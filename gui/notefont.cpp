@@ -813,38 +813,34 @@ const CharName UNKNOWN = "__UNKNOWN__";
 
 
 using Rosegarden::Accidental;
+using Rosegarden::Accidentals;
 using Rosegarden::Mark;
+using Rosegarden::Marks;
 using Rosegarden::Clef;
 using Rosegarden::Note;
 
 CharName NoteCharacterNameLookup::getAccidentalCharName(Accidental a)
 {
-    switch (a) {
-    case Rosegarden::Sharp:        return NoteCharacterNames::SHARP;
-    case Rosegarden::Flat:         return NoteCharacterNames::FLAT;
-    case Rosegarden::Natural:      return NoteCharacterNames::NATURAL;
-    case Rosegarden::DoubleSharp:  return NoteCharacterNames::DOUBLE_SHARP;
-    case Rosegarden::DoubleFlat:   return NoteCharacterNames::DOUBLE_FLAT;
-    default:
-        return NoteCharacterNames::UNKNOWN;
-    }
+    if      (a == Accidentals::Sharp)        return NoteCharacterNames::SHARP;
+    else if (a == Accidentals::Flat)         return NoteCharacterNames::FLAT;
+    else if (a == Accidentals::Natural)      return NoteCharacterNames::NATURAL;
+    else if (a == Accidentals::DoubleSharp)  return NoteCharacterNames::DOUBLE_SHARP;
+    else if (a == Accidentals::DoubleFlat)   return NoteCharacterNames::DOUBLE_FLAT;
+    return NoteCharacterNames::UNKNOWN;
 }
 
 CharName NoteCharacterNameLookup::getMarkCharName(Mark mark)
 {
-    switch (mark) {
-    case Rosegarden::Accent:    return NoteCharacterNames::ACCENT;
-    case Rosegarden::Tenuto:	return NoteCharacterNames::TENUTO;
-    case Rosegarden::Staccato:	return NoteCharacterNames::STACCATO;
-    case Rosegarden::Trill:	return NoteCharacterNames::TRILL;
-    case Rosegarden::Turn:	return NoteCharacterNames::TURN;
-    case Rosegarden::Pause:	return NoteCharacterNames::FERMATA;
-    case Rosegarden::UpBow:	return NoteCharacterNames::UP_BOW;
-    case Rosegarden::DownBow:	return NoteCharacterNames::DOWN_BOW;
-    default:
-	// Things like "sf" and "rf" are generated from text fonts
-	return NoteCharacterNames::UNKNOWN;
-    }
+    if      (mark == Marks::Accent)    return NoteCharacterNames::ACCENT;
+    else if (mark == Marks::Tenuto)    return NoteCharacterNames::TENUTO;
+    else if (mark == Marks::Staccato)  return NoteCharacterNames::STACCATO;
+    else if (mark == Marks::Trill)     return NoteCharacterNames::TRILL;
+    else if (mark == Marks::Turn)      return NoteCharacterNames::TURN;
+    else if (mark == Marks::Pause)     return NoteCharacterNames::FERMATA;
+    else if (mark == Marks::UpBow)     return NoteCharacterNames::UP_BOW;
+    else if (mark == Marks::DownBow)   return NoteCharacterNames::DOWN_BOW;
+    // Things like "sf" and "rf" are generated from text fonts
+    return NoteCharacterNames::UNKNOWN;
 }
  
 CharName NoteCharacterNameLookup::getClefCharName(const Clef &clef)

@@ -43,7 +43,7 @@
 #include "rosedebug.h"
 
 using Rosegarden::Accidental;
-using Rosegarden::NoAccidental;
+using Rosegarden::Accidentals;
 using Rosegarden::Event;
 using Rosegarden::Clef;
 using Rosegarden::Note;
@@ -227,28 +227,37 @@ NoteInserter::NoteInserter(NotationView* view)
     : NotationTool("NoteInserter", view),
       m_noteType(Rosegarden::Note::Quaver),
       m_noteDots(0),
-      m_accidental(Rosegarden::NoAccidental)
+      m_accidental(Accidentals::NoAccidental)
 {
-    for (unsigned int i = 0, accidental = NoAccidental;
-         i < 6; ++i, ++accidental) {
+    QIconSet icon;
 
+    for (unsigned int i = 0; i < 6; ++i) {
+
+	icon = QIconSet
+	    (m_parentView->getToolbarNotePixmapFactory()->
+	     makeToolbarPixmap(m_actionsAccidental[i][3]));
         KRadioAction* noteAction = new KRadioAction(i18n(m_actionsAccidental[i][0]),
-                                                    0, this,
+                                                    icon, 0, this,
                                                     m_actionsAccidental[i][1],
                                                     actionCollection(),
                                                     m_actionsAccidental[i][2]);
         noteAction->setExclusiveGroup("accidentals");
     }
 
-    new KToggleAction(i18n("Dotted note"), 0, this,
+    icon = QIconSet
+	(m_parentView->getToolbarNotePixmapFactory()->
+	 makeToolbarPixmap("dotted-crotchet"));
+    new KToggleAction(i18n("Dotted note"), icon, 0, this,
                       SLOT(slotToggleDot()), actionCollection(),
                       "toggle_dot");
 
-    new KAction(i18n("Select"), 0, this,
+    icon = QIconSet(m_parentView->getToolbarNotePixmapFactory()->
+		    makeToolbarPixmap("select"));
+    new KAction(i18n("Switch to Select Tool"), icon, 0, this,
                 SLOT(slotSelectSelected()), actionCollection(),
                 "select");
 
-    new KAction(i18n("Erase"), 0, this,
+    new KAction(i18n("Switch to Erase Tool"), "eraser", 0, this,
                 SLOT(slotEraseSelected()), actionCollection(),
                 "erase");
 
@@ -259,7 +268,7 @@ NoteInserter::NoteInserter(const QString& menuName, NotationView* view)
     : NotationTool(menuName, view),
       m_noteType(Rosegarden::Note::Quaver),
       m_noteDots(0),
-      m_accidental(Rosegarden::NoAccidental)
+      m_accidental(Accidentals::NoAccidental)
 {
     connect(m_parentView, SIGNAL(changeAccidental(Rosegarden::Accidental)),
             this,         SLOT(setAccidental(Rosegarden::Accidental)));
@@ -353,9 +362,14 @@ void NoteInserter::setAccidentalSync(Rosegarden::Accidental accidental)
 {
     setAccidental(accidental);
 
+    int i;
+    for (i = 0; i < 6; ++i) {
+	if (accidental == m_actionsAccidental[i][4]) break;
+    }
+    if (i == 6) return;
+
     // Get the parent view toolbar in sync - check the corresponding action
-    KAction* action =
-        actionCollection()->action(m_actionsAccidental[accidental][2]);
+    KAction* action = actionCollection()->action(m_actionsAccidental[i][2]);
 
     KToggleAction* tAction = 0;
     
@@ -411,14 +425,20 @@ void NoteInserter::slotSelectSelected()
     m_parentView->actionCollection()->action("select")->activate();
 }
 
-const char* NoteInserter::m_actionsAccidental[][4] = 
+const char* NoteInserter::m_actionsAccidental[][5] = 
     {
-        { "No accidental",  "1slotNoAccidental()",  "no_accidental",           "accidental-none" },
-        { "Sharp",          "1slotSharp()",         "sharp_accidental",        "accidental-sharp" },
-        { "Flat",           "1slotFlat()",          "flat_accidental",         "accidental-flat" },
-        { "Natural",        "1slotNatural()",       "natural_accidental",      "accidental-natural" },
-        { "Double sharp",   "1slotDoubleSharp()",   "double_sharp_accidental", "accidental-doublesharp" },
-        { "Double flat",    "1slotDoubleFlat()",    "double_flat_accidental",  "accidental-doubleflat" }
+        { "No accidental",  "1slotNoAccidental()",  "no_accidental",
+	      "accidental-none", Accidentals::NoAccidental.c_str() },
+        { "Sharp",          "1slotSharp()",         "sharp_accidental",
+	      "accidental-sharp", Accidentals::Sharp.c_str() },
+        { "Flat",           "1slotFlat()",          "flat_accidental",
+	      "accidental-flat", Accidentals::Flat.c_str() },
+        { "Natural",        "1slotNatural()",       "natural_accidental",
+	      "accidental-natural", Accidentals::Natural.c_str() },
+        { "Double sharp",   "1slotDoubleSharp()",   "double_sharp_accidental",
+	      "accidental-doublesharp", Accidentals::DoubleSharp.c_str() },
+        { "Double flat",    "1slotDoubleFlat()",    "double_flat_accidental",
+	      "accidental-doubleflat", Accidentals::DoubleFlat.c_str() }
     };
 
 //------------------------------

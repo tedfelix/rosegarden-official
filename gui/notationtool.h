@@ -243,7 +243,7 @@ protected:
 
     Rosegarden::Accidental m_accidental;
 
-    static const char* m_actionsAccidental[][4];
+    static const char* m_actionsAccidental[][5];
 };
 
 /**

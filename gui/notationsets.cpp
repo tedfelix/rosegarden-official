@@ -37,6 +37,8 @@ using Rosegarden::Bool;
 using Rosegarden::Clef;
 using Rosegarden::Key;
 using Rosegarden::Note;
+using Rosegarden::Mark;
+using Rosegarden::Marks;
 using Rosegarden::Segment;
 using Rosegarden::Equation;
 using Rosegarden::Quantizer;
@@ -190,16 +192,22 @@ Chord::Chord(const NotationElementList &nel, NELIterator i,
         std::stable_sort(begin(), end(), PitchGreater());
     }
 
-/*
     kdDebug(KDEBUG_AREA) << "Chord::Chord: pitches are:" << endl;
+    int prevPitch = -999;
     for (unsigned int i = 0; i < size(); ++i) {
         try {
-            kdDebug(KDEBUG_AREA) << i << ": " << (*(*this)[i])->event()->get<Int>(PITCH) << endl;
-        } catch (Event::NoData) {
+	    int pitch = (*(*this)[i])->event()->get<Int>(PITCH);
+//            kdDebug(KDEBUG_AREA) << i << ": " << pitch << endl;
+	    if (pitch < prevPitch) {
+		cerr << "ERROR: Pitch less than previous pitch (" << pitch
+		     << " < " << prevPitch << ")" << endl;
+		//!!!
+		throw(1);
+	    }
+	} catch (Event::NoData) {
             kdDebug(KDEBUG_AREA) << i << ": no pitch property" << endl;
         }
     }
-*/
 }
 
 Chord::~Chord()
@@ -228,6 +236,20 @@ Chord::height(const NELIterator &i) const
     // not setMaybe, as we know the property is absent:
     (*i)->event()->set<Int>(HEIGHT_ON_STAFF, h, false);
     return h;
+}
+
+bool Chord::hasStem() const
+{
+    // true if any of the notes are stemmed
+
+    NELIterator i(getInitialNote());
+    for (;;) {
+	Note::Type note = (*i)->event()->get<Int>(NOTE_TYPE);
+	if (Note(note).hasStem()) return true;
+	if (i == getFinalNote()) return false;
+	++i;
+    }
+    return false;
 }
 
 bool Chord::hasStemUp() const
@@ -284,6 +306,7 @@ bool Chord::isNoteHeadShifted(const NELIterator &itr) const
     for (i = 0; i < size(); ++i) {
         if ((*this)[i] == itr) break;
     }
+
     if (i == size()) {
         kdDebug(KDEBUG_AREA) << "Chord::isNoteHeadShifted: Warning: Unable to find note head " << (*itr) << endl;
         return false;
@@ -303,6 +326,37 @@ bool Chord::isNoteHeadShifted(const NELIterator &itr) const
 
     return false;
 }
+
+vector<Mark> Chord::getMarksForChord() const
+{
+    vector<Mark> marks;
+
+    for (unsigned int i = 0; i < size(); ++i) {
+
+	long markCount = 0;
+	const NELIterator &itr((*this)[i]);
+	(*itr)->event()->get<Int>(MARK_COUNT, markCount);
+
+	if (markCount == 0) continue;
+
+	for (long j = 0; j < markCount; ++j) {
+
+	    Mark mark(Marks::NoMark);
+	    (void)(*itr)->event()->get<String>(getMarkPropertyName(j), mark);
+
+	    unsigned int k;
+	    for (k = 0; k < marks.size(); ++i) {
+		if (marks[k] == mark) break;
+	    }
+	    if (k == marks.size()) {
+		marks.push_back(mark);
+	    }
+	}
+    }
+
+    return marks;
+}
+		    
 
 
 //////////////////////////////////////////////////////////////////////

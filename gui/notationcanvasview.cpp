@@ -281,8 +281,8 @@ NotationCanvasView::getNoteNameForLine(const StaffLine *line, int x)
     staff->getClefAndKeyAtX(x, clef, key);
 
     std::string noteName =
-	Rosegarden::NotationDisplayPitch(h, Rosegarden::NoAccidental).
-        getAsString(clef, key);
+	Rosegarden::NotationDisplayPitch
+	(h, Rosegarden::Accidentals::NoAccidental).getAsString(clef, key);
 
     return QString(noteName.c_str());
 }

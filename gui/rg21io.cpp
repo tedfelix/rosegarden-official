@@ -42,15 +42,16 @@ using Rosegarden::String;
 using Rosegarden::Bool;
 using Rosegarden::Clef;
 using Rosegarden::TimeSignature;
-using Rosegarden::Accidental;
-using Rosegarden::Sharp;
-using Rosegarden::Flat;
-using Rosegarden::Natural;
-using Rosegarden::NoAccidental;
 using Rosegarden::Mark;
 using Rosegarden::Note;
 using Rosegarden::Indication;
 using Rosegarden::timeT;
+
+using Rosegarden::Accidental;
+using namespace Rosegarden::Accidentals;
+
+using Rosegarden::Mark;
+using namespace Rosegarden::Marks;
 
 using namespace Rosegarden::BaseProperties;
 
@@ -449,18 +450,10 @@ vector<string> RG21Loader::convertRG21ChordMods(int chordMods)
     vector<string> marks;
 
     // bit laborious!
-    if (chordMods & ModDot) 
-	marks.push_back(Note::getMarkName(Rosegarden::Staccato));
-
-    if (chordMods & ModLegato)
-	marks.push_back(Note::getMarkName(Rosegarden::Tenuto));
-
-    if (chordMods & ModAccent)
-	marks.push_back(Note::getMarkName(Rosegarden::Accent));
-
-    if (chordMods & ModSfz)
-	marks.push_back(Note::getMarkName(Rosegarden::Sforzando));
-
+    if (chordMods & ModDot)    marks.push_back(Staccato);
+    if (chordMods & ModLegato) marks.push_back(Tenuto);
+    if (chordMods & ModAccent) marks.push_back(Accent);
+    if (chordMods & ModSfz)    marks.push_back(Sforzando);
     if (chordMods & ModRfz) {
 
 	// I'm quite confused by this.  Some rg21 files appear to have
@@ -475,18 +468,13 @@ vector<string> RG21Loader::convertRG21ChordMods(int chordMods)
 	    chordMods = chordMods ^= ModTurn;
 	    chordMods = chordMods |= ModPause;
 	} else {
-	    marks.push_back(Note::getMarkName(Rosegarden::Rinforzando));
+	    marks.push_back(Rinforzando);
 	}
     }
 
-    if (chordMods & ModTrill)
-	marks.push_back(Note::getMarkName(Rosegarden::Trill));
-
-    if (chordMods & ModTurn)
-	marks.push_back(Note::getMarkName(Rosegarden::Turn));
-
-    if (chordMods & ModPause)
-	marks.push_back(Note::getMarkName(Rosegarden::Pause));
+    if (chordMods & ModTrill)  marks.push_back(Trill);
+    if (chordMods & ModTurn)   marks.push_back(Turn);
+    if (chordMods & ModPause)  marks.push_back(Pause);
 
     return marks;
 }

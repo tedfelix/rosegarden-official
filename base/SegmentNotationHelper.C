@@ -327,7 +327,7 @@ SegmentNotationHelper::insertRest(timeT absoluteTime, Note note)
 //    int barNo = segment().getBarNumber(i);
 
     return insertSomething(i, note.getDuration(), 0, true, false,
-			   NoAccidental);
+			   Accidentals::NoAccidental);
 }
 
 
@@ -510,8 +510,8 @@ SegmentNotationHelper::insertSingleSomething(iterator i, int duration,
 
     if (!isRest) {
         e->set<Int>(PITCH, pitch);
-        if (acc != NoAccidental) {
-            e->set<String>(ACCIDENTAL, Note::getAccidentalName(acc));
+        if (acc != Accidentals::NoAccidental) {
+            e->set<String>(ACCIDENTAL, acc);
         }
         setInsertedNoteGroup(e, i);
     }

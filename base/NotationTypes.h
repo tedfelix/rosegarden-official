@@ -67,26 +67,48 @@ extern const int MIN_SUBORDERING;
 
 typedef std::list<int> DurationList;
 
-    
+
 /**
- * Accidental is hardly worth making a class, but there are conversion
- * functions to and from strings available in Note.
+ * Accidentals are stored in the event as string properties, purely
+ * for clarity.  (They aren't manipulated _all_ that often, so this
+ * probably isn't a great inefficiency.)  Originally we used an enum
+ * for the Accidental type with conversion functions to and from
+ * strings, but making Accidental a string seems simpler.
  */
 
-enum Accidental {
-    NoAccidental, Sharp, Flat, Natural, DoubleSharp, DoubleFlat
-};
+typedef std::string Accidental;
 
-   
+namespace Accidentals
+{
+    extern const Accidental NoAccidental;
+    extern const Accidental Sharp;
+    extern const Accidental Flat;
+    extern const Accidental Natural;
+    extern const Accidental DoubleSharp;
+    extern const Accidental DoubleFlat;
+}
+
+
 /**
- * Mark is hardly worth making a class, but there are conversion
- * functions to and from strings available in Note.
+ * Marks, like Accidentals, are stored in the event as string properties.
  */
 
-enum Mark {
-    NoMark, Accent, Tenuto, Staccato, Sforzando, Rinforzando,
-    Trill, Turn, Pause, UpBow, DownBow
-};
+typedef std::string Mark;
+  
+namespace Marks
+{
+    extern const Mark NoMark;
+    extern const Mark Accent;
+    extern const Mark Tenuto;
+    extern const Mark Staccato;
+    extern const Mark Sforzando;
+    extern const Mark Rinforzando;
+    extern const Mark Trill;
+    extern const Mark Turn;
+    extern const Mark Pause;
+    extern const Mark UpBow;
+    extern const Mark DownBow;
+}
 
 
 // somewhat mechanical:
@@ -335,7 +357,8 @@ public:
      * in the given clef and key
      */
     NotationDisplayPitch(int pitch, const Clef &clef, const Key &key,
-                         Accidental explicitAccidental = NoAccidental);
+                         Accidental explicitAccidental = 
+			 Accidentals::NoAccidental);
 
     int        getHeightOnStaff() const { return m_heightOnStaff; }
     Accidental getAccidental()    const { return m_accidental; }
@@ -489,24 +512,6 @@ public:
 
     /// Returned event is on heap; caller takes responsibility for ownership
     Event *getAsRestEvent(timeT absoluteTime) const;
-
-
-    struct BadAccidental { };
-
-    /**
-     * Utility functions for accidental names; can throw BadAccidental
-     */
-    static std::string getAccidentalName  (Accidental accidental);
-    static Accidental  getAccidentalByName(const std::string &name);
-
-
-    struct BadMark { };
-
-    /**
-     * Utility functions for mark names; can throw BadMark
-     */
-    static std::string getMarkName  (Mark mark);
-    static Mark getMarkByName(const std::string &name);
 
   
 private:

@@ -183,7 +183,7 @@ public:
 	BasicSelectionCommand(name(), selection) { }
     virtual ~GroupMenuBeamCommand() { }
 
-    static QString name() { return "Beam Group"; }
+    static QString name() { return "&Beam Group"; }
 
 protected:
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper) {
@@ -200,7 +200,7 @@ public:
 	BasicSelectionCommand(name(), selection) { }
     virtual ~GroupMenuAutoBeamCommand() { }
 
-    static QString name() { return "Auto-Beam"; }
+    static QString name() { return "&Auto-Beam"; }
 
 protected:
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper) {
@@ -217,7 +217,7 @@ public:
 	BasicSelectionCommand(name(), selection) { }
     virtual ~GroupMenuBreakCommand() { }
 
-    static QString name() { return "Break Groups"; }
+    static QString name() { return "&Unbeam"; }
 
 protected:
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper) {
@@ -262,7 +262,7 @@ public:
 	BasicSelectionCommand(name(), selection) { }
     virtual ~TransformsMenuNormalizeRestsCommand() { }
 
-    static QString name() { return "Normalize Rests"; }
+    static QString name() { return "&Normalize Rests"; }
 
 protected:
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper) {
@@ -278,7 +278,7 @@ public:
 	BasicSelectionCommand(name(), selection) { }
     virtual ~TransformsMenuCollapseRestsCommand() { }
 
-    static QString name() { return "Collapse Rests Aggressively"; }
+    static QString name() { return "&Collapse Rests Aggressively"; }
 
 protected:
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper) {
@@ -294,7 +294,7 @@ public:
     virtual ~TransformsMenuChangeStemsCommand() { }
 
     static QString name(bool up) {
-	return up ? "Stems Up" : "Stems Down";
+	return up ? "Stems &Up" : "Stems &Down";
     }
 
 protected:
@@ -312,11 +312,29 @@ public:
     virtual ~TransformsMenuRestoreStemsCommand() { }
 
     static QString name() {
-	return "Restore Computed Stems";
+	return "&Restore Computed Stems";
     }
 
 protected:
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper);
+};
+
+class TransformsMenuTransposeOneStepCommand : public BasicSelectionCommand
+{
+public:
+    TransformsMenuTransposeOneStepCommand(bool up, EventSelection &selection) :
+	BasicSelectionCommand(name(up), selection), m_up(up) { }
+    virtual ~TransformsMenuTransposeOneStepCommand() { }
+
+    static QString name(bool up) {
+	return up ? "Transpose &Up" : "Transpose &Down";
+    }
+
+protected:
+    virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper);
+
+private:
+    bool m_up;
 };
 
 

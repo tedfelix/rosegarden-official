@@ -144,6 +144,14 @@ public:
      */
     MultiViewCommandHistory *getCommandHistory();
 
+    /**
+     * get a NotePixmapFactory suitable for creating toolbar pixmaps
+     * (but not guaranteed to be any good for anything else)
+     */
+    NotePixmapFactory *getToolbarNotePixmapFactory() {
+	return &m_toolbarNotePixmapFactory;
+    }
+
 
 public slots:
     /**
@@ -298,6 +306,8 @@ public slots:
     void slotTransformsStemsUp();
     void slotTransformsStemsDown();
     void slotTransformsRestoreStems();
+    void slotTransformsTransposeUp();
+    void slotTransformsTransposeDown();
 
     /// Canvas actions slots
 

@@ -102,12 +102,19 @@
 
 <Menu name="Transforms">
   <text>Trans&amp;forms</text>
-  <Action name="transpose"/>
+  <Action name="collapse_notes"/>
+  <Action name="collapse_rests_aggressively"/>
+  <Action name="normalize_rests"/>
+  <Separator/>
+  <Menu name="Transpose">
+  <text>&amp;Transpose</text>
+  <Action name="transpose_up"/>
+  <Action name="transpose_down"/>
+  <Action name="general_transpose"/>
+  </Menu>
+  <Separator/>
   <Action name="invert"/>
   <Action name="retrograde"/>
-  <Separator/>
-  <Action name="normalize_rests"/>
-  <Action name="collapse_rests_aggressively"/>
   <Separator/>
   <Menu name="Stems">
     <text>&amp;Stem Direction</text>

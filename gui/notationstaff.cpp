@@ -42,13 +42,13 @@ using Rosegarden::Event;
 using Rosegarden::Int;
 using Rosegarden::Bool;
 using Rosegarden::String;
-using Rosegarden::NoAccidental;
 using Rosegarden::Note;
 using Rosegarden::Indication;
 using Rosegarden::Segment;
 using Rosegarden::Clef;
 using Rosegarden::Key;
 using Rosegarden::Accidental;
+using Rosegarden::Accidentals::NoAccidental;
 using Rosegarden::TimeSignature;
 using Rosegarden::PropertyName;
 
@@ -235,7 +235,7 @@ NotationStaff::getBarExtents(unsigned int myx)
 {
     QRect rect(x(), y(), 0, getStaffHeight());
 
-    for (int i = 1; i < m_barLines.size(); ++i) {
+    for (unsigned int i = 1; i < m_barLines.size(); ++i) {
 
 	if (m_barLines[i]->x() <= myx) continue;
 	
@@ -581,14 +581,16 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 	    }
 
 	    if (indicationEnd != getViewElementList()->end()) {
-		length = (*indicationEnd)->getLayoutX() - elt->getLayoutX();
-		y1 = (*indicationEnd)->getLayoutY();
+		length = (int)((*indicationEnd)->getLayoutX() -
+			       elt->getLayoutX());
+		y1 = (int)(*indicationEnd)->getLayoutY();
 	    } else {
 		//!!! imperfect
 		--indicationEnd;
-		length = (*indicationEnd)->getLayoutX() +
-		    m_npf->getNoteBodyWidth() * 3 - elt->getLayoutX();
-		y1 = (*indicationEnd)->getLayoutY();
+		length = (int)((*indicationEnd)->getLayoutX() +
+			       m_npf->getNoteBodyWidth() * 3 -
+			       elt->getLayoutX());
+		y1 = (int)(*indicationEnd)->getLayoutY();
 	    }
 
 	    if (length < m_npf->getNoteBodyWidth()) {
@@ -665,11 +667,7 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
     int dots = elt->event()->get<Int>(NOTE_DOTS);
 
     Accidental accidental = NoAccidental;
-
-    long acc;
-    if (elt->event()->get<Int>(DISPLAY_ACCIDENTAL, acc)) {
-        accidental = Accidental(acc);
-    }
+    (void)elt->event()->get<String>(DISPLAY_ACCIDENTAL, accidental);
 
     bool up = true;
     (void)(elt->event()->get<Bool>(STEM_UP, up));
@@ -705,20 +703,22 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
     params.setLegerLines(legerLines);
     params.setBeamed(beamed);
     params.setIsOnLine(heightOnStaff % 2 == 0);
+    params.removeMarks();
 
-    long markCount = 0;
-    (void)(elt->event()->get<Int>(MARK_COUNT, markCount));
-    if (markCount == 0) {
-	params.removeMarks();
-    } else {
-	std::vector<Rosegarden::Mark> marks;
-	for (int i = 0; i < markCount; ++i) {
-	    std::string markName;
-	    if (elt->event()->get<String>(getMarkPropertyName(i), markName)) {
-		marks.push_back(Note::getMarkByName(markName));
+    if (elt->event()->get<Bool>(CHORD_PRIMARY_NOTE)) {
+	long markCount = 0;
+	(void)(elt->event()->get<Int>(MARK_COUNT, markCount));
+	if (markCount == 0) {
+	} else {
+	    std::vector<Rosegarden::Mark> marks;
+	    for (int i = 0; i < markCount; ++i) {
+		Rosegarden::Mark mark;
+		if (elt->event()->get<String>(getMarkPropertyName(i), mark)) {
+		    marks.push_back(mark);
+		}
 	    }
+	    params.setMarks(marks);
 	}
-	params.setMarks(marks);
     }
 
     long tieLength;

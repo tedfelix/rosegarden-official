@@ -37,7 +37,7 @@ using Rosegarden::Note;
 using Rosegarden::Clef;
 using Rosegarden::Int;
 using Rosegarden::Accidental;
-using Rosegarden::NoAccidental;
+using Rosegarden::Accidentals::NoAccidental;
 using Rosegarden::Indication;
 
 using std::string;
@@ -302,7 +302,7 @@ GroupMenuAddIndicationCommand::modifySegment(SegmentNotationHelper &helper)
 QString
 GroupMenuAddIndicationCommand::name(std::string indicationType)
 {
-    std::string n = "Add ";
+    std::string n = "Add &";
     n += (char)toupper(indicationType[0]);
     n += indicationType.substr(1);
     return QString(n.c_str());
@@ -336,6 +336,28 @@ TransformsMenuRestoreStemsCommand::modifySegment(SegmentNotationHelper &helper)
 
 	if ((*i)->isa(Note::EventType)) {
 	    (*i)->unset(NotationProperties::STEM_UP);
+	}
+
+	++i;
+    }
+}
+
+
+void
+TransformsMenuTransposeOneStepCommand::modifySegment(SegmentNotationHelper &helper)
+{
+    Segment::iterator i = helper.segment().findTime(getBeginTime());
+    Segment::iterator j = helper.segment().findTime(getEndTime());
+
+    int offset = m_up ? 1 : -1;
+
+    while (i != j) {
+
+	if ((*i)->isa(Note::EventType)) {
+	    (*i)->set<Int>(Rosegarden::BaseProperties::PITCH,
+			   (*i)->get<Int>(Rosegarden::BaseProperties::PITCH) +
+			   offset);
+	    (*i)->unset(Rosegarden::BaseProperties::ACCIDENTAL);
 	}
 
 	++i;

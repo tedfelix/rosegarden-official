@@ -107,7 +107,7 @@ Mark
  * A mark is not a set or relationship: it's a single item that
    modifies a chord, such as a pause, accent or trill.
 
- * We have no representation for marks yet.
+ * Marks are stored as properties of the note event.
 
  * In the GUI, marks should be referred to as marks and should
    appear together on a Marks menu.

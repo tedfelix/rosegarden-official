@@ -36,7 +36,7 @@ public:
     NotePixmapParameters(Rosegarden::Note::Type noteType,
                          int dots,
                          Rosegarden::Accidental accidental =
-                                                Rosegarden::NoAccidental);
+			 Rosegarden::Accidentals::NoAccidental);
     ~NotePixmapParameters();
 
     void setNoteType(Rosegarden::Note::Type type) { m_noteType = type; }
@@ -68,7 +68,8 @@ public:
 
     void setMarks(const std::vector<Rosegarden::Mark> &marks) {
 	m_marks.clear();
-	for (int i = 0; i < marks.size(); ++i) m_marks.push_back(marks[i]);
+	for (unsigned int i = 0; i < marks.size(); ++i)
+	    m_marks.push_back(marks[i]);
     }
     void removeMarks() { m_marks.clear(); }
 

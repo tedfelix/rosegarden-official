@@ -42,6 +42,37 @@ using std::endl;
 
 const int MIN_SUBORDERING = -100000;
 
+namespace Accidentals
+{
+    const Accidental NoAccidental = "no-accidental";
+    const Accidental Sharp = "sharp";
+    const Accidental Flat = "flat";
+    const Accidental Natural = "natural";
+    const Accidental DoubleSharp = "double-sharp";
+    const Accidental DoubleFlat = "double-flat";
+}
+
+using namespace Accidentals;
+  
+
+namespace Marks
+{
+    const Mark NoMark = "no-mark";
+    const Mark Accent = "accent";
+    const Mark Tenuto = "tenuto";
+    const Mark Staccato = "staccato";
+    const Mark Sforzando = "sforzando";
+    const Mark Rinforzando = "rinforzando";
+    const Mark Trill = "trill";
+    const Mark Turn = "turn";
+    const Mark Pause = "pause";
+    const Mark UpBow = "up-bow";
+    const Mark DownBow = "down-bow";
+}
+
+using namespace Marks;
+
+
 //////////////////////////////////////////////////////////////////////
 // Clef
 //////////////////////////////////////////////////////////////////////
@@ -535,13 +566,11 @@ NotationDisplayPitch::displayPitchToRawPitch(int height,
         }
     }
 
-    switch (accidental) {
-    case  DoubleSharp: pitch += 2; break;
-    case        Sharp: pitch += 1; break;
-    case         Flat: pitch -= 1; break;
-    case   DoubleFlat: pitch -= 2; break;
-    case      Natural: break;
-    case NoAccidental: break;
+    if (accidental != NoAccidental) {
+	if      (accidental == DoubleSharp) pitch += 2;
+	else if (accidental ==       Sharp) pitch += 1;
+	else if (accidental ==        Flat) pitch -= 1;
+	else if (accidental ==  DoubleFlat) pitch -= 2;
     }
 
     // 3. Adjust for clef
@@ -738,64 +767,6 @@ Event *Note::getAsRestEvent(timeT absoluteTime) const
     e->setAbsoluteTime(absoluteTime);
     e->setDuration(getDuration());
     return e;
-}
-
-string Note::getAccidentalName(Accidental a)
-{
-    switch (a) {
-    case NoAccidental: return "no-accidental";
-    case        Sharp: return "sharp";
-    case         Flat: return "flat";
-    case  DoubleSharp: return "double-sharp";
-    case   DoubleFlat: return "double-flat";
-    case      Natural: return "natural";
-    default: throw BadAccidental();
-    }
-}
-
-Accidental Note::getAccidentalByName(const string &s)
-{
-    if      (s == "no-accidental") return NoAccidental;
-    else if (s == "sharp")         return Sharp;
-    else if (s == "flat")          return Flat;
-    else if (s == "double-sharp")  return DoubleSharp;
-    else if (s == "double-flat")   return DoubleFlat;
-    else if (s == "natural")       return Natural;
-    else throw BadAccidental();
-}
-
-string Note::getMarkName(Mark m)
-{
-    switch (m) {
-    case       NoMark: return "no-mark";
-    case       Accent: return "accent";
-    case       Tenuto: return "tenuto";
-    case     Staccato: return "staccato";
-    case    Sforzando: return "sforzando";
-    case  Rinforzando: return "rinforzando";
-    case        Trill: return "trill";
-    case	 Turn: return "turn";
-    case	Pause: return "pause";
-    case	UpBow: return "up-bow";
-    case      DownBow: return "down-bow";
-    default: throw BadMark();
-    }
-}
-
-Mark Note::getMarkByName(const string &s)
-{
-    if      (s == "no-mark")     return NoMark;
-    else if (s == "accent")      return Accent;
-    else if (s == "tenuto")      return Tenuto;
-    else if (s == "staccato")    return Staccato;
-    else if (s == "sforzando")   return Sforzando;
-    else if (s == "rinforzando") return Rinforzando;
-    else if (s == "trill")       return Trill;
-    else if (s == "turn")        return Turn;
-    else if (s == "pause")       return Pause;
-    else if (s == "up-bow")      return UpBow;
-    else if (s == "down-bow")    return DownBow;
-    else throw BadMark();
 }
 
 

@@ -38,11 +38,6 @@ using Rosegarden::String;
 using Rosegarden::Event;
 using Rosegarden::Clef;
 using Rosegarden::Key;
-using Rosegarden::Accidental;
-using Rosegarden::NoAccidental;
-using Rosegarden::Sharp;
-using Rosegarden::Flat;
-using Rosegarden::Natural;
 using Rosegarden::Note;
 using Rosegarden::Indication;
 using Rosegarden::Segment;
@@ -50,6 +45,9 @@ using Rosegarden::SegmentNotationHelper;
 using Rosegarden::TimeSignature;
 using Rosegarden::timeT;
 using Rosegarden::Quantizer;
+
+using Rosegarden::Accidental;
+using namespace Rosegarden::Accidentals;
 
 using namespace Rosegarden::BaseProperties;
 using namespace NotationProperties;
@@ -313,11 +311,8 @@ NotationHLayout::scanStaff(StaffType &staff)
                     }
 
                     Accidental explicitAccidental = NoAccidental;
-                    if (el->event()->has(ACCIDENTAL)) {
-                        explicitAccidental =
-                            Note::getAccidentalByName
-                            (el->event()->get<String>(ACCIDENTAL));
-                    }
+		    (void)el->event()->get<String>(ACCIDENTAL,
+						   explicitAccidental);
 
                     Rosegarden::NotationDisplayPitch p
                         (pitch, clef, key, explicitAccidental);
@@ -325,7 +320,7 @@ NotationHLayout::scanStaff(StaffType &staff)
                     Accidental acc = p.getAccidental();
 
                     el->event()->setMaybe<Int>(HEIGHT_ON_STAFF, h);
-                    el->event()->setMaybe<Int>(CALCULATED_ACCIDENTAL, acc);
+                    el->event()->setMaybe<String>(CALCULATED_ACCIDENTAL, acc);
 //!!!                    el->event()->setMaybe<String>
 //                        (NOTE_NAME, p.getAsString(clef, key));
 
@@ -338,9 +333,7 @@ NotationHLayout::scanStaff(StaffType &staff)
                     // it is for this one)
                     
                     Accidental dacc = accTable.getDisplayAccidental(acc, h);
-
-                    el->event()->setMaybe<Int>
-                        (DISPLAY_ACCIDENTAL, dacc);
+                    el->event()->setMaybe<String>(DISPLAY_ACCIDENTAL, dacc);
 
                     newAccTable.update(acc, h);
 
@@ -840,10 +833,7 @@ NotationHLayout::positionNote(StaffType &staff,
     // has an accidental.
 
     Accidental acc(NoAccidental);
-    long acc0;
-    if (note->event()->get<Int>(DISPLAY_ACCIDENTAL, acc0)) {
-        acc = (Accidental)acc0;
-    }
+    (void)note->event()->get<String>(DISPLAY_ACCIDENTAL, acc);
 
     Chord chord(*staff.getViewElementList(), itr);
     if (acc != NoAccidental || itr == chord.getInitialElement()) {

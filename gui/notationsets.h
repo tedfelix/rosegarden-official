@@ -136,10 +136,12 @@ public:
 	return height(getLowestNote());
     }
 
+    virtual bool hasStem() const;
     virtual bool hasStemUp() const;
     virtual bool hasShiftedNoteHeads() const;
     virtual bool hasNoteHeadShifted() const;
     virtual bool isNoteHeadShifted(const NELIterator &itr) const;
+    virtual std::vector<Rosegarden::Mark> getMarksForChord() const;
 
     virtual bool contains(const NELIterator &) const;
 

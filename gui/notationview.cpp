@@ -62,16 +62,15 @@ using Rosegarden::Event;
 using Rosegarden::Int;
 using Rosegarden::Bool;
 using Rosegarden::String;
-using Rosegarden::NoAccidental;
 using Rosegarden::Note;
 using Rosegarden::Segment;
 using Rosegarden::SegmentNotationHelper;
 using Rosegarden::Clef;
 using Rosegarden::Key;
-using Rosegarden::Accidental;
 using Rosegarden::TimeSignature;
 using Rosegarden::Quantizer;
 using Rosegarden::timeT;
+using Rosegarden::Accidental;
 
 using std::vector;
 using std::string;
@@ -378,8 +377,7 @@ void NotationView::setupActions()
             { "Double flat",    "1slotDoubleFlat()",    "double_flat_accidental",  "accidental-doubleflat" }
         };
 
-    for (unsigned int i = 0, accidental = NoAccidental;
-         i < 6; ++i, ++accidental) {
+    for (unsigned int i = 0; i < 6; ++i) {
 
         icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap
                         (actionsAccidental[i][3]));
@@ -491,6 +489,14 @@ void NotationView::setupActions()
     new KAction(TransformsMenuRestoreStemsCommand::name(), 0, this,
                 SLOT(slotTransformsRestoreStems()), actionCollection(),
                 "restore_stems");
+
+    new KAction(TransformsMenuTransposeOneStepCommand::name(true), 0, this,
+                SLOT(slotTransformsTransposeUp()), actionCollection(),
+                "transpose_up");
+
+    new KAction(TransformsMenuTransposeOneStepCommand::name(false), 0, this,
+                SLOT(slotTransformsTransposeDown()), actionCollection(),
+                "transpose_down");
 
     // setup Settings menu
     KStdAction::showToolbar(this, SLOT(slotToggleToolBar()), actionCollection());
@@ -1266,6 +1272,24 @@ void NotationView::slotTransformsRestoreStems()
 				    (*m_currentEventSelection));
 }
 
+void NotationView::slotTransformsTransposeUp()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Transposing up one semitone..."), statusBar());
+
+    getCommandHistory()->addCommand(new TransformsMenuTransposeOneStepCommand
+				    (true, *m_currentEventSelection));
+}
+
+void NotationView::slotTransformsTransposeDown()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Transposing down one semitone..."), statusBar());
+
+    getCommandHistory()->addCommand(new TransformsMenuTransposeOneStepCommand
+				    (false, *m_currentEventSelection));
+}
+
 
 
 //
@@ -1542,32 +1566,32 @@ void NotationView::slotDottedR64th()
 //----------------------------------------
 void NotationView::slotNoAccidental()
 {
-    emit changeAccidental(Rosegarden::NoAccidental);
+    emit changeAccidental(Rosegarden::Accidentals::NoAccidental);
 }
 
 void NotationView::slotSharp()
 {
-    emit changeAccidental(Rosegarden::Sharp);
+    emit changeAccidental(Rosegarden::Accidentals::Sharp);
 }
 
 void NotationView::slotFlat()
 {
-    emit changeAccidental(Rosegarden::Flat);
+    emit changeAccidental(Rosegarden::Accidentals::Flat);
 }
 
 void NotationView::slotNatural()
 {
-    emit changeAccidental(Rosegarden::Natural);
+    emit changeAccidental(Rosegarden::Accidentals::Natural);
 }
 
 void NotationView::slotDoubleSharp()
 {
-    emit changeAccidental(Rosegarden::DoubleSharp);
+    emit changeAccidental(Rosegarden::Accidentals::DoubleSharp);
 }
 
 void NotationView::slotDoubleFlat()
 {
-    emit changeAccidental(Rosegarden::DoubleFlat);
+    emit changeAccidental(Rosegarden::Accidentals::DoubleFlat);
 }
 
 

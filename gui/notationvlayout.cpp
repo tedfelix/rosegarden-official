@@ -122,6 +122,7 @@ NotationVLayout::scanStaff(StaffType &staffBase)
             for (unsigned int j = 0; j < chord.size(); ++j) {
                 h.push_back((*chord[j])->event()->get<Int>(HEIGHT_ON_STAFF));
             }
+	    bool stemmed = chord.hasStem();
             bool stemUp = chord.hasStemUp();
             bool hasNoteHeadShifted = chord.hasNoteHeadShifted();
 
@@ -141,7 +142,8 @@ NotationVLayout::scanStaff(StaffType &staffBase)
 		// and non-beamed stem up)
                 el->event()->setMaybe<Bool>(STEM_UP, stemUp);
 
-		bool primary = (stemUp ? (j == 0) : (j == chord.size()-1));
+		bool primary =
+		    ((stemmed && stemUp) ? (j == 0) : (j == chord.size()-1));
                 el->event()->setMaybe<Bool>(CHORD_PRIMARY_NOTE, primary);
 
                 el->event()->setMaybe<Bool>(NOTE_HEAD_SHIFTED,
@@ -250,7 +252,7 @@ NotationVLayout::positionSlur(NotationStaff &staff,
     int startTopHeight = 4, endTopHeight = 4,
 	startBottomHeight = 4, endBottomHeight = 4;
 
-    int startX = (*i)->getLayoutX(), endX = startX + 10;
+    int startX = (int)(*i)->getLayoutX(), endX = startX + 10;
     bool startStemUp = false, endStemUp = false;
     bool beamAbove = false, beamBelow = false;
 
@@ -291,14 +293,14 @@ NotationVLayout::positionSlur(NotationStaff &staff,
 		if (!haveStart) {
 		    startBottomHeight = chord.getLowestNoteHeight();
 		    startTopHeight = chord.getHighestNoteHeight();
-		    startX = (*scooter)->getLayoutX();
+		    startX = (int)(*scooter)->getLayoutX();
 		    startStemUp = stemUp;
 		    haveStart = true;
 		}
 
 		endBottomHeight = chord.getLowestNoteHeight();
 		endTopHeight = chord.getHighestNoteHeight();
-		endX = (*scooter)->getLayoutX();
+		endX = (int)(*scooter)->getLayoutX();
 		endStemUp = stemUp;
 	    }
 

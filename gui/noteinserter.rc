@@ -3,17 +3,17 @@
 <kpartgui name="Rosegarden::NotationTool" version="1">
 
 <Menu noMerge="1" name="NoteInserter">
+  <Action name="erase" />
+  <Action name="select" />
+  <Separator/>
+  <Action name="toggle_dot" />
+  <Separator/>
   <Action name="no_accidental" />
   <Action name="sharp_accidental" />
   <Action name="flat_accidental" />
   <Action name="natural_accidental" />
   <Action name="double_sharp_accidental" />
   <Action name="double_flat_accidental" />
-  <Separator/>
-  <Action name="toggle_dot" />
-  <Separator/>
-  <Action name="erase" />
-  <Action name="select" />
 </Menu>
 
 </kpartgui>

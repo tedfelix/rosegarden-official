@@ -49,16 +49,12 @@ using std::endl;
 using Rosegarden::Note;
 using Rosegarden::Clef;
 using Rosegarden::Key;
-using Rosegarden::Accidental;
-using Rosegarden::NoAccidental;
 using Rosegarden::Note;
 using Rosegarden::TimeSignature;
-using Rosegarden::Sharp;
-using Rosegarden::Flat;
-using Rosegarden::DoubleSharp;
-using Rosegarden::DoubleFlat;
-using Rosegarden::Natural;
 using Rosegarden::Equation;
+
+using Rosegarden::Accidental;
+using namespace Rosegarden::Accidentals;
 
 using std::set;
 using std::string;
