@@ -23,7 +23,7 @@ References in round brackets are to 0.1_planned_features.txt.
  using multiple tied notes (makeNoteViable).  Also handling tied
  events on conversion to MIDI [DONEish]
 
- 5. Making key, clef and time signature appear in correct order
+ 5. Making key, clef and time signature appear in correct order [DONE]
 
  6. Beaming selected area (dependent on Guillaume's doing selection)
 
@@ -58,7 +58,7 @@ D * Add basic support for beamed groups
  
 D * Make beam code cope properly with partial beams
 
-  * Make sure clef/key/time-signature combinations appear
+D * Make sure clef/key/time-signature combinations appear
     in the correct order (this will probably be a real hack,
     just as it is in RG2.1, because it's very difficult to
     enforce an order in storage and much simpler to choose
