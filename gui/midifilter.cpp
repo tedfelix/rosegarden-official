@@ -31,7 +31,7 @@
 MidiFilterDialog::MidiFilterDialog(QWidget *parent,
                                    RosegardenGUIDoc *doc):
     KDialogBase(parent, 0, true, i18n("Modify MIDI filters..."),
-                Ok | Apply | Cancel),
+                Ok | Apply | Close),
     m_doc(doc),
     m_modified(true)
 {
@@ -176,6 +176,7 @@ MidiFilterDialog::slotApply()
     m_doc->getStudio().setMIDIThruFilter(thruFilter);
     m_doc->getStudio().setMIDIRecordFilter(recordFilter);
 
+    setModified(false);
 }
 
 void
@@ -199,12 +200,10 @@ MidiFilterDialog::setModified(bool value)
 
     if (value)
     {
-        enableButtonOK(true);
         enableButtonApply(true);
     }
     else
     {
-        enableButtonOK(false);
         enableButtonApply(false);
     }
 

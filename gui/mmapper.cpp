@@ -688,13 +688,8 @@ MetronomeMmapper::MetronomeMmapper(RosegardenGUIDoc* doc)
 
     if (metronome) m_metronome = new Rosegarden::MidiMetronome(*metronome);
     else {
-	// create a default if we can't find one
-        Rosegarden::MidiProgram program(Rosegarden::MidiBank(true, 0, 0),
-                                        0, std::string("Metronome"));
-
-        m_metronome = 
-            new Rosegarden::MidiMetronome(Rosegarden::SystemInstrumentBase,
-                                          program);
+        m_metronome = new Rosegarden::MidiMetronome
+	    (Rosegarden::SystemInstrumentBase);
     }
 
     Composition& c = m_doc->getComposition();
@@ -766,6 +761,8 @@ void MetronomeMmapper::dump()
 {
     Rosegarden::RealTime eventTime;
     Composition& comp = m_doc->getComposition();
+
+    RG_DEBUG << "MetronomeMmapper::dump: instrument is " << m_metronome->getInstrument() << endl;
 
     MappedEvent* bufPos = m_mmappedBuffer;
     for (TickContainer::iterator i = m_ticks.begin(); i != m_ticks.end(); ++i) {

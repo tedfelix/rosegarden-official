@@ -1312,47 +1312,28 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             return false;
         }
 
-        // Only create if we have a device and we don't already
-        // have a metronome.
+        // Only create if we have a device
         //
-        if (m_device)
+        if (m_device && m_device->getType() == Rosegarden::Device::Midi)
         {
-	    // default to percussion
-	    QString percString = atts.value("percussion");
-	    bool percussion = (!percString || percString.lower() == "true");
-            int msb = atts.value("msb").toInt();
-            int lsb = atts.value("lsb").toInt();
-            int program = atts.value("program").toInt();
-            int pitch = atts.value("pitch").toInt();
-            int barVely = atts.value("barvelocity").toInt();
-            int beatVely = atts.value("beatvelocity").toInt();
-            int subBeatVely = atts.value("subbeatvelocity").toInt();
-
             Rosegarden::InstrumentId instrument =
                 atts.value("instrument").toInt();
 
-            if (m_device->getType() == Rosegarden::Device::Midi)
-            {
-		//!!! This is pretty screwed.  The msb/lsb/program are
-		//not actually used at all in sequencemanager.cpp when
-		//playing the metronome; all that's used is the
-		//instrument id.
+	    Rosegarden::MidiMetronome metronome(instrument);
+	    
+	    if (atts.value("pitch"))
+		metronome.setPitch(atts.value("pitch").toInt());
+	    if (atts.value("depth"))
+		metronome.setPitch(atts.value("depth").toInt());
+	    if (atts.value("barvelocity"))
+		metronome.setPitch(atts.value("barvelocity").toInt());
+	    if (atts.value("beatvelocity"))
+		metronome.setPitch(atts.value("beatvelocity").toInt());
+	    if (atts.value("subbeatvelocity"))
+		metronome.setPitch(atts.value("subbeatvelocity").toInt());
 
-                // Modify metronome
-                Rosegarden::MidiProgram prg(
-                        Rosegarden::MidiBank(percussion, msb, lsb),
-                        program,
-                        std::string("Metronome"));
-
-                dynamic_cast<Rosegarden::MidiDevice*>(m_device)->
-		    setMetronome(Rosegarden::MidiMetronome
-				 (instrument,
-				  prg,
-				  Rosegarden::MidiByte(pitch),
-				  Rosegarden::MidiByte(barVely),
-				  Rosegarden::MidiByte(beatVely),
-				  Rosegarden::MidiByte(subBeatVely)));
-            }
+	    dynamic_cast<Rosegarden::MidiDevice*>(m_device)->
+		setMetronome(metronome);
         }
 
     } else if (lcName == "instrument") {

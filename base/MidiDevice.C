@@ -404,9 +404,6 @@ MidiDevice::toXmlString()
         //
         midiDevice << "        <metronome "
                    << "instrument=\"" << m_metronome->getInstrument() << "\" "
-//!!!                   << "msb=\"" << (int)m_metronome->getProgram().getBank().getMSB() << "\" "
-//!!!                   << "lsb=\"" << (int)m_metronome->getProgram().getBank().getLSB() << "\" " 
-//!!!                   << "program=\"" << (int)m_metronome->getProgram().getProgram() << "\" "
                    << "pitch=\"" << (int)m_metronome->getPitch() << "\" "
                    << "depth=\"" << (int)m_metronome->getDepth() << "\" "
                    << "barvelocity=\"" << (int)m_metronome->getBarVelocity() << "\" "

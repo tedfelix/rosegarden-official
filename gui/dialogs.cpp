@@ -3943,9 +3943,8 @@ CountdownBar::setPosition(int position)
 
 ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
 					     RosegardenGUIDoc *doc) :
-    KDialogBase(parent, 0, true, i18n("Metronome"), Ok | Apply | Cancel),
-    m_doc(doc),
-    m_modified(false)
+    KDialogBase(parent, 0, true, i18n("Metronome"), Ok | Apply | Close),
+    m_doc(doc)
 {
     QVBox *vbox = makeVBoxMainWidget();
 
@@ -3991,7 +3990,7 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
     m_metronomePitch = new QSpinBox(frame);
     m_metronomePitch->setMinValue(0);
     m_metronomePitch->setMaxValue(127);
-    connect(m_metronomePitch, SIGNAL(activated(int)), this, SLOT(slotSetModified()));
+    connect(m_metronomePitch, SIGNAL(valueChanged(int)), this, SLOT(slotSetModified()));
     layout->addWidget(m_metronomePitch, 2, 1);
 
     layout->addWidget(new QLabel(i18n("Resolution"), frame), 3, 0);
@@ -4006,21 +4005,21 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
     m_metronomeBarVely = new QSpinBox(frame);
     m_metronomeBarVely->setMinValue(0);
     m_metronomeBarVely->setMaxValue(127);
-    connect(m_metronomeBarVely, SIGNAL(activated(int)), this, SLOT(slotSetModified()));
+    connect(m_metronomeBarVely, SIGNAL(valueChanged(int)), this, SLOT(slotSetModified()));
     layout->addWidget(m_metronomeBarVely, 4, 1);
 
     layout->addWidget(new QLabel(i18n("Beat velocity"), frame), 5, 0);
     m_metronomeBeatVely = new QSpinBox(frame);
     m_metronomeBeatVely->setMinValue(0);
     m_metronomeBeatVely->setMaxValue(127);
-    connect(m_metronomeBeatVely, SIGNAL(activated(int)), this, SLOT(slotSetModified()));
+    connect(m_metronomeBeatVely, SIGNAL(valueChanged(int)), this, SLOT(slotSetModified()));
     layout->addWidget(m_metronomeBeatVely, 5, 1);
 
     layout->addWidget(new QLabel(i18n("Sub-beat velocity"), frame), 6, 0);
     m_metronomeSubBeatVely = new QSpinBox(frame);
     m_metronomeSubBeatVely->setMinValue(0);
     m_metronomeSubBeatVely->setMaxValue(127);
-    connect(m_metronomeSubBeatVely, SIGNAL(activated(int)), this, SLOT(slotSetModified()));
+    connect(m_metronomeSubBeatVely, SIGNAL(valueChanged(int)), this, SLOT(slotSetModified()));
     layout->addWidget(m_metronomeSubBeatVely, 6, 1);
 
     // populate the dialog
@@ -4032,6 +4031,8 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
     // connect up the device list
     connect(m_metronomeDevice, SIGNAL(activated(int)),
             this, SLOT(slotSetModified()));
+
+    setModified(false);
 }
 
 void
@@ -4039,6 +4040,7 @@ ManageMetronomeDialog::slotResolutionChanged(int depth)
 {
     m_metronomeBeatVely->setEnabled(depth > 0);
     m_metronomeSubBeatVely->setEnabled(depth > 1);
+    slotSetModified();
 }
 
 void
@@ -4076,11 +4078,6 @@ ManageMetronomeDialog::populate(int device)
     // if we've got no metronome against this device then create one
     if (metronome == 0)
     {
-        Rosegarden::MidiProgram 
-            prg(Rosegarden::MidiBank(true, 0, 0),
-                0, // program
-                std::string("Metronome"));
-
         for (iit = list.begin(); iit != list.end(); ++iit)
         {
             if ((*iit)->getMidiChannel() == 9) break;
@@ -4092,13 +4089,7 @@ ManageMetronomeDialog::populate(int device)
             id = (*iit)->getId();
         }
 
-        dev->setMetronome(Rosegarden::MidiMetronome(id,
-						    prg,
-						    Rosegarden::MidiByte(37),
-						    2, //!!!
-						    Rosegarden::MidiByte(120),
-						    Rosegarden::MidiByte(100),
-						    Rosegarden::MidiByte(80)));
+        dev->setMetronome(Rosegarden::MidiMetronome(id));
 
         metronome = dev->getMetronome();
     }
@@ -4122,11 +4113,11 @@ ManageMetronomeDialog::populate(int device)
         m_metronomeInstrument->setCurrentItem(position);
 
         m_metronomePitch->setValue(metronome->getPitch());
-	m_metronomeResolution->setCurrentItem(metronome->getDepth());
+	m_metronomeResolution->setCurrentItem(metronome->getDepth() - 1);
         m_metronomeBarVely->setValue(metronome->getBarVelocity());
         m_metronomeBeatVely->setValue(metronome->getBeatVelocity());
         m_metronomeSubBeatVely->setValue(metronome->getSubBeatVelocity());
-	slotResolutionChanged(metronome->getDepth());
+	slotResolutionChanged(metronome->getDepth() - 1);
     }
 }
 
@@ -4150,12 +4141,10 @@ ManageMetronomeDialog::setModified(bool value)
 
     if (value)
     {
-        enableButtonOK(true);
         enableButtonApply(true);
     }
     else
     {
-        enableButtonOK(false);
         enableButtonApply(false);
     }
 
@@ -4209,10 +4198,10 @@ ManageMetronomeDialog::slotApply()
     metronome->setPitch(
             Rosegarden::MidiByte(m_metronomePitch->value()));
 
-    bool depthChanged = (metronome->getDepth() !=
+    bool depthChanged = (metronome->getDepth() - 1 !=
 			 m_metronomeResolution->currentItem());
     metronome->setDepth(
-	    m_metronomeResolution->currentItem());
+	    m_metronomeResolution->currentItem() + 1);
 
     metronome->setBarVelocity(
             Rosegarden::MidiByte(m_metronomeBarVely->value()));
@@ -4225,6 +4214,7 @@ ManageMetronomeDialog::slotApply()
 
     // using frigged method for the moment
     if (depthChanged) {
+	RG_DEBUG << "ManageMetronomeDialog::slotApply: depth changed" << endl;
 	m_doc->getSequenceManager()->timeSignatureChanged(0);
     } else {
 	m_doc->getSequenceManager()->

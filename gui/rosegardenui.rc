@@ -76,9 +76,9 @@
         <Action name="manage_devices"/>
         <Action name="modify_banks"/>
         <Action name="modify_midi_filters"/>
-	<Action name="manage_metronome"/>
         <Separator/>
         <Action name="manage_controls"/>
+	<Action name="manage_metronome"/>
         <Separator/>
         <Action name="save_default_studio"/>
 	<Action name="load_studio"/>
