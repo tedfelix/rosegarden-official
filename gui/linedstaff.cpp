@@ -613,7 +613,7 @@ LinedStaff<T>::resizeStaffLineRow(int row, double x, double length)
                  getCanvasYForTopLine(row)) + j;
 
 	    if (elementsInSpaces()) {
-		y -= getLineSpacing()/2 - 1;
+		y -= getLineSpacing()/2 + 1;
 	    }
 
             kdDebug(KDEBUG_AREA) << "LinedStaff: drawing line from ("
