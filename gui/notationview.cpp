@@ -840,14 +840,12 @@ bool
 NotationView::replaceRestWithNote(NotationElementList::iterator rest,
                                   NotationElement *newNote)
 {
-    // sanity check : the new note can't be longer than the rest it's
-    // supposed to replace
+    // if the new note's duration is longer than the rest it's
+    // supposed to replace, set it to the rest's duration
     //
     if ((*rest)->event()->getDuration() < newNote->event()->getDuration()) {
-        kdDebug(KDEBUG_AREA) << "NotationView::replaceRestWithNote() - can't replace rest by note, rest is too short (duration : "
-                             << (*rest)->event()->getDuration() << " note duration is "
-                             << newNote->event()->getDuration() << ")" << endl;
-        return false;
+
+        newNote->setNote(Note::getNearestNote((*rest)->event()->getDuration()));
     }
 
     bool newNoteIsSameDurationAsRest = (*rest)->event()->getDuration() == newNote->event()->getDuration();
