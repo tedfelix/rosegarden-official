@@ -25,8 +25,6 @@
 #include <klocale.h>
 #include <dcopclient.h>
 #include <iostream>
-#include <qtimer.h>
-
 
 #include "rosegardensequencer.h"
 #include <MappedComposition.h>
@@ -98,9 +96,6 @@ int main(int argc, char *argv[])
     //
     TransportStatus lastSeqStatus = roseSeq->getStatus();
 
-    QTimer *procTimer = new QTimer();
-    int loopPause = 50;
-
     while(roseSeq->getStatus() != QUIT)
     {
         // process any pending events (10ms of events)
@@ -133,7 +128,6 @@ int main(int argc, char *argv[])
                         else
                         {
                             roseSeq->setStatus(PLAYING);
-                            loopPause = 20;
                         }
                         break;
 
@@ -160,7 +154,6 @@ int main(int argc, char *argv[])
                         else
                         {
                             roseSeq->setStatus(RECORDING_MIDI);
-                            loopPause = 20;
                         }
                         break;
 
@@ -172,7 +165,6 @@ int main(int argc, char *argv[])
                         else
                         {
                             roseSeq->setStatus(RECORDING_AUDIO);
-                            loopPause = 20;
                         }
                         break;
 
@@ -214,7 +206,6 @@ int main(int argc, char *argv[])
 
                     case STOPPED:
                     default:
-                        loopPause = 500;
                         roseSeq->processAsynchronousEvents();
                         break;
                 }
@@ -224,9 +215,6 @@ int main(int argc, char *argv[])
             roseSeq->notifySequencerStatus();
 
         lastSeqStatus = roseSeq->getStatus();
-
-        // pause for breath
-        procTimer->start(loopPause, true);
     }
 
     return app.exec();
