@@ -98,7 +98,7 @@ CsoundExporter::write()
 		    << velocity << "\t\n";
 
 	    } else {
-		str << ";; Event type: " << (*j)->getType() << endl;
+		str << ";; Event type: " << (*j)->getType() << std::endl;
 	    }
 	}
     }
