@@ -27,6 +27,7 @@
 //
 
 #include <string>
+#include <vector>
 
 #include "Instrument.h"
 #include "RealTime.h"
@@ -79,10 +80,13 @@ public:
     template <PropertyType P>
     typename PropertyDefn<P>::basic_type get(const PropertyName &name) const;
 
-    // for exporting -- doesn't write the <configuration> part of
+    // For exporting -- doesn't write the <configuration> part of
     // the element in case you want to write it into another element
     //
     virtual std::string toXmlString();
+
+    /// Return all the contained property names in alphabetical order
+    std::vector<std::string> getPropertyNames();
 
     // Assignment
     //

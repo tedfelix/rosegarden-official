@@ -35,6 +35,7 @@
 #include <qpushbutton.h>
 #include <qradiobutton.h>
 #include <qlineedit.h>
+#include <qlistview.h>
 #include <qtooltip.h>
 
 #include <klocale.h>
@@ -1032,11 +1033,10 @@ SequencerConfigurationPage::apply()
 DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *doc,
 							     QWidget *parent,
 							     const char *name) :
-    TabbedConfigurationPage(doc, parent, name),
-    m_copyright(0)
+    TabbedConfigurationPage(doc, parent, name)
 {
     QFrame *frame = new QFrame(m_tabWidget);
-    QGridLayout *layout = new QGridLayout(frame, 4, 2,
+    QGridLayout *layout = new QGridLayout(frame, 3, 2,
                                           10, 5);
 
     layout->addWidget(new QLabel(i18n("Filename:"), frame), 0, 0);
@@ -1057,26 +1057,48 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
 				 .arg(doc->getComposition().getNbSegments())
 				 .arg(doc->getComposition().getNbTracks()),
 				 frame), 2, 1);
+    
+    addTab(frame, i18n("Summary"));
 
-    layout->addWidget(new QLabel(i18n("Copyright"), frame), 3, 0);
+    frame = new QFrame(m_tabWidget);
+    layout = new QGridLayout(frame, 1, 1, 10, 5);
+
+    m_metadata = new QListView(frame);
+    m_metadata->addColumn("Name");
+    m_metadata->addColumn("Value");
+
+    Rosegarden::Configuration &metadata = doc->getComposition().getMetadata();
+    std::vector<std::string> names(metadata.getPropertyNames());
+    for (unsigned int i = 0; i < names.size(); ++i) {
+	new QListViewItem(m_metadata, strtoqstr(names[i]),
+			  strtoqstr(metadata.get<String>(names[i])));
+    }
+
+    layout->addWidget(m_metadata, 0, 0);
+
+/*!!!    layout->addWidget(new QLabel(i18n("Copyright"), frame), 3, 0);
     m_copyright = new QLineEdit
 	(strtoqstr(doc->getComposition().getCopyrightNote()), frame);
     m_copyright->setMinimumWidth(300);
     layout->addWidget(m_copyright, 3, 1);
-    
-    addTab(frame, i18n("About"));
+*/
+
+    addTab(frame, i18n("Description"));
+
 }
 
 
 void
 DocumentMetaConfigurationPage::apply()
 {
+/*!!!
     Rosegarden::Composition &comp = m_doc->getComposition();
     QString copyright = m_copyright->text();
     
     if (!copyright.isNull()) {
         comp.setCopyrightNote(qstrtostr(copyright));
     }
+*/
 }
 
 

@@ -27,6 +27,7 @@
 //
 
 #include <string>
+#include <algorithm>
 
 #include "Configuration.h"
 
@@ -41,7 +42,8 @@
 namespace Rosegarden
 {
 
-Configuration::Configuration(const Configuration &conf)
+Configuration::Configuration(const Configuration &conf) :
+    PropertyMap()
 {
     clear();
 
@@ -57,6 +59,17 @@ Configuration::~Configuration()
 }
 
 
+std::vector<std::string>
+Configuration::getPropertyNames()
+{
+    std::vector<std::string> v;
+    for (const_iterator i = begin(); i != end(); ++i) {
+	v.push_back(i->first.getName());
+    }
+    std::sort(v.begin(), v.end());
+    return v;
+}
+    
 
 std::string
 Configuration::toXmlString()
