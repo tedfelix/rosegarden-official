@@ -59,9 +59,6 @@ protected:
     void handleStartingEvents(eventstartlist &eventsToStart, bool &addTie, std::ofstream &str);
     void handleEndingEvents(eventendlist &eventsInProgress, Segment::iterator &j, std::ofstream &str);
 
-    char convertPitchToName(int pitch, bool isFlatKeySignature);
-    bool needsAccidental(int pitch);
-
     std::string convertPitchToLilyNote(long pitch,
                                        bool isFlatKeySignature,
                                        int accidentalCount,

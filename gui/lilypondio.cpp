@@ -57,13 +57,11 @@ using Rosegarden::Accidentals;
 LilypondExporter::LilypondExporter(Composition *composition,
                                    std::string fileName) :
     m_composition(composition),
-    m_fileName(fileName)
-{
+    m_fileName(fileName) {
     // nothing else
 }
 
-LilypondExporter::~LilypondExporter()
-{
+LilypondExporter::~LilypondExporter() {
     // nothing
 }
 
@@ -124,57 +122,15 @@ LilypondExporter::handleEndingEvents(eventendlist &eventsInProgress, Segment::it
     }
 }
 
-// basic pitch-to-name conversion for the majority of circumstances
-// (currently needed by musicxmlio, which is why it isn't incorporated into
-// the body of convertPitchToLilyNote)
-char
-LilypondExporter::convertPitchToName(int pitch, bool isFlatKeySignature)
-{
-    // shift to a->g, rather than c->b
-    pitch += 3;
-    pitch %= 12;
-
-    // For flat key signatures, accidentals use next note name
-    if (isFlatKeySignature &&
-        (pitch == 1 || pitch == 4 ||
-         pitch == 6 || pitch == 9 || pitch == 11)) {
-        pitch++;
-    }
-    pitch = pitch % 12;
-
-    // compensate for no c-flat or f-flat
-    if (pitch > 2) {
-        pitch++;
-    }
-    if (pitch > 8) {
-        pitch++;
-    }
-    char pitchLetter = (char)((int)(pitch/2) + 97);
-    return pitchLetter;
-}
-
-bool
-LilypondExporter::needsAccidental(int pitch) {
-    if (pitch > 4) {
-        pitch++;
-    }
-    return (pitch % 2 == 1);
-}
-
-
 // processes input to produce a Lilypond-format note written correctly for all
 // keys and out-of-key accidental combinations.  (I hope.  :)
 //
-// Incomplete???
-// (Does anybody use musicxml?  Should we make this more generic so that the
-// improved algorithm can be applied to musicxml exports as well and dump
-// needsAccidental and convertPitchToName?  They're not needed here anymore.
-// (might be able to leave it alone and make musicxml convert from Lily
-// format)
+// Incomplete???  Probably this should be shared by musicxmlio so that it can
+// benefit from improved enharmonic handling, though it's too Lilypond
+// specific at the moment to serve that purpose.
 std::string
 LilypondExporter::convertPitchToLilyNote (long pitch, bool isFlatKeySignature,
-                        int accidentalCount, Accidental accidental)
-{
+                        int accidentalCount, Accidental accidental) {
     std::string lilyNote = "";
     int pitchNote, c;
     
@@ -300,8 +256,7 @@ LilypondExporter::convertPitchToLilyNote (long pitch, bool isFlatKeySignature,
 }
 
 bool
-LilypondExporter::write()
-{
+LilypondExporter::write() {
     std::ofstream str(m_fileName.c_str(), std::ios::out);
     if (!str) {
         std::cerr << "LilypondExporter::write() - can't write file " << m_fileName << std::endl;

@@ -54,13 +54,11 @@ using Rosegarden::TimeSignature;
 MusicXmlExporter::MusicXmlExporter(RosegardenGUIDoc *doc,
                                    std::string fileName) :
     m_doc(doc),
-    m_fileName(fileName)
-{
+    m_fileName(fileName) {
     // nothing else
 }
 
-MusicXmlExporter::~MusicXmlExporter()
-{
+MusicXmlExporter::~MusicXmlExporter() {
     // nothing
 }
 
@@ -107,8 +105,7 @@ convertKeyToFifths(Key whichKey) {
 // Incomplete??  probably just as limited here as it was in its original home: can't
 // handle B/C E/F or user-specified accidentals
 char
-MusicXmlExporter::convertPitchToName(int pitch, bool isFlatKeySignature)
-{
+MusicXmlExporter::convertPitchToName(int pitch, bool isFlatKeySignature) {
     // shift to a->g, rather than c->b
     pitch += 3;
     pitch %= 12;
@@ -217,8 +214,7 @@ MusicXmlExporter::writeClef(Event *event, std::ofstream &str) {
  * Incomplete: This would be cleaner via an XML parser
  */
 bool
-MusicXmlExporter::write()
-{
+MusicXmlExporter::write() {
     Composition *composition = &m_doc->getComposition();
 
     std::ofstream str(m_fileName.c_str(), std::ios::out);
