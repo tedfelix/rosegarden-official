@@ -4,12 +4,12 @@ var zones = [
 { "v":"4", "name":"authors",     "label":"authors",      "url":"authors.html" },
 { "v":"4", "name":"history",     "label":"history",      "url":"history.html" },
 { "v":"4", "name":"development", "label":"development",  "url":"development.html" },
-{ "v":"4", "name":"pictures",    "label":"pictures",     "url":"pictures.html" },
+{ "v":"4", "name":"pictures",    "label":"screenshots",     "url":"pictures.html" },
 { "v":"4", "name":"list",        "label":"mailing-list", "url":"http://lists.sourceforge.net/lists/listinfo/rosegarden-devel" },
 { "v":"2.1", "name":"index",       "label":"home",         "url":"index.html" },
 { "v":"2.1", "name":"features",    "label":"features",     "url":"features.html" },
 { "v":"2.1", "name":"faq",         "label":"faq",          "url":"faq.html" },
-{ "v":"2.1", "name":"pictures",    "label":"pictures",     "url":"pictures.html" },
+{ "v":"2.1", "name":"pictures",    "label":"screenshots",     "url":"pictures.html" },
 { "v":"2.1", "name":"list",        "label":"mailing-list", "url":"list.html" }
 ];
 function makeNav() {
