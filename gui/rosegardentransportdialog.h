@@ -77,6 +77,8 @@ public slots:
     void slotPanelOpenButtonReleased();
     void slotPanelCloseButtonReleased();
 
+    void slotEditTempo();
+
 signals:
     void closed();
 
@@ -84,6 +86,7 @@ signals:
     //
     void setLoop();
     void unsetLoop();
+    void editTempo();
 
 private:
     void loadPixmaps();

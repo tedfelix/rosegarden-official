@@ -25,13 +25,15 @@
 #include <kstddirs.h>
 #include <klocale.h>
 
+#include <iostream>
+
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qspinbox.h>
 #include <qlineedit.h>
 #include <qtimer.h>
 
-#include <iostream>
+#include "widgets.h"
 
 namespace Rosegarden
 {
@@ -136,6 +138,27 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     setFixedSize(width(), height() - rfh);
     PanelOpenButton->setOn(false);
     PanelOpenButton->setPixmap(m_panelClosed);
+
+    // We have to specify these settings in this class (copied
+    // from rosegardentransport.cpp) as we're using a specialised
+    // widgets for TempoDisplay.  Ugly but works - does mean that
+    // if the rest of the Transport ever changes then this code
+    // will have to as well.
+    //
+    //
+    QPalette pal;
+    pal.setColor(QColorGroup::Foreground, QColor(192, 216, 255));
+    TempoDisplay->setPalette(pal);
+    TempoDisplay->setAlignment(int(QLabel::AlignVCenter | QLabel::AlignRight));
+
+    QFont localFont(  OutDisplay->font() );
+    localFont.setFamily( "lucida" );
+    localFont.setBold( TRUE );
+    TempoDisplay->setFont( localFont );
+
+    // Now the reason why we have to do the above fiddling
+    connect(TempoDisplay, SIGNAL(doubleClicked()),
+            this, SLOT(slotEditTempo()));
 }
 
 RosegardenTransportDialog::~RosegardenTransportDialog()
@@ -419,6 +442,7 @@ RosegardenTransportDialog::setTempo(const double &tempo)
 
     QString tempoString;
     tempoString.sprintf("%4.3f", tempo);
+
     TempoDisplay->setText(tempoString);
 }
 
@@ -620,6 +644,12 @@ bool
 RosegardenTransportDialog::isExpanded()
 {
     return (RecordingFrame->isVisible());
+}
+
+void
+RosegardenTransportDialog::slotEditTempo()
+{
+    emit editTempo();
 }
 
 }

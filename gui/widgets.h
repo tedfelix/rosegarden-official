@@ -21,6 +21,7 @@
 
 #include <qcheckbox.h>
 #include <qcombobox.h>
+#include <qlabel.h>
 
 #ifndef _WIDGETS_H_
 #define _WIDGETS_H_
@@ -70,6 +71,24 @@ signals:
 
 private:
     bool m_reverse;
+
+};
+
+// A label that emits a double click signal
+//
+class RosegardenLabel : public QLabel
+{
+Q_OBJECT
+public:
+    RosegardenLabel(QWidget *parent = 0, const char *name=0):
+        QLabel(parent, name) {;}
+
+protected:
+    virtual void mouseDoubleClickEvent(QMouseEvent * /*e*/)
+        { emit doubleClicked(); }
+
+signals:
+    void doubleClicked();
 
 };
 

@@ -294,6 +294,11 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotEditAllTracks()),
                 actionCollection(), "edit_all_tracks");
 
+    new KAction(i18n("Edit &Tempo"),
+                0,
+                this, SLOT(slotEditTempo()),
+                actionCollection(), "edit_tempo");
+
     // Transport controls [rwb]
     //
     // We set some default key bindings - with numlock off
@@ -434,6 +439,8 @@ void RosegardenGUIApp::setupActions()
     //
     connect(m_transport, SIGNAL(setLoop()), SLOT(slotSetLoop()));
     connect(m_transport, SIGNAL(unsetLoop()), SLOT(slotUnsetLoop()));
+
+    connect(m_transport, SIGNAL(editTempo()), SLOT(slotEditTempo()));
 }
 
 
@@ -1980,4 +1987,11 @@ void RosegardenGUIApp::slotEditToolbars()
 {
     kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotEditToolbars" << std::endl;
 }
+
+void RosegardenGUIApp::slotEditTempo()
+{
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotEditTempo" << std::endl;
+}
+
+
 

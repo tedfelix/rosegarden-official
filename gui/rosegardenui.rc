@@ -12,6 +12,10 @@
       <Action name="file_export_midi" />
     </Menu>
   </Menu>
+  <Menu name="edit">
+      <text>&amp;Edit</text>
+      <Action name="edit_tempo" append="edit_merge"/>
+  </Menu>
   <Menu name="View">
 	<text>&amp;View</text>
 	<Action name="edit_all_tracks"/>
