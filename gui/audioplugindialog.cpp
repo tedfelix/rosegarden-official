@@ -375,7 +375,6 @@ PluginControl::PluginControl(QWidget *parent,
 {
     QFont plainFont;
     plainFont.setPointSize((plainFont.pointSize() * 9 )/ 10);
-    
 
     QLabel *controlTitle = new QLabel(strtoqstr(port->getName()), parent);
     controlTitle->setFont(plainFont);
@@ -385,29 +384,6 @@ PluginControl::PluginControl(QWidget *parent,
 
     if (type == Rotary)
     {
-/*!!!
-        // defaults
-        float lowerBound = 0.0;
-        float upperBound = 1.0;
-
-        // Default value appears to be more or less ignored in most
-        // plugins so let's ignore it ourselves.
-        //
-	//float defaultValue = (float)(port->getDefaultValue());
-        //cout << "DEFAULT VALUE = " << defaultValue << endl;
-
-        if (m_port->getRange() & PluginPort::Below)
-            lowerBound = float(port->getLowerBound());
-
-        if (m_port->getRange() & PluginPort::Above)
-            upperBound = float(port->getUpperBound());
-
-        if (m_port->getRange() & PluginPort::SampleRate)
-        {
-            lowerBound *= m_pluginManager->getSampleRate();
-            upperBound *= m_pluginManager->getSampleRate();
-        }
-*/
 	float lowerBound = port->getLowerBound();
 	float upperBound = port->getUpperBound();
 	// Default value was already handled when calling this constructor
@@ -422,6 +398,7 @@ PluginControl::PluginControl(QWidget *parent,
         QLabel *low = new QLabel(QString("%1").arg(lowerBound), parent);
         low->setIndent(10);
         low->setAlignment(AlignRight|AlignBottom);
+        low->setFont(plainFont);
 
         float step = (upperBound - lowerBound) / 100.0;
 

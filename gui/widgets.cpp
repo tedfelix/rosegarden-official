@@ -354,6 +354,10 @@ RosegardenProgressDialog* CurrentProgressDialog::m_currentProgressDialog = 0;
 // ------------------ RosegardenRotary -----------------
 //
 //
+#define ROTARY_MIN (0.25 * M_PI)
+#define ROTARY_MAX (1.75 * M_PI)
+#define ROTARY_RANGE (ROTARY_MAX - ROTARY_MIN)
+
 RosegardenRotary::RosegardenRotary(QWidget *parent,
                                    float minValue,
                                    float maxValue,
@@ -437,7 +441,7 @@ RosegardenRotary::paintEvent(QPaintEvent *e)
 
 	double hyp = double(m_size) / 2.0;
 
-	double angle = 0.22 * M_PI;
+	double angle = ROTARY_MIN;
 
 	double x0 = hyp - hyp * sin(angle);
 	double y0 = hyp + hyp * cos(angle);
@@ -446,7 +450,7 @@ RosegardenRotary::paintEvent(QPaintEvent *e)
 
 	paint.drawLine(int(x0), int(y0), int(x1), int(y1));
 
-	angle = 0.22 * M_PI + 1.6 * M_PI;
+	angle = ROTARY_MAX;
     
 	x0 = hyp - hyp * sin(angle);
 	y0 = hyp + hyp * cos(angle);
@@ -593,15 +597,18 @@ RosegardenRotary::drawPosition()
     QPainter paint(this);
 
     double hyp = double(m_size) / 2.0;
+    double len = hyp * 0.8;
+
+    if (m_showTicks) len = 0.9 * len;
 
     // Undraw the previous line
     //
-    double angle = (0.22 * M_PI) // offset 
-                   + (1.6 * M_PI * (double(m_lastPosition - m_minValue) /
+    double angle = ROTARY_MIN // offset 
+                   + (ROTARY_RANGE * (double(m_lastPosition - m_minValue) /
                      (double(m_maxValue) - double(m_minValue))));
 
-    double x = hyp - 0.8 * hyp * sin(angle);
-    double y = hyp + 0.8 * hyp * cos(angle);
+    double x = hyp - len * sin(angle);
+    double y = hyp + len * cos(angle);
 
     if (m_knobColour != Qt::black)
         paint.setPen(m_knobColour);
@@ -613,12 +620,12 @@ RosegardenRotary::drawPosition()
 
     // Draw the new position
     //
-    angle = (0.22 * M_PI) // offset 
-                   + (1.6 * M_PI * (double(m_position - m_minValue) /
+    angle = ROTARY_MIN // offset 
+                   + (ROTARY_RANGE * (double(m_position - m_minValue) /
                      (double(m_maxValue) - double(m_minValue))));
 
-    x = hyp - 0.8 * hyp * sin(angle);
-    y = hyp + 0.8 * hyp * cos(angle);
+    x = hyp - len * sin(angle);
+    y = hyp + len * cos(angle);
 
     paint.setPen(kapp->palette().color(QPalette::Active, QColorGroup::Dark));
     paint.drawLine(int(hyp), int(hyp), int(x), int(y));
