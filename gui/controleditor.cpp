@@ -147,6 +147,11 @@ void
 ControlEditorDialog::slotClose()
 {
     RG_DEBUG << "ControlEditorDialog::slotClose" << endl;
+
+    m_doc->getCommandHistory()->detachView(actionCollection());
+    m_doc = 0;
+
+    close();
 }
 
 void

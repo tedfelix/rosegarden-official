@@ -27,6 +27,7 @@
 #include "Instrument.h"
 #include "Device.h"
 #include "MidiDevice.h"
+#include "ControlParameter.h"
 
 class RosegardenGUIDoc;
 namespace Rosegarden { class Studio; }
@@ -219,4 +220,75 @@ protected:
     Rosegarden::DeviceId m_deviceId;
     std::string m_newConnection;
     std::string m_oldConnection;
+};
+
+class AddControlParameterCommand : public KNamedCommand
+{
+public:
+    AddControlParameterCommand(Rosegarden::Studio *studio,
+                               Rosegarden::ControlParameter *control):
+        KNamedCommand(getGlobalName()),
+        m_studio(studio),
+        m_control(control),
+        m_id(0) { }
+
+    virtual void execute();
+    virtual void unexecute();
+
+    static QString getGlobalName() { return i18n("&Add Control Parameter"); }
+
+protected:
+    
+    Rosegarden::Studio              *m_studio;
+    Rosegarden::ControlParameter    *m_control;
+    int                              m_id;
+    
+};
+
+
+class RemoveControlParameterCommand : public KNamedCommand
+{
+public:
+    RemoveControlParameterCommand(Rosegarden::Studio *studio,
+                                  int id):
+        KNamedCommand(getGlobalName()),
+        m_studio(studio),
+        m_id(id) { }
+
+    virtual void execute();
+    virtual void unexecute();
+
+    static QString getGlobalName() { return i18n("&Remove Control Parameter"); }
+
+protected:
+
+    Rosegarden::Studio              *m_studio;
+    int                              m_id;
+    Rosegarden::ControlParameter    *m_oldControl;
+
+};
+
+class ModifyControlParameterCommand : public KNamedCommand
+{
+public:
+    ModifyControlParameterCommand(Rosegarden::Studio *studio,
+                                  Rosegarden::ControlParameter *control,
+                                  int id):
+        KNamedCommand(getGlobalName()),
+        m_studio(studio),
+        m_control(control),
+        m_id(id) { }
+
+        virtual void execute();
+        virtual void unexecute();
+
+        static QString getGlobalName() { return i18n("&Modify Control Parameter"); }
+
+protected:
+
+        Rosegarden::Studio            *m_studio;
+        Rosegarden::ControlParameter  *m_control;
+        int                            m_id;
+        Rosegarden::ControlParameter  *m_originalControl;
+
 };

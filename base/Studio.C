@@ -588,7 +588,92 @@ Studio::copy(const Studio &studio)
 }
 
 
+void
+Studio::addControlParameter(ControlParameter *con)
+{
+    m_controls.push_back(con);
 }
 
+void
+Studio::addControlParameter(ControlParameter *con, int id)
+{
+    ControlList controls;
+
+    // add new controller in at a position
+    for (unsigned int i = 0; i != m_controls.size(); ++i)
+    {
+        if (id == i) controls.push_back(con);
+        controls.push_back(m_controls[i]);
+    }
+
+    // clear and copy back
+    m_controls.clear();
+
+    for (unsigned int i = 0; i != controls.size(); ++i)
+        m_controls.push_back(controls[i]);
+}
+
+
+bool
+Studio::removeControlParameter(int id)
+{
+    ControlListIterator it = m_controls.begin();
+    int i = 0;
+
+    for (; it != m_controls.end(); ++it)
+    {
+        if (id == i)
+        {
+            delete (*it);
+            m_controls.erase(it);
+            return true;
+        }
+        i++;
+    }
+
+    return false;
+}
+
+bool
+Studio::modifyControlParameter(ControlParameter *con, int id)
+{
+    if (id < 0 || id > m_controls.size()) return false;
+
+    delete m_controls[id];
+    m_controls[id] = con;
+
+    return true;
+}
+
+// Check to see if passed ControlParameter is unique.  Either the
+// type must be unique or in the case of Controller::EventType the
+// ControllerValue must be unique.
+//
+// Controllers (Control type)
+//
+//
+bool 
+Studio::isUniqueControlParameter(ControlParameter *con) const
+{
+    ControlListConstIterator it = m_controls.begin();
+
+    for (; it != m_controls.end(); ++it)
+    {
+        if ((*it)->getType() == con->getType())
+        {
+            if ((*it)->getType() == Rosegarden::Controller::EventType &&
+                (*it)->getControllerValue() != con->getControllerValue())
+                continue;
+
+            return false;
+        }
+
+    }
+
+    return true;
+}
+
+
+}
 
 

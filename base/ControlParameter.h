@@ -25,6 +25,7 @@
 #include <string>
 
 #include "XmlExportable.h"
+#include "MidiProgram.h"
 
 namespace Rosegarden
 {
@@ -32,20 +33,42 @@ namespace Rosegarden
 class ControlParameter : public XmlExportable
 {
 public:
+    ControlParameter():
+        m_name("<unnamed control paramter>"),
+        m_type("<unknown>"),
+        m_description("<no description>"),
+        m_min(0),
+        m_max(127),
+        m_default(0),
+        m_controllerValue(0) { }
+
     ControlParameter(const std::string &name,
                      const std::string &type,
                      const std::string &description,
                      int min = 0,
                      int max = 127,
-                     int def = 0);
+                     int def = 0,
+                     MidiByte controllerValue = 0);
+
+    std::string getName() const { return m_name; }
+    std::string getType() const { return m_type; }
+    std::string getDescription() const { return m_description; }
 
     int getMin() const { return m_min; }
     int getMax() const { return m_max; }
     int getDefault() const { return m_default; }
 
-    std::string getName() const { return m_name; }
-    std::string getType() const { return m_type; }
-    std::string getDescription() const { return m_description; }
+    MidiByte getControllerValue() const { return m_controllerValue; }
+
+    void setName(const std::string &name) { m_name = name; }
+    void setType(const std::string &type) { m_type = type; }
+    void setDescription(const std::string &des) { m_type = des; }
+
+    void setMin(int min) { m_min = min; }
+    void setMax(int max) { m_max = max; }
+    void setDefault(int def) { m_default = def; }
+
+    void setControllerValue(MidiByte con) { m_controllerValue = con; }
 
     virtual std::string toXmlString();
 
@@ -62,6 +85,8 @@ protected:
     int            m_min;
     int            m_max;
     int            m_default;
+
+    MidiByte       m_controllerValue;
 
 };
 

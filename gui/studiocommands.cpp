@@ -525,3 +525,47 @@ ReconnectDeviceCommand::unexecute()
 
 
 
+// ---- Control Parameter Commands -----
+//
+void
+AddControlParameterCommand::execute()
+{
+    m_studio->addControlParameter(m_control);
+
+    // store id of the new control
+    m_id = m_studio->getControlParameters()->size() - 1;
+}
+
+void
+AddControlParameterCommand::unexecute()
+{
+    m_studio->removeControlParameter(m_id);
+}
+
+void
+RemoveControlParameterCommand::execute()
+{
+    m_oldControl = (*(m_studio->getControlParameters()))[m_id];
+    m_studio->removeControlParameter(m_id);
+}
+
+void
+RemoveControlParameterCommand::unexecute()
+{
+    m_studio->addControlParameter(m_oldControl, m_id);
+}
+
+void
+ModifyControlParameterCommand::execute()
+{
+    m_originalControl = (*(m_studio->getControlParameters()))[m_id];
+    (*(m_studio->getControlParameters()))[m_id] = m_control;
+}
+
+void
+ModifyControlParameterCommand::unexecute()
+{
+    (*(m_studio->getControlParameters()))[m_id] = m_originalControl;
+}
+
+

@@ -174,9 +174,17 @@ public:
     ControlListConstIterator endControllers() const
         { return m_controls.end(); }
 
-    ControlList* getControllers() { return &m_controls; }
+    ControlList* getControlParameters() { return &m_controls; }
 
-    void addController(Controller *con);
+    void addControlParameter(ControlParameter *con);
+    void addControlParameter(ControlParameter *con, int id);
+    bool removeControlParameter(int id);
+    bool modifyControlParameter(ControlParameter *con, int id);
+
+    // Check to see if the passed ControlParameter is unique in
+    // our ControlParameter list.
+    //
+    bool isUniqueControlParameter(ControlParameter *con) const;
 
 private:
 

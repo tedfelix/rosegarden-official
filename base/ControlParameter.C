@@ -29,13 +29,15 @@ ControlParameter::ControlParameter(const std::string &name,
                                    const std::string &description,
                                    int min,
                                    int max,
-                                   int def):
+                                   int def,
+                                   MidiByte controllerValue):
         m_name(name),
         m_type(type),
         m_description(description),
         m_min(min),
         m_max(max),
-        m_default(def)
+        m_default(def),
+        m_controllerValue(controllerValue)
 {
 }
 
