@@ -131,10 +131,4 @@
      </enable>
 </State>
 
-<State name="have_clipboard_single_segment">
-     <enable>
-        <Action name="add_tracks"/>
-     </enable>
-</State>
-
 </kpartgui>
