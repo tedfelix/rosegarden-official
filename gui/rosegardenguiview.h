@@ -240,6 +240,12 @@ public slots:
      */
     void slotSynchroniseWithComposition();
 
+
+    /**
+     * The value of the 'transpose' combo was changed - remap selected segments
+     */
+    void slotTransposeValueChanged(int);
+
 signals:
     void activateTool(const QString& toolName);
 

@@ -1673,13 +1673,6 @@ SequenceManager::sendTransportControlStatuses()
 }
 
 void
-SequenceManager::slotTransposeValueChanged(int transposeVal)
-{
-    SEQMAN_DEBUG << "got transposeValueChanged(" << transposeVal << ")" << endl;
-    m_controlBlockMmapper->updateTransposeValue(transposeVal);
-}
-
-void
 SequenceManager::slotCountdownCancelled()
 {
     SEQMAN_DEBUG << "SequenceManager::slotCountdownCancelled - "

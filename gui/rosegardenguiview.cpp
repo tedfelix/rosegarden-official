@@ -103,6 +103,9 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
     connect(m_segmentParameterBox, SIGNAL(documentModified()),
             doc, SLOT(slotDocumentModified()));
 
+    connect(m_segmentParameterBox, SIGNAL(transposeValueChanged(int)),
+            this, SLOT(slotTransposeValueChanged(int)));
+
     m_instrumentParameterBox = new InstrumentParameterBox(getDocument(), vbox);
     vboxLayout->addWidget(m_instrumentParameterBox);
     vboxLayout->addStretch();
@@ -398,9 +401,6 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
 	    getDocument(), SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
     Rosegarden::SequenceManager *sM = getDocument()->getSequenceManager();
-
-    connect(m_segmentParameterBox, SIGNAL(transposeValueChanged(int)),
-            sM, SLOT(slotTransposeValueChanged(int)));
 
     connect(sM, SIGNAL(insertableNoteOnReceived(int)),
 	    notationView, SLOT(slotInsertableNoteOnReceived(int)));
@@ -1226,6 +1226,17 @@ RosegardenGUIView::slotSynchroniseWithComposition()
 
     m_instrumentParameterBox->slotUpdateAllBoxes();
 }
+
+void
+RosegardenGUIView::slotTransposeValueChanged(int transposeVal)
+{
+    Rosegarden::SegmentSelection selection = getSelection();
+    for(Rosegarden::SegmentSelection::iterator i = selection.begin(); i != selection.end(); ++i) {
+        getDocument()->getSequenceManager()->segmentModified(*i);
+    }
+}
+
+
 
 void
 RosegardenGUIView::initChordNameRuler()
