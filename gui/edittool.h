@@ -147,12 +147,16 @@ public:
     /**
      * Do nothing
      */
-    virtual void handleMouseMove(QMouseEvent*);
+    virtual void handleMouseMove(int height,
+                                 Rosegarden::timeT time,
+                                 QMouseEvent*);
 
     /**
      * Do nothing
      */
-    virtual void handleMouseRelease(QMouseEvent*);
+    virtual void handleMouseRelease(int height,
+                                    Rosegarden::timeT time,
+                                    QMouseEvent*);
 
     /**
      * Show the menu if there is one

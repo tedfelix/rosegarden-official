@@ -135,11 +135,11 @@ void EditTool::handleMouseDblClick(int, int,
 }
 
 
-void EditTool::handleMouseMove(QMouseEvent*)
+void EditTool::handleMouseMove(int, Rosegarden::timeT, QMouseEvent*)
 {
 }
 
-void EditTool::handleMouseRelease(QMouseEvent*)
+void EditTool::handleMouseRelease(int, Rosegarden::timeT, QMouseEvent*)
 {
 }
 
