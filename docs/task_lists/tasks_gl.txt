@@ -47,3 +47,6 @@ Older task list
 * key sig palette
 
 * selection point
+
+* s/Track/Segment/
+
