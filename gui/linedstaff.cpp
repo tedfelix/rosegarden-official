@@ -378,10 +378,12 @@ LinedStaff<T>::sizeStaff(Rosegarden::HorizontalLayoutEngine<T> &layout)
 
     double xleft = 0, xright = 0;
     bool haveXLeft = false;
-
+/*!!!
     if (lastBar >= 0) xright = layout.getBarPosition(lastBar);
     else xright = layout.getTotalWidth();
-    
+*/
+    xright = layout.getBarPosition(lastBar);
+
     Rosegarden::TimeSignature currentTimeSignature;
 
     for (int barNo = layout.getFirstVisibleBarOnStaff(*this);
@@ -403,7 +405,7 @@ LinedStaff<T>::sizeStaff(Rosegarden::HorizontalLayoutEngine<T> &layout)
 	    insertTimeSignature(timeSigX, currentTimeSignature);
 	}
 
-//	RG_DEBUG << "LinedStaff::sizeStaff: inserting bar at " << x << " on staff " << this << endl;
+	RG_DEBUG << "LinedStaff::sizeStaff: inserting bar at " << x << " on staff " << this << endl;
 	
 	insertBar(x,
 		  ((barNo == lastBar) ? 0 :

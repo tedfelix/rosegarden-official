@@ -320,6 +320,7 @@ protected:
     QCanvasSimpleSprite *m_staffName;
     NotationView *m_notationView;
     bool m_colourQuantize;
+    bool m_showUnknowns;
 };
 
 #endif

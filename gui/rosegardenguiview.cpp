@@ -50,6 +50,7 @@
 #include "barbuttons.h"
 #include "loopruler.h"
 #include "temporuler.h"
+#include "chordnameruler.h"
 #include "RulerScale.h"
 #include "Instrument.h"
 #include "Selection.h"
@@ -589,6 +590,10 @@ void RosegardenGUIView::setZoomSize(double size)
 	m_trackEditor->getTempoRuler()->repaint();
     }
 
+    if (m_trackEditor->getChordNameRuler()) {
+	m_trackEditor->getChordNameRuler()->repaint();
+    }
+
     if (m_trackEditor->getTopBarButtons()) {
 	m_trackEditor->getTopBarButtons()->repaint();
     }
@@ -871,6 +876,15 @@ void RosegardenGUIView::slotShowTempoRuler(bool v)
         m_trackEditor->getTempoRuler()->show();
     } else {
         m_trackEditor->getTempoRuler()->hide();
+    }
+}
+
+void RosegardenGUIView::slotShowChordNameRuler(bool v)
+{
+    if (v) {
+        m_trackEditor->getChordNameRuler()->show();
+    } else {
+        m_trackEditor->getChordNameRuler()->hide();
     }
 }
 

@@ -20,6 +20,7 @@
 */
 
 #include <kapp.h>
+#include <kconfig.h>
 
 #include "notationhlayout.h"
 #include "notationstaff.h"
@@ -76,7 +77,8 @@ NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf,
     m_legatoQuantizer(legatoQuantizer),
     m_properties(properties),
     m_timePerProgressIncrement(0),
-    m_staffCount(0)
+    m_staffCount(0),
+    m_showUnknowns(true)
 {
 //    NOTATION_DEBUG << "NotationHLayout::NotationHLayout()" << endl;
 }
@@ -291,6 +293,10 @@ void
 NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 {
     START_TIMING;
+    
+    KConfig *config = kapp->config();
+    config->setGroup("Notation Options");
+    m_showUnknowns = config->readBoolEntry("showunknowns", true);
 
     Segment &segment(staff.getSegment());
     NotationElementList *notes = staff.getViewElementList();
@@ -744,6 +750,11 @@ NotationHLayout::reconcileBarsLinear()
 	    // have we reached the end of the piece?
 	    if (barNo >= getLastVisibleBar()) break; // yes
 	    else {
+		m_totalWidth += 30;
+		NOTATION_DEBUG << "Setting bar position for degenerate bar "
+			       << barNo << " to " << m_totalWidth << endl;
+
+		m_barPositions[barNo] = m_totalWidth;
 		++barNo;
 		continue;
 	    }
@@ -787,6 +798,9 @@ NotationHLayout::reconcileBarsLinear()
 
 	++barNo;
     }
+
+    NOTATION_DEBUG << "Setting bar position for bar " << barNo
+		   << " to " << m_totalWidth << endl;
 
     m_barPositions[barNo] = m_totalWidth;
 
@@ -1621,7 +1635,7 @@ int NotationHLayout::getMinWidth(NotationElement &e) const
 
     } else {
         NOTATION_DEBUG << "NotationHLayout::getMinWidth(): no case for event type " << e.event()->getType() << endl;
-        w += 24;
+        if (m_showUnknowns) w += 24;
     }
 
     return w;
@@ -1690,6 +1704,9 @@ NotationHLayout::getFirstVisibleBar()
 	    haveBar = true;
 	}
     }
+
+//!!!    NOTATION_DEBUG << "NotationHLayout::getFirstVisibleBar: returning " << bar << endl;
+
     return bar;
 }
 
@@ -1697,8 +1714,13 @@ int
 NotationHLayout::getFirstVisibleBarOnStaff(StaffType &staff)
 {
     BarDataList &bdl(getBarData(staff));
-    if (bdl.begin() == bdl.end()) return 0;
-    return bdl.begin()->first;
+
+    int bar = 0;
+    if (bdl.begin() != bdl.end()) bar = bdl.begin()->first;
+
+//!!!    NOTATION_DEBUG << "NotationHLayout::getFirstVisibleBarOnStaff: returning " << bar << endl;
+
+    return bar;
 }
 
 int
@@ -1715,6 +1737,9 @@ NotationHLayout::getLastVisibleBar()
 	    haveBar = true;
 	}
     }
+
+//!!!    NOTATION_DEBUG << "NotationHLayout::getLastVisibleBar: returning " << bar << endl;
+
     return bar;
 }
 
@@ -1722,26 +1747,45 @@ int
 NotationHLayout::getLastVisibleBarOnStaff(StaffType &staff)
 {
     BarDataList &bdl(getBarData(staff));
-    if (bdl.begin() == bdl.end()) return 0;
-    BarDataList::iterator i(bdl.end());
-    return ((--i)->first) + 1; // last visible bar_line_
+    int bar = 0;
+
+    if (bdl.begin() != bdl.end()) {
+	BarDataList::iterator i(bdl.end());
+	bar = ((--i)->first) + 1; // last visible bar_line_
+    }
+
+//!!!    NOTATION_DEBUG << "NotationHLayout::getLastVisibleBarOnStaff: returning " << bar << endl;
+
+    return bar;
 }
 
 double
 NotationHLayout::getBarPosition(int bar)
 {
+    double position = 0.0;
+
     BarPositionList::iterator i = m_barPositions.find(bar);
-    if (i != m_barPositions.end()) return i->second;
 
-    i = m_barPositions.begin();
-    if (i == m_barPositions.end()) return 0.0;
-    if (bar < i->first) return i->second;
+    if (i != m_barPositions.end()) {
 
-    i = m_barPositions.end();
-    --i;
-    if (bar > i->first) return i->second;
+	position = i->second;
 
-    return 0.0;
+    } else {
+
+	i = m_barPositions.begin();
+	if (i != m_barPositions.end()) {
+	    if (bar < i->first) position = i->second;
+	    else {
+		i = m_barPositions.end();
+		--i;
+		if (bar > i->first) position = i->second;
+	    }
+	}
+    }
+
+//!!!    NOTATION_DEBUG << "NotationHLayout::getBarPosition: returning " << position << " for bar " << bar << endl;
+
+    return position;
 }
 
 bool

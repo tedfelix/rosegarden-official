@@ -81,13 +81,11 @@ NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment,
     m_graceNotePixmapFactory(0),
     m_previewSprite(0),
     m_staffName(0),
-    m_notationView(view)
+    m_notationView(view),
+    m_colourQuantize(true),
+    m_showUnknowns(true)
 {
     changeFont(fontName, resolution);
-    
-    KConfig *config = kapp->config();
-    config->setGroup("Notation Options");
-    m_colourQuantize = config->readBoolEntry("colourquantize", true);
 }
 
 NotationStaff::~NotationStaff()
@@ -321,6 +319,11 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 {
     NOTATION_DEBUG << "NotationStaff " << this << "::renderElements()" << endl;
     START_TIMING;
+    
+    KConfig *config = kapp->config();
+    config->setGroup("Notation Options");
+    m_colourQuantize = config->readBoolEntry("colourquantize", true);
+    m_showUnknowns = config->readBoolEntry("showunknowns", true);
 
     emit setOperationName(i18n("Rendering staff %1...").arg(getId() + 1));
     emit setProgress(0);
@@ -818,7 +821,9 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 
 		NOTATION_DEBUG
 		    << "Unrecognised indicationType " << indicationType << endl;
-		pixmap = m_notePixmapFactory->makeUnknownPixmap();
+		if (m_showUnknowns) {
+		    pixmap = m_notePixmapFactory->makeUnknownPixmap();
+		}
 	    }
 
 	} else {
@@ -826,7 +831,9 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 	    NOTATION_DEBUG
 		<< "NotationElement of unrecognised type "
 		<< elt->event()->getType() << endl;
-	    pixmap = m_notePixmapFactory->makeUnknownPixmap();
+	    if (m_showUnknowns) {
+		pixmap = m_notePixmapFactory->makeUnknownPixmap();
+	    }
 	}
 
 	if (!canvasItem && pixmap) {

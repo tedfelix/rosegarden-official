@@ -189,6 +189,8 @@ public slots:
 
     void slotShowTempoRuler(bool);
 
+    void slotShowChordNameRuler(bool);
+
     void slotShowPreviews(bool);
 
     void slotAddTracks(unsigned int, Rosegarden::InstrumentId);

@@ -375,6 +375,7 @@ protected:
 
     int m_timePerProgressIncrement;
     int m_staffCount; // purely for progress reporting
+    bool m_showUnknowns;
 };
 
 #endif

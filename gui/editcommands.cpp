@@ -924,4 +924,3 @@ ChangeVelocityCommand::modifySegment()
 	}
     }
 }
-

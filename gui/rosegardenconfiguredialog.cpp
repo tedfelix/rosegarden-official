@@ -337,7 +337,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     addTab(frame, i18n("Font"));
 
     frame = new QFrame(m_tabWidget);
-    layout = new QGridLayout(frame, 3, 2, 10, 5);
+    layout = new QGridLayout(frame, 4, 2, 10, 5);
 
     layout->addWidget(new QLabel(i18n("Default spacing"), frame), 0, 0);
     
@@ -381,15 +381,17 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
 
     layout->addWidget(m_smoothing, 1, 1);
     
-    m_colourQuantize = new QRadioButton
+    m_colourQuantize = new QCheckBox
 	(i18n("Show smoothed notes in a different colour"), frame);
     bool defaultColourQuantize = m_cfg->readBoolEntry("colourquantize", true);
     m_colourQuantize->setChecked(defaultColourQuantize);
-
-//    layout->addMultiCellWidget(m_colourQuantize,
-//			       2, 2, // fromRow, toRow,
-//			       0, 1); // fromCol, toCol
     layout->addWidget(m_colourQuantize, 2, 1);
+    
+    m_showUnknowns = new QCheckBox
+	(i18n("Show non-notation events as question marks"), frame);
+    bool defaultShowUnknowns = m_cfg->readBoolEntry("showunknowns", true);
+    m_showUnknowns->setChecked(defaultShowUnknowns);
+    layout->addWidget(m_showUnknowns, 3, 1);
     
     addTab(frame, i18n("Layout"));
 
@@ -435,18 +437,16 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
 
     bool autoBeam = m_cfg->readBoolEntry("autobeam", true);
 
-    m_autoBeam = new QRadioButton
+    m_autoBeam = new QCheckBox
 	(i18n("Auto-beam on insert when appropriate"), frame);
     m_autoBeam->setChecked(autoBeam);
-//    layout->addMultiCellWidget(m_autoBeam, 2, 2, 0, 1);
     layout->addWidget(m_autoBeam, 2, 1);
 
     bool collapse = m_cfg->readBoolEntry("collapse", false);
 
-    m_collapseRests = new QRadioButton
+    m_collapseRests = new QCheckBox
 	(i18n("Collapse rests after erase"), frame);
     m_collapseRests->setChecked(collapse);
-//    layout->addMultiCellWidget(m_collapseRests, 3, 3, 0, 1);
     layout->addWidget(m_collapseRests, 3, 1);
 
 
@@ -537,6 +537,7 @@ NotationConfigurationPage::apply()
     m_cfg->writeEntry("smoothing",
 		      m_smoothing->currentItem() + Note::Shortest);
     m_cfg->writeEntry("colourquantize", m_colourQuantize->isChecked());
+    m_cfg->writeEntry("showunknowns", m_showUnknowns->isChecked());
     m_cfg->writeEntry("style", m_noteStyle->currentText());
     m_cfg->writeEntry("inserttype", m_insertType->currentItem());
     m_cfg->writeEntry("autobeam", m_autoBeam->isChecked());

@@ -78,6 +78,7 @@
 #include "audiomanagerdialog.h"
 #include "widgets.h"
 #include "temporuler.h"
+#include "chordnameruler.h"
 #include "SoundDriver.h"
 #include "segmenttool.h"
 #include "matrixtool.h"
@@ -306,6 +307,11 @@ void RosegardenGUIApp::setupActions()
                                      SLOT(slotToggleTempoRuler()),
                                      actionCollection(),
                                      "show_tempo_ruler");
+
+    m_viewChordNameRuler = new KToggleAction(i18n("Show Ch&ord Name Ruler"), 0, this,
+					     SLOT(slotToggleChordNameRuler()),
+					     actionCollection(),
+					     "show_chord_name_ruler");
 
     m_viewPreviews = new KToggleAction(i18n("Show Segment Pre&views"), 0, this,
 				       SLOT(slotTogglePreviews()),
@@ -731,6 +737,7 @@ void RosegardenGUIApp::initView()
         slotToggleInstrumentParameters();
         slotToggleRulers();
         slotToggleTempoRuler();
+        slotToggleChordNameRuler();
         slotTogglePreviews();
 
         // Reset any loop on the sequencer
@@ -865,6 +872,7 @@ void RosegardenGUIApp::slotSaveOptions()
     m_config->writeEntry("Show Instrument Parameters",   m_viewInstrumentParameters->isChecked());
     m_config->writeEntry("Show Rulers",                  m_viewRulers->isChecked());
     m_config->writeEntry("Show Tempo Ruler",             m_viewTempoRuler->isChecked());
+    m_config->writeEntry("Show Chord Name Ruler",        m_viewChordNameRuler->isChecked());
     m_config->writeEntry("Show Previews",                m_viewPreviews->isChecked());
 
     m_fileRecent->saveEntries(m_config);
@@ -921,6 +929,10 @@ void RosegardenGUIApp::readOptions()
     opt = m_config->readBoolEntry("Show Tempo Ruler", false);
     m_viewTempoRuler->setChecked(opt);
     slotToggleTempoRuler();
+
+    opt = m_config->readBoolEntry("Show Chord Name Ruler", false);
+    m_viewChordNameRuler->setChecked(opt);
+    slotToggleChordNameRuler();
 
     opt = m_config->readBoolEntry("Show Previews", false);
     m_viewPreviews->setChecked(opt);
@@ -1604,6 +1616,11 @@ void RosegardenGUIApp::slotToggleRulers()
 void RosegardenGUIApp::slotToggleTempoRuler()
 {
     m_view->slotShowTempoRuler(m_viewTempoRuler->isChecked());
+}
+
+void RosegardenGUIApp::slotToggleChordNameRuler()
+{
+    m_view->slotShowChordNameRuler(m_viewChordNameRuler->isChecked());
 }
 
 void RosegardenGUIApp::slotTogglePreviews()
@@ -2999,6 +3016,12 @@ RosegardenGUIApp::slotChangeTempo(Rosegarden::timeT time,
     {
         m_view->getTrackEditor()->getTempoRuler()->repaint();
         m_view->getTrackEditor()->getTempoRuler()->update();
+    }
+
+    if (m_view && m_view->getTrackEditor()->getChordNameRuler())
+    {
+        m_view->getTrackEditor()->getChordNameRuler()->repaint();
+        m_view->getTrackEditor()->getChordNameRuler()->update();
     }
 
 }

@@ -207,11 +207,12 @@ protected:
     QLabel *m_fontTypeLabel;
     QComboBox *m_spacing;
     QComboBox *m_smoothing;
-    QRadioButton *m_colourQuantize;
+    QCheckBox *m_colourQuantize;
+    QCheckBox *m_showUnknowns;
     QComboBox *m_noteStyle;
     QComboBox *m_insertType;
-    QRadioButton *m_autoBeam;
-    QRadioButton *m_collapseRests;
+    QCheckBox *m_autoBeam;
+    QCheckBox *m_collapseRests;
     QComboBox *m_pasteType;
 
     void populateSizeCombo(QComboBox *combo, std::string font, int dfltSize);

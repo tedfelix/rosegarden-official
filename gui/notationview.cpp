@@ -1025,7 +1025,7 @@ void NotationView::setupActions()
     pageModeAction->setExclusiveGroup("layoutMode");
 
     (new KToggleAction
-     (i18n("Show &Chord Name Ruler"), 0, this, SLOT(slotLabelChords()),
+     (i18n("Show Ch&ord Name Ruler"), 0, this, SLOT(slotLabelChords()),
       actionCollection(), "label_chords"))->setChecked(true);
 
     (new KToggleAction
@@ -1536,7 +1536,7 @@ NotationView::setPageMode(bool pageMode)
 	if (m_tempoRuler && m_temposVisible) m_tempoRuler->show();
     }
 
-    int pageWidth = getCanvasView()->canvas()->width();
+    int pageWidth = getPageWidth();
 
     m_hlayout->setPageMode(pageMode);
     m_hlayout->setPageWidth(pageWidth);
@@ -1574,6 +1574,7 @@ void
 NotationView::scrollToTime(timeT t) {
     double notationViewLayoutCoord = m_hlayout->getXForTime(t);
     // Doesn't appear to matter which staff we use
+    //!!! actually it probably does matter, if they don't have the same extents
     double notationViewCanvasCoord = getStaff(0)->getCanvasCoordsForLayoutCoords(notationViewLayoutCoord, 0).first;
     // HK: I could have sworn I saw a hard-coded scroll happen somewhere
     // (i.e. a default extra scroll to make up for the staff not beginning on

@@ -1388,7 +1388,8 @@ NotationView::doDeferredCursorMove()
     NotationElementList::iterator i = 
 	staff->getViewElementList()->findNearestTime(t);
 
-    while (!(*i)->getCanvasItem()) ++i;
+    while (i != staff->getViewElementList()->end() &&
+	   !(*i)->getCanvasItem()) ++i;
 
     if (i == staff->getViewElementList()->end()) {
 	//!!! ???

@@ -795,6 +795,11 @@ public slots:
     void slotToggleTempoRuler();
 
     /**
+     * Toggle the chord-name ruler on the TrackEditor
+     */
+    void slotToggleChordNameRuler();
+
+    /**
      * Toggle the segment canvas previews
      */
     void slotTogglePreviews();
@@ -931,6 +936,7 @@ private:
     KToggleAction* m_viewInstrumentParameters;
     KToggleAction* m_viewRulers;
     KToggleAction* m_viewTempoRuler;
+    KToggleAction* m_viewChordNameRuler;
     KToggleAction* m_viewPreviews;
 
     KAction *m_playTransport;
