@@ -1763,7 +1763,6 @@ void NotationView::slotEditAddClef()
 
 void NotationView::slotEditAddTempo()
 {
-    NotationStaff *staff = m_staffs[m_currentStaff];
     Rosegarden::Event *clefEvt = 0, *keyEvt = 0;
     timeT insertionTime = getInsertionTime(clefEvt, keyEvt);
 
@@ -2004,8 +2003,8 @@ NotationView::slotSetInsertCursorPosition(timeT t)
 	}
 
 	staff->setInsertCursorPosition
-	    ((*i)->getCanvasX() - 2, (*i)->getCanvasY());
-	slotScrollHoriz((*i)->getCanvasX() - 4);
+	    ((*i)->getCanvasX() - 2, int((*i)->getCanvasY()));
+	slotScrollHoriz(int((*i)->getCanvasX()) - 4);
     }
 
     updateView();

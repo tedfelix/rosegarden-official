@@ -269,7 +269,7 @@ void RosegardenGUIView::slotEditSegmentMatrix(Rosegarden::Segment* p)
     matrixView->show();
 }
 
-void RosegardenGUIView::slotEditSegmentAudio(Rosegarden::Segment* p)
+void RosegardenGUIView::slotEditSegmentAudio(Rosegarden::Segment*)
 {
     std::cout << "RosegardenGUIView::slotEditSegmentAudio() - got segment" << endl;
 }
@@ -399,7 +399,7 @@ void RosegardenGUIView::slotSelectAllSegments()
 void RosegardenGUIView::slotUpdateInstrumentParameterBox(int id)
 {
     Rosegarden::Studio &studio = getDocument()->getStudio();
-    Composition &comp = getDocument()->getComposition();
+//     Composition &comp = getDocument()->getComposition();
 
     Rosegarden::Instrument *instrument = studio.getInstrumentById(id);
 

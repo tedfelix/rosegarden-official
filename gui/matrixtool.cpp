@@ -758,7 +758,7 @@ void MatrixMover::handleLeftButtonPress(Rosegarden::timeT,
 
 void MatrixMover::handleMouseMove(Rosegarden::timeT newTime,
                                   int pitch,
-                                  QMouseEvent* e)
+                                  QMouseEvent*)
 {
     kdDebug(KDEBUG_AREA) << "MatrixMover::handleMouseMove() time = "
                          << newTime << endl;
@@ -825,8 +825,8 @@ void MatrixResizer::handleLeftButtonPress(Rosegarden::timeT,
 }
 
 void MatrixResizer::handleMouseMove(Rosegarden::timeT newTime,
-                                    int pitch,
-                                    QMouseEvent* e)
+                                    int,
+                                    QMouseEvent*)
 {
     if (!m_currentElement || !m_currentStaff) return;
 
