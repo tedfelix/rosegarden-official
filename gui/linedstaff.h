@@ -535,7 +535,7 @@ protected:
     BarLineList m_beatLines;
     BarLineList m_barConnectingLines;
 
-    QCanvasLine *m_pointer;
+    QCanvasRectangle *m_pointer;
     QCanvasLine *m_insertCursor;
 };
 

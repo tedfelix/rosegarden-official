@@ -22,6 +22,9 @@
 #include "colours.h"
 #include "rosedebug.h"
 
+// width of pointer
+//
+const int pointerWidth = 3;
 
 template <class T>
 LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
@@ -41,10 +44,13 @@ LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_endLayoutX(0),
     m_current(false),
     m_currentRow(0),
-    m_pointer(new QCanvasLine(canvas)),
+    m_pointer(new QCanvasRectangle(canvas)),
     m_insertCursor(new QCanvasLine(canvas))
 {
     m_pointer->setPen(RosegardenGUIColours::Pointer);
+    m_pointer->setBrush(RosegardenGUIColours::Pointer);
+    m_pointer->setSize(pointerWidth, 0);
+
     m_insertCursor->setPen(RosegardenGUIColours::InsertCursor);
 }
 
@@ -67,10 +73,13 @@ LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_endLayoutX(0),
     m_current(false),
     m_currentRow(0),
-    m_pointer(new QCanvasLine(canvas)),
+    m_pointer(new QCanvasRectangle(canvas)),
     m_insertCursor(new QCanvasLine(canvas))
 {
     m_pointer->setPen(RosegardenGUIColours::Pointer);
+    m_pointer->setBrush(RosegardenGUIColours::Pointer);
+    m_pointer->setSize(pointerWidth, 0);
+
     m_insertCursor->setPen(RosegardenGUIColours::InsertCursor);
 }
 
@@ -93,10 +102,13 @@ LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_endLayoutX(0),
     m_current(false),
     m_currentRow(0),
-    m_pointer(new QCanvasLine(canvas)),
+    m_pointer(new QCanvasRectangle(canvas)),
     m_insertCursor(new QCanvasLine(canvas))
 {
     m_pointer->setPen(RosegardenGUIColours::Pointer);
+    m_pointer->setBrush(RosegardenGUIColours::Pointer);
+    m_pointer->setSize(pointerWidth, 0);
+
     m_insertCursor->setPen(RosegardenGUIColours::InsertCursor);
 }
 
@@ -744,8 +756,9 @@ LinedStaff<T>::setPointerPosition(double canvasX, int canvasY)
 {
     int row = getRowForCanvasCoords(canvasX, canvasY);
     canvasY = getCanvasYForTopOfStaff(row);
-    m_pointer->move(int(canvasX), canvasY);
-    m_pointer->setPoints(0, 0, 0, canvasY + getHeightOfRow() - 1);
+    m_pointer->setX(int(canvasX));
+    m_pointer->setY(int(canvasY));
+    m_pointer->setSize(pointerWidth, canvasY + getHeightOfRow() - 1);
     m_pointer->show();
 }
 

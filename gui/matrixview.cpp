@@ -190,6 +190,30 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     //
     m_pianoKeyboard->setFixedHeight(canvas()->height());
 
+
+    // Set client label
+    //
+    if (segments.size() == 1) {
+
+        setCaption(QString("%1 - Segment Track #%2")
+                   .arg(doc->getTitle())
+                   .arg(segments[0]->getTrack()));
+
+    } else if (segments.size() == doc->getComposition().getNbSegments()) {
+
+        setCaption(QString("%1 - All Segments")
+                   .arg(doc->getTitle()));
+
+    } else {
+
+        setCaption(QString("%1 - %2-Segment Partial View")
+                   .arg(doc->getTitle())
+                   .arg(segments.size()));
+
+    }
+
+
+
 }
 
 MatrixView::~MatrixView()
