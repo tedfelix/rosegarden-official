@@ -218,9 +218,7 @@ public:
      * to the value returned by getEndTime() (segments always expand
      * themselves to meet their end markers).
      */
-    timeT getEndMarkerTime() const {
-	return (m_endMarkerTime ? *m_endMarkerTime : getEndTime());
-    }
+    timeT getEndMarker() const;
 
 
     //////

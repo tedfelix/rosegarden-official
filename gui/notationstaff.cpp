@@ -912,12 +912,14 @@ NotationStaff::clearPreviewNote()
 bool
 NotationStaff::wrapEvent(Rosegarden::Event *e)
 {
+/*!!!
     if (e->isa(Note::EventRestType)) {
 	const Rosegarden::Quantizer *q =
 	    getSegment().getComposition()->getLegatoQuantizer();
 //	q->quantize(e);//!!!
 	if (q->getQuantizedDuration(e) == 0) return false;
     }
+*/
     return true;
 }
 

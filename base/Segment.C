@@ -134,6 +134,10 @@ void Segment::recalculateStartTime()
 
 timeT Segment::getDuration() const
 {
+    //!!! hmm. return "real" end time (with another method for end
+    // marker time) or return end marker time? consider the various
+    // uses of this method in this file and elsewhere
+
     const_iterator lastEl = end();
     if (lastEl == begin()) return 0;
     --lastEl;
@@ -150,35 +154,28 @@ void Segment::setDuration(timeT d)
 
     cerr << "Segment::setDuration() : current = " << currentDuration
          << " - new : " << d << endl;
-
-    if (d == currentDuration) return; // nothing to do
     
     if (d > currentDuration) {
 
+	delete m_endMarkerTime;
+	m_endMarkerTime = 0;
 	fillWithRests(getStartTime() + d);
 
     } else { // shrink
 
-        //!!! TODO : NOT IMPLEMENTED YET : move an internal marker
-
-//         if (nbBars == 0) { // no fuss
-//             erase(begin(), end());
-//             return;
-//         }
-
-//         unsigned int cutTime = ((nbBars-1) * 384) + getStartTime();
-
-//         iterator lastElToKeep = std::upper_bound(begin(), end(),
-//                                                  cutTime,
-//                                                  Event::compareTime2Event);
-//         if (lastElToKeep == end()) {
-//             cerr << "Segment::setNbBars() : upper_bound returned end\n";
-//             return;
-//         }
-
-//         erase(lastElToKeep, end());
+	if (!m_endMarkerTime) m_endMarkerTime = new timeT;
+	*m_endMarkerTime = d;
     }
-    
+}
+
+timeT Segment::getEndMarker() const
+{
+    timeT endTime = getEndTime();
+    if (m_endMarkerTime)
+	endTime = std::min(endTime, *m_endMarkerTime);
+    if (m_composition)
+	endTime = std::min(endTime, m_composition->getEndMarker());
+    return endTime;
 }
 
 void Segment::erase(iterator pos)
