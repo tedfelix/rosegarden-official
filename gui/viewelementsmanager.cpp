@@ -32,12 +32,12 @@ ViewElementsManager::ViewElementsManager(Track &t)
     : m_track(t),
       m_notationElements(0)
 {
-    t.addObserver(this);
+//!!! now below   t.addObserver(this);
 }
 
 ViewElementsManager::~ViewElementsManager()
 {
-    m_track.removeObserver(this);
+    if (m_notationElements) m_track.removeObserver(this);
 }
 
 NotationElementList*
@@ -59,12 +59,14 @@ ViewElementsManager::notationElementList(Track::iterator from,
         m_notationElements->insert(el);
     }
 
+    m_track.addObserver(this);
     return m_notationElements;
 }
 
 void ViewElementsManager::insertNewEvents(Rosegarden::Track::iterator from,
                                           Rosegarden::Track::iterator to)
 {
+/*!!!
     bool eventHasViewElement = false;
     
     for (Track::iterator i = from; i != to; ++i) {
@@ -92,15 +94,15 @@ void ViewElementsManager::insertNewEvents(Rosegarden::Track::iterator from,
         // be lenient about it
         //KMessageBox::error(0, "ViewElementsManager::insertNewEvents() : tried wrapping events which already had ViewElements");
     }
-
+*/
 }
 
 void ViewElementsManager::wrapAndInsert(Rosegarden::Event* e,
                                         bool insertInTrack)
 {
     if (!e->hasViewElement()) {
-        NotationElement *el = new NotationElement(e);
-        m_notationElements->insert(el);
+//!!!        NotationElement *el = new NotationElement(e);
+//!!!        m_notationElements->insert(el);
 
         if (insertInTrack)
             m_track.insert(e);
@@ -124,8 +126,14 @@ void ViewElementsManager::insert(NotationElement *e, bool insertInTrack)
 
 void ViewElementsManager::erase(NotationElementList::iterator it)
 {
+    m_track.eraseSingle((*it)->event());
+    // and wait for callback
+}
+
+/*!!!
     std::pair<Track::iterator, Track::iterator> interval
         = m_track.equal_range((*it)->event());
+
     // we can't use find() because events are sorted by time
     // and there could be more than one event at the same time
     // so we have to look for the actual event in the given interval
@@ -149,7 +157,7 @@ void ViewElementsManager::erase(NotationElementList::iterator it)
     
     if (foundEvent) {
         // delete in all ViewElement lists
-        m_notationElements->erase(it);
+//!!!        m_notationElements->erase(it);
     } else {
         kdDebug(KDEBUG_AREA) << "ViewElementsManager::erase() : couldn't find event for notation element "
                              << *(*it) << endl;
@@ -157,6 +165,7 @@ void ViewElementsManager::erase(NotationElementList::iterator it)
     }
 
 }
+*/
 
 void ViewElementsManager::eraseSingle(NotationElement* el)
 {
@@ -164,9 +173,12 @@ void ViewElementsManager::eraseSingle(NotationElement* el)
                          << el << endl;
     
     Rosegarden::Event* ev = el->event();
-    m_notationElements->eraseSingle(el); // this will delete el
+//!!!    m_notationElements->eraseSingle(el); // this will delete el
     m_track.eraseSingle(ev);
 }
+
+
+//!!! rework.  probably should be in track
 
 void ViewElementsManager::tryCollapse(NotationElement* el)
 {
@@ -201,12 +213,42 @@ void ViewElementsManager::tryCollapse(NotationElement* el)
 }
 
 
+NotationElementList::iterator ViewElementsManager::findEvent(Event *e)
+{
+    NotationElement dummy(e);
+    std::pair<NotationElementList::iterator, NotationElementList::iterator>
+        r = m_notationElements->equal_range(&dummy);
+
+    for (NotationElementList::iterator i = r.first; i != r.second; ++i) {
+        if ((*i)->event() == e) {
+            return i;
+        }
+    }
+
+    return m_notationElements->end();
+}
+
+
 void ViewElementsManager::eventAdded(Track *t, Event *e)
 {
     assert(t == &m_track);
     kdDebug(KDEBUG_AREA) 
 	<< "ViewElementsManager::eventAdded: at time " << e->getAbsoluteTime()
 	<< endl;
+
+    // If it isn't already wrapped, wrap it.  The already-wrapped test
+    // is rather slow, and if all goes according to plan we should
+    // eventually be able to lose it.
+
+    if (findEvent(e) == m_notationElements->end()) {
+
+        kdDebug(KDEBUG_AREA) << "We haven't got it: wrapping it now" << endl;
+        NotationElement *el = new NotationElement(e);
+        m_notationElements->insert(el);
+
+    } else {
+        kdDebug(KDEBUG_AREA) << "We already have it" << endl;
+    }
 }
 
 void ViewElementsManager::eventRemoved(Track *t, Event *e)
@@ -215,6 +257,21 @@ void ViewElementsManager::eventRemoved(Track *t, Event *e)
     kdDebug(KDEBUG_AREA) 
 	<< "ViewElementsManager::eventRemoved: from time "
 	<< e->getAbsoluteTime() << endl;
+
+    // If we have it, lose it
+
+    NotationElementList::iterator i = findEvent(e);
+    if (i == m_notationElements->end()) {
+
+        kdDebug(KDEBUG_AREA) << "We haven't got it" << endl;
+
+    } else {
+        kdDebug(KDEBUG_AREA) << "We have this one, losing it" << endl;
+        m_notationElements->erase(i);
+        return;
+    }
+
+
 }
 
 void ViewElementsManager::trackDeleted(Track *t)

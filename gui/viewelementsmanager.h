@@ -34,6 +34,12 @@
  */
 
 
+//!!! I really think this class may become obsolete with the
+//introduction of the TrackObserver; we should no longer need to wrap
+//events carefully before inserting them into the NotationElementList,
+//because we could instead make the NotationElementList a
+//TrackObserver and get it to wrap its own events. 
+
 class ViewElementsManager : public Rosegarden::TrackObserver
 {
 public: 
@@ -120,7 +126,8 @@ protected:
 
     Rosegarden::Track    &m_track;
     NotationElementList* m_notationElements;
-    
+
+    NotationElementList::iterator findEvent(Rosegarden::Event *);
 };
 
 #endif
