@@ -48,7 +48,7 @@ class NotationTool;
 class EventSelection
 {
 public:
-    typedef std::vector<Rosegarden::Event*> eventcontainer;
+    typedef std::multiset<Rosegarden::Event*, Rosegarden::Event::EventCmp> eventcontainer;
     
     EventSelection(Rosegarden::Track&);
 
@@ -77,15 +77,18 @@ public:
      */
     bool pasteToTrack(Rosegarden::Track&, Rosegarden::timeT);
 
-    void push_back(Rosegarden::Event* e) { m_trackEvents.push_back(e); }
+    /**
+     * Add an event to the selection.
+     * @see NotationSelector#getSelection()
+     */
+    void addEvent(Rosegarden::Event* e) { m_trackEvents.insert(e); }
 
-    //!!! This would be nicer if eventcontainer were a multiset or
-    // something; I'm not quite sure why it isn't
     bool contains(Rosegarden::Event *e) const;
 
     Rosegarden::timeT getBeginTime()       const { return m_beginTime; }
     Rosegarden::timeT getEndTime()         const { return m_endTime; }
     Rosegarden::timeT getTotalDuration()   const;
+    unsigned int      getNbEvents()        const { return m_ownEvents.size(); }
 
     const Rosegarden::Track &getTrack() const { return m_originalTrack; }
     

@@ -90,8 +90,7 @@ EventSelection::~EventSelection()
 
 bool EventSelection::contains(Event *e) const
 {
-    return std::find(m_trackEvents.begin(),
-                     m_trackEvents.end(), e) != m_trackEvents.end();
+    return m_trackEvents.find(e) != m_trackEvents.end();
 }
 
 void EventSelection::cut()
@@ -106,17 +105,11 @@ void EventSelection::cut()
     for(eventcontainer::iterator i = m_trackEvents.begin();
         i != m_trackEvents.end(); ++i) {
 
-        m_ownEvents.push_back(new Event(*(*i)));
+        m_ownEvents.insert(new Event(*(*i)));
 
         // delete Event from Track
         nt.deleteEvent(*i);
     }
-
-    // We have no guarantee that the events are added in time-sorted
-    // order, so we must sort them
-    //
-    sort(m_ownEvents.begin(), m_ownEvents.end(),
-         Event::EventCmp());
 
     updateBeginEndTime();
 
@@ -130,11 +123,8 @@ void EventSelection::copy()
         i != m_trackEvents.end(); ++i) {
 
         // store copy of Event
-        m_ownEvents.push_back(new Event(*(*i)));
+        m_ownEvents.insert(new Event(*(*i)));
     }
-
-    sort(m_ownEvents.begin(), m_ownEvents.end(),
-         Event::EventCmp());
 
     updateBeginEndTime();
 
@@ -1787,8 +1777,6 @@ void NotationSelector::hideSelection()
 }
 
 
-//#include <iostream>
-
 EventSelection* NotationSelector::getSelection()
 {
     if (!m_selectionRect->visible()) return 0;
@@ -1817,7 +1805,7 @@ EventSelection* NotationSelector::getSelection()
 
             NotationElement &el = sprite->getNotationElement();
 
-            selection->push_back(el.event());
+            selection->addEvent(el.event());
 
 //             kdDebug(KDEBUG_AREA) << "Selected event : \n";
 //             el.event()->dump(std::cerr);
