@@ -6,10 +6,10 @@ INCPATH  = -I..
 default: test
 
 clean:
-	rm -f test
+	rm -f test test.o
 
 %.o: %.C
-	$(CC) -c $< $(INCPATH) -o $@
+	$(CC) $(CPPFLAGS) -c $< $(INCPATH) -o $@
 
 test: test.o
 	$(CC) $< $(LIBCORE) -o $@

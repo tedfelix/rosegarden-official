@@ -105,6 +105,8 @@ Event::dump(ostream& out) const
                 "\t(persistent)" : "\t(not persistent)")
             << '\n';
     }
+
+    out << "Event storage size : " << getStorageSize() << '\n';
 #endif
 }
 
@@ -140,6 +142,18 @@ Event::getNonPersistentPropertyNames() const
     }
     return v;
 }
+
+size_t
+Event::getStorageSize() const
+{
+    size_t s = sizeof(*this);
+    for (PropertyMap::const_iterator i = m_properties.begin();
+         i != m_properties.end(); ++i) {
+        s += i->second->getStorageSize();
+    }
+    return s;
+}
+
 
 bool
 operator<(const Event &a, const Event &b)

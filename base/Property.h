@@ -104,6 +104,8 @@ public:
     virtual bool isPersistent() const = 0;
     virtual void setPersistence(bool) = 0;
 
+    virtual size_t getStorageSize() const = 0; // for debugging
+
 #ifndef NDEBUG
     virtual void dump(std::ostream&) const = 0;
 #else
@@ -138,6 +140,8 @@ public:
 
     bool isPersistent() const { return m_persistent; }
     void setPersistence(bool p) { m_persistent = p; }
+
+    virtual size_t getStorageSize() const { return sizeof(*this); }
 
 #ifndef NDEBUG
     void dump(std::ostream&) const;
@@ -184,6 +188,13 @@ std::string
 PropertyStore<P>::unparse()
 {
     return PropertyDefn<P>::unparse(m_data);
+}
+
+template <>
+size_t
+PropertyStore<String>::getStorageSize() const
+{
+    return sizeof(*this) + m_data.size();
 }
 
 #ifndef NDEBUG

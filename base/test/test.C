@@ -86,28 +86,60 @@ int main(int argc, char **argv)
         strcpy(b, "test");
 
         Event e1("note");
+        int gsCount = 20000;
+
         st = times(&spare);
-        for (i = 0; i < 10000; ++i) {
+        for (i = 0; i < gsCount; ++i) {
                 if (i%4==0) sprintf(b+4, "%d", i);
                 e1.set<Int>(b, i);
         }
         et = times(&spare);
-        cout << "Event: 10000 setInts: " << (et-st)*10 << "ms\n";
+        cout << "Event: " << gsCount << " setInts: " << (et-st)*10 << "ms\n";
+
         st = times(&spare);
         j = 0;
-        for (i = 0; i < 10000; ++i) {
+        for (i = 0; i < gsCount; ++i) {
                 if (i%4==0) sprintf(b+4, "%d", i);
                 j += e1.get<Int>(b);
         }
         et = times(&spare);
-        cout << "Event: 10000 getInts: " << (et-st)*10 << "ms\n";
+        cout << "Event: " << gsCount << " getInts: " << (et-st)*10 << "ms\n";
+        
         st = times(&spare);
         for (i = 0; i < 100; ++i) {
                 Event e11(e1);
                 (void)e11.get<Int>(b);
         }
         et = times(&spare);
-        cout << "Event: 100 copy ctors of big element: "
+        cout << "Event: 100 copy ctors of " << e1.getStorageSize() << "-byte element: "
+             << (et-st)*10 << "ms\n";
+
+        gsCount = 100000;
+
+        st = times(&spare);
+        for (i = 0; i < gsCount; ++i) {
+                if (i%4==0) sprintf(b+4, "%ds", i);
+                e1.set<String>(b, b);
+        }
+        et = times(&spare);
+        cout << "Event: " << gsCount << " setStrings: " << (et-st)*10 << "ms\n";
+        
+        st = times(&spare);
+        j = 0;
+        for (i = 0; i < gsCount; ++i) {
+                if (i%4==0) sprintf(b+4, "%ds", i);
+                j += e1.get<String>(b).size();
+        }
+        et = times(&spare);
+        cout << "Event: " << gsCount << " getStrings: " << (et-st)*10 << "ms\n";
+        
+        st = times(&spare);
+        for (i = 0; i < 100; ++i) {
+                Event e11(e1);
+                (void)e11.get<String>(b);
+        }
+        et = times(&spare);
+        cout << "Event: 100 copy ctors of " << e1.getStorageSize() << "-byte element: "
              << (et-st)*10 << "ms\n";
 
         return 0;

@@ -124,6 +124,8 @@ public:
     PropertyNames getPersistentPropertyNames() const;
     PropertyNames getNonPersistentPropertyNames() const;
 
+    size_t getStorageSize() const; // for debugging and inspection purposes
+
 #ifndef NDEBUG
     void dump(std::ostream&) const;
 #else
