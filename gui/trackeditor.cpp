@@ -223,6 +223,9 @@ TrackEditor::init(QWidget* rosegardenguiview)
     connect(m_trackButtons, SIGNAL(modified()),
             m_doc, SLOT(slotDocumentModified()));
 
+    connect(m_trackButtons, SIGNAL(muteButton(Rosegarden::TrackId, bool)),
+            rosegardenguiview, SLOT(slotSetMuteButton(Rosegarden::TrackId, bool)));
+
     connect(m_trackButtons, SIGNAL(newRecordButton()),
             m_doc, SLOT(slotNewRecordButton()));
 

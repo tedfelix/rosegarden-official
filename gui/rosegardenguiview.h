@@ -210,6 +210,19 @@ public slots:
      */
     void slotChangeInstrumentLabel(Rosegarden::InstrumentId id, QString label);
 
+    /*
+     * Set the mute button on the track buttons and on the instrument
+     * parameter box
+     */
+    void slotSetMuteButton(Rosegarden::TrackId track, bool value);
+
+    /*
+     * Set mute, record and solo by instrument id (from InstrumentParameterBox)
+     */
+    void slotSetMute(Rosegarden::InstrumentId, bool);
+    void slotSetRecord(Rosegarden::InstrumentId, bool);
+    void slotSetSolo(Rosegarden::InstrumentId, bool);
+
 signals:
     void activateTool(const QString& toolName);
 

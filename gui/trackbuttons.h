@@ -91,6 +91,11 @@ public:
     //
     void selectLabel(int trackId);
 
+    /*
+     * Set the mute button down or up
+     */
+    void setMuteButton(Rosegarden::TrackId track, bool value);
+
 signals:
     // to emit what Track has been selected
     //
@@ -106,6 +111,10 @@ signals:
     // we need to tell the sequencer for live monitoring purposes.
     //
     void newRecordButton();
+
+    // A mute button has been pressed
+    //
+    void muteButton(Rosegarden::TrackId track, bool state);
 
 public slots:
 

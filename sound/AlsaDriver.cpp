@@ -2898,7 +2898,15 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                 dynamic_cast<MappedAudioFader*>
                     (inst->getMappedStudio()->
                          getAudioFader((*it)->getInstrument()));
-                         */
+
+            MappedObjectPropertyList result =
+                fader->getPropertList(MappedAudioFader::Channels);
+
+            int channels = result[0].toInt();
+
+            cout << "FADER " << (*it)->getInstrument() <<
+                    ", CHANNELS = " << channels << endl;
+                    */
                 
             // Get input buffer
             //
@@ -3147,10 +3155,10 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                     // do the pan
                     result = fader->getPropertyList(MappedAudioFader::Pan);
                     float fpan = result[0].toFloat();
-                    if (fpan < 64.0)
-                        pan2 = fpan / 64.0;
+                    if (fpan < 0.0)
+                        pan2 = fpan / 100.0;
                     else
-                        pan1 = (127.0 - fpan) / 64.0;
+                        pan1 = -fpan / 100.0;
                 }
 
                 while (samplesOut < nframes)

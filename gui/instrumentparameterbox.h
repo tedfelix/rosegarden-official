@@ -68,12 +68,24 @@ public:
 
     void setAudioMeter(double ch1, double ch2);
 
+    // If currently showing this track's instrument then toggle
+    // the mute button on the display
+    //
+    void setMute(bool value);
+    void setSolo(bool value);
+    void setRecord(bool value);
+
 public slots:
 
     // To update all InstrumentParamterBoxen for an Instrument.
     //
     void slotUpdateAllBoxes();
 
+    // Update in other views
+    //
+    void slotUpdateSoloButtons(bool);
+    void slotUpdateMuteButtons(bool);
+    void slotUpdateRecordButtons(bool);
 
 signals:
 
@@ -82,6 +94,10 @@ signals:
     // real time during playback.
     //
     void changeInstrumentLabel(Rosegarden::InstrumentId id, QString label);
+
+    void setMute(Rosegarden::InstrumentId, bool value);
+    void setSolo(Rosegarden::InstrumentId, bool value);
+    void setRecord(Rosegarden::InstrumentId, bool value);
 
 protected:
 
@@ -142,6 +158,8 @@ public:
     //
     void setBypassButtonColour(int pluginIndex, bool bypassState);
 
+    void setMute(bool value);
+
 public slots:
     // From AudioFaderWidget
     //
@@ -152,12 +170,21 @@ public slots:
     void slotSolo();
     void slotSetPan(float pan);
 
+    void slotSetMute(bool value);
+    void slotSetSolo(bool value);
+    void slotSetRecord(bool value);
+
     // From Plugin dialog
     //
     void slotPluginSelected(int index, int plugin);
     void slotPluginPortChanged(int pluginIndex, int portIndex, float value);
     void slotBypassed(int pluginIndex, bool bp);
     void slotPluginDialogDestroyed(int index);
+
+signals:
+    void muteButton(bool state);
+    void soloButton(bool state);
+    void recordButton(bool state);
 
 protected:
     //--------------- Data members ---------------------------------

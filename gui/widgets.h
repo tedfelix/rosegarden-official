@@ -314,7 +314,7 @@ public:
                      float step = 1.0,
                      float pageStep = 10.0,
                      float initialPosition = 50.0,
-                     int size = 20.0);
+                     int size = 20);
 
     void setMinValue(float min) { m_minValue = min; }
     float getMinValue() const { return m_minValue; }

@@ -152,6 +152,21 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
             this,
             SLOT(slotChangeInstrumentLabel(Rosegarden::InstrumentId, QString)));
 
+    connect(m_instrumentParameterBox,
+            SIGNAL(setMute(Rosegarden::InstrumentId, bool)),
+            this,
+            SLOT(slotSetMute(Rosegarden::InstrumentId, bool)));
+
+    connect(m_instrumentParameterBox,
+            SIGNAL(setSolo(Rosegarden::InstrumentId, bool)),
+            this,
+            SLOT(slotSetSolo(Rosegarden::InstrumentId, bool)));
+
+    connect(m_instrumentParameterBox,
+            SIGNAL(setRecord(Rosegarden::InstrumentId, bool)),
+            this,
+            SLOT(slotSetRecord(Rosegarden::InstrumentId, bool)));
+
     if (doc)
         m_trackEditor->setupSegments();
 }
@@ -644,12 +659,13 @@ void RosegardenGUIView::slotSelectTrackSegments(int trackId)
             segments.insert(*i);
     }
 
-    slotUpdateInstrumentParameterBox(comp.getTrackById(trackId)->
-                                     getInstrument());
-
     // Store the selected Track in the Composition
     //
     comp.setSelectedTrack(trackId);
+
+    slotUpdateInstrumentParameterBox(comp.getTrackById(trackId)->
+                                     getInstrument());
+
 
     slotSetSelectedSegments(segments);
 
@@ -755,9 +771,24 @@ void RosegardenGUIView::slotSelectAllSegments()
 void RosegardenGUIView::slotUpdateInstrumentParameterBox(int id)
 {
     Rosegarden::Studio &studio = getDocument()->getStudio();
-//     Composition &comp = getDocument()->getComposition();
-
     Rosegarden::Instrument *instrument = studio.getInstrumentById(id);
+    Rosegarden::Composition &comp = getDocument()->getComposition();
+
+    Rosegarden::Track *track = comp.getTrackById(comp.getSelectedTrack());
+
+    if (track)
+    {
+        // Set the mute status
+        m_instrumentParameterBox->setMute(track->isMuted());
+
+        // Set the record track
+        m_instrumentParameterBox->setRecord(
+                    track->getId() == comp.getRecordTrack());
+
+        // Set solo
+        m_instrumentParameterBox->setSolo(
+                comp.isSolo() && track->getId() == comp.getSelectedTrack());
+    }
 
     m_instrumentParameterBox->useInstrument(instrument);
 }
@@ -987,3 +1018,59 @@ RosegardenGUIView::slotDroppedAudio(QString audioDesc)
     else
         RG_DEBUG << "instrument id == 0\n";
 }
+
+void
+RosegardenGUIView::slotSetMuteButton(Rosegarden::TrackId track, bool value)
+{
+    m_trackEditor->getTrackButtons()->setMuteButton(track, value);
+    Rosegarden::Track *trackObj = getDocument()->
+        getComposition().getTrackById(track);
+
+    if (trackObj->getInstrument() == m_instrumentParameterBox->
+            getSelectedInstrument()->getId())
+    {
+        m_instrumentParameterBox->setMute(value);
+    }
+
+    // set the value in the composition
+    trackObj->setMuted(value);
+
+    getDocument()->slotDocumentModified(); // set the modification flag
+
+}
+
+void
+RosegardenGUIView::slotSetMute(Rosegarden::InstrumentId id, bool value)
+{
+    RG_DEBUG << "RosegardenGUIView::slotSetMute - "
+             << "id = " << id
+             << ",value = " << value << endl;
+
+    Rosegarden::Composition &comp = getDocument()->getComposition();
+    Rosegarden::Composition::trackcontainer &tracks = comp.getTracks();
+    Rosegarden::Composition::trackiterator it;
+
+    for (it = tracks.begin(); it != tracks.end(); ++it)
+    {
+        if ((*it).second->getInstrument() == id)
+            slotSetMuteButton((*it).second->getId(), value);
+    }
+
+}
+
+void
+RosegardenGUIView::slotSetRecord(Rosegarden::InstrumentId id, bool value)
+{
+    RG_DEBUG << "RosegardenGUIView::slotSetRecord - "
+             << "id = " << id
+             << ",value = " << value << endl;
+}
+
+void
+RosegardenGUIView::slotSetSolo(Rosegarden::InstrumentId id, bool value)
+{
+    RG_DEBUG << "RosegardenGUIView::slotSetSolo - "
+             << "id = " << id
+             << ",value = " << value << endl;
+}
+

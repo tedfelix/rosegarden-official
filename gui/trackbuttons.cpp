@@ -424,14 +424,10 @@ TrackButtons::slotToggleMutedTrack(int mutedTrack)
     if (mutedTrack < 0 || mutedTrack > (int)m_tracks )
         return;
 
-    bool set = true;
+    Rosegarden::Track *track = 
+        m_doc->getComposition().getTrackByPosition(mutedTrack);
 
-    if (m_doc->getComposition().getTrackById(mutedTrack)->isMuted())
-        set = false;
-
-    m_doc->getComposition().getTrackById(mutedTrack)->setMuted(set);
-
-    emit modified();
+    emit muteButton(track->getId(), !track->isMuted()); // will set the value
 }
 
 // Remove buttons from all iterators and delete object
@@ -1110,6 +1106,17 @@ TrackButtons::slotLabelSelected(int position)
     {
         emit trackSelected(track->getId());
     }
+}
+
+
+// Set a mute button to a particular state
+void
+TrackButtons::setMuteButton(TrackId track, bool value)
+{
+    Rosegarden::Track *trackObj = m_doc->getComposition().getTrackById(track);
+    if (trackObj == 0) return;
+
+    m_muteButtonGroup->find(trackObj->getPosition())->setDown(value);
 }
 
 

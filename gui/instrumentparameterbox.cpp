@@ -92,6 +92,15 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
 
     connect(m_audioInstrumentParameters, SIGNAL(updateAllBoxes()),
             this, SLOT(slotUpdateAllBoxes()));
+
+    connect(m_audioInstrumentParameters, SIGNAL(muteButton(bool)),
+            this, SLOT(slotUpdateMuteButtons(bool)));
+    
+    connect(m_audioInstrumentParameters, SIGNAL(soloButton(bool)),
+            this, SLOT(slotUpdateSoloButtons(bool)));
+    
+    connect(m_audioInstrumentParameters, SIGNAL(recordButton(bool)),
+            this, SLOT(slotUpdateRecordButtons(bool)));
     
     connect(m_midiInstrumentParameters, SIGNAL(updateAllBoxes()),
             this, SLOT(slotUpdateAllBoxes()));
@@ -152,6 +161,60 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
     }
     
 }
+
+void
+InstrumentParameterBox::setMute(bool value)
+{
+    if (m_selectedInstrument && 
+            m_selectedInstrument->getType() == Rosegarden::Instrument::Audio)
+    {
+        m_audioInstrumentParameters->slotSetMute(value);
+    }
+}
+
+void
+InstrumentParameterBox::setRecord(bool value)
+{
+    if (m_selectedInstrument &&
+            m_selectedInstrument->getType() == Rosegarden::Instrument::Audio)
+    {
+        m_audioInstrumentParameters->slotSetRecord(value);
+    }
+}
+
+void
+InstrumentParameterBox::setSolo(bool value)
+{
+    if (m_selectedInstrument &&
+            m_selectedInstrument->getType() == Rosegarden::Instrument::Audio)
+    {
+        m_audioInstrumentParameters->slotSetSolo(value);
+    }
+}
+
+
+
+void
+InstrumentParameterBox::slotUpdateMuteButtons(bool value)
+{
+    RG_DEBUG << "slotUpdateMuteButtons " << value << endl;
+    emit setMute(m_selectedInstrument->getId(), value);
+}
+
+void
+InstrumentParameterBox::slotUpdateSoloButtons(bool value)
+{
+    RG_DEBUG << "slotUpdateSoloButtons " << value << endl;
+    emit setSolo(m_selectedInstrument->getId(), value);
+}
+
+void
+InstrumentParameterBox::slotUpdateRecordButtons(bool value)
+{
+    RG_DEBUG << "slotUpdateRecordButtons " << value << endl;
+    emit setRecord(m_selectedInstrument->getId(), value);
+}
+
 
 void
 MIDIInstrumentParameterPanel::slotActivateProgramChange(bool value)
@@ -332,6 +395,25 @@ AudioInstrumentParameterPanel::slotSelectAudioLevel(int value)
 
     emit updateAllBoxes();
 }
+
+void 
+AudioInstrumentParameterPanel::slotSetMute(bool value)
+{
+    m_audioFader->m_muteButton->setDown(value);
+}
+
+void
+AudioInstrumentParameterPanel::slotSetSolo(bool value)
+{
+    m_audioFader->m_soloButton->setDown(value);
+}
+
+void 
+AudioInstrumentParameterPanel::slotSetRecord(bool value)
+{
+    m_audioFader->m_recordButton->setDown(value);
+}
+
 
 void
 MIDIInstrumentParameterPanel::slotSelectBank(int index)
@@ -875,12 +957,14 @@ void
 AudioInstrumentParameterPanel::slotMute()
 {
     RG_DEBUG << "AudioInstrumentParameterPanel::slotMute" << endl;
+    emit muteButton(m_audioFader->m_muteButton->isOn());
 }
 
 void
 AudioInstrumentParameterPanel::slotSolo()
 {
     RG_DEBUG << "AudioInstrumentParameterPanel::slotSolo" << endl;
+    emit soloButton(m_audioFader->m_soloButton->isDown());
 }
 
 void
@@ -1301,3 +1385,6 @@ MIDIInstrumentParameterPanel::setupForInstrument(Rosegarden::Instrument *instrum
 
 
 }
+
+
+
