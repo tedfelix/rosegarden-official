@@ -258,9 +258,14 @@ AudioPluginDialog::makePluginParamsBox(QWidget *parent, int portCount)
 	columns = (portCount-1) / 12 + 1;
     }
 
+    int perColumn = 4;
+    if (portCount > 48) { // no bounds will be shown
+	perColumn = 2;
+    }
+
     m_gridLayout = new QGridLayout(m_pluginParamsBox,
                                    1,  // rows (will expand)
-                                   columns * 4,
+                                   columns * perColumn,
                                    5); // margin
 
     m_gridLayout->setColStretch(3, 2);
@@ -323,6 +328,7 @@ AudioPluginDialog::slotPluginSelected(int i)
     }
 
     makePluginParamsBox(parent, portCount);
+    bool showBounds = (portCount <= 48);
 
     AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
     if (!inst) return;
@@ -388,7 +394,8 @@ AudioPluginDialog::slotPluginSelected(int i)
                                       *it,
                                       m_pluginManager,
                                       count,
-                                      inst->getPort(count)->value);
+                                      inst->getPort(count)->value,
+				      showBounds);
 
                 connect(control, SIGNAL(valueChanged(float)),
                         this, SLOT(slotPluginPortChanged(float)));
@@ -752,7 +759,8 @@ PluginControl::PluginControl(QWidget *parent,
                              PluginPort *port,
                              AudioPluginManager *aPM,
                              int index,
-                             float initialValue):
+                             float initialValue,
+			     bool showBounds):
     QObject(parent),
     m_layout(layout),
     m_type(type),
@@ -835,25 +843,29 @@ PluginControl::PluginControl(QWidget *parent,
         upp->setFont(plainFont);
 
         controlTitle->show();
-        low->show();
         m_dial->show();
-        upp->show();
 
 	QWidgetItem *item = new QWidgetItem(controlTitle);
 	item->setAlignment(Qt::AlignRight | Qt::AlignBottom);
 	m_layout->addItem(item);
 
-	item = new QWidgetItem(low);
-	item->setAlignment(Qt::AlignRight | Qt::AlignBottom);
-	m_layout->addItem(item);
+	if (showBounds) {
+	    low->show();
+	    item = new QWidgetItem(low);
+	    item->setAlignment(Qt::AlignRight | Qt::AlignBottom);
+	    m_layout->addItem(item);
+	}   
 	
 	item = new QWidgetItem(m_dial);
 	item->setAlignment(Qt::AlignCenter);
 	m_layout->addItem(item);
-	
-	item = new QWidgetItem(upp);
-	item->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
-	m_layout->addItem(item);
+
+	if (showBounds) {
+	    upp->show();
+	    item = new QWidgetItem(upp);
+	    item->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
+	    m_layout->addItem(item);
+	}
 
         RG_DEBUG << "setting port value = " << initialValue << endl;
     }

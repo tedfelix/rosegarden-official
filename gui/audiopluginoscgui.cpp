@@ -737,7 +737,9 @@ AudioPluginOSCGUI::getGUIFilePath(QString identifier)
     }
 
     QDir dir(soInfo.dir());
-    if (!dir.cd(soInfo.baseName(TRUE))) {
+    QString fileBase(soInfo.baseName(TRUE));
+
+    if (!dir.cd(fileBase)) {
 	RG_DEBUG << "AudioPluginOSCGUI::AudioPluginOSCGUI: No GUI subdir for plugin .so " << soName << endl;
 	throw Rosegarden::Exception("No GUI subdir available");
     }
@@ -748,9 +750,9 @@ AudioPluginOSCGUI::getGUIFilePath(QString identifier)
     const char *suffixes[] = { "_rg", "_kde", "_qt", "_gtk2", "_gtk", "_x11", "_gui" };
     int nsuffixes = sizeof(suffixes)/sizeof(suffixes[0]);
 
-    for (int fuzzy = 0; fuzzy <= 1; ++fuzzy) {
+    for (int k = 0; k <= nsuffixes; ++k) {
 
-	for (int k = 0; k <= nsuffixes; ++k) {
+	for (int fuzzy = 0; fuzzy <= 1; ++fuzzy) {
 
 	    QFileInfoListIterator i(*list);
 	    QFileInfo *info;
@@ -759,10 +761,16 @@ AudioPluginOSCGUI::getGUIFilePath(QString identifier)
 
 		++i;
 
-		if ((info->isFile() || info->isSymLink()) &&
-		    info->isExecutable() &&
-		    (fuzzy || info->fileName().left(label.length()) == label) &&
-		    (k == nsuffixes || info->fileName().lower().endsWith(suffixes[k]))) {
+		if (!(info->isFile() || info->isSymLink())
+		    || !info->isExecutable()) continue;
+
+		if (fuzzy) {
+		    if (info->fileName().left(fileBase.length()) != fileBase) continue;
+		} else {
+		    if (info->fileName().left(label.length()) != label) continue;
+		}
+
+		if (k == nsuffixes || info->fileName().lower().endsWith(suffixes[k])) {
 		    return info->filePath();
 		}
 	    }

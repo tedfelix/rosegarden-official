@@ -79,7 +79,8 @@ public:
                   PluginPort *port,
                   AudioPluginManager *pluginManager,
                   int index,
-                  float initialValue);
+                  float initialValue,
+		  bool showBounds);
  
     void setValue(float value, bool emitSignals = true);
     float getValue() const;
