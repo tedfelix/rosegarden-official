@@ -20,7 +20,6 @@
 #ifndef _PROGRESS_H_
 #define _PROGRESS_H_
 
-#include <iostream>
 #include <string>
 
 // An abstract progress framework.  Inherited by gui progress counting
