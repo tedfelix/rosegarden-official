@@ -27,6 +27,7 @@ rosegardengui_SOURCES = trackscanvas.cpp \
 			rosegardengui.cpp \
 			main.cpp \
                         rg21io.cpp \
+			ktmpstatusmsg.cpp \
 			rosegardenguiiface.skel \
 			trackseditoriface.skel
 

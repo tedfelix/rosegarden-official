@@ -43,10 +43,12 @@
 #include "rosegardengui.h"
 #include "rosegardenguiview.h"
 #include "rosegardenguidoc.h"
-#include "resource.h"
 #include "MidiFile.h"
 #include "rg21io.h"
 #include "rosegardendcop.h"
+#include "ktmpstatusmsg.h"
+
+#define ID_STATUS_MSG 1
 
 using std::cerr;
 using std::endl;
@@ -97,15 +99,15 @@ void RosegardenGUIApp::setupActions()
 {
     // setup File menu
     // New Window ?
-    m_fileNew = KStdAction::openNew(this, SLOT(fileNew()),     actionCollection());
-    m_fileOpen = KStdAction::open   (this, SLOT(fileOpen()),    actionCollection());
+    m_fileNew  = KStdAction::openNew (this, SLOT(fileNew()),     actionCollection());
+    m_fileOpen = KStdAction::open    (this, SLOT(fileOpen()),    actionCollection());
     m_fileRecent = KStdAction::openRecent(this,
                                           SLOT(fileOpenRecent(const KURL&)),
                                           actionCollection());
-    m_fileSave = KStdAction::save  (this, SLOT(fileSave()),          actionCollection());
+    m_fileSave   = KStdAction::save  (this, SLOT(fileSave()),          actionCollection());
     m_fileSaveAs = KStdAction::saveAs(this, SLOT(fileSaveAs()),        actionCollection());
-    m_fileClose = KStdAction::close (this, SLOT(fileClose()),         actionCollection());
-    m_filePrint = KStdAction::print (this, SLOT(filePrint()),         actionCollection());
+    m_fileClose  = KStdAction::close (this, SLOT(fileClose()),         actionCollection());
+    m_filePrint  = KStdAction::print (this, SLOT(filePrint()),         actionCollection());
 
     new KAction(i18n("Import MIDI file..."), 0, 0, this,
                 SLOT(importMIDI()), actionCollection(),
@@ -213,7 +215,7 @@ void RosegardenGUIApp::initStatusBar()
     // STATUSBAR
     // TODO: add your own items you need for displaying current
     // application status.
-    statusBar()->insertItem(i18n(IDS_STATUS_DEFAULT), ID_STATUS_MSG);
+    statusBar()->insertItem(KTmpStatusMsg::getDefaultMsg(), KTmpStatusMsg::getDefaultId());
 }
 
 void RosegardenGUIApp::initDocument()
@@ -239,7 +241,7 @@ void RosegardenGUIApp::initView()
 
 void RosegardenGUIApp::openDocumentFile(const char* _cmdl)
 {
-    statusMsg(i18n("Opening file..."));
+    KTmpStatusMsg msg(i18n("Opening file..."), statusBar());
     
     kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::openDocumentFile("
                          << _cmdl << ")" << endl;
@@ -247,7 +249,6 @@ void RosegardenGUIApp::openDocumentFile(const char* _cmdl)
     m_doc->saveIfModified();
     m_doc->closeDocument();
     m_doc->openDocument(_cmdl);
-    statusMsg(i18n(IDS_STATUS_DEFAULT));
 
     initView();
 }
@@ -435,17 +436,15 @@ bool RosegardenGUIApp::queryExit()
 //
 void RosegardenGUIApp::fileNewWindow()
 {
-    statusMsg(i18n("Opening a new application window..."));
+    KTmpStatusMsg msg(i18n("Opening a new application window..."), statusBar());
 	
     RosegardenGUIApp *new_window= new RosegardenGUIApp();
     new_window->show();
-
-    statusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
 void RosegardenGUIApp::fileNew()
 {
-    statusMsg(i18n("Creating new document..."));
+    KTmpStatusMsg msg(i18n("Creating new document..."), statusBar());
 
     if (!m_doc->saveIfModified()) {
         // here saving wasn't successful
@@ -456,8 +455,6 @@ void RosegardenGUIApp::fileNew()
         QString caption=kapp->caption();	
         setCaption(caption+": "+m_doc->getTitle());
     }
-
-    statusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
 void RosegardenGUIApp::openURL(const KURL& url)
@@ -492,26 +489,22 @@ void RosegardenGUIApp::openURL(const KURL& url)
     
     setCaption(url.path());
     m_fileRecent->addURL(url);
-//     setGeneralStatusField(i18n("Done"));
-
 }
 
 void RosegardenGUIApp::fileOpen()
 {
-    statusMsg(i18n("Opening file..."));
+    KTmpStatusMsg msg(i18n("Opening file..."), statusBar());
 
     KURL url = KFileDialog::getOpenURL(QString::null, "*.xml", this,
                                        i18n("Open File"));
     if ( url.isEmpty() ) { return; }
 
     openURL(url);
-
-    statusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
 void RosegardenGUIApp::fileOpenRecent(const KURL &url)
 {
-    statusMsg(i18n("Opening file..."));
+    KTmpStatusMsg msg(i18n("Opening file..."), statusBar());
 	
 //     if (!doc->saveIfModified()) {
 //         // here saving wasn't successful
@@ -525,68 +518,59 @@ void RosegardenGUIApp::fileOpenRecent(const KURL &url)
 //     initView();
 
     openURL(url);
-
-    statusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
 void RosegardenGUIApp::fileSave()
 {
     if (!m_doc->isModified()) return;
 
-    statusMsg(i18n("Saving file..."));
+    KTmpStatusMsg msg(i18n("Saving file..."), statusBar());
+
     if (!m_doc->getAbsFilePath())
         fileSaveAs();
     else
         m_doc->saveDocument(m_doc->getAbsFilePath());
-
-    statusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
 void RosegardenGUIApp::fileSaveAs()
 {
-    statusMsg(i18n("Saving file with a new filename..."));
+    KTmpStatusMsg msg(i18n("Saving file with a new filename..."), statusBar());
 
     QString newName=KFileDialog::getSaveFileName(QDir::currentDirPath(),
                                                  i18n("*.xml"), this, i18n("Save as..."));
-    if (!newName.isEmpty())
-        {
-            QFileInfo saveAsInfo(newName);
-            m_doc->setTitle(saveAsInfo.fileName());
-            m_doc->setAbsFilePath(saveAsInfo.absFilePath());
-            m_doc->saveDocument(newName);
-            m_fileRecent->addURL(newName);
+    if (!newName.isEmpty()) {
+        QFileInfo saveAsInfo(newName);
+        m_doc->setTitle(saveAsInfo.fileName());
+        m_doc->setAbsFilePath(saveAsInfo.absFilePath());
+        m_doc->saveDocument(newName);
+        m_fileRecent->addURL(newName);
 
-            QString caption=kapp->caption();	
-            setCaption(caption + ": " + m_doc->getTitle());
-        }
-
-    statusMsg(i18n(IDS_STATUS_DEFAULT));
+        QString caption=kapp->caption();	
+        setCaption(caption + ": " + m_doc->getTitle());
+    }
 }
 
 void RosegardenGUIApp::fileClose()
 {
-    statusMsg(i18n("Closing file..."));
+    KTmpStatusMsg msg(i18n("Closing file..."), statusBar());
 	
     close();
-    statusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
 void RosegardenGUIApp::filePrint()
 {
-    statusMsg(i18n("Printing..."));
+    KTmpStatusMsg msg(i18n("Printing..."), statusBar());
 
     QPrinter printer;
 
     if (printer.setup(this)) {
         m_view->print(&printer);
     }
-
-    statusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
 void RosegardenGUIApp::quit()
 {
-    statusMsg(i18n("Exiting..."));
+    KTmpStatusMsg msg(i18n("Exiting..."), statusBar());
     saveOptions();
     // close the first window, the list makes the next one the first again.
     // This ensures that queryClose() is called on each window to ask for closing
@@ -601,80 +585,61 @@ void RosegardenGUIApp::quit()
                 break;
         }
     }	
-
-    // cc: this causes a crash, for me
-//    statusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
 void RosegardenGUIApp::editUndo()
 {
-    statusMsg(i18n("Undo..."));
-
-    statusMsg(i18n(IDS_STATUS_DEFAULT));
+    KTmpStatusMsg msg(i18n("Undo..."), statusBar());
 }
 
 void RosegardenGUIApp::editRedo()
 {
-    statusMsg(i18n("Redo..."));
-
-    statusMsg(i18n(IDS_STATUS_DEFAULT));
+    KTmpStatusMsg msg(i18n("Redo..."), statusBar());
 }
 
 void RosegardenGUIApp::editCut()
 {
-    statusMsg(i18n("Cutting selection..."));
-
-    statusMsg(i18n(IDS_STATUS_DEFAULT));
+    KTmpStatusMsg msg(i18n("Cutting selection..."), statusBar());
 }
 
 void RosegardenGUIApp::editCopy()
 {
-    statusMsg(i18n("Copying selection to clipboard..."));
-
-    statusMsg(i18n(IDS_STATUS_DEFAULT));
+    KTmpStatusMsg msg(i18n("Copying selection to clipboard..."), statusBar());
 }
 
 void RosegardenGUIApp::editPaste()
 {
-    statusMsg(i18n("Inserting clipboard contents..."));
-
-    statusMsg(i18n(IDS_STATUS_DEFAULT));
+    KTmpStatusMsg msg(i18n("Inserting clipboard contents..."), statusBar());
 }
 
 void RosegardenGUIApp::toggleToolBar()
 {
-    statusMsg(i18n("Toggle the toolbar..."));
+    KTmpStatusMsg msg(i18n("Toggle the toolbar..."), statusBar());
 
     if (m_viewToolBar->isChecked())
         toolBar("mainToolBar")->show();
     else
         toolBar("mainToolBar")->hide();
-
-    statusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
 void RosegardenGUIApp::toggleTracksToolBar()
 {
-    statusMsg(i18n("Toggle the tracks toolbar..."));
+    KTmpStatusMsg msg(i18n("Toggle the tracks toolbar..."), statusBar());
 
     if (m_viewTracksToolBar->isChecked())
         toolBar("tracksToolBar")->show();
     else
         toolBar("tracksToolBar")->hide();
-
-    statusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
 void RosegardenGUIApp::toggleStatusBar()
 {
-    statusMsg(i18n("Toggle the statusbar..."));
+    KTmpStatusMsg msg(i18n("Toggle the statusbar..."), statusBar());
 
     if(!m_viewStatusBar->isChecked())
         statusBar()->hide();
     else
         statusBar()->show();
-
-    statusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
 

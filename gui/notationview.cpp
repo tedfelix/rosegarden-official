@@ -39,7 +39,7 @@
 #include "notepixmapfactory.h"
 #include "qcanvaslinegroupable.h"
 #include "qcanvassimplesprite.h"
-#include "resource.h"
+#include "ktmpstatusmsg.h"
 
 #include "rosedebug.h"
 
@@ -62,6 +62,7 @@ using Rosegarden::TimeSignature;
 using Rosegarden::Quantizer;
 using Rosegarden::timeT;
 
+#define ID_STATUS_MSG 1
 
 
 //////////////////////////////////////////////////////////////////////
@@ -432,7 +433,7 @@ void NotationView::initStatusBar()
 {
     KStatusBar* sb = statusBar();
 
-    sb->insertItem(i18n(IDS_STATUS_DEFAULT), ID_STATUS_MSG);
+    sb->insertItem(KTmpStatusMsg::getDefaultMsg(), KTmpStatusMsg::getDefaultId());
     m_currentNotePixmap       = new QLabel(sb);
     m_hoveredOverNoteName     = new QLabel(sb);
     m_hoveredOverAbsoluteTime = new QLabel(sb);
@@ -756,49 +757,37 @@ void NotationView::setTool(NotationTool* tool)
 
 void NotationView::slotEditUndo()
 {
-    slotStatusMsg(i18n("Undo..."));
-
-    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
+    KTmpStatusMsg msg(i18n("Undo..."), statusBar());
 }
 
 void NotationView::slotEditRedo()
 {
-    slotStatusMsg(i18n("Redo..."));
-
-    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
+    KTmpStatusMsg msg(i18n("Redo..."), statusBar());
 }
 
 void NotationView::slotEditCut()
 {
-    slotStatusMsg(i18n("Cutting selection..."));
-
-    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
+    KTmpStatusMsg msg(i18n("Cutting selection..."), statusBar());
 }
 
 void NotationView::slotEditCopy()
 {
-    slotStatusMsg(i18n("Copying selection to clipboard..."));
-
-    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
+    KTmpStatusMsg msg(i18n("Copying selection to clipboard..."), statusBar());
 }
 
 void NotationView::slotEditPaste()
 {
-    slotStatusMsg(i18n("Inserting clipboard contents..."));
-
-    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
+    KTmpStatusMsg msg(i18n("Inserting clipboard contents..."), statusBar());
 }
 
 void NotationView::slotToggleToolBar()
 {
-    slotStatusMsg(i18n("Toggle the toolbar..."));
+    KTmpStatusMsg msg(i18n("Toggle the toolbar..."), statusBar());
 
     if (toolBar()->isVisible())
         toolBar()->hide();
     else
         toolBar()->show();
-
-    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
 void NotationView::slotToggleNotesToolBar()
@@ -824,6 +813,7 @@ void NotationView::slotToggleClefsToolBar()
 void NotationView::toggleNamedToolBar(const QString& toolBarName)
 {
     KToolBar *namedToolBar = toolBar(toolBarName);
+
     if (!namedToolBar) {
         kdDebug(KDEBUG_AREA) << "NotationView::toggleNamedToolBar() : toolBar "
                              << toolBarName << " not found" << endl;
@@ -838,14 +828,12 @@ void NotationView::toggleNamedToolBar(const QString& toolBarName)
 
 void NotationView::slotToggleStatusBar()
 {
-    slotStatusMsg(i18n("Toggle the statusbar..."));
+    KTmpStatusMsg msg(i18n("Toggle the statusbar..."), statusBar());
 
     if (statusBar()->isVisible())
         statusBar()->hide();
     else
         statusBar()->show();
-
-    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
 
@@ -872,7 +860,7 @@ void NotationView::slotStatusHelpMsg(const QString &text)
 // (is it within scope)
 // 
 void
-NotationView::setPositionPointer(const int &position)
+NotationView::setPositionPointer(const int& /*position*/)
 {
 }
 
