@@ -2215,7 +2215,7 @@ void RosegardenGUIApp::jogSelection(Rosegarden::timeT amount)
 
         command->addSegment((*i),
                             (*i)->getStartTime() + amount,
-                            (*i)->getEndTime(),
+                            (*i)->getEndTime() + amount,
                             (*i)->getTrack());
     }
 
