@@ -73,19 +73,35 @@ Put() {
     if [ `whoami` == "silvan" ]; then
 	echo "Previewing in kghostivew..."
 	kghostview $1
+	md5sum $1 > /tmp/$1.md5
 
 	read -p "Do you want to publish? (y/N)" key
-	if [ "$key" == "y" ]; then
-	    printf "Publishing \"$1\"... \t"
-	    user=$(cat /home/silvan/ZTQXP3)
-	    curl -u "$user" -T "$1" ftp://users.adelphia.net/public_html/
+	glee=
+	tries=0
+	until [ glee ] || [ tries == 5 ]; do
+	    if [ "$key" == "y" ]; then
+		printf "Publishing \"$1\"... \t"
+		user=$(cat /home/silvan/ZTQXP3)
+		curl -u "$user" -T "$1" ftp://users.adelphia.net/public_html/
 
-	    if [ $? ]; then
-		echo OK
-	    else
-		echo FAILED
-	    fi
-	fi 
+		echo "Verifying..."
+		pushd $PWD
+		cd /tmp
+		wget http://users.adelphia.net/~silvan/$1
+		md5sum $1 > $1.md5.2
+		diff $1.md5 $1.md5.2
+
+		if [ $? ]; then
+		    echo OK
+		    glee=true
+		else
+		    echo FAILED
+		fi
+
+		popd
+	    fi 
+	    ((tries++))
+	done
     fi
 }
 
