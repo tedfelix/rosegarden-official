@@ -308,6 +308,12 @@ public:
      */
     QCanvasRectangle* getSelectionRectangle();
 
+    /*
+     * When we zoom the main canvas we're currently resizing it (possibly
+     * soon we won't be) - consequently we need to regenerate the SegmentItem 
+     * selection as it holds positional values.
+     */
+    void updateSegmentItemSelection();
 
 public slots:
 

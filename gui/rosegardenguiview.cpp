@@ -740,6 +740,12 @@ void RosegardenGUIView::setZoomSize(double size)
     if (m_trackEditor->getBottomBarButtons()) {
 	m_trackEditor->getBottomBarButtons()->repaint();
     }
+
+    // Update the SegmentItem Selection in the canvas with
+    // new canvas positional values (as we're currently
+    // changing the canvas size).
+    //
+    m_trackEditor->updateSegmentItemSelection();
 }
 
 

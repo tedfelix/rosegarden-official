@@ -390,12 +390,14 @@ void SegmentMover::ready()
 void SegmentMover::handleMouseButtonPress(QMouseEvent *e)
 {
     SegmentItem *item = m_canvas->findSegmentClickedOn(e->pos());
+    SegmentSelector* selector = dynamic_cast<SegmentSelector*>
+            (getToolBox()->getTool("segmentselector"));
+
 
     if (item) {
         m_currentItem = item;
 	m_currentItemStartX = item->x();
 	m_clickPoint = e->pos();
-        m_currentItem->showRepeatRect(false);
 
         m_foreGuide->setX(int(m_canvas->grid().getRulerScale()->
                           getXForTime(item->getSegment()->getStartTime())) - 2);
@@ -412,10 +414,21 @@ void SegmentMover::handleMouseButtonPress(QMouseEvent *e)
         m_foreGuide->show();
         m_topGuide->show();
 
+        if (selector)
+        {
+            selector->slotSelectSegmentItem(item);
+        }
+
+	m_passedInertiaEdge = false;
         // Don't update until the move
         //
         //m_canvas->canvas()->update();
+
+    } else {
+        // check for addmode - clear the selection if not
+        selector->clearSelected();
     }
+
 }
 
 void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
@@ -426,18 +439,64 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
         Rosegarden::Track *track = comp.getTrackByPosition(
                 m_currentItem->getTrackPosition());
 
-        SegmentReconfigureCommand *command =
-	    new SegmentReconfigureCommand(i18n("Move Segment"));
+	bool haveChange = false;
 
-        command->addSegment(m_currentItem->getSegment(),
-                            m_currentItem->getStartTime(),
-                            m_currentItem->getEndTime(),
-                            track->getId());
+        SegmentSelector* 
+            selector = dynamic_cast<SegmentSelector*>
+            (getToolBox()->getTool("segmentselector"));
+
+        if (selector)
+            m_selectedItems = selector->getSegmentItemList();
+        else
+           return;
+
+	SegmentReconfigureCommand *command =
+	    new SegmentReconfigureCommand
+	    (m_selectedItems->size() == 1 ? i18n("Move Segment") :
+	                                   i18n("Move Segments"));
+
+	SegmentItemList::iterator it;
+        SegmentSelection newSelection;
+	for (it = m_selectedItems->begin();
+	     it != m_selectedItems->end();
+	     it++)
+	{
+
+	    SegmentItem *item = it->second;
+
+            Rosegarden::Composition &comp = m_doc->getComposition();
+            Rosegarden::Track *track = 
+                comp.getTrackByPosition(item->getTrackPosition());
+
+            Rosegarden::TrackId trackId = track->getId();
+
+	    if (item->getStartTime() != item->getSegment()->getStartTime() ||
+		item->getEndTime()   != item->getSegment()->getEndMarkerTime() 
+                || trackId              != item->getSegment()->getTrack()) {
+
+		command->addSegment(item->getSegment(),
+				    item->getStartTime(),
+				    item->getEndTime(),
+				    trackId);
+
+                newSelection.insert(item->getSegment());
+		haveChange = true;
+	    }
+	}
+
         addCommandToHistory(command);
-        m_currentItem->showRepeatRect(true);
+        //m_currentItem->showRepeatRect(true);
 
         m_foreGuide->hide();
         m_topGuide->hide();
+
+        selector->clearSelected();
+        for (SegmentSelection::const_iterator nIt = newSelection.begin();
+                nIt != newSelection.end(); ++nIt)
+        {
+            selector->addToSelection(*nIt);
+            selector->slotSelectSegmentItem(m_canvas->getSegmentItem(*nIt));
+        }
     }
 
     m_currentItem = 0;
@@ -445,6 +504,7 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
 
 int SegmentMover::handleMouseMove(QMouseEvent *e)
 {
+    /*
     if (m_currentItem) {
 
 	m_canvas->setSnapGrain(true);
@@ -498,6 +558,100 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
 
 	return FollowHorizontal | FollowVertical;
     }
+    */
+
+    m_canvas->setSnapGrain(true);
+
+    if (m_currentItem && m_currentItem->isSelected())
+    {
+	SegmentItemList::iterator it;
+        int guideX = 0;
+        int guideY = 0;
+
+        SegmentSelector* 
+            selector = dynamic_cast<SegmentSelector*>
+            (getToolBox()->getTool("segmentselector"));
+
+        if (selector)
+            m_selectedItems = selector->getSegmentItemList();
+        else
+            return NoFollow;
+	
+	for (it = m_selectedItems->begin();
+	     it != m_selectedItems->end();
+	     it++)
+	{
+            it->second->showRepeatRect(false);
+
+	    int x = e->pos().x() - m_clickPoint.x(),
+		y = e->pos().y() - m_clickPoint.y();
+
+	    const int inertiaDistance = m_canvas->grid().getYSnap() / 3;
+	    if (!m_passedInertiaEdge &&
+		(x < inertiaDistance && x > -inertiaDistance) &&
+		(y < inertiaDistance && y > -inertiaDistance)) {
+		return false;
+	    } else {
+		m_passedInertiaEdge = true;
+	    }
+
+
+	    timeT newStartTime = m_canvas->grid().snapX(it->first.x() + x);
+	    it->second->setEndTime(it->second->getEndTime() + newStartTime -
+				   it->second->getStartTime());
+	    it->second->setStartTime(newStartTime);
+
+	    TrackId track;
+            int newY=it->first.y() + y;
+            // Make sure we don't set a non-existing track
+            if (newY < 0) { newY = 0; }
+            track = m_canvas->grid().getYBin(newY);
+
+	    RG_DEBUG << "SegmentMover::handleMouseMove: orig y " 
+                     << it->first.y()
+		     << ", dy " << y << ", newY " << newY 
+                     << ", track " << track << endl;
+
+            // Make sure we don't set a non-existing track (c'td)
+            // TODO: make this suck less. Either the tool should
+            // not allow it in the first place, or we automatically
+            // create new tracks - might make undo very tricky though
+            //
+            if (track >= TrackId(m_doc->getComposition().getNbTracks()))
+                track  = TrackId(m_doc->getComposition().getNbTracks() - 1);
+
+            if (it == m_selectedItems->begin())
+            {
+                guideX = int(m_canvas->grid().getRulerScale()->
+                    getXForTime(newStartTime));
+
+                guideY = m_canvas->grid().getYBinCoordinate(track);
+            }
+            else
+            {
+                if (x < guideX)
+                    guideX = int(m_canvas->grid().getRulerScale()->
+                        getXForTime(newStartTime));
+
+                if (y < guideY)
+                    guideY = m_canvas->grid().getYBinCoordinate(track);
+            }
+
+            // This is during a "mover" so don't use the normalised (i.e.
+            // proper) TrackPosition value yet.
+            //
+	    it->second->setTrackPosition(track);
+	}
+
+        guideX = m_currentItem->x();
+        guideY = m_currentItem->y();
+
+        m_foreGuide->setX(guideX - 2);
+        m_topGuide->setY(guideY - 2);
+	m_canvas->canvas()->update();
+
+	return FollowHorizontal | FollowVertical;
+    }
 
     return NoFollow;
 }
@@ -548,7 +702,9 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent*)
     addCommandToHistory(command);
 
     // update preview
-    m_currentItem->getPreview()->setPreviewCurrent(false);
+    if (m_currentItem->getPreview())
+        m_currentItem->getPreview()->setPreviewCurrent(false);
+
     m_canvas->canvas()->update();
 
     m_currentItem = 0;
@@ -576,7 +732,8 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
     }
 
     // update preview
-    m_currentItem->getPreview()->setPreviewCurrent(false);
+    if (m_currentItem->getPreview())
+        m_currentItem->getPreview()->setPreviewCurrent(false);
 
     m_canvas->canvas()->update();
     return FollowHorizontal;
@@ -731,7 +888,8 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 
 	if (!m_segmentAddMode &&
 	    SegmentResizer::cursorIsCloseEnoughToEdge(item, e, threshold)) {
-            SegmentResizer* resizer = dynamic_cast<SegmentResizer*>(getToolBox()->getTool(SegmentResizer::ToolName));
+            SegmentResizer* resizer = dynamic_cast<SegmentResizer*>
+                    (getToolBox()->getTool(SegmentResizer::ToolName));
             resizer->setEdgeThreshold(threshold);
 
 	    m_dispatchTool = resizer;
@@ -745,16 +903,19 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
             //
             m_currentItem = item;
             m_clickPoint = e->pos();
+
             slotSelectSegmentItem(m_currentItem);
 
             m_foreGuide->setX(int(m_canvas->grid().getRulerScale()->
-                                  getXForTime(item->getSegment()->getStartTime())) -2);
+                                  getXForTime(item->getSegment()->
+                                      getStartTime())) -2);
             m_foreGuide->setY(0);
             m_foreGuide->setZ(10);
             m_foreGuide->setSize(2, m_canvas->canvas()->height());
 
             m_topGuide->setX(0);
-            m_topGuide->setY(int(m_canvas->grid().getYBinCoordinate(item->getSegment()->getTrack())));
+            m_topGuide->setY(int(m_canvas->grid().getYBinCoordinate(
+                            item->getSegment()->getTrack())));
             m_topGuide->setZ(10);
             m_topGuide->setSize(m_canvas->canvas()->width(), 2);
 
@@ -842,21 +1003,24 @@ SegmentSelector::slotDestroyedSegmentItem(QObject *destroyedObject)
 {
     // doesn't work, because the signal is emitted from the QObject's dtor
     //
-//     SegmentItem* destroyedItem = dynamic_cast<SegmentItem*>(destroyedObject);
+//  SegmentItem* destroyedItem = dynamic_cast<SegmentItem*>(destroyedObject);
 
-    RG_DEBUG << "SegmentSelector::slotDestroyedSegmentItem : destroyedObject : " << destroyedObject << endl;
+    RG_DEBUG << "SegmentSelector::slotDestroyedSegmentItem : "
+             << "destroyedObject : " << destroyedObject << endl;
 
     for (SegmentItemList::iterator i = m_selectedItems.begin();
          i != m_selectedItems.end(); ++i) {
         
         if (i->second == destroyedObject) {
-            RG_DEBUG << "SegmentSelector::slotDestroyedSegmentItem : found destroyedObject\n";
+            RG_DEBUG << "SegmentSelector::slotDestroyedSegmentItem : "
+                     << "found destroyedObject\n";
             m_selectedItems.erase(i);
             return;
         }
     }
     
-    RG_DEBUG << "SegmentSelector::slotDestroyedSegmentItem : WARNING - destroyedObject not found - this is probably a bug\n";
+    RG_DEBUG << "SegmentSelector::slotDestroyedSegmentItem : WARNING - "
+             << "destroyedObject not found - this is probably a bug\n";
 }
 
 
@@ -887,6 +1051,12 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
         return;
     }
 
+    /*
+    RG_DEBUG << "SegmentSelector::handleMouseButtonRelease - "
+             << "selection size = " << m_selectedItems.size()
+             << endl;
+             */
+
     m_canvas->viewport()->setCursor(Qt::arrowCursor);
 
     if (m_currentItem->isSelected())
@@ -900,12 +1070,19 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 	    (m_selectedItems.size() == 1 ? i18n("Move Segment") :
 	                                   i18n("Move Segments"));
 
+        SegmentSelection newSelection;
+
 	for (it = m_selectedItems.begin();
 	     it != m_selectedItems.end();
 	     it++)
 	{
 
 	    SegmentItem *item = it->second;
+
+/*
+            if (item->getSegment()->isRepeating())
+                item->showRepeatRect(true);
+*/
 
             Rosegarden::Composition &comp = m_doc->getComposition();
             Rosegarden::Track *track = 
@@ -914,21 +1091,38 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
             Rosegarden::TrackId trackId = track->getId();
 
 	    if (item->getStartTime() != item->getSegment()->getStartTime() ||
-		item->getEndTime()   != item->getSegment()->getEndMarkerTime() ||
-		trackId              != item->getSegment()->getTrack()) {
+		item->getEndTime()   != item->getSegment()->getEndMarkerTime() 
+                || trackId              != item->getSegment()->getTrack()) {
 
 		command->addSegment(item->getSegment(),
 				    item->getStartTime(),
 				    item->getEndTime(),
 				    trackId);
-
 		haveChange = true;
 	    }
+            newSelection.insert(item->getSegment());
 	}
 
 	if (haveChange) addCommandToHistory(command);
 
+        /*
+        RG_DEBUG << "SegmentSelector::handleMouseButtonRelease - "
+                 << "clearing selection" << endl;
+                 */
+
+        // Update selection
+        clearSelected();
+
+        for (SegmentSelection::const_iterator nIt = newSelection.begin();
+                nIt != newSelection.end(); ++nIt)
+        {
+            addToSelection(*nIt);
+            slotSelectSegmentItem(m_canvas->getSegmentItem(*nIt));
+        }
+
 	m_canvas->canvas()->update();
+
+	emit selectedSegments(newSelection);
     }
     
     // if we've just finished a quick copy then drop the Z level back
@@ -968,6 +1162,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
             if (h > 0) ++h; else --h;
 
             selectionRect->setSize(w, h);
+
 	    m_canvas->canvas()->update();
 
             // Get collisions and do selection (true for exact collisions)
@@ -1086,7 +1281,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 	SegmentItemList::iterator it;
         int guideX = 0;
         int guideY = 0;
-	
+
 	for (it = m_selectedItems.begin();
 	     it != m_selectedItems.end();
 	     it++)
@@ -1108,6 +1303,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 	    it->second->setEndTime(it->second->getEndTime() + newStartTime -
 				   it->second->getStartTime());
 	    it->second->setStartTime(newStartTime);
+            it->second->showRepeatRect(false);
 
 	    TrackId track;
             int newY=it->first.y() + y;
@@ -1148,6 +1344,9 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
             //
 	    it->second->setTrackPosition(track);
 	}
+
+        guideX = m_currentItem->x();
+        guideY = m_currentItem->y();
 
         m_foreGuide->setX(guideX - 2);
         m_topGuide->setY(guideY - 2);

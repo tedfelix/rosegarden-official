@@ -45,6 +45,12 @@ namespace Rosegarden { class RulerScale; }
 //                 Segment Tools
 //////////////////////////////////////////////////////////////////////
 
+// Allow the tools to share the Selector tool's selection
+// through these.
+//
+typedef std::pair<QPoint, SegmentItem *> SegmentItemPair;
+typedef std::vector<SegmentItemPair> SegmentItemList;
+
 class SegmentTool : public BaseTool
 {
     Q_OBJECT
@@ -180,6 +186,8 @@ protected:
     QCanvasRectangle *m_foreGuide;
     QCanvasRectangle *m_topGuide;
 
+    SegmentItemList  *m_selectedItems;
+    bool              m_passedInertiaEdge;
 };
 
 /**
@@ -255,9 +263,16 @@ public:
     void setSegmentAdd(const bool &value)  { m_segmentAddMode = value; }
     void setSegmentCopy(const bool &value) { m_segmentCopyMode = value; }
 
+    bool isSegmentAdding() const { return m_segmentAddMode; }
+    bool isSegmentCopying() const { return m_segmentCopyMode; }
+
     // Return a set of selected Segments
     //
     Rosegarden::SegmentSelection getSelectedSegments();
+
+    // Return the SegmentItem list for other tools to use
+    //
+    SegmentItemList* getSegmentItemList() { return &m_selectedItems; }
 
     static const QString ToolName;
 
@@ -275,9 +290,6 @@ protected:
     SegmentSelector(SegmentCanvas*, RosegardenGUIDoc*);
 
     void addToSelection(SegmentItem*);
-
-    typedef std::pair<QPoint, SegmentItem *> SegmentItemPair;
-    typedef std::vector<SegmentItemPair> SegmentItemList;
 
     //--------------- Data members ---------------------------------
 

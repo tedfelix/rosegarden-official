@@ -105,6 +105,12 @@ public:
     MultiViewCommandHistory *getCommandHistory();
     void addCommandToHistory(KCommand *command);
 
+    /*
+     * Update the selection tools selection - used on zoom
+     */
+    void updateSegmentItemSelection();
+
+
 public slots:
 
 //!!! I suspect most of these of never actually being used as slots, only as plain methods

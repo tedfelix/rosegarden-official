@@ -786,3 +786,9 @@ void TrackEditor::dropEvent(QDropEvent* event)
 
     }
 }
+
+void TrackEditor::updateSegmentItemSelection()
+{
+    if (m_segmentCanvas) m_segmentCanvas->updateSegmentItemSelection();
+}
+

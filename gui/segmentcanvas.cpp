@@ -1442,5 +1442,28 @@ SegmentCanvas::getSegmentItem(Rosegarden::Segment *segment)
 }
 
 
+// If we're changing zoom level then we need to regenerate the
+// SegmentItem selection.
+//
+//
+void
+SegmentCanvas::updateSegmentItemSelection()
+{
+    RG_DEBUG << "SegmentCanvas::updateSegmentItemSelection" << endl;
+
+    SegmentSelector* selTool = dynamic_cast<SegmentSelector*>
+        (getToolBox()->getTool(SegmentSelector::ToolName));
+
+    SegmentItemList *list = selTool->getSegmentItemList();
+    SegmentSelection selection;
+
+    for (SegmentItemList::iterator it = list->begin();
+            it != list->end(); ++it)
+    {
+        selection.insert(it->second->getSegment());
+    }
+
+    slotSelectSegments(selection);
+}
 
 
