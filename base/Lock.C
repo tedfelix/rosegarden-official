@@ -19,7 +19,7 @@
     COPYING included with this distribution for more information.
 */
 
-// Representation of a Track
+// A locking mechanism
 //
 //
 
@@ -65,6 +65,11 @@ Lock::releaseWriteLock(int thread)
 bool
 Lock::getReadLock(int thread)
 {
+    // If we're writing then don't allow a read-lock
+    //
+    if (m_writeThread != -1)
+        return false;
+
     std::vector<int>::iterator it = m_readThreads.begin();
     for (; it != m_readThreads.end(); it++)
     {
