@@ -152,7 +152,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         if (!m_currentEvent) {
             kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement: Warning: Found property outside of event at time " << m_currentTime << ", ignoring" << endl;
         } else {
-            m_currentEvent->setProperty(atts);
+            m_currentEvent->setPropertiesFromAttributes(atts);
         }
         
     } else {

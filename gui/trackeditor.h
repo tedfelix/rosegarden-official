@@ -43,20 +43,36 @@ class RosegardenGUIDoc;
  */
 class TracksEditor : public QWidget, virtual public TracksEditorIface
 {
-   Q_OBJECT
-public: 
+    Q_OBJECT
+public:
+    /**
+     * Create a new TracksEditor representing the document \a doc
+     */
     TracksEditor(RosegardenGUIDoc* doc,
                  QWidget* parent = 0, const char* name = 0,
                  WFlags f=0);
 
+    /**
+     * Create a new empty TracksEditor 
+     *
+     * The TracksEditor will have \a nbTracks available tracks, and
+     * ( \a nbBars * time resolution ) time steps.
+     *
+     * @see setTimeStepsResolution()
+     */
     TracksEditor(unsigned int nbTracks,
                  unsigned int nbBars,
                  QWidget* parent = 0, const char* name = 0,
                  WFlags f=0);
 
+    /// Clear the TracksCanvas
     void clear();
 
-    void moveTrack(int section, int fromIdx, int toIdx);
+    /**
+     * Reset all the tracks Y coordinates after the order of the
+     * instruments has been changed
+     */
+    void updateTrackOrder();
 
     TracksCanvas*       canvas()       { return m_tracksCanvas; }
     const TracksCanvas* canvas() const { return m_tracksCanvas; }
@@ -74,7 +90,7 @@ public:
     unsigned int getTimeStepsResolution() const;
 
     /**
-     * DCOP interface
+     * Add a new track - DCOP interface
      */
     virtual void addTrack(int instrument, int start, unsigned int nbTimeSteps);
 
@@ -86,8 +102,9 @@ public slots:
      */
     void setTimeStepsResolution(unsigned int);
     
-    // set the position pointer
-    //
+    /**
+     * Set the position pointer during playback
+     */
     void setPointerPosition(int position);
 
 protected slots:

@@ -3,6 +3,11 @@
 
 #include <dcopobject.h>
 
+/**
+ * TracksEditor DCOP Interface
+ *
+ * @see TracksEditor
+ */
 class TracksEditorIface : virtual public DCOPObject
 {
     K_DCOP

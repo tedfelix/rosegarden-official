@@ -421,7 +421,7 @@ NotationHLayout::AccidentalTable::update(Accidental accidental, int height)
 void
 NotationHLayout::reconcileBars()
 {
-    int barNo = 0;
+    unsigned int barNo = 0;
     bool reachedEnd = false;
 
     while (!reachedEnd) {
@@ -456,7 +456,7 @@ NotationHLayout::reconcileBars()
 		if (bd.idealWidth < maxWidth) {
 		    if (bd.idealWidth > 0) {
 			float ratio = (float)maxWidth / (float)bd.idealWidth;
-			bd.fixedWidth += bd.fixedWidth * ((ratio - 1.0)/2.0);
+			bd.fixedWidth += bd.fixedWidth * int((ratio - 1.0)/2.0);
 		    }
 		    bd.idealWidth = maxWidth;
 		}

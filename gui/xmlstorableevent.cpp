@@ -113,7 +113,7 @@ XmlStorableEvent::XmlStorableEvent(const Event &e)
 
 
 void
-XmlStorableEvent::setProperty(const QXmlAttributes &attributes)
+XmlStorableEvent::setPropertiesFromAttributes(const QXmlAttributes &attributes)
 {
     bool have = false;
     QString name = attributes.value("name");

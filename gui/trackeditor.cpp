@@ -205,7 +205,7 @@ void TracksEditor::trackOrderChanged(int section, int fromIdx, int toIdx)
     kdDebug(KDEBUG_AREA) << QString("TracksEditor::trackOrderChanged(section : %1, from %2, to %3)")
         .arg(section).arg(fromIdx).arg(toIdx) << endl;
 
-    moveTrack(section, fromIdx, toIdx);
+    updateTrackOrder();
     emit needUpdate();
 }
 
@@ -250,7 +250,8 @@ void TracksEditor::updateTrackInstrumentAndStartIndex(TrackItem *i)
     i->getTrack()->setStartIndex(startIndex);
 }
 
-void TracksEditor::moveTrack(int /*section*/, int /*fromIdx*/, int /*toIdx*/) {
+void TracksEditor::updateTrackOrder()
+{
     QCanvasItemList itemList = canvas()->canvas()->allItems();
     QCanvasItemList::Iterator it;
 

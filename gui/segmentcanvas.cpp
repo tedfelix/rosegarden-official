@@ -19,6 +19,7 @@
 */
 
 #include <qpopupmenu.h>
+#include <qwhatsthis.h>
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -55,7 +56,7 @@ unsigned int TrackItem::getItemNbTimeSteps() const
 
 timeT TrackItem::getStartIndex() const
 {
-    return x() / m_widthToDurationRatio * m_timeStepsResolution;
+    return timeT(x() / m_widthToDurationRatio * m_timeStepsResolution);
 }
 
 int TrackItem::getInstrument() const
@@ -121,6 +122,8 @@ TracksCanvas::TracksCanvas(int gridH, int gridV,
     m_pen(Qt::black),
     m_editMenu(new QPopupMenu(this))
 {
+    QWhatsThis::add(this, i18n("Tracks Canvas - Create and manipulate your tracks here"));
+
     TrackItem::setWidthToDurationRatio(m_grid.hstep());
     TrackItem::setItemHeight(m_grid.vstep());
 
@@ -345,7 +348,7 @@ void TrackPencil::handleMouseButtonRelase(QMouseEvent*)
                              << itemX << " - width : " << itemW << endl;
 
         m_currentItem->setX(itemX + itemW);
-        m_currentItem->setSize(-itemW, m_currentItem->height());
+        m_currentItem->setSize(int(-itemW), m_currentItem->height());
 
         kdDebug(KDEBUG_AREA) << "TracksCanvas::contentsMouseReleaseEvent() after correction : itemX = "
                              << m_currentItem->x()

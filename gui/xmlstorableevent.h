@@ -26,17 +26,37 @@
 #include "Event.h"
 
 /**
-  *@author Guillaume Laurent, Chris Cannam, Richard Bown
-  */
+ * An Event which can generate an XML representation of itself,
+ * or which can be constructed from a set of XML attributes
+ *
+ * @see RoseXmlHandler
+ */
 class XmlStorableEvent : public Rosegarden::Event
 {
 public:
+    /**
+     * Construct an XmlStorableEvent out of the XML attributes \a atts
+     */
     XmlStorableEvent(const QXmlAttributes& atts);
+
+    /**
+     * Construct an XmlStorableEvent from the specified Event
+     */
     XmlStorableEvent(const Rosegarden::Event&);
 
-    void setProperty(const QXmlAttributes& atts);
+    /**
+     * Set the Element properties from the XML attributes \a atts
+     */
+    void setPropertiesFromAttributes(const QXmlAttributes& atts);
 
+    /**
+     * Get the XML string representing the object
+     */
     QString        toXmlString() const;
+
+    /**
+     * Get the XML string representing the specified Event
+     */
     static QString toXmlString(const Event&);
 };
 

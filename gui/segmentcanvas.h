@@ -160,6 +160,7 @@ public:
 
     /**
      * Add a part item at the specified coordinates, lasting \a nbSteps
+     * Called when reading a music file
      */
     TrackItem* addPartItem(int x, int y, unsigned int nbSteps);
 

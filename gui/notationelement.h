@@ -33,7 +33,7 @@ class NotationElementList;
  * NotationElementList. Once this is done, each NotationElement is
  * affected a QCanvasItem which is set at these coords.
  *
- * @see see NotationView::showElements()
+ * @see NotationView#showElements()
  */
 class NotationElement : public Rosegarden::ViewElement
 {

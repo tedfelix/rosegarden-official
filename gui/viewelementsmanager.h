@@ -31,9 +31,7 @@
  * and NotationElementList/NotationElement objects.  For most
  * purposes the only interesting method is getNotationElementList.
  * 
- * @author Guillaume Laurent, Chris Cannam, Richard Bown
  */
-
 class ViewElementsManager : public Rosegarden::TrackObserver
 {
 public: 
@@ -76,17 +74,22 @@ public:
      */
     void erase(NotationElementList::iterator, bool eraseFromTrack = false);
 
-
+    /// Return the Track which is wrapped by this object 
     Rosegarden::Track& getTrack() { return m_track; }
 
 
     // TrackObserver methods:
 
-    // called after the event has been added to the track:
+    /**
+     * TrackObserver method - called after the event has been added to
+     * the track
+     */
     virtual void eventAdded(Rosegarden::Track *, Rosegarden::Event *);
 
-    // called after the event has been removed from the track,
-    // and just before it is deleted:
+    /**
+     * TrackObserver method - called after the event has been removed
+     * from the track, and just before it is deleted
+     */
     virtual void eventRemoved(Rosegarden::Track *, Rosegarden::Event *);
 
 
