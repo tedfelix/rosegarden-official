@@ -1654,7 +1654,7 @@ void NotationView::slotDoubleFlat()
 void NotationView::slotTrebleClef()
 {
     m_currentNotePixmap->setPixmap
-        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-treble")));
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-treble")));
     setTool(m_toolBox->getTool(ClefInserter::ToolName));
 
     dynamic_cast<ClefInserter*>(m_tool)->setClef(Rosegarden::Clef::Treble);
@@ -1664,7 +1664,7 @@ void NotationView::slotTrebleClef()
 void NotationView::slotTenorClef()
 {
     m_currentNotePixmap->setPixmap
-        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-tenor")));
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-tenor")));
     setTool(m_toolBox->getTool(ClefInserter::ToolName));
 
     dynamic_cast<ClefInserter*>(m_tool)->setClef(Rosegarden::Clef::Tenor);
@@ -1674,7 +1674,7 @@ void NotationView::slotTenorClef()
 void NotationView::slotAltoClef()
 {
     m_currentNotePixmap->setPixmap
-        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-alto")));
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-alto")));
     setTool(m_toolBox->getTool(ClefInserter::ToolName));
 
     dynamic_cast<ClefInserter*>(m_tool)->setClef(Rosegarden::Clef::Alto);
@@ -1684,7 +1684,7 @@ void NotationView::slotAltoClef()
 void NotationView::slotBassClef()
 {
     m_currentNotePixmap->setPixmap
-        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-bass")));
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-bass")));
     setTool(m_toolBox->getTool(ClefInserter::ToolName));
 
     dynamic_cast<ClefInserter*>(m_tool)->setClef(Rosegarden::Clef::Bass);
@@ -1696,7 +1696,7 @@ void NotationView::slotBassClef()
 void NotationView::slotText()
 {
     m_currentNotePixmap->setPixmap
-        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap("text")));
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("text")));
     setTool(m_toolBox->getTool(TextInserter::ToolName));
     setMenuStates();
 }

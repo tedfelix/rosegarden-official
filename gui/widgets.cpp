@@ -861,9 +861,8 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
     layout->addWidget(m_makeViable, 2, 0);
     layout->addWidget(m_deCounterpoint, 3, 0);
     
-    NotePixmapFactory npf;
-    QPixmap noMap =
-	NotePixmapFactory::toQPixmap(npf.makeToolbarPixmap("menu-no-note"));
+    QPixmap noMap = NotePixmapFactory::toQPixmap
+	(NotePixmapFactory::makeToolbarPixmap("menu-no-note"));
 
     int defaultType = 0;
     Rosegarden::timeT defaultUnit = 
@@ -929,8 +928,8 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
 	Rosegarden::timeT time = m_standardQuantizations[i];
 	Rosegarden::timeT error = 0;
 
-	QPixmap pmap =
-	    NotePixmapFactory::toQPixmap(npf.makeNoteMenuPixmap(time, error));
+	QPixmap pmap = NotePixmapFactory::toQPixmap
+	    (NotePixmapFactory::makeNoteMenuPixmap(time, error));
 	QString label = NotationStrings::makeNoteMenuLabel(time, false, error);
 
 	if (error == 0) {

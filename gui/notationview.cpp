@@ -1287,7 +1287,7 @@ void NotationView::setupActions()
         NoteActionData noteActionData = *actionDataIter;
         
         icon = QIconSet
-	    (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+	    (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
 	     (noteActionData.pixmapName)));
         noteAction = new KRadioAction(noteActionData.title,
 				      icon,
@@ -1320,7 +1320,7 @@ void NotationView::setupActions()
     for (unsigned int i = 0;
 	 i < sizeof(actionsAccidental)/sizeof(actionsAccidental[0]); ++i) {
 
-        icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+        icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                         (actionsAccidental[i][3])));
         noteAction = new KRadioAction(actionsAccidental[i][0], icon, 0, this,
                                       actionsAccidental[i][1],
@@ -1334,35 +1334,35 @@ void NotationView::setupActions()
     //
 
     // Treble
-    icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-treble")));
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-treble")));
     noteAction = new KRadioAction(i18n("&Treble Clef"), icon, 0, this,
                                   SLOT(slotTrebleClef()),
                                   actionCollection(), "treble_clef");
     noteAction->setExclusiveGroup("notes");
 
     // Tenor
-    icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-tenor")));
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-tenor")));
     noteAction = new KRadioAction(i18n("Te&nor Clef"), icon, 0, this,
                                   SLOT(slotTenorClef()),
                                   actionCollection(), "tenor_clef");
     noteAction->setExclusiveGroup("notes");
 
     // Alto
-    icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-alto")));
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-alto")));
     noteAction = new KRadioAction(i18n("&Alto Clef"), icon, 0, this,
                                   SLOT(slotAltoClef()),
                                   actionCollection(), "alto_clef");
     noteAction->setExclusiveGroup("notes");
 
     // Bass
-    icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-bass")));
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-bass")));
     noteAction = new KRadioAction(i18n("&Bass Clef"), icon, 0, this,
                                   SLOT(slotBassClef()),
                                   actionCollection(), "bass_clef");
     noteAction->setExclusiveGroup("notes");
 
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap("text")));
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("text")));
     noteAction = new KRadioAction(i18n("&Text"), icon, 0, this,
                                   SLOT(slotText()),
                                   actionCollection(), "text");
@@ -1377,13 +1377,13 @@ void NotationView::setupActions()
                                   actionCollection(), "erase");
     noteAction->setExclusiveGroup("notes");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap("select")));
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("select")));
     noteAction = new KRadioAction(i18n("&Select"), icon, 0,
                                   this, SLOT(slotSelectSelected()),
                                   actionCollection(), "select");
     noteAction->setExclusiveGroup("notes");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap("step_by_step")));
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("step_by_step")));
     new KToggleAction(i18n("Ste&p Recording"), icon, 0, this,
                 SLOT(slotToggleStepByStep()), actionCollection(),
                 "toggle_step_by_step");
@@ -1460,7 +1460,7 @@ void NotationView::setupActions()
     // Group menu
     //
     icon = QIconSet
-        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
         ("group-beam")));
 
     new KAction(GroupMenuBeamCommand::getGlobalName(), icon, 0, this,
@@ -1470,21 +1470,21 @@ void NotationView::setupActions()
                 SLOT(slotGroupAutoBeam()), actionCollection(), "auto_beam");
 
     icon = QIconSet
-        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
         ("group-unbeam")));
 
     new KAction(GroupMenuBreakCommand::getGlobalName(), icon, 0, this,
                 SLOT(slotGroupBreak()), actionCollection(), "break_group");
     
     icon = QIconSet
-        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
         ("group-simple-tuplet")));
 
     new KAction(GroupMenuTupletCommand::getGlobalName(true), icon, 0, this,
 		SLOT(slotGroupSimpleTuplet()), actionCollection(), "simple_tuplet");
 
     icon = QIconSet
-        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
         ("group-tuplet")));
 
     new KAction(GroupMenuTupletCommand::getGlobalName(false), icon, 0, this,
@@ -1493,20 +1493,20 @@ void NotationView::setupActions()
     new KAction(GroupMenuUnTupletCommand::getGlobalName(), 0, this,
                 SLOT(slotGroupUnTuplet()), actionCollection(), "break_tuplets");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap("triplet")));
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("triplet")));
     (new KToggleAction(i18n("Trip&let Insert Mode"), icon, Key_G,
 		       this, SLOT(slotUpdateInsertModeStatus()),
                        actionCollection(), "triplet_mode"))->
 	setChecked(false);
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap("chord")));
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("chord")));
     (new KToggleAction(i18n("C&hord Insert Mode"), icon, Key_H,
 		       this, SLOT(slotUpdateInsertModeStatus()),
 		      actionCollection(), "chord_mode"))->
 	setChecked(false);
 
     icon = QIconSet
-        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
         ("group-grace")));
 
     new KAction(GroupMenuGraceCommand::getGlobalName(), icon, 0, this,
@@ -1516,7 +1516,7 @@ void NotationView::setupActions()
 		SLOT(slotGroupUnGrace()), actionCollection(), "ungrace");
 
     icon = QIconSet
-        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
         ("group-slur")));
 
     new KAction(GroupMenuAddIndicationCommand::getGlobalName
@@ -1524,7 +1524,7 @@ void NotationView::setupActions()
                 SLOT(slotGroupSlur()), actionCollection(), "slur");
 
     icon = QIconSet
-        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
         ("group-crescendo")));
 
     new KAction(GroupMenuAddIndicationCommand::getGlobalName
@@ -1532,7 +1532,7 @@ void NotationView::setupActions()
                 SLOT(slotGroupCrescendo()), actionCollection(), "crescendo");
 
     icon = QIconSet
-        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
         ("group-decrescendo")));
 
     new KAction(GroupMenuAddIndicationCommand::getGlobalName
@@ -1540,7 +1540,7 @@ void NotationView::setupActions()
                 SLOT(slotGroupDecrescendo()), actionCollection(), "decrescendo");
 
     icon = QIconSet
-        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
         ("group-chord")));
     new KAction(GroupMenuMakeChordCommand::getGlobalName(), icon, 0, this,
 		SLOT(slotGroupMakeChord()), actionCollection(), "make_chord");
@@ -1559,7 +1559,7 @@ void NotationView::setupActions()
                 "collapse_notes");
 
     icon = QIconSet
-        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
         ("transforms-tie")));
 
     new KAction(TransformsMenuTieNotesCommand::getGlobalName(), icon, 0, this,
@@ -1575,7 +1575,7 @@ void NotationView::setupActions()
 		"make_notes_viable");
 
     icon = QIconSet
-        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
         ("transforms-decounterpoint")));
 
     new KAction(TransformsMenuDeCounterpointCommand::getGlobalName(), icon, 0, this,
@@ -1639,7 +1639,7 @@ void NotationView::setupActions()
                 "respell_restore");
 
     icon = QIconSet
-        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
         ("quantize")));
 
     new KAction(EventQuantizeCommand::getGlobalName(), icon, 0, this,
@@ -1663,7 +1663,7 @@ void NotationView::setupActions()
         const MarkActionData &markActionData = *i;
         
         icon = QIconSet
-	    (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+	    (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
 	     (markActionData.pixmapName)));
 
 	new KAction(markActionData.title,
@@ -1676,7 +1676,7 @@ void NotationView::setupActions()
     }
 
     icon = QIconSet
-        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
         ("text-mark")));
 
     new KAction(MarksMenuAddTextMarkCommand::getGlobalName(), icon, 0, this,
@@ -1728,7 +1728,7 @@ void NotationView::setupActions()
     for (unsigned int i = 0;
 	 i < sizeof(actionsToolbars)/sizeof(actionsToolbars[0]); ++i) {
 
-        icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap(actionsToolbars[i][3])));
+        icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap(actionsToolbars[i][3])));
 
         new KToggleAction(actionsToolbars[i][0], icon, 0,
                           this, actionsToolbars[i][1],
@@ -1789,53 +1789,53 @@ void NotationView::setupActions()
 		SLOT(slotCurrentStaffDown()), actionCollection(),
 		"cursor_down_staff");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
 		    ("transport-cursor-to-pointer")));
     new KAction(i18n("Cursor to &Playback Pointer"), icon, 0, this,
 		SLOT(slotJumpCursorToPlayback()), actionCollection(),
 		"cursor_to_playback_pointer");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
 		    ("transport-play")));
     new KAction(i18n("&Play"), icon, Key_Enter, this,
 		SIGNAL(play()), actionCollection(), "play");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
 		    ("transport-stop")));
     new KAction(i18n("&Stop"), icon, Key_Insert, this,
 		SIGNAL(stop()), actionCollection(), "stop");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
 		    ("transport-rewind")));
     new KAction(i18n("Re&wind"), icon, Key_End, this,
 		SIGNAL(rewindPlayback()), actionCollection(),
 		"playback_pointer_back_bar");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
 		    ("transport-ffwd")));
     new KAction(i18n("&Fast Forward"), icon, Key_PageDown, this,
 		SIGNAL(fastForwardPlayback()), actionCollection(),
 		"playback_pointer_forward_bar");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
 		    ("transport-rewind-end")));
     new KAction(i18n("Rewind to &Beginning"), icon, 0, this,
 		SIGNAL(rewindPlaybackToBeginning()), actionCollection(),
 		"playback_pointer_start");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
 		    ("transport-ffwd-end")));
     new KAction(i18n("Fast Forward to &End"), icon, 0, this,
 		SIGNAL(fastForwardPlaybackToEnd()), actionCollection(),
 		"playback_pointer_end");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
 		    ("transport-pointer-to-cursor")));
     new KAction(i18n("Playback Pointer to &Cursor"), icon, 0, this,
 		SLOT(slotJumpPlaybackToCursor()), actionCollection(),
 		"playback_pointer_to_cursor");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                                                  ("transport-solo")));
     new KToggleAction(i18n("&Solo"), icon, 0, this,
                 SLOT(slotToggleSolo()), actionCollection(),
@@ -2268,7 +2268,7 @@ void NotationView::setCurrentSelectedNote(const char *pixmapName,
     setTool(inserter);
 
     m_currentNotePixmap->setPixmap
-        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap(pixmapName)));
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap(pixmapName)));
 
     emit changeCurrentNote(rest, n);
 }

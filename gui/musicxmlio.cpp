@@ -76,7 +76,7 @@ void
 MusicXmlExporter::writeNote(Event *e, Rosegarden::timeT lastNoteTime,
 			    const Rosegarden::Key &key, std::ofstream &str)
 {
-    str << "\t\t\t\t<note>" << std::endl;
+    str << "\t\t\t<note>" << std::endl;
 
     if (e->isa(Note::EventRestType)) {
         str << "\t\t\t\t<rest/>" << std::endl;
@@ -132,7 +132,7 @@ MusicXmlExporter::writeNote(Event *e, Rosegarden::timeT lastNoteTime,
     }
 
     // could also do <stem>down</stem> if you wanted
-    str << "\t\t\t\t</note>" << std::endl;
+    str << "\t\t\t</note>" << std::endl;
 }
 
 void
@@ -259,11 +259,6 @@ MusicXmlExporter::write() {
         // be in an iterator loop) into the track set
         trackSet.insert((*j).first);
         Rosegarden::CompositionTimeSliceAdapter adapter(composition, trackSet);
-        if (startedPart) {
-            str << "\t</part>" << std::endl;
-        }
-        str << "\t<part id=\"" << (*j).first << "\">" << std::endl;
-	startedPart = true;
 
         int oldMeasureNumber = -1;
         bool startedAttributes = false;
@@ -275,6 +270,9 @@ MusicXmlExporter::write() {
 
             Event *event = *k;
             timeT absoluteTime = event->getNotationAbsoluteTime();
+
+	    str << "\t<part id=\"" << (*j).first << "\">" << std::endl;
+	    startedPart = true;
 
             // Open a new measure if necessary
             // Incomplete: How does MusicXML handle non-contiguous measures?
@@ -344,15 +342,16 @@ MusicXmlExporter::write() {
 		}
             }
         }
-        if (oldMeasureNumber > 0) { // no events at all
+
+	if (startedPart) {
             str << "\t\t</measure>\n" << std::endl;
-        }
+	    str << "\t</part>" << std::endl;
+	}
 
         emit setProgress(20 +
                          int(double(trackNo++)/double(tracks.size()) * 80.0));
         kapp->processEvents(50);
     }
-    str << "\t</part>" << std::endl;
 
     str << "</score-partwise>" << std::endl;
     str.close();

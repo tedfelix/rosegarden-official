@@ -14,11 +14,11 @@
 
 <font-requirements>
 	<font-requirement font-id="0" names="xinfonia" strategy="prefer-codes"/>
-	<font-requirement font-id="1" name="georgia,times new roman,times,DEFAULT" strategy="prefer-codes"/> <!-- text font -->
+	<font-requirement font-id="1" names="georgia,times new roman,times,DEFAULT" strategy="prefer-codes"/> <!-- text font -->
 </font-requirements>
 
 <font-sizes>
-	<font-scale font-height="4.2" beam-thickness="0.5" staff-line-thickness="0.1" stem-thickness="0.1" border-x="0" border-y="0"/>
+	<font-scale font-height="4.2" beam-thickness="0.5" staff-line-thickness="0.1" stem-thickness="0.1"/>
 </font-sizes>
 
 <font-symbol-map>

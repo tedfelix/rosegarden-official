@@ -181,15 +181,14 @@ SegmentParameterBox::initBox()
 
     // populate the quantize combo
     //
-    NotePixmapFactory npf;
-    QPixmap noMap = NotePixmapFactory::toQPixmap(npf.makeToolbarPixmap("menu-no-note"));
+    QPixmap noMap = NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("menu-no-note"));
 
     for (unsigned int i = 0; i < m_standardQuantizations.size(); ++i) {
 
 	Rosegarden::timeT time = m_standardQuantizations[i];
 	Rosegarden::timeT error = 0;
 	QString label = NotationStrings::makeNoteMenuLabel(time, true, error);
-	QPixmap pmap = NotePixmapFactory::toQPixmap(npf.makeNoteMenuPixmap(time, error));
+	QPixmap pmap = NotePixmapFactory::toQPixmap(NotePixmapFactory::makeNoteMenuPixmap(time, error));
 	m_quantizeValue->insertItem(error ? noMap : pmap, label);
     }
     m_quantizeValue->insertItem(noMap, i18n("Off"));
@@ -224,7 +223,7 @@ SegmentParameterBox::initBox()
 	// 
 	Rosegarden::timeT error = 0;
 	QString label = NotationStrings::makeNoteMenuLabel(time, true, error);
-	QPixmap pmap = NotePixmapFactory::toQPixmap(npf.makeNoteMenuPixmap(time, error));
+	QPixmap pmap = NotePixmapFactory::toQPixmap(NotePixmapFactory::makeNoteMenuPixmap(time, error));
 	m_delayValue->insertItem((error ? noMap : pmap), label);
     }
 
@@ -535,7 +534,6 @@ SegmentParameterBox::populateBoxFromSegments()
 
 	    if (delayLevel > 0) {
 
-		NotePixmapFactory npf;
 		Rosegarden::timeT error = 0;
 		QString label = NotationStrings::makeNoteMenuLabel(delayLevel, true, error);
 		m_delayValue->setEditText(label);

@@ -228,14 +228,6 @@ public:
         return m_notePixmapFactory;
     }
 
-    /**
-     * get a NotePixmapFactory suitable for creating toolbar pixmaps
-     * (but not guaranteed to be any good for anything else)
-     */
-    NotePixmapFactory *getToolbarNotePixmapFactory() {
-        return &m_toolbarNotePixmapFactory;
-    }
-
     virtual void refreshSegment(Rosegarden::Segment *segment,
                                 Rosegarden::timeT startTime = 0,
                                 Rosegarden::timeT endTime = 0);
@@ -836,7 +828,6 @@ protected:
     LinedStaff::PageMode m_pageMode;
 
     NotePixmapFactory *m_notePixmapFactory;
-    NotePixmapFactory m_toolbarNotePixmapFactory;
     
     NotationHLayout* m_hlayout;
     NotationVLayout* m_vlayout;

@@ -288,6 +288,8 @@ AudioManagerDialog::slotPopulateFileList()
         findSelection = true;
     }
 
+    m_fileList->blockSignals(true);
+
     // clear file list and disable associated action buttons
     m_fileList->clear();
 
@@ -307,6 +309,7 @@ AudioManagerDialog::slotPopulateFileList()
         m_fileList->setSelectionMode(QListView::NoSelection);
         m_fileList->setRootIsDecorated(false);
 
+	m_fileList->blockSignals(false);
         return;
     }
 
@@ -465,7 +468,7 @@ AudioManagerDialog::slotPopulateFileList()
         }
     }
 
-
+    m_fileList->blockSignals(false);
 }
 
 AudioFile*

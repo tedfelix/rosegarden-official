@@ -691,14 +691,14 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
     m_untupledCombo = new KComboBox(timingGrid);
 
     m_unitCombo = new KComboBox(timingGrid);
-    NotePixmapFactory npf;
 
     for (Note::Type t = Note::Shortest; t <= Note::Longest; ++t) {
 	Note note(t);
 	timeT duration(note.getDuration());
 	if (maxDuration > 0 && (2 * duration > maxDuration)) break;
 	timeT e; // error factor, ignore
-	m_unitCombo->insertItem(NotePixmapFactory::toQPixmap(npf.makeNoteMenuPixmap(duration, e)),
+	m_unitCombo->insertItem(NotePixmapFactory::toQPixmap
+				(NotePixmapFactory::makeNoteMenuPixmap(duration, e)),
 				NotationStrings::makeNoteMenuLabel(duration, false, e, true));
 	if (defaultUnitType == t) {
 	    m_unitCombo->setCurrentItem(m_unitCombo->count() - 1);
@@ -2591,11 +2591,12 @@ TempoDialog::updateBeatLabels(double tempo)
     } else {
 	m_tempoBeatLabel->setText(" (");
 
-	NotePixmapFactory npf;
-
 	timeT error = 0;
-	m_tempoBeat->setPixmap(NotePixmapFactory::toQPixmap(npf.makeNoteMenuPixmap(beat, error)));
-	if (error) m_tempoBeat->setPixmap(NotePixmapFactory::toQPixmap(npf.makeUnknownPixmap()));
+	m_tempoBeat->setPixmap(NotePixmapFactory::toQPixmap
+			       (NotePixmapFactory::makeNoteMenuPixmap(beat, error)));
+	if (error) m_tempoBeat->setPixmap(NotePixmapFactory::toQPixmap
+					  (NotePixmapFactory::makeToolbarPixmap
+					   ("menu-no-note")));
 
 	m_tempoBeatsPerMinute->setText
 	    (QString("= %1 )").arg

@@ -155,9 +155,9 @@ public:
     QCanvasPixmap* makeUnknownPixmap();
     QCanvasPixmap* makeTextPixmap(const Rosegarden::Text &text);
 
-    QCanvasPixmap* makeToolbarPixmap(const char *name);
-    QCanvasPixmap* makeNoteMenuPixmap(Rosegarden::timeT duration,
-				     Rosegarden::timeT &errorReturn);
+    static QCanvasPixmap* makeToolbarPixmap(const char *name);
+    static QCanvasPixmap* makeNoteMenuPixmap(Rosegarden::timeT duration,
+					     Rosegarden::timeT &errorReturn);
 
     QCanvasPixmap* makePitchDisplayPixmap(int pitch,
 					  const Rosegarden::Clef &clef,
@@ -203,6 +203,7 @@ public:
 
 protected:
     void init(std::string fontName, int size);
+    void initMaybe() { if (!m_font) init("", -1); }
 
     int getStemLength(const NotePixmapParameters &) const;
 
