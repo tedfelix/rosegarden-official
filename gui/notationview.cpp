@@ -323,19 +323,13 @@ NotationView::showElements(NotationElementList::iterator from,
 
                 Note::Type note = (*it)->event()->get<Int>("Notation::NoteType");
               
-                Accidental accident;
-                
-                try {
-                    //!!! this will probably be found to be confusing matters
-                    accident = Accidental((*it)->event()->get<Int>("Notation::Accident"));
-                } catch (Event::NoData) {
-                    try {
-                        accident = Accidental((*it)->event()->get<Int>("computed-accidental"));
-                    } catch (Event::NoData) {
-                        accident = NoAccidental;
-                    }
+                Accidental accident = NoAccidental;
+
+                long acc;
+                if ((*it)->event()->get<Int>("Notation::Accident", acc)) {
+                    accident = Accidental(acc);
                 }
-            
+                
                 QCanvasPixmap notePixmap(npf.makeNotePixmap(note,
                                                             accident,
                                                             true, false));

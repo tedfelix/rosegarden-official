@@ -86,12 +86,14 @@ NotationHLayout::getKeyAtPos(NotationElementList::iterator pos)
 
     if (pos == m_notationElements.begin()) return Scale::C;
 
-    try {
-        Scale::KeySignature res = Scale::KeySignature((*pos)->event()->get<Int>("key"));
-        return res;
-    } catch (Event::NoData) {
-        return Scale::C;
+    long sig;
+    
+    Scale::KeySignature res = Scale::C;
+    if ((*pos)->event()->get<Int>("key", sig)) {
+        res = Scale::KeySignature(sig);
     }
+
+    return res;
 }
 
 void
