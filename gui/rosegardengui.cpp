@@ -2070,6 +2070,7 @@ RosegardenGUIApp::getValidWriteFile(QString descriptiveExtension,
     // It's too bad there isn't this functionality within 
     // KFileDialog::getSaveFileName
     KFileDialog saveFileDialog(":ROSEGARDEN", descriptiveExtension, this, label, true);
+    saveFileDialog.setOperationMode(KFileDialog::Saving);
     if (m_doc) {
         QString saveFileName=m_doc->getAbsFilePath();
         // Show filename without the old extension
