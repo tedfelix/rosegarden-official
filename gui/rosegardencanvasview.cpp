@@ -150,7 +150,7 @@ void RosegardenCanvasView::slotScrollVertSmallSteps(int vpos)
 {
     if (m_smoothScroll) {
         int t = m_vScrollTimer.restart();
-        if (t < 500)
+        if (t < 50)
             return;
     }
 
