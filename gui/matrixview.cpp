@@ -1123,15 +1123,6 @@ MatrixView::slotQuantizeSelection(int q)
                                 unit,
                                 m_quantizations[q].maxDots);
 
-    Rosegarden::EventSelection::eventcontainer::iterator it =
-        m_currentEventSelection->getSegmentEvents().begin();
-    std::vector<Segment::iterator> eventStore;
-
-    for (; it != m_currentEventSelection->getSegmentEvents().end(); it++)
-        eventStore.push_back(it);
-
-    Rosegarden::Segment &segment = m_currentEventSelection->getSegment();
-
     if (quant.getUnit() != 0)
     {
         KTmpStatusMsg msg(i18n("Quantizing..."), statusBar());
