@@ -317,6 +317,13 @@ Composition::detachSegment(Segment *p)
 }
 
 bool
+Composition::contains(Segment *s)
+{
+    iterator i = find(begin(), end(), s);
+    return (i != end());
+}
+
+bool
 Composition::setSegmentStartTimeAndTrack(Segment *s, timeT t, unsigned int track)
 {
     iterator i = m_segments.find(s);

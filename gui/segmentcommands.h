@@ -38,16 +38,19 @@ public:
     virtual void execute();
     virtual void unexecute();
     
+    virtual void getSegments(std::set<Rosegarden::Segment *> &);
+    
 private:
     Rosegarden::Composition *m_composition;
     Rosegarden::Segment *m_segment;
 };
 
+
 class SegmentInsertCommand : public KCommand,
                              public SegmentCommand
 {
 public:
-    SegmentInsertCommand(RosegardenGUIDoc *doc,
+    SegmentInsertCommand(Rosegarden::Composition *composition,
                          Rosegarden::TrackId track,
                          Rosegarden::timeT startTime,
                          Rosegarden::timeT duration);
@@ -56,14 +59,14 @@ public:
     virtual void execute();
     virtual void unexecute();
 
-    Rosegarden::Segment* getSegment() const { return m_segment; }
-
+    virtual void getSegments(SegmentSet &);
+    
 private:
-    RosegardenGUIDoc       *m_document;
-    Rosegarden::Segment    *m_segment;
-    int                     m_track;
-    Rosegarden::timeT       m_startTime;
-    Rosegarden::timeT       m_duration;
+    Rosegarden::Composition *m_composition;
+    Rosegarden::Segment     *m_segment;
+    int                      m_track;
+    Rosegarden::timeT        m_startTime;
+    Rosegarden::timeT        m_duration;
 
 };
 
@@ -98,7 +101,7 @@ public:
     virtual ~AddTimeSignatureCommand() { }
 
     static QString name() {
-    return "Add &Time Signature Change...";
+	return "Add &Time Signature Change...";
     }
 
     virtual void execute();

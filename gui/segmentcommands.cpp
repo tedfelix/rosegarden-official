@@ -41,6 +41,14 @@ SegmentEraseCommand::~SegmentEraseCommand()
     }
 }
 
+
+void
+SegmentEraseCommand::getSegments(SegmentSet &segments)
+{
+    segments.insert(m_segment);
+}
+
+
 void
 SegmentEraseCommand::execute()
 {
@@ -56,12 +64,12 @@ SegmentEraseCommand::unexecute()
 
 // --------- Insert Segment --------
 //
-SegmentInsertCommand::SegmentInsertCommand(RosegardenGUIDoc *doc,
+SegmentInsertCommand::SegmentInsertCommand(Rosegarden::Composition *c,
                                            Rosegarden::TrackId track,
                                            Rosegarden::timeT startTime,
                                            Rosegarden::timeT duration):
     KCommand("Insert Segment"),
-    m_document(doc),
+    m_composition(c),
     m_segment(0),
     m_track(track),
     m_startTime(startTime),
@@ -71,12 +79,18 @@ SegmentInsertCommand::SegmentInsertCommand(RosegardenGUIDoc *doc,
 
 SegmentInsertCommand::~SegmentInsertCommand()
 {
-    /* - just to stop horribleness
     if (!m_segment->getComposition()) {
 	delete m_segment;
     }
-    */
 }
+
+
+void
+SegmentInsertCommand::getSegments(std::set<Rosegarden::Segment *> &segments)
+{
+    segments.insert(m_segment);
+}
+
 
 void
 SegmentInsertCommand::execute()
@@ -88,18 +102,18 @@ SegmentInsertCommand::execute()
         m_segment = new Rosegarden::Segment();
         m_segment->setTrack(m_track);
         m_segment->setStartTime(m_startTime);
-        m_document->getComposition().addSegment(m_segment);
+	m_composition->addSegment(m_segment);
         m_segment->setDuration(m_duration);
 
         // Add the SegmentItem to the canvas (does nothing
         // if the SegmentItem already exists)
         //
-        m_document->addSegmentItem(m_segment);
+//!!!        m_document->addSegmentItem(m_segment);
     }
     else
     {
-        m_document->getComposition().addSegment(m_segment);
-        m_document->addSegmentItem(m_segment);
+        m_composition->addSegment(m_segment);
+//!!!        m_document->addSegmentItem(m_segment);
     }
     
 }
@@ -107,8 +121,8 @@ SegmentInsertCommand::execute()
 void
 SegmentInsertCommand::unexecute()
 {
-    m_document->deleteSegmentItem(m_segment);
-    m_document->getComposition().detachSegment(m_segment);
+//!!!    m_document->deleteSegmentItem(m_segment);
+    m_composition->detachSegment(m_segment);
 }
 
 // --------- Move Segment --------

@@ -34,6 +34,7 @@
  */
 
 #include <kcommand.h>
+#include <set>
 
 #include "Segment.h"
 #include "SegmentNotationHelper.h"
@@ -44,12 +45,25 @@ class EventSelection;
 // Base-classes used for distinguishing between sorts of command
 // in each view's slotCommandExecuted
 
+
 /// command that affects one or more entire segments
 class SegmentCommand
 {
+public:
+
+    typedef std::set<Rosegarden::Segment *> SegmentSet;
+    
+    /** 
+     * Obtain the set of affected Segments.  Note that Segments
+     * in this set may have been removed from the Composition or
+     * even destroyed by the time this command has completed.
+     */
+    virtual void getSegments(SegmentSet &) = 0;
+
 protected:
     SegmentCommand() { }
 };
+
 
 /// command that changes Composition-wide timing settings
 class TimeAndTempoChangeCommand
@@ -58,11 +72,17 @@ protected:
     TimeAndTempoChangeCommand() { }
 };
 
+
 /// command that modifies events within a single segment
 class PartialSegmentCommand
 {
 public:
+
+    /**
+     * Return the segment in which the changes happened.
+     */
     virtual Rosegarden::Segment &getSegment() = 0;
+
 protected:
     PartialSegmentCommand() { }
 };

@@ -101,6 +101,8 @@ NotationView::NotationView(RosegardenGUIView* rgView,
     m_hlayout(new NotationHLayout(&rgView->getDocument()->getComposition(),
 				  *m_notePixmapFactory)),
     m_vlayout(new NotationVLayout()),
+    m_topBarButtons(0),
+    m_bottomBarButtons(0),
     m_fontSizeSlider(0),
     m_selectDefaultNote(0),
     m_pointer(0)
@@ -980,8 +982,8 @@ bool NotationView::applyLayout(int staffNo)
 */
 
     readjustCanvasSize();
-    m_topBarButtons->recalculate();
-    m_bottomBarButtons->recalculate();
+    if (m_topBarButtons) m_topBarButtons->recalculate();
+    if (m_bottomBarButtons) m_bottomBarButtons->recalculate();
 
     PRINT_ELAPSED("NotationView::applyLayout");
     return true;

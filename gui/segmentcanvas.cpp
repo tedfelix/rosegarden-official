@@ -70,13 +70,21 @@ SegmentItem::SegmentItem(Segment *segment,
     recalculateRectangle(true);
 }
 
+SegmentItem::~SegmentItem()
+{
+    kdDebug(KDEBUG_AREA) << "SegmentItem::~SegmentItem" << endl;
+}
+
 void
 SegmentItem::recalculateRectangle(bool inheritFromSegment)
 {
+    kdDebug(KDEBUG_AREA) << "SegmentItem::recalculateRectangle" << endl;
+
     if (m_segment && inheritFromSegment) {
 	m_track = m_segment->getTrack();
 	m_startTime = m_segment->getStartTime();
 	m_duration = m_segment->getDuration();
+	kdDebug(KDEBUG_AREA) << "inherited from segment" << endl;
     }
 	
     setX(m_snapGrid->getRulerScale()->getXForTime(m_startTime));
@@ -85,6 +93,9 @@ SegmentItem::recalculateRectangle(bool inheritFromSegment)
     setSize((int)m_snapGrid->getRulerScale()->
 	    getWidthForDuration(m_startTime, m_duration),
 	    m_snapGrid->getYSnap());
+    
+    kdDebug(KDEBUG_AREA) << "x,y: " << x() << "," << y()
+			 << "; w,h: " << width() << "," << height() << endl;
 }
 
 Segment *
@@ -243,6 +254,42 @@ SegmentCanvas::setTool(ToolType t)
     default:
         KMessageBox::error(0, QString("SegmentCanvas::setTool() : unknown tool id %1").arg(t));
     }
+}
+
+void
+SegmentCanvas::updateSegmentItem(Segment *segment)
+{
+    SegmentItem *item = findSegmentItem(segment);
+    if (!item) {
+	addSegmentItem(segment);
+    } else {
+	item->recalculateRectangle(true);
+    }
+}
+
+void
+SegmentCanvas::removeSegmentItem(Segment *segment)
+{
+    SegmentItem *item = findSegmentItem(segment);
+    delete item;
+}
+
+SegmentItem *
+SegmentCanvas::findSegmentItem(Rosegarden::Segment *segment)
+{
+    //!!! slow.
+    QCanvasItemList l = canvas()->allItems();
+    
+    if (l.count()) {
+        for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it) {
+            SegmentItem *item = dynamic_cast<SegmentItem*>(*it);
+	    if (item && (item->getSegment() == segment)) {
+                return item;
+	    }
+        }
+    }
+
+    return 0;
 }
 
 SegmentItem*
@@ -565,12 +612,12 @@ SegmentPencil::SegmentPencil(SegmentCanvas *c)
 {
 //    m_canvas->setCursor(Qt::ibeamCursor);
 
-    connect(this, SIGNAL(addSegment(int, Rosegarden::timeT, Rosegarden::timeT)),
-            c,    SIGNAL(addSegment(int, Rosegarden::timeT, Rosegarden::timeT)));
+    connect(this, SIGNAL(addSegment(Rosegarden::TrackId, Rosegarden::timeT, Rosegarden::timeT)),
+            c,    SIGNAL(addSegment(Rosegarden::TrackId, Rosegarden::timeT, Rosegarden::timeT)));
     connect(this, SIGNAL(deleteSegment(Rosegarden::Segment*)),
             c,    SIGNAL(deleteSegment(Rosegarden::Segment*)));
-    connect(this, SIGNAL(setSegmentDuration(SegmentItem*)),
-            c,    SIGNAL(updateSegmentDuration(SegmentItem*)));
+    connect(this, SIGNAL(updateSegmentDuration(Rosegarden::Segment*, Rosegarden::timeT)),
+            c,    SIGNAL(updateSegmentDuration(Rosegarden::Segment*, Rosegarden::timeT)));
 
     kdDebug(KDEBUG_AREA) << "SegmentPencil()\n";
 }
@@ -598,6 +645,10 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
 	timeT duration = m_canvas->grid().getSnapTime(e->pos().x());
 	if (duration == 0) duration = Note(Note::Shortest).getDuration();
 
+	m_currentItem = m_canvas->addSegmentItem(track, time, duration);
+        m_newRect = true;
+
+/*!!!
         // Don't use the m_currentItem for the moment as we
         // don't want to create a SegmentItem at this level
         //
@@ -606,6 +657,7 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
         m_track = track;
         m_startTime = time;
         m_duration = duration;
+*/
 
         m_canvas->update();
     }
@@ -613,12 +665,15 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
 
 void SegmentPencil::handleMouseButtonRelease(QMouseEvent*)
 {
-    //if (!m_currentItem) return;
-    //m_currentItem->normalize();
+    if (!m_currentItem) return;
+    m_currentItem->normalize();
 
     if (m_newRect) {
 
-        emit addSegment(m_track, m_startTime, m_duration);
+//        emit addSegment(m_track, m_startTime, m_duration);
+	emit addSegment(m_currentItem->getTrack(),
+			m_currentItem->getStartTime(),
+			m_currentItem->getDuration());
         
     }
     /*else {
@@ -626,9 +681,11 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent*)
         kdDebug(KDEBUG_AREA) << "SegmentCanvas::contentsMouseReleaseEvent() : shorten m_currentItem = "
                              << m_currentItem << endl;
 
-	emit setSegmentDuration(m_currentItem);
+	emit updateSegmentDuration(m_currentItem->getSegment(),
+	m_currentItem->getDuration());
     }*/
 
+    delete m_currentItem;
     m_currentItem = 0;
     m_newRect = false;
 }
@@ -652,7 +709,7 @@ void SegmentPencil::handleMouseMove(QMouseEvent *e)
 	m_currentItem->setDuration(duration);
     }
 
-    m_canvas->canvas()->update();
+    m_canvas->update();
 }
 
 //////////////////////////////
@@ -697,8 +754,8 @@ SegmentMover::SegmentMover(SegmentCanvas *c)
 {
     m_canvas->setCursor(Qt::sizeAllCursor);
 
-    connect(this, SIGNAL(updateSegmentTrackAndStartTime(SegmentItem*)),
-            c,    SIGNAL(updateSegmentTrackAndStartTime(SegmentItem*)));
+    connect(this, SIGNAL(updateSegmentTrackAndStartTime(Rosegarden::Segment *, Rosegarden::TrackId, Rosegarden::timeT)),
+            c,    SIGNAL(updateSegmentTrackAndStartTime(Rosegarden::Segment *, Rosegarden::TrackId, Rosegarden::timeT)));
 
     kdDebug(KDEBUG_AREA) << "SegmentMover()\n";
 }
@@ -718,7 +775,9 @@ void SegmentMover::handleMouseButtonPress(QMouseEvent *e)
 void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
 {
     if (m_currentItem)
-        emit updateSegmentTrackAndStartTime(m_currentItem);
+        emit updateSegmentTrackAndStartTime(m_currentItem->getSegment(),
+					    m_currentItem->getTrack(),
+					    m_currentItem->getStartTime());
 
     m_currentItem = 0;
 }
@@ -752,8 +811,8 @@ SegmentResizer::SegmentResizer(SegmentCanvas *c)
     connect(this, SIGNAL(deleteSegment(Rosegarden::Segment*)),
             c,    SIGNAL(deleteSegment(Rosegarden::Segment*)));
 
-    connect(this, SIGNAL(setSegmentDuration(Rosegarden::Segment*)),
-            c,    SIGNAL(updateSegmentDuration(Rosegarden::Segment*)));
+    connect(this, SIGNAL(updateSegmentDuration(Rosegarden::Segment*, Rosegarden::timeT)),
+            c,    SIGNAL(updateSegmentDuration(Rosegarden::Segment*, Rosegarden::timeT)));
 
     kdDebug(KDEBUG_AREA) << "SegmentResizer()\n";
 }
@@ -771,7 +830,8 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent*)
 {
     if (!m_currentItem) return;
     m_currentItem->normalize();
-    emit setSegmentDuration(m_currentItem);
+    emit updateSegmentDuration(m_currentItem->getSegment(),
+			       m_currentItem->getDuration());
     m_currentItem = 0;
 }
 
@@ -812,8 +872,8 @@ SegmentSelector::SegmentSelector(SegmentCanvas *c)
 {
     kdDebug(KDEBUG_AREA) << "SegmentSelector()\n";
 
-    connect(this, SIGNAL(updateSegmentTrackAndStartTime(SegmentItem*)),
-            c,    SIGNAL(updateSegmentTrackAndStartTime(SegmentItem*)));
+    connect(this, SIGNAL(updateSegmentTrackAndStartTime(Rosegarden::Segment *, Rosegarden::TrackId, Rosegarden::timeT)),
+            c,    SIGNAL(updateSegmentTrackAndStartTime(Rosegarden::Segment *, Rosegarden::TrackId, Rosegarden::timeT)));
 }
 
 SegmentSelector::~SegmentSelector()
@@ -863,7 +923,9 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
         m_currentItem = item;
         m_clickPoint = e->pos();
         selectSegmentItem(m_currentItem);
-        emit updateSegmentTrackAndStartTime(m_currentItem);
+        emit updateSegmentTrackAndStartTime(m_currentItem->getSegment(),
+					    m_currentItem->getTrack(),
+					    m_currentItem->getStartTime());
     }
 
 }
@@ -921,7 +983,9 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 	    it->second->setTrack(track);
 
 	    m_canvas->canvas()->update();
-	    emit updateSegmentTrackAndStartTime(it->second);
+	    emit updateSegmentTrackAndStartTime(it->second->getSegment(),
+						it->second->getTrack(),
+						it->second->getStartTime());
 	}
     }
 }

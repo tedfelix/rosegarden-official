@@ -42,6 +42,8 @@
 using Rosegarden::Composition;
 using Rosegarden::RulerScale;
 using Rosegarden::timeT;
+using Rosegarden::Segment;
+using Rosegarden::TrackId;
 
 TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
 			 RulerScale *rulerScale,
@@ -142,22 +144,24 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
     connect(this, SIGNAL(needUpdate()),
             m_segmentCanvas, SLOT(update()));
 
-    QObject::connect(m_segmentCanvas, SIGNAL(addSegment(int, Rosegarden::timeT, Rosegarden::timeT)),
-                     this,            SLOT  (addSegment(int, Rosegarden::timeT, Rosegarden::timeT)));
+    QObject::connect(m_segmentCanvas, SIGNAL(addSegment(Rosegarden::TrackId, Rosegarden::timeT, Rosegarden::timeT)),
+                     this,            SLOT  (addSegment(Rosegarden::TrackId, Rosegarden::timeT, Rosegarden::timeT)));
 
-    QObject::connect(m_segmentCanvas, SIGNAL(deleteSegment(Rosegarden::Segment*)),
-                     this,            SLOT  (deleteSegment(Rosegarden::Segment*)));
+    QObject::connect(m_segmentCanvas, SIGNAL(deleteSegment(Rosegarden::Segment *)),
+                     this,            SLOT  (deleteSegment(Rosegarden::Segment *)));
 
-    QObject::connect(m_segmentCanvas, SIGNAL(updateSegmentDuration(SegmentItem*)),
-                     this,            SLOT  (updateSegmentDuration(SegmentItem*)));
+    QObject::connect(m_segmentCanvas, SIGNAL(updateSegmentDuration(Rosegarden::Segment *, Rosegarden::timeT)),
+                     this,            SLOT  (updateSegmentDuration(Rosegarden::Segment *, Rosegarden::timeT)));
 
-    QObject::connect(m_segmentCanvas, SIGNAL(updateSegmentTrackAndStartTime(SegmentItem*)),
-                     this,            SLOT  (updateSegmentTrackAndStartTime(SegmentItem*)));
+    QObject::connect(m_segmentCanvas, SIGNAL(updateSegmentTrackAndStartTime(Rosegarden::Segment *, Rosegarden::TrackId, Rosegarden::timeT)),
+                     this,            SLOT  (updateSegmentTrackAndStartTime(Rosegarden::Segment *, Rosegarden::TrackId, Rosegarden::timeT)));
 
-    QObject::connect(m_segmentCanvas,
-            SIGNAL(splitSegment(Rosegarden::Segment*, Rosegarden::timeT)),
-            this,
-            SIGNAL(splitSegment(Rosegarden::Segment*, Rosegarden::timeT)));
+    QObject::connect(m_segmentCanvas, SIGNAL(splitSegment(Rosegarden::Segment*, Rosegarden::timeT)),
+		     this, SIGNAL(splitSegment(Rosegarden::Segment*, Rosegarden::timeT)));
+
+    QObject::connect
+	(getCommandHistory(), SIGNAL(commandExecuted(KCommand *)),
+	 this,		      SLOT  (commandExecuted(KCommand *)));
 
     // create the position pointer
     m_pointer = new QCanvasLine(canvas);
@@ -185,25 +189,53 @@ TrackEditor::setupSegments()
 			     << " - nb time steps : " << (*i)->getDuration()
 			     << " - track : " << (*i)->getTrack()
 			     << endl;
-	int y = m_vHeader->sectionPos((*i)->getTrack());
 
-	//!!! if we made segmentcanvas or item capable of working out
-	//track->y-coord mapping as well, we could just do
-	//"m_segmentCanvas->addSegment(*i);" -- it'd simplify lots of
-	//other things too
-	SegmentItem *newItem = m_segmentCanvas->addSegmentItem
-	    (y, (*i)->getStartTime(), (*i)->getDuration());
-	newItem->setSegment(*i);
+	m_segmentCanvas->addSegmentItem((*i));
+    }
+}
+
+void TrackEditor::commandExecuted(KCommand *command)
+{
+    kdDebug(KDEBUG_AREA) << "TrackEditor::commandExecuted" << endl;
+
+    SegmentCommand *segmentCommand = dynamic_cast<SegmentCommand *>(command);
+    if (!segmentCommand) {
+	kdDebug(KDEBUG_AREA) << "TrackEditor::commandExecuted: not a segment command" << endl;
+	return;
+    }
+	
+    SegmentCommand::SegmentSet segments;
+    segmentCommand->getSegments(segments);
+
+    Composition &composition = m_document->getComposition();
+
+    for (SegmentCommand::SegmentSet::iterator i = segments.begin();
+	 i != segments.end(); ++i) {
+
+	if (composition.contains(*i)) {
+	    kdDebug(KDEBUG_AREA) << "Existing segment" << endl;
+	
+	    m_segmentCanvas->updateSegmentItem(*i);
+	} else {
+	    kdDebug(KDEBUG_AREA) << "Defunct segment" << endl;
+	
+	    m_segmentCanvas->removeSegmentItem(*i);
+	}
     }
 }
 
 
-void TrackEditor::addSegment(int track, int start,
-			     unsigned int nbTimeSteps)
+void TrackEditor::addSegment(TrackId track, timeT time, timeT duration)
 {
     if (!m_document) return; // sanity check
 
     Composition &comp = m_document->getComposition();
+    SegmentInsertCommand *command =
+	new SegmentInsertCommand(&comp, track, time, duration);
+
+    addCommandToHistory(command);
+
+/*!!!    
 
     Rosegarden::Segment* segment =
         new Rosegarden::Segment(Rosegarden::Segment::Internal, start);
@@ -218,6 +250,7 @@ void TrackEditor::addSegment(int track, int start,
     newItem->setSegment(segment);
 
     emit needUpdate();
+*/
 }
 
 
@@ -230,7 +263,7 @@ void TrackEditor::segmentOrderChanged(int section, int fromIdx, int toIdx)
     emit needUpdate();
 }
 
-
+/*!!!
 void
 TrackEditor::addSegment(int y, Rosegarden::timeT time, Rosegarden::timeT duration)
 {
@@ -240,7 +273,7 @@ TrackEditor::addSegment(int y, Rosegarden::timeT time, Rosegarden::timeT duratio
 
     emit createNewSegment(time, duration, y);
 }
-
+*/
 
 void TrackEditor::deleteSegment(Rosegarden::Segment *p)
 {
@@ -255,31 +288,27 @@ void TrackEditor::deleteSegment(Rosegarden::Segment *p)
 }
 
 
-void TrackEditor::updateSegmentDuration(SegmentItem *i)
+void TrackEditor::updateSegmentDuration(Segment *s, timeT duration)
 {
     Composition& composition = m_document->getComposition();
-
-    i->getSegment()->setDuration(i->getDuration());
+    s->setDuration(duration);
 
 //!!! start time could have changed too (because we can
 // drag backwards on canvas as well as forwards -- possibility
 // of -ve duration, which gets normalised to a change in start
 // time) -- so this function's a bit misnamed
-    composition.setSegmentStartTimeAndTrack
-	(i->getSegment(), i->getStartTime(), i->getSegment()->getTrack());
+//!!!    composition.setSegmentStartTimeAndTrack
+//	(i->getSegment(), i->getStartTime(), i->getSegment()->getTrack());
 
     m_document->documentModified();
 }
 
 
-void TrackEditor::updateSegmentTrackAndStartTime(SegmentItem *i)
+void TrackEditor::updateSegmentTrackAndStartTime(Segment *s, TrackId track,
+						 timeT time)
 {
     Composition& composition = m_document->getComposition();
-
-    int track = m_vHeader->sectionAt(int(i->y()));
-
-    composition.setSegmentStartTimeAndTrack
-	(i->getSegment(), i->getStartTime(), track);
+    composition.setSegmentStartTimeAndTrack(s, time, track);
     m_document->documentModified();
 }
 

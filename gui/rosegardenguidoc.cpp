@@ -70,7 +70,7 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent, const char *name)
 
     pViewList->setAutoDelete(true);
 
-    connect(&m_commandHistory, SIGNAL(commandExecuted()),
+    connect(&m_commandHistory, SIGNAL(commandExecuted(KCommand *)),
 	    this, SLOT(documentModified()));
 
     connect(&m_commandHistory, SIGNAL(documentRestored()),
@@ -456,7 +456,7 @@ RosegardenGUIDoc::readFromFile(const QString &file, QString &text)
     return false;
 }    
     
-
+/*!!!
 void
 RosegardenGUIDoc::createNewSegment(Rosegarden::timeT time,
                                    Rosegarden::timeT duration,
@@ -482,7 +482,7 @@ RosegardenGUIDoc::createNewSegment(Rosegarden::timeT time,
 
     setModified();
 }
-
+*/
 
 // Delete a SegmentItem from the SegmentCanvas
 //

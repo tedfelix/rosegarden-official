@@ -179,13 +179,14 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
             SIGNAL(editSegmentAudio(Rosegarden::Segment*)),
             SLOT(editSegmentAudio(Rosegarden::Segment*)));
 
-
+/*!!!
     connect(m_trackEditor, SIGNAL(createNewSegment(Rosegarden::timeT,
                                                   Rosegarden::timeT,
                                                   Rosegarden::TrackId)),
             getDocument(), SLOT  (createNewSegment(Rosegarden::timeT,
                                                    Rosegarden::timeT,
                                                    Rosegarden::TrackId)));
+*/
 
     connect(m_trackEditor,  SIGNAL(scrollHorizTo(int)),
             SLOT(scrollTrackEditorHoriz(int)));

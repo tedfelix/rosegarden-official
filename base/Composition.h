@@ -155,6 +155,11 @@ public:
     void deleteSegment(iterator);
 
     /**
+     * Test whether a Segment exists in this Composition.
+     */
+    bool contains(Segment *);
+
+    /**
      * Delete the Segment if it is part of the Composition
      * \return true if the Segment was found and deleted
      *

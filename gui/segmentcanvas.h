@@ -58,6 +58,8 @@ public:
     SegmentItem(Rosegarden::Segment *segment,
 		Rosegarden::SnapGrid *snapGrid, QCanvas* canvas);
 
+    ~SegmentItem();
+
     /// Return the item's associated segment 
     Rosegarden::Segment *getSegment() const;
 
@@ -195,6 +197,18 @@ public:
     SegmentItem *addSegmentItem(Rosegarden::Segment *segment);
 
     /**
+     * Find the item corresponding to this segment and update it
+     * from the segment's attributes -- or create a new one if none
+     * is found.
+     */
+    void updateSegmentItem(Rosegarden::Segment *segment);
+
+    /**
+     * Find the item corresponding to this segment and remove it
+     */
+    void removeSegmentItem(Rosegarden::Segment *segment);
+
+    /**
      * Find which SegmentItem is under the specified point
      *
      * Note : this doesn't handle overlapping SegmentItems yet
@@ -290,18 +304,19 @@ signals:
      * dimensions for a new SegmentItem but we don't create it at
      * this stage
      */
-    void addSegment(int, Rosegarden::timeT, Rosegarden::timeT);
+    void addSegment(Rosegarden::TrackId, Rosegarden::timeT, Rosegarden::timeT);
 
     /**
      * Emitted when a Segment is deleted, the argument is a pointer to
      * the Segment being deleted
      */
-    void deleteSegment(Rosegarden::Segment*);
+    void deleteSegment(Rosegarden::Segment *);
 
     /**
      * Emitted when a Segment's duration is changed
      */
-    void updateSegmentDuration(SegmentItem*);
+    void updateSegmentDuration(Rosegarden::Segment *,
+			       Rosegarden::timeT duration);
 
     /*
      * Split a Segment - send it to the doc
@@ -312,7 +327,9 @@ signals:
      * Emitted when a Segment is moved to a different start time
      * (horizontally) or instrument (vertically)
      */
-    void updateSegmentTrackAndStartTime(SegmentItem*);
+    void updateSegmentTrackAndStartTime(Rosegarden::Segment *,
+					Rosegarden::TrackId track,
+					Rosegarden::timeT startTime);
 
     void editSegmentNotation(Rosegarden::Segment*);
     void editSegmentMatrix(Rosegarden::Segment*);
@@ -322,6 +339,9 @@ signals:
     //sig or whatever)?
 
 private:
+
+    SegmentItem *findSegmentItem(Rosegarden::Segment *segment);
+
     //--------------- Data members ---------------------------------
 
     SegmentTool *m_tool;
@@ -377,9 +397,9 @@ public:
     virtual void handleMouseMove(QMouseEvent*);
 
 signals:
-    void addSegment(int, Rosegarden::timeT, Rosegarden::timeT);
+    void addSegment(Rosegarden::TrackId, Rosegarden::timeT, Rosegarden::timeT);
     void deleteSegment(Rosegarden::Segment*);
-    void setSegmentDuration(SegmentItem*);
+    void updateSegmentDuration(Rosegarden::Segment*, Rosegarden::timeT);
 
 protected:
     //--------------- Data members ---------------------------------
@@ -415,7 +435,9 @@ public:
     virtual void handleMouseMove(QMouseEvent*);
 
 signals:
-    void updateSegmentTrackAndStartTime(SegmentItem*);
+    void updateSegmentTrackAndStartTime(Rosegarden::Segment*,
+					Rosegarden::TrackId,
+					Rosegarden::timeT);
 
 private:
     QPoint m_clickPoint;
@@ -437,7 +459,7 @@ public:
 
 signals:
     void deleteSegment(Rosegarden::Segment*);
-    void setSegmentDuration(SegmentItem*);
+    void updateSegmentDuration(Rosegarden::Segment*, Rosegarden::timeT);
 
 protected:
     bool cursorIsCloseEnoughToEdge(SegmentItem*, QMouseEvent*);
@@ -477,7 +499,9 @@ public slots:
     void selectSegmentItem(SegmentItem *selectedItem);
 
 signals:
-    void updateSegmentTrackAndStartTime(SegmentItem*);
+    void updateSegmentTrackAndStartTime(Rosegarden::Segment *,
+					Rosegarden::TrackId,
+					Rosegarden::timeT);
 
 
 private:

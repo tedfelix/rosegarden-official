@@ -81,7 +81,12 @@ public:
     /**
      * Add a new segment - DCOP interface
      */
-    virtual void addSegment(int track, int start, unsigned int nbTimeSteps);
+    //!!! can the DCOP and the slot not be the same method? this is most confusing
+    virtual void addSegment(int track, int start, unsigned int nbTimeSteps) {
+	addSegment(Rosegarden::TrackId(track),
+		   Rosegarden::timeT(start),
+		   Rosegarden::timeT(nbTimeSteps));
+    }
 
     /**
      *  Return the track header pointer for scrutiny
@@ -97,6 +102,13 @@ public:
 
 
 public slots:
+
+    /**
+     * Receive notification from the command history that a
+     * command has happened
+     */
+    void commandExecuted(KCommand *);
+
     /**
      * Set the position pointer during playback
      */
@@ -106,6 +118,7 @@ public slots:
      * Create a Segment Item from a Segment (after recording)
      *
      */
+    //!!! go?
     void addSegmentItem(Rosegarden::Segment *segment);
 
     /*
@@ -121,6 +134,7 @@ public slots:
     /*
      * Resync a SegmentItem to reflect its Segment
      **/
+//!!! go
     void updateSegmentItem(Rosegarden::Segment *segment);
 
     /*
@@ -143,13 +157,16 @@ public slots:
 protected slots:
     void segmentOrderChanged(int section, int fromIdx, int toIdx);
 
-    void addSegment(int y,
+    void addSegment(Rosegarden::TrackId track,
                     Rosegarden::timeT time,
                     Rosegarden::timeT duration);
 
-    void deleteSegment(Rosegarden::Segment*);
-    void updateSegmentDuration(SegmentItem*);
-    void updateSegmentTrackAndStartTime(SegmentItem*);
+    void deleteSegment(Rosegarden::Segment *);
+    void updateSegmentDuration(Rosegarden::Segment *,
+			       Rosegarden::timeT);
+    void updateSegmentTrackAndStartTime(Rosegarden::Segment *,
+					Rosegarden::TrackId,
+					Rosegarden::timeT);
 
 signals:
     /**
@@ -178,9 +195,9 @@ signals:
      *
      * @see RosegardenGUIDoc::createNewSegment()
      */
-    void createNewSegment(Rosegarden::timeT,
-                          Rosegarden::timeT,
-                          Rosegarden::TrackId);
+//!!!    void createNewSegment(Rosegarden::timeT,
+//                          Rosegarden::timeT,
+//                          Rosegarden::TrackId);
 
     void splitSegment(Rosegarden::Segment*, Rosegarden::timeT);
 
