@@ -165,6 +165,8 @@ SegmentCanvas::update()
 void
 SegmentCanvas::setTool(ToolType t)
 {
+//     kdDebug(KDEBUG_AREA) << "SegmentCanvas::setTool(" << t << ")\n";
+
     if (t == m_toolType && m_tool != 0) return;
 
     if (m_tool)
@@ -215,7 +217,8 @@ void SegmentCanvas::contentsMousePressEvent(QMouseEvent* e)
 {
     if (e->button() == LeftButton) { // delegate event handling to tool
 
-        m_tool->handleMouseButtonPress(e);
+        if (m_tool)
+            m_tool->handleMouseButtonPress(e);
 
     } else if (e->button() == RightButton) { // popup menu if over a part
 
@@ -244,11 +247,15 @@ void SegmentCanvas::contentsMouseDoubleClickEvent(QMouseEvent* e)
 
 void SegmentCanvas::contentsMouseReleaseEvent(QMouseEvent *e)
 {
+    if (!m_tool) return;
+
     if (e->button() == LeftButton) m_tool->handleMouseButtonRelease(e);
 }
 
 void SegmentCanvas::contentsMouseMoveEvent(QMouseEvent* e)
 {
+    if (!m_tool) return;
+
     m_tool->handleMouseMove(e);
 }
 
