@@ -1027,6 +1027,11 @@ void MatrixView::slotMousePressed(Rosegarden::timeT time, int pitch,
     MATRIX_DEBUG << "MatrixView::mousePressed at pitch "
                          << pitch << ", time " << time << endl;
 
+    // Don't allow moving/insertion before the beginning of the
+    // segment
+    timeT curSegmentStartTime = getCurrentSegment()->getStartTime();
+    if (curSegmentStartTime > time) time=curSegmentStartTime;
+
     m_tool->handleMousePress(time, pitch, 0, e, el);
 
     // play a preview
@@ -1035,6 +1040,11 @@ void MatrixView::slotMousePressed(Rosegarden::timeT time, int pitch,
 
 void MatrixView::slotMouseMoved(Rosegarden::timeT time, int pitch, QMouseEvent* e)
 {
+    // Don't allow moving/insertion before the beginning of the
+    // segment
+    timeT curSegmentStartTime = getCurrentSegment()->getStartTime();
+    if (curSegmentStartTime > time) time=curSegmentStartTime;
+
     if (activeItem()) {
         activeItem()->handleMouseMove(e);
 	updateView();
@@ -1060,6 +1070,11 @@ void MatrixView::slotMouseMoved(Rosegarden::timeT time, int pitch, QMouseEvent* 
 
 void MatrixView::slotMouseReleased(Rosegarden::timeT time, int pitch, QMouseEvent* e)
 {
+    // Don't allow moving/insertion before the beginning of the
+    // segment
+    timeT curSegmentStartTime = getCurrentSegment()->getStartTime();
+    if (curSegmentStartTime > time) time=curSegmentStartTime;
+
     if (activeItem()) {
         activeItem()->handleMouseRelease(e);
         setActiveItem(0);
