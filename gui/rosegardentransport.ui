@@ -159,6 +159,9 @@
             <property name="text">
                 <string></string>
             </property>
+            <property name="autoRepeat">
+                <bool>true</bool>
+            </property>
             <property name="pixmap">
                 <pixmap>image3</pixmap>
             </property>
@@ -257,6 +260,9 @@
             </property>
             <property name="text">
                 <string></string>
+            </property>
+            <property name="autoRepeat">
+                <bool>true</bool>
             </property>
             <property name="pixmap">
                 <pixmap>image6</pixmap>
