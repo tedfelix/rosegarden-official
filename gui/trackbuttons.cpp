@@ -33,6 +33,8 @@
 #include "colours.h"
 #include "tracklabel.h"
 #include "trackvumeter.h"
+#include "instrumentlabel.h"
+
 
 TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
                            unsigned int trackCellHeight,
@@ -53,10 +55,45 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
 {
     setFrameStyle(Plain);
 
+    m_instrumentPopup = new QPopupMenu(this);
+
     // Now draw the buttons and labels and meters
     //
     drawButtons();
 }
+
+TrackButtons::~TrackButtons()
+{
+    // Just doing most of these because they're there - not because
+    // they necessarily need to be explicitly free'd
+
+    delete m_instrumentPopup;
+
+    for (std::vector<TrackLabel *>::iterator it = m_trackLabels.begin();
+         it != m_trackLabels.end(); it++)
+        delete (*it);
+
+    m_trackLabels.erase(m_trackLabels.begin(), m_trackLabels.end());
+
+    for (std::vector<TrackVUMeter *>::iterator it = m_trackMeters.begin();
+         it != m_trackMeters.end(); it++)
+        delete (*it);
+
+    m_trackMeters.erase(m_trackMeters.begin(), m_trackMeters.end());
+
+    for (std::vector<InstrumentLabel *>::iterator it = 
+         m_instrumentLabels.begin(); it != m_instrumentLabels.end(); it++)
+        delete (*it);
+
+    m_instrumentLabels.erase(m_instrumentLabels.begin(),
+                             m_instrumentLabels.end());
+
+    delete m_recordButtonGroup;
+    delete m_muteButtonGroup;
+    delete m_layout;
+
+}
+
 
 // Draw the mute and record buttons, track labels and VU meters
 //
@@ -92,11 +129,16 @@ TrackButtons::drawButtons()
 
     TrackVUMeter *vuMeter;
     TrackLabel *trackLabel;
+    InstrumentLabel *instrumentLabel;
 
     // Populate the widgets
     //
     for (int i = 0; i < m_tracks; i++)
     {
+        // Set the label from the Track object on the Composition
+        //
+        Rosegarden::Track *track = m_doc->getComposition().getTrackByIndex(i);
+
         // Create a horizontal box for each track
         //
         trackHBox = new QFrame(this);
@@ -120,14 +162,11 @@ TrackButtons::drawButtons()
                                    VUMeter::PeakHold,
                                    25,
                                    buttonGap,
-                                   i);
+                                   track->getID());
 
         m_trackMeters.push_back(vuMeter);
 
         hblayout->addWidget(vuMeter);
-
-        // set an initial level to show the meter off
-        //vuMeter->setLevel(1.0);
 
         // Create another little gap
         hblayout->addSpacing(2);
@@ -146,20 +185,23 @@ TrackButtons::drawButtons()
         trackLabel = new TrackLabel(i, trackHBox);
         hblayout->addWidget(trackLabel);
 
+        // instrument label
+        instrumentLabel = new InstrumentLabel((Rosegarden::InstrumentId)i,
+                                               trackHBox);
+        hblayout->addWidget(instrumentLabel);
+        instrumentLabel->hide();
+
+        // insert label
+        m_instrumentLabels.push_back(instrumentLabel);
+
         connect(trackLabel, SIGNAL(changeToInstrumentList(int)),
                 this, SLOT(slotInstrumentSelection(int)));
-
-        // Set the label from the Track object on the Composition
-        //
-        Rosegarden::Track *track = m_doc->getComposition().getTrackByIndex(i);
 
         // Enforce this
         //
         assert(track != 0);
 
         trackLabel->setText(QString(track->getLabel().c_str()));
-        //label->setText(QString(m_doc->getComposition().getTracks()[i].getLabel().c_str()));
-        //label->setText(QString("Track %1").arg(i));
 
         trackLabel->setMinimumSize(80, m_cellSize - buttonGap);
         //trackLabel->setMaximumSize(80, m_cellSize - buttonGap);
@@ -376,7 +418,25 @@ TrackButtons::slotSetTrackMeter(double value, int position)
 void
 TrackButtons::slotInstrumentSelection(int position)
 {
-    cout << "INSTRUMENT SELECTION" << endl;
+    Rosegarden::Composition &comp = m_doc->getComposition();
+
+    // populate this instrument widget
+    m_instrumentLabels[position]->setText(QString("Instrument"));
+
+    Rosegarden::Composition::instrumentiterator it;
+    for (it = comp.getInstruments()->begin();
+         it != comp.getInstruments()->end(); it++)
+    {
+        m_instrumentPopup->
+            insertItem(QString((*it).second->getName().c_str()));
+    }
+
+    // Hide the track label
+    m_trackLabels[position]->hide();
+
+    // Show the instrument label
+    m_instrumentPopup->show();
+
 }
 
 

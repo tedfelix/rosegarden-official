@@ -26,12 +26,14 @@
 #include <vector>
 
 #include <qframe.h>
+#include <qpopupmenu.h>
 
 class QVBoxLayout;
 class QButtonGroup;
 class TrackVUMeter;
 class TrackLabel;
 class RosegardenGUIDoc;
+class InstrumentLabel;
 
 // This class creates a list of mute and record buttons
 // based on the rosegarden document and a specialisation
@@ -52,6 +54,8 @@ public:
                  QWidget* parent = 0,
                  const char* name = 0,
                  WFlags f=0);
+
+    ~TrackButtons();
 
     // Return the track selected for recording
     //
@@ -98,6 +102,9 @@ private:
 
     std::vector<TrackLabel *> m_trackLabels;
     std::vector<TrackVUMeter *> m_trackMeters;
+    std::vector<InstrumentLabel *> m_instrumentLabels;
+
+    QPopupMenu *m_instrumentPopup;
 
     // Number of tracks on our view
     //
