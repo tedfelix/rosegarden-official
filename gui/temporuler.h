@@ -55,6 +55,7 @@ public:
 	       Rosegarden::Composition *composition,
 	       double xorigin = 0.0,
 	       int height = 0,
+	       bool small = false,
 	       QWidget* parent = 0,
 	       const char *name = 0);
 
@@ -76,6 +77,7 @@ private:
     int  m_height;
     int  m_currentXOffset;
     int  m_width;
+    bool m_small;
 
     Rosegarden::Composition *m_composition;
     Rosegarden::RulerScale *m_rulerScale;

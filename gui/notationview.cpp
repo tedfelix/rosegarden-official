@@ -19,85 +19,47 @@
     COPYING included with this distribution for more information.
 */
 
-#include <sys/times.h>
 
-#include <qcanvas.h>
-#include <qslider.h>
-#include <qcombobox.h>
-#include <qinputdialog.h>
-#include <qvbox.h>
-#include <qregexp.h>
-
-#include <kmessagebox.h>
-#include <kmenubar.h>
-#include <klocale.h>
-#include <kconfig.h>
-#include <kaction.h>
-
-#include <kstdaction.h>
-#include <kapp.h>
-#include <kstatusbar.h>
-
-#include "rosestrings.h"
-#include "rosegardenguiview.h"
-#include "rosegardenguidoc.h"
 #include "notationview.h"
-#include "notationelement.h"
-#include "notationproperties.h"
-
-#include "notationstaff.h"
-#include "notepixmapfactory.h"
-#include "notationtool.h"
-#include "qcanvassimplesprite.h"
-#include "ktmpstatusmsg.h"
-#include "barbuttons.h"
-#include "loopruler.h"
-
-#include "rosedebug.h"
 
 #include "NotationTypes.h"
-#include "BaseProperties.h"
-#include "SegmentNotationHelper.h"
 #include "Quantizer.h"
 #include "Selection.h"
+
+#include "notepixmapfactory.h"
+#include "notationtool.h"
+#include "barbuttons.h"
+#include "loopruler.h"
+#include "rosedebug.h"
 #include "editcommands.h"
 #include "notationcommands.h"
 #include "segmentcommands.h"
-#include "dialogs.h"
 #include "widgets.h"
-#include "notestyle.h"
-
 #include "chordnameruler.h"
 #include "temporuler.h"
 
-#include "CompositionTimeSliceAdapter.h"
-#include "AnalysisTypes.h"
+#include <qstring.h>
+#include <qregexp.h>
+#include <kmessagebox.h>
+#include <kstatusbar.h>
+#include <klocale.h>
+#include <kconfig.h>
+#include <kaction.h>
+#include <kstdaction.h>
+#include <kapp.h>
 
+#include "qcanvassimplesprite.h"
+#include "ktmpstatusmsg.h"
 
 using Rosegarden::Event;
-using Rosegarden::Int;
-using Rosegarden::Bool;
-using Rosegarden::String;
 using Rosegarden::Note;
 using Rosegarden::Segment;
-using Rosegarden::SegmentNotationHelper;
 using Rosegarden::EventSelection;
-using Rosegarden::Clef;
-using Rosegarden::Key;
-using Rosegarden::TimeSignature;
 using Rosegarden::Quantizer;
 using Rosegarden::timeT;
-using Rosegarden::Accidental;
-
 using Rosegarden::Mark;
 using namespace Rosegarden::Marks;
 
-using std::vector;
-using std::string;
-using std::set;
-#define ID_STATUS_MSG 1
-
-using namespace Rosegarden::BaseProperties;
 
 class NoteActionData
 {
@@ -182,7 +144,7 @@ public:
 //////////////////////////////////////////////////////////////////////
 
 NotationView::NotationView(RosegardenGUIDoc *doc,
-                           vector<Segment *> segments,
+                           std::vector<Segment *> segments,
                            QWidget *parent,
 			   bool showProgressive) :
     EditView(doc, segments, false, parent, "notationview"),
@@ -263,7 +225,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_chordNamesVisible = true;
 
     m_tempoRuler = new TempoRuler
-	(&m_hlayout, &doc->getComposition(), 20.0, 20, getCentralFrame());
+	(&m_hlayout, &doc->getComposition(),
+	 20.0, 20, false, getCentralFrame());
     addRuler(m_tempoRuler);
     m_tempoRuler->hide();
     m_temposVisible = false;
@@ -994,14 +957,14 @@ void NotationView::initFontToolbar(int legatoUnit, bool multiStaff)
     QComboBox *fontCombo = new QComboBox(fontToolbar);
     fontCombo->setEditable(false);
 
-    set<string> fs(NotePixmapFactory::getAvailableFontNames());
-    vector<string> f(fs.begin(), fs.end());
+    std::set<std::string> fs(NotePixmapFactory::getAvailableFontNames());
+    std::vector<std::string> f(fs.begin(), fs.end());
     std::sort(f.begin(), f.end());
 
     bool foundFont = false;
     m_fontActions.clear();
 
-    for (vector<string>::iterator i = f.begin(); i != f.end(); ++i) {
+    for (std::vector<std::string>::iterator i = f.begin(); i != f.end(); ++i) {
 
 	QString fontQName(strtoqstr(*i));
 
@@ -1034,7 +997,7 @@ void NotationView::initFontToolbar(int legatoUnit, bool multiStaff)
 
     new QLabel(i18n("  Size:  "), fontToolbar);
 
-    vector<int> sizes = NotePixmapFactory::getAvailableSizes(m_fontName);
+    std::vector<int> sizes = NotePixmapFactory::getAvailableSizes(m_fontName);
     m_fontSizeSlider = new ZoomSlider<int>
         (sizes, m_fontSize, QSlider::Horizontal, fontToolbar);
     connect(m_fontSizeSlider, SIGNAL(valueChanged(int)),
@@ -1042,7 +1005,7 @@ void NotationView::initFontToolbar(int legatoUnit, bool multiStaff)
 
     new QLabel(i18n("  Spacing:  "), fontToolbar);
 
-    vector<double> spacings = NotationHLayout::getAvailableSpacings();
+    std::vector<double> spacings = NotationHLayout::getAvailableSpacings();
     QSlider *stretchSlider = new ZoomSlider<double>
         (spacings, 1.0, QSlider::Horizontal, fontToolbar);
     connect(stretchSlider, SIGNAL(valueChanged(int)),

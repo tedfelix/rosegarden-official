@@ -20,88 +20,31 @@
     COPYING included with this distribution for more information.
 */
 
-//!!! rationalise: notationview.cpp only needs some of these, and so do I
-
-#include <sys/times.h>
-
-#include <qcanvas.h>
-#include <qslider.h>
-#include <qcombobox.h>
-#include <qinputdialog.h>
-#include <qvbox.h>
-#include <qregexp.h>
-
-#include <kmessagebox.h>
-#include <kmenubar.h>
-#include <klocale.h>
-#include <kconfig.h>
-#include <kaction.h>
-
-#include <kstdaction.h>
-#include <kapp.h>
-#include <kstatusbar.h>
-
-#include "rosestrings.h"
-#include "rosegardenguiview.h"
-#include "rosegardenguidoc.h"
 #include "notationview.h"
-#include "notationelement.h"
-#include "notationproperties.h"
-
-#include "notationstaff.h"
-#include "notepixmapfactory.h"
-#include "notationtool.h"
-#include "qcanvassimplesprite.h"
-#include "ktmpstatusmsg.h"
-#include "barbuttons.h"
-#include "loopruler.h"
-
-#include "rosedebug.h"
 
 #include "NotationTypes.h"
-#include "BaseProperties.h"
-#include "SegmentNotationHelper.h"
-#include "Quantizer.h"
 #include "Selection.h"
+#include "Clipboard.h"
+#include "CompositionTimeSliceAdapter.h"
+#include "AnalysisTypes.h"
+
+#include "rosegardenguidoc.h"
+#include "notationtool.h"
 #include "editcommands.h"
 #include "notationcommands.h"
 #include "segmentcommands.h"
 #include "dialogs.h"
-#include "widgets.h"
-#include "notestyle.h"
-
 #include "chordnameruler.h"
 #include "temporuler.h"
 
-#include "CompositionTimeSliceAdapter.h"
-#include "AnalysisTypes.h"
+#include <qlabel.h>
+#include <qinputdialog.h>
+#include <kmessagebox.h>
+#include <klocale.h>
 
+#include "ktmpstatusmsg.h"
 
-using Rosegarden::Event;
-using Rosegarden::Int;
-using Rosegarden::Bool;
-using Rosegarden::String;
-using Rosegarden::Note;
-using Rosegarden::Segment;
-using Rosegarden::SegmentNotationHelper;
-using Rosegarden::EventSelection;
-using Rosegarden::Clef;
-using Rosegarden::Key;
-using Rosegarden::TimeSignature;
-using Rosegarden::Quantizer;
 using Rosegarden::timeT;
-using Rosegarden::Accidental;
-
-using Rosegarden::Mark;
-using namespace Rosegarden::Marks;
-
-using std::vector;
-using std::string;
-using std::set;
-#define ID_STATUS_MSG 1
-
-using namespace Rosegarden::BaseProperties;
-
 
 
 void
@@ -133,7 +76,7 @@ NotationView::slotTestClipboard()
 void
 NotationView::slotChangeStretch(int n)
 {
-    vector<double> spacings = m_hlayout.getAvailableSpacings();
+    std::vector<double> spacings = m_hlayout.getAvailableSpacings();
     if (n >= (int)spacings.size()) n = spacings.size() - 1;
     m_hlayout.setSpacing(spacings[n]);
 
@@ -151,9 +94,10 @@ void NotationView::slotChangeLegato(int n)
     if (n >= (int)m_legatoDurations.size())
         n = m_legatoDurations.size() - 1;
 
-    Quantizer q(Quantizer::RawEventData,
-		getViewLocalPropertyPrefix() + "Q",
-		Quantizer::LegatoQuantize, m_legatoDurations[n]);
+    Rosegarden::Quantizer q(Rosegarden::Quantizer::RawEventData,
+			    getViewLocalPropertyPrefix() + "Q",
+			    Rosegarden::Quantizer::LegatoQuantize,
+			    m_legatoDurations[n]);
     *m_legatoQuantizer = q;
     
     applyLayout();
@@ -186,12 +130,12 @@ void
 NotationView::slotChangeFont(const QString &newName)
 {
     kdDebug(KDEBUG_AREA) << "changeFont: " << newName << endl;
-    slotChangeFont(string(newName.utf8()));
+    slotChangeFont(std::string(newName.utf8()));
 }
 
 
 void
-NotationView::slotChangeFont(string newName)
+NotationView::slotChangeFont(std::string newName)
 {
     slotChangeFont(newName, NotePixmapFactory::getDefaultSize(newName));
 }
@@ -207,14 +151,14 @@ NotationView::slotChangeFontSize(int newSize)
 void
 NotationView::slotChangeFontSizeFromIndex(int n)
 {
-    vector<int> sizes = NotePixmapFactory::getAvailableSizes(m_fontName);
+    std::vector<int> sizes = NotePixmapFactory::getAvailableSizes(m_fontName);
     if (n >= (int)sizes.size()) n = sizes.size()-1;
     slotChangeFont(m_fontName, sizes[n]);
 }
 
 
 void
-NotationView::slotChangeFont(string newName, int newSize)
+NotationView::slotChangeFont(std::string newName, int newSize)
 {
     kdDebug(KDEBUG_AREA) << "NotationView::changeResolution(" << newSize << ")\n";
 
@@ -235,7 +179,7 @@ NotationView::slotChangeFont(string newName, int newSize)
     setNotePixmapFactory(npf);
 
     if (changedFont) {
-        vector<int> sizes = NotePixmapFactory::getAvailableSizes(m_fontName);
+        std::vector<int> sizes = NotePixmapFactory::getAvailableSizes(m_fontName);
         m_fontSizeSlider->reinitialise(sizes, m_fontSize);
     }
 
@@ -316,7 +260,7 @@ void NotationView::slotEditPaste()
     slotStatusHelpMsg(i18n("Inserting clipboard contents..."));
 
     NotationStaff *staff = m_staffs[m_currentStaff];
-    Segment &segment = staff->getSegment();
+    Rosegarden::Segment &segment = staff->getSegment();
     
     // Paste at cursor position
     //
@@ -332,7 +276,7 @@ void NotationView::slotEditPaste()
 	slotStatusHelpMsg(i18n("Couldn't paste at this point"));
     } else {
 	addCommandToHistory(command);
-	setCurrentSelection(new EventSelection
+	setCurrentSelection(new Rosegarden::EventSelection
 			    (segment, insertionTime, endTime));
     }
 }
@@ -349,7 +293,7 @@ void NotationView::slotEditGeneralPaste()
     slotStatusHelpMsg(i18n("Inserting clipboard contents..."));
 
     NotationStaff *staff = m_staffs[m_currentStaff];
-    Segment &segment = staff->getSegment();
+    Rosegarden::Segment &segment = staff->getSegment();
     
     PasteNotationDialog *dialog = new PasteNotationDialog
 	(this, PasteEventsCommand::getDefaultPasteType());
@@ -373,7 +317,7 @@ void NotationView::slotEditGeneralPaste()
 	    slotStatusHelpMsg(i18n("Couldn't paste at this point"));
 	} else {
 	    addCommandToHistory(command);
-	    setCurrentSelection(new EventSelection
+	    setCurrentSelection(new Rosegarden::EventSelection
 				(segment, insertionTime, endTime));
 	}
     }
@@ -382,27 +326,27 @@ void NotationView::slotEditGeneralPaste()
 void NotationView::slotEditSelectFromStart()
 {
     timeT t = getInsertionTime();
-    Segment &segment = m_staffs[m_currentStaff]->getSegment();
-    setCurrentSelection(new EventSelection(segment,
-					   segment.getStartTime(),
-					   t));
+    Rosegarden::Segment &segment = m_staffs[m_currentStaff]->getSegment();
+    setCurrentSelection(new Rosegarden::EventSelection(segment,
+						       segment.getStartTime(),
+						       t));
 }
 
 void NotationView::slotEditSelectToEnd()
 {
     timeT t = getInsertionTime();
-    Segment &segment = m_staffs[m_currentStaff]->getSegment();
-    setCurrentSelection(new EventSelection(segment,
-					   t,
-					   segment.getEndTime()));
+    Rosegarden::Segment &segment = m_staffs[m_currentStaff]->getSegment();
+    setCurrentSelection(new Rosegarden::EventSelection(segment,
+						       t,
+						       segment.getEndTime()));
 }
 
 void NotationView::slotEditSelectWholeStaff()
 {
-    Segment &segment = m_staffs[m_currentStaff]->getSegment();
-    setCurrentSelection(new EventSelection(segment,
-					   segment.getStartTime(),
-					   segment.getEndTime()));
+    Rosegarden::Segment &segment = m_staffs[m_currentStaff]->getSegment();
+    setCurrentSelection(new Rosegarden::EventSelection(segment,
+						       segment.getStartTime(),
+						       segment.getEndTime()));
 }
 
 void NotationView::slotToggleNotesToolBar()
@@ -494,7 +438,7 @@ void NotationView::slotGroupTuplet(bool simple)
     timeT unit = 0;
     int tupled = 2;
     int untupled = 3;
-    Segment *segment = 0;
+    Rosegarden::Segment *segment = 0;
 
     NotationSelector *selector = dynamic_cast<NotationSelector *>
 	(m_toolBox->getTool(NotationSelector::ToolName));
@@ -505,14 +449,14 @@ void NotationView::slotGroupTuplet(bool simple)
 	t = m_currentEventSelection->getStartTime();
 
 	timeT duration = m_currentEventSelection->getTotalDuration();
-	Note::Type unitType =
-	    Note::getNearestNote(duration / 3, 0).getNoteType();
-	unit = Note(unitType).getDuration();
+	Rosegarden::Note::Type unitType =
+	    Rosegarden::Note::getNearestNote(duration / 3, 0).getNoteType();
+	unit = Rosegarden::Note(unitType).getDuration();
 
 	if (!simple) {
 	    TupletDialog *dialog = new TupletDialog(this, unitType, duration);
 	    if (dialog->exec() != QDialog::Accepted) return;
-	    unit = Note(dialog->getUnitType()).getDuration();
+	    unit = Rosegarden::Note(dialog->getUnitType()).getDuration();
 	    tupled = dialog->getTupledCount();
 	    untupled = dialog->getUntupledCount();
 	}
@@ -526,20 +470,20 @@ void NotationView::slotGroupTuplet(bool simple)
 	NoteInserter *currentInserter = dynamic_cast<NoteInserter *>
 	    (m_toolBox->getTool(NoteInserter::ToolName));
 
-	Note::Type unitType;
+	Rosegarden::Note::Type unitType;
 
 	if (currentInserter) {
 	    unitType = currentInserter->getCurrentNote().getNoteType();
 	} else {
-	    unitType = Note::Quaver;
+	    unitType = Rosegarden::Note::Quaver;
 	}
 
-	unit = Note(unitType).getDuration();
+	unit = Rosegarden::Note(unitType).getDuration();
 
 	if (!simple) {
 	    TupletDialog *dialog = new TupletDialog(this, unitType);
 	    if (dialog->exec() != QDialog::Accepted) return;
-	    unit = Note(dialog->getUnitType()).getDuration();
+	    unit = Rosegarden::Note(dialog->getUnitType()).getDuration();
 	    tupled = dialog->getTupledCount();
 	    untupled = dialog->getUntupledCount();
 	}
@@ -789,9 +733,10 @@ void NotationView::slotTransformsQuantize()
 {
     if (!m_currentEventSelection) return;
 
-    QuantizeDialog *dialog = new QuantizeDialog(this,
-						Quantizer::RawEventData,
-						Quantizer::RawEventData);
+    QuantizeDialog *dialog = new QuantizeDialog
+	(this,
+	 Rosegarden::Quantizer::RawEventData,
+	 Rosegarden::Quantizer::RawEventData);
 
     if (dialog->exec() == QDialog::Accepted) {
 	KTmpStatusMsg msg(i18n("Quantizing..."), statusBar());
@@ -837,7 +782,7 @@ void NotationView::slotEditAddClef()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
     Rosegarden::Event *clefEvt = 0, *keyEvt = 0;
-    Segment &segment = staff->getSegment();
+    Rosegarden::Segment &segment = staff->getSegment();
     timeT insertionTime = getInsertionTime(clefEvt, keyEvt);
 
     Rosegarden::Clef clef;
@@ -883,7 +828,7 @@ void NotationView::slotEditAddTimeSignature()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
     Rosegarden::Event *clefEvt = 0, *keyEvt = 0;
-    Segment &segment = staff->getSegment();
+    Rosegarden::Segment &segment = staff->getSegment();
     Rosegarden::Composition *composition = segment.getComposition();
     timeT insertionTime = getInsertionTime(clefEvt, keyEvt);
 
@@ -897,7 +842,7 @@ void NotationView::slotEditAddTimeSignature()
 	(&m_document->getComposition(), insertionTime,
 	 m_document->getComposition().getDuration());
     Rosegarden::AnalysisHelper helper;
-    TimeSignature timeSig = helper.guessTimeSignature(adapter);
+    Rosegarden::TimeSignature timeSig = helper.guessTimeSignature(adapter);
 
 
     TimeSignatureDialog *dialog = new TimeSignatureDialog
@@ -934,7 +879,7 @@ void NotationView::slotEditAddKeySignature()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
     Rosegarden::Event *clefEvt = 0, *keyEvt = 0;
-    Segment &segment = staff->getSegment();
+    Rosegarden::Segment &segment = staff->getSegment();
     timeT insertionTime = getInsertionTime(clefEvt, keyEvt);
     
 /*!!!
@@ -991,10 +936,11 @@ void NotationView::slotEditAddKeySignature()
 void NotationView::slotDebugDump()
 {
     if (m_currentEventSelection) {
-	EventSelection::eventcontainer &ec =
+	Rosegarden::EventSelection::eventcontainer &ec =
 	    m_currentEventSelection->getSegmentEvents();
 	int n = 0;
-	for (EventSelection::eventcontainer::iterator i = ec.begin();
+	for (Rosegarden::EventSelection::eventcontainer::iterator i =
+		 ec.begin();
 	     i != ec.end(); ++i) {
 	    cerr << "\n" << n++ << " [" << (*i) << "]" << endl;
 	    (*i)->dump(cerr);
@@ -1122,7 +1068,7 @@ NotationView::doDeferredCursorMove()
 
     if (m_staffs.size() == 0) return;
     NotationStaff *staff = m_staffs[m_currentStaff];
-    Segment &segment = staff->getSegment();
+    Rosegarden::Segment &segment = staff->getSegment();
 
     if (t < segment.getStartTime()) {
 	t = segment.getStartTime();
@@ -1203,9 +1149,9 @@ void
 NotationView::slotStepBackward()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
-    Segment &segment = staff->getSegment();
+    Rosegarden::Segment &segment = staff->getSegment();
     timeT time = m_insertionTime;
-    Segment::iterator i = segment.findTime(time);
+    Rosegarden::Segment::iterator i = segment.findTime(time);
 
     while (i != segment.begin() &&
 	   (i == segment.end() || (*i)->getAbsoluteTime() == time)) --i;
@@ -1216,9 +1162,9 @@ void
 NotationView::slotStepForward()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
-    Segment &segment = staff->getSegment();
+    Rosegarden::Segment &segment = staff->getSegment();
     timeT time = m_insertionTime;
-    Segment::iterator i = segment.findTime(time);
+    Rosegarden::Segment::iterator i = segment.findTime(time);
 
     while (i != segment.end() && (*i)->getAbsoluteTime() == time) ++i;
     if (i == segment.end()) slotSetInsertCursorPosition(segment.getEndTime());
@@ -1229,7 +1175,7 @@ void
 NotationView::slotJumpBackward()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
-    Segment &segment = staff->getSegment();
+    Rosegarden::Segment &segment = staff->getSegment();
     timeT time = segment.getBarStartForTime(m_insertionTime - 1);
     slotSetInsertCursorPosition(time);
 }
@@ -1238,7 +1184,7 @@ void
 NotationView::slotJumpForward()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
-    Segment &segment = staff->getSegment();
+    Rosegarden::Segment &segment = staff->getSegment();
     timeT time = segment.getBarEndForTime(m_insertionTime);
     slotSetInsertCursorPosition(time);
 }
@@ -1314,7 +1260,7 @@ void NotationView::slotTrebleClef()
         (m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-treble"));
     setTool(m_toolBox->getTool(ClefInserter::ToolName));
 
-    dynamic_cast<ClefInserter*>(m_tool)->setClef(Clef::Treble);
+    dynamic_cast<ClefInserter*>(m_tool)->setClef(Rosegarden::Clef::Treble);
 }
 
 void NotationView::slotTenorClef()
@@ -1323,7 +1269,7 @@ void NotationView::slotTenorClef()
         (m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-tenor"));
     setTool(m_toolBox->getTool(ClefInserter::ToolName));
 
-    dynamic_cast<ClefInserter*>(m_tool)->setClef(Clef::Tenor);
+    dynamic_cast<ClefInserter*>(m_tool)->setClef(Rosegarden::Clef::Tenor);
 }
 
 void NotationView::slotAltoClef()
@@ -1332,7 +1278,7 @@ void NotationView::slotAltoClef()
         (m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-alto"));
     setTool(m_toolBox->getTool(ClefInserter::ToolName));
 
-    dynamic_cast<ClefInserter*>(m_tool)->setClef(Clef::Alto);
+    dynamic_cast<ClefInserter*>(m_tool)->setClef(Rosegarden::Clef::Alto);
 }
 
 void NotationView::slotBassClef()
@@ -1341,7 +1287,7 @@ void NotationView::slotBassClef()
         (m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-bass"));
     setTool(m_toolBox->getTool(ClefInserter::ToolName));
 
-    dynamic_cast<ClefInserter*>(m_tool)->setClef(Clef::Bass);
+    dynamic_cast<ClefInserter*>(m_tool)->setClef(Rosegarden::Clef::Bass);
 }
 
 

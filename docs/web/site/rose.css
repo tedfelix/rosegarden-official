@@ -32,7 +32,7 @@
 
 .donate {
     float: right;
-    width: 140pt;
+    width: 16em;
     margin-top: 30px;
     margin-left: 20px;
     margin-right: 0px;
@@ -46,8 +46,8 @@
     border-style: solid;
     font-style: normal;
     font-weight: medium;
-    font-family: trebuchet, verdana, sans-serif;
-    font-size: 8pt;
+    font-family: sans-serif;
+    font-size: 0.7em;
 }
 
 .paypal {
@@ -70,7 +70,7 @@ body {
 }
 
 body,p,td,ul,ol,li,blockquote { 
-    font-size: 11pt;
+    font-size: 1em;
     font-style: normal;
     font-family: georgia, "book antiqua", palatino, garamond, serif; 
 }
@@ -78,7 +78,7 @@ body,p,td,ul,ol,li,blockquote {
 h1,h2,h3,h4,h5,h6,h7 { 
     font-weight: bold;
     font-style: normal;
-    font-family: trebuchet, verdana, sans-serif;
+    font-family: sans-serif;
 }
 
 h1,h2,h3 { 
@@ -90,7 +90,7 @@ h4,h5,h6,h7 {
 }
 
 code {
-    font-size: 10pt;
+    font-size: 0.9em;
     font-style: normal;
     font-family: "andale mono", "monotype.com", lucidatypewriter, monospaced;
 }
@@ -100,7 +100,7 @@ h4,h5,h6,h7 {
 }
 
 .faqanswer {
-    margin-top: 18pt;
+    margin-top: 1.8em;
 }
 
 .faqtoc {
@@ -117,44 +117,44 @@ h4,h5,h6,h7 {
 }
 
 .navselected {
-    font-size: 10pt;
-    margin-right: 4pt;
-    font-family: trebuchet, verdana, sans-serif;
+    font-size: 0.9em;
+    margin-right: 0.4em;
+    font-family: sans-serif;
     font-weight: bold;
     color: #000000;
 }
 
 .navunselected {
-    font-size: 10pt;
-    margin-right: 4pt;
-    font-family: trebuchet, verdana, sans-serif;
+    font-size: 0.9em;
+    margin-right: 0.4em;
+    font-family: sans-serif;
     font-weight: bold;
     color: #e3e8c7;
 }
 
 .navlink {
-    font-size: 10pt;
-    padding-left: 8pt;
-    margin-left: 6pt;
-    margin-top: 5pt;
-    font-family: trebuchet, verdana, sans-serif;
+    font-size: 0.9em;
+    padding-left: 0.8em;
+    margin-left: 0.6em;
+    margin-top: 0.5em;
+    font-family: sans-serif;
     font-weight: bold;
     color: #ba2c2c;
 }
 
 .navtitle {
-    font-size: 10pt;
-    padding-left: 8pt;
-    margin-left: 6pt;
-    margin-top: 12pt;
-    margin-bottom: 7pt;
-    font-family: trebuchet, verdana, sans-serif;
+    font-size: 0.9em;
+    padding-left: 0.8em;
+    margin-left: 0.6em;
+    margin-top: 1.1em;
+    margin-bottom: 0.7em;
+    font-family: sans-serif;
     font-weight: bold;
 }
 
 small,.navtext {
-    font-size: 9pt;
-    font-family: trebuchet, verdana, sans-serif;
+    font-size: 0.8em;
+    font-family: sans-serif;
     margin-bottom: 8px;
 }
 
@@ -175,15 +175,15 @@ a {
 }
 
 .toc1,.toc2,.toc3 {
-    padding-top: 4pt;
+    padding-top: 0.4em;
 }
 
 .toc1,.toc2,.toc3,.toc4 {
-    padding-bottom: 6pt;
+    padding-bottom: 0.6em;
 }
 
 .toc4 {
-    padding-left: 20pt;
+    padding-left: 2em;
 }
 
 .toc4 {
@@ -191,7 +191,7 @@ a {
 }
 
 .oddcontent,.evencontent {
-    margin-top: 14pt;
+    margin-top: 1.4em;
 }
 
 a:active {

@@ -30,13 +30,13 @@
 #include <kmessagebox.h>
 #include <kapp.h>
 
-
 #include "RulerScale.h"
 #include "Track.h"
 #include "NotationTypes.h"
 
 #include "trackeditor.h"
 #include "segmentcanvas.h"
+#include "temporuler.h"
 #include "rosestrings.h"
 #include "rosegardenguidoc.h"
 #include "colours.h"
@@ -142,7 +142,7 @@ TrackEditor::init(QWidget* rosegardenguiview,
                          << nbTracks << ", firstBar = " << firstBar
                          << ", lastBar = " << lastBar << ")" << endl;
 
-    QGridLayout *grid = new QGridLayout(this, 4, 2);
+    QGridLayout *grid = new QGridLayout(this, 5, 2);
 
     QCanvas *canvas = new QCanvas(this);
 
@@ -158,6 +158,15 @@ TrackEditor::init(QWidget* rosegardenguiview,
     int trackLabelWidth = 230;
     int barButtonsHeight = 25;
 
+    m_tempoRuler = new TempoRuler(m_rulerScale,
+				  &m_document->getComposition(),
+				  0.0,
+				  18,
+				  true,
+				  this);
+
+    grid->addWidget(m_tempoRuler, 0, 1);
+
     //
     // Top Bar Buttons
     //
@@ -168,7 +177,7 @@ TrackEditor::init(QWidget* rosegardenguiview,
                                      this);
     m_topBarButtons->connectRulerToDocPointer(m_document);
 
-    grid->addWidget(m_topBarButtons, 0, 1);
+    grid->addWidget(m_topBarButtons, 1, 1);
 
     // Horizontal scrollbar - we need to create it now even though
     // it's inserted in the layout later on, because we need to set it's
@@ -184,7 +193,7 @@ TrackEditor::init(QWidget* rosegardenguiview,
                                         getTrackCellHeight(),
                                         canvas, this);
 
-    grid->addWidget(m_segmentCanvas, 1, 1);
+    grid->addWidget(m_segmentCanvas, 2, 1);
 
     //
     // Bottom Bar Buttons
@@ -196,7 +205,7 @@ TrackEditor::init(QWidget* rosegardenguiview,
                                         this);
     m_bottomBarButtons->connectRulerToDocPointer(m_document);
     
-    grid->addWidget(m_bottomBarButtons, 2, 1);
+    grid->addWidget(m_bottomBarButtons, 3, 1);
 
     //
     // Horizontal Scrollbar
@@ -207,7 +216,7 @@ TrackEditor::init(QWidget* rosegardenguiview,
     m_horizontalScrollBar->setSteps(m_segmentCanvas->horizontalScrollBar()->lineStep(),
                                     m_segmentCanvas->horizontalScrollBar()->pageStep());
 
-    grid->addWidget(m_horizontalScrollBar, 3, 1);
+    grid->addWidget(m_horizontalScrollBar, 4, 1);
 
   
     // Track Buttons
@@ -215,7 +224,7 @@ TrackEditor::init(QWidget* rosegardenguiview,
     // (must be put in a QScrollView)
     //
     m_trackButtonScroll = new QDeferScrollView(this);
-    grid->addWidget(m_trackButtonScroll, 1, 0);
+    grid->addWidget(m_trackButtonScroll, 2, 0);
 
     m_trackButtons = new TrackButtons(m_document,
                                       getTrackCellHeight(),
@@ -263,6 +272,11 @@ TrackEditor::init(QWidget* rosegardenguiview,
             m_bottomBarButtons, SLOT(slotScrollHoriz(int)));
     connect(m_horizontalScrollBar, SIGNAL(sliderMoved(int)),
             m_bottomBarButtons, SLOT(slotScrollHoriz(int)));
+
+    connect(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
+            m_tempoRuler, SLOT(slotScrollHoriz(int)));
+    connect(m_horizontalScrollBar, SIGNAL(sliderMoved(int)),
+            m_tempoRuler, SLOT(slotScrollHoriz(int)));
 
     connect(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
             m_segmentCanvas->horizontalScrollBar(), SIGNAL(valueChanged(int)));

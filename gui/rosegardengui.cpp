@@ -239,10 +239,15 @@ void RosegardenGUIApp::setupActions()
                                                    actionCollection(),
                                                    "show_instrument_parameters");
 
-    m_viewRulers = new KToggleAction(i18n("Show &Rulers"), 0, this,
+    m_viewRulers = new KToggleAction(i18n("Show R&ulers"), 0, this,
                                      SLOT(slotToggleRulers()),
                                      actionCollection(),
                                      "show_rulers");
+
+    m_viewTempoRuler = new KToggleAction(i18n("Show Te&mpo Ruler"), 0, this,
+                                     SLOT(slotToggleTempoRuler()),
+                                     actionCollection(),
+                                     "show_tempo_ruler");
 
     m_viewPreviews = new KToggleAction(i18n("Show Segment Pre&views"), 0, this,
 				       SLOT(slotTogglePreviews()),
@@ -610,6 +615,7 @@ void RosegardenGUIApp::initView()
         slotToggleSegmentParameters();
         slotToggleInstrumentParameters();
         slotToggleRulers();
+        slotToggleTempoRuler();
         slotTogglePreviews();
 
         // Reset any loop on the sequencer
@@ -743,6 +749,7 @@ void RosegardenGUIApp::slotSaveOptions()
     m_config->writeEntry("Show Segment Parameters",      m_viewSegmentParameters->isChecked());
     m_config->writeEntry("Show Instrument Parameters",   m_viewInstrumentParameters->isChecked());
     m_config->writeEntry("Show Rulers",                  m_viewRulers->isChecked());
+    m_config->writeEntry("Show Tempo Ruler",             m_viewTempoRuler->isChecked());
     m_config->writeEntry("Show Previews",                m_viewPreviews->isChecked());
 
 
@@ -798,6 +805,10 @@ void RosegardenGUIApp::readOptions()
     opt = m_config->readBoolEntry("Show Rulers", false);
     m_viewRulers->setChecked(opt);
     slotToggleRulers();
+
+    opt = m_config->readBoolEntry("Show Tempo Ruler", false);
+    m_viewTempoRuler->setChecked(opt);
+    slotToggleTempoRuler();
 
     opt = m_config->readBoolEntry("Show Previews", false);
     m_viewPreviews->setChecked(opt);
@@ -1367,6 +1378,11 @@ void RosegardenGUIApp::slotToggleInstrumentParameters()
 void RosegardenGUIApp::slotToggleRulers()
 {
     m_view->slotShowRulers(m_viewRulers->isChecked());
+}
+
+void RosegardenGUIApp::slotToggleTempoRuler()
+{
+    m_view->slotShowTempoRuler(m_viewTempoRuler->isChecked());
 }
 
 void RosegardenGUIApp::slotTogglePreviews()

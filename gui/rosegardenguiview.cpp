@@ -49,6 +49,7 @@
 #include "trackbuttons.h"
 #include "barbuttons.h"
 #include "loopruler.h"
+#include "temporuler.h"
 #include "RulerScale.h"
 #include "Instrument.h"
 #include "Selection.h"
@@ -376,6 +377,10 @@ void RosegardenGUIView::setZoomSize(double size)
 
     m_trackEditor->getSegmentCanvas()->slotUpdate();
 
+    if (m_trackEditor->getTempoRuler()) {
+	m_trackEditor->getTempoRuler()->repaint();
+    }
+
     if (m_trackEditor->getTopBarButtons()) {
 	m_trackEditor->getTopBarButtons()->repaint();
     }
@@ -591,6 +596,15 @@ void RosegardenGUIView::slotShowRulers(bool v)
     } else {
         m_trackEditor->getTopBarButtons()->getLoopRuler()->hide();
         m_trackEditor->getBottomBarButtons()->getLoopRuler()->hide();
+    }
+}
+
+void RosegardenGUIView::slotShowTempoRuler(bool v)
+{
+    if (v) {
+        m_trackEditor->getTempoRuler()->show();
+    } else {
+        m_trackEditor->getTempoRuler()->hide();
     }
 }
 

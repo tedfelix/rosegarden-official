@@ -42,6 +42,7 @@ class SegmentItem;
 class SegmentCanvas;
 class RosegardenGUIDoc;
 class BarButtons;
+class TempoRuler;
 class TrackButtons;
 class MultiViewCommandHistory;
 class KCommand;
@@ -74,6 +75,7 @@ public:
     ~TrackEditor();
 
     SegmentCanvas* getSegmentCanvas()       { return m_segmentCanvas; }
+    TempoRuler*    getTempoRuler()          { return m_tempoRuler; }
     BarButtons*    getTopBarButtons()       { return m_topBarButtons; }
     BarButtons*    getBottomBarButtons()    { return m_bottomBarButtons; }
     TrackButtons*  getTrackButtons()        { return m_trackButtons; }
@@ -191,6 +193,7 @@ protected:
 
     RosegardenGUIDoc        *m_document;
     Rosegarden::RulerScale  *m_rulerScale;
+    TempoRuler              *m_tempoRuler;
     BarButtons              *m_topBarButtons;
     BarButtons              *m_bottomBarButtons;
     TrackButtons            *m_trackButtons;

@@ -37,6 +37,7 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
 		       Composition *composition,
 		       double xorigin,
 		       int height,
+		       bool small,
 		       QWidget *parent,
 		       const char *name) :
     QWidget(parent, name),
@@ -44,12 +45,13 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
     m_height(height),
     m_currentXOffset(0),
     m_width(-1),
+    m_small(small),
     m_composition(composition),
     m_rulerScale(rulerScale),
     m_fontMetrics(m_boldFont)
 {
-    m_font.setPointSize(11);
-    m_boldFont.setPointSize(11);
+    m_font.setPointSize(m_small ? 8 : 11);
+    m_boldFont.setPointSize(m_small ? 8 : 11);
     m_boldFont.setBold(true);
     m_fontMetrics = QFontMetrics(m_boldFont);
 
@@ -169,9 +171,15 @@ TempoRuler::paintEvent(QPaintEvent* e)
 
 	    QString tempoString = QString("%1").arg(bpm);
 	    if (tempo == prevTempo) {
+		if (m_small) continue;
 		tempoString = "=";
 	    } else if (bpm == prevBpm) {
 		tempoString = (tempo > prevTempo ? "+" : "-");
+	    } else {
+		if (m_small && (bpm != (bpm / 10 * 10))) {
+		    if (bpm == prevBpm + 1) tempoString = "+";
+		    else if (bpm == prevBpm - 1) tempoString = "-";
+		}
 	    }
 	    prevTempo = tempo;
 	    prevBpm = bpm;
