@@ -34,7 +34,7 @@ namespace Rosegarden
  * non-Event data.
  * 
  * The Composition owns the Tracks it holds, and deletes them on
- * destruction.
+ * destruction. When tracks are removed, it will also delete them.
  */
 
 class Composition : public TrackObserver
@@ -56,15 +56,35 @@ public:
 
     trackcontainer& tracks() { return m_tracks; }
 
+    /**
+     * Add a new track and return an iterator pointing to it
+     * The inserted Track is owned by the Composition object
+     */
     iterator addTrack(Track*);
 
+    /**
+     * Delete the track pointed to by the specified iterator
+     *
+     * NOTE: The track is deleted from the composition and
+     * destroyed
+     */
     void deleteTrack(iterator);
+
+    /**
+     * Delete the track if it is part of the Composition
+     * \return true if the track was found and deleted
+     *
+     * NOTE: The track is deleted from the composition and
+     * destroyed
+     */
     bool deleteTrack(Track*);
 
     unsigned int getNbTracks() const { return m_tracks.size(); }
 
-    // returns the nb of time steps of the longest track
+    /// returns the nb of time steps of the longest track
     unsigned int getDuration() const;
+
+    /// Removes all Tracks from the Composition and destroys them
     void         clear();
 
     //!!! these should go, as the results they return are entirely
@@ -92,7 +112,10 @@ public:
     double getTempo() const { return m_tempo; }
     void setTempo(const double &tempo) { m_tempo = tempo; }
 
+    /// Get playback position
     const timeT& getPosition() { return m_position; }
+
+    /// Set playback position
     void setPosition(const timeT& position) { m_position = position; }
 
 

@@ -23,6 +23,9 @@
 
 namespace Rosegarden {
 
+/**
+ * Equation solving helper class
+ */
 class Equation
 {
 public:
