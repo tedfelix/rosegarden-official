@@ -48,6 +48,20 @@ Studio::Studio():
 
 Studio::~Studio()
 {
+    DeviceListIterator dIt = m_devices.begin();
+
+    for (; dIt != m_devices.end(); ++dIt)
+        delete(*dIt);
+
+    m_devices.clear();
+
+    ControlListIterator it = m_controls.begin();
+
+    for (; it != m_controls.end(); ++it)
+        delete (*it);
+
+    m_controls.clear();
+
 }
 
 void
@@ -602,7 +616,7 @@ Studio::addControlParameter(ControlParameter *con, int id)
     // add new controller in at a position
     for (unsigned int i = 0; i != m_controls.size(); ++i)
     {
-        if (id == i) controls.push_back(con);
+        if (((unsigned int)id) == i) controls.push_back(con);
         controls.push_back(m_controls[i]);
     }
 
@@ -637,7 +651,7 @@ Studio::removeControlParameter(int id)
 bool
 Studio::modifyControlParameter(ControlParameter *con, int id)
 {
-    if (id < 0 || id > m_controls.size()) return false;
+    if (id < 0 || ((unsigned int)id) > m_controls.size()) return false;
 
     delete m_controls[id];
     m_controls[id] = con;

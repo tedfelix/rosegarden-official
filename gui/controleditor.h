@@ -29,6 +29,8 @@
 #include <qpushbutton.h>
 
 class RosegardenGUIDoc;
+class KCommand;
+class MultiViewCommandHistory;
 
 namespace Rosegarden { class Studio; }
 
@@ -43,6 +45,12 @@ public:
     ~ControlEditorDialog();
 
     void initDialog();
+
+    void addCommandToHistory(KCommand *command);
+    MultiViewCommandHistory* getCommandHistory();
+
+    void setModified(bool value);
+    void checkModified();
 
 public slots:
     void slotApply();
@@ -70,6 +78,8 @@ protected:
     QPushButton             *m_deleteButton;
 
     KListView               *m_listView;
+
+    bool                     m_modified;
 };
 
 #endif // _CONTROLEDITOR_H_

@@ -29,12 +29,15 @@
 #include "controleditor.h"
 #include "rosegardenguidoc.h"
 #include "rosedebug.h"
+#include "rosestrings.h"
+#include "studiocommands.h"
 
 ControlEditorDialog::ControlEditorDialog(QWidget *parent,
                                          RosegardenGUIDoc *doc):
     KMainWindow(parent, "controleditordialog"),
     m_studio(&doc->getStudio()),
-    m_doc(doc)
+    m_doc(doc),
+    m_modified(false)
 {
     QVBox* mainFrame = new QVBox(this);
     setCentralWidget(mainFrame);
@@ -92,6 +95,8 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
             SLOT(slotReset()));
     setupActions();
 
+    m_listView->setAllColumnsShowFocus(true);
+
     initDialog();
 }
 
@@ -103,6 +108,24 @@ ControlEditorDialog::~ControlEditorDialog()
 void 
 ControlEditorDialog::initDialog()
 {
+    Rosegarden::ControlListConstIterator it = m_studio->beginControllers();
+    QListViewItem *item;
+
+    m_listView->clear();
+
+    for (; it != m_studio->endControllers(); ++it)
+    {
+        item = new QListViewItem(m_listView,
+                                 strtoqstr((*it)->getName()),
+                                 strtoqstr((*it)->getType()),
+                                 strtoqstr((*it)->getDescription()),
+                                 QString("%1").arg((*it)->getMin()),
+                                 QString("%1").arg((*it)->getMax()),
+                                 QString("%1").arg((*it)->getDefault()));
+
+        m_listView->insertItem(item);
+    }
+
 }
 
 void 
@@ -128,18 +151,21 @@ ControlEditorDialog::slotAdd()
 {
     RG_DEBUG << "ControlEditorDialog::slotAdd" << endl;
 
-    //if (!m_listView->currentItem())
-    /*
-    QListViewItem *item = new QListViewItem(m_listView,
-                                            "pan",
-                                            "0",
+    Rosegarden::ControlParameter *control = new Rosegarden::ControlParameter();
 
-                                            */
+    AddControlParameterCommand *command =
+        new AddControlParameterCommand(m_studio, control);
+
+    addCommandToHistory(command);
+
+    initDialog();
 }
 
 void
 ControlEditorDialog::slotDelete()
 {
+    if (!m_listView->currentItem()) return;
+
     RG_DEBUG << "ControlEditorDialog::slotDelete" << endl;
 }
 
@@ -174,5 +200,42 @@ ControlEditorDialog::setupActions()
                             KStdAction::stdName(KStdAction::Redo));
 
     createGUI("controleditor.rc");
+}
+
+void 
+ControlEditorDialog::addCommandToHistory(KCommand *command)
+{
+    getCommandHistory()->addCommand(command);
+    setModified(false);
+}
+
+MultiViewCommandHistory* 
+ControlEditorDialog::getCommandHistory()
+{
+    return m_doc->getCommandHistory();
+}
+
+
+void
+ControlEditorDialog::setModified(bool modified)
+{
+    RG_DEBUG << "ControlEditorDialog::setModified(" << modified << ")" << endl;
+
+    if (modified)
+    {
+    }
+    else
+    {
+    }
+
+    m_modified = modified;
+}
+
+void
+ControlEditorDialog::checkModified()
+{
+    RG_DEBUG << "ControlEditorDialog::checkModified(" << m_modified << ")" 
+             << endl;
+
 }
 

@@ -33,15 +33,7 @@ namespace Rosegarden
 class ControlParameter : public XmlExportable
 {
 public:
-    ControlParameter():
-        m_name("<unnamed control paramter>"),
-        m_type("<unknown>"),
-        m_description("<no description>"),
-        m_min(0),
-        m_max(127),
-        m_default(0),
-        m_controllerValue(0) { }
-
+    ControlParameter();
     ControlParameter(const std::string &name,
                      const std::string &type,
                      const std::string &description,
