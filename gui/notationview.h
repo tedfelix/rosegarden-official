@@ -75,8 +75,14 @@ public:
 
     void push_back(Rosegarden::Event* e) { m_trackEvents.push_back(e); }
 
+    //!!! This would be nicer if eventcontainer were a multiset or
+    // something; I'm not quite sure why it isn't
+    bool contains(Rosegarden::Event *e) const;
+
     Rosegarden::timeT getBeginTime() const { return m_beginTime; }
     Rosegarden::timeT getEndTime()   const { return m_endTime; }
+
+    const Rosegarden::Track &getTrack() const { return m_originalTrack; }
     
 protected:
 

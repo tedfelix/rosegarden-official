@@ -38,6 +38,12 @@
 
 #include "notefont.h"
 
+
+#include <iostream>
+using std::cerr;
+using std::endl;
+
+
 using Rosegarden::Note;
 using Rosegarden::Clef;
 using Rosegarden::Key;
@@ -590,6 +596,8 @@ NotePixmapFactory::drawBeams(const QPoint &s1,
     double grad = params.m_gradient;
 
     bool smooth = m_font->getNoteFontMap().isSmooth();
+
+cerr << "Smooth is " << smooth << endl;
 
     int gap = thickness - 1;
     if (gap < 1) gap = 1;

@@ -120,6 +120,7 @@ public:
 		      bool positionOnly = false);
 
     bool showSelection(const EventSelection *selection);
+    bool clearSelection();
 
 
     /**
@@ -151,6 +152,12 @@ public:
     static const int linesOffset;    // from top of canvas to top line (bad!)
 
 protected:
+
+    enum RefreshType { FullRefresh, PositionRefresh, SelectionRefresh };
+    bool showElements(NotationElementList::iterator from,
+		      NotationElementList::iterator to,
+		      RefreshType, const EventSelection *selection = 0);
+
     /**
      * Return a QCanvasSimpleSprite representing the NotationElement
      * pointed to by the given iterator
@@ -169,6 +176,8 @@ protected:
     QCanvasLineGroupable *m_initialBarA, *m_initialBarB;
     NotePixmapFactory *m_npf;
     Rosegarden::Quantizer m_quantizer;
+
+    bool m_haveSelection;
 };
 
 #endif

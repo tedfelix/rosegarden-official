@@ -26,6 +26,7 @@
 #include "qcanvasspritegroupable.h"
 #include "qcanvassimplesprite.h"
 #include "notationproperties.h"
+#include "notationview.h" // for EventSelection
 
 #include "rosedebug.h"
 
@@ -57,8 +58,7 @@ using std::string;
 
 NotationStaff::NotationStaff(QCanvas *canvas, Track *track,
                              unsigned int id,
-                             string fontName, int resolution)
-    :
+                             string fontName, int resolution) :
     Rosegarden::Staff<NotationElement>(*track),
     QCanvasItemGroup(canvas),
     m_id(id),
@@ -66,7 +66,8 @@ NotationStaff::NotationStaff(QCanvas *canvas, Track *track,
     m_horizLineLength(0),
     m_initialBarA(0),
     m_initialBarB(0),
-    m_npf(0)
+    m_npf(0),
+    m_haveSelection(false)
 {
     setQuantizationDuration(Note(Note::Shortest).getDuration());
     int w = canvas->width();
@@ -272,6 +273,14 @@ bool NotationStaff::showElements(NotationElementList::iterator from,
 				 NotationElementList::iterator to,
 				 bool positionOnly)
 {
+    return showElements(from, to, positionOnly ? PositionRefresh : FullRefresh);
+}
+
+bool NotationStaff::showElements(NotationElementList::iterator from,
+				 NotationElementList::iterator to,
+				 RefreshType refresh,
+				 const EventSelection *selection)
+{
     kdDebug(KDEBUG_AREA) << "NotationStaff::showElements()" << endl;
 
     START_TIMING;
@@ -281,35 +290,71 @@ bool NotationStaff::showElements(NotationElementList::iterator from,
 
     for (NotationElementList::iterator it = from; it != end; ++it) {
 
-        if (positionOnly && (*it)->canvasItem()) {
+	bool needNewSprite = true;
+	bool needBlueSprite = false;
 
-            // We can't only reposition if the event is a beamed or
-            // tied-forward note, because changing the position
-            // normally requires changing the beam or tie's length
-            // and/or angle as well
+	switch (refresh) {
 
-            if ((*it)->isNote()) {
+	case FullRefresh:
+	    break;
+
+	case PositionRefresh: 
+	    if ((*it)->canvasItem()) {
+
+		// We can't only reposition if the event is a beamed
+		// or tied-forward note, because changing the position
+		// normally requires changing the beam or tie's length
+		// and/or angle as well
+
+		if ((*it)->isNote()) {
                 
-                bool ouch = false;
-                (void)((*it)->event()->get<Bool>(BEAMED, ouch));
-                if (!ouch) (void)((*it)->event()->get<Bool>
-                                  (Note::TiedForwardPropertyName, ouch));
+		    bool spanning = false;
+		    (void)((*it)->event()->get<Bool>(BEAMED, spanning));
+		    if (!spanning)
+			(void)((*it)->event()->get<Bool>
+			       (Note::TiedForwardPropertyName, spanning));
+		    if (!spanning) needNewSprite = false;
 
-                if (!ouch) {
-                    (*it)->reposition(x(), y());
-                    continue;
-                }
-            } else {
-                (*it)->reposition(x(), y());
-                continue;
-            }
+		} else {
+		    needNewSprite = false;
+		}
+	    }
+	    break;
 
-            // beamed note or something without a pixmap -- fall through
+	case SelectionRefresh:
+	    if ((*it)->canvasItem()) {
+
+		bool selected = false;
+		(void)((*it)->event()->get<Bool>(SELECTED, selected));
+
+		bool inNewSelection =
+		    selection && selection->contains((*it)->event());
+
+		if (selected != inNewSelection) {
+		    needNewSprite = true;
+		    if (inNewSelection) {
+			(*it)->event()->set<Bool>(SELECTED, true);
+		    } else {
+			(*it)->event()->unset(SELECTED);
+		    }
+		}			
+
+		if (inNewSelection) needBlueSprite = true;
+	    }
+	    break;
         }
 
-        //
-        // process event
-        //
+	if (!needNewSprite) {
+	    (*it)->reposition(x(), y());
+	    continue;
+	}
+
+	if (needBlueSprite) {
+	    m_npf->setSelected(true);
+	} else {
+	    m_npf->setSelected(false);
+	}
+
         try {
 
             QCanvasPixmap *pixmap;
@@ -373,7 +418,9 @@ bool NotationStaff::showElements(NotationElementList::iterator from,
                                  << endl;
         }
 
-        if (it == to) positionOnly = true; // from now on
+        if (it == to && refresh == FullRefresh) {
+	    refresh = PositionRefresh; // from now on
+	}
     }
 
     kdDebug(KDEBUG_AREA) << "NotationStaff::showElements() exiting" << endl;
@@ -479,4 +526,29 @@ QCanvasSimpleSprite *NotationStaff::makeNoteSprite(NotationElementList::iterator
     return new QCanvasNotationSprite(*(*it),
                                      new QCanvasPixmap(notePixmap), canvas());
 }
+
+bool NotationStaff::clearSelection()
+{
+    if (m_haveSelection) {
+	NotationElementList *notes = getViewElementList();
+	bool shown = showElements(notes->begin(), notes->end(),
+				  SelectionRefresh, 0);
+	m_haveSelection = false;
+	return shown;
+    } else return true;
+}
+
+bool NotationStaff::showSelection(const EventSelection *selection)
+{
+    const Track *track = &(selection->getTrack());
+    if (track != &getTrack()) return;
+
+    NotationElementList *notes = getViewElementList();
+    bool shown = showElements(notes->begin(), notes->end(), SelectionRefresh,
+			      selection);
+
+    if (shown) m_haveSelection = true;
+    return shown;
+}
+
 

@@ -41,7 +41,8 @@ using std::endl;
 NoteFontMap::NoteFontMap(string name) :
     m_name(name),
     m_characterDestination(0),
-    m_hotspotCharName("")
+    m_hotspotCharName(""),
+    m_smooth(false)
 {
     m_fontDirectory = KGlobal::dirs()->findResource("appdata", "pixmaps/");
 

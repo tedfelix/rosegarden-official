@@ -47,6 +47,7 @@ extern const Rosegarden::PropertyName NOTE_HEAD_SHIFTED;
 extern const Rosegarden::PropertyName NEEDS_EXTRA_SHIFT_SPACE;
 extern const Rosegarden::PropertyName NOTE_NAME;
 extern const Rosegarden::PropertyName TIE_LENGTH;
+extern const Rosegarden::PropertyName SELECTED;
 
 // Set in applyBeam in notationsets.cpp:
 

@@ -88,6 +88,15 @@ EventSelection::~EventSelection()
     }
 }
 
+bool EventSelection::contains(Event *e) const
+{
+    for (eventcontainer::iterator i = m_trackEvents.begin(); 
+	 i != m_trackEvents.end(); ++i) {
+	if ((*i) == e) return true;
+    }
+    return false;
+}
+
 void EventSelection::cut()
 {
     if (!m_trackEvents.size()) return;
@@ -821,6 +830,10 @@ void NotationView::setCurrentSelection(EventSelection* s)
 {
     delete m_currentEventSelection;
     m_currentEventSelection = s;
+
+    //!!! TODO: get the right staff
+    getStaff(0)->showSelection(s);
+    canvas()->update();
 }
 
 void NotationView::setTool(NotationTool* tool)
@@ -1709,7 +1722,7 @@ EventSelection* NotationSelector::getSelection()
 {
     if (!m_selectionRect->visible()) return 0;
 
-    // TODO: get the right track
+    //!!! TODO: get the right track
     Track& originalTrack = m_parentView.getStaff(0)->getTrack();
     
     EventSelection* selection = new EventSelection(originalTrack);

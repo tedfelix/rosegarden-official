@@ -48,7 +48,7 @@ Quantizer::quantizeByUnit(Event *e) const
 timeT
 Quantizer::quantizeByUnit(timeT duration) const
 {
-    std::cerr << "Quantizer(" << m_unit << ")::quantizeByUnit: duration from " << duration;
+//    std::cerr << "Quantizer(" << m_unit << ")::quantizeByUnit: duration from " << duration;
     if (duration != 0) {
         timeT low = (duration / m_unit) * m_unit;
         timeT high = low + m_unit;
@@ -56,7 +56,7 @@ Quantizer::quantizeByUnit(timeT duration) const
         else duration = high;
     }
     
-    std::cerr << " to " << duration << endl;
+//    std::cerr << " to " << duration << endl;
     return duration;
 }
 

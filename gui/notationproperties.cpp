@@ -36,6 +36,7 @@ const Rosegarden::PropertyName NOTE_HEAD_SHIFTED    = "NoteHeadShifted";
 const Rosegarden::PropertyName NEEDS_EXTRA_SHIFT_SPACE = "NeedsExtraShiftSpace";
 const Rosegarden::PropertyName NOTE_NAME            = "NoteName";
 const Rosegarden::PropertyName TIE_LENGTH           = "TieLength";
+const Rosegarden::PropertyName SELECTED		    = "Selected";
 
 const Rosegarden::PropertyName BEAMED               = "Beamed";
 const Rosegarden::PropertyName BEAM_PRIMARY_NOTE    = "BeamPrimaryNote";
