@@ -101,7 +101,7 @@ void KStartupLogo::mousePressEvent( QMouseEvent*)
 {
     // for the haters of raising startlogos
     if (m_readyToHide)
-        close();
+        hide(); // don't close, main() sets up a QTimer for that
 }
 
 KStartupLogo* KStartupLogo::getInstance()
@@ -115,7 +115,8 @@ KStartupLogo* KStartupLogo::getInstance()
 
 void KStartupLogo::hideIfStillThere()
 {
-    if (m_instance) m_instance->close();
+    if (m_instance) m_instance->hide();
+    // don't close, main() sets up a QTimer for that
 }
 
 
