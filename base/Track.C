@@ -21,7 +21,14 @@
 
 #include "Track.h"
 
-Track::Track()
+namespace Rosegarden
+{
+
+Track::Track():
+   m_number(0),
+   m_muted(false),
+   m_type(midi),
+   m_name("untitled")
 {
 }
 
@@ -29,4 +36,7 @@ Track::Track()
 Track::~Track()
 {
 }
+
+}
+
 

@@ -22,15 +22,45 @@
 #ifndef _INSTRUMENT_H_
 #define _INSTRUMENT_H_
 
-class Instrument
+#include <string>
+
+// An Instrument connects a Track (containing or comparable to
+// a list of Segments) to a device that can play that Track.
+//
+//
+
+namespace Rosegarden
 {
 
+class Instrument
+{
 public:
+    enum InstrumentType { midi, audio };
+
     Instrument();
     ~Instrument();
 
+    string getName() { return m_name; }
+    InstrumentType getInstrumentType() { return m_type; }
+    int getNumber() { return m_number; }
+
+    int getMidiChannel() { return m_midiChannel; }
+    int getMidiTranspose() { return m_midiTranspose; }
+
+    void setMidiChannel(const int &mC) { m_midiChannel = mC; }
+    void setMidiTranspose(const int &mT) { m_midiTranspose = mT; }
+
 private:
 
+    int m_number;
+    string m_name;
+    InstrumentType m_type;
+    
+    int m_midiChannel;
+    int m_midiTranspose;
+
 };
+
+}
 
 #endif // _INSTRUMENT_H_

@@ -21,13 +21,19 @@
 
 #include "Instrument.h"
 
-Instrument::Instrument()
+namespace Rosegarden
+{
+
+Instrument::Instrument():
+    m_number(0),
+    m_name("untitled"),
+    m_type(midi)
 {
 }
 
-
-
 Instrument::~Instrument()
 {
+}
+
 }
 

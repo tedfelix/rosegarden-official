@@ -27,18 +27,41 @@
 #ifndef _TRACK_H_
 #define _TRACK_H_
 
+#include <string>
+
+// A Track contains information pertaining to a graphical
+// track on the sequencer.  This class is basically an
+// abstract concept (not an abstract class) which has no
+// dependency upon a specific system or sound hardware.
+//
+//
+
+namespace Rosegarden
+{
+
 class Track
 {
 
 public:
+    enum TrackType { midi, audio };
+
     Track();
     ~Track();
 
+    bool isMuted() { return m_muted; }
+    bool getNumber() { return m_number; }
+    
+
 private:
 
+    int  m_number;
     bool m_muted;
+    TrackType m_type;
+    string m_name;
 
 };
 
-#endif // _TRACK_H_
+}
 
+#endif // _TRACK_H_
+ 
