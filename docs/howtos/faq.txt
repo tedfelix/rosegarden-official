@@ -37,6 +37,25 @@ rename admin_kde3 to admin before running "make -f Makefile.cvs" --
 just as in the KDE2 instructions in the INSTALL only in reverse.
 
 
+macro `AM_PATH_ALSA' not found in library
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This can happen only when building from CVS. It means you're missing
+the 'alsa.m4' file (usually in /usr/share/aclocal) which is normally
+part of libalsa (look for a libalsa2-devel package for your
+distribution). This causes the 'configure' file to be misconstructed
+because the 'aclocal.m4' file won't be properly generated.
+
+If you can't install libalsa, you can still compile Rosegarden by
+pre-building the aclocal.m4 file yourself, like this :
+
+aclocal.m4 -I .
+
+(that's what the c_include_me_if_no_alsa.m4 file is for.)
+
+Then restart make -f Makefile.cvs. You will still see the error
+message, but the 'configure' file will be properly generated.
+
 arts/artsmidi.idl not found
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
