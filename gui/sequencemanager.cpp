@@ -1515,6 +1515,18 @@ void SequenceManager::soloChanged(const Composition *, bool solo, TrackId select
     m_controlBlockMmapper->updateSoloData(solo, selectedTrack);
 }
 
+void SequenceManager::tempoChanged(const Composition *)
+{
+    SEQMAN_DEBUG << "SequenceManager::tempoChanged()\n";
+
+    // Refresh all segments
+    //
+    for (SegmentRefreshMap::iterator i = m_segments.begin();
+	 i != m_segments.end(); ++i) {
+        segmentModified(i->first);
+    }
+}
+
 void
 SequenceManager::sendTransportControlStatuses()
 {

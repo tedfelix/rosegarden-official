@@ -742,6 +742,7 @@ protected:
     void notifyTrackChanged(Track*) const;
     void notifyMetronomeChanged() const;
     void notifySoloChanged() const;
+    void notifyTempoChanged() const;
     void notifySourceDeletion() const;
 
     BasicQuantizer                   *m_basicQuantizer;
@@ -819,6 +820,11 @@ public:
      * Called when solo status changes (solo on/off, and selected track)
      */
     virtual void soloChanged(const Composition *, bool solo, TrackId selectedTrack) = 0;
+
+    /**
+     * Called when solo status changes (solo on/off, and selected track)
+     */
+    virtual void tempoChanged(const Composition *) = 0;
     
     /**
      * Called from the composition dtor

@@ -694,6 +694,7 @@ Composition::addTempo(timeT time, double tempo)
 #ifdef DEBUG_TEMPO_STUFF
     cerr << "Composition: Added tempo " << tempo << " at " << time << endl;
 #endif
+    notifyTempoChanged();
 
     return std::distance(m_tempoSegment.begin(), i);
 }
@@ -712,6 +713,7 @@ Composition::addRawTempo(timeT time, int tempo)
 #ifdef DEBUG_TEMPO_STUFF
     cerr << "Composition: Added tempo " << tempo << " at " << time << endl;
 #endif
+    notifyTempoChanged();
 
     return std::distance(m_tempoSegment.begin(), i);
 }
@@ -1305,6 +1307,15 @@ Composition::notifySoloChanged() const
     for (ObserverSet::const_iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
 	(*i)->soloChanged(this, isSolo(), getSelectedTrack());
+    }
+}
+
+void
+Composition::notifyTempoChanged() const
+{
+    for (ObserverSet::const_iterator i = m_observers.begin();
+	 i != m_observers.end(); ++i) {
+	(*i)->tempoChanged(this);
     }
 }
 
