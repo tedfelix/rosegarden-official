@@ -85,8 +85,8 @@ public:
     };
 
     const SnapGrid& grid() const { return m_grid; }
-    const QBrush& brush() const { return *m_brush; }
-    const QPen& pen() const { return *m_pen; }
+    const QBrush& brush()  const { return m_brush; }
+    const QPen& pen()      const { return m_pen; }
 
     TrackPartItem* addPartItem(int x, int y, unsigned int nbBars);
     TrackPartItem* findPartClickedOn(QPoint);
@@ -125,8 +125,8 @@ private:
 
     QCanvasItem* m_moving;
 
-    QBrush *m_brush;
-    QPen *m_pen;
+    QBrush m_brush;
+    QPen m_pen;
 
     QPopupMenu *m_editMenu;
     
@@ -144,6 +144,9 @@ public:
 
     unsigned int length() const { return m_length; }
 
+    void setStartTime(unsigned int start);
+    unsigned int getStartTime() const;
+
     TrackPartItem* canvasPartItem() { return m_canvasPartItem; }
 
     void updateLength();
@@ -153,6 +156,9 @@ protected:
     int m_trackNb;
     /// Part length
     unsigned int m_length;
+
+    /// start time - not used yet
+    unsigned int m_startTime;
 
     /// the rect. width / track length ratio
     unsigned int m_widthToLengthRatio;
@@ -171,7 +177,8 @@ public:
     virtual void handleMouseMove(QMouseEvent*) = 0;
 
 protected:
-    TracksCanvas *m_canvas;
+    TracksCanvas*  m_canvas;
+    TrackPartItem* m_currentItem;
 };
 
 class TrackPencil : public TrackTool
@@ -188,7 +195,6 @@ signals:
     void addTrackPart(TrackPart*);
 
 protected:
-    TrackPartItem* m_currentItem;
     bool m_newRect;
 };
 

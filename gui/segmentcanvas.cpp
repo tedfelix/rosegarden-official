@@ -27,6 +27,9 @@
 
 #include "rosedebug.h"
 
+//////////////////////////////////////////////////////////////////////
+//                TrackPartItem
+//////////////////////////////////////////////////////////////////////
 
 TrackPartItem::TrackPartItem(QCanvas* canvas)
     : QCanvasRectangle(canvas),
@@ -48,22 +51,27 @@ TrackPartItem::TrackPartItem(int x, int y,
 {
 }
 
-
+//////////////////////////////////////////////////////////////////////
+//                TrackPart
+//////////////////////////////////////////////////////////////////////
 
 
 TrackPart::TrackPart(TrackPartItem *r, unsigned int widthToLengthRatio)
     : m_trackNb(0),
       m_length(0),
+      m_startTime(0),
       m_widthToLengthRatio(widthToLengthRatio),
       m_canvasPartItem(r)
 {
     if (m_canvasPartItem) {
         m_length = m_canvasPartItem->width() / m_widthToLengthRatio;
+        m_startTime = m_canvasPartItem->x() /  m_widthToLengthRatio;
         m_canvasPartItem->setPart(this);
     }
 
     kdDebug(KDEBUG_AREA) << "TrackPart::TrackPart : Length = "
-                         << m_length << endl;
+                         << m_length << ", start Time : " << m_startTime
+                         << endl;
 
 }
 
@@ -72,14 +80,28 @@ TrackPart::~TrackPart()
     delete m_canvasPartItem;
 }
 
-void
-TrackPart::updateLength()
+void TrackPart::updateLength()
 {
     m_length = m_canvasPartItem->width() / m_widthToLengthRatio;
     kdDebug(KDEBUG_AREA) << "TrackPart::updateLength : Length = "
                          << m_length << endl;
 }
 
+void TrackPart::setStartTime(unsigned int start)
+{
+    // TODO : more to do ?
+    m_startTime = start;
+}
+
+unsigned int TrackPart::getStartTime() const
+{
+    return m_startTime;
+}
+
+
+//////////////////////////////////////////////////////////////////////
+//                TracksCanvas
+//////////////////////////////////////////////////////////////////////
 
 
 TracksCanvas::TracksCanvas(int gridH, int gridV,
@@ -89,8 +111,8 @@ TracksCanvas::TracksCanvas(int gridH, int gridV,
     m_toolType(Pencil),
     m_tool(new TrackPencil(this)),
     m_grid(gridH, gridV),
-    m_brush(new QBrush(Qt::blue)),
-    m_pen(new QPen(Qt::black)),
+    m_brush(Qt::blue),
+    m_pen(Qt::black),
     m_editMenu(new QPopupMenu(this))
 {
     m_editMenu->insertItem(I18N_NOOP("Edit"),
@@ -101,8 +123,6 @@ TracksCanvas::TracksCanvas(int gridH, int gridV,
 
 TracksCanvas::~TracksCanvas()
 {
-    delete m_brush;
-    delete m_pen;
 }
 
 void
@@ -207,8 +227,8 @@ TracksCanvas::addPartItem(int x, int y, unsigned int nbBars)
                                                    gridHStep() * nbBars,
                                                    grid().vstep(),
                                                    canvas());
-    newPartItem->setPen(*m_pen);
-    newPartItem->setBrush(*m_brush);
+    newPartItem->setPen(m_pen);
+    newPartItem->setBrush(m_brush);
     newPartItem->setVisible(true);     
 
     return newPartItem;
@@ -232,7 +252,8 @@ TracksCanvas::onEditSmall()
 //////////////////////////////////////////////////////////////////////
 
 TrackTool::TrackTool(TracksCanvas* canvas)
-    : m_canvas(canvas)
+    : m_canvas(canvas),
+      m_currentItem(0)
 {
 }
 
@@ -246,7 +267,6 @@ TrackTool::~TrackTool()
 
 TrackPencil::TrackPencil(TracksCanvas *c)
     : TrackTool(c),
-      m_currentItem(0),
       m_newRect(false)
 {
     connect(this, SIGNAL(addTrackPart(TrackPart*)),
@@ -323,12 +343,6 @@ void TrackPencil::handleMouseMove(QMouseEvent *e)
 {
     if ( m_currentItem ) {
 
-        //         qDebug("Enlarging rect. to h = %d, v = %d",
-        //                gpos.x() - m_currentItem->rect().x(),
-        //                gpos.y() - m_currentItem->rect().y());
-
-        kdDebug(KDEBUG_AREA) << "TracksPencil::handleMouseMove() : changing current Item size\n";
-
 	m_currentItem->setSize(m_canvas->grid().snapX(e->pos().x()) - m_currentItem->rect().x(),
                                m_currentItem->rect().height());
 	m_canvas->canvas()->update();
@@ -367,15 +381,32 @@ TrackMover::TrackMover(TracksCanvas *c)
     kdDebug(KDEBUG_AREA) << "TrackMover()\n";
 }
 
-void TrackMover::handleMouseButtonPress(QMouseEvent*)
+void TrackMover::handleMouseButtonPress(QMouseEvent *e)
 {
+    TrackPartItem *item = m_canvas->findPartClickedOn(e->pos());
+
+    if (item) {
+        m_currentItem = item;
+        return;
+    }
 }
 
 void TrackMover::handleMouseButtonRelase(QMouseEvent*)
 {
+    if (m_currentItem) {
+        m_currentItem->part()->setStartTime(m_currentItem->x() / m_canvas->grid().hstep());
+        kdDebug(KDEBUG_AREA) << "TrackMover::handleMouseButtonRelase() : set part start time to "
+                             << m_currentItem->part()->getStartTime() << endl;
+    }
+
+    m_currentItem = 0;
 }
 
-void TrackMover::handleMouseMove(QMouseEvent*)
+void TrackMover::handleMouseMove(QMouseEvent *e)
 {
+    if (m_currentItem) {
+        m_currentItem->setX(m_canvas->grid().snapX(e->pos().x()));
+        m_canvas->canvas()->update();
+    }
 }
 
