@@ -120,9 +120,10 @@ public:
     int getMaxDots() const        { return m_maxDots; }
 
     /**
-     * Quantizes a section of a track.  Sets the DurationProperty on
-     * all events; does not change the event duration.  Sets the
-     * property even on zero-duration (non-note) events.
+     * Quantizes a section of a track.  Sets the DurationProperty and
+     * AbsoluteTimeProperty on all events; does not change the event
+     * duration.  Sets the property even on zero-duration (non-note)
+     * events.
      */
     void quantizeByUnit(Track::iterator from, Track::iterator to) const;
 
@@ -134,6 +135,15 @@ public:
      * the wrong value.)
      */
     timeT getUnitQuantizedDuration(Rosegarden::Event *el) const;
+
+    /**
+     * Returns the AbsoluteTimeProperty if it exists; otherwise quantizes
+     * the event by unit and then returns that property.  (If the event's
+     * absolute time has been changed since it was last quantized, or the
+     * last quantization used a different unit, this method may return
+     * the wrong value.)
+     */
+    timeT getUnitQuantizedAbsoluteTime(Rosegarden::Event *el) const;
 
     /**
      * Quantizes a section of a track.  Sets the DurationProperty,

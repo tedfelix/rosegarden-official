@@ -121,9 +121,16 @@ public:
      */
     virtual bool isBarLineCorrect(StaffType &staff, unsigned int barNo);
 
+    /**
+     * Returns a pointer to a time signature event if there is one in
+     * this bar, and if so also sets timeSigX to its x-coord
+     */
+    virtual Rosegarden::Event *getTimeSignatureInBar
+    (StaffType &staff, unsigned int barNo, int &timeSigX);
+
 protected:
     /**
-     * Inner class for bar data, used by preparse()
+     * Inner class for bar data, used by scanStaff()
      */
     struct BarData
     {
@@ -134,11 +141,15 @@ protected:
         int fixedWidth;       // minimum possible width of bar following barline
 	bool correct;         // bar preceding barline has correct duration
         bool needsLayout;
+	Rosegarden::Event *timeSignature; // or zero if no new one in this bar
+	int timeSigX;
         
         BarData(int ibarno, NotationElementList::iterator istart,
-                int ix, int iwidth, int fwidth, bool icorrect) :
+                int ix, int iwidth, int fwidth, bool icorrect,
+		Rosegarden::Event *timesig) :
             barNo(ibarno), start(istart), x(ix), idealWidth(iwidth),
-            fixedWidth(fwidth), correct(icorrect), needsLayout(true) { }
+            fixedWidth(fwidth), correct(icorrect), needsLayout(true),
+	    timeSignature(timesig), timeSigX(0) { }
     };
 
     typedef FastVector<BarData> BarDataList;
@@ -160,7 +171,7 @@ protected:
 
     void addNewBar
     (StaffType &staff, int barNo, NotationElementList::iterator start,
-     int width, int fwidth, bool correct);
+     int width, int fwidth, bool correct, Rosegarden::Event *timesig);
 
     int getIdealBarWidth
     (StaffType &staff, int fixedWidth, int baseWidth,

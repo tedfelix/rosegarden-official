@@ -211,9 +211,6 @@ NotationHLayout::scanStaff(StaffType &staff)
     Track::iterator refEnd = t.findBarAfter(t.getEndIndex());
     
     int barNo = 0;
-    addNewBar(staff, barNo, notes->begin(), 0, 0, true); 
-    ++barNo;
-
     kdDebug(KDEBUG_AREA) << "Quantizer: unit is " << getQuantizer(staff).getUnit() << endl;
 
     getQuantizer(staff).quantizeByNote(t.begin(), t.end());
@@ -247,6 +244,20 @@ NotationHLayout::scanStaff(StaffType &staff)
 
 	AccidentalTable accTable(key, clef), newAccTable(accTable);
 
+	Event *timeSigEvent = 0;
+
+	if ((*refi)->isa(TimeSignature::EventType)) {
+	    kdDebug(KDEBUG_AREA) << "Found timesig" << endl;
+	    timeSigEvent = *refi;
+	    timeSignature = TimeSignature(*timeSigEvent);
+	    fixedWidth += m_npf.getTimeSigWidth(timeSignature);
+	}
+
+	if (barNo == 0) {
+	    addNewBar(staff, barNo, notes->begin(), 0, 0, true, timeSigEvent); 
+	    ++barNo;
+	}
+
         for (NotationElementList::iterator it = from; it != to; ++it) {
         
             NotationElement *el = (*it);
@@ -273,13 +284,6 @@ NotationHLayout::scanStaff(StaffType &staff)
 
                 accTable = AccidentalTable(key, clef);
                 newAccTable = accTable;
-
-            } else if (el->event()->isa(TimeSignature::EventType)) {
-
-		kdDebug(KDEBUG_AREA) << "Found timesig" << endl;
-
-                fixedWidth += mw;
-                timeSignature = TimeSignature(*el->event());
 
             } else if (el->isNote() || el->isRest()) {
 
@@ -390,12 +394,13 @@ NotationHLayout::scanStaff(StaffType &staff)
 
             el->event()->setMaybe<Int>(MIN_WIDTH, mw);
         }
-        
+
         addNewBar(staff, barNo, to,
                   getIdealBarWidth(staff, fixedWidth, baseWidth, shortest, 
                                    shortCount, totalCount, timeSignature),
                   fixedWidth,
-                  apparentBarDuration == timeSignature.getBarDuration());
+                  apparentBarDuration == timeSignature.getBarDuration(),
+		  timeSigEvent);
 
 	++barNo;
     }
@@ -407,11 +412,9 @@ NotationHLayout::scanStaff(StaffType &staff)
 void
 NotationHLayout::addNewBar(StaffType &staff,
 			   int barNo, NotationElementList::iterator i,
-                           int width, int fwidth, bool correct)
+                           int width, int fwidth, bool correct, Event *timeSig)
 {
     BarDataList &bdl(m_barData[&staff]);
-//   m_barData[&staff].push_back
-//       (BarData(barNo, start, -1, width, fwidth, correct));
 
     int s = bdl.size() - 1;
     if (s >= 0) {
@@ -419,7 +422,7 @@ NotationHLayout::addNewBar(StaffType &staff,
         bdl[s].fixedWidth = fwidth;
     }
 
-    bdl.push_back(BarData(barNo, i, -1, 0, 0, correct));
+    bdl.push_back(BarData(barNo, i, -1, 0, 0, correct, timeSig));
 }
 
 
@@ -450,7 +453,7 @@ NotationHLayout::reconcileBars()
             if ((*j)->getAbsoluteTime() >= track.getStartIndex()) break;
             list.push_front
                 (BarData
-                 (-1, staff->getViewElementList()->end(), -1, 0, 0, true));
+                 (-1, staff->getViewElementList()->end(), -1, 0, 0, true, 0));
         }
     }
 
@@ -624,6 +627,12 @@ NotationHLayout::layout(BarDataMap::iterator i)
         x += getBarMargin();
 	barX += bdi->idealWidth;
 
+	bool timeSigToPlace = false;
+	if (bdi->timeSignature) {
+	    timeSignature = TimeSignature(*(bdi->timeSignature));
+	    timeSigToPlace = true;
+	}
+
         if (bdi->barNo < 0) { // fake bar
             kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): fake bar " << bdi->barNo << endl;
             continue;
@@ -644,39 +653,51 @@ NotationHLayout::layout(BarDataMap::iterator i)
             kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): setting element's x to " << x << endl;
 
             long delta = el->event()->get<Int>(MIN_WIDTH);
-
+/*!!!
             if (el->event()->isa(TimeSignature::EventType)) {
 
 		kdDebug(KDEBUG_AREA) << "Found timesig" << endl;
 
                 timeSignature = TimeSignature(*el->event());
 
-            } else if (el->event()->isa(Clef::EventType)) {
+		} else */
+	    if (el->event()->isa(Clef::EventType)) {
 
 		kdDebug(KDEBUG_AREA) << "Found clef" << endl;
 
                 clef = Clef(*el->event());
 
-            } else if (el->event()->isa(Key::EventType)) {
+            } else {
 
-		kdDebug(KDEBUG_AREA) << "Found key" << endl;
+		if (timeSigToPlace) {
+		    kdDebug(KDEBUG_AREA) << "Placing timesig at " << x << endl;
+		    bdi->timeSigX = x;
+		    x += m_npf.getTimeSigWidth(timeSignature);
+		    el->setLayoutX(x);
+		    timeSigToPlace = false;
+		}
 
-                key = Key(*el->event());
+		if (el->event()->isa(Key::EventType)) {
 
-            } else if (el->isRest()) {
+		    kdDebug(KDEBUG_AREA) << "Found key" << endl;
 
-                delta = positionRest(staff, it, bdi, timeSignature);
+		    key = Key(*el->event());
 
-            } else if (el->isNote()) {
+		} else if (el->isRest()) {
 
-                kdDebug(KDEBUG_AREA) << "delta (before) is " << delta << endl;
+		    delta = positionRest(staff, it, bdi, timeSignature);
 
-                delta = positionNote
-                    (staff, it, bdi, timeSignature, clef, key, tieMap,
-                     accidentalInThisChord);
+		} else if (el->isNote()) {
 
-                kdDebug(KDEBUG_AREA) << "delta (after) is " << delta << endl;
-            }
+		    kdDebug(KDEBUG_AREA) << "delta (before) is " << delta << endl;
+
+		    delta = positionNote
+			(staff, it, bdi, timeSignature, clef, key, tieMap,
+			 accidentalInThisChord);
+
+		    kdDebug(KDEBUG_AREA) << "delta (after) is " << delta << endl;
+		}
+	    }
 
             x += delta;
             kdDebug(KDEBUG_AREA) << "x = " << x << endl;
@@ -906,10 +927,6 @@ int NotationHLayout::getMinWidth(NotationElement &e) const
 
         w += m_npf.getKeyWidth(Key(*e.event()));
 
-    } else if (e.event()->isa(TimeSignature::EventType)) {
-
-        w += m_npf.getTimeSigWidth(TimeSignature(*e.event()));
-
     } else {
         kdDebug(KDEBUG_AREA) << "NotationHLayout::getMinWidth(): no case for event type " << e.event()->getType() << endl;
         w += 24;
@@ -972,6 +989,14 @@ bool
 NotationHLayout::isBarLineCorrect(StaffType &staff, unsigned int i)
 {
     return getBarData(staff)[i].correct;
+}
+
+Event *NotationHLayout::getTimeSignatureInBar(StaffType &staff,
+					      unsigned int i, int &timeSigX)
+{
+    BarData &bd(getBarData(staff)[i]);
+    timeSigX = bd.timeSigX;
+    return bd.timeSignature;
 }
 
 const Rosegarden::Quantizer &

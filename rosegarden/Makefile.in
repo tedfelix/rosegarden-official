@@ -224,7 +224,7 @@ config.h.in configure configure.in install-sh
 
 #>- DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 #>+ 4
-KDE_DIST=Doxyfile rcslog rb_configure cc_linux_configure Makefile.cvs cc_show_todo rg_smooth_score.png Makefile.dist cc_gcc3_configure configure.in.in gl_configure 8.xpm cc_bsd_configure 
+KDE_DIST=Doxyfile core rcslog rb_configure cc_linux_configure Makefile.cvs cc_show_todo rg_smooth_score.png Makefile.dist cc_gcc3_configure configure.in.in gl_configure 8.xpm cc_bsd_configure 
 
 DISTFILES= $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST) $(KDE_DIST)
 

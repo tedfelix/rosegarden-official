@@ -11,8 +11,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>287</width>
-            <height>149</height>
+            <width>399</width>
+            <height>106</height>
         </rect>
     </property>
     <property stdset="1">
@@ -30,8 +30,8 @@
             <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>285</width>
-                <height>145</height>
+                <width>400</width>
+                <height>107</height>
             </rect>
         </property>
         <property stdset="1">
@@ -53,8 +53,8 @@
                 <rect>
                     <x>5</x>
                     <y>5</y>
-                    <width>275</width>
-                    <height>135</height>
+                    <width>390</width>
+                    <height>97</height>
                 </rect>
             </property>
             <property stdset="1">
@@ -66,31 +66,308 @@
                 <enum>Raised</enum>
             </property>
             <widget>
-                <class>QPushButton</class>
+                <class>QFrame</class>
                 <property stdset="1">
                     <name>name</name>
-                    <cstring>StopButton</cstring>
+                    <cstring>LCDBoxFrame</cstring>
                 </property>
                 <property stdset="1">
                     <name>geometry</name>
                     <rect>
-                        <x>50</x>
-                        <y>50</y>
-                        <width>45</width>
-                        <height>40</height>
+                        <x>5</x>
+                        <y>5</y>
+                        <width>208</width>
+                        <height>44</height>
                     </rect>
                 </property>
                 <property stdset="1">
-                    <name>text</name>
-                    <string></string>
+                    <name>frameShape</name>
+                    <enum>StyledPanel</enum>
                 </property>
                 <property stdset="1">
-                    <name>pixmap</name>
-                    <pixmap>image0</pixmap>
+                    <name>frameShadow</name>
+                    <enum>Raised</enum>
                 </property>
-                <property>
-                    <name>toolTip</name>
-                </property>
+                <widget>
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TenHoursPixmap</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>geometry</name>
+                        <rect>
+                            <x>8</x>
+                            <y>5</y>
+                            <width>20</width>
+                            <height>34</height>
+                        </rect>
+                    </property>
+                    <property stdset="1">
+                        <name>pixmap</name>
+                        <pixmap>image0</pixmap>
+                    </property>
+                    <property stdset="1">
+                        <name>scaledContents</name>
+                        <bool>true</bool>
+                    </property>
+                    <property>
+                        <name>buddy</name>
+                        <cstring></cstring>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>UnitHoursPixmap</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>geometry</name>
+                        <rect>
+                            <x>28</x>
+                            <y>5</y>
+                            <width>20</width>
+                            <height>34</height>
+                        </rect>
+                    </property>
+                    <property stdset="1">
+                        <name>pixmap</name>
+                        <pixmap>image0</pixmap>
+                    </property>
+                    <property stdset="1">
+                        <name>scaledContents</name>
+                        <bool>true</bool>
+                    </property>
+                    <property>
+                        <name>buddy</name>
+                        <cstring></cstring>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TenMinutesPixmap</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>geometry</name>
+                        <rect>
+                            <x>53</x>
+                            <y>5</y>
+                            <width>20</width>
+                            <height>34</height>
+                        </rect>
+                    </property>
+                    <property stdset="1">
+                        <name>pixmap</name>
+                        <pixmap>image0</pixmap>
+                    </property>
+                    <property stdset="1">
+                        <name>scaledContents</name>
+                        <bool>true</bool>
+                    </property>
+                    <property>
+                        <name>buddy</name>
+                        <cstring></cstring>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>UnitMinutesPixmap</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>geometry</name>
+                        <rect>
+                            <x>73</x>
+                            <y>5</y>
+                            <width>20</width>
+                            <height>34</height>
+                        </rect>
+                    </property>
+                    <property stdset="1">
+                        <name>pixmap</name>
+                        <pixmap>image0</pixmap>
+                    </property>
+                    <property stdset="1">
+                        <name>scaledContents</name>
+                        <bool>true</bool>
+                    </property>
+                    <property>
+                        <name>buddy</name>
+                        <cstring></cstring>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TenSecondsPixmap</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>geometry</name>
+                        <rect>
+                            <x>98</x>
+                            <y>5</y>
+                            <width>20</width>
+                            <height>34</height>
+                        </rect>
+                    </property>
+                    <property stdset="1">
+                        <name>pixmap</name>
+                        <pixmap>image0</pixmap>
+                    </property>
+                    <property stdset="1">
+                        <name>scaledContents</name>
+                        <bool>true</bool>
+                    </property>
+                    <property>
+                        <name>buddy</name>
+                        <cstring></cstring>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>UnitSecondsPixmap</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>geometry</name>
+                        <rect>
+                            <x>118</x>
+                            <y>5</y>
+                            <width>20</width>
+                            <height>34</height>
+                        </rect>
+                    </property>
+                    <property stdset="1">
+                        <name>pixmap</name>
+                        <pixmap>image0</pixmap>
+                    </property>
+                    <property stdset="1">
+                        <name>scaledContents</name>
+                        <bool>true</bool>
+                    </property>
+                    <property>
+                        <name>buddy</name>
+                        <cstring></cstring>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TenthsPixmap</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>geometry</name>
+                        <rect>
+                            <x>144</x>
+                            <y>15</y>
+                            <width>14</width>
+                            <height>24</height>
+                        </rect>
+                    </property>
+                    <property stdset="1">
+                        <name>pixmap</name>
+                        <pixmap>image0</pixmap>
+                    </property>
+                    <property stdset="1">
+                        <name>scaledContents</name>
+                        <bool>true</bool>
+                    </property>
+                    <property>
+                        <name>buddy</name>
+                        <cstring></cstring>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>HundredthsPixmap</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>geometry</name>
+                        <rect>
+                            <x>158</x>
+                            <y>15</y>
+                            <width>14</width>
+                            <height>24</height>
+                        </rect>
+                    </property>
+                    <property stdset="1">
+                        <name>pixmap</name>
+                        <pixmap>image0</pixmap>
+                    </property>
+                    <property stdset="1">
+                        <name>scaledContents</name>
+                        <bool>true</bool>
+                    </property>
+                    <property>
+                        <name>buddy</name>
+                        <cstring></cstring>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>ThousandthsPixmap</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>geometry</name>
+                        <rect>
+                            <x>172</x>
+                            <y>15</y>
+                            <width>14</width>
+                            <height>24</height>
+                        </rect>
+                    </property>
+                    <property stdset="1">
+                        <name>pixmap</name>
+                        <pixmap>image0</pixmap>
+                    </property>
+                    <property stdset="1">
+                        <name>scaledContents</name>
+                        <bool>true</bool>
+                    </property>
+                    <property>
+                        <name>buddy</name>
+                        <cstring></cstring>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TenThousandthsPixmap</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>geometry</name>
+                        <rect>
+                            <x>186</x>
+                            <y>15</y>
+                            <width>14</width>
+                            <height>24</height>
+                        </rect>
+                    </property>
+                    <property stdset="1">
+                        <name>pixmap</name>
+                        <pixmap>image0</pixmap>
+                    </property>
+                    <property stdset="1">
+                        <name>scaledContents</name>
+                        <bool>true</bool>
+                    </property>
+                    <property>
+                        <name>buddy</name>
+                        <cstring></cstring>
+                    </property>
+                </widget>
             </widget>
             <widget>
                 <class>QPushButton</class>
@@ -102,7 +379,7 @@
                     <name>geometry</name>
                     <rect>
                         <x>95</x>
-                        <y>50</y>
+                        <y>52</y>
                         <width>75</width>
                         <height>40</height>
                     </rect>
@@ -123,13 +400,13 @@
                 <class>QPushButton</class>
                 <property stdset="1">
                     <name>name</name>
-                    <cstring>PushButton8</cstring>
+                    <cstring>StopButton</cstring>
                 </property>
                 <property stdset="1">
                     <name>geometry</name>
                     <rect>
-                        <x>5</x>
-                        <y>50</y>
+                        <x>50</x>
+                        <y>52</y>
                         <width>45</width>
                         <height>40</height>
                     </rect>
@@ -147,321 +424,68 @@
                 </property>
             </widget>
             <widget>
-                <class>QFrame</class>
+                <class>QPushButton</class>
                 <property stdset="1">
                     <name>name</name>
-                    <cstring>LCDBoxFrame</cstring>
+                    <cstring>PushButton7</cstring>
                 </property>
                 <property stdset="1">
                     <name>geometry</name>
                     <rect>
-                        <x>10</x>
-                        <y>5</y>
-                        <width>185</width>
+                        <x>170</x>
+                        <y>52</y>
+                        <width>45</width>
                         <height>40</height>
                     </rect>
                 </property>
                 <property stdset="1">
-                    <name>frameShape</name>
-                    <enum>StyledPanel</enum>
+                    <name>text</name>
+                    <string></string>
                 </property>
                 <property stdset="1">
-                    <name>frameShadow</name>
-                    <enum>Raised</enum>
+                    <name>pixmap</name>
+                    <pixmap>image3</pixmap>
                 </property>
-                <widget>
-                    <class>QLabel</class>
-                    <property stdset="1">
-                        <name>name</name>
-                        <cstring>UnitHoursPixmap</cstring>
-                    </property>
-                    <property stdset="1">
-                        <name>geometry</name>
-                        <rect>
-                            <x>25</x>
-                            <y>5</y>
-                            <width>15</width>
-                            <height>30</height>
-                        </rect>
-                    </property>
-                    <property stdset="1">
-                        <name>pixmap</name>
-                        <pixmap>image3</pixmap>
-                    </property>
-                    <property stdset="1">
-                        <name>scaledContents</name>
-                        <bool>true</bool>
-                    </property>
-                    <property>
-                        <name>buddy</name>
-                        <cstring></cstring>
-                    </property>
-                </widget>
-                <widget>
-                    <class>QLabel</class>
-                    <property stdset="1">
-                        <name>name</name>
-                        <cstring>TenSecondsPixmap</cstring>
-                    </property>
-                    <property stdset="1">
-                        <name>geometry</name>
-                        <rect>
-                            <x>80</x>
-                            <y>5</y>
-                            <width>16</width>
-                            <height>30</height>
-                        </rect>
-                    </property>
-                    <property stdset="1">
-                        <name>pixmap</name>
-                        <pixmap>image3</pixmap>
-                    </property>
-                    <property stdset="1">
-                        <name>scaledContents</name>
-                        <bool>true</bool>
-                    </property>
-                    <property>
-                        <name>buddy</name>
-                        <cstring></cstring>
-                    </property>
-                </widget>
-                <widget>
-                    <class>QLabel</class>
-                    <property stdset="1">
-                        <name>name</name>
-                        <cstring>UnitSecondsPixmap</cstring>
-                    </property>
-                    <property stdset="1">
-                        <name>geometry</name>
-                        <rect>
-                            <x>95</x>
-                            <y>5</y>
-                            <width>16</width>
-                            <height>30</height>
-                        </rect>
-                    </property>
-                    <property stdset="1">
-                        <name>pixmap</name>
-                        <pixmap>image3</pixmap>
-                    </property>
-                    <property stdset="1">
-                        <name>scaledContents</name>
-                        <bool>true</bool>
-                    </property>
-                    <property>
-                        <name>buddy</name>
-                        <cstring></cstring>
-                    </property>
-                </widget>
-                <widget>
-                    <class>QLabel</class>
-                    <property stdset="1">
-                        <name>name</name>
-                        <cstring>HundredthsPixmap</cstring>
-                    </property>
-                    <property stdset="1">
-                        <name>geometry</name>
-                        <rect>
-                            <x>135</x>
-                            <y>10</y>
-                            <width>16</width>
-                            <height>25</height>
-                        </rect>
-                    </property>
-                    <property stdset="1">
-                        <name>pixmap</name>
-                        <pixmap>image3</pixmap>
-                    </property>
-                    <property stdset="1">
-                        <name>scaledContents</name>
-                        <bool>true</bool>
-                    </property>
-                    <property>
-                        <name>buddy</name>
-                        <cstring></cstring>
-                    </property>
-                </widget>
-                <widget>
-                    <class>QLabel</class>
-                    <property stdset="1">
-                        <name>name</name>
-                        <cstring>TenMinutesPixmap</cstring>
-                    </property>
-                    <property stdset="1">
-                        <name>geometry</name>
-                        <rect>
-                            <x>45</x>
-                            <y>5</y>
-                            <width>15</width>
-                            <height>30</height>
-                        </rect>
-                    </property>
-                    <property stdset="1">
-                        <name>pixmap</name>
-                        <pixmap>image3</pixmap>
-                    </property>
-                    <property stdset="1">
-                        <name>scaledContents</name>
-                        <bool>true</bool>
-                    </property>
-                    <property>
-                        <name>buddy</name>
-                        <cstring></cstring>
-                    </property>
-                </widget>
-                <widget>
-                    <class>QLabel</class>
-                    <property stdset="1">
-                        <name>name</name>
-                        <cstring>TenHoursPixmap</cstring>
-                    </property>
-                    <property stdset="1">
-                        <name>geometry</name>
-                        <rect>
-                            <x>10</x>
-                            <y>5</y>
-                            <width>16</width>
-                            <height>30</height>
-                        </rect>
-                    </property>
-                    <property stdset="1">
-                        <name>pixmap</name>
-                        <pixmap>image3</pixmap>
-                    </property>
-                    <property stdset="1">
-                        <name>scaledContents</name>
-                        <bool>true</bool>
-                    </property>
-                    <property>
-                        <name>buddy</name>
-                        <cstring></cstring>
-                    </property>
-                </widget>
-                <widget>
-                    <class>QLabel</class>
-                    <property stdset="1">
-                        <name>name</name>
-                        <cstring>UnitMinutesPixmap</cstring>
-                    </property>
-                    <property stdset="1">
-                        <name>geometry</name>
-                        <rect>
-                            <x>60</x>
-                            <y>5</y>
-                            <width>15</width>
-                            <height>30</height>
-                        </rect>
-                    </property>
-                    <property stdset="1">
-                        <name>pixmap</name>
-                        <pixmap>image3</pixmap>
-                    </property>
-                    <property stdset="1">
-                        <name>scaledContents</name>
-                        <bool>true</bool>
-                    </property>
-                    <property>
-                        <name>buddy</name>
-                        <cstring></cstring>
-                    </property>
-                </widget>
-                <widget>
-                    <class>QLabel</class>
-                    <property stdset="1">
-                        <name>name</name>
-                        <cstring>ThousandthsPixmap</cstring>
-                    </property>
-                    <property stdset="1">
-                        <name>geometry</name>
-                        <rect>
-                            <x>150</x>
-                            <y>10</y>
-                            <width>16</width>
-                            <height>25</height>
-                        </rect>
-                    </property>
-                    <property stdset="1">
-                        <name>pixmap</name>
-                        <pixmap>image3</pixmap>
-                    </property>
-                    <property stdset="1">
-                        <name>scaledContents</name>
-                        <bool>true</bool>
-                    </property>
-                    <property>
-                        <name>buddy</name>
-                        <cstring></cstring>
-                    </property>
-                </widget>
-                <widget>
-                    <class>QLabel</class>
-                    <property stdset="1">
-                        <name>name</name>
-                        <cstring>TenthsPixmap</cstring>
-                    </property>
-                    <property stdset="1">
-                        <name>geometry</name>
-                        <rect>
-                            <x>120</x>
-                            <y>10</y>
-                            <width>16</width>
-                            <height>25</height>
-                        </rect>
-                    </property>
-                    <property stdset="1">
-                        <name>pixmap</name>
-                        <pixmap>image3</pixmap>
-                    </property>
-                    <property stdset="1">
-                        <name>scaledContents</name>
-                        <bool>true</bool>
-                    </property>
-                    <property>
-                        <name>buddy</name>
-                        <cstring></cstring>
-                    </property>
-                </widget>
-                <widget>
-                    <class>QLabel</class>
-                    <property stdset="1">
-                        <name>name</name>
-                        <cstring>TenThousandthsPixmap</cstring>
-                    </property>
-                    <property stdset="1">
-                        <name>geometry</name>
-                        <rect>
-                            <x>165</x>
-                            <y>10</y>
-                            <width>16</width>
-                            <height>25</height>
-                        </rect>
-                    </property>
-                    <property stdset="1">
-                        <name>pixmap</name>
-                        <pixmap>image3</pixmap>
-                    </property>
-                    <property stdset="1">
-                        <name>scaledContents</name>
-                        <bool>true</bool>
-                    </property>
-                    <property>
-                        <name>buddy</name>
-                        <cstring></cstring>
-                    </property>
-                </widget>
+                <property>
+                    <name>toolTip</name>
+                </property>
+            </widget>
+            <widget>
+                <class>QLabel</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>TextLabel1</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>220</x>
+                        <y>7</y>
+                        <width>40</width>
+                        <height>16</height>
+                    </rect>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>Tempo</string>
+                </property>
+                <property>
+                    <name>buddy</name>
+                    <cstring></cstring>
+                </property>
             </widget>
             <widget>
                 <class>QPushButton</class>
                 <property stdset="1">
                     <name>name</name>
-                    <cstring>FfwdButton</cstring>
+                    <cstring>PushButton8</cstring>
                 </property>
                 <property stdset="1">
                     <name>geometry</name>
                     <rect>
-                        <x>70</x>
-                        <y>90</y>
-                        <width>35</width>
+                        <x>5</x>
+                        <y>52</y>
+                        <width>45</width>
                         <height>40</height>
                     </rect>
                 </property>
@@ -478,17 +502,121 @@
                 </property>
             </widget>
             <widget>
-                <class>QPushButton</class>
+                <class>QLabel</class>
                 <property stdset="1">
                     <name>name</name>
-                    <cstring>RewindEndButton</cstring>
+                    <cstring>TextLabel2</cstring>
                 </property>
                 <property stdset="1">
                     <name>geometry</name>
                     <rect>
-                        <x>5</x>
-                        <y>90</y>
-                        <width>30</width>
+                        <x>288</x>
+                        <y>7</y>
+                        <width>62</width>
+                        <height>16</height>
+                    </rect>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>Division</string>
+                </property>
+                <property>
+                    <name>buddy</name>
+                    <cstring></cstring>
+                </property>
+            </widget>
+            <widget>
+                <class>QLabel</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>TextLabel4</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>288</x>
+                        <y>28</y>
+                        <width>67</width>
+                        <height>16</height>
+                    </rect>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>Signature</string>
+                </property>
+                <property>
+                    <name>buddy</name>
+                    <cstring></cstring>
+                </property>
+            </widget>
+            <widget>
+                <class>QLabel</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>SignatureTextLabel</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>360</x>
+                        <y>28</y>
+                        <width>26</width>
+                        <height>16</height>
+                    </rect>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>4/4</string>
+                </property>
+            </widget>
+            <widget>
+                <class>QLabel</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>DivisionTextLabel</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>360</x>
+                        <y>7</y>
+                        <width>26</width>
+                        <height>17</height>
+                    </rect>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>/16</string>
+                </property>
+            </widget>
+            <widget>
+                <class>QLineEdit</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>TempoLineEdit</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>219</x>
+                        <y>26</y>
+                        <width>61</width>
+                        <height>22</height>
+                    </rect>
+                </property>
+            </widget>
+            <widget>
+                <class>QPushButton</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>FfwdEndButton</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>345</x>
+                        <y>52</y>
+                        <width>40</width>
                         <height>40</height>
                     </rect>
                 </property>
@@ -508,14 +636,14 @@
                 <class>QPushButton</class>
                 <property stdset="1">
                     <name>name</name>
-                    <cstring>RewindButton</cstring>
+                    <cstring>FfwdButton</cstring>
                 </property>
                 <property stdset="1">
                     <name>geometry</name>
                     <rect>
-                        <x>35</x>
-                        <y>90</y>
-                        <width>35</width>
+                        <x>305</x>
+                        <y>52</y>
+                        <width>40</width>
                         <height>40</height>
                     </rect>
                 </property>
@@ -535,14 +663,14 @@
                 <class>QPushButton</class>
                 <property stdset="1">
                     <name>name</name>
-                    <cstring>FfwdEndButton</cstring>
+                    <cstring>RewindButton</cstring>
                 </property>
                 <property stdset="1">
                     <name>geometry</name>
                     <rect>
-                        <x>105</x>
-                        <y>90</y>
-                        <width>30</width>
+                        <x>265</x>
+                        <y>52</y>
+                        <width>40</width>
                         <height>40</height>
                     </rect>
                 </property>
@@ -562,14 +690,14 @@
                 <class>QPushButton</class>
                 <property stdset="1">
                     <name>name</name>
-                    <cstring>PushButton7</cstring>
+                    <cstring>RewindEndButton</cstring>
                 </property>
                 <property stdset="1">
                     <name>geometry</name>
                     <rect>
-                        <x>135</x>
-                        <y>90</y>
-                        <width>45</width>
+                        <x>225</x>
+                        <y>52</y>
+                        <width>40</width>
                         <height>40</height>
                     </rect>
                 </property>
@@ -585,173 +713,45 @@
                     <name>toolTip</name>
                 </property>
             </widget>
-            <widget>
-                <class>QLineEdit</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>TempoLineEdit</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>200</x>
-                        <y>20</y>
-                        <width>70</width>
-                        <height>22</height>
-                    </rect>
-                </property>
-            </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>TextLabel1</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>200</x>
-                        <y>5</y>
-                        <width>40</width>
-                        <height>16</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>Tempo</string>
-                </property>
-                <property>
-                    <name>buddy</name>
-                    <cstring></cstring>
-                </property>
-            </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>TextLabel2</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>205</x>
-                        <y>50</y>
-                        <width>50</width>
-                        <height>16</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>Division</string>
-                </property>
-                <property>
-                    <name>buddy</name>
-                    <cstring></cstring>
-                </property>
-            </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>DivisionLabel</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>205</x>
-                        <y>70</y>
-                        <width>26</width>
-                        <height>16</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>/16</string>
-                </property>
-            </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>SignatureLabel</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>205</x>
-                        <y>110</y>
-                        <width>26</width>
-                        <height>16</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>4/4</string>
-                </property>
-            </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>TextLabel4</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>205</x>
-                        <y>90</y>
-                        <width>55</width>
-                        <height>16</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>Signature</string>
-                </property>
-                <property>
-                    <name>buddy</name>
-                    <cstring></cstring>
-                </property>
-            </widget>
         </widget>
     </widget>
 </widget>
 <images>
     <image>
         <name>image0</name>
-        <data format="XPM.GZ" length="2225">789cbd945d4f83301486eff72bc87ab718361766588c3f41e3a589f1a29fc028ecfbd3f8dfa5b487ccd2e2a6d1775cf0a44fba033d9ce12078797e0c06c3de7a8337190d688a57c1806d8be2f8faf6f0deeb47a3a0bac67170dbbfe9f5c380064ff392abfb5d758f4675141e0c461ad735c6eaa770ab3026f134260a57069946a2704a09a64ca15488234064906b5cd64801b1463ad6b8514822322691c25223aca606ef341e6b6484931aa946582d0c9a3266806ca270a1904eaa9d6bdc1b347206a8e59341533303d4abf31a9b3f4a0c1a3907d432d7c8c61a854236010c2fccffba08938bdceab93817896029fac64559229acc50979be6e23c1c7b5d99093ba9c795aca58aa470bb0eb54ae972b153155cb65dc9ddae28da6eea518540b64b60dbf902026f7a66bb4bd865b5866ca06262b94d09db1d045c812d9775b8a9e5e61d2efbea4ad1e1eeaf70f915aef8790d9dcf96596ed6e116bf380b040bab03a4396369f759d33b4708f40e6df564297cc12d579e3ceabeddeb214e9c2a470e37a49d1558f361ef503ddfbc6b9650e2715b1f687e3e76dab3ef6ca0e4850cbbdcca9ee5ea58384bbf9abe598db13d7bfdae3b7fe67edcf73e01d8f1572e</data>
-    </image>
-    <image>
-        <name>image1</name>
-        <data format="XPM.GZ" length="3310">789ccd954973da301480effc0a0fdc980ec12b663a3d64213b842497ce747ad0620126667702e9f4bf9727c980919c087a689f39f843efb39e254b3aa95adfbb6dab7a529a2fd062402cd24733ab4ad32459fdf8f9ed57a91cd42d6ffd6b5876f94ba95cb388d5198f22b84fd7f7953a0fc02b899ec0338e215c806d8944e012d0aec30538e318c20538954804b6009da6133a4dc07740d7763d9797d4e1d8744397b7be027ab6e779bcf516d077fcbaef005e73443ef511e02360e00476c05bcf39a28006bc7504d8701b76c3055c71c40ddac0805dc0d00d6d81738e38a421c73bc0a6d7f49b1ee09023c18850c04b40e4211bf1d67b89be402c304bae488c043e0b248ec0078e044588002e0466c94860967c0a883dec60ded14060d64a240602df38528c30c71781596b2c5116f99421f501c780c45f3f99e38dc440605fa2746986c24d2446022f386e3aea49942f186528922702a9239001523fc3da5fc4ffee57103eda5f8f5814b11eeb0f2a47f815ca3611c5454f28f28731cb073ac81ff6d97ec407f858d5197b31f7138dced8c0d4475a9d459a41d4f9c348efb3be994fb2fcd138ef4fd449d0f9bd2c7f3a9bf7720fa026fe62933e4dd3d7b75c0143033fdef5d3e56ab704650a347e92f3d3f4fd74eb2b1f91eaef8cbef0d3b3f38bc219507dccf6fd346d5dca979818f4aff1d3abeb1bfe4f74a49fde8e4d7d5dfdd3bb03ea9fecfb59f166e3a7cc5feb7e5b91b2863ffd7edadbc933fc7ed0aedf7960bba1ac608dbf1d80e9b29b5f3fea02fe70fd3ee6168ff1fadd1490ef9cb144d1f5fb1761dae819ee5fb59a6efb65ec494d2cf0b53ba04e2f3c3fd41d5cab1b9f5f13a2d53f383f17bb251c7c7e4254e204c661929063ce6f11cfa8d835f13f8b7feefffe5afa03b6d2199e</data>
-    </image>
-    <image>
-        <name>image2</name>
-        <data format="XPM.GZ" length="2495">789ce5d44d6fa24018c0f1bb9f82e8cd6c282020a4d983adf6c5566b7bdaa4d9c33060058ab4be94dacd7ef7759ee7410506b77bd96cb2130ffe32ff98e1013c692bdf2623a57dd258aed82ae40a9fb185d2f6d749b279fcfef547a3696a8af8d88adefcd268aa0a57c6e93c10df57dbefadc0d6b64bf00ec902c6052f909ee1998263a28d7c2632cf173c0306f94f5d21bb7ab72338205ac80fa2dbf504a7441f7989747407e29468213744d781f81ac97417ce3ccac9e0904f440bb92632bcc073c1e9eef219d2d44c18d490682203a26332c198c8916f48cbb20cc15ba26fc16e82b4751b762744d786dd16d1472e91f97016441a4e089ce6678e882632233a9a23382772e40352d774883991ebb0db431a9a01bb1ed144be131dc315f4891cd94776b40ecc6a463491f744de81f80699cff98548737e25d260d54faeffad6d318ffbc1f4f7edd32ca415c5cfc7db240af76b9e1e6b5fc2e26ad5b7af61792deada25057cbb5674e8754d3bdf95b0409ebc7d83cd8c17e354da66a514e37759bb113b2bcecbb1ac8d0b87ddb71f92b657d3c692564ce14cd2ce246d54fd597e7e38b54fb43d499b55c70067e84b5afe07d716576e05b603499bd6dc8b0bd93d8ea4f778fff0549f9d727b296df1e1098bed6e62a5f62a3c8c11d735ad3aacbc43872f5ce9ddbc29a5895adfaab7876556fc3fa9fc978cfa79190dc7eaf15655ef26f7fca1c7066a79fdabffa97fbdfd79daf805968b525b</data>
-    </image>
-    <image>
-        <name>image3</name>
         <data format="XPM.GZ" length="923">789c9d924d0a83301085f739c5e0eca454ad1184d22314ba2c942e261169176e5abb28a577afd1980cfe54705cbd2fc973f2325108e7d311c2483c6baaef1af48d1e1016afaa7a5fae878f087631a4122424c146045bd080715b46a29132913a4f8d5446e6695ee8cc483252670595657b76a21639122b858e2b4efd7e6c3e5faae7481c2329c7492d72232c6ffeea8d8c58c747f6db757c64ef38bb2e2acf790acd02fecf1f87fb7b4e7c01c9f3619b1d1fb7b98a4fd8afe213f696b35bcd713b4a5d9f1c778367df8b4fa7cb9353b211cee6ffdd8b1f2c0ac43d</data>
     </image>
     <image>
+        <name>image1</name>
+        <data format="XPM.GZ" length="975">789c85d0bb6ac3301480e1dd4f219c2d94c4bad932a543b2b7742c940ebac64ee25c9d6be9bb37e7d8434805953cf8fb8f3142e321f9787f25c371b26f755b5b622bbd234377689acbe7d7cb7792b28cdc1e9e119a3e25e98858f2b65e79780fb7f741860bb8eb293a3648051b78ee693bd6409ac1065aa4820d343d6dc70d90954cb112b80072ca05c7235d9025571ca733a0a042089c1e8092c94c32e01ea9a5931a3805e62ca7394e57489dbb1ca70360c10b5a70e01c690a5718e004a8b8a21d1dd228a7904760294a590ae016a885a61a79ea293b5e91567b6d814ba01186199c564867b471400db4d2322b816dcfbce31ae9acb6f8b1efe93b8e22ebdf3ed0f16eacf3d11ec2ac8af750cf7db487b058c67b6856eb680f61b3f5d11e76fb36dac341c7ba39c6fe833ff9db37a7d839cffd211ffae51abb877a12bdb7e9dda5dd773f8af78795fe3c27bfb214d96d</data>
+    </image>
+    <image>
+        <name>image2</name>
+        <data format="XPM.GZ" length="606">789cddd0bf0ac2301006f03d4f71345b116b4b0b11f1111447411c7277e99fa10a5a0711df5d2f6d202088b3df65b8df97edb214f6bb0da499ba0e76e808a8b51748f9d6f7f7c371fd50496e405e0e793253c91c08b6e79393bd79ef7ae1236c279623d9d3c8086ba141b33428a4893cd209b1c4024b61e7c9e89085564815155409b5279325ff8b13ddc8f947beb7da8660d41287b8a8ad9b90ff6ba90d895bdd85c4d7f9e9becf957a0101af9593</data>
+    </image>
+    <image>
+        <name>image3</name>
+        <data format="XPM.GZ" length="695">789cddd0bd8ac3300c07f03d4f21922d1c6e1c5270297d84968e07c70d96e4d671dd16fa3194e3defd22274342b7de56098c7e7f2f42b3123eb76b2867d9f5666f2d01797b8192efc7e3e3eb7bf593e5da405d816e40e71f59ae8060733e39997d3717552a6118d8f4e444232d6c85da68d28907615d490bddc0a6e75e68d02c0c0a6920f7dc092d596b491885c8e89085564873aa692e2c12992ca55f1ce87aaaa77a252dba5594ea1e1ca7c4ec1432f36e9ceebd6f157aefdf30a5100e0a430893b488b1bb4e8c71729d7f5cfd7799fd0197e69fd5</data>
+    </image>
+    <image>
         <name>image4</name>
-        <data format="XPM.GZ" length="2570">789cadd55b6fda301407f0773e4554deaaa925c10944d31ea0e98d9642ef93a63d387628490869b99442b5ef3e9f739c8d31e552a9a68af871feb8278e130ef78defc3beb17f589b2ff822148618f399b12f9749b2fef1f3db7b6d8f350cf5679b86b9f7a5b6a702c6553a0de0bda7ded71b38805d4d46dc20dbf0025e6a0ae20dd06cc00b788a6cc30b780cb41a16b3b0da0736cd266b620faf48b7d96ebac03b2033598361b5a7c9882b24678271e03dd0b6ec866d01cf356de21bd0b11cdb417262cb6cf9c021923bae835349624bb6b13a07b6fc964be185a6241e10dbd265401fa8fa975c002f907edba5a9ea446e52f50ae832d7a6ef1e2185ebba581d684a6242f4b990c0072067dca4ea8898555f340362072938a7fffb44ccaa015158c45ba0cf7cc7c7ae1e895975a2e910af91d20f7ce49a9855a79abaab33a0b0d55436f044d3218e3575f839a3c46aaa191097c83f33cf34f519c519291c12a5458c80d2ce7850af34706bf8a2d2909f900d4615b34fe3308ae349856c320d231c6952964dd2281be3a4243b89fe8ee7e2eccb6c2b1b4d0ab3e976348a93826c10fd3b2605d9a9aa6317ba95383f3b82e59a436eb1a470909bc5165ee7eab07a9bed36b1935d6376d351d9eed1eeb2ed6471155ebde39368e59d9e01c2242f1b53d63b9fad3caf875d8cf2b291ce7a172aebe14906a5d9cbbe3a40df5b279797a5a1faae30af1e5795b25d38c0d995678f7bea80ab969b0d7576d351ebd01d14ae99be16de5c5d0b6f587c2da694557daebc3eee9e54e46569ef9c5eabfd70738bcdaf73b32328df419ff717657b121b1ec0a57d9895edf50fdd431fb93777262ebee7e9d6d02315c5d9ad6754382ac98ae459dfefe5cf3ee8398da3307ddcf934ef599d042fff7df629bf01b9d9cabf59bfbed67e0391742458</data>
+        <data format="XPM.GZ" length="768">789c6dd2c96e83301006e03b4f61851baa0866b7aa3e42ab1e2b553d18db2c09fb72a8aabe7be3195320ca9cf8fe013c8c383be4e3fd9538676b9af95c09224a3e12472e4df3fdf9f5f2639d6842684afc80d0d393757289206f5dabf4f57cbbb685e4110f351b43c58566af29a358c65cf3b23209341532a1c8ca502699668d4c590aec908c32386831640c0e1a0d258e2180ca4f7da63921833080f9b9a108a02b91a1174277300c439839474651e46b5e0d59045d1b19d318ba85a68abd5b699686c24b355b244d293043fa9e0f37bbf7b58536cf845487302fb0ca6a0b65f15f9735bc16bbaa316cf659d162681fc2a283501ec31ec2ec180e8fc2fcd1e3f0c3b8ea188e3867b9cf26337cb5cbca79fdcced05e5b22da46e3113c7d5d5fd90abe56e9ffb25ff3e5b7f3bbcc675</data>
     </image>
     <image>
         <name>image5</name>
-        <data format="XPM.GZ" length="2125">789c9dd44d739a4018c0f1bb9f82d19bd349e44564a7d3438c18f3a2312687ce747a58168cbb88f81a6332fdeee5d9674150349dae1efcc95f1681e5b2aefd1cf6b5fa6565b5a66bce3436a14badee6fa268f7ebf78fcf4ad56c6856f27634bdfaad524d026d10cf02f8ec269f6b0d39803d450bf920e9242fc94e4607f8a1c890ef408318cc20c035d0d4cd862927a540dbb0fd9609ec4b529bd814e8235bc4915b07c096d9d231be576c221f25bd16410e337ac05b451f79817408b1802ba0633a3a4e74a3d8447a4842a88cbb92c96f1db9ab1a92ea9401af81c4223a6e7d4a8913ed149bc88d24233e91bf7d467a94f9c00048ad94916280bc926494e2bc6d64ba758c64067204f42ccff0e4bc6f8a36f21599c60b451bb994f4534e15d551c529fd26f005c89ac9ae24678a2adea6c478ae1820b9a4cfd45f98a4c4ad21d2379002e83753de29dac88bda9921ef2d8f9d19feff14c1f86c11bc4eb808a7d1c9623c137284f1892210d9989716c1645f884559b1cc05228c8e8b28bf0b21a6c7c5b410a43bc915512804e7b9243e2c16c997abb5dcc6376fb093c3620bc5bb2c761f5750b40f8a302bae3b2e1462592cc6222dba1d178b6db168ab82dff45c55cc8b458c05bf85008bbbd2e2de75b3222c16f294af1edc5cc1cb8ade9942cdd2ffb2e003f7d49166fff6b177e248b333c687bdf2f3b13feb7ca5cefae2e495e3dd8e2cc665571faf2d7f1ac1613c97dc412f2375f7f0ec363c73178af651312e06b392d510178a92d5c082301794ae2816ed83f255991c8a5a542757b67c3a8422dce61e21254f98e8fc13e678fc63f1c5d3f2cff7ca5fbfa2849b</data>
+        <data format="XPM.GZ" length="813">789c65d1c96ec3201080e1bb9f02855b543531de40551fa1558f95aa1e6070129c90d559aaaaefdecc405a99e08bbf5fd8183c19b3f7b717369e64875ef70e182cf49e8dedd1fbaf8fcfe7ef6c94974ce44cd42c1f3d64a34706ec75b36ef1de5deff99406d24796813ba2bc5ec4ee8f12398b84c00552280142210159e4c5b4a045f7c85ad7aad6c803b2299abc2990dbc82ab0279a46051eff68909b481b6891b290b9a4c9ebc82a70453452499abc44aa52e581e71b55899c4756818608ca2a40b6480d5a6be209694a230c4dd69175e005091508a8909c68a1054bbf60308685f35bd18653017b2bed6c4e65f15f5cb74c8beb5669717ecd93e2fc8627c5b9ed5d71bbbbe2d3b24f9f3a246ff67db2ba3ff26417960fbfb95bf1e1be4e679eec9dc7133b5dd233bc3f552a3f4fd92f82c9b8bc</data>
     </image>
     <image>
         <name>image6</name>
-        <data format="XPM.GZ" length="2630">789cadd55b6fda3014c0f1773e45d4be55d39a8b4d124d7be835bdd2fb75da431207e2b42129d0029df6dde7738ed342b710a4d55411bff257b04d08eb6bc6ede9b1b1b6de1a8ec2918c8d380d07c69a78cef3e98f9fdf7fb5569869a83fce0d6be54b6b450546a7e827f03c50cf574d1cc00d4d46dc427aea813c7aa307ec68c6c45da0655accc2f802e9c103b80fb44d78004f3519f11ae8588e69fbc063a4ef780e720a64163319ceff5693112f9121f358083c00729b9bdc068e3539f105d8b6db561b19125dcb8d800219bac2434e80aee372d7013e23235750fc95e8099f014740cf51cbc5f850931323a22fc218b88a8c428b7806f4996fd1a95e3539f10a19fbbe8ff1bda62016c4288c05f00e18b2d0a25737357988a74a8855fca499101f9171c52e31b689e79a6de20d3062911de1994f8855dcd3d4f10e52444984dc2656aff635f5accc8a8203f780315731f24153c7838a14e79a0971887c3b73a9a9179856a438230a9b28818257fcbabad4c06b308a971ae213daa4bb6cdb4b53993d3c2ed126b9c491f58ba6b67890d5c89bda5cbe8fdee2b63793caf269515b64b3ad1c2c6ae74eab4677419bea37af0efdfab64be97004e9336c5c51dbd214ca97b13a4ea6f393f8d8d286bd6ea876730bdbedba967661673718cbbdfd603abf131fda0467300d82717910509bd7b5b0b47212a8f630d0adac6b61699b472a3bee546d59d79e48b9771a54a3b13d0b966f616541b0d1dc9ec38e5da8ec72bf716db86757b00fb0426cb3c59fc58b6ae5a4697fe9331e5eab56cd1bdb7e6ddbc729de74c6f049375c3bfa9a3c84ebecea561dd2fa6b525febe51d1ceee7bfcafff51d2ad2b974f60ed1f09d9f3ded3fda62f65eb21d2f6ce3e4fd0e91170deddb9433b3f1de07734e33990e3ede82ebeed54fdde2afff7dc66f406dbbf46fd6ef6fad3f50652e41</data>
+        <data format="XPM.GZ" length="864">789c5dd0cb8edb201406e07d9e02c5bba8f21803b1adaa8bb92d5b7559a9ea828b9d3883934c2e3393547df7f21f50830ad211dfef0b07ee16ecc7f7af6c71373b9ef469b4ccaef5812ddc799a2e3f7f7df93d9b73c978cb84607cfe69362f9965df76db1e6b1fd6454503dc24cac835b10d9378fec7163c26dac81dc82b2e39bd7c21b698e004d61526f8962823ef41c1455577e089d88956101d28b9ac24f5ff9828233f885ab65283afa0aa55a56a704854912b70592ff992d8838d685423404d348d6b0c68c0568413d0d343a28a7c073bd9f14e822f892af24ab45dd759f029d1453e835a6a1e39262a4ddf3e80469ada10f744677ae3c02d68955d5a055aa2b3dad2d322b18f2ccba22c5329cb9868c8d82c717d580eab224bd66348362f59e2a76d39f8dd3e4bfc6b3178ef8a2cf18790f8bec892e32994f3982571bc6dff4ffc7b966c505c714ba68f502efbdb7fce23f6ba66bbf7a143bfca3a0cbd0dfedede12f43f1c1f6ee77abce2ec87ec369e700fcff1cae67f3ecffe02d111c719</data>
     </image>
     <image>
         <name>image7</name>
-        <data format="XPM.GZ" length="2095">789ca5d4cb6ee2301480e13d4f11c10e8d5a08b96a340b1a0af402a55d8d5475e1d806e20001022db49a779f1c1f07124818a913aa8a4ffe71aece755dfb3d1a68f5eb4abc219b806a744ad65a9d6de7f3fdebdbafaf4ab5d5d08ce4cfd29ad51f956a1268c368c1e1bb977caf35e406ec2b1ac8aea4031f604791223f81cd067c803740ddd51ddd057e285224015abac5ec167028492c66112043daae23479f8076cb36311e48fab66bfbc09122435e211dd735800f40a7e53471aa9da289f491ae4b647c2799fcd69153f51419b286244d42816da06bb826ee6821497d4219f01d488c2496a37b45133946a671acc891cf929470dcd104998e7224d5915ba06ff8ba2f679e23d3d1b5a2857c5424cc046e24593a3a55544715a5c4f80548cd6466c9a5a28a6f5362bc52e4c8509251750ab394381a20998e144066a6bc57b49057b50b9b7c7a7c7a6163df29f8f862319906229ccd17a54524705bf29262250edbb8b0581f03311b1714719029c4a6a0986603318bcf0a9e9b4288e959116546c35088203e2d608aed7b288b8f5df26f7e524ca0d87fb6657103457452c8e3dc7b9df6a1084e8a5b2cbc6e2f2d449c2f56aaf0fa776171719f165eff21c4e2315f8843e179032c36e585d797c5fa7f8a61e15e8e47ea3d151f697038db51c9d9a6d7a33f2abb626b2cbabbb0ecaa7359747a61e99d5bc0c8733b3cdedbd3bb4f97f0e4a82768fb52f404f1fc4358f014ca49321b3f2f26b9202a580db9151514ad28bac8ac4ab55ace56f64aad9959d9ca4e4e2869824b6f07d8158fb3fcde5baaa8f8c7dbf2cfcfca5f596180b6</data>
+        <data format="XPM.GZ" length="864">789c5dcfcb6ea3301886e17daec20abba82218db01349a454fcb197559a9eac207726ae2a439b44daade7bfdfd7603aa2d593c2f60f078c41e1ffeb1d178b03fe8c3c2323bd73b3672c7f5faf4f4fcf77330e492f19a09c1f8f06a30cc9965ff37bec5b50fd75941035c24cac817621d26717f610d1e136de41ae405979c1efe20d698e0162c0b4cf02d51465e83828ba26cc003b111b520ce40c96521e9ff6f1365e489a8652d35f80aaa5215aa04db4415e9c04939e113e214ac44a52a015aa2a95c654003d6229c80eeee1255e43bd8c88637129c27aac833d1364d63c1fb441779076aa979e43251697af70634d29486b8223ad31a076e40abecc42a50139dd596ee66896d644e234bcba5688360bb92b936acd35957e68b50962f5d59ad7d9b6fb6fe52b299f76df6ea2f259bfa5076be2bcb7dc0e1d895cd9bff19a9bcfbdf05fb7abfe8957cf51170daf64a7ec6b7b07ff7872e947cda2ffa3a94b05fef5c37c71667e9957c87b39f6f7b25bbc3721fcad79fc1373c43c7b2</data>
     </image>
     <image>
         <name>image8</name>
-        <data format="XPM.GZ" length="2270">789cbd944d6f9b401040effe15c8dcac8a18175744550f21e7563d56aa7ad8af010cd88eb143a0ea7f2fc3ee5267d9a549ab764088a77982819d9d9b95f7e5f3476f75b3a8cfe49c338f65e4e4adf8a5aadaafdf3e7c5f2ca3b5d79f6f432f5cbe592c038f799f0e7b81f74d7fefaf8740ec144612eb01633c109f10c33864e18077889b351e88678591c447c498c6b731453c29e41229e22da38471c41291441a7d8542e26540460861880f12759648641b897b441a69cc14be93980cc8a9a00332893a5b295465ec34f22de211916dfb270fd82a5472ae51caf70a55915ca3cc1e061c5f942a5472a151ca4222df480444bed518bc30feafeb13fa22b7ff2e2120059ef9bf71fd3c853176fe9c9b15701d8238dd32073332875bf2890a6965772d6a1f7b9b4bac2a8872ea96c2ee42357533870ae09b2ed58f3d1c8f4780fe32fee89de93ee8cca9aecf90d6757d192ba6863b96f0d8344f90364d33ba400c97cfb899e116332e7fee9630e3b6af70c52b5cf8f31a66bf2d37dc7cc6adfe622d7c9d3875dd1da45dd7fd5ae3d2ecb3b17792a4ef9d2449c6de61939edc832bc8c42def1d6a3bedf580a45655f8163760b31518f3a1b5a88e3d6f9b258c3adcc9062daec7ce74f65d0d94a22a8339b7b777052e8be0d973d335ab093167afdbb5c73f737fbc5ffc04cb785c4b</data>
+        <data format="XPM.GZ" length="813">789c65d1496ec3201480e1bd4f81c22eaa9c802750d523b4eab252d505606730b133394355f5eef57b90a810bce1fb858580d9947cbcbf92e92c390e6a581b6256ea40a6f5a9ebbe3fbf5e7e9209cb09678497844d9e92494a0c79dbf60dcced38a7731cc0de3377dc23c5f821db3b0570e9691c1b2097dc7009d4c08c65f30c373d004b55ca52018fc02aab589501779e85e380d495743cdda9815bcfda5101452698c0c59d67e1b8416a21052e5e03652e99e3f9469903179e85a3411a594b035c0195514a212f409d6bae7171ed593a5e81a630dc14408aac4d636a7c8260b842695c94468cffdd4b8365b15c8565dddab06c5a1b14daf53628740be17fd9591b96bd8d4bff509ac343a1c7b8a47488761f0f75eaa39252159f22a59b362a293d5f6ee57af1d7456fe5f15683f2fb9cfc019c4fb8f0</data>
     </image>
 </images>
 <tabstops>

@@ -85,6 +85,8 @@ New features suitable for 0.2
 
 13. Event editor (possible hyper editor type i/f for velocities)
 
+14. Tuplets
+
 
 Basis for later features
 ------------------------

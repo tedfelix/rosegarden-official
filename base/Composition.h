@@ -38,6 +38,10 @@ namespace Rosegarden
  * destruction.  When tracks are removed, it will also delete them.
  */
 
+//!!! This could usefully do with a bit more tidying up.  We're
+// gradually increasing the amount of stuff stored in the Composition
+// as opposed to in individual Tracks.
+
 class Composition : public TrackObserver
 {
     
@@ -55,7 +59,16 @@ public:
     /// swap the contents with another composition
     void swap(Composition&);
 
-    trackcontainer& tracks() { return m_tracks; }
+    /**
+     * Returns the track storing Bar and TimeSignature events
+     */
+    Track *getReferenceTrack() {
+	referenceTrackRequested(0);
+	return &m_timeReference;
+    }
+
+    trackcontainer& getTracks() { return m_tracks; }
+    const trackcontainer& getTracks() const { return m_tracks; }
 
     /**
      * Add a new track and return an iterator pointing to it

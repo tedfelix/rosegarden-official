@@ -299,7 +299,7 @@ void Composition::eventAdded(const Track *t, Event *e)
     // in theory this should only be true if we insert a time
     // signature or something after the former end of the composition
     m_barPositionsNeedCalculating = true;
-
+/*!!!
     if (e->isa(TimeSignature::EventType)) {
 
 	timeT sigTime = e->getAbsoluteTime();
@@ -330,6 +330,7 @@ void Composition::eventAdded(const Track *t, Event *e)
 	    } else std::cerr << "Composition: skipping" << std::endl;
 	}
     }
+*/
 }
 
 
@@ -345,6 +346,7 @@ void Composition::eventRemoved(const Track *t, Event *e)
     // signature or something after the former end of the composition
     m_barPositionsNeedCalculating = true;
 
+/*!!!
     if (e->isa(TimeSignature::EventType)) {
 
 	timeT sigTime = e->getAbsoluteTime();
@@ -369,6 +371,7 @@ void Composition::eventRemoved(const Track *t, Event *e)
 	    } else std::cerr << "Composition: skipping" << std::endl;
 	}
     }
+*/
 }
 
 

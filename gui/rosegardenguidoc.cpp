@@ -235,6 +235,16 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
                << "<!DOCTYPE rosegarden-data>\n"
                << "<rosegarden-data>\n";
 
+    // output reference track
+    fileStream << "<reference-track>" << endl;
+    const Track *refTrack = m_composition.getReferenceTrack();
+    for (Track::iterator i = refTrack->begin(); i != refTrack->end(); ++i) {
+	if (!(*i)->isa(Composition::BarEventType)) {
+	    fileStream << XmlStorableEvent::toXmlString(*(*i)) << endl;
+	}
+    }
+    fileStream << "</reference-track>" << endl;
+
     // output all elements
     //
     // Iterate on tracks

@@ -70,11 +70,21 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
     if (lcName == "rosegarden-data") {
         // set to some state which says it's ok to parse the rest
 
+    } else if (lcName == "reference-track") {
+
+	if (m_currentTrack != 0) {
+            m_errorString = i18n("Reference track too late, one or more tracks already read");
+            return false;
+	}
+
+	m_currentTrack = m_composition.getReferenceTrack();
+	m_currentTime = 0;
+
     } else if (lcName == "tempo") {
 
-      QString tempoString = atts.value("value");
-      m_composition.setTempo(tempoString.toInt());
-      m_foundTempo = true;
+	QString tempoString = atts.value("value");
+	m_composition.setTempo(tempoString.toInt());
+	m_foundTempo = true;
 
     } else if (lcName == "track") {
 

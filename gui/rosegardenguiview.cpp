@@ -151,8 +151,7 @@ RosegardenGUIView::editAllTracks(Rosegarden::Composition* p)
 {
     std::vector<Rosegarden::Track *> tracksToEdit;
 
-    for (Rosegarden::Composition::trackcontainer::iterator i =
-             p->tracks().begin(); i != p->tracks().end(); ++i) {
+    for (Rosegarden::Composition::iterator i = p->begin(); i != p->end(); ++i) {
         tracksToEdit.push_back(*i);
     }
 
