@@ -65,6 +65,7 @@ protected slots:
     void trackOrderChanged(int section, int fromIdx, int toIdx);
     void addTrackPart(TrackPart*);
     void deleteTrackPart(TrackPart*);
+    void resizeTrackPart(TrackPart*);
 
 signals:
     void needUpdate();

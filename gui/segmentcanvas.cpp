@@ -325,8 +325,8 @@ void TrackPencil::handleMouseButtonRelase(QMouseEvent*)
         kdDebug(KDEBUG_AREA) << "TracksCanvas::contentsMouseReleaseEvent() : rect deleted"
                              << endl;
         emit deleteTrackPart(m_currentItem->part());
-        delete m_currentItem;
         m_canvas->canvas()->update();
+        m_currentItem = 0;
     }
 
     if (m_newRect) {
@@ -379,7 +379,6 @@ void TrackEraser::handleMouseButtonPress(QMouseEvent *e)
 void TrackEraser::handleMouseButtonRelase(QMouseEvent*)
 {
     if (m_currentItem) emit deleteTrackPart(m_currentItem->part());
-    delete m_currentItem;
     m_canvas->canvas()->update();
     
     m_currentItem = 0;

@@ -121,10 +121,13 @@ TracksEditor::init(unsigned int nbTracks, unsigned int nbBars)
             m_tracksCanvas, SLOT(update()));
 
     QObject::connect(m_tracksCanvas, SIGNAL(addTrackPart(TrackPart*)),
-                     this, SLOT(addTrackPart(TrackPart*)));
+                     this,           SLOT(addTrackPart(TrackPart*)));
 
     QObject::connect(m_tracksCanvas, SIGNAL(deleteTrackPart(TrackPart*)),
-                     this, SLOT(deleteTrackPart(TrackPart*)));
+                     this,           SLOT(deleteTrackPart(TrackPart*)));
+
+    QObject::connect(m_tracksCanvas, SIGNAL(resizeTrackPart(TrackPart*)),
+                     this,           SLOT(resizeTrackPart(TrackPart*)));
 
 }
 
@@ -200,7 +203,10 @@ TracksEditor::deleteTrackPart(TrackPart *p)
     if (iter != m_trackParts.end()) {
         kdDebug(KDEBUG_AREA) << "TracksEditor::deleteTrackPart() : part "
                              << p << " deleted" << endl;
+        TrackPart *p = *iter;
         m_trackParts.erase(iter);
+        delete p;
+
     } else {
         KMessageBox::error(0, QString("TracksEditor::deleteTrackPart() : part %1 not found").arg(long(p), 0, 16));
         
@@ -208,6 +214,13 @@ TracksEditor::deleteTrackPart(TrackPart *p)
                              << p << " not found" << endl;
     }
 }
+
+void
+TracksEditor::resizeTrackPart(TrackPart *p)
+{
+
+}
+
 
 bool
 TracksEditor::moveTrack(int /*section*/, int /*fromIdx*/, int /*toIdx*/)
