@@ -1994,30 +1994,39 @@ NotationStaff::getBarInset(int barNo, bool isFirstBarInRow) const
 
 	if ((*i)->isa(Rosegarden::Key::EventType)) {
 
-	    key = Rosegarden::Key(**i); //!!! catch
+	    try {
+		key = Rosegarden::Key(**i);
 
-	    if (barNo > composition->getBarNumber(s.getStartTime())) {
-		cancelKey = s.getKeyAtTime(barStart - 1);
-	    }
-
-	    if (m_keySigCancelMode == 0) { // only when entering C maj / A min
-
-		if (key.getAccidentalCount() != 0) cancelKey = Rosegarden::Key();
-
-	    } else if (m_keySigCancelMode == 1) { // only when reducing acc count
-
-		if (!(key.isSharp() == cancelKey.isSharp() &&
-		      key.getAccidentalCount() < cancelKey.getAccidentalCount())) {
-		    cancelKey = Rosegarden::Key();
+		if (barNo > composition->getBarNumber(s.getStartTime())) {
+		    cancelKey = s.getKeyAtTime(barStart - 1);
 		}
-	    }
+		
+		if (m_keySigCancelMode == 0) { // only when entering C maj / A min
+		    
+		    if (key.getAccidentalCount() != 0) cancelKey = Rosegarden::Key();
+		    
+		} else if (m_keySigCancelMode == 1) { // only when reducing acc count
+		    
+		    if (!(key.isSharp() == cancelKey.isSharp() &&
+			  key.getAccidentalCount() < cancelKey.getAccidentalCount())) {
+			cancelKey = Rosegarden::Key();
+		    }
+		}
+		
+		haveKey = true;
 
-	    haveKey = true;
+	    } catch (...) {
+		NOTATION_DEBUG << "getBarInset: Bad key in event" << endl;
+	    }
 
 	} else if ((*i)->isa(Rosegarden::Clef::EventType)) {
 
-	    clef = Rosegarden::Clef(**i); //!!! catch
-	    haveClef = true;
+	    try {
+		clef = Rosegarden::Clef(**i);
+		haveClef = true;
+	    } catch (...) {
+		NOTATION_DEBUG << "getBarInset: Bad clef in event" << endl;
+	    }
 	}
     }
 

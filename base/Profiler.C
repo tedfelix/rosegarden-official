@@ -25,6 +25,10 @@
 #include <vector>
 #include <algorithm>
 
+#ifdef NDEBUG
+#define NO_TIMING 1
+#endif
+
 using std::cerr;
 using std::endl;
 

@@ -1305,7 +1305,7 @@ NotePixmapFactory::makeRoomForStemAndFlags(int flagCount, int stemLength,
 	if (params.m_stemGoesUp) {
 	    s0.setY(m_noteBodyHeight * 3 / 8);
 	} else {
-	    s0.setY(m_noteBodyHeight * 6 / 8);
+	    s0.setY(m_noteBodyHeight * 5 / 8);
 	}
 	stemLength -= m_noteBodyHeight / 8;
 	break;
