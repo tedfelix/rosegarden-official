@@ -1464,19 +1464,26 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc):
     m_tempoValue(0.0)
 {
     QVBox *vbox = makeVBoxMainWidget();
-    QGroupBox *groupBox = new QGroupBox(3, Horizontal, i18n("Tempo"), vbox);
-    //groupBox->setAlignment(AlignHCenter);
+    QGroupBox *groupBox = new QGroupBox(1, Horizontal, i18n("Tempo"), vbox);
+    QHBox *tempoBox = new QHBox(groupBox);
 
     // Set tempo
-    new QLabel(i18n("New tempo"), groupBox);
-    m_tempoValueSpinBox = new RosegardenSpinBox(groupBox);
+    new QLabel(i18n("New tempo"), tempoBox);
+    m_tempoValueSpinBox = new RosegardenSpinBox(tempoBox);
     m_tempoValueSpinBox->setMinValue(1);
     m_tempoValueSpinBox->setMaxValue(1000);
-    new QLabel(i18n("bpm"), groupBox);
+//    new QLabel(i18n("bpm"), tempoBox);
 
     // create a validator
     TempoValidator *validator = new TempoValidator(1.0, 1000.0, 6, this);
     m_tempoValueSpinBox->setValidator(validator);
+
+    connect(m_tempoValueSpinBox, SIGNAL(valueChanged(const QString &)),
+            SLOT(slotTempoChanged(const QString &)));
+
+    m_tempoBeatLabel = new QLabel(tempoBox);
+    m_tempoBeat = new QLabel(tempoBox);
+    m_tempoBeatsPerMinute = new QLabel(tempoBox);
 
     // Scope Box
     QButtonGroup *scopeBox = new QButtonGroup(1, Horizontal,
@@ -1559,7 +1566,9 @@ TempoDialog::populateTempo()
     m_tempoValueSpinBox->setValue((int)tempo);
     m_tempoValueSpinBox->setSpecialValueText(tempoString);
 
-    Rosegarden::RealTime tempoTime= comp.getElapsedRealTime(m_tempoTime);
+    updateBeatLabels(tempo);
+
+    Rosegarden::RealTime tempoTime = comp.getElapsedRealTime(m_tempoTime);
     QString milliSeconds;
     milliSeconds.sprintf("%03ld", tempoTime.usec / 1000);
     m_tempoTimeLabel->setText(i18n("%1.%2 s,").arg(tempoTime.sec)
@@ -1623,6 +1632,42 @@ TempoDialog::populateTempo()
     }
 
     m_defaultBox->setEnabled(false);
+}
+
+void
+TempoDialog::updateBeatLabels(double tempo)
+{
+    Rosegarden::Composition &comp = m_doc->getComposition();
+
+    // If the time signature's beat is not a crotchet, need to show
+    // bpm separately
+
+    timeT beat = comp.getTimeSignatureAt(m_tempoTime).getBeatDuration();
+    if (beat == Note(Note::Crotchet).getDuration()) {
+	m_tempoBeatLabel->setText(" bpm");
+	m_tempoBeatLabel->show();
+	m_tempoBeat->hide();
+	m_tempoBeatsPerMinute->hide();
+    } else {
+	Note beatNote = Note::getNearestNote(beat);
+	std::string beatName = beatNote.getReferenceName();
+	NotePixmapFactory npf;
+	m_tempoBeatLabel->setText(" (");
+	m_tempoBeat->setPixmap(npf.makeToolbarPixmap
+			       (strtoqstr("menu-" + beatName)));
+	m_tempoBeatsPerMinute->setText
+	    (QString("= %1 )").arg
+	     (int(tempo * Note(Note::Crotchet).getDuration() / beat)));
+	m_tempoBeatLabel->show();
+	m_tempoBeat->show();
+	m_tempoBeatsPerMinute->show();
+    }
+}
+
+void
+TempoDialog::slotTempoChanged(const QString &)
+{
+    updateBeatLabels(m_tempoValueSpinBox->getDoubleValue());
 }
 
 void

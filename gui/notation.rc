@@ -168,6 +168,10 @@ etc
   <Action name="collapse_rests_aggressively"/>
   <Separator/>
   <Action name="collapse_notes"/>
+  <Action name="tie_notes"/>
+  <Action name="make_notes_viable"/>
+  <Separator/>
+  <Action name="quantize"/>
   <Separator/>
   <Menu name="Transpose">
   <text>Trans&amp;pose</text>
@@ -179,8 +183,6 @@ etc
   <Separator/>
   <Action name="general_transpose"/>
   </Menu>
-  <Separator/>
-  <Action name="quantize"/>
   <Separator/>
   <Action name="invert"/>
   <Action name="retrograde"/>

@@ -340,8 +340,9 @@ public:
     void setTempoPosition(Rosegarden::timeT time);
 
 public slots:
-     virtual void slotOk();
-     void slotActionChanged();
+    virtual void slotOk();
+    void slotActionChanged();
+    void slotTempoChanged(const QString &);
 
 signals:
     // Return results in this signal
@@ -356,8 +357,12 @@ protected:
     RosegardenGUIDoc   *m_doc;
     Rosegarden::timeT   m_tempoTime;
     double              m_tempoValue;
-
     RosegardenSpinBox  *m_tempoValueSpinBox;
+
+    QLabel	       *m_tempoBeatLabel;
+    QLabel	       *m_tempoBeat;
+    QLabel	       *m_tempoBeatsPerMinute;
+
     QLabel             *m_tempoTimeLabel;
     QLabel             *m_tempoBarLabel;
     QLabel             *m_tempoStatusLabel;
@@ -368,6 +373,8 @@ protected:
     QRadioButton       *m_tempoChangeStartOfBar;
     QRadioButton       *m_tempoChangeGlobal;
     QCheckBox          *m_defaultBox;
+
+    void updateBeatLabels(double newTempo);
 };
 
 

@@ -150,7 +150,7 @@ Post-0.1.5-and-a-bit task list
 
 29. Add "Lengthen notes" and "shorten notes" transforms to notation view.
     No!  Make note tools _change the length of a note_ if clicked directly
-    onto it.  What excitement.
+    onto it.  What excitement. [DONE]
 
 30. More code documentation, including documenting the iterator-
     invalidation semantics of Segment and SegmentNotationHelper methods
