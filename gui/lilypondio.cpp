@@ -265,7 +265,7 @@ LilypondExporter::write() {
 
     // Lilypond header information
     str << "\\version \"1.4.10\"\n";
-//user-specified headers coming in from new metadata eventually ???
+    //user-specified headers coming in from new metadata eventually ???
     str << "\\header {\n";
     str << "\ttitle = \"" << m_fileName << "\"\n";
     str << "\tsubtitle = \"subtitle\"\n";
@@ -291,10 +291,11 @@ LilypondExporter::write() {
 
     // Make chords offset colliding notes by default
     str << "\t\t\\property Score.NoteColumn \\override #\'force-hshift = #1.0\n";
+    
+    // set initial time signature
+    TimeSignature timeSignature = m_composition->
+            getTimeSignatureAt(m_composition->getStartMarker());
 
-    // Incomplete: Handle time signature changes
-    // i.e. getTimeSignatureCount, getTimeSignatureChange
-    TimeSignature timeSignature = m_composition->getTimeSignatureAt(m_composition->getStartMarker());
     str << "\t\t\\time "
         << timeSignature.getNumerator() << "/"
         << timeSignature.getDenominator() << "\n";
@@ -319,15 +320,18 @@ LilypondExporter::write() {
         // if we are currently in a chord
         bool addTie = false;
 
-        if ((*i)->getTrack() != lastTrackIndex) {
+        if ((int) (*i)->getTrack() != lastTrackIndex) {
             if (lastTrackIndex != -1) {
                 // Close the old track (staff)
                 str << "\n\t\t>\n";
             }
             lastTrackIndex = (*i)->getTrack();
             // Will there be problems with quotes, spaces, etc. in staff/track labels?
-            str << "\t\t\\context Staff = \"" << m_composition->getTrackByIndex(lastTrackIndex)->getLabel() << "\" <\n";
-            str << "\t\t\t\\property Staff.instrument = \"" << m_composition->getTrackByIndex(lastTrackIndex)->getLabel() << "\"\n";
+            str << "\t\t\\context Staff = \"" << m_composition->
+                    getTrackByIndex(lastTrackIndex)->getLabel() << "\" <\n";
+            
+            str << "\t\t\t\\property Staff.instrument = \"" << m_composition->
+                    getTrackByIndex(lastTrackIndex)->getLabel() << "\"\n";
         
         }
         SegmentNotationHelper tmpHelper(**i);
@@ -372,11 +376,28 @@ LilypondExporter::write() {
             // i.e. chords etc.
             timeT absoluteTime = (*j)->getAbsoluteTime();
 
-            // cc: new bar?
+            // new bar
+            bool multipleTimeSignatures = ((m_composition->getTimeSignatureCount ()) > 1);
+            
             if (j == (*i)->begin() ||
                 (prevTime < m_composition->getBarStartForTime(absoluteTime))) {
                 str << "\n\t\t\t";
+                
+                // DMM - this is really pretty much an ugly hack, but it works...
+                // check time signature against previous one; if different,
+                // write new one here at bar line...
+                TimeSignature prevTimeSignature = timeSignature;
+                if (multipleTimeSignatures) {
+                    timeSignature = m_composition->getTimeSignatureAt(absoluteTime);
+                    if ((timeSignature.getNumerator() != prevTimeSignature.getNumerator()) || 
+                        (timeSignature.getDenominator() != prevTimeSignature.getDenominator())) {
+                        str << "\\time "
+                            << timeSignature.getNumerator() << "/"
+                            << timeSignature.getDenominator() << "\n\t\t\t";
+                    }
+                }
             }
+            
             prevTime = absoluteTime;
 
             timeT duration = (*j)->getDuration();
@@ -578,12 +599,13 @@ LilypondExporter::write() {
                     str << " \\major";
                 }
                 str << "\n\t\t\t";
-
                         
             } else if ((*j)->isa(Indication::EventType)) {
                 // Handle the end of these events when it's time
                 eventsToStart.insert(*j);
                 eventsInProgress.insert(*j);
+//            } else if ((*j)->isa(Mark::EventType)) {
+//            in progress...
             } else {
                 std::cerr << "\n[Lilypond] Unhandled Event type: " << (*j)->getType();
             }
