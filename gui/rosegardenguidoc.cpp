@@ -824,12 +824,13 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
                     m_studio.getInstrumentById(track->getInstrument());
 
                 if (instr) {
-                    label = instr->getName() + std::string(" ");
+                    label = m_studio.getSegmentName(instr->getId());
                 }
-            } else
-                label = track->getLabel() + std::string(" ");
+            } else {
+                label = track->getLabel();
+	    }
 
-            label += std::string("(recorded)");
+	    label = qstrtostr(i18n("%1 (recorded)").arg(strtoqstr(label)));
         }
 
         m_recordSegment->setLabel(label);
@@ -942,15 +943,16 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
                             m_endOfLastRecordedNote = m_composition.getPosition();
                             m_composition.addSegment(m_recordSegment);
                         }
+
                     // If there was a gap between the last note and this one
                     // then fill it with rests
                     //
-                    if (absTime > m_endOfLastRecordedNote)
-                        m_recordSegment->fillWithRests(absTime + duration);
+//                    if (absTime > m_endOfLastRecordedNote)
+//                        m_recordSegment->fillWithRests(absTime + duration);
 
                     // Now insert the new event
                     //
-                    /*Segment::iterator loc = */ m_recordSegment->insert(rEvent);
+                    m_recordSegment->insert(rEvent);
 
                     // And now fiddle with it
                     //
@@ -1008,12 +1010,24 @@ RosegardenGUIDoc::stopRecordingMidi()
     //
     convertToSinglePoint(m_recordSegment);
         
-    if (m_recordSegment->getComposition()) {
+    // the record segment will have already been added to the
+    // composition if there was anything in it; otherwise we
+    // don't need to do so
+    if (m_recordSegment->getComposition() != 0) {
 
-	// something in the record segment (that's why it was added
-	// to the composition)
+	// Quantize for notation only -- doesn't affect performance timings
 	m_commandHistory->addCommand
-	    (new SegmentRecordCommand(m_recordSegment));
+	    (new EventQuantizeCommand
+	     (*m_recordSegment,
+	      m_recordSegment->getStartTime(),
+	      m_recordSegment->getEndTime(),
+	      "Notation Options",
+	      Rosegarden::Quantizer::NotationPrefix,
+	      true));
+
+	m_commandHistory->addCommand
+	    (new SegmentRecordCommand
+	     (m_recordSegment));
     }
 
     m_recordSegment = 0;
@@ -1384,8 +1398,9 @@ RosegardenGUIDoc::convertToSinglePoint(Rosegarden::Segment *segment)
 
     // Always fill with rests if we have some events
     //
-    if(segment->begin() != segment->end())
-        segment->normalizeRests(segment->getStartTime(), segment->getEndTime());
+//!!! no -- done by insert command
+//    if(segment->begin() != segment->end())
+//        segment->normalizeRests(segment->getStartTime(), segment->getEndTime());
 
 }
 
@@ -1556,9 +1571,8 @@ RosegardenGUIDoc::finalizeAudioFile(Rosegarden::AudioFileId /*id*/)
 	CurrentProgressDialog::thaw();
     }
 
-    // something in the record segment (that's why it was added
-    // to the composition)
-    m_commandHistory->addCommand(new SegmentRecordCommand(m_recordSegment));
+    m_commandHistory->addCommand
+	(new SegmentRecordCommand(m_recordSegment));
 
     // Update preview
     //

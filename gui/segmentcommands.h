@@ -208,7 +208,6 @@ private:
     Rosegarden::Composition *m_composition;
     Rosegarden::Segment *m_segment;
     bool m_detached;
-    bool m_firstTime;
 };
 
 

@@ -1012,7 +1012,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
         if (dev && dev->getDirection() == MidiDevice::Record)
         {
 	    QString label = strtoqstr(dev->getName());
-	    label += " (" + strtoqstr(dev->getConnection()) + ")";
+	    label += " - " + strtoqstr(dev->getConnection());
 	    m_recordDevice->insertItem(label);
 	    m_devices.push_back(dev->getId());
         }

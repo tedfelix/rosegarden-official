@@ -910,8 +910,8 @@ void NotationView::setupActions()
 		"select_from_start");
 
     new KAction(i18n("Select to &End"), 0, this,
-		"select_to_end");
 		SLOT(slotEditSelectToEnd()), actionCollection(),
+		"select_to_end");
 
     new KAction(i18n("Select Whole St&aff"), 0, this,
 		SLOT(slotEditSelectWholeStaff()), actionCollection(),

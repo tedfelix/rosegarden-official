@@ -73,7 +73,7 @@ NoteInsertionCommand::NoteInsertionCommand(Segment &segment, timeT time,
 					   bool autoBeam,
 					   bool matrixType,
 					   NoteStyleName noteStyle) :
-    BasicCommand("Insert Note", segment,
+    BasicCommand(i18n("Insert Note"), segment,
 		 (autoBeam ? segment.getBarStartForTime(time) : time),
 		 (autoBeam ? segment.getBarEndForTime(endTime) : endTime)),
     m_insertionTime(time),
@@ -272,7 +272,7 @@ ClefInsertionCommand::modifySegment()
 
 TextInsertionCommand::TextInsertionCommand(Segment &segment, timeT time,
 					   Text text) :
-    BasicCommand("Insert Text", segment, time, time + 1),
+    BasicCommand(i18n("Insert Text"), segment, time, time + 1),
     m_text(text),
     m_lastInsertedEvent(0)
 {

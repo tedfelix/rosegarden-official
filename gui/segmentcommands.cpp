@@ -115,7 +115,7 @@ void SegmentCommandRepeat::unexecute()
 // --------- Erase Segment --------
 //
 SegmentEraseCommand::SegmentEraseCommand(Segment *segment) :
-    KNamedCommand("Erase Segment"),
+    KNamedCommand(i18n("Erase Segment")),
     m_composition(segment->getComposition()),
     m_segment(segment),
     m_detached(false)
@@ -153,7 +153,7 @@ SegmentEraseCommand::unexecute()
 // --------- Copy Segment ---------
 //
 SegmentQuickCopyCommand::SegmentQuickCopyCommand(Segment *segment):
-    KNamedCommand("Quick-Copy Segment"),
+    KNamedCommand(i18n("Quick-Copy Segment")),
     m_composition(segment->getComposition()),
     m_segmentToCopy(segment),
     m_segment(0),
@@ -172,8 +172,8 @@ void
 SegmentQuickCopyCommand::execute()
 {
     m_segment = new Segment(*m_segmentToCopy);
-    m_segment->setLabel
-	(m_segment->getLabel() + " " + qstrtostr(i18n("(copied)")));
+    m_segment->setLabel(qstrtostr(i18n("%1 (copied)").arg
+				  (strtoqstr(m_segment->getLabel()))));
     m_composition->addSegment(m_segment);
     m_detached = false;
 }
@@ -190,7 +190,7 @@ SegmentQuickCopyCommand::unexecute()
 //
 SegmentRepeatToCopyCommand::SegmentRepeatToCopyCommand(
         Rosegarden::Segment *segment):
-    KNamedCommand("Repeating Segment to Copies"),
+    KNamedCommand(i18n("Turn Repeats into Copies")),
     m_composition(segment->getComposition()),
     m_segment(segment),
     m_detached(false)
@@ -276,7 +276,7 @@ AudioSegmentInsertCommand::AudioSegmentInsertCommand(
         Rosegarden::AudioFileId audioFileId,
         const Rosegarden::RealTime &audioStartTime,
         const Rosegarden::RealTime &audioEndTime):
-    KNamedCommand("Create Segment"),
+    KNamedCommand(i18n("Create Segment")),
     m_composition(&(doc->getComposition())),
     m_studio(&(doc->getStudio())),
     m_audioFileManager(&(doc->getAudioFileManager())),
@@ -332,9 +332,10 @@ AudioSegmentInsertCommand::execute()
                 m_audioFileManager->getAudioFile(m_audioFileId);
 
         if (aF)
-            label = aF->getName() + std::string(" (inserted)");
+            label = qstrtostr(i18n("%1 (inserted)").arg
+			      (strtoqstr(aF->getName())));
         else
-            label = std::string("unknown audio file");
+            label = qstrtostr(i18n("unknown audio file"));
 
         m_segment->setLabel(label);
 
@@ -360,7 +361,7 @@ SegmentInsertCommand::SegmentInsertCommand(RosegardenGUIDoc *doc,
                                            TrackId track,
                                            timeT startTime,
                                            timeT endTime):
-    KNamedCommand("Create Segment"),
+    KNamedCommand(i18n("Create Segment")),
     m_composition(&(doc->getComposition())),
     m_studio(&(doc->getStudio())),
     m_segment(0),
@@ -410,7 +411,6 @@ SegmentInsertCommand::execute()
 
             m_segment->setLabel(label);
         }
-
     }
     else
     {
@@ -431,11 +431,10 @@ SegmentInsertCommand::unexecute()
 //
 
 SegmentRecordCommand::SegmentRecordCommand(Segment *s) :
-    KNamedCommand("Record"),
+    KNamedCommand(i18n("Record")),
     m_composition(s->getComposition()),
     m_segment(s),
-    m_detached(false),
-    m_firstTime(true)
+    m_detached(false)
 {
 }
 
@@ -450,25 +449,9 @@ void
 SegmentRecordCommand::execute()
 {
     if (!m_segment->getComposition()) {
-
 	m_composition->addSegment(m_segment);
-
-	if (m_firstTime) {
-	    // Apply a quantization for notation only (does not affect
-	    // any other editing or performance facility).  This
-	    // normalizes the rests for us too.
-	    m_composition->getNotationQuantizer()->quantize(m_segment);
-	    Rosegarden::SegmentNotationHelper helper(*m_segment);
-	    m_segment->insert
-		(helper.guessClef(m_segment->begin(),
-				  m_segment->end()).getAsEvent(0));
-	    helper.autoBeam(m_segment->begin(),
-			    m_segment->end(),
-			    Rosegarden::BaseProperties::GROUP_TYPE_BEAMED);
-	}
-
-        m_segment->setLabel(std::string("recorded audio"));
     }
+
     m_detached = false;
 }
 
@@ -564,7 +547,7 @@ SegmentReconfigureCommand::swap()
 
 AudioSegmentSplitCommand::AudioSegmentSplitCommand(Segment *segment,
 					           timeT splitTime) :
-    KNamedCommand("Split Audio Segment"),
+    KNamedCommand(i18n("Split Audio Segment")),
     m_segment(segment),
     m_newSegment(0),
     m_splitTime(splitTime),
@@ -622,7 +605,8 @@ AudioSegmentSplitCommand::execute()
         // Set labels
         //
         m_segmentLabel = m_segment->getLabel();
-        m_segment->setLabel(m_segmentLabel + std::string(" (split)"));
+	m_segment->setLabel(qstrtostr(i18n("%1 (split)").arg
+				      (strtoqstr(m_segmentLabel))));
         m_newSegment->setLabel(m_segment->getLabel());
     }
 
@@ -668,7 +652,7 @@ AudioSegmentSplitCommand::unexecute()
 
 SegmentSplitCommand::SegmentSplitCommand(Segment *segment,
 					 timeT splitTime) :
-    KNamedCommand("Split Segment"),
+    KNamedCommand(i18n("Split Segment")),
     m_segment(segment),
     m_newSegment(0),
     m_splitTime(splitTime),
@@ -746,7 +730,8 @@ SegmentSplitCommand::execute()
         // Set labels
         //
         m_segmentLabel = m_segment->getLabel();
-        m_segment->setLabel(m_segmentLabel + std::string(" (split)"));
+	m_segment->setLabel(qstrtostr(i18n("%1 (split)").arg
+				      (strtoqstr(m_segmentLabel))));
         m_newSegment->setLabel(m_segment->getLabel());
     }
 
@@ -856,9 +841,9 @@ AudioSegmentAutoSplitCommand::execute()
 
         // label
         sprintf(splitNumber, "%d", splitCount++);
-        newSegment->setLabel(
-                m_segment->getLabel() + std::string(" (autosplit ") +
-                splitNumber + std::string(" )"));
+        newSegment->setLabel(qstrtostr(i18n("%1 (autosplit %2)").arg
+				       (strtoqstr(m_segment->getLabel())).arg
+				       (splitNumber)));
 
 	m_composition->addSegment(newSegment);
         newSegment->setStartTime(absStartTime);
@@ -983,8 +968,8 @@ SegmentAutoSplitCommand::execute()
 
 	Segment *newSegment = new Segment();
 	newSegment->setTrack(m_segment->getTrack());
-	newSegment->setLabel(m_segment->getLabel() + " " +
-			     qstrtostr(i18n("(part)")));
+	newSegment->setLabel(qstrtostr(i18n("%1 (part)").arg
+				       (strtoqstr(m_segment->getLabel()))));
 
 	timeT startTime = segmentStart;
 	if (split > 0) {
@@ -1144,8 +1129,8 @@ SegmentRescaleCommand::execute()
     timeT startTime = m_segment->getStartTime();
     m_newSegment = new Segment();
     m_newSegment->setTrack(m_segment->getTrack());
-    m_newSegment->setLabel(m_segment->getLabel() + " " +
-			   qstrtostr(i18n("(rescaled)")));
+    m_newSegment->setLabel(qstrtostr(i18n("%1 (rescaled)").arg
+				     (strtoqstr(m_segment->getLabel()))));
 
     for (Segment::iterator i = m_segment->begin();
 	 m_segment->isBeforeEndMarker(i); ++i) {
@@ -1715,7 +1700,7 @@ ChangeCompositionLengthCommand::unexecute()
 SegmentSplitByPitchCommand::SegmentSplitByPitchCommand(Segment *segment,
 						       int p, bool r, bool d,
 						       ClefHandling c) :
-    KNamedCommand("Split by Pitch"),
+    KNamedCommand(i18n("Split by Pitch")),
     m_segment(segment),
     m_newSegmentA(0),
     m_newSegmentB(0),
@@ -1819,8 +1804,10 @@ SegmentSplitByPitchCommand::execute()
 		     Rosegarden::BaseProperties::GROUP_TYPE_BEAMED);
 
     std::string label = m_segment->getLabel();
-    m_newSegmentA->setLabel(label + std::string(" (upper)"));
-    m_newSegmentB->setLabel(label + std::string(" (lower)"));
+    m_newSegmentA->setLabel(qstrtostr(i18n("%1 (upper)").arg
+				      (strtoqstr(label))));
+    m_newSegmentB->setLabel(qstrtostr(i18n("%1 (lower)").arg
+				      (strtoqstr(label))));
 
     m_segment->getComposition()->detachSegment(m_segment);
     m_executed = true;
@@ -1923,7 +1910,7 @@ SegmentSplitByPitchCommand::getSplitPitchAt(Segment::iterator i,
 SegmentLabelCommand::SegmentLabelCommand(
         const Rosegarden::SegmentSelection &segments,
         const QString &label):
-    KNamedCommand("Label Segments"),
+    KNamedCommand(i18n("Label Segments")),
     m_newLabel(label)
 {
     for (Rosegarden::SegmentSelection::iterator i = segments.begin();
