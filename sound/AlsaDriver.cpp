@@ -725,7 +725,7 @@ AlsaDriver::initialiseAudio()
                            0);
     m_audioInputPortRight =
         jack_port_register(m_audioClient,
-                           "in_1",
+                           "in_2",
                            JACK_DEFAULT_AUDIO_TYPE,
                            JackPortIsInput|JackPortIsTerminal,
                            0);

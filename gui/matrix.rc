@@ -11,6 +11,7 @@
 <Menu name="Transforms">
   <text>Trans&amp;forms</text>
   <Action name="quantize"/>
+  <Action name="set_velocities"/>
 </Menu>
 
 </MenuBar>
@@ -34,6 +35,7 @@
     <Action name="edit_cut"/>
     <Action name="edit_copy"/>
     <Action name="quantize"/>
+    <Action name="set_velocities"/>
   </enable>
 </State>
 

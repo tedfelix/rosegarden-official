@@ -31,6 +31,19 @@ namespace Rosegarden {
     class Clipboard;
     class EventSelection;
     class SegmentSelection;
+
+    // Patterns of properties
+    //
+    typedef enum 
+    {
+        Flat,           // set selection to velocity 1.
+        Alternating,    // alternate between velocity 1 and 2 on subsequent
+                        // events.
+        Crescendo,      // increasing from velocity 1 to velocity 2.
+        Diminuendo,     // decreasing from velocity 1 to velocity 2.
+        Ringing         // between velocity 1 and 2, dying away.
+    } PropertyPattern;
+
 }
 
 
@@ -235,6 +248,33 @@ protected:
 private:
     Rosegarden::Quantizer m_quantizer;
     Rosegarden::EventSelection *m_selection;
+};
+
+// Set the (numerical) property of a selection according given pattern.
+//
+class SelectionPropertyCommand : public BasicSelectionCommand
+{
+public:
+
+    SelectionPropertyCommand(Rosegarden::EventSelection *selection,
+                             const Rosegarden::PropertyName &property,
+                             Rosegarden::PropertyPattern pattern,
+                             int value1,
+                             int value2);
+
+    static QString getGlobalName() { return "Set &Property"; }
+
+    virtual void modifySegment();
+
+private:
+    Rosegarden::EventSelection *m_selection;
+    Rosegarden::PropertyName    m_property;
+    Rosegarden::PropertyPattern m_pattern;
+    int                         m_value1;
+    int                         m_value2;
+
+    std::vector<int>            m_oldValues;
+
 };
 
 class EventUnquantizeCommand : public BasicCommand

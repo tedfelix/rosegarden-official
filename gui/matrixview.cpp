@@ -403,6 +403,10 @@ void MatrixView::setupActions()
                 SLOT(slotTransformsQuantize()), actionCollection(),
                 "quantize");
 
+    new KAction(i18n("Set Event Velocities..."), 0, this,
+                SLOT(slotSetVelocities()), actionCollection(),
+                "set_velocities");
+
     new KAction(i18n("Select All"), 0, this,
                 SLOT(slotSelectAll()), actionCollection(),
                 "select_all");
@@ -815,7 +819,11 @@ MatrixView::slotSetPointerPosition(timeT time, bool scroll)
     }
 
     if (scroll)
+#ifdef RGKDE3
         slotScrollHoriz(getXbyWorldMatrix(m_hlayout.getXForTime(time)));
+#else
+        slotScrollHoriz(m_hlayout.getXForTime(time));
+#endif
 
     updateView();
 }
@@ -1396,7 +1404,7 @@ MatrixView::slotChangeHorizontalZoom(int)
     Rosegarden::timeT length = m_segments[0]->getEndTime() -
                                m_segments[0]->getStartTime();
 
-    int newWidth = getXbyWorldMatrix(m_hlayout.getXForTime(length));
+    int newWidth = int(getXbyWorldMatrix(m_hlayout.getXForTime(length)));
     readjustViewSize(QSize(newWidth, getViewSize().height()), true);
 //     applyLayout();
 #endif
@@ -1498,12 +1506,36 @@ MatrixView::readjustCanvasSize()
                                m_segments[0]->getStartTime();
 
 #ifdef RGKDE3
-    int newWidth = getXbyWorldMatrix(m_hlayout.getXForTime(length));
+    int newWidth = int(getXbyWorldMatrix(m_hlayout.getXForTime(length)));
 #else
-    int newWidth = m_hlayout.getXForTime(length);
+    int newWidth = (m_hlayout.getXForTime(length));
 #endif
 
     // now get the EditView to do the biz
     readjustViewSize(QSize(newWidth, maxHeight), true);
     repaintRulers();
 }
+
+// Set the velocities of the current selection (if we have one)
+//
+void
+MatrixView::slotSetVelocities()
+{
+    if (!m_currentEventSelection) return;
+
+    EventParameterDialog *dialog
+        = new EventParameterDialog(this,
+                                   i18n("Set Event Velocities"),
+                                   Rosegarden::BaseProperties::VELOCITY);
+
+    if (dialog->exec() == QDialog::Accepted) {
+	KTmpStatusMsg msg(i18n("Setting Velocities..."), this);
+	addCommandToHistory(new SelectionPropertyCommand
+			    (m_currentEventSelection,
+                             Rosegarden::BaseProperties::VELOCITY,
+                             dialog->getPattern(),
+                             dialog->getValue1(),
+                             dialog->getValue2()));
+    }
+}
+

@@ -58,7 +58,6 @@ using std::cerr;
 using std::endl;
 
 
-
 CutCommand::CutCommand(EventSelection &selection,
 		       Rosegarden::Clipboard *clipboard) :
     KMacroCommand(getGlobalName())
@@ -543,7 +542,48 @@ EventEditCommand::modifySegment()
     segment.normalizeRests(getStartTime(), getEndTime());
 }
 
+// -------------------- SelectionPropertyCommand -----------------
+//
+//
+SelectionPropertyCommand::SelectionPropertyCommand(
+        Rosegarden::EventSelection *selection,
+        const Rosegarden::PropertyName &property,
+        Rosegarden::PropertyPattern pattern,
+        int value1,
+        int value2):
+    BasicSelectionCommand(getGlobalName(), *selection, true),
+    m_selection(selection),
+    m_property(property),
+    m_pattern(pattern),
+    m_value1(value1),
+    m_value2(value2)
+{
+}
 
+void
+SelectionPropertyCommand::modifySegment()
+{
+    EventSelection::eventcontainer::iterator i =
+        m_selection->getSegmentEvents().begin();
+
+    for (;i != m_selection->getSegmentEvents().end(); ++i)
+    {
+        if ((*i)->has(m_property))
+        {
+            m_oldValues.push_back((*i)->get<Int>(m_property));
+        }
+        else
+        {
+            m_oldValues.push_back(-1);
+        }
+        (*i)->set<Rosegarden::Int>(m_property, m_value1);
+    }
+}
+
+
+// -------------------- EventQuantizeCommand --------------------
+//
+//
 EventQuantizeCommand::EventQuantizeCommand(Rosegarden::Segment &segment,
 					   Rosegarden::timeT startTime,
 					   Rosegarden::timeT endTime,

@@ -313,6 +313,11 @@ public slots:
     void slotQuantizeSelection(int);
 
     /*
+     * Pop-up the velocity modificatio dialog
+     */
+    void slotSetVelocities();
+
+    /*
      * Change horizontal zoom
      */
     void slotChangeHorizontalZoom(int);

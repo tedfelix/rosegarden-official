@@ -597,5 +597,37 @@ protected:
     void unparse();
 };
 
+// -------------  EventParameterDialog -------------
+//
+class EventParameterDialog : public KDialogBase
+{
+    Q_OBJECT
+
+public:
+    EventParameterDialog(QWidget *parent,
+                         const QString &name,                       // name
+                         const Rosegarden::PropertyName &property); // property
+
+    int getValue1();
+    int getValue2();
+    Rosegarden::PropertyPattern getPattern();
+
+public slots:
+    void slotPatternSelected(int value);
+
+protected:
+    //--------------- Data members ---------------------------------
+    Rosegarden::PropertyName    m_property;
+    Rosegarden::PropertyPattern m_pattern;
+
+    RosegardenComboBox         *m_value1Combo;
+    RosegardenComboBox         *m_value2Combo;
+    RosegardenComboBox         *m_patternCombo;
+
+    QLabel                     *m_value1Label;
+    QLabel                     *m_value2Label;
+
+};
+
 
 #endif

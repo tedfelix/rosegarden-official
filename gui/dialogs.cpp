@@ -2622,3 +2622,149 @@ LyricEditDialog::getLyricData()
     return m_textEdit->text();
 }
 
+EventParameterDialog::EventParameterDialog(
+        QWidget *parent,
+        const QString &name,
+        const Rosegarden::PropertyName &property):
+            KDialogBase(parent, "", true, name, Ok | Cancel),
+            m_property(property)
+{
+    QVBox *vBox = makeVBoxMainWidget();
+
+    QHBox *topBox = new QHBox(vBox);
+    QLabel *explainLabel = new QLabel(topBox);
+    QString text = i18n("Set the ") + strtoqstr(property) +
+                   i18n(" property of the event selection:");
+    explainLabel->setText(text);
+
+    QHBox *patternBox = new QHBox(vBox);
+    /*QLabel *patternLabel =*/ new QLabel(i18n("Pattern"), patternBox);
+    m_patternCombo = new RosegardenComboBox(true, patternBox);
+
+    // create options
+    text = i18n("Flat - set ") + strtoqstr(property) + (" to value");
+    m_patternCombo->insertItem(text);
+
+    text = i18n("Alternating - set ") + strtoqstr(property) +
+           i18n(" to max and min on alternate events");
+    m_patternCombo->insertItem(text);
+
+    text = i18n("Crescendo - set ") + strtoqstr(property) + 
+           i18n(" rising from min to max");
+    m_patternCombo->insertItem(text);
+
+    text = i18n("Diminuendo - set ") + strtoqstr(property) +
+           i18n(" falling from max to min");
+    m_patternCombo->insertItem(text);
+
+    text = i18n("Ringing - set ") + strtoqstr(property) +
+           i18n(" alternating from max to min with both dying to zero");
+    m_patternCombo->insertItem(text);
+
+    connect(m_patternCombo, SIGNAL(activated(int)),
+            this, SLOT(slotPatternSelected(int)));
+
+    connect(m_patternCombo, SIGNAL(propagate(int)),
+            this, SLOT(slotPatternSelected(int)));
+
+    QHBox *value1Box = new QHBox(vBox);
+    m_value1Label = new QLabel(i18n("Value"), value1Box);
+    m_value1Combo = new RosegardenComboBox(true, value1Box);
+
+    QHBox *value2Box = new QHBox(vBox);
+    m_value2Label = new QLabel(i18n("Value"), value2Box);
+    m_value2Combo = new RosegardenComboBox(true, value2Box);
+
+    for (unsigned int i = 0; i < 128; i++)
+    {
+        m_value1Combo->insertItem(QString("%1").arg(i));
+        m_value2Combo->insertItem(QString("%1").arg(i));
+    }
+    m_value1Combo->setCurrentItem(127);
+
+    slotPatternSelected(0);
+
+}
+
+void
+EventParameterDialog::slotPatternSelected(int value)
+{
+    switch(value)
+    {
+        case 0:
+            m_value1Label->setText(i18n("Value"));
+            m_value1Label->show();
+            m_value1Combo->show();
+            m_value2Label->hide();
+            m_value2Combo->hide();
+            break;
+
+        case 1:
+            m_value1Label->setText(i18n("Max Value"));
+            m_value2Label->setText(i18n("Min Value"));
+            m_value1Label->show();
+            m_value1Combo->show();
+            m_value2Label->show();
+            m_value2Combo->show();
+            break;
+
+        case 2:
+            m_value1Label->setText(i18n("Max Value"));
+            m_value2Label->setText(i18n("Min Value"));
+            m_value1Label->show();
+            m_value1Combo->show();
+            m_value2Label->show();
+            m_value2Combo->show();
+            break;
+
+        case 3:
+            m_value1Label->setText(i18n("Max Value"));
+            m_value2Label->setText(i18n("Min Value"));
+            m_value1Label->show();
+            m_value1Combo->show();
+            m_value2Label->show();
+            m_value2Combo->show();
+            break;
+
+        case 4:
+            m_value1Label->setText(i18n("Max Value"));
+            m_value2Label->setText(i18n("Min Value"));
+            m_value1Label->show();
+            m_value1Combo->show();
+            m_value2Label->show();
+            m_value2Combo->show();
+            break;
+
+        default:
+            std::cerr << "EventParameterDialog::slotPatternSelected - "
+                      << "unrecognised pattern number" << std::endl;
+            break;
+    }
+
+}
+
+Rosegarden::PropertyPattern
+EventParameterDialog::getPattern()
+{
+    return Rosegarden::PropertyPattern(m_patternCombo->currentItem());
+}
+
+int
+EventParameterDialog::getValue1()
+{
+    return m_value1Combo->currentItem();
+}
+
+int
+EventParameterDialog::getValue2()
+{
+    return m_value2Combo->currentItem();
+}
+
+
+
+
+
+
+
+
