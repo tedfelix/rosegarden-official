@@ -127,7 +127,12 @@ public:
      * changes the ordering may break.  If your Segment is already in a
      * Composition, use Composition::setSegmentTrack instead.
      */
-    void setTrack(TrackId i) { m_track = i; }
+    void setTrack(TrackId i)
+#ifdef OLD_SEGMENT_API
+    { m_track = i; }
+#else
+    ;
+#endif
 
     // label
     //
@@ -146,6 +151,7 @@ public:
     //
     // TIME & DURATION VALUES
 
+#ifdef OLD_SEGMENT_API
     /**
      * Get the formal starting time of the Segment.  This is not
      * necessarily the same as the time of the first event in it.
@@ -220,6 +226,144 @@ public:
      * themselves to meet their end markers).
      */
     timeT getEndMarker() const;
+#else
+
+    /**
+     * Return the time of the first event stored in the Segment.
+     * This time may be outside the audible/editable range of the
+     * Segment, depending on the location of the start marker.
+     */
+    timeT getStartTime() const;
+
+    /**
+     * Return the time of the end of the last event stored in the
+     * Segment.  This time may be outside the audible/editable
+     * range of the Segment, depending on the location of the end
+     * marker.
+     */
+    timeT getEndTime() const;
+
+    /**
+     * Shift the start time of the Segment by moving the start
+     * times of all the events in the Segment.  Also moves the
+     * start marker, if there is one.
+     */
+    void setStartTime(timeT);
+
+    /**
+     * Change the end time of the Segment.  If the new end time
+     * is later than the old, extend the Segment by filling it
+     * with rests; if earlier, shorten it by throwing away events
+     * as necessary (though not by truncating them) and also move
+     * the end marker to the given time.  The end time may not
+     * precede the start time.
+     *
+     * Note that simply inserting an event beyond the end of the
+     * Segment will also change the end time, although it does
+     * not fill with rests in the desirable way.
+     */
+    void setEndTime(timeT);
+
+    /**
+     * Return an iterator pointing to the nominal start of the
+     * Segment.  This may be later than the begin() iterator.
+     */
+    iterator getStartMarker();
+
+    /**
+     * Return an iterator pointing to the nominal end of the
+     * Segment.  This may be earlier than the end() iterator.
+     */
+    iterator getEndMarker();
+
+    /**
+     * Return the nominal start time of the Segment.  This must
+     * be the same as or later than the getStartTime() value.
+     * The return value will not necessarily be that last set
+     * with setStartMarkerTime, as if there is a Composition its
+     * start marker will also be used for clipping.
+     */
+    timeT getStartMarkerTime() const;
+
+    /**
+     * Return the nominal end time of the Segment.  This must
+     * be the same as or earlier than the getEndTime() value.
+     * The return value will not necessarily be that last set
+     * with setEndMarkerTime, as if there is a Composition its
+     * end marker will also be used for clipping.
+     */
+    timeT getEndMarkerTime() const;
+
+    /**
+     * Set the start marker (nominal start time) of this Segment.
+     * If the given time is earlier than the current start of
+     * the Segment's storage, the Segment will be filled with
+     * rests to extend it back to the correct time.  If the
+     * given time is later than the current end marker, the end
+     * marker will be moved to the same time as the start marker.
+     * The start marker time may not be later than the current
+     * end of the Segment's storage.
+     */
+    void setStartMarkerTime(timeT);
+    
+    /**
+     * Set the end marker (nominal end time) of this Segment.
+     * If the given time is later than the current end of
+     * the Segment's storage, the Segment will be filled with
+     * rests to extend it forward to the correct time.  If the
+     * given time is earlier than the current start marker, the
+     * start marker will be moved to the same time as the new
+     * end marker.
+     * The end marker time may not be earlier than the current
+     * start of the Segment's storage.
+     */
+    void setEndMarkerTime(timeT);
+
+    /**
+     * Remove the start marker, thus making the Segment start
+     * at its storage start time (unless the Composition's
+     * start marker is later).
+     */
+    void clearStartMarker();
+
+    /**
+     * Remove the end marker, thus making the Segment end
+     * at its storage end time (unless the Composition's
+     * end marker is earlier).
+     */
+    void clearEndMarker();
+
+    /**
+     * Return true if the given iterator points earlier in the
+     * Segment than the nominal start marker.  (Also takes the
+     * Composition's start marker into account.)
+     */
+    bool isBeforeStartMarker(iterator);
+
+    /**
+     * Return true if the given iterator points earlier in the
+     * Segment than the nominal end marker.  You can use this
+     * as an extent test in code such as
+     * 
+     *  while (segment.isBeforeEndMarker(my_iterator)) {
+     *      //...
+     *      ++my_iterator;
+     *  }
+     *
+     * It is not generally safe to write
+     *
+     *  while (my_iterator != segment.getEndMarker()) {
+     *      //...
+     *      ++my_iterator;
+     *  }
+     * 
+     * as the loop will not terminate if my_iterator's initial
+     * value is already beyond the end marker.  (Also takes the
+     * Composition's end marker into account.)
+     */
+    bool isBeforeEndMarker(iterator);
+    
+#endif
 
 
     //////
@@ -484,7 +628,8 @@ private:
     TrackId m_track;
     SegmentType m_type;         // identifies Segment type
     std::string m_label;        // segment label
-    timeT *m_endMarkerTime;     // points to end time, or zero pointer if none
+    timeT *m_startMarkerTime;   // points to start time, or null if none
+    timeT *m_endMarkerTime;     // points to end time, or null if none
 
     mutable int m_id; // not id of Segment, but a value for return by getNextId
 

@@ -350,6 +350,7 @@ Composition::findSegment(const Segment *s)
     return find(begin(), end(), s);
 }
 
+#ifdef OLD_SEGMENT_API
 bool
 Composition::setSegmentStartTimeAndTrack(Segment *s, timeT t, unsigned int track)
 {
@@ -371,6 +372,7 @@ Composition::setSegmentStartTimeAndTrack(Segment *s, timeT t, unsigned int track
 
     return true;
 }
+#endif
 
 timeT
 Composition::getDuration() const

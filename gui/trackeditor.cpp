@@ -355,7 +355,11 @@ TrackEditor::setupSegments()
 
 	kdDebug(KDEBUG_AREA) << "TrackEditor::setupSegments() add segment"
 			     << " - start idx : " << (*i)->getStartTime()
+#ifdef OLD_SEGMENT_API
 			     << " - nb time steps : " << (*i)->getDuration()
+#else
+			     << " - nb time steps : " << ((*i)->getEndTime() - (*i)->getStartTime())
+#endif
 			     << " - track : " << (*i)->getTrack()
 			     << endl;
 

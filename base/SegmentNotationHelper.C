@@ -808,7 +808,7 @@ SegmentNotationHelper::insertSingleSomething(iterator i, int duration,
     timeT effectiveDuration(duration);
 
     if (i == end()) {
-	time = segment().getDuration();
+	time = segment().getEndTime();
     } else {
 	time = (*i)->getAbsoluteTime();
 	if (isRest || (*i)->isa(Note::EventRestType)) eraseI = true;
@@ -1468,7 +1468,7 @@ SegmentNotationHelper::removeRests(timeT time, timeT &duration, bool testOnly)
 
         if (lastEvent == end()) {
             cerr << "SegmentNotationHelper::removeRests : not enough rest space\n";
-	    duration = segment().getDuration() - time;
+	    duration = segment().getEndTime() - time;
             return false;
         }
 

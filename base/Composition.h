@@ -198,6 +198,7 @@ public:
      */
     bool detachSegment(Segment*);
 
+#ifdef OLD_SEGMENT_API
     /**
      * Set the start index and track number the given Segment is
      * associated with.  You should normally use this in preference to
@@ -209,7 +210,7 @@ public:
      * \return false if the Segment was not found
      */
     bool setSegmentStartTimeAndTrack(Segment *, timeT, unsigned int);
-
+#endif
 
 
     //////

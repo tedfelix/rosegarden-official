@@ -44,6 +44,7 @@ Segment::Segment(SegmentType segmentType, timeT startTime) :
     m_startTime(startTime),
     m_track(0),
     m_type(segmentType),
+    m_startMarkerTime(0),
     m_endMarkerTime(0),
     m_id(0),
     m_audioFileID(0),
@@ -64,6 +65,8 @@ Segment::Segment(const Segment &segment):
     m_track(segment.getTrack()),
     m_type(segment.getType()),
     m_label(segment.getLabel()),
+    m_startMarkerTime(segment.m_startMarkerTime ?
+		      new timeT(*segment.m_startMarkerTime) : 0),
     m_endMarkerTime(segment.m_endMarkerTime ?
 		    new timeT(*segment.m_endMarkerTime) : 0),
     m_id(0),
@@ -86,10 +89,12 @@ Segment::~Segment()
     // delete content
     for (iterator it = begin(); it != end(); ++it) delete (*it);
 
+    delete m_startMarkerTime;
     delete m_endMarkerTime;
     delete m_quantizer;
 }
 
+#ifdef OLD_SEGMENT_API
 void Segment::setStartTime(timeT idx)
 {
     int idxDiff = idx - m_startTime;
@@ -186,7 +191,212 @@ timeT Segment::getEndMarker() const
     return endTime;
 }
 
-void Segment::erase(iterator pos)
+#else
+
+
+void
+Segment::setTrack(TrackId id)
+{
+    Composition *c = m_composition;
+    if (c) c->detachSegment(this); // sets m_composition to 0
+    m_track = id;
+    if (c) c->addSegment(this);
+}
+
+timeT
+Segment::getStartTime() const
+{
+    return m_startTime;
+}
+
+timeT
+Segment::getEndTime() const
+{
+    //!!! This isn't strictly the right thing, is it?  It should be
+    // the end time of the event that ends last, not the one that
+    // starts last.  Perhaps store this in m_endTime and update with
+    // insert/erase
+
+    const_iterator i = end();
+    if (i == begin()) return getStartTime();
+    --i;
+
+    return (*i)->getAbsoluteTime() + (*i)->getDuration();
+}
+
+void
+Segment::setStartTime(timeT t)
+{
+    int dt = t - m_startTime;
+    if (dt == 0) return;
+    Composition *c = m_composition;
+    if (c) c->detachSegment(this);
+
+    // reset the time of all events.  can't just setAbsoluteTime on these,
+    // partly 'cos we're not allowed, partly 'cos it might screw up the
+    // quantizer (which is why we're not allowed)
+
+    // still, this is rather unsatisfactory
+    
+    FastVector<Event *> events;
+
+    for (iterator i = begin(); i != end(); ++i) {
+	events.push_back(new Event(**i, (*i)->getAbsoluteTime() + dt));
+    }
+
+    erase(begin(), end());
+    if (m_startMarkerTime) *m_startMarkerTime += dt;
+    m_startTime = t;
+
+    for (int i = 0; i < events.size(); ++i) {
+	insert(events[i]);
+    }
+
+    if (c) c->addSegment(this);
+}
+
+void
+Segment::setEndTime(timeT t)
+{
+    timeT endTime = getEndTime();
+    if (t < endTime) {
+	erase(findTime(t), end());
+	endTime = getEndTime();
+	if (m_endMarkerTime && endTime < *m_endMarkerTime) {
+	    *m_endMarkerTime = endTime;
+	}
+    } else if (t > endTime) {
+	fillWithRests(endTime, t);
+    }
+
+    // Reset audio end marker if we're in an audio segment.
+    // How will this work when the Segment is moved to a
+    // different timezone?
+    //
+    if (m_type == Audio && m_composition)
+    {
+        m_audioEndTime = m_audioStartTime +
+                         m_composition->getRealTimeDifference(m_startTime,
+							      m_startTime + t);
+    }
+}
+
+Segment::iterator
+Segment::getStartMarker()
+{
+    if (m_startMarkerTime) {
+	return findTime(*m_startMarkerTime);
+    } else {
+	return begin();
+    }
+}
+
+Segment::iterator 
+Segment::getEndMarker()
+{
+    if (m_endMarkerTime) {
+	return findTime(*m_endMarkerTime);
+    } else {
+	return end();
+    }
+}
+
+timeT
+Segment::getStartMarkerTime() const
+{
+    timeT startTime;
+
+    if (m_startMarkerTime) {
+	startTime = *m_startMarkerTime;
+    } else {
+	startTime = getStartTime();
+    }
+
+    if (m_composition) {
+	startTime = std::max(startTime, m_composition->getStartMarker());
+    }
+
+    return startTime;
+
+    //!!! consider renaming Composition::getStartMarker to getStartMarkerTime
+}
+
+timeT
+Segment::getEndMarkerTime() const
+{
+    timeT endTime;
+
+    if (m_endMarkerTime) {
+	endTime = *m_endMarkerTime;
+    } else {
+	endTime = getEndTime();
+    }
+
+    if (m_composition) {
+	endTime = std::min(endTime, m_composition->getEndMarker());
+    }
+
+    return endTime;
+
+    //!!! consider renaming Composition::getEndMarker to getEndMarkerTime
+}
+
+void
+Segment::setStartMarkerTime(timeT t)
+{
+    timeT endTime = getEndTime();
+    if (t < m_startTime) fillWithRests(t, m_startTime);
+    if (t > endTime) t = endTime;
+    if (m_endMarkerTime && t > *m_endMarkerTime) *m_endMarkerTime = t;
+    if (m_startMarkerTime) *m_startMarkerTime = t;
+    else m_startMarkerTime = new timeT(t);
+}
+    
+void
+Segment::setEndMarkerTime(timeT t)
+{
+    timeT endTime = getEndTime();
+    if (t > endTime) fillWithRests(endTime, t);
+    if (t < m_startTime) t = m_startTime;
+    if (m_startMarkerTime && t < *m_startMarkerTime) *m_startMarkerTime = t;
+    if (m_endMarkerTime) *m_endMarkerTime = t;
+    else m_endMarkerTime = new timeT(t);
+}
+
+void
+Segment::clearStartMarker()
+{
+    delete m_startMarkerTime;
+    m_startMarkerTime = 0;
+}
+
+void
+Segment::clearEndMarker()
+{
+    delete m_endMarkerTime;
+    m_endMarkerTime = 0;
+}
+
+bool
+Segment::isBeforeStartMarker(iterator i)
+{
+    if (i == end()) return false;
+    return ((*i)->getAbsoluteTime() < getStartMarkerTime());
+}
+
+bool
+Segment::isBeforeEndMarker(iterator i)
+{ 
+    if (i == end()) return false;
+    return ((*i)->getAbsoluteTime() < getEndMarkerTime());
+}
+
+
+#endif
+
+
+void
+Segment::erase(iterator pos)
 {
     Event *e = *pos;
 
@@ -199,16 +409,35 @@ void Segment::erase(iterator pos)
     delete e;
 }
 
-void Segment::updateRefreshStatuses(timeT startTime, timeT endTime)
+void
+Segment::updateRefreshStatuses(timeT startTime, timeT endTime)
 {
     for(unsigned int i = 0; i < m_refreshStatusArray.size(); ++i)
         m_refreshStatusArray.getRefreshStatus(i).push(startTime, endTime);
 }
 
 
-Segment::iterator Segment::insert(Event *e)
+Segment::iterator
+Segment::insert(Event *e)
 {
     assert(e);
+
+#ifndef OLD_SEGMENT_API
+
+    if (e->getAbsoluteTime() < m_startTime ||
+	begin() == end() ||
+	(*begin())->getAbsoluteTime() > e->getAbsoluteTime()) {
+
+	Composition *c = m_composition;
+	if (c) c->detachSegment(this); // sets m_composition to 0
+	m_startTime = e->getAbsoluteTime();
+	if (m_startMarkerTime && m_startTime > *m_startMarkerTime) {
+	    *m_startMarkerTime = m_startTime;
+	}
+	if (c) c->addSegment(this);
+    }
+
+#endif
 
     iterator i = std::multiset<Event*, Event::EventCmp>::insert(e);
     notifyAdd(e);
@@ -218,7 +447,8 @@ Segment::iterator Segment::insert(Event *e)
 }
 
 
-void Segment::erase(iterator from, iterator to)
+void
+Segment::erase(iterator from, iterator to)
 {
     timeT startTime = 0, endTime = 0;
     if (from != end()) startTime = (*from)->getAbsoluteTime();
@@ -249,7 +479,8 @@ void Segment::erase(iterator from, iterator to)
 }
 
 
-bool Segment::eraseSingle(Event* e)
+bool
+Segment::eraseSingle(Event* e)
 {
     iterator elPos = findSingle(e);
 
@@ -263,7 +494,8 @@ bool Segment::eraseSingle(Event* e)
 }
 
 
-Segment::iterator Segment::findSingle(Event* e) const
+Segment::iterator
+Segment::findSingle(Event* e) const
 {
     iterator res = end();
 
@@ -279,7 +511,8 @@ Segment::iterator Segment::findSingle(Event* e) const
 }
 
 
-Segment::iterator Segment::findTime(timeT t) const
+Segment::iterator
+Segment::findTime(timeT t) const
 {
     Event dummy("dummy", t, 0, MIN_SUBORDERING);
     return lower_bound(&dummy);
@@ -320,14 +553,30 @@ int Segment::getNextId() const
 }
 
 
-void Segment::fillWithRests(timeT endTime, bool permitQuantize)
+void
+Segment::fillWithRests(timeT endTime, bool permitQuantize)
 {
     fillWithRests(getEndTime(), endTime, permitQuantize);
 }
 
-void Segment::fillWithRests(timeT startTime,
-			    timeT endTime, bool permitQuantize)
+void
+Segment::fillWithRests(timeT startTime,
+		       timeT endTime, bool permitQuantize)
 {
+#ifndef OLD_SEGMENT_API
+
+    if (startTime < m_startTime) {
+	Composition *c = m_composition;
+	if (c) c->detachSegment(this); // sets m_composition to 0
+	m_startTime = startTime;
+	if (m_startMarkerTime && m_startTime > *m_startMarkerTime) {
+	    *m_startMarkerTime = m_startTime;
+	}
+	if (c) c->addSegment(this);
+    }
+
+#endif
+
     TimeSignature ts;
     timeT sigTime = 0;
 
@@ -361,6 +610,20 @@ void Segment::fillWithRests(timeT startTime,
 void
 Segment::normalizeRests(timeT startTime, timeT endTime, bool permitQuantize)
 {
+#ifndef OLD_SEGMENT_API
+
+    if (startTime < m_startTime) {
+	Composition *c = m_composition;
+	if (c) c->detachSegment(this); // sets m_composition to 0
+	m_startTime = startTime;
+	if (m_startMarkerTime && m_startTime > *m_startMarkerTime) {
+	    *m_startMarkerTime = m_startTime;
+	}
+	if (c) c->addSegment(this);
+    }
+
+#endif
+
     // Preliminary: If there are any time signature changes between
     // the start and end times, consider separately each of the sections
     // they divide the range up into.
@@ -551,7 +814,8 @@ Segment::getRepeatEndTime() const
 }
 
 
-void Segment::notifyAdd(Event *e) const
+void
+Segment::notifyAdd(Event *e) const
 {
     for (ObserverSet::iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
@@ -560,7 +824,8 @@ void Segment::notifyAdd(Event *e) const
 }
 
  
-void Segment::notifyRemove(Event *e) const
+void
+Segment::notifyRemove(Event *e) const
 {
     for (ObserverSet::iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
@@ -573,7 +838,8 @@ void Segment::notifyRemove(Event *e) const
 SegmentHelper::~SegmentHelper() { }
 
 
-void SegmentRefreshStatus::push(timeT from, timeT to)
+void 
+SegmentRefreshStatus::push(timeT from, timeT to)
 {
     if (!needsRefresh()) { // don't do anything subtle - just erase the old data
 

@@ -32,16 +32,11 @@ class SegmentMatrixHelper : protected SegmentNotationHelper
 public:
     SegmentMatrixHelper(Segment &t) : SegmentNotationHelper(t) { }
 
+    iterator insertNote(Event *);
+
     using SegmentHelper::segment;
     using SegmentNotationHelper::deleteEvent;
-
-    iterator insertNote(Event*);
-
     using SegmentNotationHelper::deleteNote;
-
-protected:
-    iterator insertSingleSomething(iterator i, Event* e);
-
 };
 
 
