@@ -64,7 +64,7 @@
         <Action name="select_next_track"/>
         <Action name="select_previous_track"/>
         <Separator/>
-        <Menu name="set_track_instrument"><text>Set Track Instrument</text></Menu>
+        <Menu name="set_track_instrument"><text>Set Instrument</text></Menu>
         <Action name="remap_instruments"/>
   </Menu>
   <Menu name="Studio">
