@@ -187,6 +187,8 @@ bool RosegardenGUIDoc::openDocument(const QString &filename, const char *format 
 
         return false;
     }
+
+    return true;
 }
 
 bool RosegardenGUIDoc::saveDocument(const QString &filename, const char *format /*=0*/)
