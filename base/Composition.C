@@ -113,8 +113,9 @@ Composition::getDuration() const
 void
 Composition::clear()
 {
-    for(trackcontainer::iterator i = m_tracks.begin();
+    for (trackcontainer::iterator i = m_tracks.begin();
         i != m_tracks.end(); ++i) {
+        (*i)->removeObserver(this);
         delete (*i);
     }
     m_tracks.erase(begin(), end());
