@@ -26,7 +26,7 @@
 #include <strstream>
 #include "Midi.h"
 #include "MidiFile.h"
-#include "Track.h"
+#include "Segment.h"
 #include "NotationTypes.h"
 #include "TrackNotationHelper.h"
 #include "TrackPerformanceHelper.h"

@@ -23,7 +23,7 @@
 #ifndef _SEGMENT_NOTATION_HELPER_H_
 #define _SEGMENT_NOTATION_HELPER_H_
 
-#include "Track.h"
+#include "Segment.h"
 
 namespace Rosegarden 
 {

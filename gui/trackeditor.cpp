@@ -21,8 +21,8 @@
 
 #include <algorithm>
 
-#include "trackseditor.h"
-#include "trackscanvas.h"
+#include "trackeditor.h"
+#include "segmentcanvas.h"
 #include "rosegardenguidoc.h"
 
 #include "rosedebug.h"

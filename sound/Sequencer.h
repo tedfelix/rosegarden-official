@@ -40,7 +40,7 @@
 #include "Midi.h"
 #include "MidiRecord.h"
 #include "MidiEvent.h"
-#include "Track.h"
+#include "Segment.h"
 
 
 namespace Rosegarden

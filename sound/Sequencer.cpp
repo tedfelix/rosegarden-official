@@ -24,7 +24,7 @@
 #include "MidiArts.h"
 #include "MidiFile.h"
 #include "Composition.h"
-#include "Track.h"
+#include "Segment.h"
 #include "Event.h"
 #include "NotationTypes.h"
 #include <MappedComposition.h>

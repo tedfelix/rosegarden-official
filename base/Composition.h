@@ -24,7 +24,7 @@
 
 #include <set>
 
-#include "Track.h"
+#include "Segment.h"
 #include "Quantizer.h"
 
 namespace Rosegarden 

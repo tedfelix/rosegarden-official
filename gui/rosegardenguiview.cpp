@@ -29,8 +29,8 @@
 #include "rosegardenguiview.h"
 #include "rosegardenguidoc.h"
 #include "rosegardengui.h"
-#include "trackseditor.h"
-#include "trackscanvas.h"
+#include "trackeditor.h"
+#include "segmentcanvas.h"
 #include "notationview.h"
 
 RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)

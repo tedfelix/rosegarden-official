@@ -22,7 +22,7 @@
 #include <string>
 
 #include "Event.h"
-#include "Track.h"
+#include "Segment.h"
 #include "TrackNotationHelper.h"
 #include "Composition.h"
 #include "NotationTypes.h"

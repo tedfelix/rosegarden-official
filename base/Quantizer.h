@@ -22,7 +22,7 @@
 #ifndef QUANTIZER_H
 #define QUANTIZER_H
 
-#include "Track.h"
+#include "Segment.h"
 #include "Event.h"
 #include "NotationTypes.h"
 

@@ -23,7 +23,7 @@
 #define _STAFF_H_
 
 #include "ViewElement.h"
-#include "Track.h"
+#include "Segment.h"
 
 namespace Rosegarden 
 {

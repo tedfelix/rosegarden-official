@@ -20,7 +20,7 @@
 */
 
 #include "Composition.h"
-#include "Track.h"
+#include "Segment.h"
 #include "FastVector.h"
 
 #include <iostream>

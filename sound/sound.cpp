@@ -30,7 +30,7 @@
 
 #include "MidiFile.h"
 #include "Composition.h"
-#include "Track.h"
+#include "Segment.h"
 #include "Event.h"
 #include "MidiRecord.h"
 #include "Sequencer.h"

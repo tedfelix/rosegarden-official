@@ -25,7 +25,7 @@
 #include "rosedebug.h"
 #include "notationstaff.h"
 #include "Equation.h"
-#include "Track.h"
+#include "Segment.h"
 #include "Quantizer.h"
 
 #include <cstring>

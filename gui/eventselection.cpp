@@ -21,7 +21,7 @@
 
 #include "eventselection.h"
 
-#include "Track.h"
+#include "Segment.h"
 #include "TrackNotationHelper.h"
 
 #include "rosedebug.h"

@@ -29,7 +29,7 @@
 // include files for Qt
 #include <qvbox.h>
 
-#include "trackscanvas.h" // needed for SegmentCanvas::ToolType
+#include "segmentcanvas.h" // needed for SegmentCanvas::ToolType
 
 #include "rosedebug.h"
 

@@ -19,7 +19,7 @@
     COPYING included with this distribution for more information.
 */
 
-#include "Track.h"
+#include "Segment.h"
 #include "NotationTypes.h"
 #include "Quantizer.h"
 #include "BaseProperties.h"

@@ -32,7 +32,7 @@
 #include "rosedebug.h"
 
 #include "Event.h"
-#include "Track.h"
+#include "Segment.h"
 #include "Quantizer.h"
 #include "NotationTypes.h"
 

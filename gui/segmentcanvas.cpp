@@ -25,8 +25,8 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
-#include "trackscanvas.h"
-#include "Track.h"
+#include "segmentcanvas.h"
+#include "Segment.h"
 
 #include "rosedebug.h"
 
