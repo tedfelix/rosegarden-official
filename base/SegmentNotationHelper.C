@@ -952,7 +952,7 @@ SegmentNotationHelper::deleteNote(Event *e, bool collapseRest)
             collapseIfValid(newRest, dummy);
         }
 
-//!!!    }
+    }
 }
 
 bool
