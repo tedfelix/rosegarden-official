@@ -653,11 +653,15 @@ NotationDisplayPitch::getPerformancePitchFromRG21Pitch(const Clef &clef,
 }
 
 
-// Derived from RG2.1's MidiPitchToVoice in editor/src/Methods.c,
-// InitialiseAccidentalTable in Format.c, and PutItemListInClef in
-// MidiIn.c.  Converts performance pitch to height on staff + correct
-// accidentals for current key.
-
+/**
+ * Derived from RG2.1's MidiPitchToVoice in editor/src/Methods.c,
+ * InitialiseAccidentalTable in Format.c, and PutItemListInClef in
+ * MidiIn.c.  Converts performance pitch to height on staff + correct
+ * accidentals for current key.
+ *
+ * Note that the incoming accidental is already included in the pitch
+ * so we have to "undo" it to get the display height.
+ */
 void
 NotationDisplayPitch::rawPitchToDisplayPitch(int pitch,
                                              const Clef &clef,
@@ -665,85 +669,59 @@ NotationDisplayPitch::rawPitchToDisplayPitch(int pitch,
                                              int &height,
                                              Accidental &accidental) const
 {
-    int octave;
-    bool modified = false;
-    height = 0;
+    // Display any "forced" accidental, and let the key
+    // take care of NoAccidentals.
+    // Double sharps and flats always take explicit notation
+    // Height needs special consideration for b/c e/f
+
+    if (accidental != NoAccidental && accidental != Natural) {
+        if (accidental == Sharp) { pitch--; }
+        else if (accidental == Flat) { pitch++; }
+        else if (accidental == DoubleSharp) { pitch -= 2; }
+        else if (accidental == DoubleFlat) { pitch += 2; }
+    }
 
     // 1. Calculate with plain pitches, disregarding clef and key
+    int octave = pitch / 12;
+    pitch  = pitch % 12; // pitch is now 0 (C) through 11 (B)
 
-    octave = pitch / 12;
-    pitch  = pitch % 12;
+    // This code converts pitch into staff lines in the
+    // range -2 (C) through 4 (B)
+    if (pitch >= 5) { pitch++; } // make white keys %2=0
+    height = (int)(pitch/2) - 2;
 
-    // Double sharps and flats always take explicit notation
-    // Single sharps, flats, and naturals only take notation
-    //  if they are "against the key"
-    // Height needs special consideration for doubles and b/c e/f
-    
-    switch (pitch) {
-    case  0: height = -2; break;	            // C  
-    case  1: height = -2; modified = true; break;   // C# 
-    case  2: height = -1; break;                    // D  
-    case  3: height = -1; modified = true; break;   // D# 
-    case  4: height =  0; break;                    // E  
-    case  5: height =  1; break;                    // F  
-    case  6: height =  1; modified = true; break;   // F# 
-    case  7: height =  2; break;                    // G  
-    case  8: height =  2; modified = true; break;   // G# 
-    case  9: height =  3; break;                    // A  
-    case 10: height =  3; modified = true; break;   // A# 
-    case 11: height =  4; break;                    // B  
-    }
-    
-    if (accidental == DoubleSharp) {
-        // We've set the height too high
-        height--;
-    } else if (accidental == DoubleFlat) {
-        // We've set the height too low
-        height++;
-    } else if (accidental == Flat &&
-               (height == 4 || height == 0)) {
-        modified = true;
-    } else if (accidental == Sharp &&
-               (height == -2 || height == 1) &&
-               modified == false) {
-        height--; modified = true;
-    }
-    // "Recenter" height in case it's been changed
-    height = ((height + 2) % 7) - 2;
-
-    height += (octave - 5) * 7;
-    height += clef.getPitchOffset();
-
-    // Double modifiers always display
-    if (accidental != DoubleSharp &&
-        accidental != DoubleFlat) {
-        // 2. Adjust accidentals for the current key
-        
-        bool sharp = key.isSharp() || (accidental == Sharp);
-        
-        accidental = modified ? (sharp ? Sharp : Flat) : NoAccidental;
-        if (modified && !sharp) ++height; // because the mod has become a flat
-        
-        vector<int> ah(key.getAccidentalHeights(clef));
-        for (vector<int>::const_iterator i = ah.begin(); i != ah.end(); ++i) {
-            // Incomplete: Make sure canonicalHeight can handle values outside the -2-4 range
-            if (Key::canonicalHeight(*i) == Key::canonicalHeight(height)) {
-                // the key has an accidental at the same height as this note, so
-                // undo the note's accidental if there is one, or make explicit
-                // if there isn't
-                
-                if (modified && (sharp == key.isSharp())) {
-                    accidental = NoAccidental;
-                } else if (!modified) {
-                    accidental = Natural;
+    // In most cases, all the work of this function is 
+    // done already
+    // The case we're handling here is a note played on a
+    // white key that is the result of key-signature accidental
+    if (accidental == NoAccidental) {
+        // Fiddle with the height a bit for the b/c e/f case
+        if (pitch % 2 == 0) {
+            if (key.isSharp() &&
+                (height == 1 || height == -2) &&
+                key.getAccidentalAtHeight(height - 1, clef) == Sharp) {
+                height--;
+                if (height < -2) {
+                    height = 7 + height;
+                    octave--;
                 }
-                break;
+            }
+        } else if (key.getAccidentalAtHeight(height + 1, clef) == Flat) {
+            height++;
+            if (height > 4) {
+                height = height - 7;
+                octave++;
             }
         }
     }
 
+    // Note: There's duplicate work going on in these next few lines,
+    // but I haven't thought it through at all to safely fix it.
+    height += (octave - 5) * 7;
+
     // 3. Transpose up or down for the clef
 
+    height += clef.getPitchOffset();
     height -= 7 * clef.getOctave();
 }
 
@@ -757,15 +735,21 @@ NotationDisplayPitch::displayPitchToRawPitch(int height,
 {
     int octave = 5;
 
-    // 1. Get pitch and correct octave
+    // 1. Ask Key for accidental if necessary
+    if (accidental == NoAccidental) {
+        accidental = key.getAccidentalAtHeight(height, clef);
+    }
+
+    // 2. Get pitch and correct octave
 
     if (!ignoreOffset) height -= clef.getPitchOffset();
 
     while (height < 0) { octave -= 1; height += 7; }
-    while (height > 7) { octave += 1; height -= 7; }
+    while (height >= 7) { octave += 1; height -= 7; }
 
     if (height > 4) ++octave;
 
+    // Height is now relative to treble clef
     switch (height) {
 
     case 0: pitch =  4; break;	/* bottom line, treble clef: E */
@@ -775,32 +759,20 @@ NotationDisplayPitch::displayPitchToRawPitch(int height,
     case 4: pitch = 11; break;	/* B, likewise*/
     case 5: pitch =  0; break;	/* C, moved up an octave (see above) */
     case 6: pitch =  2; break;	/* D, likewise */
-    case 7: pitch =  4; break;	/* E, likewise */
+    }
+    // Pitch is now "natural"-ized note at given height
+
+    // 3. Now add the accidental
+
+    if (accidental != NoAccidental &&
+        accidental != Natural) {
+        if (accidental == Sharp) { pitch++; }
+        else if (accidental == Flat) { pitch--; }
+        else if (accidental == DoubleSharp) { pitch += 2; }
+        else if (accidental == DoubleFlat) { pitch -= 2; }
     }
 
-    // 2. Make any implicit accidentals from key explicit, and adjust pitch
-
-    bool sharp = key.isSharp();
-
-    vector<int> ah(key.getAccidentalHeights(Clef(Clef::Treble)));
-    for (vector<int>::const_iterator i = ah.begin(); i != ah.end(); ++i) {
-
-        if (Key::canonicalHeight(*i) == Key::canonicalHeight(height)) {
-            // the key has an accidental at the same height as this note
-            if (accidental == Natural) accidental = NoAccidental;
-            else if (accidental == NoAccidental) accidental = sharp ? Sharp : Flat;
-            break;
-        }
-    }
-
-    if (accidental != NoAccidental) {
-	if      (accidental == DoubleSharp) pitch += 2;
-	else if (accidental ==       Sharp) pitch += 1;
-	else if (accidental ==        Flat) pitch -= 1;
-	else if (accidental ==  DoubleFlat) pitch -= 2;
-    }
-
-    // 3. Adjust for clef
+    // 4. Adjust for clef
     octave += clef.getOctave();
 
     pitch += 12 * octave;
