@@ -2468,14 +2468,14 @@ RosegardenGUIApp::slotDocumentModified()
 #endif
 }
 
-#ifdef RGKDE3
 void
 RosegardenGUIApp::slotStateChanged(const QString& s,
                                    bool reverse)
 {
+#ifdef RGKDE3
     stateChanged(s, reverse ? KXMLGUIClient::StateReverse : KXMLGUIClient::StateNoReverse);
-}
 #endif
+}
 
 void
 RosegardenGUIApp::plugAccelerators(QWidget *widget, QAccel *acc)
