@@ -60,6 +60,9 @@ public:
     typedef std::map<int, Instrument> instrumentcontainer;
     typedef std::map<int, Track> trackcontainer;
 
+    typedef instrumentcontainer::iterator instrumentiterator;
+    typedef trackcontainer::iterator trackiterator;
+
     typedef segmentcontainer::iterator iterator;
     typedef segmentcontainer::const_iterator const_iterator;
 
@@ -94,23 +97,36 @@ public:
     unsigned int getNbSegments() const { return m_segments.size(); }
     int getNbTracks() const { return m_tracks.size(); }
 
-    /**
-     * Add a new segment and return an iterator pointing to it
-     * The inserted Segment is owned by the Composition object
+    /* Clear out the track container
+     *
      */
-    iterator addSegment(Segment*);
+    void clearTracks() { m_tracks.clear(); }
 
-    
     /**
      * Insert a new Instrument
      */
     void addInstrument(const Instrument &inst);
 
-
     /**
      * Insert a new Track
      */
     void addTrack(const Track &track);
+ 
+    /**
+     * Delete a Track by index
+     */
+    void deleteTrack(const int &track);
+
+    /*
+     * Delete instrument by index
+     */
+    void deleteInstrument(const int &instrument);
+
+    /**
+     * Add a new segment and return an iterator pointing to it
+     * The inserted Segment is owned by the Composition object
+     */
+    iterator addSegment(Segment*);
 
     /**
      * Delete the segment pointed to by the specified iterator

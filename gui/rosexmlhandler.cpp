@@ -62,6 +62,10 @@ RoseXmlHandler::~RoseXmlHandler()
 bool
 RoseXmlHandler::startDocument()
 {
+    // clear the tracks out before we load
+    //
+    m_composition.clearTracks();
+
     // reset state
     return true;
 }

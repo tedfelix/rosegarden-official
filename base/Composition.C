@@ -600,6 +600,20 @@ void Composition::addTrack(const Track &track)
 }
 
 
+void Composition::deleteTrack(const int &track)
+{
+     trackiterator titerator = m_tracks.find(track);
+
+     m_tracks.erase(titerator);
+}
+
+void Composition::deleteInstrument(const int &instrument)
+{
+     instrumentiterator iiterator = m_instruments.find(instrument);
+
+     m_instruments.erase(iiterator);
+}
+
 
 
 }
