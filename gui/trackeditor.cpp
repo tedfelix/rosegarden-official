@@ -25,7 +25,7 @@
 #include "trackeditor.h"
 #include "segmentcanvas.h"
 #include "rosegardenguidoc.h"
-#include "rulerscale.h"
+#include "RulerScale.h"
 #include "Track.h"
 #include "colours.h"
 #include "NotationTypes.h"
@@ -40,6 +40,7 @@
 #include <kmessagebox.h>
 
 using Rosegarden::Composition;
+using Rosegarden::RulerScale;
 
 TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
 			 RulerScale *rulerScale,

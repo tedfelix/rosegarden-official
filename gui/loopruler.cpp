@@ -25,7 +25,9 @@
 #include "colours.h"
 #include "Event.h"
 #include "rosedebug.h"
-#include "rulerscale.h"
+#include "RulerScale.h"
+
+using Rosegarden::RulerScale;
 
 LoopRuler::LoopRuler(RosegardenGUIDoc *doc,
                      RulerScale *rulerScale,
@@ -60,8 +62,8 @@ void LoopRuler::drawBarSections(QPainter* paint)
     if (!m_doc) return;
     Rosegarden::Composition &comp = m_doc->getComposition();
 
-    int firstBar = m_rulerScale->getFirstBarNumber(),
-	 lastBar = m_rulerScale->getLastBarNumber();
+    int firstBar = m_rulerScale->getFirstVisibleBar(),
+	 lastBar = m_rulerScale->getLastVisibleBar();
     double x = m_rulerScale->getBarPosition(firstBar);
 
     paint->setPen(RosegardenGUIColours::LoopRulerForeground);

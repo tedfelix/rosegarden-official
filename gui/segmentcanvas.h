@@ -28,10 +28,11 @@
 #include <qcanvas.h>
 #include <list>
 
-#include "rulerscale.h"
-
 using Rosegarden::timeT;
-namespace Rosegarden { class Segment; }
+namespace Rosegarden {
+    class Segment;
+    class RulerScale;
+}
 
 
 /**
@@ -47,13 +48,13 @@ public:
      * Create a new segment item without an associated segment (yet)
      */
     SegmentItem(int y, timeT startTime, timeT duration,
-		RulerScale *rulerScale, QCanvas* canvas);
+		Rosegarden::RulerScale *rulerScale, QCanvas* canvas);
 
     /**
      * Create a new segment item with an associated segment
      */
     SegmentItem(int y, Rosegarden::Segment *segment,
-		RulerScale *rulerScale, QCanvas* canvas);
+		Rosegarden::RulerScale *rulerScale, QCanvas* canvas);
 
     /// Return the item's associated segment 
     Rosegarden::Segment* getSegment() const;
@@ -103,7 +104,7 @@ protected:
     timeT m_startTime;
     timeT m_duration;
     bool m_selected;
-    RulerScale *m_rulerScale;
+    Rosegarden::RulerScale *m_rulerScale;
 
     static unsigned int m_itemHeight;
 };
@@ -129,7 +130,7 @@ public:
     /// Available tools
     enum ToolType { NoTool, Pencil, Eraser, Mover, Resizer, Selector };
 
-    SegmentCanvas(RulerScale *, int vStep, QCanvas&,
+    SegmentCanvas(Rosegarden::RulerScale *, int vStep, QCanvas&,
 		  QWidget* parent=0, const char* name=0, WFlags f=0);
     ~SegmentCanvas();
 
@@ -142,7 +143,7 @@ public:
     class SnapGrid
     {
     public:
-        SnapGrid(RulerScale *rulerScale, int vstep);
+        SnapGrid(Rosegarden::RulerScale *rulerScale, int vstep);
 
 	static const timeT NoSnap;
 	static const timeT SnapToBar;
@@ -183,10 +184,10 @@ public:
 
 	int getYSnap() const { return m_vstep; }
 
-	RulerScale *getRulerScale() { return m_rulerScale; }
+	Rosegarden::RulerScale *getRulerScale() { return m_rulerScale; }
 
     protected:
-	RulerScale *m_rulerScale; // I don't own this
+	Rosegarden::RulerScale *m_rulerScale; // I don't own this
 	timeT m_snapTime;
 	int m_vstep;
     };

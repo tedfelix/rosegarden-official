@@ -161,6 +161,8 @@ RosegardenTransportDialog::resetFonts()
     resetFont(InDisplay);
     resetFont(OutLabel);
     resetFont(OutDisplay);
+    resetFont(ToEndLabel);
+    resetFont(TimeDisplayLabel);
 }
 
 void

@@ -341,42 +341,44 @@ LinedStaff<T>::sizeStaff(Rosegarden::HorizontalLayoutEngine<T> &layout)
 
     kdDebug(KDEBUG_AREA) << "LinedStaff::sizeStaff" << endl;
 
-    unsigned int barCount = layout.getBarLineCount(*this);
+//!!!    unsigned int barCount = layout.getBarLineCount(*this);
+    int lastBar = layout.getLastVisibleBar(*this);
 
     double xleft = 0, xright = 0;
     bool haveXLeft = false;
 
-    if (barCount > 0) xright = layout.getBarLineX(*this, barCount - 1);
+    if (lastBar >= 0) xright = layout.getBarPosition(lastBar);
     else xright = layout.getTotalWidth();
     
     Rosegarden::TimeSignature currentTimeSignature;
 
-    for (unsigned int i = 0; i < barCount; ++i) {
+    for (int barNo = layout.getFirstVisibleBar(); barNo <= lastBar; ++barNo) {
 
-        if (layout.isBarLineVisible(*this, i)) {
+//        if (layout.isBarLineVisible(*this, i)) {
 
-            double x = layout.getBarLineX(*this, i);
+            double x = layout.getBarPosition(barNo);
 
-            if (!haveXLeft && layout.isBarLineVisible(*this, i)) {
+	    //!!! should be unnecessary now? can set outside of loop?
+            if (!haveXLeft /* && layout.isBarLineVisible(*this, i)*/) {
                 xleft = x;
                 haveXLeft = true;
             }
 
 	    double timeSigX = 0;
             Rosegarden::Event *timeSig =
-                layout.getTimeSignatureInBar(*this, i, timeSigX);
+                layout.getTimeSignatureInBar(*this, barNo, timeSigX);
 
-            if (timeSig && i < barCount - 1) {
+            if (timeSig && barNo < lastBar) {
 		currentTimeSignature = Rosegarden::TimeSignature(*timeSig);
                 insertTimeSignature(timeSigX, currentTimeSignature);
             }
 
             insertBar(x,
-		      ((i == barCount - 1) ? 0 :
-		       (layout.getBarLineX(*this, i+1) - x)),
-		      layout.isBarLineCorrect(*this, i),
+		      ((barNo == lastBar) ? 0 :
+		       (layout.getBarPosition(barNo + 1) - x)),
+		      layout.isBarCorrect(*this, barNo - 1),
 		      currentTimeSignature);
-        }
+//        }
     }
 
     m_startLayoutX = xleft;
@@ -753,16 +755,18 @@ LinedStaff<T>::updateRuler(Rosegarden::HorizontalLayoutEngine<T> &layout)
 
     m_ruler->clearSteps();
     
-    for (unsigned int i = 0; i < layout.getBarLineCount(*this); ++i) {
+//!!!    for (unsigned int i = 0; i < layout.getBarLineCount(*this); ++i) {
+    for (int barNo = layout.getFirstVisibleBar();
+	 barNo <= layout.getLastVisibleBar(); ++barNo) {
 
         double x;
         Rosegarden::Event *timeSigEvent =
-	    layout.getTimeSignatureInBar(*this, i, x);
+	    layout.getTimeSignatureInBar(*this, barNo, x);
 
         if (timeSigEvent)
 	    timeSignature = Rosegarden::TimeSignature(*timeSigEvent);
 
-        m_ruler->addStep(layout.getBarLineX(*this, i),
+        m_ruler->addStep(layout.getBarPosition(barNo),
                          timeSignature.getBeatsPerBar());
     }
 

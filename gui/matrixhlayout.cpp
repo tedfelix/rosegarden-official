@@ -26,8 +26,10 @@
 
 using Rosegarden::timeT;
 
-MatrixHLayout::MatrixHLayout() :
-    m_totalWidth(0.0)
+MatrixHLayout::MatrixHLayout(Rosegarden::Composition *c) :
+    Rosegarden::HorizontalLayoutEngine<MatrixElement>(c),
+    m_totalWidth(0.0),
+    m_firstBar(0)
 {
 }
 
@@ -68,8 +70,9 @@ void MatrixHLayout::scanStaff(MatrixHLayout::StaffType &staffBase)
     Rosegarden::Segment &segment = staff.getSegment();
     Rosegarden::Composition *composition = segment.getComposition();
 
-    timeT from = composition->getBarStartForTime(segment.getStartTime()),
-	    to = composition->getBarEndForTime  (segment.getEndTime  ());
+    m_firstBar = composition->getBarNumber(segment.getStartTime());
+    timeT from = composition->getBarStart(m_firstBar),
+	    to = composition->getBarEndForTime(segment.getEndTime());
 
     //!!! Deal with time signatures...
 
@@ -103,14 +106,20 @@ double MatrixHLayout::getTotalWidth()
     return m_totalWidth;
 }
 
-unsigned int MatrixHLayout::getBarLineCount(StaffType&)
+int MatrixHLayout::getFirstVisibleBar()
 {
-    return m_barData.size();
+    return m_firstBar;
 }
 
-double MatrixHLayout::getBarLineX(StaffType&, unsigned int barNo)
+int MatrixHLayout::getLastVisibleBar()
 {
-    return m_barData[barNo].first;
+    return m_firstBar + m_barData.size() - 1;
+}
+
+double MatrixHLayout::getBarPosition(int barNo)
+{
+    if (barNo < getFirstVisibleBar() || barNo > getLastVisibleBar()) return 0;
+    return m_barData[barNo - m_firstBar].first;
 }
 
 void MatrixHLayout::finishLayout()

@@ -27,7 +27,6 @@ rosegarden_SOURCES = \
 	notationelement.cpp \
 	notationhlayout.cpp \
 	notationproperties.cpp \
-	notationrulerscale.cpp \
 	notationsets.cpp \
 	notationstaff.cpp \
 	notationtool.cpp \
@@ -47,7 +46,6 @@ rosegarden_SOURCES = \
         rosegardentransport.ui \
         rosegardentransportdialog.cpp \
 	rosexmlhandler.cpp \
-	rulerscale.cpp \
 	segmentcanvas.cpp \
         segmentcommands.cpp \
         segmentselection.cpp \

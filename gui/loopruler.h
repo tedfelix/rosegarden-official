@@ -27,7 +27,9 @@
 #include "Event.h"
 #include "rosegardenguidoc.h"
 
-class RulerScale;
+namespace Rosegarden {
+    class RulerScale;
+}
 
 
 // Creates a canvas widget that reacts to mouse clicks and
@@ -46,7 +48,7 @@ class LoopRuler : public QWidget
 
 public:
     LoopRuler(RosegardenGUIDoc *doc,
-	      RulerScale *rulerScale,
+	      Rosegarden::RulerScale *rulerScale,
               int height = 0,
               QWidget* parent = 0,
               const char *name = 0);
@@ -90,7 +92,7 @@ private:
     int m_snap;            // snap the loop to the nearest
 
     RosegardenGUIDoc *m_doc;
-    RulerScale *m_rulerScale;
+    Rosegarden::RulerScale *m_rulerScale;
     
     bool m_loop;
     Rosegarden::timeT m_startLoop;

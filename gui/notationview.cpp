@@ -42,7 +42,6 @@
 #include "notationview.h"
 #include "notationelement.h"
 #include "notationproperties.h"
-#include "notationrulerscale.h"
 
 #include "notationstaff.h"
 #include "notepixmapfactory.h"
@@ -96,21 +95,20 @@ NotationView::NotationView(RosegardenGUIView* rgView,
     m_hoveredOverNoteName(0),
     m_hoveredOverAbsoluteTime(0),
     m_lastFinishingStaff(-1),
-    m_hlayout(0),
-    m_vlayout(0),
+    m_fontName(NotePixmapFactory::getDefaultFont()),
+    m_fontSize(NotePixmapFactory::getDefaultSize(m_fontName)),
+    m_notePixmapFactory(new NotePixmapFactory(m_fontName, m_fontSize)),
+    m_hlayout(new NotationHLayout(&rgView->getDocument()->getComposition(),
+				  *m_notePixmapFactory)),
+    m_vlayout(new NotationVLayout()),
     m_fontSizeSlider(0),
     m_selectDefaultNote(0),
-    m_pointer(0),
-    m_rulerScale(&rgView->getDocument()->getComposition())
+    m_pointer(0)
 {
     m_toolBox = new NotationToolBox(this);
 
     assert(segments.size() > 0);
     kdDebug(KDEBUG_AREA) << "NotationView ctor" << endl;
-
-    m_fontName = NotePixmapFactory::getDefaultFont();
-    m_fontSize = NotePixmapFactory::getDefaultSize(m_fontName);
-    m_notePixmapFactory = new NotePixmapFactory(m_fontName, m_fontSize);
 
     setupActions();
 
@@ -189,13 +187,6 @@ NotationView::NotationView(RosegardenGUIView* rgView,
     positionStaffs();
     m_currentStaff = 0;
     m_staffs[0]->setCurrent(true);
-    
-    //
-    // Layout setup
-    //
-    m_vlayout = new NotationVLayout();
-    m_hlayout = new NotationHLayout(*m_notePixmapFactory);
-    m_rulerScale.setLayout(m_hlayout);
 
     bool layoutApplied = applyLayout();
     if (!layoutApplied) KMessageBox::sorry(0, i18n("Couldn't apply score layout"));
@@ -208,7 +199,7 @@ NotationView::NotationView(RosegardenGUIView* rgView,
     }
 
     BarButtons *barButtons = new BarButtons
-	(rgView->getDocument(), &m_rulerScale, 25, m_barButtonsView);
+	(rgView->getDocument(), m_hlayout, 25, m_barButtonsView);
 
     m_barButtonsView->addChild(barButtons);
 
@@ -881,7 +872,8 @@ NotationView::changeFont(string newName, int newSize)
     }
 
     double spacing = m_hlayout->getSpacing();
-    setHLayout(new NotationHLayout(*m_notePixmapFactory));
+    setHLayout(new NotationHLayout(&m_document->getComposition(),
+				   *m_notePixmapFactory));
     m_hlayout->setSpacing(spacing);
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
@@ -974,13 +966,14 @@ bool NotationView::applyLayout(int staffNo)
             m_lastFinishingStaff = i;
         }
     }
-
+/*!!!
     if (firstStartingStaff != -1) {
 	m_rulerScale.setFirstStartingStaff(m_staffs[firstStartingStaff]);
     }
     if (m_lastFinishingStaff != -1) {
 	m_rulerScale.setLastFinishingStaff(m_staffs[m_lastFinishingStaff]);
     }
+*/
 
     readjustCanvasSize();
 
@@ -1567,6 +1560,7 @@ void NotationView::slotDebugDump()
 void
 NotationView::setPositionPointer(int position)
 {
+/*!!! omit for now
     if (m_lastFinishingStaff < 0 ||
         unsigned(m_lastFinishingStaff) >= m_staffs.size()) return;
 
@@ -1600,6 +1594,7 @@ NotationView::setPositionPointer(int position)
 
     m_pointer->setX(canvasPosition + 20);
     update();
+*/
 }
 
 //////////////////////////////////////////////////////////////////////

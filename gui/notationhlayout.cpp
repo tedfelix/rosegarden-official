@@ -73,7 +73,8 @@ static int src;
 static int abms;
 static int abc;
 
-NotationHLayout::NotationHLayout(NotePixmapFactory &npf) :
+NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory &npf) :
+    Rosegarden::HorizontalLayoutEngine<NotationElement>(c),
     m_totalWidth(0.),
     m_pageMode(false),
     m_pageWidth(0.),
@@ -1341,6 +1342,68 @@ NotationHLayout::resetStaff(StaffType &staff)
     m_totalWidth = 0;
 }
 
+int
+NotationHLayout::getFirstVisibleBar()
+{
+    BarDataMap::iterator i = m_barData.begin();
+    if (i == m_barData.end()) return -1; 
+    if (i->second.size() == 0) return -1;
+    return (i->second[0].barNo);
+}
+
+int
+NotationHLayout::getFirstVisibleBar(StaffType &staff)
+{
+    BarDataList &bdl(getBarData(staff));
+    for (int i = 0; i < bdl.size(); ++i) {
+	if (bdl[i].barNo >= 0) return bdl[i].barNo;
+    }
+    return -1;
+}
+
+int
+NotationHLayout::getLastVisibleBar()
+{
+    BarDataMap::iterator i = m_barData.begin();
+    if (i == m_barData.end()) return -1;
+    return i->second.size() - 1;
+}
+
+int
+NotationHLayout::getLastVisibleBar(StaffType &staff)
+{
+    BarDataList &bdl(getBarData(staff));
+    return bdl.size() - 1;
+}
+
+double
+NotationHLayout::getBarPosition(int i)
+{
+    BarDataMap::iterator bdi = m_barData.begin();
+    if (bdi == m_barData.end()) return 0;
+    if (i < 0) i = 0;
+    if (i >= bdi->second.size()) i = bdi->second.size() - 1;
+    return bdi->second[i].x;
+}
+
+bool
+NotationHLayout::isBarCorrect(StaffType &staff, int i)
+{
+    BarDataList &bdl(getBarData(staff));
+    ++i;
+    if (i <= 0 || i >= bdl.size()) return true;
+    else return getBarData(staff)[i].correct;
+}
+
+Event *NotationHLayout::getTimeSignatureInBar(StaffType &staff,
+					      int i, double &timeSigX)
+{
+    BarData &bd(getBarData(staff)[i]);
+    timeSigX = (double)bd.timeSigX;
+    return bd.timeSignature;
+}
+
+/*!!!
 unsigned int
 NotationHLayout::getBarLineCount(StaffType &staff)
 {
@@ -1374,3 +1437,4 @@ Event *NotationHLayout::getTimeSignatureInBar(StaffType &staff,
     return bd.timeSignature;
 }
 
+*/

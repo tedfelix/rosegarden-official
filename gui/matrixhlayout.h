@@ -30,7 +30,7 @@
 class MatrixHLayout : public Rosegarden::HorizontalLayoutEngine<MatrixElement>
 {
 public:
-    MatrixHLayout();
+    MatrixHLayout(Rosegarden::Composition *c);
     virtual ~MatrixHLayout();
 
     /**
@@ -51,15 +51,24 @@ public:
     virtual double getTotalWidth();
 
     /**
-     * Returns the total number of bar lines on the given staff
+     * Returns the number of the first visible bar line
      */
-    virtual unsigned int getBarLineCount(StaffType &staff);
+    virtual int getFirstVisibleBar();
 
     /**
-     * Returns the x-coordinate of the given bar number (zero-based)
-     * on the given staff
+     * Returns the number of the first visible bar line
      */
-    virtual double getBarLineX(StaffType &staff, unsigned int barNo);
+    virtual int getLastVisibleBar();
+
+    /**
+     * Returns the x-coordinate of the given bar number
+     */
+    virtual double getBarPosition(int barNo);
+
+    /**
+     * Returns the total number of bar lines on the given staff
+     */
+//!!!    virtual unsigned int getBarLineCount(StaffType &staff);
 
     /**
      * Precomputes layout data for a single staff, updating any
@@ -86,6 +95,7 @@ protected:
     typedef FastVector<BarData> BarDataList;
     BarDataList m_barData;
     double m_totalWidth;
+    int m_firstBar;
 };
 
 #endif

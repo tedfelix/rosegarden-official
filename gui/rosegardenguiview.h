@@ -34,12 +34,11 @@
 
 #include "rosedebug.h"
 
-namespace Rosegarden { class Composition; class MappedEvent; }
+namespace Rosegarden { class Composition; class MappedEvent; class RulerScale; }
 
 class QScrollView;
 class RosegardenGUIDoc;
 class TrackEditor;
-class RulerScale;
 class KPrinter;
 
 /**
@@ -227,7 +226,7 @@ signals:
 protected:
     //--------------- Data members ---------------------------------
 
-    RulerScale *m_rulerScale;
+    Rosegarden::RulerScale *m_rulerScale;
     
     QScrollView* m_trackEditorScrollView;
 };

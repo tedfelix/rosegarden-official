@@ -32,7 +32,6 @@
 #include "editview.h"
 #include "matrixcanvasview.h"
 #include "matrixelement.h"
-#include "rulerscale.h"
 
 namespace Rosegarden { class Segment; }
 
@@ -191,8 +190,6 @@ protected:
     virtual MatrixCanvasView *getCanvasView() {
 	return static_cast<MatrixCanvasView *>(m_canvasView);
     }
-
-    SimpleRulerScale m_rulerScale;
 };
 
 #endif

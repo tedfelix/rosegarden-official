@@ -32,7 +32,6 @@
 #include "notationvlayout.h"
 #include "notationcanvasview.h"
 #include "notationstaff.h"
-#include "notationrulerscale.h"
 #include "NotationTypes.h"
 
 class QCanvasItem;
@@ -499,8 +498,6 @@ protected:
     virtual NotationCanvasView *getCanvasView() {
 	return static_cast<NotationCanvasView *>(m_canvasView);
     }
-
-    NotationRulerScale m_rulerScale;
 };
 
 #endif

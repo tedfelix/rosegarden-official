@@ -41,7 +41,7 @@
 class NotationHLayout : public Rosegarden::HorizontalLayoutEngine<NotationElement>
 {
 public:
-    NotationHLayout(NotePixmapFactory &npf);
+    NotationHLayout(Rosegarden::Composition *c, NotePixmapFactory &npf);
     virtual ~NotationHLayout();
 
     /**
@@ -116,34 +116,45 @@ public:
     virtual double getTotalWidth() { return m_totalWidth; }
 
     /**
-     * Returns the total number of bar lines on the given staff
+     * Returns the number of the first visible bar line on the given
+     * staff
      */
-    virtual unsigned int getBarLineCount(StaffType &staff);
+    virtual int getFirstVisibleBar(StaffType &staff);
 
     /**
-     * Returns the x-coordinate of the given bar number (zero-based)
-     * on the given staff
+     * Returns the number of the first visible bar line on any
+     * staff
      */
-    virtual double getBarLineX(StaffType &staff, unsigned int barNo);
+    virtual int getFirstVisibleBar();
 
     /**
-     * Returns the number that should be displayed next to the
-     * specified bar line, if we're showing numbers
+     * Returns the number of the last visible bar line on the given
+     * staff
      */
-    virtual int getBarLineDisplayNumber(StaffType &staff, unsigned int barNo);
+    virtual int getLastVisibleBar(StaffType &staff);
 
     /**
-     * Returns true if the specified bar line is in the right place,
-     * i.e. if the bar preceding it has the correct length
+     * Returns the number of the first visible bar line on any
+     * staff
      */
-    virtual bool isBarLineCorrect(StaffType &staff, unsigned int barNo);
+    virtual int getLastVisibleBar();
+
+    /**
+     * Returns the x-coordinate of the given bar number
+     */
+    virtual double getBarPosition(int barNo);
+
+    /**
+     * Returns true if the specified bar has the correct length
+     */
+    virtual bool isBarCorrect(StaffType &staff, int barNo);
 
     /**
      * Returns a pointer to a time signature event if there is one in
      * this bar, and if so also sets timeSigX to its x-coord
      */
     virtual Rosegarden::Event *getTimeSignatureInBar
-    (StaffType &staff, unsigned int barNo, double &timeSigX);
+    (StaffType &staff, int barNo, double &timeSigX);
 
 protected:
     class AccidentalTable
@@ -169,7 +180,7 @@ protected:
     struct BarData
     {
 	// slots filled at construction time:
-        int barNo;            // of corresponding BarPosition in Segment
+        int barNo;            // in composition terms
         NotationElementList::iterator start; // i.e. event following barline
 	bool correct;         // bar preceding barline has correct duration
 

@@ -26,7 +26,9 @@
 #include <qheader.h>
 #include "rosegardenguidoc.h"
 
-class RulerScale;
+namespace Rosegarden {
+    class RulerScale;
+}
 
 
 class BarButtons : public QHBox
@@ -35,7 +37,7 @@ class BarButtons : public QHBox
 
 public:
     BarButtons(RosegardenGUIDoc* doc,
-	       RulerScale *rulerScale,
+	       Rosegarden::RulerScale *rulerScale,
                int buttonHeight,
                QWidget* parent = 0,
                const char* name = 0,
@@ -78,7 +80,7 @@ private:
     int m_offset;
 
     RosegardenGUIDoc *m_doc;
-    RulerScale *m_rulerScale;
+    Rosegarden::RulerScale *m_rulerScale;
 };
 
 

@@ -21,7 +21,7 @@
 
 #include "barbuttons.h"
 #include "loopruler.h"
-#include "rulerscale.h"
+#include "RulerScale.h"
 #include "colours.h"
 
 #include <qvbox.h>
@@ -30,6 +30,7 @@
 
 #include "rosedebug.h"
 
+using Rosegarden::RulerScale;
 
 
 BarButtons::BarButtons(RosegardenGUIDoc* doc,
@@ -104,8 +105,8 @@ BarButtons::drawButtons()
     //
     QHBox *hButtonBar = new QHBox(buttonBar);
 
-    int firstBar = m_rulerScale->getFirstBarNumber(),
-	 lastBar = m_rulerScale->getLastBarNumber();
+    int firstBar = m_rulerScale->getFirstVisibleBar(),
+	 lastBar = m_rulerScale->getLastVisibleBar();
     int x = (int)m_rulerScale->getBarPosition(firstBar);
 
     kdDebug(KDEBUG_AREA) << "BarButtons::drawButtons: firstBar " << firstBar

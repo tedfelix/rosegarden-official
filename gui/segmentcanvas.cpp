@@ -32,12 +32,13 @@
 
 #include "rosedebug.h"
 #include "colours.h"
-#include "rulerscale.h"
+#include "RulerScale.h"
 
 #include <cassert>
 
 using Rosegarden::Segment;
 using Rosegarden::Note;
+using Rosegarden::RulerScale;
 
 //////////////////////////////////////////////////////////////////////
 //                SegmentItem

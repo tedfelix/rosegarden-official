@@ -40,7 +40,9 @@
 #include "matrixview.h"
 #include "trackbuttons.h"
 #include "barbuttons.h"
-#include "rulerscale.h"
+#include "RulerScale.h"
+
+using Rosegarden::SimpleRulerScale;
 
 
 RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)

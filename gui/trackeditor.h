@@ -34,11 +34,11 @@
 #include "Event.h" // for timeT
 #include "Track.h"
 
-namespace Rosegarden { class Segment; }
+namespace Rosegarden { class Segment; class RulerScale; }
 class SegmentItem;
 class SegmentCanvas;
 class RosegardenGUIDoc;
-class RulerScale;
+
 
 /**
  * Global widget for segment edition.
@@ -56,7 +56,7 @@ public:
      * Create a new TrackEditor representing the document \a doc
      */
     TrackEditor(RosegardenGUIDoc* doc,
-		RulerScale *rulerScale,
+		Rosegarden::RulerScale *rulerScale,
 		QWidget* parent = 0, const char* name = 0,
 		WFlags f=0);
 
@@ -187,7 +187,7 @@ protected:
     //--------------- Data members ---------------------------------
 
     RosegardenGUIDoc* m_document;
-    RulerScale *m_rulerScale;
+    Rosegarden::RulerScale *m_rulerScale;
 
     SegmentCanvas *m_segmentCanvas;
     QHeader *m_hHeader;
