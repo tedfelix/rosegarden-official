@@ -67,6 +67,8 @@ void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
 
     timeT emTime = m_staff.getSegment().getEndMarkerTime();
     if (evTime > emTime) evTime = emTime;
+    timeT esTime = m_staff.getSegment().getStartTime();
+    if (evTime < esTime) evTime = esTime;
     
 //     MATRIX_DEBUG << "MatrixCanvasView::contentsMousePressEvent() at pitch "
 //                          << evPitch << ", time " << evTime << endl;
