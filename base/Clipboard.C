@@ -85,12 +85,16 @@ Clipboard::newSegment()
 Segment *
 Clipboard::newSegment(const Segment *copyFrom)
 {
+/*!!!
     Segment *s = new Segment();
     m_segments.insert(s);
 
     for (Segment::iterator i = copyFrom->begin(); i != copyFrom->end(); ++i) {
 	s->insert(new Event(**i));
     }
+*/
+    Segment *s = new Segment(*copyFrom);
+    m_segments.insert(s);
 
     return s;
 }

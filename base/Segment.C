@@ -69,12 +69,12 @@ Segment::Segment(const Segment &segment):
     m_audioStartIdx(segment.getAudioStartTime()),
     m_audioEndIdx(segment.getAudioEndTime()),
     m_repeating(segment.isRepeating()),
-    m_quantizer(new Quantizer("SegmentQ", Quantizer::RawEventData)),
+    m_quantizer(new Quantizer(segment.getQuantizer())),
     m_quantize(segment.hasQuantization()),
     m_transpose(segment.getTranspose()),
     m_delay(segment.getDelay())
 {
-    for (iterator it = begin(); it != end(); ++it)
+    for (iterator it = segment.begin(); it != segment.end(); ++it)
         insert(new Event(**it));
 }
 

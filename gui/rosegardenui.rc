@@ -56,7 +56,7 @@
 
 </MenuBar>
 
-<ToolBar fullWidth="true" name="tracksToolBar" newline="true">
+<ToolBar name="tracksToolBar">
         <Action name="select"/>
 	<Action name="move"/>
 	<Action name="resize"/>
