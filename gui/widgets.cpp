@@ -765,6 +765,12 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
 	    (config->readNumEntry("quantizesimplicity", 13) - 11);
 	m_maxTuplet->setCurrentItem
 	    (config->readNumEntry("quantizemaxtuplet", 3) - 1);
+	m_rebeam->setChecked
+	    (config->readBoolEntry("quantizerebeam", true));
+	m_makeViable->setChecked
+	    (config->readBoolEntry("quantizemakeviable", false));
+	m_deCounterpoint->setChecked
+	    (config->readBoolEntry("quantizedecounterpoint", false));
 	m_articulate->setChecked
 	    (config->readBoolEntry("quantizearticulate", true));
     } else {
@@ -773,6 +779,9 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
 	m_durationCheckBox->setChecked(false);
 	m_simplicityCombo->setCurrentItem(2);
 	m_maxTuplet->setCurrentItem(2);
+	m_rebeam->setChecked(true);
+	m_makeViable->setChecked(false);
+	m_deCounterpoint->setChecked(false);
 	m_articulate->setChecked(true);
     }
 

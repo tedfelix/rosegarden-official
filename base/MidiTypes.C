@@ -283,8 +283,6 @@ SystemExclusive::toHex(std::string r)
     for (unsigned int i = 0; i < r.size(); ++i) {
 	if (i > 0) h += ' ';
 	unsigned char b = (unsigned char)r[i];
-	std::cout << "b / 16 % 16 is " << (b / 16) % 16 << std::endl;
-	std::cout << "b % 16 is " << b % 16 << std::endl;
 	h += hexchars[(b / 16) % 16];
 	h += hexchars[b % 16];
     }

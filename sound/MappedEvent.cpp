@@ -107,6 +107,9 @@ MappedEvent::MappedEvent(InstrumentId id,
     } catch (Event::BadType b) {
 	std::cerr << "Caught Event::BadType in MappedEvent ctor, message is:"
 		  << std::endl << b.getMessage() << std::endl;
+    } catch (SystemExclusive::BadEncoding e) {
+	std::cerr << "Caught bad SysEx encoding in MappedEvent ctor"
+		  << std::endl;
     }
 }
 

@@ -986,23 +986,27 @@ MidiFile::convertToRosegarden(Composition *composition,
 	    // conductor segment and don't insert it
 	    //
 	    bool keySigsOnly = true;
+	    bool haveKeySig = false;
 	    for (Segment::iterator i = rosegardenSegment->begin();
 		 i != rosegardenSegment->end(); ++i) {
 		if (!(*i)->isa(Rosegarden::Key::EventType)) {
 		    keySigsOnly = false;
 		    break;
+		} else {
+		    haveKeySig = true;
 		}
 	    }
 
 	    if (keySigsOnly) {
 		conductorSegment = rosegardenSegment;
 		continue;
-	    } else if (conductorSegment) {
+	    } else if (!haveKeySig && conductorSegment) {
 		// copy across any key sigs from the conductor segment
 		for (Segment::iterator i = conductorSegment->begin();
 		     i != conductorSegment->end(); ++i) {
 		    rosegardenSegment->insert(new Event(**i));
 		}
+		    
 	    }
 
 	    // add the Segment to the Composition and increment the
@@ -1010,25 +1014,6 @@ MidiFile::convertToRosegarden(Composition *composition,
 	    //
 	    composition->addTrack(track);
 	    composition->addSegment(rosegardenSegment);
-/*!!!
-	    // Apply a quantization for notation only (does not affect
-	    // any other editing or performance facility).  It's a good
-	    // idea to do this before the auto-beam.  This normalizes
-	    // the rests for us too.
-	    composition->getNotationQuantizer()->quantize(rosegardenSegment);
-*/
-	    SegmentNotationHelper helper(*rosegardenSegment);
-
-	    rosegardenSegment->insert
-		(helper.guessClef(rosegardenSegment->begin(),
-				  rosegardenSegment->end()).getAsEvent
-		 (rosegardenSegment->getStartTime()));
-/*!!!
-	    helper.autoBeam(rosegardenSegment->begin(),
-			    rosegardenSegment->end(),
-			    BaseProperties::GROUP_TYPE_BEAMED);
-*/
-
 	    compTrack++;
 
 	} else {
@@ -1041,6 +1026,8 @@ MidiFile::convertToRosegarden(Composition *composition,
 
     // if we have no time signatures at all, try to guess one
     //!!! should also be in rosegardengui.cpp
+    //!!! and now is
+/*!!!
     if (!haveTimeSignatures && !preexisting)
     {
         CompositionTimeSliceAdapter adapter(composition);
@@ -1048,7 +1035,7 @@ MidiFile::convertToRosegarden(Composition *composition,
         TimeSignature timeSig = analysisHelper.guessTimeSignature(adapter);
         composition->addTimeSignature(0, timeSig);
     }
-
+*/
     return composition;
 }
 
@@ -1260,6 +1247,11 @@ MidiFile::convertToMidi(Composition &comp)
                                  program);
         m_midiComposition[trackNumber].push_back(midiEvent);
 
+	timeT segmentMidiDuration =
+	    ((*segment)->getEndMarkerTime() -
+	     (*segment)->getStartTime()) * m_timingDivision /
+	    crotchetDuration;
+
         for (Segment::iterator el = (*segment)->begin();
              (*segment)->isBeforeEndMarker(el); ++el)
         {
@@ -1287,185 +1279,202 @@ MidiFile::convertToMidi(Composition &comp)
 
 	    while (midiEventAbsoluteTime <= absoluteTimeLimit) {
 
-		if ((*el)->isa(Note::EventType))
-		{
-		    if ((*el)->has(BaseProperties::VELOCITY))
-			midiVelocity = (*el)->get<Int>(BaseProperties::VELOCITY);
-		    else
-			midiVelocity = 127;
-
-		    int pitch = (*el)->get<Int>(BaseProperties::PITCH);
-		    pitch += (*segment)->getTranspose();
-                              
-		    // insert the NOTE_ON at the appropriate channel
-		    //
-		    midiEvent = 
-			new MidiEvent(midiEventAbsoluteTime,
-				      MIDI_NOTE_ON | midiChannel,
-				      pitch,
-				      midiVelocity);
-
-		    m_midiComposition[trackNumber].push_back(midiEvent);
-
-		    // Get the sounding time for the matching NOTE_OFF.
-		    // We use SegmentPerformanceHelper::getSoundingDuration()
-		    // to work out the tied duration of the NOTE.
-		    //
-		    // [cc] avoiding floating-point
-		    timeT midiEventEndTime = midiEventAbsoluteTime +
-			helper.getSoundingDuration(el) * m_timingDivision /
-			crotchetDuration;
-
-		    // insert the matching NOTE OFF
-		    //
-		    midiEvent =
-			new MidiEvent(midiEventEndTime,
-				      MIDI_NOTE_OFF | midiChannel,
-				      pitch,
-				      127); // full volume silence
-
-		    m_midiComposition[trackNumber].push_back(midiEvent);
-
-		}
-		else if ((*el)->isa(PitchBend::EventType))
-		{
-		    PitchBend pb(**el);
-		    midiEvent =
-			new MidiEvent(midiEventAbsoluteTime,
-				      MIDI_PITCH_BEND | midiChannel,
-				      pb.getMSB(), pb.getLSB());
-
-		    m_midiComposition[trackNumber].push_back(midiEvent);
-		}
-		else if ((*el)->isa(Rosegarden::Key::EventType))
-		{
-		    Rosegarden::Key key(**el);
-
-		    int accidentals = key.getAccidentalCount();
-		    if (!key.isSharp())
-			accidentals = -accidentals;
-
-		    // stack out onto the meta string
-		    //
-		    std::string metaMessage;
-		    metaMessage += MidiByte(accidentals);
-		    metaMessage += MidiByte(key.isMinor());
-
-		    midiEvent =
-			new MidiEvent(midiEventAbsoluteTime,
-				      MIDI_FILE_META_EVENT,
-				      MIDI_KEY_SIGNATURE,
-				      metaMessage);
-
-		    //m_midiComposition[trackNumber].push_back(midiEvent);
-
-		}
-		else if ((*el)->isa(Controller::EventType))
-		{
-		    //!!! Any of these MidiTypes constructors could
-		    // throw exceptions
+		try {
 		    
-		    Controller c(**el);
-		    midiEvent =
-			new MidiEvent(midiEventAbsoluteTime,
-				      MIDI_CTRL_CHANGE | midiChannel,
-				      c.getNumber(), c.getValue());
-
-		    m_midiComposition[trackNumber].push_back(midiEvent);
-		}
-		else if ((*el)->isa(ProgramChange::EventType))
-		{
-		    ProgramChange pc(**el);
-		    midiEvent =
-			new MidiEvent(midiEventAbsoluteTime,
-				      MIDI_PROG_CHANGE | midiChannel,
-				      pc.getProgram());
-
-		    m_midiComposition[trackNumber].push_back(midiEvent);
-		}
-		else if ((*el)->isa(SystemExclusive::EventType))
-		{
-		    SystemExclusive s(**el);
-		    std::string data = s.getRawData();
-
-		    // check for closing EOX and add one if none found
-		    //
-		    if (MidiByte(data[data.length() - 1]) != MIDI_END_OF_EXCLUSIVE)
+		    if ((*el)->isa(Note::EventType))
 		    {
-			data += MIDI_END_OF_EXCLUSIVE;
+			if ((*el)->has(BaseProperties::VELOCITY))
+			    midiVelocity = (*el)->get<Int>(BaseProperties::VELOCITY);
+			else
+			    midiVelocity = 127;
+
+			int pitch = (*el)->get<Int>(BaseProperties::PITCH);
+			pitch += (*segment)->getTranspose();
+                              
+			// insert the NOTE_ON at the appropriate channel
+			//
+			midiEvent = 
+			    new MidiEvent(midiEventAbsoluteTime,
+					  MIDI_NOTE_ON | midiChannel,
+					  pitch,
+					  midiVelocity);
+
+			m_midiComposition[trackNumber].push_back(midiEvent);
+
+			// Get the sounding time for the matching NOTE_OFF.
+			// We use SegmentPerformanceHelper::getSoundingDuration()
+			// to work out the tied duration of the NOTE.
+			//
+			// [cc] avoiding floating-point
+			timeT midiEventEndTime = midiEventAbsoluteTime +
+			    helper.getSoundingDuration(el) * m_timingDivision /
+			    crotchetDuration;
+
+			// insert the matching NOTE OFF
+			//
+			midiEvent =
+			    new MidiEvent(midiEventEndTime,
+					  MIDI_NOTE_OFF | midiChannel,
+					  pitch,
+					  127); // full volume silence
+
+			m_midiComposition[trackNumber].push_back(midiEvent);
+
 		    }
+		    else if ((*el)->isa(PitchBend::EventType))
+		    {
+			PitchBend pb(**el);
+			midiEvent =
+			    new MidiEvent(midiEventAbsoluteTime,
+					  MIDI_PITCH_BEND | midiChannel,
+					  pb.getMSB(), pb.getLSB());
 
-		    // construct plain SYSEX event
-		    //
-		    midiEvent = new MidiEvent(midiEventAbsoluteTime,
-					      MIDI_SYSTEM_EXCLUSIVE,
-					      data);
-
-		    m_midiComposition[trackNumber].push_back(midiEvent);
-
-		}
-		else if ((*el)->isa(ChannelPressure::EventType))
-		{
-		    ChannelPressure cp(**el);
-		    midiEvent =
-			new MidiEvent(midiEventAbsoluteTime,
-				      MIDI_CHNL_AFTERTOUCH | midiChannel,
-				      cp.getPressure());
-
-		    m_midiComposition[trackNumber].push_back(midiEvent);
-		}
-		else if ((*el)->isa(KeyPressure::EventType))
-		{
-		    KeyPressure kp(**el);
-		    midiEvent =
-			new MidiEvent(midiEventAbsoluteTime,
-				      MIDI_POLY_AFTERTOUCH | midiChannel,
-				      kp.getPitch(), kp.getPressure());
-
-		    m_midiComposition[trackNumber].push_back(midiEvent);
-		}
-		else if ((*el)->isa(Text::EventType))
-		{
-		    Text text(**el);
-		    std::string metaMessage = text.getText();
-
-		    MidiByte midiTextType = MIDI_TEXT_EVENT;
-
-		    if (text.getTextType() == Text::Lyric) {
-			midiTextType = MIDI_LYRIC;
+			m_midiComposition[trackNumber].push_back(midiEvent);
 		    }
+		    else if ((*el)->isa(Rosegarden::Key::EventType))
+		    {
+			Rosegarden::Key key(**el);
 
-		    if (text.getTextType() != Text::Annotation) {
-			// (we don't write annotations)
+			int accidentals = key.getAccidentalCount();
+			if (!key.isSharp())
+			    accidentals = -accidentals;
+
+			// stack out onto the meta string
+			//
+			std::string metaMessage;
+			metaMessage += MidiByte(accidentals);
+			metaMessage += MidiByte(key.isMinor());
 
 			midiEvent =
 			    new MidiEvent(midiEventAbsoluteTime,
 					  MIDI_FILE_META_EVENT,
-					  midiTextType,
+					  MIDI_KEY_SIGNATURE,
 					  metaMessage);
-			
+
+			//m_midiComposition[trackNumber].push_back(midiEvent);
+
+		    }
+		    else if ((*el)->isa(Controller::EventType))
+		    {
+			//!!! Any of these MidiTypes constructors could
+			// throw exceptions
+		    
+			Controller c(**el);
+			midiEvent =
+			    new MidiEvent(midiEventAbsoluteTime,
+					  MIDI_CTRL_CHANGE | midiChannel,
+					  c.getNumber(), c.getValue());
+
 			m_midiComposition[trackNumber].push_back(midiEvent);
 		    }
-		}
-		else if ((*el)->isa(Note::EventRestType))
-		{
-		    // skip legitimately
-		}
-		else
-		{  
+		    else if ((*el)->isa(ProgramChange::EventType))
+		    {
+			ProgramChange pc(**el);
+			midiEvent =
+			    new MidiEvent(midiEventAbsoluteTime,
+					  MIDI_PROG_CHANGE | midiChannel,
+					  pc.getProgram());
+
+			m_midiComposition[trackNumber].push_back(midiEvent);
+		    }
+		    else if ((*el)->isa(SystemExclusive::EventType))
+		    {
+			SystemExclusive s(**el);
+			std::string data = s.getRawData();
+
+			// check for closing EOX and add one if none found
+			//
+			if (MidiByte(data[data.length() - 1]) != MIDI_END_OF_EXCLUSIVE)
+			{
+			    data += MIDI_END_OF_EXCLUSIVE;
+			}
+
+			// construct plain SYSEX event
+			//
+			midiEvent = new MidiEvent(midiEventAbsoluteTime,
+						  MIDI_SYSTEM_EXCLUSIVE,
+						  data);
+
+			m_midiComposition[trackNumber].push_back(midiEvent);
+
+		    }
+		    else if ((*el)->isa(ChannelPressure::EventType))
+		    {
+			ChannelPressure cp(**el);
+			midiEvent =
+			    new MidiEvent(midiEventAbsoluteTime,
+					  MIDI_CHNL_AFTERTOUCH | midiChannel,
+					  cp.getPressure());
+
+			m_midiComposition[trackNumber].push_back(midiEvent);
+		    }
+		    else if ((*el)->isa(KeyPressure::EventType))
+		    {
+			KeyPressure kp(**el);
+			midiEvent =
+			    new MidiEvent(midiEventAbsoluteTime,
+					  MIDI_POLY_AFTERTOUCH | midiChannel,
+					  kp.getPitch(), kp.getPressure());
+
+			m_midiComposition[trackNumber].push_back(midiEvent);
+		    }
+		    else if ((*el)->isa(Text::EventType))
+		    {
+			Text text(**el);
+			std::string metaMessage = text.getText();
+
+			MidiByte midiTextType = MIDI_TEXT_EVENT;
+
+			if (text.getTextType() == Text::Lyric) {
+			    midiTextType = MIDI_LYRIC;
+			}
+
+			if (text.getTextType() != Text::Annotation) {
+			    // (we don't write annotations)
+
+			    midiEvent =
+				new MidiEvent(midiEventAbsoluteTime,
+					      MIDI_FILE_META_EVENT,
+					      midiTextType,
+					      metaMessage);
+			
+			    m_midiComposition[trackNumber].push_back(midiEvent);
+			}
+		    }
+		    else if ((*el)->isa(Note::EventRestType))
+		    {
+			// skip legitimately
+		    }
+		    else
+		    {  
 /*
-		    cerr << "MidiFile::convertToMidi - "
-			 << "unsupported MidiType \""
-			 << (*el)->getType()
-			 << "\" at export"
-			 << std::endl;
+  cerr << "MidiFile::convertToMidi - "
+  << "unsupported MidiType \""
+  << (*el)->getType()
+  << "\" at export"
+  << std::endl;
 */
+		    }
+
+		} catch (MIDIValueOutOfRange r) {
+		    std::cerr << "MIDI value out of range at "
+			      << (*el)->getAbsoluteTime() << std::endl;
+		} catch (Event::NoData d) {
+		    std::cerr << "Caught Event::NoData at "
+			      << (*el)->getAbsoluteTime() << ", message is:"
+			      << std::endl << d.getMessage() << std::endl;
+		} catch (Event::BadType b) {
+		    std::cerr << "Caught Event::BadType at "
+			      << (*el)->getAbsoluteTime() << ", message is:"
+			      << std::endl << b.getMessage() << std::endl;
+		} catch (SystemExclusive::BadEncoding e) {
+		    std::cerr << "Caught bad SysEx encoding at "
+			      << (*el)->getAbsoluteTime() << std::endl;
 		}
 
-		midiEventAbsoluteTime +=
-		    ((*segment)->getEndMarkerTime() -
-		     (*segment)->getStartTime()) * m_timingDivision /
-		    crotchetDuration;
+		if (segmentMidiDuration > 0) {
+		    midiEventAbsoluteTime += segmentMidiDuration;
+		} else break;
 	    }
         }
 
@@ -1706,17 +1715,12 @@ MidiFile::writeTrack(std::ofstream* midiFile, TrackId trackNumber)
 
             case MIDI_SYSTEM_EXCLUSIVE:
 
-                /* 
-                   This simply isn't working and I haven't got a clue why
-
                 // write out message length
                 trackBuffer +=
                     longToVarBuffer((*midiEvent)->getMetaMessage().length());
 
                 // now the message
                 trackBuffer += (*midiEvent)->getMetaMessage();
-
-                */
 
                 break;
 

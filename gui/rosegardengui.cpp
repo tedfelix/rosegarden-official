@@ -88,6 +88,7 @@
 #include "studiocontrol.h"
 #include "bankeditor.h"
 #include "midifilter.h"
+#include "SegmentNotationHelper.h"
 
 //!!! ditch these when harmonize() moves out
 #include "CompositionTimeSliceAdapter.h"
@@ -1986,7 +1987,7 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
 
     KStartupLogo::hideIfStillThere();
     RosegardenProgressDialog progressDlg(i18n("Importing MIDI file..."),
-                                         200,
+                                         100,
                                          this);
 
     connect(midiFile, SIGNAL(setProgress(int)),
@@ -2076,13 +2077,48 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
 
     if (merge) return; // need to work out how to only clean merged segments
 
-    KMacroCommand *command = new KMacroCommand(i18n("Guess Notation"));
     Rosegarden::Composition *comp = &m_doc->getComposition();
-    int progressPer = 200;
-    if (comp->getNbSegments() > 0) progressPer = 100 / (comp->getNbSegments() * 4); //!!! 4 only if all transforms done
+
+    for (Rosegarden::Composition::iterator i = comp->begin();
+	 i != comp->end(); ++i) {
+
+	Rosegarden::Segment &segment = **i;
+	Rosegarden::SegmentNotationHelper helper(segment);
+	segment.insert(helper.guessClef(segment.begin(),
+					segment.getEndMarker()).getAsEvent
+		       (segment.getStartTime()));
+    }
+
+    for (Rosegarden::Composition::iterator i = comp->begin();
+	 i != comp->end(); ++i) {
+
+	// find first key event in each segment (we'd have done the
+	// same for clefs, except there is no MIDI clef event)
+
+	Rosegarden::Segment &segment = **i;
+	Rosegarden::timeT firstKeyTime = segment.getEndMarkerTime();
+
+	for (Segment::iterator si = segment.begin();
+	     segment.isBeforeEndMarker(si); ++si) {
+	    if ((*si)->isa(Rosegarden::Key::EventType)) {
+		firstKeyTime = (*si)->getAbsoluteTime();
+		break;
+	    }
+	}
+
+	if (firstKeyTime > segment.getStartTime()) {
+	    Rosegarden::CompositionTimeSliceAdapter adapter
+		(comp, Rosegarden::timeT(0), firstKeyTime);
+	    Rosegarden::AnalysisHelper helper;
+	    segment.insert(helper.guessKey(adapter).getAsEvent
+			   (segment.getStartTime()));
+	}
+    }
+
+    KMacroCommand *command = new KMacroCommand(i18n("Guess Notation"));
     int count = 0;
 
-    for (Rosegarden::Composition::iterator i  = comp->begin();
+    for (Rosegarden::Composition::iterator i = comp->begin();
 	 i != comp->end(); ++i) {
 
 	Rosegarden::Segment &segment = **i;
@@ -2094,31 +2130,17 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
 	command->addCommand(new EventQuantizeCommand
 			    (segment, startTime, endTime, "Notation Options",
 			     Rosegarden::Quantizer::NotationPrefix, true));
-	progressDlg.progressBar()->advance(progressPer);
-	
-/*!!!
-	//!!! um. the progress things are useless here, as all the
-	//real work is done in the single
-	//getCommandHistory()->addCommand below
-
-	//!!! if ...
-	command->addCommand(new TransformsMenuMakeNotesViableCommand
-			    (segment));
-	progressDlg.progressBar()->advance(progressPer);
-
-	//!!! if ...
-	command->addCommand(new TransformsMenuDeCounterpointCommand
-			    (segment));
-	progressDlg.progressBar()->advance(progressPer);
-
-	//!!! if ...
-	command->addCommand(new GroupMenuAutoBeamCommand
-			    (segment));
-	progressDlg.progressBar()->advance(progressPer);
-*/
     }
 
     m_doc->getCommandHistory()->addCommand(command);
+
+    if (comp->getTimeSignatureCount() == 0) {
+        Rosegarden::CompositionTimeSliceAdapter adapter(comp);
+        Rosegarden::AnalysisHelper analysisHelper;
+        Rosegarden::TimeSignature timeSig =
+	    analysisHelper.guessTimeSignature(adapter);
+        comp->addTimeSignature(0, timeSig);
+    }
 }
 
 void RosegardenGUIApp::slotImportRG21()
