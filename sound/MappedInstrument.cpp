@@ -31,20 +31,23 @@ MappedInstrument::MappedInstrument(Instrument::InstrumentType type,
     m_type(type),
     m_channel(channel),
     m_id(id),
-    m_name(std::string(""))
+    m_name(std::string("")),
+    m_subOrder(0)
 {
 }
 
 MappedInstrument::MappedInstrument(Instrument::InstrumentType type,
                                    MidiByte channel,
                                    InstrumentId id,
+                                   MappedInstrumentSubOrdering subOrder,
                                    const std::string &name,
                                    DeviceId device):
     m_type(type),
     m_channel(channel),
     m_id(id),
     m_name(name),
-    m_device(device)
+    m_device(device),
+    m_subOrder(subOrder)
 {
 }
 
@@ -53,7 +56,8 @@ MappedInstrument::MappedInstrument(const Instrument &instr):
     m_channel(instr.getMidiChannel()),
     m_id(instr.getId()),
     m_name(instr.getName()),
-    m_device((instr.getDevice())->getId())
+    m_device((instr.getDevice())->getId()),
+    m_subOrder(instr.getSubOrder())
 {
 }
 
@@ -62,7 +66,8 @@ MappedInstrument::MappedInstrument(Instrument *instr):
     m_channel(instr->getMidiChannel()),
     m_id(instr->getId()),
     m_name(instr->getName()),
-    m_device(instr->getDevice()->getId())
+    m_device(instr->getDevice()->getId()),
+    m_subOrder(instr->getSubOrder())
 {
 }
 

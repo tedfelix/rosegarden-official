@@ -33,6 +33,8 @@
 namespace Rosegarden
 {
 
+typedef int MappedInstrumentSubOrdering;
+
 class MappedInstrument
 {
 public:
@@ -50,6 +52,7 @@ public:
     MappedInstrument(Instrument::InstrumentType type,
                      MidiByte channel,
                      InstrumentId id,
+                     MappedInstrumentSubOrdering subOrder,
                      const std::string &name,
                      DeviceId device);
 
@@ -78,6 +81,8 @@ public:
     void setDevice(DeviceId device) { m_device = device; }
     DeviceId getDevice() const { return m_device; }
 
+    void setSubOrder(MappedInstrumentSubOrdering order) { m_subOrder = order; }
+    MappedInstrumentSubOrdering getSubOrder() const { return m_subOrder; }
 
 private:
 
@@ -86,6 +91,8 @@ private:
     InstrumentId                m_id;
     std::string                 m_name;
     DeviceId                    m_device;
+
+    MappedInstrumentSubOrdering m_subOrder;
 
 };
 

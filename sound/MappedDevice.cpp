@@ -112,6 +112,7 @@ operator>>(QDataStream &dS, MappedDevice *mD)
     dS >> instruments;
 
     unsigned int type = 0, channel = 0, id = 0, device = 0;
+    int subOrder = 0;
     QString name;
 
     while (!dS.atEnd() && instruments)
@@ -119,12 +120,14 @@ operator>>(QDataStream &dS, MappedDevice *mD)
         dS >> type;
         dS >> channel;
         dS >> id;
+        dS >> subOrder;
         dS >> name;
         dS >> device;
 
         mD->push_back(new MappedInstrument((Instrument::InstrumentType)type,
                                            (MidiByte)channel,
                                            (InstrumentId)id,
+                                          (MappedInstrumentSubOrdering)subOrder,
                                            name.utf8().data(),
                                            (DeviceId)device));
 
@@ -161,6 +164,7 @@ operator>>(QDataStream &dS, MappedDevice &mD)
     dS >> instruments;
 
     unsigned int type, channel, id, device;
+    int subOrder = 0;
     QString name;
 
     while (!dS.atEnd() && instruments)
@@ -168,12 +172,14 @@ operator>>(QDataStream &dS, MappedDevice &mD)
         dS >> type;
         dS >> channel;
         dS >> id;
+        dS >> subOrder;
         dS >> name;
         dS >> device;
 
         mD.push_back(new MappedInstrument((Instrument::InstrumentType)type,
                                           (MidiByte)channel,
                                           (InstrumentId)id,
+                                          (MappedInstrumentSubOrdering)subOrder,
                                           name.utf8().data(),
                                           (DeviceId)device));
 
@@ -212,6 +218,7 @@ operator<<(QDataStream &dS, MappedDevice *mD)
         dS << (unsigned int)(*it)->getType();
         dS << (unsigned int)(*it)->getChannel();
         dS << (unsigned int)(*it)->getId();
+        dS << (int)(*it)->getSubOrder();
         dS << QString((*it)->getName().c_str());
         dS << (unsigned int)(*it)->getDevice();
     }
@@ -236,6 +243,7 @@ operator<<(QDataStream &dS, const MappedDevice &mD)
         dS << (unsigned int)(*it)->getType();
         dS << (unsigned int)(*it)->getChannel();
         dS << (unsigned int)(*it)->getId();
+        dS << (int)(*it)->getSubOrder();
         dS << QString((*it)->getName().c_str());
         dS << (unsigned int)(*it)->getDevice();
     }

@@ -58,7 +58,8 @@ Instrument::Instrument(InstrumentId id, InstrumentType it,
     m_sendProgramChange(false),
     m_sendPan(false),
     m_sendVelocity(false),
-    m_mappedId(0)
+    m_mappedId(0),
+    m_subOrder(0)
 
 {
     if (it == Audio)
@@ -98,7 +99,8 @@ Instrument::Instrument(InstrumentId id,
     m_sendProgramChange(false),
     m_sendPan(false),
     m_sendVelocity(false),
-    m_mappedId(0)
+    m_mappedId(0),
+    m_subOrder(0)
 
 {
     // Add a number of plugin place holders (unassigned)
@@ -136,8 +138,40 @@ Instrument::Instrument(const Instrument &ins):
     m_sendProgramChange(ins.sendsProgramChange()),
     m_sendPan(ins.sendsPan()),
     m_sendVelocity(ins.sendsVelocity()),
-    m_mappedId(ins.getMappedId())
+    m_mappedId(ins.getMappedId()),
+    m_subOrder(ins.getSubOrder())
+
 {
+}
+
+Instrument
+Instrument::operator=(const Instrument &ins)
+{
+    m_id = ins.getId();
+    m_name = ins.getName();
+    m_type = ins.getType();
+    m_channel = ins.getMidiChannel();
+    m_programChange = ins.getProgramChange();
+    m_msb = ins.getMSB();
+    m_lsb = ins.getLSB();
+    m_transpose = ins.getMidiTranspose();
+    m_pan = ins.getPan();
+    m_velocity = ins.getVelocity();
+    m_attack = ins.getAttack();
+    m_release = ins.getRelease();
+    m_filter = ins.getFilter();
+    m_resonance = ins.getResonance();
+    m_chorus = ins.getChorus();
+    m_reverb = ins.getReverb();
+    m_device = ins.getDevice();
+    m_sendBankSelect = ins.sendsBankSelect();
+    m_sendProgramChange = ins.sendsProgramChange();
+    m_sendPan = ins.sendsPan();
+    m_sendVelocity = ins.sendsVelocity();
+    m_mappedId = ins.getMappedId();
+    m_subOrder = ins.getSubOrder();
+
+    return *this;
 }
 
 

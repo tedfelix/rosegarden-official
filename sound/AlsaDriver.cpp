@@ -422,6 +422,7 @@ AlsaDriver::generateInstruments()
         instr = new MappedInstrument(Instrument::Audio,
                                      channel,
                                      m_audioRunningId,
+                                     0, // sub ordering is 0
                                      audioName,
                                      m_deviceRunningId);
         m_instruments.push_back(instr);
@@ -500,6 +501,7 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
                 instr = new MappedInstrument(type,
                                              9, // always the drum channel
                                              channel,
+                                             port,
                                              channelName,
                                              m_deviceRunningId);
                 m_instruments.push_back(instr);
@@ -531,6 +533,7 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
             MappedInstrument *instr = new MappedInstrument(type,
                                                            channel,
                                                            m_midiRunningId++,
+                                                           port,
                                                            channelName,
                                                            m_deviceRunningId);
             m_instruments.push_back(instr);

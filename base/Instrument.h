@@ -98,9 +98,10 @@ public:
                Device *device);
 
 
-    // Copy constructor
+    // Copy constructor and assignment
     //
     Instrument(const Instrument &);
+    Instrument operator=(const Instrument &);
 
     ~Instrument();
 
@@ -200,6 +201,9 @@ public:
     int getMappedId() const { return m_mappedId; }
     void setMappedId(int id) { m_mappedId = id; }
 
+    int getSubOrder() const { return m_subOrder; }
+    void setSubOrder(int subOrder) { m_subOrder = subOrder; }
+
 private:
     InstrumentId    m_id;
     std::string     m_name;
@@ -242,6 +246,11 @@ private:
     // control.  Here we can store the remote fader id.
     //
     int              m_mappedId;
+
+    // Sub ordering (i.e. ports in ALSA) allows us to group
+    // instruments sub-Devices.
+    //
+    int              m_subOrder;
 
 };
 
