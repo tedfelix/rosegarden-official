@@ -269,10 +269,13 @@ public:
     static const std::string NotePropertyName;
     
     typedef int Type; // not an enum, too much arithmetic at stake
+
     struct BadType {
         std::string type;
         BadType(std::string t = "") : type(t) { }
     };
+
+    struct TooManyDots { };
 
 
     // define both sorts of names; some people prefer the American
@@ -302,56 +305,59 @@ public:
         Longest             = 7;
 
 
-    Note(Type type, bool dotted = false) throw (BadType) :
-        m_type(type), m_dotted(dotted) {
-        //!!! this may really bugger up compiler optimisations for simple
-        // uses of Note (e.g. "int d = Note(Crotchet, true).getDuration()"):
-        if (m_type < Shortest || m_type > Longest) throw BadType();
-    }
-
+    Note(Type type, int dots = 0) throw (BadType, TooManyDots);
     Note(const std::string &s) throw (BadType);
-
-    Note(const Note &n) : m_type(n.m_type), m_dotted(n.m_dotted) { }
+    Note(const Note &n) : m_type(n.m_type), m_dots(n.m_dots) { }
     virtual ~Note() { }
 
     Note &operator=(const Note &n) {
         if (&n == this) return *this;
         m_type = n.m_type;
-        m_dotted = n.m_dotted;
+        m_dots = n.m_dots;
         return *this;
     }
 
     Type getNoteType()  const { return m_type; }
 
     bool isFilled()     const { return m_type <= Crotchet; }
-    bool isDotted()     const { return m_dotted; }
     bool isStalked()    const { return m_type <= Minim; }
+    int  getDots()      const { return m_dots; }
     int  getTailCount() const {
 	return (m_type >= Crotchet) ? 0 : (Crotchet - m_type);
     }
     int  getDuration()  const {
-        return (m_dotted ? m_dottedShortestTime : m_shortestTime) *
-            (1 << m_type);
+	// may be able to tighten this up a bit so it can remain inline
+	int duration = m_shortestTime * (1 << m_type);
+	int extra = duration / 2;
+	for (int dots = m_dots; dots > 0; --dots) {
+	    duration += extra;
+	    extra /= 2;
+	}
+	return duration;
+
+//        return (m_dotted ? m_dottedShortestTime : m_shortestTime) *
+//            (1 << m_type);
     }
 
     // these default to whatever I am:
-    std::string getEnglishName(Type type = -1, bool dotted = false)  const;
-    std::string getAmericanName(Type type = -1, bool dotted = false) const;
-    std::string getShortName(Type type = -1, bool dotted = false)    const;
+    std::string getEnglishName(Type type = -1, int dots = 0)  const;
+    std::string getAmericanName(Type type = -1, int dots = 0) const;
+    std::string getShortName(Type type = -1, int dots = 0)    const;
 
-    static Note getNearestNote(int duration);
+    static Note getNearestNote(int duration, int maxDots = 2);
     static std::vector<int> getNoteDurationList(int start, int duration,
-                                           const TimeSignature &ts);
+						const TimeSignature &ts);
   
 private:
     Type m_type;
-    bool m_dotted;
+//    bool m_dotted;
+    int m_dots;
     static void makeTimeListSub(int time, bool dottedTime,
                                 std::vector<int> &timeList);
 
     // a time & effort saving device
     static const int m_shortestTime;
-    static const int m_dottedShortestTime;
+//    static const int m_dottedShortestTime;
     static const int m_crotchetTime;
     static const int m_dottedCrotchetTime;
 };

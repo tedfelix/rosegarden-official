@@ -76,6 +76,19 @@ Event::copyFrom(const Event &e)
 }
 
 string
+Event::getPropertyType(const string &name) const
+    throw (NoData)
+{
+    PropertyMap::const_iterator i = m_properties.find(name);
+    if (i != m_properties.end()) {
+        return i->second->getTypeName();
+    } else {
+        throw NoData();
+    }
+}
+   
+
+string
 Event::getAsString(const string &name) const
     throw (NoData)
 {

@@ -75,17 +75,16 @@ NotationElement::setNote(Note note)
 {
     event()->setDuration(note.getDuration());
     event()->setMaybe<Int>(P_NOTE_TYPE, note.getNoteType());
-    event()->setMaybe<Bool>(P_NOTE_DOTTED, note.isDotted());
+    event()->setMaybe<Int>(P_NOTE_DOTS, note.getDots());
 }
 
 Note
 NotationElement::getNote() const
 {
     Note::Type ntype = event()->get<Int>(P_NOTE_TYPE);
-    bool isDotted = false;
-    event()->get<Bool>(P_NOTE_DOTTED, isDotted);
-    
-    return Note(ntype, isDotted);
+    long dots = 0;;
+    event()->get<Int>(P_NOTE_DOTS, dots);
+    return Note(ntype, dots);
 }
 
 

@@ -466,7 +466,7 @@ NotationView::showElements(NotationElementList::iterator from,
                            NotationElementList::iterator to,
                            double dxoffset, double dyoffset)
 {
-    kdDebug(KDEBUG_AREA) << "NotationElement::showElements()" << endl;
+    kdDebug(KDEBUG_AREA) << "NotationView::showElements()" << endl;
 
     if (from == to) return true;
 
@@ -487,7 +487,7 @@ NotationView::showElements(NotationElementList::iterator from,
             if ((*it)->isNote()) {
 
                 Note::Type note = (*it)->event()->get<Int>(P_NOTE_TYPE);
-                bool dotted = (*it)->event()->get<Bool>(P_NOTE_DOTTED);
+                int dots = (*it)->event()->get<Int>(P_NOTE_DOTS);
 
                 Accidental accidental = NoAccidental;
 
@@ -537,7 +537,7 @@ NotationView::showElements(NotationElementList::iterator from,
 
 			QCanvasPixmap notePixmap
 			    (npf.makeBeamedNotePixmap
-			     (note, dotted, accidental, up, stemLength,
+			     (note, dots, accidental, up, stemLength,
 			      nextTailCount, thisPartialTails, nextPartialTails,
                               width, (double)gradient / 100.0));
 			sprite = new QCanvasSimpleSprite(&notePixmap, canvas());
@@ -546,7 +546,7 @@ NotationView::showElements(NotationElementList::iterator from,
 
 			QCanvasPixmap notePixmap
 			    (npf.makeNotePixmap
-			     (note, dotted, accidental, tail, up));
+			     (note, dots, accidental, tail, up));
 			sprite = new QCanvasSimpleSprite(&notePixmap, canvas());
 		    }
 
@@ -554,7 +554,7 @@ NotationView::showElements(NotationElementList::iterator from,
 		} else {
 
 		    QCanvasPixmap notePixmap
-			(npf.makeNotePixmap(note, dotted, accidental, tail, up));
+			(npf.makeNotePixmap(note, dots, accidental, tail, up));
 
 		    sprite = new QCanvasSimpleSprite(&notePixmap, canvas());
 		}
@@ -562,9 +562,9 @@ NotationView::showElements(NotationElementList::iterator from,
             } else if ((*it)->isRest()) {
 
                 Note::Type note = (*it)->event()->get<Int>(P_NOTE_TYPE);
-                bool dotted = (*it)->event()->get<Bool>(P_NOTE_DOTTED);
+                int dots = (*it)->event()->get<Int>(P_NOTE_DOTS);
 
-                QCanvasPixmap notePixmap(npf.makeRestPixmap(note, dotted));
+                QCanvasPixmap notePixmap(npf.makeRestPixmap(note, dots));
                 sprite = new QCanvasSimpleSprite(&notePixmap, canvas());
 
             } else if ((*it)->event()->isa(Clef::EventType)) {
@@ -611,7 +611,7 @@ NotationView::showElements(NotationElementList::iterator from,
         }
     }
 
-    kdDebug(KDEBUG_AREA) << "NotationElement::showElements() exiting" << endl;
+    kdDebug(KDEBUG_AREA) << "NotationView::showElements() exiting" << endl;
 
     return true;
 }
@@ -715,11 +715,11 @@ NotationView::setCurrentSelectedNote(bool rest, Note::Type n)
     if (!rest) {
         m_currentNotePixmap->setPixmap
             (m_toolbarNotePixmapFactory.makeNotePixmap
-             (n, m_currentSelectedNoteDotted, NoAccidental, true, true, true));
+             (n, m_currentSelectedNoteDotted ? 1 : 0, NoAccidental, true, true, true));
     } else {
         m_currentNotePixmap->setPixmap
             (m_toolbarNotePixmapFactory.makeRestPixmap
-             (n, m_currentSelectedNoteDotted));
+             (n, m_currentSelectedNoteDotted ? 1 : 0));
     }
 
     emit changeCurrentNote(rest, n);
@@ -965,7 +965,7 @@ NotationView::insertNote(int height, const QPoint &eventPos)
     NotationElement *newNotationElement =
         new NotationElement(insertedEvent);
     newNotationElement->setNote(Note(m_currentSelectedNoteType,
-                                     m_currentSelectedNoteDotted));
+                                     m_currentSelectedNoteDotted ? 1 : 0));
 
     newNotationElement->event()->setMaybe<String>("Name", "INSERTED_NOTE");
 

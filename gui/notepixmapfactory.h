@@ -45,7 +45,7 @@ public:
     NotePixmapOffsets();
 
     void offsetsFor(Rosegarden::Note::Type,
-                    bool dotted,
+                    int dots,
                     Rosegarden::Accidental,
                     bool drawTail,
                     bool stalkGoesUp,
@@ -94,7 +94,7 @@ protected:
     bool m_drawTail;
     bool m_stalkGoesUp;
     bool m_noteHasStalk;
-    bool m_dotted;
+    int m_dots;
 
     QPoint m_bodyOffset;
     QPoint m_hotSpot;
@@ -132,7 +132,7 @@ public:
      *   never appropriate on a real stave
      */
     QCanvasPixmap makeNotePixmap(Rosegarden::Note::Type note,
-                                 bool dotted,
+                                 int dots,
                                  Rosegarden::Accidental accidental =
                                                      Rosegarden::NoAccidental,
                                  bool drawTail = true,
@@ -140,7 +140,7 @@ public:
                                  bool fixedHeight = false);
 
     QCanvasPixmap makeBeamedNotePixmap(Rosegarden::Note::Type note,
-				       bool dotted,
+				       int dots,
 				       Rosegarden::Accidental accidental,
 				       bool stalkGoesUp,
 				       int stalkLength,
@@ -150,7 +150,7 @@ public:
 				       int width,
 				       double gradient);
     
-    QCanvasPixmap makeRestPixmap(Rosegarden::Note::Type note, bool dotted);
+    QCanvasPixmap makeRestPixmap(Rosegarden::Note::Type note, int dots);
     QCanvasPixmap makeClefPixmap(const Rosegarden::Clef &clef) const;
     QCanvasPixmap makeKeyPixmap(const Rosegarden::Key &key,
 				const Rosegarden::Clef &clef);
@@ -179,7 +179,7 @@ protected:
 
     void drawStalk(Rosegarden::Note::Type note, bool drawTail, bool stalkGoesUp);
     void drawAccidental(Rosegarden::Accidental, bool stalkGoesUp);
-    void drawDot();
+    void drawDots(int dots);
 
     void createPixmapAndMask(int width = -1, int height = -1);
 

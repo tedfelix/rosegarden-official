@@ -72,12 +72,12 @@ Quantizer::quantize(Event *el)
     Note note = Note::getNearestNote(qd);
 
     el->setMaybe<Int>(P_NOTE_TYPE, note.getNoteType());
-    el->setMaybe<Bool>(P_NOTE_DOTTED, note.isDotted());
+    el->setMaybe<Int>(P_NOTE_DOTS, note.getDots());
     el->setMaybe<Int>(P_QUANTIZED_DURATION, qd);
 
     kdDebug(KDEBUG_AREA) << "Quantized to duration : "
                           << qd << " - note : " << note.getNoteType()
-			 << ", dotted : " << note.isDotted() << "\n";
+			 << ", dots : " << note.getDots() << "\n";
 }
 
 void
@@ -92,10 +92,13 @@ Quantizer::quantize(Event::timeT drt, int &high, int &low)
     high = 1000000; //!!!
 
     try {
-        Note highNote(lowNote.isDotted() ?
-                      lowNote.getNoteType()+1 : 
-                      lowNote.getNoteType(),     !lowNote.isDotted());
-        if (highNote.getDuration() > drt) high = highNote.getDuration();
+	if (lowNote.getDots() > 0) {
+	    Note highNote(lowNote.getNoteType() + 1, 0);
+	    if (highNote.getDuration() > drt) high = highNote.getDuration();
+	} else {
+	    Note highNote(lowNote.getNoteType(), 1);
+	    if (highNote.getDuration() > drt) high = highNote.getDuration();
+	}
 
     } catch (Note::BadType) {
         // lowNote is already the longest there is

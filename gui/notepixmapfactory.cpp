@@ -48,7 +48,7 @@ NotePixmapOffsets::NotePixmapOffsets()
 
 void
 NotePixmapOffsets::offsetsFor(Note::Type note,
-                              bool dotted,
+                              int dots,
                               Accidental accidental,
                               bool drawTail,
                               bool stalkGoesUp,
@@ -58,7 +58,7 @@ NotePixmapOffsets::offsetsFor(Note::Type note,
     m_accidental = accidental;
     m_drawTail = drawTail;
     m_stalkGoesUp = stalkGoesUp;
-    m_dotted = dotted;
+    m_dots = dots;
     m_noteHasStalk = note < Note::WholeNote; //!!!
 
     m_bodyOffset.setX(0);     m_bodyOffset.setY(0);
@@ -132,7 +132,7 @@ void
 NotePixmapOffsets::computePixmapSize()
 {
     m_pixmapSize.setWidth(m_bodySize.width() + m_accidentalStalkSize.width() +
-                          (m_dotted ? m_dotSize.width() : 0));
+                          m_dots * m_dotSize.width());
 
     if (m_noteHasStalk) {
 
@@ -392,7 +392,7 @@ NotePixmapFactory::~NotePixmapFactory()
 
 QCanvasPixmap
 NotePixmapFactory::makeNotePixmap(Note::Type note,
-                                  bool dotted,
+                                  int dots,
                                   Accidental accidental,
                                   bool drawTail,
                                   bool stalkGoesUp,
@@ -421,7 +421,7 @@ NotePixmapFactory::makeNotePixmap(Note::Type note,
 
     m_offsets.setExtraBeamSpacing(0);
     m_offsets.offsetsFor
-        (note, dotted, accidental, drawTail, stalkGoesUp, fixedHeight);
+        (note, dots, accidental, drawTail, stalkGoesUp, fixedHeight);
 
     if (note > Note::Longest) {
         kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeNotePixmap : note > Note::Longest ("
@@ -444,8 +444,8 @@ NotePixmapFactory::makeNotePixmap(Note::Type note,
     m_p.drawPixmap (m_offsets.getBodyOffset(), *body);
     m_pm.drawPixmap(m_offsets.getBodyOffset(), *(body->mask()));
     
-    if (dotted)
-        drawDot();
+    if (dots > 0)
+        drawDots(dots);
 
     // paint stalk (if needed)
     //
@@ -518,7 +518,7 @@ NotePixmapFactory::makeNotePixmap(Note::Type note,
 
 QCanvasPixmap
 NotePixmapFactory::makeBeamedNotePixmap(Note::Type note,
-					bool dotted,
+					int dots,
 					Accidental accidental,
 					bool stalkGoesUp,
 					int stalkLength,
@@ -541,7 +541,7 @@ NotePixmapFactory::makeBeamedNotePixmap(Note::Type note,
     m_offsets.setExtraBeamSpacing(beamSpacing);
 
     m_offsets.offsetsFor
-        (note, dotted, accidental, false, stalkGoesUp, false);
+        (note, dots, accidental, false, stalkGoesUp, false);
 
     if (note > Note::Longest) {
         kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeNotePixmap : note > Note::Longest ("
@@ -578,8 +578,8 @@ NotePixmapFactory::makeBeamedNotePixmap(Note::Type note,
     m_p.drawPixmap (m_offsets.getBodyOffset(), *body);
     m_pm.drawPixmap(m_offsets.getBodyOffset(), *(body->mask()));
     
-    if (dotted)
-        drawDot();
+    if (dots > 0)
+        drawDots(dots);
 
     // paint stalk (if needed)
     //
@@ -691,7 +691,7 @@ NotePixmapFactory::makeBeamedNotePixmap(Note::Type note,
 
 
 QCanvasPixmap
-NotePixmapFactory::makeRestPixmap(Note::Type note, bool dotted)
+NotePixmapFactory::makeRestPixmap(Note::Type note, int dots)
 {
     switch (note) {
     case Note::SixtyFourthNote:
@@ -965,13 +965,16 @@ NotePixmapFactory::drawStalk(Note::Type note,
 }
 
 void
-NotePixmapFactory::drawDot()
+NotePixmapFactory::drawDots(int dots)
 {
     int x = m_offsets.getBodyOffset().x() + m_noteBodyFilled.size().width();
     int y = m_offsets.getBodyOffset().y();
 
-    m_p.drawPixmap(x, y, m_dot);
-    m_pm.drawPixmap(x, y, *(m_dot.mask()));
+    for (int i = 0; i < dots; ++i) {
+	m_p.drawPixmap(x, y, m_dot);
+	m_pm.drawPixmap(x, y, *(m_dot.mask()));
+	x += m_dot.size().width();
+    }
 }
 
 void

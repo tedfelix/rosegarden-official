@@ -104,6 +104,8 @@ public:
     void setPersistence(const std::string &name, bool persistent)
         throw (NoData);
 
+    std::string getPropertyType(const std::string &name) const
+	throw (NoData);
     std::string getAsString(const std::string &name) const
 	throw (NoData);
 

@@ -366,17 +366,34 @@ const string Note::EventType = "note";
 const string Note::NotePropertyName = "duration";
 
 const int Note::m_shortestTime       = 6;
-const int Note::m_dottedShortestTime = 9;
+//const int Note::m_dottedShortestTime = 9;
 const int Note::m_crotchetTime       = 96;
 const int Note::m_dottedCrotchetTime = 144;
 
+Note::Note(Type type, int dots) throw (BadType, TooManyDots) :
+    m_type(type), m_dots(dots)
+{
+    //!!! having exceptions here may really bugger up compiler
+    // optimisations for simple uses of Note (e.g. "int d =
+    // Note(Crotchet, true).getDuration()"):
+    if (m_type < Shortest || m_type > Longest) throw BadType();
+    
+    // We don't permit dotted hemis, double-dotted demis etc
+    // because we can't represent notes short enough to make up
+    // the rest of the beat (as we have no notes shorter than a
+    // hemi).  And if we got to double-dotted hemis, triple-dotted
+    // demis etc, we couldn't even represent their durations in
+    // our duration units
+//!!!    if (m_dots > m_type) throw TooManyDots();
+}
+
 Note::Note(const string &n)
     throw (BadType) :
-    m_type(-1), m_dotted(false)
+    m_type(-1), m_dots(0)
 {
     string name(n);
     if (name.length() > 7 && name.substr(0, 7) == "dotted ") {
-        m_dotted = true;
+        m_dots = 1;
         name = name.substr(7);
     }
     Type t;
@@ -391,39 +408,65 @@ Note::Note(const string &n)
     if (m_type == -1) throw BadType(name);
 }
 
-string Note::getEnglishName(Type type, bool dotted) const {
+string Note::getEnglishName(Type type, int dots) const {
     static const string names[] = {
         "hemidemisemiquaver", "demisemiquaver", "semiquaver",
             "quaver", "crotchet", "minim", "semibreve", "breve"
             };
-    if (type < 0) { type = m_type; dotted = m_dotted; }
-    return dotted ? ("dotted " + names[type]) : names[type];
+    if (type < 0) { type = m_type; dots = m_dots; }
+    //!!! double-dots etc
+    return dots ? ("dotted " + names[type]) : names[type];
 }
 
-string Note::getAmericanName(Type type, bool dotted) const {
+string Note::getAmericanName(Type type, int dots) const {
     static const string names[] = {
         "sixty-fourth note", "thirty-second note", "sixteenth note",
             "eighth note", "quarter note", "half note", "whole note",
             "double whole note"
             };
-    if (type < 0) { type = m_type; dotted = m_dotted; }
-    return dotted ? ("dotted " + names[type]) : names[type];
+    if (type < 0) { type = m_type; dots = m_dots; }
+    //!!! double-dots etc
+    return dots ? ("dotted " + names[type]) : names[type];
 }
 
-string Note::getShortName(Type type, bool dotted) const {
+string Note::getShortName(Type type, int dots) const {
     static const string names[] = {
         "64th", "32nd", "16th", "8th", "quarter", "half", "whole",
             "double whole"
             };
-    if (type < 0) { type = m_type; dotted = m_dotted; }
-    return dotted ? ("dotted " + names[type]) : names[type];
+    if (type < 0) { type = m_type; dots = m_dots; }
+    //!!! double-dots etc
+    return dots ? ("dotted " + names[type]) : names[type];
 }
 
 
-Note Note::getNearestNote(int duration)
+Note Note::getNearestNote(int duration, int maxDots)
 {
+    int tag = Shortest - 1;
+    int d(duration / m_shortestTime);
+    while (d > 0) { ++tag; d /= 2; }
+
+    cout << "Note::getNearestNote: duration " << duration <<
+	" leading to tag " << tag  << endl;
+    if (tag < Shortest) return Note(Shortest);
+
+    int prospective = Note(tag, 0).getDuration();
+    int dots = 0;
+    int extra = prospective / 2;
+
+    while (dots < maxDots) {
+	prospective += extra;
+	if (prospective > duration) return Note(tag, dots);
+	extra /= 2;
+	++dots;
+	cout << "added another dot okay" << endl;
+    }
+
+    return Note(tag, maxDots); //???
+
+/*
     int d = m_shortestTime;
-    Note n(Longest, true);
+    Note n(Longest, maxDots);
 
     //!!! too short -- reconsider?
     if (duration < d) return Note(Shortest);
@@ -432,6 +475,9 @@ Note Note::getNearestNote(int duration)
         if (d + d/2 > duration) {
 	    n = Note(tag-1); break;
         }
+
+	//???
+
         if (d*2 > duration) {
 	    n = Note(tag-1, true); break;
         }
@@ -442,10 +488,11 @@ Note Note::getNearestNote(int duration)
 //    n = Note(Longest, true);
 #ifndef NDEBUG
     cout << "Note::getNearestNote(): duration " << duration
-	 << ", returning note (" << n.getNoteType() << ", " << n.isDotted()
+	 << ", returning note (" << n.getNoteType() << ", " << n.getDots()
 	 << ") (duration is " << n.getDuration() << ")" << endl;
 #endif
     return n;
+*/
 }
 
 

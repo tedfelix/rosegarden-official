@@ -82,7 +82,7 @@ int NotationHLayout::getIdealBarWidth(int fixedWidth,
     if (d == 0) return fixedWidth;
 
     int smin = getMinWidth(npf, **shortest);
-    if (!(*shortest)->event()->get<Bool>(P_NOTE_DOTTED)) {
+    if (!(*shortest)->event()->get<Int>(P_NOTE_DOTS)) { //!!! double-dot?
         smin += npf.getDotWidth()/2;
     }
 
@@ -449,7 +449,7 @@ NotationHLayout::layout()
 		// this chord that need accidentalTable to be the same
 		// as it is for this one)
 
-		Accidental acc(Accidental(el->event()->get<Int>(P_ACCIDENTAL)));
+		Accidental acc((Accidental)el->event()->get<Int>(P_ACCIDENTAL));
 		int height(el->event()->get<Int>(P_HEIGHT_ON_STAFF));
 		
 		kdDebug(KDEBUG_AREA) << "accidental = " << acc <<
@@ -555,9 +555,9 @@ int NotationHLayout::getMinWidth(const NotePixmapFactory &npf,
     if (e.isNote() || e.isRest()) {
 
         w += npf.getNoteBodyWidth();
-        bool dotted;
-        if (e.event()->get<Bool>(P_NOTE_DOTTED, dotted) && dotted) {
-            w += npf.getDotWidth();
+        long dots;
+        if (e.event()->get<Int>(P_NOTE_DOTS, dots)) {
+            w += npf.getDotWidth() * dots;
         }
         long accidental;
         if (e.event()->get<Int>(P_ACCIDENTAL, accidental) &&

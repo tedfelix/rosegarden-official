@@ -32,6 +32,8 @@ using Rosegarden::String;
 
 XmlStorableEvent::XmlStorableEvent(const QXmlAttributes &attributes)
 {
+    setDuration(0);
+
     for (int i = 0; i < attributes.length(); ++i) {
 	QString attrName(attributes.qName(i)),
             attrVal(attributes.value(i));
@@ -144,18 +146,28 @@ XmlStorableEvent::toXmlString() const
     if (getType().length())
         res += QString(" type=\"%1\"").arg(getType().c_str());
 
-    res += QString(" duration=\"%1\"").arg(getDuration());
+    if (getDuration() != 0) {
+	res += QString(" duration=\"%1\"").arg(getDuration());
+    }
+
+    res += ">";
 
     PropertyNames propertyNames(getPersistentPropertyNames());
     for (PropertyNames::const_iterator i = propertyNames.begin();
          i != propertyNames.end(); ++i) {
 
-        res += QString(" %1=\"%2\"")
-            .arg((*i).c_str())
-            .arg(getAsString(*i).c_str());
+	res += QString("<property name=\"%1\" %2=\"%3\"/>")
+	    .arg((*i).c_str())
+	    .arg(QString(getPropertyType(*i).c_str()).lower())
+	    .arg(getAsString(*i).c_str());
+
+//        res += QString(" %1=\"%2\"")
+//            .arg((*i).c_str())
+//            .arg(getAsString(*i).c_str());
     }
-    
-    res += "/>";
+  
+    res += "</event>";
+//    res += "/>";
     return res;
 }
 
@@ -167,18 +179,28 @@ XmlStorableEvent::toXmlString(const Event &e)
     if (e.getType().length())
         res += QString(" type=\"%1\"").arg(e.getType().c_str());
 
-    res += QString(" duration=\"%1\"").arg(e.getDuration());
+    if (e.getDuration() != 0) {
+	res += QString(" duration=\"%1\"").arg(e.getDuration());
+    }
+
+    res += ">";
 
     PropertyNames propertyNames(e.getPersistentPropertyNames());
     for (PropertyNames::const_iterator i = propertyNames.begin();
          i != propertyNames.end(); ++i) {
 
-        res += QString(" %1=\"%2\"")
-            .arg((*i).c_str())
-            .arg(e.getAsString(*i).c_str());
+	res += QString("<property name=\"%1\" %2=\"%3\"/>")
+	    .arg((*i).c_str())
+	    .arg(QString(e.getPropertyType(*i).c_str()).lower())
+	    .arg(e.getAsString(*i).c_str());
+
+//        res += QString(" %1=\"%2\"")
+//            .arg((*i).c_str())
+//            .arg(e.getAsString(*i).c_str());
     }
     
-    res += "/>";
+    res += "</event>";
+//    res += "/>";
     return res;
 }
 
