@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "POT-Creation-Date: 2003-12-02 18:35-0500\n"
-"PO-Revision-Date: 2004-03-15 14:10+0300\n"
-"Last-Translator: Alexandre Prokoudine <avp@musicjournal.ru>\n"
+"PO-Revision-Date: 2004-05-18 16:24+0300\n"
+"Last-Translator: Alexandre Prokoudine <techwriter@land.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -112,7 +112,7 @@ msgstr "Каналы"
 
 #: audiomanagerdialog.cpp:219
 msgid "Sample rate"
-msgstr "Частота семплирования"
+msgstr "Частота дискретизации"
 
 #: audiomanagerdialog.cpp:326
 msgid "<no audio files>"
@@ -1471,7 +1471,7 @@ msgstr "Скорость доли"
 
 #: dialogs.cpp:4291
 msgid "Sub-beat velocity"
-msgstr ""
+msgstr "Сила нажатия на деление (полдоли)"
 
 #: dialogs.cpp:4300
 msgid "Pitch"
@@ -1679,7 +1679,7 @@ msgstr "&Транспонировать..."
 #: editcommands.h:384
 #: segmentcommands.h:385
 msgid "Stretch or S&quash..."
-msgstr ""
+msgstr "Растянуть или с&жать..."
 
 #: editcommands.h:433
 msgid "&Increase Velocity"
@@ -3058,14 +3058,12 @@ msgid "N&one"
 msgstr "&Ничего"
 
 #: notationcommands.cpp:1510
-#, fuzzy
 msgid "Respell Accidentals &Upward"
-msgstr "Принудительно по&высить знаки альтерации"
+msgstr "Перечитать случайные знаки альтерации в&верх"
 
 #: notationcommands.cpp:1513
-#, fuzzy
 msgid "Respell Accidentals &Downward"
-msgstr "Принудительно по&низить знаки альтерации"
+msgstr "Перечитать случайные знаки альтерации в&низ"
 
 #: notationcommands.cpp:1516
 msgid "Restore &Computed Accidentals"
@@ -3197,12 +3195,14 @@ msgid "Positioning staff %1..."
 msgstr "Просчитывается отображение нотного стана %1"
 
 #: notationstrings.cpp:42
+#, fuzzy
 msgid "%1-dotted-%2"
-msgstr ""
+msgstr "Точечная"
 
 #: notationstrings.cpp:43
+#, fuzzy
 msgid "%1-dotted %2"
-msgstr ""
+msgstr "Точечная"
 
 #: notationstrings.cpp:45
 msgid "dotted-%1"
@@ -3684,6 +3684,15 @@ msgid ""
 "paste type to something other than Restricted if\n"
 "you wish."
 msgstr ""
+"Ограниченный способ вставки требует достаточного\n"
+"количества свободного дискового пространства\n"
+"для хранения всех вставляемых событий.\n"
+"В настоящий момент дискового постранства не хватает..\n"
+"Если вам всё равно необходимо вставить данные, \n"
+"используйте любой другой тип вставки\n"
+"из меню \"Правка\".  Вы также можете сменить\n"
+"стандартный тип вставки с Ограниченной \n"
+"на какую-либо другую."
 
 #: notationviewslots.cpp:486
 msgid "Can't paste multiple Segments into one"
