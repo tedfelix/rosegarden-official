@@ -3004,7 +3004,8 @@ void NotationView::readjustCanvasSize()
     }
 
     NOTATION_DEBUG << "NotationView::readjustCanvasSize: maxHeight is "
-		   << maxHeight << ", page height is " << getPageHeight() << endl;
+		   << maxHeight << ", page height is " << getPageHeight() << endl
+                   << " - maxWidth is " << maxWidth << ", page width is " << getPageWidth() << endl;
 
     if (maxWidth  < getPageWidth()  + 40) maxWidth  = getPageWidth()  + 40;
     if (maxHeight < getPageHeight() + 40) maxHeight = getPageHeight() + 40;
@@ -3230,52 +3231,6 @@ void NotationView::setupDefaultProgress()
     }
 }
 
-void
-NotationView::keyPressEvent(QKeyEvent *event)
-{
-    switch(event->key())
-    {
-        case Key_Shift:
-            m_shiftDown = true;
-
-            break;
-
-        case Key_Control:
-            m_controlDown = true;
-            break;
-
-        default:
-            event->ignore();
-            break;
-    }
-
-    if (m_bottomBarButtons)
-        m_bottomBarButtons->getLoopRuler()->slotSetLoopingMode(m_shiftDown);
-}
-
-void
-NotationView::keyReleaseEvent(QKeyEvent *event)
-{
-    switch(event->key())
-    {
-        case Key_Shift:
-            m_shiftDown = false;
-            break;
-
-        case Key_Control:
-            m_controlDown = false;
-            break;
-
-        default:
-            event->ignore();
-            break;
-    }
-
-    if (m_bottomBarButtons)
-        m_bottomBarButtons->getLoopRuler()->slotSetLoopingMode(m_shiftDown);
-}
-
-    
 NotationView::NoteActionDataMap* NotationView::m_noteActionDataMap = 0;
 NotationView::MarkActionDataMap* NotationView::m_markActionDataMap = 0;
 const char* const NotationView::ConfigGroup = "Notation Options";

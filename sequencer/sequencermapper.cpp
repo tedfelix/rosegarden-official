@@ -128,7 +128,7 @@ SequencerMmapper::setFileSize(size_t size)
 QString
 SequencerMmapper::createFileName()
 {
-    return KGlobal::dirs()->resourceDirs("tmp").first() +
+    return KGlobal::dirs()->resourceDirs("tmp").last() +
 	"/rosegarden_sequencer_timing_block";
 }
 

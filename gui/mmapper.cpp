@@ -104,7 +104,7 @@ ControlBlockMmapper::~ControlBlockMmapper()
 
 QString ControlBlockMmapper::createFileName()
 {
-    return KGlobal::dirs()->resourceDirs("tmp").first() + "/rosegarden_control_block";
+    return KGlobal::dirs()->resourceDirs("tmp").last() + "/rosegarden_control_block";
 }
 
 void ControlBlockMmapper::updateTrackData(Track *t)
@@ -638,7 +638,7 @@ void CompositionMmapper::cleanup()
 
     // Erase all 'segment_*' files
     //
-    QString tmpPath = KGlobal::dirs()->resourceDirs("tmp").first();
+    QString tmpPath = KGlobal::dirs()->resourceDirs("tmp").last();
 
     QDir segmentsDir(tmpPath, "segment_*");
     for (unsigned int i = 0; i < segmentsDir.count(); ++i) {
@@ -694,7 +694,7 @@ QString CompositionMmapper::makeFileName(Segment* segment)
     QStringList tmpDirs = KGlobal::dirs()->resourceDirs("tmp");
 
     return QString("%1/segment_%2")
-        .arg(tmpDirs.first())
+        .arg(tmpDirs.last())
         .arg((unsigned int)segment, 0, 16);
 }
 
@@ -801,7 +801,7 @@ Rosegarden::InstrumentId MetronomeMmapper::getMetronomeInstrument()
 
 QString MetronomeMmapper::createFileName()
 {
-    return KGlobal::dirs()->resourceDirs("tmp").first() + "/rosegarden_metronome";
+    return KGlobal::dirs()->resourceDirs("tmp").last() + "/rosegarden_metronome";
 }
 
 unsigned int MetronomeMmapper::getSegmentRepeatCount()
@@ -875,7 +875,7 @@ unsigned int SpecialSegmentMmapper::getSegmentRepeatCount()
 
 QString SpecialSegmentMmapper::createFileName(QString baseFileName)
 {
-    return KGlobal::dirs()->resourceDirs("tmp").first() + "/" + baseFileName;
+    return KGlobal::dirs()->resourceDirs("tmp").last() + "/" + baseFileName;
 }
 
 //----------------------------------------

@@ -179,7 +179,7 @@ SequenceManager::mapSequencer()
     try
     {
         m_sequencerMapper = new SequencerMapper(
-            KGlobal::dirs()->resourceDirs("tmp").first() + "/rosegarden_sequencer_timing_block");
+            KGlobal::dirs()->resourceDirs("tmp").last() + "/rosegarden_sequencer_timing_block");
     }
     catch(Rosegarden::Exception)
     {

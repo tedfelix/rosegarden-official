@@ -690,9 +690,6 @@ protected slots:
 
 protected:
 
-    virtual void keyPressEvent(QKeyEvent *event);
-    virtual void keyReleaseEvent(QKeyEvent *event);
-        
     /**
      * read general Options again and initialize all variables like the recent file list
      */

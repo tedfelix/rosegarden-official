@@ -67,7 +67,7 @@ RosegardenSequencerApp::RosegardenSequencerApp(
     m_loopStart(0, 0),
     m_loopEnd(0, 0),
     m_studio(new Rosegarden::MappedStudio()),
-    m_segmentFilesPath(KGlobal::dirs()->resourceDirs("tmp").first()),
+    m_segmentFilesPath(KGlobal::dirs()->resourceDirs("tmp").last()),
     m_metaIterator(0),
     m_controlBlockMmapper(0),
     m_transportToken(0),
@@ -499,7 +499,8 @@ RosegardenSequencerApp::processAsynchronousEvents()
 
     if (!m_controlBlockMmapper) {
 	try {
-	    m_controlBlockMmapper = new ControlBlockMmapper(KGlobal::dirs()->resourceDirs("tmp").first() + "/rosegarden_control_block");
+	    m_controlBlockMmapper = new ControlBlockMmapper(KGlobal::dirs()->resourceDirs("tmp").last()
+                                                            + "/rosegarden_control_block");
 	} catch (Rosegarden::Exception e) {
 	    // Assume that the control block simply hasn't been
 	    // created yet because the GUI's still starting up.
@@ -746,9 +747,11 @@ RosegardenSequencerApp::play(const Rosegarden::RealTime &time,
         mmapSegment(m_segmentFilesPath + "/" + segmentsDir[i]);
     }
 
+    QString tmpDir = KGlobal::dirs()->resourceDirs("tmp").last();
+
     // Map metronome
     //
-    QString metronomeFileName = KGlobal::dirs()->resourceDirs("tmp").first() + "/rosegarden_metronome";
+    QString metronomeFileName =  tmpDir + "/rosegarden_metronome";
     QFileInfo metronomeFileInfo(metronomeFileName);
     if (metronomeFileInfo.exists())
         mmapSegment(metronomeFileName);
@@ -757,7 +760,7 @@ RosegardenSequencerApp::play(const Rosegarden::RealTime &time,
 
     // Map tempo segment
     //
-    QString tempoSegmentFileName = KGlobal::dirs()->resourceDirs("tmp").first() + "/rosegarden_tempo";
+    QString tempoSegmentFileName = tmpDir + "/rosegarden_tempo";
     QFileInfo tempoSegmentFileInfo(tempoSegmentFileName);
     if (tempoSegmentFileInfo.exists())
         mmapSegment(tempoSegmentFileName);
@@ -766,7 +769,7 @@ RosegardenSequencerApp::play(const Rosegarden::RealTime &time,
 
     // Map time sig segment
     //
-    QString timeSigSegmentFileName = KGlobal::dirs()->resourceDirs("tmp").first() + "/rosegarden_timesig";
+    QString timeSigSegmentFileName = tmpDir + "/rosegarden_timesig";
     QFileInfo timeSigSegmentFileInfo(timeSigSegmentFileName);
     if (timeSigSegmentFileInfo.exists())
         mmapSegment(timeSigSegmentFileName);
@@ -776,7 +779,7 @@ RosegardenSequencerApp::play(const Rosegarden::RealTime &time,
     // Map control block if necessary
     //
     if (!m_controlBlockMmapper) {
-	m_controlBlockMmapper = new ControlBlockMmapper(KGlobal::dirs()->resourceDirs("tmp").first() + "/rosegarden_control_block");
+	m_controlBlockMmapper = new ControlBlockMmapper(tmpDir + "/rosegarden_control_block");
 	m_sequencerMapper.setControlBlock(m_controlBlockMmapper->getControlBlock());
     }
 
