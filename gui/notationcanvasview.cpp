@@ -132,8 +132,11 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 
         QCanvasItem *item = *it;
 
-        if (item->active()) pressedItem = item;
-
+        if (item->active() && !pressedItem) {
+            kdDebug(KDEBUG_AREA) << "mousepress : got active item\n";
+            pressedItem = item;
+        }
+        
         if ((sprite = dynamic_cast<QCanvasNotationSprite*>(item))) {
             NotationElement &el = sprite->getNotationElement();
 
