@@ -79,7 +79,7 @@ EditView::EditView(RosegardenGUIDoc *doc,
 
     BarButtons *barButtons = new BarButtons
 	(doc,
-	 200, 25, 100, //!!! x3
+	 25, 100, //!!! x2
 	 m_barButtonsView);
 
 //    m_barButtonsView->setFrameStyle(Plain);

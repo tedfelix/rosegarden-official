@@ -33,16 +33,8 @@ class BarButtons : public QHBox
 
 public:
     BarButtons(RosegardenGUIDoc* doc,
-               QWidget* parent = 0,
-               QHeader *vHeader = 0,
-               QHeader *hHeader = 0,
-               const char* name = 0,
-               WFlags f=0);
-
-    BarButtons(RosegardenGUIDoc* doc,
-               int defaultBarWidth,
+               int baseBarWidth,
                int buttonHeight,
-	       int barCount,
                QWidget* parent = 0,
                const char* name = 0,
                WFlags f=0);
@@ -62,8 +54,7 @@ signals:
     void signalSetLoopMarker(Rosegarden::timeT, Rosegarden::timeT);
 
 public slots:
-
-    // Re-imit
+    // Re-emit
     //
     void slotSetPointerPosition(Rosegarden::timeT position)
         { emit setPointerPosition(position); }
@@ -82,10 +73,10 @@ public slots:
 private:
     void drawButtons();
 
-    int m_bars;
     int m_barHeight;
-    int m_barWidth;
+    int m_baseBarWidth;
     int m_offset;
+    int m_bars;
     RosegardenGUIDoc *m_doc;
     
 };

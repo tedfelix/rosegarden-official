@@ -78,9 +78,23 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
     }
 
 
-    // If we have no length to our piece then create a default
+    // If we have no length to our piece then check for (and if
+    // necessary create) start and end markers from which to
+    //  derive the bar length of the piece.
     //
-    if (bars == 0) bars = 100;
+    if (bars == 0)
+    {
+        Rosegarden::Composition &comp = doc->getComposition();
+
+        if(comp.getEndMarker() == 0)
+        {
+            comp.setStartMarker(0);
+            comp.setEndMarker(comp.getBarRange(100, false).second);
+        }
+
+        bars = comp.getBarNumber(comp.getEndMarker() -
+                                 comp.getStartMarker(), false);
+    }
 
     init(tracks, bars);
 }
@@ -125,6 +139,15 @@ TrackEditor::init(unsigned int nbTracks, unsigned int nbBars)
 
     m_vHeader->setMinimumWidth(100);
     m_vHeader->setResizeEnabled(false);
+
+
+    int barButtonWidth = 0;
+    Composition &comp = m_document->getComposition();
+
+    std::pair<Rosegarden::timeT, Rosegarden::timeT> times =
+                comp.getBarRange(nbBars, false);
+
+    barButtonWidth = times.second;
 
     QObject::connect(m_vHeader, SIGNAL(indexChange(int,int,int)),
                      this, SLOT(segmentOrderChanged(int,int,int)));

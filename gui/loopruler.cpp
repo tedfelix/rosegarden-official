@@ -27,31 +27,19 @@
 #include "rosedebug.h"
 
 LoopRuler::LoopRuler(RosegardenGUIDoc *doc,
-                     int bars,
-                     int barWidth,
+                     int baseBarWidth,
                      int height,
                      QWidget *parent,
                      const char *name)
     : QWidget(parent, name),
-      m_bars(bars),
-      m_barWidth(barWidth),
       m_height(height),
       m_snap(0),
+      m_baseBarWidth(baseBarWidth),
       m_doc(doc),
       m_loop(false),
       m_startLoop(0), m_endLoop(0)
 {
-    setMinimumSize(bars * barWidth, height);
-    setMaximumSize(bars * barWidth, height);
-
-    // Load in our bar widths from the Composition
-    //
-    std::pair<Rosegarden::timeT, Rosegarden::timeT> barMarkers;
-    for (int i = 0; i < m_bars; i++)
-    {
-        barMarkers = m_doc->getComposition().getBarRange(i, false);
-        m_barWidthMap[i] = barMarkers.second - barMarkers.first;
-    }
+    calculateBarDivisions();
 }
 
 LoopRuler::~LoopRuler()
@@ -68,6 +56,10 @@ void LoopRuler::paintEvent(QPaintEvent*)
 
 void LoopRuler::drawBarSections(QPainter* paint)
 {
+    if (!m_doc) return;
+
+    Rosegarden::Composition &comp = m_doc->getComposition();
+
     int subSectionLinePos, barWidth;
     int runningWidth = 0;
     int runningTime = 0;
@@ -78,16 +70,16 @@ void LoopRuler::drawBarSections(QPainter* paint)
     {
         // Normalise this bar width to a ratio of the first
         //
-        barWidth = m_barWidth * m_barWidthMap[i] / m_barWidthMap[0];
+        barWidth = m_baseBarWidth * m_barWidthMap[i] / m_barWidthMap[0];
 
         paint->drawLine(runningWidth, 2 * m_height / 7, runningWidth, m_height);
 
 	Rosegarden::TimeSignature timeSig =
-	    m_doc->getComposition().getTimeSignatureAt(runningTime);
+	    comp.getTimeSignatureAt(runningTime);
 
         int beatsBar = timeSig.getBeatsPerBar();
 	Rosegarden::timeT beatDuration = timeSig.getBeatDuration();
-	float beatSize = float(m_barWidth * beatDuration) / m_barWidthMap[0];
+	float beatSize = float(m_baseBarWidth * beatDuration) / m_barWidthMap[0];
 
         for (int j = 0; j < beatsBar; j++)
         {
@@ -210,7 +202,7 @@ LoopRuler::getPointerPosition(int xPos)
 
     for (int i = 0; i < m_bars; i++)
     {
-        barWidth = m_barWidth * m_barWidthMap[i] / m_barWidthMap[0];
+        barWidth = m_baseBarWidth * m_barWidthMap[i] / m_barWidthMap[0];
 
         if (runningWidth + barWidth > xPos)
         {
@@ -236,13 +228,13 @@ LoopRuler::getXPosition(Rosegarden::timeT pos)
 
     for (int i = 0; i < thisBar; i++)
     {
-        result += m_barWidth * m_barWidthMap[i] / m_barWidthMap[0];
+        result += m_baseBarWidth * m_barWidthMap[i] / m_barWidthMap[0];
     }
 
     std::pair<Rosegarden::timeT, Rosegarden::timeT> barRange =
                             m_doc->getComposition().getBarRange(thisBar, false);
 
-    result += m_barWidth *
+    result += m_baseBarWidth *
               (pos - barRange.first) / ( barRange.second - barRange.first)
               * m_barWidthMap[thisBar]/m_barWidthMap[0];
 
@@ -266,4 +258,26 @@ LoopRuler::setLoopMarker(Rosegarden::timeT startLoop, Rosegarden::timeT endLoop)
     update();
 }
 
+void
+LoopRuler::calculateBarDivisions()
+{
+    // Load in our bar widths from the Composition
+    //
+    std::pair<Rosegarden::timeT, Rosegarden::timeT> barMarkers;
+
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    m_bars = comp.getNbBars();
+
+    if (m_bars == 0)
+    {
+        m_bars = comp.getBarNumber(comp.getEndMarker() -
+                                   comp.getStartMarker(), false);
+    }
+ 
+    for (int i = 0; i < m_bars; i++)
+    {
+        barMarkers = m_doc->getComposition().getBarRange(i, false);
+        m_barWidthMap.push_back(barMarkers.second - barMarkers.first);
+    }
+}
 

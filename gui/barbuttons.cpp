@@ -28,42 +28,29 @@
 
 
 BarButtons::BarButtons(RosegardenGUIDoc* doc,
-                       QWidget* parent,
-                       QHeader *vHeader,
-                       QHeader *hHeader,
-                       const char* name,
-                       WFlags f):
-    QHBox(parent, name), m_doc(doc)
-{
-    m_barHeight = vHeader->sectionSize(0);
-    m_barWidth = hHeader->sectionSize(0);
-    m_bars = hHeader->count();
-    
-    m_offset = 4;
-
-    setMinimumHeight(m_barHeight);
-    setMaximumHeight(m_barHeight);
-
-    drawButtons();
-}
-
-BarButtons::BarButtons(RosegardenGUIDoc* doc,
-                       int barWidth,
+                       int baseBarWidth,
                        int barHeight,
-		       int barCount,
                        QWidget* parent,
                        const char* name,
-                       WFlags f):
-    QHBox(parent, name), m_doc(doc)
+                       WFlags /*f*/):
+    QHBox(parent, name),
+    m_barHeight(barHeight),
+    m_baseBarWidth(baseBarWidth),
+    m_doc(doc)
 {
-    m_barHeight = barHeight;
-    m_barWidth = barWidth;
-    m_bars = barCount;
-    
     m_offset = 4;
 
     setMinimumHeight(m_barHeight);
     setMaximumHeight(m_barHeight);
+
+    Rosegarden::Composition &comp = doc->getComposition();
+    m_bars = comp.getNbBars();
+
+    if (m_bars == 0)
+    {
+        m_bars = comp.getBarNumber(comp.getEndMarker() -
+                                   comp.getStartMarker(), false);
+    }
 
     drawButtons();
 }
@@ -75,6 +62,9 @@ BarButtons::~BarButtons()
 void
 BarButtons::drawButtons()
 {
+    if (!m_doc) return;
+
+    Rosegarden::Composition &comp = m_doc->getComposition();
 
     // Create a horizontal spacing label to jog everything
     // up with the main SegmentCanvas
@@ -91,15 +81,19 @@ BarButtons::drawButtons()
     //
     QVBox *buttonBar = new QVBox(this);
 
-/*  Not working at the moment
+    // First bar width by which others are judged
+    //
+    std::pair<Rosegarden::timeT, Rosegarden::timeT> fTimes =
+        comp.getBarRange(0, false); 
 
-    int buttonBarWidth = m_barWidth *
-                    m_doc->getComposition().getBarRange(m_bars, false).second
-                    / m_doc->getComposition().getBarRange(0, false).second;
-*/
+    int firstBarWidth = fTimes.second - fTimes.first;
+ 
+    int buttonBarWidth = m_baseBarWidth *
+                         comp.getBarRange(m_bars, false).second
+                         / firstBarWidth;
 
-    buttonBar->setMinimumSize(m_bars * m_barWidth, m_barHeight);
-    buttonBar->setMaximumSize(m_bars * m_barWidth, m_barHeight);
+    buttonBar->setMinimumSize(buttonBarWidth, m_barHeight);
+    buttonBar->setMaximumSize(buttonBarWidth, m_barHeight);
 
     // Loop ruler works its bar spacing out from the m_doc just
     // like we do in this class.  Then connect up the LoopRuler
@@ -107,8 +101,7 @@ BarButtons::drawButtons()
     //
     //
     LoopRuler *loopRuler = new LoopRuler(m_doc,
-                                         m_bars,
-                                         m_barWidth,
+                                         m_baseBarWidth,
                                          loopBarHeight,
                                          buttonBar);
 
@@ -131,24 +124,17 @@ BarButtons::drawButtons()
     //
     QHBox *hButtonBar = new QHBox(buttonBar);
 
-    // First bar width by which others are judged
-    //
-    std::pair<Rosegarden::timeT, Rosegarden::timeT> fTimes =
-        m_doc->getComposition().getBarRange(0, false);
-
-    int firstBarWidth = fTimes.second - fTimes.first;
- 
     for (int i = 0; i < m_bars; i++)
     {
         bar = new QVBox(hButtonBar);
         bar->setSpacing(0);
 
         std::pair<Rosegarden::timeT, Rosegarden::timeT> times =
-            m_doc->getComposition().getBarRange(i, false);
+            comp.getBarRange(i, false);
 
         // Normalise this bar width to a ratio of the first
         //
-        int barWidth =  m_barWidth * (times.second - times.first) /
+        int barWidth =  m_baseBarWidth * (times.second - times.first) /
                                      firstBarWidth;
 
         bar->setMinimumSize(barWidth, m_barHeight - loopBarHeight);

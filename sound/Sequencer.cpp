@@ -478,7 +478,7 @@ Sequencer::processAudioQueue()
             if ((*it)->getStatus() == PlayableAudioFile::Defunct)
             {
                 delete(*it);
-                m_audioPlayQueue.erase(it);
+                it = m_audioPlayQueue.erase(it);
                 break;
             }
         }

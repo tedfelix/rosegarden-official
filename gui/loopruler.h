@@ -44,8 +44,7 @@ class LoopRuler : public QWidget
 
 public:
     LoopRuler(RosegardenGUIDoc *doc,
-              int bars = 0,
-              int barWidth = 0,
+              int baseWidth = 0,
               int height = 0,
               QWidget* parent = 0,
               const char *name = 0);
@@ -53,6 +52,8 @@ public:
     ~LoopRuler();
 
     virtual void paintEvent(QPaintEvent*);
+
+    void calculateBarDivisions();
 
 public slots:
     void setLoopingMode(bool value) { m_loop = value; }
@@ -91,18 +92,19 @@ private:
     int getXPosition(Rosegarden::timeT pos);
     Rosegarden::timeT getPointerPosition(int xPos);
 
-    int m_bars;
-    int m_barWidth;
     int m_height;
     int m_snap;            // snap the loop to the nearest
+    int m_baseBarWidth;
+    int m_bars;
 
     RosegardenGUIDoc *m_doc;
    
+    
     bool m_loop;
     Rosegarden::timeT m_startLoop;
     Rosegarden::timeT m_endLoop;
 
-    std::map<int, int> m_barWidthMap;
+    std::vector<int> m_barWidthMap;
 
 };
 
