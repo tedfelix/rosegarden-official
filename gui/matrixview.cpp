@@ -908,6 +908,8 @@ void MatrixView::slotEditDelete()
 //
 void MatrixView::slotKeyPressed(unsigned int y, bool repeating)
 {
+    getCanvasView()->slotScrollVertSmallSteps(y);
+
     Rosegarden::Composition &comp = m_document->getComposition();
     Rosegarden::Studio &studio = m_document->getStudio();
 
