@@ -38,10 +38,6 @@
 #include "Studio.h"
 #include "MidiDevice.h"
 
-using std::cout;
-using std::cerr;
-using std::endl;
-
 // use this flag to cheat when setting up new devices
 //
 bool _newBank = false;
@@ -291,7 +287,7 @@ BankEditorDialog::slotPopulateDevice(int devNo)
 void
 BankEditorDialog::slotPopulateBank(int bank)
 {
-    //cout << "SLOT POPULATE BANK" << endl;
+    //RG_DEBUG << "SLOT POPULATE BANK" << endl;
     _newBank = true;
 
     Rosegarden::MidiDevice *device =
@@ -528,7 +524,7 @@ BankEditorDialog::setModified(bool value)
 void
 BankEditorDialog::slotProgramChanged(const QString &program, int id)
 {
-    //cout << "PROGRAM (" << id << ") = \"" << program << "\"" << endl;
+    //RG_DEBUG << "PROGRAM (" << id << ") = \"" << program << "\"" << endl;
     if (qstrtostr(program) != m_programList[id].name)
     {
         m_programList[id].name = qstrtostr(program);

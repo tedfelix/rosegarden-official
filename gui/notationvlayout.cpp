@@ -142,7 +142,7 @@ NotationVLayout::scanStaff(StaffType &staffBase, timeT, timeT)
 		    (m_properties.HEIGHT_ON_STAFF, height)) {
 		    KMessageBox::sorry
 			((QWidget *)parent(), QString(i18n("Event in chord at %1 has no HEIGHT_ON_STAFF property!\nThis is a bug (the program would previously have crashed by now)").arg((*chord[j])->getAbsoluteTime())));
-		    (*chord[j])->event()->dump(cerr);
+		    (*chord[j])->event()->dump(std::cerr);
 		}
 		h.push_back(height);
             }
@@ -306,7 +306,7 @@ NotationVLayout::positionSlur(NotationStaff &staff,
 	    if (!(*scooter)->event()->get<Int>(m_properties.HEIGHT_ON_STAFF, h)) {
 		KMessageBox::sorry
 		    ((QWidget *)parent(), QString(i18n("Spanned note at %1 has no HEIGHT_ON_STAFF property!\nThis is a bug (the program would previously have crashed by now)").arg((*scooter)->getAbsoluteTime())));
-		(*scooter)->event()->dump(cerr);
+		(*scooter)->event()->dump(std::cerr);
 	    }
 
 	    bool stemUp = (h <= 4);
