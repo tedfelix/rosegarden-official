@@ -19,11 +19,12 @@
     COPYING included with this distribution for more information.
 */
 
+#include <iostream>
+
 #include "Studio.h"
 #include "MidiDevice.h"
 #include "AudioDevice.h"
 #include "Instrument.h"
-
 
 namespace Rosegarden
 {

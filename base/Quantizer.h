@@ -169,6 +169,7 @@ public:
 
     Quantizer &operator=(const Quantizer &);
     bool operator==(const Quantizer &) const;
+    bool operator!=(const Quantizer & c) const { return !(*this == c); }
     
     ~Quantizer();
 

@@ -104,7 +104,7 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to)
     Segment::iterator ifrom = copyFrom->findTime(from);
     Segment::iterator ito   = copyFrom->findTime(to);
 
-    for (Segment::iterator i = ifrom; i != ito && i != end(); ++i) {
+    for (Segment::iterator i = ifrom; i != ito && i != copyFrom->end(); ++i) {
 	s->insert(new Event(**i));
     }
 

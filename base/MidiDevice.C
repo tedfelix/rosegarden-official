@@ -74,7 +74,7 @@ MidiDevice::createInstruments()
     m_instruments.push_back(
         new Instrument(SystemInstrumentBase + 1,      // Metronome ID
                        Instrument::Midi,              // type
-                       string("Metronome"),           // name
+                       std::string("Metronome"),           // name
                        (MidiByte)9,                   // channel
                        dynamic_cast<Device*>(this))); // parent device 
 

@@ -826,9 +826,9 @@ static string addDots(int dots, string s, bool hyphenate = false)
         os << dots << "-";
     }
     if (hyphenate) {
-	os << "dotted-" << s << ends;
+	os << "dotted-" << s << std::ends;
     } else {
-	os << "dotted " << s << ends;
+	os << "dotted " << s << std::ends;
     }
     return os.str();
 }

@@ -164,10 +164,10 @@ public:
 
 protected:
     // ### THESE NAMES ARE AWFUL. MUST GREP THEM OUT OF EXISTENCE.
-    typedef pair<double, ChordLabel> ChordPossibility;
-    typedef vector<ChordPossibility> HarmonyGuess;
-    typedef vector<pair<timeT, HarmonyGuess> > HarmonyGuessList;
-    struct cp_less : public binary_function<ChordPossibility, ChordPossibility, bool>
+    typedef std::pair<double, ChordLabel> ChordPossibility;
+    typedef std::vector<ChordPossibility> HarmonyGuess;
+    typedef std::vector<std::pair<timeT, HarmonyGuess> > HarmonyGuessList;
+    struct cp_less : public std::binary_function<ChordPossibility, ChordPossibility, bool>
     {
         bool operator()(ChordPossibility l, ChordPossibility r);
     };
@@ -198,7 +198,7 @@ protected:
     };
 
     /// For use by guessHarmonies (makeHarmonyGuessList)
-    typedef vector<pair<PitchProfile, ChordLabel> > HarmonyTable;
+    typedef std::vector<std::pair<PitchProfile, ChordLabel> > HarmonyTable;
     static HarmonyTable m_harmonyTable;
 
     /// For use by guessHarmonies (makeHarmonyGuessList)

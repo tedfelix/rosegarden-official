@@ -580,8 +580,8 @@ StandardQuantization::getStandardQuantizations()
 	int i1 = (nt < Note::Quaver ? 1 : 0);
 	for (int i = 0; i <= i1; ++i) {
 
-	    string noteName = Note(nt).getReferenceName();
-	    if (i) noteName = string("3-") + noteName;
+	    std::string noteName = Note(nt).getReferenceName();
+	    if (i) noteName = std::string("3-") + noteName;
 	    
 	    int divisor = (1 << (Note::Semibreve - nt));
 	    if (i) divisor = divisor * 3 / 2;

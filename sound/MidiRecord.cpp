@@ -37,6 +37,17 @@ RosegardenMidiRecord_impl::~RosegardenMidiRecord_impl()
     delete m_midiEventQueue;
 }
 
+Arts::TimeStamp RosegardenMidiRecord_impl::time()
+{
+    return m_midiThru.time();
+}
+
+#if (ARTS_MINOR_VERSION >= 9) && (ARTS_MICRO_VERSION >= 9)
+Arts::TimeStamp RosegardenMidiRecord_impl::playTime()
+{
+    return m_midiThru.time();
+}
+#endif
 
 void
 RosegardenMidiRecord_impl::processCommand(const Arts::MidiCommand &midiCommand)

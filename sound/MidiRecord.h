@@ -24,6 +24,7 @@
 
 #include "MidiArts.h"
 #include <arts/artsmidi.h>
+#include <arts/artsversion.h>
 
 // Extends the Arts MIDI skeleton.  This provides a basic specialised
 // aRts recording port which is loaded dynamically when the Sequencer
@@ -47,8 +48,10 @@ public:
     void record(bool recordFlag) { m_record = recordFlag; }
     void setMidiThru(Arts::MidiPort port) { m_midiThru = port; }
   
-    Arts::TimeStamp time() { return m_midiThru.time(); }
-
+    virtual Arts::TimeStamp time();
+#if (ARTS_MINOR_VERSION >= 9) && (ARTS_MICRO_VERSION >= 9)
+    virtual Arts::TimeStamp playTime();
+#endif
     std::vector<Arts::MidiEvent> *getQueue();
 
 private:
