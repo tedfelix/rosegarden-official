@@ -119,6 +119,14 @@ public slots:
     virtual void setLoop(const long &loopStartSec, const long &loopStartUSec,
                          const long &loopEndSec, const long &loopEndUSec);
  
+    // Return the Sound system status (audio/MIDI)
+    //
+    virtual int getSoundSystemStatus();
+
+    // Add and delete wav files on the sequencer
+    //
+    virtual int addWavFile(const QString &fileName, const int id);
+    virtual int deleteWavFile(const int id);
 
     // stops the sequencer
     //

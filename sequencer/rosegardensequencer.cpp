@@ -528,3 +528,31 @@ RosegardenSequencerApp::setLoop(const long &loopStartSec,
             Rosegarden::RealTime(loopEndSec, loopEndUSec));
 }
 
+
+// Return the status of the sound systems (audio and MIDI)
+//
+int
+RosegardenSequencerApp::getSoundSystemStatus()
+{
+    return m_sequencer->getStatus();
+}
+
+
+// Add a wavFile to the sequencer
+int
+RosegardenSequencerApp::addWavFile(const QString &fileName, const int id)
+{
+    cout << "RosegardenSequencerApp::addWavFile = " << fileName << endl;
+
+    return 0;
+}
+
+int
+RosegardenSequencerApp::deleteWavFile(const int id)
+{
+    cout << "RosegardenSequencerApp::deleteWavFile() = " << id << endl;
+
+    return 0;
+}
+
+

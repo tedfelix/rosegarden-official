@@ -200,6 +200,8 @@ public:
     //
     Arts::MidiPort* playMidiPort() { return &m_midiPlayPort; }
 
+    // Return the status of the sound systems
+    //
     SequencerStatus getStatus() const { return m_sequencerStatus; }
 
 private:
