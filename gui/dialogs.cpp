@@ -2743,7 +2743,7 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc,
 
     // Set tempo
     new QLabel(i18n("New tempo"), tempoBox);
-    m_tempoValueSpinBox = new HSpinBox(tempoBox, 0, 1, 0.0, 1000.0, 6);
+    m_tempoValueSpinBox = new HSpinBox(tempoBox, 0, 1e6, 0.0, 1000.0, 6);
 
     connect(m_tempoValueSpinBox, SIGNAL(valueChanged(const QString &)),
             SLOT(slotTempoChanged(const QString &)));
