@@ -7,15 +7,21 @@ to be nicer than those in most of the other applications out there".
 
 References in round brackets are to 0.1_planned_features.txt.
 
- 1. Merge rests on insertion
+ 1. Merge rests on insertion [DONE]
 
- 2. General split-on-insert
+ 2. General split-on-insert [DONE, cleanup and some fixes needed]
 
  3. Auto-beaming on input
 
  4. More than one track per editing window (for 0.1, I think it only
  has to be possible to display these tracks, we don't necessarily have
- to make editing work for any beyond the first) (B8)
+ to make editing work for any beyond the first).  Issue: particularly
+ for layering work, things will be very difficult if the tracks have
+ bar lines that are not at the same absolute time. (B8)
+
+ 4.5. Handling events read from MIDI that don't quantize viably --
+ using multiple tied notes (makeNoteViable).  Also handling tied
+ events on conversion to MIDI
 
  5. Making key, clef and time signature appear in correct order
 
