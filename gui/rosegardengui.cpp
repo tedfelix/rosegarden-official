@@ -345,14 +345,9 @@ void RosegardenGUIApp::setupActions()
     createGUI("rosegardenui.rc");
 
     // Ensure that the checkbox is unchecked if the dialog
-    // is destroyed.
-    //
-    // *sigh* -   Why isn't the dialog sending this signal?
-    //
-    //
-    connect((QObject *)m_transport, SIGNAL(destroyed()),
+    // is closed
+    connect((QObject *)m_transport, SIGNAL(closed()),
                                     SLOT(closeTransport()));
-// (QObject *)m_viewTransport, SLOT(setChecked(false)));
 
 }
 
@@ -1711,10 +1706,11 @@ void RosegardenGUIApp::exportMIDIFile(const QString &file)
     }
 }
 
+// Uncheck the transport window check box
 void
 RosegardenGUIApp::closeTransport()
 {
-    cerr << "RosegardenGUIApp::closeTransport() - callback activated" << endl;
+     m_viewTransport->setChecked(false);
 }
 
 // Called when we want to start recording from the GUI.
@@ -2087,7 +2083,18 @@ RosegardenGUIApp::setLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs)
 void
 RosegardenGUIApp::showVisuals(const Rosegarden::MappedComposition &mC)
 {
-    m_view->showVisuals(mC);
+    Rosegarden::MappedComposition::iterator it;
+    double value;
+
+    for (it = mC.begin(); it != mC.end(); ++it )
+    {
+        if ((*it)->getType() == Rosegarden::MappedEvent::Internal)
+        {
+            m_transport->setMidiOutLabel(*it);
+            m_view->showVisuals(**it);
+        }
+    }
+
 }
 
 

@@ -36,62 +36,67 @@ class RosegardenTransportDialog : public RosegardenTransport
 {
 Q_OBJECT
 public:
-  RosegardenTransportDialog(QWidget *parent=0,
-                            const char *name=0);
-  ~RosegardenTransportDialog();
+    RosegardenTransportDialog(QWidget *parent=0,
+                              const char *name=0);
+    ~RosegardenTransportDialog();
 
-  void displayTime(Rosegarden::RealTime microSeconds);
+    void displayTime(Rosegarden::RealTime microSeconds);
 
-  void setTempo(const double &tempo);
+    void setTempo(const double &tempo);
 
-  // Called indirectly from the sequencer and from the GUI to
-  // show incoming and outgoing MIDI events on the Transport
-  //
-  void setMidiInLabel(const Rosegarden::MappedEvent *mE);
-  void setMidiOutLabel(const Rosegarden::MappedEvent *mE);
+    // Called indirectly from the sequencer and from the GUI to
+    // show incoming and outgoing MIDI events on the Transport
+    //
+    void setMidiInLabel(const Rosegarden::MappedEvent *mE);
+    void setMidiOutLabel(const Rosegarden::MappedEvent *mE);
+
+protected:
+    virtual void closeEvent(QCloseEvent * e);
 
 public slots:
 
-  // These two slots are activated by QTimers
-  //
-  void clearMidiInLabel();
-  void clearMidiOutLabel();
+    // These two slots are activated by QTimers
+    //
+    void clearMidiInLabel();
+    void clearMidiOutLabel();
 
+signals:
+    void closed();
 
 private:
-  void loadPixmaps();
+    void loadPixmaps();
 
-  //--------------- Data members ---------------------------------
+    //--------------- Data members ---------------------------------
 
-  std::map<int, QPixmap> m_lcdList;
+    std::map<int, QPixmap> m_lcdList;
 
-  int m_lastTenHours;
-  int m_lastUnitHours;
-  int m_lastTenMinutes;
-  int m_lastUnitMinutes;
-  int m_lastTenSeconds;
-  int m_lastUnitSeconds;
-  int m_lastTenths;
-  int m_lastHundreths;
-  int m_lastThousandths;
-  int m_lastTenThousandths;
+    int m_lastTenHours;
+    int m_lastUnitHours;
+    int m_lastTenMinutes;
+    int m_lastUnitMinutes;
+    int m_lastTenSeconds;
+    int m_lastUnitSeconds;
+    int m_lastTenths;
+    int m_lastHundreths;
+    int m_lastThousandths;
+    int m_lastTenThousandths;
 
-  int m_tenHours;
-  int m_unitHours;
-  int m_tenMinutes;
-  int m_unitMinutes;
-  int m_tenSeconds;
-  int m_unitSeconds;
-  int m_tenths;
-  int m_hundreths;
-  int m_thousandths;
-  int m_tenThousandths;
+    int m_tenHours;
+    int m_unitHours;
+    int m_tenMinutes;
+    int m_unitMinutes;
+    int m_tenSeconds;
+    int m_unitSeconds;
+    int m_tenths;
+    int m_hundreths;
+    int m_thousandths;
+    int m_tenThousandths;
 
 
-  double m_tempo;
+    double m_tempo;
 
-  QTimer *m_midiInTimer;
-  QTimer *m_midiOutTimer;
+    QTimer *m_midiInTimer;
+    QTimer *m_midiOutTimer;
 };
 
 }

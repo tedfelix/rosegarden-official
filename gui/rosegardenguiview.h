@@ -34,7 +34,7 @@
 
 #include "rosedebug.h"
 
-namespace Rosegarden { class Composition; class MappedComposition; }
+namespace Rosegarden { class Composition; class MappedEvent; }
 
 class QScrollView;
 class RosegardenGUIDoc;
@@ -151,7 +151,7 @@ public:
     /**
      * Show output levels
      */
-    void showVisuals(const Rosegarden::MappedComposition &mC);
+    void showVisuals(const Rosegarden::MappedEvent &mE);
     
 public slots:
     void editSegmentNotation(Rosegarden::Segment*);

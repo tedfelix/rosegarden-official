@@ -1,6 +1,6 @@
 0.2 TO-DO for rwb
 -----------------
-updated 30.1.2001
+updated 31.1.2001
 
 Currently looking at:
 
@@ -13,14 +13,6 @@ Currently looking at:
 - Recording segments - trails
 
 ==
-
-o Audio. [IN PROGESS]
-  Audio file support in rg file. [DONE]
-  Audio WAV file header authentification [DONE]
-  Audio Segments [DONE]
-  Audio playing proof of concept [DONE]
-  Audio recording proof of concept [ALMOST DONE]
-  Sequencing of plain Audio files [DONE]
 
 o Bar lines widget (similar to TrackButtons).
   Implementation to allow for:
@@ -52,15 +44,22 @@ o More MIDI events at Composition level. Sys Exs, Program Changes,
 
 o Audio noise eliminator - recording
 
-o MIDI output VU meters and Transport feedback
-
 o Audio output VU meters
 
 o MIDI CC, PC and sysex handling
 
-o MIDI recording [DONE - first pass]
+o basic MIDI recording [DONE]
 
 o Write Rosegarden tempo events to exported MIDI [DONE]
+
+o MIDI output VU meters and Transport feedback [DONE]
+
+o Audio file support in rg file. [DONE]
+  Audio WAV file header authentification [DONE]
+  Audio Segments [DONE]
+  Audio playing proof of concept [DONE]
+  Audio recording proof of concept [DONE]
+  Sequencing of plain Audio files [DONE]
 
 
 Current Bugs

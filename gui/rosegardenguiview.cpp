@@ -30,7 +30,7 @@
 #include <qpushbutton.h>
 
 // application specific includes
-#include "MappedComposition.h"
+#include "MappedEvent.h"
 #include "rosegardenguiview.h"
 #include "rosegardenguidoc.h"
 #include "rosegardengui.h"
@@ -421,20 +421,10 @@ void RosegardenGUIView::setLoopMarker(Rosegarden::timeT startLoop,
 }
 
 
-void RosegardenGUIView::showVisuals(const Rosegarden::MappedComposition &mC)
+void RosegardenGUIView::showVisuals(const Rosegarden::MappedEvent &mE)
 {
-    Rosegarden::MappedComposition::iterator it;
-    double value;
-
-    for (it = mC.begin(); it != mC.end(); it++)
-    {
-        if ((*it)->getType() == Rosegarden::MappedEvent::Internal)
-        {
-            value = ((double)(*it)->getPitch()) / 127.0;
-            emit signalSetTrackMeter(value, (*it)->getTrack());
-        }
-    }
-
+    double value = ((double)mE.getPitch()) / 127.0;
+    emit signalSetTrackMeter(value, mE.getTrack());
 }
 
 

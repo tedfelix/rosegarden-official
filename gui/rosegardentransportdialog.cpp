@@ -258,9 +258,8 @@ RosegardenTransportDialog::setMidiOutLabel(const Rosegarden::MappedEvent *mE)
 {
     assert(mE > 0);
 
-    QString midiOutLabel;
-    midiOutLabel.sprintf("   %d", mE->getPitch());
-    MidiOutLabel->setText(midiOutLabel);
+    MidiPitchLabel *midiPitchLabel = new MidiPitchLabel(mE->getPitch());
+    MidiOutLabel->setText(midiPitchLabel->getQString());
 
     // Reset the timer if it's already running
     //
@@ -269,7 +268,7 @@ RosegardenTransportDialog::setMidiOutLabel(const Rosegarden::MappedEvent *mE)
 
     // 1.5 second timeout
     //
-    m_midiOutTimer->start(1500, true);
+    m_midiOutTimer->start(200, true);
 }
 
 
@@ -281,6 +280,12 @@ RosegardenTransportDialog::clearMidiOutLabel()
     MidiOutLabel->setText(QString("   --"));
 }
 
+void
+RosegardenTransportDialog::closeEvent (QCloseEvent * e)
+{
+    e->accept();  // accept the close event here
+    emit closed();
+}
 
 
 }
