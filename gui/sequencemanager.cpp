@@ -275,9 +275,14 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
             if (firstFetch == true)
             {
                 // The "<=" makes sure we don't forget items that start
-                // exactly _on_ the slice which are now valid
+                // exactly _on_ the slice which are now valid.  Also 
+                // test that these events should actually sound by 
+                // testing there finish time is greater than the start
+                // of the slice.
                 //
-                if (playTime <= sliceStartElapsed)
+                if (playTime <= sliceStartElapsed &&
+                    playTime + helper.getSoundingDuration(j)
+                                                    >= sliceStartElapsed)
                 {
                     duration = duration - (sliceStart - eventTime);
                     eventTime = sliceStart;
