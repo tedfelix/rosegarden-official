@@ -176,23 +176,23 @@ void EditView::addPropertyBox(QWidget *w)
     m_controlBox->addWidget(w);
 }
 
-ControlRuler* EditView::makeControlRuler(PropertyName propertyName)
+PropertyControlRuler* EditView::makePropertyControlRuler(PropertyName propertyName)
 {
     QCanvas* controlRulerCanvas = new QCanvas(this);
     QSize viewSize = getViewSize();
     controlRulerCanvas->resize(viewSize.width(), ControlRuler::DefaultRulerHeight); // TODO - keep it in sync with main canvas size
-    ControlRuler* controlRuler = new ControlRuler(propertyName,
-                                                  getFirstStaff(), getHLayout(),
-                                                  m_horizontalScrollBar,
-                                                  this,
-                                                  controlRulerCanvas, m_controlRulers);
+    PropertyControlRuler* controlRuler = new PropertyControlRuler(propertyName,
+                                                                  getFirstStaff(), getHLayout(),
+                                                                  m_horizontalScrollBar,
+                                                                  this,
+                                                                  controlRulerCanvas, m_controlRulers);
 
     return controlRuler;
 }
 
 void EditView::addControlRuler(ControlRuler* ruler)
 {
-    m_controlRulers->addTab(ruler, ruler->getPropertyName().c_str());
+    m_controlRulers->addTab(ruler, ruler->getName());
     m_controlRulers->showPage(ruler);
 
     connect(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
@@ -755,10 +755,10 @@ void EditView::slotAddTimeSignature()
     delete dialog;
 }                       
 
-ControlRuler* EditView::findRuler(PropertyName propertyName, int &index)
+PropertyControlRuler* EditView::findRuler(PropertyName propertyName, int &index)
 {
     for(index = 0; index < m_controlRulers->count(); ++index) {
-        ControlRuler* ruler = dynamic_cast<ControlRuler*>(m_controlRulers->page(index));
+        PropertyControlRuler* ruler = dynamic_cast<PropertyControlRuler*>(m_controlRulers->page(index));
         if (ruler && ruler->getPropertyName() == propertyName) return ruler;
     }
 
@@ -769,7 +769,7 @@ void EditView::showPropertyControlRuler(PropertyName propertyName)
 {
     int index = 0;
     
-    ControlRuler* existingRuler = findRuler(propertyName, index);
+    PropertyControlRuler* existingRuler = findRuler(propertyName, index);
 
     if (existingRuler) {
 
@@ -777,7 +777,7 @@ void EditView::showPropertyControlRuler(PropertyName propertyName)
 
     } else {
 
-        ControlRuler* controlRuler = makeControlRuler(propertyName);
+        PropertyControlRuler* controlRuler = makePropertyControlRuler(propertyName);
         addControlRuler(controlRuler);
 
     }

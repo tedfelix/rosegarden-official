@@ -45,21 +45,26 @@ class EditViewBase;
 /**
  * Property Control Ruler : edit range of event properties
  */
-class ControlRuler : public RosegardenCanvasView, public Rosegarden::StaffObserver
+class ControlRuler : public RosegardenCanvasView
 {
     Q_OBJECT
 
     friend class ControlItem;
 
 public:
-    ControlRuler(Rosegarden::PropertyName propertyName,
-                 Rosegarden::Staff*,
+    ControlRuler(Rosegarden::Segment&,
                  Rosegarden::RulerScale*,
                  QScrollBar* hsb,
                  EditViewBase* parentView,
                  QCanvas*,
                  QWidget* parent=0, const char* name=0, WFlags f=0);
-    ~ControlRuler();
+    virtual ~ControlRuler();
+
+    virtual QString getName() = 0;
+
+    int getMaxItemValue() { return m_maxItemValue; }
+    void setMaxItemValue(int val) { m_maxItemValue = val; }
+
 
     void clear();
 
@@ -68,17 +73,6 @@ public:
     int applyTool(double x, int val);
 
     QCanvasRectangle* getSelectionRectangle() { return m_selectionRect; }
-
-
-    void setMaxPropertyValue(int val) { m_maxPropertyValue = val; }
-    int getMaxPropertyValue()         { return m_maxPropertyValue; }
-
-    const Rosegarden::PropertyName& getPropertyName()     { return m_propertyName; }
-
-    // StaffObserver interface
-    virtual void elementAdded(const Rosegarden::Staff *, Rosegarden::ViewElement*);
-    virtual void elementRemoved(const Rosegarden::Staff *, Rosegarden::ViewElement*);
-    virtual void staffDeleted(const Rosegarden::Staff *);
 
     static const int DefaultRulerHeight;
     static const int MinItemHeight;
@@ -99,33 +93,62 @@ protected:
     long heightToValue(int height);
     QColor valueToColor(int);
 
-    void init();
     void clearSelectedItems();
     void updateSelection();
 
     //--------------- Data members ---------------------------------
 
-    Rosegarden::PropertyName m_propertyName;
-
     EditViewBase*               m_parentEditView;
-    Rosegarden::Staff*          m_staff;
     Rosegarden::RulerScale*     m_rulerScale;
     Rosegarden::EventSelection* m_eventSelection;
+    Rosegarden::Segment& m_segment;
 
     ControlItem* m_currentItem;
     QCanvasItemList m_selectedItems;
 
     ControlTool *m_tool;
 
-    double m_currentX;
+    int m_maxItemValue;
 
-    int m_maxPropertyValue;
+    double m_currentX;
 
     QPoint m_lastEventPos;
 
     bool m_selecting;
     ControlSelector* m_selector;
     QCanvasRectangle* m_selectionRect;
+};
+
+class PropertyControlRuler : public ControlRuler, public Rosegarden::StaffObserver
+{
+public:
+    PropertyControlRuler(Rosegarden::PropertyName propertyName,
+                         Rosegarden::Staff*,
+                         Rosegarden::RulerScale*,
+                         QScrollBar* hsb,
+                         EditViewBase* parentView,
+                         QCanvas*,
+                         QWidget* parent=0, const char* name=0, WFlags f=0);
+
+    virtual ~PropertyControlRuler();
+
+    virtual QString getName();
+
+    const Rosegarden::PropertyName& getPropertyName()     { return m_propertyName; }
+
+    // StaffObserver interface
+    virtual void elementAdded(const Rosegarden::Staff *, Rosegarden::ViewElement*);
+    virtual void elementRemoved(const Rosegarden::Staff *, Rosegarden::ViewElement*);
+    virtual void staffDeleted(const Rosegarden::Staff *);
+
+protected:
+
+    void init();
+
+    //--------------- Data members ---------------------------------
+
+    Rosegarden::PropertyName m_propertyName;
+    Rosegarden::Staff*       m_staff;
 };
 
 

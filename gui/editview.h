@@ -54,6 +54,7 @@ class ActiveItem;
 class BarButtons;
 class RosegardenCanvasView;
 class ControlRuler;
+class PropertyControlRuler;
 
 /**
  * An interface for canvas items which are capable of handling
@@ -197,7 +198,7 @@ protected:
     /**
      * Make a control ruler for the given property,
      */
-    ControlRuler* makeControlRuler(Rosegarden::PropertyName propertyName);
+    PropertyControlRuler* makePropertyControlRuler(Rosegarden::PropertyName propertyName);
 
     /**
      * Add control ruler
@@ -213,7 +214,7 @@ protected:
      * Find the control ruler for the given property name
      * if it's already been created, return 0 otherwise
      */
-    ControlRuler* findRuler(Rosegarden::PropertyName propertyName, int &index);
+    PropertyControlRuler* findRuler(Rosegarden::PropertyName propertyName, int &index);
 
     /**
      * Show a control ruler for the given property
