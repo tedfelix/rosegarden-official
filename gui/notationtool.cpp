@@ -1688,13 +1688,15 @@ EventSelection* NotationSelector::getSelection()
     QRect rect = m_selectionRect->rect().normalize();
     QCanvasNotationSprite *sprite = 0;
 
-    if (!m_selectedStaff) {
+    Rosegarden::timeT anElementTime = 0;
+
+    if (!m_selectedStaff || m_justSelectedBar) {
 
 	// Scan the list of collisions, looking for a valid notation
-	// element; if we find one, initialise m_selectedStaff from it.
-	// If we don't find one, we have no selection.  This is a little
-	// inefficient but we only do it for the first event in the
-	// selection.
+	// element; if we find one, initialise m_selectedStaff and
+	// barNo from it.  If we don't find one, we have no selection.
+	// This is a little inefficient but we only do it for the
+	// first event in the selection.
 	
 	for (it = itemList.begin(); it != itemList.end(); ++it) {
         
@@ -1705,6 +1707,7 @@ EventSelection* NotationSelector::getSelection()
             
 		NotationElement &el = sprite->getNotationElement();
 		m_selectedStaff = getStaffForElement(&el);
+		anElementTime = el.getViewAbsoluteTime();
 		break;
 	    }
 	}
@@ -1713,17 +1716,24 @@ EventSelection* NotationSelector::getSelection()
     if (!m_selectedStaff) return 0;
     Segment& originalSegment = m_selectedStaff->getSegment();
 
-    // If we selected the whole staff, force that to happen explicitly
-    // rather than relying on collisions with the rectangle -- because
-    // events way off the currently visible area might not even have
-    // been drawn yet, and so will not appear in the collision list.
-    // (We did still need the collision list to determine which staff
-    // to use though.)
+    // If we selected a whole bar or the whole staff, force that to
+    // happen explicitly rather than relying on collisions with the
+    // rectangle -- because events way off the currently visible area
+    // might not even have been drawn yet, and so will not appear in
+    // the collision list.  (We did still need the collision list to
+    // determine which staff to use though.)
     
     if (m_wholeStaffSelectionComplete) {
 	EventSelection *selection = new EventSelection(originalSegment,
 						       originalSegment.getStartTime(),
 						       originalSegment.getEndMarkerTime());
+	return selection;
+    } else if (m_justSelectedBar) {
+	Rosegarden::timeT barStart =
+	    originalSegment.getComposition()->getBarStartForTime(anElementTime);
+	Rosegarden::timeT barEnd =
+	    originalSegment.getComposition()->getBarEndForTime(anElementTime);
+	EventSelection *selection = new EventSelection(originalSegment, barStart, barEnd);
 	return selection;
     }
 	
