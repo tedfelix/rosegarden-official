@@ -67,7 +67,7 @@ SegmentParameterBox::initBox()
     // magic numbers: 13 is the height of the menu pixmaps, 10 is just 10
     int comboHeight = std::max(fontMetrics.height(), 13) + 10;
 
-    QGridLayout *gridLayout = new QGridLayout(this, 4, 2, 8, 1);
+    QGridLayout *gridLayout = new QGridLayout(this, 5, 2, 8, 1);
 
     QLabel *repeatLabel    = new QLabel(i18n("Repeat"), this);
     QLabel *quantizeLabel  = new QLabel(i18n("Quantize"), this);
@@ -125,17 +125,19 @@ SegmentParameterBox::initBox()
     transposeLabel->setFont(font);
     delayLabel->setFont(font);
 
-    gridLayout->addWidget(repeatLabel, 0, 0, AlignLeft);
-    gridLayout->addWidget(m_repeatValue, 0, 1, AlignLeft);
+    gridLayout->addRowSpacing(0, 8);
 
-    gridLayout->addWidget(quantizeLabel, 1, 0, AlignLeft);
-    gridLayout->addWidget(m_quantizeValue, 1, 1);
+    gridLayout->addWidget(repeatLabel,   1, 0, AlignLeft);
+    gridLayout->addWidget(m_repeatValue, 1, 1, AlignLeft);
 
-    gridLayout->addWidget(transposeLabel, 2, 0, AlignLeft);
-    gridLayout->addWidget(m_transposeValue, 2, 1);
+    gridLayout->addWidget(quantizeLabel,   2, 0, AlignLeft);
+    gridLayout->addWidget(m_quantizeValue, 2, 1);
 
-    gridLayout->addWidget(delayLabel, 3, 0, AlignLeft);
-    gridLayout->addWidget(m_delayValue, 3, 1);
+    gridLayout->addWidget(transposeLabel,   3, 0, AlignLeft);
+    gridLayout->addWidget(m_transposeValue, 3, 1);
+
+    gridLayout->addWidget(delayLabel,   4, 0, AlignLeft);
+    gridLayout->addWidget(m_delayValue, 4, 1);
 
     // populate the quantize combo
     //

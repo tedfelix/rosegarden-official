@@ -66,7 +66,7 @@ InstrumentParameterBox::initBox()
 
     setFont(plainFont);
 
-    QGridLayout *gridLayout = new QGridLayout(this, 5, 3, 8, 1);
+    QGridLayout *gridLayout = new QGridLayout(this, 6, 3, 8, 1);
 
     QLabel *channelLabel = new QLabel(i18n("Chan"), this);
     QLabel *panLabel = new QLabel(i18n("Pan"), this);
@@ -74,25 +74,26 @@ InstrumentParameterBox::initBox()
     QLabel *programLabel = new QLabel(i18n("Prg"), this);
     QLabel *bankLabel = new QLabel(i18n("Bank"), this);
 
-    gridLayout->addWidget(bankLabel, 0, 0, AlignLeft);
-    gridLayout->addWidget(m_bankCheckBox, 0, 1);
-    gridLayout->addWidget(m_bankValue, 0, 2, AlignRight);
+    gridLayout->addRowSpacing(0, 8);
+    gridLayout->addWidget(bankLabel,      1, 0, AlignLeft);
+    gridLayout->addWidget(m_bankCheckBox, 1, 1);
+    gridLayout->addWidget(m_bankValue,    1, 2, AlignRight);
 
     // program label under heading - filling the entire cell
-    gridLayout->addWidget(programLabel, 1, 0);
-    gridLayout->addWidget(m_programCheckBox, 1, 1);
-    gridLayout->addWidget(m_programValue, 1, 2, AlignRight);
+    gridLayout->addWidget(programLabel,      2, 0);
+    gridLayout->addWidget(m_programCheckBox, 2, 1);
+    gridLayout->addWidget(m_programValue,    2, 2, AlignRight);
 
-    gridLayout->addWidget(channelLabel, 2, 0, AlignLeft);
-    gridLayout->addMultiCellWidget(m_channelValue, 2, 2, 1, 2, AlignRight);
+    gridLayout->addWidget(channelLabel,            3, 0, AlignLeft);
+    gridLayout->addMultiCellWidget(m_channelValue, 3, 3, 1, 2, AlignRight);
 
-    gridLayout->addWidget(panLabel, 3, 0, AlignLeft);
-    gridLayout->addWidget(m_panCheckBox, 3, 1);
-    gridLayout->addWidget(m_panValue, 3, 2, AlignRight);
+    gridLayout->addWidget(panLabel,      4, 0, AlignLeft);
+    gridLayout->addWidget(m_panCheckBox, 4, 1);
+    gridLayout->addWidget(m_panValue,    4, 2, AlignRight);
 
-    gridLayout->addWidget(velocityLabel, 4, 0, AlignLeft);
-    gridLayout->addWidget(m_velocityCheckBox, 4, 1);
-    gridLayout->addWidget(m_velocityValue, 4, 2, AlignRight);
+    gridLayout->addWidget(velocityLabel,      5, 0, AlignLeft);
+    gridLayout->addWidget(m_velocityCheckBox, 5, 1);
+    gridLayout->addWidget(m_velocityValue,    5, 2, AlignRight);
 
     // Populate channel list
     for (int i = 0; i < 16; i++)
