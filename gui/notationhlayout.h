@@ -27,14 +27,35 @@
 
 class NotationHLayout : public LayoutEngine  {
 public:
-    NotationHLayout(unsigned int barWidth);
+    /**
+     * Create a new NotationHLayout object.
+     * barWidth is the length of a bar in pixels
+     * beatsPerBar is the nb of beats a bar is in the current time sig
+     */
+    NotationHLayout(unsigned int barWidth,
+                    unsigned int beatsPerBar,
+                    unsigned int barMargin,
+                    unsigned int noteMargin = 2);
 protected:
+    typedef vector<unsigned int> NoteLengthMap;
+
     virtual void layout(Event*);
+
+    void initNoteLengthTable();
 
     Quantizer m_quantizer;
 
     unsigned int m_barWidth;
-    unsigned int m_lastPos;
+    unsigned int m_beatsPerBar;
+    unsigned int m_barMargin;
+    /// minimal space between two notes
+    unsigned int m_noteMargin;
+
+    unsigned int m_nbBeatsInCurrentBar;
+    unsigned int m_currentPos;
+
+    NoteLengthMap m_noteLengthMap;
+
 };
 
 #endif
