@@ -130,6 +130,9 @@ SegmentNotationHelper::findNearestNotationAbsoluteTime(timeT t)
 timeT
 SegmentNotationHelper::getNotationDuration(Event *e, bool tupletCompensation)
 {
+    //!!! any call to getNotationDuration(e, false) might as well
+    // be a call to e->getNotationDuration()
+
     if (e->has(TUPLET_NOMINAL_DURATION)) {
 
 	//!!!
@@ -845,7 +848,7 @@ SegmentNotationHelper::insertSomething(iterator i, int duration,
     // duration of the new note.
     i = collapseRestsForInsert(i, duration);
 
-    timeT existingDuration = getNotationDuration(*i);
+    timeT existingDuration = getNotationDuration(*i, false);
 
     cerr << "SegmentNotationHelper::insertSomething: asked to insert duration " << duration
 	 << " over event of duration " << existingDuration << ":" << endl;
