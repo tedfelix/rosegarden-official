@@ -2094,8 +2094,16 @@ NotationView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
 
 // Ignore velocity for the moment -- we need the option to use or ignore it
 void
-NotationView::slotInsertableNoteEventReceived(int pitch, int, bool noteOn)
+NotationView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn)
 {
+    if (m_inPaintEvent) {
+	NOTATION_DEBUG << "NotationView::slotInsertableNoteEventReceived: in paint event already" << endl;
+	if (noteOn) {
+	    m_pendingInsertableNotes.push_back(std::pair<int, int>(pitch, velocity));
+	}
+	return;
+    }
+
     KToggleAction *action = dynamic_cast<KToggleAction *>
 	(actionCollection()->action("toggle_step_by_step"));
     if (!action) {

@@ -882,6 +882,8 @@ protected:
     ScrollBoxDialog *m_pannerDialog;
     QTimer *m_renderTimer;
 
+    std::vector<std::pair<int, int> > m_pendingInsertableNotes;
+
     enum { PROGRESS_NONE,
            PROGRESS_BAR,
            PROGRESS_DIALOG } m_progressDisplayer;

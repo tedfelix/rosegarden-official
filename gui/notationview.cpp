@@ -2248,6 +2248,10 @@ NotationView::paintEvent(QPaintEvent *e)
 {
     NOTATION_DEBUG << "NotationView::paintEvent: m_hlayout->isPageMode() returns " << m_hlayout->isPageMode() << endl;
 
+    // EditViewBase::paintEvent will also set this true again on entry
+    // and ultimately set it false on exit:
+    m_inPaintEvent = true;
+
     // relayout if the window width changes significantly in continuous page mode
     if (m_pageMode == LinedStaff::ContinuousPageMode) {
 	int diff = int(getPageWidth() - m_hlayout->getPageWidth());
@@ -2266,7 +2270,23 @@ NotationView::paintEvent(QPaintEvent *e)
 	}
     }
 
+    m_inPaintEvent = false; // to be set true shortly!
+
     EditView::paintEvent(e);
+
+    // now just to be sure:
+    m_inPaintEvent = false;
+
+    // now deal with any backlog of insertable notes that appeared
+    // during paint (because it's not safe to modify a segment from
+    // within a sub-event-loop in a processEvents call from a paint)
+    if (!m_pendingInsertableNotes.empty()) {
+	std::vector<std::pair<int, int> > notes = m_pendingInsertableNotes;
+	m_pendingInsertableNotes.clear();
+	for (unsigned int i = 0; i < notes.size(); ++i) {
+	    slotInsertableNoteEventReceived(notes[i].first, notes[i].second, true);
+	}
+    }
 }
 
 bool NotationView::applyLayout(int staffNo, timeT startTime, timeT endTime)

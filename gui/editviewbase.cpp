@@ -304,6 +304,7 @@ void EditViewBase::paintEvent(QPaintEvent* e)
     // again at the end of the call.
 
     if (m_inPaintEvent) {
+	NOTATION_DEBUG << "EditViewBase::paintEvent: in paint event already" << endl;
 	if (e) {
 	    if (m_havePendingPaintEvent) {
 		if (m_pendingPaintEvent) {
