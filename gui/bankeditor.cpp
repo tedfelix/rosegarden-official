@@ -149,7 +149,7 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
             unsigned int labelId = j*16 + i;
 
             numBox = new QHBox(progVBox);
-            label = new QLabel(QString("%1").arg(labelId), numBox);
+            label = new QLabel(QString("%1").arg(labelId + 1), numBox);
             label->setFixedWidth(50);
             label->setAlignment(AlignHCenter);
 
@@ -164,7 +164,7 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
                     SLOT(slotProgramChanged(const QString&)));
         }
     }
-    tab->addTab(progHBox, i18n("Programs 0 - 63"));
+    tab->addTab(progHBox, i18n("Programs 1 - 64"));
 
     progHBox = new QHBox(tab);
     for (unsigned int j = 0; j < 4; j++)
@@ -176,7 +176,7 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
             unsigned int labelId = 64 + j*16 + i;
 
             numBox = new QHBox(progVBox);
-            label = new QLabel(QString("%1").arg(labelId), numBox);
+            label = new QLabel(QString("%1").arg(labelId + 1), numBox);
             label->setFixedWidth(50);
             label->setAlignment(AlignHCenter);
 
@@ -192,7 +192,7 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
 
         }
     }
-    tab->addTab(progHBox, i18n("Programs 64 - 127"));
+    tab->addTab(progHBox, i18n("Programs 65 - 128"));
 
 }
 
@@ -358,12 +358,23 @@ MidiProgramsEditor::slotNewLSB(int value)
     m_bankEditor->setModified(true);
 }
 
+struct ProgramCmp
+{
+    bool operator()(const Rosegarden::MidiProgram &p1,
+                    const Rosegarden::MidiProgram &p2)
+    {
+        return (p1.program < p2.program);
+    }
+};
+
 void
 MidiProgramsEditor::slotProgramChanged(const QString &programName)
 {
     QString senderName = sender()->name();
 
-    unsigned int id = senderName.toUInt();
+    // Adjust value back to zero rated
+    //
+    unsigned int id = senderName.toUInt() - 1;
 
     RG_DEBUG << "BankEditorDialog::slotProgramChanged("
              << programName << ") : id = " << id << endl;
@@ -375,11 +386,17 @@ MidiProgramsEditor::slotProgramChanged(const QString &programName)
 
     if (program == 0)
     {
+        // Do nothing if program name is empty
+        if (programName.isEmpty()) return;
+
         program = new Rosegarden::MidiProgram;
         program->msb = getCurrentBank()->msb;
         program->lsb = getCurrentBank()->lsb;
         program->program = id;
         m_programList.push_back(*program);
+
+        // Sort the program list by id
+        std::sort(m_programList.begin(), m_programList.end(), ProgramCmp());
 
         // Now, get with the program
         //
@@ -387,6 +404,28 @@ MidiProgramsEditor::slotProgramChanged(const QString &programName)
             getProgram(getCurrentBank()->msb,
                        getCurrentBank()->lsb,
                        id);
+    }
+    else
+    {
+        // If we've found a program and the label is now empty
+        // then remove it from the program list.
+        //
+        if (programName.isEmpty())
+        {
+            MidiProgramContainer::iterator it = m_programList.begin();
+            MidiProgramContainer tmpProg;
+
+            for (; it != m_programList.end(); it++)
+            {
+                if (((unsigned int)it->program) == id)
+                {
+                    m_programList.erase(it);
+                    m_bankEditor->setModified(true);
+                    RG_DEBUG << "deleting empty program (" << id << ")" << endl;
+                    return;
+                }
+            }
+        }
     }
 
     if (qstrtostr(programName) != program->name)
@@ -784,6 +823,16 @@ BankEditorDialog::slotApply()
                                           m_bankList,
                                           m_programList,
                                           true);
+
+        /*
+        MidiProgramsEditor::MidiProgramContainer::iterator
+            it = m_programList.begin();
+
+        for (; it != m_programList.end(); it++)
+        {
+            cout << "PROGRAM = " << it->name << endl;
+        }
+        */
     }
     addCommandToHistory(command);
 
