@@ -444,7 +444,8 @@ void RosegardenGUIApp::setupActions()
 
     // setup Settings menu
     //
-    m_viewToolBar = KStdAction::showToolbar  (this, SLOT(slotToggleToolBar()),   actionCollection());
+    m_viewToolBar = KStdAction::showToolbar  (this, SLOT(slotToggleToolBar()), actionCollection(),
+	                                    "show_stock_toolbar");
 
     m_viewToolsToolBar = new KToggleAction(i18n("Show T&ools Toolbar"), 0, this,
                                             SLOT(slotToggleToolsToolBar()), actionCollection(),
@@ -466,7 +467,8 @@ void RosegardenGUIApp::setupActions()
                                             SLOT(slotToggleZoomToolBar()), actionCollection(),
                                             "show_zoom_toolbar");
 
-    m_viewStatusBar = KStdAction::showStatusbar(this, SLOT(slotToggleStatusBar()), actionCollection());
+    m_viewStatusBar = KStdAction::showStatusbar(this, SLOT(slotToggleStatusBar()),
+	                                    actionCollection(), "show_status_bar");
 
     m_viewTransport = new KToggleAction(i18n("Show Tra&nsport"), Key_T, this,
                                         SLOT(slotToggleTransport()),
@@ -478,7 +480,7 @@ void RosegardenGUIApp::setupActions()
                                           actionCollection(),
                                           "show_tracklabels");
 
-    m_viewRulers = new KToggleAction(i18n("Show R&ulers"), 0, this,
+    m_viewRulers = new KToggleAction(i18n("Show Playback Position R&uler"), 0, this,
                                      SLOT(slotToggleRulers()),
                                      actionCollection(),
                                      "show_rulers");
@@ -503,10 +505,12 @@ void RosegardenGUIApp::setupActions()
                 actionCollection(),
                 "show_inst_segment_parameters");
 
+/*  dmm - This was a retarded hack I did to deal with settings amnesia of the day...  we
+ *  should get rid of it.   
     new KAction(i18n("Toggle &All of the Above"), 0, this,
                 SLOT(slotToggleAll()),
                 actionCollection(),
-                "toggle_all");
+                "toggle_all");  */
 
 #if KDE_VERSION >= 196614 // KDE 3.1
     KStdAction::tipOfDay( this, SLOT( slotShowTip() ), actionCollection() );
@@ -755,11 +759,13 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotTrackUp()),
                 actionCollection(), "select_previous_track");
 
-    new KAction(i18n("&Mute all Tracks"), 0, 
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/mute-all.xpm"));
+    new KAction(i18n("&Mute all Tracks"), icon, 0, 
                 this, SLOT(slotMuteAllTracks()),
                 actionCollection(), "mute_all_tracks");
 
-    new KAction(i18n("&Unmute all Tracks"), 0, 
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/un-mute-all.xpm"));
+    new KAction(i18n("&Unmute all Tracks"), icon, 0, 
                 this, SLOT(slotUnmuteAllTracks()),
                 actionCollection(), "unmute_all_tracks");
 
@@ -785,10 +791,11 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotManageMIDIDevices()),
                 actionCollection(), "manage_devices");
 
-    new KAction(i18n("Modify MIDI &Filters"), 0, this,
+    new KAction(i18n("Modify MIDI &Filters"), "filter", 0, this,
                 SLOT(slotModifyMIDIFilters()),
                 actionCollection(), "modify_midi_filters");
 
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "toolbar/time-musical.xpm"));
     new KAction(i18n("Manage &Metronome"), 0, this,
                 SLOT(slotManageMetronome()),
                 actionCollection(), "manage_metronome");
@@ -2575,6 +2582,7 @@ void RosegardenGUIApp::slotParametersDockedBack(KDockWidget* dw, KDockWidget::Do
     }
 }
 
+/* dmm - commenting this out for impending removal...
 void RosegardenGUIApp::slotToggleAll()
 {
     int c = 0;
@@ -2607,7 +2615,7 @@ void RosegardenGUIApp::slotToggleAll()
     
     m_viewTrackLabels->setChecked(state);
     slotToggleTrackLabels();
-}
+} */
 
 
 void RosegardenGUIApp::slotToggleStatusBar()

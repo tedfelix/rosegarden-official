@@ -125,21 +125,27 @@
         <!-- <Action name="join"/> -->
   </Menu>
   <Menu  name="settings">
-         <Action name="show_tools_toolbar"         append="show_merge" />
-         <Action name="show_tracks_toolbar"        append="show_merge" />
-         <Action name="show_editors_toolbar"       append="show_merge" />
-         <Action name="show_transport_toolbar"     append="show_merge" />
-         <Action name="show_zoom_toolbar"          append="show_merge" />
-  <Separator append="show_merge" />
-         <Action name="show_transport"             append="show_merge" />
-         <Action name="show_inst_segment_parameters"       append="show_merge" />
-  <Separator append="show_merge" />
-         <Action name="show_rulers"                append="show_merge" />
-         <Action name="show_chord_name_ruler"      append="show_merge" />
-         <Action name="show_tempo_ruler"           append="show_merge" />
-         <Action name="show_previews"              append="show_merge" />
-         <Action name="show_tracklabels"           append="show_merge" />
-         <Action name="toggle_all"                 append="show_merge" />
+	<Menu name="toolbars" append="show_merge"><text>&amp;Toolbars</text>
+	     <Action name="show_stock_toolbar"         append="show_merge" />
+	     <Action name="show_tools_toolbar"         append="show_merge" />
+	     <Action name="show_tracks_toolbar"        append="show_merge" />
+	     <Action name="show_editors_toolbar"       append="show_merge" />
+	     <Action name="show_transport_toolbar"     append="show_merge" />
+	     <Action name="show_zoom_toolbar"          append="show_merge" />
+	     <Action name="show_status_bar"            append="show_merge" />
+	</Menu>
+         <Menu name="rulers" append="show_merge"><text>&amp;Rulers</text>
+	     <Action name="show_rulers"                append="show_merge" />
+	     <Action name="show_chord_name_ruler"      append="show_merge" />
+	     <Action name="show_tempo_ruler"           append="show_merge" />
+	 </Menu>
+      <Separator append="show_merge" />
+	     <Action name="show_transport"             append="show_merge" />
+	     <Action name="show_inst_segment_parameters"       append="show_merge" />
+      <Separator append="show_merge" />
+         <Action name="show_previews"                  append="show_merge" />
+         <Action name="show_tracklabels"               append="show_merge" />
+         <!-- Action name="toggle_all"                 append="show_merge" /> -->
   </Menu>
   <Menu name="help">
   </Menu>
