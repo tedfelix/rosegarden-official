@@ -271,8 +271,6 @@ protected:
     // pointer to the transport dialog
     RosegardenTransportDialog *m_transport;
 
-    RealTime                   m_playbackAudioLatency;
-
     clock_t                    m_lastRewoundAt;
 
     CountdownDialog           *m_countdownDialog;
@@ -302,6 +300,8 @@ protected:
 
     bool                       m_gotDiskSpaceResult;
     unsigned long              m_diskSpaceKBAvail;
+
+    bool                       m_lastLowLatencySwitchSent;
 };
 
 }

@@ -663,9 +663,9 @@ JackDriver::jackProcess(jack_nframes_t nframes)
     Rosegarden::Profiler profiler("jackProcess", true);
 #endif
 
-    if (m_lowLatencyMode) {
+    if (m_alsaDriver->getLowLatencyMode()) {
 	if (m_instrumentMixer->tryLock() == 0) {
-	    m_instrumentMixer->kick(false); //!!!
+	    m_instrumentMixer->kick(false);
 	    m_instrumentMixer->releaseLock();
 #ifdef DEBUG_JACK_PROCESS
 	} else {
@@ -674,7 +674,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	}
 	if (m_bussMixer->getBussCount() > 0) {
 	    if (m_bussMixer->tryLock() == 0) {
-		m_bussMixer->kick(false); //!!!
+		m_bussMixer->kick(false);
 		m_bussMixer->releaseLock();
 #ifdef DEBUG_JACK_PROCESS
 	    } else {
@@ -954,8 +954,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
     }
 
     if (m_alsaDriver->isPlaying()) {
-	if (!m_lowLatencyMode) {
-	    //!!! experimental -- if no busses, don't care about buss mixer
+	if (!m_alsaDriver->getLowLatencyMode()) {
 	    if (m_bussMixer->getBussCount() == 0) {
 		m_instrumentMixer->signal();
 	    } else {
@@ -1661,31 +1660,20 @@ JackDriver::updateAudioData()
     // this will return with no work if the inputs are already correct:
     createRecordInputs(inputs);
 
-    //!!! experimental -- start or stop buss mixer as needed
-
-//    m_lowLatencyMode = true;//!!!
-    m_lowLatencyMode = false;
-
-    if (m_bussMixer->getBussCount() == 0) {
+    if (m_bussMixer->getBussCount() == 0 || m_alsaDriver->getLowLatencyMode()) {
 	if (m_bussMixer->running()) {
 	    m_bussMixer->terminate();
 	}
     } else {
-	if (m_lowLatencyMode) {
-	    if (m_bussMixer->running()) {
-		m_bussMixer->terminate();
-	    }
-	} else {
-	    m_bussMixer->updateInstrumentConnections();
-	    if (!m_bussMixer->running()) {
-		m_bussMixer->run();
-	    }
+	m_bussMixer->updateInstrumentConnections();
+	if (!m_bussMixer->running()) {
+	    m_bussMixer->run();
 	}
     }
 
-    if (m_lowLatencyMode) {
+    if (m_alsaDriver->getLowLatencyMode()) {
 	if (m_instrumentMixer->running()) {
-	    m_instrumentMixer->terminate(); //!!!
+	    m_instrumentMixer->terminate();
 	}
     } else {
 	if (!m_instrumentMixer->running()) {

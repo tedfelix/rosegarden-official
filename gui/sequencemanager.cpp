@@ -72,7 +72,8 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
     m_updateRequested(true),
     m_sequencerMapper(0),
     m_reportTimer(new QTimer(doc)),
-    m_canReport(true)
+    m_canReport(true),
+    m_lastLowLatencySwitchSent(false)
 {
     // Replaced this with a call to cleanup() from composition mmapper ctor:
     // if done here, this removes the mmapped versions of any segments stored
@@ -213,10 +214,6 @@ SequenceManager::play()
     mapSequencer();
 
     Composition &comp = m_doc->getComposition();
-
-    QByteArray data;
-    QCString replyType;
-    QByteArray replyData;
   
     // If already playing or recording then stop
     //
@@ -241,17 +238,9 @@ SequenceManager::play()
 	(m_metronomeMmapper->getMetronomeInstrument());
     m_controlBlockMmapper->updateMetronomeForPlayback();
 
-    // Send audio latencies
-    //
-    //sendAudioLatencies();
-
     // make sure we toggle the play button
     // 
     m_transport->PlayButton()->setOn(true);
-
-    // write the start position argument to the outgoing stream
-    //
-    QDataStream streamOut(data, IO_WriteOnly);
 
     if (comp.getTempo() == 0) {
         comp.setDefaultTempo(120.0);
@@ -282,28 +271,78 @@ SequenceManager::play()
     KConfig* config = kapp->config();
     config->setGroup(SequencerOptionsConfigGroup);
 
+    bool lowLat = config->readBoolEntry("audiolowlatencymonitoring", true);
+
+    if (lowLat != m_lastLowLatencySwitchSent) {
+
+	QByteArray data;
+	QDataStream streamOut(data, IO_WriteOnly);
+	streamOut << lowLat;
+
+	rgapp->sequencerSend("setLowLatencyMode(bool)", data);
+	m_lastLowLatencySwitchSent = lowLat;
+    }
+
+    QByteArray data;
+    QCString replyType;
+    QByteArray replyData;
+    QDataStream streamOut(data, IO_WriteOnly);
+
     // playback start position
     streamOut << startPos.sec;
     streamOut << startPos.nsec;
+
+#ifdef NOT_DEFINED
 
     // event read ahead
     streamOut << config->readLongNumEntry("readaheadsec", 0);
     streamOut << config->readLongNumEntry("readaheadusec", 80000) * 1000;
 
-    // read ahead slice
+    // audio mix
     streamOut << config->readLongNumEntry("audiomixsec", 0);
     streamOut << config->readLongNumEntry("audiomixusec", 60000) * 1000;
 
-    // read ahead slice
+    // file read
     streamOut << config->readLongNumEntry("audioreadsec", 0);
     streamOut << config->readLongNumEntry("audioreadusec", 80000) * 1000;
 
-    // read ahead slice
+    // file write
     streamOut << config->readLongNumEntry("audiowritesec", 0);
     streamOut << config->readLongNumEntry("audiowriteusec", 200000) * 1000;
 
     // small file size
     streamOut << config->readLongNumEntry("smallaudiofilekbytes", 128);
+
+#else
+
+    // Apart from perhaps the small file size, I think with hindsight
+    // that these options are more easily set to reasonable defaults
+    // here than left to the user.  Mostly.
+
+    if (lowLat) {
+	//!!! need some cleverness somewhere to ensure the read-ahead
+	//is larger than the JACK period size
+	streamOut << 0L; // read-ahead sec
+	streamOut << 160000000L; // read-ahead nsec
+	streamOut << 0L; // audio mix sec
+	streamOut << 60000000L; // audio mix nsec: ignored in lowlat mode
+	streamOut << 2L; // audio read sec
+	streamOut << 500000000L; // audio read nsec
+	streamOut << 4L; // audio write sec
+	streamOut << 0L; // audio write nsec
+	streamOut << 256L; // cacheable small file size in K
+    } else {
+	streamOut << 0L; // read-ahead sec
+	streamOut << 500000000L; // read-ahead nsec
+	streamOut << 0L; // audio mix sec
+	streamOut << 400000000L; // audio mix nsec
+	streamOut << 2L; // audio read sec
+	streamOut << 500000000L; // audio read nsec
+	streamOut << 4L; // audio write sec
+	streamOut << 0L; // audio write nsec
+	streamOut << 256L; // cacheable small file size in K
+    }
+#endif
 
     // Send Play to the Sequencer
     if (!rgapp->sequencerCall("play(long int, long int, long int, long int, long int, long int, long int, long int, long int, long int, long int)",
@@ -660,9 +699,6 @@ punchin:
         // Some locals
         //
         TransportStatus recordType;
-        QByteArray data;
-        QCString replyType;
-        QByteArray replyData;
 
         switch (studio.getInstrumentById(inst)->getType()) {
 
@@ -712,10 +748,6 @@ punchin:
         m_transport->RecordButton()->setOn(true);
         m_transport->PlayButton()->setOn(true);
 
-        // write the start position argument to the outgoing stream
-        //
-        QDataStream streamOut(data, IO_WriteOnly);
-
         if (comp.getTempo() == 0) {
             SEQMAN_DEBUG << "SequenceManager::play() - setting Tempo to Default value of 120.000\n";
             comp.setDefaultTempo(120.0);
@@ -733,32 +765,82 @@ punchin:
         RealTime startPos =
             comp.getElapsedRealTime(comp.getPosition());
 
+	bool lowLat = config->readBoolEntry("audiolowlatencymonitoring", true);
+
+	if (lowLat != m_lastLowLatencySwitchSent) {
+
+	    QByteArray data;
+	    QDataStream streamOut(data, IO_WriteOnly);
+	    streamOut << lowLat;
+
+	    rgapp->sequencerSend("setLowLatencyMode(bool)", data);
+	    m_lastLowLatencySwitchSent = lowLat;
+	}
+
+        QByteArray data;
+        QCString replyType;
+        QByteArray replyData;
+        QDataStream streamOut(data, IO_WriteOnly);
+
         // playback start position
         streamOut << startPos.sec;
         streamOut << startPos.nsec;
     
-        // set group
-        config->setGroup(LatencyOptionsConfigGroup);
+#ifdef NOT_DEFINED
 
-        // read ahead slice
-        streamOut << config->readLongNumEntry("readaheadsec", 0);
-        streamOut << config->readLongNumEntry("readaheadusec", 80000) * 1000;
-
-	// read ahead slice
+	// event read ahead
+	streamOut << config->readLongNumEntry("readaheadsec", 0);
+	streamOut << config->readLongNumEntry("readaheadusec", 80000) * 1000;
+	
+	// audio mix
 	streamOut << config->readLongNumEntry("audiomixsec", 0);
 	streamOut << config->readLongNumEntry("audiomixusec", 60000) * 1000;
-
-	// read ahead slice
+	
+	// file read
 	streamOut << config->readLongNumEntry("audioreadsec", 0);
-	streamOut << config->readLongNumEntry("audioreadusec", 100000) * 1000;
-
-	// read ahead slice
+	streamOut << config->readLongNumEntry("audioreadusec", 80000) * 1000;
+	
+	// file write
 	streamOut << config->readLongNumEntry("audiowritesec", 0);
 	streamOut << config->readLongNumEntry("audiowriteusec", 200000) * 1000;
-
+	
 	// small file size
 	streamOut << config->readLongNumEntry("smallaudiofilekbytes", 128);
-    
+
+#else
+
+	// Apart from perhaps the small file size, I think with hindsight
+	// that these options are more easily set to reasonable defaults
+	// here than left to the user.  Mostly.
+	
+	//!!! Perhaps we should leave these as config options, but without GUI.
+	//!!! Duplicates code in play()
+
+	if (lowLat) {
+	    //!!! need some cleverness somewhere to ensure the read-ahead
+	    //is larger than the JACK period size
+	    streamOut << 0L; // read-ahead sec
+	    streamOut << 160000000L; // read-ahead nsec
+	    streamOut << 0L; // audio mix sec
+	    streamOut << 60000000L; // audio mix nsec: ignored in lowlat mode
+	    streamOut << 2L; // audio read sec
+	    streamOut << 500000000L; // audio read nsec
+	    streamOut << 4L; // audio write sec
+	    streamOut << 0L; // audio write nsec
+	    streamOut << 256L; // cacheable small file size in K
+	} else {
+	    streamOut << 0L; // read-ahead sec
+	    streamOut << 500000000L; // read-ahead nsec
+	    streamOut << 0L; // audio mix sec
+	    streamOut << 400000000L; // audio mix nsec
+	    streamOut << 2L; // audio read sec
+	    streamOut << 500000000L; // audio read nsec
+	    streamOut << 4L; // audio write sec
+	    streamOut << 0L; // audio write nsec
+	    streamOut << 256L; // cacheable small file size in K
+	}
+#endif
+
         // record type
         streamOut << (int)recordType;
     
@@ -1214,16 +1296,6 @@ SequenceManager::preparePlayback(bool forceProgramChanges)
     // Send the MappedComposition if it's got anything in it
     showVisuals(mC);
     StudioControl::sendMappedComposition(mC);
-
-    // Set up the audio playback latency
-    //
-    KConfig* config = kapp->config();
-    config->setGroup(LatencyOptionsConfigGroup);
-
-    int jackSec = config->readLongNumEntry("jackplaybacklatencysec", 0);
-    int jackUSec = config->readLongNumEntry("jackplaybacklatencyusec", 0);
-    m_playbackAudioLatency = RealTime(jackSec, jackUSec * 1000);
-
 }
 
 void

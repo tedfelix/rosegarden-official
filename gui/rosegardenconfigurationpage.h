@@ -517,6 +517,8 @@ protected:
     QCheckBox    *m_createFaderOuts;
     QCheckBox    *m_createSubmasterOuts;
 
+    KComboBox    *m_lowLatencyMode;
+
 #endif // HAVE_LIBJACK
 
     // How many minutes of audio recording should we allow?

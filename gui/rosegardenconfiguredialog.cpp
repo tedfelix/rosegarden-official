@@ -1179,24 +1179,35 @@ SequencerConfigurationPage::SequencerConfigurationPage(
             SIGNAL(valueChanged(int)),
             SLOT(slotSmallFileChanged(int)));
 
+    frame->hide();//!!!
+/*
     addTab(frame, i18n("Buffers"));
-
+*/
 
     // ------------------ Record tab ---------------------
     //
     frame = new QFrame(m_tabWidget);
-    layout = new QGridLayout(frame, 4, 2, 10, 5);
+    layout = new QGridLayout(frame, 5, 2, 10, 5);
 
     int increment = 0;
 
 #ifdef HAVE_LIBJACK
 
+    label = new QLabel(i18n("Audio mix and monitor mode:"), frame);
+    m_lowLatencyMode = new KComboBox(frame);
+    m_lowLatencyMode->insertItem(i18n("Low latency"));
+    m_lowLatencyMode->insertItem(i18n("Buffered"));
+    m_lowLatencyMode->setCurrentItem(m_cfg->readBoolEntry("audiolowlatencymonitoring", true) ? 0 : 1);
+    layout->addWidget(label, 0, 0);
+    layout->addWidget(m_lowLatencyMode, 0, 1);
+    ++increment;
+
     label = new QLabel(i18n("Create post-fader outputs for audio instruments"), frame);
     m_createFaderOuts = new QCheckBox(frame);
     m_createFaderOuts->setChecked(m_cfg->readBoolEntry("audiofaderouts", false));
 
-    layout->addWidget(label, 0, 0);
-    layout->addWidget(m_createFaderOuts, 0, 1);
+    layout->addWidget(label, 1, 0);
+    layout->addWidget(m_createFaderOuts, 1, 1);
     ++increment;
 
     label = new QLabel(i18n("Create post-fader outputs for submasters"), frame);
@@ -1204,8 +1215,8 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     m_createSubmasterOuts->setChecked(m_cfg->readBoolEntry("audiosubmasterouts",
 							   false));
 
-    layout->addWidget(label, 1, 0);
-    layout->addWidget(m_createSubmasterOuts, 1, 1);
+    layout->addWidget(label, 2, 0);
+    layout->addWidget(m_createSubmasterOuts, 2, 1);
     ++increment;
 
 #endif // HAVE_LIBJACK
@@ -1518,6 +1529,7 @@ SequencerConfigurationPage::apply()
 
     // Jack audio inputs
     //
+    m_cfg->writeEntry("audiolowlatencymonitoring", m_lowLatencyMode->currentItem() == 0);
     m_cfg->writeEntry("audiofaderouts", m_createFaderOuts->isChecked());
     m_cfg->writeEntry("audiosubmasterouts", m_createSubmasterOuts->isChecked());
 

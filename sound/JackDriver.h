@@ -244,8 +244,6 @@ protected:
     int                          m_recordInputChannel; // -1 -> stereo
     float                        m_recordLevel;
 
-    bool                         m_lowLatencyMode;
-
     size_t                       m_framesProcessed;
     bool                         m_ok;
 };

@@ -178,6 +178,7 @@ AudioThread::staticThreadRun(void *arg)
     pthread_cleanup_push(staticThreadCleanup, arg);
     
     inst->getLock();
+    inst->m_exiting = false;
     inst->threadRun();
 
 #ifdef DEBUG_THREAD_CREATE_DESTROY
@@ -300,11 +301,13 @@ AudioBussMixer::generateBuffers()
     std::cerr << "AudioBussMixer::generateBuffers: have " << m_bussCount << " busses" << std::endl;
 #endif
 
-    //!!! should be different
-    RealTime bufferLength = m_driver->getAudioMixBufferLength();
-    int bufferSamples = RealTime::realTime2Frame(bufferLength, m_sampleRate);
-    bufferSamples = ((bufferSamples / m_blockSize) + 1) * m_blockSize;
-//!!!    int bufferSamples = 1024;
+    int bufferSamples = m_blockSize;
+
+    if (!m_driver->getLowLatencyMode()) {
+	RealTime bufferLength = m_driver->getAudioMixBufferLength();
+	int bufferSamples = RealTime::realTime2Frame(bufferLength, m_sampleRate);
+	bufferSamples = ((bufferSamples / m_blockSize) + 1) * m_blockSize;
+    }
 
     for (int i = 0; i < m_bussCount; ++i) {
 	
@@ -997,14 +1000,16 @@ AudioInstrumentMixer::generateBuffers()
 
     unsigned int maxChannels = 0;
 
-    RealTime bufferLength = m_driver->getAudioMixBufferLength();
-    int bufferSamples = RealTime::realTime2Frame(bufferLength, m_sampleRate);
-    bufferSamples = ((bufferSamples / m_blockSize) + 1) * m_blockSize;
-//!!!    int bufferSamples = 1024;
+    int bufferSamples = m_blockSize;
 
+    if (!m_driver->getLowLatencyMode()) {
+	RealTime bufferLength = m_driver->getAudioMixBufferLength();
+	int bufferSamples = RealTime::realTime2Frame(bufferLength, m_sampleRate);
+	bufferSamples = ((bufferSamples / m_blockSize) + 1) * m_blockSize;
 #ifdef DEBUG_MIXER
-    std::cerr << "AudioInstrumentMixer::generateBuffers: Buffer length is " << bufferLength << "; buffer samples " << bufferSamples << " (sample rate " << m_sampleRate << ")" << std::endl;
+	std::cerr << "AudioInstrumentMixer::generateBuffers: Buffer length is " << bufferLength << "; buffer samples " << bufferSamples << " (sample rate " << m_sampleRate << ")" << std::endl;
 #endif
+    }
     
     for (int i = 0; i < audioInstruments + synthInstruments; ++i) {
 

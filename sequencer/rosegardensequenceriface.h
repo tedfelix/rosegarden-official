@@ -214,6 +214,8 @@ public:
     //
     virtual void setCurrentTimer(QString timer) = 0;
 
+    virtual void setLowLatencyMode(bool lowLatMode) = 0;
+
     // Set audio monitoring Instrument - tells the sequencer that the
     // gui is currently monitoring audio and which Instrument to report
     // the input level against - this is so we can get a real time

@@ -51,6 +51,7 @@ SoundDriver::SoundDriver(MappedStudio *studio, const std::string &name):
     m_audioRunningId(AudioInstrumentBase),
     m_audioQueue(0),
     m_audioMonitoringInstrument(AudioInstrumentBase),
+    m_lowLatencyMode(false),
     m_studio(studio),
     m_sequencerDataBlock(0),
     m_externalTransport(0),

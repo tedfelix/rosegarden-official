@@ -1174,6 +1174,12 @@ RosegardenSequencerApp::setCurrentTimer(QString timer)
 }
 
 void
+RosegardenSequencerApp::setLowLatencyMode(bool ll)
+{
+    m_driver->setLowLatencyMode(ll);
+}
+
+void
 RosegardenSequencerApp::sequencerAlive()
 {
     if (!kapp->dcopClient()->

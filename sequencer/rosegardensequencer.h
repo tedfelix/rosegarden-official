@@ -213,6 +213,8 @@ public:
     virtual QString getCurrentTimer();
     virtual void setCurrentTimer(QString timer);
 
+    virtual void setLowLatencyMode(bool);
+
     // Audio monitoring
     //
     virtual void setAudioMonitoring(long value);
