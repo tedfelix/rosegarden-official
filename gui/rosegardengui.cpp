@@ -56,9 +56,6 @@
 #include <kfilemetainfo.h>
 
 // application specific includes
-#ifdef HAVE_LIBJACK
-#include <jack/jack.h>
-#endif
 
 #include "Clipboard.h"
 #include "Configuration.h"
@@ -116,6 +113,11 @@
 #include "sequencermapper.h"
 #include "segmentparameterbox.h"
 #include "instrumentparameterbox.h"
+
+#ifdef HAVE_LIBJACK
+#include <jack/jack.h>
+#endif
+
 
 //!!! ditch these when harmonize() moves out
 #include "CompositionTimeSliceAdapter.h"
