@@ -125,4 +125,6 @@ protected:
 };
 
 
+typedef Rosegarden::ViewElementList<MatrixElement> MatrixElementList;
+
 #endif
