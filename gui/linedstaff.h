@@ -24,16 +24,17 @@
 #define LINED_STAFF_H
 
 #include "Staff.h"
-#include "LayoutEngine.h"
 #include "FastVector.h"
+
+#include <qrect.h>
 
 #include <string>
 #include <vector>
 
-#include "qcolor.h"
-#include "qcanvas.h"
-
-namespace Rosegarden { class SnapGrid; }
+namespace Rosegarden { class SnapGrid; class HorizontalLayoutEngine; }
+class QCanvas;
+class QCanvasLine;
+class QCanvasItem;
 
 /**
  * LinedStaffManager is a trivial abstract base for classes that own
@@ -572,12 +573,12 @@ protected:
 
     bool     m_current;
 
-    typedef std::vector<QCanvasLine *> LineList;
+    typedef std::vector<QCanvasItem *> LineList;
     typedef std::vector<LineList> LineMatrix;
     LineMatrix m_staffLines;
     LineList m_staffConnectingLines;
 
-    typedef std::pair<double, QCanvasLine *> BarLine; // layout-x, line
+    typedef std::pair<double, QCanvasItem *> BarLine; // layout-x, line
     typedef FastVector<BarLine> BarLineList;
     static bool compareBars(const BarLine &, const BarLine &);
     static bool compareBarToLayoutX(const BarLine &, int);

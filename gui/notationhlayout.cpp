@@ -1688,7 +1688,7 @@ int NotationHLayout::getBarMargin() const
 
 int NotationHLayout::getPreBarMargin() const
 {
-    return getBarMargin() / 2;
+    return getBarMargin() / 3;
 }
 
 int NotationHLayout::getPostBarMargin() const

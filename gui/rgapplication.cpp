@@ -55,7 +55,7 @@ void RosegardenApplication::sequencerSend(QCString dcopCall, QByteArray params)
     if (noSequencerMode()) return;
 
     if (!trySequencerSend(dcopCall, params))
-        throw Rosegarden::Exception("failed to reach the sequencer through DCOP");
+        throw Rosegarden::Exception("failed to send to the sequencer through DCOP");
 }
 
 void RosegardenApplication::sequencerCall(QCString dcopCall, QCString& replyType, QByteArray& replyData, QByteArray params, bool useEventLoop)
@@ -63,7 +63,7 @@ void RosegardenApplication::sequencerCall(QCString dcopCall, QCString& replyType
     if (noSequencerMode()) return;
 
     if (!trySequencerCall(dcopCall, replyType, replyData, params, useEventLoop))
-        throw Rosegarden::Exception("failed to reach the sequencer through DCOP");
+        throw Rosegarden::Exception("failed to call the sequencer through DCOP");
 }
 
 bool RosegardenApplication::trySequencerSend(QCString dcopCall, QByteArray params = Empty)

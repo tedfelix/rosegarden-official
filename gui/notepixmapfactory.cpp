@@ -563,13 +563,15 @@ NotePixmapFactory::makeRoomForMarks(bool isStemmed,
 				    const NotePixmapParameters &params)
 {
     int height = 0, width = 0;
+    int gap = m_noteBodyHeight / 5 + 1;
+
     for (unsigned int i = 0; i < params.m_marks.size(); ++i) {
 
 	if (!Rosegarden::Marks::isTextMark(params.m_marks[i])) {
 
 	    QPixmap pixmap(m_font->getPixmap
 			   (m_style->getMarkCharName(params.m_marks[i])));
-	    height += pixmap.height() + 1;
+	    height += pixmap.height() + gap;
 	    if (pixmap.width() > width) width = pixmap.width();
 
 	} else {
@@ -578,7 +580,7 @@ NotePixmapFactory::makeRoomForMarks(bool isStemmed,
 	    QString text = strtoqstr(Rosegarden::Marks::getTextFromMark
 				     (params.m_marks[i]));
 	    QRect bounds = m_textMarkFontMetrics.boundingRect(text);
-	    height += bounds.height() + 1;
+	    height += bounds.height() + gap;
 	    if (bounds.width() > width) width = bounds.width();
 	}
     }
@@ -598,6 +600,7 @@ NotePixmapFactory::drawMarks(bool isStemmed,
 			     const NotePixmapParameters &params)
 {
     int dy = 0;
+    int gap = m_noteBodyHeight / 5 + 1;
 
     for (unsigned int i = 0; i < params.m_marks.size(); ++i) {
 
@@ -618,7 +621,7 @@ NotePixmapFactory::drawMarks(bool isStemmed,
 
 	    m_p.drawPixmap(x, y, pixmap);
 	    m_pm.drawPixmap(x, y,  *(pixmap.mask()));
-	    dy += pixmap.height() + 1;
+	    dy += pixmap.height() + gap;
 
 	} else {
 
@@ -636,7 +639,7 @@ NotePixmapFactory::drawMarks(bool isStemmed,
 
 	    m_p.drawText(x, y, text);
 	    m_pm.drawText(x, y, text);
-	    dy += bounds.height() + 1;
+	    dy += bounds.height() + gap;
 	}
     }
 }
@@ -654,23 +657,21 @@ NotePixmapFactory::makeRoomForLegerLines(const NotePixmapParameters &params)
                            (params.m_legerLines / 2));
     }
     if (params.m_legerLines != 0) {
-        m_left  = std::max(m_left,  getStaffLineThickness() + 1);
-        m_right = std::max(m_right, getStaffLineThickness() + 1);
+        m_left  = std::max(m_left,  m_noteBodyWidth / 5 + 1);
+        m_right = std::max(m_right, m_noteBodyWidth / 5 + 1);
     }
 }
 
 void
 NotePixmapFactory::drawLegerLines(const NotePixmapParameters &params)
 {
-    QPoint s0, s1;
+    int x0, x1, y;
 
     if (params.m_legerLines == 0) return;
 
-    s0.setX(m_left - getStemThickness());
-    s1.setX(m_left + m_noteBodyWidth + getStemThickness());
-    
-    s0.setY(m_above + m_noteBodyHeight / 2);
-    s1.setY(s0.y());
+    x0 = m_left - m_noteBodyWidth / 5 - 1;
+    x1 = m_left + m_noteBodyWidth + m_noteBodyWidth / 5 + 1;
+    y = m_above + m_noteBodyHeight / 2;
     
     int offset = m_noteBodyHeight + 1;
     int legerLines = params.m_legerLines;
@@ -684,21 +685,22 @@ NotePixmapFactory::drawLegerLines(const NotePixmapParameters &params)
     
     for (int i = legerLines - 1; i >= 0; --i) {
 	if (i % 2 == 1) {
-	    m_p.drawLine(s0, s1);
-	    m_pm.drawLine(s0, s1);
-	    s0.ry() += offset;
-	    s1.ry() += offset;
+	    for (int j = 0; j < getLegerLineThickness(); ++j) {
+		QPoint p0(x0, y + j);
+		QPoint p1(x1, y + j);
+		m_p.drawLine(p0, p1);
+		m_pm.drawLine(p0, p1);
+	    }
+	    y += offset;
 	    if (first) {
-		++s0.rx();
-		--s1.rx();
+		x0 += getStemThickness();
+		x1 -= getStemThickness();
 		first = false;
 	    }
 	} else if (first) {
-	    s0.ry() += offset/2;
-	    s1.ry() += offset/2;
+	    y += offset/2;
 	    if (legerLines < 0) {
-		--s0.ry();
-		--s1.ry();
+		--y;
 	    }
 	}                
     }
@@ -2111,6 +2113,12 @@ int NotePixmapFactory::getStemThickness() const {
 int NotePixmapFactory::getStaffLineThickness() const {
     unsigned int i;
     (void)m_font->getStaffLineThickness(i);
+    return i;
+}
+
+int NotePixmapFactory::getLegerLineThickness() const {
+    unsigned int i;
+    (void)m_font->getLegerLineThickness(i);
     return i;
 }
 

@@ -1441,33 +1441,7 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
     TabbedConfigurationPage(doc, parent, name)
 {
     QFrame *frame = new QFrame(m_tabWidget);
-    QGridLayout *layout = new QGridLayout(frame,
-                                          4, 2,
-                                          10, 5);
-
-    layout->addWidget(new QLabel(i18n("Filename:"), frame), 0, 0);
-    layout->addWidget(new QLabel(doc->getTitle(), frame), 0, 1);
-
-    layout->addWidget(new QLabel(i18n("Duration:"), frame), 1, 0);
-    Rosegarden::timeT d = doc->getComposition().getDuration();
-    Rosegarden::RealTime rtd = doc->getComposition().getElapsedRealTime(d);
-    layout->addWidget
-        (new QLabel(i18n("%1 minutes %2.%3%4 seconds (%5 units, %6 bars)")
-                    .arg(rtd.sec / 60).arg(rtd.sec % 60)
-                    .arg(rtd.usec / 100000).arg((rtd.usec / 10000) % 10)
-                    .arg(d).arg(doc->getComposition().getBarNumber(d) + 1),
-                    frame), 1, 1);
-
-    layout->addWidget(new QLabel(i18n("Segments:"), frame), 2, 0);
-    layout->addWidget(new QLabel(QString("%1 on %2 tracks")
-                                 .arg(doc->getComposition().getNbSegments())
-                                 .arg(doc->getComposition().getNbTracks()),
-                                 frame), 2, 1);
-    
-    addTab(frame, i18n("Summary"));
-
-    frame = new QFrame(m_tabWidget);
-    layout = new QGridLayout(frame, 2, 2, 10, 5);
+    QGridLayout *layout = new QGridLayout(frame, 2, 2, 10, 5);
 
     m_metadata = new KListView(frame);
     m_metadata->addColumn("Name");
@@ -1509,6 +1483,31 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
     
     addTab(frame, i18n("Description"));
 
+    frame = new QFrame(m_tabWidget);
+    layout = new QGridLayout(frame,
+			     4, 2,
+			     10, 5);
+
+    layout->addWidget(new QLabel(i18n("Filename:"), frame), 0, 0);
+    layout->addWidget(new QLabel(doc->getTitle(), frame), 0, 1);
+
+    layout->addWidget(new QLabel(i18n("Duration:"), frame), 1, 0);
+    Rosegarden::timeT d = doc->getComposition().getDuration();
+    Rosegarden::RealTime rtd = doc->getComposition().getElapsedRealTime(d);
+    layout->addWidget
+        (new QLabel(i18n("%1 minutes %2.%3%4 seconds (%5 units, %6 bars)")
+                    .arg(rtd.sec / 60).arg(rtd.sec % 60)
+                    .arg(rtd.usec / 100000).arg((rtd.usec / 10000) % 10)
+                    .arg(d).arg(doc->getComposition().getBarNumber(d) + 1),
+                    frame), 1, 1);
+
+    layout->addWidget(new QLabel(i18n("Segments:"), frame), 2, 0);
+    layout->addWidget(new QLabel(QString("%1 on %2 tracks")
+                                 .arg(doc->getComposition().getNbSegments())
+                                 .arg(doc->getComposition().getNbTracks()),
+                                 frame), 2, 1);
+    
+    addTab(frame, i18n("Statistics"));
 }
 
 void
@@ -1603,33 +1602,27 @@ AudioConfigurationPage::AudioConfigurationPage(RosegardenGUIDoc *doc,
     Rosegarden::AudioFileManager &afm = doc->getAudioFileManager();
 
     QFrame *frame = new QFrame(m_tabWidget);
-    QGridLayout *layout = new QGridLayout(frame, 2, 4,
+    QGridLayout *layout = new QGridLayout(frame, 4, 3,
                                           10, 5);
-    layout->addWidget(new QLabel(i18n("Audio file path"), frame), 0, 0);
+    layout->addWidget(new QLabel(i18n("Audio file path:"), frame), 0, 0);
     m_path = new QLabel(QString(afm.getAudioPath().c_str()), frame);
-    layout->addMultiCellWidget(m_path, 0, 0, 1, 2);
+    layout->addWidget(m_path, 0, 1);
     
     m_changePathButton =
         new QPushButton(i18n("Choose..."), frame);
 
-    layout->addWidget(m_changePathButton, 0, 3);
+    layout->addWidget(m_changePathButton, 0, 2);
 
     m_diskSpace = new QLabel(frame);
-    layout->addMultiCellWidget(new QLabel(i18n("Disk Space Remaining"), frame),
-                               1, 1, 1, 2);
-    layout->addWidget(m_diskSpace, 1, 3, AlignCenter);
+    layout->addWidget(new QLabel(i18n("Disk space remaining:"), frame), 1, 0);
+    layout->addWidget(m_diskSpace, 1, 1);
 
     m_minutesAtStereo = new QLabel(frame);
-    layout->addMultiCellWidget(
-            new QLabel(i18n("Equivalent minutes of 16-bit stereo"), 
-            frame), 2, 2, 1, 2);
+    layout->addWidget(
+            new QLabel(i18n("Equivalent minutes of 16-bit stereo:"), 
+            frame), 2, 0);
 
-    layout->addWidget(m_minutesAtStereo, 2, 3, AlignCenter);
-
-    // Just to ensure that the above fields bunch towards the top nicely
-    //
-    layout->addWidget(new QLabel(frame), 3, 0);
-    layout->addWidget(new QLabel(frame), 4, 0);
+    layout->addWidget(m_minutesAtStereo, 2, 1, AlignCenter);
 
     calculateStats();
 

@@ -113,11 +113,13 @@ NotationStaff::changeFont(string fontName, int size)
     std::vector<int> sizes = NoteFontFactory::getScreenSizes(fontName);
     int graceSize = size;
     for (unsigned int i = 0; i < sizes.size(); ++i) {
-	if (sizes[i] == size) break;
+	if (sizes[i] == size || sizes[i] > size*3/4) break;
 	graceSize = sizes[i];
     }
     delete m_graceNotePixmapFactory;
     m_graceNotePixmapFactory = new NotePixmapFactory(fontName, graceSize);
+
+    setLineThickness(m_notePixmapFactory->getStaffLineThickness());
 }
 
 void

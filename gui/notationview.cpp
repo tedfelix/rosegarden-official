@@ -68,6 +68,7 @@
 #include "notationhlayout.h"
 #include "notationvlayout.h"
 #include "ktmpstatusmsg.h"
+#include "scrollbox.h"
 
 
 //!!! TESTING:
@@ -203,6 +204,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_fontSizeSlider(0),
     m_spacingSlider(0),
     m_fontSizeActionMenu(0),
+    m_pannerDialog(new ScrollBoxDialog(this)),
     m_progressDisplayer(PROGRESS_NONE),
     m_progressEventFilterInstalled(false),
     m_inhibitRefresh(true),
@@ -568,6 +570,18 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
          this,         SLOT  (slotHoveredOverAbsoluteTimeChanged(unsigned int)));
 
     QObject::connect
+	(m_pannerDialog->scrollbox(), SIGNAL(valueChanged(const QPoint &)),
+	 getCanvasView(), SLOT(slotSetScrollPos(const QPoint &)));
+
+    QObject::connect
+	(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
+	 m_pannerDialog->scrollbox(), SLOT(setViewX(int)));
+
+    QObject::connect
+	(getCanvasView()->verticalScrollBar(), SIGNAL(valueChanged(int)),
+	 m_pannerDialog->scrollbox(), SLOT(setViewY(int)));
+
+    QObject::connect
 	(doc, SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
 	 this, SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
@@ -635,6 +649,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_fontSizeSlider(0),
     m_spacingSlider(0),
     m_fontSizeActionMenu(0),
+    m_pannerDialog(0),
     m_progressDisplayer(PROGRESS_NONE),
     m_progressEventFilterInstalled(false),
     m_inhibitRefresh(true),
@@ -2609,6 +2624,7 @@ void NotationView::setMenuStates()
 	    kapp->processEvents(); \
 	}
 
+    
 void NotationView::readjustCanvasSize()
 {
     START_TIMING;
@@ -2643,6 +2659,25 @@ void NotationView::readjustCanvasSize()
     // now get the EditView to do the biz
     readjustViewSize(QSize(int(maxWidth), maxHeight));
     UPDATE_PROGRESS(2);
+
+
+    //!!! EXPERIMENTAL
+    if (m_pannerDialog) {
+//	int pdw = getCanvasView()->width() / 8;
+//	int pdh = getCanvasView()->height() / 8;
+//	m_pannerDialog->scrollbox()->setFixedSize(std::max(pdw, 150), std::max(pdh, 100));
+	m_pannerDialog->scrollbox()->setPageSize
+	    (QSize(getCanvasView()->canvas()->width(),
+		   getCanvasView()->canvas()->height()));
+	m_pannerDialog->scrollbox()->setViewSize
+	    (QSize(getCanvasView()->width(),
+		   getCanvasView()->height()));
+
+	m_pannerDialog->setFixedSize(m_pannerDialog->scrollbox()->size());
+	m_pannerDialog->show();
+	m_pannerDialog->raise();
+    }
+
 
     PRINT_ELAPSED("NotationView::readjustCanvasSize total");
 }

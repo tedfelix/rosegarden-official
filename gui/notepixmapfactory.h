@@ -177,6 +177,7 @@ public:
     int getStemLength()         const;
     int getStemThickness()      const;
     int getStaffLineThickness() const;
+    int getLegerLineThickness() const;
     int getDotWidth()           const;
     int getBarMargin()	        const;
 

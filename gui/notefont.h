@@ -65,6 +65,7 @@ public:
     std::set<CharName> getCharNames() const;
 
     bool getStaffLineThickness(int size, unsigned int &thickness) const;
+    bool getLegerLineThickness(int size, unsigned int &thickness) const;
     bool getStemThickness(int size, unsigned int &thickness) const;
     bool getBeamThickness(int size, unsigned int &thickness) const;
     bool getStemLength(int size, unsigned int &length) const;
@@ -168,6 +169,7 @@ private:
                      m_stemLength(-1),
                      m_flagSpacing(-1),
                      m_staffLineThickness(-1),
+                     m_legerLineThickness(-1),
                      m_borderX(-1), m_borderY(-1),
 		     m_fontHeight(-1) { }
         ~SizeData() { }
@@ -186,6 +188,9 @@ private:
         }
         void setStaffLineThickness(unsigned int i) {
             m_staffLineThickness = (int)i;
+        }
+        void setLegerLineThickness(unsigned int i) {
+            m_legerLineThickness = (int)i;
         }
         void setBorderX(unsigned int x) {
             m_borderX = (int)x;
@@ -232,6 +237,13 @@ private:
             } else return false;
         }
 
+        bool getLegerLineThickness(unsigned int &i) const {
+            if (m_legerLineThickness >= 0) {
+                i = (unsigned int)m_legerLineThickness;
+                return true;
+            } else return false;
+        }
+
         bool getBorderThickness(unsigned int &x, unsigned int &y) const {
             if (m_borderX >= 0) x = m_borderX;
             else x = 0;
@@ -253,6 +265,7 @@ private:
         int m_stemLength;
         int m_flagSpacing;
         int m_staffLineThickness;
+        int m_legerLineThickness;
         int m_borderX;
         int m_borderY;
 	int m_fontHeight;
@@ -326,6 +339,9 @@ public:
 
     /// Returns false + thickness=1 if not specified
     bool getStaffLineThickness(unsigned int &thickness) const;
+
+    /// Returns false + thickness=1 if not specified
+    bool getLegerLineThickness(unsigned int &thickness) const;
 
     /// Returns false + thickness=0,0 if not specified
     bool getBorderThickness(unsigned int &x, unsigned int &y) const;

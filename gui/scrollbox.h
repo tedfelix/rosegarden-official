@@ -28,6 +28,7 @@
 
 #include <qframe.h>
 #include <qimage.h>
+#include <kdialog.h>
 
 class ScrollBox: public QFrame
 {
@@ -41,6 +42,8 @@ public slots:
     void setViewSize( const QSize& );
     void setViewPos( const QPoint& );
     void setViewPos( int x, int y ) { setViewPos( QPoint( x, y ) ); }
+    void setViewX( int x );
+    void setViewY( int y );
     void setThumbnail( QPixmap img );
 
 signals:
@@ -59,6 +62,30 @@ private:
     QSize  pagesize;
     QSize  viewsize;
 };
+
+
+//!!! EXPERIMENTAL
+class ScrollBoxDialog : public KDialog
+{
+    Q_OBJECT
+public:
+    ScrollBoxDialog(QWidget *parent = 0,
+		 const char *name = 0,
+		 WFlags flags = 0);
+    ~ScrollBoxDialog();
+
+    ScrollBox *scrollbox() { return m_panner; }
+    
+protected:
+    virtual void closeEvent(QCloseEvent * e);
+
+signals:
+    void closed();
+
+private:
+    ScrollBox *m_panner;
+};
+
 
 #endif
 

@@ -181,6 +181,9 @@ NoteFontMap::startElement(const QString &, const QString &,
         s = attributes.value("staff-line-thickness");
         if (s) sizeData.setStaffLineThickness(s.toInt());
 
+        s = attributes.value("leger-line-thickness");
+        if (s) sizeData.setLegerLineThickness(s.toInt());
+
         s = attributes.value("stem-thickness");
         if (s) sizeData.setStemThickness(s.toInt());
 
@@ -209,6 +212,7 @@ NoteFontMap::startElement(const QString &, const QString &,
 	double stemLength = -1.0;
 	double flagSpacing = -1.0;
 	double staffLineThickness = -1.0;
+	double legerLineThickness = -1.0;
 	double stemThickness = -1.0;
 	double borderX = -1.0;
 	double borderY = -1.0;
@@ -224,6 +228,9 @@ NoteFontMap::startElement(const QString &, const QString &,
 
         s = attributes.value("staff-line-thickness");
 	if (s) staffLineThickness = s.toDouble();
+
+        s = attributes.value("leger-line-thickness");
+	if (s) legerLineThickness = s.toDouble();
 
         s = attributes.value("stem-thickness");
 	if (s) stemThickness = s.toDouble();
@@ -262,6 +269,10 @@ NoteFontMap::startElement(const QString &, const QString &,
 	    if (sizeData.getStaffLineThickness(temp) == false &&
 		staffLineThickness >= 0.0)
 		sizeData.setStaffLineThickness(toSize(sz, staffLineThickness, true));
+
+	    if (sizeData.getLegerLineThickness(temp) == false &&
+		legerLineThickness >= 0.0)
+		sizeData.setLegerLineThickness(toSize(sz, legerLineThickness, true));
 
 	    if (sizeData.getStemThickness(temp) == false &&
 		stemThickness >= 0.0)
@@ -733,6 +744,15 @@ NoteFontMap::getStaffLineThickness(int size, unsigned int &thickness) const
 }
 
 bool
+NoteFontMap::getLegerLineThickness(int size, unsigned int &thickness) const
+{
+    SizeDataMap::const_iterator i = m_sizes.find(size);
+    if (i == m_sizes.end()) return false;
+
+    return i->second.getLegerLineThickness(thickness);
+}
+
+bool
 NoteFontMap::getStemThickness(int size, unsigned int &thickness) const
 {
     SizeDataMap::const_iterator i = m_sizes.find(size);
@@ -836,6 +856,10 @@ NoteFontMap::dump() const
 
         if (getStaffLineThickness(*sizei, t)) {
             cout << "Staff line thickness: " << t << endl;
+        }
+
+        if (getLegerLineThickness(*sizei, t)) {
+            cout << "Leger line thickness: " << t << endl;
         }
 
         if (getStemThickness(*sizei, t)) {
@@ -979,7 +1003,14 @@ NoteFont::getFlagSpacing(unsigned int &spacing) const
 bool
 NoteFont::getStaffLineThickness(unsigned int &thickness) const
 {
-    thickness = 1;
+    thickness = (m_size < 16 ? 1 : m_size / 16);
+    return m_fontMap.getStaffLineThickness(m_size, thickness);
+}
+
+bool
+NoteFont::getLegerLineThickness(unsigned int &thickness) const
+{
+    thickness = (m_size < 12 ? 1 : m_size / 12);
     return m_fontMap.getStaffLineThickness(m_size, thickness);
 }
 

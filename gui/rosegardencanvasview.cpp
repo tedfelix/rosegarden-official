@@ -181,6 +181,11 @@ void RosegardenCanvasView::slotScrollVertSmallSteps(int vpos)
     }
 }
 
+void RosegardenCanvasView::slotSetScrollPos(const QPoint &pos)
+{
+    m_horizontalScrollBar->setValue(pos.x());
+    verticalScrollBar()->setValue(pos.y());
+}
 
 //----------------------------------------------------------------------
 

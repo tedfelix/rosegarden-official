@@ -74,6 +74,11 @@ public slots:
      */
     void slotScrollVertSmallSteps(int vpos);
 
+    /**
+     * Set the x and y scrollbars to a particular position
+     */
+    void slotSetScrollPos(const QPoint &);
+
 protected:
     
     //--------------- Data members ---------------------------------

@@ -24,8 +24,10 @@
 #include "rosestrings.h"
 #include "rosedebug.h"
 #include "SnapGrid.h"
-#include "qcanvassimplesprite.h"
+#include "qcanvas.h"
+#include "qcolor.h"
 
+#include "LayoutEngine.h"
 #include "Profiler.h"
 
 // width of pointer
@@ -560,7 +562,7 @@ LinedStaff::deleteBars()
     m_beatLines.clear();
     m_barConnectingLines.clear();
 }
-
+/*!!!
 void
 LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
 			 const Rosegarden::TimeSignature &timeSig)
@@ -568,9 +570,8 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
 //    RG_DEBUG << "insertBar: " << layoutX << ", " << width
 //			 << ", " << isCorrect << endl;
 
-    // rather arbitrary
-    int barThickness = m_resolution / 5;
-    if (barThickness < 1) barThickness = 1;
+    // rather arbitrary (dup in resizeStaffLineRow)
+    int barThickness = m_resolution / 12 + 1;
 
     int testRow = getRowForLayoutX(layoutX);
     double testX = getCanvasXForLayoutX(layoutX);
@@ -673,6 +674,114 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
             BarLine connectingLine(layoutX, line);
 	    m_barConnectingLines.push_back(connectingLine);
         }
+    }
+}
+*/
+
+void
+LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
+		      const Rosegarden::TimeSignature &timeSig)
+{
+//    RG_DEBUG << "insertBar: " << layoutX << ", " << width
+//			 << ", " << isCorrect << endl;
+
+    // rather arbitrary
+    int barThickness = m_resolution / 12 + 1;
+
+    int testRow = getRowForLayoutX(layoutX);
+    double testX = getCanvasXForLayoutX(layoutX);
+    int starti = 0;
+/*!!!
+    if (testX < getX() + getMargin() + 2 && testRow > 1) {
+	// first bar on new row
+	starti = -barThickness;
+    }
+*/
+
+    int row = getRowForLayoutX(layoutX);
+    double x = getCanvasXForLayoutX(layoutX);
+    int y = getCanvasYForTopLine(row);
+
+    QCanvasRectangle *line = new QCanvasRectangle
+	(0, 0, barThickness, getBarLineHeight(), m_canvas);
+
+    if (elementsInSpaces()) {
+	line->moveBy(x, y - (getLineSpacing()/2 + 1));
+    } else {
+	line->moveBy(x, y);
+    }
+
+    if (isCorrect) {
+	line->setPen(RosegardenGUIColours::BarLine);
+	line->setBrush(RosegardenGUIColours::BarLine);
+    } else {
+	line->setPen(RosegardenGUIColours::BarLineIncorrect);
+	line->setBrush(RosegardenGUIColours::BarLineIncorrect);
+    }
+
+    line->setZ(-1);
+    line->show();
+
+    // The bar lines have to be in order of layout-x (there's no
+    // such interesting stipulation for beat or connecting lines)
+    BarLine barLine(layoutX, line);
+    BarLineList::iterator insertPoint = lower_bound
+	(m_barLines.begin(), m_barLines.end(), barLine, compareBars);
+    m_barLines.insert(insertPoint, barLine);
+
+    if (showBeatLines()) {
+
+	double beats; // number of grid lines per bar may be fractional
+
+	// If the snap time is zero we default to beat markers
+	//
+	if (m_snapGrid && m_snapGrid->getSnapTime(x))
+	    beats = double(timeSig.getBarDuration()) /
+		double(m_snapGrid->getSnapTime(x));
+	else
+	    beats = timeSig.getBeatsPerBar();
+
+	double dx = width / beats;
+
+	for (int beat = 1; beat < beats; ++beat) {
+
+	    line = new QCanvasRectangle
+		(0, 0, barThickness, getBarLineHeight(), m_canvas);
+	    
+	    if (elementsInSpaces()) {
+		line->moveBy(x + beat * dx, y - (getLineSpacing()/2 + 1));
+	    } else {
+		line->moveBy(x + beat * dx, y);
+	    }
+		
+	    line->setPen(RosegardenGUIColours::BeatLine);
+	    line->setBrush(RosegardenGUIColours::BeatLine);
+	    line->setZ(-1);
+	    line->show();
+
+	    BarLine beatLine(layoutX + beat * dx, line);
+	    m_beatLines.push_back(beatLine);
+	}
+    }
+    
+    if (m_connectingLineLength > 0) {
+	
+	line = new QCanvasRectangle
+	    (0, 0, barThickness, m_connectingLineLength, m_canvas);
+	
+	if (elementsInSpaces()) {
+	    line->moveBy(x, y - (getLineSpacing()/2 + 1));
+	} else {
+	    line->moveBy(x, y);
+	}
+	
+	line->setPen(RosegardenGUIColours::StaffConnectingLine);
+	line->setBrush(RosegardenGUIColours::StaffConnectingLine);
+	line->setZ(-3);
+	line->show();
+	
+	BarLine connectingLine(layoutX, line);
+	m_barConnectingLines.push_back(connectingLine);
     }
 }
 
@@ -807,24 +916,24 @@ LinedStaff::resizeStaffLineRow(int row, double x, double length)
         length -= offset;
     }
 */
-    QCanvasLine *line;
+
     int y;
 
     delete m_staffConnectingLines[row];
-    line = 0;
 
-    if (m_pageMode != LinearMode && m_connectingLineLength > 0.1) { //!!! multi page
-        line = new QCanvasLine(m_canvas);
+    if (m_pageMode != LinearMode && m_connectingLineLength > 0.1) { //!!! handle multi page
+	// rather arbitrary (dup in insertBar)
+	int barThickness = m_resolution / 12 + 1;
         y = getCanvasYForTopLine(row);
-        line->setPoints(int(x + length), y, int(x + length),
-                        y + m_connectingLineLength);
-	line->setPen
-            (QPen(RosegardenGUIColours::StaffConnectingTerminatingLine, 1));
+	QCanvasRectangle *line = new QCanvasRectangle
+	    (x + length, y, barThickness, m_connectingLineLength, m_canvas);
+	line->setPen(RosegardenGUIColours::StaffConnectingTerminatingLine);
+	line->setBrush(RosegardenGUIColours::StaffConnectingTerminatingLine);
         line->setZ(-2);
         line->show();
+    } else {
+	m_staffConnectingLines[row] = 0;
     }
-
-    m_staffConnectingLines[row] = line;
 
     while ((int)m_staffLines[row].size() <= getLineCount() * m_lineThickness) {
         m_staffLines[row].push_back(0);
@@ -836,8 +945,11 @@ LinedStaff::resizeStaffLineRow(int row, double x, double length)
 
         for (j = 0; j < m_lineThickness; ++j) {
 
+	    //!!! use QCanvasRectangle if lineThickness > 1
+	    QCanvasLine *line;
+
             if (m_staffLines[row][lineIndex] != 0) {
-                line = m_staffLines[row][lineIndex];
+                line = (QCanvasLine *)m_staffLines[row][lineIndex];
             } else {
                 line = new QCanvasLine(m_canvas);
             }

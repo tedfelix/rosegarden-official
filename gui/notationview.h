@@ -55,6 +55,8 @@ class ProgressReporter;
 class NotationHLayout;
 class NotationVLayout;
 class NotationStaff;
+class ScrollBoxDialog;
+
 
 /**
  * NotationView is a view for one or more Staff objects, each of
@@ -810,6 +812,7 @@ protected:
     ZoomSlider<int> *m_fontSizeSlider;
     ZoomSlider<int> *m_spacingSlider;
     KActionMenu *m_fontSizeActionMenu;
+    ScrollBoxDialog *m_pannerDialog;
 
     enum { PROGRESS_NONE,
            PROGRESS_BAR,

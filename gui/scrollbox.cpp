@@ -99,9 +99,41 @@ void ScrollBox::setViewPos( const QPoint& pos )
     repaint();
 }
 
+void ScrollBox::setViewX( int x )
+{
+    viewpos = QPoint( x, viewpos.y() );
+    repaint();
+}
+
+void ScrollBox::setViewY( int y )
+{
+    viewpos = QPoint( viewpos.x(), y );
+    repaint();
+}
+
 void ScrollBox::setThumbnail( QPixmap img )
 {
     setPaletteBackgroundPixmap( img.convertToImage().smoothScale( size() ) );
 }
+
+
+//!!! EXPERIMENTAL
+
+ScrollBoxDialog::ScrollBoxDialog(QWidget *parent,
+			   const char *name,
+			   WFlags flags) :
+    KDialog(parent, name, flags),
+    m_panner(new ScrollBox(this))
+{ }
+
+ScrollBoxDialog::~ScrollBoxDialog()
+{ }
+
+void ScrollBoxDialog::closeEvent(QCloseEvent *e) {
+    e->accept();
+//    emit closed;
+}
+
+
 
 // vim:sw=4:sts=4:ts=8:noet
