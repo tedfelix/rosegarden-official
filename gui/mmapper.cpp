@@ -608,6 +608,11 @@ MetronomeMmapper::MetronomeMmapper(RosegardenGUIDoc* doc,
         t = c.getBarEndForTime(t);
     }
 
+    if (m_ticks.size() == 0) {
+        SEQMAN_DEBUG << "MetronomeMmapper : WARNING no ticks generated\n";
+    }
+    
+
     sortTicks();
 
     m_mmappedSize = computeMmappedSize();
