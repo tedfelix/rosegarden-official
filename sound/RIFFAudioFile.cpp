@@ -180,7 +180,7 @@ RIFFAudioFile::scanTo(std::ifstream *file, const RealTime &time)
     unsigned int totalSamples = m_sampleRate * time.sec +
        ((unsigned int)((double(m_sampleRate) * double(time.usec)) / 1000000.0));
 
-    unsigned int totalBytes = totalSamples * m_channels * m_bytesPerSample;
+    unsigned int totalBytes = totalSamples * m_bytesPerSample;
 
     // When using seekg we have to keep an eye on the boundaries ourselves
     //
