@@ -7,6 +7,19 @@
 
 import os
 
+def Check_pkg_config(context, version):
+	context.Message('Checking for pkg-config ... ')
+	ret = context.TryAction('pkg-config --atleast-pkgconfig-version=%s' % version)[0]
+	context.Result(ret)
+	return ret
+
+def Check_package(context, module, version):
+	context.Message('Checking for %s >= %s ... ' % (module, version))
+	ret = context.TryAction('pkg-config %s --atleast-version=%s' % (module, version))[0]
+	if ret:
+	    env.ParseConfig('pkg-config %s --cflags --libs' % module);
+	context.Result(ret)
+	return ret
 
 env = Environment(tools = ['default', 'config', 'kde'], toolpath='./')
 env.AppendUnique( ENV = os.environ )
@@ -19,22 +32,28 @@ env['INSTALL_ALL'] = 0
 if 'install' in COMMAND_LINE_TARGETS:
     env['INSTALL_ALL'] = 1
 
-
 ##
 ## Configure stuff    
-conf = Configure(env)
-haveAlsa    = conf.CheckLibWithHeader('asound', 'alsa/asoundlib.h', 'C', 'snd_seq_port_info_set_timestamp_queue(0,0);')
-haveJack    = conf.CheckLib('jack')
+conf = Configure(env, custom_tests = { 'Check_pkg_config' : Check_pkg_config, 
+                                       'Check_package' : Check_package }) 
+if not conf.Check_pkg_config('0.15'):
+    print 'pkg-config >= 0.15 not found.' 
+    Exit(1) 
+
+haveAlsa    = conf.Check_package('alsa','1.0')
+haveJack    = conf.Check_package('jack', '0.77')
 haveLadspa  = conf.CheckHeader('ladspa.h')
-haveLiblo   = conf.CheckLib('lo')
-haveLibrdf  = conf.CheckLib('lrdf')
-haveLibmad  = conf.CheckLib('mad')
-haveLibdssi = conf.CheckHeader('dssi.h')
+haveLiblrdf = conf.CheckLibWithHeader('lrdf', ['stdio.h', 'lrdf.h'], 'C', 'lrdf_init();')
+haveLiblo   = conf.Check_package('liblo', '0.7')
+haveLibmad  = conf.Check_package('mad', '0.10')
+haveLibdssi = conf.Check_package('dssi', '0.4')
+haveXft     = conf.Check_package('xft', '2.1.0')
+
 env = conf.Finish()
 
+env.Append(CCFLAGS = '-DQT_THREAD_SUPPORT')
 if haveAlsa:
     env.Append(CCFLAGS = '-DHAVE_ALSA')
-env.Append(CCFLAGS = '-DQT_THREAD_SUPPORT')
 if haveJack:
     env.Append(CCFLAGS = '-DHAVE_JACK')
 if haveLadspa:
@@ -43,6 +62,8 @@ if haveLiblo:
     env.Append(CCFLAGS = '-DHAVE_LIBLO')
 if haveLibmad:
     env.Append(CCFLAGS = '-DHAVE_LIBMAD')
+if haveLiblrdf:
+    env.Append(CCFLAGS = '-DHAVE_LRDF')
 
 # Export 'env' so that sconscripts in subdirectories can use it
 Export( "env" )
