@@ -457,27 +457,25 @@ public:
     // Get and set Audio file Id (see the AudioFileManager)
     //
     unsigned int getAudioFileId() const { return m_audioFileId; }
-    void setAudioFileId(unsigned int id) { m_audioFileId = id; }
+    void setAudioFileId(unsigned int id);
 
     // The audio start and end times tell us how far into
     // audio file "m_audioFileId" this Segment starts and
     // how far into the sample the Segment finishes.
     //
-    void setAudioStartTime(const RealTime&time) { m_audioStartTime = time; }
-    void setAudioEndTime(const RealTime &time) { m_audioEndTime = time; }
     RealTime getAudioStartTime() const { return m_audioStartTime; }
     RealTime getAudioEndTime() const { return m_audioEndTime; }
+    void setAudioStartTime(const RealTime &time);
+    void setAudioEndTime(const RealTime &time);
 
     bool isAutoFading() const { return m_autoFade; }
-    void setAutoFade(bool value) { m_autoFade = value; }
+    void setAutoFade(bool value);
 
     RealTime getFadeInTime() const { return m_fadeInTime; }
-    void setFadeInTime(const Rosegarden::RealTime &time)
-        { m_fadeInTime = time; }
+    void setFadeInTime(const RealTime &time);
 
     RealTime getFadeOutTime() const { return m_fadeOutTime; }
-    void setFadeOutTime(const Rosegarden::RealTime &time)
-        { m_fadeOutTime = time; }
+    void setFadeOutTime(const RealTime &time);
 
     //////
     //

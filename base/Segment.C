@@ -856,6 +856,48 @@ Segment::setTranspose(int transpose)
 }
 
 void
+Segment::setAudioFileId(unsigned int id)
+{
+    m_audioFileId = id;
+    updateRefreshStatuses(getStartTime(), getEndTime());
+}
+
+void
+Segment::setAudioStartTime(const RealTime &time)
+{
+    m_audioStartTime = time;
+    updateRefreshStatuses(getStartTime(), getEndTime());
+}
+
+void
+Segment::setAudioEndTime(const RealTime &time)
+{
+    m_audioEndTime = time;
+    updateRefreshStatuses(getStartTime(), getEndTime());
+}
+
+void
+Segment::setAutoFade(bool value)
+{
+    m_autoFade = value;
+    updateRefreshStatuses(getStartTime(), getEndTime());
+}
+
+void
+Segment::setFadeInTime(const RealTime &time)
+{
+    m_fadeInTime = time;
+    updateRefreshStatuses(getStartTime(), getEndTime());
+}
+
+void
+Segment::setFadeOutTime(const RealTime &time)
+{
+    m_fadeOutTime = time;
+    updateRefreshStatuses(getStartTime(), getEndTime());
+}
+
+void
 Segment::setLabel(const std::string &label)
 {
     m_label = label; 
