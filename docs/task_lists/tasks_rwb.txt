@@ -1,7 +1,17 @@
-Current 0.2 TO-DOs [update 14.1.2001]
-==================
+0.2 TO-DO for rwb
+-----------------
+updated 23.1.2001
 
-o Audio.  First level support. [IN PROGESS]
+
+o Audio. [IN PROGESS]
+  Audio file support in rg file. [DONE]
+  Audio WAV file header authentification [DONE]
+  Audio Segments [DONE]
+  Audio playing proof of concept [DONE]
+  Audio recording proof of concept [ALMOST DONE]
+  Sequencing of plain Audio files [IN PROGRESS]
+
+o Segment level Undo/Redo [cc - IN PROGRESS?]
 
 o Bar lines widget (similar to TrackButtons).
   Implementation to allow for:
@@ -17,18 +27,7 @@ o Track addition/deletion and moving on TrackButtons canvas
 o Complete segment edit shortcuts (click/copy/multiple
   segment drag)
 
-o MIDI recording [DONE - first pass]
-
-o Write Rosegarden tempo events to exported MIDI [DONE]
-
-o Segment level Undo/Redo
-
 o Segment colouring [low priority obviously!]
-
-
-
-Work for further down the line
-------------------------------
 
 o Segment modifiers - looping of Segments, quantisation
 
@@ -38,14 +37,35 @@ o Instrument display - aRTS environment, MIDI/Audio assignable
 o More MIDI events at Composition level. Sys Exs, Program Changes,
   Controller changes etc. etc.
 
+o MIDI output VU meters and Transport feedback
+
+o Audio output VU meters
+
+o MIDI CC, PC and sysex handling
+
+o MIDI recording [DONE - first pass]
+
+o Write Rosegarden tempo events to exported MIDI [DONE]
+
+
+Current Bugs
+============
+
+o loop ruler white out
+
+o bar and loop ruler bar widths
+
+o rg file saving is still broken for trivial cases (Segments wrong size)
 
 
 
 
 
 
-Post 0.1 TO-DOs
-===============
+
+
+Post 0.1 work
+=============
 
 o Transport GUI with time, buttons and more features [DONE]
 
@@ -53,14 +73,12 @@ o Recording mechanism
   - mute and record buttons on tracks   [DONE]
   - arm tracks for record               [DONE]
 
-
 o Audio [See above]
 
 o Handle Meta Events at the Editor and Midi levels - write then out to file
-    [HANDLED - but more work eventually required]
+    [HANDLED - but more work eventually required to support at MIDI file
+     and internal rep level]
 
-o Meaningful Sys Ex handling
-    [See above]
 
 
 
@@ -101,18 +119,18 @@ References in round brackets are to 0.1_planned_features.txt.
  8. Ensuring that Tempo is used correctly throughout Editor and Sequencer. [DONE]
 
 
-Known Bugs
-==========
+0.1 Known Bugs
+==============
 
- - MIDI file tempos aren't working yet
+ - MIDI file tempos aren't working yet [FIXED]
 
- - occasional gui/sequencer hangs while DCOP call in progress [STILL AN ISSUE?]
+ - occasional gui/sequencer hangs while DCOP call in progress [FIXED]
 
  - sending All Notes Off to aRts when they're already queued?
-   More a feature than a bug - waiting for aRts to support it.
+   More a feature than a bug - waiting for aRts to support it. [CAN'T YET SUPPORT]
 
-Fixed Bugs
-==========
+0.1 Fixed Bugs
+==============
 
  - playback currently stumbling and poor [FIXED - note off queue was filling up
    and getting all out of shape]

@@ -1,17 +1,12 @@
-To compile:
+The sound/ subsys offers MIDI interfaces (files and events),
+aRTS interfaces (MIDI and audio) and sequencing support.
 
-- try a plain ./configure
+Two libs are built from this directory:
 
-- cross your fingers
+  libRosegardenSound     - general sound support (audio and midi files)
+  libRosegardenSequencer - sequencer specific support
 
-The configure isn't set up at all well but it sometimes
-works - sometimes complains about LIBTOOL - just try the
-make again!  Dependencies seem to be OK but we're currently
-checking for way too much stuff.
+The test apps miditest and audiotest show off some of the
+features of these libraries.
 
-If it compiles it creates a test executable (script to a libtool'd
-executable) called "sound" that'll read in a MIDI file and attempt
-to get an aRts Midi Manager connection and read some events from
-the MIDI IN.
-
-RB 20.6.2001
+rwb - 23.01.2002
