@@ -26,13 +26,19 @@
 
 #include <string>
 #include <map>
+#include <set>
+#include <vector>
 
 #include "NotationTypes.h"
 
-namespace Rosegarden {
+namespace Rosegarden
+{
 
+using std::list;
 using std::string;
+using std::vector;
 using std::multimap;
+using std::set;
 
 class Segment;
 class Event;
@@ -40,29 +46,13 @@ class CompositionTimeSliceAdapter;
 
 ///////////////////////////////////////////////////////////////////////////
 
-class AnalysisHelper {
-public:
-    AnalysisHelper() {};
-    /**
-     * Returns the key in force during a given event.
-     */
-    Key getKeyForEvent(Event *e, Segment &s);
-    /**
-     * Inserts in the Segment labels for all of the chords found in
-     * the timeslice in the CompositionTimeSliceAdapter. See
-     * TransformsMenuLabelChordsCommand::modifySegment() in
-     * notationcommands.cpp
-     */
-    void labelChords(CompositionTimeSliceAdapter &c, Segment &s);
-};
-
-///////////////////////////////////////////////////////////////////////////
-
 typedef std::string ChordType;
+class ChordLabel;
 
-namespace ChordTypes {
+namespace ChordTypes
+{
 const ChordType
-    NoChord = "no-chord",
+NoChord = "no-chord",
     Major = "",
     Minor = "m",
     Diminished = "dim",
@@ -73,23 +63,43 @@ const ChordType
     DimSeventh = "dim7";
 }
 
+///////////////////////////////////////////////////////////////////////////
+
 /**
- * Chord names chords and identifies from their masks. See
- * Chord::checkMap() for details on what the masks are and
+ * ChordLabel names chords and identifies them from their masks. See
+ * ChordLabel::checkMap() for details on what the masks are and
  * AnalysisHelper::labelChords() for an example.
  */
 
-class ChordLabel {
+class ChordLabel
+{
 public:
     ChordLabel();
     ChordLabel(Key key, int mask, int bass);
     ChordLabel(ChordType type, int rootPitch, int inversion = 0) :
         m_data(type, rootPitch, inversion) { };
-    std::string getName(Key key);
-    bool isValid();
+    int rootPitch();
+    /**
+     * Gives the name of the chord in lead-sheet notation: C, Dm,
+     * G#7b5...
+     */
+    std::string getName(Key key) const;
+    /**
+     * Gives the name of the chord in roman-numeral notation: I, ii,
+     * VMm7...
+     */
+//  std::string getRomanNumeral(Key key);
+    bool isValid() const;
+    bool operator<(const ChordLabel& other) const;
+    // ### I can't believe this is necessary, but the compiler
+    //     is asking for it
+    bool operator==(const ChordLabel& other) const;
 
 private:
-    struct ChordData {
+    // #### are m_* names appropriate for a struct?
+    //      shouldn't I find a neater way to keep a ChordMap?
+    struct ChordData
+    {
         ChordData(ChordType type, int rootPitch, int inversion = 0) :
             m_type(type),
             m_rootPitch(rootPitch),
@@ -104,12 +114,119 @@ private:
         int m_rootPitch;
         int m_inversion;
     };
-
     ChordData m_data;
     void checkMap();
 
     typedef std::multimap<int, ChordData> ChordMap;
     static ChordMap m_chordMap;
+};
+
+///////////////////////////////////////////////////////////////////////////
+
+class AnalysisHelper
+{
+public:
+    AnalysisHelper() {};
+
+    /**
+     * Returns the key in force during a given event.
+     */
+    Key getKeyForEvent(Event *e, Segment &s);
+
+    /**
+     * Returns true if the given pitch is a scale step of the given key.
+     */
+    bool pitchIsDiatonic(int pitch, Key key);
+
+    /**
+     * Inserts in the given Segment labels for all of the chords found in
+     * the timeslice in the given CompositionTimeSliceAdapter.
+     */
+    void labelChords(CompositionTimeSliceAdapter &c, Segment &s);
+
+    /**
+     * Returns a time signature that is probably reasonable for the
+     * given timeslice.
+     */
+    TimeSignature guessTimeSignature(CompositionTimeSliceAdapter &c);
+
+    /**
+     * Returns a guess at the starting key of the given timeslice.
+     */
+    Key guessKey(CompositionTimeSliceAdapter &c);
+
+    /**
+     * Like labelChords, but the algorithm is more complicated. This tries
+     * to guess the chords that should go under a beat even when all of the
+     * chord members aren't played at once.
+     */
+    void guessHarmonies(CompositionTimeSliceAdapter &c, Segment &s);
+
+protected:
+    // ### THESE NAMES ARE AWFUL. MUST GREP THEM OUT OF EXISTENCE.
+    typedef pair<double, ChordLabel> ChordPossibility;
+    typedef vector<ChordPossibility> HarmonyGuess;
+    typedef vector<pair<timeT, HarmonyGuess> > HarmonyGuessList;
+    struct cp_less : public binary_function<ChordPossibility, ChordPossibility, bool>
+    {
+        bool operator()(ChordPossibility l, ChordPossibility r);
+    };
+
+    /// For use by guessHarmonies
+    void makeHarmonyGuessList(CompositionTimeSliceAdapter &c,
+                              HarmonyGuessList &l);
+
+    /// For use by guessHarmonies
+    void refineHarmonyGuessList(CompositionTimeSliceAdapter &c,
+                                HarmonyGuessList& l);
+
+    /// For use by guessHarmonies (makeHarmonyGuessList)
+    class PitchProfile
+    {
+    public:
+        PitchProfile();
+        double& operator[](int i);
+        const double& operator[](int i) const;
+        double distance(const PitchProfile &other);
+        double dotProduct(const PitchProfile &other);
+        double productScorer(const PitchProfile &other);
+        PitchProfile normalized();
+        PitchProfile& operator*=(double d);
+        PitchProfile& operator+=(const PitchProfile &d);
+    private:
+        double m_data[12];
+    };
+
+    /// For use by guessHarmonies (makeHarmonyGuessList)
+    typedef vector<pair<PitchProfile, ChordLabel> > HarmonyTable;
+    static HarmonyTable m_harmonyTable;
+
+    /// For use by guessHarmonies (makeHarmonyGuessList)
+    void checkHarmonyTable();
+
+    /// For use by guessHarmonies (refineHarmonyGuessList)
+    // #### grep ProgressionMap to something else
+    struct ChordProgression {
+        ChordProgression(ChordLabel first_,
+                         ChordLabel second_ = ChordLabel(),
+                         Key key_ = Key());
+        ChordLabel first;
+        ChordLabel second;
+        Key homeKey;
+        // double commonness...
+        bool operator<(const ChordProgression& other) const;
+        };
+    typedef set<ChordProgression> ProgressionMap;
+    static ProgressionMap m_progressionMap;
+
+    /// For use by guessHarmonies (refineHarmonyGuessList)
+    void checkProgressionMap();
+
+    /// For use by checkProgressionMap
+    void addProgressionToMap(Key k,
+                             int firstChordNumber,
+                             int secondChordNumber);
+
 };
 
 }

@@ -112,6 +112,9 @@ Clef::Clef(const Event &e)
     }
     std::string s = e.get<String>(ClefPropertyName);
     if (s != Treble && s != Tenor && s != Alto && s != Bass) {
+#ifndef NDEBUG
+	cerr << "Warning: Clef::Clef: No such clef as \"" << s << "\"" << endl;
+#endif
         throw BadClefName();
     }
     m_clef = s;
@@ -121,6 +124,9 @@ Clef::Clef(const std::string &s)
     // throw (BadClefName)
 {
     if (s != Treble && s != Tenor && s != Alto && s != Bass) {
+#ifndef NDEBUG
+	cerr << "Warning: Clef::Clef: No such clef as \"" << s << "\"" << endl;
+#endif
         throw BadClefName();
     }
     m_clef = s;
@@ -201,6 +207,9 @@ Key::Key(const Event &e)
     }
     m_name = e.get<String>(KeyPropertyName);
     if (m_keyDetailMap.find(m_name) == m_keyDetailMap.end()) {
+#ifndef NDEBUG
+	cerr << "Warning: Key::Key: No such key as \"" << m_name << "\"" <<endl;
+#endif
         throw BadKeyName();
     }
 }
@@ -211,6 +220,9 @@ Key::Key(const std::string &name)
 {
     checkMap();
     if (m_keyDetailMap.find(m_name) == m_keyDetailMap.end()) {
+#ifndef NDEBUG
+	cerr << "Warning: Key::Key: No such key as \"" << m_name << "\"" <<endl;
+#endif
         throw BadKeyName();
     }
 }    
@@ -229,6 +241,11 @@ Key::Key(int accidentalCount, bool isSharp, bool isMinor)
             return;
         }
     }
+#ifndef NDEBUG
+    cerr << "Warning: Key::Key: No "
+	 << (isMinor ? "minor" : "major") << " key with " << accidentalCount
+	 << (isSharp ? " sharp(s)" : " flat(s)") << endl;
+#endif
     throw BadKeySpec();
 }
 
@@ -249,6 +266,11 @@ Key::Key(int tonicPitch, bool isMinor)
             return;
         }
     }
+#ifndef NDEBUG
+    cerr << "Warning: Key::Key: No "
+	 << (isMinor ? "minor" : "major") << " key with tonic pitch "
+	 << tonicPitch << endl;
+#endif
     throw BadKeySpec();
 }
     
@@ -431,6 +453,10 @@ Indication::Indication(const Event &e)
     }
     std::string s = e.get<String>(IndicationTypePropertyName);
     if (s != Slur && s != Crescendo && s != Decrescendo) {
+#ifndef NDEBUG
+	cerr << "Warning: Indication::Indication: No such indication as \""
+	     << s << "\"" << endl;
+#endif
         throw BadIndicationName();
     }
     m_indicationType = s;
@@ -440,6 +466,10 @@ Indication::Indication(const Event &e)
 Indication::Indication(const std::string &s, timeT indicationDuration)
 {
     if (s != Slur && s != Crescendo && s != Decrescendo) {
+#ifndef NDEBUG
+	cerr << "Warning: Indication::Indication: No such indication as \""
+	     << s << "\"" << endl;
+#endif
         throw BadIndicationName();
     }
     m_indicationType = s;
@@ -763,7 +793,13 @@ Note::Note(const string &n)
             break;
         }
     }
-    if (m_type == -1) throw BadType(name);
+    if (m_type == -1) {
+#ifndef NDEBUG
+	cerr << "Warning: Note::Note: Can't parse note name \""
+	     << n << "\"" << endl;
+#endif
+	throw BadType(name);
+    }
 }
 
 Note& Note::operator=(const Note &n)
@@ -893,7 +929,6 @@ TimeSignature::TimeSignature(int numerator, int denominator)
     : m_numerator(numerator), m_denominator(denominator)
 {
     if (numerator < 1 || denominator < 1) throw BadTimeSignature();
-    setInternalDurations();
 }
 
 TimeSignature::TimeSignature(const Event &e)
@@ -905,7 +940,6 @@ TimeSignature::TimeSignature(const Event &e)
     m_numerator = e.get<Int>(NumeratorPropertyName);
     m_denominator = e.get<Int>(DenominatorPropertyName);
     if (m_numerator < 1 || m_denominator < 1) throw BadTimeSignature();
-    setInternalDurations();
 }
 
 TimeSignature& TimeSignature::operator=(const TimeSignature &ts)
@@ -913,8 +947,24 @@ TimeSignature& TimeSignature::operator=(const TimeSignature &ts)
     if (&ts == this) return *this;
     m_numerator = ts.m_numerator;
     m_denominator = ts.m_denominator;
-    setInternalDurations();
     return *this;
+}
+
+timeT TimeSignature::getBarDuration() const
+{
+    setInternalDurations();
+    return m_barDuration;
+}
+
+timeT TimeSignature::getBeatDuration() const
+{
+    setInternalDurations();
+    return m_beatDuration;
+}
+
+timeT TimeSignature::getUnitDuration() const
+{
+    return m_crotchetTime * 4 / m_denominator;
 }
 
 Note::Type TimeSignature::getUnit() const
@@ -956,6 +1006,8 @@ void TimeSignature::getDurationListForInterval(DurationList &dlist,
                                                int duration,
                                                int startOffset) const
 {
+    setInternalDurations();
+
     int offset = startOffset;
     int durationRemaining = duration;
 
@@ -1035,9 +1087,6 @@ void TimeSignature::getDurationListForInterval(DurationList &dlist,
 
 	    int currentDuration = m_beatDivisionDuration;
 
-	    // One or both of my safeguards against currentDuration being 0
-	    // might be useless.
-
 	    while ( !(offset % currentDuration == 0
 		      && durationRemaining >= currentDuration)
 		    && currentDuration > 1 ) {
@@ -1083,22 +1132,38 @@ void TimeSignature::getDurationListForBar(DurationList &dlist) const
     }
 
 }
-               
-void TimeSignature::setInternalDurations()
-{
-    // "unit length," which might be the beat length or the beat-division
-    // length:
-    int noteLength = m_crotchetTime * 4 / m_denominator;
 
-    m_barDuration = m_numerator * noteLength;
+int TimeSignature::getEmphasisForTime(timeT offset)
+{
+    setInternalDurations();
+
+    if      (offset % m_barDuration == 0)
+        return 4;
+    else if (m_numerator == 4 && m_denominator == 4 &&
+	     offset % (m_barDuration/2) == 0)
+	return 3;
+    else if (offset % m_beatDuration == 0)
+	return 2;
+    else if (offset % m_beatDivisionDuration == 0)
+	return 1;
+    else
+	return 0;
+}
+
+          
+void TimeSignature::setInternalDurations() const
+{
+    int unitLength = m_crotchetTime * 4 / m_denominator;
+
+    m_barDuration = m_numerator * unitLength;
 
     if (isDotted()) {
-	m_beatDuration = noteLength * 3;
-	m_beatDivisionDuration = noteLength;
+	m_beatDuration = unitLength * 3;
+	m_beatDivisionDuration = unitLength;
     }
     else {
-	m_beatDuration = noteLength;
-	m_beatDivisionDuration = noteLength / 2;
+	m_beatDuration = unitLength;
+	m_beatDivisionDuration = unitLength / 2;
     }
 
 }

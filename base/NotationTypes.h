@@ -706,9 +706,7 @@ public:
 
     TimeSignature() :
         m_numerator(DefaultTimeSignature.m_numerator),
-        m_denominator(DefaultTimeSignature.m_denominator) {
-	setInternalDurations();
-    }
+        m_denominator(DefaultTimeSignature.m_denominator) { }
 
     TimeSignature(int numerator, int denominator)
         /* throw (BadTimeSignature) */;
@@ -718,9 +716,7 @@ public:
     
     TimeSignature(const TimeSignature &ts) :
         m_numerator(ts.m_numerator),
-        m_denominator(ts.m_denominator) {
-	setInternalDurations();
-    }
+        m_denominator(ts.m_denominator) { }
 
     ~TimeSignature() { }
 
@@ -728,7 +724,7 @@ public:
 
     int getNumerator()     const { return m_numerator; }
     int getDenominator()   const { return m_denominator; }
-    timeT getBarDuration() const { return m_barDuration; }
+    timeT getBarDuration() const;
 
     /**
      * Return the unit of the time signature.  This is the note
@@ -757,7 +753,7 @@ public:
      * two beats in a 6/8 bar).  The beat therefore depends on whether
      * the signature indicates dotted or undotted time.
      */
-    timeT getBeatDuration() const { return m_beatDuration; }
+    timeT getBeatDuration() const;
 
     /**
      * Return the number of beats in a complete bar.
@@ -783,8 +779,8 @@ public:
                                     int startOffset = 0) const;
 
     /**
-     * Get the level of emphasis for a position in a bar. 0 is lots
-     * of emphasis, smaller numbers are less.
+     * Get the level of emphasis for a position in a bar. 4 is lots
+     * of emphasis, 0 is none.
      */
     int getEmphasisForTime(timeT offset);
 
@@ -795,10 +791,10 @@ private:
     int m_numerator;
     int m_denominator;
 
-    int m_barDuration;
-    int m_beatDuration;
-    int m_beatDivisionDuration;
-    void setInternalDurations();
+    mutable int m_barDuration;
+    mutable int m_beatDuration;
+    mutable int m_beatDivisionDuration;
+    void setInternalDurations() const;
 
     // a time & effort saving device
     static const timeT m_crotchetTime;
