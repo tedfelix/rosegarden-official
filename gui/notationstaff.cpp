@@ -1038,6 +1038,12 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
     Accidental accidental = NoAccidental;
     (void)elt->event()->get<String>(properties.DISPLAY_ACCIDENTAL, accidental);
 
+    bool cautionary = false;
+    if (accidental != NoAccidental) {
+	(void)elt->event()->get<Bool>(properties.DISPLAY_ACCIDENTAL_IS_CAUTIONARY,
+				      cautionary);
+    }
+
     bool up = true;
 //    (void)(elt->event()->get<Bool>(properties.STEM_UP, up));
     (void)(elt->event()->get<Bool>(properties.VIEW_LOCAL_STEM_UP, up));
@@ -1078,6 +1084,7 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
     params.setNoteType(note);
     params.setDots(dots);
     params.setAccidental(accidental);
+    params.setAccidentalCautionary(cautionary);
     params.setNoteHeadShifted(shifted);
     params.setDrawFlag(flag);
     params.setDrawStem(true);

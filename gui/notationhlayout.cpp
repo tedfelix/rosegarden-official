@@ -507,9 +507,14 @@ NotationHLayout::scanChord(NotationElementList *notes,
 	// (accidentals in force when the last chord ended) and tell
 	// accTable about accidentals from this note.
                     
-	bool cautionary;
+	bool cautionary = false;
 	Accidental dacc = accTable.processDisplayAccidental(acc, h, cautionary);
 	el->event()->setMaybe<String>(m_properties.DISPLAY_ACCIDENTAL, dacc);
+	if (cautionary) {
+	    el->event()->setMaybe<Bool>(m_properties.DISPLAY_ACCIDENTAL_IS_CAUTIONARY,
+					true);
+	}
+	    
 	if (someAccidental == NoAccidental) someAccidental = dacc;
 
 	if (i == to) barEndsInChord = true;
@@ -1350,77 +1355,16 @@ NotationHLayout::positionChord(Staff &staff,
 
     bool barEndsInChord = false;
 
-    // To work out how much space to allot a note (or chord), start
-    // with the amount alloted to the whole bar, subtract that
-    // reserved for fixed-width items, and take the same proportion of
-    // the remainder as our duration is of the whole bar's duration.
-    // (We use the actual duration of the bar, not the nominal time-
-    // signature duration.)
-
-    // In case this chord has various durations in it, we choose an
-    // effective duration based on the absolute time of the first
-    // following event not in the chord (see getSpacingDuration)
-
-//    int noteWidth = m_npf->getNoteBodyWidth();
-
-    // Find out whether the chord contains any accidentals, and if so,
-    // make space, and also shift the notes' positions right somewhat.
-    // (notepixmapfactory quite reasonably places the hot spot at the
-    // start of the note head, not at the start of the whole pixmap.)
-    // Also use this loop to check for beamed-group information.
-
     unsigned int i;
-//    int accWidth = 0;
-//    long groupId = -1;
 
     for (i = 0; i < chord.size(); ++i) {
-
-	//!!! we should scan all elts not just notes, and set same x to them
 
 	if (chord[i] == to) barEndsInChord = true;
 
 	static_cast<NotationElement*>(*chord[i])->setLayoutX(baseX);
 	static_cast<NotationElement*>(*chord[i])->setLayoutAirspace(baseX, delta);
-
-	NotationElement *note = static_cast<NotationElement*>(*(chord[i]));
-	if (!note->isNote()) continue;
-/*!!!
-	Accidental acc = NoAccidental;
-	if (note->event()->get<String>(m_properties.DISPLAY_ACCIDENTAL, acc) &&
-	    acc != NoAccidental) {
-            accWidth = std::max(accWidth, m_npf->getAccidentalWidth(acc));
-	}
-	if (groupId != -2) {
-	    long myGroupId = -1;
-	    if (note->event()->get<Int>(BEAMED_GROUP_ID, myGroupId) &&
-		(groupId == -1 || myGroupId == groupId)) {
-		groupId = myGroupId;
-	    } else {
-
-		// With a bit of luck, this should never happen any more
-		// (as Chord has been reworked so as to only accept note
-		// heads that are in the same group -- this situation
-		// should now result in more than one Chord)
-
-		groupId = -2; // not all note-heads think they're in the group
-	    }
-	}
-*/
     }
-/*!!!
-    baseX += accWidth;
 
-    // Cope with the presence of shifted note-heads
-
-    bool shifted = chord.hasNoteHeadShifted();
-
-    if (shifted) {
-	// For this to work reliably with notes inside beamed groups,
-	// we depend on the group's applyStemProperties() method
-	// having already been called (as it is in scanStaff above).
-	if (!chord.hasStemUp()) baseX += noteWidth;
-    }
-*/
     // Check for any ties going back, and if so work out how long it
     // must have been and assign accordingly.
 
@@ -1469,20 +1413,6 @@ NotationHLayout::positionChord(Staff &staff,
 	}
     }
 
-    // Now set the positions of all the notes in the chord.  We don't
-    // need to shift the positions of shifted notes, because that will
-    // be taken into account when making their pixmaps later (in
-    // NotationStaff::makeNoteSprite / NotePixmapFactory::makeNotePixmap).
-/*!!!
-    bool barEndsInChord = false;
-    for (i = 0; i < chord.size(); ++i) {
-	NotationElementList::iterator subItr = chord[i];
-	if (subItr == to) barEndsInChord = true;
-	(*subItr)->setLayoutX(baseX);
-	if (groupId < 0) (*chord[i])->event()->unset(m_properties.BEAMED);
-	else (*chord[i])->event()->set<Int>(BEAMED_GROUP_ID, groupId);
-    }
-*/
     itr = chord.getFinalElement();
     if (barEndsInChord) { to = itr; ++to; }
 }

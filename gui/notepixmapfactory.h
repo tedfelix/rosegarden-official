@@ -46,7 +46,8 @@ public:
     void setNoteType(Rosegarden::Note::Type type) { m_noteType = type; }
     void setDots(int dots) { m_dots = dots; }
     void setAccidental(Rosegarden::Accidental acc) { m_accidental = acc; }
-    
+
+    void setAccidentalCautionary(bool cautionary) { m_cautionary = cautionary; }
     void setNoteHeadShifted(bool shifted) { m_shifted          = shifted;   }
     void setAccidentalShift(int shift)    { m_accidentalShift  = shift;     }
     void setAccExtraShift(bool extra)     { m_accidentalExtra  = extra;     }
@@ -93,6 +94,7 @@ private:
     int m_dots;
     Rosegarden::Accidental m_accidental;
 
+    bool    m_cautionary;
     bool    m_shifted;
     int     m_accidentalShift;
     bool    m_accidentalExtra;
@@ -246,8 +248,8 @@ protected:
 
     int getStemLength(const NotePixmapParameters &) const;
 
-    void makeRoomForAccidental(Rosegarden::Accidental, int shift, bool extra);
-    void drawAccidental(Rosegarden::Accidental);
+    void makeRoomForAccidental(Rosegarden::Accidental, bool cautionary, int shift, bool extra);
+    void drawAccidental(Rosegarden::Accidental, bool cautionary);
 
     void makeRoomForMarks(bool isStemmed, const NotePixmapParameters &params);
     void drawMarks(bool isStemmed, const NotePixmapParameters &params);

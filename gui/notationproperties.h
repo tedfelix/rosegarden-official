@@ -56,6 +56,7 @@ public:
     const Rosegarden::PropertyName MIN_WIDTH;
     const Rosegarden::PropertyName CALCULATED_ACCIDENTAL;
     const Rosegarden::PropertyName DISPLAY_ACCIDENTAL;
+    const Rosegarden::PropertyName DISPLAY_ACCIDENTAL_IS_CAUTIONARY;
     const Rosegarden::PropertyName ACCIDENTAL_SHIFT;
     const Rosegarden::PropertyName ACCIDENTAL_EXTRA_SHIFT;
     const Rosegarden::PropertyName UNBEAMED_STEM_LENGTH;

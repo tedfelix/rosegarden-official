@@ -199,6 +199,7 @@ NotePixmapParameters::NotePixmapParameters(Note::Type noteType,
     m_noteType(noteType),
     m_dots(dots),
     m_accidental(accidental),
+    m_cautionary(false),
     m_shifted(false),
     m_accidentalShift(0),
     m_drawFlag(true),
@@ -481,6 +482,7 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
 
     if (params.m_accidental != NoAccidental) {
         makeRoomForAccidental(params.m_accidental,
+			      params.m_cautionary,
 			      params.m_accidentalShift,
 			      params.m_accidentalExtra);
     }
@@ -570,7 +572,7 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
     }
 
     if (params.m_accidental != NoAccidental) {
-        drawAccidental(params.m_accidental);
+        drawAccidental(params.m_accidental, params.m_cautionary);
     }
 
     NoteCharacter body;
@@ -714,7 +716,8 @@ NotePixmapFactory::getStemLength(const NotePixmapParameters &params) const
 }
 
 void
-NotePixmapFactory::makeRoomForAccidental(Accidental a, int shift, bool extra)
+NotePixmapFactory::makeRoomForAccidental(Accidental a,
+					 bool cautionary, int shift, bool extra)
 {
     // General observation: where we're only using a character to
     // determine its dimensions, we should (for the moment) just
@@ -767,7 +770,7 @@ NotePixmapFactory::makeRoomForAccidental(Accidental a, int shift, bool extra)
 }
 
 void
-NotePixmapFactory::drawAccidental(Accidental a)
+NotePixmapFactory::drawAccidental(Accidental a, bool cautionary)
 {
     NoteCharacter ac
 	(m_font->getCharacter

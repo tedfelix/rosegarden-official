@@ -36,6 +36,7 @@ NotationProperties::NotationProperties(const std::string &prefix) :
 
     CALCULATED_ACCIDENTAL	(prefix + "NoteCalculatedAccidental"),
     DISPLAY_ACCIDENTAL		(prefix + "NoteDisplayAccidental"),
+    DISPLAY_ACCIDENTAL_IS_CAUTIONARY(prefix + "NoteDisplayAccidentalIsCautionary"),
     ACCIDENTAL_SHIFT            (prefix + "NoteAccidentalShift"),
     ACCIDENTAL_EXTRA_SHIFT      (prefix + "NoteAccidentalExtraShift"),
     UNBEAMED_STEM_LENGTH	(prefix + "UnbeamedStemLength"),
