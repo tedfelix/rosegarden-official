@@ -80,15 +80,9 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
     QLabel *label = new QLabel(i18n("<no instrument>"), m_noInstrumentParameters);
     label->setAlignment(label->alignment() | Qt::AlignHCenter);
 
-#ifdef RGKDE3    
     m_widgetStack->addWidget(m_midiInstrumentParameters);
     m_widgetStack->addWidget(m_audioInstrumentParameters);
     m_widgetStack->addWidget(m_noInstrumentParameters);
-#else
-    m_widgetStack->addWidget(m_midiInstrumentParameters, 0);
-    m_widgetStack->addWidget(m_audioInstrumentParameters, 1);
-    m_widgetStack->addWidget(m_noInstrumentParameters, 2);
-#endif
 
     m_midiInstrumentParameters->adjustSize();
     m_audioInstrumentParameters->adjustSize();
@@ -621,7 +615,6 @@ AudioInstrumentParameterPanel::slotBypassed(int pluginIndex, bool bp)
              Rosegarden::MappedObjectValue(bp));
 #endif // HAVE_LADSPA
 
-#ifdef RGKDE3
         // Set the bypass colour on the plugin button
         if (bp)
         {
@@ -633,7 +626,7 @@ AudioInstrumentParameterPanel::slotBypassed(int pluginIndex, bool bp)
             m_pluginButtons[pluginIndex]->setPaletteForegroundColor(kapp->palette().color(QPalette::Active, QColorGroup::ButtonText));
             m_pluginButtons[pluginIndex]->setPaletteBackgroundColor(kapp->palette().color(QPalette::Active, QColorGroup::Button));
         }
-#endif
+
         // Set the bypass on the instance
         //
         inst->setBypass(bp);

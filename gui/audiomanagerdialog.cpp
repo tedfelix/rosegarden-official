@@ -196,9 +196,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     m_fileList->setColumnAlignment(5, Qt::AlignHCenter);
     m_fileList->setColumnAlignment(6, Qt::AlignHCenter);
 
-#ifdef RGKDE3
     m_fileList->restoreLayout(kapp->config(), m_listViewLayoutName);
-#endif
 
     // a minimum width for the list box
     //m_fileList->setMinimumWidth(300);
@@ -207,9 +205,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     m_fileList->setAllColumnsShowFocus(true);
 
     // show tooltips when columns are partially hidden
-#ifdef RGKDE3
     m_fileList->setShowToolTips(true);
-#endif
 
     // connect buttons
     connect(m_deleteButton, SIGNAL(released()), SLOT(slotDelete()));
@@ -243,9 +239,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
 
 AudioManagerDialog::~AudioManagerDialog()
 {
-#ifdef RGKDE3
     m_fileList->saveLayout(kapp->config(), m_listViewLayoutName);
-#endif
 }
 
 // Scan the AudioFileManager and populate the m_fileList
@@ -605,11 +599,7 @@ AudioManagerDialog::slotAdd()
                                  QString(i18n("*.wav|WAV files (*.wav)")),
                                  this, i18n("Select one or more Audio Files"));
 
-#ifdef RGKDE3
     KURL::List::iterator it;
-#else
-    KURL::List::Iterator it;
-#endif
 
     for (it = kurlList.begin(); it != kurlList.end(); ++it)
         addFile(*it);
@@ -725,7 +715,7 @@ AudioManagerDialog::slotRename()
         return;
 
     bool ok = false;
-#ifdef RGKDE3
+
     QString newText = QInputDialog::getText(
                                  QString("Change Audio File label"),
                                  QString("Enter new label"),
@@ -733,14 +723,6 @@ AudioManagerDialog::slotRename()
                                  QString(audioFile->getName().c_str()),
                                  &ok,
                                  this);
-#else
-    QString newText = QInputDialog::getText(
-                                 QString("Change Audio File label"),
-                                 QString("Enter new label"),
-                                 QString(audioFile->getName().c_str()),
-                                 &ok,
-                                 this);
-#endif
 
     if ( ok && !newText.isEmpty() )
         audioFile->setName(qstrtostr(newText));

@@ -416,7 +416,6 @@ void TrackEditor::paintEvent(QPaintEvent* e)
         m_segmentCanvas->updateAllSegmentItems();
         m_trackButtons->slotUpdateTracks();
 
-#ifdef RGKDE3
 	Composition &composition = m_document->getComposition();
 
         if (composition.getNbSegments() == 0) {
@@ -430,8 +429,6 @@ void TrackEditor::paintEvent(QPaintEvent* e)
             else
                 emit stateChange("segment_selected", true); // no selection : reverse state
         }
-
-#endif
 
         setCompositionModified(false);
 

@@ -178,7 +178,6 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 
     // Now autoload
     //
-#ifdef RGKDE3
     stateChanged("new_file");
     stateChanged("have_segments",    KXMLGUIClient::StateReverse);
     stateChanged("segment_selected", KXMLGUIClient::StateReverse);
@@ -188,7 +187,6 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     //
     if (m_doc->getStudio().getMidiDevice(0) == 0)
         stateChanged("got_midi_devices");
-#endif
 
     // All toolbars should be created before this is called
     setAutoSaveSettings("MainView", true);
@@ -748,10 +746,8 @@ void RosegardenGUIApp::initView()
 
     }
 
-#ifdef RGKDE3
     connect(m_view, SIGNAL(stateChange(const QString&, bool)),
             this,   SLOT  (slotStateChanged(const QString&, bool)));
-#endif
 
     // make sure we show
     //
@@ -760,9 +756,7 @@ void RosegardenGUIApp::initView()
     slotChangeZoom(int(m_zoomSlider->getCurrentSize()));
 
     // Create a sequence manager
-#ifdef RGKDE3
     stateChanged("new_file");
-#endif
 
     // Refresh the audioManagerDialog if it's hanging around
     //
@@ -1244,13 +1238,11 @@ void RosegardenGUIApp::slotFilePrint()
 
     KTmpStatusMsg msg(i18n("Printing..."), this);
 
-#ifdef RGKDE3
     KPrinter printer(true, QPrinter::HighResolution);
 
     if (printer.setup(this)) {
         m_view->print(&printer, &m_doc->getComposition());
     }
-#endif
 }
 
 void RosegardenGUIApp::slotQuit()
@@ -3008,24 +3000,19 @@ RosegardenGUIApp::slotChangeTempo(Rosegarden::timeT time,
 void
 RosegardenGUIApp::slotDocumentModified()
 {
-#ifdef RGKDE3
     stateChanged("file_modified");
-#endif
 }
 
 void
 RosegardenGUIApp::slotStateChanged(const QString& s,
                                    bool reverse)
 {
-#ifdef RGKDE3
     stateChanged(s, reverse ? KXMLGUIClient::StateReverse : KXMLGUIClient::StateNoReverse);
-#endif
 }
 
 void
 RosegardenGUIApp::slotTestClipboard()
 {
-#ifdef RGKDE3
     if (m_doc->getClipboard()->isEmpty()) {
 	stateChanged("have_clipboard", KXMLGUIClient::StateReverse);
 	stateChanged("have_clipboard_single_segment",
@@ -3037,7 +3024,6 @@ RosegardenGUIApp::slotTestClipboard()
 		      KXMLGUIClient::StateNoReverse :
 		      KXMLGUIClient::StateReverse));
     }
-#endif
 }
 
 void

@@ -296,10 +296,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     slotSetPointerPosition(comp.getPosition());
 
-#ifdef RGKDE3
     stateChanged("have_selection", KXMLGUIClient::StateReverse);
     slotTestClipboard();
-#endif
 
     setCurrentSelection(0, false);
 
@@ -796,7 +794,6 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview)
     m_selectionCounter->update();
 
 
-#ifdef RGKDE3
     // Clear states first, then enter only those ones that apply
     // (so as to avoid ever clearing one after entering another, in
     // case the two overlap at all)
@@ -815,7 +812,6 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview)
                          KXMLGUIClient::StateNoReverse);
         }
     }
-#endif
 
     updateQuantizeCombo();
     updateView();
@@ -1049,11 +1045,7 @@ MatrixView::slotSetPointerPosition(timeT time, bool scroll)
     }
 
     if (scroll)
-#ifdef RGKDE3
         getCanvasView()->slotScrollHoriz(static_cast<int>(getXbyWorldMatrix(m_hlayout.getXForTime(time))));
-#else
-        getCanvasView()->slotScrollHoriz(m_hlayout.getXForTime(time));
-#endif
 
     updateView();
 }
@@ -1067,11 +1059,7 @@ MatrixView::slotSetInsertCursorPosition(timeT time, bool scroll)
     m_staffs[0]->setInsertCursorPosition(m_hlayout, time);
 
     if (scroll) {
-#ifdef RGKDE3
         getCanvasView()->slotScrollHoriz(static_cast<int>(getXbyWorldMatrix(m_hlayout.getXForTime(time))));
-#else
-        getCanvasView()->slotScrollHoriz(m_hlayout.getXForTime(time));
-#endif
     }
 
     updateView();
@@ -1644,8 +1632,6 @@ MatrixView::initZoomToolbar()
 void
 MatrixView::slotChangeHorizontalZoom(int)
 {
-#ifdef RGKDE3
-
     double zoomValue = m_hZoomSlider->getCurrentSize();
 
     m_zoomLabel->setText(i18n("%1%").arg(zoomValue*100.0));
@@ -1692,8 +1678,6 @@ MatrixView::slotChangeHorizontalZoom(int)
     // hasn't changed
     //
     getCanvasView()->polish();
-
-#endif
 }
 
 /// Scrolls the view such that the given time is centered
@@ -1857,11 +1841,7 @@ MatrixView::readjustCanvasSize()
     int endX = int(m_hlayout.getXForTime(m_segments[0]->getEndMarkerTime()));
     int startX = int(m_hlayout.getXForTime(m_segments[0]->getStartTime()));
 
-#ifdef RGKDE3
     int newWidth = int(getXbyWorldMatrix(endX - startX));
-#else
-    int newWidth = endX - startX;
-#endif
 
     // now get the EditView to do the biz
     readjustViewSize(QSize(newWidth, maxHeight), true);

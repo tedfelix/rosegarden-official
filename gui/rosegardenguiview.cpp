@@ -705,9 +705,7 @@ void RosegardenGUIView::slotSetSelectedSegments(
     // update the segment parameter box
     m_segmentParameterBox->useSegments(segments);
 
-#ifdef RGKDE3
     emit stateChange("segment_selected", false);
-#endif
 }
 
 void RosegardenGUIView::slotSelectAllSegments()
@@ -761,9 +759,7 @@ void RosegardenGUIView::slotSelectAllSegments()
     //!!! similarly, how to set no selected track?
     //comp.setSelectedTrack(trackId);
 
-#ifdef RGKDE3
     emit stateChange("segment_selected", false);
-#endif
 
     // inform
     emit segmentsSelected(segments);

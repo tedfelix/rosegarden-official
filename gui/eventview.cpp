@@ -405,7 +405,6 @@ EventView::setupActions()
     EditViewBase::setupActions("eventlist.rc");
 
     // File menu
-#ifdef RGKDE3
     KStdAction::close   (this, SLOT(slotCloseWindow()), actionCollection());
     // Edit menu
     KStdAction::cut     (this, SLOT(slotEditCut()), actionCollection());
@@ -413,24 +412,6 @@ EventView::setupActions()
     KStdAction::copy    (this, SLOT(slotEditCopy()), actionCollection());
 
     KStdAction::paste   (this, SLOT(slotEditPaste()), actionCollection());
-
-#else
-    KStdAction::close   ((const QObject *)this,
-                         SLOT(slotCloseWindow()),
-                         (QObject*)actionCollection());
-    // Edit menu
-    KStdAction::cut     ((const QObject *)this,
-                         SLOT(slotEditCut()),
-                         (QObject*)actionCollection());
-
-    KStdAction::copy    ((const QObject *)this,
-                         SLOT(slotEditCopy()),
-                         (QObject*)actionCollection());
-
-    KStdAction::paste   ((const QObject *)this,
-                         SLOT(slotEditPaste()),
-                         (QObject*)actionCollection());
-#endif
 
     createGUI(getRCFileName());
 }
@@ -477,9 +458,7 @@ EventView::readOptions()
 {
     m_config->setGroup("EventList Options");
     EditViewBase::readOptions();
-#ifdef RGKDE3
     m_eventList->restoreLayout(m_config, LayoutConfigGroupName);
-#endif
 }
 
 const char* const EventView::LayoutConfigGroupName = "EventList Layout";
@@ -487,9 +466,7 @@ const char* const EventView::LayoutConfigGroupName = "EventList Layout";
 void
 EventView::slotSaveOptions()
 {
-#ifdef RGKDE3
     m_eventList->saveLayout(m_config, LayoutConfigGroupName);
-#endif
 }
 
 void 

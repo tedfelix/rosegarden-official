@@ -388,7 +388,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     QObject::connect
 	(doc, SIGNAL(destroyed()), this, SLOT(slotDocumentDestroyed()));
 
-#ifdef RGKDE3
     stateChanged("have_selection", KXMLGUIClient::StateReverse);
     stateChanged("have_notes_in_selection", KXMLGUIClient::StateReverse);
     stateChanged("have_rests_in_selection", KXMLGUIClient::StateReverse);
@@ -397,20 +396,15 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 		                        KXMLGUIClient::StateReverse));
     stateChanged("rest_insert_tool_current", KXMLGUIClient::StateReverse);
     slotTestClipboard();
-#endif
 
     if (getSegmentsOnlyRests()) {
         m_selectDefaultNote->activate();
-#ifdef RGKDE3
 	stateChanged("note_insert_tool_current", 
 		     KXMLGUIClient::StateNoReverse);
-#endif
     } else {
         actionCollection()->action("select")->activate();
-#ifdef RGKDE3
 	stateChanged("note_insert_tool_current",
 		     KXMLGUIClient::StateReverse);
-#endif
     }
 
     slotSetInsertCursorPosition(0);
@@ -505,11 +499,9 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     QCanvas *tCanvas = new QCanvas(this);
 
-#ifdef RGKDE3
     RG_DEBUG << "Print area size : "
              << pdm.width() << ", " << pdm.height()
              << " - printer resolution : " << printer->resolution() << "\n";
-#endif
 
     unsigned int scaleFactor = 5;
     tCanvas->resize(pdm.width() / scaleFactor, pdm.height() / scaleFactor);
@@ -1973,13 +1965,11 @@ void NotationView::print(KPrinter* printer)
     
     QPainter printpainter(printer);
 
-#ifdef RGKDE3
     RG_DEBUG << "Printing total height "  << fullHeight
              << ", nbStaffRowsPerPage = " << nbStaffRowsPerPage
              << ", printSliceHeight = "   << printSliceHeight
              << ", printer Resolution = " << printer->resolution()
              << endl;
-#endif
 
     unsigned int pageNum = 1;
 
@@ -2095,8 +2085,6 @@ void NotationView::refreshSegment(Segment *segment,
 
 void NotationView::setMenuStates()
 {
-#ifdef RGKDE3
-
     // 1. set selection-related states
 
     // Clear states first, then enter only those ones that apply
@@ -2138,12 +2126,6 @@ void NotationView::setMenuStates()
 	stateChanged("note_insert_tool_current", StateReverse);
 	stateChanged("rest_insert_tool_current", StateReverse);
     }
-
-#else
-
-    NOTATION_DEBUG << "Not using KDE3, not setting selection-related states"
-		   << endl;
-#endif
 }
 
 

@@ -84,11 +84,9 @@ EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
         (getCommandHistory(), SIGNAL(commandExecuted()),
          this,                  SLOT(update()));
 
-#ifdef RGKDE3
     QObject::connect
 	(getCommandHistory(), SIGNAL(commandExecuted()),
 	 this, SLOT(slotTestClipboard()));
-#endif
 
     // create accelerators
     //
@@ -390,7 +388,6 @@ KToggleAction* EditViewBase::getToggleAction(const QString& actionName)
 void
 EditViewBase::slotTestClipboard()
 {
-#ifdef RGKDE3
     if (m_document->getClipboard()->isEmpty()) {
 	RG_DEBUG << "EditViewBase::slotTestClipboard(): empty" << endl;
 
@@ -406,6 +403,5 @@ EditViewBase::slotTestClipboard()
 		      KXMLGUIClient::StateNoReverse :
 		      KXMLGUIClient::StateReverse));
     }
-#endif
 }
  

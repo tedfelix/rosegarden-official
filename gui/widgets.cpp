@@ -210,11 +210,8 @@ RosegardenProgressDialog::RosegardenProgressDialog(
     m_wasVisible(false),
     m_frozen(false)
 {
-#ifdef RGKDE3
     progressBar()->setTotalSteps(totalSteps);
-#else
-    progressBar()->setRange(0, totalSteps);
-#endif
+
     RG_DEBUG << "RosegardenProgressDialog::RosegardenProgressDialog type 2 - "
              << labelText << " - modal : " << modal << endl;
 
@@ -230,11 +227,7 @@ void
 RosegardenProgressDialog::polish()
 {
     KProgressDialog::polish();
-#ifdef RGKDE3
     QApplication::setOverrideCursor(Qt::ArrowCursor, true);
-#else
-    QApplication::setOverrideCursor(Qt::arrowCursor, true);
-#endif
     kapp->processEvents();
 }
 
@@ -299,11 +292,7 @@ RosegardenProgressBar::RosegardenProgressBar(int totalSteps,
 					     QWidget *creator,
 					     const char *name,
 					     WFlags f) :
-#ifdef RGKDE3
     KProgress(totalSteps, creator, name, f)
-#else
-    KProgress(0, totalSteps, 0, Qt::Horizontal, creator, name)
-#endif
 {
 }
 

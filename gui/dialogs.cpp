@@ -50,12 +50,7 @@
 #include <qvbuttongroup.h>
 #include <qregexp.h>
 #include <qstringlist.h>
-
-#ifdef RGKDE3
 #include <qtextedit.h>
-#else
-#include <qmultilineedit.h>
-#endif
 
 #include <kapp.h>
 #include <klocale.h>
@@ -1407,14 +1402,8 @@ EventEditDialog::slotRealTimePropertyChanged(int value)
     m_modified = true;
     QString propertyFullName = spinBox->name();
 
-#ifdef RGKDE3
     QString propertyName = propertyFullName.section('%', 0, 0),
         usecOrSec =  propertyFullName.section('%', 1, 1);
-#else
-    int sep = propertyFullName.find('%');
-    QString propertyName = propertyFullName.left(sep),
-        usecOrSec =  propertyFullName.mid(sep + 1);
-#endif
 
     Rosegarden::RealTime realTime = m_event.get<RealTimeT>(qstrtostr(propertyName));
 
@@ -2555,12 +2544,8 @@ LyricEditDialog::LyricEditDialog(QWidget *parent,
     QGroupBox *groupBox = new QGroupBox
 	(1, Horizontal, i18n("Lyrics for this segment"), vbox);
 
-#ifdef RGKDE3
     m_textEdit = new QTextEdit(groupBox);
     m_textEdit->setTextFormat(Qt::PlainText);
-#else
-    m_textEdit = new QMultiLineEdit(groupBox);
-#endif
 
     m_textEdit->setMinimumWidth(300);
     m_textEdit->setMinimumHeight(200);
