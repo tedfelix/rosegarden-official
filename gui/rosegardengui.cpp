@@ -859,9 +859,14 @@ void RosegardenGUIApp::importMIDIFile(const QString &file)
 {
   Rosegarden::MidiFile *midiFile;
 
-  midiFile = new Rosegarden::MidiFile(file.ascii());
+  midiFile = new Rosegarden::MidiFile(file.data());
 
-  midiFile->open();
+  if (!midiFile->open())
+  {
+    KMessageBox::error(this,
+      i18n("Couldn't understand MIDI file.\nIt might be corrupted."));
+    return;
+  }
 
   m_doc->closeDocument();
   m_doc->newDocument();

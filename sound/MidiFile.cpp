@@ -105,14 +105,14 @@ MidiFile::getMidiBytes(ifstream* midiFile, const unsigned int &numberOfBytes)
   {
     cerr << "Attempt to get more bytes than allowed on Track - ( " <<
           numberOfBytes << " > " << _trackByteCount << " )" << endl;
-    exit(1);
+    throw(std::string("Attempt to get more bytes than allowed on Track"));
   }
 
   if (midiFile->eof())
   {
     cerr << "MIDI file EOF - got " << stringRet.length() << " bytes out of "
          << numberOfBytes << endl;
-    exit(1);
+    throw(std::string("MIDI EOF encountered while reading"));
   }
 
   while((stringRet.length() < numberOfBytes) && midiFile->read(&fileMidiByte, 1))
@@ -132,7 +132,7 @@ MidiFile::getMidiBytes(ifstream* midiFile, const unsigned int &numberOfBytes)
     stringRet = "";
     cerr << "Attempt to read past file end - got " << stringRet.length() <<
             " bytes out of " << numberOfBytes << endl;
-    exit(1);
+    throw(std::string("Attempt to read part MIDI file end"));
   }
 
   // decrement the byte count
@@ -208,67 +208,79 @@ MidiFile::skipToNextTrack(ifstream *midiFile)
 }
 
 
-// Read in a MIDI file.
+// Read in a MIDI file.  The parsing process throws string
+// exceptions back up here if we run into trouble which we
+// can then pass back out to whoever called us using a nice
+// bool.
 // 
 //
 bool
 MidiFile::open()
 {
+  bool retOK = true;
 
   // Open the file
   ifstream *midiFile = new ifstream(_filename.c_str(), ios::in | ios::binary);
 
-  if (*midiFile)
+  try
   {
-    // Parse the MIDI header first.  The first 14 bytes of the file.
-    if (!parseHeader(getMidiBytes(midiFile, 14)))
+    if (*midiFile)
     {
+      // Parse the MIDI header first.  The first 14 bytes of the file.
+      if (!parseHeader(getMidiBytes(midiFile, 14)))
+      {
+        _format = MIDI_FILE_NOT_LOADED;
+        return(false);
+      }
+
+      for ( unsigned int i = 0; i < _numberOfTracks; i++ )
+      {
+
+#ifdef MIDI_DEBUG
+        std::cout << "Parsing Track " << i << endl;
+#endif
+
+        if(!skipToNextTrack(midiFile))
+        {
+#ifdef MIDI_DEBUG
+          cerr << "Couldn't find Track " << i << endl;
+#endif
+          _format = MIDI_FILE_NOT_LOADED;
+          return(false);
+        }
+
+        // Run through the events taking them into our internal
+        // representation.
+        if (!parseTrack(midiFile, i))
+        {
+#ifdef MIDI_DEBUG
+          std::cerr << "Track " << i << " parsing failed" << endl;
+#endif
+          _format = MIDI_FILE_NOT_LOADED;
+          return(false);
+        }
+      }
+    }
+    else
+    {
+#ifdef MIDI_DEBUG
+      std::cerr << "MidiFile::open - \"" << _filename <<
+                   "\" not recognised as a MIDI file" << endl;
+#endif
       _format = MIDI_FILE_NOT_LOADED;
       return(false);
     }
 
-    for ( unsigned int i = 0; i < _numberOfTracks; i++ )
-    {
-
-#ifdef MIDI_DEBUG
-      std::cout << "Parsing Track " << i << endl;
-#endif
-
-      if(!skipToNextTrack(midiFile))
-      {
-#ifdef MIDI_DEBUG
-        cerr << "Couldn't find Track " << i << endl;
-#endif
-        _format = MIDI_FILE_NOT_LOADED;
-        return(false);
-      }
-
-      // Run through the events taking them into our internal
-      // representation.
-      if (!parseTrack(midiFile, i))
-      {
-#ifdef MIDI_DEBUG
-        std::cerr << "Track " << i << " parsing failed" << endl;
-#endif
-        _format = MIDI_FILE_NOT_LOADED;
-        return(false);
-      }
-    }
+    // Close the file now
+    midiFile->close();
   }
-  else
+  catch(std::string e)
   {
-#ifdef MIDI_DEBUG
-    std::cerr << "MidiFile::open - \"" << _filename <<
-                 "\" not recognised as a MIDI file" << endl;
-#endif
-    _format = MIDI_FILE_NOT_LOADED;
-    return(false);
+    cout << "MidiFile::open() - caught exception - " << e << endl;
+    retOK = false;
   }
 
-  // Close the file now
-  midiFile->close();
-
-  return(true);
+  return(retOK);
 }
 
 // Parse and ensure the MIDI Header is legitimate
@@ -988,29 +1000,38 @@ MidiFile::writeTrack(std::ofstream* midiFile, const unsigned int &trackNumber)
       //trackBuffer += (Number of message bytes);
       //trackBuffer += (Message bytes);
     }
-    switch(midiEvent->messageType())
+    else
     {
-      case MIDI_NOTE_ON:
-      case MIDI_NOTE_OFF:
-      case MIDI_POLY_AFTERTOUCH:
-        trackBuffer += (MidiByte)midiEvent->note();
-        trackBuffer += (MidiByte)midiEvent->velocity();
-        break;
+      // Send the normal event code (with encoded channel information)
+      //
+      trackBuffer += (MidiByte)midiEvent->eventCode();
 
-      case MIDI_CTRL_CHANGE:
-        break;
+      // Send the relevant data
+      //
+      switch(midiEvent->messageType())
+      {
+        case MIDI_NOTE_ON:
+        case MIDI_NOTE_OFF:
+        case MIDI_POLY_AFTERTOUCH:
+          trackBuffer += (MidiByte)midiEvent->note();
+          trackBuffer += (MidiByte)midiEvent->velocity();
+          break;
 
-      case MIDI_PROG_CHANGE:
-        break;
+        case MIDI_CTRL_CHANGE:
+          break;
 
-      case MIDI_CHNL_AFTERTOUCH:
-        break;
+        case MIDI_PROG_CHANGE:
+          break;
 
-      case MIDI_PITCH_BEND:
-        break;
+        case MIDI_CHNL_AFTERTOUCH:
+          break;
 
-      default:
-        break;
+        case MIDI_PITCH_BEND:
+          break;
+
+        default:
+          break;
+      }
     }
   }
 

@@ -1,5 +1,5 @@
 # ensure our path is correct
-INCLUDES= $(all_includes) -I$(kde_includes)/arts -I../core
+INCLUDES= $(all_includes) -I$(kde_includes)/arts -I../core -DMIDI_DEBUG
 
 COMPILE_FIRST = libRosegardenSound
 
@@ -33,7 +33,6 @@ MidiRecord.cpp: MidiArts.h
 
 DISTCLEANFILES = $(sound_METASOURCES) MidiArts.h MidiArts.cc
 
-bin_PROGRAMS = sound
-sound_SOURCES = sound.cpp
-sound_LDADD = -lartsmidi -lqt -lsoundserver_idl libRosegardenSound.la ../core/libcore.la
-
+#bin_PROGRAMS = sound
+#sound_SOURCES = sound.cpp
+#sound_LDADD = -lartsmidi -lqt -lsoundserver_idl libRosegardenSound.la ../core/libcore.la

@@ -69,6 +69,8 @@ namespace Rosegarden
     inline const MidiByte channelNumber()
         { return ( _eventCode & MIDI_CHANNEL_NUM_MASK ); }
 
+    inline const MidiByte eventCode() { return _eventCode; }
+
     inline const MidiByte note() { return _data1; }
     inline const MidiByte velocity() { return _data2; }
 
