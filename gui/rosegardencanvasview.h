@@ -85,6 +85,9 @@ public:
     /// GC all marked items
     static void gc();
 
+    /// Forget all marked items - don't delete them
+    static void flush();
+
 protected:
     static std::vector<QCanvasItem*> m_garbage;
 };
