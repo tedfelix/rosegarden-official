@@ -159,6 +159,11 @@ public:
     //
     void getSequencerPlugins(Rosegarden::AudioPluginManager *);
 
+    // Get an object ID for a (singleton) type
+    //
+    Rosegarden::MappedObjectId getSequencerMappedObjectId(
+            Rosegarden::MappedObject::MappedObjectType type);
+
 public slots:
     // Empty the m_clearToSend flag
     //

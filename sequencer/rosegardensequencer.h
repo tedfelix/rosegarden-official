@@ -193,7 +193,7 @@ public:
     virtual Rosegarden::MappedRealTime getAudioRecordLatency();
 
     // Set a MappedObject 
-    virtual void setMappedProperty(unsigned int id,
+    virtual void setMappedProperty(int id,
                                    const QString &property,
                                    int value);
 
@@ -203,7 +203,7 @@ public:
 
     // get a Property list from an Object
     //
-    virtual QValueVector<QString> getPropertyList(unsigned int id,
+    virtual QValueVector<QString> getPropertyList(int id,
                                                   const QString &property);
 
     //

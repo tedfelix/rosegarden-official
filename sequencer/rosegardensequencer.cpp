@@ -982,7 +982,7 @@ RosegardenSequencerApp::initialiseStudio()
 
 
 void
-RosegardenSequencerApp::setMappedProperty(unsigned int id,
+RosegardenSequencerApp::setMappedProperty(int id,
                                           const QString &property,
                                           int value)
 {
@@ -1022,7 +1022,7 @@ RosegardenSequencerApp::getMappedObjectId(int type)
 
 
 QValueVector<QString>
-RosegardenSequencerApp::getPropertyList(unsigned int id,
+RosegardenSequencerApp::getPropertyList(int id,
                                         const QString &property)
 {
     QValueVector<QString> propertyList;
@@ -1031,15 +1031,7 @@ RosegardenSequencerApp::getPropertyList(unsigned int id,
         m_studio.getObject(id);
 
     if (object)
-    {
-        Rosegarden::MappedObjectPropertyList::iterator it = 
-            object->getPropertyList().begin();
-
-        for (; it != object->getPropertyList().end(); it++)
-        {
-            propertyList.push_back(it->first);
-        }
-    }
+        propertyList = object->getPropertyList(property);
 
     return propertyList;
 }

@@ -19,10 +19,6 @@
   COPYING included with this distribution for more information.
 */
 
-#include <qpair.h>
-#include <qstring.h>
-
-#include "rosestrings.h"
 #include "MappedStudio.h"
 #include "PluginManager.h"
 
@@ -154,7 +150,7 @@ MappedStudio::clear()
 }
 
 MappedObjectPropertyList
-MappedStudio::getPropertyList()
+MappedStudio::getPropertyList(const QString &property)
 {
     return MappedObjectPropertyList();
 }
@@ -188,7 +184,7 @@ MappedAudioFader::setLevel(MappedObjectValue param)
 }
 
 MappedObjectPropertyList 
-MappedAudioFader::getPropertyList()
+MappedAudioFader::getPropertyList(const QString &property)
 {
     return MappedObjectPropertyList();
 }
@@ -262,18 +258,13 @@ MappedAudioPluginManager::~MappedAudioPluginManager()
 
 
 MappedObjectPropertyList
-MappedAudioPluginManager::getPropertyList()
+MappedAudioPluginManager::getPropertyList(const QString &property)
 {
     MappedObjectPropertyList list;
 
-    Rosegarden::PluginIterator it = begin();
-
-    for (; it != end(); it++)
-    {
-        list.push_back(QPair<QString, int>
-                (QString::fromUtf8((*it)->getName().c_str()),
-                                          (*it)->getId()));
-    }
+    PluginIterator it;
+    for (it = m_plugins.begin(); it != m_plugins.end(); it++)
+        list.push_back(QString((*it)->getName().c_str()));
 
     return MappedObjectPropertyList();
 }

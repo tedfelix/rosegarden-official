@@ -1620,6 +1620,17 @@ SequenceManager::setMappedProperty(
 void
 SequenceManager::getSequencerPlugins(Rosegarden::AudioPluginManager *aPM)
 {
+    Rosegarden::MappedObjectId id =
+        getSequencerMappedObjectId(Rosegarden::MappedObject::Studio);
+
+    Rosegarden::MappedObjectPropertyList seqPlugins
+        = getSequencerPropertyList(id, "thing");
+
+    Rosegarden::MappedObjectPropertyList::iterator it;
+
+    for (it = seqPlugins.begin(); it != seqPlugins.end(); it++)
+        cout << *it << endl;
+
 }
 
 QValueVector<QString>
@@ -1634,11 +1645,11 @@ SequenceManager::getSequencerPropertyList(MappedObjectId id,
     QDataStream streamOut(data, IO_WriteOnly);
 
     streamOut << id;
-    streamOut << property;
+    streamOut << QString(property);
 
     if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
                                   ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "getPropertyList()",
+                                  "getPropertyList(int, QString)",
                                   data, replyType, replyData))
     {
         SEQMAN_DEBUG << "RosegardenGUIDoc::getSequencerPropertyList - "
@@ -1653,6 +1664,38 @@ SequenceManager::getSequencerPropertyList(MappedObjectId id,
 
     return list;
 }
+
+Rosegarden::MappedObjectId
+SequenceManager::getSequencerMappedObjectId(
+        Rosegarden::MappedObject::MappedObjectType type)
+{
+    Rosegarden::MappedObjectId value = -1;
+    QByteArray data;
+    QCString replyType;
+    QByteArray replyData;
+    QDataStream streamOut(data, IO_WriteOnly);
+
+    streamOut << type;
+
+    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
+                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                                  "getMappedObjectId(int)",
+                                  data, replyType, replyData))
+    {
+        SEQMAN_DEBUG << "RosegardenGUIDoc::getSequencerMappedObjectId - "
+                     << "failed to contact Rosegarden sequencer"
+                     << endl;
+    }
+    else
+    {
+        QDataStream streamIn(replyData, IO_ReadOnly);
+        streamIn >> value;
+    }
+
+    return value;
+}
+
+
 
 
 

@@ -150,7 +150,7 @@ public:
 
     // Set a property on a MappedObject
     //
-    virtual void setMappedProperty(unsigned int id,
+    virtual void setMappedProperty(int id,
                                    const QString &property,
                                    int value) = 0;
 
@@ -160,7 +160,7 @@ public:
 
     // Get a list of properties of a certain type from an object
     //
-    virtual QValueVector<QString> getPropertyList(unsigned int id,
+    virtual QValueVector<QString> getPropertyList(int id,
                                                   const QString &property) = 0;
 
 };

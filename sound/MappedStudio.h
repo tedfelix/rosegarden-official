@@ -45,11 +45,11 @@ namespace Rosegarden
 
 // Some types
 //
-typedef unsigned int MappedObjectId;
+typedef int          MappedObjectId;
 typedef QString      MappedObjectProperty;
 typedef int          MappedObjectValue;
 
-typedef QValueVector<QPair<QString, int> > MappedObjectPropertyList;
+typedef QValueVector<QString> MappedObjectPropertyList;
 
 
 // Every MappedStudio object derives from this class - if an
@@ -93,7 +93,8 @@ public:
     std::string getName() { return m_name; }
     void setName(const std::string &name) { m_name= name; }
 
-    virtual MappedObjectPropertyList getPropertyList() = 0;
+    virtual MappedObjectPropertyList
+        getPropertyList(const QString &property) = 0;
 
 protected:
 
@@ -147,7 +148,7 @@ public:
 
     // Property list
     //
-    virtual MappedObjectPropertyList getPropertyList();
+    virtual MappedObjectPropertyList getPropertyList(const QString &property);
 
     // Return the object vector
     //
@@ -200,7 +201,7 @@ public:
 
     // Property list
     //
-    virtual MappedObjectPropertyList getPropertyList();
+    virtual MappedObjectPropertyList getPropertyList(const QString &property);
 
 protected:
 
@@ -222,7 +223,7 @@ public:
 
     // Property list
     //
-    virtual MappedObjectPropertyList getPropertyList();
+    virtual MappedObjectPropertyList getPropertyList(const QString &property);
 
 
 protected:
