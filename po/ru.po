@@ -2,13 +2,13 @@
 # translation of rosegarden.po to Russian
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) 2003 THE PACKAGE'S COPYRIGHT HOLDER.
-# Alexandre Prokoudine <avp@altlinux.ru>, 2003.
+# Alexandre Prokoudine <avp@altlinux.ru>, 2003, 2004.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "POT-Creation-Date: 2003-12-02 18:35-0500\n"
-"PO-Revision-Date: 2003-12-22 13:11+0300\n"
+"PO-Revision-Date: 2004-01-07 15:45+0300\n"
 "Last-Translator: Alexandre Prokoudine <avp@altlinux.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -2969,9 +2969,8 @@ msgid "Si&ze"
 msgstr "Ра&змер"
 
 #: notationview.cpp:1197
-#, fuzzy
 msgid "S&pacing"
-msgstr "Проме&жуток"
+msgstr "Инте&рвал"
 
 #: notationview.cpp:1219
 msgid "Du&ration Factor"
@@ -4920,6 +4919,8 @@ msgid ""
 "You can't drop files into Rosegarden from this client.  Try using Konqueror "
 "instead."
 msgstr ""
+"Перетаскивание файлов в Rosegarden из этого клиента невозможно.  "
+"Попробуйте использовать Konqueror."
 
 #: widgets.cpp:136 widgets.cpp:140 widgets.cpp:163
 msgid "Processing..."
@@ -5038,7 +5039,6 @@ msgid "Hide Advanced Options"
 msgstr "Меньше пераметров"
 
 #: widgets.cpp:1388
-#, fuzzy
 msgid "Note:"
 msgstr ""
 "Нота\n"
