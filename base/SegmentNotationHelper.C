@@ -311,11 +311,16 @@ SegmentNotationHelper::expandIntoTie(iterator &from, iterator to,
 	    evb->unset(BEAMED_GROUP_TYPE);
 	}
 
-        // We don't want to do the insert yet, as we'd find ourselves
-        // iterating over the new event unexpectedly (symptom: we get
-        // to see the baseTime WARNING above, even though the "to"
-        // iterator was fine when we entered the function).  Not quite
-        // clear why this happens though
+	// and compensate for tupling
+	
+	timeT td = 0;
+	if ((*i)->get<Int>(TUPLET_NOMINAL_DURATION, td)) {
+	    eva->set<Int> (TUPLET_NOMINAL_DURATION,
+			   eva->getDuration() * td / (*i)->getDuration());
+	    evb->set<Int> (TUPLET_NOMINAL_DURATION,
+			   evb->getDuration() * td / (*i)->getDuration());
+	}
+
 	toInsert.push_back(eva);
         toInsert.push_back(evb);
 	toErase.push_back(*i);
@@ -473,6 +478,10 @@ SegmentNotationHelper::collapseRestsForInsert(iterator i,
     if (d >= desiredDuration || j == end()) return i;
 
     Event *e(new Event(**i, (*i)->getAbsoluteTime(), d + (*j)->getDuration()));
+    if (e->has(TUPLET_NOMINAL_DURATION)) {
+	e->set<Int>(TUPLET_NOMINAL_DURATION,
+		    getNotationDuration(i) + getNotationDuration(j));
+    }
 
     iterator ii(insert(e));
     erase(i);
@@ -619,22 +628,33 @@ SegmentNotationHelper::insertSomething(iterator i, int duration, int pitch,
 
 Segment::iterator
 SegmentNotationHelper::insertSingleSomething(iterator i, int duration,
-                                           int pitch, bool isRest,
-                                           bool tiedBack,
-                                           Accidental acc)
+					     int pitch, bool isRest,
+					     bool tiedBack,
+					     Accidental acc)
 {
     timeT time;
     bool eraseI = false;
+    timeT effectiveDuration(duration);
 
     if (i == end()) {
 	time = segment().getDuration();
     } else {
 	time = (*i)->getAbsoluteTime();
 	if (isRest || (*i)->isa(Note::EventRestType)) eraseI = true;
+
+	if ((*i)->has(TUPLET_NOMINAL_DURATION)) {
+	    effectiveDuration =
+		(effectiveDuration * (*i)->getDuration()) /
+		(*i)->get<Int>(TUPLET_NOMINAL_DURATION);
+	}
     }
 
     Event *e = new Event(isRest ? Note::EventRestType : Note::EventType,
-			 time, duration);
+			 time, effectiveDuration);
+
+    if (effectiveDuration != duration) {
+	e->set<Int>(TUPLET_NOMINAL_DURATION, duration);
+    }
 
     if (!isRest) {
         e->set<Int>(PITCH, pitch);
@@ -665,10 +685,21 @@ SegmentNotationHelper::setInsertedNoteGroup(Event *e, iterator i)
     while (i != end()) {
 	if ((*i)->isa(Note::EventType)) {
 	    if ((*i)->has(BEAMED_GROUP_ID)) {
+
 		e->set<Int>(BEAMED_GROUP_ID,
-			       (*i)->get<Int>(BEAMED_GROUP_ID));
+			    (*i)->get<Int>(BEAMED_GROUP_ID));
 		e->set<String>(BEAMED_GROUP_TYPE,
 			       (*i)->get<String>(BEAMED_GROUP_TYPE));
+
+		if ((*i)->has(BEAMED_GROUP_TUPLED_COUNT)) {
+
+		    e->set<Int>(BEAMED_GROUP_TUPLED_COUNT,
+				(*i)->get<Int>(BEAMED_GROUP_TUPLED_COUNT));
+		    e->set<Int>(BEAMED_GROUP_TUPLED_LENGTH,
+				(*i)->get<Int>(BEAMED_GROUP_TUPLED_LENGTH));
+		    e->set<Int>(BEAMED_GROUP_UNTUPLED_LENGTH,
+				(*i)->get<Int>(BEAMED_GROUP_UNTUPLED_LENGTH));
+		}
 	    }
 	    return;
 	} else if ((*i)->isa(Note::EventRestType)) {
