@@ -1,3 +1,5 @@
+KDE_CXXFLAGS = $(USE_EXCEPTIONS)
+
 bin_PROGRAMS = rosegardensequencer
 rosegardensequencer_SOURCES = rosegardensequencer.cpp \
 			      main.cpp \

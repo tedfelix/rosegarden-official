@@ -1,3 +1,5 @@
+KDE_CXXFLAGS = $(USE_EXCEPTIONS)
+
 # ensure our path is correct
 INCLUDES= $(all_includes) -I$(kde_includes)/arts -I../core
 

@@ -1,3 +1,5 @@
+KDE_CXXFLAGS = $(USE_EXCEPTIONS)
+
 # create a static library with libtool
 noinst_LTLIBRARIES = libcore.la
 

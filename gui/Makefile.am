@@ -1,3 +1,5 @@
+KDE_CXXFLAGS = $(USE_EXCEPTIONS)
+
 bin_PROGRAMS = rosegarden
 rosegarden_SOURCES = trackscanvas.cpp \
 			trackseditor.cpp \
