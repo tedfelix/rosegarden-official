@@ -74,8 +74,6 @@ int main(int argc, char *argv[])
 
     DCOPClient *client = kapp->dcopClient();
 
-    kdDebug(KDEBUG_AREA) << "kapp->name : " << kapp->name() << endl;
-    
     QCString realAppId = client->registerAs(kapp->name());
     
     //app.dcopClient()->setDefaultObject("RosegardenGUIIface");

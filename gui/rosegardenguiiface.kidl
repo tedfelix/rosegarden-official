@@ -5,6 +5,24 @@
     <NAME>RosegardenGUIIface</NAME>
     <SUPER>DCOPObject</SUPER>
     <FUNC>
+        <TYPE>int</TYPE>
+        <NAME>openFile</NAME>
+	<ARG><TYPE qleft="const" qright="&amp;">QString</TYPE><NAME>fileurl</NAME></ARG>
+	<ARG><TYPE>int</TYPE><NAME>mode</NAME></ARG>
+     </FUNC>
+    <FUNC>
+        <TYPE>void</TYPE>
+        <NAME>fileNew</NAME>
+     </FUNC>
+    <FUNC>
+        <TYPE>void</TYPE>
+        <NAME>fileSave</NAME>
+     </FUNC>
+    <FUNC>
+        <TYPE>void</TYPE>
+        <NAME>fileClose</NAME>
+     </FUNC>
+    <FUNC>
         <TYPE>void</TYPE>
         <NAME>quit</NAME>
      </FUNC>

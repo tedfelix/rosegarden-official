@@ -85,27 +85,27 @@ void RosegardenGUIApp::setupActions()
 {
     // setup File menu
     // New Window ?
-    KStdAction::openNew(this, SLOT(slotFileNew()),     actionCollection());
-    KStdAction::open   (this, SLOT(slotFileOpen()),    actionCollection());
+    KStdAction::openNew(this, SLOT(fileNew()),     actionCollection());
+    KStdAction::open   (this, SLOT(fileOpen()),    actionCollection());
     m_fileRecent = KStdAction::openRecent(this,
-                                          SLOT(slotFileOpenRecent(const KURL&)),
+                                          SLOT(fileOpenRecent(const KURL&)),
                                           actionCollection());
-    KStdAction::save  (this, SLOT(slotFileSave()),          actionCollection());
-    KStdAction::saveAs(this, SLOT(slotFileSaveAs()),        actionCollection());
-    KStdAction::close (this, SLOT(slotFileClose()),         actionCollection());
-    KStdAction::print (this, SLOT(slotFilePrint()),         actionCollection());
-    KStdAction::quit  (this, SLOT(slotFileQuit()),          actionCollection());
+    KStdAction::save  (this, SLOT(fileSave()),          actionCollection());
+    KStdAction::saveAs(this, SLOT(fileSaveAs()),        actionCollection());
+    KStdAction::close (this, SLOT(fileClose()),         actionCollection());
+    KStdAction::print (this, SLOT(filePrint()),         actionCollection());
+    KStdAction::quit  (this, SLOT(quit()),              actionCollection());
 
     // setup edit menu
-    KStdAction::undo     (this, SLOT(slotEditUndo()),       actionCollection());
-    KStdAction::redo     (this, SLOT(slotEditRedo()),       actionCollection());
-    KStdAction::cut      (this, SLOT(slotEditCut()),        actionCollection());
-    KStdAction::copy     (this, SLOT(slotEditCopy()),       actionCollection());
-    KStdAction::paste    (this, SLOT(slotEditPaste()),      actionCollection());
+    KStdAction::undo     (this, SLOT(editUndo()),       actionCollection());
+    KStdAction::redo     (this, SLOT(editRedo()),       actionCollection());
+    KStdAction::cut      (this, SLOT(editCut()),        actionCollection());
+    KStdAction::copy     (this, SLOT(editCopy()),       actionCollection());
+    KStdAction::paste    (this, SLOT(editPaste()),      actionCollection());
 
     // setup Settings menu
-    KStdAction::showToolbar  (this, SLOT(slotToggleToolBar()),   actionCollection());
-    KStdAction::showStatusbar(this, SLOT(slotToggleStatusBar()), actionCollection());
+    KStdAction::showToolbar  (this, SLOT(toggleToolBar()),   actionCollection());
+    KStdAction::showStatusbar(this, SLOT(toggleStatusBar()), actionCollection());
 
     KStdAction::saveOptions(this, SLOT(save_options()), actionCollection());
     KStdAction::preferences(this, SLOT(customize()),    actionCollection());
@@ -118,7 +118,7 @@ void RosegardenGUIApp::setupActions()
     // TODO : add some shortcuts here
     action = new KRadioAction(i18n("Erase"), "eraser",
                               0,
-                              this, SLOT(slotEraseSelected()),
+                              this, SLOT(eraseSelected()),
                               actionCollection(), "erase");
     action->setExclusiveGroup("tracktools");
 
@@ -199,7 +199,7 @@ void RosegardenGUIApp::disableCommand(int id_)
 
 void RosegardenGUIApp::openDocumentFile(const char* _cmdl)
 {
-    slotStatusMsg(i18n("Opening file..."));
+    statusMsg(i18n("Opening file..."));
     
     kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::openDocumentFile("
                          << _cmdl << ")" << endl;
@@ -207,7 +207,7 @@ void RosegardenGUIApp::openDocumentFile(const char* _cmdl)
     m_doc->saveIfModified();
     m_doc->closeDocument();
     m_doc->openDocument(_cmdl);
-    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
+    statusMsg(i18n(IDS_STATUS_DEFAULT));
 
     initView();
 }
@@ -366,19 +366,19 @@ bool RosegardenGUIApp::queryExit()
 
 // Not connected to anything at the moment
 //
-void RosegardenGUIApp::slotFileNewWindow()
+void RosegardenGUIApp::fileNewWindow()
 {
-    slotStatusMsg(i18n("Opening a new application window..."));
+    statusMsg(i18n("Opening a new application window..."));
 	
     RosegardenGUIApp *new_window= new RosegardenGUIApp();
     new_window->show();
 
-    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
+    statusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
-void RosegardenGUIApp::slotFileNew()
+void RosegardenGUIApp::fileNew()
 {
-    slotStatusMsg(i18n("Creating new document..."));
+    statusMsg(i18n("Creating new document..."));
 
     if (!m_doc->saveIfModified()) {
         // here saving wasn't successful
@@ -390,7 +390,7 @@ void RosegardenGUIApp::slotFileNew()
         setCaption(caption+": "+m_doc->getTitle());
     }
 
-    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
+    statusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
 int RosegardenGUIApp::openURL(const KURL& url, int /*mode*/)
@@ -423,9 +423,9 @@ int RosegardenGUIApp::openURL(const KURL& url, int /*mode*/)
     return OK;
 }
 
-void RosegardenGUIApp::slotFileOpen()
+void RosegardenGUIApp::fileOpen()
 {
-    slotStatusMsg(i18n("Opening file..."));
+    statusMsg(i18n("Opening file..."));
 
     while( 1 ) {
 
@@ -450,14 +450,14 @@ void RosegardenGUIApp::slotFileOpen()
         }
     }
     
-    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
+    statusMsg(i18n(IDS_STATUS_DEFAULT));
 
 //     initView();
 }
 
-void RosegardenGUIApp::slotFileOpenRecent(const KURL &url)
+void RosegardenGUIApp::fileOpenRecent(const KURL &url)
 {
-    slotStatusMsg(i18n("Opening file..."));
+    statusMsg(i18n("Opening file..."));
 	
 //     if (!doc->saveIfModified()) {
 //         // here saving wasn't successful
@@ -472,27 +472,27 @@ void RosegardenGUIApp::slotFileOpenRecent(const KURL &url)
 
     openURL(url, 0);
 
-    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
+    statusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
-void RosegardenGUIApp::slotFileSave()
+void RosegardenGUIApp::fileSave()
 {
     if (!m_doc->isModified()) return;
 
-    slotStatusMsg(i18n("Saving file..."));
+    statusMsg(i18n("Saving file..."));
     if (!m_doc->getAbsFilePath())
-        slotFileSaveAs();
+        fileSaveAs();
     else
         m_doc->saveDocument(m_doc->getAbsFilePath());
 
-    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
+    statusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
-void RosegardenGUIApp::slotFileSaveAs()
+void RosegardenGUIApp::fileSaveAs()
 {
     //if (!m_doc->isModified()) return;
 
-    slotStatusMsg(i18n("Saving file with a new filename..."));
+    statusMsg(i18n("Saving file with a new filename..."));
 
     QString newName=KFileDialog::getSaveFileName(QDir::currentDirPath(),
                                                  i18n("*.xml"), this, i18n("Save as..."));
@@ -508,20 +508,20 @@ void RosegardenGUIApp::slotFileSaveAs()
             setCaption(caption + ": " + m_doc->getTitle());
         }
 
-    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
+    statusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
-void RosegardenGUIApp::slotFileClose()
+void RosegardenGUIApp::fileClose()
 {
-    slotStatusMsg(i18n("Closing file..."));
+    statusMsg(i18n("Closing file..."));
 	
     close();
-    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
+    statusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
-void RosegardenGUIApp::slotFilePrint()
+void RosegardenGUIApp::filePrint()
 {
-    slotStatusMsg(i18n("Printing..."));
+    statusMsg(i18n("Printing..."));
 
     QPrinter printer;
 
@@ -529,12 +529,12 @@ void RosegardenGUIApp::slotFilePrint()
         m_view->print(&printer);
     }
 
-    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
+    statusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
-void RosegardenGUIApp::slotFileQuit()
+void RosegardenGUIApp::quit()
 {
-    slotStatusMsg(i18n("Exiting..."));
+    statusMsg(i18n("Exiting..."));
     saveOptions();
     // close the first window, the list makes the next one the first again.
     // This ensures that queryClose() is called on each window to ask for closing
@@ -548,76 +548,70 @@ void RosegardenGUIApp::slotFileQuit()
                 break;
         }
     }	
-    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
+    statusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
-void RosegardenGUIApp::quit()
+void RosegardenGUIApp::editUndo()
 {
-    slotFileQuit();
+    statusMsg(i18n("Undo..."));
+
+    statusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
-
-void RosegardenGUIApp::slotEditUndo()
+void RosegardenGUIApp::editRedo()
 {
-    slotStatusMsg(i18n("Undo..."));
+    statusMsg(i18n("Redo..."));
 
-    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
+    statusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
-void RosegardenGUIApp::slotEditRedo()
+void RosegardenGUIApp::editCut()
 {
-    slotStatusMsg(i18n("Redo..."));
+    statusMsg(i18n("Cutting selection..."));
 
-    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
+    statusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
-void RosegardenGUIApp::slotEditCut()
+void RosegardenGUIApp::editCopy()
 {
-    slotStatusMsg(i18n("Cutting selection..."));
+    statusMsg(i18n("Copying selection to clipboard..."));
 
-    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
+    statusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
-void RosegardenGUIApp::slotEditCopy()
+void RosegardenGUIApp::editPaste()
 {
-    slotStatusMsg(i18n("Copying selection to clipboard..."));
+    statusMsg(i18n("Inserting clipboard contents..."));
 
-    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
+    statusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
-void RosegardenGUIApp::slotEditPaste()
+void RosegardenGUIApp::toggleToolBar()
 {
-    slotStatusMsg(i18n("Inserting clipboard contents..."));
-
-    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
-}
-
-void RosegardenGUIApp::slotToggleToolBar()
-{
-    slotStatusMsg(i18n("Toggle the toolbar..."));
+    statusMsg(i18n("Toggle the toolbar..."));
 
     if (toolBar()->isVisible())
         toolBar()->hide();
     else
         toolBar()->show();
 
-    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
+    statusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
-void RosegardenGUIApp::slotToggleStatusBar()
+void RosegardenGUIApp::toggleStatusBar()
 {
-    slotStatusMsg(i18n("Toggle the statusbar..."));
+    statusMsg(i18n("Toggle the statusbar..."));
 
     if (statusBar()->isVisible())
         statusBar()->hide();
     else
         statusBar()->show();
 
-    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
+    statusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
 
-void RosegardenGUIApp::slotStatusMsg(const QString &text)
+void RosegardenGUIApp::statusMsg(const QString &text)
 {
     ///////////////////////////////////////////////////////////////////
     // change status message permanently
@@ -626,29 +620,29 @@ void RosegardenGUIApp::slotStatusMsg(const QString &text)
 }
 
 
-void RosegardenGUIApp::slotStatusHelpMsg(const QString &text)
+void RosegardenGUIApp::statusHelpMsg(const QString &text)
 {
     ///////////////////////////////////////////////////////////////////
     // change status message of whole statusbar temporary (text, msec)
     statusBar()->message(text, 2000);
 }
 
-void RosegardenGUIApp::slotEraseSelected()
+void RosegardenGUIApp::eraseSelected()
 {
     m_view->eraseSelected();
 }
 
-void RosegardenGUIApp::slotDrawSelected()
+void RosegardenGUIApp::drawSelected()
 {
     m_view->drawSelected();
 }
 
-void RosegardenGUIApp::slotMoveSelected()
+void RosegardenGUIApp::moveSelected()
 {
     m_view->moveSelected();
 }
 
-void RosegardenGUIApp::slotResizeSelected()
+void RosegardenGUIApp::resizeSelected()
 {
     m_view->resizeSelected();
 }
@@ -698,7 +692,7 @@ void GetTimeResDialog::setInitialTimeRes(unsigned int v)
 
 
 
-void RosegardenGUIApp::slotChangeTimeResolution()
+void RosegardenGUIApp::changeTimeResolution()
 {
     GetTimeResDialog *dialog = new GetTimeResDialog(this);
     

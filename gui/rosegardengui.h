@@ -101,7 +101,7 @@ class RosegardenGUIApp : public KMainWindow, virtual public RosegardenGUIIface
 
     /** open a file
      */
-    int openFile(const QString& url, int mode);
+    virtual int openFile(const QString& url, int mode);
 
     /**
      * Works like openFile but is able to open remote files
@@ -164,28 +164,28 @@ class RosegardenGUIApp : public KMainWindow, virtual public RosegardenGUIIface
 
   public slots:
     /** open a new application window by creating a new instance of RosegardenGUIApp */
-    void slotFileNewWindow();
+    void fileNewWindow();
 
     /** clears the document in the actual view to reuse it as the new document */
-    void slotFileNew();
+    virtual void fileNew();
 
     /** open a file and load it into the document*/
-    void slotFileOpen();
+    void fileOpen();
 
     /** opens a file from the recent files menu */
-    void slotFileOpenRecent(const KURL&);
+    void fileOpenRecent(const KURL&);
 
     /** save a document */
-    void slotFileSave();
+    virtual void fileSave();
 
     /** save a document by a new filename*/
-    void slotFileSaveAs();
+    void fileSaveAs();
 
     /** asks for saving if the file is modified, then closes the actual file and window*/
-    void slotFileClose();
+    virtual void fileClose();
 
     /** print the actual file */
-    void slotFilePrint();
+    void filePrint();
 
     /**
      * closes all open windows by calling close() on each memberList
@@ -193,73 +193,71 @@ class RosegardenGUIApp : public KMainWindow, virtual public RosegardenGUIIface
      * queryClose() returns false because the user canceled the
      * saveModified() dialog, the closing breaks.
      */
-    void slotFileQuit();
-
     virtual void quit();
     
     /** undo
      */
-    void slotEditUndo();
+    void editUndo();
     /** redo
      */
-    void slotEditRedo();
+    void editRedo();
     
     /** put the marked text/object into the clipboard and remove
      *	it from the document
      */
-    void slotEditCut();
+    void editCut();
 
     /** put the marked text/object into the clipboard
      */
-    void slotEditCopy();
+    void editCopy();
 
     /** paste the clipboard into the document
      */
-    void slotEditPaste();
+    void editPaste();
 
     /** toggles the toolbar
      */
-    void slotToggleToolBar();
+    void toggleToolBar();
 
     /** toggles the statusbar
      */
-    void slotToggleStatusBar();
+    void toggleStatusBar();
 
     /** changes the statusbar contents for the standard label permanently, used to indicate current actions.
      * @param text the text that is displayed in the statusbar
      */
-    void slotStatusMsg(const QString &text);
+    void statusMsg(const QString &text);
 
     /** changes the status message of the whole statusbar for two seconds, then restores the last status. This is used to display
      * statusbar messages that give information about actions for toolbar icons and menuentries.
      * @param text the text that is displayed in the statusbar
      */
-    void slotStatusHelpMsg(const QString &text);
+    void statusHelpMsg(const QString &text);
 
     /**
      * track eraser tool is selected
      */
-    void slotEraseSelected();
+    void eraseSelected();
     
     /**
      * track draw tool is selected
      */
-    void slotDrawSelected();
+    void drawSelected();
     
     /**
      * track move tool is selected
      */
-    void slotMoveSelected();
+    void moveSelected();
 
     /**
      * track resize tool is selected
      */
-    void slotResizeSelected();
+    void resizeSelected();
 
     /**
      * track resize tool is selected
      */
-    void slotChangeTimeResolution();
+    void changeTimeResolution();
 
 private:
 

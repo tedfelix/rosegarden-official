@@ -124,7 +124,7 @@ bool RosegardenGUIDoc::saveIfModified()
             {
             case KMessageBox::Yes:
                 if (m_title == i18n("Untitled")) {
-                    win->slotFileSaveAs();
+                    win->fileSaveAs();
                 } else {
                     saveDocument(getAbsFilePath());
                 };
