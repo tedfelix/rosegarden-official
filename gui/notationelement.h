@@ -72,11 +72,16 @@ public:
     }
 };
 
+/**
+ * This class owns the NotationElements its items are pointing at
+ */
 class NotationElementList : public multiset<NotationElement*, NotationElementCmp>
 {
 public:
     NotationElementList() : multiset<NotationElement*, NotationElementCmp>() {};
     ~NotationElementList();
+
+    void erase(iterator pos);
 };
 
 #ifndef NDEBUG

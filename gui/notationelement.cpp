@@ -62,6 +62,14 @@ NotationElementList::~NotationElementList()
     }
 }
 
+void
+NotationElementList::erase(NotationElementList::iterator pos)
+{
+    delete *pos;
+    multiset<NotationElement*, NotationElementCmp>::erase(pos);
+}
+
+
 #ifndef NDEBUG
 kdbgstream& operator<<(kdbgstream &dbg, NotationElement &e)
 {
