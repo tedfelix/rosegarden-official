@@ -574,7 +574,7 @@ Composition::calculateTempoTimestamps() const
 	// if we're storing microseconds -- in particular, 32 bits is not
 	// really quite enough
 
-	(*i)->set<Int>
+	(*i)->setMaybe<Int>
 	    (TempoTimestampProperty,
 	     (long)calculateMicroseconds((*i)->getAbsoluteTime(), tempo));
 	
