@@ -64,25 +64,27 @@ QPixmap
 NotePixmapFactory::makeNotePixmap(Note note, bool drawTail,
                                   bool stalkGoesUp)
 {
-    if(note > SixtyFourth) {
-        kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeNotePixmap : note > 6 ("
+    if(note > LastNote) {
+        kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeNotePixmap : note > LastNote ("
                              << note << ")\n";
         throw -1;
     }
+
+    kdDebug(KDEBUG_AREA) << "makeNotePixmap : " << note << endl;
 
     m_generatedPixmapHeight = m_noteBodyEmpty.height() / 2 + Staff::stalkLen;
 
     readjustGeneratedPixmapHeight(note);
 
     // X-offset at which the tail should be drawn
-    unsigned int tailOffset = (note > 2 && stalkGoesUp) ? m_tailWidth : 0;
+    unsigned int tailOffset = (note < Quarter && stalkGoesUp) ? m_tailWidth : 0;
 
     createPixmapAndMask(tailOffset);
 
     // paint note body
 
-    QPixmap *body = (note < QuarterDotted) ? &m_noteBodyEmpty : &m_noteBodyFilled;
-    bool noteHasStalk = note > Whole;
+    QPixmap *body = (note > QuarterDotted) ? &m_noteBodyEmpty : &m_noteBodyFilled;
+    bool noteHasStalk = note < Whole;
 
     if(stalkGoesUp) {
 
@@ -114,13 +116,19 @@ NotePixmapFactory::makeNotePixmap(Note note, bool drawTail,
 void
 NotePixmapFactory::readjustGeneratedPixmapHeight(Note note)
 {
-    if(note > Eighth) {
+    if(note < Quarter) {
 
         // readjust pixmap height according to its duration - the stalk
         // is longer for 8th, 16th, etc.. because the tail is higher
         //
-        m_generatedPixmapHeight += m_tailsUp[note - 3]->height() - (12 + note);
-
+        if (note == Eighth || note == EighthDotted)
+            m_generatedPixmapHeight += 1;
+        else if (note == Sixteenth || note == SixteenthDotted)
+            m_generatedPixmapHeight += 4;
+        else if (note == ThirtySecond || note == ThirtySecondDotted)
+            m_generatedPixmapHeight += 9;
+        else if (note == SixtyFourth || note == SixtyFourthDotted)
+            m_generatedPixmapHeight += 14;
     }
 }
 
@@ -163,7 +171,7 @@ NotePixmapFactory::makeChordPixmap(const chordpitches &pitches,
     readjustGeneratedPixmapHeight(note);
 
     // X-offset at which the tail should be drawn
-    unsigned int tailOffset = (note > Quarter && stalkGoesUp) ? m_tailWidth : 0;
+    unsigned int tailOffset = (note < Quarter && stalkGoesUp) ? m_tailWidth : 0;
 
     createPixmapAndMask(tailOffset);
 
@@ -172,8 +180,8 @@ NotePixmapFactory::makeChordPixmap(const chordpitches &pitches,
     // set mask painter RasterOp to Or
     m_pm.setRasterOp(Qt::OrROP);
 
-    QPixmap *body = (note < QuarterDotted) ? &m_noteBodyEmpty : &m_noteBodyFilled;
-    bool noteHasStalk = note > Whole;
+    QPixmap *body = (note > QuarterDotted) ? &m_noteBodyEmpty : &m_noteBodyFilled;
+    bool noteHasStalk = note < Whole;
 
     if(stalkGoesUp) {
         int offset = m_generatedPixmap->height() - body->height() - highestNote;
@@ -212,6 +220,59 @@ NotePixmapFactory::makeChordPixmap(const chordpitches &pitches,
 }
 
 
+const QPixmap*
+NotePixmapFactory::tailUp(Note note) const
+{
+    if (note > EighthDotted) {
+        kdDebug(KDEBUG_AREA) << "NotePixmapFactory::tailUp : note("
+                             << note << ") > EighthDotted" << endl;
+        throw -1;
+        return 0;
+    }
+    
+    if (note == Eighth || note == EighthDotted)
+        return m_tailsUp[0];
+    if (note == Sixteenth || note == SixteenthDotted)
+        return m_tailsUp[1];
+    if (note == ThirtySecond || note == ThirtySecondDotted)
+        return m_tailsUp[2];
+    if (note == SixtyFourth || note == SixtyFourthDotted)
+        return m_tailsUp[3];
+    else {
+        kdDebug(KDEBUG_AREA) << "NotePixmapFactory::tailUp : unknown note"
+                             << endl;
+        throw -1;
+    }
+    
+}
+
+const QPixmap*
+NotePixmapFactory::tailDown(Note note) const
+{
+    if (note > EighthDotted) {
+        kdDebug(KDEBUG_AREA) << "NotePixmapFactory::tailDown : note("
+                             << note << ") > EighthDotted" << endl;
+        throw -1;
+        return 0;
+    }
+    
+    if (note == Eighth || note == EighthDotted)
+        return m_tailsDown[0];
+    if (note == Sixteenth || note == SixteenthDotted)
+        return m_tailsDown[1];
+    if (note == ThirtySecond || note == ThirtySecondDotted)
+        return m_tailsDown[2];
+    if (note == SixtyFourth || note == SixtyFourthDotted)
+        return m_tailsDown[3];
+    else {
+        kdDebug(KDEBUG_AREA) << "NotePixmapFactory::tailUp : unknown note"
+                             << endl;
+        throw -1;
+    }
+}
+
+
+
 void
 NotePixmapFactory::drawStalk(Note note,
                              bool drawTail, bool stalkGoesUp)
@@ -230,20 +291,20 @@ NotePixmapFactory::drawStalk(Note note,
                       0, m_generatedPixmapHeight);
     }
 
-    if(drawTail && note > 2) {
+    if(drawTail && note < Quarter) {
         // need to add a tail pixmap
         //
-        QPixmap *tailPixmap = 0;
+        const QPixmap *tailPixmap = 0;
 
         if(stalkGoesUp) {
-            tailPixmap = m_tailsUp[note - 3];
+            tailPixmap = tailUp(note);
 
             m_p.drawPixmap (m_noteBodyWidth, 0, *tailPixmap);
             m_pm.drawPixmap(m_noteBodyWidth, 0, *(tailPixmap->mask()));
 
         } else {
 
-            tailPixmap = m_tailsDown[note - 3];
+            tailPixmap = tailDown(note);
 
             m_p.drawPixmap (1,
                             m_generatedPixmapHeight - tailPixmap->height(),

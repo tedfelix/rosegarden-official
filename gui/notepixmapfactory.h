@@ -23,13 +23,25 @@
 
 typedef vector<int> chordpitches;
 
-enum Note { WholeDotted = 0, Whole,
-            HalfDotted, Half,
-            QuarterDotted, Quarter,
-            EighthDotted, Eighth,
-            SixteenthDotted, Sixteenth,
-            ThirtySecondDotted, ThirtySecond,
-            SixtyFourthDotted, SixtyFourth };
+// enum Note { WholeDotted = 0, Whole,
+//             HalfDotted, Half,
+//             QuarterDotted, Quarter,
+//             EighthDotted, Eighth,
+//             SixteenthDotted, Sixteenth,
+//             ThirtySecondDotted, ThirtySecond,
+//             SixtyFourthDotted, SixtyFourth, LastNote = SixtyFourth };
+
+enum Note {
+    SixtyFourth = 0, SixtyFourthDotted,
+    ThirtySecond, ThirtySecondDotted,
+    Sixteenth, SixteenthDotted,
+    Eighth, EighthDotted,
+    Quarter, QuarterDotted,
+    Half, HalfDotted,
+    Whole, WholeDotted,
+    LastNote = WholeDotted 
+};
+
 
 /**Generates pixmaps for single notes and chords
 
@@ -72,6 +84,9 @@ protected:
      * to note type (Note enum)
      */
     Note duration2note(unsigned int duration);
+
+    const QPixmap* tailUp(Note note) const;
+    const QPixmap* tailDown(Note note) const;
 
     void drawStalk(Note note, bool drawTail, bool stalkGoesUp);
     void readjustGeneratedPixmapHeight(Note note);
