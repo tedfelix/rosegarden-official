@@ -186,8 +186,3 @@ feature.<br><br>
 <p>...that you can change the MIDI record device from the configuration dialog?  Go to <b>Settings -> Configure Rosegarden</b>, select the Sequencer page and Recording tab, and then select the device you want from the MIDI Record Device dropdown.  Your selection will be remembered for next time.</p>
 </html>
 </tip>
-<tip category="Rosegarden|General">
-<html>
-<p>No more tips...</p>
-</html>
-</tip>
