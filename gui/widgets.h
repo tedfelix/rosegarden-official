@@ -396,7 +396,10 @@ class RosegardenQuantizeParameters : public QFrame
 {
     Q_OBJECT
 public:
+    enum QuantizerType { Grid, Notation };
+
     RosegardenQuantizeParameters(QWidget *parent,
+				 QuantizerType defaultQuantizer,
 				 bool showNotationOption,
 				 QString configCategory,
 				 QString preamble = 0);

@@ -2852,7 +2852,9 @@ QuantizeDialog::QuantizeDialog(QWidget *parent, bool inNotation) :
     QVBox *vbox = makeVBoxMainWidget();
 
     m_quantizeFrame =
-	new RosegardenQuantizeParameters(vbox, inNotation, 0);
+	new RosegardenQuantizeParameters
+	(vbox, inNotation ? RosegardenQuantizeParameters::Notation :
+	                    RosegardenQuantizeParameters::Grid, true, 0);
 }
 
 Quantizer *

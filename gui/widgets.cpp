@@ -763,6 +763,7 @@ RosegardenRotary::setPosition(float position)
 
 
 RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
+							   QuantizerType defaultQuantizer,
 							   bool showNotationOption,
 							   QString configCategory,
 							   QString preamble) :
@@ -793,8 +794,6 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
     m_notationTarget = new QCheckBox
 	(i18n("Quantize for notation only (leave performance unchanged)"),
 	 quantizerBox);
-// better if we always show this, I think, and use showNotationOption to determine which pane to default to...
-// aargh, no -- we don't want to show it in notation quantization pane in preferences, but we do in main quantize dlg
     if (!showNotationOption) m_notationTarget->hide();
 
     QHBox *parameterBox = new QHBox(this);
@@ -881,15 +880,22 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
     Rosegarden::timeT defaultUnit = 
 	Rosegarden::Note(Rosegarden::Note::Demisemiquaver).getDuration();
 
+    if (!m_configCategory) {
+	if (defaultQuantizer == Notation) m_configCategory = "Quantize Dialog Notation";
+	else m_configCategory = "Quantize Dialog Grid";
+    }
+
     if (m_configCategory) {
 	KConfig *config = kapp->config();
 	config->setGroup(m_configCategory);
 	defaultType =
-	    config->readNumEntry("quantizetype", showNotationOption ? 2 : 0);
+	    config->readNumEntry("quantizetype",
+				 (defaultQuantizer == Notation) ? 2 : 0);
 	defaultUnit =
 	    config->readNumEntry("quantizeunit", defaultUnit);
 	m_notationTarget->setChecked
-	    (config->readBoolEntry("quantizenotationonly", showNotationOption));
+	    (config->readBoolEntry("quantizenotationonly",
+				   defaultQuantizer == Notation));
 	m_durationCheckBox->setChecked
 	    (config->readBoolEntry("quantizedurations", false));
 	m_simplicityCombo->setCurrentItem
@@ -905,8 +911,8 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
 	m_articulate->setChecked
 	    (config->readBoolEntry("quantizearticulate", true));
     } else {
-	defaultType = showNotationOption ? 2 : 0;
-	m_notationTarget->setChecked(showNotationOption);
+	defaultType = (defaultQuantizer == Notation) ? 2 : 0;
+	m_notationTarget->setChecked(defaultQuantizer == Notation);
 	m_durationCheckBox->setChecked(false);
 	m_simplicityCombo->setCurrentItem(2);
 	m_maxTuplet->setCurrentItem(2);
