@@ -361,6 +361,12 @@ public:
                                      QMouseEvent*,
                                      Rosegarden::ViewElement*);
 
+    virtual void handleMouseTripleClick(Rosegarden::timeT,
+					int height,
+					int staffNo,
+					QMouseEvent*,
+					Rosegarden::ViewElement*);
+
     /**
      * Create the selection rect
      *
@@ -402,6 +408,8 @@ public slots:
     void slotInsertSelected();
     void slotEraseSelected();
 
+    void slotClickTimeout();
+
 protected:
     NotationSelector(NotationView*);
 
@@ -417,6 +425,8 @@ protected:
 
     int m_clickedStaff;
     NotationElement *m_clickedElement;
+
+    bool m_justSelectedBar;
 
 };
 

@@ -472,8 +472,8 @@ NoteStyleFileReader::NoteStyleFileReader(std::string name) :
 
 bool
 NoteStyleFileReader::startElement(const QString &, const QString &,
-			      const QString &qName,
-			      const QXmlAttributes &attributes)
+				  const QString &qName,
+				  const QXmlAttributes &attributes)
 {
     QString lcName = qName.lower();
 

@@ -20,6 +20,7 @@
 */
 
 #include <qpopupmenu.h>
+#include <qtimer.h>
 
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -261,7 +262,7 @@ NoteInserter::handleMouseMove(Rosegarden::timeT,
 {
     if (!m_clickHappened) return false;
     computeLocationAndPreview(e);
-    return true;
+    return false;
 }
 
 
@@ -835,7 +836,8 @@ NotationSelector::NotationSelector(NotationView* view)
       m_selectionRect(0),
       m_updateRect(false),
       m_clickedStaff(-1),
-      m_clickedElement(0)
+      m_clickedElement(0),
+      m_justSelectedBar(false)
 {
     connect(m_parentView, SIGNAL(usedSelection()),
             this,         SLOT(slotHideSelection()));
@@ -854,12 +856,18 @@ NotationSelector::NotationSelector(NotationView* view)
     createMenu("notationselector.rc");
 }
 
-void NotationSelector::handleLeftButtonPress(Rosegarden::timeT,
-                                             int,
+void NotationSelector::handleLeftButtonPress(Rosegarden::timeT t,
+                                             int height,
                                              int staffNo,
                                              QMouseEvent* e,
                                              ViewElement *element)
 {
+    if (m_justSelectedBar) {
+	handleMouseTripleClick(t, height, staffNo, e, element);
+	m_justSelectedBar = false;
+	return;
+    }
+
     kdDebug(KDEBUG_AREA) << "NotationSelector::handleMousePress" << endl;
     m_clickedStaff = staffNo;
     m_clickedElement = dynamic_cast<NotationElement*>(element);
@@ -872,6 +880,11 @@ void NotationSelector::handleLeftButtonPress(Rosegarden::timeT,
     m_updateRect = true;
 
     //m_parentView->setCursorPosition(p.x());
+}
+
+void NotationSelector::slotClickTimeout()
+{
+    m_justSelectedBar = false;
 }
 
 void NotationSelector::handleMouseDblClick(Rosegarden::timeT,
@@ -911,6 +924,44 @@ void NotationSelector::handleMouseDblClick(Rosegarden::timeT,
 	m_selectionRect->setX(rect.x() + 1);
 	m_selectionRect->setY(rect.y());
 	m_selectionRect->setSize(rect.width() - 1, rect.height());
+
+	m_selectionRect->show();
+	m_updateRect = false;
+	
+	m_justSelectedBar = true;
+	QTimer::singleShot(300, this, SLOT(slotClickTimeout()));
+    }
+
+    return;
+}
+void NotationSelector::handleMouseTripleClick(Rosegarden::timeT t,
+					      int height,
+					      int staffNo,
+					      QMouseEvent* e,
+					      ViewElement *element)
+{
+    if (!m_justSelectedBar) return;
+    m_justSelectedBar = false;
+
+    kdDebug(KDEBUG_AREA) << "NotationSelector::handleMouseTripleClick" << endl;
+    m_clickedStaff = staffNo;
+    m_clickedElement = dynamic_cast<NotationElement*>(element);
+    
+    NotationStaff *staff = m_nParentView->getStaff(staffNo);
+    if (!staff) return;
+
+    if (m_clickedElement) {
+
+	// should be safe, as we've already set m_justSelectedBar false
+	handleLeftButtonPress(t, height, staffNo, e, element);
+	return;
+
+    } else {
+
+	m_selectionRect->setX(staff->getX());
+	m_selectionRect->setY(staff->getY());
+	m_selectionRect->setSize(int(staff->getTotalWidth()) - 1,
+				 staff->getTotalHeight() - 1);
 
 	m_selectionRect->show();
 	m_updateRect = false;

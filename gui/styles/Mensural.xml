@@ -8,8 +8,9 @@
   
   <!-- Mapping from mensural to classical picked up from
          http://listen.to/early.music
-       I know nothing about mensural notation myself.  The
-       white mensural note names are in comments. -->
+       I know nothing about mensural notation myself.
+       The white mensural note names are in comments.
+  -->
 
   <note type="64th" flags="3"/>
   <note type="32nd" flags="2"/>
