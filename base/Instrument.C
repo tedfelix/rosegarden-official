@@ -27,7 +27,7 @@ namespace Rosegarden
 Instrument::Instrument():
     m_number(0),
     m_name("untitled"),
-    m_type(midi)
+    m_type(Midi)
 {
 }
 

@@ -27,7 +27,7 @@ namespace Rosegarden
 Track::Track():
    m_number(0),
    m_muted(false),
-   m_type(midi),
+   m_type(Midi),
    m_name("untitled")
 {
 }
