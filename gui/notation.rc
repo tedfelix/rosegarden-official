@@ -124,6 +124,18 @@
 		<Action name="add_up-bow"/>
 		<Action name="add_down-bow"/>
 		<Separator/>
+		<Menu name="mordants">
+			<text>Mordants</text>
+			<Action name="add_mordant"/>
+			<Action name="add_mordant-inverted"/>
+			<Action name="add_mordant-long"/>
+			<Action name="add_mordant-long-inverted"/>
+			<Action name="add_mordant-downhook-long"/>
+			<Action name="add_mordant-uphook-long"/>
+			<Action name="add_mordant-downhook-long-inverted"/>
+			<Action name="add_mordant-uphook-long-inverted"/>
+		</Menu>
+		<Separator/>
 		<Action name="add_text_mark"/>
 		<Separator/>
 		<Action name="remove_marks"/>
@@ -692,6 +704,14 @@
     <Action name="add_pause"/>
     <Action name="add_up-bow"/>
     <Action name="add_down-bow"/>
+	<Action name="add_mordant"/>
+	<Action name="add_mordant-inverted"/>
+	<Action name="add_mordant-long"/>
+	<Action name="add_mordant-long-inverted"/>
+	<Action name="add_mordant-downhook-long"/>
+	<Action name="add_mordant-uphook-long"/>
+	<Action name="add_mordant-downhook-long-inverted"/>
+	<Action name="add_mordant-uphook-long-inverted"/>
     <Action name="add_text_mark"/>
     <Action name="make_ornament"/>
     <Action name="remove_ornament"/>

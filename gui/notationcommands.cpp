@@ -1087,6 +1087,22 @@ NotesMenuAddMarkCommand::getGlobalName(Rosegarden::Mark markType)
     else if (markType == Rosegarden::Marks::Pause) m = i18n("&Pause");
     else if (markType == Rosegarden::Marks::UpBow) m = i18n("&Up-Bow");
     else if (markType == Rosegarden::Marks::DownBow) m = i18n("&Down-Bow");
+    else if (markType == Rosegarden::Marks::Mordant)
+	m = i18n("&Mordant");
+    else if (markType == Rosegarden::Marks::MordantInverted)
+	m = i18n("&Inverted Mordant");
+    else if (markType == Rosegarden::Marks::MordantLong)
+	m = i18n("&Long Mordant");
+    else if (markType == Rosegarden::Marks::MordantLongInverted)
+	m = i18n("Lon&g Inverted Mordant");
+    else if (markType == Rosegarden::Marks::MordantDownHookLong)
+	m = i18n("&Down-Hook Long Mordant");
+    else if (markType == Rosegarden::Marks::MordantUpHookLong)
+	m = i18n("&Up-Hook Long Mordant");
+    else if (markType == Rosegarden::Marks::MordantDownHookLongInverted)
+	m = i18n("Do&wn-Hook Long Inverted Mordant");
+    else if (markType == Rosegarden::Marks::MordantUpHookLongInverted)
+	m = i18n("U&p-Hook Long Inverted Mordant");
     else m = i18n("&%1%2").arg(m[0].upper()).arg(m.right(m.length()-1));
     // FIXME: That last i18n has very little chance of working, unless
     // by some miracle the exact same string was translated elsewhere already

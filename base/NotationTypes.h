@@ -118,6 +118,7 @@ typedef std::string Mark;
 namespace Marks //!!! This would be better as a class, these days
 {
     extern const Mark NoMark;         // " "
+
     extern const Mark Accent;         // ">"
     extern const Mark Tenuto;         // "-"  ("legato" in RG2.1)
     extern const Mark Staccato;       // "."
@@ -125,11 +126,23 @@ namespace Marks //!!! This would be better as a class, these days
     extern const Mark Marcato;        // "^"
     extern const Mark Sforzando;      // "sf"
     extern const Mark Rinforzando;    // "rf"
+
     extern const Mark Trill;          // "tr"
     extern const Mark Turn;           // "~"
+
     extern const Mark Pause;          // aka "fermata"
+
     extern const Mark UpBow;          // "v"
     extern const Mark DownBow;        // a square with the bottom side missing
+
+    extern const Mark Mordant;
+    extern const Mark MordantInverted;
+    extern const Mark MordantLong;
+    extern const Mark MordantLongInverted;
+    extern const Mark MordantDownHookLong;
+    extern const Mark MordantUpHookLong;
+    extern const Mark MordantDownHookLongInverted;
+    extern const Mark MordantUpHookLongInverted;
 
     /**
      * Given a string, return a mark that will be recognised as a

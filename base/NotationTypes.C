@@ -102,6 +102,15 @@ namespace Marks
     const Mark UpBow = "up-bow";
     const Mark DownBow = "down-bow";
 
+    const Mark Mordant = "mordant";
+    const Mark MordantInverted = "mordant-inverted";
+    const Mark MordantLong = "mordant-long";
+    const Mark MordantLongInverted = "mordant-long-inverted";
+    const Mark MordantDownHookLong = "mordant-downhook-long";
+    const Mark MordantUpHookLong = "mordant-uphook-long";
+    const Mark MordantDownHookLongInverted = "mordant-downhook-long-inverted";
+    const Mark MordantUpHookLongInverted = "mordant-uphook-long-inverted";
+
     string getTextMark(string text) {
         return string("text_") + text;
     }
@@ -225,7 +234,10 @@ namespace Marks
 
         static Mark a[] = {
             NoMark, Accent, Tenuto, Staccato, Staccatissimo, Marcato,
-            Sforzando, Rinforzando, Trill, Turn, Pause, UpBow, DownBow
+            Sforzando, Rinforzando, Trill, Turn, Pause, UpBow, DownBow,
+	    Mordant, MordantInverted, MordantLong, MordantLongInverted,
+	    MordantDownHookLong, MordantUpHookLong, MordantDownHookLongInverted,
+	    MordantUpHookLongInverted
         };
 
         static std::vector<Mark> v;
