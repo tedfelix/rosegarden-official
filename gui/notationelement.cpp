@@ -16,13 +16,22 @@
  ***************************************************************************/
 
 #include "notationelement.h"
+#include "rosedebug.h"
 
 NotationElement::NotationElement(Event *event)
-    : ViewElement(event)
+    : ViewElement(event),
+      m_canvasItem(0)
 {
 }
 
 NotationElement::~NotationElement()
 {
     // de-register from "observer"
+}
+
+bool operator<(NotationElement &e1, NotationElement &e2)
+{
+    kdDebug(KDEBUG_AREA) << "operator<(e1.m_x = "
+                         << e1.m_x << ", e2.m_x = " << e2.m_x << endl;
+    return e1.m_x < e2.m_x;
 }

@@ -20,6 +20,8 @@
 
 #include "Element2.h"
 
+class QCanvasItem;
+
 /**
   *@author Guillaume Laurent, Chris Cannam, Rich Bown
   */
@@ -37,19 +39,24 @@ public:
     void setX(double x) { m_x = x; }
     void setY(double y) { m_y = y; }
 
+    void setCanvasItem(QCanvasItem *e) { m_canvasItem = e; }
+    QCanvasItem* canvasItem() { return m_canvasItem; }
+
     friend bool operator<(NotationElement&, NotationElement&);
 
 protected:
     double m_x;
     double m_y;
+
+    QCanvasItem *m_canvasItem;
 };
 
 typedef list<NotationElement*> NotationElementList;
 
-inline bool operator<(NotationElement &e1, NotationElement &e2)
-{
-    return e1.m_x < e2.m_x;
-}
+// inline bool operator<(NotationElement &e1, NotationElement &e2)
+// {
+//     return e1.m_x < e2.m_x;
+// }
 
 
 #endif
