@@ -467,6 +467,21 @@ void RosegardenGUIApp::initView()
     // set the play metronome button
     m_transport->MetronomeButton->setOn(comp.usePlayMetronome());
 
+
+    // We only check for the SequenceManager to make sure
+    // we're not on the first pass though - we don't want
+    // to send these toggles twice on initialisation.
+    //
+    // Clunky but we just about get away with it for the
+    // moment.
+    //
+    if(m_seqManager != 0)
+    {
+      slotToggleSegmentParameters();
+      slotToggleInstrumentParameters();
+      slotToggleRulers();
+    }
+
 }
 
 void RosegardenGUIApp::openDocumentFile(const char* _cmdl)
