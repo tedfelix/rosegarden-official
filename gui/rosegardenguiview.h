@@ -180,6 +180,11 @@ public slots:
      */
     void slotSendMappedEvent(Rosegarden::MappedEvent *mE);
 
+    /*
+     * Change the Instrument Label
+     */
+    void slotChangeInstrumentLabel(Rosegarden::InstrumentId id, QString label);
+
 signals:
     void activateTool(SegmentCanvas::ToolType);
 

@@ -63,6 +63,7 @@ signals:
     // real time during playback.
     //
     void sendMappedEvent(Rosegarden::MappedEvent *mE);
+    void changeInstrumentLabel(Rosegarden::InstrumentId id, QString label);
 
 protected:
     void populateProgramList();

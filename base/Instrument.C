@@ -20,6 +20,7 @@
 */
 
 #include "Instrument.h"
+#include "MidiDevice.h"
 
 #if (__GNUC__ < 3)
 #include <strstream>
@@ -157,6 +158,32 @@ Instrument::toXmlString()
     return instrument.str();
 
 }
+
+// Return a program name given a bank select (and whether
+// we send it or not)
+//
+std::string
+Instrument::getProgramName()
+{
+    std::string programName;
+
+    MidiByte msb = 0;
+    MidiByte lsb = 0;
+    MidiByte program;
+
+    if (m_sendBankSelect)
+    {
+        msb = m_msb;
+        lsb = m_lsb;
+    }
+
+    if (m_sendProgramChange == false)
+        return std::string("");
+
+    return ((dynamic_cast<MidiDevice*>(m_device))
+              ->getProgramName(m_msb, m_lsb, m_programChange));
+}
+
 
 
 }

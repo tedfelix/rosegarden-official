@@ -56,6 +56,7 @@ public:
     // Get a program list for a certain bank
     //
     StringList getProgramList(MidiByte msb, MidiByte lsb);
+    std::string getProgramName(MidiByte msb, MidiByte lsb, MidiByte program);
 
     // Get a list of all banks
     //

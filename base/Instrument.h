@@ -145,6 +145,11 @@ public:
     //
     Device* getDevice() { return m_device; }
 
+    // Return a string describing the current program for
+    // this Instrument
+    //
+    std::string getProgramName();
+
 private:
     InstrumentId    m_id;
     std::string     m_name;

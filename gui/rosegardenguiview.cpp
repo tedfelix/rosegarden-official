@@ -119,6 +119,11 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
             this,
             SLOT(slotSendMappedEvent(Rosegarden::MappedEvent*)));
 
+    connect(m_instrumentParameterBox,
+            SIGNAL(changeInstrumentLabel(Rosegarden::InstrumentId, QString)),
+            this,
+            SLOT(slotChangeInstrumentLabel(Rosegarden::InstrumentId, QString)));
+
     if (doc)
         m_trackEditor->setupSegments();
 }
@@ -385,6 +390,13 @@ void
 RosegardenGUIView::slotSendMappedEvent(Rosegarden::MappedEvent *mE)
 {
     emit sendMappedEvent(mE);
+}
+
+void
+RosegardenGUIView::slotChangeInstrumentLabel(Rosegarden::InstrumentId id,
+                                             QString label)
+{
+    m_trackEditor->getTrackButtons()->changeInstrumentLabel(id, label);
 }
 
 

@@ -206,14 +206,14 @@ QFrame* TrackButtons::makeButton(unsigned int trackId)
     trackLabel->setIndent(7);
 
     if (m_trackInstrumentLabels == ShowInstrument)
-        {
-            trackLabel->hide();
-        }
+    {
+        trackLabel->hide();
+    }
     else if (m_trackInstrumentLabels == ShowTrack)
-        {
-            connect(trackLabel, SIGNAL(changeToInstrumentList(int)),
-                    this, SLOT(slotInstrumentSelection(int)));
-        }
+    {
+        connect(trackLabel, SIGNAL(changeToInstrumentList(int)),
+                this, SLOT(slotInstrumentSelection(int)));
+    }
 
     connect(trackLabel, SIGNAL(renameTrack(QString, int)),
             SLOT(slotRenameTrack(QString, int)));
@@ -243,6 +243,14 @@ QFrame* TrackButtons::makeButton(unsigned int trackId)
     instrumentLabel->setFixedHeight(m_cellSize - buttonGap);
     instrumentLabel->setIndent(7);
     hblayout->addWidget(instrumentLabel);
+
+    // Set label to program change if it's being sent
+    //
+    if (ins != 0 && ins->sendsProgramChange())
+        instrumentLabel->slotSetAlternativeLabel(
+                QString(ins->getProgramName().c_str()));
+
+    // select instrument
 
     if (m_trackInstrumentLabels == ShowTrack)
     {
@@ -612,9 +620,19 @@ TrackButtons::slotInstrumentPopupActivated(int item)
         if (track != 0)
         {
             track->setInstrument(inst->getID());
-            m_instrumentLabels[m_popupItem]->setText(QString(inst->getName().c_str()));
+            m_instrumentLabels[m_popupItem]->
+                    setText(QString(inst->getName().c_str()));
 
+            // Now see if the program is being shown for this instrument
+            // and if so reset the label
+            //
+            if (inst->sendsProgramChange())
+                m_instrumentLabels[m_popupItem]->slotSetAlternativeLabel(
+                             QString(inst->getProgramName().c_str()));
+
+            // select instrument
             emit instrumentSelected((int)inst->getID());
+
         }
         else
             cerr << "slotInstrumentPopupActivated() - can't find item!" << endl;
@@ -697,6 +715,25 @@ TrackButtons::changeTrackInstrumentLabels(InstrumentTrackLabels label)
                         this, SLOT(slotInstrumentSelection(int)));
                 break;
         }
+    }
+}
+
+// Set all the labels that are showing InstrumentId to show a 
+// new label - this is usually driven by enabling program change
+// sending for this instrument
+//
+void
+TrackButtons::changeInstrumentLabel(Rosegarden::InstrumentId id, QString label)
+{
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    Rosegarden::Track *track;
+
+    for (int i = 0; i < (int)m_tracks; i++)
+    {
+        track = comp.getTrackByPosition(i);
+
+        if(track && track->getInstrument() == id)
+            m_instrumentLabels[i]->slotSetAlternativeLabel(label);
     }
 }
 

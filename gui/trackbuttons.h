@@ -83,6 +83,13 @@ public:
     //
     void populateInstrumentPopup();
 
+
+    // Change the instrument label to something else like
+    // an actual program name rather than a meaningless
+    // device number and midi channel
+    //
+    void changeInstrumentLabel(Rosegarden::InstrumentId id, QString label);
+
 signals:
     // to emit what Track has been selected
     //

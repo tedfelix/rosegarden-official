@@ -343,11 +343,15 @@ InstrumentParameterBox::slotActivateProgramChange(bool value)
     Rosegarden::MappedEvent *mE = 
         new Rosegarden::MappedEvent(m_selectedInstrument->getID(), 
                                     Rosegarden::MappedEvent::MidiProgramChange,
-                                    (Rosegarden::MidiByte)value,
+                                    m_selectedInstrument->getProgramChange(),
                                     (Rosegarden::MidiByte)0);
     // Send the controller change
     //
     emit sendMappedEvent(mE);
+
+    emit changeInstrumentLabel(m_selectedInstrument->getID(),
+                                   QString(m_selectedInstrument->
+                                       getProgramName().c_str()));
 }
 
 void
@@ -391,6 +395,9 @@ InstrumentParameterBox::slotActivateBank(bool value)
     m_selectedInstrument->setSendBankSelect(value);
     m_bankValue->setDisabled(!value);
 
+    emit changeInstrumentLabel(m_selectedInstrument->getID(),
+                                   QString(m_selectedInstrument->
+                                       getProgramName().c_str()));
 }
 
 
@@ -414,6 +421,9 @@ InstrumentParameterBox::slotSelectProgram(int index)
     // Send the controller change
     //
     emit sendMappedEvent(mE);
+    emit changeInstrumentLabel(m_selectedInstrument->getID(),
+                                   QString(m_selectedInstrument->
+                                       getProgramName().c_str()));
 
 }
 

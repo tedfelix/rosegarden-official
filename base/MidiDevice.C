@@ -278,6 +278,21 @@ MidiDevice::addInstrument(Instrument *instrument)
     generatePresentationList();
 }
 
+std::string
+MidiDevice::getProgramName(MidiByte msb, MidiByte lsb, MidiByte program)
+{
+    ProgramList::iterator it;
+
+    for (it = m_programList->begin(); it != m_programList->end(); it++)
+    {
+        // If the bank matches
+        if (msb == (*it)->msb && lsb == (*it)->lsb &&
+            program == (*it)->program)
+            return (*it)->name;
+    }
+
+    return std::string("");
+}
 
 }
 

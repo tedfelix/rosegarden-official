@@ -44,11 +44,13 @@ public:
 
     QPoint getPressPosition() const { return m_pressPosition; }
 
-
 public slots:
     void slotChangeToInstrumentList();
     void setLabelHighlight(bool value);
-
+    //
+    // Set an alternative label
+    //
+    void slotSetAlternativeLabel(const QString &label);
 
 protected:
     virtual void mousePressEvent(QMouseEvent *e);
@@ -68,6 +70,7 @@ private:
 
     QTimer *m_pressTimer;
     QPoint m_pressPosition;
+    QString m_alternativeLabel;
 
 
 };

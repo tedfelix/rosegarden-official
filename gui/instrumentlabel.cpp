@@ -24,7 +24,8 @@ InstrumentLabel::InstrumentLabel(const QString & text,
                                  int position,
                                  QWidget *parent, const char *name):
     QLabel(text, parent, name),
-    m_position(position), m_pressPosition(0, 0)
+    m_position(position), m_pressPosition(0, 0),
+    m_alternativeLabel("")
 {
     m_pressTimer = new QTimer();
 
@@ -88,5 +89,26 @@ InstrumentLabel::setLabelHighlight(bool value)
 }
 
 
+void
+InstrumentLabel::slotSetAlternativeLabel(const QString &label)
+{
+    // recover saved original
+    if (label == "" && m_alternativeLabel != "")
+    {
+        setText(m_alternativeLabel);
+        return;
+    }
+
+    // do nothing if we've got nothing to swap
+    if (label == "" && m_alternativeLabel == "")
+        return;
+
+    // Store the current (first) label
+    if(m_alternativeLabel == "")
+        m_alternativeLabel = text();
+
+    // set new label
+    setText(label);
+}
 
 
