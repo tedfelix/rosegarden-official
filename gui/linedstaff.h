@@ -404,7 +404,14 @@ public:
      */
     virtual void positionAllElements();
     
+
+//!!! CHANGE THIS BACK TO PROTECTED.  THESE SHOULD EMPHATICALLY NOT BE PUBLIC.
+// FIND ANOTHER WAY TO SOLVE YOUR PROBLEM.  Better for the subclass to
+// duplicate or explicitly expose parts of the API than to make all this
+// stuff public -- much of this stuff is equivalent to data members, except
+// dependent on the parameters with which the staff was constructed.
 public:
+
     // Methods that the subclass may (indeed, should) use to convert
     // between the layout coordinates of elements and their canvas
     // coordinates.  These are deliberately not virtual.
