@@ -31,8 +31,29 @@
 namespace Rosegarden
 {
 
-typedef std::pair<MidiByte, std::string> MidiProgram;
+struct MidiBank
+{
+    MidiByte msb;
+    MidiByte lsb;
+    std::string name;
+};
 
+struct MidiProgram
+{
+    MidiByte program;
+    MidiByte msb;
+    MidiByte lsb;
+    std::string name;
+};
+
+// A mapped MIDI instrument - a drum track click for example
+//
+struct MidiMetronome : public MidiProgram
+{
+    MidiByte pitch;
+    MidiByte channel;
+};
+        
 class MidiDevice : public Device
 {
 
@@ -43,14 +64,15 @@ public:
 
     virtual void createInstruments();
 
-    // Bank select
-    //
-    void setBankSelect(bool value);
-    void setBankSelectMSB(MidiByte msb);
-    void setBankSelectLSB(MidiByte lsb);
+    void setMetronome(MidiByte msb, MidiByte lsb, MidiByte program,
+                      MidiByte pitch, MidiByte channel,
+                      const std::string &name);
+    MidiMetronome* getMetronome() const { return m_metronome; }
+
+    void addProgram(MidiProgram *program);
+    void addBank(MidiBank *bank);
 
 private:
-    void populateProgramList();
     void clearProgramList();
 
     // Brief (probably incorrect) synopsis of bank select 
@@ -64,7 +86,10 @@ private:
     // and then fiddle with LSB for individual banks
     //
     // For Soundblaster use MSG = 0 and then LSB to
-    // required bank
+    // required bank.
+    //
+    // We set all bank select messages in the Studio section
+    // of the rosegarden file and at the gui map names only.
     //
     //
     MidiByte                  m_bankMSB;     // Send as Controller 0
@@ -75,6 +100,9 @@ private:
     // - we can create our own and save them out
     //
     std::vector<MidiProgram*> m_programList;
+    std::vector<MidiBank*> m_bankList;
+
+    MidiMetronome *m_metronome;
 
 };
 

@@ -107,6 +107,9 @@ protected:
 
     RosegardenFileSection m_section;
     Rosegarden::Device *m_device;
+    Rosegarden::MidiByte m_msb;
+    Rosegarden::MidiByte m_lsb;
+
 };
 
 #endif

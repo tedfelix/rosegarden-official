@@ -59,7 +59,9 @@ RoseXmlHandler::RoseXmlHandler(Composition &composition,
       m_groupId(0),
       m_foundTempo(false),
       m_section(NoSection),
-      m_device(0)
+      m_device(0),
+      m_msb(0),
+      m_lsb(0)
 {
 //     kdDebug(KDEBUG_AREA) << "RoseXmlHandler() : composition size : "
 //                          << m_composition.getNbSegments()
@@ -513,6 +515,20 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             return false;
         }
 
+        QString nameStr = (atts.value("name"));
+        m_msb = (atts.value("msb")).toInt();
+        m_lsb = (atts.value("lsb")).toInt();
+
+        // Create a new bank
+        Rosegarden::MidiBank *bank = new Rosegarden::MidiBank();
+        bank->msb = m_msb;
+        bank->lsb = m_lsb;
+        bank->name = std::string(nameStr.data());
+
+        // Insert the bank
+        //
+        dynamic_cast<Rosegarden::MidiDevice*>(m_device)->addBank(bank);
+
     } else if (lcName == "program") {
 
         if (m_section != InStudio)
@@ -520,6 +536,44 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             m_errorString = i18n("Found Program outside Studio");
             return false;
         }
+
+        QString nameStr = (atts.value("name"));
+        Rosegarden::MidiByte pc = atts.value("id").toInt();
+
+        // Create a new program
+        Rosegarden::MidiProgram *program = new Rosegarden::MidiProgram();
+        program->name = std::string(nameStr.data());
+        program->program = pc;
+        program->msb = m_msb;
+        program->lsb = m_lsb;
+
+        // Insert the program
+        //
+        dynamic_cast<Rosegarden::MidiDevice*>(m_device)->addProgram(program);
+
+    } else if (lcName == "metronome") {
+
+        if (m_section != InStudio)
+        {
+            m_errorString = i18n("Found Metronome outside Studio");
+            return false;
+        }
+
+        if (m_device == 0)
+        {
+            m_errorString = i18n("Found Metronome outside Device");
+            return false;
+        }
+
+        int msb = atts.value("msb").toInt();
+        int lsb = atts.value("lsb").toInt();
+        int program = atts.value("program").toInt();
+        int pitch = atts.value("pitch").toInt();
+        int channel = atts.value("channel").toInt();
+
+        dynamic_cast<Rosegarden::MidiDevice*>(m_device)->
+          setMetronome(msb, lsb, program, pitch,
+                       channel, std::string("MIDI Metronome"));
 
     } else {
         kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement : Don't know how to parse this : " << qName << endl;

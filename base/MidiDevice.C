@@ -29,14 +29,16 @@ namespace Rosegarden
 
 MidiDevice::MidiDevice():
     Device("Default Midi Device", Device::Midi),
-    m_bankMSB(0), m_bankLSB(0), m_bankSelect(false)
+    m_bankMSB(0), m_bankLSB(0), m_bankSelect(false),
+    m_metronome(new MidiMetronome())
 {
     createInstruments();
 }
 
 MidiDevice::MidiDevice(const std::string &name):
     Device(name, Device::Midi),
-    m_bankMSB(0), m_bankLSB(0), m_bankSelect(false)
+    m_bankMSB(0), m_bankLSB(0), m_bankSelect(false),
+    m_metronome(new MidiMetronome())
 {
     createInstruments();
 }
@@ -66,29 +68,6 @@ MidiDevice::createInstruments()
 }
 
 void
-MidiDevice::setBankSelect(bool value)
-{
-    m_bankSelect = value;
-    populateProgramList();
-}
-
-
-void
-MidiDevice::setBankSelectMSB(MidiByte msb)
-{
-    m_bankMSB = msb;
-    populateProgramList();
-}
-
-void
-MidiDevice::setBankSelectLSB(MidiByte lsb)
-{
-    m_bankLSB = lsb;
-    populateProgramList();
-}
-
-
-void
 MidiDevice::clearProgramList()
 {
     std::vector<MidiProgram*>::iterator it;
@@ -102,31 +81,29 @@ MidiDevice::clearProgramList()
 }
 
 
-// Set labels according to bank select messages
-//
 void
-MidiDevice::populateProgramList()
+MidiDevice::addProgram(MidiProgram *prog)
 {
-    if(m_bankSelect)
-    {
-        // Eventually calculate according to MSB and LSB -
-        // for the moment populate with 128 default values
+    m_programList.push_back(prog);
+}
 
-        clearProgramList();
+void 
+MidiDevice::addBank(MidiBank *bank)
+{
+    m_bankList.push_back(bank);
+}
 
-        std::vector<MidiProgram*>::iterator it;
-        int i = 0;
-
-        for (it = m_programList.begin(); it != m_programList.end(); it++)
-        {
-            m_programList.push_back(new MidiProgram((MidiByte)i++, ""));
-        }
-        
-    }
-    else // no bank select - populate with General MIDI
-    {
-    }
-
+void
+MidiDevice::setMetronome(MidiByte msb, MidiByte lsb, MidiByte program,
+                         MidiByte pitch, MidiByte channel,
+                         const std::string &name)
+{
+    m_metronome->pitch = pitch;
+    m_metronome->program = program;
+    m_metronome->msb = msb;
+    m_metronome->lsb = lsb;
+    m_metronome->name = name;
+    m_metronome->channel = channel;
 }
 
 
