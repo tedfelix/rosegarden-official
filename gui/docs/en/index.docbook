@@ -568,6 +568,35 @@
       </sect2>
 
       <!-- Insertion: notes, auto-ties, accidentals -->
+
+      <sect2 id="nv-insertion">
+      <title>Inserting notes and rests</title>
+
+      <para>To insert a note, you generally just select one of the
+      note tools by clicking on a particular duration of note on the
+      toolbar, and then click on the staff at the point where you
+      want to add the note.</para>
+
+      <para>If you add a note at the same time as an existing note of
+      different duration, the editor will generally assume that you
+      want to create chords and will split the existing or new note
+      accordingly so as to create one or more chords with ties.  If
+      you really did want to chord two different durations, you can
+      select the tied noteheads and use the Collapse Equal-Pitch Notes
+      function to merge them together.  Alternatively, the default
+      behaviour can be changed in the Rosegarden configuration dialog
+      so as not to do the split at all.</para>
+
+      <para>If you add a note exactly over an existing note of
+      different duration (i.e. at the same pitch), the duration of the
+      existing note will be changed to that of the new one.</para>
+
+      <para>If you add a rest at the same time as an existing note,
+      the note will be silenced for the duration of the rest,
+      shortening or possibly removing it altogether.</para>
+
+      </sect2>
+
       <!-- Text -->
       <!-- Indications -->
       <!-- Beamed groups, including overlapping and nesting them -->
