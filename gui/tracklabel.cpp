@@ -109,12 +109,25 @@ TrackLabel::setSelected(bool on)
 {
     if (on) {
         m_selected = true;
-        m_instrumentLabel->setBackgroundMode(PaletteHighlight);
-        m_trackLabel->setBackgroundMode(PaletteHighlight);
+	
+// dmm - fixes bug 855607 by crudely hacking around some mysterious QT
+// problem; setting the background explictly, and using unsetPalette() to hack
+// around the resulting "lingering color" problem that the previous change
+// brought about.  Damnfino, but it works here and shuts me up.
+	m_instrumentLabel->unsetPalette();
+	m_trackLabel->unsetPalette();
+//        m_instrumentLabel->setBackgroundMode(PaletteHighlight);
+//        m_trackLabel->setBackgroundMode(PaletteHighlight);
+        m_instrumentLabel->setPaletteBackgroundColor(colorGroup().highlight());
         m_instrumentLabel->setPaletteForegroundColor(colorGroup().highlightedText());
+	m_trackLabel->setPaletteBackgroundColor(colorGroup().highlight());
         m_trackLabel->setPaletteForegroundColor(colorGroup().highlightedText());
     } else {
         m_selected = false;
+	
+	m_instrumentLabel->unsetPalette();
+	m_trackLabel->unsetPalette();
+	
         m_instrumentLabel->setBackgroundMode(PaletteBackground);
         m_trackLabel->setBackgroundMode(PaletteBackground);
         m_instrumentLabel->setPaletteForegroundColor(colorGroup().text());
