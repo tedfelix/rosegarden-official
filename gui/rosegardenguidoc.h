@@ -107,7 +107,7 @@ public:
      * sets the modified flag for the document after a modifying
      * action on the view connected to the document.
      */
-    void setModified(bool _m=true);
+    void setModified(bool m=true);
 
     /**
      * returns if the document is modified or not. Use this to
@@ -338,6 +338,11 @@ public:
     /* assignment */
     RosegardenGUIDoc& operator=(const RosegardenGUIDoc &doc);
 
+    /**
+     * return the list of the views currently connected to the document
+     */
+    QList<RosegardenGUIView>* getViewList() { return m_viewList; }
+
 public slots:
     /**
      * calls repaint() on all views connected to the document object
@@ -427,14 +432,13 @@ protected:
      */
     QString getAutoSaveFileName();
 
-public:	
+protected:
+    //--------------- Data members ---------------------------------
+
     /**
      * the list of the views currently connected to the document
      */
-    static QList<RosegardenGUIView> *pViewList;	
-
-private:
-    //--------------- Data members ---------------------------------
+    QList<RosegardenGUIView>* m_viewList;	
 
     /**
      * the modified flag of the current document

@@ -292,15 +292,8 @@ protected:
     /// Raise the transport along
     virtual void showEvent(QShowEvent*);
 
-    /**
-     * Overridden virtuals for Qt drag 'n drop (XDND)
-     */
-//     virtual void dragEnterEvent(QDragEnterEvent *event);
-//     virtual void dropEvent(QDropEvent *event);
-
-    virtual void keyPressEvent(QKeyEvent *event);
-    virtual void keyReleaseEvent(QKeyEvent *event);
-
+    virtual void keyPressEvent(QKeyEvent*);
+    virtual void keyReleaseEvent(QKeyEvent*);
 
     /**
      * read general Options again and initialize all variables like
@@ -410,9 +403,20 @@ protected:
      * Return a null string if the write should not go ahead.
      */
     QString getValidWriteFile(const QString &extension, const QString &label);
- 
+
+    /**
+     * Set the current document
+     *
+     * Do all the needed housework when the current document changes
+     * (like closing edit views, emitting documentChanged signal, etc...)
+     */
+    void setDocument(RosegardenGUIDoc*);
+
 signals:
     void startupStatusMessage(const QString &message);
+
+    /// emitted when the current document changes
+    void documentChanged(RosegardenGUIDoc*);
 
 public slots:
 

@@ -800,6 +800,12 @@ void RosegardenGUIApp::initView()
         m_audioManagerDialog->slotPopulateFileList();
 }
 
+void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
+{
+    emit documentChanged(newDocument);
+}
+
+
 void RosegardenGUIApp::openFile(const QString& filePath)
 {
     static QRegExp midiFile("\\.mid$"), rg21File("\\.rose$");

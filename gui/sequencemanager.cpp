@@ -1524,8 +1524,9 @@ void
 SequenceManager::sendAudioLevel(Rosegarden::MappedEvent *mE)
 {
     RosegardenGUIView *v;
+    QList<RosegardenGUIView>* viewList = m_doc->getViewList();
 
-    for (v = m_doc->pViewList->first(); v != 0; v = m_doc->pViewList->next())
+    for (v = viewList->first(); v != 0; v = viewList->next())
     {
         v->showVisuals(mE);
     }
@@ -1778,12 +1779,12 @@ void
 SequenceManager::showVisuals(const Rosegarden::MappedComposition &mC)
 {
     RosegardenGUIView *v;
+    QList<RosegardenGUIView>* viewList = m_doc->getViewList();
 
     MappedComposition::iterator it = mC.begin();
     for (; it != mC.end(); it++)
     {
-        for (v = m_doc->pViewList->first(); v != 0;
-             v = m_doc->pViewList->next())
+        for (v = viewList->first(); v != 0; v = viewList->next())
         {
             //v->showVisuals(*it);
             m_transport->setMidiOutLabel(*it);

@@ -74,8 +74,6 @@
 #include "AudioPluginInstance.h"
 
 
-QList<RosegardenGUIView> *RosegardenGUIDoc::pViewList = 0L;
-
 using Rosegarden::Composition;
 using Rosegarden::Segment;
 using Rosegarden::SegmentNotationHelper;
@@ -96,6 +94,7 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
                                    Rosegarden::AudioPluginManager *pluginManager,
                                    const char *name)
     : QObject(parent, name),
+      m_viewList(new QList<RosegardenGUIView>()),
       m_modified(false),
       m_autoSaved(false),
       m_recordSegment(0), m_endOfLastRecordedNote(0),
@@ -105,11 +104,7 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
 {
     syncDevices();
 
-    if(!pViewList) {
-        pViewList = new QList<RosegardenGUIView>();
-    }
-
-    pViewList->setAutoDelete(true);
+//     m_viewList->setAutoDelete(true);
 
     connect(m_commandHistory, SIGNAL(commandExecuted(KCommand *)),
 	    this, SLOT(slotDocumentModified()));
@@ -118,16 +113,9 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
 	    this, SLOT(slotDocumentRestored()));
 }
 
-unsigned int
-RosegardenGUIDoc::getAutoSavePeriod() const
-{
-    KConfig* config = kapp->config();
-    config->setGroup("General Options");
-    return config->readUnsignedNumEntry("autosaveinterval", 60);
-}
-
 RosegardenGUIDoc::RosegardenGUIDoc(RosegardenGUIDoc *doc)
     : QObject(doc->parent(), doc->name()),
+      m_viewList(new QList<RosegardenGUIView>()),
       m_modified(doc->isModified()),
       m_autoSaved(doc->isAutoSaved()),
       m_recordSegment(0),
@@ -144,11 +132,7 @@ RosegardenGUIDoc::RosegardenGUIDoc(RosegardenGUIDoc *doc)
     m_config = doc->getConfiguration();
     m_composition = doc->getComposition();
 
-    if(!pViewList) {
-        pViewList = new QList<RosegardenGUIView>();
-    }
-
-    pViewList->setAutoDelete(true);
+//     m_viewList->setAutoDelete(true);
 
     connect(m_commandHistory, SIGNAL(commandExecuted(KCommand *)),
 	    this, SLOT(slotDocumentModified()));
@@ -188,16 +172,25 @@ RosegardenGUIDoc::~RosegardenGUIDoc()
     RG_DEBUG << "~RosegardenGUIDoc()\n";
     delete m_commandHistory; // must be deleted before the Composition is
     delete m_clipboard;
+    delete m_viewList;
+}
+
+unsigned int
+RosegardenGUIDoc::getAutoSavePeriod() const
+{
+    KConfig* config = kapp->config();
+    config->setGroup("General Options");
+    return config->readUnsignedNumEntry("autosaveinterval", 60);
 }
 
 void RosegardenGUIDoc::addView(RosegardenGUIView *view)
 {
-    pViewList->append(view);
+    m_viewList->append(view);
 }
 
 void RosegardenGUIDoc::removeView(RosegardenGUIView *view)
 {
-    pViewList->remove(view);
+    m_viewList->remove(view);
 }
 
 void RosegardenGUIDoc::setAbsFilePath(const QString &filename)
@@ -223,9 +216,9 @@ const QString& RosegardenGUIDoc::getTitle() const
 void RosegardenGUIDoc::slotUpdateAllViews(RosegardenGUIView *sender)
 {
     RosegardenGUIView *w;
-    if(pViewList)
+    if(m_viewList)
         {
-            for(w=pViewList->first(); w!=0; w=pViewList->next())
+            for(w=m_viewList->first(); w!=0; w=m_viewList->next())
                 {
                     if(w!=sender)
                         w->repaint();
@@ -401,7 +394,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
     bool cancelled = false;
 
     bool okay = readFromFile(filename, fileContents);
-    if (!okay) errMsg = "Not a Rosegarden-4 file";
+    if (!okay) errMsg = i18n("Not a Rosegarden-4 file");
     else {
 
         // parse xml file
@@ -699,7 +692,7 @@ void RosegardenGUIDoc::deleteContents()
 void RosegardenGUIDoc::deleteViews()
 {
     // auto-deletion is enabled : GUIViews will be deleted
-    pViewList->clear();
+    m_viewList->clear();
 }
 
 bool RosegardenGUIDoc::isSequencerRunning()
@@ -1005,9 +998,9 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
     {
         // update this segment on the GUI
         RosegardenGUIView *w;
-        if(pViewList)
+        if(m_viewList)
         {
-            for(w=pViewList->first(); w!=0; w=pViewList->next())
+            for(w=m_viewList->first(); w!=0; w=m_viewList->next())
             {
                 w->showRecordingSegmentItem(m_recordSegment);
             }
@@ -1029,9 +1022,9 @@ RosegardenGUIDoc::stopRecordingMidi()
     // otherwise do something with it
     //
     RosegardenGUIView *w;
-    if(pViewList)
+    if(m_viewList)
     {
-        for(w=pViewList->first(); w!=0; w=pViewList->next())
+        for(w=m_viewList->first(); w!=0; w=m_viewList->next())
         {
             w->deleteRecordingSegmentItem();
         }
@@ -1464,9 +1457,9 @@ RosegardenGUIDoc::insertRecordedAudio(const Rosegarden::RealTime &time,
 
     // update this segment on the GUI
     RosegardenGUIView *w;
-    if(pViewList)
+    if(m_viewList)
     {
-        for(w=pViewList->first(); w!=0; w=pViewList->next())
+        for(w=m_viewList->first(); w!=0; w=m_viewList->next())
         {
             w->showRecordingSegmentItem(m_recordSegment);
         }
@@ -1487,9 +1480,9 @@ RosegardenGUIDoc::stopRecordingAudio()
         return;
 
     RosegardenGUIView *w;
-    if(pViewList)
+    if(m_viewList)
     {
-        for(w=pViewList->first(); w!=0; w=pViewList->next())
+        for(w=m_viewList->first(); w!=0; w=m_viewList->next())
         {
             w->deleteRecordingSegmentItem();
         }
@@ -1567,9 +1560,9 @@ RosegardenGUIDoc::finalizeAudioFile(Rosegarden::AudioFileId /*id*/)
     // Update preview
     //
     RosegardenGUIView *w;
-    if(pViewList)
+    if(m_viewList)
     {
-        for(w=pViewList->first(); w!=0; w=pViewList->next())
+        for(w=m_viewList->first(); w!=0; w=m_viewList->next())
         {
             w->getTrackEditor()->
                 getSegmentCanvas()->updateSegmentItem(m_recordSegment);
