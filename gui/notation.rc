@@ -47,17 +47,21 @@
 </Menu>
 
 <Menu name="document">
-  <text>&amp;Document</text>
+  <text>&amp;Composition</text>
   <Action name="add_tempo"/>
   <Action name="add_time_signature"/>
-  <Action name="add_clef"/>
-  <Action name="add_key_signature"/>
 </Menu>
 
 <Menu name="segment">
-  <text>Seg&amp;ment</text>
-  <Action name="open_in_event_list"/>
-  <Action name="open_in_matrix"/>
+  <text>Se&amp;gment</text>
+  <Menu name="open-with">
+	   <text>Edit &amp;With</text>
+	   <Action name="open_in_event_list"/>
+	   <Action name="open_in_notation"/>
+  </Menu>
+  <Separator/>
+  <Action name="add_clef"/>
+  <Action name="add_key_signature"/>
   <Separator/>
   <Action name="set_segment_start"/>
   <Action name="set_segment_duration"/>
@@ -65,44 +69,24 @@
 
 
 <Menu name="Notes">
-	<text>&amp;Notes</text>
-	<Menu name="Group">
-		<text>&amp;Group</text>
-		<Action name="make_chord"/>
-		<Separator/>
-		<Menu name="beams">
-			<text>&amp;Beams</text>
-			<Action name="beam"/>
-			<Action name="auto_beam"/>
-			<Action name="break_group"/>
-		</Menu>
-		<Separator/>
-		<Menu name="triplets">
-			<text>Trip&amp;lets and Tuplets</text>
-			<Action name="tuplet"/>
-			<Action name="simple_tuplet"/>
-			<Action name="break_tuplets"/>
-		</Menu>
-		<Separator/>
-		<Action name="grace"/>
-	  <!--  <Action name="ungrace"/> -->
-		<Separator/>
-		<Menu name="octaves">
-			<text>&amp;Octaves</text>
-			<Action name="octave_2up"/>
-			<Action name="octave_up"/>
-			<Action name="octave_down"/>
-			<Action name="octave_2down"/>
-		</Menu>
-		<Action name="remove_indications"/>
-	</Menu>
-	<Action name="note_style_actionmenu"/>
-	<Menu name="Stems">
-		<text>S&amp;tem Direction</text>
-		<Action name="stems_up"/>
-		<Action name="stems_down"/>
-		<Action name="restore_stems"/>
-	</Menu>
+	<text>Attac&amp;h</text>
+	    <Action name="make_chord"/>
+	    <Separator/>
+	    <Menu name="beams">
+		    <text>&amp;Beams</text>
+		    <Action name="beam"/>
+		    <Action name="auto_beam"/>
+		    <Action name="break_group"/>
+	    </Menu>
+	    <Separator/>
+	    <Menu name="octaves">
+		    <text>&amp;Octaves</text>
+		    <Action name="octave_2up"/>
+		    <Action name="octave_up"/>
+		    <Action name="octave_down"/>
+		    <Action name="octave_2down"/>
+	    </Menu>
+	    <Action name="remove_indications"/>
 	<Separator/>	
 	<Menu name="indications">
 		<text>&amp;Indications</text>
@@ -129,29 +113,6 @@
 	</Menu>
 	<Menu name="Marks">
 		<text>Mar&amp;ks</text>
-		<Menu name="Fingering">
-			<text>&amp;Fingerings</text>
-			<Action name="remove_fingering_marks"/>
-			<Separator/>
-			<Action name="add_fingering_0"/>
-			<Action name="add_fingering_1"/>
-			<Action name="add_fingering_2"/>
-			<Action name="add_fingering_3"/>
-			<Action name="add_fingering_4"/>
-			<Action name="add_fingering_5"/>
-			<Action name="add_fingering_plus"/>
-			<Action name="add_fingering_mark"/>
-		</Menu>
-		<Menu name="Slashes">
-			<text>S&amp;lashes</text>
-			<Action name="slashes_0"/>
-			<Action name="slashes_1"/>
-			<Action name="slashes_2"/>
-			<Action name="slashes_3"/>
-			<Action name="slashes_4"/>
-			<Action name="slashes_5"/>
-		</Menu>
-		<Separator/>
 		<Action name="add_accent"/>
 		<Action name="add_tenuto"/>
 		<Action name="add_staccato"/>
@@ -171,7 +132,6 @@
 		<Separator/>
 		<Action name="remove_marks"/>
 	</Menu>
-	<Separator/>
 	<Menu name="ornaments">
 		<text>&amp;Ornaments</text>
 		<Action name="use_ornament"/>
@@ -179,10 +139,33 @@
 		<Action name="make_ornament"/>
 		<Action name="ornament_actionmenu"/>
 	</Menu>
+	<Menu name="Fingering">
+		<text>&amp;Fingerings</text>
+		<Action name="remove_fingering_marks"/>
+		<Separator/>
+		<Action name="add_fingering_0"/>
+		<Action name="add_fingering_1"/>
+		<Action name="add_fingering_2"/>
+		<Action name="add_fingering_3"/>
+		<Action name="add_fingering_4"/>
+		<Action name="add_fingering_5"/>
+		<Action name="add_fingering_plus"/>
+		<Action name="add_fingering_mark"/>
+	</Menu>
+	<Menu name="Slashes">
+		<text>S&amp;lashes</text>
+		<Action name="slashes_0"/>
+		<Action name="slashes_1"/>
+		<Action name="slashes_2"/>
+		<Action name="slashes_3"/>
+		<Action name="slashes_4"/>
+		<Action name="slashes_5"/>
+	</Menu>
+	<Separator/>
 </Menu>
 
-<Menu name="Transforms">
-	<text>Trans&amp;forms</text>
+<Menu name="Adjust">
+	<text>Ad&amp;just</text>
 	<Menu name="Respell">
 		<text>&amp;Accidentals</text>
 		<Action name="respell_doubleflat"/>
@@ -195,6 +178,24 @@
 		<Separator/>
 		<Action name="show_cautionary"/>
 		<Action name="cancel_cautionary"/>
+	</Menu>
+	<Separator/>
+	<Menu name="triplets">
+		<text>Trip&amp;lets and Tuplets</text>
+		<Action name="tuplet"/>
+		<Action name="simple_tuplet"/>
+		<Action name="break_tuplets"/>
+	</Menu>
+	<Separator/>
+	<Action name="grace"/>
+  <!--  <Action name="ungrace"/> -->
+	<Separator/>
+	<Action name="note_style_actionmenu"/>
+	<Menu name="Stems">
+		<text>S&amp;tem Direction</text>
+		<Action name="stems_up"/>
+		<Action name="stems_down"/>
+		<Action name="restore_stems"/>
 	</Menu>
 	<Menu name="rests">
 		<text>Adjust R&amp;ests</text>
@@ -242,7 +243,7 @@
   <Action name="text" />
   <Separator/>
   <Menu name="edit_tools">
-  	<text>&amp;Edit Tools</text>
+  	<text>&amp;Editor Tools</text>
 	<Action name="select"/>
 	<Action name="erase"/>
       <Menu noMerge="1" name="Notes">
@@ -613,11 +614,20 @@
     <Action name="add_text_mark"/>
 <!--    <Action name="normalize_rests"/> -->
     <Action name="collapse_rests_aggressively"/>
+    <Menu name="Adjust"/>
   </enable>
 </State>
 
 <State name="have_notes_in_selection">
   <enable>
+    <Action name="respell_doubleflat"/>
+    <Action name="respell_flat"/>
+    <Action name="respell_natural"/>
+    <Action name="respell_sharp"/>
+    <Action name="respell_doublesharp"/>
+    <Action name="respell_restore"/>
+    <Action name="show_cautionary"/>
+    <Action name="cancel_cautionary"/>
     <Action name="make_chord"/>
     <Action name="beam"/>
     <Action name="auto_beam"/>
@@ -690,6 +700,24 @@
     <Menu name="Stems"/>
     <Menu name="Slashes"/>
     <Menu name="Transpose"/>
+<Menu name="Notes"/>
+<Menu name="beams"/>
+<Menu name="octaves"/>
+<Menu name="indications"/>
+<Menu name="Slurs"/>
+<Menu name="Ties"/>
+<Menu name="Marks"/>
+<Menu name="ornaments"/>
+<Menu name="Fingering"/>
+<Menu name="Slashes"/>
+<Menu name="Adjust"/>
+<Menu name="Respell"/>
+<Menu name="triplets"/>
+<Menu name="Stems"/>
+<Menu name="rests"/>
+<Menu name="transform_notes"/>
+<Menu name="quantize_notes"/>
+<Menu name="Transpose"/>
   </enable>
 </State>
 

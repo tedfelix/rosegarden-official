@@ -8,22 +8,21 @@ Transport menus in the matrix and notation editors are mostly full of actions
 I expect most people to do with toolbars or keyboard shortcuts.  They don't
 rate a place on the top, and pulling them down reduces clutter.
 
-The entire Studio has been pulled into the new Document menu, and various
-Document-related items have been pulled out of Edit and into Document.  All
-Document-related functions in the matrix/notation editors are on Document now;
+The entire Studio has been pulled into the new Composition menu, and various
+Composition-related items have been pulled out of Edit and into Composition.  All
+Composition-related functions in the matrix/notation editors are on Composition now;
 namely the tempo/time actions, which are indeed global to the document.
 
-The notation editor has lost many top level menus.  Arguably the menus are
-more annoying to navigate now because some actions require negotiating three
-layers instead of two.  However, gone is any ambiguity about whether, for
-example, a tie is a group or a mark or a transform.  It doesn't move a note
-anywhere or physically alter its duration in any way, so it will be found on
-Note with all its like-minded brethren.
+The notation editor has lost many top level menus, and actions that were once
+scattered among three or maybe four different places are now categorized into
+whether they Attach something to the note (ornaments, indications, ties,
+slurs), or Adjust the note by physically altering it in some way (quantize,
+transpose, tuplet (changes duration), stems, note styles).
 
 
 The standard arrangement of menus is:
 
-File Edit View Document Segment [Extras] Tools Settings Help
+File Edit View Composition Segment [Extras] Tools Settings Help
 
 Each top level menu has a specific purpose we should stick to as closely as
 possible.  Generally they are:
@@ -36,7 +35,7 @@ Edit     - actions that affect selections, such as select, cut, copy, paste, etc
 
 View     - actions that affect the current view
 
-Document - actions that affect the document globally and which are unique to
+Composition - actions that affect the document globally and which are unique to
            the document, such as tempo/time, the entire Studio, and all the
 	   document length/properties functions
 
@@ -51,15 +50,16 @@ Settings - settings which affect Rosegarden globally, and the various
 
 Specific to the notation editor:
 
-Notes:   - these are actions that affect the visual appearance of a note
-           without physically moving it; this sweeping category includes
-	   beams, ties, tuplets, grace notes, slashes, marks, etc. 
+Attach   - these are actions that affect the visual appearance of a note
+           without physically moving it or changing its duration in any way.
 
-Transforms
-         - these are actions that alter the note in some way, by respelling
-	   it, transposing it, decounterpointing it, interpreting it, etc. and
-	   also where "tie notes at barlines" is found, even though this one
-	   really doesn't quite fit into either the "Notes" or "Transforms"
-	   categories as set forth here.
+Adjust    - these are ideally to be actions that alter a note in a less
+            superficial way; eg. transposing, interpreting, quantizing.  This
+	    is also the home for tuplets, grace notes, note styles and stem
+	    directions if for no better reason than to even some things out
+	    between Attach and Adjust.  (There are a lot of gray areas still.)
 
-08-06-2004  D. Michael "Silvan" McIntyre
+History:
+
+08-06-2004  D. Michael "Silvan" McIntyre	rev. 01
+12-06-2004  D. Michael "Silvan" McIntyre	rev. 02

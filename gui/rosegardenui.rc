@@ -36,7 +36,7 @@
         <Separator/>
   </Menu>
   <Menu name="document">
-  	<text>&amp;Document</text>
+  	<text>&amp;Composition</text>
 	<Menu name="Studio">
 		<text>&amp;Studio</text>
 		<Action name="audio_mixer"/>
@@ -57,17 +57,20 @@
 	    <Action name="add_tempo"/>
 	    <Action name="add_time_signature"/>
 	    <Action name="edit_tempos"/>
+	    <Separator/>
+	    <Action name="set_tempo_to_segment_length"/>
+	    <Action name="groove_quantize"/>
 	</Menu>
         <Separator/>
         <Action name="change_composition_length"/>
-        <Action name="edit_markers"/>
         <Separator/>
+        <Action name="edit_markers"/>
         <Action name="edit_doc_properties"/>
   </Menu>
   <Menu name="Segments">
-        <text>Seg&amp;ments</text>
+        <text>Se&amp;gments</text>
 	<Menu name="edit_with">
-	<text>Edit &amp;With</text>
+  	    <text>Edit &amp;With</text>
 	    <Action name="edit_default"/>
 	    <Separator/>
 	    <Action name="edit_matrix"/>
@@ -96,9 +99,6 @@
 	</Menu>  
         <Action name="repeats_to_real_copies"/>
         <Separator/>
-        <Action name="set_tempo_to_segment_length"/>
-	<Action name="groove_quantize"/>
-        <Separator/>
         <Action name="manage_trigger_segments"/>
       <Action name="audio_manager"/>
   </Menu>
@@ -122,8 +122,8 @@
   </Menu>
   <Menu name="Tools">
   <text>&amp;Tools</text>
-      <Menu name="Edit Tools">
-	    <text>&amp;Edit Tools</text>
+      <Menu name="Editor Tools">
+	    <text>&amp;Editor Tools</text>
 	    <Action name="select"/>
 	    <Action name="draw"/>
 	    <Action name="erase"/>

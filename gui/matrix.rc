@@ -42,23 +42,29 @@
 </Menu> 
 
 <Menu name="document">
-	<text>&amp;Document</text>
+	<text>&amp;Composition</text>
 	<Action name="add_tempo"/>
 	<Action name="add_time_signature"/>
 </Menu>
 <Menu name="segments">
 	<text>&amp;Segment</text>
-        <Action name="open_in_event_list"/>
-        <Action name="open_in_notation"/>
+	<Menu name="open-with">
+	        <text>Edit &amp;With</text>
+		<Action name="open_in_event_list"/>
+	        <Action name="open_in_notation"/>
+	</Menu>
         <Separator/>	
 	<Action name="set_segment_start"/>
 	<Action name="set_segment_duration"/>
 </Menu>
 <Menu name="Transforms">
-  <text>Trans&amp;forms</text>
-  <Action name="quantize"/>
-  <Action name="repeat_quantize"/>
-  <Action name="legatoize"/>
+  <text>Ad&amp;just</text>
+   <Menu name="quantize_notes">
+	 <text>&amp;Quantize Notes</text>
+   	 <Action name="quantize"/>
+	 <Action name="repeat_quantize"/>
+	 <Action name="legatoize"/>
+  </Menu>
   <Separator/>
   <Action name="half_speed"/>
   <Action name="double_speed"/>
@@ -92,7 +98,7 @@
 <Menu name="Tools">
   <text>&amp;Tools</text>
   <Menu name="edit_tools">
-  	<text>&amp;Edit Tools</text>
+  	<text>&amp;Editor Tools</text>
 	<Action name="select" />
 	<Action name="draw" />
 	<Action name="erase" />

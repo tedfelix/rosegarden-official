@@ -818,7 +818,7 @@ punchin:
             m_transportStatus = STOPPED;
 
             if (recordType == STARTING_TO_RECORD_AUDIO) {
-                throw(Exception("Couldn't start recording audio.  Ensure your audio record path is valid\nin Document Properties (Edit->Edit Document Properties->Audio)"));
+                throw(Exception("Couldn't start recording audio.  Ensure your audio record path is valid\nin Document Properties (Composition -> Edit Document Properties -> Audio)"));
             } else {
                 throw(Exception("Couldn't start recording MIDI"));
             }

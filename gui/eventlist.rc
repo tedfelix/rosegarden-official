@@ -28,9 +28,13 @@
 </Menu>
 
 <Menu name="segment">
-  <text>Seg&amp;ment</text>
-  <Action name="open_in_matrix"/>
-  <Action name="open_in_notation"/>
+  <text>Se&amp;gment</text>
+  <Menu name="open-with">
+           <text>Edit &amp;With</text>
+           <Action name="open_in_event_list"/>
+           <Action name="open_in_notation"/>
+  </Menu>
+</Menu>
 </MenuBar>
 
 <ToolBar name="Actions Toolbar">
