@@ -14,3 +14,5 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+
+/* Nothing here - this class is completely inlined at the moment */
