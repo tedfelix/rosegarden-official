@@ -1571,12 +1571,13 @@ void RosegardenGUIApp::setupFileDialogSpeedbar()
         
 	unsigned int n = config->readUnsignedNumEntry("Number of Entries", 0);
 
-        config->writeEntry("Description_0", i18n("Example Files"));
-        config->writeEntry("IconGroup_0", 4);
-        config->writeEntry("Icon_0", "folder");
-        config->writeEntry("URL_0", KGlobal::dirs()->findResource("appdata", "examples/"));
+        config->writeEntry(QString("Description_%1").arg(n), i18n("Example Files"));
+        config->writeEntry(QString("IconGroup_%1").arg(n), 4);
+        config->writeEntry(QString("Icon_%1").arg(n), "folder");
+        config->writeEntry(QString("URL_%1").arg(n),
+                           KGlobal::dirs()->findResource("appdata", "examples/"));
 
-	RG_DEBUG << "wrote url " << config->readEntry("URL_0") << endl;
+	RG_DEBUG << "wrote url " << config->readEntry(QString("URL_%1").arg(n)) << endl;
 
         config->writeEntry("Examples Set", true);
 	config->writeEntry("Number of Entries", n + 1);
