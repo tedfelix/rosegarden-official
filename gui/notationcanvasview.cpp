@@ -18,6 +18,7 @@
 #include "notationcanvasview.h"
 #include "qcanvasgroupableitem.h"
 #include "qcanvasitemgroup.h"
+#include "staffline.h"
 
 #include "rosedebug.h"
 
@@ -59,6 +60,15 @@ NotationCanvasView::contentsMousePressEvent (QMouseEvent *e)
 
     QCanvasItem *item = itemList.first();
 
+    StaffLine *staffLine;
+    
+    if ((staffLine = dynamic_cast<StaffLine*>(item))) {
+        kdDebug(KDEBUG_AREA) << "mousepress : on a staff Line - insert note" << endl;
+        insertNote(staffLine, e);
+        return;
+    }
+    
+
     QCanvasGroupableItem *gitem;
 
     if((gitem = dynamic_cast<QCanvasGroupableItem*>(item))) {
@@ -79,4 +89,11 @@ NotationCanvasView::contentsMousePressEvent (QMouseEvent *e)
     m_draggingItem = true;
     m_movingItem->move(e->x(), e->y());
     canvas()->update();
+}
+
+
+void
+NotationCanvasView::insertNote(const StaffLine *line, QMouseEvent *e)
+{
+    kdDebug(KDEBUG_AREA) << "insertNote at pitch " << line->associatedPitch() << endl;
 }

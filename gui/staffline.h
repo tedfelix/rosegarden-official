@@ -36,14 +36,14 @@ public:
      * sets the pitch this staff line corresponds to (e.g. the pitch
      * of a natural note which would be on this line)
      */
-    void setAssociatedPitch(unsigned int p) { m_pitch = p; }
+    void setAssociatedPitch(int p) { m_pitch = p; }
 
     /// returns the pitch this staff line corresponds to
-    unsigned int associatedPitch() const { return m_pitch; }
+    int associatedPitch() const { return m_pitch; }
 
 protected:
 
-    unsigned int m_pitch;
+    int m_pitch;
 };
 
 #endif

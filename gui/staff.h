@@ -39,7 +39,7 @@ public:
      * Returns the Y offset at which a note with pitch 'p'
      * should be displayed on this staff
      */
-    int pitchYOffset(unsigned int p) const;
+    int pitchYOffset(int p) const;
 
     /// Returns the height of a bar line
     unsigned int barLineHeight() const { return m_barLineHeight; }
@@ -53,7 +53,7 @@ public:
 
 protected:
 
-    void makeInvisibleLine(int y);
+    void makeInvisibleLine(int y, int pitch);
 
     Clef m_currentKey;
     unsigned int m_barLineHeight;

@@ -101,7 +101,8 @@ Staff::Staff(QCanvas *canvas, Staff::Clef clef)
 
     staffLine->setPoints(0,y, m_horizLineLength,y);
     staffLine->moveBy(0,linesOffset);
-
+    staffLine->setAssociatedPitch(pitch);
+    
     m_pitchToHeight[pitch] = y; // F
     m_pitchToHeight[pitch + 1] = y; // F#
 
@@ -109,25 +110,26 @@ Staff::Staff(QCanvas *canvas, Staff::Clef clef)
     m_pitchToHeight[pitch + 3] = y + lineWidth / 2 + 1; // G#
     m_pitchToHeight[pitch + 4] = y + lineWidth;     // A
 
-    // Intermediate invisible line
+    // Intermediate invisible line just below this one
     //
-    makeInvisibleLine(y + lineWidth / 2 + 1);
+    makeInvisibleLine(y + lineWidth / 2 + 1, 16); // E
     
     // Line 1 : D - pitch 14
     //
     ++l; pitch = 14;
     staffLine = new StaffLine(canvas, this);
-
+    
     y = l * lineWidth;
 
     staffLine->setPoints(0,y, m_horizLineLength,y);
     staffLine->moveBy(0,linesOffset);
+    staffLine->setAssociatedPitch(pitch);
 
     m_pitchToHeight[pitch] = y; // D
     m_pitchToHeight[pitch + 1] = y; // D#
     m_pitchToHeight[pitch + 2] = y + lineWidth / 2 + 1; // E
     
-    makeInvisibleLine(y + lineWidth / 2 + 1);
+    makeInvisibleLine(y + lineWidth / 2 + 1, 12); // C
 
     // Line 2 : B - pitch 11
     //
@@ -138,12 +140,13 @@ Staff::Staff(QCanvas *canvas, Staff::Clef clef)
 
     staffLine->setPoints(0,y, m_horizLineLength,y);
     staffLine->moveBy(0,linesOffset);
+    staffLine->setAssociatedPitch(pitch);
 
     m_pitchToHeight[pitch] = y; // B
     m_pitchToHeight[pitch + 1] = y + lineWidth / 2 + 1; // C
     m_pitchToHeight[pitch + 2] = y + lineWidth / 2 + 1; // C#
     
-    makeInvisibleLine(y + lineWidth / 2 + 1);
+    makeInvisibleLine(y + lineWidth / 2 + 1, 9); // A
 
     // Line 3 : G - pitch 7
     //
@@ -154,13 +157,14 @@ Staff::Staff(QCanvas *canvas, Staff::Clef clef)
 
     staffLine->setPoints(0,y, m_horizLineLength,y);
     staffLine->moveBy(0,linesOffset);
+    staffLine->setAssociatedPitch(pitch);
 
     m_pitchToHeight[pitch] = y; // G
     m_pitchToHeight[pitch + 1] = y; // G#
     m_pitchToHeight[pitch + 2] = y + lineWidth / 2 + 1; // A
     m_pitchToHeight[pitch + 3] = y + lineWidth / 2 + 1; // A#
     
-    makeInvisibleLine(y + lineWidth / 2 + 1);
+    makeInvisibleLine(y + lineWidth / 2 + 1, 5); // F
 
     // Line 4 : E - pitch 4
     //
@@ -171,27 +175,29 @@ Staff::Staff(QCanvas *canvas, Staff::Clef clef)
 
     staffLine->setPoints(0,y, m_horizLineLength,y);
     staffLine->moveBy(0,linesOffset);
+    staffLine->setAssociatedPitch(pitch);
 
     m_pitchToHeight[pitch] = y; // E
     m_pitchToHeight[pitch + 1] = y + lineWidth / 2 + 1; // F
     m_pitchToHeight[pitch + 2] = y + lineWidth / 2 + 1; // F#
 
-    makeInvisibleLine(y + lineWidth / 2 + 1);
+    makeInvisibleLine(y + lineWidth / 2 + 1, 2); // D
 
     // Line 5 : middle C - pitch 0 (not actually displayed)
     //
     ++l; pitch = 0;
     y = l * lineWidth;
 
-    makeInvisibleLine(y);
+    makeInvisibleLine(y, pitch);
 
     m_pitchToHeight[pitch] = y; // C
     m_pitchToHeight[pitch + 1] = y; // C#
     m_pitchToHeight[pitch + 2] = y + lineWidth / 2 + 1; // D
     m_pitchToHeight[pitch + 3] = y + lineWidth / 2 + 1; // D#
     
-    makeInvisibleLine(y + lineWidth / 2 + 1);
+    makeInvisibleLine(y + lineWidth / 2 + 1, -2);
 
+    //
     // Add vertical lines
     //
     QCanvasLineGroupable *staffVertLine = new QCanvasLineGroupable(canvas, this);
@@ -220,7 +226,7 @@ Staff::Staff(QCanvas *canvas, Staff::Clef clef)
 }
 
 int
-Staff::pitchYOffset(unsigned int pitch) const
+Staff::pitchYOffset(int pitch) const
 {
     if (pitch <= 17)
         return m_pitchToHeight[pitch];
@@ -231,7 +237,7 @@ Staff::pitchYOffset(unsigned int pitch) const
 }
 
 void
-Staff::makeInvisibleLine(int y)
+Staff::makeInvisibleLine(int y, int pitch)
 {
     // Intermediate invisible line
     //
@@ -240,6 +246,7 @@ Staff::makeInvisibleLine(int y)
     
     invisibleLine->setPoints(0,y, m_horizLineLength,y);
     invisibleLine->moveBy(0,linesOffset);
+    invisibleLine->setAssociatedPitch(pitch);
 }
 
 

@@ -20,6 +20,8 @@
 
 #include <qcanvas.h>
 
+class StaffLine;
+
 /**
   *@author Guillaume Laurent, Chris Cannam, Rich Bown
   */
@@ -38,6 +40,9 @@ public:
     virtual void contentsMouseMoveEvent(QMouseEvent *e);
 
 protected:
+
+    void insertNote(const StaffLine*, QMouseEvent*);
+
     QCanvasItem* m_movingItem;
     bool m_draggingItem;
 
