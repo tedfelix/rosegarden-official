@@ -20,6 +20,8 @@ o BUG - recorded audio file inserting to AudioManagerDialog before it's ready
 
 o BUG - Plugin calls() during playback causing usual problem
 
+o BUG - changing audio file path doesn't work
+
 o File loading blank-out
 
 o Drum bank selects and different MIDI drums

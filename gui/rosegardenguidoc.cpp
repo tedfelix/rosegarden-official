@@ -1398,6 +1398,9 @@ RosegardenGUIDoc::finalizeAudioFile(Rosegarden::AudioFileId /*id*/)
 
     if (progressDlg) delete progressDlg;
 
+    // something in the record segment (that's why it was added
+    // to the composition)
+    m_commandHistory->addCommand(new SegmentRecordCommand(m_recordSegment));
 
     // Update preview
     //
@@ -1434,10 +1437,6 @@ RosegardenGUIDoc::finalizeAudioFile(Rosegarden::AudioFileId /*id*/)
                      << endl;
         return;
     }
-
-    // something in the record segment (that's why it was added
-    // to the composition)
-    m_commandHistory->addCommand(new SegmentRecordCommand(m_recordSegment));
 
     // clear down
     m_recordSegment = 0;
