@@ -915,30 +915,14 @@ void LatencyConfigurationPage::slotFetchLatencyValues()
     m_jackRecord->setValue(jackRecordValue);
 }
 
-// With these two slots just make sure that read ahead isn't 
-// greater than the total playback latency.
-//
 void LatencyConfigurationPage::slotReadAheadChanged(int value)
 {
     m_readAheadLabel->setNum(value);
-
-    if (value > m_playback->value())
-    {
-        m_playback->setValue(value);
-        m_playbackLabel->setNum(value);
-    }
 }
 
 void LatencyConfigurationPage::slotPlaybackChanged(int value)
 {
     m_playbackLabel->setNum(value);
-
-    if (value < m_readAhead->value())
-    {
-        m_readAhead->setValue(value);
-        m_readAheadLabel->setNum(value);
-    }
-
 }
 
 
