@@ -44,18 +44,18 @@ static const int maxPreviewWidth = 100;
 static const int previewHeight = 30;
 
 AudioManagerDialog::AudioManagerDialog(QWidget *parent,
-                                       AudioFileManager *aFM):
+                                       RosegardenGUIDoc *doc):
     KDialogBase(parent, "", false,
                 i18n("Rosegarden Audio File Manager"), Close),
-    m_audioFileManager(aFM)
+    m_doc(doc)
 {
     QHBox *h = makeHBoxMainWidget();
     QVButtonGroup *v = new QVButtonGroup(i18n("Audio File actions"), h);
 
-    if (m_audioFileManager == 0)
+    if (m_doc == 0)
     {
         KMessageBox::sorry(this,
-                           i18n("No Audio File Manager - internal error"));
+                           i18n("No RosegardenGUIDoc - internal error"));
         delete this;
     }
 
@@ -87,6 +87,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
 
     // Show focus across all columns
     m_fileList->setAllColumnsShowFocus(true);
+
 
     // connect buttons
     connect(m_deleteButton, SIGNAL(released()), SLOT(slotDelete()));
@@ -122,26 +123,36 @@ AudioManagerDialog::~AudioManagerDialog()
 void
 AudioManagerDialog::slotPopulateFileList()
 {
-    std::vector<AudioFile*>::const_iterator it;
 
     // create pixmap of given size
     QPixmap *audioPixmap = new QPixmap(maxPreviewWidth, previewHeight);
 
     // clear file list and disable associated action buttons
     m_fileList->clear();
+
     m_deleteButton->setDisabled(true);
     m_playButton->setDisabled(true);
     m_renameButton->setDisabled(true);
+    m_insertButton->setDisabled(true);
+    m_deleteAllButton->setDisabled(true);
 
-    if (m_audioFileManager->begin() == m_audioFileManager->end())
+    if (m_doc->getAudioFileManager().begin() ==
+            m_doc->getAudioFileManager().end())
     {
         // Turn off selection and report empty list
         //
         new AudioListItem(m_fileList, i18n("<no audio files>"), 0);
         m_fileList->setSelectionMode(QListView::NoSelection);
+        m_fileList->setRootIsDecorated(false);
 
         return;
     }
+
+    // we have at least one audio file
+    m_deleteAllButton->setDisabled(false);
+
+    // show tree hierarchy
+    m_fileList->setRootIsDecorated(true);
 
     // enable selection
     m_fileList->setSelectionMode(QListView::Single);
@@ -150,9 +161,25 @@ AudioManagerDialog::slotPopulateFileList()
     QString msecs;
     RealTime length;
 
-    for (it = m_audioFileManager->begin();
-         it != m_audioFileManager->end();
-         it++)
+    // Create a vector of audio Segments only
+    //
+    std::vector<Rosegarden::Segment*> segments;
+    std::vector<Rosegarden::Segment*>::const_iterator iit;
+
+    for (Composition::iterator it = m_doc->getComposition().begin();
+             it != m_doc->getComposition().end(); it++)
+    {
+        if ((*it)->getType() == Rosegarden::Segment::Audio)
+            segments.push_back(*it);
+    }
+
+    // duration
+    Rosegarden::RealTime segmentDuration;
+
+    for (std::vector<AudioFile*>::const_iterator
+             it = m_doc->getAudioFileManager().begin();
+             it != m_doc->getAudioFileManager().end();
+             it++)
     {
         generateEnvelopePixmap(audioPixmap, *it);
 
@@ -175,7 +202,7 @@ AudioManagerDialog::slotPopulateFileList()
         // File location
         //
         item->setText(3, QString(
-                    m_audioFileManager->
+                    m_doc->getAudioFileManager().
                         substituteHomeForTilde((*it)->getFilename()).c_str()));
                                        
         // Resolution
@@ -185,7 +212,32 @@ AudioManagerDialog::slotPopulateFileList()
         // Channels
         //
         item->setText(5, QString("%1").arg((*it)->getChannels()));
+
+        // Add children
+        //
+        for (iit = segments.begin(); iit != segments.end(); iit++)
+        {
+            if ((*iit)->getAudioFileID() == (*it)->getId())
+            {
+                AudioListItem *childItem =
+                    new AudioListItem(item,
+                                      QString((*iit)->getLabel().c_str()),
+                                      (*it)->getId());
+                segmentDuration = (*iit)->getAudioEndTime() -
+                                  (*iit)->getAudioStartTime();
+
+
+                // Write segment duration
+                //
+                msecs.sprintf("%3ld", segmentDuration.usec / 1000);
+                childItem->setText(1, QString("%1.%2s")
+                                          .arg(segmentDuration.sec)
+                                          .arg(msecs));
+
+            }
+        }
     }
+
 
 }
 
@@ -199,8 +251,8 @@ AudioManagerDialog::getCurrentSelection()
 
     std::vector<AudioFile*>::const_iterator it;
 
-    for (it = m_audioFileManager->begin();
-         it != m_audioFileManager->end();
+    for (it = m_doc->getAudioFileManager().begin();
+         it != m_doc->getAudioFileManager().end();
          it++)
     {
         // If we match then return the valid AudioFile
@@ -231,7 +283,7 @@ AudioManagerDialog::slotDelete()
         return;
 
     unsigned int id = audioFile->getId();
-    m_audioFileManager->removeFile(id);
+    m_doc->getAudioFileManager().removeFile(id);
     slotPopulateFileList();
 
     // tell the sequencer
@@ -259,7 +311,7 @@ AudioManagerDialog::slotAdd()
     unsigned int id = 0;
 
     KFileDialog *fileDialog =
-        new KFileDialog(QString(m_audioFileManager->getLastAddPath().c_str()),
+        new KFileDialog(QString(m_doc->getAudioFileManager().getLastAddPath().c_str()),
                         QString(i18n("*.wav|WAV files (*.wav)")),
                         this, i18n("Select an Audio File"), true);
 
@@ -271,8 +323,8 @@ AudioManagerDialog::slotAdd()
         // we start looking in the same place.
         //
         std::string newLastAddPath =
-            m_audioFileManager->getDirectory(std::string(newFilePath.data()));
-        m_audioFileManager->setLastAddPath(newLastAddPath);
+            m_doc->getAudioFileManager().getDirectory(std::string(newFilePath.data()));
+        m_doc->getAudioFileManager().setLastAddPath(newLastAddPath);
 
         RosegardenProgressDialog *progressDlg =
             new RosegardenProgressDialog(i18n("Generating audio preview..."),
@@ -281,7 +333,7 @@ AudioManagerDialog::slotAdd()
                                          this);
         try
         {
-            id = m_audioFileManager->addFile(std::string(newFilePath.data()));
+            id = m_doc->getAudioFileManager().addFile(std::string(newFilePath.data()));
         }
         catch(std::string e)
         {
@@ -299,7 +351,7 @@ AudioManagerDialog::slotAdd()
 
         try
         {
-            m_audioFileManager->generatePreview(
+            m_doc->getAudioFileManager().generatePreview(
                     dynamic_cast<Progress*>(progressDlg), id);
         }
         catch(std::string e)
@@ -390,8 +442,8 @@ AudioManagerDialog::generateEnvelopePixmap(QPixmap *pixmap, AudioFile *aF)
     if (m_maxLength == RealTime(0, 0))
     {
         std::vector<AudioFile*>::const_iterator it;
-        for (it = m_audioFileManager->begin();
-             it != m_audioFileManager->end();
+        for (it = m_doc->getAudioFileManager().begin();
+             it != m_doc->getAudioFileManager().end();
              it++)
         {
             if ((*it)->getLength() > m_maxLength)
@@ -407,7 +459,7 @@ AudioManagerDialog::generateEnvelopePixmap(QPixmap *pixmap, AudioFile *aF)
                    pixmap->height());
                    */
 
-    m_audioFileManager->
+    m_doc->getAudioFileManager().
         drawPreview(aF->getId(),
                     RealTime(0, 0),
                     aF->getLength(),

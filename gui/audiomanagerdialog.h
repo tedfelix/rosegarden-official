@@ -27,6 +27,7 @@
 #include <string>
 
 #include "AudioFileManager.h"
+#include "rosegardenguidoc.h"
 
 // This dialog presents and allows editing of the Audio files that
 // are in the Composition.  We edit the AudioFileManager directly
@@ -53,8 +54,26 @@ class AudioListItem : public QListViewItem
 
 public:
 
-    AudioListItem(QListView * parent, QString label, unsigned int id):
-        QListViewItem(parent, label, "", "", "", "", "", "", ""), m_id(id) {;}
+    AudioListItem(QListView *parent):QListViewItem(parent) {;}
+
+    AudioListItem(QListViewItem *parent):QListViewItem(parent) {;}
+
+    AudioListItem(QListView *parent,
+                  QString label,
+                  unsigned int id):
+                      QListViewItem(parent,
+                                    label,
+                                    "", "", "", "", "", "", ""),
+                                    m_id(id) {;}
+
+    AudioListItem(QListViewItem *parent, 
+                  QString label,
+                  unsigned int id):
+                      QListViewItem(parent,
+                                    label,
+                                    "", "", "", "", "", "", ""),
+                                    m_id(id) {;}
+
 
     unsigned int getId() { return m_id; }
 
@@ -71,7 +90,7 @@ class AudioManagerDialog : public KDialogBase
 
 public:
     AudioManagerDialog(QWidget *parent,
-                       AudioFileManager *aFM);
+                       RosegardenGUIDoc *doc);
     ~AudioManagerDialog();
 
     // Populate the file list from the AudioFileManager
@@ -116,7 +135,7 @@ protected:
     QPushButton      *m_insertButton;
     QPushButton      *m_deleteAllButton;
 
-    AudioFileManager *m_audioFileManager;
+    RosegardenGUIDoc *m_doc;
 
     RealTime          m_maxLength;
     QAccel           *m_accelerator;
