@@ -1042,8 +1042,7 @@ AudioManagerDialog::slotDropped(QDropEvent *event, QListViewItem*)
     if (QUriDrag::decode(event, uri))
     {
         // okay, we have a URI.. process it
-        QString url, target;
-        for(const char* url = uri.first(); url; url = uri.next()) {
+        for(QString url = uri.first(); url; url = uri.next()) {
             
             RG_DEBUG << "AudioManagerDialog::dropEvent() : got "
                                  << url << endl;

@@ -106,6 +106,7 @@
 #include "markereditor.h"
 #include "studiocommands.h"
 #include "rgapplication.h"
+#include "playlist.h"
 
 //!!! ditch these when harmonize() moves out
 #include "CompositionTimeSliceAdapter.h"
@@ -137,6 +138,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
       m_useSequencer(useSequencer),
       m_autoSaveTimer(new QTimer(this)),
       m_clipboard(new Rosegarden::Clipboard),
+      m_playList(0),
       m_deviceManager(0),
       m_bankEditor(0),
       m_markerEditor(0)
@@ -226,7 +228,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 
     // All toolbars should be created before this is called
     setAutoSaveSettings(RosegardenGUIApp::MainWindowConfigGroup, true);
-
+    
     readOptions();
 }
 
@@ -301,6 +303,10 @@ void RosegardenGUIApp::setupActions()
     new KAction(i18n("Export M&up file..."), 0, 0, this,
                 SLOT(slotExportMup()), actionCollection(),
                 "file_export_mup");
+
+    new KAction(i18n("Playlist"), 0, 0, this,
+                SLOT(slotPlayList()), actionCollection(),
+                "file_show_playlist");
 
     KStdAction::quit  (this, SLOT(slotQuit()),              actionCollection());
 
@@ -4623,6 +4629,35 @@ RosegardenGUIApp::slotControlEditorClosed()
     }
 
     std::cerr << "WARNING: control editor " << s << " closed, but couldn't find it in our control editor list (we have " << m_controlEditors.size() << " editors)" << std::endl;
+}
+
+void
+RosegardenGUIApp::slotPlayList()
+{
+    if (!m_playList) {
+        m_playList = new PlayListDialog(i18n("Play List"), this);
+        connect(m_playList, SIGNAL(closing()),
+                SLOT(slotPlayListClosed()));
+        connect(m_playList->getPlayList(), SIGNAL(play(QString)),
+                SLOT(slotPlayListPlay(QString)));
+    }
+
+    m_playList->show();
+}
+
+void
+RosegardenGUIApp::slotPlayListPlay(QString url)
+{
+    slotStop();
+    openURL(url);
+    slotPlay();
+}
+
+void
+RosegardenGUIApp::slotPlayListClosed()
+{
+    RG_DEBUG << "RosegardenGUIApp::slotPlayListClosed()\n";
+    m_playList = 0;
 }
 
 void

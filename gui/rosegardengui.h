@@ -69,6 +69,7 @@ namespace Rosegarden
 class RosegardenProgressBar;
 class ControlEditorDialog;
 class MarkerEditorDialog;
+class PlayListDialog;
 
 /**
   * The base class for RosegardenGUI application windows. It sets up the main
@@ -1049,6 +1050,19 @@ public slots:
     void slotTestClipboard();
 
     /**
+     * Show a 'play list' dialog
+     */
+    void slotPlayList();
+
+    /**
+     * Play the requested URL
+     *
+     * Stop current playback, close current document,
+     * open specified document and play it.
+     */
+    void slotPlayListPlay(QString url);
+
+    /**
      * View the audio file manager - and some associated actions
      */
     void slotAudioManager();
@@ -1079,6 +1093,11 @@ public slots:
     // Auto-save update interval changes
     //
     void slotUpdateAutoSaveInterval(unsigned int interval);
+
+    /**
+     * called when the PlayList is being closed
+     */
+    void slotPlayListClosed();
 
     /**
      * called when the BankEditor is being closed
@@ -1199,6 +1218,7 @@ private:
 
     Rosegarden::Clipboard *m_clipboard;
 
+    PlayListDialog        *m_playList;
     DeviceManagerDialog   *m_deviceManager;
     BankEditorDialog      *m_bankEditor;
     MarkerEditorDialog    *m_markerEditor;

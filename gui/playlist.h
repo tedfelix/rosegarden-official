@@ -26,6 +26,7 @@ class PlayListView;
 class QListViewItem;
 class QDropEvent;
 class QHBoxLayout;
+class KConfig;
 
 class PlayList : public QVBox
 {
@@ -37,6 +38,9 @@ public:
     PlayListView* getListView() { return m_listView; }
 
     void enableButtons(QListViewItem*);
+
+signals:
+    void play(QString);
 
 protected slots:
     void slotOpenFiles();
@@ -66,11 +70,24 @@ protected:
 
 class PlayListDialog : public KDialogBase
 {
+    Q_OBJECT
+
 public:
     PlayListDialog(QString caption, QWidget* parent = 0, const char* name = 0);
 
+    PlayList* getPlayList() { return m_playList; }
+
+signals:
+    void closing();
+
 protected:    
+    virtual void closeEvent(QCloseEvent *e);
+
+    void save();
+    void restore();
 
     //--------------- Data members ---------------------------------
     PlayList* m_playList;
+
+    static const char* const PLAYLIST_CONFIG;
 };

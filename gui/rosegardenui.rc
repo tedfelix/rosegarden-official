@@ -24,6 +24,8 @@
       <Action name="file_export_mup" />
       <Action name="file_export_musicxml" />
     </Menu>
+  <Separator/>
+  <Action name="file_show_playlist" />
   </Menu>
   <Menu name="edit">
         <Action name="delete"/>

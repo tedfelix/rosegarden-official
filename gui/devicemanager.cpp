@@ -194,7 +194,7 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
                                        actionCollection());
 
     closeButton->setText(close->text());
-    connect(closeButton, SIGNAL(released()), this, SLOT(slotClose()));
+    connect(closeButton, SIGNAL(clicked()), this, SLOT(slotClose()));
 
     mainLayout->addWidget(btnBox);
 

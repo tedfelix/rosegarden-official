@@ -21,7 +21,6 @@
 #include "playlist.h"
 
 #include <qlabel.h>
-#include <qvbox.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qdragobject.h>
@@ -205,12 +204,11 @@ PlayList::slotDropped(QDropEvent *event, QListViewItem* after)
     if (QUriDrag::decode(event, uri)) {
 
         // okay, we have a URI.. process it
-        QString url, target;
-        for(const char* url = uri.first(); url; url = uri.next()) {
-            
-//             qDebug("PlayListView::dropEvent() : got %s\n", url);
-
-            new PlayListViewItem(m_listView, after, KURL(url));
+        // weed out non-rg files
+        //
+        for(QString url = uri.first(); url; url = uri.next()) {
+            if (url.right(3).lower() == ".rg")
+                new PlayListViewItem(m_listView, after, KURL(url));
             
         }
     }
@@ -220,7 +218,10 @@ PlayList::slotDropped(QDropEvent *event, QListViewItem* after)
 
 void PlayList::slotPlay()
 {
-    // TODO
+    PlayListViewItem *currentItem = dynamic_cast<PlayListViewItem*>(m_listView->currentItem());
+
+    if (currentItem)
+        emit play(currentItem->getURL().url());
 }
 
 void PlayList::slotMoveUp()
@@ -282,7 +283,8 @@ void PlayList::enableButtons(QListViewItem* currentItem)
 
 //////////////////////////////////////////////////////////////////////
 
-PlayListDialog::PlayListDialog(QString caption, QWidget* parent, const char* name)
+PlayListDialog::PlayListDialog(QString caption,
+                               QWidget* parent, const char* name)
     : KDialogBase(parent, name, false, caption,
                   KDialogBase::Close, // standard buttons
                   KDialogBase::Close, // default button
@@ -290,4 +292,26 @@ PlayListDialog::PlayListDialog(QString caption, QWidget* parent, const char* nam
       m_playList(new PlayList(this))
 {
     setMainWidget(m_playList);
+    restore();
 }
+
+void PlayListDialog::save()
+{
+    saveDialogSize(PLAYLIST_CONFIG);
+}
+
+void PlayListDialog::restore()
+{
+    setInitialSize(configDialogSize(PLAYLIST_CONFIG));
+}
+
+void PlayListDialog::closeEvent(QCloseEvent *e)
+{
+    save();
+
+    emit closing();
+    KDialogBase::closeEvent(e);
+}
+
+
+const char* const PlayListDialog::PLAYLIST_CONFIG = "PLAY_LIST";
