@@ -442,9 +442,9 @@ Studio::unassignAllInstruments()
                     channel = ( channel + 1 ) % 16;
 
                     (*iit)->setSendPan(false);
-                    (*iit)->setSendVelocity(false);
+                    (*iit)->setSendVolume(false);
                     (*iit)->setPan(MidiMidValue);
-                    (*iit)->setVelocity(100);
+                    (*iit)->setVolume(100);
 
                 }
             }

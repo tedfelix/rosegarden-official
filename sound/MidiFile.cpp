@@ -1119,7 +1119,8 @@ MidiFile::convertToMidi(Composition &comp)
         m_midiComposition[trackNumber].push_back(midiEvent);
     }
 
-    // Insert time signatures
+    // Insert time signatures (don't worry that the times might be out
+    // of order with those of the tempo events -- we sort the track later)
     //
     for (int i = 0; i < comp.getTimeSignatureCount(); i++)
     {
@@ -1163,7 +1164,6 @@ MidiFile::convertToMidi(Composition &comp)
         m_midiComposition[trackNumber].push_back(midiEvent);
     }
 
-
     // first track proper
     //
     trackNumber++;
@@ -1178,6 +1178,11 @@ MidiFile::convertToMidi(Composition &comp)
         //
         SegmentPerformanceHelper helper(**segment);
 
+        Track *track =
+            comp.getTrackById((*segment)->getTrack());
+
+	if (track->isMuted()) continue;
+
         {
             stringstream trackName;
             // insert a track name
@@ -1191,19 +1196,13 @@ MidiFile::convertToMidi(Composition &comp)
             midiEvent = new MidiEvent(0,
                                       MIDI_FILE_META_EVENT,
                                       MIDI_TRACK_NAME,
-                                      //trackName.str());
-                          comp.getTrackById((*segment)->getTrack())->getLabel());
+				      track->getLabel());
 
             m_midiComposition[trackNumber].push_back(midiEvent);
         }
 
         // Get the Instrument
         //
-        Track *track =
-            comp.getTrackById((*segment)->getTrack());
-
-	if (track->isMuted()) continue;
-
         Instrument *instr =
             m_studio->getInstrumentById(track->getInstrument());
 
@@ -1214,8 +1213,7 @@ MidiFile::convertToMidi(Composition &comp)
 	MidiByte lsb = 0;
 	MidiByte msb = 0;
 
-        if (instr)
-        {
+        if (instr) {
             midiChannel = instr->getMidiChannel();
             program = instr->getProgramChange();
 	    if (instr->sendsBankSelect()) {
@@ -1250,6 +1248,46 @@ MidiFile::convertToMidi(Composition &comp)
                                  MIDI_PROG_CHANGE | midiChannel,
                                  program);
         m_midiComposition[trackNumber].push_back(midiEvent);
+
+	if (instr) {
+	    // MidiInstrument parameters: volume, pan, attack,
+	    // release, filter, resonance, chorus, reverb.  Always
+	    // write these: the Instrument has an additional parameter
+	    // to record whether they should be sent, but it isn't
+	    // actually set anywhere so we have to ignore it.
+
+	    m_midiComposition[trackNumber].push_back
+		(new MidiEvent(0, MIDI_CTRL_CHANGE | midiChannel,
+			       MIDI_CONTROLLER_VOLUME, instr->getVolume()));
+
+	    m_midiComposition[trackNumber].push_back
+		(new MidiEvent(0, MIDI_CTRL_CHANGE | midiChannel,
+			       MIDI_CONTROLLER_PAN, instr->getPan()));
+
+	    m_midiComposition[trackNumber].push_back
+		(new MidiEvent(0, MIDI_CTRL_CHANGE | midiChannel,
+			       MIDI_CONTROLLER_ATTACK, instr->getAttack()));
+
+	    m_midiComposition[trackNumber].push_back
+		(new MidiEvent(0, MIDI_CTRL_CHANGE | midiChannel,
+			       MIDI_CONTROLLER_RELEASE, instr->getRelease()));
+
+	    m_midiComposition[trackNumber].push_back
+		(new MidiEvent(0, MIDI_CTRL_CHANGE | midiChannel,
+			       MIDI_CONTROLLER_FILTER, instr->getFilter()));
+
+	    m_midiComposition[trackNumber].push_back
+		(new MidiEvent(0, MIDI_CTRL_CHANGE | midiChannel,
+			       MIDI_CONTROLLER_RESONANCE, instr->getResonance()));
+
+	    m_midiComposition[trackNumber].push_back
+		(new MidiEvent(0, MIDI_CTRL_CHANGE | midiChannel,
+			       MIDI_CONTROLLER_CHORUS, instr->getChorus()));
+
+	    m_midiComposition[trackNumber].push_back
+		(new MidiEvent(0, MIDI_CTRL_CHANGE | midiChannel,
+			       MIDI_CONTROLLER_REVERB, instr->getReverb()));
+	}
 
 	timeT segmentMidiDuration =
 	    ((*segment)->getEndMarkerTime() -

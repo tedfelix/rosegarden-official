@@ -355,7 +355,7 @@ MIDIInstrumentParameterPanel::slotSelectVolume(float value)
     if (m_selectedInstrument == 0)
         return;
 
-    m_selectedInstrument->setVelocity(Rosegarden::MidiByte(value));
+    m_selectedInstrument->setVolume(Rosegarden::MidiByte(value));
 
     Rosegarden::MappedEvent *mE = 
      new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
@@ -390,7 +390,7 @@ AudioInstrumentParameterPanel::slotSelectAudioLevel(int value)
         else
         {
             //cout << "SETTING STORED LEVEL = " << value << endl;
-            m_selectedInstrument->setVelocity(Rosegarden::MidiByte(value));
+            m_selectedInstrument->setVolume(Rosegarden::MidiByte(value));
 
             Rosegarden::StudioControl::setStudioObjectProperty
               (Rosegarden::MappedObjectId(m_selectedInstrument->getMappedId()),
@@ -467,10 +467,10 @@ AudioInstrumentParameterPanel::slotSetRecord(bool value)
 
             // set the fader value to the playback value
             m_audioFader->m_fader->
-                setFader(m_selectedInstrument->getVelocity());
+                setFader(m_selectedInstrument->getVolume());
 
             //cout << "SETTING VISIBLE FADER LEVEL = " << 
-                    //int(m_selectedInstrument->getVelocity()) << endl;
+                    //int(m_selectedInstrument->getVolume()) << endl;
 
             connect(m_audioFader->m_fader, SIGNAL(faderChanged(int)),
                     this, SLOT(slotSelectAudioLevel(int)));
@@ -1113,10 +1113,10 @@ AudioInstrumentParameterPanel::slotRecord()
         {
             // set the fader value to the record value
             m_audioFader->m_fader->
-                setFader(m_selectedInstrument->getVelocity());
+                setFader(m_selectedInstrument->getVolume());
 
             cout << "SETTING FADER LEVEL = " 
-                 << int(m_selectedInstrument->getVelocity()) << endl;
+                 << int(m_selectedInstrument->getVolume()) << endl;
         }
     }
     */
@@ -1160,7 +1160,7 @@ AudioInstrumentParameterPanel::setupForInstrument(Rosegarden::Instrument* instru
     if (m_audioFader->m_recordButton->isOn())
         m_audioFader->m_fader->setFader(instrument->getRecordLevel());
     else
-        m_audioFader->m_fader->setFader(instrument->getVelocity());
+        m_audioFader->m_fader->setFader(instrument->getVolume());
         */
 
 
@@ -1278,10 +1278,10 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     */
 
     /*
-    // velocity values
+    // volume values
     //
     for (int i = 0; i < Rosegarden::MidiMaxValue + 1; i++)
-        m_velocityValue->insertItem(QString("%1").arg(i));
+        m_volumeValue->insertItem(QString("%1").arg(i));
         */
 
 
@@ -1510,7 +1510,7 @@ MIDIInstrumentParameterPanel::setupForInstrument(Rosegarden::Instrument *instrum
     //
     m_channelValue->setCurrentItem((int)instrument->getMidiChannel());
     m_panRotary->setPosition((float)instrument->getPan());
-    m_volumeRotary->setPosition((float)instrument->getVelocity());
+    m_volumeRotary->setPosition((float)instrument->getVolume());
 
     // Check for program change
     //

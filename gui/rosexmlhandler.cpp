@@ -1148,8 +1148,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (m_instrument)
         {
-            m_instrument->setVelocity(value);
-            m_instrument->setSendVelocity(true);
+            m_instrument->setVolume(value);
+            m_instrument->setSendVolume(true);
         }
 
 #ifdef HAVE_LADSPA

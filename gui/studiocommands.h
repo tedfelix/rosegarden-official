@@ -44,7 +44,8 @@ public:
                         const std::string &librarianEmail,
                         std::vector<Rosegarden::MidiBank> bankList,
                         std::vector<Rosegarden::MidiProgram> programList,
-                        bool overwrite);
+                        bool overwrite,
+			bool rename);
 
     static QString getGlobalName() { return i18n("Modify &MIDI Bank"); }
 
@@ -68,6 +69,7 @@ protected:
     std::string                            m_oldLibrarianEmail;
 
     bool                                   m_overwrite;
+    bool                                   m_rename;
 
 };
 

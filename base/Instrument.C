@@ -46,7 +46,7 @@ Instrument::Instrument(InstrumentId id, InstrumentType it,
     m_lsb(0),
     m_transpose(MidiMidValue),
     m_pan(MidiMidValue),
-    m_velocity(100),
+    m_volume(100),
     m_recordLevel(100),
     m_attack(MidiMinValue),
     m_release(MidiMinValue),
@@ -58,7 +58,7 @@ Instrument::Instrument(InstrumentId id, InstrumentType it,
     m_sendBankSelect(false),
     m_sendProgramChange(false),
     m_sendPan(false),
-    m_sendVelocity(false),
+    m_sendVolume(false),
     m_mappedId(0),
     m_mappedAudioInput(0),
     m_mappedAudioOutput(std::pair<int, int>(0, 0))
@@ -98,7 +98,7 @@ Instrument::Instrument(InstrumentId id,
     m_lsb(0),
     m_transpose(MidiMidValue),
     m_pan(MidiMidValue),
-    m_velocity(100),
+    m_volume(100),
     m_recordLevel(100),
     m_attack(MidiMinValue),
     m_release(MidiMinValue),
@@ -110,7 +110,7 @@ Instrument::Instrument(InstrumentId id,
     m_sendBankSelect(false),
     m_sendProgramChange(false),
     m_sendPan(false),
-    m_sendVelocity(false),
+    m_sendVolume(false),
     m_mappedId(0),
     m_mappedAudioInput(0),
     m_mappedAudioOutput(std::pair<int, int>(0, 0))
@@ -147,7 +147,7 @@ Instrument::Instrument(const Instrument &ins):
     m_lsb(ins.getLSB()),
     m_transpose(ins.getMidiTranspose()),
     m_pan(ins.getPan()),
-    m_velocity(ins.getVelocity()),
+    m_volume(ins.getVolume()),
     m_recordLevel(ins.getRecordLevel()),
     m_attack(ins.getAttack()),
     m_release(ins.getRelease()),
@@ -159,7 +159,7 @@ Instrument::Instrument(const Instrument &ins):
     m_sendBankSelect(ins.sendsBankSelect()),
     m_sendProgramChange(ins.sendsProgramChange()),
     m_sendPan(ins.sendsPan()),
-    m_sendVelocity(ins.sendsVelocity()),
+    m_sendVolume(ins.sendsVolume()),
     m_mappedId(ins.getMappedId()),
     m_mappedAudioInput(ins.getMappedAudioInput()),
     m_mappedAudioOutput(ins.getMappedAudioOutput())
@@ -194,7 +194,7 @@ Instrument::operator=(const Instrument &ins)
     m_lsb = ins.getLSB();
     m_transpose = ins.getMidiTranspose();
     m_pan = ins.getPan();
-    m_velocity = ins.getVelocity();
+    m_volume = ins.getVolume();
     m_recordLevel = ins.getRecordLevel();
     m_attack = ins.getAttack();
     m_release = ins.getRelease();
@@ -206,7 +206,7 @@ Instrument::operator=(const Instrument &ins)
     m_sendBankSelect = ins.sendsBankSelect();
     m_sendProgramChange = ins.sendsProgramChange();
     m_sendPan = ins.sendsPan();
-    m_sendVelocity = ins.sendsVelocity();
+    m_sendVolume = ins.sendsVolume();
     m_mappedId = ins.getMappedId();
     m_mappedAudioInput = ins.getMappedAudioInput();
     m_mappedAudioOutput = ins.getMappedAudioOutput();
@@ -248,7 +248,7 @@ Instrument::toXmlString()
     if (!m_sendBankSelect &&
         !m_sendProgramChange &&
         !m_sendPan &&
-        !m_sendVelocity)
+        !m_sendVolume)
     {
         instrument << std::ends;
         return instrument.str();
@@ -280,7 +280,7 @@ Instrument::toXmlString()
                    << (int)m_pan << "\"/>" << std::endl;
 
         instrument << "            <volume value=\""
-                   << (int)m_velocity << "\"/>" << std::endl;
+                   << (int)m_volume << "\"/>" << std::endl;
 
         // Advanced MIDI controls
         //
@@ -311,7 +311,7 @@ Instrument::toXmlString()
                    << (int)m_pan << "\"/>" << std::endl;
 
         instrument << "            <volume value=\""
-                   << (int)m_velocity << "\"/>" << std::endl;
+                   << (int)m_volume << "\"/>" << std::endl;
 
         instrument << "            <recordLevel value=\""
                    << (int)m_recordLevel << "\"/>" << std::endl;

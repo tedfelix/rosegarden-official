@@ -518,7 +518,7 @@ void RosegardenGUIDoc::initialiseStudio()
             //
             Rosegarden::StudioControl::setStudioObjectProperty(mappedId,
                 Rosegarden::MappedAudioFader::FaderLevel,
-                Rosegarden::MappedObjectValue((*it)->getVelocity()));
+                Rosegarden::MappedObjectValue((*it)->getVolume()));
 
             // Set the record level
             //
@@ -1941,7 +1941,7 @@ RosegardenGUIDoc::initialiseControllers()
             advancedControls.
                 push_back(Rosegarden::
                         MidiControlPair(Rosegarden::MIDI_CONTROLLER_VOLUME,
-                                       (*it)->getVelocity()));
+                                       (*it)->getVolume()));
 
 
             std::vector<Rosegarden::MidiControlPair>::iterator

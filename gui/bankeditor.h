@@ -357,6 +357,7 @@ protected:
     QButtonGroup       *m_buttonGroup;
     QRadioButton       *m_mergeBanks;
     QRadioButton       *m_overwriteBanks;
+    QCheckBox          *m_rename;
 
 };
 

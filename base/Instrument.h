@@ -128,8 +128,8 @@ public:
     void setPan(MidiByte pan) { m_pan = pan; }
     MidiByte getPan() const { return m_pan; }
 
-    void setVelocity(MidiByte velocity) { m_velocity = velocity; }
-    MidiByte getVelocity() const { return m_velocity; }
+    void setVolume(MidiByte volume) { m_volume = volume; }
+    MidiByte getVolume() const { return m_volume; }
 
     void setProgramChange(MidiByte program) { m_programChange = program; }
     MidiByte getProgramChange() const { return m_programChange; }
@@ -143,8 +143,8 @@ public:
     void setSendPan(bool value) { m_sendPan = value; }
     bool sendsPan() const { return m_sendPan; }
 
-    void setSendVelocity(bool value) { m_sendVelocity = value; }
-    bool sendsVelocity() const { return m_sendVelocity; } 
+    void setSendVolume(bool value) { m_sendVolume = value; }
+    bool sendsVolume() const { return m_sendVolume; } 
 
     void setMSB(MidiByte msb) { m_msb = msb; }
     MidiByte getMSB() const { return m_msb; }
@@ -235,9 +235,9 @@ private:
     MidiByte        m_pan;
 
 
-    // Used for MIDI velocity and Audio volume (0dB == 100)
+    // Used for MIDI volume and Audio volume (0dB == 100)
     //
-    MidiByte        m_velocity;
+    MidiByte        m_volume;
 
     // Record level for Audio recording (0dB == 100)
     //
@@ -261,7 +261,7 @@ private:
     bool             m_sendBankSelect;
     bool             m_sendProgramChange;
     bool             m_sendPan;
-    bool             m_sendVelocity;
+    bool             m_sendVolume;
 
     // Where we hold the audio plugins for this instrument
     std::vector<AudioPluginInstance*>     m_audioPlugins;

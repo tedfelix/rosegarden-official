@@ -40,7 +40,8 @@ ModifyDeviceCommand::ModifyDeviceCommand(
         const std::string &librarianEmail,
         std::vector<Rosegarden::MidiBank> bankList,
         std::vector<Rosegarden::MidiProgram> programList,
-        bool overwrite):
+        bool overwrite,
+	bool rename):
     KNamedCommand(getGlobalName()),
     m_studio(studio),
     m_device(device),
@@ -49,7 +50,8 @@ ModifyDeviceCommand::ModifyDeviceCommand(
     m_librarianEmail(librarianEmail),
     m_bankList(bankList),
     m_programList(programList),
-    m_overwrite(overwrite)
+    m_overwrite(overwrite),
+    m_rename(rename)
 {
 }
 
@@ -68,7 +70,7 @@ ModifyDeviceCommand::execute()
     {
         device->replaceBankList(m_bankList);
         device->replaceProgramList(m_programList);
-        device->setName(m_name);
+        if (rename) device->setName(m_name);
         device->setLibrarian(m_librarianName, m_librarianEmail);
     }
     else
@@ -76,8 +78,10 @@ ModifyDeviceCommand::execute()
         device->mergeBankList(m_bankList);
         device->mergeProgramList(m_programList);
 
-        std::string mergeName = device->getName() + std::string("/") + m_name;
-        device->setName(mergeName);
+	if (rename) {
+	    std::string mergeName = device->getName() + std::string("/") + m_name;
+	    device->setName(mergeName);
+	}
     }
 
 }
@@ -87,7 +91,7 @@ ModifyDeviceCommand::unexecute()
 {
     Rosegarden::MidiDevice *device = m_studio->getMidiDevice(m_device);
 
-    device->setName(m_oldName);
+    if (rename) device->setName(m_oldName);
     device->replaceBankList(m_oldBankList);
     device->replaceProgramList(m_oldProgramList);
     device->setLibrarian(m_oldLibrarianName, m_oldLibrarianEmail);

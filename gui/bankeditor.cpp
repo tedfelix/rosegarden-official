@@ -1126,7 +1126,8 @@ BankEditorDialog::checkModified()
                                           device->getLibrarianEmail(),
                                           tempBank,
                                           tempProg,
-                                          true); // overwrite
+                                          true, // overwrite
+					  true); // rename
 
     } else {
 
@@ -1144,7 +1145,8 @@ BankEditorDialog::checkModified()
                                           device->getLibrarianEmail(),
                                           m_bankList,
                                           m_programList,
-                                          true);
+                                          true,
+					  true);
     }
 
     addCommandToHistory(command);
@@ -1250,7 +1252,8 @@ BankEditorDialog::slotApply()
                                           device->getLibrarianEmail(),
                                           tempBank,
                                           tempProg,
-                                          true);
+                                          true,
+					  true);
     }
     else
     {
@@ -1268,7 +1271,8 @@ BankEditorDialog::slotApply()
                                           device->getLibrarianEmail(),
                                           m_bankList,
                                           m_programList,
-                                          true);
+                                          true,
+					  true);
 
     }
     addCommandToHistory(command);
@@ -1763,14 +1767,12 @@ BankEditorDialog::slotImport()
 
                 int res = dialog->exec();
 
-                // Check for overwrite flag and reset res as necessary
+                // Check for overwrite/rename flags and reset res as necessary
                 //
-                bool overwrite = false;
-                if (res >> 24)
-                {
-                    overwrite = true;
-                    res &= 0xffffff;
-                }
+		bool overwrite = ((res >> 25) & 1);
+		bool rename = ((res >> 24) & 1);
+		
+		res &= 0xffffff;
 
                 if (res > -1)
                 {
@@ -1820,7 +1822,8 @@ BankEditorDialog::slotImport()
                                         librarianEmail,
                                         banks,
                                         programs,
-                                        overwrite);
+                                        overwrite,
+					true);
                             addCommandToHistory(command);
 
                             // No need to redraw the dialog, this is done by
@@ -1898,13 +1901,12 @@ BankEditorDialog::importFromSF2(QString filename)
 
         int res = dialog->exec();
 
-        // Check for overwrite flag and reset res as necessary
+        // Check for overwrite/rename flags and reset res as necessary
         //
-        bool overwrite = false;
-        if (res >> 24) {
-            overwrite = true;
-            res &= 0xffffff;
-        }
+        bool overwrite = ((res >> 25) & 1);
+	bool rename = ((res >> 24) & 1);
+
+	res &= 0xffffff;
 
         if (res > -1) {
 
@@ -1918,7 +1920,8 @@ BankEditorDialog::importFromSF2(QString filename)
                         "",
                         banks,
                         programs,
-                        overwrite);
+                        overwrite,
+			rename);
                 addCommandToHistory(command);
             }
         }
@@ -2261,11 +2264,15 @@ ImportDeviceDialog::ImportDeviceDialog(QWidget *parent,
     m_overwriteBanks =
         new QRadioButton(i18n("Overwrite Banks"), m_buttonGroup);
 
+    m_rename = new QCheckBox(i18n("Import device name"), mainFrame);
+
     KConfig *config = kapp->config();
     config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
     bool overwrite = config->readBoolEntry("importbanksoverwrite", false);
+    bool rename = config->readBoolEntry("importbanksrename", true);
     if (overwrite) m_buttonGroup->setButton(1);
     else m_buttonGroup->setButton(0);
+    m_rename->setChecked(rename);
 }
 
 void
@@ -2275,7 +2282,10 @@ ImportDeviceDialog::slotOk()
     KConfig *config = kapp->config();
     config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
     config->writeEntry("importbanksoverwrite", v == 1);
-    v <<= 24;
+    config->writeEntry("importbanksrename", m_rename->isChecked());
+    v <<= 1;
+    if (m_rename->isChecked()) v += 1;
+    v <<= 23;
     if (m_deviceCombo) v += m_deviceCombo->currentItem();
     done (v);
 }

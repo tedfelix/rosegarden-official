@@ -1594,7 +1594,7 @@ SequenceManager::preparePlayback()
         else if ((*it)->getType() == Instrument::Audio)
         {
             Rosegarden::StudioControl::setStudioObjectProperty(
-                    (*it)->getId(), "value", (*it)->getVelocity());
+                    (*it)->getId(), "value", (*it)->getVolume());
         }
         else
         {
