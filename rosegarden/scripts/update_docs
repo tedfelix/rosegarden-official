@@ -1,0 +1,28 @@
+#!/bin/sh
+
+cd /home/glaurent/rosegarden
+
+if ! [ -r "Doxyfile" ]
+then
+ echo "Doxyfile not found"
+ exit 1
+fi
+
+DOCDIR=`grep "OUTPUT_DIR.*=" Doxyfile | awk '{ print $3 }'`
+
+rm -rf $DOCDIR/code_doc
+
+(cd $DOCDIR/tutorial && cvs -z3 -q update -d -P) &
+echo "Running doxygen..."
+doxygen Doxyfile > /dev/null 2>&1
+echo "doxygen done"
+
+mv $DOCDIR/html $DOCDIR/code_doc
+
+wait
+
+rsync -auv --delete -e ssh $DOCDIR/code_doc $DOCDIR/tutorial glaurent@shell.sourceforge.net:/home/groups/r/ro/rosegarden/htdocs
+
+#scp $DOCDIR/html/* glaurent@shell.sourceforge.net:/home/groups/r/ro/rosegarden/htdocs/code_doc
+
+
