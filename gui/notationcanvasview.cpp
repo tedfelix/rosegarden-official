@@ -27,7 +27,8 @@ NotationCanvasView::NotationCanvasView(QCanvas *viewing, QWidget *parent,
                                        const char *name, WFlags f)
     : QCanvasView(viewing, parent, name, f),
       m_currentHighlightedLine(0),
-      m_currentNotePixmap(0)
+      m_currentNotePixmap(0),
+      m_lastYPosNearStaff(0)
 {
     setCurrentNotePixmap(m_notePixmapFactory.makeNotePixmap(Note::WholeNote));
 
@@ -54,42 +55,47 @@ NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
 //     if (m_currentHighlightedLine)
 //         m_currentHighlightedLine->setHighlighted(false);
 
-    m_currentHighlightedLine = 0;
-    m_currentNotePixmap->hide();
-
     QCanvasItemList itemList = canvas()->collisions(e->pos());
 
-    if(itemList.isEmpty()) {
-        
-        return;
-    }
+    if(itemList.isEmpty() && posIsTooFarFromStaff(e->pos())) {
 
-    QCanvasItemList::Iterator it;
+        m_currentHighlightedLine = 0;
+        m_currentNotePixmap->hide();
 
-    for (it = itemList.begin(); it != itemList.end(); ++it) {
+        needUpdate = true;
 
-        QCanvasItem *item = *it;
+    } else {
 
-        StaffLine *staffLine = 0;
+        QCanvasItemList::Iterator it;
+
+        for (it = itemList.begin(); it != itemList.end(); ++it) {
+
+            QCanvasItem *item = *it;
+
+            StaffLine *staffLine = 0;
     
-        if ((staffLine = dynamic_cast<StaffLine*>(item))) {
-            m_currentHighlightedLine = staffLine;
+            if ((staffLine = dynamic_cast<StaffLine*>(item))) {
+                m_currentHighlightedLine = staffLine;
 
-            // the -10 needed or else it's hidden by the mouse pointer
-            m_currentNotePixmap->setX(e->x() - 10);
+                // the -10 needed or else the pixmap is hidden by the
+                // mouse pointer
+                m_currentNotePixmap->setX(e->x() - 10);
 
-            QPoint point = m_currentHighlightedLine->startPoint();
+                QPoint point = m_currentHighlightedLine->startPoint();
 
-            // TODO : change this when Chris finishes pitch<->y stuff
-            //
-            m_currentNotePixmap->setY(point.y() + m_currentHighlightedLine->y());
+                // TODO : change this when Chris finishes pitch<->y stuff
+                //
+                m_currentNotePixmap->setY(point.y() + m_currentHighlightedLine->y());
 
-            m_currentNotePixmap->show();
-            needUpdate = true;
-            break;
+                m_currentNotePixmap->show();
+                m_lastYPosNearStaff = e->y();
+
+                needUpdate = true;
+                break;
+            }
         }
     }
-
+    
     if (needUpdate)
         canvas()->update();
 }
@@ -107,7 +113,7 @@ NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
         return;
     }
     
-
+#if 0 // all this should be removed
     QCanvasItemList itemList = canvas()->collisions(e->pos());
 
     if(itemList.isEmpty()) { // click was not on an item
@@ -124,7 +130,7 @@ NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
         StaffLine *staffLine;
     
         if ((staffLine = dynamic_cast<StaffLine*>(item))) {
-            kdDebug(KDEBUG_AREA) << "mousepress : on a staff Line - insert note - staff pitch :"
+            kdDebug(KDEBUG_AREA) << "mousepress : on a staff Line - insert note - staff pitch : "
                                  << staffLine->associatedPitch() << endl;
             insertNote(staffLine, e->pos());
             // staffLine->setPen(blue); - debug feedback to confirm which line what clicked on
@@ -132,6 +138,7 @@ NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
             return;
         }
     }
+#endif
     
     canvas()->update();
 }
@@ -140,11 +147,15 @@ NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 void
 NotationCanvasView::currentNoteChanged(Note::Type note)
 {
-    kdDebug(KDEBUG_AREA) << "NotationCanvasView::currentNoteChanged("
-                         << note << ")\n";
-
     QCanvasPixmap notePixmap = m_notePixmapFactory.makeNotePixmap(note);
     setCurrentNotePixmap(notePixmap);
+}
+
+void
+NotationCanvasView::setCurrentNotePixmap(QCanvasPixmap note)
+{
+    delete m_currentNotePixmap;
+    m_currentNotePixmap = new QCanvasSimpleSprite(&note, canvas());
 }
 
 
@@ -158,13 +169,14 @@ NotationCanvasView::insertNote(const StaffLine *line, const QPoint &pos)
     
 }
 
-void
-NotationCanvasView::setCurrentNotePixmap(QCanvasPixmap note)
+bool
+NotationCanvasView::posIsTooFarFromStaff(const QPoint &pos)
 {
-    if (m_currentNotePixmap)
-        m_currentNotePixmap->hide();
-
-    delete m_currentNotePixmap;
-    m_currentNotePixmap = new QCanvasSimpleSprite(&note, canvas());
-    m_currentNotePixmap->show();
+    // return true if pos.y is more than 10 pixels away from
+    // the last pos for which a collision was detected
+    //
+    return (pos.y() > m_lastYPosNearStaff) ?
+        (pos.y() - m_lastYPosNearStaff) > 10 :
+        (m_lastYPosNearStaff - pos.y()) > 10;
+    
 }

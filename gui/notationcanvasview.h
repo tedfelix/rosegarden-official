@@ -58,13 +58,15 @@ protected:
 
     void insertNote(const StaffLine*, const QPoint&);
 
+    bool posIsTooFarFromStaff(const QPoint &pos);
     
     StaffLine* m_currentHighlightedLine;
 
     QCanvasSprite *m_currentNotePixmap;
 
     NotePixmapFactory m_notePixmapFactory;
-    
+
+    int m_lastYPosNearStaff;
 };
 
 
