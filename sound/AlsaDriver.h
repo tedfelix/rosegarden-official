@@ -23,6 +23,8 @@
 #ifdef HAVE_ALSA
 
 #include <vector>
+#include <multiset.h>
+
 #include <alsa/asoundlib.h> // ALSA
 
 #include "SoundDriver.h"
@@ -96,6 +98,20 @@ public:
     bool isBypassed() const { return m_bypassed; }
     void setBypassed(bool value) { m_bypassed = value; }
 
+    // Order by instrument and then position
+    //
+    struct PluginCmp
+    {
+        bool operator()(const LADSPAPluginInstance *p1,
+                        const LADSPAPluginInstance *p2)
+        {
+            if (p1->getInstrument() != p2->getInstrument())
+                return p1->getInstrument() < p2->getInstrument();
+            else
+                return p1->getPosition() < p2->getPosition();
+        }
+    };
+
 protected:
     
     Rosegarden::InstrumentId  m_instrument;
@@ -116,6 +132,10 @@ protected:
 
 typedef std::vector<LADSPAPluginInstance*> PluginInstances;
 typedef std::vector<LADSPAPluginInstance*>::iterator PluginIterator;
+typedef std::multiset<LADSPAPluginInstance*,
+                      LADSPAPluginInstance::PluginCmp> OrderedPluginList;
+typedef std::multiset<LADSPAPluginInstance*,
+                      LADSPAPluginInstance::PluginCmp>::iterator OrderedPluginIterator;
 
 #endif // HAVE_LADSPA
 
@@ -240,6 +260,10 @@ public:
     // Return a list of plugin instances that haven't been run()
     //
     PluginInstances getUnprocessedPlugins();
+
+    // Return an ordered list of plugins for an Instrument
+    //
+    PluginInstances getInstrumentPlugins(InstrumentId id);
 
     // Reset all plugin processed states (start of a new process() loop)
     //

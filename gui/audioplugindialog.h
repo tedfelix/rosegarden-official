@@ -99,6 +99,8 @@ public:
                       Instrument *instrument,
                       int index);
 
+    Instrument* getInstrument() const { return m_instrument; }
+
 public slots:
     void slotPluginSelected(int index);
     void slotPluginPortChanged(int pluginIndex, float value);

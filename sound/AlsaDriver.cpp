@@ -2165,6 +2165,28 @@ AlsaDriver::getUnprocessedPlugins()
     return list;
 }
 
+// Return an ordered list of plugins for an instrument
+//
+PluginInstances
+AlsaDriver::getInstrumentPlugins(InstrumentId id)
+{
+    OrderedPluginList orderedList;
+    PluginIterator it = m_pluginInstances.begin();
+    for (; it != m_pluginInstances.end(); it++)
+    {
+        if ((*it)->getInstrument() == id)
+            orderedList.insert(*it);
+    }
+
+    PluginInstances list;
+    OrderedPluginIterator oIt = orderedList.begin();
+    for (; oIt != orderedList.end(); oIt++)
+        list.push_back(*oIt);
+
+    return list;
+}
+
+
 void
 AlsaDriver::setAllPluginsToUnprocessed()
 {
@@ -2480,7 +2502,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                                 ((short)(*(unsigned char *)samplePtr)) /
                                          _8bitSampleMax;
 
-                            _pluginBufferIn1[samplesOut] = outBytes;
+                            _pluginBufferIn1[samplesOut] = outBytes * volume;
                             //_tempOutBuffer1[samplesOut] += outBytes * volume;
 
                             if (fabs(outBytes) > peakLevel)
@@ -2494,7 +2516,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                                           _8bitSampleMax;
                             }
 
-                            _pluginBufferIn2[samplesOut] = outBytes;
+                            _pluginBufferIn2[samplesOut] = outBytes * volume;
                             //_tempOutBuffer2[samplesOut] += outBytes * volume;
                             break;
 
@@ -2502,7 +2524,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                             outBytes = (*((short*)(samplePtr))) /
                                            _16bitSampleMax;
 
-                            _pluginBufferIn1[samplesOut] = outBytes;
+                            _pluginBufferIn1[samplesOut] = outBytes * volume;
 
                             //_tempOutBuffer1[samplesOut] += outBytes * volume;
 
@@ -2516,7 +2538,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                                 outBytes = (*((short*)(samplePtr + 2))) /
                                            _16bitSampleMax;
                             }
-                            _pluginBufferIn2[samplesOut] = outBytes;
+                            _pluginBufferIn2[samplesOut] = outBytes * volume;
                             //_tempOutBuffer2[samplesOut] += outBytes * volume;
                             break;
 
@@ -2574,45 +2596,65 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                 // Insert plugins go here
                 //
 
-                // At this point attempt to use a plugin - get the
-                // plugin count and iterate over them with the 
-                // plugin buffer.
+                // At this point check for plugins on this
+                // instrument and step through them in the
+                // order returned.
                 //
-                LADSPAPluginInstance *plugin =
-                    inst->getPlugin((*it)->getInstrument(), 0);
+                PluginInstances list =
+                    inst->getInstrumentPlugins((*it)->getInstrument());
 
-                if (plugin)
+                if (list.size())
                 {
-                    plugin->run(_jackBufferSize);
-
-                    // Now mix the signal
-                    //
-                    for (unsigned int i = 0; i < nframes; i++)
+                    PluginIterator pIt = list.begin();
+                    for (; pIt != list.end(); pIt++)
                     {
-                        _tempOutBuffer1[i] += _pluginBufferOut1[i] * volume;
+    
+                        (*pIt)->run(_jackBufferSize);
+
+                        // Now mix the signal
+                        //
+                        for (unsigned int i = 0; i < nframes; i++)
+                        {
+                            _tempOutBuffer1[i] += _pluginBufferOut1[i];
                             
-                        if (plugin->getAudioChannelsOut() >= 2)
-                        {
-                            _tempOutBuffer2[i] += _pluginBufferOut2[i] * volume;
-                        }
-                        else
-                        {
-                            _tempOutBuffer2[i] += _pluginBufferOut1[i] * volume;
+                            if ((*pIt)->getAudioChannelsOut() >= 2)
+                            {
+                                _tempOutBuffer2[i] += _pluginBufferOut2[i];
+                            }
+                            else
+                            {
+                                _tempOutBuffer2[i] += _pluginBufferOut1[i];
+                            }
                         }
 
+                        // If we've got more than one plugin then now copy
+                        // back the out buffer into the input for reprocessing
+                        // by the next plugin.
+                        // 
+                        if ((*pIt) != list.back())
+                        {
+                            for (unsigned int i = 0; i < nframes; i++)
+                            {
+                                _pluginBufferIn1[i] = _pluginBufferOut1[i];
+                                _pluginBufferIn2[i] = _pluginBufferOut2[i];
+                            }
+                        }
                     }
                 }
-                else
+                else // straight through without plugins
                 {
                     for (unsigned int i = 0; i < nframes; i++)
                     {
-                        _tempOutBuffer1[i] += _pluginBufferIn1[i] * volume;
-                        _tempOutBuffer2[i] += _pluginBufferIn2[i] * volume;
+                        _tempOutBuffer1[i] += _pluginBufferIn1[i];
+                        _tempOutBuffer2[i] += _pluginBufferIn2[i];
                     }
                 }
             }
         }
 
+        // Playing plugins that have no current audio input but
+        // nonetheless could still have audio output.
+        //
 #ifdef HAVE_LADSPA
         if (inst->isPlaying())
         {
