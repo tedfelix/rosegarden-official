@@ -834,9 +834,9 @@ static string addDots(int dots, string s, bool hyphenate = false)
         os << dots << "-";
     }
     if (hyphenate) {
-	os << "dotted-" << s;
+	os << "dotted-" << s << ends;
     } else {
-	os << "dotted " << s;
+	os << "dotted " << s << ends;
     }
     return os.str();
 }

@@ -60,7 +60,10 @@
 15. Ties don't always appear (e.g. load davy.mid with viability switched
     on in MidiFile.cpp)
 
-16. Parameterise property names for quantizer
+16. Parameterise property names for quantizer [DONE]
+
+17. Deal with this strstream/stringstream thing -- fix on one or the
+    other, and make sure the memory management is correct
 
 
 Post-0.1.3 task list (superseding older ones)

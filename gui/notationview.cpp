@@ -321,8 +321,9 @@ void NotationView::setupActions()
     for (unsigned int i = 0, noteType = Note::Longest;
          i < 8; ++i, --noteType) {
 
-        icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap
-			(Note(noteType).getReferenceName().c_str()));
+	string iconName = Note(noteType).getReferenceName();
+        icon = QIconSet
+	    (m_toolbarNotePixmapFactory.makeToolbarPixmap(iconName.c_str()));
         noteAction = new KRadioAction(i18n(actionsNote[i][0]), icon, 0, this,
                                       actionsNote[i][1],
                                       actionCollection(), actionsNote[i][2]);
@@ -351,8 +352,9 @@ void NotationView::setupActions()
     for (unsigned int i = 0, noteType = Note::Longest;
          i < 8; ++i, --noteType) {
 
-        icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap
-			(Note(noteType, 1).getReferenceName().c_str()));
+	string iconName = Note(noteType, 1).getReferenceName();
+        icon = QIconSet
+	    (m_toolbarNotePixmapFactory.makeToolbarPixmap(iconName.c_str()));
         noteAction = new KRadioAction(i18n(actionsDottedNote[i][0]), icon, 0, this,
                                       actionsDottedNote[i][1],
                                       actionCollection(), actionsDottedNote[i][2]);
@@ -378,8 +380,9 @@ void NotationView::setupActions()
     for (unsigned int i = 0, noteType = Note::Longest;
          i < 8; ++i, --noteType) {
 
-        icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap
-			(Note(noteType).getReferenceName(true)).c_str());
+	string iconName = Note(noteType).getReferenceName(true);
+        icon = QIconSet
+	    (m_toolbarNotePixmapFactory.makeToolbarPixmap(iconName.c_str()));
         noteAction = new KRadioAction(i18n(actionsRest[i][0]), icon, 0, this,
                                       actionsRest[i][1],
                                       actionCollection(), actionsRest[i][2]);
@@ -405,8 +408,9 @@ void NotationView::setupActions()
     for (unsigned int i = 0, noteType = Note::Longest;
          i < 8 && noteType > 0; ++i, --noteType) {
 
-        icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap
-			(Note(noteType, 1).getReferenceName(true)).c_str());
+	string iconName = Note(noteType, 1).getReferenceName(true);
+        icon = QIconSet
+	    (m_toolbarNotePixmapFactory.makeToolbarPixmap(iconName.c_str()));
         noteAction = new KRadioAction(i18n(actionsDottedRest[i][0]), icon, 0, this,
                                       actionsDottedRest[i][1],
                                       actionCollection(), actionsDottedRest[i][2]);
