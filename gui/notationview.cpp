@@ -590,9 +590,12 @@ NotationView::showElements(NotationElementList::iterator from,
                 QCanvasPixmap unknownPixmap(npf.makeUnknownPixmap());
                 sprite = new QCanvasSimpleSprite(&unknownPixmap, canvas());
             }
-                
+
+            //
+            // Show the sprite
+            //
             if (sprite) {
-                
+
                 (*it)->setCanvasItem(sprite, dxoffset, dyoffset);
                 sprite->show();
 
