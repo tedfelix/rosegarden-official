@@ -87,6 +87,8 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
     } else if (lcName == "event") {
 
+        kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement: found event, current time is " << m_currentTime << endl;
+
         XMLStorableEvent *newEvent = new XMLStorableEvent(atts);
         newEvent->setAbsoluteTime(m_currentTime);
         
@@ -94,10 +96,12 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
             m_currentTime += newEvent->duration();
 
+            kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement: (we're not in a chord) " << endl;
+
         } else if (m_chordDuration == 0 &&
                    newEvent->duration() != 0) {
 
-            // set group duration to the duration of the 1st element
+            // set chord duration to the duration of the 1st element
             // with a non-null duration (if no such elements, leave it
             // to 0).
 
@@ -123,7 +127,7 @@ RoseXmlHandler::endElement(const QString& /*namespaceURI*/,
 {
     QString lcName = qName.lower();
 
-    if (lcName == "group") {
+    if (lcName == "chord") {
         m_currentTime += m_chordDuration;
         m_inChord = false;
         m_chordDuration = 0;

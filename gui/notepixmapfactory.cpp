@@ -37,14 +37,15 @@ NotePixmapOffsets::NotePixmapOffsets()
 
 void
 NotePixmapOffsets::offsetsFor(Note::Type note,
+                              bool dotted,
                               Accidental accidental,
-                              bool drawTail,
-                              bool stalkGoesUp)
+                              bool drawTail, bool stalkGoesUp)
 {
     m_note = note;
     m_accidental = accidental;
     m_drawTail = drawTail;
     m_stalkGoesUp = stalkGoesUp;
+    m_dotted = dotted;
     m_noteHasStalk = note < Note::WholeNote; //!!!
 
     m_bodyOffset.setX(0);     m_bodyOffset.setY(0);
@@ -90,7 +91,8 @@ NotePixmapOffsets::computeAccidentalAndStalkSize()
 void
 NotePixmapOffsets::computePixmapSize()
 {
-    m_pixmapSize.setWidth(m_bodySize.width() + m_accidentalStalkSize.width());
+    m_pixmapSize.setWidth(m_bodySize.width() + m_accidentalStalkSize.width() +
+                          (m_dotted ? m_dotSize.width() : 0));
 
     if (m_noteHasStalk) {
 
@@ -255,6 +257,10 @@ NotePixmapOffsets::setAccidentalsWidth(unsigned int sharp,
     m_naturalWidth = natural;
 }
 
+void NotePixmapOffsets::setDotSize(QSize size)
+{
+    m_dotSize = size;
+}
 
 
 
@@ -266,7 +272,8 @@ NotePixmapFactory::NotePixmapFactory()
       m_noteBodyEmpty("pixmaps/note-bodyempty.xpm"),
       m_accidentalSharp("pixmaps/notemod-sharp.xpm"),
       m_accidentalFlat("pixmaps/notemod-flat.xpm"),
-      m_accidentalNatural("pixmaps/notemod-natural.xpm")
+      m_accidentalNatural("pixmaps/notemod-natural.xpm"),
+      m_dot("pixmaps/dot.xpm")
 {
     // Yes, this is not a mistake. Don't ask me why - Chris named those
     QString pixmapTailUpFileName("pixmaps/tail-up-%1.xpm"),
@@ -302,6 +309,7 @@ NotePixmapFactory::NotePixmapFactory()
                                 m_accidentalFlat.width(),
                                 m_accidentalNatural.width());
     
+    m_offsets.setDotSize(m_dot.size());
 }
 
 NotePixmapFactory::~NotePixmapFactory()
@@ -320,13 +328,16 @@ NotePixmapFactory::~NotePixmapFactory()
 
 QCanvasPixmap
 NotePixmapFactory::makeNotePixmap(Note::Type note,
+                                  bool dotted,
                                   Accidental accidental,
                                   bool drawTail,
                                   bool stalkGoesUp)
 {
 
-    m_offsets.offsetsFor(note, accidental, drawTail, stalkGoesUp);
+    kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeNotePixmap: note is "
+                         << note << ", dotted is " << dotted << endl;
 
+    m_offsets.offsetsFor(note, dotted, accidental, drawTail, stalkGoesUp);
 
     if (note > Note::Longest) {
         kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeNotePixmap : note > LastNote ("
@@ -345,7 +356,9 @@ NotePixmapFactory::makeNotePixmap(Note::Type note,
 
     m_p.drawPixmap (m_offsets.bodyOffset(), *body);
     m_pm.drawPixmap(m_offsets.bodyOffset(), *(body->mask()));
-
+    
+    if (dotted)
+        drawDot();
 
     // paint stalk (if needed)
     //
@@ -391,7 +404,7 @@ NotePixmapFactory::makeNotePixmap(Note::Type note,
 
 
 QCanvasPixmap
-NotePixmapFactory::makeRestPixmap(Note::Type note)
+NotePixmapFactory::makeRestPixmap(Note::Type note, bool dotted)
 {
     switch (note) {
     case Note::SixtyFourthNote:
@@ -540,6 +553,19 @@ NotePixmapFactory::drawStalk(Note::Type note,
 }
 
 void
+NotePixmapFactory::drawDot()
+{
+    int x = m_offsets.bodyOffset().x() + m_noteBodyFilled.size().width();
+    int y = m_offsets.bodyOffset().y();
+
+    kdDebug(KDEBUG_AREA) << "NotePixmapFactory::drawDot(): placing dot at "
+                         << x << "," << y << endl;
+
+    m_p.drawPixmap(x, y, m_dot);
+    m_pm.drawPixmap(x, y, *(m_dot.mask()));
+}
+
+void
 NotePixmapFactory::drawAccidental(Accidental accidental, bool /*stalkGoesUp*/)
 {
     const QPixmap *accidentalPixmap = 0;
@@ -595,8 +621,8 @@ ChordPixmapFactory::ChordPixmapFactory(const Staff &s)
 QCanvasPixmap
 ChordPixmapFactory::makeChordPixmap(const ChordPitches &pitches,
                                     const Accidentals &accidentals,
-                                    Note::Type note, bool drawTail,
-                                    bool stalkGoesUp)
+                                    Note::Type note, bool dotted,
+                                    bool drawTail, bool stalkGoesUp)
 {
     // The heights we calculate are in the default clef, but they're
     // just used to calculate relative distances &c so that should be

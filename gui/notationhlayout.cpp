@@ -98,10 +98,12 @@ NotationHLayout::layout(NotationElementList::iterator from,
         NotationElement *elementBeforeFrom = (*oneBeforeFrom);
 
         m_quantizer.quantize(elementBeforeFrom->event());
-        //!!! dottedness
+
         Note::Type previousNote = elementBeforeFrom->event()->get<Int>("Notation::NoteType");
+        bool previousDotted = elementBeforeFrom->event()->get<Bool>("Notation::NoteDotted");
         x = elementBeforeFrom->x();
-        x += getNoteWidth(previousNote) + Staff::noteWidth + m_noteMargin;
+        x += getNoteWidth(previousNote, previousDotted) +
+            Staff::noteWidth + m_noteMargin;
 
 //!!! do this right
 /*!        if (m_currentScale->noteIsDecorated(*elementBeforeFrom)) {
@@ -168,9 +170,13 @@ NotationHLayout::layout(NotationElementList::iterator from,
             m_quantizer.quantize(nel->event());
         
             // find out if we have a chord; if not, move on
+
             NotationElementList::iterator ni(it);
-            if (it == to || !nel->isNote() || (++ni) == to || !(*ni)->isNote() ||
+
+            if (it == to || !nel->isNote() ||
+                (++ni) == to || !(*ni)->isNote() ||
                 (*ni)->absoluteTime() != nel->absoluteTime()) {
+
                 // okay, we aren't a note being followed by a note with the
                 // same absolute time... so don't hang back
 
@@ -180,11 +186,13 @@ NotationHLayout::layout(NotationElementList::iterator from,
 
                 // check the property is here ?
                 Note::Type note = nel->event()->get<Int>("Notation::NoteType");
+                bool dotted = nel->event()->get<Bool>("Notation::NoteDotted");
 
                 kdDebug(KDEBUG_AREA) << "NotationHLayout::layout() : moving from "
                                      << x << "..." << endl;
 
-                x += getNoteWidth(note) + Staff::noteWidth + m_noteMargin;
+                x += getNoteWidth(note, dotted) +
+                    Staff::noteWidth + m_noteMargin;
 
                 kdDebug(KDEBUG_AREA) << " to " << x << endl;
 
