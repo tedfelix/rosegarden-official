@@ -259,6 +259,11 @@ void RosegardenProgressDialog::slotFreeze()
 	hide();
     }
 
+    // This is also a convenient place to ensure the wait cursor (if
+    // currently shown) returns to the original cursor to ensure that
+    // the user can respond to whatever's freezing the progress dialog
+    QApplication::restoreOverrideCursor();
+
     mShowTimer->stop();
     m_frozen = true;
 }

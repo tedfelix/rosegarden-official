@@ -148,6 +148,21 @@ static void _settingLog(QString msg)
 #endif
 
 
+SetWaitCursor::SetWaitCursor()
+{
+    QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
+}
+
+SetWaitCursor::~SetWaitCursor()
+{
+    QApplication::restoreOverrideCursor();
+}
+
+//!!!    SetWaitCursor() : m_currentCursor(kapp->mainWidget()->cursor())
+//    { kapp->mainWidget()->setCursor(QCursor(Qt::waitCursor)); }
+//    ~SetWaitCursor() { kapp->mainWidget()->setCursor(m_currentCursor); }
+
+
 RosegardenGUIApp *RosegardenGUIApp::m_myself = 0;
 
 using Rosegarden::timeT;
