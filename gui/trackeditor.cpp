@@ -316,10 +316,17 @@ void TrackEditor::slotReadjustCanvasSize()
 //                                 //QApplication::desktop()->height()
 //                                 );
 
-    RG_DEBUG << "TrackEditor::slotReadjustCanvasSize() : nbTracks = "
+    RG_DEBUG << "TrackEditor::slotReadjustCanvasSize() : width = "
+	     << m_canvasWidth << ", nbTracks = "
              << comp.getNbTracks() << endl;
 
     int canvasHeight = getTrackCellHeight() * std::max(40u, comp.getNbTracks());
+
+    int chunkSize = 100;
+    if (m_canvasWidth > 20000) {
+	chunkSize = m_canvasWidth / 1000;
+    }
+    m_segmentCanvas->canvas()->retune(chunkSize);
 
     m_segmentCanvas->canvas()->resize(m_canvasWidth, canvasHeight);
 

@@ -1407,13 +1407,26 @@ SequenceManager::getSequencerPlugins(AudioPluginManager *aPM)
 
 #ifdef QUERY_PLUGINS_FROM_GUI
 
-    PluginFactory::enumerateAllPlugins(seqPlugins);
+	if (!rgapp->noSequencerMode()) {
 
-    SEQMAN_DEBUG << "got " << seqPlugins.size() << " pieces of plugin data at GUI side" << endl;
+	    // We only waste the time looking for plugins here if we
+	    // know we're actually going to be able to use them.
+	    // Otherwise fall back to querying the sequencer for them,
+	    // which will almost certainly fail (because we just
+	    // established it wasn't running) but at least will fail
+	    // in a way consistent with the old
+	    // non-QUERY_PLUGINS_FROM_GUI behaviour.
 
+	    PluginFactory::enumerateAllPlugins(seqPlugins);
+
+	    SEQMAN_DEBUG << "got " << seqPlugins.size() << " pieces of plugin data at GUI side" << endl;
+
+	} else {
+	    seqPlugins = StudioControl::getPluginInformation();
+	}
 #else
 
-    seqPlugins = StudioControl::getPluginInformation();
+	seqPlugins = StudioControl::getPluginInformation();
 
 #endif
     }
