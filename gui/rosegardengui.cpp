@@ -920,7 +920,7 @@ void RosegardenGUIApp::slotFileNew()
 {
     RG_DEBUG << "RosegardenGUIApp::slotFileNew()\n";
 
-    KTmpStatusMsg msg(i18n("Creating new document..."), statusBar());
+    KTmpStatusMsg msg(i18n("Creating new document..."), this);
 
     bool makeNew = false;
     
