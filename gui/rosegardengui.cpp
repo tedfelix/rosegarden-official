@@ -456,6 +456,11 @@ void RosegardenGUIApp::setupActions()
 
     KStdAction::quit  (this, SLOT(slotQuit()),              actionCollection());
 
+    // help menu
+    new KAction(i18n("Rosegarden Online &Tutorial"), 0, 0, this,
+		SLOT(slotTutorial()), actionCollection(),
+		"tutorial");
+
     // setup edit menu
     KStdAction::cut      (this, SLOT(slotEditCut()),        actionCollection());
     KStdAction::copy     (this, SLOT(slotEditCopy()),       actionCollection());
@@ -5998,6 +6003,13 @@ RosegardenGUIApp::slotPlayListClosed()
 {
     RG_DEBUG << "RosegardenGUIApp::slotPlayListClosed()\n";
     m_playList = 0;
+}
+
+void
+RosegardenGUIApp::slotTutorial()
+{
+    QString tutorialURL = i18n("http://www.rosegardenmusic.com/resources/tutorial/using_en.shtml");
+    kapp->invokeBrowser(tutorialURL);
 }
 
 void

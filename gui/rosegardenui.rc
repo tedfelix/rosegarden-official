@@ -169,7 +169,8 @@
              <Action name="show_tracklabels"           append="show_merge" />
          <!-- Action name="toggle_all"                 append="show_merge" /> -->
   </Menu>
-  <Menu name="help">
+  <Menu name="help" append="about_merge"><text>&amp;Help</text>
+    <Action name="tutorial"/>
   </Menu>
 
 </MenuBar>

@@ -1143,6 +1143,11 @@ public slots:
     void slotPlayListPlay(QString url);
 
     /**
+     * Call up the online tutorial
+     */
+    void slotTutorial();
+
+    /**
      * View the trigger segments manager
      */
     void slotManageTriggerSegments();
