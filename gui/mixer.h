@@ -55,6 +55,7 @@ protected slots:
     void slotMuteChanged();
     void slotRecordChanged();
     void slotSelectPlugin();
+    void slotClose();
     
 protected:
     virtual void closeEvent(QCloseEvent *);
@@ -72,7 +73,7 @@ private:
 	FaderRec() :
 	    m_input(0), m_output(0), m_pan(0), m_fader(0), m_meter(0),
 	    m_muteButton(0), m_soloButton(0), m_recordButton(0),
-	    m_stereoButton(0), m_pluginBox(0)
+	    m_stereoButton(0), m_stereoness(false), m_pluginBox(0)
 	{ }
 
 	QPushButton *m_input;
@@ -102,6 +103,7 @@ private:
 
     void updateFader(int id); // instrument id if large enough, master/sub otherwise
     void updateRouteButtons(int id);
+    void updateStereoButton(int id);
 
     QPixmap m_monoPixmap;
     QPixmap m_stereoPixmap;

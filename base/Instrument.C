@@ -287,7 +287,7 @@ Instrument::setAudioInputToRecord(int recordIn)
 int
 Instrument::getAudioInput(bool &isBuss) const
 {
-    if (m_audioInput > 1000) {
+    if (m_audioInput >= 1000) {
 	isBuss = false;
 	return m_audioInput - 1000;
     } else {

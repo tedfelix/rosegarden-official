@@ -174,7 +174,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     //
     if (m_useSequencer) {
 
-#ifdef HAVE_LIBJACK
+#ifdef HAVE_LIBJACK__DISABLED_FOR_TESTING_JACK_0_95
         // First we check if jackd is running allready
 
         std::string jackClientName = "rosegarden";
