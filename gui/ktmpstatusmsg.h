@@ -19,6 +19,9 @@
     COPYING included with this distribution for more information.
 */
 
+#ifndef KTMPSTATUSMSG_H
+#define KTMPSTATUSMSG_H
+
 class KStatusBar;
 
 /**
@@ -75,4 +78,6 @@ protected:
     static int m_defaultId;
     static QString m_defaultMsg;
 };
+
+#endif
 
