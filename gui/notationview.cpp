@@ -282,7 +282,7 @@ NotationView::setupActions()
     // Quarter
     icon = QIconSet(m_toolbarNotePixmapFactory.makeNotePixmap
                     (Note::QuarterNote, false, NoAccidental,
-                     true, true, true));
+                     false, true, true, true));
     noteAction = new KRadioAction(i18n("Quarter"), icon, 0, this,
                                   SLOT(slotQuarter()),
                                   actionCollection(), "quarter" );
@@ -291,7 +291,7 @@ NotationView::setupActions()
     // 8th
     icon = QIconSet(m_toolbarNotePixmapFactory.makeNotePixmap
                     (Note::EighthNote, false, NoAccidental,
-                     true, true, true));
+                     false, true, true, true));
     noteAction = new KRadioAction(i18n("8th"), icon, 0, this,
                                   SLOT(slot8th()),
                                   actionCollection(), "8th" );
@@ -300,7 +300,7 @@ NotationView::setupActions()
     // 16th
     icon = QIconSet(m_toolbarNotePixmapFactory.makeNotePixmap
                     (Note::SixteenthNote, false, NoAccidental,
-                     true, true, true));
+                     false, true, true, true));
     noteAction = new KRadioAction(i18n("16th"), icon, 0, this,
                                   SLOT(slot16th()),
                                   actionCollection(), "16th" );
@@ -309,7 +309,7 @@ NotationView::setupActions()
     // 32nd
     icon = QIconSet(m_toolbarNotePixmapFactory.makeNotePixmap
                     (Note::ThirtySecondNote, false, NoAccidental,
-                     true, true, true));
+                     false, true, true, true));
     noteAction = new KRadioAction(i18n("32nd"), icon, 0, this,
                                   SLOT(slot32nd()),
                                   actionCollection(), "32nd" );
@@ -318,7 +318,7 @@ NotationView::setupActions()
     // 64th
     icon = QIconSet(m_toolbarNotePixmapFactory.makeNotePixmap
                     (Note::SixtyFourthNote, false, NoAccidental,
-                     true, true, true));
+                     false, true, true, true));
     noteAction = new KRadioAction(i18n("64th"), icon, 0, this,
                                   SLOT(slot64th()),
                                   actionCollection(), "64th" );

@@ -21,6 +21,8 @@
 
 namespace Rosegarden 
 {
+using std::cerr;
+using std::endl;
     
 Track::Track(unsigned int nbBars, unsigned int startIdx)
     : std::multiset<Event*, Event::EventCmp>(),
