@@ -335,7 +335,7 @@ RosegardenGUIDoc::xmlParse(QFile &file)
 
 
 void
-RosegardenGUIDoc::createNewTrack(TrackPartItem *p)
+RosegardenGUIDoc::createNewTrack(TrackItem *p)
 {
     kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::createNewTrack(item : "
                          << p << ")\n";

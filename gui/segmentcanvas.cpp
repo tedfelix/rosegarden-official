@@ -31,22 +31,22 @@
 using Rosegarden::Track;
 
 //////////////////////////////////////////////////////////////////////
-//                TrackPartItem
+//                TrackItem
 //////////////////////////////////////////////////////////////////////
 
-TrackPartItem::TrackPartItem(QCanvas* canvas)
+TrackItem::TrackItem(QCanvas* canvas)
     : QCanvasRectangle(canvas),
       m_track(0)
 {
 }
 
-TrackPartItem::TrackPartItem(const QRect &r, QCanvas* canvas)
+TrackItem::TrackItem(const QRect &r, QCanvas* canvas)
     : QCanvasRectangle(r, canvas),
       m_track(0)
 {
 }
 
-TrackPartItem::TrackPartItem(int x, int y,
+TrackItem::TrackItem(int x, int y,
                              int width, int height,
                              QCanvas* canvas)
     : QCanvasRectangle(x, y, width, height, canvas),
@@ -54,22 +54,22 @@ TrackPartItem::TrackPartItem(int x, int y,
 {
 }
 
-unsigned int TrackPartItem::getLength() const
+unsigned int TrackItem::getLength() const
 {
     return rect().width() / m_widthToLengthRatio;
 }
 
-unsigned int TrackPartItem::getStartIndex() const
+unsigned int TrackItem::getStartIndex() const
 {
     return rect().x() / m_widthToLengthRatio;
 }
 
-void TrackPartItem::setWidthToLengthRatio(unsigned int r)
+void TrackItem::setWidthToLengthRatio(unsigned int r)
 {
     m_widthToLengthRatio = r;
 }
 
-unsigned int TrackPartItem::m_widthToLengthRatio = 1;
+unsigned int TrackItem::m_widthToLengthRatio = 1;
 
 
 //////////////////////////////////////////////////////////////////////
@@ -88,7 +88,7 @@ TracksCanvas::TracksCanvas(int gridH, int gridV,
     m_pen(Qt::black),
     m_editMenu(new QPopupMenu(this))
 {
-    TrackPartItem::setWidthToLengthRatio(m_grid.hstep());
+    TrackItem::setWidthToLengthRatio(m_grid.hstep());
 
     m_editMenu->insertItem(I18N_NOOP("Edit"),
                            this, SLOT(onEdit()));
@@ -133,7 +133,7 @@ TracksCanvas::setTool(ToolType t)
     }
 }
 
-TrackPartItem*
+TrackItem*
 TracksCanvas::findPartClickedOn(QPoint pos)
 {
     QCanvasItemList l=canvas()->collisions(pos);
@@ -141,7 +141,7 @@ TracksCanvas::findPartClickedOn(QPoint pos)
     if (l.count()) {
 
         for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it) {
-            if (TrackPartItem *item = dynamic_cast<TrackPartItem*>(*it))
+            if (TrackItem *item = dynamic_cast<TrackItem*>(*it))
                 return item;
         }
 
@@ -159,7 +159,7 @@ TracksCanvas::contentsMousePressEvent(QMouseEvent* e)
 
     } else if (e->button() == RightButton) { // popup menu if over a part
 
-        TrackPartItem *item = findPartClickedOn(e->pos());
+        TrackItem *item = findPartClickedOn(e->pos());
 
         if (item) {
             m_currentItem = item;
@@ -199,10 +199,10 @@ void TracksCanvas::clear()
 }
 
 /// called when reading a music file
-TrackPartItem*
+TrackItem*
 TracksCanvas::addPartItem(int x, int y, unsigned int nbBars)
 {
-    TrackPartItem* newPartItem = new TrackPartItem(x, y,
+    TrackItem* newPartItem = new TrackItem(x, y,
                                                    gridHStep() * nbBars,
                                                    grid().vstep(),
                                                    canvas());
@@ -249,8 +249,8 @@ TrackPencil::TrackPencil(TracksCanvas *c)
     : TrackTool(c),
       m_newRect(false)
 {
-    connect(this, SIGNAL(addTrack(TrackPartItem*)),
-            c,    SIGNAL(addTrack(TrackPartItem*)));
+    connect(this, SIGNAL(addTrack(TrackItem*)),
+            c,    SIGNAL(addTrack(TrackItem*)));
     connect(this, SIGNAL(deleteTrack(Rosegarden::Track*)),
             c,    SIGNAL(deleteTrack(Rosegarden::Track*)));
     connect(this, SIGNAL(resizeTrack(Rosegarden::Track*)),
@@ -266,7 +266,7 @@ void TrackPencil::handleMouseButtonPress(QMouseEvent *e)
 
     // Check if we're clicking on a rect
     //
-    TrackPartItem *item = m_canvas->findPartClickedOn(e->pos());
+    TrackItem *item = m_canvas->findPartClickedOn(e->pos());
 
     if (item) {
         // we are, so set currentItem to it
@@ -278,7 +278,7 @@ void TrackPencil::handleMouseButtonPress(QMouseEvent *e)
         int gx = m_canvas->grid().snapX(e->pos().x()),
             gy = m_canvas->grid().snapY(e->pos().y());
 
-        m_currentItem = new TrackPartItem(gx, gy,
+        m_currentItem = new TrackItem(gx, gy,
                                           m_canvas->grid().hstep(),
                                           m_canvas->grid().vstep(),
                                           m_canvas->canvas());
@@ -377,7 +377,7 @@ TrackMover::TrackMover(TracksCanvas *c)
 
 void TrackMover::handleMouseButtonPress(QMouseEvent *e)
 {
-    TrackPartItem *item = m_canvas->findPartClickedOn(e->pos());
+    TrackItem *item = m_canvas->findPartClickedOn(e->pos());
 
     if (item) {
         m_currentItem = item;
@@ -424,7 +424,7 @@ TrackResizer::TrackResizer(TracksCanvas *c)
 
 void TrackResizer::handleMouseButtonPress(QMouseEvent *e)
 {
-    TrackPartItem* item = m_canvas->findPartClickedOn(e->pos());
+    TrackItem* item = m_canvas->findPartClickedOn(e->pos());
 
     if (item && cursorIsCloseEnoughToEdge(item, e)) {
         m_currentItem = item;
@@ -449,7 +449,7 @@ void TrackResizer::handleMouseMove(QMouseEvent *e)
     
 }
 
-bool TrackResizer::cursorIsCloseEnoughToEdge(TrackPartItem* p, QMouseEvent* e)
+bool TrackResizer::cursorIsCloseEnoughToEdge(TrackItem* p, QMouseEvent* e)
 {
     return ( abs(p->rect().x() + p->rect().width() - e->x()) < m_edgeThreshold);
 }

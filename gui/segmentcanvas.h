@@ -26,12 +26,12 @@
 
 namespace Rosegarden { class Track; }
 
-class TrackPartItem : public QCanvasRectangle
+class TrackItem : public QCanvasRectangle
 {
 public:
-    TrackPartItem(QCanvas* canvas);
-    TrackPartItem(const QRect &, QCanvas* canvas);
-    TrackPartItem(int x, int y, int width, int height, QCanvas* canvas);
+    TrackItem(QCanvas* canvas);
+    TrackItem(const QRect &, QCanvas* canvas);
+    TrackItem(int x, int y, int width, int height, QCanvas* canvas);
 
     unsigned int getLength() const;
     unsigned int getStartIndex() const;
@@ -98,8 +98,8 @@ public:
     const QBrush& brush()  const { return m_brush; }
     const QPen& pen()      const { return m_pen; }
 
-    TrackPartItem* addPartItem(int x, int y, unsigned int nbBars);
-    TrackPartItem* findPartClickedOn(QPoint);
+    TrackItem* addPartItem(int x, int y, unsigned int nbBars);
+    TrackItem* findPartClickedOn(QPoint);
 
 public slots:
     void setTool(TracksCanvas::ToolType);
@@ -120,7 +120,7 @@ protected slots:
     void onEditSmall();
 
 signals:
-    void addTrack(TrackPartItem*);
+    void addTrack(TrackItem*);
     void deleteTrack(Rosegarden::Track*);
     void resizeTrack(Rosegarden::Track*);
     void editTrack(Rosegarden::Track*);
@@ -132,7 +132,7 @@ private:
 
     SnapGrid m_grid;
 
-    TrackPartItem* m_currentItem;
+    TrackItem* m_currentItem;
 
     QCanvasItem* m_moving;
 
@@ -159,7 +159,7 @@ public:
 
 protected:
     TracksCanvas*  m_canvas;
-    TrackPartItem* m_currentItem;
+    TrackItem* m_currentItem;
 };
 
 //////////////////////////////
@@ -177,7 +177,7 @@ public:
     virtual void handleMouseMove(QMouseEvent*);
 
 signals:
-    void addTrack(TrackPartItem*);
+    void addTrack(TrackItem*);
     void resizeTrack(Rosegarden::Track*);
     void deleteTrack(Rosegarden::Track*);
 
@@ -227,7 +227,7 @@ signals:
     void resizeTrack(Rosegarden::Track*);
 
 protected:
-    bool cursorIsCloseEnoughToEdge(TrackPartItem*, QMouseEvent*);
+    bool cursorIsCloseEnoughToEdge(TrackItem*, QMouseEvent*);
 
     unsigned int m_edgeThreshold;
 };

@@ -36,7 +36,7 @@
 // forward declaration of the RosegardenGUI classes
 class RosegardenGUIView;
 class ViewElementsManager;
-class TrackPartItem;
+class TrackItem;
 
 /**	RosegardenGUIDoc provides a document object for a document-view model.
   *
@@ -121,7 +121,7 @@ public slots:
      */
     void slotUpdateAllViews(RosegardenGUIView *sender);
 
-    void createNewTrack(TrackPartItem*);
+    void createNewTrack(TrackItem*);
 
 protected:
     bool xmlParse(QFile &file);

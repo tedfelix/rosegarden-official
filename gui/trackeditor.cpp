@@ -115,8 +115,8 @@ TracksEditor::init(unsigned int nbTracks, unsigned int nbBars)
     connect(this, SIGNAL(needUpdate()),
             m_tracksCanvas, SLOT(update()));
 
-    QObject::connect(m_tracksCanvas, SIGNAL(addTrack(TrackPartItem*)),
-                     this,           SLOT(addTrack(TrackPartItem*)));
+    QObject::connect(m_tracksCanvas, SIGNAL(addTrack(TrackItem*)),
+                     this,           SLOT(addTrack(TrackItem*)));
 
     QObject::connect(m_tracksCanvas, SIGNAL(deleteTrack(Rosegarden::Track*)),
                      this,           SLOT(deleteTrack(Rosegarden::Track*)));
@@ -151,7 +151,7 @@ TracksEditor::setupTracks()
             y = m_vHeader->sectionPos((*i)->getInstrument());
             // TODO : compute x according to track start
 
-            TrackPartItem *newItem = m_tracksCanvas->addPartItem(x, y,
+            TrackItem *newItem = m_tracksCanvas->addPartItem(x, y,
                                                                  (*i)->getNbBars());    
             newItem->setTrack(*i);
         }
@@ -171,7 +171,7 @@ TracksEditor::trackOrderChanged(int section, int fromIdx, int toIdx)
 }
 
 void
-TracksEditor::addTrack(TrackPartItem *p)
+TracksEditor::addTrack(TrackItem *p)
 {
     // find instrument for part
     //
@@ -225,7 +225,7 @@ TracksEditor::moveTrack(int /*section*/, int /*fromIdx*/, int /*toIdx*/)
 
     for (it = itemList.begin(); it != itemList.end(); ++it) {
         QCanvasItem *item = *it;
-        TrackPartItem *trackItem = dynamic_cast<TrackPartItem*>(item);
+        TrackItem *trackItem = dynamic_cast<TrackItem*>(item);
         
         if (trackItem) {
             trackItem->setY(m_vHeader->sectionPos(trackItem->getInstrument()));

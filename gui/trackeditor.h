@@ -26,7 +26,7 @@
 #include <qheader.h>
 
 namespace Rosegarden { class Track; }
-class TrackPartItem;
+class TrackItem;
 class TracksCanvas;
 class RosegardenGUIDoc;
 
@@ -65,13 +65,13 @@ public:
 
 protected slots:
     void trackOrderChanged(int section, int fromIdx, int toIdx);
-    void addTrack(TrackPartItem*);
+    void addTrack(TrackItem*);
     void deleteTrack(Rosegarden::Track*);
     void resizeTrack(Rosegarden::Track*); // TODO : get rid of this
 
 signals:
     void needUpdate();
-    void createNewTrack(TrackPartItem*);
+    void createNewTrack(TrackItem*);
 
 protected:
 
