@@ -218,6 +218,10 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
         NotationElementList::iterator from = 
 	    getStartOfQuantizedSlice(notes, barTimes.first);
 
+	NOTATION_DEBUG << "getStartOfQuantizedSlice returned " <<
+	    (from != notes->end() ? (*from)->getViewAbsoluteTime() : -1)
+		       << " from " << barTimes.first << endl;
+
         NotationElementList::iterator to =
 	    getStartOfQuantizedSlice(notes, barTimes.second);
 
@@ -257,6 +261,7 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
         for (NotationElementList::iterator itr = from; itr != to; ++itr) {
         
             NotationElement *el = static_cast<NotationElement*>((*itr));
+	    NOTATION_DEBUG << "element is a " << el->event()->getType() << endl;
 
 	    if (el->event()->has(BEAMED_GROUP_ID)) {
 		long groupId = el->event()->get<Int>(BEAMED_GROUP_ID);
@@ -1173,6 +1178,8 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
             NotationElement *el = static_cast<NotationElement*>(*it);
 
+	    NOTATION_DEBUG << "element is a " << el->event()->getType() << endl;
+
 	    double delta = 0;
 	    if (chunkitr != chunks.end()) {
 //		NOTATION_DEBUG << "barX is " << barX << ", reconcileRatio is " << reconcileRatio << " (" << bdi->second.sizeData.reconciledWidth << "/" << bdi->second.sizeData.idealWidth << ") , chunk's x is " << (*chunkitr).x << ", chunk is at " << &(*chunkitr) << endl;
@@ -1205,7 +1212,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 		timeSigToPlace = false;
 	    }
 
-//            NOTATION_DEBUG << "NotationHLayout::layout(): setting element's x to " << x << endl;
+            NOTATION_DEBUG << "NotationHLayout::layout(): setting element's x to " << x << endl;
 
 	    el->setLayoutX(x);
 	    el->setLayoutAirspace(x, int(delta));

@@ -168,9 +168,8 @@ MusicXmlExporter::writeNote(Event *e, bool isFlatKeySignature, std::ofstream &st
     // Incomplete: will RG ever use this?
     str << "\t\t\t\t<voice>" << "1" << "</voice>" << std::endl;
     Note tmpNote = Note::getNearestNote(e->getDuration(), MAX_DOTS);
-    // Incomplete: getReferenceName probably is not the list of valid
-    // MusicXML types (need to convert)
-    str << "\t\t\t\t<type>" << NotationStrings::getReferenceName(tmpNote) << "</type>" << std::endl;
+    // getAmericanName is not necessarily the right thing here
+    str << "\t\t\t\t<type>" << NotationStrings::getAmericanName(tmpNote) << "</type>" << std::endl;
     // could also do <stem>down</stem> if you wanted
     str << "\t\t\t\t</note>" << std::endl;
 }
@@ -269,8 +268,10 @@ MusicXmlExporter::write() {
             str << "\t\t\t\t<instrument-name>" << trackInstrument->getType() << "</instrument-name>" << std::endl;
             str << "\t\t\t</score-instrument>" << std::endl;
             str << "\t\t\t<midi-instrument id=\"" << trackInstrument->getName() << "\">" << std::endl;
-            str << "\t\t\t\t<midi-channel>" << ((unsigned int)trackInstrument->getMidiChannel()) << "</midi-channel>" << std::endl;
-            str << "\t\t\t\t<midi-program>" << ((unsigned int)trackInstrument->getProgramChange()) << "</midi-program>" << std::endl;
+            str << "\t\t\t\t<midi-channel>" << ((unsigned int)trackInstrument->getMidiChannel() + 1) << "</midi-channel>" << std::endl;
+	    if (trackInstrument->sendsProgramChange()) {
+		str << "\t\t\t\t<midi-program>" << ((unsigned int)trackInstrument->getProgramChange() + 1) << "</midi-program>" << std::endl;
+	    }
             str << "\t\t\t</midi-instrument>" << std::endl;
         }
         str << "\t\t</score-part>" << std::endl;
@@ -295,9 +296,9 @@ MusicXmlExporter::write() {
         Rosegarden::CompositionTimeSliceAdapter adapter(composition, trackSet);
         if (startedPart) {
             str << "\t</part>" << std::endl;
-            startedPart = true;
         }
         str << "\t<part id=\"" << (*j).first << "\">" << std::endl;
+	startedPart = true;
         int oldMeasureNumber = -1;
         bool startedAttributes = false;
         bool isFlatKeySignature = false;

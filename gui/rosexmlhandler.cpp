@@ -956,20 +956,12 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 		// valid play midi device to modify:
 		skipToNextPlayDevice();
 
-//		m_device = getStudio().getDevice(id);
-	    
-//		Rosegarden::MidiDevice *md =
-//		    dynamic_cast<Rosegarden::MidiDevice *>(m_device);
-		    
-//		if (md && md->getDirection() == Rosegarden::MidiDevice::Play) {
 		if (m_device) {
 		    if (nameStr && nameStr != "") {
 			m_device->setName(qstrtostr(nameStr));
 		    }
 		} else if (nameStr && nameStr != "") {
 		    addMIDIDevice(nameStr, m_createDevices); // also sets m_device
-//		} else {
-//		    m_device = 0;
 		}
 	    }
 
@@ -1124,8 +1116,11 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         }
 
 	if (!m_device) {
-	    m_deprecation = true;
-	    std::cerr << "WARNING: This Rosegarden file uses a deprecated control parameter structure.  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
+//!!! ach no, we can't give this warning -- we might be in a <device> elt
+// but have no sequencer support, for example.  we need a separate m_inDevice
+// flag
+//	    m_deprecation = true;
+//	    std::cerr << "WARNING: This Rosegarden file uses a deprecated control parameter structure.  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
 
 	} else if (m_device->getType() == Rosegarden::Device::Midi) {
 

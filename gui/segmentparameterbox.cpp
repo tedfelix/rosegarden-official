@@ -63,7 +63,7 @@ SegmentParameterBox::~SegmentParameterBox()
 void
 SegmentParameterBox::initBox()
 {
-    QFont font(getFont());
+    QFont font(m_font);
 
     QFontMetrics fontMetrics(font);
     // magic numbers: 13 is the height of the menu pixmaps, 10 is just 10

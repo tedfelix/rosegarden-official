@@ -74,9 +74,12 @@ NotationElement::getCanvasX()
 {
     if (m_canvasItem)
         return m_canvasItem->x();
-    else
+    else {
+	std::cerr << "ERROR: No canvas item for this notation element:";
+	event()->dump(std::cerr);
         throw NoCanvasItem("No canvas item for notation element of type " +
 			   event()->getType(), __FILE__, __LINE__);
+    }
 }
 
 double
@@ -84,9 +87,12 @@ NotationElement::getCanvasY()
 {
     if (m_canvasItem)
         return m_canvasItem->y();
-    else
+    else {
+	std::cerr << "ERROR: No canvas item for this notation element:";
+	event()->dump(std::cerr);
         throw NoCanvasItem("No canvas item for notation element of type " +
 			   event()->getType(), __FILE__, __LINE__);
+    }
 }
 
 bool

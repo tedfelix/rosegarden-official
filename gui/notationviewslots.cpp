@@ -1554,6 +1554,8 @@ NotationView::doDeferredCursorMove()
         }
     }
 
+//!!! need to catch NoCanvasItem exceptions
+
     if (m_deferredCursorMove == CursorMoveAndScrollToPosition) {
 
         // get current canvas x of insert cursor, which might not be

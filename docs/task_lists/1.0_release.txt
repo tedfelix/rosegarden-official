@@ -4,9 +4,6 @@ Features for 1.0 - updated 20030923
 - integrate new JACK transport and synchronisation - also
   investigate MIDI clock, MTC and MMC [IN PROGRESS - rwb]
 
-- banks/variations [cc] [DONE] [NOT QUITE DONE AFTER ALL - just noticed
-  variation toggle status isn't being loaded from .rgd file correctly]
-
 - punch in record [rwb] [HALF COMPLETE]
 
 - audio threading for file r/w access [rwb]
@@ -69,6 +66,10 @@ Features for 1.0 - updated 20030923
 
 Completed
 ---------
+
+- banks/variations [cc] [DONE] [NOT QUITE DONE AFTER ALL - just noticed
+  variation toggle status isn't being loaded from .rgd file correctly]
+  [DONE now]
 
 - liblrdf support for LADSPA plugins - a hierachy is provided in the plugin
   dialog [cc]

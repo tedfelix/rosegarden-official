@@ -314,9 +314,6 @@ private:
     RealTime                     m_loopEndTime;
     bool                         m_looping;
 
-    // added metronome yet?
-//!!!    bool                         m_addedMetronome;
-
     // sending of audio meter data in MappedComposition return stream
     //
     bool                         m_audioMeterSent;

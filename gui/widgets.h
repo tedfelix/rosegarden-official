@@ -129,12 +129,8 @@ public:
 			   QWidget *parent = 0,
 			   const char *name = 0);
 
-    QFont getFont() const { return m_font; }
-
 protected:
     void init();
-
-private:
     QFont m_font;
 };
 

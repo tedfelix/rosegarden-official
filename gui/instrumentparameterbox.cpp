@@ -74,10 +74,10 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
       m_selectedInstrument(0),
       m_doc(doc)
 {
-//     m_widgetStack->setFont(getFont());
-    m_noInstrumentParameters->setFont(getFont());
-    m_midiInstrumentParameters->setFont(getFont());
-    m_audioInstrumentParameters->setFont(getFont());
+//     m_widgetStack->setFont(m_font);
+    m_noInstrumentParameters->setFont(m_font);
+    m_midiInstrumentParameters->setFont(m_font);
+    m_audioInstrumentParameters->setFont(m_font);
 
     bool contains = false;
 

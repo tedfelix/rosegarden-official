@@ -1349,6 +1349,8 @@ MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
 
     pluginHandle = dlopen(path.c_str(), RTLD_LAZY);
 
+//    std::cout << "Opening " << path << std::endl;
+
     if (!pluginHandle) {
 #ifdef DEBUG_MAPPEDSTUDIO
         std::cout << "MappedAudioPluginManager::enumeratePlugin : couldn't dlopen "
@@ -1372,6 +1374,9 @@ MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
 
             if (descriptor)
             {
+//		std::cout << "Found plugin; label is " << descriptor->Label
+//			  << "; " << (LADSPA_IS_HARD_RT_CAPABLE(descriptor->Properties) ? "is" : "is not") << " hard RT capable" << std::endl;
+
                 // The sequencer is only interested in plugins that 
                 // will be able to run in real time.
                 //
@@ -1480,6 +1485,10 @@ MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
             }
         }
         while(descriptor);
+
+    } else {
+	std::cerr << "PluginManager::loadPlugin: " << path
+		  << " is not a LADSPA plugin object" << std::endl;
     }
 
     if(dlclose(pluginHandle) != 0)
