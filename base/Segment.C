@@ -82,6 +82,10 @@ timeT Segment::getDuration() const
     const_iterator lastEl = end();
     if (lastEl == begin()) return 0;
     --lastEl;
+
+    std::cerr << "Segment::getDuration() : lastEl dump : \n";
+    (*lastEl)->dump(std::cerr);
+              
     return (*lastEl)->getAbsoluteTime() +
            (*lastEl)->getDuration() -
            getStartIndex();
