@@ -17,6 +17,8 @@
     COPYING included with this distribution for more information.
 */
 
+#include <iostream>
+
 #include <kapp.h>
 #include <dcopclient.h>
 

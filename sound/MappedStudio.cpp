@@ -19,6 +19,8 @@
   COPYING included with this distribution for more information.
 */
 
+#include <iostream>
+
 #include <dlfcn.h>
 
 #include <qdir.h>
