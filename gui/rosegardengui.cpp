@@ -2745,57 +2745,57 @@ RosegardenGUIApp::plugAccelerators(QWidget *widget, QAccel *acc)
 
     if (transport)
     {
-        connect((QObject *) transport->PlayButton,
-                SIGNAL(released()),
+        connect(transport->PlayButton,
+                SIGNAL(clicked()),
                 this,
                 SLOT(slotPlay()));
 
-        connect((QObject *) transport->StopButton,
-                SIGNAL(released()),
+        connect(transport->StopButton,
+                SIGNAL(clicked()),
                 this,
                 SLOT(slotStop()));
              
-        connect((QObject *) transport->FfwdButton,
-                SIGNAL(released()),
+        connect(transport->FfwdButton,
+                SIGNAL(clicked()),
                 SLOT(slotFastforward()));
             
-        connect((QObject *) transport->RewindButton,
-                SIGNAL(released()),
+        connect(transport->RewindButton,
+                SIGNAL(clicked()),
                 this,
                 SLOT(slotRewind()));
 
-        connect((QObject *) transport->RecordButton,
-                SIGNAL(released()),
+        connect(transport->RecordButton,
+                SIGNAL(clicked()),
                 this,
                 SLOT(slotRecord()));
 
-        connect((QObject *) transport->RewindEndButton,
-                SIGNAL(released()),
+        connect(transport->RewindEndButton,
+                SIGNAL(clicked()),
                 this,
                 SLOT(slotRewindToBeginning()));
 
-        connect((QObject *) transport->FfwdEndButton,
-                SIGNAL(released()),
+        connect(transport->FfwdEndButton,
+                SIGNAL(clicked()),
                 this,
                 SLOT(slotFastForwardToEnd()));
 
-        connect((QObject *) transport->MetronomeButton,
-                SIGNAL(released()),
+        connect(transport->MetronomeButton,
+                SIGNAL(clicked()),
                 this,
                 SLOT(slotToggleMetronome()));
             
-        connect((QObject *) transport->SoloButton,
-                SIGNAL(released()),
+        connect(transport->SoloButton,
+                SIGNAL(clicked()),
                 this,
                 SLOT(slotToggleSolo()));
             
-        connect((QObject *) transport->TimeDisplayButton,
-                SIGNAL(released()),
+        connect(transport->TimeDisplayButton,
+                SIGNAL(clicked()),
                 this,
                 SLOT(slotRefreshTimeDisplay()));
 
-        connect((QObject *) transport->ToEndButton,
-                SIGNAL(released()),
+        connect(transport->ToEndButton,
+                SIGNAL(clicked()),
                 SLOT(slotRefreshTimeDisplay()));
     }
 }
