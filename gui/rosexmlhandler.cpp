@@ -26,6 +26,10 @@ RoseXmlHandler::RoseXmlHandler(Composition &composition)
       m_groupDuration(0),
       m_inGroup(false)
 {
+//     kdDebug(KDEBUG_AREA) << "RoseXmlHandler() : composition size : "
+//                          << m_composition.getNbTracks()
+//                          << " addr : " << &m_composition
+//                          << endl;
 }
 
 RoseXmlHandler::~RoseXmlHandler()
@@ -54,17 +58,28 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         QString trackNbStr = atts.value("nb");
         if (trackNbStr) {
             trackNb = trackNbStr.toInt();
-            kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement : track nb attr = "
-                                 << trackNbStr << " (" << trackNb << ")\n";
+//             kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement : track nb = "
+//                                  << trackNb << endl;
         }
         
         m_currentTrack = new Track;
-
+        bool rc = true;
+        
+//         kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement : composition size is now "
+//                              << m_composition.getNbTracks()
+//                              << endl;
         if (trackNb > 0)
-            m_composition.addTrack(m_currentTrack, trackNb);
+            rc = m_composition.addTrack(m_currentTrack, trackNb);
         else
-            m_composition.addTrack(m_currentTrack);
+            rc = m_composition.addTrack(m_currentTrack);
     
+        if (!rc)
+            kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement : addTrack failed"
+                                 << endl;
+        else
+            kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement : addTrack succeeded - composition size is now "
+                                 << m_composition.getNbTracks()
+                                 << endl;
 
     } else if (lcName == "event") {
 
