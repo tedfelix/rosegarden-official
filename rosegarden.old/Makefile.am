@@ -1,3 +1,14 @@
+####### kdevelop will overwrite this part!!! (begin)##########
+
+SUBDIRS = rosegardengui po 
+
+EXTRA_DIST = rosegardengui.kdevprj AUTHORS COPYING ChangeLog INSTALL README TODO rosegardengui.lsm 
+
+####### kdevelop will overwrite this part!!! (end)############
+
+# This Makefile.am initially comes from kapptemplate but kdevelop has added
+# its own stuff in it, hence the inconsistencies. - GL.
+
 SUBDIRS = $(TOPSUBDIRS)
 
 $(top_srcdir)/configure.in: configure.in.in $(top_srcdir)/subdirs
@@ -15,7 +26,7 @@ package-messages:
 	$(MAKE) -f admin/Makefile.common package-messages
 	$(MAKE) -C po merge
 
-EXTRA_DIST = admin 
+EXTRA_DIST = $(EXTRA_DIST) admin 
 
 dist-hook:
 	cd $(top_distdir) && perl admin/am_edit -padmin
