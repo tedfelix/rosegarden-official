@@ -6,12 +6,10 @@
 
 <Menu name="Transforms">
   <text>Trans&amp;forms</text>
-
   <Action name="quantize"/>
 </Menu>
 
 </MenuBar>
-
 
 <ToolBar name="toolsToolBar">
   <Action name="select" />
@@ -20,5 +18,19 @@
   <Action name="erase" />
   <Action name="resize" />
 </ToolBar>
+
+<State name="have_selection">
+  <enable>
+    <Action name="edit_cut"/>
+    <Action name="edit_copy"/>
+    <Action name="quantize"/>
+  </enable>
+</State>
+
+<State name="have_clipboard_single_segment">
+  <enable>
+    <Action name="edit_paste"/>
+  </enable>
+</State>
 
 </kpartgui>

@@ -236,6 +236,11 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
                                      m_canvasView->visibleHeight()/2);
     */
 
+#ifdef RGKDE3
+    stateChanged("have_selection", KXMLGUIClient::StateReverse);
+    slotTestClipboard();
+#endif
+
 
     // Change this when the matrix view will have its own page
     // in the config dialog.
@@ -470,6 +475,13 @@ void MatrixView::setCurrentSelection(EventSelection* s)
         s->recordSelectionOnSegment(m_selectedProperty);
         getStaff(0)->positionElements(s->getStartTime(),
                                       s->getEndTime());
+#ifdef RGKDE3
+	stateChanged("have_selection", KXMLGUIClient::StateNoReverse);
+#endif
+    } else {
+#ifdef RGKDE3
+	stateChanged("have_selection", KXMLGUIClient::StateReverse);
+#endif
     }
 
     updateView();

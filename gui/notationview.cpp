@@ -351,10 +351,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	(doc, SIGNAL(destroyed()), this, SLOT(slotDocumentDestroyed()));
 
 #ifdef RGKDE3
-    QObject::connect
-	(doc->getCommandHistory(), SIGNAL(commandExecuted()),
-	 this, SLOT(slotTestClipboard()));
-
     stateChanged("have_selection", KXMLGUIClient::StateReverse);
     stateChanged("have_notes_in_selection", KXMLGUIClient::StateReverse);
     stateChanged("have_rests_in_selection", KXMLGUIClient::StateReverse);

@@ -445,12 +445,6 @@ public slots:
     /// The document has been destroyed, and we're about to go with it
     void slotDocumentDestroyed();
 
-    /**
-     * A command has happened; check the clipboard in case we
-     * need to change state
-     */
-    void slotTestClipboard();
-
 signals:
     /**
      * Emitted when the note selected in the palette changes

@@ -207,7 +207,12 @@ protected:
      * setup status bar
      */
     virtual void initStatusBar() = 0;
-
+    
+    /**
+     * A command has happened; check the clipboard in case we
+     * need to change state
+     */
+    virtual void slotTestClipboard();
 
 protected slots:
     /**

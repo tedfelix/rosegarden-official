@@ -57,24 +57,6 @@ NotationView::slotDocumentDestroyed()
 }
 
 void
-NotationView::slotTestClipboard()
-{
-#ifdef RGKDE3
-    if (m_document->getClipboard()->isEmpty()) {
-	stateChanged("have_clipboard", KXMLGUIClient::StateReverse);
-	stateChanged("have_clipboard_single_segment",
-		     KXMLGUIClient::StateReverse);
-    } else {
-	stateChanged("have_clipboard", KXMLGUIClient::StateNoReverse);
-	stateChanged("have_clipboard_single_segment",
-		     (m_document->getClipboard()->isSingleSegment() ?
-		      KXMLGUIClient::StateNoReverse :
-		      KXMLGUIClient::StateReverse));
-    }
-#endif
-}
- 
-void
 NotationView::slotChangeSpacing(int n)
 {
     std::vector<int> spacings = m_hlayout.getAvailableSpacings();

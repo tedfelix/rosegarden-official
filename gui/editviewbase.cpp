@@ -84,6 +84,12 @@ EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
         (getCommandHistory(), SIGNAL(commandExecuted()),
          this,                  SLOT(update()));
 
+#ifdef RGKDE3
+    QObject::connect
+	(getCommandHistory(), SIGNAL(commandExecuted()),
+	 this, SLOT(slotTestClipboard()));
+#endif
+
     // create accelerators
     //
     m_accelerators = new QAccel(this);
@@ -396,5 +402,21 @@ KToggleAction* EditViewBase::getToggleAction(const QString& actionName)
     return dynamic_cast<KToggleAction*>(actionCollection()->action(actionName));
 }
 
-
-
+void
+EditViewBase::slotTestClipboard()
+{
+#ifdef RGKDE3
+    if (m_document->getClipboard()->isEmpty()) {
+	stateChanged("have_clipboard", KXMLGUIClient::StateReverse);
+	stateChanged("have_clipboard_single_segment",
+		     KXMLGUIClient::StateReverse);
+    } else {
+	stateChanged("have_clipboard", KXMLGUIClient::StateNoReverse);
+	stateChanged("have_clipboard_single_segment",
+		     (m_document->getClipboard()->isSingleSegment() ?
+		      KXMLGUIClient::StateNoReverse :
+		      KXMLGUIClient::StateReverse));
+    }
+#endif
+}
+ 
