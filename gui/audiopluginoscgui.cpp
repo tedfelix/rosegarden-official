@@ -613,9 +613,11 @@ AudioPluginOSCGUIManager::dispatch()
 		QString key = strtoqstr(i->first);
 		QString value = strtoqstr(i->second);
 
+#ifdef DSSI_PROJECT_DIRECTORY_KEY
 		if (key == Rosegarden::PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY) {
 		    key = DSSI_PROJECT_DIRECTORY_KEY;
 		}
+#endif
 
 		RG_DEBUG << "update: configuration: " << key << " -> "
 			 << value << endl;
@@ -660,18 +662,23 @@ AudioPluginOSCGUIManager::dispatch()
 	    }
 	    QString value = &arg->s;
 
+#ifdef DSSI_RESERVED_CONFIGURE_PREFIX
 	    if (key.startsWith(DSSI_RESERVED_CONFIGURE_PREFIX) || 
 		key == Rosegarden::PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY) {
 		RG_DEBUG << "AudioPluginOSCGUIManager: illegal reserved configure call from gui: " << key << " -> " << value << endl;
 		goto done;
 	    }
-		
+#endif
 
 	    RG_DEBUG << "AudioPluginOSCGUIManager: configure(" << key << "," << value
 		     << ")" << endl;
 
 	    m_app->slotPluginConfigurationChanged(instrument, position,
+#ifdef DSSI_GLOBAL_CONFIGURE_PREFIX
 						  key.startsWith(DSSI_GLOBAL_CONFIGURE_PREFIX),
+#else
+						  false,
+#endif
 						  key, value);
 
 	} else if (method == "midi") {

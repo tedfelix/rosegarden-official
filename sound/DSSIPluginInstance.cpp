@@ -675,8 +675,13 @@ DSSIPluginInstance::configure(QString key,
     if (!m_descriptor || !m_descriptor->configure) return QString();
 
     if (key == PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY) {
+#ifdef DSSI_PROJECT_DIRECTORY_KEY
 	key = DSSI_PROJECT_DIRECTORY_KEY;
+#else
+	return QString();
+#endif
     }
+	
     
 #ifdef DEBUG_DSSI
     std::cerr << "DSSIPluginInstance::configure(" << key << "," << value << ")" << std::endl;
@@ -688,10 +693,12 @@ DSSIPluginInstance::configure(QString key,
 
     // Ignore return values from reserved key configuration calls such
     // as project directory
+#ifdef DSSI_RESERVED_CONFIGURE_PREFIX
     if (key.startsWith(DSSI_RESERVED_CONFIGURE_PREFIX)) {
 	return qm;
     }
-    
+#endif
+
     if (message) {
 	if (m_descriptor->LADSPA_Plugin && m_descriptor->LADSPA_Plugin->Label) {
 	    qm = QString(m_descriptor->LADSPA_Plugin->Label) + ": ";

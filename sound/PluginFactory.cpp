@@ -90,10 +90,17 @@ PluginFactory::enumerateAllPlugins(MappedObjectPropertyList &list)
 {
     PluginFactory *factory;
 
-    factory = instance("ladspa");
-    if (factory) factory->enumeratePlugins(list);
+    // Query DSSI plugins before LADSPA ones.
+    // This is to provide for the interesting possibility of plugins
+    // providing either DSSI or LADSPA versions of themselves,
+    // returning both versions if the LADSPA identifiers are queried
+    // first but only the DSSI version if the DSSI identifiers are
+    // queried first.
 
     factory = instance("dssi");
+    if (factory) factory->enumeratePlugins(list);
+
+    factory = instance("ladspa");
     if (factory) factory->enumeratePlugins(list);
 }
 
