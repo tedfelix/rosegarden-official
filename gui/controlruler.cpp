@@ -615,13 +615,11 @@ void ControlRuler::layoutItem(ControlItem* item)
     item->setX(x);
     int itemElementDuration = item->getElementAdapter()->getDuration();
     
-    int width = getDefaultItemWidth();
-    if (itemDuration > 1)
-        width = int(m_rulerScale->getXForTime(itemTime + itemElementDuration) - x);
+    int width = int(m_rulerScale->getXForTime(itemTime + itemElementDuration) - x);
 
     item->setWidth(width);
 
-a    RG_DEBUG << "layoutItem ControlItem x = " << x << " - width = " << width << endl;
+    RG_DEBUG << "ControlRuler::layoutItem ControlItem x = " << x << " - width = " << width << endl;
 }
 
 void ControlRuler::setControlTool(ControlTool* tool)
@@ -1255,6 +1253,22 @@ void ControllerEventsRuler::contentsMouseMoveEvent(QMouseEvent *e)
     m_controlLine->setPoints(m_controlLineX, m_controlLineY, e->x(), e->y());
     canvas()->update();
 
+}
+
+void ControllerEventsRuler::layoutItem(ControlItem* item)
+{
+    timeT itemTime = item->getElementAdapter()->getTime();
+    
+    double x = m_rulerScale->getXForTime(itemTime) + m_staffOffset;
+    
+    item->setX(x);
+    int itemElementDuration = item->getElementAdapter()->getDuration();
+    
+    int width = getDefaultItemWidth(); // how to scale that ??
+
+    item->setWidth(width);
+
+    RG_DEBUG << "ControllerEventsRuler::layoutItem ControlItem x = " << x << " - width = " << width << endl;
 }
 
 void
