@@ -2238,6 +2238,7 @@ AudioSplitDialog::AudioSplitDialog(QWidget *parent,
 
     m_canvasView->setHScrollBarMode(QScrollView::AlwaysOff);
     m_canvasView->setVScrollBarMode(QScrollView::AlwaysOff);
+    m_canvasView->setDragAutoScroll(false);
 
     QHBox *hbox = new QHBox(w);
     new QLabel(i18n("Threshold %"), hbox);
@@ -2265,6 +2266,9 @@ AudioSplitDialog::drawPreview()
     QCanvasItemList list = m_canvas->allItems();
     for (QCanvasItemList::Iterator it = list.begin(); it != list.end(); it++)
         delete *it;
+
+    // empty the preview boxes
+    m_previewBoxes.erase(m_previewBoxes.begin(), m_previewBoxes.end());
 
     // Draw a bounding box
     //
@@ -2345,60 +2349,61 @@ AudioSplitDialog::drawPreview()
 
     // Draw zero dc line
     //
-    QCanvasLine *line = new QCanvasLine(m_canvas);
-    line->setPoints(startX,
-                    halfHeight,
-                    startX + m_previewWidth,
-                    halfHeight);
-    line->setPen(kapp->palette().color(QPalette::Active, QColorGroup::Dark));
-    line->setBrush(kapp->palette().color(QPalette::Active, QColorGroup::Base));
-    line->setZ(3);
-    line->setVisible(true);
+    rect = new QCanvasRectangle(m_canvas);
+    rect->setX(startX);
+    rect->setY(halfHeight - 1);
+    rect->setSize(m_previewWidth, 2);
+    rect->setPen(kapp->palette().color(QPalette::Active, QColorGroup::Shadow));
+    rect->setBrush(kapp->palette().color(QPalette::Active, QColorGroup::Shadow));
+    rect->setZ(4);
+    rect->setVisible(true);
 
     // Start time
     //
     char usecs[100];
     sprintf(usecs, "%03ld", m_segment->getAudioStartTime().usec / 1000);
-    QString startText = QString("%1.%2").arg(m_segment->getAudioStartTime().sec)
+    QString startText = QString("%1.%2s")
+                              .arg(m_segment->getAudioStartTime().sec)
                               .arg(usecs);
     QCanvasText *text = new QCanvasText(m_canvas);
-    line->setPen(kapp->palette().color(QPalette::Active, QColorGroup::Dark));
+    text->setColor(
+            kapp->palette().color(QPalette::Active, QColorGroup::Shadow));
     text->setText(startText);
     text->setX(startX - 20);
     text->setY(m_canvasHeight / 2 - m_previewHeight / 2 - 35);
     text->setZ(3);
     text->setVisible(true);
 
-    line = new QCanvasLine(m_canvas);
-    line->setPoints(startX,
-                    m_canvasHeight / 2 - m_previewHeight / 2 - 12,
-                    startX,
-                    m_canvasHeight / 2 + m_previewHeight / 2 + 12);
-    line->setPen(kapp->palette().color(QPalette::Active, QColorGroup::Dark));
-    line->setZ(3);
-    line->setVisible(true);
+    rect = new QCanvasRectangle(m_canvas);
+    rect->setX(startX - 1);
+    rect->setY(m_canvasHeight / 2 - m_previewHeight / 2 - 14);
+    rect->setSize(1, m_previewHeight + 28);
+    rect->setPen(kapp->palette().color(QPalette::Active, QColorGroup::Shadow));
+    rect->setZ(3);
+    rect->setVisible(true);
     
     // End time
     //
     sprintf(usecs, "%03ld", m_segment->getAudioEndTime().usec / 1000);
-    QString endText = QString("%1.%2").arg(m_segment->getAudioEndTime().sec)
+    QString endText = QString("%1.%2s")
+                            .arg(m_segment->getAudioEndTime().sec)
                             .arg(usecs);
     text = new QCanvasText(m_canvas);
-    line->setPen(kapp->palette().color(QPalette::Active, QColorGroup::Shadow));
+    text->setColor(
+            kapp->palette().color(QPalette::Active, QColorGroup::Shadow));
     text->setText(endText);
     text->setX(startX + m_previewWidth - 20);
     text->setY(m_canvasHeight / 2 - m_previewHeight / 2 - 35);
     text->setZ(3);
     text->setVisible(true);
 
-    line = new QCanvasLine(m_canvas);
-    line->setPoints(startX + m_previewWidth,
-                    m_canvasHeight / 2 - m_previewHeight / 2 - 12,
-                    startX + m_previewWidth,
-                    m_canvasHeight / 2 + m_previewHeight / 2 + 12);
-    line->setPen(kapp->palette().color(QPalette::Active, QColorGroup::Shadow));
-    line->setZ(3);
-    line->setVisible(true);
+    rect = new QCanvasRectangle(m_canvas);
+    rect->setX(startX + m_previewWidth - 1);
+    rect->setY(m_canvasHeight / 2 - m_previewHeight / 2 - 14);
+    rect->setSize(1, m_previewHeight + 28);
+    rect->setPen(kapp->palette().color(QPalette::Active, QColorGroup::Shadow));
+    rect->setZ(3);
+    rect->setVisible(true);
 
     m_canvas->update();
 }
@@ -2408,23 +2413,6 @@ AudioSplitDialog::drawPreview()
 void
 AudioSplitDialog::drawSplits(int threshold)
 {
-    cout << "SIZE = " << m_previewBoxes.size() << endl;
-    /*
-    if (m_previewBoxes.size())
-    {
-        // clear any previous preview boxes
-        //
-        std::vector<QCanvasRectangle*>::iterator pIt;
-        for (pIt = m_previewBoxes.begin(); pIt != m_previewBoxes.end(); pIt++)
-        {
-            (*pIt)->setVisible(false);
-            delete (*pIt);
-        }
-        m_previewBoxes.erase(m_previewBoxes.begin(), m_previewBoxes.end());
-        m_canvas->update();
-    }
-    */
-
     // Now get the current split points and paint them
     //
     Rosegarden::AudioFileManager &aFM = m_doc->getAudioFileManager();
@@ -2435,6 +2423,7 @@ AudioSplitDialog::drawSplits(int threshold)
                            threshold);
 
     std::vector<Rosegarden::SplitPointPair>::iterator it;
+    std::vector<QCanvasRectangle*> tempRects;
 
     Rosegarden::RealTime length = m_segment->getAudioEndTime() - 
         m_segment->getAudioStartTime();
@@ -2464,10 +2453,32 @@ AudioSplitDialog::drawSplits(int threshold)
         rect->setBrush(kapp->
                 palette().color(QPalette::Active, QColorGroup::Dark));
         rect->setVisible(true);
-        m_previewBoxes.push_back(rect);
+        tempRects.push_back(rect);
     }
 
+    std::vector<QCanvasRectangle*>::iterator pIt;
+
+    // We've written the new Rects, now delete the old ones
+    //
+    if (m_previewBoxes.size())
+    {
+        // clear any previous preview boxes
+        //
+        for (pIt = m_previewBoxes.begin(); pIt != m_previewBoxes.end(); pIt++)
+        {
+            //(*pIt)->setVisible(false);
+            delete (*pIt);
+            //cout << "X = " << (*pIt)->x() << endl;
+        }
+        m_previewBoxes.erase(m_previewBoxes.begin(), m_previewBoxes.end());
+        m_canvas->update();
+    }
     m_canvas->update();
+
+    // Now store the new ones
+    //
+    for (pIt = tempRects.begin(); pIt != tempRects.end(); pIt++)
+        m_previewBoxes.push_back(*pIt);
 }
 
 
@@ -2476,7 +2487,6 @@ AudioSplitDialog::drawSplits(int threshold)
 void
 AudioSplitDialog::slotThresholdChanged(int threshold)
 {
-    drawPreview();
     drawSplits(threshold);
 }
 

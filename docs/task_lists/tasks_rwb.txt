@@ -5,6 +5,8 @@ o Matrix Parameter Box [SKELETON]
 
 o Event list [SKELETON]
 
+o Audio file open dialog
+
 o Get Segment joining working
 
 o Audio volume faders - studio concept on sequencer
