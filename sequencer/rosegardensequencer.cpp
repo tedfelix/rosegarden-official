@@ -1032,11 +1032,11 @@ RosegardenSequencerApp::getMappedObjectId(int type)
 }
 
 
-QValueVector<QString>
+std::vector<QString>
 RosegardenSequencerApp::getPropertyList(int id,
                                         const QString &property)
 {
-    QValueVector<QString> list;
+    std::vector<QString> list;
 
     Rosegarden::MappedObject *object =
         m_studio->getObject(id);

@@ -22,8 +22,8 @@
 #define _ROSEGARDENSEQUENCERIFACE_H_
 
 #include <dcopobject.h>
-#include <qvaluevector.h>
-#include <qpair.h>
+// #include <qvaluevector.h>
+// #include <qpair.h>
 
 #include "rosegardendcop.h"
 #include "Event.h"
@@ -33,6 +33,7 @@
 #include "MappedDevice.h"
 #include "MappedRealTime.h"
 #include "MappedStudio.h"
+#include "MappedCommon.h"
 
 class RosegardenSequencerIface : virtual public DCOPObject
 {
@@ -160,8 +161,8 @@ public:
 
     // Get a list of properties of a certain type from an object
     //
-    virtual QValueVector<QString> getPropertyList(int id,
-                                                  const QString &property) = 0;
+    virtual std::vector<QString> getPropertyList(int id,
+                                                 const QString &property) = 0;
 
     // Cheat - we can't use a call (getPropertyList) during playback
     // so we use this method to set port N on plugin X.

@@ -27,6 +27,34 @@
 #include "MappedStudio.h"
 #include "Sequencer.h"
 
+// These two functions are stolen and adapted from Qt3 qvaluevector.h
+//
+// ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+//
+QDataStream& operator>>(QDataStream& s, Rosegarden::MappedObjectPropertyList& v)
+{
+    v.clear();
+    Q_UINT32 c;
+    s >> c;
+    v.resize(c);
+    for(Q_UINT32 i = 0; i < c; ++i)
+    {
+        Rosegarden::MappedObjectProperty t;
+        s >> t;
+        v[i] = t;
+    }
+    return s;
+}
+
+QDataStream& operator<<(QDataStream& s, const Rosegarden::MappedObjectPropertyList& v)
+{
+    s << (Q_UINT32)v.size();
+    Rosegarden::MappedObjectPropertyList::const_iterator it = v.begin();
+    for( ; it != v.end(); ++it )
+        s << *it;
+    return s;
+}
+
 namespace Rosegarden
 {
 
@@ -62,27 +90,6 @@ const MappedObjectProperty MappedLADSPAPort::Value = "value";
 const MappedObjectProperty MappedLADSPAPort::PortNumber = "portNumber";
 
 #endif // HAVE_LADSPA
-
-// This function is stolen and adapted from Qt3
-//
-// ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
-//
-QDataStream& operator>>(QDataStream& s, MappedObjectPropertyList v)
-{
-    v.clear();
-    Q_UINT32 c;
-    s >> c;
-    v.resize(c);
-    for(Q_UINT32 i = 0; i < c; ++i)
-    {
-        MappedObjectProperty t;
-        s >> t;
-        v[i] = t;
-    }
-    return s;
-}
-
-
 
 // --------- MappedObject ---------
 //

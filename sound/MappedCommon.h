@@ -40,8 +40,9 @@ typedef float        MappedObjectValue;
 
 typedef std::vector<MappedObjectProperty> MappedObjectPropertyList;
 
-QDataStream& operator>>(QDataStream& s, MappedObjectPropertyList);
-
 }
+
+QDataStream& operator>>(QDataStream& s, Rosegarden::MappedObjectPropertyList&);
+QDataStream& operator<<(QDataStream&, const Rosegarden::MappedObjectPropertyList&);
 
 #endif // _MAPPEDCOMMON_H_

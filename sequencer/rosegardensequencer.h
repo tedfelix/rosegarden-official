@@ -203,8 +203,8 @@ public:
 
     // Get a Property list from an Object
     //
-    virtual QValueVector<QString> getPropertyList(int id,
-                                                  const QString &property);
+    virtual std::vector<QString> getPropertyList(int id,
+                                                 const QString &property);
 
     // Set a plugin port
     //
