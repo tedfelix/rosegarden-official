@@ -2349,6 +2349,7 @@ void NotationView::refreshSegment(Segment *segment,
     PixmapArrayGC::deleteAll();
 
     Event::dumpStats(cerr);
+    slotSetInsertCursorPosition(m_insertionTime);
 
     PRINT_ELAPSED("NotationView::refreshSegment (including update/GC)");
 }

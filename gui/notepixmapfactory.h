@@ -172,6 +172,7 @@ public:
     int getTimeSigWidth(const Rosegarden::TimeSignature &timesig) const;
     int getRestWidth(const Rosegarden::Note &restType) const;
     int getKeyWidth(const Rosegarden::Key &key) const;
+    int getTextWidth(const Rosegarden::Text &text) const;
 
     static void dumpStats(std::ostream &);
 

@@ -259,7 +259,14 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 	}
     }
 
-    kdDebug(KDEBUG_AREA) << "NotationHLayout::scanStaff: full scan " << isFullScan << ", times " << startTime << "->" << endTime << ", bars " << barNo << "->" << endBarNo << endl;
+    std::string name =
+	segment.getComposition()->
+	getTrackByIndex(segment.getTrack())->getLabel();
+    m_staffNameWidths[&staff] =
+	m_npf->getNoteBodyWidth() * 2 +
+	m_npf->getTextWidth(Rosegarden::Text(name,Rosegarden::Text::StaffName));
+
+    kdDebug(KDEBUG_AREA) << "NotationHLayout::scanStaff: full scan " << isFullScan << ", times " << startTime << "->" << endTime << ", bars " << barNo << "->" << endBarNo << ", staff name \"" << segment.getLabel() << "\", width " << m_staffNameWidths[&staff] << endl;
 
     SegmentNotationHelper nh(segment);
     nh.quantize();
@@ -627,7 +634,12 @@ NotationHLayout::reconcileBarsLinear()
 
     int barNo = getFirstVisibleBar();
     bool aWidthChanged = false;
+
     m_totalWidth = 0.0;
+    for (StaffIntMap::iterator i = m_staffNameWidths.begin();
+	 i != m_staffNameWidths.end(); ++i) {
+	if (i->second > m_totalWidth) m_totalWidth = double(i->second);
+    }
 
     for (;;) {
 
@@ -703,6 +715,10 @@ NotationHLayout::reconcileBarsPage()
     double stretchFactor = 10.0;
 
     m_totalWidth = 0.0;
+    for (StaffIntMap::iterator i = m_staffNameWidths.begin();
+	 i != m_staffNameWidths.end(); ++i) {
+	if (i->second > m_totalWidth) m_totalWidth = double(i->second);
+    }
 
     for (;;) {
 	

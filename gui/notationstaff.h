@@ -137,6 +137,8 @@ public:
      */
     virtual void deleteTimeSignatures();
 
+    virtual void drawStaffName();
+
     /**
      * Return the clef and key in force at the given canvas
      * coordinates
@@ -303,6 +305,7 @@ protected:
 
     NotePixmapFactory *m_npf;
     QCanvasSimpleSprite *m_previewSprite;
+    QCanvasSimpleSprite *m_staffName;
 };
 
 #endif

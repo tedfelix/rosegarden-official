@@ -1,4 +1,79 @@
 
+Post-0.1.5-and-a-bit task list
+==============================
+
+ 1. Support for displaying and editing lyrics
+
+ 2. Ensure that text is read from MIDI files even when no notes on same track
+
+ 3. Ponder help
+
+ 4. Try actually editing some notation!  Devise a basic set of transforms
+    (split/join notes etc)
+
+ 5. Mess around with tuplets, locate and fix the many bugs there
+
+ 5a. Decide how we want to manage quantization of segments containing
+     tuplets, and quantization to tuplet units
+
+ 5b. Find some way to identify tuplets in MIDI import
+
+ 6. See why accidentals appear to be wrong when not in treble clef (see paper)
+
+ 7. Things like Split Segment and Resize Segment won't work correctly
+    until the Segment's moveable start/end markers are implemented.  Look
+    into this.
+
+ 8. Add origin to start of hlayout, so that first bar is indented on both
+    ruler and staff (preceded by staff name perhaps)
+
+ 8. Extend Chord (in notationsets) so as to handle case where some notes
+    at a given time have stem up and some have stem down (explicitly set
+    by user) -- make two chords instead of one.  NotationElementList is
+    now sorted by pitch, which should make this easier.  Can we assign
+    stem directions sensibly for chords that begin during other chords? 
+
+ 9. Test and debug the Paste types from Paste... dialog; also
+    implement Cut-&-Close
+
+11. Ties don't always appear (e.g. load davy.mid with viability switched
+    on in MidiFile.cpp)
+
+12. Deal with this strstream/stringstream thing -- fix on one or the
+    other, and make sure the memory management is correct
+
+13. Make save & reload preserve unquantized values -- see code comments
+
+16. The NormalizeRestsCommand in notationcommands.cpp has the wrong
+    undo/redo extents, because the normalization function may modify
+    rests before the nominal given starting time.  Deal with this.
+    Also a theoretical problem when (e.g.) inserting notes at the
+    start of a bar.  Potential (nasty) solution might involve
+    BasicCommand being a SegmentObserver
+
+19. Do something cool with Randall's harmonizer (or even something
+    not especially cool -- say, just generate a new segment with
+    a guess at the harmony in it)
+
+19a. Need to fix up so it has a key to work from, instead of always
+    using default key!  argh!
+
+22. Rationalise segment editor tools into "simple" and "extended"
+    as per discussion on mailing list:
+    http://www.geocrawler.com/mail/thread.php3?subject=a+question%2C+was+Re%3A+%5BRosegarden-devel%5D+0.2+roadmap+-+some+thoughts&list=16004
+    We now have a multifunction Select tool, meaning probably all
+    the rest can become "extended"
+
+24. Fix bugs in tempo ruler (why do timesigs often not appear?),
+    make it useful, work out a good way to take out common code
+    between it and ChordNameRuler, and make it able to display notes
+    as well as text (e.g. <crotchet> = 120) so it can convert qpms
+    to bpms in non-4/4 timesigs
+
+30. Move some of the esoteric vaguely notation-related methods from
+    Segment to SegmentNotationHelper
+
+
 Post-0.1.4 task list
 ====================
 
@@ -115,6 +190,9 @@ Post-0.1.4 task list
 28. Why aren't breve & semibreve appearing on notationview toolbar? [DONE]
 
 29. Why doesn't Select All Segments work? [DONE]
+
+30. Move some of the esoteric vaguely notation-related methods from
+    Segment to SegmentNotationHelper
 
 
 20020301 task list (based on outstanding items from post-0.1.3 list below)

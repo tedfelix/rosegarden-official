@@ -498,6 +498,12 @@ protected:
     virtual void insertTimeSignature(double layoutX,
 				     const Rosegarden::TimeSignature &);
 
+    // The default implementation of the following is empty.  The
+    // subclass is presumed to know what the staff's name is and
+    // where to put it; this is simply called at some point during
+    // the staff-drawing process.
+    virtual void drawStaffName();
+
 protected:
 
     //--------------- Data members ---------------------------------

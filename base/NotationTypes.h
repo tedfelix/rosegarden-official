@@ -470,6 +470,7 @@ public:
     static const PropertyName TextTypePropertyName;
 
     static const std::string UnspecifiedType;
+    static const std::string StaffName;
     static const std::string ChordName;
     static const std::string KeyName;
     static const std::string Lyric;

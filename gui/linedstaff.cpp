@@ -403,6 +403,7 @@ LinedStaff<T>::sizeStaff(Rosegarden::HorizontalLayoutEngine<T> &layout)
     m_startLayoutX = xleft;
     m_endLayoutX = xright;
 
+    drawStaffName();
     resizeStaffLines();
 }
 
@@ -542,6 +543,13 @@ LinedStaff<T>::deleteTimeSignatures()
 template <class T>
 void
 LinedStaff<T>::insertTimeSignature(double, const Rosegarden::TimeSignature &)
+{
+    // default implementation is empty
+}
+
+template <class T>
+void
+LinedStaff<T>::drawStaffName()
 {
     // default implementation is empty
 }

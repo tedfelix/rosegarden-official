@@ -238,6 +238,7 @@ protected:
     typedef BarDataList::value_type BarDataPair;
     typedef std::map<StaffType *, BarDataList> BarDataMap;
     typedef std::map<int, double> BarPositionList;
+    typedef std::map<StaffType *, int> StaffIntMap;
 
     void clearBarList(StaffType &);
 
@@ -336,6 +337,7 @@ protected:
     //--------------- Data members ---------------------------------
 
     BarDataMap m_barData;
+    StaffIntMap m_staffNameWidths;
     BarPositionList m_barPositions;
 
     double m_totalWidth;

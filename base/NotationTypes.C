@@ -514,6 +514,7 @@ const PropertyName Text::TextPropertyName = "text";
 const PropertyName Text::TextTypePropertyName = "type";
 
 const std::string Text::UnspecifiedType = "unspecified";
+const std::string Text::StaffName	= "staffname";
 const std::string Text::ChordName	= "chordname";
 const std::string Text::KeyName		= "keyname";
 const std::string Text::Dynamic		= "dynamic";

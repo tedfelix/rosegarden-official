@@ -1461,6 +1461,7 @@ NotePixmapFactory::makeTextPixmap(const Rosegarden::Text &text)
      * Text types:
      *
      * UnspecifiedType:    Nothing known, use small roman
+     * StaffName:	   Large roman, to left of start of staff
      * ChordName:	   Not normally shown in score, use small roman
      * KeyName:		   Not normally shown in score, use small roman
      * Lyric:		   Small roman, below staff and dynamic texts
@@ -1486,7 +1487,8 @@ NotePixmapFactory::makeTextPixmap(const Rosegarden::Text &text)
 	italic = true;
     }
 
-    if (type == Rosegarden::Text::Direction ||
+    if (type == Rosegarden::Text::StaffName ||
+	type == Rosegarden::Text::Direction ||
 	type == Rosegarden::Text::Tempo) {
 	large = true;
     }
@@ -1607,5 +1609,14 @@ int NotePixmapFactory::getRestWidth(const Rosegarden::Note &restType) const {
 int NotePixmapFactory::getKeyWidth(const Rosegarden::Key &key) const {
     return 2*m_origin.x() + (key.getAccidentalCount() *
                              (getAccidentalWidth(key.isSharp() ? Sharp : Flat)));
+}
+
+int NotePixmapFactory::getTextWidth(const Rosegarden::Text &text) const {
+    //!!! Very slow, but not worth optimising until we've dealt with
+    // the makeTextPixmap optimisation which should make font metrics
+    // available to us immediately here.  Also we're messing with
+    // constness here on the assumption that we won't need to when
+    // that's dealt with
+    return ((NotePixmapFactory *)this)->makeTextPixmap(text).width();
 }
 

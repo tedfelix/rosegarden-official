@@ -61,12 +61,13 @@ NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment,
                              int id, bool pageMode, double pageWidth, 
                              string fontName, int resolution) :
     LinedStaff<NotationElement>(canvas, segment, id, resolution,
-				1, //!!!
+				resolution / 16 + 1, // line thickness
 				pageMode, pageWidth,
-				0 //!!!
-	),
+				0 // row spacing
+	                        ),
     m_npf(0),
-    m_previewSprite(0)
+    m_previewSprite(0),
+    m_staffName(0)
 {
     changeFont(fontName, resolution);
 }
@@ -116,6 +117,27 @@ NotationStaff::deleteTimeSignatures()
 }
 
 void
+NotationStaff::drawStaffName()
+{
+    delete m_staffName;
+
+    std::string name =
+	getSegment().getComposition()->
+	getTrackByIndex(getSegment().getTrack())->getLabel();
+
+    m_staffName = new QCanvasSimpleSprite
+	(new QCanvasPixmap
+	 (m_npf->makeTextPixmap(Rosegarden::Text(name,
+						 Rosegarden::Text::StaffName))),
+	 m_canvas);
+
+    int layoutY = getLayoutYForHeight(5);
+    LinedStaffCoords coords = getCanvasCoordsForLayoutCoords(0, layoutY);
+    m_staffName->move(m_npf->getNoteBodyWidth(), (double)coords.second);
+    m_staffName->show();
+}
+
+void
 NotationStaff::getClefAndKeyAtCanvasCoords(double cx, int cy,
 					   Clef &clef, 
 					   Rosegarden::Key &key) const
@@ -161,9 +183,6 @@ NotationStaff::getClosestElementToLayoutX(double x,
 
     NotationElementList *notes = getViewElementList();
     NotationElementList::iterator it, result;
-
-    //!!! Doesn't handle time signature correctly -- needs to get 
-    // from composition
 
     // TODO: this is grossly inefficient
 
@@ -573,13 +592,13 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 
 	} else if (elt->isRest()) {
 
-	    kdDebug(KDEBUG_AREA) << "NotationStaff::renderSingleElement: about to query legato duration property" << endl;
+//	    kdDebug(KDEBUG_AREA) << "NotationStaff::renderSingleElement: about to query legato duration property" << endl;
 
 	    const Rosegarden::Quantizer *q =
 		getSegment().getComposition()->getLegatoQuantizer();
 	    timeT duration = q->getQuantizedDuration(elt->event());
 
-	    kdDebug(KDEBUG_AREA) << "done" <<endl;
+//	    kdDebug(KDEBUG_AREA) << "done" <<endl;
 
 	    if (duration > 0) {
 
@@ -668,7 +687,10 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 		    (m_npf->makeSlurPixmap(length, dy, above));
 		    
 	    } else {
-		//...
+
+		kdDebug(KDEBUG_AREA)
+		    << "Unrecognised indicationType " << indicationType << endl;
+		pixmap = new QCanvasPixmap(m_npf->makeUnknownPixmap());
 	    }
 
 	} else {
