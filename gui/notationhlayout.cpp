@@ -1345,18 +1345,23 @@ NotationHLayout::resetStaff(StaffType &staff)
 int
 NotationHLayout::getFirstVisibleBar()
 {
-    BarDataMap::iterator i = m_barData.begin();
-    if (i == m_barData.end()) return -1; 
-    if (i->second.size() == 0) return -1;
-    return (i->second[0].barNo);
+    int bar = -1;
+    for (BarDataMap::iterator i = m_barData.begin();
+	 i != m_barData.end(); ++i) {
+	int barHere = getFirstVisibleBarOnStaff(*i->first);
+	if (barHere >= 0) {
+	    if (barHere < bar || bar < 0) bar = barHere;
+	}
+    }
+    return bar;
 }
 
 int
-NotationHLayout::getFirstVisibleBar(StaffType &staff)
+NotationHLayout::getFirstVisibleBarOnStaff(StaffType &staff)
 {
     BarDataList &bdl(getBarData(staff));
     for (int i = 0; i < bdl.size(); ++i) {
-	if (bdl[i].barNo >= 0) return bdl[i].barNo;
+	if (bdl[i].barNo >= 0) return i;
     }
     return -1;
 }
@@ -1364,13 +1369,17 @@ NotationHLayout::getFirstVisibleBar(StaffType &staff)
 int
 NotationHLayout::getLastVisibleBar()
 {
-    BarDataMap::iterator i = m_barData.begin();
-    if (i == m_barData.end()) return -1;
-    return i->second.size() - 1;
+    int bar = -1;
+    for (BarDataMap::iterator i = m_barData.begin();
+	 i != m_barData.end(); ++i) {
+	int barHere = getLastVisibleBarOnStaff(*i->first);
+	if (barHere > bar) bar = barHere;
+    }
+    return bar;
 }
 
 int
-NotationHLayout::getLastVisibleBar(StaffType &staff)
+NotationHLayout::getLastVisibleBarOnStaff(StaffType &staff)
 {
     BarDataList &bdl(getBarData(staff));
     return bdl.size() - 1;
@@ -1387,7 +1396,7 @@ NotationHLayout::getBarPosition(int i)
 }
 
 bool
-NotationHLayout::isBarCorrect(StaffType &staff, int i)
+NotationHLayout::isBarCorrectOnStaff(StaffType &staff, int i)
 {
     BarDataList &bdl(getBarData(staff));
     ++i;
@@ -1395,8 +1404,8 @@ NotationHLayout::isBarCorrect(StaffType &staff, int i)
     else return getBarData(staff)[i].correct;
 }
 
-Event *NotationHLayout::getTimeSignatureInBar(StaffType &staff,
-					      int i, double &timeSigX)
+Event *NotationHLayout::getTimeSignaturePosition(StaffType &staff,
+						 int i, double &timeSigX)
 {
     BarDataList &bdl(getBarData(staff));
     if (i < 0) i = 0;
@@ -1405,38 +1414,3 @@ Event *NotationHLayout::getTimeSignatureInBar(StaffType &staff,
     return (bdl[i]).timeSignature;
 }
 
-/*!!!
-unsigned int
-NotationHLayout::getBarLineCount(StaffType &staff)
-{
-    int c = getBarData(staff).size();
-    return c;
-}
-
-double
-NotationHLayout::getBarLineX(StaffType &staff, unsigned int i)
-{
-    return getBarData(staff)[i].x;
-}
-
-int
-NotationHLayout::getBarLineDisplayNumber(StaffType &staff, unsigned int i)
-{
-    return getBarData(staff)[i].barNo;
-}
-
-bool
-NotationHLayout::isBarLineCorrect(StaffType &staff, unsigned int i)
-{
-    return getBarData(staff)[i].correct;
-}
-
-Event *NotationHLayout::getTimeSignatureInBar(StaffType &staff,
-					      unsigned int i, double &timeSigX)
-{
-    BarData &bd(getBarData(staff)[i]);
-    timeSigX = (double)bd.timeSigX;
-    return bd.timeSignature;
-}
-
-*/

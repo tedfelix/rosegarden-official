@@ -103,36 +103,26 @@ public:
      */
     virtual void setPageWidth(double) { /* default: ignore it */ }
 
-    //!!! bad idea to have both methods with the same name:
-
     /**
      * Returns the number of the first visible bar line on the given
      * staff
      */
-    virtual int getFirstVisibleBar(StaffType &) {
+    virtual int getFirstVisibleBarOnStaff(StaffType &) {
 	return  getFirstVisibleBar();
-    }
-
-    virtual int getFirstVisibleBar() {
-	return RulerScale::getFirstVisibleBar();
     }
 
     /**
      * Returns the number of the last visible bar line on the given
      * staff
      */
-    virtual int getLastVisibleBar(StaffType &) {
+    virtual int getLastVisibleBarOnStaff(StaffType &) {
 	return  getLastVisibleBar();
-    }
-
-    virtual int getLastVisibleBar() {
-	return RulerScale::getFirstVisibleBar();
     }
 
     /**
      * Returns true if the specified bar has the correct length
      */
-    virtual bool isBarCorrect(StaffType &, int/* barNo */) {
+    virtual bool isBarCorrectOnStaff(StaffType &, int/* barNo */) {
         return true;
     }
 
@@ -140,7 +130,7 @@ public:
      * Returns a pointer to a time signature event if there is one in
      * this bar, and if so also sets timeSigX to its x-coord
      */
-    virtual Event *getTimeSignatureInBar
+    virtual Event *getTimeSignaturePosition
     (StaffType &, int /* barNo */, double &/* timeSigX */) {
 	return 0;
     }

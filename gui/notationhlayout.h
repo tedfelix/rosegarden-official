@@ -119,7 +119,7 @@ public:
      * Returns the number of the first visible bar line on the given
      * staff
      */
-    virtual int getFirstVisibleBar(StaffType &staff);
+    virtual int getFirstVisibleBarOnStaff(StaffType &staff);
 
     /**
      * Returns the number of the first visible bar line on any
@@ -131,7 +131,7 @@ public:
      * Returns the number of the last visible bar line on the given
      * staff
      */
-    virtual int getLastVisibleBar(StaffType &staff);
+    virtual int getLastVisibleBarOnStaff(StaffType &staff);
 
     /**
      * Returns the number of the first visible bar line on any
@@ -147,13 +147,13 @@ public:
     /**
      * Returns true if the specified bar has the correct length
      */
-    virtual bool isBarCorrect(StaffType &staff, int barNo);
+    virtual bool isBarCorrectOnStaff(StaffType &staff, int barNo);
 
     /**
      * Returns a pointer to a time signature event if there is one in
      * this bar, and if so also sets timeSigX to its x-coord
      */
-    virtual Rosegarden::Event *getTimeSignatureInBar
+    virtual Rosegarden::Event *getTimeSignaturePosition
     (StaffType &staff, int barNo, double &timeSigX);
 
 protected:
@@ -180,7 +180,7 @@ protected:
     struct BarData
     {
 	// slots filled at construction time:
-        int barNo;            // in composition terms
+        int barNo;            // local to this staff, not in composition terms
         NotationElementList::iterator start; // i.e. event following barline
 	bool correct;         // bar preceding barline has correct duration
 

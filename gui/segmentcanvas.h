@@ -398,8 +398,6 @@ public:
 
 signals:
     void addSegment(Rosegarden::TrackId, Rosegarden::timeT, Rosegarden::timeT);
-    void deleteSegment(Rosegarden::Segment*);
-    void updateSegmentDuration(Rosegarden::Segment*, Rosegarden::timeT);
 
 protected:
     //--------------- Data members ---------------------------------

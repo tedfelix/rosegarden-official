@@ -614,10 +614,6 @@ SegmentPencil::SegmentPencil(SegmentCanvas *c)
 
     connect(this, SIGNAL(addSegment(Rosegarden::TrackId, Rosegarden::timeT, Rosegarden::timeT)),
             c,    SIGNAL(addSegment(Rosegarden::TrackId, Rosegarden::timeT, Rosegarden::timeT)));
-    connect(this, SIGNAL(deleteSegment(Rosegarden::Segment*)),
-            c,    SIGNAL(deleteSegment(Rosegarden::Segment*)));
-    connect(this, SIGNAL(updateSegmentDuration(Rosegarden::Segment*, Rosegarden::timeT)),
-            c,    SIGNAL(updateSegmentDuration(Rosegarden::Segment*, Rosegarden::timeT)));
 
     kdDebug(KDEBUG_AREA) << "SegmentPencil()\n";
 }
@@ -631,36 +627,19 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
     //
     SegmentItem *item = m_canvas->findSegmentClickedOn(e->pos());
 
-    if (item) {
-        // we are, so set currentItem to it
-//        m_currentItem = item;
-        return;
+    if (item) return;
 
-    } else { // we are not, so create one
+    m_canvas->setSnapGrain(false);
 
-	m_canvas->setSnapGrain(false);
-
-	TrackId track = m_canvas->grid().getYBin(e->pos().y());
-	timeT time = m_canvas->grid().snapX(e->pos().x());
-	timeT duration = m_canvas->grid().getSnapTime(e->pos().x());
-	if (duration == 0) duration = Note(Note::Shortest).getDuration();
-
-	m_currentItem = m_canvas->addSegmentItem(track, time, duration);
-        m_newRect = true;
-
-/*!!!
-        // Don't use the m_currentItem for the moment as we
-        // don't want to create a SegmentItem at this level
-        //
-	//m_currentItem = m_canvas->addSegmentItem(y, time, duration);
-        m_newRect = true;
-        m_track = track;
-        m_startTime = time;
-        m_duration = duration;
-*/
-
-        m_canvas->update();
-    }
+    TrackId track = m_canvas->grid().getYBin(e->pos().y());
+    timeT time = m_canvas->grid().snapX(e->pos().x(), SnapGrid::SnapLeft);
+    timeT duration = m_canvas->grid().getSnapTime(e->pos().x());
+    if (duration == 0) duration = Note(Note::Shortest).getDuration();
+    
+    m_currentItem = m_canvas->addSegmentItem(track, time, duration);
+    m_newRect = true;
+    
+    m_canvas->update();
 }
 
 void SegmentPencil::handleMouseButtonRelease(QMouseEvent*)
@@ -669,21 +648,10 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent*)
     m_currentItem->normalize();
 
     if (m_newRect) {
-
-//        emit addSegment(m_track, m_startTime, m_duration);
 	emit addSegment(m_currentItem->getTrack(),
 			m_currentItem->getStartTime(),
 			m_currentItem->getDuration());
-        
     }
-    /*else {
-
-        kdDebug(KDEBUG_AREA) << "SegmentCanvas::contentsMouseReleaseEvent() : shorten m_currentItem = "
-                             << m_currentItem << endl;
-
-	emit updateSegmentDuration(m_currentItem->getSegment(),
-	m_currentItem->getDuration());
-    }*/
 
     delete m_currentItem;
     m_currentItem = 0;
@@ -696,19 +664,25 @@ void SegmentPencil::handleMouseMove(QMouseEvent *e)
 
     m_canvas->setSnapGrain(false);
 
-    timeT time = m_canvas->grid().snapX(e->pos().x());
+    SnapGrid::SnapDirection direction = SnapGrid::SnapRight;
+    if (e->pos().x() < m_currentItem->x()) direction = SnapGrid::SnapLeft;
+
+    timeT time = m_canvas->grid().snapX(e->pos().x(), direction);
     timeT duration = time - m_currentItem->getStartTime();
 
     timeT snap = m_canvas->grid().getSnapTime(e->pos().x());
     if (snap == 0) snap = Note(Note::Shortest).getDuration();
 
-    if ((duration > 0 && duration <  snap) ||
-	(duration < 0 && duration > -snap)) {
-	m_currentItem->setDuration(duration < 0 ? -snap : snap);
-    } else {
-	m_currentItem->setDuration(duration);
+    if ((duration >= 0 && duration <  snap) ||
+	(duration <  0 && duration > -snap)) {
+	duration = (duration < 0 ? -snap : snap);
     }
 
+    if (direction == SnapGrid::SnapLeft) {
+	duration += std::max(m_currentItem->getDuration(), timeT(0));
+    }
+
+    m_currentItem->setDuration(duration);
     m_canvas->update();
 }
 

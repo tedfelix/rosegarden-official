@@ -341,8 +341,7 @@ LinedStaff<T>::sizeStaff(Rosegarden::HorizontalLayoutEngine<T> &layout)
 
     kdDebug(KDEBUG_AREA) << "LinedStaff::sizeStaff" << endl;
 
-//!!!    unsigned int barCount = layout.getBarLineCount(*this);
-    int lastBar = layout.getLastVisibleBar(*this);
+    int lastBar = layout.getLastVisibleBarOnStaff(*this);
 
     double xleft = 0, xright = 0;
     bool haveXLeft = false;
@@ -352,7 +351,8 @@ LinedStaff<T>::sizeStaff(Rosegarden::HorizontalLayoutEngine<T> &layout)
     
     Rosegarden::TimeSignature currentTimeSignature;
 
-    for (int barNo = layout.getFirstVisibleBar(); barNo <= lastBar; ++barNo) {
+    for (int barNo = layout.getFirstVisibleBarOnStaff(*this);
+	 barNo <= lastBar; ++barNo) {
 
 //        if (layout.isBarLineVisible(*this, i)) {
 
@@ -366,7 +366,7 @@ LinedStaff<T>::sizeStaff(Rosegarden::HorizontalLayoutEngine<T> &layout)
 
 	    double timeSigX = 0;
             Rosegarden::Event *timeSig =
-                layout.getTimeSignatureInBar(*this, barNo, timeSigX);
+                layout.getTimeSignaturePosition(*this, barNo, timeSigX);
 
             if (timeSig && barNo < lastBar) {
 		currentTimeSignature = Rosegarden::TimeSignature(*timeSig);
@@ -376,7 +376,7 @@ LinedStaff<T>::sizeStaff(Rosegarden::HorizontalLayoutEngine<T> &layout)
             insertBar(x,
 		      ((barNo == lastBar) ? 0 :
 		       (layout.getBarPosition(barNo + 1) - x)),
-		      layout.isBarCorrect(*this, barNo - 1),
+		      layout.isBarCorrectOnStaff(*this, barNo - 1),
 		      currentTimeSignature);
 //        }
     }
@@ -755,13 +755,12 @@ LinedStaff<T>::updateRuler(Rosegarden::HorizontalLayoutEngine<T> &layout)
 
     m_ruler->clearSteps();
     
-//!!!    for (unsigned int i = 0; i < layout.getBarLineCount(*this); ++i) {
     for (int barNo = layout.getFirstVisibleBar();
 	 barNo <= layout.getLastVisibleBar(); ++barNo) {
 
         double x;
         Rosegarden::Event *timeSigEvent =
-	    layout.getTimeSignatureInBar(*this, barNo, x);
+	    layout.getTimeSignaturePosition(*this, barNo, x);
 
         if (timeSigEvent)
 	    timeSignature = Rosegarden::TimeSignature(*timeSigEvent);

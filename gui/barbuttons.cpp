@@ -120,9 +120,9 @@ BarButtons::drawButtons(bool recalc)
     m_firstBar = firstBar;
 
 
-/*
     kdDebug(KDEBUG_AREA) << "BarButtons::drawButtons: firstBar " << firstBar
-			 << ", lastBar " << lastBar << ", x " << x << std::endl;
+			 << ", lastBar " << lastBar  << std::endl;
+/*
 
     kdDebug(KDEBUG_AREA) << "bar positions: " << std::endl;
     for (int j = firstBar; j <= lastBar; ++j) {
@@ -167,9 +167,12 @@ BarButtons::recalculate()
     int firstBar = m_rulerScale->getFirstVisibleBar(),
 	 lastBar = m_rulerScale->getLastVisibleBar();
 
+    kdDebug(KDEBUG_AREA) << "BarButtons::recalculate: firstBar = "
+			 << firstBar << ", m_firstBar = " << m_firstBar << endl;
+
     if (m_firstBar != firstBar) drawButtons(false);
 
-    int x = (int)m_rulerScale->getBarPosition(firstBar);
+    int x = 0;
 
 //        label->setMinimumHeight(m_barHeight - m_loopRulerHeight - 4);
 //        label->setMaximumHeight(m_barHeight - m_loopRulerHeight - 4);

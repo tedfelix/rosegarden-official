@@ -180,6 +180,8 @@ public:
     static const timeT SnapToBar;
     static const timeT SnapToBeat;
 
+    enum SnapDirection { SnapEither, SnapLeft, SnapRight };
+
     /**
      * Set the snap size of the grid to the given time.
      * The snap time must be positive, or else one of the
@@ -204,8 +206,13 @@ public:
      * conversion, so it's useful even in NoSnap mode.
      * If the snap time is greater than the bar duration
      * at this point, the bar duration will be used instead.
+     *
+     * If d is SnapLeft or SnapRight, a time to the left or
+     * right respectively of the given coordinate will be
+     * returned; otherwise the nearest time on either side
+     * will be returned.
      */
-    timeT snapX(double x) const;
+    timeT snapX(double x, SnapDirection d = SnapEither) const;
 
     /**
      * Snap a given y-coordinate to the nearest lower

@@ -266,7 +266,7 @@ SnapGrid::getSnapTime(double x) const
 }
 
 timeT
-SnapGrid::snapX(double x) const
+SnapGrid::snapX(double x, SnapDirection direction) const
 {
     timeT time = m_rulerScale->getTimeForX(x);
     if (m_snapTime == NoSnap) return time;
@@ -286,14 +286,16 @@ SnapGrid::snapX(double x) const
     timeT offset = (time - barRange.first);
     timeT rounded = (offset / snapTime) * snapTime;
 
-    timeT snapped;
-    if ((offset - rounded) > (rounded + snapTime - offset)) {
-	snapped = rounded + snapTime + barRange.first;
-    } else {
-	snapped = rounded + barRange.first;
-    }
+    timeT left  = rounded + barRange.first;
+    timeT right = left + snapTime;
 
-    return snapped;
+    if (direction == SnapLeft) return left;
+    else if (direction == SnapRight) return right;
+    else if ((offset - rounded) > (rounded + snapTime - offset)) {
+	return right;
+    } else {
+	return left;
+    }
 }
 
 
