@@ -103,8 +103,8 @@ public:
     Composition&       getComposition()       { return m_composition; }
     const Composition& getComposition() const { return m_composition; }
 
-    EventList*         getTrack(int trackNb)        { return m_composition[trackNb]; }
-    const EventList*   getTrack(int trackNb) const  { return m_composition[trackNb]; }
+    Track*         getTrack(int trackNb)        { return m_composition[trackNb]; }
+    const Track*   getTrack(int trackNb) const  { return m_composition[trackNb]; }
 
     unsigned int getNbTracks() const { return m_composition.getNbTracks(); }
     unsigned int getNbBars()   const { return m_composition.getNbBars(); }

@@ -226,10 +226,10 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 
         fileStream << "<Track>" << endl; //--------------------------
 
-        for(EventList::iterator i = (*trks)->begin();
+        for(Track::iterator i = (*trks)->begin();
             i != (*trks)->end(); ++i) {
 
-            EventList::iterator nextEl = i;
+            Track::iterator nextEl = i;
             ++nextEl;
 
             if (nextEl != (*trks)->end()) {
@@ -283,7 +283,7 @@ void RosegardenGUIDoc::deleteContents()
 
         if (*trks) {
 
-            for(EventList::iterator i = (*trks)->begin();
+            for(Track::iterator i = (*trks)->begin();
                 i != (*trks)->end(); ++i) {
                 delete *i;
             }

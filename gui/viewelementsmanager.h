@@ -33,8 +33,8 @@ public:
 
     bool setCurrentTrack(unsigned int trackNb);
 
-    NotationElementList* notationElementList(EventList::iterator from,
-                                             EventList::iterator to);
+    NotationElementList* notationElementList(Track::iterator from,
+                                             Track::iterator to);
 
     // overload these for each ViewElement type
     void insert(NotationElement*);
@@ -43,7 +43,7 @@ public:
 protected:
 
     Composition         &m_composition;
-    EventList           *m_currentTrack;
+    Track               *m_currentTrack;
     NotationElementList *m_notationElements;
     
 };

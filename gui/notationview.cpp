@@ -145,7 +145,7 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
                .arg(trackNb)
                .arg(doc->getTitle()));
 
-    EventList* t = doc->getTrack(trackNb);
+    Track* t = doc->getTrack(trackNb);
 
     if (!t) {
         kdDebug(KDEBUG_AREA) << "NotationView ctor : getTrack("
@@ -156,7 +156,7 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
         throw -1;
     }
         
-    EventList &allEvents = *t;
+    Track &allEvents = *t;
 
     m_viewElementsManager = doc->getViewElementsManager();
 

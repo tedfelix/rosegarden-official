@@ -63,10 +63,10 @@ Quantizer::computeNoteDurations()
 
 
 void
-Quantizer::quantize(EventList::iterator from,
-                    EventList::iterator to)
+Quantizer::quantize(Track::iterator from,
+                    Track::iterator to)
 {
-    EventList::iterator it = from;
+    Track::iterator it = from;
 
     while (it != to) {
 

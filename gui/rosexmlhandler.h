@@ -53,7 +53,7 @@ public:
 
 protected:
     Composition &m_composition;
-    EventList *m_currentTrack;
+    Track *m_currentTrack;
 
     Event::timeT m_currentTime;
 

@@ -42,14 +42,14 @@ ViewElementsManager::setCurrentTrack(unsigned int trackNb)
 
 
 NotationElementList*
-ViewElementsManager::notationElementList(EventList::iterator from,
-                                         EventList::iterator to)
+ViewElementsManager::notationElementList(Track::iterator from,
+                                         Track::iterator to)
 {
     if (m_notationElements) return m_notationElements;
     
     m_notationElements = new NotationElementList;
 
-    for (EventList::iterator i = from; i != to; ++i) {
+    for (Track::iterator i = from; i != to; ++i) {
         NotationElement *el = new NotationElement(*i);
         m_notationElements->insert(el);
     }
@@ -67,12 +67,12 @@ ViewElementsManager::insert(NotationElement *e)
 void
 ViewElementsManager::erase(NotationElementList::iterator it)
 {
-    pair<EventList::iterator, EventList::iterator> interval
+    pair<Track::iterator, Track::iterator> interval
         = m_currentTrack->equal_range((*it)->event());
 
     bool foundEvent = false;
 
-    for (EventList::iterator eIter = interval.first;
+    for (Track::iterator eIter = interval.first;
          eIter != interval.second;
          ++eIter) {
 

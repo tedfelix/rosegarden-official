@@ -58,7 +58,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
                                  << trackNbStr << " (" << trackNb << ")\n";
         }
         
-        m_currentTrack = new EventList;
+        m_currentTrack = new Track;
 
         if (trackNb > 0)
             m_composition.addTrack(m_currentTrack, trackNb);

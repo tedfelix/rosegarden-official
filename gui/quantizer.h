@@ -34,8 +34,8 @@ public:
      * sets the 'Notation::NoteType' and 'QuantizedDuration' properties
      * does not change the element duration
      */
-    void quantize(EventList::iterator from,
-                  EventList::iterator to);
+    void quantize(Track::iterator from,
+                  Track::iterator to);
 
     /**
      * quantize one element to a Note
