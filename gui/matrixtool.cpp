@@ -490,6 +490,7 @@ MatrixSelector::MatrixSelector(MatrixView* view)
     : MatrixTool("MatrixSelector", view),
       m_selectionRect(0),
       m_updateRect(false),
+      m_greedy(true),
       m_currentStaff(0),
       m_clickedElement(0),
       m_dispatchTool(0)
@@ -612,7 +613,12 @@ bool MatrixSelector::handleMouseMove(timeT time, int height,
             if ((matrixRect = dynamic_cast<QCanvasMatrixRectangle*>(item)))
             {
 
-                if (!normalizedSelectionRect.contains(matrixRect->rect())) continue;
+                // If selector is not greedy, check if the element's rect
+                // is actually included in the selection rect.
+                //
+                if (!isGreedy() &&
+                    !normalizedSelectionRect.contains(matrixRect->rect()))
+                    continue;
 
                 MatrixElement *mE = &matrixRect->getMatrixElement();
 

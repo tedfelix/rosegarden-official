@@ -191,6 +191,24 @@ public:
      */
     Rosegarden::EventSelection* getSelection();
 
+    /**
+     * Sets the selector to "greedy" mode
+     *
+     * In greedy mode, elements which merely touch the edges of the
+     * selection rectangle are selected. Otherwise, elements have to
+     * actually be fully included in the rectangle to be selected.
+     *
+     * @see #isGreedy
+     */
+    void setGreedyMode(bool s) { m_greedy = s; }
+
+    /**
+     * Returns whether the selector is in "greedy" mode
+     *
+     * @see #setGreedy
+     */
+    bool isGreedy() const      { return m_greedy; }
+
     static const QString ToolName;
 
 public slots:
@@ -211,6 +229,7 @@ protected:
 
     QCanvasRectangle* m_selectionRect;
     bool m_updateRect;
+    bool m_greedy;
 
     int m_clickedStaff;
     MatrixStaff* m_currentStaff;
