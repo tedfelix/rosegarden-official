@@ -144,10 +144,5 @@ kdbgstream& operator<<(kdbgstream&, NotationElementList&);
 inline kndbgstream& operator<<(kndbgstream &e, NotationElementList&) { return e; }
 #endif
 
-// inline bool operator<(NotationElement &e1, NotationElement &e2)
-// {
-//     return e1.m_x < e2.m_x;
-// }
-
 
 #endif

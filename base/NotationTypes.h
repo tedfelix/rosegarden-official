@@ -28,7 +28,7 @@
 namespace Rosegarden 
 {
 
-typedef std::vector<int> DurationList;
+typedef std::list<int> DurationList;
 
     
 enum Accidental {
@@ -443,7 +443,8 @@ private:
                                          int intervalDuration,
                                          int startOffset = 0) const;
 
-    void getDurationListAux(DurationList &dlist, int duration) const;
+    void getDurationListAux(DurationList &dlist, int duration,
+                            bool isLeadIn) const;
 
     // a time & effort saving device
     static const int m_crotchetTime;

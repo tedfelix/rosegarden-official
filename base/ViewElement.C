@@ -42,7 +42,7 @@ ViewElement::~ViewElement()
 bool
 operator<(const ViewElement &a, const ViewElement &b)
 {
-    return a.event()->getAbsoluteTime() < b.event()->getAbsoluteTime();
+    return *(a.event()) < *(b.event());
 }
  
 }

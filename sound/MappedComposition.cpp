@@ -21,6 +21,7 @@
 #include <qdatastream.h>
 #include "MappedComposition.h"
 #include "MappedEvent.h"
+#include <iostream>
 
 namespace Rosegarden
 {

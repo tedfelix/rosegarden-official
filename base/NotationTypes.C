@@ -767,10 +767,13 @@ void TimeSignature::getDurationListForInterval(DurationList &dlist,
 
     //!!! Solely for testing.  This obviously slows things down...
 
+    cerr << "Checking duration list: ";
     int d = 0;
     for (DurationList::iterator di = dlist.begin(); di != dlist.end(); ++di) {
+        cerr << *di << ", ";
 	d += *di;
     }
+    cerr << "done." << endl;
 
     if (d != duration) {
 	cerr << "\n\nERROR: TimeSignature::getDurationListForInterval: returned duration list sums to incorrect total:" << endl << "Desired duration is " << duration << " with startOffset " << startOffset << ", returned duration list is: " << endl;
@@ -812,6 +815,53 @@ void TimeSignature::getDurationListForBar(DurationList &dlist) const
 }
 
 
+
+//!!! It might be nice to have a better algorithm for this, but I'm
+// not sure if it's possible to be general enough and of high enough
+// quality without simply having lots of special cases.
+
+// Example of limitation of the current code: in a 4/4 bar, we have a
+// single semibreve rest.  We insert a crotchet note over the start of
+// the bar, expecting the semibreve rest to be split into a crotchet
+// and a minim.  Instead, it's split into a minim and a crotchet.
+
+// Here's a potential better algorithm:
+
+// Given an interval and a beat duration, we can divide the interval
+// into three parts: the lead-in to the first beat, a section composed
+// only of full beats, and the lead-out of the final beat (the first
+// and third parts being shorter than a single beat duration, and any
+// of the three being potentially of zero duration).
+
+// Given a time signature, we can work out the longest natural
+// subdivision of the bar by dividing the bar duration by the smallest
+// integer factor of the time signature's numerator.  This is the
+// initial beat duration.  The result of dividing our numerator by its
+// smallest factor is the effective numerator of the beat.  We can
+// then subdivide this into sub-beats, using the effective numerator
+// in the same way as we used the original numerator.  If the
+// numerator for the bar's whole time signature is prime, we divide by
+// that; if an effective numerator becomes 1, we divide by 2 for our
+// beats but keep the numerator at 1.
+
+// So, to make an interval: Find the beat for the whole bar.  Divide
+// the interval into three as described above (lead-in, beats,
+// lead-out).  For the lead-in, find the next shortest sub-beat;
+// divide the lead-in interval into two (lead-in, beats) and recurse
+// on those with the sub-beat duration.  For the main beats, just fill
+// up with main-beat-duration rests.  For the lead-out, find the
+// sub-beat, divide the lead-out into two (beats, lead-out) and
+// recurse.  I think this could work for multi-bar sections too, if we
+// start by dividing into the whole bar duration.
+
+// The remaining problem is what to do if a beat duration is not
+// expressible as a single rest (possibly dotted, if in dotted time).
+// Probably we should just subdivide the beat immediately.
+
+// Might be too complicated overall, that.
+
+
+
 // Derived from RG2's MidiMakeRestList in editor/src/MidiIn.c.
 
 // Create a list of durations, totalling (as close as possible) the
@@ -837,27 +887,41 @@ void TimeSignature::getDurationListForShortInterval(DurationList &dlist,
          << startOffset << ", beatDuration " << beatDuration << endl;
                
     if (toNextBeat > duration) {
-        getDurationListAux(dlist, duration);
+        getDurationListAux(dlist, duration, false);
     } else {
         // first fill up to the next crotchet (or, in 6/8 or some
         // other such time, the next dotted crotchet); then fill in
         // crotchet or dotted-crotchet leaps until the end of the
         // section needing filling
-        getDurationListAux(dlist, toNextBeat);
-        getDurationListAux(dlist, duration - toNextBeat);
+        getDurationListAux(dlist, toNextBeat, dlist.size() == 0);
+        getDurationListAux(dlist, duration - toNextBeat, false);
     }
 }
 
 
 // Derived from RG2's MidiMakeRestListSub in editor/src/MidiIn.c.
 
-void TimeSignature::getDurationListAux(DurationList &dlist, int t) const
+void TimeSignature::getDurationListAux(DurationList &dlist, int t,
+                                       bool isLeadIn = false) const
     // (we append to dlist, it's expected to have stuff in it already)
 {
-    cerr << "TimeSignature::getDurationListAux: duration is " << t << endl;
+    cerr << "TimeSignature::getDurationListAux: duration is " << t
+         << ", isLeadIn is " << isLeadIn << endl;
     
     if (t == 0) return;
     assert(t > 0);
+
+    // We behave differently if we're trying to fill the space leading
+    // up to the first beat boundary of an interval.  In this case, we
+    // want to end up on semi-beat boundaries as quickly as possible,
+    // and usually the best way to achieve that is to fill up the
+    // duration list in reverse order, longest duration at the end
+    // (and avoid using dotted notes, but we don't currently use those
+    // anyway).  isLeadIn indicates this case.
+
+    // This code could probably be rather simpler, and it would be
+    // better if taking into account the possibility of using longer
+    // beats in time signatures like 4/4
 
     int shortestTime = Note(Note::Shortest).getDuration();
 
@@ -865,15 +929,17 @@ void TimeSignature::getDurationListAux(DurationList &dlist, int t) const
         cerr << "pushing [1] " << t << endl;
 	// we want to divide the time exactly, even if it means we
 	// can't represent everything quite right in note durations
-	dlist.push_back(t);
+	if (isLeadIn) dlist.push_front(t);
+        else dlist.push_back(t);
 	return;
     }
     int current;
 
     if ((current = (isDotted() ? m_dottedCrotchetTime : m_crotchetTime)) <= t) {
         cerr << "pushing [2] " << current << endl;
-        dlist.push_back(current);
-        getDurationListAux(dlist, t - current);
+        if (isLeadIn) dlist.push_front(current);
+        else dlist.push_back(current);
+        getDurationListAux(dlist, t - current, isLeadIn);
         return;
     }
                
@@ -882,8 +948,9 @@ void TimeSignature::getDurationListAux(DurationList &dlist, int t) const
         int next = Note(tag).getDuration();
         if (next > t) {
             cerr << "pushing [3] " << current << endl;
-            dlist.push_back(current);
-            getDurationListAux(dlist, t - current);
+            if (isLeadIn) dlist.push_front(current);
+            else dlist.push_back(current);
+            getDurationListAux(dlist, t - current, isLeadIn);
             return;
         }
         current = next;
@@ -894,8 +961,9 @@ void TimeSignature::getDurationListAux(DurationList &dlist, int t) const
 
     current = m_crotchetTime;
     cerr << "pushing [4] " << current << endl;
-    dlist.push_back(current);
-    getDurationListAux(dlist, t - current);
+    if (isLeadIn) dlist.push_front(current);
+    else dlist.push_back(current);
+    getDurationListAux(dlist, t - current, isLeadIn);
 }
 
 const int TimeSignature::m_crotchetTime       = 96;

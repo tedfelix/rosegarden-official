@@ -265,10 +265,20 @@ Track::iterator TrackNotationHelper::collapseRestsForInsert(iterator i,
 }
 
 
-bool TrackNotationHelper::isViable(timeT duration)
+bool TrackNotationHelper::isViable(timeT duration, int dots)
 {
+    cerr << "TrackNotationHelper::isViable: timeT " << duration << ", dots " << dots << endl;
+    bool viable;
     duration = quantizer().quantizeByUnit(duration);
-    return (duration == quantizer().quantizeByNote(duration));
+
+    if (dots >= 0) {
+        viable = (duration == Quantizer(1, dots).quantizeByNote(duration));
+    } else {
+        viable = (duration == quantizer().quantizeByNote(duration));
+    }
+
+    cerr << "TrackNotationHelper::isViable: returning " << viable << endl;
+    return viable;
 }
 
 
@@ -276,6 +286,11 @@ void TrackNotationHelper::makeRestViable(iterator i)
 {
     DurationList dl;
     int barNo = track().getBarNumber(i);
+
+    cerr << "TrackNotationHelper::makeRestViable: bar number is " << barNo
+         << ", start time is " << track().getBarPositions()[barNo].start
+         << ", absTime is " << (*i)->getAbsoluteTime() << endl;
+
     TimeSignature tsig = track().getBarPositions()[barNo].timeSignature;
     timeT absTime = (*i)->getAbsoluteTime();
 
@@ -287,8 +302,8 @@ void TrackNotationHelper::makeRestViable(iterator i)
 
     erase(i);
     
-    for (unsigned int i = 0; i < dl.size(); ++i) {
-	int duration = dl[i];
+    for (DurationList::iterator i = dl.begin(); i != dl.end(); ++i) {
+	int duration = *i;
 	
 	cerr << "TrackNotationHelper::makeRestViable: Inserting rest of duration "
 	     << duration << " at time " << absTime << endl;
@@ -316,6 +331,8 @@ void TrackNotationHelper::makeNoteViable(iterator i)
     timeT acc = 0;
     timeT required = (*i)->getDuration();
 
+    // Behaviour differs from TimeSignature::getDurationListForInterval
+
     while (acc < required) {
         timeT component = Note::getNearestNote(required - acc).getDuration();
         if (component > (required - acc)) dl.push_back(required - acc);
@@ -332,16 +349,18 @@ void TrackNotationHelper::makeNoteViable(iterator i)
     e->set<Bool>(Note::TiedForwardPropertyName, true);
     erase(i);
 
-    for (unsigned int i = 0; i < dl.size(); ++i) {
+    for (DurationList::iterator i = dl.begin(); i != dl.end(); ++i) {
 
-        e->setDuration(dl[i]);
-        insert(new Event(*e));
-        e->addAbsoluteTime(dl[i]);
-
-        e->set<Bool>(Note::TiedBackwardPropertyName, true);
-        if (i == dl.size()-1 && !lastTiedForward) {
+        DurationList::iterator j(i);
+        if (++j == dl.end() && !lastTiedForward) {
             e->unset(Note::TiedForwardPropertyName);
         }
+
+        e->setDuration(*i);
+        insert(new Event(*e));
+        e->addAbsoluteTime(*i);
+
+        e->set<Bool>(Note::TiedBackwardPropertyName, true);
     }
 
     delete e;
@@ -489,7 +508,16 @@ void TrackNotationHelper::insertSomething(iterator i, int duration, int pitch,
 	    // be better.  Unfortunately I'm not currently quite sure how
 	    // to tell.
 
-	    if (last != end() && !isViable(*last)) makeRestViable(last);
+            if (last != end()) {
+                cerr << "last != end()" << endl;
+
+                if (/*last != end() &&*/ !isViable(*last, 1)) {
+                cerr << "calling makeRestViable" << endl;
+                makeRestViable(last);
+                }
+            } else {
+                cerr << "last == end()" << endl;
+            }
 	}
 
 	insertSingleSomething(i, duration, pitch, isRest, tiedBack);

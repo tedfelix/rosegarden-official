@@ -154,15 +154,29 @@ public:
      * Check whether a note or rest event has a duration that can be
      * represented by a single note-type.  (If not, the code that's
      * doing the check might wish to split the event.)
+     *
+     * If dots is specified, a true value will only be returned if the
+     * best-fit note has no more than that number of dots.  e.g. if
+     * dots = 0, only notes that are viable without the use of dots
+     * will be acceptable.  The default is whatever the track's
+     * quantizer considers acceptable (probably either 1 or 2 dots).
      */
-    bool isViable(Event *e) { return isViable(e->getDuration()); }
+    bool isViable(Event *e, int dots = -1) {
+        return isViable(e->getDuration(), dots);
+    }
 
     /**
      * Check whether a duration can be represented by a single
      * note-type.  (If not, the code that's doing the check might wish
      * to split the duration.)
+     *
+     * If dots is specified, a true value will only be returned if the
+     * best-fit note has no more than that number of dots.  e.g. if
+     * dots = 0, only notes that are viable without the use of dots
+     * will be acceptable.  The default is whatever the track's
+     * quantizer considers acceptable (probably either 1 or 2 dots).
      */
-    bool isViable(timeT duration);
+    bool isViable(timeT duration, int dots = -1);
 
     
     /**

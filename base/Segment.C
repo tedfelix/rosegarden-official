@@ -200,7 +200,10 @@ int Track::getBarNumber(const Event *e) const
     BarPositionList::const_iterator bpi
         (std::lower_bound(m_barPositions.begin(), m_barPositions.end(), pos));
 
-    return std::distance(m_barPositions.begin(), bpi);
+    int barNo = std::distance(m_barPositions.begin(), bpi);
+
+    if (bpi->start > e->getAbsoluteTime() && barNo > 0) --barNo;
+    return barNo;
 }
 
 

@@ -54,13 +54,6 @@ protected:
     Event *m_event;
 };
 
-//class ViewElementsManagerBase
-//{
-//public:
-//    virtual void insert(Track::iterator from, Track::iterator to) = 0;
-//    virtual void erase (Track::iterator from, Track::iterator to) = 0;
-//};
-
  
 }
 

@@ -1,5 +1,6 @@
 
 #include "TrackPerformanceHelper.h"
+#include <iostream>
 
 namespace Rosegarden 
 {
