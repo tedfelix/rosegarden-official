@@ -33,7 +33,7 @@ public:
     TrackItem(const QRect &, QCanvas* canvas);
     TrackItem(int x, int y, int width, int height, QCanvas* canvas);
 
-    unsigned int getLength() const;
+    unsigned int getItemNbBars() const;
     unsigned int getStartIndex() const;
 
     int  getInstrument() const;

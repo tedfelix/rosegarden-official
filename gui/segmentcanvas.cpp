@@ -54,7 +54,7 @@ TrackItem::TrackItem(int x, int y,
 {
 }
 
-unsigned int TrackItem::getLength() const
+unsigned int TrackItem::getItemNbBars() const
 {
     return rect().width() / m_widthToLengthRatio;
 }
@@ -402,12 +402,8 @@ void TrackMover::handleMouseButtonPress(QMouseEvent *e)
 
 void TrackMover::handleMouseButtonRelase(QMouseEvent*)
 {
-    if (m_currentItem) {
-//         m_currentItem->getTrack()->setStartIndex(m_currentItem->x() / m_canvas->grid().hstep());
-//         kdDebug(KDEBUG_AREA) << "TrackMover::handleMouseButtonRelase() : set part start time to "
-//                              << m_currentItem->getTrack()->getStartIndex() << endl;
+    if (m_currentItem)
         emit updateTrackInstrumentAndStartIndex(m_currentItem);
-    }
 
     m_currentItem = 0;
 }
@@ -450,6 +446,13 @@ void TrackResizer::handleMouseButtonPress(QMouseEvent *e)
 
 void TrackResizer::handleMouseButtonRelase(QMouseEvent*)
 {
+    unsigned int newNbBars = m_currentItem->getItemNbBars();
+
+    kdDebug(KDEBUG_AREA) << "TrackResizer: set track nb bars to "
+                         << newNbBars << endl;
+    
+    m_currentItem->getTrack()->setNbBars(newNbBars);
+
     m_currentItem = 0;
 }
 
