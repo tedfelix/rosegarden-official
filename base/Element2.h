@@ -101,10 +101,7 @@ class PropertyStore : public PropertyStoreBase
 public:
     PropertyStore(PropertyDefn<P>::basic_type d) : m_data(d) { }
     PropertyStore(const PropertyStore<P> &p) : m_data(p.m_data) { }
-    PropertyStore &operator=(const PropertyStore<P> &p) {
-	if (this != &p) m_data = p.m_data;
-	return *this;
-    }
+    PropertyStore &operator=(const PropertyStore<P> &p);
 
     virtual PropertyType getType() { return P; }
     virtual string getTypeName() { return PropertyDefn<P>::name(); }
@@ -124,6 +121,14 @@ private:
     PropertyDefn<P>::basic_type m_data;
 };
 
+template <PropertyType P>
+PropertyStore<P>&
+PropertyStore<P>::operator=(const PropertyStore<P> &p) {
+    if (this != &p) m_data = p.m_data;
+    return *this;
+}
+
+
 class Element2
 {
 private:
@@ -132,100 +137,38 @@ public:
     struct NoData { };
     struct BadType { };
 
-    Element2(const string &package, const string &type) :
-	m_package(package), m_type(type) { }
+    Element2(const string &package, const string &type);
 
-    Element2(const Element2 &e) {
-	copyFrom(e);
-    }
+    Element2(const Element2 &e);
 
-    virtual ~Element2() {
-	scrapMap();
-    }
+    virtual ~Element2();
 
-    Element2 &operator=(const Element2 &e) {
-	if (&e != this) {
-	    copyFrom(e);
-	}
-	return *this;
-    }    
+    Element2 &operator=(const Element2 &e);
 
     const string &getPackage() const { return m_package; }
     const string &getType() const { return m_type; }
 
-    bool has(const string &name) const {
-	PropertyMap::const_iterator i = m_properties.find(name);
-	return (i != m_properties.end());
-    }
+    bool has(const string &name) const;
 
     template <PropertyType P>
     PropertyDefn<P>::basic_type get(const string &name) const
-	throw (NoData, BadType) {
-	PropertyMap::const_iterator i = m_properties.find(name);
-	if (i != m_properties.end()) { 
-
-	    PropertyStoreBase *sb = (*i).second;
-	    if (sb->getType() == P) return ((PropertyStore<P> *)sb)->getData();
-	    else {
-		cerr << "Error: Element: Attempt to get property \"" << name
-		     << "\" as " << PropertyDefn<P>::name() <<", actual type is "
-		     << sb->getTypeName() << endl;
-		throw BadType();
-	    }
-	    
-	} else {
-	    throw NoData();
-	}
-    }
+        throw (NoData, BadType);
 
     template <PropertyType P>
     string getAsString(const string &name) const
-	throw (NoData, BadType) {
-	return PropertyDefn<P>::unparse(get<P>(name));
-    }
+	throw (NoData, BadType);
 
     template <PropertyType P>
     void set(const string &name, PropertyDefn<P>::basic_type value)
-	throw (BadType) {
-	PropertyMap::const_iterator i = m_properties.find(name);
-	if (i != m_properties.end()) {
-
-	    PropertyStoreBase *sb = (*i).second;
-	    if (sb->getType() == P) ((PropertyStore<P> *)sb)->setData(value);
-	    else {
-		cerr << "Error: Element: Attempt to get property \"" << name
-		     << "\" as " << PropertyDefn<P>::name() <<", actual type is "
-		     << sb->getTypeName() << endl;
-		throw BadType();
-	    }
-	    
-	} else {
-	    PropertyStoreBase *p = new PropertyStore<P>(value);
-	    m_properties.insert(PropertyPair(name, p));
-	}
-    }
+	throw (BadType);
 
     template <PropertyType P>
     void setFromString(const string &name, string value)
-	throw (BadType) {
-	set<P>(name, PropertyDefn<P>::parse(value));
-    }
+	throw (BadType);
 
 private:
-    void scrapMap() {
-	for (PropertyMap::iterator i = m_properties.begin();
-	     i != m_properties.end(); ++i) {
-	    delete (*i).second;
-	}
-    }
-
-    void copyFrom(const Element2 &e) {
-	scrapMap();
-	for (PropertyMap::const_iterator i = e.m_properties.begin();
-	     i != e.m_properties.end(); ++i) {
-	    m_properties.insert(PropertyPair((*i).first, (*i).second->clone()));
-	}
-    }
+    void scrapMap();
+    void copyFrom(const Element2 &e);
 
     string m_package;
     string m_type;
@@ -234,5 +177,70 @@ private:
     typedef PropertyMap::value_type PropertyPair;
     PropertyMap m_properties;
 };
+
+
+template <PropertyType P>
+PropertyDefn<P>::basic_type
+Element2::get(const string &name) const
+    throw (NoData, BadType)
+{
+    PropertyMap::const_iterator i = m_properties.find(name);
+    if (i != m_properties.end()) { 
+
+        PropertyStoreBase *sb = (*i).second;
+        if (sb->getType() == P) return ((PropertyStore<P> *)sb)->getData();
+        else {
+            cerr << "Error: Element: Attempt to get property \"" << name
+                 << "\" as " << PropertyDefn<P>::name() <<", actual type is "
+                 << sb->getTypeName() << endl;
+            throw BadType();
+        }
+	    
+    } else {
+        throw NoData();
+    }
+}
+
+
+template <PropertyType P>
+string
+Element2::getAsString(const string &name) const
+    throw (NoData, BadType)
+{
+    return PropertyDefn<P>::unparse(get<P>(name));
+}
+
+
+template <PropertyType P>
+void
+Element2::set(const string &name, PropertyDefn<P>::basic_type value)
+    throw (BadType)
+{
+    PropertyMap::const_iterator i = m_properties.find(name);
+    if (i != m_properties.end()) {
+
+        PropertyStoreBase *sb = (*i).second;
+        if (sb->getType() == P) ((PropertyStore<P> *)sb)->setData(value);
+        else {
+            cerr << "Error: Element: Attempt to get property \"" << name
+                 << "\" as " << PropertyDefn<P>::name() <<", actual type is "
+                 << sb->getTypeName() << endl;
+            throw BadType();
+        }
+	    
+    } else {
+        PropertyStoreBase *p = new PropertyStore<P>(value);
+        m_properties.insert(PropertyPair(name, p));
+    }
+}
+
+
+template <PropertyType P>
+void
+Element2::setFromString(const string &name, string value)
+    throw (BadType)
+{
+    set<P>(name, PropertyDefn<P>::parse(value));
+}
 
 #endif
