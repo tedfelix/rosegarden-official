@@ -1068,7 +1068,7 @@ MoveCommand::MoveCommand(Segment &s, timeT newTime, bool useNotationTimings,
 			 EventSelection &sel) :
     BasicCommand(getGlobalName(), s,
 		 std::min(sel.getStartTime(), newTime),
-		 std::max(sel.getEndTime(), newTime + sel.getTotalDuration())),
+		 1 + std::max(sel.getEndTime(), newTime + sel.getTotalDuration())),
     m_selection(&sel),
     m_newStartTime(newTime),
     m_useNotationTimings(useNotationTimings)
@@ -1104,17 +1104,14 @@ MoveCommand::modifySegment()
     for (i  = m_selection->getSegmentEvents().begin();
 	 i != m_selection->getSegmentEvents().end(); ++i) {
 
-	if (!(*i)->isa(Note::EventRestType)) {
+	if ((*i)->isa(Note::EventRestType)) continue;
 
-	    toErase.push_back(*i);
-
-	    timeT newTime =
-		(m_useNotationTimings ?
-		 (*i)->getNotationAbsoluteTime() : (*i)->getAbsoluteTime()) +
-		(b0 - a0);
-
-	    toInsert.push_back(new Event(**i, newTime));
-	}
+	toErase.push_back(*i);
+	timeT newTime =
+	    (m_useNotationTimings ?
+	     (*i)->getNotationAbsoluteTime() : (*i)->getAbsoluteTime()) +
+	    (b0 - a0);
+	toInsert.push_back(new Event(**i, newTime));
     }
 
     Segment &segment(m_selection->getSegment());
@@ -1125,13 +1122,27 @@ MoveCommand::modifySegment()
     }
 
     for (unsigned int j = 0; j < toInsert.size(); ++j) {
-	segment.insert(toInsert[j]);
+
+	// somewhat like the NoteOverlay part of PasteEventsCommand::modifySegment
+	if (m_useNotationTimings && toInsert[j]->isa(Note::EventType)) {
+	    long pitch = 0;
+	    Accidental explicitAccidental = NoAccidental;
+	    toInsert[j]->get<String>(ACCIDENTAL, explicitAccidental);
+	    if (toInsert[j]->get<Int>(PITCH, pitch)) {
+		SegmentNotationHelper(segment).insertNote
+		    (toInsert[j]->getAbsoluteTime(),
+		     Note::getNearestNote(toInsert[j]->getDuration()),
+		     pitch, explicitAccidental);
+	    }
+	} else {
+	    segment.insert(toInsert[j]);
+	}
     }
 
     segment.normalizeRests(a0, a1);
     segment.normalizeRests(b0, b1);
 
-    //!!! should select all moved notes
+    //!!! should select all moved notes?
 }
    
 void

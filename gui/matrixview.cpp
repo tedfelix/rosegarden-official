@@ -754,7 +754,7 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview,
     //!!! rather too much here shared with notationview -- could much of
     // this be in editview?
 
-    if (!m_currentEventSelection && !s)	{
+    if (m_currentEventSelection == s)	{
 	updateQuantizeCombo();
 	return;
     }

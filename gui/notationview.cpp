@@ -2246,7 +2246,7 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview,
     //!!! rather too much here shared with matrixview -- could much of
     // this be in editview?
 
-    if (!m_currentEventSelection && !s) return;
+    if (m_currentEventSelection == s) return;
     NOTATION_DEBUG << "XXX " << endl;
 
     installProgressEventFilter();
@@ -2388,72 +2388,6 @@ void NotationView::setSingleSelectedEvent(Segment &segment, Event *event,
     selection->addEvent(event);
     setCurrentSelection(selection, preview, redrawNow);
 }
-
-bool NotationView::drag(NotationStaff *staff, NotationElement *element, int x, int y)
-{
-    NOTATION_DEBUG << "NotationView::drag element " << x << ", " << y << endl;
-
-    EventSelection *selection = m_currentEventSelection;
-    if (!selection) selection = new EventSelection(staff->getSegment());
-    if (!selection->contains(element->event())) selection->addEvent(element->event());
-    m_currentEventSelection = selection;
-
-    // Calculate time and height
-    
-    timeT clickedTime = element->event()->getNotationAbsoluteTime();
-
-    Rosegarden::Accidental clickedAccidental = Rosegarden::Accidentals::NoAccidental;
-    (void)element->event()->get<Rosegarden::String>
-	(Rosegarden::BaseProperties::ACCIDENTAL, clickedAccidental);
-
-    long clickedPitch = 0;
-    (void)element->event()->get<Rosegarden::Int>
-	(Rosegarden::BaseProperties::PITCH, clickedPitch);
-
-    Event *clefEvt = 0, *keyEvt = 0;
-    Rosegarden::Clef clef;
-    Rosegarden::Key key;
-    timeT dragTime = clickedTime;
-
-    NotationElementList::iterator itr =
-	staff->getElementUnderCanvasCoords(x, y, clefEvt, keyEvt);
-
-    if (itr != staff->getViewElementList()->end()) {
-	dragTime = (*itr)->event()->getNotationAbsoluteTime();
-    }
-
-    if (clefEvt) clef = Rosegarden::Clef(*clefEvt);
-    if (keyEvt) key = Rosegarden::Key(*keyEvt);
-    
-    int height = staff->getHeightAtCanvasY(y);
-    Rosegarden::Pitch p(height, clef, key, clickedAccidental);
-    int pitch = p.getPerformancePitch();
-
-    if (pitch != clickedPitch) {
-	//!!! we need some limit to this
-
-	addCommandToHistory(new TransposeCommand(pitch - clickedPitch,
-						 *m_currentEventSelection));
-	return true;
-    }
-
-    //!!! move the selection left or right if (a) there is an event at the
-    // time dragged to (and the time is not the absolute or notation time
-    // of the original event) or (b) the original event has notation
-    // duration > 0 and the time dragged to is a multiple of that notation
-    // duration into its bar.  Need to maintain selectedness on the events
-    // though
-
-    if (dragTime != clickedTime) {
-	// this is only option (a) from the above selection
-	addCommandToHistory(new MoveCommand(staff->getSegment(), dragTime,
-					    true, *m_currentEventSelection));
-	return true;
-    }
-
-    return false;
-}
-
 
 bool NotationView::canPreviewAnotherNote()
 {

@@ -437,6 +437,8 @@ protected:
      */
     NotationStaff *getStaffForElement(NotationElement *elt);
 
+    void drag(int x, int y, bool final);
+
     //--------------- Data members ---------------------------------
 
     QCanvasRectangle* m_selectionRect;

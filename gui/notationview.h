@@ -197,14 +197,6 @@ public:
                                 bool preview = false,
                                 bool redrawNow = false);
 
-    /**
-     * Respond to a mouse drag of the given element on the given staff.
-     * The element may or may not be in the current selection.
-     * Return true if the drag was sufficient to cause the element to
-     * move, false otherwise.
-     */
-    bool drag(NotationStaff *staff, NotationElement *element, int x, int y);
-
     /// Show and sound the given note
     void showPreviewNote(int staffNo, double layoutX,
                          int pitch, int height,

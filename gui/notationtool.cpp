@@ -59,10 +59,12 @@ using Rosegarden::EventSelection;
 using Rosegarden::Clef;
 using Rosegarden::Note;
 using Rosegarden::Int;
+using Rosegarden::String;
 using Rosegarden::Segment;
 using Rosegarden::SegmentNotationHelper;
 using Rosegarden::timeT;
 using Rosegarden::ViewElement;
+using namespace Rosegarden::BaseProperties;
 
 //////////////////////////////////////////////////////////////////////
 //               Notation Toolbox
@@ -503,7 +505,7 @@ NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
     if (m_nParentView->isInTripletMode()) {
 	Segment::iterator i(segment.findTime(time));
 	if (i != segment.end() &&
-	    !(*i)->has(Rosegarden::BaseProperties::BEAMED_GROUP_TUPLET_BASE)) {
+	    !(*i)->has(BEAMED_GROUP_TUPLET_BASE)) {
 
 	    KMacroCommand *command = new KMacroCommand(insertionCommand->name());
 	    command->addCommand(new GroupMenuTupletCommand
@@ -706,7 +708,7 @@ RestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
     if (m_nParentView->isInTripletMode()) {
 	Segment::iterator i(segment.findTime(time));
 	if (i != segment.end() &&
-	    !(*i)->has(Rosegarden::BaseProperties::BEAMED_GROUP_TUPLET_BASE)) {
+	    !(*i)->has(BEAMED_GROUP_TUPLET_BASE)) {
 
 	    KMacroCommand *command = new KMacroCommand(insertionCommand->name());
 	    command->addCommand(new GroupMenuTupletCommand
@@ -989,10 +991,7 @@ void NotationSelector::handleLeftButtonPress(Rosegarden::timeT t,
     delete m_selectionToMerge;
     const EventSelection *selectionToMerge = 0;
     if (e->state() && ShiftButton) {
-	NOTATION_DEBUG << "shift is down" << endl;
-	NotationView *nView = dynamic_cast<NotationView *>(m_parentView);
-	if (nView) selectionToMerge = nView->getCurrentSelection();
-	NOTATION_DEBUG << "selection is " << selectionToMerge << endl;
+	selectionToMerge = m_nParentView->getCurrentSelection();
     }
     m_selectionToMerge =
 	(selectionToMerge ? new EventSelection(*selectionToMerge) : 0);
@@ -1107,19 +1106,15 @@ int NotationSelector::handleMouseMove(timeT, int,
 {
     if (!m_updateRect) return NoFollow;
 
-    if (m_clickedElement) {
+    int w = int(e->x() - m_selectionRect->x());
+    int h = int(e->y() - m_selectionRect->y());
 
-	if (m_nParentView->drag(m_selectedStaff, m_clickedElement, e->x(), e->y())) {
-	    //!!! hmm, m_clickedElement might have been deleted and recreated by the drag operation's command
-	    m_selectionRect->setX(e->x());
-	    m_selectionRect->setY(e->y());
-	    m_selectionRect->setSize(0, 0);
-	}
+    if (m_clickedElement && m_clickedElement->isNote() &&
+	(w > 3 || w < -3 || h > 3 || h < -3)) {
+
+	drag(e->x(), e->y(), false);
 
     } else {
-
-	int w = int(e->x() - m_selectionRect->x());
-	int h = int(e->y() - m_selectionRect->y());
 
 	// Qt rectangle dimensions appear to be 1-based
 	if (w > 0) ++w; else --w;
@@ -1127,9 +1122,9 @@ int NotationSelector::handleMouseMove(timeT, int,
 
 	m_selectionRect->setSize(w,h);
 	setViewCurrentSelection(true);
+	m_nParentView->canvas()->update();
     }
 
-    m_nParentView->canvas()->update();
     return FollowHorizontal | FollowVertical;
 }
 
@@ -1137,14 +1132,24 @@ void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)
 {
     NOTATION_DEBUG << "NotationSelector::handleMouseRelease" << endl;
     m_updateRect = false;
-    
-    if (m_selectionRect->width()  > -3 &&
-        m_selectionRect->width()  <  3 &&
-        m_selectionRect->height() > -3 &&
-        m_selectionRect->height() <  3) {
 
-	if (m_clickedElement != 0 &&
-	    m_selectedStaff) {
+    NOTATION_DEBUG << "selectionRect width, height: " << m_selectionRect->width()
+		   << ", " << m_selectionRect->height() << endl;
+
+    // Test how far we've moved from the original click position -- not
+    // how big the rectangle is (if we were dragging an event, the
+    // rectangle size will still be zero).
+    
+    if ((e->x() - m_selectionRect->x()) > -3 &&
+        (e->x() - m_selectionRect->x()) <  3 &&
+        (e->y() - m_selectionRect->y()) > -3 &&
+        (e->y() - m_selectionRect->y()) <  3) {
+
+	if (m_clickedElement != 0 && m_selectedStaff) {
+		
+	    // If we didn't drag out a meaningful area, but _did_
+	    // click on an individual event, then select just that
+	    // event
 
 	    if (m_selectionToMerge &&
 		m_selectionToMerge->getSegment() ==
@@ -1156,10 +1161,6 @@ void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)
 		m_selectionToMerge = 0;
 
 	    } else {
-		
-		// If we didn't drag out a meaningful area, but _did_
-		// click on an individual event, then select just that
-		// event
 
 		m_nParentView->setSingleSelectedEvent
 		    (m_selectedStaff->getId(), m_clickedElement->event(),
@@ -1177,12 +1178,112 @@ void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)
 	    m_nParentView->slotSetInsertCursorPosition(e->x(), (int)e->y());
 	}
     } else {
-	setViewCurrentSelection(false);
+
+	if (m_clickedElement) {
+	    drag(e->x(), e->y(), true);
+	} else {
+	    setViewCurrentSelection(false);
+	}
     }
 
     m_clickedElement = 0;
     m_selectionRect->hide();
     m_nParentView->canvas()->update();
+}
+
+void NotationSelector::drag(int x, int y, bool final)
+{
+    NOTATION_DEBUG << "NotationSelector::drag " << x << ", " << y << endl;
+
+    if (!m_clickedElement || !m_selectedStaff) return;
+
+    EventSelection *selection = m_nParentView->getCurrentSelection();
+    if (!selection) selection = new EventSelection(m_selectedStaff->getSegment());
+    if (!selection->contains(m_clickedElement->event()))
+	 selection->addEvent(m_clickedElement->event());
+    m_nParentView->setCurrentSelection(selection);
+
+    // Calculate time and height
+    
+    timeT clickedTime = m_clickedElement->event()->getNotationAbsoluteTime();
+
+    Accidental clickedAccidental = Accidentals::NoAccidental;
+    (void)m_clickedElement->event()->get<String>(ACCIDENTAL, clickedAccidental);
+
+    long clickedPitch = 0;
+    (void)m_clickedElement->event()->get<Rosegarden::Int>(PITCH, clickedPitch);
+
+    Event *clefEvt = 0, *keyEvt = 0;
+    Rosegarden::Clef clef;
+    Rosegarden::Key key;
+    timeT dragTime = clickedTime;
+
+    NotationElementList::iterator itr =
+	m_selectedStaff->getElementUnderCanvasCoords(x, y, clefEvt, keyEvt);
+
+    if (itr != m_selectedStaff->getViewElementList()->end()) {
+	dragTime = (*itr)->event()->getNotationAbsoluteTime();
+    }
+
+    if (clefEvt) clef = Rosegarden::Clef(*clefEvt);
+    if (keyEvt) key = Rosegarden::Key(*keyEvt);
+    
+    int height = m_selectedStaff->getHeightAtCanvasY(y);
+    Rosegarden::Pitch p(height, clef, key, clickedAccidental);
+    int pitch = p.getPerformancePitch();
+
+    if (!final) {
+
+	double layoutX = m_clickedElement->getLayoutX();
+
+	NOTATION_DEBUG << "dragTime " << dragTime << ", clickedTime " << clickedTime << endl;
+
+	if (dragTime != clickedTime) {
+	    layoutX = m_selectedStaff->getLayoutCoordsForCanvasCoords(x, y).first;
+	}
+
+	timeT duration = m_clickedElement->getViewDuration();
+	//!!! what if not a note?
+
+	m_nParentView->showPreviewNote(m_selectedStaff->getId(),
+				       layoutX, pitch, height,
+				       Note::getNearestNote(duration));
+
+    } else {
+
+	m_nParentView->clearPreviewNote();
+
+	KMacroCommand *command = new KMacroCommand(MoveCommand::getGlobalName());
+	bool haveSomething = false;
+
+	if (pitch != clickedPitch) {
+	    //!!! we need some limit to this
+	    
+	    command->addCommand(new TransposeCommand(pitch - clickedPitch,
+						     *selection));
+	    haveSomething = true;
+	}
+
+	//!!! move the selection left or right if (a) there is an event at the
+	// time dragged to (and the time is not the absolute or notation time
+	// of the original event) or (b) the original event has notation
+	// duration > 0 and the time dragged to is a multiple of that notation
+	// duration into its bar.  Need to maintain selectedness on the events
+	// though
+
+	if (dragTime != clickedTime) {
+	    // this is only option (a) from the above selection
+	    command->addCommand(new MoveCommand(m_selectedStaff->getSegment(),
+						dragTime, true, *selection));
+	    haveSomething = true;
+	}
+
+	if (haveSomething) {
+	    m_nParentView->addCommandToHistory(command);
+	} else {
+	    delete command;
+	}
+    }
 }
 
 void NotationSelector::ready()
