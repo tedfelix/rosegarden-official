@@ -13,10 +13,6 @@ Post-0.1.1 task list
 
  !! Segment should barf meaningfully if getComposition without composition
 
- !! Fix use of m_referenceSegment.size() in Composition::getBarNumber
- when what's intended is "the number of bars" (or number of bars + 1)
- because it'll break now we can have tempo events in ref seg too
-
 
  1. Sort out true legato quantization [DONE]
 
@@ -69,6 +65,11 @@ Post-0.1.1 task list
 16. Fix staff ruler so it's owned by the staff (and works in page mode);
     fix bar-at-end-of-row in page mode; switch to doubles instead of
     ints in notationhlayout x-coord calculations
+
+17. Fix storage for bars, time sigs, tempo events in Composition
+    (new Segment-a-like as per email)
+
+18. Real-time timestamps only in mapped classes
 
 
 Task list from 18/19th August meetings

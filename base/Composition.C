@@ -39,28 +39,181 @@ namespace Rosegarden
 
 const std::string Composition::BarEventType = "bar";
 const PropertyName Composition::BarNumberProperty = "BarNumber";
+const PropertyName Composition::BarHasTimeSigProperty = "BarHasTimeSig";
 
 const std::string Composition::TempoEventType = "tempo";
 const PropertyName Composition::TempoProperty = "BeatsPerHour";
 const PropertyName Composition::TempoTimestampProperty = "Timestamp";
 
 
+bool
+Composition::ReferenceSegmentEventCmp::operator()(const Event &e1,
+						  const Event &e2) const
+{
+    if (e1.getAbsoluteTime() >= 0 &&
+	e1.getAbsoluteTime() >= 0) {
+	return e1 < e2;
+    } else {
+	//!!! shouldn't just be longs
+	long r1 = 0, r2 = 0;
+	e1.get<Int>(TempoTimestampProperty, r1);
+	e2.get<Int>(TempoTimestampProperty, r2);
+	return r1 < r2;
+    }
+}
+
+bool
+Composition::ReferenceSegmentEventCmp::operator()(const Event *e1,
+						  const Event *e2) const
+{
+    return operator()(*e1, *e2);
+}
+
+Composition::ReferenceSegment::ReferenceSegment(std::string eventType) :
+    m_eventType(eventType)
+{
+    // nothing
+}
+
+Composition::ReferenceSegment::~ReferenceSegment()
+{
+    clear();
+}
+
+void
+Composition::ReferenceSegment::clear()
+{
+    for (iterator it = begin(); it != end(); ++it) delete (*it);
+    Impl::erase(begin(), end());
+}
+
+timeT
+Composition::ReferenceSegment::getDuration() const
+{
+    const_iterator i = end();
+    if (i == begin()) return 0;
+    --i;
+    return (*i)->getAbsoluteTime() + (*i)->getDuration();
+}
+
+void
+Composition::ReferenceSegment::swap(Composition::ReferenceSegment &r)
+{
+    Impl temp;
+
+    // inefficient palaver.  must reorganise usage of Composition
+    // so as not to require swap()
+
+    for (iterator i = begin(); i != end(); ++i) {
+	temp.push_back(*i);
+    }
+    Impl::erase(begin(), end());
+
+    for (iterator i = r.begin(); i != r.end(); ++i) {
+	push_back(new Event(**i));
+    }
+    r.clear();
+
+    for (iterator i = temp.begin(); i != temp.end(); ++i) {
+	r.push_back(*i);
+    }
+    temp.erase(temp.begin(), temp.end());
+}
+	
+
+Composition::ReferenceSegment::iterator
+Composition::ReferenceSegment::find(Event *e)
+{
+    return std::lower_bound
+	(begin(), end(), e, ReferenceSegmentEventCmp());
+}
+
+Composition::ReferenceSegment::iterator
+Composition::ReferenceSegment::insert(Event *e)
+{
+    if (!e->isa(m_eventType)) throw Event::BadType();
+
+    iterator i = find(e);
+
+    if (i != end() && (*i)->getAbsoluteTime() == e->getAbsoluteTime()) {
+
+	Event *old = (*i);
+	(*i) = e;
+	delete old;
+	return i;
+
+    } else {
+	return Impl::insert(i, e);
+    }
+}
+
+void
+Composition::ReferenceSegment::erase(Event *e)
+{
+    iterator i = find(e);
+    if (i != end()) Impl::erase(i);
+}
+
+Composition::ReferenceSegment::iterator
+Composition::ReferenceSegment::findTime(timeT t)
+{
+    Event dummy;
+    dummy.setAbsoluteTime(t);
+    dummy.setSubOrdering(MIN_SUBORDERING);
+    return find(&dummy);
+}
+
+Composition::ReferenceSegment::iterator
+Composition::ReferenceSegment::findRealTime(RealTime t)
+{
+    Event dummy;
+    dummy.setAbsoluteTime(-1);
+    dummy.setSubOrdering(MIN_SUBORDERING);
+    dummy.set<Int>(TempoTimestampProperty, t);
+    return find(&dummy);
+}
+
+Composition::ReferenceSegment::iterator
+Composition::ReferenceSegment::findNearestTime(timeT t)
+{
+    iterator i = findTime(t);
+    if (i == end() || (*i)->getAbsoluteTime() > t) {
+	if (i == begin()) return end();
+	else --i;
+    }
+    return i;
+}
+
+Composition::ReferenceSegment::iterator
+Composition::ReferenceSegment::findNearestRealTime(RealTime t)
+{
+    iterator i = findRealTime(t);
+    long t0(0); //!!! should be longer
+    if (i == end() ||
+	((*i)->get<Int>(TempoTimestampProperty, t0) && t0 > t)) {
+	if (i == begin()) return end();
+	else --i;
+    }
+    return i;
+}
+
+
+
 Composition::Composition() :
     m_recordTrack(0),
-    m_barCount(0),
+    m_barSegment(BarEventType),
+    m_timeSigSegment(TimeSignature::EventType),
+    m_tempoSegment(TempoEventType),
     m_position(0),
     m_defaultTempo(120.0),
     m_barPositionsNeedCalculating(true),
     m_tempoTimestampsNeedCalculating(true)
 {
-    m_barSegment.addObserver(this);
-    m_tempoSegment.addObserver(this);
+    // nothing else
 }
 
 Composition::~Composition()
 {
-    m_barSegment.removeObserver(this);
-    m_tempoSegment.removeObserver(this);
     clear();
 }
 
@@ -75,6 +228,7 @@ void Composition::swap(Composition& c)
     that->m_defaultTempo = tp;
 
     m_barSegment.swap(c.m_barSegment);
+    m_timeSigSegment.swap(c.m_timeSigSegment);
     m_tempoSegment.swap(c.m_tempoSegment);
 
     // swap tracks and instruments
@@ -145,12 +299,12 @@ Composition::deleteSegment(Segment *p)
 timeT
 Composition::getDuration() const
 {
-    unsigned int maxDuration = 0;
+    timeT maxDuration = 0;
 
     for (segmentcontainer::const_iterator i = m_segments.begin();
          i != m_segments.end(); ++i) {
 
-        unsigned int segmentTotal = (*i)->getDuration() + (*i)->getStartIndex();
+	timeT segmentTotal = (*i)->getEndIndex();
         
         if (segmentTotal > maxDuration) {
             maxDuration = segmentTotal;
@@ -170,17 +324,21 @@ Composition::clear()
         delete (*i);
     }
     m_segments.erase(begin(), end());
-    m_barSegment.erase(m_barSegment.begin(), m_barSegment.end());
-    m_tempoSegment.erase(m_tempoSegment.begin(), m_tempoSegment.end());
+    m_barSegment.clear();
+    m_timeSigSegment.clear();
+    m_tempoSegment.clear();
 }
 
-Segment::iterator
-Composition::addNewBar(timeT time, int barNo) const
+Composition::ReferenceSegment::iterator
+Composition::addNewBar(timeT time, timeT duration,
+		       int barNo, bool hasTimeSig) const
 {
 //    std::cerr << "Composition::addNewBar" << std::endl;
     Event *e = new Event(BarEventType);
     e->setAbsoluteTime(time);
+    e->setDuration(duration);
     e->set<Int>(BarNumberProperty, barNo);
+    e->set<Bool>(BarHasTimeSigProperty, hasTimeSig);
     return m_barSegment.insert(e);
 }
 
@@ -191,42 +349,24 @@ Composition::calculateBarPositions() const
 
     if (!m_barPositionsNeedCalculating) return;
 
-    Segment &t = m_barSegment;
-    Segment::iterator i;
+    ReferenceSegment &t = m_timeSigSegment;
+    ReferenceSegment::iterator i;
 
     FastVector<timeT> sections;
     FastVector<timeT> sectionTimes;
 
-    FastVector<Segment::iterator> baritrs;
-
     for (i = t.begin(); i != t.end(); ++i) {
 
-	if ((*i)->isa(BarEventType)) {
-
-	    baritrs.push_back(i);
-
-	} else if ((*i)->isa(TimeSignature::EventType)) {
-
-	    if (sections.size() > 0 &&
-		sections[sections.size()-1] == (*i)->getAbsoluteTime()) {
-//		std::cerr << "Ignoring time sig at "
-//			  << (*i)->getAbsoluteTime()
-//			  << " because we already have it" << endl;
-	    } else {
 //		std::cerr << "Pushing time sig duration "
 //			  << TimeSignature(**i).getBarDuration()
 //			  << " at time "
 //			  << (*i)->getAbsoluteTime() << endl;
-		sections.push_back((*i)->getAbsoluteTime());
-		sectionTimes.push_back(TimeSignature(**i).getBarDuration());
-	    }
-	}
+	sections.push_back((*i)->getAbsoluteTime());
+	sectionTimes.push_back(TimeSignature(**i).getBarDuration());
     }
 
     // Take out the old bar events, 'cos we're about to recalculate them
-    for (int j = 0; j < baritrs.size(); ++j) {
-	t.erase(baritrs[j]);
-    }
+    m_barSegment.clear();
 
 //    std::cerr << "have " << t.size() << " non-bars in ref segment" << std::endl;
 
@@ -238,7 +378,10 @@ Composition::calculateBarPositions() const
     }    
 
     timeT duration = getDuration();
-    sections.push_back(duration);
+    if (sections.size() == 0 || sections[sections.size()-1] != duration) {
+	sections.push_back(duration);
+	sectionTimes.push_back(sectionTimes[sectionTimes.size()-1]);
+    }
 
     int barNo = 0;
 
@@ -247,26 +390,17 @@ Composition::calculateBarPositions() const
 	timeT start = sections[s], finish = sections[s+1];
 	timeT time;
 
-	if (s > 0 || section0isTimeSig) {
-	    start += sectionTimes[s];
-	    ++barNo;
-	}
-
 //	std::cerr << "section " << s << ": start " << start << ", finish " << finish << std::endl;
+	
+	bool haveTimeSig = (s > 0 || section0isTimeSig);
 
 	for (time = start; time < finish; time += sectionTimes[s]) {
-	    addNewBar(time, barNo++);
+	    addNewBar(time, sectionTimes[s],
+		      barNo++, haveTimeSig);
+	    haveTimeSig = false;
 //            std::cerr << "added bar at " << time << std::endl;
 	}
-
-	if (s == sections.size() - 1 && time != duration) {
-            addNewBar(time, barNo++);
-//            std::cerr << "added final bar at " << time << std::endl;
-        }            
     }
-
-    m_barCount = barNo - 1;
-    if (m_barCount < 0) m_barCount = 0; // don't count the final bar line
 
     m_barPositionsNeedCalculating = false;
 //    std::cerr << "Composition::calculateBarPositions ending" << std::endl;
@@ -281,7 +415,7 @@ int
 Composition::getNbBars() const
 {
     calculateBarPositions();
-    return m_barCount;
+    return m_barSegment.size();
 }
 
 int
@@ -289,77 +423,46 @@ Composition::getBarNumber(timeT t, bool truncate) const
 {
     calculateBarPositions();
 
-    //    std::cerr << "Composition::getBarNumber: time is " << t
-    //	      << " (my duration is " << getDuration() << ")" << endl;
+    int barNo;
 
-    Segment::iterator i = m_barSegment.findTime(t);
-    long n = 0;
+    ReferenceSegment::iterator i = m_barSegment.findNearestTime(t);
 
     if (i == m_barSegment.end()) {
+	// precedes any bar lines...?
+	barNo = t / getTimeSignatureAt(t).getBarDuration();
 
-	n = m_barCount;
-
-	if (!truncate) {
-	    TimeSignature sig = getTimeSignatureAt(t);
-	    n += (t - m_barSegment.getDuration()) / sig.getBarDuration();
-	}
-	    
     } else {
 
-	int slack = 0;
-	if ((*i)->getAbsoluteTime() != t) slack = -1;
+	barNo = (int)(*i)->get<Int>(BarNumberProperty);
 
-	while (!(*i)->isa(BarEventType)) {
-	    if (i == m_barSegment.begin()) break;
-	    ++slack;
-	    --i;
+//	cerr << "found " << barNo << " at " << (*i)->getAbsoluteTime() << endl;
+
+	if (!truncate && t >= m_barSegment.getDuration()) {
+	    TimeSignature sig = getTimeSignatureAt(t);
+	    barNo = m_barSegment.size() +
+		(t - m_barSegment.getDuration()) / sig.getBarDuration();
 	}
-
-	(*i)->get<Int>(BarNumberProperty, n);
-	n += slack;
     }
+/*
+    cerr << "Composition::getBarNumber: returning " << barNo
+	 << " for " << t << " (m_barSegment.getDuration() is "
+	 << m_barSegment.getDuration() << ", size() is "
+	 << m_barSegment.size() << ")" << endl;
+*/
+    return barNo;
 
-//    std::cerr << "Composition::getBarNumber: returning " << n << endl;
-
-    return (int)n;
 }
 
 timeT
 Composition::getBarStart(timeT t) const
 {
-    calculateBarPositions();
-
-    Segment::iterator i = m_barSegment.findTime(t);
-    if (i != m_barSegment.end() && (*i)->getAbsoluteTime() == t) return t;
-    if (i != m_barSegment.begin()) --i;
-    if (i == m_barSegment.end()) return 0;
-
-    return (*i)->getAbsoluteTime();
+    return getBarRange(t).first;
 }
 
 timeT
 Composition::getBarEnd(timeT t) const
 {
-    calculateBarPositions();
-
-    Segment::iterator i = m_barSegment.findTime(t);
-
-//    cerr << "Composition::getBarEnd: asked for " << t << ", found an iterator at " << (i == m_barSegment.end() ? -1 : (*i)->getAbsoluteTime()) << endl;
-//    Segment::iterator j = m_barSegment.end();
-//    if (j != m_barSegment.begin()) {
-//	--j;
-//	cerr << "Composition::getBarEnd: final item in ref segment is at "
-//	     << (*j)->getAbsoluteTime() << endl;
-//    } else {
-//	cerr << "Composition::getBarEnd: ref segment is empty" << endl;
-//    }
-
-    if (i == m_barSegment.end() || ++i == m_barSegment.end()) {
-	timeT d = m_barSegment.getDuration();
-	return d + getTimeSignatureAt(d).getBarDuration();
-    }
-
-    return (*i)->getAbsoluteTime();
+    return getBarRange(t).second;
 }
 
 std::pair<timeT, timeT>
@@ -368,34 +471,18 @@ Composition::getBarRange(timeT t) const
     calculateBarPositions();
 
     timeT start, finish;
+    ReferenceSegment::iterator i = m_barSegment.findNearestTime(t);
 
-    Segment::iterator i = m_barSegment.findTime(t);
-    Segment::iterator j(i);
-    ++j;
-
-    if (i != m_barSegment.end() && (*i)->getAbsoluteTime() == t) {
-
-	// t is itself the start of a bar
-	start = t;
-
+    if (i == m_barSegment.end()) {
+	start = 0;
+	finish = getTimeSignatureAt(t).getBarDuration();
     } else {
-
-	// t is in the middle of a bar, so rewind to its start
-	if (i != m_barSegment.begin()) { --i; --j; }
-
-	if (i == m_barSegment.end()) {
-	    start = 0; 
-	} else {
-	    start = (*i)->getAbsoluteTime();
-	}
+	start = (*i)->getAbsoluteTime();
+	finish = start + (*i)->getDuration();
     }
 
-    if (j == m_barSegment.end()) {
-	finish = m_barSegment.getDuration();
-	finish += getTimeSignatureAt(finish).getBarDuration();
-    } else {
-	finish = (*j)->getAbsoluteTime();
-    }
+//    cerr << "Composition::getBarRange for " << t  << ": range is " << start
+//	 << " -> " << finish << endl;
 
     return std::pair<timeT, timeT>(start, finish);
 }
@@ -406,72 +493,55 @@ Composition::getBarRange(int n, bool truncate) const
 {
     calculateBarPositions();
 
-    Segment::iterator i = m_barSegment.begin();
+    timeT start, barDuration;
 
-    timeT start = 0, finish = start;
+    if (n >= m_barSegment.size() && truncate && m_barSegment.size() > 0) {
+	n = m_barSegment.size() - 1;
+    }
+
+    if (n < m_barSegment.size()) {
+	start = m_barSegment[n]->getAbsoluteTime();
+	barDuration = m_barSegment[n]->getDuration();
+
+//    cerr << "Composition::getBarRange[A] for " << n << ": range is " << start
+//	 << " -> " << (start + barDuration) << endl;
+//	return std::pair<timeT, timeT>(start, start + barDuration);
+    }
     
-//    cerr << "Composition::getBarRange(" << n << ", " << truncate << ")" << endl;
+    ReferenceSegment::iterator i = m_barSegment.end();
+    
+    if (i == m_barSegment.begin()) { // no bars at all
 
-    TimeSignature timeSignature;
+	barDuration = getTimeSignatureAt(0).getBarDuration();
 
-    int m = 0;
-
-    if (i != m_barSegment.end()) {
-
-	for (; m <= n; ++m) {
-
-	    start = (*i)->getAbsoluteTime();
-
-//	    cerr << "Composition::getBarRange: looking at time " << start << endl;
-
-	    if ((*i)->isa(TimeSignature::EventType)) {
-		timeSignature = TimeSignature(**i);
-	    }
-
-	    finish = start + timeSignature.getBarDuration();
-	    ++i;
-	    if (i == m_barSegment.end()) break;
+	if (truncate) {
+	    start = 0;
+	} else {
+	    start = n * barDuration;
 	}
+
+    } else {
+
+	// truncate must be false, otherwise the first conditional
+	// in this function would have been fired
+
+	--i;
+	start = (*i)->getAbsoluteTime();
+	barDuration = (*i)->getDuration();
+	start += (n - (*i)->get<Int>(BarNumberProperty)) * barDuration;
     }
 
-//    cerr << "Composition::getBarRange: start = " << start << ", finish = " << finish << endl;
+//    cerr << "Composition::getBarRange[B] for " << n << ": range is " << start
+//	 << " -> " << (start + barDuration) << endl;
 
-    if (!truncate &&
-	(m < n || finish == start)) { // reached end of composition too soon
-
-//	cerr << "Composition::getBarRange: making it up (n = " << n << ", m = " << m << ")" << endl;
-
-	timeT d = timeSignature.getBarDuration();
-	if (m < n) start += d * (n - m);
-	finish = start + d;
-    }
-
-//    cerr << "Composition::getBarRange: start = " << start << ", finish = " << finish << endl;
-
-    return std::pair<timeT, timeT>(start, finish);
+    return std::pair<timeT, timeT>(start, start + barDuration);
 }
 
 void
 Composition::addTimeSignature(timeT t, TimeSignature timeSig)
 {
-    // Remove any existing time sigs at time t before we insert the
-    // new one
-
-    calculateBarPositions();
-
-    Segment::iterator i = m_barSegment.findTime(t);
-    std::vector<Segment::iterator> timeSigs;
-
-    while (i != m_barSegment.end() && (*i)->getAbsoluteTime() == t) {
-	if ((*i)->isa(TimeSignature::EventType)) timeSigs.push_back(i);
-	++i;
-    }
-
-    for (unsigned int j = 0; j < timeSigs.size(); ++j) {
-	m_barSegment.erase(timeSigs[j]);
-    }
-    
-    m_barSegment.insert(timeSig.getAsEvent(t));
+    m_timeSigSegment.insert(timeSig.getAsEvent(t));
+    m_barPositionsNeedCalculating = true;
 }
 
 TimeSignature
@@ -485,47 +555,57 @@ Composition::getTimeSignatureAt(timeT t) const
 timeT
 Composition::getTimeSignatureAt(timeT t, TimeSignature &timeSig) const
 {
-    // We explicitly don't want to call calculateBarPositions(),
-    // because we don't need the bars to be recalculated -- we only
-    // want to look at the time signatures, not the bar events
+    ReferenceSegment::iterator i = m_timeSigSegment.findNearestTime(t);
 
-    Segment::iterator i = m_barSegment.findTime(t);
-
-//    cerr << "Composition::getTimeSignatureAt: event at " << t
-//	 << " is ..." << endl;
-//    if (i == m_barSegment.end()) { cerr << "end" << endl; }
-//    else (*i)->dump(cerr);
-
-    timeSig = TimeSignature();
-    timeT sigTime = 0;
-
-    //!!! Oh dear.  Excessive slowness here.
-
-    while (i != m_barSegment.begin() &&
-	   (i == m_barSegment.end() ||
-	    ((*i)->getAbsoluteTime() > t) ||
-	    !(*i)->isa(TimeSignature::EventType))) {
-	--i;
-//	cerr << "Composition::getTimeSignatureAt: decrementing to" << endl;
-//	(*i)->dump(cerr);
+    if (i == m_timeSigSegment.end()) {
+	timeSig = TimeSignature();
+	return 0;
+    } else {
+	timeSig = TimeSignature(**i);
+	return (*i)->getAbsoluteTime();
     }
-
-    if (i == m_barSegment.end() ||
-	!(*i)->isa(TimeSignature::EventType)) {
-	return sigTime;
-    }
-
-    timeSig = TimeSignature(**i);
-    return (*i)->getAbsoluteTime();
 }
+
+TimeSignature
+Composition::getTimeSignatureInBar(int barNo, bool &isNew) const
+{
+    if (barNo > m_barSegment.size()) barNo = m_barSegment.size() - 1;
+    if (barNo < 0) {
+	isNew = false;
+	return TimeSignature();
+    }
+
+    isNew = m_barSegment[barNo]->get<Bool>(BarHasTimeSigProperty);
+    return getTimeSignatureAt(m_barSegment[barNo]->getAbsoluteTime());
+}
+
+int
+Composition::getTimeSignatureCount() const
+{
+    return m_timeSigSegment.size();
+}
+
+std::pair<timeT, TimeSignature>
+Composition::getTimeSignatureChange(int n) const
+{
+    return std::pair<timeT, TimeSignature>
+	(m_timeSigSegment[n]->getAbsoluteTime(),
+	 TimeSignature(*m_timeSigSegment[n]));
+}
+
+void
+Composition::removeTimeSignature(int n)
+{
+    m_timeSigSegment.erase(m_timeSigSegment[n]);
+    m_barPositionsNeedCalculating = true;
+}
+
 
 double
 Composition::getTempoAt(timeT t) const
 {
-    Segment::iterator i = m_tempoSegment.findTime(t);
-
-    if (i == m_tempoSegment.begin()) return m_defaultTempo;
-    if (i == m_tempoSegment.end() || (*i)->getAbsoluteTime() > t) --i;
+    ReferenceSegment::iterator i = m_tempoSegment.findNearestTime(t);
+    if (i == m_tempoSegment.end()) return m_defaultTempo;
 
     double tempo = (double)((*i)->get<Int>(TempoProperty)) / 60.0;
 
@@ -536,31 +616,57 @@ Composition::getTempoAt(timeT t) const
 void
 Composition::addTempo(timeT time, double tempo)
 {
-    Segment::iterator i = m_tempoSegment.findTime(time);
-    if (i != m_tempoSegment.end() &&
-	(*i)->getAbsoluteTime() == time) m_tempoSegment.erase(i);
-
     Event *tempoEvent = new Event(TempoEventType);
     tempoEvent->setAbsoluteTime(time);
     tempoEvent->set<Int>(TempoProperty, (long)(tempo * 60));
     m_tempoSegment.insert(tempoEvent);
+    m_tempoTimestampsNeedCalculating = true;
 
     std::cerr << "Composition: Added tempo " << tempo << " at " << time << endl;
 }
 
+void
+Composition::addRawTempo(timeT time, int tempo)
+{
+    Event *tempoEvent = new Event(TempoEventType);
+    tempoEvent->setAbsoluteTime(time);
+    tempoEvent->set<Int>(TempoProperty, tempo);
+    m_tempoSegment.insert(tempoEvent);
+    m_tempoTimestampsNeedCalculating = true;
+
+    std::cerr << "Composition: Added tempo " << tempo << " at " << time << endl;
+}
+int
+Composition::getTempoChangeCount() const
+{
+    return m_tempoSegment.size();
+}
+
+std::pair<timeT, long>
+Composition::getRawTempoChange(int n) const
+{
+    return std::pair<timeT, long>
+	(m_tempoSegment[n]->getAbsoluteTime(),
+	 m_tempoSegment[n]->get<Int>(TempoProperty));
+}
+
+void
+Composition::removeTempoChange(int n)
+{
+    m_tempoSegment.erase(m_tempoSegment[n]);
+    m_tempoTimestampsNeedCalculating = true;
+}
+
+
 RealTime
 Composition::getElapsedRealTime(timeT t) const
 {
-    if (m_tempoTimestampsNeedCalculating) {
-	calculateTempoTimestamps();
-    }
+    calculateTempoTimestamps();
 
-    Segment::iterator i = m_tempoSegment.findTime(t);
-    if (i == m_tempoSegment.begin()) {
+    ReferenceSegment::iterator i = m_tempoSegment.findNearestTime(t);
+    if (i == m_tempoSegment.end()) {
 	return time2RealTime(t, m_defaultTempo);
     }
-
-    if (i == m_tempoSegment.end() || (*i)->getAbsoluteTime() > t) --i;
 
     return (RealTime)((*i)->get<Int>(TempoTimestampProperty)) +
 	time2RealTime(t - (*i)->getAbsoluteTime(),
@@ -570,37 +676,16 @@ Composition::getElapsedRealTime(timeT t) const
 timeT
 Composition::getElapsedTimeForRealTime(RealTime t) const
 {
-    if (m_tempoTimestampsNeedCalculating) {
-	calculateTempoTimestamps();
-    }
+    calculateTempoTimestamps();
 
-    Event dummy;
-    //!!!
-    dummy.set<Int>(TempoTimestampProperty, t);
-    Segment::const_iterator i = lower_bound(m_tempoSegment.begin(),
-                                            m_tempoSegment.end(),
-                                            &dummy,
-                                            compareTempoTimestamps);
-
-    if (i == m_tempoSegment.begin()) {
+    ReferenceSegment::iterator i = m_tempoSegment.findNearestRealTime(t);
+    if (i == m_tempoSegment.end()) {
 	return realTime2Time(t, m_defaultTempo);
     }
-
-    if (i == m_tempoSegment.end() ||
-	(*i)->get<Int>(TempoTimestampProperty) > t) --i;
 
     return (*i)->getAbsoluteTime() +
 	realTime2Time(t - (*i)->get<Int>(TempoTimestampProperty),
 		      (double)((*i)->get<Int>(TempoProperty)) / 60.0);
-}
-
-bool
-Composition::compareTempoTimestamps(const Event *e1, const Event *e2)
-{
-    RealTime r1 = e1->get<Int>(TempoTimestampProperty);
-    RealTime r2 = e2->get<Int>(TempoTimestampProperty);
-
-    return (r1 < r2);
 }
 
 void
@@ -613,7 +698,7 @@ Composition::calculateTempoTimestamps() const
 
     cerr << "Composition::calculateTempoTimestamps: Tempo events are:" << endl;
 
-    for (Segment::iterator i = m_tempoSegment.begin();
+    for (ReferenceSegment::iterator i = m_tempoSegment.begin();
 	 i != m_tempoSegment.end(); ++i) {
 
 	//!!! Potential rounding problems, coercing an unsigned long long
@@ -656,55 +741,27 @@ Composition::setPosition(timeT position)
     m_position = position;
 }
 
-void Composition::eventAdded(const Segment *s, Event *e)
+void Composition::eventAdded(const Segment *, Event *e)
 {
     // we only need to recalculate bars if we insert something after
-    // the former end of the composition, or add a time sig to the bar
-    // segment
+    // the former end of the composition
 
-    if (s == &m_barSegment) {
-
-	if (e->isa(TimeSignature::EventType)) {
-	    m_barPositionsNeedCalculating = true;
-	}
-
-    } else if (s == &m_tempoSegment) {
-
-	m_tempoTimestampsNeedCalculating = true;
-
-    } else { // ordinary segment
-
-	if (e->getAbsoluteTime() + e->getDuration() >
-	    m_barSegment.getDuration()) {
-	    m_barPositionsNeedCalculating = true;
-	}
+    if (e->getAbsoluteTime() + e->getDuration() >
+	m_barSegment.getDuration()) {
+	m_barPositionsNeedCalculating = true;
     }
 }
 
 
-void Composition::eventRemoved(const Segment *s, Event *e)
+void Composition::eventRemoved(const Segment *, Event *e)
 {
     // we only need to recalculate bars if we remove something at the
-    // former end of the composition, or remove a time sig from the
-    // bar segment
+    // former end of the composition
 
-    if (s == &m_barSegment) {
+    if (e->getAbsoluteTime() + e->getDuration() >=
+	m_barSegment.getDuration()) {
 
-	if (e->isa(TimeSignature::EventType)) {
-	    m_barPositionsNeedCalculating = true;
-	}
-
-    } else if (s == &m_tempoSegment) {
-
-	m_tempoTimestampsNeedCalculating = true;
-
-    } else { // ordinary segment
-
-	if (e->getAbsoluteTime() + e->getDuration() >=
-	    m_barSegment.getDuration()) {
-
-	    m_barPositionsNeedCalculating = true;
-	}
+	m_barPositionsNeedCalculating = true;
     }
 }
 
@@ -776,6 +833,34 @@ string Composition::toXmlString()
     }
 
     composition << endl;
+
+    for (ReferenceSegment::iterator i = m_timeSigSegment.begin();
+	 i != m_timeSigSegment.end(); ++i) {
+
+	// Might be nice just to stream the events, but that's
+	// normally done by XmlStorableEvent in gui/ at the
+	// moment.  Still, this isn't too much of a hardship
+
+	composition << "  <timesignature time=\"" << (*i)->getAbsoluteTime()
+		    << "\" numerator=\""
+		    << (*i)->get<Int>(TimeSignature::NumeratorPropertyName)
+		    << "\" denominator=\""
+		    << (*i)->get<Int>(TimeSignature::DenominatorPropertyName)
+		    << "\"/>" << endl;
+    }
+
+    composition << endl;
+
+    for (ReferenceSegment::iterator i = m_tempoSegment.begin();
+	 i != m_tempoSegment.end(); ++i) {
+
+	composition << "  <tempo time=\"" << (*i)->getAbsoluteTime()
+		    << "\" bph=\""
+		    << (*i)->get<Int>(TempoProperty) << "\"/>" << endl;
+    }
+
+    composition << endl;
+
     composition << "</composition>" << ends;
 
     return composition.str();

@@ -2,18 +2,6 @@
 <!DOCTYPE rosegarden-data>
 <rosegarden-data>
 
-<bar-segment>
-<event type="timesignature" subordering="-10"><property name="numerator" int="4"/><property name="denominator" int="4"/></event>
-</bar-segment>
-
-<tempo-segment>
-<event type="tempo"><property name="BeatsPerHour" int="4560"/></event>
-<resync time="12384"/>
-<event type="tempo"><property name="BeatsPerHour" int="5760"/></event>
-<resync time="18528"/>
-<event type="tempo"><property name="BeatsPerHour" int="4560"/></event>
-</tempo-segment>
-
 <composition recordtrack="3" pointer="0" defaultTempo="120">
 
   <instrument id="0" type="midi" name="Piano"/>
@@ -25,6 +13,12 @@
   <track id="1" type="midi" label="XML Trk 1" position="1" muted="false" instrument="0"/>
   <track id="2" type="midi" label="XML Trk 2" position="2" muted="false" instrument="0"/>
   <track id="3" type="audio" label="XML Trk 3" position="2" muted="true" instrument="0"/>
+
+  <timesignature time="0" numerator="4" denominator="4"/>
+
+  <tempo time="0" bph="4560"/>
+  <tempo time="12384" bph="5760"/>
+  <tempo time="18528" bph="4560"/>
 
 </composition>
 

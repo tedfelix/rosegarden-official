@@ -80,7 +80,7 @@ Instrument::toXmlString()
     }
 
     instrument << "\" name=\"" << m_name << "\"";
-    instrument << "/>";
+    instrument << "/>" << ends;
 
     return instrument.str();
 

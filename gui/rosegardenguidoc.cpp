@@ -256,13 +256,14 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
     fileStream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                << "<!DOCTYPE rosegarden-data>\n"
                << "<rosegarden-data>\n";
-
+/*!!!
     // output bar reference segment
 
     fileStream << "<bar-segment>" << endl;
-    const Segment *barSegment = m_composition.getBarSegment();
+    Composition::ReferenceSegment *barSegment =
+	m_composition.getBarSegment();
 
-    for (Segment::iterator i = barSegment->begin();
+    for (Composition::ReferenceSegment::iterator i = barSegment->begin();
 	 i != barSegment->end(); ++i) {
 
 	if (!(*i)->isa(Composition::BarEventType)) {
@@ -279,9 +280,10 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
     // output tempo reference segment
 
     fileStream << "<tempo-segment>" << endl;
-    const Segment *tempoSegment = m_composition.getTempoSegment();
+    Composition::ReferenceSegment *tempoSegment =
+	m_composition.getTempoSegment();
 
-    for (Segment::iterator i = tempoSegment->begin();
+    for (Composition::ReferenceSegment::iterator i = tempoSegment->begin();
 	 i != tempoSegment->end(); ++i) {
 
 	if ((*i)->getAbsoluteTime() > 0) {
@@ -292,10 +294,9 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
     }
 
     fileStream << "</tempo-segment>" << endl << endl;
-
-    // Send out Composition (this includes Tracks and Instruments
-    // and any other sub-objects)
-    //
+*/
+    // Send out Composition (this includes Tracks, Instruments, Tempo
+    // and Time Signature changes and any other sub-objects)
     //
     fileStream << QString(m_composition.toXmlString().c_str()) << endl << endl;
 

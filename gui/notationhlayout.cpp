@@ -43,6 +43,7 @@ using Rosegarden::Key;
 using Rosegarden::Note;
 using Rosegarden::Indication;
 using Rosegarden::Segment;
+using Rosegarden::Composition;
 using Rosegarden::SegmentNotationHelper;
 using Rosegarden::TimeSignature;
 using Rosegarden::timeT;
@@ -203,15 +204,7 @@ NotationHLayout::scanStaff(StaffType &staff)
     START_TIMING;
 
     Segment &t(staff.getSegment());
-    const Segment *timeRef = t.getComposition()->getBarSegment();
-
-    if (timeRef == 0) {
-	kdDebug(KDEBUG_AREA) << "ERROR: NotationHLayout::scanStaff: reference segment required (at least until code\nis written to render a segment without bar lines)" << endl;
-	return;
-    }
-
     NotationElementList *notes = staff.getViewElementList();
-
     BarDataList &barList(getBarData(staff));
 
     Key key;
@@ -220,34 +213,27 @@ NotationHLayout::scanStaff(StaffType &staff)
 
     barList.clear();
 
-    Segment::iterator refStart = timeRef->findTime(t.getStartIndex());
-    Segment::iterator refEnd = timeRef->findTime(t.getEndIndex());
-    if (refEnd != timeRef->end()) ++refEnd;
-    
-    int barNo = 0;
+    Composition *composition = t.getComposition();
+
+    int barNo = composition->getBarNumber(t.getStartIndex(), true);
+    int endBarNo = composition->getBarNumber(t.getEndIndex(), true);
+    int barCounter = 0;
 
     SegmentNotationHelper nh(t);
     nh.quantize();
 
-    addNewBar(staff, barNo, notes->begin(), 0, 0, 0, true, 0); 
-    ++barNo;
+    addNewBar(staff, barCounter, notes->begin(), 0, 0, 0, true, 0); 
+    ++barCounter;
 
-    for (Segment::iterator refi = refStart; refi != refEnd; ++refi) {
+    while (barNo <= endBarNo) {
 
-	timeT barStartTime = (*refi)->getAbsoluteTime();
-	timeT   barEndTime;
+	std::pair<timeT, timeT> barTimes =
+	    composition->getBarRange(barNo, true);
 
-	Segment::iterator refi0(refi);
-	if (++refi0 != refEnd) {
-	    barEndTime = (*refi0)->getAbsoluteTime();
-	} else {
-	    barEndTime = t.getEndIndex();
-	}
+        NotationElementList::iterator from = notes->findTime(barTimes.first);
+        NotationElementList::iterator to = notes->findTime(barTimes.second);
 
-        NotationElementList::iterator from = notes->findTime(barStartTime);
-        NotationElementList::iterator to = notes->findTime(barEndTime);
-
-	kdDebug(KDEBUG_AREA) << "NotationHLayout::scanStaff: bar " << barNo << ", from " << barStartTime << ", to " << barEndTime << " (end " << t.getEndIndex() << ")" << endl;
+	kdDebug(KDEBUG_AREA) << "NotationHLayout::scanStaff: bar " << barNo << ", from " << barTimes.first << ", to " << barTimes.second << " (end " << t.getEndIndex() << ")" << endl;
 
         NotationElementList::iterator shortest = notes->end();
         int shortCount = 0;
@@ -264,11 +250,11 @@ NotationHLayout::scanStaff(StaffType &staff)
 	AccidentalTable accTable(key, clef), newAccTable(accTable);
 
 	Event *timeSigEvent = 0;
+	bool newTimeSig = false;
+	timeSignature = composition->getTimeSignatureInBar(barNo, newTimeSig);
 
-	if ((*refi)->isa(TimeSignature::EventType)) {
-	    kdDebug(KDEBUG_AREA) << "Found timesig" << endl;
-	    timeSigEvent = *refi;
-	    timeSignature = TimeSignature(*timeSigEvent);
+	if (newTimeSig) {
+	    timeSigEvent = timeSignature.getAsEvent(barTimes.first);
 	    fixedWidth += getFixedItemSpacing() +
 		m_npf.getTimeSigWidth(timeSignature);
 	}
@@ -412,13 +398,14 @@ NotationHLayout::scanStaff(StaffType &staff)
 	}
 
 
-        addNewBar(staff, barNo, to,
+        addNewBar(staff, barCounter, to,
                   getIdealBarWidth(staff, fixedWidth, baseWidth, shortest, 
                                    shortCount, totalCount, timeSignature),
                   fixedWidth, baseWidth,
                   apparentBarDuration == timeSignature.getBarDuration(),
 		  timeSigEvent);
 
+	++barCounter;
 	++barNo;
     }
 
@@ -468,12 +455,12 @@ NotationHLayout::fillFakeBars()
         if (list.size() > 0 && list[0].barNo < 0) continue; // done it already
 
         Segment &segment = staff->getSegment();
-        const Segment &refSegment = *(segment.getComposition()->getBarSegment());
 
-        for (Segment::const_iterator j = refSegment.begin();
-             j != refSegment.end(); ++j) {
+	for (int b = 0; b < segment.getComposition()->getNbBars(); ++b) {
 
-            if ((*j)->getAbsoluteTime() >= segment.getStartIndex()) break;
+	    if (segment.getComposition()->getBarRange(b, true).first
+		>= segment.getStartIndex()) break;
+
             list.push_front
                 (BarData
                  (-1, staff->getViewElementList()->end(), -1, 0, 0, 0, true, 0));
@@ -834,7 +821,6 @@ NotationHLayout::layout(BarDataMap::iterator i)
 	    kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): there's a time sig in this bar" << endl;
 	}
 
-//!!!        Accidental accidentalInThisChord = NoAccidental;
 
         for (NotationElementList::iterator it = from; it != to; ++it) {
             
@@ -1148,6 +1134,18 @@ int NotationHLayout::getPostBarMargin() const
 void
 NotationHLayout::reset()
 {
+    for (BarDataMap::iterator i = m_barData.begin();
+	 i != m_barData.end(); ++i) {
+
+	BarDataList &bdl = i->second;
+
+	for (int j = 0; j < bdl.size(); ++j) {
+	    delete bdl[j].timeSignature;
+	}
+
+	bdl.erase(bdl.begin(), bdl.end());
+    }
+
     m_barData.clear();
     m_totalWidth = 0;
 }

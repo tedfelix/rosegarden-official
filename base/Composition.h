@@ -24,6 +24,8 @@
 #include <set>
 #include <map>
 
+#include "FastVector.h"
+
 #include "Segment.h"
 #include "Quantizer.h"
 #include "Instrument.h"
@@ -41,25 +43,26 @@ typedef std::map<int, Track> trackcontainer;
 typedef instrumentcontainer::iterator instrumentiterator;
 typedef trackcontainer::iterator trackiterator;
 
+
 /**
  * Composition contains a complete representation of a piece of music.
  * It is a container for multiple Segments, as well as any associated
  * non-Event data.
  * 
  * The Composition owns the Segments it holds, and deletes them on
- * destruction.  When segments are removed, it will also delete them.
+ * destruction.  When Segments are removed, it will also delete them.
  */
 
-//!!! This could usefully do with a bit more tidying up.  We're
-// gradually increasing the amount of stuff stored in the Composition
-// as opposed to in individual Segments.
-
-class Composition : public SegmentObserver, public XmlExportable
+class Composition : public SegmentObserver,
+		    public XmlExportable
 {
     
 public:
+    class ReferenceSegment;
+
     static const std::string BarEventType;
     static const PropertyName BarNumberProperty;
+    static const PropertyName BarHasTimeSigProperty;
 
     static const std::string TempoEventType; 
     static const PropertyName TempoProperty; // stored in beats per hour
@@ -77,23 +80,23 @@ public:
     void swap(Composition&);
 
     /**
-     * Returns the segment storing Bar and TimeSignature events
+     * Remove all Segments from the Composition and destroy them
      */
-    Segment *getBarSegment() {
-	calculateBarPositions();
-	return &m_barSegment;
-    }
+    void clear();
 
-    Segment *getTempoSegment() {
-	return &m_tempoSegment;
-    }
+    /**
+     * Return the absolute end time of the segment that ends last
+     */
+    timeT getDuration() const;
 
     const Quantizer *getQuantizer() const {
 	return &m_quantizer;
     }
 
-    segmentcontainer& getSegments() { return m_segments; }
-    const segmentcontainer& getSegments() const { return m_segments; }
+
+    //////
+    //
+    //  INSTRUMENT & TRACK
 
     Track* getTrackByIndex(const int &track) { return &(m_tracks[track]); }
     Instrument* getInstrumentByIndex(const int &instr)
@@ -105,11 +108,10 @@ public:
     int getRecordTrack() const { return m_recordTrack; }
     void setRecordTrack(const int &recordTrack) { m_recordTrack = recordTrack; }
 
-    unsigned int getNbSegments() const { return m_segments.size(); }
     int getNbTracks() const { return m_tracks.size(); }
 
-    /* Clear out the track container
-     *
+    /**
+     * Clear out the track container
      */
     void clearTracks() { m_tracks.clear(); }
 
@@ -132,6 +134,17 @@ public:
      * Delete instrument by index
      */
     void deleteInstrument(const int &instrument);
+
+
+
+    //////
+    //
+    //  SEGMENT
+
+    segmentcontainer& getSegments() { return m_segments; }
+    const segmentcontainer& getSegments() const { return m_segments; }
+
+    unsigned int getNbSegments() const { return m_segments.size(); }
 
     /**
      * Add a new segment and return an iterator pointing to it
@@ -156,15 +169,11 @@ public:
      */
     bool deleteSegment(Segment*);
 
-    /**
-     * Remove all Segments from the Composition and destroy them
-     */
-    void clear();
 
-    /**
-     * Return the absolute end time of the segment that ends last
-     */
-    timeT getDuration() const;
+
+    //////
+    //
+    //  BAR
 
     /**
      * Return the total number of bars in the composition
@@ -192,7 +201,7 @@ public:
     int getBarNumber(timeT t, bool truncate) const;
 
     /**
-     * Return the time range of bar n.  Relatively inefficient.
+     * Return the time range of bar n.
      * 
      * If truncate is true, will stop at the end of the composition
      * and return last real bar if n is out of range; otherwise will
@@ -206,9 +215,15 @@ public:
      * Return the starting and ending times of the bar that contains
      * time t.  Unlike getBarRange(int, bool) this will only work for
      * bars that actually exist and will stop working at the end of
-     * the composition.  It's much, much quicker though.
+     * the composition.
      */
     std::pair<timeT, timeT> getBarRange(timeT t) const;
+
+
+
+    //////
+    //
+    //  TIME SIGNATURE
 
     /**
      * Add the given time signature at the given time
@@ -225,6 +240,36 @@ public:
      * which it came into effect
      */
     timeT getTimeSignatureAt(timeT, TimeSignature &) const;
+
+    /**
+     * Return the time signature in effect in bar n.  Also sets
+     * isNew to true if the time signature is a new one that did
+     * not appear in the previous bar.
+     */
+    TimeSignature getTimeSignatureInBar(int n, bool &isNew) const;
+
+    /**
+     * Return the total number of time signature changes in the
+     * composition.
+     */
+    int getTimeSignatureCount() const;
+
+    /**
+     * Return the absolute time of and time signature introduced
+     * by time-signature change n.
+     */
+    std::pair<timeT, TimeSignature> getTimeSignatureChange(int n) const;
+
+    /**
+     * Remove time signature change event n from the composition.
+     */
+    void removeTimeSignature(int n);
+
+
+
+    //////
+    //
+    //  TEMPO
 
     /**
      * Return the tempo in effect at time t, in beats per minute.
@@ -248,6 +293,36 @@ public:
      * event at that time.
      */
     void addTempo(timeT time, double tempo);
+
+    /**
+     * Add a tempo-change event at the given time, to the given
+     * tempo (in beats per hour).  Removes any existing tempo
+     * event at that time.
+     */
+    void addRawTempo(timeT time, int tempo);
+
+    /**
+     * Return the number of tempo changes in the composition.
+     */
+    int getTempoChangeCount() const;
+
+    /**
+     * Return the absolute time of and tempo introduced by tempo
+     * change number n, in beats per hour (this is the value that's
+     * actually stored)
+     */
+    std::pair<timeT, long> getRawTempoChange(int n) const;
+
+    /**
+     * Remove tempo change event n from the composition.
+     */
+    void removeTempoChange(int n);
+
+
+
+    //////
+    //
+    //  REAL TIME
 
     /**
      * Return the number of microseconds elapsed between
@@ -283,6 +358,8 @@ public:
 	else	     return getElapsedRealTime(t0) - getElapsedRealTime(t1);
     }
 
+
+
     /**
      * Get the current playback position.
      */
@@ -310,21 +387,75 @@ public:
     //
     virtual string toXmlString();
 
+
+
+    struct ReferenceSegmentEventCmp
+    {
+	bool operator()(const Event &e1, const Event &e2) const;
+	bool operator()(const Event *e1, const Event *e2) const;
+    };
+    
+    /**
+     * This is a bit like a segment, but can only contain one sort of
+     * event, and can only have one event at each absolute time
+     */
+    class ReferenceSegment :
+	private FastVector<Event *> // not a set: want random access for bars
+    {
+	typedef FastVector<Event *> Impl;
+
+    public:
+	ReferenceSegment(std::string eventType);
+	virtual ~ReferenceSegment();
+	
+	typedef Impl::iterator iterator;
+
+	Impl::size;
+	Impl::begin;
+	Impl::end;
+	Impl::operator[];
+
+	void clear();
+
+	timeT getDuration() const;
+	
+	/// Inserts a single event, removing any existing one at that time
+	iterator insert(Event *e); // may throw Event::BadType
+
+	void erase(Event *e);
+
+	void swap(ReferenceSegment &);
+
+	iterator findTime(timeT time);
+	iterator findNearestTime(timeT time);
+
+	iterator findRealTime(RealTime time);
+	iterator findNearestRealTime(RealTime time);
+
+    private:
+  	iterator find(Event *e);
+	std::string m_eventType;
+    };
+
 protected:
+
     trackcontainer m_tracks;
     segmentcontainer m_segments;
     instrumentcontainer m_instruments;
     int m_recordTrack;
 
-    /// Contains time signature and new-bar events.
-    mutable Segment m_barSegment;
+    /// Contains new-bar events -- not saved, but based on the timesigs
+    mutable ReferenceSegment m_barSegment;
 
-    /// Contains tempo events.
-    mutable Segment m_tempoSegment;
+    /// Contains time signature events
+    mutable ReferenceSegment m_timeSigSegment;
+
+    /// Contains tempo events
+    mutable ReferenceSegment m_tempoSegment;
 
     // called from calculateBarPositions
-    Segment::iterator addNewBar(timeT time, int barNo) const;
-    mutable int m_barCount;
+    ReferenceSegment::iterator addNewBar(timeT time, timeT duration, int barNo,
+					 bool hasTimeSig) const;
 
     Quantizer m_quantizer;
 
@@ -340,7 +471,6 @@ protected:
     mutable bool m_tempoTimestampsNeedCalculating;
     RealTime time2RealTime(timeT time, double tempo) const;
     timeT realTime2Time(RealTime rtime, double tempo) const;
-    static bool compareTempoTimestamps(const Event *, const Event *);
 
 private:
     Composition(const Composition &);

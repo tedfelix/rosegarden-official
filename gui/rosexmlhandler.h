@@ -73,6 +73,7 @@ protected:
 
     Rosegarden::Composition &m_composition;
     Rosegarden::Segment *m_currentSegment;
+    Rosegarden::Composition::ReferenceSegment *m_currentReferenceSegment;
     XmlStorableEvent *m_currentEvent;
 
     Rosegarden::timeT m_currentTime;

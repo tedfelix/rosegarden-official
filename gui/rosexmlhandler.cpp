@@ -42,6 +42,7 @@ using namespace Rosegarden::BaseProperties;
 RoseXmlHandler::RoseXmlHandler(Composition &composition)
     : m_composition(composition),
       m_currentSegment(0),
+      m_currentReferenceSegment(0),
       m_currentEvent(0),
       m_currentTime(0),
       m_chordDuration(0),
@@ -81,15 +82,34 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
     if (lcName == "rosegarden-data") {
         // set to some state which says it's ok to parse the rest
 
-    } else if (lcName == "bar-segment") {
+    } else if (lcName == "timesignature") {
 
-	m_currentSegment = m_composition.getBarSegment();
-	m_currentTime = 0;
+	Rosegarden::timeT t = 0;
+	QString timeStr = atts.value("time");
+	if (timeStr) t = timeStr.toInt();
 
-    } else if (lcName == "tempo-segment") {
+	int num = 4;
+	QString numStr = atts.value("numerator");
+	if (numStr) num = numStr.toInt();
 
-	m_currentSegment = m_composition.getTempoSegment();
-	m_currentTime = 0;
+	int denom = 4;
+	QString denomStr = atts.value("denominator");
+	if (denomStr) denom = denomStr.toInt();
+
+	m_composition.addTimeSignature
+	    (t, Rosegarden::TimeSignature(num, denom));
+
+    } else if (lcName == "tempo") {
+
+	Rosegarden::timeT t = 0;
+	QString timeStr = atts.value("time");
+	if (timeStr) t = timeStr.toInt();
+	
+	int bph = 120 * 60; // arbitrary
+	QString bphStr = atts.value("bph");
+	if (bphStr) bph = bphStr.toInt();
+
+	m_composition.addRawTempo(t, bph);
 
     } else if (lcName == "instrument") {
         int id = -1;
@@ -327,6 +347,9 @@ RoseXmlHandler::endElement(const QString& /*namespaceURI*/,
         if (m_currentSegment && m_currentEvent) {
             m_currentSegment->insert(m_currentEvent);
             m_currentEvent = 0;
+	} else if (m_currentReferenceSegment && m_currentEvent) {
+            m_currentReferenceSegment->insert(m_currentEvent);
+            m_currentEvent = 0;
         } else if (!m_currentSegment && m_currentEvent) {
             m_errorString = i18n("Got event outside of a Segment");
             return false;
@@ -346,6 +369,10 @@ RoseXmlHandler::endElement(const QString& /*namespaceURI*/,
 
         m_currentSegment = 0;
 
+    } else if (lcName == "bar-segment" || lcName == "tempo-segment") {
+	
+	m_currentSegment = 0;
+	m_currentReferenceSegment = 0;
     }
 
     return true;

@@ -59,7 +59,7 @@ class Segment : public std::multiset<Event*, Event::EventCmp>
 {
 public:
     Segment(timeT startIdx = 0);
-    ~Segment();
+    virtual ~Segment();
     
     timeT getStartIndex() const { return m_startIdx; }
     void  setStartIndex(timeT i);

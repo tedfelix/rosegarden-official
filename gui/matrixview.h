@@ -211,7 +211,7 @@ public:
     MatrixHLayout();
     virtual ~MatrixHLayout();
 
-    /*
+    /**
      * Resets internal data stores for all staffs
      */
     virtual void reset();

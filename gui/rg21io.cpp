@@ -383,7 +383,7 @@ bool RG21Loader::parseBarType()
 
     timeT sigTime = m_composition->getBarRange(barNo, true).first;
     TimeSignature timeSig(numerator, denominator);
-    m_composition->getBarSegment()->insert(timeSig.getAsEvent(sigTime));
+    m_composition->addTimeSignature(sigTime, timeSig);
 
     return true;
 }
