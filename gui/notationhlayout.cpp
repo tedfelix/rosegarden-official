@@ -105,14 +105,8 @@ NotationHLayout::layout(NotationElementList::iterator from,
         x += getNoteWidth(previousNote, previousDotted) +
             Staff::noteWidth + m_noteMargin;
 
-//!!! do this right
-/*!        if (m_currentScale->noteIsDecorated(*elementBeforeFrom)) {
-            m_currentPos += Staff::accidentWidth;
-        }
-*/
         //!!! no, shouldn't be doing this
         m_nbTimeUnitsInCurrentBar = barTimeAtPos(oneBeforeFrom);
-
 /*!        setCurrentKey(getKeyAtPos(from)); */
     }
 
@@ -155,13 +149,18 @@ NotationHLayout::layout(NotationElementList::iterator from,
         } else if (nel->event()->isa(TimeSignature::EventPackage,
                                      TimeSignature::EventType)) {
 
+            // need to insert the bar line _before_ this event
+            m_nbTimeUnitsInCurrentBar = 0;
+            addNewBar(x + m_noteMargin, nel->getAbsoluteTime(), true, true);
+
+            x += 2 * m_noteMargin + Staff::noteWidth;
+            nel->setX(x);
             x += 24 + m_noteMargin; //!!! fix
 
             kdDebug(KDEBUG_AREA) << "NotationHLayout::layout() : got a timesig event - moving + 24"
                                  << endl;
 
             m_timeSignature = TimeSignature(*nel->event());
-            //... and put in a new barline &c
 
         } else if (nel->isNote() || nel->isRest()) {
 
@@ -175,7 +174,7 @@ NotationHLayout::layout(NotationElementList::iterator from,
 
             if (it == to || !nel->isNote() ||
                 (++ni) == to || !(*ni)->isNote() ||
-                (*ni)->absoluteTime() != nel->absoluteTime()) {
+                (*ni)->getAbsoluteTime() != nel->getAbsoluteTime()) {
 
                 // okay, we aren't a note being followed by a note with the
                 // same absolute time... so don't hang back
@@ -203,56 +202,47 @@ NotationHLayout::layout(NotationElementList::iterator from,
                 } catch (Event::NoData) {
                     // not a problem
                 }
-
-/*!
-  if (m_currentScale->noteIsDecorated(*nel)) {
-  //!!! now in notationvlayout -- look for computed-accidental
-  nel->event()->set<Int>("Notation::Accident",
-  m_currentScale->useSharps() ? Sharp : Flat);
-  m_currentPos += Staff::accidentWidth;
-  } else {
-  nel->event()->set<Int>("Notation::Accident", NoAccidental);
-  }
-*/         
             }
 
             // See if we've completed a bar
             //
-            int barDuration = m_timeSignature.getBarDuration();
-            if (m_nbTimeUnitsInCurrentBar > barDuration) {
-                kdDebug(KDEBUG_AREA) << "NotationHLayout::layout() : Bar has wrong length" << endl;
-                //!!! TODO
-            } else if (m_nbTimeUnitsInCurrentBar == barDuration) {
+            Event::timeT barDuration = m_timeSignature.getBarDuration();
+
+            if (m_nbTimeUnitsInCurrentBar >= barDuration) {
+                bool correct = (m_nbTimeUnitsInCurrentBar == barDuration);
+                if (!correct) kdDebug(KDEBUG_AREA) << "NotationHLayout::layout() : Bar has wrong length" << endl;
                 m_nbTimeUnitsInCurrentBar = 0;
-                addNewBar(x + m_noteMargin);
+                addNewBar(x + m_noteMargin, nel->getAbsoluteTime(),
+                          false, correct);
                 x += 2 * m_noteMargin + Staff::noteWidth;
             }
 
-            if (nel->absoluteTime() < m_previousAbsoluteTime) {
+            if (nel->getAbsoluteTime() < m_previousAbsoluteTime) {
                 kdDebug(KDEBUG_AREA) << "NotationHLayout::layout() : sanity problem - event absolute time is before previous event's time" << endl;
             }
 
-            m_previousAbsoluteTime = nel->absoluteTime();
+            m_previousAbsoluteTime = nel->getAbsoluteTime();
         }
     }
 }
 
 void
-NotationHLayout::addNewBar(unsigned int barPos)
+NotationHLayout::addNewBar(unsigned int barPos, Event::timeT time,
+                           bool fixed, bool correct)
 {
-    m_barPositions.push_back(barPos);
+    m_barPositions.push_back(BarPosition(barPos, time, fixed, correct));
     kdDebug(KDEBUG_AREA) << "NotationHLayout::addNewBar(" << barPos << ") - size : "
                          << m_barPositions.size() << "\n";
 }
 
-NotationHLayout::barpositions&
-NotationHLayout::barPositions()
+NotationHLayout::BarPositions&
+NotationHLayout::getBarPositions()
 {
     return m_barPositions;
 }
 
-const NotationHLayout::barpositions&
-NotationHLayout::barPositions() const
+const NotationHLayout::BarPositions&
+NotationHLayout::getBarPositions() const
 {
     return m_barPositions;
 }

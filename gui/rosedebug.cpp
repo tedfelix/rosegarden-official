@@ -39,8 +39,8 @@ operator<<(kdbgstream &dbg, const Event &e)
         dbg << "Event type : " << e.type() << endl;
     }
 
-    dbg << "\tDuration : " << e.duration()
-        << "\n\tAbsolute Time : " << e.absoluteTime()
+    dbg << "\tDuration : " << e.getDuration()
+        << "\n\tAbsolute Time : " << e.getAbsoluteTime()
         << endl;
 
 //     for (Event::PropertyMap::const_iterator i = e.properties().begin();

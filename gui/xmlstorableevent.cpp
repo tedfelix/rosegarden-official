@@ -48,12 +48,12 @@ XMLStorableEvent::XMLStorableEvent(const QXmlAttributes &attributes)
             if (!isNumeric) {
 		try {
 		    Note n(attrVal.latin1());
-		    setTimeDuration(n.getDuration());
+		    setDuration(n.getDuration());
 		} catch (Note::BadType b) {
                     kdDebug(KDEBUG_AREA) << "XMLStorableEvent::XMLStorableEvent: Bad duration: " << attrVal << " (Note choked on \"" << b.type << "\")" << endl;
 		}
             } else {
-		setTimeDuration(d);
+		setDuration(d);
 	    }
 
         } else {
@@ -105,7 +105,7 @@ XMLStorableEvent::toXMLString() const
     if (type().length())
         res += QString(" type=\"%1\"").arg(type().c_str());
 
-    res += QString(" duration=\"%1\"").arg(duration());
+    res += QString(" duration=\"%1\"").arg(getDuration());
 
 
     for (PropertyMap::const_iterator i = properties().begin();
@@ -132,7 +132,7 @@ XMLStorableEvent::toXMLString(const Event &e)
     if (e.type().length())
         res += QString(" type=\"%1\"").arg(e.type().c_str());
 
-    res += QString(" duration=\"%1\"").arg(e.duration());
+    res += QString(" duration=\"%1\"").arg(e.getDuration());
 
 
     for (PropertyMap::const_iterator i = e.properties().begin();

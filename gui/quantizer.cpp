@@ -45,7 +45,7 @@ Quantizer::quantize(Track::iterator from,
 void
 Quantizer::quantize(Event *el)
 {
-    Event::timeT drt = el->duration();
+    Event::timeT drt = el->getDuration();
 
     kdDebug(KDEBUG_AREA) << "Quantizer applying to event of duration " << drt << endl;
 

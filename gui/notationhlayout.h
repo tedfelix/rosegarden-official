@@ -25,6 +25,7 @@
 #include "quantizer.h"
 #include "notationelement.h"
 
+
 /**
   *@author Guillaume Laurent, Chris Cannam, Rich Bown
   */
@@ -48,11 +49,23 @@ public:
     void layout(NotationElementList::iterator from,
                 NotationElementList::iterator to);
 
-    typedef list<unsigned int> barpositions;
+    struct BarPosition
+    {
+        unsigned int x;       // coordinate for display
+        Event::timeT time;    // absolute time of start of following event
+        bool fixed;           // user-supplied new-bar or timesig event?
+        bool correct;         // false if preceding bar has incorrect duration
+        
+        BarPosition(unsigned int ix, Event::timeT itime,
+                    bool ifixed, bool icorrect) :
+            x(ix), time(itime), fixed(ifixed), correct(icorrect) { }
+    };
+
+    typedef list<BarPosition> BarPositions;
 
     /// returns the bar positions computed from the last call to layout()
-    barpositions& barPositions();
-    const barpositions& barPositions() const;
+    BarPositions& getBarPositions();
+    const BarPositions& getBarPositions() const;
 
     /// resets the internal position counters of the object
     void reset();
@@ -67,7 +80,7 @@ protected:
     //     const vector<unsigned int>& splitNote(unsigned int noteLen);
 
     unsigned int barTimeAtPos(NotationElementList::iterator pos);
-    void addNewBar(unsigned int barPos);
+    void addNewBar(unsigned int barPos, Event::timeT time, bool, bool);
 
     /// returns the note immediately before 'pos'
     NotationElementList::iterator getPreviousNote(NotationElementList::iterator pos);
@@ -84,8 +97,8 @@ protected:
     /// minimal space between two notes
     unsigned int m_noteMargin;
 
-    unsigned int m_nbTimeUnitsInCurrentBar;
-    unsigned int m_previousAbsoluteTime;
+    Event::timeT m_nbTimeUnitsInCurrentBar;
+    Event::timeT m_previousAbsoluteTime;
 
     TimeSignature m_timeSignature;
 
@@ -97,7 +110,7 @@ protected:
             Note(Note::WholeNote, false).getDuration();
     }
 
-    barpositions m_barPositions;
+    BarPositions m_barPositions;
 };
 
 // Looks like we don't need this at the moment but I'd rather keep it around just in case

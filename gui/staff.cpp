@@ -124,7 +124,7 @@ compareBarToPos(QCanvasLineGroupable *barLine1, unsigned int pos)
 }
 
 void
-Staff::insertBar(unsigned int barPos)
+Staff::insertBar(unsigned int barPos, bool correct)
 {
     kdDebug(KDEBUG_AREA) << "Staff::insertBar(" << barPos << ")\n";
 
@@ -133,6 +133,7 @@ Staff::insertBar(unsigned int barPos)
     barLine->setPoints(0, linesOffset,
                        0, barLineHeight() + linesOffset);
     barLine->moveBy(barPos + x(), y());
+    if (!correct) barLine->setPen(QPen(red, 1));
     barLine->show();
 
     barlines::iterator insertPoint = lower_bound(m_barLines.begin(),

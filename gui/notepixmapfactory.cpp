@@ -346,7 +346,7 @@ NotePixmapFactory::makeNotePixmap(Note::Type note,
     }
 
     bool noteHasStalk = note < Note::WholeNote;
-    m_generatedPixmapHeight = m_offsets.pixmapSize().height();
+    m_generatedPixmapHeight = m_offsets.getPixmapSize().height();
     
     createPixmapAndMask();
 
@@ -354,8 +354,8 @@ NotePixmapFactory::makeNotePixmap(Note::Type note,
     //
     QPixmap *body = (note >= Note::HalfNote) ? &m_noteBodyEmpty : &m_noteBodyFilled;
 
-    m_p.drawPixmap (m_offsets.bodyOffset(), *body);
-    m_pm.drawPixmap(m_offsets.bodyOffset(), *(body->mask()));
+    m_p.drawPixmap (m_offsets.getBodyOffset(), *body);
+    m_pm.drawPixmap(m_offsets.getBodyOffset(), *(body->mask()));
     
     if (dotted)
         drawDot();
@@ -375,13 +375,13 @@ NotePixmapFactory::makeNotePixmap(Note::Type note,
     // add red dots at each corner of the pixmap
     m_p.setPen(Qt::red); m_p.setBrush(Qt::red);
     m_p.drawPoint(0,0);
-    m_p.drawPoint(0,m_offsets.hotSpot().y());
+    m_p.drawPoint(0,m_offsets.getHotSpot().y());
     m_p.drawPoint(0,m_generatedPixmap->height() - 1);
     m_p.drawPoint(m_generatedPixmap->width() - 1,0);
     m_p.drawPoint(m_generatedPixmap->width() - 1,m_generatedPixmap->height() - 1);
 
     m_pm.drawPoint(0,0);
-    m_pm.drawPoint(0,m_offsets.hotSpot().y());
+    m_pm.drawPoint(0,m_offsets.getHotSpot().y());
     m_pm.drawPoint(0,m_generatedPixmap->height() -1);
     m_pm.drawPoint(m_generatedPixmap->width() -1,0);
     m_pm.drawPoint(m_generatedPixmap->width() -1,m_generatedPixmap->height()-1);
@@ -392,7 +392,7 @@ NotePixmapFactory::makeNotePixmap(Note::Type note,
     m_p.end();
     m_pm.end();
 
-    QCanvasPixmap notePixmap(*m_generatedPixmap, m_offsets.hotSpot());
+    QCanvasPixmap notePixmap(*m_generatedPixmap, m_offsets.getHotSpot());
     QBitmap mask(*m_generatedMask);
     notePixmap.setMask(mask);
 
@@ -469,8 +469,8 @@ NotePixmapFactory::createPixmapAndMask()
 {
     // create pixmap and mask
     //
-    m_generatedPixmap = new QPixmap(m_offsets.pixmapSize().width(),
-                                    m_offsets.pixmapSize().height());
+    m_generatedPixmap = new QPixmap(m_offsets.getPixmapSize().width(),
+                                    m_offsets.getPixmapSize().height());
  
     m_generatedMask = new QBitmap(m_generatedPixmap->width(),
                                   m_generatedPixmap->height());
@@ -546,8 +546,8 @@ NotePixmapFactory::drawStalk(Note::Type note,
 {
     QPoint lineOrig, lineDest;
 
-    lineOrig = m_offsets.stalkPoints().first;
-    lineDest = m_offsets.stalkPoints().second;
+    lineOrig = m_offsets.getStalkPoints().first;
+    lineDest = m_offsets.getStalkPoints().second;
 
     m_p.drawLine(lineOrig, lineDest);
     m_pm.drawLine(lineOrig, lineDest);
@@ -560,18 +560,18 @@ NotePixmapFactory::drawStalk(Note::Type note,
         if (stalkGoesUp) {
             tailPixmap = tailUp(note);
 
-            m_p.drawPixmap (m_offsets.stalkPoints().first.x() + 1 , 0, *tailPixmap);
-            m_pm.drawPixmap(m_offsets.stalkPoints().first.x() + 1 , 0, *(tailPixmap->mask()));
+            m_p.drawPixmap (m_offsets.getStalkPoints().first.x() + 1 , 0, *tailPixmap);
+            m_pm.drawPixmap(m_offsets.getStalkPoints().first.x() + 1 , 0, *(tailPixmap->mask()));
 
         } else {
 
             tailPixmap = tailDown(note);
 
-            m_p.drawPixmap (m_offsets.stalkPoints().first.x() + 1,
+            m_p.drawPixmap (m_offsets.getStalkPoints().first.x() + 1,
                             m_generatedPixmapHeight - tailPixmap->height(),
                             *tailPixmap);
 
-            m_pm.drawPixmap(m_offsets.stalkPoints().first.x() + 1,
+            m_pm.drawPixmap(m_offsets.getStalkPoints().first.x() + 1,
                             m_generatedPixmapHeight - tailPixmap->height(),
                             *(tailPixmap->mask()));
 
@@ -590,8 +590,8 @@ NotePixmapFactory::drawStalk(Note::Type note,
 void
 NotePixmapFactory::drawDot()
 {
-    int x = m_offsets.bodyOffset().x() + m_noteBodyFilled.size().width();
-    int y = m_offsets.bodyOffset().y();
+    int x = m_offsets.getBodyOffset().x() + m_noteBodyFilled.size().width();
+    int y = m_offsets.getBodyOffset().y();
 
     kdDebug(KDEBUG_AREA) << "NotePixmapFactory::drawDot(): placing dot at "
                          << x << "," << y << endl;
@@ -629,12 +629,12 @@ NotePixmapFactory::drawAccidental(Accidental accidental, bool /*stalkGoesUp*/)
         //!!! double sharp, double flat
     }
 
-    m_p.drawPixmap(m_offsets.accidentalOffset().x(),
-                   m_offsets.accidentalOffset().y(),
+    m_p.drawPixmap(m_offsets.getAccidentalOffset().x(),
+                   m_offsets.getAccidentalOffset().y(),
                    *accidentalPixmap);
 
-    m_pm.drawPixmap(m_offsets.accidentalOffset().x(),
-                    m_offsets.accidentalOffset().y(),
+    m_pm.drawPixmap(m_offsets.getAccidentalOffset().x(),
+                    m_offsets.getAccidentalOffset().y(),
                     *(accidentalPixmap->mask()));
     
 }

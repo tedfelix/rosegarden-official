@@ -239,14 +239,14 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 
             if (nextEl != (*trks)->end()) {
 
-                Event::timeT absTime = (*i)->absoluteTime();
+                Event::timeT absTime = (*i)->getAbsoluteTime();
             
-                if ((*nextEl)->absoluteTime() == absTime) {
+                if ((*nextEl)->getAbsoluteTime() == absTime) {
                     // group elements
                     //
                     fileStream << "<Group>" << endl; //------
 
-                    while ((*i)->absoluteTime() == absTime) {
+                    while ((*i)->getAbsoluteTime() == absTime) {
                         fileStream << '\t'
                                    << XMLStorableEvent::toXMLString(*(*i))
                                    << endl;

@@ -94,18 +94,18 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         
         if (!m_inChord) {
 
-            m_currentTime += newEvent->duration();
+            m_currentTime += newEvent->getDuration();
 
             kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement: (we're not in a chord) " << endl;
 
         } else if (m_chordDuration == 0 &&
-                   newEvent->duration() != 0) {
+                   newEvent->getDuration() != 0) {
 
             // set chord duration to the duration of the 1st element
             // with a non-null duration (if no such elements, leave it
             // to 0).
 
-            m_chordDuration = newEvent->duration();
+            m_chordDuration = newEvent->getDuration();
         }
         
         m_currentTrack->insert(newEvent);

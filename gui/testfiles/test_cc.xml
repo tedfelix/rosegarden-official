@@ -16,5 +16,15 @@
         <event type="note" duration="quaver" pitch="54"/>
         </chord>
         <event type="note" duration="quaver" pitch="51"/>
+        <event type="note" duration="crotchet" pitch="44"/>
+        <event type="note" duration="crotchet" pitch="45"/>
+        <event type="timesignature" numerator="4" denominator="4"/>
+        <event type="rest" duration="crotchet"/>
+        <event type="note" duration="crotchet" pitch="44"/>
+        <event type="note" duration="crotchet" pitch="45"/>
+        <event type="note" duration="minim" pitch="44"/>
+        <event type="note" duration="crotchet" pitch="45"/>
+        <event type="note" duration="crotchet" pitch="44"/>
+        <event type="note" duration="crotchet" pitch="45"/>
 </track>
 </rosegarden-data>

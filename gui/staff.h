@@ -41,7 +41,7 @@ public:
     /// Returns the height of a bar line
     unsigned int barLineHeight() const { return m_barLineHeight; }
 
-    void insertBar(unsigned int barPos);
+    void insertBar(unsigned int barPos, bool correct);
     void deleteBars(unsigned int fromPos);
     void deleteBars();
 

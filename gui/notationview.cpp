@@ -427,8 +427,7 @@ NotationView::showBars(NotationElementList::iterator from,
 {
     if (from == to) return true;
 
-    const NotationHLayout::barpositions& barPositions(m_hlayout->barPositions());
-
+    const NotationHLayout::BarPositions& barPos(m_hlayout->getBarPositions());
     NotationElementList::iterator lastElement = to;
     --lastElement;
 
@@ -438,16 +437,11 @@ NotationView::showBars(NotationElementList::iterator from,
     
     m_currentStaff->deleteBars((*from)->x());
         
-    
-    for (NotationHLayout::barpositions::const_iterator it = barPositions.begin();
-        it != barPositions.end(); ++it) {
+    for (NotationHLayout::BarPositions::const_iterator it = barPos.begin();
+        it != barPos.end(); ++it) {
 
-        unsigned int barPos = *it;
-
-        kdDebug(KDEBUG_AREA) << "Adding bar at pos " << barPos << endl;
-
-        m_currentStaff->insertBar(barPos);
-
+        kdDebug(KDEBUG_AREA) << "Adding bar at pos " << it->x << endl;
+        m_currentStaff->insertBar(it->x, it->correct);
     }
     
     return true;
@@ -457,6 +451,11 @@ NotationView::showBars(NotationElementList::iterator from,
 bool
 NotationView::applyLayout()
 {
+    // we have to apply the vertical layout first, because it
+    // calculates accidentals which may be relevant when doing
+    // horizontal layout.  at the moment there are no dependencies the
+    // other way around; if we find any, we may need to introduce an
+    // extra pass before either of these
     bool rcv = applyVerticalLayout();
     bool rch = applyHorizontalLayout();
 
@@ -672,7 +671,7 @@ NotationView::insertNote(int pitch, const QPoint &eventPos)
     //
 /*!    insertedEvent->setTimeDuration(m_hlayout->quantizer().noteDuration(m_currentSelectedNote)); */
     //!!! no dottedness yet
-    insertedEvent->setTimeDuration(Note(m_currentSelectedNote).getDuration());
+    insertedEvent->setDuration(Note(m_currentSelectedNote).getDuration());
     insertedEvent->set<Int>("pitch", pitch);
 
     // Create associated notationElement and set its note type
@@ -707,10 +706,10 @@ NotationView::insertNote(int pitch, const QPoint &eventPos)
         }
 
         kdDebug(KDEBUG_AREA) << "NotationHLayout::insertNote : insert over note - absoluteTime = "
-                             << (*closestNote)->absoluteTime()
+                             << (*closestNote)->getAbsoluteTime()
                              << endl;
 
-        newNotationElement->setAbsoluteTime((*closestNote)->absoluteTime());
+        newNotationElement->setAbsoluteTime((*closestNote)->getAbsoluteTime());
         // m_notationElements->insert(newNotationElement);
 
         kdDebug(KDEBUG_AREA) << "new event is: " << (*newNotationElement) << endl;
@@ -723,6 +722,8 @@ NotationView::insertNote(int pitch, const QPoint &eventPos)
 //                          << endl << *m_notationElements << endl;
 
 //!!!    (*m_vlayout)(newNotationElement);
+
+    // we have to apply the vertical layout first: see applyLayout()
     applyVerticalLayout(); // TODO : be more subtle than this
     applyHorizontalLayout(); // TODO : be more subtle than this
 
@@ -801,26 +802,26 @@ NotationView::replaceRestWithNote(NotationElementList::iterator rest,
     // sanity check : the new note can't be longer than the rest it's
     // supposed to replace
     //
-    if ((*rest)->event()->duration() < newNote->event()->duration()) {
+    if ((*rest)->event()->getDuration() < newNote->event()->getDuration()) {
         kdDebug(KDEBUG_AREA) << "NotationView::replaceRestWithNote() - can't replace rest by note, rest is too short (duration : "
-                             << (*rest)->event()->duration() << " note duration is "
-                             << newNote->event()->duration() << ")" << endl;
+                             << (*rest)->event()->getDuration() << " note duration is "
+                             << newNote->event()->getDuration() << ")" << endl;
         return false;
     }
 
-    bool newNoteIsSameDurationAsRest = (*rest)->event()->duration() == newNote->event()->duration();
+    bool newNoteIsSameDurationAsRest = (*rest)->event()->getDuration() == newNote->event()->getDuration();
 
     // set new note absolute time to the one of the rest it's replacing
     //
-    newNote->setAbsoluteTime((*rest)->event()->absoluteTime());
+    newNote->setAbsoluteTime((*rest)->event()->getAbsoluteTime());
 
     if (!newNoteIsSameDurationAsRest) { // we need to insert shorter rests
         
-        RestSplitter splitter((*rest)->event()->duration(),
-                              newNote->event()->duration());
+        RestSplitter splitter((*rest)->event()->getDuration(),
+                              newNote->event()->getDuration());
 
-        Event::timeT restAbsoluteTime = newNote->event()->absoluteTime() +
-            newNote->event()->duration();
+        Event::timeT restAbsoluteTime = newNote->event()->getAbsoluteTime() +
+            newNote->event()->getDuration();
     
         while(Event::timeT bit = splitter.nextBit()) {
             kdDebug(KDEBUG_AREA) << "Inserting rest of duration " << bit
@@ -829,7 +830,7 @@ NotationView::replaceRestWithNote(NotationElementList::iterator rest,
             Event *newRest = new Event;
 	    newRest->setPackage("core");
             newRest->setType("rest");
-            newRest->setTimeDuration(bit);
+            newRest->setDuration(bit);
             newRest->setAbsoluteTime(restAbsoluteTime);
             newRest->set<String>("Name", "INSERTED_REST");
             NotationElement *newNotationRest = new NotationElement(newRest);
