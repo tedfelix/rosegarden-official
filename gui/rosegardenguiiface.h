@@ -59,6 +59,14 @@ k_dcop:
     virtual void fileClose()                     = 0;
     virtual void quit()                          = 0;
 
+    virtual void play() = 0;
+    virtual void stop() = 0;
+    virtual void rewind() = 0;
+    virtual void fastForward() = 0;
+    virtual void record() = 0;
+    virtual void rewindToBeginning() = 0;
+    virtual void fastForwardToEnd() = 0;
+
     // Sequencer gets slice of MappedEvents wrapped in a
     // MappedComposition.  These are lightweight versions
     // of what we have in Event and Composition.  

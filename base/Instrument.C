@@ -47,6 +47,7 @@ Instrument::Instrument(InstrumentId id, InstrumentType it,
     m_transpose(MidiMidValue),
     m_pan(MidiMidValue),
     m_velocity(100),
+    m_recordLevel(100),
     m_attack(MidiMinValue),
     m_release(MidiMinValue),
     m_filter(MidiMaxValue),
@@ -58,7 +59,9 @@ Instrument::Instrument(InstrumentId id, InstrumentType it,
     m_sendProgramChange(false),
     m_sendPan(false),
     m_sendVelocity(false),
-    m_mappedId(0)
+    m_mappedId(0),
+    m_mappedAudioInput(-1),
+    m_mappedAudioOutput(std::pair<int, int>(-1, -1))
 {
     if (it == Audio)
     {
@@ -96,6 +99,7 @@ Instrument::Instrument(InstrumentId id,
     m_transpose(MidiMidValue),
     m_pan(MidiMidValue),
     m_velocity(100),
+    m_recordLevel(100),
     m_attack(MidiMinValue),
     m_release(MidiMinValue),
     m_filter(MidiMaxValue),
@@ -107,7 +111,9 @@ Instrument::Instrument(InstrumentId id,
     m_sendProgramChange(false),
     m_sendPan(false),
     m_sendVelocity(false),
-    m_mappedId(0)
+    m_mappedId(0),
+    m_mappedAudioInput(-1),
+    m_mappedAudioOutput(std::pair<int, int>(-1, -1))
 {
     // Add a number of plugin place holders (unassigned)
     //
@@ -142,6 +148,7 @@ Instrument::Instrument(const Instrument &ins):
     m_transpose(ins.getMidiTranspose()),
     m_pan(ins.getPan()),
     m_velocity(ins.getVelocity()),
+    m_recordLevel(ins.getRecordLevel()),
     m_attack(ins.getAttack()),
     m_release(ins.getRelease()),
     m_filter(ins.getFilter()),
@@ -153,7 +160,9 @@ Instrument::Instrument(const Instrument &ins):
     m_sendProgramChange(ins.sendsProgramChange()),
     m_sendPan(ins.sendsPan()),
     m_sendVelocity(ins.sendsVelocity()),
-    m_mappedId(ins.getMappedId())
+    m_mappedId(ins.getMappedId()),
+    m_mappedAudioInput(ins.getMappedAudioInput()),
+    m_mappedAudioOutput(ins.getMappedAudioOutput())
 {
     // Add a number of plugin place holders (unassigned)
     //
@@ -186,6 +195,7 @@ Instrument::operator=(const Instrument &ins)
     m_transpose = ins.getMidiTranspose();
     m_pan = ins.getPan();
     m_velocity = ins.getVelocity();
+    m_recordLevel = ins.getRecordLevel();
     m_attack = ins.getAttack();
     m_release = ins.getRelease();
     m_filter = ins.getFilter();
@@ -198,6 +208,8 @@ Instrument::operator=(const Instrument &ins)
     m_sendPan = ins.sendsPan();
     m_sendVelocity = ins.sendsVelocity();
     m_mappedId = ins.getMappedId();
+    m_mappedAudioInput = ins.getMappedAudioInput();
+    m_mappedAudioOutput = ins.getMappedAudioOutput();
 
     return *this;
 }

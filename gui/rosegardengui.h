@@ -216,6 +216,14 @@ public:
     virtual void fileClose()  { slotFileClose(); }
     virtual void quit()       { slotQuit(); }
 
+    virtual void play()               { slotPlay(); }
+    virtual void stop()               { slotStop(); }
+    virtual void rewind()             { slotRewind(); }
+    virtual void fastForward()        { slotFastforward(); }
+    virtual void record()             { slotRecord(); }
+    virtual void rewindToBeginning()  { slotRewindToBeginning(); }
+    virtual void fastForwardToEnd()   { slotFastForwardToEnd(); }
+
     /**
      * Set the song position pointer - we use longs so that
      * this method is directly accesible from the sequencer

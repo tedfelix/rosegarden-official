@@ -18,6 +18,7 @@ o Audio
    - multithreading
    - autosplitting
    - libsoundfile support (LSFSoundFile class?)
+   - MP3/OGG support
    - exceptions and return values
    - stereo vu meters (0dB level = 1.0f etc)
    - jack process tidy up (Bob Ham inspired) [DONE]

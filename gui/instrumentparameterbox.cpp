@@ -367,19 +367,29 @@ AudioInstrumentParameterPanel::slotSelectAudioLevel(int value)
     if (m_selectedInstrument == 0)
         return;
 
-    m_selectedInstrument->setVelocity(Rosegarden::MidiByte(value));
-
     if (m_selectedInstrument->getType() == Rosegarden::Instrument::Audio)
     {
-        // stupid QSliders mean we have to invert this value so that
-        // the top of the slider is max, the bottom min.
+        // If this is the record track then we store and send the record level
         //
-        //m_audioLevelValue->setNum(int(value));
+        if (m_audioFader->m_recordButton->isOn())
+        {
+            cout << "SETTING RECORD LEVEL = " << value << endl;
+            m_selectedInstrument->setRecordLevel(Rosegarden::MidiByte(value));
 
-        Rosegarden::StudioControl::setStudioObjectProperty
-            (Rosegarden::MappedObjectId(m_selectedInstrument->getMappedId()),
-             Rosegarden::MappedAudioFader::FaderLevel,
-             Rosegarden::MappedObjectValue(value));
+            Rosegarden::StudioControl::setStudioObjectProperty
+              (Rosegarden::MappedObjectId(m_selectedInstrument->getMappedId()),
+               Rosegarden::MappedAudioFader::FaderRecordLevel,
+               Rosegarden::MappedObjectValue(value));
+        }
+        else
+        {
+            m_selectedInstrument->setVelocity(Rosegarden::MidiByte(value));
+
+            Rosegarden::StudioControl::setStudioObjectProperty
+              (Rosegarden::MappedObjectId(m_selectedInstrument->getMappedId()),
+               Rosegarden::MappedAudioFader::FaderLevel,
+               Rosegarden::MappedObjectValue(value));
+        }
     }
 
     emit updateAllBoxes();
@@ -410,10 +420,28 @@ AudioInstrumentParameterPanel::slotSetRecord(bool value)
     // Set the background colour for the button
     //
     if (value)
+    {
         m_audioFader->m_recordButton->
             setPalette(QPalette(RosegardenGUIColours::ActiveRecordTrack));
+
+        if (m_selectedInstrument)
+        {
+            // set the fader value to the record value
+            m_audioFader->m_fader->
+                setFader(m_selectedInstrument->getRecordLevel());
+        }
+    }
     else
+    {
         m_audioFader->m_recordButton->unsetPalette();
+
+        if (m_selectedInstrument)
+        {
+            // set the fader value to the playback value
+            m_audioFader->m_fader->
+                setFader(m_selectedInstrument->getVelocity());
+        }
+    }
 
     m_audioFader->m_recordButton->setOn(value);
 }
@@ -985,10 +1013,28 @@ AudioInstrumentParameterPanel::slotRecord()
     // At the moment we can't turn a recording button off
     //
     if (!m_audioFader->m_recordButton->isOn())
+    {
         m_audioFader->m_recordButton->setOn(true);
+
+        if (m_selectedInstrument)
+        {
+            // set the fader value to the record value
+            m_audioFader->m_fader->
+                setFader(m_selectedInstrument->getRecordLevel());
+        }
+    }
     else
+    {
+        if (m_selectedInstrument)
+        {
+            // set the fader value to the record value
+            m_audioFader->m_fader->
+                setFader(m_selectedInstrument->getVelocity());
+        }
+
         emit recordButton(m_selectedInstrument->getId(),
                           m_audioFader->m_recordButton->isOn());
+    }
 }
 
 void
@@ -1018,7 +1064,14 @@ AudioInstrumentParameterPanel::setupForInstrument(Rosegarden::Instrument* instru
     m_selectedInstrument = instrument;
 
     m_instrumentLabel->setText(strtoqstr(instrument->getName()));
-    m_audioFader->m_fader->setFader(instrument->getVelocity());
+
+    /*
+    if (m_audioFader->m_recordButton->isOn())
+        m_audioFader->m_fader->setFader(instrument->getRecordLevel());
+    else
+        m_audioFader->m_fader->setFader(instrument->getVelocity());
+        */
+
 
     for (unsigned int i = 0; i < m_audioFader->m_plugins.size(); i++)
     {

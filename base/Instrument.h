@@ -116,11 +116,11 @@ public:
     void setType(InstrumentType type) { m_type = type; }
     InstrumentType getInstrumentType() { return m_type; }
 
+
+    // ---------------- MIDI Controllers -----------------
+    //
     void setMidiChannel(MidiByte mC) { m_channel = mC; }
     MidiByte getMidiChannel() const { return m_channel; }
-
-    void setAudioChannels(unsigned int ch) { m_channel = MidiByte(ch); }
-    unsigned int getAudioChannels() const { return (unsigned int)(m_channel); }
 
     void setMidiTranspose(MidiByte mT) { m_transpose = mT; }
     MidiByte getMidiTranspose() const { return m_transpose; }
@@ -170,6 +170,22 @@ public:
     void setReverb(MidiByte reverb) { m_reverb = reverb; }
     MidiByte getReverb() const { return m_reverb; }
 
+    // --------------- Audio Controllers -----------------
+    //
+    void setRecordLevel(MidiByte level) { m_recordLevel = level; }
+    MidiByte getRecordLevel() const { return m_recordLevel; }
+
+    void setAudioChannels(unsigned int ch) { m_channel = MidiByte(ch); }
+    unsigned int getAudioChannels() const { return (unsigned int)(m_channel); }
+
+    void setMappedAudioInput(int input) { m_mappedAudioInput = input; }
+    int getMappedAudioInput() const { return m_mappedAudioInput; }
+
+    void setMappedAudioOutput(std::pair<int, int> pair) 
+        { m_mappedAudioOutput = pair; }
+    std::pair<int, int> getMappedAudioOutput() const 
+        { return m_mappedAudioOutput; }
+
     // Implementation of virtual function
     //
     virtual std::string toXmlString();
@@ -217,7 +233,15 @@ private:
     MidiByte        m_lsb;
     MidiByte        m_transpose;
     MidiByte        m_pan;
+
+
+    // Used for MIDI velocity and Audio volume (0dB == 100)
+    //
     MidiByte        m_velocity;
+
+    // Record level for Audio recording (0dB == 100)
+    //
+    MidiByte        m_recordLevel;
 
     // More advanced controllers
     //
@@ -247,6 +271,14 @@ private:
     //
     int              m_mappedId;
 
+    // Which input terminal we're connected to - simple integer based
+    // on the number of channels this audio Instrument supports.
+    //
+    int              m_mappedAudioInput;
+
+    // MappedObjectId/port pair for output connection
+    //
+    std::pair<int, int>  m_mappedAudioOutput;
 };
 
 }
