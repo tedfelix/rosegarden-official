@@ -40,6 +40,11 @@
 // to Composition conversion invalidates the internal
 // MIDI model).
 //
+// Derived from SoundFile but still had some features
+// in common with it which could theoretically be moved
+// up into the base for use in other derived classes.
+//
+// [rwb]
 //
 //
 

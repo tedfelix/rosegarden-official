@@ -31,11 +31,11 @@ main(int argc, char **argv)
     audioFile = new Rosegarden::AudioFile(0, "firstwav", string(wavFile));
 
     if(!(audioFile->open()))
-        cout << "COULDN'T OPEN FILE" << endl;
+        cout << "Couldn' open file \"" << wavFile << "\"" << endl;
 
-    exit(0);
-
-
+    // Print out the information on this file and then play it
+    audioFile->printStats();
+  
     // start sequencer
     //
     Rosegarden::Sequencer seq;

@@ -59,6 +59,23 @@ SoundFile::putBytes(std::ofstream *file,
 }
 
 
+
+// Turn a little endian binary string into an integer
+//
+int
+SoundFile::getLittleEndian(const std::string &s)
+{
+    int r = 0;
+    int shift = 0;
+
+    for (unsigned int i = 0; i < s.length(); i++)
+    {
+        r += (int)(((FileByte)s[i]) << (i * 8));
+    }
+
+    return r;
 }
 
+
+}
 

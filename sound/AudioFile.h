@@ -26,6 +26,17 @@
 #include <string>
 #include "SoundFile.h"
 
+// An AudioFile extracts and maintains information pertaining
+// to an audio (sample) file.  For the moment the only format
+// we handle is the .wav
+//
+// Our "open" call in this case only examines the header and
+// populates useful information/checks for erros.  We don't
+// yet attempt to scan the body of the file as it could be
+// potentially very big.
+//
+// [rwb]
+// 
 
 namespace Rosegarden
 {
@@ -46,8 +57,8 @@ public:
 
     std::string getName() const { return m_name; }
     int getID() const { return m_id; }
-    int getBits() const { return m_bits; }
-    int getResolution() const { return m_resolution; }
+    int getBitsPerSample() const { return m_bitsPerSample; }
+    int getSampleRate() const { return m_sampleRate; }
     bool getStereo() const { return m_stereo; }
     
     AudioFileType getType() { return m_type; }
@@ -57,19 +68,24 @@ public:
     virtual bool open();
     virtual bool write();
 
+    // Show the information we have on this file
+    //
+    void printStats();
+
 private:
 
     void parseHeader(const std::string &headerString);
     void parseBody();
 
-    int m_id;
-    string m_name;
-    int m_bits;
-    int m_resolution;
-    bool m_stereo;
-    AudioFileType m_type;
-
-    int m_fileSize;
+    int            m_id;
+    string         m_name;
+    int            m_bitsPerSample;
+    int            m_sampleRate;
+    int            m_bytesPerSecond;
+    int            m_bytesPerSample;
+    bool           m_stereo;
+    AudioFileType  m_type;
+    int            m_fileSize;
 
 };
 
