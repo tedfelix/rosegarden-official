@@ -125,7 +125,12 @@ CutAndCloseCommand::CloseCommand::execute()
     for (Segment::iterator i = m_segment->findTime(m_gapEnd);
 	 m_segment->isBeforeEndMarker(i); ++i) {
 	events.push_back(new Event
-			 (**i, (*i)->getAbsoluteTime() - timeDifference));
+			 (**i,
+			  (*i)->getAbsoluteTime() - timeDifference,
+			  (*i)->getDuration(),
+			  (*i)->getSubOrdering(),
+			  (*i)->getNotationAbsoluteTime() - timeDifference,
+			  (*i)->getNotationDuration()));
     }
 
     timeT oldEndTime = m_segment->getEndTime();
@@ -185,7 +190,12 @@ CutAndCloseCommand::CloseCommand::unexecute()
 	Segment::iterator j(i);
 	++j;
 	events.push_back(new Event
-			 (**i, (*i)->getAbsoluteTime() + timeDifference));
+			 (**i,
+			  (*i)->getAbsoluteTime() + timeDifference,
+			  (*i)->getDuration(),
+			  (*i)->getSubOrdering(),
+			  (*i)->getNotationAbsoluteTime() + timeDifference,
+			  (*i)->getNotationDuration()));
 	m_segment->erase(i);
 	i = j;
     }
