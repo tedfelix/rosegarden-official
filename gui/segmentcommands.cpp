@@ -912,6 +912,8 @@ SegmentSplitCommand::execute()
 				      (strtoqstr(m_segmentLabel))));
         m_newSegment->setLabel(m_segment->getLabel());
 	m_newSegment->setColourIndex(m_segment->getColourIndex());
+        m_newSegment->setTranspose(m_segment->getTranspose());
+        m_newSegment->setDelay(m_segment->getDelay());
     }
 
     // Resize left hand Segment

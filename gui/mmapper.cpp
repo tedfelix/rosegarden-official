@@ -851,6 +851,10 @@ bool CompositionMmapper::segmentModified(Segment* segment)
 {
     SegmentMmapper* mmapper = m_segmentMmappers[segment];
 
+    if (!mmapper)
+        return false; // this can happen with the SegmentSplitCommand, where the new segment's transpose is set
+    // even though it's not mapped yet
+
     SEQMAN_DEBUG << "CompositionMmapper::segmentModified(" << segment << ") - mmapper = "
                  << mmapper << endl;
 
