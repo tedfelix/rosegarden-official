@@ -1027,7 +1027,7 @@ void RosegardenGUIApp::slotQuit()
     KMainWindow* w;
     if (memberList) {
 
-        for(w=memberList->first(); w!=0; w=memberList->first()) {
+        for(w=memberList->first(); w!=0; w=memberList->next()) {
             // only close the window if the closeEvent is accepted. If
             // the user presses Cancel on the saveIfModified() dialog,
             // the window and the application stay open.
