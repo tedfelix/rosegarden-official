@@ -1,0 +1,165 @@
+A short evaluation of Logic Audio features regarding track part
+creation and notation edition, and discussion ([[ ... ]] ) of what we
+can do about either implementing these features as is, differently, or
+not at all.
+
+
+----------------------------------------------------------------------
+
+
+Track parts : there are three main pointers : arrow, pen, eraser.
+Others are for cut'n paste (I guess : bar, scissors, glue tube), and others
+I don't know.
+
+[[ I think the different features on the tracks canvas warrant for at
+least two tools, pointer and pencil ]]
+
+The tracks canvas is horizontally graduated by bars/quarters. You
+can move a part with substeps granularity, but can create one
+only at the beginning of a bar (however, holding down the button switches
+to "move" mode).
+
+[[ Not sure it's worth worrying about quarter-granularity substeps at
+this time. I don't like the move mode either. ]]
+
+Track part creation : left-button click with "pen" pointer,
+creates a 1 bar-length part.
+
+[[ The current method is click and drag to extend to the length you
+want. I really find this to be much more intuitive ]]
+
+Part move : left-button click, hold : you can move the part anywhere on
+the tracks canvas, including over an existing part.
+
+[[ Right now you can reorder tracks by manipulating the vertical
+headers, but it only alters the visual presentation, the
+instrument/track correspondence remains unchanged. It would obviously
+be nice to allow moving the tracks from one instrument to another or
+through time. ]]
+
+Part resize : with "arrow" pointer, click on lower corner (left or right),
+drag horiz.
+
+[[ Royally sucks IMHO. There is *zero* visual feedback of what you're
+about to do. The pointer shape doesn't even change as it typically
+does when you're near a window edge and you want to resize it (turns
+into a pair of arrows). ]]
+
+Part deletion : click on it with "eraser" pointer. You erase the whole
+part at once, not just parts of it.
+
+[[ Not sure about this one, I don't find it too intuitive as well. You
+expect the eraser to let you trim a track part to a short length, not
+nuke it to oblivion with a single click. ]]
+
+Part edition : double-click with any pointer. If double-click with
+left-Button, pops up notation view. If with right-button, pops up
+event list.
+
+[[ That's nice, though I'd rather make the disctinction with a
+modifier, keeping right-button for menu. ]]
+
+
+[[ What I propose :
+
+A vector drawing program-like UI (like xfig).
+
+Two pointers, arrow and pencil. Parts are like rectangles, except you
+can't resize them vertically.
+
+The pencil draws new rectangles (click-drag), the arrow moves them
+around (when clicked inside) or extands/shorten them (when clicking on
+the vertical edges).
+
+Double-click pops up notation window.
+Right-btn pops up the usual rmb menu, with edit/delete.
+
+Time granularity is bar.
+
+]]
+
+----------------------------------------------------------------------
+
+Notation edition :
+
+Use the same pointers as track creation. Arrow for moving notes
+around, pencil to add new notes, eraser to erase (duh).
+
+[[ OK with that. ]]
+
+You start with all bars filled with rests. The part may not start
+at the beginning of a bar if it has been moved so on the tracks canvas,
+in which case it starts with a quarter or half note rest instead of a whole
+note rest.
+
+You select which kind of note you want to add on a palette. A note always
+replaces a rest, either partially (add a half note on a whole note rest),
+or it may "eat" into the next rest if there is one (insert a whole note
+over a half-note rest followed by a whole note rest : the whole note is
+splitted into two tied half-notes).
+
+If you hold down the button on insert, a window appears displaying
+the exact note (C4, D#3...) the time, and you can further move the
+note on the staff.
+
+If a note is already present where you want to add one, three cases
+
+- the note is of the same duration as the one you want to add :
+        the new one is chorded with the other
+
+- the note is of shorter duration than the one you want to add :
+        you insert a note of that same duration, even if the
+        one you've selected on the palette is longer
+
+- the note is of longer duration that the one you want to add :
+        it is constrained down to the same duration as the one
+        you're inserting.
+
+If the note you want to insert is longer than the rest it should
+replace, it is constrained down to that rest's duration.
+
+Regarding selection and moving stuff around, the notation behaves
+quite like a drawing program too. You can select a bunch of notes
+(through rectangular selection, e.g. not necessarily all the notes of
+a bar at once but only the highest or lowest ones for instance) and
+move them around, both pitch and time wise. This provides very easy
+transposition.
+
+It seems that this is the only way to insert notes : move a bunch of
+them further in time to make room.
+
+[[ Honestly, I like it. I think treating notes as elements of a
+diagram is simpler than as letters of a text.
+
+Duration constrains are a good way to solve the chord/counterpoint
+related problems. Though it would be nice to provide a better visual
+feedback for it, I don't know how to do it. Changing the type of the
+note pointer to the note you're near works only one way (when the note
+you'll insert will be constrained down), but changing the note type of
+the note you're near... no way (go near a whole note with the quarter
+selected, the whole turns into a quarter - yuck)
+
+]]
+
+
+Note erasing : looks fairly buggy to me. I can't make out any sense
+of it. Sometimes remaining notes change duration after an erase.
+
+[[ Replace erased notes by rests, plain and simple ]]
+
+
+
+----------------------------------------------------------------------
+
+
+Palette : there seem to be a "master" and "slave" palettes. The master
+holds several groups of features (notes, rests, clefs, and various other
+funny looking symbols), each represented by a single pixmap.
+Selecting one adds the feature on the slave palette over the existing ones.
+The slave palette is a bit like a stack or a roll.
+For instance, clicking on the note pixmap on the master adds all the
+notes (from whole to 64th) on the slave. Clicking on the clef adds
+the treble, alto, tenor clef and some more).
+
+[[ I don't think we have enough things to put on the toolbar to worry
+about that yet :-) ]]
