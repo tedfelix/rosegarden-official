@@ -143,10 +143,6 @@ NotationStaff::getClosestElementToCanvasCoords(double cx, int cy,
 {
     LinedStaffCoords layoutCoords = getLayoutCoordsForCanvasCoords(cx, cy);
 
-    kdDebug(KDEBUG_AREA) << "My coords: canvas (" << cx << "," << cy
-			 << "), layout (" << layoutCoords.first << ","
-			 << layoutCoords.second << ")" << endl;
-
     return getClosestElementToLayoutX
 	(layoutCoords.first, clef, key, notesAndRestsOnly, proximityThreshold);
 }
@@ -219,11 +215,6 @@ NotationStaff::getElementUnderCanvasCoords(double cx, int cy,
 					   Rosegarden::Event *&key)
 {
     LinedStaffCoords layoutCoords = getLayoutCoordsForCanvasCoords(cx, cy);
-
-    kdDebug(KDEBUG_AREA) << "My coords: canvas (" << cx << "," << cy
-			 << "), layout (" << layoutCoords.first << ","
-			 << layoutCoords.second << ")" << endl;
-
     return getElementUnderLayoutX(layoutCoords.first, clef, key);
 }
 

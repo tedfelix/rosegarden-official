@@ -1464,16 +1464,16 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc):
     }
 
     QVBox *vbox = makeVBoxMainWidget();
-    QGroupBox *groupBox = new QGroupBox(1, Horizontal,
-                                        i18n("Insert Tempo Change"), vbox);
+    QGroupBox *groupBox = new QGroupBox(1, Horizontal, i18n("Tempo"), vbox);
     QVBox *topBox = new QVBox(groupBox);
 
-    QGrid *labelGrid = new QGrid(2, QGrid::Horizontal, topBox);
+    QGrid *labelGrid = new QGrid(3, QGrid::Horizontal, topBox);
     labelGrid->setMargin(4);
     labelGrid->setSpacing(4);
 
-    QLabel *tempoLabel = new QLabel(i18n("New Tempo value"), labelGrid);
+    QLabel *tempoLabel = new QLabel(i18n("New tempo"), labelGrid);
     m_tempoValueSpinBox = new RosegardenSpinBox(labelGrid);
+    new QLabel(i18n("bpm"), labelGrid);
 
     // create a validator
     TempoValidator *validator = new TempoValidator(1.0, 1000.0, 6, this);
@@ -1487,7 +1487,7 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc):
                                         i18n("Scope"), vbox);
 
     QHBox *scopeHBox = new QHBox(scopeBox);
-    new QLabel(i18n("This Tempo Event will be inserted at "), scopeHBox);
+    new QLabel(i18n("This tempo change will take effect from "), scopeHBox);
     m_tempoTimeLabel = new QLabel(scopeHBox);
 
     // Option Box
@@ -1495,10 +1495,10 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc):
     QGroupBox *optionBox = new QGroupBox(1, Horizontal,
                                         i18n("Options"), vbox);
 
-    m_makeDefaultCheckBox = new QCheckBox(i18n("make this the default tempo"),
+    m_makeDefaultCheckBox = new QCheckBox(i18n("Make this the default tempo"),
                                           optionBox);
     m_deleteOthersCheckBox =
-        new QCheckBox(i18n("remove all other tempo changes"),
+        new QCheckBox(i18n("Remove all other tempo changes"),
                                           optionBox);
     populateTempo();
 }
