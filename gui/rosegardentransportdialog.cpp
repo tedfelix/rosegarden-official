@@ -649,7 +649,7 @@ RosegardenTransportDialog::isExpanded()
 void
 RosegardenTransportDialog::slotEditTempo()
 {
-    emit editTempo();
+    emit editTempo(this);
 }
 
 }

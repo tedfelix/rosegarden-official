@@ -22,9 +22,11 @@
 #include <qstring.h>
 #include <qspinbox.h>
 #include <qlabel.h>
+#include <qvalidator.h>
 
 #include "rosegardentempodialog.h"
 #include "rosegardenguidoc.h"
+#include "widgets.h"
 
 
 namespace Rosegarden
@@ -38,22 +40,25 @@ RosegardenTempoDialog::RosegardenTempoDialog(RosegardenGUIDoc *doc,
 {
     resetFonts();
 
+
     connect((QObject*)OKButton, SIGNAL(released()),
             this, SLOT(slotOK()));
 
     connect((QObject*)CancelButton, SIGNAL(released()),
             this, SLOT(slotCancel()));
 
-    Rosegarden::Composition &comp = m_doc->getComposition();
-    Rosegarden::timeT currentPos = comp.getPosition();
-    double tempo = comp.getTempoAt(currentPos);
-    RealTime currentTime = comp.getElapsedRealTime(currentPos);
+    TempoSpin->setFrameShadow(QFrame::Plain);
+    TempoSpin->setMinValue(1);
+    TempoSpin->setMaxValue(1000);
 
-    QString tempoString;
-    tempoString.sprintf("%4.3f", tempo);
+    // Create a 3 d.p. validator for the spin box
+    //
+    QDoubleValidator *validator = new QDoubleValidator(1.0, 1000.0, 3, this);
+    TempoSpin->setValidator(validator);
 
-    TempoSpin->setSpecialValueText(tempoString);
-    PositionValue->setText(QString("%1.%2 s").arg(currentTime.sec).arg(currentTime.usec));
+    showTempo();
+    showPosition();
+
 }
 
 RosegardenTempoDialog::~RosegardenTempoDialog()
@@ -61,8 +66,34 @@ RosegardenTempoDialog::~RosegardenTempoDialog()
 }
 
 void
+RosegardenTempoDialog::showTempo()
+{
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    Rosegarden::timeT currentPos = comp.getPosition();
+    double tempo = comp.getTempoAt(currentPos);
+
+    QString tempoString;
+    tempoString.sprintf("%4.3f", tempo);
+    TempoSpin->setValue((int)tempo);
+}
+
+void
+RosegardenTempoDialog::showPosition()
+{
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    Rosegarden::timeT currentPos = comp.getPosition();
+    RealTime currentTime = comp.getElapsedRealTime(currentPos);
+
+    PositionValue->setText(QString("%1.%2 s").
+            arg(currentTime.sec).
+            arg(currentTime.usec));
+}
+
+
+void
 RosegardenTempoDialog::slotOK()
 {
+    m_doc->getComposition().setDefaultTempo(TempoSpin->getDoubleValue());
     slotCancel();
 }
 

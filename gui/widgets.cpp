@@ -19,6 +19,8 @@
     COPYING included with this distribution for more information.
 */
 
+#include <iostream>
+
 #include "widgets.h"
 
 void
@@ -58,5 +60,42 @@ RosegardenTristateCheckBox::mouseReleaseEvent(QMouseEvent *)
 RosegardenTristateCheckBox::~RosegardenTristateCheckBox()
 {
 }
+
+RosegardenSpinBox::RosegardenSpinBox(QWidget *parent, const char *name):
+    QSpinBox(parent, name), m_doubleValue(0)
+{
+}
+
+QString
+RosegardenSpinBox::mapValueToText(int value)
+{
+    QString doubleStr;
+
+    // Assume we want to show the precision
+    //
+    if ((int)m_doubleValue != value)
+        m_doubleValue = (double) value;
+
+    doubleStr.sprintf("%4.3f", m_doubleValue);
+
+    //setSpecialValueText(doubleStr);
+
+    return doubleStr;
+}
+
+int
+RosegardenSpinBox::mapTextToValue(bool *ok)
+{
+    double number = text().toDouble();
+
+    if (number)
+    {
+        m_doubleValue = number;
+        return ((int)number);
+    }
+
+    return 120; // default
+}
+
 
 

@@ -599,6 +599,7 @@ public slots:
      * Edit the tempo - called from a Transport signal
      */
     void slotEditTempo();
+    void slotEditTempo(QWidget *parent);
         
 private:
 

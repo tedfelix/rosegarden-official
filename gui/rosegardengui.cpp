@@ -295,7 +295,7 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotEditAllTracks()),
                 actionCollection(), "edit_all_tracks");
 
-    new KAction(i18n("Edit &Tempo"),
+    new KAction(i18n("Edit &Tempo..."),
                 0,
                 this, SLOT(slotEditTempo()),
                 actionCollection(), "edit_tempo");
@@ -441,7 +441,8 @@ void RosegardenGUIApp::setupActions()
     connect(m_transport, SIGNAL(setLoop()), SLOT(slotSetLoop()));
     connect(m_transport, SIGNAL(unsetLoop()), SLOT(slotUnsetLoop()));
 
-    connect(m_transport, SIGNAL(editTempo()), SLOT(slotEditTempo()));
+    connect(m_transport, SIGNAL(editTempo(QWidget*)),
+                         SLOT(slotEditTempo(QWidget*)));
 }
 
 
@@ -1991,12 +1992,21 @@ void RosegardenGUIApp::slotEditToolbars()
 
 void RosegardenGUIApp::slotEditTempo()
 {
+    slotEditTempo(this);
+}
+
+void RosegardenGUIApp::slotEditTempo(QWidget *parent)
+{
     kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotEditTempo" << std::endl;
 
     Rosegarden::RosegardenTempoDialog *tempoDlg = 
-        new Rosegarden::RosegardenTempoDialog(m_doc, this);
+        new Rosegarden::RosegardenTempoDialog(m_doc, parent);
 
     tempoDlg->show();
+
+    // Apply feedback when the dialog closes
+    //
+    connect(tempoDlg, SIGNAL(destroyed()), SLOT(slotEditTempo()));
 }
 
 

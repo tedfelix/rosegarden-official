@@ -22,6 +22,7 @@
 #ifndef _ROSEGARDENTEMPODIALOG_H_
 #define _ROSEGARDENTEMPODIALOG_H_
 
+#include "Event.h"
 #include "rosegardentempo.h"
 
 class RosegardenGUIDoc;
@@ -41,6 +42,9 @@ public:
 
     void resetFont(QWidget *w);
     void resetFonts();
+
+    void showTempo();
+    void showPosition();
 
 public slots:
     void slotOK();

@@ -86,7 +86,7 @@ signals:
     //
     void setLoop();
     void unsetLoop();
-    void editTempo();
+    void editTempo(QWidget *);
 
 private:
     void loadPixmaps();

@@ -22,6 +22,7 @@
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qlabel.h>
+#include <qspinbox.h>
 
 #ifndef _WIDGETS_H_
 #define _WIDGETS_H_
@@ -91,6 +92,28 @@ signals:
     void doubleClicked();
 
 };
+
+// A Combobox that just about handles doubles - you have
+// to set the precision outside of this class if you're
+// using it with Qt designer.  Urch.
+//
+class RosegardenSpinBox : public QSpinBox
+{
+    Q_OBJECT
+public:
+    RosegardenSpinBox(QWidget *parent = 0, const char *name=0);
+
+    double getDoubleValue() const { return m_doubleValue; }
+
+protected:
+    // virtual void valueChange();
+    virtual QString mapValueToText (int value);
+    virtual int mapTextToValue(bool *ok);
+
+signals:
+    double m_doubleValue;
+};
+
 
 
 #endif // _WIDGETS_H_
