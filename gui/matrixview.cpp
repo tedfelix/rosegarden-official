@@ -26,6 +26,10 @@
 #include <kstdaction.h>
 #include <kmessagebox.h>
 
+#include "NotationTypes.h"
+#include "Event.h"
+
+#include "BaseProperties.h"
 #include "matrixview.h"
 #include "rosegardenguidoc.h"
 #include "ktmpstatusmsg.h"
@@ -43,6 +47,8 @@ MatrixCanvasView::~MatrixCanvasView()
 //----------------------------------------------------------------------
 
 MatrixVLayout::MatrixVLayout()
+    : m_pitchScaleFactor(10.0),
+      m_staffIdScaleFactor(100.0)
 {
 }
 
@@ -58,8 +64,12 @@ void MatrixVLayout::resetStaff(StaffType&)
 {
 }
 
-void MatrixVLayout::scanStaff(MatrixVLayout::StaffType& staff)
+void MatrixVLayout::scanStaff(MatrixVLayout::StaffType& staffBase)
 {
+    MatrixStaff& staff = dynamic_cast<MatrixStaff&>(staffBase);
+
+    using Rosegarden::BaseProperties::PITCH;
+
     MatrixElementList *notes = staff.getViewElementList();
 
     MatrixElementList::iterator from = notes->begin();
@@ -70,8 +80,15 @@ void MatrixVLayout::scanStaff(MatrixVLayout::StaffType& staff)
 
         MatrixElement *el = (*i);
 
+        if (!el->isNote()) continue; // notes only
+        
+        int pitch = el->event()->get<Rosegarden::Int>(PITCH);
+
+        el->setLayoutY(pitch * m_pitchScaleFactor +
+                       staff.getId() * m_staffIdScaleFactor);
+        el->setHeight(m_pitchScaleFactor);
     }
-    
+
 }
 
 void MatrixVLayout::finishLayout()
@@ -146,27 +163,31 @@ void MatrixHLayout::finishLayout()
 
 MatrixElement::MatrixElement(Rosegarden::Event *event)
     : Rosegarden::ViewElement(event),
-      m_canvasRect(0),
-      m_xOffset(0.0),
-      m_yOffset(0.0)
+      m_canvasRect(new QCanvasRectangle(0))
 {
 }
 
 MatrixElement::~MatrixElement()
 {
+    m_canvasRect->hide();
     delete m_canvasRect;
 }
 
-void MatrixElement::createCanvasRect(QCanvas* c)
+void MatrixElement::setCanvas(QCanvas* c)
 {
-    delete m_canvasRect;
+    if (!m_canvasRect->canvas()) {
+        
+        m_canvasRect->setCanvas(c);
+        m_canvasRect->setBrush(Qt::blue);
+        m_canvasRect->show();
 
-    m_canvasRect = new QCanvasRectangle(m_rect, c);
-
-    m_canvasRect->setBrush(Qt::blue);
-    m_canvasRect->show();
+    }
 }
 
+bool MatrixElement::isNote() const
+{
+    return event()->isa(Rosegarden::Note::EventType);
+}
 
 //----------------------------------------------------------------------
 MatrixStaff::MatrixStaff(QCanvas* c, Rosegarden::Segment* segment,
@@ -185,7 +206,7 @@ void MatrixStaff::renderElements(MatrixElementList::iterator from,
         
         MatrixElement* el = (*i);
 
-        el->createCanvasRect(m_canvas);
+        el->setCanvas(m_canvas);
     }
 }
 
@@ -277,6 +298,8 @@ bool MatrixView::applyLayout()
         m_hLayout->scanStaff(*m_staffs[i]);
         m_vLayout->scanStaff(*m_staffs[i]);
     }
+
+    return true;
 }
 
 

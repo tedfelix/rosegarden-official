@@ -43,7 +43,7 @@ public:
 
     virtual ~MatrixElement();
 
-    void createCanvasRect(QCanvas* c);
+    void setCanvas(QCanvas* c);
 
     /**
      * Returns the X coordinate of the element, as computed by the
@@ -52,7 +52,7 @@ public:
      *
      * @see getEffectiveX()
      */
-    double getLayoutX() { return m_rect.x(); }
+    double getLayoutX() { return m_canvasRect->x(); }
 
     /**
      * Returns the Y coordinate of the element, as computed by the
@@ -61,32 +61,35 @@ public:
      *
      * @see getEffectiveY()
      */
-    double getLayoutY() { return m_rect.y(); }
+    double getLayoutY() { return m_canvasRect->y(); }
 
     /**
      * Sets the X coordinate which was computed by the layout engine
      * @see getLayoutX()
      */
-    void setLayoutX(double x) { m_rect.setX(int(x)); }
+    void setLayoutX(double x) { m_canvasRect->setX(x); }
 
     /**
      * Sets the Y coordinate which was computed by the layout engine
      * @see getLayoutY()
      */
-    void setLayoutY(double y) { m_rect.setY(int(y)); }
+    void setLayoutY(double y) { m_canvasRect->setY(y); }
 
-    void setWidth(double w)   { m_rect.setWidth(int(w)); }
+    /**
+     * Sets the width of the rectangle computed by the layout engine
+     */
+    void setWidth(int w)   { m_canvasRect->setSize(m_canvasRect->height(), w); }
 
-    void setXOffset(double x) { m_xOffset = x; }
-    void setYOffset(double y) { m_yOffset = y; }
+    /**
+     * Sets the height of the rectangle computed by the layout engine
+     */
+    void setHeight(int h)   { m_canvasRect->setSize(h, m_canvasRect->width()); }
+
+    /// Returns true if the wrapped event is a note
+    bool isNote() const;
 
 protected:
     QCanvasRectangle* m_canvasRect;
-
-    QRect m_rect;
-
-    double m_xOffset;
-    double m_yOffset;
 };
 
 
@@ -134,6 +137,9 @@ public:
      */
     virtual void finishLayout();
 
+protected:
+    double m_pitchScaleFactor;
+    double m_staffIdScaleFactor;
 };
 
 class MatrixHLayout : public Rosegarden::HorizontalLayoutEngine<MatrixElement>
