@@ -233,6 +233,15 @@ Studio::getInstrumentFromList(int index)
 
     for (it = m_devices.begin(); it != m_devices.end(); it++)
     {
+        MidiDevice *midiDevice = dynamic_cast<MidiDevice*>(*it);
+
+        if (midiDevice)
+	{
+          // skip read-only devices
+          if (midiDevice->getDirection() == MidiDevice::ReadOnly)
+              continue;
+        }
+
         list = (*it)->getPresentationInstruments();
 
         for (iit = list.begin(); iit != list.end(); iit++)

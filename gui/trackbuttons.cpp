@@ -664,8 +664,12 @@ TrackButtons::populateInstrumentPopup()
 
             // Check for sub-ordering
             //
+#ifdef EXPERIMENTAL_ALSA_DRIVER
+	    int subOrderDepth = 0;
+#else
             int subOrderDepth =
                 studio.getDevice(devId)->getPortNumbers().size();
+#endif
 
             if (subOrderDepth > 1)
             {
@@ -753,11 +757,15 @@ TrackButtons::populateInstrumentPopup()
 void
 TrackButtons::slotInstrumentPopupActivated(int item)
 {
+    RG_DEBUG << "TrackButtons::slotInstrumentPopupActivated " << item << endl;
+    
     Rosegarden::Composition &comp = m_doc->getComposition();
     Rosegarden::Studio &studio = m_doc->getStudio();
 
     Rosegarden::Instrument *inst = studio.getInstrumentFromList(item);
 
+    RG_DEBUG << "TrackButtons::slotInstrumentPopupActivated: instrument " << inst << endl;
+    
     if (inst != 0)
     {
         Rosegarden::Track *track = comp.getTrackByPosition(m_popupItem);

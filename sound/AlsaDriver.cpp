@@ -322,6 +322,9 @@ AlsaDriver::generateInstruments()
     m_instruments.clear();
     m_devices.clear();
     m_alsaPorts.clear();
+#ifdef EXPERIMENTAL_ALSA_DRIVER
+    m_devicePortMap.clear();
+#endif
 
     std::cout << std::endl << "  ALSA Client information:"
               << std::endl << std::endl;
@@ -378,10 +381,17 @@ AlsaDriver::generateInstruments()
 
                 // Generate a unique name using the client id
                 //
+#ifndef EXPERIMENTAL_ALSA_DRIVER
                 char clientId[10];
                 sprintf(clientId,
                         "%d ",
                         snd_seq_port_info_get_client(pinfo));
+#else
+		char clientId[20];
+		sprintf(clientId, "%d:%d ",
+			snd_seq_port_info_get_client(pinfo),
+			snd_seq_port_info_get_port(pinfo));
+#endif
 
                 std::string fullClientName = 
                     std::string(snd_seq_client_info_get_name(cinfo));
@@ -494,8 +504,12 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
 {
     // only increment device number if we're on a new client
     //
+#ifdef EXPERIMENTAL_ALSA_DRIVER
+    m_deviceRunningId++;
+#else
     if (client != m_currentPair.first && m_currentPair.first != -1)
         m_deviceRunningId++;
+#endif
  
     AlsaPort *alsaInstr;
     MappedInstrument *instr;
@@ -570,6 +584,11 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
 
             m_instruments.push_back(instr);
         }
+
+#ifdef EXPERIMENTAL_ALSA_DRIVER
+	cout << "AlsaDriver: creating device id " << m_deviceRunningId << " for client " << client << ", port " << port << ", name " << name << endl;
+	m_devicePortMap[m_deviceRunningId] = ClientPortPair(client, port);
+#endif
 
         MappedDevice *device =
                 new MappedDevice(m_deviceRunningId,
@@ -2143,6 +2162,27 @@ AlsaDriver::getFirstDestination(bool duplex)
 ClientPortPair
 AlsaDriver::getPairForMappedInstrument(InstrumentId id)
 {
+#ifdef EXPERIMENTAL_ALSA_DRIVER
+    MappedInstrument *instrument = getMappedInstrument(id);
+    if (instrument)
+    {
+	DeviceId device = instrument->getDevice();
+	DevicePortMap::iterator i = m_devicePortMap.find(device);
+	if (i != m_devicePortMap.end())
+	{
+	    return i->second;
+	}
+	else
+	{
+	    cerr << "WARNING: AlsaDriver::getPairForMappedInstrument: Device id " << device << " (from instrument id " << id << ") not in m_devicePortMap, falling through" << endl;
+	}
+    }
+    else
+    {
+	cerr << "WARNING: AlsaDriver::getPairForMappedInstrument: couldn't find instrument for id " << id << ", falling through" << endl;
+    }
+#endif
+
     ClientPortPair matchPair(-1, -1);
 
     std::vector<AlsaPort*>::iterator it;

@@ -320,6 +320,11 @@ private:
 
 #endif // HAVE_LADSPA
 
+#ifdef EXPERIMENTAL_ALSA_DRIVER
+    typedef std::map<DeviceId, ClientPortPair> DevicePortMap;
+    DevicePortMap m_devicePortMap;
+#endif
+
 };
 
 }

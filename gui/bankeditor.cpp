@@ -686,6 +686,13 @@ BankEditorDialog::initDialog()
         {
             Rosegarden::MidiDevice* midiDevice = dynamic_cast<Rosegarden::MidiDevice*>(*it);
             
+	    if (midiDevice)
+	    {
+		// skip read-only devices
+		if (midiDevice->getDirection() == Rosegarden::MidiDevice::ReadOnly)
+		    continue;
+	    }
+
             m_deviceList.push_back(midiDevice->getName());
             QString itemName = strtoqstr(midiDevice->getName());
 
