@@ -87,7 +87,7 @@ public:
     // Any mods on the GUI are sent only through this method.
     //
     virtual void setMappedInstrument(int type,
-                                     short int channel,
+                                     unsigned char channel,
                                      unsigned int id) = 0;
 
 

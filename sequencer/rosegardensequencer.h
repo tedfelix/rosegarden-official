@@ -144,7 +144,9 @@ public slots:
     //
     virtual void stop();
 
-    virtual void setMappedInstrument(int type, short int channel,
+    // Set a MappedInstrument at the Sequencer
+    //
+    virtual void setMappedInstrument(int type, unsigned char channel,
                                      unsigned int id);
 
 

@@ -323,6 +323,10 @@ SequenceManager::play()
     // This check may throw an exception
     checkSoundSystemStatus();
 
+    // Align Instrument lists and send initial program changes
+    //
+    preparePlayback();
+
     // make sure we toggle the play button
     // 
     if (m_transport->PlayButton->state() == QButton::Off)
@@ -926,6 +930,40 @@ SequenceManager::insertMetronomeClicks(const timeT &sliceStart,
         }
     }
 }
+
+// Send Instrument list to Sequener and ensure that initial program
+// changes follow them.  Sending the instruments ensures that we have
+// channels available on the Sequencer and then the program changes
+// are sent to those specific channel (referenced by Instrument ID)
+//
+// 
+void
+SequenceManager::preparePlayback()
+{
+    Rosegarden::Studio &studio = m_doc->getStudio();
+
+    Rosegarden::InstrumentList list = studio.getInstruments();
+
+    InstrumentList::iterator it = list.begin();
+    for (; it != list.end(); it++)
+    {
+        QByteArray data;
+        QDataStream streamOut(data, IO_WriteOnly);
+
+        streamOut << (*it)->getType();
+        streamOut << (*it)->getMidiChannel();
+        streamOut << (*it)->getID();
+
+        if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
+                                      ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                 "setMappedInstrument(int, unsigned char, unsigned int)", data))
+        {
+            throw(i18n("Failed to contact Rosegarden sequencer"));
+        }
+    }
+}
+
+
 
 
 }

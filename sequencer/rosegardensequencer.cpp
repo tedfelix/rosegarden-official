@@ -624,7 +624,7 @@ RosegardenSequencerApp::clearAllAudioFiles()
 }
 
 void
-RosegardenSequencerApp::setMappedInstrument(int type, short int channel,
+RosegardenSequencerApp::setMappedInstrument(int type, unsigned char channel,
                                             unsigned int id)
 {
     // Convert the types
@@ -650,6 +650,12 @@ RosegardenSequencerApp::setMappedInstrument(int type, short int channel,
     // else create
     m_instruments.push_back(
             new Rosegarden::MappedInstrument (mType, mChannel, mID));
+
+    std::cout << "RosegardenSequencerApp::setMappedInstrument()"
+              << " - type = " << mType << " : "
+              << "channel = " << (int)mChannel << " : "
+              << "id = " << mID << endl;
+
 }
 
 

@@ -85,6 +85,11 @@ public:
     //
     void checkSoundSystemStatus();
 
+    // Send prgoram changes and align Instrument lists before playback
+    // starts.
+    //
+    void preparePlayback();
+
     // Check and set sequencer status
     void setTransportStatus(const TransportStatus &status);
     TransportStatus getTransportStatus() const { return m_transportStatus; }
