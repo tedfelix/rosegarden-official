@@ -1,6 +1,10 @@
 Current Task list
 ======================================
 
+- look at lazy note pixmap rendering again (see
+gui/qcanvassimplesprite.h r1.18, qcanvassimplesprite.cpp r1.20,
+notationstaff.cpp r1.146).
+
 - optimize segment overlap shading
 
 - guitar chord display
