@@ -105,6 +105,7 @@ NotationStaff::setLegatoDuration(Rosegarden::timeT duration)
 void NotationStaff::insertTimeSignature(double layoutX,
 					const TimeSignature &timeSig)
 {
+    m_npf->setSelected(false);
     QCanvasPixmap *pixmap =
 	new QCanvasPixmap(m_npf->makeTimeSigPixmap(timeSig));
     QCanvasSimpleSprite *sprite = new QCanvasSimpleSprite(pixmap, m_canvas);

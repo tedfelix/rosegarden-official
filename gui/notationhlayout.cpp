@@ -889,7 +889,6 @@ NotationHLayout::positionRest(StaffType &staff,
 
     long delta = (((int)bdi->idealWidth - bdi->fixedWidth) *
 		  getSpacingDuration(staff, itr)) /
-        //!!! not right for partial bar?
         timeSignature.getBarDuration();
 
     // Situate the rest somewhat further into its allotted space.  Not
@@ -945,7 +944,6 @@ NotationHLayout::positionChord(StaffType &staff,
 
     long delta = (((int)bdi->idealWidth - bdi->fixedWidth) *
 		  getSpacingDuration(staff, itr)) /
-        //!!! not right for partial bar?
         timeSignature.getBarDuration();
 
     int noteWidth = m_npf.getNoteBodyWidth();
@@ -1020,7 +1018,7 @@ NotationHLayout::positionChord(StaffType &staff,
 	int pitch = note->event()->get<Int>(PITCH);
 	if (tiedForwards) {
 	    note->event()->setMaybe<Int>(TIE_LENGTH, 0);
-	    tieMap[pitch] = itr;
+	    tieMap[pitch] = chord[i];
 	} else {
 	    note->event()->unset(TIE_LENGTH);
 	}
