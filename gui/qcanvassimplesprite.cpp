@@ -122,9 +122,7 @@ QCanvasNotationSprite::QCanvasNotationSprite(NotationElement& n,
                                              QPixmap* pixmap,
                                              QCanvas* canvas)
     : QCanvasSimpleSprite(pixmap, canvas),
-      m_notationElement(n),
-      m_pixmapFactory(0),
-      m_pixmapParameters(Rosegarden::Note::Crotchet, 0)
+      m_notationElement(n)
 {
 }
 
@@ -132,59 +130,14 @@ QCanvasNotationSprite::QCanvasNotationSprite(NotationElement& n,
                                              QCanvasPixmap* pixmap,
                                              QCanvas* canvas)
     : QCanvasSimpleSprite(pixmap, canvas),
-      m_notationElement(n),
-      m_pixmapFactory(0),
-      m_pixmapParameters(Rosegarden::Note::Crotchet, 0)
+      m_notationElement(n)
 
-{
-}
-
-QCanvasNotationSprite::QCanvasNotationSprite(NotationElement& n,
-                                             NotePixmapParameters param,
-                                             NotePixmapFactory* factory,
-                                             QCanvas* canvas)
-    : QCanvasSimpleSprite(canvas),
-      m_notationElement(n),
-      m_pixmapFactory(factory),
-      m_pixmapParameters(param)
 {
 }
 
 QCanvasNotationSprite::~QCanvasNotationSprite()
 {
 }
-
-void QCanvasNotationSprite::draw(QPainter &painter)
-{
-    // lazy rendering
-    //
-    if (! m_pixmapArray) {
-        makePixmap();
-    }
-    
-    QCanvasSimpleSprite::draw(painter);
-}
-
-QRect QCanvasNotationSprite::boundingRect() const
-{
-    if (! m_pixmapArray) {
-        QCanvasNotationSprite* fakeThis = const_cast<QCanvasNotationSprite*>(this);
-
-        fakeThis->makePixmap();
-    }
-
-    return QCanvasSimpleSprite::boundingRect();
-}
-
-
-void QCanvasNotationSprite::makePixmap()
-{
-    QCanvasPixmap pixmap = m_pixmapFactory->makeNotePixmap(m_pixmapParameters);
-    
-    m_pixmapArray = makePixmapArray(new QCanvasPixmap(pixmap));
-    setSequence(m_pixmapArray);
-}
-
 
 //////////////////////////////////////////////////////////////////////
 

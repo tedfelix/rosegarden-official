@@ -36,6 +36,8 @@ public:
     QCanvasSimpleSprite(QPixmap*, QCanvas*);
     QCanvasSimpleSprite(QCanvasPixmap*, QCanvas*);
     QCanvasSimpleSprite(const QString &pixmapfile, QCanvas*);
+
+    // For lazy pixmap rendering, when we get around looking at it
     QCanvasSimpleSprite(QCanvas*);
 
     virtual ~QCanvasSimpleSprite();
@@ -62,25 +64,15 @@ class QCanvasNotationSprite : public QCanvasSimpleSprite
 public:
     QCanvasNotationSprite(NotationElement&, QPixmap*, QCanvas*);
     QCanvasNotationSprite(NotationElement&, QCanvasPixmap*, QCanvas*);
-    QCanvasNotationSprite(NotationElement&, NotePixmapParameters,
-                          NotePixmapFactory*, QCanvas*);
 
     virtual ~QCanvasNotationSprite();
     
     NotationElement& getNotationElement() { return m_notationElement; }
 
-    virtual void draw(QPainter &painter);
-    virtual QRect boundingRect() const;
-
 protected:
-    void makePixmap();
-
     //--------------- Data members ---------------------------------
 
     NotationElement& m_notationElement;
-    NotePixmapFactory* m_pixmapFactory;
-    NotePixmapParameters m_pixmapParameters;
-    
 };
 
 /**
