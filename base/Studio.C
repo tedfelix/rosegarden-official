@@ -518,11 +518,6 @@ Studio::getSegmentName(InstrumentId id)
                     if ((*iit)->sendsProgramChange())
                     {
 			return (*iit)->getProgramName();
-//!!!                        return midiDevice->
-//                            getProgramName((*iit)->getPercussion(),
-//					   (*iit)->getMSB(),
-//                                           (*iit)->getLSB(),
-//                                           (*iit)->getProgramChange());
                     }
                     else
                     {

@@ -931,6 +931,10 @@ SetLyricsCommand::~SetLyricsCommand()
 void
 SetLyricsCommand::execute()
 {
+    // This and LyricEditDialog::unparse() are opposites that will
+    // need to be kept in sync with any changes to one another.  (They
+    // should really both be in a common lyric management class.)
+
     // first remove old lyric events
     
     Segment::iterator i = m_segment->begin();
@@ -979,7 +983,9 @@ SetLyricsCommand::execute()
 	    while (m_segment->isBeforeEndMarker(i) &&
 		   (*i)->getAbsoluteTime() < barRange.second &&
 		   (!(*i)->isa(Note::EventType) ||
-		    (*i)->getNotationAbsoluteTime() <= laterThan)) ++i;
+		    (*i)->getNotationAbsoluteTime() <= laterThan ||
+		    ((*i)->has(TIED_BACKWARD) &&
+		     (*i)->get<Rosegarden::Bool>(TIED_BACKWARD)))) ++i;
 
 	    timeT time = m_segment->getEndMarkerTime();
 	    timeT notationTime = time;

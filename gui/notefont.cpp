@@ -967,7 +967,7 @@ NoteFont::~NoteFont()
 bool
 NoteFont::getStemThickness(unsigned int &thickness) const
 {
-    thickness = 1;
+    thickness = m_size/9 + 1;
     return m_fontMap.getStemThickness(m_size, thickness);
 }
 

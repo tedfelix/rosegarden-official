@@ -626,8 +626,6 @@ public:
 
     virtual ~TransformsMenuInterpretCommand();
 
-    //!!! might be nice to get a name based on the interpretations
-    // applied as well
     static QString getGlobalName() { return i18n("&Interpret..."); }
     
 protected:

@@ -3367,8 +3367,9 @@ LyricEditDialog::LyricEditDialog(QWidget *parent,
 void
 LyricEditDialog::unparse()
 {
-    // This code and SetLyricsCommand::execute() are opposites that will
-    // need to be kept in sync with any changes in one another
+    // This and SetLyricsCommand::execute() are opposites that will
+    // need to be kept in sync with any changes in one another.  (They
+    // should really both be in a common lyric management class.)
 
     Rosegarden::Composition *comp = m_segment->getComposition();
 
@@ -3383,9 +3384,6 @@ LyricEditDialog::unparse()
     for (Segment::iterator i = m_segment->begin();
 	 m_segment->isBeforeEndMarker(i); ++i) {
 
-	//!!! should ignore tied-back notes, here and in parse()
-	// (and are we doing the right thing with chords yet?)
-	
 	bool isNote = (*i)->isa(Note::EventType);
 	bool isLyric = false;
 	
@@ -3397,6 +3395,10 @@ LyricEditDialog::unparse()
 		    isLyric = true;
 		}
 	    }
+	} else {
+	    if ((*i)->has(Rosegarden::BaseProperties::TIED_BACKWARD) &&
+		(*i)->get<Bool>(Rosegarden::BaseProperties::TIED_BACKWARD))
+		continue;
 	}
 
 	if (!isNote && !isLyric) continue;

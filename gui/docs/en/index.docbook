@@ -432,47 +432,99 @@
 	</para>
 
     <para>
-    The segment parameter box allows you to adjust the following paramters:
+    The segment parameter box allows you to modify some aspects of the
+    selected segments.  If a single segment is currently selected, its
+    parameters will be shown in the segment parameter box and can be
+    edited there.  If several segments are selected, the parameter box
+    will only show the current values where they are the same for all
+    of the selected segments -- but you can still edit them, and your
+    changes will apply to the whole selection.
 
     <variablelist>
      <varlistentry>
       <term>Label</term>
        <listitem>
-       <para> The label segment parameter allows you to view or modify
-       the label of the currently selected segments.</para>
+       <para>Shows the label of the selected segment (or segments, if
+       they all have the same label).  Click the "..." button to edit
+       the label.</para>
       </listitem>
      </varlistentry>
-
+     
      <varlistentry>
       <term>Repeat</term>
        <listitem>
-       <para>To repeat the currently selected segments for the entire
-       length of the composition, click on the repeat checkbox.  To
-       turn off repeat, un-check the checkbox.</para>
+       <para>Switches repeat on or off for the selected segments.  A
+       repeating segment will repeat until the start of the following
+       segment on the same track, or until the end of the composition
+       if there is no following segment.</para>
 
-       <para>When repeat is turned on, you will see a ghosted view of
-       the selected segments starting from the end of the selected  
-       segments.</para>
+       <para>The repeated parts of a repeating segment are shown on
+       the main canvas in a fainter colour than the original segment.
+       You can turn them into real editable copies of the original
+       segment either by using the "Turn Repeats into Copies" option
+       on the Segments menu, or by double-clicking on the individual
+       repeating blocks to edit them directly.</para>
       </listitem>
      </varlistentry>
 
      <varlistentry>
       <term>Quantize</term>
-       <listitem><para>To do...</para>
+       <listitem>
+		<para>
+		  Shows the quantization setting for the selected
+		  segments.  You can change this to quickly quantize
+		  the start times of all their notes.  For more
+		  advanced quantization, use the Quantize function on
+		  the Segments menu.
+		</para>
       </listitem>
      </varlistentry>
 
      <varlistentry>
       <term>Transpose</term>
        <listitem>
-       <para>To do...</para>
+       <para>Shows the transposition (in semitones) currently applied
+       to the selected segments.  This transposition is applied when
+       the segment is played, and is not shown in the notes displayed
+       in the matrix, notation or event list editors.  You can use
+       this to quickly change the pitch of part or all of a composition.</para>
       </listitem>
      </varlistentry>
 
      <varlistentry>
       <term>Delay</term>
        <listitem>
-       <para>To do...</para>
+       <para>Shows the delay currently in effect on the selected
+       segments.  You can set a delay here in order to cause an entire
+       segment to play later than written.  This delay is applied when
+       the segment is played, and is not shown in the notes displayed
+       in the matrix, notation or event list editors.
+       </para>
+		<para>
+		  You can set a delay either in musical time (by
+		  choosing a note duration from the delay dropdown),
+		  in which time the exact delay will depend on the
+		  tempo, or in real time (by choosing a time in
+		  milliseconds from the dropdown).
+		</para>
+      </listitem>
+     </varlistentry>
+
+     <varlistentry>
+      <term>Colour</term>
+       <listitem>
+       <para>Shows the colour being used for the display of the
+       selected segments.  You can choose another colour from the
+       dropdown, or choose the "Add New Colour" option if you want a
+       colour not in the dropdown.
+       </para>
+		<para>
+		  You can also manage and rename colours using the
+		  "Edit Document Properties" function on the Edit menu
+		  (choose the Colour page on the document properties
+		  dialog).  The modified colour palette will be saved
+		  with the composition in the Rosegarden file.
+		</para>
       </listitem>
      </varlistentry>
      
@@ -1020,6 +1072,16 @@
       <sect2 id="matrix-editing">
 	<title>Moving and copying notes</title>
 	<para>
+	  You can move notes in both time and pitch on the matrix
+	  editor by either clicking and dragging them with the Move
+	  tool, or selecting them and then dragging them with the
+	  Select tool.
+	</para>
+	<para>
+	  To copy notes, select them and then use the standard copy
+	  and paste functions.  After the paste the pasted notes will
+	  be selected instead, and you can then drag them wherever you
+	  need them.
 	</para>
       </sect2>
 
@@ -3955,6 +4017,24 @@
       directory, and a number of samples are included with the
       distribution.</para>
 
+      <para>You can also use these mapping files to define new
+      pixmap-based fonts, in which every shape in a particular size is
+      loaded from a separate pixmap file.  The two standard notation
+      fonts supplied with Rosegarden-4 are pixmap fonts defined in
+      exactly this way.
+      </para>
+
+      <para>It is even possible to define a notation font as using one
+      or more scalable system fonts, augmented with pixmaps for
+      particular sizes or for characters not found in the scalable
+      fonts.  This is because most of the mapping file format is the
+      same for scalable and pixmap fonts, and where there are
+      different elements for the different sorts of fonts, it is
+      usually possible to include both of them.  Rosegarden will
+      usually use pixmaps where available and scalable fonts
+      otherwise.
+      </para>
+
       <sect2 id="developers-note-fonts-mapping-format">
 	<title>Notation font mapping XML format</title>
 
@@ -4065,13 +4145,165 @@
 	<sect3 id="developers-note-fonts-mapping-format-font-requirements">
 	  <title>font-requirements</title>
 	  <para>
+	    This element is only relevant for scalable fonts.  It is
+	    used to specify that this font should only be offered if
+	    certain system fonts are available, as well as to
+	    associate IDs with those system fonts to refer to in the
+	    "font-symbol-map" element.  This scheme is used to decide
+	    which notation fonts should be offered to the user, and
+	    also allows you to compose a Rosegarden notation font from
+	    more than one system font if desired.
+	  </para>
+	  <para>The "font-requirements" element should contain a list
+	  of "font-requirement" child elements.  Each of these has two
+	  attributes: "font-id", containing a numerical ID of your
+	  choice for reference elsewhere in the file, and either a
+	  "name" or a "names" attribute.  If "name" is provided, it
+	  will be used as the name of a single system font to be
+	  associated with the font id; if "names" is provided, it will
+	  be treated as a comma-separated list of system fonts and the
+	  first one found will be associated with the font id.
 	  </para>
 	</sect3>
 
 	<sect3 id="developers-note-fonts-mapping-format-font-sizes">
 	  <title>font-sizes</title>
-	  <para>
+
+	  <para>The "font-sizes" element specifies which notation font
+	  sizes are available, and how the nominal font size relates
+	  to the dimensions of non-font elements such as stems, staff
+	  lines and beams.  The "size" of a notation font is assumed
+	  to be the distance in pixels between staff lines, or more
+	  precisely, the height of a conventional note head that
+	  completely fills the space between lines: the size therefore
+	  does not include the thickness of either of the neighbouring
+	  staff lines.
 	  </para>
+
+	  <para>
+	    There are two possible child elements of "font-sizes":
+	    "font-scale" and "font-size".  Their use depends on the
+	    type of font being described.</para>
+
+	  <para>
+	    For pixmap (non-scalable) fonts, the "font-sizes" element
+	    should contain a list of "font-size" elements, one for
+	    each size of pixmaps available.  The pixmaps themselves
+	    must be installed in the
+	    fonts/&lt;font-name&gt;/&lt;font-size&gt; subdirectory of
+	    the Rosegarden installation directory, where
+	    &lt;font-name&gt; is the name of the font (as specified in
+	    the "rosegarden-font-encoding" element at the start of the
+	    mapping file), or a lower-case version of the name, and
+	    &lt;font-size&gt; is the pixel size of the font.  A font
+	    size will only be made available to the user if it has an
+	    entry in the "font-sizes" list and the pixmap directory is
+	    found.
+	  </para>
+	  
+	  <para>
+	    For scalable fonts, the "font-sizes" element should
+	    contain one "font-scale" element that defines the
+	    relationships between font and non-font elements in a
+	    general way, and also defines the relationship between
+	    Rosegarden's nominal font size and the size of the
+	    corresponding system font.  If this "font-scale" element
+	    is found, then Rosegarden will assume the font is
+	    available in any size.  You can however still include one
+	    or more "font-size" elements to define precise proportions
+	    for any particular size for which the general proportions
+	    do not quite work correctly, for example because of
+	    rounding error.
+	  </para>
+
+	  <para>
+	    The attributes of "font-scale" and "font-size" are very
+	    similar.  The main difference is that all attributes of
+	    "font-scale" are floating-point values relative to the
+	    font size, where 1.0 is the base font size (i.e. the
+	    distance between staff lines), whereas attributes of
+	    "font-size" are integer pixel values.  The attributes
+	    available are as follows.  (Those marked "optional" have
+	    vaguely sensible defaults, so it's a good idea to try not
+	    setting them first.)
+	  </para>
+	    
+	  <variablelist>
+
+	  <varlistentry>
+	    <term>note-height</term>
+	    <listitem>
+	      <para>This attribute is only available for the
+	      "font-size" element, and it is mandatory in that
+	      element.  It defines the base size of font to which the
+	      other attributes in this element apply, and a size that
+	      will be offered to the user and used when looking up
+	      pixmaps for this font.</para>
+	    </listitem>
+	  </varlistentry>
+
+	  <varlistentry>
+	    <term>font-height</term>
+	    <listitem>
+	      <para>May be used in either "font-size" or "font-scale".
+	      This is only relevant for scalable fonts, but is
+	      mandatory for them if used in the "font-scale" element.
+	      This defines the size of the system font used to draw a
+	      given size of notation font.</para>
+	    </listitem>
+	  </varlistentry>
+
+	  <varlistentry>
+	    <term>beam-thickness</term>
+	    <listitem>
+	      <para>Optional.  Defines the thickness of a beam.</para>
+	    </listitem>
+	  </varlistentry>
+
+	  <varlistentry>
+	    <term>staff-line-thickness</term>
+	    <listitem>
+	      <para>Optional.  Defines the thickness of a staff line.</para>
+	    </listitem>
+	  </varlistentry>
+
+	  <varlistentry>
+	    <term>stem-thickness</term>
+	    <listitem>
+	      <para>Optional.  Defines the thickness of a note stem.</para>
+	    </listitem>
+	  </varlistentry>
+
+	  <varlistentry>
+	    <term>flag-spacing</term>
+	    <listitem>
+	      <para>Optional.  Defines the gap between note flags in
+	      cases where multiple flags are drawn by drawing a single
+	      flag several times.</para>
+	    </listitem>
+	  </varlistentry>
+
+	  <varlistentry>
+	    <term>border-x</term>
+	    <listitem>
+	      <para>Optional.  Specifies that the note head pixmaps
+	      have a fixed area to left and right that should not be
+	      considered part of the note head.  This attribute gives
+	      the thickness of that area.</para>
+	    </listitem>
+	  </varlistentry>
+
+	  <varlistentry>
+	    <term>border-y</term>
+	    <listitem>
+	      <para>Optional.  Specifies that the note head pixmaps
+	      have a fixed area to top and bottom that should not be
+	      considered part of the note head.  This attribute gives
+	      the thickness of that area.</para>
+	    </listitem>
+	  </varlistentry>
+
+	  </variablelist>
 	</sect3>
 
 	<sect3 id="developers-note-fonts-mapping-format-font-symbol-map">
