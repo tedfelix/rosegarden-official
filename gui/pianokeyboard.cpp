@@ -27,7 +27,7 @@
 PianoKeyboard::PianoKeyboard(QSize keySize, QWidget *parent,
                              const char* name, WFlags f)
     : QWidget(parent, name, f),
-      m_keySize(48, 18), // keySize),
+      m_keySize(48, 19), // keySize),
       m_blackKeySize(24, 9),
       m_nbKeys(88)
 {
@@ -49,13 +49,49 @@ void PianoKeyboard::paintEvent(QPaintEvent*)
 {
     QPainter paint(this);
 
-    QPoint pos(0, 0);
-    unsigned int posInOctave = 0;
+    QPoint pos(0, 4);
 
-    for(unsigned int i = 0; i < m_nbKeys; ++i) {
+    // Draw 1st white key
+    QRect firstWhiteKeyRect(pos, m_keySize);
+
+    firstWhiteKeyRect.setHeight(firstWhiteKeyRect.height() -
+                                m_blackKeySize.height() / 2);
+
+    paint.drawRect(firstWhiteKeyRect);
+
+    // Draw 1st black key
+    paint.save();
+
+    paint.setBrush(colorGroup().foreground());
+
+    QPoint bPos = pos;
+
+    bPos.setY(bPos.y() + firstWhiteKeyRect.height() - m_blackKeySize.height() / 2 - 1);
+            
+    paint.drawRect(QRect(bPos, m_blackKeySize));
+    
+    paint.restore();
+
+
+    // Draw the rest
+    pos.setY(pos.y() + firstWhiteKeyRect.height() - 1);
+
+    unsigned int posInOctave = 1;
+
+    for(unsigned int i = 1; i < m_nbKeys; ++i) {
         posInOctave = i % 7;
 
-        paint.drawRect(QRect(pos, m_keySize));
+        QRect whiteKeyRect(pos, m_keySize);
+        
+        if (posInOctave == 2 ||
+            posInOctave == 6 ||
+            posInOctave == 3 ||
+            posInOctave == 7) { // draw shorter white key
+
+            whiteKeyRect.setHeight(firstWhiteKeyRect.height());
+        }
+
+        paint.drawRect(whiteKeyRect);
 
         if (posInOctave != 2 && posInOctave != 6) { // draw black key
 
@@ -65,7 +101,8 @@ void PianoKeyboard::paintEvent(QPaintEvent*)
 
             QPoint bPos = pos;
 
-            bPos.setY(bPos.y() + m_keySize.height() - m_blackKeySize.height() / 2);
+            bPos.setY(bPos.y() + whiteKeyRect.height() -
+                      m_blackKeySize.height() / 2 - 1);
             
             paint.drawRect(QRect(bPos, m_blackKeySize));
 
@@ -75,9 +112,10 @@ void PianoKeyboard::paintEvent(QPaintEvent*)
             // Debug
 
             paint.restore();
+
         }
 
-        pos.setY(pos.y() + m_keySize.height());
+        pos.setY(pos.y() + whiteKeyRect.height() - 1);
         
     }
     
