@@ -587,9 +587,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     QFrame* btnBox = new QFrame(mainFrame);
 
-#if QT_VERSION >= 0x030100
-    btnBox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-#endif
+    btnBox->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed));
 
     QHBoxLayout* layout = new QHBoxLayout(btnBox, 4, 10);
 
