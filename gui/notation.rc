@@ -44,6 +44,8 @@
 
 <Menu name="Group">
   <text>&amp;Group</text>
+  <Action name="make_chord"/>
+  <Separator/>
   <Action name="beam"/>
   <Action name="auto_beam"/>
   <Action name="break_group"/>
@@ -59,8 +61,6 @@
   <Action name="crescendo"/>
   <Action name="decrescendo"/>
   <Action name="remove_indications"/>
-  <Separator/>
-  <Action name="make_chord"/>
 </Menu>
 
 <Menu name="Notes">
@@ -414,6 +414,7 @@
 <ToolBar name="Group Toolbar" hidden="true">
   <text>Group Toolbar</text>
 
+  <Action name="make_chord"/>
   <Action name="beam"/>
   <Action name="break_group"/>
   <Separator/>

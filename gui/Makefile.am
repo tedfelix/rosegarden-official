@@ -238,6 +238,8 @@ rc_DATA = bankeditor.rc \
 	notationselector.rc \
 	noteinserter.rc \
 	restinserter.rc \
+	textinserter.rc \
+	clefinserter.rc \
 	rosegardenui.rc
 
 # make messages.po. Move this one to ../po/ and "make merge" in po

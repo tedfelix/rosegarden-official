@@ -257,6 +257,8 @@ protected slots:
  */
 class ClefInserter : public NotationTool
 {
+    Q_OBJECT
+    
     friend class NotationToolBox;
 
 public:
@@ -270,6 +272,11 @@ public:
                                        QMouseEvent*,
                                        Rosegarden::ViewElement* el);
     static const QString ToolName;
+
+protected slots:
+    void slotNotesSelected();
+    void slotEraseSelected();
+    void slotSelectSelected();
 
 protected:
     ClefInserter(NotationView*);
@@ -285,6 +292,8 @@ protected:
  */
 class TextInserter : public NotationTool
 {
+    Q_OBJECT
+    
     friend class NotationToolBox;
 
 public:
@@ -296,6 +305,11 @@ public:
                                        QMouseEvent*,
                                        Rosegarden::ViewElement* el);
     static const QString ToolName;
+
+protected slots:
+    void slotNotesSelected();
+    void slotEraseSelected();
+    void slotSelectSelected();
 
 protected:
     TextInserter(NotationView*);

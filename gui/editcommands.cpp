@@ -1071,7 +1071,8 @@ MoveCommand::MoveCommand(Segment &s, timeT delta, bool useNotationTimings,
 		 delta < 0 ? sel.getEndTime()+1 : sel.getEndTime()+1 + delta),
     m_selection(&sel),
     m_delta(delta),
-    m_useNotationTimings(useNotationTimings)
+    m_useNotationTimings(useNotationTimings),
+    m_lastInsertedEvent(0)
 {
     // nothing else
 }
@@ -1123,26 +1124,28 @@ MoveCommand::modifySegment()
 
     for (unsigned int j = 0; j < toInsert.size(); ++j) {
 
+	Segment::iterator jtr = segment.end();
+
 	// somewhat like the NoteOverlay part of PasteEventsCommand::modifySegment
 	if (m_useNotationTimings && toInsert[j]->isa(Note::EventType)) {
 	    long pitch = 0;
 	    Accidental explicitAccidental = NoAccidental;
 	    toInsert[j]->get<String>(ACCIDENTAL, explicitAccidental);
 	    if (toInsert[j]->get<Int>(PITCH, pitch)) {
-		SegmentNotationHelper(segment).insertNote
+		jtr = SegmentNotationHelper(segment).insertNote
 		    (toInsert[j]->getAbsoluteTime(),
 		     Note::getNearestNote(toInsert[j]->getDuration()),
 		     pitch, explicitAccidental);
 	    }
 	} else {
-	    segment.insert(toInsert[j]);
+	    jtr = segment.insert(toInsert[j]);
 	}
+
+	if (jtr != segment.end()) m_lastInsertedEvent = toInsert[j];
     }
 
     segment.normalizeRests(a0, a1);
     segment.normalizeRests(b0, b1);
-
-    //!!! should select all moved notes?
 }
    
 void

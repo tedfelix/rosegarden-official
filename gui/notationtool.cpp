@@ -751,6 +751,39 @@ ClefInserter::ClefInserter(NotationView* view)
     : NotationTool("ClefInserter", view),
       m_clef(Rosegarden::Clef::Treble)
 {
+    QIconSet icon = QIconSet(NotePixmapFactory::toQPixmap(m_nParentView->getToolbarNotePixmapFactory()->
+		    makeToolbarPixmap("select")));
+    new KAction(i18n("Switch to Select Tool"), icon, 0, this,
+                SLOT(slotSelectSelected()), actionCollection(),
+                "select");
+
+    new KAction(i18n("Switch to Erase Tool"), "eraser", 0, this,
+                SLOT(slotEraseSelected()), actionCollection(),
+                "erase");
+
+    icon = QIconSet
+	(NotePixmapFactory::toQPixmap(m_nParentView->getToolbarNotePixmapFactory()->
+	 makeToolbarPixmap("crotchet")));
+    new KAction(i18n("Switch to Inserting Notes"), icon, 0, this,
+                SLOT(slotNotesSelected()), actionCollection(),
+                "notes");
+
+    createMenu("clefinserter.rc");
+}
+
+void ClefInserter::slotNotesSelected()
+{
+    m_nParentView->slotLastNoteAction();
+}
+
+void ClefInserter::slotEraseSelected()
+{
+    m_parentView->actionCollection()->action("erase")->activate();
+}
+
+void ClefInserter::slotSelectSelected()
+{
+    m_parentView->actionCollection()->action("select")->activate();
 }
 
 void ClefInserter::ready()
@@ -793,13 +826,45 @@ void ClefInserter::handleLeftButtonPress(Rosegarden::timeT,
     if (event) m_nParentView->setSingleSelectedEvent(staffNo, event);
 }
 
-
 //------------------------------
 
 TextInserter::TextInserter(NotationView* view)
     : NotationTool("TextInserter", view),
       m_text("", Rosegarden::Text::Dynamic)
 {
+    QIconSet icon = QIconSet(NotePixmapFactory::toQPixmap(m_nParentView->getToolbarNotePixmapFactory()->
+		    makeToolbarPixmap("select")));
+    new KAction(i18n("Switch to Select Tool"), icon, 0, this,
+                SLOT(slotSelectSelected()), actionCollection(),
+                "select");
+
+    new KAction(i18n("Switch to Erase Tool"), "eraser", 0, this,
+                SLOT(slotEraseSelected()), actionCollection(),
+                "erase");
+
+    icon = QIconSet
+	(NotePixmapFactory::toQPixmap(m_nParentView->getToolbarNotePixmapFactory()->
+	 makeToolbarPixmap("crotchet")));
+    new KAction(i18n("Switch to Inserting Notes"), icon, 0, this,
+                SLOT(slotNotesSelected()), actionCollection(),
+                "notes");
+
+    createMenu("textinserter.rc");
+}
+
+void TextInserter::slotNotesSelected()
+{
+    m_nParentView->slotLastNoteAction();
+}
+
+void TextInserter::slotEraseSelected()
+{
+    m_parentView->actionCollection()->action("erase")->activate();
+}
+
+void TextInserter::slotSelectSelected()
+{
+    m_parentView->actionCollection()->action("select")->activate();
 }
 
 void TextInserter::ready()
@@ -1273,8 +1338,10 @@ void NotationSelector::drag(int x, int y, bool final)
 	}
     }	    
 
-    if (!final /* && (m_clickedElement->isNote() ||
-		  selection->getSegmentEvents().size() > 1) */ ) {
+    bool singleNonNotePreview = !m_clickedElement->isNote() &&
+	selection->getSegmentEvents().size() == 1;
+
+    if (!final && !singleNonNotePreview) {
 
 	NOTATION_DEBUG << "dragTime " << dragTime << ", clickedTime " << clickedTime << endl;
 
@@ -1291,22 +1358,48 @@ void NotationSelector::drag(int x, int y, bool final)
 	KMacroCommand *command = new KMacroCommand(MoveCommand::getGlobalName());
 	bool haveSomething = false;
 
-	if (pitch != clickedPitch) {
+	MoveCommand *mc = 0;
+	Event *lastInsertedEvent = 0;
+
+	if (pitch != clickedPitch && m_clickedElement->isNote()) {
 	    command->addCommand(new TransposeCommand(pitch - clickedPitch,
 						     *selection));
 	    haveSomething = true;
 	}
 
 	if (dragTime != clickedTime) {
-	    // this is only option (a) from the above selection
-	    command->addCommand(new MoveCommand
-				(m_selectedStaff->getSegment(),
-				 dragTime - clickedTime, true, *selection));
+	    mc = new MoveCommand
+		(m_selectedStaff->getSegment(),
+		 dragTime - clickedTime, true, *selection);
+	    command->addCommand(mc);
 	    haveSomething = true;
 	}
 
 	if (haveSomething) {
 	    m_nParentView->addCommandToHistory(command);
+	    if (mc && singleNonNotePreview) {
+		lastInsertedEvent = mc->getLastInsertedEvent();
+		if (lastInsertedEvent) {
+		    m_nParentView->setSingleSelectedEvent(m_selectedStaff->getId(),
+							  lastInsertedEvent);
+
+
+		    //!!! why is Staff::findSingle protected?
+		    Rosegarden::ViewElementList::iterator vli =
+			m_selectedStaff->getViewElementList()->findTime(lastInsertedEvent->getAbsoluteTime());
+		    while (vli != m_selectedStaff->getViewElementList()->end() &&
+			   (*vli)->event() != lastInsertedEvent) ++vli;
+		    if (vli != m_selectedStaff->getViewElementList()->end()) {
+			m_clickedElement = dynamic_cast<NotationElement *>(*vli);
+		    } else {
+			m_clickedElement = 0;
+		    }
+
+
+		    m_selectionRect->setX(x);
+		    m_selectionRect->setY(y);
+		}
+	    }
 	} else {
 	    delete command;
 	}

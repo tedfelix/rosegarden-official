@@ -379,6 +379,8 @@ public:
     
     static QString getGlobalName(Rosegarden::timeT delta = 0);
 
+    Rosegarden::Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
+
 protected:
     virtual void modifySegment();
 
@@ -386,6 +388,7 @@ private:
     Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
     Rosegarden::timeT m_delta;
     bool m_useNotationTimings;
+    Rosegarden::Event *m_lastInsertedEvent;
 };
 
 
