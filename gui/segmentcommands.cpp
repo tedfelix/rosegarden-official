@@ -641,21 +641,25 @@ SegmentReconfigureCommand::swap()
 
 	// set the segment's values from the record, but set the
 	// previous values back in to the record for use in the
-	// next iteration of the execute/unexecute cycle
+	// next iteration of the execute/unexecute cycle.
 
-	timeT currentStartTime = i->segment->getStartTime();
+	// #1083496: look up both of the "old" values before we set
+	// anything, as setting the start time is likely to change the
+	// end marker time.
 
-	if (currentStartTime != i->startTime) {
+	timeT prevStartTime = i->segment->getStartTime();
+	timeT prevEndMarkerTime = i->segment->getEndMarkerTime();
+
+	if (i->segment->getStartTime() != i->startTime) {
 	    i->segment->setStartTime(i->startTime);
-	    i->startTime = currentStartTime;
 	}
 
-	timeT currentEndMarkerTime = i->segment->getEndMarkerTime();
-
-	if (currentEndMarkerTime != i->endMarkerTime) {
+	if (i->segment->getEndMarkerTime() != i->endMarkerTime) {
 	    i->segment->setEndMarkerTime(i->endMarkerTime);
-	    i->endMarkerTime = currentEndMarkerTime;
 	}
+
+	i->startTime = prevStartTime;
+	i->endMarkerTime = prevEndMarkerTime;
 
 	TrackId currentTrack = i->segment->getTrack();
 
