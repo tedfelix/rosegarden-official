@@ -275,6 +275,16 @@ void BarButtonsWidget::paintEvent(QPaintEvent*)
         if (every == firstBar) count++;
 
 	painter.drawLine(x, 0, x, m_barHeight);
-	if (i >= 0) painter.drawText(x + 4, 12, QString("%1").arg(i + 1));
+
+        // disable worldXForm for text
+        QPoint textDrawPoint = painter.xForm(QPoint(x+4, 12));
+        
+        bool enableXForm = painter.hasWorldXForm();
+        painter.setWorldXForm(false);
+
+	if (i >= 0) painter.drawText(textDrawPoint, QString("%1").arg(i + 1));
+
+        painter.setWorldXForm(enableXForm);
+
     }
 }
