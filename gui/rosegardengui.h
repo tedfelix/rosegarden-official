@@ -699,6 +699,11 @@ public slots:
                          double value,      
                          TempoDialog::TempoDialogAction action);
 
+    /**
+     * Document modified
+     */
+    void slotDocumentModified();
+
 private:
 
     //--------------- Data members ---------------------------------

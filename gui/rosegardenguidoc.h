@@ -275,6 +275,11 @@ public slots:
     void slotSetLoop(Rosegarden::timeT s, Rosegarden::timeT e) {setLoop(s,e);}
 
 signals:
+    /**
+     * Emitted when document is modified
+     */
+    void documentModified();
+
     void pointerPositionChanged(Rosegarden::timeT);
     void playPositionChanged(Rosegarden::timeT);
     void loopChanged(Rosegarden::timeT, Rosegarden::timeT);

@@ -73,9 +73,6 @@
 
 #define ID_STATUS_MSG 1
 
-using std::cerr;
-using std::endl;
-using std::cout;
 using Rosegarden::timeT;
 
 
@@ -120,6 +117,9 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer)
 
     connect(m_doc, SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
             this,   SLOT(slotSetPointerPosition(Rosegarden::timeT)));
+
+    connect(m_doc, SIGNAL(documentModified()),
+            this,   SLOT(slotDocumentModified()));
 
     connect(m_doc, SIGNAL(loopChanged(Rosegarden::timeT, Rosegarden::timeT)),
             this,  SLOT(slotSetLoop(Rosegarden::timeT, Rosegarden::timeT)));
@@ -2378,12 +2378,19 @@ RosegardenGUIApp::slotChangeTempo(Rosegarden::timeT time,
     } 
     else
     {
-        std::cerr << "RosegardenGUIApp::slotChangeTempo() - "
-                  << "unrecognised tempo command" << std::endl;
+        kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotChangeTempo() - "
+                             << "unrecognised tempo command" << endl;
     }
 
 }
 
+void
+RosegardenGUIApp::slotDocumentModified()
+{
+#ifdef RGKDE3
+    stateChanged("file_modified");
+#endif
+}
 
 void
 RosegardenGUIApp::plugAccelerators(QWidget *widget, QAccel *acc)

@@ -86,4 +86,11 @@
 	</enable>
 </State>
 
+<State name="file_modified">
+	<enable>
+		<Action name="file_save"/>
+		<Action name="file_save_as"/>
+	</enable>
+</State>
+
 </kpartgui>

@@ -165,6 +165,7 @@ void RosegardenGUIDoc::slotDocumentModified()
 {
 //    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::slotDocumentModified()" << endl;
     setModified(true);
+    emit documentModified();
 }
 
 void RosegardenGUIDoc::slotDocumentRestored()
