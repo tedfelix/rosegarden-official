@@ -961,14 +961,18 @@ void NotationView::insertNote(NotationElementList::iterator closestNote,
 
     //!!! experimental:
 
-    if (!m_currentSelectedNoteIsRest) {
+    Note note(m_currentSelectedNoteType, m_currentSelectedNoteDotted ? 1 : 0);
 
-	Note note(m_currentSelectedNoteType, m_currentSelectedNoteDotted ? 1:0);
-	getTrack().insertNote((*closestNote)->event()->getAbsoluteTime(),
-			      note, pitch);
-	redoLayout(m_notationElements->begin()); // for now
-	return;
+    if (m_currentSelectedNoteIsRest) {
+	getTrack().insertRest
+	    ((*closestNote)->event()->getAbsoluteTime(), note);
+    } else {
+	getTrack().insertNote
+	    ((*closestNote)->event()->getAbsoluteTime(), note, pitch);
     }
+
+    redoLayout(m_notationElements->begin()); // for now
+    return;
 	
 
     // create new event

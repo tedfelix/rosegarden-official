@@ -823,8 +823,11 @@ void Track::insertNote(timeT absoluteTime, Note note, int pitch)
     // and recurse (to step 1) with both the first and the second part
     // in turn.
 
-    //!!! ... 4. Then we somehow need to recover correctness for the
+    // 4. Then we somehow need to recover correctness for the
     // second half of any split note or rest...
+
+    //!!! Handle grouping!  (Inserting into the middle of an existing
+    // group -- take a cue from NotationView::setupGroup)
 
     //... 
 
@@ -833,21 +836,37 @@ void Track::insertNote(timeT absoluteTime, Note note, int pitch)
 
     int barNo = getBarNumber(i);
 
-    iterator uncollapsed = collapseRestsForInsert(i, note.getDuration());
+//    iterator uncollapsed = collapseRestsForInsert(i, note.getDuration());
 
-    insertNoteAux(i, note.getDuration(), pitch, false);
+    insertSomething(i, note.getDuration(), pitch, false, false);
 }
 
 
-void Track::insertNoteAux(iterator i, int duration, int pitch, bool tiedBack)
+void Track::insertRest(timeT absoluteTime, Note note)
 {
-    timeT existingDuration;
-    while (i != end() && (existingDuration = (*i)->getDuration()) == 0) ++i;
+    iterator i, j;
+    getTimeSlice(absoluteTime, i, j);
+
+    int barNo = getBarNumber(i);
+
+//    iterator uncollapsed = collapseRestsForInsert(i, note.getDuration());
+
+    insertSomething(i, note.getDuration(), 0, true, false);
+}
+
+
+void Track::insertSomething(iterator i, int duration, int pitch,
+			    bool isRest, bool tiedBack)
+{
+    while (i != end() && (*i)->getDuration() == 0) ++i;
 
     if (i == end()) {
-	insertSingleNote(i, duration, pitch, tiedBack);
+	insertSingleSomething(i, duration, pitch, isRest, tiedBack);
 	return;
     }
+
+    collapseRestsForInsert(i, duration);
+    timeT existingDuration = (*i)->getDuration();
 
     cerr << "Track::insertNoteAux: asked to insert duration " << duration
 	 << " over this event:" << endl;
@@ -857,7 +876,7 @@ void Track::insertNoteAux(iterator i, int duration, int pitch, bool tiedBack)
 
 	cerr << "Durations match; doing simple insert" << endl;
 
-	insertSingleNote(i, duration, pitch, tiedBack);
+	insertSingleSomething(i, duration, pitch, isRest, tiedBack);
 
     } else if (duration < existingDuration) {
 
@@ -881,7 +900,7 @@ void Track::insertNoteAux(iterator i, int duration, int pitch, bool tiedBack)
 	    if (last != end() && !isViable(*last)) makeRestViable(last);
 	}
 
-	insertSingleNote(i, duration, pitch, tiedBack);
+	insertSingleSomething(i, duration, pitch, isRest, tiedBack);
 
     } else { // duration > existingDuration
 
@@ -889,6 +908,7 @@ void Track::insertNoteAux(iterator i, int duration, int pitch, bool tiedBack)
 
 	// special case: existing event is a rest, and it's at the end
 	// of the track
+
 	if ((*i)->isa(Note::EventRestType)) {
 	    iterator j;
 	    for (j = i; j != end(); ++j) {
@@ -899,69 +919,51 @@ void Track::insertNoteAux(iterator i, int duration, int pitch, bool tiedBack)
 	
 	if (needToSplit) {
 
+	    //!!! This is not quite right for rests.  Because they
+	    // replace (rather than chording with) any events already
+	    // present, they don't need to be split in the case where
+	    // their duration spans several note-events.  Worry about
+	    // that later, I guess.
+
 	    cerr << "Need to split new note" << endl;
 
-	    i = insertSingleNote(i, existingDuration, pitch, tiedBack);
-	    (*i)->set<Bool>(Note::TiedForwardPropertyName, true);
+	    i = insertSingleSomething(i, existingDuration, pitch, isRest, tiedBack);
+	    if (!isRest) (*i)->set<Bool>(Note::TiedForwardPropertyName, true);
 
 	    iterator dummy;
 	    getTimeSlice((*i)->getAbsoluteTime() + existingDuration, i, dummy);
 
-	    insertNoteAux(i, duration - existingDuration, pitch, true);
+	    insertSomething(i, duration - existingDuration, pitch, isRest, true);
 
 	} else {
 
 	    cerr << "No need to split new note" << endl;
 
-	    i = insertSingleNote(i, duration, pitch, tiedBack);
+	    i = insertSingleSomething(i, duration, pitch, isRest, tiedBack);
 	}
     }
 }
 
-Track::iterator Track::insertSingleNote(iterator i, int duration, int pitch,
-					bool tiedBack)
+Track::iterator Track::insertSingleSomething(iterator i, int duration, int pitch,
+					     bool isRest, bool tiedBack)
 {
     timeT time;
+
     if (i == end()) {
 	time = getDuration();
     } else {
 	time = (*i)->getAbsoluteTime();
-	if ((*i)->isa(Note::EventRestType)) erase(i);
+	if (isRest || (*i)->isa(Note::EventRestType)) erase(i);
     }
-    Event *e = new Event(Note::EventType);
+
+    Event *e = new Event(isRest ? Note::EventRestType : Note::EventType);
     e->setAbsoluteTime(time);
     e->setDuration(duration);
-    e->set<Int>("pitch", pitch);
-    if (tiedBack) e->set<Bool>(Note::TiedBackwardPropertyName, true);
+
+    if (!isRest) e->set<Int>("pitch", pitch);
+    if (tiedBack && !isRest) e->set<Bool>(Note::TiedBackwardPropertyName, true);
+
     return insert(e);
-}
-
-
-void Track::insertRest(timeT absoluteTime, Note note)
-{
-    // Procedure:
-
-    // First, if there is a rest at the insertion position, merge it
-    // with any following rests, if available, until we have at least
-    // the duration of the new rest.  Then:
-    // 
-    // 1. If the new rest is the same length as an existing note or
-    // rest at that position, delete the existing note or rest and
-    // insert.
-    // 
-    // 2. If the new rest is shorter than an existing note or rest,
-    // split the existing one and replace the first part.
-    // 
-    // 3. If the new rest is longer, split the new rest so that the
-    // first part is the same duration as the existing note or rest,
-    // and recurse (to step 1) with both the first and the second part
-    // in turn.
-    // 
-    //!!! ... 4. Then we somehow need to recover correctness for the
-    // second half of any split note or rest...
-
-
-
 }
 
 

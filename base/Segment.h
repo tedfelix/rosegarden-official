@@ -392,13 +392,13 @@ protected:
     void makeRestViable(iterator i);
 
 
-    /// for use by insertNote
-    void insertNoteAux(iterator position, int duration, int pitch,
-		       bool tiedBack);
+    /// for use by insertNote and insertRest
+    void insertSomething(iterator position, int duration, int pitch,
+			 bool isRest, bool tiedBack);
 
-    /// for use by insertNoteAux
-    iterator insertSingleNote(iterator position, int duration, int pitch,
-			      bool tiedBack);
+    /// for use by insertSomething
+    iterator insertSingleSomething(iterator position, int duration, int pitch,
+				   bool isRest, bool tiedBack);
 
     /// for use by calculateBarPositions
     void addNewBar(timeT start, bool fixed, bool correct, 
