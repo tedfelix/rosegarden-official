@@ -12,6 +12,6 @@ libcore.a:	Element2.o NotationTypes.o
 NotationTypes.o:	NotationTypes.h
 
 clean:
-	rm *.o test speedtrial
+	rm -f *.o test speedtrial
 
 # DO NOT DELETE
