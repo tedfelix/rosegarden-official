@@ -10,7 +10,7 @@ o Get Segment joining working
 o Repeating Notes bug
 
 o More MIDI events at Composition level. Sys Exs, Program Changes,
-  Controller changes etc. etc.
+  Controller changes etc. etc. [ALMOST DONE - can't insert them]
 
 o Audio volume faders - studio concept on sequencer
 

@@ -25,7 +25,10 @@ namespace Rosegarden
 {
 
 
-MappedStudio::MappedStudio():m_mappedStudioId(0)
+MappedStudio::MappedStudio():MappedObject("MappedStudio",
+                                          Studio,
+                                          0),
+                             m_runningObjectId(1)
 {
 }
 
@@ -33,26 +36,87 @@ MappedStudio::MappedStudio():m_mappedStudioId(0)
 // the slider can then be connected to an Instrument.
 //
 // 
-MappedStudioId
-MappedStudio::createSlider(Device::DeviceType type,
-                           MappedStudioItem item)
+MappedObjectId
+MappedStudio::createObject(MappedObjectType /*type*/)
 {
-    MappedStudioId id = m_mappedStudioId++;
+    MappedObjectId id = m_runningObjectId++;
     return id;
 }
 
 
 bool
-MappedStudio::destroyItem(MappedStudioId id)
+MappedStudio::destroyItem(MappedObjectId /*id*/)
 {
     return true;
 }
 
 bool
-MappedStudio::connectItem(InstrumentId iId,
-                          MappedStudioId msId)
+MappedStudio::connectInstrument(InstrumentId /*iId*/, MappedObjectId /*msId*/)
 {
     return true;
+}
+
+bool
+MappedStudio::connectObjects(MappedObjectId /*mId1*/, MappedObjectId /*mId2*/)
+{
+    return true;
+}
+
+// Clear down the whole studio
+//
+void
+MappedStudio::clear()
+{
+    std::vector<MappedObject*>::iterator it;
+
+    for (it = m_objects.begin(); m_objects.end(); it++)
+        delete (*it);
+
+    m_objects.erase(m_objects.begin(), m_objects.end());
+
+}
+
+
+MappedObjectParameter
+MappedAudioFader::getLevel()
+{
+    return m_level;
+}
+
+void
+MappedAudioFader::setLevel(MappedObjectParameter param)
+{
+    m_level = param;
+}
+
+QDataStream&
+operator>>(QDataStream &dS, MappedStudio *mS)
+{
+    // not implemented
+    return dS;
+}
+
+
+QDataStream&
+operator<<(QDataStream &dS, MappedStudio *mS)
+{
+    // not implemented
+    return dS;
+}
+
+QDataStream&
+operator>>(QDataStream &dS, MappedStudio &mS)
+{
+    // not implemented
+    return dS;
+}
+
+
+QDataStream&
+operator<<(QDataStream &dS, const MappedStudio &mS)
+{
+    // not implemented
+    return dS;
 }
 
 

@@ -49,6 +49,7 @@
 #include "MappedComposition.h"
 #include "Sequencer.h"
 #include "Event.h"
+#include "MappedStudio.h"
 
 class KURL;
 class KRecentFilesAction;
@@ -324,6 +325,13 @@ private:
     // Are we clear to send after a call()?
     //
     bool m_clearToSend;
+
+    // MappedStudio holds all of our session-persistent information -
+    // sliders and what have you.  It's also streamable over DCOP
+    // so you can reconstruct it at either end of the link for 
+    // presentation, storage etc.
+    //
+    Rosegarden::MappedStudio m_studio;
 
 };
  
