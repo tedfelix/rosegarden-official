@@ -1,9 +1,9 @@
 
-Rosegarden 0.9.5 release notes
+Rosegarden 0.9.6 release notes
 ==============================
 
-ALSA 0.9.x support, JACK and LADSPA
-===================================
+ALSA 0.9.x/1.x support, JACK and LADSPA
+=======================================
 
 Rosegarden-4 supports ALSA (www.alsa-project.org) sound drivers as
 default.  Any version above ALSA 0.9.0beta12 will do.
