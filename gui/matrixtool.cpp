@@ -244,8 +244,8 @@ MatrixMoveCommand::MatrixMoveCommand(Rosegarden::Segment &segment,
                                      Rosegarden::Event *event)
     : BasicCommand(i18n("Move Note"),
                    segment,
-                   QMIN(newTime + event->getDuration(), event->getAbsoluteTime()), 
-                   QMAX(newTime + event->getDuration(), event->getAbsoluteTime()),
+                   std::min(newTime, event->getAbsoluteTime()), 
+                   std::max(newTime + event->getDuration(), event->getAbsoluteTime() + event->getDuration()),
                    true),
     m_newTime(newTime),
     m_oldTime(event->getAbsoluteTime()),
@@ -257,8 +257,6 @@ MatrixMoveCommand::MatrixMoveCommand(Rosegarden::Segment &segment,
 
 void MatrixMoveCommand::modifySegment()
 {
-    Rosegarden::SegmentMatrixHelper helper(getSegment());
-
     std::string eventType = m_event->getType();
 
     if (eventType == Note::EventType) {
@@ -268,10 +266,15 @@ void MatrixMoveCommand::modifySegment()
         newEvent->set<Rosegarden::Int>(Rosegarden::BaseProperties::PITCH, m_newPitch);
 
         // Delete old one
-	helper.deleteNote(m_event, false);
+        getSegment().eraseSingle(m_event);
 
         // Insert new one
-        helper.insertNote(newEvent);
+        getSegment().insert(newEvent);
+
+        // Tidy up
+        getSegment().normalizeRests(std::min(m_newTime, m_oldTime),
+                                    std::max(m_newTime + newEvent->getDuration(), m_oldTime + newEvent->getDuration()));
+
     }
 }
 
@@ -302,7 +305,7 @@ MatrixChangeDurationCommand::MatrixChangeDurationCommand(Rosegarden::Segment &se
     : BasicCommand(i18n("Change Note Duration"),
                    segment,
                    event->getAbsoluteTime(), 
-                   event->getAbsoluteTime() + QMAX(newDuration, event->getDuration()),
+                   event->getAbsoluteTime() + std::max(newDuration, event->getDuration()),
                    true),
     m_newDuration(newDuration),
     m_staff(staff),
@@ -312,11 +315,11 @@ MatrixChangeDurationCommand::MatrixChangeDurationCommand(Rosegarden::Segment &se
 
 void MatrixChangeDurationCommand::modifySegment()
 {
-    Rosegarden::SegmentMatrixHelper helper(getSegment());
-
     std::string eventType = m_event->getType();
 
     if (eventType == Note::EventType) {
+
+        timeT oldDuration = m_event->getDuration();
 
         // We can't change the duration directly
 
@@ -325,10 +328,14 @@ void MatrixChangeDurationCommand::modifySegment()
                                                             m_event->getAbsoluteTime(),
                                                             m_newDuration);
         // Delete old one
-	helper.deleteNote(m_event, false);
+        getSegment().eraseSingle(m_event);
 
         // Insert new one
-        helper.insertNote(newEvent);
+        getSegment().insert(newEvent);
+
+        // Tidy up
+        getSegment().normalizeRests(newEvent->getAbsoluteTime(),
+                                    newEvent->getAbsoluteTime() + std::max(m_newDuration, oldDuration));
 
     }
 }
