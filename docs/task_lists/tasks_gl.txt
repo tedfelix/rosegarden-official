@@ -1,6 +1,17 @@
 Current Task list
 ======================================
 
+
+--
+
+1.0 stuff :
+
+- fix MIDI import
+- 'add' features in Control Rulers DONE
+- rgapp->sequencer(Send|Call) DONE
+
+--
+
 - make clipboard app-wide instead of doc-wide (move it to RosegardenGUIApp).
 
 - "stacked toolboxes" widget (something like Mozilla's left sidebar,
@@ -16,7 +27,7 @@ beyond the canvas' boundary.
 - harmonize namings of m_view* toggle actions, slotToggleXXX(), slotShowXXX()
  (m_viewSegmentParameters / slotToggleSegmentParameters / slotShowSegmentParameters)
 
-- valgrind/kcachegrind - standby, not working on my P4
+- valgrind/kcachegrind - ok
 
 - try to improve sequencer latency problems (GUI & seq. should mmap a
 tmp file which would hold easy-to-parse event data. File should have
