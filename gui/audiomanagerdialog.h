@@ -142,7 +142,6 @@ signals:
     void segmentsSelected(Rosegarden::SegmentSelection&);
     void deleteSegments(Rosegarden::SegmentSelection&);
     void insertAudioSegment(Rosegarden::AudioFileId,
-                            Rosegarden::InstrumentId,
                             const Rosegarden::RealTime &,
                             const Rosegarden::RealTime &);
 protected:

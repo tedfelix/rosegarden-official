@@ -22,8 +22,6 @@ Features for 1.0 - updated 20030923
 
 - playlists (essential for demos!) [rwb]
 
-- search facility for patch sounds (search all banks) [rwb]
-
 - request: notation segment expanding itself as you enter 
            notes past the end of it
 

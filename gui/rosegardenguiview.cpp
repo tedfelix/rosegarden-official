@@ -1029,45 +1029,20 @@ RosegardenGUIView::slotAddAudioSegment(Rosegarden::AudioFileId audioId,
 
 
 void
-RosegardenGUIView::slotAddAudioSegmentAndTrack(
-                                       Rosegarden::AudioFileId audioFileId,
-                                       Rosegarden::InstrumentId instrumentId,
-                                       const Rosegarden::RealTime &startTime,
-                                       const Rosegarden::RealTime &endTime)
+RosegardenGUIView::slotAddAudioSegmentCurrentPosition(Rosegarden::AudioFileId audioFileId,
+                                                      const Rosegarden::RealTime &startTime,
+                                                      const Rosegarden::RealTime &endTime)
 {
-    KMacroCommand *macro = new KMacroCommand("Insert Audio Segment");
-
     Rosegarden::Composition &comp = getDocument()->getComposition();
-    macro->addCommand(new AddTracksCommand(&comp,
-                                           1,
-                                           instrumentId));
 
-    // Note, the new track _will be_ comp.getNbTracks
-    //
-    macro->addCommand(new AudioSegmentInsertCommand(getDocument(),
-                                                    comp.getNbTracks(),
-                                                    0,
-                                                    audioFileId,
-                                                    startTime,
-                                                    endTime));
-    slotAddCommandToHistory(macro);
-
-    // Fix the canvas size
-    //
-    m_trackEditor->slotReadjustCanvasSize();
-
-    m_trackEditor->getTrackButtons()->slotUpdateTracks();
- 
-    // Select the new track (will scroll to it automatically)
-    //
-    Rosegarden::TrackId newTrackId = 
-        comp.getTrackByPosition(comp.getNbTracks() - 1)->getId();
-
-    comp.setSelectedTrack(newTrackId);
-
-    m_trackEditor->getTrackButtons()->selectLabel(comp.getNbTracks() - 1);
-
-    slotSelectTrackSegments(newTrackId);
+    AudioSegmentInsertCommand *command = 
+        new AudioSegmentInsertCommand(getDocument(),
+                                      comp.getSelectedTrack(),
+                                      comp.getPosition(),
+                                      audioFileId,
+                                      startTime,
+                                      endTime);
+    slotAddCommandToHistory(command);
 }
 
 

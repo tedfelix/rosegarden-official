@@ -732,55 +732,68 @@ void TrackEditor::dropEvent(QDropEvent* event)
             Rosegarden::AudioFileId audioFileId;
             Rosegarden::InstrumentId instrumentId;
             Rosegarden::RealTime startTime, endTime;
+            bool wellFormed = true;
 
-            // read the audio info
+            // read the audio info checking for end of stream
             s >> audioFileId;
+            if (s.atEnd()) wellFormed = false;
+
             s >> instrumentId;
             s >> startTime.sec;
             s >> startTime.usec;
             s >> endTime.sec;
+            if (s.atEnd()) wellFormed = false;
+
             s >> endTime.usec;
 
-            // create a track and
+            if (wellFormed) // only create something if this Text data is valid
+            {
+                // create a track
 
-            int trackPos = m_segmentCanvas->grid().
-                getYBin(event->pos().y() + 
+                int trackPos = m_segmentCanvas->grid().
+                    getYBin(event->pos().y() + 
                         m_segmentCanvas->verticalScrollBar()->value() - heightAdjust);
 
-            Rosegarden::timeT time = 
-                m_segmentCanvas->grid().getRulerScale()->
-                getTimeForX(event->pos().x() + 
+                Rosegarden::timeT time = 
+                    m_segmentCanvas->grid().getRulerScale()->
+                    getTimeForX(event->pos().x() + 
                             m_segmentCanvas->horizontalScrollBar()->value() - widthAdjust);
 
-            // Drop this audio segment if we have a valid track number
-            // (could also check for time limits too)
-            //
-            if (m_doc->getComposition().getTrackById(trackPos))
-            {
+                // Drop this audio segment if we have a valid track number
+                // (could also check for time limits too)
+                //
+                if (m_doc->getComposition().getTrackById(trackPos))
+                {
 
-                RG_DEBUG << "TrackEditor::dropEvent() : dropping at track pos = " 
-                         << trackPos
-                         << ", time = "
-                         << time 
-                         /*
-                         << ", X = "
-                         << event->pos().x()
-                         << ", SCROLL = "
-                         << m_segmentCanvas->horizontalScrollBar()->value() */
-                         << endl;
+                    RG_DEBUG << "TrackEditor::dropEvent() : dropping at track pos = " 
+                             << trackPos
+                             << ", time = "
+                             << time 
+                             /*
+                             << ", X = "
+                             << event->pos().x()
+                             << ", SCROLL = "
+                             << m_segmentCanvas->horizontalScrollBar()->value() */
+                             << endl;
 
-                QString audioText;
-                QTextOStream t(&audioText);
-                t << audioFileId << "\n";
-                t << trackPos << "\n"; // track id
-                t << time << "\n"; // time on canvas
-                t << startTime.sec << "\n";
-                t << startTime.usec << "\n";
-                t << endTime.sec << "\n";
-                t << endTime.usec << "\n";
+                    QString audioText;
+                    QTextOStream t(&audioText);
+                    t << audioFileId << "\n";
+                    t << trackPos << "\n"; // track id
+                    t << time << "\n"; // time on canvas
+                    t << startTime.sec << "\n";
+                    t << startTime.usec << "\n";
+                    t << endTime.sec << "\n";
+                    t << endTime.usec << "\n";
 
-                emit droppedAudio(audioText);
+                    emit droppedAudio(audioText);
+                }
             }
+            else
+            {
+                KMessageBox::sorry(this, i18n("You can't drop files into Rosegarden from this client.  Try using Konqueror instead."));
+            }
+
         }
     }
 

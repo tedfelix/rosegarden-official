@@ -717,48 +717,7 @@ AudioManagerDialog::slotInsert()
 
     RG_DEBUG << "AudioManagerDialog::slotInsert\n";
 
-    // Find an Audio Instrument and create a Track and insert
-    // the audio file over given time parameters.
-
-    Rosegarden::DeviceList *devices = m_doc->getStudio().getDevices();
-    Rosegarden::DeviceListIterator it;
-    Rosegarden::InstrumentList instruments;
-    Rosegarden::InstrumentList::iterator iit;
-    Rosegarden::Instrument *instr = 0;
-
-    // Hmm, creative use of vectors and iterators there - *sigh*
-    //
-    for (it = devices->begin(); it != devices->end(); ++it)
-    {
-        if ((*it)->getType() == Rosegarden::Device::Audio)
-        {
-            // Hmm, again..
-            //
-            instruments = (*it)->getAllInstruments();
-
-            for (iit = instruments.begin(); iit != instruments.end(); ++iit)
-            {
-                if (instr == 0)
-                {
-                    instr = (*iit);
-                    break;
-                }
-                else
-                    break;
-            }
-        }
-    }
-
-    // Ok, so we've got the first audio instrument
-    //
-    if (instr == 0) {
-        RG_DEBUG << "AudioManagerDialog::slotInsert() instr = 0\n";
-        return;
-    }
-
-    // find selected audio file and guess a track
     emit insertAudioSegment(audioFile->getId(),
-                            instr->getId(),
                             Rosegarden::RealTime::zeroTime,
                             audioFile->getLength());
 }

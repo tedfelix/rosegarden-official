@@ -202,10 +202,9 @@ public slots:
 
     void slotDeleteTracks(std::vector<Rosegarden::TrackId> tracks);
 
-    void slotAddAudioSegmentAndTrack(Rosegarden::AudioFileId,
-                                     Rosegarden::InstrumentId,
-                                     const Rosegarden::RealTime &,
-                                     const Rosegarden::RealTime &);
+    void slotAddAudioSegmentCurrentPosition(Rosegarden::AudioFileId,
+                                            const Rosegarden::RealTime &startTime,
+                                            const Rosegarden::RealTime &endTime);
 
     void slotAddAudioSegment(Rosegarden::AudioFileId audioId,
                              Rosegarden::TrackId trackId,
