@@ -328,6 +328,33 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
                          */
     }
 
+    // Draw an autofade line if we're applying it
+    //
+    //
+    if (m_segment->isAutoFading())
+    {
+        Rosegarden::Composition &comp = m_parent.getDocument()->
+            getComposition();
+
+        int audioFadeInEnd = 
+            m_rulerScale->getXForTime(comp.
+                    getElapsedTimeForRealTime(m_segment->getFadeInTime()) +
+		    m_segment->getStartTime()) -
+	    m_rulerScale->getXForTime(m_segment->getStartTime());
+
+	// Convert by matrix
+        int mappedFadeInEnd, y;
+        painter.worldMatrix().map(audioFadeInEnd, 0, &mappedFadeInEnd, &y);
+
+	painter.setPen(Qt::blue);
+	painter.drawLine(tRect.x(),
+			 tRect.y() + tRect.height() - 1,
+			 tRect.x() + mappedFadeInEnd,
+			 tRect.y());
+
+    }
+
+
     // perhaps draw an XOR'd label at some point
     /*
       painter.setPen(RosegardenGUIColours::SegmentLabel);

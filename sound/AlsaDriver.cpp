@@ -2587,6 +2587,7 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
 
                 if ((*i)->isAutoFading())
                 {
+		    paf->setAutoFade(true);
                     paf->setFadeInTime((*i)->getFadeInTime());
                     paf->setFadeOutTime((*i)->getFadeInTime());
 

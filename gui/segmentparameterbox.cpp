@@ -952,7 +952,7 @@ SegmentParameterBox::slotFadeInChanged(int value)
 
     // Convert from ms
     //
-    Rosegarden::RealTime fadeInTime(value/1000000, (value % 1000) * 1000000);
+    Rosegarden::RealTime fadeInTime(value/1000, (value % 1000) * 1000000);
 
     std::vector<Rosegarden::Segment*>::iterator it;
     for (it = m_segments.begin(); it != m_segments.end(); it++) {

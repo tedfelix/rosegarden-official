@@ -143,6 +143,30 @@ SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &events)
 
 	    paf->setRuntimeSegmentId(i->getRuntimeSegmentId());
 
+            if (i->isAutoFading())
+            {
+                paf->setAutoFade(true);
+                paf->setFadeInTime(i->getFadeInTime());
+                paf->setFadeOutTime(i->getFadeInTime());
+
+#define DEBUG_AUTOFADING
+#ifdef DEBUG_AUTOFADING
+                 std::cout << "SoundDriver::initialiseAudioQueue - "
+                           << "PlayableAudioFile is AUTOFADING - "
+                           << "in = " << i->getFadeInTime()
+                           << ", out = " << i->getFadeOutTime()
+                           << std::endl;
+#endif
+            }
+#ifdef DEBUG_AUTOFADING
+            else
+            {
+                std::cout << "PlayableAudioFile has no AUTOFADE"
+                          << std::endl;
+            }
+#endif
+
+
 	    m_audioQueue->addScheduled(paf);
 	}
 	else
