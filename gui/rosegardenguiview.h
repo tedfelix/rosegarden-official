@@ -25,8 +25,49 @@
 // include files for Qt
 #include <qcanvas.h>
 
+// Layout stuff
+#include <algorithm>
+#include <Element2.h>
+
 #define KDEBUG_AREA 1010
 
+class HLayoutEngine;
+class VLayoutEngine;
+
+class LayoutEngine : public unary_function<Element2, void>
+{
+public:
+    LayoutEngine();
+    virtual ~LayoutEngine();
+
+    unsigned int status() const { return m_status; }
+    
+    void operator() (Element2 *el) { layout(el); }
+protected:
+    virtual void layout(Element2*) = 0;
+
+    unsigned int m_status;
+};
+
+class NotationHLayout : public LayoutEngine
+{
+public:
+    NotationHLayout(unsigned int barWidth);
+protected:
+    virtual void layout(Element2*);
+
+    unsigned int m_barWidth;
+    unsigned int m_lastPos;
+};  
+
+class NotationVLayout : public LayoutEngine
+{
+public:
+    NotationVLayout();
+protected:
+    virtual void layout(Element2*);
+};  
+    
 class RosegardenGUIDoc;
 
 /** The RosegardenGUIView class provides the view widget for the RosegardenGUIApp instance.	
@@ -64,11 +105,31 @@ protected:
     /** Callback for a mouse move event in the canvas */
     virtual void contentsMouseMoveEvent (QMouseEvent *e);
 
+    /// Normally calls applyHorizontalLayout() then applyVerticalLayout()
+    virtual bool applyLayout();
+
+    /// Set the 'y'-coord on all doc elements - should be called before applyVerticalLayout()
+    virtual bool applyHorizontalLayout();
+
+    /// Set the 'x'-coord on all doc elements - should be called after applyHorizontalLayout()
+    virtual bool applyVerticalLayout();
+    
+    void setHorizontalLayoutEngine(NotationHLayout* e) { m_hlayout = e; }
+    void setVerticalLayoutEngine(NotationVLayout* e)   { m_vlayout = e; }
+
+    LayoutEngine* getHorizontalLayoutEngine() { return m_hlayout; }
+    LayoutEngine* getVerticalLayoutEngine()   { return m_vlayout; }
+
+
     void perfTest();
+    void test();
 
 private:
     QCanvasItem *m_movingItem;
     bool m_draggingItem;
+
+    NotationHLayout* m_hlayout;
+    NotationVLayout* m_vlayout;
 	
 };
 

@@ -87,7 +87,10 @@ public:
     void setTitle(const QString &_t);
     /** returns the title of the document */
     const QString &getTitle() const;
-	
+
+    ElementList&       getElements()       { return m_elements; }
+    const ElementList& getElements() const { return m_elements; }
+
 public slots:
 /** calls repaint() on all views connected to the document object and is called by the view by which the document has been changed.
  * As this view normally repaints itself, it is excluded from the paintEvent.

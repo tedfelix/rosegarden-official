@@ -32,7 +32,7 @@
 #include "rosegardengui.h"
 #include "rosegardenguiview.h"
 
-#include "core/Element2.h"
+#include "Element2.h"
 
 QList<RosegardenGUIView> *RosegardenGUIDoc::pViewList = 0L;
 
@@ -161,9 +161,6 @@ bool RosegardenGUIDoc::openDocument(const QString &filename, const char *format 
     QFileInfo fileInfo(filename);
     title=fileInfo.fileName();
     absFilePath=fileInfo.absFilePath();	
-    /////////////////////////////////////////////////
-    // TODO: Add your document opening code here
-    /////////////////////////////////////////////////
 
     QFile file(filename);
 
@@ -191,6 +188,7 @@ bool RosegardenGUIDoc::openDocument(const QString &filename, const char *format 
         modified=false;
         return true;
     }
+
     return false;
 }
 
