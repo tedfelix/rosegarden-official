@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "POT-Creation-Date: 2003-04-23 14:39+0200\n"
-"PO-Revision-Date: 2003-04-17 14:22+0400\n"
+"PO-Revision-Date: 2003-04-25 10:48+0400\n"
 "Last-Translator: Alexandre Prokoudine <avp@altlinux.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -437,48 +437,44 @@ msgid ""
 msgstr "avp@altlinux.ru"
 
 #: editview.cpp:452
-#, fuzzy
 msgid "I"
-msgstr "В"
+msgstr "I"
 
 #: editview.cpp:452
 msgid "II"
-msgstr ""
+msgstr "II"
 
 #: editview.cpp:452
 msgid "III"
-msgstr ""
+msgstr "III"
 
 #: editview.cpp:452
-#, fuzzy
 msgid "IV"
-msgstr "DIV"
+msgstr "IV"
 
 #: editview.cpp:453
 msgid "V"
-msgstr ""
+msgstr "V"
 
 #: editview.cpp:453
 msgid "VI"
-msgstr ""
+msgstr "VI"
 
 #: editview.cpp:453
 msgid "VII"
-msgstr ""
+msgstr "VII"
 
 #: editview.cpp:453
 msgid "VIII"
-msgstr ""
+msgstr "VIII"
 
 #: editview.cpp:455
-#, fuzzy
 msgid "%1 flat"
-msgstr " бемоль"
+msgstr "%1 бемоль"
 
 #: editview.cpp:456
-#, fuzzy
 msgid "%1 sharp"
-msgstr " диез"
+msgstr "%1 диез"
 
 #: editview.cpp:471
 msgid "&Insert Note"
@@ -649,14 +645,12 @@ msgid "Found Metadata outside Composition"
 msgstr "Обнаружены метаданные за пределами композиции"
 
 #: rosexmlhandler.cpp:1357
-#, fuzzy
 msgid "Found recordLevel outside Instrument"
-msgstr "Обнаружен реверберация вне инструмента"
+msgstr ""
 
 #: rosexmlhandler.cpp:1370
-#, fuzzy
 msgid "Found audioInput outside Instrument"
-msgstr "Обнаружен баланс вне инструмента"
+msgstr ""
 
 #: rosexmlhandler.cpp:1413
 msgid "Got event outside of a Segment"
@@ -667,7 +661,6 @@ msgid "Set Tempo"
 msgstr "Установить темп"
 
 #: rosegardentempo.cpp:44
-#, fuzzy
 msgid "Modify Tempo"
 msgstr "Изменить темп"
 
@@ -798,9 +791,8 @@ msgid "Manage MIDI Banks and Programs"
 msgstr "Настроить банки и программы"
 
 #: bankeditor.cpp:621
-#, fuzzy
 msgid "Reset"
-msgstr "Пауза"
+msgstr "Перезагрузить"
 
 #: bankeditor.cpp:640
 msgid "MIDI Device"
@@ -851,8 +843,7 @@ msgid "Export Banks"
 msgstr "Экспортировать банки"
 
 #: bankeditor.cpp:674
-msgid ""
-"Import Bank and Program data from a Rosegarden file to the current Device"
+msgid "Import Bank and Program data from a Rosegarden file to the current Device"
 msgstr ""
 "Импортировать данные о банке и программах\n"
 "из файла Rosegarden в текущее устройство"
@@ -1097,12 +1088,11 @@ msgstr "&Удалить контрапункт"
 
 #: notationcommands.h:469
 msgid "Stems &Up"
-msgstr ""
+msgstr "Штилями &вверх"
 
 #: notationcommands.h:469
-#, fuzzy
 msgid "Stems &Down"
-msgstr "&Направление штилей"
+msgstr "Штилями в&низ"
 
 #: notationcommands.h:488
 msgid "&Restore Computed Stems"
@@ -1113,9 +1103,8 @@ msgid "Change &Note Style"
 msgstr "Сменить нотный &стиль"
 
 #: notationcommands.h:526
-#, fuzzy
 msgid "Slashes"
-msgstr "Чё&рточки"
+msgstr "Чёрточки"
 
 #: notationcommands.h:564
 msgid "Add Te&xt Mark..."
@@ -1472,9 +1461,8 @@ msgid "All files"
 msgstr "Все файлы"
 
 #: rosegardengui.cpp:1428
-#, fuzzy
 msgid "Save as..."
-msgstr "Переместить дорожки..."
+msgstr "Сохранить как..."
 
 #: rosegardengui.cpp:1448
 msgid "Closing file..."
@@ -2514,7 +2502,7 @@ msgstr "Низкий"
 
 #: widgets.cpp:847
 msgid "Very low"
-msgstr ""
+msgstr "Очень низкая"
 
 #: widgets.cpp:850
 msgid "Tuplet level:"
@@ -2646,14 +2634,12 @@ msgid "<untitled>"
 msgstr "<без имени>"
 
 #: segmentcommands.h:298 segmentcommands.h:318
-#, fuzzy
 msgid "&Split on Silence"
-msgstr "Разделить аудиосегмент"
+msgstr "&Разделить по тишине"
 
 #: segmentcommands.h:357
-#, fuzzy
 msgid "&Rescale..."
-msgstr "Перемасштабировать"
+msgstr "&Перемасштабировать..."
 
 #: segmentcommands.h:403
 msgid "Add Time Si&gnature Change..."
@@ -2768,14 +2754,12 @@ msgid "Instrument Parameters"
 msgstr "Параметры инструмента"
 
 #: instrumentparameterbox.cpp:454
-#, fuzzy
 msgid "Record level = "
-msgstr "Добавить устройство записи"
+msgstr "Уровень записи = "
 
 #: instrumentparameterbox.cpp:478
-#, fuzzy
 msgid "Playback level = "
-msgstr "Воспроизведение (в мс)"
+msgstr "Уровень воспроизведения = "
 
 #: instrumentparameterbox.cpp:672 instrumentparameterbox.cpp:1150
 #: studiowidgets.cpp:56 audioplugindialog.cpp:151
@@ -3347,9 +3331,8 @@ msgstr ""
 "    (учитывается при следующем старте программы)"
 
 #: rosegardenconfiguredialog.cpp:992
-#, fuzzy
 msgid "MIDI Record Device"
-msgstr "Добавить устройство записи"
+msgstr "MIDI-устройство записи"
 
 #: rosegardenconfiguredialog.cpp:1044
 msgid "<no record devices>"
@@ -3372,9 +3355,8 @@ msgid "Send MIDI Clock and System messages"
 msgstr ""
 
 #: rosegardenconfiguredialog.cpp:1094
-#, fuzzy
 msgid "JACK transport mode"
-msgstr "JACK-ведущий"
+msgstr "Режим JACK-транспорта"
 
 #: rosegardenconfiguredialog.cpp:1100 rosegardenconfiguredialog.cpp:1125
 msgid "off"
@@ -3390,7 +3372,7 @@ msgstr "JACK-ведущий"
 
 #: rosegardenconfiguredialog.cpp:1119
 msgid "MMC transport mode"
-msgstr ""
+msgstr "Режим MMC-транспорта"
 
 #: rosegardenconfiguredialog.cpp:1126
 msgid "MMC Slave"
@@ -3470,7 +3452,7 @@ msgstr "<частота дискретизации недоступна>"
 
 #: rosegardenconfiguredialog.cpp:1530
 msgid "minutes at"
-msgstr ""
+msgstr "минут в"
 
 #: notationview.cpp:710
 msgid "Note &Font"
@@ -3514,7 +3496,7 @@ msgstr "Поставить бемоль"
 
 #: notationview.cpp:835
 msgid "Natural"
-msgstr ""
+msgstr "Натуральный"
 
 #: notationview.cpp:836
 msgid "Double sharp"
@@ -3714,8 +3696,7 @@ msgstr "  Шрифт:  "
 
 #: notationview.cpp:1432
 msgid "Unknown font \"%1\", using default"
-msgstr ""
-"Размер шрифта \"%1\" не подходит - вместо него используется стандартный"
+msgstr "Размер шрифта \"%1\" не подходит - вместо него используется стандартный"
 
 #: notationview.cpp:1440
 msgid "  Size:  "
@@ -3758,14 +3739,12 @@ msgid "rest"
 msgstr "пауза"
 
 #: segmenttool.cpp:398 segmenttool.cpp:824
-#, fuzzy
 msgid "Move Segment"
-msgstr "Ререместить событие"
+msgstr "Переместить сегмент"
 
 #: segmenttool.cpp:825
-#, fuzzy
 msgid "Move Segments"
-msgstr "Переместить события"
+msgstr "Переместить сегменты"
 
 #: matrixtool.cpp:776
 msgid "Move Event"
@@ -4064,31 +4043,32 @@ msgid "Remove and audio file from this manager dialog."
 msgstr ""
 
 #: audiomanagerdialog.cpp:182
-#, fuzzy
 msgid "Hear a preview of the currently selected audio file."
-msgstr "Приглушает все дорожки кроме выбранных"
+msgstr "Прослушать фрагмент выбранного аудиофайла"
 
 #: audiomanagerdialog.cpp:185
-#, fuzzy
 msgid "Rename the currently selected audio file."
-msgstr "Приглушает все дорожки кроме выбранных"
+msgstr "Переименовать выбранный аудиофайл"
 
 #: audiomanagerdialog.cpp:188
 msgid ""
 "Insert the current audio file at the bottom of your composition in a new "
 "audio track."
 msgstr ""
+"Вставить выбранный аудиофайл в низ композиции "
+"как новую аудиодорожку"
 
 #: audiomanagerdialog.cpp:191
 msgid ""
 "Remove all audio files (and any representations of them) from this dialog "
 "and the composition."
 msgstr ""
+"Удалить все аудиофайлы (в любых их ипостасях) как "
+"из этого диалога, так и из композиции"
 
 #: audiomanagerdialog.cpp:194
-#, fuzzy
 msgid "Export this audio file."
-msgstr "Экспортируется аудиофайл..."
+msgstr "Экспортировать этот аудиофайл"
 
 #: audiomanagerdialog.cpp:197
 msgid ""
@@ -4130,8 +4110,7 @@ msgstr "Экспортируется аудиофайл..."
 
 #: audiomanagerdialog.cpp:606
 msgid "Really delete audio file \"%1\" and all associated audio segments ?"
-msgstr ""
-"Вы действительно хотите удалить аудиофайл \"%1\" и связанные с ним сегменты?"
+msgstr "Вы действительно хотите удалить аудиофайл \"%1\" и связанные с ним сегменты?"
 
 #: audiomanagerdialog.cpp:679
 msgid "Select one or more Audio Files"
@@ -4274,9 +4253,8 @@ msgid "Transposing down one octave..."
 msgstr "Транспонировать октавой ниже..."
 
 #: matrixview.cpp:1119 notationviewslots.cpp:1702
-#, fuzzy
 msgid "Time: %1"
-msgstr "Время  "
+msgstr "Время: %1"
 
 #: matrixview.cpp:1172 notationviewslots.cpp:301 notationviewslots.cpp:327
 msgid "Cutting selection to clipboard..."
@@ -4537,11 +4515,11 @@ msgstr "Моно- или стереофонический аудиоинстру
 
 #: studiowidgets.cpp:107
 msgid "Mute the Track to which this Instrument is attached."
-msgstr ""
+msgstr "Приглушить дорожку, с которой ассоциирован инструмент"
 
 #: studiowidgets.cpp:113
 msgid "Solo the Track to which this Instrument is attached."
-msgstr ""
+msgstr "Сделать солирующей дорожку, с которой ассоциирован инструмент"
 
 #: studiowidgets.cpp:120
 msgid "Arm recording for this audio Instrument"
@@ -4568,8 +4546,7 @@ msgid "global element must precede note elements"
 msgstr "глобальный элемент должен предшествовать нотным эелементам"
 
 #: notestyle.cpp:595
-msgid ""
-"global and note elements may have shape or charname attribute, but not both"
+msgid "global and note elements may have shape or charname attribute, but not both"
 msgstr ""
 
 #: rosegardentransportdialog.cpp:617 rosegardentransportdialog.cpp:691
@@ -5125,3 +5102,4 @@ msgstr "Заново присоединить устройство"
 
 #~ msgid "  Smoothing:  "
 #~ msgstr "  Сглаживание:  "
+
