@@ -42,17 +42,17 @@ StaffRuler::StaffRuler(int xPos, int yPos, QCanvas* c)
       m_stepLineHeight(10),
       m_subStepLineHeight(5),
       m_mainLine(new QCanvasLine(m_canvas)),
+      m_background(new QCanvasRectangle(0, 0,
+                                        m_canvas->width(), m_yPos, 
+                                        m_canvas)),
       m_cursor(new PositionCursor(m_canvas, m_canvas))
 {
-    QCanvasRectangle *rulerBackground = new QCanvasRectangle(0, 0,
-                                                             m_canvas->width(), m_yPos, 
-                                                             m_canvas);
     QColor bgColor(105, 170, 228);
     
-    rulerBackground->setBrush(bgColor);
-    rulerBackground->setPen(bgColor);
-    rulerBackground->setZ(-1);
-    rulerBackground->show();
+    m_background->setBrush(bgColor);
+    m_background->setPen(bgColor);
+    m_background->setZ(-1);
+    m_background->show();
 
     m_mainLine->setPoints(0, m_yPos, m_canvas->width(), m_yPos);
     
@@ -148,6 +148,13 @@ void StaffRuler::makeStep(int stepValue,
 
     m_stepElements.push_back(stepEl);
 }
+
+void StaffRuler::resize()
+{
+    m_background->setSize(m_canvas->width(), m_background->height());
+    m_mainLine->setPoints(0, m_yPos, m_canvas->width(), m_yPos);
+}
+
 
 //////////////////////////////////////////////////////////////////////
 

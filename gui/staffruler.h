@@ -86,6 +86,9 @@ public:
     
     PositionCursor* getCursor() { return m_cursor; }
 
+    /// reset ruler width to canvas width
+    void resize();
+
 protected:
     struct StepElement
     {
@@ -113,6 +116,8 @@ protected:
         m_subStepLineHeight;
 
     QCanvasLine* m_mainLine;
+    QCanvasRectangle* m_background;
+
     PositionCursor* m_cursor;
 
     Steps m_steps;

@@ -1651,6 +1651,7 @@ void NotationView::readjustCanvasSize()
                              << totalWidth << endl;
 
         canvas()->resize(int(totalWidth) + 50, int(totalHeight) + 50);
+        m_ruler->resize();
     }
 }
 
