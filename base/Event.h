@@ -58,17 +58,14 @@ typedef int timeT;
     
 class Event
 {
-private:
-    
 public:
+    friend class ViewElement;
 
     struct NoData { };
     struct BadType { };
 
-    Event() :
-        m_duration(0), m_absoluteTime(0) { }
-    Event(const std::string &type) :
-        m_type(type), m_duration(0), m_absoluteTime(0) { }
+    Event();
+    Event(const std::string &type);
     Event(const Event &e);
 
     virtual ~Event();
@@ -157,6 +154,13 @@ public:
     void dump(std::ostream&) const {}
 #endif
 
+    bool hasViewElement() const { return m_viewElementRefCount != 0; }
+
+protected:
+    // these are for ViewElement only
+    void viewElementRef()   { ++m_viewElementRefCount; }
+    void viewElementUnRef() { --m_viewElementRefCount; }
+
 private:
     void scrapMap();
     void copyFrom(const Event &e);
@@ -164,6 +168,8 @@ private:
     std::string m_type;
     timeT m_duration;
     timeT m_absoluteTime;
+
+    unsigned int m_viewElementRefCount;
 
     typedef std::hash_map<std::string, PropertyStoreBase*, hashstring, eqstring>
         PropertyMap;

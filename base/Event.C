@@ -26,10 +26,28 @@ namespace Rosegarden
 using std::string;
 using std::ostream;
 
+Event::Event()
+    : m_duration(0),
+      m_absoluteTime(0),
+      m_viewElementRefCount(0)
+{
+}
+
+Event::Event(const std::string &type)
+    : m_type(type),
+      m_duration(0),
+      m_absoluteTime(0),
+      m_viewElementRefCount(0)
+{
+}
+
+
 Event::Event(const Event &e) :
     m_type(e.getType()),
     m_duration(e.getDuration()),
-    m_absoluteTime(e.getAbsoluteTime())
+    m_absoluteTime(e.getAbsoluteTime()),
+    m_viewElementRefCount(0) // because we do not copy the ViewElements,
+    // since we can't access them
 {
     copyFrom(e);
 }
