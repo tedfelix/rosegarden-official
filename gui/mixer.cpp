@@ -620,6 +620,7 @@ AudioMixerWindow::slotPluginSelected(Rosegarden::InstrumentId id,
 	if (plugin == -1) {
 
 	    rec.m_plugins[index]->setText(i18n("<none>"));
+            QToolTip::add(rec.m_plugins[index], i18n("<no plugin>"));
 
 	    rec.m_plugins[index]->setPaletteBackgroundColor
 		(kapp->palette().
@@ -630,13 +631,21 @@ AudioMixerWindow::slotPluginSelected(Rosegarden::InstrumentId id,
 	    Rosegarden::AudioPlugin *pluginClass 
 		= m_document->getPluginManager()->getPlugin(plugin);
 
+            QColor pluginBgColour =
+                kapp->palette().color(QPalette::Active, QColorGroup::Light);
+
 	    if (pluginClass)
+            {
 		rec.m_plugins[index]->
 		    setText(pluginClass->getLabel());
+                QToolTip::add(rec.m_plugins[index], pluginClass->getLabel());
 
-	    rec.m_plugins[index]->setPaletteBackgroundColor
-		(kapp->palette().
-		 color(QPalette::Active, QColorGroup::Light));
+                pluginBgColour = pluginClass->getColour();
+            }
+
+
+            rec.m_plugins[index]->setPaletteForegroundColor(Qt::white);
+	    rec.m_plugins[index]->setPaletteBackgroundColor(pluginBgColour);
 	}
     }
 }
@@ -736,6 +745,8 @@ AudioMixerWindow::updatePluginButtons(int id)
 
 	    bool used = false;
 	    bool bypass = false;
+            QColor pluginBgColour = 
+                kapp->palette().color(QPalette::Active, QColorGroup::Light);
 
 	    rec.m_plugins[i]->show();
 
@@ -749,8 +760,12 @@ AudioMixerWindow::updatePluginButtons(int id)
 			    getPositionByUniqueId(inst->getId()));
 
 		if (pluginClass)
-		    rec.m_plugins[i]->
-			setText(pluginClass->getLabel());
+                {
+		    rec.m_plugins[i]->setText(pluginClass->getLabel());
+                    QToolTip::add(rec.m_plugins[i], pluginClass->getLabel());
+
+                    pluginBgColour = pluginClass->getColour();
+                }
 		
 		used = true;
 		bypass = inst->isBypassed();
@@ -758,6 +773,7 @@ AudioMixerWindow::updatePluginButtons(int id)
 	    } else {
 
 		rec.m_plugins[i]->setText(i18n("<none>"));
+                QToolTip::add(rec.m_plugins[i], i18n("<no plugin>"));
 
 		if (inst) bypass = inst->isBypassed();
 	    }
@@ -774,13 +790,9 @@ AudioMixerWindow::updatePluginButtons(int id)
 
 	    } else if (used) {
 
-		rec.m_plugins[i]->setPaletteForegroundColor
-		    (kapp->palette().
-		     color(QPalette::Active, QColorGroup::ButtonText));
+		rec.m_plugins[i]->setPaletteForegroundColor(Qt::white);
+		rec.m_plugins[i]->setPaletteBackgroundColor(pluginBgColour);
 
-		rec.m_plugins[i]->setPaletteBackgroundColor
-		    (kapp->palette().
-		     color(QPalette::Active, QColorGroup::Light));
 
 	    } else {
 

@@ -172,7 +172,8 @@ public:
 
     // Set the button colour
     //
-    void setBypassButtonColour(int pluginIndex, bool bypassState);
+    void setButtonColour(int pluginIndex, bool bypassState, 
+                         const QColor &color);
 
     void setMute(bool value);
 

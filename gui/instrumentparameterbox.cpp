@@ -416,9 +416,18 @@ AudioInstrumentParameterPanel::slotPluginSelected(Rosegarden::InstrumentId instr
     if (!m_selectedInstrument ||
 	instrumentId != m_selectedInstrument->getId()) return;
 
+    RG_DEBUG << "AudioInstrumentParameterPanel::slotPluginSelected - "
+             << "instrument = " << instrumentId
+             << ", index = " << index
+             << ", plugin = " << plugin << endl;
+
+    QColor pluginBackgroundColour = Qt::black;
+    bool bypassed = false;
+
     if (plugin == -1) {
 
 	m_audioFader->m_plugins[index]->setText(i18n("<no plugin>"));
+        QToolTip::add(m_audioFader->m_plugins[index], i18n("<no plugin>"));
 
     } else {
 
@@ -426,9 +435,24 @@ AudioInstrumentParameterPanel::slotPluginSelected(Rosegarden::InstrumentId instr
 	    = m_doc->getPluginManager()->getPlugin(plugin);
 
 	if (pluginClass)
+        {
 	    m_audioFader->m_plugins[index]->
 		setText(pluginClass->getLabel());
+
+            QToolTip::add(m_audioFader->m_plugins[index], 
+                    pluginClass->getLabel());
+
+            pluginBackgroundColour = pluginClass->getColour();
+        }
     }
+
+    Rosegarden::AudioPluginInstance *inst = 
+        m_selectedInstrument->getPlugin(index);
+
+    if (inst)
+        bypassed = inst->isBypassed();
+
+    setButtonColour(index, bypassed, pluginBackgroundColour);
 }
 
 void
@@ -441,20 +465,35 @@ AudioInstrumentParameterPanel::slotPluginBypassed(Rosegarden::InstrumentId instr
     Rosegarden::AudioPluginInstance *inst = 
         m_selectedInstrument->getPlugin(pluginIndex);
 
-    if (inst)
+    QColor backgroundColour = Qt::black; // default background colour
+
+    if (inst && inst->isAssigned())
     {
+        Rosegarden::AudioPlugin *pluginClass 
+            = m_doc->getPluginManager()->getPlugin(
+                    m_doc->getPluginManager()->
+                        getPositionByUniqueId(inst->getId()));
+
         /// Set the colour on the button
         //
-        setBypassButtonColour(pluginIndex, bp);
+        if (pluginClass)
+            backgroundColour = pluginClass->getColour();
     }
+
+    setButtonColour(pluginIndex, bp, backgroundColour);
 }
 
 // Set the button colour
 //
 void
-AudioInstrumentParameterPanel::setBypassButtonColour(int pluginIndex,
-                                                     bool bypassState)
+AudioInstrumentParameterPanel::setButtonColour(
+        int pluginIndex, bool bypassState, const QColor &colour)
 {
+    RG_DEBUG << "AudioInstrumentParameterPanel::setButtonColour " 
+        << "pluginIndex = " << pluginIndex
+        << ", bypassState = " << bypassState
+        << ", rgb = " << colour.name() << endl;
+
     // Set the bypass colour on the plugin button
     if (bypassState)
     {
@@ -466,7 +505,7 @@ AudioInstrumentParameterPanel::setBypassButtonColour(int pluginIndex,
             setPaletteBackgroundColor(kapp->palette().
                     color(QPalette::Active, QColorGroup::ButtonText));
     }
-    else
+    else if (colour == Qt::black)
     {
         m_audioFader->m_plugins[pluginIndex]->
             setPaletteForegroundColor(kapp->palette().
@@ -475,6 +514,12 @@ AudioInstrumentParameterPanel::setBypassButtonColour(int pluginIndex,
         m_audioFader->m_plugins[pluginIndex]->
             setPaletteBackgroundColor(kapp->palette().
                     color(QPalette::Active, QColorGroup::Button));
+    }
+    else
+    {
+        m_audioFader->m_plugins[pluginIndex]->
+            setPaletteForegroundColor(Qt::white);
+        m_audioFader->m_plugins[pluginIndex]->setPaletteBackgroundColor(colour);
     }
 }
 
@@ -616,20 +661,23 @@ AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
                             getPositionByUniqueId(inst->getId()));
 
             if (pluginClass)
+            {
                 m_audioFader->m_plugins[i]->
                     setText(pluginClass->getLabel());
 
-            setBypassButtonColour(i, inst->isBypassed());
+                QToolTip::add(m_audioFader->m_plugins[i], 
+                    pluginClass->getLabel());
 
+                setButtonColour(i, inst->isBypassed(), 
+                        pluginClass->getColour());
+            }
         }
         else
         {
             m_audioFader->m_plugins[i]->setText(i18n("<no plugin>"));
+            QToolTip::add(m_audioFader->m_plugins[i], i18n("<no plugin>"));
 
-            if (inst)
-                setBypassButtonColour(i, inst->isBypassed());
-            else
-                setBypassButtonColour(i, false);
+            setButtonColour(i, inst ? inst->isBypassed() : false, Qt::black);
         }
     }
 

@@ -21,6 +21,7 @@
 #include <vector>
 
 #include <qstring.h>
+#include <qcolor.h>
 
 #include "AudioPluginInstance.h"
 
@@ -82,6 +83,9 @@ public:
     PortIterator begin() { return m_ports.begin(); }
     PortIterator end() { return m_ports.end(); }
 
+    QColor getColour() const { return m_colour; }
+    void setColour(const QColor &colour) { m_colour = colour; }
+
 protected:
 
     MappedObjectId             m_id;
@@ -95,6 +99,9 @@ protected:
     // our ports and associated hints
     std::vector<PluginPort*>   m_ports;
 
+    // Colour of this activated plugin
+    //
+    QColor                    m_colour;
 };
 
 typedef std::vector<AudioPlugin*>::iterator PluginIterator;
