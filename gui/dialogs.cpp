@@ -36,6 +36,7 @@
 #include <qlayout.h>
 #include <qtooltip.h>
 #include <qobjectlist.h>
+#include <qmessagebox.h>
 
 #include <klocale.h>
 #include <karrowbutton.h>
@@ -1064,10 +1065,12 @@ TextEventDialog::slotTypeChanged(const QString &)
 
 
 EventEditDialog::EventEditDialog(QWidget *parent,
+				 NotePixmapFactory *npf,
 				 const Rosegarden::Event &event,
 				 bool editable) :
     KDialogBase(parent, 0, true, i18n(editable ? "Edit Event" : "View Event"),
 		(editable ? (Ok | Cancel) : Ok)),
+    m_notePixmapFactory(npf),
     m_originalEvent(event),
     m_event(event),
     m_type(event.getType()),
@@ -1080,15 +1083,17 @@ EventEditDialog::EventEditDialog(QWidget *parent,
     QGroupBox *intrinsicBox = new QGroupBox
 	(1, Horizontal, i18n("Intrinsics"), vbox);
 
-    QGrid *intrinsicGrid = new QGrid(3, QGrid::Horizontal, intrinsicBox);
+    QGrid *intrinsicGrid = new QGrid(4, QGrid::Horizontal, intrinsicBox);
 
     new QLabel(i18n("Event type: "), intrinsicGrid);
+    new QLabel("", intrinsicGrid);
     new QLabel("", intrinsicGrid);
     QLineEdit *lineEdit = new QLineEdit(intrinsicGrid);
     lineEdit->setText(event.getType().c_str());
 
     new QLabel(i18n("Absolute time: "), intrinsicGrid);
     m_absoluteTimeDisplay = new QLabel("(note)", intrinsicGrid);
+    m_absoluteTimeDisplayAux = new QLabel("(note)", intrinsicGrid);
 
     QSpinBox *absoluteTime = new QSpinBox
 	(INT_MIN, INT_MAX, Note(Note::Shortest).getDuration(), intrinsicGrid);
@@ -1099,6 +1104,7 @@ EventEditDialog::EventEditDialog(QWidget *parent,
 
     new QLabel(i18n("Duration: "), intrinsicGrid);
     m_durationDisplay = new QLabel("(note)", intrinsicGrid);
+    m_durationDisplayAux = new QLabel("(note)", intrinsicGrid);
 
     QSpinBox *duration = new QSpinBox
 	(0, INT_MAX, Note(Note::Shortest).getDuration(), intrinsicGrid);
@@ -1108,6 +1114,7 @@ EventEditDialog::EventEditDialog(QWidget *parent,
     slotDurationChanged(event.getDuration());
 
     new QLabel(i18n("Sub-ordering: "), intrinsicGrid);
+    new QLabel("", intrinsicGrid);
     new QLabel("", intrinsicGrid);
     
     QSpinBox *subOrdering = new QSpinBox(-100, 100, 1, intrinsicGrid);
@@ -1122,7 +1129,7 @@ EventEditDialog::EventEditDialog(QWidget *parent,
 
     QLabel *label = new QLabel(i18n("Name"), m_persistentGrid);
     QFont font(label->font());
-    font.setBold(true);
+    font.setItalic(true);
     label->setFont(font);
     
     label = new QLabel(i18n("Type"), m_persistentGrid);
@@ -1141,7 +1148,7 @@ EventEditDialog::EventEditDialog(QWidget *parent,
 
     QGroupBox *nonPersistentBox = new QGroupBox
 	(1, Horizontal, i18n("Non-persistent properties"), vbox);
-    new QLabel(i18n("These will be lost if the event is modified."),
+    new QLabel(i18n("These are cached values, lost if the event is modified."),
 	       nonPersistentBox);
 
     m_nonPersistentGrid = new QGrid
@@ -1239,12 +1246,48 @@ void
 EventEditDialog::slotAbsoluteTimeChanged(int value)
 {
     m_absoluteTime = value;
+
+    Note nearestNote = Note::getNearestNote(timeT(value), 1);
+    std::string noteName = nearestNote.getReferenceName();
+    noteName = "menu-" + noteName;
+    QPixmap map = m_notePixmapFactory->makeToolbarPixmap(noteName.c_str());
+
+    m_absoluteTimeDisplay->setPixmap(map);
+
+    timeT nearestDuration = nearestNote.getDuration();
+    if (timeT(value) >= nearestDuration * 2) {
+	m_absoluteTimeDisplayAux->setText("++");
+    } else if (timeT(value) > nearestDuration) {
+	m_absoluteTimeDisplayAux->setText("+");
+    } else if (timeT(value) < nearestDuration) {
+	m_absoluteTimeDisplayAux->setText("-");
+    } else {
+	m_absoluteTimeDisplayAux->setText("");
+    }
 }
 
 void
 EventEditDialog::slotDurationChanged(int value)
 {
     m_duration = value;
+
+    Note nearestNote = Note::getNearestNote(timeT(value), 1);
+    std::string noteName = nearestNote.getReferenceName();
+    noteName = "menu-" + noteName;
+    QPixmap map = m_notePixmapFactory->makeToolbarPixmap(noteName.c_str());
+
+    m_durationDisplay->setPixmap(map);
+
+    timeT nearestDuration = nearestNote.getDuration();
+    if (timeT(value) >= nearestDuration * 2) {
+	m_durationDisplayAux->setText("++");
+    } else if (timeT(value) > nearestDuration) {
+	m_durationDisplayAux->setText("+");
+    } else if (timeT(value) < nearestDuration) {
+	m_durationDisplayAux->setText("-");
+    } else {
+	m_durationDisplayAux->setText("");
+    }
 }
 
 void
@@ -1297,6 +1340,13 @@ EventEditDialog::slotPropertyDeleted()
 
     QString propertyName = pushButton->name();
 
+    if (QMessageBox::warning
+	(this, i18n("Edit Event"),
+	 i18n("Are you sure you want to delete the \"%1\" property?\n\n"
+	      "Removing necessary properties may cause unexpected behaviour.").
+	 arg(propertyName),
+	 i18n("&Delete"), i18n("&Cancel"), 0, 1) != 0) return;
+
     QObjectList *list = m_persistentGrid->queryList(0, propertyName, false);
     QObjectListIt i(*list);
     QObject *obj;
@@ -1305,7 +1355,7 @@ EventEditDialog::slotPropertyDeleted()
 	delete obj;
     }
     delete list;
-
+    
     m_event.unset(propertyName.latin1());
 }
 
@@ -1317,6 +1367,14 @@ EventEditDialog::slotPropertyMadePersistent()
     if (!pushButton) return;
 
     QString propertyName = pushButton->name();
+
+    if (QMessageBox::warning
+	(this, i18n("Edit Event"),
+	 i18n("Are you sure you want to make the \"%1\" property persistent?\n\n"
+	      "This could cause problems if it overrides a different "
+	      "computed value later on.").
+	 arg(propertyName),
+	 i18n("Make &Persistent"), i18n("&Cancel"), 0, 1) != 0) return;
 
     QObjectList *list = m_nonPersistentGrid->queryList(0, propertyName, false);
     QObjectListIt i(*list);

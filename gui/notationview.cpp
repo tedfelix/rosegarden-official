@@ -183,6 +183,9 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_currentStaff = 0;
     m_staffs[0]->setCurrent(true);
 
+    m_hlayout.setPageMode(false);
+    m_hlayout.setPageWidth(width() - 50);
+
     bool layoutApplied = applyLayout();
     if (!layoutApplied) KMessageBox::sorry(0, i18n("Couldn't apply score layout"));
     else {

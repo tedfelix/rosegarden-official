@@ -642,8 +642,6 @@ public:
         BadType(std::string t = "") : type(t) { }
     };
 
-    struct TooManyDots { };
-    
     struct MalformedNoteName {
         std::string name;
         std::string reason;
@@ -685,31 +683,11 @@ public:
      * durational; they don't represent pitch, and may be as
      * relevant to rests as actual notes.
      */
-    Note(Type type, int dots = 0) /* throw (BadType, TooManyDots) */ :
-    m_type(type), m_dots(dots) {
-        
-        // I'm not sure how this'll interact with compiler
-        // optimisation -- I'm hoping throw() is implemented as a
-        // single out-of-line function call, in which case it'll be
-        // fine to inline this constructor in code like
-        // "Note(Note::Crotchet, false).getDuration()".  That's quite
-        // important; I'd even consider not throwing if it'll screw
-        // inlining
-
-        if (m_type < Shortest || m_type > Longest) throw BadType();
-    
-        // We don't permit dotted hemis, double-dotted demis etc
-        // because we can't represent notes short enough to make up
-        // the rest of the beat (as we have no notes shorter than a
-        // hemi).  And if we got to double-dotted hemis, triple-dotted
-        // demis etc, we couldn't even represent their durations in
-        // our duration units.  Still, throwing this exception is
-        // probably going to cause mayhem -- might be happier just
-        // setting m_dots back to m_type if it's found to be larger
-
-//!!! nah, I think we're okay with this now
-//        if (m_dots > m_type) throw TooManyDots();
-    }
+    Note(Type type, int dots = 0) :
+	m_type(type < Shortest ? Shortest :
+	       type >  Longest ?  Longest :
+	       type),
+	m_dots(dots) { }
 
     Note(const std::string &s)
         /* throw (BadType, MalformedNoteName) */;
@@ -896,8 +874,8 @@ public:
      * is entirely in this time signature.
      */
     void getDurationListForInterval(DurationList &dlist,
-                                    int intervalDuration,
-                                    int startOffset = 0) const;
+                                    timeT intervalDuration,
+                                    timeT startOffset = 0) const;
 
     /**
      * Get the level of emphasis for a position in a bar. 4 is lots

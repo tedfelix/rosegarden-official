@@ -1109,13 +1109,13 @@ Event *TimeSignature::getAsEvent(timeT absoluteTime) const
 // correctly (compound time included).
 
 void TimeSignature::getDurationListForInterval(DurationList &dlist,
-                                               int duration,
-                                               int startOffset) const
+                                               timeT duration,
+                                               timeT startOffset) const
 {
     setInternalDurations();
 
-    int offset = startOffset;
-    int durationRemaining = duration;
+    timeT offset = startOffset;
+    timeT durationRemaining = duration;
 
     while (durationRemaining > 0) {
 
@@ -1191,21 +1191,29 @@ void TimeSignature::getDurationListForInterval(DurationList &dlist,
 
 	else {
 
-	    int currentDuration = m_beatDivisionDuration;
+	    timeT currentDuration = m_beatDivisionDuration;
 
 	    while ( !(offset % currentDuration == 0
-		      && durationRemaining >= currentDuration)
-/*		    && currentDuration > 1 */ ) {
+		      && durationRemaining >= currentDuration) ) {
 
 		if (currentDuration <= Note(Note::Shortest).getDuration()) {
-		    currentDuration  = durationRemaining;
+		    
+		    // okay, this isn't working.  If our duration takes
+		    // us past the next beat boundary, fill with an exact
+		    // rest duration to there and then continue  --cc
+		    
+		    timeT toNextBeat =
+			m_beatDuration - (offset % m_beatDuration);
+
+		    if (durationRemaining > toNextBeat) {
+			currentDuration = toNextBeat;
+		    } else {
+			currentDuration  = durationRemaining;
+		    }
 		    break;
 		}
 
 		currentDuration /= 2;
-
-//		if (currentDuration == 0) currentDuration = 1;
-
 	    }
 
 	    dlist.push_back(currentDuration);

@@ -749,6 +749,9 @@ NotationHLayout::reconcileBarsLinear()
 
 	if (!widest) break; // reached end of piece
 	double maxWidth = m_barData[widest][barNo].idealWidth;
+	if (m_pageWidth > 0.1 && maxWidth > m_pageWidth) {
+	    maxWidth = m_pageWidth;
+	}
 
 	// Now apply width to this bar on all staffs
 

@@ -1004,7 +1004,7 @@ NotePixmapFactory::makeRestPixmap(const NotePixmapParameters &params)
     m_noteBodyWidth = pixmap.width();
     m_noteBodyHeight = pixmap.height();
 
-    makeRoomForTuplingLine(params);
+    if (params.m_tupletCount) makeRoomForTuplingLine(params);
 
     createPixmapAndMask(m_noteBodyWidth + m_left + m_right,
                         m_noteBodyHeight + m_above + m_below);
@@ -1012,7 +1012,7 @@ NotePixmapFactory::makeRestPixmap(const NotePixmapParameters &params)
     m_p.drawPixmap(m_left, m_above, pixmap);
     m_pm.drawPixmap(m_left, m_above, *(pixmap.mask()));
 
-    drawTuplingLine(params);
+    if (params.m_tupletCount) drawTuplingLine(params);
 
     QPoint hotspot(m_font->getHotspot(charName));
     hotspot.setX(m_left);

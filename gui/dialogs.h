@@ -271,18 +271,24 @@ public:
      * the resulting edited version can subsequently be queried
      * through getEvent().
      */
-    EventEditDialog(QWidget *parent, const Rosegarden::Event &event,
+    EventEditDialog(QWidget *parent,
+		    NotePixmapFactory *npf,
+		    const Rosegarden::Event &event,
 		    bool editable = true);
 
     bool isModified() const;
     Rosegarden::Event getEvent() const;
 
 protected:
+    NotePixmapFactory *m_notePixmapFactory;
+
     const Rosegarden::Event &m_originalEvent;
     Rosegarden::Event m_event;
 
     QLabel *m_absoluteTimeDisplay;
+    QLabel *m_absoluteTimeDisplayAux;
     QLabel *m_durationDisplay;
+    QLabel *m_durationDisplayAux;
 
     QGrid *m_persistentGrid;
     QGrid *m_nonPersistentGrid;
