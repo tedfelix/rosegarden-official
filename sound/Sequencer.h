@@ -118,7 +118,7 @@ namespace Rosegarden
 
     // Process a chunk of Rosegarden Composition into MIDI events and send
     // them to aRTS.
-    void processMidiOut(const Rosegarden::Composition &composition);
+    void processMidiOut(Rosegarden::Composition &composition);
 
   private:
 
@@ -154,7 +154,7 @@ namespace Rosegarden
 
     Rosegarden::Track *_recordTrack;
 
-    map<unsigned int, Event*> _noteOnMap;
+    std::map<unsigned int, Event*> _noteOnMap;
 
   };
 

@@ -420,7 +420,7 @@ MidiFile::convertToRosegarden()
     //
     for ( midiEvent = (_midiComposition[i].begin());
           midiEvent != (_midiComposition[i].end());
-          midiEvent++ )
+          ++midiEvent )
     {
       if (midiEvent->messageType() == MIDI_NOTE_ON)
       {
@@ -462,7 +462,7 @@ MidiFile::convertToRosegarden()
 
       for ( midiEvent = (_midiComposition[i].begin());
             midiEvent != (_midiComposition[i].end());
-            midiEvent++ )
+            ++midiEvent )
       {
 
         if (midiEvent->isMeta())

@@ -36,8 +36,8 @@ namespace Rosegarden
   // Our internal MIDI structure is just a list of MidiEvents
   // vector or list?
   //
-  typedef map<unsigned int, list<MidiEvent> > MidiComposition;
-  typedef list<MidiEvent>::iterator MidiTrackIterator;
+  typedef std::map<unsigned int, std::list<MidiEvent> > MidiComposition;
+  typedef std::list<MidiEvent>::iterator MidiTrackIterator;
 
   class MidiFile
   {

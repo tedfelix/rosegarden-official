@@ -37,8 +37,8 @@ main(int argc, char **argv)
 {
   // Create a Rosegarden MIDI file
   //
-  Rosegarden::MidiFile *midiFile = new Rosegarden::MidiFile("glazunov.mid");
-  //Rosegarden::MidiFile *midiFile = new Rosegarden::MidiFile("Kathzy.mid");
+  //Rosegarden::MidiFile *midiFile = new Rosegarden::MidiFile("glazunov.mid");
+  Rosegarden::MidiFile *midiFile = new Rosegarden::MidiFile("Kathzy.mid");
 
   // open the MIDI file
   midiFile->open();
@@ -67,6 +67,10 @@ main(int argc, char **argv)
 
   // turn on playing
   sequencer.play();
+
+
+  cout << "Number of Tracks in Composition = " << comp.getNbTracks() << endl;
+  cout << "Number of Ticks per Bar = " << comp.getNbTicksPerBar() << endl;
 
   while(true)
   {
@@ -108,7 +112,7 @@ main(int argc, char **argv)
         break;
 
       case Rosegarden::Sequencer::ASYNCHRONOUS_MIDI:
-        // send asynchronous MIDI events in up to the GUI
+        // send asynchronous MIDI events up to the GUI
         break;
 
       default:
@@ -116,8 +120,6 @@ main(int argc, char **argv)
     }
 
    //sequencer.incrementSongPosition(60000);
-   //midiQueueIt = midiQueue->begin();
-
   }
 
 }

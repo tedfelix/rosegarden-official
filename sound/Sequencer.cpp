@@ -314,11 +314,12 @@ Sequencer::updateSongPosition()
 }
 
 void
-Sequencer::processMidiOut(const Rosegarden::Composition &composition)
+Sequencer::processMidiOut(Rosegarden::Composition &composition)
 {
 
   // send the event out
   // _midiPlayPort.processEvent(midiEvent)
+  MappedComposition *mappedComp = composition.getMappedComposition(0, 3000);
 
 }
 
