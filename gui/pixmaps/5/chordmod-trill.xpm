@@ -1,8 +1,0 @@
-/* XPM */
-static char * chordmod_trill_xpm[] = {
-"5 3 2 1",
-" 	c black",
-".	c None",
-" ....",
-" .  .",
-"   .."};
