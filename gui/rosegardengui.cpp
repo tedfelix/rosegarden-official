@@ -1965,7 +1965,7 @@ void RosegardenGUIApp::slotConfigure()
     kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotConfigure" << std::endl;
 
     Rosegarden::RosegardenConfigureDialog *configDlg = 
-        new Rosegarden::RosegardenConfigureDialog(this);
+        new Rosegarden::RosegardenConfigureDialog(m_doc, this);
 
     configDlg->show();
 }

@@ -36,15 +36,8 @@ namespace Rosegarden
 SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
                                  RosegardenTransportDialog *transport):
     m_doc(doc),
-    m_playLatency(0, 100000),  // the sequencer's head start
-    m_fetchLatency(0, 50000),  // how long to fetch and queue new events
-    m_readAhead(0, 40000),     // how many events to fetch
     m_transportStatus(STOPPED),
     m_soundSystemStatus(Rosegarden::NO_SEQUENCE_SUBSYS),
-    m_metronomePitch(37),
-    m_metronomeBarVelocity(120),
-    m_metronomeBeatVelocity(70),
-    m_metronomeDuration(0, 10000),
     m_transport(transport)
 {
 }
@@ -365,21 +358,23 @@ SequenceManager::play()
     if (comp.isLooping())
         startPos = comp.getElapsedRealTime(comp.getLoopStart());
 
+    Rosegarden::Configuration &config = m_doc->getConfiguration();
+
     // playback start position
     streamOut << startPos.sec;
     streamOut << startPos.usec;
 
     // playback latency
-    streamOut << m_playLatency.sec;
-    streamOut << m_playLatency.usec;
+    streamOut << config.getPlaybackLatency().sec;
+    streamOut << config.getPlaybackLatency().usec;
 
     // fetch latency
-    streamOut << m_fetchLatency.sec;
-    streamOut << m_fetchLatency.usec;
+    streamOut << config.getFetchLatency().sec;
+    streamOut << config.getFetchLatency().usec;
 
     // read ahead slice
-    streamOut << m_readAhead.sec;
-    streamOut << m_readAhead.usec;
+    streamOut << config.getReadAhead().sec;
+    streamOut << config.getReadAhead().usec;
 
     // Send Play to the Sequencer
     if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
@@ -650,22 +645,23 @@ SequenceManager::record()
     //
 
     Rosegarden::RealTime startPos =comp.getElapsedRealTime(comp.getPosition());
+    Rosegarden::Configuration &config = m_doc->getConfiguration();
 
     // playback start position
     streamOut << startPos.sec;
     streamOut << startPos.usec;
 
     // playback latency
-    streamOut << m_playLatency.sec;
-    streamOut << m_playLatency.usec;
+    streamOut << config.getPlaybackLatency().sec;
+    streamOut << config.getPlaybackLatency().usec;
 
     // fetch latency
-    streamOut << m_fetchLatency.sec;
-    streamOut << m_fetchLatency.usec;
+    streamOut << config.getFetchLatency().sec;
+    streamOut << config.getFetchLatency().usec;
 
     // read ahead slice
-    streamOut << m_readAhead.sec;
-    streamOut << m_readAhead.usec;
+    streamOut << config.getReadAhead().sec;
+    streamOut << config.getReadAhead().usec;
 
     // record type
     streamOut << (int)recordType;
@@ -875,6 +871,7 @@ SequenceManager::insertMetronomeClicks(const timeT &sliceStart,
 {
     Composition &comp = m_doc->getComposition();
     Studio &studio = m_doc->getStudio();
+    Configuration &config = m_doc->getConfiguration();
 
     MidiMetronome *metronome = studio.getMetronome();
 
@@ -883,7 +880,7 @@ SequenceManager::insertMetronomeClicks(const timeT &sliceStart,
     if(metronome == 0)
     {
         metronome = new MidiMetronome();
-        metronome->pitch = m_metronomePitch;
+        metronome->pitch = config.getMetronomePitch();
 
         // Default instrument is the first possible instrument
         //
@@ -915,9 +912,9 @@ SequenceManager::insertMetronomeClicks(const timeT &sliceStart,
         MappedEvent *me =
             new MappedEvent(metronome->instrument,
                             metronome->pitch,
-                            m_metronomeBarVelocity,
+                            config.getMetronomeBarVelocity(),
                             comp.getElapsedRealTime(barStart.first),
-                            m_metronomeDuration);
+                            config.getMetronomeDuration());
         m_mC.insert(me);
     }
     else if (barEnd.first >= sliceStart && barEnd.first <= sliceEnd)
@@ -925,9 +922,9 @@ SequenceManager::insertMetronomeClicks(const timeT &sliceStart,
         MappedEvent *me =
             new MappedEvent(metronome->instrument,
                             metronome->pitch,
-                            m_metronomeBarVelocity,
+                            config.getMetronomeBarVelocity(),
                             comp.getElapsedRealTime(barEnd.first),
-                            m_metronomeDuration);
+                            config.getMetronomeDuration());
         m_mC.insert(me);
     }
 
@@ -945,9 +942,9 @@ SequenceManager::insertMetronomeClicks(const timeT &sliceStart,
         {
             MappedEvent *me =new MappedEvent(metronome->instrument,
                                              metronome->pitch,
-                                             m_metronomeBeatVelocity,
+                                             config.getMetronomeBeatVelocity(),
                                              comp.getElapsedRealTime(i),
-                                             m_metronomeDuration);
+                                             config.getMetronomeDuration());
             m_mC.insert(me);
         }
     }

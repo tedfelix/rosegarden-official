@@ -24,6 +24,8 @@
 
 #include "rosegardenconfigure.h"
 
+class RosegardenGUIDoc;
+
 namespace Rosegarden
 {
 
@@ -31,16 +33,19 @@ class RosegardenConfigureDialog : public RosegardenConfigure
 {
 Q_OBJECT
 public:
-    RosegardenConfigureDialog(QWidget *parent=0,
+    RosegardenConfigureDialog(RosegardenGUIDoc *doc,
+                              QWidget *parent=0,
                               const char *name=0);
     ~RosegardenConfigureDialog();
 
-protected:
-
 public slots:
-signals:
+    void slotClose();
+    void slotApply();
+    void slotActivateApply();
 
 private:
+
+    RosegardenGUIDoc *m_doc;
 };
 
 }

@@ -38,6 +38,7 @@
 #include "multiviewcommandhistory.h"
 #include "AudioFileManager.h"
 #include "Studio.h"
+#include "Configuration.h"
 
 // forward declaration of the RosegardenGUI classes
 class RosegardenGUIView;
@@ -171,6 +172,11 @@ public:
      * return the Studio
      */
     Rosegarden::Studio& getStudio() { return m_studio;}
+
+    /*
+     * return the Configuration object
+     */
+    Rosegarden::Configuration& getConfiguration() { return m_config; }
 
     /**
      * returns the composition (the principal constituent of the document)
@@ -310,6 +316,12 @@ private:
      * the Studio
      **/
     Rosegarden::Studio m_studio;
+
+    /*
+     * A configuration object
+     *
+     */
+    Rosegarden::Configuration m_config;
 };
 
 #endif // ROSEGARDENGUIDOC_H

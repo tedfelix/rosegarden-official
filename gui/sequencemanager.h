@@ -104,21 +104,9 @@ private:
     Rosegarden::MappedComposition m_mC;
     RosegardenGUIDoc *m_doc;
 
-    // Latencies
-    RealTime m_playLatency;
-    RealTime m_fetchLatency;
-    RealTime m_readAhead;
-
     // statuses
     TransportStatus m_transportStatus;
     SoundSystemStatus m_soundSystemStatus;
-
-    // Metronome details
-    //
-    MidiByte     m_metronomePitch;
-    MidiByte     m_metronomeBarVelocity;
-    MidiByte     m_metronomeBeatVelocity;
-    RealTime     m_metronomeDuration;
 
     // pointer to the transport dialog
     RosegardenTransportDialog *m_transport;

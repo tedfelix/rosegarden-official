@@ -131,6 +131,70 @@
                         <enum>Raised</enum>
                     </property>
                     <widget>
+                        <class>QComboBox</class>
+                        <item>
+                            <property>
+                                <name>text</name>
+                                <string>Notation Editor</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property>
+                                <name>text</name>
+                                <string>Matrix Editor</string>
+                            </property>
+                        </item>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>ClientCombo</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>geometry</name>
+                            <rect>
+                                <x>235</x>
+                                <y>10</y>
+                                <width>161</width>
+                                <height>31</height>
+                            </rect>
+                        </property>
+                    </widget>
+                    <widget>
+                        <class>QSpinBox</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>CountInSpin</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>geometry</name>
+                            <rect>
+                                <x>345</x>
+                                <y>50</y>
+                                <width>51</width>
+                                <height>26</height>
+                            </rect>
+                        </property>
+                    </widget>
+                    <widget>
+                        <class>QLabel</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>TextLabel4</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>geometry</name>
+                            <rect>
+                                <x>15</x>
+                                <y>15</y>
+                                <width>215</width>
+                                <height>26</height>
+                            </rect>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>Double-clicking Segment opens</string>
+                        </property>
+                    </widget>
+                    <widget>
                         <class>QLabel</class>
                         <property stdset="1">
                             <name>name</name>
@@ -139,31 +203,15 @@
                         <property stdset="1">
                             <name>geometry</name>
                             <rect>
-                                <x>235</x>
-                                <y>25</y>
-                                <width>91</width>
+                                <x>15</x>
+                                <y>50</y>
+                                <width>235</width>
                                 <height>26</height>
                             </rect>
                         </property>
                         <property stdset="1">
                             <name>text</name>
-                            <string>Bars count-in</string>
-                        </property>
-                    </widget>
-                    <widget>
-                        <class>QSpinBox</class>
-                        <property stdset="1">
-                            <name>name</name>
-                            <cstring>SpinBox1</cstring>
-                        </property>
-                        <property stdset="1">
-                            <name>geometry</name>
-                            <rect>
-                                <x>330</x>
-                                <y>25</y>
-                                <width>51</width>
-                                <height>26</height>
-                            </rect>
+                            <string>Number of count-in bars when recording</string>
                         </property>
                     </widget>
                 </widget>
@@ -205,34 +253,14 @@
                         <class>QSlider</class>
                         <property stdset="1">
                             <name>name</name>
-                            <cstring>ReadAheadSlider</cstring>
+                            <cstring>PlaybackSlider</cstring>
                         </property>
                         <property stdset="1">
                             <name>geometry</name>
                             <rect>
                                 <x>30</x>
-                                <y>80</y>
-                                <width>170</width>
-                                <height>21</height>
-                            </rect>
-                        </property>
-                        <property stdset="1">
-                            <name>orientation</name>
-                            <enum>Horizontal</enum>
-                        </property>
-                    </widget>
-                    <widget>
-                        <class>QSlider</class>
-                        <property stdset="1">
-                            <name>name</name>
-                            <cstring>ReadAheadSlider_2</cstring>
-                        </property>
-                        <property stdset="1">
-                            <name>geometry</name>
-                            <rect>
-                                <x>30</x>
-                                <y>115</y>
-                                <width>170</width>
+                                <y>110</y>
+                                <width>175</width>
                                 <height>21</height>
                             </rect>
                         </property>
@@ -251,7 +279,7 @@
                             <name>geometry</name>
                             <rect>
                                 <x>227</x>
-                                <y>110</y>
+                                <y>105</y>
                                 <width>155</width>
                                 <height>35</height>
                             </rect>
@@ -265,40 +293,20 @@
                         <class>QLabel</class>
                         <property stdset="1">
                             <name>name</name>
-                            <cstring>TextLabel2</cstring>
-                        </property>
-                        <property stdset="1">
-                            <name>geometry</name>
-                            <rect>
-                                <x>240</x>
-                                <y>70</y>
-                                <width>135</width>
-                                <height>35</height>
-                            </rect>
-                        </property>
-                        <property stdset="1">
-                            <name>text</name>
-                            <string>Read-ahead (ms)</string>
-                        </property>
-                    </widget>
-                    <widget>
-                        <class>QLabel</class>
-                        <property stdset="1">
-                            <name>name</name>
                             <cstring>TextLabel3</cstring>
                         </property>
                         <property stdset="1">
                             <name>geometry</name>
                             <rect>
                                 <x>25</x>
-                                <y>15</y>
+                                <y>5</y>
                                 <width>335</width>
                                 <height>50</height>
                             </rect>
                         </property>
                         <property stdset="1">
                             <name>text</name>
-                            <string>Greater latency improves playback quality on slower systems but reduces overall sequencer response.</string>
+                            <string>Higher latency improves playback quality on slower systems but reduces overall sequencer response.</string>
                         </property>
                         <property stdset="1">
                             <name>alignment</name>
@@ -309,6 +317,100 @@
                         </property>
                         <property>
                             <name>wordwrap</name>
+                        </property>
+                    </widget>
+                    <widget>
+                        <class>QLabel</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>PlaybackValue</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>geometry</name>
+                            <rect>
+                                <x>100</x>
+                                <y>95</y>
+                                <width>41</width>
+                                <height>21</height>
+                            </rect>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>0</string>
+                        </property>
+                        <property stdset="1">
+                            <name>alignment</name>
+                            <set>AlignCenter</set>
+                        </property>
+                        <property>
+                            <name>hAlign</name>
+                        </property>
+                    </widget>
+                    <widget>
+                        <class>QLabel</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>ReadAheadValue</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>geometry</name>
+                            <rect>
+                                <x>100</x>
+                                <y>55</y>
+                                <width>41</width>
+                                <height>21</height>
+                            </rect>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>0</string>
+                        </property>
+                        <property stdset="1">
+                            <name>alignment</name>
+                            <set>AlignCenter</set>
+                        </property>
+                        <property>
+                            <name>hAlign</name>
+                        </property>
+                    </widget>
+                    <widget>
+                        <class>QSlider</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>ReadAheadSlider</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>geometry</name>
+                            <rect>
+                                <x>30</x>
+                                <y>75</y>
+                                <width>175</width>
+                                <height>21</height>
+                            </rect>
+                        </property>
+                        <property stdset="1">
+                            <name>orientation</name>
+                            <enum>Horizontal</enum>
+                        </property>
+                    </widget>
+                    <widget>
+                        <class>QLabel</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>TextLabel2</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>geometry</name>
+                            <rect>
+                                <x>240</x>
+                                <y>65</y>
+                                <width>135</width>
+                                <height>35</height>
+                            </rect>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>Read-ahead (ms)</string>
                         </property>
                     </widget>
                 </widget>
