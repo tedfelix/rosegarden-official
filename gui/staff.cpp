@@ -178,28 +178,26 @@ Staff::Staff(QCanvas *canvas, Staff::Clef clef)
     //
     QCanvasLineGroupable *staffVertLine = new QCanvasLineGroupable(canvas, this);
 
-    int vertLineHeight = nbLines * lineWidth - lineWidth / 2 - 4;
+    int vertLineHeight = nbLines * lineWidth - lineWidth / 2 - 5;
 
-    staffVertLine->setPoints(0,linesOffset,
-                             0,vertLineHeight + linesOffset);
-
+    // First line - thick
+    //
     QPen pen(black, 3);
+    pen.setCapStyle(Qt::SquareCap);
     staffVertLine->setPen(pen);
 
+    staffVertLine->setPoints(0,linesOffset + 1,
+                             0,vertLineHeight + linesOffset - 1);
+
+    // Second line - thin
+    //
     staffVertLine = new QCanvasLineGroupable(canvas, this);
 
     staffVertLine->setPoints(4,linesOffset,
-                             4,vertLineHeight + linesOffset - 1);
- // why -1 ? Otherwise the line is 1 pixel too long - probably a bug
- // in QCanvas (v2.2.0beta2)
-
-//     staffVertLine = new QCanvasLineGroupable(canvas(), staff);
-//     staffVertLine->setPoints(5,linesOffset,
-//                              5, vertLineHeight + linesOffset);
+                             4,vertLineHeight + linesOffset);
 
 
-    //setActive(false); // don't react to mousePress events
-    setActive(false);
+    setActive(false);  // don't react to mousePress events
 
 }
 
