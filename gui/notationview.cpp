@@ -221,7 +221,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     ChordNameRuler *cnr = new ChordNameRuler
 	(m_hlayout, &doc->getComposition(), 0, 25, m_centralFrame);
-    setTextRuler(cnr);
+    addBottomRuler(cnr);
 
     m_bottomBarButtons = new BarButtons(m_hlayout, 25,
                                         true, m_centralFrame);

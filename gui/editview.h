@@ -42,6 +42,7 @@ class ActiveItem;
 class BarButtons;
 class QVBox;
 class QGridLayout;
+class QHBoxLayout;
 
 class EditView : public KMainWindow
 {
@@ -177,16 +178,17 @@ protected:
     void setTopBarButtons(QWidget*);
 
     /**
-     * Locate the given widget in the top bar-buttons position and
+     * Locate the given widget in the bottom bar-buttons position and
      * connect up its scrolling signals.
      */
     void setBottomBarButtons(QWidget*);
 
     /**
-     * Locate the given widget in the top bar-buttons position and
+     * Locate the given widget right above the bottom bar-buttons and
      * connect up its scrolling signals.
+     * The widget has to have a slotScrolllHoriz(int) slot
      */
-    void setTextRuler(QWidget*);
+    void addBottomRuler(QWidget*);
 
     /**
      * Set the current Notation tool (note inserter, rest inserter, eraser...)
@@ -249,8 +251,8 @@ protected:
     QFrame      *m_centralFrame;
     QScrollBar  *m_horizontalScrollBar;
     QGridLayout *m_grid;
+    QHBoxLayout *m_bottomHBox;
     QWidget     *m_topBarButtons;
-    QWidget     *m_textRuler;
     QWidget     *m_bottomBarButtons;
 };
 

@@ -54,8 +54,8 @@ EditView::EditView(RosegardenGUIDoc *doc,
       m_centralFrame(new QFrame(this)),
       m_horizontalScrollBar(new QScrollBar(Horizontal, m_centralFrame)),
       m_grid(new QGridLayout(m_centralFrame, 5, 0)), // 5 rows, 0 cols
+      m_bottomHBox(new QHBoxLayout(m_centralFrame)),
       m_topBarButtons(0),
-      m_textRuler(0),
       m_bottomBarButtons(0)
 {
     setCentralWidget(m_centralFrame);
@@ -66,10 +66,11 @@ EditView::EditView(RosegardenGUIDoc *doc,
     getCommandHistory()->attachView(actionCollection());
     
     QObject::connect
-	(getCommandHistory(), SIGNAL(commandExecuted(KCommand *)),
-	 this,		      SLOT(slotCommandExecuted(KCommand *)));
+        (getCommandHistory(), SIGNAL(commandExecuted(KCommand *)),
+         this,                      SLOT(slotCommandExecuted(KCommand *)));
 
     m_grid->addWidget(m_horizontalScrollBar, 4, 0);
+    m_grid->addLayout(m_bottomHBox, 2, 0);
 }
 
 EditView::~EditView()
@@ -121,16 +122,14 @@ void EditView::setBottomBarButtons(QWidget* w)
             m_bottomBarButtons, SLOT(slotScrollHoriz(int)));
 }
 
-void EditView::setTextRuler(QWidget* w)
+void EditView::addBottomRuler(QWidget* w)
 {
-    delete m_textRuler;
-    m_textRuler = w;
-    m_grid->addWidget(w, 0, 0);
+    m_bottomHBox->addWidget(w);
 
     connect(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
-            m_textRuler, SLOT(slotScrollHoriz(int)));
+            w, SLOT(slotScrollHoriz(int)));
     connect(m_horizontalScrollBar, SIGNAL(sliderMoved(int)),
-            m_textRuler, SLOT(slotScrollHoriz(int)));
+            w, SLOT(slotScrollHoriz(int)));
 }
 
 
@@ -143,8 +142,8 @@ void EditView::readjustViewSize(QSize requestedSize, bool exact)
 
     int requestedWidth  = requestedSize.width(),
         requestedHeight = requestedSize.height(),
-	windowWidth     = width(),
-	windowHeight	= height();
+        windowWidth     = width(),
+        windowHeight        = height();
 
     QSize newSize;
 
@@ -214,55 +213,55 @@ void EditView::slotCommandExecuted(KCommand *command)
 
     if (dynamic_cast<PartialSegmentCommand *>(command) != 0) {
 
-	BasicCommand *basicCommand = 0;
+        BasicCommand *basicCommand = 0;
 
-	if ((basicCommand = dynamic_cast<BasicCommand *>(command)) != 0) {
-	    refreshSegment(&basicCommand->getSegment(),
-			   basicCommand->getBeginTime(),
-			   basicCommand->getRelayoutEndTime());
-	} else {
-	    // partial segment command, but not a basic command
-	    Rosegarden::Segment *segment = &basicCommand->getSegment();
-	    refreshSegment(segment,
-			   segment->getStartTime(),
-			   segment->getEndTime());
-	}
+        if ((basicCommand = dynamic_cast<BasicCommand *>(command)) != 0) {
+            refreshSegment(&basicCommand->getSegment(),
+                           basicCommand->getBeginTime(),
+                           basicCommand->getRelayoutEndTime());
+        } else {
+            // partial segment command, but not a basic command
+            Rosegarden::Segment *segment = &basicCommand->getSegment();
+            refreshSegment(segment,
+                           segment->getStartTime(),
+                           segment->getEndTime());
+        }
 
-	return;
+        return;
     }
 
     SegmentCommand *segmentCommand = dynamic_cast<SegmentCommand *>(command);
     if (segmentCommand) {
-	
-	SegmentCommand::SegmentSet segments;
-	segmentCommand->getSegments(segments);
+        
+        SegmentCommand::SegmentSet segments;
+        segmentCommand->getSegments(segments);
 
-	for (SegmentCommand::SegmentSet::iterator i = segments.begin();
-	     i != segments.end(); ++i) {
+        for (SegmentCommand::SegmentSet::iterator i = segments.begin();
+             i != segments.end(); ++i) {
 
-	    //!!!
-	    // segment-commands -> redraw ruler if only segment, redraw all
-	    // otherwise I fear -- but what if the segment's been deleted?
+            //!!!
+            // segment-commands -> redraw ruler if only segment, redraw all
+            // otherwise I fear -- but what if the segment's been deleted?
 
-	}
+        }
 
-	return;
+        return;
     }
 
     TimeAndTempoChangeCommand *timeCommand =
-	dynamic_cast<TimeAndTempoChangeCommand *>(command);
+        dynamic_cast<TimeAndTempoChangeCommand *>(command);
     if (timeCommand) {
 
-	//!!!
-	// time-and-tempo-commands -> redraw all? hmm
+        //!!!
+        // time-and-tempo-commands -> redraw all? hmm
 
-	return;
+        return;
     }
 
     kdDebug(KDEBUG_AREA)
-	<< "Warning: EditView::slotCommandExecuted:\n"
-	<< "Unknown sort of KCommand, don't know how to refresh"
-	<< endl;
+        << "Warning: EditView::slotCommandExecuted:\n"
+        << "Unknown sort of KCommand, don't know how to refresh"
+        << endl;
 }
 
 //
