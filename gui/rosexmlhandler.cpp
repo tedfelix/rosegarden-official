@@ -1743,9 +1743,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 	    if (atts.value("barpitch"))
 		metronome.setBarPitch(atts.value("barpitch").toInt());
 	    if (atts.value("beatpitch"))
-		metronome.setBarPitch(atts.value("beatpitch").toInt());
+		metronome.setBeatPitch(atts.value("beatpitch").toInt());
 	    if (atts.value("subbeatpitch"))
-		metronome.setBarPitch(atts.value("subbeatpitch").toInt());
+		metronome.setSubBeatPitch(atts.value("subbeatpitch").toInt());
 	    if (atts.value("depth"))
 		metronome.setDepth(atts.value("depth").toInt());
 	    if (atts.value("barvelocity"))
