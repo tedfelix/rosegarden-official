@@ -142,7 +142,7 @@ SoundDriver::addAudioFile(const std::string &fileName, unsigned int id)
 
     m_audioFiles.push_back(ins);
 
-    cout << "Sequencer::addAudioFile() = \"" << fileName << "\"" << endl;
+    std::cout << "Sequencer::addAudioFile() = \"" << fileName << "\"" << std::endl;
 
     return true;
 }
