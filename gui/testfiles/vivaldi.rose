@@ -1,0 +1,113 @@
+#!Rosegarden
+#
+#  Musical Notation File
+#
+
+RV20
+
+
+Staves 1
+
+
+Name Violoncello
+Clef
+	Clef Name Bass  
+Text
+	String Largo
+	Position 0
+Key
+	Key Name Bb maj / G  min
+Text
+	String mf
+	Position 4
+: Dotted crotchet 0 3 2 0 7 2 11 2
+Mark start 0 Slur
+: Quaver 0 1 12 0
+Mark end 0
+: Crotchet 0 1 13 0
+Group
+	Beamed
+	: Dotted quaver 0 1 14 2
+	Mark start 1 Slur
+	: Semiquaver 0 1 11 2
+	Mark end 1
+	: Dotted quaver 0 1 9 0
+	: Semiquaver 0 1 11 2
+	: Dotted quaver 0 1 7 2
+	: Semiquaver 0 1 9 0
+	End
+Group
+	Beamed
+	: Dotted quaver 0 1 8 0
+	: Semiquaver 0 1 10 2
+	: Dotted quaver 0 1 6 0
+	: Semiquaver 0 1 8 0
+	: Dotted quaver 0 1 4 2
+	: Semiquaver 0 1 10 2
+	End
+: Dotted crotchet 0 1 9 0
+Mark start 2 Slur
+: Quaver 0 1 8 0
+Mark end 2
+: Crotchet 0 1 7 2
+: Dotted crotchet 0 3 2 0 7 2 12 0
+Mark start 3 Slur
+: Quaver 0 1 13 0
+Mark end 3
+: Crotchet 0 1 14 2
+: Dotted crotchet 0 1 10 0
+: Quaver 0 1 9 0
+: Crotchet 0 1 8 0
+: Dotted crotchet 0 3 3 0 8 0 12 0
+Mark start 4 Slur
+: Quaver 0 1 13 0
+Mark end 4
+: Crotchet 0 1 14 2
+: Dotted crotchet 0 1 13 0
+: Quaver 0 1 12 0
+: Crotchet 0 1 11 2
+Group
+	Beamed
+	: Dotted quaver 0 1 12 0
+	Mark start 5 Slur
+	: Semiquaver 0 1 14 2
+	Mark end 5
+	: Dotted quaver 0 1 10 0
+	: Semiquaver 0 1 12 0
+	: Dotted quaver 0 1 8 0
+	: Semiquaver 0 1 10 0
+	End
+Group
+	Beamed
+	: Dotted quaver 0 1 7 2
+	: Semiquaver 0 1 9 0
+	: Dotted quaver 0 1 5 0
+	: Semiquaver 0 1 7 2
+	: Dotted quaver 0 1 3 0
+	: Semiquaver 0 1 8 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 11 2
+	Mark start 6 Slur
+	: Quaver 0 1 12 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 13 0
+	: Quaver 0 1 12 0
+	Mark end 6
+	End
+: Crotchet 0 1 11 2
+: Crotchet 0 1 14 2
+: Dotted crotchet 0 1 12 0
+Mark start 7 Slur
+: Quaver 0 1 11 2
+Mark end 7
+: Dotted minim 0 1 11 2
+End
+
+Bar 0 0 time 3 4
+Stave 0 tags 1 2
+
+End
