@@ -1,12 +1,15 @@
 var zone;
 var zones = [
 { "v":"4", "name":"index",       "label":"home",         "url":"index.html" },
+{ "v":"4", "name":"pictures",    "label":"screenshots",     "url":"pictures.html" },
+{ "v":"4", "name":"requirements",    "label":"requirements",     "url":"requirements.html" },
+{ "v":"4", "name":"schools",    "label":"schools",     "url":"schools.html" },
 { "v":"4", "name":"authors",     "label":"authors",      "url":"authors.html" },
 { "v":"4", "name":"history",     "label":"history",      "url":"history.html" },
 { "v":"4", "name":"development", "label":"development",  "url":"development.html" },
 { "v":"4", "name":"faq",         "label":"faq",          "url":"faq.html" },
-{ "v":"4", "name":"pictures",    "label":"screenshots",     "url":"pictures.html" },
 { "v":"4", "name":"list",        "label":"mailing-list", "url":"http://lists.sourceforge.net/lists/listinfo/rosegarden-devel" },
+{ "v":"4", "name":"contact",         "label":"contact",          "url":"contact.html" },
 { "v":"2.1", "name":"index",       "label":"home",         "url":"index.html" },
 { "v":"2.1", "name":"features",    "label":"features",     "url":"features.html" },
 { "v":"2.1", "name":"faq",         "label":"faq",          "url":"faq.html" },
