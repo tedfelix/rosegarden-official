@@ -3,6 +3,7 @@ var zones = [
 { "v":"4", "name":"index",       "label":"home",         "url":"index.html" },
 { "v":"4", "name":"pictures",    "label":"screenshots",     "url":"pictures.html" },
 { "v":"4", "name":"requirements",    "label":"requirements",     "url":"requirements.html" },
+{ "v":"4", "name":"documents",    "label":"documents",     "url":"documents.html" },
 { "v":"4", "name":"demonstrations",    "label":"demonstrations",     "url":"demos.html" },
 { "v":"4", "name":"history",     "label":"history",      "url":"history.html" },
 { "v":"4", "name":"development", "label":"development",  "url":"development.html" },
