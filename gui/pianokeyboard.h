@@ -37,6 +37,11 @@ public:
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;
 
+    /* 
+     * We want to be able to call this from the matrix view
+     */
+    void drawHoverNote(int evPitch);
+
 signals:
 
     /**
@@ -76,8 +81,6 @@ protected:
     virtual void enterEvent(QEvent *);
     virtual void leaveEvent(QEvent *);
 
-    void drawHoverNote(unsigned int y);
-
     // compute all key positions and store them
     //
     void computeKeyPos();
@@ -90,12 +93,14 @@ protected:
     std::vector<unsigned int> m_whiteKeyPos;
     std::vector<unsigned int> m_blackKeyPos;
     std::vector<unsigned int> m_labelKeyPos;
+    std::vector<unsigned int> m_allKeyPos;
 
     bool                      m_mouseDown;
     bool                      m_selecting;
 
     // highlight element on the keyboard
     QWidget                  *m_hoverHighlight;
+    int                       m_lastHoverHighlight;
 };
 
 #endif

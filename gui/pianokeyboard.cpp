@@ -28,6 +28,8 @@
 #include "pianokeyboard.h"
 #include "midipitchlabel.h"
 #include "colours.h"
+#include "rosedebug.h"
+#include "matrixview.h"
 
 const unsigned int _smallWhiteKeyHeight = 14;
 const unsigned int _whiteKeyHeight = 18;
@@ -38,7 +40,8 @@ PianoKeyboard::PianoKeyboard(QWidget *parent)
       m_blackKeySize(24, 8),
       m_nbKeys(88),
       m_mouseDown(false),
-      m_hoverHighlight(new QWidget(this))
+      m_hoverHighlight(new QWidget(this)),
+      m_lastHoverHighlight(0)
 {
     m_hoverHighlight->hide();
     m_hoverHighlight->setPaletteBackgroundColor(RosegardenGUIColours::MatrixKeyboardFocus);
@@ -71,7 +74,10 @@ void PianoKeyboard::computeKeyPos()
         posInOctave = (i+5) % 7;
 
         if (y >= 0)
+        {
             m_whiteKeyPos.push_back(y);
+            m_allKeyPos.push_back(y);
+        }
 
         if (posInOctave == 2)
             m_labelKeyPos.push_back(y + (keyHeight * 3/4) - 2);
@@ -96,12 +102,12 @@ void PianoKeyboard::computeKeyPos()
             unsigned int bY = y + keyHeight - m_blackKeySize.height() / 2;
 
             m_blackKeyPos.push_back(bY);
+            m_allKeyPos.push_back(bY);
 
         }
 
         y += keyHeight;
     }
-    
 }
 
 void PianoKeyboard::paintEvent(QPaintEvent*)
@@ -136,93 +142,91 @@ void PianoKeyboard::paintEvent(QPaintEvent*)
                        m_blackKeySize.width(), m_blackKeySize.height());
 }
 
-void PianoKeyboard::enterEvent(QEvent*)
+void PianoKeyboard::enterEvent(QEvent *)
 {
-    m_hoverHighlight->show();
+    //drawHoverNote(e->y());
 }
 
 
 void PianoKeyboard::leaveEvent(QEvent*)
 {
-    m_hoverHighlight->hide();
+    //m_hoverHighlight->hide();
 }
 
-void PianoKeyboard::drawHoverNote(unsigned int y)
+void PianoKeyboard::drawHoverNote(int evPitch)
 {
-    unsigned int whiteDiff = 0;
-    unsigned int whiteYPos = 0;
-    bool shortWhiteKey = false;
-
-    for (unsigned int i = 0; i < m_whiteKeyPos.size(); ++i)
+   if (m_lastHoverHighlight != evPitch)
     {
-        unsigned int diff = (m_whiteKeyPos[i] > y) ?
-            m_whiteKeyPos[i] - y : y - m_whiteKeyPos[i];
+        //MATRIX_DEBUG << "PianoKeyboard::drawHoverNote : note = " << evPitch << endl;
+        m_lastHoverHighlight = evPitch;
 
-        if (i == 0) 
-            whiteDiff = diff;
-        else
+        int count = 0;
+        std::vector<unsigned int>::iterator it;
+        for (it = m_allKeyPos.begin(); it != m_allKeyPos.end(); ++it, ++count)
         {
-            if (diff < whiteDiff)
+            if (126 - evPitch == count)
             {
-                whiteDiff = diff;
-                whiteYPos = m_whiteKeyPos[i];
+                int width = m_keySize.width() - 8;
+                int yPos = *it + 5;
 
-                // check to see if it's a short note and adjust position accordingly
-                if (i + 1 < m_whiteKeyPos.size())
-                    if (m_whiteKeyPos[i + 1] - m_whiteKeyPos[i] < _whiteKeyHeight)
-                        shortWhiteKey = true;
-                    else
-                        shortWhiteKey = false;
+                // check if this is a black key
+                //
+                std::vector<unsigned int>::iterator bIt;
+                bool isBlack = false;
+                for (bIt = m_blackKeyPos.begin(); bIt != m_blackKeyPos.end(); ++bIt)
+                {
+                    if (*bIt == *it)
+                    {
+                        isBlack = true;
+                        break;
+                    }
+                }
+
+                // Adjust for black note
+                //
+                if (isBlack)
+                {
+                    width = m_blackKeySize.width() - 8;
+                    yPos -= 3;
+                }
+                else
+                {
+                    // If a white note then ensure that we allow for short/tall ones
+                    //
+                    std::vector<unsigned int>::iterator wIt = m_whiteKeyPos.begin(), tIt;
+                    
+                    while (wIt != m_whiteKeyPos.end())
+                    {
+                        if (*wIt == *it)
+                        {
+                            tIt = wIt;
+
+                            if (++tIt != m_whiteKeyPos.end())
+                            {
+                                //MATRIX_DEBUG << "WHITE KEY HEIGHT = " << *tIt - *wIt << endl;
+                                if (*tIt - *wIt == _whiteKeyHeight)
+                                {
+                                    yPos += 2;
+                                }
+
+                            }
+                        }
+
+                        ++wIt;
+                    }
+
+
+                }
+
+                m_hoverHighlight->setFixedSize(width, 4);
+                m_hoverHighlight->move(3, yPos);
+                m_hoverHighlight->show();
+
+                return;
             }
         }
     }
 
-    // adjust for large notes
-    /*
-    if (y > whiteYPos + 14) whiteYPos += 14;
-    else if (y < whiteYPos - 14) whiteYPos -= 14;
-    */
-
-
-    unsigned int blackDiff = 0;
-    unsigned int blackYPos = 0;
-
-    for (unsigned int i = 0; i < m_blackKeyPos.size(); ++i)
-    {
-        unsigned int diff = (m_blackKeyPos[i] > y) ?
-            m_blackKeyPos[i] - y : y - m_blackKeyPos[i];
-
-        if (i == 0)
-            blackDiff = diff;
-        else
-        {
-            if (diff < blackDiff)
-            {
-                blackDiff = diff;
-                blackYPos = m_blackKeyPos[i];
-            }
-        }
-    }
-
-    if (blackDiff < whiteDiff)
-    {
-        m_hoverHighlight->setFixedSize(
-                QSize(m_blackKeySize.width() - 2, 
-                      m_blackKeySize.height() - 2));
-
-        m_hoverHighlight->move(pos().x(), blackYPos + 1);
-    }
-    else
-    {
-        m_hoverHighlight->setFixedSize(
-                QSize(m_keySize.width() - 4,
-                      m_keySize.height() - ((shortWhiteKey) ? 12 : 10)));
-
-        m_hoverHighlight->move(pos().x(), whiteYPos + 5);
-    }
-
-    // sometimes the enter event gets bypassed
-    m_hoverHighlight->show();
 
 }
 
@@ -234,7 +238,16 @@ void PianoKeyboard::mouseMoveEvent(QMouseEvent* e)
     //
     // RWB (20040220)
     //
-    //drawHoverNote((unsigned int)e->y());
+    MatrixView *matrixView = dynamic_cast<MatrixView*>(topLevelWidget());
+    if (matrixView)
+    {
+        MatrixStaff *staff = matrixView->getStaff(0);
+
+        if (staff)
+        {
+            drawHoverNote(staff->getHeightAtCanvasY(e->y()));
+        }
+    }
 
     if (m_mouseDown)
 	if (m_selecting)

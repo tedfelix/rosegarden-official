@@ -260,8 +260,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
          SLOT(slotMouseReleased(Rosegarden::timeT, int, QMouseEvent*)));
 
     QObject::connect
-        (getCanvasView(), SIGNAL(hoveredOverNoteChanged(const QString&)),
-         this, SLOT(slotHoveredOverNoteChanged(const QString&)));
+        (getCanvasView(), SIGNAL(hoveredOverNoteChanged(int)),
+         this, SLOT(slotHoveredOverNoteChanged(int)));
 
     QObject::connect
         (m_pianoKeyboard, SIGNAL(hoveredOverKeyChanged(unsigned int)),
@@ -1109,6 +1109,7 @@ void MatrixView::slotMouseMoved(Rosegarden::timeT time, int pitch, QMouseEvent* 
             m_previousEvPitch = pitch;
         }
     }
+
 }
 
 void MatrixView::slotMouseReleased(Rosegarden::timeT time, int pitch, QMouseEvent* e)
@@ -1130,9 +1131,11 @@ void MatrixView::slotMouseReleased(Rosegarden::timeT time, int pitch, QMouseEven
 }
 
 void
-MatrixView::slotHoveredOverNoteChanged(const QString &noteName)
+MatrixView::slotHoveredOverNoteChanged(int evPitch)
 {
-    m_hoveredOverNoteName->setText(noteName);
+    Rosegarden::MidiPitchLabel label(evPitch);
+    m_hoveredOverNoteName->setText(label.getQString());
+    m_pianoKeyboard->drawHoverNote(evPitch);
 }
 
 void
@@ -1265,6 +1268,8 @@ void MatrixView::slotEditDelete()
 //
 void MatrixView::slotKeyPressed(unsigned int y, bool repeating)
 {
+    slotHoveredOverKeyChanged(y);
+
     getCanvasView()->slotScrollVertSmallSteps(y);
 
     Rosegarden::Composition &comp = getDocument()->getComposition();
@@ -1310,6 +1315,8 @@ void MatrixView::slotKeyPressed(unsigned int y, bool repeating)
 
 void MatrixView::slotKeySelected(unsigned int y, bool repeating)
 {
+    slotHoveredOverKeyChanged(y);
+
     getCanvasView()->slotScrollVertSmallSteps(y);
 
     MatrixStaff& staff = *(m_staffs[0]);

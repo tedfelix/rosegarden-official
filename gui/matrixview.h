@@ -299,7 +299,7 @@ public slots:
      *
      * @see MatrixCanvasView#hoveredOverNoteChanged()
      */
-    void slotHoveredOverNoteChanged(const QString&);
+    void slotHoveredOverNoteChanged(int evPitch);
 
     /**
      * Called when the mouse cursor moves over a different key on

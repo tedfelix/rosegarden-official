@@ -57,11 +57,9 @@ signals:
 
     /**
      * Emitted when the mouse cursor moves to a different height
-     * on the staff
-     *
-     * \a noteName contains the MIDI name of the corresponding note
+     * on the staff.  Returns the new pitch.
      */
-    void hoveredOverNoteChanged(const QString &noteName);
+    void hoveredOverNoteChanged(int evPitch);
 
     /**
      * Emitted when the mouse cursor moves to a note which is at a

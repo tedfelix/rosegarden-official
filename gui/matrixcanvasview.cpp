@@ -143,7 +143,7 @@ void MatrixCanvasView::contentsMouseMoveEvent(QMouseEvent* e)
 
     if (evPitch != m_previousEvPitch) {
 	Rosegarden::MidiPitchLabel label(evPitch);
-        emit hoveredOverNoteChanged(label.getQString());
+        emit hoveredOverNoteChanged(evPitch);
         m_previousEvPitch = evPitch;
     }
 
