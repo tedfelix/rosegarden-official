@@ -404,6 +404,8 @@ void testInstalledVersion()
 
 int main(int argc, char *argv[])
 {
+    setsid(); // acquire shiny new process group
+
     KAboutData aboutData( "rosegarden", I18N_NOOP("Rosegarden"),
                           VERSION, description, KAboutData::License_GPL,
                           I18N_NOOP("Copyright 2000 - 2004 Guillaume Laurent, Chris Cannam, Richard Bown\nParts copyright 1994 - 2004 Chris Cannam, Andy Green, Richard Bown, Guillaume Laurent\nLilypond fonts copyright 1997 - 2004 Han-Wen Nienhuys and Jan Nieuwenhuizen"),
