@@ -12,7 +12,6 @@ rosegarden_SOURCES = \
 	editcommands.cpp \
 	edittool.cpp \
 	editview.cpp \
-        guielements.h \
         instrumentlabel.cpp \
         instrumentparameterbox.cpp \
 	kstartuplogo.cpp \
@@ -67,6 +66,7 @@ rosegarden_SOURCES = \
 	trackseditoriface.skel \
         trackvumeter.cpp \
         vumeter.cpp \
+        widgets.cpp \
 	xmlstorableevent.cpp
 
 rosegarden_LDADD   = ../sound/libRosegardenSound.la ../base/libbase.la -lqt -lkfile -lkdeui -lkdecore -lkdeprint -lXext -lX11 $(LIBSOCKET)

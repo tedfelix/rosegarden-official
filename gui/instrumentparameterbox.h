@@ -20,7 +20,13 @@
 */
 
 #include <qframe.h>
-#include "guielements.h"
+#include <qdial.h>
+#include <qlabel.h>
+
+#include "widgets.h"
+
+// Display and allow modification of Instrument parameters
+//
 
 #ifndef _INSTRUMENTPARAMETERBOX_H_
 #define _INSTRUMENTPARAMETERBOX_H_
@@ -36,11 +42,18 @@ public:
     ~InstrumentParameterBox();
 
     void useInstrument(Rosegarden::Instrument *instrument);
+
+public slots:
+    void slotChangePanLabel(int value);
+
 private:
+
     void initBox();
+
     RosegardenComboBox *m_channelValue;
     RosegardenComboBox *m_programValue;
-    RosegardenComboBox *m_panValue;
+    QDial              *m_panDial;
+    QLabel             *m_panValue;
     RosegardenComboBox *m_volumeValue;
 
 };

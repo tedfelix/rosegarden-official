@@ -22,8 +22,8 @@
 #include <qcheckbox.h>
 #include <qcombobox.h>
 
-#ifndef _GUIELEMENTS_H_
-#define _GUIELEMENTS_H_
+#ifndef _WIDGETS_H_
+#define _WIDGETS_H_
 
 // Create out own check box which is always Tristate 
 // and allows us to click only between on and off
@@ -38,11 +38,11 @@ public:
                                const char *name=0):QCheckBox(parent, name)
         { setTristate(true) ;}
 
-    virtual ~RosegardenTristateCheckBox() {;}
+    virtual ~RosegardenTristateCheckBox();
 
 protected:
     // don't emit when the button is released
-    virtual void mouseReleaseEvent(QMouseEvent *) {;}
+    virtual void mouseReleaseEvent(QMouseEvent *);
 
 private:
 };
@@ -63,32 +63,7 @@ public:
 
 
 protected:
-    virtual void wheelEvent(QWheelEvent *e)
-    {
-        e->accept();
-
-        int value = e->delta();
-
-        if (m_reverse)
-             value = -value;
-       
-        if (value < 0)
-        {
-            if (currentItem() < count() - 1)
-            {
-                setCurrentItem(currentItem() + 1);
-                emit propagate(currentItem());
-            }
-        }
-        else
-        {
-            if (currentItem() > 0)
-            {
-                setCurrentItem(currentItem() - 1);
-                emit propagate(currentItem());
-            }
-        }
-    }
+    virtual void wheelEvent(QWheelEvent *e);
 
 signals:
     void propagate(int); // update the Segment with new value
@@ -99,4 +74,4 @@ private:
 };
 
 
-#endif // _GUIELEMENTS_H_
+#endif // _WIDGETS_H_

@@ -26,6 +26,7 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
+#include <qhbox.h>
 
 #include "Instrument.h"
 #include "MidiDevice.h"
@@ -69,8 +70,25 @@ InstrumentParameterBox::initBox()
     // reversing motif style read-only combo
     m_programValue = new RosegardenComboBox(true, false, this);
 
+    // Create an HBox which we insert into the GridLayout
+    // for the Pan value
+    //
+    QHBox *hbox = new QHBox(this);
+
     // reversing motif style read-only combo
-    m_panValue = new RosegardenComboBox(true, true, this);
+    m_panDial = new QDial(-Rosegarden::MidiMidValue,
+                            Rosegarden::MidiMidValue,
+                            10, // page step
+                            0, // initial value
+                            hbox);
+
+    m_panDial->setLineStep(5);
+    m_panDial->setMaximumHeight(panLabel->height());
+
+    connect(m_panDial, SIGNAL(valueChanged(int)),
+            m_panValue, SLOT(slotChangePanLabel(int)));
+
+    m_panValue = new QLabel("0", hbox);
 
     // reversing motif style read-only combo
     m_volumeValue = new RosegardenComboBox(true, true, this);
@@ -84,7 +102,7 @@ InstrumentParameterBox::initBox()
     gridLayout->addWidget(m_programValue, 2, 1, AlignRight);
 
     gridLayout->addWidget(panLabel, 3, 0, AlignLeft);
-    gridLayout->addWidget(m_panValue, 3, 1, AlignRight);
+    gridLayout->addWidget(hbox, 3, 1, AlignRight);
 
     gridLayout->addWidget(volumeLabel, 4, 0, AlignLeft);
     gridLayout->addWidget(m_volumeValue, 4, 1, AlignRight);
@@ -126,6 +144,16 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
 
     m_programValue->setCurrentItem((int)instrument->getProgramChange());
 
+    // Set pan
+    m_panDial->setValue((int)instrument->getPan());
+    m_panValue->setText(QString("%1").arg(instrument->getPan()));
+
+}
+
+void
+InstrumentParameterBox::slotChangePanLabel(int value)
+{
+    m_panValue->setText(QString("%1").arg(value));
 }
 
 

@@ -28,7 +28,7 @@
 #include <qcombobox.h>
 
 #include "Quantizer.h"
-#include "guielements.h"
+#include "widgets.h"
 
 
 // Provides a mechanism for viewing and modifying the parameters
