@@ -494,6 +494,12 @@ Event *
 NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
 			   const Note &note, int pitch, Accidental accidental)
 {
+    if (time < segment.getStartTime() ||
+	endTime > segment.getEndMarkerTime() ||
+	time + note.getDuration() > segment.getEndMarkerTime()) {
+	return 0;
+    }
+
     NoteInsertionCommand *insertionCommand =
 	new NoteInsertionCommand
         (segment, time, endTime, note, pitch, accidental,
@@ -700,9 +706,14 @@ Event *
 RestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
 			   const Note &note, int, Accidental)
 {
+    if (time < segment.getStartTime() ||
+	endTime > segment.getEndMarkerTime() ||
+	time + note.getDuration() > segment.getEndMarkerTime()) {
+	return 0;
+    }
+
     NoteInsertionCommand *insertionCommand = 
 	new RestInsertionCommand(segment, time, endTime, note);
-    m_nParentView->addCommandToHistory(insertionCommand);
 
     KCommand *activeCommand = insertionCommand;
 
