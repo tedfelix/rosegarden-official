@@ -98,3 +98,4 @@ protected:
     BarDataList m_barData;
 };
 
+#endif
