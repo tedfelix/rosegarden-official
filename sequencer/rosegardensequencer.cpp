@@ -67,9 +67,6 @@ RosegardenSequencerApp::RosegardenSequencerApp():
         close();
     }
 
-    if (mappedComp == 0)
-        mappedComp = new Rosegarden::MappedComposition();
-
     // set this here and now so we can accept async midi events
     //
     m_sequencer->record(Rosegarden::Sequencer::ASYNCHRONOUS_MIDI);
@@ -123,15 +120,45 @@ Rosegarden::MappedComposition*
 RosegardenSequencerApp::fetchEvents(const Rosegarden::RealTime &start,
                                     const Rosegarden::RealTime &end)
 {
-
-    // Always return an empty fetch if we're stopping or stopped
+    // Always return nothing if we're stopped
     //
     if ( m_transportStatus == STOPPED || m_transportStatus == STOPPING )
+        return 0;
+ 
+    // If we're looping then we should get as much of the rest of
+    // the right hand of the loop as possible and also events from
+    // the beginning of the loop.  We can do this in two fetches.
+    //
+    if (isLooping() == true && end > m_loopEnd)
     {
-        mappedComp->clear();
-        return mappedComp;
-    }
 
+        Rosegarden::RealTime loopEventCatcher = Rosegarden::RealTime(0, 2000);
+
+        Rosegarden::RealTime loopOverlap = end - m_loopEnd;
+        Rosegarden::MappedComposition *endLoop, *beginLoop;
+        endLoop = getSlice(start, m_loopEnd - loopEventCatcher);
+        beginLoop = getSlice(m_loopStart - loopEventCatcher,
+                             m_loopStart + loopOverlap);
+
+        // move the start time of the begin section one loop width
+        // into the future and ensure that we keep the clocks level
+        // until this time has passed
+        //
+        beginLoop->moveStartTime(m_loopEnd - m_loopStart);
+
+        *endLoop = *endLoop + *beginLoop;
+        delete beginLoop;
+        return endLoop;
+    }
+    else
+        return getSlice(start, end);
+}
+
+
+Rosegarden::MappedComposition*
+RosegardenSequencerApp::getSlice(const Rosegarden::RealTime &start,
+                                 const Rosegarden::RealTime &end)
+{
     QByteArray data, replyData;
     QCString replyType;
     QDataStream arg(data, IO_WriteOnly);
@@ -141,8 +168,12 @@ RosegardenSequencerApp::fetchEvents(const Rosegarden::RealTime &start,
     arg << end.sec;
     arg << end.usec;
 
-    QTime t;
-    t.start();
+    Rosegarden::MappedComposition *mC = new Rosegarden::MappedComposition();
+
+    // Loop timing
+    //
+    //QTime t;
+    //t.start();
 
     if (!kapp->dcopClient()->call(ROSEGARDEN_GUI_APP_NAME,
                                   ROSEGARDEN_GUI_IFACE_NAME,
@@ -150,13 +181,12 @@ RosegardenSequencerApp::fetchEvents(const Rosegarden::RealTime &start,
                                   data, replyType, replyData, true))
     {
         cerr <<
-        "RosegardenSequencer::fetchEvents() - can't call RosegardenGUI client"
-         << endl;
+            "RosegardenSequencer::getSlice() - can't call RosegardenGUI client"
+             << endl;
 
         // Stop the sequencer so we can see if we can try again later
         //
         m_transportStatus = STOPPING;
-
     }
     else
     {
@@ -165,17 +195,17 @@ RosegardenSequencerApp::fetchEvents(const Rosegarden::RealTime &start,
         QDataStream reply(replyData, IO_ReadOnly);
         if (replyType == "Rosegarden::MappedComposition")
         {
-            mappedComp->clear();
-            reply >> *mappedComp;
+            reply >> *mC;
         }
         else
         {
-            cerr << "RosegardenSequencer::fetchEvents() - unrecognised type returned"
-             << endl;
+            cerr <<
+                 "RosegardenSequencer::getSlice() - unrecognised type returned"
+                 << endl;
         }
     }
 
-    return mappedComp;
+    return mC;
 }
 
 
@@ -196,9 +226,21 @@ RosegardenSequencerApp::startPlaying()
     m_sequencer->initialisePlayback(m_songPosition);
 
     // Send the first events (starting the clock)
-    m_sequencer->processMidiOut( *fetchEvents(m_songPosition,
-                                              m_songPosition + m_readAhead),
-                                              m_playLatency );
+    mappedComp = fetchEvents(m_songPosition, m_songPosition + m_readAhead);
+
+    if (mappedComp != 0)
+    {
+        m_sequencer->processMidiOut( *mappedComp, m_playLatency );
+        delete mappedComp;
+    }
+
+    // Adjust for looping
+    //
+    if (isLooping() && m_lastFetchSongPosition > m_loopEnd)
+    {
+        m_lastFetchSongPosition =
+            m_lastFetchSongPosition - (m_loopEnd - m_loopStart);
+    }
 
     return true;
 }
@@ -215,11 +257,24 @@ RosegardenSequencerApp::keepPlaying()
 {
     if (m_songPosition > ( m_lastFetchSongPosition - m_fetchLatency))
     {
-        m_sequencer->processMidiOut(*fetchEvents(m_lastFetchSongPosition,
-                                    m_lastFetchSongPosition + m_readAhead),
-                                    m_playLatency);
+        mappedComp = fetchEvents(m_lastFetchSongPosition,
+                                 m_lastFetchSongPosition + m_readAhead);
+
+        if (mappedComp != 0)
+        {
+            m_sequencer->processMidiOut(*mappedComp, m_playLatency);
+            delete mappedComp;
+        }
 
         m_lastFetchSongPosition = m_lastFetchSongPosition + m_readAhead;
+
+        // Adjust for looping
+        //
+        if (isLooping() && m_lastFetchSongPosition > m_loopEnd)
+        {
+            m_lastFetchSongPosition =
+                m_lastFetchSongPosition - (m_loopEnd - m_loopStart);
+        }
     }
 
     return true;
@@ -238,47 +293,52 @@ RosegardenSequencerApp::updateClocks()
 
     Rosegarden::RealTime newPosition = m_sequencer->getSequencerTime();
 
-    // Using RealTime boundaries for the update check
+    // Go around the loop if we've reached the end
     //
-    Rosegarden::RealTime updateBound(0, 1000); // 1000 microseconds
-
-/*
-    if (newPosition > ( m_songPosition + updateBound ) ||
-        newPosition < ( m_songPosition - updateBound ) )
+    if (isLooping() && newPosition > m_loopEnd + m_playLatency)
     {
-*/
+
+        // Remove the loop width from the song position and send
+        // this position (minus m_playLatency) to the GUI
+        m_songPosition = newPosition - (m_loopEnd - m_loopStart);
+        newPosition = m_songPosition - m_playLatency;
+
+        // Reset playback using this jump
+        //
+        m_sequencer->resetPlayback(m_loopStart, m_playLatency);
+
+        //cout << "SONG POSITION = " << m_songPosition << endl;
+        //cout << "LAST FETCH = " << m_lastFetchSongPosition << endl;
+    }
+    else
+    {
         m_songPosition = newPosition;
 
-        // Now use newPosition to work out if we need to move the
-        // GUI pointer.
-        //
         if (m_songPosition > m_sequencer->getStartPosition() + m_playLatency)
             newPosition = newPosition - m_playLatency;
         else
             newPosition = m_sequencer->getStartPosition();
-
-        arg << newPosition.sec;
-        arg << newPosition.usec;
-    
-        //std::cerr << "updateClocks() - m_songPosition = " << m_songPosition.sec << "s " << m_songPosition.usec << "us" << endl;
-
-        if (!kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
-                          ROSEGARDEN_GUI_IFACE_NAME,
-                          "setPointerPosition(long int, long int)",
-                          data))
-        {
-            cerr <<
-            "RosegardenSequencer::updateClocks() - can't send to RosegardenGUI client"
-             << endl;
-
-            // Stop the sequencer so we can see if we can try again later
-            //
-            m_transportStatus = STOPPING;
-    
-        }
-/*
     }
-*/
+
+    arg << newPosition.sec;
+    arg << newPosition.usec;
+    
+    //std::cerr << "updateClocks() - m_songPosition = " << m_songPosition.sec << "s " << m_songPosition.usec << "us" << endl;
+
+    if (!kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
+                      ROSEGARDEN_GUI_IFACE_NAME,
+                      "setPointerPosition(long int, long int)",
+                      data))
+    {
+        cerr <<
+        "RosegardenSequencer::updateClocks() - can't send to RosegardenGUI client"
+         << endl;
+
+        // Stop the sequencer so we can see if we can try again later
+        //
+        m_transportStatus = STOPPING;
+
+    }
 }
 
 void
@@ -318,6 +378,11 @@ RosegardenSequencerApp::jumpTo(const long &posSec, const long &posUsec)
 
     stop();
     play(Rosegarden::RealTime(posSec, posUsec), m_playLatency, m_fetchLatency);
+
+/* - still doesn't work!
+    m_sequencer->resetPlayback(Rosegarden::RealTime(posSec, posUsec),
+                               m_playLatency);
+*/
   
     return;
 }
@@ -513,8 +578,6 @@ RosegardenSequencerApp::setLoop(const Rosegarden::RealTime &loopStart,
 {
     m_loopStart = loopStart;
     m_loopEnd = loopEnd;
-
-    // Requires thought
 }
 
 

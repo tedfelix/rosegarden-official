@@ -61,12 +61,19 @@ public:
     void setStartTime(const Rosegarden::RealTime &sT) { m_startTime = sT; }
     void setEndTime(const Rosegarden::RealTime &eT) { m_endTime = eT; }
 
+    // When we're looping we want to be able to move the start
+    // time of MappedEvents around in this container
+    //
+    void moveStartTime(const Rosegarden::RealTime &mT);
+
+    MappedComposition operator+(const MappedComposition &c);
 
     // This section is used for serialising this class over DCOP
     //
     //
-    friend QDataStream& operator<<(QDataStream &dS, const MappedComposition &mC);
     friend QDataStream& operator>>(QDataStream &dS, MappedComposition &mC);
+    friend QDataStream& operator<<(QDataStream &dS,
+                                   const MappedComposition &mC);
 
 private:
     Rosegarden::RealTime m_startTime;

@@ -177,10 +177,18 @@ public:
     void processMidiOut(Rosegarden::MappedComposition mappedComp,
                         const Rosegarden::RealTime &playLatency);
 
-    // Reset internal states ready for new playback to commence
+    // Initialise internal states ready for new playback to commence
     //
     void initialisePlayback(const Rosegarden::RealTime &position);
 
+    // Reset internal states while playing (like when looping
+    // and jumping to a new time)
+    //
+    void resetPlayback(const Rosegarden::RealTime &position,
+                       const Rosegarden::RealTime &playLatency);
+
+    // Get the sequencer time
+    //
     Rosegarden::RealTime getSequencerTime();
 
     bool isPlaying() { return m_playing; }
@@ -203,6 +211,9 @@ public:
     // Return the status of the sound systems
     //
     SequencerStatus getStatus() const { return m_sequencerStatus; }
+
+    void setPlayStartPosition(const Rosegarden::RealTime &pos)
+        { m_playStartPosition = pos; }
 
 private:
 

@@ -167,8 +167,17 @@ public:
     bool isLooping() const { return (m_loopStart != m_loopEnd); }
 
 private:
-    Rosegarden::MappedComposition* fetchEvents(const Rosegarden::RealTime &start,
-                                               const Rosegarden::RealTime &end);
+
+    // get events whilst handling loop
+    //
+    Rosegarden::MappedComposition*
+        fetchEvents(const Rosegarden::RealTime &start,
+                    const Rosegarden::RealTime &end);
+
+    // just get a slice of events between markers
+    //
+    Rosegarden::MappedComposition* getSlice(const Rosegarden::RealTime &start,
+                                            const Rosegarden::RealTime &end);
 
     Rosegarden::Sequencer *m_sequencer;
     TransportStatus m_transportStatus;

@@ -470,12 +470,14 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition mappedComp,
 
         if (secAhead < 0)
         {
-            std::cerr <<"Sequencer::processMidiOut: MIDI processing lagging by " << -secAhead << "s and " << uSecAhead << "ms" << endl;
+            std::cerr <<"Sequencer::processMidiOut: MIDI processing lagging by " << -secAhead << "s and " << uSecAhead << "us" << endl;
         }
-
-        // Send the event out to the MIDI port
-        //
-        m_midiPlayPort.processEvent(event);
+        else
+        {
+            // Send the event out to the MIDI port
+            //
+            m_midiPlayPort.processEvent(event);
+        }
 
 #if 0
         int secFromStart = event.time.sec - m_playStartTime.sec;
@@ -604,6 +606,22 @@ Sequencer::initialisePlayback(const Rosegarden::RealTime &position)
     m_playStartTime.usec = 0;
     m_playStartPosition = position;
 }
+
+// Used when looping or jumping to a particular part of the piece
+// immediately with no lag and clearing down notes as we go
+//
+void
+Sequencer::resetPlayback(const Rosegarden::RealTime &position,
+                         const Rosegarden::RealTime &latency)
+{
+    allNotesOff();
+
+    m_playStartTime = deltaTime(m_midiPlayPort.time(),
+                                Arts::TimeStamp(latency.sec, latency.usec));
+    m_playStartPosition = position;
+
+}
+
 
 void
 Sequencer::stopPlayback()

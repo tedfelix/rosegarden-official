@@ -32,9 +32,11 @@ using std::cerr;
 using std::cout;
 using std::endl;
 
-// We use some globals here for speed - we're
-// making a lot of these conversions when sending
-// this class over DCOP
+// We declare some globals here just for speed - we're
+// making a lot of these conversions when sending this
+// class over DCOP so if we keep the top level object
+// reasonably persistent we can save some overhead.
+//
 //
 MappedCompositionIterator it;
 MappedEvent               *insertEvent;
@@ -113,7 +115,7 @@ MappedComposition::MappedComposition(Rosegarden::Composition &comp,
 
 
 
-// turn a MappedComposition into a data stream
+// Turn a MappedComposition into a QDataStream
 //
 QDataStream&
 operator<<(QDataStream &dS, const MappedComposition &mC)
@@ -136,7 +138,7 @@ operator<<(QDataStream &dS, const MappedComposition &mC)
 }
 
 
-// turn a data stream into a MappedComposition
+// Turn a QDataStream into a MappedComposition
 //
 QDataStream& 
 operator>>(QDataStream &dS, MappedComposition &mC)
@@ -169,6 +171,38 @@ operator>>(QDataStream &dS, MappedComposition &mC)
 
     return dS;
 }
+
+// Move the start time of this MappedComposition and all its events
+//
+//
+void
+MappedComposition::moveStartTime(const Rosegarden::RealTime &mT)
+{
+    for (it = this->begin(); it != this->end(); it++)
+    {
+        (*it)->setAbsoluteTime((*it)->getAbsoluteTime() + mT);
+        cout << "NEW ST = " << (*it)->getAbsoluteTime() << endl;
+    }
+
+    m_startTime = m_startTime + mT;
+    m_endTime = m_endTime + mT;
+
+}
+
+
+MappedComposition
+MappedComposition::operator+(const MappedComposition &c)
+{
+    for (it = c.begin(); it != c.end(); it++)
+    {
+        this->insert((*it));
+    }
+
+    return *this;
+}
+
+
+
 
 
 

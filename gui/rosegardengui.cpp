@@ -1189,6 +1189,7 @@ void RosegardenGUIApp::setPointerPosition(const long &posSec,
 
     timeT elapsedTime = m_doc->getComposition().getElapsedTimeForRealTime(rT);
 
+/*
     // Check for loop - if we're in one and we've reached the
     // end of it then jump back to the beginning
     if (m_doc->getComposition().isLooping())
@@ -1200,6 +1201,7 @@ void RosegardenGUIApp::setPointerPosition(const long &posSec,
             return;
         }
     }
+*/
 
     // set the composition time
     m_doc->getComposition().setPosition(elapsedTime);
@@ -1296,7 +1298,6 @@ void RosegardenGUIApp::play()
     if (m_doc->getComposition().isLooping())
         startPos = m_doc->getComposition().getElapsedRealTime(
                             m_doc->getComposition().getLoopStart());
-
 
     // playback start position
     streamOut << startPos.sec;
