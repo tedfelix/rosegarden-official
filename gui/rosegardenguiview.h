@@ -27,6 +27,7 @@
 #endif 
 
 // include files for Qt
+#include <kcommand.h>
 #include <qvbox.h>
 #include <list>
 #include "segmentcanvas.h" // needed for SegmentCanvas::ToolType
@@ -41,6 +42,7 @@ class TrackEditor;
 class KPrinter;
 class SegmentParameterBox;
 class InstrumentParameterBox;
+class MultiViewCommandHistory;
 
 /**
  * The RosegardenGUIView class provides the view widget for the
@@ -83,6 +85,10 @@ public:
      */
     RosegardenGUIDoc* getDocument() const;
 
+    /*
+     * Command history
+     **/
+    MultiViewCommandHistory* getCommandHistory();
 
     TrackEditor* getTrackEditor() { return m_trackEditor; }
 
@@ -138,6 +144,12 @@ public slots:
     void slotSelectTrackSegments(int);
 
     void slotSelectedSegments(std::vector<Rosegarden::Segment*> segments);
+
+    /*
+     * Commands
+     *
+     */
+    void slotAddCommandToHistory(KCommand *command);
 
 signals:
     void activateTool(SegmentCanvas::ToolType);

@@ -21,6 +21,7 @@
 
 #include <vector>
 
+#include <kcommand.h>
 #include <qframe.h>
 #include <qlabel.h>
 #include <qcheckbox.h>
@@ -134,6 +135,13 @@ public:
     //
     void useSegment(Rosegarden::Segment *segment);
     void useSegments(std::vector<Rosegarden::Segment*> segments);
+
+signals:
+    /*
+     * KCommand
+     *
+     */
+    void addCommandToHistory(KCommand *command);
 
 public slots:
     void slotRepeatPressed();

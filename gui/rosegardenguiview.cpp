@@ -78,6 +78,11 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
     m_segmentParameterBox = new SegmentParameterBox(vbox);
     m_instrumentParameterBox = new InstrumentParameterBox(vbox);
 
+    // Connect up command path
+    //
+    connect(m_segmentParameterBox, SIGNAL(addCommandToHistory(KCommand*)),
+            this, SLOT(slotAddCommandToHistory(KCommand*)));
+
     // fudge to get everything aligned properly
     QLabel *spacer = new QLabel(vbox);
     spacer->setMinimumHeight(100);
@@ -277,6 +282,19 @@ RosegardenGUIView::slotSelectedSegments(std::vector<Rosegarden::Segment*> segmen
 {
     // update the segment parameter box
     m_segmentParameterBox->useSegments(segments);
+}
+
+
+MultiViewCommandHistory*
+RosegardenGUIView::getCommandHistory()
+{
+    return getDocument()->getCommandHistory();
+}
+
+void
+RosegardenGUIView::slotAddCommandToHistory(KCommand *command)
+{           
+    getCommandHistory()->addCommand(command);
 }
 
 
