@@ -1,7 +1,10 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:output method="html"/>
+
+<!-- eek, can't get this working yet 
 <xsl:param name="name" select="no composition name"/>
+-->
 
 <!-- XSLT for extracting some stats from an RG4 file
      See rosegarden/scripts/produceRGStats.sh to turn your RG file
@@ -35,7 +38,7 @@
   <!-- get the filename from the parameter list -->
 
   <h1>
-  Rosegarden Composition ("<xsl:attribute select="$name"/>")
+  Rosegarden Composition <!-- ("<xsl:attribute select="$name"/>") -->
   </h1>
 
   <p>
