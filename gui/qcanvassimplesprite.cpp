@@ -151,15 +151,15 @@ void PixmapArrayGC::deleteAll()
     RG_DEBUG << "PixmapArrayGC::deleteAll() : "
              << m_pixmapArrays.size() << " pixmap arrays to delete\n";
 
-//    static unsigned long total = 0;
+    static unsigned long total = 0;
 
     for (unsigned int i = 0; i < m_pixmapArrays.size(); ++i) {
 	QCanvasPixmapArray *array = m_pixmapArrays[i];
-//	QPixmap *pixmap = array->image(0);
-//	if (pixmap) {
-//	    total += pixmap->width() * pixmap->height();
-//!!!	    NOTATION_DEBUG << "PixmapArrayGC::deleteAll(): " << pixmap->width() << "x" << pixmap->height() << " (" << (pixmap->width()*pixmap->height()) << " px, " << total << " total)" << endl;
-//	}
+	QPixmap *pixmap = array->image(0);
+	if (pixmap) {
+	    total += pixmap->width() * pixmap->height();
+	    NOTATION_DEBUG << "PixmapArrayGC::deleteAll(): " << pixmap->width() << "x" << pixmap->height() << " (" << (pixmap->width()*pixmap->height()) << " px, " << total << " total)" << endl;
+	}
         delete m_pixmapArrays[i];
     }
     

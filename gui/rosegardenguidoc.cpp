@@ -493,9 +493,7 @@ RosegardenGUIDoc::mergeDocument(RosegardenGUIDoc *doc,
 	time0 = getComposition().getBarEndForTime(getComposition().getDuration());
     }
 
-    int myMinTrack = getComposition().getMinTrackId();
     int myMaxTrack = getComposition().getMaxTrackId();
-    
     int yrMinTrack = doc->getComposition().getMinTrackId();
     int yrMaxTrack = doc->getComposition().getMaxTrackId();
     int yrNrTracks = yrMaxTrack - yrMinTrack + 1;

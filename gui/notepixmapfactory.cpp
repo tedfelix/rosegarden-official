@@ -86,6 +86,102 @@ class NotePixmapCache : public __HASH_NS::hash_map<CharName, QCanvasPixmap*,
     // nothing to add -- just so we can predeclare it in the header
 };
 
+class NotePixmapPainter
+{
+    // Just a trivial class that instructs two painters to do the
+    // same thing (one for the pixmap, one for the mask).  We only
+    // duplicate those methods we actually use in NotePixmapFactory
+
+public:
+    NotePixmapPainter() :
+	m_painter(&m_myPainter) { }
+
+    void beginExternal(QPainter *painter) {
+
+	m_externalPainter = painter;
+	m_useMask = false;
+
+	if (m_externalPainter) {
+	    m_painter = m_externalPainter;
+	} else {
+	    m_painter = &m_myPainter;
+	}
+    }
+
+    bool begin(QPaintDevice *device, QPaintDevice *mask = 0, bool unclipped = false) {
+
+	m_externalPainter = 0;
+
+	if (mask) {
+	    m_useMask = true;
+	    m_maskPainter.begin(mask, unclipped);
+	} else {
+	    m_useMask = false;
+	}
+
+	m_painter = &m_myPainter;
+	return m_painter->begin(device, unclipped);
+    }
+
+    bool end() {
+	if (m_useMask) m_maskPainter.end();
+	return m_painter->end();
+    }
+
+    QPainter &painter() {
+	return *m_painter;
+    }
+
+    QPainter &maskPainter() {
+	return m_maskPainter;
+    }
+
+    void drawPoint(int x, int y) {
+	m_painter->drawPoint(x, y);
+	if (m_useMask) m_maskPainter.drawPoint(x, y);
+    }
+
+    void drawLine(int x1, int y1, int x2, int y2) {
+	m_painter->drawLine(x1, y1, x2, y2);
+	if (m_useMask) m_maskPainter.drawLine(x1, y1, x2, y2);
+    }
+
+    void drawRect(int x, int y, int w, int h) {
+	m_painter->drawRect(x, y, w, h);
+	if (m_useMask) m_maskPainter.drawRect(x, y, w, h);
+    }
+    
+    void drawArc(int x, int y, int w, int h, int a, int alen) {
+	m_painter->drawArc(x, y, w, h, a, alen);
+	if (m_useMask) m_maskPainter.drawArc(x, y, w, h, a, alen);
+    }
+
+    void drawPolyline(const QPointArray &a, int index = 0, int n = -1) {
+	m_painter->drawPolyline(a, index, n);
+	if (m_useMask) m_maskPainter.drawPolyline(a, index, n);
+    }
+
+    void drawPixmap(int x, int y, const QPixmap &pm,
+		    int sx = 0, int sy = 0, int sw = -1, int sh = -1) {
+	m_painter->drawPixmap(x, y, pm, sx, sy, sw, sh);
+	if (m_useMask) m_maskPainter.drawPixmap(x, y, *(pm.mask()), sx, sy, sw, sh);
+    }
+
+    void drawText(int x, int y, const QString &string) {
+	m_painter->drawText(x, y, string);
+	if (m_useMask) m_maskPainter.drawText(x, y, string);
+    }
+
+private:
+    bool m_useMask;
+    QPainter  m_myPainter;
+    QPainter  m_maskPainter;
+    QPainter *m_externalPainter;
+    QPainter *m_painter;
+};
+
+    
+
 NotePixmapParameters::NotePixmapParameters(Note::Type noteType,
                                            int dots,
                                            Accidental accidental) :
@@ -136,6 +232,11 @@ NotePixmapFactory::NotePixmapFactory(std::string fontName, int size) :
     m_timeSigFontMetrics(m_timeSigFont),
     m_bigTimeSigFont("new century schoolbook", 12, QFont::Normal),
     m_bigTimeSigFontMetrics(m_bigTimeSigFont),
+    m_generatedPixmap(0),
+    m_generatedMask(0),
+    m_generatedWidth(-1),
+    m_generatedHeight(-1),
+    m_p(new NotePixmapPainter()),
     m_dottedRestCache(new NotePixmapCache)
 {
     init(fontName, size);
@@ -151,6 +252,11 @@ NotePixmapFactory::NotePixmapFactory(const NotePixmapFactory &npf) :
     m_timeSigFontMetrics(m_timeSigFont),
     m_bigTimeSigFont(npf.m_bigTimeSigFont),
     m_bigTimeSigFontMetrics(m_bigTimeSigFont),
+    m_generatedPixmap(0),
+    m_generatedMask(0),
+    m_generatedWidth(-1),
+    m_generatedHeight(-1),
+    m_p(new NotePixmapPainter()),
     m_dottedRestCache(new NotePixmapCache)
 {
     init(npf.m_font->getName(), npf.m_font->getSize());
@@ -228,6 +334,7 @@ NotePixmapFactory::init(std::string fontName, int size)
 
 NotePixmapFactory::~NotePixmapFactory()
 {
+    delete m_p;
     delete m_dottedRestCache;
 }
 
@@ -278,6 +385,44 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
     Rosegarden::Profiler profiler("NotePixmapFactory::makeNotePixmap");
     clock_t startTime = clock();
 
+    drawNoteAux(params, 0, 0, 0);
+
+    QPoint hotspot(m_left, m_above + m_noteBodyHeight/2);
+
+//#define ROSE_DEBUG_NOTE_PIXMAP_FACTORY
+#ifdef ROSE_DEBUG_NOTE_PIXMAP_FACTORY
+    m_p->painter().setPen(Qt::red); m_p->painter().setBrush(Qt::red);
+
+    m_p->drawLine(0,0,0,m_generatedHeight - 1);
+    m_p->drawLine(m_generatedWidth - 1, 0, 
+                 m_generatedWidth - 1,
+                 m_generatedHeight - 1);
+
+    {
+	int hsx = hotspot.x();
+	int hsy = hotspot.y();
+	m_p->drawLine(hsx - 2, hsy - 2, hsx + 2, hsy + 2);
+	m_p->drawLine(hsx - 2, hsy + 2, hsx + 2, hsy - 2);
+    }
+#endif
+
+    clock_t endTime = clock();
+    makeNotesTime += (endTime - startTime);
+
+    return makeCanvasPixmap(hotspot);
+}
+
+void
+NotePixmapFactory::drawNote(const NotePixmapParameters &params,
+			    QPainter &painter, int x, int y)
+{
+    drawNoteAux(params, &painter, x, y);
+}
+
+void
+NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
+			       QPainter *painter, int x, int y)
+{
     bool drawFlag = params.m_drawFlag;
 
     if (params.m_beamed) drawFlag = false;
@@ -385,8 +530,14 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
 	m_below = std::max(m_below, actualNoteBodyHeight - m_noteBodyHeight);
     }
 */
-    createPixmapAndMask(m_noteBodyWidth + m_left + m_right,
-                        m_noteBodyHeight + m_above + m_below);
+    if (painter) {
+	m_p->beginExternal(painter);
+	NOTATION_DEBUG << "Translate: (" << x << "," << y << ")" << endl;
+	painter->translate(x, y);
+    } else {
+	createPixmapAndMask(m_noteBodyWidth + m_left + m_right,
+			    m_noteBodyHeight + m_above + m_below);
+    }
 
     if (params.m_tupletCount > 0) {
 	drawTuplingLine(params);
@@ -437,8 +588,7 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
         }
     }
     
-    m_p.drawPixmap (bodyLocation, body);
-    m_pm.drawPixmap(bodyLocation, *(body.mask()));
+    m_p->drawPixmap(bodyLocation.x(), bodyLocation.y(), body);
 
     if (params.m_dots > 0) {
 
@@ -449,8 +599,7 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
         if (params.m_onLine)  y -= m_noteBodyHeight/2;
 
         for (int i = 0; i < params.m_dots; ++i) {
-            m_p.drawPixmap(x, y, dot);
-            m_pm.drawPixmap(x, y, *(dot.mask()));
+            m_p->drawPixmap(x, y, dot);
             x += dotWidth;
         }
     }
@@ -479,37 +628,10 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
     if (params.m_tied) {
         drawTie(!params.m_stemGoesUp, params.m_tieLength);
     }
-            
-    QPoint hotspot(m_left, m_above + m_noteBodyHeight/2);
-
-//#define ROSE_DEBUG_NOTE_PIXMAP_FACTORY
-#ifdef ROSE_DEBUG_NOTE_PIXMAP_FACTORY
-    m_p.setPen(Qt::red); m_p.setBrush(Qt::red);
-
-    m_p.drawLine(0,0,0,m_generatedPixmap->height() - 1);
-    m_p.drawLine(m_generatedPixmap->width() - 1, 0, 
-                 m_generatedPixmap->width() - 1,
-                 m_generatedPixmap->height() - 1);
-
-    m_pm.drawLine(0,0,0,m_generatedPixmap->height() - 1);
-    m_pm.drawLine(m_generatedPixmap->width() - 1, 0,
-                  m_generatedPixmap->width() - 1,
-                  m_generatedPixmap->height() - 1);
-
-    {
-	int hsx = hotspot.x();
-	int hsy = hotspot.y();
-	m_p.drawLine(hsx - 2, hsy - 2, hsx + 2, hsy + 2);
-	m_pm.drawLine(hsx - 2, hsy - 2, hsx + 2, hsy + 2);
-	m_p.drawLine(hsx - 2, hsy + 2, hsx + 2, hsy - 2);
-	m_pm.drawLine(hsx - 2, hsy + 2, hsx + 2, hsy - 2);
+    
+    if (painter) {
+	painter->translate(-x, -y);
     }
-#endif
-
-    clock_t endTime = clock();
-    makeNotesTime += (endTime - startTime);
-
-    return makeCanvasPixmap(hotspot);
 }
 
 int
@@ -596,8 +718,7 @@ NotePixmapFactory::drawAccidental(Accidental a)
     QPixmap ap(m_font->getPixmap(m_style->getAccidentalCharName(a)));
     QPoint ah(m_font->getHotspot(m_style->getAccidentalCharName(a)));
 
-    m_p.drawPixmap(0, m_above + m_noteBodyHeight/2 - ah.y(), ap);
-    m_pm.drawPixmap(0, m_above + m_noteBodyHeight/2 - ah.y(), *(ap.mask()));
+    m_p->drawPixmap(0, m_above + m_noteBodyHeight/2 - ah.y(), ap);
 }
 
 void
@@ -661,8 +782,7 @@ NotePixmapFactory::drawMarks(bool isStemmed,
 	    int y = (markAbove ? (m_above - dy - pixmap.height() - 1) :
 			         (m_above + m_noteBodyHeight + m_borderY*2 + dy));
 
-	    m_p.drawPixmap(x, y, pixmap);
-	    m_pm.drawPixmap(x, y,  *(pixmap.mask()));
+	    m_p->drawPixmap(x, y, pixmap);
 	    dy += pixmap.height() + gap;
 
 	} else {
@@ -671,16 +791,15 @@ NotePixmapFactory::drawMarks(bool isStemmed,
 				     (params.m_marks[i]));
 	    QRect bounds = m_textMarkFontMetrics.boundingRect(text);
 	    
-	    m_p.setFont(m_textMarkFont);
-	    m_pm.setFont(m_textMarkFont);
+	    m_p->painter().setFont(m_textMarkFont);
+	    m_p->maskPainter().setFont(m_textMarkFont);
 
 	    int x = m_left + m_noteBodyWidth/2 - bounds.width()/2;
 	    int y = (markAbove ? (m_above - dy - 3) :
 				 (m_above + m_noteBodyHeight + m_borderY*2 +
 				  dy + bounds.height() + 1));
 
-	    m_p.drawText(x, y, text);
-	    m_pm.drawText(x, y, text);
+	    m_p->drawText(x, y, text);
 	    dy += bounds.height() + gap;
 	}
     }
@@ -756,10 +875,7 @@ NotePixmapFactory::drawLegerLines(const NotePixmapParameters &params)
     for (int i = legerLines - 1; i >= 0; --i) {
 	if (i % 2 == 1) {
 	    for (int j = 0; j < getLegerLineThickness(); ++j) {
-		QPoint p0(x0, y + j);
-		QPoint p1(x1, y + j);
-		m_p.drawLine(p0, p1);
-		m_pm.drawLine(p0, p1);
+		m_p->drawLine(x0, y + j, x1, y + j);
 	    }
 	    y += offset;
 	    if (first) {
@@ -908,9 +1024,10 @@ NotePixmapFactory::drawFlags(int flagCount,
 	    int y = m_above + s1.y();
 	    if (params.m_stemGoesUp) y += flag * flagSpace;
 	    else y -= (flag * flagSpace) + flagMap.height();
+
+	    //!!! not right if not drawing to a pixmap:
 	    
-	    m_p.end();
-	    m_pm.end();
+	    m_p->end();
 
 	    // Super-slow
 	    
@@ -920,8 +1037,7 @@ NotePixmapFactory::drawFlags(int flagCount,
 					      y,
 					      flagMap);
 	    
-	    m_p.begin(m_generatedPixmap);
-	    m_pm.begin(m_generatedMask);
+	    m_p->begin(m_generatedPixmap, m_generatedMask);
 	}
 
     } else { // the normal case
@@ -931,8 +1047,7 @@ NotePixmapFactory::drawFlags(int flagCount,
 	int y = m_above + s1.y();
 	if (!params.m_stemGoesUp) y -= flagMap.height();
 	
-	m_p.drawPixmap(m_left + s1.x() - hotspot.x(), y, flagMap);
-	m_pm.drawPixmap(m_left + s1.x() - hotspot.x(), y, *(flagMap.mask()));
+	m_p->drawPixmap(m_left + s1.x() - hotspot.x(), y, flagMap);
     }
 }
 
@@ -941,9 +1056,7 @@ NotePixmapFactory::drawStem(const NotePixmapParameters &,
 			    const QPoint &s0, const QPoint &s1)
 {
     for (int i = 0; i < getStemThickness(); ++i) {
-	m_p.drawLine (m_left + s0.x() + i, m_above + s0.y(),
-		      m_left + s1.x() + i, m_above + s1.y());
-	m_pm.drawLine(m_left + s0.x() + i, m_above + s0.y(),
+	m_p->drawLine (m_left + s0.x() + i, m_above + s0.y(),
 		      m_left + s1.x() + i, m_above + s1.y());
     }
 }
@@ -980,8 +1093,7 @@ NotePixmapFactory::drawShallowLine(int x0, int y0, int x1, int y1,
 {
     if (!smooth || (y0 == y1)) {
         for (int i = 0; i < thickness; ++i) {
-            m_p.drawLine(x0, y0 + i, x1, y1 + i);
-            m_pm.drawLine(x0, y0 + i, x1, y1 + i);
+            m_p->drawLine(x0, y0 + i, x1, y1 + i);
         }
         return;
     }
@@ -1037,27 +1149,24 @@ NotePixmapFactory::drawShallowLine(int x0, int y0, int x1, int y1,
 
 	int off = 0;
 
-        m_p.setPen(colours[quartile]);
-        m_p.drawPoint(cx, cy);
-        m_pm.drawPoint(cx, cy);
+        m_p->painter().setPen(colours[quartile]);
+        m_p->drawPoint(cx, cy);
 	drawBeamsCount ++;
 
-	if (thickness > 1) m_p.setPen(Qt::black);
+	if (thickness > 1) m_p->painter().setPen(Qt::black);
 	while (++off < thickness) {
-            m_p.drawPoint(cx, cy + off);
-            m_pm.drawPoint(cx, cy + off);
+            m_p->drawPoint(cx, cy + off);
 	    drawBeamsCount ++;
         }
         
-        m_p.setPen(colours[4 - quartile]);
-        m_p.drawPoint(cx, cy + off);
-        m_pm.drawPoint(cx, cy + off);
+        m_p->painter().setPen(colours[4 - quartile]);
+        m_p->drawPoint(cx, cy + off);
 	drawBeamsCount ++;
 	    
         ++cx;
     }
 
-    m_p.setPen(Qt::black);
+    m_p->painter().setPen(Qt::black);
 }
 
 
@@ -1231,22 +1340,18 @@ NotePixmapFactory::drawTuplingLine(const NotePixmapParameters &params)
     bool smooth = m_font->isSmooth();
 
     if (!params.m_tuplingLineFollowsBeam) {
-
-	m_p.drawLine(startX, startY, startX, startY + tickOffset);
-	m_pm.drawLine(startX, startY, startX, startY + tickOffset);
-
+	m_p->drawLine(startX, startY, startX, startY + tickOffset);
 	drawShallowLine(startX, startY, endX, endY, thickness, smooth);
     }
 
-    m_p.setFont(m_tupletCountFont);
-    m_pm.setFont(m_tupletCountFont);
+    m_p->painter().setFont(m_tupletCountFont);
+    m_p->maskPainter().setFont(m_tupletCountFont);
 
     int textX = endX + countSpace;
     int textY = endY + cr.height()/2;
 //    NOTATION_DEBUG << "text: (" << textX << "," << textY << ")" << endl;
 
-    m_p.drawText(textX, textY, count);
-    m_pm.drawText(textX, textY, count);
+    m_p->drawText(textX, textY, count);
 
     startX += tlw - w;
     endX = startX + w;
@@ -1258,11 +1363,8 @@ NotePixmapFactory::drawTuplingLine(const NotePixmapParameters &params)
 //			 << endX << "," << endY << ")" << endl;
 
     if (!params.m_tuplingLineFollowsBeam) {
-
 	drawShallowLine(startX, startY, endX, endY, thickness, smooth);
-
-	m_p.drawLine(endX, endY, endX, endY + tickOffset);
-	m_pm.drawLine(endX, endY, endX, endY + tickOffset);
+	m_p->drawLine(endX, endY, endX, endY + tickOffset);
     }
 }
 
@@ -1293,41 +1395,26 @@ NotePixmapFactory::drawTie(bool above, int length)
 
         if (above) {
 
-            m_p.drawArc
-                (x, y + i, tieCurve*2, tieCurve*2, 90*16, 70*16);
-            m_pm.drawArc
+            m_p->drawArc
                 (x, y + i, tieCurve*2, tieCurve*2, 90*16, 70*16);
 
-            m_p.drawLine
-                (x + tieCurve, y + i, x + length - tieCurve - 2, y + i);
-            m_pm.drawLine
+            m_p->drawLine
                 (x + tieCurve, y + i, x + length - tieCurve - 2, y + i);
 
-            m_p.drawArc
-                (x + length - 2*tieCurve - 1, y + i,
-                 tieCurve*2, tieCurve*2, 20*16, 70*16);
-            m_pm.drawArc
+            m_p->drawArc
                 (x + length - 2*tieCurve - 1, y + i,
                  tieCurve*2, tieCurve*2, 20*16, 70*16);
 
         } else {
 
-            m_p.drawArc
-                (x, y + i - tieCurve, tieCurve*2, tieCurve*2, 200*16, 70*16);
-            m_pm.drawArc
+            m_p->drawArc
                 (x, y + i - tieCurve, tieCurve*2, tieCurve*2, 200*16, 70*16);
 
-            m_p.drawLine
-                (x + tieCurve, y + height - i - 1,
-                 x + length - tieCurve - 2, y + height - i - 1);
-            m_pm.drawLine
+            m_p->drawLine
                 (x + tieCurve, y + height - i - 1,
                  x + length - tieCurve - 2, y + height - i - 1);
 
-            m_p.drawArc
-                (x + length - 2*tieCurve - 1, y + i - tieCurve,
-                 tieCurve*2, tieCurve*2, 270*16, 70*16);
-            m_pm.drawArc
+            m_p->drawArc
                 (x + length - 2*tieCurve - 1, y + i - tieCurve,
                  tieCurve*2, tieCurve*2, 270*16, 70*16);
         }
@@ -1383,8 +1470,7 @@ NotePixmapFactory::makeRestPixmap(const NotePixmapParameters &params)
     createPixmapAndMask(m_noteBodyWidth + m_left + m_right,
                         m_noteBodyHeight + m_above + m_below);
 
-    m_p.drawPixmap(m_left, m_above, pixmap);
-    m_pm.drawPixmap(m_left, m_above, *(pixmap.mask()));
+    m_p->drawPixmap(m_left, m_above, pixmap);
 
     if (params.m_tupletCount) drawTuplingLine(params);
 
@@ -1400,8 +1486,7 @@ NotePixmapFactory::makeRestPixmap(const NotePixmapParameters &params)
 
     for (int i = 0; i < params.m_dots; ++i) {
         int x = m_left + m_noteBodyWidth + i * dotWidth + dotWidth/2;
-        m_p.drawPixmap(x, restY, dot); 
-        m_pm.drawPixmap(x, restY, *(dot.mask()));
+        m_p->drawPixmap(x, restY, dot); 
     }
 
     QCanvasPixmap* canvasMap = makeCanvasPixmap(hotspot);
@@ -1440,23 +1525,19 @@ NotePixmapFactory::makeClefPixmap(const Clef &clef)
 			plainMap->height() + rect.height());
 
     if (m_selected) {
-	m_p.setPen(RosegardenGUIColours::SelectedElement);
+	m_p->painter().setPen(RosegardenGUIColours::SelectedElement);
     }
 	
-    m_p.drawPixmap(0, oct < 0 ? 0 : rect.height(), *plainMap);
-    m_pm.drawPixmap(0, oct < 0 ? 0 : rect.height(), *(plainMap->mask()));
+    m_p->drawPixmap(0, oct < 0 ? 0 : rect.height(), *plainMap);
 
-    m_p.setFont(octaveFont);
-    m_pm.setFont(octaveFont);
+    m_p->painter().setFont(octaveFont);
+    m_p->maskPainter().setFont(octaveFont);
 
-    m_p.drawText(plainMap->width()/2 - rect.width()/2,
+    m_p->drawText(plainMap->width()/2 - rect.width()/2,
 		 oct < 0 ? plainMap->height() + rect.height() - 1 :
 		                                rect.height(), text);
-    m_pm.drawText(plainMap->width()/2 - rect.width()/2,
-		  oct < 0 ? plainMap->height() + rect.height() - 1 :
-		                                 rect.height(), text);
 
-    m_p.setPen(Qt::black);
+    m_p->painter().setPen(Qt::black);
     QPoint hotspot(plainMap->offsetX(), plainMap->offsetY());
     if (oct > 0) hotspot.setY(hotspot.y() + rect.height());
     delete plainMap;
@@ -1554,8 +1635,7 @@ NotePixmapFactory::makeKeyPixmap(const Key &key,
         //it?  (Apart from not overlapping the accidentals' x-coords,
         //which wouldn't be a great solution.)
 
-	m_p.drawPixmap(x, y, accidentalPixmap);
-	m_pm.drawPixmap(x, y, *(accidentalPixmap.mask()));
+	m_p->drawPixmap(x, y, accidentalPixmap);
 
 	x += delta;
     }
@@ -1576,13 +1656,11 @@ NotePixmapFactory::makeClefDisplayPixmap(const Clef &clef)
     int h = clef.getAxisHeight();
     int y = (lw * 3) + ((8 - h) * lw) / 2;
     int x = 3 * getNoteBodyWidth();
-    m_p.drawPixmap(x, y - clefPixmap->offsetY(), *clefPixmap);
-    m_pm.drawPixmap(x, y - clefPixmap->offsetY(), *(clefPixmap->mask()));
+    m_p->drawPixmap(x, y - clefPixmap->offsetY(), *clefPixmap);
 
     for (h = 0; h <= 8; h += 2) {
         y = (lw * 3) + ((8 - h) * lw) / 2;
-	m_p.drawLine(x/2, y, m_generatedPixmap->width() - x/2 - 1, y);
-	m_pm.drawLine(x/2, y, m_generatedPixmap->width() - x/2 - 1, y);
+	m_p->drawLine(x/2, y, m_generatedWidth - x/2 - 1, y);
     }
 
     delete clefPixmap;
@@ -1613,24 +1691,21 @@ NotePixmapFactory::makeKeyDisplayPixmap(const Key &key, const Clef &clef)
 
     int h = clef.getAxisHeight();
     int y = (lw * 3) + ((8 - h) * lw) / 2;
-    m_p.drawPixmap(2 * maxDelta, y - clefPixmap->offsetY(), *clefPixmap);
-    m_pm.drawPixmap(2 * maxDelta, y - clefPixmap->offsetY(), *(clefPixmap->mask()));
+    m_p->drawPixmap(2 * maxDelta, y - clefPixmap->offsetY(), *clefPixmap);
 
     for (unsigned int i = 0; i < ah.size(); ++i) {
 
 	h = ah[i];
 	y = (lw * 3) + ((8 - h) * lw) / 2 - hotspot.y();
 
-	m_p.drawPixmap(x, y, accidentalPixmap);
-	m_pm.drawPixmap(x, y, *(accidentalPixmap.mask()));
+	m_p->drawPixmap(x, y, accidentalPixmap);
 
 	x += delta;
     }
 
     for (h = 0; h <= 8; h += 2) {
         y = (lw * 3) + ((8 - h) * lw) / 2;
-	m_p.drawLine(maxDelta, y, m_generatedPixmap->width() - 2*maxDelta - 1, y);
-	m_pm.drawLine(maxDelta, y, m_generatedPixmap->width() - 2*maxDelta - 1, y);
+	m_p->drawLine(maxDelta, y, m_generatedWidth - 2*maxDelta - 1, y);
     }
 
     delete clefPixmap;
@@ -1678,19 +1753,16 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
 	getClefWidth(Rosegarden::Clef::Bass) + 5 * getNoteBodyWidth() -
 	getAccidentalWidth(accidental);
     int y = yoffset + ((8 - h) * lw) / 2 - notePixmap->offsetY();
-    m_p.drawPixmap(x, y, *notePixmap);
-    m_pm.drawPixmap(x, y, *(notePixmap->mask()));
+    m_p->drawPixmap(x, y, *notePixmap);
 
     h = clef.getAxisHeight();
     x = 3 * getNoteBodyWidth();
     y = yoffset + ((8 - h) * lw) / 2;
-    m_p.drawPixmap(x, y - clefPixmap->offsetY(), *clefPixmap);
-    m_pm.drawPixmap(x, y - clefPixmap->offsetY(), *(clefPixmap->mask()));
+    m_p->drawPixmap(x, y - clefPixmap->offsetY(), *clefPixmap);
 
     for (h = 0; h <= 8; h += 2) {
         y = yoffset + ((8 - h) * lw) / 2;
-	m_p.drawLine(x/2, y, m_generatedPixmap->width() - x/2, y);
-	m_pm.drawLine(x/2, y, m_generatedPixmap->width() - x/2, y);
+	m_p->drawLine(x/2, y, m_generatedWidth - x/2, y);
     }
 
     delete clefPixmap;
@@ -1828,7 +1900,7 @@ NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
 				width, height);
 				
 	    hotspot = QPoint(-topLeft.x(), -topLeft.y());
-	    if (m_selected) m_p.setPen(RosegardenGUIColours::SelectedElement);
+	    if (m_selected) m_p->painter().setPen(RosegardenGUIColours::SelectedElement);
 	    havePixmap = true;
 	}
 
@@ -1843,20 +1915,20 @@ NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
 
 	delete polyPoints;
 
-	m_pm.drawPolyline(qp);
+//???	m_pm.drawPolyline(qp);
 
 	if (!smooth || (i > 0 && i < thickness-1)) {
 	    if (smooth) {
 		for (int j = 0; j < ppc; ++j) {
 		    qp.setPoint(j, qp.point(j).x()*2, qp.point(j).y()*2);
 		}
-		m_p.drawPolyline(qp);
+		m_p->drawPolyline(qp);
 		for (int j = 0; j < ppc; ++j) {
 		    qp.setPoint(j, qp.point(j).x(), qp.point(j).y()+1);
 		}
-		m_p.drawPolyline(qp);
+		m_p->drawPolyline(qp);
 	    } else {
-		m_p.drawPolyline(qp);
+		m_p->drawPolyline(qp);
 	    }
 	}
 
@@ -1865,11 +1937,10 @@ NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
     }
 
     if (m_selected) {
-        m_p.setPen(Qt::black);
+        m_p->painter().setPen(Qt::black);
     }
 
-    m_p.end();
-    m_pm.end();
+    m_p->end();
 
     if (smooth) {
 
@@ -1904,8 +1975,7 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
 	if (m_font->getPixmap(NoteCharacterNames::COMMON_TIME, map)) {
 	    //!!! selected?
 	    createPixmapAndMask(map.width(), map.height());
-	    m_p.drawPixmap(0, 0, map);
-	    m_pm.drawPixmap(0, 0, *(map.mask()));
+	    m_p->drawPixmap(0, 0, map);
 	    return makeCanvasPixmap(QPoint(0, map.height()/2));
 	}
 
@@ -1916,26 +1986,24 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
 	createPixmapAndMask(r.width(), r.height() + dy*2);
 
 	if (m_selected) {
-	    m_p.setPen(RosegardenGUIColours::SelectedElement);
+	    m_p->painter().setPen(RosegardenGUIColours::SelectedElement);
 	}
 	
-	m_p.setFont(m_bigTimeSigFont);
-	m_pm.setFont(m_bigTimeSigFont);
+	m_p->painter().setFont(m_bigTimeSigFont);
+	m_p->maskPainter().setFont(m_bigTimeSigFont);
 
-	m_p.drawText(0, r.height() + dy, c);
-	m_pm.drawText(0, r.height() + dy, c);
+	m_p->drawText(0, r.height() + dy, c);
 
 	if (sig.getNumerator() == 2) { // cut common
 
 	    int x = r.width()*3/5 - getStemThickness();
 
 	    for (int i = 0; i < getStemThickness() * 2; ++i, ++x) {
-		m_p.drawLine(x, 0, x, r.height() + dy*2 - 1);
-		m_pm.drawLine(x, 0, x, r.height() + dy*2 - 1);
+		m_p->drawLine(x, 0, x, r.height() + dy*2 - 1);
 	    }
 	}
 
-	m_p.setPen(Qt::black);
+	m_p->painter().setPen(Qt::black);
 	return makeCanvasPixmap(QPoint(0, r.height()/2 + dy));
 
     } else {
@@ -1969,8 +2037,7 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
 		int y = height/4 - (map.height()/2);
 		QPixmap charMap = m_font->getPixmap
 		    (m_style->getTimeSignatureDigitName(numerator % 10));
-		m_p.drawPixmap(x, y, charMap);
-		m_pm.drawPixmap(x, y, *(charMap.mask()));
+		m_p->drawPixmap(x, y, charMap);
 		numerator /= 10;
 	    }
 
@@ -1979,8 +2046,7 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
 		int y = height/2 + height/4 - (map.height()/2);
 		QPixmap charMap = m_font->getPixmap
 		    (m_style->getTimeSignatureDigitName(denominator % 10));
-		m_p.drawPixmap(x, y, charMap);
-		m_pm.drawPixmap(x, y, *(charMap.mask()));
+		m_p->drawPixmap(x, y, charMap);
 		denominator /= 10;
 	    }
 
@@ -1995,21 +2061,19 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
 	createPixmapAndMask(width, denomR.height() * 2 + getNoteBodyHeight());
 	
 	if (m_selected) {
-	    m_p.setPen(RosegardenGUIColours::SelectedElement);
+	    m_p->painter().setPen(RosegardenGUIColours::SelectedElement);
 	}
 
-	m_p.setFont(m_timeSigFont);
-	m_pm.setFont(m_timeSigFont);
+	m_p->painter().setFont(m_timeSigFont);
+	m_p->maskPainter().setFont(m_timeSigFont);
 
 	x = (width - numR.width()) / 2 - 1;
-	m_p.drawText(x, denomR.height(), numS);
-	m_pm.drawText(x, denomR.height(), numS);
+	m_p->drawText(x, denomR.height(), numS);
 
 	x = (width - denomR.width()) / 2 - 1;
-	m_p.drawText(x, denomR.height() * 2 + (getNoteBodyHeight()/2) - 1, denomS);
-	m_pm.drawText(x, denomR.height() * 2 + (getNoteBodyHeight()/2) - 1, denomS);
+	m_p->drawText(x, denomR.height() * 2 + (getNoteBodyHeight()/2) - 1, denomS);
 	
-	m_p.setPen(Qt::black);
+	m_p->painter().setPen(Qt::black);
 	
 	return makeCanvasPixmap(QPoint(0, denomR.height() +
 				       (getNoteBodyHeight()/4) - 1));
@@ -2129,15 +2193,14 @@ NotePixmapFactory::makeTextPixmap(const Rosegarden::Text &text)
 
     createPixmapAndMask(width, height);
     
-    if (m_selected) m_p.setPen(RosegardenGUIColours::SelectedElement);
+    if (m_selected) m_p->painter().setPen(RosegardenGUIColours::SelectedElement);
 
-    m_p.setFont(textFont);
-    m_pm.setFont(textFont);
+    m_p->painter().setFont(textFont);
+    m_p->maskPainter().setFont(textFont);
 
-    m_p.drawText(offset, textMetrics.ascent() + offset, s);
-    m_pm.drawText(offset, textMetrics.ascent() + offset, s);
+    m_p->drawText(offset, textMetrics.ascent() + offset, s);
 
-    m_p.setPen(Qt::black);
+    m_p->painter().setPen(Qt::black);
     return makeCanvasPixmap(QPoint(2, 2), true);
 }
     
@@ -2164,19 +2227,19 @@ NotePixmapFactory::makeAnnotationPixmap(const Rosegarden::Text &text)
 
     createPixmapAndMask(pixmapWidth, pixmapHeight);
 
-    if (m_selected) m_p.setPen(RosegardenGUIColours::SelectedElement);
+    if (m_selected) m_p->painter().setPen(RosegardenGUIColours::SelectedElement);
 
-    m_p.setFont(textFont);
-    m_pm.setFont(textFont);
+    m_p->painter().setFont(textFont);
+    m_p->maskPainter().setFont(textFont);
 
-    m_p.setBrush(RosegardenGUIColours::TextAnnotationBackground);
-    m_p.drawRect(QRect(0, 0, pixmapWidth, pixmapHeight));
-    m_pm.drawRect(QRect(0, 0, pixmapWidth, pixmapHeight));
+    m_p->painter().setBrush(RosegardenGUIColours::TextAnnotationBackground);
+    m_p->drawRect(0, 0, pixmapWidth, pixmapHeight);
 
-    m_p.setBrush(Qt::black);
-    m_p.drawText(QRect(sideGap, topGap,
-		       annotationWidth + sideGap, pixmapHeight - bottomGap),
-		 Qt::WordBreak, s);
+    m_p->painter().setBrush(Qt::black);
+    m_p->painter().drawText(QRect(sideGap, topGap,
+				  annotationWidth + sideGap,
+				  pixmapHeight - bottomGap),
+			    Qt::WordBreak, s);
 
 /* unnecessary following the rectangle draw
     m_pm.drawText(QRect(sideGap, topGap,
@@ -2194,31 +2257,30 @@ NotePixmapFactory::createPixmapAndMask(int width, int height,
     if (maskWidth  < 0) maskWidth  = width;
     if (maskHeight < 0) maskHeight = height;
 
+    m_generatedWidth = width;
+    m_generatedHeight = height;
     m_generatedPixmap = new QPixmap(width, height);
     m_generatedMask = new QBitmap(maskWidth, maskHeight);
 
-//    static unsigned long total = 0;
-//    total += width*height;
-//!!!    NOTATION_DEBUG << "createPixmapAndMask: " << width << "x" << height << " (" << (width*height) << " px, " << total << " total)" << endl;
+    static unsigned long total = 0;
+    total += width*height;
+    NOTATION_DEBUG << "createPixmapAndMask: " << width << "x" << height << " (" << (width*height) << " px, " << total << " total)" << endl;
 
     // clear up pixmap and mask
     m_generatedPixmap->fill();
     m_generatedMask->fill(Qt::color0);
 
     // initiate painting
-    
-    m_p.begin(m_generatedPixmap);
-    m_pm.begin(m_generatedMask);
+    m_p->begin(m_generatedPixmap, m_generatedMask);
 
-    m_p.setPen(Qt::black); m_p.setBrush(Qt::black);
-    m_pm.setPen(Qt::white); m_pm.setBrush(Qt::white);
+    m_p->painter().setPen(Qt::black); m_p->painter().setBrush(Qt::black);
+    m_p->maskPainter().setPen(Qt::white); m_p->maskPainter().setBrush(Qt::white);
 }
 
 QCanvasPixmap*
 NotePixmapFactory::makeCanvasPixmap(QPoint hotspot, bool generateMask)
 {
-    m_p.end();
-    m_pm.end();
+    m_p->end();
 
     QCanvasPixmap* p = new QCanvasPixmap(*m_generatedPixmap, hotspot);
 

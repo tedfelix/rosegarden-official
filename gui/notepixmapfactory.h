@@ -123,6 +123,8 @@ private:
 };    
 
 
+class NotePixmapPainter;
+
 /**
  * Generates QCanvasPixmaps for various notation items
  */
@@ -155,6 +157,10 @@ public:
     QCanvasPixmap* makeSlurPixmap(int length, int dy, bool above);
     QCanvasPixmap* makeUnknownPixmap();
     QCanvasPixmap* makeTextPixmap(const Rosegarden::Text &text);
+
+    // for printing -- draw note direct to a paint device
+    void drawNote(const NotePixmapParameters &parameters,
+		  QPainter &painter, int x, int y);
 
     static QCanvasPixmap* makeToolbarPixmap(const char *name);
     static QCanvasPixmap* makeNoteMenuPixmap(Rosegarden::timeT duration,
@@ -205,6 +211,9 @@ public:
 protected:
     void init(std::string fontName, int size);
     void initMaybe() { if (!m_font) init("", -1); }
+
+    void drawNoteAux(const NotePixmapParameters &parameters,
+		     QPainter *painter, int x, int y);
 
     int getStemLength(const NotePixmapParameters &) const;
 
@@ -272,9 +281,11 @@ protected:
 
     QPixmap *m_generatedPixmap;
     QBitmap *m_generatedMask;
+
+    int m_generatedWidth;
+    int m_generatedHeight;
     
-    QPainter m_p;
-    QPainter m_pm;
+    NotePixmapPainter *m_p;
 
     mutable NotePixmapCache *m_dottedRestCache;
 

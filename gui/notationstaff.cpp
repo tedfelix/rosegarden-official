@@ -90,6 +90,7 @@ NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment,
     m_barNumbersEvery(0),
     m_colourQuantize(true),
     m_showUnknowns(true),
+    m_printPainter(0),
     m_ready(false)
 {
     KConfig *config = kapp->config();
@@ -344,7 +345,6 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 
     emit setOperationName(i18n("Rendering staff %1...").arg(getId() + 1));
     emit setProgress(0);
-//!!!    kapp->processEvents();
 
     throwIfCancelled();
 
@@ -365,6 +365,12 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 	 it != to; it = nextIt) {
 	
 	++nextIt;
+	
+	if (m_printPainter && (*it)->event()->isa(Rosegarden::Note::EventType)) {
+	    // notes are renderable direct to the printer, so don't render
+	    // them to the canvas here
+	    continue;
+	}
 
 	if ((*it)->event()->isa(Rosegarden::Key::EventType)) {
 	    // force rendering in positionElements instead
@@ -385,6 +391,58 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 
 	    timeT myTime = (*it)->getViewAbsoluteTime();
 	    emit setProgress((myTime - startTime) * 100 / (endTime - startTime));
+	    throwIfCancelled();
+	}
+    }
+
+//    NOTATION_DEBUG << "NotationStaff " << this << "::renderElements: "
+//			 << elementCount << " elements rendered" << endl;
+}	
+
+void
+NotationStaff::renderPrintable(timeT from, timeT to)
+{
+    if (!m_printPainter) return;
+
+    Rosegarden::Profiler profiler("NotationStaff::renderElements");
+
+    emit setOperationName(i18n("Rendering notes on staff %1...").arg(getId() + 1));
+    emit setProgress(0);
+
+    throwIfCancelled();
+
+    // These are only used when rendering keys, and we don't do that
+    // here, so we don't care what they are
+    Clef currentClef;
+    Rosegarden::Key currentKey;
+
+    NotationElementList::iterator beginAt = getViewElementList()->findTime(from);
+    NotationElementList::iterator endAt = getViewElementList()->findTime(to);
+
+    int elementCount = 0;
+
+    for (NotationElementList::iterator it = beginAt, nextIt = beginAt;
+	 it != endAt; it = nextIt) {
+	
+	++nextIt;
+
+	if (!(*it)->event()->isa(Rosegarden::Note::EventType)) {
+	    continue;
+	}
+
+	bool selected = isSelected(it);
+//	NOTATION_DEBUG << "Rendering at " << (*it)->getAbsoluteTime()
+//			     << " (selected = " << selected << ")" << endl;
+
+//!!! remember: must tidy up this renderSingleElement stuff
+
+	renderSingleElement(*it, (nextIt == endAt ? 0 : *nextIt),
+			    currentClef, currentKey, selected);
+
+	if ((to > from) && (++elementCount % 200 == 0)) {
+
+	    timeT myTime = (*it)->getViewAbsoluteTime();
+	    emit setProgress((myTime - from) * 100 / (to - from));
 	    throwIfCancelled();
 	}
     }
@@ -436,30 +494,35 @@ NotationStaff::positionElements(timeT from, timeT to)
 
 	++nextIt;
 
-	if ((*it)->event()->isa(Clef::EventType)) {
+	if (el->event()->isa(Clef::EventType)) {
 
-	    currentClef = Clef(*(*it)->event());
-	    m_clefChanges.push_back(ClefChange(int((*it)->getLayoutX()),
+	    currentClef = Clef(*el->event());
+	    m_clefChanges.push_back(ClefChange(int(el->getLayoutX()),
 					       currentClef));
 	    haveCurrentClef = true;
 
-	} else if ((*it)->event()->isa(Rosegarden::Key::EventType)) {
+	} else if (el->event()->isa(Rosegarden::Key::EventType)) {
 
 	    m_keyChanges.push_back
-		(KeyChange(int((*it)->getLayoutX()),
-			   Rosegarden::Key(*(*it)->event())));
+		(KeyChange(int(el->getLayoutX()),
+			   Rosegarden::Key(*el->event())));
 
 	    if (!haveCurrentClef) { // need this to know how to present the key
 		currentClef = getSegment().getClefAtTime
-		    ((*it)->event()->getAbsoluteTime());
+		    (el->event()->getAbsoluteTime());
 		haveCurrentClef = true;
 	    }
 
 	    if (!haveCurrentKey) { // stores the key _before_ this one
 		currentKey = getSegment().getKeyAtTime
-		    ((*it)->event()->getAbsoluteTime() - 1);
+		    (el->event()->getAbsoluteTime() - 1);
 		haveCurrentKey = true;
 	    }
+
+	} else if (m_printPainter && el->isNote()) {
+
+	    // these are rendered by renderPrintable for printing
+	    continue;
 	}
 
 	bool selected = isSelected(it); 
@@ -477,8 +540,7 @@ NotationStaff::positionElements(timeT from, timeT to)
 	    // user inserts a new clef; unfortunately this means
 	    // inserting clefs is rather slow.
 	    
-	    needNewSprite = needNewSprite ||
-		!elementNotMovedInY(static_cast<NotationElement*>(*it));
+	    needNewSprite = needNewSprite || !elementNotMovedInY(el);
 	    
 	    if (!needNewSprite) {
 
@@ -488,20 +550,20 @@ NotationStaff::positionElements(timeT from, timeT to)
 		// or tie is part of the note's sprite).
 
 		bool spanning = false;
-		(void)((*it)->event()->get<Bool>
+		(void)(el->event()->get<Bool>
 		       (properties.BEAMED, spanning));
 		if (!spanning) {
-		    (void)((*it)->event()->get<Bool>(TIED_FORWARD, spanning));
+		    (void)(el->event()->get<Bool>(TIED_FORWARD, spanning));
 		}
 	    
 		if (spanning) {
 		    needNewSprite =
-			((*it)->getViewAbsoluteTime() < nextBarTime ||
+			(el->getViewAbsoluteTime() < nextBarTime ||
 			 !elementShiftedOnly(it));
 		}
 	    }
 
-	} else if ((*it)->event()->isa(Indication::EventType) &&
+	} else if (el->event()->isa(Indication::EventType) &&
 		   !el->isRecentlyRegenerated()) {
 	    needNewSprite = true;
 	}
@@ -516,9 +578,9 @@ NotationStaff::positionElements(timeT from, timeT to)
 	    ++elementsRendered;
 	}
 
-	if ((*it)->event()->isa(Rosegarden::Key::EventType)) {
+	if (el->event()->isa(Rosegarden::Key::EventType)) {
 	    // update currentKey after rendering, not before
-	    currentKey = Rosegarden::Key(*(*it)->event());
+	    currentKey = Rosegarden::Key(*el->event());
 	}
 
 	LinedStaffCoords coords = getCanvasOffsetsForLayoutCoords
@@ -528,7 +590,7 @@ NotationStaff::positionElements(timeT from, timeT to)
 
 	if ((to > from) &&
 	    (++elementsPositioned % 300 == 0)) {
-	    timeT myTime = (*it)->getViewAbsoluteTime();
+	    timeT myTime = el->getViewAbsoluteTime();
 	    emit setProgress((myTime - from) * 100 / (to - from));
 	    throwIfCancelled();
 	}
@@ -1015,23 +1077,35 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
     setTuplingParameters(elt, params);
 
     QCanvasNotationSprite *item = 0;
+    NotePixmapFactory *factory = m_notePixmapFactory;
 
     if (elt->isGrace()) {
-
 	params.setLegerLines(0);
-	m_graceNotePixmapFactory->setSelected
-	    (m_notePixmapFactory->isSelected());
-	item = new QCanvasNotationSprite
-	    (*elt, m_graceNotePixmapFactory->makeNotePixmap(params), m_canvas);
-
-    } else {
-	item = new QCanvasNotationSprite
-	    (*elt, m_notePixmapFactory->makeNotePixmap(params), m_canvas);
+	m_graceNotePixmapFactory->setSelected(m_notePixmapFactory->isSelected());
+	factory = m_graceNotePixmapFactory;
     }
 
-    if (m_notePixmapFactory->isSelected()) item->setZ(3);
-    else if (quantized) item->setZ(2);
-    else item->setZ(0);
+    if (m_printPainter) {
+
+	// Return no canvas item, but instead render straight to
+	// the printer.
+	
+	LinedStaffCoords coords = getCanvasCoordsForLayoutCoords
+	    (elt->getLayoutX(), (int)elt->getLayoutY());
+	factory->drawNote
+	    (params, *m_printPainter, int(coords.first), coords.second);
+
+    } else {
+	// The normal on-screen case
+	
+	item = new QCanvasNotationSprite
+	    (*elt, factory->makeNotePixmap(params), m_canvas);
+
+	if (factory->isSelected()) item->setZ(3);
+	else if (quantized) item->setZ(2);
+	else item->setZ(0);
+    }
+
     return item;
 }
 
@@ -1228,6 +1302,12 @@ NotationStaff::markChanged(timeT from, timeT to, bool movedOnly)
     }
 
     m_ready = true;
+}
+
+void
+NotationStaff::setPrintPainter(QPainter *painter)
+{
+    m_printPainter = painter;
 }
 
 bool

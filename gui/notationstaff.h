@@ -175,6 +175,23 @@ public:
     virtual void markChanged(Rosegarden::timeT from = 0,
 			     Rosegarden::timeT to = 0,
 			     bool movedOnly = false);
+
+    /**
+     * Set a painter as the printer output.  If this painter is
+     * non-null, subsequent renderElements calls will only render
+     * those elements that cannot be rendered directly to a print
+     * painter; those that can, will be rendered by renderPrintable()
+     * instead.
+     */
+    virtual void setPrintPainter(QPainter *painter);
+
+    /**
+     * Render to the current print painter those elements that can be
+     * rendered directly to a print painter.  If no print painter is
+     * set, do nothing.
+     */
+    virtual void renderPrintable(Rosegarden::timeT from,
+				 Rosegarden::timeT to);
     
     /**
      * Insert time signature at x-coordinate \a x.
@@ -375,6 +392,8 @@ protected:
     int m_barNumbersEvery;
     bool m_colourQuantize;
     bool m_showUnknowns;
+
+    QPainter *m_printPainter;
 
     enum BarStatus { UnRendered = 0, Rendered, Positioned };
     typedef __HASH_NS::hash_map<int, BarStatus> BarStatusMap;

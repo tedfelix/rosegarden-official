@@ -2151,7 +2151,7 @@ NotationView::setPageMode(LinedStaff::PageMode pageMode)
     }
 
     positionPages();
-    updateView();
+    if (!m_printMode) updateView();
 
     Rosegarden::Profiles::getInstance()->dump();
 }   
@@ -2719,6 +2719,7 @@ void NotationView::print(bool previewOnly)
 	    timeT t0 = m_hlayout->getTimeForX(cc0.first);
 	    timeT t1 = m_hlayout->getTimeForX(cc1.first);
 
+	    m_staffs[i]->setPrintPainter(&printpainter);
 	    m_staffs[i]->checkRendered(t0, t1);
 	}
 
@@ -2741,6 +2742,23 @@ void NotationView::print(bool previewOnly)
 #endif
 	}
 	NOTATION_DEBUG << "NotationView::print: QCanvas::drawArea done" << endl;
+
+	//!!! experimental stuff this
+	for (size_t i = 0; i < m_staffs.size(); ++i) {
+
+	    NotationStaff *staff = m_staffs[i];
+	    
+	    LinedStaff::LinedStaffCoords cc0 = staff->getLayoutCoordsForCanvasCoords
+		(pageRect.x(), pageRect.y());
+
+	    LinedStaff::LinedStaffCoords cc1 = staff->getLayoutCoordsForCanvasCoords
+		(pageRect.x() + pageRect.width(), pageRect.y() + pageRect.height());
+
+	    timeT t0 = m_hlayout->getTimeForX(cc0.first);
+	    timeT t1 = m_hlayout->getTimeForX(cc1.first);
+
+	    m_staffs[i]->renderPrintable(t0, t1);
+	}
 
         printpainter.translate(-pageWidth, 0);
 
