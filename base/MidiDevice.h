@@ -62,7 +62,6 @@ public:
     // Assignment
     MidiDevice &operator=(const MidiDevice &);
 
-    virtual void createInstruments();
     virtual void addInstrument(Instrument*);
 
     void removeMetronome();
@@ -155,8 +154,6 @@ protected:
     ProgramList   *m_programList;
     BankList      *m_bankList;
     MidiMetronome *m_metronome;
-
-    double m_garbage; //!!!
 
     // used when we're presenting the instruments
     InstrumentList  m_presentationInstrumentList;

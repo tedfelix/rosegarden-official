@@ -45,7 +45,7 @@ MidiDevice::MidiDevice():
     m_librarian(std::pair<std::string, std::string>("<none>", "<none>"))
 {
     std::cerr<< "MidiDevice ctor without data for device " << getId() << std::endl;
-    createInstruments();
+    generatePresentationList();
 }
 
 MidiDevice::MidiDevice(DeviceId id,
@@ -60,7 +60,7 @@ MidiDevice::MidiDevice(DeviceId id,
 {
     std::cerr<< "MidiDevice ctor with data for device " << getId() << std::endl;
 
-    createInstruments();
+    generatePresentationList();
 }
 
 MidiDevice::MidiDevice(const MidiDevice &dev):
@@ -227,22 +227,6 @@ MidiDevice::~MidiDevice()
     delete m_programList;
     delete m_bankList;
     if (m_metronome) delete m_metronome;
-}
-
-void
-MidiDevice::createInstruments()
-{
-    // Create metronome instrument
-    //
-    m_instruments.push_back(
-        new Instrument(SystemInstrumentBase + 1,      // Metronome ID
-                       Instrument::Midi,              // type
-                       std::string("Metronome"),      // name
-                       (MidiByte)9,                   // channel
-                       dynamic_cast<Device*>(this))); // parent device 
-
-
-    generatePresentationList();
 }
 
 void

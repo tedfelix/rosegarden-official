@@ -356,7 +356,7 @@ void RosegardenGUIApp::setupActions()
                                   "toggle_all");
 
     m_viewTipsOnStartup =
-        new KToggleAction(i18n("Show Tips on &startup"), 0, this,
+        new KToggleAction(i18n("&Show Tips on Startup"), 0, this,
                           SLOT(slotToggleShowTipsOnStartup()),
                           actionCollection(),
                           "show_tips_on_startup");
@@ -857,6 +857,8 @@ void RosegardenGUIApp::initView()
 
 void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
 {
+    if (m_doc == newDocument) return;
+
     emit documentAboutToChange();
 
     // Take care of all subparts which depend on the document
@@ -2262,7 +2264,8 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
 
     // Create new document (autoload is inherent)
     //
-    RosegardenGUIDoc *newDoc = new RosegardenGUIDoc(this, m_pluginManager);
+    RosegardenGUIDoc *newDoc =
+	merge ? m_doc : new RosegardenGUIDoc(this, m_pluginManager);
 
     std::string fname(QFile::encodeName(file));
 
@@ -2286,6 +2289,7 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
         {
             CurrentProgressDialog::freeze();
             KMessageBox::error(this, strtoqstr(midiFile.getError())); //!!! i18n
+	    if (!merge) delete newDoc;
             return;
         }
 
@@ -2296,10 +2300,8 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
 
     if (!merge) {
 
-        Rosegarden::Composition *tmpComp = new Rosegarden::Composition();
-        tmpComp = midiFile.convertToRosegarden();
-        newDoc->getComposition().swap(*tmpComp);
-        delete tmpComp;
+	midiFile.convertToRosegarden(newDoc->getComposition(),
+				     Rosegarden::MidiFile::CONVERT_REPLACE);
 
     } else {
 
@@ -2332,8 +2334,10 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
             }
         }
             
-        /*Rosegarden::Composition *tmpComp =*/
-        midiFile.convertToRosegarden(&newDoc->getComposition(), append);
+        midiFile.convertToRosegarden
+	    (newDoc->getComposition(),
+	     append ? Rosegarden::MidiFile::CONVERT_APPEND
+	            : Rosegarden::MidiFile::CONVERT_AUGMENT);
     }
 
 
@@ -2470,9 +2474,9 @@ void RosegardenGUIApp::importRG21File(const QString &file)
     //
     RosegardenGUIDoc *newDoc = new RosegardenGUIDoc(this, m_pluginManager);
 
-    RG21Loader rg21Loader(file, &newDoc->getStudio());
+    RG21Loader rg21Loader(&newDoc->getStudio());
 
-    // TODO: makde RG21Loader to actually emit these signals
+    // TODO: make RG21Loader to actually emit these signals
     //
     connect(&rg21Loader, SIGNAL(setProgress(int)),
             progressDlg.progressBar(), SLOT(setValue(int)));
@@ -2480,30 +2484,21 @@ void RosegardenGUIApp::importRG21File(const QString &file)
     connect(&rg21Loader, SIGNAL(incrementProgress(int)),
             progressDlg.progressBar(), SLOT(advance(int)));
 
-    rg21Loader.parse();
-
     // "your starter for 40%" - helps the "freeze" work
     //
     progressDlg.progressBar()->advance(40);
 
-    Rosegarden::Composition *tmpComp = rg21Loader.getComposition();
+    if (!rg21Loader.load(file, newDoc->getComposition())) {
 
-    // Check for success
-    //
-    if (tmpComp == 0) 
-    {
-        CurrentProgressDialog::freeze();
-        KMessageBox::error(this,
-          i18n("Can't load Rosegarden 2.1 file.  It appears to be corrupted."));
-        return;
+	CurrentProgressDialog::freeze();
+	KMessageBox::error(this,
+			   i18n("Can't load Rosegarden 2.1 file.  It appears to be corrupted."));
+	delete newDoc;
+	return;
     }
-
-    newDoc->getComposition().swap(*tmpComp);
 
     // assign to existing document
     setDocument(newDoc);
-
-    delete tmpComp;
 
     // Set modification flag
     //

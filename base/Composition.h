@@ -59,8 +59,6 @@ public:
     typedef std::map<TrackId, Track*> trackcontainer;
     typedef trackcontainer::iterator trackiterator;
 
-    enum MergeType { MergeAtStart, MergeAtEnd };
-
     Composition();
     virtual ~Composition();
 
@@ -68,9 +66,6 @@ private:
     Composition(const Composition &);
     Composition &operator=(const Composition &);
 public:
-
-    /// swap the contents with another composition
-    void swap(Composition &);
 
     /**
      * Remove all Segments from the Composition and destroy them
@@ -606,8 +601,6 @@ public:
 	iterator insert(Event *e); // may throw Event::BadType
 
 	void erase(Event *e);
-
-	void swap(ReferenceSegment &);
 
 	iterator findTime(timeT time);
 	iterator findNearestTime(timeT time);

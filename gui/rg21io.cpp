@@ -58,10 +58,9 @@ using namespace Rosegarden::Marks;
 
 using namespace Rosegarden::BaseProperties;
 
-RG21Loader::RG21Loader(const QString& fileName, Rosegarden::Studio *studio,
-                       QObject *parent, const char* name)
+RG21Loader::RG21Loader(Rosegarden::Studio *studio,
+		       QObject *parent, const char* name)
     : ProgressReporter(parent, name),
-      m_file(fileName),
       m_stream(0),
       m_studio(studio),
       m_composition(0),
@@ -74,18 +73,10 @@ RG21Loader::RG21Loader(const QString& fileName, Rosegarden::Studio *studio,
       m_tieStatus(0),
       m_nbStaves(0)
 {
-    m_studio->unassignAllInstruments();
-
-    if (m_file.open(IO_ReadOnly)) {
-
-        m_stream = new QTextStream(&m_file);
-    }
-
 }
 
 RG21Loader::~RG21Loader()
 {
-    delete m_stream;
 }
 
 bool RG21Loader::parseClef()
@@ -583,7 +574,7 @@ timeT RG21Loader::convertRG21Duration(QStringList::Iterator& i)
 }
 
 
-void RG21Loader::closeSegmentOrComposition()
+void RG21Loader::closeSegment()
 {
     if (m_currentSegment) {
 
@@ -666,8 +657,20 @@ bool RG21Loader::readNextLine()
 }
 
 
-bool RG21Loader::parse()
+bool RG21Loader::load(const QString &fileName, Rosegarden::Composition &comp)
 {
+    m_composition = &comp;
+    comp.clear();
+
+    QFile file(fileName);
+    if (file.open(IO_ReadOnly)) {
+        m_stream = new QTextStream(&file);
+    } else {
+	return false;
+    }
+
+    m_studio->unassignAllInstruments();
+
     while (!m_stream->eof()) {
 
         if (!readNextLine()) break;
@@ -677,7 +680,6 @@ bool RG21Loader::parse()
         if (firstToken == "Staves" || firstToken == "Staffs") { // nb staves
 
             m_nbStaves = m_tokens[1].toUInt();
-            m_composition = new Rosegarden::Composition;
 
         } else if (firstToken == "Name") { // Staff name
 
@@ -741,13 +743,16 @@ bool RG21Loader::parse()
             if (m_inGroup)
                 closeGroup();
             else
-                closeSegmentOrComposition();
+                closeSegment();
             
         } else {
 
 	    RG_DEBUG << "RG21Loader::parse: Unsupported element type \"" << firstToken << "\", ignoring" << endl;
 	}
     }
+
+    delete m_stream;
+    m_stream = 0;
     
     return true;
 }

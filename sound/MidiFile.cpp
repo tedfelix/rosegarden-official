@@ -608,9 +608,8 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
 // other applications (and formats) we'd make this method and its twin
 // pure virtual.
 //
-Composition*
-MidiFile::convertToRosegarden(Composition *composition,
-			      bool append) // only used if composition != 0
+bool
+MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 {
     MidiTrackIterator midiEvent;
     Segment *rosegardenSegment;
@@ -638,24 +637,16 @@ MidiFile::convertToRosegarden(Composition *composition,
     bool isMinor;
     bool isSharp;
 
-    bool preexisting = false;
-    if (composition)
-    {
-        if (!append) composition->clear();
-        preexisting = true;
-    }
-    else
-        composition = new Composition;
-
+    if (type == CONVERT_REPLACE) composition.clear();
 
     timeT origin = 0;
-    if (preexisting && append && composition->getDuration() > 0) {
-	origin = composition->getBarEndForTime(composition->getDuration());
+    if (type == CONVERT_APPEND && composition.getDuration() > 0) {
+	origin = composition.getBarEndForTime(composition.getDuration());
     }
 
     TrackId compTrack = 0;
-    for (Composition::iterator ci = composition->begin();
-	 ci != composition->end(); ++ci) {
+    for (Composition::iterator ci = composition.begin();
+	 ci != composition.end(); ++ci) {
 	if ((*ci)->getTrack() >= compTrack) compTrack = (*ci)->getTrack() + 1;
     }
 
@@ -759,8 +750,8 @@ MidiFile::convertToRosegarden(Composition *composition,
                     break;
 
                 case MIDI_COPYRIGHT_NOTICE:
-		    if (!preexisting) {
-			composition->setCopyrightNote((*midiEvent)->
+		    if (type == CONVERT_REPLACE) {
+			composition.setCopyrightNote((*midiEvent)->
 						      getMetaMessage());
 		    }
                     break;
@@ -794,7 +785,7 @@ MidiFile::convertToRosegarden(Composition *composition,
                         {
                             tempo = 60000000 / tempo;
 			    //!!! if preexisting, need to ask user about this
-                            composition->addTempo(rosegardenTime, tempo);
+                            composition.addTempo(rosegardenTime, tempo);
                         }
                     }
                     break;
@@ -810,7 +801,7 @@ MidiFile::convertToRosegarden(Composition *composition,
                     if (denominator == 0) denominator = 4;
 
 		    //!!! if preexisting, need to ask user about this
-                    composition->addTimeSignature
+                    composition.addTimeSignature
                         (rosegardenTime,
                          TimeSignature(numerator, denominator));
                     haveTimeSignatures = true;
@@ -1024,8 +1015,8 @@ MidiFile::convertToRosegarden(Composition *composition,
 	    // add the Segment to the Composition and increment the
 	    // Rosegarden segment number
 	    //
-	    composition->addTrack(track);
-	    composition->addSegment(rosegardenSegment);
+	    composition.addTrack(track);
+	    composition.addSegment(rosegardenSegment);
 	    compTrack++;
 
 	} else {
@@ -1036,7 +1027,7 @@ MidiFile::convertToRosegarden(Composition *composition,
 	}
     }
 
-    return composition;
+    return true;
 }
 
 // Takes a Composition and turns it into internal MIDI representation

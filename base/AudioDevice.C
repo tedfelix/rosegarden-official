@@ -38,13 +38,11 @@ namespace Rosegarden
 
 AudioDevice::AudioDevice():Device(0, "Default Audio Device", Device::Audio)
 {
-   createInstruments();
 }
 
 AudioDevice::AudioDevice(DeviceId id, const std::string &name):
     Device(id, name, Device::Audio)
 {
-   createInstruments();
 }
 
 
@@ -63,31 +61,6 @@ AudioDevice::~AudioDevice()
 {
 }
 
-
-
-void
-AudioDevice::createInstruments()
-{
-    /*
-    char instNum[100];
-
-    // for the moment just create an arbitrary number of audio tracks
-    for (InstrumentId i = 0; i < 8; i++)
-    {
-        sprintf(instNum, "%d", i);
-        std::string name = m_name.c_str() +
-                           std::string(" #") +
-                           std::string(instNum);
-
-        m_instruments.push_back(
-                new Instrument(i + AudioInstrumentBase,     // id
-                               Instrument::Audio,           // type
-                               name,                        // name
-                               dynamic_cast<Device*>(this))); // parent device
-    }
-
-    */
-}
 
 std::string
 AudioDevice::toXmlString()

@@ -47,7 +47,6 @@ public:
     //
     AudioDevice(const AudioDevice &);
 
-    virtual void createInstruments();
     virtual void addInstrument(Instrument*);
 
     // An untainted Instrument we can use for playing previews

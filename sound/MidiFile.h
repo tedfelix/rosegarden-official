@@ -77,6 +77,13 @@ public:
 	MIDI_FILE_NOT_LOADED            = 0xFF
     } MIDIFileFormatType;
 
+    typedef enum
+    {
+	CONVERT_REPLACE,
+	CONVERT_AUGMENT,
+	CONVERT_APPEND
+    } ConversionType;
+
     MidiFile(Studio *studio);
     MidiFile (const std::string &fn, Studio *studio);
     ~MidiFile();
@@ -95,11 +102,16 @@ public:
     // If a file open or save failed
     std::string getError() { return m_error; }
 
-    // Conversion in and out of Rosegarden
-    //
-    Rosegarden::Composition* convertToRosegarden(Rosegarden::Composition *
-						 preexistingComposition = 0,
-						 bool append = false);
+    /**
+     * Convert a MIDI file to a Rosegarden composition.  Return true
+     * for success.
+     */
+    bool convertToRosegarden(Rosegarden::Composition &c, ConversionType type);
+
+    /**
+     * Convert a Rosegarden composition to MIDI format, storing the
+     * result internally for later writing.
+     */
     void convertToMidi(Rosegarden::Composition &comp);
 
 signals:

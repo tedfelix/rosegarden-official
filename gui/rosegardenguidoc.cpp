@@ -1172,7 +1172,7 @@ RosegardenGUIDoc::syncDevices()
 
 //!!! weird -- this prevents crash later in unassignAllInstruments call
 // from MidiFile::openFile or wherever //!!! HACK! FIXME! Shouldn't be needed!
-    m_studio.unassignAllInstruments();
+//    m_studio.unassignAllInstruments();
 
     //!!! need to force an update on the instrument parameter box if
     //necessary -- how?

@@ -721,12 +721,15 @@ AlsaDriver::addInstrumentsForDevice(MappedDevice *device)
     std::string channelName;
     char number[100];
 
+    static int metronomeRunningId = 0; //!!! should be m_metronomeRunningId
+
     // If we haven't added a metronome then add one to the first
     // device we add.   This is accomplished by adding a
     // MappedInstrument for Instrument #0
     //
     if (!m_addedMetronome && device->getDirection() != MidiDevice::Record)
     {
+/*!!!
 	for (int channel = 0; channel < 16; ++channel)
 	{
 	    sprintf(number, " #%d", channel);
@@ -741,6 +744,17 @@ AlsaDriver::addInstrumentsForDevice(MappedDevice *device)
 	}
 
 	m_addedMetronome = true;
+*/
+
+	//!!! experimental
+	instr = new MappedInstrument(Instrument::Midi,
+				     9, // always the drum channel
+				     metronomeRunningId++,
+				     "Metronome",
+				     device->getId());
+	m_instruments.push_back(instr);
+	m_addedMetronome = false; // we want one on each device now
+
     }
 
     for (int channel = 0; channel < 16; ++channel)
