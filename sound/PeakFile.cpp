@@ -376,7 +376,7 @@ PeakFile::scanToPeak(int peak)
 
     // Scan to start of chunk and then seek to peak number
     //
-    m_inFile->seekg(m_chunkStartPosition + 128, std::ios::beg); 
+    m_inFile->seekg(m_chunkStartPosition + std::streampos(128), std::ios::beg); 
     m_inFile->seekg(peak * m_format * m_channels * m_pointsPerValue,
                     std::ios::cur);
 
@@ -479,7 +479,7 @@ PeakFile::writePeaks(std::ofstream *file)
         {
             std::cerr << "PeakFile::writePeaks - \"" << e << "\"" 
                       << std::endl
-                      << "PeakFile::writePeaks - leaving last block" << endl;
+                      << "PeakFile::writePeaks - leaving last block" << std::endl;
             break;
         }
 
@@ -658,11 +658,11 @@ PeakFile::getPreview(const RealTime &startIndex,
             try
             {
                 peakData = getBytes(m_format * m_pointsPerValue);
-                cout << "PEAK DATA = \"" << peakData << "\"" << endl;
+                std::cout << "PEAK DATA = \"" << peakData << "\"" << endl;
             }
             catch (std::string e)
             {
-                std::cout << "PeakFile::getPreview - \"" << e << "\""
+                std::cout << "PeakFile::getPreview - \"" << e << "\"\n"
                           << std::endl;
                 return ret;
             }
