@@ -64,7 +64,7 @@ NotationVLayout::layout(NotationElementList::iterator from,
             Chord chord(m_elements, i);
             if (chord.size() == 0) continue;
 
-            vector<int> h;
+            std::vector<int> h;
             for (unsigned int j = 0; j < chord.size(); ++j) {
                 h.push_back((*chord[j])->event()->get<Int>(P_HEIGHT_ON_STAFF));
             }

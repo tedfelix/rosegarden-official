@@ -58,7 +58,7 @@ public:
             fixedWidth(fwidth), fixed(ifixed), correct(icorrect) { }
     };
 
-    typedef vector<BarPosition> BarPositions;
+    typedef std::vector<BarPosition> BarPositions;
 
     /// returns the bar positions computed from the last call to preparse()
     BarPositions& getBarPositions();

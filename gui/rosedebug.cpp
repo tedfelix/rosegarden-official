@@ -23,7 +23,7 @@
 #include "Event.h"
 
 kdbgstream&
-operator<<(kdbgstream &dbg, const string &s)
+operator<<(kdbgstream &dbg, const std::string &s)
 {
     dbg << s.c_str();
     return dbg;
@@ -44,11 +44,12 @@ operator<<(kdbgstream &dbg, const Rosegarden::Event &e)
 //             << ((*i).second)->unparse() << '\n';
 //     }
 
-    e.dump(cerr);
+    e.dump(std::cerr);
     
     return dbg;
 }
 
+#ifdef NOT_DEFINED
 
 ostream&
 kdbgostreamAdapter::operator<<(bool i)
@@ -154,6 +155,8 @@ kdbgostreamAdapter::operator<<(double d)
     m_kdbgStream << d;
     return *this;
 }
+
+#endif
 
 // ostream& endl( ostream &s)
 // {

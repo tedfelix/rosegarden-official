@@ -30,7 +30,7 @@ NotationGroup::NotationGroup(const NotationElementList &nel,
         i = (*this)[0];
 
         try {
-            string t = (*i)->event()->get<String>("GroupType");
+            std::string t = (*i)->event()->get<String>("GroupType");
             if (strcasecmp(t.c_str(), "beamed")) {
                 m_type = Beamed;
             } else if (strcasecmp(t.c_str(), "tupled")) {

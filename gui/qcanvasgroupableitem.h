@@ -35,7 +35,7 @@ class QCanvasItemGroup;
 class QCanvasItem;
 
 class QCanvasGroupableItem {
-    friend QCanvasItemGroup;
+    friend class QCanvasItemGroup;
 
 public:
 

@@ -116,10 +116,10 @@ public:
 
     void erase(iterator pos);
 
-    iterator findPrevious(const string &type, iterator i);
-    iterator findNext(const string &type, iterator i);
+    iterator findPrevious(const std::string &type, iterator i);
+    iterator findNext(const std::string &type, iterator i);
 
-    typedef pair<iterator,iterator> IteratorPair;
+    typedef std::pair<iterator,iterator> IteratorPair;
     template <class MembershipTest>
     IteratorPair findContainingSet(iterator i, MembershipTest m) const;
 
@@ -169,7 +169,7 @@ inline kndgstream& operator<<(kdbgstream &e, NotationElementList&)
 // A temporary collection of pointers to things in the list.  Don't
 // store Chords, just create them, query them and throw them away.
 
-class Chord : public vector<NotationElementList::iterator>
+class Chord : public std::vector<NotationElementList::iterator>
 {
 public:
     typedef NotationElementList::iterator NELIterator;

@@ -64,7 +64,7 @@ protected:
 
     bool m_inChord;
     bool m_inGroup;
-    string m_groupType;
+    std::string m_groupType;
     int m_groupNo;
 };
 

@@ -63,7 +63,7 @@ ViewElementsManager::insert(NotationElement *e)
 void
 ViewElementsManager::erase(NotationElementList::iterator it)
 {
-    pair<Track::iterator, Track::iterator> interval
+    std::pair<Track::iterator, Track::iterator> interval
         = m_track.equal_range((*it)->event());
 
     bool foundEvent = false;

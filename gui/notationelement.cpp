@@ -126,7 +126,7 @@ NotationElementList::erase(NotationElementList::iterator pos)
 }
 
 NotationElementList::iterator
-NotationElementList::findPrevious(const string &type, iterator i)
+NotationElementList::findPrevious(const std::string &type, iterator i)
 
 {
     //!!! what to return on failure? I think probably
@@ -141,7 +141,7 @@ NotationElementList::findPrevious(const string &type, iterator i)
 }
 
 NotationElementList::iterator
-NotationElementList::findNext(const string &type, iterator i)
+NotationElementList::findNext(const std::string &type, iterator i)
 {
     if (i == end()) return i;
     for (++i; i != end() && !(*i)->event()->isa(type); ++i);

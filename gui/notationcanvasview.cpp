@@ -192,7 +192,7 @@ NotationCanvasView::getNoteNameForLine(const StaffLine *line)
     int h = line->getHeight();
 
     //!!! TODO -- take clef & key into account, and then accidental
-    string noteName = Rosegarden::NotationDisplayPitch(h,
+    std::string noteName = Rosegarden::NotationDisplayPitch(h,
                                                        Rosegarden::NoAccidental).
         getAsString(Rosegarden::Clef::DefaultClef,
                     Rosegarden::Key::DefaultKey);

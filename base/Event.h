@@ -30,6 +30,9 @@
 #endif
 
 #include <string>
+#ifndef NDEBUG
+#include <iostream>
+#endif
 
 struct eqstring
 {
@@ -161,7 +164,7 @@ Event::get(const std::string &name, PropertyDefn<P>::basic_type &val) const
         }
         else {
 #ifndef NDEBUG
-            cerr << "Event::get() Error: Attempt to get property \"" << name
+            std::cerr << "Event::get() Error: Attempt to get property \"" << name
                  << "\" as " << PropertyDefn<P>::name() <<", actual type is "
                  << sb->getTypeName() << std::endl;
 #endif
@@ -170,7 +173,7 @@ Event::get(const std::string &name, PropertyDefn<P>::basic_type &val) const
 	    
     } else {
 #ifndef NDEBUG
-        cerr << "Event::get() Error: Attempt to get property \"" << name
+        std::cerr << "Event::get() Error: Attempt to get property \"" << name
              << "\" which doesn't exist for this element" << std::endl;
 #endif
         return false;

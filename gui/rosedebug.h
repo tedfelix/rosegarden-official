@@ -30,7 +30,7 @@ namespace Rosegarden { class Event; }
 #define KDEBUG_AREA 1010
 
 kdbgstream&
-operator<<(kdbgstream&, const string&);
+operator<<(kdbgstream&, const std::string&);
 
 kdbgstream&
 operator<<(kdbgstream&, const Rosegarden::Event&);
@@ -38,26 +38,31 @@ operator<<(kdbgstream&, const Rosegarden::Event&);
 // This doesn't work - keeping it just in case I somehow get it
 // working someday
 
-class kdbgostreamAdapter : public ostream
+#ifdef NOT_DEFINED
+
+// can't be bothered to even get this to compile with gcc-3.0 at the
+// moment
+
+class kdbgostreamAdapter : public std::ostream
 {
 public:
     kdbgostreamAdapter(kdbgstream &e) : m_kdbgStream(e) {}
 
-    ostream& operator<<(bool i);
-    ostream& operator<<(short i);
-    ostream& operator<<(unsigned short i);
-    ostream& operator<<(char i);
-    ostream& operator<<(unsigned char i);
-    ostream& operator<<(int i);
-    ostream& operator<<(unsigned int i);
-    ostream& operator<<(long i);
-    ostream& operator<<(unsigned long i);
-    ostream& operator<<(const QString& string);
-    ostream& operator<<(const char *string);
-    ostream& operator<<(const QCString& string);
-    ostream& operator<<(void * p);
-    ostream& operator<<(KDBGFUNC f);
-    ostream& operator<<(double d);
+    std::ostream& operator<<(bool i);
+    std::ostream& operator<<(short i);
+    std::ostream& operator<<(unsigned short i);
+    std::ostream& operator<<(char i);
+    std::ostream& operator<<(unsigned char i);
+    std::ostream& operator<<(int i);
+    std::ostream& operator<<(unsigned int i);
+    std::ostream& operator<<(long i);
+    std::ostream& operator<<(unsigned long i);
+    std::ostream& operator<<(const QString& str);
+    std::ostream& operator<<(const char *str);
+    std::ostream& operator<<(const QCString& str);
+    std::ostream& operator<<(void * p);
+    std::ostream& operator<<(KDBGFUNC f);
+    std::ostream& operator<<(double d);
 
     kdbgstream& dbgStream() { return m_kdbgStream; }
 
@@ -65,7 +70,9 @@ protected:
     kdbgstream &m_kdbgStream;
 };
 
-// ostream& endl(ostream& s);
+#endif
+
+// std::ostream& endl(std::ostream& s);
 
 void DBCheckThrow();
 

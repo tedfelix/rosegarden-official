@@ -480,14 +480,14 @@ NotePixmapFactory::makeUnknownPixmap()
 }
 
 QCanvasPixmap
-NotePixmapFactory::makeKeyPixmap(string type, string cleftype)
+NotePixmapFactory::makeKeyPixmap(std::string type, std::string cleftype)
 {
     try {
         // Key is a Qt type as well, so we have to specify ::Key
 
         ::Key key(type);
         Clef clef(cleftype);
-        vector<int> ah = key.getAccidentalHeights(clef);
+        std::vector<int> ah = key.getAccidentalHeights(clef);
 
         QPixmap &accidentalPixmap
             (key.isSharp() ? m_accidentalSharp : m_accidentalFlat);
@@ -550,7 +550,7 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
 
     QRect numR = m_timeSigFontMetrics.boundingRect(numS);
     QRect denomR = m_timeSigFontMetrics.boundingRect(denomS);
-    int width = max(numR.width(), denomR.width()) + 2;
+    int width = std::max(numR.width(), denomR.width()) + 2;
     int x;
 
     createPixmapAndMask(width, denomR.height() * 2 + getNoteBodyHeight());

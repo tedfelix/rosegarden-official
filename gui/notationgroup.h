@@ -29,7 +29,7 @@
 // collection of pointers to things in the main list.  Don't store
 // these, just create them, query them and throw them away.
 
-class NotationGroup : public vector<NotationElementList::iterator>
+class NotationGroup : public std::vector<NotationElementList::iterator>
 {
 public:
     typedef NotationElementList::iterator NELIterator;

@@ -31,7 +31,7 @@ class QCanvasLineGroupable;
 class Staff : public QCanvasItemGroup
 {
 public:
-    typedef vector<QCanvasLineGroupable*> barlines;
+    typedef std::vector<QCanvasLineGroupable*> barlines;
     
     Staff(QCanvas *, int resolution);
     ~Staff();

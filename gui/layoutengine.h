@@ -43,7 +43,7 @@ protected:
     unsigned int m_status;
 };
 
-class NotationLayout : public LayoutEngine, public unary_function<NotationElement*, void>
+class NotationLayout : public LayoutEngine, public std::unary_function<NotationElement*, void>
 {
 public:
 

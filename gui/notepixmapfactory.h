@@ -27,8 +27,8 @@
 #include "NotationTypes.h"
 #include "notepixmapfactory.h"
 
-typedef vector<int> ChordPitches;
-typedef vector<Rosegarden::Accidental> Accidentals;
+typedef std::vector<int> ChordPitches;
+typedef std::vector<Rosegarden::Accidental> Accidentals;
 
 
 /**
@@ -40,7 +40,7 @@ class NotePixmapOffsets
 {
 public:
 
-    typedef pair<QPoint, QPoint> stalkpoints;
+    typedef std::pair<QPoint, QPoint> stalkpoints;
 
     NotePixmapOffsets();
 
@@ -129,7 +129,7 @@ public:
 
     QCanvasPixmap makeRestPixmap(Rosegarden::Note::Type note, bool dotted);
     QCanvasPixmap makeClefPixmap(Rosegarden::Clef clef) const;
-    QCanvasPixmap makeKeyPixmap(string type, string cleftype);
+    QCanvasPixmap makeKeyPixmap(std::string type, std::string cleftype);
     QCanvasPixmap makeTimeSigPixmap(const Rosegarden::TimeSignature& sig);
     QCanvasPixmap makeUnknownPixmap();
 
@@ -180,9 +180,9 @@ protected:
 
     QPixmap m_dot;
 
-    vector<QPixmap*> m_tailsUp;
-    vector<QPixmap*> m_tailsDown;
-    vector<QPixmap*> m_rests;
+    std::vector<QPixmap*> m_tailsUp;
+    std::vector<QPixmap*> m_tailsDown;
+    std::vector<QPixmap*> m_rests;
 
     mutable int m_clefWidth;
 
@@ -210,7 +210,7 @@ public:
     /**
      * Generate a pixmap for a chord
      *
-     * @param pitches : a \b sorted vector of relative pitches
+     * @param pitches : a sorted vector of relative pitches
      * @param duration : chord duration
      * @param drawTail : if the pixmap should have a tail or not
      *   (useful when the tail should be collapsed with the one of a neighboring chord)

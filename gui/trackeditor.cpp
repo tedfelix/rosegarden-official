@@ -195,7 +195,7 @@ bool
 TracksEditor::moveTrack(int /*section*/, int /*fromIdx*/, int /*toIdx*/)
 {
     // just reset every part's Y coordinate
-    for (list<TrackPart*>::iterator iter = m_trackParts.begin();
+    for (std::list<TrackPart*>::iterator iter = m_trackParts.begin();
          iter != m_trackParts.end(); ++iter) {
         TrackPart* p = *iter;
         int trackSection = p->trackNb();
@@ -209,7 +209,7 @@ TracksEditor::moveTrack(int /*section*/, int /*fromIdx*/, int /*toIdx*/)
 TrackPart*
 TracksEditor::getTrackAtIdx(int section)
 {
-    for (list<TrackPart*>::iterator iter = m_trackParts.begin();
+    for (std::list<TrackPart*>::iterator iter = m_trackParts.begin();
          iter != m_trackParts.end(); ++iter) {
         TrackPart* p = *iter;
         if (p->trackNb() == section) return p;

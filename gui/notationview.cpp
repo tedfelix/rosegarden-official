@@ -364,7 +364,7 @@ NotationView::showElements(NotationElementList::iterator from,
 //    static ChordPixmapFactory npf(*m_mainStaff);
     // let's revert to this for now
     NotePixmapFactory &npf(m_notePixmapFactory);
-    string currentClef = Clef::DefaultClef.getClefType();
+    std::string currentClef = Clef::DefaultClef.getClefType();
 
     for (NotationElementList::iterator it = from; it != to; ++it) {
 
@@ -951,7 +951,7 @@ NotationView::perfTest()
     st = times(&spare);
 
 
-    cout << "Adding 1000 notes" << endl;
+    std::cout << "Adding 1000 notes" << std::endl;
     setUpdatesEnabled(false);
 
     QCanvasPixmapArray *notePixmap = new QCanvasPixmapArray("pixmaps/note-bodyfilled.xpm");
@@ -967,10 +967,10 @@ NotationView::perfTest()
     }
     setUpdatesEnabled(true);
 
-    cout << "Done adding 1000 notes" << endl;
+    std::cout << "Done adding 1000 notes" << std::endl;
     et = times(&spare);
 
-    cout << (et-st)*10 << "ms" << endl;
+    std::cout << (et-st)*10 << "ms" << std::endl;
 }
 
 

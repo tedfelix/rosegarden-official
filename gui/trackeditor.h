@@ -82,7 +82,7 @@ protected:
     TracksCanvas *m_tracksCanvas;
     QHeader *m_hHeader, *m_vHeader;
 
-    list<TrackPart*> m_trackParts;
+    std::list<TrackPart*> m_trackParts;
 };
 
 #endif
