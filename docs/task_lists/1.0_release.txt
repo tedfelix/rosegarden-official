@@ -7,8 +7,6 @@ Features for 1.0 - updated 20040331
 
 - BUG - matrix resizes itself by default when adding notes
 
-- add pitch bend control events to all existing .rgd files
-
 - native printing
   o it's too slow
   o adding fluff and nicities to printed staves
@@ -43,6 +41,11 @@ Features for 1.0 - updated 20040331
 
 - plugins - randomise button and time related frequency parameters
 
+
+Recently DONE
+-------------
+
+- add pitch bend control events to all existing .rgd files [DONE]
 
 
 POST 1.0

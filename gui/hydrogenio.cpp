@@ -108,7 +108,9 @@ HydrogenXMLHandler::HydrogenXMLHandler(Rosegarden::Composition *composition,
     m_currentProperty(""),
     m_segment(0),
     m_currentTrackNb(0),
-    m_segmentAdded(false)
+    m_segmentAdded(false),
+    m_currentBar(0),
+    m_newSegment(false)
 {
 }
 
@@ -161,6 +163,8 @@ HydrogenXMLHandler::startDocument()
     m_segment = 0;
     m_currentTrackNb = 0;
     m_segmentAdded = 0;
+    m_currentBar = 0;
+    m_newSegment = false;
 
     return true;
 }
@@ -187,8 +191,11 @@ HydrogenXMLHandler::startElement(const QString& /*namespaceURI*/,
         m_inPattern = true;
         m_segmentAdded = false; // flag the segments being added
     } else if (lcName == "sequence") {
-        // Create a new segment
+
+        // Create a new segment and set some flags
+        //
         m_segment = new Rosegarden::Segment();
+        m_newSegment = true;
         m_inSequence = true;
     }
 
@@ -214,11 +221,24 @@ HydrogenXMLHandler::endElement(const QString& /*namespaceURI*/,
                  << ", instrument = " << m_instrument
                  << endl;
 
-        Rosegarden::timeT barLength = m_composition->getBarEnd(0) - 
-            m_composition->getBarStart(0);
+        Rosegarden::timeT barLength = m_composition->getBarEnd(m_currentBar) - 
+            m_composition->getBarStart(m_currentBar);
 
-        Rosegarden::timeT pos = Rosegarden::timeT(
-                double(m_position)/double(m_patternSize) * double(barLength));
+        Rosegarden::timeT pos = m_composition->getBarStart(m_currentBar) + 
+            Rosegarden::timeT(
+                    double(m_position)/double(m_patternSize) * double(barLength));
+
+        // Insert a rest if we've got a new segment
+        //
+        if (m_newSegment)
+        {
+            Event *restEvent = new Event(Rosegarden::Note::EventRestType,
+                                         m_composition->getBarStart(m_currentBar), 
+                                         pos - m_composition->getBarStart(m_currentBar),
+                                         Rosegarden::Note::EventRestSubOrdering);
+            m_segment->insert(restEvent);
+            m_newSegment = false;
+        }
 
         // Create and insert this event
         //
@@ -255,6 +275,11 @@ HydrogenXMLHandler::endElement(const QString& /*namespaceURI*/,
             m_composition->addTrack(track);
 
             m_segmentAdded = false;
+
+            // Each pattern has it's own bar so that the imported
+            // song shows off each pattern a bar at a time.
+            //
+            m_currentBar++; 
         }
     
     } else if (lcName == "sequence") {
@@ -275,8 +300,7 @@ HydrogenXMLHandler::endElement(const QString& /*namespaceURI*/,
             // Enforce start and end markers for this bar so that we have a 
             // whole bar unit segment.
             //
-            m_segment->setStartTime(m_composition->getBarStart(0));
-            m_segment->setEndMarkerTime(m_composition->getBarEnd(0));
+            m_segment->setEndMarkerTime(m_composition->getBarEnd(m_currentBar));
             QString label = QString("%1 - %2 %3 %4").arg(strtoqstr(m_patternName))
                 .arg(strtoqstr(m_sequenceName))
                 .arg(i18n(" imported from Hydrogen ")).arg(strtoqstr(m_version));
@@ -316,6 +340,30 @@ HydrogenXMLHandler::characters(const QString& chars)
             m_pitch = ch.toDouble();
         } else if (m_currentProperty == "instrument") {
             m_instrument = ch.toInt();
+
+            // Standard kit conversion - hardcoded conversion for Hyrdogen's default
+            // drum kit.  The m_instrument mapping for low values maps well onto the
+            // kick drum GM kit starting point (MIDI pitch = 36).
+            //
+            switch(m_instrument)
+            {
+                case 11: // Cowbell
+                    m_instrument = 20;
+                    break;
+                case 12: // Ride Jazz
+                    m_instrument = 15;
+                    break;
+                case 14: // Ride Rock
+                    m_instrument = 17;
+                    break;
+                case 15: // Crash Jazz
+                    m_instrument = 16;
+                    break;
+
+                default:
+                    break;
+            }
+
         }
     } else if (m_inInstrument)
     {

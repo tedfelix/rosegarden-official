@@ -135,6 +135,8 @@ protected:
     Rosegarden::Segment     *m_segment;
     Rosegarden::TrackId      m_currentTrackNb;
     bool                     m_segmentAdded;
+    int                      m_currentBar;
+    bool                     m_newSegment;
 };
 
 
