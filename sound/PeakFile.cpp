@@ -576,6 +576,8 @@ PeakFile::writePeaks(Progress *progress,
         //
         for (unsigned int i = 0; i < m_audioFile->getChannels(); i++)
         {
+	    cerr << "peak: " << channelPeaks[i].first << " - " << channelPeaks[i].second << endl;
+
             putBytes(file, getLittleEndianFromInteger(channelPeaks[i].first,
                                                       bytes));
             putBytes(file, getLittleEndianFromInteger(channelPeaks[i].second,

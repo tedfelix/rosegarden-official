@@ -248,6 +248,14 @@ void MatrixModifyCommand::modifySegment()
 
     if (eventType == Note::EventType) {
 
+	timeT normalizeStart = std::min(m_newEvent->getAbsoluteTime(),
+					m_oldEvent->getAbsoluteTime());
+
+	timeT normalizeEnd = std::max(m_newEvent->getAbsoluteTime() +
+				      m_newEvent->getDuration(),
+				      m_oldEvent->getAbsoluteTime() +
+				      m_oldEvent->getDuration());
+
         // Delete old one
         getSegment().eraseSingle(m_oldEvent);
 
@@ -255,12 +263,7 @@ void MatrixModifyCommand::modifySegment()
         getSegment().insert(m_newEvent);
 
         // Tidy up
-        getSegment().normalizeRests(std::min(m_newEvent->getAbsoluteTime(),
-                                             m_oldEvent->getAbsoluteTime()),
-                                    std::max(m_newEvent->getAbsoluteTime() +
-                                             m_newEvent->getDuration(),
-                                             m_oldEvent->getAbsoluteTime() +
-                                             m_oldEvent->getDuration()));
+        getSegment().normalizeRests(normalizeStart, normalizeEnd);
 
     }
 }
