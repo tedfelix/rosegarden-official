@@ -246,7 +246,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_hlayout->setNotePixmapFactory(m_notePixmapFactory);
     
     setupActions();
-    setupAddControlRulerMenu();
+//     setupAddControlRulerMenu(); - too early for notation, moved to end of ctor.
     initLayoutToolbar();
     initStatusBar();
     
@@ -636,6 +636,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     setConfigDialogPageIndex(1);
     setOutOfCtor();
     setupControllerTabs();
+
+    setupAddControlRulerMenu();
     
     NOTATION_DEBUG << "NotationView ctor exiting" << endl;
 }
