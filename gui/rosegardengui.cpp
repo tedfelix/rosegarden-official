@@ -138,7 +138,9 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer)
 
     // Now autoload
     //
+#ifdef RGKDE3
     stateChanged("new_file");
+#endif
 }
 
 RosegardenGUIApp::~RosegardenGUIApp()
