@@ -39,8 +39,6 @@ public:
                     unsigned int barMargin,
                     unsigned int noteMargin = 2);
 
-    virtual ~NotationHLayout();
-
     typedef list<unsigned int> barpositions;
 
     barpositions& barPositions();
