@@ -52,9 +52,12 @@ class Track : public XmlExportable
 
 public:
     Track();
-    Track(const TrackId &id, const bool &muted,
+    Track(TrackId id,
+          InstrumentId instrument, 
+          unsigned int position,
           const std::string &label,
-          const unsigned int &position, const int &instrument);
+          bool muted);
+
     ~Track();
 
     TrackId getID() const { return m_id; }

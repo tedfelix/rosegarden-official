@@ -77,7 +77,6 @@ bool
 RoseXmlHandler::startDocument()
 {
     m_composition.clearTracks();
-    m_studio.clear();
 
     // and the loop
     //
@@ -178,6 +177,10 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             m_errorString = i18n("Found Studio in another section");
             return false;
         }
+
+        // Only clear the Studio if we're loading a new one
+        //
+        m_studio.clear();
 
         m_section = InStudio;
 
@@ -320,9 +323,11 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             instrument = instrumentStr.toInt();
         }
        
-        Rosegarden::Track *track = new Rosegarden::Track(id, muted,
-                                                         label, position,
-                                                         instrument);
+        Rosegarden::Track *track = new Rosegarden::Track(id,
+                                                         instrument,
+                                                         position,
+                                                         label,
+                                                         muted);
         m_composition.addTrack(track);
 
 

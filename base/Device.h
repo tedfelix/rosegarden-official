@@ -53,9 +53,11 @@ public:
     DeviceType getType() const { return m_type; }
     std::string getName() const { return m_name; }
 
+    // Accessing instrument lists - Devices should only
+    // show the world what they want it to see
+    //
     virtual void createInstruments() = 0;
-
-    InstrumentList& getInstruments() { return m_instruments; }
+    virtual InstrumentList& getInstruments() = 0;
 
 protected:
     InstrumentList     m_instruments;

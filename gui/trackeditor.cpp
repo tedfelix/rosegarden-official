@@ -82,13 +82,20 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
         //
         tracks = 64;
 
+        // instrument assignment
+        //
+        Rosegarden::InstrumentId instBase = Rosegarden::MidiInstrumentBase;
+
         // Create the Tracks on the Composition
         //
         Rosegarden::Track *track;
         for (int i = 0; i < tracks; i++)
         {
-            track = new Rosegarden::Track(i, false,
-                                          std::string("untitled"), i, 0);
+            track = new Rosegarden::Track(i,                       // id
+                                          (i + instBase) % 16,     // instrument
+                                          i,                       // position
+                                          std::string("untitled"), 
+                                          false);                  // mute
 
             comp.addTrack(track);
         }

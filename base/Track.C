@@ -42,8 +42,11 @@ Track::Track():
 {
 }
 
-Track::Track(const TrackId &id, const bool &muted, const std::string &label,
-             const unsigned int &position, const int &instrument):
+Track::Track(TrackId id,
+             InstrumentId instrument,
+             unsigned int position,
+             const std::string &label,
+             bool muted):
    m_id(id),
    m_muted(muted),
    m_label(label),
@@ -56,8 +59,6 @@ Track::Track(const TrackId &id, const bool &muted, const std::string &label,
 Track::~Track()
 {
 }
-
-
 
 
 // Our virtual method for exporting Xml.

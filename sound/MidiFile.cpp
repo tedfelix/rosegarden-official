@@ -467,7 +467,7 @@ MidiFile::convertToRosegarden()
     MidiTrackIterator midiEvent;
     Rosegarden::Segment *rosegardenSegment;
     Rosegarden::Event *rosegardenEvent;
-    Rosegarden::TrackId compositionTrack = 0;
+    Rosegarden::TrackId compTrack = 0;
     string trackName;
 
     // Time conversions
@@ -504,6 +504,8 @@ MidiFile::convertToRosegarden()
     int divisor = m_timingDivision ? m_timingDivision : crotchetTime;
     bool haveTimeSignatures = false;
 
+    Rosegarden::InstrumentId compInstrument = Rosegarden::MidiInstrumentBase;
+
     for (Rosegarden::TrackId i = 0; i < m_numberOfTracks; i++ )
     {
         segmentTime = 0;
@@ -527,21 +529,25 @@ MidiFile::convertToRosegarden()
         if(consolidateNoteOffEvents(i)) // returns true if some notes exist
         {
             rosegardenSegment = new Segment;
-            rosegardenSegment->setTrack(compositionTrack);
+            rosegardenSegment->setTrack(compTrack);
             rosegardenSegment->setStartTime(0);
 
-            track = new Rosegarden::Track(compositionTrack,
-                                          false,
-                                          trackName,
-                                          compositionTrack,
-                                          0);
+            track = new Rosegarden::Track(compTrack,        // id
+                                          compInstrument,   // instrument
+                                          compTrack,        // position
+                                          trackName,        // name
+                                          false);           // muted
 
             composition->addTrack(track);
             // add the Segment to the Composition and increment the
             // Rosegarden segment number
             //
             composition->addSegment(rosegardenSegment);
-            compositionTrack++;
+            compTrack++;
+
+            // Rotate Instrument assignment
+            //
+            compInstrument = Rosegarden::MidiInstrumentBase + (compTrack % 16);
 
         } else {
             rosegardenSegment = 0;

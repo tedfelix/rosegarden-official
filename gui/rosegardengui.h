@@ -184,6 +184,12 @@ public:
      */
     virtual void notifySequencerStatus(const int &status);
 
+    /*
+     * Autoload the autoload song for Studio parameters
+     *
+     */
+    void performAutoload();
+
 protected:
 
     /**

@@ -111,6 +111,11 @@ RosegardenGUIApp::RosegardenGUIApp()
 //     disableCommand(ID_EDIT_CUT);
 //     disableCommand(ID_EDIT_COPY);
 //     disableCommand(ID_EDIT_PASTE);
+
+
+    // Now autoload
+    //
+    performAutoload();
 }
 
 RosegardenGUIApp::~RosegardenGUIApp()
@@ -1804,6 +1809,13 @@ RosegardenGUIApp::slotSendMappedEvent(Rosegarden::MappedEvent *mE)
 {
     m_seqManager->sendMappedEvent(mE);
 }
+
+
+void
+RosegardenGUIApp::performAutoload()
+{
+}
+
 
 
 

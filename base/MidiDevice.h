@@ -69,6 +69,8 @@ public:
 
     virtual std::string toXmlString();
 
+    virtual InstrumentList& getInstruments();
+
 private:
     void clearProgramList();
 
@@ -93,10 +95,12 @@ private:
     // We store voice names that depend on bank select state
     // - we can create our own and save them out
     //
-    ProgramList *m_programList;
-    BankList *m_bankList;
-
+    ProgramList   *m_programList;
+    BankList      *m_bankList;
     MidiMetronome *m_metronome;
+
+    // used when we're presenting the instruments
+    InstrumentList m_presentationInstrumentList;
 
 };
 

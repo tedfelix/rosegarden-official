@@ -78,6 +78,18 @@ MidiDevice::createInstruments()
                        (MidiByte)9,                   // channel
                        dynamic_cast<Device*>(this))); // parent device 
 
+    // Now fill the presentation list for the instruments
+    //
+    m_presentationInstrumentList.clear();
+
+    InstrumentList::iterator it;
+    for (it = m_instruments.begin(); it != m_instruments.end(); it++)
+    {
+        if ((*it)->getID() >= AudioInstrumentBase)
+            m_presentationInstrumentList.push_back(*it);
+    }
+
+
 }
 
 void
@@ -173,6 +185,15 @@ MidiDevice::toXmlString()
 
     return xml;
 }
+
+// Only copy across non System instruments
+//
+InstrumentList&
+MidiDevice::getInstruments()
+{
+    return m_presentationInstrumentList;
+}
+
 
 }
 

@@ -23,6 +23,11 @@
 
 #include "Device.h"
 
+// An AudioDevice defines Instruments where we can play our
+// audio Segments.
+//
+//
+//
 #ifndef _AUDIODEVICE_H_
 #define _AUDIODEVICE_H_
 
@@ -42,6 +47,8 @@ public:
     // Turn into XML string
     //
     virtual std::string toXmlString(); 
+
+    virtual InstrumentList& getInstruments() { return m_instruments; }
 
 private:
 
