@@ -32,7 +32,31 @@ rosegarden-$version (for instance, rosegarden-0.1).
 
 cd to that new directory and do 'make dist'
 
-the tarball should be built in the new directory, that is at
+NOTE : 'make dist' uses the output of `cd $PWD` and will get it wrong
+if your CDPATH contains '..'. This causes 'make dist' to fail with a
+message like :
+
+---------
+automake: /home/glaurent/tmp/rosegarden-0.1.2/rosegarden-0.1.2.am:
+`/home/glaurent/tmp/rosegarden-0.1.2/rosegarden-0.1.2.am' does not
+exist
+---------
+
+in which case the simplest thing to do is to unset CDPATH and restart
+'make dist'. You may also get errors about missing rules for some
+targets, like :
+
+---------
+make[1]: *** No rule to make target `../sound/libRosegardenSequencer.la', needed by `rosegardensequencer'.  Stop.
+make[1]: Leaving directory `/home/glaurent/tmp/rosegarden-0.1.2/sequencer'
+make: *** [distdir] Error 1
+zsh: exit 2     make dist
+---------
+
+For the moment the only known way out of this is to simply do a 'make'
+first, then restarting 'make dist'.
+
+The tarball should be built in the new directory, that is at
 rosegarden-0.1/rosegarden-0.1.tar.gz
 
 
@@ -40,7 +64,7 @@ rosegarden-0.1/rosegarden-0.1.tar.gz
 
 This is the rather non-trivial step.
 
-- copy the tarball to ftp://upload.sf.net/incoming/
+- copy the tarball to ftp://upload.sf.net/incoming/ (anon-ftp)
 - log on to SourceForge
 - go to the 'admin' page of Rosegarden, then to the 'Edit/Release files' page.
   The direct URL should be :
