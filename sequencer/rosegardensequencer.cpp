@@ -24,7 +24,6 @@
 
 #include <dcopclient.h>
 #include <qdatetime.h>
-#include <qvaluevector.h>
 #include <qstring.h>
 
 #include "rosedebug.h"
