@@ -66,8 +66,7 @@ PropertyStoreBase::~PropertyStoreBase()
 
 Event::Event()
     : m_duration(0),
-      m_absoluteTime(0),
-      m_viewElements(0)
+      m_absoluteTime(0)
 {
 }
 
@@ -75,8 +74,7 @@ Event::Event(const string &package, const string &type)
     : m_package(package),
       m_type(type),
       m_duration(0),
-      m_absoluteTime(0),
-      m_viewElements(0)
+      m_absoluteTime(0)
 {
 }
 
@@ -84,8 +82,7 @@ Event::Event(const Event &e)
     : m_package(e.package()),
       m_type(e.type()),
       m_duration(e.duration()),
-      m_absoluteTime(e.absoluteTime()),
-      m_viewElements(0)
+      m_absoluteTime(e.absoluteTime())
 {
     copyFrom(e);
 }
@@ -93,7 +90,6 @@ Event::Event(const Event &e)
 Event::~Event()
 {
     scrapMap();
-    delete m_viewElements;
 }
 
 Event&
@@ -124,29 +120,12 @@ Event::scrapMap()
 void
 Event::copyFrom(const Event &e)
 {
-    delete m_viewElements;
     scrapMap();
 
     for (PropertyMap::const_iterator i = e.m_properties.begin();
          i != e.m_properties.end(); ++i) {
         m_properties.insert(PropertyPair((*i).first, (*i).second->clone()));
     }
-
-    if (e.viewElements())
-        m_viewElements = new ViewElements(*(e.viewElements()));
-
-}
-
-
-void
-Event::setViewElements(ViewElements *ve)
-{
-    if (m_viewElements) {
-        // this will also delete all elements in m_group
-        delete m_viewElements;
-    }
-    
-    m_viewElements = ve;
 }
 
 void
@@ -232,9 +211,11 @@ Track::getNbBars() const
 
 ViewElements::~ViewElements()
 {
+    cerr << "~ViewElements() : this : " << this << endl;
+
     // delete content
     for(iterator it = begin(); it != end(); ++it) {
-        cerr << "ViewElements delete" << endl;
+        cerr << "~ViewElements() : delete ViewElement" << endl;
         delete (*it);
     }
 

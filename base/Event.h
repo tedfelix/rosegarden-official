@@ -251,10 +251,6 @@ public:
     void setTimeDuration(timeT d)      { m_duration = d; }
     void setAbsoluteTime(timeT d)      { m_absoluteTime = d; }
 
-    ViewElements* viewElements()             { return m_viewElements; }
-    const ViewElements* viewElements() const { return m_viewElements; }
-    void setViewElements(ViewElements*);
-
     bool has(const string &name) const;
 
     template <PropertyType P>
@@ -287,6 +283,8 @@ public:
 #endif
 
 private:
+    void setViewElements(ViewElements*);
+    void scrapViewElements();
     void scrapMap();
     void copyFrom(const Event &e);
 
@@ -294,9 +292,6 @@ private:
     string m_type;
     timeT m_duration;
     timeT m_absoluteTime;
-
-    /// The ViewElements this Event corresponds to (one per View type)
-    ViewElements *m_viewElements;
 
     //    typedef map<string, PropertyStoreBase *> PropertyMap;
     typedef PropertyMap::value_type PropertyPair;
