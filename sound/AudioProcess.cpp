@@ -37,8 +37,9 @@
 
 #include <cmath>
 
+//#define DEBUG_BUSS_MIXER 1
 //#define DEBUG_MIXER 1
-#define DEBUG_MIXER_LIGHTWEIGHT 1
+//#define DEBUG_MIXER_LIGHTWEIGHT 1
 //#define DEBUG_LOCKS 1
 //#define DEBUG_READER 1
 //#define DEBUG_WRITER 1
@@ -46,63 +47,55 @@
 namespace Rosegarden
 {
 
-AudioMixer::AudioMixer(SoundDriver *driver,
-		       AudioFileReader *fileReader,
-		       unsigned int sampleRate,
-		       unsigned int blockSize) :
+AudioThread::AudioThread(std::string name,
+			 SoundDriver *driver,
+			 unsigned int sampleRate) :
+    m_name(name),
     m_driver(driver),
-    m_fileReader(fileReader),
     m_sampleRate(sampleRate),
-    m_blockSize(blockSize),
-    m_thread(0),
-    m_submasterCount(0)
+    m_thread(0)
 {
-    // Leave the buffer map and process buffer list empty for now.
-    // The number of channels per fader can change between plays, so
-    // we always examine the buffers in fillBuffers and are prepared
-    // to regenerate from scratch if necessary.
-
     pthread_mutex_t  initialisingMutex = PTHREAD_MUTEX_INITIALIZER;
     memcpy(&m_lock, &initialisingMutex, sizeof(pthread_mutex_t));
 
     pthread_cond_t initialisingCondition = PTHREAD_COND_INITIALIZER;
     memcpy(&m_condition, &initialisingCondition, sizeof(pthread_cond_t));
-
-    pthread_create(&m_thread, NULL, threadRun, this);
-    pthread_detach(m_thread);
 }
 
-AudioMixer::~AudioMixer()
+AudioThread::~AudioThread()
 {
-    std::cerr << "AudioMixer::~AudioMixer" << std::endl;
-
     if (m_thread) {
 	pthread_cancel(m_thread);
 	m_thread = 0;
     }
     pthread_mutex_destroy(&m_lock);
-
-    // BufferRec dtor will handle the BufferMap
-
-    for (std::vector<sample_t *>::iterator i = m_processBuffers.begin();
-	 i != m_processBuffers.end(); ++i) {
-	delete *i;
-    }
-
-    std::cerr << "AudioMixer::~AudioMixer exiting" << std::endl;
 }
 
-AudioMixer::BufferRec::~BufferRec()
+void
+AudioThread::run()
 {
-    for (size_t i = 0; i < buffers.size(); ++i) delete buffers[i];
+    pthread_create(&m_thread, NULL, staticThreadRun, this);
+    pthread_detach(m_thread);
+}
+
+void *
+AudioThread::staticThreadRun(void *arg)
+{
+    AudioThread *inst = static_cast<AudioThread *>(arg);
+    if (!inst) return 0;
+
+    pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
+
+    inst->threadRun();
+    return 0;
 }
 
 int
-AudioMixer::getLock()
+AudioThread::getLock()
 {
     int rv;
 #ifdef DEBUG_LOCKS
-    std::cerr << "AudioMixer::getLock()" << std::endl;
+    std::cerr << m_name << "::getLock()" << std::endl;
 #endif
     rv = pthread_mutex_lock(&m_lock);
 #ifdef DEBUG_LOCKS
@@ -112,11 +105,11 @@ AudioMixer::getLock()
 }
 
 int
-AudioMixer::tryLock()
+AudioThread::tryLock()
 {
     int rv;
 #ifdef DEBUG_LOCKS
-    std::cerr << "AudioMixer::tryLock()" << std::endl;
+    std::cerr << m_name << "::tryLock()" << std::endl;
 #endif
     rv = pthread_mutex_trylock(&m_lock);
 #ifdef DEBUG_LOCKS
@@ -126,11 +119,11 @@ AudioMixer::tryLock()
 }
 
 int
-AudioMixer::releaseLock()
+AudioThread::releaseLock()
 {
     int rv;
 #ifdef DEBUG_LOCKS
-    std::cerr << "AudioMixer::releaseLock()" << std::endl;
+    std::cerr << m_name << "::releaseLock()" << std::endl;
 #endif
     rv = pthread_mutex_unlock(&m_lock);
 #ifdef DEBUG_LOCKS
@@ -140,16 +133,330 @@ AudioMixer::releaseLock()
 }
 
 void
-AudioMixer::signal()
+AudioThread::signal()
 {
 #ifdef DEBUG_LOCKS
-    std::cerr << "AudioMixer::signal()" << std::endl;
+    std::cerr << m_name << "::signal()" << std::endl;
 #endif
     pthread_cond_signal(&m_condition);
 }
 
+
+AudioBussMixer::AudioBussMixer(SoundDriver *driver,
+			       AudioInstrumentMixer *instrumentMixer,
+			       unsigned int sampleRate, 
+			       unsigned int blockSize) :
+    AudioThread("AudioBussMixer", driver, sampleRate),
+    m_instrumentMixer(instrumentMixer),
+    m_blockSize(blockSize),
+    m_bussCount(0)
+{ 
+    run();
+}
+
+AudioBussMixer::~AudioBussMixer()
+{
+    for (unsigned int i = 0; i < m_processBuffers.size(); ++i) {
+	delete[] m_processBuffers[i];
+    }
+}
+
+AudioBussMixer::BufferRec::~BufferRec()
+{
+    for (size_t i = 0; i < buffers.size(); ++i) delete buffers[i];
+}
+
 void
-AudioMixer::setPlugin(InstrumentId id, int position, unsigned int pluginId)
+AudioBussMixer::generateBuffers()
+{
+#ifdef DEBUG_BUSS_MIXER
+    std::cerr << "AudioBussMixer::generateBuffers" << std::endl;
+#endif
+
+    // This returns one too many, as the master is counted as buss 0
+    m_bussCount =
+	m_driver->getMappedStudio()->getObjectCount(MappedStudio::AudioBuss) - 1;
+
+#ifdef DEBUG_BUSS_MIXER
+    std::cerr << "AudioBussMixer::generateBuffers: have " << m_bussCount << " busses" << std::endl;
+#endif
+
+    //!!! should be different
+    RealTime bufferLength = m_driver->getAudioMixBufferLength();
+    int bufferSamples = RealTime::realTime2Frame(bufferLength, m_sampleRate);
+    bufferSamples = ((bufferSamples / m_blockSize) + 1) * m_blockSize;
+
+    for (int i = 0; i < m_bussCount; ++i) {
+	
+	if (m_bufferMap.find(i) != m_bufferMap.end()) continue;
+
+	BufferRec &rec = m_bufferMap[i];
+	for (unsigned int ch = 0; ch < 2; ++ch) {
+	    RingBuffer<sample_t> *rb = new RingBuffer<sample_t>(bufferSamples);
+	    if (!rb->mlock()) {
+		std::cerr << "WARNING: AudioBussMixer::generateBuffers: couldn't lock ring buffer into real memory, performance may be impaired" << std::endl;
+	    }
+	    rec.buffers.push_back(rb);
+	}
+    }
+
+    if (m_processBuffers.size() == 0) {
+	m_processBuffers.push_back(new sample_t[m_blockSize]);
+	m_processBuffers.push_back(new sample_t[m_blockSize]);
+    }
+}	
+
+void
+AudioBussMixer::fillBuffers()
+{
+#ifdef DEBUG_BUSS_MIXER
+    std::cerr << "AudioBussMixer::fillBuffers" << std::endl;
+#endif
+    emptyBuffers();
+    kick();
+}
+
+void
+AudioBussMixer::emptyBuffers()
+{
+    getLock();
+
+#ifdef DEBUG_BUSS_MIXER
+    std::cerr << "AudioBussMixer::emptyBuffers" << std::endl;
+#endif
+
+    generateBuffers();
+
+    for (int i = 0; i < m_bussCount; ++i) {
+	m_bufferMap[i].dormant = true;
+//	m_bufferMap[i].dormant = false;
+	for (int ch = 0; ch < 2; ++ch) {
+	    m_bufferMap[i].buffers[ch]->reset();
+	}
+    }
+
+    releaseLock();
+}
+    
+void
+AudioBussMixer::kick(bool wantLock)
+{
+    if (wantLock) getLock();
+
+#ifdef DEBUG_BUSS_MIXER
+    std::cerr << "AudioBussMixer::kick" << std::endl;
+#endif
+
+    processBlocks();
+
+#ifdef DEBUG_BUSS_MIXER
+    std::cerr << "AudioBussMixer::kick: processed" << std::endl;
+#endif
+
+    m_instrumentMixer->signal();
+    
+    if (wantLock) releaseLock();
+}
+
+void
+AudioBussMixer::processBlocks()
+{
+    if (m_bussCount == 0) return;
+
+    InstrumentId instrumentBase;
+    int instruments;
+    m_driver->getAudioInstrumentNumbers(instrumentBase, instruments);
+
+#ifdef DEBUG_BUSS_MIXER
+    if (m_driver->isPlaying())
+	std::cerr << "AudioBussMixer::processBlocks" << std::endl;
+#endif
+
+    for (int buss = 0; buss < m_bussCount; ++buss) {
+
+	MappedAudioBuss *mbuss =
+	    m_driver->getMappedStudio()->getAudioBuss(buss + 1); // master is 0
+	if (!mbuss) continue;
+	
+	float gain[2];
+	    	    
+	float level = 0.0;
+	(void)mbuss->getProperty(MappedAudioBuss::Level, level);
+
+	float volume = AudioLevel::dB_to_multiplier(level);
+
+	float pan = 0.0;
+//!!!	(void)mbuss->getProperty(MappedAudioBuss::Pan, pan);
+
+	gain[0] = volume * ((pan > 0.0) ? (1.0 - (pan / 100.0)) : 1.0);
+	gain[1] = volume * ((pan < 0.0) ? ((pan + 100.0) / 100.0) : 1.0);
+	    
+	BufferRec &rec = m_bufferMap[buss];
+
+	// The dormant calculation here depends on the buffer length
+	// for this mixer being the same as that for the instrument mixer
+
+	size_t minSpace = 0;
+
+	for (int ch = 0; ch < 2; ++ch) {
+
+	    size_t w = rec.buffers[ch]->getWriteSpace();
+	    if (ch == 0 || w < minSpace) minSpace = w;
+
+	    if (minSpace == 0) break;
+
+	    //!!! query connections in from studio -- but for now:
+	    
+	    for (InstrumentId id = instrumentBase + buss * 4;
+		 id < instrumentBase + buss * 4 + 4; ++id) {
+
+		RingBuffer<sample_t, 2> *rb =
+		    m_instrumentMixer->getRingBuffer(id, ch);
+		if (rb) {
+		    size_t r = rb->getReadSpace(1);
+		    if (r < minSpace) minSpace = r;
+		    if (minSpace == 0) break;
+		}
+	    }
+
+	    if (minSpace == 0) break;
+	}
+
+	int blocks = minSpace / m_blockSize;
+	
+#ifdef DEBUG_BUSS_MIXER
+	if (m_driver->isPlaying())
+	    std::cerr << "AudioBussMixer::processBlocks: doing " << blocks << " blocks" << std::endl;
+#endif
+
+	for (int block = 0; block < blocks; ++block) {
+
+	    memset(m_processBuffers[0], 0, m_blockSize * sizeof(sample_t));
+	    memset(m_processBuffers[1], 0, m_blockSize * sizeof(sample_t));
+
+	    //!!! query connections in from studio -- but for now:
+
+	    bool dormant = true;
+
+	    for (InstrumentId id = instrumentBase + buss * 4;
+		 id < instrumentBase + buss * 4 + 4; ++id) {
+
+		if (m_instrumentMixer->isInstrumentDormant(id)) {
+//		if (false) {
+
+		    for (int ch = 0; ch < 2; ++ch) {
+			RingBuffer<sample_t, 2> *rb =
+			    m_instrumentMixer->getRingBuffer(id, ch);
+
+			if (rb) rb->skip(m_blockSize,
+					 1);
+		    }
+		} else {
+		    dormant = false;
+
+		    for (int ch = 0; ch < 2; ++ch) {
+			RingBuffer<sample_t, 2> *rb =
+			    m_instrumentMixer->getRingBuffer(id, ch);
+
+			if (rb) rb->readAdding(m_processBuffers[ch],
+					       m_blockSize,
+					       1);
+		    }
+		}
+	    }
+
+	    for (int ch = 0; ch < 2; ++ch) {
+		if (dormant) {
+		    rec.buffers[ch]->zero(m_blockSize);
+		} else {
+		    for (size_t i = 0; i < m_blockSize; ++i) {
+			m_processBuffers[ch][i] *= gain[ch];
+		    }
+		    rec.buffers[ch]->write(m_processBuffers[ch], m_blockSize);
+		}
+	    }
+
+	    rec.dormant = dormant;
+
+#ifdef DEBUG_BUSS_MIXER
+	if (m_driver->isPlaying())
+	    std::cerr << "AudioBussMixer::processBlocks: buss " << buss << (dormant ? " dormant" : " not dormant") << std::endl;
+#endif
+	}
+    }
+
+#ifdef DEBUG_BUSS_MIXER
+    std::cerr << "AudioBussMixer::processBlocks: done" << std::endl;
+#endif
+
+//    m_instrumentMixer->signal();
+}
+
+void
+AudioBussMixer::threadRun()
+{
+    getLock();
+
+    while (1) {
+	if (m_driver->areClocksRunning()) {
+	    kick(false);
+	}
+
+	RealTime t = m_driver->getAudioMixBufferLength();
+	t = t / 2;
+
+	struct timeval now;
+	gettimeofday(&now, 0);
+	t = t + RealTime(now.tv_sec, now.tv_usec * 1000);
+
+	struct timespec timeout;
+	timeout.tv_sec = t.sec;
+	timeout.tv_nsec = t.nsec;
+	pthread_cond_timedwait(&m_condition, &m_lock, &timeout);
+    }
+
+    releaseLock();
+}
+
+
+AudioInstrumentMixer::AudioInstrumentMixer(SoundDriver *driver,
+					   AudioFileReader *fileReader,
+					   unsigned int sampleRate,
+					   unsigned int blockSize) :
+    AudioThread("AudioInstrumentMixer", driver, sampleRate),
+    m_fileReader(fileReader),
+    m_bussMixer(0),
+    m_blockSize(blockSize)
+{
+    // Leave the buffer map and process buffer list empty for now.
+    // The number of channels per fader can change between plays, so
+    // we always examine the buffers in fillBuffers and are prepared
+    // to regenerate from scratch if necessary.
+
+    run();
+}
+
+AudioInstrumentMixer::~AudioInstrumentMixer()
+{
+    std::cerr << "AudioInstrumentMixer::~AudioInstrumentMixer" << std::endl;
+    // BufferRec dtor will handle the BufferMap
+
+    for (std::vector<sample_t *>::iterator i = m_processBuffers.begin();
+	 i != m_processBuffers.end(); ++i) {
+	delete *i;
+    }
+
+    std::cerr << "AudioInstrumentMixer::~AudioInstrumentMixer exiting" << std::endl;
+}
+
+AudioInstrumentMixer::BufferRec::~BufferRec()
+{
+    for (size_t i = 0; i < buffers.size(); ++i) delete buffers[i];
+}
+
+
+void
+AudioInstrumentMixer::setPlugin(InstrumentId id, int position, unsigned int pluginId)
 {
     removePlugin(id, position);
 
@@ -178,7 +485,7 @@ AudioMixer::setPlugin(InstrumentId id, int position, unsigned int pluginId)
 }
     
 void 
-AudioMixer::removePlugin(InstrumentId id, int position)
+AudioInstrumentMixer::removePlugin(InstrumentId id, int position)
 {
     getLock();
 
@@ -214,7 +521,7 @@ AudioMixer::removePlugin(InstrumentId id, int position)
 }
 
 void
-AudioMixer::removeAllPlugins()
+AudioInstrumentMixer::removeAllPlugins()
 {
     getLock();
 
@@ -258,7 +565,7 @@ AudioMixer::removeAllPlugins()
 
 
 void
-AudioMixer::setPluginPortValue(InstrumentId id, int position,
+AudioInstrumentMixer::setPluginPortValue(InstrumentId id, int position,
 			       unsigned int port, float value)
 {
     getLock();
@@ -272,7 +579,7 @@ AudioMixer::setPluginPortValue(InstrumentId id, int position,
 }
 
 void
-AudioMixer::setPluginBypass(InstrumentId id, int position, bool bypass)
+AudioInstrumentMixer::setPluginBypass(InstrumentId id, int position, bool bypass)
 {
     getLock();
     
@@ -285,7 +592,7 @@ AudioMixer::setPluginBypass(InstrumentId id, int position, bool bypass)
 }
 
 void
-AudioMixer::resetAllPlugins()
+AudioInstrumentMixer::resetAllPlugins()
 {
     getLock();
 
@@ -313,36 +620,7 @@ AudioMixer::resetAllPlugins()
 }
 
 void
-AudioMixer::generateBuffer(InstrumentId id,
-			   unsigned int channels,
-			   size_t bufferSamples,
-			   unsigned int &maxChannels)
-{
-    BufferRec &rec = m_bufferMap[id];
-    
-    rec.channels = channels;
-    
-    // We always have stereo buffers (for output of pan)
-    // even on a mono instrument.
-    if (channels < 2) channels = 2;
-    if (channels > maxChannels) maxChannels = channels;
-    
-    for (size_t i = 0; i < rec.buffers.size(); ++i) {
-	delete rec.buffers[i];
-    }
-    rec.buffers.clear();
-    
-    for (unsigned int i = 0; i < channels; ++i) {
-	RingBuffer<sample_t> *rb = new RingBuffer<sample_t>(bufferSamples);
-	if (!rb->mlock()) {
-	    std::cerr << "WARNING: AudioMixer::generateBuffers: couldn't lock ring buffer into real memory, performance may be impaired" << std::endl;
-	}
-	rec.buffers.push_back(rb);
-    }	    
-}
-
-void
-AudioMixer::generateBuffers()
+AudioInstrumentMixer::generateBuffers()
 {
     InstrumentId instrumentBase;
     int instruments;
@@ -355,46 +633,19 @@ AudioMixer::generateBuffers()
     bufferSamples = ((bufferSamples / m_blockSize) + 1) * m_blockSize;
 
 #ifdef DEBUG_MIXER
-    std::cerr << "AudioMixer::generateBuffers: Buffer length is " << bufferLength << "; buffer samples " << bufferSamples << " (sample rate " << m_sampleRate << ")" << std::endl;
+    std::cerr << "AudioInstrumentMixer::generateBuffers: Buffer length is " << bufferLength << "; buffer samples " << bufferSamples << " (sample rate " << m_sampleRate << ")" << std::endl;
 #endif
-
-    // master
-
-    generateBuffer(0, 2, bufferSamples, maxChannels);
-
-    // submasters
-
-    m_submasterCount =
-	m_driver->getMappedStudio()->getObjectCount(MappedStudio::AudioBuss);
-    if (m_submasterCount > 0) --m_submasterCount; // buss zero is master
-
-    for (InstrumentId id = 1; id < 1 + m_submasterCount; ++id) {
-
-	generateBuffer(id, 2, bufferSamples, maxChannels);
-
-	WorkBufferMap::iterator bi = m_submasterWorkBuffers.find(id);
-	if (bi != m_submasterWorkBuffers.end()) {
-	    BufferSet &s = bi->second;
-	    delete[] s[0];
-	    delete[] s[1];
-	    m_submasterWorkBuffers.erase(bi);
-	}
-	m_submasterWorkBuffers[id].push_back(new sample_t[m_blockSize]);
-	m_submasterWorkBuffers[id].push_back(new sample_t[m_blockSize]);
-    }
-
-    // instruments
     
     for (InstrumentId id = instrumentBase;
 	 id < instrumentBase + instruments;
 	 ++id) {
 
 	// Get a fader for this instrument - if we can't then this
-	// isn't a valid audio instrument
+	// isn't a valid audio track.
 	MappedAudioFader *fader = m_driver->getMappedStudio()->getAudioFader(id);
 
 	if (!fader) {
-	    std::cerr << "WARNING: AudioMixer::generateBuffers: no fader for audio instrument " << id << std::endl;
+	    std::cerr << "WARNING: AudioInstrumentMixer::generateBuffers: no fader for audio instrument " << id << std::endl;
 	    continue;
 	}
 
@@ -402,11 +653,41 @@ AudioMixer::generateBuffers()
 	(void)fader->getProperty(MappedAudioFader::Channels, fch);
 	unsigned int channels = (unsigned int)fch;
 
-	generateBuffer(id, channels, bufferSamples, maxChannels);
+	BufferRec &rec = m_bufferMap[id];
+
+	rec.channels = channels;
+
+	// We always have stereo buffers (for output of pan)
+	// even on a mono instrument.
+	if (channels < 2) channels = 2;
+	if (channels > maxChannels) maxChannels = channels;
+
+	for (size_t i = 0; i < rec.buffers.size(); ++i) {
+	    delete rec.buffers[i];
+	}
+	rec.buffers.clear();
+
+	for (unsigned int i = 0; i < channels; ++i) {
+
+	    // All our ringbuffers are set up for two readers: the
+	    // buss mix thread and the main process thread for
+	    // e.g. JACK.  The main process thread gets the zero-id
+	    // reader, so it gets the same API as if this was a
+	    // single-reader buffer; the buss mixer has to remember to
+	    // explicitly request reader 1.
+
+	    RingBuffer<sample_t, 2> *rb =
+		new RingBuffer<sample_t, 2>(bufferSamples);
+
+	    if (!rb->mlock()) {
+		std::cerr << "WARNING: AudioInstrumentMixer::generateBuffers: couldn't lock ring buffer into real memory, performance may be impaired" << std::endl;
+	    }
+	    rec.buffers.push_back(rb);
+	}	    
     }
 
     while (m_processBuffers.size() > maxChannels) {
-	BufferSet::iterator bi = m_processBuffers.end();
+	std::vector<sample_t *>::iterator bi = m_processBuffers.end();
 	--bi;
 	delete[] *bi;
 	m_processBuffers.erase(bi);
@@ -417,14 +698,14 @@ AudioMixer::generateBuffers()
 }
 
 void
-AudioMixer::fillBuffers(const RealTime &currentTime)
+AudioInstrumentMixer::fillBuffers(const RealTime &currentTime)
 {
     emptyBuffers(currentTime);
 
     getLock();
 
 #ifdef DEBUG_MIXER
-    std::cerr << "AudioMixer::fillBuffers(" << currentTime <<")" << std::endl;
+    std::cerr << "AudioInstrumentMixer::fillBuffers(" << currentTime <<")" << std::endl;
 #endif
 
     bool discard;
@@ -434,25 +715,29 @@ AudioMixer::fillBuffers(const RealTime &currentTime)
 }
 
 void
-AudioMixer::emptyBuffers(RealTime currentTime)
+AudioInstrumentMixer::emptyBuffers(RealTime currentTime)
 {
     getLock();
 
 #ifdef DEBUG_MIXER
-    std::cerr << "AudioMixer::emptyBuffers(" << currentTime <<")" << std::endl;
+    std::cerr << "AudioInstrumentMixer::emptyBuffers(" << currentTime <<")" << std::endl;
 #endif
 
     generateBuffers();
 
-    for (BufferMap::iterator itr = m_bufferMap.begin();
-	 itr != m_bufferMap.end(); ++itr) {
+    InstrumentId instrumentBase;
+    int instrumentCount;
+    m_driver->getAudioInstrumentNumbers(instrumentBase, instrumentCount);
+    
+    for (InstrumentId id = instrumentBase;
+	 id < instrumentBase + instrumentCount; ++id) {
 
-	BufferRec &rec = itr->second;
+	m_bufferMap[id].dormant = true;
+	m_bufferMap[id].zeroFrames = 0;
+	m_bufferMap[id].filledTo = currentTime;
 
-	rec.reset(currentTime);
-
-	for (size_t i = 0; i < rec.buffers.size(); ++i) {
-	    rec.buffers[i]->reset();
+	for (size_t i = 0; i < m_bufferMap[id].buffers.size(); ++i) {
+	    m_bufferMap[id].buffers[i]->reset();
 	}
     }
 
@@ -468,11 +753,8 @@ static inline void denormalKill(float *buffer, int size)
 }
 
 void
-AudioMixer::processBlocks(bool forceFill, bool &waitingForFiles)
+AudioInstrumentMixer::processBlocks(bool forceFill, bool &readSomething)
 {
-    waitingForFiles = false;
-    if (m_bufferMap[0].buffers.size() < 2) return; // no master set up yet
-
     InstrumentId instrumentBase;
     int instrumentCount;
     m_driver->getAudioInstrumentNumbers(instrumentBase, instrumentCount);
@@ -493,64 +775,9 @@ AudioMixer::processBlocks(bool forceFill, bool &waitingForFiles)
 	m_bufferMap[id].empty = false;
     }
 
-    int minBlocks = 0;
-
-    for (InstrumentId id = 0; id <= m_submasterCount; ++id) {
-	int lb = m_bufferMap[id].buffers[0]->getWriteSpace() / m_blockSize;
-	int rb = m_bufferMap[id].buffers[1]->getWriteSpace() / m_blockSize;
-	if (id == 0 || lb < minBlocks || rb < minBlocks) {
-	    minBlocks = std::min(lb, rb);
-	}
-    }
-
-    if (minBlocks == 0) {
-	return;
-    }
-
-    for (InstrumentId id = 0; id <= m_submasterCount; ++id) {
-	
-	    m_bufferMap[id].gainLeft  = 1.0;
-	    m_bufferMap[id].gainRight = 1.0;
-	    m_bufferMap[id].volume    = 1.0;
-
-	MappedAudioBuss *buss =
-	    m_driver->getMappedStudio()->getAudioBuss(id);
-
-	if (!buss) {
-
-	    std::cerr << "WARNING: No audio buss found for buss no "
-		      << id << std::endl;
-
-	    m_bufferMap[id].gainLeft  = 0.0;
-	    m_bufferMap[id].gainRight = 0.0;
-	    m_bufferMap[id].volume    = 0.0;
-	} else {
-	    	    
-	    float level = 0.0;
-	    (void)buss->getProperty(MappedAudioBuss::Level, level);
-
-	    float volume = AudioLevel::dB_to_multiplier(level);
-
-	    float pan = 0.0;
-//!!!	    (void)fader->getProperty(MappedAudioFader::Pan, pan);
-
-	    m_bufferMap[id].gainLeft = 
-		volume * ((pan > 0.0) ? (1.0 - (pan / 100.0)) : 1.0);
-
-	    m_bufferMap[id].gainRight =
-		volume * ((pan < 0.0) ? ((pan + 100.0) / 100.0) : 1.0);
-	    
-	    m_bufferMap[id].volume = volume;
-	}
-    }
-
     for (InstrumentId id = instrumentBase;
 	 id < instrumentBase + instrumentCount; ++id) {
 	
-	    m_bufferMap[id].gainLeft  = 1.0;
-	    m_bufferMap[id].gainRight = 1.0;
-	    m_bufferMap[id].volume    = 1.0;
-
 	MappedAudioFader *fader =
 	    m_driver->getMappedStudio()->getAudioFader(id);
 
@@ -576,191 +803,38 @@ AudioMixer::processBlocks(bool forceFill, bool &waitingForFiles)
 	    
 	    m_bufferMap[id].volume = volume;
 	}
+
+	if (m_bufferMap[id].volume == 0.0) m_bufferMap[id].empty = true;
     }
 
-#ifdef DEBUG_MIXER_LIGHTWEIGHT
-    int n[20];
-    std::cout << minBlocks << " .. ";
-#endif
+    bool more = true;
+    
+    while (more) {
 
-    for (InstrumentId id = instrumentBase;
-	 id < instrumentBase + instrumentCount; ++id) {
-
-	int blocksHere = 0;
-
-	if (m_bufferMap[id].empty) {
-	    blocksHere = canProcessEmptyBlocks(id);
-
-#ifdef DEBUG_MIXER
-	    if (m_driver->isPlaying()) {
-		if (id == 1000) std::cerr << "AudioMixer::processBlocks(" << id << "): can process " << blocksHere << " empty blocks" << std::endl;
-	    }
-#endif
-
-	} else {
-	    blocksHere = canProcessBlocks(id, files[id], forceFill);
-
-#ifdef DEBUG_MIXER
-	    if (m_driver->isPlaying()) {
-		if (id == 1000) std::cerr << "AudioMixer::processBlocks(" << id << "): can process " << blocksHere << " blocks" << std::endl;
-	    }
-#endif
-	}
-
-#ifdef DEBUG_MIXER_LIGHTWEIGHT
-	n[id - instrumentBase] = blocksHere;
-#endif
-
-	if (id == instrumentBase || blocksHere < minBlocks) {
-	    minBlocks = blocksHere;
-	}
-    }
-
-#ifdef DEBUG_MIXER_LIGHTWEIGHT
-    for (int i = 0; i < instrumentCount; ++i) {
-	std::cout << n[i] << " ";
-    }
-    std::cout << std::endl;
-#endif
-
-    if (minBlocks == 0) {
-	waitingForFiles = true;
-	return;
-    }
-
-#ifdef DEBUG_MIXER
-    if (m_driver->isPlaying()) {
-	std::cerr << "AudioMixer::processBlocks: planning to do " << minBlocks << " blocks" << std::endl;
-    }
-#endif
-
-    // Call the processBlock methods to process individual instruments,
-    // and mix in to the submasters and master as we go along.
-
-    for (int block = 0; block < minBlocks; ++block) {
-
-	for (WorkBufferMap::iterator wi = m_submasterWorkBuffers.begin();
-	     wi != m_submasterWorkBuffers.end(); ++wi) {
-
-	    memset(wi->second[0], 0, m_blockSize * sizeof(sample_t));
-	    memset(wi->second[1], 0, m_blockSize * sizeof(sample_t));
-	}
+	more = false;
 
 	for (InstrumentId id = instrumentBase;
 	     id < instrumentBase + instrumentCount; ++id) {
 
 	    if (m_bufferMap[id].empty) {
-		processEmptyBlock(id);
-	    } else {
-		processBlock(id, files[id]);
+		processEmptyBlocks(id);
+		continue;
 	    }
-#ifdef DEBUG_MIXER
-//	    std::cerr << "AudioMixer::processBlocks: instr " << id << " now " << canProcessBlocks(id, files[id], false) << " blocks" << std::endl;
-#endif
-	}
-
-	bool first = true;
-
-	for (WorkBufferMap::iterator wi = m_submasterWorkBuffers.begin();
-	     wi != m_submasterWorkBuffers.end(); ++wi) {
-
-	    InstrumentId id = wi->first;
-	    BufferSet &workset = wi->second;
-	    BufferRec &rec = m_bufferMap[id];
-
-	    for (int ch = 0; ch < 2; ++ch) {
-		
-		// Write submaster ringbuffer
-
-		float gain = ((ch == 0) ? rec.gainLeft : rec.gainRight);
-
-		if (gain == 0.0) {
-
-		    rec.buffers[ch]->zero(m_blockSize);
-
-		    if (first) {
-			memset(m_processBuffers[ch], 0,
-			       m_blockSize * sizeof(sample_t));
-		    }
-
-		} else {
-
-		    for (size_t i = 0; i < m_blockSize; ++i) {
-			workset[ch][i] *= gain;
-		    }
-		    
-		    rec.buffers[ch]->write(workset[ch], m_blockSize);
-
-		    // Accumulate into master buffers
-
-		    if (first) {
-			memcpy(m_processBuffers[ch], workset[ch],
-			       m_blockSize * sizeof(sample_t));
-		    } else {
-			for (size_t i = 0; i < m_blockSize; ++i) {
-			    m_processBuffers[ch][i] += workset[ch][i];
-			}
-		    }
-		}
-	    }
-
-	    first = false;
-	}
-
-	// Write master ringbuffer
-
-	BufferRec &rec = m_bufferMap[0];
-
-	for (int ch = 0; ch < 2; ++ch) {
 	    
-	    float gain = ((ch == 0) ? rec.gainLeft : rec.gainRight);
-
-	    for (size_t i = 0; i < m_blockSize; ++i) {
-		m_processBuffers[ch][i] *= gain;
+	    if (processBlock(id, files[id], forceFill, readSomething)) {
+		more = true;
 	    }
-
-	    rec.buffers[ch]->write(m_processBuffers[ch], m_blockSize);
 	}
     }
 }
 
-
-int
-AudioMixer::canProcessEmptyBlocks(InstrumentId id)
-{
-#ifdef DEBUG_MIXER
-    if (m_driver->isPlaying()) {
-	if (id == 1000) std::cerr << "AudioMixer::canProcessEmptyBlock(" << id << ")" << std::endl;
-    }
-#endif
-  
-    BufferRec &rec = m_bufferMap[id];
-
-    unsigned int channels = rec.buffers.size();
-    if (channels > m_processBuffers.size()) channels = m_processBuffers.size();
-    if (channels == 0) return 0; // buffers just haven't been set up yet
-
-    unsigned int targetChannels = channels;
-    if (targetChannels < 2) targetChannels = 2; // fill at least two buffers
-
-    size_t minWriteSpace = 0;
-    for (unsigned int ch = 0; ch < targetChannels; ++ch) {
-	size_t thisWriteSpace = rec.buffers[ch]->getWriteSpace();
-	if (ch == 0 || thisWriteSpace < minWriteSpace) {
-	    minWriteSpace = thisWriteSpace;
-	    if (minWriteSpace < m_blockSize) return 0;
-	}
-    }
-
-    return minWriteSpace / m_blockSize;
-}
 
 void
-AudioMixer::processEmptyBlock(InstrumentId id)
+AudioInstrumentMixer::processEmptyBlocks(InstrumentId id)
 {
 #ifdef DEBUG_MIXER
     if (m_driver->isPlaying()) {
-	if (id == 1000) std::cerr << "AudioMixer::processEmptyBlock(" << id << ")" << std::endl;
+	if (id == 1000) std::cerr << "AudioInstrumentMixer::processEmptyBlock(" << id << ")" << std::endl;
     }
 #endif
   
@@ -772,31 +846,45 @@ AudioMixer::processEmptyBlock(InstrumentId id)
     unsigned int targetChannels = channels;
     if (targetChannels < 2) targetChannels = 2; // fill at least two buffers
 
-    rec.zeroFrames += m_blockSize;
+    size_t minWriteSpace = 0;
+    for (unsigned int ch = 0; ch < targetChannels; ++ch) {
+	size_t thisWriteSpace = rec.buffers[ch]->getWriteSpace();
+	if (ch == 0 || thisWriteSpace < minWriteSpace) {
+	    minWriteSpace = thisWriteSpace;
+	    if (minWriteSpace < m_blockSize) return;
+	}
+    }
+
+    // unlike processBlock, we can really fill this one up here (at
+    // least to the nearest block multiple, just to make things easier
+    // to understand) because it's so cheap
+
+    size_t toWrite = (minWriteSpace / m_blockSize) * m_blockSize;
+
+    rec.zeroFrames += toWrite;
     bool dormant = true;
                 
     for (unsigned int ch = 0; ch < targetChannels; ++ch) {
-	rec.buffers[ch]->zero(m_blockSize);
+	rec.buffers[ch]->zero(toWrite);
 	if (rec.buffers[ch]->getReadSpace() > rec.zeroFrames) dormant = false;
     }
 
     rec.dormant = dormant;
     rec.filledTo = rec.filledTo +
-	RealTime::frame2RealTime(m_blockSize, m_sampleRate);
+	RealTime::frame2RealTime(toWrite, m_sampleRate);
 }
 	    
 
-int
-AudioMixer::canProcessBlocks(InstrumentId id,
-			     PlayableAudioFileList &audioQueue,
-			     bool forceFill)
+bool
+AudioInstrumentMixer::processBlock(InstrumentId id, PlayableAudioFileList &audioQueue,
+			 bool forceFill, bool &readSomething)
 {
     BufferRec &rec = m_bufferMap[id];
     RealTime bufferTime = rec.filledTo;
 
 #ifdef DEBUG_MIXER
     if (m_driver->isPlaying()) {
-	if (id == 1000) std::cerr << "AudioMixer::canProcessBlock(" << id << "): buffer time is " << bufferTime << std::endl;
+	if (id == 1000) std::cerr << "AudioInstrumentMixer::processBlock(" << id << "): buffer time is " << bufferTime << std::endl;
     }
 #endif
 
@@ -814,7 +902,7 @@ AudioMixer::canProcessBlocks(InstrumentId id,
 
     if (forceFill) {
 #ifdef DEBUG_MIXER
-	if (id == 1000) std::cerr << "AudioMixer::canProcessBlock(" << id << "): calling file reader to force buffering" << std::endl;
+	if (id == 1000) std::cerr << "AudioInstrumentMixer::processBlock(" << id << "): calling file reader to force buffering" << std::endl;
 #endif
 	m_fileReader->updateReadyStatuses(audioQueue);
     }
@@ -822,7 +910,7 @@ AudioMixer::canProcessBlocks(InstrumentId id,
     unsigned int channels = rec.channels;
     if (channels > rec.buffers.size()) channels = rec.buffers.size();
     if (channels > m_processBuffers.size()) channels = m_processBuffers.size();
-    if (channels == 0) return 0; // buffers just haven't been set up yet
+    if (channels == 0) return false; // buffers just haven't been set up yet
 
     unsigned int targetChannels = channels;
     if (targetChannels < 2) targetChannels = 2; // fill at least two buffers
@@ -832,16 +920,13 @@ AudioMixer::canProcessBlocks(InstrumentId id,
 	size_t thisWriteSpace = rec.buffers[ch]->getWriteSpace();
 	if (ch == 0 || thisWriteSpace < minWriteSpace) {
 	    minWriteSpace = thisWriteSpace;
-	    if (minWriteSpace < m_blockSize) return 0;
+	    if (minWriteSpace < m_blockSize) return false;
 	}
     }
 
+    PluginList &plugins = m_plugins[id];
 #ifdef DEBUG_MIXER
-    if (id == 1000 && m_driver->isPlaying()) std::cerr << "AudioMixer::canProcessBlock(" << id <<"): minWriteSpace is " << minWriteSpace << std::endl;
-#else
-#ifdef DEBUG_MIXER_LIGHTWEIGHT
-    if (id == 1000 && m_driver->isPlaying()) std::cout << minWriteSpace << "/" << rec.buffers[0]->getSize() << std::endl;
-#endif
+    if (id == 1000 && !plugins.empty()) std::cerr << "AudioInstrumentMixer::processBlock(" << id << "): have " << plugins.size() << " plugin(s)" << std::endl;
 #endif
 
     for (PlayableAudioFileList::iterator it = audioQueue.begin();
@@ -851,123 +936,112 @@ AudioMixer::canProcessBlocks(InstrumentId id,
 	    
 	if (file->getStatus() == PlayableAudioFile::READY &&
 	    file->isBufferable(bufferTime)) {
+	    // This file should be playing, but the disc thread
+	    // hasn't got around to buffering it yet.  There's
+	    // nothing we can do in this situation except give
+	    // up on it and get on with the next instrument.
 
-	    // This file should be playing, but the disc thread hasn't
-	    // got around to buffering it yet.  There's nothing
-	    // constructive to do in this situation.  The strictly
-	    // correct thing would be to block, returning zero, but
-	    // that may cause a substantial holdup in the main
-	    // processBlocks loop, which is silly since a new file
-	    // always has plenty of empty space at the start of its
-	    // buffer anyway.  So we just advance the file's ready
-	    // time to ensure that it gets buffered for the next block
-	    // instead, and ensure that we return no more than 1
-	    // available block.
-
-	    //!!! hm, this doesn't seem to produce enough of an
-	    //improvement to justify the cost in theoretical
-	    //correctness
-
-//	    file->setReadyTime(bufferTime + RealTime::frame2RealTime(m_blockSize,
-//								     m_sampleRate));
-//	    minWriteSpace = std::min(minWriteSpace, m_blockSize);
-
-//	    m_fileReader->signal();
 #ifdef DEBUG_MIXER
-	    if (id == 1000)
-		std::cerr << "AudioMixer::canProcessBlock(" << id <<"): some unbuffered files, can't continue with this instrument" << std::endl;
+	    if (id == 1000) std::cerr << "AudioInstrumentMixer::processBlock(" << id <<"): some unbuffered files, can't continue with this instrument" << std::endl;
 #endif
-	    return 0;
+	    return false;
 	}
     }
 
 #ifdef DEBUG_MIXER
-    if (id == 1000 && audioQueue.size() > 0) std::cerr << "AudioMixer::canProcessBlock(" << id <<"): " << audioQueue.size() << " audio file(s) to consider" << std::endl;
+    if (id == 1000 && m_driver->isPlaying()) std::cerr << "AudioInstrumentMixer::processBlock(" << id <<"): minWriteSpace is " << minWriteSpace << std::endl;
+#else
+#ifdef DEBUG_MIXER_LIGHTWEIGHT
+    if (id == 1000 && m_driver->isPlaying()) std::cout << minWriteSpace << "/" << rec.buffers[0]->getSize() << std::endl;
+#endif
 #endif
 
+#ifdef DEBUG_MIXER
+    if (id == 1000 && audioQueue.size() > 0) std::cerr << "AudioInstrumentMixer::processBlock(" << id <<"): " << audioQueue.size() << " audio file(s) to consider" << std::endl;
+#endif
+
+    bool haveBlock = true;
     bool haveFiles = false;
-    size_t minReadSpace = 0;
+    bool haveMore = false;
 
     for (PlayableAudioFileList::iterator it = audioQueue.begin();
 	 it != audioQueue.end(); ++it) {
 
+	bool acceptable = false;
+
 	if ((*it)->getStatus() == PlayableAudioFile::PLAYING) {
 
-	    // Once a file is fully buffered, it can theoretically
-	    // serve any number of frames (because it will happily
-	    // serve up any number of zeroes after EOF).  So it
-	    // needn't concern us here.
-
-	    if ((*it)->isFullyBuffered()) continue;
+	    haveFiles = true;
 
 	    size_t frames = (*it)->getSampleFramesAvailable();
+	    acceptable =
+		((frames >= m_blockSize) || (*it)->isFullyBuffered());
+
+	    if (acceptable &&
+		(minWriteSpace >= m_blockSize * 2) &&
+		(frames >= m_blockSize * 2)) {
 
 #ifdef DEBUG_MIXER
-	    if (id == 1000) std::cerr << "AudioMixer::canProcessBlock(" << id <<"): playing audio file has " << frames << " frames available" << std::endl;
+		if (id == 1000) std::cerr << "AudioInstrumentMixer::processBlock(" << id <<"): will be asking for more" << std::endl;
 #endif
 
-//	    if ((*it)->isFullyBuffered() && frames < m_blockSize) {
-//		frames = m_blockSize;
-//	    }
-
-	    if (!haveFiles || frames < minReadSpace) {
-		if (frames < m_blockSize) return 0;
-		minReadSpace = frames;
+		haveMore = true;
 	    }
 
-	    haveFiles = true;
+	} else {
+	    acceptable = true;
+	}
+
+#ifdef DEBUG_MIXER
+	if (id == 1000) std::cerr << "AudioInstrumentMixer::processBlock(" << id <<"): file has " << (*it)->getSampleFramesAvailable() << " frames available" << std::endl;
+#endif
+
+	if (!acceptable) {
+	    haveBlock = false;
 	}
     }
 	
     if (haveFiles) {
-	return std::min(minWriteSpace, minReadSpace) / m_blockSize;
-    } else {
-	return minWriteSpace / m_blockSize;
+	if (!haveBlock) {
+	    std::cerr << "WARNING: buffer underrun in file ringbuffer for instrument " << id << std::endl;
+	    return false; // blocked
+	}
     }
-}
 
-void
-AudioMixer::processBlock(InstrumentId id, PlayableAudioFileList &audioQueue)
-{
-    BufferRec &rec = m_bufferMap[id];
-    RealTime bufferTime = rec.filledTo;
-    
-    unsigned int channels = rec.channels;
-    if (channels > rec.buffers.size()) channels = rec.buffers.size();
-    if (channels > m_processBuffers.size()) channels = m_processBuffers.size();
-    if (channels == 0) return; // buffers just haven't been set up yet
-
-    unsigned int targetChannels = channels;
-    if (targetChannels < 2) targetChannels = 2; // fill at least two buffers
+#ifdef DEBUG_MIXER
+    if (!haveMore) {
+	if (id == 1000) std::cerr << "AudioInstrumentMixer::processBlock(" << id <<"): won't be asking for more" << std::endl;
+    }
+#endif
 
     for (unsigned int ch = 0; ch < targetChannels; ++ch) {
 	memset(m_processBuffers[ch], 0, sizeof(sample_t) * m_blockSize);
     }
 	
-    // Mix in a block from each playing file on this instrument.
-    
-    for (PlayableAudioFileList::iterator it = audioQueue.begin();
-	 it != audioQueue.end(); ++it) {
-	
-	if ((*it)->getStatus() != PlayableAudioFile::PLAYING) continue;
-	unsigned int fileChannels = (*it)->getTargetChannels();
-	unsigned int ch = 0;
-	
-	for (ch = 0; ch < channels; ++ch) {
-	    if (ch >= fileChannels) break;
-	    (*it)->addSamples(m_processBuffers[ch], ch, m_blockSize);
-	}
-	
-	while (ch < fileChannels) {
-	    (*it)->skipSamples(ch, m_blockSize);
-	    ++ch;
+    if (haveBlock) {
+	    
+	// Mix in a block from each playing file on this instrument.
+	    
+	for (PlayableAudioFileList::iterator it = audioQueue.begin();
+	     it != audioQueue.end(); ++it) {
+		
+	    if ((*it)->getStatus() != PlayableAudioFile::PLAYING) continue;
+	    unsigned int fileChannels = (*it)->getTargetChannels();
+	    unsigned int ch = 0;
+
+	    for (ch = 0; ch < channels; ++ch) {
+		if (ch >= fileChannels) break;
+		(*it)->addSamples(m_processBuffers[ch], ch, m_blockSize);
+	    }
+
+	    while (ch < fileChannels) {
+		(*it)->skipSamples(ch, m_blockSize);
+		++ch;
+	    }
+
+	    readSomething = true;
 	}
     }
-
-    PluginList &plugins = m_plugins[id];
-#ifdef DEBUG_MIXER
-    if (id == 1000 && !plugins.empty()) std::cerr << "AudioMixer::processBlock(" << id << "): have " << plugins.size() << " plugin(s)" << std::endl;
-#endif
 
     // Apply plugins.  There are various copy-reducing
     // optimisations available here, but we're not even going to
@@ -1066,7 +1140,7 @@ AudioMixer::processBlock(InstrumentId id, PlayableAudioFileList &audioQueue)
 		// handle volume and pan
 		m_processBuffers[ch][i] *= gain;
 
-		if (allZeros && (m_processBuffers[ch][i] != 0.0))
+		if (allZeros && m_processBuffers[ch][i] != 0.0)
 		    allZeros = false;
 	    }
 		
@@ -1088,23 +1162,8 @@ AudioMixer::processBlock(InstrumentId id, PlayableAudioFileList &audioQueue)
 	dormant = false;
     }
 
-    if (!allZeros) {
-	//!!! for the moment let's just use a fixed submaster
-	//!!! note also fixed number of submaster channels for the mo'
-	InstrumentId submaster = 1 + (id % 1000) / 4;//!!! hack
-
-	BufferSet &s = m_submasterWorkBuffers[submaster];
-
-	for (unsigned int ch = 0; ch < 2; ++ch) {
-	    
-	    for (size_t i = 0; i < m_blockSize; ++i) {
-		s[ch][i] += m_processBuffers[ch][i];
-	    }
-	}
-    }
-
 #ifdef DEBUG_MIXER
-    if (id == 1000 && m_driver->isPlaying()) std::cerr << "AudioMixer::processBlock(" << id <<"): setting dormant to " << dormant << std::endl;
+    if (id == 1000 && m_driver->isPlaying()) std::cerr << "AudioInstrumentMixer::processBlock(" << id <<"): setting dormant to " << dormant << std::endl;
 #endif
 
     rec.dormant = dormant;
@@ -1112,49 +1171,37 @@ AudioMixer::processBlock(InstrumentId id, PlayableAudioFileList &audioQueue)
 						       m_sampleRate);
 
     rec.filledTo = bufferTime;
-    return;
+    return haveMore;
 }
 
 void
-AudioMixer::kick(bool wantLock)
+AudioInstrumentMixer::kick(bool wantLock)
 {
     if (wantLock) getLock();
 
-//    Rosegarden::Profiler profiler("AudioMixer::kick");
-    
-    bool discard;
-    processBlocks(false, discard);
-    m_fileReader->signal();
+//    Rosegarden::Profiler profiler("AudioInstrumentMixer::kick");
+
+    bool readSomething = false;
+    processBlocks(false, readSomething);
+//    if (m_bussMixer) m_bussMixer->signal();
+    if (readSomething) m_fileReader->signal();
     m_fileReader->updateDefunctStatuses();
 
     if (wantLock) releaseLock();
 }
 
 
-void *
-AudioMixer::threadRun(void *arg)
+void
+AudioInstrumentMixer::threadRun()
 {
-    AudioMixer *inst = static_cast<AudioMixer *>(arg);
-    if (!inst) return 0;
-
-    pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
-
-    inst->getLock();
+    getLock();
 
     while (1) {
-
-	bool waitingForFiles = false;
-
-	if (inst->m_driver->areClocksRunning()) {
-	    inst->processBlocks(false, waitingForFiles);
-	    inst->m_fileReader->signal();
-	    inst->m_fileReader->updateDefunctStatuses();
-//	    inst->kick(false, waitingForFiles);
+	if (m_driver->areClocksRunning()) {
+	    kick(false);
 	}
 
-//	if (waitingForFiles) continue;
-
-	RealTime t = inst->m_driver->getAudioMixBufferLength();
+	RealTime t = m_driver->getAudioMixBufferLength();
 	t = t / 2;
 
 	struct timeval now;
@@ -1164,96 +1211,25 @@ AudioMixer::threadRun(void *arg)
 	struct timespec timeout;
 	timeout.tv_sec = t.sec;
 	timeout.tv_nsec = t.nsec;
-	pthread_cond_timedwait(&inst->m_condition, &inst->m_lock, &timeout);
+	pthread_cond_timedwait(&m_condition, &m_lock, &timeout);
 
     }
 
-    inst->releaseLock();
-    return 0;
+    releaseLock();
 }
 
 
 
 AudioFileReader::AudioFileReader(SoundDriver *driver,
 				 unsigned int sampleRate) :
-    m_driver(driver),
-    m_sampleRate(sampleRate),
-    m_thread(0)
+    AudioThread("AudioFileReader", driver, sampleRate)
 {
-    pthread_mutex_t  initialisingMutex = PTHREAD_MUTEX_INITIALIZER;
-    memcpy(&m_lock, &initialisingMutex, sizeof(pthread_mutex_t));
-
-    pthread_cond_t initialisingCondition = PTHREAD_COND_INITIALIZER;
-    memcpy(&m_condition, &initialisingCondition, sizeof(pthread_cond_t));
-
-    pthread_create(&m_thread, NULL, threadRun, this);
-    pthread_detach(m_thread);
+    run();
 }
 
 AudioFileReader::~AudioFileReader()
 {
-    std::cerr << "AudioFileReader::~AudioFileReader" << std::endl;
-
-    if (m_thread) {
-	pthread_cancel(m_thread);
-	m_thread = 0;
-    }
-    pthread_mutex_destroy(&m_lock);
-
-    std::cerr << "AudioFileReader::~AudioFileReader exiting" << std::endl;
 }
-
-int
-AudioFileReader::getLock()
-{
-    int rv;
-#ifdef DEBUG_LOCKS
-    std::cerr << "AudioFileReader::getLock()" << std::endl;
-#endif
-    rv = pthread_mutex_lock(&m_lock);
-#ifdef DEBUG_LOCKS
-    std::cerr << "OK" << std::endl;
-#endif
-    return rv;
-}
-
-int
-AudioFileReader::tryLock()
-{
-    int rv;
-#ifdef DEBUG_LOCKS
-    std::cerr << "AudioFileReader::tryLock()" << std::endl;
-#endif
-    rv = pthread_mutex_trylock(&m_lock);
-#ifdef DEBUG_LOCKS
-    std::cerr << "OK (rv is " << rv << ")" << std::endl;
-#endif
-    return rv;
-}
-
-int
-AudioFileReader::releaseLock()
-{
-    int rv;
-#ifdef DEBUG_LOCKS
-    std::cerr << "AudioFileReader::releaseLock()" << std::endl;
-#endif
-    rv = pthread_mutex_unlock(&m_lock);
-#ifdef DEBUG_LOCKS
-    std::cerr << "OK" << std::endl;
-#endif
-    return rv;
-}
-
-void
-AudioFileReader::signal()
-{
-#ifdef DEBUG_LOCKS
-    std::cerr << "AudioFileReader::signal()" << std::endl;
-#endif
-    pthread_cond_signal(&m_condition);
-}
-
 
 void
 AudioFileReader::updateReadyStatuses(PlayableAudioFileList &audioQueue)
@@ -1336,9 +1312,6 @@ AudioFileReader::kick(bool wantLock)
 
 	if (file->getStatus() == PlayableAudioFile::PLAYING) {
 
-#ifdef DEBUG_READER
-	    std::cerr << "AudioFileReader::kick: found a PLAYING file to update" << std::endl;
-#endif
 	    file->updateBuffers();
 
 	} else if (file->getStatus() == PlayableAudioFile::READY) {
@@ -1360,22 +1333,16 @@ AudioFileReader::kick(bool wantLock)
     return someFilled;
 }
 
-void *
-AudioFileReader::threadRun(void *arg)
+void
+AudioFileReader::threadRun()
 {
-    AudioFileReader *inst = static_cast<AudioFileReader*>(arg);
-    if (!inst) return 0;
-
-    pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
-
-    inst->getLock();
+    getLock();
 
     while (1) {
 
-	inst->kick(false);
-//	if (!inst->kick(false)) {
+	if (!kick(false)) {
 
-	    RealTime t = inst->m_driver->getAudioReadBufferLength();
+	    RealTime t = m_driver->getAudioReadBufferLength();
 	    t = t / 2;
 
 	    struct timeval now;
@@ -1385,22 +1352,18 @@ AudioFileReader::threadRun(void *arg)
 	    struct timespec timeout;
 	    timeout.tv_sec = t.sec;
 	    timeout.tv_nsec = t.nsec;
-	    pthread_cond_timedwait(&inst->m_condition, &inst->m_lock, &timeout);
-//	}
+	    pthread_cond_timedwait(&m_condition, &m_lock, &timeout);
+	}
     }
 
-    inst->releaseLock();
-
-    return 0;
+    releaseLock();
 }
 
 
 
 AudioFileWriter::AudioFileWriter(SoundDriver *driver,
 				 unsigned int sampleRate) :
-    m_driver(driver),
-    m_sampleRate(sampleRate),
-    m_thread(0)
+    AudioThread("AudioFileWriter", driver, sampleRate)
 {
     InstrumentId instrumentBase;
     int instrumentCount;
@@ -1416,80 +1379,11 @@ AudioFileWriter::AudioFileWriter(SoundDriver *driver,
 	m_files[id] = FilePair(0, 0);
     }
 
-    pthread_mutex_t  initialisingMutex = PTHREAD_MUTEX_INITIALIZER;
-    memcpy(&m_lock, &initialisingMutex, sizeof(pthread_mutex_t));
-
-    pthread_cond_t initialisingCondition = PTHREAD_COND_INITIALIZER;
-    memcpy(&m_condition, &initialisingCondition, sizeof(pthread_cond_t));
-
-    pthread_create(&m_thread, NULL, threadRun, this);
-    pthread_detach(m_thread);
+    run();
 }
 
 AudioFileWriter::~AudioFileWriter()
 {
-    std::cerr << "AudioFileWriter::~AudioFileWriter" << std::endl;
-
-    if (m_thread) {
-	pthread_cancel(m_thread);
-	m_thread = 0;
-    }
-    pthread_mutex_destroy(&m_lock);
-
-    std::cerr << "AudioFileWriter::~AudioFileWriter exiting" << std::endl;
-}
-
-int
-AudioFileWriter::getLock()
-{
-    int rv;
-#ifdef DEBUG_LOCKS
-    std::cerr << "AudioFileWriter::getLock()" << std::endl;
-#endif
-    rv = pthread_mutex_lock(&m_lock);
-#ifdef DEBUG_LOCKS
-    std::cerr << "OK" << std::endl;
-#endif
-    return rv;
-    return pthread_mutex_lock(&m_lock);
-}
-
-int
-AudioFileWriter::tryLock()
-{
-    int rv;
-#ifdef DEBUG_LOCKS
-    std::cerr << "AudioFileWriter::tryLock()" << std::endl;
-#endif
-    rv = pthread_mutex_trylock(&m_lock);
-#ifdef DEBUG_LOCKS
-    std::cerr << "OK (rv is " << rv << ")" << std::endl;
-#endif
-    return rv;
-    return pthread_mutex_trylock(&m_lock);
-}
-
-int
-AudioFileWriter::releaseLock()
-{
-    int rv;
-#ifdef DEBUG_LOCKS
-    std::cerr << "AudioFileWriter::releaseLock()" << std::endl;
-#endif
-    rv = pthread_mutex_unlock(&m_lock);
-#ifdef DEBUG_LOCKS
-    std::cerr << "OK" << std::endl;
-#endif
-    return rv;
-}
-
-void
-AudioFileWriter::signal()
-{
-#ifdef DEBUG_LOCKS
-    std::cerr << "AudioFileWriter::signal()" << std::endl;
-#endif
-    pthread_cond_signal(&m_condition);
 }
 
 
@@ -1614,21 +1508,16 @@ AudioFileWriter::kick(bool wantLock)
     if (wantLock) releaseLock();
 }
 
-void *
-AudioFileWriter::threadRun(void *arg)
+void
+AudioFileWriter::threadRun()
 {
-    AudioFileWriter *inst = static_cast<AudioFileWriter*>(arg);
-    if (!inst) return 0;
-
-    pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
-
-    inst->getLock();
+    getLock();
 
     while (1) {
 
-	inst->kick(false);
+	kick(false);
 
-	RealTime t = inst->m_driver->getAudioWriteBufferLength();
+	RealTime t = m_driver->getAudioWriteBufferLength();
 	t = t / 2;
 	
 	struct timeval now;
@@ -1638,12 +1527,10 @@ AudioFileWriter::threadRun(void *arg)
 	struct timespec timeout;
 	timeout.tv_sec = t.sec;
 	timeout.tv_nsec = t.nsec;
-	pthread_cond_timedwait(&inst->m_condition, &inst->m_lock, &timeout);
+	pthread_cond_timedwait(&m_condition, &m_lock, &timeout);
     }
 
-    inst->releaseLock();
-
-    return 0;
+    releaseLock();
 }
 
 

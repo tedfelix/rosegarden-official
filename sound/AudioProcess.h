@@ -32,27 +32,132 @@
 
 namespace Rosegarden
 {
-	
-class AudioFileReader;
-class AudioFileWriter;
 
-class AudioMixer
+class AudioThread
 {
 public:
     typedef float sample_t;
 
-    AudioMixer(SoundDriver *driver,
-	       AudioFileReader *fileReader,
-	       unsigned int sampleRate,
-	       unsigned int blockSize);
-    virtual ~AudioMixer();
+    AudioThread(std::string name, // for diagnostics
+		SoundDriver *driver,
+		unsigned int sampleRate);
 
-    void kick(bool wantLock = true);
+    virtual ~AudioThread();
+
+    virtual void run();
 
     int getLock();
     int tryLock();
     int releaseLock();
     void signal();
+
+protected:
+    virtual void threadRun() = 0;
+
+    std::string       m_name;
+
+    SoundDriver      *m_driver;
+    unsigned int      m_sampleRate;
+
+    pthread_t         m_thread;
+    pthread_mutex_t   m_lock;
+    pthread_cond_t    m_condition;
+
+private:
+    static void *staticThreadRun(void *arg);
+};
+    
+
+class AudioInstrumentMixer;
+
+class AudioBussMixer : public AudioThread
+{
+public:
+    AudioBussMixer(SoundDriver *driver,
+		   AudioInstrumentMixer *instrumentMixer,
+		   unsigned int sampleRate,
+		   unsigned int blockSize);
+    virtual ~AudioBussMixer();
+
+    void kick(bool wantLock = true);
+    
+    /**
+     * Prebuffer.  This should be called only when the transport is
+     * not running.
+     */
+    void fillBuffers();
+
+    /**
+     * Empty and discard buffer contents.
+     */
+    void emptyBuffers();
+
+    int getBussCount() {
+	return m_bussCount;
+    }
+
+    /**
+     * A buss is "dormant" if every readable sample on every one of
+     * its buffers is zero.  It can therefore be safely ignored during
+     * playback.
+     */
+    bool isBussDormant(int buss) {
+	return m_bufferMap[buss].dormant;
+    }
+
+    /**
+     * Busses are currently always stereo.
+     */
+    RingBuffer<sample_t> *getRingBuffer(int buss, unsigned int channel) {
+	if (channel < m_bufferMap[buss].buffers.size()) {
+	    return m_bufferMap[buss].buffers[channel];
+	} else {
+	    return 0;
+	}
+    }
+
+protected:
+    virtual void threadRun();
+
+    void processBlocks();
+    void generateBuffers();
+
+    AudioInstrumentMixer   *m_instrumentMixer;
+    unsigned int            m_blockSize;
+    int                     m_bussCount;
+
+    std::vector<sample_t *> m_processBuffers;
+
+    struct BufferRec
+    {
+	BufferRec() : dormant(true), buffers() { }
+	~BufferRec();
+
+	bool dormant;
+
+	std::vector<RingBuffer<sample_t> *> buffers;
+    };
+
+    typedef std::map<int, BufferRec> BufferMap;
+    BufferMap m_bufferMap;
+};		   
+
+
+class AudioFileReader;
+class AudioFileWriter;
+
+class AudioInstrumentMixer : public AudioThread
+{
+public:
+    AudioInstrumentMixer(SoundDriver *driver,
+			 AudioFileReader *fileReader,
+			 unsigned int sampleRate,
+			 unsigned int blockSize);
+    virtual ~AudioInstrumentMixer();
+
+    void kick(bool wantLock = true);
+
+    void setBussMixer(AudioBussMixer *mixer) { m_bussMixer = mixer; }
 
     void setPlugin(InstrumentId id, int position, unsigned int pluginId);
     void removePlugin(InstrumentId id, int position);
@@ -88,7 +193,7 @@ public:
      * Pan setting which will have been applied by the time we get to
      * these buffers.
      */
-    RingBuffer<sample_t> *getRingBuffer(InstrumentId id, unsigned int channel) {
+    RingBuffer<sample_t, 2> *getRingBuffer(InstrumentId id, unsigned int channel) {
 	if (channel < m_bufferMap[id].buffers.size()) {
 	    return m_bufferMap[id].buffers[channel];
 	} else {
@@ -96,33 +201,18 @@ public:
 	}
     }
 
-    unsigned int getSubmasterCount() { return m_submasterCount; }
-
 protected:
-    static void *threadRun(void *arg);
+    virtual void threadRun();
 
-    void processBlocks(bool forceFill, bool &waitingForFiles);
-
-    int canProcessBlocks(InstrumentId id, PlayableAudioFileList &,
-			 bool forceFill);
-    void processBlock(InstrumentId id, PlayableAudioFileList &);
-
-    int canProcessEmptyBlocks(InstrumentId id);
-    void processEmptyBlock(InstrumentId id);
-
+    void processBlocks(bool forceFill, bool &readSomething);
+    void processEmptyBlocks(InstrumentId id);
+    bool processBlock(InstrumentId id, PlayableAudioFileList&, bool forceFill,
+		      bool &readSomething);
     void generateBuffers();
-    void generateBuffer(InstrumentId id, unsigned int channels,
-			size_t bufferSamples, unsigned int &maxChannels);
 
-    SoundDriver      *m_driver;
     AudioFileReader  *m_fileReader;
-
-    unsigned int      m_sampleRate;
+    AudioBussMixer   *m_bussMixer;
     unsigned int      m_blockSize;
-
-    pthread_t         m_thread;
-    pthread_mutex_t   m_lock;
-    pthread_cond_t    m_condition;
 
     typedef std::map<int, RunnablePluginInstance *> PluginList;
     typedef std::map<InstrumentId, PluginList> PluginMap;
@@ -130,20 +220,12 @@ protected:
 
     // maintain the same number of these as the maximum number of
     // channels on any audio instrument
-    typedef std::vector<sample_t *> BufferSet;
-    BufferSet m_processBuffers;
+    std::vector<sample_t *> m_processBuffers;
 
     struct BufferRec
     {
-	BufferRec() { reset(RealTime::zeroTime); }
+	BufferRec() : dormant(true), filledTo(RealTime::zeroTime), buffers() { }
 	~BufferRec();
-
-	void reset(RealTime t) {
-	    empty = false;
-	    dormant = false;
-	    zeroFrames = 0;
-	    filledTo = t;
-	}	    
 
 	bool empty;
 	bool dormant;
@@ -151,7 +233,7 @@ protected:
 
 	RealTime filledTo;
 	size_t channels;
-	std::vector<RingBuffer<sample_t> *> buffers;
+	std::vector<RingBuffer<sample_t, 2> *> buffers;
 
 	float gainLeft;
 	float gainRight;
@@ -160,14 +242,10 @@ protected:
 
     typedef std::map<InstrumentId, BufferRec> BufferMap;
     BufferMap m_bufferMap;
-
-    unsigned int m_submasterCount;
-    typedef std::map<InstrumentId, BufferSet> WorkBufferMap;
-    WorkBufferMap m_submasterWorkBuffers;
 };
 
 
-class AudioFileReader
+class AudioFileReader : public AudioThread
 {
 public:
     AudioFileReader(SoundDriver *driver,
@@ -176,41 +254,22 @@ public:
 
     bool kick(bool wantLock = true);
 
-    int getLock();
-    int tryLock();
-    int releaseLock();
-    void signal();
-
     void updateReadyStatuses(PlayableAudioFileList &audioQueue);
     void updateDefunctStatuses();
 
 protected:
-    static void *threadRun(void *arg);
-
-    SoundDriver    *m_driver;
-    unsigned int    m_sampleRate;
-
-    pthread_t       m_thread;
-    pthread_mutex_t m_lock;
-    pthread_cond_t  m_condition;
+    virtual void threadRun();
 };
 
 
-class AudioFileWriter
+class AudioFileWriter : public AudioThread
 {
 public:
-    typedef float sample_t;
-
     AudioFileWriter(SoundDriver *driver,
 		    unsigned int sampleRate);
     virtual ~AudioFileWriter();
 
     void kick(bool wantLock = true);
-
-    int getLock();
-    int tryLock();
-    int releaseLock();
-    void signal();
 
     bool createRecordFile(InstrumentId id, const std::string &fileName);
     bool closeRecordFile(InstrumentId id, AudioFileId &returnedId);
@@ -218,14 +277,7 @@ public:
     void write(InstrumentId id, const sample_t *, int channel, size_t samples);
 
 protected:
-    static void *threadRun(void *arg);
-
-    SoundDriver    *m_driver;
-    unsigned int    m_sampleRate;
-
-    pthread_t       m_thread;
-    pthread_mutex_t m_lock;
-    pthread_cond_t  m_condition;
+    virtual void threadRun();
 
     typedef std::pair<AudioFile *, RecordableAudioFile *> FilePair;
     typedef std::map<InstrumentId, FilePair> FileMap;
