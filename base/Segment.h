@@ -159,6 +159,14 @@ public:
     void setQuantizeLevel(const StandardQuantization &);
 
     /**
+     * Set the quantization level by copying from another Quantizer.
+     * (This does not switch quantization on, if it's currently off,
+     * it only changes the level that will be used when it's next
+     * switched on.)
+     */
+    void setQuantizeLevel(const Quantizer &);
+
+    /**
      * Get the quantizer currently in (or not in) use.
      */
     const Quantizer &getQuantizer() const;

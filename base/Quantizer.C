@@ -50,6 +50,15 @@ Quantizer::Quantizer(const StandardQuantization &sq,
     if (m_unit < 0) m_unit = Note(Note::Shortest).getDuration();
 }    
 
+Quantizer::Quantizer(const Quantizer &q,
+		     std::string propertyNamePrefix) :
+    m_type(q.m_type), m_unit(q.m_unit), m_maxDots(q.m_maxDots),
+    m_absoluteTimeProperty(propertyNamePrefix + "AbsoluteTime"),
+    m_durationProperty(propertyNamePrefix + "Duration")
+{
+    // nothing else
+}
+   
 Quantizer::Quantizer(const Quantizer &q) :
     m_type(q.m_type), m_unit(q.m_unit), m_maxDots(q.m_maxDots),
     m_absoluteTimeProperty(q.m_absoluteTimeProperty),

@@ -112,6 +112,13 @@ public:
     Quantizer(const StandardQuantization &,
 	      std::string propertyNamePrefix = DefaultPropertyNamePrefix);
 
+    /**
+     * Construct a quantizer by copying from another quantizer,
+     * but with a different propertyNamePrefix
+     */
+    Quantizer(const Quantizer &,
+	      std::string propertyNamePrefix = DefaultPropertyNamePrefix);
+
     Quantizer(const Quantizer &);
     Quantizer &operator=(const Quantizer &);
     bool operator==(const Quantizer &) const;

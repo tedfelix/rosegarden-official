@@ -515,6 +515,22 @@ Segment::setQuantizeLevel(const StandardQuantization &q)
     }
 }
 
+void
+Segment::setQuantizeLevel(const Quantizer &q)
+{
+    Quantizer newQ(q, "SegmentQ");
+
+    if (newQ != *m_quantizer) {
+
+	*m_quantizer = newQ;
+	m_quantizer->quantize(begin(), end());
+
+	for (iterator i = begin(); i != end(); ++i) {
+	    notifyQuantizationChanged(*i);
+	}
+    }
+}
+
 const Quantizer &
 Segment::getQuantizer() const
 {

@@ -346,7 +346,8 @@ SegmentSplitCommand::execute()
     // Look for a final rest and shrink it
     Segment::iterator it = m_segment->end();
 
-    if (it != m_segment->begin() && (*(--it))->isa(Note::EventRestType))
+    if (it != m_segment->begin() &&
+	(*(--it))->isa(Rosegarden::Note::EventRestType))
         (*it)->setDuration(m_splitTime - (*it)->getAbsoluteTime());
 
     if (!m_newSegment->getComposition()) {
