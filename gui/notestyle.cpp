@@ -43,10 +43,10 @@ using Rosegarden::Note;
 
 namespace StandardNoteStyleNames
 {
-    const NoteStyleName Classical = "classical";
-    const NoteStyleName Cross = "cross";
-    const NoteStyleName Triangle = "triangle";
-    const NoteStyleName Mensural = "mensural";
+    const NoteStyleName Classical = "Classical";
+    const NoteStyleName Cross = "Cross";
+    const NoteStyleName Triangle = "Triangle";
+    const NoteStyleName Mensural = "Mensural";
 
 /*!!!
     const NoteStyleName Cross     = "_Cross";
@@ -82,8 +82,8 @@ NoteStyleFactory::getStyle(NoteStyleName name)
 
 	    NoteStyle *newStyle = 0;
 
-	    if (name == StandardNoteStyleNames::Classical) {
-		newStyle = new ClassicalNoteStyle();
+//	    if (name == StandardNoteStyleNames::Classical) {
+//		newStyle = new ClassicalNoteStyle();
 
 /*!!!
 	    } else if (name == StandardNoteStyleNames::Cross) {
@@ -95,9 +95,9 @@ NoteStyleFactory::getStyle(NoteStyleName name)
 	    } else if (name == StandardNoteStyleNames::Mensural) {
 		newStyle = new MensuralNoteStyle();
 */
-	    } else {
+//	    } else {
 		newStyle = new CustomNoteStyle(name);
-	    }
+//	    }
 	
 	    m_styles[name] = newStyle;
 	    return newStyle;
@@ -453,8 +453,23 @@ CustomNoteStyle::initialiseNotes()
 void
 CustomNoteStyle::setBaseStyle(NoteStyleName name)
 {
-    m_baseStyle = NoteStyleFactory::getStyle(name);
-    if (m_baseStyle == this) m_baseStyle = 0;
+    try {
+	m_baseStyle = NoteStyleFactory::getStyle(name);
+	if (m_baseStyle == this) m_baseStyle = 0;
+    } catch (NoteStyleFactory::StyleUnavailable u) {
+	if (name != StandardNoteStyleNames::Classical) {
+	    kdDebug(KDEBUG_AREA)
+		<< "CustomNoteStyle::setBaseStyle: Base style "
+		<< name << " not available, defaulting to "
+		<< StandardNoteStyleNames::Classical << endl;
+	    setBaseStyle(StandardNoteStyleNames::Classical);
+	} else {
+	    kdDebug(KDEBUG_AREA)
+		<< "CustomNoteStyle::setBaseStyle: Base style "
+		<< name << " not available" << endl;
+	    m_baseStyle = 0;
+	}
+    }	    
 }
 
 void
@@ -504,18 +519,6 @@ CustomNoteStyle::startElement(const QString &, const QString &,
 
 	QString s;
 	NoteDescription desc;
-
-	s = attributes.value("shape");
-	if (s) desc.shape = s.lower();
-	
-	s = attributes.value("filled");
-	if (s) desc.filled = (s.lower() == "true");
-	
-	s = attributes.value("stem");
-	if (s) desc.stem = (s.lower() == "true");
-	
-	s = attributes.value("flags");
-	if (s) desc.flags = (s.lower() == "true");
 	
 	s = attributes.value("type");
 	if (!s) {
@@ -524,8 +527,23 @@ CustomNoteStyle::startElement(const QString &, const QString &,
 	}
 	
 	try {
-	    Note note(qstrtostr(s)); 
-	    m_notes[note.getNoteType()] = desc;
+	    Note::Type type = Note(qstrtostr(s)).getNoteType();
+	    if (m_notes.find(type) != m_notes.end()) desc = m_notes[type];
+
+	    s = attributes.value("shape");
+	    if (s) desc.shape = s.lower();
+	
+	    s = attributes.value("filled");
+	    if (s) desc.filled = (s.lower() == "true");
+	
+	    s = attributes.value("stem");
+	    if (s) desc.stem = (s.lower() == "true");
+	
+	    s = attributes.value("flags");
+	    if (s) desc.flags = (s.lower() == "true");
+
+	    m_notes[type] = desc;
+
 	} catch (Note::MalformedNoteName n) {
 	    m_errorString = i18n("Unrecognised note name " + s);
 	    return false;
