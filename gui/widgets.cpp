@@ -240,7 +240,6 @@ void
 RosegardenProgressDialog::polish()
 {
     KProgressDialog::polish();
-    QApplication::setOverrideCursor(Qt::ArrowCursor, true);
     installFilter();
 }
 
