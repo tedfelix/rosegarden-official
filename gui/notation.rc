@@ -547,6 +547,7 @@
 
 <State name="have_notes_in_selection">
   <enable>
+    <Action name="make_chord"/>
     <Action name="beam"/>
     <Action name="auto_beam"/>
     <Action name="break_group"/>
@@ -568,6 +569,13 @@
     <Action name="slashes_5"/>
     <Action name="note_style_actionmenu"/>
     <Action name="remove_marks"/>
+    <Action name="add_fingering_0"/>
+    <Action name="add_fingering_1"/>
+    <Action name="add_fingering_2"/>
+    <Action name="add_fingering_3"/>
+    <Action name="add_fingering_4"/>
+    <Action name="add_fingering_5"/>
+    <Action name="add_fingering_mark"/>
     <Action name="add_accent"/>
     <Action name="add_tenuto"/>
     <Action name="add_staccato"/>
