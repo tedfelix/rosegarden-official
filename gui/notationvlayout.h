@@ -28,10 +28,16 @@
 class NotationVLayout : public LayoutEngine  {
 public:
     NotationVLayout();
+
+    void setStaffOffsetY(int y) { m_staffOffsetY = y; }
+    int  getStaffOffsetY() const { return m_staffOffsetY; }
+
 protected:
     virtual void layout(Element2*);
 
     PitchToHeight& m_pitchToHeight;
+
+    int m_staffOffsetY;
 };
 
 #endif

@@ -18,7 +18,8 @@
 #include "notationvlayout.h"
 
 NotationVLayout::NotationVLayout()
-    : m_pitchToHeight(PitchToHeight::instance())
+    : m_pitchToHeight(PitchToHeight::instance()),
+      m_staffOffsetY(0)
 {
 }
 
@@ -26,5 +27,5 @@ void
 NotationVLayout::layout(Element2 *el)
 {
     unsigned int pitch = el->get<Int>("pitch");
-    el->set<Int>("Notation::Y", m_pitchToHeight[pitch]);
+    el->set<Int>("Notation::Y", m_pitchToHeight[pitch] + m_staffOffsetY);
 }
