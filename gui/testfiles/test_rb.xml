@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE rosegarden-data>
-<rosegarden-data>
-<track instrument="0" start="0">
-<event type="note" duration="384"><property name="pitch" int="76"/></event>
-<event type="note" duration="384"><property name="pitch" int="76"/></event>
-</track>
-</rosegarden-data>
