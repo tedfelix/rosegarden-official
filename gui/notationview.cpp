@@ -3066,8 +3066,55 @@ void NotationView::removeProgressEventFilter()
                  << m_progressDisplayer << "," << PROGRESS_BAR << endl;
     }
 }
+
+void
+NotationView::keyPressEvent(QKeyEvent *event)
+{
+    switch(event->key())
+    {
+        case Key_Shift:
+            m_shiftDown = true;
+
+            break;
+
+        case Key_Control:
+            m_controlDown = true;
+            break;
+
+        default:
+            event->ignore();
+            break;
+    }
+
+    if (m_bottomBarButtons)
+        m_bottomBarButtons->getLoopRuler()->slotSetLoopingMode(m_shiftDown);
+}
+
+void
+NotationView::keyReleaseEvent(QKeyEvent *event)
+{
+    switch(event->key())
+    {
+        case Key_Shift:
+            m_shiftDown = false;
+            break;
+
+        case Key_Control:
+            m_controlDown = false;
+            break;
+
+        default:
+            event->ignore();
+            break;
+    }
+
+    if (m_bottomBarButtons)
+        m_bottomBarButtons->getLoopRuler()->slotSetLoopingMode(m_shiftDown);
+}
+
     
 NotationView::NoteActionDataMap* NotationView::m_noteActionDataMap = 0;
 NotationView::MarkActionDataMap* NotationView::m_markActionDataMap = 0;
 const char* const NotationView::ConfigGroup = "Notation Options";
+
 
