@@ -7,9 +7,10 @@ EXTRA_DIST = AUTHORS COPYING ChangeLog INSTALL README TODO rosegarden.lsm
 # This Makefile.am initially comes from kapptemplate but kdevelop has added
 # its own stuff in it, hence the inconsistencies. - GL.
 
-COMPILE_FIRST = base sound
-COMPILE_LAST = gui
-SUBDIRS = $(COMPILE_FIRST) $(TOPSUBDIRS) $(COMPILE_LAST)
+#COMPILE_FIRST = base sound
+#COMPILE_LAST = gui
+#SUBDIRS = $(COMPILE_FIRST) $(TOPSUBDIRS) $(COMPILE_LAST)
+SUBDIRS = base sound sequencer gui po
 
 $(top_srcdir)/configure.in: configure.in.in $(top_srcdir)/subdirs
 	cd $(top_srcdir) && $(MAKE) -f admin/Makefile.common configure.in ;
