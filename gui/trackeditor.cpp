@@ -385,6 +385,16 @@ void TrackEditor::slotCommandExecuted(Command *command)
     return;
 }
 
+void TrackEditor::slotAddTracks(unsigned int nbTracks)
+{
+    Composition &composition = m_document->getComposition();
+
+    for (unsigned int i = 0; i < nbTracks; ++i) {
+        composition.addTrack(new Rosegarden::Track);
+    }
+
+    m_trackButtons->slotAddTracks(nbTracks);
+}
 
 void TrackEditor::addSegment(int track, int start, unsigned int duration)
 {

@@ -87,11 +87,9 @@ signals:
 
 public slots:
 
-    // We use these to set the Track and Composition
-    // objects with our returned values
-    //
     void slotSetRecordTrack(int id);
     void slotToggleMutedTrack(int mutedTrack);
+    void slotAddTracks(unsigned int nbTracks);
     void slotLabelSelected(int id);
     void slotRenameTrack(QString newName, int trackNumber);
     void slotSetTrackMeter(double value, int position);
@@ -121,7 +119,7 @@ private:
 
     // Number of tracks on our view
     //
-    int m_tracks;
+    unsigned int m_tracks;
 
     // The pixel offset from the top - just to overcome
     // the borders

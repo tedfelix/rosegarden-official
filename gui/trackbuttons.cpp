@@ -361,6 +361,11 @@ TrackButtons::slotToggleMutedTrack(int mutedTrack)
     m_doc->getComposition().getTrackByIndex(mutedTrack)->setMuted(set);
 }
 
+void
+TrackButtons::slotAddTracks(unsigned int nbTracks)
+{
+    m_tracks += nbTracks;
+}
 
 // Set a newly selected record button to a shocking palette and
 // unset the palette on the record buttons we're jumping from.

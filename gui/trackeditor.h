@@ -132,8 +132,15 @@ public slots:
     void slotSetSelectCopy(bool value);
     void slotSetFineGrain(bool value);
 
-
+    /**
+     * Scroll horizontally to given position
+     */
     void slotScrollHoriz(int hpos);
+
+    /**
+     * Add given number of tracks
+     */
+    void slotAddTracks(unsigned int nbTracks);
 
 protected slots:
     void slotSegmentOrderChanged(int section, int fromIdx, int toIdx);
