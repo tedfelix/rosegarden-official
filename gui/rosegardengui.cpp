@@ -127,6 +127,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 {
     m_myself = this;
 
+
     if (startupStatusMessageReceiver) {
         QObject::connect(this, SIGNAL(startupStatusMessage(const QString &)),
                          startupStatusMessageReceiver,
@@ -136,9 +137,17 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     // Try to start the sequencer
     //
     if (m_useSequencer) {
-        RG_DEBUG << "RosegardenGUIApp : starting sequencer\n";
+
+        // Try to launch JACK - if the configuration wants us to.
+        //
+        if (!launchJack())
+        {
+            KMessageBox::error(this, i18n("Attempted to launch JACK audio daemon failed.  Audio will be disabled.\nPlease check configuration (Settings->Configure Rosegarden->Sequencer->JACK control)\n and restart."));
+        }
+
         emit startupStatusMessage(i18n("Starting sequencer..."));
         launchSequencer();
+
     } else RG_DEBUG << "RosegardenGUIApp : don't use sequencer\n";
 
     // Plugin manager
@@ -2670,8 +2679,8 @@ void RosegardenGUIApp::slotRefreshTimeDisplay()
 
 
 // Sequencer auxiliary process management
-
-
+//
+//
 bool RosegardenGUIApp::launchSequencer()
 {
     if (!isUsingSequencer()) {
@@ -2784,6 +2793,19 @@ bool RosegardenGUIApp::launchSequencer()
     if (m_doc) m_doc->syncDevices();
     
     return res;
+}
+
+bool RosegardenGUIApp::launchJack()
+{
+    KConfig* config = kapp->config();
+    config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
+
+    bool startJack = config->readBoolEntry("jackstart", false);
+    if (!startJack) return true; // we don't do anything
+
+    emit startupStatusMessage(i18n("Starting jackd..."));
+
+    return true;
 }
 
 void RosegardenGUIApp::slotSequencerExited(KProcess*)

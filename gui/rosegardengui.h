@@ -104,7 +104,7 @@ public:
      * Get the current copy of the app object
      */
     static RosegardenGUIApp *self() { return m_myself; }
-
+    
     /**
      * returns a pointer to the current document connected to the
      * KTMainWindow instance and is used by * the View class to access
@@ -256,6 +256,15 @@ public:
      * @see slotSequencerExited()
      */
     bool launchSequencer();
+
+#ifdef HAVE_LIBJACK
+    /*
+     * Launch and control JACK if required to by configuration 
+     */
+    bool launchJack();
+
+#endif // HAVE_LIBJACK
+
 
     /**
      * Returns whether we're using a sequencer.

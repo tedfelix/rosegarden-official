@@ -427,6 +427,7 @@ void testInstalledVersion()
     exit(1);
 }
 
+
 int main(int argc, char *argv[])
 {
     KAboutData aboutData( "rosegarden", I18N_NOOP("Rosegarden"),
@@ -470,7 +471,8 @@ int main(int argc, char *argv[])
     config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
     KStartupLogo* startLogo = 0L;
 
-
+    // See if the config wants us to control JACK
+    //
     if (config->readBoolEntry("Logo",true) && (!kapp->isRestored() && args->isSet("splash")) )
     {
         RG_DEBUG << "main: Showing startup logo\n";
@@ -538,11 +540,11 @@ int main(int argc, char *argv[])
     }
     catch(std::string e)
     {
-        std::cout << "RosegardenGUI - " << e << std::endl;
+        RG_DEBUG << "RosegardenGUI - " << e << endl;
     }
     catch(QString e)
     {
-        std::cout << "RosegardenGUI - " << e << std::endl;
+        RG_DEBUG << "RosegardenGUI - " << e << endl;
     }
 
 

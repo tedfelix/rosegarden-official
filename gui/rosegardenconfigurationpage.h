@@ -401,15 +401,23 @@ public:
     static QString iconLabel() { return i18n("Sequencer"); }
     static QString title()     { return i18n("Sequencer Settings"); }
 
+    QString getJackPath() { return m_jackPath->text(); }
+
 protected slots:
 
     void slotShowStatus();
+    void slotJackToggled();
 
 protected:
 
     // General
     QLineEdit *m_sequencerArguments;
     QCheckBox *m_sendControllersAtPlay;
+
+#ifdef HAVE_LIBJACK
+    QCheckBox *m_startJack;
+    QLineEdit *m_jackPath;
+#endif // HAVE_LIBJACK
 
     // Latency
     QCheckBox *m_midiClockEnabled;
