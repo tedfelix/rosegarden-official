@@ -77,8 +77,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
       m_previousEvPitch(0),
       m_canvasView(0),
       m_pianoView(0),
-      m_lastNote(0),
-      m_selectedProperty(getViewLocalPropertyPrefix() + "Selected")
+      m_lastNote(0)
 {
     MATRIX_DEBUG << "MatrixView ctor\n";
 
@@ -95,8 +94,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     for (unsigned int i = 0; i < segments.size(); ++i) {
         m_staffs.push_back(new MatrixStaff(tCanvas, segments[i], i,
-                                           8, //!!! so random, so rare
-                                           m_selectedProperty));
+                                           8 //!!! so random, so rare
+	    ));
 	if (i == 0) m_staffs[i]->setCurrent(true);
     }
 
@@ -250,6 +249,9 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
 MatrixView::~MatrixView()
 {
+    delete m_currentEventSelection;
+    m_currentEventSelection = 0;
+
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
         delete m_staffs[i]; // this will erase all "notes" canvas items
     }
@@ -462,8 +464,6 @@ MatrixCanvasView* MatrixView::getCanvasView()
 void MatrixView::setCurrentSelection(EventSelection* s)
 {
     if (m_currentEventSelection) {
-        m_currentEventSelection->removeSelectionFromSegment
-	    (m_selectedProperty);
         getStaff(0)->positionElements(m_currentEventSelection->getStartTime(),
                                       m_currentEventSelection->getEndTime());
     }
@@ -472,7 +472,6 @@ void MatrixView::setCurrentSelection(EventSelection* s)
     m_currentEventSelection = s;
 
     if (s) {
-        s->recordSelectionOnSegment(m_selectedProperty);
         getStaff(0)->positionElements(s->getStartTime(),
                                       s->getEndTime());
 #ifdef RGKDE3

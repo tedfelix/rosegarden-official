@@ -30,8 +30,7 @@ class VelocityColour;
 class MatrixStaff : public LinedStaff<MatrixElement>
 {
 public:
-    MatrixStaff(QCanvas *, Rosegarden::Segment *, int id, int vResolution,
-                const Rosegarden::PropertyName &selectedProperty);
+    MatrixStaff(QCanvas *, Rosegarden::Segment *, int id, int vResolution);
     virtual ~MatrixStaff();
 
 protected:
@@ -72,7 +71,6 @@ private:
     double m_scaleFactor;
 
     VelocityColour *m_elementColour;
-    Rosegarden::PropertyName m_selectedProperty;
 
 };
 

@@ -256,8 +256,9 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     for (unsigned int i = 0; i < segments.size(); ++i) {
         m_staffs.push_back(new NotationStaff(canvas(), segments[i], i,
-					     m_legatoQuantizer,
-					     m_properties, false, width() - 50,
+					     this,
+					     /*m_legatoQuantizer,
+					       m_properties,*/ false, width() - 50,
                                              m_fontName, m_fontSize));
     }
 
@@ -381,6 +382,9 @@ NotationView::~NotationView()
 
     if (m_documentDestroyed) return;
 
+    delete m_currentEventSelection;
+    m_currentEventSelection = 0;
+
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 	for (Segment::iterator j = m_staffs[i]->getSegment().begin();
 	     j != m_staffs[i]->getSegment().end(); ++j) {
@@ -415,6 +419,11 @@ NotationView::removeViewLocalProperties(Rosegarden::Event *e)
     }
 }
     
+const NotationProperties &
+NotationView::getProperties() const 
+{
+    return m_properties;
+}
 
 void NotationView::positionStaffs()
 {
@@ -1331,34 +1340,6 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview)
     EventSelection *oldSelection = m_currentEventSelection;
     m_currentEventSelection = s;
 
-#ifdef RGKDE3
-    // Clear states first, then enter only those ones that apply
-    // (so as to avoid ever clearing one after entering another, in
-    // case the two overlap at all)
-    stateChanged("have_selection", KXMLGUIClient::StateReverse);
-    stateChanged("have_notes_in_selection", KXMLGUIClient::StateReverse);
-    stateChanged("have_rests_in_selection", KXMLGUIClient::StateReverse);
-#endif
-
-    if (oldSelection) {
-        oldSelection->removeSelectionFromSegment(m_properties.SELECTED);
-    }
-
-    if (s) {
-        s->recordSelectionOnSegment(m_properties.SELECTED);
-#ifdef RGKDE3
-	stateChanged("have_selection", KXMLGUIClient::StateNoReverse);
-	if (s->contains(Rosegarden::Note::EventType)) {
-	    stateChanged("have_notes_in_selection",
-			 KXMLGUIClient::StateNoReverse);
-	}
-	if (s->contains(Rosegarden::Note::EventRestType)) {
-	    stateChanged("have_rests_in_selection",
-			 KXMLGUIClient::StateNoReverse);
-	}
-#endif
-    }
-
     // positionElements is overkill here, but we hope it's not too
     // much overkill (if that's not a contradiction)
 
@@ -1375,8 +1356,15 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview)
 	endA   = endB   = s->getEndTime();
     }
 
-    // play previews if appropriate
+    bool updateRequired = true;
+
+    // play previews if appropriate -- also permits an optimisation
+    // for the case where the selection is unchanged (quite likely
+    // when sweeping) 
+
     if (s && preview) {
+
+	bool foundNewEvent = false;
 
 	for (EventSelection::eventcontainer::iterator i =
 		 s->getSegmentEvents().begin();
@@ -1385,27 +1373,40 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview)
 	    if (oldSelection && oldSelection->getSegment() == s->getSegment()
 		&& oldSelection->contains(*i)) continue;
 		
+	    foundNewEvent = true;
+
 	    long pitch;
 	    if (!(*i)->get<Rosegarden::Int>(Rosegarden::BaseProperties::PITCH,
 					    pitch)) continue;
 
 	    playNote(s->getSegment(), pitch);
 	}
+
+	if (!foundNewEvent) {
+	    if (oldSelection &&
+		oldSelection->getSegment() == s->getSegment() &&
+		oldSelection->getSegmentEvents().size() ==
+		s->getSegmentEvents().size()) updateRequired = false;
+	}
     }
 
-    if ((endA >= startB && endB >= startA) &&
-	(!s || !oldSelection ||
-	 oldSelection->getSegment() == s->getSegment())) {
+    if (updateRequired) {
 
-	// the regions overlap, so use their union and just do one reposition
-	Segment &segment(s ? s->getSegment() : oldSelection->getSegment());
-	getStaff(segment)->positionElements(std::min(startA, startB),
-					    std::max(endA, endB));
-
-    } else {
-	// do two repositions, one for each -- here we know neither is null
-	getStaff(oldSelection->getSegment())->positionElements(startA, endA);
-	getStaff(s->getSegment())->positionElements(startB, endB);
+	if ((endA >= startB && endB >= startA) &&
+	    (!s || !oldSelection ||
+	     oldSelection->getSegment() == s->getSegment())) {
+	    
+	    // the regions overlap: use their union and just do one reposition
+	    Segment &segment(s ? s->getSegment() : oldSelection->getSegment());
+	    getStaff(segment)->positionElements(std::min(startA, startB),
+						std::max(endA, endB));
+	    
+	} else {
+	    // do two repositions, one for each -- here we know neither is null
+	    getStaff(oldSelection->getSegment())->positionElements(startA,
+								   endA);
+	    getStaff(s->getSegment())->positionElements(startB, endB);
+	}
     }
 
     delete oldSelection;
@@ -1416,6 +1417,31 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview)
 	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 	    m_staffs[i]->setProgressReporter(0);
 	}
+    }
+
+    //!!! NEED TO UPDATE THIS STUFF AFTER COMMAND TOO
+
+#ifdef RGKDE3
+    // Clear states first, then enter only those ones that apply
+    // (so as to avoid ever clearing one after entering another, in
+    // case the two overlap at all)
+    stateChanged("have_selection", KXMLGUIClient::StateReverse);
+    stateChanged("have_notes_in_selection", KXMLGUIClient::StateReverse);
+    stateChanged("have_rests_in_selection", KXMLGUIClient::StateReverse);
+#endif
+
+    if (s) {
+#ifdef RGKDE3
+	stateChanged("have_selection", KXMLGUIClient::StateNoReverse);
+	if (s->contains(Rosegarden::Note::EventType)) {
+	    stateChanged("have_notes_in_selection",
+			 KXMLGUIClient::StateNoReverse);
+	}
+	if (s->contains(Rosegarden::Note::EventRestType)) {
+	    stateChanged("have_rests_in_selection",
+			 KXMLGUIClient::StateNoReverse);
+	}
+#endif
     }
 
     updateView();

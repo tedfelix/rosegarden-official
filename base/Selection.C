@@ -88,25 +88,6 @@ timeT EventSelection::getTotalDuration() const
 }
 
 void
-EventSelection::recordSelectionOnSegment(PropertyName property)
-{
-    removeSelectionFromSegment(property);
-    for (eventcontainer::iterator i = m_segmentEvents.begin();
-	 i != m_segmentEvents.end(); ++i) {
-	(*i)->setMaybe<Bool>(property, true);
-    }
-}
-
-void
-EventSelection::removeSelectionFromSegment(PropertyName property)
-{ 
-    for (Segment::iterator i = m_originalSegment.begin();
-	 i != m_originalSegment.end(); ++i) {
-	(*i)->unset(property);
-    }
-}
-
-void
 EventSelection::eventRemoved(const Segment *s, Event *e)
 {
     if (s == &m_originalSegment && contains(e)) {

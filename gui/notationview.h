@@ -84,7 +84,12 @@ public:
     /**
      * Return the view-local PropertyName definitions for this view
      */
-    const NotationProperties &getProperties();
+    const NotationProperties &getProperties() const;
+
+    /**
+     * Return a legato quantizer with the curent smoothing settings
+     */
+    Rosegarden::Quantizer *getLegatoQuantizer() { return m_legatoQuantizer; }
 
     /// Return the number of staffs
     int getStaffCount() { return m_staffs.size(); }
@@ -125,6 +130,10 @@ public:
      * @see NotationSelector
      */
     void setCurrentSelection(Rosegarden::EventSelection*, bool preview = false);
+
+    const Rosegarden::EventSelection *getCurrentSelection() {
+	return m_currentEventSelection;
+    }
 
     /**
      * Set the current event selection to a single event

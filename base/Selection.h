@@ -100,18 +100,6 @@ public:
     const Segment &getSegment() const { return m_originalSegment; }
     Segment &getSegment()             { return m_originalSegment; }
 
-    /**
-     * Set the given boolean property on all selected events in the
-     * segment, and unset from all non-selected events.
-     */
-    void recordSelectionOnSegment(PropertyName property);
-
-    /**
-     * Unset the given boolean property from all events in the segment
-     * that are in this selection.
-     */
-    void removeSelectionFromSegment(PropertyName property);
-
     // SegmentObserver methods
     virtual void eventAdded(const Segment *, Event *) { }
     virtual void eventRemoved(const Segment *, Event *);

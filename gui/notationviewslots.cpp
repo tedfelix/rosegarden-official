@@ -235,7 +235,6 @@ void NotationView::slotEditCut()
 
     addCommandToHistory(new CutCommand(*m_currentEventSelection,
 				       m_document->getClipboard()));
-    setCurrentSelection(0);
 }
 
 void NotationView::slotEditDelete()
@@ -244,7 +243,6 @@ void NotationView::slotEditDelete()
     KTmpStatusMsg msg(i18n("Deleting selection..."), statusBar());
 
     addCommandToHistory(new EraseCommand(*m_currentEventSelection));
-    setCurrentSelection(0);
 }
 
 void NotationView::slotEditCopy()
@@ -263,7 +261,6 @@ void NotationView::slotEditCutAndClose()
 
     addCommandToHistory(new CutAndCloseCommand(*m_currentEventSelection,
 					       m_document->getClipboard()));
-    setCurrentSelection(0);
 }
 
 void NotationView::slotEditPaste()
@@ -604,7 +601,6 @@ void NotationView::slotTransformsNormalizeRests()
 
     addCommandToHistory(new TransformsMenuNormalizeRestsCommand
                         (*m_currentEventSelection));
-    setCurrentSelection(0);
 }
 
 void NotationView::slotTransformsCollapseRests()
@@ -614,7 +610,6 @@ void NotationView::slotTransformsCollapseRests()
 
     addCommandToHistory(new TransformsMenuCollapseRestsCommand
                         (*m_currentEventSelection));
-    setCurrentSelection(0);
 }
 
 void NotationView::slotTransformsCollapseNotes()
@@ -624,7 +619,6 @@ void NotationView::slotTransformsCollapseNotes()
 
     addCommandToHistory(new TransformsMenuCollapseNotesCommand
                         (*m_currentEventSelection));
-    setCurrentSelection(0);
 }
 
 void NotationView::slotTransformsTieNotes()
@@ -634,7 +628,6 @@ void NotationView::slotTransformsTieNotes()
 
     addCommandToHistory(new TransformsMenuTieNotesCommand
                         (*m_currentEventSelection));
-    setCurrentSelection(0);
 }
 
 void NotationView::slotTransformsUntieNotes()
@@ -644,7 +637,6 @@ void NotationView::slotTransformsUntieNotes()
 
     addCommandToHistory(new TransformsMenuUntieNotesCommand
                         (*m_currentEventSelection));
-    setCurrentSelection(0);
 }
 
 void NotationView::slotTransformsStemsUp()
@@ -889,7 +881,7 @@ void NotationView::slotEditAddTimeSignature()
 				 dialog->getTimeSignature()));
 	}
 
-	setCurrentSelection(0);
+	//!!!setCurrentSelection(0);
     }
     
     delete dialog;
@@ -946,7 +938,7 @@ void NotationView::slotEditAddKeySignature()
 		  conversion == KeySignatureDialog::Transpose));
 	}
 
-	setCurrentSelection(0);
+	//!!!setCurrentSelection(0);
     }
 
     delete dialog;

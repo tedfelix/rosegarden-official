@@ -34,6 +34,7 @@
 #include "colours.h"
 #include "notestyle.h"
 #include "widgets.h"
+#include "notationview.h"
 
 #include "Event.h"
 #include "Segment.h"
@@ -67,8 +68,7 @@ using std::string;
 
 
 NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment, int id,
-			     Rosegarden::Quantizer *legatoQuantizer,
-			     const NotationProperties &properties,
+			     NotationView *view,
 			     bool pageMode, double pageWidth, 
                              string fontName, int resolution) :
     LinedStaff<NotationElement>(canvas, segment, id, resolution,
@@ -80,8 +80,7 @@ NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment, int id,
     m_graceNotePixmapFactory(0),
     m_previewSprite(0),
     m_staffName(0),
-    m_legatoQuantizer(legatoQuantizer),
-    m_properties(properties),
+    m_notationView(view),
     m_progress(0)
 {
     changeFont(fontName, resolution);
@@ -350,9 +349,7 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 	    currentClef = Clef(*(*it)->event());
 	}
 
-	bool selected = false;
-	(void)((*it)->event()->get<Bool>(m_properties.SELECTED, selected));
-
+	bool selected = isSelected(it);
 //	NOTATION_DEBUG << "Rendering at " << (*it)->getAbsoluteTime()
 //			     << " (selected = " << selected << ")" << endl;
 
@@ -394,6 +391,8 @@ NotationStaff::positionElements(timeT from, timeT to)
 	}
     }
 
+    const NotationProperties &properties(m_notationView->getProperties());
+
     int elementsPositioned = 0;
     int elementsRendered = 0; // diagnostic
     
@@ -434,9 +433,7 @@ NotationStaff::positionElements(timeT from, timeT to)
 	    }
 	}
 
-	bool selected = false;
-	(void)((*it)->event()->get<Bool>(m_properties.SELECTED, selected));
-
+	bool selected = isSelected(it); 
 	bool needNewSprite = (selected != (*it)->isSelected());
 
 	if (!(*it)->getCanvasItem()) {
@@ -462,7 +459,7 @@ NotationStaff::positionElements(timeT from, timeT to)
 
 		bool spanning = false;
 		(void)((*it)->event()->get<Bool>
-		       (m_properties.BEAMED, spanning));
+		       (properties.BEAMED, spanning));
 		if (!spanning) {
 		    (void)((*it)->event()->get<Bool>(TIED_FORWARD, spanning));
 		}
@@ -667,12 +664,14 @@ NotationStaff::elementShiftedOnly(NotationElementList::iterator i)
     return ok;
 }
 
+
 void
 NotationStaff::renderSingleElement(NotationElement *elt,
 				   NotationElement *nextElt,
 				   const Rosegarden::Clef &currentClef,
 				   bool selected)
 {
+    const NotationProperties &properties(m_notationView->getProperties());
     static NotePixmapParameters restParams(Note::Crotchet, 0);
 
     try {
@@ -705,9 +704,11 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 
 	} else if (elt->isRest()) {
 
-	    timeT absTime = m_legatoQuantizer->getQuantizedAbsoluteTime
+	    timeT absTime = 
+		m_notationView->getLegatoQuantizer()->getQuantizedAbsoluteTime
 		(elt->event());
-	    timeT duration = m_legatoQuantizer->getQuantizedDuration
+	    timeT duration =
+		m_notationView->getLegatoQuantizer()->getQuantizedDuration
 		(elt->event());
 
 	    // We ignore any rest which has a quantized duration of
@@ -718,8 +719,8 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 	    if (!ignoreRest) {
 		if (nextElt) {
 		    timeT nextTime =
-			m_legatoQuantizer->getQuantizedAbsoluteTime
-			(nextElt->event());
+			m_notationView->getLegatoQuantizer()->
+			getQuantizedAbsoluteTime(nextElt->event());
 		    if (nextTime - absTime
 			< Note(Note::Shortest).getDuration()) {
 			ignoreRest = true;
@@ -730,8 +731,8 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 	    if (!ignoreRest) {
 
 		Note::Type note =
-		    elt->event()->get<Int>(m_properties.NOTE_TYPE);
-		int dots = elt->event()->get<Int>(m_properties.NOTE_DOTS);
+		    elt->event()->get<Int>(properties.NOTE_TYPE);
+		int dots = elt->event()->get<Int>(properties.NOTE_DOTS);
 		restParams.setNoteType(note);
 		restParams.setDots(dots);
 		setTuplingParameters(elt, restParams);
@@ -817,9 +818,9 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 		long dy = 0;
 		long length = 10;
 		
-		elt->event()->get<Bool>(m_properties.SLUR_ABOVE, above);
-		elt->event()->get<Int>(m_properties.SLUR_Y_DELTA, dy);
-		elt->event()->get<Int>(m_properties.SLUR_LENGTH, length);
+		elt->event()->get<Bool>(properties.SLUR_ABOVE, above);
+		elt->event()->get<Int>(properties.SLUR_Y_DELTA, dy);
+		elt->event()->get<Int>(properties.SLUR_LENGTH, length);
 		
 		pixmap = new QCanvasPixmap
 		    (m_notePixmapFactory->makeSlurPixmap(length, dy, above));
@@ -870,33 +871,34 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 QCanvasSimpleSprite *
 NotationStaff::makeNoteSprite(NotationElement *elt)
 {
+    const NotationProperties &properties(m_notationView->getProperties());
     static NotePixmapParameters params(Note::Crotchet, 0);
 
-    Note::Type note = elt->event()->get<Int>(m_properties.NOTE_TYPE);
-    int dots = elt->event()->get<Int>(m_properties.NOTE_DOTS);
+    Note::Type note = elt->event()->get<Int>(properties.NOTE_TYPE);
+    int dots = elt->event()->get<Int>(properties.NOTE_DOTS);
 
     Accidental accidental = NoAccidental;
-    (void)elt->event()->get<String>(m_properties.DISPLAY_ACCIDENTAL, accidental);
+    (void)elt->event()->get<String>(properties.DISPLAY_ACCIDENTAL, accidental);
 
     bool up = true;
-    (void)(elt->event()->get<Bool>(m_properties.STEM_UP, up));
+    (void)(elt->event()->get<Bool>(properties.STEM_UP, up));
 
     bool flag = true;
-    (void)(elt->event()->get<Bool>(m_properties.DRAW_FLAG, flag));
+    (void)(elt->event()->get<Bool>(properties.DRAW_FLAG, flag));
 
     bool beamed = false;
-    (void)(elt->event()->get<Bool>(m_properties.BEAMED, beamed));
+    (void)(elt->event()->get<Bool>(properties.BEAMED, beamed));
 
     bool shifted = false;
-    (void)(elt->event()->get<Bool>(m_properties.NOTE_HEAD_SHIFTED, shifted));
+    (void)(elt->event()->get<Bool>(properties.NOTE_HEAD_SHIFTED, shifted));
 
     long stemLength = m_notePixmapFactory->getNoteBodyHeight();
-    (void)(elt->event()->get<Int>(m_properties.UNBEAMED_STEM_LENGTH, stemLength));
+    (void)(elt->event()->get<Int>(properties.UNBEAMED_STEM_LENGTH, stemLength));
     
     long heightOnStaff = 0;
     int legerLines = 0;
 
-    (void)(elt->event()->get<Int>(m_properties.HEIGHT_ON_STAFF, heightOnStaff));
+    (void)(elt->event()->get<Int>(properties.HEIGHT_ON_STAFF, heightOnStaff));
     if (heightOnStaff < 0) {
         legerLines = heightOnStaff;
     } else if (heightOnStaff > 8) {
@@ -904,14 +906,14 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
     }
 
     long slashes = 0;
-    (void)(elt->event()->get<Int>(m_properties.SLASHES, slashes));
+    (void)(elt->event()->get<Int>(properties.SLASHES, slashes));
 
     bool quantized = false;
     if (m_colourQuantize && !elt->isTuplet()) {
-	timeT absTime =
-	    m_legatoQuantizer->getQuantizedAbsoluteTime(elt->event());
-	timeT duration =
-	    m_legatoQuantizer->getQuantizedDuration(elt->event());
+	timeT absTime = m_notationView->getLegatoQuantizer()->
+	    getQuantizedAbsoluteTime(elt->event());
+	timeT duration = m_notationView->getLegatoQuantizer()->
+	    getQuantizedDuration(elt->event());
 
 	quantized = (absTime != elt->getAbsoluteTime() ||
 		     duration != elt->getDuration());
@@ -931,7 +933,7 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
     params.setIsOnLine(heightOnStaff % 2 == 0);
     params.removeMarks();
 
-    if (elt->event()->get<Bool>(m_properties.CHORD_PRIMARY_NOTE)) {
+    if (elt->event()->get<Bool>(properties.CHORD_PRIMARY_NOTE)) {
 	long markCount = 0;
 	(void)(elt->event()->get<Int>(MARK_COUNT, markCount));
 	if (markCount == 0) {
@@ -948,7 +950,7 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
     }
 
     long tieLength = 0;
-    (void)(elt->event()->get<Int>(m_properties.TIE_LENGTH, tieLength));
+    (void)(elt->event()->get<Int>(properties.TIE_LENGTH, tieLength));
     if (tieLength > 0) {
         params.setTied(true);
         params.setTieLength(tieLength);
@@ -958,25 +960,25 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
 
     if (beamed) {
 
-        if (elt->event()->get<Bool>(m_properties.CHORD_PRIMARY_NOTE)) {
+        if (elt->event()->get<Bool>(properties.CHORD_PRIMARY_NOTE)) {
 
-            int myY = elt->event()->get<Int>(m_properties.BEAM_MY_Y);
+            int myY = elt->event()->get<Int>(properties.BEAM_MY_Y);
 
             stemLength = myY - (int)elt->getLayoutY();
             if (stemLength < 0) stemLength = -stemLength;
 
             int nextBeamCount =
-                elt->event()->get<Int>(m_properties.BEAM_NEXT_BEAM_COUNT);
+                elt->event()->get<Int>(properties.BEAM_NEXT_BEAM_COUNT);
             int width =
-                elt->event()->get<Int>(m_properties.BEAM_SECTION_WIDTH);
+                elt->event()->get<Int>(properties.BEAM_SECTION_WIDTH);
             int gradient =
-                elt->event()->get<Int>(m_properties.BEAM_GRADIENT);
+                elt->event()->get<Int>(properties.BEAM_GRADIENT);
 
             bool thisPartialBeams(false), nextPartialBeams(false);
             (void)elt->event()->get<Bool>
-                (m_properties.BEAM_THIS_PART_BEAMS, thisPartialBeams);
+                (properties.BEAM_THIS_PART_BEAMS, thisPartialBeams);
             (void)elt->event()->get<Bool>
-                (m_properties.BEAM_NEXT_PART_BEAMS, nextPartialBeams);
+                (properties.BEAM_NEXT_PART_BEAMS, nextPartialBeams);
 
 	    params.setBeamed(true);
             params.setNextBeamCount(nextBeamCount);
@@ -1023,15 +1025,17 @@ void
 NotationStaff::setTuplingParameters(NotationElement *elt,
 				    NotePixmapParameters &params)
 {
+    const NotationProperties &properties(m_notationView->getProperties());
+
     params.setTupletCount(0);
     long tuplingLineY = 0;
-    bool tupled = (elt->event()->get<Int>(m_properties.TUPLING_LINE_MY_Y, tuplingLineY));
+    bool tupled = (elt->event()->get<Int>(properties.TUPLING_LINE_MY_Y, tuplingLineY));
 
     if (tupled) {
 	int tuplingLineWidth =
-	    elt->event()->get<Int>(m_properties.TUPLING_LINE_WIDTH);
+	    elt->event()->get<Int>(properties.TUPLING_LINE_WIDTH);
 	double tuplingLineGradient =
-	    (double)(elt->event()->get<Int>(m_properties.TUPLING_LINE_GRADIENT)) / 100.0;
+	    (double)(elt->event()->get<Int>(properties.TUPLING_LINE_GRADIENT)) / 100.0;
 
 	long tupletCount;
 	if (elt->event()->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT, tupletCount)) {
@@ -1041,6 +1045,14 @@ NotationStaff::setTuplingParameters(NotationElement *elt,
 	    params.setTuplingLineGradient(tuplingLineGradient);
 	}
     }
+}
+
+bool
+NotationStaff::isSelected(NotationElementList::iterator it)
+{
+    const Rosegarden::EventSelection *selection =
+	m_notationView->getCurrentSelection();
+    return selection && selection->contains((*it)->event());
 }
 
 void

@@ -34,13 +34,11 @@ using Rosegarden::Segment;
 using Rosegarden::timeT;
 
 MatrixStaff::MatrixStaff(QCanvas *canvas, Segment *segment,
-			 int id, int vResolution,
-                         const Rosegarden::PropertyName &selectedProperty) :
+			 int id, int vResolution) :
     LinedStaff<MatrixElement>(canvas, segment, id, vResolution, 1),
     m_scaleFactor
         (1.5 / Rosegarden::Note(Rosegarden::Note::Shortest).getDuration()),
-    m_elementColour(0),
-    m_selectedProperty(selectedProperty)
+    m_elementColour(0)
 {
 
     // Create a velocity colouring object
@@ -111,9 +109,15 @@ void MatrixStaff::positionElement(MatrixElement* el)
 
     // Is the event currently selected?  Colour accordingly.
     //
+
+/*!!! This property is no longer set -- need to get hold of the
+      current EventSelection from somewhere and test whether
+      selection->contains(el->event())
+
     if (el->event()->has(m_selectedProperty))
         el->setColour(RosegardenGUIColours::SelectedElement);
-    else
+    else*/
+
         el->setColour(m_elementColour->getColour(velocity));
 
     el->setCanvasX(coords.first);

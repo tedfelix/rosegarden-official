@@ -29,8 +29,6 @@ const Rosegarden::PropertyName NotationProperties::SLASHES	      = "Slashes";
 
 NotationProperties::NotationProperties(const std::string &prefix) :
 
-    SELECTED			(prefix + "Selected"),
-
     MIN_WIDTH			(prefix + "MinWidth"),
 
     CALCULATED_ACCIDENTAL	(prefix + "NoteCalculatedAccidental"),

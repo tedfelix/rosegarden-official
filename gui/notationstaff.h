@@ -32,6 +32,7 @@ namespace Rosegarden { class Quantizer; class Progress; }
 
 class QCanvasSimpleSprite;
 class NotationProperties;
+class NotationView;
 
 
 /**
@@ -54,8 +55,7 @@ public:
      * \a id is the id of the staff in the NotationView
      */
     NotationStaff(QCanvas *, Rosegarden::Segment *, int id,
-		  Rosegarden::Quantizer *legatoQuantizer,
-		  const NotationProperties &properties,
+		  NotationView *view,
 		  bool pageMode, double pageWidth,
                   std::string fontName, int resolution);
     virtual ~NotationStaff();
@@ -305,6 +305,8 @@ protected:
      */
     virtual bool elementShiftedOnly(NotationElementList::iterator);
 
+    bool isSelected(NotationElementList::iterator);
+
     typedef std::set<QCanvasSimpleSprite *> SpriteSet;
     SpriteSet m_timeSigs;
 
@@ -320,8 +322,7 @@ protected:
     NotePixmapFactory *m_graceNotePixmapFactory;
     QCanvasSimpleSprite *m_previewSprite;
     QCanvasSimpleSprite *m_staffName;
-    Rosegarden::Quantizer *m_legatoQuantizer;
-    const NotationProperties &m_properties;
+    NotationView *m_notationView;
     Rosegarden::Progress *m_progress;
     bool m_colourQuantize;
 };
