@@ -461,6 +461,28 @@ TrackButtons::slotSetTrackMeter(double value, int position)
     }
 }
 
+// For all Track meters get their position and from that
+// value work out their Track and hence Instrument and
+// equate that to the Instrument we're setting.
+//
+void
+TrackButtons::slotSetMetersByInstrument(double value,
+                                        Rosegarden::InstrumentId id)
+{
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    Rosegarden::Track *track;
+
+    std::vector<TrackVUMeter*>::iterator it = m_trackMeters.begin();
+    
+    for (; it != m_trackMeters.end(); it++)
+    {
+        track = comp.getTrackByPosition((*it)->getPosition());
+
+        if (track !=0 && track->getInstrument() == id)
+            (*it)->setLevel(value);
+    }
+}
+
 
 void
 TrackButtons::slotInstrumentSelection(int position)

@@ -24,9 +24,9 @@
 
 // Used as a transformation stage between Composition, Events and output
 // at the Sequencer this class and MidiComposition eliminate the notion
-// of the Segment for ease of Event access.  The MappedEvents are ready
-// for playing and whatever else they might want to do internally in the
-// application.
+// of the Segment and Track for ease of Event access.  The MappedEvents
+// are ready for playing or routing through an Instrument or Effects
+// boxes
 //
 // MappedEvents can also represent instructions for playback of audio
 // samples - if the m_type is Audio then the sequencer will attempt to
@@ -67,8 +67,7 @@ public:
     MappedEvent(const Event &e,
                 const Rosegarden::RealTime &eventTime,
                 const Rosegarden::RealTime &duration,
-                const Rosegarden::InstrumentId &instrument,
-                const Rosegarden::TrackId &track);
+                const Rosegarden::InstrumentId &instrument);
 
     // A shortcut for creating MIDI/Internal MappedEvents
     // from base properties
@@ -77,16 +76,14 @@ public:
                 const Rosegarden::RealTime &absTime,
                 const Rosegarden::RealTime &duration,
                 const velocityT &velocity,
-                const Rosegarden::InstrumentId &instrument,
-                const Rosegarden::TrackId &track):
+                const Rosegarden::InstrumentId &instrument):
         m_pitch(pitch),
         m_eventTime(absTime),
         m_duration(duration),
         m_audioStartMarker(Rosegarden::RealTime(0,0)),
         m_velocity(velocity),
         m_type(Internal),
-        m_instrument(instrument),
-        m_track(track) {;}
+        m_instrument(instrument) {;}
 
     // A general MappedEvent constructor for any MappedEvent type
     //
@@ -96,7 +93,6 @@ public:
                 const Rosegarden::RealTime &audioStartMarker,
                 const velocityT &velocity,
                 const Rosegarden::InstrumentId &instrument,
-                const Rosegarden::TrackId &track,
                 const MappedEventType &type):
         m_pitch(pitch),
         m_eventTime(absTime),
@@ -104,8 +100,7 @@ public:
         m_audioStartMarker(audioStartMarker),
         m_velocity(velocity),
         m_type(type),
-        m_instrument(instrument),
-        m_track(track) {;}
+        m_instrument(instrument) {;}
 
     // Audio MappedEvent shortcut constructor
     //
@@ -113,15 +108,13 @@ public:
                 const Rosegarden::RealTime &duration,
                 const Rosegarden::RealTime &audioStartMarker,
                 const Rosegarden::InstrumentId &instrument,
-                const Rosegarden::TrackId &track,
                 const int &id):
          m_pitch(id),
          m_eventTime(eventTime),
          m_duration(duration),
          m_audioStartMarker(audioStartMarker),
          m_type(Audio),
-         m_instrument(instrument),
-         m_track(track) {;}
+         m_instrument(instrument) {;}
 
     // Copy
     //
@@ -132,8 +125,7 @@ public:
         m_audioStartMarker(getAudioStartMarker()),
         m_velocity(getVelocity()),
         m_type(getType()),
-        m_instrument(getInstrument()),
-        m_track(getTrack()) {;}
+        m_instrument(getInstrument()) {;}
                 
     ~MappedEvent() {;}
 
@@ -155,13 +147,6 @@ public:
     //
     void setVelocity(const velocityT &v) { m_velocity = v; }
     velocityT getVelocity() const { return m_velocity; }
-
-    // Track (used for visual feedback as we can get all playback
-    // information from the Instrument)
-    //
-    void setTrack(const TrackId &track) { m_track = track; }
-    TrackId getTrack() const { return m_track; }
-
 
     // Pitch - keep with MIDI limits when setting
     //
@@ -216,7 +201,6 @@ private:
     velocityT                m_velocity;
     MappedEventType          m_type;
     Rosegarden::InstrumentId m_instrument;
-    Rosegarden::TrackId      m_track;
 
 };
 

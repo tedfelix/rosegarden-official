@@ -253,12 +253,14 @@ void RosegardenGUIView::deleteRecordingSegmentItem()
 }
 
 
-// Send a MappedEvent to the track meter
+// Send a MappedEvent to the track meters by Instrument id
 //
 void RosegardenGUIView::showVisuals(const Rosegarden::MappedEvent *mE)
 {
     double value = ((double)mE->getVelocity()) / 127.0;
-    m_trackEditor->getTrackButtons()->slotSetTrackMeter(value, mE->getTrack());
+
+    m_trackEditor->getTrackButtons()->
+        slotSetMetersByInstrument(value, mE->getInstrument());
 }
 
 

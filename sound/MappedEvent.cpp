@@ -28,16 +28,14 @@ namespace Rosegarden
 MappedEvent::MappedEvent(const Event &e,
                          const Rosegarden::RealTime &eventTime,
                          const Rosegarden::RealTime &duration,
-                         const Rosegarden::InstrumentId &instrument,
-                         const Rosegarden::TrackId &track):
+                         const Rosegarden::InstrumentId &instrument):
        m_pitch(e.get<Int>(BaseProperties::PITCH)),
        m_eventTime(eventTime),
        m_duration(duration),
        m_audioStartMarker(0, 0),
        m_velocity(127),
        m_type(Internal),
-       m_instrument(instrument),
-       m_track(track)
+       m_instrument(instrument)
 {
     if (e.has(BaseProperties::VELOCITY)) {
 

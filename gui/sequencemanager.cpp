@@ -157,7 +157,6 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
                                                 startTime,
                                                 duration,
                                                 instrument,
-                                                track,
                                                 (*it)->getAudioFileID());
             m_mC.insert(me);
             continue; // next Segment
@@ -286,7 +285,7 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 	    // 
 	    Rosegarden::MappedEvent *mE =
 		new Rosegarden::MappedEvent(**j, eventTime, duration,
-					    instrument, track);
+					    instrument);
 
 	    // Add any performance transposition
 	    // 
@@ -893,8 +892,7 @@ SequenceManager::insertMetronomeClicks(const timeT &sliceStart,
                                         comp.getElapsedRealTime(barStart.first),
                                         m_metronomeDuration,
                                         m_metronomeBarVelocity,
-                                        m_metronomeInstrument,
-                                        m_metronomeTrack);
+                                        m_metronomeInstrument);
         m_mC.insert(me);
     }
     else if (barEnd.first >= sliceStart && barEnd.first <= sliceEnd)
@@ -903,8 +901,7 @@ SequenceManager::insertMetronomeClicks(const timeT &sliceStart,
                                           comp.getElapsedRealTime(barEnd.first),
                                           m_metronomeDuration,
                                           m_metronomeBarVelocity,
-                                          m_metronomeInstrument,
-                                          m_metronomeTrack);
+                                          m_metronomeInstrument);
         m_mC.insert(me);
     }
 
@@ -924,8 +921,7 @@ SequenceManager::insertMetronomeClicks(const timeT &sliceStart,
                                              comp.getElapsedRealTime(i),
                                              m_metronomeDuration,
                                              m_metronomeBeatVelocity,
-                                             m_metronomeInstrument,
-                                             m_metronomeTrack);
+                                             m_metronomeInstrument);
             m_mC.insert(me);
         }
     }

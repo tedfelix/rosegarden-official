@@ -24,6 +24,7 @@
 #define _TRACKBUTTONS_H_
 
 #include <vector>
+#include "Instrument.h"
 
 #include <qframe.h>
 #include <qpopupmenu.h>
@@ -94,6 +95,7 @@ public slots:
     void slotLabelSelected(int id);
     void slotRenameTrack(QString newName, int trackNumber);
     void slotSetTrackMeter(double value, int position);
+    void slotSetMetersByInstrument(double value, Rosegarden::InstrumentId id);
 
     void slotInstrumentSelection(int);
     void slotInstrumentPopupActivated(int);
