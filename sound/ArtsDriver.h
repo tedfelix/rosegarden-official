@@ -96,17 +96,17 @@ public:
 
     // Plugin instance management - do nothing for the moment
     //
-    virtual void setPluginInstance(InstrumentId id,
-                                   unsigned long pluginId,
-                                   int position) {;}
+    virtual void setPluginInstance(InstrumentId /*id*/,
+                                   unsigned long /*pluginId*/,
+                                   int /*position*/) {;}
 
-    virtual void removePluginInstance(InstrumentId id, int position) {;}
+    virtual void removePluginInstance(InstrumentId /*id*/,
+                                      int /*position*/) {;}
 
-    virtual void setPluginInstancePortValue(InstrumentId id,
-                                            int position,
-                                            unsigned long portNumber,
-                                            float value) {;}
-
+    virtual void setPluginInstancePortValue(InstrumentId /*id*/,
+                                            int /*position*/,
+                                            unsigned long /*portNumber*/,
+                                            float /*value*/) {;}
 
 protected:
     virtual void generateInstruments();
