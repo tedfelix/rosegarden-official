@@ -23,10 +23,10 @@
 
 #include <set>
 #include <map>
-#include <iostream>
 
 #include "FastVector.h"
 
+#include "RealTime.h"
 #include "Segment.h"
 #include "Quantizer.h"
 #include "Instrument.h"
@@ -35,50 +35,6 @@
 
 namespace Rosegarden 
 {
-
-struct RealTime
-{
-    long sec;
-    long usec;
-
-    RealTime(): sec(0), usec(0) {;}
-    RealTime(long s, long u);
-
-    RealTime(const RealTime &r) :
-	sec(r.sec), usec(r.usec) { }
-
-    RealTime &operator=(const RealTime &r) {
-	sec = r.sec; usec = r.usec; return *this;
-    }
-
-    RealTime operator+(const RealTime &r) const {
-	return RealTime(sec + r.sec, usec + r.usec);
-    }
-    RealTime operator-(const RealTime &r) const {
-	return RealTime(sec - r.sec, usec - r.usec);
-    }
-
-    bool operator <(const RealTime &r) const {
-	if (sec == r.sec) return usec < r.usec;
-	else return sec < r.sec;
-    }
-
-    bool operator >(const RealTime &r) const {
-	if (sec == r.sec) return usec > r.usec;
-	else return sec > r.sec;
-    }
-
-    bool operator==(const RealTime &r) const {
-        if (sec == r.sec && usec == r.usec) return true;
-        else return false;
-    }
-};
-
-inline std::ostream &operator<<(std::ostream &out, const RealTime &rt) {
-    out << rt.sec << "." << rt.usec << "R";
-    return out;
-}
-    
 
 typedef std::map<int, Instrument*> instrumentcontainer;
 typedef std::map<int, Track*> trackcontainer;

@@ -565,31 +565,6 @@ SegmentNotationHelper::setInsertedNoteGroup(Event *e, iterator i)
 	}
 	++i;
     }
-/*!!!
-    if (i == end() || !((*i)->isa(Note::EventType))) {
-	cerr << "SegmentNotationHelper::setInsertedNoteGroup: i no good" << endl;
-	return;
-    }
-
-    iterator j = segment().findContiguousPrevious(i);
-
-    cerr << "\n i is" << endl;
-    (*i)->dump(cerr);
-    cerr << "\n j is" << endl;
-    if (j != end()) (*j)->dump(cerr);
-    else cerr << "end" << endl;
-
-    if ((*i)->has(BEAMED_GROUP_ID) &&
-        (j == end() || ((*j)->has(BEAMED_GROUP_ID) &&
-			(*i)->get<Int>(BEAMED_GROUP_ID) ==
-			(*j)->get<Int>(BEAMED_GROUP_ID)))) {
-
-        e->setMaybe<Int>(BEAMED_GROUP_ID,
-                         (*i)->get<Int>(BEAMED_GROUP_ID));
-        e->set<String>(BEAMED_GROUP_TYPE,
-                       (*i)->get<String>(BEAMED_GROUP_TYPE));
-    }
-*/
 }
 
 
@@ -739,10 +714,6 @@ void SegmentNotationHelper::autoBeam(iterator from, iterator to, string type)
 
 	timeT t = (*from)->getAbsoluteTime();
 
-/*!!!
-	iterator barStart = segment().findStartOfBar(t);
-	iterator barEnd = segment().findStartOfNextBar(t);
-*/
 	iterator barStart =
 	    segment().findTime(segment().getBarStart(t));
 	iterator barEnd = 
@@ -750,12 +721,7 @@ void SegmentNotationHelper::autoBeam(iterator from, iterator to, string type)
 
 	TimeSignature timeSig =
 	    segment().getComposition()->getTimeSignatureAt(t);
-//!!!	segment().findTimeSignatureAt(t, timeSig);
 
-//	cerr << "SegmentNotationHelper::autoBeam: t is " << t << "; from time " <<
-//	    (*barStart)->getAbsoluteTime() << " to time " <<
-//	    (barEnd == end() ? -1 : (*barEnd)->getAbsoluteTime()) << endl;
- 
 	autoBeamBar(barStart, barEnd, timeSig, type);
 	
 	if (barEnd == end() ||

@@ -8,7 +8,7 @@ libbase_la_LDFLAGS = $(all_libraries)
 INCLUDES= $(all_includes)
 
 libbase_la_SOURCES = AnalysisTypes.C \
-             BaseProperties.C \
+	             BaseProperties.C \
 		     Composition.C \
 		     CompositionAdapter.C \
 		     Equation.C \
@@ -18,6 +18,7 @@ libbase_la_SOURCES = AnalysisTypes.C \
                      Property.C \
 		     PropertyName.C \
 		     Quantizer.C \
+		     RealTime.C \
 		     Segment.C \
 		     SegmentNotationHelper.C \
 		     SegmentPerformanceHelper.C \

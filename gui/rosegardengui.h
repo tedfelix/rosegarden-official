@@ -418,6 +418,12 @@ public slots:
 
 
     /**
+     * timeT version of the same
+     */
+    void setPointerPosition(Rosegarden::timeT t);
+
+
+    /**
      * Transport controls
      */
     void play();

@@ -40,13 +40,13 @@ Post-0.1.1 task list
     [DONE]
 
 11. Complete the plugging-in and testing of the notationview
-    position-pointer stuff
+    position-pointer stuff [DONE]
 
 12. Investigate why making a beamed group doesn't always work (not all
     notes end up beamed)
 
 13. Restore correct note stem lengths to beamed groups (following
-    change to which note in a chord is primary)
+    change to which note in a chord is primary) [DONE]
 
 14. Why does it crash when I try to delete a slur?  Sure, deleting
     slurs probably isn't implemented yet, but that doesn't excuse
@@ -69,7 +69,11 @@ Post-0.1.1 task list
 17. Fix storage for bars, time sigs, tempo events in Composition
     (new Segment-a-like as per email) [DONE]
 
-18. Real-time timestamps only in mapped classes
+18. Real-time timestamps only in mapped classes [moved to rwb]
+
+19. XML files to use absoluteTime attribute instead of resync element;
+    add an offset attribute giving time between end of last event and
+    start of this one; make XML output actually use them
 
 
 Task list from 18/19th August meetings

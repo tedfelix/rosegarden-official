@@ -49,21 +49,6 @@ const PropertyName Composition::TempoProperty = "BeatsPerHour";
 const PropertyName Composition::TempoTimestampSecProperty = "TimestampSec";
 const PropertyName Composition::TempoTimestampUsecProperty = "TimestampUsec";
 
-RealTime::RealTime(long s, long u) :
-    sec(s), usec(u)
-{
-    if (sec == 0) {
-	while (usec <= -1000000) { usec += 1000000; --sec; }
-	while (usec >=  1000000) { usec -= 1000000; ++sec; }
-    } else if (sec < 0) {
-	while (usec <= -1000000) { usec += 1000000; --sec; }
-	while (usec > 0) { usec -= 1000000; ++sec; }
-    } else { 
-	while (usec >= 1000000) { usec -= 1000000; ++sec; }
-	while (usec < 0) { usec += 1000000; --sec; }
-    }
-}
-
 
 bool
 Composition::ReferenceSegmentEventCmp::operator()(const Event &e1,

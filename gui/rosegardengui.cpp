@@ -1170,6 +1170,18 @@ void RosegardenGUIApp::setPointerPosition(const long &posSec,
     m_transport->displayTime(rT);
 }
 
+void RosegardenGUIApp::setPointerPosition(timeT t)
+{
+    // set the composition time
+    m_doc->getComposition().setPosition(t);
+
+    // and the gui time
+    m_view->setPointerPosition(t);
+
+    // and the time
+    m_transport->displayTime(m_doc->getComposition().getElapsedRealTime(t));
+}
+
 void RosegardenGUIApp::play()
 {
 
@@ -1326,21 +1338,20 @@ void RosegardenGUIApp::rewind()
     Rosegarden::Composition &composition = m_doc->getComposition();
 
     timeT position = composition.getPosition();
-    cerr<<"RosegardenGUIApp::rewind:position="<<position<<endl;
     
     // want to cope with bars beyond the actual end of the piece
     int barNumber = composition.getBarNumber(position - 1, false);
-    Rosegarden::RealTime jumpTo = composition.getElapsedRealTime(composition.getBarRange(barNumber, false).first);
+    timeT newPosition = composition.getBarRange(barNumber, false).first;
 
     if ( m_transportStatus == PLAYING ||
          m_transportStatus == RECORDING_MIDI ||
          m_transportStatus == RECORDING_AUDIO )
     {
-        sendSequencerJump(jumpTo);
+        sendSequencerJump(composition.getElapsedRealTime(newPosition));
     }
     else
     {
-        setPointerPosition(jumpTo);
+        setPointerPosition(newPosition);
     }
 }
 
@@ -1353,11 +1364,8 @@ void RosegardenGUIApp::fastforward()
 
     timeT position = composition.getPosition() + 1;
 
-    cerr<<"RosegardenGUIApp::fastforward:position="<<position<<endl;
-
     int barNumber = composition.getBarNumber(position, false);
-    Rosegarden::RealTime jumpTo = composition.getElapsedRealTime(composition.getBarRange(barNumber + 1, false).first);
-
+    timeT newPosition = composition.getBarRange(barNumber + 1, false).first;
 
     // we need to work out where the trackseditor finishes so we
     // don't skip beyond it.  Generally we need extra-Composition
@@ -1368,11 +1376,11 @@ void RosegardenGUIApp::fastforward()
          m_transportStatus == RECORDING_MIDI ||
          m_transportStatus == RECORDING_AUDIO )
     {
-        sendSequencerJump(jumpTo);
+        sendSequencerJump(composition.getElapsedRealTime(newPosition));
     }
     else
     {
-        setPointerPosition(jumpTo);
+        setPointerPosition(newPosition);
     }
 
 }
