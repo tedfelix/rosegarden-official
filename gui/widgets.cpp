@@ -113,6 +113,16 @@ RosegardenSpinBox::mapTextToValue(bool * /*ok*/)
 }
 
 
+RosegardenParameterBox::RosegardenParameterBox(int strips,
+                                               Orientation orientation,
+                                               QString label,
+					       QWidget *parent,
+					       const char *name) :
+    QGroupBox(strips, orientation, label, parent, name)
+{
+    init();
+}
+
 RosegardenParameterBox::RosegardenParameterBox(QString label,
 					       QWidget *parent,
 					       const char *name) :
@@ -149,7 +159,11 @@ RosegardenParameterBox::RosegardenParameterBox(QString label,
 	m_font.setPointSize(plainSize * 9 / 10);
     }
 */
+    init();
+}
 
+void RosegardenParameterBox::init()
+{
     QFont plainFont;
     plainFont.setPointSize(plainFont.pointSize() * 9 / 10);
     m_font = plainFont;
