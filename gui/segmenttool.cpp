@@ -297,7 +297,7 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
 
 int SegmentPencil::handleMouseMove(QMouseEvent *e)
 {
-    if (!m_currentItem) return NoFollow;
+    if (!m_currentItem) return RosegardenCanvasView::NoFollow;
 
     m_canvas->setSnapGrain(false);
 
@@ -332,7 +332,7 @@ int SegmentPencil::handleMouseMove(QMouseEvent *e)
 
     m_canvas->slotUpdate();
 
-    return FollowHorizontal;
+    return RosegardenCanvasView::FollowHorizontal;
 }
 
 //////////////////////////////
@@ -373,7 +373,7 @@ void SegmentEraser::handleMouseButtonRelease(QMouseEvent*)
 
 int SegmentEraser::handleMouseMove(QMouseEvent*)
 {
-    return NoFollow;
+    return RosegardenCanvasView::NoFollow;
 }
 
 //////////////////////////////
@@ -539,7 +539,7 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
         if (selector)
             m_selectedItems = selector->getSegmentItemList();
         else
-            return NoFollow;
+            return RosegardenCanvasView::NoFollow;
 	
 	for (it = m_selectedItems->begin();
 	     it != m_selectedItems->end();
@@ -614,10 +614,10 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
         m_canvas->setTextFloat(guideX + 10, guideY - 30, posString);
 	m_canvas->canvas()->update();
 
-	return FollowHorizontal | FollowVertical;
+	return RosegardenCanvasView::FollowHorizontal | RosegardenCanvasView::FollowVertical;
     }
 
-    return NoFollow;
+    return RosegardenCanvasView::NoFollow;
 }
 
 //////////////////////////////
@@ -712,7 +712,7 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent*)
 
 int SegmentResizer::handleMouseMove(QMouseEvent *e)
 {
-    if (!m_currentItem) return NoFollow;
+    if (!m_currentItem) return RosegardenCanvasView::NoFollow;
 
     // Don't allow Audio segments to resize yet
     //
@@ -721,7 +721,7 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
         m_currentItem = 0;
         KMessageBox::information(m_canvas,
                 i18n("You can't yet resize an audio segment!"));
-        return NoFollow;
+        return RosegardenCanvasView::NoFollow;
     }
 
     m_canvas->setSnapGrain(true);
@@ -774,7 +774,7 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
 
     m_canvas->canvas()->update();
 
-    return FollowHorizontal;
+    return RosegardenCanvasView::FollowHorizontal;
 }
 
 bool SegmentResizer::cursorIsCloseEnoughToEdge(SegmentItem* p, const QPoint &coord,
@@ -1260,7 +1260,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
             if (m_segmentAddMode)
             { 
                 emit selectedSegments(getSelectedSegments());
-                return FollowHorizontal | FollowVertical;
+                return RosegardenCanvasView::FollowHorizontal | RosegardenCanvasView::FollowVertical;
             }
 
             // Check for unselected items with this piece of crap
@@ -1296,7 +1296,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
                 emit selectedSegments(getSelectedSegments());
             }
         }
-        return FollowHorizontal | FollowVertical;
+        return RosegardenCanvasView::FollowHorizontal | RosegardenCanvasView::FollowVertical;
     }
 
     m_canvas->viewport()->setCursor(Qt::sizeAllCursor);
@@ -1415,7 +1415,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 	m_canvas->canvas()->update();
     }
 
-    return FollowHorizontal | FollowVertical;
+    return RosegardenCanvasView::FollowHorizontal | RosegardenCanvasView::FollowVertical;
 }
 
 //////////////////////////////
@@ -1509,13 +1509,13 @@ SegmentSplitter::handleMouseMove(QMouseEvent *e)
     {
         m_canvas->viewport()->setCursor(Qt::blankCursor);
         drawSplitLine(e);
-	return FollowHorizontal;
+	return RosegardenCanvasView::FollowHorizontal;
     }
     else
     {
         m_canvas->viewport()->setCursor(Qt::splitHCursor);
         m_canvas->slotHideSplitLine();
-	return NoFollow;
+	return RosegardenCanvasView::NoFollow;
     }
 }
 
@@ -1579,7 +1579,7 @@ SegmentJoiner::handleMouseButtonRelease(QMouseEvent*)
 int
 SegmentJoiner::handleMouseMove(QMouseEvent*)
 {
-    return NoFollow;
+    return RosegardenCanvasView::NoFollow;
 }
 
 void

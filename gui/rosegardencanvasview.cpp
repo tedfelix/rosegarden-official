@@ -38,7 +38,11 @@ RosegardenCanvasView::RosegardenCanvasView(QCanvas* canvas,
       m_smoothScrollTimeInterval(DefaultSmoothScrollTimeInterval),
       m_minDeltaScroll(DefaultMinDeltaScroll),
       m_autoScrollTime(InitialScrollTime),
-      m_autoScrollAccel(InitialScrollAccel)
+      m_autoScrollAccel(InitialScrollAccel),
+      m_autoScrollXMargin(0),
+      m_autoScrollYMargin(0),
+      m_currentScrollDirection(None),
+      m_scrollDirectionConstraint(NoFollow)
 {
     setDragAutoScroll(true);
     connect( &m_autoScrollTimer, SIGNAL( timeout() ),
@@ -106,6 +110,7 @@ void RosegardenCanvasView::stopAutoScroll()
 {
     m_autoScrollTimer.stop();
     m_minDeltaScroll = DefaultMinDeltaScroll;
+    m_currentScrollDirection = None;
 }
 
 void RosegardenCanvasView::doAutoScroll()
@@ -113,28 +118,34 @@ void RosegardenCanvasView::doAutoScroll()
     QPoint p = viewport()->mapFromGlobal( QCursor::pos() );
 
     m_autoScrollTimer.start( m_autoScrollTime );
-
-//     if ( m_autoScrollAccel-- <= 0 && m_autoScrollTime ) {
-//         m_autoScrollAccel = InitialScrollAccel;
-//         m_autoScrollTime--;
-//         m_autoScrollTimer.start( m_autoScrollTime );
-//     }
+    ScrollDirection scrollDirection = None;
 
     int dx = 0, dy = 0;
-    if ( p.y() < m_autoScrollYMargin ) {
-        dy = -m_minDeltaScroll;
-    } else if ( p.y() > visibleHeight() - m_autoScrollYMargin ) {
-        dy = +m_minDeltaScroll;
+    if (m_scrollDirectionConstraint & FollowVertical) {
+        if ( p.y() < m_autoScrollYMargin ) {
+            dy = -m_minDeltaScroll;
+            scrollDirection = Left;
+        } else if ( p.y() > visibleHeight() - m_autoScrollYMargin ) {
+            dy = +m_minDeltaScroll;
+            scrollDirection = Right;
+        }
     }
-    if ( p.x() < m_autoScrollXMargin ) {
-        dx = -m_minDeltaScroll;
-    } else if ( p.x() > visibleWidth() - m_autoScrollXMargin ) {
-        dx = +m_minDeltaScroll;
+    if (m_scrollDirectionConstraint & FollowHorizontal) {
+        if ( p.x() < m_autoScrollXMargin ) {
+            dx = -m_minDeltaScroll;
+            scrollDirection = Top;
+        } else if ( p.x() > visibleWidth() - m_autoScrollXMargin ) {
+            dx = +m_minDeltaScroll;
+            scrollDirection = Bottom;
+        }
     }
-    if ( dx || dy ) {
+    
+    if ( (dx || dy) &&
+         ((scrollDirection == m_currentScrollDirection) || (m_currentScrollDirection == None)) ) {
         scrollBy(dx,dy);
         m_minDeltaScroll *= 1.08;
 	if (m_minDeltaScroll > 60) m_minDeltaScroll = 60;
+        m_currentScrollDirection = scrollDirection;
     } else {
         stopAutoScroll();
     }
@@ -359,6 +370,10 @@ void RosegardenCanvasView::updateBottomWidgetGeometry()
         emit bottomWidgetHeightChanged(bottomWidgetHeight);
         m_currentBottomWidgetHeight = bottomWidgetHeight;
     }
+
+    RG_DEBUG << "RosegardenCanvasView::updateBottomWidgetGeometry() : hsb range : "
+             << horizontalScrollBar()->minValue()
+             << "-" << horizontalScrollBar()->maxValue() << endl;
     
 }
 

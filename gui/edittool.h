@@ -65,15 +65,6 @@ class BaseTool : public QObject
 
 public:
 
-    /**
-     * handleMouseMove() will return a OR-ed combination of these
-     */
-    enum {
-        NoFollow = 0x0,
-        FollowHorizontal = 0x1,
-        FollowVertical = 0x2
-    };
-
     virtual ~BaseTool();
 
     /**

@@ -1446,8 +1446,9 @@ void SegmentCanvas::contentsMouseMoveEvent(QMouseEvent* e)
     if (!m_tool) return;
 
     int follow = m_tool->handleMouseMove(e);
+    setScrollDirectionConstraint(follow);
     
-    if (follow != SegmentTool::NoFollow) {
+    if (follow != RosegardenCanvasView::NoFollow) {
         doAutoScroll();
 
 //         if (follow & EditTool::FollowHorizontal) {

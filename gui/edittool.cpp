@@ -26,7 +26,7 @@
 
 #include "edittool.h"
 #include "editview.h"
-
+#include "rosegardencanvasview.h"
 #include "rosestrings.h"
 #include "rosedebug.h"
 
@@ -178,7 +178,7 @@ void EditTool::handleMouseDoubleClick(Rosegarden::timeT,
 
 int EditTool::handleMouseMove(Rosegarden::timeT, int, QMouseEvent*)
 {
-    return NoFollow;
+    return RosegardenCanvasView::NoFollow;
 }
 
 void EditTool::handleMouseRelease(Rosegarden::timeT, int, QMouseEvent*)

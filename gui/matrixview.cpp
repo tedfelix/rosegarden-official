@@ -1242,6 +1242,7 @@ void MatrixView::slotMousePressed(Rosegarden::timeT time, int pitch,
     if (curSegmentStartTime > time) time=curSegmentStartTime;
 
     m_tool->handleMousePress(time, pitch, 0, e, el);
+    getCanvasView()->startAutoScroll();
 
     // play a preview
     //playPreview(pitch);
@@ -1261,16 +1262,18 @@ void MatrixView::slotMouseMoved(Rosegarden::timeT time, int pitch, QMouseEvent* 
     else 
     {
         int follow = m_tool->handleMouseMove(time, pitch, e);
+        getCanvasView()->setScrollDirectionConstraint(follow);
         
-        if (getCanvasView()->isTimeForSmoothScroll()) {
-            
-            if (follow & EditTool::FollowHorizontal) {
-                getCanvasView()->slotScrollHorizSmallSteps(e->x());
-            }
+        if (follow != RosegardenCanvasView::NoFollow) {
+            getCanvasView()->doAutoScroll();
 
-            if (follow & EditTool::FollowVertical) {
-                getCanvasView()->slotScrollVertSmallSteps(e->y());
-            }
+//             if (follow & RosegardenCanvasView::FollowHorizontal) {
+//                 getCanvasView()->slotScrollHorizSmallSteps(e->x());
+//             }
+
+//             if (follow & RosegardenCanvasView::FollowVertical) {
+//                 getCanvasView()->slotScrollVertSmallSteps(e->y());
+//             }
 
         }
         
@@ -1300,6 +1303,7 @@ void MatrixView::slotMouseReleased(Rosegarden::timeT time, int pitch, QMouseEven
     // send the real event time now (not adjusted for beginning of bar)
     m_tool->handleMouseRelease(time, pitch, e);
     m_previousEvPitch = 0;
+    getCanvasView()->stopAutoScroll();
 }
 
 void
@@ -2298,6 +2302,13 @@ MatrixView::readjustCanvasSize()
 		     (composition->getBarStartForTime
 		      (segment->getStartTime())));
 
+    RG_DEBUG << "MatrixView::readjustCanvasSize() : startX = " 
+             << startX
+             << " endX = " << endX
+             << " endmarkertime : " << segment->getEndMarkerTime()
+             << " barEnd for time : " << composition->getBarEndForTime(segment->getEndMarkerTime())
+             << endl;
+    
     int newWidth = int(getXbyWorldMatrix(endX - startX));
 
     // now get the EditView to do the biz

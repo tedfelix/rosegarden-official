@@ -47,6 +47,16 @@ public:
                          QWidget* parent=0, const char* name=0, WFlags f=0);
 
     /**
+     * EditTool::handleMouseMove() returns a OR-ed combination of these
+     * to indicate which direction to scroll to
+     */
+    enum {
+        NoFollow = 0x0,
+        FollowHorizontal = 0x1,
+        FollowVertical = 0x2
+    };
+
+    /**
      * Sets the canvas width to be exactly the width needed to show
      * all the items
      */
@@ -66,6 +76,11 @@ public:
     void setSmoothScroll(bool s) { m_smoothScroll = s; }
 
     bool isTimeForSmoothScroll();
+
+    void startAutoScroll();
+    void stopAutoScroll();
+
+    void setScrollDirectionConstraint(int d) { m_scrollDirectionConstraint = d; }
 
 public slots:
     /// Update the RosegardenCanvasView after a change of content
@@ -103,6 +118,11 @@ public slots:
      */
     void slotSetScrollPos(const QPoint &);
 
+    /**
+     * @param scrollDirection ORed combination of the NoFollow,FollowHorizontal,FollowVertical
+     */
+    void doAutoScroll();
+
 signals:
     void bottomWidgetHeightChanged(int);
 
@@ -113,14 +133,10 @@ protected:
 
     virtual QScrollBar* getMainHorizontalScrollBar() { return horizontalScrollBar(); }
 
-    void startAutoScroll();
-    void stopAutoScroll();
-protected slots:
-    void doAutoScroll();
-    
-
     //--------------- Data members ---------------------------------
-
+    enum ScrollDirection { None, Top, Bottom, Left, Right };
+    
+        
     QWidget* m_bottomWidget;
     int m_currentBottomWidgetHeight;
 
@@ -134,9 +150,11 @@ protected slots:
     int m_autoScrollTime;
     int m_autoScrollAccel;
     QPoint m_autoScrollStartPoint;
-    int m_autoScrollYMargin;
     int m_autoScrollXMargin;
-    
+    int m_autoScrollYMargin;
+    ScrollDirection m_currentScrollDirection;
+    int m_scrollDirectionConstraint;
+
     static const int DefaultSmoothScrollTimeInterval;
     static const int DefaultMinDeltaScroll;
 

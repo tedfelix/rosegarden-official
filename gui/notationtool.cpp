@@ -269,9 +269,11 @@ NoteInserter::handleMouseMove(Rosegarden::timeT,
 			      int,
 			      QMouseEvent *e)
 {
-    if (!m_clickHappened) return NoFollow;
-    computeLocationAndPreview(e);
-    return NoFollow;
+    if (m_clickHappened) {
+        computeLocationAndPreview(e);
+    }
+    
+    return RosegardenCanvasView::NoFollow;
 }
 
 
@@ -1261,7 +1263,7 @@ void NotationSelector::handleMouseTripleClick(Rosegarden::timeT t,
 int NotationSelector::handleMouseMove(timeT, int,
 				      QMouseEvent* e)
 {
-    if (!m_updateRect) return NoFollow;
+    if (!m_updateRect) return RosegardenCanvasView::NoFollow;
 
     int w = int(e->x() - m_selectionRect->x());
     int h = int(e->y() - m_selectionRect->y());
@@ -1289,7 +1291,7 @@ int NotationSelector::handleMouseMove(timeT, int,
 	m_nParentView->canvas()->update();
     }
 
-    return FollowHorizontal | FollowVertical;
+    return RosegardenCanvasView::FollowHorizontal | RosegardenCanvasView::FollowVertical;
 }
 
 void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)
