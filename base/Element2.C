@@ -1,5 +1,8 @@
 #include "Element2.h"
 
+Element2::Element2()
+{ }
+
 Element2::Element2(const string &package, const string &type)
     : m_package(package), m_type(type)
 { }

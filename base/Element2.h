@@ -134,8 +134,12 @@ class Element2
 private:
 
 public:
+    typedef unsigned int duration;
+
     struct NoData { };
     struct BadType { };
+
+    Element2();
 
     Element2(const string &package, const string &type);
 
@@ -145,8 +149,14 @@ public:
 
     Element2 &operator=(const Element2 &e);
 
+    // Accessors
     const string &getPackage() const { return m_package; }
-    const string &getType() const { return m_type; }
+    const string &getType() const    { return m_type; }
+    void setPackage(const string &p) { m_package = p; }
+    void setType(const string &t)    { m_type = t; }
+
+    duration getDuration() const { return m_duration; }
+    void setDuration(duration d)      { m_duration = d; }
 
     bool has(const string &name) const;
 
@@ -172,6 +182,8 @@ private:
 
     string m_package;
     string m_type;
+    duration m_duration;
+
     //    typedef map<string, PropertyStoreBase *> PropertyMap;
     typedef hash_map<string, PropertyStoreBase*, hashstring, eqstring> PropertyMap;
     typedef PropertyMap::value_type PropertyPair;
