@@ -1239,7 +1239,7 @@ EventEditDialog::addPersistentProperty(const Rosegarden::PropertyName &name)
 Rosegarden::Event
 EventEditDialog::getEvent() const
 {
-    return Event(m_event, m_absoluteTime, m_duration, m_subOrdering);
+    return Rosegarden::Event(m_event, m_absoluteTime, m_duration, m_subOrdering);
 }
 
 
