@@ -204,7 +204,12 @@ protected:
      * Add control ruler
      */
     void addControlRuler(ControlRuler* ruler);
-    
+
+    /**
+     * Update all control rulers
+     */
+    void updateControlRulers();
+
     /**
      * Find the control ruler for the given property name
      * if it's already been created, return 0 otherwise
@@ -274,8 +279,6 @@ protected:
 
     virtual RosegardenCanvasView* getCanvasView();
     virtual void setCanvasView(RosegardenCanvasView *cv);
-
-    ControlRuler* getControlRuler() { return m_controlRuler; }
 
     //--------------- Data members ---------------------------------
 

@@ -29,6 +29,7 @@
 #include <qhbox.h>
 #include <qframe.h>
 
+#include "Selection.h"
 #include "Staff.h"
 #include "controlruler.h"
 #include "colours.h"
@@ -37,15 +38,19 @@
 #include "Segment.h"
 #include "RulerScale.h"
 #include "velocitycolour.h"
+#include "basiccommand.h"
+#include "editviewbase.h"
 
 using Rosegarden::RulerScale;
 using Rosegarden::Segment;
 using Rosegarden::timeT;
 using Rosegarden::PropertyName;
 using Rosegarden::ViewElement;
+using Rosegarden::EventSelection;
+
 
 /**
- * Control Tool
+ * Control Tool - not really used yet
  */
 class ControlTool
 {
@@ -192,7 +197,6 @@ void ControlItem::handleMouseMove(QMouseEvent*, int /*deltaX*/, int deltaY)
     
     setHeight(-absNewHeight);
     setValue(m_controlRuler->heightToValue(getHeight()));
-    updateValue();
     canvas()->update();
 }
 
@@ -272,6 +276,44 @@ void ControlSelector::handleMouseMove(QMouseEvent *e, int, int)
 
 //////////////////////////////////////////////////////////////////////
 
+/**
+ * Command defining a change (property change or similar) from the control ruler
+ */
+class ControlChangeCommand : public BasicCommand
+{
+public:
+
+    ControlChangeCommand(QCanvasItemList selectedItems,
+                         Segment &segment,
+                         Rosegarden::timeT start, Rosegarden::timeT end);
+
+    virtual void modifySegment();
+
+    static QString getGlobalName() { return i18n("&Control Change"); }
+protected:
+
+    QCanvasItemList m_selectedItems;
+};
+
+ControlChangeCommand::ControlChangeCommand(QCanvasItemList selectedItems,
+                                           Segment &segment,
+                                           Rosegarden::timeT start, Rosegarden::timeT end)
+    : BasicCommand(getGlobalName(), segment, start, end, true),
+      m_selectedItems(selectedItems)
+{
+}
+
+
+void ControlChangeCommand::modifySegment()
+{
+    for (QCanvasItemList::Iterator it=m_selectedItems.begin(); it!=m_selectedItems.end(); ++it) {
+        if (ControlItem *item = dynamic_cast<ControlItem*>(*it))
+            item->updateValue();
+    }
+}
+
+//////////////////////////////////////////////////////////////////////
+
 using Rosegarden::Staff;
 using Rosegarden::ViewElementList;
 
@@ -284,13 +326,16 @@ const int ControlRuler::ItemHeightRange = 64;
 ControlRuler::ControlRuler(Rosegarden::PropertyName propertyName,
                            Staff* staff,
                            Rosegarden::RulerScale* rulerScale,
-                           QScrollBar* hsb,
+                           QScrollBar* hsb,                           
+                           EditViewBase* parentView,
                            QCanvas* c, QWidget* parent,
                            const char* name, WFlags f) :
     RosegardenCanvasView(hsb, c, parent, name, f),
     m_propertyName(propertyName),
+    m_parentEditView(parentView),
     m_staff(staff),
     m_rulerScale(rulerScale),
+    m_eventSelection(new EventSelection(m_staff->getSegment())),
     m_currentItem(0),
     m_tool(0),
     m_currentX(0.0),
@@ -317,7 +362,6 @@ ControlRuler::~ControlRuler()
 
 void ControlRuler::init()
 {
-    ViewElementList::iterator j;
     ViewElementList* viewElementList = m_staff->getViewElementList();
 
     for(ViewElementList::iterator i = viewElementList->begin();
@@ -394,11 +438,13 @@ void ControlRuler::contentsMousePressEvent(QMouseEvent* e)
         if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
             if (item->isSelected()) continue;
 
-            // clear selection unless shift was pressed
-            if (!(e->state() && QMouseEvent::ShiftButton)) { clearSelectedItems(); }
+            // clear selection unless control was pressed, in which case add the event
+            // to the current selection
+            if (!(e->state() && QMouseEvent::ControlButton)) { clearSelectedItems(); }
             m_selectedItems << item;
             item->setSelected(true);
             item->handleMouseButtonPress(e);
+            m_eventSelection->addEvent(item->getViewElement()->event());
 
         }
     }
@@ -416,10 +462,20 @@ void ControlRuler::contentsMouseReleaseEvent(QMouseEvent* e)
         return;
     }
 
-    if (m_currentItem)
-        m_currentItem->handleMouseButtonRelease(e);
+    for (QCanvasItemList::Iterator it=m_selectedItems.begin(); it!=m_selectedItems.end(); ++it) {
+        if (ControlItem *item = dynamic_cast<ControlItem*>(*it))
+            item->handleMouseButtonRelease(e);
+    }
 
     m_lastEventPos = e->pos();
+
+    // Add command to history
+    ControlChangeCommand* command = new ControlChangeCommand(m_selectedItems,
+                                                             m_staff->getSegment(),
+                                                             m_eventSelection->getStartTime(),
+                                                             m_eventSelection->getEndTime());
+
+    m_parentEditView->addCommandToHistory(command);
 }
 
 void ControlRuler::contentsMouseMoveEvent(QMouseEvent* e)
@@ -474,6 +530,9 @@ ControlRuler::clearSelectedItems()
         (*it)->setSelected(false);
     }
     m_selectedItems.clear();
+
+    delete m_eventSelection;
+    m_eventSelection = new EventSelection(m_staff->getSegment());
 }
 
 void ControlRuler::clear()

@@ -113,18 +113,27 @@ void EditView::paintEvent(QPaintEvent* e)
             ++it;
         }
 
-        // update control ruler
-        if (getControlRuler()) getControlRuler()->slotUpdate();
-
+        updateControlRulers();
+        
     } else {
 
         getCanvasView()->slotUpdate();
-        if (getControlRuler()) getControlRuler()->slotUpdate();
+        updateControlRulers();
 
     }
 
     m_needUpdate = false;
 }
+
+void EditView::updateControlRulers()
+{
+    for(int i = 0; i < m_controlRulers->count(); ++i) {
+        ControlRuler* ruler = dynamic_cast<ControlRuler*>(m_controlRulers->page(i));
+        if (ruler) ruler->slotUpdate();
+    }
+    
+}
+
 
 void EditView::setTopBarButtons(BarButtons* w)
 {
@@ -175,6 +184,7 @@ ControlRuler* EditView::makeControlRuler(PropertyName propertyName)
     ControlRuler* controlRuler = new ControlRuler(propertyName,
                                                   getFirstStaff(), getHLayout(),
                                                   m_horizontalScrollBar,
+                                                  this,
                                                   controlRulerCanvas, m_controlRulers);
 
     return controlRuler;

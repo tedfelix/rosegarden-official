@@ -32,11 +32,7 @@
 #include "rosegardencanvasview.h"
 #include "widgets.h"
 
-namespace Rosegarden
-{
-    class RulerScale;
-    class Segment;
-}
+namespace Rosegarden { class RulerScale; class Segment; class EventSelection; }
 
 class QFont;
 class QFontMetrics;
@@ -44,6 +40,7 @@ class QFontMetrics;
 class ControlItem;
 class ControlTool;
 class ControlSelector;
+class EditViewBase;
 
 /**
  * Property Control Ruler : edit range of event properties
@@ -59,6 +56,7 @@ public:
                  Rosegarden::Staff*,
                  Rosegarden::RulerScale*,
                  QScrollBar* hsb,
+                 EditViewBase* parentView,
                  QCanvas*,
                  QWidget* parent=0, const char* name=0, WFlags f=0);
     ~ControlRuler();
@@ -109,8 +107,10 @@ protected:
 
     Rosegarden::PropertyName m_propertyName;
 
-    Rosegarden::Staff*      m_staff;
-    Rosegarden::RulerScale* m_rulerScale;
+    EditViewBase*               m_parentEditView;
+    Rosegarden::Staff*          m_staff;
+    Rosegarden::RulerScale*     m_rulerScale;
+    Rosegarden::EventSelection* m_eventSelection;
 
     ControlItem* m_currentItem;
     QCanvasItemList m_selectedItems;
