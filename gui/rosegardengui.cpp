@@ -416,7 +416,7 @@ void RosegardenGUIApp::setupActions()
 		SLOT(slotHarmonizeSelection()), actionCollection(),
 		"harmonize_selection");
 
-    new KAction(i18n("Set &Tempo to Audio Segment Length"), 0, this,
+    new KAction(i18n("Set &Tempo to Audio Segment Duration"), 0, this,
 		SLOT(slotTempoToSegmentLength()), actionCollection(),
 		"set_tempo_to_segment_length");
 

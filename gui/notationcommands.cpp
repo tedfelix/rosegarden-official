@@ -801,6 +801,8 @@ TransformsMenuDeCounterpointCommand::modifySegment()
 	    e2->set<Bool>(TIED_BACKWARD, true);
 	    segment.insert(e1);
 	    segment.insert(e2);
+	    // so that e2 is itself a candidate for splitting later:
+	    m_selection->addEvent(e2);
 	    segment.erase(si);
 	}
 

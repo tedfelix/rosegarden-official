@@ -543,7 +543,7 @@ public:
     virtual ~ChangeCompositionLengthCommand();
 
     static QString getGlobalName()
-        { return i18n("Change &Composition Length..."); }
+        { return i18n("Change &Composition Duration..."); }
 
     virtual void execute();
     virtual void unexecute();
