@@ -55,7 +55,7 @@ EditView::EditView(RosegardenGUIDoc *doc,
       m_centralFrame(new QFrame(this)),
       m_horizontalScrollBar(new QScrollBar(Horizontal, m_centralFrame)),
       m_grid(new QGridLayout(m_centralFrame, 5, hasTwoCols ? 2 : 1)),
-      m_rulerBox(new QVBoxLayout(m_centralFrame)),
+      m_rulerBox(new QVBoxLayout), // added to grid later on
       m_topBarButtons(0),
       m_bottomBarButtons(0),
       m_mainCol(hasTwoCols ? 1 : 0)
