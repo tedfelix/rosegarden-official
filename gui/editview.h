@@ -32,21 +32,24 @@
 
 namespace Rosegarden { class Segment; }
 
-class RosegardenGUIDoc;
-class MultiViewCommandHistory;
-class KCommand;
-class EditTool;
-class EditToolBox;
-class BasicCommand;
 class QCanvasItem;
 class QScrollView;
 class QCanvasView;
-class ActiveItem;
-class BarButtons;
 class QVBox;
 class QGridLayout;
 class QVBoxLayout;
 class QScrollBar;
+
+class KCommand;
+class KToggleAction;
+
+class RosegardenGUIDoc;
+class MultiViewCommandHistory;
+class EditTool;
+class EditToolBox;
+class BasicCommand;
+class ActiveItem;
+class BarButtons;
 class RosegardenCanvasView;
 
 /**
@@ -288,6 +291,9 @@ protected:
 
     bool isCompositionModified();
     void setCompositionModified(bool);
+
+    /// Convenience function around actionCollection()->action()
+    KToggleAction* getToggleAction(const QString& actionName);
 
     //--------------- Data members ---------------------------------
 

@@ -253,8 +253,6 @@ etc
 <ToolBar name="metaToolbar" newline="true">
   <Action name="show_notes_toolbar"        />
   <Action name="show_rests_toolbar"        />
-  <Action name="show_dotted_notes_toolbar" />
-  <Action name="show_dotted_rests_toolbar" />
   <Action name="show_accidentals_toolbar"  />
   <Action name="show_clefs_toolbar"        />
 </ToolBar>

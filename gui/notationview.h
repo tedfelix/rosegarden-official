@@ -457,8 +457,10 @@ protected:
 
     /**
      * Helper function to toggle a toolbar given its name
+     * If \a force point to a bool, then the bool's value
+     * is used to show/hide the toolbar.
      */
-    void toggleNamedToolBar(const QString& toolBarName);
+    void toggleNamedToolBar(const QString& toolBarName, bool* force = 0);
 
     /// Calls all the relevant preparse and layout methods
     virtual bool applyLayout(int staffNo = -1,

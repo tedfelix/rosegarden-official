@@ -402,16 +402,31 @@ void NotationView::positionStaffs()
 }    
 
 void NotationView::saveOptions()
-{        
+{
     m_config->setGroup("Notation Options");
     m_config->writeEntry("Geometry", size());
     m_config->writeEntry("Show Toolbar", toolBar()->isVisible());
     m_config->writeEntry("Show Statusbar",statusBar()->isVisible());
     m_config->writeEntry("ToolBarPos", (int) toolBar()->barPos());
+
+    m_config->writeEntry("Show Notes Toolbar",       getToggleAction("show_notes_toolbar")->isChecked());
+    m_config->writeEntry("Show Rests Toolbar",       getToggleAction("show_rests_toolbar")->isChecked());
+    m_config->writeEntry("Show Clefs Toolbar",       getToggleAction("show_clefs_toolbar")->isChecked());
+    m_config->writeEntry("Show Font Toolbar",        getToggleAction("show_font_toolbar")->isChecked());
+    m_config->writeEntry("Show Accidentals Toolbar", getToggleAction("show_accidentals_toolbar")->isChecked());
+
+    m_config->writeEntry("Notes ToolBarPos",       (int) toolBar("notesToolBar")->barPos());
+    m_config->writeEntry("Rests ToolBarPos",       (int) toolBar("restsToolBar")->barPos());
+    m_config->writeEntry("Clefs ToolBarPos",       (int) toolBar("clefsToolBar")->barPos());
+    m_config->writeEntry("Font ToolBarPos",        (int) toolBar("fontToolBar")->barPos());
+    m_config->writeEntry("Accidentals ToolBarPos", (int) toolBar("accidentalsToolBar")->barPos());
+
 }
 
 void NotationView::readOptions()
 {
+    bool opt;
+
     m_config->setGroup("Notation Options");
         
     QSize size(m_config->readSizeEntry("Geometry"));
@@ -419,6 +434,27 @@ void NotationView::readOptions()
     if (!size.isEmpty()) {
         resize(size);
     }
+
+    opt = m_config->readBoolEntry("Show Notes Toolbar", true);
+    getToggleAction("show_notes_toolbar")->setChecked(opt);
+    toggleNamedToolBar("notesToolBar", &opt);
+
+    opt = m_config->readBoolEntry("Show Rests Toolbar", true);
+    getToggleAction("show_rests_toolbar")->setChecked(opt);
+    toggleNamedToolBar("restsToolBar", &opt);
+
+    opt = m_config->readBoolEntry("Show Clefs Toolbar", false);
+    getToggleAction("show_clefs_toolbar")->setChecked(opt);
+    toggleNamedToolBar("clefsToolBar", &opt);
+
+    opt = m_config->readBoolEntry("Show Font Toolbar", true);
+    getToggleAction("show_font_toolbar")->setChecked(opt);
+    toggleNamedToolBar("fontToolBar", &opt);
+
+    opt = m_config->readBoolEntry("Show Accidentals Toolbar", true);
+    getToggleAction("show_accidentals_toolbar")->setChecked(opt);
+    toggleNamedToolBar("accidentalsToolBar", &opt);
+
 }
 
 void NotationView::setupActions()
@@ -1401,7 +1437,7 @@ void NotationView::slotToggleFontToolBar()
     toggleNamedToolBar("fontToolBar");
 }
 
-void NotationView::toggleNamedToolBar(const QString& toolBarName)
+void NotationView::toggleNamedToolBar(const QString& toolBarName, bool* force)
 {
     KToolBar *namedToolBar = toolBar(toolBarName);
 
@@ -1410,11 +1446,21 @@ void NotationView::toggleNamedToolBar(const QString& toolBarName)
                              << toolBarName << " not found" << endl;
         return;
     }
+
+    if (!force) {
     
-    if (namedToolBar->isVisible())
-        namedToolBar->hide();
-    else
-        namedToolBar->show();
+        if (namedToolBar->isVisible())
+            namedToolBar->hide();
+        else
+            namedToolBar->show();
+    } else {
+
+        if (*force)
+            namedToolBar->show();
+        else
+            namedToolBar->hide();
+    }
+
 }
 
 //

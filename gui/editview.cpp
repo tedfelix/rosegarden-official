@@ -404,3 +404,8 @@ void EditView::setCompositionModified(bool c)
     m_document->getComposition().getRefreshStatus
 	(m_compositionRefreshStatusId).setNeedsRefresh(c);
 }
+
+KToggleAction* EditView::getToggleAction(const QString& actionName)
+{
+    return dynamic_cast<KToggleAction*>(actionCollection()->action(actionName));
+}
