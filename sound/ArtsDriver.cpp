@@ -66,6 +66,7 @@ ArtsDriver::ArtsDriver(MappedStudio *studio):
 
 ArtsDriver::~ArtsDriver()
 {
+    std::cout << "ArtsDriver::~ArtsDriver" << std::endl;
 }
 
 // Create a list of possible instruments for this driver

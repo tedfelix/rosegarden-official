@@ -33,6 +33,11 @@ namespace Rosegarden
 //
 const MappedObjectProperty MappedObject::Name = "name";
 const MappedObjectProperty MappedAudioFader::FaderLevel = "faderLevel";
+const MappedObjectProperty MappedAudioPluginManager::Plugins = "plugins";
+const MappedObjectProperty MappedAudioPluginManager::PluginIds = "pluginids";
+
+#ifdef HAVE_LADSPA
+
 const MappedObjectProperty MappedLADSPAPlugin::UniqueId = "uniqueId";
 const MappedObjectProperty MappedLADSPAPlugin::PluginName = "pluginname";
 const MappedObjectProperty MappedLADSPAPlugin::Label = "label";
@@ -43,8 +48,8 @@ const MappedObjectProperty MappedLADSPAPort::Descriptor = "descriptor";
 const MappedObjectProperty MappedLADSPAPort::RangeHint = "rangehint";
 const MappedObjectProperty MappedLADSPAPort::RangeLower = "rangelower";
 const MappedObjectProperty MappedLADSPAPort::RangeUpper = "rangeupper";
-const MappedObjectProperty MappedAudioPluginManager::Plugins = "plugins";
-const MappedObjectProperty MappedAudioPluginManager::PluginIds = "pluginids";
+
+#endif // HAVE_LADSPA
 
 
 // --------- MappedObject ---------
@@ -147,6 +152,9 @@ MappedStudio::createObject(MappedObjectType type,
         // push to the studio's child stack
         addChild(mO);
     }
+    
+#ifdef HAVE_LADSPA
+
     else if (type == MappedObject::LADSPAPlugin)
     {
         // create plugins under the pluginmanager if it exists
@@ -164,6 +172,8 @@ MappedStudio::createObject(MappedObjectType type,
         // reset the parent after creation outside this method
         mO = new MappedLADSPAPort(this, id, readOnly);
     }
+
+#endif // HAVE_LADSPA
 
     // Insert
     if (mO)
@@ -400,8 +410,13 @@ MappedAudioPluginManager::getPropertyList(const MappedObjectProperty &property)
         list.push_back(MappedAudioPluginManager::Plugins);
         list.push_back(MappedAudioPluginManager::PluginIds);
     }
+
+#ifdef HAVE_LADSPA
+
     else if (property == MappedAudioPluginManager::PluginIds)
     {
+
+
         // get the list of plugin ids
         //
         MappedStudio *studio = dynamic_cast<MappedStudio*>(m_parent);
@@ -423,12 +438,14 @@ MappedAudioPluginManager::getPropertyList(const MappedObjectProperty &property)
     }
     else if (property == MappedAudioPluginManager::Plugins)
     {
+
         // get a full list of plugin descriptions
         //
         MappedStudio *studio = dynamic_cast<MappedStudio*>(m_parent);
 
         if (studio)
         {
+
             MappedLADSPAPlugin *plugin =
                 dynamic_cast<MappedLADSPAPlugin*>
                     (studio->getFirst(MappedObject::LADSPAPlugin));
@@ -482,15 +499,16 @@ MappedAudioPluginManager::getPropertyList(const MappedObjectProperty &property)
                     list.push_back(MappedObjectProperty
                             ("%1").arg(port->getRangeHint().UpperBound));
 
-
                 }
-
 
                 plugin = dynamic_cast<MappedLADSPAPlugin*>
                             (studio->getNext(plugin));
             }
         }
+
     }
+
+#endif // HAVE_LADSPA
 
     return list;
 }
@@ -518,6 +536,8 @@ MappedAudioPluginManager::clearPlugins(MappedStudio *studio)
 }
 
 
+#ifdef HAVE_LADSPA
+
 void
 MappedAudioPluginManager::getenvLADSPAPath()
 {
@@ -544,6 +564,8 @@ MappedAudioPluginManager::addLADSPAPath(const std::string &path)
 {
     m_path += path;
 }
+#endif // HAVE_LADSPA
+
 
 void
 MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
@@ -679,6 +701,9 @@ MappedLADSPAPlugin::getPropertyList(const MappedObjectProperty &property)
 // ------------------ MappedLADSPAPort --------------------
 //
 //
+
+#ifdef HAVE_LADSPA
+
 MappedLADSPAPort::MappedLADSPAPort(MappedObject *parent,
                                    MappedObjectId id,
                                    bool readOnly):
@@ -702,6 +727,9 @@ MappedLADSPAPort::getPropertyList(const MappedObjectProperty &property)
 
     return list;
 }
+
+#endif // HAVE_LADSPA
+
 
 
 }
