@@ -119,10 +119,6 @@ public:
     iterator findPrevious(const std::string &type, iterator i);
     iterator findNext(const std::string &type, iterator i);
 
-    typedef std::pair<iterator,iterator> IteratorPair;
-    template <class MembershipTest>
-    IteratorPair findContainingSet(iterator i, MembershipTest m) const;
-
     // Discovers whether this note is in a chord at some position
     // other than at the end, i.e. it is true if you could construct a
     // Chord object (see below) from the passed iterator and the
@@ -134,30 +130,6 @@ private:
     Quantizer m_quantizer;
 };
 
-template <class MembershipTest>
-NotationElementList::IteratorPair
-NotationElementList::findContainingSet
-(NotationElementList::iterator i, MembershipTest mtest) const
-{
-    IteratorPair ipair(end(), end());
-    if (i == end() || !mtest(i)) return ipair;
-    iterator j;
-
-    // first scan back to find an element not in the desired set, and
-    // leave ipair.first pointing to the one after it
-
-    for (j = i; i != begin() && mtest(--j); i = j);
-    ipair.first = i;
-
-    // then scan forwards to find an element not in the desired set,
-    // and leave ipair.second pointing to that
-
-    for (j = i; j != end() && mtest(j); ++j);
-    ipair.second = j;
-
-    return ipair;
-}
-
 #ifndef NDEBUG
 kdbgstream& operator<<(kdbgstream&, NotationElementList&);
 #else
@@ -165,7 +137,7 @@ inline kndgstream& operator<<(kdbgstream &e, NotationElementList&)
 { return e; }
 #endif
 
-
+#ifdef NOT_DEFINED
 // A temporary collection of pointers to things in the list.  Don't
 // store Chords, just create them, query them and throw them away.
 
@@ -207,22 +179,31 @@ public:
     }
 
 private:
+    void sample(const NELIterator &i);
+    Rosegarden::Event::timeT duration(const NELIterator &i, bool quantized);
+
     class ChordMembershipTest {
     public:
-        ChordMembershipTest(const NELIterator &i) :
+        ChordMembershipTest(Chord &c, const NELIterator &i) :
+            m_chord(c),
             m_time((*i)->getAbsoluteTime()) {
         }
         bool operator()(const NELIterator &i) {
             return ((*i)->isNote() && ((*i)->getAbsoluteTime() == m_time));
         }
+        void sample(const NELIterator &i) {
+            m_chord.sample(i);
+        }
     private:
+        Chord &m_chord;
         Rosegarden::Event::timeT m_time;
     };
 
     const NotationElementList &m_nel;
     NELIterator m_initial, m_final, m_shortest, m_longest;
+    bool m_quantized;
 };
-
+#endif
 
 // inline bool operator<(NotationElement &e1, NotationElement &e2)
 // {

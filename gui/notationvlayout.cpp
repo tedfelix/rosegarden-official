@@ -23,6 +23,7 @@
 #include "NotationTypes.h"
 #include "notepixmapfactory.h"
 #include "notationproperties.h"
+#include "notationsets.h"
 
 using Rosegarden::Int;
 using Rosegarden::Bool;
@@ -94,47 +95,8 @@ NotationVLayout::layout(NotationElementList::iterator from,
                 }
             }
 
-            i = chord.getFinalNote();
+            i = chord.getFinalElement();
             
-/*!
-            NotationElementList::iterator inext(i);
-            Event::timeT d; // unwanted
-            vector<NotationElementList::iterator> notes =
-                m_elements.findSucceedingChordElements(i, inext, d);
-            if (notes.size() == 0) continue;
-
-            vector<int> h;
-            for (unsigned int j = 0; j < notes.size(); ++j) {
-                h.push_back((*notes[j])->event()->get<Int>(P_HEIGHT_ON_STAFF));
-            }
-            int top = h.size()-1;
-
-            bool stalkUp = true;
-            if (h[top] > 4) {
-                if (h[0] > 4) stalkUp = false;
-                else stalkUp = (h[top] - 4) < (5 - h[0]);
-            }
-
-            for (unsigned int j = 0; j < notes.size(); ++j) {
-                el = *notes[j];
-                try {
-
-                    el->setLayoutY(m_staff.yCoordOfHeight(h[j]));
-                    el->event()->setMaybe<Bool>(P_STALK_UP, stalkUp);
-
-                    el->event()->setMaybe<Bool>
-                        (P_DRAW_TAIL,
-                         ((stalkUp && j == notes.size()-1) ||
-                          (!stalkUp && j == 0)));
-
-                } catch (Event::NoData) {
-                    kdDebug(KDEBUG_AREA) <<
-                        "NotationVLayout::layout : couldn't get properties for element (has NotationHLayout::preparse run?)" << endl;
-                }
-            }
-
-            i = inext;
-*/        
         } else {
 
             if (el->event()->isa(Clef::EventType)) {

@@ -181,6 +181,9 @@ kdbgstream& operator<<(kdbgstream &dbg, NotationElementList &l)
     return dbg;
 }
 
+#endif
+
+#ifdef NOT_DEFINED
 
 class PitchGreater {
 public:
@@ -203,47 +206,17 @@ Chord::Chord(const NotationElementList &nel, NELIterator i,
     m_initial(nel.end()),
     m_final(nel.end()),
     m_shortest(nel.end()),
-    m_longest(nel.end())
+    m_longest(nel.end()),
+    m_quantized(quantized)
 {
     if (i == nel.end()) return;
 
-    NotationElementList::IteratorPair pair
+    NotationElementList::IteratorPair ipair
         (nel.findContainingSet<ChordMembershipTest>
-         (i, ChordMembershipTest(i)));
+         (i, ChordMembershipTest(*this, i)));
 
-    long d;
-    Event::timeT maxDuration = 0;
-    Event::timeT minDuration = 1000000;
-
-    i = pair.first;
-    m_initial = i;
-    
-    while (i != pair.second) {
-
-        if (quantized) {
-            bool done = (*i)->event()->get<Int>(P_QUANTIZED_DURATION, d);
-            if (!done) {
-                Quantizer().quantize((*i)->event());
-                d = (*i)->event()->get<Int>(P_QUANTIZED_DURATION);
-            }
-        } else {
-            d = (*i)->event()->getDuration();
-        }
-
-        if (d > maxDuration) {
-            maxDuration = d;
-            m_longest = i;
-        }
-
-        if (d < minDuration) {
-            minDuration = d;
-            m_shortest = i;
-        }
-
-        push_back(i);
-        m_final = i;
-        ++i;
-    }
+    m_initial = ipair.first;
+    m_final = ipair.second;
 
     if (size() > 1) {
         stable_sort(begin(), end(), PitchGreater());
@@ -253,9 +226,40 @@ Chord::Chord(const NotationElementList &nel, NELIterator i,
     for (unsigned int i = 0; i < size(); ++i) {
         kdDebug(KDEBUG_AREA) << ((*(*this)[i])->event()->get<Int>("pitch")) <<endl;
     }
+}
+
+
+Event::timeT Chord::duration(const NELIterator &i, bool quantized)
+{
+    if (quantized) {
+        long d;
+        bool done = (*i)->event()->get<Int>(P_QUANTIZED_DURATION, d);
+        if (done) {
+            return d;
+        } else {
+            Quantizer().quantize((*i)->event());
+            return (*i)->event()->get<Int>(P_QUANTIZED_DURATION);
+        }
+    } else {
+        return (*i)->event()->getDuration();
+    }
+}
+
+
+void Chord::sample(const NELIterator &i)
+{
+    if (m_longest == m_nel.end() ||
+        duration(i, m_quantized) > duration(m_longest, m_quantized)) {
+        m_longest = i;
+    }
+    if (m_shortest == m_nel.end() ||
+        duration(i, m_quantized) < duration(m_shortest, m_quantized)) {
+        m_shortest = i;
+    }
+
+    push_back(i);
 }    
 
 Chord::~Chord() { }
-
 
 #endif
