@@ -70,7 +70,7 @@ uninstall-local:
 	-rm -f $(kde_icondir)/medium/hicolor/apps/rosegarden.xpm
 	-rm -f $(kde_icondir)/small/locolor/apps/rosegarden.xpm
 	-rm -f $(kde_icondir)/small/hicolor/apps/rosegarden.xpm
-	-rm -f $(kde_datadir)/rosegarden/pixmaps
+	-rm -rf $(kde_datadir)/rosegarden/pixmaps
 
 # this 10 paths are KDE specific. Use them:
 # kde_htmldir       Where your docs should go to. (contains lang subdirs)
