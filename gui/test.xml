@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rosegarden-data>
+<rosegarden-data>
+<Track>
+	<event duration="48" pitch="4"/>
+	<event duration="48" pitch="5"/>
+	<event duration="48" pitch="6"/>
+	<event duration="48" pitch="7"/>
+	<event duration="whole" pitch="8"/>
+	<event duration="whole" pitch="9"/>
+</Track>
+</rosegarden-data>
