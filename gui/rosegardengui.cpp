@@ -811,7 +811,8 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotManageMIDIDevices()),
                 actionCollection(), "manage_devices");
 
-    new KAction(i18n("Manage S&ynth Plugins"), 0, 0, this,
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "toolbar/manage-synth-plugins.xpm"));
+    new KAction(i18n("Manage S&ynth Plugins"), icon, 0, this,
                 SLOT(slotManageSynths()),
                 actionCollection(), "manage_synths");
 
