@@ -1126,8 +1126,10 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent * /*e*/)
 	    //need to get our data to it somehow and let it collate
 	    // the segments into a single command
 
-	    if (it->second->getSegment()->getStartTime() !=
-		it->second->getStartTime()) {
+	    if ((it->second->getSegment()->getStartTime() !=
+		 it->second->getStartTime()) ||
+                (it->second->getSegment()->getTrack() !=
+                 it->second->getTrack())) {
 		emit changeSegmentTrackAndStartTime(it->second->getSegment(),
 						    it->second->getTrack(),
 						    it->second->getStartTime());
