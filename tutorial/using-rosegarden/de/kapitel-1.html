@@ -1,0 +1,207 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-3">
+	<TITLE>Arbeiten mit Rosegarden</TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.0.1  (Linux)">
+	<META NAME="CREATED" CONTENT="20040411;1502800">
+	<META NAME="CHANGED" CONTENT="20040411;20200900">
+	<META NAME="DESCRIPTION" CONTENT="Arbeiten mit Rosegarden ist eine ">
+	<META NAME="KEYWORDS" CONTENT="Rosegarden Anleitung, Noten, score, MIDI, Sequenzer, open source, free, shareware, Unix, Linux, SGI">
+	<META NAME="robots" CONTENT="index">
+	<STYLE>
+	<!--
+		P { margin-top: 0.08in; margin-bottom: 0in; font-family: "georgia", "book antiqua", "palatino", "garamond", serif; font-style: normal }
+		H1 { margin-top: 0.25in; font-family: sans-serif; font-style: normal }
+		H2 { margin-top: 0.25in; font-family: sans-serif; font-style: normal }
+		A:link { color: #ba2c2c; font-weight: bold; text-decoration: none }
+		A:visited { color: #ba2c2c }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="de" LINK="#ba2c2c" VLINK="#ba2c2c" BGCOLOR="#ffffff">
+<DIV ID="heading" STYLE="background: #ccd4a0">
+	<P STYLE="margin-bottom: 0.2in"><IMG SRC="../../roses.png" NAME="Graphic1" ALIGN=BOTTOM WIDTH=183 HEIGHT=104 BORDER=0>
+		<IMG SRC="../../title-rosegarden.png" NAME="Graphic2" ALT="Rosegarden" ALIGN=BOTTOM WIDTH=400 HEIGHT=104 BORDER=0></P>
+</DIV>
+<DIV ID="main">
+	<P STYLE="margin-top: 0in; font-style: normal"><FONT FACE="Arial">Vor
+	Voriges Kapitel</FONT></P>
+	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+	<FONT SIZE=7>Arbeiten mit Rosegarden</FONT></P>
+	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
+	<FONT SIZE=4>Ein F&uuml;hrer zu Rosegarden-4 1.0</FONT></P>
+	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+	<BR><BR>
+	</P>
+	<H1 STYLE="border: none; padding: 0in; page-break-before: always"><A NAME="1"></A>
+	1 Einleitung</H1>
+	<H2 STYLE="border: none; padding: 0in"><A NAME="1_1"></A>1.1 Was ist Rosegarden?</H2>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
+	Rosegarden-4, im folgenden nur noch Rosegarden gennant, ist
+	eine vielseitige Anwendung, die f&uuml;r diejenigen ein
+	n&uuml;tzliches Werkzeug sein soll, die Musik machen
+	wollen. Sie verbindet Aspekte eines Midi-Sequenzers, eines
+	Audio-Sequenzers und eines Notationseditors in einem
+	bequemen einfach zu bedienenden Paket, das Benutzern eine
+	stimmige und intuitive Oberfl&auml;e bietet.
+	</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none;
+	padding: 0in">
+	Rosegarden ist eine in KDE integrierte Anwendung, die auf
+	jedem Sysem lauff&auml;hig ist, das die KDE und
+	QT-Bibliotheken imstalliert hat und zur Zeit mindestens KDE/QT
+	3.0 ben&ouml;tigt um zu laufen. Viele ihrer Teile laufen
+	voraussichtlich nur unter Linux-Systemen, aber sie ist darauf
+	angelegt, auf jeder UNIX-&auml;hnlichen Plattform zu
+	compilieren und zu laufen, auf der auch KDE lauff&auml;hig ist.
+	(Siehe auch in den <A HREF="http://faq.html/">FAQ</A>
+	nach Einzelheiten &uuml;ber; den Bau auf Systemen, auf
+	denen ALSA nicht lauff&auml;hig ist..) 
+      </P>
+	<H2 STYLE="border: none; padding: 0in"><A NAME="1_2"></A>1.2
+	Der Grund f&uuml;r diesen F&uuml;hrer. 
+	</H2>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none;
+	padding: 0in; font-style: normal">
+	Mit diesem F&uuml;rer beabsichtige ich dabei zu helfen Rosegarden zu
+	erkunden und Wege zu entdecken seine F&auml;higkeiten f&uuml;r
+	die L&ouml;sung echter Aufgaben zu benutzen, die
+	auftreten wenn man seine eigene Musik machen
+	will. Rosegarden ist einfach zu benutzen wenn man einmal
+	dessen Aufbau verstanden hat, aber es ist nicht vergleichbar
+	mit irgendetwas, das man in der Vergangenheit verwendet
+	hat. Also m&ouml;chte ich Sie auf eine F&uuml;hrung durch
+	Rosegarden mitnehmen um viele seiner F&auml;higkeiten
+	vorzuf&uuml;hren und Ihnen eine Grundlage zu schaffen von der
+	aus Ihre eigenen creativen Projekte Ihren Ausgang nehmen k&ouml;nnen.
+      </P>
+	<H2 STYLE="border: none; padding: 0in"><A NAME="1_3"></A>1.3
+	Ben&ouml;tigte Versionen</H2>
+     
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none;
+	padding: 0in">
+	Dieses Dokument beschreibt Rosegarden4, die neuste Version
+      dieser ehrw&uuml;rdigen Reihe. W&auml;hrend ich dies schreibe
+      sind wir bei 0.9.8_cvs. Die letzte offizielle Ausgabe ist
+      0.9.7. Es gibt Myriaden &auml;lterer Ausgaben und einige hier
+      beschriebene Funktionen laufen m&ouml;glicherweise nur, wenn sie
+      eine der neuesten benutzen.
+      </P>
+	<H2 STYLE="border: none; padding: 0in"><A NAME="1_4"></A>1.4
+	Das Studio des Autors</H2>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+	Offensichtlich ist das, was ich demonstrieren kann
+	hardwareabh&auml;ngig.
+	Ich m&ouml;chte, dass Sie im Ged&auml;chtnis behalten was sich
+	vor mir befindet w&auml;hrend ich dies schreibe und deshalb
+	m&ouml;chte ich die Details meines Studios mitteilen.
+      </P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+	Ich habe einen 2.0 GHz P4 mit 512 MB RAM;  Debian
+	&ldquo;Testversion&rdquo; und KDE 3.1.x. Mein Kernel ist Debian-Konserve; Version
+	2.4.24-1-686, mit keiner niedrigen Latenzzeit oder
+	pr&auml;emptiven Patchs.
+	
+</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+Auf der Audio-Seite ist meine einzige Sound-Karte eine Sound Blaster
+	PCI 128/ens1371. Es ist eine ziemlich lausige Sound-Karte und
+	ich bemitleide jeden anderen, der sie benutzt. Auf der
+	Midi-Seite habe ich eine Joystick-Port MIDI-Box f&uuml;r den
+	Sound-Blaster an den ich einen Fatar MIDI-72
+	Keyboard-Controller und eine Roland SC-33 Sound Canvas angeschlossen
+	habe.
+</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+	Zus&auml;tzlich zur Roland habe ich FluidSynth. F&uuml;r
+	gew&ouml;hnlich benutze ich den Soft Synth um Percussion zu
+	rippen, da die Trommelausstattungen meiner Sound Canvas
+	Wasserd&uuml;nn sind. 
+</P>
+	<H2 ALIGN=LEFT STYLE="border: none; padding: 0in"><A NAME="1_5"></A>1.5
+	Geschichte</H2>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+	<U><B>Chronologie</B></U></P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium; text-decoration: none">
+	12/10/02 Erster &ouml;ffentlicher Entwurf</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium; text-decoration: none">
+	12/15/02 Dem CVS-Baum hinzugef&uuml;gt</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium; text-decoration: none">
+	12/16/02 Erste &Uuml;berarbeitung beginnt...</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium; text-decoration: none">
+	12/19/02 Fortgesetzt...</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium; text-decoration: none">
+	01/01/03 Umwandlung des &quot;Tutorial&quot; zum &quot;F&uuml;hrer&quot;
+	und Umstellung des Entwicklungsmodells</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium; text-decoration: none">
+	01/12/03 Studio hinzugef&uuml;gt, Restrukturiert um Segmente
+	an einen logischen Platz zu setzen</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium; text-decoration: none">
+	01/19/03 Das Studio-Kapitel wesentlich verbessert,
+	Vielf&auml;ltige Bearbeitungen und Verfeinerungen</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium; text-decoration: none">
+	02/19/03 Geringf&uuml;gige Bereinigung, Vorbereitung F&uuml;r
+	die erste &Uuml;bersetzung.,
+	Studio-Verbesserungen...</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium; text-decoration: none">
+	03/31/03 Version 0.9.0 Gewichtige Updates (niemals ver&ouml;ffentlicht)</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium; text-decoration: none">
+	5/1/03 Version 0.9.0 Schlussversion</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium; text-decoration: none">
+	4/12/04 Redesign und Update in Vorbereitung f&uuml;r 1.0</P>
+	<H2 STYLE="border: none; padding: 0in"><A NAME="1_6"></A>1.6
+	Wie bekommt man dieses Dokument?</H2>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding:
+	0in">Die Aktuelle Version von <I>Arbeiten mit
+	  Rosegarden</I>bekommt man immer unter <A HREF="http://rosegarden.sourceforge.net/tutorial/using-rosegardenrosegarden.html">
+	http://rosegarden.sourceforge.net/tutorial/using-rosegarden/ </A>
+	</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+Man kann es auch aus dem CVS bekommen. Es ist Teil von Rosegarden,
+	aber es ist ein eigenst&auml;ndiges Modul, so bekommt es
+	nicht, ausser man checkt speziell das
+&ldquo;tutorial&rdquo;-Modul aus.
+	.</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">cvs -Q
+	-z3
+	-d:pserver:anonymous@cvs.rosegarden.sourceforge.net:/cvsroot/rosegarden
+	checkout tutorial</P>
+	<H2 STYLE="border: none; padding: 0in"><A NAME="1_7"></A>1.7
+	Copyright und Lizenz</H2>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Copyright
+	&copy; 2002-2004 by D. Michael McIntyre
+	&lt;dmmcintyr@users.sourceforge.net&gt;</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding:
+	0in"><B><I>Arbeiten mit Rosegarden</I></B> 
+	wird unter der GNU-Freien Dokumentationslizenz
+	herausgegeben und Titel und Inhalt sind unter den
+	Bedingungen der GNU-Freien Dokumentations-Lizenz
+	gesch&uuml;tzt, die von <A HREF="http://www.gnu.org/licenses/fdl.txt">
+	http://www.gnu.org/licenses/fdl.txt</A> erh&auml;ltlich ist.</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+	Mir ist wohl bekannt, dass Worte wie &quot;Roland,&quot; &quot;Yamaha,&quot;
+	&quot;General MIDI,&quot; &quot;GS,&quot; &quot;XG,&quot; und
+	viele andere die ich nicht ber&uuml;cksichtigt habe aber
+	vielleicht sollte, sich im Besitz gut mit Geld ausgestatteter
+	Firmen befinden und Wahrscheinlich putzige kleine Symbole in
+	Kreisen oder hochgestellten Zeichen haben m&uuml;ssten, oder
+	mit einem anderen Namensanhang versehen sein sollten. Ich habe
+	besseres zu tun, als herauszufinden welche putzigen kleinen
+	Symbole zu welchem Namen geh&ouml;ren, aber falls Vertreter
+	irgendeiner dieser Firmen, denen diese Worte geh&ouml;ren so
+	freundlich w&auml;ren, mich zu informieren, welche kleinen
+	Symbole an sie angeheftet werden sollten, werde ich sie sofort
+	anf&uuml;gen.</P>
+	<H2 STYLE="border: none; padding: 0in"><A NAME="1_8"></A>1.8
+	&Uuml;bersetzungen</H2>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding:
+	0in">&Uuml;bersetzungen sind unterwegs. Informationen &uuml;ber
+	Verf&uuml;gbarkeit werden hier &auml;ngek&uuml;digt..</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Deutsch:
+	Bernd Weber &lt;<A HREF="mailto:weber.freiburg@freenet.de">weber.freiburg@freenet.de</A>&gt;</P>
+</DIV>
+<P><BR>
+</P>
+</BODY>
+</HTML>
