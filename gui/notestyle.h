@@ -88,7 +88,7 @@ public:
     typedef std::pair<CharName, bool> CharNameRec; // bool is "inverted"
     CharNameRec getNoteHeadCharName(Rosegarden::Note::Type);
 
-    CharName getRestCharName(Rosegarden::Note::Type, bool rest_outside_stave);
+    CharName getRestCharName(Rosegarden::Note::Type, bool restOutsideStave);
     CharName getPartialFlagCharName(bool final);
     CharName getFlagCharName(int flagCount);
     CharName getAccidentalCharName(const Rosegarden::Accidental &);

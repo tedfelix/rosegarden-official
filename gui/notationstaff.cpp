@@ -955,11 +955,16 @@ NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
 		setTuplingParameters(elt, restParams);
 		restParams.setQuantized(false);
 		bool restOutside = false;
-		if (elt->event()->has(properties.REST_OUTSIDE_STAVE))
-			(void)elt->event()->get<Bool>(
-						properties.REST_OUTSIDE_STAVE,
-						restOutside);
+		elt->event()->get<Bool>(properties.REST_OUTSIDE_STAVE,
+					restOutside);
     		restParams.setRestOutside(restOutside);
+    		if (restOutside) {
+		   NOTATION_DEBUG << "NotationStaff::renderSingleElement() : rest outside staff" << endl;
+		   if (note == Note::DoubleWholeNote) {
+		      NOTATION_DEBUG << "NotationStaff::renderSingleElement() : breve rest needs leger lines" << endl;
+		      restParams.setLegerLines(5);
+		   }
+		}
 
 		if (m_printPainter) {
 		    m_notePixmapFactory->drawRest

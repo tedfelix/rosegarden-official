@@ -64,11 +64,13 @@
         <symbol name="MUSICAL SYMBOL COMBINING FLAG-4" 
                 font-id="0" code="136" inversion-code="142" glyph="101" inversion-glyph="107"/>
 
+        <!-- None of the "... REST ON STAFF" names are part of Unicode 4.0: -->
         <symbol name="MUSICAL SYMBOL MULTI REST" font-id="0" glyph="7"/>
-        <symbol name="MUSICAL SYMBOL WHOLE REST" font-id="0" code="32" glyph="1"/>
-        <symbol name="MUSICAL SYMBOL WHOLE REST OUTSIDE" font-id="0" code="34" glyph="3"/>
-        <symbol name="MUSICAL SYMBOL HALF REST" font-id="0" code="33" glyph="2"/>
-        <symbol name="MUSICAL SYMBOL HALF REST OUTSIDE" font-id="0" code="35" glyph="4"/>
+        <symbol name="MUSICAL SYMBOL MULTI REST ON STAFF" font-id="0" glyph="7"/>
+        <symbol name="MUSICAL SYMBOL WHOLE REST" font-id="0" code="34" glyph="3"/>
+        <symbol name="MUSICAL SYMBOL WHOLE REST ON STAFF" font-id="0" code="32" glyph="1"/>
+        <symbol name="MUSICAL SYMBOL HALF REST" font-id="0" code="35" glyph="4"/>
+        <symbol name="MUSICAL SYMBOL HALF REST ON STAFF" font-id="0" code="33" glyph="2"/>
         <symbol name="MUSICAL SYMBOL QUARTER REST" font-id="0" code="38" glyph="8"/>
         <symbol name="MUSICAL SYMBOL EIGHTH REST" font-id="0" code="39" glyph="10"/>
         <symbol name="MUSICAL SYMBOL SIXTEENTH REST" font-id="0" code="41" glyph="11"/>
@@ -150,10 +152,19 @@
         <hotspot name="MUSICAL SYMBOL MULTI REST">
 		<scaled y="0"/>
         </hotspot>
+        <hotspot name="MUSICAL SYMBOL MULTI REST ON STAFF">
+		<scaled y="0"/>
+        </hotspot>
         <hotspot name="MUSICAL SYMBOL WHOLE REST">
 		<scaled y="0.1"/>
         </hotspot>
+        <hotspot name="MUSICAL SYMBOL WHOLE REST ON STAFF">
+		<scaled y="0.1"/>
+        </hotspot>
         <hotspot name="MUSICAL SYMBOL HALF REST">
+		<scaled y="0.9"/>
+        </hotspot>
+        <hotspot name="MUSICAL SYMBOL HALF REST ON STAFF">
 		<scaled y="0.9"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL QUARTER REST">

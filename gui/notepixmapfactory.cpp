@@ -217,6 +217,7 @@ NotePixmapParameters::NotePixmapParameters(Note::Type noteType,
     m_trigger(false),
     m_onLine(false),
     m_safeVertDistance(0),
+    m_restOutsideStave(false),
     m_beamed(false),
     m_nextBeamCount(0),
     m_thisPartialBeams(false),
@@ -1100,11 +1101,12 @@ NotePixmapFactory::drawMarks(bool isStemmed,
 void
 NotePixmapFactory::makeRoomForLegerLines(const NotePixmapParameters &params)
 {
-    if (params.m_legerLines < 0) {
+    if (params.m_legerLines < 0 || params.m_restOutsideStave) {
         m_above = std::max(m_above,
                            (m_noteBodyHeight + 1) *
                            (-params.m_legerLines / 2));
-    } else if (params.m_legerLines > 0) {
+    }
+    if (params.m_legerLines > 0 || params.m_restOutsideStave) {
         m_below = std::max(m_below,
                            (m_noteBodyHeight + 1) *
                            (params.m_legerLines / 2));
@@ -1112,6 +1114,11 @@ NotePixmapFactory::makeRoomForLegerLines(const NotePixmapParameters &params)
     if (params.m_legerLines != 0) {
         m_left  = std::max(m_left,  m_noteBodyWidth / 5 + 1);
         m_right = std::max(m_right, m_noteBodyWidth / 5 + 1);
+    }
+    if (params.m_restOutsideStave) {
+	m_above += 1;
+        m_left  = std::max(m_left,  m_noteBodyWidth * 3 + 1);
+        m_right = std::max(m_right, m_noteBodyWidth * 3 + 1);
     }
 }
 
@@ -1144,18 +1151,30 @@ NotePixmapFactory::drawLegerLines(const NotePixmapParameters &params)
 	offset = -offset;
     }
 
-    if (!below) { // note above staff
-	if (legerLines % 2) { // note is between lines
-	    y = m_above + m_noteBodyHeight;
-	} else { // note is on a line
-	    y = m_above + m_noteBodyHeight / 2 - getStaffLineThickness()/2;
-	} 
-    } else { // note below staff
-	if (legerLines % 2) { // note is between lines
-	    y = m_above - getStaffLineThickness();
-	} else { // note is on a line
-	    y = m_above + m_noteBodyHeight / 2;
+    if (params.m_restOutsideStave)
+	y = m_above;
+    else {
+	if (!below) { // note above staff
+	    if (legerLines % 2) { // note is between lines
+		y = m_above + m_noteBodyHeight;
+	    } else { // note is on a line
+		y = m_above + m_noteBodyHeight / 2 - getStaffLineThickness()/2;
+	    }
+	} else { // note below staff
+	    if (legerLines % 2) { // note is between lines
+		y = m_above - getStaffLineThickness();
+	    } else { // note is on a line
+		y = m_above + m_noteBodyHeight / 2;
+	    }
 	}
+    }
+    if (params.m_restOutsideStave) {
+    NOTATION_DEBUG << "draw leger lines: " << legerLines << " lines, below "
+		   << below
+		   << ", note body height " << m_noteBodyHeight
+		   << ", thickness " << getLegerLineThickness()
+		   << " (staff line " << getStaffLineThickness() << ")"
+		   << ", offset " << offset << endl;
     }
 
 //    NOTATION_DEBUG << "draw leger lines: " << legerLines << " lines, below "
@@ -1795,10 +1814,20 @@ NotePixmapFactory::makeRestPixmap(const NotePixmapParameters &params)
     Rosegarden::Profiler profiler("NotePixmapFactory::makeRestPixmap");
 
     CharName charName(m_style->getRestCharName(params.m_noteType,
-    					       params.m_rest_outside_stave));
+    					       params.m_restOutsideStave));
+    // Check whether the font has the glyph for this charName;
+    // if not, substitute a rest-on-stave glyph for a rest-outside-stave glyph,
+    // and vice-versa.
+    NoteCharacter character;
+    if (!getCharacter(charName, character, PlainColour, false))
+	charName = m_style->getRestCharName(params.m_noteType,
+					   !params.m_restOutsideStave);
+
     bool encache = false;
 
-    if (params.m_tupletCount == 0 && !m_selected && !m_shaded) {
+    if (params.m_tupletCount == 0 && !m_selected && !m_shaded &&
+       !params.m_restOutsideStave) {
+
 	if (params.m_dots == 0) {
 	    return getCharacter(charName, PlainColour, false).getCanvasPixmap();
 	} else {
@@ -1839,7 +1868,7 @@ NotePixmapFactory::drawRestAux(const NotePixmapParameters &params,
 			       QPoint &hotspot, QPainter *painter, int x, int y)
 {
     CharName charName(m_style->getRestCharName(params.m_noteType,
-    					       params.m_rest_outside_stave));
+    					       params.m_restOutsideStave));
     NoteCharacter character = getCharacter(charName,
 					   params.m_quantized ? QuantizedColour :
 					   PlainColour,
@@ -1861,6 +1890,11 @@ NotePixmapFactory::drawRestAux(const NotePixmapParameters &params,
     // we'll adjust this for tupling line after drawing rest character:
     hotspot = m_font->getHotspot(charName);
 
+    if (params.m_restOutsideStave &&
+        (charName == NoteCharacterNames::MULTI_REST ||
+         charName == NoteCharacterNames::MULTI_REST_ON_STAFF)) {
+	makeRoomForLegerLines(params);
+    }
     if (painter) {
 	painter->save();
 	m_p->beginExternal(painter);
@@ -1886,6 +1920,12 @@ NotePixmapFactory::drawRestAux(const NotePixmapParameters &params,
     for (int i = 0; i < params.m_dots; ++i) {
         int x = m_left + m_noteBodyWidth + i * dotWidth + dotWidth/2;
         m_p->drawNoteCharacter(x, restY, dot); 
+    }
+
+    if (params.m_restOutsideStave &&
+        (charName == NoteCharacterNames::MULTI_REST ||
+         charName == NoteCharacterNames::MULTI_REST_ON_STAFF)) {
+	drawLegerLines(params);
     }
 
     if (painter) {

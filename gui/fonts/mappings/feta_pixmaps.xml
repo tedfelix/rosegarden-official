@@ -58,11 +58,13 @@
         <symbol name="MUSICAL SYMBOL COMBINING FLAG-4" 
                 src="flags-u6" inversion-src="flags-d6"/>
 
-        <symbol name="MUSICAL SYMBOL MULTI REST" src="rests--1"/>
-        <symbol name="MUSICAL SYMBOL WHOLE REST" src="rests-0"/>
-        <symbol name="MUSICAL SYMBOL WHOLE REST OUTSIDE" src="rests-0o"/>
-        <symbol name="MUSICAL SYMBOL HALF REST" src="rests-1"/>
-        <symbol name="MUSICAL SYMBOL HALF REST OUTSIDE" src="rests-1o"/>
+        <!-- None of the "... REST ON STAFF" names are part of Unicode 4.0: -->
+        <symbol name="MUSICAL SYMBOL MULTI REST" src="rests--1o"/>
+        <symbol name="MUSICAL SYMBOL MULTI REST ON STAFF" src="rests--1"/>
+        <symbol name="MUSICAL SYMBOL WHOLE REST" src="rests-0o"/>
+        <symbol name="MUSICAL SYMBOL WHOLE REST ON STAFF" src="rests-0"/>
+        <symbol name="MUSICAL SYMBOL HALF REST" src="rests-1o"/>
+        <symbol name="MUSICAL SYMBOL HALF REST ON STAFF" src="rests-1"/>
         <symbol name="MUSICAL SYMBOL QUARTER REST" src="rests-2"/>
         <symbol name="MUSICAL SYMBOL EIGHTH REST" src="rests-3"/>
         <symbol name="MUSICAL SYMBOL SIXTEENTH REST" src="rests-4"/>
@@ -149,6 +151,13 @@
                 <when note-height="10" y="0"/>
                 <when note-height="12" y="0"/>
         </hotspot>
+        <hotspot name="MUSICAL SYMBOL MULTI REST ON STAFF">
+                <when note-height="4" y="0"/>
+                <when note-height="6" y="0"/>
+                <when note-height="8" y="0"/>
+                <when note-height="10" y="0"/>
+                <when note-height="12" y="0"/>
+        </hotspot>
         <hotspot name="MUSICAL SYMBOL WHOLE REST">
                 <when note-height="4" y="1"/>
                 <when note-height="6" y="1"/>
@@ -156,7 +165,21 @@
                 <when note-height="10" y="1"/>
                 <when note-height="12" y="1"/>
         </hotspot>
+        <hotspot name="MUSICAL SYMBOL WHOLE REST ON STAFF">
+                <when note-height="4" y="1"/>
+                <when note-height="6" y="1"/>
+                <when note-height="8" y="1"/>
+                <when note-height="10" y="1"/>
+                <when note-height="12" y="1"/>
+        </hotspot>
         <hotspot name="MUSICAL SYMBOL HALF REST">
+                <when note-height="4" y="3"/>
+                <when note-height="6" y="4"/>
+                <when note-height="8" y="6"/>
+                <when note-height="10" y="7"/>
+                <when note-height="12" y="8"/>
+        </hotspot>
+        <hotspot name="MUSICAL SYMBOL HALF REST ON STAFF">
                 <when note-height="4" y="3"/>
                 <when note-height="6" y="4"/>
                 <when note-height="8" y="6"/>

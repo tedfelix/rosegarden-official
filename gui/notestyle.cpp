@@ -396,7 +396,7 @@ NoteStyle::getClefCharName(const Clef &clef)
 }
 
 CharName
-NoteStyle::getRestCharName(Note::Type type, bool rest_outside_stave)
+NoteStyle::getRestCharName(Note::Type type, bool restOutsideStave)
 {
     switch (type) {
     case Note::Hemidemisemiquaver:  return NoteCharacterNames::SIXTY_FOURTH_REST;
@@ -404,13 +404,15 @@ NoteStyle::getRestCharName(Note::Type type, bool rest_outside_stave)
     case Note::Semiquaver:          return NoteCharacterNames::SIXTEENTH_REST;
     case Note::Quaver:              return NoteCharacterNames::EIGHTH_REST;
     case Note::Crotchet:            return NoteCharacterNames::QUARTER_REST;
-    case Note::Minim:               return rest_outside_stave ?
-					NoteCharacterNames::HALF_REST_OUTSIDE
-				      : NoteCharacterNames::HALF_REST;
-    case Note::Semibreve:           return rest_outside_stave ?
-    					NoteCharacterNames::WHOLE_REST_OUTSIDE
-				      : NoteCharacterNames::WHOLE_REST;
-    case Note::Breve:               return NoteCharacterNames::MULTI_REST;
+    case Note::Minim:               return restOutsideStave ?
+					NoteCharacterNames::HALF_REST
+				      : NoteCharacterNames::HALF_REST_ON_STAFF;
+    case Note::Semibreve:           return restOutsideStave ?
+    					NoteCharacterNames::WHOLE_REST
+				      : NoteCharacterNames::WHOLE_REST_ON_STAFF;
+    case Note::Breve:               return restOutsideStave ?
+					NoteCharacterNames::MULTI_REST
+				      : NoteCharacterNames::MULTI_REST_ON_STAFF;
     default:
         return NoteCharacterNames::UNKNOWN;
     }

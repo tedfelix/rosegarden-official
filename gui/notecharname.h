@@ -59,10 +59,11 @@ extern const CharName FLAG_3;
 extern const CharName FLAG_4;
 
 extern const CharName MULTI_REST;
+extern const CharName MULTI_REST_ON_STAFF;
 extern const CharName WHOLE_REST;
-extern const CharName WHOLE_REST_OUTSIDE;
+extern const CharName WHOLE_REST_ON_STAFF;
 extern const CharName HALF_REST;
-extern const CharName HALF_REST_OUTSIDE;
+extern const CharName HALF_REST_ON_STAFF;
 extern const CharName QUARTER_REST;
 extern const CharName EIGHTH_REST;
 extern const CharName SIXTEENTH_REST;
