@@ -26,7 +26,7 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <qhbox.h>
+#include <qcheckbox.h>
 
 #include "Instrument.h"
 #include "MidiDevice.h"
@@ -38,11 +38,16 @@ InstrumentParameterBox::InstrumentParameterBox(QWidget *parent,
                                                const char *name,
                                                WFlags f)
     : QFrame(parent, name, f),
+      m_bankValue(new RosegardenComboBox(true, false, this)),
       m_channelValue(new RosegardenComboBox(true, false, this)),
       m_programValue(new RosegardenComboBox(true, false, this)),
-      m_panDial(0),
-      m_panValue(0),
-      m_volumeValue(new RosegardenComboBox(true, true, this))
+      m_panValue(new RosegardenComboBox(true, false, this)),
+      m_velocityValue(new RosegardenComboBox(true, true, this)),
+      m_bankCheckBox(new QCheckBox(this)),
+      m_programCheckBox(new QCheckBox(this)),
+      m_panCheckBox(new QCheckBox(this)),
+      m_velocityCheckBox(new QCheckBox(this)),
+      m_selectedInstrument(0)
 {
     initBox();
 }
@@ -61,67 +66,114 @@ InstrumentParameterBox::initBox()
     boldFont.setPointSize(10);
     boldFont.setBold(true);
 
-    QGridLayout *gridLayout = new QGridLayout(this, 2, 2, 5, 1);
+    QGridLayout *gridLayout = new QGridLayout(this, 2, 3, 5, 1);
 
     QLabel *title = new QLabel(i18n("Instrument Parameters"), this);
     title->setFont(boldFont);
 
-    QLabel *channelLabel = new QLabel(i18n("Channel"), this);
-    QLabel *programLabel = new QLabel(i18n("Program"), this);
+    QLabel *channelLabel = new QLabel(i18n("Chan"), this);
     QLabel *panLabel = new QLabel(i18n("Pan"), this);
-    QLabel *volumeLabel = new QLabel(i18n("Volume"), this);
+    QLabel *velocityLabel = new QLabel(i18n("Vol"), this);
+    QLabel *programLabel = new QLabel(i18n("Prg"), this);
+    QLabel *bankLabel = new QLabel(i18n("Bank"), this);
 
-    // reversing motif style read-only combo
-    //m_channelValue = new RosegardenComboBox(true, false, this);
+    //QFontMetrics fm(plainFont);
+    //m_panValue->setFixedWidth(fm.width("-99"));
 
-    // reversing motif style read-only combo
-    //m_programValue = new RosegardenComboBox(true, false, this);
-
-    // Create an HBox which we insert into the GridLayout
-    // for the Pan value
+    // Make columns 1 and 2 stretch more than 0
     //
-    QHBox *hbox = new QHBox(this);
+    //gridLayout->setColStretch(0, 0);
+    //gridLayout->setColStretch(1, 2);
+    //gridLayout->setColStretch(2, 1);
 
-    // reversing motif style read-only combo
-    m_panDial = new QDial(-Rosegarden::MidiMidValue,
-                            Rosegarden::MidiMidValue,
-                            10, // page step
-                            0, // initial value
-                            hbox);
+    gridLayout->addMultiCellWidget(title, 0, 0, 0, 2, AlignLeft);
 
-    m_panDial->setLineStep(5);
-    m_panDial->setMaximumHeight(panLabel->height());
+    gridLayout->addWidget(bankLabel, 1, 0, AlignLeft);
+    gridLayout->addWidget(m_bankCheckBox, 1, 1, 0);
+    gridLayout->addWidget(m_bankValue, 1, 2, 0);
 
-    m_panValue = new QLabel("0", hbox);
-    QFontMetrics fm(plainFont);
-    m_panValue->setFixedWidth(fm.width("-99"));
+    // program label under heading - filling the entire cell
+    gridLayout->addWidget(programLabel, 2, 0);
+    gridLayout->addWidget(m_programCheckBox, 2, 1, AlignLeft);
+    gridLayout->addWidget(m_programValue, 2, 2);
 
-    connect(m_panDial, SIGNAL(valueChanged(int)),
-            this, SLOT(slotChangePanLabel(int)));
+    gridLayout->addWidget(channelLabel, 3, 0, AlignLeft);
+    gridLayout->addMultiCellWidget(m_channelValue, 3, 3, 1, 2, AlignRight);
 
-    // reversing motif style read-only combo
-    //m_volumeValue = new RosegardenComboBox(true, true, this);
+    gridLayout->addWidget(panLabel, 4, 0, AlignLeft);
+    gridLayout->addWidget(m_panCheckBox, 4, 1);
+    gridLayout->addWidget(m_panValue, 4, 2, AlignRight);
 
-    gridLayout->addMultiCellWidget(title, 0, 0, 0, 1, AlignLeft);
-
-    gridLayout->addWidget(channelLabel, 1, 0, AlignLeft);
-    gridLayout->addWidget(m_channelValue, 1, 1, AlignRight);
-
-    gridLayout->addWidget(programLabel, 2, 0, AlignLeft);
-    gridLayout->addWidget(m_programValue, 2, 1, AlignRight);
-
-    gridLayout->addWidget(panLabel, 3, 0, AlignLeft);
-    gridLayout->addWidget(hbox, 3, 1, AlignRight);
-
-    gridLayout->addWidget(volumeLabel, 4, 0, AlignLeft);
-    gridLayout->addWidget(m_volumeValue, 4, 1, AlignRight);
+    gridLayout->addWidget(velocityLabel, 5, 0, AlignLeft);
+    gridLayout->addWidget(m_velocityCheckBox, 5, 1);
+    gridLayout->addWidget(m_velocityValue, 5, 2, AlignRight);
 
     // Populate channel list
     for (int i = 0; i < 16; i++)
-    {
         m_channelValue->insertItem(QString("%1").arg(i));
+
+    // Populate pan
+    //
+    QString mod;
+
+    for (int i = -Rosegarden::MidiMidValue;
+             i < Rosegarden::MidiMidValue + 1; i++)
+    {
+        if (i > 0)
+            mod = QString("+");
+
+        m_panValue->insertItem(mod + QString("%1").arg(i));
     }
 
+    // velocity values
+    //
+    for (int i = 0; i < Rosegarden::MidiMaxValue; i++)
+        m_velocityValue->insertItem(QString("%1").arg(i));
+
+
+    // Disable these three by default - they are activate by their
+    // checkboxes
+    //
+    m_panValue->setDisabled(true);
+    m_programValue->setDisabled(true);
+    m_velocityValue->setDisabled(true);
+    m_bankValue->setDisabled(true);
+
+    // Only active is we have an Instrument selected
+    //
+    m_panCheckBox->setDisabled(true);
+    m_velocityCheckBox->setDisabled(true);
+    m_programCheckBox->setDisabled(true);
+    m_bankCheckBox->setDisabled(true);
+
+    // Connect up the toggle boxes
+    //
+    connect(m_panCheckBox, SIGNAL(toggled(bool)),
+            this, SLOT(slotActivatePan(bool)));
+
+    connect(m_velocityCheckBox, SIGNAL(toggled(bool)),
+            this, SLOT(slotActivateVelocity(bool)));
+
+    connect(m_programCheckBox, SIGNAL(toggled(bool)),
+            this, SLOT(slotActivateProgramChange(bool)));
+
+    connect(m_bankCheckBox, SIGNAL(toggled(bool)),
+            this, SLOT(slotActivateBank(bool)));
+
+
+    // Connect activations
+    //
+    connect(m_bankValue, SIGNAL(activated(int)),
+            this, SLOT(slotSelectBank(int)));
+
+    connect(m_panValue, SIGNAL(activated(int)),
+            this, SLOT(slotSelectPan(int)));
+
+    connect(m_programValue, SIGNAL(activated(int)),
+            this, SLOT(slotSelectProgram(int)));
+
+    connect(m_velocityValue, SIGNAL(activated(int)),
+            this, SLOT(slotSelectVelocity(int)));
 }
 
 void
@@ -132,34 +184,222 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
     if (instrument == 0)
         return;
 
+    // for the moment ignore everything other than MIDI
+    //
+    if (instrument->getType() != Rosegarden::Instrument::Midi)
+        return;
+
+    m_selectedInstrument = instrument;
+
+    // Activate all checkboxes
+    //
+    m_panCheckBox->setDisabled(false);
+    m_velocityCheckBox->setDisabled(false);
+    m_programCheckBox->setDisabled(false);
+    m_bankCheckBox->setDisabled(false);
+
     // The MIDI channel
     m_channelValue->setCurrentItem((int)instrument->getMidiChannel());
 
-    // The program list
-    m_programValue->clear();
-
-    Rosegarden::ProgramList list = 
-        dynamic_cast<Rosegarden::MidiDevice*>(instrument->getDevice())->getProgramList(0, 0);
-
-    Rosegarden::ProgramList::iterator it;
-
-    for (it = list.begin(); it != list.end(); it++)
+    // Check for pan
+    //
+    if (instrument->sendsPan())
     {
-        m_programValue->insertItem(QString((*it).data()));
+        // activate
+        m_panValue->setDisabled(false);
+
+        // Set pan
+        m_panValue->setCurrentItem(instrument->getPan()
+                                   - Rosegarden::MidiMidValue);
+    }
+    else
+    {
+        m_panValue->setDisabled(true);
     }
 
-    m_programValue->setCurrentItem((int)instrument->getProgramChange());
+    // Check for program change
+    //
+    if (instrument->sendsProgramChange())
+    {
+        m_programValue->setDisabled(false);
+        populateProgramList();
+    }
+    else
+    {
+        m_programValue->setDisabled(true);
+    }
 
-    // Set pan
-    m_panDial->setValue((int)instrument->getPan());
-    m_panValue->setText(QString("%1").arg(instrument->getPan()));
+    // Check for velocity
+    //
+    if (instrument->sendsVelocity())
+    {
+        m_velocityValue->setDisabled(false);
+    }
+    else
+    {
+        m_velocityValue->setDisabled(true);
+    }
+
+    // clear bank list
+    m_bankValue->clear();
+
+    // create bank list
+    Rosegarden::BankList list = 
+        dynamic_cast<Rosegarden::MidiDevice*>
+            (instrument->getDevice())->getBankList();
+
+    Rosegarden::BankList::iterator it;
+
+    for (it = list.begin(); it != list.end(); it++)
+        m_bankValue->insertItem(QString((*it).data()));
+
+
 
 }
 
 void
-InstrumentParameterBox::slotChangePanLabel(int value)
+InstrumentParameterBox::slotActivateProgramChange(bool value)
 {
-    m_panValue->setText(QString("%1").arg(value));
+    if (m_selectedInstrument == 0)
+    {
+        m_programCheckBox->setChecked(false);
+        return;
+    }
+
+    m_selectedInstrument->setSendProgramChange(value);
+    m_programValue->setDisabled(!value);
+    populateProgramList();
+}
+
+void
+InstrumentParameterBox::slotActivateVelocity(bool value)
+{
+    if (m_selectedInstrument == 0)
+    {
+        m_velocityCheckBox->setChecked(false);
+        return;
+    }
+
+    m_selectedInstrument->setSendVelocity(value);
+    m_velocityValue->setDisabled(!value);
+}
+
+void
+InstrumentParameterBox::slotActivatePan(bool value)
+{
+    if (m_selectedInstrument == 0)
+    {
+        m_panCheckBox->setChecked(false);
+        return;
+    }
+
+    m_selectedInstrument->setSendPan(value);
+    m_panValue->setDisabled(!value);
+}
+
+void
+InstrumentParameterBox::slotActivateBank(bool value)
+{
+    if (m_selectedInstrument == 0)
+    {
+        m_bankCheckBox->setChecked(false);
+        return;
+    }
+
+    m_selectedInstrument->setSendBankSelect(value);
+    m_bankValue->setDisabled(!value);
+
+}
+
+
+void
+InstrumentParameterBox::slotSelectProgram(int index)
+{
+    if (m_selectedInstrument == 0)
+        return;
+
+    Rosegarden::MidiProgram *prg = 
+        dynamic_cast<Rosegarden::MidiDevice*>
+            (m_selectedInstrument->getDevice())->getProgramByIndex(index);
+
+    m_selectedInstrument->setProgramChange(prg->program);
+
+}
+
+
+void
+InstrumentParameterBox::slotSelectPan(int index)
+{
+    if (m_selectedInstrument == 0)
+        return;
+
+    Rosegarden::MidiByte newPan = m_panValue->text(index).toInt();
+
+    m_selectedInstrument->setPan(newPan);
+}
+
+void
+InstrumentParameterBox::slotSelectVelocity(int index)
+{
+    if (m_selectedInstrument == 0)
+        return;
+
+    Rosegarden::MidiByte newVely = m_velocityValue->text(index).toInt();
+
+    m_selectedInstrument->setVelocity(newVely);
+}
+
+void
+InstrumentParameterBox::slotSelectBank(int index)
+{
+    if (m_selectedInstrument == 0)
+        return;
+
+    Rosegarden::MidiBank *bank = 
+        dynamic_cast<Rosegarden::MidiDevice*>
+            (m_selectedInstrument->getDevice())->getBankByIndex(index);
+
+    m_selectedInstrument->setMSB(bank->msb);
+    m_selectedInstrument->setLSB(bank->lsb);
+
+    // repopulate program list
+    populateProgramList();
+}
+
+
+
+// Populate program list by bank context
+//
+void
+InstrumentParameterBox::populateProgramList()
+{
+    if (m_selectedInstrument == 0)
+        return;
+
+    // The program list
+    m_programValue->clear();
+
+
+    Rosegarden::MidiByte msb = 0;
+    Rosegarden::MidiByte lsb = 0;
+
+    if (m_selectedInstrument->sendsBankSelect())
+    {
+        msb = m_selectedInstrument->getMSB();
+        lsb = m_selectedInstrument->getLSB();
+    }
+
+    Rosegarden::ProgramList list = 
+        dynamic_cast<Rosegarden::MidiDevice*>
+            (m_selectedInstrument->getDevice())->getProgramList(msb, lsb);
+
+    Rosegarden::ProgramList::iterator it;
+
+    for (it = list.begin(); it != list.end(); it++)
+        m_programValue->insertItem(QString((*it).data()));
+
+    m_programValue->setCurrentItem(
+            (int)m_selectedInstrument->getProgramChange());
 }
 
 

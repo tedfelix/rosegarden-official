@@ -126,6 +126,37 @@ MidiDevice::getProgramList(MidiByte msb, MidiByte lsb)
 
 }
 
+// We handle banks by name, not by number
+//
+BankList
+MidiDevice::getBankList()
+{
+    BankList list;
+    std::vector<MidiBank*>::iterator it;
+
+    for (it = m_bankList.begin(); it != m_bankList.end(); it++)
+        list.push_back((*it)->name);
+
+    return list;
+}
+
+MidiBank*
+MidiDevice::getBankByIndex(int index)
+{
+    return m_bankList[index];
+}
+
+
+MidiProgram*
+MidiDevice::getProgramByIndex(int index)
+{
+    return m_programList[index];
+}
+
+
+
+
+
 
 
 

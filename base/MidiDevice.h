@@ -33,6 +33,7 @@ namespace Rosegarden
 {
 
 typedef std::vector<std::string> ProgramList;
+typedef std::vector<std::string> BankList;
 
 class MidiDevice : public Device
 {
@@ -53,8 +54,17 @@ public:
     //
     ProgramList getProgramList(MidiByte msb, MidiByte lsb);
 
+    // Get a list of all banks
+    //
+    BankList getBankList();
+
     void addProgram(MidiProgram *program);
     void addBank(MidiBank *bank);
+
+    // Retreive some stuff
+    //
+    MidiBank* getBankByIndex(int index);
+    MidiProgram* getProgramByIndex(int index);
 
 private:
     void clearProgramList();

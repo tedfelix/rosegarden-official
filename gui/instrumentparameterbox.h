@@ -22,6 +22,7 @@
 #include <qframe.h>
 #include <qdial.h>
 #include <qlabel.h>
+#include <qcheckbox.h>
 
 #include "widgets.h"
 
@@ -44,17 +45,32 @@ public:
     void useInstrument(Rosegarden::Instrument *instrument);
 
 public slots:
-    void slotChangePanLabel(int value);
+    void slotSelectProgram(int index);
+    void slotSelectPan(int index);
+    void slotSelectVelocity(int index);
+    void slotSelectBank(int index);
 
-private:
+    void slotActivateProgramChange(bool value);
+    void slotActivateVelocity(bool value);
+    void slotActivatePan(bool value);
+    void slotActivateBank(bool value);
 
+protected:
+    void populateProgramList();
     void initBox();
 
+    RosegardenComboBox *m_bankValue;
     RosegardenComboBox *m_channelValue;
     RosegardenComboBox *m_programValue;
-    QDial              *m_panDial;
-    QLabel             *m_panValue;
-    RosegardenComboBox *m_volumeValue;
+    RosegardenComboBox *m_panValue;
+    RosegardenComboBox *m_velocityValue;
+
+    QCheckBox          *m_bankCheckBox;
+    QCheckBox          *m_programCheckBox;
+    QCheckBox          *m_panCheckBox;
+    QCheckBox          *m_velocityCheckBox;
+
+    Rosegarden::Instrument *m_selectedInstrument;
 
 };
 

@@ -113,10 +113,10 @@ public:
     void setPan(MidiByte pan) { m_pan = pan; }
     MidiByte getPan() const { return m_pan; }
 
-    void setVolume(MidiByte volume) { m_volume = volume; }
-    MidiByte getVolume() const { return m_volume; }
+    void setVelocity(MidiByte velocity) { m_velocity = velocity; }
+    MidiByte getVelocity() const { return m_velocity; }
 
-    void setProgramChange(MidiByte program);
+    void setProgramChange(MidiByte program) { m_programChange = program; }
     MidiByte getProgramChange() const { return m_programChange; }
 
     void setSendBankSelect(bool value) { m_sendBankSelect = value; }
@@ -128,8 +128,14 @@ public:
     void setSendPan(bool value) { m_sendPan = value; }
     bool sendsPan() const { return m_pan; }
 
-    void setSendsVelocity(bool value) { m_sendVelocity = value; }
+    void setSendVelocity(bool value) { m_sendVelocity = value; }
     bool sendsVelocity() const { return m_sendVelocity; } 
+
+    void setMSB(MidiByte msb) { m_msb = msb; }
+    MidiByte getMSB() const { return m_msb; }
+
+    void setLSB(MidiByte lsb) { m_lsb = lsb; }
+    MidiByte getLSB() const { return m_lsb; }
 
     // Implementation of virtual function
     //
@@ -151,7 +157,7 @@ private:
     MidiByte        m_lsb;
     MidiByte        m_transpose;
     MidiByte        m_pan;
-    MidiByte        m_volume;
+    MidiByte        m_velocity;
 
     Device         *m_device;
 

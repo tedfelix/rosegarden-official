@@ -1,11 +1,11 @@
 0.2 TO-DO for rwb
 -----------------
-updated 07.03.2001
+updated 19.03.2001
 
 Currently looking at:
 
 o Looping marker set from file load/top level - Looping
-  set from Clients
+  set from Clients - Looping BUG crashing sequencer
 
 o Sharing keyboard accelerators cleanly across all child windows
 
@@ -18,8 +18,14 @@ o smooth position pointer
 o Latency dialog
 
 o Segment paramters and modifiers - looping of Segments, quantisation
+  [GETTING THERE]
 
 o Looping doesn't pick up first loop events cleanly [BETTER]
+
+o Instrument display - aRTS environment, MIDI/Audio assignable
+  parameters [GETTING THERE]
+
+o File writing - lots need writing out, Device, Studio etc.
 
 
 ==
@@ -27,9 +33,6 @@ o Looping doesn't pick up first loop events cleanly [BETTER]
 o Complete segment edit shortcuts (click/copy/multiple segment drag)
 
 o Segment colouring
-
-o Instrument display - aRTS environment, MIDI/Audio assignable
-  parameters
 
 o Track addition/deletion and moving on TrackButtons canvas - needs undo!
 
