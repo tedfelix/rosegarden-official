@@ -1,5 +1,5 @@
 <HTML>
-<H1><A NAME="2"></A>2 Produciendo Sonido</H1>
+<H1>Produciendo Sonido</H1>
 <P>Muchos usuarios han escrito preguntando por qu&eacute; no pueden
 lograr que Rosegarden haga alg&uacute;n sonido. Es la pregunta m&aacute;s
 com&uacute;n realizada en la lista de correo de usuarios de
@@ -32,7 +32,7 @@ mostrando todos los posibles caminos para producir sonido con
 Rosegarden. Es bastante dif&iacute;cil, lo s&eacute;, pero espero que
 te pueda ayudar a darte una idea:</P>
 <P ALIGN=CENTER><IMG SRC="../pixmaps/sound-diagram-master.jpg" NAME="Graphic16" ALIGN=BOTTOM WIDTH=614 HEIGHT=580 BORDER=0></P>
-<H2><A NAME="2_1"></A>2.1 Reproduciendo MIDI:</H2>
+<H2>Reproduciendo MIDI:</H2>
 <P>MIDI bajo Linux es un asunto un poco complicado. El hardware
 disponible se divide en tres grandes categor&iacute;as, cada una con
 su consideraci&oacute;n especial. Hardware MIDI externo<FONT COLOR="#0000ff">
@@ -42,7 +42,7 @@ por ALSA. La &uacute;ltima categor&iacute;a se divide en:<FONT COLOR="#9966cc">
 ALSA soft synths</FONT> (sintetizadores ALSA por software) y<FONT COLOR="#5e11a6">
 synth plugins (plugins sintetizadores)</FONT>, que son similares pero
 ligeramente distintos.</P>
-<H3><A NAME="2_1_1"></A>2.1.1 &iquest;Qu&eacute; hay en mi PC?</H3>
+<H3><A NAME="2_1_1"></A>&iquest;Qu&eacute; hay en mi PC?</H3>
 <P>Si no tienes ni idea sobre lo que hay dentro de tu PC, y no tienes
 ni idea sobre c&oacute;mo configurar cualquiera de estas cosas, un
 buen lugar para comenzar es peg&aacute;ndole una mirada y ver cu&aacute;n
@@ -302,9 +302,9 @@ hable acerca de asignar instrumentos a pistas, porque su
 configuraci&oacute;n y uso es enteramente interna en Rosegarden. Por
 el momento es suficiente saber que existe, y que requiere un server
 JACK funcionando correctamente.</P>
-<H2><A NAME="2_2"></A>2.2 Reproduciendo Audio</H2>
+<H2>Reproduciendo Audio</H2>
 <P>Para reproducir audio necesitar&aacute;s correr JACK.</P>
-<H3><A NAME="2_2_1"></A>2.2.1 &iquest;Qu&eacute; es JACK?</H3>
+<H3>&iquest;Qu&eacute; es JACK?</H3>
 <P>JACK es una abreviaci&oacute;n de Jack Audio Connection Kit. JACK
 es un flexible servidor de audio que permite a sus aplicaciones
 clientes compartir el hardware de audio de un modo similar, y
@@ -315,7 +315,7 @@ construido para los profesionales en audio que quieren obtener la
 mejor posible performance de su hardware, pero siendo profesional o
 no, es algo que deber&aacute;s entender si quieres reproducir audio
 con Rosegarden.</P>
-<H3><A NAME="2_2_2"></A>2.2.2 Obteniendo un Kernel adecuado</H3>
+<H3>Obteniendo un Kernel adecuado</H3>
 <P>Es te&oacute;ricamente posible correr JACK y Rosegarden con un
 kernel ordinario, pero nunca obtendr&aacute;s resultados aceptables,
 incluso en una m&aacute;quina con altas especificaciones. Poder en el
@@ -346,7 +346,7 @@ buenos resultados trabajando con audio con los nuevos kernels. Alguna
 de las capacidades puestas en el kernel de AGNULA han sido
 incorporadas dentro del kernel 2.6,  pero no todas ellas. Te
 recomiendo que te quedes con la serie 2.4 por ahora.</I></FONT></P>
-<H3><A NAME="2_2_3"></A>2.2.3 Iniciando y afinando JACK</H3>
+<H3>Iniciando y afinando JACK</H3>
 <P>El modo m&aacute;s simple de controlar tu server JACK es usando<A HREF="http://qjackctl.sourceforge.net/">
 <FONT FACE="courier 10 pitch">qjackctl</FONT></A>. Es una aplicaci&oacute;n
 muy &uacute;til que provee un modo conveniente de iniciar y parar tu
@@ -397,7 +397,7 @@ desde all&iacute;. (Por ejemplo, no es posible iniciar JACK en mi
 hardware con un par&aacute;metro periods/buffer  distinto de dos,
 entonces no hay nada que hacer salvo usar ese seteo y moverse hacia
 un par&aacute;metro diferente.)</P>
-<H4><A NAME="2_2_4_1"></A>2.2.4.1 El maligno XRUN</H4>
+<H4>El maligno XRUN</H4>
 <P ALIGN=LEFT>Es muy importante evadir xruns. Si encuentras una
 combinaci&oacute;n de par&aacute;metros de baja latencia que le
 permitan al servidor JACK iniciar, pero que producen un
@@ -415,7 +415,7 @@ causan  p&eacute;rdida de audio; clicks, pops, distorsiones, efectos
 del tipo flanger. Si obtienes mas de dos o tres en el curso de un
 d&iacute;a, probablemente necesitas afinar JACK un poco y perder algo
 de performance para ganar calidad.</P>
-<H3><A NAME="2_2_5"></A>2.2.5 Manejando conexiones JACK 
+<H3>Manejando conexiones JACK 
 </H3>
 <P>Rosegarden establecer&aacute; conexiones correctas
 autom&aacute;ticamente; as&iacute; lo har&aacute;n  QSynth e

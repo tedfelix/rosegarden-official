@@ -1,30 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <HTML>
-<HEAD>
-	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
-	<TITLE></TITLE>
-	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.2  (Linux)">
-	<META NAME="CREATED" CONTENT="20040613;312000">
-	<META NAME="CHANGED" CONTENT="20041008;14472800">
-	<STYLE>
-	<!--
-		@page { size: 8.5in 11in }
-		H2.western { font-family: "Albany", sans-serif; font-size: 14pt; font-style: italic }
-		H2.cjk { font-family: "HG Mincho Light J"; font-size: 14pt; font-style: italic }
-		H2.ctl { font-family: "Arial Unicode MS"; font-size: 14pt; font-style: italic }
-		H3.western { font-family: "Albany", sans-serif }
-		H3.cjk { font-family: "HG Mincho Light J" }
-		H3.ctl { font-family: "Arial Unicode MS" }
-		H4.western { font-family: "Albany", sans-serif; font-size: 11pt; font-style: italic }
-		H4.cjk { font-family: "HG Mincho Light J"; font-size: 11pt; font-style: italic }
-		H4.ctl { font-family: "Arial Unicode MS"; font-size: 11pt; font-style: italic }
-		H5.western { font-family: "Albany", sans-serif; font-size: 11pt }
-		H5.cjk { font-family: "HG Mincho Light J"; font-size: 11pt }
-		H5.ctl { font-family: "Arial Unicode MS"; font-size: 11pt }
-	-->
-	</STYLE>
-</HEAD>
-<BODY LANG="en-US" DIR="LTR">
 <H1>Notation</H1>
 <P STYLE="margin-bottom: 0.2in; font-style: normal"><FONT FACE="Arial">I
 have mentioned elsewhere that Rosegarden is not purely a MIDI
@@ -907,17 +881,8 @@ bit of notation in the first staff, then selected alternating notes.</P>
 note and dropped it in the next staff down, right over the bar line.
 The remaining notes took their places on either side of it.</P>
 <P ALIGN=RIGHT><IMG SRC="../pixmaps/notation-move-notes1.png" NAME="Graphic90" ALIGN=BOTTOM WIDTH=304 HEIGHT=279 BORDER=0></P>
-<P ALIGN=LEFT STYLE="font-weight: medium"><I>TIP: I find that I have
-a tendency to surprise myself with this feature. It is not necessary
-to select an element before dragging it, and neither is it a
-requirement that you only move a note from your selection. If you
-have a selection off to the side somewhere, it is very easy to forget
-that it is going to move too. When you perform the actual drag
-operation, there is no visual indication that the selected notes are
-going along for the ride. If the selection is not visible, you might
-not even notice what has happened until some time after performing
-the drag. This is not a bug, but it often feels like one. I have
-stubbed my toe on this innumerable times.</I></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
 <H4 CLASS="western">Ties</H4>
 <P>Ties work just like slurs, except that they must occur between two
 notes of the same pitch. If you attempt to tie two notes at different
@@ -1027,6 +992,13 @@ default style. After inserting the dynamic on either end (the second
 one inserted on the rest after the last E) the hairpin shrinks up a
 bit to accommodate these, and the result looks like this:</P>
 <P ALIGN=CENTER><IMG SRC="../pixmaps/notation-text-tool1.png" NAME="Graphic85" ALIGN=BOTTOM WIDTH=426 HEIGHT=146 BORDER=0></P>
+<P ALIGN=LEFT><I>NOTE:  If you wish to interpret the hairpins later
+on, the procedure I have documented here is not quite reliable.  I
+can obtain better results by putting a dynamic under the first E,
+then another dynamic under the last E, then selecting the range from
+the F# to the C and applying the hairpin to that selection.  I should
+eventually rewrite this bit here to reflect the preferred procedure,
+but I feel for now it is sufficient merely to mention it in passing.</I></P>
 <H4 CLASS="western">Text Styles</H4>
 <P>There are a variety of text styles for various purposes. While all
 of them are intended to serve different musical functions, they are
@@ -1229,6 +1201,77 @@ notes.</P>
 <P ALIGN=CENTER><IMG SRC="../pixmaps/notation-trigger11.png" NAME="Graphic106" ALIGN=BOTTOM WIDTH=309 HEIGHT=271 BORDER=0></P>
 <P><BR><BR>
 </P>
+<H2 CLASS="western">Tweaking Parts with the Selection Filter</H2>
+<P>I have demonstrated the selection event filter in other places,
+and I usually use it from the matrix view myself, but it has its uses
+here in the notation editor as well.</P>
+<H3 CLASS="western">Bringing Parts into Range</H3>
+<P>One of the best uses I have found for the event selection filter
+is for cleaning up parts that were written without respect to the
+practical playable ranges of actual instruments. For example, I have
+an oboe part in a short piece I wrote for inclusion with a computer
+game. I knew little about the oboe at the time, and did not
+particularly care about writing a playable part, because I was
+writing music for a computer and synthesizer to perform. My handy
+dandy pocket guide to arranging indicates that the useful range of
+the oboe is from the D below the staff to the D above, so in order to
+make this part playable, I have to do something with the notes
+outside that range.</P>
+<P>As I have demonstrated elsewhere, the selection event filter works
+by filtering events out of a selection. You must first make a
+selection to filter. So, make an appropriate selection (or <B>Edit -&gt;
+Select Whole Staff</B>) and then...</P>
+<P><BR><BR>
+</P>
+<P STYLE="font-weight: medium">click on the 
+<IMG SRC="../pixmaps/event-list-filter-selection.png" NAME="Graphic112" ALIGN=BOTTOM WIDTH=30 HEIGHT=27 BORDER=0>
+icon...</P>
+<P><BR><BR>
+</P>
+<P ALIGN=CENTER STYLE="font-weight: medium">...then dial up the
+appropriate filter range (the Db below the staff to the D# above)...</P>
+<P ALIGN=RIGHT STYLE="font-weight: medium">...and set the first box
+to &quot;exclude&quot; this range...</P>
+<P ALIGN=CENTER><BR><BR>
+</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/notation-filter-notes.png" NAME="Graphic113" ALIGN=BOTTOM WIDTH=380 HEIGHT=130 BORDER=0></P>
+<P ALIGN=LEFT STYLE="font-weight: medium"><I>(Yes, if you are paying
+close attention, I took a screenshot that displays incorrect numbers.
+That should be from 61 to 87 so that the low and high extremes will
+be excluded from the selection. I goofed, and I don't feel motivated
+to do a corrected screenshot.)</I></P>
+<P ALIGN=RIGHT STYLE="font-weight: medium">...leaving you with the
+out-of-range notes selected, so you can rearrange them as you deem
+appropriate.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/notation-filter-notes1.png" NAME="Graphic114" ALIGN=BOTTOM WIDTH=456 HEIGHT=88 BORDER=0></P>
+<P ALIGN=LEFT STYLE="font-weight: medium">In the preceding example,
+it happened that all the notes I needed to adjust fell toward the
+bottom of the playable range. What I encounter most often in
+arranging is the case where I have notes both too high and too low.
+In that case, I transpose the selected notes in the direction that
+pushes the fewest notes even further out of range, then I repeat the
+process of making a selection and filtering it to pick off those
+notes and transpose them down a couple of octaves.</P>
+<H3 CLASS="western">Correcting Odd Durations</H3>
+<P>Another good notation use for my filter is to change the duration
+of notes <I>en masse</I>. For example, I found a MIDI file that
+imported and quantized with consistently awkward pairs of 32<SUP>nd</SUP>
+notes with 32<SUP>nd</SUP> rests that were probably trying to be 16<SUP>th</SUP>
+notes. I selected the notes...</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/notation-filter-notes2.png" NAME="Graphic115" ALIGN=BOTTOM WIDTH=380 HEIGHT=70 BORDER=0></P>
+<P ALIGN=LEFT STYLE="font-style: normal">...then I set the selection
+filter to leave me with all 32<SUP>nd</SUP> notes selected...</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/notation-filter-notes3.png" NAME="Graphic116" ALIGN=BOTTOM WIDTH=380 HEIGHT=128 BORDER=0></P>
+<P ALIGN=LEFT STYLE="font-style: normal">Leaving me with this:</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/notation-filter-notes4.png" NAME="Graphic117" ALIGN=BOTTOM WIDTH=380 HEIGHT=68 BORDER=0></P>
+<P ALIGN=LEFT STYLE="font-style: normal">Then I simply used <B>Ctrl</B>+<B>6</B>
+to change all of these into 16<SUP>th</SUP> notes, leaving me with
+this:</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/notation-filter-notes5.png" NAME="Graphic118" ALIGN=BOTTOM WIDTH=342 HEIGHT=71 BORDER=0></P>
+<P ALIGN=LEFT STYLE="font-style: normal; font-weight: medium">Then,
+of course, I had to select everything again and <B>Notes -&gt; Beams
+-&gt; Auto Beam</B> to correct the beaming:</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/notation-filter-notes6.png" NAME="Graphic119" ALIGN=BOTTOM WIDTH=323 HEIGHT=72 BORDER=0></P>
 <P><BR><BR>
 </P>
 <P>TODO:</P>
@@ -1268,5 +1311,4 @@ transpose/delete/copy/move them.</P>
 <P>explain busses and faders and allt hat other audio/synth
 instrument whatnot you haven't done yet</P>
 <P>talk about setting tempo from audio segment or a beat segment</P>
-</BODY>
 </HTML>

@@ -44,7 +44,7 @@ translate_es() {
 #	mv chapter-0.html capitulo-0.html
 	for file in *.html;do
 	    	echo translating headers in $file...
-		Sed index.html capitulo-0.html $file
+		Sed index.html chapter-0.html $file
 		Sed Contents Contenido $file
 		Sed Next Siguiente $file
 		Sed Previous Atrás $file
