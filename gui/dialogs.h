@@ -648,4 +648,23 @@ private:
 };
 
 
+// Timer dialog for counting down
+//
+class CountdownDialog : public KDialogBase
+{
+    Q_OBJECT
+
+public:
+    CountdownDialog(QWidget *parent);
+
+    void setLabel(const QString &label);
+    void setTime(int seconds);
+
+protected:
+    QLabel  *m_label;
+    int      m_time;
+
+    QFrame  *m_progressBar;
+};
+
 #endif

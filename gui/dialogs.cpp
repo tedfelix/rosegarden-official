@@ -2810,3 +2810,31 @@ InterpretDialog::getInterpretations()
 }
 
 
+// ------------------ CountdownDialog -------------------
+//
+CountdownDialog::CountdownDialog(QWidget *parent):
+    KDialogBase(parent, 0, false, i18n("Countdown Dialog"),  Cancel),
+    m_time(0)
+{
+    QVBox *vBox = makeVBoxMainWidget();
+    QFrame *frame = new QFrame(vBox);
+
+    m_label = new QLabel(vBox);
+    m_progressBar = new QFrame(vBox);
+
+    m_label->setText(i18n("Value"));
+}
+
+
+void
+CountdownDialog::setLabel(const QString &label)
+{
+    m_label->setText(label);
+}
+
+void
+CountdownDialog::setTime(int seconds)
+{
+    m_time = seconds;
+}
+

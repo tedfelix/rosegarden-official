@@ -37,11 +37,13 @@
 #include <qlineedit.h>
 #include <qtooltip.h>
 #include <qvbox.h>
+#include <qstringlist.h>
 
 #include <klistview.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
+#include <kprocess.h>
 
 #include "rosestrings.h"
 #include "rosegardenconfiguredialog.h"
@@ -62,6 +64,7 @@
 #include "studiocontrol.h"
 #include "widgets.h"
 #include "MidiDevice.h"
+#include "audiopluginmanager.h"
 
 namespace Rosegarden
 {
@@ -1031,6 +1034,17 @@ SequencerConfigurationPage::SequencerConfigurationPage(
 
 #endif // HAVE_LIBJACK
 
+    label = new QLabel(i18n("Minutes of audio recording"), frame);
+    m_audioRecordMinutes = new QSpinBox(frame);
+
+    layout->addWidget(label,                2, 0);
+    layout->addWidget(m_audioRecordMinutes, 2, 1);
+
+    int audioRecordMinutes = m_cfg->readNumEntry("audiorecordminutes", 5);
+
+    m_audioRecordMinutes->setValue(audioRecordMinutes);
+    m_audioRecordMinutes->setMinValue(1);
+    m_audioRecordMinutes->setMaxValue(60);
 
     addTab(frame, i18n("Recording"));
 
@@ -1162,9 +1176,14 @@ SequencerConfigurationPage::apply()
     m_cfg->writeEntry("midirecorddevice", device);
 
 #ifdef HAVE_LIBJACK
+
     // Jack audio inputs
     //
     m_cfg->writeEntry("jackaudioinputs", m_jackInputs->value());
+
+    // Audio record minutes
+    //
+    m_cfg->writeEntry("audiorecordminutes", m_audioRecordMinutes->value());
 
     mE = new Rosegarden::MappedEvent(
                 Rosegarden::MidiInstrumentBase, // InstrumentId
@@ -1397,8 +1416,7 @@ AudioConfigurationPage::AudioConfigurationPage(RosegardenGUIDoc *doc,
                                                QWidget *parent,
                                                const char *name)
     : TabbedConfigurationPage(doc, parent, name),
-      m_path(0),
-      m_changePathButton(0)
+    m_diskSpaceKBytes(0)
 {
     Rosegarden::AudioFileManager &afm = doc->getAudioFileManager();
 
@@ -1406,8 +1424,7 @@ AudioConfigurationPage::AudioConfigurationPage(RosegardenGUIDoc *doc,
     QGridLayout *layout = new QGridLayout(frame, 2, 4,
                                           10, 5);
     layout->addWidget(new QLabel(i18n("Audio file path"), frame), 0, 0);
-    m_path = new QLineEdit(QString(afm.getAudioPath().c_str()), frame);
-    m_path->setMinimumWidth(200);
+    m_path = new QLabel(QString(afm.getAudioPath().c_str()), frame);
     layout->addMultiCellWidget(m_path, 0, 0, 1, 2);
     
     m_changePathButton =
@@ -1415,10 +1432,114 @@ AudioConfigurationPage::AudioConfigurationPage(RosegardenGUIDoc *doc,
 
     layout->addWidget(m_changePathButton, 0, 3);
 
+    m_diskSpace = new QLabel(frame);
+    layout->addMultiCellWidget(new QLabel(i18n("Disk Space Remaining"), frame),
+                               1, 1, 1, 2);
+    layout->addWidget(m_diskSpace, 1, 3, AlignCenter);
+
+    m_minutesAtStereo = new QLabel(frame);
+    layout->addMultiCellWidget(
+            new QLabel(i18n("Equivalent minutes of 16-bit stereo"), 
+            frame), 2, 2, 1, 2);
+
+    layout->addWidget(m_minutesAtStereo, 2, 3, AlignCenter);
+
+    // Just to ensure that the above fields bunch towards the top nicely
+    //
+    layout->addWidget(new QLabel(frame), 3, 0);
+    layout->addWidget(new QLabel(frame), 4, 0);
+
+    calculateStats();
+
     connect(m_changePathButton, SIGNAL(released()),
             SLOT(slotFileDialog()));
 
     addTab(frame, i18n("Modify audio path"));
+}
+
+void
+AudioConfigurationPage::calculateStats()
+{
+    KProcess *proc = new KProcess;
+
+    // df with the path as the only argument
+    //
+    *proc << "/bin/df";
+    *proc << "-k" << m_path->text();
+
+    connect(proc, SIGNAL(receivedStdout (KProcess*, char *, int)),
+            this, SLOT(slotProcessStdout(KProcess*, char *, int)));
+
+    // Start the process as blocking and capture All output
+    //
+    if(proc->start(KProcess::Block, KProcess::All) == false)
+    {
+        KMessageBox::error(this, i18n("Couldn't determine free disk space"));
+        return;
+    }
+
+    // it should already be complete by here
+    while(proc->isRunning());
+    
+    float mbSize = float(m_diskSpaceKBytes)/1024.0;
+    QString mbSizeStr;
+    mbSizeStr.sprintf("%10.3f", mbSize);
+    m_diskSpace->setText(QString("%1 MB").arg(mbSizeStr));
+
+    // Work out minutes of recordable stereo from centralised sample rate value
+    //
+    Rosegarden::AudioPluginManager *apm = m_doc->getPluginManager();
+
+    if (apm == 0 || apm->getSampleRate() == 0)
+    {
+        m_minutesAtStereo->setText(i18n("<sample rate not available>"));
+        return;
+    }
+
+    // Work out total bytes and divide this by the sample rate times the
+    // number of channels (2) times the number of bytes per sample (2)
+    // times 60 seconds.
+    //
+    float stereoMins = ( float(m_diskSpaceKBytes) * 1024.0 ) / 
+                       ( float(apm->getSampleRate()) * 2.0 * 2.0 * 60.0 );
+    QString minsStr;
+    minsStr.sprintf("%8.1f", stereoMins);
+
+    m_minutesAtStereo->
+        setText(QString("%1 %2 %3Hz").arg(minsStr)
+                                     .arg(i18n("minutes at"))
+                                     .arg(apm->getSampleRate()));
+}
+
+void
+AudioConfigurationPage::slotProcessStdout(KProcess * /*proc*/,
+                                          char *buf, int no)
+{
+    QString outputStr;
+    for (int i = 0; i < no; ++i) outputStr +=buf[i];
+
+    // split by forward slash to begin with
+    QStringList list(QStringList::split("/", outputStr));
+
+    if (list.size() < 4)
+    {
+        m_diskSpaceKBytes = 0;
+        KMessageBox::error(this, 
+                           i18n("Couldn't extract disk space information"));
+        return;
+    }
+
+    QStringList valueList(QStringList::split(" ", list[2]));
+    m_diskSpaceKBytes = valueList[3].toInt();
+
+    /*
+    // Device upon which the record path is mounted - in case we ever
+    // need it.
+    //
+    QString device = QString("/%1/%2").arg(list[1]).arg(valueList[0]);
+    cout << "DEVICE \"" << device << "\" = remaining = " 
+         << m_diskSpaceKBytes << endl;
+         */
 }
 
 void
@@ -1440,6 +1561,7 @@ AudioConfigurationPage::slotFileDialog()
     if (fileDialog->exec() == QDialog::Accepted)
     {
         m_path->setText(fileDialog->selectedFile());
+        calculateStats();
     }
     delete fileDialog;
 }

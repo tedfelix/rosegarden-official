@@ -19,6 +19,9 @@ o Audio
    - exceptions and return values
    - stereo vu meters (0dB level = 1.0f etc)
    - jack process tidy up (Bob Ham inspired) [DONE]
+   - notify disk space available on audio path [DONE]
+   - countdown dialog for audio recording
+   - check disk space on audio record start
 
 o Audio busses and routing
    - n jack input routes [DONE]

@@ -43,6 +43,7 @@ class QLabel;
 class QCheckBox;
 class KListView;
 class RosegardenQuantizeParameters;
+class KProcess;
 
 namespace Rosegarden
 {
@@ -367,13 +368,24 @@ public:
 
 protected slots:
     void slotFileDialog();
+    void slotProcessStdout(KProcess*, char*, int);
+
+    // Work out and display remaining disk space and time left 
+    // at current path.
+    //
+    void calculateStats();
 
 protected:
 
     //--------------- Data members ---------------------------------
 
-    QLineEdit        *m_path;
+    QLabel           *m_path;
+    QLabel           *m_diskSpace;
+    QLabel           *m_minutesAtStereo;
+
     QPushButton      *m_changePathButton;
+
+    int               m_diskSpaceKBytes;  // actual bytes recovered from df
 };
 
 
@@ -419,6 +431,10 @@ protected:
     QSpinBox     *m_jackInputs;
 
 #endif // HAVE_LIBJACK
+
+    // How many minutes of audio recording should we allow?
+    //
+    QSpinBox     *m_audioRecordMinutes;
 
 };
  

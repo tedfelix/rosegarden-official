@@ -1041,6 +1041,12 @@ SequenceManager::record(bool toggled)
             {
                 // completed successfully 
                 m_transportStatus = recordType;
+
+                if (recordType == STARTING_TO_RECORD_AUDIO)
+                {
+                    // pop up the countdown timer for recording the audio
+                    //CountdownDialog *dialog = new CountdownDialog(this);
+                }
             }
             else
             {
