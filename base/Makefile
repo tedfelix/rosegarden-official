@@ -18,6 +18,6 @@ clean:
 	rm -f *.o 
 
 distclean:	clean
-	rm -f libcore.a
+	rm -f libcore.a *~
 
 # DO NOT DELETE
