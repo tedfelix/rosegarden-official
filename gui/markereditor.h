@@ -106,6 +106,10 @@ public slots:
     void slotEdit(QListViewItem *);
     void slotItemClicked(QListViewItem *);
 
+    void slotMusicalTime();
+    void slotRealTime();
+    void slotRawTime();
+
 signals:
     void closing();
     void jumpToMarker(Rosegarden::timeT);
@@ -114,6 +118,7 @@ protected:
     virtual void closeEvent(QCloseEvent *);
 
     void setupActions();
+    QString makeTimeString(Rosegarden::timeT time, int timeMode);
 
     //--------------- Data members ---------------------------------
     RosegardenGUIDoc        *m_doc;

@@ -20,8 +20,10 @@
 */
 
 
+#include <kconfig.h>
 #include <kstdaction.h>
 #include <kaction.h>
+#include <kstddirs.h>
 
 #include <qvbox.h>
 #include <qlayout.h>
@@ -30,6 +32,7 @@
 #include <qspinbox.h>
 #include <qlabel.h>
 #include <qaccel.h>
+#include <qiconset.h>
 
 #include "markereditor.h"
 #include "rosegardenguidoc.h"
@@ -37,6 +40,60 @@
 #include "rosestrings.h"
 #include "editcommands.h"
 #include "widgets.h"
+
+
+// ------- MarkerEditorViewItem --------
+//
+//
+
+class MarkerEditorViewItem : public QListViewItem
+{
+public:
+    MarkerEditorViewItem(QListView * parent, QString label1, 
+                         QString label2 = QString::null, 
+                         QString label3 = QString::null,
+                         QString label4 = QString::null, 
+                         QString label5 = QString::null, 
+                         QString label6 = QString::null, 
+                         QString label7 = QString::null, 
+                         QString label8 = QString::null):
+        QListViewItem(parent, label1, label2, label3, label4,
+                      label5, label6, label7, label8) { ; }
+
+    virtual int compare(QListViewItem * i, int col, bool ascending) const;
+
+    void setRawTime(Rosegarden::timeT rawTime) { m_rawTime = rawTime; }
+    Rosegarden::timeT getRawTime() const { return m_rawTime; }
+
+protected:
+    Rosegarden::timeT   m_rawTime;
+};
+
+int
+MarkerEditorViewItem::compare(QListViewItem * i, int col, bool ascending) const
+{
+    MarkerEditorViewItem *ei = 
+        dynamic_cast<MarkerEditorViewItem *>(i);
+
+    if (!ei) return QListViewItem::compare(i, col, ascending);
+
+    // Raw time sorting on time column
+    //
+    if (col == 0) {  
+
+        if (m_rawTime < ei->getRawTime()) return -1;
+        else if (ei->getRawTime() < m_rawTime) return 1;
+        else return 0;
+
+    } else {
+        return QListViewItem::compare(i, col, ascending);
+    }
+}
+
+
+// -------- MarkerEditorDialog --------
+//
+//
 
 MarkerEditorDialog::MarkerEditorDialog(QWidget *parent,
                                          RosegardenGUIDoc *doc):
@@ -206,7 +263,7 @@ MarkerEditorDialog::slotUpdate()
 
     //QPtrList<QListViewItem> selection = m_listView->selectedItems();
 
-    QListViewItem *item;
+    MarkerEditorViewItem *item;
 
     m_listView->clear();
 
@@ -215,20 +272,30 @@ MarkerEditorDialog::slotUpdate()
 
     Rosegarden::Composition::markerconstiterator it;
 
+    kapp->config()->setGroup(MarkerEditorConfigGroup);
+    int timeMode = kapp->config()->readNumEntry("timemode", 0);
+
     for (it = markers.begin(); it != markers.end(); ++it)
     {
-        item = new QListViewItem(m_listView,
-                                 QString("%1").arg((*it)->getTime()),
+        QString timeString = makeTimeString((*it)->getTime(), timeMode);
+
+        item = new 
+            MarkerEditorViewItem(m_listView,
+                                 timeString,
                                  strtoqstr((*it)->getName()),
                                  strtoqstr((*it)->getDescription()));
+
+        // Set this for the MarkerEditorDialog
+        //
+        item->setRawTime((*it)->getTime());
 
         m_listView->insertItem(item);
     }
 
     if (m_listView->childCount() == 0)
     {
-        QListViewItem *item = new QListViewItem(m_listView,
-                                                i18n("<none>"));
+        QListViewItem *item = 
+            new MarkerEditorViewItem(m_listView, i18n("<none>"));
         m_listView->insertItem(item);
 
         m_listView->setSelectionMode(QListView::NoSelection);
@@ -331,6 +398,35 @@ MarkerEditorDialog::setupActions()
                             actionCollection(),
                             KStdAction::stdName(KStdAction::Redo));
 
+    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+    int timeMode = kapp->config()->readNumEntry("timemode", 0);
+
+    KRadioAction *action;
+
+    QIconSet icon(QCanvasPixmap(pixmapDir + "/toolbar/time-musical.xpm"));
+
+    action = new KRadioAction(i18n("&Musical Times"), icon, 0, this,
+                              SLOT(slotMusicalTime()),
+                              actionCollection(), "time_musical");
+    action->setExclusiveGroup("timeMode");
+    if (timeMode == 0) action->setChecked(true);
+
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/time-real.xpm"));
+
+    action = new KRadioAction(i18n("&Real Times"), icon, 0, this,
+                              SLOT(slotRealTime()),
+                              actionCollection(), "time_real");
+    action->setExclusiveGroup("timeMode");
+    if (timeMode == 1) action->setChecked(true);
+
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/time-raw.xpm"));
+
+    action = new KRadioAction(i18n("Ra&w Times"), icon, 0, this,
+                              SLOT(slotRawTime()),
+                              actionCollection(), "time_raw");
+    action->setExclusiveGroup("timeMode");
+    if (timeMode == 2) action->setChecked(true);
+
     createGUI("markereditor.rc");
 }
 
@@ -376,10 +472,18 @@ MarkerEditorDialog::slotEdit(QListViewItem *i)
 {
     RG_DEBUG << "MarkerEditorDialog::slotEdit" << endl;
 
+    // Need to get the raw time from the ListViewItem
+    //
+    MarkerEditorViewItem *item = 
+        dynamic_cast<MarkerEditorViewItem*>(i);
+
+    if (!item) return;
+
     MarkerModifyDialog dialog(this,
 			      &m_doc->getComposition(),
-			      i->text(0).toInt(),
-			      i->text(1), i->text(2));
+			      item->getRawTime(),
+			      item->text(1), 
+                              item->text(2));
 
     if (dialog.exec() == QDialog::Accepted)
     {
@@ -470,5 +574,66 @@ MarkerEditorDialog::slotItemClicked(QListViewItem *item)
         emit jumpToMarker(Rosegarden::timeT(item->text(0).toInt()));
     }
 }
+
+QString
+MarkerEditorDialog::makeTimeString(Rosegarden::timeT time, int timeMode)
+{
+    switch (timeMode) {
+
+    case 0: // musical time
+    {
+        int bar, beat, fraction, remainder;
+        m_doc->getComposition().getMusicalTimeForAbsoluteTime
+            (time, bar, beat, fraction, remainder);
+        ++bar;
+        return QString("%1%2%3-%4%5-%6%7-%8%9   ")
+            .arg(bar/100)
+            .arg((bar%100)/10)
+            .arg(bar%10)
+            .arg(beat/10)
+            .arg(beat%10)
+            .arg(fraction/10)
+            .arg(fraction%10)
+            .arg(remainder/10)
+            .arg(remainder%10);
+    }
+
+    case 1: // real time
+    {
+        Rosegarden::RealTime rt =
+            m_doc->getComposition().getElapsedRealTime(time);
+        return QString("%1   ").arg(rt.toString().c_str());
+    }
+
+    default:
+        return QString("%1   ").arg(time);
+    }
+}
+
+void
+MarkerEditorDialog::slotMusicalTime()
+{
+    kapp->config()->setGroup(MarkerEditorConfigGroup);
+    kapp->config()->writeEntry("timemode", 0);
+    slotUpdate();
+}
+
+void
+MarkerEditorDialog::slotRealTime()
+{
+    kapp->config()->setGroup(MarkerEditorConfigGroup);
+    kapp->config()->writeEntry("timemode", 1);
+    slotUpdate();
+}
+
+void
+MarkerEditorDialog::slotRawTime()
+{
+    kapp->config()->setGroup(MarkerEditorConfigGroup);
+    kapp->config()->writeEntry("timemode", 2);
+    slotUpdate();
+}
+
+
 
 const char* const MarkerEditorDialog::MarkerEditorConfigGroup = "Marker Editor";

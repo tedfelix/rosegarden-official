@@ -260,6 +260,7 @@ rc_DATA = audiomanager.rc \
 	eventlist.rc \
 	tempoview.rc \
         devicemanager.rc \
+        markereditor.rc \
 	matrix.rc \
         matrixselector.rc \
         matrixeraser.rc \
