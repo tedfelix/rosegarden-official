@@ -205,7 +205,7 @@ operator>>(QDataStream &dS, MappedDevice &mD)
 QDataStream&
 operator<<(QDataStream &dS, MappedDevice *mD)
 {
-    dS << mD->size();
+    dS << (int)mD->size();
 
     for (MappedDeviceIterator it = mD->begin(); it != mD->end(); it++)
         dS << (*it);
@@ -228,7 +228,7 @@ operator<<(QDataStream &dS, MappedDevice *mD)
 QDataStream&
 operator<<(QDataStream &dS, const MappedDevice &mD)
 {
-    dS << mD.size();
+    dS << (int)mD.size();
 
     for (MappedDeviceConstIterator it = mD.begin(); it != mD.end(); it++)
         dS << (*it);
