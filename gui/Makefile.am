@@ -101,6 +101,7 @@ EXTRA_DIST = rosegardenguiiface.kidl trackseditoriface.kidl \
 	pixmaps/transport/*.xpm \
 	pixmaps/splash.png \
 	testfiles/*.rg \
+        testfiles/audio/*.wav \
 	testfiles/*.rose
 
 # Where pixmaps for notes, clefs, etc... will be installed
