@@ -199,7 +199,7 @@ Note::Note(const string &n)
     string name(n);
     if (name.length() > 7 && name.substr(0, 7) == "dotted ") {
         m_dotted = true;
-        name = name.substr(8);
+        name = name.substr(7);
     }
     Type t;
     for (t = Shortest; t <= Longest; ++t) {
@@ -210,7 +210,7 @@ Note::Note(const string &n)
             break;
         }
     }
-    if (m_type == -1) throw BadType();
+    if (m_type == -1) throw BadType(name);
 }
 
 string Note::getEnglishName(Type type, bool dotted) const {

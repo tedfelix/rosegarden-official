@@ -286,7 +286,10 @@ public:
     static const string NotePropertyName;
     
     typedef int Type; // not an enum, too much arithmetic at stake
-    struct BadType { };
+    struct BadType {
+        string type;
+        BadType(string t = "") : type(t) { }
+    };
 
 
     // define both sorts of names; some people prefer the American
