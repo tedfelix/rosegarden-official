@@ -702,14 +702,26 @@ Sequencer::getMappedComposition()
     }
 
     // Free the returned vector from here as the aRTS stub
-    // has already gone ahead and allocated a new one for
-    // next time - nice leak, teach me to blindly copy
-    // code ... [rwb]
+    // has already gone ahead and allocated a new one.
     //
     delete midiQueue;
 
     return m_recordComposition;
 
+}
+
+void
+Sequencer::playAudioFile(AudioFile *audioFile,
+                         const RealTime &startTime,
+                         const RealTime &duration)
+{
+    PlayableAudioFile *newAF = new PlayableAudioFile(audioFile,
+                                                     startTime,
+                                                     duration,
+                                                     m_soundServer);
+                                                
+
+    m_audioPlayQueue.push_back(newAF);
 }
 
 

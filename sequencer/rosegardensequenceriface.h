@@ -75,10 +75,7 @@ public:
 
     // Add and delete audio files on the sequencer
     //
-    virtual int addAudioFile(const int &audioFileType,
-                             const QString &fileName,
-                             const int &id) = 0;
-
+    virtual int addAudioFile(const QString &fileName, const int &id) = 0;
     virtual int deleteAudioFile(const int &id) = 0;
 
     // clear down the AudioFilePlayer

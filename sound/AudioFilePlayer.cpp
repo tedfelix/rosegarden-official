@@ -27,8 +27,10 @@ using std::endl;
 namespace Rosegarden
 {
 
-AudioFilePlayer::AudioFilePlayer()
+AudioFilePlayer::AudioFilePlayer(Rosegarden::Sequencer *sequencer):
+    m_sequencer(sequencer)
 {
+    assert(m_sequencer != 0);
 }
 
 
@@ -38,9 +40,8 @@ AudioFilePlayer::~AudioFilePlayer()
 
 
 bool
-AudioFilePlayer::addAudioFile(const AudioFileType &audioFileType,
-                              const string &fileName,
-                              const int &id)
+AudioFilePlayer::addAudioFile(const string &fileName,
+                              const unsigned int &id)
 {
     AudioFile *ins = new AudioFile(id, fileName, fileName);
     try
@@ -60,20 +61,31 @@ AudioFilePlayer::addAudioFile(const AudioFileType &audioFileType,
 }
 
 bool
-AudioFilePlayer::deleteAudioFile(const int &id)
+AudioFilePlayer::deleteAudioFile(const unsigned int &id)
+{
+    std::vector<AudioFile*>::iterator it = getAudioFile(id);
+
+    if(it == 0)
+        return false;
+
+    m_audioFiles.erase(it);
+
+    return true;
+}
+
+std::vector<AudioFile*>::iterator
+AudioFilePlayer::getAudioFile(const unsigned int &id)
 {
     std::vector<AudioFile*>::iterator it;
     for (it = m_audioFiles.begin(); it != m_audioFiles.end(); it++)
     {
         if ((*it)->getID() == id)
-        {
-            m_audioFiles.erase(it);
-            return true;
-        }
+            return it;
     }
 
-    return false;
+    return 0;
 }
+
 
 void
 AudioFilePlayer::clear()
@@ -82,15 +94,26 @@ AudioFilePlayer::clear()
 
     std::vector<AudioFile*>::iterator it;
     for (it = m_audioFiles.begin(); it != m_audioFiles.end(); it++)
+    {
         m_audioFiles.erase(it);
+    }
 
 }
 
 
 bool
-AudioFilePlayer::playAudio(const int &id, const RealTime startIndex,
+AudioFilePlayer::playAudio(const unsigned int &id, const RealTime startIndex,
                            const RealTime duration)
 {
+    std::vector<AudioFile*>::iterator it = getAudioFile(id);
+
+    if (it == 0)
+        return false;
+
+    // send the resultant AudioFile to the Sequencer for playback
+    //
+    m_sequencer->playAudioFile(*it, startIndex, duration);
+
     return true;
 }
 

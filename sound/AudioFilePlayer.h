@@ -22,13 +22,16 @@
 //"add" and "delete" requests from the AudioFileManager at the GUI.
 // Sample files can then be preloaded, manipulated or generally
 // readied for playback and then executed against the aRTS audio
-// framework when indicated through the sequencer.
+// framework when indicated through the sequencer.  This class has
+// a close relationship with the Sequencer for playback and recording
+// but seperates out the management aspect of the Audio files.
 //
 //
 //
 
 #include "AudioFile.h"
 #include "RealTime.h"
+#include "Sequencer.h"
 #include <string>
 #include <vector>
 
@@ -38,17 +41,17 @@
 namespace Rosegarden
 {
 
+
 class AudioFilePlayer
 {
 public:
-    AudioFilePlayer();
+    AudioFilePlayer(Rosegarden::Sequencer *sequencer);
     ~AudioFilePlayer();
 
-    bool addAudioFile(const AudioFileType &audioFileType,
-                      const string &fileName,
-                      const int &id);
+    bool addAudioFile(const string &fileName,
+                      const unsigned int &id);
 
-    bool deleteAudioFile(const int &id);
+    bool deleteAudioFile(const unsigned int &id);
 
     // Empty all the files and clear down all the handles
     //
@@ -56,13 +59,16 @@ public:
 
     // Play an audio sample
     //
-    bool playAudio(const int &id, const RealTime startIndex,
+    bool playAudio(const unsigned int &id, const RealTime startIndex,
                    const RealTime duration);
 
+protected:
+
+    std::vector<AudioFile*>::iterator getAudioFile(const unsigned int &id);
     
 private:
-
     std::vector<AudioFile*> m_audioFiles;
+    Rosegarden::Sequencer  *m_sequencer;
 
 };
 

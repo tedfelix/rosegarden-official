@@ -124,12 +124,9 @@ public slots:
     //
     virtual int getSoundSystemStatus();
 
-    // Add and delete wav files on the sequencer
+    // Add and delete Audio files on the sequencer
     //
-    virtual int addAudioFile(const int &audioFileType,
-                             const QString &fileName,
-                             const int &id);
-
+    virtual int addAudioFile(const QString &fileName, const int &id);
     virtual int deleteAudioFile(const int &id);
 
     // Deletes all the audio files and clears down any flapping i/o handles
@@ -217,7 +214,7 @@ private:
 
     // Manage and play audio files at the sequencer level
     //
-    Rosegarden::AudioFilePlayer m_audioFilePlayer;
+    Rosegarden::AudioFilePlayer *m_audioFilePlayer;
 };
  
 #endif // _ROSEGARDEN_SEQUENCER_APP_H_

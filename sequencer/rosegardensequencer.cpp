@@ -68,11 +68,16 @@ RosegardenSequencerApp::RosegardenSequencerApp():
     // set this here and now so we can accept async midi events
     //
     m_sequencer->record(Rosegarden::Sequencer::ASYNCHRONOUS_MIDI);
+
+    // create an AudioFilePlayer with a pointer to the Sequencer 
+    //
+    m_audioFilePlayer = new Rosegarden::AudioFilePlayer(m_sequencer);
 }
 
 RosegardenSequencerApp::~RosegardenSequencerApp()
 {
     delete m_sequencer;
+    delete m_audioFilePlayer;
 }
 
 void
@@ -581,25 +586,22 @@ RosegardenSequencerApp::getSoundSystemStatus()
 
 // Add an audio file to the sequencer
 int
-RosegardenSequencerApp::addAudioFile(const int &audioFileType,
-                                     const QString &fileName,
+RosegardenSequencerApp::addAudioFile(const QString &fileName,
                                      const int &id)
 {
-    return((int)m_audioFilePlayer.addAudioFile(
-                     (Rosegarden::AudioFileType) audioFileType,
-                     string(fileName.data()), id));
+    return((int)m_audioFilePlayer->addAudioFile(string(fileName.data()), id));
 }
 
 int
 RosegardenSequencerApp::deleteAudioFile(const int &id)
 {
-    return((int)m_audioFilePlayer.deleteAudioFile(id));
+    return((int)m_audioFilePlayer->deleteAudioFile(id));
 }
 
 void
 RosegardenSequencerApp::deleteAllAudioFiles()
 {
-    m_audioFilePlayer.clear();
+    m_audioFilePlayer->clear();
 }
 
 

@@ -57,11 +57,11 @@ o Write Rosegarden tempo events to exported MIDI [DONE]
 Current Bugs
 ============
 
-o loop ruler white out
+o End of loop flyback sends duplicate copies of start of loop events
 
-o bar and loop ruler bar widths
+o bar and loop ruler bar widths for partial bars
 
-o rg file saving is still broken for trivial cases (Segments wrong size)
+o rg file saving is still broken for some trivial cases (Segments wrong size)
 
 
 

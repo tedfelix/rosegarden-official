@@ -47,12 +47,13 @@
 #include <map>
 #include <arts/artsmidi.h>
 #include <arts/soundserver.h>
-#include <arts/artsflow.h>     // audio subsys
-#include <arts/artsmodules.h>  // handling wavs
+#include <arts/artsflow.h>     // aRTS audio subsys
+#include <arts/artsmodules.h>  // aRTS wav modules
 #include "MappedComposition.h"
 #include "Midi.h"
 #include "MidiRecord.h"
 #include "MidiEvent.h"
+#include "AudioFile.h"
 
 
 namespace Rosegarden
@@ -100,6 +101,33 @@ public:
 private:
 };
 
+class PlayableAudioFile
+{
+public:
+    PlayableAudioFile(AudioFile *audioFile,
+                      const RealTime &startTime,
+                      const RealTime &duration,
+                      Arts::SoundServerV2 &soundServer):
+    m_id(audioFile->getID()),
+    m_startTime(startTime),
+    m_duration(duration)
+    {
+        m_artsAudioObject = Arts::DynamicCast(soundServer.createObject
+                               ("Arts::Synth_PLAY_WAV"));
+
+        m_artsAudioObject.filename(audioFile->getFilename());
+    }
+
+    ~PlayableAudioFile() {;}
+ 
+    Arts::Synth_PLAY_WAV& getAudioObject() { return m_artsAudioObject; }
+
+private:
+    unsigned int          m_id;
+    RealTime              m_startTime;
+    RealTime              m_duration;
+    Arts::Synth_PLAY_WAV  m_artsAudioObject;
+};
 
 class Sequencer
 {
@@ -171,6 +199,12 @@ public:
     //
     void processEventsOut(Rosegarden::MappedComposition mC,
                           const Rosegarden::RealTime &playLatency);
+
+    // Play an audio file
+    //
+    void playAudioFile(Rosegarden::AudioFile *audioFile,
+                       const Rosegarden::RealTime &startTime,
+                       const Rosegarden::RealTime &duration);
 
     // Initialise internal states ready for new playback to commence
     //
@@ -275,6 +309,8 @@ private:
     MappedComposition      m_recordComposition;
 
     std::map<unsigned int, MappedEvent*> m_noteOnMap;
+
+    std::vector<PlayableAudioFile*> m_audioPlayQueue;
 
     // State of the sequencer
     //

@@ -646,13 +646,12 @@ RosegardenGUIDoc::prepareAudio()
 
         // We have to pass the filename as a QString
         //
-        streamOut << (*it)->getType();
         streamOut << QString((*it)->getFilename().c_str());
         streamOut << (*it)->getID();
 
         if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
                                       ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                      "addAudioFile(int, QString, int)", data, replyType, replyData))
+                                      "addAudioFile(QString, int)", data, replyType, replyData))
         {
             std::cerr << "prepareAudio() - couldn't add audio file"
                       << std::endl;
