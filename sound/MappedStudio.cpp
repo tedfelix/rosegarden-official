@@ -63,6 +63,26 @@ const MappedObjectProperty MappedLADSPAPort::PortNumber = "portNumber";
 
 #endif // HAVE_LADSPA
 
+// This function is stolen and adapted from Qt3
+//
+// ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
+//
+QDataStream& operator>>(QDataStream& s, MappedObjectPropertyList v)
+{
+    v.clear();
+    Q_UINT32 c;
+    s >> c;
+    v.resize(c);
+    for(Q_UINT32 i = 0; i < c; ++i)
+    {
+        MappedObjectProperty t;
+        s >> t;
+        v[i] = t;
+    }
+    return s;
+}
+
+
 
 // --------- MappedObject ---------
 //
@@ -156,7 +176,7 @@ MappedObject::destroy()
         (*it)->destroy();
     }
 
-    std::cout << "DESTROYING ID = " << m_id << endl;
+    std::cout << "DESTROYING ID = " << m_id << std::endl;
     (void)studio->clearObject(m_id);
     delete this;
 }
@@ -182,12 +202,12 @@ MappedObject::clone(MappedObject *object)
                 dynamic_cast<MappedStudio*>(studio)
                     ->createObject((*it)->getType(), false);
             object->addChild(child);
-            std::cout << "ADD CHILD" << endl;
+            std::cout << "ADD CHILD" << std::endl;
             (*it)->clone(child);
         }
     }
     else
-        std::cerr << "NO CHILDREN TO CLONE" << endl;
+        std::cerr << "NO CHILDREN TO CLONE" << std::endl;
 }
 
 
@@ -559,7 +579,7 @@ MappedStudio::setPluginInstancePort(InstrumentId id,
                                     unsigned long portNumber,
                                     LADSPA_Data value)
 {
-    //cout << "PORT NUMBER = " << portNumber << endl;
+    //std::cout << "PORT NUMBER = " << portNumber << std::endl;
 
     if (m_sequencer)
     {

@@ -19,8 +19,6 @@
   COPYING included with this distribution for more information.
 */
 
-#include <qvaluevector.h>
-
 #ifndef _MAPPEDCOMMON_H_
 #define _MAPPEDCOMMON_H_
 
@@ -28,6 +26,7 @@
 // plugin and Studio information.  Putting them here so we can change
 // MappedStudio regularly without having to rebuild the gui.
 //
+#include <vector>
 
 namespace Rosegarden
 {
@@ -36,8 +35,12 @@ typedef int          MappedObjectId;
 typedef QString      MappedObjectProperty;
 typedef float        MappedObjectValue;
 
-typedef QValueVector<MappedObjectProperty> MappedObjectPropertyList;
+// typedef QValueVector<MappedObjectProperty> MappedObjectPropertyList;
+// replaced with a std::vector<> for Qt2 compatibility
 
+typedef std::vector<MappedObjectProperty> MappedObjectPropertyList;
+
+QDataStream& operator>>(QDataStream& s, MappedObjectPropertyList);
 
 }
 
