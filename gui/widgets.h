@@ -33,6 +33,7 @@
 #include <qvbox.h>
 #include <qcolor.h>
 #include <qdatetime.h>
+#include <qtooltip.h>
 
 #include "Event.h" // for timeT
 
@@ -290,13 +291,22 @@ protected:
 //
 class RosegardenTextFloat : public QWidget
 {
-    Q_OBJECT
 public:
     RosegardenTextFloat(QWidget *parent);
+    virtual ~RosegardenTextFloat() {;}
 
     void setText(const QString &text);
 
+    /*
+    void setShow(bool value) { m_show = value; }
+    bool isShowing() const { return m_show; }
+    */
+    
 protected:
+    //virtual void maybeTip(const QPoint &p);
+
+    QString m_text;
+    //bool    m_show;
 
 };
 

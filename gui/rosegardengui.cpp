@@ -355,13 +355,13 @@ void RosegardenGUIApp::setupActions()
                                   "toggle_all");
 
     m_viewTipsOnStartup =
-        new KToggleAction(i18n("Show &Tips on startup"), 0, this,
+        new KToggleAction(i18n("Show Tips on &startup"), 0, this,
                           SLOT(slotToggleShowTipsOnStartup()),
                           actionCollection(),
                           "show_tips_on_startup");
 
     m_viewTipsNow =
-        new KAction(i18n("Show &Tip of the Day"), 0, this,
+        new KAction(i18n("Show Tip of the &Day"), 0, this,
                     SLOT(slotShowTips()),
                     actionCollection(),
                     "show_tips_now");
@@ -4192,7 +4192,7 @@ void
 RosegardenGUIApp::slotShowTips()
 {
     RG_DEBUG << "RosegardenGUIApp::slotShowTips" << endl;
-    KTipDialog::showTip(locate("data", "rosegarden/tips"), true);
+    KTipDialog::showTip(this, locate("data", "rosegarden/tips"), true);
 }
 
 const void* RosegardenGUIApp::SequencerExternal = (void*)-1;

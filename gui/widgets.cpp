@@ -491,8 +491,16 @@ RosegardenRotary::RosegardenRotary(QWidget *parent):
     m_lastX(0),
     m_knobColour(0, 0, 0)
 {
+    QToolTip::add(this, 
+                 "Click and drag up and down or left and right to modify");
     setFixedSize(m_size, m_size);
-    QToolTip::add(this, i18n("Click and drag.  Up and down or left to right to modify value."));
+
+    QWidget *par = parentWidget();
+    while (par->parentWidget() && par->parentWidget() != par)
+        par = par->parentWidget();
+
+    m_float = new RosegardenTextFloat(par);
+    m_float->hide();
 }
 
 
@@ -514,11 +522,18 @@ RosegardenRotary::RosegardenRotary(QWidget *parent,
     m_buttonPressed(false),
     m_lastY(0),
     m_lastX(0),
-    m_knobColour(0, 0, 0),
-    m_float(0)
+    m_knobColour(0, 0, 0)
 {
+    QToolTip::add(this,
+                 "Click and drag up and down or left and right to modify");
     setFixedSize(size, size);
-    QToolTip::add(this, i18n("Click and drag.  Up and down or left to right to modify value."));
+
+    QWidget *par = parentWidget();
+    while (par->parentWidget() && par->parentWidget() != par)
+        par = par->parentWidget();
+
+    m_float = new RosegardenTextFloat(par);
+    m_float->hide();
 }
 
 
@@ -582,8 +597,11 @@ RosegardenRotary::mouseReleaseEvent(QMouseEvent *e)
         //
         if (m_float)
         {
+            /*
             delete m_float;
             m_float = 0;
+            */
+            m_float->hide();
         }
 
     }
@@ -594,8 +612,6 @@ RosegardenRotary::mouseMoveEvent(QMouseEvent *e)
 {
     if (m_buttonPressed)
     {
-        if (m_float == 0) m_float = new RosegardenTextFloat(this);
-
         // Dragging by x or y axis when clicked modifies value
         //
         float newValue = m_position +
@@ -621,6 +637,7 @@ RosegardenRotary::mouseMoveEvent(QMouseEvent *e)
 
         // draw on the float text
         m_float->setText(QString("%1").arg(m_position));
+        //m_float->show();
     }
 }
 
@@ -689,6 +706,10 @@ void
 RosegardenRotary::setPosition(float position)
 {
     m_position = position;
+
+    // modify tip
+    m_float->setText(QString("%1").arg(m_position));
+
     drawPosition();
 }
 
@@ -975,12 +996,48 @@ RosegardenQuantizeParameters::slotTypeChanged(int index)
 // ---------- RosegardenTextFloat -----------
 //
 //
-RosegardenTextFloat::RosegardenTextFloat(QWidget *parent)
+RosegardenTextFloat::RosegardenTextFloat(QWidget *parent):
+    QWidget(parent, "RosegardenTextFloat", WType_Popup),
+    m_text("")
 {
+    //setFrameStyle(QFrame::WinPanel | QFrame::Raised );
+    resize(30, 30);
 }
+
+/*
+void
+RosegardenTextFloat::maybeTip(const QPoint &pos)
+{
+    QRect r(0, 0, parentWidget()->width(), parentWidget()->height());
+    cout << "MAYBE" << endl;
+    tip(parentWidget()->rect(), m_text);
+}
+
+
+void
+RosegardenTextFloat::paintEvent(QPaintEvent *e)
+{
+    QPainter paint(this);
+
+    paint.setClipRegion(e->region());
+    paint.setClipRect(e->rect().normalize());
+
+    paint.setPen(kapp->palette().color(QPalette::Active, QColorGroup::Dark));
+
+    int size = 20;
+    paint.drawEllipse(0, 0, size, size);
+
+}
+*/
+
 
 void 
 RosegardenTextFloat::setText(const QString &text)
 {
+    m_text = text;
+    //QRect r(0, 0, parentWidget()->width(), parentWidget()->height());
+    //setGloballyEnabled(true);
+    //cout << "TEXT SET" << endl;
+    //tip(parentWidget()->rect(), m_text);
 }
 
