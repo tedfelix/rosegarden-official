@@ -277,8 +277,6 @@ InstrumentParameterBox::setSolo(bool value)
 void
 InstrumentParameterBox::slotUpdateAllBoxes()
 {
-    RG_DEBUG << "InstrumentParameterBox::slotUpdateAllBoxes" << endl;
-
     std::vector<InstrumentParameterBox*>::iterator it =
         instrumentParamBoxes.begin();
 
@@ -319,9 +317,6 @@ AudioInstrumentParameterPanel::slotSelectAudioLevel(float dB)
 {
     if (m_selectedInstrument == 0)
         return;
-
-    std::cerr << "AudioInstrumentParameterPanel::slotSelectAudioLevel("
-	      << dB << ")" << std::endl;
 
     if (m_selectedInstrument->getType() == Instrument::Audio ||
 	m_selectedInstrument->getType() == Instrument::SoftSynth)

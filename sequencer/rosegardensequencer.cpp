@@ -1264,9 +1264,9 @@ RosegardenSequencerApp::setMappedProperty(int id,
                                           float value)
 {
 
-    SEQUENCER_DEBUG << "setProperty: id = " << id
-                    << " : property = \"" << property << "\""
-		    << ", value = " << value << endl;
+//    SEQUENCER_DEBUG << "setProperty: id = " << id
+//                    << " : property = \"" << property << "\""
+//		    << ", value = " << value << endl;
 
 
     Rosegarden::MappedObject *object = m_studio->getObjectById(id);
