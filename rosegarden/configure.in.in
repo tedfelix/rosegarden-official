@@ -55,6 +55,7 @@ if test "$with_alsa" = "no"; then
   AC_CHECK_FILE($kde_includes/arts/reference.h,, AC_MSG_ERROR("aRts headers are missing"))
   with_jack=no
   with_ladspa=no
+  with_liblrdf=no
 else
   dnl ALSA is good
   AC_DEFINE(HAVE_ALSA, 1, [Define if you have ALSA support])
@@ -97,13 +98,30 @@ else
   ], with_ladspa=yes)
 
   dnl only use LADSPA when ladspa.h is found
-  if test "$with_ladspa" != "yes"; then
+  if test "$with_ladspa" = "yes"; then
     AC_CHECK_HEADERS(ladspa.h,,[with_ladspa=no])
   fi
 
   if test "$with_ladspa" = "yes"; then
     AC_DEFINE(HAVE_LADSPA, 1, [Define if you have LADSPA])
-    AC_CHECK_LIB(lrdf, lrdf_init)
+  fi
+
+  dnl check whether user wants to have liblrdf
+  AC_ARG_WITH(liblrdf, [  --with-liblrdf           enable liblrdf metadata for LADSPA plugins (enabled by default when installed)],
+  [
+    if test "$withval" = "yes"; then
+      with_liblrdf=yes
+    else
+      with_liblrdf=no
+    fi
+  ], with_liblrdf=yes)
+
+  dnl only use liblrdf when lrdf library is found
+  if test "$with_liblrdf" = "yes"; then
+    AC_CHECK_HEADERS(lrdf.h,,[with_liblrdf=no])
+      if test "$with_liblrdf" = "yes"; then
+        AC_CHECK_LIB(lrdf, lrdf_init,[with_liblrdf=no])
+      fi
   fi
 
   dnl check for mad MP3 library
@@ -190,6 +208,7 @@ else
     echo "ALSA MIDI support         : ${with_alsa}"
     echo "JACK audio support        : ${with_jack}"
     echo "LADSPA plugin support     : ${with_ladspa}"
+    echo "liblrdf metadata support  : ${with_liblrdf}"
 
     if test "$with_alsa" = "yes"; then
         echo "aRTS MIDI and audio       : no"
