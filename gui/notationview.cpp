@@ -595,6 +595,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     tCanvas->resize(width() * 2, height() * 2);//!!! 
 
     setCanvasView(new NotationCanvasView(*this, tCanvas, getCentralWidget()));
+    canvas()->retune(128); // tune for larger canvas
 
     for (unsigned int i = 0; i < segments.size(); ++i) {
         m_staffs.push_back(new NotationStaff(canvas(), segments[i], 0, // snap
