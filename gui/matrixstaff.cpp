@@ -119,5 +119,6 @@ int MatrixStaff::snapX(int x)
 
 int MatrixStaff::snapY(int y)
 {
-    return (y / getLineSpacing()) * getLineSpacing();
+    //    return (y / getLineSpacing()) * getLineSpacing() - getY();
+    return getCanvasYForHeight(getHeightAtCanvasY(y));
 }
