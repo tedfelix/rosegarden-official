@@ -1,0 +1,37 @@
+Some notes about how to properly manage toolbars in views : saving and
+restoring them, and making sure the "show xxx toolbar" menu items are
+in consistent state.
+
++ We use KMainWindow::setAutoSaveSettings() to do most of the dirty
+  work.  It is always called at the end of the view ctor. This is
+  important because all toolbars must be created prior to calling
+  setAutoSaveSettings.
+
+This handles both the saving *AND* the reading of bars settings
+(visibility and position).
+
++ What remains to do is setting the various "Show XXX Toolbar" toggle
+  actions in a state consistent with what was read from the
+  options. This is done by checking if the corresponding toolbar is
+  not hidden (checking if it's visible won't work, because when this
+  occurs the toolbars are not yet shown). E.g :
+
+m_viewTracksToolBar->setChecked(!toolBar("tracksToolBar")->isHidden());
+
++ So there is *NO NEED* to save these toggle actions state. We just
+  deduce their state from the related toolbar's state.
+
++ The case of the editview (notation, matrix) is a bit special. These
+  are derived from EditViewBase, which has readOptions() and
+  slotSaveOptions() methods, which should be called by their children
+  (even though they currently don't do much).
+
+EditViewBase::readOptions() handles the "show toolbar" and "show
+status bar" actions. It should be called right after
+setAutoSaveSettings() by the child.
+
++ When adding a new toolbar : if this toolbar has a corresponding
+  "Show" toggle action, then the only thing you need is to make sure
+  this action is in the proper state according to the saved status of
+  the toolbar. Just set its state as indicated above.
+
