@@ -160,6 +160,7 @@ RosegardenGUIDoc::RosegardenGUIDoc(RosegardenGUIDoc *doc)
 RosegardenGUIDoc&
 RosegardenGUIDoc::operator=(const RosegardenGUIDoc &doc)
 {
+    if (&doc == this) return *this;
 
     m_modified = doc.isModified();
     m_autoSaved = doc.isAutoSaved();
