@@ -922,7 +922,7 @@ NoteFont::NoteFont(string fontName, int size) :
 
     if (size > 0) {
         if (sizes.find(size) == sizes.end()) {
-            throw BadFont(qstrtostr(QString("Font \"%1\" not available in size %2").arg(fontName).arg(size)));
+            throw BadFont(qstrtostr(QString("Font \"%1\" not available in size %2").arg(strtoqstr(fontName)).arg(size)));
         } else {
             m_size = size;
         }
