@@ -181,6 +181,7 @@ void
 Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
                          const Arts::TimeStamp &timeStamp)
 {
+
     Rosegarden::MidiByte channel;
     Rosegarden::MidiByte message;
     //Rosegarden::Event *event;
@@ -518,6 +519,13 @@ Sequencer::getMappedComposition()
         processMidiIn(midiQueueIt->command,
                       recordTime(midiQueueIt->time));
     }
+
+    // Free the returned vector from here as the aRTS stub
+    // has already gone ahead and allocated a new one for
+    // next time - nice leak, teach me to blindly copy
+    // code .. [rwb]
+    //
+    delete midiQueue;
 
     return m_recordComposition;
 
