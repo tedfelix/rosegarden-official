@@ -4009,7 +4009,8 @@
     <sect1 id="developers-note-fonts">
       <title>Configuring custom notation fonts</title>
 
-      <para>If you have a notation font that is not currently
+      <para>If you have a notation font installed on your system in a
+      scalable format (TrueType or Type-1) but it is not currently
       supported by Rosegarden, you can create your own mapping XML
       file to describe the font's character map and metrics in a way
       Rosegarden can use.  These files are installed in the
@@ -4035,11 +4036,17 @@
       otherwise.
       </para>
 
+      <para>You may also wish to edit the mapping files supplied with
+      Rosegarden if you find their measurements for alignment or
+      sizing are not to your liking.  (If you believe that any of the
+      supplied files are actually wrong, please let us know.)
+      </para>
+
       <sect2 id="developers-note-fonts-mapping-format">
 	<title>Notation font mapping XML format</title>
 
 	<para>Here is a summary of the XML elements that may be used
-	in the font mapping file format.</para>
+	in the font mapping file.</para>
 
 	<sect3 id="developers-note-fonts-mapping-format-font-encoding">
 	  <title>rosegarden-font-encoding</title>
@@ -4059,8 +4066,8 @@
 	  <title>font-information</title>
 
 	  <para>This should normally be the first child element of
-	  "rosegarden-font-encoding".  It may have the following
-	  attributes:
+	  "rosegarden-font-encoding".  It may have any of the
+	  following attributes, all of which are optional:
 
 	    <variablelist>
 	      <varlistentry>
@@ -4105,6 +4112,12 @@
 		  from pixmap files corresponding to individual sizes
 		  of pixmap (such as the feta and rg21 fonts included
 		  with Rosegarden) have type "pixmap".</para>
+
+	    <para>This information is only intended for the user
+	    reference; it isn't actually used by Rosegarden.  It is
+	    legitimate in practice for a font to be a mixture of the
+	    two, but in general we will assume in this documentation
+	    that a font is either scalable or pixmap.</para>
 		</listitem>
 	      </varlistentry>
 
@@ -4149,10 +4162,12 @@
 	    used to specify that this font should only be offered if
 	    certain system fonts are available, as well as to
 	    associate IDs with those system fonts to refer to in the
-	    "font-symbol-map" element.  This scheme is used to decide
-	    which notation fonts should be offered to the user, and
-	    also allows you to compose a Rosegarden notation font from
-	    more than one system font if desired.
+	    <link
+	    linkend="developers-note-fonts-mapping-format-font-symbol-map">font-symbol-map</link>
+	    element.  This scheme is used to decide which notation
+	    fonts should be offered to the user, and also allows you
+	    to compose a Rosegarden notation font from more than one
+	    system font if desired.
 	  </para>
 	  <para>The "font-requirements" element should contain a list
 	  of "font-requirement" child elements.  Each of these has two
@@ -4181,6 +4196,7 @@
 	  </para>
 
 	  <para>
+	    <!-- !!! TODO throughout this section: how to mark up XML element/attribute names? equiv of <code> in HTML would do -->
 	    There are two possible child elements of "font-sizes":
 	    "font-scale" and "font-size".  Their use depends on the
 	    type of font being described.</para>
@@ -4309,7 +4325,134 @@
 	<sect3 id="developers-note-fonts-mapping-format-font-symbol-map">
 	  <title>font-symbol-map</title>
 	  <para>
+	    This element lists the symbols available in this notation
+	    font, and which pixmap files or system font code points
+	    they should be drawn from.</para>
+
+	  <para>It should contain a list of "symbol" elements.  These
+	  have several possible attributes, the choice of which will
+	  normally depend on whether the font is based on pixmaps or
+	  system fonts:
 	  </para>
+
+	  <variablelist>
+	    <varlistentry>
+	      <term>name</term>
+	      <listitem>
+		<para>Mandatory.  This attribute should contain the
+		name of the notation symbol.  If the symbol exists in
+		the <ulink
+		url="http://www.unicode.org/charts/PDF/U1D100.pdf">Unicode
+		3.2 standard</ulink>, the name should be that used to
+		identify the symbol in the standard.</para>
+
+		<para>Most of the symbols Rosegarden expects to find
+		are in the standard; one exception is that many fonts
+		have a special version of the flag symbol that is
+		intended to be used when composing multiple flags from
+		individual single flags.  Rosegarden refers to this as
+		"MUSICAL SYMBOL COMBINING FLAG-0", a name not used in
+		the Unicode standard (which has flags 1-5 only).</para>
+
+		<para>For a definitive set of the symbol names
+		Rosegarden knows about, see the file
+		"gui/notecharname.cpp" in the Rosegarden source
+		distribution.  Note however that it is possible to use
+		additional symbol names by introducing them in a <link
+		linkend="developers-note-styles">notation
+		style</link>.
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry>
+	      <term>src</term>
+	      <listitem>
+		<para>The name of the pixmap file from which this
+		symbol should be loaded, without a directory or
+		extension.  This is the usual way of describing a
+		symbol in a pixmap font.  The file itself should be
+		installed to
+		fonts/&lt;font-name&gt;/&lt;font-size&gt;/&lt;src&gt;.xpm
+		under the Rosegarden installation directory.
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry>
+	      <term>inversion-src</term>
+	      <listitem>
+		<para>The name of a pixmap file from which an inverted
+		version of this symbol may be loaded, without a
+		directory or extension.  If this attribute is absent
+		and an inverted version of the symbol is required, it
+		will be generated simply by loading the normal version
+		and reflecting it in a central x-axis.
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry>
+	      <term>code</term>
+	      <listitem>
+		<para>The code point at which this symbol may be found
+		in the relevant system font, as a decimal integer.
+		This is the usual way of describing a symbol in a
+		scalable font.  This attribute will only be referred
+		to if no pixmap file is supplied, or if the pixmap
+		file fails to load.
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry>
+	      <term>inversion-code</term>
+	      <listitem>
+		<para>The code point at which an inverted version of
+		this symbol may be found in the relevant system font.
+		If this attribute is absent and an inverted version of
+		the symbol is required, it will be generated simply by
+		loading the normal version and reflecting it in a
+		central x-axis.
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry>
+	      <term>font-id</term>
+	      <listitem>
+		<para>The id of the system font from which this symbol
+		should be loaded, as defined in the <link
+		linkend="developers-note-fonts-mapping-format-font-requirements">font-requirements</link>
+		element.  The default is 0.
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry>
+	      <term>codebase</term>
+	      <listitem>
+		<para>This (decimal integer) attribute may be of use
+		if many of the symbols in a scalable font cover a
+		short range of code points starting at a relatively
+		high code page.  If supplied, the codebase value will
+		be added to each of the subsequent code and
+		inversion-code values when looking up a symbol.
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+	  </variablelist>
+
+	  <para>
+	    Although none of these attributes is mandatory except for
+	    the name, a symbol obviously needs to supply at least one
+	    of "src", "inversion-src", "code", or "inversion-code" to
+	    stand any chance of being rendered at all.  It is of course
+	    perfectly legitimate to supply several or all of these
+	    attributes.
+	  </para>
+
 	</sect3>
 
 	<sect3 id="developers-note-fonts-mapping-format-font-hotspots">
