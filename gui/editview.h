@@ -43,6 +43,7 @@ class BarButtons;
 class QVBox;
 class QGridLayout;
 class QVBoxLayout;
+class RosegardenCanvasView;
 
 /**
  * An interface for canvas items which are capable of handling
@@ -256,8 +257,8 @@ protected:
      */
     virtual void setViewSize(QSize) = 0;
 
-    virtual QCanvasView* getCanvasView();
-    virtual void setCanvasView(QCanvasView *cv);
+    virtual RosegardenCanvasView* getCanvasView();
+    virtual void setCanvasView(RosegardenCanvasView *cv);
 
     QFrame* getCentralFrame() { return m_centralFrame; }
 
@@ -279,7 +280,7 @@ protected:
 
     ActiveItem* m_activeItem;
 
-    QCanvasView *m_canvasView;
+    RosegardenCanvasView *m_canvasView;
 
     QFrame      *m_centralFrame;
     QScrollBar  *m_horizontalScrollBar;

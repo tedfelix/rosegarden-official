@@ -28,14 +28,16 @@
 #include <qlayout.h>
 
 #include "editview.h"
+#include "rosegardencanvasview.h"
 #include "edittool.h"
 #include "qcanvasgroupableitem.h"
 #include "basiccommand.h"
 #include "rosegardenguidoc.h"
 #include "multiviewcommandhistory.h"
-#include "rosedebug.h"
 #include "ktmpstatusmsg.h"
 #include "barbuttons.h"
+
+#include "rosedebug.h"
 
 //----------------------------------------------------------------------
 const unsigned int EditView::ID_STATUS_MSG = 1;
@@ -83,26 +85,6 @@ EditView::~EditView()
     getCommandHistory()->detachView(actionCollection());
 }
 
-void EditView::setCanvasView(QCanvasView *canvasView)
-{
-    delete m_canvasView;
-    m_canvasView = canvasView;
-    m_grid->addWidget(m_canvasView, 2, m_mainCol);
-    m_canvasView->setHScrollBarMode(QScrollView::AlwaysOff);
-
-    m_horizontalScrollBar->setRange(m_canvasView->horizontalScrollBar()->minValue(),
-                                    m_canvasView->horizontalScrollBar()->maxValue());
-
-    m_horizontalScrollBar->setSteps(m_canvasView->horizontalScrollBar()->lineStep(),
-                                    m_canvasView->horizontalScrollBar()->pageStep());
-
-    connect(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
-            m_canvasView->horizontalScrollBar(), SIGNAL(valueChanged(int)));
-    connect(m_horizontalScrollBar, SIGNAL(sliderMoved(int)),
-            m_canvasView->horizontalScrollBar(), SIGNAL(sliderMoved(int)));
-
-}
-
 void EditView::paintEvent(QPaintEvent* e)
 {
     if (isCompositionModified()) {
@@ -135,10 +117,11 @@ void EditView::paintEvent(QPaintEvent* e)
         unsigned int refreshStatusId = m_segmentsRefreshStatusIds[i];
         Rosegarden::SegmentRefreshStatus &refreshStatus = segment->getRefreshStatus(refreshStatusId);
         
-
-        if (refreshStatus.needsRefresh()) {
+        if (refreshStatus.needsRefresh() && isCompositionModified()) {
 
             // TODO : if composition is also modified, relayout everything
+            
+        } else if (refreshStatus.needsRefresh()) {
 
             Rosegarden::timeT startTime = refreshStatus.from(),
                 endTime = refreshStatus.to();
@@ -154,6 +137,7 @@ void EditView::paintEvent(QPaintEvent* e)
     if (needUpdate)  {
         kdDebug(KDEBUG_AREA) << "EditView::paintEvent() - calling updateView\n";
         updateView();
+        getCanvasView()->slotUpdate();
     }
 
 }
@@ -240,8 +224,27 @@ void EditView::setTool(EditTool* tool)
 
 }
 
+void EditView::setCanvasView(RosegardenCanvasView *canvasView)
+{
+    delete m_canvasView;
+    m_canvasView = canvasView;
+    m_grid->addWidget(m_canvasView, 2, m_mainCol);
+    m_canvasView->setHScrollBarMode(QScrollView::AlwaysOff);
 
-QCanvasView* EditView::getCanvasView()
+    m_horizontalScrollBar->setRange(m_canvasView->horizontalScrollBar()->minValue(),
+                                    m_canvasView->horizontalScrollBar()->maxValue());
+
+    m_horizontalScrollBar->setSteps(m_canvasView->horizontalScrollBar()->lineStep(),
+                                    m_canvasView->horizontalScrollBar()->pageStep());
+
+    connect(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
+            m_canvasView->horizontalScrollBar(), SIGNAL(valueChanged(int)));
+    connect(m_horizontalScrollBar, SIGNAL(sliderMoved(int)),
+            m_canvasView->horizontalScrollBar(), SIGNAL(sliderMoved(int)));
+
+}
+
+RosegardenCanvasView* EditView::getCanvasView()
 {
     return m_canvasView;
 }
