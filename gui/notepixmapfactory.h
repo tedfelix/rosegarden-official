@@ -45,7 +45,8 @@ enum Note {
 };
 
 
-/**Generates pixmaps for single notes and chords
+/**
+ * Generates QCanvasPixmaps for single notes
  *
  *@author Guillaume Laurent
  */
@@ -60,7 +61,7 @@ public:
     /**
      * Generate a pixmap for a single note
      *
-     * @param duration : note duration
+     * @param note : note type
      * @param drawTail : if the pixmap should have a tail or not
      *   (useful when the tail should be collapsed with the one of a neighboring note)
      * @param stalkGoesUp : if the note's stalk should go up or down
@@ -69,6 +70,12 @@ public:
                                  bool drawTail = true,
                                  bool stalkGoesUp = true);
 
+    /**
+     * Generate a pixmap for a rest
+     *
+     * @param note : note type
+     */
+    QCanvasPixmap makeRestPixmap(Note note);
 
 protected:
     /**
@@ -99,9 +106,17 @@ protected:
 
     vector<QPixmap*> m_tailsUp;
     vector<QPixmap*> m_tailsDown;
+    vector<QPixmap*> m_rests;
+
+    static QPoint m_pointZero;
 
 };
 
+/**
+ * Generates QCanvasPixmaps for chords
+ *
+ *@author Guillaume Laurent
+ */
 class ChordPixmapFactory : public NotePixmapFactory
 {
 public:

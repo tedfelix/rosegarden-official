@@ -36,7 +36,7 @@ NotePixmapFactory::NotePixmapFactory()
     QString pixmapTailUpFileName("pixmaps/tail-up-%1.xpm"),
         pixmapTailDownFileName("pixmaps/tail-down-%1.xpm");
 
-    for(unsigned int i = 0; i < 4; ++i) {
+    for (unsigned int i = 0; i < 4; ++i) {
         
         m_tailsUp.push_back(new QPixmap(pixmapTailDownFileName.arg(i+1)));
         m_tailsDown.push_back(new QPixmap(pixmapTailUpFileName.arg(i+1)));
@@ -47,13 +47,26 @@ NotePixmapFactory::NotePixmapFactory()
     m_noteBodyWidth         = m_noteBodyEmpty.width();
     m_tailWidth             = m_tailsUp[0]->width();
 
+    // Load rests
+    m_rests.push_back(new QPixmap("pixmaps/rest-hemidemisemi.xpm"));
+    m_rests.push_back(new QPixmap("pixmaps/rest-demisemi.xpm"));
+    m_rests.push_back(new QPixmap("pixmaps/rest-semiquaver.xpm"));
+    m_rests.push_back(new QPixmap("pixmaps/rest-quaver.xpm"));
+    m_rests.push_back(new QPixmap("pixmaps/rest-crotchet.xpm"));
+    m_rests.push_back(new QPixmap("pixmaps/rest-minim.xpm"));
+    m_rests.push_back(new QPixmap("pixmaps/rest-semibreve.xpm"));
+    
 }
 
 NotePixmapFactory::~NotePixmapFactory()
 {
-    for(unsigned int i = 0; i < m_tailsUp.size(); ++i) {
+    for (unsigned int i = 0; i < m_tailsUp.size(); ++i) {
         delete m_tailsUp[i];
         delete m_tailsDown[i];
+    }
+
+    for (unsigned int i = 0; i < m_rests.size(); ++i) {
+        delete m_rests[i];
     }
 }
 
@@ -90,7 +103,7 @@ NotePixmapFactory::makeNotePixmap(Note note, bool drawTail,
 
     int yOffset = 0;
 
-    if(stalkGoesUp) {
+    if (stalkGoesUp) {
 
         m_p.drawPixmap (0,m_generatedPixmap->height() - body->height(), *body);
         m_pm.drawPixmap(0,m_generatedPixmap->height() - body->height(), *(body->mask()));
@@ -107,11 +120,12 @@ NotePixmapFactory::makeNotePixmap(Note note, bool drawTail,
 
     // paint stalk (if needed)
     //
-    if(noteHasStalk)
+    if (noteHasStalk)
         drawStalk(note, drawTail, stalkGoesUp);
 
 
 #ifdef ROSE_DEBUG_NOTE_PIXMAP_FACTORY
+    // add red dots at each corner of the pixmap
     m_p.setPen(Qt::red); m_p.setBrush(Qt::red);
     m_p.drawPoint(0,0);
     m_p.drawPoint(0,yOffset);
@@ -141,10 +155,37 @@ NotePixmapFactory::makeNotePixmap(Note note, bool drawTail,
     return notePixmap;
 }
 
+
+QCanvasPixmap
+NotePixmapFactory::makeRestPixmap(Note note)
+{
+    switch (note) {
+    case SixtyFourth:
+        return QCanvasPixmap(*m_rests[0], m_pointZero);
+    case ThirtySecond:
+        return QCanvasPixmap(*m_rests[1], m_pointZero);
+    case Sixteenth:
+        return QCanvasPixmap(*m_rests[2], m_pointZero);
+    case Eighth:
+        return QCanvasPixmap(*m_rests[3], m_pointZero);
+    case Quarter:
+        return QCanvasPixmap(*m_rests[4], m_pointZero);
+    case Half:
+        return QCanvasPixmap(*m_rests[5], m_pointZero);
+    case Whole:
+        return QCanvasPixmap(*m_rests[6], m_pointZero);
+    default:
+        kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeRestPixmap() for note "
+                             << note << " not yet implemented or note out of range\n";
+        return QCanvasPixmap(*m_rests[0], m_pointZero);
+    }
+}
+
+
 void
 NotePixmapFactory::readjustGeneratedPixmapHeight(Note note)
 {
-    if(note < Quarter) {
+    if (note < Quarter) {
 
         // readjust pixmap height according to its duration - the stalk
         // is longer for 8th, 16th, etc.. because the tail is higher
@@ -238,7 +279,7 @@ void
 NotePixmapFactory::drawStalk(Note note,
                              bool drawTail, bool stalkGoesUp)
 {
-    if(stalkGoesUp) {
+    if (stalkGoesUp) {
 
         m_p.drawLine(m_noteBodyWidth - 2, m_generatedPixmapHeight - m_noteBodyHeight / 2 - 1,
                      m_noteBodyWidth - 2, 0);
@@ -252,12 +293,12 @@ NotePixmapFactory::drawStalk(Note note,
                       0, m_generatedPixmapHeight);
     }
 
-    if(drawTail && note < Quarter) {
+    if (drawTail && note < Quarter) {
         // need to add a tail pixmap
         //
         const QPixmap *tailPixmap = 0;
 
-        if(stalkGoesUp) {
+        if (stalkGoesUp) {
             tailPixmap = tailUp(note);
 
             m_p.drawPixmap (m_noteBodyWidth - 1, 0, *tailPixmap);
@@ -311,6 +352,12 @@ NotePixmapFactory::duration2note(unsigned int duration)
 }
 
 
+QPoint
+NotePixmapFactory::m_pointZero;
+
+
+//////////////////////////////////////////////////////////////////////
+
 
 ChordPixmapFactory::ChordPixmapFactory(const Staff &s)
     : m_referenceStaff(s)
@@ -352,17 +399,17 @@ ChordPixmapFactory::makeChordPixmap(const chordpitches &pitches,
 
     QPixmap *body = (note > QuarterDotted) ? &m_noteBodyEmpty : &m_noteBodyFilled;
 
-    if(stalkGoesUp) {
+    if (stalkGoesUp) {
         int offset = m_generatedPixmap->height() - body->height() - highestNote;
         
-        for(int i = pitches.size() - 1; i >= 0; --i) {
+        for (int i = pitches.size() - 1; i >= 0; --i) {
             m_p.drawPixmap (0, m_referenceStaff.pitchYOffset(pitches[i]) + offset, *body);
             m_pm.drawPixmap(0, m_referenceStaff.pitchYOffset(pitches[i]) + offset, *(body->mask()));
         }
         
     } else {
         int offset = lowestNote;
-        for(unsigned int i = 0; i < pitches.size(); ++i) {
+        for (unsigned int i = 0; i < pitches.size(); ++i) {
             m_p.drawPixmap (0, m_referenceStaff.pitchYOffset(pitches[i]) - offset, *body);
             m_pm.drawPixmap(0, m_referenceStaff.pitchYOffset(pitches[i]) - offset, *(body->mask()));
         }
@@ -371,13 +418,13 @@ ChordPixmapFactory::makeChordPixmap(const chordpitches &pitches,
     // restore mask painter RasterOp to Copy
     m_pm.setRasterOp(Qt::CopyROP);
 
-    if(noteHasStalk)
+    if (noteHasStalk)
         drawStalk(note, drawTail, stalkGoesUp);
 
     m_p.end();
     m_pm.end();
 
-    QCanvasPixmap notePixmap(*m_generatedPixmap, QPoint(0,0));
+    QCanvasPixmap notePixmap(*m_generatedPixmap, m_pointZero);
     QBitmap mask(*m_generatedMask);
     notePixmap.setMask(mask);
 
