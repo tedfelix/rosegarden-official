@@ -1544,17 +1544,21 @@ NotationView::doDeferredCursorMove()
             }
         }
 
-        staff->setInsertCursorPosition
-            (static_cast<NotationElement*>(*i)->getCanvasX() - 2,
-	     int(static_cast<NotationElement*>(*i)->getCanvasY()));
+	if (static_cast<NotationElement*>(*i)->getCanvasItem()) {
 
-        if (m_deferredCursorMove == CursorMoveAndMakeVisible) {
-            getCanvasView()->slotScrollHoriz
-		(int(static_cast<NotationElement*>(*i)->getCanvasX()) - 4);
-        }
+	    staff->setInsertCursorPosition
+		(static_cast<NotationElement*>(*i)->getCanvasX() - 2,
+		 int(static_cast<NotationElement*>(*i)->getCanvasY()));
+	    
+	    if (m_deferredCursorMove == CursorMoveAndMakeVisible) {
+		getCanvasView()->slotScrollHoriz
+		    (int(static_cast<NotationElement*>(*i)->getCanvasX()) - 4);
+	    }
+	} else {
+	    std::cerr << "WARNING: No canvas item for this notation element:";
+	    (*i)->event()->dump(std::cerr);
+	}
     }
-
-//!!! need to catch NoCanvasItem exceptions
 
     if (m_deferredCursorMove == CursorMoveAndScrollToPosition) {
 
@@ -1566,19 +1570,24 @@ NotationView::doDeferredCursorMove()
         NotationElementList::iterator i = 
             staff->getViewElementList()->findTime(t);
 
-        if (i == staff->getViewElementList()->end()) {
-            if (i == staff->getViewElementList()->begin()) return;
-            double lx, lwidth;
-            --i;
-            ccx = static_cast<NotationElement*>(*i)->getCanvasX();
-            static_cast<NotationElement*>(*i)->getLayoutAirspace(lx, lwidth);
-            ccx += lwidth;
-        } else {
-            ccx = static_cast<NotationElement*>(*i)->getCanvasX();
-        }
+	if (static_cast<NotationElement*>(*i)->getCanvasItem()) {
+	    if (i == staff->getViewElementList()->end()) {
+		if (i == staff->getViewElementList()->begin()) return;
+		double lx, lwidth;
+		--i;
+		ccx = static_cast<NotationElement*>(*i)->getCanvasX();
+		static_cast<NotationElement*>(*i)->getLayoutAirspace(lx, lwidth);
+		ccx += lwidth;
+	    } else {
+		ccx = static_cast<NotationElement*>(*i)->getCanvasX();
+	    }
         
-        QScrollBar* hbar = getCanvasView()->horizontalScrollBar();
-        hbar->setValue(int(hbar->value() - (m_deferredCursorScrollToX - ccx)));
+	    QScrollBar* hbar = getCanvasView()->horizontalScrollBar();
+	    hbar->setValue(int(hbar->value() - (m_deferredCursorScrollToX - ccx)));
+	} else {
+	    std::cerr << "WARNING: No canvas item for this notation element*:";
+	    (*i)->event()->dump(std::cerr);
+	}   
     }
 
     m_deferredCursorMove = NoCursorMoveNeeded;

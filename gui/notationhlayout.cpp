@@ -1212,7 +1212,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 		timeSigToPlace = false;
 	    }
 
-            NOTATION_DEBUG << "NotationHLayout::layout(): setting element's x to " << x << endl;
+            NOTATION_DEBUG << "NotationHLayout::layout(): setting element's x to " << x << " (was " << el->getLayoutX() << ")" << endl;
 
 	    el->setLayoutX(x);
 	    el->setLayoutAirspace(x, int(delta));

@@ -2302,6 +2302,10 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview,
 	endA   = endB   = s->getEndTime();
     }
 
+    // refreshSegment takes start==end to mean refresh everything
+    if (startA == endA) ++endA;
+    if (startB == endB) ++endB;
+
     bool updateRequired = true;
 
     // play previews if appropriate -- also permits an optimisation
