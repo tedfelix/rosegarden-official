@@ -3742,7 +3742,14 @@ RosegardenGUIApp::slotRecord()
         m_transport->MetronomeButton()->setOn(false);
         m_transport->RecordButton()->setOn(false);
         m_transport->PlayButton()->setOn(false);
+    }
+    catch(Rosegarden::Exception e)
+    {
+        KMessageBox::error(this, strtoqstr(e.getMessage()));
 
+        m_transport->MetronomeButton()->setOn(false);
+        m_transport->RecordButton()->setOn(false);
+        m_transport->PlayButton()->setOn(false);
     }
 
     // plugin the keyboard accelerators for focus on this dialog
@@ -3776,6 +3783,10 @@ RosegardenGUIApp::slotToggleRecord()
     catch(QString s)
     {
         KMessageBox::error(this, s);
+    }
+    catch(Rosegarden::Exception e)
+    {
+        KMessageBox::error(this, strtoqstr(e.getMessage()));
     }
 
 }
