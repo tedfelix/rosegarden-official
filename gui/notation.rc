@@ -422,7 +422,7 @@
   <Action name="toggle_tracking"/>
 </ToolBar>
 
-<ToolBar name="Notes Toolbar" newline="true">
+<ToolBar name="Notes Toolbar" newline="true" hidden="false" position="left">
   <text>Notes Toolbar</text>
 
   <!-- Reference names, but with _ instead of - -->
@@ -448,7 +448,7 @@
   <Action name="triplet_mode" />
 </ToolBar>
 
-<ToolBar name="Rests Toolbar">
+<ToolBar name="Rests Toolbar" hidden="false" position="left">
   <text>Rests Toolbar</text>
 
   <!-- Reference names, but with _ instead of - -->
@@ -470,7 +470,16 @@
 
 </ToolBar>
 
-<ToolBar name="Accidentals Toolbar">
+<ToolBar name="Clefs Toolbar" hidden="false" position="left" newline="true">
+  <text>Clefs Toolbar</text>
+
+  <Action name="treble_clef" />
+  <Action name="tenor_clef" />
+  <Action name="alto_clef" />
+  <Action name="bass_clef" />
+</ToolBar>
+
+<ToolBar name="Accidentals Toolbar" hidden="false" position="left">
   <text>Accidentals Toolbar</text>
 
   <Action name="no_accidental" />
@@ -481,37 +490,7 @@
   <Action name="double_flat_accidental" />
 </ToolBar>
 
-<ToolBar name="Clefs Toolbar" hidden="true">
-  <text>Clefs Toolbar</text>
-
-  <Action name="treble_clef" />
-  <Action name="tenor_clef" />
-  <Action name="alto_clef" />
-  <Action name="bass_clef" />
-</ToolBar>
-
-<ToolBar name="Marks Toolbar" newline="true" hidden="true">
-  <text>Marks Toolbar</text>
-
-    <Action name="add_accent"/>
-    <Action name="add_tenuto"/>
-    <Action name="add_staccato"/>
-    <Action name="add_staccatissimo"/>
-    <Action name="add_marcato"/>
-    <Action name="add_text_sf"/>
-    <Action name="add_text_rf"/>
-    <Separator/>
-    <Action name="add_trill"/>
-    <Action name="add_turn"/>
-    <Action name="add_pause"/>
-    <Separator/>
-    <Action name="add_up-bow"/>
-    <Action name="add_down-bow"/>
-    <Separator/>
-    <Action name="add_text_mark"/>
-</ToolBar>
-
-<ToolBar name="Group Toolbar" hidden="true">
+<ToolBar name="Group Toolbar" hidden="false" position="right">
   <text>Group Toolbar</text>
 
   <Action name="make_chord"/>
@@ -532,6 +511,27 @@
   <Action name="octave_up"/>
 </ToolBar>
 
+<ToolBar name="Marks Toolbar" newline="true" hidden="false" position="right">
+  <text>Marks Toolbar</text>
+
+    <Action name="add_accent"/>
+    <Action name="add_tenuto"/>
+    <Action name="add_staccato"/>
+    <Action name="add_staccatissimo"/>
+    <Action name="add_marcato"/>
+    <Action name="add_text_sf"/>
+    <Action name="add_text_rf"/>
+    <Separator/>
+    <Action name="add_trill"/>
+    <Action name="add_turn"/>
+    <Action name="add_pause"/>
+    <Separator/>
+    <Action name="add_up-bow"/>
+    <Action name="add_down-bow"/>
+    <Separator/>
+    <Action name="add_text_mark"/>
+</ToolBar>
+
 <ToolBar name="Meta Toolbar" newline="true" hidden="true">
   <text>Meta Toolbar</text>
 
@@ -543,7 +543,7 @@
   <Action name="show_group_toolbar"        />
 </ToolBar>
 
-<ToolBar name="Layout Toolbar">
+<ToolBar name="Layout Toolbar" hidden="true">
   <text>Layout Toolbar</text>
   <Action name="linear_mode"               />
   <Action name="continuous_page_mode"      />
