@@ -67,6 +67,9 @@ Bernd Weber
 Kevin Liang
     * HSpinBox class
 
+Thorsten Wilms
+    * Original designs on which the Rosegarden rotary controllers are based
+
 ##
 ## Names in there should also be credited in gui/main.cpp, with aboutData.addCredit()
 ##
