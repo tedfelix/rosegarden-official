@@ -979,6 +979,8 @@ msgid ""
 "You've not yet defined an audio editor for Rosegarden to use.\n"
 "See Settings -> Configure Rosegarden -> General -> External Editors."
 msgstr ""
+"Вы не определили звуковой редактор для совместной работы с Rosegarden.\n"
+"Пройдитесь по меню Настройки -> Настроить Rosegarden -> Общее -> Внешние редакторы."
 
 #: rosegardenguiview.cpp:1352
 #: rosegardenguiview.cpp:1356
@@ -1535,7 +1537,7 @@ msgstr "Изменить этот темп на"
 
 #: rosegardentempo.cpp:55
 msgid "Tempo at time"
-msgstr ""
+msgstr "Темп в позиции"
 
 #: rosegardentempo.cpp:59
 #: rosegardentempo.cpp:70
@@ -3174,7 +3176,7 @@ msgstr "в середине такта %1."
 
 #: dialogs.cpp:2879
 msgid "        (at %1.%2 s, in measure %3)"
-msgstr "       (на позиции %1.%2 с, в такте %3)"
+msgstr "       (в позиции %1.%2 с, в такте %3)"
 
 #: dialogs.cpp:2896
 msgid "There are no preceding tempo changes."
@@ -3815,10 +3817,14 @@ msgstr "Подсистема JACK Audio теряет некоторые сэмп
 #: sequencemanager.cpp:1032
 msgid "Failed to read audio data from disc in time to service the audio subsystem."
 msgstr ""
+"Не удалось своевременно прочитать звуковые данные с диска\n"
+"для обеспечения нормальной работы звуковой подсистемы."
 
 #: sequencemanager.cpp:1036
 msgid "Failed to write audio data to disc fast enough to service the audio subsystem."
 msgstr ""
+"Не удалось записать данные на диск достаточно быстро\n"
+"для обеспечения нормальной работы звуковой подсистемы."
 
 #: sequencemanager.cpp:1041
 msgid "The audio subsystem is failing to keep up."
@@ -3826,7 +3832,7 @@ msgstr "Звуковая подсистема не поспевает."
 
 #: sequencemanager.cpp:1045
 msgid "Unknown sequencer failure mode!"
-msgstr ""
+msgstr "Неизвестная ошибка секвенсера!"
 
 #: notationcommands.cpp:73
 #: matrixcommands.cpp:38
@@ -3843,7 +3849,7 @@ msgstr "Вставить текст"
 
 #: notationcommands.cpp:331
 msgid "Edit Text"
-msgstr "Измениь текст"
+msgstr "Изменить текст"
 
 #: notationcommands.cpp:808
 msgid "Add S&lur"
@@ -3896,7 +3902,7 @@ msgstr "тре&ль"
 
 #: notationcommands.cpp:1111
 msgid "Trill &with Line"
-msgstr ""
+msgstr "Трель с л&инией"
 
 #: notationcommands.cpp:1112
 msgid "Trill Line"
@@ -4034,6 +4040,8 @@ msgid ""
 "Click and drag up and down or left and right to modify.\n"
 "Double click to edit value directly."
 msgstr ""
+"Для изменения щёлкните и перетащите вверх-вниз или вправо-влево.\n"
+"Двойным щелчком вызывается диалога для ввода значения напрямую."
 
 #: widgets.cpp:724
 msgid "Select a new value"
@@ -5487,7 +5495,7 @@ msgstr "Источник записи"
 
 #: mixer.cpp:298
 msgid "Output destination"
-msgstr ""
+msgstr "Куда вывести"
 
 #: mixer.cpp:311
 #: mixer.cpp:460
@@ -5606,7 +5614,7 @@ msgstr "Разквантовать события"
 
 #: editcommands.cpp:1505
 msgid "&Move Events to Other Segment"
-msgstr ""
+msgstr "С&местить события в другой сегмент"
 
 #: editcommands.cpp:1738
 msgid "Insert Trigger Note"
