@@ -73,9 +73,13 @@ public:
     int getClient() const { return m_client; }
     void setClient(int client) { m_client = client; }
 
-    // Get te DeviceDirection from the attached MappedInstruments
+    // Get the DeviceDirection from the attached MappedInstruments
     //
     Rosegarden::MidiDevice::DeviceDirection getDirection() const;
+
+    // Get all the ports of the attached MappedInstruments
+    //
+    std::vector<int> getPorts() const;
 
 protected:
 

@@ -987,6 +987,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
         {
             std::vector<int> ports = dev->getPortNumbers();
 
+
             for (unsigned int i = 0; i < ports.size(); i++)
             {
                 QString label = strtoqstr((*it)->getName());
@@ -998,7 +999,6 @@ SequencerConfigurationPage::SequencerConfigurationPage(
                 m_devPorts.push_back(
                     std::pair<Rosegarden::DeviceId, int>((*it)->getId(), i));
             }
-
         }
     }
 
@@ -1013,7 +1013,18 @@ SequencerConfigurationPage::SequencerConfigurationPage(
         }
     }
 
-    if (m_devPorts.size() == 0)
+    // If we have more than one input device then create an
+    // "all" inputs device - special case.
+    //
+    if (m_devPorts.size() > 1)
+    {
+        /*
+        m_recordDevice->insertItem(i18n("<all of the above>"));
+        m_devPorts.push_back(
+            std::pair<Rosegarden::DeviceId, int>(255, 255));
+            */
+    }
+    else if (m_devPorts.size() == 0)
     {
         m_recordDevice->insertItem(i18n("<no record devices>"));
         m_recordDevice->setEnabled(false);

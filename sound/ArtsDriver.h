@@ -122,9 +122,6 @@ public:
     virtual void setLoop(const RealTime &/*loopStart*/,
                          const RealTime &/*loopEnd*/) {;}
 
-    virtual void setRecordDevice(Rosegarden::DeviceId /*id*/,
-                                 int /*port*/) {;}
-
     virtual void sendMidiClock(const RealTime &/*playLatency*/) {;}
 
 protected:

@@ -203,7 +203,7 @@ operator<<(QDataStream &dS, const MappedDevice &mD)
 Rosegarden::MidiDevice::DeviceDirection
 MappedDevice::getDirection() const
 {
-    Rosegarden::MidiDevice::DeviceDirection direction = WriteOnly;
+    Rosegarden::MidiDevice::DeviceDirection direction = MidiDevice::WriteOnly;
 
     for (MappedDeviceConstIterator it = this->begin(); it != this->end(); ++it)
     {
@@ -217,6 +217,36 @@ MappedDevice::getDirection() const
 
     return direction;
 }
+
+// Similar to Device::getPortNumbers
+//
+std::vector<int>
+MappedDevice::getPorts() const
+{
+    std::vector<int> ports;
+    std::vector<int>::iterator pIt;
+    bool addPort = false;
+
+    for (MappedDeviceConstIterator it = this->begin(); it != this->end(); ++it)
+    {
+        addPort = true;
+
+        for (pIt = ports.begin(); pIt != ports.end(); ++pIt)
+        {
+            if ((*pIt) == (*it)->getPort())
+            {
+                addPort = false;
+                continue;
+            }
+        }
+
+        if (addPort) ports.push_back((*it)->getPort());
+    }
+
+    return ports;
+}
+
+
 
 
 }

@@ -2009,7 +2009,44 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
 
             int recordPort = (int)((*i)->getData2());
 
-            setRecordDevice(recordDevice, recordPort);
+            // Unset connections
+            //
+            unsetRecordDevices();
+
+            // Special case to set for all record ports
+            //
+            if (recordDevice == 255 && recordPort == 255)
+            {
+                /* set all record devices */
+                std::cout << "SET ALL RECORD DEVICES" << std::endl;
+
+                /*
+                std::vector<MappedDevice*>::iterator it = m_devices.begin();
+                std::vector<int> ports;
+                std::vector<int>::iterator pIt;
+
+                for (; it != m_devices.end(); ++it)
+                {
+                    cout << "DEVICE = " << (*it)->getName() << " - DIR = "
+                         << (*it)->getDirection() << endl;
+                    // ignore ports we can't connect to
+                    if ((*it)->getDirection() == MidiDevice::WriteOnly) continue;
+
+                    cout << "PORTS = " << ports.size() << endl;
+                    ports = (*it)->getPorts();
+                    for (pIt = ports.begin(); pIt != ports.end(); ++pIt)
+                    {
+                        setRecordDevice((*it)->getClient(), *pIt);
+                    }
+                }
+                */
+            }
+            else
+            {
+                // Otherwise just for the one device and port
+                //
+                setRecordDevice(recordDevice, recordPort);
+            }
         }
     }
 
@@ -3325,6 +3362,38 @@ AlsaDriver::setRecordDevice(Rosegarden::DeviceId id, int port)
     //
     snd_seq_port_subscribe_set_time_real(subs, 1);
 
+    if (snd_seq_subscribe_port(m_midiHandle, subs) < 0)
+    {
+        std::cerr << "AlsaDriver::initialiseMidi - "
+                  << "can't subscribe input client/port"
+                  << std::endl;
+        // Not the end of the world if this fails but we
+        // have to flag it internally.
+        //
+        m_midiInputPortConnected = false;
+        std::cerr << "AlsaDriver::setRecordDevice - "
+                  << "failed to subscribe device " 
+                  << id << " as record port" << std::endl;
+    }
+    else
+    {
+        m_midiInputPortConnected = true;
+        std::cerr << "AlsaDriver::setRecordDevice - "
+                  << "successfully subscribed device "
+                  << id << " as record port" << std::endl;
+    }
+
+}
+
+// Clear any record device connections
+//
+void
+AlsaDriver::unsetRecordDevices()
+{
+    snd_seq_addr_t dest;
+    dest.client = m_client;
+    dest.port = m_port;
+
     snd_seq_query_subscribe_t *qSubs;
     snd_seq_addr_t tmp_addr;
     snd_seq_query_subscribe_alloca(&qSubs);
@@ -3356,7 +3425,7 @@ AlsaDriver::setRecordDevice(Rosegarden::DeviceId id, int port)
 
         if (error < 0)
         {
-            std::cerr << "AlsaDriver::setRecordDevice - "
+            std::cerr << "AlsaDriver::unsetRecordDevices - "
                       << "can't unsubscribe record port" << std::endl;
 
         }
@@ -3364,28 +3433,6 @@ AlsaDriver::setRecordDevice(Rosegarden::DeviceId id, int port)
         snd_seq_query_subscribe_set_index(qSubs,
                 snd_seq_query_subscribe_get_index(qSubs) + 1);
     }
-
-    if (snd_seq_subscribe_port(m_midiHandle, subs) < 0)
-    {
-        std::cerr << "AlsaDriver::initialiseMidi - "
-                  << "can't subscribe input client/port"
-                  << std::endl;
-        // Not the end of the world if this fails but we
-        // have to flag it internally.
-        //
-        m_midiInputPortConnected = false;
-        std::cerr << "AlsaDriver::setRecordDevice - "
-                  << "failed to subscribe device " 
-                  << id << " as record port" << std::endl;
-    }
-    else
-    {
-        m_midiInputPortConnected = true;
-        std::cerr << "AlsaDriver::setRecordDevice - "
-                  << "successfully subscribed device "
-                  << id << " as record port" << std::endl;
-    }
-
 }
 
 // We send 

@@ -131,10 +131,6 @@ public:
 
     virtual void setLoop(const RealTime &loopStart, const RealTime &loopEnd);
 
-    // Set the record device
-    //
-    virtual void setRecordDevice(Rosegarden::DeviceId id, int port);
-
     // Send the MIDI clock
     //
     virtual void sendMidiClock(const RealTime &playLatency);
@@ -158,6 +154,11 @@ public:
     void sendSystemQueued(Rosegarden::MidiByte command,
                           const std::string &args,
                           const Rosegarden::RealTime &time);
+
+    // Set the record device
+    //
+    void setRecordDevice(Rosegarden::DeviceId id, int port);
+    void unsetRecordDevices();
 
 #ifdef HAVE_LADSPA
 

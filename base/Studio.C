@@ -345,6 +345,38 @@ Studio::assignMidiProgramToInstrument(MidiByte program,
 	if (lsb < 0) lsb = 0;
     }
 
+    // Pre-pass phase - work out if we have a WriteOnly device to assign
+    // to first - if we don't then we look for Duplex - if there's neither
+    // then we're in trouble of course so we just default and see where
+    // it takes us.
+    //
+    MidiDevice::DeviceDirection direction = MidiDevice::WriteOnly;
+    bool foundDuplex = false, foundWriteOnly = false;
+
+    for (it = m_devices.begin(); it != m_devices.end(); it++)
+    {
+        midiDevice = dynamic_cast<MidiDevice*>(*it);
+        if (midiDevice)
+        {
+            switch ((midiDevice)->getDirection())
+            {
+                case MidiDevice::WriteOnly:
+                    foundWriteOnly = true;
+                    break;
+
+                case MidiDevice::Duplex:
+                    foundDuplex = true;
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+
+    if (foundWriteOnly) direction = MidiDevice::WriteOnly;
+    else if (foundDuplex) direction = MidiDevice::Duplex;
+
     // Pass one - search through all MIDI instruments looking for
     // a match that we can re-use.  i.e. if we have a matching 
     // Program Change then we can use this Instrument.
@@ -354,7 +386,7 @@ Studio::assignMidiProgramToInstrument(MidiByte program,
     {
         midiDevice = dynamic_cast<MidiDevice*>(*it);
 
-        if (midiDevice && midiDevice->getDirection() == MidiDevice::WriteOnly)
+        if (midiDevice && midiDevice->getDirection() == direction)
         {
             instList = (*it)->getPresentationInstruments();
 

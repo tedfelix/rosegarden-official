@@ -276,10 +276,6 @@ public:
     virtual void setLoop(const RealTime &loopStart, const RealTime &loopEnd)
         = 0;
 
-    // Set the record device
-    //
-    virtual void setRecordDevice(Rosegarden::DeviceId id, int port) = 0;
-
     // Send the MIDI clock
     //
     virtual void sendMidiClock(const RealTime &playLatency) = 0;
