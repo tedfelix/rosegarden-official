@@ -277,7 +277,11 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
 
     if (params.m_tied) {
         m_right = std::max(m_right, params.m_tieLength - m_noteBodyWidth/2);
-        //!!! need height above or below as well
+        if (params.m_stemGoesUp) {
+            m_below = std::max(m_below, m_noteBodyHeight * 2);
+        } else {
+            m_above = std::max(m_above, m_noteBodyHeight * 2);
+        }
     }
 
     createPixmapAndMask(m_noteBodyWidth + m_left + m_right,
@@ -648,9 +652,9 @@ NotePixmapFactory::drawTie(bool above, int length)
         if (above) {
 
             m_p.drawArc
-                (x, y + i, x + tieCurve, y + tieCurve + i, 180*16, 270*16);
+                (x, y + i, x + tieCurve, y + tieCurve + i, 180*16, 90*16);
             m_pm.drawArc
-                (x, y + i, x + tieCurve, y + tieCurve + i, 180*16, 270*16);
+                (x, y + i, x + tieCurve, y + tieCurve + i, 180*16, 90*16);
 
             m_p.drawLine
                 (x + tieCurve, y + i, x + length - tieCurve - 1, y + i);
@@ -660,18 +664,18 @@ NotePixmapFactory::drawTie(bool above, int length)
             m_p.drawArc
                 (x + length - tieCurve - 1, y + i,
                  x + length - 1, y + tieCurve + i,
-                 270*16, 360*16);
+                 270*16, 90*16);
             m_pm.drawArc
                 (x + length - tieCurve - 1, y + i,
                  x + length - 1, y + tieCurve + i,
-                 270*16, 360*16);
+                 270*16, 90*16);
 
         } else {
 
             m_p.drawArc
-                (x, y + i, x + tieCurve, y + tieCurve + i, 90*16, 180*16);
+                (x, y + i, x + tieCurve, y + tieCurve + i, 90*16, 90*16);
             m_pm.drawArc
-                (x, y + i, x + tieCurve, y + tieCurve + i, 90*16, 180*16);
+                (x, y + i, x + tieCurve, y + tieCurve + i, 90*16, 90*16);
 
             m_p.drawLine
                 (x + tieCurve, y + height - i - 1,

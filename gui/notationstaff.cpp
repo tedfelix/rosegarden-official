@@ -272,15 +272,19 @@ bool NotationStaff::showElements(NotationElementList::iterator from,
 
         if (positionOnly && (*it)->canvasItem()) {
 
-            // We can't only reposition if the event is a beamed note,
-            // because changing the position normally requires
-            // changing the beam's length and/or angle as well
+            // We can't only reposition if the event is a beamed or
+            // tied-forward note, because changing the position
+            // normally requires changing the beam or tie's length
+            // and/or angle as well
 
             if ((*it)->isNote()) {
                 
-                bool beamed = false;
-                (void)((*it)->event()->get<Bool>(BEAMED, beamed));
-                if (!beamed) {
+                bool ouch = false;
+                (void)((*it)->event()->get<Bool>(BEAMED, ouch));
+                if (!ouch) (void)((*it)->event()->get<Bool>
+                                  (Note::TiedForwardPropertyName, ouch));
+
+                if (!ouch) {
                     (*it)->reposition(x(), y());
                     continue;
                 }
