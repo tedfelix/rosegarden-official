@@ -85,7 +85,12 @@ ArtsDriver::generateInstruments()
     std::string name("aRts MIDI");
     std::string channelName;
     char number[100];
-    int deviceId = 0;
+
+    m_instruments.clear();
+    m_devices.clear();
+
+    MappedDevice *device = new MappedDevice(0, Rosegarden::Device::Midi, name);
+    m_devices.push_back(device);
 
     for (int channel = 0; channel < 16; ++channel)
     {
@@ -96,11 +101,14 @@ ArtsDriver::generateInstruments()
                                                        channel,
                                                        m_midiRunningId++,
                                                        channelName,
-                                                       deviceId++);
+                                                       0);
         m_instruments.push_back(instr);
     }
 
     name = "aRts Audio";
+
+    device = new MappedDevice(1, Rosegarden::Device::Audio, name);
+    m_devices.push_back(device);
 
     for (int channel = 0; channel < 16; ++channel)
     {
@@ -111,7 +119,7 @@ ArtsDriver::generateInstruments()
                                                        channel,
                                                        m_audioRunningId++,
                                                        channelName,
-                                                       deviceId++);
+                                                       1);
         m_instruments.push_back(instr);
     }
 
