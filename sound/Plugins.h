@@ -31,7 +31,6 @@
 #include <vector>
 
 #include <qstring.h>
-#include <qvaluevector.h>
 
 namespace Rosegarden
 {
