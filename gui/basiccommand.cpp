@@ -35,17 +35,17 @@ using Rosegarden::timeT;
 BasicCommand::BasicCommand(const QString &name, Segment &segment,
 			   timeT start, timeT end, bool bruteForceRedo) :
     KNamedCommand(name),
+    m_startTime(calculateStartTime(start, segment)),
+    m_endTime(calculateEndTime(end, segment)),
     m_segment(segment),
-    m_savedEvents(segment.getType(), start),
-    m_startTime(start),
-    m_endTime(end),
+    m_savedEvents(segment.getType(), m_startTime),
     m_doBruteForceRedo(false),
     m_redoEvents(0)
 {
-    if (end == start) ++m_endTime;
+    if (m_endTime == m_startTime) ++m_endTime;
 
     if (bruteForceRedo) {
-        m_redoEvents = new Segment(segment.getType(), start);
+        m_redoEvents = new Segment(segment.getType(), m_startTime);
     }
 }
 
@@ -54,6 +54,36 @@ BasicCommand::~BasicCommand()
     m_savedEvents.clear();
     if (m_redoEvents) m_redoEvents->clear();
     delete m_redoEvents;
+}
+
+timeT
+BasicCommand::calculateStartTime(timeT given, Segment &segment)
+{
+    timeT actual = given;
+    Segment::iterator i = segment.findTime(given);
+
+    while (i != segment.end() && (*i)->getAbsoluteTime() == given) {
+	timeT notation = (*i)->getNotationAbsoluteTime();
+	if (notation < given) actual = notation;
+	++i;
+    }
+
+    return actual;
+}
+
+timeT
+BasicCommand::calculateEndTime(timeT given, Segment &segment)
+{
+    timeT actual = given;
+    Segment::iterator i = segment.findTime(given);
+
+    while (i != segment.end() && (*i)->getAbsoluteTime() == given) {
+	timeT notation = (*i)->getNotationAbsoluteTime();
+	if (notation > given) actual = notation;
+	++i;
+    }
+
+    return actual;
 }
 
 Rosegarden::Segment& BasicCommand::getSegment()

@@ -102,7 +102,7 @@ private:
     };
 
     std::pair<Rosegarden::timeT, Rosegarden::timeT> getExtents(Rosegarden::Segment::iterator);
-    void addChildren(Rosegarden::Segment *, Rosegarden::Segment::iterator, Rosegarden::timeT, EventTreeNode *);
+    Rosegarden::Segment::iterator addChildren(Rosegarden::Segment *, Rosegarden::Segment::iterator, Rosegarden::timeT, EventTreeNode *);
     void dumpSubtree(EventTreeNode *, int);
     void dumpForest(std::vector<EventTreeNode *> *);
     void buildForest(Rosegarden::Segment *, Rosegarden::Segment::iterator, Rosegarden::Segment::iterator);

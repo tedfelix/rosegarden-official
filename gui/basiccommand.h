@@ -89,11 +89,16 @@ private:
     void copyTo(Rosegarden::Segment *);
     void copyFrom(Rosegarden::Segment *);
 
-    Rosegarden::Segment &m_segment;
-    Rosegarden::Segment m_savedEvents;
+    Rosegarden::timeT calculateStartTime(Rosegarden::timeT given,
+					 Rosegarden::Segment &segment);
+    Rosegarden::timeT calculateEndTime(Rosegarden::timeT given,
+				       Rosegarden::Segment &segment);
 
     Rosegarden::timeT m_startTime;
     Rosegarden::timeT m_endTime;
+
+    Rosegarden::Segment &m_segment;
+    Rosegarden::Segment m_savedEvents;
 
     bool m_doBruteForceRedo;
     Rosegarden::Segment *m_redoEvents;
