@@ -39,7 +39,7 @@ foreach (@ARGV) {
 
 	if ($in_todo) {
 
-	    if (m, //(!!!)?\s* (.*) $ ,x) {
+	    if (m, /[/\*](!!!)?\s* (.*) $ ,x) {
 		print "          $2\n";
 	    } else {
 		$in_todo = 0;
@@ -47,13 +47,13 @@ foreach (@ARGV) {
 
 	} else {
 
-	    if (m, // !!!\s* (.*) $ ,x) {
+	    if (m, /[/\*] !!!\s* (.*) $ ,x) {
 		print_file_maybe(\$printed_file, $file);
 		print sprintf("%8d", $line), ": $1\n";
 		$in_todo = 1;
 		$todo_count++;
 
-	    } elsif (m, // \Q...\E \s* (.*) $ ,x) {
+	    } elsif (m, /[/\*] \Q...\E \s* (.*) $ ,x) {
 		print_file_maybe(\$printed_file, $file);
 		print sprintf("%8d", $line), ": [U] $1\n";
 		$unfinished_count++;

@@ -233,12 +233,10 @@ long RG21Loader::convertRG21Pitch(long pitch, int noteModifier)
         (noteModifier & ModFlat)    ? Flat  :
         (noteModifier & ModNatural) ? Natural : NoAccidental;
  
-    // the "pitch" we read from the file is actually a "height on
-    // staff" in rg4 terminology
     Rosegarden::NotationDisplayPitch displayPitch(pitch, accidental);
 
-    long rtn = displayPitch.getPerformancePitch(m_currentClef,
-                                                m_currentKey);
+    long rtn = displayPitch.getPerformancePitchFromRG21Pitch(m_currentClef,
+							     m_currentKey);
 
     return rtn;
 }

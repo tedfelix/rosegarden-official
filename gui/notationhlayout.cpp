@@ -177,7 +177,6 @@ NotationHLayout::preparse(Staff &staff)
     TimeSignature timeSignature;
 
     const NotePixmapFactory &npf(staff.getNotePixmapFactory());
-    AccidentalTable accTable(key, clef), newAccTable(accTable);
 
     barList.clear();
 
@@ -206,6 +205,8 @@ NotationHLayout::preparse(Staff &staff)
         int shortCount = 0;
         int totalCount = 0;
 	int fixedWidth = staff.getBarMargin();
+
+	AccidentalTable accTable(key, clef), newAccTable(accTable);
 
         for (NotationElementList::iterator it = from; it != to; ++it) {
         
@@ -395,10 +396,16 @@ NotationHLayout::AccidentalTable::getDisplayAccidental(Accidental accidental,
 
     if ((*this)[height] != NoAccidental) {
 
+        if (accidental == (*this)[height]) {
+            return NoAccidental;
+        } else if (accidental == NoAccidental || accidental == Natural) {
+            return Natural;
+/*!!!
         if (accidental == NoAccidental || accidental == Natural) {
             return Natural;
         } else if (accidental == (*this)[height]) {
             return NoAccidental;
+*/
         } else {
             //!!! aargh.  What we really want to do now is have two
             //accidentals shown: first a natural, then the one

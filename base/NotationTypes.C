@@ -81,6 +81,12 @@ Clef& Clef::operator=(const Clef &c)
     return *this;
 }
 
+int Clef::getTransposition() const
+{
+//!!! plus or minus?
+    return getOctave() * 12 - getPitchOffset();
+}
+
 int Clef::getOctave() const
 {
     if (m_clef == Treble) return 0;
@@ -212,7 +218,7 @@ vector<int> Key::getAccidentalHeights(const Clef &clef) const
     checkAccidentalHeights();
     vector<int> v(*m_accidentalHeights);
     for (unsigned int i = 0; i < v.size(); ++i) {
-        v[i] += clef.getPitchOffset();
+        v[i] += clef.getPitchOffset(); //!!! changed from += 20010930 cc
     }
     return v;
 }
@@ -334,35 +340,21 @@ NotationDisplayPitch::getPerformancePitch(const Clef &clef, const Key &key) cons
     return p;
 }
 
-string
-NotationDisplayPitch::getAsString(const Clef &clef, const Key &key) const
+int
+NotationDisplayPitch::getPerformancePitchFromRG21Pitch(const Clef &clef,
+						       const Key &key) const
 {
-    static const string noteNamesSharps[] = {
-        "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
-    };
-    static const string noteNamesFlats[]  = {
-        "C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"
-    };
-    
-    int performancePitch = getPerformancePitch(clef, key);
+    // Rosegarden 2.1 pitches are a bit weird; see
+    // docs/data_struct/units.txt
 
-    // highly unlikely, but fatal if it happened:
-    if (performancePitch < 0) performancePitch = 0;
+    // We pass the accidental and clef, a faked key of C major, and a
+    // flag telling displayPitchToRawPitch to ignore the clef offset
+    // and take only its octave into account
 
-    int octave = performancePitch / 12;
-    int pitch  = performancePitch % 12;
-
-    char tmp[1024];
-
-    if (key.isSharp())
-        sprintf(tmp, "%s%d", noteNamesSharps[pitch].c_str(), octave);
-    else
-        sprintf(tmp, "%s%d", noteNamesFlats[pitch].c_str(), octave);
-    
-    return string(tmp);
-    
+    int p = 0;
+    displayPitchToRawPitch(m_heightOnStaff, m_accidental, clef, Key(), p, true);
+    return p;
 }
-
 
 
 // Derived from RG2.1's MidiPitchToVoice in editor/src/Methods.c,
@@ -402,6 +394,7 @@ NotationDisplayPitch::rawPitchToDisplayPitch(int pitch,
     }
 
     height += (octave - 5) * 7;
+    height += clef.getPitchOffset();
 
     // 2. Adjust accidentals for the current key
 
@@ -430,7 +423,6 @@ NotationDisplayPitch::rawPitchToDisplayPitch(int pitch,
     // 3. Transpose up or down for the clef
 
     height -= 7 * clef.getOctave();
-    height += clef.getPitchOffset();
 }
 
 void
@@ -438,13 +430,14 @@ NotationDisplayPitch::displayPitchToRawPitch(int height,
                                              Accidental accidental,
                                              const Clef &clef,
                                              const Key &key,
-                                             int &pitch) const
+                                             int &pitch,
+					     bool ignoreOffset) const
 {
     int octave = 5;
 
     // 1. Get pitch and correct octave
 
-    height -= clef.getPitchOffset();
+    if (!ignoreOffset) height -= clef.getPitchOffset();
 
     while (height < 0) { octave -= 1; height += 7; }
     while (height > 7) { octave += 1; height -= 7; }
@@ -491,6 +484,35 @@ NotationDisplayPitch::displayPitchToRawPitch(int height,
     octave += clef.getOctave();
 
     pitch += 12 * octave;
+}
+
+string
+NotationDisplayPitch::getAsString(const Clef &clef, const Key &key) const
+{
+    static const string noteNamesSharps[] = {
+        "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
+    };
+    static const string noteNamesFlats[]  = {
+        "C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"
+    };
+    
+    int performancePitch = getPerformancePitch(clef, key);
+
+    // highly unlikely, but fatal if it happened:
+    if (performancePitch < 0) performancePitch = 0;
+
+    int octave = performancePitch / 12;
+    int pitch  = performancePitch % 12;
+
+    char tmp[1024];
+
+    if (key.isSharp())
+        sprintf(tmp, "%s%d", noteNamesSharps[pitch].c_str(), octave);
+    else
+        sprintf(tmp, "%s%d", noteNamesFlats[pitch].c_str(), octave);
+    
+    return string(tmp);
+    
 }
 
 string NotationDisplayPitch::getAccidentalName(Accidental a)
@@ -582,7 +604,6 @@ Note& Note::operator=(const Note &n)
 
 timeT Note::getDurationAux() const
 {
-    //!!! may be able to tighten this up a bit so it can remain inline
     int duration = m_shortestTime * (1 << m_type);
     int extra = duration / 2;
     for (int dots = m_dots; dots > 0; --dots) {
@@ -800,27 +821,6 @@ void TimeSignature::getDurationListForInterval(DurationList &dlist,
 //        cerr << "TimeSignature::getDurationListForInterval: acc is " << acc << ", filling the remaining " << (duration-acc) << endl;
         getDurationListForShortInterval(dlist, duration - acc, 0);
     }
-
-    //!!! Solely for testing.  This obviously slows things down...
-/*
-    cerr << "Checking duration list: ";
-    int d = 0;
-    for (DurationList::iterator di = dlist.begin(); di != dlist.end(); ++di) {
-        cerr << *di << ", ";
-	d += *di;
-    }
-    cerr << "done." << endl;
-
-    if (d != duration) {
-	cerr << "\n\nERROR: TimeSignature::getDurationListForInterval: returned duration list sums to incorrect total:" << endl << "Desired duration is " << duration << " with startOffset " << startOffset << ", returned duration list is: " << endl;
-	for (DurationList::iterator di = dlist.begin(); di != dlist.end(); ++di) {
-	    cerr << "-=> " << *di << endl;
-	}
-	cerr << "(end)" << endl;
-	assert(0);
-    }
-*/
-    //!!! End of testing code
 }
 
 

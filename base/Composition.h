@@ -87,6 +87,31 @@ public:
     /// Removes all Tracks from the Composition and destroys them
     void         clear();
 
+
+    //!!! The following four functions are not yet implemented
+    // (shouldn't be difficult -- lookups on m_timeReference)
+
+    /**
+     * Return the number of the bar that starts at or contains time t
+     */
+    int getBarNumber(timeT t);
+
+    /**
+     * Return the starting time of the bar that contains time t
+     */
+    timeT getBarStart(timeT t);
+
+    /**
+     * Return the ending time of the bar that contains time t
+     */
+    timeT getBarEnd(timeT t);
+
+    /**
+     * Return the time range of bar n
+     */
+    pair<timeT, timeT> getBarRange(int n);
+
+
     //!!! these should go, as the results they return are entirely
     // arbitrary -- but they're used in transport code, so we need to
     // convert the transport to use the bar start and end instead

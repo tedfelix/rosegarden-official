@@ -262,7 +262,6 @@ void Composition::eventAdded(const Track *t, Event *e)
 		(*i)->insert(new Event(*e));
 		(*i)->addObserver(this);
 	    } else std::cerr << "Composition: skipping" << std::endl;
-//!!!	    (*i)->calculateBarPositions();
 	}
     }
 }
@@ -302,7 +301,6 @@ void Composition::eventRemoved(const Track *t, Event *e)
 		if (found != (*i)->end()) (*i)->erase(found);
 		(*i)->addObserver(this);
 	    } else std::cerr << "Composition: skipping" << std::endl;
-//!!!	    (*i)->calculateBarPositions();
 	}
     }
 }

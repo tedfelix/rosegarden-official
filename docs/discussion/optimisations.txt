@@ -1,6 +1,5 @@
 
-Potential optimisations in core/ that aren't worth doing at the moment
-but might be worth bearing in mind:
+Potential optimisations:
 
  * Property names (currently strings) could be interned into integers
    once per program invocation and then stored as integers.  Tests
@@ -13,13 +12,14 @@ but might be worth bearing in mind:
 
        static const PropertyName MyPropertyName = "myproperty";
 
-   continues to work.  (Could we?)
+   continues to work.
 
- * Track (and gui/NotationHLayout) could use FastVector instead of
-   vector for BarPositionList and BarDataList.  We do lots of appends
-   (although no inserts) so that might gain us something.  Probably
-   not much though, as most appends will follow clear() and so reuse
-   previously-allocated space.
+   [DONE -- comparative timings below]
+
+ * NotationHLayout could use FastVector instead of vector for
+   BarDataList.  We do lots of appends (although no inserts) so that
+   might gain us something.  Probably not much though, as most appends
+   will follow clear() and so reuse previously-allocated space. [DONE]
 
 
 

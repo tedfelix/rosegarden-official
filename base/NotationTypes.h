@@ -73,7 +73,24 @@ public:
 
     std::string getClefType() const { return m_clef; }
 
+    /** 
+     * Return the number of semitones a pitch in the treble clef would
+     * have to be lowered by in order to be drawn with the same height
+     * and accidental in this clef
+     */
+    int getTransposition() const;
+
+    /**
+     * Return the octave component of getTransposition(), i.e. the number
+     * of octaves difference in pitch between this clef and the treble
+     */
     int getOctave() const;
+
+    /**
+     * Return the intra-octave component of getTransposition(), i.e. the
+     * number of semitones this clef is distinct in pitch from the treble
+     * besides the different in octaves
+     */
     int getPitchOffset() const;
 
     /// Returned event is on heap; caller takes responsibility for ownership
@@ -198,8 +215,9 @@ private:
 
 /**
 
-  NotationDisplayPitch calculates the display height and accidental
-  value corresponding to a given stored note pitch.
+  NotationDisplayPitch stores a note's pitch in terms of the position
+  of the note on the staff and its associated accidental, and
+  converts these values to and from performance (MIDI) pitches.
 
   Rationale: When we insert a note, we need to query the height of the
   staff line next to which it's being inserted, then translate this
@@ -221,17 +239,41 @@ private:
 class NotationDisplayPitch
 {
 public:
+    /**
+     * Construct a NotationDisplayPitch containing the given staff
+     * height and accidental
+     */
     NotationDisplayPitch(int heightOnStaff, Accidental accidental);
+
+    /**
+     * Construct a NotationDisplayPitch containing the height and
+     * accidental to which the given performance pitch corresponds
+     * in the given clef and key
+     */
     NotationDisplayPitch(int pitch, const Clef &clef, const Key &key,
                          Accidental explicitAccidental = NoAccidental);
 
     int        getHeightOnStaff() const { return m_heightOnStaff; }
     Accidental getAccidental()    const { return m_accidental; }
 
+    /**
+     * Calculate and return the performance (MIDI) pitch 
+     * corresponding to the stored height and accidental, in the
+     * given clef and key
+     */
     int getPerformancePitch(const Clef &clef, const Key &key) const;
 
     /**
-     * Returns the pitch as a string (C4, Bb2, etc...)
+     * Calculate and return the performance (MIDI) pitch
+     * corresponding to the stored height and accidental,
+     * interpreting them as Rosegarden-2.1-style values (for
+     * backward compatibility use), in the given clef and key
+     */
+    int getPerformancePitchFromRG21Pitch(const Clef &clef,
+					 const Key &key) const;
+
+    /**
+     * Return the stored pitch as a string (C4, Bb2, etc...)
      * according to http://www.harmony-central.com/MIDI/Doc/table2.html
      */
     std::string getAsString(const Clef &clef, const Key &key) const;
@@ -251,7 +293,7 @@ private:
     void rawPitchToDisplayPitch(int, const Clef &, const Key &,
                                 int &, Accidental &) const;
     void displayPitchToRawPitch(int, Accidental, const Clef &, const Key &,
-                                int &) const;
+                                int &, bool ignoreOffset = false) const;
 };
 
 

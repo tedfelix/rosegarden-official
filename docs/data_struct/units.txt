@@ -24,13 +24,31 @@ display pitch and raw pitch depends on the clef and key.  For height
 on the staff, we use the RG2.1 convention of 0 = bottom line, 1 = gap
 between bottom two lines and so on up to 8 = top line.  Negative
 heights are below the staff (i.e. on leger lines), heights over 8 are
-above.
+above.  Display pitch is therefore independent of clef, so height 0 is
+always the bottom line in any clef.
 
 If we ever see pitch as a plain integer, we assume it's a raw internal
 pitch rather than a display pitch.  A plain integer used for display
 pitch would probably be referred to as a "height" rather than a pitch,
 as it would be lacking the extra information (accidental, clef, key)
 required to interpret it as a true pitch.
+
+
+Rosegarden 2.1 pitch
+--------------------
+
+Rosegarden 2.1 had a rather peculiar way of storing pitch, which we
+support for Rosegarden 2.1 file I/O only.
+
+The pitch recorded in its files is a "height on staff" measurement
+which depends on the pitch offset of the clef but not its octave.  For
+example, pitch -2 is middle C in the treble clef, but is also a C in
+any other clef, although in a different octave.  (If the pitch were a
+pure height measurement, -2 would be an E in the bass clef, a D in the
+alto and a B in the tenor.)
+
+Accidentals are recorded in absolute form in the file, i.e. as
+sounding accidentals independent of the key signature then in force.
 
 
 Duration

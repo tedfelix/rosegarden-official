@@ -190,7 +190,6 @@ public:
      * Only splits a single note; unlike expandIntoTie, this does
      * not by default split all notes at a given timeslice.
      */
-    //!!! untested.
     void makeNoteViable(iterator i);
 
 

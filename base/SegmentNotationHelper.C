@@ -301,6 +301,7 @@ void TrackNotationHelper::insertNote(timeT absoluteTime, Note note, int pitch,
     track().getTimeSlice(absoluteTime, i, j);
 
     //!!! Deal with end-of-bar issues!
+
 //    int barNo = track().getBarNumber(i);
 
     insertSomething(i, note.getDuration(), pitch, false, false,
@@ -314,6 +315,7 @@ void TrackNotationHelper::insertRest(timeT absoluteTime, Note note)
     track().getTimeSlice(absoluteTime, i, j);
 
     //!!! Deal with end-of-bar issues!
+
 //    int barNo = track().getBarNumber(i);
 
     insertSomething(i, note.getDuration(), 0, true, false, NoAccidental);

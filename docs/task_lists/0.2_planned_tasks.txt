@@ -23,6 +23,8 @@ Work required to fix existing stuff
     notation elements without corresponding events (because the
     time sig event will never be copied to individual tracks)
 
+3.  leger lines
+
 
 New features suitable for 0.2
 -----------------------------
