@@ -241,7 +241,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     QCanvas *tCanvas = new QCanvas(this);
     tCanvas->resize(width() * 2, height() * 2);
-    
+
     setCanvasView(new NotationCanvasView(*this, m_horizontalScrollBar,
                                          tCanvas, getCentralFrame()));
 
@@ -276,6 +276,11 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     addRuler(m_tempoRuler);
     m_tempoRuler->hide();
     m_temposVisible = false;
+
+    // All toolbars should be created before this is called
+    setAutoSaveSettings("NotationView", true);
+    readOptions();
+
 
     setBottomBarButtons(new BarButtons(m_hlayout, 20.0, 25,
 				       true, getCentralFrame()));
@@ -430,11 +435,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_inhibitRefresh = false;
 
     setConfigDialogPageIndex(1);
-
-    // All toolbars should be created before this is called
-    setAutoSaveSettings("NotationView", true);
-
-    readOptions();
 
     if (m_annotationsVisible) {
 	// oops
