@@ -1178,33 +1178,6 @@ void NotationView::setCurrentSelection(EventSelection* s)
     updateView();
 }
 
-/*!!!
-void NotationView::checkCurrentSelection()
-{
-    // If any of the notes in the selection are absent from their
-    // segment, cancel the selection and give up
-
-    if (m_currentEventSelection) {
-
-	Segment &segment = m_currentEventSelection->getSegment();
-
-	for (EventSelection::eventcontainer::iterator i =
-		 m_currentEventSelection->getSegmentEvents().begin();
-	     i != m_currentEventSelection->getSegmentEvents().end(); ++i) {
-
-	    if (segment.findSingle(*i) == segment.end()) {
-		m_currentEventSelection->removeSelectionFromSegment
-		    (m_properties.SELECTED);
-		delete m_currentEventSelection;
-		m_currentEventSelection = 0;
-		emit usedSelection();
-		return;
-	    }
-	}
-    }
-}
-*/
-
 void NotationView::setSingleSelectedEvent(int staffNo, Event *event)
 {
     setSingleSelectedEvent(getStaff(staffNo)->getSegment(), event);
@@ -2470,7 +2443,6 @@ void NotationView::refreshSegment(Segment *segment,
     START_TIMING;
 
     emit usedSelection();
-//!!!    checkCurrentSelection();
 
     if (segment) {
         NotationStaff *staff = getStaff(*segment);

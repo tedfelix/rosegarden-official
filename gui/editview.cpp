@@ -181,8 +181,18 @@ void EditView::paintEvent(QPaintEvent* e)
 
     bool needUpdate = false;
     
-    // Scan all segments and check if they've been modified
+    // Scan all segments and check if they've been modified.
     //
+    // If we have more than one segment modified, we need to update
+    // them all at once with the same time range, otherwise we can run
+    // into problems when the layout of one depends on the others.  So
+    // we use updateStart/End to calculate a bounding range for all
+    // modifications.
+
+    Rosegarden::timeT updateStart = 0, updateEnd = 0;
+    int segmentsToUpdate = 0;
+    Rosegarden::Segment *singleSegment = 0;
+
     for (unsigned int i = 0; i < m_segments.size(); ++i) {
 
         Rosegarden::Segment* segment = m_segments[i];
@@ -194,17 +204,32 @@ void EditView::paintEvent(QPaintEvent* e)
 
             // if composition is also modified, relayout everything
             refreshSegment(0);
-            break;
+	    segmentsToUpdate = 0;
+	    break;
             
         } else if (refreshStatus.needsRefresh()) {
 
             Rosegarden::timeT startTime = refreshStatus.from(),
                 endTime = refreshStatus.to();
 
-            refreshSegment(segment, startTime, endTime);
+	    if (segmentsToUpdate == 0 || startTime < updateStart) {
+		updateStart = startTime;
+	    }
+	    if (segmentsToUpdate == 0 || endTime > updateEnd) {
+		updateEnd = endTime;
+	    }
+	    singleSegment = segment;
+	    ++segmentsToUpdate;
+
             refreshStatus.setNeedsRefresh(false);
             needUpdate = true;
         }
+    }
+
+    if (segmentsToUpdate > 1) {
+	refreshSegment(0, updateStart, updateEnd);
+    } else if (segmentsToUpdate > 0) {
+	refreshSegment(singleSegment, updateStart, updateEnd);
     }
 
     KMainWindow::paintEvent(e);
