@@ -751,7 +751,7 @@
 	</para>
 
 	<para>
-	  This dialog allow you to attach banks of programs (names for
+	  This dialog allows you to attach banks of programs (names for
 	  voices) to your MIDI devices, thus permitting each
 	  instrument on a device to be set to use one of those voices
 	  in the <link
@@ -799,7 +799,7 @@
             <imageobject>
               <imagedata fileref="rg-midifilter.png" format="PNG"/>
               </imageobject>
-              <textobject>
+	      <textobject>
                 <phrase>The MIDI filter dialog</phrase>
               </textobject>
           </mediaobject>
@@ -2851,6 +2851,57 @@
 	      </listitem>
 	    </varlistentry>
 
+	  
+	    <varlistentry id="commands-nv-menu-edit-filter-selection">
+	      <term><menuchoice>
+		  <guimenu>Edit</guimenu>
+		  <guimenuitem>Filter Selection</guimenuitem>
+		</menuchoice></term>
+		<listitem>
+		<para>
+		  <action>
+		    Invokes an event filter dialog.
+		  </action>
+		    This offers you the ability to filter a range of events in
+		    any of several categories out of your selection.
+	        </para>
+		<para>
+		  <screenshot>
+		    <mediaobject>
+		      <imageobject>
+			<imagedata fileref="rg-eventfilter.png" format="PNG"/>
+		      </imageobject>
+		      <textobject>
+			<phrase>The event filter dialog</phrase>
+		      </textobject>
+		    </mediaobject>
+		  </screenshot>
+	        </para>
+		<para>
+		    All ranges may be either inclusive or exclusive.
+		</para>
+	        <para>
+		    An inclusive range will remove events on either side of it
+		    from the selection.  You can use this, for example, to
+		    filter everything below middle C and above the A above
+		    middle C out of your selection.
+		</para>
+	        <para>
+		    An exclusive range will remove the events within the range
+		    itself, leaving everything on either side of it selected.
+		    Using the same search points as in the previous example,
+		    you would use an exclusive range to remove everything
+		    between middle C and the A above middle C from your
+		    selection, while leaving everything above and below that
+		    range selected.
+		</para>
+		<para>
+		    Once your selection has been filtered, you can manipulate
+		    it by any conventional means.
+		</para>
+	      </listitem>
+	    </varlistentry>
+
 
 	    <varlistentry id="commands-nv-menu-edit-add-tempo">
 	      <term><menuchoice>
@@ -3809,7 +3860,7 @@
 	  <para>
 
 	    Other major contributors include Randall Farmer, Ron
-	    Kuris, and Hans Kieserman.
+	    Kuris, Hans Kieserman, and Michael McIntyre.
 
 	  </para>
 	</listitem>

@@ -21,6 +21,10 @@ Features for 1.0 - updated 20030627
            notes past the end of it
 
 - request: importing lilypond after manual hackery?
+  dmm:  No, I don't think so.  I saw the exchange Hans had on the
+  lilypond-devel list some time ago, and this feature would be extremely
+  difficult to implement.  If Hans has been working on it all this time in
+  secret, then it might make 1.0, but otherwise there's not a chance.
 
 - request: triplets of more than three (erm, quintuplets?)
 
@@ -28,6 +32,35 @@ Features for 1.0 - updated 20030627
 
 - porting to shared memory experimental branch [rwb/cc/gl]
 
+- event filter dialog [dmm] [DONE]
+
+- document event filter dialog in RG manual [dmm] [DONE]
+
+- look at other updates for RG manual [dmm] [IN PROGRESS]
+    
+- request: import studio from file [dmm] [IN PROGRESS]
+
+- request: use studio from file instead of default [dmm] [IN PROGRESS]
+
+- implement Pitch in lilypondio in parallel with existing methods, so we can
+  eventually wean it off of the junky code it currently uses. [dmm/hk]
+
+- look at the "Chord" class for Lilypond and see how it might help resolve
+  the weird "measures that just don't add up" problems I've been seeing
+  [dmm/hk]
+
+- named controllers for studio with associated bankeditor-like dialog [dmm/rwb]
+  [IN PROGRESS]
+
+- find decent home for event filter toolbar icons [cc? dmm?]
+
+- fix step recording icon?  little feet would be more intuitive to me than
+  the arrow thing Chris came up with...  Chris??  [dmm]
+
+- completely rewrite tutorial for 1.0, using fewer/smaller pixmaps, better
+  organization, possibly converting to LDP docbook format [dmm]
+
+- request: integration of fluidsynth
 
 Bugs
 ----
@@ -39,4 +72,5 @@ Many - but additional ones are:
   view screws up quite a bit.
 - can't move the start time of a segment
 - Repeating segment ghosts when moving them.
+- segment preview ghosts when moving them
 

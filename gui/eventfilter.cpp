@@ -80,7 +80,7 @@ EventFilterDialog::initDialog()
 
     //---------[ Buttons ]--------------------------------------
     QWidget* privateLayoutWidget = new QWidget(this);
-    privateLayoutWidget->setGeometry(QRect(440, 285, 170, 75));
+    privateLayoutWidget->setGeometry(QRect(430, 285, 190, 90));
     QGridLayout* buttonLayout = new QGridLayout(privateLayoutWidget, 1, 1, 11, 6); 
 
     m_buttonAll = new QPushButton(i18n("All"), privateLayoutWidget);
@@ -401,7 +401,7 @@ EventFilterDialog::initDialog()
     wheelFrameLayout->addMultiCell(spacer_4, 0, 1, 3, 3); 
    
     // Set Initial Size
-    resize( QSize(624, 375).expandedTo(minimumSizeHint()) );
+    resize( QSize(630, 375).expandedTo(minimumSizeHint()) );
     
     // Force a sync with the checkboxes in the event that they were read false
     // from kconfig data.
