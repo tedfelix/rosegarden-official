@@ -176,6 +176,11 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotChangeTimeResolution()),
                 actionCollection(), "change_time_res");
 
+    new KAction(i18n("Edit All Tracks"),
+                0,
+                this, SLOT(editAllTracks()),
+                actionCollection(), "edit_all_tracks");
+
     // Transport controls [rwb]
     //
     // We set some default key bindings - with numlock off
@@ -1096,3 +1101,10 @@ RosegardenGUIApp::sendSequencerJump(const Rosegarden::timeT &position)
 
   return;
 }
+
+void
+RosegardenGUIApp::editAllTracks()
+{
+    m_view->editAllTracks(&m_doc->getComposition());
+}
+

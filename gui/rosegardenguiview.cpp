@@ -159,6 +159,20 @@ RosegardenGUIView::editTrackNotationSmall(Rosegarden::Track* p)
 }
 
 void
+RosegardenGUIView::editAllTracks(Rosegarden::Composition* p)
+{
+    std::vector<Rosegarden::Track *> tracksToEdit;
+
+    for (Rosegarden::Composition::trackcontainer::iterator i =
+             p->tracks().begin(); i != p->tracks().end(); ++i) {
+        tracksToEdit.push_back(*i);
+    }
+
+    m_notationView = new NotationView(getDocument(), tracksToEdit, this, 9);
+    m_notationView->show();
+}
+
+void
 RosegardenGUIView::setPointerPosition(const int &position)
 {
   emit setPositionPointer(position);

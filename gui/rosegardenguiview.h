@@ -32,6 +32,7 @@
 
 #include "rosedebug.h"
 
+namespace Rosegarden { class Composition; }
 
 class RosegardenGUIDoc;
 class NotationView;
@@ -94,6 +95,8 @@ public:
      * track resize tool is selected
      */
     void resizeSelected();
+
+    void editAllTracks(Rosegarden::Composition*);
     
     void setPointerPosition(const int &position);
     

@@ -14,6 +14,7 @@
 	<Action name="erase"/>
 	<Action name="resize"/>
 	<Action name="change_time_res"/>
+	<Action name="edit_all_tracks"/>
   </Menu>
   <Menu name="Transport">
         <text>Transport</text>

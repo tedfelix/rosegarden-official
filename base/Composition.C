@@ -153,6 +153,13 @@ void Composition::eventAdded(Track *t, Event *e)
 	if (found != m_timeReference.end()) m_timeReference.erase(found);
 	m_timeReference.insert(new Event(*e));
 
+        //!!! Modify so as only to insert if the time sig falls within
+        //the range of the track; if it's before the track starts, we
+        //need to stick it at the start unless another time sig
+        //appears later.  Complicated.  Maybe we should just allow
+        //time sigs within a track before the nominal start time --
+        //why not?
+
 	for (iterator i = begin(); i != end(); ++i) {
 	    std::cerr << "Composition: comparing with a track" << std::endl;
 	    if (*i != t) {
@@ -185,6 +192,10 @@ void Composition::eventRemoved(Track *t, Event *e)
 
 	Track::iterator found = findTimeSig(&m_timeReference, sigTime);
 	if (found != m_timeReference.end()) m_timeReference.erase(found);
+
+        //!!! What do we do if the time sig is before the start of a
+        //track, if we've modified eventAdded so as not always to add
+        //them in this case?
 
 	for (iterator i = begin(); i != end(); ++i) {
 	    std::cerr << "Composition: comparing with a track" << std::endl;

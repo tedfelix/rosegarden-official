@@ -349,9 +349,14 @@ public slots:
     void resizeSelected();
 
     /**
-     * track resize tool is selected
+     * change the resolution of the track display
      */
     void changeTimeResolution();
+
+    /**
+     * edit all tracks at once
+     */
+    void editAllTracks();
 
     /**
      * Set the song position pointer

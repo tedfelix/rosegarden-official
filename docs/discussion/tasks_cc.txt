@@ -25,7 +25,7 @@ References in round brackets are to 0.1_planned_features.txt.
     4b. Fix up Composition's cunning code for keeping time signatures
     in check between different Tracks by taking into account the
     starting time of the Track (or is absolute time now counted from
-    the start of the whole piece? it's so hard to remember)
+    the start of the whole piece? [YES, so DONE])
 
     4c. Modify NotationHLayout so layout() can work on multiple staffs
     at once -- needs sync track? coping with partial bars at start and
