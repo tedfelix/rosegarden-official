@@ -282,6 +282,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
                                    << XmlStorableEvent::toXmlString(*(*i))
                                    << endl;
                         ++i;
+                        if (i == (*trks)->end()) break;
                     }
 
                     fileStream << "</chord>" << endl; //-----
