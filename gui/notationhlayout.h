@@ -71,6 +71,16 @@ public:
     virtual void finishLayout();
 
     /**
+     * Set page mode
+     */
+    virtual void setPageMode(bool pageMode) { m_pageMode = pageMode; }
+
+    /**
+     * Get the page mode setting
+     */
+    virtual bool getPageMode() { return m_pageMode; }
+
+    /**
      * Set a page width
      */
     virtual void setPageWidth(double pageWidth) { m_pageWidth = pageWidth; }
@@ -235,6 +245,7 @@ protected:
     }
 
     double m_totalWidth;
+    bool m_pageMode;
     double m_pageWidth;
     double m_spacing;
     NotePixmapFactory &m_npf;

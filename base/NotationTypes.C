@@ -61,13 +61,17 @@ namespace Marks
     const Mark Accent = "accent";
     const Mark Tenuto = "tenuto";
     const Mark Staccato = "staccato";
-    const Mark Sforzando = "sforzando";
-    const Mark Rinforzando = "rinforzando";
+    const Mark Sforzando = getTextMark("sf");
+    const Mark Rinforzando = getTextMark("rf");
     const Mark Trill = "trill";
     const Mark Turn = "turn";
     const Mark Pause = "pause";
     const Mark UpBow = "up-bow";
     const Mark DownBow = "down-bow";
+
+    string getTextMark(string text) {
+	return string("text ") + text;
+    }
 }
 
 using namespace Marks;

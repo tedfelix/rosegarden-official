@@ -891,12 +891,13 @@ NotationView::changeFont(string newName, int newSize)
 void
 NotationView::setPageMode(bool pageMode)
 {
-    m_hlayout->setPageWidth(pageMode ? (width() - 50) : 0.0);
+    m_hlayout->setPageMode(pageMode);
+    m_hlayout->setPageWidth(width() - 50);
     
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 //        m_staffs[i]->move(0, 0);
-        m_staffs[i]->setPageWidth(width() - 50);
         m_staffs[i]->setPageMode(pageMode);
+        m_staffs[i]->setPageWidth(width() - 50);
 //        m_staffs[i]->move(20, m_staffs[i]->getStaffHeight() * i + 45);
     }
 
@@ -1028,7 +1029,10 @@ void NotationView::setNotePixmapFactory(NotePixmapFactory* f)
 
 void NotationView::setHLayout(NotationHLayout* l)
 {
-    if (m_hlayout) l->setPageWidth(m_hlayout->getPageWidth());
+    if (m_hlayout) {
+	l->setPageMode(m_hlayout->getPageMode());
+	l->setPageWidth(m_hlayout->getPageWidth());
+    }
     delete m_hlayout;
     m_hlayout = l;
 }

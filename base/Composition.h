@@ -142,11 +142,7 @@ public:
     /**
      * Return the total number of bars in the composition
      */
-    unsigned int getNbBars() const {
-	timeT d = getDuration();
-	if (d == 0) return 0;
-	else return getBarNumber(getDuration(), false) + 1;
-    }
+    int getNbBars() const;
 
     /**
      * Return the starting time of the bar that contains time t
@@ -250,6 +246,7 @@ protected:
 
     // called from calculateBarPositions
     Segment::iterator addNewBar(timeT time, int barNo) const;
+    mutable int m_barCount;
 
     Quantizer m_quantizer;
 

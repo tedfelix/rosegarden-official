@@ -36,13 +36,15 @@ const std::string Composition::TempoEventType = "tempo";
 const PropertyName Composition::TempoProperty = "BeatsPerHour";
 
 
-Composition::Composition()
-    : m_referenceSegment(0),
-      m_position(0),
-      m_currentTempo(120.0),
-      m_defaultTempo(120.0),
-      m_barPositionsNeedCalculating(true)
+Composition::Composition() :
+    m_referenceSegment(0),
+    m_barCount(0),
+    m_position(0),
+    m_currentTempo(120.0),
+    m_defaultTempo(120.0),
+    m_barPositionsNeedCalculating(true)
 {
+    // nothing
 }
 
 Composition::~Composition()
@@ -178,8 +180,8 @@ Composition::calculateBarPositions() const
     Segment &t = m_referenceSegment;
     Segment::iterator i;
 
-    FastVector<timeT> segments;
-    FastVector<timeT> segmentTimes;
+    FastVector<timeT> sections;
+    FastVector<timeT> sectionTimes;
 
     FastVector<Segment::iterator> baritrs;
 
@@ -191,8 +193,8 @@ Composition::calculateBarPositions() const
 
 	} else if ((*i)->isa(TimeSignature::EventType)) {
 
-	    if (segments.size() > 0 &&
-		segments[segments.size()-1] == (*i)->getAbsoluteTime()) {
+	    if (sections.size() > 0 &&
+		sections[sections.size()-1] == (*i)->getAbsoluteTime()) {
 		std::cerr << "Ignoring time sig at "
 			  << (*i)->getAbsoluteTime()
 			  << " because we already have it" << endl;
@@ -201,8 +203,8 @@ Composition::calculateBarPositions() const
 			  << TimeSignature(**i).getBarDuration()
 			  << " at time "
 			  << (*i)->getAbsoluteTime() << endl;
-		segments.push_back((*i)->getAbsoluteTime());
-		segmentTimes.push_back(TimeSignature(**i).getBarDuration());
+		sections.push_back((*i)->getAbsoluteTime());
+		sectionTimes.push_back(TimeSignature(**i).getBarDuration());
 	    }
 	}
     }
@@ -214,40 +216,43 @@ Composition::calculateBarPositions() const
 
 //    std::cerr << "have " << t.size() << " non-bars in ref segment" << std::endl;
 
-    bool segment0isTimeSig = true;
-    if (segments.size() == 0 || segments[0] != 0) {
-	segments.push_front(0);
-	segmentTimes.push_front(TimeSignature().getBarDuration());
-	segment0isTimeSig = false;
+    bool section0isTimeSig = true;
+    if (sections.size() == 0 || sections[0] != 0) {
+	sections.push_front(0);
+	sectionTimes.push_front(TimeSignature().getBarDuration());
+	section0isTimeSig = false;
     }    
 
     timeT duration = getDuration();
-    segments.push_back(duration);
+    sections.push_back(duration);
 
     int barNo = 0;
 
-    for (int s = 0; s < segments.size() - 1; ++s) {
+    for (int s = 0; s < sections.size() - 1; ++s) {
 
-	timeT start = segments[s], finish = segments[s+1];
+	timeT start = sections[s], finish = sections[s+1];
 	timeT time;
 
-	if (s > 0 || segment0isTimeSig) {
-	    start += segmentTimes[s];
+	if (s > 0 || section0isTimeSig) {
+	    start += sectionTimes[s];
 	    ++barNo;
 	}
 
-//	std::cerr << "segment " << s << ": start " << start << ", finish " << finish << std::endl;
+//	std::cerr << "section " << s << ": start " << start << ", finish " << finish << std::endl;
 
-	for (time = start; time < finish; time += segmentTimes[s]) {
+	for (time = start; time < finish; time += sectionTimes[s]) {
 	    addNewBar(time, barNo++);
 //            std::cerr << "added bar at " << time << std::endl;
 	}
 
-	if (s == segments.size() - 1 && time != duration) {
+	if (s == sections.size() - 1 && time != duration) {
             addNewBar(time, barNo++);
 //            std::cerr << "added final bar at " << time << std::endl;
         }            
     }
+
+    m_barCount = barNo - 1;
+    if (m_barCount < 0) m_barCount = 0; // don't count the final bar line
 
     m_barPositionsNeedCalculating = false;
 //    std::cerr << "Composition::calculateBarPositions ending" << std::endl;
@@ -256,6 +261,13 @@ Composition::calculateBarPositions() const
 //    for (i = t.begin(); i != t.end(); ++i) {
 //	(*i)->dump(std::cerr);
 //    }
+}
+
+int
+Composition::getNbBars() const
+{
+    calculateBarPositions();
+    return m_barCount;
 }
 
 int
@@ -271,10 +283,9 @@ Composition::getBarNumber(timeT t, bool truncate) const
 
     if (i == m_referenceSegment.end()) {
 
-	n = m_referenceSegment.size() - 1; //!!! tempo events break this
+	n = m_barCount;
 
 	if (!truncate) {
-	    if (n < 0) n = 0; // ref seg can only contain 0, 2, or more bars
 	    TimeSignature sig = getTimeSignatureAt(t);
 	    n += (t - m_referenceSegment.getDuration()) / sig.getBarDuration();
 	}

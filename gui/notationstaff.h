@@ -19,8 +19,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef STAFF_H
-#define STAFF_H
+#ifndef NOTATION_STAFF_H
+#define NOTATION_STAFF_H
 
 #include <string>
 
@@ -31,6 +31,8 @@
 
 #include "Staff.h"
 #include "StaffLayout.h"
+
+#include "linedstaff.h"
 
 class QCanvasLineGroupable;
 class QCanvasSimpleSprite;
@@ -169,7 +171,7 @@ public:
 
 
     /**
-     * Assign suitable coordinates to all the elements on the staff,
+     * Assign suitable coordinates to the elements on the staff,
      * based entirely on the layout X and Y coordinates they were
      * given by the horizontal and vertical layout processes.
      *

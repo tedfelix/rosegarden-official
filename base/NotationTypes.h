@@ -108,6 +108,7 @@ namespace Marks
     extern const Mark Pause;
     extern const Mark UpBow;
     extern const Mark DownBow;
+    extern Mark getTextMark(std::string text);
 }
 
 

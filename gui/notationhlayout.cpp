@@ -59,6 +59,8 @@ std::vector<double> NotationHLayout::m_availableSpacings;
 
 NotationHLayout::NotationHLayout(NotePixmapFactory &npf) :
     m_totalWidth(0.),
+    m_pageMode(false),
+    m_pageWidth(0.),
     m_spacing(1.0),
     m_npf(npf)
 {
@@ -758,7 +760,7 @@ void
 NotationHLayout::finishLayout()
 {
     fillFakeBars();
-    if (m_pageWidth > 0.1) reconcileBarsPage();
+    if (m_pageMode && (m_pageWidth > 0.1)) reconcileBarsPage();
     else reconcileBarsLinear();
     
     for (BarDataMap::iterator i(m_barData.begin()); i != m_barData.end(); ++i)
