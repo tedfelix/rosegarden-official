@@ -102,6 +102,9 @@ PluginFactory::enumerateAllPlugins(MappedObjectPropertyList &list)
 
     factory = instance("ladspa");
     if (factory) factory->enumeratePlugins(list);
+    
+    // Plugins can change the locale, revert it to default.
+    setlocale(LC_ALL, "C");
 }
 
 
