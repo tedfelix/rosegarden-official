@@ -120,7 +120,7 @@ public:
     /**
      * Update the view
      */
-    virtual void update() = 0;
+    virtual void updateView() = 0;
 
     /**
      * Return the active item

@@ -308,7 +308,7 @@ void MatrixView::refreshSegment(Segment *segment,
 		to   = m_staffs[i]->getSegment().getEndTime();
 	    }
 	    m_staffs[i]->positionElements(from, to);
-	    update();
+	    updateView();
 	    return;
 	}
     }
@@ -324,7 +324,7 @@ void MatrixView::setViewSize(QSize s)
     canvas()->resize(s.width(), s.height());
 }
 
-void MatrixView::update()
+void MatrixView::updateView()
 {
     canvas()->update();
 }
@@ -352,7 +352,7 @@ void MatrixView::setCurrentSelection(EventSelection* s)
                                       s->getEndTime());
     }
 
-    update();
+    updateView();
 }
 
 
@@ -390,7 +390,7 @@ void MatrixView::slotMouseMoved(Rosegarden::timeT time, QMouseEvent* e)
 {
     if (activeItem()) {
         activeItem()->handleMouseMove(e);
-        update();
+        updateView();
     }
     else 
         m_tool->handleMouseMove(time, 0, e);
@@ -401,7 +401,7 @@ void MatrixView::slotMouseReleased(Rosegarden::timeT time, QMouseEvent* e)
     if (activeItem()) {
         activeItem()->handleMouseRelease(e);
         setActiveItem(0);
-        update();
+        updateView();
     }
     m_tool->handleMouseRelease(time, 0, e);
 }
@@ -452,7 +452,7 @@ MatrixView::slotSetPointerPosition(timeT time)
         m_staffs[0]->setPointerPosition(m_hlayout, time);
     }
 
-    update();
+    updateView();
 }
 
 void
@@ -462,7 +462,7 @@ MatrixView::slotSetInsertCursorPosition(timeT time)
     // should snap to the nearest event.
 
     m_staffs[0]->setInsertCursorPosition(m_hlayout, time);
-    update();
+    updateView();
 }
 
 

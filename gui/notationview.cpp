@@ -832,7 +832,7 @@ NotationView::slotChangeStretch(int n)
         m_staffs[i]->positionAllElements();
     }
 
-    update();
+    updateView();
 }
 
 void NotationView::slotChangeLegato(int n)
@@ -849,7 +849,7 @@ void NotationView::slotChangeLegato(int n)
         m_staffs[i]->positionAllElements();
     }
 
-    update();
+    updateView();
 }
 
 
@@ -927,7 +927,7 @@ NotationView::slotChangeFont(string newName, int newSize)
         }
     }
 
-    update();
+    updateView();
 }
 
 
@@ -961,7 +961,7 @@ NotationView::setPageMode(bool pageMode)
         }
     }
 
-    update();
+    updateView();
 }   
 
 
@@ -1063,7 +1063,7 @@ void NotationView::setCurrentSelection(EventSelection* s)
                                                     s->getEndTime());
     }
 
-    update();
+    updateView();
 }
 
 void NotationView::setSingleSelectedEvent(int staffNo, Event *event)
@@ -1807,7 +1807,7 @@ NotationView::slotSetPointerPosition(timeT time)
 	}
     }
 
-    update();
+    updateView();
 }
 
 void
@@ -1817,7 +1817,7 @@ NotationView::slotSetInsertCursorPosition(timeT time)
     // should snap to the nearest event.
 
     m_staffs[m_currentStaff]->setInsertCursorPosition(m_hlayout, time);
-    update();
+    updateView();
 }
 
     
@@ -2190,7 +2190,7 @@ void NotationView::slotItemPressed(int height, int staffNo,
 		(e->x(), (int)e->y());
 	}
 
-	update();
+	updateView();
 
     } else {
 
@@ -2214,7 +2214,7 @@ void NotationView::slotMouseMoved(QMouseEvent *e)
 {
     if (activeItem()) {
         activeItem()->handleMouseMove(e);
-        update();
+        updateView();
     }
     else 
         m_tool->handleMouseMove(0, 0, // unknown time and height
@@ -2226,7 +2226,7 @@ void NotationView::slotMouseReleased(QMouseEvent *e)
     if (activeItem()) {
         activeItem()->handleMouseRelease(e);
         setActiveItem(0);
-        update();
+        updateView();
     }
     else
         m_tool->handleMouseRelease(0, 0, // unknown time and height
@@ -2243,7 +2243,7 @@ NotationView::getStaffForCanvasY(int y) const
     return 0;
 }
 
-void NotationView::update()
+void NotationView::updateView()
 {
     canvas()->update();
 }
@@ -2298,7 +2298,7 @@ void NotationView::refreshSegment(Segment *segment,
 
     PRINT_ELAPSED("NotationView::refreshSegment (without update/GC)");
 
-    update();
+    updateView();
     PixmapArrayGC::deleteAll();
 
     Event::dumpStats(cerr);

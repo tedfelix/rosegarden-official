@@ -145,7 +145,7 @@ public:
     /**
      * Overridden from EditView
      */
-    virtual void update();
+    virtual void updateView();
 
     /**
      * Render segments on printing painter

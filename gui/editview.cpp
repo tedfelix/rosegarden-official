@@ -330,7 +330,7 @@ void EditView::slotActiveItemPressed(QMouseEvent* e,
 
         setActiveItem(activeItem);
         activeItem->handleMousePress(e);
-        update();
+        updateView();
 
     }
 

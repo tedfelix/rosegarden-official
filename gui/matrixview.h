@@ -80,7 +80,7 @@ public:
 //     }
 
     MatrixStaff* getStaff(int) { return m_staffs[0]; } // deal with 1 staff only
-    virtual void update();
+    virtual void updateView();
 
     void setCurrentSelection(Rosegarden::EventSelection* s);
 
