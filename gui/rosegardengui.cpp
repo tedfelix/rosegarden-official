@@ -124,7 +124,7 @@ void RosegardenGUIApp::setupActions()
 
     action = new KRadioAction(i18n("Draw"), "pencil",
                               0,
-                              this, SLOT(slotDrawSelected()),
+                              this, SLOT(drawSelected()),
                               actionCollection(), "draw");
     action->setExclusiveGroup("tracktools");
 
@@ -132,13 +132,13 @@ void RosegardenGUIApp::setupActions()
 
     action = new KRadioAction(i18n("Move"), "move",
                               0,
-                              this, SLOT(slotMoveSelected()),
+                              this, SLOT(moveSelected()),
                               actionCollection(), "move");
     action->setExclusiveGroup("tracktools");
 
     action = new KRadioAction(i18n("Resize"), "misc", // TODO : find a better icon
                               0,
-                              this, SLOT(slotResizeSelected()),
+                              this, SLOT(resizeSelected()),
                               actionCollection(), "resize");
     action->setExclusiveGroup("tracktools");
 
