@@ -1389,7 +1389,9 @@ MappedAudioPluginManager::MappedAudioPluginManager(
                   id,
                   readOnly)
 {
+#ifdef HAVE_LADSPA
     getenvLADSPAPath();
+#endif // HAVE_LADSPA
 }
 
 MappedAudioPluginManager::~MappedAudioPluginManager()
