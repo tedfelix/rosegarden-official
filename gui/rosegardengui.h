@@ -617,11 +617,6 @@ public slots:
     void slotEditTimeSignature();
     void slotEditTimeSignature(QWidget *parent);
 
-    /*
-     * Command Executed
-     */
-//!!!    void slotCommandExecuted(Command *);
-
 private:
 
     //--------------- Data members ---------------------------------

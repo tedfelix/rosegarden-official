@@ -476,11 +476,7 @@ void RosegardenGUIApp::initDocument()
 {
     m_doc = new RosegardenGUIDoc(this, m_useSequencer);
     m_doc->newDocument();
-
     m_doc->getCommandHistory()->attachView(actionCollection());
-
-    connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted(KCommand *)),
-            SLOT(slotCommandExecuted(KCommand *)));
 }
 
 void RosegardenGUIApp::initView()
@@ -881,6 +877,7 @@ void RosegardenGUIApp::slotFileNew()
     if (makeNew) {
 
         m_doc->newDocument();
+	m_doc->getCommandHistory()->attachView(actionCollection());
 
         QString caption=kapp->caption();	
         setCaption(caption+": "+m_doc->getTitle());
@@ -1001,6 +998,7 @@ void RosegardenGUIApp::slotFileClose()
     m_doc->closeDocument();
 
     m_doc->newDocument();
+    m_doc->getCommandHistory()->attachView(actionCollection());
 
     initView();
 
@@ -1290,6 +1288,7 @@ void RosegardenGUIApp::importMIDIFile(const QString &file)
     m_doc->closeDocument();
 
     m_doc->newDocument();
+    m_doc->getCommandHistory()->attachView(actionCollection());
 
     SetWaitCursor waitCursor;
 
@@ -1337,6 +1336,7 @@ void RosegardenGUIApp::importRG21File(const QString &file)
 
     m_doc->closeDocument();
     m_doc->newDocument();
+    m_doc->getCommandHistory()->attachView(actionCollection());
     Rosegarden::Composition *tmpComp = rg21Loader.getComposition();
 
     m_doc->getComposition().swap(*tmpComp);
@@ -2084,20 +2084,6 @@ void RosegardenGUIApp::slotEditTimeSignature(QWidget *parent)
     delete dialog;
 }
 
-/*!!!
-void RosegardenGUIApp::slotCommandExecuted(Command *command)
-{
-    AddTempoChangeCommand *tempoCommand =
-        dynamic_cast<AddTempoChangeCommand *>(command);
-
-    // Update the transport if the tempo has been done/undone
-    //
-    if (tempoCommand)
-    {
-        slotRefreshTimeDisplay();
-    }
-}
-*/
 
 // The sequencer calls this method when it's alive to get us
 // to poll it for Device/Instrument information.  We also tell
