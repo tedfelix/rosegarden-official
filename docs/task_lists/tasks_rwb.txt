@@ -22,6 +22,8 @@ o Matrix tools - cut and join
                - multiple resize
                - wire up quantize
 
+o MIDI export broken for key sig and SysExs
+
 
 Post 0.2
 ========

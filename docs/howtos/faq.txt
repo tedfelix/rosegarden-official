@@ -11,8 +11,26 @@ normally (and will in the future) be found there instead.
 Compilation or installation problems
 ------------------------------------
 
-Can I build for KDE2 or KDE3?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Rosegarden builds for KDE but can I run it under GNOME/WindowMaker etc?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Yes, completely.  You can run Rosegarden under any window manager you
+like.  We build for KDE because we like developing for KDE as it
+lets us get a job done.  You can run the resulting application 
+under any graphical environment you like with no change in
+functionality.
+
+I don't want to build the thing myself.  Is there an RPM available?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Not quite yet.  We don't consider the code stable enough to turn it
+into an RPM yet.  Hopefully we'll have one available soon but if you
+want to go ahead and roll an RPM for us, please do so, and let us
+know where you've put it so that we can test it out.
+
+
+Can I build for KDE2 instead of KDE3?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The short answer is Yes but you have to ensure the correct "admin"
 directory is present in the top-level directory.   In CVS and in
