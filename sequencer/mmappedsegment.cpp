@@ -346,24 +346,30 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil
 
             //std::cerr << "Iterating on Segment #" << i << std::endl;
 
+            /*
             SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : "
                             << "checking segment #" << i << " " 
                             << iter->getSegment()->getFileName() << endl;
+                            */
 
             if (!validSegments[i]) {
+                /*
                 SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : "
                                 << "no more events to get for this slice "
                                 << "in segment #" << i << endl;
+                                */
                 continue; // skip this segment
             }
 
             bool evtIsFromMetronome = iter->getSegment()->isMetronome();
 
             if (iter->atEnd()) {
+                /*
                 SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : " 
                                 << endTime
                                 << " reached end of segment #"
                                 << i << endl;
+                                */
                 continue;
             } else if (!evtIsFromMetronome) {
                 eventsRemaining = true;
@@ -393,6 +399,7 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil
 
                 }
                 
+                /*
                 SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : " << endTime
                                 << " inserting evt from segment #"
                                 << i
@@ -405,24 +412,25 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil
                                 << " - data2: " << (unsigned int)evt->getData2()
                                 << " - metronome event: " << evtIsFromMetronome
                                 << endl;
+                                */
 
 
                 if (evt->getType() == MappedEvent::TimeSignature) {
                     // do something
-                    SEQUENCER_DEBUG << "timeSig event\n";
+                    //SEQUENCER_DEBUG << "timeSig event\n";
 
                 } else if (evt->getType() == MappedEvent::Tempo) {
                     // do something else
-                    SEQUENCER_DEBUG << "tempo event\n";
+                    //SEQUENCER_DEBUG << "tempo event\n";
 
                 } else if (acceptEvent(evt, evtIsFromMetronome)) {
-                    SEQUENCER_DEBUG << "inserting event\n";
+                    //SEQUENCER_DEBUG << "inserting event\n";
 
                     c->insert(evt);
 
                 } else {
                     
-                    SEQUENCER_DEBUG << "skipping event\n";
+                    //SEQUENCER_DEBUG << "skipping event\n";
                 }
             
                 if (!evtIsFromMetronome) foundOneEvent = true;
@@ -430,15 +438,17 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil
 
             } else {
                 validSegments[i] = false; // no more events to get from this segment
+                /*
                 SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : no more events to get from segment #"
                                 << i << endl;
+                                */
             }
 
         }
 
     } while (foundOneEvent);
 
-    SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : eventsRemaining = " << eventsRemaining << endl;
+    //SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : eventsRemaining = " << eventsRemaining << endl;
 
     return eventsRemaining || foundOneEvent;
 }

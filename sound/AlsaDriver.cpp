@@ -243,11 +243,18 @@ AlsaDriver::~AlsaDriver()
 void
 AlsaDriver::shutdown()
 {
+    // to ensure that only one thread does the closing
+    if (_threadAlsaClosing) return;
+
     AUDIT_START;
     AUDIT_STREAM << "AlsaDriver::~AlsaDriver - shutting down" << std::endl;
 
     if (_threadAlsaClosing == false && m_midiHandle)
     {
+#ifdef DEBUG_ALSA
+        std::cerr << "AlsaDriver::shutdown - closing MIDI client" << std::endl;
+#endif
+
         _threadAlsaClosing = true;
         snd_seq_stop_queue(m_midiHandle, m_queue, 0);
         snd_seq_close(m_midiHandle);
@@ -255,12 +262,18 @@ AlsaDriver::shutdown()
     }
 
 #ifdef HAVE_LADSPA
+#ifdef DEBUG_ALSA
+    std::cout << "AlsaDriver::shutdown - unloading LADSPA" << std::endl;
+#endif
     m_studio->unloadAllPluginLibraries();
 #endif // HAVE_LADSPA
 
 #ifdef HAVE_LIBJACK
 
-    // wait for disk thread
+#ifdef DEBUG_ALSA
+    std::cerr << "AlsaDriver::shutdown - cancelling disk thread" << std::endl;
+#endif
+    // join disk thread
     pthread_join(_diskThread, NULL);
 
     if (_threadJackClosing == false && m_audioClient)
@@ -1618,7 +1631,7 @@ AlsaDriver::initialisePlayback(const RealTime &position,
 
 #ifdef HAVE_LIBJACK
     // stop transport master
-    if (_jackTransportMaster && _jackTransportEnabled)
+    if (_jackTransportMaster && _jackTransportEnabled && m_audioClient)
         jack_transport_start(m_audioClient);
 #endif
 
@@ -1700,7 +1713,7 @@ AlsaDriver::stopPlayback()
 #ifdef HAVE_LIBJACK
 
     // stop transport master
-    if (_jackTransportMaster && _jackTransportEnabled)
+    if (_jackTransportMaster && _jackTransportEnabled && m_audioClient)
         jack_transport_stop(m_audioClient);
 
     // Wait for the queue vector to become available so we can
@@ -2263,6 +2276,8 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
                            const RealTime &playLatency,
                            bool now)
 {
+    if (m_midiHandle == 0) return;
+
     RealTime midiRelativeTime;
     RealTime midiRelativeStopTime;
     MappedInstrument *instrument;
@@ -4860,7 +4875,7 @@ AlsaDriver::jackDiskThread(void *arg)
         std::vector<PlayableAudioFile*> audioQueue = inst->getAudioPlayQueueNotDefunct();
         std::vector<PlayableAudioFile*>::iterator it;
 
-        while(true)
+        while(_threadJackClosing == false)
         {
             for (it = audioQueue.begin(); it != audioQueue.end(); ++it)
             {
