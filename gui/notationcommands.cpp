@@ -1208,7 +1208,7 @@ TransformsMenuInterpretCommand::stressBeats()
 	Event *e = *itr;
 	if (!e->isa(Note::EventType)) continue;
 
-	timeT t = m_quantizer->getQuantizedAbsoluteTime(e);
+	timeT t = e->getNotationAbsoluteTime();
 	Rosegarden::TimeSignature timeSig = c->getTimeSignatureAt(t);
 	timeT barStart = getSegment().getBarStartForTime(t);
 	int stress = timeSig.getEmphasisForTime(t - barStart);
@@ -1321,12 +1321,18 @@ TransformsMenuInterpretCommand::articulate()
 	    // last note in a slur should be treated as if unslurred
 	    timeT slurEnd =
 		inditr->first + inditr->second->getIndicationDuration();
-	    Segment::iterator slurEndItr = segment.findTime(slurEnd);
-	    if (slurEndItr == segment.end() ||
-		(m_quantizer->getQuantizedAbsoluteTime(*slurEndItr) > 
-		 m_quantizer->getQuantizedAbsoluteTime(e))) {
+	    if (slurEnd == e->getNotationAbsoluteTime() + e->getNotationDuration() ||
+		slurEnd == e->getAbsoluteTime() + e->getDuration()) {
 		slurred = false;
 	    }
+/*!!!
+	    Segment::iterator slurEndItr = segment.findTime(slurEnd);
+	    if (slurEndItr != segment.end() &&
+		(*slurEndItr)->getNotationAbsoluteTime() <=
+		            e->getNotationAbsoluteTime()) {
+		slurred = false;
+	    } 
+*/
 	}
 
 	int durationChange = 0;
@@ -1364,7 +1370,7 @@ TransformsMenuInterpretCommand::articulate()
 	    if (velocity > 127) velocity = 127;
 	    e->set<Int>(VELOCITY, velocity);
 
-	    timeT duration = m_quantizer->getQuantizedDuration(e);
+	    timeT duration = e->getNotationDuration();
 	    
 	    // don't mess with the duration of a tied note
 	    bool tiedForward = false;

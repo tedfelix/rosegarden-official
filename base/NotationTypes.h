@@ -168,6 +168,7 @@ public:
     static const std::string EventType;
     static const int EventSubOrdering;
     static const PropertyName ClefPropertyName;
+    static const PropertyName OctaveOffsetPropertyName;
     static const Clef DefaultClef;
     typedef Exception BadClefName;
 
@@ -176,19 +177,20 @@ public:
     static const std::string Alto;
     static const std::string Bass;
 
-    Clef() : m_clef(DefaultClef.m_clef) { }
+    Clef() : m_clef(DefaultClef.m_clef), m_octaveOffset(0) { }
 
     Clef(const Event &e)
         /* throw (Event::NoData, Event::BadType, BadClefName) */;
-    Clef(const std::string &s)
+    Clef(const std::string &s, int octaveOffset = 0)
         /* throw (BadClefName) */;
 
-    Clef(const Clef &c) : m_clef(c.m_clef) { }
+    Clef(const Clef &c) : m_clef(c.m_clef), m_octaveOffset(c.m_octaveOffset) {
+    }
 
     Clef &operator=(const Clef &c);
 
     bool operator==(const Clef &c) const {
-	return c.m_clef == m_clef;
+	return c.m_clef == m_clef && c.m_octaveOffset == m_octaveOffset;
     }
 
     bool operator!=(const Clef &c) const {
@@ -197,7 +199,16 @@ public:
 
     ~Clef() { }
 
+    /**
+     * Return the basic clef type (Treble, Tenor, Alto, Bass)
+     */
     std::string getClefType() const { return m_clef; }
+
+    /**
+     * Return any additional octave offset, that is, return 1 for
+     * a clef shifted an 8ve up, etc
+     */
+    int getOctaveOffset() const { return m_octaveOffset; }
 
     /** 
      * Return the number of semitones a pitch in the treble clef would
@@ -237,6 +248,7 @@ public:
 
 private:
     std::string m_clef;
+    int m_octaveOffset;
 };
 
 /**

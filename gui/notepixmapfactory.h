@@ -126,7 +126,8 @@ private:
 class NotePixmapFactory 
 {
 public:
-    NotePixmapFactory(std::string fontName = "", int size = -1);
+    NotePixmapFactory(std::string fontName = "", int size = -1,
+		      bool fineRendering = false);
     NotePixmapFactory(const NotePixmapFactory &);
     NotePixmapFactory &operator=(const NotePixmapFactory &);
     ~NotePixmapFactory();
@@ -157,7 +158,8 @@ public:
     QCanvasPixmap* makeClefDisplayPixmap(const Rosegarden::Clef &clef);
     QCanvasPixmap* makeKeyDisplayPixmap(const Rosegarden::Key &key,
 				       const Rosegarden::Clef &clef);
-    QCanvasPixmap* makeTextPixmap(const Rosegarden::Text &text);
+    QCanvasPixmap* makeTextPixmap(const Rosegarden::Text &text,
+				  bool withMask = false);
 
     QCanvasPixmap* makeToolbarPixmap(const char *name);
     QCanvasPixmap* makeNoteMenuPixmap(Rosegarden::timeT duration,
@@ -223,13 +225,18 @@ protected:
 
     QCanvasPixmap* makeAnnotationPixmap(const Rosegarden::Text &text);
 
-    void createPixmapAndMask(int width, int height);
-    QCanvasPixmap* makeCanvasPixmap(QPoint hotspot);
+    void createPixmapAndMask(int width, int height,
+			     int maskWidth = -1,
+			     int maskHeight = -1);
+    QCanvasPixmap* makeCanvasPixmap(QPoint hotspot,
+				    bool scalePixmapDown = false,
+				    bool scaleMaskDown = false);
 
     //--------------- Data members ---------------------------------
 
     NoteFont *m_font;
     NoteStyle *m_style;
+    bool m_fineRendering;
     bool m_selected;
 
     int m_noteBodyWidth, m_noteBodyHeight;

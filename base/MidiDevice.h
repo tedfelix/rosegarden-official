@@ -39,12 +39,18 @@ typedef std::vector<MidiBank*> BankList;
 class MidiDevice : public Device
 {
 public:
-
     typedef enum
     {
 	Play = 0,
 	Record = 1
     } DeviceDirection;
+
+    typedef enum
+    {
+	NoVariations,
+	VariationFromLSB,
+	VariationFromMSB
+    } VariationType;
 
     MidiDevice();
     MidiDevice(DeviceId id,
@@ -90,7 +96,7 @@ public:
     void clearBankList();
     void clearProgramList();
 
-    // Retreive by different criteria
+    // Retrieve by different criteria
     //
     MidiBank* getBankByIndex(int index);
     MidiBank* getBankByMsbLsb(MidiByte msb, MidiByte lsb);
@@ -128,6 +134,9 @@ public:
     DeviceDirection getDirection() const { return m_direction; }
     void setDirection(DeviceDirection dir) { m_direction = dir; }
 
+    VariationType getVariationType() const { return m_variationType; }
+    void setVariationType(VariationType v) { m_variationType = v; }
+
 protected:
     void generatePresentationList();
 
@@ -162,6 +171,10 @@ protected:
     // Is this device Read-Only, Write-Only or Duplex
     //
     DeviceDirection m_direction; 
+
+    // Should we present LSB or MSB of bank info as a Variation number?
+    //
+    VariationType m_variationType;
 
     // Librarian contact details
     //

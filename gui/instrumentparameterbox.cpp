@@ -1462,19 +1462,6 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     connect(m_channelValue, SIGNAL(activated(int)),
             this, SLOT(slotSelectChannel(int)));
 
-    // connect up mouse wheel movement
-    //
-/*!!!
-    connect(m_bankValue, SIGNAL(propagate(int)),
-            this, SLOT(slotSelectBank(int)));
-
-    connect(m_programValue, SIGNAL(propagate(int)),
-            this, SLOT(slotSelectProgram(int)));
-
-    connect(m_channelValue, SIGNAL(propagate(int)),
-            this, SLOT(slotSelectChannel(int)));
-*/
-
     // connect the advanced MIDI controls
     connect(m_chorusRotary, SIGNAL(valueChanged(float)),
             this, SLOT(slotSelectChorus(float)));

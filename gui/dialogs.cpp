@@ -1966,6 +1966,8 @@ ClefDialog::ClefDialog(QWidget *parent,
 	    new QRadioButton
 	    (i18n("Transpose into appropriate octave"), conversionFrame);
 	m_transposeButton = 0;
+
+	//!!! why aren't we offering this option? does it not work? too difficult to describe?
 //	m_transposeButton =
 //	    new QRadioButton
 //	    (i18n("Maintain current positions on the staff"), conversionFrame);

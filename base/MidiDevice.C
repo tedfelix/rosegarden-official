@@ -42,6 +42,7 @@ MidiDevice::MidiDevice():
     m_bankList(new BankList()),
     m_metronome(0),
     m_direction(Play),
+    m_variationType(NoVariations),
     m_librarian(std::pair<std::string, std::string>("<none>", "<none>"))
 {
     std::cerr<< "MidiDevice ctor without data for device " << getId() << std::endl;
@@ -56,6 +57,7 @@ MidiDevice::MidiDevice(DeviceId id,
     m_bankList(new BankList()),
     m_metronome(0),
     m_direction(dir),
+    m_variationType(NoVariations),
     m_librarian(std::pair<std::string, std::string>("<none>", "<none>"))
 {
     std::cerr<< "MidiDevice ctor with data for device " << getId() << std::endl;
@@ -69,6 +71,7 @@ MidiDevice::MidiDevice(const MidiDevice &dev):
     m_bankList(new BankList()),
     m_metronome(0),
     m_direction(dev.getDirection()),
+    m_variationType(dev.getVariationType()),
     m_librarian(dev.getLibrarian())
 {
     std::cerr<< "MidiDevice copy ctor for device " << getId() << std::endl;
@@ -146,6 +149,7 @@ MidiDevice::operator=(const MidiDevice &dev)
     m_programList->clear();
     m_bankList->clear();
     m_direction = dev.getDirection();
+    m_variationType = dev.getVariationType();
 
     // clear down instruments list
     m_instruments.clear();
@@ -385,6 +389,10 @@ MidiDevice::toXmlString()
                << "\" name=\""         << m_name 
 	       << "\" direction=\""    << (m_direction == Play ?
 					   "play" : "record")
+	       << "\" variation=\""    << (m_variationType == VariationFromLSB ?
+					   "LSB" :
+					   m_variationType == VariationFromMSB ?
+					   "MSB" : "")
 	       << "\" connection=\""   << encode(m_connection)
                << "\" type=\"midi\">"  << std::endl << std::endl;
 

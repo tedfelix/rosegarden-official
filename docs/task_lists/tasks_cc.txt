@@ -5,7 +5,7 @@ Post-0.9 task list
 
 1. Restore "fix smoothing" [DONE]
 
-2. Fix "make viable" particularly, "de-counterpoint" also
+2. Fix "make viable" particularly [DONE], "de-counterpoint" also
 
 3. instrument-id problem as below
 
@@ -31,14 +31,29 @@ Post-0.9 task list
 
 13. Roland Variations controllers / drum banks
 
-14. Karaoke file (.kar) import -- and must get around to doing that bouncing-ball
-    lyric thing.
+14. Karaoke file (.kar) import -- and must get around to doing that
+    bouncing-ball lyric thing.
 
 15. TimeSignature::isHidden() doesn't appear to be being used in the notation
-    code... ?
+    code... ? [no, used in hlayout]
 
 16. Test transposition options in Key signature insert following
     Pitch/NDP change to Key::convertFrom (plus usage in AnalysisTypes?)
+
+17. In the middle of adding 8ve up/down clef types -- do NotePixmapFactory
+    stuff etc
+
+18. Arpeggiated chords -- can easily identify in quantize, so decorate
+    appropriately
+
+19. Performable ornaments!
+
+20. In the middle of doing antialiasing-by-hand for slurs, ties and
+    text in note pixmap factory
+
+21. Ordered tip-of-the-day
+
+22. Generic file merge -- important feature
 
 
 Priorities for 0.9

@@ -910,6 +910,22 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         if (type == "midi")
         {
             m_device = getStudio().getDevice(id);
+	    QString variation = atts.value("variation").lower();
+	    if (!variation.isNull()) {
+		
+		Rosegarden::MidiDevice *md =
+		    dynamic_cast<Rosegarden::MidiDevice *>(m_device);
+		if (md) {
+		    if (variation == "lsb") {
+			md->setVariationType(Rosegarden::MidiDevice::VariationFromLSB);
+		    } else if (variation == "msb") {
+			md->setVariationType(Rosegarden::MidiDevice::VariationFromLSB);
+		    } else if (variation == "") {
+			md->setVariationType(Rosegarden::MidiDevice::NoVariations);
+		    }
+		}
+	    }
+
 	    QString direction = atts.value("direction").lower();
 
 	    if (direction.isNull() ||

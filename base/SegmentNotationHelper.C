@@ -655,13 +655,14 @@ SegmentNotationHelper::makeNoteViable(iterator i, bool splitAtBars)
     timeT required = (*i)->getNotationDuration();
 
     while (acc < required) {
-        timeT component = Note::getNearestNote(required - acc).getDuration();
+	timeT remaining = required - acc;
 	if (splitAtBars) {
 	    timeT thisNoteStart = (*i)->getNotationAbsoluteTime() + acc;
 	    timeT toNextBar =
 		segment().getBarEndForTime(thisNoteStart) - thisNoteStart;
-	    if (toNextBar > 0 && component > toNextBar) component = toNextBar;
+	    if (toNextBar > 0 && remaining > toNextBar) remaining = toNextBar;
 	}
+        timeT component = Note::getNearestNote(remaining).getDuration();
         if (component > (required - acc)) dl.push_back(required - acc);
         else dl.push_back(component);
         acc += component;

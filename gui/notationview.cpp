@@ -1556,6 +1556,7 @@ NotationView::setPageMode(bool pageMode)
     }
 
     updateView();
+    Rosegarden::Profiles::getInstance()->dump();
 }   
 
 int

@@ -138,6 +138,7 @@ using namespace Marks;
 const string Clef::EventType = "clefchange";
 const int Clef::EventSubOrdering = -250;
 const PropertyName Clef::ClefPropertyName = "clef";
+const PropertyName Clef::OctaveOffsetPropertyName = "octaveoffset";
 const string Clef::Treble = "treble";
 const string Clef::Tenor = "tenor";
 const string Clef::Alto = "alto";
@@ -155,21 +156,29 @@ Clef::Clef(const Event &e)
     if (s != Treble && s != Tenor && s != Alto && s != Bass) {
         throw BadClefName("No such clef as \"" + s + "\"");
     }
+    long octaveOffset = 0;
+    (void)e.get<Int>(OctaveOffsetPropertyName, octaveOffset);
+
     m_clef = s;
+    m_octaveOffset = octaveOffset;
 }        
 
-Clef::Clef(const std::string &s)
+Clef::Clef(const std::string &s, int octaveOffset)
     // throw (BadClefName)
 {
     if (s != Treble && s != Tenor && s != Alto && s != Bass) {
         throw BadClefName("No such clef as \"" + s + "\"");
     }
     m_clef = s;
+    m_octaveOffset = octaveOffset;
 }
 
 Clef &Clef::operator=(const Clef &c)
 {
-    if (this != &c) m_clef = c.m_clef;
+    if (this != &c) {
+	m_clef = c.m_clef;
+	m_octaveOffset = c.m_octaveOffset;
+    }
     return *this;
 }
 
@@ -181,9 +190,9 @@ int Clef::getTransposition() const
 
 int Clef::getOctave() const
 {
-    if (m_clef == Treble) return 0;
-    else if (m_clef == Bass) return -2;
-    else return -1;
+    if (m_clef == Treble) return 0 + m_octaveOffset;
+    else if (m_clef == Bass) return -2 + m_octaveOffset;
+    else return -1 + m_octaveOffset;
 }
 
 int Clef::getPitchOffset() const
@@ -206,10 +215,14 @@ Clef::ClefList
 Clef::getClefs()
 {
     ClefList clefs;
+    clefs.push_back(Clef(Bass, -2)); 
+    clefs.push_back(Clef(Bass, -1));
     clefs.push_back(Clef(Bass));
     clefs.push_back(Clef(Tenor));
     clefs.push_back(Clef(Alto));
     clefs.push_back(Clef(Treble));
+    clefs.push_back(Clef(Treble, 1));
+    clefs.push_back(Clef(Treble, 2));
     return clefs;
 }
 
