@@ -340,6 +340,7 @@ SegmentCanvas::destroyRecordingSegmentItem()
 {
     if(m_recordingSegment)
     {
+         m_recordingSegment->setVisible(false);
          delete m_recordingSegment;
          m_recordingSegment = 0;
     }

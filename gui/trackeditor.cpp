@@ -317,7 +317,6 @@ void TrackEditor::clear()
 void TrackEditor::setupHorizontalHeader(int firstBar, int lastBar)
 {
     QString num;
-    Composition &comp = m_document->getComposition();
     m_hHeader = new QHeader(lastBar - firstBar + 1, this);
 
     int x = 0;
@@ -427,6 +426,13 @@ TrackEditor::updateRecordingSegmentItem(Rosegarden::Segment *segment)
 
     int width = m_hHeader->sectionPos(endBar) + wAdj - x;
 
+    //int width = m_hHeader->sectionPos(endBar)  - x;
+    //cout << "WADJ = " << wAdj << endl;
+    //cout << "X = " << x << " : WIDTH = " << width << endl;
+    //cout << "START INDEX = " << segment->getStartIndex() << endl;
+    //cout << "POSITION    = " << comp.getPosition() << endl;
+    //cout << "BAR RANGE = " << bar.first << " - " << bar.second << endl;
+
     m_segmentCanvas->showRecordingSegmentItem(x, y, width);
     emit needUpdate();
 }
@@ -435,6 +441,7 @@ void
 TrackEditor::destroyRecordingSegmentItem()
 {
     m_segmentCanvas->destroyRecordingSegmentItem();
+    emit needUpdate();
 }
 
 
