@@ -902,8 +902,10 @@ void NotationView::deleteNote(NotationElement* element)
 
     if (element->isNote()) {
         
-        // is note in a chord ?
-        Rosegarden::Track &track = getTrack();
+	getTrack().deleteNote(element->event());
+	needLayout = true;
+
+	/*!!!
 
         if (track.noteIsInChord(element->event())) {
 
@@ -923,11 +925,18 @@ void NotationView::deleteNote(NotationElement* element)
         
             needLayout = true;
         }
+
+	*/
     
     } else if (element->isRest()) {
 
+	getTrack().deleteRest(element->event());
+	needLayout = true;
+
+	/*!!!
         m_viewElementsManager->tryCollapse(element);
         needLayout = true;
+	*/
 
     } else {
         // we don't know what it is

@@ -462,6 +462,29 @@ Track::iterator Track::findContiguousPrevious(Track::iterator el)
 }
 
 
+Track::iterator Track::findSingle(Event* e)
+{
+    iterator res = end();
+
+    std::pair<iterator, iterator> interval = equal_range(e);
+
+    for(iterator i = interval.first; i != interval.second; ++i) {
+        if (*i == e) {
+            res = i;
+            break;
+        }
+    }
+    return res;
+}
+
+
+
+int Track::getNextGroupId() const
+{
+    return m_groupId++;
+}
+
+
 //!!! I don't quite understand the logic here.  we can't for example
 //collapse a dotted crotchet rest with a dotted minim rest (total
 //duration: two minims and one quaver), but this method thinks we can.
@@ -489,29 +512,6 @@ bool Track::isCollapseValid(timeT a, timeT b)
 }
 
 
-Track::iterator Track::findSingle(Event* e)
-{
-    iterator res = end();
-
-    std::pair<iterator, iterator> interval = equal_range(e);
-
-    for(iterator i = interval.first; i != interval.second; ++i) {
-        if (*i == e) {
-            res = i;
-            break;
-        }
-    }
-    return res;
-}
-
-
-
-int Track::getNextGroupId() const
-{
-    return m_groupId++;
-}
-
-
 //!!! Not sufficient -- doesn't work for dotted notes (where splitting
 //e.g. a dotted crotchet into a crotchet and a quaver is fine) --
 //should just check that both durations correspond to decent note
@@ -527,17 +527,16 @@ bool Track::isExpandValid(timeT a, timeT b)
             (maxDuration == (4 * minDuration / 3)));
 }
 
-void Track::expandIntoTie(iterator i, timeT baseDuration)
+
+Track::iterator Track::expandIntoTie(iterator i, timeT baseDuration)
 {
-    if (i == end()) return;
+    if (i == end()) return end();
     iterator i2;
     getTimeSlice((*i)->getAbsoluteTime(), i, i2);
-    expandIntoTie(i, i2, baseDuration);
+    return expandIntoTie(i, i2, baseDuration);
 }
 
-//!!! can probably lose lastInsertedEvent
-
-void Track::expandIntoTie(iterator from, iterator to, timeT baseDuration)
+Track::iterator Track::expandIntoTie(iterator from, iterator to, timeT baseDuration)
 {
     cerr << "Track::expandIntoTie(" << baseDuration << ")\n";
 
@@ -551,12 +550,12 @@ void Track::expandIntoTie(iterator from, iterator to, timeT baseDuration)
 
     if (baseDuration == eventDuration) {
         cerr << "Track::expandIntoTie() : baseDuration == eventDuration\n";
-        return;
+        return end();
     }
     
     if (baseDuration > eventDuration) {
         cerr << "WARNING: Track::expandIntoTie() : baseDuration > eventDuration\n";
-        return;
+        return end();
     }
     
     long firstGroupId = -1;
@@ -567,6 +566,8 @@ void Track::expandIntoTie(iterator from, iterator to, timeT baseDuration)
     if (ni != end() && ++ni != end()) {
 	(void)(*ni)->get<Int>(BeamedGroupIdPropertyName, nextGroupId);
     }
+
+    iterator last = end();
           
     // Expand all the events in range [from, to[
     //
@@ -621,8 +622,10 @@ void Track::expandIntoTie(iterator from, iterator to, timeT baseDuration)
 	}
 
 	m_quantizer->quantizeByNote(ev);
-	insert(ev);
+	last = insert(ev);
     }
+
+    return last;
 }
 
 
@@ -697,6 +700,13 @@ bool Track::expandAndInsertEvent(Event *baseEvent, timeT baseDuration,
 */
 
 
+bool Track::isViable(timeT duration)
+{
+    duration = m_quantizer->quantizeByUnit(duration);
+    return (duration == m_quantizer->quantizeByNote(duration));
+}
+
+
 void Track::fillWithRests(timeT endTime)
 {
     timeT sigTime;
@@ -709,7 +719,7 @@ void Track::fillWithRests(timeT endTime)
     timeT acc = duration;
 
     for (DurationList::iterator i = dl.begin(); i != dl.end(); ++i) {
-	Event *e = new Event("rest");
+	Event *e = new Event(Note::EventRestType);
 	e->setDuration(*i);
 	e->setAbsoluteTime(acc);
 	insert(e);
@@ -734,6 +744,44 @@ Track::iterator Track::collapseRestsForInsert(iterator i,
     erase(j);
 
     return collapseRestsForInsert(i, desiredDuration);
+}
+
+
+void Track::makeRestViable(iterator i)
+{
+    DurationList dl;
+    int barNo = getBarNumber(i);
+    TimeSignature tsig = m_barPositions[barNo].timeSignature;
+    timeT absTime = (*i)->getAbsoluteTime();
+
+    tsig.getDurationListForInterval
+	(dl, (*i)->getDuration(), absTime - m_barPositions[barNo].start);
+
+    cerr << "Track::makeRestViable: Removing rest of duration "
+	 << (*i)->getDuration() << " from time " << absTime << endl;
+
+    erase(i);
+    
+    for (unsigned int i = 0; i < dl.size(); ++i) {
+	int duration = dl[i];
+	
+	cerr << "Track::makeRestViable: Inserting rest of duration "
+	     << duration << " at time " << absTime << endl;
+
+	if (duration == 0) {
+	    cerr << "WARNING: duration zero; skipping" << endl;
+	    continue;
+	}
+
+	Event *e = new Event(Note::EventRestType);
+	e->setDuration(duration);
+	e->setAbsoluteTime(absTime);
+	e->setMaybe<String>("Name", "INSERTED_REST"); //!!!
+//	m_quantizer->quantizeByNote(e);
+
+	insert(e);
+	absTime += duration;
+    }
 }
 
 
@@ -788,7 +836,6 @@ void Track::insertNote(timeT absoluteTime, Note note, int pitch)
     iterator uncollapsed = collapseRestsForInsert(i, note.getDuration());
 
     insertNoteAux(i, note.getDuration(), pitch, false);
-
 }
 
 
@@ -814,19 +861,24 @@ void Track::insertNoteAux(iterator i, int duration, int pitch, bool tiedBack)
 
     } else if (duration < existingDuration) {
 
-	if ((*i)->isa(Note::EventType) &&
-	    !isExpandValid((*i)->getDuration(), duration)) {
+	if ((*i)->isa(Note::EventType)) {
 
-	    cerr << "Bad split, coercing new note" << endl;
+	    if (!isExpandValid((*i)->getDuration(), duration)) {
 
-	    // not reasonable to split existing note, so force new one
-	    // to same duration instead
-	    duration = (*i)->getDuration();
+		cerr << "Bad split, coercing new note" << endl;
 
-	} else {	
-	    cerr << "Good split (or rest), splitting old event" << endl;
+		// not reasonable to split existing note, so force new one
+		// to same duration instead
+		duration = (*i)->getDuration();
 
-	    expandIntoTie(i, duration);
+	    } else {
+		cerr << "Good split, splitting old event" << endl;
+		(void)expandIntoTie(i, duration);
+	    }
+	} else {
+	    cerr << "Found rest, splitting" << endl;
+	    iterator last = expandIntoTie(i, duration);
+	    if (last != end() && !isViable(*last)) makeRestViable(last);
 	}
 
 	insertSingleNote(i, duration, pitch, tiedBack);
@@ -885,6 +937,65 @@ Track::iterator Track::insertSingleNote(iterator i, int duration, int pitch,
 }
 
 
+void Track::insertRest(timeT absoluteTime, Note note)
+{
+    // Procedure:
+
+    // First, if there is a rest at the insertion position, merge it
+    // with any following rests, if available, until we have at least
+    // the duration of the new rest.  Then:
+    // 
+    // 1. If the new rest is the same length as an existing note or
+    // rest at that position, delete the existing note or rest and
+    // insert.
+    // 
+    // 2. If the new rest is shorter than an existing note or rest,
+    // split the existing one and replace the first part.
+    // 
+    // 3. If the new rest is longer, split the new rest so that the
+    // first part is the same duration as the existing note or rest,
+    // and recurse (to step 1) with both the first and the second part
+    // in turn.
+    // 
+    //!!! ... 4. Then we somehow need to recover correctness for the
+    // second half of any split note or rest...
+
+
+
+}
+
+
+void Track::deleteNote(Event *e)
+{
+    iterator i = findSingle(e);
+
+    if (noteIsInChord(e)) {
+
+	erase(i);
+
+    } else {
+	
+	// replace with a rest
+	Event *newRest = new Event(Note::EventRestType);
+	newRest->setAbsoluteTime(e->getAbsoluteTime());
+	newRest->setDuration(e->getDuration());
+	insert(newRest);
+	erase(i);
+    }
+}
+
+
+void Track::deleteRest(Event *e)
+{
+    //!!! streamline
+
+    bool collapseForward;
+    Event *deletedEvent;
+
+    (void)collapse(e, collapseForward, deletedEvent);
+}
+
+
 void Track::getTimeSlice(timeT absoluteTime, iterator &start, iterator &end)
 {
     Event dummy;
@@ -897,13 +1008,16 @@ void Track::getTimeSlice(timeT absoluteTime, iterator &start, iterator &end)
     end = res.second;
 }
 
+
 bool Track::noteIsInChord(Event *note)
 {
     std::pair<iterator, iterator> res = equal_range(note);
 
-    int dist = distance(res.first,res.second);
-
-    return dist > 1;
+    int noteCount = 0;
+    for (iterator i = res.first; i != res.second; ++i) {
+	if ((*i)->isa(Note::EventType)) ++noteCount;
+    }
+    return noteCount > 1;
 }
 
 

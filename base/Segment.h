@@ -216,13 +216,13 @@ public:
      * tied events of duration baseDuration + events of duration R,
      * with R being equal to the events' initial duration minus baseDuration
      *
-     * lastInsertedEvent will point to the last inserted event
-     *
      * The events in [from, to[ must all be at the same absolute time
      * 
      * Does not check "reasonableness" of expansion first
+     *
+     * @return iterator pointing at the last inserted event
      */
-    void expandIntoTie(iterator from, iterator to, timeT baseDuration);
+    iterator expandIntoTie(iterator from, iterator to, timeT baseDuration);
 
 
     /**
@@ -232,8 +232,10 @@ public:
      * minus baseDuration
      *
      * Does not check "reasonableness" of expansion first
+     *
+     * @return iterator pointing at the last inserted event
      */
-    void expandIntoTie(iterator i, timeT baseDuration);
+    iterator expandIntoTie(iterator i, timeT baseDuration);
 
     /**
      * Same as expandIntoTie(), but for an Event which hasn't
@@ -294,7 +296,7 @@ public:
     void getTimeSlice(timeT absoluteTime, iterator &start, iterator &end);
 
     /**
-     * Returns if the note is part of a chord
+     * Returns true if the iterator points at a note in a chord
      * e.g. if there are more notes at the same absolute time
      */
     bool noteIsInChord(Event *note);
@@ -308,9 +310,32 @@ public:
     /**
      * Inserts a note, doing all the clever split/merge stuff as
      * appropriate.  Requires up-to-date bar position list.
+     *
+     * This method will only work correctly if there is a note or
+     * rest event already starting at absoluteTime.
      */
-//    void insertNote(iterator position, Note note, int pitch);
     void insertNote(timeT absoluteTime, Note note, int pitch);
+
+    /**
+     * Inserts a rest, doing all the clever split/merge stuff as
+     * appropriate.  Requires up-to-date bar position list.
+     *
+     * This method will only work correctly if there is a note or
+     * rest event already starting at absoluteTime.
+     */
+    void insertRest(timeT absoluteTime, Note note);
+
+    /**
+     * Deletes a note, doing all the clever split/merge stuff as
+     * appropriate.  Requires up-to-date bar position list.
+     */
+    void deleteNote(Event *e);
+
+    /**
+     * Deletes a rest, doing all the clever split/merge stuff as
+     * appropriate.  Requires up-to-date bar position list.
+     */
+    void deleteRest(Event *e);
 
     /**
      * The compare class used by Composition
@@ -343,11 +368,39 @@ protected:
      * uncollapsed event)
      */
     iterator collapseRestsForInsert(iterator firstRest, timeT desiredDuration);
+
+    /**
+     * Check whether a note or rest event has a duration that can be
+     * represented by a single note-type.  (If not, the code that's
+     * doing the check might wish to split the event.)
+     */
+    bool isViable(Event *e) { return isViable(e->getDuration()); }
+
+    /**
+     * Check whether a duration can be represented by a single
+     * note-type.  (If not, the code that's doing the check might wish
+     * to split the duration.)
+     */
+    bool isViable(timeT duration);
+
+    
+    /**
+     * Given an iterator pointing to a rest, split that rest up
+     * according to the durations returned by TimeSignature's
+     * getDurationListForInterval
+     */
+    void makeRestViable(iterator i);
+
+
+    /// for use by insertNote
     void insertNoteAux(iterator position, int duration, int pitch,
 		       bool tiedBack);
+
+    /// for use by insertNoteAux
     iterator insertSingleNote(iterator position, int duration, int pitch,
 			      bool tiedBack);
 
+    /// for use by calculateBarPositions
     void addNewBar(timeT start, bool fixed, bool correct, 
                    const TimeSignature &timesig) {
         m_barPositions.push_back(BarPosition(start, fixed, correct, timesig));
