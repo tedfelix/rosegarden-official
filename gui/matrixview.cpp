@@ -59,7 +59,7 @@ MatrixElement::MatrixElement(const QRect& r, QCanvas* canvas)
 MatrixView::MatrixView(RosegardenGUIDoc *doc,
                        std::vector<Rosegarden::Segment *> segments,
                        QWidget *parent)
-    : EditionView(doc, segments, parent),
+    : EditView(doc, segments, parent),
       m_canvasView(new MatrixCanvasView(new QCanvas(width() * 2,
                                                     height() * 2),
                                         this))

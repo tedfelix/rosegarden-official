@@ -30,7 +30,7 @@
 #include "Staff.h"
 #include "LayoutEngine.h"
 
-#include "editionview.h"
+#include "editview.h"
 
 namespace Rosegarden { class Segment; }
 
@@ -100,7 +100,7 @@ public:
 
 //------------------------------------------------------------
 
-class MatrixView : public EditionView
+class MatrixView : public EditView
 {
     Q_OBJECT
 public:

@@ -25,14 +25,14 @@
 #include <klocale.h>
 #include <kstdaction.h>
 
-#include "editionview.h"
+#include "editview.h"
 #include "rosegardenguidoc.h"
 #include "ktmpstatusmsg.h"
 
 //----------------------------------------------------------------------
-const unsigned int EditionView::ID_STATUS_MSG = 1;
+const unsigned int EditView::ID_STATUS_MSG = 1;
 
-EditionView::EditionView(RosegardenGUIDoc *doc,
+EditView::EditView(RosegardenGUIDoc *doc,
                          std::vector<Rosegarden::Segment *> segments,
                          QWidget *parent)
     : KMainWindow(parent),
@@ -41,7 +41,7 @@ EditionView::EditionView(RosegardenGUIDoc *doc,
 {
 }
 
-EditionView::~EditionView()
+EditView::~EditView()
 {
 }
 
@@ -49,7 +49,7 @@ EditionView::~EditionView()
 //                    Slots
 //////////////////////////////////////////////////////////////////////
 
-void EditionView::closeWindow()
+void EditView::closeWindow()
 {
     close();
 }
@@ -57,7 +57,7 @@ void EditionView::closeWindow()
 //
 // Toolbar and statusbar toggling
 //
-void EditionView::slotToggleToolBar()
+void EditView::slotToggleToolBar()
 {
     KTmpStatusMsg msg(i18n("Toggle the toolbar..."), statusBar());
 
@@ -67,7 +67,7 @@ void EditionView::slotToggleToolBar()
         toolBar()->show();
 }
 
-void EditionView::slotToggleStatusBar()
+void EditView::slotToggleStatusBar()
 {
     KTmpStatusMsg msg(i18n("Toggle the statusbar..."), statusBar());
 
@@ -80,7 +80,7 @@ void EditionView::slotToggleStatusBar()
 //
 // Status messages
 //
-void EditionView::slotStatusMsg(const QString &text)
+void EditView::slotStatusMsg(const QString &text)
 {
     ///////////////////////////////////////////////////////////////////
     // change status message permanently
@@ -89,7 +89,7 @@ void EditionView::slotStatusMsg(const QString &text)
 }
 
 
-void EditionView::slotStatusHelpMsg(const QString &text)
+void EditView::slotStatusHelpMsg(const QString &text)
 {
     ///////////////////////////////////////////////////////////////////
     // change status message of whole statusbar temporary (text, msec)

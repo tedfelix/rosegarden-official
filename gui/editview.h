@@ -31,16 +31,16 @@ namespace Rosegarden { class Segment; }
 
 class RosegardenGUIDoc;
 
-class EditionView : public KMainWindow
+class EditView : public KMainWindow
 {
     static const unsigned int ID_STATUS_MSG;
 
     Q_OBJECT
 public:
-    EditionView(RosegardenGUIDoc *doc,
+    EditView(RosegardenGUIDoc *doc,
                 std::vector<Rosegarden::Segment *> segments,
                 QWidget *parent);
-    virtual ~EditionView();
+    virtual ~EditView();
 
     const RosegardenGUIDoc *getDocument() const { return m_document; }
     RosegardenGUIDoc *getDocument() { return m_document; }
