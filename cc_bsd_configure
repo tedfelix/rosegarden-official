@@ -8,4 +8,4 @@
 
 gmake -f Makefile.cvs
 
-LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:/usr/local/lib/qt2 CXXFLAGS="-fexceptions" ./configure --enable-debug --with-qt-includes=/usr/local/include/X11/qt2 --with-qt-libraries=/usr/local/lib/qt2 --prefix=/usr/local
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib CXXFLAGS="-fexceptions" ./configure --enable-debug --prefix=/usr/local

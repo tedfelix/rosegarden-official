@@ -13,7 +13,7 @@ AC_HEADER_STDC
 AC_HEADER_TIME
 AC_CHECK_HEADERS(fcntl.h sys/time.h unistd.h stdlib.h paths.h)
 AC_CHECK_FUNCS(usleep)
-AC_CHECK_LIB(z, gzgets,, AC_MSG_ERROR("gzgets not found in zlib - need zlib-1.0.9 or newer"))
+#AC_CHECK_LIB(z, gzgets,, AC_MSG_ERROR("gzgets not found in zlib - need zlib-1.0.9 or newer"))
 
 dnl check whether user wants to use ALSA
 AC_ARG_WITH(arts, [  --with-arts             enable aRts support (at cost of ALSA support)],
