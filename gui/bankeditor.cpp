@@ -1448,8 +1448,8 @@ BankEditorDialog::importFromSF2(QString filename)
 	const SF2PatchExtractor::Bank &sf2bank = i->second;
 
 	Rosegarden::MidiBank bank;
-	bank.msb = bankNumber / 127;
-	bank.lsb = bankNumber % 127;
+	bank.msb = bankNumber / 128;
+	bank.lsb = bankNumber % 128;
 	bank.name = qstrtostr(QString("Bank %1:%1").arg(bank.msb).arg(bank.lsb));
 	banks.push_back(bank);
 
