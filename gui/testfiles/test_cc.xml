@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rosegarden-data>
+<rosegarden-data>
+<track nb="1" start="0">
+        <event type="clefchange" clef="tenor"/>
+        <event type="keychange" key="Cb major"/>
+        <event type="timesignature" numerator="6" denominator="8"/>
+        <event type="note" duration="crotchet" pitch="64"/>
+        <event type="note" duration="crotchet" pitch="65"/>
+        <event type="rest" duration="crotchet"/>
+        <event type="note" duration="dotted crotchet" pitch="64"/>
+        <event type="clefchange" clef="bass"/>
+        <event type="note" duration="quaver" pitch="49"/>
+        <chord>
+        <event type="note" duration="quaver" pitch="50"/>
+        <event type="note" duration="quaver" pitch="54"/>
+        </chord>
+        <event type="note" duration="quaver" pitch="51"/>
+</track>
+</rosegarden-data>
