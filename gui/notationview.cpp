@@ -537,6 +537,10 @@ void NotationView::setupActions()
                 SLOT(slotTransformsRestoreStems()), actionCollection(),
                 "restore_stems");
 
+    new KAction(TransformsMenuLabelChordsCommand::name(), 0, this,
+                SLOT(slotTransformsLabelChords()), actionCollection(),
+                "label_chords");
+
     new KAction(TransformsMenuTransposeOneStepCommand::name(true), 0, this,
                 SLOT(slotTransformsTransposeUp()), actionCollection(),
                 "transpose_up");
@@ -1335,6 +1339,16 @@ void NotationView::slotTransformsStemsDown()
 
     addCommandToHistory(new TransformsMenuChangeStemsCommand
                         (false, *m_currentEventSelection));
+
+}
+
+void NotationView::slotTransformsLabelChords()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Labelling chords..."), statusBar());
+
+    addCommandToHistory(new TransformsMenuLabelChordsCommand
+                        (*m_currentEventSelection));
 }
 
 void NotationView::slotTransformsRestoreStems()
@@ -1844,10 +1858,10 @@ void NotationView::itemPressed(int height, int staffNo,
         // This won't work because a double click event is always
         // preceded by a single click event
         if (e->type() == QEvent::MouseButtonDblClick)
-            m_tool->handleMouseDblClick(height, unknownTime,
+            m_tool->handleMouseDblClick(unknownTime, height,
                                         staffNo, e, el);
         else
-            m_tool->handleMousePress(height, unknownTime,
+            m_tool->handleMousePress(unknownTime, height,
                                      staffNo, e, el);
     }
     
@@ -1884,7 +1898,7 @@ void NotationView::mouseMoved(QMouseEvent *e)
         canvas()->update();
     }
     else 
-        m_tool->handleMouseMove(0, 0, // unknown height and time
+        m_tool->handleMouseMove(0, 0, // unknown time and height
                                 e);
 }
 
@@ -1896,7 +1910,7 @@ void NotationView::mouseReleased(QMouseEvent *e)
         canvas()->update();
     }
     else
-        m_tool->handleMouseRelease(0, 0, // unknown height and time
+        m_tool->handleMouseRelease(0, 0, // unknown time and height
                                    e);
 }
 

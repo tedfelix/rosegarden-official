@@ -274,6 +274,7 @@ public slots:
     void slotGroupDecrescendo();
 
     // transforms slots
+    void slotTransformsLabelChords();
     void slotTransformsNormalizeRests();
     void slotTransformsCollapseRests();
     void slotTransformsStemsUp();

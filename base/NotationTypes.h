@@ -221,6 +221,10 @@ public:
         return m_keyDetailMap[m_name].m_sharps;
     }
 
+	int getTonicPitch() const {
+        return m_keyDetailMap[m_name].m_tonicPitch;
+		}
+
     int getAccidentalCount() const {
         return m_keyDetailMap[m_name].m_sharpCount;
     }
@@ -263,24 +267,27 @@ private:
         int    m_sharpCount;
         std::string m_equivalence;
         std::string m_rg2name;
+		int    m_tonicPitch;
 
         KeyDetails(); // ctor needed in order to live in a hash_map
 
         KeyDetails(bool sharps, bool minor, int sharpCount,
-                   std::string equivalence, std::string rg2name);
+                   std::string equivalence, std::string rg2name,
+				   int m_tonicPitch);
 
         KeyDetails(const KeyDetails &d);
 
         KeyDetails &operator=(const KeyDetails &d);
     };
 
+
     typedef std::hash_map<std::string, KeyDetails, hashstring, eqstring>
         KeyDetailMap;
     static KeyDetailMap m_keyDetailMap;
     static void checkMap();
     void checkAccidentalHeights() const;
-};
 
+};
 
 class Indication
 {
@@ -383,8 +390,11 @@ public:
     /**
      * Return the stored pitch as a string (C4, Bb2, etc...)
      * according to http://www.harmony-central.com/MIDI/Doc/table2.html
+	 *
+	 * If inclOctave is false, this will return C, Bb, etc.
      */
-    std::string getAsString(const Clef &clef, const Key &key) const;
+    std::string getAsString(const Clef &clef, const Key &key,
+					 bool inclOctave=true) const;
 
 private:
     int m_heightOnStaff;
@@ -563,7 +573,7 @@ public:
 
     int getNumerator()    const { return m_numerator; }
     int getDenominator()  const { return m_denominator; }
-    int getBarDuration()  const { return m_numerator * getUnitDuration(); }
+    int getBarDuration()  const;
 
     // We say the "unit" of the time is the duration of the note
     // implied by the denominator.  For example, the unit of 4/4 time
@@ -571,7 +581,7 @@ public:
     // of the time signature gives the number of units per bar.
 
     Note::Type getUnit()  const;
-    int getUnitDuration() const { return 6 * (64 / m_denominator); }
+    int getUnitDuration() const;
 
     // The "beat" of the time depends on whether the signature implies
     // dotted or undotted time.  The beat of 4/4 time is the crotchet,
@@ -602,16 +612,19 @@ public:
                                     int intervalDuration,
                                     int startOffset = 0) const;
 
+    // Get the level of emphasis for a position in a bar. 0 is lots
+    // of emphasis, smaller numbers are less.
+
+    int getEmphasisForTime(int offset);
+
 private:
     int m_numerator;
     int m_denominator;
+	mutable int m_barDuration;
+	mutable int m_beatDuration;
+	mutable int m_beatDivisionDuration;
 
-    void getDurationListForShortInterval(DurationList &dlist,
-                                         int intervalDuration,
-                                         int startOffset = 0) const;
-
-    void getDurationListAux(DurationList &dlist, int duration,
-                            bool isLeadIn) const;
+	void setInternalDurations() const;
 
     // a time & effort saving device
     static const int m_crotchetTime;

@@ -7,8 +7,10 @@ libbase_la_LDFLAGS = $(all_libraries)
 
 INCLUDES= $(all_includes)
 
-libbase_la_SOURCES = BaseProperties.C \
+libbase_la_SOURCES = AnalysisTypes.C \
+             BaseProperties.C \
 		     Composition.C \
+		     CompositionAdapter.C \
 		     Equation.C \
 		     Event.C \
                      Instrument.C \

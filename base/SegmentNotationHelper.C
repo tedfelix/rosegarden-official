@@ -272,10 +272,11 @@ void SegmentNotationHelper::makeNoteViable(iterator i)
 
     DurationList dl;
 
+    // Behaviour differs from TimeSignature::getDurationListForInterval
+
+
     timeT acc = 0;
     timeT required = (*i)->getDuration();
-
-    // Behaviour differs from TimeSignature::getDurationListForInterval
 
     while (acc < required) {
         timeT component = Note::getNearestNote(required - acc).getDuration();
@@ -446,10 +447,8 @@ SegmentNotationHelper::insertSomething(iterator i, int duration, int pitch,
 
             // Recover viability for the second half of any split rest
 
-            if (last != end() && !isViable(*last, 1)) {
                 makeRestViable(last);
             }
-	}
 
 	return insertSingleSomething(i, duration, pitch, isRest, tiedBack,
 				     acc);
@@ -1123,7 +1122,7 @@ void SegmentNotationHelper::normalizeContiguousRests(timeT startTime,
 	 << duration << endl;
 
     DurationList dl;
-    ts.getDurationListForInterval(dl, duration, sigTime);
+    ts.getDurationListForInterval(dl, duration, startTime - sigTime);
 
     timeT acc = startTime;
 

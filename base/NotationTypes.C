@@ -154,6 +154,7 @@ Event *Clef::getAsEvent(timeT absoluteTime) const
 // Key
 //////////////////////////////////////////////////////////////////////
 
+
 const string Key::EventType = "keychange";
 const int Key::EventSubOrdering = -20;
 const PropertyName Key::KeyPropertyName = "key";
@@ -291,49 +292,50 @@ Event *Key::getAsEvent(timeT absoluteTime) const
 void Key::checkMap() {
     if (!m_keyDetailMap.empty()) return;
 
-    m_keyDetailMap["A major" ] = KeyDetails(true,  false, 3, "F# minor", "A  maj / F# min");
-    m_keyDetailMap["F# minor"] = KeyDetails(true,  true,  3, "A major",  "A  maj / F# min");
-    m_keyDetailMap["Ab major"] = KeyDetails(false, false, 4, "F minor",  "Ab maj / F  min");
-    m_keyDetailMap["F minor" ] = KeyDetails(false, true,  4, "Ab major", "Ab maj / F  min");
-    m_keyDetailMap["B major" ] = KeyDetails(true,  false, 5, "G# minor", "B  maj / G# min");
-    m_keyDetailMap["G# minor"] = KeyDetails(true,  true,  5, "B major",  "B  maj / G# min");
-    m_keyDetailMap["Bb major"] = KeyDetails(false, false, 2, "G minor",  "Bb maj / G  min");
-    m_keyDetailMap["G minor" ] = KeyDetails(false, true,  2, "Bb major", "Bb maj / G  min");
-    m_keyDetailMap["C major" ] = KeyDetails(true,  false, 0, "A minor",  "C  maj / A  min");
-    m_keyDetailMap["A minor" ] = KeyDetails(true,  true,  0, "C major",  "C  maj / A  min");
-    m_keyDetailMap["Cb major"] = KeyDetails(false, false, 7, "Ab minor", "Cb maj / Ab min");
-    m_keyDetailMap["Ab minor"] = KeyDetails(false, true,  7, "Cb major", "Cb maj / Ab min");
-    m_keyDetailMap["C# major"] = KeyDetails(true,  false, 7, "A# minor", "C# maj / A# min");
-    m_keyDetailMap["A# minor"] = KeyDetails(true,  true,  7, "C# major", "C# maj / A# min");
-    m_keyDetailMap["D major" ] = KeyDetails(true,  false, 2, "B minor",  "D  maj / B  min");
-    m_keyDetailMap["B minor" ] = KeyDetails(true,  true,  2, "D major",  "D  maj / B  min");
-    m_keyDetailMap["Db major"] = KeyDetails(false, false, 5, "Bb minor", "Db maj / Bb min");
-    m_keyDetailMap["Bb minor"] = KeyDetails(false, true,  5, "Db major", "Db maj / Bb min");
-    m_keyDetailMap["E major" ] = KeyDetails(true,  false, 4, "C# minor", "E  maj / C# min");
-    m_keyDetailMap["C# minor"] = KeyDetails(true,  true,  4, "E major",  "E  maj / C# min");
-    m_keyDetailMap["Eb major"] = KeyDetails(false, false, 3, "C minor",  "Eb maj / C  min");
-    m_keyDetailMap["C minor" ] = KeyDetails(false, true,  3, "Eb major", "Eb maj / C  min");
-    m_keyDetailMap["F major" ] = KeyDetails(false, false, 1, "D minor",  "F  maj / D  min");
-    m_keyDetailMap["D minor" ] = KeyDetails(false, true,  1, "F major",  "F  maj / D  min");
-    m_keyDetailMap["F# major"] = KeyDetails(true,  false, 6, "D# minor", "F# maj / D# min");
-    m_keyDetailMap["D# minor"] = KeyDetails(true,  true,  6, "F# major", "F# maj / D# min");
-    m_keyDetailMap["G major" ] = KeyDetails(true,  false, 1, "E minor",  "G  maj / E  min");
-    m_keyDetailMap["E minor" ] = KeyDetails(true,  true,  1, "G major",  "G  maj / E  min");
-    m_keyDetailMap["Gb major"] = KeyDetails(false, false, 6, "Eb minor", "Gb maj / Eb min");
-    m_keyDetailMap["Eb minor"] = KeyDetails(false, true,  6, "Gb major", "Gb maj / Eb min");
+    m_keyDetailMap["A major" ] = KeyDetails(true,  false, 3, "F# minor", "A  maj / F# min", 9);
+    m_keyDetailMap["F# minor"] = KeyDetails(true,  true,  3, "A major",  "A  maj / F# min", 6);
+    m_keyDetailMap["Ab major"] = KeyDetails(false, false, 4, "F minor",  "Ab maj / F  min", 8);
+    m_keyDetailMap["F minor" ] = KeyDetails(false, true,  4, "Ab major", "Ab maj / F  min", 5);
+    m_keyDetailMap["B major" ] = KeyDetails(true,  false, 5, "G# minor", "B  maj / G# min", 11);
+    m_keyDetailMap["G# minor"] = KeyDetails(true,  true,  5, "B major",  "B  maj / G# min", 8);
+    m_keyDetailMap["Bb major"] = KeyDetails(false, false, 2, "G minor",  "Bb maj / G  min", 10);
+    m_keyDetailMap["G minor" ] = KeyDetails(false, true,  2, "Bb major", "Bb maj / G  min", 7);
+    m_keyDetailMap["C major" ] = KeyDetails(true,  false, 0, "A minor",  "C  maj / A  min", 0);
+    m_keyDetailMap["A minor" ] = KeyDetails(true,  true,  0, "C major",  "C  maj / A  min", 9);
+    m_keyDetailMap["Cb major"] = KeyDetails(false, false, 7, "Ab minor", "Cb maj / Ab min", 11);
+    m_keyDetailMap["Ab minor"] = KeyDetails(false, true,  7, "Cb major", "Cb maj / Ab min", 8);
+    m_keyDetailMap["C# major"] = KeyDetails(true,  false, 7, "A# minor", "C# maj / A# min", 1);
+    m_keyDetailMap["A# minor"] = KeyDetails(true,  true,  7, "C# major", "C# maj / A# min", 10);
+    m_keyDetailMap["D major" ] = KeyDetails(true,  false, 2, "B minor",  "D  maj / B  min", 2);
+    m_keyDetailMap["B minor" ] = KeyDetails(true,  true,  2, "D major",  "D  maj / B  min", 11);
+    m_keyDetailMap["Db major"] = KeyDetails(false, false, 5, "Bb minor", "Db maj / Bb min", 1);
+    m_keyDetailMap["Bb minor"] = KeyDetails(false, true,  5, "Db major", "Db maj / Bb min", 10);
+    m_keyDetailMap["E major" ] = KeyDetails(true,  false, 4, "C# minor", "E  maj / C# min", 4);
+    m_keyDetailMap["C# minor"] = KeyDetails(true,  true,  4, "E major",  "E  maj / C# min", 1);
+    m_keyDetailMap["Eb major"] = KeyDetails(false, false, 3, "C minor",  "Eb maj / C  min", 3);
+    m_keyDetailMap["C minor" ] = KeyDetails(false, true,  3, "Eb major", "Eb maj / C  min", 0);
+    m_keyDetailMap["F major" ] = KeyDetails(false, false, 1, "D minor",  "F  maj / D  min", 5);
+    m_keyDetailMap["D minor" ] = KeyDetails(false, true,  1, "F major",  "F  maj / D  min", 2);
+    m_keyDetailMap["F# major"] = KeyDetails(true,  false, 6, "D# minor", "F# maj / D# min", 6);
+    m_keyDetailMap["D# minor"] = KeyDetails(true,  true,  6, "F# major", "F# maj / D# min", 3);
+    m_keyDetailMap["G major" ] = KeyDetails(true,  false, 1, "E minor",  "G  maj / E  min", 7);
+    m_keyDetailMap["E minor" ] = KeyDetails(true,  true,  1, "G major",  "G  maj / E  min", 4);
+    m_keyDetailMap["Gb major"] = KeyDetails(false, false, 6, "Eb minor", "Gb maj / Eb min", 6);
+    m_keyDetailMap["Eb minor"] = KeyDetails(false, true,  6, "Gb major", "Gb maj / Eb min", 3);
 }
 
 
 Key::KeyDetails::KeyDetails()
     : m_sharps(false), m_minor(false), m_sharpCount(0),
-      m_equivalence(""), m_rg2name("")
+      m_equivalence(""), m_rg2name(""), m_tonicPitch(0)
 {
 }
 
 Key::KeyDetails::KeyDetails(bool sharps, bool minor, int sharpCount,
-                            std::string equivalence, std::string rg2name)
+                            std::string equivalence, std::string rg2name,
+							int tonicPitch)
     : m_sharps(sharps), m_minor(minor), m_sharpCount(sharpCount),
-      m_equivalence(equivalence), m_rg2name(rg2name)
+      m_equivalence(equivalence), m_rg2name(rg2name), m_tonicPitch(tonicPitch)
 {
 }
 
@@ -352,8 +354,6 @@ Key::KeyDetails& Key::KeyDetails::operator=(const Key::KeyDetails &d)
     m_rg2name = d.m_rg2name;
     return *this;
 }
-
-
 
 //////////////////////////////////////////////////////////////////////
 // Indication
@@ -584,7 +584,8 @@ NotationDisplayPitch::displayPitchToRawPitch(int height,
 }
 
 string
-NotationDisplayPitch::getAsString(const Clef &clef, const Key &key) const
+NotationDisplayPitch::getAsString(const Clef &clef, const Key &key,
+								  bool inclOctave) const
 {
     static const string noteNamesSharps[] = {
         "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
@@ -598,8 +599,11 @@ NotationDisplayPitch::getAsString(const Clef &clef, const Key &key) const
     // highly unlikely, but fatal if it happened:
     if (performancePitch < 0) performancePitch = 0;
 
-    int octave = performancePitch / 12;
     int pitch  = performancePitch % 12;
+	int octave = performancePitch / 12;
+
+	if (!inclOctave)
+		return key.isSharp() ? noteNamesSharps[pitch] : noteNamesFlats[pitch];
 
     char tmp[1024];
 
@@ -610,6 +614,7 @@ NotationDisplayPitch::getAsString(const Clef &clef, const Key &key) const
     
     return string(tmp);
     
+
 }
 
 
@@ -808,11 +813,22 @@ TimeSignature& TimeSignature::operator=(const TimeSignature &ts)
     return *this;
 }
 
+int TimeSignature::getBarDuration() const
+{
+    setInternalDurations();
+    return m_barDuration;
+}
+
 Note::Type TimeSignature::getUnit() const
 {
     int c, d;
     for (c = 0, d = m_denominator; d > 1; d /= 2) ++c;
     return Note::Semibreve - c;
+}
+
+int TimeSignature::getUnitDuration() const
+{
+    return m_crotchetTime * 4 / m_denominator;
 }
 
 bool TimeSignature::isDotted() const
@@ -821,6 +837,9 @@ bool TimeSignature::isDotted() const
     // the check for m_numerator > 3 -- but otherwise we'd get a false
     // positive with 3/4
 
+	// [rf] That's an acceptable answer, according to my theory book. In
+	// practice, you can say it's dotted time iff it has 6, 9, or 12 on top.
+
     return (m_numerator % 3 == 0 &&
             m_numerator > 3 &&
             getBarDuration() >= Note(Note::Crotchet, true).getDuration());
@@ -828,18 +847,8 @@ bool TimeSignature::isDotted() const
 
 int TimeSignature::getBeatDuration() const
 {
-    if (isDotted()) {
-        // this is surprisingly difficult to work out, I got it badly
-        // wrong first time and I'm still not certain about it
-        int u = getUnitDuration();
-        if (u * 3 >= getBarDuration()) {
-            return (u * 3) / 2;
-        } else {
-            return (u * 3);
-        }
-    } else {
-        return getUnitDuration();
-    }
+    setInternalDurations();
+    return m_beatDuration;
 }
 
 Event *TimeSignature::getAsEvent(timeT absoluteTime) const
@@ -852,248 +861,147 @@ Event *TimeSignature::getAsEvent(timeT absoluteTime) const
     return e;
 }
 
-
-//#define DEBUG_DURATION_LIST_STUFF 1
-
+// This doesn't consider subdivisions of the bar larger than a beat in
+// any time other than 4/4, but it should handle the usual time signatures
+// correctly (compound time included).
 
 void TimeSignature::getDurationListForInterval(DurationList &dlist,
                                                int duration,
                                                int startOffset) const
 {
-    // We need to do this in three parts: (1) if the startOffset isn't
-    // at the start of a bar, fill up the interval from it to the
-    // start of the next bar using the "short interval" algorithm.
-    // (2) fill up with "optimal bar-length rests" as far as
-    // possible. (3) fill any remainder using the "short interval"
-    // algorithm.
 
-    int toNextBar;
-    int barDuration = getBarDuration();
-    int acc = 0;
+    setInternalDurations();
 
-#ifdef DEBUG_DURATION_LIST_STUFF
-    cerr << "TimeSignature::getDurationListForInterval: Desired duration is " << duration << " with startOffset " << startOffset << " and bar duration " << barDuration << endl;
-#endif
+	int offset = startOffset;
+	int durationRemaining = duration;
 
-    toNextBar = barDuration - (startOffset % barDuration);
+	while (durationRemaining > 0) {
 
-    if (toNextBar > 0 && toNextBar <= duration && toNextBar < barDuration) {
-#ifdef DEBUG_DURATION_LIST_STUFF
-        cerr << "TimeSignature::getDurationListForInterval: filling to next bar (duration " << toNextBar << ")" << endl;
-#endif
-        getDurationListForShortInterval(dlist, toNextBar, startOffset);
-        acc = toNextBar;
-    }
+		// Everything in this loop is of the form, "if we're on a [unit] boundary
+		// and there's a [unit] of space left to fill, insert a [unit] of time."
 
-    while (duration - acc >= barDuration) {
-#ifdef DEBUG_DURATION_LIST_STUFF
-        cerr << "TimeSignature::getDurationListForInterval: acc is " << acc << ", filling a bar" << endl;
-#endif
+		// See if we can insert a bar of time.
+
+		if (offset % m_barDuration == 0
+			&& durationRemaining >= m_barDuration) {
+
         getDurationListForBar(dlist);
-        acc += barDuration;
-    }
+			durationRemaining -= m_barDuration,
+			offset += m_barDuration;
     
-    if (duration > acc) {
-#ifdef DEBUG_DURATION_LIST_STUFF
-        cerr << "TimeSignature::getDurationListForInterval: acc is " << acc << ", filling the remaining " << (duration-acc) << endl;
-#endif
-        getDurationListForShortInterval(dlist, duration - acc, 0);
-    }
 }
 
+		// If that fails and we're in 4/4 time, see if we can insert a
+		// half-bar of time.
+
+		//_else_ if!
+		else if (m_numerator == 4 && m_denominator == 4
+			&& offset % (m_barDuration/2) == 0
+			&& durationRemaining >= m_barDuration/2) {
+
+			dlist.push_back(m_barDuration/2);
+			durationRemaining -= m_barDuration/2;
+			offset += m_barDuration;
+
+    }
+
+		// If that fails, see if we can insert a beat of time.
+
+		else if (offset % m_beatDuration == 0
+			&& durationRemaining >= m_beatDuration) {
+
+			dlist.push_back(m_beatDuration);
+			durationRemaining -= m_beatDuration;
+			offset += m_beatDuration;
+
+}
+
+		// If that fails, see if we can insert a beat-division of time
+		// (half the beat in simple time, a third of the beat in compound
+		// time)
+
+		else if (offset % m_beatDivisionDuration == 0
+			&& durationRemaining >= m_beatDivisionDuration) {
+
+			dlist.push_back(m_beatDivisionDuration);
+			durationRemaining -= m_beatDivisionDuration;
+			offset += m_beatDivisionDuration;
+
+		}
+
+		// If that fails, keep halving the beat division until we
+		// find something to insert. (This could be part of the beat-division
+		// case; it's only in its own place for clarity.)
+
+		else {
+
+			int currentDuration = m_beatDivisionDuration;
+
+			// One or both of my safeguards against currentDuration being 0
+			// might be useless.
+
+			while ( !(offset % currentDuration == 0
+				&& durationRemaining >= currentDuration)
+				&& currentDuration > 1 ) {
+
+				currentDuration /= 2;
+				if (currentDuration == 0) currentDuration = 1;
+
+    }
+
+			dlist.push_back(currentDuration);
+			durationRemaining -= currentDuration;
+			offset += currentDuration;
+
+}
+
+	}
+
+}
 
 void TimeSignature::getDurationListForBar(DurationList &dlist) const
 {
-    // mostly just a bunch of special-cases, for now
-
-    if (m_numerator < 3) {
-#ifdef DEBUG_DURATION_LIST_STUFF
-        cerr << "TimeSignature::getDurationListForBar: adding 2/* whole bar " << getBarDuration() << endl;
-#endif
-        // A single long rest should be okay for all the common 2/x
-        // timesigs, probably even tolerable for freaks like 2/1
-        dlist.push_back(getBarDuration());
-        return;
-    }
-
-    if (m_numerator == 4 && m_denominator > 2) {
-#ifdef DEBUG_DURATION_LIST_STUFF
-        cerr << "TimeSignature::getDurationListForBar: adding whole-bar " << getBarDuration() << endl;
-#endif
-        dlist.push_back(getBarDuration());
-        return;
-    }
-
-    for (int i = 0; i < getBeatsPerBar(); ++i) {
-#ifdef DEBUG_DURATION_LIST_STUFF
-        cerr << "TimeSignature::getDurationListForBar: adding beat " << getBeatDuration() << endl;
-#endif
-        dlist.push_back(getBeatDuration());
-    }
-}
-
-
-
-//!!! It might be nice to have a better algorithm for this, but I'm
-// not sure if it's possible to be general enough and of high enough
-// quality without simply having lots of special cases.
-
-// Example of limitation of the current code: in a 4/4 bar, we have a
-// single semibreve rest.  We insert a crotchet note over the start of
-// the bar, expecting the semibreve rest to be split into a crotchet
-// and a minim.  Instead, it's split into a minim and a crotchet.
-
-// Here's a potential better algorithm:
-
-// Given an interval and a beat duration, we can divide the interval
-// into three parts: the lead-in to the first beat, a section composed
-// only of full beats, and the lead-out of the final beat (the first
-// and third parts being shorter than a single beat duration, and any
-// of the three being potentially of zero duration).
-
-// Given a time signature, we can work out the longest natural
-// subdivision of the bar by dividing the bar duration by the smallest
-// integer factor of the time signature's numerator.  This is the
-// initial beat duration.  The result of dividing our numerator by its
-// smallest factor is the effective numerator of the beat.  We can
-// then subdivide this into sub-beats, using the effective numerator
-// in the same way as we used the original numerator.  If the
-// numerator for the bar's whole time signature is prime, we divide by
-// that; if an effective numerator becomes 1, we divide by 2 for our
-// beats but keep the numerator at 1.
-
-// So, to make an interval: Find the beat for the whole bar.  Divide
-// the interval into three as described above (lead-in, beats,
-// lead-out).  For the lead-in, find the next shortest sub-beat;
-// divide the lead-in interval into two (lead-in, beats) and recurse
-// on those with the sub-beat duration.  For the main beats, just fill
-// up with main-beat-duration rests.  For the lead-out, find the
-// sub-beat, divide the lead-out into two (beats, lead-out) and
-// recurse.  I think this could work for multi-bar sections too, if we
-// start by dividing into the whole bar duration.
-
-// The remaining problem is what to do if a beat duration is not
-// expressible as a single rest (possibly dotted, if in dotted time).
-// Probably we should just subdivide the beat immediately.
-
-// Might be too complicated overall, that.
-
-
-// Derived from RG2's MidiMakeRestList in editor/src/MidiIn.c.
-
-// Create a list of durations, totalling (as close as possible) the
-// given duration, such that each is an exact note duration and the
-// notes are the proper sort for the time signature.  start is the
-// elapsed duration since the beginning of the bar (or of the last
-// beat); for use independent of a particular bar, pass zero.
-
-// Currently uses no note-durations longer than a dotted-crotchet; for
-// general use in /2 time, this is a defect
-
-void TimeSignature::getDurationListForShortInterval(DurationList &dlist,
-                                                    int duration,
-                                                    int startOffset) const
-{
-    int toNextBeat;
-    int beatDuration = getBeatDuration();
-
-    toNextBeat = beatDuration - (startOffset % beatDuration);
-
-#ifdef DEBUG_DURATION_LIST_STUFF
-    cerr << "TimeSignature::getDurationListForShortInterval: duration is "
-         << duration << ", toNextBeat " << toNextBeat << ", startOffset "
-         << startOffset << ", beatDuration " << beatDuration << endl;
-#endif               
-
-    if (toNextBeat == duration) {
-        getDurationListAux(dlist, duration, true);
-    } else if (toNextBeat > duration) {
-        getDurationListAux(dlist, duration, false);
-    } else {
-        // first fill up to the next crotchet (or, in 6/8 or some
-        // other such time, the next dotted crotchet); then fill in
-        // crotchet or dotted-crotchet leaps until the end of the
-        // section needing filling
-        getDurationListAux(dlist, toNextBeat, dlist.size() == 0);
-        getDurationListAux(dlist, duration - toNextBeat, false);
-    }
-}
-
-
-// Derived from RG2's MidiMakeRestListSub in editor/src/MidiIn.c.
-
-void TimeSignature::getDurationListAux(DurationList &dlist, int t,
-                                       bool isLeadIn = false) const
-    // (we append to dlist, it's expected to have stuff in it already)
-{
-#ifdef DEBUG_DURATION_LIST_STUFF
-    cerr << "TimeSignature::getDurationListAux: duration is " << t
-         << ", isLeadIn is " << isLeadIn << endl;
-#endif
     
-    if (t <= 0) return;
+	// If the bar's length can be represented with one long symbol, do it.
+	// Otherwise, represent it as individual beats.
 
-    // We behave differently if we're trying to fill the space leading
-    // up to the first beat boundary of an interval.  In this case, we
-    // want to end up on semi-beat boundaries as quickly as possible,
-    // and usually the best way to achieve that is to fill up the
-    // duration list in reverse order, longest duration at the end
-    // (and avoid using dotted notes, but we don't currently use those
-    // anyway).  isLeadIn indicates this case.
+	if (m_barDuration == m_crotchetTime ||
+		m_barDuration == m_crotchetTime * 2 ||
+		m_barDuration == m_crotchetTime * 4 ||
+		m_barDuration == m_crotchetTime * 8 ||
+		m_barDuration == m_dottedCrotchetTime ||
+		m_barDuration == m_dottedCrotchetTime * 2 ||
+		m_barDuration == m_dottedCrotchetTime * 4 ||
+		m_barDuration == m_dottedCrotchetTime * 8) {
 
-    // This code could probably be rather simpler, and it would be
-    // better if taking into account the possibility of using longer
-    // beats in time signatures like 4/4
+		dlist.push_back(getBarDuration());
 
-    int shortestTime = Note(Note::Shortest).getDuration();
+    } else {
 
-    if (t < shortestTime) {
-#ifdef DEBUG_DURATION_LIST_STUFF
-        cerr << "pushing [1] " << t << endl;
-#endif
-	// we want to divide the time exactly, even if it means we
-	// can't represent everything quite right in note durations
-	if (isLeadIn) dlist.push_front(t);
-        else dlist.push_back(t);
-	return;
-    }
-    int current;
-
-    if ((current = (isDotted() ? m_dottedCrotchetTime : m_crotchetTime)) <= t) {
-#ifdef DEBUG_DURATION_LIST_STUFF
-        cerr << "pushing [2] " << current << endl;
-#endif
-        if (isLeadIn) dlist.push_front(current);
-        else dlist.push_back(current);
-        getDurationListAux(dlist, t - current, isLeadIn);
-        return;
+	    for (int i = 0; i < getBeatsPerBar(); ++i) {
+			dlist.push_back(getBeatDuration());
     }
                
-    current = shortestTime;
-    for (int tag = Note::Shortest + 1; tag <= Note::Crotchet; ++tag) {
-        int next = Note(tag).getDuration();
-        if (next > t) {
-#ifdef DEBUG_DURATION_LIST_STUFF
-            cerr << "pushing [3] " << current << endl;
-#endif
-            if (isLeadIn) dlist.push_front(current);
-            else dlist.push_back(current);
-            getDurationListAux(dlist, t - current, isLeadIn);
-            return;
         }
-        current = next;
+
     }
                
-    // should only be reached in dotted time for lengths between
-    // crotchet and dotted crotchet:
+void TimeSignature::setInternalDurations() const {
+	// "unit length," which might be the beat length or the beat-division
+	// length:
+	int noteLength = m_crotchetTime * 4 / m_denominator;
 
-    current = m_crotchetTime;
-#ifdef DEBUG_DURATION_LIST_STUFF
-    cerr << "pushing [4] " << current << endl;
-#endif
-    if (isLeadIn) dlist.push_front(current);
-    else dlist.push_back(current);
-    getDurationListAux(dlist, t - current, isLeadIn);
+	m_barDuration = m_numerator * noteLength;
+
+	if (isDotted()) {
+	m_beatDuration = noteLength * 3;
+	m_beatDivisionDuration = noteLength;
+	}
+	else {
+	m_beatDuration = noteLength;
+	m_beatDivisionDuration = noteLength / 2;
+	}
+
 }
 
 const int TimeSignature::m_crotchetTime       = 96;

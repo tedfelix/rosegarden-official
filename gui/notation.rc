@@ -114,6 +114,8 @@ etc
   <Action name="collapse_rests_aggressively"/>
   <Action name="normalize_rests"/>
   <Separator/>
+  <Action name="label_chords"/>
+  <Separator/>
   <Menu name="Transpose">
   <text>&amp;Transpose</text>
   <Action name="transpose_up"/>
