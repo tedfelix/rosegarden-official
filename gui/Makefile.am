@@ -158,7 +158,7 @@ install-data-local:
 	$(INSTALL_DATA) $(srcdir)/pixmaps/transport/*.xpm  $(kde_datadir)/$(data_dirname)/pixmaps/transport
 	$(INSTALL_DATA) $(srcdir)/pixmaps/splash.png       $(kde_datadir)/$(data_dirname)/pixmaps
 	$(INSTALL_DATA) $(srcdir)/testfiles/autoload.rg    $(kde_datadir)/$(data_dirname)
-	perl -ne 'print "$1\n" if /#define VERSION "(.*?)"/;' $(top_builddir)/config.h >$(kde_datadir)/$(data_dirname)/version.txt
+	perl -ne 'print "$$1\n" if /#define VERSION "(.*?)"/;' $(top_builddir)/config.h >$(kde_datadir)/$(data_dirname)/version.txt
 
 
 # Previous way to extract version from config.h, keeping around just in case :
