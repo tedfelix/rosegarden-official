@@ -12,6 +12,10 @@ o Split/Join - segment start and end markers
 
 o smooth position pointer
 
+o Latency dialog
+
+o Segment paramters and modifiers - looping of Segments, quantisation
+
 
 ==
 
@@ -29,15 +33,9 @@ o More MIDI events at Composition level. Sys Exs, Program Changes,
 
 o Segment Zooming - (midi and audio previews of Segments)
 
-o Segment paramters and modifiers - looping of Segments, quantisation
-
-o Allow negative time on segment canvas and transport
-
 o Audio noise eliminator - recording
 
 o Audio output VU meters
-
-o MIDI CC, PC and sysex handling
 
 
 Recently completed/fixed
@@ -79,6 +77,8 @@ Recently completed/fixed
 - Recording segments - trails [DONE]
 
 - tidy up getSequencerSlice and MappedEvent [MappedEvent DONE]
+
+- Allow negative time on segment canvas and transport [DONE CC]
 
 
 

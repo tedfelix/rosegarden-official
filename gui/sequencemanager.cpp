@@ -176,7 +176,7 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
             // Include Events within our range
             //
             if (eventTime >= m_mC.getStartTime() &&
-                eventTime <= m_mC.getEndTime())
+                eventTime < m_mC.getEndTime())
             {
 		// Find the performance duration, i.e. taking into account any
 		// ties etc that this note may have  --cc

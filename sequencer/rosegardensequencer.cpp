@@ -296,15 +296,22 @@ RosegardenSequencerApp::updateClocks()
 
         // Remove the loop width from the song position and send
         // this position (minus m_playLatency) to the GUI
+        /*
         m_songPosition = newPosition - (m_loopEnd - m_loopStart);
         newPosition = m_songPosition - m_playLatency;
+        m_lastFetchSongPosition =
+                m_lastFetchSongPosition - (m_loopEnd - m_loopStart);
+                */
+
+        // forgetting the fancy stuff brings superior results
+        //
+        newPosition = m_songPosition = m_lastFetchSongPosition = m_loopStart;
 
         // Reset playback using this jump
         //
         m_sequencer->resetPlayback(m_loopStart, m_playLatency);
 
-        m_lastFetchSongPosition =
-                m_lastFetchSongPosition - (m_loopEnd - m_loopStart);
+
     }
     else
     {
