@@ -188,7 +188,7 @@ protected:
     
 };
 
-};
+}
 
 
 #endif // _PEAKFILE_H_

@@ -108,7 +108,7 @@ protected:
 
 };
 
-};
+}
 
 
 #endif // _SOUNDFILE_H_

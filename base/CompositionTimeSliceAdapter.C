@@ -54,7 +54,7 @@ CompositionTimeSliceAdapter::CompositionTimeSliceAdapter(Composition *c,
          ci != m_composition->end(); ++ci) {
 	m_segmentList.push_back(*ci);
     }
-};
+}
 
 CompositionTimeSliceAdapter::CompositionTimeSliceAdapter(Composition *c,
 							 SegmentSelection* s,
@@ -75,7 +75,7 @@ CompositionTimeSliceAdapter::CompositionTimeSliceAdapter(Composition *c,
 	    m_segmentList.push_back(*ci);
 	}
     }
-};
+}
 
 CompositionTimeSliceAdapter::CompositionTimeSliceAdapter(Composition *c,
 							 const TrackSet &trackIDs,
@@ -96,7 +96,7 @@ CompositionTimeSliceAdapter::CompositionTimeSliceAdapter(Composition *c,
 	    m_segmentList.push_back(*ci);
 	}
     }
-};
+}
 
 CompositionTimeSliceAdapter::iterator
 CompositionTimeSliceAdapter::begin() const

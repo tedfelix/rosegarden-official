@@ -79,7 +79,7 @@ struct AlsaPortCmp
 };
 
 
-};
+}
 
 #endif // HAVE_ALSA
 

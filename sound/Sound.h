@@ -34,7 +34,7 @@ const float SAMPLE_MAX_24BIT = (float)(0xffffff/2);
 
 
 
-};
+}
 
 
 #endif // _ROSEGARDEN_SOUND_H_

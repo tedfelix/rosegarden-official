@@ -38,6 +38,6 @@ const std::string AUDIO_BWF_PEAK_ID = "levl";  // BWF peak chunk id
 
 
 
-};
+}
 
 #endif // _AUDIO_H_

@@ -48,5 +48,5 @@ Marker::toXmlString()
     return marker.str();
 }
 
-};
+}
 
