@@ -26,6 +26,6 @@ NotationHLayout::NotationHLayout(unsigned int barWidth)
 void
 NotationHLayout::layout(Event *el)
 {
-    el->set<Int>("Notation::X", m_lastPos + 15);
-    m_lastPos += 15;
+    el->set<Int>("Notation::X", m_lastPos + 20);
+    m_lastPos += 20;
 }
