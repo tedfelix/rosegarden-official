@@ -915,8 +915,8 @@ void NotationView::setCurrentSelectedNote(const char *pixmapName,
 
 void NotationView::setCurrentSelection(EventSelection* s)
 {
-    if (s && m_currentEventSelection &&
-	s->getSegment() != m_currentEventSelection->getSegment()) {
+    if (/* s && */ m_currentEventSelection /* &&
+	s->getSegment() != m_currentEventSelection->getSegment() */) {
 	m_currentEventSelection->removeSelectionFromSegment();
 	getStaff(m_currentEventSelection->getSegment())->positionElements
 	    (m_currentEventSelection->getBeginTime(),
