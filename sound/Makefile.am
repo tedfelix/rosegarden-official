@@ -1,13 +1,13 @@
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
-# ensure our path is correct
+# over stated path
 INCLUDES= $(all_includes) -I$(kde_includes)/arts -I../base
 
 COMPILE_FIRST = libRosegardenSound
 
-####### This part is very Rosegarden specific
-# you can add here more. This one gets installed 
-
+# The two libraries built from this directory are libRosegardenSound
+# and libRosegardenSequencer
+#
 noinst_LTLIBRARIES = libRosegardenSound.la
 libRosegardenSound_la_SOURCES = AudioFile.cpp \
                                 AudioFileManager.cpp \
@@ -20,24 +20,18 @@ libRosegardenSound_la_SOURCES = AudioFile.cpp \
                                 SoundFile.cpp
 
 lib_LTLIBRARIES = libRosegardenSequencer.la
-libRosegardenSequencer_la_SOURCES = ArtsDriver.cpp\
+libRosegardenSequencer_la_SOURCES = MidiArts.cc \
+                                    ArtsDriver.cpp\
 				    AlsaDriver.cpp \
-                                    MidiArts.cc \
                                     MidiRecord.cpp \
                                     Sequencer.cpp \
                                     SoundDriver.cpp
-# the library search path. 
 libRosegardenSequencer_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -module -no-undefined
-
-# the libraries to link against. Be aware of the order. First the libraries,
-# that depend on the following ones.
 libRosegardenSequencer_la_LIBADD   = -lartsmidi $(LIB_QT) -lsoundserver_idl libRosegardenSound.la ../base/libbase.la -lartsflow -lartsmodules -lasound @JACKLIB@
 
-# make messages.po. Move this one to ../po/ and "make merge" in po
-# the -x is for skipping messages already translated in kdelibs
-#messages:
-#	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot $(kless_SOURCES) && mv messages.po ../po/kless.pot
 
+# aRts stubs generated from idl
+#
 MidiArts.h: $(srcdir)/MidiArts.idl
 	$(MCOPIDL) -I$(kde_includes) -I$(kde_includes)/arts -t $(srcdir)/MidiArts.idl
 
@@ -46,10 +40,13 @@ MidiArts.mcopclass: MidiArts.h
 MidiArts.mcoptype: MidiArts.h
 MidiRecord.cpp: MidiArts.h
 
+# when cleaning
+#
 DISTCLEANFILES = $(sound_METASOURCES) MidiArts.h MidiArts.cc
 
-# Variable names are broken up because otherwise the Makefile.cvs
-# scanning picks them up
+
+# some test programs
+#
 #
 #bin_PROGRAMS = miditest
 #miditest_SOURCES = miditest.cpp
