@@ -35,6 +35,8 @@ NotationVLayout::layout(NotationElement *el)
 
     } else if (el->isNote()) {
 
+        kdDebug(KDEBUG_AREA) << "NotationVLayout::layout()\n";
+
         try {
             int pitch = el->event()->get<Int>("pitch");
 
