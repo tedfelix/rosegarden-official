@@ -27,11 +27,14 @@
 #include <qpushbutton.h>
 #include <qgroupbox.h>
 #include <qcheckbox.h>
+#include <qlayout.h>
 
 #include "audioplugindialog.h"
 #include "audiopluginmanager.h"
 #include "widgets.h"
 #include "rosestrings.h"
+
+#include "rosedebug.h"
 
 namespace Rosegarden
 {
@@ -47,15 +50,16 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     m_index(index),
     m_generating(true)
 {
+    setSizePolicy(QSizePolicy(QSizePolicy::Preferred,
+                              QSizePolicy::Fixed));
+
     QVBox *vbox = makeVBoxMainWidget();
 
     QGroupBox *pluginSelectionBox = new QGroupBox
 	(1, Horizontal, i18n("Plugin"), vbox);
 
-    m_pluginParamsBox = new QGroupBox
-	(1, Horizontal, i18n("Plugin Parameters"), vbox);
-    m_pluginParamsBox->hide();
-    
+    makePluginParamsBox(vbox);
+
     m_pluginList = new RosegardenComboBox(true, pluginSelectionBox);
     m_pluginList->insertItem(i18n("(none)"));
 
@@ -64,19 +68,11 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     // top line
     m_bypass = new QCheckBox(i18n("Bypass"), h);
 
-    connect(m_bypass, SIGNAL(activated()),
-            this, SLOT(slotBypassChanged()));
-
-    // spacing
-    /*QLabel *idLabel =*/ new QLabel("", h);
+    connect(m_bypass, SIGNAL(toggled(bool)),
+            this, SLOT(slotBypassChanged(bool)));
 
     m_pluginId = new QLabel(i18n("<no id>"), h);
     m_pluginId->setAlignment(AlignRight);
-
-    // Store the height so we can resize the whole dialog later
-    // if required
-    //
-    m_headHeight = m_pluginList->height();
 
     connect(m_pluginList, SIGNAL(activated(int)),
             this, SLOT(slotPluginSelected(int)));
@@ -117,6 +113,21 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
 }
 
 void
+AudioPluginDialog::makePluginParamsBox(QWidget *parent)
+{
+    m_pluginParamsBox = new QFrame(parent);
+    //     m_pluginParamsBox = new QGroupBox
+    //         (1, Horizontal, i18n("Plugin Parameters"), vbox);
+    //m_pluginParamsBox->hide();
+
+    m_gridLayout = new QGridLayout(m_pluginParamsBox,
+                                   1, // rows (will expand)
+                                   10 // columns
+                                   );
+
+}
+
+void
 AudioPluginDialog::slotPluginSelected(int number)
 {
     QString caption = strtoqstr(m_instrument->getName()) + QString(" - ");
@@ -132,24 +143,14 @@ AudioPluginDialog::slotPluginSelected(int number)
 
     AudioPlugin *plugin = m_pluginManager->getPlugin(number - 1);
 
-    /*
-    // Destroy all the old widgets
+    // Destroy old param widgets
     //
-    ControlIterator it = m_pluginWidgets.begin();
-    for (; it != m_pluginWidgets.end(); it++)
-        delete (*it);
-    m_pluginWidgets.erase(m_pluginWidgets.begin(), m_pluginWidgets.end());
-    */
+    QWidget* parent = dynamic_cast<QWidget*>(m_pluginParamsBox->parent());
 
-    // Destroy old lines
-    //
-    ControlLineIterator cIt = m_controlLines.begin();
-    for (; cIt != m_controlLines.end(); cIt++)
-        delete (*cIt);
-    m_controlLines.erase(m_controlLines.begin(), m_controlLines.end());
+    delete m_pluginParamsBox;
 
-    int height = 0;
-
+    makePluginParamsBox(parent);
+    
     if (plugin)
     {
         setCaption(caption + plugin->getName());
@@ -175,24 +176,22 @@ AudioPluginDialog::slotPluginSelected(int number)
         // if we've got more than 10 control ports then opt for a slider
         // model so they fit on the screen
 
-        QHBox *controlLine;
-
         for (; it != plugin->end(); it++)
         {
-            if (((float(count))/2.0) == (float(count/2)))
-            {
-		controlLine = new QHBox(m_pluginParamsBox);
-                controlLine->show();
+//             if (((float(count))/2.0) == (float(count/2)))
+//             {
+// 		controlLine = new QHBox(m_pluginParamsBox);
+//                 controlLine->show();
 
-                // store so we can remove it later
-                m_controlLines.push_back(controlLine);
-            }
-            else
-            {
-                // spacer
-                QLabel *label = new QLabel(QString("   "), controlLine);
-                label->show();
-            }
+//                 // store so we can remove it later
+//                 m_controlLines.push_back(controlLine);
+//             }
+//             else
+//             {
+//                 // spacer
+//                 QLabel *label = new QLabel(QString("   "), controlLine);
+//                 label->show();
+//             }
 
 
             // Weed out non-control ports and those which have erroneous
@@ -208,7 +207,8 @@ AudioPluginDialog::slotPluginSelected(int number)
                     inst->addPort(count, 0.0);
 
                 PluginControl *control =
-                    new PluginControl(controlLine,
+                    new PluginControl(m_pluginParamsBox,
+                                      m_gridLayout,
                                       PluginControl::Rotary,
                                       *it,
                                       m_pluginManager,
@@ -216,11 +216,8 @@ AudioPluginDialog::slotPluginSelected(int number)
                                       inst->getPort(count)->value);
 
 
-                connect(control, SIGNAL(valueChanged(int, float)),
-                        this, SLOT(slotPluginPortChanged(int, float)));
-                control->show();
-
-                height += control->height();
+                connect(control, SIGNAL(valueChanged(float)),
+                        this, SLOT(slotPluginPortChanged(float)));
 
                 m_pluginWidgets.push_back(control);
 
@@ -235,32 +232,41 @@ AudioPluginDialog::slotPluginSelected(int number)
 	    shortName = shortName.left(parenIdx);
 	    if (shortName == "Null") shortName = "Plugin";
 	}
-	m_pluginParamsBox->setTitle(i18n("Parameters for %1").arg(shortName));
+	//m_pluginParamsBox->setTitle(i18n("Parameters for %1").arg(shortName));
 	m_pluginParamsBox->show();
 
     } else {
-	m_pluginParamsBox->hide();
+	//m_pluginParamsBox->hide();
     }
 
-    // rather severe for the moment
-    this->setFixedHeight(m_headHeight + height);
-
+    adjustSize();
+    setFixedSize(minimumSizeHint());
 }
 
 void
-AudioPluginDialog::slotPluginPortChanged(int portIndex, float value)
+AudioPluginDialog::slotPluginPortChanged(float value)
 {
+    const QObject* object = sender();
+
+    const PluginControl* control = dynamic_cast<const PluginControl*>(object);
+
+    if (!control) return;
+
+//     RG_DEBUG << "AudioPluginDialog::slotPluginPortChanged("
+//              << value << ") from control "
+//              << control->getIndex()
+//              << endl;
+
     // store the new value
     AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
-    inst->getPort(portIndex)->value = value;
+    inst->getPort(control->getIndex())->value = value;
 
-    emit pluginPortChanged(m_index, portIndex, value);
+    emit pluginPortChanged(m_index, control->getIndex(), value);
 }
 
 void
-AudioPluginDialog::slotBypassChanged()
+AudioPluginDialog::slotBypassChanged(bool bp)
 {
-    bool bp = m_bypass->isChecked();
     AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
 
     if (inst)
@@ -273,12 +279,14 @@ AudioPluginDialog::slotBypassChanged()
 // --------------------- PluginControl -------------------------
 //
 PluginControl::PluginControl(QWidget *parent,
+                             QGridLayout *layout,
                              ControlType type,
                              PluginPort *port,
                              AudioPluginManager *aPM,
                              int index,
                              float initialValue):
-    QHBox(parent),
+    QObject(parent),
+    m_layout(layout),
     m_type(type),
     m_port(port),
     m_multiplier(1.0),
@@ -287,13 +295,15 @@ PluginControl::PluginControl(QWidget *parent,
 {
     QFont plainFont;
     plainFont.setPointSize((plainFont.pointSize() * 9 )/ 10);
-    setFont(plainFont);
+    
 
-    QLabel *title = new QLabel(port->getName(), this);
-    setStretchFactor(title, 20);
+    QLabel *controlTitle = new QLabel(port->getName(), parent);
+    controlTitle->setFont(plainFont);
+    //setStretchFactor(title, 20);
 
-    QLabel *value = new QLabel(this);
-    setStretchFactor(value, 1);
+    QLabel *controlValue = new QLabel(parent);
+    controlValue->setFont(plainFont);
+    //setStretchFactor(value, 1);
 
     if (type == Rotary)
     {
@@ -320,10 +330,10 @@ PluginControl::PluginControl(QWidget *parent,
             lowerBound = swap;
         }
 
-        QLabel *low = new QLabel(QString("%1").arg(lowerBound), this);
+        QLabel *low = new QLabel(QString("%1").arg(lowerBound), parent);
         low->setIndent(10);
         low->setAlignment(AlignRight|AlignBottom);
-        setStretchFactor(low, 1);
+        //setStretchFactor(low, 1);
 
             
 
@@ -335,14 +345,14 @@ PluginControl::PluginControl(QWidget *parent,
         cout << "STEP = " << step << endl;
         */
 
-        m_dial = new RosegardenRotary(this,
+        m_dial = new RosegardenRotary(parent,
                                       lowerBound * m_multiplier, // min
                                       upperBound * m_multiplier, // max
                                       step,                      // step
                                       step * 10.0,
                                       lowerBound * m_multiplier, // initial
                                       30);                       // size
-        setStretchFactor(m_dial, 8);
+        //setStretchFactor(m_dial, 8);
 
         // Ensure that we always have at least fifty steps
         //
@@ -364,24 +374,31 @@ PluginControl::PluginControl(QWidget *parent,
             value = upperBound * m_multiplier;
 
         m_dial->setPosition(value);
-        slotValueChanged(value);
+        emit valueChanged(value);
 
         //cout << "INITIAL VALUE = " << value << endl;
 
         connect(m_dial, SIGNAL(valueChanged(float)),
-                this, SLOT(slotValueChanged(float)));
+                this, SIGNAL(valueChanged(float)));
 
-        QLabel *upp = new QLabel(QString("%1").arg(upperBound), this);
+        QLabel *upp = new QLabel(QString("%1").arg(upperBound), parent);
         upp->setIndent(10);
         upp->setAlignment(AlignLeft|AlignBottom);
-        setStretchFactor(upp, 1);
-    }
-}
+        upp->setFont(plainFont);
+        //setStretchFactor(upp, 1);
 
-void
-PluginControl::slotValueChanged(float value)
-{
-    emit valueChanged(m_index, value/m_multiplier);
+        controlTitle->show();
+        controlValue->show();
+        low->show();
+        m_dial->show();
+        upp->show();
+
+        m_layout->addItem(new QWidgetItem(controlTitle));
+        m_layout->addItem(new QWidgetItem(controlValue));
+        m_layout->addItem(new QWidgetItem(low));
+        m_layout->addItem(new QWidgetItem(m_dial));
+        m_layout->addItem(new QWidgetItem(upp));
+    }
 }
 
 void
@@ -395,4 +412,3 @@ PluginControl::setValue(float value)
 
 
 }
-

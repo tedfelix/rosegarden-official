@@ -43,6 +43,7 @@ class RosegardenComboBox;
 class QGroupBox;
 class QCheckBox;
 class QLabel;
+class QGridLayout;
 
 namespace Rosegarden
 {
@@ -50,7 +51,7 @@ namespace Rosegarden
 class PluginPort;
 class AudioPluginManager;
 
-class PluginControl : public QHBox
+class PluginControl : public QObject
 {
     Q_OBJECT
 public:
@@ -63,6 +64,7 @@ public:
     } ControlType;
 
     PluginControl(QWidget *parent,
+                  QGridLayout *layout,
                   ControlType type,
                   PluginPort *port,
                   AudioPluginManager *pluginManager,
@@ -71,13 +73,16 @@ public:
  
     void setValue(float value);
 
-public slots:
-    void slotValueChanged(float value);
+    int getIndex() const { return m_index; }
 
 signals:
-    void valueChanged(int index, float value);
+    void valueChanged(float value);
 
 protected:
+
+    //--------------- Data members ---------------------------------
+
+    QGridLayout         *m_layout;
 
     ControlType          m_type;
     PluginPort          *m_port;
@@ -107,8 +112,8 @@ public:
 
 public slots:
     void slotPluginSelected(int index);
-    void slotPluginPortChanged(int pluginIndex, float value);
-    void slotBypassChanged();
+    void slotPluginPortChanged(float value);
+    void slotBypassChanged(bool);
 
 signals:
     void pluginSelected(int pluginIndex, int plugin);
@@ -118,19 +123,22 @@ signals:
     void bypassed(int pluginIndex, bool bp);
 
 protected:
+    void makePluginParamsBox(QWidget*);
+
+    //--------------- Data members ---------------------------------
 
     AudioPluginManager  *m_pluginManager;
     Instrument          *m_instrument;
 
-    QGroupBox		*m_pluginParamsBox;
+    QFrame		*m_pluginParamsBox;
     RosegardenComboBox  *m_pluginList;
     QLabel              *m_pluginId;
     QCheckBox		*m_bypass;
 
     std::vector<PluginControl*> m_pluginWidgets;
-    std::vector<QHBox*>         m_controlLines;
+//     std::vector<QHBox*>         m_controlLines;
+    QGridLayout         *m_gridLayout;
 
-    int                  m_headHeight;
     int                  m_index;
 
     bool                 m_generating;
