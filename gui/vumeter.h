@@ -69,12 +69,6 @@ private:
     VUMeterType m_type;
     int         m_level;          // percentage
     int         m_peakLevel;      // percentage
-
-#define ALTERNATIVE_COLOUR_THEOREM_A
-#ifdef ALTERNATIVE_COLOUR_THEOREM_A
-    int         m_lastLevel;
-#endif
-
     int         m_levelStep;
     QTimer      m_fallTimer;
     QTimer      m_peakTimer;

@@ -74,12 +74,27 @@ VUMeter::setLevel(const double &level)
     if (m_level < 0) m_level = 0;
     if (m_level > 100) m_level = 100;
 
+#define ALTERNATIVE_LEVEL_THEOREM_A
+#ifdef ALTERNATIVE_LEVEL_THEOREM_A
+    // at 100% the fall timer should be 40ms, at 50% it should
+    // be 80ms etc -- though beware divide-by-zero
+    int fallTimerInterval = 200;
+    if (m_level > 20) fallTimerInterval = (100/m_level) * 40;
+    if (m_fallTimer.isActive()) {
+	m_fallTimer.changeInterval(fallTimerInterval);
+    } else {
+	m_fallTimer.start(fallTimerInterval);
+	meterStart();
+    }
+#else    
     // Only start the timer when we need it
     if(m_fallTimer.isActive() == false)
     {
         m_fallTimer.start(40); // 40 ms per level fall iteration
         meterStart();
     }
+#endif
+
     // Reset level and reset timer if we're exceeding the
     // current peak
     //
@@ -93,10 +108,6 @@ VUMeter::setLevel(const double &level)
 
         m_peakTimer.start(1000); // milliseconds of peak hold
     }
-
-#ifdef ALTERNATIVE_COLOUR_THEOREM_A
-    m_lastLevel = m_level;
-#endif
 
     QPainter paint(this);
     drawMeterLevel(&paint);
@@ -146,14 +157,9 @@ VUMeter::drawMeterLevel(QPainter* paint)
 
     // Get the colour from the VelocityColour helper
     //
-#ifdef ALTERNATIVE_COLOUR_THEOREM_A
-    QColor mixedColour = m_velocityColour->getColour(m_lastLevel);
-#else
     QColor mixedColour = m_velocityColour->getColour(m_level);
-#endif
     paint->setPen(mixedColour);
     paint->setBrush(mixedColour);
-
 
     // Proper width
     //
