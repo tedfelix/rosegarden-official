@@ -202,8 +202,8 @@ SegmentParameterBox::initBox()
     for(int i = -m_tranposeRange; i < m_tranposeRange + 1; i++)
     {
         m_transposeValue->insertItem(QString("%1").arg(i));
+	if (i == 0) m_transposeValue->setCurrentItem(m_transposeValue->count() - 1);
     }
-    m_transposeValue->setCurrentItem(-1);
 
     m_delays.clear();
 

@@ -36,7 +36,8 @@ namespace Rosegarden
 using std::cerr;
 using std::endl;
 using std::string;
-    
+
+#define DEBUG_NORMALIZE_RESTS 1    
 
 
 Segment::Segment(SegmentType segmentType, timeT startTime) :
@@ -495,12 +496,11 @@ Segment::fillWithRests(timeT startTime, timeT endTime)
     timeT restDuration = endTime - startTime;
     if (restDuration <= 0) return;
 
-/*
-    cerr << "Segment(" << this << ")::fillWithRests: endTime "
-	 << endTime << ", startTime " << startTime << ", composition "
+#ifdef DEBUG_NORMALIZE_RESTS
+    cerr << "fillWithRests (" << startTime << "->" << endTime << "), composition "
 	 << (getComposition() ? "exists" : "does not exist") << ", sigTime "
 	 << sigTime << ", timeSig duration " << ts.getBarDuration() << ", restDuration " << restDuration << endl;
-*/
+#endif
 
     DurationList dl;
     ts.getDurationListForInterval(dl, restDuration, startTime - sigTime);
@@ -520,7 +520,15 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 {
     Profiler profiler("Segment::normalizeRests");
 
+#ifdef DEBUG_NORMALIZE_RESTS
+    cerr << "normalizeRests (" << startTime << "->" << endTime << "), segment starts at " << m_startTime << endl;
+#endif
+
     if (startTime < m_startTime) {
+#ifdef DEBUG_NORMALIZE_RESTS
+	cerr << "normalizeRests: pulling start time back from "
+	     << m_startTime << " to " << startTime << endl;
+#endif
         if (m_composition) m_composition->setSegmentStartTime(this, startTime);
 	else m_startTime = startTime;
     }
@@ -545,6 +553,9 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 	    timeT nextSigTime =
 		composition->getTimeSignatureChange(timeSigNo + 1).first;
 	    if (nextSigTime < endTime) {
+#ifdef DEBUG_NORMALIZE_RESTS
+		cerr << "normalizeRests: divide-and-conquer on timesig at " << nextSigTime << endl;
+#endif
 		normalizeRests(startTime, nextSigTime);
 		normalizeRests(nextSigTime, endTime);
 		return;
@@ -554,18 +565,20 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 
     // First stage: erase all existing non-tupleted rests in this range.
 
-    /*
-    cerr << "Segment::normalizeRests " << startTime << " -> "
-	 << endTime << endl;
-         */
-
     timeT segmentEndTime = m_endTime;
 
     iterator ia = findNearestTime(startTime);
     if (ia == end()) ia = begin();
     if (ia == end()) { // the segment is empty
+#ifdef DEBUG_NORMALIZE_RESTS
+	cerr << "normalizeRests: empty segment" << endl;
+#endif
 	fillWithRests(endTime);
 	return;
+    } else {
+	if (startTime > (*ia)->getNotationAbsoluteTime()) {
+	    startTime = (*ia)->getNotationAbsoluteTime();
+	}
     }
 
     iterator ib = findTime(endTime);
@@ -595,10 +608,13 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
     while (scooter-- != begin()) {
 //	if ((*scooter)->isa(Note::EventRestType)) { //!!! experimental
 	if ((*scooter)->getDuration() > 0) { 
-	    if ((*scooter)->getAbsoluteTime() + (*scooter)->getDuration() !=
+	    if ((*scooter)->getNotationAbsoluteTime() +
+		(*scooter)->getNotationDuration() !=
 		startTime) {
-		startTime = (*scooter)->getAbsoluteTime();
-//		cerr << "Scooting back to " << startTime << endl;
+		startTime = (*scooter)->getNotationAbsoluteTime();
+#ifdef DEBUG_NORMALIZE_RESTS
+		cerr << "normalizeRests: scooting back to " << startTime << endl;
+#endif
 		ia = scooter;
 	    }
 	    break;
@@ -613,6 +629,9 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 	++j;
 	if ((*i)->isa(Note::EventRestType) &&
 	    !(*i)->has(BaseProperties::BEAMED_GROUP_TUPLET_BASE)) {
+#ifdef DEBUG_NORMALIZE_RESTS
+	    cerr << "normalizeRests: erasing rest at " << (*i)->getAbsoluteTime() << endl;
+#endif
 	    erase(i);
 	}
     }
@@ -673,11 +692,11 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 
 	timeT thisNoteStarts = (*i)->getNotationAbsoluteTime();
 
-        /*
-	cerr << "scanning: thisNoteStarts " << thisNoteStarts
+#ifdef DEBUG_NORMALIZE_RESTS
+	cerr << "normalizeRests: scanning: thisNoteStarts " << thisNoteStarts
 	     << ", lastNoteStarts " << lastNoteStarts
 	     << ", lastNoteEnds " << lastNoteEnds << endl;
-             */
+#endif
 
 	if (thisNoteStarts < lastNoteEnds &&
 	    thisNoteStarts > lastNoteStarts) { //!!! experimental
@@ -705,7 +724,9 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 
     for (unsigned int gi = 0; gi < gaps.size(); ++gi) {
 
-	//cerr << "gap " << gi << ": " << gaps[gi].first << " -> " << gaps[gi].second << endl;
+#ifdef DEBUG_NORMALIZE_RESTS
+	cerr << "normalizeRests: gap " << gi << ": " << gaps[gi].first << " -> " << (gaps[gi].first + gaps[gi].second) << endl;
+#endif
 
         startTime = gaps[gi].first;
 	duration = gaps[gi].second;

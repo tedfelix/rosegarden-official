@@ -208,7 +208,7 @@ ChordNameRuler::recalculate(timeT from, timeT to)
 {
     if (!m_ready) return;
 
-    Rosegarden::Profiler profiler("ChordNameRuler::recalculate", true);
+    Rosegarden::Profiler profiler("ChordNameRuler::recalculate");
     NOTATION_DEBUG << "ChordNameRuler[" << this << "]::recalculate" << endl;
 
     bool regetSegments = false;
@@ -394,7 +394,7 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
 
     NOTATION_DEBUG << "*** Chord Name Ruler: paintEvent" << endl;
 
-    Rosegarden::Profiler profiler1("ChordNameRuler::paintEvent (whole)", true);
+    Rosegarden::Profiler profiler1("ChordNameRuler::paintEvent (whole)");
 
     QPainter paint(this);
     paint.setPen(RosegardenGUIColours::ChordNameRulerForeground);
@@ -413,7 +413,7 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
 
     if (!m_chordSegment) return;
 
-    Rosegarden::Profiler profiler2("ChordNameRuler::paintEvent (paint)", true);
+    Rosegarden::Profiler profiler2("ChordNameRuler::paintEvent (paint)");
 
     QRect boundsForHeight = m_fontMetrics.boundingRect("^j|lM");
     int fontHeight = boundsForHeight.height();
