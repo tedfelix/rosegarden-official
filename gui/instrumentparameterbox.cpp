@@ -112,24 +112,6 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
 	    this,
 	    SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)));
 
-/* Removed mute, solo and record buttons from audio IPB for symmetry
-   with MIDI IPB and to save space
-
-    connect(m_audioInstrumentParameters,
-            SIGNAL(muteButton(Rosegarden::InstrumentId, bool)),
-            this, 
-            SIGNAL(setMute(Rosegarden::InstrumentId, bool)));
-    
-    connect(m_audioInstrumentParameters,
-            SIGNAL(soloButton(Rosegarden::InstrumentId, bool)),
-            this,
-            SIGNAL(setSolo(Rosegarden::InstrumentId, bool)));
-    
-    connect(m_audioInstrumentParameters,
-            SIGNAL(recordButton(Rosegarden::InstrumentId, bool)),
-            this,
-            SIGNAL(setRecord(Rosegarden::InstrumentId, bool)));
-*/
     connect(m_audioInstrumentParameters,
 	    SIGNAL(selectPlugin(QWidget *, Rosegarden::InstrumentId, int)),
 	    this,
@@ -239,46 +221,6 @@ InstrumentParameterBox::useInstrument(Instrument *instrument)
     
 }
 
-/*
-void
-InstrumentParameterBox::setMute(bool value)
-{
-    if (m_selectedInstrument && 
-	(m_selectedInstrument->getType() == Instrument::Audio ||
-	 m_selectedInstrument->getType() == Instrument::SoftSynth))
-    {
-        m_audioInstrumentParameters->slotSetMute(value);
-    }
-}
-*/
-
-/*
- * Set the record state of the audio instrument parameter panel
- */
-/*
-void
-InstrumentParameterBox::setRecord(bool value)
-{
-    if (m_selectedInstrument &&
-	(m_selectedInstrument->getType() == Instrument::Audio ||
-	 m_selectedInstrument->getType() == Instrument::SoftSynth))
-    {
-        m_audioInstrumentParameters->slotSetRecord(value);
-    }
-}
-
-void
-InstrumentParameterBox::setSolo(bool value)
-{
-    if (m_selectedInstrument &&
-	(m_selectedInstrument->getType() == Instrument::Audio ||
-	 m_selectedInstrument->getType() == Instrument::SoftSynth))
-    {
-        m_audioInstrumentParameters->slotSetSolo(value);
-    }
-}
-*/
-    
 
 void
 InstrumentParameterBox::slotUpdateAllBoxes()
@@ -379,52 +321,6 @@ AudioInstrumentParameterPanel::slotSelectAudioRecordLevel(float dB)
     }
 }
 
-/*
-
-void 
-AudioInstrumentParameterPanel::slotSetMute(bool value)
-{
-    RG_DEBUG << "AudioInstrumentParameterPanel::slotSetMute - "
-             << "value = " << value << endl;
-    m_audioFader->m_muteButton->setOn(value);
-    emit instrumentParametersChanged(m_selectedInstrument->getId());
-}
-
-void
-AudioInstrumentParameterPanel::slotSetSolo(bool value)
-{
-    RG_DEBUG << "AudioInstrumentParameterPanel::slotSetSolo - "
-             << "value = " << value << endl;
-    m_audioFader->m_soloButton->setOn(value);
-    emit instrumentParametersChanged(m_selectedInstrument->getId());
-}
-
-void 
-AudioInstrumentParameterPanel::slotSetRecord(bool value)
-{
-    RG_DEBUG << "AudioInstrumentParameterPanel::slotSetRecord - "
-             << "value = " << value << endl;
-
-    //if (m_selectedInstrument)
-        //cout << "INSTRUMENT NAME = " 
-               //<< m_selectedInstrument->getName() << endl;
-
-    // Set the background colour for the button
-    //
-    if (value)
-    {
-        m_audioFader->m_recordButton->
-            setPalette(QPalette(RosegardenGUIColours::ActiveRecordTrack));
-    }
-    else
-    {
-        m_audioFader->m_recordButton->unsetPalette();
-    }
-
-    m_audioFader->m_recordButton->setOn(value);
-    emit instrumentParametersChanged(m_selectedInstrument->getId());
-}
-*/
 
 void
 AudioInstrumentParameterPanel::slotPluginSelected(Rosegarden::InstrumentId instrumentId,
@@ -445,7 +341,7 @@ AudioInstrumentParameterPanel::slotPluginSelected(Rosegarden::InstrumentId instr
     QString noneText;
 
     if (index == Rosegarden::Instrument::SYNTH_PLUGIN_POSITION) {
-	button = m_synthButton;
+	button = m_audioFader->m_synthButton;
 	noneText = i18n("<no synth>");
     } else {
 	button = m_audioFader->m_plugins[index];
@@ -525,7 +421,7 @@ AudioInstrumentParameterPanel::setButtonColour(
     QPushButton *button = 0;
 
     if (pluginIndex == Rosegarden::Instrument::SYNTH_PLUGIN_POSITION) {
-	button = m_synthButton;
+	button = m_audioFader->m_synthButton;
     } else {
 	button = m_audioFader->m_plugins[pluginIndex];
     }
@@ -566,26 +462,15 @@ AudioInstrumentParameterPanel::setButtonColour(
 
 AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenGUIDoc* doc, QWidget* parent)
     : InstrumentParameterPanel(doc, parent),
-      m_audioFader(new AudioFaderWidget(this, AudioFaderWidget::FaderBox))
+      m_audioFader(new AudioFaderBox(this))
 {
-    QGridLayout *gridLayout = new QGridLayout(this, 3, 2, 5, 5);
+    QGridLayout *gridLayout = new QGridLayout(this, 2, 2, 5, 5);
 
     // Instrument label : first row, all cols
     gridLayout->addMultiCellWidget(m_instrumentLabel, 0, 0, 0, 1, AlignCenter);
 
-    m_synthButton = new QPushButton(this);
-    m_synthButton->setText(i18n("<no synth>"));
-    QToolTip::add(m_synthButton, i18n("Synth plugin button"));
-    connect(m_synthButton, SIGNAL(clicked()), this, SLOT(slotSynthButtonClicked()));
-    gridLayout->addMultiCellWidget(m_synthButton, 1, 1, 0, 1, AlignCenter);
-
-//    m_synthGUIButton = new QPushButton(this);
-//    m_synthGUIButton->setText(i18n("GUI"));
-//    connect(m_synthGUIButton, SIGNAL(clicked()), this, SLOT(slotSynthGUIButtonClicked()));
-//    gridLayout->addMultiCellWidget(m_synthGUIButton, 1, 1, 1, 1, AlignLeft);
-
     // fader and connect it
-    gridLayout->addMultiCellWidget(m_audioFader, 2, 2, 0, 1);
+    gridLayout->addMultiCellWidget(m_audioFader, 1, 1, 0, 1);
 
     connect(m_audioFader, SIGNAL(audioChannelsChanged(int)),
             this, SLOT(slotAudioChannels(int)));
@@ -598,16 +483,7 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenGUIDoc* d
 
     connect(m_audioFader->m_recordFader, SIGNAL(faderChanged(float)),
             this, SLOT(slotSelectAudioRecordLevel(float)));
-/*
-    connect(m_audioFader->m_muteButton, SIGNAL(clicked()),
-            this, SLOT(slotMute()));
 
-    connect(m_audioFader->m_soloButton, SIGNAL(clicked()),
-            this, SLOT(slotSolo()));
-
-    connect(m_audioFader->m_recordButton, SIGNAL(clicked()),
-            this, SLOT(slotRecord()));
-*/
     connect(m_audioFader->m_pan, SIGNAL(valueChanged(float)),
             this, SLOT(slotSetPan(float)));
 
@@ -616,6 +492,9 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenGUIDoc* d
 
     connect(m_audioFader->m_audioInput, SIGNAL(changed()),
             this, SLOT(slotAudioRoutingChanged()));
+
+    connect(m_audioFader->m_synthButton, SIGNAL(clicked()),
+	    this, SLOT(slotSynthButtonClicked()));
 }
 
 void
@@ -631,43 +510,7 @@ AudioInstrumentParameterPanel::slotSynthGUIButtonClicked()
 			Rosegarden::Instrument::SYNTH_PLUGIN_POSITION);
 }
 */
-/*
-void
-AudioInstrumentParameterPanel::slotMute()
-{
-    RG_DEBUG << "AudioInstrumentParameterPanel::slotMute" << endl;
-    emit muteButton(m_selectedInstrument->getId(),
-                    m_audioFader->m_muteButton->isOn());
-}
 
-void
-AudioInstrumentParameterPanel::slotSolo()
-{
-    RG_DEBUG << "AudioInstrumentParameterPanel::slotSolo" << endl;
-    emit soloButton(m_selectedInstrument->getId(),
-                    m_audioFader->m_soloButton->isOn());
-}
-
-void
-AudioInstrumentParameterPanel::slotRecord()
-{
-    RG_DEBUG << "AudioInstrumentParameterPanel::slotRecord - " 
-             << " isOn = " <<  m_audioFader->m_recordButton->isOn() << endl;
-
-    // At the moment we can't turn a recording button off
-    //
-    if (m_audioFader->m_recordButton->isOn())
-    {
-        m_audioFader->m_recordButton->setOn(true);
-        emit recordButton(m_selectedInstrument->getId(),
-                          m_audioFader->m_recordButton->isOn());
-    }
-    else
-    {
-        m_audioFader->m_recordButton->setOn(true);
-    }
-}
-*/
 void
 AudioInstrumentParameterPanel::slotSetPan(float pan)
 {
@@ -693,11 +536,7 @@ AudioInstrumentParameterPanel::setAudioMeter(float dBleft, float dBright)
     {
 	// Always set stereo, because we have to reflect what's happening
 	// with the pan setting even on mono tracks
-//        if (m_selectedInstrument->getAudioChannels() == 1) {
-//	    m_audioFader->m_vuMeter->setLevel(dBleft);
-//	} else {
-	    m_audioFader->m_vuMeter->setLevel(dBleft, dBright);
-//	}
+	m_audioFader->m_vuMeter->setLevel(dBleft, dBright);
     }
 }
 
@@ -717,14 +556,6 @@ AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
     m_audioFader->slotSetInstrument(&m_doc->getStudio(), instrument);
 
     int start = 0;
-    if (instrument->getType() == Rosegarden::Instrument::SoftSynth) {
-	m_synthButton->show();
-//	m_synthGUIButton->show();
-	start = -1;
-    } else {
-	m_synthButton->hide();
-//	m_synthGUIButton->hide();
-    }
 
     for (int i = start; i < int(m_audioFader->m_plugins.size()); i++)
     {
@@ -734,7 +565,7 @@ AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
 
 	if (i == -1) {
 	    index = Rosegarden::Instrument::SYNTH_PLUGIN_POSITION;
-	    button = m_synthButton;
+	    button = m_audioFader->m_synthButton;
 	    noneText = i18n("<no synth>");
 	} else {
 	    index = i;

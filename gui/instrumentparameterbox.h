@@ -42,7 +42,7 @@ class KComboBox;
 class RosegardenGUIDoc;
 class QWidgetStack;
 class AudioVUMeter;
-class AudioFaderWidget;
+class AudioFaderBox;
 
 namespace Rosegarden
 {
@@ -75,14 +75,6 @@ public:
 
     void setAudioMeter(float dBleft, float dBright);
 
-    // If currently showing this track's instrument then toggle
-    // the mute button on the display
-    //
-/*
-    void setMute(bool value);
-    void setSolo(bool value);
-    void setRecord(bool value);
-*/
     void setDocument(RosegardenGUIDoc* doc);
 
 public slots:
@@ -108,11 +100,7 @@ signals:
 
     void selectPlugin(QWidget*, Rosegarden::InstrumentId id, int index);
     void startPluginGUI(Rosegarden::InstrumentId id, int index);
-/*
-    void setMute(Rosegarden::InstrumentId, bool value);
-    void setSolo(Rosegarden::InstrumentId, bool value);
-    void setRecord(Rosegarden::InstrumentId, bool value);
-*/
+
     void instrumentParametersChanged(Rosegarden::InstrumentId);
 
 protected:
@@ -177,11 +165,9 @@ public:
     //
     void setButtonColour(int pluginIndex, bool bypassState, 
                          const QColor &color);
-/*
-    void setMute(bool value);
-*/
+
 public slots:
-    // From AudioFaderWidget
+    // From AudioFaderBox
     //
     void slotSelectAudioLevel(float dB);
     void slotSelectAudioRecordLevel(float dB);
@@ -190,20 +176,8 @@ public slots:
     void slotSelectPlugin(int index);
 
     // From the parameter box clicks
-/*
-    void slotMute();
-    void slotSolo();
-    void slotRecord();
-*/
     void slotSetPan(float pan);
 
-    // External things set our button states here
-    //
-/*
-    void slotSetMute(bool value);
-    void slotSetSolo(bool value);
-    void slotSetRecord(bool value);
-*/
     // From Plugin dialog
     //
     void slotPluginSelected(Rosegarden::InstrumentId id, int index, int plugin);
@@ -213,11 +187,6 @@ public slots:
 //    void slotSynthGUIButtonClicked();
 
 signals:
-/*
-    void muteButton(Rosegarden::InstrumentId, bool state);
-    void soloButton(Rosegarden::InstrumentId, bool state);
-    void recordButton(Rosegarden::InstrumentId, bool state);
-*/
     void selectPlugin(QWidget *, Rosegarden::InstrumentId, int index);
     void instrumentParametersChanged(Rosegarden::InstrumentId);
     void startPluginGUI(Rosegarden::InstrumentId, int index);
@@ -225,9 +194,8 @@ signals:
 protected:
     //--------------- Data members ---------------------------------
 
-    QPushButton *m_synthButton;
 //    QPushButton *m_synthGUIButton;
-    AudioFaderWidget   *m_audioFader;
+    AudioFaderBox   *m_audioFader;
 
 private:
 

@@ -256,30 +256,15 @@ public:
 };
 
 
-class AudioFaderWidget : public QFrame
+class AudioFaderBox : public QFrame
 {
     Q_OBJECT
 
 public:
-    enum LayoutType {
-	FaderStrip,
-	FaderBox
-    };
-
-    //!!! We've rather abandoned the FaderStrip mode -- the mixer no
-    //longer uses it.  Maybe we should rip it out again rather than
-    //just let it rot.  This class is a complete mess anyway, not
-    //least because it now needs to know the studio &c (in order to
-    //construct the audio route menus) yet still expects its owner to
-    //set instrument-related data on all the other widgets.
-    
-    AudioFaderWidget(QWidget *parent,
-                     LayoutType type,
-		     QString id = "",
-		     bool haveInOut = true,
-		     bool havePlugins = true,
-		     bool haveMiscButtons = true, // solo, record, mono/stereo
-                     const char *name = 0);
+    AudioFaderBox(QWidget *parent,
+		  QString id = "",
+		  bool haveInOut = true,
+		  const char *name = 0);
 
     void setAudioChannels(int);
 
@@ -287,19 +272,13 @@ public:
 
     bool owns(const QObject *object);
 
+    QPushButton               *m_synthButton;
     std::vector<QPushButton*>  m_plugins;
-
-    QGridLayout               *m_grid;
 
     AudioVUMeter              *m_vuMeter;
 
     RosegardenFader           *m_fader;
     RosegardenFader           *m_recordFader;
-/*
-    QPushButton               *m_muteButton;
-    QPushButton               *m_soloButton;
-    QPushButton               *m_recordButton;
-*/
     RosegardenRotary          *m_pan;
 
     QPixmap                    m_monoPixmap;

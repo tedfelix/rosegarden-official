@@ -236,16 +236,11 @@ PlayableAudioFile::PlayableAudioFile(InstrumentId instrumentId,
     m_targetSampleRate(targetSampleRate),
     m_runtimeSegmentId(-1),
     m_isSmallFile(false),
-//    m_workBufferSize(0),
-//    m_rawFileBuffer(0),
-//    m_rawFileBufferSize(0),
     m_currentScanPoint(RealTime::zeroTime),
     m_autoFade(false),
     m_fadeInTime(RealTime::zeroTime),
     m_fadeOutTime(RealTime::zeroTime)
 {
-//    m_smallFileSize = 0;
-
 #ifdef DEBUG_PLAYABLE
     std::cerr << "PlayableAudioFile::PlayableAudioFile - creating " << this << " for instrument " << instrumentId << std::endl;
 #endif
@@ -336,13 +331,7 @@ PlayableAudioFile::~PlayableAudioFile()
     if (m_isSmallFile) {
 	m_smallFileCache.decrementReference(m_audioFile);
     }
-/*
-    for (size_t i = 0; i < m_workBuffers.size(); ++i) {
-	delete[] m_workBuffers[i];
-    }
 
-    delete[] m_rawFileBuffer;
-*/
 #ifdef DEBUG_PLAYABLE
 //    std::cerr << "PlayableAudioFile::~PlayableAudioFile - destroying - " << this << std::endl;
 #endif

@@ -73,7 +73,8 @@ SegmentParameterBox::initBox()
     // magic numbers: 13 is the height of the menu pixmaps, 10 is just 10
     int comboHeight = std::max(fontMetrics.height(), 13) + 10;
 
-    QGridLayout *gridLayout = new QGridLayout(this, 6, 2, 8, 1);
+//    QFrame *frame = new QFrame(this);
+    QGridLayout *gridLayout = new QGridLayout(this, 6, 4, 4, 2);
 
     QLabel *label = new QLabel(i18n("Label"), this);
     QLabel *repeatLabel    = new QLabel(i18n("Repeat"), this);
@@ -93,11 +94,12 @@ SegmentParameterBox::initBox()
     m_label = new QLabel(hbox);
     m_label->setFont(font);
     m_label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-    m_label->setFixedWidth(100);
+//    m_label->setFixedWidth(100);
 
     // .. and edit button
     m_labelButton = new QPushButton("...", hbox);
     m_labelButton->setFont(font);
+    m_labelButton->setFixedWidth(25);
 
     connect(m_labelButton, SIGNAL(released()),
             SLOT(slotEditSegmentLabel()));
@@ -187,34 +189,34 @@ SegmentParameterBox::initBox()
     m_fadeInLabel->setFont(font);
     m_fadeOutLabel->setFont(font);
 
-    gridLayout->addRowSpacing(0, 8);
+    gridLayout->addRowSpacing(0, 12);
 
-    gridLayout->addWidget(label,         1, 0, AlignLeft);
-    gridLayout->addWidget(hbox,       1, 1, AlignLeft);
+    gridLayout->addWidget(label, 1, 0, AlignRight);
+    gridLayout->addMultiCellWidget(hbox, 1, 1, 1, 3);
 
-    gridLayout->addWidget(repeatLabel,   2, 0, AlignLeft);
+    gridLayout->addWidget(repeatLabel, 2, 0, AlignRight);
     gridLayout->addWidget(m_repeatValue, 2, 1, AlignLeft);
 
-    gridLayout->addWidget(quantizeLabel,   3, 0, AlignLeft);
+    gridLayout->addWidget(transposeLabel, 2, 2, AlignRight);
+    gridLayout->addWidget(m_transposeValue, 2, 3);
+
+    gridLayout->addWidget(quantizeLabel, 3, 0, AlignRight);
     gridLayout->addWidget(m_quantizeValue, 3, 1);
 
-    gridLayout->addWidget(transposeLabel,   4, 0, AlignLeft);
-    gridLayout->addWidget(m_transposeValue, 4, 1);
+    gridLayout->addWidget(delayLabel, 3, 2, AlignRight);
+    gridLayout->addWidget(m_delayValue, 3, 3);
 
-    gridLayout->addWidget(delayLabel,   5, 0, AlignLeft);
-    gridLayout->addWidget(m_delayValue, 5, 1);
+    gridLayout->addWidget(colourLabel, 4, 0, AlignRight);
+    gridLayout->addMultiCellWidget(m_colourValue, 4, 4, 1, 3);
 
-    gridLayout->addWidget(colourLabel,   6, 0, AlignLeft);
-    gridLayout->addWidget(m_colourValue, 6, 1);
+    m_autoFadeLabel->hide();
+    m_autoFadeBox->hide();
 
-    gridLayout->addWidget(m_autoFadeLabel, 7, 0, AlignLeft);
-    gridLayout->addWidget(m_autoFadeBox,  7, 1);
+    gridLayout->addWidget(m_fadeInLabel,   5, 0, AlignRight);
+    gridLayout->addWidget(m_fadeInSpin,  5, 1);
 
-    gridLayout->addWidget(m_fadeInLabel,   8, 0, AlignLeft);
-    gridLayout->addWidget(m_fadeInSpin,  8, 1);
-
-    gridLayout->addWidget(m_fadeOutLabel,  9, 0, AlignLeft);
-    gridLayout->addWidget(m_fadeOutSpin, 9, 1);
+    gridLayout->addWidget(m_fadeOutLabel,  5, 2, AlignRight);
+    gridLayout->addWidget(m_fadeOutSpin, 5, 3);
 
     // populate the quantize combo
     //
@@ -243,7 +245,7 @@ SegmentParameterBox::initBox()
 
     m_delays.clear();
 
-    for (int i = 0; i < 9; i++)
+    for (int i = 0; i < 6; i++)
     {
 	Rosegarden::timeT time = 0;
 	if (i > 0 && i < 6) {
@@ -645,6 +647,11 @@ SegmentParameterBox::populateBoxFromSegments()
         m_fadeInSpin->blockSignals(true);
         m_fadeOutSpin->blockSignals(true);
 
+        m_fadeInLabel->show();
+        m_fadeInSpin->show();
+        m_fadeOutLabel->show();
+        m_fadeOutSpin->show();
+
         m_autoFadeLabel->setEnabled(true);
         m_autoFadeBox->setEnabled(true);
         m_fadeInLabel->setEnabled(true);
@@ -676,6 +683,13 @@ SegmentParameterBox::populateBoxFromSegments()
         m_fadeInSpin->setEnabled(false);
         m_fadeOutLabel->setEnabled(false);
         m_fadeOutSpin->setEnabled(false);
+
+        m_autoFadeLabel->hide();
+        m_autoFadeBox->hide();
+        m_fadeInLabel->hide();
+        m_fadeInSpin->hide();
+        m_fadeOutLabel->hide();
+        m_fadeOutSpin->hide();
 
         m_autoFadeBox->setChecked(false);
         m_fadeInSpin->setValue(0);
@@ -950,6 +964,9 @@ SegmentParameterBox::slotFadeInChanged(int value)
     if (m_segments.size() == 0)
         return;
 
+    if (value == 0 && m_fadeOutSpin->value() == 0) slotAudioFadeChanged(QButton::Off);
+    else slotAudioFadeChanged(QButton::On);
+
     // Convert from ms
     //
     Rosegarden::RealTime fadeInTime(value/1000, (value % 1000) * 1000000);
@@ -970,6 +987,9 @@ SegmentParameterBox::slotFadeOutChanged(int value)
 
     if (m_segments.size() == 0)
         return;
+
+    if (value == 0 && m_fadeInSpin->value() == 0) slotAudioFadeChanged(QButton::Off);
+    else slotAudioFadeChanged(QButton::On);
 
     // Convert from ms
     //
