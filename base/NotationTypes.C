@@ -643,7 +643,8 @@ TimeSignature::getTimeIntervalAsRests(int startTime,
     int time = startTime,
         unitDuration = getUnitDuration();
 
-    for (int len = 0; len < duration; ++len, time += unitDuration) {
+    for (int len = 0; len < duration;
+         len += unitDuration, time += unitDuration) {
         Event *e = new Event;
         e->setType("rest");
         e->setDuration(unitDuration);
