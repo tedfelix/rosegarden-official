@@ -974,15 +974,7 @@ RosegardenGUIApp::getSequencerSlice(const long &sliceStartSec,
     mappComp.setStartTime(Rosegarden::RealTime(sliceStartSec, sliceStartUsec));
     mappComp.setEndTime(Rosegarden::RealTime(sliceEndSec, sliceEndUsec));
 
-/*
-    std::cerr << "GET SLICE AT " << sliceStartSec << "s and " << sliceStartUsec << "usecs" << endl;
-    std::cerr << "          TO " << sliceEndSec << "s and " << sliceEndUsec << "usecs" << endl;
-*/
-
-/*
-    timeT sliceStartElapsed =
-      m_doc->getComposition().getElapsedTimeForRealTime(mappComp.getStartTime());
-*/
+    //timeT sliceStartElapsed = m_doc->getComposition().getElapsedTimeForRealTime(mappComp.getStartTime());
 
     timeT sliceEndElapsed =
       m_doc->getComposition().getElapsedTimeForRealTime(mappComp.getEndTime());
@@ -1039,8 +1031,8 @@ RosegardenGUIApp::getSequencerSlice(const long &sliceStartSec,
 
             // Eliminate events before our required time
             //
-            if ( eventTime > mappComp.getStartTime() &&
-                 eventTime < mappComp.getEndTime())
+            if ( eventTime >= mappComp.getStartTime() &&
+                 eventTime <= mappComp.getEndTime())
             {
                 // insert event
                 Rosegarden::MappedEvent *me =
@@ -1067,6 +1059,8 @@ void RosegardenGUIApp::importMIDI()
     QString tmpfile;
     KIO::NetAccess::download(url, tmpfile);
     importMIDIFile(tmpfile);
+
+    actionCollection()->action("move")->activate();
   
     KIO::NetAccess::removeTempFile( tmpfile );
 }
@@ -1358,11 +1352,11 @@ void RosegardenGUIApp::fastforward()
 {
     Rosegarden::Composition &composition = m_doc->getComposition();
 
-    timeT position = composition.getPosition();
+    timeT position = composition.getPosition() + 1;
 
     cerr<<"RosegardenGUIApp::fastforward:position="<<position<<endl;
 
-    int  barNumber = composition.getBarNumber(position, false);
+    int barNumber = composition.getBarNumber(position, false);
     Rosegarden::RealTime jumpTo = composition.getElapsedRealTime(composition.getBarRange(barNumber + 1, false).first);
 
 

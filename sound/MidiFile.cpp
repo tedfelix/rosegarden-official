@@ -468,8 +468,8 @@ MidiFile::convertToRosegarden()
     MidiTrackIterator midiEvent, noteOffSearch;
     Rosegarden::Segment *rosegardenSegment;
     Rosegarden::Event *rosegardenEvent;
-    unsigned int compositionTrack = 0;
-    string trackName("Imported MIDI");
+    Rosegarden::TrackId compositionTrack = 0;
+    string trackName;
     bool noteOffFound;
     bool notesOnTrack;
 
@@ -510,6 +510,7 @@ MidiFile::convertToRosegarden()
     {
 	segmentTime = 0;
 	notesOnTrack = false;
+        trackName = string("Imported MIDI");
 
 	// Convert the deltaTime to an absolute time since
 	// the start of the segment.  The addTime method 
@@ -572,6 +573,14 @@ MidiFile::convertToRosegarden()
 	    rosegardenSegment->setTrack(compositionTrack);
 	    rosegardenSegment->setStartIndex(0);
 
+            track = new Rosegarden::Track(compositionTrack,
+                                          false,
+                                          Rosegarden::Track::Midi,
+                                          trackName,
+                                          compositionTrack,
+                                          0);
+
+            composition->addTrack(track);
 	    // add the Segment to the Composition and increment the
 	    // Rosegarden segment number
 	    //
@@ -609,10 +618,9 @@ MidiFile::convertToRosegarden()
 		case MIDI_COPYRIGHT_NOTICE:
 		    break;
                     
-                    // Set the track name
-                    //
 		case MIDI_TRACK_NAME:
-                    trackName = midiEvent->metaMessage();
+                    if (rosegardenSegment)
+                        track->setLabel(midiEvent->metaMessage());
 		    break;
 
 		case MIDI_INSTRUMENT_NAME:
@@ -634,7 +642,6 @@ MidiFile::convertToRosegarden()
 		    break;
 
 		case MIDI_END_OF_TRACK:
-
 		    if (rosegardenSegment) {
 			if (endOfLastNote < rosegardenTime) {
 			    rosegardenSegment->fillWithRests(rosegardenTime);
@@ -778,18 +785,6 @@ MidiFile::convertToRosegarden()
 			    rosegardenSegment->end(),
 			    BaseProperties::GROUP_TYPE_BEAMED);
 	}
-
-
-        // Create and insert a new Track object
-        //
-        track = new Rosegarden::Track((int) i,
-                                      false,
-                                      Rosegarden::Track::Midi,
-                                      trackName,
-                                      (int) i,
-                                      0);
-
-        composition->addTrack(track);
 
     }
 

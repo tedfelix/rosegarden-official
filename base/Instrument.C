@@ -39,7 +39,7 @@ Instrument::Instrument():
 {
 }
 
-Instrument::Instrument(const int &id,
+Instrument::Instrument(const InstrumentId &id,
                        const InstrumentType &it,
                        const std::string &name):
     m_id(id),

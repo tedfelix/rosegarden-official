@@ -34,18 +34,22 @@
 namespace Rosegarden
 {
 
+typedef unsigned int InstrumentId;
+
 class Instrument : public XmlExportable
 {
 public:
     enum InstrumentType { Midi, Audio };
 
     Instrument();
-    Instrument(const int &id, const InstrumentType &it, const std::string &name);
+    Instrument(const InstrumentId &id,
+               const InstrumentType &it,
+               const std::string &name);
     ~Instrument();
 
     std::string getName() { return m_name; }
     InstrumentType getInstrumentType() { return m_type; }
-    int getID() const { return m_id; }
+    InstrumentId getID() const { return m_id; }
 
     int getMidiChannel() { return m_midiChannel; }
     int getMidiTranspose() { return m_midiTranspose; }
@@ -63,7 +67,7 @@ public:
 
 private:
 
-    int m_id;
+    InstrumentId m_id;
     std::string m_name;
     InstrumentType m_type;
     

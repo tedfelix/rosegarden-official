@@ -44,6 +44,8 @@
 namespace Rosegarden
 {
 
+typedef unsigned int TrackId;
+
 class Track : public XmlExportable
 {
 
@@ -51,15 +53,15 @@ public:
     enum TrackType { Midi, Audio };
 
     Track();
-    Track(const int &id, const bool &muted,
+    Track(const TrackId &id, const bool &muted,
           const TrackType &tt, const std::string &label,
-          const int &position, const int &instrument);
+          const unsigned int &position, const int &instrument);
     ~Track();
 
-    int getID() const { return m_id; }
+    TrackId getID() const { return m_id; }
     bool isMuted() { return m_muted; }
     int getPosition() { return m_position; }
-    int getInstrument() { return m_instrument; }
+    unsigned int getInstrument() { return m_instrument; }
     std::string const getLabel() { return m_label; }
     TrackType getType() { return m_type; }
 
@@ -76,7 +78,7 @@ public:
 
 private:
 
-    int       m_id;
+    TrackId       m_id;
     bool      m_muted;
     TrackType m_type;
     std::string    m_label;

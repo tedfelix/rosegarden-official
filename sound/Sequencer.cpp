@@ -325,30 +325,32 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition mappedComp,
         event.command.data1 = (*i)->getPitch();     // pitch
         event.command.data2 = (*i)->getVelocity();  // velocity
 
-        // Test our timing
+        // Here's a little check to test out timing - if
+        // the event TimeStamp is later than current time
+        // then we've missed an event - so flag it
+        //
         Arts::TimeStamp now = m_midiPlayPort.time();
-        int secAhead = event.time.sec - now.sec;
-        int uSecAhead = event.time.usec - now.sec;
 
+        int secAhead = event.time.sec - now.sec;
+        int uSecAhead = event.time.usec - now.usec;
+
+        // Adjust for this
         if (uSecAhead < 0) 
         {
             uSecAhead += 1000000;
-
-            // add a second of lag if they're different
-            if ( event.time.sec > now.sec )
             secAhead++;
         }
 
         if (secAhead < 0)
         {
-            std::cerr << "Failed to process NOTE events in time - lagging by "
-              << secAhead << "s and " << uSecAhead << "ms" << endl;
+            std::cerr <<"Sequencer::processMidiOut: MIDI processing lagging by " << -secAhead << "s and " << uSecAhead << "ms" << endl;
         }
 
-        // if a NOTE ON
-        // send the event out
+        // Send the event out to the MIDI port
+        //
         m_midiPlayPort.processEvent(event);
 
+#if 0
         int secFromStart = event.time.sec - m_playStartTime.sec;
         int usecFromStart = event.time.usec - m_playStartTime.usec;
 
@@ -359,7 +361,6 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition mappedComp,
         }
 
 
-#if 0
         cout << "Event sent to aRts at " << secFromStart << "s & "
              << usecFromStart << "ms" << endl;
 #endif
@@ -432,6 +433,7 @@ Sequencer::processNotesOff(const Rosegarden::RealTime &midiTime)
             m_noteOffQueue.erase(i);
         }
     }
+
 }
 
 // Force all pending note offs to stop immediately.

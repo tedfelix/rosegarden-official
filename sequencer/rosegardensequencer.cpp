@@ -41,7 +41,7 @@ RosegardenSequencerApp::RosegardenSequencerApp():
     m_lastFetchSongPosition(0, 0),
     m_fetchLatency(0, 100000),
     m_playLatency(0, 200000),
-    m_readAhead(0, 80000)
+    m_readAhead(0, 50000)
 {
     // Without DCOP we are nothing
     QCString realAppId = kapp->dcopClient()->registerAs(kapp->name(), false);
@@ -187,7 +187,7 @@ RosegardenSequencerApp::fetchEvents(const Rosegarden::RealTime &start,
 bool
 RosegardenSequencerApp::startPlaying()
 {
-    // Fetch up to m_playLatency ahead
+    // Fetch up to m_readHead microseconds worth of events
     //
     m_lastFetchSongPosition = m_songPosition + m_readAhead;
 
@@ -198,7 +198,7 @@ RosegardenSequencerApp::startPlaying()
     // Send the first events (starting the clock)
     m_sequencer->processMidiOut( *fetchEvents(m_songPosition,
                                               m_songPosition + m_readAhead),
-                                 m_playLatency );
+                                              m_playLatency );
 
     return true;
 }
