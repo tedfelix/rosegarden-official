@@ -777,8 +777,8 @@ NotationHLayout::positionNote(StaffType &staff,
     // the right thing to do.
 
     if (delta > 2 * noteWidth) {
-        int shift = (delta - 2 * noteWidth) / 4;
-        shift = std::min(shift, (m_npf.getNoteBodyWidth() * 3));
+        int shift = (delta - 2 * noteWidth) / 5;
+        shift = std::min(shift, (m_npf.getNoteBodyWidth() * 3 / 2));
         note->setLayoutX(note->getLayoutX() + shift);
     }
 

@@ -264,7 +264,7 @@ Track::iterator Track::findContiguousPrevious(Track::iterator el) const
 
     iterator i = --el;
 
-    for(; i != begin(); --i) {
+    while (true) {
         std::string iType = (*i)->getType();
 
         if (iType == reject) {
@@ -275,6 +275,8 @@ Track::iterator Track::findContiguousPrevious(Track::iterator el) const
             success = true;
             break;
         }
+	if (i == begin()) break;
+	--i;
     }
 
     if (success) return i;

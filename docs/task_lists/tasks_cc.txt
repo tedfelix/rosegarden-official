@@ -44,7 +44,7 @@ References in round brackets are to 0.1_planned_features.txt.
  [Selection has been POSTPONED]
 
  7. Various subtle improvements to notation layout, for example moving
- long notes to the right to be more central in their space (A9) [some DONE]
+ long notes to the right to be more central in their space (A9) [mostly DONE]
 
  8. Improvements to insert/split code in TrackNotationHelper --
  avoiding splitting rests when they're inserted over shorter notes,

@@ -54,7 +54,7 @@ using namespace NotationProperties;
 
 const int NotationStaff::nbLines      = 5;
 const int NotationStaff::nbLegerLines = 5;
-const int NotationStaff::linesOffset  = 40;
+const int NotationStaff::linesOffset  = 55;
 
 using std::string;
 

@@ -241,16 +241,10 @@ Quantizer::quantizeByNote(Track::iterator from, Track::iterator to) const
 	     UnitQuantizer(), NoteQuantizer(), NoteDurationProperty, false);
 
 /*!!!
-
- Need an option that quantizes note durations with a minimum unit, but
- quantizes with the given unit if and only if there's enough rest space
- following to take up the slack (the real meaning of legato!)
-
  We could also use a "fixNoteQuantizedValues" type of function that
  could be used explicitly by a user to state that (across a particular
  selection) they want quantized values to be saved as the normal ones,
  with the file.
-
 */
 }
 

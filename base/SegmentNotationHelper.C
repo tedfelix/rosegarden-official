@@ -19,53 +19,60 @@ using std::list;
 
 const PropertyName TrackNotationHelper::BeamedGroupIdPropertyName   = "BGroupId";
 const PropertyName TrackNotationHelper::BeamedGroupTypePropertyName = "BGroupType";
+const PropertyName TrackNotationHelper::BeamedGroupTupledLengthPropertyName = "BGroupTupledLength";
+const PropertyName TrackNotationHelper::BeamedGroupTupledCountPropertyName = "BGroupTupledCount";
 
 TrackNotationHelper::~TrackNotationHelper() { }
 
 
 bool TrackNotationHelper::collapse(Event* e, bool& collapseForward)
 {
-    bool success = false;
     iterator elPos = track().findSingle(e);
-
     if (elPos == end()) return false;
 
     timeT   myDuration = quantizer().getNoteQuantizedDuration(*elPos);
     iterator nextEvent = track().findContiguousNext(elPos),
          previousEvent = track().findContiguousPrevious(elPos);
 
+    // collapse to right if (a) not at end...
     if (nextEvent != end() &&
-	isCollapseValid(quantizer().getNoteQuantizedDuration(*nextEvent),
-			myDuration)) {
+	// ...(b) notes can be merged to a single, valid unit
+ 	isCollapseValid(quantizer().getNoteQuantizedDuration(*nextEvent),
+			myDuration) &&
+	// ...(c) event is in same bar (no cross-bar collapsing)
+	(*nextEvent)->getAbsoluteTime() <
+	    track().findBarEndTime(e->getAbsoluteTime())) {
 
-        // collapse with next event
+        // collapse right is OK; collapse e with nextEvent
+
         e->setDuration(e->getDuration() + (*nextEvent)->getDuration());
 
         quantizer().unquantize(e);
 
-        success = true;
         collapseForward = true;
-
         erase(nextEvent);
+	return true;
+    }
 
-    } else if (previousEvent != end() &&
-	       isCollapseValid(quantizer().getNoteQuantizedDuration
-			       (*previousEvent),
-			       myDuration)) {
-
-        // collapse with previous event
+    // logic is exactly backwards from collapse to right logic above
+    if (previousEvent != end() &&
+	isCollapseValid(quantizer().getNoteQuantizedDuration(*previousEvent),
+			myDuration) &&
+	(*previousEvent)->getAbsoluteTime() >
+	    track().findBarStartTime(e->getAbsoluteTime())) {
+	
+        // collapse left is OK; collapse e with previousEvent
         (*previousEvent)->setDuration(e->getDuration() +
                                       (*previousEvent)->getDuration());
 
         quantizer().unquantize(*previousEvent);
 
-        success = true;
         collapseForward = false;
-
         erase(elPos);
+	return true;
     }
     
-    return success;
+    return false;
 }
 
 
@@ -559,6 +566,11 @@ void TrackNotationHelper::deleteNote(Event *e)
 	newRest->setDuration(e->getDuration());
 	insert(newRest);
 	erase(i);
+
+	//!!! not convinced -- cc
+	// collapse the new rest
+//        bool collapseForward;
+//	collapse(newRest, collapseForward);
     }
 }
 

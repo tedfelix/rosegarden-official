@@ -42,6 +42,8 @@ public:
     
     static const PropertyName BeamedGroupIdPropertyName;
     static const PropertyName BeamedGroupTypePropertyName;
+    static const PropertyName BeamedGroupTupledLengthPropertyName;
+    static const PropertyName BeamedGroupTupledCountPropertyName;
 
 
     /**

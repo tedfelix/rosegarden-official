@@ -87,6 +87,8 @@ protected:
     bool m_inGroup;
     unsigned int m_groupId;
     std::string m_groupType;
+    int m_groupTupledLength;
+    int m_groupTupledCount;
 
     QString m_currentLine;
     QString m_currentStaffName;

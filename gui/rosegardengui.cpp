@@ -1175,25 +1175,18 @@ void RosegardenGUIApp::stop()
 //
 void RosegardenGUIApp::rewind()
 {
-    double barNumber = ((double) m_doc->getComposition().getPosition())/
-                       ((double) m_doc->getComposition().getNbTicksPerBar());
-    int newBarNumber = (int) barNumber;
+    Rosegarden::Composition &composition = m_doc->getComposition();
 
-    if (barNumber < 1)
-        newBarNumber = 0;
-    else
-    if (barNumber == (double) newBarNumber)
-          newBarNumber--;
+    timeT position = composition.getPosition();
+    timeT jumpTo   = composition.getBarStart(position - 1);
 
     if ( m_transportStatus == PLAYING )
     {
-        sendSequencerJump(newBarNumber *
-                             m_doc->getComposition().getNbTicksPerBar());
+        sendSequencerJump(jumpTo);
     }
     else
     {
-        setPointerPosition(newBarNumber *
-                               m_doc->getComposition().getNbTicksPerBar());
+        setPointerPosition(jumpTo);
     }
 }
 
@@ -1202,25 +1195,26 @@ void RosegardenGUIApp::rewind()
 //
 void RosegardenGUIApp::fastforward()
 {
-    double barNumber = ((double) m_doc->getComposition().getPosition())/
-                       ((double) m_doc->getComposition().getNbTicksPerBar());
-    int newBarNumber = (int) barNumber;
+    Rosegarden::Composition &composition = m_doc->getComposition();
+
+    timeT position = composition.getPosition();
+    int  barNumber = composition.getBarNumber(position);
+    timeT   jumpTo = composition.getBarRange(barNumber + 1).first;
+
+    if (jumpTo > composition.getDuration()) jumpTo = composition.getDuration();
 
     // we need to work out where the trackseditor finishes so we
     // don't skip beyond it.  Generally we need extra-Composition
     // non-destructive start and end markers for the piece.
     //
-    newBarNumber++;
 
     if ( m_transportStatus == PLAYING )
     {
-        sendSequencerJump(newBarNumber *
-                             m_doc->getComposition().getNbTicksPerBar());
+        sendSequencerJump(jumpTo);
     }
     else
     {
-        setPointerPosition(newBarNumber * 
-                             m_doc->getComposition().getNbTicksPerBar());
+        setPointerPosition(jumpTo);
     }
 
 }

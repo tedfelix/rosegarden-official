@@ -22,8 +22,11 @@ Work required to fix existing stuff
     them to file from there.  Probably a good case for having
     notation elements without corresponding events (because the
     time sig event will never be copied to individual tracks).
+    [DONE]
+
     This would also require GUI for handling time sigs in track
     editor rather than (just) notation view.  Complicated stuff
+    [GUI BIT NOT DONE YET]
 
 3.  leger lines [DONE]
 

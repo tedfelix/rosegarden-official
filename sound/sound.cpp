@@ -78,7 +78,7 @@ main(int argc, char **argv)
     Arts::MidiEvent event;
 
     cout << "Number of Tracks in Composition = " << comp->getNbTracks() << endl;
-    cout << "Number of Ticks per Bar = " << comp->getNbTicksPerBar() << endl;
+//    cout << "Number of Ticks per Bar = " << comp->getNbTicksPerBar() << endl;
 
 
     // allow for a pause while we connect the inputs and outputs

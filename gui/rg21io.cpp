@@ -124,10 +124,19 @@ bool RG21Loader::parseChordItem()
 //                              << " at time " << m_currentTrackTime << endl;
 
         if (m_inGroup) {
+
             noteEvent->setMaybe<Int>
                 (TrackNotationHelper::BeamedGroupIdPropertyName, m_groupId);
-            noteEvent->set<String>
+            noteEvent->setMaybe<String>
                 (TrackNotationHelper::BeamedGroupTypePropertyName, m_groupType);
+	    if (m_groupType == "tupled") { //!!! Should be converting to a property value, but there is no property value for this yet (see notationsets.cpp and TrackNotationHelper.C)
+		noteEvent->set/*!!! Maybe */<Int> // should be Maybe ultimately
+		    (TrackNotationHelper::BeamedGroupTupledLengthPropertyName,
+		     m_groupTupledLength);
+		noteEvent->set/*!!! Maybe */<Int>
+		    (TrackNotationHelper::BeamedGroupTupledCountPropertyName,
+		     m_groupTupledCount);
+	    }
         }
         
 
@@ -159,14 +168,23 @@ bool RG21Loader::parseGroupStart()
 {
     m_groupType = m_tokens[0].lower();
     m_inGroup = true;
+    m_groupId = m_currentTrack->getNextId();
 
     if (m_groupType == "beamed") {
 
-        m_groupId = m_currentTrack->getNextId();
+	// no more to do
         
     } else if (m_groupType == "tupled") {
-        unsigned int nbTuples = m_tokens[1].toUInt();
-        // we don't do anything with it yet
+
+	m_groupTupledLength = m_tokens[1].toUInt();
+	m_groupTupledCount = m_tokens[2].toUInt();
+
+    } else {
+
+	kdDebug(KDEBUG_AREA)
+	    << "RG21Loader::parseGroupStart: WARNING: Unknown group type "
+	    << m_groupType << ", ignoring" << endl;
+	m_inGroup = false;
     }
 
     return true;
@@ -201,7 +219,9 @@ Rosegarden::timeT RG21Loader::convertRG21Duration(QStringList::Iterator& i)
 
     try {
 
+	kdDebug(KDEBUG_AREA) << "durationString is \"" << durationString << "\"" << endl;
         Rosegarden::Note n(durationString.latin1());
+	kdDebug(KDEBUG_AREA) << "Note duration is " << n.getDuration() << endl;
         return n.getDuration();
 
     } catch (Rosegarden::Note::BadType b) {

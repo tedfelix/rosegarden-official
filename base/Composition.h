@@ -140,8 +140,8 @@ public:
     //!!! these should go, as the results they return are entirely
     // arbitrary -- but they're used in transport code, so we need to
     // convert the transport to use the bar start and end instead
-    unsigned int getNbTicksPerBar() const { return m_nbTicksPerBar; }
-    void setNbTicksPerBar(unsigned int n) { m_nbTicksPerBar = n; }
+//    unsigned int getNbTicksPerBar() const { return m_nbTicksPerBar; }
+//    void setNbTicksPerBar(unsigned int n) { m_nbTicksPerBar = n; }
 
     // Some set<> API delegation
     iterator       begin()       { return m_tracks.begin(); }
@@ -156,7 +156,7 @@ public:
     void setTempo(const double &tempo) { m_tempo = tempo; }
 
     /// Get playback position
-    const timeT& getPosition() { return m_position; }
+    timeT getPosition() { return m_position; }
 
     /// Set playback position
     void setPosition(const timeT& position) { m_position = position; }
@@ -179,7 +179,7 @@ protected:
 
     Quantizer m_quantizer;
 
-    unsigned int m_nbTicksPerBar; //!!! must lose this
+//!!!    unsigned int m_nbTicksPerBar; //!!! must lose this
     double m_tempo;
 
     timeT m_position;

@@ -34,7 +34,6 @@ const std::string Composition::BarEventType = "bar";
 
 Composition::Composition()
     : m_timeReference(0),
-      m_nbTicksPerBar(384),
       m_tempo(120),
       m_position(0),
       m_barPositionsNeedCalculating(true)
@@ -52,11 +51,6 @@ void Composition::swap(Composition& c)
     // ugh.
 
     Composition *that = &c;
-    unsigned int t;
-
-    t = this->m_nbTicksPerBar;
-    this->m_nbTicksPerBar = that->m_nbTicksPerBar;
-    that->m_nbTicksPerBar = t;
 
     double tp = this->m_tempo;
     this->m_tempo = that->m_tempo;
@@ -164,7 +158,7 @@ Composition::addNewBar(timeT time)
 void
 Composition::calculateBarPositions()
 {
-    std::cerr << "Composition::calculateBarPositions" << std::endl;
+//    std::cerr << "Composition::calculateBarPositions" << std::endl;
 
     if (!m_barPositionsNeedCalculating) return;
 
@@ -273,7 +267,7 @@ Composition::getBarRange(int n, bool truncate)
 
     timeT start = 0, finish = start;
     
-    cerr << "Composition::getBarRange(" << n << ", " << truncate << ")" << endl;
+//    cerr << "Composition::getBarRange(" << n << ", " << truncate << ")" << endl;
 
     TimeSignature timeSignature;
 
@@ -285,7 +279,7 @@ Composition::getBarRange(int n, bool truncate)
 
 	    start = (*i)->getAbsoluteTime();
 
-	    cerr << "Composition::getBarRange: looking at time " << start << endl;
+//	    cerr << "Composition::getBarRange: looking at time " << start << endl;
 
 	    if ((*i)->isa(TimeSignature::EventType)) {
 		timeSignature = TimeSignature(**i);
@@ -297,19 +291,19 @@ Composition::getBarRange(int n, bool truncate)
 	}
     }
 
-    cerr << "Composition::getBarRange: start = " << start << ", finish = " << finish << endl;
+//    cerr << "Composition::getBarRange: start = " << start << ", finish = " << finish << endl;
 
     if (!truncate &&
 	(m < n || finish == start)) { // reached end of composition too soon
 
-	cerr << "Composition::getBarRange: making it up (n = " << n << ", m = " << m << ")" << endl;
+//	cerr << "Composition::getBarRange: making it up (n = " << n << ", m = " << m << ")" << endl;
 
 	timeT d = timeSignature.getBarDuration();
 	if (m < n) start += d * (n - m);
 	finish = start + d;
     }
 
-    cerr << "Composition::getBarRange: start = " << start << ", finish = " << finish << endl;
+//    cerr << "Composition::getBarRange: start = " << start << ", finish = " << finish << endl;
 
     return std::pair<timeT, timeT>(start, finish);
 }
