@@ -144,8 +144,6 @@ signals:
 protected:
     bool addFile(const KURL& kurl);
 
-    virtual void closeEvent(QCloseEvent *e);
-
     virtual void dragEnterEvent(QDragEnterEvent *event);
     virtual void dropEvent(QDropEvent*);
 

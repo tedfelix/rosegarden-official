@@ -788,13 +788,6 @@ AudioManagerDialog::slotRename()
 }
 
 void
-AudioManagerDialog::closeEvent(QCloseEvent *e)
-{
-    e->accept();
-    emit closeClicked();
-}
-
-void
 AudioManagerDialog::slotSelectionChanged(QListViewItem *item)
 {
     slotEnableButtons();

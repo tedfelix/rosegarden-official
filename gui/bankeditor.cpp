@@ -702,7 +702,8 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 BankEditorDialog::~BankEditorDialog()
 {
     RG_DEBUG << "~BankEditorDialog()\n";
-    m_doc->getCommandHistory()->detachView(actionCollection());
+    if (m_doc) // see slotFileClose() for an explanation on why we need to test m_doc
+        m_doc->getCommandHistory()->detachView(actionCollection());
 }
 
 
@@ -1765,6 +1766,14 @@ void
 BankEditorDialog::slotFileClose()
 {
     RG_DEBUG << "BankEditorDialog::slotFileClose()\n";
+
+    // We need to do this because we might be here due to a
+    // documentAboutToChange signal, in which case the document won't
+    // be valid by the time we reach the dtor, since it will be
+    // triggered when the closeEvent is actually processed.
+    //
+    m_doc->getCommandHistory()->detachView(actionCollection());
+    m_doc = 0;
     close();
 }
 

@@ -868,7 +868,7 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
 
     // reset AudioManagerDialog
     //
-    delete m_audioManagerDialog;
+    delete m_audioManagerDialog; // TODO : replace this with a connection to documentAboutToChange() sig.
     m_audioManagerDialog = 0;
 
     RosegardenGUIDoc* oldDoc = m_doc;
