@@ -119,7 +119,7 @@ Composition::getMappedComposition(const unsigned int &sliceStart,
 
   for (Composition::iterator i = begin(); i != end(); ++i )
   {
-    if ( (*i)->getStartIndex() >= sliceEnd )
+    if ( (*i)->getStartIndex() >= int(sliceEnd) )
       continue;
 
     for ( Track::iterator j = (*i)->begin(); j != (*i)->end(); ++j )
