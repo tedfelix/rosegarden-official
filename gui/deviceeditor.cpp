@@ -53,17 +53,7 @@ DeviceEditorDialog::DeviceEditorDialog(QWidget *parent,
 {
     QVBox *mainBox = makeVBoxMainWidget();
 
-    Rosegarden::DeviceList *devices = m_studio->getDevices();
-    Rosegarden::DeviceListIterator it;
-
-    for (it = devices->begin(); it != devices->end(); ++it) {
-	if ((*it)->getType() == Rosegarden::Device::Midi) {
-	    Rosegarden::MidiDevice *md = dynamic_cast<Rosegarden::MidiDevice *>(*it);
-	    m_devices.push_back(md);
-	}
-    }
-
-    m_table = new QTable(m_devices.size(), 4, mainBox);
+    m_table = new QTable(0, 4, mainBox);
     m_table->setSorting(false);
     m_table->setRowMovingEnabled(false);
     m_table->setColumnMovingEnabled(false);
@@ -84,6 +74,49 @@ DeviceEditorDialog::DeviceEditorDialog(QWidget *parent,
     makeConnectionList((unsigned int)Rosegarden::MidiDevice::Record,
 		       m_recordConnections);
 
+    populate();
+
+    QHBox *hbox = new QHBox(mainBox);
+    QPushButton *addButton = new QPushButton(i18n("Add Play Device"), hbox);
+    QPushButton *addRButton = new QPushButton(i18n("Add Record Device"), hbox);
+    QPushButton *deleteButton = new QPushButton(i18n("Delete Device"), hbox);
+    connect(addButton, SIGNAL(clicked()), this, SLOT(slotAddPlayDevice()));
+    connect(addRButton, SIGNAL(clicked()), this, SLOT(slotAddRecordDevice()));
+    connect(deleteButton, SIGNAL(clicked()), this, SLOT(slotDeleteDevice()));
+    connect(m_table, SIGNAL(valueChanged(int, int)),
+	    this, SLOT(slotValueChanged (int, int)));
+
+    setMinimumHeight(250);
+
+    enableButtonOK(false);
+    enableButtonApply(false);
+}
+
+DeviceEditorDialog::~DeviceEditorDialog()
+{
+    // nothing -- don't need to clear device list (the devices were
+    // just aliases for those in the studio)
+}
+
+void
+DeviceEditorDialog::populate()
+{
+    Rosegarden::DeviceList *devices = m_studio->getDevices();
+    Rosegarden::DeviceListIterator it;
+    m_devices.clear();
+
+    for (it = devices->begin(); it != devices->end(); ++it) {
+	if ((*it)->getType() == Rosegarden::Device::Midi) {
+	    Rosegarden::MidiDevice *md =
+		dynamic_cast<Rosegarden::MidiDevice *>(*it);
+	    if (md) m_devices.push_back(md);
+	}
+    }
+
+    while (m_table->numRows() > 0) {
+	m_table->removeRow(m_table->numRows()-1);
+    }
+
     int deviceCount = 0;
 
 #define NAME_COL 0
@@ -92,6 +125,8 @@ DeviceEditorDialog::DeviceEditorDialog(QWidget *parent,
 #define CONNECTION_COL 3
 
     for (it = m_devices.begin(); it != m_devices.end(); ++it) {
+
+	m_table->insertRows(deviceCount, 1);
 
 	// we know we only put MidiDevices in m_devices
 	Rosegarden::MidiDevice *md = static_cast<Rosegarden::MidiDevice *>(*it);
@@ -128,21 +163,6 @@ DeviceEditorDialog::DeviceEditorDialog(QWidget *parent,
 	if (m_table->columnWidth(i) < minColumnWidths[i])
 	    m_table->setColumnWidth(i, minColumnWidths[i]);
     }
-
-    QHBox *hbox = new QHBox(mainBox);
-    QPushButton *addButton = new QPushButton(i18n("Add Play Device"), hbox);
-    QPushButton *addRButton = new QPushButton(i18n("Add Record Device"), hbox);
-    QPushButton *deleteButton = new QPushButton(i18n("Delete Device"), hbox);
-    connect(addButton, SIGNAL(clicked()), this, SLOT(slotAddPlayDevice()));
-    connect(addRButton, SIGNAL(clicked()), this, SLOT(slotAddRecordDevice()));
-    connect(deleteButton, SIGNAL(clicked()), this, SLOT(slotDeleteDevice()));
-    connect(m_table, SIGNAL(valueChanged(int, int)),
-	    this, SLOT(slotValueChanged (int, int)));
-
-    setMinimumHeight(250);
-
-    enableButtonOK(false);
-    enableButtonApply(false);
 }
 
 
@@ -296,6 +316,9 @@ DeviceEditorDialog::slotApply()
 
     m_document->getCommandHistory()->addCommand(command);
 
+    m_deletedDevices.clear();
+
+    populate();
     setModified(false);
 }
 

@@ -78,12 +78,26 @@ Studio::addDevice(Device *device)
     m_devices.push_back(device);
 }
 
+void
+Studio::removeDevice(DeviceId id)
+{
+    DeviceListIterator it;
+    for (it = m_devices.begin(); it != m_devices.end(); it++)
+    {
+	if ((*it)->getId() == id) {
+	    delete *it;
+	    m_devices.erase(it);
+	    return;
+	}
+    }
+}
+
 InstrumentList
 Studio::getAllInstruments()
 {
     InstrumentList list, subList;
 
-    std::vector<Device*>::iterator it;
+    DeviceListIterator it;
 
     // Append lists
     //

@@ -28,9 +28,9 @@ namespace Rosegarden
 
 MappedDevice::MappedDevice():
     std::vector<Rosegarden::MappedInstrument*>(),
-    m_id(0),
+    m_id(Rosegarden::Device::NO_DEVICE),
     m_type(Rosegarden::Device::Midi),
-    m_name("Unnamed Device"),
+    m_name("Unconfigured device"),
     m_connection(""),
     m_direction(MidiDevice::Play)
 {

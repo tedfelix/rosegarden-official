@@ -39,6 +39,7 @@ class DeviceEditorDialog : public KDialogBase
     Q_OBJECT
 public:
     DeviceEditorDialog(QWidget *parent, RosegardenGUIDoc *document);
+    ~DeviceEditorDialog();
 
     void setModified(bool value);
 
@@ -64,6 +65,8 @@ private:
 
     Rosegarden::DeviceList m_devices;
     std::set<Rosegarden::DeviceId> m_deletedDevices;
+
+    void populate();
     int getDeviceIdAt(int row); // -1 for new device without an id yet
     
     bool m_modified;

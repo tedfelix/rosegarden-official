@@ -392,6 +392,8 @@ CreateOrDeleteDeviceCommand::execute()
 	SEQMAN_DEBUG << "CreateDeviceCommand::unexecute - "
 		     << " removed device " << m_deviceId << endl;
 
+	m_studio->removeDevice(m_deviceId);
+
 	m_deviceId = Rosegarden::Device::NO_DEVICE;
 	m_deviceCreated = false;
     }

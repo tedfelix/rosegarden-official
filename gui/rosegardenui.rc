@@ -248,4 +248,10 @@
      </enable>
 </State>
 
+<State name="not_playing">
+     <enable>
+	<Action name="manage_devices"/>
+     </enable>
+</State>
+
 </kpartgui>

@@ -3061,6 +3061,12 @@ RosegardenGUIApp:: processRecordedAudio(long recordTimeSec,
 //
 void RosegardenGUIApp::notifySequencerStatus(const int& status)
 {
+    stateChanged("not_playing",
+		 (status == PLAYING ||
+		  status == RECORDING_MIDI ||
+		  status == RECORDING_AUDIO) ?
+		 KXMLGUIClient::StateReverse : KXMLGUIClient::StateNoReverse);
+
     if (m_seqManager)
         m_seqManager->setTransportStatus((TransportStatus) status);
 }

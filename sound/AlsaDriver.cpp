@@ -471,7 +471,7 @@ AlsaDriver::generateInstruments()
 	    } else {
 		//!!! why do we bother adding instruments for record devices?
 		//!!! answer: we shouldn't (but breaks things if we don't?)
-		addInstrumentsForDevice(device);
+//!!!		addInstrumentsForDevice(device);
 		m_devices.push_back(device);
 	    }
 	}
@@ -728,8 +728,6 @@ AlsaDriver::addDevice(Device::DeviceType type,
 void
 AlsaDriver::removeDevice(DeviceId id)
 {
-    //!!! test
-
     for (MappedDeviceList::iterator i = m_devices.end();
 	 i != m_devices.begin(); ) {
 	

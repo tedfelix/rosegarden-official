@@ -73,6 +73,8 @@ public:
                    Device::DeviceType type);
     void addDevice(Device *device);
 
+    void removeDevice(DeviceId id);
+
     // Return the combined instrument list from all devices
     // for all and presentation Instrument (Presentation is
     // just a subset of All).

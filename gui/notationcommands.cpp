@@ -1304,6 +1304,7 @@ TransformsMenuInterpretCommand::articulate()
 	int durationChange = 0;
 	
 	if (slurred) {
+	    //!!! doesn't seem to be picking up slurs correctly
 	    if (tenuto) durationChange = -10;
 	    else if (marcato || staccato) durationChange = -30;
 	    else if (staccatissimo) durationChange = -50;

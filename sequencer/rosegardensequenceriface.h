@@ -124,7 +124,10 @@ public:
     //
     virtual void processMappedEvent(Rosegarden::MappedEvent mE) = 0;
 
-    // Return number of devices found
+    // Return device id following last existing one -- you can treat
+    // this as "number of devices" but there might be some holes if
+    // devices were deleted, which you will recognise because
+    // getMappedDevice(id) will return a device with id NO_DEVICE
     //
     virtual unsigned int getDevices() = 0;
 

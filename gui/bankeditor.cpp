@@ -766,6 +766,10 @@ BankEditorDialog::checkModified()
             if (m_bankList.size() == 0 && m_programList.size() == 0)
             {
                 Rosegarden::MidiDevice *device = getMidiDevice(m_lastDevice);
+		if (!device) {
+		    setModified(false);
+		    return;
+		}
 
                 std::vector<Rosegarden::MidiBank>
                     tempBank = device->getBanks();
@@ -805,7 +809,7 @@ BankEditorDialog::checkModified()
 void
 BankEditorDialog::slotPopulateDevice(QListViewItem* item)
 {
-    RG_DEBUG << "BankEditorDialog::slotPopulateDevice\n";
+    RG_DEBUG << "BankEditorDialog::slotPopulateDevice" << endl;
 
     if (!item) return;
 
@@ -822,7 +826,7 @@ BankEditorDialog::slotPopulateDevice(QListViewItem* item)
         m_bankList = device->getBanks();
         m_programList = device->getPrograms();
 
-        RG_DEBUG << "BankEditorDialog::slotPopulateDevice : not a bank item - disabling\n";
+        RG_DEBUG << "BankEditorDialog::slotPopulateDevice : not a bank item - disabling" << endl;
         m_deleteBank->setEnabled(false);
         m_copyPrograms->setEnabled(false);
         m_pastePrograms->setEnabled(false);
@@ -927,7 +931,7 @@ BankEditorDialog::getParentDeviceItem(QListViewItem* item)
         item = item->parent();
 
     if (!item) {
-        RG_DEBUG << "BankEditorDialog::getParentDeviceItem : missing parent device item for bank item - this SHOULD NOT HAPPEN\n";
+        RG_DEBUG << "BankEditorDialog::getParentDeviceItem : missing parent device item for bank item - this SHOULD NOT HAPPEN" << endl;
         return 0;
     }
 
@@ -1132,7 +1136,7 @@ BankEditorDialog::getFirstFreeBank(QListViewItem* item)
 void
 BankEditorDialog::slotModifyDeviceOrBankName(QListViewItem* item, const QString &label, int)
 {
-    RG_DEBUG << "MidiProgramsEditor::slotModifyDeviceorBankName\n";
+    RG_DEBUG << "MidiProgramsEditor::slotModifyDeviceorBankName" << endl;
 
     MidiDeviceListViewItem* deviceItem =
         dynamic_cast<MidiDeviceListViewItem*>(item);
@@ -1230,7 +1234,7 @@ void
 BankEditorDialog::setModified(bool value)
 {
     RG_DEBUG << "BankEditorDialog::setModified("
-             << value << ")\n";
+             << value << ")" << endl;
 
     if (m_modified == value) return;
 

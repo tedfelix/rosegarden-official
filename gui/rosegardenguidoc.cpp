@@ -1182,11 +1182,25 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
     //
     Rosegarden::Device *device = m_studio.getDevice(id);
 
+    if (mD->getId() == Rosegarden::Device::NO_DEVICE)
+    {
+	if (device) m_studio.removeDevice(id);
+	delete mD;
+	return;
+    }
+
     if (mD->size() == 0)
     {
-        SEQMAN_DEBUG << "RosegardenGUIDoc::getMappedDevice() - "
-                     << "no instruments found" << endl;
-        return;
+	// no instruments is OK for a record device
+	if (mD->getType() != Rosegarden::Device::Midi ||
+	    mD->getDirection() != Rosegarden::MidiDevice::Record) {
+
+	    SEQMAN_DEBUG << "RosegardenGUIDoc::getMappedDevice() - "
+			 << "no instruments found" << endl;
+	    if (device) m_studio.removeDevice(id);
+	    delete mD;
+	    return;
+	}
     }
 
     bool hadDeviceAlready = (device != 0);
@@ -1270,6 +1284,7 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
 	}
     }
 
+    delete mD;
 }
 
 // Convert a single-point recorded Segment to a proper Segment
