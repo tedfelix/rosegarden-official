@@ -623,6 +623,8 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 				   const Rosegarden::Clef &currentClef,
 				   bool selected)
 {
+    static NotePixmapParameters restParams(Note::Crotchet, 0);
+
     try {
 	m_npf->setNoteStyle(NoteStyleFactory::getStyleForEvent(elt->event()));
 
@@ -644,7 +646,7 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 	QCanvasItem *canvasItem = 0;
 
 	m_npf->setSelected(selected);
-	int z = selected ? 2 : 0;
+	int z = selected ? 3 : 0;
 
 	if (elt->isNote()) {
 
@@ -652,23 +654,24 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 
 	} else if (elt->isRest()) {
 
-//	    kdDebug(KDEBUG_AREA) << "NotationStaff::renderSingleElement: about to query legato duration property" << endl;
-
+	    timeT absTime = m_legatoQuantizer->getQuantizedAbsoluteTime
+		(elt->event());
 	    timeT duration = m_legatoQuantizer->getQuantizedDuration
 		(elt->event());
 
-//	    kdDebug(KDEBUG_AREA) << "done" <<endl;
-	    
-	    //!!! perhaps better not to have the quantizer here but instead
-	    // have marked the event as not-for-display in notationhlayout
-
 	    if (duration > 0) {
 
-		Note::Type note = elt->event()->get<Int>(m_properties.NOTE_TYPE);
+		Note::Type note =
+		    elt->event()->get<Int>(m_properties.NOTE_TYPE);
 		int dots = elt->event()->get<Int>(m_properties.NOTE_DOTS);
-		NotePixmapParameters params(note, dots);
-		setTuplingParameters(elt, params);
-		pixmap = new QCanvasPixmap(m_npf->makeRestPixmap(params));
+		restParams.setNoteType(note);
+		restParams.setDots(dots);
+		setTuplingParameters(elt, restParams);
+		bool quantized = (absTime != elt->getAbsoluteTime() ||
+				  duration != elt->getDuration());
+		restParams.setQuantized(quantized);
+		if (quantized) z = 2;
+		pixmap = new QCanvasPixmap(m_npf->makeRestPixmap(restParams));
 
 	    } else {
 		kdDebug(KDEBUG_AREA) << "Omitting too-short rest" << endl;
@@ -765,6 +768,7 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 
 	if (!canvasItem && pixmap) {
 	    canvasItem = new QCanvasNotationSprite(*elt, pixmap, m_canvas);
+	    canvasItem->setZ(z);
 	}
 
 	// Show the sprite
@@ -774,7 +778,6 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 		(elt->getLayoutX(), (int)elt->getLayoutY());
 	    elt->setCanvasItem
 		(canvasItem, coords.first, (double)coords.second);
-	    canvasItem->setZ(z);
 	    canvasItem->show();
 	} else {
 	    elt->removeCanvasItem();
@@ -827,6 +830,12 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
 
     long slashes = 0;
     (void)(elt->event()->get<Int>(m_properties.SLASHES, slashes));
+
+    timeT absTime = m_legatoQuantizer->getQuantizedAbsoluteTime(elt->event());
+    timeT duration = m_legatoQuantizer->getQuantizedDuration(elt->event());
+    bool quantized = (absTime != elt->getAbsoluteTime() ||
+		      duration != elt->getDuration());
+    params.setQuantized(quantized);
 
     params.setNoteType(note);
     params.setDots(dots);
@@ -905,8 +914,13 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
     setTuplingParameters(elt, params);
 
     QCanvasPixmap notePixmap(m_npf->makeNotePixmap(params));
-    return new QCanvasNotationSprite(*elt,
-                                     new QCanvasPixmap(notePixmap), m_canvas);
+    QCanvasNotationSprite *item = new QCanvasNotationSprite
+	(*elt, new QCanvasPixmap(notePixmap), m_canvas);
+
+    if (m_npf->isSelected()) item->setZ(3);
+    else if (quantized) item->setZ(2);
+    else item->setZ(0);
+    return item;
 }
 
 void
@@ -963,7 +977,7 @@ NotationStaff::showPreviewNote(double layoutX, int heightOnStaff,
     LinedStaffCoords coords = getCanvasCoordsForLayoutCoords(layoutX, layoutY);
 
     m_previewSprite->move(coords.first, (double)coords.second);
-    m_previewSprite->setZ(3);
+    m_previewSprite->setZ(4);
     m_previewSprite->show();
     m_canvas->update();
 } 

@@ -84,6 +84,7 @@ NotePixmapParameters::NotePixmapParameters(Note::Type noteType,
     m_slashes(0),
     m_selected(false),
     m_highlighted(false),
+    m_quantized(false),
     m_onLine(false),
     m_beamed(false),
     m_nextBeamCount(0),
@@ -294,6 +295,7 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
     bool isStemmed = m_style->hasStem(params.m_noteType);
     int flagCount = m_style->getFlagCount(params.m_noteType);
     int slashCount = params.m_slashes;
+    if (!slashCount) slashCount = m_style->getSlashCount(params.m_noteType);
 
     if (params.m_accidental != NoAccidental) {
         makeRoomForAccidental(params.m_accidental);
@@ -506,15 +508,18 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
     }
 
     QPixmap body;
-    if (!m_selected && !params.m_selected && !params.m_highlighted) {
-	body = m_font->getPixmap
-	    (m_style->getNoteHeadCharName(params.m_noteType));
-    } else {
+    CharName charName(m_style->getNoteHeadCharName(params.m_noteType));
+    if (m_selected || params.m_selected) {
 	body = m_font->getColouredPixmap
-	    (m_style->getNoteHeadCharName(params.m_noteType),
-	     params.m_highlighted ? RosegardenGUIColours::HighlightedElementHue
-	                          : RosegardenGUIColours::   SelectedElementHue)
-	    ;
+	    (charName, RosegardenGUIColours::SelectedElementHue);
+    } else if (params.m_highlighted) {
+	body = m_font->getColouredPixmap
+	    (charName, RosegardenGUIColours::HighlightedElementHue);
+    } else if (params.m_quantized) {
+	body = m_font->getColouredPixmap
+	    (charName, RosegardenGUIColours::QuantizedNoteHue);
+    } else {
+	body = m_font->getPixmap(charName);
     }
 
     QPoint bodyLocation(m_left - m_origin.x(), m_above - m_origin.y());
@@ -1115,11 +1120,14 @@ NotePixmapFactory::makeRestPixmap(const NotePixmapParameters &params)
 
     QPixmap pixmap;
 
-    if (!m_selected) {
-        pixmap = m_font->getPixmap(charName);
-    } else {
+    if (m_selected || params.m_selected) {
         pixmap = m_font->getColouredPixmap
 	    (charName, RosegardenGUIColours::SelectedElementHue);
+    } else if (params.m_quantized) {
+        pixmap = m_font->getColouredPixmap
+	    (charName, RosegardenGUIColours::QuantizedNoteHue);
+    } else {
+        pixmap = m_font->getPixmap(charName);
     }
     QPixmap dot = m_font->getPixmap(NoteCharacterNames::DOT);
 
@@ -1704,7 +1712,6 @@ NotePixmapFactory::makeAnnotationPixmap(const Rosegarden::Text &text)
     
     return makeCanvasPixmap(QPoint(0, 0));
 }
-
 
 void
 NotePixmapFactory::createPixmapAndMask(int width, int height)

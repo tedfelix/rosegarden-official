@@ -54,6 +54,7 @@ public:
     void setSlashes(int slashes)          { m_slashes          = slashes;   }
     void setSelected(bool selected)       { m_selected         = selected;  }
     void setHighlighted(bool highlighted) { m_highlighted      = highlighted;}
+    void setQuantized(bool quantized)     { m_quantized        = quantized; }
     void setIsOnLine(bool isOnLine)       { m_onLine           = isOnLine;  }
 
     void setBeamed(bool beamed)           { m_beamed           = beamed;    }
@@ -96,6 +97,7 @@ private:
     int     m_slashes;
     bool    m_selected;
     bool    m_highlighted;
+    bool    m_quantized;
     bool    m_onLine;
 
     bool    m_beamed;

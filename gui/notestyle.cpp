@@ -214,6 +214,22 @@ NoteStyle::getFlagCount(Note::Type type)
 }
 
 
+int
+NoteStyle::getSlashCount(Note::Type type)
+{
+    NoteDescriptionMap::iterator i = m_notes.find(type);
+    if (i == m_notes.end()) { 
+	if (m_baseStyle) return m_baseStyle->getSlashCount(type);
+	kdDebug(KDEBUG_AREA) 
+	    << "WARNING: NoteStyle::getSlashCount: No definition for note type "
+	    << type << ", defaulting to 0" << endl;
+	return 0;
+    }
+
+    return i->second.slashes;
+}
+
+
 void
 NoteStyle::getStemFixPoints(Note::Type type,
 			    HFixPoint &hfix, VFixPoint &vfix)
@@ -446,6 +462,13 @@ NoteStyle::setFlagCount(Note::Type note, int flags)
 }
 
 void
+NoteStyle::setSlashCount(Note::Type note, int slashes)
+{
+    checkDescription(note);
+    m_notes[note].slashes = slashes;
+}
+
+void
 NoteStyle::setStemFixPoints(Note::Type note, HFixPoint hfix, VFixPoint vfix)
 {
     checkDescription(note);
@@ -564,6 +587,9 @@ NoteStyleFileReader::setFromAttributes(Note::Type type,
     
     s = attributes.value("flags");
     if (s) m_style->setFlagCount(type, s.toInt());
+    
+    s = attributes.value("slashes");
+    if (s) m_style->setSlashCount(type, s.toInt());
 
     NoteStyle::HFixPoint hfix;
     NoteStyle::VFixPoint vfix;

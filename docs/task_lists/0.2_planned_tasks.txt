@@ -50,11 +50,11 @@ In order of importance:
 
   o GUI support for various things that are supported in the
     internal representation already - tuplets [DONE], n-dotted notes,
-    tempo [DONE but not in notation view yet], text, and quantization
-    beyond the simplest sort.
+    tempo [DONE], text [DONE except for lyrics], and quantization
+    beyond the simplest sort [DONE].
 
   o Segment start and end markers - moveable non-destructive markers for
-    Segments
+    Segments [largely DONE for end markers at least]
 
   o Switcheable pointer-follow mode - turn it off, enable the same behaviour
     in clients
@@ -70,7 +70,7 @@ In order of importance:
     details for RG4 and MIDI files)
 
   o Parameter box fields don't look very disabled even when they are
-
+    [DONE by Qt3]
 
 [work completed or partially completed]
 

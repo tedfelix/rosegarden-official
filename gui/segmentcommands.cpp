@@ -453,6 +453,7 @@ SegmentSplitCommand::execute()
     m_segment->setEndMarkerTime(m_splitTime);
 
     // Look for a final rest and shrink it
+//!!! lose, rework
     Segment::iterator it = m_segment->end();
 
     if (it != m_segment->begin() &&
@@ -487,6 +488,101 @@ SegmentSplitCommand::unexecute()
     m_detached = true;
 }
 
+
+SegmentAutoSplitCommand::SegmentAutoSplitCommand(Segment *segment) :
+    XKCommand("Auto-Split Segment"),
+    m_segment(segment),
+    m_detached(false)
+{
+}
+
+SegmentAutoSplitCommand::~SegmentAutoSplitCommand()
+{
+    if (m_detached) {
+	delete m_segment;
+    } else {
+	for (unsigned int i = 0; i < m_newSegments.size(); ++i) {
+	    delete m_newSegments[i];
+	}
+    }
+}
+
+struct AutoSplitPoint
+{
+    timeT time;
+    timeT lastSoundTime;
+    Rosegarden::Clef clef;
+    Rosegarden::Key key;
+    AutoSplitPoint(timeT t, timeT lst, Rosegarden::Clef c, Rosegarden::Key k) :
+	time(t), lastSoundTime(lst), clef(c), key(k) { }
+};
+
+void
+SegmentAutoSplitCommand::execute()
+{
+    std::vector<AutoSplitPoint> splitPoints;
+
+    Rosegarden::Clef clef;
+    Rosegarden::Key key;
+    timeT lastSoundTime = m_segment->getStartTime();
+    timeT lastSplitTime = m_segment->getStartTime() - 1;
+    Composition *comp = m_segment->getComposition();
+
+    for (Segment::iterator i = m_segment->begin();
+	 m_segment->isBeforeEndMarker(i); ++i) {
+	
+	timeT myTime = (*i)->getAbsoluteTime();
+	int barNo = comp->getBarNumber(myTime);
+
+	if ((*i)->isa(Rosegarden::Clef::EventType)) {
+	    clef = Rosegarden::Clef(**i);
+	} else if ((*i)->isa(Rosegarden::Key::EventType)) {
+	    key = Rosegarden::Key(**i);
+	}
+
+	if (myTime <= lastSplitTime) continue;
+
+	bool newTimeSig = false;
+	Rosegarden::TimeSignature tsig =
+	    comp->getTimeSignatureInBar(barNo, newTimeSig);
+
+	if (newTimeSig) {
+
+	    splitPoints.push_back(AutoSplitPoint(myTime, lastSoundTime,
+						 clef, key));
+	    lastSplitTime = myTime;
+
+	} else if ((*i)->isa(Rosegarden::Note::EventRestType)) {
+	    
+	    continue;
+
+	} else {
+
+	    int lastSoundBarNo = comp->getBarNumber(lastSoundTime);
+
+	    if (lastSoundBarNo < barNo - 1 ||
+		(lastSoundBarNo == barNo - 1 &&
+		 comp->getBarStartForTime(lastSoundTime) == lastSoundTime)) {
+
+		splitPoints.push_back(AutoSplitPoint(myTime, lastSoundTime,
+						     clef, key));
+		lastSplitTime = myTime;
+	    }
+	}
+
+	lastSoundTime = std::max(lastSoundTime, myTime + (*i)->getDuration());
+    }
+	
+
+    //!!! now do something with it
+}
+
+void
+SegmentAutoSplitCommand::unexecute()
+{
+    //!!! implement (by just detaching the new segments and restoring
+    // the old one)
+}
 
 
 

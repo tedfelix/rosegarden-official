@@ -27,9 +27,10 @@ Tasks suggested by Chris (notation guy):
  include import of Finale ETF files (see
  http://www.cs.uu.nl/~hanwen/lily-devel/etf.html and various sample
  files at http://www.cpdl.org), import of Brahms files, and I/O of
- MusicXML (check first whether any other program actually uses it).
- ETF is difficult, Brahms should be easy.  We used to ask for
- Lilypond export here, but Hans Kieserman stepped up and wrote that. 
+ MusicXML (check first whether any other program actually uses it)
+ and NIFF (likewise).  ETF is difficult, Brahms should be easy.  We 
+ used to ask for Lilypond export here, but Hans Kieserman stepped up
+ and wrote that. 
 
  -- We're lacking an event list window, which would be very useful.
  We do now have a window for viewing and editing the properties of a

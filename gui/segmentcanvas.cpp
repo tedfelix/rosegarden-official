@@ -286,8 +286,8 @@ void SegmentNotationPreview::drawShape(QPainter& painter)
         // draw rectangles, discarding those which are clipped
         //
         QRect p = m_previewInfo[i];
-        if ((p.x() + p.width()) >= viewportRect.x() &&
-            p.x() <= (viewportRect.x() + viewportRect.width())) {
+	if (p.x() > (viewportRect.x() + viewportRect.width())) break;
+        if ((p.x() + p.width()) >= viewportRect.x()) {
             painter.drawRect(p);
         }
     }
@@ -326,8 +326,8 @@ void SegmentNotationPreview::updatePreview()
         double x0 = m_rulerScale->getXForTime(eventStart) - rect().x();
         double x1 = m_rulerScale->getXForTime(eventEnd) - rect().x();
 
-        int width = (int)(x1 - x0);
-        if (width > 0) --width;
+        int width = (int)(x1 - x0) - 2;
+	if (width < 1) width = 1;
 
         double y0 = 0; // rect().y();
         double y1 = /*rect().y() + */ rect().height();
@@ -410,6 +410,7 @@ void SegmentItem::setShowPreview(bool preview)
 void SegmentItem::setPreview()
 {
     delete m_preview;
+    if (!m_segment) return;
 
     if (m_segment->getType() == Rosegarden::Segment::Audio)
         m_preview = new SegmentAudioPreview(*this,

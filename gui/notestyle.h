@@ -129,6 +129,7 @@ public:
     bool          isFilled     (Rosegarden::Note::Type);
     bool          hasStem      (Rosegarden::Note::Type);
     int           getFlagCount (Rosegarden::Note::Type);
+    int           getSlashCount(Rosegarden::Note::Type);
 
     CharName getNoteHeadCharName(Rosegarden::Note::Type);
     CharName getRestCharName(Rosegarden::Note::Type);
@@ -143,6 +144,7 @@ public:
     void setFilled    (Rosegarden::Note::Type, bool);
     void setStem      (Rosegarden::Note::Type, bool);
     void setFlagCount (Rosegarden::Note::Type, int);
+    void setSlashCount(Rosegarden::Note::Type, int);
 
     void getStemFixPoints(Rosegarden::Note::Type, HFixPoint &, VFixPoint &);
     void setStemFixPoints(Rosegarden::Note::Type, HFixPoint, VFixPoint);
@@ -154,18 +156,20 @@ protected:
 	bool filled;
 	bool stem;
 	int flags;
+	int slashes;
 	HFixPoint hfix;
 	VFixPoint vfix;
 
 	NoteDescription() :
 	    shape(AngledOval), charName(NoteCharacterNames::UNKNOWN),
-	    filled(true), stem(true), flags(0), hfix(Normal), vfix(Middle) { }
+	    filled(true), stem(true), flags(0), slashes(0),
+	    hfix(Normal), vfix(Middle) { }
 
 	NoteDescription(NoteHeadShape _shape, CharName _charName,
-			bool _filled, bool _stem, int _flags,
+			bool _filled, bool _stem, int _flags, int _slashes,
 			HFixPoint _hfix, VFixPoint _vfix) :
 	    shape(_shape), charName(_charName),
-	    filled(_filled), stem(_stem), flags(_flags),
+	    filled(_filled), stem(_stem), flags(_flags), slashes(_slashes),
 	    hfix(_hfix), vfix(_vfix) { }
     };
 

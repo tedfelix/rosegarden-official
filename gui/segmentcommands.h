@@ -221,6 +221,22 @@ private:
 };
 
 
+class SegmentAutoSplitCommand : public XKCommand
+{
+public:
+    SegmentAutoSplitCommand(Rosegarden::Segment *segment);
+    virtual ~SegmentAutoSplitCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+    
+private:
+    Rosegarden::Segment *m_segment;
+    std::vector<Rosegarden::Segment *> m_newSegments;
+    bool m_detached;
+};
+
+
 class SegmentChangeQuantizationCommand : public XKCommand
 {
 public:
