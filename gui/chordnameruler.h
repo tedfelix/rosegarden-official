@@ -30,6 +30,7 @@
 namespace Rosegarden {
     class RulerScale;
     class Composition;
+    class Segment;
 }
 
 class QFont;
@@ -64,6 +65,10 @@ public:
 	m_composition = composition;
     }
 
+    void setCurrentSegment(Rosegarden::Segment *segment) {
+	m_currentSegment = segment;
+    }
+
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;
 
@@ -83,6 +88,7 @@ private:
 
     Rosegarden::RulerScale  *m_rulerScale;
     Rosegarden::Composition *m_composition;
+    Rosegarden::Segment *m_currentSegment;
 
     QFont m_font;
     QFont m_boldFont;

@@ -297,7 +297,8 @@ public:
 
     /**
      * Returns an iterator pointing to the first element starting at
-     * or before the given absolute time
+     * or before the given absolute time (so returns end() if the
+     * time precedes the first event, not if it follows the last one)
      */
     iterator findNearestTime(timeT time) const;
 

@@ -2085,6 +2085,8 @@ NotationView::slotSetCurrentStaff(int y)
 	    m_currentStaff = staffNo;
 	    m_staffs[m_currentStaff]->setCurrent(true, y);
 	}
+	m_chordNameRuler->setCurrentSegment
+	    (&m_staffs[m_currentStaff]->getSegment());
     }
     
     updateView();

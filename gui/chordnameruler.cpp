@@ -31,6 +31,8 @@
 #include "Segment.h"
 #include "NotationTypes.h"
 #include "AnalysisTypes.h"
+#include "SegmentNotationHelper.h"
+#include "Composition.h"
 #include "CompositionTimeSliceAdapter.h"
 #include "RulerScale.h"
 
@@ -39,6 +41,7 @@ using Rosegarden::Int;
 using Rosegarden::String;
 using Rosegarden::RulerScale;
 using Rosegarden::Segment;
+using Rosegarden::SegmentNotationHelper;
 using Rosegarden::Composition;
 using Rosegarden::CompositionTimeSliceAdapter;
 using Rosegarden::AnalysisHelper;
@@ -58,6 +61,7 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
     m_width(-1),
     m_rulerScale(rulerScale),
     m_composition(composition),
+    m_currentSegment(0),
 //!!!    m_font("helvetica", 12),
 //!!!    m_boldFont("helvetica", 12, QFont::Bold),
     m_fontMetrics(m_boldFont),
@@ -120,19 +124,23 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
     timeT   to = m_rulerScale->getTimeForX
 	(clipRect.x() + clipRect.width() - m_currentXOffset - m_xorigin + 100);
 
-    //!!! The AnalysisHelper guesses chord labels based on a particular
-    // key, which it looks for in the segment passed to it.  At present
-    // we have no keys in that segment.  Possibly we could stoke it up
-    // with the last key preceding "from" in each segment in the
-    // composition, plus any between "from" and "to".  Better if the
-    // CompositionTimeSliceAdapter could locate keys in its subset of
-    // segments, perhaps?
-
-    //!!! bit of a problem, as a linear search for keys in the entire
-    // segment would be a real drag
-
     CompositionTimeSliceAdapter adapter(m_composition, from, to + 1);
     Segment segment;
+
+    // Populate the segment with the current clef and key at the
+    // time at which analysis starts, taken from the "current segment"
+    // if we have one or any old segment if we don't
+
+    Segment *clefKeySegment = m_currentSegment;
+    if (!clefKeySegment) clefKeySegment = *m_composition->begin();
+    SegmentNotationHelper notationHelper(*clefKeySegment);
+
+    Rosegarden::Key key;
+    Rosegarden::Clef clef;
+    notationHelper.getClefAndKeyAt(from, clef, key); // slow
+    segment.insert(clef.getAsEvent(from - 1));
+    segment.insert(key.getAsEvent(from - 1));
+
     AnalysisHelper helper;
     helper.labelChords(adapter, segment);
 
@@ -188,8 +196,8 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
 	long formalX = (*i)->get<Int>(TEXT_FORMAL_X);
 	long actualX = (*i)->get<Int>(TEXT_ACTUAL_X);
 
-	formalX += m_currentXOffset + m_xorigin;
-	actualX += m_currentXOffset + m_xorigin;
+	formalX += m_currentXOffset + long(m_xorigin);
+	actualX += m_currentXOffset + long(m_xorigin);
 
 	paint.drawLine(formalX, height() - 4, formalX, height());
 

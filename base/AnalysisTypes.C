@@ -52,7 +52,8 @@ Key
 AnalysisHelper::getKeyForEvent(Event *e, Segment &s)
 {
 
-    Segment::iterator i = s.find(e);
+//    Segment::iterator i = s.find(e);
+    Segment::iterator i = s.findNearestTime(e->getAbsoluteTime()); //cc
 
     if (i==s.end()) return Key();
 
