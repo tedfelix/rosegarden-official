@@ -64,17 +64,17 @@ class RosegardenGUIView : public QCanvasView
     void print(QPrinter *pPrinter);
 
     /// draw all elements
-    virtual bool showElements(ElementList::iterator from,
-                              ElementList::iterator to);
+    virtual bool showElements(EventList::iterator from,
+                              EventList::iterator to);
 
     /// same, with dx,dy offset
-    virtual bool showElements(ElementList::iterator from,
-                              ElementList::iterator to,
+    virtual bool showElements(EventList::iterator from,
+                              EventList::iterator to,
                               double dxoffset, double dyoffset);
 
     /// same, relative to the specified item
-    virtual bool showElements(ElementList::iterator from,
-                              ElementList::iterator to,
+    virtual bool showElements(EventList::iterator from,
+                              EventList::iterator to,
                               QCanvasItem*);
 
     /// Normally calls applyHorizontalLayout() then applyVerticalLayout()

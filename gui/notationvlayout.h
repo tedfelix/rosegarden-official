@@ -33,7 +33,7 @@ public:
     int  getStaffOffsetY() const { return m_staffOffsetY; }
 
 protected:
-    virtual void layout(Element2*);
+    virtual void layout(Event*);
 
     PitchToHeight& m_pitchToHeight;
 

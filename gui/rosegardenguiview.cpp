@@ -58,10 +58,14 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char *name)
     Staff *staff = new Staff(canvas());
     staff->move(20, 15);
 
+//     m_vlayout->setStaffOffsetY((Staff::nbLines * Staff::lineWidth -
+//                                Staff::lineWidth / 2 - 4 + Staff::linesOffset));
+    
+
     if (!applyLayout()) {
 
         // Show all elements in the staff
-        ElementList& elements(getDocument()->getElements());
+        EventList& elements(getDocument()->getElements());
 
         showElements(elements.begin(), elements.end(), staff);
 
@@ -261,28 +265,28 @@ RosegardenGUIView::test()
 }
 
 bool
-RosegardenGUIView::showElements(ElementList::iterator from,
-                                ElementList::iterator to)
+RosegardenGUIView::showElements(EventList::iterator from,
+                                EventList::iterator to)
 {
     return showElements(from, to, 0, 0);
 }
 
 bool
-RosegardenGUIView::showElements(ElementList::iterator from,
-                                ElementList::iterator to,
+RosegardenGUIView::showElements(EventList::iterator from,
+                                EventList::iterator to,
                                 QCanvasItem *item)
 {
     return showElements(from, to, item->x(), item->y());
 }
 
 bool
-RosegardenGUIView::showElements(ElementList::iterator from,
-                                ElementList::iterator to,
+RosegardenGUIView::showElements(EventList::iterator from,
+                                EventList::iterator to,
                                 double dxoffset, double dyoffset)
 {
     static NotePixmapFactory npf;
 
-    for(ElementList::iterator it = from; it != to; ++it) {
+    for(EventList::iterator it = from; it != to; ++it) {
         
         // TODO : Extract note duration
         QPixmap note(npf.makeNotePixmap(4, true, true));
@@ -314,7 +318,7 @@ RosegardenGUIView::applyHorizontalLayout()
         return false;
     }
 
-    ElementList& elements(getDocument()->getElements());
+    EventList& elements(getDocument()->getElements());
     
     for_each(elements.begin(), elements.end(), *m_hlayout);
     
@@ -330,7 +334,7 @@ RosegardenGUIView::applyVerticalLayout()
         return false;
     }
 
-    ElementList& elements(getDocument()->getElements());
+    EventList& elements(getDocument()->getElements());
     
     for_each(elements.begin(), elements.end(), *m_vlayout);
     

@@ -24,7 +24,7 @@ NotationVLayout::NotationVLayout()
 }
 
 void
-NotationVLayout::layout(Element2 *el)
+NotationVLayout::layout(Event *el)
 {
     unsigned int pitch = el->get<Int>("pitch");
     el->set<Int>("Notation::Y", m_pitchToHeight[pitch] + m_staffOffsetY);

@@ -28,7 +28,7 @@ class NotationHLayout : public LayoutEngine  {
 public:
     NotationHLayout(unsigned int barWidth);
 protected:
-    virtual void layout(Element2*);
+    virtual void layout(Event*);
 
     unsigned int m_barWidth;
     unsigned int m_lastPos;
