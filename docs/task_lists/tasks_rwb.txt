@@ -5,6 +5,10 @@ o Process management
   - killing older copies of the sequencer and children
   - starting and managing JACK if requested in configure options
 
+o File loading/importing
+  - improve performance
+  - MDI
+  
 o MTC/MMC - transport awareness
   - we're now sending Midi RealTime sequencer control messages
     and adding infrastructure for real time clock messages
@@ -35,18 +39,9 @@ o Audio looping (doesn't work)
 
 o Audio/MIDI looping and start position (performance)
 
-o JACK autostart and process management  [SCRIPT?]
-o automatic Sequencer process management [SCRIPT?]
-
 o Toggle record mode for punch in/out [HALF COMPLETE]
 
-o MIDI export broken for key sig and SysExs [CC?]
-
-o Multiple Document Interface - at least internally capable
-  of handling multiple documents.   Two phases:
-
-  - more complete "swap()" that works at Document level [DONE]
-  - full MDI interface internals [with GL/ almost DONE]
+o MIDI export broken for key sig and SysExs [FIXED by Pedro]
 
 Smaller stuff
 =============

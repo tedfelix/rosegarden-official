@@ -158,7 +158,8 @@ public:
         Local
     };
 
-    GeneralConfigurationPage(KConfig *cfg,
+    GeneralConfigurationPage(RosegardenGUIDoc *doc,
+                             KConfig *cfg,
                              QWidget *parent=0, const char *name=0);
 
     virtual void apply();
@@ -181,6 +182,7 @@ protected slots:
 protected:
 
     //--------------- Data members ---------------------------------
+    RosegardenGUIDoc* m_doc;
 
     QComboBox* m_client;
     QSpinBox*  m_countIn;
@@ -189,6 +191,7 @@ protected:
     QCheckBox* m_backgroundTextures;
     QSpinBox*  m_autosaveInterval;
     QComboBox* m_nameStyle;
+
 };
 
 /**
@@ -381,6 +384,32 @@ protected:
     QLabel           *m_minutesAtStereo;
 
     QPushButton      *m_changePathButton;
+};
+
+/**
+ * Metronome Configuration page
+ *
+ * (document-wide settings)
+ */
+class MetronomeConfigurationPage : public TabbedConfigurationPage
+{
+    Q_OBJECT
+public:
+    MetronomeConfigurationPage(RosegardenGUIDoc *doc,
+                               QWidget *parent=0, const char *name=0);
+    virtual void apply();
+
+    static QString iconLabel() { return i18n("Metronome"); }
+    static QString title()     { return i18n("Metronome Settings"); }
+
+protected:
+
+    //--------------- Data members ---------------------------------
+
+    QSpinBox*  m_metronomeBarVely;
+    QSpinBox*  m_metronomeBeatVely;
+    QSpinBox*  m_defaultMetronomePitch;
+
 };
 
 

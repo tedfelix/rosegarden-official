@@ -1465,7 +1465,7 @@ SequenceManager::insertMetronomeClicks(const timeT &sliceStart,
     Rosegarden::MidiByte mBarVelocity =
         Rosegarden::MidiByte(config.get<Int>("metronomebarvelocity"));
     Rosegarden::MidiByte mBeatVelocity =
-        Rosegarden::MidiByte(config.get<Int>("metronomebarvelocity"));
+        Rosegarden::MidiByte(config.get<Int>("metronomebeatvelocity"));
 
     if (mDuration == Rosegarden::RealTime(0, 0))
         mDuration = Rosegarden::RealTime(0, 10000);

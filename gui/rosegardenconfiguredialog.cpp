@@ -118,9 +118,11 @@ void TabbedConfigurationPage::addTab(QWidget *tab, const QString &title)
 
 //------------------------------------------------------------
 
-GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg,
+GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
+                                                   KConfig *cfg,
                                                    QWidget *parent, const char *name)
     : TabbedConfigurationPage(cfg, parent, name),
+      m_doc(doc),
       m_client(0),
       m_countIn(0),
       m_midiPitchOctave(0),
@@ -193,6 +195,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg,
     m_countIn->setMaxValue(10);
     m_countIn->setMinValue(0);
     layout->addWidget(m_countIn, 2, 1);
+
 
     addTab(frame, i18n("Behaviour"));
 
@@ -301,6 +304,8 @@ void GeneralConfigurationPage::apply()
     }
     else
         m_cfg->writeEntry("externalaudioeditor", externalAudioEditor);
+
+
 }
 
 
@@ -1497,6 +1502,51 @@ DocumentMetaConfigurationPage::apply()
 }
 
 
+// ---------------- MetronomeConfigurationPage ---------------
+//
+MetronomeConfigurationPage::MetronomeConfigurationPage(RosegardenGUIDoc *doc,
+                                                       QWidget *parent,
+                                                       const char *name)
+    : TabbedConfigurationPage(doc, parent, name)
+{
+    QFrame *frame = new QFrame(m_tabWidget);
+    QGridLayout *layout = new QGridLayout(frame, 2, 2,
+                                          10, 5);
+
+    Configuration &config = m_doc->getConfiguration();
+
+    layout->addWidget(new QLabel(i18n("Metronome Bar Velocity"), frame), 0, 0);
+    m_metronomeBarVely = new QSpinBox(frame);
+    m_metronomeBarVely->setMinValue(0);
+    m_metronomeBarVely->setMaxValue(127);
+    m_metronomeBarVely->setValue(config.get<Int>("metronomebarvelocity"));
+    layout->addWidget(m_metronomeBarVely, 0, 1);
+
+    layout->addWidget(new QLabel(i18n("Metronome Beat Velocity"), frame), 1, 0);
+    m_metronomeBeatVely = new QSpinBox(frame);
+    m_metronomeBeatVely->setMinValue(0);
+    m_metronomeBeatVely->setMaxValue(127);
+    m_metronomeBeatVely->setValue(config.get<Int>("metronomebeatvelocity"));
+    layout->addWidget(m_metronomeBeatVely, 1, 1);
+
+    addTab(frame, i18n("Modify Metronome settings"));
+}
+
+
+void 
+MetronomeConfigurationPage::apply()
+{
+    // Metronome
+    //
+    Configuration &config = m_doc->getConfiguration();
+    config.set<Int>("metronomebarvelocity", m_metronomeBarVely->value());
+    config.set<Int>("metronomebeatvelocity", m_metronomeBeatVely->value());
+
+    m_doc->slotDocumentModified();
+}
+
+// ---------------- AudioConfigurationPage -------------------
+//
 AudioConfigurationPage::AudioConfigurationPage(RosegardenGUIDoc *doc,
                                                QWidget *parent,
                                                const char *name)
@@ -1618,6 +1668,7 @@ AudioConfigurationPage::apply()
     if (!newDir.isNull())
     {
         afm.setAudioPath(qstrtostr(newDir));
+        m_doc->slotDocumentModified();
     }
 }
 
@@ -1684,7 +1735,7 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
                          GeneralConfigurationPage::title(),
                          loadIcon(GeneralConfigurationPage::iconName()));
     vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
-    page = new GeneralConfigurationPage(cfg, pageWidget);
+    page = new GeneralConfigurationPage(doc, cfg, pageWidget);
     vlay->addWidget(page);
     page->setPageIndex(pageIndex(pageWidget));
     m_configurationPages.push_back(page);
@@ -1765,6 +1816,17 @@ DocumentConfigureDialog::DocumentConfigureDialog(RosegardenGUIDoc *doc,
                          loadIcon(AudioConfigurationPage::iconName()));
     vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
     page = new AudioConfigurationPage(doc, pageWidget);
+    vlay->addWidget(page);
+    page->setPageIndex(pageIndex(pageWidget));
+    m_configurationPages.push_back(page);
+
+    // Metronome Page
+    //
+    pageWidget = addPage(MetronomeConfigurationPage::iconLabel(),
+                         MetronomeConfigurationPage::title(),
+                         loadIcon(MetronomeConfigurationPage::iconName()));
+    vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
+    page = new MetronomeConfigurationPage(doc, pageWidget);
     vlay->addWidget(page);
     page->setPageIndex(pageIndex(pageWidget));
     m_configurationPages.push_back(page);

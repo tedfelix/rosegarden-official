@@ -992,7 +992,7 @@ AlsaDriver::initialiseMidi()
     // ("hw" will possibly give in to other handles in future?)
     //
     if (snd_seq_open(&m_midiHandle,
-                     "hw",                
+                     "default",
                      SND_SEQ_OPEN_DUPLEX,
                      SND_SEQ_NONBLOCK) < 0)
     {
@@ -1032,7 +1032,9 @@ AlsaDriver::initialiseMidi()
 					"Rosegarden",
                                         SND_SEQ_PORT_CAP_WRITE |
                                         SND_SEQ_PORT_CAP_READ  |
-					SND_SEQ_PORT_CAP_NO_EXPORT,
+					SND_SEQ_PORT_CAP_SUBS_WRITE |
+                                        SND_SEQ_PORT_CAP_SUBS_READ,
+                                        //SND_SEQ_PORT_CAP_NO_EXPORT,
                                         SND_SEQ_PORT_TYPE_APPLICATION);
     if (m_port < 0)
     {
