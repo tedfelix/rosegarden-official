@@ -48,9 +48,8 @@ MixerWindow::MixerWindow(QWidget *parent,
     font.setBold(false);
     setFont(font);
 
-    setBackgroundMode(Qt::PaletteMidlight);
-
     QFrame *mainBox = new QFrame(this);
+    mainBox->setBackgroundMode(Qt::PaletteMidlight);
     setCentralWidget(mainBox);
     QHBoxLayout *mainLayout = new QHBoxLayout(mainBox, 4, 4);
 

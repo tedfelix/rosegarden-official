@@ -707,7 +707,7 @@ void RosegardenGUIApp::setupActions()
     //
     // Studio menu
     //
-    new KAction(i18n("Mi&xer"), 0, this,
+    new KAction(i18n("Audio Mi&xer"), 0, this,
 		SLOT(slotOpenMixer()),
 		actionCollection(), "open_mixer");
 

@@ -24,6 +24,7 @@
 #include "WAVAudioFile.h"
 #include "MappedStudio.h"
 
+#include <time.h>
 #include <sys/time.h>
 #include <pthread.h> // for mutex
 
