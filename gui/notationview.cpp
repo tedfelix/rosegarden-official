@@ -141,7 +141,9 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     m_notationElements(0),
     m_hlayout(0),
     m_vlayout(0),
-    m_currentSelectedNote(Note::QuarterNote)
+    m_currentSelectedNoteIsRest(false),
+    m_currentSelectedNoteType(Note::QuarterNote),
+    m_currentSelectedNoteDotted(false)
 {
 
     kdDebug(KDEBUG_AREA) << "NotationView ctor" << endl;
@@ -265,9 +267,17 @@ NotationView::setupActions()
     
     // setup Notes menu & toolbar
 
-    // Whole
+    // Breve
     QIconSet icon(m_toolbarNotePixmapFactory.makeNotePixmap
-                  (Note::WholeNote, false, NoAccidental, true, true, true));
+                  (Note::Breve, false, NoAccidental, true, true, true));
+    noteAction = new KRadioAction(i18n("Breve"), icon, 0, this,
+                                  SLOT(slotBreve()),
+                                  actionCollection(), "breve" );
+    noteAction->setExclusiveGroup("notes");
+    
+    // Whole
+    icon = QIconSet(m_toolbarNotePixmapFactory.makeNotePixmap
+                    (Note::WholeNote, false, NoAccidental, true, true, true));
     noteAction = new KRadioAction(i18n("Whole"), icon, 0, this,
                                   SLOT(slotWhole()),
                                   actionCollection(), "whole_note" );
@@ -321,10 +331,78 @@ NotationView::setupActions()
     icon = QIconSet(m_toolbarNotePixmapFactory.makeNotePixmap
                     (Note::SixtyFourthNote, false, NoAccidental,
                      true, true, true));
-
     noteAction = new KRadioAction(i18n("64th"), icon, 0, this,
                                   SLOT(slot64th()),
                                   actionCollection(), "64th" );
+    noteAction->setExclusiveGroup("notes");
+
+    //!!! surely we should be doing all this in a loop, making the
+    //buttons all call back on the same method when pressed but
+    //passing in different data to the method to indicate which button
+    //was pressed?  no idea how to do that with this qt lark though
+
+    // Breve
+    icon = QIconSet(m_toolbarNotePixmapFactory.makeRestPixmap
+                    (Note::Breve, false));
+    noteAction = new KRadioAction(i18n("Breve Rest"), icon, 0, this,
+                                  SLOT(slotRBreve()),
+                                  actionCollection(), "breve_rest" );
+    noteAction->setExclusiveGroup("notes");
+    
+    // Whole
+    icon = QIconSet(m_toolbarNotePixmapFactory.makeRestPixmap
+                    (Note::WholeNote, false));
+    noteAction = new KRadioAction(i18n("Whole Rest"), icon, 0, this,
+                                  SLOT(slotRWhole()),
+                                  actionCollection(), "whole_note_rest" );
+    noteAction->setExclusiveGroup("notes");
+    
+    // Half
+    icon = QIconSet(m_toolbarNotePixmapFactory.makeRestPixmap
+                    (Note::HalfNote, false));
+    noteAction = new KRadioAction(i18n("Half Rest"), icon, 0, this,
+                                  SLOT(slotRHalf()),
+                                  actionCollection(), "half_rest" );
+    noteAction->setExclusiveGroup("notes");
+
+    // Quarter
+    icon = QIconSet(m_toolbarNotePixmapFactory.makeRestPixmap
+                    (Note::QuarterNote, false));
+    noteAction = new KRadioAction(i18n("Quarter Rest"), icon, 0, this,
+                                  SLOT(slotRQuarter()),
+                                  actionCollection(), "quarter_rest" );
+    noteAction->setExclusiveGroup("notes");
+
+    // 8th
+    icon = QIconSet(m_toolbarNotePixmapFactory.makeRestPixmap
+                    (Note::EighthNote, false));
+    noteAction = new KRadioAction(i18n("8th Rest"), icon, 0, this,
+                                  SLOT(slotR8th()),
+                                  actionCollection(), "8th_rest" );
+    noteAction->setExclusiveGroup("notes");
+
+    // 16th
+    icon = QIconSet(m_toolbarNotePixmapFactory.makeRestPixmap
+                    (Note::SixteenthNote, false));
+    noteAction = new KRadioAction(i18n("16th Rest"), icon, 0, this,
+                                  SLOT(slotR16th()),
+                                  actionCollection(), "16th_rest" );
+    noteAction->setExclusiveGroup("notes");
+
+    // 32nd
+    icon = QIconSet(m_toolbarNotePixmapFactory.makeRestPixmap
+                    (Note::ThirtySecondNote, false));
+    noteAction = new KRadioAction(i18n("32nd Rest"), icon, 0, this,
+                                  SLOT(slotR32nd()),
+                                  actionCollection(), "32nd_rest" );
+    noteAction->setExclusiveGroup("notes");
+
+    // 64th
+    icon = QIconSet(m_toolbarNotePixmapFactory.makeRestPixmap
+                    (Note::SixtyFourthNote, false));
+    noteAction = new KRadioAction(i18n("64th Rest"), icon, 0, this,
+                                  SLOT(slotR64th()),
+                                  actionCollection(), "64th_rest" );
     noteAction->setExclusiveGroup("notes");
     
 
@@ -629,11 +707,22 @@ NotationView::applyVerticalLayout()
 
 
 void
-NotationView::setCurrentSelectedNote(Note::Type n)
+NotationView::setCurrentSelectedNote(bool rest, Note::Type n)
 {
-    m_currentSelectedNote = n;
-    m_currentNotePixmap->setPixmap(m_toolbarNotePixmapFactory.makeNotePixmap(n, false, NoAccidental, true, true, true));
-    emit changeCurrentNote(n);
+    m_currentSelectedNoteIsRest = rest;
+    m_currentSelectedNoteType = n;
+
+    if (!rest) {
+        m_currentNotePixmap->setPixmap
+            (m_toolbarNotePixmapFactory.makeNotePixmap
+             (n, m_currentSelectedNoteDotted, NoAccidental, true, true, true));
+    } else {
+        m_currentNotePixmap->setPixmap
+            (m_toolbarNotePixmapFactory.makeRestPixmap
+             (n, m_currentSelectedNoteDotted));
+    }
+
+    emit changeCurrentNote(rest, n);
 }
 
 
@@ -729,52 +818,115 @@ NotationView::slotStatusHelpMsg(const QString &text)
 //////////////////////////////////////////////////////////////////////
 
 void
+NotationView::slotBreve()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slotBreve()\n";
+    setCurrentSelectedNote(false, Note::Breve);
+}
+
+void
 NotationView::slotWhole()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotWhole()\n";
-    setCurrentSelectedNote(Note::WholeNote);
+    setCurrentSelectedNote(false, Note::WholeNote);
 }
 
 void
 NotationView::slotHalf()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotHalf()\n";
-    setCurrentSelectedNote(Note::HalfNote);
+    setCurrentSelectedNote(false, Note::HalfNote);
 }
 
 void
 NotationView::slotQuarter()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotQuarter()\n";
-    setCurrentSelectedNote(Note::QuarterNote);
+    setCurrentSelectedNote(false, Note::QuarterNote);
 }
 
 void
 NotationView::slot8th()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slot8th()\n";
-    setCurrentSelectedNote(Note::EighthNote);
+    setCurrentSelectedNote(false, Note::EighthNote);
 }
 
 void
 NotationView::slot16th()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slot16th()\n";
-    setCurrentSelectedNote(Note::SixteenthNote);
+    setCurrentSelectedNote(false, Note::SixteenthNote);
 }
 
 void
 NotationView::slot32nd()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slot32nd()\n";
-    setCurrentSelectedNote(Note::ThirtySecondNote);
+    setCurrentSelectedNote(false, Note::ThirtySecondNote);
 }
 
 void
 NotationView::slot64th()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slot64th()\n";
-    setCurrentSelectedNote(Note::SixtyFourthNote);
+    setCurrentSelectedNote(false, Note::SixtyFourthNote);
+}
+
+void
+NotationView::slotRBreve()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slotRBreve()\n";
+    setCurrentSelectedNote(true, Note::Breve);
+}
+
+void
+NotationView::slotRWhole()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slotRWhole()\n";
+    setCurrentSelectedNote(true, Note::WholeNote);
+}
+
+void
+NotationView::slotRHalf()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slotRHalf()\n";
+    setCurrentSelectedNote(true, Note::HalfNote);
+}
+
+void
+NotationView::slotRQuarter()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slotRQuarter()\n";
+    setCurrentSelectedNote(true, Note::QuarterNote);
+}
+
+void
+NotationView::slotR8th()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slotR8th()\n";
+    setCurrentSelectedNote(true, Note::EighthNote);
+}
+
+void
+NotationView::slotR16th()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slotR16th()\n";
+    setCurrentSelectedNote(true, Note::SixteenthNote);
+}
+
+void
+NotationView::slotR32nd()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slotR32nd()\n";
+    setCurrentSelectedNote(true, Note::ThirtySecondNote);
+}
+
+void
+NotationView::slotR64th()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slotR64th()\n";
+    setCurrentSelectedNote(true, Note::SixtyFourthNote);
 }
 
 void
@@ -803,20 +955,17 @@ NotationView::insertNote(int height, const QPoint &eventPos)
     //
     Event *insertedEvent = new Event;
 
-    insertedEvent->setType(Note::EventType); // TODO : we can insert rests too
-    
-    // set its duration and pitch
-    //
-/*!    insertedEvent->setTimeDuration(m_hlayout->quantizer().noteDuration(m_currentSelectedNote)); */
+    if (m_currentSelectedNoteIsRest) {
+        insertedEvent->setType("rest");
+    } else {
+        insertedEvent->setType(Note::EventType);
+        insertedEvent->set<Int>("pitch", pitch);
+    }
 
-    insertedEvent->set<Int>("pitch", pitch);
-
-    // Create associated notationElement and set its note type
-    //
-    NotationElement *newNotationElement = new NotationElement(insertedEvent);
-
-    //!!! no dottedness yet
-    newNotationElement->setNote(Note(m_currentSelectedNote));
+    NotationElement *newNotationElement =
+        new NotationElement(insertedEvent);
+    newNotationElement->setNote(Note(m_currentSelectedNoteType,
+                                     m_currentSelectedNoteDotted));
 
     newNotationElement->event()->setMaybe<String>("Name", "INSERTED_NOTE");
 
@@ -836,6 +985,8 @@ NotationView::insertNote(int height, const QPoint &eventPos)
             --redoLayoutStart;
             
     } else { // it's a note : chord it
+
+        //!!! This is wrong when inserting rests, of course -- sort it out
 
         // if closest note has the same pitch as the one we're
         // inserting, bail out

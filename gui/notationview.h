@@ -83,9 +83,13 @@ public:
 
     QCanvas* canvas() { return m_canvasView->canvas(); }
 
-    void setCurrentSelectedNote(Rosegarden::Note::Type);
+    void setCurrentSelectedNote(bool isRest, Rosegarden::Note::Type);
 
-    Rosegarden::Note::Type currentSelectedNote() const { return m_currentSelectedNote; }
+/*!!!
+    bool isCurrentSelectedNoteRest() const { return m_currentSelectedNoteIsRest; }
+    Rosegarden::Note::Type getCurrentSelectedNoteType() const { return m_currentSelectedNoteType; }
+    bool isCurrentSelectedNoteDotted() const { return m_currentSelectedNoteDotted; }
+*/
 
 public slots:
 
@@ -130,6 +134,7 @@ public slots:
 
 
     // note switch slots
+    void slotBreve();
     void slotWhole();
     void slotHalf();
     void slotQuarter();
@@ -138,12 +143,22 @@ public slots:
     void slot32nd();
     void slot64th();
 
+    // rest switch slots
+    void slotRBreve();
+    void slotRWhole();
+    void slotRHalf();
+    void slotRQuarter();
+    void slotR8th();
+    void slotR16th();
+    void slotR32nd();
+    void slotR64th();
+
     // Canvas actions slots
     void insertNote(int height, const QPoint&);
     void hoveredOverNoteChanged(const QString&);
 
 signals:
-    void changeCurrentNote(Rosegarden::Note::Type);
+    void changeCurrentNote(bool isRest, Rosegarden::Note::Type);
 
 protected:
 
@@ -217,7 +232,9 @@ protected:
     NotationHLayout* m_hlayout;
     NotationVLayout* m_vlayout;
 
-    Rosegarden::Note::Type m_currentSelectedNote;
+    bool m_currentSelectedNoteIsRest;
+    Rosegarden::Note::Type m_currentSelectedNoteType;
+    bool m_currentSelectedNoteDotted;
 };
 
 #endif

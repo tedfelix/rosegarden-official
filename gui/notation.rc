@@ -16,6 +16,7 @@
 </MenuBar>
 
 <ToolBar fullWidth="true" name="notesToolBar" newline="true">
+  <Action name="breve" />
   <Action name="whole_note" />
   <Action name="half" />
   <Action name="quarter" />
@@ -23,6 +24,17 @@
   <Action name="16th" />
   <Action name="32nd" />
   <Action name="64th" />
+</ToolBar>
+
+<ToolBar fullWidth="true" name="restsToolBar" newline="true">
+  <Action name="breve_rest" />
+  <Action name="whole_note_rest" />
+  <Action name="half_rest" />
+  <Action name="quarter_rest" />
+  <Action name="8th_rest" />
+  <Action name="16th_rest" />
+  <Action name="32nd_rest" />
+  <Action name="64th_rest" />
 </ToolBar>
 
 </kpartgui>

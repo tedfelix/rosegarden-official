@@ -5,6 +5,7 @@
         <event type="timesignature" numerator="9" denominator="16"/>
         <event type="keychange" key="C# major"/>
         <event type="clefchange" clef="treble"/>
+        <event type="note" duration="breve" pitch="64"/>
         <event type="note" duration="crotchet" pitch="64"/>
         <event type="note" duration="crotchet" pitch="65"/>
         <event type="rest" duration="crotchet"/>

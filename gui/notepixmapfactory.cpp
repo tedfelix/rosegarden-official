@@ -63,10 +63,15 @@ NotePixmapOffsets::offsetsFor(Note::Type note,
     m_hotSpot.setX(0);        m_hotSpot.setY(0);
     m_accidentalOffset.setX(0); m_accidentalOffset.setY(0);
     
-    if (note >= Note::HalfNote)
-        m_bodySize = m_noteBodyEmptySize;
-    else
+    if (note >= Note::HalfNote) {
+        if (note == Note::Breve) {
+            m_bodySize = m_breveSize;
+        } else {
+            m_bodySize = m_noteBodyEmptySize;
+        }
+    } else {
         m_bodySize = m_noteBodyFilledSize;
+    }
 
     computeAccidentalAndStalkSize();
     computePixmapSize();
@@ -250,10 +255,11 @@ NotePixmapOffsets::computeBodyOffset()
 
 
 void
-NotePixmapOffsets::setNoteBodySizes(QSize empty, QSize filled)
+NotePixmapOffsets::setNoteBodySizes(QSize empty, QSize filled, QSize breve)
 {
     m_noteBodyEmptySize = empty;
     m_noteBodyFilledSize = filled;
+    m_breveSize = breve;
 }
 
 void
@@ -304,6 +310,7 @@ NotePixmapFactory::NotePixmapFactory(int resolution) :
     m_timeSigFontMetrics(m_timeSigFont),
     m_noteBodyFilled(m_pixmapDirectory + "/note-bodyfilled.xpm"),
     m_noteBodyEmpty(m_pixmapDirectory + "/note-bodyempty.xpm"),
+    m_breve(m_pixmapDirectory + "/note-breve.xpm"),
     m_accidentalSharp(m_pixmapDirectory + "/notemod-sharp.xpm"),
     m_accidentalFlat(m_pixmapDirectory + "/notemod-flat.xpm"),
     m_accidentalNatural(m_pixmapDirectory + "/notemod-natural.xpm"),
@@ -331,10 +338,12 @@ NotePixmapFactory::NotePixmapFactory(int resolution) :
     m_rests.push_back(new QPixmap(m_pixmapDirectory + "/rest-crotchet.xpm"));
     m_rests.push_back(new QPixmap(m_pixmapDirectory + "/rest-minim.xpm"));
     m_rests.push_back(new QPixmap(m_pixmapDirectory + "/rest-semibreve.xpm"));
+    m_rests.push_back(new QPixmap(m_pixmapDirectory + "/rest-breve.xpm"));
 
     // Init offsets
     m_offsets.setNoteBodySizes(m_noteBodyEmpty.size(),
-                               m_noteBodyFilled.size());
+                               m_noteBodyFilled.size(),
+                               m_breve.size());
 
     m_offsets.setTailWidth(m_tailsUp[0]->width());
     m_offsets.setStalkLength(getStalkLength());
@@ -409,7 +418,9 @@ NotePixmapFactory::makeNotePixmap(Note::Type note,
 
     // paint note body
     //
-    QPixmap *body = (note >= Note::HalfNote) ? &m_noteBodyEmpty : &m_noteBodyFilled;
+    QPixmap *body =
+        (note == Note::Breve) ? &m_breve :
+        (note >= Note::HalfNote) ? &m_noteBodyEmpty : &m_noteBodyFilled;
 
     m_p.drawPixmap (m_offsets.getBodyOffset(), *body);
     m_pm.drawPixmap(m_offsets.getBodyOffset(), *(body->mask()));
@@ -522,7 +533,9 @@ NotePixmapFactory::makeBeamedNotePixmap(Note::Type note,
 
     // paint note body
     //
-    QPixmap *body = (note >= Note::HalfNote) ? &m_noteBodyEmpty : &m_noteBodyFilled;
+    QPixmap *body =
+        (note == Note::Breve) ? &m_breve :
+        (note >= Note::HalfNote) ? &m_noteBodyEmpty : &m_noteBodyFilled;
 
     m_p.drawPixmap (m_offsets.getBodyOffset(), *body);
     m_pm.drawPixmap(m_offsets.getBodyOffset(), *(body->mask()));
@@ -659,7 +672,8 @@ NotePixmapFactory::makeRestPixmap(Note::Type note, bool dotted)
         return QCanvasPixmap(*m_rests[5], m_pointZero); // QPoint(0, 19)
     case Note::WholeNote:
         return QCanvasPixmap(*m_rests[6], m_pointZero); // QPoint(0, 9)
-        //!!! ... and breve
+    case Note::Breve:
+        return QCanvasPixmap(*m_rests[7], m_pointZero); // QPoint(0, 9)
     default:
         kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeRestPixmap() for note "
                              << note << " not yet implemented or note out of range\n";
@@ -1079,7 +1093,9 @@ ChordPixmapFactory::makeChordPixmap(const ChordPitches &pitches,
     // set mask painter RasterOp to Or
     m_pm.setRasterOp(Qt::OrROP);
 
-    QPixmap *body = (note >= Note::HalfNote) ? &m_noteBodyEmpty : &m_noteBodyFilled;
+    QPixmap *body =
+        (note == Note::Breve) ? &m_breve :
+        (note >= Note::HalfNote) ? &m_noteBodyEmpty : &m_noteBodyFilled;
 
     if (stalkGoesUp) {
         int offset = m_generatedPixmap->height() - body->height() - topY;

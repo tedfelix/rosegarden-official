@@ -57,7 +57,7 @@ public:
     const stalkpoints& getStalkPoints()    { return m_stalkPoints; }
     const QPoint&      getAccidentalOffset() { return m_accidentalOffset; }
 
-    void setNoteBodySizes(QSize empty, QSize filled);
+    void setNoteBodySizes(QSize empty, QSize filled, QSize breve);
     void setTailWidth(unsigned int);
     void setStalkLength(unsigned int);
     void setAccidentalsWidth(unsigned int sharp,
@@ -75,6 +75,7 @@ protected:
 
     QSize m_noteBodyEmptySize;
     QSize m_noteBodyFilledSize;
+    QSize m_breveSize;
 
     unsigned int m_tailWidth;
     unsigned int m_sharpWidth;
@@ -156,6 +157,7 @@ public:
 
     int getNoteBodyHeight() const   { return m_noteBodyEmpty.height(); }
     int getNoteBodyWidth() const    { return m_noteBodyEmpty.width(); }
+    int getBreveWidth() const       { return m_breve.width(); }
     int getLineSpacing() const      { return getNoteBodyHeight() + 1; }
     int getAccidentalWidth() const  { return m_accidentalSharp.width(); }
     int getAccidentalHeight() const { return m_accidentalSharp.height(); }
@@ -195,6 +197,7 @@ protected:
 
     QPixmap m_noteBodyFilled;
     QPixmap m_noteBodyEmpty;
+    QPixmap m_breve;
 
     QPixmap m_accidentalSharp;
     QPixmap m_accidentalFlat;
