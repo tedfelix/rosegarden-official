@@ -144,6 +144,35 @@ StudioControl::setStudioObjectProperty(MappedObjectId id,
     return true;
 }
 
+MappedObjectId
+StudioControl::getStudioObjectByType(MappedObject::MappedObjectType type)
+{
+    Rosegarden::MappedObjectId value = -1;
+    QByteArray data;
+    QCString replyType;
+    QByteArray replyData;
+    QDataStream streamOut(data, IO_WriteOnly);
+
+    streamOut << type;
+
+    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
+                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                                  "getMappedObjectId(int)",
+                                  data, replyType, replyData))
+    {
+        SEQMAN_DEBUG << "getStudioObjectByType - "
+                     << "failed to contact Rosegarden sequencer"
+                     << endl;
+    }
+    else
+    {
+        QDataStream streamIn(replyData, IO_ReadOnly);
+        streamIn >> value;
+    }
+
+    return value;
+}
+
 
 };
 

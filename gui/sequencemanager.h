@@ -142,28 +142,11 @@ public:
     //
     void sendMappedInstrument(const MappedInstrument &mI);
 
-    // Set a property on a MappedStudio object
-    //
-    void setMappedProperty(Rosegarden::MappedObjectId id,
-                           const Rosegarden::MappedObjectProperty &property,
-                           Rosegarden::MappedObjectValue value);
-
-
-    // Get a property list back from the MappedStudio at the sequencer
-    //
-    QValueVector<QString> getSequencerPropertyList(
-                       Rosegarden::MappedObjectId id,
-                       const Rosegarden::MappedObjectProperty &property);
-
     // Get the plugins that are available at the sequencer and
     // put them in the local pluginmanager
     //
     void getSequencerPlugins(Rosegarden::AudioPluginManager *);
 
-    // Get an object ID for a (singleton) type
-    //
-    Rosegarden::MappedObjectId getSequencerMappedObjectId(
-            Rosegarden::MappedObject::MappedObjectType type);
 
     // Reinitialise the studio
     //

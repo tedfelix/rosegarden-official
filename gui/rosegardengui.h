@@ -819,10 +819,6 @@ public slots:
     void slotDeleteSegments(Rosegarden::SegmentSelection&);
     void slotSegmentsSelected(const Rosegarden::SegmentSelection &);
 
-    void slotSetMappedProperty(Rosegarden::MappedObjectId,
-                               const Rosegarden::MappedObjectProperty &,
-                               Rosegarden::MappedObjectValue);
-
 private:
 
     //--------------- Data members ---------------------------------

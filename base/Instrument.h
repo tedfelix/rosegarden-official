@@ -169,6 +169,12 @@ public:
     //
     AudioPluginInstance* getPlugin(int index);
 
+    // MappedId management - should typedef this type once
+    // we have the energy to shake this all out.
+    //
+    int getMappedId() const { return m_mappedId; }
+    void setMappedId(int id) { m_mappedId = id; }
+
 private:
     InstrumentId    m_id;
     std::string     m_name;
@@ -196,6 +202,11 @@ private:
 
     // Where we hold the audio plugins for this instrument
     std::vector<AudioPluginInstance*>     m_audioPlugins;
+
+    // Instruments are directly related to faders for volume
+    // control.  Here we can store the remote fader id.
+    //
+    int              m_mappedId;
 
 };
 

@@ -51,7 +51,8 @@ Instrument::Instrument(InstrumentId id, InstrumentType it,
     m_sendBankSelect(false),
     m_sendProgramChange(false),
     m_sendPan(false),
-    m_sendVelocity(false)
+    m_sendVelocity(false),
+    m_mappedId(0)
 
 {
     // Add a number of plugin place holders (unassigned)
@@ -82,7 +83,8 @@ Instrument::Instrument(InstrumentId id,
     m_sendBankSelect(false),
     m_sendProgramChange(false),
     m_sendPan(false),
-    m_sendVelocity(false)
+    m_sendVelocity(false),
+    m_mappedId(0)
 
 {
     // Add a number of plugin place holders (unassigned)

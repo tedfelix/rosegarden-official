@@ -91,9 +91,6 @@ signals:
 
     void sendMappedInstrument(const Rosegarden::MappedInstrument &mI);
 
-    void setMappedProperty(Rosegarden::MappedObjectId,
-                           const Rosegarden::MappedObjectProperty &,
-                           Rosegarden::MappedObjectValue);
 protected:
 
     void populateProgramList();

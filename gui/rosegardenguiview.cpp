@@ -159,17 +159,6 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
             this,
             SLOT(slotChangeInstrumentLabel(Rosegarden::InstrumentId, QString)));
 
-    connect(m_instrumentParameterBox,
-            SIGNAL(setMappedProperty(
-                    Rosegarden::MappedObjectId,
-                    const Rosegarden::MappedObjectProperty &,
-                    Rosegarden::MappedObjectValue)),
-            this,
-            SIGNAL(setMappedProperty(
-                    Rosegarden::MappedObjectId,
-                    const Rosegarden::MappedObjectProperty &,
-                    Rosegarden::MappedObjectValue)));
-
     if (doc)
         m_trackEditor->setupSegments();
 }

@@ -221,6 +221,10 @@ public:
     virtual void setProperty(const MappedObjectProperty &property,
                              MappedObjectValue value);
 
+    // Get an audio fader for an InstrumentId
+    //
+    MappedObject* getAudioFader(Rosegarden::InstrumentId id);
+
     // Return the object vector
     //
     //std::vector<MappedObject*>* getObjects() const { return &m_objects; }
@@ -262,6 +266,7 @@ public:
     // properties
     //
     static const MappedObjectProperty FaderLevel;
+    static const MappedObjectProperty InstrumentId;
 
     MappedAudioFader(MappedObject *parent,
                      MappedObjectId id,
@@ -273,7 +278,8 @@ public:
                      id,
                      readOnly),
                      m_level(80), // assume 100 is max for the moment
-                     m_channels(channels) {;}
+                     m_channels(channels),
+                     m_instrumentId(0) {;}
 
     ~MappedAudioFader() {;}
 
@@ -289,11 +295,11 @@ public:
     virtual void setProperty(const MappedObjectProperty &property,
                              MappedObjectValue value);
 
-
 protected:
 
     MappedObjectValue m_level;
     MappedObjectValue m_channels;
+    Rosegarden::InstrumentId      m_instrumentId;
 
 };
 

@@ -588,17 +588,6 @@ void RosegardenGUIApp::initView()
             this, SLOT(slotSendMappedEvent(Rosegarden::MappedEvent*)));
     
     connect(m_view,
-            SIGNAL(setMappedProperty(
-                    Rosegarden::MappedObjectId,
-                    const Rosegarden::MappedObjectProperty &,
-                    Rosegarden::MappedObjectValue)),
-            this,
-            SLOT(slotSetMappedProperty(
-                    Rosegarden::MappedObjectId,
-                    const Rosegarden::MappedObjectProperty &,
-                    Rosegarden::MappedObjectValue)));
-
-    connect(m_view,
             SIGNAL(sendMappedInstrument(const Rosegarden::MappedInstrument &)),
             this,
             SLOT(slotSendMappedInstrument(const Rosegarden::MappedInstrument&)));
@@ -3220,15 +3209,3 @@ RosegardenGUIApp::skippedSlices(unsigned int /*slices*/)
 }
 
  
-void
-RosegardenGUIApp::slotSetMappedProperty(
-        Rosegarden::MappedObjectId id,
-        const Rosegarden::MappedObjectProperty &property,
-        Rosegarden::MappedObjectValue value)
-{
-    if(m_seqManager)
-        m_seqManager->setMappedProperty(id, property, value);
-}
-
-
-

@@ -33,7 +33,10 @@ namespace Rosegarden
 // cases set too.
 //
 const MappedObjectProperty MappedObject::Name = "name";
+
 const MappedObjectProperty MappedAudioFader::FaderLevel = "faderLevel";
+const MappedObjectProperty MappedAudioFader::InstrumentId = "instrumentId";
+
 const MappedObjectProperty MappedAudioPluginManager::Plugins = "plugins";
 const MappedObjectProperty MappedAudioPluginManager::PluginIds = "pluginids";
 
@@ -439,6 +442,33 @@ MappedStudio::clearTemporaries()
 
 }
 
+MappedObject*
+MappedStudio::getAudioFader(Rosegarden::InstrumentId id)
+{
+    std::vector<MappedObject*>::iterator it = m_objects.begin();
+    std::vector<std::vector<MappedObject*>::iterator> dead;
+
+    while (it != m_objects.end())
+    {
+        if ((*it)->getType() == MappedObject::AudioFader)
+        {
+            // compare InstrumentId
+            //
+            MappedObjectPropertyList list = (*it)->
+                getPropertyList(MappedAudioFader::InstrumentId);
+
+            if (Rosegarden::InstrumentId(list[0].toInt()) == id)
+                return (*it);
+        }
+        it++;
+    }
+
+    return 0;
+
+}
+
+
+
 
 // ------------ MappedAudioFader ----------------
 //
@@ -466,9 +496,13 @@ MappedAudioFader::getPropertyList(const MappedObjectProperty &property)
     {
         list.push_back(MappedAudioFader::FaderLevel);
     }
+    else if (property == MappedAudioFader::InstrumentId)
+    {
+        list.push_back(MappedObjectProperty("%1").arg(m_instrumentId));
+    }
     else if (property == MappedAudioFader::FaderLevel)
     {
-        list.push_back(QString("%1").arg(m_level));
+        list.push_back(MappedObjectProperty("%1").arg(m_level));
     }
 
     return list;
@@ -480,7 +514,13 @@ MappedAudioFader::setProperty(const MappedObjectProperty &property,
 {
     if (property == MappedAudioFader::FaderLevel)
     {
+        std::cout << "MappedAudioFader::setProperty - "
+                  << "fader = " << value << std::endl;
         m_level = value;
+    }
+    else if (property == MappedAudioFader::InstrumentId)
+    {
+        m_instrumentId = Rosegarden::InstrumentId(value);
     }
     else
     {

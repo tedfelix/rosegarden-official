@@ -33,10 +33,16 @@ class StudioControl
 {
 public:
 
-    static MappedObjectId createStudioObject(
-                  MappedObject::MappedObjectType type);
+    // Object management
+    //
+    static MappedObjectId
+        createStudioObject(MappedObject::MappedObjectType type);
+    static MappedObjectId
+        getStudioObjectByType(MappedObject::MappedObjectType type);
     static bool destroyStudioObject(MappedObjectId id);
 
+    // Properties
+    //
     static MappedObjectPropertyList
                   getStudioObjectProperty(MappedObjectId id,
                                           const MappedObjectProperty &property);
@@ -44,10 +50,6 @@ public:
     static bool setStudioObjectProperty(MappedObjectId id,
                                         const MappedObjectProperty &property,
                                         MappedObjectValue value);
-
-//static MappedObjectId getStudioObject(
-//static modifyStudioObject(MappedObjectId id
-
 };
 
 }

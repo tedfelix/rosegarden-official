@@ -218,9 +218,6 @@ signals:
     //
     void sendMappedEvent(Rosegarden::MappedEvent *mE);
     void sendMappedInstrument(const Rosegarden::MappedInstrument &mI);
-    void setMappedProperty(Rosegarden::MappedObjectId,
-                           const Rosegarden::MappedObjectProperty &,
-                           Rosegarden::MappedObjectValue);
 
     void stateChange(const QString&, bool);
 

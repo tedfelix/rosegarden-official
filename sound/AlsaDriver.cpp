@@ -2109,16 +2109,17 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                 // Get the volume of the audio fader if we can find it
                 //
                 float volume = 1.0f;
-                Rosegarden::MappedAudioFader*fader =
+
+                Rosegarden::MappedAudioFader *fader =
                     dynamic_cast<Rosegarden::MappedAudioFader*>
                         (inst->getMappedStudio()->
-                             getObject((*it)->getInstrument()));
+                             getAudioFader((*it)->getInstrument()));
                 
                 if (fader)
                 {
                     MappedObjectPropertyList result =
                         fader->getPropertyList(MappedAudioFader::FaderLevel);
-                    volume = float(result[0].toInt())/127.0;
+                    volume = float(result[0].toFloat())/127.0;
                 }
 
                 while (samplesOut < nframes)

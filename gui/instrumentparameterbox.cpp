@@ -568,10 +568,11 @@ InstrumentParameterBox::slotSelectVelocity(int index)
         // the top of the slider is max, the bottom min.
         //
         m_volumeValue->setNum(index);
-        emit setMappedProperty(
-                Rosegarden::MappedObjectId(m_selectedInstrument->getId()),
-                Rosegarden::MappedAudioFader::FaderLevel,
-                index);
+
+        Rosegarden::StudioControl::setStudioObjectProperty
+            (Rosegarden::MappedObjectId(m_selectedInstrument->getMappedId()),
+             Rosegarden::MappedAudioFader::FaderLevel,
+             Rosegarden::MappedObjectValue(index));
     }
 
     updateAllBoxes();
