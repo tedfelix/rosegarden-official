@@ -59,17 +59,22 @@ public:
      * Scan [from, to[ for events which aren't wrapped in ViewElements
      * and wrap them
      */
-    void insertNewEvents(Rosegarden::Track::iterator from,
-                         Rosegarden::Track::iterator to);
+//    void insertNewEvents(Rosegarden::Track::iterator from,
+//                         Rosegarden::Track::iterator to);
 
     /**
      * Wrap Event in a ViewElement if it doesn't have one already, and
-     * inserts it in all ViewElements list.
+     * insert it in a ViewElements list.
      *
      * If insertInTrack is true, insert the Event itself in the wrapped
-     * Track as well.
+     * Track as well.  In this case, behaviour is equivalent to simply
+     * inserting in the track instead of calling this method...
      */
-    void wrapAndInsert(Rosegarden::Event*, bool insertInTrack = false);
+    void insert(Rosegarden::Event*, bool insertInTrack = false);
+
+    //!!! We perhaps could do with methods to insert and erase
+    //notationelements (etc) that are not also in the underlying
+    //track, but these currently do not do that -- consider later.
 
     // overload these for each ViewElement type
 
@@ -85,19 +90,19 @@ public:
      * If insertInTrack is true, also insert the Event which the
      * NotationElement points to in the wrapped Track.
      */
-    void insert(NotationElement*, bool insertInTrack = false);
+//!!!    void insert(NotationElement*, bool insertInTrack = false);
 
     /**
      * Erase the element pointed to by iterator
      * Also erase the corresponding Event from the wrapped Track
      */
-    void erase(NotationElementList::iterator);
+//!!!    void erase(NotationElementList::iterator);
 
     /**
      * Erase the element
      * Also erase the corresponding Event from the wrapped Track
      */
-    void eraseSingle(NotationElement*);
+//!!!    void eraseSingle(NotationElement*);
 
     /**
      * Try to collapse the element (note or rest)

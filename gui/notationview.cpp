@@ -33,7 +33,6 @@
 #include "rosegardenguidoc.h"
 #include "notationview.h"
 #include "notationelement.h"
-#include "NotationTypes.h"
 #include "notationproperties.h"
 
 #include "staff.h"
@@ -43,6 +42,9 @@
 #include "resource.h"
 
 #include "rosedebug.h"
+
+#include "NotationTypes.h"
+#include "Quantizer.h"
 
 using Rosegarden::Event;
 using Rosegarden::Int;
@@ -55,6 +57,7 @@ using Rosegarden::Clef;
 using Rosegarden::Key;
 using Rosegarden::Accidental;
 using Rosegarden::TimeSignature;
+using Rosegarden::Quantizer;
 using Rosegarden::timeT;
 
 
@@ -905,7 +908,7 @@ void NotationView::deleteNote(NotationElement* element)
         if (track.noteIsInChord(element->event())) {
 
             // Simply delete the event
-            m_viewElementsManager->eraseSingle(element);
+            m_viewElementsManager->getTrack().eraseSingle(element->event());
             needLayout = true;
 
         } else {
@@ -915,8 +918,8 @@ void NotationView::deleteNote(NotationElement* element)
             newRest->setDuration(element->getDuration());
             newRest->setAbsoluteTime(element->getAbsoluteTime());
 
-            m_viewElementsManager->eraseSingle(element);
-            m_viewElementsManager->wrapAndInsert(newRest, true);
+            m_viewElementsManager->getTrack().eraseSingle(element->event());
+            m_viewElementsManager->getTrack().insert(newRest);
         
             needLayout = true;
         }
@@ -1012,7 +1015,8 @@ void NotationView::insertNote(NotationElementList::iterator closestNote,
 
         kdDebug(KDEBUG_AREA) << "new event is: " << (*newNotationElement) << endl;
 
-        m_viewElementsManager->insert(newNotationElement, true);
+	//!!! wholly wrong -- leaks notation element -- rework later
+        m_viewElementsManager->getTrack().insert(newNotationElement->event());
             
     }
 
@@ -1151,15 +1155,18 @@ void NotationView::chordEvent(NotationElementList::iterator closestNote,
 
             // new note is being chorded with notes which are longer
             // for the moment, do the same as in other case
-            if (track.expandIntoTie(start, end,
-                                    insertedEvent->getDuration(),
-                                    newEnd)) {
+	    if (track.isExpandValid
+		(track.getQuantizer().getNoteQuantizedDuration(*start),
+		 insertedEvent->getDuration())) {
+
+		track.expandIntoTie(start, end,
+                                    insertedEvent->getDuration());
+//!!!                                    newEnd);
 
                 // put NotationElements around the newly created events
-                ++newEnd; // insertNewEvents works on a [from,to[ range
+//!!!                ++newEnd; // insertNewEvents works on a [from,to[ range
                 // and we need to wrap this last event
-                m_viewElementsManager->insertNewEvents(start, newEnd);
-
+//!!!                m_viewElementsManager->insertNewEvents(start, newEnd);
 
             } else {
                 // expansion is not possible, so force the inserted note
@@ -1283,12 +1290,13 @@ bool NotationView::replaceRestWithNote(NotationElementList::iterator rest,
             newRest->setMaybe<String>("Name", "INSERTED_REST");
             restAbsoluteTime += duration;
 
-            m_viewElementsManager->wrapAndInsert(newRest, true);
+            m_viewElementsManager->getTrack().insert(newRest);
         }
     }
-    
-    m_viewElementsManager->insert(newNote, true);
-    m_viewElementsManager->erase(rest);
+
+    //!!! wholly wrong -- leaks notation element -- rework later
+    m_viewElementsManager->getTrack().insert(newNote->event());
+    m_viewElementsManager->getTrack().eraseSingle((*rest)->event());
 
     return true;
 }

@@ -63,10 +63,10 @@ ViewElementsManager::notationElementList(Track::iterator from,
     return m_notationElements;
 }
 
+/*!!!
 void ViewElementsManager::insertNewEvents(Rosegarden::Track::iterator from,
                                           Rosegarden::Track::iterator to)
 {
-/*!!!
     bool eventHasViewElement = false;
     
     for (Track::iterator i = from; i != to; ++i) {
@@ -94,25 +94,24 @@ void ViewElementsManager::insertNewEvents(Rosegarden::Track::iterator from,
         // be lenient about it
         //KMessageBox::error(0, "ViewElementsManager::insertNewEvents() : tried wrapping events which already had ViewElements");
     }
-*/
 }
+*/
 
-void ViewElementsManager::wrapAndInsert(Rosegarden::Event* e,
+void ViewElementsManager::insert(Rosegarden::Event* e,
                                         bool insertInTrack)
 {
-    if (!e->hasViewElement()) {
-//!!!        NotationElement *el = new NotationElement(e);
-//!!!        m_notationElements->insert(el);
-
-        if (insertInTrack)
-            m_track.insert(e);
-            
-    } else {
-        KMessageBox::error(0, "ViewElementsManager::insert() : trying to insert an Event which already has a ViewElement");
+    if (insertInTrack) m_track.insert(e);
+    else {
+	if (!e->hasViewElement()) {
+	    NotationElement *el = new NotationElement(e);
+	    m_notationElements->insert(el);
+	} else {
+	    KMessageBox::error(0, "ViewElementsManager::insert() : trying to insert an Event which already has a ViewElement");
+	}
     }
 }
 
-
+/*!!!
 void ViewElementsManager::insert(NotationElement *e, bool insertInTrack)
 {
     kdDebug(KDEBUG_AREA) << "ViewElementsManager::insert("
@@ -123,12 +122,15 @@ void ViewElementsManager::insert(NotationElement *e, bool insertInTrack)
     if (insertInTrack)
         m_track.insert(e->event());
 }
+*/
 
+/*!!!
 void ViewElementsManager::erase(NotationElementList::iterator it)
 {
     m_track.eraseSingle((*it)->event());
     // and wait for callback
 }
+*/
 
 /*!!!
     std::pair<Track::iterator, Track::iterator> interval
@@ -167,6 +169,7 @@ void ViewElementsManager::erase(NotationElementList::iterator it)
 }
 */
 
+/*!!!
 void ViewElementsManager::eraseSingle(NotationElement* el)
 {
     kdDebug(KDEBUG_AREA) << "ViewElementsManager::erase() erasing : "
@@ -176,7 +179,7 @@ void ViewElementsManager::eraseSingle(NotationElement* el)
 //!!!    m_notationElements->eraseSingle(el); // this will delete el
     m_track.eraseSingle(ev);
 }
-
+*/
 
 void ViewElementsManager::tryCollapse(NotationElement* el)
 {

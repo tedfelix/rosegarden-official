@@ -26,56 +26,57 @@ const std::string Quantizer::DurationProperty = "QuantizedDuration";
 const std::string Quantizer::NoteDurationProperty = "QuantizedNoteDuration";
 
 void
-Quantizer::quantizeByUnit(Track::iterator from,
-                          Track::iterator to,
-                          int unit) 
+Quantizer::quantizeByUnit(Track::iterator from, Track::iterator to) const
 {
-    for ( ; from != to; ++from) quantizeByUnit(*from, unit);
+    for ( ; from != to; ++from) quantizeByUnit(*from);
 }
 
 
 timeT
-Quantizer::quantizeByUnit(Event *e, int unit)
+Quantizer::quantizeByUnit(Event *e) const
 {
-    timeT duration = e->getDuration();
-
-    if (duration != 0) {
-        timeT low = (duration / unit) * unit;
-        timeT high = low + unit;
-        if (high - duration > duration - low) duration = low;
-        else duration = high;
-    }
-
+    timeT duration = quantizeByUnit(e->getDuration());
     e->setMaybe<Int>(DurationProperty, duration);
     return duration;
 }
 
 
 timeT
-Quantizer::getQuantizedDuration(Event *e, int unit)
+Quantizer::quantizeByUnit(timeT duration) const
 {
-    long d;
-    if (e->get<Int>(DurationProperty, d)) return (timeT)d;
-    else return quantizeByUnit(e, unit);
-}
-
-
-void
-Quantizer::quantizeByNote(Track::iterator from,
-                          Track::iterator to,
-                          int maxDots) 
-{
-    for ( ; from != to; ++from) quantizeByNote(*from, maxDots);
+    if (duration != 0) {
+        timeT low = (duration / m_unit) * m_unit;
+        timeT high = low + m_unit;
+        if (high - duration > duration - low) duration = low;
+        else duration = high;
+    }
+    return duration;
 }
 
 
 timeT
-Quantizer::quantizeByNote(Event *e, int maxDots)
+Quantizer::getUnitQuantizedDuration(Event *e) const
 {
-    timeT duration = quantizeByUnit(e, Note(Note::Shortest).getDuration());
+    long d;
+    if (e->get<Int>(DurationProperty, d)) return (timeT)d;
+    else return quantizeByUnit(e);
+}
+
+
+void
+Quantizer::quantizeByNote(Track::iterator from, Track::iterator to) const
+{
+    for ( ; from != to; ++from) quantizeByNote(*from);
+}
+
+
+timeT
+Quantizer::quantizeByNote(Event *e) const
+{
+    timeT duration = quantizeByUnit(e);
     if (duration == 0 && e->getDuration() == 0) return 0;
 
-    Note note(quantizeByNote(duration, maxDots));
+    Note note(requantizeByNote(duration));
 
     e->setMaybe<Int>(NoteDurationProperty, duration);
     e->setMaybe<Int>(Note::NoteType, note.getNoteType());
@@ -85,10 +86,19 @@ Quantizer::quantizeByNote(Event *e, int maxDots)
 }
 
 
-Note
-Quantizer::quantizeByNote(timeT &duration, int maxDots)
+timeT 
+Quantizer::quantizeByNote(timeT duration) const
 {
-    Note  shortNote = Note::getNearestNote(duration, maxDots);
+    duration = quantizeByUnit(duration);
+    (void)requantizeByNote(duration);
+    return duration;
+}
+
+
+Note
+Quantizer::requantizeByNote(timeT &duration) const
+{
+    Note  shortNote = Note::getNearestNote(duration, m_maxDots);
     timeT shortTime = shortNote.getDuration();
     if   (shortTime == duration) return shortNote;
 
@@ -119,11 +129,11 @@ Quantizer::quantizeByNote(timeT &duration, int maxDots)
 
 
 timeT
-Quantizer::getQuantizedNoteDuration(Event *e, int maxDots)
+Quantizer::getNoteQuantizedDuration(Event *e) const
 {
     long d;
     if (e->get<Int>(NoteDurationProperty, d)) return (timeT)d;
-    else return quantizeByNote(e, maxDots);
+    else return quantizeByNote(e);
 }
 
 

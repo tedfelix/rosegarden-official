@@ -91,6 +91,8 @@ public:
     static const PropertyName BeamedGroupIdPropertyName;
     static const PropertyName BeamedGroupTypePropertyName;
 
+    const Quantizer &getQuantizer() { return *m_quantizer; }
+
     timeT getStartIndex() const { return m_startIdx; }
     void  setStartIndex(timeT i);
 
@@ -105,8 +107,8 @@ public:
     //!!! This may be obsolete, but we'll think about that more later
     TimeSignature getTimeSigAtEnd(timeT &absTimeOfSig) const;
 
-    unsigned int getDuration() const;
-    void         setDuration(unsigned int);
+    timeT getDuration() const;
+    void  setDuration(timeT); // fills up with rests when lengthening
 
     /**
      * Calculates suitable positions for the bar lines, taking into
@@ -161,31 +163,6 @@ public:
     bool eraseSingle(Event*);
 
     /**
-     * If possible, collapses the event with the following or previous
-     * one.
-     *
-     * @return true if collapse was done
-     *
-     * collapseForward is set to true if the collapse was with the
-     * following element, false if it was with the previous one
-     *
-     * collapsedEvent will point to the deleted Event (so we can
-     * easily find the corresponding ViewElements to delete), or null
-     * if no event was deleted
-     */
-
-    //!!! we can probably remove collapsedEvent now that
-    //ViewElementsManager is a TrackObserver.  Besides, surely the
-    //event would have been deleted (by erase()) before the code that
-    //called this method was able to look at it?
-
-    //!!! maybe needs a more specific name -- doesn't always collapse,
-    //only if the collapsed notes make a single note of meaningful
-    //duration
-
-    bool collapse(Event*, bool& collapseForward, Event*& collapsedEvent);
-
-    /**
      * Returns an iterator pointing to that specific element,
      * end() otherwise
      */
@@ -210,17 +187,29 @@ public:
      * element is a rest, end() will be returned)
      */
     iterator findContiguousPrevious(iterator);
-
-    /**
-     * Returns true if both Events can be collapsed (into a single one)
-     */
-    bool canCollapse(iterator, iterator);
     
     /**
      * Returns an event group id
      * The id is guaranteed to be unique within the track
      */
     int getNextGroupId() const;
+
+
+    /**
+     * Checks whether it's reasonable to expand (split) a single event
+     * of duration a+b into two events of durations a and b, for some
+     * working definition of "reasonable".
+     *
+     * Currently "reasonable" is: given D = max(a, b) and d = min(b, a)
+     * one of the following is true :
+     * D = 2*d
+     * D = 4*d
+     * D = 4*d/3 
+     *
+     * You should pass note-quantized durations into this method
+     */
+    bool isExpandValid(timeT a, timeT b);
+
 
     /**
      * Expands (splits) events in the [from, to[ interval into 
@@ -230,11 +219,10 @@ public:
      * lastInsertedEvent will point to the last inserted event
      *
      * The events in [from, to[ must all be at the same absolute time
-     *
+     * 
+     * Does not check "reasonableness" of expansion first
      */
-    bool expandIntoTie(iterator from, iterator to,
-                       timeT baseDuration, iterator& lastInsertedEvent,
-		       bool force = false);
+    void expandIntoTie(iterator from, iterator to, timeT baseDuration);
 
 
     /**
@@ -243,15 +231,9 @@ public:
      * duration R, with R being equal to the events' initial duration
      * minus baseDuration
      *
-     * This can work only if, given D = max(i->duration, baseDuration)
-     * and d = min(i->duration, baseDuration)
-     * one of the following is true :
-     * D = 2*d
-     * D = 4*d
-     * D = 4*d/3 
+     * Does not check "reasonableness" of expansion first
      */
-    bool expandIntoTie(iterator i, timeT baseDuration,
-                       iterator& lastInsertedEvent, bool force = false);
+    void expandIntoTie(iterator i, timeT baseDuration);
 
     /**
      * Same as expandIntoTie(), but for an Event which hasn't
@@ -270,6 +252,41 @@ public:
                               iterator& lastInsertedEvent);
 
     */
+
+
+    /**
+     * Returns true if Events of durations a and b can reasonably be
+     * collapsed into a single one of duration a+b, for some
+     * definition of "reasonably".
+     *
+     * You should pass note-quantized durations into this method
+     */
+    bool isCollapseValid(timeT a, timeT b);
+
+    /**
+     * If possible, collapses the event with the following or previous
+     * one.
+     *
+     * @return true if collapse was done
+     *
+     * collapseForward is set to true if the collapse was with the
+     * following element, false if it was with the previous one
+     *
+     * collapsedEvent will point to the deleted Event (so we can
+     * easily find the corresponding ViewElements to delete), or null
+     * if no event was deleted
+     */
+
+    //!!! we can probably remove collapsedEvent now that
+    //ViewElementsManager is a TrackObserver.  Besides, surely the
+    //event would have been deleted (by erase()) before the code that
+    //called this method was able to look at it?
+
+    //!!! maybe needs a more specific name -- doesn't always collapse,
+    //only if the collapsed notes make a single note of meaningful
+    //duration
+
+    bool collapse(Event*, bool& collapseForward, Event*& collapsedEvent);
 
     /**
      * Returns the range [start, end[ of events which are at absoluteTime
@@ -330,8 +347,6 @@ protected:
 		       bool tiedBack);
     iterator insertSingleNote(iterator position, int duration, int pitch,
 			      bool tiedBack);
-
-    static bool checkExpansionValid(timeT maxDuration, timeT minDuration);
 
     void addNewBar(timeT start, bool fixed, bool correct, 
                    const TimeSignature &timesig) {

@@ -51,19 +51,35 @@ public:
         well -- the results are stored in separate properties and do
         not conflict.
     */
-    Quantizer() { }
+    Quantizer(int unit = -1, int maxDots = 2) :
+	m_unit(unit), m_maxDots(maxDots) {
+	if (unit < 0) setUnit(Note(Note::Shortest));
+    }
+
+    ~Quantizer() { }
 
     static const std::string DurationProperty;
     static const std::string NoteDurationProperty;
+
+    void setUnit(int unit)        { m_unit = unit; }
+    void setUnit(Note note)	  { m_unit = note.getDuration(); }
+    void setMaxDots(int maxDots)  { m_maxDots = maxDots; }
 
     /**
      * Quantizes a section of a track.  Sets the DurationProperty on
      * all events; does not change the event duration.  Sets the
      * property even on zero-duration (non-note) events.
      */
-    void quantizeByUnit(Track::iterator from,
-                        Track::iterator to,
-                        int unit = Note::Shortest);
+    void quantizeByUnit(Track::iterator from, Track::iterator to) const;
+
+    /**
+     * Returns the DurationProperty if it exists; otherwise quantizes
+     * the event by unit and then returns that property.  (If the event's
+     * duration has been changed since it was last quantized, or the
+     * last quantization used a different unit, this method may return
+     * the wrong value.)
+     */
+    timeT getUnitQuantizedDuration(Rosegarden::Event *el) const;
 
     /**
      * Quantizes a section of a track.  Sets the DurationProperty,
@@ -72,9 +88,7 @@ public:
      * Sets the first of those properties even on zero-duration
      * (non-note) events, but the others only on notes and rests.
      */
-    void quantizeByNote(Track::iterator from,
-                         Track::iterator to,
-                         int maxDots = 2);
+    void quantizeByNote(Track::iterator from, Track::iterator to) const;
 
     /**
      * Quantizes one event.  Sets the DurationProperty; does not
@@ -82,7 +96,14 @@ public:
      *
      * @return Quantized duration (same as DurationProperty)
      */
-    timeT quantizeByUnit(Rosegarden::Event *el, int unit = Note::Shortest);
+    timeT quantizeByUnit(Rosegarden::Event *el) const;
+
+    /**
+     * Quantizes a duration.  
+     *
+     * @return Quantized duration
+     */
+    timeT quantizeByUnit(timeT duration) const;
 
     /**
      * Quantizes one event.  Sets the DurationProperty,
@@ -92,29 +113,29 @@ public:
      *
      * @return Quantized note duration (same as NoteDurationProperty)
      */
-    timeT quantizeByNote(Rosegarden::Event *el, int maxDots = 2);
+    timeT quantizeByNote(Rosegarden::Event *el) const;
 
     /**
-     * Returns the DurationProperty if it exists; otherwise quantizes
-     * the event and then returns that property.  (If the event's
-     * duration has been changed since it was last quantized, or the
-     * last quantization used a different unit, this method may return
-     * the wrong value.)
+     * Quantizes a duration.
+     *
+     * @return Duration of quantized note
      */
-    timeT getQuantizedDuration(Rosegarden::Event *el, int unit = Note::Shortest);
+    timeT quantizeByNote(timeT duration) const;
 
     /**
      * Returns the NoteDurationProperty if it exists, otherwise
-     * quantizes the event and then returns that property.  (If the
-     * event's duration has been changed since it was last quantized,
-     * or the last quantization used a different maxDots value, this
-     * may return the wrong value.)
+     * quantizes the event by note and then returns that property.
+     * (If the event's duration has been changed since it was last
+     * quantized, or the last quantization used a different maxDots
+     * value, this may return the wrong value.)
      */
-    timeT getQuantizedNoteDuration(Rosegarden::Event *el, int maxDots = 2);
+    timeT getNoteQuantizedDuration(Rosegarden::Event *el) const;
 
 protected:
+    Note requantizeByNote(timeT &unitQuantizedDuration) const;
 
-    Note quantizeByNote(timeT &duration, int dots);
+    int m_unit;
+    int m_maxDots;
 };
 
 }

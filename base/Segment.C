@@ -108,19 +108,18 @@ TimeSignature Track::getTimeSigAtEnd(timeT &absTimeOfSig) const
 
 // was called getNbTimeSteps, but getDuration is what it is
 
-unsigned int Track::getDuration() const
+timeT Track::getDuration() const
 {
     const_iterator lastEl = end();
     if (lastEl == begin()) return 0;
     --lastEl;
-    return ((*lastEl)->getAbsoluteTime() +
-	    (*lastEl)->getDuration());
+    return ((*lastEl)->getAbsoluteTime() + (*lastEl)->getDuration());
 }
 
 
-void Track::setDuration(unsigned int d)
+void Track::setDuration(timeT d)
 {
-    unsigned int currentDuration = getDuration();
+    timeT currentDuration = getDuration();
 
     cerr << "Track::setDuration() : current = " << currentDuration
          << " - new : " << d << endl;
@@ -333,11 +332,13 @@ bool Track::collapse(Event* e, bool& collapseForward, Event*& collapsedEvent)
 
     if (elPos == end()) return false;
 
+    timeT   myDuration = m_quantizer->getNoteQuantizedDuration(*elPos);
     iterator nextEvent = findContiguousNext(elPos),
-        previousEvent  = findContiguousPrevious(elPos);
+         previousEvent = findContiguousPrevious(elPos);
 
     if (nextEvent != end() &&
-        canCollapse(nextEvent, elPos)) {
+	isCollapseValid(m_quantizer->getNoteQuantizedDuration(*nextEvent),
+			myDuration)) {
 
         // collapse with next event
         e->setDuration(e->getDuration() + (*nextEvent)->getDuration());
@@ -358,7 +359,9 @@ bool Track::collapse(Event* e, bool& collapseForward, Event*& collapsedEvent)
         erase(nextEvent);
 
     } else if (previousEvent != end() &&
-               canCollapse(previousEvent, elPos)) {
+	       isCollapseValid(m_quantizer->getNoteQuantizedDuration
+			       (*previousEvent),
+			       myDuration)) {
 
         // collapse with previous event
         (*previousEvent)->setDuration(e->getDuration() +
@@ -465,20 +468,20 @@ Track::iterator Track::findContiguousPrevious(Track::iterator el)
 //better to add the quantized durations and see if the closest
 //possible note has the same duration as we have
 
-bool Track::canCollapse(Track::iterator a, Track::iterator b)
+bool Track::isCollapseValid(timeT a, timeT b)
 {
-    time_t durationMax, durationMin;
+//    timeT ad = m_quantizer->getQuantizedNoteDuration(*a);
+//    timeT bd = m_quantizer->getQuantizedNoteDuration(*b);
     
-    timeT ad = m_quantizer->getQuantizedNoteDuration(*a);
-    timeT bd = m_quantizer->getQuantizedNoteDuration(*b);
-    
-    if (ad > bd) {
-        durationMax = ad;
-        durationMin = bd;
-    } else {
-        durationMax = bd;
-        durationMin = ad;
-    }
+//    if (ad > bd) {
+//        durationMax = ad;
+//        durationMin = bd;
+//    } else {
+//        durationMax = bd;
+//        durationMin = ad;
+//    }
+    timeT durationMax = std::max(a, b);
+    timeT durationMin = std::min(a, b);
 
     return ((durationMax == durationMin) ||
             (durationMax == (2 * durationMin)));
@@ -508,29 +511,33 @@ int Track::getNextGroupId() const
     return m_groupId++;
 }
 
-bool Track::expandIntoTie(iterator i,
-                          timeT baseDuration,
-                          iterator& lastInsertedEvent,
-			  bool force)
+
+//!!! Not sufficient -- doesn't work for dotted notes (where splitting
+//e.g. a dotted crotchet into a crotchet and a quaver is fine) --
+//should just check that both durations correspond to decent note
+//lengths?  This needs to be relatively permissive, as it's making
+//decisions about what notes to allow the user to enter
+
+bool Track::isExpandValid(timeT a, timeT b)
 {
-    if (i == end()) return false;
-
-    iterator i2;
-    getTimeSlice((*i)->getAbsoluteTime(), i, i2);
-    return expandIntoTie(i, i2, baseDuration, lastInsertedEvent, force);
-
-/*
-    iterator i2 = i;
-    ++i2;
-    
-    return expandIntoTie(i, i2, baseDuration, lastInsertedEvent);
-*/
+    timeT maxDuration = std::max(a, b);
+    timeT minDuration = std::min(a, b);
+    return ((maxDuration == (2 * minDuration)) ||
+            (maxDuration == (4 * minDuration)) ||
+            (maxDuration == (4 * minDuration / 3)));
 }
 
-bool Track::expandIntoTie(iterator from, iterator to,
-                          timeT baseDuration,
-                          iterator& lastInsertedEvent,
-			  bool force)
+void Track::expandIntoTie(iterator i, timeT baseDuration)
+{
+    if (i == end()) return;
+    iterator i2;
+    getTimeSlice((*i)->getAbsoluteTime(), i, i2);
+    expandIntoTie(i, i2, baseDuration);
+}
+
+//!!! can probably lose lastInsertedEvent
+
+void Track::expandIntoTie(iterator from, iterator to, timeT baseDuration)
 {
     cerr << "Track::expandIntoTie(" << baseDuration << ")\n";
 
@@ -544,100 +551,80 @@ bool Track::expandIntoTie(iterator from, iterator to,
 
     if (baseDuration == eventDuration) {
         cerr << "Track::expandIntoTie() : baseDuration == eventDuration\n";
-        return true;
+        return;
     }
-    
-    timeT maxDuration = 0,
-          minDuration = 0;
     
     if (baseDuration > eventDuration) {
-        maxDuration = baseDuration;
-        minDuration = eventDuration;
-    } else {
-        maxDuration = eventDuration;
-        minDuration = baseDuration;
+        cerr << "WARNING: Track::expandIntoTie() : baseDuration > eventDuration\n";
+        return;
     }
-
-    // Check if we can perform the operation
-    //
-    if (force || checkExpansionValid(maxDuration, minDuration)) {
-  
-        long firstGroupId = -1;
-        (void)(*from)->get<Int>(BeamedGroupIdPropertyName, firstGroupId);
-
-        long nextGroupId = -1;
-        iterator ni(to);
-        if (ni != end() && ++ni != end()) {
-            (void)(*ni)->get<Int>(BeamedGroupIdPropertyName, nextGroupId);
-        }
-          
-        // Expand all the events in range [from, to[
-        //
-        for (iterator i = from; i != to; ++i) {
-
-            if ((*i)->getAbsoluteTime() != baseTime) {
-                // there's no way to really report an error,
-                // because at this point we may already have
-                // expanded some events. So since returning false
-                // means "no change was made at all", it's better
-                // to silently skip this event
-                continue;
-            }
-
-            // set the initial event's duration to base
-            (*i)->setDuration(minDuration);
-	    m_quantizer->quantizeByNote((*i));
-            
-            // Add 2nd event
-            Event* ev = new Event(*(*i));
-            ev->setDuration(maxDuration - minDuration);
-            ev->setAbsoluteTime((*i)->getAbsoluteTime() + minDuration);       
-
-            // we only want to tie Note events:
-
-            if ((*i)->isa(Note::EventType)) {
-
-                // if the first event was already tied forward, the
-                // second one will now be marked as tied forward
-                // (which is good).  set up the relationship between
-                // the original (now shorter) event and the new one.
-
-                    ev->set<Bool>(Note::TiedBackwardPropertyName, true);
-                  (*i)->set<Bool>(Note:: TiedForwardPropertyName, true);
-            }
-
-            // we may also need to change some group information: if
-            // the first event is in a beamed group but the event
-            // following the insertion is not or is in a different
-            // group, then the new second event should not be in a
-            // group.  otherwise, it should inherit the grouping info
-            // from the first event (as it already does, because it
-            // was created using the copy constructor).
-
-            //!!! Note that the whole division principle collapses if
-            //tuplets are involved.  That might be an acceptable
-            //behaviour, though, as the user can hardly expect an
-            //exact division where tuplets are present.
-
-            if (firstGroupId != -1 && nextGroupId != firstGroupId) {
-                ev->unset(BeamedGroupIdPropertyName);
-                ev->unset(BeamedGroupTypePropertyName);
-            }
-
-            lastInsertedEvent = insert(ev);
-        }
     
-        cerr << "Track::expandIntoTie() returning true\n";
-        return true;
+    long firstGroupId = -1;
+    (void)(*from)->get<Int>(BeamedGroupIdPropertyName, firstGroupId);
 
-    } else { // expansion is not possible
-        
-        cerr << "Track::expandIntoTie() returning false\n";
-        return false;
+    long nextGroupId = -1;
+    iterator ni(to);
+    if (ni != end() && ++ni != end()) {
+	(void)(*ni)->get<Int>(BeamedGroupIdPropertyName, nextGroupId);
     }
+          
+    // Expand all the events in range [from, to[
+    //
+    for (iterator i = from; i != to; ++i) {
 
+	if ((*i)->getAbsoluteTime() != baseTime) {
+	    // no way to really cope with an error, because at this
+	    // point we may already have expanded some events. Best to
+	    // skip this event
+	    cerr << "WARNING: Track::expandIntoTie(): (*i)->getAbsoluteTime() != baseTime\n";
+	    continue;
+	}
 
+	// set the initial event's duration to base
+	(*i)->setDuration(baseDuration);
+	m_quantizer->quantizeByNote((*i));
+            
+	// Add 2nd event
+	Event* ev = new Event(*(*i));
+	ev->setDuration(eventDuration - baseDuration);
+	ev->setAbsoluteTime((*i)->getAbsoluteTime() + baseDuration);
+
+	// we only want to tie Note events:
+
+	if ((*i)->isa(Note::EventType)) {
+
+	    // if the first event was already tied forward, the
+	    // second one will now be marked as tied forward
+	    // (which is good).  set up the relationship between
+	    // the original (now shorter) event and the new one.
+
+  	      ev->set<Bool>(Note::TiedBackwardPropertyName, true);
+	    (*i)->set<Bool>(Note:: TiedForwardPropertyName, true);
+	}
+
+	// we may also need to change some group information: if
+	// the first event is in a beamed group but the event
+	// following the insertion is not or is in a different
+	// group, then the new second event should not be in a
+	// group.  otherwise, it should inherit the grouping info
+	// from the first event (as it already does, because it
+	// was created using the copy constructor).
+
+	//!!! Note that the whole division principle collapses if
+	//tuplets are involved.  That might be an acceptable
+	//behaviour, though, as the user can hardly expect an
+	//exact division where tuplets are present.
+
+	if (firstGroupId != -1 && nextGroupId != firstGroupId) {
+	    ev->unset(BeamedGroupIdPropertyName);
+	    ev->unset(BeamedGroupTypePropertyName);
+	}
+
+	m_quantizer->quantizeByNote(ev);
+	insert(ev);
+    }
 }
+
 
 /*!!! Commented out while I establish whether we need something like this
 
@@ -816,21 +803,32 @@ void Track::insertNoteAux(iterator i, int duration, int pitch, bool tiedBack)
     }
 
     cerr << "Track::insertNoteAux: asked to insert duration " << duration
-	 << " over this event:" << endl << (*i) << endl;
+	 << " over this event:" << endl;
+    (*i)->dump(cerr);
 
     if (duration == existingDuration) {
+
+	cerr << "Durations match; doing simple insert" << endl;
 
 	insertSingleNote(i, duration, pitch, tiedBack);
 
     } else if (duration < existingDuration) {
 
-	iterator dummy;
-	if (!expandIntoTie(i, duration, dummy,
-			   (*i)->isa(Note::EventRestType))) {
-	    // not reasonable to split existing note, to force new one
+	if ((*i)->isa(Note::EventType) &&
+	    !isExpandValid((*i)->getDuration(), duration)) {
+
+	    cerr << "Bad split, coercing new note" << endl;
+
+	    // not reasonable to split existing note, so force new one
 	    // to same duration instead
 	    duration = (*i)->getDuration();
+
+	} else {	
+	    cerr << "Good split (or rest), splitting old event" << endl;
+
+	    expandIntoTie(i, duration);
 	}
+
 	insertSingleNote(i, duration, pitch, tiedBack);
 
     } else { // duration > existingDuration
@@ -849,6 +847,8 @@ void Track::insertNoteAux(iterator i, int duration, int pitch, bool tiedBack)
 	
 	if (needToSplit) {
 
+	    cerr << "Need to split new note" << endl;
+
 	    i = insertSingleNote(i, existingDuration, pitch, tiedBack);
 	    (*i)->set<Bool>(Note::TiedForwardPropertyName, true);
 
@@ -858,6 +858,9 @@ void Track::insertNoteAux(iterator i, int duration, int pitch, bool tiedBack)
 	    insertNoteAux(i, duration - existingDuration, pitch, true);
 
 	} else {
+
+	    cerr << "No need to split new note" << endl;
+
 	    i = insertSingleNote(i, duration, pitch, tiedBack);
 	}
     }
@@ -901,14 +904,6 @@ bool Track::noteIsInChord(Event *note)
     int dist = distance(res.first,res.second);
 
     return dist > 1;
-}
-
-
-bool Track::checkExpansionValid(timeT maxDuration, timeT minDuration)
-{
-    return ((maxDuration == (2 * minDuration)) ||
-            (maxDuration == (4 * minDuration)) ||
-            (maxDuration == (4 * minDuration / 3)));
 }
 
 
