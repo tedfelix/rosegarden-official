@@ -812,13 +812,11 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenGUIDoc* d
     : InstrumentParameterPanel(parent),
       m_audioLevelFader(new RosegardenFader(this)),
       m_audioLevelValue(new QLabel(this)),
+      m_channelButton(0),
       m_signalMapper(new QSignalMapper(this)),
       m_pluginManager(doc->getPluginManager())
 {
     QGridLayout *gridLayout = new QGridLayout(this, 10, 4);
-    // Some top space
-//     gridLayout->addRowSpacing(0, 8);
-//     gridLayout->addRowSpacing(1, 30);
 
     QLabel* audioLevelLabel = new QLabel(i18n("Level"), this);
     QLabel* pluginLabel = new QLabel(i18n("Plugins"), this);
@@ -902,7 +900,7 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenGUIDoc* d
 
     /*
     AudioFaderWidget *afW = new AudioFaderWidget(this);
-    gridLayout->addMultiCellWidget(afW, 0, 7, 3, 3);
+    gridLayout->addMultiCellWidget(afW, 0, 9, 0, 3);
     */
 }
 
@@ -937,11 +935,11 @@ AudioInstrumentParameterPanel::setupForInstrument(Rosegarden::Instrument* instru
     switch (instrument->getAudioChannels())
     {
         case 1:
-            m_channelButton->setPixmap(m_monoPixmap);
+            if (m_channelButton) m_channelButton->setPixmap(m_monoPixmap);
             break;
 
         case 2:
-            m_channelButton->setPixmap(m_stereoPixmap);
+            if (m_channelButton) m_channelButton->setPixmap(m_stereoPixmap);
             break;
 
         default:
@@ -960,12 +958,12 @@ AudioInstrumentParameterPanel::slotAudioChannelToggle()
     switch(m_selectedInstrument->getAudioChannels())
     {
         case 1:
-            m_channelButton->setPixmap(m_stereoPixmap);
+            if (m_channelButton) m_channelButton->setPixmap(m_stereoPixmap);
             m_selectedInstrument->setAudioChannels(2);
             break;
 
         case 2:
-            m_channelButton->setPixmap(m_monoPixmap);
+            if (m_channelButton) m_channelButton->setPixmap(m_monoPixmap);
             m_selectedInstrument->setAudioChannels(1);
             break;
 

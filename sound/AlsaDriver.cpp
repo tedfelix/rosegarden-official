@@ -419,7 +419,7 @@ AlsaDriver::generateInstruments()
     {
         for (int channel = 0; channel < 16; ++channel)
         {
-            sprintf(number, " #%d", channel);
+            sprintf(number, " #%d", channel + 1);
             audioName = "JACK Audio" + std::string(number);
             instr = new MappedInstrument(Instrument::Audio,
                                          channel,

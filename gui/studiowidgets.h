@@ -24,6 +24,8 @@
 
 #include <qwidget.h>
 #include <qpushbutton.h>
+#include <qpixmap.h>
+#include <qsignalmapper.h>
 
 #include "widgets.h"
 #include "trackvumeter.h"
@@ -50,13 +52,6 @@ class AudioFaderWidget : public QWidget
 public:
     AudioFaderWidget(QWidget *parent, const char *name=0);
 
-protected:
-    virtual void paintEvent(QPaintEvent *e);
-    virtual void mousePressEvent(QMouseEvent *e);
-    virtual void mouseReleaseEvent(QMouseEvent *e);
-    virtual void mouseMoveEvent(QMouseEvent *e);
-    virtual void wheelEvent(QWheelEvent *e);
-
     std::vector<QPushButton*>  m_plugins;
     AudioVUMeter              *m_vuMeter;
     QSlider                   *m_fader;
@@ -64,6 +59,13 @@ protected:
     QPushButton               *m_soloButton;
     QPushButton               *m_stereoButton;
     RosegardenRotary          *m_pan;
+
+    QPixmap                    m_monoPixmap;
+    QPixmap                    m_stereoPixmap;
+
+    QSignalMapper             *m_signalMapper;
+
+protected:
 
 };
 

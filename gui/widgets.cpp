@@ -633,7 +633,7 @@ RosegardenRotary::drawPosition()
 
     // Undraw the previous line
     //
-    double angle = (0.2 * M_PI) // offset 
+    double angle = (0.22 * M_PI) // offset 
                    + (1.6 * M_PI * (double(m_lastPosition - m_minValue) /
                      (double(m_maxValue) - double(m_minValue))));
 
@@ -650,7 +650,7 @@ RosegardenRotary::drawPosition()
 
     // Draw the new position
     //
-    angle = (0.2 * M_PI) // offset 
+    angle = (0.22 * M_PI) // offset 
                    + (1.6 * M_PI * (double(m_position - m_minValue) /
                      (double(m_maxValue) - double(m_minValue))));
 
