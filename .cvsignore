@@ -21,3 +21,4 @@ config.py
 .sconf_temp
 scons_signatures.dblite
 cache
+kde.cache.py
