@@ -216,6 +216,7 @@ protected:
     QScrollView             *m_trackButtonScroll;
 
     bool                     m_showTrackLabels;
+    unsigned int             m_canvasWidth;
 };
 
 #endif

@@ -68,7 +68,8 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
     m_horizontalScrollBar(0),
     m_segmentCanvas(0),
     m_trackButtonScroll(0),
-    m_showTrackLabels(showTrackLabels)
+    m_showTrackLabels(showTrackLabels),
+    m_canvasWidth(0)
 {
     Composition &comp = doc->getComposition();
 
@@ -119,10 +120,10 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
 
     QCanvas *canvas = new QCanvas(this);
 
-    int canvasWidth = (int)(m_rulerScale->getBarPosition(lastBar) +
-			    m_rulerScale->getBarWidth(lastBar));
+    m_canvasWidth = (int)(m_rulerScale->getBarPosition(lastBar) +
+                          m_rulerScale->getBarWidth(lastBar));
 
-    canvas->resize(canvasWidth, getTrackCellHeight() * nbTracks);
+    canvas->resize(m_canvasWidth, getTrackCellHeight() * nbTracks);
 
     canvas->setBackgroundColor(RosegardenGUIColours::SegmentCanvas);
 
@@ -402,6 +403,10 @@ void TrackEditor::slotAddTracks(unsigned int nbNewTracks)
     }
 
     m_trackButtons->slotAddTracks(nbNewTracks);
+
+    m_segmentCanvas->canvas()->resize(m_canvasWidth,
+                                      getTrackCellHeight() * composition.getNbTracks());
+
 }
 
 void TrackEditor::addSegment(int track, int start, unsigned int duration)
