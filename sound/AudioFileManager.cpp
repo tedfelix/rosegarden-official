@@ -56,41 +56,24 @@ AudioFileManager::AudioFileManager()
 
 AudioFileManager::AudioFileManager(const AudioFileManager &aFM):
     XmlExportable(),
-    m_audioPath(aFM.getAudioPath())
+    m_audioPath(aFM.getAudioPath()),
+    m_peakManager(aFM.getPeakFileManager())
 {
     std::vector<AudioFile*>::const_iterator it;
     for (it = aFM.begin(); it != aFM.end(); it++)
     {
         m_audioFiles.push_back((*it)->clone());
-        
-//         switch ((*it)->getType())
-//         {
-//             case Rosegarden::WAV:
-//                 m_audioFiles.push_back(new WAVAudioFile(**it));
-//                 break;
-
-//             case Rosegarden::BWF:
-//                 m_audioFiles.push_back(new BWFAudioFile(**it));
-//                 break;
-
-//             case Rosegarden::AIFF:
-//             default:
-//                 // do nothing
-//                 break;
-//         }
     }
 
     m_audioPath = aFM.getAudioPath();
-
-    // Get a copy of the peak file manager
-    //
-    m_peakManager = aFM.getPeakFileManager();
 
 }
 
 AudioFileManager&
 AudioFileManager::operator=(const AudioFileManager &aFM)
 {
+    if (&aFM == this) return *this;
+
     m_audioFiles.clear();
 
     // Copy all the audio file details
@@ -99,22 +82,6 @@ AudioFileManager::operator=(const AudioFileManager &aFM)
     for (it = aFM.begin(); it != aFM.end(); it++)
     {
         m_audioFiles.push_back((*it)->clone());
-
-//         switch ((*it)->getType())
-//         {
-//             case Rosegarden::WAV:
-//                 m_audioFiles.push_back(new WAVAudioFile(**it));
-//                 break;
-
-//             case Rosegarden::BWF:
-//                 m_audioFiles.push_back(new BWFAudioFile(**it));
-//                 break;
-
-//             case Rosegarden::AIFF:
-//             default:
-//                 // do nothing
-//                 break;
-//         }
     }
 
     m_audioPath = aFM.getAudioPath();

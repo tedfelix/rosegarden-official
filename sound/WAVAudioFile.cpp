@@ -64,19 +64,6 @@ WAVAudioFile::WAVAudioFile(const std::string &fileName,
     m_channels = channels;
 }
 
-// WAVAudioFile::WAVAudioFile(const AudioFile &wav):
-//     RIFFAudioFile(wav.getId(), wav.getName(), wav.getFilename())
-// {
-//     m_type = wav.getType();
-//     m_id = wav.getId();
-//     m_name = wav.getName();
-//     m_bitsPerSample = wav.getBitsPerSample();
-//     m_sampleRate = wav.getSampleRate();
-//     m_channels = wav.getChannels();
-//     m_dataChunkIndex = -1;
-//     m_fileInfo = new QFileInfo(QString(wav.getFilename().c_str()));
-// }
-
 AudioFile* WAVAudioFile::clone()
 {
     WAVAudioFile* cloneFile = new WAVAudioFile(getFilename(),
@@ -87,10 +74,6 @@ AudioFile* WAVAudioFile::clone()
                                                getBitsPerSample());
 
     cloneFile->setName(getName());
-
-    std::cout << "WAVAudioFile::clone() " << getFilename()
-              << " - cloning " << this << " to " << cloneFile << std::endl;
-
     cloneFile->setId(getId());
 
     return cloneFile;
@@ -103,8 +86,6 @@ WAVAudioFile::~WAVAudioFile()
 bool
 WAVAudioFile::open()
 {
-    std::cout << "WAVAudioFile::open() " << getFilename() << endl;
-
     // if already open
     if (m_inFile && (*m_inFile))
         return true;

@@ -71,6 +71,8 @@ public:
     //
     unsigned int getSize() const { return m_fileSize; }
 
+    void resetStream() { m_inFile->seekg(0); m_inFile->clear(); }
+
 protected:
     std::string m_fileName;
 

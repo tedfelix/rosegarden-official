@@ -91,6 +91,8 @@ MappedDevice::operator+(const MappedDevice &mD)
 MappedDevice&
 MappedDevice::operator=(const MappedDevice &mD)
 {
+    if (&mD == this) return *this;
+
     clear();
 
     for (MappedDeviceConstIterator it = mD.begin(); it != mD.end(); it++)

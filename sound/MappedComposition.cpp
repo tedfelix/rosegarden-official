@@ -176,6 +176,8 @@ MappedComposition::operator+(const MappedComposition &mC)
 MappedComposition&
 MappedComposition::operator=(const MappedComposition &mC)
 {
+    if (&mC == this) return *this;
+
     clear();
 
     // deep copy

@@ -122,6 +122,8 @@ operator<(const MappedEvent &a, const MappedEvent &b)
 MappedEvent&
 MappedEvent::operator=(const MappedEvent &mE)
 {
+    if (&mE == this) return *this;
+
     m_instrument = mE.getInstrument();
     m_type = mE.getType();
     m_data1 = mE.getData1();

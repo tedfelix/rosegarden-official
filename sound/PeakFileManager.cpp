@@ -62,6 +62,8 @@ PeakFileManager::PeakFileManager(const PeakFileManager &pFM)
 PeakFileManager&
 PeakFileManager::operator=(const PeakFileManager &pFM)
 {
+    if (&pFM == this) return *this;
+
     m_peakFiles.clear();
 
     std::vector<PeakFile*>::const_iterator it;

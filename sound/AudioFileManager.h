@@ -189,7 +189,7 @@ public:
 
     // Get the peak file manager
     //
-    PeakFileManager getPeakFileManager() const { return m_peakManager; }
+    const PeakFileManager& getPeakFileManager() const { return m_peakManager; }
 
 private:
     std::string getFileInPath(const std::string &file);
