@@ -1631,14 +1631,15 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 	    QString identifier = atts.value("identifier");
 
             Rosegarden::AudioPlugin *plugin = 0;
+	    Rosegarden::AudioPluginManager *apm = getAudioPluginManager();
 
 	    if (!identifier) {
 		if (atts.value("id")) {
 		    unsigned long id = atts.value("id").toULong();
-		    plugin = getAudioPluginManager()->getPluginByUniqueId(id);
+		    if (apm) plugin = apm->getPluginByUniqueId(id);
 		}
 	    } else {
-		plugin = getAudioPluginManager()->getPluginByIdentifier(identifier);
+		if (apm) plugin = apm->getPluginByIdentifier(identifier);
 	    }
 
             // If we find the plugin all is well and good but if

@@ -1263,23 +1263,29 @@ RosegardenGUIDoc::xmlParse(QIODevice* file, QString &errMsg,
 	CurrentProgressDialog::thaw();
     }
 
-    if (!handler.pluginsNotFound().empty()) {
+    if (m_pluginManager) {
+	// We only warn if a plugin manager is present, so as to avoid
+	// warnings when importing a studio from another file (which is
+	// the normal case in which we have no plugin manager).
 
-	QString msg(i18n("The following plugins could not be loaded:\n\n"));
+	if (!handler.pluginsNotFound().empty()) {
 
-	for (std::set<QString>::iterator i = handler.pluginsNotFound().begin();
-	     i != handler.pluginsNotFound().end(); ++i) {
-	    QString ident = *i;
-	    QString type, soName, label;
-	    Rosegarden::PluginIdentifier::parseIdentifier(ident, type, soName, label);
-	    QString pluginFileName = QFileInfo(soName).fileName();
-	    msg += i18n("--  %1 (from %2)\n").arg(label).arg(pluginFileName);
+	    QString msg(i18n("The following plugins could not be loaded:\n\n"));
+	    
+	    for (std::set<QString>::iterator i = handler.pluginsNotFound().begin();
+		 i != handler.pluginsNotFound().end(); ++i) {
+		QString ident = *i;
+		QString type, soName, label;
+		Rosegarden::PluginIdentifier::parseIdentifier(ident, type, soName, label);
+		QString pluginFileName = QFileInfo(soName).fileName();
+		msg += i18n("--  %1 (from %2)\n").arg(label).arg(pluginFileName);
+	    }
+	    
+	    KStartupLogo::hideIfStillThere();
+	    CurrentProgressDialog::freeze();
+	    KMessageBox::information(0, msg);
+	    CurrentProgressDialog::thaw();
 	}
-        
-	KStartupLogo::hideIfStillThere();
-	CurrentProgressDialog::freeze();
-        KMessageBox::information(0, msg);
-	CurrentProgressDialog::thaw();
     }
 
     return ok;
