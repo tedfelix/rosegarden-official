@@ -22,6 +22,9 @@
 
 #include "Profiler.h"
 
+using std::cerr;
+using std::endl;
+
 namespace Rosegarden 
 {
 
@@ -45,31 +48,32 @@ Profiles::~Profiles()
 
 void Profiles::accumulate(const char* id, clock_t time)
 {
-//     std::cerr << "Profiles::accumulate() : "
-//               << id << " += " << time << std::endl;
+//     cerr << "Profiles::accumulate() : "
+//               << id << " += " << time << endl;
 
     m_profiles[id] += time;
 }
 
 void Profiles::dump()
 {
-    std::cerr << "Profiles::dump() :\n";
+    cerr << "Profiles::dump() :\n";
 
     for(profilesmap::iterator i = m_profiles.begin();
         i != m_profiles.end(); ++i) {
 
-        std::cerr << (*i).first << " : " << (*i).second << std::endl;
+        cerr << (*i).first << " : " << (*i).second << endl;
     }
     
-    std::cerr << "Profiles::dump() finished\n";
+    cerr << "Profiles::dump() finished\n";
 }
 
 struct tms Profiler::m_spare;
 
-Profiler::Profiler(const char* c)
-    : m_c(c)
+Profiler::Profiler(const char* c, bool showOnDestruct)
+    : m_c(c),
+      m_showOnDestruct(showOnDestruct)
 {
-//     std::cerr << "Profiler" << c << std::endl;
+//     cerr << "Profiler" << c << endl;
 
     m_startTime = times(&m_spare);
 }
@@ -79,6 +83,10 @@ Profiler::~Profiler()
     clock_t elapsedTime = times(&m_spare) - m_startTime;
 
     Profiles::getInstance()->accumulate(m_c, elapsedTime);
+
+    if (m_showOnDestruct)
+        cerr << "Profiler : id = " << m_c
+             << " - elapsed = " << elapsedTime << endl;
 }
  
 }

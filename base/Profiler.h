@@ -102,12 +102,13 @@ protected:
 class Profiler
 {
 public:
-    Profiler(const char*);
+    Profiler(const char*, bool showOnDestruct=false);
     ~Profiler();
 
 protected:
     const char* m_c;
     clock_t m_startTime;
+    bool m_showOnDestruct;
 
     static struct tms m_spare;
 };
