@@ -201,11 +201,11 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     QString defaultFont = m_cfg->readEntry
 	("notefont", strtoqstr(NotePixmapFactory::getDefaultFont()));
 
-    set<string> fs(NotePixmapFactory::getAvailableFontNames());
-    vector<string> f(fs.begin(), fs.end());
+    std::set<std::string> fs(NotePixmapFactory::getAvailableFontNames());
+    std::vector<std::string> f(fs.begin(), fs.end());
     std::sort(f.begin(), f.end());
 
-    for (vector<string>::iterator i = f.begin(); i != f.end(); ++i) {
+    for (std::vector<std::string>::iterator i = f.begin(); i != f.end(); ++i) {
 	QString s(strtoqstr(*i));
         m_font->insertItem(s);
 	if (s == defaultFont) m_font->setCurrentItem(m_font->count() - 1);
@@ -265,10 +265,10 @@ NotationConfigurationPage::populateSizeCombo(QComboBox *combo,
 					     std::string font,
 					     int defaultSize)
 {
-    vector<int> sizes = NotePixmapFactory::getAvailableSizes(font);
+    std::vector<int> sizes = NotePixmapFactory::getAvailableSizes(font);
     combo->clear();
     
-    for (vector<int>::iterator i = sizes.begin(); i != sizes.end(); ++i) {
+    for (std::vector<int>::iterator i = sizes.begin(); i != sizes.end(); ++i) {
         combo->insertItem(QString("%1").arg(*i));
 	if (*i == defaultSize) combo->setCurrentItem(combo->count() - 1);
     }
