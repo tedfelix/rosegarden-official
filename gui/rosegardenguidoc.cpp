@@ -516,9 +516,10 @@ RosegardenGUIDoc::mergeDocument(RosegardenGUIDoc *doc,
 			     Rosegarden::MidiInstrumentBase));
     }
 
-    for (Composition::iterator i = doc->getComposition().begin();
-	 i != doc->getComposition().end(); ++i) {
+    for (Composition::iterator i = doc->getComposition().begin(), j = i;
+	 i != doc->getComposition().end(); i = j) {
 
+	++j;
 	Segment *s = *i;
 
 	int yrTrack = s->getTrack();
