@@ -7,9 +7,6 @@ rosegardensequencer_SOURCES = rosegardensequencer.cpp \
 
 rosegardensequencer_LDADD   = -lkdeui -lkdecore $(LIB_QT) $(LIBSOCKET) ../sound/libRosegardenSound.la ../sound/libRosegardenSequencer.la ../base/libbase.la $(LIB_KFILE)
 
-#EXTRA_DIST = rosegardensequenceriface.kidl
-EXTRA_DIST =
-
 # this 10 paths are KDE specific. Use them:
 # kde_htmldir       Where your docs should go to. (contains lang subdirs)
 # kde_appsdir       Where your application file (.kdelnk) should go to. 
