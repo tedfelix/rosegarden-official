@@ -217,6 +217,16 @@ Track::~Track()
         delete (*it);
 }
 
+unsigned int
+Track::getNbBars() const
+{
+    const_iterator lastEl = end();
+    --lastEl;
+    unsigned int nbBars = ((*lastEl)->absoluteTime() + (*lastEl)->duration()) / 384;
+
+    return nbBars;
+}
+
 //////////////////////////////////////////////////////////////////////
 
 ViewElements::~ViewElements()

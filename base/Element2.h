@@ -394,7 +394,7 @@ public:
     unsigned int getStartIndex() const         { return m_startIdx; }
     void         setStartIndex(unsigned int i) { m_startIdx = i; }
 
-    unsigned int getNbBars() const { return m_nbBars; }
+    unsigned int getNbBars() const;
     
 protected:
     unsigned int m_startIdx;
