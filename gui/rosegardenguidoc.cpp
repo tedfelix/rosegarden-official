@@ -735,15 +735,26 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
                    break;
 
                 case Rosegarden::MappedEvent::MidiKeyPressure:
+                   /*
                    SEQMAN_DEBUG << "RosegardenGUIDoc::insertRecordedMidi() - "
                                 << "got Key Pressure (unsupported)"
                                 << endl;
+                   */
+                   rEvent = new Event(Rosegarden::KeyPressure::EventType,
+                                      absTime);
+                   rEvent->set<Int>(KeyPressure::PITCH, (*i)->getData1());
+                   rEvent->set<Int>(KeyPressure::PRESSURE, (*i)->getData2());
                    break;
 
                 case Rosegarden::MappedEvent::MidiChannelPressure:
+                   /*
                    SEQMAN_DEBUG << "RosegardenGUIDoc::insertRecordedMidi() - "
                                 << "got Channel Pressure (unsupported)"
                                 << endl;
+                                */
+                   rEvent = new Event(Rosegarden::ChannelPressure::EventType,
+                                      absTime);
+                   rEvent->set<Int>(ChannelPressure::PRESSURE, (*i)->getData1());
                    break;
 
                 case Rosegarden::MappedEvent::MidiSystemExclusive:

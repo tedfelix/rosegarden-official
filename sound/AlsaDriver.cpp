@@ -797,7 +797,7 @@ AlsaDriver::initialiseAudio()
     // connect our client up to the ALSA ports - first left output
     //
     if (jack_connect(m_audioClient, jack_port_name(m_audioOutputPortLeft),
-                     "alsa_pcm:out_1"))
+                     "alsa_pcm:playback_1"))
     {
         std::cerr << "AlsaDriver::initialiseAudio - "
                   << "cannot connect to JACK output port" << std::endl;
@@ -805,7 +805,7 @@ AlsaDriver::initialiseAudio()
     }
 
     if (jack_connect(m_audioClient, jack_port_name(m_audioOutputPortRight),
-                     "alsa_pcm:out_2"))
+                     "alsa_pcm:playback_2"))
     {
         std::cerr << "AlsaDriver::initialiseAudio - "
                   << "cannot connect to JACK output port" << std::endl;
@@ -813,14 +813,14 @@ AlsaDriver::initialiseAudio()
     }
 
     // now input
-    if (jack_connect(m_audioClient, "alsa_pcm:in_1",
+    if (jack_connect(m_audioClient, "alsa_pcm:capture_1",
                      jack_port_name(m_audioInputPortLeft)))
     {
         std::cerr << "AlsaDriver::initialiseAudio - "
                   << "cannot connect to JACK input port" << std::endl;
     }
 
-    if (jack_connect(m_audioClient, "alsa_pcm:in_2",
+    if (jack_connect(m_audioClient, "alsa_pcm:capture_2",
                      jack_port_name(m_audioInputPortRight)))
     {
         std::cerr << "AlsaDriver::initialiseAudio - "
