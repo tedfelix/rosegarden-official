@@ -249,6 +249,7 @@ TrackEditor::addSegment(SegmentItem *p)
 
     kdDebug(KDEBUG_AREA) << QString("TrackEditor::addSegment() : segment track is %1 at y=%2")
         .arg(track).arg(p->y())
+                         << ", start bar = " << p->getStartBar()
                          << ", p = " << p << endl;
 
 }
