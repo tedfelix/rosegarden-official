@@ -793,7 +793,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
     }
 
 #ifdef DEBUG_JACK_PROCESS
-    std::cerr << "JackDriver::jackProcess: have " << instruments << " instruments" << std::endl;
+    std::cerr << "JackDriver::jackProcess: have " << audioInstruments << " audio and " << synthInstruments << " synth instruments" << std::endl;
 #endif
 
     for (int i = 0; i < audioInstruments + synthInstruments; ++i) {
@@ -835,7 +835,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 
 #ifdef DEBUG_JACK_PROCESS
 	    if (id == 1000 || id == 10000) {
-		std::cerr << "JackDriver::jackProcess: instrument id " << id << ", base " << instrumentBase << ", direct masters " << m_directMasterAudioInstruments << ": " << directToMaster << std::endl;
+		std::cerr << "JackDriver::jackProcess: instrument id " << id << ", base " << audioInstrumentBase << ", direct masters " << m_directMasterAudioInstruments << ": " << directToMaster << std::endl;
 	    }
 #endif
 
@@ -1478,7 +1478,7 @@ JackDriver::prebufferAudio()
     m_fileReader->fillBuffers(sliceStart);
 
     if (m_bussMixer->getBussCount() > 0) {
-	m_instrumentMixer->fillBuffers(sliceStart);
+//	m_instrumentMixer->fillBuffers(sliceStart);
 	m_bussMixer->fillBuffers(sliceStart);
     } else {
 	m_instrumentMixer->fillBuffers(sliceStart);
@@ -1637,6 +1637,22 @@ JackDriver::updateAudioData()
 	if (!m_bussMixer->running()) {
 	    m_bussMixer->run();
 	}
+    }
+}
+
+void
+JackDriver::setAudioBussLevels(int bussNo, float dB, float pan)
+{
+    if (m_bussMixer) {
+	m_bussMixer->setBussLevels(bussNo, dB, pan);
+    }
+}
+
+void
+JackDriver::setAudioInstrumentLevels(InstrumentId instrument, float dB, float pan)
+{
+    if (m_instrumentMixer) {
+	m_instrumentMixer->setInstrumentLevels(instrument, dB, pan);
     }
 }
 

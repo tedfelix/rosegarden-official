@@ -125,7 +125,7 @@ public:
     // play queue -- at least when adding or removing files or
     // resetting status; it doesn't need to hold the locks when
     // incrementing their statuses or simply reading them.
-
+    //
     int getAudioQueueLocks();
     int tryAudioQueueLocks();
     int releaseAudioQueueLocks();
@@ -140,9 +140,18 @@ public:
     // various bits of data such as the master fader and monitoring
     // levels, number of inputs etc and either processes them or
     // writes them into simple records in the JACK driver for process
-    // to read.
+    // to read.  Actually quite a lot of work.
     //
     void updateAudioData();
+
+    // Similarly, set data on the buss mixer to avoid the buss mixer
+    // having to call back on the mapped studio to discover it
+    // 
+    void setAudioBussLevels(int bussNo, float dB, float pan);
+
+    // Likewise for instrument mixer
+    // 
+    void setAudioInstrumentLevels(InstrumentId instrument, float dB, float pan);
 
     RealTime getNextSliceStart(const RealTime &now) const;
 

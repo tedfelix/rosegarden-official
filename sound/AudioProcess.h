@@ -129,9 +129,11 @@ public:
 	}
     }
 
+    /// For call from MappedStudio.  Pan is in range -100.0 -> 100.0
+    void setBussLevels(int buss, float dB, float pan);
+
 protected:
     virtual void threadRun();
-    virtual int getPriority() { return 3; }
 
     void processBlocks();
     void generateBuffers();
@@ -150,6 +152,9 @@ protected:
 	bool dormant;
 
 	std::vector<RingBuffer<sample_t> *> buffers;
+
+	float gainLeft;
+	float gainRight;
     };
 
     typedef std::map<int, BufferRec> BufferMap;
@@ -231,23 +236,18 @@ public:
 	}
     }
 
-    /// For call from MappedStudio.
-    void setInstrumentChannels(InstrumentId instrument, int channels);
-
-    /// For call from MappedStudio
-    void setInstrumentLevel(InstrumentId instrument, float dB);
-
     /// For call from MappedStudio.  Pan is in range -100.0 -> 100.0
-    void setInstrumentPan(InstrumentId instrument, float pan);
+    void setInstrumentLevels(InstrumentId instrument, float dB, float pan);
 
 protected:
     virtual void threadRun();
+
+    //!!! want to make this optional under user control
     virtual int getPriority() { return 3; }
 
-    void processBlocks(bool forceFill, bool &readSomething);
+    void processBlocks(bool &readSomething);
     void processEmptyBlocks(InstrumentId id);
-    bool processBlock(InstrumentId id, AudioPlayQueue::FileSet&, bool forceFill,
-		      bool &readSomething);
+    bool processBlock(InstrumentId id, AudioPlayQueue::FileSet&, bool &readSomething);
     void generateBuffers();
 
     AudioFileReader  *m_fileReader;
@@ -266,7 +266,8 @@ protected:
 
     struct BufferRec
     {
-	BufferRec() : empty(true), dormant(true), filledTo(RealTime::zeroTime), buffers() { }
+	BufferRec() : empty(true), dormant(true), filledTo(RealTime::zeroTime),
+		      buffers(), gainLeft(0.0), gainRight(0.0), volume(0.0) { }
 	~BufferRec();
 
 	bool empty;
@@ -305,7 +306,6 @@ public:
 
 protected:
     virtual void threadRun();
-    virtual int getPriority() { return 2; }
 };
 
 
@@ -326,7 +326,6 @@ public:
 
 protected:
     virtual void threadRun();
-    virtual int getPriority() { return 2; }
 
     typedef std::pair<AudioFile *, RecordableAudioFile *> FilePair;
     typedef std::map<InstrumentId, FilePair> FileMap;

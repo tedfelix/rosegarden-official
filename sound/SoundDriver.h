@@ -208,6 +208,14 @@ public:
 					  int position,
 					  QString program) = 0;
 
+    virtual void setAudioBussLevels(int bussId,
+				    float dB,
+				    float pan) = 0;
+
+    virtual void setAudioInstrumentLevels(InstrumentId id,
+					  float dB,
+					  float pan) = 0;
+
     // Poll for new clients (for new Devices/Instruments)
     //
     virtual bool checkForNewClients() = 0;

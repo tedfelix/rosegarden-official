@@ -2599,7 +2599,7 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
                     paf->setFadeInTime((*i)->getFadeInTime());
                     paf->setFadeOutTime((*i)->getFadeInTime());
 
-#define DEBUG_AUTOFADING
+//#define DEBUG_AUTOFADING
 #ifdef DEBUG_AUTOFADING
                     std::cout << "PlayableAudioFile is AUTOFADING - "
                               << "in = " << (*i)->getFadeInTime()

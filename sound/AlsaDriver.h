@@ -179,6 +179,22 @@ public:
 #endif
     }
 
+    virtual void setAudioBussLevels(int bussId,
+				    float dB,
+				    float pan) {
+#ifdef HAVE_LIBJACK
+	if (m_jackDriver) m_jackDriver->setAudioBussLevels(bussId, dB, pan);
+#endif
+    }
+
+    virtual void setAudioInstrumentLevels(InstrumentId instrument,
+					  float dB,
+					  float pan) {
+#ifdef HAVE_LIBJACK
+	if (m_jackDriver) m_jackDriver->setAudioInstrumentLevels(instrument, dB, pan);
+#endif
+    }
+
     virtual bool checkForNewClients();
 
     virtual void setLoop(const RealTime &loopStart, const RealTime &loopEnd);

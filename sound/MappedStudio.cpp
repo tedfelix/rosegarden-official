@@ -911,13 +911,17 @@ void
 MappedAudioFader::setProperty(const MappedObjectProperty &property,
                               MappedObjectValue value)
 {
+    bool updateLevels = false;
+
     if (property == MappedAudioFader::FaderLevel)
     {
         m_level = value;
+	updateLevels = true;
     }
     else if (property == MappedObject::Instrument)
     {
         m_instrumentId = Rosegarden::InstrumentId(value);
+	updateLevels = true;
     }
     else if (property ==  MappedAudioFader::FaderRecordLevel)
     {
@@ -934,6 +938,7 @@ MappedAudioFader::setProperty(const MappedObjectProperty &property,
     else if (property ==  MappedAudioFader::Pan)
     {
         m_pan = value;
+	updateLevels = true;
     }
     else if (property == MappedConnectableObject::ConnectionsIn)
     {
@@ -959,7 +964,15 @@ MappedAudioFader::setProperty(const MappedObjectProperty &property,
               << property << " = " << value << std::endl;
               */
 
-
+    if (updateLevels) {
+	MappedStudio *studio =
+	    dynamic_cast<MappedStudio*>(getParent());
+	
+	if (studio) {
+	    studio->getSoundDriver()->setAudioInstrumentLevels
+		(m_instrumentId, m_level, m_pan);
+	}
+    }
 }
 
 // ---------------- MappedAudioBuss -------------------
@@ -1050,17 +1063,22 @@ void
 MappedAudioBuss::setProperty(const MappedObjectProperty &property,
 			     MappedObjectValue value)
 {
+    bool updateLevels = false;
+
     if (property == MappedAudioBuss::BussId)
     {
-        m_bussId = value;
+        m_bussId = (int)value;
+	updateLevels = true;
     }
     else if (property == MappedAudioBuss::Level)
     {
         m_level = value;
+	updateLevels = true;
     }
     else if (property == MappedAudioBuss::Pan)
     {
         m_pan = value;
+	updateLevels = true;
     }
     else if (property == MappedConnectableObject::ConnectionsIn)
     {
@@ -1079,6 +1097,16 @@ MappedAudioBuss::setProperty(const MappedObjectProperty &property,
                   << "unsupported property" << std::endl;
 #endif
         return;
+    }
+
+    if (updateLevels) {
+	MappedStudio *studio =
+	    dynamic_cast<MappedStudio*>(getParent());
+	
+	if (studio) {
+	    studio->getSoundDriver()->setAudioBussLevels
+		(m_bussId, m_level, m_pan);
+	}
     }
 }
 
@@ -1231,7 +1259,7 @@ MappedPluginSlot::getPropertyList(const MappedObjectProperty &property)
 		studio->getSoundDriver()->getPluginInstancePrograms(m_instrument,
 								  m_position);
 
-	    for (int i = 0; i < programs.count(); ++i) {
+	    for (int i = 0; i < int(programs.count()); ++i) {
 		list.push_back(programs[i]);
 	    }
 	}
@@ -1399,8 +1427,8 @@ MappedPluginSlot::setProperty(const MappedObjectProperty &property,
 }
 
 void
-MappedPluginSlot::setPropertyList(const MappedObjectProperty &property,
-				  const QStringList &values)
+MappedPluginSlot::setPropertyList(const MappedObjectProperty &,
+				  const QStringList &)
 {
 #ifdef DEBUG_MAPPEDSTUDIO
     std::cerr << "MappedPluginSlot::setPropertyList - "
@@ -1417,7 +1445,7 @@ MappedPluginSlot::setPort(unsigned long portNumber, float value)
 
     for (; it != ports.end(); it++) {
         port = dynamic_cast<MappedPluginPort *>(*it);
-        if (port && port->getPortNumber() == portNumber) {
+        if (port && (unsigned long)port->getPortNumber() == portNumber) {
             port->setValue(value);
 	}
     }

@@ -98,16 +98,16 @@ public:
 
     // Only relevant to objects that have string properties
     // 
-    virtual bool getProperty(const MappedObjectProperty &property,
-			     QString &value) { return false; }
+    virtual bool getProperty(const MappedObjectProperty &/* property */,
+			     QString &/* value */) { return false; }
 
     virtual void setProperty(const MappedObjectProperty &property,
                              MappedObjectValue value) = 0;
 
     // Only relevant to objects that have string properties
     // 
-    virtual void setProperty(const MappedObjectProperty &property,
-                             QString value) { }
+    virtual void setProperty(const MappedObjectProperty &/* property */,
+                             QString /* value */) { }
 
     // Not a requirement - but an occasionally useful method
     //
@@ -116,8 +116,8 @@ public:
 
     // Only relevant to objects that have list properties
     //
-    virtual void setPropertyList(const MappedObjectProperty &,
-				 const QStringList &) { }
+    virtual void setPropertyList(const MappedObjectProperty &/* property */,
+				 const QStringList &/* values */) { }
 
     // Ownership
     //
@@ -410,7 +410,7 @@ public:
     std::vector<InstrumentId> getInstruments();
 
 protected:
-    MappedObjectValue m_bussId;
+    int m_bussId;
     MappedObjectValue m_level;
     MappedObjectValue m_pan;
 };

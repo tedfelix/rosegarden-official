@@ -91,29 +91,42 @@ AudioThread::run()
     pthread_attr_t attr;
     pthread_attr_init(&attr);
 
-/* experimental option:
-
     int priority = getPriority();
 
     if (priority > 0) {
 
 	if (pthread_attr_setschedpolicy(&attr, SCHED_FIFO)) {
+
 	    std::cerr << m_name << "::run: WARNING: couldn't set FIFO scheduling "
 		      << "on new thread" << std::endl;
-	}	
+	    pthread_attr_init(&attr); // reset to safety
+
+	} else {
 	
-	struct sched_param param;
-	memset(&param, 0, sizeof(struct sched_param));
-	param.sched_priority = priority;
-    
-	if (pthread_attr_setschedparam(&attr, &param)) {
-	    std::cerr << m_name << "::run: WARNING: couldn't set priority "
-		      << priority << " on new thread" << std::endl;
+	    struct sched_param param;
+	    memset(&param, 0, sizeof(struct sched_param));
+	    param.sched_priority = priority;
+	    
+	    if (pthread_attr_setschedparam(&attr, &param)) {
+		std::cerr << m_name << "::run: WARNING: couldn't set priority "
+			  << priority << " on new thread" << std::endl;
+		pthread_attr_init(&attr); // reset to safety
+	    }
 	}
     }
-*/
 
-    pthread_create(&m_thread, &attr, staticThreadRun, this);
+    int rv = pthread_create(&m_thread, &attr, staticThreadRun, this);
+
+    if (rv != 0 && priority > 0) {
+	std::cerr << m_name << "::run: WARNING: unable to start RT thread;"
+		  << "\ntrying again with normal scheduling" << std::endl;
+	pthread_attr_init(&attr);
+	rv = pthread_create(&m_thread, &attr, staticThreadRun, this);
+    }
+
+    if (rv != 0) {
+	std::cerr << m_name << "::run: ERROR: failed to start thread!" << std::endl;
+    }	
 
     m_running = true;
 
@@ -290,15 +303,30 @@ AudioBussMixer::generateBuffers()
 
     for (int i = 0; i < m_bussCount; ++i) {
 	
-	if (m_bufferMap.find(i) != m_bufferMap.end()) continue;
-
 	BufferRec &rec = m_bufferMap[i];
+
+	if (rec.buffers.size() == 2) continue;
+
 	for (unsigned int ch = 0; ch < 2; ++ch) {
 	    RingBuffer<sample_t> *rb = new RingBuffer<sample_t>(bufferSamples);
 	    if (!rb->mlock()) {
 //		std::cerr << "WARNING: AudioBussMixer::generateBuffers: couldn't lock ring buffer into real memory, performance may be impaired" << std::endl;
 	    }
 	    rec.buffers.push_back(rb);
+	}
+
+	MappedAudioBuss *mbuss =
+	    m_driver->getMappedStudio()->getAudioBuss(i + 1); // master is 0
+	
+	if (mbuss) {
+
+	    float level = 0.0;
+	    (void)mbuss->getProperty(MappedAudioBuss::Level, level);
+	    
+	    float pan = 0.0;
+	    (void)mbuss->getProperty(MappedAudioBuss::Pan, pan);
+	    
+	    setBussLevels(i + 1, level, pan);
 	}
     }
 
@@ -361,6 +389,20 @@ AudioBussMixer::kick(bool wantLock)
     
     if (wantLock) releaseLock();
 }
+	    	    
+void
+AudioBussMixer::setBussLevels(int bussId, float dB, float pan)
+{
+    if (bussId == 0) return; // master
+    int buss = bussId - 1;
+
+    BufferRec &rec = m_bufferMap[buss];
+
+    float volume = AudioLevel::dB_to_multiplier(dB);
+    
+    rec.gainLeft  = volume * ((pan > 0.0) ? (1.0 - (pan / 100.0)) : 1.0);
+    rec.gainRight = volume * ((pan < 0.0) ? ((pan + 100.0) / 100.0) : 1.0);
+}
 
 void
 AudioBussMixer::processBlocks()
@@ -381,27 +423,19 @@ AudioBussMixer::processBlocks()
 
 	MappedAudioBuss *mbuss =
 	    m_driver->getMappedStudio()->getAudioBuss(buss + 1); // master is 0
+
 	if (!mbuss) {
 #ifdef DEBUG_BUSS_MIXER
 	    std::cerr << "AudioBussMixer::processBlocks: buss " << buss << " not found" << std::endl;
 #endif
 	    continue;
 	}
+
+	BufferRec &rec = m_bufferMap[buss];
 	
 	float gain[2];
-	    	    
-	float level = 0.0;
-	(void)mbuss->getProperty(MappedAudioBuss::Level, level);
-
-	float volume = AudioLevel::dB_to_multiplier(level);
-
-	float pan = 0.0;
-	(void)mbuss->getProperty(MappedAudioBuss::Pan, pan);
-
-	gain[0] = volume * ((pan > 0.0) ? (1.0 - (pan / 100.0)) : 1.0);
-	gain[1] = volume * ((pan < 0.0) ? ((pan + 100.0) / 100.0) : 1.0);
-	    
-	BufferRec &rec = m_bufferMap[buss];
+	gain[0] = rec.gainLeft;
+	gain[1] = rec.gainRight;
 
 	std::vector<InstrumentId> instruments = mbuss->getInstruments();
 
@@ -1018,6 +1052,14 @@ AudioInstrumentMixer::generateBuffers()
 	    }
 	    rec.buffers.push_back(rb);
 	}	    
+
+	float level = 0.0;
+	(void)fader->getProperty(MappedAudioFader::FaderLevel, level);
+
+	float pan = 0.0;
+	(void)fader->getProperty(MappedAudioFader::Pan, pan);
+
+	setInstrumentLevels(id, level, pan);
     }
 
     while (m_processBuffers.size() > maxChannels) {
@@ -1043,7 +1085,7 @@ AudioInstrumentMixer::fillBuffers(const RealTime &currentTime)
 #endif
 
     bool discard;
-    processBlocks(true, discard);
+    processBlocks(discard);
 
     releaseLock();
 }
@@ -1102,29 +1144,23 @@ static inline void denormalKill(float *buffer, int size)
 }
 
 void
-AudioInstrumentMixer::setInstrumentChannels(InstrumentId id, int channels)
+AudioInstrumentMixer::setInstrumentLevels(InstrumentId id, float dB, float pan)
 {
-    //!!!
+    BufferRec &rec = m_bufferMap[id];
+    
+    float volume = AudioLevel::dB_to_multiplier(dB);
+
+    rec.gainLeft  = volume * ((pan > 0.0) ? (1.0 - (pan / 100.0)) : 1.0);
+    rec.gainRight = volume * ((pan < 0.0) ? ((pan + 100.0) / 100.0) : 1.0);
+    rec.volume = volume;
 }
 
 void
-AudioInstrumentMixer::setInstrumentLevel(InstrumentId id, float dB)
-{
-    //!!!
-}
-
-void
-AudioInstrumentMixer::setInstrumentPan(InstrumentId id, float pan)
-{
-    //!!!
-}
-
-void
-AudioInstrumentMixer::processBlocks(bool forceFill, bool &readSomething)
+AudioInstrumentMixer::processBlocks(bool &readSomething)
 {
 #ifdef DEBUG_MIXER
     if (m_driver->isPlaying())
-	std::cerr << "AudioInstrumentMixer::processBlocks(" << forceFill << ")" << std::endl;
+	std::cerr << "AudioInstrumentMixer::processBlocks" << std::endl;
 #endif
 
     const AudioPlayQueue *queue = m_driver->getAudioQueue();
@@ -1137,45 +1173,6 @@ AudioInstrumentMixer::processBlocks(bool forceFill, bool &readSomething)
 
 	rec.empty = (m_plugins[id].empty() && m_synths[id] == 0 &&
 		     !queue->haveFilesForInstrument(id));
-
-	MappedAudioFader *fader =
-	    m_driver->getMappedStudio()->getAudioFader(id);
-
-	if (!fader) {
-#ifdef DEBUG_MIXER
-//	    if ((id % 100) == 0) {
-//		std::cerr << "No fader for instrument " << id << ", setting gains to zero" << std::endl;
-//	    }
-#endif
-	    rec.gainLeft  = 0.0;
-	    rec.gainRight = 0.0;
-	    rec.volume    = 0.0;
-	} else {
-	    	    
-	    float faderLevel = 0.0;
-	    (void)fader->getProperty(MappedAudioFader::FaderLevel, faderLevel);
-
-	    float volume = AudioLevel::dB_to_multiplier(faderLevel);
-
-	    float pan = 0.0;
-	    (void)fader->getProperty(MappedAudioFader::Pan, pan);
-
-	    rec.gainLeft = 
-		volume * ((pan > 0.0) ? (1.0 - (pan / 100.0)) : 1.0);
-
-	    rec.gainRight =
-		volume * ((pan < 0.0) ? ((pan + 100.0) / 100.0) : 1.0);
-	    
-	    rec.volume = volume;
-
-#ifdef DEBUG_MIXER
-//	    if ((id % 100) == 0) {
-//		std::cerr << "Setting gains for instrument " << id << " to "
-//			  << rec.gainLeft << " : " << rec.gainRight << " ("
-//			  << rec.volume << ")" << std::endl;
-//	    }
-#endif
-	}
 
 	// For a while we were setting empty to true if the volume on
 	// the track was zero, but that breaks continuity if there is
@@ -1208,7 +1205,7 @@ AudioInstrumentMixer::processBlocks(bool forceFill, bool &readSomething)
 						blockDuration,
 						id, playing);
 	    
-	    if (processBlock(id, playing, forceFill, readSomething)) {
+	    if (processBlock(id, playing, readSomething)) {
 		more = true;
 	    }
 	}
@@ -1272,7 +1269,7 @@ AudioInstrumentMixer::processEmptyBlocks(InstrumentId id)
 bool
 AudioInstrumentMixer::processBlock(InstrumentId id,
 				   AudioPlayQueue::FileSet &audioQueue,
-				   bool forceFill, bool &readSomething)
+				   bool &readSomething)
 {
     BufferRec &rec = m_bufferMap[id];
     RealTime bufferTime = rec.filledTo;
@@ -1576,7 +1573,7 @@ AudioInstrumentMixer::kick(bool wantLock)
     if (wantLock) getLock();
 
     bool readSomething = false;
-    processBlocks(false, readSomething);
+    processBlocks(readSomething);
     if (readSomething) m_fileReader->signal();
 
     if (wantLock) releaseLock();
