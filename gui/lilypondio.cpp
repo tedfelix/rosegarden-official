@@ -303,8 +303,8 @@ LilypondExporter::convertPitchToLilyNote(int pitch, Accidental accidental,
         for (c = 0; c <= accidentalCount; c++) {
             if (isFlatKeySignature) {                              // Flat Keys:
                 switch (c) {
-                    case 7: if (pitchNote == 11) lilyNote = "ces"; // Cb 
-                    case 6: if (pitchNote ==  4) lilyNote = "fes"; // Fb 
+                    case 7: if (pitchNote ==  4) lilyNote = "fes"; // Fb 
+                    case 6: if (pitchNote == 11) lilyNote = "ces"; // Cb 
                     case 5: if (pitchNote ==  6) lilyNote = "ges"; // Gb 
                     case 4: if (pitchNote ==  1) lilyNote = "des"; // Db 
                     case 3: if (pitchNote ==  3) lilyNote = "ees"; // Eb 
