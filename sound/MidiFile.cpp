@@ -679,8 +679,8 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 
     // Event specific vars
     //
-    int numerator;
-    int denominator;
+    int numerator = 4;
+    int denominator = 4;
     timeT segmentTime;
 
     // keys
