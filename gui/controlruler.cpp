@@ -29,6 +29,7 @@
 #include <qhbox.h>
 #include <qframe.h>
 #include <qpopupmenu.h>
+#include <qobjectlist.h>
 
 #include <klocale.h>
 #include <klineeditdlg.h>
@@ -699,15 +700,6 @@ ControlRuler::~ControlRuler()
 {
 }
 
-void 
-ControlRuler::setSegment(Rosegarden::Segment *segment)
-{
-    m_segment = segment;
-    drawBackground();
-    init();
-}
-
-
 void ControlRuler::slotUpdate()
 {
     RG_DEBUG << "ControlRuler::slotUpdate()\n";
@@ -1149,6 +1141,23 @@ PropertyControlRuler::PropertyControlRuler(Rosegarden::PropertyName propertyName
     init();
 }
 
+void 
+PropertyControlRuler::setStaff(Rosegarden::Staff *staff)
+{
+    RG_DEBUG << "PropertyControlRuler::setStaff(" << staff << ")" << endl;
+
+    m_staff->removeObserver(this);
+    m_staff = staff;
+    m_segment = &m_staff->getSegment();
+    m_staff->addObserver(this);
+
+    //!!! need to delete the control items here
+
+    drawBackground();
+    init();
+}
+
+
 void
 PropertyControlRuler::drawBackground()
 {
@@ -1469,6 +1478,8 @@ ControllerEventsRuler::ControllerEventsRuler(Rosegarden::Segment *segment,
       m_controlLineX(0),
       m_controlLineY(0)
 {
+    m_segment->addObserver(this);
+
     // Make a copy of the ControlParameter if we have one
     //
     if (controller)
@@ -1481,6 +1492,22 @@ ControllerEventsRuler::ControllerEventsRuler(Rosegarden::Segment *segment,
     init();
 }
 
+void 
+ControllerEventsRuler::setSegment(Rosegarden::Segment *segment)
+{
+    RG_DEBUG << "ControllerEventsRuler::setSegment(" << segment << ")" << endl;
+
+    m_segment->removeObserver(this);
+    m_segment = segment;
+    m_segment->addObserver(this);
+
+    while (child(NULL)) delete (child(NULL));
+
+    drawBackground();
+    init();
+}
+
+
 void
 ControllerEventsRuler::init()
 {
@@ -1488,8 +1515,6 @@ ControllerEventsRuler::init()
     // this assumes min is always 0.
     //
     setMaxItemValue(m_controller->getMax());
-
-    m_segment->addObserver(this);
 
     for(Segment::iterator i = m_segment->begin();
         i != m_segment->end(); ++i) {

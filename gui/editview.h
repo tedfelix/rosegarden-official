@@ -268,6 +268,11 @@ protected:
     void setControlRulersZoom(QWMatrix);
 
     /**
+     * Set current segment for control rulers
+     */
+    void setControlRulersCurrentSegment();
+
+    /**
      * Find the control ruler for the given property name
      * if it's already been created, return 0 otherwise
      */

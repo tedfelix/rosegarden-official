@@ -1,6 +1,6 @@
 #! /bin/bash
 export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
-IMAGEWRITER=/homes/ccannam/rosegarden/rosegarden/docs/web/support/imagewriter
+IMAGEWRITER=`pwd`/imagewriter
 
 # RG2.1
 
@@ -32,4 +32,5 @@ $IMAGEWRITER/imagewriter -f $IMAGEWRITER/fonts/aristo.ttf -b204/212/160 -t204/21
 $IMAGEWRITER/imagewriter -f $IMAGEWRITER/fonts/aristo.ttf -b204/212/160 -t204/212/160 -s 50 -w 400 -h 104 -x 2 -y 28 -o title-requirements.png Requirements
 $IMAGEWRITER/imagewriter -f $IMAGEWRITER/fonts/aristo.ttf -b204/212/160 -t204/212/160 -s 50 -w 400 -h 104 -x 2 -y 28 -o title-documents.png Documents
 $IMAGEWRITER/imagewriter -f $IMAGEWRITER/fonts/aristo.ttf -b204/212/160 -t204/212/160 -s 50 -w 400 -h 104 -x 2 -y 28 -o title-tutorial.png Tutorial
+$IMAGEWRITER/imagewriter -f $IMAGEWRITER/fonts/aristo.ttf -b204/212/160 -t204/212/160 -s 50 -w 570 -h 104 -x 2 -y 28 -o title-using-rosegarden.png "Using Rosegarden"
 

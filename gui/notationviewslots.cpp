@@ -1541,17 +1541,23 @@ NotationView::slotSetCurrentStaff(double x, int y)
 void
 NotationView::slotSetCurrentStaff(int staffNo)
 {
+    NOTATION_DEBUG << "NotationView::slotSetCurrentStaff(" << staffNo << ")" << endl;
+
     if (m_currentStaff != staffNo) {
+
 	m_staffs[m_currentStaff]->setCurrent(false);
+
 	m_currentStaff = staffNo;
+
 	m_staffs[m_currentStaff]->setCurrent(true);
 
-	m_chordNameRuler->setCurrentSegment
-	    (&m_staffs[m_currentStaff]->getSegment());
-	m_rawNoteRuler->setCurrentSegment
-	    (&m_staffs[m_currentStaff]->getSegment());
+	Rosegarden::Segment *segment = &m_staffs[m_currentStaff]->getSegment();
+
+	m_chordNameRuler->setCurrentSegment(segment);
+	m_rawNoteRuler->setCurrentSegment(segment);
 	m_rawNoteRuler->repaint();
-	
+	setControlRulersCurrentSegment();
+
 	updateView();
 	
 	slotSetInsertCursorPosition(getInsertionTime());
@@ -1571,15 +1577,13 @@ NotationView::slotCurrentStaffUp()
     if (!track) return;
 
     int position = track->getPosition();
-    if (position > 0) --position;
+    Rosegarden::Track *newTrack = 0;
 
-    Rosegarden::Track *newTrack = composition->getTrackByPosition(position);
-
-    if (newTrack) {
+    while ((newTrack = composition->getTrackByPosition(--position))) {
 	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 	    if (m_staffs[i]->getSegment().getTrack() == newTrack->getId()) {
 		slotSetCurrentStaff(i);
-		break;
+		return;
 	    }
 	}
     }
@@ -1598,15 +1602,13 @@ NotationView::slotCurrentStaffDown()
     if (!track) return;
 
     int position = track->getPosition();
-    ++position;
+    Rosegarden::Track *newTrack = 0;
 
-    Rosegarden::Track *newTrack = composition->getTrackByPosition(position);
-
-    if (newTrack) {
+    while ((newTrack = composition->getTrackByPosition(++position))) {
 	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 	    if (m_staffs[i]->getSegment().getTrack() == newTrack->getId()) {
 		slotSetCurrentStaff(i);
-		break;
+		return;
 	    }
 	}
     }

@@ -82,11 +82,6 @@ public:
     static const int MaxItemHeight;
     static const int ItemHeightRange;
 
-    // Allow something external to reset the selection of Events
-    // that this ruler is displaying
-    //
-    void setSegment(Rosegarden::Segment *);
-
     void flipForwards();
     void flipBackwards();
 
@@ -177,6 +172,11 @@ public:
 
     const Rosegarden::PropertyName& getPropertyName()     { return m_propertyName; }
 
+    // Allow something external to reset the selection of Events
+    // that this ruler is displaying
+    //
+    void setStaff(Rosegarden::Staff *);
+
     // StaffObserver interface
     virtual void elementAdded(const Rosegarden::Staff *, Rosegarden::ViewElement*);
     virtual void elementRemoved(const Rosegarden::Staff *, Rosegarden::ViewElement*);
@@ -230,6 +230,11 @@ public:
 
     virtual QString getName();
     int getDefaultItemWidth() { return m_defaultItemWidth; }
+
+    // Allow something external to reset the selection of Events
+    // that this ruler is displaying
+    //
+    void setSegment(Rosegarden::Segment *);
 
     /// SegmentObserver interface
     virtual void eventAdded(const Rosegarden::Segment *, Rosegarden::Event *);

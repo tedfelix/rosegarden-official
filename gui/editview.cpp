@@ -181,6 +181,40 @@ void EditView::setControlRulersZoom(QWMatrix zoomMatrix)
     }
 }
 
+void EditView::setControlRulersCurrentSegment()
+{
+    bool visible = m_controlRulers->isVisible();
+
+    delete m_controlRulers;
+    
+#if KDE_VERSION < 197120
+    m_controlRulers = new KDE32Backport::KTabWidget(getBottomWidget(), "controlrulers");
+#else
+    m_controlRulers = new KTabWidget(getBottomWidget(), "controlrulers");
+#endif
+
+    setupControllerTabs();
+
+    if (visible) m_controlRulers->show();
+
+/*
+    for (int i = 0; i < m_controlRulers->count(); ++i) {
+
+        PropertyControlRuler *pcr = dynamic_cast<PropertyControlRuler *>
+	    (m_controlRulers->page(i));
+
+        if (pcr) pcr->setStaff(getCurrentStaff());
+	else {
+
+	    ControllerEventsRuler *cer = dynamic_cast<ControllerEventsRuler *>
+		(m_controlRulers->page(i));
+
+	    if (cer) cer->setSegment(getCurrentSegment());
+	}
+    }
+*/
+}
+
 
 void EditView::setTopBarButtons(BarButtons* w)
 {
