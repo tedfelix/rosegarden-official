@@ -200,9 +200,13 @@ Segment::setStartTime(timeT t)
     FastVector<Event *> events;
 
     for (iterator i = begin(); i != end(); ++i) {
-	Event *e = new Event(**i, (*i)->getAbsoluteTime() + dt);
-	e->setNotationAbsoluteTime((*i)->getNotationAbsoluteTime() + dt);
-	e->setNotationDuration((*i)->getNotationDuration());
+	Event *e = new Event
+	    (**i,
+	     (*i)->getAbsoluteTime() + dt,
+	     (*i)->getDuration(),
+	     (*i)->getSubOrdering(),
+	     (*i)->getNotationAbsoluteTime() + dt,
+	     (*i)->getNotationDuration());
 	events.push_back(e);
     }
 

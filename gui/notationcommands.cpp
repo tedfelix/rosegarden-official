@@ -1263,11 +1263,30 @@ TransformsMenuRemoveNotationQuantizeCommand::modifySegment()
 {
     EventSelection::eventcontainer::iterator i;
 
+    std::vector<Event *> toInsert;
+    std::vector<Event *> toErase;
+
     for (i  = m_selection->getSegmentEvents().begin();
 	 i != m_selection->getSegmentEvents().end(); ++i) {
 
-	(*i)->setNotationAbsoluteTime((*i)->getAbsoluteTime());
-	(*i)->setNotationDuration((*i)->getDuration());
+	toInsert.push_back(new Event(**i,
+				     (*i)->getAbsoluteTime(),
+				     (*i)->getDuration(),
+				     (*i)->getSubOrdering(),
+				     (*i)->getAbsoluteTime(),
+				     (*i)->getDuration()));
+
+	toErase.push_back(*i);
+    }
+
+    for (std::vector<Event *>::iterator i = toErase.begin(); i != toErase.end();
+	 ++i) {
+	m_selection->getSegment().eraseSingle(*i);
+    }
+
+    for (std::vector<Event *>::iterator i = toInsert.begin(); i != toInsert.end();
+	 ++i) {
+	m_selection->getSegment().insert(*i);
     }
 }
 
@@ -1712,8 +1731,12 @@ TransformsMenuInterpretCommand::articulate()
 		
 		    //!!! deal with tuplets
 		    
-		    Event *newEvent = new Event(*e, e->getAbsoluteTime(), newDuration);
-		    newEvent->setNotationDuration(duration);
+		    Event *newEvent = new Event(*e,
+						e->getAbsoluteTime(),
+						newDuration,
+						e->getSubOrdering(),
+						e->getNotationAbsoluteTime(),
+						duration);
 		    toInsert.insert(newEvent);
 		    toErase.insert(e);
 		}

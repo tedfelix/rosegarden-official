@@ -1322,9 +1322,15 @@ MoveCommand::modifySegment()
 	timeT newTime =
 	    (m_useNotationTimings ?
 	     (*i)->getNotationAbsoluteTime() : (*i)->getAbsoluteTime()) + m_delta;
-	Event *e = new Event(**i, newTime);
-	if (m_useNotationTimings)
-	    e->setNotationDuration((*i)->getNotationDuration());
+
+	Event *e;
+	if (m_useNotationTimings) {
+	    e = new Event(**i, newTime, (*i)->getDuration(), (*i)->getSubOrdering(),
+			  newTime, (*i)->getNotationDuration());
+	} else {
+	    e = new Event(**i, newTime);
+	}
+
 	toInsert.push_back(e);
     }
 

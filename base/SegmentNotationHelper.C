@@ -692,7 +692,6 @@ SegmentNotationHelper::makeNotesViable(iterator from, iterator to,
     
 	acc = (*i)->getNotationAbsoluteTime();
 	Event *e = new Event(*(*i));
-	e->setNotationAbsoluteTime(acc);
 
 	bool lastTiedForward;
 	e->get<Bool>(TIED_FORWARD, lastTiedForward);
@@ -1000,8 +999,8 @@ SegmentNotationHelper::insertSingleSomething(iterator i, int duration,
 	    (*i)->isa(Note::EventRestType)) eraseI = true;
     }
 
-    Event *e = new Event(*modelEvent, time, effectiveDuration);
-    e->setNotationAbsoluteTime(notationTime);
+    Event *e = new Event(*modelEvent, time, effectiveDuration,
+			 modelEvent->getSubOrdering(), notationTime);
 
     setInsertedNoteGroup(e, i);
 
@@ -1860,12 +1859,8 @@ SegmentNotationHelper::splitPreservingPerformanceTimes(Event *e, timeT q1)
 	return std::pair<Event *, Event *>(0, 0);
     }
 
-    Event *e1 = new Event(*e, ut, u1);
-    Event *e2 = new Event(*e, ut + u1, u2);
-    e1->setNotationAbsoluteTime(qt);
-    e1->setNotationDuration(q1);
-    e2->setNotationAbsoluteTime(qt + q1);
-    e2->setNotationDuration(qd - q1);
+    Event *e1 = new Event(*e, ut, u1, e->getSubOrdering(), qt, q1);
+    Event *e2 = new Event(*e, ut + u1, u2, e->getSubOrdering(), qt + q1, qd - q1);
 
     e1->set<Bool>(TIED_FORWARD, true);
     e2->set<Bool>(TIED_BACKWARD, true);

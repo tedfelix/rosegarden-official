@@ -136,10 +136,8 @@ Staff::eventRemoved(const Segment *t, Event *e)
         return;
     }
 
-    /*
-    std::cerr << "Event at " << e->getAbsoluteTime() << ", type " << e->getType()
-	      << " not found in Staff" << std::endl;
-              */
+//    std::cerr << "Event at " << e->getAbsoluteTime() << ", notation time " << e->getNotationAbsoluteTime() << ", type " << e->getType()
+//	      << " not found in Staff" << std::endl;
 }
 
 void

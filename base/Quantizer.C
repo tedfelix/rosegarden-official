@@ -366,43 +366,47 @@ Quantizer::setToTarget(Segment *s, Segment::iterator i,
     Event *e;
     if (m_target == RawEventData) {
 	e = new Event(**i, absTime, duration);
+    } else if (m_target == NotationPrefix) {
+	// Setting the notation absolute time on an event without
+	// recreating it would be dodgy, just as setting the absolute
+	// time would, because it could change the ordering of events
+	// that are already being referred to in ViewElementLists,
+	// preventing us from locating them in the ViewElementLists
+	// because their ordering would have silently changed
+#ifdef DEBUG_NOTATION_QUANTIZER
+	cout << "Quantizer: setting " << absTime << " to "
+	     << m_targetProperties[AbsoluteTimeValue] << " and "
+	     << duration << " to " << m_targetProperties[DurationValue]
+	     << endl;
+#endif
+	e = new Event(**i, (*i)->getAbsoluteTime(), (*i)->getDuration(),
+		      (*i)->getSubOrdering(), absTime, duration);
     } else {
 	e = *i;
 	e->clearNonPersistentProperties();
-	if (m_target == NotationPrefix) {
+    }
 
-	    timeT normalizeStart = std::min(absTime, (*i)->getAbsoluteTime());
-	    timeT normalizeEnd = std::max(absTime + duration,
-					  (*i)->getAbsoluteTime() +
-					  (*i)->getDuration()) + 1;
+    if (m_target == NotationPrefix) {
+	timeT normalizeStart = std::min(absTime, (*i)->getAbsoluteTime());
+	timeT normalizeEnd = std::max(absTime + duration,
+				      (*i)->getAbsoluteTime() +
+				      (*i)->getDuration()) + 1;
 
-	    if (m_normalizeRegion.first != m_normalizeRegion.second) {
-		normalizeStart = std::min(normalizeStart, m_normalizeRegion.first);
-		normalizeEnd = std::max(normalizeEnd, m_normalizeRegion.second);
-	    }
-
-	    m_normalizeRegion = std::pair<timeT, timeT>
-		(normalizeStart, normalizeEnd);
+	if (m_normalizeRegion.first != m_normalizeRegion.second) {
+	    normalizeStart = std::min(normalizeStart, m_normalizeRegion.first);
+	    normalizeEnd = std::max(normalizeEnd, m_normalizeRegion.second);
 	}
+	
+	m_normalizeRegion = std::pair<timeT, timeT>
+	    (normalizeStart, normalizeEnd);
     }
     
     if (haveSt) e->setMaybe<Int>(m_sourceProperties[AbsoluteTimeValue],st);
     if (haveSd) e->setMaybe<Int>(m_sourceProperties[DurationValue],    sd);
     
-    if (m_target != RawEventData) {
-	if (m_target == NotationPrefix) {
-	    e->setNotationAbsoluteTime(absTime);
-	    e->setNotationDuration(duration);
-	} else {
-#ifdef DEBUG_NOTATION_QUANTIZER
-	    cout << "Quantizer: setting " << absTime << " to "
-		 << m_targetProperties[AbsoluteTimeValue] << " and "
-		 << duration << " to " << m_targetProperties[DurationValue]
-		 << endl;
-#endif
-	    e->setMaybe<Int>(m_targetProperties[AbsoluteTimeValue], absTime);
-	    e->setMaybe<Int>(m_targetProperties[DurationValue], duration);
-	}
+    if (m_target != RawEventData && m_target != NotationPrefix) {
+	e->setMaybe<Int>(m_targetProperties[AbsoluteTimeValue], absTime);
+	e->setMaybe<Int>(m_targetProperties[DurationValue], duration);
     } else {
 	s->erase(i);
 	m_toInsert.push_back(e);

@@ -87,7 +87,7 @@ public:
     Event(const Event &e) :
 	m_nonPersistentProperties(0) { share(e); }
 
-    // next 3 ctors can't use default args: default has to be obtained from e
+    // these ctors can't use default args: default has to be obtained from e
 
     Event(const Event &e, timeT absoluteTime) :
 	m_nonPersistentProperties(0) {
@@ -117,6 +117,30 @@ public:
 	m_data->m_subOrdering = subOrdering;
 	setNotationAbsoluteTime(absoluteTime);
 	setNotationDuration(duration);
+    }
+
+    Event(const Event &e, timeT absoluteTime, timeT duration, short subOrdering,
+	  timeT notationAbsoluteTime) :
+	m_nonPersistentProperties(0) {
+	share(e);
+	unshare();
+	m_data->m_absoluteTime = absoluteTime;
+	m_data->m_duration = duration;
+	m_data->m_subOrdering = subOrdering;
+	setNotationAbsoluteTime(notationAbsoluteTime);
+	setNotationDuration(duration);
+    }
+
+    Event(const Event &e, timeT absoluteTime, timeT duration, short subOrdering,
+	  timeT notationAbsoluteTime, timeT notationDuration):
+	m_nonPersistentProperties(0) {
+	share(e);
+	unshare();
+	m_data->m_absoluteTime = absoluteTime;
+	m_data->m_duration = duration;
+	m_data->m_subOrdering = subOrdering;
+	setNotationAbsoluteTime(notationAbsoluteTime);
+	setNotationDuration(notationDuration);
     }
 
     ~Event() { lose(); }
@@ -181,8 +205,6 @@ public:
 
     timeT getNotationAbsoluteTime() const { return m_data->getNotationTime(); }
     timeT getNotationDuration() const { return m_data->getNotationDuration(); }
-    void setNotationAbsoluteTime(timeT t) { unshare(); m_data->setNotationTime(t); }
-    void setNotationDuration(timeT d) { unshare(); m_data->setNotationDuration(d); }
     
     typedef std::vector<PropertyName> PropertyNames;
     PropertyNames getPropertyNames() const;
@@ -255,6 +277,8 @@ protected:
     void setAbsoluteTime(timeT t)      { unshare(); m_data->m_absoluteTime = t; }
     void setDuration(timeT d)	       { unshare(); m_data->m_duration = d; }
     void setSubOrdering(short o)       { unshare(); m_data->m_subOrdering = o; }
+    void setNotationAbsoluteTime(timeT t) { unshare(); m_data->setNotationTime(t); }
+    void setNotationDuration(timeT d) { unshare(); m_data->setNotationDuration(d); }
 
 private:
     struct EventData // Data that are shared between shallow-copied instances

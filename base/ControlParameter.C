@@ -112,6 +112,8 @@ bool operator<(const ControlParameter &a, const ControlParameter &b)
         return a.m_type < b.m_type;
     else if (a.m_controllerValue != b.m_controllerValue)
         return a.m_controllerValue < b.m_controllerValue;
+    else
+	return false;
 }
 
 

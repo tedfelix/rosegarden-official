@@ -480,9 +480,6 @@ void SegmentMmapper::dump()
 		(**k)->get<Int>(Rosegarden::BaseProperties::TRIGGER_SEGMENT_ID,
 				triggerId);
 
-		RG_DEBUG << "SegmentMmapper::dump: triggerId " << triggerId
-			 << " for event at time " << (**k)->getAbsoluteTime() << endl;
-
 		if (triggerId >= 0) {
 
 		    Rosegarden::TriggerSegmentRec *rec =
@@ -569,8 +566,6 @@ void SegmentMmapper::dump()
 			    mE->setPitch(mE->getPitch() + m_segment->getTranspose());
 			}
 
-			RG_DEBUG << "Wrote pitch " << int(mE->getPitch()) << " from " << (i == k ? "i" : "j") << " at " << bufPos-m_mmappedEventBuffer << endl;
-
 			++bufPos;
 
 		    } catch(...) {
@@ -655,8 +650,6 @@ SegmentMmapper::mergeTriggerSegment(Rosegarden::Segment **target,
 	Rosegarden::timeT t = (*i)->getAbsoluteTime() - trStart;
 	Rosegarden::timeT d = (*i)->getDuration();
 
-	RG_DEBUG << "pre-adjust:  t = " << t << ", d = " << d << ", trStart " << trStart << ", evTime " << evTime << ", evDuration " << evDuration << ", trDuration " << trDuration << endl;
-
 	if (evDuration != trDuration &&
 	    timeAdjust == BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH) {
 	    t = Rosegarden::timeT(double(t * evDuration) / double(trDuration));
@@ -682,15 +675,12 @@ SegmentMmapper::mergeTriggerSegment(Rosegarden::Segment **target,
 	    }
 	}
 
-	RG_DEBUG << "post-adjust: t = " << t << ", d = " << d << endl;
-
 	Rosegarden::Event *newEvent = new Rosegarden::Event(**i, t, d);
 
 	if (retune && newEvent->has(BaseProperties::PITCH)) {
 	    int pitch = newEvent->get<Int>(BaseProperties::PITCH) + pitchDiff;
 	    if (pitch > 127) pitch = 127;
 	    if (pitch < 0) pitch = 0;
-	    RG_DEBUG << "retune to pitch " << pitch << " (diff " << pitchDiff << ")" << endl;
 	    newEvent->set<Int>(BaseProperties::PITCH, pitch);
 	}
 

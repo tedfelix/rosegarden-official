@@ -21,6 +21,7 @@
 
 #include "ViewElement.h"
 #include <iostream>
+#include <cassert>
 
 namespace Rosegarden 
 {
@@ -46,6 +47,24 @@ bool
 operator<(const ViewElement &a, const ViewElement &b)
 {
     timeT at = a.getViewAbsoluteTime(), bt = b.getViewAbsoluteTime();
+/*
+    if (at < bt) {
+	if (!(*(a.event()) < *(b.event()))) {
+	    std::cerr << "    types: a: " << a.event()->getType() << " b: " << b.event()->getType() << std::endl;
+	    std::cerr << "performed: a: " << a.event()->getAbsoluteTime() << " b: " << b.event()->getAbsoluteTime() << std::endl;
+	    std::cerr << "  notated: a: " << a.getViewAbsoluteTime() << " b: " << b.getViewAbsoluteTime() << std::endl;
+//	assert(*(a.event()) < *(b.event()));
+	}
+    }
+    else if (at > bt) {
+	if (*(a.event()) < *(b.event())) {
+	    std::cerr << "    types: a: " << a.event()->getType() << " b: " << b.event()->getType() << std::endl;
+	    std::cerr << "performed: a: " << a.event()->getAbsoluteTime() << " b: " << b.event()->getAbsoluteTime() << std::endl;
+	    std::cerr << "  notated: a: " << a.getViewAbsoluteTime() << " b: " << b.getViewAbsoluteTime() << std::endl;
+//	    assert(!(*(a.event()) < *(b.event())));
+	}
+    }
+*/
     if (at == bt) return *(a.event()) < *(b.event());
     else return (at < bt);
 }
