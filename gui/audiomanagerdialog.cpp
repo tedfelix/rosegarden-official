@@ -43,13 +43,11 @@ namespace Rosegarden
 static const int maxPreviewWidth = 100;
 static const int previewHeight = 30;
 
-AudioManagerDialog::AudioManagerDialog(QApplication *app,
-                                       QWidget *parent,
+AudioManagerDialog::AudioManagerDialog(QWidget *parent,
                                        AudioFileManager *aFM):
     KDialogBase(parent, "", false,
                 i18n("Rosegarden Audio File Manager"), Close),
-    m_audioFileManager(aFM),
-    m_app(app)
+    m_audioFileManager(aFM)
 {
     QHBox *h = makeHBoxMainWidget();
     QVButtonGroup *v = new QVButtonGroup(i18n("Audio File actions"), h);
@@ -235,7 +233,6 @@ AudioManagerDialog::slotAdd()
     if (fileDialog->exec() == QDialog::Accepted)
     {
         QString newFilePath = fileDialog->selectedFile().data();
-        unsigned int id;
 
         // Now set the "last add" path so that next time we use "file add"
         // we start looking in the same place.
@@ -245,7 +242,10 @@ AudioManagerDialog::slotAdd()
         m_audioFileManager->setLastAddPath(newLastAddPath);
 
         RosegardenProgressDialog *progressDlg =
-            new RosegardenProgressDialog(m_app, this);
+            new RosegardenProgressDialog(i18n("Generating audio preview..."),
+                                         i18n("Cancel"),
+                                         100,
+                                         this);
         try
         {
             id = m_audioFileManager->addFile(std::string(newFilePath.data()));

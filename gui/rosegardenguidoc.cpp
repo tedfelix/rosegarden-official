@@ -273,8 +273,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
 
 	// parse xml file
 	RosegardenProgressDialog *progressDlg =
-	    new RosegardenProgressDialog(kapp,
-					 i18n("Reading file..."),
+	    new RosegardenProgressDialog(i18n("Reading file..."),
 					 i18n("Cancel"),
 					 100,
 					 (QWidget*)parent());
@@ -304,8 +303,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
     // We might need a progress dialog when we generate previews.
     //
     RosegardenProgressDialog *progressDlg =
-        new RosegardenProgressDialog(kapp,
-                                     i18n("Generating audio previews..."),
+        new RosegardenProgressDialog(i18n("Generating audio previews..."),
                                      i18n("Cancel"),
                                      100,
                                      (QWidget*)parent());
@@ -1228,8 +1226,7 @@ RosegardenGUIDoc::stopRecordingAudio()
     // Create a progress dialog
     //
     RosegardenProgressDialog *progressDlg =
-        new RosegardenProgressDialog(dynamic_cast<QApplication*>(kapp),
-                                     i18n("Generating audio preview..."),
+        new RosegardenProgressDialog(i18n("Generating audio preview..."),
                                      i18n("Cancel"),
                                      100,
                                      (QWidget*)parent());

@@ -70,8 +70,7 @@ class AudioManagerDialog : public KDialogBase
     Q_OBJECT
 
 public:
-    AudioManagerDialog(QApplication *app,
-                       QWidget *parent,
+    AudioManagerDialog(QWidget *parent,
                        AudioFileManager *aFM);
 
     // Populate the file list from the AudioFileManager

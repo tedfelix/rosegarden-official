@@ -283,7 +283,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     if (showProgressive) {
 	show();
 	m_progressDlg = new RosegardenProgressDialog
-	    (kapp, i18n("Starting..."), i18n("Cancel"), 100, this,
+	    (i18n("Starting..."), i18n("Cancel"), 100, this,
 	     i18n("Notation progress"), true);
 	m_progressDlg->setAutoClose(false);
 	for (unsigned int i = 0; i < m_staffs.size(); ++i) {

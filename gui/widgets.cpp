@@ -25,6 +25,8 @@
 #include <qtimer.h>
 #include <qapplication.h>
 #include <qcursor.h>
+#include <kapp.h>
+#include <klocale.h>
 
 #include "widgets.h"
 #include "rosedebug.h"
@@ -153,25 +155,24 @@ RosegardenParameterBox::RosegardenParameterBox(QString label,
     setFont(boldFont);
 }
 
-RosegardenProgressDialog::RosegardenProgressDialog(QApplication *app,
-                                                   QWidget *creator,
+RosegardenProgressDialog::RosegardenProgressDialog(QWidget *creator,
                                                    const char *name,
                                                    bool modal,
                                                    WFlags f):
     QProgressDialog(creator, name, modal, f),
     Rosegarden::Progress(100), // default to percent
-    m_app(app),
     m_firstTimeout(true)
 {
+    setCaption(i18n("Processing..."));
     QTimer::singleShot(700, this, SLOT(slotTimerElapsed()));
 
     // set the cursor
     QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
+    setCursor(QCursor(Qt::waitCursor));
 }
 
 
 RosegardenProgressDialog::RosegardenProgressDialog(
-                QApplication *app,
                 const QString &labelText,
                 const QString &cancelButtonText,
                 int totalSteps,
@@ -187,10 +188,14 @@ RosegardenProgressDialog::RosegardenProgressDialog(
                         modal,
                         f | WDestructiveClose),
         Rosegarden::Progress(100), // default to percent
-        m_app(app),
         m_firstTimeout(true)
 {
+    setCaption(i18n("Processing..."));
     QTimer::singleShot(700, this, SLOT(slotTimerElapsed()));
+
+    // set the cursor
+    QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
+    setCursor(QCursor(Qt::waitCursor));
 }
 
 RosegardenProgressDialog::~RosegardenProgressDialog()
@@ -210,8 +215,7 @@ RosegardenProgressDialog::setCompleted(int value)
 void
 RosegardenProgressDialog::processEvents()
 {
-    if (m_app)
-        m_app->processEvents(50);
+    kapp->processEvents(50);
 }
 
 void
@@ -233,5 +237,8 @@ void
 RosegardenProgressDialog::slotShowMyself()
 {
     show();
-    QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
+
+    // re-set the cursor
+    //QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
+    //setCursor(QCursor(Qt::waitCursor));
 }

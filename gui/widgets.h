@@ -145,19 +145,17 @@ class RosegardenProgressDialog : public QProgressDialog,
 {
     Q_OBJECT
 public:
-    RosegardenProgressDialog(QApplication *app,
-                             QWidget * creator = 0,
+    RosegardenProgressDialog(QWidget * creator = 0,
                              const char * name = 0,
-                             bool modal = FALSE,
+                             bool modal = TRUE, // default TRUE
                              WFlags f = 0);
 
-    RosegardenProgressDialog(QApplication *app,
-                             const QString &labelText,
+    RosegardenProgressDialog(const QString &labelText,
                              const QString &cancelButtonText,
                              int totalSteps,
                              QWidget *creator = 0,
-                             const char *name = 0,
-                             bool modal = FALSE,
+                             const char *name = 0, // default TRUE
+                             bool modal = TRUE,
                              WFlags f = 0);
 
     ~RosegardenProgressDialog();
@@ -183,10 +181,6 @@ public slots:
     void slotShowMyself();
 
 private:
-
-    // Application handle
-    //
-    QApplication *m_app;
 
     bool m_firstTimeout;
 
