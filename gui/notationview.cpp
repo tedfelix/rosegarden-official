@@ -203,6 +203,7 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
                                                     height() * 2),
                                         this)),
     m_ruler(new StaffRuler(20, 10, canvas())),
+    m_movingCursor(false),
     m_hlayout(0),
     m_vlayout(0),
     m_tool(0),
@@ -950,6 +951,10 @@ void NotationView::setHLayout(NotationHLayout* l)
     m_hlayout = l;
 }
 
+PositionCursor* NotationView::getCursor()
+{
+    return getRuler()->getCursor();
+}
 
 
 //////////////////////////////////////////////////////////////////////
@@ -1413,6 +1418,7 @@ void NotationView::slotBassClef()
 //----------------------------------------
 // Time sigs.
 //----------------------------------------
+// TODO: time sig :-)
 
 //----------------------------------------
 // Edition Tools
@@ -1437,17 +1443,46 @@ void NotationView::itemPressed(int height, int staffNo,
                                QCanvasItem* item,
                                NotationElement* el)
 {
-    m_tool->handleMousePress(height, staffNo, eventPos, item, el);
+    kdDebug(KDEBUG_AREA) << "NotationView::itemPressed : item = " << item
+                         << endl;
+
+    if (item) {
+
+        // Check if it's the cursor
+        QCanvasGroupableItem *gitem = dynamic_cast<QCanvasGroupableItem*>(item);
+        
+        if (gitem && dynamic_cast<PositionCursor*>(gitem->group()) == m_ruler->getCursor()) {
+
+            setMovingCursor(true);
+            getCursor()->handleMousePress();
+        }
+        
+    } else {
+        
+        setMovingCursor(false);
+        m_tool->handleMousePress(height, staffNo, eventPos, item, el);
+
+    }
 }
 
 void NotationView::mouseMove(QMouseEvent *e)
 {
-    m_tool->handleMouseMove(e);
+    if (movingCursor()) {
+        getCursor()->handleMouseMove(e);
+        canvas()->update();
+    }
+    else
+        m_tool->handleMouseMove(e);
 }
 
 void NotationView::mouseRelease(QMouseEvent *e)
 {
-    m_tool->handleMouseRelease(e);
+    if (movingCursor()) {
+        getCursor()->handleMouseRelease(e);
+        setMovingCursor(false);
+    }
+    else
+        m_tool->handleMouseRelease(e);
 }
 
 int NotationView::findClosestStaff(double eventY)
@@ -1474,6 +1509,10 @@ NotationView::findClosestNote(double eventX, Event *&timeSignature,
     NotationElementList::iterator it, res;
 
     // TODO: this is grossly inefficient
+    //
+    // Possible optimization : make a QRect of width = 2*proximityThreshold,
+    // height = staffHeight, centered at eventX. Get canvas items in this
+    // rectangle (QCanvas::collisions(QRect), and scan this item list only
     //
     for (it = notes->begin();
          it != notes->end(); ++it) 

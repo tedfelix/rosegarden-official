@@ -38,6 +38,7 @@ namespace Rosegarden { class Track; }
 class RosegardenGUIDoc;
 class NotationTool;
 class StaffRuler;
+class PositionCursor;
 
 /**
  * This class holds a selection of Events, used for cut'n paste
@@ -461,18 +462,42 @@ protected:
     void setTool(NotationTool*);
 
     /**
-     * Sets the note pixmap factory
+     * Set the note pixmap factory
      *
      * The previous pixmap factory is deleted
      */
     void setNotePixmapFactory(NotePixmapFactory*);
 
     /**
-     * Sets the horizontal layout
+     * Set the horizontal layout
      *
      * The previous layout is deleted
      */
     void setHLayout(NotationHLayout*);
+
+
+    /**
+     * Return the staff ruler
+     */
+    StaffRuler* getRuler() { return m_ruler; }
+
+    /**
+     * Return the cursor
+     */
+    PositionCursor* getCursor();
+
+    /**
+     * Set if we're moving the cursor
+     */
+    void setMovingCursor(bool b) { m_movingCursor = b; }
+
+    /**
+     * Return if we're moving the cursor
+     */
+    bool movingCursor() { return m_movingCursor; }
+
+
+    //--------------- Data members ---------------------------------
 
     KConfig* m_config;
 
@@ -497,6 +522,7 @@ protected:
     std::vector<NotationStaff*> m_staffs;
 
     StaffRuler* m_ruler;
+    bool m_movingCursor;
 
     std::string m_fontName;
     int m_fontSize;
