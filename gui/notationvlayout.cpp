@@ -69,13 +69,7 @@ NotationVLayout::layout(NotationElementList::iterator from,
             for (unsigned int j = 0; j < chord.size(); ++j) {
                 h.push_back((*chord[j])->event()->get<Int>(P_HEIGHT_ON_STAFF));
             }
-            int top = h.size()-1;
-
-	    bool stalkUp = true;
-	    if (h[top] > 4) {
-		if (h[0] > 4) stalkUp = false;
-		else stalkUp = (h[top] - 4) < (5 - h[0]);
-	    }
+            bool stalkUp = chord.hasStalkUp();
 
 	    for (unsigned int j = 0; j < chord.size(); ++j) {
 		el = *chord[j];
@@ -90,7 +84,9 @@ NotationVLayout::layout(NotationElementList::iterator from,
 		// introduce two separate properties (beamed stalk up
 		// and non-beamed stalk up)
 //		if (!el->event()->has(P_STALK_UP))
-		    el->event()->setMaybe<Bool>(P_STALK_UP, stalkUp);
+                el->event()->setMaybe<Bool>(P_STALK_UP, stalkUp);
+                el->event()->setMaybe<Bool>(P_NOTE_HEAD_SHIFTED,
+                                            chord.isNoteHeadShifted(chord[j]));
 
 		if (!el->event()->has(P_DRAW_TAIL))
 		    el->event()->setMaybe<Bool>

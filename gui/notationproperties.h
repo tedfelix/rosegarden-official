@@ -37,6 +37,7 @@
 #define  P_DISPLAY_ACCIDENTAL    "NoteDisplayAccidental"
 #define  P_STALK_UP              "NoteStalkUp"
 #define  P_DRAW_TAIL             "NoteDrawTail"
+#define  P_NOTE_HEAD_SHIFTED     "NoteHeadShifted"
 #define  P_NOTE_NAME             "NoteName"
 
 #define  P_GROUP_NO              "GroupNo"
@@ -52,7 +53,6 @@
 #define  P_BEAM_NEXT_PART_TAILS  "BeamNextPartTails"
 #define  P_BEAM_THIS_PART_TAILS  "BeamThisPartTails"
 #define  P_BEAM_MY_Y		 "BeamMyY"
-//#define  P_BEAM_NEXT_Y		 "BeamNextY"
 
 #endif
 

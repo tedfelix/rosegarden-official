@@ -50,12 +50,14 @@ void
 NotePixmapOffsets::offsetsFor(Note::Type note,
                               int dots,
                               Accidental accidental,
+                              bool shifted,
                               bool drawTail,
                               bool stalkGoesUp,
                               bool fixedHeight)
 {
     m_note = note;
     m_accidental = accidental;
+    m_shifted = shifted;
     m_drawTail = drawTail;
     m_stalkGoesUp = stalkGoesUp;
     m_dots = dots;
@@ -169,6 +171,10 @@ NotePixmapOffsets::computePixmapSize()
 
         break;
     }
+
+    if (m_shifted) {
+        m_pixmapSize.rwidth() += m_noteBodyFilledSize.width() - 1;
+    }
 }
 
 void
@@ -265,6 +271,9 @@ NotePixmapOffsets::computeBodyOffset()
 	m_stalkPoints.second.setY(m_stalkPoints.first.y() - m_stalkLength);
     else
 	m_stalkPoints.second.setY(m_stalkPoints.first.y() + m_stalkLength);
+
+    if (m_shifted)
+        m_bodyOffset.rx() += m_noteBodyFilledSize.width() - 1;
 }
 
 
@@ -394,6 +403,7 @@ QCanvasPixmap
 NotePixmapFactory::makeNotePixmap(Note::Type note,
                                   int dots,
                                   Accidental accidental,
+                                  bool shifted,
                                   bool drawTail,
                                   bool stalkGoesUp,
                                   bool fixedHeight)
@@ -421,7 +431,7 @@ NotePixmapFactory::makeNotePixmap(Note::Type note,
 
     m_offsets.setExtraBeamSpacing(0);
     m_offsets.offsetsFor
-        (note, dots, accidental, drawTail, stalkGoesUp, fixedHeight);
+        (note, dots, accidental, shifted, drawTail, stalkGoesUp, fixedHeight);
 
     if (note > Note::Longest) {
         kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeNotePixmap : note > Note::Longest ("
@@ -520,6 +530,7 @@ QCanvasPixmap
 NotePixmapFactory::makeBeamedNotePixmap(Note::Type note,
 					int dots,
 					Accidental accidental,
+                                        bool shifted,
 					bool stalkGoesUp,
 					int stalkLength,
 					int nextTailCount,
@@ -541,7 +552,7 @@ NotePixmapFactory::makeBeamedNotePixmap(Note::Type note,
     m_offsets.setExtraBeamSpacing(beamSpacing);
 
     m_offsets.offsetsFor
-        (note, dots, accidental, false, stalkGoesUp, false);
+        (note, dots, accidental, shifted, false, stalkGoesUp, false);
 
     if (note > Note::Longest) {
         kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeNotePixmap : note > Note::Longest ("

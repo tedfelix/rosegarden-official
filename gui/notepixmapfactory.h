@@ -47,6 +47,7 @@ public:
     void offsetsFor(Rosegarden::Note::Type,
                     int dots,
                     Rosegarden::Accidental,
+                    bool shifted,
                     bool drawTail,
                     bool stalkGoesUp,
                     bool fixedHeight);
@@ -91,6 +92,7 @@ protected:
 
     Rosegarden::Note::Type m_note;
     Rosegarden::Accidental m_accidental;
+    bool m_shifted;
     bool m_drawTail;
     bool m_stalkGoesUp;
     bool m_noteHasStalk;
@@ -135,6 +137,7 @@ public:
                                  int dots,
                                  Rosegarden::Accidental accidental =
                                                      Rosegarden::NoAccidental,
+                                 bool noteHeadShifted = false,
                                  bool drawTail = true,
                                  bool stalkGoesUp = true,
                                  bool fixedHeight = false);
@@ -142,6 +145,7 @@ public:
     QCanvasPixmap makeBeamedNotePixmap(Rosegarden::Note::Type note,
 				       int dots,
 				       Rosegarden::Accidental accidental,
+                                       bool noteHeadShifted,
 				       bool stalkGoesUp,
 				       int stalkLength,
 				       int nextTailCount,

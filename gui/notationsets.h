@@ -114,15 +114,24 @@ class Chord : public NotationSet,
 {
 public:
     Chord(const NotationElementList &nel, NELIterator elementInChord,
+          const Rosegarden::Clef &clef = Rosegarden::Clef::DefaultClef,
+          const Rosegarden::Key &key = Rosegarden::Key::DefaultKey,
           bool quantized = true);
 
     virtual ~Chord();
+
+    virtual bool hasStalkUp() const;
+    virtual bool hasShiftedNoteHeads() const;
+    virtual bool isNoteHeadShifted(const NELIterator &itr) const;
 
 protected:
     virtual bool test(const NELIterator&);
     virtual void sample(const NELIterator&);
 
 private:
+    int height(const NELIterator&) const;
+    const Rosegarden::Clef &m_clef;
+    const Rosegarden::Key &m_key;
     Rosegarden::Event::timeT m_time;
 };
 
@@ -168,7 +177,7 @@ private:
 
     Beam calculateBeam(Staff &);
 
-    int height(const NELIterator&);
+    int height(const NELIterator&) const;
     const Rosegarden::Clef &m_clef;
     const Rosegarden::Key &m_key;
     int m_weightAbove, m_weightBelow;

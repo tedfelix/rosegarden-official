@@ -252,7 +252,7 @@ NotationView::setupActions()
 
     // Breve
     QIconSet icon(m_toolbarNotePixmapFactory.makeNotePixmap
-                  (Note::Breve, false, NoAccidental, true, true, true));
+                  (Note::Breve, false, NoAccidental, false, true, true, true));
     noteAction = new KRadioAction(i18n("Breve"), icon, 0, this,
                                   SLOT(slotBreve()),
                                   actionCollection(), "breve" );
@@ -260,7 +260,7 @@ NotationView::setupActions()
     
     // Whole
     icon = QIconSet(m_toolbarNotePixmapFactory.makeNotePixmap
-                    (Note::WholeNote, false, NoAccidental, true, true, true));
+                    (Note::WholeNote, false, NoAccidental, false, true, true, true));
     noteAction = new KRadioAction(i18n("Whole"), icon, 0, this,
                                   SLOT(slotWhole()),
                                   actionCollection(), "whole_note" );
@@ -268,7 +268,7 @@ NotationView::setupActions()
     
     // Half
     icon = QIconSet(m_toolbarNotePixmapFactory.makeNotePixmap
-                    (Note::HalfNote, false, NoAccidental, true, true, true));
+                    (Note::HalfNote, false, NoAccidental, false, true, true, true));
     noteAction = new KRadioAction(i18n("Half"), icon, 0, this,
                                   SLOT(slotHalf()),
                                   actionCollection(), "half" );
@@ -490,6 +490,9 @@ NotationView::showElements(NotationElementList::iterator from,
                 bool beamed = false;
                 (void)((*it)->event()->get<Bool>(P_BEAMED, beamed));
 
+                bool shifted = false;
+                (void)((*it)->event()->get<Bool>(P_NOTE_HEAD_SHIFTED, shifted));
+
 		if (beamed) {
 
 		    int stemLength = npf.getNoteBodyHeight();
@@ -520,7 +523,7 @@ NotationView::showElements(NotationElementList::iterator from,
 
 			QCanvasPixmap notePixmap
 			    (npf.makeBeamedNotePixmap
-			     (note, dots, accidental, up, stemLength,
+			     (note, dots, accidental, shifted, up, stemLength,
 			      nextTailCount, thisPartialTails, nextPartialTails,
                               width, (double)gradient / 100.0));
 			sprite = new QCanvasSimpleSprite(&notePixmap, canvas());
@@ -529,7 +532,7 @@ NotationView::showElements(NotationElementList::iterator from,
 
 			QCanvasPixmap notePixmap
 			    (npf.makeNotePixmap
-			     (note, dots, accidental, tail, up));
+			     (note, dots, accidental, shifted, tail, up));
 			sprite = new QCanvasSimpleSprite(&notePixmap, canvas());
 		    }
 
@@ -537,7 +540,8 @@ NotationView::showElements(NotationElementList::iterator from,
 		} else {
 
 		    QCanvasPixmap notePixmap
-			(npf.makeNotePixmap(note, dots, accidental, tail, up));
+			(npf.makeNotePixmap(note, dots, accidental,
+                                            shifted, tail, up));
 
 		    sprite = new QCanvasSimpleSprite(&notePixmap, canvas());
 		}
@@ -698,7 +702,7 @@ NotationView::setCurrentSelectedNote(bool rest, Note::Type n)
     if (!rest) {
         m_currentNotePixmap->setPixmap
             (m_toolbarNotePixmapFactory.makeNotePixmap
-             (n, m_currentSelectedNoteDotted ? 1 : 0, NoAccidental, true, true, true));
+             (n, m_currentSelectedNoteDotted ? 1 : 0, NoAccidental, false, true, true, true));
     } else {
         m_currentNotePixmap->setPixmap
             (m_toolbarNotePixmapFactory.makeRestPixmap
@@ -1235,7 +1239,7 @@ NotationView::test()
 
             QPixmap note(npf.makeNotePixmap((Note::Type)i, false,
                                             NoAccidental,
-                                            true, true));
+                                            false, true, true));
 
             QCanvasSimpleSprite *noteSprite = new QCanvasSimpleSprite(&note,
                                                                       canvas());

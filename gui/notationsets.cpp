@@ -172,8 +172,11 @@ public:
 
 //////////////////////////////////////////////////////////////////////
 
-Chord::Chord(const NotationElementList &nel, NELIterator i, bool quantized) :
+Chord::Chord(const NotationElementList &nel, NELIterator i,
+             const Clef &clef, const Key &key, bool quantized) :
     NotationSet(nel, i, quantized),
+    m_clef(clef),
+    m_key(key),
     m_time((*i)->getAbsoluteTime())
 {
     initialise();
@@ -208,6 +211,61 @@ void Chord::sample(const NELIterator &i)
     NotationSet::sample(i);
     push_back(i);
 }
+
+int
+Chord::height(const NELIterator &i) const
+{
+    long h;
+    if ((*i)->event()->get<Int>(P_HEIGHT_ON_STAFF, h)) return h;
+    int pitch = (*i)->event()->get<Int>("pitch");
+    Rosegarden::NotationDisplayPitch p(pitch, m_clef, m_key);
+    h = p.getHeightOnStaff();
+    // not setMaybe, as we know the property is absent:
+    (*i)->event()->set<Int>(P_HEIGHT_ON_STAFF, h, false);
+    return h;
+}
+
+bool Chord::hasStalkUp() const
+{
+    int high = height(getHighestNote()), low = height(getLowestNote());
+
+    if (high > 4) {
+        if (low > 4) return false;
+        else return ((high - 4) < (5 - low));
+    } else return true;
+}
+
+bool Chord::hasShiftedNoteHeads() const
+{
+    int prevH = 10000;
+    for (unsigned int i = 0; i < size(); ++i) {
+        int h = height((*this)[i]);
+        if (h == prevH + 1) return true;
+        prevH = h;
+    }
+    return false;
+}
+
+bool Chord::isNoteHeadShifted(const NELIterator &itr) const
+{
+    unsigned int i;
+    for (i = 0; i < size(); ++i) {
+        if ((*this)[i] == itr) break;
+    }
+    if (i == size()) {
+        kdDebug(KDEBUG_AREA) << "Chord::isNoteHeadShifted: Warning: Unable to find note head " << (*itr) << endl;
+        return false;
+    }
+
+    int h = height((*this)[i]);
+
+    if (hasStalkUp()) {
+        return ((i > 0) && (h == height((*this)[i-1]) + 1));
+    } else {
+        return ((i < size()-1) && (h == height((*this)[i+1]) + 1));
+    }
+}
+
 
 //////////////////////////////////////////////////////////////////////
 
@@ -282,7 +340,7 @@ NotationGroup::sample(const NELIterator &i)
 }
 
 int
-NotationGroup::height(const NELIterator &i)
+NotationGroup::height(const NELIterator &i) const
 {
     long h;
     if ((*i)->event()->get<Int>(P_HEIGHT_ON_STAFF, h)) return h;
@@ -311,8 +369,8 @@ NotationGroup::calculateBeam(Staff &staff)
         return beam; // no notes, no case to answer
     }
 
-    Chord initialChord(getList(), initialNote),
-            finalChord(getList(),   finalNote);
+    Chord initialChord(getList(), initialNote, m_clef, m_key),
+            finalChord(getList(),   finalNote, m_clef, m_key);
 
     if (initialChord.getInitialElement() == finalChord.getInitialElement()) {
         return beam;
@@ -457,7 +515,7 @@ NotationGroup::applyBeam(Staff &staff)
 
         if ((*i)->isNote()) {
 
-	    Chord chord(getList(), i);
+	    Chord chord(getList(), i, m_clef, m_key);
 	    unsigned int j;
 
 	    for (j = 0; j < chord.size(); ++j) {
