@@ -77,7 +77,7 @@ ControlRuler::~ControlRuler()
 void
 ControlRuler::slotScrollHoriz(int x)
 {
-    m_currentXOffset = (double(-x)) / getHScaleFactor();
+    m_currentXOffset = int((double(-x)) / getHScaleFactor());
     repaint();
 }
 

@@ -68,6 +68,14 @@ InstrumentParameterBox::InstrumentParameterBox(
       m_volumeValue(new QLabel(this)),
       m_volumeLabel(new QLabel(i18n("Volume"), this)),
       m_pluginLabel(new QLabel(i18n("Plugins"), this)),
+      m_chorusRotary(new RosegardenRotary(this, 0.0, 127.0, 1.0, 0.0, 20)),
+      m_reverbRotary(new RosegardenRotary(this, 0.0, 127.0, 1.0, 0.0, 20)),
+      m_highPassRotary(new RosegardenRotary(this, 0.0, 127.0, 1.0, 0.0, 20)),
+      m_resonanceRotary(new RosegardenRotary(this, 0.0, 127.0, 1.0, 0.0, 20)),
+      m_chorusLabel(new QLabel(i18n("Chorus"), this)),
+      m_reverbLabel(new QLabel(i18n("Reverb"), this)),
+      m_highPassLabel(new QLabel(i18n("HPF"), this)),
+      m_resonanceLabel(new QLabel(i18n("Resonance"), this)),
       m_selectedInstrument(0),
       m_pluginManager(pluginManager)
 {
@@ -133,6 +141,13 @@ InstrumentParameterBox::initBox()
     m_volumeLabel->setFont(getFont());
     m_pluginLabel->setFont(getFont());
 
+    // advanced MIDI effects
+    //
+    m_chorusLabel->setFont(getFont());
+    m_reverbLabel->setFont(getFont());
+    m_highPassLabel->setFont(getFont());
+    m_resonanceLabel->setFont(getFont());
+
     unsigned int defaultPlugins = 5;
     for (unsigned int i = 0; i < defaultPlugins; i++)
     {
@@ -146,12 +161,13 @@ InstrumentParameterBox::initBox()
     gridLayout->addRowSpacing(0, 8);
     gridLayout->addRowSpacing(1, 30);
 
+    // MIDI widgets
+    //
     gridLayout->addMultiCellWidget(m_instrumentLabel, 1, 1, 0, 2, AlignCenter);
     gridLayout->addWidget(m_bankLabel,    2, 0, AlignLeft);
     gridLayout->addWidget(m_bankCheckBox, 2, 1);
     gridLayout->addWidget(m_bankValue,    2, 2, AlignRight);
 
-    // program label under heading - filling the entire cell
     gridLayout->addWidget(m_programLabel,    3, 0);
     gridLayout->addWidget(m_programCheckBox, 3, 1);
     gridLayout->addWidget(m_programValue,    3, 2, AlignRight);
@@ -167,15 +183,29 @@ InstrumentParameterBox::initBox()
     gridLayout->addWidget(m_velocityCheckBox, 6, 1);
     gridLayout->addWidget(m_velocityValue,    6, 2, AlignRight);
 
-    gridLayout->addWidget(m_volumeLabel, 7, 0, AlignCenter);
-    gridLayout->addMultiCellWidget(m_pluginLabel, 7, 7, 1, 2, AlignCenter);
-    gridLayout->addMultiCellWidget(m_volumeFader, 8, 10, 0, 0,  AlignCenter);
-    gridLayout->addWidget(m_volumeValue, 11, 0, AlignCenter);
+    gridLayout->addWidget(m_chorusLabel, 7, 0, AlignLeft);
+    gridLayout->addWidget(m_chorusRotary, 7, 2, AlignRight);
+
+    gridLayout->addWidget(m_reverbLabel, 8, 0, AlignLeft);
+    gridLayout->addWidget(m_reverbRotary, 8, 2, AlignRight);
+
+    gridLayout->addWidget(m_highPassLabel, 9, 0, AlignLeft);
+    gridLayout->addWidget(m_highPassRotary, 9, 2, AlignRight);
+
+    gridLayout->addWidget(m_resonanceLabel, 10, 0, AlignLeft);
+    gridLayout->addWidget(m_resonanceRotary, 10, 2, AlignRight);
+
+    // Audio widgets
+    //
+    gridLayout->addWidget(m_volumeLabel, 11, 0, AlignCenter);
+    gridLayout->addMultiCellWidget(m_pluginLabel, 11, 11, 1, 2, AlignCenter);
+    gridLayout->addMultiCellWidget(m_volumeFader, 12, 14, 0, 0,  AlignCenter);
+    gridLayout->addWidget(m_volumeValue, 15, 0, AlignCenter);
 
     for (unsigned int i = 0; i < m_pluginButtons.size(); i++)
     {
         gridLayout->addMultiCellWidget(m_pluginButtons[i],
-                                       8 + i, 8 + i, 1, 2, AlignCenter);
+                                       12 + i, 12 + i, 1, 2, AlignCenter);
         connect(m_pluginButtons[i], SIGNAL(released(int)),
                 this, SLOT(slotSelectPlugin(int)));
 
@@ -310,6 +340,20 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
         m_velocityValue->hide();
         m_velocityLabel->hide();
 
+        // Advanced MIDI controls
+        //
+        m_chorusRotary->hide();
+        m_reverbRotary->hide();
+        m_highPassRotary->hide();
+        m_resonanceRotary->hide();
+        m_chorusLabel->hide();
+        m_reverbLabel->hide();
+        m_highPassLabel->hide();
+        m_resonanceLabel->hide();
+
+        // Audio controls
+        //
+
         //m_velocityValue->setDisabled(false);
         //m_velocityValue->setCurrentItem(instrument->getVelocity());
 
@@ -360,6 +404,20 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
         m_panCheckBox->show();
         m_velocityCheckBox->show();
 
+        // Advanced MIDI controls
+        //
+        m_chorusRotary->show();
+        m_reverbRotary->show();
+        m_highPassRotary->show();
+        m_resonanceRotary->show();
+        m_chorusLabel->show();
+        m_reverbLabel->show();
+        m_highPassLabel->show();
+        m_resonanceLabel->show();
+
+
+        // Audio controls
+        //
         m_volumeFader->hide();
         m_volumeValue->hide();
         m_volumeLabel->hide();

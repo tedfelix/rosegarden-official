@@ -295,7 +295,16 @@ public:
     RosegardenRotary(QWidget *parent,
                      float minValue,
                      float maxValue,
-                     float step);
+                     float step,
+                     float initialPosition,
+                     int size);
+
+    float getMinValue() const { return m_minValue; }
+    float getMaxValue() const { return m_maxValue; }
+    float getStep() const { return m_step; }
+    int getSize() const { return m_size; }
+
+    float getPosition() const { return m_position; }
 
 signals:
     void valueChanged(float);
@@ -305,10 +314,19 @@ protected:
     virtual void mousePressEvent(QMouseEvent *e);
     virtual void mouseReleaseEvent(QMouseEvent *e);
     virtual void mouseMoveEvent(QMouseEvent *e);
+    virtual void wheelEvent(QWheelEvent *e);
+
+    void drawPosition();
 
     float m_minValue;
     float m_maxValue;
     float m_step;
+    int   m_size;
+
+    float m_position;
+    bool  m_buttonPressed;
+    int   m_originalY;
+    int   m_lastY;
 };
 
 

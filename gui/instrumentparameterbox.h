@@ -120,6 +120,15 @@ protected:
     QLabel             *m_volumeLabel;
     QLabel             *m_pluginLabel;
 
+    RosegardenRotary   *m_chorusRotary;
+    RosegardenRotary   *m_reverbRotary;
+    RosegardenRotary   *m_highPassRotary;
+    RosegardenRotary   *m_resonanceRotary;
+    QLabel             *m_chorusLabel;
+    QLabel             *m_reverbLabel;
+    QLabel             *m_highPassLabel;
+    QLabel             *m_resonanceLabel;
+
     std::vector<PluginButton*>       m_pluginButtons;
 
     Rosegarden::Instrument          *m_selectedInstrument;

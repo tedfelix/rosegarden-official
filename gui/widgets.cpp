@@ -20,15 +20,17 @@
 */
 
 #include <iostream>
+#include <unistd.h>
+#include <math.h>
 
-#include "unistd.h"
+#include <kapp.h>
+#include <klocale.h>
 
 #include <qfontdatabase.h>
 #include <qtimer.h>
 #include <qapplication.h>
 #include <qcursor.h>
-#include <kapp.h>
-#include <klocale.h>
+#include <qpainter.h>
 
 #include "widgets.h"
 #include "rosedebug.h"
@@ -400,36 +402,121 @@ PluginButton::mouseReleaseEvent(QMouseEvent *e)
 RosegardenRotary::RosegardenRotary(QWidget *parent,
                                    float minValue,
                                    float maxValue,
-                                   float step):
+                                   float step,
+                                   float initialPosition,
+                                   int size):
     QWidget(parent),
     m_minValue(minValue),
     m_maxValue(maxValue),
-    m_step(step)
+    m_step(step),
+    m_size(size),
+    m_position(initialPosition),
+    m_buttonPressed(false),
+    m_originalY(0),
+    m_lastY(0)
 {
-    
+    setFixedSize(size, size);
 }
 
 
 void
 RosegardenRotary::paintEvent(QPaintEvent *e)
 {
+    QPainter paint(this);
+
+    paint.setClipRegion(e->region());
+    paint.setClipRect(e->rect().normalize());
+
+    drawPosition();
 }
 
 
 void
 RosegardenRotary::mousePressEvent(QMouseEvent *e)
 {
+    if (e->button() == LeftButton)
+    {
+        m_buttonPressed = true;
+        m_originalY = e->y();
+    }
 }
 
 void
 RosegardenRotary::mouseReleaseEvent(QMouseEvent *e)
 {
+    if (e->button() == LeftButton)
+    {
+        m_buttonPressed = false;
+        m_lastY = 0;
+    }
 }
 
 void
 RosegardenRotary::mouseMoveEvent(QMouseEvent *e)
 {
+    if (m_buttonPressed)
+    {
+        float newValue = m_position + (float(e->y() - m_lastY));
+
+        if (newValue > m_maxValue)
+            m_position = m_maxValue;
+        else
+        if (newValue < m_minValue)
+            m_position = m_minValue;
+        else
+            m_position = newValue;
+
+        m_lastY = e->y();
+
+        drawPosition();
+
+        emit valueChanged(m_position);
+    }
 }
+
+void
+RosegardenRotary::wheelEvent(QWheelEvent *e)
+{
+    cout << "WHEEL = " << e->delta() << endl;
+
+    if (e->delta() > 0)
+        m_position += m_step;
+    else 
+        m_position -= m_step;
+
+    if (m_position > m_maxValue)
+        m_position = m_maxValue;
+
+    if (m_position < m_minValue)
+        m_position = m_minValue;
+
+    drawPosition();
+
+    emit valueChanged(m_position);
+}
+
+void
+RosegardenRotary::drawPosition()
+{
+    QPainter paint(this);
+
+    paint.setPen(kapp->palette().color(QPalette::Active, QColorGroup::Dark));
+    paint.setBrush(kapp->palette().color(QPalette::Active, QColorGroup::Base));
+
+    paint.drawEllipse(0, 0, m_size, m_size);
+
+    // draw the position
+    double hyp = double(m_size) / 2.0;
+    double angle = (0.1 * M_PI) // offset 
+                   + (1.8 * M_PI * (double(m_position) /  // value
+                     (double(m_maxValue) - double(m_minValue))));
+
+    double x = hyp - 0.9 * hyp * sin(angle);
+    double y = hyp + 0.9 * hyp * cos(angle);
+
+    paint.drawLine(hyp, hyp, x, y);
+} 
+
 
 
 
