@@ -7,8 +7,10 @@
 #include <cstdio>
 
 #include <sys/times.h>
+#include <iostream>
 
 using namespace std;
+using namespace Rosegarden;
 
 int main(int argc, char **argv)
 {
