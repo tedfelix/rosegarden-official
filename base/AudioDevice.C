@@ -20,13 +20,26 @@
 */
 
 #include "AudioDevice.h"
+#include "Instrument.h"
+
+#if (__GNUC__ < 3)
+#include <strstream>
+#else
+#include <sstream>
+#endif
+
 
 namespace Rosegarden
 {
 
-
-AudioDevice::AudioDevice(std::string name):Device(name)
+AudioDevice::AudioDevice():Device("Default Audio Device", Device::Audio)
 {
+   createInstruments();
+}
+
+AudioDevice::AudioDevice(const std::string &name):Device(name, Device::Audio)
+{
+   createInstruments();
 }
 
 
@@ -34,6 +47,26 @@ AudioDevice::~AudioDevice()
 {
 }
 
+void
+AudioDevice::createInstruments()
+{
+
+#if (__GNUC__ < 3)
+    std::ostrstream instrumentName;
+#else
+    std::ostringstream instrumentName;
+#endif
+
+    // for the moment just create an arbitrary number of audio tracks
+    for (InstrumentId i = 0; i < 8; i++)
+    {
+        instrumentName << m_name.c_str() << " #" << i << std::ends;
+
+        m_instruments.push_back(
+                new Instrument(i, Instrument::Audio, instrumentName.str()));
+    }
+
+}
 
 }
 

@@ -25,6 +25,10 @@
 #ifndef _DEVICE_H_
 #define _DEVICE_H_
 
+// A Device can query underlying hardware/sound APIs to
+// generate a list of Instruments.
+//
+
 namespace Rosegarden
 {
 
@@ -35,17 +39,21 @@ class Device
 public:
     typedef enum 
     {
-        Internal,
+        Midi,
         Audio
     } DeviceType;
 
-    Device(std::string name):m_name(name) {;}
-    ~Device() {;}
+    Device(const std::string &name, DeviceType type):
+        m_name(name), m_type(type) { }
+
+    virtual ~Device() {;}
 
     DeviceType getType() const { return m_type; }
     std::string getName() const { return m_name; }
 
-private:
+    virtual void createInstruments() = 0;
+
+protected:
     std::vector<Instrument *> m_instruments;
     std::string               m_name;
     DeviceType                m_type;

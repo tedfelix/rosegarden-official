@@ -20,17 +20,57 @@
 */
 
 #include "MidiDevice.h"
+#include "Instrument.h"
+
+#if (__GNUC__ < 3)
+#include <strstream>
+#else
+#include <sstream>
+#endif
 
 namespace Rosegarden
 {
 
-MidiDevice::MidiDevice(std::string name):Device(name)
+MidiDevice::MidiDevice():
+    Device("Default Midi Device", Device::Midi),
+    m_bankMSB(0), m_bankLSB(0), m_sendBankSelect(false)
 {
+    createInstruments();
+}
+
+MidiDevice::MidiDevice(const std::string &name):
+    Device(name, Device::Midi),
+    m_bankMSB(0), m_bankLSB(0), m_sendBankSelect(false)
+{
+    createInstruments();
 }
 
 MidiDevice::~MidiDevice()
 {
 }
+
+void
+MidiDevice::createInstruments()
+{
+#if (__GNUC__ < 3)
+    std::ostrstream instrumentName;
+#else
+    std::ostringstream instrumentName;
+#endif
+
+    for (InstrumentId i = 0; i < 16; i++)
+    {
+        instrumentName << m_name.c_str() << " #" << i << std::ends;
+
+        m_instruments.push_back(
+            new Instrument(i,                             // id
+                           Instrument::Midi,              // type
+                           instrumentName.str(),         // name
+                           (MidiByte)i));                  // channel
+    }
+
+}
+
 
 }
 

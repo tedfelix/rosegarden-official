@@ -5,7 +5,7 @@ On examination of a few other pieces of software and after having
 a bit of a think the following model for implementing Instruments
 and Tracks seems like a good starting point.
 
-We start from the notion of Audio and Midi Devices..
+We start from the notion of Audio and Midi Devices.
 
 An AudioDevice provides a mechanism by which an Audio Segment can
 be played.  The AudioDevice will provide details of the number
@@ -21,6 +21,9 @@ information.  A MidiDevice will have parameters available for the
 setting of System Exclusive states and other device-global parameters.
 MidiDevice channel will be equivalent to a single entry on the
 Instrument selection menu.
+
+There can be many MidiDevices and many AudioDevices in a single
+application.
 
 A single entry on a Track's Instrument selection menu will be known
 as an Instrument.
@@ -55,4 +58,22 @@ Instruments themselves can modify these values via the InstrumentParameterBox
 
 Don't worry it the end of that last paragraph doesn't make any sense.
 
+
+Instrument list
+---------------
+
+The Instrument list itself is held centrally at the Composition.
+When MidiDevices and AudioDevices are they generate their own Instrument
+lists.  These lists are combined into the Composition's canonical list of
+Instruments.  When a Composition is saved the Instrument list (including
+basic Device information) is saved along with it.  On reloading if the
+Composition's Instrument list does not form a valid subset of the current
+application's instrument list then an error will be flagged and Tracks
+will either be remapped automatically of left to for the user to sort
+out.
+
+Incompatible Instrument lists should not preclude the Composition from
+being remapped.  If users are sharing Composition between different
+instances of the application then it's more than likely that underlying
+hardware or software APIs may provide differing Instrument configurations.
 

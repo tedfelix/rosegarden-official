@@ -25,8 +25,13 @@
 #include <qpushbutton.h>
 #include <ktmpstatusmsg.h>
 
+#include "rosegardenguidoc.h"
+#include "rosegardentransportdialog.h"
 #include "sequencemanager.h"
 #include "SegmentPerformanceHelper.h"
+
+#include "MidiDevice.h"
+#include "AudioDevice.h"
 
 namespace Rosegarden
 {
@@ -47,6 +52,8 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
     m_metronomeDuration(0, 10000),
     m_transport(transport)
 {
+    m_midiDevices.push_back(new Rosegarden::MidiDevice("aRts MIDI"));
+    m_audioDevices.push_back(new Rosegarden::AudioDevice("aRts Audio"));
 }
 
 

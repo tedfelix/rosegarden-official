@@ -25,9 +25,7 @@
 #include <kprocess.h>
 
 #include "rosegardendcop.h"
-#include "rosegardenguidoc.h"
 #include "MappedComposition.h"
-#include "rosegardentransportdialog.h"
 #include "RealTime.h"
 #include "Sound.h"
 #include "Track.h"
@@ -42,8 +40,16 @@
 // Basically this neatens up the source code and provides a
 // logical break in the design.
 //
+
+class RosegardenGUIDoc;
+
 namespace Rosegarden
 {
+
+class MidiDevice;
+class AudioDevice;
+class RosegardenTransportDialog;
+
 
 class SequenceManager : public QObject
 {
@@ -110,6 +116,11 @@ private:
 
     // pointer to the transport dialog
     RosegardenTransportDialog *m_transport;
+
+    // MIDI and Audio devices
+    //
+    std::vector<Rosegarden::MidiDevice*>  m_midiDevices;
+    std::vector<Rosegarden::AudioDevice*> m_audioDevices;
 
 };
 

@@ -34,8 +34,11 @@ class AudioDevice : public Device
 {
 
 public:
-    AudioDevice(std::string name);
-    ~AudioDevice();
+    AudioDevice();
+    AudioDevice(const std::string &name);
+    virtual ~AudioDevice();
+
+    virtual void createInstruments();
 
 private:
 
