@@ -365,6 +365,15 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     QObject::connect
 	(doc, SIGNAL(destroyed()), this, SLOT(slotDocumentDestroyed()));
 
+#ifdef RGKDE3
+    QObject::connect
+	(doc->getCommandHistory(), SIGNAL(commandExecuted()),
+	 this, SLOT(slotTestClipboard()));
+
+    stateChanged("have_selection", KXMLGUIClient::StateReverse);
+    slotTestClipboard();
+#endif
+
     m_selectDefaultNote->activate();
     slotSetInsertCursorPosition(0);
     slotSetPointerPosition(doc->getComposition().getPosition());
@@ -377,15 +386,14 @@ NotationView::~NotationView()
     kdDebug(KDEBUG_AREA) << "-> ~NotationView()\n";
 
     saveOptions();
+    if (m_documentDestroyed) return;
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-	if (!m_documentDestroyed) {
-	    for (Segment::iterator j = m_staffs[i]->getSegment().begin();
-		 j != m_staffs[i]->getSegment().end(); ++j) {
-		removeViewLocalProperties(*j);
-	    }
+	for (Segment::iterator j = m_staffs[i]->getSegment().begin();
+	     j != m_staffs[i]->getSegment().end(); ++j) {
+	    removeViewLocalProperties(*j);
 	}
-        delete m_staffs[i]; // this will erase all "notes" canvas items
+	delete m_staffs[i]; // this will erase all "notes" canvas items
     }
 
     // Delete remaining canvas items.
@@ -406,6 +414,24 @@ NotationView::slotDocumentDestroyed()
     m_inhibitRefresh = true;
 }
 
+void
+NotationView::slotTestClipboard()
+{
+#ifdef RGKDE3
+    if (m_document->getClipboard()->isEmpty()) {
+	stateChanged("have_clipboard", KXMLGUIClient::StateReverse);
+	stateChanged("have_clipboard_single_segment",
+		     KXMLGUIClient::StateReverse);
+    } else {
+	stateChanged("have_clipboard", KXMLGUIClient::StateNoReverse);
+	stateChanged("have_clipboard_single_segment",
+		     (m_document->getClipboard()->isSingleSegment() ?
+		      KXMLGUIClient::StateNoReverse :
+		      KXMLGUIClient::StateReverse));
+    }
+#endif
+}
+ 
     
 void
 NotationView::removeViewLocalProperties(Rosegarden::Event *e)
@@ -1337,6 +1363,13 @@ void NotationView::setCurrentSelection(EventSelection* s)
         s->recordSelectionOnSegment(m_properties.SELECTED);
         getStaff(s->getSegment())->positionElements(s->getStartTime(),
                                                     s->getEndTime());
+#ifdef RGKDE3
+	stateChanged("have_selection", KXMLGUIClient::StateNoReverse);
+#endif
+    } else {
+#ifdef RGKDE3
+	stateChanged("have_selection", KXMLGUIClient::StateReverse);
+#endif
     }
 
     updateView();

@@ -308,4 +308,71 @@ etc
 <ToolBar name="fontToolBar">
 </ToolBar>
 
+<State name="have_selection">
+  <enable>
+    <Action name="edit_cut"/>
+    <Action name="edit_copy"/>
+    <Action name="delete"/>
+    <Action name="cut_and_close"/>
+    <Action name="beam"/>
+    <Action name="auto_beam"/>
+    <Action name="break_group"/>
+    <!-- Action name="tuplet"/ -->
+    <!-- Action name="simple_tuplet"/ -->
+    <Action name="break_tuplets"/>
+    <Action name="slur"/>
+    <Action name="crescendo"/>
+    <Action name="decrescendo"/>
+    <Action name="remove_indications"/>
+    <Action name="style_classical"/>
+    <Action name="style_x"/>
+    <Action name="style_triangle"/>
+    <Action name="style_mensural"/>
+    <Action name="stems_up"/>
+    <Action name="stems_down"/>
+    <Action name="restore_stems"/>
+    <Action name="slashes_0"/>
+    <Action name="slashes_1"/>
+    <Action name="slashes_2"/>
+    <Action name="slashes_3"/>
+    <Action name="slashes_4"/>
+    <Action name="slashes_5"/>
+    <Action name="remove_marks"/>
+    <Action name="add_accent"/>
+    <Action name="add_tenuto"/>
+    <Action name="add_staccato"/>
+    <Action name="add_staccatissimo"/>
+    <Action name="add_marcato"/>
+    <Action name="add_text_sf"/>
+    <Action name="add_text_rf"/>
+    <Action name="add_trill"/>
+    <Action name="add_turn"/>
+    <Action name="add_pause"/>
+    <Action name="add_up-bow"/>
+    <Action name="add_down-bow"/>
+    <Action name="add_text_mark"/>
+    <Action name="normalize_rests"/>
+    <Action name="collapse_rests_aggressively"/>
+    <Action name="collapse_notes"/>
+    <Action name="tie_notes"/>
+    <Action name="untie_notes"/>
+    <Action name="make_notes_viable"/>
+    <Action name="quantize"/>
+    <Action name="transpose_up"/>
+    <Action name="transpose_down"/>
+    <Action name="transpose_up_octave"/>
+    <Action name="transpose_down_octave"/>
+    <Action name="general_transpose"/>
+    <Action name="invert"/>
+    <Action name="retrograde"/>
+  </enable>
+</State>
+
+<State name="have_clipboard_single_segment">
+  <enable>
+    <Action name="edit_paste"/>
+    <Action name="general_paste"/>
+  </enable>
+</State>
+
 </kpartgui>

@@ -726,6 +726,12 @@ public slots:
     void slotStateChanged(const QString&, bool);
 
     /**
+     * A command has happened; check the clipboard in case we
+     * need to change state
+     */
+    void slotTestClipboard();
+
+    /**
      * View the audio file manager
      */
     void slotAudioManager();

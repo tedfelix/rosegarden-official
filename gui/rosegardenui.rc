@@ -113,19 +113,27 @@
 	</enable>
 </State>
 
-<State name="segment_selected">
+<State name="have_selection">
      <enable>
       	<Action name="edit_cut"/>
       	<Action name="edit_copy"/>
+      	<Action name="delete"/>
       	<Action name="edit_matrix"/>
       	<Action name="edit_notation"/>
 	<Action name="quantize_selection"/>
+	<Action name="harmonize_selection"/>
      </enable>
 </State>
 
-<State name="selection_enabled">
+<State name="have_clipboard">
      <enable>
         <Action name="edit_paste"/>
+     </enable>
+</State>
+
+<State name="have_clipboard_single_segment">
+     <enable>
+        <Action name="add_tracks"/>
      </enable>
 </State>
 

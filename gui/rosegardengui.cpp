@@ -154,6 +154,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer)
     stateChanged("new_file");
     stateChanged("have_segments",    KXMLGUIClient::StateReverse);
     stateChanged("segment_selected", KXMLGUIClient::StateReverse);
+    slotTestClipboard();
 #endif
 }
 
@@ -492,8 +493,10 @@ void RosegardenGUIApp::initDocument()
     m_doc = new RosegardenGUIDoc(this, m_useSequencer);
     m_doc->newDocument();
     m_doc->getCommandHistory()->attachView(actionCollection());
-   connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),
-           SLOT(update()));
+    connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),
+	    SLOT(update()));
+    connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),
+	    SLOT(slotTestClipboard()));
 }
 
 void RosegardenGUIApp::initView()
@@ -2490,6 +2493,24 @@ RosegardenGUIApp::slotStateChanged(const QString& s,
 {
 #ifdef RGKDE3
     stateChanged(s, reverse ? KXMLGUIClient::StateReverse : KXMLGUIClient::StateNoReverse);
+#endif
+}
+
+void
+RosegardenGUIApp::slotTestClipboard()
+{
+#ifdef RGKDE3
+    if (m_doc->getClipboard()->isEmpty()) {
+	stateChanged("have_clipboard", KXMLGUIClient::StateReverse);
+	stateChanged("have_clipboard_single_segment",
+		     KXMLGUIClient::StateReverse);
+    } else {
+	stateChanged("have_clipboard", KXMLGUIClient::StateNoReverse);
+	stateChanged("have_clipboard_single_segment",
+		     (m_doc->getClipboard()->isSingleSegment() ?
+		      KXMLGUIClient::StateNoReverse :
+		      KXMLGUIClient::StateReverse));
+    }
 #endif
 }
 

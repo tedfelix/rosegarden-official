@@ -482,6 +482,7 @@ SegmentSplitCommand::unexecute()
 	m_segment->insert(new Event(**it));
     }
 
+    m_segment->clearEndMarker();
     m_segment->getComposition()->detachSegment(m_newSegment);
     m_detached = true;
 }

@@ -257,9 +257,8 @@ void SegmentItem::drawShape(QPainter& painter)
                 // draw rectangles, discarding those which are clipped
                 //
                 QRect p = m_previewInfo[i];
-                if (p.x() >= viewportRect.x() &&
+                if ((p.x() + p.width()) >= viewportRect.x() &&
                     p.x() <= (viewportRect.x() + viewportRect.width())) {
-		    if (p.width() > 0) p.setWidth(p.width()-1);
                     painter.drawRect(p);
 		}
             }
