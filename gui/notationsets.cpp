@@ -1146,7 +1146,7 @@ NotationGroup::applyTuplingLine(NotationStaff &staff)
 		if (bc > maxEndBeamCount) maxEndBeamCount = bc;
 	    }
 
-	    int extraBeamSpace = maxEndBeamCount * nh;
+	    int extraBeamSpace = maxEndBeamCount * nh + nh/2;
 
 	    if (beam.aboveNotes) {
 		startY -= extraBeamSpace; endY -= extraBeamSpace;
