@@ -42,7 +42,7 @@ class ActiveItem;
 class BarButtons;
 class QVBox;
 class QGridLayout;
-class QHBoxLayout;
+class QVBoxLayout;
 
 class EditView : public KMainWindow
 {
@@ -251,7 +251,7 @@ protected:
     QFrame      *m_centralFrame;
     QScrollBar  *m_horizontalScrollBar;
     QGridLayout *m_grid;
-    QHBoxLayout *m_bottomHBox;
+    QVBoxLayout *m_rulerBox;
     QWidget     *m_topBarButtons;
     QWidget     *m_bottomBarButtons;
 };

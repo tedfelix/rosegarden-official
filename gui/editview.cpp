@@ -54,7 +54,7 @@ EditView::EditView(RosegardenGUIDoc *doc,
       m_centralFrame(new QFrame(this)),
       m_horizontalScrollBar(new QScrollBar(Horizontal, m_centralFrame)),
       m_grid(new QGridLayout(m_centralFrame, 5, 0)), // 5 rows, 0 cols
-      m_bottomHBox(new QHBoxLayout(m_centralFrame)),
+      m_rulerBox(new QVBoxLayout(m_centralFrame)),
       m_topBarButtons(0),
       m_bottomBarButtons(0)
 {
@@ -70,7 +70,7 @@ EditView::EditView(RosegardenGUIDoc *doc,
          this,                      SLOT(slotCommandExecuted(KCommand *)));
 
     m_grid->addWidget(m_horizontalScrollBar, 4, 0);
-    m_grid->addLayout(m_bottomHBox, 0, 0);
+    m_grid->addLayout(m_rulerBox, 0, 0);
 }
 
 EditView::~EditView()
@@ -124,7 +124,7 @@ void EditView::setBottomBarButtons(QWidget* w)
 
 void EditView::addRuler(QWidget* w)
 {
-    m_bottomHBox->addWidget(w);
+    m_rulerBox->addWidget(w);
 
     connect(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
             w, SLOT(slotScrollHoriz(int)));

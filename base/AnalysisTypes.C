@@ -83,7 +83,14 @@ AnalysisHelper::labelChords(CompositionTimeSliceAdapter &c, Segment &s) {
         // no initialization
         for (  ; i != c.end() && (*i)->getAbsoluteTime() == time; ++i) {
 
-            if ((*i)->isa(Key::EventType)) key = Key(**i);
+            if ((*i)->isa(Key::EventType)) {
+		key = Key(**i);
+
+		//!!! Should distinguish these events from the chord labels
+		// somehow (another property, presumably)
+		Text text(key.getName());
+		s.insert(text.getAsEvent(time));
+	    }
 
             else if ((*i)->isa(Note::EventType)) {
                 int pitch = (*i)->get<Int>(Rosegarden::BaseProperties::PITCH);

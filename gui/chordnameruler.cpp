@@ -59,7 +59,7 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
     m_boldFont("helvetica", 12, QFont::Bold),
     m_fontMetrics(m_boldFont)
 {
-    setBackgroundColor(RosegardenGUIColours::ChordNameRulerBackground);
+//!!!    setBackgroundColor(RosegardenGUIColours::ChordNameRulerBackground);
 }
 
 ChordNameRuler::~ChordNameRuler()
@@ -99,7 +99,7 @@ void
 ChordNameRuler::paintEvent(QPaintEvent* e)
 {
     QPainter paint(this);
-    paint.setPen(RosegardenGUIColours::ChordNameRulerForeground);
+//!!!    paint.setPen(RosegardenGUIColours::ChordNameRulerForeground);
 
     paint.setClipRegion(e->region());
     paint.setClipRect(e->rect().normalize());
@@ -111,9 +111,10 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
 	<< " -> " << (clipRect.x() + clipRect.width() - m_currentXOffset)
 	<< endl;
 
-    timeT from = m_rulerScale->getTimeForX(clipRect.x() - m_currentXOffset);
-    timeT   to = m_rulerScale->getTimeForX(clipRect.x() + clipRect.width() -
-					   m_currentXOffset);
+    timeT from = m_rulerScale->getTimeForX
+	(clipRect.x() - m_currentXOffset - 100);
+    timeT   to = m_rulerScale->getTimeForX
+	(clipRect.x() + clipRect.width() - m_currentXOffset + 100);
 
     kdDebug(KDEBUG_AREA)
 	<< "Range (times): " << from << " -> " << to << endl;
@@ -161,7 +162,7 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
 	QRect noteBounds = m_fontMetrics.boundingRect(noteName);
 
 	paint.setFont(m_font);
-	paint.drawText(x + noteBounds.width() + 1, y, remainder);
+	paint.drawText(x + noteBounds.width() + 2, y, remainder);
     }
 }
 
