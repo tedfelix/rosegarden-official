@@ -283,9 +283,6 @@
         <Action name="edit_event_list"/>
         <Action name="quantize_selection"/>
         <Action name="rescale"/>
-        <Action name="jog_left"/>
-        <Action name="jog_right"/>
-        <Action name="auto_split"/>
         <Action name="split_by_pitch"/>
         <Action name="collapse"/>
         <Action name="set_tempo_to_segment_length"/>
