@@ -3,22 +3,49 @@
 require 'getoptlong'
 require 'date'
 
-class LogExtractor
-  def initialize dFrom, dTo = "", files = ""
-    @from = dFrom
-    @to = dTo
-    @files = files
+#
+# A Class representing one log entry, with author, date, and message
+# Objects from this class can be put into a hash
+#
+class LogEntry
+  include Comparable
+
+  attr_reader :author, :date, :logMessage
+
+  def initialize headerLine, logMessage
+    parseHeaderLine headerLine
+    @logMessage = logMessage
   end
 
-  def extract
-    cmd = "cvs -q -z3 log -d '#{@from}<#{@to}' #{@files}"
-    puts cmd if $DEBUG
-    @logStream = IO.popen cmd
-    @logParser = LogParser.new @logStream
-    @logParser.parse
+  def parseHeaderLine headerLine
+    fields = headerLine.split
+    dateArray = fields[1].split("/")
+    timeArray = fields[2].split(":")
+    @date = Time.gm(dateArray[0], dateArray[1], dateArray[2],
+		    timeArray[0], timeArray[1], timeArray[2])
+    @author = fields[4].chop
+  end
+
+  def <=>(anOther)
+    @date <=> anOther.date
+  end
+
+  def eql?(anOther)
+    logMessage.eql? anOther.logMessage
+  end
+
+  def to_s
+    return "From #{author} at #{date} :\n" + logMessage
+  end
+
+  def hash
+    return logMessage.hash
   end
 end
 
+#
+# Parse cvs log from a given IO stream
+#
 class LogParser
 
   def initialize logstream
@@ -26,6 +53,9 @@ class LogParser
     @logs = Hash.new
   end
 
+  #
+  # Parse and dump all the logs
+  #
   def parse
     @logstream.each do |line|
       if (line =~ /^RCS file:/)
@@ -33,7 +63,8 @@ class LogParser
       end
     end
 
-    @logs.each { |key, value| puts "Log for :", value.sort.join(", "), "" , key, "\n---------------\n" }
+    @logs.keys.sort.each { |logEntry| puts "Log for :", @logs[logEntry].sort.join(", "), "" , logEntry, "\n---------------\n" }
+    #@logs.each { |logEntry, files| puts "Log for :", files.sort.join(", "), "" , logEntry, "\n---------------\n" }
   end
 
   HeadRevNum = Regexp.new('^\d+\.\d+$')
@@ -55,6 +86,7 @@ class LogParser
 	# Take the log in account only if it's from HEAD
 	if (HeadRevNum.match(revisionNumber))
 	  # Update the list of files this log entry pertains to
+
 	  files = @logs[logEntry] || []
 	  files << workingFile unless files.include? workingFile
 	  @logs[logEntry] = files
@@ -79,21 +111,41 @@ class LogParser
 
   def parseLogEntry
     # read date
-    date = @logstream.readline
-    date.chomp!
+    headerLine = @logstream.readline
+    headerLine.chomp!
 
-    logEntry = ""
+    logMessage = ""
     line = ""
     until (line =~ /^[-=]+$/)
-      logEntry += line unless line.nil? || line =~ /^branches:\s+[\d.]+;$/
+      logMessage += line unless line.nil? || line =~ /^branches:\s+[\d.]+;$/
       line = @logstream.readline
     end
 
-    puts "Log Entry for #{date} : #{logEntry}" if $DEBUG
-    return logEntry, (line =~ /^=+$/)
+    puts "Log Entry for #{headerLine} : #{logMessage}" if $DEBUG
+    return LogEntry.new(headerLine, logMessage), (line =~ /^=+$/)
   end
 
 end
+
+#
+# Main class - parse log from the 'cvs log' command
+#
+class LogExtractor
+  def initialize dFrom, dTo = "", files = ""
+    @from = dFrom
+    @to = dTo
+    @files = files
+  end
+
+  def extract
+    cmd = "cvs -q -z3 log -d '#{@from}<#{@to}' #{@files}"
+    puts cmd if $DEBUG
+    @logStream = IO.popen cmd
+    @logParser = LogParser.new @logStream
+    @logParser.parse
+  end
+end
+
 
 def usage
   STDERR << File.basename($0) <<
@@ -105,6 +157,7 @@ def usage
     "Defaults to changes since yesterday."
   exit
 end
+
 ########## And now for something completely different
 
 # logparser = LogParser.new(File.new ARGV[0])
