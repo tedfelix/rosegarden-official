@@ -7,6 +7,7 @@
     <!-- these two would like to be open_merge, but that sticks them at
 	 the very bottom in older KDE3 versions: -->
     <Menu name="import" append="new_merge"><text>&amp;Import</text>
+      <Action name="file_import_project" />
       <Action name="file_import_midi" />
       <Action name="file_import_rg21" />
       <Action name="file_import_hydrogen" />
@@ -20,6 +21,7 @@
     <!-- this one would like to be save_merge, but that sticks it at
 	 the very bottom in older KDE3 versions: -->
     <Menu name="export" append="new_merge"><text>&amp;Export</text>
+      <Action name="file_export_project" />
       <Action name="file_export_midi" />
       <Action name="file_export_csound" />
       <Action name="file_export_lilypond" />
@@ -275,6 +277,13 @@
         <enable>
                 <Action name="file_revert"/>
         </enable>
+</State>
+
+<State name="have_project_packager">
+	<enable>
+		<Action name="file_import_project"/>
+		<Action name="file_export_project"/>
+	</enable>
 </State>
 
 <State name="have_segments">

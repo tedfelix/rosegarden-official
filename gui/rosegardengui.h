@@ -530,6 +530,11 @@ public slots:
     void slotFilePrintPreview();
 
     /**
+     * Let the user select a Rosegarden Project file for import
+     */
+    void slotImportProject();
+
+    /**
      * Let the user select a MIDI file for import
      */
     void slotImportMIDI();
@@ -568,6 +573,11 @@ public slots:
      * Select a Hydrogen drum machine file for merge
      */
     void slotMergeHydrogen();
+
+    /**
+     * Let the user export a Rosegarden Project file
+     */
+    void slotExportProject();
 
     /**
      * Let the user enter a MIDI file to export to

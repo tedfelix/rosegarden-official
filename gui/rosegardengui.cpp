@@ -316,6 +316,20 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     }
 #endif
 
+    emit startupStatusMessage(i18n("Testing project packager..."));
+    KProcess *proc;
+    *proc << "rosegarden-package";
+    *proc << "--conftest";
+    proc->start(KProcess::Block, KProcess::All);
+    if (proc->exitStatus()) {
+	RG_DEBUG << "RosegardenGUIApp::RosegardenGUIApp - No project packager available" << endl;
+	stateChanged("have_project_packager", KXMLGUIClient::StateReverse);
+    } else {
+	RG_DEBUG << "RosegardenGUIApp::RosegardenGUIApp - Project packager OK" << endl;
+	stateChanged("have_project_packager", KXMLGUIClient::StateNoReverse);
+    }
+    delete proc;
+
     // Plugin manager
     //
     emit startupStatusMessage(i18n("Initializing plugin manager..."));
@@ -488,6 +502,10 @@ void RosegardenGUIApp::setupActions()
     KStdAction::print (this, SLOT(slotFilePrint()),         actionCollection());
     KStdAction::printPreview (this, SLOT(slotFilePrintPreview()),         actionCollection());
 
+    new KAction(i18n("Import Rosegarden &Project file..."), 0, 0, this,
+                SLOT(slotImportProject()), actionCollection(),
+                "file_import_project");
+
     new KAction(i18n("Import &MIDI file..."), 0, 0, this,
                 SLOT(slotImportMIDI()), actionCollection(),
                 "file_import_midi");
@@ -515,6 +533,10 @@ void RosegardenGUIApp::setupActions()
     new KAction(i18n("Merge &Hydrogen file..."), 0, 0, this,
                 SLOT(slotMergeHydrogen()), actionCollection(),
                 "file_merge_hydrogen");
+
+    new KAction(i18n("Export Rosegarden &Project file..."), 0, 0, this,
+                SLOT(slotExportProject()), actionCollection(),
+                "file_export_project");
 
     new KAction(i18n("Export &MIDI file..."), 0, 0, this,
                 SLOT(slotExportMIDI()), actionCollection(),
@@ -3197,6 +3219,25 @@ void RosegardenGUIApp::slotRevertToSaved()
     }
 }
 
+void RosegardenGUIApp::slotImportProject()
+{
+    if (m_doc && !m_doc->saveIfModified()) return;
+
+    KURL url = KFileDialog::getOpenURL
+        (":RGPROJECT",
+         i18n("*.rgp|Rosegarden Project files\n*|All files"), this,
+         i18n("Import Rosegarden Project File"));
+    if (url.isEmpty()) { return; }
+
+    QString tmpfile;
+    KIO::NetAccess::download(url, tmpfile);
+
+    //!!!
+//    openFile(tmpfile, ImportMIDI); // does everything including setting the document
+
+//    KIO::NetAccess::removeTempFile( tmpfile );
+}
+
 void RosegardenGUIApp::slotImportMIDI()
 {
     if (m_doc && !m_doc->saveIfModified()) return;
@@ -4076,6 +4117,21 @@ void RosegardenGUIApp::slotSequencerExited(KProcess*)
     // so pressing the play button may attempt to restart the sequencer
 }
 
+
+void RosegardenGUIApp::slotExportProject()
+{
+    KTmpStatusMsg msg(i18n("Exporting Rosegarden Project file..."), this);
+
+    QString fileName = getValidWriteFile
+        ("*.rgp|" + i18n("Rosegarden Project files\n") +
+         "\n*|" + i18n("All files"),
+         i18n("Export as..."));
+
+    if (fileName.isEmpty()) return;
+    
+    //!!!
+//    exportMIDIFile(fileName);
+}
 
 void RosegardenGUIApp::slotExportMIDI()
 {
