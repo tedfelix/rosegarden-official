@@ -42,7 +42,7 @@ using std::endl;
 
 // This is the fundamental definition of the resolution used throughout.
 // It must be a multiple of 16, and should ideally be a multiple of 96.
-static const timeT basePPQ = 96;
+static const timeT basePPQ = 960;
 
 const int MIN_SUBORDERING = -100000;
 

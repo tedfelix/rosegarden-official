@@ -37,8 +37,7 @@ namespace Rosegarden
 {
 
 RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
-                                                     const char *name,
-                                                     const double &ppq):
+                                                     const char *name):
     RosegardenTransport(parent, name),
     m_lastTenHours(0),
     m_lastUnitHours(0),
@@ -50,8 +49,7 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     m_lastHundreths(0),
     m_lastThousandths(0),
     m_lastTenThousandths(0),
-    m_tempo(0),
-    m_ppq(ppq)
+    m_tempo(0)
 {
     // set the LCD frame background to black
     //

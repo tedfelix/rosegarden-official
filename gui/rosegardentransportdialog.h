@@ -37,8 +37,7 @@ class RosegardenTransportDialog : public RosegardenTransport
 Q_OBJECT
 public:
   RosegardenTransportDialog(QWidget *parent=0,
-                            const char *name=0,
-                            const double &ppq = 384.0);
+                            const char *name=0);
   ~RosegardenTransportDialog();
 
   void displayTime(Rosegarden::RealTime microSeconds);
@@ -90,7 +89,6 @@ private:
 
 
   double m_tempo;
-  double m_ppq;
 
   QTimer *m_midiInTimer;
   QTimer *m_midiOutTimer;

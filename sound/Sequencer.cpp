@@ -453,10 +453,13 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition mC,
         // sort out the correct TimeStamp for playback
         assert((*i)->getAbsoluteTime() >= m_playStartPosition);
 
+        // check the type we're processing
+        if ((*i)->getType() != MappedEvent::Internal)
+            continue;
+
         // add the fiddle factor for RealTime to MIDI conversion in here
         midiRelativeTime = (*i)->getAbsoluteTime() - m_playStartPosition +
             playLatency;
-
 
         event.time = aggregateTime(m_playStartTime,
                   Arts::TimeStamp(midiRelativeTime.sec, midiRelativeTime.usec));

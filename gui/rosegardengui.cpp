@@ -268,8 +268,7 @@ void RosegardenGUIApp::setupActions()
 
     // create the Transport GUI and add the callbacks
     //
-    m_transport = new Rosegarden::RosegardenTransportDialog(this, "",
-                Rosegarden::Note(Rosegarden::Note::Crotchet).getDuration());
+    m_transport = new Rosegarden::RosegardenTransportDialog(this, "");
 
     // We should be plugging the actions into the buttons
     // on the transport - but this doesn't seem to be working
@@ -1055,19 +1054,21 @@ RosegardenGUIApp::getSequencerSlice(const long &sliceStartSec,
 
         if ((*i)->getType() == Rosegarden::Segment::Audio)
         {
-            // We might have to adjust this check to allow for audio
-            // out latency
-            //
-            if ((*i)->getAudioStartIndex() > sliceEndElapsed ||
-                (*i)->getAudioStartIndex() < sliceStartElapsed)
+
+            if ((*i)->getAudioStartIndex() < sliceStartElapsed ||
+                (*i)->getAudioStartIndex() > sliceEndElapsed)
                 continue;
+
+            cout << "AUDIO START = " << (*i)->getAudioStartIndex() << endl;
+            cout << "AUDIO END   = " << (*i)->getAudioEndIndex() << endl;
+            cout << "SLICE START = " << sliceStartElapsed << endl;
+            cout << "SLICE END   = " << sliceEndElapsed << endl << endl;
 
             eventTime = m_doc->getComposition().getElapsedRealTime
                             (((*i)->getAudioStartIndex()));
 
             duration = m_doc->getComposition().getElapsedRealTime
-                            (((*i)->getAudioEndIndex()))
-                       - eventTime;
+                            (((*i)->getAudioEndIndex())) - eventTime;
 
             assert (duration >= Rosegarden::RealTime(0,0));
             

@@ -26,6 +26,7 @@
 #include "rosegardenguidoc.h"
 #include "Track.h"
 #include "colours.h"
+#include "NotationTypes.h"
 
 #include "rosedebug.h"
 
@@ -344,8 +345,12 @@ void TrackEditor::setupHorizontalHeader()
 
 	std::pair<timeT, timeT> times = comp.getBarRange(i, false);
 
-	//!!! ??? s'pose we should divide by some resolution-dependent thing
-	int width = (times.second - times.first) / 5;
+        // Get bar width according to resolution
+        //
+	int width = (times.second - times.first) /
+                    (Rosegarden::Note(Rosegarden::Note::Crotchet).getDuration()
+                      / 20);
+
 	if (width == 0) width = 10;
         m_hHeader->resizeSection(i, width);
 
