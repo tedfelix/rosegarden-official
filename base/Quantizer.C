@@ -1732,7 +1732,7 @@ NotationQuantizer::Impl::quantizeRange(Segment *s,
 	    if (ud < (qd * 3 / 4) &&
 		qd <= Note(Note::Crotchet).getDuration()) {
 		Marks::addMark(**i, Marks::Staccato, true);
-	    } else if (ud >= qd /*!!! && !inSlur */) {
+	    } else if (ud > qd /*!!! && !inSlur */) {
 		Marks::addMark(**i, Marks::Tenuto, true);
 	    }	    
 
