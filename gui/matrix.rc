@@ -78,6 +78,7 @@
     <Separator/>
     <Action name="general_transpose"/>
   </Menu>
+  <Action name="trigger_segment"/>
 </Menu>
 
 <Menu name="Move">
@@ -212,6 +213,7 @@
     <Action name="jog_left"/>
     <Action name="jog_right"/>
     <Action name="set_velocities"/>
+    <Action name="trigger_segment"/>
     <Action name="transpose_up"/>
     <Action name="transpose_down"/>
     <Action name="transpose_up_octave"/>

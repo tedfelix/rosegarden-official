@@ -1258,6 +1258,19 @@ TransformsMenuFixNotationQuantizeCommand::modifySegment()
     //!!! normalizeRests?
 }
 
+void
+TransformsMenuRemoveNotationQuantizeCommand::modifySegment()
+{
+    EventSelection::eventcontainer::iterator i;
+
+    for (i  = m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
+
+	(*i)->setNotationAbsoluteTime((*i)->getAbsoluteTime());
+	(*i)->setNotationDuration((*i)->getDuration());
+    }
+}
+
 
 const int TransformsMenuInterpretCommand::NoInterpretation      = 0;
 const int TransformsMenuInterpretCommand::GuessDirections	= (1<<0);

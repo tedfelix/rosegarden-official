@@ -908,6 +908,8 @@ protected:
 
 class MakeOrnamentDialog : public KDialogBase
 {
+    Q_OBJECT
+
 public:
     MakeOrnamentDialog(QWidget *parent, QString defaultName, int defaultBasePitch);
     
@@ -922,12 +924,54 @@ protected:
 
 class UseOrnamentDialog : public KDialogBase
 {
+    Q_OBJECT
+
 public:
-    UseOrnamentDialog(QWidget *parent);
-    
+    UseOrnamentDialog(QWidget *parent, Rosegarden::Composition *);
+
+    Rosegarden::TriggerSegmentId getId() const;
+    Rosegarden::Mark getMark() const;
+    bool getRetune() const;
+    std::string getTimeAdjust() const;
+
+public slots:
+    void slotOk();
+    void slotMarkChanged(int);
 
 protected:
+    void setupFromConfig();
 
+    Rosegarden::Composition  *m_composition;
+    KComboBox                *m_ornament;
+    KComboBox                *m_mark;
+    QLabel                   *m_textLabel;
+    QLineEdit                *m_text;
+    QCheckBox                *m_retune;
+    KComboBox                *m_adjustTime;
+};
+
+
+class TriggerSegmentDialog : public KDialogBase
+{
+    Q_OBJECT
+
+public:
+    TriggerSegmentDialog(QWidget *parent, Rosegarden::Composition *);
+
+    Rosegarden::TriggerSegmentId getId() const;
+    bool getRetune() const;
+    std::string getTimeAdjust() const;
+
+public slots:
+    void slotOk();
+
+protected:
+    void setupFromConfig();
+
+    Rosegarden::Composition  *m_composition;
+    KComboBox                *m_segment;
+    QCheckBox                *m_retune;
+    KComboBox                *m_adjustTime;
 };
 
 

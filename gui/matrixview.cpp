@@ -533,6 +533,10 @@ void MatrixView::setupActions()
                 SLOT(slotSetVelocities()), actionCollection(),
                 "set_velocities");
 
+    new KAction(i18n("Trigger Se&gment..."), 0, this,
+                SLOT(slotTriggerSegment()), actionCollection(),
+                "trigger_segment");
+
     new KAction(i18n("Select &All"), Key_A + CTRL, this,
                 SLOT(slotSelectAll()), actionCollection(),
                 "select_all");
@@ -2266,6 +2270,24 @@ MatrixView::slotSetVelocities()
                              dialog.getValue2()));
     }
 }
+
+void
+MatrixView::slotTriggerSegment()
+{
+    if (!m_currentEventSelection) return;
+    
+    TriggerSegmentDialog dialog(this, &getDocument()->getComposition());
+    if (dialog.exec() != QDialog::Accepted) return;
+
+    addCommandToHistory(new SetTriggerCommand(*m_currentEventSelection,
+					      dialog.getId(),
+					      true,
+					      dialog.getRetune(),
+					      dialog.getTimeAdjust(),
+					      Rosegarden::Marks::NoMark,
+					      i18n("Trigger Segment")));
+}
+
 
 void
 MatrixView::slotToggleChordsRuler()

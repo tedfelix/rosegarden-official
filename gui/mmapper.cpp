@@ -628,13 +628,13 @@ SegmentMmapper::mergeTriggerSegment(Rosegarden::Segment **target,
     if (trDuration == 0) return;
 
     bool retune = false;
-    bool adjustDuration = false;
+    std::string timeAdjust = BaseProperties::TRIGGER_SEGMENT_ADJUST_NONE;
 
     trigger->get<Bool>
 	(BaseProperties::TRIGGER_SEGMENT_RETUNE, retune);
     
-    trigger->get<Bool>
-	(BaseProperties::TRIGGER_SEGMENT_ADJUST_DURATION, adjustDuration);
+    trigger->get<Rosegarden::String>
+	(BaseProperties::TRIGGER_SEGMENT_ADJUST_TIMES, timeAdjust);
 
     long evPitch = rec->getBasePitch();
     (void)trigger->get<Int>(BaseProperties::PITCH, evPitch);
@@ -644,6 +644,11 @@ SegmentMmapper::mergeTriggerSegment(Rosegarden::Segment **target,
     (void)trigger->get<Int>(BaseProperties::VELOCITY, evVelocity);
     int velocityDiff = evVelocity - rec->getBaseVelocity();
 
+    Rosegarden::timeT offset = 0;
+    if (timeAdjust == BaseProperties::TRIGGER_SEGMENT_ADJUST_SYNC_END) {
+	offset = evDuration - trDuration;
+    }
+
     for (Segment::iterator i = rec->getSegment()->begin();
 	 rec->getSegment()->isBeforeEndMarker(i); ++i) {
 	
@@ -652,12 +657,30 @@ SegmentMmapper::mergeTriggerSegment(Rosegarden::Segment **target,
 
 	RG_DEBUG << "pre-adjust:  t = " << t << ", d = " << d << ", trStart " << trStart << ", evTime " << evTime << ", evDuration " << evDuration << ", trDuration " << trDuration << endl;
 
-	if (adjustDuration) {
-	    t = t * evDuration / trDuration;
-	    d = d * evDuration / trDuration;
+	if (evDuration != trDuration &&
+	    timeAdjust == BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH) {
+	    t = Rosegarden::timeT(double(t * evDuration) / double(trDuration));
+	    d = Rosegarden::timeT(double(d * evDuration) / double(trDuration));
 	}
 
-	t += evTime;
+	t += evTime + offset;
+
+	if (t < evTime) {
+	    if (t + d <= evTime) continue;
+	    else {
+		d -= (evTime - t);
+		t = evTime;
+	    }
+	}
+	
+	if (timeAdjust == BaseProperties::TRIGGER_SEGMENT_ADJUST_SYNC_START) {
+	    if (t + d > evTime + evDuration) {
+		if (t >= evTime + evDuration) continue;
+		else {
+		    d = evTime + evDuration - t;
+		}
+	    }
+	}
 
 	RG_DEBUG << "post-adjust: t = " << t << ", d = " << d << endl;
 

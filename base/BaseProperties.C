@@ -106,7 +106,12 @@ const std::string GROUP_TYPE_GRACE		 = "grace";
 
 const PropertyName TRIGGER_SEGMENT_ID            = "triggersegmentid";
 const PropertyName TRIGGER_SEGMENT_RETUNE        = "triggersegmentretune";
-const PropertyName TRIGGER_SEGMENT_ADJUST_DURATION = "triggersegmentadjustduration";
+const PropertyName TRIGGER_SEGMENT_ADJUST_TIMES  = "triggersegmentadjusttimes";
+
+const std::string TRIGGER_SEGMENT_ADJUST_NONE = "none";
+const std::string TRIGGER_SEGMENT_ADJUST_SQUISH = "squish";
+const std::string TRIGGER_SEGMENT_ADJUST_SYNC_START = "syncstart";
+const std::string TRIGGER_SEGMENT_ADJUST_SYNC_END = "syncend";
 
 }
 

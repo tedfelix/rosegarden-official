@@ -395,6 +395,11 @@ public slots:
     void slotSetVelocities();
 
     /**
+     * Pop-up the select trigger segment dialog
+     */
+    void slotTriggerSegment();
+
+    /**
      * Change horizontal zoom
      */
     void slotChangeHorizontalZoom(int);

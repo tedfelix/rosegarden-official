@@ -1056,6 +1056,15 @@ void NotationView::slotTransformsFixQuantization()
                         (*m_currentEventSelection));
 }    
 
+void NotationView::slotTransformsRemoveQuantization()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Removing notation quantization..."), this);
+
+    addCommandToHistory(new TransformsMenuRemoveNotationQuantizeCommand
+                        (*m_currentEventSelection));
+}    
+
 void NotationView::slotSetStyleFromAction()
 {
     const QObject *s = sender();
@@ -1437,7 +1446,8 @@ NotationView::slotMakeOrnament()
 			 style->getName(),
 			 getDocument()->getComposition().getNextTriggerSegmentId(),
 			 true, //!!!
-			 true)); //!!!
+			 Rosegarden::BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH, //!!!
+			 Rosegarden::Marks::NoMark)); //!!!
 
     addCommandToHistory(command);
 }
@@ -1449,13 +1459,15 @@ NotationView::slotUseOrnament()
     
     if (!m_currentEventSelection) return;
     
-//!!! dialog
-    
+    UseOrnamentDialog dialog(this, &getDocument()->getComposition());
+    if (dialog.exec() != QDialog::Accepted) return;
+
     addCommandToHistory(new SetTriggerCommand(*m_currentEventSelection,
-					      0, //!!!
+					      dialog.getId(),
 					      true,
-					      true,
-					      true,
+					      dialog.getRetune(),
+					      dialog.getTimeAdjust(),
+					      dialog.getMark(),
 					      i18n("Use Ornament")));
 }
 

@@ -2449,6 +2449,8 @@ PasteToTriggerSegmentCommand::execute()
 
 	m_id = m_composition->addTriggerSegment(m_segment, m_basePitch, m_baseVelocity);
     }
+
+    m_composition->getTriggerSegmentRec(m_id)->updateReferences();
     
     m_detached = false;
 }

@@ -57,7 +57,12 @@ extern const std::string GROUP_TYPE_GRACE;
 
 extern const PropertyName TRIGGER_SEGMENT_ID;
 extern const PropertyName TRIGGER_SEGMENT_RETUNE;
-extern const PropertyName TRIGGER_SEGMENT_ADJUST_DURATION;
+extern const PropertyName TRIGGER_SEGMENT_ADJUST_TIMES;
+
+extern const std::string TRIGGER_SEGMENT_ADJUST_NONE;
+extern const std::string TRIGGER_SEGMENT_ADJUST_SQUISH;
+extern const std::string TRIGGER_SEGMENT_ADJUST_SYNC_START;
+extern const std::string TRIGGER_SEGMENT_ADJUST_SYNC_END;
 
 }
 

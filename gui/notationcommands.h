@@ -692,6 +692,22 @@ private:
     Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
 };
 
+class TransformsMenuRemoveNotationQuantizeCommand : public BasicSelectionCommand
+{
+public:
+    TransformsMenuRemoveNotationQuantizeCommand(Rosegarden::EventSelection &selection) :
+	BasicSelectionCommand(getGlobalName(), selection, true),
+	m_selection(&selection) { }
+    
+    static QString getGlobalName() { return i18n("Remo&ve Notation Quantization"); }
+    
+protected:
+    virtual void modifySegment();
+
+private:
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+};
+
 class TransformsMenuInterpretCommand : public BasicSelectionCommand
 {
 public:

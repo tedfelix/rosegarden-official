@@ -170,6 +170,7 @@
   <Separator/>
   <Action name="quantize"/>
   <Action name="fix_quantization"/>
+  <Action name="remove_quantization"/>
   <Separator/>
   <Action name="interpret"/>
   <Separator/>

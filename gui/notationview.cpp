@@ -1655,6 +1655,10 @@ void NotationView::setupActions()
 		this, SLOT(slotTransformsFixQuantization()), actionCollection(),
                 "fix_quantization");
 
+    new KAction(TransformsMenuRemoveNotationQuantizeCommand::getGlobalName(), 0,
+		this, SLOT(slotTransformsRemoveQuantization()), actionCollection(),
+                "remove_quantization");
+
     new KAction(TransformsMenuInterpretCommand::getGlobalName(), 0,
 		this, SLOT(slotTransformsInterpret()), actionCollection(),
 		"interpret");

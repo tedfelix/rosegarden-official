@@ -447,6 +447,7 @@ public slots:
     void slotTransformsRestoreStems();
     void slotTransformsQuantize();
     void slotTransformsFixQuantization();
+    void slotTransformsRemoveQuantization();
     void slotTransformsInterpret();
 
     void slotRespellDoubleFlat();

@@ -565,14 +565,16 @@ public:
 		      Rosegarden::TriggerSegmentId triggerSegmentId,
 		      bool notesOnly,
 		      bool retune,
-		      bool adjustDuration,
+		      std::string timeAdjust,
+		      Rosegarden::Mark mark,
 		      QString name = 0) :
 	BasicSelectionCommand(name ? name : getGlobalName(), selection, true),
 	m_selection(&selection),
 	m_triggerSegmentId(triggerSegmentId),
 	m_notesOnly(notesOnly),
 	m_retune(retune),
-	m_adjustDuration(adjustDuration)
+	m_timeAdjust(timeAdjust),
+	m_mark(mark)
     { }
 
     static QString getGlobalName() {
@@ -587,7 +589,8 @@ private:
     Rosegarden::TriggerSegmentId m_triggerSegmentId;
     bool m_notesOnly;
     bool m_retune;
-    bool m_adjustDuration;
+    std::string m_timeAdjust;
+    Rosegarden::Mark m_mark;
 };
 
 
@@ -623,7 +626,8 @@ public:
 			     NoteStyleName noteStyle,
 			     Rosegarden::TriggerSegmentId id,
 			     bool retune,
-			     bool adjustDuration);
+			     std::string timeAdjust,
+			     Rosegarden::Mark mark);
     virtual ~InsertTriggerNoteCommand();
 
 protected:
@@ -636,7 +640,8 @@ protected:
     NoteStyleName m_noteStyle;
     Rosegarden::TriggerSegmentId m_id;
     bool m_retune;
-    bool m_adjustDuration;
+    std::string m_timeAdjust;
+    Rosegarden::Mark m_mark;
 };
 
 

@@ -1593,7 +1593,10 @@ SetTriggerCommand::modifySegment()
 	if (!m_notesOnly || (*i)->isa(Note::EventType)) {
 	    (*i)->set<Int>(TRIGGER_SEGMENT_ID, m_triggerSegmentId);
 	    (*i)->set<Rosegarden::Bool>(TRIGGER_SEGMENT_RETUNE, m_retune);
-	    (*i)->set<Rosegarden::Bool>(TRIGGER_SEGMENT_ADJUST_DURATION, m_adjustDuration);
+	    (*i)->set<Rosegarden::String>(TRIGGER_SEGMENT_ADJUST_TIMES, m_timeAdjust);
+	    if (m_mark != Rosegarden::Marks::NoMark) {
+		Rosegarden::Marks::addMark(**i, m_mark, true);
+	    }
 	}
     }
 
@@ -1619,7 +1622,7 @@ ClearTriggersCommand::modifySegment()
 
 	(*i)->unset(TRIGGER_SEGMENT_ID);
 	(*i)->unset(TRIGGER_SEGMENT_RETUNE);
-	(*i)->unset(TRIGGER_SEGMENT_ADJUST_DURATION);
+	(*i)->unset(TRIGGER_SEGMENT_ADJUST_TIMES);
     }
 }
 
@@ -1632,7 +1635,8 @@ InsertTriggerNoteCommand::InsertTriggerNoteCommand(Rosegarden::Segment &segment,
 						   NoteStyleName noteStyle,
 						   Rosegarden::TriggerSegmentId id,
 						   bool retune,
-						   bool adjustDuration) :
+						   std::string timeAdjust,
+						   Rosegarden::Mark mark) :
     BasicCommand(i18n("Insert Trigger Note"), segment,
 		 time, time + note.getDuration()),
     m_time(time),
@@ -1642,7 +1646,8 @@ InsertTriggerNoteCommand::InsertTriggerNoteCommand(Rosegarden::Segment &segment,
     m_noteStyle(noteStyle),
     m_id(id),
     m_retune(retune),
-    m_adjustDuration(adjustDuration)
+    m_timeAdjust(timeAdjust),
+    m_mark(mark)
 {
     // nothing
 }
@@ -1669,7 +1674,11 @@ InsertTriggerNoteCommand::modifySegment()
 
     e->set<Int>(TRIGGER_SEGMENT_ID, m_id);
     e->set<Rosegarden::Bool>(TRIGGER_SEGMENT_RETUNE, m_retune);
-    e->set<Rosegarden::Bool>(TRIGGER_SEGMENT_ADJUST_DURATION, m_adjustDuration);
+    e->set<Rosegarden::String>(TRIGGER_SEGMENT_ADJUST_TIMES, m_timeAdjust);
+
+    if (m_mark != Rosegarden::Marks::NoMark) {
+	Rosegarden::Marks::addMark(*e, m_mark, true);
+    }
 
     (void)Rosegarden::SegmentMatrixHelper(getSegment()).insertNote(e);
 

@@ -4758,3 +4758,314 @@ MakeOrnamentDialog::getBasePitch() const
     return m_pitch->getPitch();
 }
 
+
+UseOrnamentDialog::UseOrnamentDialog(QWidget *parent,
+				     Rosegarden::Composition *composition) :
+    KDialogBase(parent, "useornamentdialog", true, i18n("Use Ornament"),
+		Ok | Cancel, Ok),
+    m_composition(composition)
+{
+    QVBox *vbox = makeVBoxMainWidget();
+    QLabel *label;
+
+    QGroupBox *notationBox = new QGroupBox(1, Horizontal, i18n("Notation"), vbox);
+
+    QFrame *frame = new QFrame(notationBox);
+    QGridLayout *layout = new QGridLayout(frame, 4, 1, 5, 5);
+
+    label = new QLabel(i18n("Display as:  "), frame);
+    layout->addWidget(label, 0, 0);
+
+    m_mark = new KComboBox(frame);
+    layout->addWidget(m_mark, 0, 1);
+    
+    m_mark->insertItem(i18n("Trill"));
+    m_mark->insertItem(i18n("Turn"));
+    m_mark->insertItem(i18n("Text mark"));
+
+    connect(m_mark, SIGNAL(activated(int)), this, SLOT(slotMarkChanged(int)));
+    
+    m_textLabel = new QLabel(i18n("   Text:  "), frame);
+    layout->addWidget(m_textLabel, 0, 2);
+
+    m_text = new QLineEdit(frame);
+    layout->addWidget(m_text, 0, 3);
+
+    QGroupBox *performBox = new QGroupBox(1, Horizontal, i18n("Performance"), vbox);
+
+    frame = new QFrame(performBox);
+    layout = new QGridLayout(frame, 3, 2, 5, 5);
+
+    label = new QLabel(i18n("Perform using triggered segment: "), frame);
+    layout->addWidget(label, 0, 0);
+    
+    m_ornament = new KComboBox(frame);
+    layout->addWidget(m_ornament, 0, 1);
+
+    int n = 1;
+    for (Rosegarden::Composition::triggersegmentcontaineriterator i =
+	     m_composition->getTriggerSegments().begin();
+	 i != m_composition->getTriggerSegments().end(); ++i) {
+	m_ornament->insertItem
+	    (QString("%1. %2").arg(n++).arg(strtoqstr((*i)->getSegment()->getLabel())));
+    }
+
+    label = new QLabel(i18n("Perform with timing: "), frame);
+    layout->addWidget(label, 1, 0);
+
+    m_adjustTime = new KComboBox(frame);
+    layout->addWidget(m_adjustTime, 1, 1);
+
+    m_adjustTime->insertItem(i18n("As stored"));
+    m_adjustTime->insertItem(i18n("Truncate if longer than note"));
+    m_adjustTime->insertItem(i18n("End at same time as note")); 
+    m_adjustTime->insertItem(i18n("Stretch or squash segment to note duration"));
+
+    m_retune = new QCheckBox(i18n("Adjust pitch to note"), frame);
+    m_retune->setChecked(true);
+
+    layout->addWidget(m_retune, 2, 1);
+
+    setupFromConfig();
+}
+
+void
+UseOrnamentDialog::setupFromConfig()
+{
+    KConfig *config = kapp->config();
+    config->setGroup(NotationView::ConfigGroup);
+
+    Rosegarden::Mark mark = qstrtostr(config->readEntry("useornamentmark", "trill"));
+    int seg = config->readNumEntry("useornamentlastornament", 0);
+    std::string timing = qstrtostr
+	(config->readEntry
+	 ("useornamenttiming",
+	  strtoqstr(Rosegarden::BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH)));
+    bool retune = config->readBoolEntry("useornamentretune", true);
+
+    if (mark == Rosegarden::Marks::Trill) {
+	m_mark->setCurrentItem(0);
+	m_text->setEnabled(false);
+    } else if (mark == Rosegarden::Marks::Turn) {
+	m_mark->setCurrentItem(1);
+	m_text->setEnabled(false);
+    } else {
+	m_mark->setCurrentItem(2);
+	m_text->setEnabled(true);
+	m_text->setText(strtoqstr(Rosegarden::Marks::getTextFromMark(mark)));
+    }
+
+    if (seg >= 0 && seg < m_ornament->count()) m_ornament->setCurrentItem(seg);
+    
+    if (timing == Rosegarden::BaseProperties::TRIGGER_SEGMENT_ADJUST_NONE) {
+	m_adjustTime->setCurrentItem(0);
+    } else if (timing == Rosegarden::BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH) {
+	m_adjustTime->setCurrentItem(3);
+    } else if (timing == Rosegarden::BaseProperties::TRIGGER_SEGMENT_ADJUST_SYNC_START) {
+	m_adjustTime->setCurrentItem(1);
+    } else if (timing == Rosegarden::BaseProperties::TRIGGER_SEGMENT_ADJUST_SYNC_END) {
+	m_adjustTime->setCurrentItem(2);
+    }
+
+    m_retune->setChecked(retune);
+}
+
+Rosegarden::TriggerSegmentId
+UseOrnamentDialog::getId() const
+{
+    int ix = m_ornament->currentItem();
+    
+    for (Rosegarden::Composition::triggersegmentcontaineriterator i =
+	     m_composition->getTriggerSegments().begin();
+	 i != m_composition->getTriggerSegments().end(); ++i) {
+
+	if (ix == 0) return (*i)->getId();
+	--ix;
+    }
+
+    return 0;
+}
+    
+Rosegarden::Mark
+UseOrnamentDialog::getMark() const
+{
+    if (m_mark->currentItem() == 0) {
+	return Rosegarden::Marks::Trill;
+    } else if (m_mark->currentItem() == 1) {
+	return Rosegarden::Marks::Turn;
+    } else {
+	return Rosegarden::Marks::getTextMark(qstrtostr(m_text->text()));
+    }
+}
+
+bool
+UseOrnamentDialog::getRetune() const
+{
+    return m_retune->isChecked();
+}
+
+std::string
+UseOrnamentDialog::getTimeAdjust() const
+{
+    int option = m_adjustTime->currentItem();
+    
+    switch(option) {
+
+    case  0: return Rosegarden::BaseProperties::TRIGGER_SEGMENT_ADJUST_NONE;
+    case  1: return Rosegarden::BaseProperties::TRIGGER_SEGMENT_ADJUST_SYNC_START;
+    case  2: return Rosegarden::BaseProperties::TRIGGER_SEGMENT_ADJUST_SYNC_END;
+    case  3: return Rosegarden::BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH;
+
+    default: return Rosegarden::BaseProperties::TRIGGER_SEGMENT_ADJUST_NONE;
+    }
+}
+
+void
+UseOrnamentDialog::slotMarkChanged(int i)
+{
+    if (i == 2) {
+	m_text->setEnabled(true);
+    } else {
+	m_text->setEnabled(false);
+    }
+}
+
+void
+UseOrnamentDialog::slotOk()
+{
+    KConfig *config = kapp->config();
+    config->setGroup(NotationView::ConfigGroup);
+
+    config->writeEntry("useornamentmark", strtoqstr(getMark()));
+    config->writeEntry("useornamenttiming", strtoqstr(getTimeAdjust()));
+    config->writeEntry("useornamentretune", m_retune->isChecked());
+    config->writeEntry("useornamentlastornament", m_ornament->currentItem());
+
+    accept();
+}
+
+
+
+TriggerSegmentDialog::TriggerSegmentDialog(QWidget *parent,
+					   Rosegarden::Composition *composition) :
+    KDialogBase(parent, "triggersegmentdialog", true, i18n("Trigger Segment"),
+		Ok | Cancel, Ok),
+    m_composition(composition)
+{
+    QVBox *vbox = makeVBoxMainWidget();
+
+    QFrame *frame = new QFrame(vbox);
+    QGridLayout *layout = new QGridLayout(frame, 3, 2, 5, 5);
+
+    QLabel *label = new QLabel(i18n("Trigger segment: "), frame);
+    layout->addWidget(label, 0, 0);
+    
+    m_segment = new KComboBox(frame);
+    layout->addWidget(m_segment, 0, 1);
+
+    int n = 1;
+    for (Rosegarden::Composition::triggersegmentcontaineriterator i =
+	     m_composition->getTriggerSegments().begin();
+	 i != m_composition->getTriggerSegments().end(); ++i) {
+	m_segment->insertItem
+	    (QString("%1. %2").arg(n++).arg(strtoqstr((*i)->getSegment()->getLabel())));
+    }
+
+    label = new QLabel(i18n("Perform with timing: "), frame);
+    layout->addWidget(label, 1, 0);
+
+    m_adjustTime = new KComboBox(frame);
+    layout->addWidget(m_adjustTime, 1, 1);
+
+    m_adjustTime->insertItem(i18n("As stored"));
+    m_adjustTime->insertItem(i18n("Truncate if longer than note"));
+    m_adjustTime->insertItem(i18n("End at same time as note")); 
+    m_adjustTime->insertItem(i18n("Stretch or squash segment to note duration"));
+
+    m_retune = new QCheckBox(i18n("Adjust pitch to note"), frame);
+    m_retune->setChecked(true);
+
+    layout->addWidget(m_retune, 2, 1);
+
+    setupFromConfig();
+}
+
+void
+TriggerSegmentDialog::setupFromConfig()
+{
+    KConfig *config = kapp->config();
+    config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
+
+    int seg = config->readNumEntry("triggersegmentlastornament", 0);
+    std::string timing = qstrtostr
+	(config->readEntry
+	 ("triggersegmenttiming",
+	  strtoqstr(Rosegarden::BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH)));
+    bool retune = config->readBoolEntry("triggersegmentretune", true);
+
+    if (seg >= 0 && seg < m_segment->count()) m_segment->setCurrentItem(seg);
+    
+    if (timing == Rosegarden::BaseProperties::TRIGGER_SEGMENT_ADJUST_NONE) {
+	m_adjustTime->setCurrentItem(0);
+    } else if (timing == Rosegarden::BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH) {
+	m_adjustTime->setCurrentItem(3);
+    } else if (timing == Rosegarden::BaseProperties::TRIGGER_SEGMENT_ADJUST_SYNC_START) {
+	m_adjustTime->setCurrentItem(1);
+    } else if (timing == Rosegarden::BaseProperties::TRIGGER_SEGMENT_ADJUST_SYNC_END) {
+	m_adjustTime->setCurrentItem(2);
+    }
+
+    m_retune->setChecked(retune);
+}
+
+Rosegarden::TriggerSegmentId
+TriggerSegmentDialog::getId() const
+{
+    int ix = m_segment->currentItem();
+    
+    for (Rosegarden::Composition::triggersegmentcontaineriterator i =
+	     m_composition->getTriggerSegments().begin();
+	 i != m_composition->getTriggerSegments().end(); ++i) {
+
+	if (ix == 0) return (*i)->getId();
+	--ix;
+    }
+
+    return 0;
+}
+
+bool
+TriggerSegmentDialog::getRetune() const
+{
+    return m_retune->isChecked();
+}
+
+std::string
+TriggerSegmentDialog::getTimeAdjust() const
+{
+    int option = m_adjustTime->currentItem();
+    
+    switch(option) {
+
+    case  0: return Rosegarden::BaseProperties::TRIGGER_SEGMENT_ADJUST_NONE;
+    case  1: return Rosegarden::BaseProperties::TRIGGER_SEGMENT_ADJUST_SYNC_START;
+    case  2: return Rosegarden::BaseProperties::TRIGGER_SEGMENT_ADJUST_SYNC_END;
+    case  3: return Rosegarden::BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH;
+
+    default: return Rosegarden::BaseProperties::TRIGGER_SEGMENT_ADJUST_NONE;
+    }
+}
+
+void
+TriggerSegmentDialog::slotOk()
+{
+    KConfig *config = kapp->config();
+    config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
+
+    config->writeEntry("triggersegmenttiming", strtoqstr(getTimeAdjust()));
+    config->writeEntry("triggersegmentretune", m_retune->isChecked());
+    config->writeEntry("triggersegmentlastornament", m_segment->currentItem());
+
+    accept();
+}
+

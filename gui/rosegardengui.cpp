@@ -661,10 +661,6 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotRepeatQuantizeSelection()), actionCollection(),
                 "repeat_quantize");
 
-    new KAction(i18n("Groove Quantize"), 0, this,
-                SLOT(slotGrooveQuantize()), actionCollection(),
-                "groove_quantize");
-
     new KAction(SegmentRescaleCommand::getGlobalName(), 0, this,
                 SLOT(slotRescaleSelection()), actionCollection(),
                 "rescale");
@@ -706,6 +702,10 @@ void RosegardenGUIApp::setupActions()
     new KAction(i18n("Manage Tri&ggered Segments"), 0, 
                 this, SLOT(slotManageTriggerSegments()),
                 actionCollection(), "manage_trigger_segments");
+
+    new KAction(i18n("Set Tempos from &Beat Segment"), 0, this,
+                SLOT(slotGrooveQuantize()), actionCollection(),
+                "groove_quantize");
 
     new KAction(i18n("Set &Tempo to Audio Segment Duration"), 0, this,
                 SLOT(slotTempoToSegmentLength()), actionCollection(),
