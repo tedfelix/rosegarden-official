@@ -1,5 +1,9 @@
+2002-12-17  D. Michael McIntyre, <dmmcintyr@users.sourceforge.net>
+
+	* Made index.html and index that can point to other tutorial projects.  Renamed my tutorial using-rosegarden.html and linked to it from the index.
+
 2002-12-15  D. Michael McIntyre, <dmmcintyr@users.sourceforge.net>
-
+	* Moved miscellaneous tidbits into extras directory, renamed rosegarden-tutor.html to index.html in preparation for an eventual split of this document into separate files.  Incorporated CSS changes.
+2002-12-15  D. Michael McIntyre, <dmmcintyr@users.sourceforge.net>
 	* Initial incorporation into CVS
-
 
