@@ -484,8 +484,12 @@ vector<int> Key::getAccidentalHeights(const Clef &clef) const
     // staff positions of accidentals
     checkAccidentalHeights();
     vector<int> v(*m_accidentalHeights);
+    int offset = clef.getPitchOffset();
+
     for (unsigned int i = 0; i < v.size(); ++i) {
-        v[i] += clef.getPitchOffset();
+        v[i] += offset;
+	if (offset > 0) 
+	    if (v[i] > 8) v[i] -= 7;
     }
     return v;
 }
@@ -497,12 +501,12 @@ void Key::checkAccidentalHeights() const
   
     bool sharp = isSharp();
     int accidentals = getAccidentalCount();
-    int pitch = sharp ? 8 : 4;
+    int height = sharp ? 8 : 4;
   
     for (int i = 0; i < accidentals; ++i) {
-        m_accidentalHeights->push_back(pitch);
-        if (sharp) { pitch -= 3; if (pitch < 3) pitch += 7; }
-        else       { pitch += 3; if (pitch > 7) pitch -= 7; }
+        m_accidentalHeights->push_back(height);
+        if (sharp) { height -= 3; if (height < 3) height += 7; }
+        else       { height += 3; if (height > 7) height -= 7; }
     }
 }
 

@@ -599,7 +599,8 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
 	    (charName, charType, inverted);
     }
 
-    QPoint bodyLocation(m_left - m_borderX, m_above - m_borderY);
+    QPoint bodyLocation(m_left - m_borderX,
+			m_above - m_borderY + getStaffLineThickness()/2);
     if (params.m_shifted) {
         if (params.m_stemGoesUp) {
             bodyLocation.rx() += m_noteBodyWidth;
@@ -915,7 +916,7 @@ NotePixmapFactory::drawLegerLines(const NotePixmapParameters &params)
     bool first = true;
     
     for (int i = legerLines - 1; i >= -1/*0*/; --i) { //!!! one too many for test purposes
-	if (i % 2 == 1) {
+	if (i % 2) {
 //	    NOTATION_DEBUG << "drawing at y = " << y << endl;
 	    for (int j = 0; j < getLegerLineThickness(); ++j) {
 		m_p->drawLine(x0, y + j, x1, y + j);
@@ -1459,9 +1460,9 @@ NotePixmapFactory::drawTie(bool above, int length)
 //    if (m_inPrinterMethod) {
 	//!!!experimental!
 	QPoint hotspot;
-	bool smooth = false;
-	if (!m_inPrinterMethod) smooth = m_font->isSmooth() && getNoteBodyHeight() > 5;
-	drawSlurAux(length, 0, above, smooth, hotspot,
+//	bool smooth = false;
+//	if (!m_inPrinterMethod) smooth = m_font->isSmooth() && getNoteBodyHeight() > 5;
+	drawSlurAux(length, 0, above, false, hotspot,
 		    &m_p->painter(), x, above ? m_above : m_above + m_noteBodyHeight);
 	return;
 //    }
@@ -2063,8 +2064,8 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above, bool smooth,
     else if (y2 < my2 - nbh/2) my2 = y2 + nbh/2;
 #endif
 
-    my1 = y1 - sqrt(length);
-    my2 = y2 - sqrt(length);
+    my1 = y1 - nbh * sqrt(float(length) / nbw) / 2;
+    my2 = y2 - nbh * sqrt(float(length) / nbw) / 2;
 
     if (!above) {
 	y1  = -y1;
@@ -2094,9 +2095,9 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above, bool smooth,
 	    int width  = bottomRight.x() - topLeft.x();
 	    int height = bottomRight.y() - topLeft.y() + thickness - 1 +
 		abs(dy);
-	    hotspot = QPoint(0, -topLeft.y());
+	    hotspot = QPoint(0, -topLeft.y() + (dy < 0 ? -dy : 0));
 
-//	    NOTATION_DEBUG << "slur: bottomRight " << bottomRight << ", topLeft " << topLeft << ", width " << width << ", height " << height << ", hotspot " << hotspot << ", dy " << dy << endl;
+	    NOTATION_DEBUG << "slur: bottomRight (" << bottomRight.x() << "," << bottomRight.y() << "), topLeft (" << topLeft.x() << "," << topLeft.y() << "), width " << width << ", height " << height << ", hotspot (" << hotspot.x() << "," << hotspot.y() << "), dy " << dy << endl;
 
 	    if (painter) {
 
@@ -2114,26 +2115,39 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above, bool smooth,
 		    m_p->maskPainter().save();
 		    m_p->painter().translate(x/* - hotspot.x()*/, y/* - hotspot.y()*/);
 		    m_p->maskPainter().translate(x/* - hotspot.x()*/, y/* - hotspot.y()*/);
+		    NOTATION_DEBUG << "probably a tie: rotate " << rotate << ", theta " << theta << endl;
 		    if (rotate) {
 			m_p->painter().rotate(theta);
 			m_p->maskPainter().rotate(theta);
 		    }
-		    m_p->painter().translate(hotspot.x(), hotspot.y());
-		    m_p->maskPainter().translate(hotspot.x(), hotspot.y());
+//		    m_p->painter().translate(hotspot.x(), hotspot.y());
+//		    m_p->maskPainter().translate(hotspot.x(), hotspot.y());
 		}
 
 	    } else {
 		createPixmapAndMask(smooth ? width*2+1  : width,
 				    smooth ? height*2+thickness*2 : height + thickness,
 				    width, height);
+/*
+		m_p->drawLine(0, 0, smooth ? width*2 : width-1, 0);
+		m_p->drawLine(0, smooth ? height*2+thickness*2-1 : height+thickness-1,
+			      smooth ? width*2 : width-1,
+			      smooth ? height*2+thickness*2-1 : height+thickness-1);
 
+		m_p->drawPoint(0, hotspot.y());
+*/
 		if (rotate) {
 		    m_p->painter().rotate(theta);
 		    m_p->maskPainter().rotate(theta);
 		}
 
-		m_p->painter().translate(hotspot.x(), hotspot.y());
-		m_p->maskPainter().translate(hotspot.x(), hotspot.y());
+		if (smooth) {
+		    m_p->painter().translate(2*hotspot.x(), 2*hotspot.y());
+		    m_p->maskPainter().translate(2*hotspot.x(), 2*hotspot.y());
+		} else {
+		    m_p->painter().translate(hotspot.x(), hotspot.y());
+		    m_p->maskPainter().translate(hotspot.x(), hotspot.y());
+		}		    
 	    }
 
 	    if (m_selected)
