@@ -66,7 +66,7 @@ void LoopRuler::drawBarSections(QPainter* paint)
 
     for (int i = m_firstBar; i <= m_lastBar; i++)
     {
-	paint->drawLine(x, 2 * m_height / 7, x, m_height);
+	paint->drawLine((int)x, 2 * m_height / 7, (int)x, m_height);
 
 	double width = m_rulerScale->getBarWidth(i);
 	double beatAccumulator = 0;
@@ -75,8 +75,8 @@ void LoopRuler::drawBarSections(QPainter* paint)
 	     beatAccumulator < width;
 	     beatAccumulator += m_rulerScale->getBeatWidth(i)) {
 
-	    paint->drawLine(x + beatAccumulator, 5 * m_height / 7,
-			    x + beatAccumulator, m_height);
+	    paint->drawLine((int)(x + beatAccumulator), 5 * m_height / 7,
+			    (int)(x + beatAccumulator), m_height);
 	}
 
 	x += width;
@@ -86,13 +86,13 @@ void LoopRuler::drawBarSections(QPainter* paint)
 void
 LoopRuler::drawLoopMarker(QPainter* paint)
 {
-    int x1 = m_rulerScale->getXForTime(m_startLoop);
-    int x2 = m_rulerScale->getXForTime(m_endLoop);
+    int x1 = (int)m_rulerScale->getXForTime(m_startLoop);
+    int x2 = (int)m_rulerScale->getXForTime(m_endLoop);
 
     if (x1 > x2) 
     {
         x2 = x1;
-        x1 = m_rulerScale->getXForTime(m_endLoop);
+        x1 = (int)m_rulerScale->getXForTime(m_endLoop);
     }
 
     paint->save();

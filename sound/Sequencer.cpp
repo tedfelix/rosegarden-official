@@ -756,8 +756,8 @@ Sequencer::getMappedComposition()
         m_recordStatus != ASYNCHRONOUS_AUDIO) 
         return m_recordComposition;
 
-    vector<Arts::MidiEvent>::iterator midiQueueIt;
-    vector<Arts::MidiEvent> *midiQueue;
+    std::vector<Arts::MidiEvent>::iterator midiQueueIt;
+    std::vector<Arts::MidiEvent> *midiQueue;
 
     // get the MIDI queue
     //
@@ -772,7 +772,7 @@ Sequencer::getMappedComposition()
                       recordTime(midiQueueIt->time));
     }
 
-    // Free the returned vector from here as the aRTS stub
+    // Free the returned std::vector from here as the aRTS stub
     // has already gone ahead and allocated a new one.
     //
     delete midiQueue;
@@ -782,14 +782,14 @@ Sequencer::getMappedComposition()
 }
 
 bool
-Sequencer::addAudioFile(const string &fileName, const unsigned int &id)
+Sequencer::addAudioFile(const std::string &fileName, const unsigned int &id)
 {
     AudioFile *ins = new AudioFile(id, fileName, fileName);
     try
     {
         ins->open();
     }
-    catch(string s)
+    catch(std::string s)
     {
         return false;
     }
@@ -806,7 +806,7 @@ Sequencer::removeAudioFile(const unsigned int &id)
 {
     std::vector<AudioFile*>::iterator it = getAudioFile(id);
 
-    if(it == 0)
+    if(it == m_audioFiles.end())
         return false;
 
     m_audioFiles.erase(it);
@@ -824,7 +824,7 @@ Sequencer::getAudioFile(const unsigned int &id)
             return it;
     }
 
-    return 0;
+    return m_audioFiles.end();
 }
 
 
@@ -851,7 +851,7 @@ Sequencer::queueAudio(const unsigned int &id,
 {
     std::vector<AudioFile*>::iterator it = getAudioFile(id);
 
-    if (it == 0)
+    if (it == m_audioFiles.end())
         return false;
 
     std::cout << "queueAudio() - queuing Audio event at time "

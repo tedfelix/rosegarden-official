@@ -51,11 +51,11 @@ Segment::iterator SegmentMatrixHelper::insertNote(Event* e)
         // existing note or rest at that position, chord the existing
         // note or delete the existing rest and insert.
 
-	cerr << "Durations match; doing simple insert" << endl;
+	std::cerr << "Durations match; doing simple insert" << std::endl;
 
     } else if (duration < existingDuration) {
 
-        cerr << "Found rest, splitting" << endl;
+        std::cerr << "Found rest, splitting" << std::endl;
         iterator last = expandIntoTie(i, duration);
 
         // Recover viability for the second half of any split rest

@@ -189,12 +189,12 @@ Staff<T>::eventRemoved(const Segment *t, Event *e)
 
     // If we have it, lose it
 
-    cerr << "Staff " << this << "::eventRemoved" << endl;
+    std::cerr << "Staff " << this << "::eventRemoved" << std::endl;
 
     ViewElementList<T>::iterator i = findEvent(e);
     if (i != m_viewElementList->end()) {
         m_viewElementList->erase(i);
-    cerr << "Found and removed" << endl;
+    std::cerr << "Found and removed" << std::endl;
 
         return;
     }

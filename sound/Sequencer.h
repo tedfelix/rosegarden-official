@@ -275,7 +275,7 @@ public:
 
     // Add an AudioFile reference at the Sequencer
     //
-    bool addAudioFile(const string &fileName, const unsigned int &id);
+    bool addAudioFile(const std::string &fileName, const unsigned int &id);
 
     // Remove an AudioFile reference from the Sequencer
     //

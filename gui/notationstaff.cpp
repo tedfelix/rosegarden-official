@@ -290,7 +290,7 @@ NotationStaff::positionElements(timeT from, timeT to)
 
     START_TIMING;
     
-    cerr << "positionElements: " << from << " -> " << to << endl;
+    std::cerr << "positionElements: " << from << " -> " << to << std::endl;
 
     Clef currentClef; // default is okay to start with
     m_clefChanges.empty();
@@ -429,10 +429,10 @@ NotationStaff::elementNotMoved(NotationElement *elt)
 	kdDebug(KDEBUG_AREA)
 	    << "elementNotMoved: elt at " << elt->getAbsoluteTime() <<
 	    ", ok is " << ok << endl;
-	cerr << "(cf " << (int)(elt->getCanvasX()) << " vs "
-	     << (int)(coords.first) << ", "
-	     << (int)(elt->getCanvasY()) << " vs "
-	     << (int)(coords.second) << ")" << endl;
+	std::cerr << "(cf " << (int)(elt->getCanvasX()) << " vs "
+		  << (int)(coords.first) << ", "
+		  << (int)(elt->getCanvasY()) << " vs "
+		  << (int)(coords.second) << ")" << std::endl;
     }
     return ok;
 }
@@ -451,8 +451,8 @@ NotationStaff::elementNotMovedInY(NotationElement *elt)
 	kdDebug(KDEBUG_AREA)
 	    << "elementNotMovedInY: elt at " << elt->getAbsoluteTime() <<
 	    ", ok is " << ok << endl;
-	cerr << "(cf " << (int)(elt->getCanvasY()) << " vs "
-	     << (int)(coords.second) << ")" << endl;
+	std::cerr << "(cf " << (int)(elt->getCanvasY()) << " vs "
+		  << (int)(coords.second) << ")" << std::endl;
     }
     return ok;
 }

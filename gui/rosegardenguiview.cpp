@@ -213,8 +213,8 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     connect(this,          SIGNAL(setCanvasPositionPointer(Rosegarden::timeT)),
             trackEditor,  SLOT(setPointerPosition(Rosegarden::timeT)));
 
-    connect(this, SIGNAL(selectSegments(list<Rosegarden::Segment*>)),
-            trackEditor->canvas(), SLOT(selectSegments(list<Rosegarden::Segment*>)));
+    connect(this, SIGNAL(selectSegments(std::list<Rosegarden::Segment*>)),
+            trackEditor->canvas(), SLOT(selectSegments(std::list<Rosegarden::Segment*>)));
 
     connect(this,         SIGNAL(addSegmentItem(Rosegarden::Segment*)),
             trackEditor, SLOT(addSegmentItem(Rosegarden::Segment*)));
@@ -388,7 +388,7 @@ void RosegardenGUIView::selectTrackSegments(int trackId)
     //
     emit activateTool(SegmentCanvas::Selector);
 
-    list<Rosegarden::Segment*> segments;
+    std::list<Rosegarden::Segment*> segments;
 
     for (Rosegarden::Composition::iterator i =
               getDocument()->getComposition().begin();

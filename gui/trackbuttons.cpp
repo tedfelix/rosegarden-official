@@ -62,7 +62,7 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
 
 TrackButtons::~TrackButtons()
 {
-    vector<TrackVUMeter*>::iterator vuit = m_trackMeters.begin();
+    std::vector<TrackVUMeter*>::iterator vuit = m_trackMeters.begin();
 
     for (; vuit != m_trackMeters.end(); vuit++)
     {
@@ -71,7 +71,7 @@ TrackButtons::~TrackButtons()
 
     m_trackMeters.erase(m_trackMeters.begin(), m_trackMeters.end());
 
-    vector<TrackLabel*>::iterator lit = m_trackLabels.begin();
+    std::vector<TrackLabel*>::iterator lit = m_trackLabels.begin();
     for (; lit != m_trackLabels.end(); lit++)
     {
         delete(*lit);
@@ -196,8 +196,8 @@ TrackButtons::drawButtons()
         //
         m_trackLabels.push_back(trackLabel);
 
-        connect((QObject *)trackLabel, SIGNAL(released(int)),
-                                       SLOT(labelSelected(int)));
+        connect(trackLabel, SIGNAL(released(int)),
+                SLOT(labelSelected(int)));
 
         // Insert the buttons into groups
         //
@@ -268,10 +268,10 @@ TrackButtons::selectedRecordTrack()
 // Create and return a vector of all muted tracks
 //
 //
-vector<int>
+std::vector<int>
 TrackButtons::mutedTracks()
 {
-    vector<int> mutedTracks;
+    std::vector<int> mutedTracks;
 
     for (int i = 0; i < m_tracks; i++)
     {
@@ -330,7 +330,7 @@ TrackButtons::setRecordTrack(int recordTrack)
 void
 TrackButtons::labelSelected(int trackNum)
 {
-    vector<TrackLabel *>::iterator tlpIt;
+    std::vector<TrackLabel *>::iterator tlpIt;
 
     for (tlpIt = m_trackLabels.begin();
          tlpIt != m_trackLabels.end();
@@ -353,11 +353,11 @@ TrackButtons::labelSelected(int trackNum)
 // Return a vector of highlighted tracks by querying the TrackLabels
 // for highlight state.
 //
-vector<int>
+std::vector<int>
 TrackButtons::getHighLightedTracks()
 {
-    vector<int> retList;
-    vector<TrackLabel *>::iterator tlpIt;
+    std::vector<int> retList;
+    std::vector<TrackLabel *>::iterator tlpIt;
 
     for (tlpIt = m_trackLabels.begin();
          tlpIt != m_trackLabels.end();
@@ -374,9 +374,9 @@ void
 TrackButtons::renameTrack(QString newName, int trackNum)
 {
     Rosegarden::Track *track = m_doc->getComposition().getTrackByIndex(trackNum);
-    track->setLabel(string(newName.data()));
+    track->setLabel(std::string(newName.data()));
 
-    vector<TrackLabel*>::iterator it = m_trackLabels.begin();
+    std::vector<TrackLabel*>::iterator it = m_trackLabels.begin();
     for (; it != m_trackLabels.end(); it++)
     {
         if ((*it)->trackNum() == trackNum)
@@ -392,7 +392,7 @@ TrackButtons::renameTrack(QString newName, int trackNum)
 void
 TrackButtons::setTrackMeter(double value, int trackNum)
 {
-    vector<TrackVUMeter*>::iterator it = m_trackMeters.begin();
+    std::vector<TrackVUMeter*>::iterator it = m_trackMeters.begin();
     
     for (; it != m_trackMeters.end(); it++)
     {

@@ -276,7 +276,7 @@ Composition::addSegment(Segment *segment)
     std::cerr << "Composition::addSegment: segment is " << segment
 	      << ", with track " << segment->getTrack() << " and start index "
 	      << segment->getStartIndex() << "; currently have " << m_segments.size() << " segments"
-	      << endl;
+	      << std::endl;
 
     if (!segment) return end();
     
@@ -285,7 +285,7 @@ Composition::addSegment(Segment *segment)
     segment->setComposition(this);
 
     std::cerr << "Composition::addSegment: added segment, now have "
-	      << m_segments.size() << " segments" << endl;
+	      << m_segments.size() << " segments" << std::endl;
 
     return res;
 }
@@ -332,7 +332,7 @@ Composition::setSegmentStartIndexAndTrack(Segment *s, timeT t, unsigned int trac
     iterator i = m_segments.find(s);
     if (i == end()) {
         std::cerr << "Composition::setSegmentStartIndexAndTrack() : couldn't find segment " << s
-                  << endl;
+                  << std::endl;
         return false;
     }
 
@@ -772,7 +772,7 @@ Composition::getElapsedRealTime(timeT t) const
 		      (double)((*i)->get<Int>(TempoProperty)) / 60.0);
 /*
     cerr << "Composition::getElapsedRealTime: " << t << " -> "
-	 << elapsed << endl;
+	 << elapsed << std::endl;
 */
     return elapsed;
 }
@@ -803,7 +803,7 @@ Composition::getElapsedTimeForRealTime(RealTime t) const
 	     << elapsed << " (error " << (cfReal - t)
 	     << " or " << (cfTimeT - elapsed) << ", tempo "
 	     << (*i)->getAbsoluteTime() << ":"
-	     << ((double)((*i)->get<Int>(TempoProperty)) / 60.0) << ")" << endl;
+	     << ((double)((*i)->get<Int>(TempoProperty)) / 60.0) << ")" << std::endl;
     }
 #endif
     return elapsed;

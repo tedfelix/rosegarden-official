@@ -589,7 +589,7 @@ int
 RosegardenSequencerApp::addAudioFile(const QString &fileName,
                                      const int &id)
 {
-    return((int)m_sequencer->addAudioFile(string(fileName.data()), id));
+    return((int)m_sequencer->addAudioFile(std::string(fileName.data()), id));
 }
 
 int

@@ -35,8 +35,8 @@
 namespace Rosegarden
 {
 
-static string notes[] = { "C",  "C#", "D",  "D#", "E",  "F",
-                          "F#", "G",  "G#", "A",  "A#", "B"  };
+static std::string notes[] = { "C",  "C#", "D",  "D#", "E",  "F",
+			       "F#", "G",  "G#", "A",  "A#", "B"  };
 
 class MidiPitchLabel
 {
@@ -60,7 +60,7 @@ public:
 
     // Return the string as we like
     //
-    string getString() const { return string(m_midiNote.data()); }
+    std::string getString() const { return std::string(m_midiNote.data()); }
     QString getQString() const { return m_midiNote; }
 
 private:

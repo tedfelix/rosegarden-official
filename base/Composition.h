@@ -445,7 +445,7 @@ protected:
      * event, and can only have one event at each absolute time
      */
     class ReferenceSegment :
-	private FastVector<Event *> // not a set: want random access for bars
+	public FastVector<Event *> // not a set: want random access for bars
     {
 	typedef FastVector<Event *> Impl;
 
@@ -456,11 +456,6 @@ protected:
 	typedef Impl::iterator iterator;
 	typedef Impl::size_type size_type;
 	typedef Impl::difference_type difference_type;
-
-	Impl::size;
-	Impl::begin;
-	Impl::end;
-	Impl::operator[];
 
 	void clear();
 

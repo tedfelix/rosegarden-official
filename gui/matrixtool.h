@@ -69,7 +69,7 @@ class MatrixPainter : public MatrixTool
 {
     Q_OBJECT
 
-    friend MatrixToolBox;
+    friend class MatrixToolBox;
 
 public:
 
@@ -118,7 +118,7 @@ class MatrixEraser : public MatrixTool
 {
     Q_OBJECT
 
-    friend MatrixToolBox;
+    friend class MatrixToolBox;
 
 public:
 

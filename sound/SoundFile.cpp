@@ -32,8 +32,8 @@ const std::string
 SoundFile::getBytes(std::ifstream *file,
                     const unsigned int &numberOfBytes)
 {
-    string rS;
-    FileByte fileByte;
+    std::string rS;
+    char fileByte;
 
     if (file->eof())
         throw(std::string("SoundFile::getBytes() - EOF encountered"));
@@ -60,7 +60,7 @@ SoundFile::putBytes(std::ofstream *file,
 
 
 
-// Turn a little endian binary string into an integer
+// Turn a little endian binary std::string into an integer
 //
 int
 SoundFile::getLittleEndian(const std::string &s)

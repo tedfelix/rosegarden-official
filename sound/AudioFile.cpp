@@ -31,7 +31,7 @@ namespace Rosegarden
 {
 
 AudioFile::AudioFile(const unsigned int &id,
-                     const string &name, const string &fileName):
+                     const std::string &name, const std::string &fileName):
     SoundFile(fileName), m_id(id), m_name(name),
     m_bitsPerSample(0), m_sampleRate(0), m_bytesPerSecond(0),
     m_bytesPerSample(0), m_stereo(false), m_type(AUDIO_NOT_LOADED),
@@ -65,7 +65,7 @@ AudioFile::parseHeader(const std::string &hS)
     if (hS.compare(0, 4, Rosegarden::AUDIO_RIFF_ID) != 0)
 #endif
     {
-        throw((string("AudioFile::parseHeader - can't find RIFF identifier")));
+        throw((std::string("AudioFile::parseHeader - can't find RIFF identifier")));
     }
 
     // Look for the WAV identifier
@@ -76,7 +76,7 @@ AudioFile::parseHeader(const std::string &hS)
     if (hS.compare(4, 4, Rosegarden::AUDIO_WAVE_ID) != 0)
 #endif
     {
-        throw((string("AudioFile::parseHeader - can't find WAV identifier")));
+        throw((std::string("AudioFile::parseHeader - can't find WAV identifier")));
     }
 
     // Look for the FORMAT identifier
@@ -87,7 +87,7 @@ AudioFile::parseHeader(const std::string &hS)
     if (hS.compare(4, 4, Rosegarden::AUDIO_FORMAT_ID) != 0)
 #endif
     {
-        throw((string("AudioFile::parseHeader - can't find FORMAT identifier")));
+        throw((std::string("AudioFile::parseHeader - can't find FORMAT identifier")));
     }
 
     // Little endian conversion of length bytes into file length
@@ -97,7 +97,7 @@ AudioFile::parseHeader(const std::string &hS)
     unsigned int length = getLittleEndian(hS.substr(4,4)) + 8;
 
     if (length != m_fileSize)
-        throw(string("AudioFile::parseHeader - file " + m_fileName +
+        throw(std::string("AudioFile::parseHeader - file " + m_fileName +
                      " corrupted (wrong length)"));
 
     // Check the format length (always 0x10)
@@ -105,14 +105,14 @@ AudioFile::parseHeader(const std::string &hS)
     unsigned int lengthOfFormat = getLittleEndian(hS.substr(16, 4));
 
     if (lengthOfFormat != 0x10)
-        throw(string("AudioFile::parseHeader - format length incorrect"));
+        throw(std::string("AudioFile::parseHeader - format length incorrect"));
 
 
     // Check this field is one
     //
     unsigned int alwaysOne = getLittleEndian(hS.substr(20, 2));
     if (alwaysOne != 0x01)
-        throw(string("AudioFile::parseHeader - always one byte isn't"));
+        throw(std::string("AudioFile::parseHeader - always one byte isn't"));
 
 
     // We seem to have a good looking .WAV file - extract the
@@ -132,7 +132,7 @@ AudioFile::parseHeader(const std::string &hS)
 
         default:
             {
-                throw(string("AudioFile::parseHeader - unrecognised number of channels"));
+                throw(std::string("AudioFile::parseHeader - unrecognised number of channels"));
             }
             break;
     }
@@ -149,13 +149,13 @@ AudioFile::parseHeader(const std::string &hS)
 bool
 AudioFile::open()
 {
-    ifstream *file = new ifstream(m_fileName.c_str(), ios::in | ios::binary);
+    std::ifstream *file = new std::ifstream(m_fileName.c_str(), std::ios::in | std::ios::binary);
 
     // get the actual file size
     //
-    file->seekg(0, ios::end);
+    file->seekg(0, std::ios::end);
     m_fileSize = file->tellg();
-    file->seekg(0, ios::beg);
+    file->seekg(0, std::ios::beg);
 
     // now parse the file
     try
@@ -166,7 +166,7 @@ AudioFile::open()
             {
                 parseHeader(getBytes(file, 36));
             }
-            catch(string s)
+            catch(std::string s)
             {
                 cerr << "EXCEPTION : " << s << endl;
             }
@@ -178,7 +178,7 @@ AudioFile::open()
         }
         file->close();
     }
-    catch(string s)
+    catch(std::string s)
     {  
         cout << "EXCEPTION : " << s << endl;
         return false;

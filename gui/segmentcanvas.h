@@ -219,7 +219,7 @@ public slots:
     // to automatically set the selection of Segments (say
     // by Track).
     //
-    void selectSegments(list<Rosegarden::Segment*> segment);
+    void selectSegments(std::list<Rosegarden::Segment*> segment);
 
     // These are sent from the top level app when it gets key
     // depresses relating to selection add (usually SHIFT) and
@@ -437,7 +437,7 @@ signals:
 
 private:
 
-    list<SegmentItem*> m_selectedItems;
+    std::list<SegmentItem*> m_selectedItems;
     bool               m_segmentAddMode;
     bool               m_segmentCopyMode;
 

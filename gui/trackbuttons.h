@@ -81,11 +81,11 @@ public:
 
     // Return a vector of muted tracks
     //
-    vector<int> mutedTracks();
+    std::vector<int> mutedTracks();
 
     // Return a vector of highlighted tracks
     //
-    vector<int> getHighLightedTracks();
+    std::vector<int> getHighLightedTracks();
 
 signals:
     // to emit what Track has been selected
@@ -118,8 +118,8 @@ private:
     QButtonGroup *m_recordButtonGroup;
     QButtonGroup *m_muteButtonGroup;
 
-    vector<TrackLabel *> m_trackLabels;
-    vector<TrackVUMeter *> m_trackMeters;
+    std::vector<TrackLabel *> m_trackLabels;
+    std::vector<TrackVUMeter *> m_trackMeters;
 
     int m_tracks;
     int m_offset;

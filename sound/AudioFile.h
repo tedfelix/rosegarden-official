@@ -54,8 +54,8 @@ public:
 
 
     AudioFile(const unsigned int &id,
-              const string &name,
-              const string &fileName);
+              const std::string &name,
+              const std::string &fileName);
     ~AudioFile();
 
     std::string getName() const { return m_name; }
@@ -77,11 +77,11 @@ public:
 
 private:
 
-    void parseHeader(const std::string &headerString);
+    void parseHeader(const std::string &header);
     void parseBody();
 
     unsigned int   m_id;
-    string         m_name;
+    std::string    m_name;
     unsigned int   m_bitsPerSample;
     unsigned int   m_sampleRate;
     unsigned int   m_bytesPerSecond;

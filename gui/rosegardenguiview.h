@@ -190,7 +190,7 @@ signals:
     void setGUILoop(Rosegarden::timeT, Rosegarden::timeT);
 
     void activateTool(SegmentCanvas::ToolType);
-    void selectSegments(list<Rosegarden::Segment*>);
+    void selectSegments(std::list<Rosegarden::Segment*>);
 
     // Activated by Shift and Control key depresses
     //

@@ -334,13 +334,13 @@ void SegmentCanvas::onEditAudio()
 //
 //
 void
-SegmentCanvas::selectSegments(list<Rosegarden::Segment*> segments)
+SegmentCanvas::selectSegments(std::list<Rosegarden::Segment*> segments)
 {
     SegmentSelector* selTool = dynamic_cast<SegmentSelector*>(m_tool);
 
     if (!selTool) return;
 
-    list<Rosegarden::Segment*>::iterator segIt;
+    std::list<Rosegarden::Segment*>::iterator segIt;
     QCanvasItemList itemList = canvas()->allItems();
     QCanvasItemList::Iterator it;
 
@@ -713,7 +713,7 @@ SegmentSelector::clearSelected()
 {
     // For the moment only clear all selected from the list
     //
-    list<SegmentItem*>::iterator it;
+    std::list<SegmentItem*>::iterator it;
     for (it = m_selectedItems.begin();
          it != m_selectedItems.end();
          it++)
@@ -784,13 +784,13 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 
         if (m_segmentCopyMode)
         {
-            std::cout << "Segment quick copy mode not implemented" << endl;
+            std::cout << "Segment quick copy mode not implemented" << std::endl;
         }
         else
         {
             if (m_currentItem->isSelected())
             {
-                list<SegmentItem*>::iterator it;
+                std::list<SegmentItem*>::iterator it;
 
                 for (it = m_selectedItems.begin();
                      it != m_selectedItems.end();

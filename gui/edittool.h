@@ -82,7 +82,7 @@ protected:
  */
 class EditTool : public QObject, public KXMLGUIClient
 {
-    friend EditToolBox;
+    friend class EditToolBox;
 
 public:
     virtual ~EditTool();

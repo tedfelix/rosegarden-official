@@ -316,9 +316,9 @@ bool Chord::isNoteHeadShifted(const NELIterator &itr) const
     return false;
 }
 
-vector<Mark> Chord::getMarksForChord() const
+std::vector<Mark> Chord::getMarksForChord() const
 {
-    vector<Mark> marks;
+    std::vector<Mark> marks;
 
     for (unsigned int i = 0; i < size(); ++i) {
 

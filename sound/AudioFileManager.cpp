@@ -71,7 +71,7 @@ AudioFileManager::insertFile(const std::string &name,
 bool
 AudioFileManager::removeFile(const unsigned int &id)
 {
-    vector<AudioFile*>::iterator it;
+    std::vector<AudioFile*>::iterator it;
 
     for (it = m_audioFiles.begin();
          it != m_audioFiles.end();
@@ -95,7 +95,7 @@ AudioFileManager::getFirstUnusedID()
 
     if (m_audioFiles.size() == 0) return rI;
 
-    vector<AudioFile*>::iterator it;
+    std::vector<AudioFile*>::iterator it;
 
     for (it = m_audioFiles.begin();
          it != m_audioFiles.end();
@@ -153,7 +153,7 @@ AudioFileManager::addSearchPath(const std::string &path)
     if (hPath[0] == '~')
     {
         hPath.erase(0, 1);
-        hPath = string(getenv("HOME")) + hPath;
+        hPath = std::string(getenv("HOME")) + hPath;
     }
 
     m_audioSearchPath.push_back(hPath);
@@ -162,7 +162,7 @@ AudioFileManager::addSearchPath(const std::string &path)
 
 // See if we can find a given file in our search path
 // return the first occurence of a match or the empty
-// string if no match.
+// std::string if no match.
 //
 std::string
 AudioFileManager::getFileInPath(const std::string &file)
@@ -189,7 +189,7 @@ AudioFileManager::getFileInPath(const std::string &file)
 
         // Check we can open the file and return if we can
         //
-        fd = new ifstream(search.c_str(), ios::in | ios::binary);
+        fd = new std::ifstream(search.c_str(), std::ios::in | std::ios::binary);
         if (*fd)
         {
             rS = search;
@@ -208,7 +208,7 @@ AudioFileManager::getFileInPath(const std::string &file)
 bool
 AudioFileManager::fileExists(const unsigned int &id)
 {
-    vector<AudioFile*>::iterator it;
+    std::vector<AudioFile*>::iterator it;
 
     for (it = m_audioFiles.begin();
          it != m_audioFiles.end();
@@ -225,7 +225,7 @@ AudioFileManager::fileExists(const unsigned int &id)
 void
 AudioFileManager::clear()
 {
-    vector<AudioFile*>::iterator it;
+    std::vector<AudioFile*>::iterator it;
 
     for (it = m_audioFiles.begin();
          it != m_audioFiles.end();

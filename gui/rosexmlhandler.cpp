@@ -207,7 +207,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         }
 
         int id = -1;
-        string name;
+        std::string name;
         Rosegarden::Instrument::InstrumentType it;
 
         QString instrNbStr = atts.value("id");
@@ -217,7 +217,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
         QString nameStr = atts.value("name");
         if (nameStr) {
-            name = string(nameStr.data());
+            name = std::string(nameStr.data());
         }
 
         QString instrTypeStr = atts.value("type");
@@ -302,7 +302,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         int id = -1;
         int position = -1;
         int instrument = -1;
-        string label;
+        std::string label;
         bool muted;
         Rosegarden::Track::TrackType tt;
 
@@ -313,7 +313,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
         QString labelStr = atts.value("label");
         if (labelStr) {
-            label = string(labelStr.data());
+            label = std::string(labelStr.data());
         }
 
         QString mutedStr = atts.value("muted");
@@ -427,8 +427,8 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         // (this checks the integrity of the file at the
         // same time)
         //
-        if(m_audioFileManager.insertFile(string(label.data()),
-                                         string(file.data()),
+        if(m_audioFileManager.insertFile(std::string(label.data()),
+                                         std::string(file.data()),
                                          id.toInt()) == false)
         {
             m_errorString = i18n("Couldn't find audio file " + file);
@@ -451,7 +451,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             return false;
         }
 
-        m_audioFileManager.addSearchPath(string(search.data()));
+        m_audioFileManager.addSearchPath(std::string(search.data()));
 
     } else if (lcName == "begin") {
         int marker = atts.value("marker").toInt();

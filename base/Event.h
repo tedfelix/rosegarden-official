@@ -294,7 +294,7 @@ Event::get(const PropertyName &name) const
     } else {
 
         std::cerr << "Event::get(): Error: Attempt to get property \"" << name
-		  << "\" which doesn't exist for this event\n" << endl;
+		  << "\" which doesn't exist for this event\n" << std::endl;
 #ifndef NDEBUG
 	std::cerr << "Event::get(): Dump follows:" << std::endl;
 	dump(std::cerr);

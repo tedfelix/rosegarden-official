@@ -68,7 +68,7 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
         for (int i = 0; i < tracks; i++)
         {
             track = new Rosegarden::Track(i, false, Rosegarden::Track::Midi,
-                                          string("untitled"), i, 0);
+                                          std::string("untitled"), i, 0);
 
             comp.addTrack(track);
         }
@@ -76,7 +76,7 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
         // Add a default Instrument
         //
         Rosegarden::Instrument *instr = new Rosegarden::Instrument(0,
-                          Rosegarden::Instrument::Midi, string("Instrument 1"));
+                          Rosegarden::Instrument::Midi, std::string("Instrument 1"));
         comp.addInstrument(instr);
     }
 
@@ -357,7 +357,7 @@ TrackEditor::setPointerPosition(Rosegarden::timeT position)
     if (distance >= 1.0) {
 
 	m_pointer->setX(canvasPosition);
-        emit scrollHorizTo(canvasPosition);
+        emit scrollHorizTo((int)canvasPosition);
 	emit needUpdate();
     }
 }

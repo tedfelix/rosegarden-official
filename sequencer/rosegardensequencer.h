@@ -168,7 +168,7 @@ public:
 
     // Are we looping?
     //
-    bool isLooping() const { return (m_loopStart != m_loopEnd); }
+    bool isLooping() const { return !(m_loopStart == m_loopEnd); }
 
 private:
 

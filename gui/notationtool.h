@@ -83,7 +83,7 @@ protected:
  */
 class NotationTool : public EditTool
 {
-    friend NotationToolBox;
+    friend class NotationToolBox;
 
 public:
     virtual ~NotationTool();
@@ -116,7 +116,7 @@ class NoteInserter : public NotationTool
 {
     Q_OBJECT
 
-    friend NotationToolBox;
+    friend class NotationToolBox;
 
 public:
     ~NoteInserter();
@@ -188,7 +188,7 @@ protected:
  */
 class RestInserter : public NoteInserter
 {
-    friend NotationToolBox;
+    friend class NotationToolBox;
 
 public:
 
@@ -210,7 +210,7 @@ protected:
  */
 class ClefInserter : public NotationTool
 {
-    friend NotationToolBox;
+    friend class NotationToolBox;
 
 public:
     void setClef(std::string clefType);
@@ -240,7 +240,7 @@ class NotationEraser : public NotationTool
 {
     Q_OBJECT
 
-    friend NotationToolBox;
+    friend class NotationToolBox;
 
 public:
 
@@ -274,7 +274,7 @@ class NotationSelector : public NotationTool
 {
     Q_OBJECT
 
-    friend NotationToolBox;
+    friend class NotationToolBox;
 
 public:
 

@@ -140,10 +140,10 @@ void StaffRuler::update()
 
     m_cursor->setMinPosition(int(m_steps[0].first) + m_xPos);
 
-    m_greyBackground->setSize(maxStepPos, m_greyBackground->height());
-    m_whiteBackground->setSize(maxStepPos, m_whiteBackground->height());
+    m_greyBackground->setSize((int)maxStepPos, m_greyBackground->height());
+    m_whiteBackground->setSize((int)maxStepPos, m_whiteBackground->height());
     m_mainLine->setPoints(0, m_mainLinePos + m_yPos,
-			  maxStepPos, m_mainLinePos + m_yPos);
+			  (int)maxStepPos, m_mainLinePos + m_yPos);
 
     setActive(true); // set steps active
 }

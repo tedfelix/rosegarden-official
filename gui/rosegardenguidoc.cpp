@@ -140,7 +140,7 @@ bool RosegardenGUIDoc::saveIfModified()
     kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::saveIfModified()" << endl;
     bool completed=true;
 
-    if(m_modified) {
+    if (m_modified) {
         RosegardenGUIApp *win=(RosegardenGUIApp *) parent();
         int want_save = KMessageBox::warningYesNoCancel(win,
                                                         i18n("The current file has been modified.\n"
