@@ -245,9 +245,11 @@ RosegardenSequencerApp::updateClocks()
     //
     Rosegarden::RealTime updateBound(0, 1000); // 1000 microseconds
 
+/*
     if (newPosition > ( m_songPosition + updateBound ) ||
         newPosition < ( m_songPosition - updateBound ) )
     {
+*/
         m_songPosition = newPosition;
 
         // Now use newPosition to work out if we need to move the
@@ -277,7 +279,9 @@ RosegardenSequencerApp::updateClocks()
             m_transportStatus = STOPPING;
     
         }
+/*
     }
+*/
 }
 
 void

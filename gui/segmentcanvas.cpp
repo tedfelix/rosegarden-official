@@ -640,13 +640,18 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 {
     SegmentItem *item = m_canvas->findPartClickedOn(e->pos());
 
-    if (item)
-        m_currentItem = item;
-
     // Only add to the list if we've got SHIFT held down -
-    // for the moment we just clear everything
+    // for the moment we just clear everything and then
+    // set the current item
     //
     clearSelected();
+
+    if (item)
+    {
+        m_currentItem = item;
+        selectSegmentItem(m_currentItem);
+        emit updateSegmentTrackAndStartIndex(m_currentItem);
+    }
 
 }
 
@@ -662,19 +667,12 @@ SegmentSelector::selectSegmentItem(SegmentItem *selectedItem)
 }
 
 
+// Don't need to do anything - for the moment we do this
+// all on click, not release
+//
 void
-SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
+SegmentSelector::handleMouseButtonRelease(QMouseEvent * /*e*/)
 {
-    // If we've set a m_currentItem then that means we've
-    // clicked on it, now we released we highlight it.
-    //
-    if (m_currentItem)
-    {
-        selectSegmentItem(m_currentItem);
-        emit updateSegmentTrackAndStartIndex(m_currentItem);
-    }
-
-    m_currentItem = 0;
 }
 
 // In Select mode we implement movement on the Segment
