@@ -440,7 +440,10 @@ RosegardenRotary::mousePressEvent(QMouseEvent *e)
 
         // Reposition - remap to topLevel or dialog to please move().
         //
-        QPoint totalPos = mapTo(topLevelWidget(), this->pos());
+        // (Note that we're remapping to the local widget firstly so
+        //  the QPoint only has to be zero)
+        //
+        QPoint totalPos = mapTo(topLevelWidget(), QPoint(0, 0));
 
         // Move just top/right of the rotary
         //
