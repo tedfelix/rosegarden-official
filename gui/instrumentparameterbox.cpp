@@ -26,6 +26,7 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qcheckbox.h>
+#include <qregexp.h>
 #include <qslider.h>
 #include <qpushbutton.h>
 #include <qsignalmapper.h>
@@ -1529,10 +1530,27 @@ MIDIInstrumentParameterPanel::setupForInstrument(Rosegarden::Instrument *instrum
     if (instrument->getDevice()) {
 	QString connection(strtoqstr(instrument->getDevice()->getConnection()));
 	if (connection == "") {
-	    m_connectionLabel->setText(i18n("No connection"));
+	    m_connectionLabel->setText(i18n("[ %1 ]").arg(i18n("No connection")));
 	} else {
+
+	    // remove trailing "(duplex)", "(read only)", "(write only)" etc
+	    connection.replace(QRegExp("\\s*\\([^)0-9]+\\)\\s*$"), "");
+
+	    QString text = i18n("[ %1 ]").arg(connection);
+	    QString origText(text);
+
 	    QFontMetrics metrics(m_connectionLabel->fontMetrics());
-	    m_connectionLabel->setText(i18n("Connection: %1").arg(connection));
+	    int maxwidth = metrics.width
+		("Program: [X]   Acoustic Grand Piano 123");// kind of arbitrary!
+
+	    int hlen = text.length() / 2;
+	    while (metrics.width(text) > maxwidth && text.length() > 10) {
+		--hlen;
+		text = origText.left(hlen) + "..." + origText.right(hlen);
+	    }
+
+	    if (text.length() > origText.length() - 7) text = origText;
+	    m_connectionLabel->setText(text);
 	}
     } else {
 	m_connectionLabel->setText("");

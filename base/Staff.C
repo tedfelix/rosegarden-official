@@ -77,11 +77,25 @@ Staff::wrapEvent(Event *e)
 ViewElementList::iterator
 Staff::findEvent(Event *e)
 {
-    ViewElement dummy(e);
-
+    // Note that we have to create this using the virtual
+    // makeViewElement, because the result of equal_range depends on
+    // the value of the view absolute time for the element, which
+    // depends on the particular subclass of ViewElement in use.
+    
+    //!!! (This is also why this method has to be here and not in
+    // ViewElementList -- ViewElementList has no equivalent of
+    // makeViewElement.  Possibly things like NotationElementList
+    // should be subclasses of ViewElementList that implement
+    // makeViewElement instead of having makeViewElement in Staff, but
+    // that's for another day.)
+    
+    ViewElement *dummy = makeViewElement(e);
+    
     std::pair<ViewElementList::iterator,
-	      ViewElementList::iterator>
-        r = m_viewElementList->equal_range(&dummy);
+  	      ViewElementList::iterator>
+        r = m_viewElementList->equal_range(dummy);
+ 
+    delete dummy;
 
     for (ViewElementList::iterator i = r.first; i != r.second; ++i) {
         if ((*i)->event() == e) {
