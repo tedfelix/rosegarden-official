@@ -6,7 +6,7 @@ Current Task list
 
 1.0 stuff :
 
-- fix MIDI import
+- fix MIDI import CAN'T REPRODUCE PROBLEMS
 - 'add' features in Control Rulers DONE
 - rgapp->sequencer(Send|Call) DONE
 
