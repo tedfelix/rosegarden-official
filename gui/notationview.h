@@ -773,6 +773,7 @@ protected:
     int m_lastFinishingStaff;
 
     std::vector<QCanvasItem *> m_pages;
+    std::vector<QCanvasItem *> m_pageNumbers;
 
     Rosegarden::timeT m_insertionTime;
     enum {

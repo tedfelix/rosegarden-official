@@ -614,6 +614,12 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     setConfigDialogPageIndex(1);
 
+    
+    //!!! EXPERIMENTAL
+    ScrollBoxDialog *pdialog = new ScrollBoxDialog(this);
+    pdialog->show();
+
+
     NOTATION_DEBUG << "NotationView ctor exiting\n";
 }
 
@@ -693,7 +699,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     double printSizePx = printSizePt * (double)printer->resolution() / 72.0;
     double scaleFactor = printSizePx / (double)m_fontSize; 
 
-    tCanvas->resize(pdm.width() / scaleFactor, pdm.height() / scaleFactor);
+    tCanvas->resize(int(pdm.width()  / scaleFactor),
+		    int(pdm.height() / scaleFactor));
     
     setCanvasView(new NotationCanvasView(*this, m_horizontalScrollBar,
                                          tCanvas, getCentralFrame()));
@@ -715,7 +722,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
         RG_DEBUG << "NotationView : setting up progress dialog\n";
 
-        progressDlg = new RosegardenProgressDialog(i18n("Printing..."),
+        progressDlg = new RosegardenProgressDialog(i18n("Preparing to print..."),
                                                    100, parent);
 	progressDlg->setAutoClose(false);
         progressDlg->setAutoReset(true);
@@ -727,7 +734,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     try {
 
-        setPageMode(LinedStaff::ContinuousPageMode); // also positions and renders the staffs!
+        setPageMode(LinedStaff::MultiPageMode); // also positions and renders the staffs!
 
 	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 	    m_staffs[i]->getSegment().getRefreshStatus
@@ -891,23 +898,42 @@ void NotationView::positionPages()
     
     for (unsigned int i = 0; i < m_pages.size(); ++i) {
 	delete m_pages[i];
+	delete m_pageNumbers[i];
     }
     m_pages.clear();
+    m_pageNumbers.clear();
     
     if (m_pageMode != LinedStaff::MultiPageMode) {
 	if (haveBackground) canvas()->setBackgroundPixmap(background);
     } else {
+
+	QFont pageNumberFont;
+	pageNumberFont.setPixelSize(m_fontSize * 2);
+	QFontMetrics metrics(pageNumberFont);
+
 	canvas()->setBackgroundPixmap(deskBackground);
+
 	for (int page = 0; page < maxPageCount; ++page) {
-	    QCanvasRectangle *rect = new QCanvasRectangle
-		(20 + pageWidth * page + leftMargin/4, topMargin / 2,
-		 pageWidth - leftMargin/2, pageHeight + topMargin,
-		 canvas());
+
+	    int x = 20 + pageWidth * page + leftMargin/4;
+	    int y = topMargin / 2;
+	    int w = pageWidth - leftMargin/2;
+	    int h = pageHeight + topMargin;
+
+	    QCanvasRectangle *rect = new QCanvasRectangle(x, y, w, h, canvas());
 	    if (haveBackground) rect->setBrush(QBrush(Qt::white, background));
 	    rect->setPen(Qt::black);
 	    rect->setZ(-1000);
 	    rect->show();
 	    m_pages.push_back(rect);
+
+	    QString str = QString("%1").arg(page + 1);
+	    QCanvasText *text = new QCanvasText(str, pageNumberFont, canvas());
+	    text->setX(x + w - metrics.width(str) - leftMargin/2);
+	    text->setY(y + h - metrics.descent() - topMargin);
+	    text->setZ(-999);
+	    text->show();
+	    m_pageNumbers.push_back(text);
 	}
     }
 
@@ -2399,106 +2425,42 @@ void NotationView::print(KPrinter* printer)
         return;
     }
 
+    // We need to be in multi-page mode at this point
+
     m_config->setGroup(NotationView::ConfigGroup);
     unsigned int printSizePt = m_config->readUnsignedNumEntry("printingnotesize", 6);
     double printSizePx = printSizePt * (double)printer->resolution() / 72.0;
     double scaleFactor = printSizePx / (double)m_fontSize;
 
-    QPaintDeviceMetrics pdm(printer);
-
-    unsigned int pageHeight = pdm.height();
-
-    int maxStaffY = -1;
-    NotationStaff *lastStaff = 0;
+    int pageWidth = getPageWidth();
+    int pageHeight = getPageHeight();
+    int leftMargin = 0, topMargin = 0;
+    getPageMargins(leftMargin, topMargin);
+    int maxPageCount = 1;
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-
-	//!!! what we really need is to ask each staff how many rows
-	//it can fit in a certain height, and use the min of those as
-	//the number of rows; and then use the max of the heights of
-	//that many rows of each staff as the cut-off point
-
-	int thisStaffY =
-	    (m_staffs[i]->getRowSpacing() + m_staffs[i]->getY()) * scaleFactor;
-
-	if (thisStaffY > maxStaffY) {
-	    maxStaffY = thisStaffY;
-	    lastStaff = m_staffs[i];
-	}
+	int pageCount = m_staffs[i]->getPageCount();
+	if (pageCount > maxPageCount) maxPageCount = pageCount;
     }
-
-    if (!lastStaff) {
-        KMessageBox::error(0, "All staffs are empty (?!) -- I'm confused");
-        return;
-    }
-
-    RG_DEBUG << "Page height : " << pageHeight << endl;
-
-    if (maxStaffY > pageHeight) {
-	double scaleDown = double(pageHeight) / double(maxStaffY);
-	int actualSizePtTenths = int(printSizePt * 10 * scaleDown);
-        KMessageBox::information(0, i18n("Too many staffs for the page at %1pt: scaling down to %2pt approx").arg(printSizePt).arg(double(actualSizePtTenths) / 10.0));
-	scaleFactor *= scaleDown;
-        return;
-    }
-
-    unsigned int nbStaffRowsPerPage = pageHeight / maxStaffY;
-    int printSliceHeight = maxStaffY * nbStaffRowsPerPage / scaleFactor;
-
-    int printY = 0;
-    int fullHeight = (lastStaff->getTotalHeight() + lastStaff->getY());
     
     QPainter printpainter(printer);
-
-    RG_DEBUG << "Printing total height "  << fullHeight
-             << ", nbStaffRowsPerPage = " << nbStaffRowsPerPage
-             << ", printSliceHeight = "   << printSliceHeight
-             << ", printer Resolution = " << printer->resolution()
-             << endl;
-
-    unsigned int pageNum = 1;
-
-    unsigned int canvasWidth = getCanvasView()->canvas()->width();
-
-    QWMatrix scale;
-
-    scale.scale(scaleFactor, scaleFactor);
     printpainter.scale(scaleFactor, scaleFactor);
+    printpainter.translate(0, -topMargin);
 
-    // Stuff text items for debugging
-//     for (int y = 0; y < canvasHeight; y += 10) {
-//         QCanvasText* t = new QCanvasText(QString("y = %1").arg(y),
-//                                          getCanvasView()->canvas());
-//         t->setY(y);
-//         t->show();
-//     }
-//     getCanvasView()->canvas()->update();
-    // end of stuffing
+    for (int page = 0; page < maxPageCount; ++page) {
 
-    while (printY < fullHeight) {
-
-        RG_DEBUG << "Printing from " << printY << " to "
-                 << printY + printSliceHeight
-                 << endl;
-
-        QRect printRect(0, printY,
-                        canvasWidth, printSliceHeight);
+	QRect pageRect(20 + pageWidth * page, topMargin, pageWidth, pageHeight);
 
 	// supplying doublebuffer==true to this method appears to
         // slow down printing considerably but without it we get
 	// all sorts of horrible artifacts (possibly related to
 	// mishandling of pixmap masks?)
-        getCanvasView()->canvas()->drawArea(printRect,
-                                            &printpainter, true);
+        getCanvasView()->canvas()->drawArea(pageRect, &printpainter, true);
 
-        printpainter.translate(0, -printSliceHeight);
+        printpainter.translate(-pageWidth, 0);
 
-        printY += printSliceHeight;
-        ++pageNum;
-
-        if (printY < fullHeight) printer->newPage();
+	printer->newPage();
     }
-
 }
 
 void NotationView::refreshSegment(Segment *segment,

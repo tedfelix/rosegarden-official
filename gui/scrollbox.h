@@ -63,7 +63,6 @@ private:
     QSize  viewsize;
 };
 
-
 //!!! EXPERIMENTAL
 class ScrollBoxDialog : public KDialog
 {
@@ -89,4 +88,3 @@ private:
 
 #endif
 
-// vim:sw=4:sts=4:ts=8:noet
