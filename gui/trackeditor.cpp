@@ -119,7 +119,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
     if (kapp->config()->readBoolEntry("backgroundtextures", false)) {
 	QPixmap background;
 	QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-	if (background.load(QString("%1/misc/bg-paper-grey.xpm").
+	if (background.load(QString("%1/misc/bg-segmentcanvas.xpm").
 			    arg(pixmapDir))) {
 	    canvas->setBackgroundPixmap(background);
 	}
