@@ -228,8 +228,8 @@ public:
     const EventList* group() const { return m_group; }
     void setGroup(EventList*);
 
-    duration duration() const         { return m_duration; }
-    void setDuration(duration d)      { m_duration = d; }
+    duration timeDuration() const         { return m_duration; }
+    void setTimeDuration(duration d)      { m_duration = d; }
 
     ViewElements* viewElements()             { return m_viewElements; }
     const ViewElements* viewElements() const { return m_viewElements; }
