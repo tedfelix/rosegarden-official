@@ -133,12 +133,6 @@ public:
     NotePixmapFactory &operator=(const NotePixmapFactory &);
     ~NotePixmapFactory();
 
-    static std::set<std::string> getAvailableFontNames();
-    static std::vector<int> getAvailableSizes(std::string fontName,
-					      bool screenOnly = true); // sorted
-    static std::string getDefaultFont();
-    static int getDefaultSize(std::string fontName);
-
     std::string getFontName() const;
     int getSize() const;
 

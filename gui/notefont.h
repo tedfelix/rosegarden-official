@@ -273,20 +273,12 @@ class NoteFont
 {
 public:
     typedef Rosegarden::Exception BadFont;
-
-    // can throw BadFont, MappingFileReadFailed:
-    NoteFont(std::string fontName, int size = 0);
     ~NoteFont();
 
+    std::string getName() const { return m_fontMap.getName(); }
+    int getSize() const { return m_size; }
+    bool isSmooth() const { return m_fontMap.isSmooth(); }
     const NoteFontMap &getNoteFontMap() const { return m_fontMap; }
-
-    static std::set<std::string> getAvailableFontNames();
-    std::set<int> getSizes() const { return m_fontMap.getSizes(); }
-
-    int getCurrentSize() const { return m_currentSize; }
-    void setCurrentSize(int s) { m_currentSize = s; }
-
-
 
     /// Returns false + thickness=1 if not specified
     bool getStemThickness(unsigned int &thickness) const;
@@ -350,8 +342,11 @@ public:
     /// Ignores problems, returns centre-left of pixmap if necessary
     QPoint getHotspot(CharName charName, bool inverted = false) const;
 
-
 private:
+    friend class NoteFontFactory;
+    NoteFont(std::string fontName, int size = 0);
+    static std::set<std::string> getAvailableFontNames();
+    std::set<int> getSizes() const { return m_fontMap.getSizes(); }
 
     QPixmap *lookup(CharName charName, bool inverted) const;
     void add(CharName charName, bool inverted, QPixmap *pixmap) const;
@@ -370,12 +365,34 @@ private:
 
     //--------------- Data members ---------------------------------
 
-    int m_currentSize;
+    int m_size;
     NoteFontMap m_fontMap;
 
     mutable PixmapMap *m_map; // pointer at a member of m_fontPixmapMap
     static FontPixmapMap *m_fontPixmapMap;
     static QPixmap *m_blankPixmap;
+};
+
+
+class NoteFontFactory
+{
+public:
+    typedef Rosegarden::Exception NoFontsAvailable;
+
+    // Any method passed a fontName argument may throw BadFont or
+    // MappingFileReadFailed; any other method may throw NoFontsAvailable
+
+    static NoteFont *getFont(std::string fontName, int size);
+
+    static std::set<std::string> getFontNames();
+    static std::vector<int> getAllSizes(std::string fontName); // sorted
+    static std::vector<int> getScreenSizes(std::string fontName); // sorted
+
+    static std::string getDefaultFontName();
+    static int getDefaultSize(std::string fontName);
+
+private:
+    static std::map<std::pair<std::string, int>, NoteFont *> m_fonts;
 };
 
 

@@ -70,7 +70,7 @@
 #include "rosegardenguidoc.h"
 #include "rosedebug.h"
 #include "sequencemanager.h"
-#include "notepixmapfactory.h"
+#include "notefont.h"
 #include "matrixtool.h"
 #include "notationtool.h"
 #include "segmenttool.h"
@@ -372,10 +372,12 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     m_font = new KComboBox(frame);
     m_font->setEditable(false);
 
+    //!!! catch exception
     QString defaultFont = m_cfg->readEntry
-        ("notefont", strtoqstr(NotePixmapFactory::getDefaultFont()));
+        ("notefont", strtoqstr(NoteFontFactory::getDefaultFontName()));
 
-    std::set<std::string> fs(NotePixmapFactory::getAvailableFontNames());
+    //!!! catch exception
+    std::set<std::string> fs(NoteFontFactory::getFontNames());
     std::vector<std::string> f(fs.begin(), fs.end());
     std::sort(f.begin(), f.end());
 
@@ -618,15 +620,16 @@ NotationConfigurationPage::slotFontComboChanged(const QString &font)
     populateSizeCombo(m_singleStaffSize, fontStr,
                       m_cfg->readUnsignedNumEntry
                       ("singlestaffnotesize",
-                       NotePixmapFactory::getDefaultSize(fontStr)));
+                       NoteFontFactory::getDefaultSize(fontStr)));
     populateSizeCombo(m_multiStaffSize, fontStr,
                       m_cfg->readUnsignedNumEntry
                       ("multistaffnotesize",
-                       NotePixmapFactory::getDefaultSize(fontStr)));
+                       NoteFontFactory::getDefaultSize(fontStr)));
 
     try {
-        NoteFont noteFont(fontStr);
-        const NoteFontMap &map(noteFont.getNoteFontMap());
+	NoteFont *noteFont = NoteFontFactory::getFont
+	    (fontStr, NoteFontFactory::getDefaultSize(fontStr));
+        const NoteFontMap &map(noteFont->getNoteFontMap());
         m_fontOriginLabel->setText(strtoqstr(map.getOrigin()));
         m_fontCopyrightLabel->setText(strtoqstr(map.getCopyright()));
         m_fontMappedByLabel->setText(strtoqstr(map.getMappedBy()));
@@ -645,7 +648,7 @@ NotationConfigurationPage::populateSizeCombo(QComboBox *combo,
                                              std::string font,
                                              int defaultSize)
 {
-    std::vector<int> sizes = NotePixmapFactory::getAvailableSizes(font);
+    std::vector<int> sizes = NoteFontFactory::getScreenSizes(font);
     combo->clear();
     
     for (std::vector<int>::iterator i = sizes.begin(); i != sizes.end(); ++i) {

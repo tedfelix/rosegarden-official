@@ -150,8 +150,7 @@ NotePixmapFactory::NotePixmapFactory(const NotePixmapFactory &npf) :
     m_bigTimeSigFontMetrics(m_bigTimeSigFont),
     m_dottedRestCache(new NotePixmapCache)
 {
-    init(npf.m_font->getNoteFontMap().getName(),
-	 npf.m_font->getCurrentSize());
+    init(npf.m_font->getName(), npf.m_font->getSize());
 }
 
 NotePixmapFactory &
@@ -167,9 +166,7 @@ NotePixmapFactory::operator=(const NotePixmapFactory &npf)
 	m_tupletCountFontMetrics = QFontMetrics(m_tupletCountFont);
 	m_textMarkFont = npf.m_textMarkFont;
 	m_textMarkFontMetrics = QFontMetrics(m_textMarkFont);
-	delete m_font;
-	init(npf.m_font->getNoteFontMap().getName(),
-	     npf.m_font->getCurrentSize());
+	init(npf.m_font->getName(), npf.m_font->getSize());
 	m_dottedRestCache->clear();
 	m_textFontCache.clear();
     }
@@ -186,11 +183,10 @@ NotePixmapFactory::init(std::string fontName, int size)
 	throw;
     }
 
-    if (fontName == "") fontName = NotePixmapFactory::getDefaultFont();
-    if (size < 0) size = NotePixmapFactory::getDefaultSize(fontName);
-
     try {
-        m_font = new NoteFont(fontName, size);
+	if (fontName == "") fontName = NoteFontFactory::getDefaultFontName();
+	if (size < 0) size = NoteFontFactory::getDefaultSize(fontName);
+        m_font = NoteFontFactory::getFont(fontName, size);
     } catch (Rosegarden::Exception f) {
         KMessageBox::error(0, i18n(strtoqstr(f.getMessage())));
         throw;
@@ -222,62 +218,19 @@ NotePixmapFactory::init(std::string fontName, int size)
 
 NotePixmapFactory::~NotePixmapFactory()
 {
-    delete m_font;
     delete m_dottedRestCache;
-}
-
-set<string>
-NotePixmapFactory::getAvailableFontNames()
-{
-    return NoteFont::getAvailableFontNames();
-}
-
-string
-NotePixmapFactory::getDefaultFont()
-{
-    set<string> fontNames = getAvailableFontNames();
-    if (fontNames.find("Feta") != fontNames.end()) return "Feta";
-    else if (fontNames.size() == 0) {
-        KMessageBox::error(0, i18n("No note font names available, aborting"));
-	throw -1;
-    }
-    else return *fontNames.begin();
-}
-
-vector<int>
-NotePixmapFactory::getAvailableSizes(string fontName, bool screenOnly)
-{
-    try {
-	set<int> s(NoteFont(fontName).getSizes());
-	vector<int> v;
-	for (set<int>::iterator i = s.begin(); i != s.end(); ++i) {
-	    if (*i >= 3 && *i <= 16) v.push_back(*i);
-	}
-	std::sort(v.begin(), v.end());
-	return v;
-    } catch (Rosegarden::Exception f) {
-        KMessageBox::error(0, i18n(strtoqstr(f.getMessage())));
-        throw;
-    }
-}
-
-int
-NotePixmapFactory::getDefaultSize(string fontName)
-{
-    vector<int> sizes(getAvailableSizes(fontName));
-    return sizes[sizes.size()/2];
 }
 
 string
 NotePixmapFactory::getFontName() const
 {
-    return m_font->getNoteFontMap().getName();
+    return m_font->getName();
 }
 
 int
 NotePixmapFactory::getSize() const
 {
-    return m_font->getCurrentSize();
+    return m_font->getSize();
 }
 
 QPixmap
@@ -916,7 +869,7 @@ NotePixmapFactory::drawBeams(const QPoint &s1,
     int width = params.m_width;
     double grad = params.m_gradient;
 
-    bool smooth = m_font->getNoteFontMap().isSmooth();
+    bool smooth = m_font->isSmooth();
 
     int gap = thickness - 1;
     if (gap < 1) gap = 1;
@@ -980,7 +933,7 @@ NotePixmapFactory::drawSlashes(const QPoint &s0,
     int gap = thickness - 1;
     if (gap < 1) gap = 1;
 
-    bool smooth = m_font->getNoteFontMap().isSmooth();
+    bool smooth = m_font->isSmooth();
 
     int width = m_noteBodyWidth * 4 / 5;
     int sign = (params.m_stemGoesUp ? -1 : 1);
@@ -1062,7 +1015,7 @@ NotePixmapFactory::drawTuplingLine(const NotePixmapParameters &params)
     RG_DEBUG << "line: (" << startX << "," << startY << ") -> ("
 			 << endX << "," << endY << ")" << endl;
 */
-    bool smooth = m_font->getNoteFontMap().isSmooth();
+    bool smooth = m_font->isSmooth();
 
     m_p.drawLine(startX, startY, startX, startY + tickOffset);
     m_pm.drawLine(startX, startY, startX, startY + tickOffset);
@@ -1104,7 +1057,7 @@ NotePixmapFactory::drawTie(bool above, int length)
     }
 
     int tieThickness = getStaffLineThickness() * 2;
-    int tieCurve = m_font->getCurrentSize() * 2 / 3;
+    int tieCurve = m_font->getSize() * 2 / 3;
     int height = tieCurve + tieThickness;
     int x = m_left + m_noteBodyWidth;
     int y = (above ? m_above - height - tieCurve/2 :
@@ -1544,7 +1497,7 @@ NotePixmapFactory::makeHairpinPixmap(int length, bool isCrescendo)
 
     int left = 1, right = length - 2*nbw/3 + 1;
 
-    bool smooth = m_font->getNoteFontMap().isSmooth();
+    bool smooth = m_font->isSmooth();
 
     if (isCrescendo) {
 	drawShallowLine(left, height/2-1,
@@ -1634,7 +1587,7 @@ NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
     //!!! could remove "nbh > 5" requirement if we did a better job of
     // sizing so that any horizontal part was rescaled down to exactly
     // 1 pixel wide instead of blurring
-    bool smooth = m_font->getNoteFontMap().isSmooth() && nbh > 5;
+    bool smooth = m_font->isSmooth() && nbh > 5;
 
     if (smooth) thickness += 2;
 
@@ -2008,12 +1961,12 @@ int NotePixmapFactory::getNoteBodyWidth(Note::Type type)
 int NotePixmapFactory::getNoteBodyHeight(Note::Type type)
     const {
     // this is by definition
-    return m_font->getCurrentSize();
-//!!!    return m_font->getHeight(m_style->getNoteHeadCharName(type).first) -2*m_origin.y();
+//!!!    return m_font->getSize();
+    return m_font->getHeight(m_style->getNoteHeadCharName(type).first) -2*m_origin.y();
 }
 
 int NotePixmapFactory::getLineSpacing() const {
-    return m_font->getCurrentSize() + 1;
+    return m_font->getSize() + 1;
 }
 
 int NotePixmapFactory::getAccidentalWidth(const Accidental &a) const {

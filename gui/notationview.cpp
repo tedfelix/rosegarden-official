@@ -52,6 +52,7 @@
 #include "colours.h"
 #include "notationstrings.h"
 #include "notepixmapfactory.h"
+#include "notefont.h"
 #include "notestyle.h"
 #include "notationtool.h"
 #include "notationstrings.h"
@@ -181,8 +182,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_currentStaff(-1),
     m_lastFinishingStaff(-1),
     m_insertionTime(0),
-    m_fontName(NotePixmapFactory::getDefaultFont()),
-    m_fontSize(NotePixmapFactory::getDefaultSize(m_fontName)),
+    m_fontName(NoteFontFactory::getDefaultFontName()), //!!! exceptions
+    m_fontSize(NoteFontFactory::getDefaultSize(m_fontName)), //!!! exceptions
     m_notePixmapFactory(new NotePixmapFactory(m_fontName, m_fontSize)),
     m_hlayout(new NotationHLayout(&doc->getComposition(), m_notePixmapFactory,
                                   m_properties, this)),
@@ -216,13 +217,14 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     m_config->setGroup(NotationView::ConfigGroup);
 
+    //!!! catch exception
     m_fontName = qstrtostr(m_config->readEntry
 			   ("notefont",
-			    strtoqstr(NotePixmapFactory::getDefaultFont())));
+			    strtoqstr(NoteFontFactory::getDefaultFontName())));
 
     m_fontSize = m_config->readUnsignedNumEntry
 	((segments.size() > 1 ? "multistaffnotesize" : "singlestaffnotesize"),
-	 NotePixmapFactory::getDefaultSize(m_fontName));
+	 NoteFontFactory::getDefaultSize(m_fontName)); //!!! exceptions
 
     int defaultSpacing = m_config->readNumEntry("spacing", 100);
     m_hlayout->setSpacing(defaultSpacing);
@@ -448,8 +450,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_hoveredOverAbsoluteTime(0),
     m_lastFinishingStaff(-1),
     m_insertionTime(0),
-    m_fontName(NotePixmapFactory::getDefaultFont()),
-    m_fontSize(NotePixmapFactory::getDefaultSize(m_fontName)),
+    m_fontName(NoteFontFactory::getDefaultFontName()),
+    m_fontSize(NoteFontFactory::getDefaultSize(m_fontName)), //!!! exceptions
     m_notePixmapFactory(new NotePixmapFactory(m_fontName, m_fontSize)),
     m_hlayout(new NotationHLayout(&doc->getComposition(), m_notePixmapFactory,
 				  m_properties, this)),
@@ -479,13 +481,15 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     m_config->setGroup(NotationView::ConfigGroup);
 
+    //!!! catch exception
     m_fontName = qstrtostr(m_config->readEntry
 			   ("notefont",
-			    strtoqstr(NotePixmapFactory::getDefaultFont())));
+			    strtoqstr(NoteFontFactory::getDefaultFontName())));
 
 
     // Force largest font size
-    std::vector<int> sizes = NotePixmapFactory::getAvailableSizes(m_fontName);
+    //!!! catch exception
+    std::vector<int> sizes = NoteFontFactory::getAllSizes(m_fontName);
     m_fontSize = sizes[sizes.size()-1];
 
     setBackgroundMode(PaletteBase);
@@ -737,7 +741,7 @@ void NotationView::setupActions()
     KActionMenu *fontActionMenu =
 	new KActionMenu(i18n("Note &Font"), this, "note_font_actionmenu");
 
-    std::set<std::string> fs(NotePixmapFactory::getAvailableFontNames());
+    std::set<std::string> fs(NoteFontFactory::getFontNames());
     std::vector<std::string> f(fs.begin(), fs.end());
     std::sort(f.begin(), f.end());
     
@@ -1430,9 +1434,9 @@ void
 NotationView::setupFontSizeMenu(std::string oldFontName)
 {
     if (oldFontName != "") {
-	
-	std::vector<int> sizes = NotePixmapFactory::getAvailableSizes
-	    (oldFontName);
+
+	//!!! catch exception
+	std::vector<int> sizes = NoteFontFactory::getScreenSizes(oldFontName);
 	
 	for (unsigned int i = 0; i < sizes.size(); ++i) {
 	    KAction *action =
@@ -1443,7 +1447,8 @@ NotationView::setupFontSizeMenu(std::string oldFontName)
 	}
     }
 
-    std::vector<int> sizes = NotePixmapFactory::getAvailableSizes(m_fontName);
+    //!!! catch exception
+    std::vector<int> sizes = NoteFontFactory::getScreenSizes(m_fontName);
 
     for (unsigned int i = 0; i < sizes.size(); ++i) {
 
@@ -1483,7 +1488,7 @@ void NotationView::initLayoutToolbar()
     m_fontCombo = new QComboBox(layoutToolbar);
     m_fontCombo->setEditable(false);
 
-    std::set<std::string> fs(NotePixmapFactory::getAvailableFontNames());
+    std::set<std::string> fs(NoteFontFactory::getFontNames());
     std::vector<std::string> f(fs.begin(), fs.end());
     std::sort(f.begin(), f.end());
 
@@ -1504,7 +1509,8 @@ void NotationView::initLayoutToolbar()
 	KMessageBox::sorry
 	    (this, QString(i18n("Unknown font \"%1\", using default")).arg
 	     (strtoqstr(m_fontName)));
-	m_fontName = NotePixmapFactory::getDefaultFont();
+	//!!! catch exception
+	m_fontName = NoteFontFactory::getDefaultFontName();
     }
     
     connect(m_fontCombo, SIGNAL(activated(const QString &)),
@@ -1512,7 +1518,8 @@ void NotationView::initLayoutToolbar()
 
     new QLabel(i18n("  Size:  "), layoutToolbar, "kde toolbar widget");
 
-    std::vector<int> sizes = NotePixmapFactory::getAvailableSizes(m_fontName);
+    //!!! catch exception
+    std::vector<int> sizes = NoteFontFactory::getScreenSizes(m_fontName);
     m_fontSizeSlider = new ZoomSlider<int>
         (sizes, m_fontSize, QSlider::Horizontal, layoutToolbar, "kde toolbar widget");
     connect(m_fontSizeSlider, SIGNAL(valueChanged(int)),

@@ -403,9 +403,9 @@ NoteFontMap::startElement(const QString &, const QString &,
 		    i18n("font-requirement may have name or names attribute, but not both");
 		return false;
 	    }
-	    //!!! need the font-sizes stuff to tell us what pixel size to use for a given line width
+
 	    QFont font;
-	    if (checkFont(name, 12, font)) { //!!!
+	    if (checkFont(name, 12, font)) {
 		m_fonts[n] = font;
 	    } else {
 		cerr << i18n("Warning: Unable to load font \"%1\"").arg(name) << endl;
@@ -418,7 +418,7 @@ NoteFontMap::startElement(const QString &, const QString &,
 	    QStringList list = QStringList::split(",", names, false);
 	    for (QStringList::Iterator i = list.begin(); i != list.end(); ++i) {
 		QFont font;
-		if (checkFont(*i, 12, font)) { //!!!
+		if (checkFont(*i, 12, font)) {
 		    m_fonts[n] = font;
 		    have = true;
 		    break;
@@ -741,19 +741,19 @@ NoteFont::NoteFont(string fontName, int size) :
     std::set<int> sizes = m_fontMap.getSizes();
 
     if (sizes.size() > 0) {
-        m_currentSize = *sizes.begin();
+        m_size = *sizes.begin();
     } else {
-        throw BadFont(qstrtostr(QString("No sizes listed for font \"%1\"")
+        throw BadFont(qstrtostr(i18n("No sizes listed for font \"%1\"")
                       .arg(strtoqstr(fontName))));
     }
 
     if (size > 0) {
         if (sizes.find(size) == sizes.end()) {
-            throw BadFont(qstrtostr(QString("Font \"%1\" not available in size %2")
+            throw BadFont(qstrtostr(i18n("Font \"%1\" not available in size %2")
                           .arg(strtoqstr(fontName))
                           .arg(size)));
         } else {
-            m_currentSize = size;
+            m_size = size;
         }
     }
 
@@ -772,7 +772,7 @@ NoteFont::NoteFont(string fontName, int size) :
 
     string fontKey = qstrtostr(QString("__%1__%2__")
         .arg(strtoqstr(m_fontMap.getName()))
-        .arg(m_currentSize));
+        .arg(m_size));
 
     FontPixmapMap::iterator i = m_fontPixmapMap->find(fontKey);
     if (i == m_fontPixmapMap->end()) {
@@ -822,22 +822,22 @@ bool
 NoteFont::getStemThickness(unsigned int &thickness) const
 {
     thickness = 1;
-    return m_fontMap.getStemThickness(m_currentSize, thickness);
+    return m_fontMap.getStemThickness(m_size, thickness);
 }
 
 bool
 NoteFont::getBeamThickness(unsigned int &thickness) const
 {
-//    thickness = (m_currentSize + 2) / 3;
-    thickness = m_currentSize / 2;
-    return m_fontMap.getBeamThickness(m_currentSize, thickness);
+//    thickness = (m_size + 2) / 3;
+    thickness = m_size / 2;
+    return m_fontMap.getBeamThickness(m_size, thickness);
 }
 
 bool
 NoteFont::getStaffLineThickness(unsigned int &thickness) const
 {
     thickness = 1;
-    return m_fontMap.getStaffLineThickness(m_currentSize, thickness);
+    return m_fontMap.getStaffLineThickness(m_size, thickness);
 }
 
 bool
@@ -845,7 +845,7 @@ NoteFont::getBorderThickness(unsigned int &x, unsigned int &y) const
 {
     x = 0;
     y = 0;
-    return m_fontMap.getBorderThickness(m_currentSize, x, y);
+    return m_fontMap.getBorderThickness(m_size, x, y);
 }
 
 QPixmap *
@@ -889,7 +889,7 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
         return true;
     }
 
-    if (inverted && !m_fontMap.hasInversion(m_currentSize, charName)) {
+    if (inverted && !m_fontMap.hasInversion(m_size, charName)) {
 	if (!getPixmap(charName, pixmap, !inverted)) return false;
 	found = new QPixmap(PixmapFunctions::flipVertical(pixmap));
 	add(charName, inverted, found);
@@ -900,8 +900,8 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
     string src;
     bool ok = false;
 
-    if (!inverted) ok = m_fontMap.getSrc(m_currentSize, charName, src);
-    else  ok = m_fontMap.getInversionSrc(m_currentSize, charName, src);
+    if (!inverted) ok = m_fontMap.getSrc(m_size, charName, src);
+    else  ok = m_fontMap.getInversionSrc(m_size, charName, src);
     
     if (ok) {
 	NOTATION_DEBUG
@@ -915,7 +915,7 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
                 cerr << "NoteFont::getPixmap: Warning: No automatic mask "
                      << "for character \"" << charName << "\"" 
                      << (inverted ? " (inverted)" : "") << " in font \""
-                     << m_fontMap.getName() << "-" << m_currentSize
+                     << m_fontMap.getName() << "-" << m_size
                      << "\"; consider making xpm background transparent"
                      << endl;
 		found->setMask(PixmapFunctions::generateMask(*found));
@@ -931,8 +931,8 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
 
 	int code = -1;
 	QFont font;
-	if (!inverted) ok = m_fontMap.getCode(m_currentSize, charName, code);
-	else  ok = m_fontMap.getInversionCode(m_currentSize, charName, code);
+	if (!inverted) ok = m_fontMap.getCode(m_size, charName, code);
+	else  ok = m_fontMap.getInversionCode(m_size, charName, code);
 
 	if (!ok) {
 	    cerr << "NoteFont::getPixmap: Warning: No pixmap or code for character \""
@@ -942,10 +942,10 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
 	    return false;
 	}
 
-	ok = m_fontMap.getFont(m_currentSize, charName, font);
+	ok = m_fontMap.getFont(m_size, charName, font);
 
 	if (!ok) {
-	    if (!inverted && m_fontMap.hasInversion(m_currentSize, charName)) {
+	    if (!inverted && m_fontMap.hasInversion(m_size, charName)) {
 		if (!getPixmap(charName, pixmap, !inverted)) return false;
 		found = new QPixmap(PixmapFunctions::flipVertical(pixmap));
 		add(charName, inverted, found);
@@ -1095,7 +1095,7 @@ NoteFont::getHeight(CharName charName) const
 bool
 NoteFont::getHotspot(CharName charName, int &x, int &y, bool inverted) const
 {
-    bool ok = m_fontMap.getHotspot(m_currentSize, charName, x, y);
+    bool ok = m_fontMap.getHotspot(m_size, charName, x, y);
 
     if (!ok) {
         int w, h;
@@ -1118,4 +1118,77 @@ NoteFont::getHotspot(CharName charName, bool inverted) const
     (void)getHotspot(charName, x, y, inverted);
     return QPoint(x, y);
 }
+
+
+std::set<std::string>
+NoteFontFactory::getFontNames()
+{
+    return NoteFont::getAvailableFontNames();
+}
+
+std::vector<int>
+NoteFontFactory::getAllSizes(std::string fontName)
+{
+    NoteFont *font = getFont(fontName, 0);
+    if (!font) return std::vector<int>();
+
+    std::set<int> s(font->getSizes());
+    std::vector<int> v;
+    for (std::set<int>::iterator i = s.begin(); i != s.end(); ++i) {
+	v.push_back(*i);
+    }
+    std::sort(v.begin(), v.end());
+    return v;
+}
+
+std::vector<int>
+NoteFontFactory::getScreenSizes(std::string fontName)
+{
+    NoteFont *font = getFont(fontName, 0);
+    if (!font) return std::vector<int>();
+
+    std::set<int> s(font->getSizes());
+    std::vector<int> v;
+    for (std::set<int>::iterator i = s.begin(); i != s.end(); ++i) {
+	if (*i >= 3 && *i <= 16) v.push_back(*i);
+    }
+    std::sort(v.begin(), v.end());
+    return v;
+}
+
+NoteFont *
+NoteFontFactory::getFont(std::string fontName, int size)
+{
+    std::map<std::pair<std::string, int>, NoteFont *>::iterator i =
+	m_fonts.find(std::pair<std::string, int>(fontName, size));
+
+    if (i == m_fonts.end()) {
+	NoteFont *font = new NoteFont(fontName, size);
+	m_fonts[std::pair<std::string, int>(fontName, size)] = font;
+	return font;
+    } else {
+	return i->second;
+    }
+}
+
+std::string
+NoteFontFactory::getDefaultFontName()
+{
+    std::set<std::string> fontNames = getFontNames();
+    if (fontNames.find("Feta") != fontNames.end()) return "Feta";
+    else if (fontNames.size() == 0) {
+	throw NoFontsAvailable
+	    (qstrtostr(i18n("Can't obtain a default font -- no fonts found")));
+    }
+    else return *fontNames.begin();
+}
+
+int
+NoteFontFactory::getDefaultSize(std::string fontName)
+{
+    std::vector<int> sizes(getScreenSizes(fontName));
+    return sizes[sizes.size()/2];
+}
+
+std::map<std::pair<std::string, int>, NoteFont *> NoteFontFactory::m_fonts;
 

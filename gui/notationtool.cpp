@@ -1134,10 +1134,6 @@ void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)
 	if (m_clickedElement != 0 &&
 	    m_selectedStaff) {
 
-	    // If we didn't drag out a meaningful area, but _did_
-	    // click on an individual event, then select just that
-	    // event
-
 	    if (m_selectionToMerge &&
 		m_selectionToMerge->getSegment() ==
 		m_selectedStaff->getSegment()) {
@@ -1148,6 +1144,10 @@ void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)
 		m_selectionToMerge = 0;
 
 	    } else {
+		
+		// If we didn't drag out a meaningful area, but _did_
+		// click on an individual event, then select just that
+		// event
 
 		m_nParentView->setSingleSelectedEvent
 		    (m_selectedStaff->getId(), m_clickedElement->event(),
@@ -1288,9 +1288,13 @@ void NotationSelector::setViewCurrentSelection(bool preview)
 {
     EventSelection *selection = getSelection();
     
-    if (m_selectionToMerge && selection &&
-	m_selectionToMerge->getSegment() == selection->getSegment()) {
-	selection->addFromSelection(m_selectionToMerge);
+    if (m_selectionToMerge) {
+	if (selection &&
+	    m_selectionToMerge->getSegment() == selection->getSegment()) {
+	    selection->addFromSelection(m_selectionToMerge);
+	} else {
+	    return; 
+	}
     }
 
     m_nParentView->setCurrentSelection(selection, preview, true);

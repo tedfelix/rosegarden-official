@@ -36,6 +36,7 @@
 #include "colours.h"
 #include "notestyle.h"
 #include "widgets.h"
+#include "notefont.h"
 
 #include "Event.h"
 #include "Segment.h"
@@ -111,7 +112,7 @@ NotationStaff::changeFont(string fontName, int size)
     delete m_notePixmapFactory;
     m_notePixmapFactory = new NotePixmapFactory(fontName, size);
 
-    std::vector<int> sizes = NotePixmapFactory::getAvailableSizes(fontName);
+    std::vector<int> sizes = NoteFontFactory::getScreenSizes(fontName);
     int graceSize = size;
     for (unsigned int i = 0; i < sizes.size(); ++i) {
 	if (sizes[i] == size) break;

@@ -48,6 +48,7 @@
 #include "temporuler.h"
 #include "rawnoteruler.h"
 #include "notationhlayout.h"
+#include "notefont.h"
 #include "eventfilter.h"
 
 #include "ktmpstatusmsg.h"
@@ -201,7 +202,7 @@ NotationView::slotChangeFont(const QString &newName)
 void
 NotationView::slotChangeFont(std::string newName)
 {
-    slotChangeFont(newName, NotePixmapFactory::getDefaultSize(newName));
+    slotChangeFont(newName, NoteFontFactory::getDefaultSize(newName));
 }
 
 
@@ -215,7 +216,7 @@ NotationView::slotChangeFontSize(int newSize)
 void
 NotationView::slotChangeFontSizeFromIndex(int n)
 {
-    std::vector<int> sizes = NotePixmapFactory::getAvailableSizes(m_fontName);
+    std::vector<int> sizes = NoteFontFactory::getScreenSizes(m_fontName);
     if (n >= (int)sizes.size()) n = sizes.size()-1;
     slotChangeFont(m_fontName, sizes[n]);
 }
@@ -243,7 +244,7 @@ NotationView::slotChangeFont(std::string newName, int newSize)
 
     // update the various GUI elements
 
-    std::set<std::string> fs(NotePixmapFactory::getAvailableFontNames());
+    std::set<std::string> fs(NoteFontFactory::getFontNames());
     std::vector<std::string> f(fs.begin(), fs.end());
     std::sort(f.begin(), f.end());
 
@@ -264,7 +265,7 @@ NotationView::slotChangeFont(std::string newName, int newSize)
 
     NOTATION_DEBUG << "about to reinitialise sizes" << endl;
 
-    std::vector<int> sizes = NotePixmapFactory::getAvailableSizes(m_fontName);
+    std::vector<int> sizes = NoteFontFactory::getScreenSizes(m_fontName);
     m_fontSizeSlider->reinitialise(sizes, m_fontSize);
     setupFontSizeMenu(oldName);
 
