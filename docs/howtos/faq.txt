@@ -110,8 +110,7 @@ If the build fails with something like:
 then you've come across our aRts build dependency problem.
 Until we get around to fixing it the workaround is to:
 
-  $ cd rosegarden/sound
-  $ make MidiArts.h
+  $ ( cd sound ; make MidiArts.h )
 
 and then continue with the build as normal.
 
