@@ -270,15 +270,17 @@ RosegardenTransportDialog::displayBarTime(int bar, int beat, int unit)
     m_unitMinutes = ( bar ) % 10;
     m_tenMinutes = ( bar / 10 ) % 10;
     
-    if (m_tenMinutes == 0) {
-	m_tenMinutes = -1;
-    }
-
     m_unitHours = ( bar / 100 ) % 10;
     m_tenHours = ( bar / 1000 ) % 10;
     
     if (m_tenHours == 0) {
 	m_tenHours = -1;
+	if (m_unitHours == 0) {
+	    m_unitHours = -1;
+	    if (m_tenMinutes == 0) {
+		m_tenMinutes = -1;
+	    }
+	}
     }
 
     updateTimeDisplay();
