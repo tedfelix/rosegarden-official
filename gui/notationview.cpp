@@ -59,6 +59,7 @@
 #include "studiocontrol.h"
 #include "notationhlayout.h"
 #include "notationvlayout.h"
+#include "sequencemanager.h"
 
 #include "qcanvassimplesprite.h"
 #include "ktmpstatusmsg.h"
@@ -553,6 +554,11 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 NotationView::~NotationView()
 {
     NOTATION_DEBUG << "-> ~NotationView()\n";
+
+    // Give the sequencer something to suck on while we close
+    //
+    m_document->getSequenceManager()->
+        setTemporarySequencerSliceSize(Rosegarden::RealTime(2, 0));
 
     slotSaveOptions();
 

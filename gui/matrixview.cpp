@@ -70,6 +70,7 @@
 #include "notepixmapfactory.h"
 #include "controlruler.h"
 #include "studiocontrol.h"
+#include "sequencemanager.h"
 
 #include "rosedebug.h"
 
@@ -317,6 +318,11 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
 MatrixView::~MatrixView()
 {
+    // Give the sequencer something to suck on while we close
+    //
+    m_document->getSequenceManager()->
+        setTemporarySequencerSliceSize(Rosegarden::RealTime(2, 0));
+
     slotSaveOptions();
 
     delete m_currentEventSelection;

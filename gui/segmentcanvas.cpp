@@ -952,25 +952,49 @@ void SegmentCanvas::contentsMousePressEvent(QMouseEvent* e)
                                              Rosegarden::Segment::Audio)
             {
                 m_editMenu->clear();
-                m_editMenu->insertItem(i18n("Edit Audio"),
-                                       this, SLOT(slotOnEditAudio()));
-                m_editMenu->insertItem(i18n("AutoSplit Audio"),
-                                       this, SLOT(slotOnAutoSplitAudio()));
+                m_editMenu->insertItem(i18n("Edit Audio"), 0);
+                m_editMenu->insertItem(i18n("AutoSplit Audio"), 1);
+
+                switch(m_editMenu->exec(QCursor::pos()))
+                {
+                    case 0:
+                        emit editSegmentAudio(m_currentItem->getSegment());
+                        break;
+
+                    case 1:
+                        emit audioSegmentAutoSplit(m_currentItem->getSegment());
+                        break;
+
+                    default:
+                        // do nothing
+                        break;
+                }
+
             }
             else
             {
                 m_editMenu->clear();
-                m_editMenu->insertItem(i18n("Edit as Notation"),
-                                       this, SLOT(slotOnEditNotation()));
+                m_editMenu->insertItem(i18n("Edit as Notation"), 0);
+                m_editMenu->insertItem(i18n("Edit as Matrix"), 1);
+                m_editMenu->insertItem(i18n("Edit as Event List"), 2);
 
-                m_editMenu->insertItem(i18n("Edit as Matrix"),
-                                       this, SLOT(slotOnEditMatrix()));
+                switch(m_editMenu->exec(QCursor::pos()))
+                {
+                    case 0:
+                        emit editSegmentNotation(m_currentItem->getSegment());
+                        break;
+                    case 1:
+                        emit editSegmentMatrix(m_currentItem->getSegment());
+                        break;
+                    case 2:
+                        emit editSegmentEventList(m_currentItem->getSegment());
+                        break;
 
-                m_editMenu->insertItem(i18n("Edit as Event List"),
-                                       this, SLOT(slotOnEditEventList()));
+                    default:
+                        // do nothing
+                        break;
+                }
             }
-
-            m_editMenu->exec(QCursor::pos());
         }
     }
 }
@@ -1096,34 +1120,6 @@ void SegmentCanvas::deleteRecordingSegmentItem()
 	m_recordingSegment = 0;
         canvas()->update();
     }
-}
-
-
-
-void SegmentCanvas::slotOnEditNotation()
-{
-    emit editSegmentNotation(m_currentItem->getSegment());
-}
-
-void SegmentCanvas::slotOnEditMatrix()
-{
-    emit editSegmentMatrix(m_currentItem->getSegment());
-}
-
-void SegmentCanvas::slotOnEditAudio()
-{
-    emit editSegmentAudio(m_currentItem->getSegment());
-}
-
-void SegmentCanvas::slotOnAutoSplitAudio()
-{
-    emit audioSegmentAutoSplit(m_currentItem->getSegment());
-}
-
-
-void SegmentCanvas::slotOnEditEventList()
-{
-    emit editSegmentEventList(m_currentItem->getSegment());
 }
 
 

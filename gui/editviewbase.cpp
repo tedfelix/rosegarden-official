@@ -42,7 +42,6 @@
 #include "multiviewcommandhistory.h"
 #include "ktmpstatusmsg.h"
 #include "barbuttons.h"
-#include "sequencemanager.h"
 
 #include "rosedebug.h"
 
@@ -98,11 +97,6 @@ EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
 
 EditViewBase::~EditViewBase()
 {
-    // Give the sequencer 1s fill time while we're destructing
-    //
-    m_document->getSequenceManager()->
-                setTemporarySequencerSliceSize(Rosegarden::RealTime(1, 0));
-
     getCommandHistory()->detachView(actionCollection());
     m_viewNumberPool.erase(m_viewNumber);
     slotSaveOptions();

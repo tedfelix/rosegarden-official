@@ -1855,10 +1855,15 @@ SequenceManager::setSequencerSliceSize(const RealTime &time)
         SEQMAN_DEBUG << "set sequencer slice = " << msecs
                      << "ms" << endl;
 
-        // Spin until the sequencer has got the next slice
+        // Spin until the sequencer has got the next slice - we only
+        // do this if we're at the top loop level (otherwise DCOP
+        // events don't get processed)
         //
-        while (m_sliceFetched == false)
-            kapp->processEvents();
+        if (kapp->loopLevel() > 1)
+            SEQMAN_DEBUG << "can't wait for slice fetch" << endl;
+        else
+            while (m_sliceFetched == false) kapp->processEvents();
+
     }
 }
 
@@ -1910,10 +1915,13 @@ SequenceManager::setTemporarySequencerSliceSize(const RealTime &time)
         SEQMAN_DEBUG << "set temporary sequencer slice = " << msecs
                      << "ms" << endl;
 
-        // Spin until the sequencer has got the next slice
+        // Spin until the sequencer has got the next slice - only do
+        // this if we're being called from the top loop level.
         //
-        while (m_sliceFetched == false)
-            kapp->processEvents();
+        if (kapp->loopLevel() > 1)
+            SEQMAN_DEBUG << "can't wait for slice fetch" << endl;
+        else
+            while (m_sliceFetched == false) kapp->processEvents();
     }
 }
 

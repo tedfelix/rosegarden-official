@@ -46,6 +46,7 @@
 #include "dialogs.h"
 #include "editcommands.h"
 #include "matrixtool.h"
+#include "sequencemanager.h"
 
 #include "Segment.h"
 #include "SegmentPerformanceHelper.h"
@@ -209,6 +210,10 @@ EventView::EventView(RosegardenGUIDoc *doc,
 
 EventView::~EventView()
 {
+    // Give the sequencer something to suck on while we close
+    //
+    m_document->getSequenceManager()->
+        setTemporarySequencerSliceSize(Rosegarden::RealTime(2, 0));
 }
 
 bool

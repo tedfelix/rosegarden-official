@@ -365,35 +365,6 @@ protected:
     virtual void contentsMouseMoveEvent(QMouseEvent*);
     virtual void contentsMouseDoubleClickEvent(QMouseEvent*);
 
-protected slots:
-
-    /**
-     * connected to the 'Edit as Notation' items of the RMB popup menu -
-     * re-emits slotEditSegmentNotation(Segment*)
-     */
-    void slotOnEditNotation();
-
-    /**
-     * connected to the 'Edit as Matrix' items of the RMB popup
-     * menu - re-emits slotEditSegmentMatrix(Segment*)
-     */
-    void slotOnEditMatrix();
-
-    /**
-     * connected to the 'Edit Audio' item of the RMB popup
-     */
-    void slotOnEditAudio();
-
-    /**
-     * AutoSplit audio segment
-     */ 
-    void slotOnAutoSplitAudio();
-
-    /*
-     * pop-up an event list
-     */
-    void slotOnEditEventList();
-
 signals:
     void editSegment(Rosegarden::Segment*); // use default editor
     void editSegmentNotation(Rosegarden::Segment*);
