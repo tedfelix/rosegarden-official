@@ -39,6 +39,7 @@
 #include "Segment.h"
 #include "SegmentPerformanceHelper.h"
 #include "BaseProperties.h"
+#include "dialogs.h"
 
 
 using Rosegarden::Int;
@@ -48,7 +49,8 @@ EventView::EventView(RosegardenGUIDoc *doc,
                      std::vector<Rosegarden::Segment *> segments,
                      QWidget *parent):
     EditViewBase(doc, segments, 2, parent, "eventview"),
-    m_eventFilter(Note|Text|SysEx|Controller|ProgramChange|Rest)
+    m_eventFilter(Note|Text|SysEx|Controller|ProgramChange|Rest),
+    m_doc(doc)
 {
 
     readOptions();
@@ -84,7 +86,7 @@ EventView::EventView(RosegardenGUIDoc *doc,
 
     m_sysExFilter->setToggleButton(true);
     connect(m_sysExFilter, SIGNAL(toggled(bool)),
-            SLOT(slotSetSysExFilter(bool)));
+            SLOT(slotSysExFilter(bool)));
 
     m_textFilter->setToggleButton(true);
     connect(m_textFilter, SIGNAL(toggled(bool)),
@@ -107,6 +109,11 @@ EventView::EventView(RosegardenGUIDoc *doc,
     {
         setCaption(i18n("Event List"));
     }
+
+    // Connect double clicker
+    //
+    connect(m_eventList, SIGNAL(doubleClicked(QListViewItem*)),
+            SLOT(slotPopupEventEditor(QListViewItem*)));
 
     m_eventList->setAllColumnsShowFocus(true);
     m_eventList->setSelectionMode(QListView::Single);
@@ -178,10 +185,11 @@ EventView::applyLayout(int /*staffNo*/)
 		durationStr = QString("%1  ").arg((*it)->getDuration());
 	    }
 
-            new QListViewItem(m_eventList,
-                              QString("%1  ").arg(eventTime),
-			      durationStr,
-			      strtoqstr((*it)->getType()) + "  ",
+            new EventViewItem(m_segments[i],
+                              m_eventList,
+                              QString("%1").arg(eventTime),
+                              QString("%1").arg((*it)->getDuration()),
+                              QString((*it)->getType().c_str()),
                               pitchStr,
                               velyStr,
 			      "",
@@ -207,10 +215,11 @@ EventView::applyLayout(int /*staffNo*/)
 }
 
 void
-EventView::refreshSegment(Rosegarden::Segment *segment,
-                          Rosegarden::timeT startTime,
-                          Rosegarden::timeT endTime)
+EventView::refreshSegment(Rosegarden::Segment * /*segment*/,
+                          Rosegarden::timeT /*startTime*/,
+                          Rosegarden::timeT /*endTime*/)
 {
+    applyLayout(0);
 }
 
 void
@@ -375,4 +384,56 @@ EventView::setButtonsToFilter()
         m_restFilter->setOn(false);
 
 }
+
+void
+EventView::slotPopupEventEditor(QListViewItem *item)
+{
+    Rosegarden::Composition &comp = m_doc->getComposition();
+
+    EventViewItem *eItem = dynamic_cast<EventViewItem*>(item);
+
+    if (eItem)
+    {
+        // For the moment just get one event
+        //
+        Rosegarden::Segment::iterator it = eItem->getSegment()->
+            findTime(eItem->text(0).toInt());
+
+        while (it != eItem->getSegment()->end())
+        {
+            // if types don't match then return
+            if ((*it)->getType() != std::string(eItem->text(2).data()))
+                continue;
+
+            // try to match durations
+            if ((*it)->getDuration() != eItem->text(1).toInt())
+                continue;
+
+            if((*it)->isa(Rosegarden::Note::EventRestType))
+            {
+                break;
+            }
+
+            if((*it)->isa(Rosegarden::Note::EventType))
+            {
+                // check pitch and velocity
+                break;
+            }
+
+
+            it++;
+            if ((*it)->getAbsoluteTime() > eItem->text(0).toInt())
+            {
+                std::cerr << "EventView::slotPopupEventEditor - "
+                          << "couldn't find event" << std::endl;
+                return;
+            }
+        }
+
+        cout << "FOUND " << eItem->text(2) << " at " << eItem->text(0)
+             << endl;
+
+    }
+}
+
 

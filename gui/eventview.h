@@ -29,12 +29,60 @@
 
 
 #include <vector>
+#include <qlistview.h>
 
 #include "editviewbase.h"
 
 class RosegardenGUIDoc;
 class KListView;
 class QPushButton;
+
+
+// EventView specialisation of a QListViewItem with the
+// addition of a segment pointer
+//
+class EventViewItem : public QListViewItem
+{
+public:
+    EventViewItem(Rosegarden::Segment *segment,
+                  QListView *parent):QListViewItem(parent),
+                                     m_segment(segment) {;}
+
+    EventViewItem(Rosegarden::Segment *segment,
+                  QListViewItem *parent):QListViewItem(parent),
+                                         m_segment(segment) {;}
+
+    EventViewItem(Rosegarden::Segment *segment,
+                  QListView *parent, QString label1,
+                  QString label2 = QString::null,
+                  QString label3 = QString::null,
+                  QString label4 = QString::null,
+                  QString label5 = QString::null,
+                  QString label6 = QString::null,
+                  QString label7 = QString::null,
+                  QString label8 = QString::null)
+        :QListViewItem(parent, label1, label2, label3, label4,
+                       label5, label6, label7, label8), m_segment(segment) {;}
+
+    EventViewItem(Rosegarden::Segment *segment,
+                  QListViewItem *parent, QString label1,
+                  QString label2 = QString::null,
+                  QString label3 = QString::null,
+                  QString label4 = QString::null,
+                  QString label5 = QString::null,
+                  QString label6 = QString::null,
+                  QString label7 = QString::null,
+                  QString label8 = QString::null)
+        :QListViewItem(parent, label1, label2, label3, label4,
+                       label5, label6, label7, label8), m_segment(segment) {;}
+
+    void setSegment(Rosegarden::Segment *segment) { m_segment = segment; }
+    Rosegarden::Segment* getSegment() { return m_segment; }
+
+protected:
+
+    Rosegarden::Segment *m_segment;
+};
 
 class EventView : public EditViewBase
 {
@@ -87,7 +135,12 @@ public slots:
     void slotTextFilter(bool);
     void slotRestFilter(bool);
 
+    // on double click on the event list
+    //
+    void slotPopupEventEditor(QListViewItem*);
+
 protected slots:
+
     virtual void slotSaveOptions();
 
 protected:
@@ -105,7 +158,9 @@ protected:
     QPushButton *m_controllerFilter;
     QPushButton *m_restFilter;
 
+    RosegardenGUIDoc *m_doc;
     static const char* const LayoutConfigGroupName;
+
 };
 
 #endif
