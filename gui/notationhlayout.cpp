@@ -238,11 +238,17 @@ NotationHLayout::preparse(const Track::BarPositionList &barPositions,
 		
 		    // either we're not in a chord or the chord is about
 		    // to end: update shortest data accordingly
-
-		    int d = el->event()->get<Int>
-			(Quantizer::NoteDurationProperty);
+		    
+		    int d = 0;
+		    try {
+			d = el->event()->get<Int>
+			    (Quantizer::NoteDurationProperty);
+		    } catch (Event::NoData e) {
+			kdDebug(KDEBUG_AREA) << "No quantized duration in note/rest! event is " << *(el->event()) << endl;
+		    }
 
 		    int sd = 0;
+		    try {
 		    if (shortest == m_notationElements.end() ||
 			d <= (sd = (*shortest)->event()->get<Int>
 			      (Quantizer::NoteDurationProperty))) {
@@ -252,6 +258,9 @@ NotationHLayout::preparse(const Track::BarPositionList &barPositions,
 			    shortest = it;
 			    shortCount = 1;
 			}
+		    }
+		    } catch (Event::NoData e) {
+			kdDebug(KDEBUG_AREA) << "No quantized duration in shortest! event is " << *((*shortest)->event()) << endl;
 		    }
 		}
 	    }

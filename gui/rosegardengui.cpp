@@ -96,11 +96,11 @@ void RosegardenGUIApp::setupActions()
     KStdAction::close (this, SLOT(fileClose()),         actionCollection());
     KStdAction::print (this, SLOT(filePrint()),         actionCollection());
 
-    new KAction(i18n("Import MIDI file"), 0, 0, this,
+    new KAction(i18n("Import MIDI file..."), 0, 0, this,
                 SLOT(importMIDI()), actionCollection(),
                 "file_import_midi");
 
-    new KAction(i18n("Import Rosegarden 2.1 file"), 0, 0, this,
+    new KAction(i18n("Import Rosegarden 2.1 file..."), 0, 0, this,
                 SLOT(importRG21()), actionCollection(),
                 "file_import_rg21");
 

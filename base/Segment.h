@@ -25,7 +25,7 @@
 #include <string>
 
 #include "Event.h"
-#include "NotationTypes.h" // for TimeSignature
+#include "NotationTypes.h"
 
 namespace Rosegarden 
 {
@@ -53,6 +53,7 @@ namespace Rosegarden
  */
 
 class TrackObserver;
+class Quantizer;
 
 class Track : public std::multiset<Event*, Event::EventCmp>
 {
@@ -60,10 +61,6 @@ public:
     Track(unsigned int nbTimeSteps = 0, timeT startIdx = 0,
           unsigned int stepsPerBar = 384);
     ~Track();
-
-    
-    //!!! store a quantizer here that other stuff can use too?
-
 
 
     struct BarPosition
@@ -94,8 +91,7 @@ public:
     static const PropertyName BeamedGroupIdPropertyName;
     static const PropertyName BeamedGroupTypePropertyName;
 
-
-    timeT getStartIndex() const         { return m_startIdx; }
+    timeT getStartIndex() const { return m_startIdx; }
     void  setStartIndex(timeT i);
 
     unsigned int getInstrument() const         { return m_instrument; }
@@ -324,6 +320,8 @@ protected:
 
     typedef std::set<TrackObserver *> ObserverSet;
     ObserverSet m_observers;
+
+    Quantizer *m_quantizer;
 
     void notifyAdd(Event *);
     void notifyRemove(Event *);

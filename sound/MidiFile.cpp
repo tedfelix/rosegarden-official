@@ -36,7 +36,7 @@ using std::cout;
 using std::endl;
 using std::ios;
 
-MidiFile::MidiFile():_filename("unamed.mid"),
+MidiFile::MidiFile():_filename("unnamed.mid"),
                      _timingDivision(0),
                      _format(MIDI_FILE_NOT_LOADED),
                      _numberOfTracks(0),

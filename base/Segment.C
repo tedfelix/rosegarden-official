@@ -39,7 +39,8 @@ Track::Track(unsigned int nbTimeSteps, timeT startIdx,
     : std::multiset<Event*, Event::EventCmp>(),
     m_startIdx(startIdx),
     m_instrument(0),
-    m_groupId(0)
+    m_groupId(0),
+    m_quantizer(new Quantizer())
 {
     unsigned int initialTime = m_startIdx;
     
@@ -64,6 +65,8 @@ Track::~Track()
     // delete content
     for (iterator it = begin(); it != end(); ++it)
          delete (*it);
+
+    delete m_quantizer;
 }
 
 
@@ -91,8 +94,10 @@ TimeSignature Track::getTimeSigAtEnd(timeT &absTimeOfSig) const
 
     const_reverse_iterator sig = std::find_if(rbegin(), rend(), isTimeSig);
 
-    if (sig != rend() ||
-        ((*sig) && (*sig)->isa(TimeSignature::EventType))) {
+//    if (sig != rend() ||
+//        ((*sig) && (*sig)->isa(TimeSignature::EventType))) {
+    if (sig != rend()) {
+	assert((*sig)->isa(TimeSignature::EventType));
         absTimeOfSig = (*sig)->getAbsoluteTime();
 	timesig = TimeSignature(*(*sig));
     }
@@ -106,6 +111,7 @@ TimeSignature Track::getTimeSigAtEnd(timeT &absTimeOfSig) const
 unsigned int Track::getDuration() const
 {
     const_iterator lastEl = end();
+    if (lastEl == begin()) return 0;
     --lastEl;
     return ((*lastEl)->getAbsoluteTime() +
 	    (*lastEl)->getDuration());
@@ -188,7 +194,6 @@ void Track::setDuration(unsigned int d)
 void Track::calculateBarPositions()
 {
     TimeSignature timeSignature;
-    Quantizer quantizer;
 
     m_barPositions.clear();
 
@@ -224,7 +229,7 @@ void Track::calculateBarPositions()
         } else if (e->isa(Note::EventType) || e->isa(Note::EventRestType)) {
 
             bool hasDuration = true;
-            timeT d = quantizer.quantizeByNote(e);
+            timeT d = m_quantizer->quantizeByNote(e);
 
             if (e->isa(Note::EventType)) {
                 iterator i0(i);
@@ -463,10 +468,9 @@ Track::iterator Track::findContiguousPrevious(Track::iterator el)
 bool Track::canCollapse(Track::iterator a, Track::iterator b)
 {
     time_t durationMax, durationMin;
-    Quantizer q;
     
-    timeT ad = q.getQuantizedNoteDuration(*a);
-    timeT bd = q.getQuantizedNoteDuration(*b);
+    timeT ad = m_quantizer->getQuantizedNoteDuration(*a);
+    timeT bd = m_quantizer->getQuantizedNoteDuration(*b);
     
     if (ad > bd) {
         durationMax = ad;

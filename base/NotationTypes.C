@@ -738,6 +738,20 @@ void TimeSignature::getDurationListForInterval(DurationList &dlist,
     if (duration > acc) {
         getDurationListForShortInterval(dlist, duration - acc, 0);
     }
+
+    // Testing:
+    int d = 0;
+    for (DurationList::iterator di = dlist.begin(); di != dlist.end(); ++di) {
+	d += *di;
+    }
+    if (d != duration) {
+	cerr << "ERROR: TimeSignature::getDurationListForInterval: returned duration list sums to incorrect total:" << endl << "Desired duration is " << duration << ", returned duration list is: " << endl;
+	for (DurationList::iterator di = dlist.begin(); di != dlist.end(); ++di) {
+	    cerr << "-=> " << *di << endl;
+	}
+	cerr << "(end)" << endl;
+	assert(0);
+    }
 }
 
 
