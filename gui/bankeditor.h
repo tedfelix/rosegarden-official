@@ -36,6 +36,7 @@
 #include "Device.h"
 #include "Instrument.h"
 #include "MidiProgram.h"
+#include "Studio.h"
 
 class KComboBox;
 class QButtonGroup;
@@ -50,8 +51,6 @@ class KCommand;
 class BankEditorDialog;
 class KListView;
 class KLineEdit;
-
-namespace Rosegarden { class Studio; class MidiDevice; }
 
 class MidiDeviceListViewItem : public QListViewItem
 {
@@ -345,6 +344,9 @@ protected:
     QButtonGroup        *m_buttonGroup;
     KComboBox           *m_fromCombo;
     KComboBox           *m_toCombo;
+
+    Rosegarden::DeviceList m_devices;
+    Rosegarden::InstrumentList m_instruments;
 };
 
 // --------------------- ImportDeviceDialog --------------------------

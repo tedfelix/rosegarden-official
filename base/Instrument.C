@@ -224,6 +224,16 @@ Instrument::~Instrument()
 {
 }
 
+std::string
+Instrument::getPresentationName() const
+{
+    if (m_type == Audio || !m_device) {
+	return m_name;
+    } else {
+	return m_device->getName() + " " + m_name;
+    }
+}
+
 void
 Instrument::setProgramChange(MidiByte program)
 {

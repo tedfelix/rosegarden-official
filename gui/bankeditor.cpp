@@ -2267,20 +2267,6 @@ RemapInstrumentDialog::RemapInstrumentDialog(QWidget *parent,
     m_fromCombo = new KComboBox(groupBox);
     m_toCombo = new KComboBox(groupBox);
 
-    /*
-    QGridLayout *gridLayout = new QGridLayout(frame,
-                                              2,  // rows
-                                              2,  // cols
-                                              2); // margin
-    m_fromCombo = new RosegardenComboBox(true, frame);
-    m_toCombo = new RosegardenComboBox(true, frame);
-
-    gridLayout->addWidget(new QLabel(i18n("From:"), frame), 0, 0, AlignLeft);
-    gridLayout->addWidget(new QLabel(i18n("To:"), frame), 0, 1, AlignLeft);
-    gridLayout->addWidget(m_fromCombo, 1, 0, AlignLeft);
-    gridLayout->addWidget(m_toCombo, 1, 1, AlignLeft);
-    */
-
     m_buttonGroup->setButton(0);
     populateCombo(0);
 }
@@ -2296,14 +2282,22 @@ RemapInstrumentDialog::populateCombo(int id)
     {
         Rosegarden::DeviceList *devices = studio->getDevices();
         Rosegarden::DeviceListIterator it;
+	m_devices.clear();
 
         for (it = devices->begin(); it != devices->end(); it++)
         {
-            m_fromCombo->insertItem(strtoqstr((*it)->getName()));
-            m_toCombo->insertItem(strtoqstr((*it)->getName()));
+	    Rosegarden::MidiDevice *md =
+		dynamic_cast<Rosegarden::MidiDevice *>(*it);
+
+	    if (md && md->getDirection() == Rosegarden::MidiDevice::Play)
+	    {
+		m_devices.push_back(*it);
+		m_fromCombo->insertItem(strtoqstr((*it)->getName()));
+		m_toCombo->insertItem(strtoqstr((*it)->getName()));
+	    }
         }
 
-        if (devices->size() == 0)
+        if (m_devices.size() == 0)
         {
             m_fromCombo->insertItem(i18n("<no devices>"));
             m_toCombo->insertItem(i18n("<no devices>"));
@@ -2311,23 +2305,15 @@ RemapInstrumentDialog::populateCombo(int id)
     }
     else 
     {
-        //Rosegarden::DeviceList *devices = studio->getDevices();
-        Rosegarden::InstrumentList list = studio->getPresentationInstruments();
-        Rosegarden::InstrumentList::iterator it = list.begin();
+        m_instruments = studio->getPresentationInstruments();
+        Rosegarden::InstrumentList::iterator it = m_instruments.begin();
 
-        for (; it != list.end(); it++)
+        for (; it != m_instruments.end(); it++)
         {
-            m_fromCombo->insertItem(strtoqstr((*it)->getName()));
-            m_toCombo->insertItem(strtoqstr((*it)->getName()));
+            m_fromCombo->insertItem(strtoqstr((*it)->getPresentationName()));
+            m_toCombo->insertItem(strtoqstr((*it)->getPresentationName()));
         }
     }
-
-    /*
-    for (int i = 0; m_fromCombo->count(); i++)
-    {
-    }
-    */
-
 }
 
 
@@ -2350,18 +2336,19 @@ RemapInstrumentDialog::slotApply()
     if (m_buttonGroup->id(m_buttonGroup->selected()) == 0) // devices
     {
         ModifyDeviceMappingCommand *command =
-            new ModifyDeviceMappingCommand(m_doc,
-                                           m_fromCombo->currentItem(),
-                                           m_toCombo->currentItem());
+            new ModifyDeviceMappingCommand
+	    (m_doc,
+	     m_devices[m_fromCombo->currentItem()]->getId(),
+	     m_devices[m_toCombo->currentItem()]->getId());
         addCommandToHistory(command);
     }
     else // instruments
     {
         ModifyInstrumentMappingCommand *command =
-            new ModifyInstrumentMappingCommand(m_doc,
-                                               m_fromCombo->currentItem(),
-                                               m_toCombo->currentItem());
-
+            new ModifyInstrumentMappingCommand
+	    (m_doc,
+	     m_instruments[m_fromCombo->currentItem()]->getId(),
+	     m_instruments[m_toCombo->currentItem()]->getId());
         addCommandToHistory(command);
     }
 

@@ -207,7 +207,7 @@ ChordNameRuler::recalculate()
 
 	regetSegments = true;
 
-    } else {
+    } else if (m_regetSegmentsOnChange) {
 
 	Rosegarden::RefreshStatus &rs =
 	    m_composition->getRefreshStatus(m_compositionRefreshStatusId);

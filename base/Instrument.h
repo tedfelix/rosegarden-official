@@ -84,6 +84,7 @@ public:
     ~Instrument();
 
     std::string getName() const { return m_name; }
+    std::string getPresentationName() const;
 
     void setId(int id) { m_id = id; }
     InstrumentId getId() const { return m_id; }

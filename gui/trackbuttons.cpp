@@ -248,7 +248,8 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
     Rosegarden::Instrument *ins =
         m_doc->getStudio().getInstrumentById(track->getInstrument());
 
-    QString instrumentName(getPresentationName(ins));
+    QString instrumentName(i18n("<no instrument>"));
+    if (ins) instrumentName = strtoqstr(ins->getPresentationName());
 
     // Set label to program change if it's being sent
     //
@@ -279,18 +280,6 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
     return trackHBox;
 }
 
-QString
-TrackButtons::getPresentationName(Rosegarden::Instrument *instr)
-{
-    if (!instr) {
-	return i18n("<no instrument>");
-    } else if (instr->getType() == Rosegarden::Instrument::Audio) {
-	return strtoqstr(instr->getName());
-    } else {
-	return strtoqstr(instr->getDevice()->getName() + " " + 
-			 instr->getName());
-    }
-}
 
 void TrackButtons::setButtonMapping(QObject* obj, Rosegarden::TrackId trackId)
 {
@@ -350,7 +339,8 @@ TrackButtons::populateButtons()
 
         if (ins)
         {
-            m_trackLabels[i]->getInstrumentLabel()->setText(getPresentationName(ins));
+            m_trackLabels[i]->getInstrumentLabel()->setText
+		(strtoqstr(ins->getPresentationName()));
             if (ins->sendsProgramChange())
             {
                 m_trackLabels[i]->setAlternativeLabel(strtoqstr(ins->getProgramName()));
@@ -675,13 +665,15 @@ TrackButtons::slotInstrumentSelection(int trackId)
 
     int position = comp.getTrackById(trackId)->getPosition();
 
-    QString instrumentName;
+    QString instrumentName = i18n("<no instrument>");
     Rosegarden::Track *track = comp.getTrackByPosition(position);
 
     Rosegarden::Instrument *instrument = 0;
-    if (track != 0)
+    if (track != 0) {
 	instrument = studio.getInstrumentById(track->getInstrument());
-    instrumentName = getPresentationName(instrument);
+	if (instrument)
+	    instrumentName = strtoqstr(instrument->getPresentationName());
+    }
 
     //
     // populate this instrument widget
@@ -758,7 +750,7 @@ TrackButtons::populateInstrumentPopup(Rosegarden::Instrument *thisTrackInstr, QP
 
         if (! (*it)) continue; // sanity check
 
-	QString iname(getPresentationName(*it));
+	QString iname(strtoqstr((*it)->getPresentationName()));
 	QString pname(strtoqstr((*it)->getProgramName()));
 	Rosegarden::Device *device = (*it)->getDevice();
         Rosegarden::DeviceId devId = device->getId();
@@ -872,7 +864,7 @@ TrackButtons::slotInstrumentPopupActivated(int item)
             emit instrumentSelected((int)inst->getId());
 
             m_trackLabels[m_popupItem]->getInstrumentLabel()->
-                    setText(getPresentationName(inst));
+		setText(strtoqstr(inst->getPresentationName()));
 
             // reset the alternative label
             m_trackLabels[m_popupItem]->clearAlternativeLabel();
@@ -937,7 +929,6 @@ TrackButtons::slotSynchroniseWithComposition()
     Rosegarden::Composition &comp = m_doc->getComposition();
     Rosegarden::Studio &studio = m_doc->getStudio();
     Rosegarden::Track *track;
-    QString instrumentName;
 
     for (int i = 0; i < (int)m_tracks; i++)
     {
@@ -955,7 +946,8 @@ TrackButtons::slotSynchroniseWithComposition()
             Rosegarden::Instrument *ins = studio.
                 getInstrumentById(track->getInstrument());
 
-	    instrumentName = getPresentationName(ins);
+	    QString instrumentName(i18n("<no instrument>"));
+	    if (ins) instrumentName = strtoqstr(ins->getPresentationName());
 
             m_trackLabels[i]->getInstrumentLabel()->setText(instrumentName);
         }

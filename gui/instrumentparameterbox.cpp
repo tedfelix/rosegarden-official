@@ -1103,21 +1103,6 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     m_variationValue->setCurrentItem(-1);
 }
 
-//!!! dup with trackbuttons.cpp
-static QString
-getPresentationName(Instrument *instr)
-{
-    if (!instr) {
-	return i18n("<no instrument>");
-    } else if (instr->getType() == Instrument::Audio) {
-	return strtoqstr(instr->getName());
-    } else {
-	return strtoqstr(instr->getDevice()->getName() + " " + 
-			 instr->getName());
-    }
-}
-
-
 void
 MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
 {
@@ -1133,7 +1118,7 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
 
     // Set instrument name
     //
-    m_instrumentLabel->setText(getPresentationName(instrument));
+    m_instrumentLabel->setText(strtoqstr(instrument->getPresentationName()));
 
     // Set Studio Device name
     //

@@ -130,6 +130,11 @@ void SequenceManager::setDocument(RosegardenGUIDoc* doc)
         connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),
                 this, SLOT(update()));
 
+	for (Rosegarden::Composition::iterator i = m_doc->getComposition().begin();
+	     i != m_doc->getComposition().end(); ++i) {
+	    m_segments.insert(SegmentRefreshMap::value_type
+			      (*i, (*i)->getNewRefreshStatusId()));
+	}
     }
 
     resetCompositionMmapper();
@@ -1373,6 +1378,9 @@ void SequenceManager::checkRefreshStatus()
     }
     m_removedSegments.clear();
 
+    SEQMAN_DEBUG << "SequenceManager::checkRefreshStatus: we have "
+		 << m_segments.size() << " segments" << endl;
+    
     // then the ones which are still there
     for (SegmentRefreshMap::iterator i = m_segments.begin();
 	 i != m_segments.end(); ++i) {
