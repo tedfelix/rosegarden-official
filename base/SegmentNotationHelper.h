@@ -94,6 +94,61 @@ public:
 
 
     /**
+     * Returns an iterator pointing to the next contiguous element of
+     * the same type (note or rest) as the one passed as argument, if
+     * any. Returns end() otherwise.
+     *
+     * (for instance if the argument points to a note and the next
+     * element is a rest, end() will be returned)
+     *
+     * Note that if the iterator points to a note, the "contiguous"
+     * iterator returned may point to a note that follows the first
+     * one, overlaps with it, shares a starting time (i.e. they're
+     * both in the same chord) or anything else.  "Contiguous" refers
+     * only to their locations in the segment's event container,
+     * which normally means what you expect for rests but not notes.
+     * 
+     * See also SegmentNotationHelper::getNextAdjacentNote.
+     */
+    iterator findContiguousNext(iterator);
+
+    /**
+     * Returns an iterator pointing to the previous contiguous element
+     * of the same type (note or rest) as the one passed as argument,
+     * if any. Returns end() otherwise.
+     *
+     * (for instance if the argument points to a note and the previous
+     * element is a rest, end() will be returned)
+     *
+     * Note that if the iterator points to a note, the "contiguous"
+     * iterator returned may point to a note that precedes the first
+     * one, overlaps with it, shares a starting time (i.e. they're
+     * both in the same chord) or anything else.  "Contiguous" refers
+     * only to their locations in the segment's event container,
+     * which normally means what you expect for rests but not notes.
+     * 
+     * See also SegmentNotationHelper::getPreviousAdjacentNote.
+     */
+    iterator findContiguousPrevious(iterator);
+
+    /**
+     * Returns true if the iterator points at a note in a chord
+     * e.g. if there are more notes at the same absolute time
+     */
+    bool noteIsInChord(Event *note);
+
+    /**
+     * Returns an iterator pointing to the note that this one is tied
+     * with, in the forward direction if goForwards or back otherwise.
+     * Returns end() if none.
+     *
+     * Untested and probably marked-for-expiry -- prefer
+     * SegmentPerformanceHelper::getTiedNotes
+     */
+    iterator getNoteTiedWith(Event *note, bool goForwards);
+
+
+    /**
      * Checks whether it's reasonable to split a single event
      * of duration a+b into two events of durations a and b, for some
      * working definition of "reasonable".

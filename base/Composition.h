@@ -70,32 +70,16 @@ public:
      */
     timeT getDuration() const;
 
-    /**
-     * Return a quantizer that quantizes to the our most basic
-     * units (i.e. a unit quantizer whose unit is our shortest
-     * note duration).
-     */
-    const Quantizer *getBasicQuantizer() const {
-	return &m_basicQuantizer;
-    }
 
-    /**
-     * Return a quantizer that does note-quantization with the
-     * default number of dots.
-     */
-    const Quantizer *getNoteQuantizer() const {
-	return &m_noteQuantizer;
-    }
+    //////
+    //
+    // START AND END MARKERS
 
-    /**
-     * Return a quantizer that does legato-quantization with the
-     * default number of dots.
-     */
-    const Quantizer *getLegatoQuantizer() const {
-	return &m_legatoQuantizer;
-    }
+    timeT getStartMarker() const { return m_startMarker; }
+    timeT getEndMarker() const { return m_endMarker; }
 
-    void setLegatoQuantizerDuration(timeT duration);
+    void setStartMarker(const timeT &sM) { m_startMarker = sM; }
+    void setEndMarker(const timeT &eM) { m_endMarker = eM; }
 
 
 
@@ -465,18 +449,6 @@ public:
 
     //////
     //
-    // START AND END MARKERS
-
-    timeT getStartMarker() const { return m_startMarker; }
-    timeT getEndMarker() const { return m_endMarker; }
-
-    void setStartMarker(const timeT &sM) { m_startMarker = sM; }
-    void setEndMarker(const timeT &eM) { m_endMarker = eM; }
-
-
-
-    //////
-    //
     // LOOP 
 
     timeT getLoopStart() const { return m_loopStart; }
@@ -534,6 +506,39 @@ public:
     //
     static const std::string TempoEventType; 
     static const PropertyName TempoProperty; // stored in beats per hour
+
+
+    //////
+    //
+    // QUANTIZERS
+
+    /**
+     * Return a quantizer that quantizes to the our most basic
+     * units (i.e. a unit quantizer whose unit is our shortest
+     * note duration).
+     */
+    const Quantizer *getBasicQuantizer() const {
+	return &m_basicQuantizer;
+    }
+
+    /**
+     * Return a quantizer that does note-quantization with the
+     * default number of dots.
+     */
+    const Quantizer *getNoteQuantizer() const {
+	return &m_noteQuantizer;
+    }
+
+    /**
+     * Return a quantizer that does legato-quantization with the
+     * default number of dots.
+     */
+    const Quantizer *getLegatoQuantizer() const {
+	return &m_legatoQuantizer;
+    }
+
+    void setLegatoQuantizerDuration(timeT duration);
+
 
 
     //////

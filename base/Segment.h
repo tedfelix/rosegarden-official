@@ -213,6 +213,15 @@ public:
      */
     timeT getEndTime() const { return m_startTime + getDuration(); }
 
+    /**
+     * Return the end-marker time.  This is earlier than or equal
+     * to the value returned by getEndTime() (segments always expand
+     * themselves to meet their end markers).
+     */
+    timeT getEndMarkerTime() const {
+	return (m_endMarkerTime ? *m_endMarkerTime : getEndTime());
+    }
+
 
     //////
     //
@@ -325,60 +334,6 @@ public:
      * (See Composition for most of the generally useful bar methods.)
      */
     timeT getBarEndForTime(timeT t) const;
-
-    /**
-     * Returns an iterator pointing to the next contiguous element of
-     * the same type (note or rest) as the one passed as argument, if
-     * any. Returns end() otherwise.
-     *
-     * (for instance if the argument points to a note and the next
-     * element is a rest, end() will be returned)
-     *
-     * Note that if the iterator points to a note, the "contiguous"
-     * iterator returned may point to a note that follows the first
-     * one, overlaps with it, shares a starting time (i.e. they're
-     * both in the same chord) or anything else.  "Contiguous" refers
-     * only to their locations in the segment's event container,
-     * which normally means what you expect for rests but not notes.
-     * 
-     * See also SegmentNotationHelper::getNextAdjacentNote.
-     */
-    iterator findContiguousNext(iterator) const;
-
-    /**
-     * Returns an iterator pointing to the previous contiguous element
-     * of the same type (note or rest) as the one passed as argument,
-     * if any. Returns end() otherwise.
-     *
-     * (for instance if the argument points to a note and the previous
-     * element is a rest, end() will be returned)
-     *
-     * Note that if the iterator points to a note, the "contiguous"
-     * iterator returned may point to a note that precedes the first
-     * one, overlaps with it, shares a starting time (i.e. they're
-     * both in the same chord) or anything else.  "Contiguous" refers
-     * only to their locations in the segment's event container,
-     * which normally means what you expect for rests but not notes.
-     * 
-     * See also SegmentNotationHelper::getPreviousAdjacentNote.
-     */
-    iterator findContiguousPrevious(iterator) const;
-
-    /**
-     * Returns true if the iterator points at a note in a chord
-     * e.g. if there are more notes at the same absolute time
-     */
-    bool noteIsInChord(Event *note) const;
-
-    /**
-     * Returns an iterator pointing to the note that this one is tied
-     * with, in the forward direction if goForwards or back otherwise.
-     * Returns end() if none.
-     *
-     * Untested and probably marked-for-expiry -- prefer
-     * SegmentPerformanceHelper::getTiedNotes
-     */
-    iterator getNoteTiedWith(Event *note, bool goForwards) const;
 
     /**
      * Fill up the segment with rests, from the end of the last event
@@ -538,7 +493,8 @@ private:
     timeT m_startTime;
     TrackId m_track;
     SegmentType m_type;         // identifies Segment type
-    std::string m_label; // segment label
+    std::string m_label;        // segment label
+    timeT *m_endMarkerTime;     // points to end time, or zero pointer if none
 
     mutable int m_id; // not id of Segment, but a value for return by getNextId
 
@@ -581,6 +537,8 @@ public:
     // and just before it is deleted:
     virtual void eventRemoved(const Segment *, Event *) = 0;
 };
+
+
 
 // an abstract base
 

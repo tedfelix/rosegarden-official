@@ -57,7 +57,8 @@ SegmentPerformanceHelper::getTiedNotes(iterator i)
     int pitch = e->get<Int>(PITCH);
 
     for (;;) {
-        i = segment().findContiguousNext(i);
+	while (++i != end() && !(*i)->isa(Note::EventType));
+//!!!        i = segment().findContiguousNext(i);
         if (i == end()) return c;
 
         e = *i;

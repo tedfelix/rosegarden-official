@@ -170,6 +170,148 @@ SegmentNotationHelper::getPreviousAdjacentNote(iterator i,
 }
 
 
+Segment::iterator
+SegmentNotationHelper::findContiguousNext(iterator el) 
+{
+    std::string elType = (*el)->getType(),
+        reject, accept;
+     
+    if (elType == Note::EventType) {
+        accept = Note::EventType;
+        reject = Note::EventRestType;
+    } else if (elType == Note::EventRestType) {
+        accept = Note::EventRestType;
+        reject = Note::EventType;
+    } else {
+        accept = elType;
+        reject = "";
+    }
+
+    bool success = false;
+
+    iterator i = ++el;
+    
+    for(; i != end(); ++i) {
+        std::string iType = (*i)->getType();
+
+        if (iType == reject) {
+            success = false;
+            break;
+        }
+        if (iType == accept) {
+            success = true;
+            break;
+        }
+    }
+
+    if (success) return i;
+    else return end();
+    
+}
+
+Segment::iterator
+SegmentNotationHelper::findContiguousPrevious(iterator el)
+{
+    if (el == begin()) return end();
+
+    std::string elType = (*el)->getType(),
+        reject, accept;
+     
+    if (elType == Note::EventType) {
+        accept = Note::EventType;
+        reject = Note::EventRestType;
+    } else if (elType == Note::EventRestType) {
+        accept = Note::EventRestType;
+        reject = Note::EventType;
+    } else {
+        accept = elType;
+        reject = "";
+    }
+
+    bool success = false;
+
+    iterator i = --el;
+
+    while (true) {
+        std::string iType = (*i)->getType();
+
+        if (iType == reject) {
+            success = false;
+            break;
+        }
+        if (iType == accept) {
+            success = true;
+            break;
+        }
+	if (i == begin()) break;
+	--i;
+    }
+
+    if (success) return i;
+    else return end();
+}
+
+
+bool
+SegmentNotationHelper::noteIsInChord(Event *note)
+{
+    iterator first, second;
+    segment().getTimeSlice(note->getAbsoluteTime(), first, second);
+
+    int noteCount = 0;
+    for (iterator i = first; i != second; ++i) {
+	if ((*i)->isa(Note::EventType)) ++noteCount;
+    }
+
+    return noteCount > 1;
+}
+
+
+Segment::iterator
+SegmentNotationHelper::getNoteTiedWith(Event *note, bool forwards)
+{
+    bool tied = false;
+
+    if (!note->get<Bool>(forwards ?
+			 BaseProperties::TIED_FORWARD :
+                         BaseProperties::TIED_BACKWARD, tied) || !tied) {
+        return end();
+    }
+
+    timeT myTime = note->getAbsoluteTime();
+    timeT myDuration = note->getDuration();
+    int myPitch = note->get<Int>(BaseProperties::PITCH);
+
+    iterator i = segment().findSingle(note);
+    if (i == end()) return end();
+
+    for (;;) {
+        i = forwards ? findContiguousNext(i) : findContiguousPrevious(i);
+
+        if (i == end()) return end();
+        if ((*i)->getAbsoluteTime() == myTime) continue;
+
+        if (forwards && ((*i)->getAbsoluteTime() != myTime + myDuration)) {
+            return end();
+        }
+        if (!forwards &&
+            (((*i)->getAbsoluteTime() + (*i)->getDuration()) != myTime)) {
+            return end();
+        }
+        
+        if (!(*i)->get<Bool>(forwards ?
+                             BaseProperties::TIED_BACKWARD :
+                             BaseProperties::TIED_FORWARD, tied) || !tied) {
+            continue;
+        }
+
+        if ((*i)->get<Int>(BaseProperties::PITCH) == myPitch) return i;
+    }
+
+    return end();
+}
+
+
 bool
 SegmentNotationHelper::collapseIfValid(Event* e, bool& collapseForward)
 {
@@ -178,8 +320,8 @@ SegmentNotationHelper::collapseIfValid(Event* e, bool& collapseForward)
 
     timeT myDuration = getNotationDuration(*elPos);
 
-    iterator nextEvent = segment().findContiguousNext(elPos),
-	 previousEvent = segment().findContiguousPrevious(elPos);
+    iterator nextEvent = findContiguousNext(elPos),
+	 previousEvent = findContiguousPrevious(elPos);
 
     //!!! This method fails for notes -- fortunately it's not used for
     // notes at the moment.   (findContiguousXXX is inadequate for
@@ -503,7 +645,7 @@ SegmentNotationHelper::collapseRestsForInsert(iterator i,
     if (i == end() || !(*i)->isa(Note::EventRestType)) return i;
 
     timeT d = (*i)->getDuration();
-    iterator j = segment().findContiguousNext(i);
+    iterator j = findContiguousNext(i);
     if (d >= desiredDuration || j == end()) return i;
 
     Event *e(new Event(**i, (*i)->getAbsoluteTime(), d + (*j)->getDuration()));
@@ -759,7 +901,7 @@ SegmentNotationHelper::deleteNote(Event *e, bool collapseRest)
     iterator i = segment().findSingle(e);
     if (i == end()) return;
 
-    if (segment().noteIsInChord(e)) {
+    if (noteIsInChord(e)) {
 
 	erase(i);
 
