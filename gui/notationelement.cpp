@@ -32,6 +32,8 @@
 #include "NotationTypes.h"
 #include "Event.h"
 
+#include <kmessagebox.h>
+
 using Rosegarden::Event;
 using Rosegarden::Note;
 using Rosegarden::Int;
@@ -120,6 +122,9 @@ NotationElementList::~NotationElementList()
 void
 NotationElementList::erase(NotationElementList::iterator pos)
 {
+    kdDebug(KDEBUG_AREA) << "NotationElementList::erase() : delete "
+                         << *pos << endl;
+
     delete *pos;
     multiset<NotationElement*, NotationElementCmp>::erase(pos);
 }
@@ -138,8 +143,29 @@ NotationElementList::erase(NotationElementList::iterator from,
 void
 NotationElementList::erase(NotationElement* el)
 {
-    delete el;
-    multiset<NotationElement*, NotationElementCmp>::erase(el);
+    std::pair<iterator, iterator> interval = equal_range(el);
+
+    kdDebug(KDEBUG_AREA) << "NotationElementList::erase() : distance = "
+                         << distance(interval.first, interval.second)
+                         << endl;
+
+    bool foundIt = false;
+    
+    for(iterator i = interval.first; i != interval.second; ++i) {
+        if (*i == el) {
+            foundIt = true;
+            erase(i);
+            break;
+        }
+    }
+
+    if (!foundIt) {
+        
+        kdDebug(KDEBUG_AREA) << "NotationElementList::erase() : couldn't find element "
+                             << *el << endl;
+        KMessageBox::error(0, "NotationElementList::erase() : could't find element");
+    }
+
 }
 
 NotationElementList::iterator

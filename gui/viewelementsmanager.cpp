@@ -137,6 +137,7 @@ void ViewElementsManager::erase(NotationElementList::iterator it)
     }
     
     if (foundEvent) {
+        // delete in all ViewElement lists
         m_notationElements->erase(it);
     } else {
         kdDebug(KDEBUG_AREA) << "ViewElementsManager::erase() : couldn't find event for notation element "
@@ -148,6 +149,9 @@ void ViewElementsManager::erase(NotationElementList::iterator it)
 
 void ViewElementsManager::erase(NotationElement* el)
 {
+    kdDebug(KDEBUG_AREA) << "ViewElementsManager::erase() erasing : "
+                         << el << endl;
+    
     Rosegarden::Event* ev = el->event();
     m_notationElements->erase(el); // this will delete el
     m_track.erase(ev);
