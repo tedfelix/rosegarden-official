@@ -991,7 +991,7 @@ SequenceManager::checkSoundDriverStatus()
 //
 // 
 void
-SequenceManager::preparePlayback()
+SequenceManager::preparePlayback(bool forceProgramChanges)
 {
     Rosegarden::Studio &studio = m_doc->getStudio();
     Rosegarden::InstrumentList list = studio.getAllInstruments();
@@ -1029,14 +1029,16 @@ SequenceManager::preparePlayback()
 
             // send program change
             //
-//             if ((*it)->sendsProgramChange()) // temporary fix for 820174
-//             {
+            if ((*it)->sendsProgramChange() || forceProgramChanges)
+            {
+                RG_DEBUG << "SequenceManager::preparePlayback() : sending prg change for "
+                         << (*it)->getPresentationName().c_str() << endl;
 
                 mE = new MappedEvent((*it)->getId(),
                                      Rosegarden::MappedEvent::MidiProgramChange,
                                      (*it)->getProgramChange());
                 mC.insert(mE);
-//             }
+            }
 
         }
         else if ((*it)->getType() == Instrument::Audio)

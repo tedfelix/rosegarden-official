@@ -112,10 +112,16 @@ public:
     //
     void checkSoundDriverStatus();
 
-    // Send program changes and align Instrument lists before playback
-    // starts.
-    //
-    void preparePlayback();
+    /**
+     * Send program changes and align Instrument lists before playback
+     * starts.
+     * Also called at document loading (with arg set to true) to reset all instruments
+     * (fix for bug 820174)
+     *
+     * @arg forceProgramChanges if true, always send program changes even if the instrument is
+     * set not to send any.
+     */
+    void preparePlayback(bool forceProgramChanges = false);
 
     // Check and set sequencer status
     void setTransportStatus(const TransportStatus &status);

@@ -1040,6 +1040,10 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
     //
     m_doc->prepareAudio();
 
+    if (m_seqManager)
+        m_seqManager->preparePlayback(true);
+
+
     // If the control editor is up then repopulate
     //
     if (m_controlEditor) m_controlEditor->setDocument(m_doc);
@@ -4290,7 +4294,7 @@ RosegardenGUIApp::slotCancelAudioPlayingFile(Rosegarden::AudioFileId id)
     if (aF == 0)
         return;
 
-    Rosegarden::MappedEvent*mE(m_doc->getStudio().
+    Rosegarden::MappedEvent mE(m_doc->getStudio().
                                getAudioPreviewInstrument(),
                                Rosegarden::MappedEvent::AudioCancel,
                                id);
