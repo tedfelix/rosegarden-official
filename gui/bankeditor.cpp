@@ -83,6 +83,30 @@ MidiDeviceListViewItem::MidiDeviceListViewItem(Rosegarden::DeviceId deviceId,
 {
 }
 
+int MidiDeviceListViewItem::compare(QListViewItem *i, int col, bool ascending) const
+{
+    MidiDeviceListViewItem* item = dynamic_cast<MidiDeviceListViewItem*>(i);
+    if (!item) return QListViewItem::compare(i, col, ascending);
+    if (col == 0) return 
+	getDeviceId() >  item->getDeviceId() ? 1 :
+	getDeviceId() == item->getDeviceId() ? 0 :
+	-1;
+    
+    int thisVal = text(col).toInt(),
+        otherVal = item->text(col).toInt();
+
+    if (thisVal == otherVal) {
+        if (col == 1) // if sorting on MSB, suborder with LSB
+            return compare(i, 2, ascending);
+        else
+            return 0;
+    }
+
+    // 'ascending' should be ignored according to Qt docs
+    //
+    return (thisVal > otherVal) ? 1 : -1;
+}
+
 //--------------------------------------------------
 
 MidiBankListViewItem::MidiBankListViewItem(Rosegarden::DeviceId deviceId,
@@ -121,7 +145,10 @@ int MidiBankListViewItem::compare(QListViewItem *i, int col, bool ascending) con
 
     // 'ascending' should be ignored according to Qt docs
     //
-    return (thisVal > otherVal) ? 1 : -1;
+    return 
+	thisVal >  otherVal ? 1 :
+	thisVal == otherVal ? 0	:
+	-1;
     
 }
 
@@ -200,7 +227,7 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
     m_librarianEmail = new QLabel(groupBox);
 
     QToolTip::add(groupBox,
-                  i18n("The librarian maintains the generic Bank and Program information for this device.\nIf you've made modifications to a Bank to suit your own device it might be worth\nliasing with the librarian in order to publish your Bank information for the benefit\nof others."));
+                  i18n("The librarian maintains the generic Bank and Program information for this device.\nIf you've made modifications to a Bank to suit your own device it might be worth\nliaising with the librarian in order to publish your Bank information for the benefit\nof others."));
 
     QTabWidget* tab = new QTabWidget(this);
 
@@ -336,7 +363,7 @@ MidiProgramsEditor::populateBank(QListViewItem* item)
         return;
     }
     
-    Rosegarden::DeviceId deviceId = bankItem->getDevice();
+    Rosegarden::DeviceId deviceId = bankItem->getDeviceId();
     Rosegarden::MidiDevice* device = m_bankEditor->getMidiDevice(deviceId);
     if (!device) return;
     
@@ -931,7 +958,7 @@ BankEditorDialog::updateDialog()
                     getParentDeviceItem(currentItem);
 
                 if (deviceItem &&
-                    deviceItem->getDevice() == midiDevice->getId())
+                    deviceItem->getDeviceId() == midiDevice->getId())
                 {
                     if (deviceItem->text(0) != strtoqstr(midiDevice->getName()))
                     {
@@ -944,13 +971,33 @@ BankEditorDialog::updateDialog()
                        cout << "NEW TEXT FOR DEVICE " << midiDevice->getId()
                             << " IS " << midiDevice->getName() << endl;
                        cout << "LIST ITEM ID = "
-                            << deviceItem->getDevice() << endl;
+                            << deviceItem->getDeviceId() << endl;
                             */
 
                         deviceLabelUpdate = true;
                     }
-                }
 
+		    QListViewItem *child = deviceItem->firstChild();
+
+		    while (child) {
+
+			MidiBankListViewItem *bankItem =
+			    dynamic_cast<MidiBankListViewItem *>(child);
+
+			if (bankItem) {
+			    int msb = bankItem->text(1).toInt();
+			    int lsb = bankItem->text(2).toInt();
+			    Rosegarden::MidiBank *bank =
+				midiDevice->getBankByMsbLsb(msb, lsb);
+			    if (bank &&
+				bankItem->text(0) != strtoqstr(bank->name)) {
+				bankItem->setText(0, strtoqstr(bank->name));
+			    }
+			}
+
+			child = child->nextSibling();
+		    }
+                }
             }
 
             continue;
@@ -980,7 +1027,7 @@ BankEditorDialog::updateDialog()
     
     while(sibling) {
 
-        if (m_deviceNameMap.find(sibling->getDevice()) == m_deviceNameMap.end())
+        if (m_deviceNameMap.find(sibling->getDeviceId()) == m_deviceNameMap.end())
             itemsToDelete.push_back(sibling);
         else
             updateDeviceItem(sibling);
@@ -1019,7 +1066,7 @@ BankEditorDialog::populateDeviceItem(QListViewItem* deviceItem, Rosegarden::Midi
 void
 BankEditorDialog::updateDeviceItem(MidiDeviceListViewItem* deviceItem)
 {
-    Rosegarden::MidiDevice* midiDevice = getMidiDevice(deviceItem->getDevice());
+    Rosegarden::MidiDevice* midiDevice = getMidiDevice(deviceItem->getDeviceId());
     if (!midiDevice) {
         RG_DEBUG << "BankEditorDialog::updateDeviceItem : WARNING no midi device for this item\n";
         return;
@@ -1181,7 +1228,7 @@ BankEditorDialog::populateDevice(QListViewItem* item)
         //
         MidiDeviceListViewItem* deviceItem = getParentDeviceItem(item);
 
-        m_lastDevice = deviceItem->getDevice();
+        m_lastDevice = deviceItem->getDeviceId();
 
         Rosegarden::MidiDevice *device = getMidiDevice(deviceItem);
         if (!device) {
@@ -1209,7 +1256,7 @@ BankEditorDialog::populateDevice(QListViewItem* item)
     if (m_copyBank.first != Rosegarden::Device::NO_DEVICE)
         m_pastePrograms->setEnabled(true);
 
-    Rosegarden::MidiDevice *device = getMidiDevice(bankItem->getDevice());
+    Rosegarden::MidiDevice *device = getMidiDevice(bankItem->getDeviceId());
 
     if (!m_keepBankList || m_bankList.size() == 0)
         m_bankList    = device->getBanks();
@@ -1223,7 +1270,7 @@ BankEditorDialog::populateDevice(QListViewItem* item)
 
     m_programEditor->populateBank(item);
 
-    m_lastDevice = bankItem->getDevice();
+    m_lastDevice = bankItem->getDeviceId();
 }
 
 void
@@ -1367,7 +1414,7 @@ BankEditorDialog::slotAddBank()
         m_bankList.push_back(newBank);
 
         QListViewItem* newBankItem =
-            new MidiBankListViewItem(deviceItem->getDevice(),
+            new MidiBankListViewItem(deviceItem->getDeviceId(),
                                      m_bankList.size() - 1,
                                      deviceItem,
                                      strtoqstr(newBank.name),
@@ -1429,7 +1476,7 @@ BankEditorDialog::slotDeleteBank()
 
             // Don't allow pasting from this defunct device
             //
-            if (m_copyBank.first == bankItem->getDevice() &&
+            if (m_copyBank.first == bankItem->getDeviceId() &&
                 m_copyBank.second == bankItem->getBank())
             {
                 m_pastePrograms->setEnabled(false);
@@ -1470,7 +1517,7 @@ BankEditorDialog::slotDeleteAllBanks()
 
         // Don't allow pasting from this defunct device
         //
-        if (m_copyBank.first == deviceItem->getDevice())
+        if (m_copyBank.first == deviceItem->getDeviceId())
         {
             m_pastePrograms->setEnabled(false);
             m_copyBank = std::pair<Rosegarden::DeviceId, int>
@@ -1493,7 +1540,20 @@ BankEditorDialog::slotDeleteAllBanks()
 Rosegarden::MidiDevice*
 BankEditorDialog::getMidiDevice(Rosegarden::DeviceId id)
 {
-    return m_studio->getMidiDevice(id);
+    Rosegarden::Device *device = m_studio->getDevice(id);
+    Rosegarden::MidiDevice *midiDevice =
+	dynamic_cast<Rosegarden::MidiDevice *>(device);
+    if (device) {
+	if (!midiDevice) {
+	    std::cerr << "ERROR: BankEditorDialog::getMidiDevice: device "
+		      << id << " is not a MIDI device" << std::endl;
+	}
+    } else {
+	std::cerr
+	    << "ERROR: BankEditorDialog::getMidiDevice: no such device as "
+	    << id << std::endl;
+    }
+    return midiDevice;
 }
 
 Rosegarden::MidiDevice*
@@ -1503,7 +1563,7 @@ BankEditorDialog::getMidiDevice(QListViewItem* item)
         dynamic_cast<MidiDeviceListViewItem*>(item);
     if (!deviceItem) return 0;
 
-    return m_studio->getMidiDevice(deviceItem->getDevice());
+    return getMidiDevice(deviceItem->getDeviceId());
 }
 
 // Try to find a unique MSB/LSB pair for a new bank
@@ -1558,8 +1618,8 @@ BankEditorDialog::slotModifyDeviceOrBankName(QListViewItem* item, const QString 
         RG_DEBUG << "BankEditorDialog::slotModifyDeviceOrBankName - "
                  << "modify device name to " << label << endl;
 
-        if (m_deviceNameMap[deviceItem->getDevice()] != qstrtostr(label)) {
-            m_deviceNameMap[deviceItem->getDevice()] = qstrtostr(label);
+        if (m_deviceNameMap[deviceItem->getDeviceId()] != qstrtostr(label)) {
+            m_deviceNameMap[deviceItem->getDeviceId()] = qstrtostr(label);
             setModified(true);
 
             m_updateDeviceList = true;
@@ -1612,7 +1672,7 @@ BankEditorDialog::selectDeviceBankItem(Rosegarden::DeviceId deviceId,
         {
             do
             {
-                if (deviceId == midiDeviceItem->getDevice() &
+                if (deviceId == midiDeviceItem->getDeviceId() &
                     bank == bankCount)
                 {
                     m_listView->setSelected(bankChild, true);
@@ -1812,10 +1872,17 @@ BankEditorDialog::slotImport()
 
                         if (deviceItem)
                         {
+			    if (!overwrite) {
+				// don't record the librarian when
+				// merging banks -- it's misleading
+				librarianName = "";
+				librarianEmail = "";
+			    }
+
                             ModifyDeviceCommand *command =
                                 new ModifyDeviceCommand(
                                         m_studio,
-                                        deviceItem->getDevice(),
+                                        deviceItem->getDeviceId(),
                                         qstrtostr(importList[deviceIndex]),
                                         librarianName,
                                         librarianEmail,
@@ -1891,7 +1958,7 @@ BankEditorDialog::importFromSF2(QString filename)
     
     if (deviceItem)
     {
-        Rosegarden::DeviceId deviceId = deviceItem->getDevice();
+        Rosegarden::DeviceId deviceId = deviceItem->getDeviceId();
         Rosegarden::Device *device = m_studio->getDevice(deviceId);
 
         std::vector<QString> importList;
@@ -1934,7 +2001,7 @@ BankEditorDialog::slotEditCopy()
 
     if (bankItem)
     {
-        m_copyBank = std::pair<Rosegarden::DeviceId, int>(bankItem->getDevice(),
+        m_copyBank = std::pair<Rosegarden::DeviceId, int>(bankItem->getDeviceId(),
                                                           bankItem->getBank());
         m_pastePrograms->setEnabled(true);
     }
@@ -1991,7 +2058,7 @@ BankEditorDialog::slotEditPaste()
 
         // Save these for post-apply 
         //
-        int devPos = bankItem->getDevice();
+	Rosegarden::DeviceId devPos = bankItem->getDeviceId();
         int bankPos = bankItem->getBank();
 
         slotApply();
@@ -2261,7 +2328,9 @@ ImportDeviceDialog::ImportDeviceDialog(QWidget *parent,
         new QRadioButton(i18n("Overwrite Banks"), m_buttonGroup);
 
     if (showRenameOption) {
-	m_rename = new QCheckBox(i18n("Import device name"), m_buttonGroup);
+	QGroupBox *gb = new QGroupBox(1, Horizontal, i18n("Options"),
+				      mainFrame);
+	m_rename = new QCheckBox(i18n("Import device name"), gb);
     } else {
 	m_rename = 0;
     }

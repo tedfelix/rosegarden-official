@@ -541,8 +541,6 @@ int main(int argc, char *argv[])
         RG_DEBUG << "RosegardenGUI - " << e << endl;
     }
 
-
-
     if (startLogo) {
         
         // pause to ensure the logo has been visible for a reasonable

@@ -313,19 +313,21 @@ void RosegardenGUIView::slotEditSegment(Rosegarden::Segment* segment)
 void RosegardenGUIView::slotEditRepeat(Rosegarden::Segment *segment,
 				       Rosegarden::timeT time)
 {
+/*!!!
     if (KMessageBox::warningContinueCancel
 	(this,
 	 i18n("You have asked to edit a repeat.\n"
 	      "Do you want to turn it into a real segment and edit that?"),
 	 i18n("Edit Repeat"),
 	 i18n("Yes, edit")) != KMessageBox::Continue) return;
-
+*/
     SegmentSingleRepeatToCopyCommand *command =
 	new SegmentSingleRepeatToCopyCommand(segment, time);
     slotAddCommandToHistory(command);
-
+/*!!!
     Rosegarden::Segment *newSegment = command->getNewSegment();
     slotEditSegment(newSegment);
+*/
 }
 
 

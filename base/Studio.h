@@ -140,10 +140,7 @@ public:
     //
     Device* getDevice(DeviceId id);
 
-    // Useful for combo boxes
-    //
-    MidiDevice *getMidiDevice(int id);
-    Device *getDeviceOfType(int id, Device::DeviceType type);
+    bool haveMidiDevices() const;
 
     // Export as XML string
     //

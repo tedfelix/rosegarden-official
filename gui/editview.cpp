@@ -222,8 +222,8 @@ EditView::getInsertionTime(Rosegarden::Clef &clef,
     Rosegarden::Segment *segment = getCurrentSegment();
 
     if (segment) {
-	Rosegarden::SegmentNotationHelper helper(*segment);
-	helper.getClefAndKeyAt(t, clef, key);
+	clef = segment->getClefAtTime(t);
+	key = segment->getKeyAtTime(t);
     } else {
 	clef = Rosegarden::Clef();
 	key = Rosegarden::Key();

@@ -506,6 +506,11 @@ SegmentNotationHelper::splitIntoTie(iterator &from, iterator to,
 	Event *eva = split.first;
 	Event *evb = split.second;
 
+	if (!eva || !evb) {
+	    cerr << "WARNING: SegmentNotationHelper::splitIntoTie(): No valid split for event of duration " << eventDuration << " at " << baseTime << " (baseDuration " << baseDuration << "), ignoring this event\n";
+	    continue;
+	}
+
 	// we only want to tie Note events:
 
 	if (eva->isa(Note::EventType)) {
@@ -658,13 +663,16 @@ SegmentNotationHelper::makeNoteViable(iterator i, bool splitAtBars)
 	std::pair<Event *, Event *> splits =
 	    splitPreservingPerformanceTimes(e, *dli);
 
+	if (!splits.first || !splits.second) {
+	    cerr << "WARNING: SegmentNotationHelper::makeNoteViable(): No valid split for event of duration " << e->getDuration() << " at " << e->getAbsoluteTime() << " (split duration " << *dli << "), ignoring remainder\n";
+	    cerr << "WARNING: This is probably a bug; fix required" << std::endl;
+	    //!!!
+	    return insert(e);
+	}
+
 	iterator k = insert(splits.first);
 	delete e;
 	e = splits.second;
-
-/*
-        iterator k = insert(new Event(*e, acc, *dli));
-*/
 
 	if (!havej) j = k;
 	acc += *dli;
@@ -1496,48 +1504,6 @@ SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
 }
 
 
-void
-SegmentNotationHelper::getClefAndKeyAt(timeT time, Clef &clef, Key &key)
-{
-    Event *clefEvent = 0;
-    Event *keyEvent = 0;
-
-    //std::cerr << "SegmentNotationHelper::getClefAndKeyAt(" << time << ")" << std::endl;
-
-    iterator i = segment().findTime(time);
-    while (i != end() && (*i)->getAbsoluteTime() == time) ++i;
-
-    while (i != segment().begin()) {
-
-	--i;
-
-	//std::cerr << "Event type " << (*i)->getType() << " at " << (*i)->getAbsoluteTime() << std::endl;
-
-	if (!clefEvent && (*i)->isa(Rosegarden::Clef::EventType)) {
-	    clefEvent = *i;
-	}
-
-	if (!keyEvent && (*i)->isa(Rosegarden::Key::EventType)) {
-	    keyEvent = *i;
-	}
-	
-	if (clefEvent && keyEvent) break;
-    }
-
-    if (clefEvent) {
-	clef = Clef(*clefEvent);
-    } else {
-	clef = Clef();
-    }
-
-    if (keyEvent) {
-	key = Key(*keyEvent);
-    } else {
-	key = Key();
-    }
-}
-
-
 // based on Rosegarden 2.1's GuessItemListClef in editor/src/MidiIn.c
 
 Clef
@@ -1854,20 +1820,27 @@ SegmentNotationHelper::deCounterpoint(timeT startTime, timeT endTime)
 	timeT t = (*i)->getAbsoluteTime();
 	if (t >= endTime) break;
 
+#ifdef DEBUG_DECOUNTERPOINT
 	std::cerr << "SegmentNotationHelper::deCounterpoint: event at " << (*i)->getAbsoluteTime() << " notation " << (*i)->getNotationAbsoluteTime() << ", duration " << (*i)->getNotationDuration() << ", type " << (*i)->getType() << std::endl;
+#endif	    
 
 	if (!(*i)->isa(Note::EventType)) { ++i; continue; }
 
 	timeT ti = (*i)->getNotationAbsoluteTime();
 	timeT di = (*i)->getNotationDuration();
 
+#ifdef DEBUG_DECOUNTERPOINT
 	std::cerr<<"looking for k"<<std::endl;
+#endif	    
+
 	// find next event that's either at a different time or (if a
 	// note) has a different duration
 	Segment::iterator k = i;
 	while (segment().isBeforeEndMarker(k)) {
 	    if ((*k)->isa(Note::EventType)) {
+#ifdef DEBUG_DECOUNTERPOINT
 		std::cerr<<"abstime "<<(*k)->getAbsoluteTime()<< std::endl;
+#endif	    
 		if ((*k)->getNotationAbsoluteTime() > ti ||
 		    (*k)->getNotationDuration() != di) break;
 	    }
@@ -1876,7 +1849,9 @@ SegmentNotationHelper::deCounterpoint(timeT startTime, timeT endTime)
 
 	if (!segment().isBeforeEndMarker(k)) break; // no split, no more notes
 
+#ifdef DEBUG_DECOUNTERPOINT
 	std::cerr << "k is at " << (k == segment().end() ? -1 : (*k)->getAbsoluteTime()) << ", notation " << (*k)->getNotationAbsoluteTime() << ", duration " << (*k)->getNotationDuration() << std::endl;
+#endif	    
 
 	timeT tk = (*k)->getNotationAbsoluteTime();
 	timeT dk = (*k)->getNotationDuration();
@@ -1888,18 +1863,24 @@ SegmentNotationHelper::deCounterpoint(timeT startTime, timeT endTime)
 	if (tk == ti && dk != di) {
 	    // do the same-time-different-durations case
 	    if (di > dk) { // split *i
+#ifdef DEBUG_DECOUNTERPOINT
 		std::cerr << "splitting i into " << dk << " and "<< (di-dk) << std::endl;
+#endif	    
 		splits = splitPreservingPerformanceTimes(*i, dk);
 
 		toGo = i;
 	    } else { // split *k
+#ifdef DEBUG_DECOUNTERPOINT
 		std::cerr << "splitting k into " << di << " and "<< (dk-di) << std::endl;
+#endif	    
 		splits = splitPreservingPerformanceTimes(*k, di);
 
 		toGo = k;
 	    }
 	} else if (tk - ti > 0 && tk - ti < di) { // split *i
+#ifdef DEBUG_DECOUNTERPOINT
 	    std::cerr << "splitting i[*] into " << (tk-ti) << " and "<< (di-(tk-ti)) << std::endl;
+#endif	    
 	    splits = splitPreservingPerformanceTimes(*i, tk - ti);
 
 	    toGo = i;
@@ -1913,27 +1894,42 @@ SegmentNotationHelper::deCounterpoint(timeT startTime, timeT endTime)
 	    e1->set<Bool>(TIED_FORWARD, true);
 	    e2->set<Bool>(TIED_BACKWARD, true);
 
+#ifdef DEBUG_DECOUNTERPOINT
 	    std::cerr<<"Erasing:"<<std::endl;
 	    (*toGo)->dump(std::cerr);
+#endif	    
+
 	    segment().erase(toGo);
+
+#ifdef DEBUG_DECOUNTERPOINT
 	    std::cerr<<"Inserting:"<<std::endl;
 	    e1->dump(std::cerr);
+#endif	    
+
 	    segment().insert(e1);
+
+#ifdef DEBUG_DECOUNTERPOINT
 	    std::cerr<<"Inserting:"<<std::endl;
 	    e2->dump(std::cerr);
+#endif	    
+
 	    segment().insert(e2);
 
 	    i = segment().findTime(t);
+
+#ifdef DEBUG_DECOUNTERPOINT
 	    std::cerr<<"resync at " << t << ":" << std::endl;
 	    if (i != segment().end()) (*i)->dump(std::cerr);
 	    else std::cerr << "(end)" << std::endl;
+#endif	    
 
 	} else {
 
 	    // no split here
 
+#ifdef DEBUG_DECOUNTERPOINT
 	    std::cerr<<"no split"<<std::endl;
-	    
+#endif	    
 	    ++i;
 	}
     }

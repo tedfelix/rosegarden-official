@@ -62,7 +62,9 @@ public:
                            QListViewItem* parent, QString name,
                            int msb, int lsb);
 
-    Rosegarden::DeviceId getDevice() const { return m_deviceId; }
+    Rosegarden::DeviceId getDeviceId() const { return m_deviceId; }
+
+    virtual int compare(QListViewItem *i, int col, bool ascending) const;
 
 protected:
 

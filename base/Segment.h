@@ -388,6 +388,18 @@ public:
      */
     void normalizeRests(timeT startTime, timeT endTime);
 
+    /**
+     * Return the clef in effect at the given time.  This is a
+     * reasonably quick call.
+     */
+    Clef getClefAtTime(timeT time) const;
+
+    /**
+     * Return the key signature in effect at the given time.  This is
+     * a reasonably quick call.
+     */
+    Key getKeyAtTime(timeT time) const;
+
 
     //////
     //
@@ -459,15 +471,6 @@ public:
         }
     };
 
-    /**
-     * An alternative compare class that orders by start time first
-     */
-//     struct SegmentTimeCmp
-//     {
-// 	bool operator()(const Segment *a, const Segment *b) const {
-// 	    return a->getStartTime() < b->getStartTime();
-// 	}
-//     };
 
     /// For use by SegmentObserver objects like Composition & ViewElementsManager
     void    addObserver(SegmentObserver *obs) { m_observers.insert(obs); }
@@ -523,6 +526,12 @@ private:
     RealTime m_realTimeDelay;   // all Events delay (the delays are cumulative)
 
     RefreshStatusArray<SegmentRefreshStatus> m_refreshStatusArray;
+
+    struct ClefKeyCmp {
+        bool operator()(const Event *e1, const Event *e2) const;
+    };
+    typedef std::multiset<Event*, ClefKeyCmp> ClefKeyList;
+    mutable ClefKeyList *m_clefKeyList;
 
 private: // stuff to support SegmentObservers
 

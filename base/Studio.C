@@ -565,36 +565,18 @@ Studio::getAudioPreviewInstrument()
     return 0;
 }
 
-
-Device*
-Studio::getDeviceOfType(int id, Device::DeviceType type)
+bool
+Studio::haveMidiDevices() const
 {
-    if (id > int(m_devices.size()))
-        return 0;
-
-    int count = 0;
     Rosegarden::DeviceListIterator it = m_devices.begin();
     for (; it != m_devices.end(); it++)
     {
-        if ((*it)->getType() == type)
-        {
-            if (count == id)
-                break;
-            count++;
-        }
+        if ((*it)->getType() == Device::Midi) return true;
     }
-
-    if (it == m_devices.end())
-        return 0;
-
-    return *it;
+    return false;
 }
+    
 
-MidiDevice*
-Studio::getMidiDevice(int id)
-{
-    return dynamic_cast<MidiDevice*>(getDeviceOfType(id, Device::Midi));
-}
 
 // Copy a studio from another example into this one - regenerating
 // copies of everything (deep copying) as we go.

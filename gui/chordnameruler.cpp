@@ -131,23 +131,29 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
 
     // Populate the segment with the current clef and key at the
     // time at which analysis starts, taken from the "current segment"
-    // if we have one or any old segment if we don't
+    // if we have one.  If we don't have one, use the first segment
+    // that contains our start time
 
     Segment *clefKeySegment = m_currentSegment;
     if (!clefKeySegment) {
-	if (m_composition->begin() == m_composition->end()) return;
-	clefKeySegment = *m_composition->begin();
+	for (Composition::iterator ci = m_composition->begin();
+	     ci != m_composition->end(); ++ci) {
+	    if ((*ci)->getStartTime() <= from &&
+		(*ci)->getEndMarkerTime() >= from) {
+		clefKeySegment = *ci;
+		break;
+	    }
+	}
+	if (!clefKeySegment) return;
     }
-    SegmentNotationHelper notationHelper(*clefKeySegment);
 
-    Rosegarden::Key key;
-    Rosegarden::Clef clef;
-    notationHelper.getClefAndKeyAt(from, clef, key); // slow
+    Rosegarden::Clef clef = clefKeySegment->getClefAtTime(from);
     segment.insert(clef.getAsEvent(from - 1));
+
+    Rosegarden::Key key = clefKeySegment->getKeyAtTime(from);
     segment.insert(key.getAsEvent(from - 1));
 
     AnalysisHelper helper;
-
     helper.labelChords(adapter, segment);
 
     QRect boundsForHeight = m_fontMetrics.boundingRect("^j|lM");

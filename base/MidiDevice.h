@@ -93,6 +93,7 @@ public:
     // Retreive by different criteria
     //
     MidiBank* getBankByIndex(int index);
+    MidiBank* getBankByMsbLsb(MidiByte msb, MidiByte lsb);
     MidiProgram* getProgramByIndex(int index);
     MidiProgram* getProgram(MidiByte msb, MidiByte lsb, int index);
 

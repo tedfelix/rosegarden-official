@@ -579,6 +579,23 @@ Text::Text(const std::string &s, const std::string &type) :
     // nothing else
 }
 
+Text::Text(const Text &t) :
+    m_text(t.m_text),
+    m_type(t.m_type)
+{
+    // nothing else
+}
+
+Text &
+Text::operator=(const Text &t)
+{
+    if (&t != this) {
+	m_text = t.m_text;
+	m_type = t.m_type;
+    }
+    return *this;
+}
+
 Text::~Text()
 { 
     // nothing
@@ -1181,6 +1198,23 @@ Pitch::Pitch(int heightOnStaff, const Clef &clef, const Key &key,
 {
     displayPitchToRawPitch
 	(heightOnStaff, explicitAccidental, clef, key, m_pitch);
+}
+
+Pitch::Pitch(const Pitch &p) :
+    m_pitch(p.m_pitch),
+    m_accidental(p.m_accidental)
+{
+    // nothing else
+}
+
+Pitch &
+Pitch::operator=(const Pitch &p)
+{
+    if (&p != this) {
+	m_pitch = p.m_pitch;
+	m_accidental = p.m_accidental;
+    }
+    return *this;
 }
 
 int

@@ -340,6 +340,16 @@ MidiDevice::getBankByIndex(int index)
     return (*m_bankList)[index];
 }
 
+MidiBank*
+MidiDevice::getBankByMsbLsb(MidiByte msb, MidiByte lsb)
+{
+    std::vector<MidiBank*>::iterator it;
+
+    for (it = m_bankList->begin(); it != m_bankList->end(); it++) 
+	if ((*it)->msb == msb && (*it)->lsb == lsb) return *it;
+
+    return 0;
+}
 
 MidiProgram*
 MidiDevice::getProgramByIndex(int index)

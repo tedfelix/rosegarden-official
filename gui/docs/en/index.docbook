@@ -8,6 +8,63 @@
 
 <!-- The language must be changed in the <book> tag for translations. -->
 
+
+<!--
+
+    Notes on style and terminology for Rosegarden handbook
+    ======================================================
+
+     * Aim to be clear, brief and direct, but be informal.
+
+     * Write instructions in the second person.
+
+       Bad:      "Segments can be selected by clicking on
+                  them with the arrow tool."
+
+       Very bad: "The arrow tool allows the user to select
+                  segments by clicking on them."
+
+       Good:     "You can select segments by clicking on
+                  them with the arrow tool".
+
+       If you dislike the last of these because you want to
+       make the phrase "the arrow tool" more obvious by placing
+       it at the start of the sentence, then perhaps you
+       should be using a variablelist instead and making
+       "the arrow tool" a list item.
+
+     * It's perfectly permissible to detour to explain why
+       something is the way it is, particularly if it might
+       not be obvious.
+
+     * It's also entirely permissible to omit advanced stuff
+       from the "Using Rosegarden" section and document it
+       only in the reference section.  "Using Rosegarden"
+       should be about understanding how and why, not about
+       knowing every last clever detail.
+
+     * Bear in mind we can link extensively from any part of
+       the handbook to any other.  Unfortunately DocBook won't
+       allow you to write a link to a target that doesn't
+       exist yet, so if you want to link to something that's
+       not yet been written, either make a note of the planned
+       link in an XML comment, or go and create a stub for the
+       bit that hasn't been written yet, or else just write in
+       a way that allows for a link to be easily added later
+       (we could do an editing phase specially for links).
+
+     * Be strict about using the correct terminology for
+       Rosegarden data structures (segment, event, track,
+       instrument, composition), but don't capitalise the
+       words.  Capitalisation is useful in technical documents
+       to make it clear that you're referring to a precise
+       concept, but you shouldn't have to do it to make your
+       meaning clear in user documentation.  If something
+       seems ambiguous without, try rewording it instead.
+
+-->
+
+
 <book id="rosegarden" lang="en">
 
   <!-- This header contains all of the meta-information for the document such
@@ -70,54 +127,6 @@
   may be left out at the author's discretion. Other chapters should
   not be left out in order to maintain a consistent documentation
   style across all KDE apps. -->
-
-
-  <!--
-
-
-
-
-
-
-    Notes on style and terminology for Rosegarden handbook
-    ======================================================
-
-     * Aim to be clear, brief and direct, but be informal.
-
-     * Write instructions in the second person.  For example,
-       don't write: "Segments can be selected by clicking on
-       them with the arrow tool", write "You can select
-       segments by clicking on them with the arrow tool".
-
-     * It's perfectly permissible to pause to explain why
-       something is the way it is, particularly if it might
-       not be obvious.
-
-     * Bear in mind we can link extensively from any part of
-       the handbook to any other.  Unfortunately DocBook won't
-       allow you to write a link to a target that doesn't
-       exist yet, so if you want to link to something that's
-       not yet been written, either make a note of the planned
-       link in an XML comment, or go and create a stub for the
-       bit that hasn't been written yet, or else just write in
-       a way that allows for a link to be easily added later
-       (we could do an editing phase specially for links).
-
-     * Be strict about using the correct terminology for
-       Rosegarden data structures (segment, event, track,
-       instrument, composition), but don't capitalise the
-       words.  Capitalisation is useful in technical documents
-       to make it clear that you're referring to a precise
-       concept, but you shouldn't have to do it to make your
-       meaning clear in user documentation.  If something
-       seems ambiguous without, try rewording it instead.
-
-
-
-
-
-  -->
-
 
   <chapter id="introduction">
     <title>Introduction</title>
@@ -262,7 +271,7 @@
       </para>
     </sect2>
       <sect2 id="segment-view-instruments">
-	<title>Tracks and Instruments</title>
+	<title>Tracks and instruments</title>
 	<para>
 	  Each track must have an instrument assigned to it, in order
 	  to be heard.  To assign a track to an instrument, click and
@@ -285,6 +294,11 @@
 	  Parameter Box</link>.  This is where, for example, you would
 	  set a MIDI instrument to use a particular patch and so
 	  produce a particular sound (piano, strings etc).
+	</para>
+	<para>
+	  See the
+	  <link linkend="studio-introduction">Studio</link> section
+	  for more about instruments.
 	</para>
       </sect2>
 
@@ -507,10 +521,11 @@
       <para>
         The Transport shows the current position of the pointer either
         in terms of absolute time from the first bar (in seconds) or
-        in <acronym>SMTPE</acronym> time or alternatively in bars and beats. It can also
-        show time from the end of composition if you should so wish.
-        These functions are controlled by the small buttons on the
-        left of the main transport display.
+        in 24-fps <acronym>SMTPE</acronym> time or alternatively in
+        bars and beats. It can also show time from the end of
+        composition if you should so wish.  These functions are
+        controlled by the small buttons on the left of the main
+        transport display.
       </para>
 
       <para>
@@ -533,7 +548,7 @@
       <title>The Studio</title>
 
       <sect2 id="studio-introduction">
-	<title>Devices, Instruments and Connections</title>
+	<title>Devices, instruments and connections</title>
 
 	<para>Rosegarden uses the term Studio to refer to everything
 	it knows about the sound systems attached to the computer.
@@ -603,29 +618,23 @@
 	configured with a suitable program, and you would then assign
 	tracks to those.</para>
 
-	<!--
 	<para>
-	
-	  &rosegarden; has the concept of a <quote>studio</quote>, which is a
-	  description of the collection of sound devices attached to
-	  the computer together with their &MIDI; patch information and
-	  related data.
-
+	  In practice, Rosegarden will by default create a device for
+	  each of the available connections on startup.  So in the
+	  example above, two MIDI devices will be created by default
+	  even though you only need one.  You would generally then
+	  rename and apply patch maps to the first, and delete or
+	  simply not use the second.  Remember that there is no way
+	  for Rosegarden to know what synths you actually have plugged
+	  in to the MIDI ports on your computer: for this reason, the
+	  devices created at startup are just intended to be a default
+	  set, and it's up to you to ensure that the devices you
+	  configure match those you are really using.
 	</para>
-	
-	<para>
 
-	  If you want to use any &MIDI; devices other than General &MIDI;
-	  (<acronym>GM</acronym>) compatible synthesizers, you will normally have to set
-	  up a studio configuration yourself.  &rosegarden; has no way
-	  to examine the hardware you actually have plugged in, so it
-	  relies on you to set up your studio in a way that matches
-	  the actual configuration of your synths and other
-	  instruments. The studio setup is then saved with every file
-	  you save.
-	  
-	</para>
--->
+	<para>Once configured, the studio setup is stored with every
+	Rosegarden-format file you save.</para>
+
       </sect2>
       <sect2 id="studio-midi-import">
 	<title>Studio mapping on &MIDI; import</title>
@@ -663,7 +672,7 @@
       </sect2>
 
       <sect2 id="studio-device-editor">
-	<title>The MIDI Device Manager</title>
+	<title>Managing MIDI devices</title>
 
         <para>
         <screenshot>
@@ -672,28 +681,51 @@
               <imagedata fileref="rg-devicemanager.png" format="PNG"/>
               </imageobject>
               <textobject>
-                <phrase>&rosegarden;'s MIDI Device Manager dialog</phrase>
+                <phrase>The MIDI device manager</phrase>
               </textobject>
           </mediaobject>
         </screenshot>
         </para>
 
 	<para>
-        Rosegarden provides a basic set of MIDI Devices that portray what 
-        it's found on your system at start up and then aims to provide
-        sensible default connections for these devices.  The MIDI Device
-        Manager allows the user to modify connections of devices and also
-        what direction the devices send their information.  By adding a 
-        new "Play" device in this dialog you provide a new target for any
-        of your MIDI tracks to talk to.  If this device is connected to an
-        external synth then this is where your MIDI events will go when
-        you play to an Instrument on this device.
-        </para>
+	  The MIDI device manager dialog shows you the MIDI devices
+	  that you currently have available to you, and where they are
+	  connected.  To reach this dialog, use the Manage MIDI
+	  Devices function on the Studio menu.
+	</para>
+
+	<para>
+	  As described in the <link
+	  linkend="studio-introduction">Devices, Instruments nd
+	  Connections</link> section, by default Rosegarden tries to
+	  provide a plausible set of devices for you at startup, and
+	  to make sensible connections for those devices.  But the
+	  default configuration might not always be suitable, and so
+	  this dialog allows you to rename devices and modify their
+	  connections and play/record direction.
+	</para>
+	
+	<para>
+	  Each of the Play devices listed here provides a target for
+	  MIDI tracks to talk to: if you add a new Play device, you
+	  will then have 16 new instruments on this device which you
+	  can assign tracks to.  If you then assign a connection for
+	  that device, the tracks assigned to it will play to the
+	  appropriate channel (depending on the instrument) of any
+	  MIDI synth attached to that connection.
+	</para>
+
+	<para>
+	  The Record devices listed here represent possible sources
+	  for recording MIDI.  These constitute the set of devices
+	  that you can select for recording in the Configuration
+	  dialog.
+	</para>
 
       </sect2>
 
       <sect2 id="studio-bank-editor">
-	<title>The MIDI Banks and Programs Editor</title>
+	<title>Managing banks and programs for MIDI devices</title>
 
         <para>
         <screenshot>
@@ -702,33 +734,64 @@
               <imagedata fileref="rg-bankeditor.png" format="PNG"/>
               </imageobject>
               <textobject>
-                <phrase>&rosegarden;'s MIDI Banks and Programs Editor</phrase>
+                <phrase>The MIDI bank and program editor</phrase>
               </textobject>
           </mediaobject>
         </screenshot>
         </para>
 
 	<para>
-        This dialog allow you to attach banks of programs (names for
-        MIDI instrument voices) to your MIDI devices.  Basically this
-        means that you can identify the names of sounds on MIDI devices
-        by a meaningful name rather than having to remember MIDI numbers.
-        Attaching banks of programs in this manner makes it possible for
-        users to share these banks of mappings through a library of
-        Rosegarden devices files.
-        </para>
+	  Remember that each MIDI device contains a number of
+	  instruments, and that you can assign tracks to those
+	  instruments.  In MIDI terms, each instrument corresponds to
+	  a single channel on your MIDI synth.  You can choose which
+	  of the available voices (sounds) on your synth each
+	  instrument uses, but in order to do this, you need to let
+	  Rosegarden know the names for all of the available voices.
+	</para>
+
+	<para>
+	  This dialog allow you to attach banks of programs (names for
+	  voices) to your MIDI devices, thus permitting each
+	  instrument on a device to be set to use one of those voices
+	  in the <link
+	  linkend="segment-view-instrumentparameterbox">Instrument
+	  Parameter Box</link>.
+	</para>
+
+	<para>
+	  The usual way to set up the program names for a device is
+	  simply to import them from one of the supplied device
+	  (".rgd") files.  To do this, select a device in the list on
+	  the left of the dialog, then click the Import button below
+	  the list and choose the .rgd file corresponding to your
+	  synth.
+	</para>
 
         <para>
-        If you MIDI device has no current .rgd file available for
-        immediate loading then you can use this editor to create
-        a new bank (mapping the names to the program numbers for
-         yourself).
+        If there is no current .rgd file available for your synth,
+        then you can use this dialog to create a new bank.  To do this
+        you will have to find the program map in your synth's MIDI
+        Implementation Chart and enter all the names by hand: you can
+        then Export them to a .rgd file to share with other Rosegarden
+        users.  Contact the rosegarden-user mailing list if you have
+        made a new .rgd file and would like to share it.  (This is how
+        all of the existing .rgd files have come to be included with
+        Rosegarden: other users have contributed them.)
         </para>
+
+	<para>
+	  If you happen to be using a soft-synth or soundcard synth
+	  that uses SoundFont (.sf2) files, you can simply load the
+	  correct program names directly from your .sf2 file into this
+	  dialog.  Just ask to Import as normal, and then choose the
+	  .sf2 file that you are using instead of a .rgd file.
+	</para>
 
       </sect2>
 
       <sect2 id="studio-midi-filters">
-	<title>MIDI Filters dialog</title>
+	<title>MIDI filters</title>
 
         <para>
         <screenshot>
@@ -737,17 +800,18 @@
               <imagedata fileref="rg-midifilter.png" format="PNG"/>
               </imageobject>
               <textobject>
-                <phrase>&rosegarden;'s MIDI Banks and Programs Editor</phrase>
+                <phrase>The MIDI filter dialog</phrase>
               </textobject>
           </mediaobject>
         </screenshot>
         </para>
 
 	<para>
-        Using this dialog you can decide which MIDI events Rosegarden will
-        ignore or accept either when forwarding event (MIDI THRU) or simply
-        recording them.  Use the check boxes on this dialog to tell Rosegarden
-        which type of MIDI events you don't want to receive.
+        Using this dialog you can decide which MIDI events Rosegarden
+        will ignore or accept, either when forwarding events using
+        MIDI THRU or when simply recording them.  Use the check boxes
+        on this dialog to tell Rosegarden which types of MIDI events
+        you don't want to forward or record.
         </para>
 
       </sect2>
@@ -792,7 +856,7 @@
       <!-- Single and multiple staffs, and "current staff" -->
 
       <sect2 id="nv-staffs">
-	<title>Single and Multiple Staffs</title>
+	<title>Single and multiple staffs</title>
 
 	<para>
 	  There are three ways to open a notation editor from the
@@ -877,7 +941,7 @@
       <!-- Linear and page layouts -->
 
       <sect2 id="nv-layout">
-	<title>Linear and Page Layout</title>
+	<title>Linear and page layout</title>
 
 	<para>
 	  The usual way the notation editor displays staffs is known
@@ -906,7 +970,7 @@
       <!-- Rulers and Cursors -->
 
       <sect2 id="nv-rulers">
-	<title>Rulers and Cursors</title>
+	<title>Rulers and cursors</title>
 
 	<para>
 	  The &rosegarden; Notation editor window includes two rulers
@@ -954,7 +1018,7 @@
       <!-- Tools and Selections -->
 
       <sect2 id="nv-tools-selections">
-        <title>Tools and Selections</title>
+        <title>Tools and selections</title>
 	<para>
 	  Most of the menu and toolbar editing functions in the
 	  &rosegarden; Notation editor fall into one of two categories:
@@ -1182,7 +1246,7 @@
       <!-- Keys, Clefs and Time Signatures -->
 
       <sect2 id="nv-signatures">
-	<title>Clefs, Keys, Tempo and Time Signatures</title>
+	<title>Clefs, keys, tempo and time signatures</title>
 	
 	<para>The first thing to know about the way &rosegarden; handles
 	these is that time-related changes (tempos and time
@@ -1225,7 +1289,7 @@
 	</sect3>
 	
 	<sect3 id="nv-signatures-time-signature">
-	  <title>Time Signature</title>
+	  <title>Time signature</title>
 	  <!-- Should be in general section, not notation -->
 	  <para></para>
 	</sect3>
@@ -1378,7 +1442,7 @@
       <!-- Stem direction, slashes etc -->
 
       <sect2 id="nv-note-qualities">
-	<title>Note Stems and Slashes</title>
+	<title>Note stems and slashes</title>
 
 	<para>You can set the stem direction of any selected notes
 	(provided they are a sort that have stems) using the three
@@ -1571,7 +1635,7 @@
       </sect2>
 
       <sect2 id="nv-note-styles">
-	<title>Note Styles</title>
+	<title>Note styles</title>
 
 	<para>
 	  &rosegarden; also allows you to change various aspects of the
@@ -1608,7 +1672,7 @@
       <!-- Quantization, smoothing, and display of quantized notes -->
 
       <sect2 id="nv-quantization">
-	<title>Notation from Performance Data</title>
+	<title>Notation from performance data</title>
 
 	<para>
 	  &rosegarden; is a multi-purpose program: it is a notation
@@ -1856,12 +1920,12 @@
     <para></para>
 
     <sect1 id="commands-main">
-      <title>The main Rosegarden window</title>
+      <title>Main window</title>
       <para></para>
 
 
       <sect2>
-	<title>The File Menu</title>
+	<title>File menu</title>
 	<para>
 	  <variablelist>
 
@@ -2013,7 +2077,7 @@
 
     <!-- Levi Burton additions 2003.03.05 -->
     <sect2>
-    <title>The Edit Menu</title>
+    <title>Edit menu</title>
     <para>
       <variablelist>
 
@@ -2271,7 +2335,7 @@
     <!-- Levi Burton additions 2003.03.05 -->
 
     <sect2>
-    <title>The Segments Menu</title>
+    <title>Segments menu</title>
     <para>
      <variablelist>
     
@@ -2427,7 +2491,7 @@
     </sect1>
     
     <sect1 id="commands-nv">
-      <title>The Notation View</title>
+      <title>Notation editor</title>
       <para></para>
 
       <!-- Tools -->
@@ -2438,7 +2502,7 @@
          <!-- Eraser -->
 
       <sect2 id="commands-nv-menu-file">
-	<title>The File Menu</title>
+	<title>File menu</title>
 	<para>
 	  <variablelist>
 
@@ -2459,7 +2523,7 @@
       </sect2>
 
       <sect2 id="commands-nv-menu-edit">
-	<title>The Edit Menu</title>
+	<title>Edit menu</title>
 	<para>
 	  <variablelist>
 
@@ -2844,7 +2908,7 @@
       </sect2>
 
       <sect2 id="commands-nv-menu-group">
-	<title>The Group Menu</title>
+	<title>Group menu</title>
 	<para>
 	  <variablelist>
 
@@ -3062,7 +3126,7 @@
       </sect2>
 
       <sect2 id="commands-nv-menu-notes">
-	<title>The Notes Menu</title>
+	<title>Notes menu</title>
 	<para>
 	  <variablelist>
 
@@ -3149,7 +3213,7 @@
       </sect2>
 
       <sect2 id="commands-nv-menu-marks">
-	<title>The Marks Menu</title>
+	<title>Marks menu</title>
 	<para>
 	  <variablelist>
 	    <varlistentry>
@@ -3167,7 +3231,7 @@
       </sect2>
 
       <sect2 id="commands-nv-menu-transforms">
-	<title>The Transforms Menu</title>
+	<title>Transforms menu</title>
 	<para>
 	  <variablelist>
 

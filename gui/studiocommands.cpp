@@ -34,7 +34,7 @@
 
 ModifyDeviceCommand::ModifyDeviceCommand(
         Rosegarden::Studio *studio,
-        int device,
+	Rosegarden::DeviceId device,
         const std::string &name,
         const std::string &librarianName,
         const std::string &librarianEmail,
@@ -58,29 +58,45 @@ ModifyDeviceCommand::ModifyDeviceCommand(
 void
 ModifyDeviceCommand::execute()
 {
-    Rosegarden::MidiDevice *device = m_studio->getMidiDevice(m_device);
+    Rosegarden::Device *device = m_studio->getDevice(m_device);
+    Rosegarden::MidiDevice *midiDevice =
+	dynamic_cast<Rosegarden::MidiDevice *>(device);
 
-    m_oldName = device->getName();
-    m_oldBankList = device->getBanks();
-    m_oldProgramList = device->getPrograms();
-    m_oldLibrarianName = device->getLibrarianName();
-    m_oldLibrarianEmail = device->getLibrarianEmail();
+    if (device) {
+	if (!midiDevice) {
+	    std::cerr << "ERROR: ModifyDeviceCommand::execute: device "
+		      << m_device << " is not a MIDI device" << std::endl;
+	    return;
+	}
+    } else {
+	std::cerr
+	    << "ERROR: ModifyDeviceCommand::execute: no such device as "
+	    << m_device << std::endl;
+	return;
+    }
+
+    m_oldName = midiDevice->getName();
+    m_oldBankList = midiDevice->getBanks();
+    m_oldProgramList = midiDevice->getPrograms();
+    m_oldLibrarianName = midiDevice->getLibrarianName();
+    m_oldLibrarianEmail = midiDevice->getLibrarianEmail();
 
     if (m_overwrite)
     {
-        device->replaceBankList(m_bankList);
-        device->replaceProgramList(m_programList);
-        if (m_rename) device->setName(m_name);
-        device->setLibrarian(m_librarianName, m_librarianEmail);
+        midiDevice->replaceBankList(m_bankList);
+        midiDevice->replaceProgramList(m_programList);
+        if (m_rename) midiDevice->setName(m_name);
+        midiDevice->setLibrarian(m_librarianName, m_librarianEmail);
     }
     else
     {
-        device->mergeBankList(m_bankList);
-        device->mergeProgramList(m_programList);
+        midiDevice->mergeBankList(m_bankList);
+        midiDevice->mergeProgramList(m_programList);
 
 	if (m_rename) {
-	    std::string mergeName = device->getName() + std::string("/") + m_name;
-	    device->setName(mergeName);
+	    std::string mergeName = midiDevice->getName() +
+		std::string("/") + m_name;
+	    midiDevice->setName(mergeName);
 	}
     }
 
@@ -89,13 +105,27 @@ ModifyDeviceCommand::execute()
 void
 ModifyDeviceCommand::unexecute()
 {
-    Rosegarden::MidiDevice *device = m_studio->getMidiDevice(m_device);
+    Rosegarden::Device *device = m_studio->getDevice(m_device);
+    Rosegarden::MidiDevice *midiDevice =
+	dynamic_cast<Rosegarden::MidiDevice *>(device);
 
-    if (m_rename) device->setName(m_oldName);
-    device->replaceBankList(m_oldBankList);
-    device->replaceProgramList(m_oldProgramList);
-    device->setLibrarian(m_oldLibrarianName, m_oldLibrarianEmail);
+    if (device) {
+	if (!midiDevice) {
+	    std::cerr << "ERROR: ModifyDeviceCommand::unexecute: device "
+		      << m_device << " is not a MIDI device" << std::endl;
+	    return;
+	}
+    } else {
+	std::cerr
+	    << "ERROR: ModifyDeviceCommand::unexecute: no such device as "
+	    << m_device << std::endl;
+	return;
+    }
 
+    if (m_rename) midiDevice->setName(m_oldName);
+    midiDevice->replaceBankList(m_oldBankList);
+    midiDevice->replaceProgramList(m_oldProgramList);
+    midiDevice->setLibrarian(m_oldLibrarianName, m_oldLibrarianEmail);
 }
 
 // -------------------- ModifyDeviceMapping -----------------------
@@ -263,20 +293,16 @@ ModifyInstrumentMappingCommand::unexecute()
 void
 RenameDeviceCommand::execute()
 {
-    Rosegarden::MidiDevice *device = m_studio->getMidiDevice(m_deviceId);
-    if (device) {
-	if (m_oldName == "") m_oldName = device->getName();
-	device->setName(m_name);
-    }
+    Rosegarden::Device *device = m_studio->getDevice(m_deviceId);
+    if (m_oldName == "") m_oldName = device->getName();
+    device->setName(m_name);
 }
 
 void
 RenameDeviceCommand::unexecute()
 {
-    Rosegarden::MidiDevice *device = m_studio->getMidiDevice(m_deviceId);
-    if (device) {
-	device->setName(m_oldName);
-    }
+    Rosegarden::Device *device = m_studio->getDevice(m_deviceId);
+    device->setName(m_oldName);
 }
 
 CreateOrDeleteDeviceCommand::CreateOrDeleteDeviceCommand(Rosegarden::Studio *studio,

@@ -56,7 +56,8 @@ Segment::Segment(SegmentType segmentType, timeT startTime) :
     m_quantize(false),
     m_transpose(0),
     m_delay(0),
-    m_realTimeDelay(0, 0)
+    m_realTimeDelay(0, 0),
+    m_clefKeyList(0)
 {
 }
 
@@ -81,14 +82,14 @@ Segment::Segment(const Segment &segment):
     m_quantize(segment.hasQuantization()),
     m_transpose(segment.getTranspose()),
     m_delay(segment.getDelay()),
-    m_realTimeDelay(segment.getRealTimeDelay())
+    m_realTimeDelay(segment.getRealTimeDelay()),
+    m_clefKeyList(0)
 {
     for (iterator it = segment.begin();
 	 segment.isBeforeEndMarker(it); ++it) {
         insert(new Event(**it));
     }
 }
-
 
 Segment::~Segment()
 {
@@ -98,6 +99,12 @@ Segment::~Segment()
     }
 
     if (m_composition) m_composition->detachSegment(this);
+
+    if (m_clefKeyList) {
+	// don't delete contents of m_clefKeyList: the pointers
+	// are just aliases for events in the main segment
+	delete m_clefKeyList;
+    }
 
     // delete content
     for (iterator it = begin(); it != end(); ++it) delete (*it);
@@ -767,7 +774,66 @@ Segment::setLabel(const std::string &label)
     if (m_composition) m_composition->updateRefreshStatuses();
 }
 
+bool
+Segment::ClefKeyCmp::operator()(const Event *e1, const Event *e2) const
+{
+    if (e1->getType() == e2->getType()) return Event::EventCmp()(e1, e2);
+    else return e1->getType() < e2->getType();
+}
 
+Clef
+Segment::getClefAtTime(timeT time) const
+{
+    if (!m_clefKeyList) return Clef();
+
+    Event ec(Clef::EventType, time);
+    ClefKeyList::iterator i = m_clefKeyList->lower_bound(&ec);
+
+    while (i == m_clefKeyList->end() ||
+	   (*i)->getAbsoluteTime() > time ||
+	   (*i)->getType() != Clef::EventType) {
+
+	if (i == m_clefKeyList->begin()) return Clef();
+	--i;
+    }
+
+    try {
+	return Clef(**i);
+    } catch (const Exception &e) {
+	std::cerr << "Segment::getClefAtTime(" << time
+		  << "): bogus clef in ClefKeyList: event dump follows:"
+		  << std::endl;
+	(*i)->dump(std::cerr);
+	return Clef();
+    }
+}
+
+Key
+Segment::getKeyAtTime(timeT time) const
+{
+    if (!m_clefKeyList) return Key();
+
+    Event ek(Key::EventType, time);
+    ClefKeyList::iterator i = m_clefKeyList->lower_bound(&ek);
+
+    while (i == m_clefKeyList->end() ||
+	   (*i)->getAbsoluteTime() > time ||
+	   (*i)->getType() != Key::EventType) {
+
+	if (i == m_clefKeyList->begin()) return Key();
+	--i;
+    }
+
+    try {
+	return Key(**i);
+    } catch (const Exception &e) {
+	std::cerr << "Segment::getClefAtTime(" << time
+		  << "): bogus key in ClefKeyList: event dump follows:"
+		  << std::endl;
+	(*i)->dump(std::cerr);
+	return Key();
+    }
+}
 
 timeT
 Segment::getRepeatEndTime() const
@@ -780,7 +846,6 @@ Segment::getRepeatEndTime() const
 	    return (*i)->getStartTime();
 	} else {
             return m_composition->getEndMarker();
-	    //return m_composition->getDuration();
 	}
     }
     return getEndMarkerTime();
@@ -790,6 +855,11 @@ Segment::getRepeatEndTime() const
 void
 Segment::notifyAdd(Event *e) const
 {
+    if (e->isa(Clef::EventType) || e->isa(Key::EventType)) {
+	if (!m_clefKeyList) m_clefKeyList = new ClefKeyList;
+	m_clefKeyList->insert(e);
+    }
+
     for (ObserverSet::iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
 	(*i)->eventAdded(this, e);
@@ -800,6 +870,13 @@ Segment::notifyAdd(Event *e) const
 void
 Segment::notifyRemove(Event *e) const
 {
+    if (m_clefKeyList && (e->isa(Clef::EventType) || e->isa(Key::EventType))) {
+	ClefKeyList::iterator i = m_clefKeyList->find(e);
+	if (i != m_clefKeyList->end()) {
+	    m_clefKeyList->erase(i);
+	}
+    }
+    
     for (ObserverSet::iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
 	(*i)->eventRemoved(this, e);

@@ -234,10 +234,7 @@ void
 ClefInsertionCommand::modifySegment()
 {
     SegmentNotationHelper helper(getSegment());
-
-    Clef oldClef;
-    Rosegarden::Key key;
-    helper.getClefAndKeyAt(getStartTime(), oldClef, key);
+    Clef oldClef(getSegment().getClefAtTime(getStartTime()));
 
     Segment::iterator i = helper.insertClef(getStartTime(), m_clef);
     if (i != helper.segment().end()) m_lastInsertedEvent = *i;
@@ -315,11 +312,10 @@ void
 KeyInsertionCommand::modifySegment()
 {
     SegmentNotationHelper helper(getSegment());
-    Rosegarden::Clef clef;
     Rosegarden::Key oldKey;
 
     if (m_convert || m_transpose) {
-	helper.getClefAndKeyAt(getStartTime(), clef, oldKey);
+	oldKey = getSegment().getKeyAtTime(getStartTime());
     }
 
     Segment::iterator i = helper.insertKey(getStartTime(), m_key);
@@ -333,11 +329,6 @@ KeyInsertionCommand::modifySegment()
 
 	    //!!! what if we get two keys at the same time...?
 	    if ((*i)->isa(Rosegarden::Key::EventType)) break;
-
-	    if ((*i)->isa(Rosegarden::Clef::EventType)) {
-		clef = Rosegarden::Clef(**i);
-		continue;
-	    }
 
 	    if ((*i)->isa(Rosegarden::Note::EventType) &&
 		(*i)->has(PITCH)) {
@@ -955,6 +946,8 @@ TransformsMenuFixNotationQuantizeCommand::modifySegment()
 	 segment->findTime(m_selection->getStartTime()),
 	 segment->findTime(m_selection->getEndTime()));
 */
+
+    //!!! normalizeRests?
 }
 
 

@@ -424,10 +424,8 @@ NotationStaff::positionElements(timeT from, timeT to)
 			   Rosegarden::Key(*(*it)->event())));
 
 	    if (!haveCurrentClef) { // need this to know how to present the key
-		Rosegarden::SegmentNotationHelper helper(getSegment());
-		Rosegarden::Key someKey;
-		helper.getClefAndKeyAt
-		    ((*it)->event()->getAbsoluteTime(), currentClef, someKey);
+		currentClef = getSegment().getClefAtTime
+		    ((*it)->event()->getAbsoluteTime());
 		haveCurrentClef = true;
 	    }
 	}

@@ -503,6 +503,8 @@ public:
 	/* throw (Event::NoData, Event::BadType) */;
     Text(const std::string &text,
 	 const std::string &textType = UnspecifiedType);
+    Text(const Text &);
+    Text &operator=(const Text &);
     ~Text();
 
     std::string getText() const { return m_text; }
@@ -686,6 +688,9 @@ public:
      */
     Pitch(int heightOnStaff, const Clef &clef, const Key &key,
 	  const Accidental &explicitAccidental = Accidentals::NoAccidental);
+
+    Pitch(const Pitch &);
+    Pitch &operator=(const Pitch &);
 
     /**
      * Return the MIDI pitch for this Pitch object.

@@ -1,3 +1,4 @@
+// -*- c-basic-offset: 4 -*-
 /*
     Rosegarden-4
     A sequencer and musical notation editor.
@@ -316,10 +317,9 @@ MupExporter::writeClefAndKey(std::ofstream &str, Rosegarden::TrackId trackNo)
     for (Composition::iterator i = c->begin(); i != c->end(); ++i) {
 	if ((*i)->getTrack() == trackNo) {
 
-	    Rosegarden::Clef clef;
-	    Rosegarden::Key key;
-	    (Rosegarden::SegmentNotationHelper(**i)).
-		getClefAndKeyAt((*i)->getStartTime(), clef, key);
+	    Rosegarden::Clef clef((*i)->getClefAtTime((*i)->getStartTime()));
+	    Rosegarden::Key key((*i)->getKeyAtTime((*i)->getStartTime()));
+		
 
 	    str << "staff " << trackNo+1 << "\n";
 

@@ -203,8 +203,8 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 
     // Check for lack of MIDI devices and disable Studio options accordingly
     //
-    if (m_doc->getStudio().getMidiDevice(0) == 0)
-        stateChanged("got_midi_devices");
+    if (!m_doc->getStudio().haveMidiDevices())
+        stateChanged("got_midi_devices", KXMLGUIClient::StateReverse);
 
     emit startupStatusMessage(i18n("Starting..."));
 

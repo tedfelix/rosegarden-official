@@ -443,13 +443,6 @@ public:
      */
     void unbeam(iterator from, iterator to);
 
-
-    /**
-     * Find the clef and key in effect at the given time.  Slow.
-     */
-    void getClefAndKeyAt(timeT time, Clef &clef, Key &key);
-    
-
     /**
      * Guess which clef a section of music is supposed to be in,
      * ignoring any clef events actually found in the section.

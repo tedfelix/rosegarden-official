@@ -38,7 +38,7 @@ class ModifyDeviceCommand : public KNamedCommand
 {
 public:
     ModifyDeviceCommand(Rosegarden::Studio *studio,
-                        int device,
+                        Rosegarden::DeviceId device,
                         const std::string &name,
                         const std::string &librarianName,
                         const std::string &librarianEmail,
