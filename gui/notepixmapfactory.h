@@ -74,8 +74,8 @@ public:
     void setNoteBodySizes(QSize empty, QSize filled);
     void setTailWidth(unsigned int);
     void setAccidentalsWidth(unsigned int sharp,
-                           unsigned int flat,
-                           unsigned int natural);
+                             unsigned int flat,
+                             unsigned int natural);
 
 protected:
 
@@ -118,7 +118,6 @@ class NotePixmapFactory
 {
 public:
 
-    /// The Staff is used for pitch->height conversion with chord pixmap
     NotePixmapFactory();
     ~NotePixmapFactory();
 
