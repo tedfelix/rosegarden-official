@@ -89,7 +89,7 @@ Staff::Staff(QCanvas *canvas, Staff::Clef clef)
 int
 Staff::pitch0YOffset() const
 {
-    return nbLines * lineWidth - lineWidth / 2 - 15;
+    return nbLines * lineWidth - lineWidth / 2 - 22;
 }
 
 
@@ -98,5 +98,5 @@ const unsigned int Staff::lineWidth = noteHeight + 1;
 const unsigned int Staff::noteWidth = 9;
 const unsigned int Staff::stalkLen = noteHeight * 7/2 - 6;
 const unsigned int Staff::nbLines = 5;
-const unsigned int Staff::linesOffset = 14;
+const unsigned int Staff::linesOffset = 8;
 
