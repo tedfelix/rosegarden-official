@@ -132,6 +132,11 @@ public:
     void exportMIDIFile(const QString &url);
 
     /**
+     * export a Csound scorefile
+     */
+    void exportCsoundFile(const QString &url);
+
+    /**
      * The Sequencer calls this method to get a MappedCompositon
      * full of MappedEvents for it to play.
      */
@@ -373,6 +378,11 @@ public slots:
      * Let the user enter a MIDI file to export to
      */
     void slotExportMIDI();
+
+    /**
+     * Let the user enter a Csound scorefile to export to
+     */
+    void slotExportCsound();
 
     /**
      * closes all open windows by calling close() on each memberList

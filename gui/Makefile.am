@@ -7,6 +7,7 @@ rosegarden_SOURCES = \
 	basiccommand.cpp \
 	chordnameruler.cpp \
 	colours.cpp \
+	csoundio.cpp \
 	dialogs.cpp \
 	editcommands.cpp \
 	edittool.cpp \

@@ -53,6 +53,7 @@
 #include "rosegardenconfiguredialog.h"
 #include "MidiFile.h"
 #include "rg21io.h"
+#include "csoundio.h"
 #include "rosegardendcop.h"
 #include "ktmpstatusmsg.h"
 #include "SegmentPerformanceHelper.h"
@@ -173,6 +174,10 @@ void RosegardenGUIApp::setupActions()
     new KAction(i18n("Export as &MIDI file..."), 0, 0, this,
                 SLOT(slotExportMIDI()), actionCollection(),
                 "file_export_midi");
+
+    new KAction(i18n("Export as &Csound score file..."), 0, 0, this,
+                SLOT(slotExportCsound()), actionCollection(),
+                "file_export_csound");
 
     KStdAction::quit  (this, SLOT(slotQuit()),              actionCollection());
 
@@ -1605,6 +1610,62 @@ void RosegardenGUIApp::exportMIDIFile(const QString &file)
     {
         KMessageBox::sorry(this, i18n("The MIDI File has not been exported."));
         return;
+    }
+}
+
+void RosegardenGUIApp::slotExportCsound()
+{
+    KTmpStatusMsg msg(i18n("Exporting to Csound scorefile..."), statusBar());
+
+    QString fileName=KFileDialog::getSaveFileName(QDir::currentDirPath(),
+                                                  i18n("*"), this, i18n("Export as..."));
+
+    if (fileName.isEmpty())
+      return;
+
+    KURL *u = new KURL(fileName);
+
+    if (u->isMalformed())
+    {
+        KMessageBox::sorry(this, i18n("This is not a valid filename.\n"));
+        return;
+    }
+
+    if (!u->isLocalFile())
+    {
+        KMessageBox::sorry(this, i18n("This is not a local file.\n"));
+        return;
+    }
+
+    QFileInfo info(fileName);
+
+    if (info.isDir())
+    {
+        KMessageBox::sorry(this, i18n("You have specified a directory"));
+        return;
+    }
+
+    if (info.exists())
+    {
+        int overwrite = KMessageBox::questionYesNo(this,
+                               i18n("The specified file exists.  Overwrite?"));
+
+        if (overwrite != KMessageBox::Yes)
+         return;
+    }
+
+    // Go ahead and export the file
+    //
+    exportCsoundFile(fileName);
+}
+
+void RosegardenGUIApp::exportCsoundFile(const QString &file)
+{
+    SetWaitCursor waitCursor;
+
+    CsoundExporter e(&m_doc->getComposition(), file.latin1());
+    if (!e.write()) {
+	KMessageBox::sorry(this, i18n("The Csound file has not been exported."));
     }
 }
 
