@@ -34,6 +34,7 @@
 #include <kmainwindow.h>
 #include <kaccel.h>
 
+#include "Event.h"
 #include "rosegardensequenceriface.h"
 
 class KURL;
@@ -56,7 +57,7 @@ protected:
 
 public slots:
   virtual void quit();
-  virtual bool play();
+  virtual bool play(const Rosegarden::timeT &position);
   virtual bool stop();
     
 private:

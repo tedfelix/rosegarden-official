@@ -17,21 +17,15 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _ROSEGARDENSEQUENCERIFACE_H_
-#define _ROSEGARDENSEQUENCERIFACE_H_
 
-#include <dcopobject.h>
-#include "Event.h"
+#ifndef _ROSEGARDEN_DCOP_H_
+#define _ROSEGARDEN_DCOP_H_
 
-class RosegardenSequencerIface : virtual public DCOPObject
-{
-  K_DCOP
-public:
-k_dcop:
+#define ROSEGARDEN_SEQUENCER_APP_NAME   "rosegardensequencer"
+#define ROSEGARDEN_SEQUENCER_IFACE_NAME "RosegardenSequencerIface"
 
-  virtual void quit() = 0;
-  virtual bool play(const Rosegarden::timeT &position) = 0;
-  virtual bool stop() = 0;
-};
+#define ROSEGARDEN_GUI_APP_NAME         "rosegardengui"
+#define ROSEGARDEN_GUI_IFACE_NAME       "RosegardenGUIIface"
 
-#endif // _ROSEGARDENSEQUENCERIFACE_H_
+
+#endif // _ROSEGARDEN_DCOP_H_

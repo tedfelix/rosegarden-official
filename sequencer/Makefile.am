@@ -21,7 +21,7 @@ EXTRA_DIST = main.cpp rosegardensequencer.cpp rosegardensequencer.h rosegardense
 # kde_wallpaperdir  Where general wallpapers should go to.
 
 # set the include path for X, qt and KDE
-INCLUDES= $(all_includes) -I../core -I../sound
+INCLUDES= $(all_includes) -I../core -I../sound -I../gui
 # claim, which subdirectories you want to install
 # you can add here more. This one gets installed 
 bin_PROGRAMS = rosegardensequencer

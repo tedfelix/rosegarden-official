@@ -45,6 +45,7 @@
 #include "resource.h"
 #include "MidiFile.h"
 #include "rg21io.h"
+#include "rosegardendcop.h"
 
 RosegardenGUIApp::RosegardenGUIApp()
     : KMainWindow(0), DCOPObject("RosegardenGUIIface"),
@@ -53,8 +54,7 @@ RosegardenGUIApp::RosegardenGUIApp()
       m_view(0),
       m_doc(0),
       m_selectDefaultTool(0),
-      m_transportStatus(STOPPED),
-      m_dcopClient(0)
+      m_transportStatus(STOPPED)
 {
     ///////////////////////////////////////////////////////////////////
     // call inits to invoke all other construction parts
@@ -65,8 +65,6 @@ RosegardenGUIApp::RosegardenGUIApp()
     initView();
 	
     readOptions();
-
-    initSequencer();
 
     m_selectDefaultTool->activate();
     
@@ -162,23 +160,36 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotChangeTimeResolution()),
                 actionCollection(), "change_time_res");
 
-    // Transport controls 
+    // Transport controls (rwb)
     //
-    new KAction(i18n("Play"), 0, 0, this,
-                SLOT(play()), actionCollection(),
-                "play");
+    // We set some default key bindings - with numlock off
+    // use 1 (End) and 3 (Page Down) for Rwd and Ffwd and
+    // 0 (insert) and Enter for Play and Stop 
+    //
+    KAction *transportAction;
+    transportAction = new KAction(i18n("Play"), 0, 0, this,
+                                  SLOT(play()), actionCollection(),
+                                  "play");
+    transportAction->setGroup("transportcontrols");
+    transportAction->setAccel(Key_Insert);
 
-    new KAction(i18n("Stop"), 0, 0, this,
-                SLOT(stop()), actionCollection(),
-                "stop");
+    transportAction = new KAction(i18n("Stop"), 0, 0, this,
+                                  SLOT(stop()), actionCollection(),
+                                  "stop");
+    transportAction->setGroup("transportcontrols");
+    transportAction->setAccel(Key_Enter);
 
-    new KAction(i18n("Fast Forward"), 0, 0, this,
-                SLOT(fastforward()), actionCollection(),
-                "fast_forward");
+    transportAction = new KAction(i18n("Fast Forward"), 0, 0, this,
+                                  SLOT(fastforward()), actionCollection(),
+                                  "fast_forward");
+    transportAction->setGroup("transportcontrols");
+    transportAction->setAccel(Key_PageDown);
 
-    new KAction(i18n("Rewind"), 0, 0, this,
-                SLOT(rewind()), actionCollection(),
-                "rewind");
+    transportAction = new KAction(i18n("Rewind"), 0, 0, this,
+                                  SLOT(rewind()), actionCollection(),
+                                  "rewind");
+    transportAction->setGroup("transportcontrols");
+    transportAction->setAccel(Key_End);
 
 
     createGUI("rosegardenui.rc");
@@ -834,6 +845,22 @@ RosegardenGUIApp::setPointerPosition(const int &position)
 void
 RosegardenGUIApp::play()
 {
+  QByteArray data;
+  QCString replyType;
+  QByteArray replyData;
+
+  // Send a Stop to the Sequencer
+  if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
+                          ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                          "play(Rosegarden::timeT)", data,
+                          replyType, replyData))
+  {
+    // failed
+  }
+  else
+  {
+  }
+
 }
 
 // Send stop request to Sequencer if playing, else
@@ -844,9 +871,27 @@ RosegardenGUIApp::stop()
   if (m_transportStatus == STOPPED)
   {
     setPointerPosition(0);
-    return;
+    //return;
   }
 
+  QByteArray data;
+  QCString replyType;
+  QByteArray replyData;
+
+  // Send a Stop to the Sequencer
+  if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
+                          ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                          "stop()", data,
+                          replyType, replyData))
+  {
+    // failed
+    cout << "FAILED" << endl;
+  }
+  else
+  {
+    cout << "COMPLETED" << endl;
+  }
+                          
 }
 
 // Jump to previous bar
@@ -877,6 +922,10 @@ RosegardenGUIApp::fastforward()
                      ((double) m_doc->getComposition().getNbTicksPerBar());
   int newBarNumber = (int) barNumber;
 
+  // we need to work out where the trackseditor finishes so we
+  // don't skip beyond it.  Generally we need extra-Composition
+  // non-destructive start and end markers for the piece.
+  //
   newBarNumber++;
 
   setPointerPosition(newBarNumber * 
@@ -885,36 +934,18 @@ RosegardenGUIApp::fastforward()
 }
 
 // Use this method to try and locate the sequencer engine
+// and then register with it
 //
 void
 RosegardenGUIApp::initSequencer()
 {
-  // if we've already got the reference
-  if (m_dcopClient)
+  DCOPClient *client = kapp->dcopClient();
+
+  if (!client->isApplicationRegistered(ROSEGARDEN_SEQUENCER_APP_NAME))
+  {
     return;
-
-  m_dcopClient = kapp->dcopClient();
-
-  QCStringList dcopApps = m_dcopClient->registeredApplications();
-
-/*
-  // Number of matches of our GUI app
-  //
-  int guiAppInstances  = dcopApps.contains(QCString(ROSEGARDEN_GUI_APP));
-
-  if ( guiAppInstances == 0 )
-  {
-    cerr << "Rosegarden sequencer cannot start as \""
-         << ROSEGARDEN_GUI_APP << "\" is not running"  << endl;
-    return(1);
   }
 
-  if ( guiAppInstances > 1 )
-  {
-    cerr << "Rosegarden sequencer cannot start as too many instances of \"" <<
-             ROSEGARDEN_GUI_APP << "\" are running." << endl;
-    return(1);
-  }
-*/
-
+  // got the sequencer
 }
+

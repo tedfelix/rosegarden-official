@@ -325,10 +325,6 @@ private:
     //
     TransportStatus m_transportStatus;
  
-    // DCOP client reference - our comms handle
-    //
-    DCOPClient *m_dcopClient;
-
 };
  
 #endif // ROSEGARDENGUI_H

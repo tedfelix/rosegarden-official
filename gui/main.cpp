@@ -43,12 +43,14 @@ int main(int argc, char *argv[])
 
     KAboutData aboutData( "rosegardengui", I18N_NOOP("RosegardenGUI"),
                           VERSION, description, KAboutData::License_GPL,
-                          "(c) 2000-2001, Guillaume Laurent, Chris Cannam, Rich Bown");
-    aboutData.addAuthor("Guillaume Laurent, Chris Cannam, Rich Bown",0, "glaurent@telegraph-road.org, cannam@all-day-breakfast.com, bownie@bownie.com");
+                          "(c) 2000-2001, Guillaume Laurent, Chris Cannam, Richard Bown");
+    aboutData.addAuthor("Guillaume Laurent, Chris Cannam, Richard Bown",0, "glaurent@telegraph-road.org, cannam@all-day-breakfast.com, bownie@bownie.com");
     KCmdLineArgs::init( argc, argv, &aboutData );
     KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
 
     KApplication app;
+
+    RosegardenGUIApp *rosegardengui = 0;
  
     if (app.isRestored()) {
 
@@ -56,7 +58,7 @@ int main(int argc, char *argv[])
 
     } else {
 
-        RosegardenGUIApp *rosegardengui = new RosegardenGUIApp();
+        rosegardengui = new RosegardenGUIApp();
         rosegardengui->show();
 
         KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
@@ -68,13 +70,16 @@ int main(int argc, char *argv[])
         }
 
         args->clear();
+
     }
 
     QObject::connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
-
     kapp->dcopClient()->registerAs(kapp->name(), false);
-    
     //app.dcopClient()->setDefaultObject("RosegardenGUIIface");
 
+    if (rosegardengui)
+      rosegardengui->initSequencer();
+
     return app.exec();
+
 }  

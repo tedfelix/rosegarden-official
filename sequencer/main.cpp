@@ -28,14 +28,11 @@
 
 #include "rosegardensequencer.h"
 #include <MappedComposition.h>
+#include "rosegardendcop.h"
 
 using std::cout;
 using std::cerr;
 using std::endl;
-
-// the name of our rosegarden gui application
-//
-#define ROSEGARDEN_GUI_APP "rosegardengui"
 
 static const char *description = I18N_NOOP("RosegardenSequencer");
     
@@ -88,33 +85,37 @@ int main(int argc, char *argv[])
 
   DCOPClient *client = kapp->dcopClient();
 
-  QCString realAppId = client->registerAs(kapp->name());
+  QCString realAppId = client->registerAs(kapp->name(), false);
     
   // get list of registered applications from DCOP
   //
   QCStringList dcopApps = client->registeredApplications();
 
+/*
+  cout << "GOT " << dcopApps.count() << " INSTANCES" << endl;
+
+
   // Number of matches of our GUI app
   //
-  int guiAppInstances  = dcopApps.contains(QCString(ROSEGARDEN_GUI_APP));
+  int guiAppInstances  = dcopApps.contains(QCString(ROSEGARDEN_GUI_APP_NAME));
 
   if ( guiAppInstances == 0 )
   {
     cerr << "Rosegarden sequencer cannot start as \""
-         << ROSEGARDEN_GUI_APP << "\" is not running"  << endl;
+         << ROSEGARDEN_GUI_APP_NAME << "\" is not running"  << endl;
     return(1);
   }
 
   if ( guiAppInstances > 1 )
   {
     cerr << "Rosegarden sequencer cannot start as too many instances of \"" <<
-             ROSEGARDEN_GUI_APP << "\" are running." << endl;
+             ROSEGARDEN_GUI_APP_NAME << "\" are running." << endl;
     return(1);
   }
 
   // Get the GUI App reference
   //
-  QValueList<QCString>::Iterator guiApp = dcopApps.find(QCString(ROSEGARDEN_GUI_APP));
+  QValueList<QCString>::Iterator guiApp = dcopApps.find(QCString(ROSEGARDEN_GUI_APP_NAME));
 
   // Call the relevant method on the GUI interface to
   // return the time slice of MappedEvents
@@ -125,8 +126,8 @@ int main(int argc, char *argv[])
   arg << 0;
   arg << 1000;
 
-  if (!client->call(ROSEGARDEN_GUI_APP,
-                    "RosegardenGUIIface",
+  if (!client->call(ROSEGARDEN_GUI_APP_NAME,
+                    ROSEGARDEN_GUI_IFACE_NAME,
                     "getSequencerSlice(int, int)",
                     data, replyType, replyData))
   {
@@ -167,6 +168,9 @@ int main(int argc, char *argv[])
       return(1);
     }
   }
+
+*/
+
 /*
   cout << "Number of items in list = " << apps.count() << endl;
 
