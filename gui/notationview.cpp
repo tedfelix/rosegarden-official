@@ -2147,7 +2147,7 @@ bool NotationView::applyLayout(int staffNo, timeT startTime, timeT endTime)
 
     m_hlayout->setStaffCount(m_staffs.size());
 
-    START_TIMING;
+    Rosegarden::Profiler profiler("NotationView::applyLayout");
     unsigned int i;
 
     for (i = 0; i < m_staffs.size(); ++i) {
@@ -2204,7 +2204,6 @@ bool NotationView::applyLayout(int staffNo, timeT startTime, timeT endTime)
 	m_bottomBarButtons->update();
     }
 
-    PRINT_ELAPSED("NotationView::applyLayout");
     return true;
 }
 
@@ -2601,11 +2600,10 @@ void NotationView::print(bool previewOnly)
 void NotationView::refreshSegment(Segment *segment,
 				  timeT startTime, timeT endTime)
 {
-    START_TIMING;
     NOTATION_DEBUG << "*** " << endl;
-    Rosegarden::Profiler foo("NotationView::refreshSegment()");
 
     if (m_inhibitRefresh) return;
+    Rosegarden::Profiler foo("NotationView::refreshSegment");
 
     installProgressEventFilter();
 
@@ -2646,8 +2644,6 @@ void NotationView::refreshSegment(Segment *segment,
         m_staffs[i]->positionElements(barStartTime, barEndTime);
     }
 
-    PRINT_ELAPSED("NotationView::refreshSegment (without update/GC)");
-
     PixmapArrayGC::deleteAll();
 
     removeProgressEventFilter();
@@ -2665,7 +2661,6 @@ void NotationView::refreshSegment(Segment *segment,
 
     setMenuStates();
 
-    PRINT_ELAPSED("NotationView::refreshSegment (including update/GC)");
     NOTATION_DEBUG << "*** " << endl;
 }
 
@@ -2726,7 +2721,7 @@ void NotationView::setMenuStates()
     
 void NotationView::readjustCanvasSize()
 {
-    START_TIMING;
+    Rosegarden::Profiler profiler("NotationView::readjustCanvasSize");
 
     double maxWidth = 0.0;
     int maxHeight = 0;
@@ -2751,8 +2746,6 @@ void NotationView::readjustCanvasSize()
         if (staff.getTotalHeight() + staff.getY() > maxHeight) {
             maxHeight = staff.getTotalHeight() + staff.getY() + 1;
         }
-
-	PRINT_ELAPSED("NotationView::readjustCanvasSize checkpoint");
     }
 
     NOTATION_DEBUG << "NotationView::readjustCanvasSize: maxHeight is "
@@ -2783,8 +2776,6 @@ void NotationView::readjustCanvasSize()
 		       getCanvasView()->height()));
 	}
     }
-
-    PRINT_ELAPSED("NotationView::readjustCanvasSize total");
 }
 
 

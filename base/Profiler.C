@@ -1,6 +1,5 @@
 // -*- c-basic-offset: 4 -*-
 
-
 /*
     Rosegarden-4
     A sequencer and musical notation editor.
@@ -21,7 +20,6 @@
 */
 
 #include <iostream>
-
 #include "Profiler.h"
 
 using std::cerr;
@@ -62,13 +60,26 @@ void Profiles::dump()
 #ifndef NO_TIMING    
     cerr << "Profiles::dump() :\n";
 
+    // I'm finding these two confusing dumped out in random order,
+    // so I'm going to sort them alphabetically:
+
+    std::vector<const char *> profileNames;
     for (ProfileMap::iterator i = m_profiles.begin();
 	 i != m_profiles.end(); ++i) {
+	profileNames.push_back((*i).first);
+    }
 
-        cerr << (*i).first << ": " 
-	     << (*i).second.first << " calls, "
-	     << (((*i).second.second * 1000) / CLOCKS_PER_SEC) << "ms, "
-	     << (((*i).second.second * 1000000 / (*i).second.first) / CLOCKS_PER_SEC) << "us/call" << endl;
+    std::sort(profileNames.begin(), profileNames.end());
+
+    for (std::vector<const char *>::iterator i = profileNames.begin();
+	 i != profileNames.end(); ++i) {
+
+        cerr << "-> " << *i << ": " 
+	     << m_profiles[*i].first << " calls, "
+	     << ((m_profiles[*i].second * 1000) / CLOCKS_PER_SEC) << "ms, "
+	     << (((double)m_profiles[*i].second * 1000000.0 /
+		  (double)m_profiles[*i].first) / CLOCKS_PER_SEC) << "us/call"
+	     << endl;
     }
 
     cerr << "Profiles::dump() finished\n";
