@@ -86,6 +86,9 @@ protected:
 
     std::ifstream *m_inFile;
     std::ofstream *m_outFile;
+    
+    bool           m_loseBuffer; // do we need to dump the read buffer
+                                 // and re-fill it?
 
 };
 

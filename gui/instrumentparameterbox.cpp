@@ -215,7 +215,9 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
     //
     if (instrument->getType() == Rosegarden::Instrument::Audio)
     {
-        m_instrumentLabel->hide();
+        m_instrumentLabel->show();
+        m_instrumentLabel->setText(strtoqstr(m_selectedInstrument->getName()));
+
         m_channelLabel->hide();
         m_panLabel->hide();
         m_velocityLabel->hide();

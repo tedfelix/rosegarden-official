@@ -83,6 +83,11 @@ public:
 
     AudioFile* getAudioFile() { return m_audioFile; }
 
+    // Scan to a peak and scan forward a number of peaks
+    //
+    bool scanToPeak(int peak);
+    bool scanForward(int numberOfPeaks);
+
 protected:
     // Write the peak header and the peaks themselves
     //

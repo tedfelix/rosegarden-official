@@ -206,6 +206,15 @@ PeakFile::write(unsigned short undatePercentage)
 void
 PeakFile::close()
 {
+    // Close any input file handle
+    //
+    if (m_inFile && m_inFile->is_open())
+    {
+        m_inFile->close();
+        delete m_inFile;
+        m_inFile = 0;
+    }
+
     if (m_outFile == 0)
         return;
 
@@ -356,6 +365,58 @@ PeakFile::writeHeader(std::ofstream *file)
     putBytes(file, header);
 }
 
+bool
+PeakFile::scanToPeak(int peak)
+{
+    if (!m_inFile)
+        return false;
+
+    if (!m_inFile->is_open())
+        return false;
+
+    // Scan to start of chunk and then seek to peak number
+    //
+    m_inFile->seekg(m_chunkStartPosition + 128, std::ios::beg); 
+    m_inFile->seekg(peak * m_format * m_channels * m_pointsPerValue,
+                    std::ios::cur);
+
+    // Ensure we re-read the input buffer
+    m_loseBuffer = true;
+
+    /*
+    if (m_inFile->eof())
+        return false;
+        */
+
+    return true;
+}
+
+bool
+PeakFile::scanForward(int numberOfPeaks)
+{
+    if (!m_inFile)
+        return false;
+
+    if (!m_inFile->is_open())
+        return false;
+
+    // Seek forward and number of peaks
+    //
+    m_inFile->seekg(numberOfPeaks * m_format * m_channels * m_pointsPerValue,
+                    std::ios::cur);
+
+    // Ensure we re-read the input buffer
+    m_loseBuffer = true;
+
+    /*
+    if (m_inFile->eof())
+        return false;
+        */
+
+    return true;
+}
+
+
 void
 PeakFile::writePeaks(std::ofstream *file)
 {
@@ -378,7 +439,7 @@ PeakFile::writePeaks(std::ofstream *file)
     // 
     std::vector<std::pair<int, int> > channelPeaks;
 
-    for (int i = 0; i < m_audioFile->getChannels(); i++)
+    for (unsigned int i = 0; i < m_audioFile->getChannels(); i++)
         channelPeaks.push_back(std::pair<int, int>());
 
     // Set the format level now we've written the peak data
@@ -389,13 +450,13 @@ PeakFile::writePeaks(std::ofstream *file)
     //
     int sampleValue;
     int sampleMax = 0 ;
-    int sampleMaxPosition = 0;
     int sampleFrameCount = 0;
 
     // Clear some totals
     //
     m_numberOfPeaks = 0;
     m_bodyBytes = 0;
+    m_positionPeakOfPeaks = 0;
 
     // Always loop until we hit EOF
     //
@@ -484,7 +545,7 @@ PeakFile::writePeaks(std::ofstream *file)
                 if (sampleValue > sampleMax)
                 {
                     sampleMax = sampleValue;
-                    sampleMaxPosition = sampleFrameCount;
+                    m_positionPeakOfPeaks = sampleFrameCount;
                 }
 
             }
@@ -533,6 +594,82 @@ PeakFile::getPreview(const RealTime &startIndex,
                      int resolution)
 {
     std::vector<float> ret;
+    int startPeak = ((startIndex.sec * 1000000.0 + startIndex.usec) *
+                      m_audioFile->getSampleRate()) / (m_blockSize * 1000000);
+
+    int endPeak = ((endIndex.sec * 1000000.0 + endIndex.usec) *
+                      m_audioFile->getSampleRate()) / (m_blockSize * 1000000);
+
+    if (startPeak > endPeak)
+        return ret;
+
+    float value = 0.0f;
+    std::string peakData;
+
+    std::cout << "PeakFile::getPreview - getting preview for \""
+              << m_audioFile->getFilename() << "\"" << std::endl;
+
+    // Walk through the peak values 
+    //
+    std::cout << "START = " << startPeak << std::endl;
+    std::cout << "END   = " << endPeak << std::endl;
+
+    /*
+    close();
+    if (open() == false)
+    {
+        std::cout << "PeakFile::getPreview - can't open" << std::endl;
+        return ret;
+    }
+    */
+
+    /*
+    char t;
+    std::string thing = "";
+    m_inFile->seekg(0, std::ios::beg); 
+    for (int i = 0; i < 10; i++)
+    {
+        m_inFile->read(&t, 1);
+        thing += t;
+    }
+
+    std::cout << "STRING = " << thing << std::endl;
+
+    return ret;
+    */
+
+    for (int i = startPeak; i < endPeak; i++)
+    {
+        // Seek to first peak value
+        //
+        if (i == startPeak)
+        {
+            if (scanToPeak(startPeak) == false)
+                return ret;
+        }
+
+        //cout << "POS = " << m_inFile->tellg() << endl;
+
+        value = 0.0f;
+
+        // Get peak value
+        for (int j = 0; j < m_channels; j++)
+        {
+            try
+            {
+                peakData = getBytes(m_format * m_pointsPerValue);
+                cout << "PEAK DATA = \"" << peakData << "\"" << endl;
+            }
+            catch (std::string e)
+            {
+                std::cout << "PeakFile::getPreview - \"" << e << "\""
+                          << std::endl;
+                return ret;
+            }
+            //cout << "VALUE = " << getIntegerFromLittleEndian(peakData) << endl;
+        }
+
+    }
 
     return ret;
 }

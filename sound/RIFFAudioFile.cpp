@@ -215,7 +215,9 @@ RIFFAudioFile::scanTo(std::ifstream *file, const RealTime &time)
     // sanity
     if (file == 0) return false;
 
-    // seek past header
+    // seek past header - don't hardcode this - use the file format
+    // spec to get header length
+    //
     file->seekg(36, std::ios::beg);
 
     try

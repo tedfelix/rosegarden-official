@@ -30,8 +30,8 @@ SoundFile::SoundFile(const std::string &fileName):
     m_readChunkPtr(-1),
     m_readChunkSize(4096), // 4k blocks
     m_inFile(0),
-    m_outFile(0)
-
+    m_outFile(0),
+    m_loseBuffer(false)
 {
 }
 
@@ -90,6 +90,20 @@ SoundFile::getBytes(unsigned int numberOfBytes)
 {
     if (m_inFile == 0)
         throw(std::string("SoundFile::getBytes - no open file handle"));
+
+    if (m_inFile->eof())
+        throw(std::string("SoundFile::getBytes() - EOF encountered"));
+
+
+    // If this flag is set we dump the buffer and re-read it -
+    // should be set if specialised class is scanning about
+    // when we're doing buffered reads
+    //
+    if (m_loseBuffer)
+    {
+        m_readChunkPtr = -1;
+        m_loseBuffer = false;
+    }
 
     std::string rS;
     char *fileBytes = new char[m_readChunkSize];
