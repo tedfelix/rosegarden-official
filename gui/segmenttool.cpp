@@ -217,64 +217,10 @@ void SegmentPencil::stow()
 
 void SegmentPencil::slotCanvasScrolled(int newX, int newY)
 {
-    if (!m_currentItem) return;
-    handleMouseMove(m_canvas->viewport()->mapFromGlobal(QCursor::pos()) +
-		    QPoint(newX, newY));
-    return;
-
-    QPoint newP1(newX, newY), oldP1(m_canvas->contentsX(),
-                                    m_canvas->contentsY());
-
-    QPoint offset = newP1 - oldP1;
-
-    QPoint absPos = m_canvas->viewport()->mapFromGlobal(QCursor::pos());
-
-    offset = m_canvas->inverseMapPoint(offset);
-    absPos = m_canvas->inverseMapPoint(absPos);
-    
-    QPoint tPos(m_currentItem->x(), m_currentItem->y());
-
-    if (absPos.x() > m_currentItem->x())
-        tPos.setX(tPos.x() + m_currentItem->width());
-    tPos += offset;
-
-    SnapGrid::SnapDirection direction = SnapGrid::SnapRight;
-    if (tPos.x() < m_currentItem->x()) direction = SnapGrid::SnapLeft;
-
-    timeT snap = m_canvas->grid().getSnapTime(double(tPos.x()));
-    if (snap == 0) snap = Note(Note::Shortest).getDuration();
-
-    timeT time = m_canvas->grid().snapX(tPos.x(), direction);
-    double xForTime = m_canvas->grid().getRulerScale()->getXForTime(time);
-
-    if ((absPos.x() > m_currentItem->x()) &&
-        (xForTime < tPos.x())) 
-        return;
-
-    if ((absPos.x() < m_currentItem->x()) &&
-        (xForTime > tPos.x())) 
-        return;
-
-    timeT startTime = m_currentItem->getStartTime();
-
-    if (time >= startTime) {
-	if ((time - startTime) < snap) {
-	    time = startTime + snap;
-	}
-    } else {
-	if ((startTime - time) < snap) {
-	    time = startTime - snap;
-	}
-    }
-
-    if (direction == SnapGrid::SnapLeft) {
-	time += std::max(m_currentItem->getEndTime() -
-			 m_currentItem->getStartTime(), timeT(0));
-    }
-
-    m_currentItem->setEndTime(time);
-
-    m_canvas->slotUpdate();
+    QMouseEvent tmpEvent(QEvent::MouseMove,
+                         m_canvas->viewport()->mapFromGlobal(QCursor::pos()) + QPoint(newX, newY),
+                         Qt::NoButton, Qt::NoButton);
+    handleMouseMove(&tmpEvent);
 }
 
 
@@ -369,11 +315,8 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
 
 int SegmentPencil::handleMouseMove(QMouseEvent *e)
 {
-    return handleMouseMove(e->pos());
-}
+    QPoint pos = e->pos();
 
-int SegmentPencil::handleMouseMove(QPoint pos)
-{
     if (!m_currentItem) return RosegardenCanvasView::NoFollow;
 
     m_canvas->setSnapGrain(false);
@@ -495,6 +438,10 @@ void SegmentMover::stow()
 
 void SegmentMover::slotCanvasScrolled(int newX, int newY)
 {
+    QMouseEvent tmpEvent(QEvent::MouseMove,
+                         m_canvas->viewport()->mapFromGlobal(QCursor::pos()) + QPoint(newX, newY),
+                         Qt::NoButton, Qt::NoButton);
+    handleMouseMove(&tmpEvent);
 }
 
 
@@ -741,6 +688,10 @@ void SegmentResizer::stow()
 
 void SegmentResizer::slotCanvasScrolled(int newX, int newY)
 {
+    QMouseEvent tmpEvent(QEvent::MouseMove,
+                         m_canvas->viewport()->mapFromGlobal(QCursor::pos()) + QPoint(newX, newY),
+                         Qt::NoButton, Qt::NoButton);
+    handleMouseMove(&tmpEvent);
 }
 
 
@@ -950,22 +901,10 @@ void SegmentSelector::stow()
 
 void SegmentSelector::slotCanvasScrolled(int newX, int newY)
 {
-    int offsetX = newX - m_canvas->contentsX();
-    int offsetY = newY - m_canvas->contentsY();
-
-    QCanvasRectangle *selectionRect  = m_canvas->getSelectionRectangle();
-
-    if (!selectionRect) return;
-
-    int w = int(selectionRect->width() + offsetX);
-    int h = int(selectionRect->height() + offsetY);
-
-    // Qt rectangle dimensions appear to be 1-based
-    if (w > 0) ++w; else --w;
-    if (h > 0) ++h; else --h;
-
-    updateSelectionRect(w, h);
-
+    QMouseEvent tmpEvent(QEvent::MouseMove,
+                         m_canvas->viewport()->mapFromGlobal(QCursor::pos()) + QPoint(newX, newY),
+                         Qt::NoButton, Qt::NoButton);
+    handleMouseMove(&tmpEvent);
 }
 
 void

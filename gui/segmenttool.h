@@ -134,7 +134,6 @@ protected slots:
     
 protected:
     SegmentPencil(SegmentCanvas*, RosegardenGUIDoc*);
-    virtual int handleMouseMove(QPoint);
 
     //--------------- Data members ---------------------------------
 
