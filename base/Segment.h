@@ -349,8 +349,9 @@ public:
 
 
     /**
-     * Give all events in the interval [from, to[ the same (new) group
-     * id and the given type
+     * Give all events between the start of the timeslice containing
+     * from and the start of the timeslice containing to the same new
+     * group id and the given type
      */
     void makeBeamedGroup(iterator from, iterator to, std::string type);
 
@@ -408,15 +409,15 @@ protected:
 				   bool isRest, bool tiedBack);
 
     /// for use by calculateBarPositions
-    void addNewBar(timeT start, bool fixed, bool correct, 
-                   const TimeSignature &timesig) {
-        m_barPositions.push_back(BarPosition(start, fixed, correct, timesig));
-    }
+    void addNewBar(timeT start, bool fixed, bool correct, TimeSignature tsig);
 
     /// for use by autoBeam
     void autoBeamAux(iterator from, iterator to, timeT average,
                      timeT minimum, timeT maximum, TimeSignature timesig,
                      std::string type);
+
+    /// used by calculateBarPositions & autoBeamAux
+    bool hasEffectiveDuration(iterator i);
 
     timeT m_startIdx;
     unsigned int m_instrument;
