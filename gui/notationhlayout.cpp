@@ -468,7 +468,7 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 
 	if (m_progressDlg && (endTime > startTime)) {
 	    m_progressDlg->setCompleted
-		((barTimes.second - startTime) * 50 / (endTime - startTime));
+		((barTimes.second - startTime) * 95 / (endTime - startTime));
 	    m_progressDlg->processEvents();
 	    if (m_progressDlg->wasCancelled()) {
 		throw std::string("Action cancelled");
@@ -1047,11 +1047,30 @@ NotationHLayout::finishLayout(timeT startTime, timeT endTime)
 	 i != m_barData.end(); ++i) {
 	
 	if (m_progressDlg) {
-	    m_progressDlg->setCompleted(50 + 50 * staffNo / m_barData.size());
+
+	    m_progressDlg->setCompleted(100 * staffNo / m_barData.size());
+
 	    m_progressDlg->processEvents();
 	    if (m_progressDlg->wasCancelled()) {
 		throw std::string("Action cancelled");
 	    }
+
+	    timeT timeCovered = endTime - startTime;
+	    
+	    if (timeCovered == 0) { // full layout
+
+		NotationElementList *notes = i->first->getViewElementList();
+		if (notes->begin() != notes->end()) {
+		    NotationElementList::iterator j(notes->end());
+		    timeCovered =
+			(*--j)->getAbsoluteTime() -
+			(*notes->begin())->getAbsoluteTime();
+		}
+	    }
+
+	    m_timePerProgressIncrement = timeCovered / (100 / m_barData.size());
+	} else {
+	    m_timePerProgressIncrement = 0;
 	}
 
 	layout(i, startTime, endTime);
@@ -1083,6 +1102,10 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
     double x = 0, barX = 0;
     TieMap tieMap;
+
+    timeT lastIncrement =
+	(isFullLayout && (notes->begin() != notes->end())) ?
+	(*notes->begin())->getAbsoluteTime() : startTime; // progress reporting
 
     for (BarPositionList::iterator bpi = m_barPositions.begin();
 	 bpi != m_barPositions.end(); ++bpi) {
@@ -1169,7 +1192,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 	}
 
         for (NotationElementList::iterator it = from; it != to; ++it) {
-            
+
             NotationElement *el = (*it);
             el->setLayoutX(x);
 //            kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): setting element's x to " << x << endl;
@@ -1214,7 +1237,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 		el->setLayoutAirspace(x, delta);
 	    }
 
-	    if (it != to && (*it)->event()->has(BEAMED_GROUP_ID)) {
+	    if (it != to && el->event()->has(BEAMED_GROUP_ID)) {
 
 		//!!! Gosh.  We need some clever logic to establish
 		// whether one group is happening while another has
@@ -1227,7 +1250,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 		// of their first notes to determine this, as if that
 		// doesn't work, nothing will
 
-		long groupId = (*it)->event()->get<Int>(BEAMED_GROUP_ID);
+		long groupId = el->event()->get<Int>(BEAMED_GROUP_ID);
 		kdDebug(KDEBUG_AREA) << "group id: " << groupId << endl;
 		if (m_groupsExtant.find(groupId) == m_groupsExtant.end()) {
 		    kdDebug(KDEBUG_AREA) << "(new group)" << endl;
@@ -1240,6 +1263,21 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 	    }
 
             x += delta;
+	    
+	    if (m_progressDlg && m_timePerProgressIncrement > 0) {
+		timeT sinceIncrement = el->getAbsoluteTime() - lastIncrement;
+		if (sinceIncrement > m_timePerProgressIncrement) {
+		    m_progressDlg->incrementCompletion
+			(sinceIncrement / m_timePerProgressIncrement);
+		    lastIncrement +=
+			(sinceIncrement / m_timePerProgressIncrement)
+			* m_timePerProgressIncrement;
+		    m_progressDlg->processEvents();
+		    if (m_progressDlg->wasCancelled()) {
+			throw std::string("Action cancelled");
+		    }
+		}
+	    }
         }
 
 	for (NotationGroupMap::iterator mi = m_groupsExtant.begin();

@@ -372,6 +372,7 @@ protected:
     Rosegarden::Quantizer *m_legatoQuantizer;
     const NotationProperties &m_properties;
     RosegardenProgressDialog *m_progressDlg;
+    int m_timePerProgressIncrement;
     int m_staffCount; // purely for progress reporting
 };
 
