@@ -47,7 +47,7 @@ class QSpinBox;
 
 class RosegardenPitchChooser;
 
-/*
+/**
  * Creates a dialog box to allow the user to dial up various selection
  * criteria used for removing events from a selection.  It is up to the caller
  * to actually manipulate the selection.  After the dialog has been accepted,
@@ -55,7 +55,7 @@ class RosegardenPitchChooser;
  * should continue to be selected.  See matrixview.cpp slotFilterSelection()
  * for an example of how to use this.
  */
-class EventFilterDialog : public KDialog
+class EventFilterDialog : public KDialogBase
 {
     Q_OBJECT
 
@@ -151,27 +151,10 @@ protected:
     QComboBox* 	 m_noteVelocityIncludeComboBox;
     QComboBox* 	 m_wheelAmountIncludeComboBox;
     
-    QLabel* 	 m_controllerFromLabel;
-    QLabel*	 m_controllerToLabel;
-    QLabel* 	 m_durationLabel;
-    QLabel*  	 m_numberLabel;
-    QLabel* 	 m_pitchFromLabel;
-    QLabel* 	 m_pitchFromValueLabel;
-    QLabel* 	 m_pitchLabel;
-    QLabel* 	 m_pitchToLabel;
-    QLabel*	 m_pitchToValueLabel;
-    QLabel* 	 m_valueLabel;
-    QLabel* 	 m_velocityLabel;
-    QLabel* 	 m_wheelAmountLabel;
-    QLabel* 	 m_wheelFromLabel;
-    QLabel* 	 m_wheelToLabel;
-    
     QPushButton* m_pitchFromChooserButton;
     QPushButton* m_pitchToChooserButton;
     QPushButton* m_buttonAll;
-    QPushButton* m_buttonCancel;
     QPushButton* m_buttonNone;
-    QPushButton* m_buttonOK;
     
     QSpinBox*  	 m_controllerNumberFromSpinBox;
     QSpinBox* 	 m_controllerNumberToSpinBox;
@@ -195,7 +178,7 @@ protected slots:
     void slotToggleNone();
 
     // write out settings to kconfig data for next time and call accept()
-    void slotButtonOK();
+    virtual void slotOk();
 
     // hooked up to disable their associated widgets
     void slotNoteCheckBoxToggle(int);
