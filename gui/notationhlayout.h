@@ -38,11 +38,19 @@ public:
     ~NotationHLayout();
 
     /**
-     * Precomputes layout data
-     *
-     * The data is put in BarDataList
+     * Precomputes layout data for a single staff.  The resulting data
+     * is stored in the BarDataMap, keyed from the staff reference;
+     * the entire map is then used by reconcileBars() and layout().
+     * The map should be cleared (by calling reset()) before a full
+     * set of staffs is preparsed.
      */
     void preparse(Staff &staff, int firstBar = -1, int lastBar = -1);
+
+    /**
+     * Resets internal data stores, notably the BarDataMap that is
+     * used to retain the data computed by preparse().
+     */
+    void reset();
 
     /// Tries to harmonize the bar positions for all the staves
     void reconcileBars();
@@ -75,11 +83,6 @@ public:
      */
     BarDataList& getBarData(Staff &staff);
     const BarDataList& getBarData(Staff &staff) const;
-
-    /**
-     * Resets any internal position counters the object may have
-     */
-    void reset();
 
     /**
      * Returns the total length of all elements once layout is done

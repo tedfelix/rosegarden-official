@@ -262,6 +262,10 @@ private:
 
     void notifyAdd(Event *);
     void notifyRemove(Event *);
+
+private:
+    Track(const Track &);
+    Track &operator=(const Track &);
 };
 
 

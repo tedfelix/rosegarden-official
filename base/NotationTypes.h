@@ -82,9 +82,7 @@ private:
 };
 
 
-/*
-  -- Key
-
+/**
      All we store in a key Event is the name of the key.  A Key object
      can be constructed from such an Event or just from its name, and
      will return all the properties of the key.

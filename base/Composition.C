@@ -32,9 +32,7 @@ Composition::Composition()
       m_tempo(0),
       m_position(0)
 {
-//     cerr << "Composition:(" << nbTracks << ") : this = "
-//          << this <<  " - size = "
-//          << m_tracks.size() << endl;
+    // empty
 }
 
 Composition::~Composition()
@@ -44,18 +42,35 @@ Composition::~Composition()
 
 void Composition::swap(Composition& c)
 {
-    unsigned int t = m_nbTicksPerBar;
-    m_nbTicksPerBar = c.m_nbTicksPerBar;
-    c.m_nbTicksPerBar = t;
+    // ugh.
 
-    t = m_tempo;
-    m_tempo = c.m_tempo;
-    c.m_tempo = t;
+    Composition *that = &c;
+    unsigned int t;
+
+    t = this->m_nbTicksPerBar;
+    this->m_nbTicksPerBar = that->m_nbTicksPerBar;
+    that->m_nbTicksPerBar = t;
+
+    t = this->m_tempo;
+    this->m_tempo = that->m_tempo;
+    that->m_tempo = t;
 
     m_tracks.swap(c.m_tracks);
+
+    for (trackcontainer::iterator i = that->m_tracks.begin();
+	 i != that->m_tracks.end(); ++i) {
+	(*i)->removeObserver(this);
+	(*i)->addObserver(that);
+    }
+
+    for (trackcontainer::iterator i = this->m_tracks.begin();
+	 i != this->m_tracks.end(); ++i) {
+	(*i)->removeObserver(that);
+	(*i)->addObserver(this);
+    }
+
+    m_timeReference.swap(c.m_timeReference);
 }
-
-
 
 Composition::iterator
 Composition::addTrack(Track *track)
@@ -84,15 +99,10 @@ bool
 Composition::deleteTrack(Track *p)
 {
     iterator i = find(begin(), end(), p);
+    if (i == end()) return false;
     
-    if (i != end()) {
-	p->removeObserver(this);
-        delete p;
-        m_tracks.erase(i);
-        return true;
-    }
-
-    return false;
+    deleteTrack(i);
+    return true;
 }
 
 unsigned int
@@ -122,7 +132,7 @@ Composition::clear()
         delete (*i);
     }
     m_tracks.erase(begin(), end());
-    
+    m_timeReference.erase(m_timeReference.begin(), m_timeReference.end());
 }
 
 

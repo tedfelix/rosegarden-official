@@ -331,18 +331,6 @@ void RosegardenGUIDoc::deleteViews()
 }
 
 
-//            1 unit  = 1/4 clock
-//            4 units =   1 clock
-//            6 units = 3/2 clocks = 1 hemidemisemiquaver
-//           12 units =   3 clocks = 1 demisemiquaver
-//           24 units =   6 clocks = 1 semiquaver
-//           48 units =  12 clocks = 1 quaver
-//           96 units =  24 clocks = 1 crotchet
-//          192 units =  48 clocks = 1 minim
-//          384 units =  96 clocks = 1 semibreve
-//          768 units = 192 clocks = 1 breve
-
-
 bool
 RosegardenGUIDoc::xmlParse(QFile &file, QString &errMsg)
 {
@@ -357,12 +345,6 @@ RosegardenGUIDoc::xmlParse(QFile &file, QString &errMsg)
     bool ok = reader.parse(source);
 
     if (!ok) errMsg = handler.errorString();
-
-    // m_doc.setContent(xmldata);
-    
-//     QDomElement baseNode = m_doc.documentElement();
-
-//     xmlParseElement(baseNode);
 
     return ok;
 }

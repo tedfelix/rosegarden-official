@@ -104,6 +104,10 @@ protected:
     unsigned int m_tempo;
 
     timeT m_position;
+
+private:
+    Composition(const Composition &);
+    Composition &operator=(const Composition &);
 };
 
 }
