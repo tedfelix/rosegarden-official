@@ -25,6 +25,7 @@
  * Copyright (C) 2000 David Faure <faure@kde.org>
  */
 
+#include "rosestrings.h"
 #include "rosegardenguiiface.h"
 
 #include <dcopclient.h>

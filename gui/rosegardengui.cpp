@@ -47,6 +47,7 @@
 #include <kstdaction.h>
 
 // application specific includes
+#include "rosestrings.h"
 #include "rosegardengui.h"
 #include "rosegardenguiview.h"
 #include "rosegardenguidoc.h"

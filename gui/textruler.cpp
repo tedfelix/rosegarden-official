@@ -23,6 +23,7 @@
 
 #include "textruler.h"
 #include "colours.h"
+#include "rosestrings.h"
 #include "rosedebug.h"
 #include "Event.h"
 #include "Segment.h"
@@ -122,14 +123,14 @@ TextRuler::paintEvent(QPaintEvent* e)
 	    continue;
 	}
 
-	QRect bounds = m_fontMetrics.boundingRect(text.c_str());
+	QRect bounds = m_fontMetrics.boundingRect(strtoqstr(text));
 
 	double x = m_rulerScale->getXForTime((*i)->getAbsoluteTime()) +
 	    m_currentXOffset - bounds.width()/2;
 
 	int y = height()/2 + bounds.height()/2;
 
-	paint.drawText(x, y, text.c_str());
+	paint.drawText(x, y, strtoqstr(text));
     }
 }
 

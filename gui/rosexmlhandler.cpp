@@ -19,6 +19,7 @@
     COPYING included with this distribution for more information.
 */
 
+#include "rosestrings.h"
 #include "rosedebug.h"
 #include "rosexmlhandler.h"
 #include "xmlstorableevent.h"

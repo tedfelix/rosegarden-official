@@ -29,6 +29,7 @@
 #include "Clipboard.h"
 #include "notationproperties.h"
 
+#include "rosestrings.h"
 #include "rosedebug.h"
 #include <iostream>
 #include <cctype>
@@ -160,7 +161,7 @@ QString
 ClefInsertionCommand::getGlobalName(Rosegarden::Clef *clef) 
 {
     if (clef) {
-	QString name(clef->getClefType().c_str());
+	QString name(strtoqstr(clef->getClefType()));
 	name = name.left(1).upper() + name.right(name.length()-1);
 	return QString("Change to ") + name + " Cle&f...";
     } else {
@@ -322,7 +323,8 @@ MultiKeyInsertionCommand::~MultiKeyInsertionCommand()
 EraseEventCommand::EraseEventCommand(Segment &segment,
 				     Event *event,
 				     bool collapseRest) :
-    BasicCommand(makeName(event->getType()).c_str(), segment,
+    BasicCommand(strtoqstr(makeName(event->getType())),
+		 segment,
 		 event->getAbsoluteTime(),
 		 event->getAbsoluteTime() + event->getDuration(),
 		 true),
@@ -454,7 +456,7 @@ GroupMenuAddIndicationCommand::getGlobalName(std::string indicationType)
     std::string n = "Add &";
     n += (char)toupper(indicationType[0]);
     n += indicationType.substr(1);
-    return QString(n.c_str());
+    return QString(strtoqstr(n));
 }
 
 TransformsMenuNormalizeRestsCommand::TransformsMenuNormalizeRestsCommand
@@ -575,7 +577,7 @@ MarksMenuAddMarkCommand::getGlobalName(Rosegarden::Mark markType)
     else m = std::string("&") + (char)toupper(m[0]) + m.substr(1);
 
     m = std::string("Add ") + m;
-    return QString(m.c_str());
+    return QString(strtoqstr(m));
 }
 
 void

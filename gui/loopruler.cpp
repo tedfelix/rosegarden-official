@@ -24,6 +24,7 @@
 #include "loopruler.h"
 #include "colours.h"
 #include "Event.h"
+#include "rosestrings.h"
 #include "rosedebug.h"
 #include "RulerScale.h"
 

@@ -19,6 +19,7 @@
     COPYING included with this distribution for more information.
 */
 
+#include "rosestrings.h"
 #include "rosegardentransportdialog.h"
 #include "MidiPitchLabel.h"
 #include <kglobal.h>

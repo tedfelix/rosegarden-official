@@ -1,5 +1,3 @@
-// -*- c-basic-offset: 4 -*-
-
 /*
     Rosegarden-4 v0.1
     A sequencer and musical notation editor.
@@ -19,36 +17,15 @@
     COPYING included with this distribution for more information.
 */
 
-#include "staffline.h"
+#ifndef _ROSE_STRINGS_H_
+#define _ROSE_STRINGS_H_
 
-#include "rosestrings.h"
-#include "rosedebug.h"
+#include <string>
+#include <qstring.h>
+#include "PropertyName.h"
 
-StaffLine::StaffLine(QCanvas *c, QCanvasItemGroup *g, int height) :
-    QCanvasLineGroupable(c, g),
-    m_height(height),
-    m_significant(true)
-{
-    setZ(1);
-}
+extern QString strtoqstr(const std::string &);
+extern QString strtoqstr(const Rosegarden::PropertyName &);
+extern std::string qstrtostr(const QString &);
 
-void
-StaffLine::setHighlighted(bool highlighted)
-{
-//     kdDebug(KDEBUG_AREA) << "StaffLine::setHighlighted("
-//                          << highlighted << ")\n";
-
-    if (highlighted) {
-
-        m_normalPen = pen();
-        QPen newPen = m_normalPen;
-        newPen.setColor(red);
-        setPen(newPen);
-
-    } else {
-
-        setPen(m_normalPen);
-
-    }
-}
-
+#endif

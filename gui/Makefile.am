@@ -54,6 +54,7 @@ rosegarden_SOURCES = \
 	rosegardenguiview.cpp \
         rosegardentransport.ui \
         rosegardentransportdialog.cpp \
+	rosestrings.cpp \
 	rosexmlhandler.cpp \
 	segmentcanvas.cpp \
         segmentcommands.cpp \

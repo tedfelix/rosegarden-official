@@ -32,6 +32,8 @@
 
 #include <iostream>
 
+#include "rosestrings.h"
+
 using std::string;
 using std::map;
 using std::set;
@@ -48,8 +50,8 @@ NoteFontMap::NoteFontMap(string name) :
     m_fontDirectory = KGlobal::dirs()->findResource("appdata", "pixmaps/");
 
     QString mapFileName = QString("%1/%2/mapping.xml")
-        .arg(m_fontDirectory.c_str())
-        .arg(name.c_str());
+        .arg(strtoqstr(m_fontDirectory))
+        .arg(strtoqstr(name));
 
     QFileInfo mapFileInfo(mapFileName);
 
@@ -255,10 +257,10 @@ bool
 NoteFontMap::checkFile(int size, string &src) const
 {
     QString pixmapFileName = QString("%1/%2/%3/%4.xpm")
-        .arg(m_fontDirectory.c_str())
-        .arg(m_name.c_str())
+        .arg(strtoqstr(m_fontDirectory))
+        .arg(strtoqstr(m_name))
         .arg(size)
-        .arg(src.c_str());
+        .arg(strtoqstr(src));
     src = pixmapFileName.latin1();
 
     QFileInfo pixmapFileInfo(pixmapFileName);
@@ -405,13 +407,13 @@ NoteFont::NoteFont(string fontName, int size) :
         m_currentSize = *sizes.begin();
     } else {
         throw BadFont(QString("No sizes listed for font \"%1\"")
-                      .arg(fontName.c_str()).latin1());
+                      .arg(strtoqstr(fontName)).latin1());
     }
 
     if (size > 0) {
         if (sizes.find(size) == sizes.end()) {
             throw BadFont(QString("Font \"%1\" not available in size %2")
-                          .arg(fontName.c_str())
+                          .arg(strtoqstr(fontName))
                           .arg(size).latin1());
         } else {
             m_currentSize = size;
@@ -432,7 +434,7 @@ NoteFont::NoteFont(string fontName, int size) :
     // Locate our font's pixmap map in the font map, create if necessary
 
     string fontKey = QString("__%1__%2__")
-        .arg(m_fontMap.getName().c_str())
+        .arg(strtoqstr(m_fontMap.getName()))
         .arg(m_currentSize).latin1();
 
     FontPixmapMap::iterator i = m_fontPixmapMap->find(fontKey);
@@ -555,7 +557,7 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
     if (ok) {
         cerr << "NoteFont::getPixmap: Loading \"" << src << "\"" << endl;
 
-        found = new QPixmap(src.c_str());
+        found = new QPixmap(strtoqstr(src));
 
         if (!found->isNull()) {
 
@@ -650,7 +652,7 @@ NoteFont::getColouredCanvasPixmap(CharName charName, int hue,
 CharName
 NoteFont::getNameWithColour(CharName base, int hue) const
 {
-    return QString("%1__%2").arg(hue).arg(base.c_str()).latin1();
+    return QString("%1__%2").arg(hue).arg(strtoqstr(base)).latin1();
 }
 
 QPixmap *

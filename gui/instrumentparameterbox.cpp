@@ -35,6 +35,7 @@
 #include "instrumentparameterbox.h"
 #include "widgets.h"
 
+#include "rosestrings.h"
 #include "rosedebug.h"
 
 InstrumentParameterBox::InstrumentParameterBox(QWidget *parent,
@@ -256,8 +257,7 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
 
     // Set instrument name
     //
-    m_instrumentLabel->
-        setText(QString(m_selectedInstrument->getName().c_str()));
+    m_instrumentLabel->setText(strtoqstr(m_selectedInstrument->getName()));
 
     // Enable all check boxes
     //
@@ -325,7 +325,7 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
     Rosegarden::StringList::iterator it;
 
     for (it = list.begin(); it != list.end(); it++)
-        m_bankValue->insertItem(QString((*it).c_str()));
+        m_bankValue->insertItem(strtoqstr(*it));
 
     // Select 
     if (instrument->sendsBankSelect())
@@ -363,8 +363,8 @@ InstrumentParameterBox::slotActivateProgramChange(bool value)
     emit sendMappedEvent(mE);
 
     emit changeInstrumentLabel(m_selectedInstrument->getID(),
-                                   QString(m_selectedInstrument->
-                                       getProgramName().c_str()));
+			       strtoqstr(m_selectedInstrument->
+					 getProgramName()));
 }
 
 void
@@ -409,8 +409,8 @@ InstrumentParameterBox::slotActivateBank(bool value)
     m_bankValue->setDisabled(!value);
 
     emit changeInstrumentLabel(m_selectedInstrument->getID(),
-                                   QString(m_selectedInstrument->
-                                       getProgramName().c_str()));
+			       strtoqstr(m_selectedInstrument->
+					 getProgramName()));
 }
 
 
@@ -435,8 +435,8 @@ InstrumentParameterBox::slotSelectProgram(int index)
     //
     emit sendMappedEvent(mE);
     emit changeInstrumentLabel(m_selectedInstrument->getID(),
-                                   QString(m_selectedInstrument->
-                                       getProgramName().c_str()));
+			       strtoqstr(m_selectedInstrument->
+					 getProgramName()));
 
 }
 
@@ -547,7 +547,7 @@ InstrumentParameterBox::populateProgramList()
     Rosegarden::StringList::iterator it;
 
     for (it = list.begin(); it != list.end(); it++)
-        m_programValue->insertItem(QString((*it).c_str()));
+        m_programValue->insertItem(strtoqstr(*it));
 
     m_programValue->setCurrentItem(
             (int)m_selectedInstrument->getProgramChange());

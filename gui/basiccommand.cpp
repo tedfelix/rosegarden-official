@@ -24,6 +24,7 @@
 
 #include <qstring.h>
 
+#include "rosestrings.h"
 #include "rosedebug.h"
 
 using Rosegarden::Segment;

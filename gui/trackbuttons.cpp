@@ -36,6 +36,7 @@
 #include "trackvumeter.h"
 #include "instrumentlabel.h"
 
+#include "rosestrings.h"
 #include "rosedebug.h"
 
 using Rosegarden::TrackId;
@@ -207,7 +208,7 @@ QFrame* TrackButtons::makeButton(unsigned int trackId)
     //
     assert(track != 0);
 
-    trackLabel->setText(QString(track->getLabel().c_str()));
+    trackLabel->setText(strtoqstr(track->getLabel()));
 
     trackLabel->setFixedSize(labelWidth, m_cellSize - buttonGap);
     trackLabel->setFixedHeight(m_cellSize - buttonGap);
@@ -241,7 +242,7 @@ QFrame* TrackButtons::makeButton(unsigned int trackId)
     if (ins == 0)
         instrumentName = QString("<no instrument>");
     else
-        instrumentName = QString(ins->getName().c_str());
+        instrumentName = QString(strtoqstr(ins->getName()));
 
     instrumentLabel = new InstrumentLabel(instrumentName,
                                           Rosegarden::InstrumentId(trackId),
@@ -256,7 +257,7 @@ QFrame* TrackButtons::makeButton(unsigned int trackId)
     //
     if (ins != 0 && ins->sendsProgramChange())
         instrumentLabel->slotSetAlternativeLabel(
-                QString(ins->getProgramName().c_str()));
+                QString(strtoqstr(ins->getProgramName())));
 
     // select instrument
 
@@ -559,7 +560,7 @@ TrackButtons::slotInstrumentSelection(int position)
         if (ins == 0)
             instrumentName = QString("<no instrument>");
         else
-            instrumentName = QString(ins->getName().c_str());
+            instrumentName = QString(strtoqstr(ins->getName()));
     }
     else
         instrumentName = QString("<no instrument>");
@@ -621,8 +622,7 @@ TrackButtons::populateInstrumentPopup()
 
     for (it = list.begin(); it != list.end(); it++)
     {
-        m_instrumentPopup->
-            insertItem(QString((*it)->getName().c_str()), i++);
+        m_instrumentPopup->insertItem(strtoqstr((*it)->getName()), i++);
     }
 }
 
@@ -649,7 +649,7 @@ TrackButtons::slotInstrumentPopupActivated(int item)
             emit instrumentSelected((int)inst->getID());
 
             m_instrumentLabels[m_popupItem]->
-                    setText(QString(inst->getName().c_str()));
+                    setText(strtoqstr(inst->getName()));
 
             // reset the alternative label
             m_instrumentLabels[m_popupItem]->clearAlternativeLabel();
@@ -659,7 +659,7 @@ TrackButtons::slotInstrumentPopupActivated(int item)
             //
             if (inst->sendsProgramChange())
                 m_instrumentLabels[m_popupItem]->slotSetAlternativeLabel(
-                             QString(inst->getProgramName().c_str()));
+                             QString(strtoqstr(inst->getProgramName())));
 
         }
         else

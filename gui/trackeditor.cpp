@@ -37,6 +37,7 @@
 
 #include "trackeditor.h"
 #include "segmentcanvas.h"
+#include "rosestrings.h"
 #include "rosegardenguidoc.h"
 #include "colours.h"
 #include "multiviewcommandhistory.h"

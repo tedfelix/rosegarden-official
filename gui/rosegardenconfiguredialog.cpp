@@ -26,6 +26,7 @@
 #include <qlabel.h>
 #include <qcombobox.h>
 
+#include "rosestrings.h"
 #include "rosegardenconfiguredialog.h"
 #include "rosegardenguidoc.h"
 #include "Composition.h"

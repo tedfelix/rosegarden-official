@@ -22,6 +22,7 @@
 #include "notationsets.h"
 #include "notationproperties.h"
 #include "BaseProperties.h"
+#include "rosestrings.h"
 #include "rosedebug.h"
 #include "notationstaff.h"
 #include "Equation.h"

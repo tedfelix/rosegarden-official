@@ -43,6 +43,7 @@
 #include "matrixhlayout.h"
 #include "matrixvlayout.h"
 #include "matrixtool.h"
+#include "rosestrings.h"
 #include "rosegardenguidoc.h"
 #include "ktmpstatusmsg.h"
 #include "barbuttons.h"

@@ -19,6 +19,7 @@
 
 #include "dialogs.h"
 #include "notepixmapfactory.h"
+#include "rosestrings.h"
 #include "rosedebug.h"
 #include "rosegardenguidoc.h"
 #include "widgets.h"
@@ -468,7 +469,7 @@ KeySignatureDialog::regenerateKeyCombo()
     for (Rosegarden::Key::KeySet::iterator i = keys.begin();
 	 i != keys.end(); ++i) {
 
-	QString name(i->getName().c_str());
+	QString name(strtoqstr(i->getName()));
 	int space = name.find(' ');
 	if (space > 0) name = name.left(space);
 
@@ -523,7 +524,7 @@ KeySignatureDialog::slotKeyNameChanged(const QString &s)
 
 	int space = name.find(' ');
 	if (space > 0) name = name.substr(0, space);
-	m_keyCombo->setEditText(name.c_str());
+	m_keyCombo->setEditText(strtoqstr(name));
 
     } catch (Rosegarden::Key::BadKeyName) {
 	setValid(false);
@@ -688,8 +689,8 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
 	Note note(t);
 	if (maxDuration > 0 && (2 * note.getDuration() > maxDuration)) break;
 	QPixmap pmap = npf.makeToolbarPixmap
-	    ((std::string("menu-") + note.getReferenceName()).c_str());
-	m_unitCombo->insertItem(pmap, (note.getEnglishName() + "s").c_str());
+	    (strtoqstr((std::string("menu-") + note.getReferenceName())));
+	m_unitCombo->insertItem(pmap, strtoqstr(note.getEnglishName() + "s"));
 	if (defaultUnitType == t) {
 	    m_unitCombo->setCurrentItem(m_unitCombo->count() - 1);
 	}
@@ -941,7 +942,7 @@ TextEventDialog::TextEventDialog(QWidget *parent,
 
     new QLabel(i18n("Text:  "), entryGrid);
     m_text = new QLineEdit(entryGrid);
-    m_text->setText(defaultText.getText().c_str());
+    m_text->setText(strtoqstr(defaultText.getText()));
     if (maxLength > 0) m_text->setMaxLength(maxLength);
 
     new QLabel(i18n("Style:  "), entryGrid);
@@ -962,7 +963,7 @@ TextEventDialog::TextEventDialog(QWidget *parent,
 		styleName.substr(uindex + 1);
 	}
 
-	m_typeCombo->insertItem(styleName.c_str());
+	m_typeCombo->insertItem(strtoqstr(styleName));
 
 	if (style == defaultText.getTextType()) {
 	    m_typeCombo->setCurrentItem(m_typeCombo->count() - 1);
@@ -1012,7 +1013,7 @@ TextEventDialog::TextEventDialog(QWidget *parent,
 		     this, SLOT(slotTypeChanged(const QString &)));
 
     m_text->setFocus();
-    slotTypeChanged(getTextType().c_str());
+    slotTypeChanged(strtoqstr(getTextType()));
 }
 
 std::string
@@ -1098,7 +1099,7 @@ EventEditDialog::EventEditDialog(QWidget *parent,
     new QLabel("", intrinsicGrid);
     new QLabel("", intrinsicGrid);
     QLineEdit *lineEdit = new QLineEdit(intrinsicGrid);
-    lineEdit->setText(event.getType().c_str());
+    lineEdit->setText(strtoqstr(event.getType()));
 
     new QLabel(i18n("Absolute time: "), intrinsicGrid);
     new QLabel("", intrinsicGrid);
@@ -1179,10 +1180,10 @@ EventEditDialog::EventEditDialog(QWidget *parent,
     for (Rosegarden::Event::PropertyNames::iterator i = p.begin();
 	 i != p.end(); ++i) {
 
-	new QLabel(i->c_str(), m_nonPersistentGrid, i->c_str());
-	new QLabel(event.getPropertyTypeAsString(*i).c_str(), m_nonPersistentGrid, i->c_str());
-	new QLabel(event.getAsString(*i).c_str(), m_nonPersistentGrid, i->c_str());
-	QPushButton *button = new QPushButton("P", m_nonPersistentGrid, i->c_str());
+	new QLabel(strtoqstr(*i), m_nonPersistentGrid, strtoqstr(*i));
+	new QLabel(strtoqstr(event.getPropertyTypeAsString(*i)), m_nonPersistentGrid, strtoqstr(*i));
+	new QLabel(strtoqstr(event.getAsString(*i)), m_nonPersistentGrid, strtoqstr(*i));
+	QPushButton *button = new QPushButton("P", m_nonPersistentGrid, strtoqstr(*i));
 	button->setFixedSize(QSize(24, 24));
 	QToolTip::add(button, i18n("Make persistent"));
 	QObject::connect(button, SIGNAL(clicked()),
@@ -1194,10 +1195,10 @@ EventEditDialog::EventEditDialog(QWidget *parent,
 void
 EventEditDialog::addPersistentProperty(const Rosegarden::PropertyName &name)
 {
-    QLabel *label = new QLabel(name.c_str(), m_persistentGrid, name.c_str());
+    QLabel *label = new QLabel(strtoqstr(name), m_persistentGrid, strtoqstr(name));
     label->show();
-    label = new QLabel(m_originalEvent.getPropertyTypeAsString(name).c_str(),
-		       m_persistentGrid, name.c_str());
+    label = new QLabel(strtoqstr(m_originalEvent.getPropertyTypeAsString(name)),
+		       m_persistentGrid, strtoqstr(name));
     label->show();
 
     Rosegarden::PropertyType type(m_originalEvent.getPropertyType(name));
@@ -1206,7 +1207,7 @@ EventEditDialog::addPersistentProperty(const Rosegarden::PropertyName &name)
     case Rosegarden::Int:
     {
 	QSpinBox *spinBox = new QSpinBox
-	    (INT_MIN, INT_MAX, 1, m_persistentGrid, name.c_str());
+	    (INT_MIN, INT_MAX, 1, m_persistentGrid, strtoqstr(name));
 	spinBox->setValue(m_originalEvent.get<Rosegarden::Int>(name));
 	QObject::connect(spinBox, SIGNAL(valueChanged(int)),
 			 this, SLOT(slotIntPropertyChanged(int)));
@@ -1217,7 +1218,7 @@ EventEditDialog::addPersistentProperty(const Rosegarden::PropertyName &name)
     case Rosegarden::Bool:
     {
 	QCheckBox *checkBox = new QCheckBox
-	    ("", m_persistentGrid, name.c_str());
+	    ("", m_persistentGrid, strtoqstr(name));
 	checkBox->setChecked(m_originalEvent.get<Rosegarden::Bool>(name));
 	QObject::connect(checkBox, SIGNAL(clicked()),
 			 this, SLOT(slotBoolPropertyChanged()));
@@ -1228,8 +1229,9 @@ EventEditDialog::addPersistentProperty(const Rosegarden::PropertyName &name)
     case Rosegarden::String:
     {
 	QLineEdit *lineEdit = new QLineEdit
-	    (m_originalEvent.get<Rosegarden::String>(name).c_str(),
-	     m_persistentGrid, name.c_str());
+	    (strtoqstr(m_originalEvent.get<Rosegarden::String>(name)),
+	     m_persistentGrid,
+	     strtoqstr(name));
 	QObject::connect(lineEdit, SIGNAL(textChanged(const QString &)),
 			 this, SLOT(slotStringPropertyChanged(const QString &)));
 	lineEdit->show();
@@ -1237,7 +1239,8 @@ EventEditDialog::addPersistentProperty(const Rosegarden::PropertyName &name)
     }
     }
     
-    QPushButton *button = new QPushButton("X", m_persistentGrid, name.c_str());
+    QPushButton *button = new QPushButton("X", m_persistentGrid,
+					  strtoqstr(name));
     button->setFixedSize(QSize(24, 24));
     QToolTip::add(button, i18n("Delete this property"));
     QObject::connect(button, SIGNAL(clicked()),
@@ -1277,7 +1280,7 @@ EventEditDialog::slotDurationChanged(int value)
     Note nearestNote = Note::getNearestNote(timeT(value), 1);
     std::string noteName = nearestNote.getReferenceName();
     noteName = "menu-" + noteName;
-    QPixmap map = m_notePixmapFactory->makeToolbarPixmap(noteName.c_str());
+    QPixmap map = m_notePixmapFactory->makeToolbarPixmap(strtoqstr(noteName));
 
     m_durationDisplay->setPixmap(map);
 
@@ -1715,7 +1718,7 @@ ClefDialog::redrawClefPixmap()
 {
     QCanvasPixmap pmap = m_notePixmapFactory->makeClefDisplayPixmap(m_clef);
     m_clefLabel->setPixmap(pmap);
-    QString name(m_clef.getClefType().c_str());
+    QString name(strtoqstr(m_clef.getClefType()));
     name = name.left(1).upper() + name.right(name.length() - 1);
     m_clefNameLabel->setText(name);
 }

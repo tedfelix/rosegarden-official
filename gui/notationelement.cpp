@@ -24,6 +24,7 @@
 
 #include "notationelement.h"
 #include "notationproperties.h"
+#include "rosestrings.h"
 #include "rosedebug.h"
 
 #include "NotationTypes.h"

@@ -25,6 +25,7 @@
 #include "edittool.h"
 #include "editview.h"
 
+#include "rosestrings.h"
 #include "rosedebug.h"
 
 EditToolBox::EditToolBox(EditView *parent)

@@ -28,6 +28,7 @@
 #include <dcopclient.h>
 #include <kconfig.h>
 
+#include "rosestrings.h"
 #include "rosedebug.h"
 #include "rosegardengui.h"
 

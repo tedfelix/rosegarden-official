@@ -28,6 +28,7 @@
 #include "Composition.h"
 #include "BaseProperties.h"
 
+#include "rosestrings.h"
 #include "rosedebug.h"
 #include "colours.h"
 

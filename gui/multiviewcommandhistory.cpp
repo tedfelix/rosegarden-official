@@ -29,6 +29,7 @@
 #include <ktoolbar.h>
 #include <kstdaccel.h>
 
+#include "rosestrings.h"
 #include "rosedebug.h"
 
 MultiViewCommandHistory::MultiViewCommandHistory() :

@@ -24,6 +24,7 @@
 #include "chordnameruler.h"
 #include "colours.h"
 #include "notationproperties.h"
+#include "rosestrings.h"
 #include "rosedebug.h"
 
 #include "Event.h"
@@ -148,7 +149,7 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
 	double x = m_rulerScale->getXForTime((*i)->getAbsoluteTime());
 	(*i)->set<Int>(NotationProperties::TEXT_FORMAL_X, (long)x);
 
-	QRect textBounds = m_fontMetrics.boundingRect(text.c_str());
+	QRect textBounds = m_fontMetrics.boundingRect(strtoqstr(text));
 	int width = textBounds.width();
 
 	x -= width / 2;
@@ -179,7 +180,7 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
 	    paint.setFont(m_font);
 	}
 
-	paint.drawText(actualX, textY, text.c_str());
+	paint.drawText(actualX, textY, strtoqstr(text));
     }
 }
 

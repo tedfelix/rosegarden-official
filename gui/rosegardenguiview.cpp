@@ -33,6 +33,7 @@
 
 // application specific includes
 #include "MappedEvent.h"
+#include "rosestrings.h"
 #include "rosegardenguiview.h"
 #include "rosegardenguidoc.h"
 #include "rosegardengui.h"

@@ -30,6 +30,7 @@
 #include "BaseProperties.h"
 
 #include "rg21io.h"
+#include "rosestrings.h"
 #include "rosedebug.h"
 
 using std::vector;

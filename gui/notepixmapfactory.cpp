@@ -33,6 +33,7 @@
 #include <kstddirs.h>
 #include <klocale.h>
 
+#include "rosestrings.h"
 #include "rosedebug.h"
 #include "rosegardenguiview.h"
 #include "notepixmapfactory.h"
@@ -151,10 +152,10 @@ NotePixmapFactory::init(std::string fontName, int size)
     try {
         m_font = new NoteFont(fontName, size);
     } catch (NoteFontMap::MappingFileReadFailed f) {
-        KMessageBox::error(0, f.reason.c_str());
+        KMessageBox::error(0, strtoqstr(f.reason));
         throw;
     } catch (NoteFont::BadFont f) {
-        KMessageBox::error(0, f.reason.c_str());
+        KMessageBox::error(0, strtoqstr(f.reason));
         throw;
     }
 
@@ -606,8 +607,8 @@ NotePixmapFactory::makeRoomForMarks(bool isStemmed,
 	} else {
 	    // inefficient to do this here _and_ in drawMarks
 
-	    QString text =
-		Rosegarden::Marks::getTextFromMark(params.m_marks[i]).c_str();
+	    QString text = strtoqstr(Rosegarden::Marks::getTextFromMark
+				     (params.m_marks[i]));
 	    QRect bounds = m_textMarkFontMetrics.boundingRect(text);
 	    height += bounds.height() + 1;
 	    if (bounds.width() > width) width = bounds.width();
@@ -653,8 +654,8 @@ NotePixmapFactory::drawMarks(bool isStemmed,
 
 	} else {
 
-	    QString text =
-		Rosegarden::Marks::getTextFromMark(params.m_marks[i]).c_str();
+	    QString text = strtoqstr(Rosegarden::Marks::getTextFromMark
+				     (params.m_marks[i]));
 	    QRect bounds = m_textMarkFontMetrics.boundingRect(text);
 	    
 	    m_p.setFont(m_textMarkFont);
@@ -1450,7 +1451,7 @@ int NotePixmapFactory::getTimeSigWidth(const TimeSignature &sig) const
 QCanvasPixmap
 NotePixmapFactory::makeTextPixmap(const Rosegarden::Text &text)
 {
-    QString s(text.getText().c_str());
+    QString s(strtoqstr(text.getText()));
     std::string type(text.getTextType());
 
     //!!! Calls for big optimisation -- move all the font construction

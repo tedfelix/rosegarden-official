@@ -27,6 +27,7 @@
 #include "notationproperties.h"
 #include "notationstaff.h"
 
+#include "rosestrings.h"
 #include "rosedebug.h"
 
 using namespace NotationProperties;
@@ -124,8 +125,8 @@ NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
 	    }
 
 	    emit hoveredOverNoteChanged
-		(m_currentStaff->getNoteNameAtCanvasCoords
-		 (e->x(), e->y()).c_str());
+		(strtoqstr
+		 (m_currentStaff->getNoteNameAtCanvasCoords(e->x(), e->y())));
 	}
 
 	if (needUpdate) canvas()->update();

@@ -21,6 +21,7 @@
 
 #include "notationvlayout.h"
 #include "notationstaff.h"
+#include "rosestrings.h"
 #include "rosedebug.h"
 #include "NotationTypes.h"
 #include "Composition.h"

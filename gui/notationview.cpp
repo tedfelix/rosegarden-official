@@ -38,6 +38,7 @@
 #include <kapp.h>
 #include <kstatusbar.h>
 
+#include "rosestrings.h"
 #include "rosegardenguiview.h"
 #include "rosegardenguidoc.h"
 #include "notationview.h"
@@ -642,7 +643,7 @@ void NotationView::setupActions()
     for (unsigned int i = 0; i < 10; ++i) {
         new KAction(MarksMenuAddMarkCommand::getGlobalName(marks[i]), 0, this,
                     markSlots[i], actionCollection(),
-                    QString("add_%1").arg(marks[i].c_str()));
+                    QString("add_%1").arg(strtoqstr(marks[i])));
     }
 
     new KAction(MarksMenuAddTextMarkCommand::getGlobalName(), 0, this,
@@ -768,7 +769,7 @@ void NotationView::initFontToolbar(int legatoUnit)
     std::sort(f.begin(), f.end());
 
     for (vector<string>::iterator i = f.begin(); i != f.end(); ++i) {
-        fontCombo->insertItem(QString(i->c_str()));
+        fontCombo->insertItem(strtoqstr(*i));
         if (*i == m_fontName) {
             fontCombo->setCurrentItem(fontCombo->count() - 1);
         }
@@ -877,7 +878,7 @@ void
 NotationView::slotChangeFont(const QString &newName)
 {
     kdDebug(KDEBUG_AREA) << "changeFont: " << newName << endl;
-    slotChangeFont(string(newName.latin1()));
+    slotChangeFont(string(newName.utf8()));
 }
 
 
@@ -2423,9 +2424,9 @@ void NotationView::initNoteActionDataMap()
 
 		Note note(type, dots);
 
-		QString refName(note.getReferenceName(rest).c_str());
-		QString shortName(note.getShortName().c_str());
-		QString titleName(note.getAmericanName().c_str());
+		QString refName(strtoqstr(note.getReferenceName(rest)));
+		QString shortName(strtoqstr(note.getShortName()));
+		QString titleName(strtoqstr(note.getAmericanName()));
 		titleName = titleName.left(1).upper() +
 		            titleName.right(titleName.length()-1);
 

@@ -52,6 +52,7 @@
 #include "MidiDevice.h"
 #include "AudioDevice.h"
 
+#include "rosestrings.h"
 #include "rosedebug.h"
 #include "rosegardenguidoc.h"
 #include "rosegardengui.h"
@@ -300,7 +301,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
     // Send out Composition (this includes Tracks, Instruments, Tempo
     // and Time Signature changes and any other sub-objects)
     //
-    outStream << QString(m_composition.toXmlString().c_str()) << endl << endl;
+    outStream << QString(strtoqstr(m_composition.toXmlString())) << endl << endl;
 
     // output all elements
     //
@@ -316,8 +317,8 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
                             .arg(segment->getStartTime());
 
         outStream << "label=\"" <<
-	    Rosegarden::XmlExportable::encode(segment->getLabel()).c_str() <<
-	    "\">\n";
+	    strtoqstr(Rosegarden::XmlExportable::encode(segment->getLabel()))
+		  << "\">\n";
 
         long currentGroup = -1;
 	bool inChord = false;
@@ -332,7 +333,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
                 if (group != currentGroup) {
                     if (currentGroup != -1) outStream << "</group>" << endl;
                     std::string type = (*i)->get<String>(BEAMED_GROUP_TYPE);
-                    outStream << "<group type=\"" << type.c_str() << "\"";
+                    outStream << "<group type=\"" << strtoqstr(type) << "\"";
 		    if (type == GROUP_TYPE_TUPLED) {
 			outStream
 			    << " base=\""
@@ -417,7 +418,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 
     // Send out the studio - a self contained command
     //
-    outStream << QString(m_studio.toXmlString().c_str()) << endl << endl;
+    outStream << QString(strtoqstr(m_studio.toXmlString())) << endl << endl;
     
     // close the top-level XML tag
     //
@@ -727,7 +728,7 @@ RosegardenGUIDoc::prepareAudio()
 
         // We have to pass the filename as a QString
         //
-        streamOut << QString((*it)->getFilename().c_str());
+        streamOut << QString(strtoqstr((*it)->getFilename()));
         streamOut << (*it)->getId();
 
         if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,

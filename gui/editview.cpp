@@ -29,6 +29,7 @@
 #include <kstatusbar.h>
 
 #include "editview.h"
+#include "rosestrings.h"
 #include "rosegardencanvasview.h"
 #include "edittool.h"
 #include "qcanvasgroupableitem.h"

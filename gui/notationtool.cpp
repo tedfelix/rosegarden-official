@@ -32,6 +32,7 @@
 #include "SegmentNotationHelper.h"
 #include "Selection.h"
 
+#include "rosestrings.h"
 #include "rosegardenguidoc.h"
 #include "notationtool.h"
 #include "notationview.h"

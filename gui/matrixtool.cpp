@@ -29,6 +29,7 @@
 #include "matrixview.h"
 #include "matrixstaff.h"
 
+#include "rosestrings.h"
 #include "rosedebug.h"
 
 using Rosegarden::EventSelection;

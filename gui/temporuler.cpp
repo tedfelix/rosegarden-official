@@ -23,6 +23,7 @@
 
 #include "temporuler.h"
 #include "colours.h"
+#include "rosestrings.h"
 #include "rosedebug.h"
 #include "Composition.h"
 #include "RulerScale.h"

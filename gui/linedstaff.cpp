@@ -20,6 +20,7 @@
 
 #include "linedstaff.h"
 #include "colours.h"
+#include "rosestrings.h"
 #include "rosedebug.h"
 
 // width of pointer

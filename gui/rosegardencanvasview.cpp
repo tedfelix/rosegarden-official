@@ -19,6 +19,7 @@
     COPYING included with this distribution for more information.
 */
 
+#include "rosestrings.h"
 #include "rosegardencanvasview.h"
 
 #include "rosedebug.h"

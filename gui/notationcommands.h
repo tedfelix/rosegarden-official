@@ -21,6 +21,7 @@
 #define NOTATION_COMMANDS_H
 
 
+#include "rosestrings.h"
 #include "basiccommand.h"
 
 
@@ -119,7 +120,8 @@ public:
 
     static QString getGlobalName(Rosegarden::Key *key = 0) {
 	if (key) {
-	    return QString("Change to &Key ") + key->getName().c_str() + "...";
+	    return QString("Change to &Key ") +
+		strtoqstr(key->getName()) + "...";
 	} else {
 	    return "Add &Key Change...";
 	}
@@ -148,7 +150,8 @@ public:
 
     static QString getGlobalName(Rosegarden::Key *key = 0) {
 	if (key) {
-	    return QString("Change all to &Key ") + key->getName().c_str() + "...";
+	    return QString("Change all to &Key ") +
+		strtoqstr(key->getName()) + "...";
 	} else {
 	    return "Add &Key Change...";
 	}

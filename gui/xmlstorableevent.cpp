@@ -26,6 +26,7 @@
 #include "Quantizer.h"
 #include "XmlExportable.h"
 
+#include "rosestrings.h"
 #include "rosedebug.h"
 
 using Rosegarden::Event;
@@ -185,7 +186,7 @@ XmlStorableEvent::toXmlString(timeT expectedTime) const
     QString res = "<event";
 
     if (getType().length())
-        res += QString(" type=\"%1\"").arg(getType().c_str());
+        res += QString(" type=\"%1\"").arg(strtoqstr(getType()));
 
     if (getDuration() != 0) {
 	res += QString(" duration=\"%1\"").arg(getDuration());
@@ -216,9 +217,9 @@ XmlStorableEvent::toXmlString(timeT expectedTime) const
 	    *i == Rosegarden::BaseProperties::BEAMED_GROUP_TYPE) continue;
 
 	res += QString("<property name=\"%1\" %2=\"%3\"/>")
-	    .arg(Rosegarden::XmlExportable::encode(i->getName()).c_str())
-	    .arg(QString(getPropertyTypeAsString(*i).c_str()).lower())
-	    .arg(Rosegarden::XmlExportable::encode(getAsString(*i)).c_str());
+	    .arg(strtoqstr(Rosegarden::XmlExportable::encode(i->getName())))
+	    .arg(strtoqstr(getPropertyTypeAsString(*i)).lower())
+	    .arg(strtoqstr(Rosegarden::XmlExportable::encode(getAsString(*i))));
     }
   
     res += "</event>";

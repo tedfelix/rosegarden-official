@@ -28,6 +28,7 @@
 #include "notationproperties.h"
 #include "segmentcommands.h"
 
+#include "rosestrings.h"
 #include "rosedebug.h"
 #include <iostream>
 

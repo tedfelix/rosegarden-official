@@ -27,6 +27,7 @@
 #include <qcanvas.h>
 #include <qpainter.h>
 
+#include "rosestrings.h"
 #include "rosedebug.h"
 
 using Rosegarden::RulerScale;

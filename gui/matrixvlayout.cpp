@@ -24,6 +24,7 @@
 #include "matrixvlayout.h"
 #include "matrixstaff.h"
 
+#include "rosestrings.h"
 #include "rosedebug.h"
 
 using Rosegarden::timeT;

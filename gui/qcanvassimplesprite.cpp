@@ -22,6 +22,7 @@
 #include <vector>
 
 #include "qcanvassimplesprite.h"
+#include "rosestrings.h"
 #include "rosedebug.h"
 
 QCanvasSimpleSprite::QCanvasSimpleSprite(QPixmap *pixmap, QCanvas *canvas)

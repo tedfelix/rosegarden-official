@@ -25,6 +25,7 @@
 #include <qpushbutton.h>
 #include <ktmpstatusmsg.h>
 
+#include "rosestrings.h"
 #include "rosegardenguidoc.h"
 #include "rosegardentransportdialog.h"
 #include "sequencemanager.h"

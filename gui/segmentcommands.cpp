@@ -18,6 +18,7 @@
 */
 
 #include "segmentcommands.h"
+#include "rosestrings.h"
 #include "rosedebug.h"
 #include "notationcommands.h"
 #include "NotationTypes.h"
@@ -488,7 +489,7 @@ SegmentChangeQuantizationCommand::getGlobalName(Rosegarden::StandardQuantization
     if (!sq) {
 	return "Unquantize";
     } else {
-	return QString("Quantize to ") + sq->name.c_str();
+	return QString("Quantize to ") + strtoqstr(sq->name);
     }
 }
 

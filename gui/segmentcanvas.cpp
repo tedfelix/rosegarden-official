@@ -28,6 +28,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
+#include "rosestrings.h"
 #include "rosegardenguidoc.h"
 #include "segmentcanvas.h"
 #include "Segment.h"
@@ -157,7 +158,7 @@ void SegmentItem::recalculateRectangle(bool inheritFromSegment)
 	m_track = m_segment->getTrack();
 	m_startTime = m_segment->getStartTime();
 	m_duration = m_segment->getDuration();
-        m_label = m_segment->getLabel().c_str();
+        m_label = strtoqstr(m_segment->getLabel());
 
 	if (m_segment->isRepeating()) {
 

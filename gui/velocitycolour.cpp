@@ -20,6 +20,7 @@
 */
 
 #include "velocitycolour.h"
+#include "rosestrings.h"
 #include "rosedebug.h"
 
 

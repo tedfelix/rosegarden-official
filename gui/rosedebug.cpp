@@ -19,6 +19,7 @@
     COPYING included with this distribution for more information.
 */
 
+#include "rosestrings.h"
 #include "rosedebug.h"
 
 #include "Event.h"
@@ -28,7 +29,7 @@
 kdbgstream&
 operator<<(kdbgstream &dbg, const std::string &s)
 {
-    dbg << s.c_str();
+    dbg << strtoqstr(s);
     return dbg;
 }
 

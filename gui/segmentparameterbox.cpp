@@ -31,6 +31,7 @@
 
 #include "notepixmapfactory.h"
 #include "segmentcommands.h"
+#include "rosestrings.h"
 #include "rosegardenguiview.h"
 
 using Rosegarden::Note;
@@ -155,11 +156,11 @@ SegmentParameterBox::initBox()
 
     for (unsigned int i = 0; i < m_standardQuantizations.size(); ++i) {
 	std::string noteName = m_standardQuantizations[i].noteName;
-	QString qname = m_standardQuantizations[i].name.c_str();
+	QString qname = strtoqstr(m_standardQuantizations[i].name);
 	QPixmap pmap = noMap;
 	if (noteName != "") {
 	    noteName = "menu-" + noteName;
-	    pmap = npf.makeToolbarPixmap(noteName.c_str());
+	    pmap = npf.makeToolbarPixmap(strtoqstr(noteName));
 	}
 	m_quantizeValue->insertItem(pmap, qname);
     }
@@ -190,7 +191,7 @@ SegmentParameterBox::initBox()
 	if (nearestNote.getDuration() == time) {
 	    std::string noteName = nearestNote.getReferenceName(); 
 	    noteName = "menu-" + noteName;
-	    QPixmap pmap = npf.makeToolbarPixmap(noteName.c_str());
+	    QPixmap pmap = npf.makeToolbarPixmap(strtoqstr(noteName));
 	    m_delayValue->insertItem(pmap, QString("%1").arg(time));
 	} else {
 	    m_delayValue->insertItem(QString("%1").arg(time));
@@ -512,7 +513,7 @@ SegmentParameterBox::slotDelayTextChanged(const QString &text)
     if (nearestNote.getDuration() == delayValue) {
 	std::string noteName = nearestNote.getReferenceName(); 
 	noteName = "menu-" + noteName;
-	pmap = npf.makeToolbarPixmap(noteName.c_str());
+	pmap = npf.makeToolbarPixmap(strtoqstr(noteName));
     }
     //!!! Now, how to get pmap into the pixmap part of the text field?
 
