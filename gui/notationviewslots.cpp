@@ -1089,17 +1089,17 @@ void NotationView::slotEditAddTempo()
 {
     timeT insertionTime = getInsertionTime();
 
-    TempoDialog *tempoDlg = new TempoDialog(this, getDocument());
+    TempoDialog tempoDlg(this, getDocument());
 
-    connect(tempoDlg,
+    connect(&tempoDlg,
 	    SIGNAL(changeTempo(Rosegarden::timeT,
 			       double, TempoDialog::TempoDialogAction)),
 	    this,
 	    SIGNAL(changeTempo(Rosegarden::timeT,
 			       double, TempoDialog::TempoDialogAction)));
 	
-    tempoDlg->setTempoPosition(insertionTime);
-    tempoDlg->show();
+    tempoDlg.setTempoPosition(insertionTime);
+    tempoDlg.exec();
 }
 
 void NotationView::slotEditAddTimeSignature()

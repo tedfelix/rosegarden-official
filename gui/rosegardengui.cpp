@@ -1521,18 +1521,16 @@ void RosegardenGUIApp::slotAutoSplitSelection()
 
         if ((*i)->getType() == Rosegarden::Segment::Audio)
         {
-            AudioSplitDialog *aSD = new AudioSplitDialog(this,
-                                                        (*i),
-                                                        m_doc);
+            AudioSplitDialog aSD(this, (*i), m_doc);
 
-            if (aSD->exec() == QDialog::Accepted)
+            if (aSD.exec() == QDialog::Accepted)
             {
                 // split to threshold
                 //
 	        command->addCommand(
                         new AudioSegmentAutoSplitCommand(m_doc,
                                                          *i,
-                                                         aSD->getThreshold()));
+                                                         aSD.getThreshold()));
             }
         } else {
 	    command->addCommand(new SegmentAutoSplitCommand(*i));
@@ -3244,16 +3242,16 @@ void RosegardenGUIApp::slotEditTempo(QWidget *parent)
 {
     RG_DEBUG << "RosegardenGUIApp::slotEditTempo\n";
 
-    TempoDialog tempoDlg(parent, m_doc);
+    TempoDialog tempoDialog(parent, m_doc);
 
-    connect(&tempoDlg,
+    connect(&tempoDialog,
             SIGNAL(changeTempo(Rosegarden::timeT,
                                double, TempoDialog::TempoDialogAction)),
             SLOT(slotChangeTempo(Rosegarden::timeT,
-                               double, TempoDialog::TempoDialogAction)));
+                                 double, TempoDialog::TempoDialogAction)));
 
-    tempoDlg.setTempoPosition(m_doc->getComposition().getPosition());
-    tempoDlg.exec();
+    tempoDialog.setTempoPosition(m_doc->getComposition().getPosition());
+    tempoDialog.exec();
 }
 
 void RosegardenGUIApp::slotEditTimeSignature(QWidget *parent)

@@ -505,15 +505,13 @@ void RosegardenGUIView::slotEditSegmentEventList(Rosegarden::Segment *p)
 
 void RosegardenGUIView::slotSegmentAutoSplit(Rosegarden::Segment *segment)
 {
-    AudioSplitDialog *aSD = new AudioSplitDialog(this,
-                                                 segment,
-                                                 getDocument());
+    AudioSplitDialog aSD(this, segment, getDocument());
 
-    if (aSD->exec() == QDialog::Accepted)
+    if (aSD.exec() == QDialog::Accepted)
     {
         KCommand *command =
             new AudioSegmentAutoSplitCommand(getDocument(),
-                    segment, aSD->getThreshold());
+                    segment, aSD.getThreshold());
         slotAddCommandToHistory(command);
     }
 }

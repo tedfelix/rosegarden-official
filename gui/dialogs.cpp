@@ -1561,7 +1561,7 @@ private:
 
 
 TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc):
-    KDialogBase(parent, 0, true, i18n("Tempo"), Ok | Cancel),
+    KDialogBase(parent, 0, true, i18n("Insert Tempo Change"), Ok | Cancel),
     m_doc(doc),
     m_tempoTime(0),
     m_tempoValue(0.0)
@@ -1815,7 +1815,8 @@ TempoDialog::slotOk()
     emit changeTempo(m_tempoTime,
                      tempoDouble,
                      action);
-    delete this;
+
+    KDialogBase::slotOk();
 }
 
 

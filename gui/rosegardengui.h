@@ -1015,6 +1015,8 @@ private:
     //
     Rosegarden::RosegardenTransportDialog *m_transport;
 
+    // Dialogs which depend on the document
+
     // Audio file manager
     //
     Rosegarden::AudioManagerDialog *m_audioManagerDialog;
