@@ -91,7 +91,7 @@ void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
             // QCanvas::collisions() can be a bit optimistic and report
             // items which are close to the point but not actually under it.
             // So a little sanity check helps.
-            if (! mRect->rect().contains(p)) continue;
+            if (! mRect->rect().contains(p, true)) continue;
 
             mel = &(mRect->getMatrixElement());
 	    MATRIX_DEBUG << "MatrixCanvasView::contentsMousePressEvent: collision with an existing matrix element" << endl;
