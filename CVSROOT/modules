@@ -32,7 +32,7 @@
 # repository
 # all others are plain dirs
 #
-rosegarden rosegarden &admin &core &docs &gui &po &sound &sequencer
+rosegarden rosegarden &admin &core &docs &sound &gui &po &sequencer
 
-#rgtest -d rosegarden rosegarden &admin &core &docs &gui &po &sound
+#rgtest -d rosegarden rosegarden &admin &core &docs &sound &gui &po
 
