@@ -294,8 +294,15 @@ bool SegmentMmapper::refresh()
                  << " - old size = " << m_mmappedSize
                  << endl;
 
-    // always zero out
-    memset(m_mmappedBuffer, 0, m_mmappedSize);
+    // always zero out - not anymore.
+    // memset(m_mmappedBuffer, 0, m_mmappedSize);
+
+    // we can't zero out the buffer here because if the mmapped
+    // segment is being read from by the sequencer in the interval of
+    // time between the memset() and the dump(), the sequencer will go
+    // over all the zeros up to the end of the segment and reach its
+    // end, and therefore will stop playing it.
+    // 
 
     if (newMmappedSize != m_mmappedSize) {
 
