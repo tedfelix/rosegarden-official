@@ -234,7 +234,10 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
     for(Composition::iterator trks = m_composition.begin();
         trks != m_composition.end(); ++trks) {
 
-        fileStream << "<Track>" << endl; //--------------------------
+        //--------------------------
+        fileStream << QString("<Track instrument=\"%1\" start=\"%2\">")
+            .arg((*trks)->getInstrument())
+            .arg((*trks)->getStartIndex()) << endl;
 
         for(Track::iterator i = (*trks)->begin();
             i != (*trks)->end(); ++i) {

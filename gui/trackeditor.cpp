@@ -152,10 +152,10 @@ TracksEditor::setupTracks()
             int x = 0, y = 0;
 
             y = m_vHeader->sectionPos((*i)->getInstrument());
-            // TODO : compute x according to track start
+            x = m_hHeader->sectionPos((*i)->getStartIndex());
 
             TrackItem *newItem = m_tracksCanvas->addPartItem(x, y,
-                                                                 (*i)->getNbBars());    
+                                                             (*i)->getNbBars());    
             newItem->setTrack(*i);
         }
         
