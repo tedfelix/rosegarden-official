@@ -39,6 +39,58 @@ class RosegardenGUIDoc;
 class NotationTool;
 
 /**
+ * This class holds a selection of Events, used for cut'n paste
+ * operations
+ *
+ * When created, the EventSelection holds pointers to Events in a
+ * Track. 
+ */
+class EventSelection
+{
+public:
+    typedef std::vector<Rosegarden::Event*> eventcontainer;
+    
+    EventSelection(Rosegarden::Track&);
+
+    ~EventSelection();
+
+    /**
+     * Remove the selected events from the original track
+     * and shallow-copy them internally
+     * (just copy the pointers)
+     */
+    void cut();
+
+    /**
+     * Deep-copy the selected events from the original track
+     * (create new Events from the selected ones)
+     */
+    void copy();
+
+    /**
+     * Copy the selected Events to the specified track
+     */
+    void pasteToTrack(Rosegarden::Track*);
+
+    void push_back(Rosegarden::Event* e) { m_trackEvents.push_back(e); }
+    
+protected:
+
+    Rosegarden::Track& m_originalTrack;
+
+    /// copy of Events ptr from the original Track
+    eventcontainer m_trackEvents;
+
+    /**
+     * our own set of Events copied from m_trackEvents.
+     * These are the events we paste from.
+     */
+    eventcontainer m_ownEvents;
+};
+
+
+
+/**
  * NotationView is a view for one or more Staff objects, each of
  * which contains the notation data associated with a Track.
  * NotationView owns the Staff objects it displays.
@@ -57,8 +109,8 @@ class NotationView : public KMainWindow
 
 public:
     NotationView(RosegardenGUIDoc *doc,
-		 std::vector<Rosegarden::Track *> tracks,
-		 QWidget *parent);
+                 std::vector<Rosegarden::Track *> tracks,
+                 QWidget *parent);
     ~NotationView();
 
     const RosegardenGUIDoc *getDocument() const { return m_document; }
@@ -80,7 +132,13 @@ public:
      */
     void setCurrentSelectedNote(const char *pixmapName,
                                 bool isRest, Rosegarden::Note::Type,
-				int dots = 0);
+                                int dots = 0);
+
+    /**
+     * Set the current event selection
+     * @see NotationSelector
+     */
+    void setCurrentSelection(EventSelection*);
 
     /// Changes the font of the staffs on the view
     void changeFont(std::string newFont);
@@ -369,6 +427,9 @@ protected:
 
     RosegardenGUIDoc* m_document;
 
+    /// The current selection of Events (for cut/copy/paste)
+    EventSelection* m_currentEventSelection;
+
     /// Displayed in the status bar, holds the pixmap of the current note
     QLabel* m_currentNotePixmap;
 
@@ -533,7 +594,19 @@ public:
     virtual void handleMouseMove(QMouseEvent*);
     virtual void handleMouseRelease(QMouseEvent*);
 
+    /**
+     * Returns the currently selected events
+     *
+     * The returned result is owned by the caller
+     */
+    EventSelection* getSelection();
+    
 protected:
+    /**
+     * Set the current selection on the parent NotationView
+     */
+    void setViewCurrentSelection();
+
     QCanvasRectangle* m_selectionRect;
     bool m_updateRect;
 

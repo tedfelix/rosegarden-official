@@ -41,6 +41,7 @@
 #include "notationstaff.h"
 #include "notepixmapfactory.h"
 #include "qcanvaslinegroupable.h"
+#include "qcanvassimplesprite.h"
 #include "ktmpstatusmsg.h"
 
 #include "rosedebug.h"
@@ -68,19 +69,72 @@ using Rosegarden::timeT;
 using std::vector;
 using std::string;
 using std::set;
-
 #define ID_STATUS_MSG 1
 
+
+EventSelection::EventSelection(Track& t)
+    : m_originalTrack(t)
+{
+}
+
+
+EventSelection::~EventSelection()
+{
+    for(eventcontainer::iterator i = m_ownEvents.begin();
+        i != m_ownEvents.end(); ++i) {
+        delete *i;
+    }
+}
+
+void EventSelection::cut()
+{
+    TrackNotationHelper nt(m_originalTrack);
+
+    // copy Events from original Track and erase them
+    // from that Track
+    //
+    for(eventcontainer::iterator i = m_trackEvents.begin();
+        i != m_trackEvents.end(); ++i) {
+
+        // store copy of Event
+        m_ownEvents.push_back(new Event(*(*i)));
+
+        // delete Event from Track
+        nt.deleteEvent(*i);
+
+        // TODO : store iterators in m_trackEvents instead of ptrs
+    }
+}
+
+void EventSelection::copy()
+{
+    // copy  Events from original Track
+    for(eventcontainer::iterator i = m_trackEvents.begin();
+        i != m_trackEvents.end(); ++i) {
+
+        // store copy of Event
+        m_ownEvents.push_back(new Event(*(*i)));
+    }
+}
+
+void EventSelection::pasteToTrack(Track* t)
+{
+    for(eventcontainer::iterator i = m_ownEvents.begin();
+        i != m_ownEvents.end(); ++i) {
+        t->insert(new Event(*(*i)));
+    }
+}
 
 
 //////////////////////////////////////////////////////////////////////
 
 NotationView::NotationView(RosegardenGUIDoc* doc,
-			   vector<Track *> tracks,
+                           std::vector<Track *> tracks,
                            QWidget *parent) :
     KMainWindow(parent),
     m_config(kapp->config()),
     m_document(doc),
+    m_currentEventSelection(0),
     m_currentNotePixmap(0),
     m_hoveredOverNoteName(0),
     m_hoveredOverAbsoluteTime(0),
@@ -110,45 +164,45 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     setCentralWidget(m_canvasView);
 
     QObject::connect
-	(m_canvasView, SIGNAL(itemClicked(int,const QPoint&, NotationElement*)),
-	 this,         SLOT  (itemClicked(int,const QPoint&, NotationElement*)));
+        (m_canvasView, SIGNAL(itemClicked(int,const QPoint&, NotationElement*)),
+         this,         SLOT  (itemClicked(int,const QPoint&, NotationElement*)));
 
     QObject::connect
-	(m_canvasView, SIGNAL(mouseMove(QMouseEvent*)),
-	 this,         SLOT  (mouseMove(QMouseEvent*)));
+        (m_canvasView, SIGNAL(mouseMove(QMouseEvent*)),
+         this,         SLOT  (mouseMove(QMouseEvent*)));
 
     QObject::connect
-	(m_canvasView, SIGNAL(mouseRelease(QMouseEvent*)),
-	 this,         SLOT  (mouseRelease(QMouseEvent*)));
+        (m_canvasView, SIGNAL(mouseRelease(QMouseEvent*)),
+         this,         SLOT  (mouseRelease(QMouseEvent*)));
 
     QObject::connect
-	(m_canvasView, SIGNAL(hoveredOverNoteChange (const QString&)),
-	 this,         SLOT  (hoveredOverNoteChanged(const QString&)));
+        (m_canvasView, SIGNAL(hoveredOverNoteChange (const QString&)),
+         this,         SLOT  (hoveredOverNoteChanged(const QString&)));
 
     QObject::connect
-	(m_canvasView, SIGNAL(hoveredOverAbsoluteTimeChange(unsigned int)),
-	 this,         SLOT  (hoveredOverAbsoluteTimeChange(unsigned int)));
+        (m_canvasView, SIGNAL(hoveredOverAbsoluteTimeChange(unsigned int)),
+         this,         SLOT  (hoveredOverAbsoluteTimeChange(unsigned int)));
 
     readOptions();
 
     if (tracks.size() == 1) {
-	setCaption(QString("%1 - Track Instrument #%2")
-		   .arg(doc->getTitle())
-		   .arg(tracks[0]->getInstrument()));
+        setCaption(QString("%1 - Track Instrument #%2")
+                   .arg(doc->getTitle())
+                   .arg(tracks[0]->getInstrument()));
     } else if (tracks.size() == doc->getComposition().getNbTracks()) {
-	setCaption(QString("%1 - All Tracks")
-		   .arg(doc->getTitle()));
+        setCaption(QString("%1 - All Tracks")
+                   .arg(doc->getTitle()));
     } else {
-	setCaption(QString("%1 - %2-Track Partial View")
-		   .arg(doc->getTitle())
-		   .arg(tracks.size()));
+        setCaption(QString("%1 - %2-Track Partial View")
+                   .arg(doc->getTitle())
+                   .arg(tracks.size()));
     }
 
     for (unsigned int i = 0; i < tracks.size(); ++i) {
-	m_staffs.push_back(new NotationStaff(canvas(), tracks[i],
+        m_staffs.push_back(new NotationStaff(canvas(), tracks[i],
                                              m_fontName, m_fontSize));
-	m_staffs[i]->move(20, m_staffs[i]->getStaffHeight() * i + 15);
-	m_staffs[i]->show();
+        m_staffs[i]->move(20, m_staffs[i]->getStaffHeight() * i + 15);
+        m_staffs[i]->show();
     }
     m_currentStaff = 0;
 
@@ -165,10 +219,10 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     bool layoutApplied = applyLayout();
     if (!layoutApplied) KMessageBox::sorry(0, "Couldn't apply layout");
     else {
-	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-	    m_staffs[i]->showElements();
-	    showBars(i);
-	}
+        for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+            m_staffs[i]->showElements();
+            showBars(i);
+        }
     }
 
     m_selectDefaultNote->activate();
@@ -184,7 +238,7 @@ NotationView::~NotationView()
     delete m_vlayout;
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-	delete m_staffs[i]; // this will erase all "notes" canvas items
+        delete m_staffs[i]; // this will erase all "notes" canvas items
     }
 
     // Delete remaining canvas items.
@@ -198,7 +252,7 @@ NotationView::~NotationView()
 }
 
 void NotationView::saveOptions()
-{	
+{        
     m_config->setGroup("Notation Options");
     m_config->writeEntry("Geometry", size());
     m_config->writeEntry("Show Toolbar", toolBar()->isVisible());
@@ -209,7 +263,7 @@ void NotationView::saveOptions()
 void NotationView::readOptions()
 {
     m_config->setGroup("Notation Options");
-	
+        
     QSize size(m_config->readSizeEntry("Geometry"));
 
     if (!size.isEmpty()) {
@@ -581,11 +635,11 @@ NotationView::changeStretch(int newStretch)
     applyLayout();
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-	NotationElementList *notes = m_staffs[i]->getViewElementList();
+        NotationElementList *notes = m_staffs[i]->getViewElementList();
         NotationElementList::iterator starti = notes->begin();
         NotationElementList::iterator endi = notes->end();
-	m_staffs[i]->showElements(starti, endi, true);
-	showBars(i);
+        m_staffs[i]->showElements(starti, endi, true);
+        showBars(i);
     }
 
     canvas()->update();
@@ -660,10 +714,10 @@ NotationView::changeFont(string newName, int newSize)
     bool layoutApplied = applyLayout();
     if (!layoutApplied) KMessageBox::sorry(0, "Couldn't apply layout");
     else {
-	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-	    m_staffs[i]->showElements();
+        for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+            m_staffs[i]->showElements();
             m_staffs[i]->show();
-	    showBars(i);
+            showBars(i);
         }
     }
 
@@ -708,6 +762,12 @@ void NotationView::setCurrentSelectedNote(const char *pixmapName,
     emit changeCurrentNote(rest, n);
 }
 
+void NotationView::setCurrentSelection(EventSelection* s)
+{
+    delete m_currentEventSelection;
+    m_currentEventSelection = s;
+}
+
 void NotationView::setTool(NotationTool* tool)
 {
     delete m_tool;
@@ -737,6 +797,9 @@ void NotationView::closeWindow()
     close();
 }
 
+//
+// Undo, Redo
+//
 void NotationView::slotEditUndo()
 {
     KTmpStatusMsg msg(i18n("Undo..."), statusBar());
@@ -747,21 +810,37 @@ void NotationView::slotEditRedo()
     KTmpStatusMsg msg(i18n("Redo..."), statusBar());
 }
 
+//
+// Cut, Copy, Paste
+//
 void NotationView::slotEditCut()
 {
+    if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Cutting selection..."), statusBar());
+
+    m_currentEventSelection->cut();
 }
 
 void NotationView::slotEditCopy()
 {
+    if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Copying selection to clipboard..."), statusBar());
+
+    m_currentEventSelection->copy();
 }
 
 void NotationView::slotEditPaste()
 {
+    if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Inserting clipboard contents..."), statusBar());
+
+    Track* track = 0; // TODO : obtain track where the click happens
+    m_currentEventSelection->pasteToTrack(track);
 }
 
+//
+// Toolbar and statusbar toggling
+//
 void NotationView::slotToggleToolBar()
 {
     KTmpStatusMsg msg(i18n("Toggle the toolbar..."), statusBar());
@@ -818,7 +897,9 @@ void NotationView::slotToggleStatusBar()
         statusBar()->show();
 }
 
-
+//
+// Status messages
+//
 void NotationView::slotStatusMsg(const QString &text)
 {
     ///////////////////////////////////////////////////////////////////
@@ -1158,9 +1239,9 @@ int
 NotationView::findClosestStaff(double eventY)
 {
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-	int top = m_staffs[i]->getStaffHeight() * i;
-	int bottom = top + m_staffs[i]->getStaffHeight() + 15;
-	if (eventY >= top && eventY < bottom) return i;
+        int top = m_staffs[i]->getStaffHeight() * i;
+        int bottom = top + m_staffs[i]->getStaffHeight() + 15;
+        if (eventY >= top && eventY < bottom) return i;
     }
     return -1;
 }
@@ -1168,8 +1249,8 @@ NotationView::findClosestStaff(double eventY)
 
 NotationElementList::iterator
 NotationView::findClosestNote(double eventX, Event *&timeSignature,
-			      Event *&clef, Event *&key, int staffNo,
-			      unsigned int proximityThreshold)
+                              Event *&clef, Event *&key, int staffNo,
+                              unsigned int proximityThreshold)
 {
     double minDist = 10e9,
         prevDist = 10e9;
@@ -1187,14 +1268,14 @@ NotationView::findClosestNote(double eventX, Event *&timeSignature,
             if ((*it)->event()->isa(Clef::EventType)) {
                 kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : found clef: type is "
                                      << (*it)->event()->get<String>(Clef::ClefPropertyName) << endl;
-		clef = (*it)->event();
+                clef = (*it)->event();
             } else if ((*it)->event()->isa(TimeSignature::EventType)) {
-		kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : found time sig " << endl;
-		timeSignature = (*it)->event();
+                kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : found time sig " << endl;
+                timeSignature = (*it)->event();
             } else if ((*it)->event()->isa(Rosegarden::Key::EventType)) {
                 kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : found key: type is "
                                      << (*it)->event()->get<String>(Rosegarden::Key::KeyPropertyName) << endl;
-		key = (*it)->event();
+                key = (*it)->event();
             }
             continue;
         }
@@ -1237,7 +1318,7 @@ void NotationView::redoLayout(int staffNo, timeT startTime, timeT endTime)
 
         Track &track = m_staffs[i]->getTrack();
 
-	NotationElementList *notes = m_staffs[i]->getViewElementList();
+        NotationElementList *notes = m_staffs[i]->getViewElementList();
         NotationElementList::iterator starti = notes->begin();
         NotationElementList::iterator endi = notes->end();
 
@@ -1251,9 +1332,9 @@ void NotationView::redoLayout(int staffNo, timeT startTime, timeT endTime)
             endi = notes->findTime(barEndTime);
         }
 
-	m_staffs[i]->showElements(starti, endi,
-				  (staffNo >= 0 && (int)i != staffNo));
-	showBars(i);
+        m_staffs[i]->showElements(starti, endi,
+                                  (staffNo >= 0 && (int)i != staffNo));
+        showBars(i);
     }
 }
 
@@ -1365,7 +1446,7 @@ NoteInserter::handleMousePress(int height, const QPoint &eventPos,
     //!!! Could be nicer! Likewise the other inserters.
 
     if (closestNote ==
-	m_parentView.getStaff(staffNo)->getViewElementList()->end()) {
+        m_parentView.getStaff(staffNo)->getViewElementList()->end()) {
         return;
     }
 
@@ -1383,8 +1464,7 @@ NoteInserter::handleMousePress(int height, const QPoint &eventPos,
     m_parentView.getDocument()->setModified();
 
     Note note(m_noteType, m_noteDots);
-    TrackNotationHelper nt
-	(m_parentView.getStaff(staffNo)->getTrack());
+    TrackNotationHelper nt(m_parentView.getStaff(staffNo)->getTrack());
 
     timeT time = (*closestNote)->getAbsoluteTime();
     timeT endTime = time + note.getDuration(); //???
@@ -1442,16 +1522,16 @@ void ClefInserter::handleMousePress(int /*height*/, const QPoint &eventPos,
 
     NotationElementList::iterator closestNote =
         m_parentView.findClosestNote
-	(eventPos.x(), tsig, clef, key, staffNo, 100);
+        (eventPos.x(), tsig, clef, key, staffNo, 100);
 
     if (closestNote ==
-	m_parentView.getStaff(staffNo)->getViewElementList()->end()) {
+        m_parentView.getStaff(staffNo)->getViewElementList()->end()) {
         return;
     }
 
     timeT time = (*closestNote)->getAbsoluteTime();
     TrackNotationHelper nt
-	(m_parentView.getStaff(staffNo)->getTrack());
+        (m_parentView.getStaff(staffNo)->getTrack());
     nt.insertClef(time, m_clef);
 
     m_parentView.redoLayout(staffNo, time, time + 1);
@@ -1475,32 +1555,32 @@ void NotationEraser::handleMousePress(int, const QPoint&,
     int staffNo = -1;
     for (int i = 0; i < m_parentView.getStaffCount(); ++i) {
 
-	NotationElementList *nel =
-	    m_parentView.getStaff(i)->getViewElementList(); 
+        NotationElementList *nel =
+            m_parentView.getStaff(i)->getViewElementList(); 
 
-	if (nel->findSingle(element) != nel->end()) {
-	    staffNo = i;
-	    break;
-	}
+        if (nel->findSingle(element) != nel->end()) {
+            staffNo = i;
+            break;
+        }
     }
     if (staffNo == -1) return;
 
     TrackNotationHelper nt
-	(m_parentView.getStaff(staffNo)->getTrack());
+        (m_parentView.getStaff(staffNo)->getTrack());
 
     timeT absTime = 0;
 
     if (element->isNote()) {
 
         absTime = element->getAbsoluteTime();
-	nt.deleteNote(element->event());
-	needLayout = true;
+        nt.deleteNote(element->event());
+        needLayout = true;
 
     } else if (element->isRest()) {
 
         absTime = element->getAbsoluteTime();
-	nt.deleteRest(element->event());
-	needLayout = true;
+        nt.deleteRest(element->event());
+        needLayout = true;
 
     } else {
         // we don't know what it is
@@ -1555,4 +1635,44 @@ void NotationSelector::handleMouseMove(QMouseEvent* e)
 void NotationSelector::handleMouseRelease(QMouseEvent*)
 {
     m_updateRect = false;
+}
+
+#include <iostream>
+
+EventSelection* NotationSelector::getSelection()
+{
+    EventSelection* selection = new EventSelection(m_parentView.getStaff(0)->getTrack());
+
+    QCanvasItemList itemList = m_selectionRect->collisions(true);
+
+    QCanvasItemList::Iterator it;
+
+    for (it = itemList.begin(); it != itemList.end(); ++it) {
+
+        QCanvasItem *item = *it;
+        QCanvasNotationSprite *sprite = 0;
+        
+        if ((sprite = dynamic_cast<QCanvasNotationSprite*>(item))) {
+
+            if (!m_selectionRect->rect().contains(item->x(), item->y(), true)) {
+                kdDebug(KDEBUG_AREA) << "Skipping item not really in selection rect\n";
+                continue;
+            }
+
+            NotationElement &el = sprite->getNotationElement();
+
+            selection->push_back(el.event());
+
+            kdDebug(KDEBUG_AREA) << "Selected event : \n";
+            el.event()->dump(cerr);
+        }
+        
+    }
+
+    return selection;
+}
+
+void NotationSelector::setViewCurrentSelection()
+{
+    m_parentView.setCurrentSelection(getSelection());
 }

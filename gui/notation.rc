@@ -131,7 +131,7 @@
   <Action name="show_clefs_toolbar"        />
 </ToolBar>
 
-<ToolBar name="toolsToolBar" newline="true">
+<ToolBar name="mainToolBar">
   <Action name="erase" />
   <Action name="select" />
 </ToolBar>

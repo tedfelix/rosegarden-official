@@ -137,9 +137,8 @@ NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 
             if (el.isNote()) { // make sure we get the right note
 
-                using Rosegarden::Int;
                 long eventPitch = 0;
-                el.event()->get<Int>("pitch", eventPitch);
+                el.event()->get<Rosegarden::Int>("pitch", eventPitch);
                 if (eventPitch == clickPitch) break;
 
             } else { // it's not a note, so we don't care about checking the pitch
