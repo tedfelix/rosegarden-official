@@ -1,4 +1,26 @@
 
+Task list from 18/19th August meetings
+======================================
+
+Aim: "to make a good base for other developers".
+
+References in round brackets are to 0.1_planned_features.txt.
+
+ 1. Basic Rosegarden 2.1 import (A12)
+
+ 2. Finish insertion -- keys, dots, accidentals etc.  (May need
+ input from Chris on accidentals) (A9a)
+
+ 3. Tidy framework ("make install", pixmaps, resource.h) (A13, C2ish)
+
+ 4. Implement selection (B4)
+
+ Throughout: Code documentation
+
+
+Older task list
+===============
+
 * Take up all following rests into account when inserting a note (rest collapsing function ?)
 
 * when replacing a rest, split it according to where the click

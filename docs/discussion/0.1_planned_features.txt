@@ -1,6 +1,13 @@
 Features for release 0.1
 ========================
 
+This should be cross-referenced against tasks_*.txt.
+
+The following items in this file are not yet done (at 20010820) but
+are also not listed in any tasks_* file: A2, B1, B5, B6, B7, C3.
+
+===
+
 A.  Features without which nobody will even believe we're serious:
 
 1.  be able to store music in multiple tracks and display multiple

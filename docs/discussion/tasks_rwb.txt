@@ -1,0 +1,15 @@
+
+Task list from 18/19th August meetings
+======================================
+
+Aim: "working sequencer, framework for instrument management".
+
+References in round brackets are to 0.1_planned_features.txt.
+
+ 1. MIDI file writing (A10)
+
+ 2. Good DCOP API for sequencer process
+
+ 3. Everything else (A11 etc)
+
+

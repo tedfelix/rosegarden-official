@@ -1,3 +1,35 @@
+
+Task list from 18/19th August meetings
+======================================
+
+Aim: "to make it apparent that the notation editor has the potential
+to be nicer than those in most of the other applications out there".
+
+References in round brackets are to 0.1_planned_features.txt.
+
+ 1. Merge rests on insertion
+
+ 2. General split-on-insert
+
+ 3. Auto-beaming on input
+
+ 4. More than one track per editing window (for 0.1, I think it only
+ has to be possible to display these tracks, we don't necessarily have
+ to make editing work for any beyond the first) (B8)
+
+ 5. Making key, clef and time signature appear in correct order
+
+ 6. Beaming selected area (dependent on Guillaume's doing selection)
+
+ 7. Various subtle improvements to notation layout, for example moving
+ long notes to the right to be more central in their space (A9)
+
+ Throughout: Code documentation
+
+
+Older task list
+===============
+
 D * Take a careful look at the situations in which accidentals
     do and don't appear, and make sure they're correct.
 
