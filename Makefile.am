@@ -1,11 +1,4 @@
-####### kdevelop will overwrite this part!!! (begin)##########
-
 EXTRA_DIST = AUTHORS COPYING ChangeLog INSTALL README TODO TRANSLATORS rosegarden.lsm 
-
-####### kdevelop will overwrite this part!!! (end)############
-
-# This Makefile.am initially comes from kapptemplate but kdevelop has added
-# its own stuff in it, hence the inconsistencies. - GL.
 
 #COMPILE_FIRST = base sound
 #COMPILE_LAST = gui
