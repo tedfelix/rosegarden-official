@@ -33,6 +33,7 @@
 
 #include "editview.h"
 #include "linedstaff.h"
+#include "qcanvassimplesprite.h"
 
 namespace Rosegarden { class Segment; }
 
@@ -111,7 +112,7 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    QCanvasRectangle* m_canvasRect;
+    QCanvasMatrixRectangle* m_canvasRect;
 
     double m_layoutX;
     double m_layoutY;
@@ -176,6 +177,8 @@ protected:
 
     Rosegarden::timeT m_previousEvTime;
     int m_previousEvPitch;
+
+    bool m_mouseWasPressed;
 };
 
 //------------------------------------------------------------
@@ -545,6 +548,30 @@ protected:
 
     Rosegarden::Note::Type m_resolution;
     Rosegarden::timeT m_basicDuration;
+};
+
+
+
+class MatrixEraser : public MatrixTool
+{
+    Q_OBJECT
+
+    friend MatrixToolBox;
+
+public:
+
+    virtual void handleLeftButtonPress(Rosegarden::timeT,
+                                       int height,
+                                       int staffNo,
+                                       QMouseEvent *event,
+                                       Rosegarden::ViewElement*);
+
+    static const QString ToolName;
+
+protected:
+    MatrixEraser(MatrixView*);
+
+    MatrixStaff* m_currentStaff;
 };
 
 #endif

@@ -50,7 +50,8 @@ MatrixCanvasView::MatrixCanvasView(MatrixStaff& staff,
     : QCanvasView(viewing, parent, name, f),
       m_staff(staff),
       m_previousEvTime(0),
-      m_previousEvPitch(0)
+      m_previousEvPitch(0),
+      m_mouseWasPressed(false)
 {
     viewport()->setMouseTracking(true);
 }
@@ -68,17 +69,23 @@ void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
     kdDebug(KDEBUG_AREA) << "MatrixCanvasView::contentsMousePressEvent() at pitch "
                          << evPitch << ", time " << evTime << endl;
 
-    //     QCanvasItemList itemList = canvas()->collisions(e->pos());
-    //     QCanvasItemList::Iterator it;
-    //     for (it = itemList.begin(); it != itemList.end(); ++it) {
+    QCanvasItemList itemList = canvas()->collisions(e->pos());
+    QCanvasItemList::Iterator it;
+    MatrixElement* mel = 0;
 
-    //         QCanvasItem *item = *it;
-    //         MatrixElement* mel;
+    for (it = itemList.begin(); it != itemList.end(); ++it) {
+
+        QCanvasItem *item = *it;
+        QCanvasMatrixRectangle* mRect = 0;
         
-    //     }
+        if ((mRect = dynamic_cast<QCanvasMatrixRectangle*>(item))) {
+            mel = &(mRect->getMatrixElement());
+            break;
+        }    
+    }
 
-    emit mousePressed(evTime, evPitch, e, 0);
-
+    emit mousePressed(evTime, evPitch, e, mel);
+    m_mouseWasPressed = true;
 }
 
 void MatrixCanvasView::contentsMouseMoveEvent(QMouseEvent* e)
@@ -99,8 +106,11 @@ void MatrixCanvasView::contentsMouseMoveEvent(QMouseEvent* e)
         m_previousEvPitch = evPitch;
     }
 
-    if (e->button() != NoButton)
+    if (m_mouseWasPressed) {
+        kdDebug(KDEBUG_AREA) << "MatrixCanvasView::contentsMouseMoveEvent() emitting mouseMoved\n";
         emit mouseMoved(evTime, e);
+    }
+    
 }
 
 void MatrixCanvasView::contentsMouseReleaseEvent(QMouseEvent* e)
@@ -108,6 +118,7 @@ void MatrixCanvasView::contentsMouseReleaseEvent(QMouseEvent* e)
     timeT evTime = m_staff.getTimeForCanvasX(e->x());
 
     emit mouseReleased(evTime, e);
+    m_mouseWasPressed = false;
 }
 
 //----------------------------------------------------------------------
@@ -263,7 +274,7 @@ void MatrixHLayout::finishLayout()
 
 MatrixElement::MatrixElement(Rosegarden::Event *event) :
     Rosegarden::ViewElement(event),
-    m_canvasRect(new QCanvasRectangle(0)),
+    m_canvasRect(new QCanvasMatrixRectangle(*this, 0)),
     m_layoutX(0.0),
     m_layoutY(0.0)
 {
@@ -485,7 +496,7 @@ void MatrixView::setupActions()
     KRadioAction* toolAction = 0;
 
     toolAction = new KRadioAction(i18n("Paint"), "pencil", 0,
-                                  this, SLOT(slotEraseSelected()),
+                                  this, SLOT(slotPaintSelected()),
                                   actionCollection(), "paint");
     toolAction->setExclusiveGroup("tools");
 
@@ -504,7 +515,7 @@ void MatrixView::setupActions()
 
     createGUI("matrix.rc");
 
-    slotPaintSelected();
+    actionCollection()->action("paint")->activate();
 }
 
 void MatrixView::initStatusBar()
@@ -572,13 +583,16 @@ void MatrixView::setViewSize(QSize s)
 
 void MatrixView::slotPaintSelected()
 {
-    MatrixPainter* painter = dynamic_cast<MatrixPainter*>(m_toolBox->getTool(MatrixPainter::ToolName));
+    EditTool* painter = m_toolBox->getTool(MatrixPainter::ToolName);
 
     setTool(painter);
 }
 
 void MatrixView::slotEraseSelected()
 {
+    EditTool* eraser = m_toolBox->getTool(MatrixEraser::ToolName);
+
+    setTool(eraser);
 }
 
 void MatrixView::slotSelectSelected()
@@ -664,10 +678,9 @@ public:
     SegmentMatrixHelper(Segment &t) : SegmentNotationHelper(t) { }
 
     SegmentHelper::segment;
+    SegmentNotationHelper::deleteEvent;
 
     iterator insertNote(Event*);
-
-    iterator deleteNote(Event*);
 
 protected:
     iterator insertSingleSomething(iterator i, Event* e);
@@ -753,13 +766,6 @@ SegmentMatrixHelper::insertSingleSomething(iterator i, Event* e)
     return insert(e);
 }
 
-Segment::iterator SegmentMatrixHelper::deleteNote(Event* e)
-{
-    return begin();
-}
-
-
-
 } // closing namespace Rosegarden
 
 // Move this to base - end
@@ -785,6 +791,10 @@ EditTool* MatrixToolBox::createTool(const QString& toolName)
     if (toolNamelc == MatrixPainter::ToolName)
 
         tool = new MatrixPainter(m_mParentView);
+
+    else if (toolNamelc == MatrixEraser::ToolName)
+
+        tool = new MatrixEraser(m_mParentView);
 
     else {
         KMessageBox::error(0, QString("NotationToolBox::createTool : unrecognised toolname %1 (%2)")
@@ -900,6 +910,7 @@ void MatrixPainter::handleMouseRelease(Rosegarden::timeT,
         //m_currentStaff->insert(m_currentElement->event(), true);
         Rosegarden::SegmentMatrixHelper helper(m_currentStaff->getSegment());
         helper.insertNote(m_currentElement->event());
+        m_currentStaff->getViewElementList()->insert(m_currentElement);
 
     } else {
 
@@ -916,6 +927,36 @@ void MatrixPainter::setResolution(Rosegarden::Note::Type note)
     m_resolution = note;
 }
 
+//------------------------------
+
+using Rosegarden::Event;
+using Rosegarden::Note;
+
+MatrixEraser::MatrixEraser(MatrixView* parent)
+    : MatrixTool("MatrixEraser", parent),
+      m_currentStaff(0)
+{
+}
+
+void MatrixEraser::handleLeftButtonPress(Rosegarden::timeT,
+                                         int,
+                                         int staffNo,
+                                         QMouseEvent*,
+                                         Rosegarden::ViewElement* el)
+{
+    kdDebug(KDEBUG_AREA) << "MatrixEraser::handleLeftButtonPress : el = "
+                         << el << endl;
+
+    if (!el) return; // nothing to erase
+
+    m_currentStaff = m_mParentView->getStaff(staffNo);
+
+    Rosegarden::SegmentMatrixHelper helper(m_currentStaff->getSegment());
+    helper.deleteEvent(el->event());
+
+    m_mParentView->canvas()->update();
+}
 
 const QString MatrixPainter::ToolName = "painter";
+const QString MatrixEraser::ToolName  = "eraser";
 
