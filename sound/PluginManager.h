@@ -24,8 +24,9 @@
 #include "config.h"
 
 #ifdef HAVE_LADSPA
-
 #include <ladspa.h>
+#endif
+
 #include <string>
 #include <vector>
 
@@ -68,6 +69,7 @@ protected:
 
 };
 
+#ifdef HAVE_LADSPA
 class LADSPAPlugin : public Plugin
 {
 public:
@@ -81,6 +83,7 @@ protected:
     const LADSPA_Descriptor *m_descriptor;
 
 };
+#endif
 
 typedef vector<Plugin*>::const_iterator PluginIterator;
 
@@ -90,11 +93,13 @@ public:
     PluginManager();
     ~PluginManager();
 
+#ifdef HAVE_LADSPA
     // Modify path
     void getenvLADSPAPath();
     std::string getLADSPAPath() { return m_path; }
     void setLADSPAPath(const std::string &path);
     void addLADSPAPath(const std::string &path);
+#endif
 
     // Search path for all plugins
     void discoverPlugins();
@@ -123,6 +128,5 @@ protected:
 
 };
 
-#endif // HAVE_LADSPA
-
 #endif // _PLUGINMANAGER_H_
+

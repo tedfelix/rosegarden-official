@@ -20,7 +20,6 @@
 
 #include "PluginManager.h"
 
-#ifdef HAVE_LADSPA
 
 #include <dlfcn.h>
 
@@ -44,6 +43,7 @@ Plugin::~Plugin()
 {
 }
 
+#ifdef HAVE_LADSPA
 LADSPAPlugin::LADSPAPlugin(const LADSPA_Descriptor *descriptor,
                            PluginId id,
                            const std::string &libraryName):
@@ -61,7 +61,10 @@ LADSPAPlugin::~LADSPAPlugin()
     if (m_descriptor) delete m_descriptor;
 } 
 
+#endif
+
 PluginManager::PluginManager():
+    m_path(""),
     m_runningId(0)
 {
 }
@@ -71,6 +74,7 @@ PluginManager::~PluginManager()
     clearPlugins();
 }
 
+#ifdef HAVE_LADSPA
 void
 PluginManager::getenvLADSPAPath()
 {
@@ -93,6 +97,7 @@ PluginManager::addLADSPAPath(const std::string &path)
 {
     m_path += path;
 }
+#endif 
 
 void
 PluginManager::clearPlugins()
@@ -119,6 +124,7 @@ PluginManager::discoverPlugins()
 void
 PluginManager::loadPlugin(const std::string &path)
 {
+#ifdef HAVE_LADSPA
     LADSPA_Descriptor_Function descrFn = 0;
     void *pluginHandle = 0;
 
@@ -147,10 +153,11 @@ PluginManager::loadPlugin(const std::string &path)
         while(data);
     }
     dlclose(pluginHandle);
+#endif // HAVE_LADSPA
+
 }
 
 };
 
-#endif // HAVE_LADSPA
 
 

@@ -904,12 +904,12 @@ MidiFile::convertToMidi(Rosegarden::Composition &comp)
     // any other MIDI track.
     //
     midiEvent = new MidiEvent(0, MIDI_FILE_META_EVENT, MIDI_TEXT_MARKER,
-                              "Created by Rosegarden 4.0");
+                              "Created by Rosegarden");
 
     m_midiComposition[trackNumber].push_back(midiEvent);
 
     midiEvent = new MidiEvent(0, MIDI_FILE_META_EVENT, MIDI_TEXT_MARKER,
-                              "http://rosegarden.sourceforge.net");
+                              "http://www.all-day-breakfast.com/rosegarden");
 
     m_midiComposition[trackNumber].push_back(midiEvent);
 
