@@ -69,8 +69,8 @@ RosegardenGUIApp::RosegardenGUIApp()
       m_view(0),
       m_doc(0),
       m_playLatency(0, 100000), // the sequencer's head start
-      m_fetchLatency(0, 30000), // how long we allow to fetch and queue new events
-      m_readAhead(0, 20000),    // how many events to fetch (microseconds)
+      m_fetchLatency(0, 50000), // how long we allow to fetch and queue new events
+      m_readAhead(0, 40000),    // how many events to fetch (microseconds)
       m_transportStatus(STOPPED),
       m_sequencerProcess(0),
       m_soundSystemStatus(Rosegarden::NO_SEQUENCE_SUBSYS)
