@@ -1739,9 +1739,15 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 
     if (item) {
 	
+        // Ten percent of the width of the SegmentItem
+        //
+        int threshold = int(float(item->width()) * 0.15);
+        if (threshold  == 0) threshold = 1;
+
+
 	if (!m_segmentAddMode &&
-	    SegmentResizer::cursorIsCloseEnoughToEdge(item, e, 10)) {
-	    m_dispatchTool = new SegmentResizer(m_canvas, m_doc, 10);
+	    SegmentResizer::cursorIsCloseEnoughToEdge(item, e, threshold)) {
+	    m_dispatchTool = new SegmentResizer(m_canvas, m_doc, threshold);
 	    m_dispatchTool->handleMouseButtonPress(e);
 	    return;
 	}
@@ -1752,8 +1758,11 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 
     } else {
 
+        // If in segment add mode and outside of a segment then insert
+        // one.
+        //
         /*
-	if (!m_segmentAddMode) {
+	if (m_segmentAddMode) {
 	    m_dispatchTool = new SegmentPencil(m_canvas, m_doc);
 	    m_dispatchTool->handleMouseButtonPress(e);
 	    return;
