@@ -55,8 +55,12 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
 {
 //    m_font.setPointSize(m_small ? 9 : 11);
 //    m_boldFont.setPointSize(m_small ? 9 : 11);
-    m_font.setPixelSize(m_height * 2 / 3);
-    m_boldFont.setPixelSize(m_height * 2 / 3);
+
+//    m_font.setPixelSize(m_height * 2 / 3);
+//    m_boldFont.setPixelSize(m_height * 2 / 3);
+
+    m_font.setPixelSize(m_height / 2 + 2);
+    m_boldFont.setPixelSize(m_height / 2 + 2);
     m_boldFont.setBold(true);
     m_fontMetrics = QFontMetrics(m_boldFont);
 
@@ -141,9 +145,9 @@ TempoRuler::paintEvent(QPaintEvent* e)
     timeT   to = m_rulerScale->getTimeForX
 	(clipRect.x() + clipRect.width() - m_currentXOffset + 100 - m_xorigin);
 
-    QRect boundsForHeight = m_fontMetrics.boundingRect("^j|lM");
+    QRect boundsForHeight = m_fontMetrics.boundingRect("019");
     int fontHeight = boundsForHeight.height();
-    int textY = (height() - 6)/2 + fontHeight/2;
+    int textY = fontHeight + 1;
 
     double prevEndX = -1000.0;
     double prevTempo = 0.0;
@@ -215,7 +219,8 @@ TempoRuler::paintEvent(QPaintEvent* e)
                    + m_xorigin;
 	
 	paint.drawLine(static_cast<int>(x),
-		       height() - (height()/3 - 2),
+//		       height() - (height()/3 - 2),
+		       height() - (height()/3),
 		       static_cast<int>(x),
 		       height());
 
@@ -224,21 +229,12 @@ TempoRuler::paintEvent(QPaintEvent* e)
 	    Rosegarden::TimeSignature sig =
 		m_composition->getTimeSignatureAt(time);
 
-	    QString numStr = QString("%1").arg(sig.getNumerator());
-	    QString denStr = QString("%1").arg(sig.getDenominator());
-
-	    QRect numBounds = m_fontMetrics.boundingRect(numStr);
-	    QRect denBounds = m_fontMetrics.boundingRect(denStr);
-
-	    int margin = (m_height - (numBounds.height() +
-				      denBounds.height())) / 2;
+	    QString str = QString("%1/%2")
+		.arg(sig.getNumerator())
+		.arg(sig.getDenominator());
 
 	    paint.setFont(m_boldFont);
-	    paint.drawText(static_cast<int>(x - numBounds.width()/2),
-			   margin + numBounds.height(), numStr);
-	    paint.drawText(static_cast<int>(x - denBounds.width()/2),
-			   margin + numBounds.height() + denBounds.height(),
-			   denStr);
+	    paint.drawText(static_cast<int>(x) + 2, m_height - 2, str);
 	}
 
 	if (i->second & tempoChangeHere) { 
@@ -264,7 +260,8 @@ TempoRuler::paintEvent(QPaintEvent* e)
 	    QRect bounds = m_fontMetrics.boundingRect(tempoString);
 
 	    paint.setFont(m_font);
-	    if (x > bounds.width() / 2) x -= bounds.width() / 2;
+	    if (time > 0) x -= bounds.width() / 2;
+//	    if (x > bounds.width() / 2) x -= bounds.width() / 2;
 	    if (prevEndX >= x - 3) x = prevEndX + 3;
 	    paint.drawText(static_cast<int>(x), textY, tempoString);
 	    prevEndX = x + bounds.width();
