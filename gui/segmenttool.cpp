@@ -1285,9 +1285,11 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 	return m_dispatchTool->handleMouseMove(e);
     }
 
-    if (!m_canvas->getSelectionRectangle() ||
-	!m_canvas->getSelectionRectangle()->visible()) 
+    if (!m_currentItem && 
+	(!m_canvas->getSelectionRectangle() ||
+	 !m_canvas->getSelectionRectangle()->visible())) {
 	return RosegardenCanvasView::NoFollow;
+    }
 
     QWMatrix matrix = m_canvas->worldMatrix().invert();
     QPoint tPos = matrix.map(e->pos());
