@@ -54,7 +54,7 @@ public slots:
     void slotSetSnap(int);
 
 signals:
-    void quantizeSelection(Rosegarden::StandardQuantization);
+    void quantizeSelection(Rosegarden::Quantizer);
     void modifySnapTime(Rosegarden::timeT);
 
 protected:

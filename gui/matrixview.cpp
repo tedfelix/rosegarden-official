@@ -120,9 +120,9 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     m_grid->addWidget(m_parameterBox, 2, 0);
 
     connect(m_parameterBox,
-            SIGNAL(quantizeSelection(Rosegarden::StandardQuantization)),
+            SIGNAL(quantizeSelection(Rosegarden::Quantizer)),
             this,
-            SLOT(slotQuantizeSelection(Rosegarden::StandardQuantization)));
+            SLOT(slotQuantizeSelection(Rosegarden::Quantizer)));
     
     connect(m_parameterBox,
             SIGNAL(modifySnapTime(Rosegarden::timeT)),
@@ -1060,12 +1060,17 @@ MatrixView::slotSetSnap(Rosegarden::timeT snapTime)
 
 
 void
-MatrixView::slotQuantizeSelection(Rosegarden::StandardQuantization q)
+MatrixView::slotQuantizeSelection(Rosegarden::Quantizer q)
 {
+    if (!m_currentEventSelection) return;
+    if (m_currentEventSelection->getAddedEvents() == 0) return;
+
     MATRIX_DEBUG << "MatrixView::slotQuantizeSelection\n";
+
+    KTmpStatusMsg msg(i18n("Quantizing..."), statusBar());
     addCommandToHistory(new EventQuantizeCommand
 			    (*m_currentEventSelection,
-                             Rosegarden::Quantizer(q)));
+                             q));
 }
 
 

@@ -30,6 +30,7 @@
 #include "matrixparameterbox.h"
 #include "notepixmapfactory.h"
 #include "rosestrings.h"
+#include "Quantizer.h"
 
 
 using std::cout;
@@ -63,7 +64,7 @@ MatrixParameterBox::initBox()
 
     QGridLayout *gridLayout = new QGridLayout(this, 5, 2, 8, 1);
 
-    QLabel *quantizeLabel  = new QLabel(i18n("Quantize"), this);
+    QLabel *quantizeLabel  = new QLabel(i18n("Quantize positions"), this);
     quantizeLabel->setFont(font);
 
     m_quantizeCombo = new RosegardenComboBox(false, false, this);
@@ -89,6 +90,10 @@ MatrixParameterBox::initBox()
     m_quantizeCombo->insertItem(noMap, i18n("Off"));
 
     connect(m_quantizeCombo, SIGNAL(activated(int)),
+            this, SLOT(slotQuantizeSelected(int)));
+
+    // mouse wheel
+    connect(m_quantizeCombo, SIGNAL(propagate(int)),
             this, SLOT(slotQuantizeSelected(int)));
 
     // default to last item
@@ -160,7 +165,20 @@ MatrixParameterBox::setSelection(Rosegarden::EventSelection *selection)
 void
 MatrixParameterBox::slotQuantizeSelected(int q)
 {
-    emit quantizeSelection(m_quantizations[q]);
+    using Rosegarden::Quantizer;
+
+    Rosegarden::timeT unit = m_quantizations[q].unit;
+
+    // if we're the last value then we're Off
+    //
+    if (q == m_quantizations.size() - 1)
+        unit = 0;
+
+    emit quantizeSelection(Quantizer(Quantizer::RawEventData,
+                                     Quantizer::RawEventData,
+                                     Quantizer::PositionQuantize,
+                                     unit,
+                                     m_quantizations[q].maxDots));
 }
 
 void

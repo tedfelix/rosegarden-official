@@ -243,7 +243,7 @@ public slots:
     /*
      * Quantize a selection to a given level
      */
-    void slotQuantizeSelection(Rosegarden::StandardQuantization);
+    void slotQuantizeSelection(Rosegarden::Quantizer);
 
 protected:
 

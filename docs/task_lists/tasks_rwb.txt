@@ -19,7 +19,7 @@ o Tidy up AudioFiles:
 o "Revert file" option
 
 o Matrix tools - cut and join 
-               - multiple resize
+               - multiple resize [DONE]
                - wire up quantize
 
 o MIDI export broken for key sig and SysExs
@@ -52,8 +52,6 @@ o First time run up go to settings and walk user through the
   MIDI and Audio setup to help them understand what they're
   doing.
 
-o Segment previews still buggy [BETTER but still a glitch]
-
 o Toggle record mode for punch in/out [Half complete]
 
 o Finite audio recording time - check for available disk space
@@ -75,6 +73,8 @@ Completed for 0.21
 ==================
 
 o Sysexs MIDI file in/out
+
+o Segment previews still buggy [cc FIXED]
 
 
 
