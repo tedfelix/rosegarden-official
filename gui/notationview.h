@@ -350,16 +350,18 @@ public slots:
     void slotHoveredOverAbsoluteTimeChanged(unsigned int);
 
     /// Set the time pointer position during playback
-    void slotSetPointerPosition(Rosegarden::timeT position);
+    void slotSetPointerPosition(Rosegarden::timeT position, bool scroll = true);
 
     /// Set the current staff to the one containing the given canvas Y coord
     void slotSetCurrentStaff(int canvasY);
 
     /// Set the insertion pointer position (from the top LoopRuler)
-    void slotSetInsertCursorPosition(Rosegarden::timeT position);
+    void slotSetInsertCursorPosition(Rosegarden::timeT position,
+				     bool scroll = true);
 
     /// Set the insertion pointer position from a mouse event location
-    void slotSetInsertCursorPosition(double canvasX, int canvasY);
+    void slotSetInsertCursorPosition(double canvasX, int canvasY,
+				     bool scroll = true);
 
     /// Step back one event with the insertion pointer position
     void slotStepBackward();

@@ -1482,35 +1482,51 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc):
     QButtonGroup *scopeBox = new QButtonGroup(1, Horizontal,
 					      i18n("Scope"), vbox);
 
+    new QLabel(scopeBox);
+
     QHBox *currentBox = new QHBox(scopeBox);
     new QLabel(i18n("The pointer is currently at "), currentBox);
     m_tempoTimeLabel = new QLabel(currentBox);
     m_tempoBarLabel = new QLabel(currentBox);
+    m_tempoStatusLabel = new QLabel(scopeBox);
+
+    new QLabel(scopeBox);
 
     m_tempoChangeHere = new QRadioButton
-	(i18n("This tempo applies from here onwards"), scopeBox);
+	(i18n("Apply this tempo from here onwards"), scopeBox);
 
-    m_tempoChangeBefore = new QRadioButton(scopeBox);
+    m_tempoChangeBefore = new QRadioButton
+	(i18n("Replace the last tempo change"), scopeBox);
     m_tempoChangeBeforeAt = new QLabel(scopeBox);
+    m_tempoChangeBeforeAt->hide();
 
     m_tempoChangeStartOfBar = new QRadioButton
-	(i18n("This tempo applies from the start of this bar"), scopeBox);
+	(i18n("Apply this tempo from the start of this bar"), scopeBox);
 
-    m_tempoChangeGlobal = new QRadioButton(scopeBox);
+    m_tempoChangeGlobal = new QRadioButton
+	(i18n("Apply this tempo to the whole composition"), scopeBox);
 
     QHBox *optionHBox = new QHBox(scopeBox);
     new QLabel(optionHBox);
     m_defaultBox = new QCheckBox
-	(i18n("Also make this the default for new segments"), optionHBox);
+	(i18n("Also make this the default tempo"), optionHBox);
     new QLabel(optionHBox);
 
-    // disable initially
-    m_defaultBox->setDisabled(true);
+    new QLabel(scopeBox);
 
+    connect(m_tempoChangeHere, SIGNAL(clicked()),
+            SLOT(slotActionChanged()));
+    connect(m_tempoChangeBefore, SIGNAL(clicked()),
+            SLOT(slotActionChanged()));
+    connect(m_tempoChangeStartOfBar, SIGNAL(clicked()),
+            SLOT(slotActionChanged()));
     connect(m_tempoChangeGlobal, SIGNAL(clicked()),
-            SLOT(slotGlobalTempoChangeClicked()));
+            SLOT(slotActionChanged()));
 
     m_tempoChangeHere->setChecked(true);
+
+    // disable initially
+    m_defaultBox->setEnabled(false);
 
     populateTempo();
 }
@@ -1552,52 +1568,65 @@ TempoDialog::populateTempo()
     int barNo = comp.getBarNumber(m_tempoTime);
     if (comp.getBarStart(barNo) == m_tempoTime) {
 	m_tempoBarLabel->setText
-	    (i18n("at the start of bar %1").arg(barNo+1));
+	    (i18n("at the start of bar %1.").arg(barNo+1));
 	m_tempoChangeStartOfBar->setEnabled(false);
     } else {
 	m_tempoBarLabel->setText(
-	    i18n("in the middle of bar %1").arg(barNo+1));
+	    i18n("in the middle of bar %1.").arg(barNo+1));
 	m_tempoChangeStartOfBar->setEnabled(true);
     }
+
+    m_tempoChangeBefore->setEnabled(false);
+    m_tempoChangeBeforeAt->setEnabled(false);
+
+    bool havePrecedingTempo = false;
 
     int tempoChangeNo = comp.getTempoChangeNumberAt(m_tempoTime);
     if (tempoChangeNo >= 0) {
 
-	m_tempoChangeBefore->setText
-	    (i18n("This tempo replaces the last tempo change"));
-
 	timeT lastTempoTime = comp.getRawTempoChange(tempoChangeNo).first;
-	Rosegarden::RealTime lastRT = comp.getElapsedRealTime(lastTempoTime);
-	QString lastms;
-	lastms.sprintf("%03ld", lastRT.usec / 1000);
-	int lastBar = comp.getBarNumber(lastTempoTime);
-	m_tempoChangeBeforeAt->setText
-	    (i18n("    (at %1.%2 s, in bar %3)").arg(lastRT.sec)
-	     .arg(lastms).arg(lastBar+1));
+	if (lastTempoTime < m_tempoTime) {
 
-	m_tempoChangeBefore->setEnabled(true);
-	m_tempoChangeBeforeAt->setEnabled(true);
+	    Rosegarden::RealTime lastRT = comp.getElapsedRealTime(lastTempoTime);
+	    QString lastms;
+	    lastms.sprintf("%03ld", lastRT.usec / 1000);
+	    int lastBar = comp.getBarNumber(lastTempoTime);
+	    m_tempoChangeBeforeAt->setText
+		(i18n("        (at %1.%2 s, in bar %3)").arg(lastRT.sec)
+		 .arg(lastms).arg(lastBar+1));
+	    m_tempoChangeBeforeAt->show();
 
-    } else {
-	m_tempoChangeBefore->setEnabled(false);
-	m_tempoChangeBeforeAt->setEnabled(false);
+	    m_tempoChangeBefore->setEnabled(true);
+	    m_tempoChangeBeforeAt->setEnabled(true);
+
+	    havePrecedingTempo = true;
+	}
     }
 
     if (comp.getTempoChangeCount() > 0) {
 
-	m_tempoChangeGlobal->setText
-	    (i18n("This tempo applies to the whole segment"));
+	if (havePrecedingTempo) {
+	    m_tempoStatusLabel->hide();
+	} else {
+	    m_tempoStatusLabel->setText
+		(i18n("There are no preceding tempo changes."));
+	}
+
 	m_tempoChangeGlobal->setEnabled(true);
-	m_defaultBox->setEnabled(true);
 
     } else {
+	
+	m_tempoStatusLabel->setText
+	    (i18n("There are no other tempo changes."));
+
 	m_tempoChangeGlobal->setEnabled(false);
-	m_defaultBox->setEnabled(false);
     }
+
+    m_defaultBox->setEnabled(false);
 }
 
 void
-TempoDialog::slotGlobalTempoChangeClicked()
+TempoDialog::slotActionChanged()
 {
     m_defaultBox->setEnabled(m_tempoChangeGlobal->isChecked());
 }

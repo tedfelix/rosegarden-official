@@ -324,7 +324,7 @@ void RosegardenGUIApp::setupActions()
 		SLOT(slotDeleteSelectedSegments()), actionCollection(),
 		"delete");
 
-    new KAction(i18n("Open in &Matrix Editor"), 0, this,
+    new KAction(i18n("Open in Matri&x Editor"), 0, this,
 		SLOT(slotEditInMatrix()), actionCollection(),
 		"edit_matrix");
 
@@ -337,7 +337,7 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotEditTempo()),
                 actionCollection(), "add_tempo");
 
-    new KAction(i18n("Edit Document Properties..."), 0, this,
+    new KAction(i18n("Edit Document P&roperties..."), 0, this,
                 SLOT(slotEditDocumentProperties()),
                 actionCollection(), "edit_doc_properties");
 
@@ -2252,6 +2252,9 @@ RosegardenGUIApp::slotChangeTempo(Rosegarden::timeT time,
     }
     else if (action == TempoDialog::ReplaceTempo)
     {
+	//!!! I'm sure this should be unnecessary, as tempo changes
+	// should replace if you just insert at the same time anyway
+
         int index = comp.getTempoChangeNumberAt(time);
 
         // if there's no previous tempo change then just set globally
@@ -2274,6 +2277,12 @@ RosegardenGUIApp::slotChangeTempo(Rosegarden::timeT time,
 
         m_doc->getCommandHistory()->addCommand(macro);
 
+    }
+    else if (action == TempoDialog::AddTempoAtBarStart)
+    {
+        m_doc->getCommandHistory()->addCommand(new
+                AddTempoChangeCommand(&comp, comp.getBarStartForTime(time),
+				      value));
     }
     else if (action == TempoDialog::GlobalTempo ||
              action == TempoDialog::GlobalTempoWithDefault)

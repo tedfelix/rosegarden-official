@@ -127,14 +127,15 @@ Post-0.1.5-and-a-bit task list
 
     a. Flatten out so as not to use QButtonGroup (need to change usage
        of selected()) but put buttons directly in parent QGroupBox with
-       the labels
+       the labels [DONE]
 
     b. Add explanatory "There are no {previous,other} tempo changes"
        label, and make unavailable options disabled rather than hidden
+       [DONE]
 
-    c. Add "Change tempo from start of this bar" option
+    c. Add "Change tempo from start of this bar" option [DONE]
 
-    d. Rework texts
+    d. Rework texts [DONE]
 
 27. Event quantize command needs to be able to be constructed with
     an EventSelection argument, and to operate by quantizing in

@@ -2032,7 +2032,7 @@ void NotationView::slotDebugDump()
 
 
 void
-NotationView::slotSetPointerPosition(timeT time)
+NotationView::slotSetPointerPosition(timeT time, bool scroll)
 {
     Rosegarden::Composition &comp = m_document->getComposition();
     int barNo = comp.getBarNumber(time);
@@ -2046,7 +2046,7 @@ NotationView::slotSetPointerPosition(timeT time)
 	}
     }
 
-    slotScrollHoriz(m_hlayout.getXForTime(time));
+    if (scroll) slotScrollHoriz(m_hlayout.getXForTime(time));
     updateView();
 }
 
@@ -2090,7 +2090,7 @@ NotationView::slotCurrentStaffDown()
 }
 
 void
-NotationView::slotSetInsertCursorPosition(double x, int y)
+NotationView::slotSetInsertCursorPosition(double x, int y, bool scroll)
 {
     slotSetCurrentStaff(y);
 
@@ -2100,14 +2100,14 @@ NotationView::slotSetInsertCursorPosition(double x, int y)
 	staff->getElementUnderCanvasCoords(x, y, clefEvt, keyEvt);
 
     if (i == staff->getViewElementList()->end()) {
-	slotSetInsertCursorPosition(staff->getSegment().getEndTime());
+	slotSetInsertCursorPosition(staff->getSegment().getEndTime(), scroll);
     } else {
-	slotSetInsertCursorPosition((*i)->getAbsoluteTime());
+	slotSetInsertCursorPosition((*i)->getAbsoluteTime(), scroll);
     }
 }    
 
 void
-NotationView::slotSetInsertCursorPosition(timeT t)
+NotationView::slotSetInsertCursorPosition(timeT t, bool scroll)
 {
     m_insertionTime = t;
     if (m_staffs.size() == 0) return;
@@ -2153,7 +2153,7 @@ NotationView::slotSetInsertCursorPosition(timeT t)
 
 	staff->setInsertCursorPosition
 	    ((*i)->getCanvasX() - 2, int((*i)->getCanvasY()));
-	slotScrollHoriz(int((*i)->getCanvasX()) - 4);
+	if (scroll) slotScrollHoriz(int((*i)->getCanvasX()) - 4);
     }
 
     updateView();
@@ -2499,8 +2499,8 @@ void NotationView::refreshSegment(Segment *segment,
     PixmapArrayGC::deleteAll();
 
     Event::dumpStats(cerr);
-    slotSetInsertCursorPosition(m_insertionTime);
-    slotSetPointerPosition(m_document->getComposition().getPosition());
+    slotSetInsertCursorPosition(m_insertionTime, false);
+    slotSetPointerPosition(m_document->getComposition().getPosition(), false);
 
     PRINT_ELAPSED("NotationView::refreshSegment (including update/GC)");
 }

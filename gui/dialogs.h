@@ -341,7 +341,7 @@ public:
 
 public slots:
      virtual void slotOk();
-     void slotGlobalTempoChangeClicked();
+     void slotActionChanged();
 
 signals:
     // Return results in this signal
@@ -357,9 +357,10 @@ protected:
     Rosegarden::timeT   m_tempoTime;
     double              m_tempoValue;
 
+    RosegardenSpinBox  *m_tempoValueSpinBox;
     QLabel             *m_tempoTimeLabel;
     QLabel             *m_tempoBarLabel;
-    RosegardenSpinBox  *m_tempoValueSpinBox;
+    QLabel             *m_tempoStatusLabel;
     
     QRadioButton       *m_tempoChangeHere;
     QRadioButton       *m_tempoChangeBefore;
