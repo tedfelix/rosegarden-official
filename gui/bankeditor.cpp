@@ -229,70 +229,54 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
     QToolTip::add(groupBox,
                   i18n("The librarian maintains the generic Bank and Program information for this device.\nIf you've made modifications to a Bank to suit your own device it might be worth\nliaising with the librarian in order to publish your Bank information for the benefit\nof others."));
 
-    QTabWidget* tab = new QTabWidget(this);
+    QTabWidget* tabw = new QTabWidget(this);
 
-    tab->setMargin(10);
+    tabw->setMargin(10);
 
-    QHBox *progHBox = new QHBox(tab);
+    QHBox *progHBox;
     QVBox *progVBox;
     QHBox *numBox;
     QLabel *label;
+    
+    unsigned int tabs = 4;
+    unsigned int cols = 2;
+    unsigned int labelId = 0;
 
-    for (unsigned int j = 0; j < 4; j++)
+    for (unsigned int tab = 0; tab < tabs; ++tab)
     {
-        progVBox = new QVBox(progHBox);
+	progHBox = new QHBox(tabw);
 
-        for (unsigned int i = 0; i < 16; i++)
-        {
-            unsigned int labelId = j*16 + i;
+	for (unsigned int col = 0; col < cols; ++col)
+	{
+	    progVBox = new QVBox(progHBox);
 
-            numBox = new QHBox(progVBox);
-            label = new QLabel(QString("%1").arg(labelId + 1), numBox);
-            label->setFixedWidth(50);
-            label->setAlignment(AlignHCenter);
+	    for (unsigned int row = 0; row < 128/(tabs*cols); ++row)
+	    {
+		numBox = new QHBox(progVBox);
+		label = new QLabel(QString("%1").arg(labelId + 1), numBox);
+		label->setFixedWidth(40);
+		label->setAlignment(AlignHCenter);
 
-            KLineEdit* lineEdit = new KLineEdit(numBox, label->text().data());
-            lineEdit->setMinimumWidth(100);
-            lineEdit->setCompletionMode(KGlobalSettings::CompletionAuto);
-            lineEdit->setCompletionObject(&m_completion);
-            m_programNames.push_back(lineEdit);
+		KLineEdit* lineEdit = new KLineEdit(numBox, label->text().data());
+		lineEdit->setMinimumWidth(110);
+		lineEdit->setCompletionMode(KGlobalSettings::CompletionAuto);
+		lineEdit->setCompletionObject(&m_completion);
+		m_programNames.push_back(lineEdit);
+		
+		connect(m_programNames[labelId],
+			SIGNAL(textChanged(const QString&)),
+			this,
+			SLOT(slotProgramChanged(const QString&)));
 
-            connect(m_programNames[labelId],
-                    SIGNAL(textChanged(const QString&)),
-                    this,
-                    SLOT(slotProgramChanged(const QString&)));
-        }
+		++labelId;
+	    }
+	}
+	
+	tabw->addTab(progHBox,
+		     (tab == 0 ? i18n("Programs %1 - %2") : QString("%1 - %2")).
+		     arg(tab * (128/tabs) + 1).
+		     arg((tab + 1) * (128 / tabs)));
     }
-    tab->addTab(progHBox, i18n("Programs 1 - 64"));
-
-    progHBox = new QHBox(tab);
-    for (unsigned int j = 0; j < 4; j++)
-    {
-        progVBox = new QVBox(progHBox);
-
-        for (unsigned int i = 0; i < 16; i++)
-        {
-            unsigned int labelId = 64 + j*16 + i;
-
-            numBox = new QHBox(progVBox);
-            label = new QLabel(QString("%1").arg(labelId + 1), numBox);
-            label->setFixedWidth(50);
-            label->setAlignment(AlignHCenter);
-
-            KLineEdit* lineEdit = new KLineEdit(numBox, label->text().data());
-            lineEdit->setMinimumWidth(100);
-            lineEdit->setCompletionMode(KGlobalSettings::CompletionAuto);
-            lineEdit->setCompletionObject(&m_completion);
-            m_programNames.push_back(lineEdit);
-
-            connect(m_programNames[labelId],
-                    SIGNAL(textChanged(const QString&)),
-                    this,
-                    SLOT(slotProgramChanged(const QString&)));
-        }
-    }
-    tab->addTab(progHBox, i18n("Programs 65 - 128"));
-
 }
 
 MidiProgramsEditor::MidiProgramContainer
@@ -772,6 +756,16 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     QToolTip::add(m_pastePrograms,
             i18n("Paste Program names from clipboard to current Bank"));
+
+    QGroupBox *optionBox  = new QVGroupBox(i18n("Options"),
+					 leftPart);
+
+    QHBox *variationBox = new QHBox(optionBox);
+    QCheckBox *variationToggle = new QCheckBox(i18n("Show Variation list based on "), variationBox);
+    QComboBox *variationCombo = new RosegardenComboBox(false, variationBox);
+    variationCombo->insertItem(i18n("MSB"));
+    variationCombo->insertItem(i18n("LSB"));
+
 
     connect(m_listView, SIGNAL(currentChanged(QListViewItem*)),
             this,       SLOT(slotPopulateDevice(QListViewItem*)));
