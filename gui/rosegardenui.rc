@@ -18,11 +18,13 @@
 	<Separator/>
       	<Action name="select_all"/>
 	<Separator/>
-      	<Action name="edit_in_matrix"/>
-      	<Action name="edit_as_notation"/>
+      	<Action name="edit_matrix"/>
+      	<Action name="edit_notation"/>
 	<Separator/>
       	<Action name="add_tempo" append="edit_merge"/>
       	<Action name="add_time_signature" append="edit_merge"/>
+	<Separator/>
+      	<Action name="edit_doc_properties" append="edit_merge"/>
   </Menu>
   <Menu name="Tracks">
 	<text>&amp;Tracks</text>

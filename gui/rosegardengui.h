@@ -442,6 +442,23 @@ public slots:
     void slotEditAsNotation();
 
     /**
+     * Edit the tempo - called from a Transport signal
+     */
+    void slotEditTempo();
+    void slotEditTempo(QWidget *parent);
+
+    /**
+     * Edit the time signature - called from a Transport signal
+     */
+    void slotEditTimeSignature();
+    void slotEditTimeSignature(QWidget *parent);
+
+    /**
+     * open a dialog for document properties
+     */
+    void slotEditDocumentProperties();
+
+    /**
      * toggles the toolbar
      */
     void slotToggleToolBar();
@@ -634,36 +651,26 @@ public slots:
      */ 	
     void slotSaveOptions();
 
-    /*
-     *
+    /**
      * Show the configure dialog
-     *
      */
     void slotConfigure();
 
-    /*
+    /**
      * Show the key mappings
      *
      */
     void slotEditKeys();
 
-    /*
-     * Do we need this?
-     *
+    /**
+     * Edit toolbars
      */
     void slotEditToolbars();
 
-    /*
-     * Edit the tempo - called from a Transport signal
+    /**
+     * Update the toolbars after edition
      */
-    void slotEditTempo();
-    void slotEditTempo(QWidget *parent);
-
-    /*
-     * Edit the time signature - called from a Transport signal
-     */
-    void slotEditTimeSignature();
-    void slotEditTimeSignature(QWidget *parent);
+    void slotUpdateToolbars();
 
     /**
      * Zoom slider moved

@@ -42,7 +42,8 @@
 #include <qiconset.h>
 #include <kstddirs.h>
 #include <kstatusbar.h>
-
+#include <kedittoolbar.h>
+#include <kkeydialog.h>
 #include <kaction.h>
 #include <kstdaction.h>
 
@@ -318,11 +319,11 @@ void RosegardenGUIApp::setupActions()
 
     new KAction(i18n("Open in &Matrix Editor"), 0, this,
 		SLOT(slotEditInMatrix()), actionCollection(),
-		"edit_in_matrix");
+		"edit_matrix");
 
     new KAction(i18n("Open in &Notation Editor"), 0, this,
 		SLOT(slotEditAsNotation()), actionCollection(),
-		"edit_as_notation");
+		"edit_notation");
 
     new KAction(AddTempoChangeCommand::getGlobalName(),
                 0,
@@ -331,8 +332,8 @@ void RosegardenGUIApp::setupActions()
 
     new KAction(AddTimeSignatureCommand::getGlobalName(),
                 0,
-                this, SLOT(slotEditTimeSignature()),
-                actionCollection(), "add_time_signature");
+                this, SLOT(slotEditDocumentProperties()),
+                actionCollection(), "edit_doc_properties");
 
     // Transport controls [rwb]
     //
@@ -2108,15 +2109,31 @@ void RosegardenGUIApp::slotConfigure()
     configDlg->show();
 }
 
+void RosegardenGUIApp::slotEditDocumentProperties()
+{
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotEditDocumentProperties\n";
+}
+
 void RosegardenGUIApp::slotEditKeys()
 {
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotEditKeys\n";
+    KKeyDialog::configureKeys(actionCollection(), xmlFile(), true, this);
 }
 
 
 void RosegardenGUIApp::slotEditToolbars()
 {
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotEditToolbars\n";
+    KEditToolbar dlg(actionCollection(), "rosegardenui.rc");
+
+    connect( &dlg, SIGNAL(newToolbarConfig()),
+             SLOT(slotUpdateToolbars()) );
+
+    dlg.exec();
+}
+
+void RosegardenGUIApp::slotUpdateToolbars()
+{
+  createGUI("rosegardenui.rc");
+  m_viewToolBar->setChecked(!toolBar()->isHidden());
 }
 
 void RosegardenGUIApp::slotEditTempo()
