@@ -29,11 +29,9 @@ NotePixmapFactory::NotePixmapFactory()
       m_noteBodyHeight(0),
       m_tailWidth(0),
       m_noteBodyFilled("pixmaps/note-bodyfilled.xpm"),
-      m_noteBodyEmpty("pixmaps/note-bodyempty.xpm"),
-      m_tailsUp(4),
-      m_tailsDown(4)
+      m_noteBodyEmpty("pixmaps/note-bodyempty.xpm")
 {
-    for(unsigned int i = 0; i < m_tailsUp.size(); ++i) {
+    for(unsigned int i = 0; i < 4; ++i) {
         char pixmapTailUpFileName[256],
             pixmapTailDownFileName[256];
 
@@ -41,8 +39,8 @@ NotePixmapFactory::NotePixmapFactory()
         sprintf(pixmapTailDownFileName, "pixmaps/tail-down-%u.xpm", i + 1);
 
         // Yes, this is not a mistake. Don't ask me why - Chris named those
-        m_tailsUp[i] = new QPixmap(pixmapTailDownFileName);
-        m_tailsDown[i] = new QPixmap(pixmapTailUpFileName);
+        m_tailsUp.push_back(new QPixmap(pixmapTailDownFileName));
+        m_tailsDown.push_back(new QPixmap(pixmapTailUpFileName));
     }
 
     m_generatedPixmapHeight = m_noteBodyEmpty.height() / 2 + Staff::stalkLen;
@@ -51,6 +49,16 @@ NotePixmapFactory::NotePixmapFactory()
     m_tailWidth             = m_tailsUp[0]->width();
 
 }
+
+NotePixmapFactory::~NotePixmapFactory()
+{
+    for(unsigned int i = 0; i < m_tailsUp.size(); ++i) {
+        delete m_tailsUp[i];
+        delete m_tailsDown[i];
+    }
+}
+
+
 
 QPixmap
 NotePixmapFactory::makeNotePixmap(unsigned int duration, bool drawTail,

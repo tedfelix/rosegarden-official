@@ -31,6 +31,7 @@ class NotePixmapFactory
 {
 public:
     NotePixmapFactory();
+    ~NotePixmapFactory();
 
     /**
      * Generate a pixmap for a single note
