@@ -18,10 +18,6 @@
   COPYING included with this distribution for more information.
 */
 
-// EXPERIMENTAL - SHOULDN'T EVEN BE IN THE BUILD YET!!!!
-//
-// rwb 04.04.2002
-
 
 #include "SoundDriver.h"
 
@@ -34,7 +30,10 @@ SoundDriver::SoundDriver(const std::string &name):
     m_playStartPosition(0, 0),
     m_startPlayback(false),
     m_playing(false),
-    m_recordStatus(ASYNCHRONOUS_MIDI)
+    m_recordStatus(ASYNCHRONOUS_MIDI),
+    m_midiRunningId(MidiInstrumentBase),
+    m_audioRunningId(AudioInstrumentBase)
+
 {
 }
 

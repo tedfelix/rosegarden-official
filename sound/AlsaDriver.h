@@ -124,11 +124,6 @@ private:
     std::vector<AlsaPort*>       m_alsaPorts;
 
 
-    // Counters for assignment of Instruments at the driver level.
-    //
-    InstrumentId                 m_midiRunningId; 
-    InstrumentId                 m_audioRunningId;
-
     // ALSA MIDI/Sequencer stuff
     //
     snd_seq_t                   *m_midiHandle;

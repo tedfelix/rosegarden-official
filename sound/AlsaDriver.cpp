@@ -33,8 +33,6 @@ namespace Rosegarden
 
 AlsaDriver::AlsaDriver():
     SoundDriver(std::string("ALSA ") + std::string(SND_LIB_VERSION_STR)),
-    m_midiRunningId(MidiInstrumentBase),
-    m_audioRunningId(AudioInstrumentBase),
     m_midiClient(-1),
     m_midiPort(-1),
     m_midiQueue(-1),
@@ -221,13 +219,20 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
         m_alsaPorts.push_back(alsaInstr);
 
 
+        std::string channelName;
+        char number[100];
+
         for (int channel = 0; channel < 16; channel++)
         {
             // Create MappedInstrument for export to GUI
             //
+            sprintf(number, " %d", channel);
+            channelName = name + std::string(number);
+
             MappedInstrument *instr = new MappedInstrument(type,
                                                            channel,
-                                                           m_midiRunningId++);
+                                                           m_midiRunningId++,
+                                                           channelName);
             m_instruments.push_back(instr);
         }
     }

@@ -114,6 +114,11 @@ private:
     // pointer to the transport dialog
     RosegardenTransportDialog *m_transport;
 
+    // do we need to send the start up sync? i.e. has the sequencer
+    // already requested a sync?
+    //
+    bool m_startUpSync;
+
 };
 
 }

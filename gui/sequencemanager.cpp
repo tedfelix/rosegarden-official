@@ -39,8 +39,14 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
     m_doc(doc),
     m_transportStatus(STOPPED),
     m_soundSystemStatus(Rosegarden::NO_SEQUENCE_SUBSYS),
-    m_transport(transport)
+    m_transport(transport),
+    m_startUpSync(true)
 {
+    // Try to tell the sequencer that we're alive only if the
+    // sequencer hasn't already forced us to sync
+    //
+    if (m_startUpSync)
+        alive();
 }
 
 
@@ -1083,6 +1089,23 @@ SequenceManager::sendMappedEvent(Rosegarden::MappedEvent *mE)
 void
 SequenceManager::alive()
 {
+    // Just a quick refreshing sleep here to ensure that we don't
+    // mask any call back to the sequencer by being to hasty.
+    //
+    // Probably unnecessary but better safe than sorry.
+    //
+    kapp->processEvents(5); // 10 ms is enough?
+
+
+    if (!kapp->dcopClient()->
+            isApplicationRegistered(QCString(ROSEGARDEN_SEQUENCER_APP_NAME)))
+    {
+        std::cout << "SequenceManager::alive() - "
+                  << "no Sequencer yet available, I'll wait for it to poll me"
+                  << std::endl;
+        return;
+    }
+
     QByteArray data;
     if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
                                   ROSEGARDEN_SEQUENCER_IFACE_NAME,
@@ -1090,7 +1113,7 @@ SequenceManager::alive()
                                   data))
     {
         std::cerr << "SequenceManager::alive() - "
-                  << "can't call Sequencer" << std::endl;
+                  << "can't call the Sequencer" << std::endl;
         return;
     }
 
@@ -1120,18 +1143,49 @@ SequenceManager::alive()
         reply >> mD;
     }
 
+    std::cout << std::endl
+              << "SequenceManager::alive() - MappedDevices" << std::endl;
 
-    cout << "SequenceManager::alive() - MappedDevices" << std::endl;
-    for (Rosegarden::MappedDeviceIterator it = mD->begin();
-         it = mD->end(); it++)
+    // Clear and recreate the studio from the initialisation data
+    // sent up from the SoundDriver.  If we've got Midi then we
+    // create a MidiDevice, if we've got Audio then an AudioDevice.
+    // Names are created and relationships between Devices/Instruments
+    // and Studio are created.
+    //
+/*
+    Studio &studio = m_doc->getStudio();
+    studio.clear();
+    */
+
+    Rosegarden::MappedDeviceIterator it;
+
+    for (it = mD->begin(); it != mD->end(); it++)
     {
-        cout << "    " << (*it)->getName() << endl;
+        /*
+        if ((*it)->getType() == Rosegarden::Instrument::Midi)
+        {
+        }
+        else
+        if ((*it)->getType() == Rosegarden::Instrument::Audio)
+        {
+        }
+        else
+        {
+        }
+        */
+        std::cout << "    " << (*it)->getName() << std::endl;
     }
+    std::cout << std::endl;
 
     std::cout << "SequenceManager::alive() - "
               << "Sequencer alive - Instruments synced"
               << std::endl;
 
+    // Ok, we've sync'd - make sure that this app doesn't
+    // drive this sync again by switching our startUpSync
+    // flag off.
+    //
+    m_startUpSync = false;
 
 }
 

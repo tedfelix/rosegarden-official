@@ -269,6 +269,7 @@ private:
     // If we should poll the GUI to see if it's alive
     //
     bool m_sendAlive;
+    int m_guiCount;
 
 };
  

@@ -48,7 +48,8 @@ RosegardenSequencerApp::RosegardenSequencerApp():
     m_readAhead(0, 40000),         // default value
     m_loopStart(0, 0),
     m_loopEnd(0, 0),
-    m_sendAlive(true)
+    m_sendAlive(true),
+    m_guiCount(0)       // how many GUIs have we known?
 {
     // Without DCOP we are nothing
     QCString realAppId = kapp->dcopClient()->registerAs(kapp->name(), false);
@@ -701,7 +702,8 @@ void
 RosegardenSequencerApp::alive()
 {
     std::cout << "RosegardenSequencerApp::alive() - "
-              << "GUI is alive, Instruments synced" << std::endl;
+              << "GUI (count = " << ++m_guiCount
+              << ") is alive, instruments synced" << std::endl;
 
     // now turn off the automatic sendalive
     m_sendAlive = false;

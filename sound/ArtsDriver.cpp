@@ -22,6 +22,8 @@
 #include <arts/artsversion.h>
 #include <arts/connect.h>
 
+#include <cstdio> // for sprintf
+
 // RG
 //
 #include "ArtsDriver.h"
@@ -62,6 +64,22 @@ ArtsDriver::~ArtsDriver()
 void
 ArtsDriver::generateInstruments()
 {
+    std::string name("aRts MIDI");
+    std::string channelName;
+    char number[100];
+
+    for (int channel = 0; channel < 16; channel++)
+    {
+        sprintf(number, " %d", channel);
+        channelName = name + std::string(number);
+
+        MappedInstrument *instr = new MappedInstrument(Instrument::Midi,
+                                                       channel,
+                                                       m_midiRunningId++,
+                                                       channelName);
+        m_instruments.push_back(instr);
+
+    }
 }
 
 void

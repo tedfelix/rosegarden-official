@@ -267,6 +267,8 @@ protected:
     RecordStatus             m_recordStatus;
 
 
+    InstrumentId                m_midiRunningId;
+    InstrumentId                m_audioRunningId;
 
 };
 
