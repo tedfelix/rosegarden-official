@@ -630,7 +630,7 @@ MidiFile::convertToRosegarden()
                     break;
                     
                 case MIDI_TRACK_NAME:
-                    if (rosegardenSegment)
+                    if (rosegardenSegment && track)
                         track->setLabel((*midiEvent)->getMetaMessage());
                     break;
 
@@ -774,7 +774,8 @@ MidiFile::convertToRosegarden()
                     // assign it here
                     if (instr != 0) {
 			
-                        track->setInstrument(instr->getId());
+                        if (track)
+                            track->setInstrument(instr->getId());
 
 			// give the Segment a name based on the the Instrument
 			//
