@@ -67,7 +67,6 @@ public:
     int getMaxItemValue() { return m_maxItemValue; }
     void setMaxItemValue(int val) { m_maxItemValue = val; }
 
-
     void clear();
 
     void setControlTool(ControlTool*);
@@ -78,6 +77,7 @@ public:
 
     Rosegarden::RulerScale* getRulerScale() { return m_rulerScale; }
 
+    void layoutItem(ControlItem*);
 
     static const int DefaultRulerHeight;
     static const int MinItemHeight;
@@ -98,6 +98,8 @@ protected:
     virtual void contentsMouseMoveEvent(QMouseEvent*);
     virtual void contentsWheelEvent(QWheelEvent*);
     virtual void contentsContextMenuEvent(QContextMenuEvent*);
+
+    virtual void computeStaffOffset() {};
 
     int valueToHeight(long val);
     long heightToValue(int height);
@@ -122,6 +124,8 @@ protected:
     ControlTool *m_tool;
 
     int m_maxItemValue;
+
+    int m_staffOffset;
 
     double m_currentX;
 
@@ -166,6 +170,7 @@ public:
 protected:
 
     void init();
+    virtual void computeStaffOffset();
 
     //--------------- Data members ---------------------------------
 

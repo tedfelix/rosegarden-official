@@ -50,6 +50,7 @@
 #include "ControlParameter.h"
 #include "Property.h"
 #include "widgets.h"
+#include "linedstaff.h"
 
 using Rosegarden::RulerScale;
 using Rosegarden::Segment;
@@ -336,8 +337,7 @@ void ControlItem::setSelected(bool s)
 
 void ControlItem::updateHPos()
 {
-    setX(m_controlRuler->getRulerScale()->getXForTime(getElementAdapter()->getTime()));
-    
+    m_controlRuler->layoutItem(this);
 }
 
 
@@ -552,6 +552,7 @@ ControlRuler::ControlRuler(Segment& segment,
     m_currentItem(0),
     m_tool(0),
     m_maxItemValue(127),
+    m_staffOffset(0),
     m_currentX(0.0),
     m_itemMoved(false),
     m_selecting(false),
@@ -587,6 +588,8 @@ void ControlRuler::slotUpdate()
 
 void ControlRuler::slotUpdateElementsHPos()
 {
+    computeStaffOffset();
+
     QCanvasItemList list = canvas()->allItems();
     QCanvasItemList::Iterator it = list.begin();
     for (; it != list.end(); ++it) {
@@ -596,6 +599,11 @@ void ControlRuler::slotUpdateElementsHPos()
     }
 
     canvas()->update();
+}
+
+void ControlRuler::layoutItem(ControlItem* item)
+{
+    item->setX(m_rulerScale->getXForTime(item->getElementAdapter()->getTime()) + m_staffOffset);
 }
 
 void ControlRuler::setControlTool(ControlTool* tool)
@@ -878,11 +886,16 @@ void PropertyControlRuler::init()
 {
     ViewElementList* viewElementList = m_staff->getViewElementList();
 
+    LinedStaff* lStaff = dynamic_cast<LinedStaff*>(m_staff);
+    
+    if (lStaff)
+        m_staffOffset = lStaff->getX();
+
     for(ViewElementList::iterator i = viewElementList->begin();
         i != viewElementList->end(); ++i) {
 
  	double x = m_rulerScale->getXForTime((*i)->getViewAbsoluteTime());
- 	new ControlItem(this, new ViewElementAdapter(*i, getPropertyName()), int(x),
+ 	new ControlItem(this, new ViewElementAdapter(*i, getPropertyName()), int(x) + m_staffOffset,
                         int(m_rulerScale->getXForTime((*i)->getViewAbsoluteTime() +
                                                       (*i)->getViewDuration()) - x));
 
@@ -895,7 +908,7 @@ void PropertyControlRuler::elementAdded(const Rosegarden::Staff *, ViewElement *
 
     double x = m_rulerScale->getXForTime(el->getViewAbsoluteTime());
 
-    new ControlItem(this, new ViewElementAdapter(el, getPropertyName()), int(x),
+    new ControlItem(this, new ViewElementAdapter(el, getPropertyName()), int(x) + m_staffOffset,
                     int(m_rulerScale->getXForTime(el->getViewAbsoluteTime() +
                                                   el->getViewDuration()) - x));
 }
@@ -922,6 +935,13 @@ void PropertyControlRuler::elementRemoved(const Rosegarden::Staff *, ViewElement
 void PropertyControlRuler::staffDeleted(const Rosegarden::Staff *)
 {
     m_staff = 0;
+}
+
+void PropertyControlRuler::computeStaffOffset()
+{
+    LinedStaff* lStaff = dynamic_cast<LinedStaff*>(m_staff);
+    if (lStaff)
+        m_staffOffset = lStaff->getX();
 }
 
 //----------------------------------------
@@ -974,7 +994,7 @@ ControllerEventsRuler::ControllerEventsRuler(Rosegarden::Segment& segment,
         RG_DEBUG << "ControllerEventsRuler: adding element\n";
 
  	double x = m_rulerScale->getXForTime((*i)->getAbsoluteTime());
- 	new ControlItem(this, new ControllerEventAdapter(*i), int(x),
+ 	new ControlItem(this, new ControllerEventAdapter(*i), int(x) + m_staffOffset,
                         getDefaultItemWidth());
 
     }
@@ -1027,7 +1047,7 @@ void ControllerEventsRuler::eventAdded(const Segment*, Event *e)
 
     double x = m_rulerScale->getXForTime(e->getAbsoluteTime());
 
-    new ControlItem(this, new ControllerEventAdapter(e), int(x),
+    new ControlItem(this, new ControllerEventAdapter(e), int(x) + m_staffOffset,
                     getDefaultItemWidth());
 }
 
