@@ -831,10 +831,16 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
     long slashes = 0;
     (void)(elt->event()->get<Int>(m_properties.SLASHES, slashes));
 
-    timeT absTime = m_legatoQuantizer->getQuantizedAbsoluteTime(elt->event());
-    timeT duration = m_legatoQuantizer->getQuantizedDuration(elt->event());
-    bool quantized = (absTime != elt->getAbsoluteTime() ||
-		      duration != elt->getDuration());
+    bool quantized = false;
+    if (!elt->event()->has(BEAMED_GROUP_TUPLET_BASE)) {
+	timeT absTime =
+	    m_legatoQuantizer->getQuantizedAbsoluteTime(elt->event());
+	timeT duration =
+	    m_legatoQuantizer->getQuantizedDuration(elt->event());
+
+	quantized = (absTime != elt->getAbsoluteTime() ||
+		     duration != elt->getDuration());
+    }
     params.setQuantized(quantized);
 
     params.setNoteType(note);

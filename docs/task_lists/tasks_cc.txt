@@ -249,6 +249,11 @@ Post-0.1.5-and-a-bit task list
     time duration (i.e. notes on which the quantizer has actually
     done something) in green [DONE]
 
+39. Grace note strategy.  We aim to place all grace notes at the same
+    time (and the same time as their main note), using some other
+    property to order them.  I think perhaps we should store their
+    durations in a property other than the event's basic duration, too.
+
 
 Post-0.1.4 task list
 ====================

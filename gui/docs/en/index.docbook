@@ -3,486 +3,501 @@
   <!ENTITY rosegarden "<application>Rosegarden</application>">
   <!ENTITY % English "INCLUDE" > <!-- change language only here -->
   <!ENTITY % addindex "IGNORE">
-
-
 ]>
 
 <!-- The language must be changed in the <book> tag for translations. -->
 
 <book id="rosegarden" lang="en">
 
-<!-- This header contains all of the meta-information for the document such
-as Authors, publish date, the abstract, and Keywords -->
-
-<bookinfo>
-<title>The Rosegarden Handbook</title>
-<authorgroup>
-<author>
-<firstname>Richard</firstname>
-<surname>Bown</surname>
-</author>
-<author>
-<firstname>Chris</firstname>
-<surname>Cannam</surname>
-</author>
-<author>
-<firstname>Guillaume</firstname>
-<surname>Laurent</surname>
-</author>
-<!-- TRANS:ROLES_OF_TRANSLATORS -->
-</authorgroup>
-
-<copyright>
-<year>2002</year>
-<holder>Richard Bown, Chris Cannam, Guillaume Laurent</holder>
-</copyright>
-
-<date>2002-07-04</date>
-<releaseinfo>0.1.7</releaseinfo>
-
-<abstract>
-<para>Rosegarden is a MIDI and audio sequencer and musical notation editor.  This Handbook describes how to use it.</para>
-</abstract>
-
-<keywordset>
-<keyword>Rosegarden</keyword>
-<keyword>sequencer</keyword>
-<keyword>MIDI</keyword>
-<keyword>audio</keyword>
-<keyword>music</keyword>
-<keyword>notation</keyword>
-<keyword>score</keyword>
-<keyword>KDE</keyword>
-</keywordset>
-
-</bookinfo>
-
-<!-- The contents of the documentation begins here.  Label
-each chapter so with the id attribute. This is necessary for two reasons: it
-allows you to easily reference the chapter from other chapters of your
-document, and if there is no ID, the name of the generated HTML files will vary
-from time to time making it hard to manage for maintainers and for the CVS
-system. Any chapter labelled (OPTIONAL) may be left out at the author's
-discretion. Other chapters should not be left out in order to maintain a
-consistent documentation style across all KDE apps. -->
-
-<chapter id="introduction">
-<title>Introduction</title>
-
-<!-- The introduction chapter contains a brief introduction for the application
-that explains what it does, where to get new versions of the app, where to
-report problems, and a brief revision history of the app. Basically a long
-version of the abstract. -->
-
-<para>
-The complete user manual to <application>Rosegarden</application>, version 0.1
-</para>
-
-<!-- Note that the revhistory tags apply to the documentation version and not to
-the app version. That is why we use an ItemizedList here. -->
-
-<sect1 id="rosegarden-revhistory">
-<title>Rosegarden Revision History</title>
-<para>
-<itemizedlist>
-<listitem><para>
-0.1 - first public release
-</para></listitem>
-</itemizedlist>
-</para>
-</sect1>
-</chapter>
-
-<chapter id="installation">
-<title>Installation</title>
-
-<sect1 id="getting-rosegarden">
-<title>How to obtain Rosegarden</title>
-
-<para>
-<application>Rosegarden</application> is part of the KDE project
-<ulink url="http://www.kde.org">http://www.kde.org</ulink>.
-<application>Rosegarden</application> can be found on
-<ulink url="ftp://ftp.kde.org/pub/kde/">ftp://ftp.kde.org/pub/kde/</ulink>, the
-main ftp site of the KDE project. </para>
-</sect1>
-
-<sect1 id="requirements">
-<title>Requirements</title>
-
-<!--
-List any special requirements for your application here. This should include:
-.Libraries or other software that is not included in kdesupport,
-kdelibs, or kdebase.
-.Hardware requirements like amount of RAM, disk space, graphics card
-capabilities, screen resolution, special expansion cards, etc.
-.Operating systems the app will run on. If your app is designed only for a
-specific OS, (you wrote a graphical LILO configurator for example) put this
-information here.
--->
-
-<para>
-In order to successfully use <application>Rosegarden</application>, you need KDE 1.1. Foobar.lib is required
-in order to support the advanced <application>Rosegarden</application> features. <application>Rosegarden</application> uses about 5 megs of
-memory to run, but this may vary depending on your platform and
-configuration.
-</para>
-
-<para>
-All required libraries as well as <application>Rosegarden</application> itself can be found
-on <ulink url="ftp://ftp.kapp.org"> The <application>Rosegarden</application> home page</ulink>.
-</para>
-
-</sect1>
-
-<sect1 id="compilation">
-<title>Compilation and installation</title>
-
-<para>
-In order to compile and install Rosegarden on your system, type the following in the base
-directory of the Rosegarden distribution:
-<screen width="40">
-<prompt>%</prompt> <userinput>./configure</userinput>
-<prompt>%</prompt> <userinput>make</userinput>
-<prompt>%</prompt> <userinput>make install</userinput>
-</screen>
-</para>
-
-<para>Since Rosegarden uses autoconf and automake you should have not trouble compiling it.
-Should you run into problems please report them to the author at <ulink url="mailto:glaurent@telegraph-road.org, cannam@all-day-breakfast.com, bownie@bownie.com"> Guillaume Laurent, Chris Cannam, Rich Bown</ulink>.</para>
-
-</sect1>
-
-<sect1 id="configuration">
-<title>Configuration</title>
-
-<para>Don't forget to tell your system to start the <filename>dtd</filename>
-dicer-toaster daemon first, or Rosegarden won't work !</para>
-
-</sect1>
-
-</chapter>
-
-<chapter id="using-kapp">
-<title>Using Rosegarden</title>
-
-<!-- This chapter should tell the user how to use your app. You should use as
-many sections (Chapter, Sect1, Sect3, etc...) as is necessary to fully document
-your application. -->
-
-<para>
-
-<!-- Note that all graphics should be in .png format. Use no gifs because of
-patent issues. -->
-
-<screenshot>
-<mediaobject>
-<imageobject>
-<imagedata fileref="example.png" format="PNG"/>
-</imageobject>
-<textobject>
-<phrase>An example image</phrase>
-</textobject>
-</mediaobject>
-</screenshot>
-
-</para>
-
-
-<sect1 id="kapp-features">
-<title>More Rosegarden features</title>
-
-<para>It slices! It dices! and it comes with a free toaster!</para>
-<para>
-The Squiggle Tool <guiicon><inlinemediaobject><imageobject><imagedata fileref="squiggle.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> is used to draw squiggly lines all
-over the <application>Rosegarden</application> main window. It's not a bug, it's a feature!
-</para>
-
-</sect1>
-</chapter>
-
-<chapter id="commands">
-<title>Command Reference</title>
-
-<!-- (OPTIONAL, BUT RECOMMENDED) This chapter should list all of the
-application windows and their menubar and toolbar commands for easy reference.
-Also include any keys that have a special function but have no equivalent in the
-menus or toolbars. This may not be necessary for small apps or apps with no tool
-or menu bars. -->
-
-<para></para>
-
-<sect1 id="kapp-mainwindow">
-<title>The main Rosegarden window</title>
-<para></para>
-
-<sect2>
-<title>The File Menu</title>
-<para>
-<variablelist>
-<varlistentry>
-<term><menuchoice>
-<shortcut>
-<keycombo><keycap>Ctrl</keycap><keycap>n</keycap></keycombo>
-</shortcut>
-<guimenu>File</guimenu>
-<guimenuitem>New</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Creates a new document</action></para></listitem>
-</varlistentry>
-<varlistentry>
-<term><menuchoice>
-<shortcut>
-<keycombo><keycap>Ctrl</keycap><keycap>s</keycap></keycombo>
-</shortcut>
-<guimenu>File</guimenu>
-<guimenuitem>Save</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Saves the document</action></para></listitem>
-</varlistentry>
-<varlistentry>
-<term><menuchoice>
-<shortcut>
-<keycombo><keycap>Ctrl</keycap><keycap>q</keycap></keycombo>
-</shortcut>
-<guimenu>File</guimenu>
-<guimenuitem>Quit</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Quits &rosegarden;</action></para></listitem>
-</varlistentry>
-</variablelist>
-</para>
-
-</sect2>
-</sect1>
-</chapter>
-
-<chapter id="developers">
-<title>Developer's Guide to Rosegarden</title>
-
-<!-- (OPTIONAL) A Programming/Scripting reference chapter should be
-used for apps that use plugins or that provide their own scripting hooks
-and/or development libraries. -->
-
-<para>
-Programming <application>Rosegarden</application> plugins is a joy to behold. Just read through the next
-66 pages of API's to learn how!
-</para>
-
-<!-- Use refentries to describe APIs.  Refentries are fairly complicated and you
-should consult the docbook reference for further details. The example below was
-taken from that reference and shortened a bit for readability. -->
-
-<refentry id="re-1007-unmanagechildren-1">
-<refmeta>
-<refentrytitle>XtUnmanageChildren</refentrytitle>
-<refmiscinfo>Xt - Geometry Management</refmiscinfo>
-</refmeta>
-<refnamediv>
-<refname>XtUnmanageChildren
-</refname>
-<refpurpose>remove a list of children from a parent widget's managed list.
-</refpurpose>
-</refnamediv>
-<refsynopsisdiv>
-<refsynopsisdivinfo>
-<date>4 March 1996</date>
-</refsynopsisdivinfo>
-<synopsis>
-void XtUnmanageChildren(<replaceable>children</replaceable>, <replaceable>num_children</replaceable>)
-    WidgetList <replaceable>children</replaceable>;
-    Cardinal <replaceable>num_children</replaceable>;
-</synopsis>
-
-<refsect2 id="r2-1007-unmanagechildren-1">
-<title>Inputs</title>
-<variablelist>
-<varlistentry>
-<term><replaceable>children</replaceable>
-</term>
-<listitem>
-<para>Specifies an array of child widgets. Each child must be of
-class RectObj or any subclass thereof.
-</para>
-</listitem>
-</varlistentry>
-<varlistentry>
-<term><replaceable>num_children</replaceable>
-</term>
-<listitem>
-<para>Specifies the number of elements in <replaceable>children</replaceable>.
-</para>
-</listitem>
-</varlistentry>
-</variablelist>
-</refsect2></refsynopsisdiv>
-
-<refsect1 id="r1-1007-unmanagechildren-1">
-<title>Description
-</title>
-<para><function>XtUnmanageChildren()</function> unmaps the specified widgets
-and removes them from their parent's geometry management.
-The widgets will disappear from the screen, and (depending
-on its parent) may no longer have screen space allocated for
-them.
-</para>
-<para>Each of the widgets in the <replaceable>children</replaceable> array must have
-the same parent.
-</para>
-<para>See the &ldquo;Algorithm&rdquo; section below for full details of the
-widget unmanagement procedure.
-</para>
-</refsect1>
-
-<refsect1 id="r1-1007-unmanagechildren-2">
-<title>Usage</title>
-<para>Unmanaging widgets is the usual method for temporarily
-making them invisible.  They can be re-managed with
-<function>XtManageChildren()</function>.
-</para>
-<para>You can unmap a widget, but leave it under geometry
-management by calling <function>XtUnmapWidget()</function>.  You can
-destroy a widget's window without destroying the widget by
-calling <function>XtUnrealizeWidget()</function>.  You can destroy a
-widget completely with <function>XtDestroyWidget()</function>.
-</para>
-<para>If you are only going to unmanage a single widget, it is
-more convenient to call <function>XtUnmanageChild()</function>.  It is
-often more convenient to call <function>XtUnmanageChild()</function>
-several times than it is to declare and initialize an array
-of widgets to pass to <function>XtUnmanageChildren()</function>.  Calling
-<function>XtUnmanageChildren()</function> is more efficient, however,
-because it only calls the parent's <function>change_managed()</function>
-method once.
-</para>
-</refsect1>
-
-<refsect1 id="r1-1007-unmanagechildren-3">
-<title>Algorithm
-</title>
-<para><function>XtUnmanageChildren()</function> performs the following:
-</para>
-<variablelist>
-<varlistentry>
-<term>-
-</term>
-<listitem>
-<para>Ignores the child if it already is unmanaged or is being
-destroyed.
-</para>
-</listitem>
-</varlistentry>
-<varlistentry>
-<term>-
-</term>
-<listitem>
-<para>Otherwise, if the child is realized, it makes it nonvisible
-by unmapping it.
-</para>
-</listitem>
-</varlistentry>
-</variablelist>
-<para>
-</para>
-</refsect1>
-
-<refsect1 id="r1-1007-unmanagechildren-4">
-<title>Structures</title>
-<para>The <type>WidgetList</type> type is simply an array of widgets:
-</para>
-<screen id="sc-1007-unmanagechildren-1">typedef Widget *WidgetList;
-</screen>
-</refsect1>
-</refentry>
-
-</chapter>
-
-<chapter id="faq">
-<title>Questions and Answers</title>
-
-<!-- (OPTIONAL but recommended) This chapter should include all of the silly
-(and not-so-silly) newbie questions that fill up your mailbox. This chapter
-should be reserved for BRIEF questions and answers! If one question uses more
-than a page or so then it should probably be part of the
-"Using this Application" chapter instead. You should use links to
-cross-reference questions to the parts of your documentation that answer them.
-This is also a great place to provide pointers to other FAQ's if your users
-must do some complicated configuration on other programs in order for your
-application work. -->
-
-<para></para>
-
-<qandaset>
-<qandaentry>
-<question>
-<para>My Mouse doesn't work. How do I quit <application>Rosegarden</application>?</para>
-</question>
-<answer>
-<para>You silly goose! Check out the <link linkend="commands">Commands
-Section</link> for the answer.</para>
-</answer>
-</qandaentry>
-<qandaentry>
-<question>
-<para>Why can't I twiddle my documents?</para>
-</question>
-<answer>
-<para>You can only twiddle your documents if you have the foobar.lib
-installed.</para>
-</answer>
-</qandaentry>
-</qandaset>
-</chapter>
-
-<chapter id="credits">
-
-<!-- Include credits for the programmers, documentation writers, and
-contributors here. The license for your software should then be included below
-the credits with a reference to the appropriate license file included in the KDE
-distribution. -->
-
-<title>Credits and License</title>
-
-<para>
-<application>Rosegarden</application>
-</para>
-<para>
-Program copyright 1997 John Q. Hacker <email>jqh@kde.org</email>
-</para>
-<para>
-Contributors:
-<itemizedlist>
-<listitem><para>Konqui the KDE Dragon <email>konqui@kde.org</email></para>
-</listitem>
-<listitem><para>Tux the Linux Penguin <email>tux@linux.org</email></para>
-</listitem>
-</itemizedlist>
-</para>
-
-<para>
-Documentation copyright 1999 George N. Ugnacious <email>gnu@kde.org</email>
-</para>
-<para>
-Translations done by:
-<itemizedlist>
-<listitem>
-<para>Babel D. Fish <email>babelfish@kde.org</email> (Sanskrit)</para>
-</listitem>
-</itemizedlist>
-</para>
-
-<!-- For URL links to common stuff like the one below,
-always use paths like "common/gpl-licence".
-In this path, "common" will be a symbolic link built at "make install" time.
-This link will normally point to $KDEDIR/share/doc/HTML/en/common,
-where "en" should be replaced with the current language. -->
-
-<para>
-This program is licensed under the terms of the
-<ulink url="common/gpl-license.html">GNU GPL</ulink>.
-</para>
-</chapter>
-
-
-&documentation.index; 
+  <!-- This header contains all of the meta-information for the document such
+  as Authors, publish date, the abstract, and Keywords -->
+
+  <bookinfo>
+    <title>The Rosegarden Handbook</title>
+    <authorgroup>
+      <author>
+	<firstname>Richard</firstname>
+	<surname>Bown</surname>
+      </author>
+      <author>
+	<firstname>Chris</firstname>
+	<surname>Cannam</surname>
+      </author>
+      <author>
+	<firstname>Guillaume</firstname>
+	<surname>Laurent</surname>
+      </author>
+      <!-- TRANS:ROLES_OF_TRANSLATORS -->
+    </authorgroup>
+
+    <copyright>
+      <year>2002</year>
+      <holder>Richard Bown, Chris Cannam, Guillaume Laurent</holder>
+    </copyright>
+
+    <date>2002-07-04</date>
+    <releaseinfo>0.1.7</releaseinfo>
+
+    <abstract>
+      <para>
+
+	Rosegarden is a MIDI and audio sequencer and musical notation
+	editor.  This Handbook describes how to use it.
+
+      </para>
+    </abstract>
+
+    <keywordset>
+      <keyword>Rosegarden</keyword>
+      <keyword>sequencer</keyword>
+      <keyword>MIDI</keyword>
+      <keyword>audio</keyword>
+      <keyword>music</keyword>
+      <keyword>notation</keyword>
+      <keyword>score</keyword>
+      <keyword>KDE</keyword>
+    </keywordset>
+
+  </bookinfo>
+
+  <!-- The contents of the documentation begins here.  Label each
+  chapter so with the id attribute. This is necessary for two reasons:
+  it allows you to easily reference the chapter from other chapters of
+  your document, and if there is no ID, the name of the generated HTML
+  files will vary from time to time making it hard to manage for
+  maintainers and for the CVS system. Any chapter labelled (OPTIONAL)
+  may be left out at the author's discretion. Other chapters should
+  not be left out in order to maintain a consistent documentation
+  style across all KDE apps. -->
+
+  <chapter id="introduction">
+    <title>Introduction</title>
+
+    <!-- The introduction chapter contains a brief introduction for
+    the application that explains what it does, where to get new
+    versions of the app, where to report problems, and a brief
+    revision history of the app. Basically a long version of the
+    abstract. -->
+
+    <para>
+      The complete user manual to <application>Rosegarden</application>, version 0.1
+    </para>
+
+    <!-- Note that the revhistory tags apply to the documentation
+    version and not to the app version. That is why we use an
+    ItemizedList here. -->
+
+    <sect1 id="rosegarden-revhistory">
+      <title>Rosegarden Revision History</title>
+      <para>
+	<itemizedlist>
+	  <listitem><para>
+	      0.1 - first public release
+	    </para></listitem>
+	</itemizedlist>
+      </para>
+    </sect1>
+  </chapter>
+
+  <chapter id="installation">
+    <title>Installation</title>
+
+    <sect1 id="getting-rosegarden">
+      <title>How to obtain Rosegarden</title>
+
+      <para>
+	<application>Rosegarden</application> is part of the KDE project
+	<ulink url="http://www.kde.org">http://www.kde.org</ulink>.
+	<application>Rosegarden</application> can be found on
+	<ulink url="ftp://ftp.kde.org/pub/kde/">ftp://ftp.kde.org/pub/kde/</ulink>, the
+	main ftp site of the KDE project. </para>
+    </sect1>
+
+    <sect1 id="requirements">
+      <title>Requirements</title>
+
+      <!-- List any special requirements for your application
+      here. This should include: .Libraries or other software that is
+      not included in kdesupport, kdelibs, or kdebase.  .Hardware
+      requirements like amount of RAM, disk space, graphics card
+      capabilities, screen resolution, special expansion cards, etc.
+      .Operating systems the app will run on. If your app is designed
+      only for a specific OS, (you wrote a graphical LILO configurator
+      for example) put this information here.  -->
+
+      <para>
+
+	In order to successfully use
+	<application>Rosegarden</application>, you need KDE
+	1.1. Foobar.lib is required in order to support the advanced
+	<application>Rosegarden</application>
+	features. <application>Rosegarden</application> uses about 5
+	megs of memory to run, but this may vary depending on your
+	platform and configuration.
+
+      </para>
+
+      <para>
+
+	All required libraries as well as
+	<application>Rosegarden</application> itself can be found on
+	<ulink url="ftp://ftp.kapp.org"> The
+	<application>Rosegarden</application> home page</ulink>.
+
+      </para>
+
+    </sect1>
+
+    <sect1 id="compilation">
+      <title>Compilation and installation</title>
+
+      <para>
+	In order to compile and install Rosegarden on your system, type the following in the base
+	directory of the Rosegarden distribution:
+	<screen width="40">
+	  <prompt>%</prompt> <userinput>./configure</userinput>
+	  <prompt>%</prompt> <userinput>make</userinput>
+	  <prompt>%</prompt> <userinput>make install</userinput>
+	</screen>
+      </para>
+
+      <para>Since Rosegarden uses autoconf and automake you should have not trouble compiling it.
+	Should you run into problems please report them to the author at <ulink url="mailto:glaurent@telegraph-road.org, cannam@all-day-breakfast.com, bownie@bownie.com"> Guillaume Laurent, Chris Cannam, Rich Bown</ulink>.</para>
+
+    </sect1>
+
+    <sect1 id="configuration">
+      <title>Configuration</title>
+
+      <para>Don't forget to tell your system to start the <filename>dtd</filename>
+	dicer-toaster daemon first, or Rosegarden won't work !</para>
+
+    </sect1>
+
+  </chapter>
+
+  <chapter id="using-kapp">
+    <title>Using Rosegarden</title>
+
+    <!-- This chapter should tell the user how to use your app. You
+    should use as many sections (Chapter, Sect1, Sect3, etc...) as is
+    necessary to fully document your application. -->
+
+    <para>
+
+      <!-- Note that all graphics should be in .png format. Use no
+      gifs because of patent issues. -->
+
+      <screenshot>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="example.png" format="PNG"/>
+	  </imageobject>
+	  <textobject>
+	    <phrase>An example image</phrase>
+	  </textobject>
+	</mediaobject>
+      </screenshot>
+
+    </para>
+
+
+    <sect1 id="kapp-features">
+      <title>More Rosegarden features</title>
+
+      <para>It slices! It dices! and it comes with a free toaster!</para>
+      <para>
+	The Squiggle Tool <guiicon><inlinemediaobject><imageobject><imagedata fileref="squiggle.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> is used to draw squiggly lines all
+	over the <application>Rosegarden</application> main window. It's not a bug, it's a feature!
+      </para>
+
+    </sect1>
+  </chapter>
+
+  <chapter id="commands">
+    <title>Command Reference</title>
+
+    <!-- (OPTIONAL, BUT RECOMMENDED) This chapter should list all of
+    the application windows and their menubar and toolbar commands for
+    easy reference.  Also include any keys that have a special
+    function but have no equivalent in the menus or toolbars. This may
+    not be necessary for small apps or apps with no tool or menu
+    bars. -->
+
+    <para></para>
+
+    <sect1 id="kapp-mainwindow">
+      <title>The main Rosegarden window</title>
+      <para></para>
+
+      <sect2>
+	<title>The File Menu</title>
+	<para>
+	  <variablelist>
+	    <varlistentry>
+	      <term><menuchoice>
+		  <shortcut>
+		    <keycombo><keycap>Ctrl</keycap><keycap>n</keycap></keycombo>
+		  </shortcut>
+		  <guimenu>File</guimenu>
+		  <guimenuitem>New</guimenuitem>
+		</menuchoice></term>
+	      <listitem><para><action>Creates a new document</action></para></listitem>
+	    </varlistentry>
+	    <varlistentry>
+	      <term><menuchoice>
+		  <shortcut>
+		    <keycombo><keycap>Ctrl</keycap><keycap>s</keycap></keycombo>
+		  </shortcut>
+		  <guimenu>File</guimenu>
+		  <guimenuitem>Save</guimenuitem>
+		</menuchoice></term>
+	      <listitem><para><action>Saves the document</action></para></listitem>
+	    </varlistentry>
+	    <varlistentry>
+	      <term><menuchoice>
+		  <shortcut>
+		    <keycombo><keycap>Ctrl</keycap><keycap>q</keycap></keycombo>
+		  </shortcut>
+		  <guimenu>File</guimenu>
+		  <guimenuitem>Quit</guimenuitem>
+		</menuchoice></term>
+	      <listitem><para><action>Quits &rosegarden;</action></para></listitem>
+	    </varlistentry>
+	  </variablelist>
+	</para>
+
+      </sect2>
+    </sect1>
+  </chapter>
+
+  <chapter id="developers">
+    <title>Developer's Guide to Rosegarden</title>
+
+    <!-- (OPTIONAL) A Programming/Scripting reference chapter should be
+    used for apps that use plugins or that provide their own scripting hooks
+    and/or development libraries. -->
+
+    <para>
+      Programming <application>Rosegarden</application> plugins is a joy to behold. Just read through the next
+      66 pages of API's to learn how!
+    </para>
+
+    <!-- Use refentries to describe APIs.  Refentries are fairly
+    complicated and you should consult the docbook reference for
+    further details. The example below was taken from that reference
+    and shortened a bit for readability. -->
+
+    <refentry id="re-1007-unmanagechildren-1">
+      <refmeta>
+	<refentrytitle>XtUnmanageChildren</refentrytitle>
+	<refmiscinfo>Xt - Geometry Management</refmiscinfo>
+      </refmeta>
+      <refnamediv>
+	<refname>XtUnmanageChildren
+	</refname>
+	<refpurpose>remove a list of children from a parent widget's managed list.
+	</refpurpose>
+      </refnamediv>
+      <refsynopsisdiv>
+	<refsynopsisdivinfo>
+	  <date>4 March 1996</date>
+	</refsynopsisdivinfo>
+	<synopsis>
+	  void XtUnmanageChildren(<replaceable>children</replaceable>, <replaceable>num_children</replaceable>)
+	  WidgetList <replaceable>children</replaceable>;
+	  Cardinal <replaceable>num_children</replaceable>;
+	</synopsis>
+
+	<refsect2 id="r2-1007-unmanagechildren-1">
+	  <title>Inputs</title>
+	  <variablelist>
+	    <varlistentry>
+	      <term><replaceable>children</replaceable>
+	      </term>
+	      <listitem>
+		<para>Specifies an array of child widgets. Each child must be of
+		  class RectObj or any subclass thereof.
+		</para>
+	      </listitem>
+	    </varlistentry>
+	    <varlistentry>
+	      <term><replaceable>num_children</replaceable>
+	      </term>
+	      <listitem>
+		<para>Specifies the number of elements in <replaceable>children</replaceable>.
+		</para>
+	      </listitem>
+	    </varlistentry>
+	  </variablelist>
+	</refsect2></refsynopsisdiv>
+
+      <refsect1 id="r1-1007-unmanagechildren-1">
+	<title>Description
+	</title>
+	<para><function>XtUnmanageChildren()</function> unmaps the specified widgets
+	  and removes them from their parent's geometry management.
+	  The widgets will disappear from the screen, and (depending
+	  on its parent) may no longer have screen space allocated for
+	  them.
+	</para>
+	<para>Each of the widgets in the <replaceable>children</replaceable> array must have
+	  the same parent.
+	</para>
+	<para>See the &ldquo;Algorithm&rdquo; section below for full details of the
+	  widget unmanagement procedure.
+	</para>
+      </refsect1>
+
+      <refsect1 id="r1-1007-unmanagechildren-2">
+	<title>Usage</title>
+	<para>Unmanaging widgets is the usual method for temporarily
+	  making them invisible.  They can be re-managed with
+	  <function>XtManageChildren()</function>.
+	</para>
+	<para>You can unmap a widget, but leave it under geometry
+	  management by calling <function>XtUnmapWidget()</function>.  You can
+	  destroy a widget's window without destroying the widget by
+	  calling <function>XtUnrealizeWidget()</function>.  You can destroy a
+	  widget completely with <function>XtDestroyWidget()</function>.
+	</para>
+	<para>If you are only going to unmanage a single widget, it is
+	  more convenient to call <function>XtUnmanageChild()</function>.  It is
+	  often more convenient to call <function>XtUnmanageChild()</function>
+	  several times than it is to declare and initialize an array
+	  of widgets to pass to <function>XtUnmanageChildren()</function>.  Calling
+	  <function>XtUnmanageChildren()</function> is more efficient, however,
+	  because it only calls the parent's <function>change_managed()</function>
+	  method once.
+	</para>
+      </refsect1>
+
+      <refsect1 id="r1-1007-unmanagechildren-3">
+	<title>Algorithm
+	</title>
+	<para><function>XtUnmanageChildren()</function> performs the following:
+	</para>
+	<variablelist>
+	  <varlistentry>
+	    <term>-
+	    </term>
+	    <listitem>
+	      <para>Ignores the child if it already is unmanaged or is being
+		destroyed.
+	      </para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>-
+	    </term>
+	    <listitem>
+	      <para>Otherwise, if the child is realized, it makes it nonvisible
+		by unmapping it.
+	      </para>
+	    </listitem>
+	  </varlistentry>
+	</variablelist>
+	<para>
+	</para>
+      </refsect1>
+
+      <refsect1 id="r1-1007-unmanagechildren-4">
+	<title>Structures</title>
+	<para>The <type>WidgetList</type> type is simply an array of widgets:
+	</para>
+	<screen id="sc-1007-unmanagechildren-1">typedef Widget *WidgetList;
+	</screen>
+      </refsect1>
+    </refentry>
+
+  </chapter>
+
+  <chapter id="faq">
+    <title>Questions and Answers</title>
+
+    <!-- (OPTIONAL but recommended) This chapter should include all of the silly
+    (and not-so-silly) newbie questions that fill up your mailbox. This chapter
+    should be reserved for BRIEF questions and answers! If one question uses more
+    than a page or so then it should probably be part of the
+    "Using this Application" chapter instead. You should use links to
+    cross-reference questions to the parts of your documentation that answer them.
+    This is also a great place to provide pointers to other FAQ's if your users
+    must do some complicated configuration on other programs in order for your
+    application work. -->
+
+    <para></para>
+
+    <qandaset>
+      <qandaentry>
+	<question>
+	  <para>My Mouse doesn't work. How do I quit <application>Rosegarden</application>?</para>
+	</question>
+	<answer>
+	  <para>You silly goose! Check out the <link linkend="commands">Commands
+	      Section</link> for the answer.</para>
+	</answer>
+      </qandaentry>
+      <qandaentry>
+	<question>
+	  <para>Why can't I twiddle my documents?</para>
+	</question>
+	<answer>
+	  <para>You can only twiddle your documents if you have the foobar.lib
+	    installed.</para>
+	</answer>
+      </qandaentry>
+    </qandaset>
+  </chapter>
+
+  <chapter id="credits">
+
+    <!-- Include credits for the programmers, documentation writers, and
+    contributors here. The license for your software should then be included below
+    the credits with a reference to the appropriate license file included in the KDE
+    distribution. -->
+
+    <title>Credits and License</title>
+
+    <para>
+      <application>Rosegarden</application>
+    </para>
+    <para>
+      Program copyright 1997 John Q. Hacker <email>jqh@kde.org</email>
+    </para>
+    <para>
+      Contributors:
+      <itemizedlist>
+	<listitem><para>Konqui the KDE Dragon <email>konqui@kde.org</email></para>
+	</listitem>
+	<listitem><para>Tux the Linux Penguin <email>tux@linux.org</email></para>
+	</listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      Documentation copyright 1999 George N. Ugnacious <email>gnu@kde.org</email>
+    </para>
+    <para>
+      Translations done by:
+      <itemizedlist>
+	<listitem>
+	  <para>Babel D. Fish <email>babelfish@kde.org</email> (Sanskrit)</para>
+	</listitem>
+      </itemizedlist>
+    </para>
+
+    <!-- For URL links to common stuff like the one below,
+    always use paths like "common/gpl-licence".
+    In this path, "common" will be a symbolic link built at "make install" time.
+    This link will normally point to $KDEDIR/share/doc/HTML/en/common,
+    where "en" should be replaced with the current language. -->
+
+    <para>
+      This program is licensed under the terms of the
+      <ulink url="common/gpl-license.html">GNU GPL</ulink>.
+    </para>
+  </chapter>
+
+
+  &documentation.index; 
 </book>

@@ -267,6 +267,7 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 
     bool isFullScan = (startTime == endTime);
     bool allDone = false; // used in partial scans
+    bool barCorrect = true;
 
     int barNo = getComposition()->getBarNumber(segment.getStartTime());
     int endBarNo = getComposition()->getBarNumber(segment.getEndMarkerTime());
@@ -331,7 +332,7 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 		m_npf->getTimeSigWidth(timeSignature);
 	}
 
-	setBarBasicData(staff, barNo, from, true, timeSigEvent);
+	setBarBasicData(staff, barNo, from, barCorrect, timeSigEvent);
 
 	if (barTimes.second >= startTime) {
 	    // we're confident this isn't end() after setBarBasicData above
@@ -427,6 +428,7 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
             el->event()->setMaybe<Int>(m_properties.MIN_WIDTH, mw);
 	}
 
+	barCorrect = (actualBarEnd == barTimes.first + apparentBarDuration);
 	if (actualBarEnd == barTimes.first) actualBarEnd = barTimes.second;
 
 	if (!leaveSizesAlone) {

@@ -146,15 +146,6 @@ public:
     /// Remove any visible preview note
     void clearPreviewNote();
 
-    /// Changes the font of the staffs on the view, gets font name from sender
-    void slotChangeFontFromAction();
-
-    /// Changes the font of the staffs on the view
-    void slotChangeFont(std::string newFont);
-
-    /// Changes the font and font size of the staffs on the view
-    void slotChangeFont(std::string newFont, int newSize);
-    
     /// Switches between page- and linear- layout mode
     void setPageMode(bool pageMode);
 
@@ -425,6 +416,15 @@ public slots:
     /// Change the current staff to the one following the current one
     void slotCurrentStaffDown();
 
+    /// Changes the font of the staffs on the view, gets font name from sender
+    void slotChangeFontFromAction();
+
+    /// Changes the font of the staffs on the view
+    void slotChangeFont(std::string newFont);
+
+    /// Changes the font and font size of the staffs on the view
+    void slotChangeFont(std::string newFont, int newSize);
+    
     /// Changes the font of the staffs on the view
     void slotChangeFont(const QString &newFont);
 

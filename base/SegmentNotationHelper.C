@@ -851,7 +851,10 @@ SegmentNotationHelper::setInsertedNoteGroup(Event *e, iterator i)
 	    string type = (*i)->get<String>(BEAMED_GROUP_TYPE);
 	    if (type != GROUP_TYPE_TUPLED && !(*i)->isa(Note::EventType)) {
 		if ((*i)->isa(Note::EventRestType)) return;
-		else continue;
+		else {
+		    ++i;
+		    continue;
+		}
 	    }
 
 	    e->set<Int>(BEAMED_GROUP_ID, (*i)->get<Int>(BEAMED_GROUP_ID));
