@@ -127,9 +127,9 @@ public:
      * Add a new item to this group.
      *
      * The item's coordinates are considered relative to the group.
-     * For example, suppose you have a QCanvasItemGroup which coords
+     * For example, suppose you have a QCanvasItemGroup whose coords
      * are 10,10. If you call addItemWithRelativeCoords() with an item
-     * which coords are 5,5, the item is moved so that it's coords
+     * whose coords are 5,5, the item is moved so that its coords
      * will be 5,5 relative to the group (e.g. 15,15).
      *
      * @see addItem()

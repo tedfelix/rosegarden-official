@@ -141,9 +141,7 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
     // to make sure the event happens at the point we clicked at
     // rather than the last point for which contentsMouseMoveEvent
     // happened to be called
-/*
-    StaffLine *staffLine = findClosestLineWithinThreshold(e);
-*/
+
     NotationStaff *staff = dynamic_cast<NotationStaff *>
 	(m_staffLayout.getStaffAtY(e->y()));
 
@@ -153,7 +151,7 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
                                    // item - check if some are active
             processActiveItems(e, itemList);
         else 
-            handleMousePress(-1000, -1, e); // it didn't occur anywhere special
+            handleMousePress(NotationStaff::NoHeight, -1, e); // it didn't occur anywhere special
 
         return;
 
@@ -289,9 +287,9 @@ NotationCanvasView::setPositionMarkerHeight(QMouseEvent *e)
     int lineY = m_staffLayout.getYSnappedToLine(e->y());
     int height = m_staffLayout.getHeightAtY(e->y());
 
-    kdDebug(KDEBUG_AREA) << "NotationCanvasView::setPositionMarkerHeight: "
-			 << e->y() << " snapped to line -> " << lineY
-			 << " (height " << height << ")" << endl;
+//    kdDebug(KDEBUG_AREA) << "NotationCanvasView::setPositionMarkerHeight: "
+//			 << e->y() << " snapped to line -> " << lineY
+//			 << " (height " << height << ")" << endl;
 
     //!!! nasty
     int spacing =

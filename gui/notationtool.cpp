@@ -292,7 +292,7 @@ NoteInserter::handleLeftButtonPress(int height, int staffNo,
 				    QMouseEvent* e,
 				    NotationElement*)
 {
-    if (height == StaffLine::NoHeight || staffNo < 0) return;
+    if (height == NotationStaff::NoHeight || staffNo < 0) return;
 
     Event *tsig = 0, *clef = 0, *key = 0;
 

@@ -23,7 +23,6 @@
 
 #include "eventselection.h"
 #include "notationstaff.h"
-#include "staffline.h"
 #include "qcanvassimplesprite.h"
 #include "notationproperties.h"
 #include "notationview.h" // for EventSelection
@@ -58,35 +57,35 @@ using namespace NotationProperties;
 const int NotationStaff::nbLines      = 5;
 const int NotationStaff::nbLegerLines = 8;
 
+const int NotationStaff::NoHeight = -1000;
+
 using std::string;
 
 NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment,
                              unsigned int id, bool pageMode,
-			     int lineBreakGap,
+			     double pageWidth, int lineBreakGap,
                              string fontName, int resolution) :
     Rosegarden::Staff<NotationElement>(*segment),
     QCanvasItemGroup(canvas),
     m_id(id),
     m_pageMode(pageMode),
+    m_pageWidth(pageWidth),
     m_lineBreakGap(lineBreakGap),
-    m_horizLineLength(0),
+    m_horizLineStart(getRowLeftX(0)),
+    m_horizLineEnd(getRowRightX(0)),
     m_initialBarA(0),
     m_initialBarB(0),
     m_npf(0),
     m_haveSelection(false)
 {
     setLegatoDuration(Note(Note::Shortest).getDuration());
-    int w = canvas->width();
-    m_horizLineLength = w - 20;
     changeFont(fontName, resolution);
     setActive(false);  // don't react to mousePress events
 }
 
 NotationStaff::~NotationStaff()
 {
-    // TODO : this causes a crash on quit - don't know why
-//     for (LineList::iterator i = m_barLines.begin(); i != m_barLines.end(); ++i)
-//         delete (*i);
+    for (int i = 0; i < (int)m_staffLines.size(); ++i) clearStaffLineRow(i);
 }
 
 void
@@ -97,76 +96,50 @@ NotationStaff::changeFont(string fontName, int resolution)
     delete m_npf;
     m_npf = new NotePixmapFactory(fontName, resolution);
 
-    recreateStaffLines();
+    resizeStaffLines();
 }
 
 void
-NotationStaff::recreateStaffLines()
+NotationStaff::resizeStaffLines()
 {
-    // Pitch is represented with the MIDI pitch scale; NotationTypes.h
-    // contains methods to convert this to and from staff-height
-    // according to the current clef and key.  Staff-height is
-    // represented with signed integers such that the bottom staff
-    // line is 0, the space immediately above it is 1, and so on up to
-    // the top staff line which has a height of 8.  We shouldn't be
-    // concerned with pitch in this class, only with staff-height.
+    int firstRow = getRowForLayoutX(m_horizLineStart);
+    int  lastRow = getRowForLayoutX(m_horizLineEnd);
+    
+    int i;
 
-    // Now, the y-coord of a staff m whole-lines below the top
-    // staff-line (where 0 <= m <= 4) is m * lineWidth + lineOffset.
-    // For a staff at height h, m = (8-h)/2.  Therefore the y-coord of
-    // a staff at height h is (8-h)/2 * lineWidth + lineOffset
-
-    int i, h;
-    for (i = 0; i < int(m_staffLines.size()); ++i) {
-	for (h = 0; h < int(m_staffLines[i].size()); ++h) {
-	    delete m_staffLines[i][h];
-	}
-	m_staffLines[i].clear();
-    }
-    m_staffLines.clear();
-
-    // If the resolution is 8 or less, we want to reduce the blackness
-    // of the staff lines somewhat to make them less intrusive
-    int level = 0;
-    int z = 1;
-    if (m_resolution < 6) {
-        z = -1;
-        level = (9 - m_resolution) * 32;
-        if (level > 200) level = 200;
-    }
-    QColor lineColour(level, level, level);
-
-    for (i = 0; i < getRowCount(); ++i) {
-
+    while ((int)m_staffLines.size() <= lastRow) {
 	m_staffLines.push_back(LineList());
-
-	for (h = 0; h <= (2*nbLines - 2); h += 2) {
-
-	    for (int j = 0; j < m_npf->getStaffLineThickness(); ++j) {
-
-		StaffLine *line = new StaffLine(canvas(), this, h);
-		int y = yCoordOfHeight(h) + j; //!!!
-		line->setPoints(getRowLeftX(i) - x(), y,
-				getRowRightX(i) - x(), y);
-		if (j > 0) line->setSignificant(false);
-
-		if ((h % 2 == 1) ||
-		    (h < 0 || h > (nbLines * 2 - 2))) {
-
-		    // make the line invisible
-		    line->setPen(QPen(white, 1));
-		    line->setZ(-1);
-                
-		} else {
-		    line->setPen(QPen(lineColour, 1));
-		    line->setZ(z);
-		}
-		
-		line->show();
-		m_staffLines[i].push_back(line);
-	    }
-	}
     }
+
+    // Remove all the staff lines that precede the start of the staff
+
+    for (i = 0; i < firstRow; ++i) clearStaffLineRow(i);
+
+    // now i == firstRow
+
+    while (i <= lastRow) {
+
+	double x0 = 0;
+	double x1 = getPageWidth();
+
+	if (i == firstRow) {
+	    x0 = getXForLayoutX(m_horizLineStart);
+	}
+
+	if (i == lastRow) {
+	    x1 = getXForLayoutX(m_horizLineEnd);
+	}
+
+	resizeStaffLineRow(i, x0, x1 - x0);
+
+	++i;
+    }
+
+    // now i == lastRow+1
+
+    while (i < (int)m_staffLines.size()) clearStaffLineRow(i++);
+
+    //!!! should be per-row in createStaffLineRow?
 
     delete m_initialBarA;
     delete m_initialBarB;
@@ -185,7 +158,100 @@ NotationStaff::recreateStaffLines()
     m_initialBarB = new QCanvasLineGroupable(canvas(), this);
     m_initialBarB->setPoints(4, getTopLineOffset(),
                              4, getBarLineHeight() + getTopLineOffset());
+}
+
+
+// m_staffLines[row] must already exist (although it may be empty)
+
+void
+NotationStaff::clearStaffLineRow(int row)
+{
+    for (int h = 0; h < (int)m_staffLines[row].size(); ++h) {
+	delete m_staffLines[row][h];
+    }
+    m_staffLines[row].clear();
+}
+
+
+// m_staffLines[row] must already exist (although it may be empty)
+
+void
+NotationStaff::resizeStaffLineRow(int row, double offset, double length)
+{
+    kdDebug(KDEBUG_AREA) << "NotationStaff::resizeStaffLineRow: row "
+			 << row << ", offset " << offset << ", length " 
+			 << length << ", pagewidth " << getPageWidth() << endl;
+
+
+    // If the resolution is 8 or less, we want to reduce the blackness
+    // of the staff lines somewhat to make them less intrusive
+    int level = 0;
+    int z = 1;
+    if (m_resolution < 6) {
+        z = -1;
+        level = (9 - m_resolution) * 32;
+        if (level > 200) level = 200;
+    }
+    QColor lineColour(level, level, level);
+
+    //!!!
+    if (row % 2 == 1) {
+	lineColour = Qt::red;
+    }
+
+    int h, j;
+    int staffLineThickness = m_npf->getStaffLineThickness();
+
+    while ((int)m_staffLines[row].size() <= nbLines * staffLineThickness) {
+	m_staffLines[row].push_back(0);
+    }
+
+    int lineIndex = 0;
+
+    for (h = 0; h < nbLines; ++h) {
+
+	for (j = 0; j < staffLineThickness; ++j) {
+
+	    QCanvasLine *line;
+
+	    if (m_staffLines[row][lineIndex] != 0) {
+		line = m_staffLines[row][lineIndex];
+	    } else {
+		line = new QCanvasLine(canvas());
+	    }
+
+	    double lx = (int)x() + getRowLeftX(row) + offset;
+	    int ly = (int)y() + yCoordOfHeight(2 * h) + j; //!!!
+
+	    kdDebug(KDEBUG_AREA) << "My coords: " << x() << "," << y()
+				 << "; setting line points to ("
+				 << lx << "," << ly << ") -> ("
+				 << (lx+length-1) << "," << ly << ")" << endl;
+
+	    line->setPoints(lx, ly, lx + length - 1, ly);
+
+//	    if (j > 0) line->setSignificant(false);
+
+	    line->setPen(QPen(lineColour, 1));
+	    line->setZ(z);
+
+	    if (m_staffLines[row][lineIndex] == 0) {
+		m_staffLines[row][lineIndex] = line;
+	    }
+
+	    line->show();
+
+	    ++lineIndex;
+	}
+    }
+
+    while (lineIndex < (int)m_staffLines[row].size()) {
+	delete m_staffLines[row][lineIndex];
+	m_staffLines[row][lineIndex] = 0;
+	++lineIndex;
+    }
 }    
+
 
 void
 NotationStaff::setLegatoDuration(Rosegarden::timeT duration)
@@ -206,7 +272,19 @@ NotationStaff::setLegatoDuration(Rosegarden::timeT duration)
 
 int NotationStaff::yCoordOfHeight(int h) const
 {
-    // 0 is bottom staff-line, 8 is top one, leger lines above & below
+    // Pitch is represented with the MIDI pitch scale; NotationTypes.h
+    // contains methods to convert this to and from staff-height
+    // according to the current clef and key.  Staff-height is
+    // represented with signed integers such that the bottom staff
+    // line is 0, the space immediately above it is 1, and so on up to
+    // the top staff line which has a height of 8.  We shouldn't be
+    // concerned with pitch in this class, only with staff-height.
+
+    // Now, the y-coord of a staff m whole-lines below the top
+    // staff-line (where 0 <= m <= 4) is m * lineWidth + lineOffset.
+    // For a staff at height h, m = (8-h)/2.  Therefore the y-coord of
+    // a staff at height h is (8-h)/2 * lineWidth + lineOffset
+
 
     int y = 8 - h;
     y = getTopLineOffset() + (y * m_npf->getLineSpacing()) / 2;
@@ -261,13 +339,13 @@ int NotationStaff::heightOfYCoord(int y) const
 }
 
 static bool
-compareBarPos(QCanvasLineGroupable *barLine1, QCanvasLineGroupable *barLine2)
+compareBarPos(QCanvasLine *barLine1, QCanvasLine *barLine2)
 {
     return barLine1->x() < barLine2->x();
 }
 
 static bool
-compareBarToPos(QCanvasLineGroupable *barLine1, unsigned int pos)
+compareBarToPos(QCanvasLine *barLine1, unsigned int pos)
 {
     return barLine1->x() < pos;
 }
@@ -367,13 +445,10 @@ void NotationStaff::setLines(double xfrom, double xto)
 {
     START_TIMING;
 
-    int beginRow = getRowForLayoutX(xfrom),
-	  endRow = getRowForLayoutX(xto);
+    m_horizLineStart = (int)xfrom;
+    m_horizLineEnd = (int)xto;
+    resizeStaffLines();
 
-    if (endRow >= m_staffLines.size()) {
-	m_horizLineLength = xto;
-	recreateStaffLines();
-    }
 /*!!!   needs to be cleverer
     for (LineList::iterator i = m_staffLines.begin();
          i != m_staffLines.end(); ++i) {
@@ -394,7 +469,7 @@ void NotationStaff::setLines(double xfrom, double xto)
 void NotationStaff::getClefAndKeyAtX(int myx, Clef &clef,
 				     Rosegarden::Key &key) const
 {
-    unsigned int i;
+    int i;
 
     for (i = 0; i < m_clefChanges.size(); ++i) {
 	if (m_clefChanges[i].first + x() > myx) break;
@@ -569,7 +644,9 @@ NotationStaff::positionElements(timeT from, timeT to)
 	    //kdDebug(KDEBUG_AREA) << "Positioning at " << (*it)->getAbsoluteTime()
 	    //<< " (selected = " << selected << ", canvas item selected = " << (*it)->isSelected() << ")" << endl;
 
-	    (*it)->reposition(x(), y());
+	    double xoff, yoff;
+	    getPageOffsets((*it), xoff, yoff);
+	    (*it)->reposition(xoff, yoff);
 	}
     }
 
@@ -710,7 +787,9 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 	// Show the sprite
 	//
 	if (canvasItem) {
-	    elt->setCanvasItem(canvasItem, x(), y());
+	    double xoff, yoff;
+	    getPageOffsets(elt, xoff, yoff);
+	    elt->setCanvasItem(canvasItem, xoff, yoff);
 	    canvasItem->setZ(selected ? 2 : 0);
 	    canvasItem->show();
 	} else {
@@ -726,7 +805,9 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 			     << endl;
     }
 
-    elt->reposition(x(), y());
+    double xoff, yoff;
+    getPageOffsets(elt, xoff, yoff);
+    elt->reposition(xoff, yoff);
 }
 
 QCanvasSimpleSprite *
@@ -862,24 +943,29 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
                                      new QCanvasPixmap(notePixmap), canvas());
 }
 
-int
+double
 NotationStaff::getPageWidth()
 {
-    return canvas()->width() - (2 * x());
+    return m_pageWidth;
 }
 
 int
-NotationStaff::getRowForLayoutX(int lx)
+NotationStaff::getRowForLayoutX(double lx)
+{
+    return (int)(lx / getPageWidth());
+}
+
+double
+NotationStaff::getXForLayoutX(double lx)
+{
+    return (lx - (getPageWidth() * getRowForLayoutX(lx)));
+}
+
+int
+NotationStaff::getTopOfStaffForRow(int row)
 {
     if (!m_pageMode) return 0;
-    else return (lx / getPageWidth());
-}
-
-int
-NotationStaff::getXForLayoutX(int lx)
-{
-    if (!m_pageMode) return lx + x();
-    else return (lx - (getPageWidth() * getRowForLayoutX(lx))) + x();
+    else return (m_lineBreakGap * row);
 }
 
 int
@@ -892,20 +978,33 @@ NotationStaff::getTopLineOffsetForRow(int row)
 int
 NotationStaff::getRowCount()
 {
-    return getRowForLayoutX(m_horizLineLength) + 1;
+    return getRowForLayoutX(m_horizLineEnd) + 1;
 }
 
-int
+double
 NotationStaff::getRowLeftX(int row)
 {
-    if (!m_pageMode) return (row * getPageWidth()) + x();
-    else return x();
+    if (!m_pageMode) return (row * getPageWidth());
+    else return 0;
 }
 
-int
+double
 NotationStaff::getRowRightX(int row)
 {
-    if (!m_pageMode) return (row * getPageWidth()) + getPageWidth() + x();
-    else return getPageWidth() + x();
+    if (!m_pageMode) return (row * getPageWidth()) + getPageWidth();
+    else return getPageWidth();
+}
+
+void
+NotationStaff::getPageOffsets(NotationElement *elt,
+			      double &xoff, double &yoff)
+{
+    double lx = elt->getLayoutX();
+    double ly = elt->getLayoutY();
+
+    int row = getRowForLayoutX(lx);
+
+    xoff = getXForLayoutX(lx) - lx + getRowLeftX(row) + x();
+    yoff = getTopOfStaffForRow(row) + y();
 }
 

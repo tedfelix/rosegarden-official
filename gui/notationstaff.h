@@ -45,12 +45,16 @@ typedef Rosegarden::StaffLayout<NotationElement> NotationStaffLayout;
  * lines, as well as basic positional and size data.  This class
  * used to be in gui/staff.h, but it's been moved and renamed
  * following the introduction of the core Staff base class.
+ *
+ * For various wacky reasons, many of the x-coordinate measurements
+ * are in floating-point whereas the y-coordinate ones are integers.
  */
+
 class NotationStaff : public Rosegarden::Staff<NotationElement>,
 		      public QCanvasItemGroup
 {
 public:
-    typedef std::vector<QCanvasLineGroupable *> LineList;
+    typedef std::vector<QCanvasLine *> LineList;
     typedef std::vector<LineList> LineListList;
     typedef std::set<QCanvasSimpleSprite *> SpriteSet;
     
@@ -59,7 +63,7 @@ public:
      * \a id is the id of the staff in the NotationView
      */
     NotationStaff(QCanvas *, Rosegarden::Segment *, unsigned int id,
-		  bool pageMode, int lineBreakGap,
+		  bool pageMode, double pageWidth, int lineBreakGap,
                   std::string fontName, int resolution);
     ~NotationStaff();
 
@@ -100,21 +104,21 @@ public:
      * Returns the difference between the y-coord of one visible line
      * and that of its neighbour
      */
-    unsigned int getLineSpacing() const {
+    int getLineSpacing() const {
 	return m_npf->getLineSpacing();
     }
 
     /**
      * Returns the height of a bar line.
      */
-    unsigned int getBarLineHeight() const {
+    int getBarLineHeight() const {
 	return getLineSpacing() * (nbLines - 1);
     }
 
     /**
      * Returns the total height of a staff
      */
-    unsigned int getStaffHeight() const {
+    int getStaffHeight() const {
 	return getTopLineOffset() * 2 + getBarLineHeight()
 	    + m_npf->getStaffLineThickness();
     }
@@ -125,7 +129,7 @@ public:
      * space between the last visible line and the bottom of the staff
      * object.)
      */
-    unsigned int getTopLineOffset() const {
+    int getTopLineOffset() const {
 	return getLineSpacing() * nbLegerLines;
     }
  
@@ -137,7 +141,7 @@ public:
      * @see NotationTool#handleMousePress
      * @see NotationView#itemPressed
      */
-    unsigned int getId() { return m_id; }
+    int getId() { return m_id; }
 
 
     /**
@@ -247,6 +251,8 @@ public:
     static const int nbLines;        // number of main lines on the staff
     static const int nbLegerLines;   // number of lines above or below
 
+    static const int NoHeight;
+
 protected:
 
     enum RefreshType { FullRefresh, PositionRefresh, SelectionRefresh };
@@ -270,24 +276,31 @@ protected:
      */
     bool elementNotMoved(NotationElement *);
 
-    void recreateStaffLines();
-//    void changePageWidth(int newWidth);
-
     int m_id;
 
     bool m_pageMode;
+    double m_pageWidth;
     int m_lineBreakGap;
 
-    int m_horizLineLength;
+    double m_horizLineStart;
+    double m_horizLineEnd;
     int m_resolution;
 
-    int getPageWidth();
-    int getRowForLayoutX(int x);
-    int getXForLayoutX(int x);
-    int getTopLineOffsetForRow(int row);
-    int getRowCount();
-    int getRowLeftX(int row);
-    int getRowRightX(int row);
+    void resizeStaffLines();
+    void clearStaffLineRow(int rowNo);
+    void resizeStaffLineRow(int rowNo, double offset, double length);
+
+    double getPageWidth();
+    int	   getRowForLayoutX(double x);
+    double getXForLayoutX(double x);
+    int	   getTopOfStaffForRow(int row);
+    int	   getTopLineOffsetForRow(int row);
+    int	   getRowCount();
+    double getRowLeftX(int row);
+    double getRowRightX(int row);
+
+    void   getPageOffsets(NotationElement *,
+			  double &xoff, double &yoff);
 
     LineList m_barLines;
     LineListList m_staffLines;
