@@ -22,6 +22,22 @@
 #include "quantizer.h"
 #include "notationelement.h"
 
+class ElementHPos
+{
+public:
+    ElementHPos(unsigned int p=0) : pos(p) {}
+    ElementHPos(unsigned int p, NotationElementList::iterator i) : pos(p), it(i) {}
+
+    ElementHPos& operator=(const ElementHPos &h) { pos = h.pos; it = h.it; return *this; }
+
+    unsigned int pos;
+    NotationElementList::iterator it;
+};
+
+inline bool operator<(const ElementHPos &h1, const ElementHPos &h2) { return h1.pos < h2.pos; }
+inline bool operator>(const ElementHPos &h1, const ElementHPos &h2) { return h1.pos > h2.pos; }
+inline bool operator==(const ElementHPos &h1, const ElementHPos &h2) { return h1.pos == h2.pos; }
+
 /**
   *@author Guillaume Laurent, Chris Cannam, Rich Bown
   */
@@ -34,7 +50,8 @@ public:
      * barWidth is the length of a bar in pixels
      * beatsPerBar is the nb of beats a bar is in the current time sig
      */
-    NotationHLayout(unsigned int barWidth,
+    NotationHLayout(NotationElementList& elements,
+                    unsigned int barWidth,
                     unsigned int beatsPerBar,
                     unsigned int barMargin,
                     unsigned int noteMargin = 2);
@@ -44,19 +61,24 @@ public:
     barpositions& barPositions();
     const barpositions& barPositions() const;
 
+    ElementHPos& lastElementPos() { return m_lastElementPos; }
+
+    NotationElementList::iterator insertNote(NotationElement *el, unsigned int xPos);
+
 protected:
     /*
-     * Breaks down a note which doesn't fit in a bar into shorter notes - disabled for now
-     */
+     * Breaks down a note which doesn't fit in a bar into shorter notes - disabled for now */
     //     const vector<unsigned int>& splitNote(unsigned int noteLen);
 
-    virtual void layout(NotationElement*);
+    virtual void layout(NotationElementList::iterator&);
 
     void initNoteWidthTable();
 
     void addNewBar(unsigned int barPos);
 
     Quantizer m_quantizer;
+
+    NotationElementList& m_notationElements;
 
     unsigned int m_barWidth;
     unsigned int m_timeUnitsPerBar;
@@ -68,14 +90,16 @@ protected:
     unsigned int m_nbTimeUnitsInCurrentBar;
     unsigned int m_previousNbTimeUnitsInCurrentBar;
     unsigned int m_currentPos;
+    ElementHPos m_lastElementPos;
 
     typedef vector<unsigned int> NoteWidthTable;
 
     /// maps note types (Whole, Half, etc...) to the width they should take on the bar
     NoteWidthTable m_noteWidthTable;
-public:
+
     barpositions m_barPositions;
 
+    vector<ElementHPos> m_notePositions;
 };
 
 #endif

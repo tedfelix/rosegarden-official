@@ -40,19 +40,83 @@
 
 #include "rosedebug.h"
 
+
+NotationCanvasView::NotationCanvasView(QCanvas *viewing=0, QWidget *parent=0,
+                                       const char *name=0, WFlags f=0)
+    : QCanvasView(viewing, parent, name, f),
+      m_movingItem(0),
+      m_draggingItem(false)
+{
+}
+
+
+void
+NotationCanvasView::contentsMouseReleaseEvent (QMouseEvent *e)
+{
+    m_draggingItem = false;
+    canvas()->update();
+}
+
+void
+NotationCanvasView::contentsMouseMoveEvent (QMouseEvent *e)
+{
+    if(m_draggingItem) {
+        m_movingItem->move(e->x(), e->y());
+        canvas()->update();
+    }
+}
+
+void
+NotationCanvasView::contentsMousePressEvent (QMouseEvent *e)
+{
+    kdDebug(KDEBUG_AREA) << "mousepress" << endl;
+
+    QCanvasItemList itemList = canvas()->collisions(e->pos());
+
+    if(itemList.isEmpty()) { // click was not on an item
+        kdDebug(KDEBUG_AREA) << "mousepress : Not on an item" << endl;
+        return;
+    }
+
+    QCanvasItem *item = itemList.first();
+
+    QCanvasGroupableItem *gitem;
+
+    if((gitem = dynamic_cast<QCanvasGroupableItem*>(item))) {
+        kdDebug(KDEBUG_AREA) << "mousepress : Groupable item" << endl;
+        QCanvasItemGroup *t = gitem->group();
+
+        if(t->active())
+            m_movingItem = t;
+        else {
+            kdDebug(KDEBUG_AREA) << "mousepress : Unmoveable groupable item" << endl;
+            m_movingItem = 0; // this is not a moveable item
+            return;
+        }
+    } else {
+        m_movingItem = item;
+    }
+
+    m_draggingItem = true;
+    m_movingItem->move(e->x(), e->y());
+    canvas()->update();
+}
+
+
+
+
 NotationView::NotationView(RosegardenGUIDoc* doc, QWidget *parent)
     : KMainWindow(parent),
       m_config(kapp->config()),
       m_document(doc),
-      m_canvasView(new QCanvasView(new QCanvas(width() * 2,
-                                               height() * 2),
-                                   this)),
+      m_canvasView(new NotationCanvasView(new QCanvas(width() * 2,
+                                                      height() * 2),
+                                          this)),
       m_mainStaff(new Staff(canvas())),
       m_currentStaff(m_mainStaff),
-      m_movingItem(0),
-      m_draggingItem(false),
       m_hlayout(0),
-      m_vlayout(0)
+      m_vlayout(0),
+      m_currentSelectedNote(Quarter)
 {
 
     kdDebug(KDEBUG_AREA) << "NotationView ctor" << endl;
@@ -66,15 +130,8 @@ NotationView::NotationView(RosegardenGUIDoc* doc, QWidget *parent)
     readOptions();
 
     if (doc) {
-        setCaption(doc->getTitle());
-    }
-    
-    //#define TEST_CANVAS
-#ifndef TEST_CANVAS
 
-    RosegardenGUIDoc* doc = getDocument();
-    
-    if (doc) {
+        setCaption(doc->getTitle());
 
         EventList &allEvents(doc->getEvents());
 
@@ -85,7 +142,8 @@ NotationView::NotationView(RosegardenGUIDoc* doc, QWidget *parent)
         m_mainStaff->show();
 
         m_vlayout = new NotationVLayout(*m_mainStaff);
-        m_hlayout = new NotationHLayout((Staff::noteWidth + 2) * 4, // this shouldn't be constant
+        m_hlayout = new NotationHLayout(*m_notationElements,
+                                        (Staff::noteWidth + 2) * 4, // this shouldn't be constant
                                         4, // 4 beats per bar
                                         40);
 
@@ -102,10 +160,6 @@ NotationView::NotationView(RosegardenGUIDoc* doc, QWidget *parent)
         kdDebug(KDEBUG_AREA) << "NotationView ctor : getDocument() returned 0" << endl;
         KMessageBox::sorry(0, "No document");
     }
-    
-#else
-    test();
-#endif
 }
 
 NotationView::~NotationView()
@@ -205,56 +259,233 @@ NotationView::setupActions()
     createGUI("notation.rc");
 }
 
-
-void
-NotationView::contentsMouseReleaseEvent (QMouseEvent *e)
+bool
+NotationView::showElements(NotationElementList::iterator from,
+                                NotationElementList::iterator to)
 {
-    m_draggingItem = false;
-    canvas()->update();
+    return showElements(from, to, 0, 0);
 }
 
-void
-NotationView::contentsMouseMoveEvent (QMouseEvent *e)
+bool
+NotationView::showElements(NotationElementList::iterator from,
+                                NotationElementList::iterator to,
+                                QCanvasItem *item)
 {
-    if(m_draggingItem) {
-        m_movingItem->move(e->x(), e->y());
-        canvas()->update();
-    }
+    return showElements(from, to, item->x(), item->y());
 }
 
-void
-NotationView::contentsMousePressEvent (QMouseEvent *e)
+bool
+NotationView::showElements(NotationElementList::iterator from,
+                                NotationElementList::iterator to,
+                                double dxoffset, double dyoffset)
 {
-    QCanvasItemList itemList = canvas()->collisions(e->pos());
+    static ChordPixmapFactory npf(*m_mainStaff);
 
-    if(itemList.isEmpty()) { // click was not on an item
-        return;
+    for(NotationElementList::iterator it = from; it != to; ++it) {
+        
+        Note note = Note((*it)->event()->get<Int>("Notation::NoteType"));
+        
+        QCanvasPixmap notePixmap(npf.makeNotePixmap(note, true, true));
+        QCanvasSimpleSprite *noteSprite = new QCanvasSimpleSprite(&notePixmap,
+                                                                  canvas());
+        noteSprite->move(dxoffset + (*it)->x(),
+                         dyoffset + (*it)->y());
+        noteSprite->show();
+        
     }
 
-    QCanvasItem *item = itemList.first();
 
-    QCanvasGroupableItem *gitem;
+    // Display bars
+    const NotationHLayout::barpositions& barPositions(m_hlayout->barPositions());
 
-    if((gitem = dynamic_cast<QCanvasGroupableItem*>(item))) {
-        kdDebug(KDEBUG_AREA) << "Groupable item" << endl;
-        QCanvasItemGroup *t = gitem->group();
+    for(NotationHLayout::barpositions::const_iterator it = barPositions.begin();
+        it != barPositions.end(); ++it) {
 
-        if(t->active())
-            m_movingItem = t;
-        else {
-            kdDebug(KDEBUG_AREA) << "Unmoveable groupable item" << endl;
-            m_movingItem = 0; // this is not a moveable item
-            return;
-        }
-    } else {
-        m_movingItem = item;
+        unsigned int barPos = *it;
+
+        kdDebug(KDEBUG_AREA) << "Adding bar at pos " << barPos << endl;
+
+        QCanvasLineGroupable* barLine = new QCanvasLineGroupable(canvas(), m_currentStaff);
+
+        barLine->setPoints(0, Staff::linesOffset,
+                           0, m_currentStaff->barLineHeight() + Staff::linesOffset);
+        barLine->move(barPos + dxoffset,
+                      dyoffset);
+        barLine->show();
     }
+    
 
-    m_draggingItem = true;
-    m_movingItem->move(e->x(), e->y());
-    canvas()->update();
+    return true;
 }
 
+
+bool
+NotationView::applyLayout()
+{
+    bool rch = applyHorizontalLayout();
+    bool rcv = applyVerticalLayout();
+
+    return rch && rcv;
+}
+
+
+bool
+NotationView::applyHorizontalLayout()
+{
+    if (!m_hlayout) {
+        KMessageBox::error(0, "No Horizontal Layout engine");
+        return false;
+    }
+
+    for (NotationElementList::iterator i = m_notationElements->begin();
+         i != m_notationElements->end(); ++i)
+        (*m_hlayout)(i);
+
+    return m_hlayout->status();
+}
+
+
+bool 
+NotationView::applyVerticalLayout()
+{
+    if (!m_vlayout) {
+        KMessageBox::error(0, "No Vertical Layout engine");
+        return false;
+    }
+
+    for (NotationElementList::iterator i = m_notationElements->begin();
+         i != m_notationElements->end(); ++i)
+        (*m_vlayout)(i);
+    
+    return m_vlayout->status();
+}
+
+//////////////////////////////////////////////////////////////////////
+//                    Slots
+//////////////////////////////////////////////////////////////////////
+
+void NotationView::slotEditUndo()
+{
+    slotStatusMsg(i18n("Undo..."));
+
+    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
+}
+
+void NotationView::slotEditRedo()
+{
+    slotStatusMsg(i18n("Redo..."));
+
+    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
+}
+
+void NotationView::slotEditCut()
+{
+    slotStatusMsg(i18n("Cutting selection..."));
+
+    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
+}
+
+void NotationView::slotEditCopy()
+{
+    slotStatusMsg(i18n("Copying selection to clipboard..."));
+
+    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
+}
+
+void NotationView::slotEditPaste()
+{
+    slotStatusMsg(i18n("Inserting clipboard contents..."));
+
+    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
+}
+
+void NotationView::slotToggleToolBar()
+{
+    slotStatusMsg(i18n("Toggle the toolbar..."));
+
+    if (toolBar()->isVisible())
+        toolBar()->hide();
+    else
+        toolBar()->show();
+
+    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
+}
+
+void NotationView::slotToggleStatusBar()
+{
+    slotStatusMsg(i18n("Toggle the statusbar..."));
+
+    if (statusBar()->isVisible())
+        statusBar()->hide();
+    else
+        statusBar()->show();
+
+    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
+}
+
+
+void NotationView::slotStatusMsg(const QString &text)
+{
+    ///////////////////////////////////////////////////////////////////
+    // change status message permanently
+    statusBar()->clear();
+    statusBar()->changeItem(text, ID_STATUS_MSG);
+}
+
+
+void NotationView::slotStatusHelpMsg(const QString &text)
+{
+    ///////////////////////////////////////////////////////////////////
+    // change status message of whole statusbar temporary (text, msec)
+    statusBar()->message(text, 2000);
+}
+
+//////////////////////////////////////////////////////////////////////
+
+void NotationView::slotWhole()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slotWhole()\n";
+    m_currentSelectedNote = Whole;
+}
+
+void NotationView::slotHalf()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slotHalf()\n";
+    m_currentSelectedNote = Half;
+}
+
+void NotationView::slotQuarter()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slotQuarter()\n";
+    m_currentSelectedNote = Quarter;
+}
+
+void NotationView::slot8th()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slot8th()\n";
+    m_currentSelectedNote = Eighth;
+}
+
+void NotationView::slot16th()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slot16th()\n";
+    m_currentSelectedNote = Sixteenth;
+}
+
+void NotationView::slot32nd()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slot32nd()\n";
+    m_currentSelectedNote = ThirtySecond;
+}
+
+void NotationView::slot64th()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slot64th()\n";
+    m_currentSelectedNote = SixtyFourth;
+}
+
+
+//////////////////////////////////////////////////////////////////////
 
 
 void
@@ -357,220 +588,4 @@ NotationView::test()
 
     chordSprite->move(50, 50);
    
-}
-
-bool
-NotationView::showElements(NotationElementList::iterator from,
-                                NotationElementList::iterator to)
-{
-    return showElements(from, to, 0, 0);
-}
-
-bool
-NotationView::showElements(NotationElementList::iterator from,
-                                NotationElementList::iterator to,
-                                QCanvasItem *item)
-{
-    return showElements(from, to, item->x(), item->y());
-}
-
-bool
-NotationView::showElements(NotationElementList::iterator from,
-                                NotationElementList::iterator to,
-                                double dxoffset, double dyoffset)
-{
-    static ChordPixmapFactory npf(*m_mainStaff);
-
-    for(NotationElementList::iterator it = from; it != to; ++it) {
-        
-        Note note = Note((*it)->event()->get<Int>("Notation::NoteType"));
-        
-        QCanvasPixmap notePixmap(npf.makeNotePixmap(note, true, true));
-        QCanvasSimpleSprite *noteSprite = new QCanvasSimpleSprite(&notePixmap,
-                                                                  canvas());
-        noteSprite->move(dxoffset + (*it)->x(),
-                         dyoffset + (*it)->y());
-        noteSprite->show();
-        
-    }
-
-
-    // Display bars
-    const NotationHLayout::barpositions& barPositions(m_hlayout->barPositions());
-
-    for(NotationHLayout::barpositions::const_iterator it = barPositions.begin();
-        it != barPositions.end(); ++it) {
-
-        unsigned int barPos = *it;
-
-        kdDebug(KDEBUG_AREA) << "Adding bar at pos " << barPos << endl;
-
-        QCanvasLineGroupable* barLine = new QCanvasLineGroupable(canvas(), m_currentStaff);
-
-        barLine->setPoints(0, Staff::linesOffset,
-                           0, m_currentStaff->barLineHeight() + Staff::linesOffset);
-        barLine->move(barPos + dxoffset,
-                      dyoffset);
-        barLine->show();
-    }
-    
-
-    return true;
-}
-
-
-bool
-NotationView::applyLayout()
-{
-    bool rch = applyHorizontalLayout();
-    bool rcv = applyVerticalLayout();
-
-    return rch && rcv;
-}
-
-
-bool
-NotationView::applyHorizontalLayout()
-{
-    if (!m_hlayout) {
-        KMessageBox::error(0, "No Horizontal Layout engine");
-        return false;
-    }
-
-    for (NotationElementList::iterator i = m_notationElements->begin();
-         i != m_notationElements->end(); ++i)
-        (*m_hlayout)(*i);
-
-    return m_hlayout->status();
-}
-
-
-bool 
-NotationView::applyVerticalLayout()
-{
-    if (!m_vlayout) {
-        KMessageBox::error(0, "No Vertical Layout engine");
-        return false;
-    }
-
-    for_each(m_notationElements->begin(), m_notationElements->end(), *m_vlayout);
-    
-    return m_vlayout->status();
-}
-
-//////////////////////////////////////////////////////////////////////
-//                    Slots
-//////////////////////////////////////////////////////////////////////
-
-void NotationView::slotEditUndo()
-{
-    slotStatusMsg(i18n("Undo..."));
-
-    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
-}
-
-void NotationView::slotEditRedo()
-{
-    slotStatusMsg(i18n("Redo..."));
-
-    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
-}
-
-void NotationView::slotEditCut()
-{
-    slotStatusMsg(i18n("Cutting selection..."));
-
-    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
-}
-
-void NotationView::slotEditCopy()
-{
-    slotStatusMsg(i18n("Copying selection to clipboard..."));
-
-    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
-}
-
-void NotationView::slotEditPaste()
-{
-    slotStatusMsg(i18n("Inserting clipboard contents..."));
-
-    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
-}
-
-void NotationView::slotToggleToolBar()
-{
-    slotStatusMsg(i18n("Toggle the toolbar..."));
-
-    if (toolBar()->isVisible())
-        toolBar()->hide();
-    else
-        toolBar()->show();
-
-    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
-}
-
-void NotationView::slotToggleStatusBar()
-{
-    slotStatusMsg(i18n("Toggle the statusbar..."));
-
-    if (statusBar()->isVisible())
-        statusBar()->hide();
-    else
-        statusBar()->show();
-
-    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
-}
-
-
-void NotationView::slotStatusMsg(const QString &text)
-{
-    ///////////////////////////////////////////////////////////////////
-    // change status message permanently
-    statusBar()->clear();
-    statusBar()->changeItem(text, ID_STATUS_MSG);
-}
-
-
-void NotationView::slotStatusHelpMsg(const QString &text)
-{
-    ///////////////////////////////////////////////////////////////////
-    // change status message of whole statusbar temporary (text, msec)
-    statusBar()->message(text, 2000);
-}
-
-//////////////////////////////////////////////////////////////////////
-
-void NotationView::slotWhole()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slotWhole()\n";
-}
-
-void NotationView::slotHalf()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slotHalf()\n";
-}
-
-void NotationView::slotQuarter()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slotQuarter()\n";
-}
-
-void NotationView::slot8th()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slot8th()\n";
-}
-
-void NotationView::slot16th()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slot16th()\n";
-}
-
-void NotationView::slot32nd()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slot32nd()\n";
-}
-
-void NotationView::slot64th()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slot64th()\n";
 }

@@ -32,6 +32,25 @@ class RosegardenGUIDoc;
   *@author Guillaume Laurent, Chris Cannam, Rich Bown
   */
 
+class NotationCanvasView : public QCanvasView
+{
+public:
+    NotationCanvasView(QCanvas *viewing=0, QWidget *parent=0,
+                       const char *name=0, WFlags f=0);
+    
+    /** Callback for a mouse button press event in the canvas */
+    virtual void contentsMousePressEvent (QMouseEvent *e);
+    /** Callback for a mouse button release event in the canvas */
+    virtual void contentsMouseReleaseEvent (QMouseEvent *e);
+    /** Callback for a mouse move event in the canvas */
+    virtual void contentsMouseMoveEvent (QMouseEvent *e);
+
+protected:
+    QCanvasItem* m_movingItem;
+    bool m_draggingItem;
+
+};
+
 
 class NotationView : public KMainWindow
 {
@@ -145,14 +164,6 @@ protected:
      */
     void setupActions();
 
-
-    /** Callback for a mouse button press event in the canvas */
-    virtual void contentsMousePressEvent (QMouseEvent *e);
-    /** Callback for a mouse button release event in the canvas */
-    virtual void contentsMouseReleaseEvent (QMouseEvent *e);
-    /** Callback for a mouse move event in the canvas */
-    virtual void contentsMouseMoveEvent (QMouseEvent *e);
-
     void perfTest();
     void test();
 
@@ -160,18 +171,17 @@ protected:
 
     RosegardenGUIDoc* m_document;
 
-    QCanvasView* m_canvasView;
+    NotationCanvasView* m_canvasView;
 
     Staff* m_mainStaff;
     Staff* m_currentStaff;
 
     NotationElementList* m_notationElements;
     
-    QCanvasItem* m_movingItem;
-    bool m_draggingItem;
-
     NotationHLayout* m_hlayout;
     NotationVLayout* m_vlayout;
+
+    Note m_currentSelectedNote;
 	
 };
 

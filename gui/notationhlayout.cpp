@@ -19,11 +19,13 @@
 #include "notationhlayout.h"
 #include "rosedebug.h"
 
-NotationHLayout::NotationHLayout(unsigned int barWidth,
+NotationHLayout::NotationHLayout(NotationElementList& elements,
+                                 unsigned int barWidth,
                                  unsigned int beatsPerBar,
                                  unsigned int barMargin,
                                  unsigned int noteMargin)
-    : m_barWidth(barWidth),
+    : m_notationElements(elements),
+      m_barWidth(barWidth),
       m_timeUnitsPerBar(0),
       m_beatsPerBar(beatsPerBar),
       m_barMargin(barMargin),
@@ -31,6 +33,7 @@ NotationHLayout::NotationHLayout(unsigned int barWidth,
       m_nbTimeUnitsInCurrentBar(0),
       m_previousNbTimeUnitsInCurrentBar(0),
       m_currentPos(barMargin),
+      m_lastElementPos(barMargin),
       m_noteWidthTable(LastNote)
 {
     initNoteWidthTable();
@@ -39,11 +42,13 @@ NotationHLayout::NotationHLayout(unsigned int barWidth,
 }
 
 void
-NotationHLayout::layout(NotationElement *el)
+NotationHLayout::layout(NotationElementList::iterator &it)
 {
     // if (el) is time sig change, reflect that
 
     // kdDebug(KDEBUG_AREA) << "Layout" << endl;
+
+    NotationElement *el = *it;
 
     m_quantizer.quantize(el->event());
 
@@ -54,6 +59,12 @@ NotationHLayout::layout(NotationElement *el)
     m_nbTimeUnitsInCurrentBar += el->event()->get<Int>("QuantizedDuration");
 
     el->setX(m_currentPos);
+
+    // Store note position
+    //
+    m_lastElementPos = ElementHPos(m_currentPos, it);
+
+    m_notePositions.push_back(m_lastElementPos);
 
     Note note = Note(el->event()->get<Int>("Notation::NoteType")); // check the property is here ?
 
@@ -69,7 +80,7 @@ NotationHLayout::layout(NotationElement *el)
         m_nbTimeUnitsInCurrentBar = 0;
         addNewBar(m_currentPos + m_noteMargin);
         m_currentPos += 2 * m_noteMargin + Staff::noteWidth;
-    }    
+    }
 }
 
 void
@@ -142,3 +153,33 @@ NotationHLayout::barPositions() const
 {
     return m_barPositions;
 }
+
+NotationElementList::iterator
+NotationHLayout::insertNote(NotationElement *el, unsigned int xPos)
+{
+    ElementHPos elementPos(xPos);
+    
+    vector<ElementHPos>::iterator insertPoint = lower_bound(m_notePositions.begin(),
+                                                            m_notePositions.end(),
+                                                            elementPos);
+    
+    if (insertPoint != m_notePositions.end()) {
+
+        ++insertPoint;
+        elementPos.pos = insertPoint->pos;
+        el->setX(elementPos.pos);
+        
+        m_notePositions.insert(insertPoint, elementPos);
+
+        // TODO
+        // reapply layout on all following notes
+
+        return insertPoint->it;
+
+    } else {
+        m_notePositions.push_back(elementPos);
+        return m_notationElements.end();
+    }
+
+}
+
