@@ -24,7 +24,18 @@
 #define _LOOPRULER_H_
 
 #include <qcanvas.h>
+#include "Event.h"
 
+
+// Creates a canvas widget that reacts to mouse clicks and
+// sends relevant signals to modify position pointer and
+// playback/looping states.
+//
+// Hopefully use this same class in TrackEditor and editing
+// clients - they will have to be synced-up or managed at
+// some point.
+//
+//
 
 class LoopRuler : public QCanvasView
 {
@@ -40,10 +51,29 @@ public:
 
     ~LoopRuler();
 
+public slots:
+
+protected:
     // ActiveItem interface
-    virtual void handleMousePress(QMouseEvent*);
-    virtual void handleMouseMove(QMouseEvent*);
-    virtual void handleMouseRelease(QMouseEvent*);
+    virtual void contentsMousePressEvent(QMouseEvent *mE);
+    virtual void contentsMouseReleaseEvent(QMouseEvent *mE);
+    virtual void contentsMouseDoubleClickEvent(QMouseEvent *mE);
+
+signals:
+    // The three main functions that this class performs
+    //
+
+    // Set the pointer position on mouse single click
+    //
+    void setPointerPosition(Rosegarden::timeT position);
+
+    // Set pointer position and start playing on double click
+    //
+    void setPlayPosition(Rosegarden::timeT position);
+
+    // Set a playing loop
+    //
+    void setLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs);
 
 private:
 
@@ -59,3 +89,4 @@ private:
 };
 
 #endif // _LOOPRULER_H_
+

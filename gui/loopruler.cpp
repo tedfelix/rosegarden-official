@@ -79,7 +79,7 @@ LoopRuler::drawBars()
 }
 
 void
-LoopRuler::handleMousePress(QMouseEvent *mE)
+LoopRuler::contentsMousePressEvent(QMouseEvent *mE)
 {
     if (mE->button() == LeftButton)
     {
@@ -91,13 +91,19 @@ LoopRuler::handleMousePress(QMouseEvent *mE)
 }
 
 void
-LoopRuler::handleMouseMove(QMouseEvent *mE)
+LoopRuler::contentsMouseReleaseEvent(QMouseEvent *mE)
 {
+    if (mE->button() == LeftButton)
+    {
+    }
 }
 
 void
-LoopRuler::handleMouseRelease(QMouseEvent *mE)
+LoopRuler::contentsMouseDoubleClickEvent(QMouseEvent *mE)
 {
+    if (mE->button() == LeftButton)
+    {
+    }
 }
 
 
