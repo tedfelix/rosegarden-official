@@ -36,18 +36,18 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
 		       Composition *composition,
 		       int height,
 		       QWidget *parent,
-		       const char *name)
-    : QWidget(parent, name),
-      m_height(height),
-      m_currentXOffset(0),
-      m_width(-1),
-      m_composition(composition),
-      m_rulerScale(rulerScale),
-      m_font("helvetica", 12),
-      m_fontMetrics(m_font)
+		       const char *name) :
+    QWidget(parent, name),
+    m_height(height),
+    m_currentXOffset(0),
+    m_width(-1),
+    m_composition(composition),
+    m_rulerScale(rulerScale),
+    m_font("helvetica", 10),
+    m_boldFont("helvetica", 10, QFont::Bold),
+    m_fontMetrics(m_boldFont)
 {
     setBackgroundColor(RosegardenGUIColours::TextRulerBackground);
-    m_font.setPixelSize(10);
 }
 
 TempoRuler::~TempoRuler()
@@ -104,22 +104,81 @@ TempoRuler::paintEvent(QPaintEvent* e)
     int fontHeight = boundsForHeight.height();
     int textY = (height() - 6)/2 + fontHeight/2;
 
+    double prevEndX = -1000.0;
+    double prevTempo = 0.0;
+    long prevBpm = 0;
+
+    typedef std::map<timeT, bool> TimePoints;
+    int tempoChangeHere = 1, timeSigChangeHere = 2;
+    TimePoints timePoints;
+
     for (int tempoNo = m_composition->getTempoChangeNumberAt(from) + 1;
 	 tempoNo <= m_composition->getTempoChangeNumberAt(to); ++tempoNo) {
 
-	std::pair<timeT, long> tempoChange =
-	    m_composition->getRawTempoChange(tempoNo);
+	timePoints.insert
+	    (TimePoints::value_type
+	     (m_composition->getRawTempoChange(tempoNo).first,
+	      tempoChangeHere));
+    }
+	
+    for (int sigNo = m_composition->getTimeSignatureNumberAt(from) + 1;
+	 sigNo <= m_composition->getTimeSignatureNumberAt(to); ++sigNo) {
 
-	timeT time = tempoChange.first;
-	long tempo = tempoChange.second;
-	QString tempoString = QString("%1").arg(tempo / 60);
-	QRect bounds = m_fontMetrics.boundingRect(tempoString);
+	timeT time(m_composition->getTimeSignatureChange(sigNo).first);
+	if (timePoints.find(time) != timePoints.end()) {
+	    timePoints[time] += timeSigChangeHere;
+	} else {
+	    timePoints.insert(TimePoints::value_type(time, timeSigChangeHere));
+	}
+    }
 
+    for (TimePoints::iterator i = timePoints.begin();
+	 i != timePoints.end(); ++i) {
+
+	timeT time = i->first;
 	double x = m_rulerScale->getXForTime(time) + m_currentXOffset;
 	paint.drawLine(x, height() - 4, x, height());
+	
+	if (i->second & timeSigChangeHere) {
 
-	if (x > bounds.width() / 2) x -= bounds.width() / 2;
-	paint.drawText(x, textY, tempoString);
+	    Rosegarden::TimeSignature sig =
+		m_composition->getTimeSignatureAt(time);
+
+	    QString numStr = QString("%1").arg(sig.getNumerator());
+	    QString denStr = QString("%1").arg(sig.getDenominator());
+
+	    QRect numBounds = m_fontMetrics.boundingRect(numStr);
+	    QRect denBounds = m_fontMetrics.boundingRect(denStr);
+
+	    paint.setFont(m_boldFont);
+	    paint.drawText(x - numBounds.width()/2,
+			   numBounds.height(), numStr);
+	    paint.drawText(x - denBounds.width()/2,
+			   numBounds.height() + denBounds.height(), denStr);
+	}
+
+	if (i->second & tempoChangeHere) { 
+	
+	    double tempo = m_composition->getTempoAt(time);
+	    long bpm = long(tempo);
+
+	    QString tempoString = QString("%1").arg(bpm);
+	    if (tempo == prevTempo) {
+		tempoString = "=";
+	    } else if (bpm == prevBpm) {
+		tempoString = (tempo > prevTempo ? "+" : "-");
+	    }
+	    prevTempo = tempo;
+	    prevBpm = bpm;
+
+	    QRect bounds = m_fontMetrics.boundingRect(tempoString);
+
+	    paint.setFont(m_font);
+	    if (x > bounds.width() / 2) x -= bounds.width() / 2;
+	    if (prevEndX >= x - 3) x = prevEndX + 3;
+	    paint.drawText(x, textY, tempoString);
+	    prevEndX = x + bounds.width();
+	}
     }
 }
 

@@ -79,6 +79,7 @@ private:
     Rosegarden::RulerScale *m_rulerScale;
 
     QFont m_font;
+    QFont m_boldFont;
     QFontMetrics m_fontMetrics;
 };
 
