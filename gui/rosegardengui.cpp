@@ -358,7 +358,7 @@ void RosegardenGUIApp::setupActions()
     KStdAction::tipOfDay( this, SLOT( slotShowTip() ), actionCollection() );
 #else
     new KAction(i18n("Show Tip of the &Day"), 0, this,
-                SLOT(slotShowTips()),
+                SLOT(slotShowTip()),
                 actionCollection(),
                 "help_show_tip");
 #endif
