@@ -173,24 +173,11 @@ EventFilterDialog::initDialog()
 	    SLOT(slotPitchToChanged(int)));
 
     m_pitchToChooserButton = new QPushButton(i18n("..."), noteFrame);
-    m_pitchToChooserButton->setSizePolicy(QSizePolicy((QSizePolicy::SizeType)0,
-	(QSizePolicy::SizeType)0, 0, 0, m_pitchToChooserButton->
-	sizePolicy().hasHeightForWidth()));
     QToolTip::add(m_pitchToChooserButton, i18n("choose a pitch using a staff"));  
     noteFrameLayout->addWidget(m_pitchToChooserButton, 1, 5);
     connect(m_pitchToChooserButton, SIGNAL(clicked()),
 	    SLOT(slotPitchToChooser()));
 
-    // spacer, to help keep From/To columns from going out of alignment
-    // relative to each other in the three separate frames...
-    QSpacerItem* spacer_0 =
-	new QSpacerItem(80, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-    noteFrameLayout->addItem(spacer_0, 2, 2);
-
-    QSpacerItem* spacer_1 =
-	 new QSpacerItem(50, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-    noteFrameLayout->addItem(spacer_1, 2, 4);
-    
     // Velocity From/To
     m_velocityFromSpinBox = new QSpinBox(noteFrame);
     m_velocityFromSpinBox->setMaxValue(127);
@@ -212,20 +199,13 @@ EventFilterDialog::initDialog()
     // Duration From/To
     m_noteDurationFromComboBox = new QComboBox(0, noteFrame);
     m_noteDurationFromComboBox->insertItem(i18n("unlimited"));
-    m_noteDurationFromComboBox->setSizePolicy(QSizePolicy((QSizePolicy::SizeType)0,
-		(QSizePolicy::SizeType)0, 0, 0,
-		m_noteDurationFromComboBox->sizePolicy().hasHeightForWidth()));
     noteFrameLayout->addWidget(m_noteDurationFromComboBox, 3, 2);
     connect(m_noteDurationFromComboBox, SIGNAL(activated(int)),
 		SLOT(slotDurationFromChanged(int)));
 
     m_noteDurationToComboBox = new QComboBox(0, noteFrame);
     m_noteDurationToComboBox->insertItem(i18n("unlimited"));
-    m_noteDurationToComboBox->setSizePolicy(QSizePolicy((QSizePolicy::SizeType)0,
-		(QSizePolicy::SizeType)0, 0, 0,
-		m_noteDurationToComboBox->sizePolicy().hasHeightForWidth())); 
     noteFrameLayout->addWidget(m_noteDurationToComboBox, 3, 4);
-//    noteFrameLayout->addMultiCellWidget(m_noteDurationToComboBox, 3, 3, 2, 3);
     connect(m_noteDurationToComboBox, SIGNAL(activated(int)),
 	    	SLOT(slotDurationToChanged(int)));
 
@@ -309,16 +289,6 @@ EventFilterDialog::initDialog()
     connect(m_controllerValueToSpinBox, SIGNAL(valueChanged(int)),
 	    SLOT(slotValueToChanged(int)));
 
-    // Spacers
-    QSpacerItem* spacer_2 =
-	new QSpacerItem(121, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
-    controllerFrameLayout->addItem( spacer_2, 1, 3 );
-    
-    QSpacerItem* spacer_3 =
-	new QSpacerItem( 190, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
-    controllerFrameLayout->addItem( spacer_3, 1, 5 );
-
-
     //----------[ Wheel Filter Widgets ]--------------------------
     
     // Frame
@@ -371,20 +341,12 @@ EventFilterDialog::initDialog()
     connect(m_wheelAmountToSpinBox, SIGNAL(valueChanged(int)),
 	    SLOT(slotWheelToChanged(int)));
 
-    // Spacer
-    QSpacerItem* spacer_4 =
-	new QSpacerItem(121, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-    wheelFrameLayout->addMultiCell(spacer_4, 0, 1, 3, 3); 
-   
-    // Set Initial Size
-    resize( QSize(630, 375).expandedTo(minimumSizeHint()) );
-    
     // Force a sync with the checkboxes in the event that they were read false
     // from kconfig data.
     slotNoteCheckBoxToggle(0);
     slotControllerCheckBoxToggle(0);
     slotWheelCheckBoxToggle(0);
-} // end initDialog
+}
 
 // Populate the duration combos with a few reasonable values, including
 // pixmaps; as per the segment parameters widget in the main window
