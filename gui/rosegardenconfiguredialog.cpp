@@ -35,6 +35,7 @@
 #include <qpushbutton.h>
 #include <qradiobutton.h>
 #include <qlineedit.h>
+#include <qtooltip.h>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -819,17 +820,26 @@ SequencerConfigurationPage::SequencerConfigurationPage(
 
     QGridLayout *layout = new QGridLayout(frame, 4, 2, 10, 5);
 
-    layout->addMultiCellWidget(new QLabel(i18n("Sequencer command line options"), frame),
-                               1, 1,
+    QLabel *label = new QLabel("Send all MIDI Controllers at start of playback\n(will usually incur noticeable delay)", frame);
+
+    QString controllerTip = i18n("Rosegarden can send all MIDI Controllers (Pan, Reverb etc) to all\ndevices at the start of playback if you so wish.  This will usually\n take some time to perform however so be aware that this might make\nRosegarden appear less responsive when playback starts.");
+    QToolTip::add(label, controllerTip);
+    layout->addWidget(label, 1, 0);
+
+    m_sendControllersAtPlay = new QCheckBox(frame);
+    layout->addWidget(m_sendControllersAtPlay, 1, 1);
+    QToolTip::add(m_sendControllersAtPlay, controllerTip);
+
+    bool sendControllers = m_cfg->readBoolEntry("alwayssendcontrollers", false);
+    m_sendControllersAtPlay->setChecked(sendControllers);
+
+    layout->addMultiCellWidget(new QLabel(i18n("Sequencer command line options\n(any change made here will come into effect the next time you start Rosegarden)"), frame),
+                               3, 3,
                                0, 1);
 
-    layout->addWidget(new QLabel(i18n("Options:"), frame), 2, 0);
+    layout->addWidget(new QLabel(i18n("Options:"), frame), 4, 0);
     m_sequencerArguments = new QLineEdit("", frame);
-    layout->addWidget(m_sequencerArguments, 2, 1);
-
-    layout->addWidget(new QLabel(i18n("Any change made here will come into effect the next time you start Rosegarden."),
-                               frame),
-                               3, 1);
+    layout->addWidget(m_sequencerArguments, 4, 1);
 
     // Get the options
     //
@@ -844,6 +854,7 @@ SequencerConfigurationPage::apply()
 {
     m_cfg->setGroup("Sequencer Options");
     m_cfg->writeEntry("commandlineoptions", m_sequencerArguments->text());
+    m_cfg->writeEntry("alwayssendcontrollers", m_sendControllersAtPlay->isChecked());
 }
 
 // ---

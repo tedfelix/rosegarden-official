@@ -379,6 +379,7 @@ protected slots:
 protected:
 
     QLineEdit *m_sequencerArguments;
+    QCheckBox* m_sendControllersAtPlay;
 
 };
  

@@ -2763,6 +2763,15 @@ void RosegardenGUIApp::slotPlay()
         return;
     }
 
+    // Send the controllers at start of playback if required
+    //
+    KConfig *config = kapp->config();
+    config->setGroup("Sequencer Options");
+    bool sendControllers = config->readBoolEntry("alwayssendcontrollers", false);
+
+    if (sendControllers)
+        m_doc->initialiseControllers();
+
     try
     {
         m_seqManager->play();

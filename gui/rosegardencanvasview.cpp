@@ -95,9 +95,11 @@ void RosegardenCanvasView::slotScrollHoriz(int hpos)
 {
     QScrollBar* hbar = m_horizontalScrollBar;
 
+    /* Lots of performance hitting debug
     RG_DEBUG << "RosegardenCanvasView::slotScrollHoriz: hpos is " << hpos
 	     << ", contentsX is " << contentsX() << ", visibleWidth is "
 	     << visibleWidth() << endl;
+             */
 
     if (hpos == 0) {
 	
