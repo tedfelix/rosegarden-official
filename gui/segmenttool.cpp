@@ -285,6 +285,15 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
 	m_currentItem->setStartTime(newStartTime);
 
 	TrackId track = m_canvas->grid().getYBin(y);
+
+        int nbTracks = m_doc->getComposition().getNbTracks();
+
+        if (track >= nbTracks) {
+            // Make sure the item isn't dragged to below the last track
+            track = nbTracks - 1;
+            y = m_canvas->grid().getYBinCoordinate(track);
+        }
+
         m_currentItem->setTrack(track);
 
         m_foreGuide->setX(int(m_canvas->grid().getRulerScale()->
