@@ -172,7 +172,8 @@ PropertyStore<P>::unparse()
     return PropertyDefn<P>::unparse(m_data);
 }
 
-
+class ViewElement;
+typedef vector<ViewElement*> ViewElements;
 
 class Element2
 {
@@ -203,6 +204,9 @@ public:
     duration getDuration() const { return m_duration; }
     void setDuration(duration d)      { m_duration = d; }
 
+    ViewElements& viewElements()             { return *m_viewElements; }
+    const ViewElements& viewElements() const { return *m_viewElements; }
+
     bool has(const string &name) const;
 
     template <PropertyType P>
@@ -228,6 +232,9 @@ private:
     string m_package;
     string m_type;
     duration m_duration;
+
+    /// The ViewElements this Event corresponds to (one per View type)
+    ViewElements *m_viewElements;
 
     //    typedef map<string, PropertyStoreBase *> PropertyMap;
     typedef hash_map<string, PropertyStoreBase*, hashstring, eqstring> PropertyMap;
@@ -303,9 +310,24 @@ Element2::setFromString(const string &name, string value)
 // Std
 #include <list>
 
-// see rosegarden/docs/discussion/names.txt
+// see rosegarden/docs/discussion/names.txt - Events are the basic datatype
 typedef Element2 Event;
 typedef list<Event*> EventList;
 
+
+class ViewElement
+{
+public:
+    ViewElement(Event*);
+    virtual ~ViewElement();
+
+    const Event* event() const { return m_event; }
+    Event*       event()       { return m_event; }
+
+protected:
+    Event *m_event;
+};
+
+typedef list<ViewElement*> ViewElementList;
 
 #endif

@@ -65,11 +65,17 @@ PropertyStoreBase::~PropertyStoreBase()
 
 
 Element2::Element2()
-{ }
+    : m_duration(0),
+      m_viewElements(0)
+{
+}
 
 Element2::Element2(const string &package, const string &type)
-    : m_package(package), m_type(type)
-{ }
+    : m_package(package),
+      m_type(type),
+      m_viewElements(0)
+{
+}
 
 Element2::Element2(const Element2 &e)
 {
@@ -79,6 +85,7 @@ Element2::Element2(const Element2 &e)
 Element2::~Element2()
 {
     scrapMap();
+    delete m_viewElements;
 }
 
 Element2&
@@ -109,10 +116,26 @@ Element2::scrapMap()
 void
 Element2::copyFrom(const Element2 &e)
 {
+    delete m_viewElements;
     scrapMap();
+
     for (PropertyMap::const_iterator i = e.m_properties.begin();
          i != e.m_properties.end(); ++i) {
         m_properties.insert(PropertyPair((*i).first, (*i).second->clone()));
     }
+
+    m_viewElements = new ViewElements(e.viewElements());
 }
+
+
+
+ViewElement::ViewElement(Event *e)
+    : m_event(e)
+{
+}
+
+ViewElement::~ViewElement()
+{
+}
+
 
