@@ -82,10 +82,9 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     kdDebug(KDEBUG_AREA) << "MatrixView : creating canvas view\n";
 
     MatrixCanvasView *canvasView =
-	new MatrixCanvasView(*m_staffs[0], tCanvas, m_centralFrame);
+	new MatrixCanvasView(*m_staffs[0], m_horizontalScrollBar,
+                             tCanvas, m_centralFrame);
     setCanvasView(canvasView);
-
-//    setCentralWidget(m_canvasView);
 
     QObject::connect
         (getCanvasView(), SIGNAL(activeItemPressed(QMouseEvent*, QCanvasItem*)),
@@ -123,16 +122,14 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
         }
     }
 
-//     BarButtons *topBarButtons = new BarButtons
-// 	(m_hlayout, 25, false, m_topBarButtonsView);
-//     topBarButtons->connectRulerToDocPointer(doc);
-//     topBarButtons->setMinimumWidth(canvas()->width());
-//     m_topBarButtonsView->addChild(topBarButtons);
+    BarButtons *topBarButtons = new BarButtons(m_hlayout, 25,
+                                               false, m_centralFrame);
+    topBarButtons->connectRulerToDocPointer(doc);
+    setTopBarButtons(topBarButtons);
 
-//     BarButtons *bottomBarButtons = new BarButtons
-// 	(m_hlayout, 25, true, m_bottomBarButtonsView);
-//     bottomBarButtons->setMinimumWidth(canvas()->width());
-//     m_bottomBarButtonsView->addChild(bottomBarButtons);
+    BarButtons *bottomBarButtons = new BarButtons(m_hlayout, 25,
+                                                  true, m_centralFrame);
+    setBottomBarButtons(bottomBarButtons);
 }
 
 MatrixView::~MatrixView()
