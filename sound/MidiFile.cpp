@@ -409,7 +409,7 @@ MidiFile::convertToRosegarden()
   bool noteOffFound;
   bool notesOnTrack;
 
-  Rosegarden::Composition *composition = new Composition(_numberOfTracks);
+  Rosegarden::Composition *composition = new Composition;
 
   // preset tempo to zero
   composition->setTempo(0);
