@@ -18,6 +18,7 @@ rosegarden_SOURCES = \
 	qcanvasgroupableitem.cpp \
 	qcanvasitemgroup.cpp \
 	qcanvaslinegroupable.cpp \
+	qcanvasrectanglegroupable.cpp \
 	qcanvassimplesprite.cpp \
 	qcanvasspline.cpp \
 	qcanvasspritegroupable.cpp \
