@@ -1336,10 +1336,10 @@ MatrixView::slotChangeHorizontalZoom(int)
     m_canvasView->setWorldMatrix(zoomTransfo);
 
     BarButtons* barButtons = dynamic_cast<BarButtons*>(m_topBarButtons);
-    if (barButtons) barButtons->setHorizScaleFactor(value);
+    if (barButtons) barButtons->setHScaleFactor(value);
 
     barButtons = dynamic_cast<BarButtons*>(m_bottomBarButtons);
-    if (barButtons) barButtons->setHorizScaleFactor(value);
+    if (barButtons) barButtons->setHScaleFactor(value);
 
 //     for (unsigned int i = 0; i < m_staffs.size(); ++i)
 //     {

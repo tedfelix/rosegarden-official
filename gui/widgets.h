@@ -226,6 +226,17 @@ private:
     bool m_changedCursor;
 };
    
-			      
+class HZoomable
+{
+public:
+    HZoomable() : m_hScaleFactor(1.0) {}
+
+    void setHScaleFactor(double dy) { m_hScaleFactor = dy; }
+    double getHScaleFactor()        { return m_hScaleFactor; }
+
+protected:    
+    double m_hScaleFactor;
+};
+
 
 #endif // _WIDGETS_H_

@@ -107,6 +107,8 @@ ControlRuler::paintEvent(QPaintEvent* e)
 {
     QPainter paint(this);
 
+    if (getHScaleFactor() != 1.0) paint.scale(getHScaleFactor(), 1.0);
+
     paint.setPen(RosegardenGUIColours::MatrixElementBorder);
 
     if (m_velocityColour == 0)

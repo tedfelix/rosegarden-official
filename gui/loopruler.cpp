@@ -91,6 +91,8 @@ void LoopRuler::paintEvent(QPaintEvent* e)
 {
     QPainter paint(this);
 
+    if (getHScaleFactor() != 1.0) paint.scale(getHScaleFactor(), 1.0);
+
     paint.setClipRegion(e->region());
     paint.setClipRect(e->rect().normalize());
 

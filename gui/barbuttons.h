@@ -58,7 +58,7 @@ public:
     
     void setMinimumWidth(int width);
 
-    void setHorizScaleFactor(double dy);
+    void setHScaleFactor(double dy);
 
 public slots:
     void slotScrollHoriz(int x);

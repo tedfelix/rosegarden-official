@@ -23,10 +23,11 @@
 #ifndef _CONTROLRULER_H_
 #define _CONTROLRULER_H_
 
-#include <qwidget.h>
 #include <qstring.h>
 
 #include "PropertyName.h"
+
+#include "widgets.h"
 
 namespace Rosegarden
 {
@@ -47,7 +48,7 @@ class VelocityColour;
  *
  */
 
-class ControlRuler : public QWidget
+class ControlRuler : public QWidget, public HZoomable
 {
     Q_OBJECT
 

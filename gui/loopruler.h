@@ -23,12 +23,12 @@
 #ifndef _LOOPRULER_H_
 #define _LOOPRULER_H_
 
-#include <qwidget.h>
 #include "Event.h"
 #include "RulerScale.h"
 #include "SnapGrid.h"
-#include "rosegardenguidoc.h"
 
+#include "rosegardenguidoc.h"
+#include "widgets.h"
 
 /**
  * LoopRuler is a widget that shows bar and beat durations on a
@@ -36,7 +36,7 @@
  * signals to modify position pointer and playback/looping states.
 */
 
-class LoopRuler : public QWidget
+class LoopRuler : public QWidget, public HZoomable
 {
     Q_OBJECT
 
@@ -56,6 +56,8 @@ public:
     void scrollHoriz(int x);
 
     void setMinimumWidth(int width) { m_width = width; }
+
+    void setHorizScaleFactor(double dy) { m_hScaleFactor = dy; }
 
 public slots:
     void slotSetLoopingMode(bool value);

@@ -34,7 +34,7 @@ using Rosegarden::RulerScale;
 
 
 
-class BarButtonsWidget : public QWidget
+class BarButtonsWidget : public QWidget, public HZoomable
 {
 public:
     BarButtonsWidget(Rosegarden::RulerScale *rulerScale,
@@ -53,8 +53,6 @@ public:
 
     void setWidth(int width) { m_width = width; }
 
-    void setHorizScaleFactor(double dy) { m_hScaleFactor = dy; }
-
 protected:
     virtual void paintEvent(QPaintEvent*);
 
@@ -63,8 +61,6 @@ protected:
     double m_xorigin;
     int m_currentXOffset;
     int m_width;
-
-    double m_hScaleFactor;
 
     QFont *m_barFont;
 
@@ -142,9 +138,10 @@ void BarButtons::setMinimumWidth(int width)
     m_loopRuler->setMinimumWidth(width);
 }
 
-void BarButtons::setHorizScaleFactor(double dy)
+void BarButtons::setHScaleFactor(double dy)
 {
-    m_hButtonBar->setHorizScaleFactor(dy);
+    m_hButtonBar->setHScaleFactor(dy);
+    m_loopRuler->setHScaleFactor(dy);
 }
 
 
@@ -177,7 +174,6 @@ BarButtonsWidget::BarButtonsWidget(RulerScale *rulerScale,
       m_xorigin(xorigin),
       m_currentXOffset(0),
       m_width(-1),
-      m_hScaleFactor(1.0),
       m_rulerScale(rulerScale)
 {
 //    m_barFont = new QFont("helvetica", 12);
@@ -221,8 +217,7 @@ void BarButtonsWidget::paintEvent(QPaintEvent*)
     QPainter painter(this);
     painter.setFont(*m_barFont);
 
-    if (m_hScaleFactor != 1.0)
-        painter.scale(m_hScaleFactor, 1.0);
+    if (getHScaleFactor() != 1.0) painter.scale(getHScaleFactor(), 1.0);
 
     QRect clipRect = visibleRect();
 
