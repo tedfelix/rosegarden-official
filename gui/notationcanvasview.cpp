@@ -100,7 +100,9 @@ NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
 
 void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 {
-    kdDebug(KDEBUG_AREA) << "NotationCanvasView::contentsMousePressEvent()\n";
+    kdDebug(KDEBUG_AREA) << "NotationCanvasView::contentsMousePressEvent() - btn : "
+                         << e->button() << " - state : " << e->state()
+                         << endl;
 
     QCanvasItemList itemList = canvas()->collisions(e->pos());
 
@@ -179,6 +181,13 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
                          e, &(sprite->getNotationElement()));
     else
         handleMousePress(m_currentHighlightedLine, staffNo, e);
+}
+
+void NotationCanvasView::contentsMouseDoubleClickEvent(QMouseEvent* e)
+{
+        kdDebug(KDEBUG_AREA) << "NotationCanvasView::contentsMouseDoubleClickEvent()\n";
+    
+    contentsMousePressEvent(e);
 }
 
 

@@ -50,21 +50,6 @@ public:
 
     ~NotationCanvasView();
 
-    /**
-     * Callback for a mouse button press event in the canvas
-     */
-    virtual void contentsMousePressEvent(QMouseEvent *e);
-
-    /**
-     * Callback for a mouse button release event in the canvas
-     */
-    virtual void contentsMouseReleaseEvent(QMouseEvent *e);
-
-    /**
-     * Callback for a mouse move event in the canvas
-     */
-    virtual void contentsMouseMoveEvent(QMouseEvent *e);
-
 // Used for a note-shaped cursor - leaving around just in case
 //     void setCurrentNotePixmap(QCanvasPixmap note);
 
@@ -122,6 +107,27 @@ signals:
     void mouseRelease(QMouseEvent*);
     
 protected:
+
+    /**
+     * Callback for a mouse button press event in the canvas
+     */
+    virtual void contentsMousePressEvent(QMouseEvent*);
+
+    /**
+     * Callback for a mouse button release event in the canvas
+     */
+    virtual void contentsMouseReleaseEvent(QMouseEvent*);
+
+    /**
+     * Callback for a mouse move event in the canvas
+     */
+    virtual void contentsMouseMoveEvent(QMouseEvent*);
+
+    /**
+     * Callback for a mouse double click event in the canvas
+     */
+    virtual void contentsMouseDoubleClickEvent(QMouseEvent*);
+
     void processActiveItems(QMouseEvent*, QCanvasItemList);
 
     void handleMousePress(const StaffLine*, int staffNo,
