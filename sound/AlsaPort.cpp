@@ -51,6 +51,7 @@ AlsaPortDescription::AlsaPortDescription(Instrument::InstrumentType type,
                                          int client,
                                          int port,
 					 unsigned int clientType,
+					 unsigned int portType,
 					 unsigned int capability,
                                          PortDirection direction):
         m_type(type),
@@ -58,6 +59,7 @@ AlsaPortDescription::AlsaPortDescription(Instrument::InstrumentType type,
         m_client(client),
         m_port(port),
 	m_clientType(clientType),
+	m_portType(portType),
 	m_capability(capability),
         m_direction(direction)
 {

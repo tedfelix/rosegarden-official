@@ -49,6 +49,7 @@ public:
                         int client,
                         int port,
 			unsigned int clientType,
+			unsigned int portType,
 			unsigned int capability,
                         PortDirection direction);
 
@@ -57,6 +58,7 @@ public:
     int                        m_client;
     int                        m_port;
     unsigned int               m_clientType;
+    unsigned int               m_portType;
     unsigned int               m_capability;
     PortDirection              m_direction; // or can deduce from capability
 
