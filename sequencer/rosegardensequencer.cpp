@@ -353,10 +353,6 @@ RosegardenSequencerApp::updateClocks()
         m_transportStatus != RECORDING_AUDIO)
         return;
 
-    // Remap the position pointer
-    //
-    m_sequencerMapper.updatePositionPointer(m_sequencer->getSequencerTime());
-
     QByteArray data, replyData;
     QCString replyType;
     QDataStream arg(data, IO_WriteOnly);
@@ -397,6 +393,11 @@ RosegardenSequencerApp::updateClocks()
             newPosition = m_sequencer->getStartPosition();
     }
 
+    // Remap the position pointer
+    //
+    m_sequencerMapper.updatePositionPointer(newPosition);
+
+    /*
     arg << newPosition.sec;
     arg << newPosition.usec;
 
@@ -413,6 +414,7 @@ RosegardenSequencerApp::updateClocks()
         //
         stop();
     }
+    */
 
 }
 

@@ -1119,11 +1119,15 @@ public slots:
      */
     void slotMarkerEditorClosed();
 
-
     /**
      * when AudioManagerDialog is being closed
      */
     void slotAudioManagerClosed();
+
+    /**
+     * Update the pointer position from the sequencer mmapped file when playing
+     */
+    void slotUpdatePlaybackPosition();
 
 private:
 
@@ -1227,6 +1231,10 @@ private:
     static const char* const MainWindowConfigGroup;
 
     static RosegardenGUIApp *m_myself;
+
+    // Used to fetch the current sequencer position from the mmapped sequencer information file
+    //
+    QTimer*  m_playTimer;
 };
 
 /**

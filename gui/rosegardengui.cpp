@@ -107,6 +107,7 @@
 #include "studiocommands.h"
 #include "rgapplication.h"
 #include "playlist.h"
+#include "sequencermapper.h"
 
 //!!! ditch these when harmonize() moves out
 #include "CompositionTimeSliceAdapter.h"
@@ -141,7 +142,8 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
       m_playList(0),
       m_deviceManager(0),
       m_bankEditor(0),
-      m_markerEditor(0)
+      m_markerEditor(0),
+      m_playTimer(new QTimer(this))
 {
     m_myself = this;
 
@@ -1024,6 +1026,10 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
     // connect and start the autosave timer
     connect(m_autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
     m_autoSaveTimer->start(m_doc->getAutoSavePeriod() * 1000);
+
+    // Connect the playback timer
+    //
+    connect(m_playTimer, SIGNAL(timeout()), this, SLOT(slotUpdatePlaybackPosition()));
 
     // finally recreate the main view
     //
@@ -2858,21 +2864,29 @@ void RosegardenGUIApp::setPointerPosition(long posSec,
     //
     if (elapsedTime >= comp.getEndMarker())
         slotStop();
-
-    /*
-    if (m_seqManager)
-    {
-        long* ptr = (long*)m_seqManager->getSequencerMapper();
-        long sec = *(ptr++);
-        long usec = *ptr;
-        Rosegarden::RealTime position(sec, usec);
-
-        std::cout << "SEQUENCER POSITION = " << position << std::endl;
-    }
-    */
-
-    return;
 }
+
+void
+RosegardenGUIApp::slotUpdatePlaybackPosition()
+{
+    if (!m_seqManager) return;
+
+    long* ptr = (long*)m_seqManager->getSequencerMapper()->getBuffer();
+    long sec = *(ptr++);
+    long usec = *ptr;
+    Rosegarden::RealTime position(sec, usec);
+
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    timeT elapsedTime = comp.getElapsedTimeForRealTime(position);
+
+    m_originatingJump = true;
+    m_doc->setPointerPosition(elapsedTime);
+    m_originatingJump = false;
+
+    if (elapsedTime >= comp.getEndMarker())
+        slotStop();
+}
+
 
 void
 RosegardenGUIApp::slotSetPointerPosition(Rosegarden::RealTime time)
@@ -3656,6 +3670,10 @@ RosegardenGUIApp::slotRecord()
     // plugin the keyboard accelerators for focus on this dialog
     plugAccelerators(m_seqManager->getCountdownDialog(),
                      m_seqManager->getCountdownDialog()->getAccelerators());
+
+    // Start the playback timer - this fetches the current sequencer position every 20ms
+    //
+    m_playTimer->start(20); // 20ms update
 }
 
 // Toggling record whilst stopped prepares us for record next time we
@@ -3755,6 +3773,10 @@ void RosegardenGUIApp::slotPlay()
     {
         KMessageBox::error(this, s);
     }
+
+    // Start the playback timer - this fetches the current sequencer position every 20ms
+    //
+    m_playTimer->start(20);
 }
 
 // Send stop request to Sequencer.  This'll set the flag 
@@ -3764,6 +3786,9 @@ void RosegardenGUIApp::slotStop()
 {
     if (m_seqManager)
         m_seqManager->stopping();
+
+    // stop the playback timer
+    m_playTimer->stop();
 }
 
 // Jump to previous bar
