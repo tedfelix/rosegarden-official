@@ -182,8 +182,11 @@ class RosegardenGUIApp : public KMainWindow
     /** print the actual file */
     void slotFilePrint();
 
-    /** closes all open windows by calling close() on each memberList item until the list is empty, then quits the application.
-     * If queryClose() returns false because the user canceled the saveModified() dialog, the closing breaks.
+    /**
+     * closes all open windows by calling close() on each memberList
+     * item until the list is empty, then quits the application.  If
+     * queryClose() returns false because the user canceled the
+     * saveModified() dialog, the closing breaks.
      */
     void slotFileQuit();
 
@@ -225,6 +228,9 @@ class RosegardenGUIApp : public KMainWindow
      * @param text the text that is displayed in the statusbar
      */
     void slotStatusHelpMsg(const QString &text);
+
+    void slotWhole();
+
 
 private:
 

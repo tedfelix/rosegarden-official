@@ -84,11 +84,11 @@ void RosegardenGUIApp::setupActions()
     m_fileRecent = KStdAction::openRecent(this,
                                           SLOT(slotFileOpenRecent(const KURL&)),
                                           actionCollection());
-    KStdAction::save  (this, SLOT(slotFileSave()),     actionCollection());
-    KStdAction::saveAs(this, SLOT(slotFileSaveAs()),  actionCollection());
-    KStdAction::close (this, SLOT(slotFileClose()),    actionCollection());
+    KStdAction::save  (this, SLOT(slotFileSave()),          actionCollection());
+    KStdAction::saveAs(this, SLOT(slotFileSaveAs()),        actionCollection());
+    KStdAction::close (this, SLOT(slotFileClose()),         actionCollection());
     KStdAction::print (this, SLOT(slotFilePrint()),         actionCollection());
-    KStdAction::quit  (this, SLOT(slotFileQuit()),         actionCollection());
+    KStdAction::quit  (this, SLOT(slotFileQuit()),          actionCollection());
 
     // setup edit menu
     KStdAction::undo     (this, SLOT(slotEditUndo()),       actionCollection());
@@ -107,8 +107,12 @@ void RosegardenGUIApp::setupActions()
     KStdAction::keyBindings      (this, SLOT(editKeys()),     actionCollection());
     KStdAction::configureToolbars(this, SLOT(editToolbars()), actionCollection());
 
-//     createGUI("rosegardenui.rc");
-    createGUI(); // we don't have non-standard actions for the moment
+    // setup Notes menu
+    new KAction(i18n("Whole"), 0, this,
+                SLOT(slotWhole()), actionCollection(), "whole_note" );
+
+    createGUI("rosegardenui.rc");
+    // createGUI(); // we don't have non-standard actions for the moment
     
 }
 
@@ -306,7 +310,7 @@ void RosegardenGUIApp::readProperties(KConfig* _cfg)
             }
         }
 
-    QString caption=kapp->caption();	
+    QString caption=kapp->caption();
     setCaption(caption+": "+m_doc->getTitle());
 }		
 
@@ -584,3 +588,7 @@ void RosegardenGUIApp::slotStatusHelpMsg(const QString &text)
     statusBar()->message(text, 2000);
 }
 
+void RosegardenGUIApp::slotWhole()
+{
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotWhole()\n";
+}
