@@ -1888,7 +1888,7 @@ MatrixView::slotChangeHorizontalZoom(int)
     // Set zoom matrix
     //
     QWMatrix zoomMatrix;
-    zoomMatrix.scale(1.0 / zoomValue, 1.0);
+    zoomMatrix.scale(zoomValue, 1.0);
     m_canvasView->setWorldMatrix(zoomMatrix);
 
     // make control rulers zoom too
