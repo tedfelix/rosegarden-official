@@ -11,6 +11,7 @@
 	<event type="note" duration="quarter" pitch="6"/>
 	<event type="note" duration="quarter" pitch="7"/>
 	<event type="note" duration="quarter" pitch="8"/>
+	<event type="keychange" key="0"/>
 	<event type="note" duration="quarter" pitch="9"/>
 	<event type="note" duration="quarter" pitch="10"/>
 	<event type="note" duration="quarter" pitch="11"/>
