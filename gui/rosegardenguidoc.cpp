@@ -414,12 +414,16 @@ RosegardenGUIDoc::createNewSegment(SegmentItem *p, int track)
 			 << startIndex << ", duration = " << duration << endl;
 
     newSegment->setStartIndex(startIndex);
-    newSegment->setDuration(duration);
 
     // Now we can add the segment to the composition, because its start index
     // has been set
     //
     m_composition.addSegment(newSegment);
+
+    // And we can set its duration, because it's been added to the
+    // Composition
+    //
+    newSegment->setDuration(duration);
 
     // store ptr to new segment in segment part item
     p->setSegment(newSegment);
