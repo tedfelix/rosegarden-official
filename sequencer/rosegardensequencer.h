@@ -181,7 +181,7 @@ public:
     virtual Rosegarden::MappedDevice getMappedDevice(unsigned int id);
 
     virtual int canReconnect(int deviceType);
-    virtual unsigned int addDevice(int type);
+    virtual unsigned int addDevice(int type, unsigned int direction);
     virtual void removeDevice(unsigned int id);
     virtual unsigned int getConnections(unsigned int deviceId);
     virtual QString getConnection(unsigned int deviceId,

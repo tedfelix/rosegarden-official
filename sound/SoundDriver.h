@@ -313,7 +313,8 @@ public:
 
     virtual bool canReconnect(Device::DeviceType) { return false; }
 
-    virtual DeviceId addDevice(Device::DeviceType) {
+    virtual DeviceId addDevice(Device::DeviceType,
+			       MidiDevice::DeviceDirection) {
 	return 0; //!!! really need known No-Device id
     }
     virtual void removeDevice(DeviceId) { }

@@ -56,25 +56,25 @@ DeviceEditorDialog::DeviceEditorDialog(QWidget *parent,
     for (it = devices->begin(); it != devices->end(); ++it) {
 	if ((*it)->getType() == Rosegarden::Device::Midi) {
 	    Rosegarden::MidiDevice *md = dynamic_cast<Rosegarden::MidiDevice *>(*it);
-	    if (md && md->getDirection() != Rosegarden::MidiDevice::ReadOnly) {
-		validDevices.push_back(md);
-	    }
+	    validDevices.push_back(md);
 	}
     }
 
-    m_table = new QTable(validDevices.size(), 3, mainBox);
+    m_table = new QTable(validDevices.size(), 4, mainBox);
     m_table->setSorting(false);
     m_table->setRowMovingEnabled(false);
     m_table->setColumnMovingEnabled(false);
     m_table->setShowGrid(false);
     m_table->horizontalHeader()->setLabel(0, i18n("Device"));
-    m_table->horizontalHeader()->setLabel(1, i18n("Label"));
-    m_table->horizontalHeader()->setLabel(2, i18n("Connection"));
+    m_table->horizontalHeader()->setLabel(1, i18n("Name"));
+    m_table->horizontalHeader()->setLabel(2, i18n("Type"));
+    m_table->horizontalHeader()->setLabel(3, i18n("Connection"));
     m_table->horizontalHeader()->show();
     m_table->verticalHeader()->hide();
     m_table->setLeftMargin(0);
     m_table->setSelectionMode(QTable::SingleRow);
     m_table->setColumnReadOnly(0, true);
+    m_table->setColumnReadOnly(2, true);
 
     int deviceCount = 0;
 
@@ -84,8 +84,8 @@ DeviceEditorDialog::DeviceEditorDialog(QWidget *parent,
 	Rosegarden::MidiDevice *md = static_cast<Rosegarden::MidiDevice *>(*it);
 
 	Rosegarden::DeviceId id = md->getId();
-	QString deviceName = strtoqstr(md->getName());
-	QString deviceLabel = strtoqstr(md->getUserLabel());
+	QString deviceName = i18n("Device %1").arg(md->getId() + 1);
+	QString deviceLabel = strtoqstr(md->getName());
 	QString connectionName = strtoqstr(md->getConnection());
 
 	QStringList connectionList;
@@ -141,10 +141,13 @@ DeviceEditorDialog::DeviceEditorDialog(QWidget *parent,
 
 	m_table->setText(deviceCount, 0, deviceName);
 	m_table->setText(deviceCount, 1, deviceLabel);
+	m_table->setText(deviceCount, 2,
+			 (md->getDirection() == Rosegarden::MidiDevice::Play ?
+			  i18n("Play") : i18n("Record")));
 
 	QComboTableItem *item = new QComboTableItem(m_table, connectionList, false);
 	item->setCurrentItem(currentConnectionIndex);
-	m_table->setItem(deviceCount, 2, item);
+	m_table->setItem(deviceCount, 3, item);
 
 	m_table->adjustRow(deviceCount);
 	++deviceCount;
@@ -157,18 +160,29 @@ DeviceEditorDialog::DeviceEditorDialog(QWidget *parent,
     if (m_table->columnWidth(1) < 120) m_table->setColumnWidth(1, 120);
 
     m_table->adjustColumn(2);
-    if (m_table->columnWidth(2) < 200) m_table->setColumnWidth(2, 200);
+    if (m_table->columnWidth(2) < 80) m_table->setColumnWidth(2, 80);
+
+    m_table->adjustColumn(3);
+    if (m_table->columnWidth(3) < 200) m_table->setColumnWidth(3, 200);
 
     QHBox *hbox = new QHBox(mainBox);
-    QPushButton *addButton = new QPushButton(i18n("Add Device"), hbox);
+    QPushButton *addButton = new QPushButton(i18n("Add Play Device"), hbox);
+    QPushButton *addRButton = new QPushButton(i18n("Add Record Device"), hbox);
     QPushButton *deleteButton = new QPushButton(i18n("Delete Device"), hbox);
-    connect(addButton, SIGNAL(clicked()), this, SLOT(slotAddDevice()));
+    connect(addButton, SIGNAL(clicked()), this, SLOT(slotAddPlayDevice()));
+    connect(addRButton, SIGNAL(clicked()), this, SLOT(slotAddRecordDevice()));
     connect(deleteButton, SIGNAL(clicked()), this, SLOT(slotDeleteDevice()));
 }
 
 
 void
-DeviceEditorDialog::slotAddDevice()
+DeviceEditorDialog::slotAddPlayDevice()
+{
+    //...
+}
+
+void
+DeviceEditorDialog::slotAddRecordDevice()
 {
     //...
 }

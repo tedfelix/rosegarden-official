@@ -53,9 +53,6 @@ TrackButtons::getPresentationName(Rosegarden::Instrument *instr)
 	return i18n("<no instrument>");
     } else if (instr->getType() == Rosegarden::Instrument::Audio) {
 	return strtoqstr(instr->getName());
-    } else if (instr->getDevice()->getUserLabel() != "") {
-	return strtoqstr(instr->getDevice()->getUserLabel() + " " +
-			 instr->getName());
     } else {
 	return strtoqstr(instr->getDevice()->getName() + " " + 
 			 instr->getName());
@@ -912,10 +909,7 @@ TrackButtons::populateInstrumentPopup(Rosegarden::Instrument *thisTrackInstr)
             currentDevId = int(devId);
 
 	    QPopupMenu *subMenu = new QPopupMenu(this);
-	    
-	    QString deviceName = strtoqstr(device->getUserLabel());
-	    if (deviceName == "") deviceName = strtoqstr(device->getName());
-
+	    QString deviceName = strtoqstr(device->getName());
 	    m_instrumentPopup->insertItem(iconSet, deviceName, subMenu);
 	    m_instrumentSubMenu.push_back(subMenu);
 	    

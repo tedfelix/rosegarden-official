@@ -1192,22 +1192,17 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
     {
         if (mD->getType() == Rosegarden::Device::Midi)
         {
-	    //!!! oops -- converting from PortDirection (sound/MappedCommon.h)
-	    // to MidiDevice::DeviceDirection by just assuming they're the same
-
 	    device =
 		new Rosegarden::MidiDevice
 		(id,
-		 qstrtostr(QString("MIDI device %1").arg(id+1)),
 		 mD->getName(),
-		 Rosegarden::MidiDevice::DeviceDirection(mD->getDirection()));
+		 mD->getDirection());
 
             m_studio.addDevice(device);
 
             SEQMAN_DEBUG  << "RosegardenGUIDoc::getMappedDevice - "
                           << "adding MIDI Device \""
                           << device->getName() << "\" id = " << id
-			  << " label=\"" << device->getUserLabel() << "\""
 			  << endl;
         }
         else if (mD->getType() == Rosegarden::Device::Audio)

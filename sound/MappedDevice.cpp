@@ -32,7 +32,7 @@ MappedDevice::MappedDevice():
     m_type(Rosegarden::Device::Midi),
     m_name("Unnamed Device"),
     m_connection(""),
-    m_direction(Duplex)
+    m_direction(MidiDevice::Play)
 {
 }
 
@@ -45,7 +45,7 @@ MappedDevice::MappedDevice(Rosegarden::DeviceId id,
     m_type(type),
     m_name(name),
     m_connection(connection),
-    m_direction(Duplex)
+    m_direction(MidiDevice::Play)
 {
 }
 
@@ -136,7 +136,7 @@ operator>>(QDataStream &dS, MappedDevice *mD)
     mD->setType(Rosegarden::Device::DeviceType(dType));
     mD->setName(std::string(name.data()));
     mD->setConnection(connection.data());
-    mD->setDirection(PortDirection(direction));
+    mD->setDirection(MidiDevice::DeviceDirection(direction));
 
     if (instruments)
     {
@@ -177,7 +177,7 @@ operator>>(QDataStream &dS, MappedDevice &mD)
     mD.setType(Rosegarden::Device::DeviceType(dType));
     mD.setName(std::string(name.data()));
     mD.setConnection(connection.data());
-    mD.setDirection(PortDirection(direction));
+    mD.setDirection(MidiDevice::DeviceDirection(direction));
 
     if (instruments)
     {
@@ -225,26 +225,6 @@ operator<<(QDataStream &dS, const MappedDevice &mD)
 
     return dS;
 }
-
-/*!!!
-Rosegarden::MidiDevice::DeviceDirection
-MappedDevice::getDirection() const
-{
-    Rosegarden::MidiDevice::DeviceDirection direction = MidiDevice::WriteOnly;
-
-    for (MappedDeviceConstIterator it = this->begin(); it != this->end(); ++it)
-    {
-        if ((Rosegarden::MidiDevice::DeviceDirection((*it)->getDirection()))
-             != direction)
-        {
-            direction =
-                (Rosegarden::MidiDevice::DeviceDirection) (*it)->getDirection();
-        }
-    }
-
-    return direction;
-}
-*/
 
 }
 

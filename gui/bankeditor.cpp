@@ -688,7 +688,7 @@ BankEditorDialog::initDialog()
 	    if (!midiDevice) continue;
             
 	    // skip read-only devices
-	    if (midiDevice->getDirection() == Rosegarden::MidiDevice::ReadOnly)
+	    if (midiDevice->getDirection() == Rosegarden::MidiDevice::Record)
 		continue;
 
             m_deviceList.push_back(midiDevice->getName());

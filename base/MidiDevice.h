@@ -42,9 +42,8 @@ public:
 
     typedef enum
     {
-        ReadOnly,
-        WriteOnly,
-        Duplex
+	Play = 0,
+	Record = 1
     } DeviceDirection;
 
     MidiDevice();

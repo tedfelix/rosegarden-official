@@ -904,7 +904,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
             if (m_device && m_device->getType() == Rosegarden::Device::Midi) {
 		if (nameStr && nameStr != "") {
-		    m_device->setUserLabel(qstrtostr(nameStr));
+		    m_device->setName(qstrtostr(nameStr));
 		}
 	    } else if (nameStr && nameStr != "") {
 		//!!! add device
@@ -915,7 +915,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             m_device = getStudio().getDevice(id);
 
             if (m_device && m_device->getType() == Rosegarden::Device::Audio)
-                m_device->setUserLabel(qstrtostr(nameStr));
+                m_device->setName(qstrtostr(nameStr));
         }
         else
         {

@@ -979,12 +979,9 @@ SequencerConfigurationPage::SequencerConfigurationPage(
         Rosegarden::MidiDevice *dev =
             dynamic_cast<Rosegarden::MidiDevice*>(*it);
 
-        // Choose ReadOnly and Duplex devices here
-        //
-        if (dev && dev->getDirection() != MidiDevice::WriteOnly)
+        if (dev && dev->getDirection() == MidiDevice::Record)
         {
-	    QString label = strtoqstr(dev->getUserLabel());
-	    if (label == "") label = strtoqstr(dev->getName());
+	    QString label = strtoqstr(dev->getName());
 	    label += " (" + strtoqstr(dev->getConnection()) + ")";
 	    m_recordDevice->insertItem(label);
 	    m_devices.push_back(dev->getId());

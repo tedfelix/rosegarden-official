@@ -40,7 +40,7 @@ MidiDevice::MidiDevice():
     m_programList(new ProgramList()),
     m_bankList(new BankList()),
     m_metronome(0),
-    m_direction(WriteOnly),
+    m_direction(Play),
     m_librarian(std::pair<std::string, std::string>("<none>", "<none>"))
 {
     createInstruments();
@@ -59,22 +59,8 @@ MidiDevice::MidiDevice(DeviceId id,
     createInstruments();
 }
 
-MidiDevice::MidiDevice(DeviceId id,
-                       const std::string &name,
-                       const std::string &label,
-                       DeviceDirection dir):
-    Device(id, name, label, Device::Midi),
-    m_programList(new ProgramList()),
-    m_bankList(new BankList()),
-    m_metronome(0),
-    m_direction(dir),
-    m_librarian(std::pair<std::string, std::string>("<none>", "<none>"))
-{
-    createInstruments();
-}
-
 MidiDevice::MidiDevice(const MidiDevice &dev):
-    Device(dev.getId(), dev.getName(), dev.getUserLabel(), dev.getType()),
+    Device(dev.getId(), dev.getName(), dev.getType()),
     m_programList(new ProgramList()),
     m_bankList(new BankList()),
     m_metronome(0),
@@ -156,9 +142,6 @@ MidiDevice::operator=(const MidiDevice &dev)
     // clear down instruments list
     m_instruments.clear();
     m_presentationInstrumentList.clear();
-
-    // Device
-    m_label = dev.getUserLabel();
 
     // Create and assign a metronome if required
     //

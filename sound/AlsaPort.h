@@ -33,31 +33,6 @@
 namespace Rosegarden
 {
 
-#ifdef NOT_DEFINED
-// An AlsaPort represents one or more (usually 16) MappedInstruments.
-//
-//
-class AlsaPort
-{
-public:
-    AlsaPort(InstrumentId startId,
-             InstrumentId endId,
-             const std::string &name,
-             int client,
-             int port,
-             PortDirection direction);
-    ~AlsaPort();
-
-    InstrumentId  m_startId;
-    InstrumentId  m_endId;
-    std::string   m_name;
-    int           m_client;
-    int           m_port;
-    PortDirection m_direction; // read, write or duplex
-    unsigned int  m_type;      // MIDI, synth or what?
-};
-#endif
-
 typedef std::pair<int, int> ClientPortPair;
 
 // Use this to hold all client information so that we can sort it
@@ -80,6 +55,13 @@ public:
     int                        m_client;
     int                        m_port;
     PortDirection              m_direction;
+
+    bool isReadable()  { return m_direction == ReadOnly ||
+			        m_direction == Duplex; }
+
+    bool isWriteable() { return m_direction == WriteOnly ||
+			        m_direction == Duplex; }
+
 };
 
 // Sort by checking direction

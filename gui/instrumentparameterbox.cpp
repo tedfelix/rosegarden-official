@@ -1195,9 +1195,6 @@ getPresentationName(Rosegarden::Instrument *instr)
 	return i18n("<no instrument>");
     } else if (instr->getType() == Rosegarden::Instrument::Audio) {
 	return strtoqstr(instr->getName());
-    } else if (instr->getDevice()->getUserLabel() != "") {
-	return strtoqstr(instr->getDevice()->getUserLabel() + " " +
-			 instr->getName());
     } else {
 	return strtoqstr(instr->getDevice()->getName() + " " + 
 			 instr->getName());

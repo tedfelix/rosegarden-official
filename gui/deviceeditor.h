@@ -37,7 +37,8 @@ public:
     DeviceEditorDialog(QWidget *parent, RosegardenGUIDoc *document);
 
 protected slots:
-    void slotAddDevice();
+    void slotAddPlayDevice();
+    void slotAddRecordDevice();
     void slotDeleteDevice();
     void slotValueChanged(int row, int col);
 

@@ -116,7 +116,7 @@ static const float  _16bitSampleMax = (float)(0xffff/2);
 static bool _jackTransportEnabled;
 static bool _jackTransportMaster;
 
-static Rosegarden::MappedEvent _jackMappedEvent;
+static MappedEvent _jackMappedEvent;
 
 // How many passes through JACK's process loop before reporting
 // audio level.  So we avoid flooding.
@@ -375,13 +375,12 @@ AlsaDriver::generatePortList(AlsaPortList *newPorts)
 		int port   = snd_seq_port_info_get_port(pinfo);
 		
 		char portId[40];
-		sprintf(portId, "%d:%d", client, port);
+		sprintf(portId, "%d:%d ", client, port);
 
                 std::string fullClientName = 
                     std::string(snd_seq_port_info_get_name(pinfo));
 
-                std::string name =
-                    fullClientName + " (" + portId + ")";
+                std::string name = portId + fullClientName;
 
                 AlsaPortDescription *portDescription = 
                     new AlsaPortDescription(
@@ -419,8 +418,8 @@ AlsaDriver::generateInstruments()
     //
     m_deviceRunningId = 0;
     m_addedMetronome = false;
-    m_audioRunningId = Rosegarden::AudioInstrumentBase;
-    m_midiRunningId = Rosegarden::MidiInstrumentBase;
+    m_audioRunningId = AudioInstrumentBase;
+    m_midiRunningId = MidiInstrumentBase;
 
     // Clear these
     //
@@ -437,9 +436,24 @@ AlsaDriver::generateInstruments()
              << " port = " << (*it)->m_port << endl;
              */
 
-	MappedDevice *device = createMidiDevice(*it);
-	addInstrumentsForDevice(device);
-	m_devices.push_back(device);
+	if ((*it)->isWriteable()) {
+	    MappedDevice *device = createMidiDevice(*it, MidiDevice::Play);
+	    if (!device) {
+		std::cerr << "WARNING: Failed to create play device" << std::endl;
+	    } else {
+		addInstrumentsForDevice(device);
+		m_devices.push_back(device);
+	    }
+	}
+	if ((*it)->isReadable()) {
+	    MappedDevice *device = createMidiDevice(*it, MidiDevice::Record);
+	    if (!device) {
+		std::cerr << "WARNING: Failed to create record device" << std::endl;
+	    } else {
+		addInstrumentsForDevice(device);
+		m_devices.push_back(device);
+	    }
+	}
     }
 
 #ifdef HAVE_LIBJACK
@@ -469,7 +483,7 @@ AlsaDriver::generateInstruments()
             // Create a fader with a matching id - this is the starting
             // point for all audio faders.
             //
-            m_studio->createObject(Rosegarden::MappedObject::AudioFader,
+            m_studio->createObject(MappedObject::AudioFader,
                                    m_audioRunningId);
 
             /*
@@ -485,7 +499,7 @@ AlsaDriver::generateInstruments()
         //
         MappedDevice *device =
                         new MappedDevice(m_deviceRunningId,
-                                         Rosegarden::Device::Audio,
+                                         Device::Audio,
                                          "JACK Audio");
         m_devices.push_back(device);
 
@@ -496,16 +510,50 @@ AlsaDriver::generateInstruments()
 }
 
 MappedDevice *
-AlsaDriver::createMidiDevice(AlsaPortDescription *port)
+AlsaDriver::createMidiDevice(AlsaPortDescription *port,
+			     MidiDevice::DeviceDirection requestedDirection)
 {
     char clientId[60];
-    static int systemDeviceCounter = 1,
-	       hardwareDeviceCounter = 1,
-	       softwareDeviceCounter = 1,
-	       unknownDeviceCounter = 1;
+    std::string connectionName("");
+
+    static int unknownCounter;
+    static int counters[3][2]; // [system/hardware/software][out/in]
+    static const char *names[3][2] = {
+	{ "MIDI output system device %d", "MIDI input system device %d" },
+	{ "MIDI hardware synth %d", "MIDI hardware input device %d" },
+	{ "MIDI soft synth %d", "MIDI software input %d" }
+    };
+
+    const int SYSTEM = 0, HARDWARE = 1, SOFTWARE = 2;
+
+    if (port) {
+
+	if (requestedDirection == MidiDevice::Record &&
+	    !port->isReadable()) return 0;
+
+	if (requestedDirection == MidiDevice::Play &&
+	    !port->isWriteable()) return 0;
+
+	int type = (port->m_client <  64 ? SYSTEM :
+		    port->m_client < 128 ? HARDWARE : SOFTWARE);
+
+	sprintf(clientId,
+		names[type][requestedDirection],
+		++counters[type][requestedDirection]);
+
+	m_devicePortMap[m_deviceRunningId] = ClientPortPair(port->m_client,
+							    port->m_port);
+
+	connectionName = port->m_name;
+
+    } else {
+
+	sprintf(clientId, "Anonymous MIDI device %d", ++unknownCounter);
+    }
+
+#ifdef NOT_DEFINED
 
     PortDirection direction(Duplex);
-    std::string connectionName("");
 
     if (port) {
 
@@ -557,16 +605,15 @@ AlsaDriver::createMidiDevice(AlsaPortDescription *port)
 
 	sprintf(clientId, "Anonymous MIDI device %d", unknownDeviceCounter++);
     }
+#endif
 	
-    std::string clientName = clientId;
-    
     //!!! should reuse any unused ids instead of using m_deviceRunningId
 
     MappedDevice *device = new MappedDevice(m_deviceRunningId,
-					    Rosegarden::Device::Midi,
-					    clientName,
+					    Device::Midi,
+					    clientId,
 					    connectionName);
-    device->setDirection(direction);
+    device->setDirection(requestedDirection);
     ++m_deviceRunningId;
     return device;
 }
@@ -582,7 +629,7 @@ AlsaDriver::addInstrumentsForDevice(MappedDevice *device)
     // device we add.   This is accomplished by adding a
     // MappedInstrument for Instrument #0
     //
-    if (!m_addedMetronome && device->getDirection() != ReadOnly)
+    if (!m_addedMetronome && device->getDirection() != MidiDevice::Record)
     {
 	for (int channel = 0; channel < 16; ++channel)
 	{
@@ -620,28 +667,33 @@ AlsaDriver::addInstrumentsForDevice(MappedDevice *device)
     
 
 bool
-AlsaDriver::canReconnect(Rosegarden::Device::DeviceType type)
+AlsaDriver::canReconnect(Device::DeviceType type)
 {
-    return (type == Rosegarden::Device::Midi);
+    return (type == Device::Midi);
 }
 
 DeviceId
-AlsaDriver::addDevice(Rosegarden::Device::DeviceType type)
+AlsaDriver::addDevice(Device::DeviceType type,
+		      MidiDevice::DeviceDirection direction)
 {
-    if (type == Rosegarden::Device::Midi) {
+    if (type == Device::Midi) {
 
-	MappedDevice *device = createMidiDevice(0);
-	addInstrumentsForDevice(device);
-	m_devices.push_back(device);
+	MappedDevice *device = createMidiDevice(0, direction);
+	if (!device) {
+	    std::cerr << "WARNING: Device creation failed" << std::endl;
+	} else {
+	    addInstrumentsForDevice(device);
+	    m_devices.push_back(device);
 
-        MappedEvent *mE =
-            new MappedEvent(0, MappedEvent::SystemUpdateInstruments,
-                            0, 0);
-        insertMappedEventForReturn(mE);
+	    MappedEvent *mE =
+		new MappedEvent(0, MappedEvent::SystemUpdateInstruments,
+				0, 0);
+	    insertMappedEventForReturn(mE);
 
-	return device->getId();
+	    return device->getId();
+	}
     }
-    return 0; // would really like a known "no device" number
+    return 0; //!!! would really like a known "no device" number
 }
 
 void
@@ -1148,7 +1200,7 @@ AlsaDriver::stopPlayback()
 
     // reset the clock send time
     //
-    m_midiClockSendTime = Rosegarden::RealTime(0, 0);
+    m_midiClockSendTime = RealTime(0, 0);
 
     // Flush the output and input queues
     //
@@ -1501,7 +1553,7 @@ AlsaDriver::getMappedComposition(const RealTime &playLatency)
         return &m_recordComposition;
     }
 
-    Rosegarden::RealTime eventTime(0, 0);
+    RealTime eventTime(0, 0);
 
     snd_seq_event_t *event;
 
@@ -1711,9 +1763,9 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
                            const RealTime &playLatency,
                            bool now)
 {
-    Rosegarden::RealTime midiRelativeTime;
-    Rosegarden::RealTime midiRelativeStopTime;
-    Rosegarden::MappedInstrument *instrument;
+    RealTime midiRelativeTime;
+    RealTime midiRelativeStopTime;
+    MappedInstrument *instrument;
     ClientPortPair outputDevice;
     MidiByte channel;
     snd_seq_event_t *event = new snd_seq_event_t();
@@ -1800,7 +1852,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
                 // If we've got an "infinite" note then just noteon -
                 // else send the duration.
                 //
-                if ((*i)->getDuration() == Rosegarden::RealTime(-1, 0))
+                if ((*i)->getDuration() == RealTime(-1, 0))
                 {
                     snd_seq_ev_set_noteon(event,
                                           channel,
@@ -1968,7 +2020,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 //
 void
 AlsaDriver::processEventsOut(const MappedComposition &mC,
-                             const Rosegarden::RealTime &playLatency,
+                             const RealTime &playLatency,
                              bool now)
 {
     if (m_startPlayback)
@@ -1997,7 +2049,7 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
 
             if (audioFile)
             { 
-                Rosegarden::RealTime adjustedEventTime =
+                RealTime adjustedEventTime =
                     (*i)->getEventTime();
 
                 /*
@@ -2062,8 +2114,8 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
         //
         if ((*i)->getType() == MappedEvent::AudioCancel)
         {
-            cancelAudioFile(Rosegarden::InstrumentId((*i)->getInstrument()),
-                             Rosegarden::AudioFileId((*i)->getData1()));
+            cancelAudioFile(InstrumentId((*i)->getInstrument()),
+                             AudioFileId((*i)->getData1()));
         }
 
         if ((*i)->getType() == MappedEvent::SystemMIDIClock)
@@ -2153,8 +2205,8 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
 
         if ((*i)->getType() == MappedEvent::SystemRecordDevice)
         {
-            Rosegarden::DeviceId recordDevice =
-               (Rosegarden::DeviceId)((*i)->getData1());
+            DeviceId recordDevice =
+               (DeviceId)((*i)->getData1());
 
             // Unset connections
             //
@@ -2832,8 +2884,8 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                 float pan1 = 1.0f;
                 float pan2 = 1.0f;
 
-                Rosegarden::MappedAudioFader *fader =
-                    dynamic_cast<Rosegarden::MappedAudioFader*>
+                MappedAudioFader *fader =
+                    dynamic_cast<MappedAudioFader*>
                         (inst->getMappedStudio()->
                              getAudioFader((*it)->getInstrument()));
                 
@@ -3060,8 +3112,8 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                 {
                     float volume = 1.0f;
     
-                    Rosegarden::MappedAudioFader *fader =
-                        dynamic_cast<Rosegarden::MappedAudioFader*>
+                    MappedAudioFader *fader =
+                        dynamic_cast<MappedAudioFader*>
                             (inst->getMappedStudio()->
                                  getAudioFader((*it)->getInstrument()));
                 
@@ -3275,7 +3327,7 @@ AlsaDriver::createAudioFile(const std::string &fileName)
     // we're recording 32 bit float MONO audio.
     //
     _recordFile =
-        new Rosegarden::WAVAudioFile(fileName,
+        new WAVAudioFile(fileName,
                                      1,                    // channels
                                      _jackSampleRate,      // bits per second
                                      _jackSampleRate/16,   // bytes per second
@@ -3392,7 +3444,7 @@ AlsaDriver::checkForNewClients()
     MappedDeviceList::iterator it = m_devices.begin();
     for (; it != m_devices.end(); ++it)
     {
-        if ((*it)->getType() == Rosegarden::Device::Midi)
+        if ((*it)->getType() == Device::Midi)
             oldPortCount++;
     }
 */
@@ -3458,8 +3510,6 @@ AlsaDriver::checkForNewClients()
     // have none, where possible, and create new devices for
     // any left over.
     
-//!!!        generateInstruments();
-
     if (newPorts.size() > 0) {
 
 	std::cout << "New ports:" << std::endl;
@@ -3472,25 +3522,62 @@ AlsaDriver::checkForNewClients()
 	    ClientPortPair portPair = ClientPortPair((*i)->m_client,
 						     (*i)->m_port);
 	    
-	    bool allocated = false;
+	    bool needPlayDevice = true, needRecordDevice = true;
 
-	    for (MappedDeviceList::iterator j = m_devices.begin();
-		 j != m_devices.end(); ++j) {
-		if ((*j)->getConnection() == "") { //!!! check direction
-		    std::cout << "(Reusing device " << (*j)->getId()
-			      << ")" << std::endl;
-		    m_devicePortMap[(*j)->getId()] = portPair;
-		    (*j)->setConnection(portName);
-		    allocated = true;
-		    break;
+	    if ((*i)->isReadable()) {
+		for (MappedDeviceList::iterator j = m_devices.begin();
+		     j != m_devices.end(); ++j) {
+		    if ((*j)->getConnection() == "" &&
+			(*j)->getDirection() == MidiDevice::Record) {
+			std::cout << "(Reusing record device " << (*j)->getId()
+				  << ")" << std::endl;
+			m_devicePortMap[(*j)->getId()] = portPair;
+			(*j)->setConnection(portName);
+			needRecordDevice = false;
+			break;
+		    }
+		}
+	    } else {
+		needRecordDevice = false;
+	    }
+
+	    if ((*i)->isWriteable()) {
+		for (MappedDeviceList::iterator j = m_devices.begin();
+		     j != m_devices.end(); ++j) {
+		    if ((*j)->getConnection() == "" &&
+			(*j)->getDirection() == MidiDevice::Play) {
+			std::cout << "(Reusing play device " << (*j)->getId()
+				  << ")" << std::endl;
+			m_devicePortMap[(*j)->getId()] = portPair;
+			(*j)->setConnection(portName);
+			needPlayDevice = false;
+			break;
+		    }
+		}
+	    } else {
+		needPlayDevice = false;
+	    }
+
+	    if (needRecordDevice) {
+		MappedDevice *device = createMidiDevice(*i, MidiDevice::Record);
+		if (!device) {
+		    std::cerr << "WARNING: Failed to create record device" << std::endl;
+		} else {
+		    std::cout << "(Created new record device " << device->getId() << ")" << std::endl;
+		    addInstrumentsForDevice(device);
+		    m_devices.push_back(device);
 		}
 	    }
 
-	    if (!allocated) { // new device
-		MappedDevice *device = createMidiDevice(*i);
-		std::cout << "(Created new device " << device->getId() << ")" << std::endl;
-		addInstrumentsForDevice(device);
-		m_devices.push_back(device);
+	    if (needPlayDevice) {
+		MappedDevice *device = createMidiDevice(*i, MidiDevice::Play);
+		if (!device) {
+		    std::cerr << "WARNING: Failed to create play device" << std::endl;
+		} else {
+		    std::cout << "(Created new play device " << device->getId() << ")" << std::endl;
+		    addInstrumentsForDevice(device);
+		    m_devices.push_back(device);
+		}
 	    }
 	}
     }
@@ -3530,7 +3617,7 @@ AlsaDriver::setPluginInstanceBypass(InstrumentId id,
 // MIDI record device.
 //
 void
-AlsaDriver::setRecordDevice(Rosegarden::DeviceId id /*!!!, int port */)
+AlsaDriver::setRecordDevice(DeviceId id /*!!!, int port */)
 {
     // Locate a suitable port
     //
@@ -3547,8 +3634,10 @@ AlsaDriver::setRecordDevice(Rosegarden::DeviceId id /*!!!, int port */)
     sender.client = pair.first;
     sender.port = pair.second;
 
+    //!!! check direction
+
 #ifdef NOT_DEFINED
-    Rosegarden::InstrumentId typicalId = 0;
+    InstrumentId typicalId = 0;
 
     // Find a typical InstrumentId for this device
     //
@@ -3688,8 +3777,8 @@ AlsaDriver::unsetRecordDevices()
 
 // We send 
 void
-AlsaDriver::sendMMC(Rosegarden::MidiByte deviceId,
-                    Rosegarden::MidiByte instruction,
+AlsaDriver::sendMMC(MidiByte deviceId,
+                    MidiByte instruction,
                     bool isCommand,
                     const std::string &data)
 {
@@ -3805,9 +3894,9 @@ AlsaDriver::sendSystemDirect(MidiByte command, const std::string &args)
 
 
 void
-AlsaDriver::sendSystemQueued(Rosegarden::MidiByte command,
+AlsaDriver::sendSystemQueued(MidiByte command,
                              const std::string &args,
-                             const Rosegarden::RealTime &time)
+                             const RealTime &time)
 {
     snd_seq_addr_t sender, dest;
     sender.client = m_client;
@@ -3885,13 +3974,13 @@ AlsaDriver::sendMidiClock(const RealTime &playLatency)
     // Get the number of ticks in (say) two seconds
     //
     unsigned int numTicks =
-        (unsigned int)(Rosegarden::RealTime(10, 0)/
-                       Rosegarden::RealTime(0, m_midiClockInterval));
+        (unsigned int)(RealTime(10, 0)/
+                       RealTime(0, m_midiClockInterval));
 
     // First time through set the clock send time - this will also
     // ensure we send the first batch of clock events
     //
-    if (m_midiClockSendTime == Rosegarden::RealTime(0, 0))
+    if (m_midiClockSendTime == RealTime(0, 0))
     {
         m_midiClockSendTime = getAlsaTime() + playLatency;
         /*
@@ -3903,7 +3992,7 @@ AlsaDriver::sendMidiClock(const RealTime &playLatency)
     // then send a new batch of clock signals.
     //
     if ((getAlsaTime() + playLatency) >
-        (m_midiClockSendTime - Rosegarden::RealTime(0, 100000)))
+        (m_midiClockSendTime - RealTime(0, 100000)))
     {
         /*
         cout << "SENDING " << numTicks
@@ -3916,7 +4005,7 @@ AlsaDriver::sendMidiClock(const RealTime &playLatency)
 
             // increment send time
             m_midiClockSendTime = m_midiClockSendTime +
-                Rosegarden::RealTime(0, m_midiClockInterval);
+                RealTime(0, m_midiClockInterval);
         }
     }
 
@@ -3931,7 +4020,7 @@ AlsaDriver::sendMidiClock(const RealTime &playLatency)
         //
         long spp =
           long(((getAlsaTime() - m_alsaPlayStartTime + m_playStartPosition) /
-                         Rosegarden::RealTime(0, m_midiClockInterval)) / 6.0);
+                         RealTime(0, m_midiClockInterval)) / 6.0);
 
         // Only send if it's changed
         //

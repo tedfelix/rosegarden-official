@@ -920,9 +920,9 @@ RosegardenSequencerApp::canReconnect(int type)
 }
 
 unsigned int
-RosegardenSequencerApp::addDevice(int type)
+RosegardenSequencerApp::addDevice(int type, unsigned int direction)
 {
-    return m_sequencer->addDevice(type);
+    return m_sequencer->addDevice(type, direction);
 }
 
 void

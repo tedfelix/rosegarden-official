@@ -139,12 +139,13 @@ public:
     //
     virtual int canReconnect(int deviceType) = 0;
     
-    // Create a device of the given type and return its id.
-    // The device will have no connection by default, and will
-    // have Duplex direction until connected to something.
+    // Create a device of the given type and direction (corresponding
+    // to MidiDevice::DeviceDirection enum) and return its id.
+    // The device will have no connection by default.
     // Do not use this unless canReconnect(type) returned true.
+//!!! oops -- direction not used unless type == midi -- fix api please
     //
-    virtual unsigned int addDevice(int type) = 0;
+    virtual unsigned int addDevice(int type, unsigned int direction) = 0;
 
     // Remove the device of the given id.
     // Ignored if driver does not permit changing the number of devices

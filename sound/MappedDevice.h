@@ -75,8 +75,8 @@ public:
     std::string getConnection() const { return m_connection; }
     void setConnection(std::string connection) { m_connection = connection; }
 
-    PortDirection getDirection() const { return m_direction; }
-    void setDirection(PortDirection direction) { m_direction = direction; }
+    MidiDevice::DeviceDirection getDirection() const { return m_direction; }
+    void setDirection(MidiDevice::DeviceDirection direction) { m_direction = direction; }
 
 protected:
 
@@ -84,7 +84,7 @@ protected:
     Rosegarden::Device::DeviceType  m_type;
     std::string                     m_name;
     std::string                     m_connection;
-    PortDirection                   m_direction;
+    MidiDevice::DeviceDirection     m_direction;
 };
 
 typedef std::vector<Rosegarden::MappedInstrument*>::const_iterator

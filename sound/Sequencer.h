@@ -182,9 +182,10 @@ public:
 	return m_soundDriver->canReconnect(Rosegarden::Device::DeviceType(type));
     }
 
-    unsigned int addDevice(int type)
+    unsigned int addDevice(int type, unsigned int direction)
     {
-	return m_soundDriver->addDevice(Rosegarden::Device::DeviceType(type));
+	return m_soundDriver->addDevice(Rosegarden::Device::DeviceType(type),
+					Rosegarden::MidiDevice::DeviceDirection(direction));
     }
 
     void removeDevice(unsigned int deviceId)

@@ -77,7 +77,7 @@ public:
     virtual bool record(const RecordStatus& recordStatus);
 
     virtual void processEventsOut(const MappedComposition &mC,
-                                  const Rosegarden::RealTime &playLatency, 
+                                  const RealTime &playLatency, 
                                   bool now);
 
     // Return the sample rate
@@ -133,30 +133,31 @@ public:
 
     // Create and send an MMC command
     //
-    void sendMMC(Rosegarden::MidiByte deviceId,
-                 Rosegarden::MidiByte instruction,
+    void sendMMC(MidiByte deviceId,
+                 MidiByte instruction,
                  bool isCommand,
                  const std::string &data);
 
     // Send a System message straight away
     //
-    void sendSystemDirect(Rosegarden::MidiByte command,
+    void sendSystemDirect(MidiByte command,
                           const std::string &args);
 
     // Scheduled system message with arguments
     //
-    void sendSystemQueued(Rosegarden::MidiByte command,
+    void sendSystemQueued(MidiByte command,
                           const std::string &args,
-                          const Rosegarden::RealTime &time);
+                          const RealTime &time);
 
     // Set the record device
     //
-    void setRecordDevice(Rosegarden::DeviceId id /*!!!, int port */);
+    void setRecordDevice(DeviceId id /*!!!, int port */);
     void unsetRecordDevices();
 
-    virtual bool canReconnect(Rosegarden::Device::DeviceType type);
+    virtual bool canReconnect(Device::DeviceType type);
 
-    virtual DeviceId addDevice(Rosegarden::Device::DeviceType type);
+    virtual DeviceId addDevice(Device::DeviceType type,
+			       MidiDevice::DeviceDirection direction);
     virtual void removeDevice(DeviceId id);
 
     // Get available connections per device
@@ -228,7 +229,8 @@ protected:
     virtual void generatePortList(AlsaPortList *newPorts = 0);
     virtual void generateInstruments();
     void addInstrumentsForDevice(MappedDevice *device);
-    MappedDevice *createMidiDevice(AlsaPortDescription *);
+    MappedDevice *createMidiDevice(AlsaPortDescription *,
+				   MidiDevice::DeviceDirection);
 
     virtual void processMidiOut(const MappedComposition &mC,
                                 const RealTime &playLatency,

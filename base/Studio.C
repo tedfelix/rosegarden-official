@@ -58,7 +58,7 @@ Studio::addDevice(const std::string &name,
     switch(type)
     {
         case Device::Midi:
-            m_devices.push_back(new MidiDevice(id, name, MidiDevice::Duplex));
+            m_devices.push_back(new MidiDevice(id, name, MidiDevice::Play));
             break;
 
         case Device::Audio:
@@ -115,15 +115,15 @@ Studio::getPresentationInstruments()
         midiDevice = dynamic_cast<MidiDevice*>(*it);
 
         if (midiDevice)
-       {
-           // skip read-only devices
-          if (midiDevice->getDirection() == MidiDevice::ReadOnly)
-              continue;
-        }
-
+	{
+	    // skip read-only devices
+	    if (midiDevice->getDirection() == MidiDevice::Record)
+		continue;
+	}
+	
         // get sub list
         subList = (*it)->getPresentationInstruments();
-
+	
 
         // concetenate
         list.insert(list.end(), subList.begin(), subList.end());
@@ -171,7 +171,7 @@ Studio::getInstrumentFromList(int index)
         if (midiDevice)
 	{
           // skip read-only devices
-          if (midiDevice->getDirection() == MidiDevice::ReadOnly)
+          if (midiDevice->getDirection() == MidiDevice::Record)
               continue;
         }
 
@@ -292,7 +292,7 @@ Studio::assignMidiProgramToInstrument(MidiByte program,
     // then we're in trouble of course so we just default and see where
     // it takes us.
     //
-    MidiDevice::DeviceDirection direction = MidiDevice::WriteOnly;
+    MidiDevice::DeviceDirection direction = MidiDevice::Play;
     bool foundDuplex = false, foundWriteOnly = false;
 
     for (it = m_devices.begin(); it != m_devices.end(); it++)
@@ -302,22 +302,22 @@ Studio::assignMidiProgramToInstrument(MidiByte program,
         {
             switch ((midiDevice)->getDirection())
             {
-                case MidiDevice::WriteOnly:
+                case MidiDevice::Play:
                     foundWriteOnly = true;
                     break;
-
+/*!!!
                 case MidiDevice::Duplex:
                     foundDuplex = true;
                     break;
-
+*/
                 default:
                     break;
             }
         }
     }
 
-    if (foundWriteOnly) direction = MidiDevice::WriteOnly;
-    else if (foundDuplex) direction = MidiDevice::Duplex;
+    if (foundWriteOnly) direction = MidiDevice::Play;
+//    else if (foundDuplex) direction = MidiDevice::Duplex;
 
     // Pass one - search through all MIDI instruments looking for
     // a match that we can re-use.  i.e. if we have a matching 
