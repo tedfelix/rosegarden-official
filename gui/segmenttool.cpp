@@ -111,6 +111,9 @@ SegmentTool::SegmentTool(SegmentCanvas* canvas, RosegardenGUIDoc *doc)
       m_currentItem(0),
       m_doc(doc)
 {
+
+    connect(this,     SIGNAL(selectedSegments(const Rosegarden::SegmentSelection &)),
+            m_canvas, SIGNAL(selectedSegments(const Rosegarden::SegmentSelection &)));
 }
 
 SegmentTool::~SegmentTool()
@@ -124,15 +127,18 @@ void SegmentTool::ready()
 void 
 SegmentTool::handleRightButtonPress(QMouseEvent *e)
 {
+    RG_DEBUG << "SegmentTool::handleRightButtonPress()\n";
+
     SegmentItem *item = m_canvas->findSegmentClickedOn(e->pos());
 
     if (item) {
         m_currentItem = item;
         if (!item->isSelected()) {
+
             SegmentSelector* selector = dynamic_cast<SegmentSelector*>(getToolBox()->getTool("segmentselector"));
+            selector->slotSelectSegmentItem(item);
+            emit selectedSegments(selector->getSelectedSegments());
             
-            selector->clearSelected();
-            selector->addToSelection(item);
         }
     }
     
@@ -159,20 +165,6 @@ SegmentTool::createMenu()
         RG_DEBUG << "SegmentTool::createMenu() failed: !app\n";
     }
 }
-
-// //     setXMLFile(rcFileName);
-// //     m_parentView->factory()->addClient(this);
-
-// //     QWidget* tmp =  m_parentView->factory()->container(m_menuName, this);
-
-// //     if (!tmp)
-// //         RG_DEBUG << "EditTool::createMenu(" << rcFileName
-// //                  << ") : menu creation failed (name : "
-// //                  << m_menuName << ")\n";
-
-// //     m_menu = dynamic_cast<QPopupMenu*>(tmp);
-
-// }
 
 void
 SegmentTool::addCommandToHistory(KCommand *command)
@@ -566,9 +558,6 @@ SegmentSelector::SegmentSelector(SegmentCanvas *c, RosegardenGUIDoc *d)
     m_topGuide->setPen(RosegardenGUIColours::MovementGuide);
     m_topGuide->setBrush(RosegardenGUIColours::MovementGuide);
     m_topGuide->hide();
-
-    connect(this, SIGNAL(selectedSegments(const Rosegarden::SegmentSelection &)),
-            c,     SIGNAL(selectedSegments(const Rosegarden::SegmentSelection &)));
 }
 
 SegmentSelector::~SegmentSelector()
@@ -679,7 +668,7 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 
 	if (!m_segmentAddMode &&
 	    SegmentResizer::cursorIsCloseEnoughToEdge(item, e, threshold)) {
-            SegmentResizer* resizer = getToolBox()->getTool(SegmentResizer::ToolName);
+            SegmentResizer* resizer = dynamic_cast<SegmentResizer*>(getToolBox()->getTool(SegmentResizer::ToolName));
             resizer->setEdgeThreshold(threshold);
 
 	    m_dispatchTool = resizer;

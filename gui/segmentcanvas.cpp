@@ -870,7 +870,7 @@ void SegmentCanvas::updateSegmentItem(Segment *segment)
 void
 SegmentCanvas::addToSelection(Segment *segment)
 {
-    SegmentSelector* selTool = dynamic_cast<SegmentSelector*>(m_tool);
+    SegmentSelector* selTool = dynamic_cast<SegmentSelector*>(getToolBox()->getTool(SegmentSelector::ToolName));
     if (!selTool) return;
     selTool->addToSelection(segment);
 }
@@ -1066,7 +1066,7 @@ void SegmentCanvas::deleteRecordingSegmentItem()
 //
 void SegmentCanvas::slotSelectSegments(const SegmentSelection &segments)
 {
-    SegmentSelector* selTool = dynamic_cast<SegmentSelector*>(m_tool);
+    SegmentSelector* selTool = dynamic_cast<SegmentSelector*>(getToolBox()->getTool(SegmentSelector::ToolName));
 
     if (!selTool) return;
 
@@ -1099,7 +1099,7 @@ void SegmentCanvas::slotSelectSegments(const SegmentSelection &segments)
 SegmentSelection
 SegmentCanvas::getSelectedSegments()
 {
-    SegmentSelector* selTool = dynamic_cast<SegmentSelector*>(m_tool);
+    SegmentSelector* selTool = dynamic_cast<SegmentSelector*>(getToolBox()->getTool(SegmentSelector::ToolName));
 
     if (selTool)
         return selTool->getSelectedSegments();
@@ -1110,7 +1110,7 @@ SegmentCanvas::getSelectedSegments()
 bool
 SegmentCanvas::haveSelection()
 {
-    SegmentSelector* selTool = dynamic_cast<SegmentSelector*>(m_tool);
+    SegmentSelector* selTool = dynamic_cast<SegmentSelector*>(getToolBox()->getTool(SegmentSelector::ToolName));
 
     if (!selTool) return false;
     return (selTool->getSelectedSegments().size() > 0);
@@ -1119,7 +1119,7 @@ SegmentCanvas::haveSelection()
 void
 SegmentCanvas::clearSelected()
 {
-    SegmentSelector* selTool = dynamic_cast<SegmentSelector*>(m_tool);
+    SegmentSelector* selTool = dynamic_cast<SegmentSelector*>(getToolBox()->getTool(SegmentSelector::ToolName));
 
     if (selTool)
         return selTool->clearSelected();
@@ -1134,7 +1134,7 @@ SegmentCanvas::clearSelected()
 //
 void SegmentCanvas::slotSetSelectAdd(const bool &value)
 {
-    SegmentSelector* selTool = dynamic_cast<SegmentSelector*>(m_tool);
+    SegmentSelector* selTool = dynamic_cast<SegmentSelector*>(getToolBox()->getTool(SegmentSelector::ToolName));
 
     if (!selTool) return;
 
@@ -1150,7 +1150,7 @@ void SegmentCanvas::slotSetSelectAdd(const bool &value)
 //
 void SegmentCanvas::slotSetSelectCopy(const bool &value)
 {
-    SegmentSelector* selTool = dynamic_cast<SegmentSelector*>(m_tool);
+    SegmentSelector* selTool = dynamic_cast<SegmentSelector*>(getToolBox()->getTool(SegmentSelector::ToolName));
 
     if (!selTool) return;
 

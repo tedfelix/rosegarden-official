@@ -47,6 +47,7 @@ namespace Rosegarden { class RulerScale; }
 
 class SegmentTool : public BaseTool
 {
+    Q_OBJECT
 public:
     friend class SegmentToolBox;
 
@@ -65,6 +66,9 @@ public:
     virtual int  handleMouseMove(QMouseEvent*)            = 0;
 
     void addCommandToHistory(KCommand *command);
+
+signals:
+    void selectedSegments(const Rosegarden::SegmentSelection &);
 
 protected:
     SegmentTool(SegmentCanvas*, RosegardenGUIDoc *doc);
@@ -282,9 +286,6 @@ public slots:
      * This is for maintaining the list of selected items
      */
     void slotDestroyedSegmentItem(QObject*);
-
-signals:
-    void selectedSegments(const Rosegarden::SegmentSelection &);
 
 protected:
     SegmentSelector(SegmentCanvas*, RosegardenGUIDoc*);
