@@ -98,6 +98,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     for (unsigned int i = 0; i < segments.size(); ++i) {
         m_staffs.push_back(new MatrixStaff(tCanvas, 
                                            segments[i],
+                                           &m_snapGrid,
                                            i,
                                            8, //!!! so random, so rare
                                            this));
@@ -130,7 +131,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
             SLOT(slotSetSnap(Rosegarden::timeT)));
 
 
-    m_snapGrid.setSnapTime(Rosegarden::SnapGrid::SnapToUnit);
+    m_snapGrid.setSnapTime(Rosegarden::SnapGrid::NoSnap);
 
     m_canvasView = new MatrixCanvasView(*m_staffs[0], m_snapGrid,
 					m_horizontalScrollBar,

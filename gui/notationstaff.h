@@ -54,9 +54,8 @@ public:
      * Creates a new NotationStaff for the specified Segment
      * \a id is the id of the staff in the NotationView
      */
-    NotationStaff(QCanvas *, Rosegarden::Segment *, int id,
-		  NotationView *view,
-		  bool pageMode, double pageWidth,
+    NotationStaff(QCanvas *, Rosegarden::Segment *, Rosegarden::SnapGrid *,
+                  int id, NotationView *view, bool pageMode, double pageWidth,
                   std::string fontName, int resolution);
     virtual ~NotationStaff();
 

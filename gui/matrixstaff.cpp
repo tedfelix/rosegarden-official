@@ -33,14 +33,16 @@
 
 
 using Rosegarden::Segment;
+using Rosegarden::SnapGrid;
 using Rosegarden::timeT;
 
 MatrixStaff::MatrixStaff(QCanvas *canvas,
                          Segment *segment,
+                         SnapGrid *snapGrid,
 			 int id,
                          int vResolution,
                          MatrixView *view) :
-    LinedStaff<MatrixElement>(canvas, segment, id, vResolution, 1),
+    LinedStaff<MatrixElement>(canvas, segment, snapGrid, id, vResolution, 1),
     m_scaleFactor
         (1.5 / Rosegarden::Note(Rosegarden::Note::Shortest).getDuration()),
     m_elementColour(0),

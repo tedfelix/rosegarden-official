@@ -256,8 +256,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     readOptions();
 
     for (unsigned int i = 0; i < segments.size(); ++i) {
-        m_staffs.push_back(new NotationStaff(canvas(), segments[i], i,
-					     this,
+        m_staffs.push_back(new NotationStaff(canvas(), segments[i], 0, // snap
+                                             i, this,
 					     /*m_legatoQuantizer,
 					       m_properties,*/ false, width() - 50,
                                              m_fontName, m_fontSize));

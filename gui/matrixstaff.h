@@ -33,6 +33,7 @@ class MatrixStaff : public LinedStaff<MatrixElement>
 public:
     MatrixStaff(QCanvas *canvas,
                 Rosegarden::Segment *segment, 
+                Rosegarden::SnapGrid *snapGrid,
                 int id, 
                 int vResolution,
                 MatrixView *view);

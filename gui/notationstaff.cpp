@@ -67,11 +67,12 @@ using namespace Rosegarden::BaseProperties;
 using std::string;
 
 
-NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment, int id,
+NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment,
+                             Rosegarden::SnapGrid *snapGrid, int id,
 			     NotationView *view,
 			     bool pageMode, double pageWidth, 
                              string fontName, int resolution) :
-    LinedStaff<NotationElement>(canvas, segment, id, resolution,
+    LinedStaff<NotationElement>(canvas, segment, snapGrid, id, resolution,
 				resolution / 16 + 1, // line thickness
 				pageMode, pageWidth,
 				0 // row spacing

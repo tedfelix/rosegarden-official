@@ -33,6 +33,7 @@
 #include "qcolor.h"
 #include "qcanvas.h"
 
+namespace Rosegarden { class SnapGrid; }
 
 /**
  * LinedStaffManager is a trivial abstract base for classes that own
@@ -85,8 +86,8 @@ protected:
      * \a lineThickness is the number of pixels thick a
      *    staff line should be
      */
-    LinedStaff(QCanvas *, Rosegarden::Segment *, int id,
-	       int resolution, int lineThickness);
+    LinedStaff(QCanvas *, Rosegarden::Segment *, Rosegarden::SnapGrid *,
+               int id, int resolution, int lineThickness);
 
     /**
      * Create a new LinedStaff for the given Segment, with a
@@ -108,16 +109,16 @@ protected:
      * \a rowSpacing is the distance in pixels between
      *    the tops of consecutive rows on this staff
      */
-    LinedStaff(QCanvas *, Rosegarden::Segment *, int id,
-	       int resolution, int lineThickness,
+    LinedStaff(QCanvas *, Rosegarden::Segment *, Rosegarden::SnapGrid *,
+               int id, int resolution, int lineThickness,
 	       double pageWidth, int rowSpacing);
 
     /**
      * Create a new LinedStaff for the given Segment, with
      * either page or linear layout.
      */
-    LinedStaff(QCanvas *, Rosegarden::Segment *, int id,
-	       int resolution, int lineThickness,
+    LinedStaff(QCanvas *, Rosegarden::Segment *, Rosegarden::SnapGrid *,
+               int id, int resolution, int lineThickness,
 	       bool pageMode, double pageWidth, int rowSpacing);
 
 public:
@@ -509,6 +510,7 @@ protected:
     //--------------- Data members ---------------------------------
 
     QCanvas *m_canvas;
+    Rosegarden::SnapGrid *m_snapGrid;
 
     int	     m_id;
 

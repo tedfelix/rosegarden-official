@@ -29,9 +29,11 @@ const int pointerWidth = 3;
 
 template <class T>
 LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
-                          int id, int resolution, int lineThickness) :
+                          Rosegarden::SnapGrid *snapGrid, int id,
+                          int resolution, int lineThickness) :
     Rosegarden::Staff<T>(*segment),
     m_canvas(canvas),
+    m_snapGrid(snapGrid),
     m_id(id),
     m_x(0.0),
     m_y(0),
@@ -59,10 +61,12 @@ LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
 
 template <class T>
 LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
+                          Rosegarden::SnapGrid *snapGrid,
                           int id, int resolution, int lineThickness,
                           double pageWidth, int rowSpacing) :
     Rosegarden::Staff<T>(*segment),
     m_canvas(canvas),
+    m_snapGrid(snapGrid),
     m_id(id),
     m_x(0.0),
     m_y(0),
@@ -90,10 +94,12 @@ LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
 
 template <class T>
 LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
+                          Rosegarden::SnapGrid *snapGrid,
                           int id, int resolution, int lineThickness,
                           bool pageMode, double pageWidth, int rowSpacing) :
     Rosegarden::Staff<T>(*segment),
     m_canvas(canvas),
+    m_snapGrid(snapGrid),
     m_id(id),
     m_x(0.0),
     m_y(0),

@@ -106,46 +106,65 @@ MatrixParameterBox::initBox()
     m_snapGridCombo = new RosegardenComboBox(false, false, this);
     m_snapGridCombo->setFont(font);
 
+    Rosegarden::timeT crotchetDuration = Note(Note::Crotchet).getDuration();
     m_snapValues.push_back(Rosegarden::SnapGrid::NoSnap);
-    m_snapGridCombo->insertItem(i18n("None"));
-
     m_snapValues.push_back(Rosegarden::SnapGrid::SnapToUnit);
-    m_snapGridCombo->insertItem(i18n("Unit"));
-
+    m_snapValues.push_back(crotchetDuration / 96);
+    m_snapValues.push_back(crotchetDuration / 48);
+    m_snapValues.push_back(crotchetDuration / 24);
+    m_snapValues.push_back(crotchetDuration / 16);
+    m_snapValues.push_back(crotchetDuration / 8);
+    m_snapValues.push_back(crotchetDuration / 4);
+    m_snapValues.push_back(crotchetDuration / 2);
     m_snapValues.push_back(Rosegarden::SnapGrid::SnapToBeat);
-    m_snapGridCombo->insertItem(i18n("Beat"));
-
     m_snapValues.push_back(Rosegarden::SnapGrid::SnapToBar);
-    m_snapGridCombo->insertItem(i18n("Bar"));
 
-    for (int i = 1; i < 4; i++) // based on delay-combo code
+    for (unsigned int i = 0; i < m_snapValues.size(); i++)
     {
-	// this could be anything
-	Rosegarden::timeT time = Note(Note::Crotchet).getDuration() * i;
-	
-	m_snapValues.push_back(time);
+        Note nearestNote = Note::getNearestNote(m_snapValues[i]);
+        if (nearestNote.getDuration() == m_snapValues[i])
+        {
+            QString pmapName = "menu-" +
+                strtoqstr(nearestNote.getReferenceName());
+            QPixmap pmap = npf.makeToolbarPixmap(pmapName);
 
-	// check if it's a valid note duration (it will be for the
-	// time defn above, but if we were basing it on the sequencer
-	// resolution it might not be) & include a note pixmap if so
-	// 
-	Note nearestNote = Note::getNearestNote(time);
-	if (nearestNote.getDuration() == time) {
-	    std::string noteName = nearestNote.getReferenceName(); 
-	    noteName = "menu-" + noteName;
-	    QPixmap pmap = npf.makeToolbarPixmap(strtoqstr(noteName));
-	    m_snapGridCombo->insertItem(pmap, i18n("Snap %1").arg(time));
-	} else {
-	    m_snapGridCombo->insertItem(i18n("Snap %1").arg(time));
-	}	    
+            m_snapGridCombo->insertItem(pmap,
+                    strtoqstr(nearestNote.getShortName()));
+        }
+        else
+        {
+            QString noteName = "";
+
+            if (m_snapValues[i] == Rosegarden::SnapGrid::NoSnap)
+                noteName = i18n("None");
+            else if (m_snapValues[i] == Rosegarden::SnapGrid::SnapToUnit)
+                noteName = i18n("Unit");
+            else if (m_snapValues[i] == Rosegarden::SnapGrid::SnapToBeat)
+                noteName = i18n("Beat");
+            else if (m_snapValues[i] == Rosegarden::SnapGrid::SnapToBar)
+                noteName = i18n("Bar");
+
+            if (noteName == "")
+            {
+                // attempt to construct a meaningful note length but just
+                // without the pixmap
+
+                float fValue = float(crotchetDuration) / float(m_snapValues[i]);
+                int iValue = crotchetDuration / m_snapValues[i];
+
+                /*
+                if (int(fValue) == iValue)
+                    noteName = i18n("1/%1").arg(iValue);
+                else
+                */
+                    noteName = i18n("%1 ticks").arg(m_snapValues[i]);
+            }
+
+
+            m_snapGridCombo->insertItem(noteName);
+        }
     }
-/*!!!
-    for (Rosegarden::timeT i = 0; i < 3840; i += 960)
-    {
-        m_snapValues.push_back(i);
-        m_snapGridCombo->insertItem(QString("Snap %1").arg(i));
-    }
-*/
+
     connect(m_snapGridCombo, SIGNAL(activated(int)),
             this, SLOT(slotSetSnap(int)));
 
