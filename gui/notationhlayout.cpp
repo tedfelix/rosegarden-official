@@ -256,14 +256,16 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 
     int accBarMode = config->readNumEntry("accidentalbarmode", 1);
     Rosegarden::AccidentalTable::BarResetType barResetType =
-	(accBarMode == 0 ? Rosegarden::AccidentalTable::BarResetTotal :
+	(accBarMode == 0 ? Rosegarden::AccidentalTable::BarResetNone :
 	 accBarMode == 1 ? Rosegarden::AccidentalTable::BarResetCautionary :
-	 Rosegarden::AccidentalTable::BarResetNaturals);
+	 Rosegarden::AccidentalTable::BarResetExplicit);
 
-    if (barResetType != Rosegarden::AccidentalTable::BarResetTotal) {
+    if (barResetType != Rosegarden::AccidentalTable::BarResetNone) {
 	//!!! very crude and expensive way of making sure we see the
 	// accidentals from previous bar:
-	--startBarNo;
+	if (startBarNo > segment.getComposition()->getBarNumber(segment.getStartTime())) {
+	    --startBarNo;
+	}
     }
 
     Rosegarden::AccidentalTable accTable(key, clef, octaveType, barResetType);

@@ -1130,13 +1130,13 @@ public:
     };
 
     enum BarResetType {
-	BarResetTotal,      // c# | c -> omit natural
+	BarResetNone,       // c# | c -> omit natural
 	BarResetCautionary, // c# | c -> add natural to c in brackets
-	BarResetNaturals    // c# | c -> add natural to c
+	BarResetExplicit    // c# | c -> add natural to c
     };
 
     AccidentalTable(const Key &, const Clef &,
-		    OctaveType = OctavesIndependent,
+		    OctaveType = OctavesCautionary,
 		    BarResetType = BarResetCautionary);
 
     AccidentalTable(const AccidentalTable &);

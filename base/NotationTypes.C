@@ -1900,14 +1900,14 @@ AccidentalTable::processDisplayAccidental(const Accidental &acc0, int height,
 	}
     }
 
-    if (m_barReset != BarResetTotal) {
+    if (m_barReset != BarResetNone) {
 	AccidentalMap::iterator i = m_accidentals.find(height);
 	if (i != m_accidentals.end() && i->second.previousBar) {
 	    prevBarAcc = i->second.accidental;
 	}
     }
 
-//    std::cerr << "AccidentalTable::processDisplayAccidental: acc " << acc0 << ", h " << height << ", caut " << cautionary << ", ch " << canonicalHeight << ", keyacc " << keyAcc << " canacc " << canonicalAcc << " noracc " << normalAcc << " oct " << m_octaves << std::endl;
+    std::cerr << "AccidentalTable::processDisplayAccidental: acc " << acc0 << ", h " << height << ", caut " << cautionary << ", ch " << canonicalHeight << ", keyacc " << keyAcc << " canacc " << canonicalAcc << " noracc " << normalAcc << " oct " << m_octaves << " barReset = " << m_barReset << " pbacc " << prevBarAcc << std::endl;
 
     if (acc == NoAccidental) acc = keyAcc;
 
@@ -1964,9 +1964,9 @@ AccidentalTable::processDisplayAccidental(const Accidental &acc0, int height,
 	}
     }
 
-    if (m_barReset != BarResetTotal) {
+    if (m_barReset != BarResetNone) {
 	if (acc == NoAccidental) {
-	    if (prevBarAcc != NoAccidental && prevBarAcc != Natural) {
+	    if (prevBarAcc != NoAccidental) {
 		cautionary = (m_barReset == BarResetCautionary);
 		if (keyAcc == NoAccidental) {
 		    acc = Natural;
@@ -2019,8 +2019,6 @@ void
 AccidentalTable::newClef(const Clef &clef)
 {
     m_clef = clef;
-    //!!! so, what's the proper thing to do here??
-    newBar();
 }
 
 

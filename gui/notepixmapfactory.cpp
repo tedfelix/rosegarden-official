@@ -1992,12 +1992,14 @@ NotePixmapFactory::makeKeyPixmap(const Key &key,
     int keyDelta = keyCharacter.getWidth() - keyCharacter.getHotspot().x();
 
     int cancelDelta = 0;
+    int between = 0;
     if (cancelCount > 0) {
 	cancelDelta = cancelCharacter.getWidth() + cancelCharacter.getWidth()/3;
+	between = cancelCharacter.getWidth();
     }
 
-    createPixmapAndMask(keyDelta * ah1.size() + cancelDelta * cancelCount +
-			keyCharacter.getWidth()/2, lw * 8 + 1);
+    createPixmapAndMask(keyDelta * ah1.size() + cancelDelta * cancelCount + between +
+			keyCharacter.getWidth()/4, lw * 8 + 1);
 
     if (key.isSharp() != previousKey.isSharp()) {
 
@@ -2014,7 +2016,7 @@ NotePixmapFactory::makeKeyPixmap(const Key &key,
 	}
 
 	if (cancelCount > 0) {
-	    x += keyCharacter.getWidth()/4;
+	    x += between;
 	}
     }
 
@@ -2033,7 +2035,7 @@ NotePixmapFactory::makeKeyPixmap(const Key &key,
 	// cancellation afterwards
 
 	if (cancelCount > 0) {
-	    x += keyCharacter.getWidth()/4;
+	    x += between;
 	}
 
 	for (unsigned int i = 0; i < cancelCount; ++i) {
@@ -3101,11 +3103,13 @@ int NotePixmapFactory::getKeyWidth(const Key &key,
     int keyDelta = keyCharacter.getWidth() - keyCharacter.getHotspot().x();
 
     int cancelDelta = 0;
+    int between = 0;
     if (cancelCount > 0) {
 	cancelDelta = cancelCharacter.getWidth() + cancelCharacter.getWidth()/3;
+	between = cancelCharacter.getWidth();
     }
 
-    return (keyDelta * ah1.size() + cancelDelta * cancelCount +
+    return (keyDelta * ah1.size() + cancelDelta * cancelCount + between +
 	    keyCharacter.getWidth()/4);
 }
 
