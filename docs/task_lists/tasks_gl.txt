@@ -1,7 +1,6 @@
 Current Task list
 ======================================
 
-
 --
 
 1.0 stuff :
@@ -13,6 +12,8 @@ Current Task list
 - rgapp->sequencer(Send|Call) DONE
 
 --
+
+- control rulers events draggable x-wise
 
 - make clipboard app-wide instead of doc-wide (move it to RosegardenGUIApp).
 
@@ -31,10 +32,6 @@ beyond the canvas' boundary.
 
 - valgrind/kcachegrind - ok
 
-- try to improve sequencer latency problems (GUI & seq. should mmap a
-tmp file which would hold easy-to-parse event data. File should have
-lines of fixed length).
-
 - show selected zones à la RG2.1
 
 - audio peak files in tmp. dir with hashed names
@@ -42,8 +39,6 @@ lines of fixed length).
 - menu item status (enabled/disabled) - ongoing work...
 
 - better error report when failing to load a resource
-
-- RPM building - taken over by nice volunteers
 
 - look at lazy note pixmap rendering again (see
 gui/qcanvassimplesprite.h r1.18, qcanvassimplesprite.cpp r1.20,
@@ -55,9 +50,17 @@ notationstaff.cpp r1.146).
 
 - use KFilterBase/KFilterDev for accessing .rg files (rather than calling zlib directly)
 
+- windows 'linking' : linked windows would keep in synch which part of the segment they show
+
 
 "Done" stuff
 ======================================
+
+- RPM building - taken over by nice volunteers
+
+- try to improve sequencer latency problems (GUI & seq. should mmap a
+tmp file which would hold easy-to-parse event data. File should have
+lines of fixed length). DONE
 
 - add signals for progress reporting in layout classes DONE
 
