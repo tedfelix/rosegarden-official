@@ -184,6 +184,10 @@ public slots:
     //
     void slotKeyPressed(unsigned int y);
 
+    // handle scrolling between view and Pianoa
+    void slotVerticalScrollMatrixCanvas(int x, int y);
+    void slotVerticalScrollPianoKeyboard(int y);
+
 protected:
 
     /**
@@ -241,6 +245,10 @@ protected:
      * keyboard
      */
     int m_previousEvPitch;
+
+    MatrixCanvasView    *m_canvasView;
+    QScrollView         *m_pianoView;
+
 
 };
 
