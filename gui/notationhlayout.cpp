@@ -18,10 +18,12 @@
 #include "staff.h"
 #include "notationhlayout.h"
 #include "rosedebug.h"
+#include "NotationTypes.h"
 
 
 
-NotationHLayout::NotationHLayout(NotationElementList& elements,
+NotationHLayout::NotationHLayout(Staff &staff, //!!! maybe not needed, just trying to build up consistent interfaces for h & v layout
+                                 NotationElementList& elements,
                                  unsigned int barWidth,
                                  unsigned int beatsPerBar,
                                  unsigned int barMargin,
@@ -37,11 +39,12 @@ NotationHLayout::NotationHLayout(NotationElementList& elements,
       m_previousAbsoluteTime(0),
       m_previousPos(barMargin),
       m_currentPos(barMargin),
-      m_noteWidthTable(LastNote),
+//      m_noteWidthTable(LastNote),
       m_currentScale(new Scale(Scale::C))
 {
-    initNoteWidthTable();
-    m_timeUnitsPerBar = m_quantizer.wholeNoteDuration();
+//    initNoteWidthTable();
+    //!!! ask the time signature...
+    m_timeUnitsPerBar = Note(Note::WholeNote).getDuration();
     kdDebug(KDEBUG_AREA) << "NotationHLayout::NotationHLayout()" << endl;
 }
 
@@ -66,22 +69,16 @@ NotationHLayout::barTimeAtPos(NotationElementList::iterator pos)
 NotationElementList::iterator
 NotationHLayout::getPreviousNote(NotationElementList::iterator pos)
 {
-    NotationElementList::iterator prevNote = pos;
-
-    --prevNote;
-    
-    while ((*prevNote)->event()->type() != "note" &&
-           prevNote != m_notationElements.begin()) {
-        --prevNote;
-    }
-    
-    return prevNote;
+    return m_notationElements.findPrevious
+        (Note::EventPackage, Note::EventType, pos);
 }
 
 
 Scale::KeySignature
 NotationHLayout::getKeyAtPos(NotationElementList::iterator pos)
 {
+    //!!! dubious purposes anyway
+
     while ((*pos)->event()->type() != "keychange" &&
            pos != m_notationElements.begin()) {
         --pos;
@@ -105,6 +102,7 @@ NotationHLayout::layout(NotationElementList::iterator from,
     //
     if (from == m_notationElements.begin()) {
 
+        //!!! make broadly as in notationvlayout
         setCurrentKey(Scale::C); // TODO add document-wide scale
         
         m_currentPos = m_barMargin; // we are at the beginning of the elements
@@ -120,9 +118,10 @@ NotationHLayout::layout(NotationElementList::iterator from,
         NotationElement *elementBeforeFrom = (*oneBeforeFrom);
 
         m_quantizer.quantize(elementBeforeFrom->event());
-        Note previousNote = Note(elementBeforeFrom->event()->get<Int>("Notation::NoteType"));
+        //!!! dottedness
+        Note::Type previousNote = elementBeforeFrom->event()->get<Int>("Notation::NoteType");
         m_currentPos = elementBeforeFrom->x();
-        m_currentPos += m_noteWidthTable[previousNote] + Staff::noteWidth + m_noteMargin;
+        m_currentPos += getNoteWidth(previousNote) + Staff::noteWidth + m_noteMargin;
 
         if (m_currentScale->noteIsDecorated(*elementBeforeFrom)) {
             m_currentPos += Staff::accidentWidth;
@@ -188,13 +187,14 @@ NotationHLayout::layout(NotationElementList::iterator from,
             nel->setX(m_currentPos);
 
             // check the property is here ?
-            Note note = Note(nel->event()->get<Int>("Notation::NoteType"));
+            Note::Type note = nel->event()->get<Int>("Notation::NoteType");
 
             // Move current pos to next note
             m_previousPos = m_currentPos;
-            m_currentPos += m_noteWidthTable[note] + Staff::noteWidth + m_noteMargin;
+            m_currentPos += getNoteWidth(note) + Staff::noteWidth + m_noteMargin;
 
             if (m_currentScale->noteIsDecorated(*nel)) {
+                //!!! now in notationvlayout -- look for computed-accidental
                 nel->event()->set<Int>("Notation::Accident",
                                        m_currentScale->useSharps() ? Sharp : Flat);
                 m_currentPos += Staff::accidentWidth;
@@ -236,7 +236,7 @@ NotationHLayout::layout(NotationElementList::iterator from,
     }
 }
 
-
+/*!
 void
 NotationHLayout::initNoteWidthTable()
 {
@@ -257,6 +257,7 @@ NotationHLayout::initNoteWidthTable()
     m_noteWidthTable[SixtyFourthDotted]  = m_noteWidthTable[SixtyFourth]  + m_noteWidthTable[SixtyFourth] / 2;
 
 }
+*/
 
 void
 NotationHLayout::addNewBar(unsigned int barPos)

@@ -22,8 +22,11 @@
 #include <qcanvas.h>
 
 #include "staff.h"
+#include "NotationTypes.h"
 
 typedef vector<int> chordpitches;
+
+//!!! some of the stuff in the Note class could simplify a few bits of this
 
 // enum Note { WholeDotted = 0, Whole,
 //             HalfDotted, Half,
@@ -33,6 +36,7 @@ typedef vector<int> chordpitches;
 //             ThirtySecondDotted, ThirtySecond,
 //             SixtyFourthDotted, SixtyFourth, LastNote = SixtyFourth };
 
+/*!
 enum Note {
     SixtyFourth = 0, SixtyFourthDotted,
     ThirtySecond, ThirtySecondDotted,
@@ -43,8 +47,9 @@ enum Note {
     Whole, WholeDotted,
     LastNote = WholeDotted 
 };
+*/
 
-enum Accidental { NoAccidental, Sharp, Flat, Natural };
+/*! enum Accidental { NoAccidental, Sharp, Flat, Natural }; */
 
 
 /**
@@ -60,7 +65,7 @@ public:
 
     NotePixmapOffsets();
 
-    void offsetsFor(Note,
+    void offsetsFor(Note::Type,
                     Accidental,
                     bool drawTail,
                     bool stalkGoesUp);
@@ -91,7 +96,7 @@ protected:
     unsigned int m_flatWidth;
     unsigned int m_naturalWidth;
 
-    Note m_note;
+    Note::Type m_note;
     Accidental m_accidental;
     bool m_drawTail;
     bool m_stalkGoesUp;
@@ -129,7 +134,7 @@ public:
      *   (useful when the tail should be collapsed with the one of a neighboring note)
      * @param stalkGoesUp : if the note's stalk should go up or down
      */
-    QCanvasPixmap makeNotePixmap(Note note,
+    QCanvasPixmap makeNotePixmap(Note::Type note,
                                  Accidental accidental = NoAccidental,
                                  bool drawTail = true,
                                  bool stalkGoesUp = true);
@@ -139,19 +144,13 @@ public:
      *
      * @param note : note type
      */
-    QCanvasPixmap makeRestPixmap(Note note);
+    QCanvasPixmap makeRestPixmap(Note::Type note);
 
 protected:
-    /**
-     * Transform a duration in rosegarden time units (96 = 4th)
-     * to note type (Note enum)
-     */
-    Note duration2note(unsigned int duration);
+    const QPixmap* tailUp(Note::Type note) const;
+    const QPixmap* tailDown(Note::Type note) const;
 
-    const QPixmap* tailUp(Note note) const;
-    const QPixmap* tailDown(Note note) const;
-
-    void drawStalk(Note note, bool drawTail, bool stalkGoesUp);
+    void drawStalk(Note::Type note, bool drawTail, bool stalkGoesUp);
     void drawAccidental(Accidental, bool stalkGoesUp);
 
     void createPixmapAndMask();
@@ -204,7 +203,7 @@ public:
      * @param stalkGoesUp : if the note's stalk should go up or down
      */
     QCanvasPixmap makeChordPixmap(const chordpitches &pitches,
-                                  Note note, bool drawTail,
+                                  Note::Type note, bool drawTail,
                                   bool stalkGoesUp = true);
 
 protected:

@@ -21,6 +21,8 @@
 
 XMLStorableEvent::XMLStorableEvent(const QXmlAttributes &attributes)
 {
+    setPackage("core"); //!!! sensible default for storable events?
+
     for (int i = 0; i < attributes.length(); ++i) {
 	QString attrName(attributes.qName(i)),
             attrVal(attributes.value(i));

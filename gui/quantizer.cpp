@@ -18,17 +18,19 @@
 #include "rosedebug.h"
 #include "quantizer.h"
 #include "notepixmapfactory.h"
+#include "NotationTypes.h"
 
+/*!
 unsigned int
 Quantizer::defaultWholeNoteDuration = 384;
-
+*/
 Quantizer::Quantizer()
-    : m_durationTable(size_t(LastNote)),
-      m_wholeNoteDuration(defaultWholeNoteDuration)
+/*!    : m_durationTable(size_t(LastNote)),
+  m_wholeNoteDuration(defaultWholeNoteDuration) */
 {
-    computeNoteDurations();
+    /*!   computeNoteDurations(); */
 }
-
+/*!
 void
 Quantizer::setWholeNoteDuration(unsigned int d)
 {
@@ -60,7 +62,7 @@ Quantizer::computeNoteDurations()
 //                              << m_durationTable[i] << endl;
 //     }
 }
-
+*/
 
 void
 Quantizer::quantize(Track::iterator from,
@@ -79,17 +81,27 @@ Quantizer::quantize(Track::iterator from,
 void
 Quantizer::quantize(Event *el)
 {
-    Note note = Whole;
+//    Note note = Whole;
     Event::timeT drt = el->duration();
 
-    DurationMap::iterator high, low;
-    
+//    DurationMap::iterator high, low;
+    int high, low;
     quantize(drt, high, low);
-
+/*
     Event::timeT highDuration = *high,
         lowDuration = *(low),
         quantizedDuration = 0;
+*/
+    int qd;
 
+    if ((high - drt) > (drt - low)) {
+        qd = low;
+    } else {
+        qd = high;
+    }
+
+    Note note = Note::getNearestNote(qd);
+/*!
     if ((highDuration - drt) > (drt - lowDuration)) {
         note = Note(distance(m_durationTable.begin(), low));
         quantizedDuration = lowDuration;
@@ -100,17 +112,43 @@ Quantizer::quantize(Event *el)
 
 //     kdDebug(KDEBUG_AREA) << "Quantized to duration : "
 //                          << quantizedDuration << " - note : " << note << "\n";
-
-    el->set<Int>("Notation::NoteType", note);
-    el->set<Int>("QuantizedDuration", quantizedDuration);
+*/
+    el->set<Int>("Notation::NoteType", note.getType());
+    el->set<Bool>("Notation::NoteDotted", note.isDotted());
+    el->set<Int>("QuantizedDuration", qd);
 
 }
 
 
 void
-Quantizer::quantize(Event::timeT drt, DurationMap::iterator &high, 
-                    DurationMap::iterator &low)
+Quantizer::quantize(Event::timeT drt,
+                    int &high,
+                    int &low
+                    /*!
+                    DurationMap::iterator &high, 
+                    DurationMap::iterator &low */)
 {
+    //!!! no dottedness -- NotationTypes stuff can help more here
+
+    int d, ld = Note(Note::Shortest).getDuration();
+
+    for (Note::Type t = Note::Shortest; t < Note::Longest; ++t) {
+        d = Note(t+1).getDuration();
+        if (d > drt) {
+            low = ld;
+            high = d;
+            return;
+        }
+        ld = d;
+    }
+
+    low = Note(Note::Longest).getDuration();
+    high = 1000000; //!!!
+    return;
+}
+
+/*!
+    
 
 //     kdDebug(KDEBUG_AREA) << "quantize : duration " << drt << endl;
 
@@ -152,8 +190,9 @@ Quantizer::quantize(Event::timeT drt, DurationMap::iterator &high,
         low = lb - 1;
     }
 }
+*/
 
-
+/*!
 Event::timeT
 Quantizer::noteDuration(Note note)
 {
@@ -166,3 +205,4 @@ Quantizer::noteDuration(Note note)
     return m_durationTable[note];
 }
 
+*/

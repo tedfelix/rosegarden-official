@@ -35,15 +35,17 @@ public:
      * barWidth is the length of a bar in pixels
      * beatsPerBar is the nb of beats a bar is in the current time sig
      */
-    NotationHLayout(NotationElementList& elements,
-                    unsigned int barWidth,
-                    unsigned int beatsPerBar,
+    NotationHLayout(Staff &staff, //!!! just for consistency with vlayout, for now
+                    NotationElementList& elements,
+                    unsigned int barWidth, //!!! this stuff should vary --cc
+                    unsigned int beatsPerBar, //!!! likewise, get timesig obj
                     unsigned int barMargin,
                     unsigned int noteMargin = 2);
 
     ~NotationHLayout();
     
-    void layout(NotationElementList::iterator from, NotationElementList::iterator to);
+    void layout(NotationElementList::iterator from,
+                NotationElementList::iterator to);
 
     typedef list<unsigned int> barpositions;
 
@@ -67,7 +69,7 @@ protected:
      */
     //     const vector<unsigned int>& splitNote(unsigned int noteLen);
 
-    void initNoteWidthTable();
+//    void initNoteWidthTable();
 
     unsigned int barTimeAtPos(NotationElementList::iterator pos);
     void addNewBar(unsigned int barPos);
@@ -95,10 +97,16 @@ protected:
     double m_previousPos;
     double m_currentPos;
 
-    typedef vector<unsigned int> NoteWidthTable;
 
     /// maps note types (Whole, Half, etc...) to the width they should take on the bar
-    NoteWidthTable m_noteWidthTable;
+    //!!! nah -- this will need to be more general as it depends on time sig &c
+//    typedef vector<unsigned int> NoteWidthTable;
+//    NoteWidthTable m_noteWidthTable;
+    // for now we do this:
+    int getNoteWidth(Note::Type type, bool dotted = false) {
+        return (m_barWidth * Note(type, dotted).getDuration()) /
+            Note(Note::WholeNote, false).getDuration();
+    }
 
     barpositions m_barPositions;
 

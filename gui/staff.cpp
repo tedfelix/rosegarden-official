@@ -23,9 +23,8 @@
 
 #include "rosedebug.h"
 
-Staff::Staff(QCanvas *canvas, Staff::Clef clef)
+Staff::Staff(QCanvas *canvas)
     : QCanvasItemGroup(canvas),
-      m_currentKey(clef),
       m_barLineHeight(0),
       m_horizLineLength(0),
       m_pitchToHeight(32)
@@ -34,11 +33,12 @@ Staff::Staff(QCanvas *canvas, Staff::Clef clef)
     // clef
     //
     QCanvasPixmapArray *clefPixmap;
-    
-    if (clef == Treble) {
+
+    //!!!
+//    if (clef == Treble) {
         
         clefPixmap = new QCanvasPixmapArray("pixmaps/clef-treble.xpm");
-
+/*!
     } else if (clef == Bass) {
 
         clefPixmap = new QCanvasPixmapArray("pixmaps/clef-bass.xpm");
@@ -52,7 +52,7 @@ Staff::Staff(QCanvas *canvas, Staff::Clef clef)
         clefPixmap = new QCanvasPixmapArray("pixmaps/clef-tenor.xpm");
 
     }
-    
+*/ 
     
     QCanvasSpriteGroupable *clef = new QCanvasSpriteGroupable(clefPixmap, canvas, this);
 
@@ -234,10 +234,19 @@ Staff::~Staff()
 //         delete (*i);
 }
 
+int Staff::yCoordOfHeight(int height) const
+{
+    // 0 is bottom staff-line, 8 is top one
+    return linesOffset + (8 - height) * (lineWidth / 2);
+}
+
 
 int
 Staff::pitchYOffset(int pitch) const
 {
+    cerr << "Staff::pitchYOffset called" << endl;
+    assert(0);
+
     if (pitch >= 0 && pitch <= 21)
         return m_pitchToHeight[pitch];
     else {
@@ -245,6 +254,7 @@ Staff::pitchYOffset(int pitch) const
         return m_pitchToHeight[pitch % 22];
     }
 }
+
 
 void
 Staff::makeInvisibleLine(int y, int pitch, const QColor& col)

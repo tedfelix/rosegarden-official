@@ -185,7 +185,7 @@ protected:
     NotationHLayout* m_hlayout;
     NotationVLayout* m_vlayout;
 
-    Note m_currentSelectedNote;
+    Note::Type m_currentSelectedNote;
 	
 };
 

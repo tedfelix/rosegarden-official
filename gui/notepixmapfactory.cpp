@@ -32,7 +32,7 @@ NotePixmapOffsets::NotePixmapOffsets()
 }
 
 void
-NotePixmapOffsets::offsetsFor(Note note,
+NotePixmapOffsets::offsetsFor(Note::Type note,
                               Accidental accidental,
                               bool drawTail,
                               bool stalkGoesUp)
@@ -41,13 +41,13 @@ NotePixmapOffsets::offsetsFor(Note note,
     m_accidental = accidental;
     m_drawTail = drawTail;
     m_stalkGoesUp = stalkGoesUp;
-    m_noteHasStalk = note < Whole;
+    m_noteHasStalk = note < Note::WholeNote; //!!!
 
     m_bodyOffset.setX(0);     m_bodyOffset.setY(0);
     m_hotSpot.setX(0);        m_hotSpot.setY(0);
     m_accidentalOffset.setX(0); m_accidentalOffset.setY(0);
     
-    if (note > QuarterDotted)
+    if (note >= Note::HalfNote)
         m_bodySize = m_noteBodyEmptySize;
     else
         m_bodySize = m_noteBodyFilledSize;
@@ -60,7 +60,7 @@ NotePixmapOffsets::offsetsFor(Note note,
 void
 NotePixmapOffsets::computeAccidentalAndStalkSize()
 {
-    unsigned int tailOffset = (m_note < Quarter && m_stalkGoesUp) ? m_tailWidth : 0;
+    unsigned int tailOffset = (m_note < Note::QuarterNote && m_stalkGoesUp) ? m_tailWidth : 0;
     unsigned int totalXOffset = tailOffset,
         totalYOffset = 0;
     
@@ -94,18 +94,18 @@ NotePixmapOffsets::computePixmapSize()
                                Staff::stalkLen +
                                m_accidentalStalkSize.height());
 
-        if (m_note < Quarter) {
+        if (m_note < Note::QuarterNote) {
 
             // readjust pixmap height according to its duration - the stalk
             // is longer for 8th, 16th, etc.. because the tail is higher
             //
-            if (m_note == Eighth || m_note == EighthDotted)
+            if (m_note == Note::EighthNote)
                 m_pixmapSize.rheight() += 1;
-            else if (m_note == Sixteenth || m_note == SixteenthDotted)
+            else if (m_note == Note::SixteenthNote)
                 m_pixmapSize.rheight() += 4;
-            else if (m_note == ThirtySecond || m_note == ThirtySecondDotted)
+            else if (m_note == Note::ThirtySecondNote)
                 m_pixmapSize.rheight() += 9;
-            else if (m_note == SixtyFourth || m_note == SixtyFourthDotted)
+            else if (m_note == Note::SixtyFourthNote)
                 m_pixmapSize.rheight() += 14;
         }
         
@@ -315,7 +315,7 @@ NotePixmapFactory::~NotePixmapFactory()
 
 
 QCanvasPixmap
-NotePixmapFactory::makeNotePixmap(Note note,
+NotePixmapFactory::makeNotePixmap(Note::Type note,
                                   Accidental accidental,
                                   bool drawTail,
                                   bool stalkGoesUp)
@@ -324,20 +324,20 @@ NotePixmapFactory::makeNotePixmap(Note note,
     m_offsets.offsetsFor(note, accidental, drawTail, stalkGoesUp);
 
 
-    if (note > LastNote) {
+    if (note > Note::Longest) {
         kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeNotePixmap : note > LastNote ("
                              << note << ")\n";
         throw -1;
     }
 
-    bool noteHasStalk = note < Whole;
+    bool noteHasStalk = note < Note::WholeNote;
     m_generatedPixmapHeight = m_offsets.pixmapSize().height();
     
     createPixmapAndMask();
 
     // paint note body
     //
-    QPixmap *body = (note > QuarterDotted) ? &m_noteBodyEmpty : &m_noteBodyFilled;
+    QPixmap *body = (note >= Note::HalfNote) ? &m_noteBodyEmpty : &m_noteBodyFilled;
 
     m_p.drawPixmap (m_offsets.bodyOffset(), *body);
     m_pm.drawPixmap(m_offsets.bodyOffset(), *(body->mask()));
@@ -387,23 +387,24 @@ NotePixmapFactory::makeNotePixmap(Note note,
 
 
 QCanvasPixmap
-NotePixmapFactory::makeRestPixmap(Note note)
+NotePixmapFactory::makeRestPixmap(Note::Type note)
 {
     switch (note) {
-    case SixtyFourth:
+    case Note::SixtyFourthNote:
         return QCanvasPixmap(*m_rests[0], m_pointZero);
-    case ThirtySecond:
+    case Note::ThirtySecondNote:
         return QCanvasPixmap(*m_rests[1], m_pointZero);
-    case Sixteenth:
+    case Note::SixteenthNote:
         return QCanvasPixmap(*m_rests[2], m_pointZero);
-    case Eighth:
+    case Note::EighthNote:
         return QCanvasPixmap(*m_rests[3], m_pointZero);
-    case Quarter:
+    case Note::QuarterNote:
         return QCanvasPixmap(*m_rests[4], m_pointZero);
-    case Half:
+    case Note::HalfNote:
         return QCanvasPixmap(*m_rests[5], m_pointZero); // QPoint(0, 19)
-    case Whole:
+    case Note::WholeNote:
         return QCanvasPixmap(*m_rests[6], m_pointZero); // QPoint(0, 9)
+        //!!! ... and breve
     default:
         kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeRestPixmap() for note "
                              << note << " not yet implemented or note out of range\n";
@@ -435,22 +436,22 @@ NotePixmapFactory::createPixmapAndMask()
 }
 
 const QPixmap*
-NotePixmapFactory::tailUp(Note note) const
+NotePixmapFactory::tailUp(Note::Type note) const
 {
-    if (note > EighthDotted) {
+    if (note >= Note::QuarterNote) {
         kdDebug(KDEBUG_AREA) << "NotePixmapFactory::tailUp : note("
                              << note << ") > EighthDotted" << endl;
         throw -1;
         return 0;
     }
     
-    if (note == Eighth || note == EighthDotted)
+    if (note == Note::EighthNote)
         return m_tailsUp[0];
-    if (note == Sixteenth || note == SixteenthDotted)
+    if (note == Note::SixteenthNote)
         return m_tailsUp[1];
-    if (note == ThirtySecond || note == ThirtySecondDotted)
+    if (note == Note::ThirtySecondNote)
         return m_tailsUp[2];
-    if (note == SixtyFourth || note == SixtyFourthDotted)
+    if (note == Note::SixtyFourthNote)
         return m_tailsUp[3];
     else {
         kdDebug(KDEBUG_AREA) << "NotePixmapFactory::tailUp : unknown note"
@@ -461,22 +462,22 @@ NotePixmapFactory::tailUp(Note note) const
 }
 
 const QPixmap*
-NotePixmapFactory::tailDown(Note note) const
+NotePixmapFactory::tailDown(Note::Type note) const
 {
-    if (note > EighthDotted) {
+    if (note >= Note::QuarterNote) {
         kdDebug(KDEBUG_AREA) << "NotePixmapFactory::tailDown : note("
                              << note << ") > EighthDotted" << endl;
         throw -1;
         return 0;
     }
     
-    if (note == Eighth || note == EighthDotted)
+    if (note == Note::EighthNote)
         return m_tailsDown[0];
-    if (note == Sixteenth || note == SixteenthDotted)
+    if (note == Note::SixteenthNote)
         return m_tailsDown[1];
-    if (note == ThirtySecond || note == ThirtySecondDotted)
+    if (note == Note::ThirtySecondNote)
         return m_tailsDown[2];
-    if (note == SixtyFourth || note == SixtyFourthDotted)
+    if (note == Note::SixtyFourthNote)
         return m_tailsDown[3];
     else {
         kdDebug(KDEBUG_AREA) << "NotePixmapFactory::tailUp : unknown note"
@@ -488,7 +489,7 @@ NotePixmapFactory::tailDown(Note note) const
 
 
 void
-NotePixmapFactory::drawStalk(Note note,
+NotePixmapFactory::drawStalk(Note::Type note,
                              bool drawTail, bool stalkGoesUp)
 {
     QPoint lineOrig, lineDest;
@@ -499,7 +500,7 @@ NotePixmapFactory::drawStalk(Note note,
     m_p.drawLine(lineOrig, lineDest);
     m_pm.drawLine(lineOrig, lineDest);
 
-    if (drawTail && note < Quarter) {
+    if (drawTail && note < Note::QuarterNote) {
         // need to add a tail pixmap
         //
         const QPixmap *tailPixmap = 0;
@@ -559,6 +560,8 @@ NotePixmapFactory::drawAccidental(Accidental accidental, bool /*stalkGoesUp*/)
     case Natural:
         accidentalPixmap = &m_accidentalNatural;
         break;
+ 
+        //!!! double sharp, double flat
     }
 
     m_p.drawPixmap(m_offsets.accidentalOffset().x(),
@@ -569,37 +572,6 @@ NotePixmapFactory::drawAccidental(Accidental accidental, bool /*stalkGoesUp*/)
                     m_offsets.accidentalOffset().y(),
                     *(accidentalPixmap->mask()));
     
-}
-
-
-// Keep this around just in case
-Note
-NotePixmapFactory::duration2note(unsigned int duration)
-{
-    // Very basic, very dumb.
-    // Make a quantization class - how to represent dotted notes ?
-    static unsigned int wholeDuration = 384;
-    Note rc;
-    
-    if (duration == wholeDuration)
-        rc = Whole;
-    else if (duration == wholeDuration / 2 )
-        rc = Half;
-    else if (duration == wholeDuration / 4 )
-        rc = Quarter;
-    else if (duration == wholeDuration / 8 )
-        rc = Eighth;
-    else if (duration == wholeDuration / 16 )
-        rc = Sixteenth;
-    else if (duration == wholeDuration / 32 )
-        rc = ThirtySecond;
-    else if (duration == wholeDuration / 64 )
-        rc = SixtyFourth;
-
-    kdDebug(KDEBUG_AREA) << "NotePixmapFactory::duration : duration = "
-                         << duration << " - rc = " << rc << "\n";
-
-    return rc;
 }
 
 
@@ -618,14 +590,16 @@ ChordPixmapFactory::ChordPixmapFactory(const Staff &s)
 
 QCanvasPixmap
 ChordPixmapFactory::makeChordPixmap(const chordpitches &pitches,
-                                    Note note, bool drawTail,
+                                    Note::Type note, bool drawTail,
                                     bool stalkGoesUp)
 {
+    //!!! oh jeez
+
     int highestNote = m_referenceStaff.pitchYOffset(pitches[pitches.size() - 1]),
         lowestNote = m_referenceStaff.pitchYOffset(pitches[0]);
 
 
-    bool noteHasStalk = note < Whole;
+    bool noteHasStalk = note < Note::WholeNote;
 
     m_generatedPixmapHeight = highestNote - lowestNote + m_noteBodyHeight;
 
@@ -648,7 +622,7 @@ ChordPixmapFactory::makeChordPixmap(const chordpitches &pitches,
     // set mask painter RasterOp to Or
     m_pm.setRasterOp(Qt::OrROP);
 
-    QPixmap *body = (note > QuarterDotted) ? &m_noteBodyEmpty : &m_noteBodyFilled;
+    QPixmap *body = (note >= Note::HalfNote) ? &m_noteBodyEmpty : &m_noteBodyFilled;
 
     if (stalkGoesUp) {
         int offset = m_generatedPixmap->height() - body->height() - highestNote;

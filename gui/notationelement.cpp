@@ -23,8 +23,10 @@
 #ifndef NDEBUG
 
 #include "rosedebug.h"
-#include "Element2.h"
 #endif
+
+#include "NotationTypes.h"
+#include "Element2.h"
 
 NotationElement::NotationElement(Event *event)
     : ViewElement(event),
@@ -43,13 +45,16 @@ NotationElement::~NotationElement()
 bool
 NotationElement::isRest() const
 {
-    return event()->type() == "rest";
+    //???
+    return event()->isa("core", "rest");
+//    return event()->type() == "rest";
 }
 
 bool
 NotationElement::isNote() const
 {
-    return event()->type() == "note";
+    return event()->isa(Note::EventPackage, Note::EventType);
+//    return event()->type() == "note";
 }
 
 void

@@ -26,15 +26,21 @@
   *@author Guillaume Laurent, Chris Cannam, Rich Bown
   */
 
-class NotationVLayout : public NotationLayout
+class NotationVLayout : public LayoutEngine /* : public NotationLayout */
 {
 public:
-    NotationVLayout(Staff&);
+    NotationVLayout(Staff &staff, NotationElementList &elements);
+    virtual ~NotationVLayout();
+    
+    void layout(NotationElementList::iterator from,
+                NotationElementList::iterator to);
+
+    /// resets any internal position counters there may happen to be
+    void reset();
 
 protected:
-    virtual void layout(NotationElement*);
-
     Staff &m_staff;
+    NotationElementList &m_elements;
 };
 
 #endif
