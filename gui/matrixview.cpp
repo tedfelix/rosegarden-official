@@ -58,9 +58,8 @@ MatrixCanvasView::~MatrixCanvasView()
 
 void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
 {
-    timeT evTime = 0;
-    int evPitch = 0;
-    eventTimePitch(e, evTime, evPitch);
+    timeT evTime = m_staff.getTimeForCanvasX(e->x());
+    int evPitch = m_staff.getHeightAtCanvasY(e->y());
 
     
     kdDebug(KDEBUG_AREA) << "MatrixCanvasView::contentsMousePressEvent() at pitch "
@@ -75,36 +74,22 @@ void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
         
     //     }
 
-    emit itemPressed(evPitch, evTime, e, 0);
+    emit mousePressed(evPitch, evTime, e, 0);
     
-}
-
-void MatrixCanvasView::contentsMouseReleaseEvent(QMouseEvent* e)
-{
-    timeT evTime = 0;
-    int evPitch = 0;
-    eventTimePitch(e, evTime, evPitch);
-
-    emit itemReleased(evTime, e);
 }
 
 void MatrixCanvasView::contentsMouseMoveEvent(QMouseEvent* e)
 {
-    timeT evTime = 0;
-    int evPitch = 0;
-    eventTimePitch(e, evTime, evPitch);
+    timeT evTime = m_staff.getTimeForCanvasX(e->x());
 
-    emit itemResized(evTime, e);
+    emit mouseMoved(evTime, e);
 }
 
-void MatrixCanvasView::eventTimePitch(QMouseEvent* e,
-                                      Rosegarden::timeT& evTime,
-                                      int& pitch)
+void MatrixCanvasView::contentsMouseReleaseEvent(QMouseEvent* e)
 {
-    QPoint eventPos = e->pos();
+    timeT evTime = m_staff.getTimeForCanvasX(e->x());
 
-    evTime = m_staff.getTimeForCanvasX(eventPos.x());
-    pitch = m_staff.getHeightAtCanvasY(eventPos.y());
+    emit mouseReleased(evTime, e);
 }
 
 //----------------------------------------------------------------------
@@ -150,8 +135,6 @@ void MatrixVLayout::scanStaff(MatrixVLayout::StaffType& staffBase)
         int pitch = el->event()->get<Rosegarden::Int>(PITCH);
 
 	int y = staff.getLayoutYForHeight(pitch) - staff.getElementHeight();
-
-        kdDebug(KDEBUG_AREA) << "VLayout : Layout y = " << y << " for pitch " << pitch << endl;
 
         el->setLayoutY(y);
         el->setHeight(staff.getElementHeight());
@@ -384,8 +367,16 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     setCentralWidget(m_canvasView);
 
     QObject::connect
-        (m_canvasView, SIGNAL(itemPressed(int, Rosegarden::timeT, QMouseEvent*, MatrixElement*)),
-         this,         SLOT  (itemPressed(int, Rosegarden::timeT, QMouseEvent*, MatrixElement*)));
+        (m_canvasView, SIGNAL(mousePressed(int, Rosegarden::timeT, QMouseEvent*, MatrixElement*)),
+         this,         SLOT  (mousePressed(int, Rosegarden::timeT, QMouseEvent*, MatrixElement*)));
+
+    QObject::connect
+        (m_canvasView, SIGNAL(mouseMoved(Rosegarden::timeT, QMouseEvent*)),
+         this,         SLOT  (mouseMoved(Rosegarden::timeT, QMouseEvent*)));
+
+    QObject::connect
+        (m_canvasView, SIGNAL(mouseReleased(Rosegarden::timeT, QMouseEvent*)),
+         this,         SLOT  (mouseReleased(Rosegarden::timeT, QMouseEvent*)));
 
 
 
@@ -533,15 +524,24 @@ void MatrixView::slotSelectSelected()
 {
 }
 
-void MatrixView::itemPressed(int pitch, Rosegarden::timeT time,
+void MatrixView::mousePressed(int pitch, Rosegarden::timeT time,
                              QMouseEvent* e, MatrixElement* el)
 {
-    kdDebug(KDEBUG_AREA) << "MatrixView::itemPressed at pitch "
+    kdDebug(KDEBUG_AREA) << "MatrixView::mousePressed at pitch "
                          << pitch << ", time " << time << endl;
 
     m_tool->handleMousePress(pitch, time, 0, e, el);
 }
 
+void MatrixView::mouseMoved(Rosegarden::timeT time, QMouseEvent* e)
+{
+    m_tool->handleMouseMove(0, time, e);
+}
+
+void MatrixView::mouseReleased(Rosegarden::timeT time, QMouseEvent* e)
+{
+    m_tool->handleMouseRelease(0, time, e);
+}
 
 
 //////////////////////////////////////////////////////////////////////
@@ -621,12 +621,18 @@ MatrixTool::MatrixTool(const QString& menuName, MatrixView* parent)
 
 
 using Rosegarden::Event;
+using Rosegarden::Note;
 
 MatrixPainter::MatrixPainter(MatrixView* parent)
     : MatrixTool("MatrixPainter", parent),
       m_currentElement(0),
-      m_currentStaff(0)
+      m_currentStaff(0),
+      m_resolution(Note::QuarterNote),
+      m_basicDuration(0)
 {
+    Note tmpNote(m_resolution);
+
+    m_basicDuration = tmpNote.getDuration();
 }
 
 void MatrixPainter::handleLeftButtonPress(int pitch,
@@ -635,12 +641,15 @@ void MatrixPainter::handleLeftButtonPress(int pitch,
                                           QMouseEvent*,
                                           Rosegarden::ViewElement*)
 {
-    using Rosegarden::Note;
-    
     kdDebug(KDEBUG_AREA) << "MatrixPainter::handleLeftButtonPress : pitch = "
                          << pitch << ", time : " << time << endl;
 
-    Note newNote(Note::QuarterNote);
+    Note newNote(m_resolution);
+
+    // Round event time to a multiple of resolution
+    timeT noteDuration = newNote.getDuration();
+    
+    time = (time / noteDuration) * noteDuration;
 
     Event* el = newNote.getAsNoteEvent(pitch, time);
 
@@ -650,23 +659,52 @@ void MatrixPainter::handleLeftButtonPress(int pitch,
 
     int y = m_currentStaff->getLayoutYForHeight(pitch) - m_currentStaff->getElementHeight();
 
-        kdDebug(KDEBUG_AREA) << "Painter : Layout y = " << y << " for pitch " << pitch << endl;
-
     m_currentElement->setLayoutY(y);
     m_currentElement->setLayoutX(time * m_currentStaff->getTimeScaleFactor());
     m_currentElement->setHeight(m_currentStaff->getElementHeight());
+
+    double width = noteDuration * m_currentStaff->getTimeScaleFactor();
+    m_currentElement->setWidth(int(width));
 
     m_currentStaff->positionElement(m_currentElement);
     m_mParentView->canvas()->update();
 }
 
-void MatrixPainter::handleMouseMove(QMouseEvent*)
+void MatrixPainter::handleMouseMove(int,
+                                    Rosegarden::timeT newTime,
+                                    QMouseEvent*)
 {
+    newTime = (newTime / m_basicDuration) * m_basicDuration;
+
+    if (newTime == m_currentElement->getAbsoluteTime()) return;
+
+    timeT newDuration = newTime - m_currentElement->getAbsoluteTime();
+
+    kdDebug(KDEBUG_AREA) << "MatrixPainter::handleMouseMove : time = "
+                         << newTime << ", new duration = "
+                         << newDuration << endl;
+
+    m_currentElement->setDuration(newDuration);
+
+    double width = newDuration * m_currentStaff->getTimeScaleFactor();
+    m_currentElement->setWidth(int(width));
+
+    m_mParentView->canvas()->update();
 }
 
-void MatrixPainter::handleMouseRelease(QMouseEvent*)
+void MatrixPainter::handleMouseRelease(int,
+                                       Rosegarden::timeT,
+                                       QMouseEvent*)
 {
     m_currentElement = 0;
+
+    // Insert element
 }
+
+void MatrixPainter::setResolution(Rosegarden::Note::Type note)
+{
+    m_resolution = note;
+}
+
 
 const QString MatrixPainter::ToolName = "painter";

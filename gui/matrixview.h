@@ -130,12 +130,12 @@ public:
 
 signals:
 
-    void itemPressed(int pitch, Rosegarden::timeT time,
-                     QMouseEvent*, MatrixElement*);
+    void mousePressed(int pitch, Rosegarden::timeT time,
+                      QMouseEvent*, MatrixElement*);
 
-    void itemReleased(Rosegarden::timeT time, QMouseEvent*);
+    void mouseMoved(Rosegarden::timeT time, QMouseEvent*);
 
-    void itemResized(Rosegarden::timeT time, QMouseEvent*);
+    void mouseReleased(Rosegarden::timeT time, QMouseEvent*);
 
 protected:
     /**
@@ -144,20 +144,14 @@ protected:
     virtual void contentsMousePressEvent(QMouseEvent*);
 
     /**
-     * Callback for a mouse button release event in the canvas
-     */
-    virtual void contentsMouseReleaseEvent(QMouseEvent*);
-
-    /**
      * Callback for a mouse move event in the canvas
      */
     virtual void contentsMouseMoveEvent(QMouseEvent*);
 
     /**
-     * Compute the time and pitch corresponding to the event's
-     * location
+     * Callback for a mouse button release event in the canvas
      */
-    void eventTimePitch(QMouseEvent*, Rosegarden::timeT&, int& pitch);
+    virtual void contentsMouseReleaseEvent(QMouseEvent*);
 
     //--------------- Data members ---------------------------------
 
@@ -376,8 +370,11 @@ public slots:
      * Called when a mouse press occurred on a matrix element
      * or somewhere on the staff
      */
-    void itemPressed(int pitch, Rosegarden::timeT time,
+    void mousePressed(int pitch, Rosegarden::timeT time,
                      QMouseEvent*, MatrixElement*);
+
+    void mouseMoved(Rosegarden::timeT time, QMouseEvent*);
+    void mouseReleased(Rosegarden::timeT time, QMouseEvent*);
 
 protected:
 
@@ -462,6 +459,8 @@ protected:
 
 class MatrixPainter : public MatrixTool
 {
+    Q_OBJECT
+
     friend MatrixToolBox;
 
 public:
@@ -475,20 +474,34 @@ public:
     /**
      * Set the duration of the element
      */
-    virtual void handleMouseMove(QMouseEvent*);
+    virtual void handleMouseMove(int height,
+                                 Rosegarden::timeT,
+                                 QMouseEvent*);
 
     /**
      * Actually insert the new element
      */
-    virtual void handleMouseRelease(QMouseEvent*);
+    virtual void handleMouseRelease(int height,
+                                    Rosegarden::timeT,
+                                    QMouseEvent*);
 
     static const QString ToolName;
+
+public slots:
+    /**
+     * Set the shortest note which can be "painted"
+     * on the matrix
+     */
+    void setResolution(Rosegarden::Note::Type);
 
 protected:
     MatrixPainter(MatrixView*);
 
     MatrixElement* m_currentElement;
     MatrixStaff* m_currentStaff;
+
+    Rosegarden::Note::Type m_resolution;
+    Rosegarden::timeT m_basicDuration;
 };
 
 #endif
