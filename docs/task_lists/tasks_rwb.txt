@@ -1,7 +1,7 @@
 0.2 tasks
 =========
 
-o Sync audio and MIDI [PARTIAL]
+o Sync audio and MIDI [PARTIAL - manual JACK sliders]
 
 o Get first fetch audio working - partial segments
 
@@ -10,13 +10,13 @@ o Fix Audio Segment splitting [WORKING BUT TIMING DODGY]
 o Audio file playing feedback - async events and how to
   operate outside the ALSA timing loop
 
-o Fix/Complete repeating Segments
+o Fix/Complete repeating Segments [ALMOST COMPLETE]
 
 o Get Segment joining working
 
 o Audio volume faders - studio concept on sequencer
 
-o Segment previews still buggy
+o Segment previews still buggy [BETTER but still a glitch]
 
 o Realtime downsampling buggy (8 bit)
 
@@ -33,13 +33,11 @@ o First time run up go to settings and walk user through the
 
 o "Split silence" function to automatically split up an audio segment
    into a number of segments when the amplitude falls below a given
-   threshold.
+   threshold. [MADE A START]
 
 o Set tempo event to length of audio sample
 
 o Audio VU meters
-
-o Some state we're getting into with mute buttons and file saving
 
 o "Revert file" option
 
@@ -63,17 +61,11 @@ o Segment colouring
 o selection of ALSA recording device
 
 
-Completed for 0.1.7
-===================
+Completed for 0.1.7 (0.2.0)
+===========================
 
-Big things
-----------
-
-o AudioManager
-
-
-Weird things
-------------
+o Some state we're getting into with mute buttons and file saving
+  [FIXED]
 
 o Saving RG files with audio [DONE]
 

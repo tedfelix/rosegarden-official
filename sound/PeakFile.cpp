@@ -457,69 +457,44 @@ PeakFile::writePeaks(Progress *progress,
 
     cout << "PeakFile::writePeaks - calculating peaks" << endl;
 
-    // Scan to beginning of data
-    //
+    // Scan to beginning of audio data
     m_audioFile->scanTo(RealTime(0, 0));
-
 
     // Store our samples
     //
+    std::vector<std::pair<int, int> > channelPeaks;
     std::string samples;
     char *samplePtr;
 
-    // Store our maxima and minima in this vector 
-    // 
-    std::vector<std::pair<int, int> > channelPeaks;
-
-    for (unsigned int i = 0; i < m_audioFile->getChannels(); i++)
-        channelPeaks.push_back(std::pair<int, int>());
-
-    // Set the format level now we've written the peak data
-    //
-    int bytes = m_audioFile->getBitsPerSample() / 8;
-
-    // Get approx file size for progress dialog
-    //
-    unsigned int apprxTotalBytes = m_audioFile->getSize();
-    unsigned int byteCount = 0;
-
-    // Store peaks of peaks position
-    //
     int sampleValue;
     int sampleMax = 0 ;
     int sampleFrameCount = 0;
 
-    int showCount = 0;
+    int channels = m_audioFile->getChannels();
+    int bytes = m_audioFile->getBitsPerSample() / 8;
 
-    // Clear some totals
-    //
+    // for the progress dialog
+    unsigned int apprxTotalBytes = m_audioFile->getSize();
+    unsigned int byteCount = 0;
+
+    for (unsigned int i = 0; i < channels; i++)
+        channelPeaks.push_back(std::pair<int, int>());
+
+    // clear down info
     m_numberOfPeaks = 0;
     m_bodyBytes = 0;
     m_positionPeakOfPeaks = 0;
 
-    // Always loop until we hit EOF
-    //
     while(true)
     {
-        // clear peak data
-        samples.erase(samples.begin(), samples.end());
-
-        // Get a block of bytes - blocksize * channels * bytes per sample
-        //
-        // We fetch from the AudioFile handle and place into the given
-        // output file handle.
-        //
         try
         {
             samples = m_audioFile->
-                getBytes(m_blockSize * m_audioFile->getChannels() * bytes);
+                getBytes(m_blockSize * channels * bytes);
         }
         catch (std::string e)
         {
-            cerr << "PeakFile::writePeaks - \"" << e << "\"" 
-                      << endl
-                      << "PeakFile::writePeaks - leaving last block" << endl;
-            break;
+            // do nothing
         }
 
         // If no bytes or less than the total number of bytes are returned
@@ -532,29 +507,12 @@ PeakFile::writePeaks(Progress *progress,
 
         byteCount += samples.length();
 
-        // Set the progress dialog
-        //
         if (progress)
-        {
             progress->setCompleted((int)(double(byteCount)/
                                    double(apprxTotalBytes) * 100.0));
-        }
 
-        // The sample data pointer
-        //
         samplePtr = (char *)samples.c_str();
 
-        // Set the peaks (positive and negative) to zero for
-        // each channel.
-        // 
-        for (unsigned int i = 0; i < m_audioFile->getChannels(); i++)
-        {
-            channelPeaks[i].first = 0;
-            channelPeaks[i].second = 0;
-        }
-
-        // Scan over entire block
-        //
         for (int i = 0; i < m_blockSize; i++)
         {
             for (unsigned int j = 0; j < m_audioFile->getChannels(); j++)
@@ -582,20 +540,16 @@ PeakFile::writePeaks(Progress *progress,
                     throw(std::string("PeakFile::writePeaks - unsupported bit depth"));
                 }
 
-                // first time through set to both
-                if (i == 0 && j == 0)
+                // First time for each channel
+                //
+                if (i == 0)
                 {
                     channelPeaks[j].first = sampleValue;
                     channelPeaks[j].second = sampleValue;
                 }
                 else
                 {
-                    /*
-                    if (showCount++ < 10)
-                        cout << "SAMPLES = " << sampleValue << endl;
-                    */
-
-                    // Store maximum for this block
+                    // Compare and store
                     //
                     if (sampleValue > channelPeaks[j].first)
                         channelPeaks[j].first = sampleValue;
@@ -611,35 +565,20 @@ PeakFile::writePeaks(Progress *progress,
                     sampleMax = abs(sampleValue);
                     m_positionPeakOfPeaks = sampleFrameCount;
                 }
-
             }
 
             // for peak of peaks as well as frame count
             sampleFrameCount++;
         }
-        /*
-        if (showCount++ == 10)
-          cout << endl;
-          */
 
         // Write absolute peak data in channel order
         //
         for (unsigned int i = 0; i < m_audioFile->getChannels(); i++)
         {
-            //cout << "PeakFile::writePeaks - "
-                      //<< "writing peak data out" << endl;
-
-            //cout << "WRITING HI VALUE = " << channelPeaks[i].first << endl;
-
             putBytes(file, getLittleEndianFromInteger(channelPeaks[i].first,
                                                       bytes));
-
-            //cout << "WRITING LO VALUE = " << channelPeaks[i].second << endl;
-
             putBytes(file, getLittleEndianFromInteger(channelPeaks[i].second,
                                                       bytes));
-            // count up total body bytes
-            //
             m_bodyBytes += bytes * 2;
         }
 
@@ -751,8 +690,8 @@ PeakFile::getPreview(const RealTime &startTime,
                 int inValue =
                     getIntegerFromLittleEndian(peakData.substr(0, m_format));
 
-                if (inValue > intDivisor)
-                    inValue = intDivisor - inValue;
+                if (inValue >= intDivisor - 1)
+                    inValue = inValue % intDivisor;
 
                 hiValue += float(inValue);
 
@@ -762,7 +701,7 @@ PeakFile::getPreview(const RealTime &startTime,
                         getIntegerFromLittleEndian(
                                 peakData.substr(m_format, m_format));
 
-                    if (inValue > intDivisor)
+                    if (inValue >= intDivisor - 1)
                         inValue = intDivisor - inValue;
 
                     loValue += float(inValue);
@@ -779,6 +718,8 @@ PeakFile::getPreview(const RealTime &startTime,
                 return ret;
             }
 
+            //cout << "VALUE = " << hiValue / divisor << endl;
+
             // Always push back high value
             ret.push_back(hiValue / divisor);
 
@@ -789,52 +730,6 @@ PeakFile::getPreview(const RealTime &startTime,
 
     return ret;
 }
-
-/*
-void
-PeakFile::drawPixmap(const RealTime &startTime,
-                     const RealTime &endTime,
-                     QPixmap *pixmap)
-{
-    std::vector<float> ret = getPreview(startTime,
-                                        endTime, 
-                                        pixmap->width());
-    // Setup pixmap and painter
-    //
-    QPainter painter(pixmap);
-    pixmap->fill(kapp->palette().color(QPalette::Active,
-                                       QColorGroup::Base));
-    painter.setPen(Qt::black);
-
-    float yStep = pixmap->height() / 2;
-
-    for (int i = 0; i < pixmap->width(); i++)
-    {
-        // Draw the line
-        //
-        painter.drawLine(i, yStep + ret[i] * yStep,
-                         i, yStep - ret[i] * yStep);
-
-    }
-
-    return;
-
-}
-
-void
-PeakFile::drawHighlightedPixmap(const RealTime &startTime,
-                                const RealTime &endTime,
-                                const RealTime &startHighlight,
-                                const RealTime &endHighlight,
-                                QPixmap *pixmap)
-{
-    std::vector<float> ret = getPreview(startTime,
-                                        endTime, 
-                                        pixmap->width());
-    // Setup pixmap and painter
-}
-*/
-
 
 double
 PeakFile::getPeak(const RealTime &time)

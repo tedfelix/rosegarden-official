@@ -952,11 +952,17 @@ void RosegardenGUIApp::slotFileNew()
 
     if (makeNew) {
 
-        m_doc->newDocument();
+        // Perform autoload to create a new document - if that fails
+        // then create a new Document the old fashioned way.
+        //
+        if(!performAutoload())
+        {
+            m_doc->newDocument();
 
-        QString caption=kapp->caption();	
-        setCaption(caption+": "+m_doc->getTitle());
-        initView();
+            QString caption=kapp->caption();	
+            setCaption(caption+": "+m_doc->getTitle());
+            initView();
+        }
     }
 }
 
