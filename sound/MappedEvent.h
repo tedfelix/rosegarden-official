@@ -184,6 +184,8 @@ public:
 	FailureCPUOverload       = 7,
         // JACK kicked us out, but we've reconnected
         FailureJackRestart       = 8,
+        // JACK kicked us out, and now the reconnection has failed
+        FailureJackRestartFailed = 9,
     } FailureCode;	
 
     MappedEvent(): m_trackId(0),
