@@ -976,7 +976,7 @@ void RosegardenGUIApp::slotFileOpen()
     slotStatusHelpMsg(i18n("Opening file..."));
 
 
-    KURL url = KFileDialog::getOpenURL(QString::null, "*.rg", this,
+    KURL url = KFileDialog::getOpenURL(":ROSEGARDEN", "*.rg", this,
                                        i18n("Open File"));
     if ( url.isEmpty() ) { return; }
 
@@ -1031,7 +1031,7 @@ RosegardenGUIApp::getValidWriteFile(const QString &extension,
 				    const QString &label)
 {
     QString name = KFileDialog::getSaveFileName
-	(QDir::currentDirPath(),
+	(":ROSEGARDEN",
 	 (extension.isEmpty() ? QString("*") : ("*." + extension)), this,
 	 i18n(label));
 
@@ -1609,7 +1609,7 @@ void RosegardenGUIApp::slotAddTracks()
 
 void RosegardenGUIApp::slotImportMIDI()
 {
-    KURL url = KFileDialog::getOpenURL(QString::null, "*.mid", this,
+    KURL url = KFileDialog::getOpenURL(":MIDI", "*.mid", this,
                                      i18n("Open MIDI File"));
     if (url.isEmpty()) { return; }
 
@@ -1677,7 +1677,7 @@ void RosegardenGUIApp::importMIDIFile(const QString &file)
 
 void RosegardenGUIApp::slotImportRG21()
 {
-    KURL url = KFileDialog::getOpenURL(QString::null, "*.rose", this,
+    KURL url = KFileDialog::getOpenURL(":ROSEGARDEN21", "*.rose", this,
                                        i18n("Open Rosegarden 2.1 File"));
     if (url.isEmpty()) { return; }
 
