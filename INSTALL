@@ -6,7 +6,8 @@ ALSA 0.9.x/1.x support, JACK and LADSPA
 =======================================
 
 Rosegarden-4 supports ALSA (www.alsa-project.org) sound drivers as
-default.  Any version above ALSA 0.9.0beta12 will do.
+default.  Any version above ALSA 0.9.0beta12 will do, although 1.0.6
+or newer is recommended.
 
 Full duplex audio is provided through the JACK library and server:
 
@@ -18,6 +19,10 @@ don't need JACK for MIDI.
 Audio plugin support is provided courtesy of LADSPA:
 
   http://www.ladspa.org
+
+and audio synth plugin support courtesy of DSSI:
+
+  http://dssi.sourceforge.net
 
 
 Compiling from CVS
