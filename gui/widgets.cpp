@@ -1663,8 +1663,12 @@ RosegardenTimeWidget::populate()
 	// starting at the start of a bar, in the time signature in effect
 	// at m_startTime
 
+	int bars = 0, beats = 0, hemidemis = 0, remainder = 0;
+	m_composition->getMusicalTimeForDuration(m_startTime, m_time,
+						 bars, beats, hemidemis, remainder);
 	Rosegarden::TimeSignature timeSig =
 	    m_composition->getTimeSignatureAt(m_startTime);
+/*!!!
 	Rosegarden::timeT barDuration = timeSig.getBarDuration();
 	Rosegarden::timeT beatDuration = timeSig.getBeatDuration();
 	int bars = m_time / barDuration;
@@ -1672,7 +1676,7 @@ RosegardenTimeWidget::populate()
 	Rosegarden::timeT remainder = (m_time % barDuration) % beatDuration;
 	int hemidemis = remainder /
 	    Rosegarden::Note(Rosegarden::Note::Shortest).getDuration();
-
+*/
 	if (m_bar) {
 	    m_bar->setMinValue(0);
 	    m_bar->setMaxValue
@@ -1731,11 +1735,11 @@ RosegardenTimeWidget::populate()
 	double tempo = m_composition->getTempoAt(m_startTime);
 	int qpmc = int(tempo * 100.0);
 	int bpmc = qpmc;
-	if (beatDuration != Rosegarden::Note(Rosegarden::Note::Crotchet).
-	    getDuration()) {
+	if (timeSig.getBeatDuration()
+	    != Rosegarden::Note(Rosegarden::Note::Crotchet).getDuration()) {
 	    bpmc = int(tempo * 100.0 *
 		       Rosegarden::Note(Rosegarden::Note::Crotchet).getDuration() /
-		       beatDuration);
+		       timeSig.getBeatDuration());
 	}
 	if (change) {
 	    if (bpmc != qpmc) {
@@ -1775,15 +1779,21 @@ RosegardenTimeWidget::populate()
 	    m_timeT->setValue(m_time);
 	}
 
-	int bar = m_composition->getBarNumber(m_time);
+	int bar = 1, beat = 1, hemidemis = 0, remainder = 0;
+	m_composition->getMusicalTimeForAbsoluteTime
+	    (m_time, bar, beat, hemidemis, remainder);
+	
 	Rosegarden::TimeSignature timeSig =
 	    m_composition->getTimeSignatureAt(m_time);
+/*!!!
+	int bar = m_composition->getBarNumber(m_time);
 	Rosegarden::timeT barStart = m_composition->getBarStart(bar);
 	Rosegarden::timeT beatDuration = timeSig.getBeatDuration();
 	int beat = (m_time - barStart) / beatDuration + 1;
 	Rosegarden::timeT remainder = (m_time - barStart) % beatDuration;
 	int hemidemis = remainder /
 	    Rosegarden::Note(Rosegarden::Note::Shortest).getDuration();
+*/
 
 	if (m_bar) {
 	    m_bar->setMinValue(INT_MIN);
@@ -1918,6 +1928,9 @@ RosegardenTimeWidget::slotBarBeatOrFractionChanged(int)
     int fraction = m_fraction->value();
 
     if (m_isDuration) {
+	slotSetTime(m_composition->getDurationForMusicalTime
+		    (m_startTime, bar, beat, fraction, 0));
+/*!!!
 	Rosegarden::TimeSignature timeSig =
 	    m_composition->getTimeSignatureAt(m_startTime);
 	Rosegarden::timeT barDuration = timeSig.getBarDuration();
@@ -1925,13 +1938,18 @@ RosegardenTimeWidget::slotBarBeatOrFractionChanged(int)
 	Rosegarden::timeT t = bar * barDuration + beat * beatDuration + fraction *
 	    Rosegarden::Note(Rosegarden::Note::Shortest).getDuration();
 	slotSetTime(t);
+*/
     } else {
+	slotSetTime(m_composition->getAbsoluteTimeForMusicalTime
+		    (bar, beat, fraction, 0));
+	/*!!!
 	Rosegarden::timeT t = m_composition->getBarStart(bar - 1);
 	Rosegarden::TimeSignature timesig = m_composition->getTimeSignatureAt(t);
 	t += (beat-1) * timesig.getBeatDuration();
 	t += Rosegarden::Note(Rosegarden::Note::Shortest).getDuration() *
 	    fraction;
 	slotSetTime(t);
+	*/
     }
 }
 

@@ -883,6 +883,66 @@ Composition::setTempoTimestamp(Event *e, RealTime t)
 }
 
 void
+Composition::getMusicalTimeForAbsoluteTime(timeT absTime,
+					   int &bar, int &beat,
+					   int &fraction, int &remainder)
+{
+    bar = getBarNumber(absTime);
+
+    TimeSignature timeSig = getTimeSignatureAt(absTime);
+    timeT barStart = getBarStart(bar);
+    timeT beatDuration = timeSig.getBeatDuration();
+    beat = (absTime - barStart) / beatDuration + 1;
+
+    remainder = (absTime - barStart) % beatDuration;
+    timeT fractionDuration = Note(Note::Shortest).getDuration();
+    fraction = remainder / fractionDuration;
+    remainder = remainder % fractionDuration;
+}
+
+void
+Composition::getMusicalTimeForDuration(timeT absTime, timeT duration,
+				       int &bars, int &beats,
+				       int &fractions, int &remainder)
+{
+    TimeSignature timeSig = getTimeSignatureAt(absTime);
+    timeT barDuration = timeSig.getBarDuration();
+    timeT beatDuration = timeSig.getBeatDuration();
+
+    bars = duration / barDuration;
+    beats = (duration % barDuration) / beatDuration;
+    remainder = (duration % barDuration) % beatDuration;
+    timeT fractionDuration = Note(Note::Shortest).getDuration();
+    fractions = remainder / fractionDuration;
+    remainder = remainder % fractionDuration;
+}
+
+timeT
+Composition::getAbsoluteTimeForMusicalTime(int bar, int beat,
+					   int fraction, int remainder)
+{
+    timeT t = getBarStart(bar - 1);
+    TimeSignature timesig = getTimeSignatureAt(t);
+    t += (beat-1) * timesig.getBeatDuration();
+    t += Note(Note::Shortest).getDuration() * fraction;
+    t += remainder;
+    return t;
+}
+
+timeT
+Composition::getDurationForMusicalTime(timeT absTime,
+				       int bars, int beats,
+				       int fractions, int remainder)
+{
+    TimeSignature timeSig = getTimeSignatureAt(absTime);
+    timeT barDuration = timeSig.getBarDuration();
+    timeT beatDuration = timeSig.getBeatDuration();
+    timeT t = bars * barDuration + beats * beatDuration + fractions *
+	Note(Note::Shortest).getDuration() + remainder;
+    return t;
+}
+
+void
 Composition::setPosition(timeT position)
 {
     m_position = position;

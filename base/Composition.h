@@ -499,6 +499,46 @@ public:
     }
 
 
+    //////
+    //
+    //  OTHER TIME CONVERSIONS
+
+    /**
+     * Return (by reference) the bar number and beat/division values
+     * corresponding to a given absolute time.
+     */
+    void getMusicalTimeForAbsoluteTime(timeT absoluteTime,
+				       int &bar, int &beat,
+				       int &fraction, int &remainder);
+
+    /**
+     * Return (by reference) the number of bars and beats/divisions
+     * corresponding to a given duration.  The absolute time at which
+     * the duration starts is also required, so as to know the correct
+     * time signature.
+     */
+    void getMusicalTimeForDuration(timeT absoluteTime, timeT duration,
+				   int &bars, int &beats,
+				   int &fractions, int &remainder);
+
+    /**
+     * Return the absolute time corresponding to a given bar number
+     * and beat/division values.
+     */
+    timeT getAbsoluteTimeForMusicalTime(int bar, int beat,
+					int fraction, int remainder);
+
+    /**
+     * Return the duration corresponding to a given number of bars and
+     * beats/divisions.  The absolute time at which the duration
+     * starts is also required, so as to know the correct time
+     * signature.
+     */
+    timeT getDurationForMusicalTime(timeT absoluteTime,
+				    int bars, int beats,
+				    int fractions, int remainder);
+
+
     /**
      * Get the current playback position.
      */
