@@ -166,10 +166,11 @@ public:
     //
     MappedComposition getMappedComposition();
 
-    // Process MappedComposition into MIDI events and send to aRTS
+    // Process MappedComposition into MIDI and Audio events and send
+    // to aRTS
     //
-    void processMidiOut(Rosegarden::MappedComposition mappedComp,
-                        const Rosegarden::RealTime &playLatency);
+    void processEventsOut(Rosegarden::MappedComposition mC,
+                          const Rosegarden::RealTime &playLatency);
 
     // Initialise internal states ready for new playback to commence
     //
@@ -214,6 +215,12 @@ private:
     //
     void initialiseMidi();
     void initialiseAudio();
+
+    void processAudioOut(Rosegarden::MappedComposition mC,
+                        const Rosegarden::RealTime &playLatency);
+
+    void processMidiOut(Rosegarden::MappedComposition mC,
+                        const Rosegarden::RealTime &playLatency);
 
     // get a vector of recorded events from aRTS
     // (only for internal use)

@@ -31,8 +31,8 @@
 //
 //
 // MappedEvents also code playback of audio samples - if the
-// m_isAudio flag is set by the GUI then the sequencer will
-// attempt to map the Pitch (m_pitch) to the audio id.
+// m_type is Audio then the sequencer will attempt to map the
+// Pitch (m_pitch) to the audio id.
 //
 
 #include "Composition.h" // for Rosegarden::RealTime
@@ -43,18 +43,22 @@
 namespace Rosegarden
 {
 
-typedef unsigned int trackT;
 typedef unsigned int velocityT;
 
 class MappedEvent
 {
 public:
+    typedef enum
+    {
+        Internal,
+        Audio
+    } MappedEventType;
+
     MappedEvent(): m_pitch(0),
                    m_absoluteTime(0, 0),
                    m_duration(0, 0),
                    m_velocity(0),
-                   m_track(0),
-                   m_isAudio(false) {;}
+                   m_type(Internal) {;}
 
     // Our main constructors used to convert from Events -
     // note that we put in place default velocities at this
@@ -65,30 +69,43 @@ public:
 
     MappedEvent(const Event &e,
                 const Rosegarden::RealTime &absoluteTime,
-                const Rosegarden::RealTime &duration);
-
-    MappedEvent(const int &pitch, const Rosegarden::RealTime &absTime,
                 const Rosegarden::RealTime &duration,
-                const velocityT &velocity, const trackT &track):
+                const Rosegarden::InstrumentId &instrument);
+
+    MappedEvent(const int &pitch,
+                const Rosegarden::RealTime &absTime,
+                const Rosegarden::RealTime &duration,
+                const velocityT &velocity,
+                const Rosegarden::InstrumentId &instrument,
+                const MappedEventType &type):
         m_pitch(pitch),
         m_absoluteTime(absTime),
         m_duration(duration),
         m_velocity(velocity),
-        m_track(track),
-        m_isAudio(false) {;}
+        m_type(type),
+        m_instrument(instrument) {;}
+
+    // Set the type, id and times - Audio event constructor
+    //
+    MappedEvent(const Rosegarden::RealTime &absTime,
+                const Rosegarden::RealTime &duration,
+                const Rosegarden::InstrumentId &instrument,
+                const MappedEventType type,
+                const int &id);
+                
     ~MappedEvent() {;}
 
     void setPitch(const int &p) { m_pitch = p; }
     void setAbsoluteTime(const Rosegarden::RealTime &a) { m_absoluteTime = a; }
     void setDuration(const Rosegarden::RealTime &d) { m_duration = d; }
-    void setTrack(const trackT &i) { m_track = i; }
     void setVelocity(const velocityT &v) { m_velocity = v; }
+    void setInstrument(const InstrumentId &id) { m_instrument = id; }
 
-    int   getPitch() const { return m_pitch; }
+    int getPitch() const { return m_pitch; }
     Rosegarden::RealTime getAbsoluteTime() const { return m_absoluteTime; }
     Rosegarden::RealTime getDuration() const { return m_duration; }
     velocityT getVelocity() const { return m_velocity; }
-    trackT getTrack() const { return m_track; }
+    InstrumentId getInstrument() const { return m_instrument; }
 
     // Audio MappedEvent methods
     //
@@ -99,8 +116,8 @@ public:
     void setAudioID(const int &id) { m_pitch = id; }
     int getAudioID() const { return m_pitch; }
 
-    bool isAudio() const { return m_isAudio; }
-    void isAudio(const bool &value) { m_isAudio = value; }
+    MappedEventType getType() const { return m_type; }
+    void setType(const MappedEventType &value) { m_type = value; }
 
     struct MappedEventCmp
     {
@@ -118,8 +135,8 @@ private:
     Rosegarden::RealTime     m_absoluteTime;
     Rosegarden::RealTime     m_duration;
     velocityT                m_velocity;
-    trackT                   m_track;
-    bool                     m_isAudio;
+    MappedEventType          m_type;
+    Rosegarden::InstrumentId m_instrument;
 
 };
 

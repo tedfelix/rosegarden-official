@@ -37,20 +37,42 @@ AudioFilePlayer::~AudioFilePlayer()
 }
 
 
-void
+bool
 AudioFilePlayer::addAudioFile(const AudioFileType &audioFileType,
                               const string &fileName,
                               const int &id)
 {
     AudioFile *ins = new AudioFile(id, fileName, fileName);
+    try
+    {
+        ins->open();
+    }
+    catch(string s)
+    {
+        return false;
+    }
+
     m_audioFiles.push_back(ins);
 
     cout << "AudioFilePlayer::addAudioFile() = \"" << fileName << "\"" << endl;
+
+    return true;
 }
 
-void
+bool
 AudioFilePlayer::deleteAudioFile(const int &id)
 {
+    std::vector<AudioFile*>::iterator it;
+    for (it = m_audioFiles.begin(); it != m_audioFiles.end(); it++)
+    {
+        if ((*it)->getID() == id)
+        {
+            m_audioFiles.erase(it);
+            return true;
+        }
+    }
+
+    return false;
 }
 
 void

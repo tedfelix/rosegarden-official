@@ -398,7 +398,26 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
 
 
 void
-Sequencer::processMidiOut(Rosegarden::MappedComposition mappedComp,
+Sequencer::processEventsOut(Rosegarden::MappedComposition mC,
+                            const Rosegarden::RealTime &playLatency)
+{
+    processAudioOut(mC, playLatency);
+    processMidiOut(mC, playLatency);
+}
+
+void
+Sequencer::processAudioOut(Rosegarden::MappedComposition mC,
+                          const Rosegarden::RealTime &playLatency)
+{
+    for (MappedComposition::iterator i = mC.begin(); i != mC.end(); ++i)
+    {
+        if ((*i)->getType() == MappedEvent::Audio)
+            std::cout << "processAudioOut() - got audio event" << std::endl;
+    }
+}
+
+void
+Sequencer::processMidiOut(Rosegarden::MappedComposition mC,
                           const Rosegarden::RealTime &playLatency)
 {
     Arts::MidiEvent event;
@@ -429,8 +448,7 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition mappedComp,
     }
 
 
-    for ( MappedComposition::iterator i = mappedComp.begin();
-          i != mappedComp.end(); ++i )
+    for (MappedComposition::iterator i = mC.begin(); i != mC.end(); ++i)
     {
         // sort out the correct TimeStamp for playback
         assert((*i)->getAbsoluteTime() >= m_playStartPosition);

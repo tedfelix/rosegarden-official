@@ -126,11 +126,11 @@ public slots:
 
     // Add and delete wav files on the sequencer
     //
-    virtual void addAudioFile(const int &audioFileType,
+    virtual int addAudioFile(const int &audioFileType,
                              const QString &fileName,
                              const int &id);
 
-    virtual void deleteAudioFile(const int &id);
+    virtual int deleteAudioFile(const int &id);
 
     // Deletes all the audio files and clears down any flapping i/o handles
     //

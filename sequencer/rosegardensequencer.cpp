@@ -231,7 +231,7 @@ RosegardenSequencerApp::startPlaying()
 
     if (mC != 0)
     {
-        m_sequencer->processMidiOut( *mC, m_playLatency );
+        m_sequencer->processEventsOut(*mC, m_playLatency);
         delete mC;
     }
 
@@ -256,7 +256,7 @@ RosegardenSequencerApp::keepPlaying()
 
         if (mC != 0)
         {
-            m_sequencer->processMidiOut(*mC, m_playLatency);
+            m_sequencer->processEventsOut(*mC, m_playLatency);
             delete mC;
         }
 
@@ -580,20 +580,20 @@ RosegardenSequencerApp::getSoundSystemStatus()
 
 
 // Add an audio file to the sequencer
-void
+int
 RosegardenSequencerApp::addAudioFile(const int &audioFileType,
                                      const QString &fileName,
                                      const int &id)
 {
-    m_audioFilePlayer.addAudioFile((Rosegarden::AudioFileType) audioFileType,
-                                   string(fileName.data()),
-                                   id);
+    return((int)m_audioFilePlayer.addAudioFile(
+                     (Rosegarden::AudioFileType) audioFileType,
+                     string(fileName.data()), id));
 }
 
-void
+int
 RosegardenSequencerApp::deleteAudioFile(const int &id)
 {
-    m_audioFilePlayer.deleteAudioFile(id);
+    return((int)m_audioFilePlayer.deleteAudioFile(id));
 }
 
 void

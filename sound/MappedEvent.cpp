@@ -27,11 +27,13 @@ namespace Rosegarden
 
 MappedEvent::MappedEvent(const Event &e,
                          const Rosegarden::RealTime &absoluteTime,
-                         const Rosegarden::RealTime &duration):
+                         const Rosegarden::RealTime &duration,
+                         const Rosegarden::InstrumentId &instrument):
        m_pitch(e.get<Int>(BaseProperties::PITCH)),
        m_absoluteTime(absoluteTime),
        m_duration(duration),
-       m_isAudio(false)
+       m_type(Internal),
+       m_instrument(instrument)
 {
     // Attempt to get a velocity - if it fails then
     // set the velocity to default maximum (127)
@@ -45,6 +47,20 @@ MappedEvent::MappedEvent(const Event &e,
         m_velocity = 127;
     }
 }
+
+MappedEvent::MappedEvent(const Rosegarden::RealTime &absTime,
+                         const Rosegarden::RealTime &duration,
+                         const Rosegarden::InstrumentId &instrument,
+                         const MappedEventType type,
+                         const int &id):
+      m_pitch(id),
+      m_absoluteTime(absTime),
+      m_duration(duration),
+      m_type(type),
+      m_instrument(instrument)
+{
+}
+
 
 bool
 operator<(const MappedEvent &a, const MappedEvent &b)

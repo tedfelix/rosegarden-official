@@ -44,11 +44,11 @@ public:
     AudioFilePlayer();
     ~AudioFilePlayer();
 
-    void addAudioFile(const AudioFileType &audioFileType,
+    bool addAudioFile(const AudioFileType &audioFileType,
                       const string &fileName,
                       const int &id);
 
-    void deleteAudioFile(const int &id);
+    bool deleteAudioFile(const int &id);
 
     // Empty all the files and clear down all the handles
     //

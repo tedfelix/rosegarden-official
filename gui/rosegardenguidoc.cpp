@@ -617,6 +617,8 @@ void
 RosegardenGUIDoc::prepareAudio()
 {
     Rosegarden::AudioFileManagerIterator it = m_audioFileManager.begin();
+    QCString replyType;
+    QByteArray replyData;
 
     // Clear down the sequencer AudioFilePlayer object
     //
@@ -648,13 +650,24 @@ RosegardenGUIDoc::prepareAudio()
         streamOut << QString((*it)->getFilename().c_str());
         streamOut << (*it)->getID();
 
-        if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
+        if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
                                       ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                      "addAudioFile(int, QString, int)", data))
+                                      "addAudioFile(int, QString, int)", data, replyType, replyData))
         {
             std::cerr << "prepareAudio() - couldn't add audio file"
                       << std::endl;
             return;
+        }
+        else
+        {
+            QDataStream streamIn(replyData, IO_ReadOnly);
+            int result;
+            streamIn >> result;
+            if (!result)
+            {
+                std::cerr << "prepareAudio() - failed to add file \"" 
+                          << (*it)->getFilename() << "\"" << endl;
+            }
         }
     }
 }

@@ -492,7 +492,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             return false;
         }
 
-        m_currentSegment->setAudioStartIndex(marker);
+        m_currentSegment->setAudioEndIndex(marker);
         m_currentSegment->setDuration(marker -
                                m_currentSegment->getAudioStartIndex());
 

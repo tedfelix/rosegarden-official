@@ -60,8 +60,17 @@ struct RealTime
     }
 
     bool operator==(const RealTime &r) const {
-        if (sec == r.sec && usec == r.usec) return true;
-        else return false;
+        return (sec == r.sec && usec == r.usec);
+    }
+ 
+    bool operator>=(const RealTime &r) const {
+        if (sec == r.sec) return usec >= r.usec;
+        else return sec >= r.sec;
+    }
+
+    bool operator<=(const RealTime &r) const {
+        if (sec == r.sec) return usec <= r.usec;
+        else return sec <= r.sec;
     }
 };
 

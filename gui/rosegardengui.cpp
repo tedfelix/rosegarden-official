@@ -1053,10 +1053,45 @@ RosegardenGUIApp::getSequencerSlice(const long &sliceStartSec,
         if (m_doc->getComposition().getTrackByIndex((*i)->getTrack())->isMuted())
             continue;
 
-        // Skip the Segment if it starts too late to be of
-        // interest to our slice.
-        if ( (*i)->getStartIndex() > sliceEndElapsed )
-            continue;
+        if ((*i)->getType() == Rosegarden::Segment::Audio)
+        {
+            // We might have to adjust this check to allow for audio
+            // out latency
+            //
+            if ((*i)->getAudioStartIndex() > sliceEndElapsed ||
+                (*i)->getAudioStartIndex() < sliceStartElapsed)
+                continue;
+
+            eventTime = m_doc->getComposition().getElapsedRealTime
+                            (((*i)->getAudioStartIndex()));
+
+            duration = m_doc->getComposition().getElapsedRealTime
+                            (((*i)->getAudioEndIndex()))
+                       - eventTime;
+
+            assert (duration >= Rosegarden::RealTime(0,0));
+            
+            Rosegarden::InstrumentId instrument = m_doc->getComposition().
+                             getTrackByIndex((*i)->getTrack())->getInstrument();
+
+            // Insert Audio event
+            //
+            Rosegarden::MappedEvent *me =
+                    new Rosegarden::MappedEvent(eventTime, duration,
+                                                instrument,
+                                                Rosegarden::MappedEvent::Audio,
+                                                (*i)->getAudioFileID());
+            mappComp.insert(me);
+
+            continue; // next Segment
+        }
+        else
+        {
+            // Skip the Segment if it starts too late to be of
+            // interest to our slice.
+            if ( (*i)->getStartIndex() > sliceEndElapsed )
+                continue;
+        }
 
         Rosegarden::SegmentPerformanceHelper helper(**i);
 
@@ -1096,11 +1131,13 @@ RosegardenGUIApp::getSequencerSlice(const long &sliceStartSec,
 		if (duration == Rosegarden::RealTime(0, 0))
 		    continue;
 
+                Rosegarden::InstrumentId instrument = m_doc->getComposition().
+                             getTrackByIndex((*i)->getTrack())->getInstrument();
                 // insert event
                 Rosegarden::MappedEvent *me =
-                      new Rosegarden::MappedEvent(**j, eventTime, duration);
+                      new Rosegarden::MappedEvent(**j, eventTime, duration,
+                                                  instrument);
 
-                me->setTrack((*i)->getTrack());
                 mappComp.insert(me);
             }
         }

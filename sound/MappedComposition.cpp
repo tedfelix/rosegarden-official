@@ -55,7 +55,8 @@ operator<<(QDataStream &dS, const MappedComposition &mC)
 	dS << (*it)->getDuration().sec;
 	dS << (*it)->getDuration().usec;
 	dS << (*it)->getVelocity();
-	dS << (*it)->getTrack();
+	dS << (*it)->getInstrument();
+        dS << (*it)->getType();
     }
 
     return dS;
@@ -67,7 +68,7 @@ operator<<(QDataStream &dS, const MappedComposition &mC)
 QDataStream& 
 operator>>(QDataStream &dS, MappedComposition &mC)
 {
-    int sliceSize, velocity, track, pitch;
+    int sliceSize, pitch, type, instrument, velocity;
     Rosegarden::RealTime absTime, duration;
 
     dS >> sliceSize;
@@ -80,9 +81,13 @@ operator>>(QDataStream &dS, MappedComposition &mC)
 	dS >> duration.sec;
 	dS >> duration.usec;
 	dS >> velocity;
-	dS >> track;
+	dS >> instrument;
+        dS >> type;
 
-	mC.insert(new MappedEvent(pitch, absTime, duration, velocity, track));
+	mC.insert(new MappedEvent(pitch, absTime,
+                                  duration, velocity,
+                                  instrument,
+                                  (MappedEvent::MappedEventType)type));
 
 	sliceSize--;
 
