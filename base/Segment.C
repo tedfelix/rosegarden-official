@@ -31,6 +31,8 @@ using std::cerr;
 using std::endl;
 using std::string;
     
+
+
 Track::Track(timeT duration, timeT startIdx) :
     std::multiset<Event*, Event::EventCmp>(),
     m_startIdx(startIdx),
@@ -69,13 +71,15 @@ static bool isTimeSig(const Event* e)
 
 TimeSignature Track::getTimeSigAtEnd(timeT &absTimeOfSig) const
 {
+//!!! should presumably be based on findTimeSignatureAt
+
     TimeSignature timesig;
     absTimeOfSig = 0;
 
     const_reverse_iterator sig = std::find_if(rbegin(), rend(), isTimeSig);
 
     if (sig != rend()) {
-	assert((*sig)->isa(TimeSignature::EventType));
+	assert(isTimeSig(*sig));
         absTimeOfSig = (*sig)->getAbsoluteTime();
 	timesig = TimeSignature(*(*sig));
     }
@@ -130,7 +134,7 @@ void Track::setDuration(timeT d)
     
 }
 
-
+/*
 void Track::calculateBarPositions()
 {
     TimeSignature timeSignature;
@@ -203,7 +207,7 @@ int Track::getBarNumber(const Event *e) const
     if (bpi->start > e->getAbsoluteTime() && barNo > 0) --barNo;
     return barNo;
 }
-
+*/
 
 void Track::erase(iterator pos)
 {
@@ -216,6 +220,7 @@ void Track::erase(iterator pos)
 
 Track::iterator Track::insert(Event *e)
 {
+    m_quantizer->quantizeByNote(e);
     iterator i = std::multiset<Event*, Event::EventCmp>::insert(e);
     notifyAdd(e);
     return i;
@@ -245,7 +250,7 @@ bool Track::eraseSingle(Event* e)
 }
 
 
-Track::iterator Track::findContiguousNext(Track::iterator el)
+Track::iterator Track::findContiguousNext(Track::iterator el) const
 {
     std::string elType = (*el)->getType(),
         reject, accept;
@@ -283,7 +288,7 @@ Track::iterator Track::findContiguousNext(Track::iterator el)
     
 }
 
-Track::iterator Track::findContiguousPrevious(Track::iterator el)
+Track::iterator Track::findContiguousPrevious(Track::iterator el) const
 {
     if (el == begin()) return end();
 
@@ -323,7 +328,7 @@ Track::iterator Track::findContiguousPrevious(Track::iterator el)
 }
 
 
-Track::iterator Track::findSingle(Event* e)
+Track::iterator Track::findSingle(Event* e) const
 {
     iterator res = end();
 
@@ -339,12 +344,82 @@ Track::iterator Track::findSingle(Event* e)
 }
 
 
-Track::iterator Track::findTime(timeT t)
+Track::iterator Track::findTime(timeT t) const
 {
     Event dummy;
     dummy.setAbsoluteTime(t);
-    dummy.setSubOrdering(-100000);
+    dummy.setSubOrdering(MIN_SUBORDERING);
     return lower_bound(&dummy);
+}
+
+
+Track::iterator Track::findBarAt(timeT t) const
+{
+    const Track *ref = getReferenceTrack();
+    iterator i = ref->findTime(t);
+    if (i != ref->begin() &&
+	(i == ref->end() || (*i)->getAbsoluteTime() > t)) --i;
+    return i;
+}
+
+
+Track::iterator Track::findTimeSignatureAt(timeT t) const
+{
+    iterator i = findBarAt(t);
+    const Track *ref = m_referenceTrack;
+
+    while (i != ref->begin() &&
+	   (i == ref->end() || !isTimeSig(*i))) {
+	--i;
+    }
+
+    if (i == ref->end() || !isTimeSig(*i)) {
+	return ref->end();
+    }
+
+    return i;
+}
+
+timeT Track::findTimeSignatureAt(timeT t, TimeSignature &timeSig) const
+{
+    iterator i = findTimeSignatureAt(t);
+
+    if (i == m_referenceTrack->end()) {
+	timeSig = TimeSignature();
+	return 0;
+    }
+
+    timeSig = TimeSignature(**i);
+    return (*i)->getAbsoluteTime();
+}
+
+timeT Track::findBarStartTime(timeT t) const
+{
+    iterator barItr = findBarAt(t);
+    if (barItr == m_referenceTrack->end()) return -1;
+    return (*barItr)->getAbsoluteTime();
+}
+
+timeT Track::findBarEndTime(timeT t) const
+{
+    iterator barItr = findBarAt(t);
+    if (barItr == m_referenceTrack->end() ||
+	++barItr == m_referenceTrack->end()) return -1;
+    return (*barItr)->getAbsoluteTime();
+}
+
+Track::iterator Track::findStartOfBar(timeT t) const
+{
+    t = findBarStartTime(t);
+    if (t < 0) return end();
+    else return findTime(t);
+}
+
+Track::iterator Track::findStartOfNextBar(timeT t) const
+{
+    t = findBarEndTime(t);
+    if (t < 0) return end();
+    else return findTime(t);
 }
 
 
@@ -378,19 +453,33 @@ void Track::fillWithRests(timeT endTime)
 
 
 void Track::getTimeSlice(timeT absoluteTime, iterator &start, iterator &end)
+    const
 {
     Event dummy;
     
     dummy.setAbsoluteTime(absoluteTime);
-    
-    std::pair<iterator, iterator> res = equal_range(&dummy);
+  
+    // No, this won't work -- we need to include things that don't
+    // compare equal because they have different suborderings, as long
+    // as they have the same times
+  
+//    std::pair<iterator, iterator> res = equal_range(&dummy);
 
-    start = res.first;
-    end = res.second;
+//    start = res.first;
+//    end = res.second;
+
+    // Got to do this instead:
+
+    dummy.setSubOrdering(MIN_SUBORDERING);
+    start = end = lower_bound(&dummy);
+
+    while (end != this->end() &&
+	   (*end)->getAbsoluteTime() == (*start)->getAbsoluteTime())
+	++end;
 }
 
 
-bool Track::noteIsInChord(Event *note)
+bool Track::noteIsInChord(Event *note) const
 {
     std::pair<iterator, iterator> res = equal_range(note);
 
@@ -401,7 +490,8 @@ bool Track::noteIsInChord(Event *note)
     return noteCount > 1;
 }
 
-bool Track::hasEffectiveDuration(iterator i)
+/*
+bool Track::hasEffectiveDuration(iterator i) const
 {
     bool hasDuration = ((*i)->getDuration() > 0);
 
@@ -416,10 +506,10 @@ bool Track::hasEffectiveDuration(iterator i)
     
     return hasDuration;
 }
+*/
 
 
-
-void Track::notifyAdd(Event *e)
+void Track::notifyAdd(Event *e) const
 {
     for (ObserverSet::iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
@@ -428,11 +518,20 @@ void Track::notifyAdd(Event *e)
 }
 
  
-void Track::notifyRemove(Event *e)
+void Track::notifyRemove(Event *e) const
 {
     for (ObserverSet::iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
 	(*i)->eventRemoved(this, e);
+    }
+}
+
+
+void Track::notifyReferenceTrackRequested() const
+{
+    for (ObserverSet::iterator i = m_observers.begin();
+	 i != m_observers.end(); ++i) {
+	(*i)->referenceTrackRequested(this);
     }
 }
 

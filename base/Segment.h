@@ -61,7 +61,7 @@ public:
     Track(timeT duration = 0, timeT startIdx = 0);
     ~Track();
 
-
+/*
     struct BarPosition
     {
         timeT start;          // absolute time of event following barline
@@ -80,9 +80,9 @@ public:
     };
 
     typedef std::vector<BarPosition> BarPositionList;
+*/
 
-
-    const Quantizer &getQuantizer() { return *m_quantizer; }
+    const Quantizer &getQuantizer() const { return *m_quantizer; }
 
     timeT getStartIndex() const { return m_startIdx; }
     void  setStartIndex(timeT i);
@@ -99,19 +99,25 @@ public:
      * The results can be retrieved with getBarPositions().
      */
     //!!! NEW -- called automatically by Composition when a time sig is inserted somewhere (anywhere)
+/*
     void calculateBarPositions();
+*/
 
     /**
      * Returns the set of bar positions calculated by the last call to
      * calculateBarPositions().  No guarantee these are still valid.
      */
+/*
     const BarPositionList &getBarPositions() const { return m_barPositions; }
+*/
 
     /**
      * Returns the set of bar positions calculated by the last call to
      * calculateBarPositions().  No guarantee these are still valid.
      */
+/*
     BarPositionList &getBarPositions() { return m_barPositions; }
+*/
 
     /** 
      * Returns the number of the bar (as an index into the
@@ -121,15 +127,101 @@ public:
      * Returned value will only be correct if calculateBarPositions
      * has been called since the track was last modified.
      */
+/*
     int getBarNumber(const iterator &i) const;
     int getBarNumber(const Event *e) const;
+*/
+
+    /// Returns the track storing Bar and TimeSignature events, or null if none
+    const Track *getReferenceTrack() const {
+	notifyReferenceTrackRequested();
+	return m_referenceTrack;
+    }
+
+    /// Should only be called by Composition
+    void setReferenceTrack(const Track *reftrack) {
+	m_referenceTrack = reftrack;
+    }
 
     /**
-     * Equivalent to getBarPositions()[getBarNumber(end())].timeSignature,
-     * but slower and capable of working even if calculateBarPositions has
-     * not been called lately.
+     * Returns an iterator onto the reference track, pointing to the
+     * last bar or time signature event before (or at) the absolute
+     * time given.  Returns end() of reference track if there are no
+     * bar or time signature events before this time.
+     *
+     * Do not call this unless the track is in a Composition.
      */
-    //!!! This may be obsolete, but we'll think about that more later
+    //!!! untested
+    iterator findBarAt(timeT) const;
+
+    /**
+     * Returns an iterator onto the reference track, pointing to the
+     * last time signature before (or at) the absolute time given.
+     * Returns end() of reference track if there was no time signature
+     * before this time.
+     * 
+     * Do not call this unless the track is in a Composition.
+     */
+    //!!! untested
+    iterator findTimeSignatureAt(timeT) const;
+
+    /**
+     * Returns the absolute time of the last time signature before (or
+     * at) the absolute time given, and the time signature itself
+     * through the reference argument.
+     * 
+     * Returns 0 and the default time signature if there was no time
+     * signature before this time.  (You cannot distinguish between
+     * this case and a real default time signature at time 0; use the
+     * previous method if this matters to you.)
+     * 
+     * Do not call this unless the track is in a Composition.
+     */
+    //!!! untested
+    timeT findTimeSignatureAt(timeT, TimeSignature &) const;
+
+    /**
+     * Returns the time at which the bar containing the given time
+     * starts.  Returns -1 if the given time is somehow out of range.
+     *
+     * Do not call this unless the track is in a Composition.
+     */
+    //!!! untested
+    timeT findBarStartTime(timeT) const;
+
+    /**
+     * Returns the time at which the bar containing the given time
+     * ends.  Returns -1 if the given time is somehow out of range.
+     *
+     * Do not call this unless the track is in a Composition.
+     */
+    //!!! untested
+    timeT findBarEndTime(timeT) const;
+
+    /**
+     * Returns an iterator onto this track, pointing to the first item
+     * in the bar containing the given time.
+     *
+     * Do not call this unless the track is in a Composition.
+     */
+    //!!! untested
+    iterator findStartOfBar(timeT) const;
+
+    /**
+     * Returns an iterator onto this track, pointing to the first item
+     * in the bar following the one containing the given time.
+     *
+     * Do not call this unless the track is in a Composition.
+     */
+    //!!! untested
+    iterator findStartOfNextBar(timeT) const;
+
+    /**
+     * Returns the time signature in effect at the end of the track,
+     * without referring to the bar position data.  Inefficient unless
+     * the time signature changes very close to the end of the track.
+     * Does not require the reference track to exist.
+     */
     TimeSignature getTimeSigAtEnd(timeT &absTimeOfSig) const;
 
     /**
@@ -157,13 +249,13 @@ public:
      * Returns an iterator pointing to that specific element,
      * end() otherwise
      */
-    iterator findSingle(Event*);
+    iterator findSingle(Event*) const;
 
     /**
      * Returns an iterator pointing to the first element starting at
      * or beyond the given absolute time
      */
-    iterator findTime(timeT time);
+    iterator findTime(timeT time) const;
 
     /**
      * Returns an iterator pointing to the next contiguous element of
@@ -173,7 +265,7 @@ public:
      * (for instance if the argument points to a note and the next
      * element is a rest, end() will be returned)
      */
-    iterator findContiguousNext(iterator);
+    iterator findContiguousNext(iterator) const;
 
     /**
      * Returns an iterator pointing to the previous contiguous element
@@ -183,7 +275,7 @@ public:
      * (for instance if the argument points to a note and the previous
      * element is a rest, end() will be returned)
      */
-    iterator findContiguousPrevious(iterator);
+    iterator findContiguousPrevious(iterator) const;
     
     /**
      * Returns a numeric id of some sort
@@ -195,13 +287,13 @@ public:
     /**
      * Returns the range [start, end[ of events which are at absoluteTime
      */
-    void getTimeSlice(timeT absoluteTime, iterator &start, iterator &end);
+    void getTimeSlice(timeT absoluteTime, iterator &start, iterator &end) const;
 
     /**
      * Returns true if the iterator points at a note in a chord
      * e.g. if there are more notes at the same absolute time
      */
-    bool noteIsInChord(Event *note);
+    bool noteIsInChord(Event *note) const;
 
     /**
      * Fill up the track with rests, from the end of the last event
@@ -243,25 +335,34 @@ public:
 
 private:
     /// for use by calculateBarPositions
+/*
     void addNewBar(timeT start, bool fixed,
                    timeT prevStart, TimeSignature tsig);
 
     /// used by calculateBarPositions
     bool hasEffectiveDuration(iterator i);
+*/
 
     timeT m_startIdx;
     unsigned int m_instrument;
 
     mutable int m_id;
+
+/*
     BarPositionList m_barPositions;
+*/
+
+    /// contains bar position data etc. I do not own this
+    const Track *m_referenceTrack;
 
     typedef std::set<TrackObserver *> ObserverSet;
     ObserverSet m_observers;
 
     Quantizer *m_quantizer;
 
-    void notifyAdd(Event *);
-    void notifyRemove(Event *);
+    void notifyAdd(Event *) const;
+    void notifyRemove(Event *) const;
+    void notifyReferenceTrackRequested() const;
 
 private:
     Track(const Track &);
@@ -273,11 +374,14 @@ class TrackObserver
 {
 public:
     // called after the event has been added to the track:
-    virtual void eventAdded(Track *, Event *) = 0;
+    virtual void eventAdded(const Track *, Event *) = 0;
 
     // called after the event has been removed from the track,
     // and just before it is deleted:
-    virtual void eventRemoved(Track *, Event *) = 0;
+    virtual void eventRemoved(const Track *, Event *) = 0;
+
+    // probably only of interest to Composition
+    virtual void referenceTrackRequested(const Track *) { }
 };
 
 

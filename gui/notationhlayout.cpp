@@ -159,13 +159,16 @@ int NotationHLayout::getIdealBarWidth(Staff &staff,
 
 
 void
-NotationHLayout::preparse(Staff &staff,
-                          int firstBar, int lastBar)
+NotationHLayout::preparse(Staff &staff)
 {
     Track &t(staff.getViewElementsManager()->getTrack());
-    t.calculateBarPositions();
+    const Track *timeRef = t.getReferenceTrack();
+    if (timeRef == 0) {
+	kdDebug(KDEBUG_AREA) << "ERROR: NotationHLayout::preparse: reference track required (at least until code\nis written to render a track without bar lines)" << endl;
+	return;
+    }
 
-    const Track::BarPositionList &barPositions(t.getBarPositions());
+//!!!    const Track::BarPositionList &barPositions(t.getBarPositions());
     NotationElementList *notes = staff.getNotationElementList();
 
     BarDataList &barList(getBarData(staff));
@@ -180,33 +183,35 @@ NotationHLayout::preparse(Staff &staff,
     barList.clear();
     int fixedWidth = staff.getBarMargin();
 
-    if (firstBar < 0) firstBar = 0;
-    if ( lastBar < 0)  lastBar = barPositions.size() - 1;
-    
-    for (int barNo = firstBar; barNo <= lastBar; ++barNo) {
+//!!!    if (firstBar < 0) firstBar = 0;
+//!!!    if ( lastBar < 0)  lastBar = barPositions.size() - 1;
 
-        kdDebug(KDEBUG_AREA) << "preparse: Looking at bar " << barNo << " with start time " << barPositions[barNo].start << endl;
+    Track::iterator refStart = timeRef->findTime(t.getStartIndex());
+    Track::iterator refEnd =
+	timeRef->findTime(t.getStartIndex() + t.getDuration() + 1);
+
+    int barNo = 0; //!!!
+
+    for (Track::iterator refi = refStart; refi != refEnd; ++refi) {
+
+//!!!    for (int barNo = firstBar; barNo <= lastBar; ++barNo) {
+
+//!!!        kdDebug(KDEBUG_AREA) << "preparse: Looking at bar " << barNo << " with start time " << barPositions[barNo].start << endl;
 
         NotationElementList::iterator shortest = notes->end();
         int shortCount = 0;
         int totalCount = 0;
 
         NotationElementList::iterator from =
-            notes->findTime(barPositions[barNo].start);
-
-	if (barPositions[barNo].start == 0 &&
-	    from != notes->begin()) {
-	    kdDebug(KDEBUG_AREA) << "preparse: bar starts at time 0, but position is not at start of list!  Elts from start:" << endl;
-	    for (NotationElementList::iterator ii(notes->begin());
-		 ii != from; ++ii) {
-		(*ii)->event()->dump(std::cout);
-	    }
-	}
-	    
+	    notes->findTime((*refi)->getAbsoluteTime());
+//            notes->findTime(barPositions[barNo].start);
 
         NotationElementList::iterator to;
-        if (barNo < (int)barPositions.size() - 1) {
-            to = notes->findTime(barPositions[barNo+1].start);
+	Track::iterator refi0(refi); ++refi0;
+	if (refi0 != timeRef->end()) {
+//        if (barNo < (int)barPositions.size() - 1) {
+//            to = notes->findTime(barPositions[barNo+1].start);
+            to = notes->findTime((*refi0)->getAbsoluteTime());
         } else {
             to = notes->end();
         }
@@ -350,6 +355,8 @@ NotationHLayout::preparse(Staff &staff,
                   getIdealBarWidth(staff, fixedWidth, shortest, npf,
                                    shortCount, totalCount, timeSignature),
                   fixedWidth);
+
+	++barNo; //!!!
     }
 }
 

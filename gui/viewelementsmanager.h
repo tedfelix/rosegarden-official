@@ -84,13 +84,13 @@ public:
      * TrackObserver method - called after the event has been added to
      * the track
      */
-    virtual void eventAdded(Rosegarden::Track *, Rosegarden::Event *);
+    virtual void eventAdded(const Rosegarden::Track *, Rosegarden::Event *);
 
     /**
      * TrackObserver method - called after the event has been removed
      * from the track, and just before it is deleted
      */
-    virtual void eventRemoved(Rosegarden::Track *, Rosegarden::Event *);
+    virtual void eventRemoved(const Rosegarden::Track *, Rosegarden::Event *);
 
 
 protected:

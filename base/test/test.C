@@ -4,8 +4,9 @@
 
 #include "Event.h"
 #include "Track.h"
+#include "Composition.h"
 
-//#define TEST_NOTATION_TYPES 1
+#define TEST_NOTATION_TYPES 1
 #define TEST_SPEED 1
 
 #ifdef TEST_NOTATION_TYPES
@@ -22,27 +23,11 @@
 using namespace std;
 using namespace Rosegarden;
 
-#ifdef PROPERTY_NAME_IS_INT
-static const PropertyName DURATION_PROPERTY = 2143213;
-static const PropertyName SOME_BOOL_PROPERTY = 2132;
-static const PropertyName SOME_STRING_PROPERTY = 325432;
-static const PropertyName NONEXISTENT_PROPERTY = 12;
-static const PropertyName ANNOTATION_PROPERTY = 15935254;
-#else // !PROPERTY_NAME_IS_INT
-#ifdef PROPERTY_NAME_IS_CLASS
 static const PropertyName DURATION_PROPERTY = "duration";
 static const PropertyName SOME_BOOL_PROPERTY = "someBoolProp";
 static const PropertyName SOME_STRING_PROPERTY = "someStringProp";
 static const PropertyName NONEXISTENT_PROPERTY = "nonexistentprop";
 static const PropertyName ANNOTATION_PROPERTY = "annotation";
-#else // !PROPERTY_NAME_IS_CLASS
-#define DURATION_PROPERTY "duration"
-#define SOME_BOOL_PROPERTY "someBoolProp"
-#define SOME_STRING_PROPERTY "someStringProp"
-#define NONEXISTENT_PROPERTY "nonexistentprop"
-#define ANNOTATION_PROPERTY "annotation"
-#endif // !PROPERTY_NAME_IS_CLASS
-#endif // !PROPERTY_NAME_IS_INT
 
 int main(int argc, char **argv)
 {
@@ -324,7 +309,10 @@ int main(int argc, char **argv)
 
         cout << "Testing Track::expandIntoTie() - expanding 384 -> 2*192\n";
 
-        Track t;
+	Composition c;
+	Track *ht = new Track();
+	c.addTrack(ht);
+        Track &t(*ht);
         TrackNotationHelper nh(t);
         TrackPerformanceHelper ph(t);
 
@@ -365,6 +353,10 @@ int main(int argc, char **argv)
                      << " - performance duration : " <<
                     ph.getSoundingDuration(i) << endl;
         }
+
+	t.insert(TimeSignature(2,4).getAsEvent(0));
+
+	nh.autoBeam(t.begin(), t.end(), "beamed");
 
 #endif // TEST_NOTATION_TYPES
 };

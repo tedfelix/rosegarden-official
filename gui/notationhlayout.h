@@ -44,7 +44,7 @@ public:
      * The map should be cleared (by calling reset()) before a full
      * set of staffs is preparsed.
      */
-    void preparse(Staff &staff, int firstBar = -1, int lastBar = -1);
+    void preparse(Staff &staff);
 
     /**
      * Resets internal data stores, notably the BarDataMap that is
@@ -55,7 +55,7 @@ public:
     /// Tries to harmonize the bar positions for all the staves
     void reconcileBars();
 
-    /// Effectiveley perform layout
+    /// Effectively perform layout
     void layout();
 
     /**

@@ -107,7 +107,7 @@ NotationElementList::iterator ViewElementsManager::findEvent(Event *e)
 }
 
 
-void ViewElementsManager::eventAdded(Track *t, Event *e)
+void ViewElementsManager::eventAdded(const Track *t, Event *e)
 {
     assert(t == &m_track);
     kdDebug(KDEBUG_AREA) 
@@ -129,7 +129,7 @@ void ViewElementsManager::eventAdded(Track *t, Event *e)
     }
 }
 
-void ViewElementsManager::eventRemoved(Track *t, Event *e)
+void ViewElementsManager::eventRemoved(const Track *t, Event *e)
 {
     assert(t == &m_track);
     kdDebug(KDEBUG_AREA) 

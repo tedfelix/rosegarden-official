@@ -642,8 +642,8 @@ bool NotationView::showBars(int staffNo,
     Staff *staff = m_staffs[staffNo];
     
     const NotationHLayout::BarDataList &barData(m_hlayout->getBarData(*staff));
-    const Track::BarPositionList &barPositions
-	(staff->getViewElementsManager()->getTrack().getBarPositions());
+//!!!    const Track::BarPositionList &barPositions
+//	(staff->getViewElementsManager()->getTrack().getBarPositions());
 
     NotationElementList::iterator lastElement = to;
     --lastElement;
@@ -657,19 +657,23 @@ bool NotationView::showBars(int staffNo,
     for (NotationHLayout::BarDataList::const_iterator it = barData.begin();
          it != barData.end(); ++it) {
 
-	if (it->barNo < 0 || it->barNo >= (int)barPositions.size()) {
-	    kdDebug(KDEBUG_AREA) << "ERROR: Synchronisation problem: barNo "
-				 << it->barNo << " is out of legal range (0,"
-				 << barPositions.size()-1 << ")" << endl;
-	} else {
+//	if (it->barNo < 0 || it->barNo >= (int)barPositions.size()) {
+//	    kdDebug(KDEBUG_AREA) << "ERROR: Synchronisation problem: barNo "
+//				 << it->barNo << " is out of legal range (0,"
+//				 << barPositions.size()-1 << ")" << endl;
+//	} else {
 	    kdDebug(KDEBUG_AREA) << "Adding bar number " << it->barNo
 				 << " at pos " << it->x << endl;
+
+	    //!!! We've lost bar correctness indication here; it's
+	    // going to be a bit more work than it was, I think
+
 	    if (it->barNo >= 0) {
-		staff->insertBar(it->x, barPositions[it->barNo].correct);
+		staff->insertBar(it->x, true /*!!! barPositions[it->barNo].correct */);
 	    }
-	}
+//	}
     }
-    
+
     return true;
 }
 

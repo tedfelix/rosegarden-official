@@ -20,6 +20,7 @@
 
 #include "Composition.h"
 #include "Track.h"
+#include "FastVector.h"
 
 #include <iostream>
 
@@ -27,10 +28,14 @@
 namespace Rosegarden 
 {
 
+const string Composition::BarEventType = "bar";
+
+
 Composition::Composition()
     : m_nbTicksPerBar(384),
       m_tempo(0),
-      m_position(0)
+      m_position(0),
+      m_barPositionsNeedCalculating(true)
 {
     // empty
 }
@@ -51,9 +56,11 @@ void Composition::swap(Composition& c)
     this->m_nbTicksPerBar = that->m_nbTicksPerBar;
     that->m_nbTicksPerBar = t;
 
-    t = this->m_tempo;
+    double tp = this->m_tempo;
     this->m_tempo = that->m_tempo;
-    that->m_tempo = t;
+    that->m_tempo = tp;
+
+    m_timeReference.swap(c.m_timeReference);
 
     m_tracks.swap(c.m_tracks);
 
@@ -61,15 +68,15 @@ void Composition::swap(Composition& c)
 	 i != that->m_tracks.end(); ++i) {
 	(*i)->removeObserver(this);
 	(*i)->addObserver(that);
+	(*i)->setReferenceTrack(&that->m_timeReference);
     }
 
     for (trackcontainer::iterator i = this->m_tracks.begin();
 	 i != this->m_tracks.end(); ++i) {
 	(*i)->removeObserver(that);
 	(*i)->addObserver(this);
+	(*i)->setReferenceTrack(&this->m_timeReference);
     }
-
-    m_timeReference.swap(c.m_timeReference);
 }
 
 Composition::iterator
@@ -79,6 +86,7 @@ Composition::addTrack(Track *track)
     
     std::pair<iterator, bool> res = m_tracks.insert(track);
     track->addObserver(this);
+    track->setReferenceTrack(&m_timeReference);
 
     return res.first;
 }
@@ -90,6 +98,7 @@ Composition::deleteTrack(Composition::iterator i)
 
     Track *p = (*i);
     p->removeObserver(this);
+    p->setReferenceTrack(0);
 
     delete p;
     m_tracks.erase(i);
@@ -129,10 +138,69 @@ Composition::clear()
     for (trackcontainer::iterator i = m_tracks.begin();
         i != m_tracks.end(); ++i) {
         (*i)->removeObserver(this);
+	(*i)->setReferenceTrack(0);
         delete (*i);
     }
     m_tracks.erase(begin(), end());
     m_timeReference.erase(m_timeReference.begin(), m_timeReference.end());
+}
+
+Track::iterator
+Composition::addNewBar(timeT time)
+{
+    std::cerr << "Composition::addNewBar" << std::endl;
+    Event *e = new Event(BarEventType);
+    e->setAbsoluteTime(time);
+    return m_timeReference.insert(e);
+}
+
+void
+Composition::calculateBarPositions()
+{
+    std::cerr << "Composition::calculateBarPositions" << std::endl;
+
+
+    Track &t = m_timeReference;
+    Track::iterator i;
+
+    FastVector<timeT> segments;
+    FastVector<timeT> segmentTimes;
+
+    for (i = t.begin(); i != t.end(); ++i) {
+	if ((*i)->isa(BarEventType)) t.erase(i);
+	else {
+	    segments.push_back((*i)->getAbsoluteTime());
+	    segmentTimes.push_back(TimeSignature(**i).getBarDuration());
+	}
+    }
+
+    bool segment0isTimeSig = true;
+    if (segments.size() == 0 || segments[0] != 0) {
+	segments.push_front(0);
+	segmentTimes.push_front(TimeSignature().getBarDuration());
+	segment0isTimeSig = false;
+    }    
+
+    timeT duration = getDuration();
+    segments.push_back(duration);
+
+    for (int s = 0; s < segments.size() - 1; ++s) {
+
+	timeT start = segments[s], finish = segments[s+1];
+	timeT time;
+
+	if (s > 0 || segment0isTimeSig) start += segmentTimes[s];
+
+	cerr << "segment " << s << ": start " << start << ", finish " << finish << endl;
+
+	for (time = start; time < finish; time += segmentTimes[s]) {
+	    addNewBar(time);
+	}
+
+	if (s == segments.size() - 1 && time != duration) addNewBar(time);
+    }
+
+    std::cerr << "Composition::calculateBarPositions ending" << std::endl;
 }
 
 
@@ -153,8 +221,18 @@ static Track::iterator findTimeSig(Track *t, timeT time)
 // observer for m_timeReference, as we aren't an observer for it
 // anyway
 
-void Composition::eventAdded(Track *t, Event *e)
+//!!! Aaargh! Of course, if a track is moved (i.e. its start time
+// changes, and therefore all the times of the events including the
+// time signature event) then we're well fucked.  Better not to allow
+// someone to insert time signature events into a track other than the
+// reference track at all
+
+void Composition::eventAdded(const Track *t, Event *e)
 {
+    // in theory this should only be true if we insert a time
+    // signature or something after the former end of the composition
+    m_barPositionsNeedCalculating = true;
+
     if (e->isa(TimeSignature::EventType)) {
 
 	timeT sigTime = e->getAbsoluteTime();
@@ -183,7 +261,7 @@ void Composition::eventAdded(Track *t, Event *e)
 		(*i)->insert(new Event(*e));
 		(*i)->addObserver(this);
 	    } else std::cerr << "Composition: skipping" << std::endl;
-	    (*i)->calculateBarPositions();
+//!!!	    (*i)->calculateBarPositions();
 	}
     }
 }
@@ -195,8 +273,12 @@ void Composition::eventAdded(Track *t, Event *e)
 // observer for m_timeReference, as we aren't an observer for it
 // anyway
 
-void Composition::eventRemoved(Track *t, Event *e)
+void Composition::eventRemoved(const Track *t, Event *e)
 {
+    // in theory this should only be true if we insert a time
+    // signature or something after the former end of the composition
+    m_barPositionsNeedCalculating = true;
+
     if (e->isa(TimeSignature::EventType)) {
 
 	timeT sigTime = e->getAbsoluteTime();
@@ -219,11 +301,17 @@ void Composition::eventRemoved(Track *t, Event *e)
 		if (found != (*i)->end()) (*i)->erase(found);
 		(*i)->addObserver(this);
 	    } else std::cerr << "Composition: skipping" << std::endl;
-	    (*i)->calculateBarPositions();
+//!!!	    (*i)->calculateBarPositions();
 	}
     }
 }
 
+
+void Composition::referenceTrackRequested(const Track *)
+{
+    if (m_barPositionsNeedCalculating) calculateBarPositions();
+    m_barPositionsNeedCalculating = false;
+}
 
 
 }

@@ -65,7 +65,15 @@ public:
 
 private:
     class iterator_base : public
+
+#if defined(_STL_1997_) || (__GNUC__ > 2)
     std::iterator<std::random_access_iterator_tag, T, size_type>
+#else
+#if defined(__STL_USE_NAMESPACES)
+    std::
+#endif
+    random_access_iterator<T, size_type>
+#endif
     {
     public:
 	iterator_base() :

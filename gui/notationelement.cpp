@@ -203,7 +203,7 @@ NotationElementList::findTime(timeT time) const
 {
     Event e;
     e.setAbsoluteTime(time);
-    e.setSubOrdering(-100000);
+    e.setSubOrdering(Rosegarden::MIN_SUBORDERING);
     NotationElement dummy(&e);
     return lower_bound(&dummy);
 }

@@ -28,6 +28,8 @@
 namespace Rosegarden 
 {
 
+extern const int MIN_SUBORDERING;
+
 typedef std::list<int> DurationList;
 
     

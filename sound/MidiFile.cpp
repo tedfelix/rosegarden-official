@@ -726,7 +726,7 @@ MidiFile::convertToRosegarden()
           (notationTrack.guessClef
            (rosegardenTrack->begin(), rosegardenTrack->end()).getAsEvent(0));
 
-      rosegardenTrack->calculateBarPositions();
+//!!!      rosegardenTrack->calculateBarPositions();
 
       notationTrack.autoBeam
           (rosegardenTrack->begin(), rosegardenTrack->end(),

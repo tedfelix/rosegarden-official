@@ -41,6 +41,8 @@ class Composition : public TrackObserver
 {
     
 public:
+    static const std::string BarEventType;
+
     typedef std::set<Track*, Track::TrackCmp> trackcontainer;
 
     typedef trackcontainer::iterator iterator;
@@ -96,17 +98,26 @@ public:
 
     // TrackObserver methods:
 
-    virtual void eventAdded(Track *, Event *);
-    virtual void eventRemoved(Track *, Event *);
+    virtual void eventAdded(const Track *, Event *);
+    virtual void eventRemoved(const Track *, Event *);
+    virtual void referenceTrackRequested(const Track *);
 
 protected:
     trackcontainer m_tracks;
-    Track m_timeReference; // contains time signature events &c
+
+    /// Contains time signature and new-bar events.
+    Track m_timeReference;
+
+    Track::iterator addNewBar(timeT time);
 
     unsigned int m_nbTicksPerBar; //!!! must lose this
     double m_tempo;
 
     timeT m_position;
+
+    /// affects the reference track in m_timeReference
+    void calculateBarPositions();
+    bool m_barPositionsNeedCalculating;
 
 private:
     Composition(const Composition &);

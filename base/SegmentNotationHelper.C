@@ -205,6 +205,7 @@ bool TrackNotationHelper::isViable(timeT duration, int dots)
     return viable;
 }
 
+/*!!!
 
 void TrackNotationHelper::makeRestViable(iterator i)
 {
@@ -220,6 +221,40 @@ void TrackNotationHelper::makeRestViable(iterator i)
 
     tsig.getDurationListForInterval
 	(dl, (*i)->getDuration(), absTime - track().getBarPositions()[barNo].start);
+
+    cerr << "TrackNotationHelper::makeRestViable: Removing rest of duration "
+	 << (*i)->getDuration() << " from time " << absTime << endl;
+
+    erase(i);
+    
+    for (DurationList::iterator i = dl.begin(); i != dl.end(); ++i) {
+	int duration = *i;
+	
+	cerr << "TrackNotationHelper::makeRestViable: Inserting rest of duration "
+	     << duration << " at time " << absTime << endl;
+
+	Event *e = new Event(Note::EventRestType);
+	e->setDuration(duration);
+	e->setAbsoluteTime(absTime);
+	e->setMaybe<String>("Name", "INSERTED_REST"); //!!!
+
+	insert(e);
+	absTime += duration;
+    }
+}
+*/
+
+    //!!! untested
+void TrackNotationHelper::makeRestViable(iterator i)
+{
+    DurationList dl;
+    timeT absTime = (*i)->getAbsoluteTime(); 
+
+    TimeSignature timeSig;
+    timeT sigTime = track().findTimeSignatureAt(absTime, timeSig);
+
+    timeSig.getDurationListForInterval
+	(dl, (*i)->getDuration(), absTime - sigTime);
 
     cerr << "TrackNotationHelper::makeRestViable: Removing rest of duration "
 	 << (*i)->getDuration() << " from time " << absTime << endl;
@@ -628,7 +663,7 @@ TrackNotationHelper::makeBeamedGroup(iterator from, iterator to, string type)
   
 */
 
-
+/*!!!
 void TrackNotationHelper::autoBeam(iterator from, iterator to, string type)
 {
     // This can only manage whole bars at a time, and it will expand
@@ -656,6 +691,38 @@ void TrackNotationHelper::autoBeam(iterator from, iterator to, string type)
         }
 
         autoBeamBar(from, to, bpl[i].timeSignature, type);
+    }
+}
+*/
+
+    //!!! untested
+void TrackNotationHelper::autoBeam(iterator from, iterator to, string type)
+{
+    // This can only manage whole bars at a time, and it will expand
+    // the from-to range out to encompass the whole bars in which they
+    // each occur
+
+    for (;;) {
+
+	timeT t = (*from)->getAbsoluteTime();
+
+	iterator barStart = track().findStartOfBar(t);
+	iterator barEnd = track().findStartOfNextBar(t);
+
+	TimeSignature timeSig;
+	track().findTimeSignatureAt(t, timeSig);
+
+	cerr << "TrackNotationHelper::autoBeam: t is " << t << "; from time " <<
+	    (*barStart)->getAbsoluteTime() << " to time " <<
+	    (barEnd == end() ? -1 : (*barEnd)->getAbsoluteTime()) << endl;
+ 
+	autoBeamBar(barStart, barEnd, timeSig, type);
+	
+	if (barEnd == end() ||
+	    (to != end() &&
+	     ((*barEnd)->getAbsoluteTime() > (*to)->getAbsoluteTime()))) return;
+
+	from = barEnd;
     }
 }
 
