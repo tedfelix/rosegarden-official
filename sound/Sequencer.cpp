@@ -27,7 +27,8 @@
 #include "Event.h"
 #include "NotationTypes.h"
 #include "BaseProperties.h"
-#include <MappedComposition.h>
+#include "MappedEvent.h"
+#include "MappedComposition.h"
 
 namespace Rosegarden
 {
@@ -498,7 +499,7 @@ Sequencer::getMappedComposition()
 
     // get the MIDI queue
     //
-    midiQueue = getMidiQueue();
+    midiQueue = m_midiRecordPort.getQueue();
 
     if (midiQueue->size() > 0)
         cout << "QUEUE SIZE = " << midiQueue->size() << endl;

@@ -38,6 +38,6 @@ DISTCLEANFILES = $(sound_METASOURCES) MidiArts.h MidiArts.cc
 # Variable names are broken up because otherwise the Makefile.cvs
 # scanning picks them up
 #
-# bin_P_ROGRAMS = sound
-# sound_S_OURCES = sound.cpp
-# sound_L_DADD = -lartsmidi -lqt -lsoundserver_idl libRosegardenSound.la ../base/libbase.la
+# bin_PROGRAMS = miditest
+# miditest_SOURCES = miditest.cpp
+# miditest_LDADD = -lartsmidi -lqt -lsoundserver_idl libRosegardenSound.la ../base/libbase.la libRosegardenSequencer.la
