@@ -151,8 +151,22 @@ public slots:
      */
     void slotAddCommandToHistory(KCommand *command);
 
+    /*
+     * For re-emission purposes
+     */
+    void slotSendMidiController(Rosegarden::InstrumentId id,
+                                Rosegarden::MidiByte controller,
+                                Rosegarden::MidiByte value);
+
 signals:
     void activateTool(SegmentCanvas::ToolType);
+
+    // Re-emit sendMidiController (going up towards SequenceManager
+    // through the GUIApp)
+    //
+    void sendMidiController(Rosegarden::InstrumentId,
+                            Rosegarden::MidiByte,
+                            Rosegarden::MidiByte);
 
 protected:
     //--------------- Data members ---------------------------------

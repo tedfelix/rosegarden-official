@@ -530,6 +530,13 @@ public slots:
      */
     void slotToggleTrackLabels();
 
+    /*
+     * slotSendMidiController
+     **/
+    void slotSendMidiController(Rosegarden::InstrumentId id,
+                                Rosegarden::MidiByte controller,
+                                Rosegarden::MidiByte value);
+
 private:
 
     //--------------- Data members ---------------------------------

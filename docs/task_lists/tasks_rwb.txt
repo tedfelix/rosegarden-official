@@ -4,6 +4,8 @@ updated 19.03.2001
 
 Currently looking at:
 
+o Device specific controllers from XML (pan etc)
+
 o Looping marker set from file load/top level - Looping
   set from Clients - Looping BUG crashing sequencer
 

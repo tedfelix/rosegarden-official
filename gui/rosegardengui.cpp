@@ -423,6 +423,17 @@ void RosegardenGUIApp::initView()
     connect(m_view, SIGNAL(activateTool(SegmentCanvas::ToolType)),
             this,   SLOT(slotActivateTool(SegmentCanvas::ToolType)));
 
+    // So that the GUIView can send immediate controllers
+    //
+    connect(m_view,
+            SIGNAL(sendMidiController(Rosegarden::InstrumentId,
+                                      Rosegarden::MidiByte,
+                                      Rosegarden::MidiByte)),
+            this,
+            SLOT(slotSendMidiController(Rosegarden::InstrumentId,
+                                        Rosegarden::MidiByte,
+                                        Rosegarden::MidiByte)));
+
     m_doc->addView(m_view);
     setCentralWidget(m_view);
     setCaption(m_doc->getTitle());
@@ -1719,5 +1730,14 @@ RosegardenGUIApp::slotUnsetLoop()
     // of the display items
     m_doc->setLoop(0, 0);
 }
+
+void
+RosegardenGUIApp::slotSendMidiController(Rosegarden::InstrumentId id,
+                                         Rosegarden::MidiByte controller,
+                                         Rosegarden::MidiByte value)
+{
+    m_seqManager->sendMidiController(id, controller, value);
+}
+
 
 

@@ -367,6 +367,12 @@ InstrumentParameterBox::slotSelectPan(int index)
         return;
 
     m_selectedInstrument->setPan(index);
+
+    // Send the controller change
+    //
+    emit sendMidiController(m_selectedInstrument->getID(), 
+                            (Rosegarden::MidiByte)10,
+                            (Rosegarden::MidiByte)index);
 }
 
 void

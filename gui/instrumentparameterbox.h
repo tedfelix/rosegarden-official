@@ -19,15 +19,15 @@
     COPYING included with this distribution for more information.
 */
 
+#include <qgroupbox.h>
+
+#include "Instrument.h"
+
 #ifndef _INSTRUMENTPARAMETERBOX_H_
 #define _INSTRUMENTPARAMETERBOX_H_
 
-#include <qgroupbox.h>
-
 // Display and allow modification of Instrument parameters
 //
-
-namespace Rosegarden { class Instrument; }
 
 class RosegardenComboBox;
 class QCheckBox;
@@ -53,6 +53,16 @@ public slots:
     void slotActivateVelocity(bool value);
     void slotActivatePan(bool value);
     void slotActivateBank(bool value);
+
+signals:
+
+    // Emit a MIDI controller for immediate processing.
+    // This is necessary for controlling MIDI devices in
+    // real time during playback.
+    //
+    void sendMidiController(Rosegarden::InstrumentId,
+                            Rosegarden::MidiByte,
+                            Rosegarden::MidiByte);
 
 protected:
     void populateProgramList();
