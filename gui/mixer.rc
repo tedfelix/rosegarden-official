@@ -15,10 +15,29 @@
   </Menu>
 
 <Menu name="settings"><text>&amp;Settings</text>
+
   <Action name="show_midi" append="show_merge" />
   <Action name="show_audio_faders" append="show_merge" />
   <Action name="show_audio_submasters" append="show_merge" />
   <Action name="show_plugin_buttons" append="show_merge" />
+
+  <Menu name="Inputs">
+    <text>Number of Stereo &amp;Inputs</text>
+    <Action name="inputs_1"/>
+    <Action name="inputs_2"/>
+    <Action name="inputs_4"/>
+    <Action name="inputs_8"/>
+    <Action name="inputs_16"/>
+  </Menu>
+
+  <Menu name="Submasters">
+    <text>Number of &amp;Submasters</text>
+    <Action name="submasters_0"/>
+    <Action name="submasters_2"/>
+    <Action name="submasters_4"/>
+    <Action name="submasters_8"/>
+  </Menu>
+
 </Menu> 
 
 </MenuBar>

@@ -123,6 +123,7 @@ public:
     void clearMidiBanksAndPrograms();
 
     void clearBusses();
+    void clearRecordIns();
     
     // Clear down
     void clear();

@@ -229,6 +229,11 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
 
 DeviceManagerDialog::~DeviceManagerDialog()
 {
+    if (m_document) {
+	m_document->getCommandHistory()->detachView(actionCollection());
+	m_document = 0;
+    }
+
     RG_DEBUG << "\n*** DeviceManagerDialog::~DeviceManagerDialog\n" << endl;
 }
 

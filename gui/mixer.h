@@ -73,6 +73,9 @@ protected slots:
     void slotPluginSelected(Rosegarden::InstrumentId id, int index, int plugin);
     void slotPluginBypassed(Rosegarden::InstrumentId id, int pluginIndex, bool bp);
 
+    void slotSetInputCountFromAction();
+    void slotSetSubmasterCountFromAction();
+
 protected:
     virtual void closeEvent(QCloseEvent *);
 
@@ -109,6 +112,9 @@ private:
 	std::vector<QPushButton *> m_plugins;
     };
 
+    QHBox *m_surroundBox;
+    QFrame *m_mainBox;
+
     typedef std::map<Rosegarden::InstrumentId, FaderRec> FaderMap;
     FaderMap m_faders;
 
@@ -116,6 +122,8 @@ private:
     FaderVector m_submasters;
     FaderRec m_monitor;
     FaderRec m_master;
+
+    void populate();
 
     void updateFader(int id); // instrument id if large enough, monitor if -1, master/sub otherwise
     void updateRouteButtons(int id);

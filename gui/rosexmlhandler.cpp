@@ -426,6 +426,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         //
         getStudio().clearMidiBanksAndPrograms();
 	getStudio().clearBusses();
+	getStudio().clearRecordIns();
 
         m_section = InStudio; // set top level section
 

@@ -641,20 +641,13 @@ AudioInstrumentParameterPanel::slotAudioChannels(int channels)
              << "channels = " << channels << endl;
 
     m_selectedInstrument->setAudioChannels(channels);
-    /*
-    Rosegarden::MappedEvent *mE =
-        new Rosegarden::MappedEvent(
-                m_selectedInstrument->getId(),
-                Rosegarden::MappedEvent::AudioChannels,
-                Rosegarden::MidiByte(m_selectedInstrument->getAudioChannels()));
-
-    Rosegarden::StudioControl::sendMappedEvent(mE);
-    */
 
     Rosegarden::StudioControl::setStudioObjectProperty
         (Rosegarden::MappedObjectId(m_selectedInstrument->getMappedId()),
          Rosegarden::MappedAudioFader::Channels,
          Rosegarden::MappedObjectValue(channels));
+
+    emit instrumentParametersChanged(m_selectedInstrument->getId());
 
 }
 

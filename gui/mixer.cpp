@@ -48,6 +48,116 @@ MixerWindow::MixerWindow(QWidget *parent,
     m_studio(&document->getStudio()),
     m_currentId(0)
 {
+    m_mainBox = 0;
+    populate();
+
+    KAction* close = KStdAction::close(this,
+                                       SLOT(slotClose()),
+                                       actionCollection());
+
+    QIconSet icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+                                                 ("transport-play")));
+    new KAction(i18n("&Play"), icon, Key_Enter, this,
+		SIGNAL(play()), actionCollection(), "play");
+
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+                                                 ("transport-stop")));
+    new KAction(i18n("&Stop"), icon, Key_Insert, this,
+		SIGNAL(stop()), actionCollection(), "stop");
+
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+                                                 ("transport-rewind")));
+    new KAction(i18n("Re&wind"), icon, Key_End, this,
+		SIGNAL(rewindPlayback()), actionCollection(),
+		"playback_pointer_back_bar");
+
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+                                                 ("transport-ffwd")));
+    new KAction(i18n("&Fast Forward"), icon, Key_PageDown, this,
+		SIGNAL(fastForwardPlayback()), actionCollection(),
+		"playback_pointer_forward_bar");
+
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+                                                 ("transport-rewind-end")));
+    new KAction(i18n("Rewind to &Beginning"), icon, 0, this,
+		SIGNAL(rewindPlaybackToBeginning()), actionCollection(),
+		"playback_pointer_start");
+
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+                                                 ("transport-ffwd-end")));
+    new KAction(i18n("Fast Forward to &End"), icon, 0, this,
+		SIGNAL(fastForwardPlaybackToEnd()), actionCollection(),
+		"playback_pointer_end");
+
+    KRadioAction *action = 0;
+
+    for (int i = 1; i <= 16; i *= 2) {
+	action =
+	    new KRadioAction
+	    ((i == 1 ? i18n("%1 Input") : i18n("%1 Inputs")).arg(i),
+	     0, this,
+	     SLOT(slotSetInputCountFromAction()), actionCollection(),
+	     QString("inputs_%1").arg(i));
+	action->setExclusiveGroup("inputs");
+    }
+
+    action = new KRadioAction
+	(i18n("No Submasters"),
+	 0, this,
+	 SLOT(slotSetSubmasterCountFromAction()), actionCollection(),
+	 QString("submasters_0"));
+    action->setExclusiveGroup("submasters");
+    
+    for (int i = 2; i <= 8; i *= 2) {
+	action = new KRadioAction
+	    (i18n("%1 Submasters").arg(i),
+	     0, this,
+	     SLOT(slotSetSubmasterCountFromAction()), actionCollection(),
+	     QString("submasters_%1").arg(i));
+	action->setExclusiveGroup("submasters");
+    }
+    
+    createGUI("mixer.rc");
+}
+
+MixerWindow::~MixerWindow()
+{
+    RG_DEBUG << "MixerWindow::~MixerWindow" << endl;
+}
+
+void
+MixerWindow::slotClose()
+{
+    RG_DEBUG << "MixerWindow::slotClose()" << endl;
+    close();
+}    
+
+void
+MixerWindow::populate()
+{
+    if (m_mainBox) {
+
+	// All the widgets will be deleted when the main box goes,
+	// except that we need to delete the AudioRouteMenus first
+	// because they aren't actually widgets but do contain them
+	
+	for (FaderMap::iterator i = m_faders.begin();
+	     i != m_faders.end(); ++i) {
+	    delete i->second.m_input;
+	    delete i->second.m_output;
+	}
+
+	m_faders.clear();
+	m_submasters.clear();
+
+	delete m_mainBox;
+
+    } else {
+
+	m_surroundBox = new QHBox(this);
+	setCentralWidget(m_surroundBox);
+    }	
+
     QFont font;
     font.setPointSize(font.pointSize() * 8 / 10);
     font.setBold(false);
@@ -56,9 +166,7 @@ MixerWindow::MixerWindow(QWidget *parent,
     QFont boldFont(font);
     boldFont.setBold(true);
 
-    QFrame *mainBox = new QFrame(this);
-//    mainBox->setBackgroundMode(Qt::PaletteMidlight);
-//    QHBoxLayout *mainLayout = new QHBoxLayout(mainBox, 4, 4);
+    m_mainBox = new QFrame(m_surroundBox);
 
     Rosegarden::InstrumentList instruments = m_studio->getPresentationInstruments();
     Rosegarden::BussList busses = m_studio->getBusses();
@@ -70,7 +178,7 @@ MixerWindow::MixerWindow(QWidget *parent,
     // Total cols: is 2 for each fader, submaster or master, plus 2
     // for the monitor strip, plus 1 for each spacer.
     QGridLayout *mainLayout = new QGridLayout
-	(mainBox, (instruments.size() + busses.size() + 1) * 3, 7);
+	(m_mainBox, (instruments.size() + busses.size() + 1) * 3, 7);
 
     setCaption(i18n("Mixer"));
 
@@ -86,11 +194,11 @@ MixerWindow::MixerWindow(QWidget *parent,
 
 //!!! bring across the tooltips
 
-	rec.m_input  = new AudioRouteMenu(mainBox,
+	rec.m_input  = new AudioRouteMenu(m_mainBox,
 					  AudioRouteMenu::In,
 					  AudioRouteMenu::Compact,
 					  m_studio, *i);
-	rec.m_output = new AudioRouteMenu(mainBox,
+	rec.m_output = new AudioRouteMenu(m_mainBox,
 					  AudioRouteMenu::Out,
 					  AudioRouteMenu::Compact,
 					  m_studio, *i);
@@ -99,42 +207,42 @@ MixerWindow::MixerWindow(QWidget *parent,
 	rec.m_output->getWidget()->setMaximumWidth(45);
 
 	rec.m_pan = new RosegardenRotary
-	    (mainBox, -100.0, 100.0, 1.0, 5.0, 0.0, 20);
+	    (m_mainBox, -100.0, 100.0, 1.0, 5.0, 0.0, 20);
 	rec.m_pan->setKnobColour(RosegardenGUIColours::RotaryPastelGreen);
 
 	rec.m_fader = new RosegardenFader
-	    (Rosegarden::AudioLevel::LongFader, 20, 240, mainBox);
+	    (Rosegarden::AudioLevel::LongFader, 20, 240, m_mainBox);
 	rec.m_meter = new AudioVUMeter
-	    (mainBox, VUMeter::AudioPeakHoldLong, true, 20, 240);
+	    (m_mainBox, VUMeter::AudioPeakHoldLong, true, 20, 240);
 
-	rec.m_stereoButton = new QPushButton(mainBox);
+	rec.m_stereoButton = new QPushButton(m_mainBox);
 	rec.m_stereoButton->setPixmap(m_monoPixmap); // default is mono
 	rec.m_stereoButton->setFixedSize(20, 20);
 	rec.m_stereoButton->setFlat(true);
 	rec.m_stereoness = false;
 
-	rec.m_muteButton = new QPushButton(mainBox);
+	rec.m_muteButton = new QPushButton(m_mainBox);
 	rec.m_muteButton->setText("M");
 	rec.m_muteButton->setToggleButton(true);
 	rec.m_muteButton->setFixedWidth(rec.m_stereoButton->width());
 	rec.m_muteButton->setFixedHeight(rec.m_stereoButton->height());
 	rec.m_muteButton->setFlat(true);
 
-	rec.m_soloButton = new QPushButton(mainBox);
+	rec.m_soloButton = new QPushButton(m_mainBox);
 	rec.m_soloButton->setText("S");
 	rec.m_soloButton->setToggleButton(true);
 	rec.m_soloButton->setFixedWidth(rec.m_stereoButton->width());
 	rec.m_soloButton->setFixedHeight(rec.m_stereoButton->height());
 	rec.m_soloButton->setFlat(true);
 
-	rec.m_recordButton = new QPushButton(mainBox);
+	rec.m_recordButton = new QPushButton(m_mainBox);
 	rec.m_recordButton->setText("R");
 	rec.m_recordButton->setToggleButton(true);
 	rec.m_recordButton->setFixedWidth(rec.m_stereoButton->width());
 	rec.m_recordButton->setFixedHeight(rec.m_stereoButton->height());
 	rec.m_recordButton->setFlat(true);
 
-	rec.m_pluginBox = new QVBox(mainBox);
+	rec.m_pluginBox = new QVBox(m_mainBox);
 	
 	for (int p = 0; p < 5; ++p) {
 	    QPushButton *plugin = new QPushButton(rec.m_pluginBox);
@@ -146,7 +254,7 @@ MixerWindow::MixerWindow(QWidget *parent,
 		    this, SLOT(slotSelectPlugin()));
 	}
 	
-	QLabel *idLabel = new QLabel(QString("%1").arg(count), mainBox);
+	QLabel *idLabel = new QLabel(QString("%1").arg(count), m_mainBox);
 	idLabel->setFont(boldFont);
 
 	mainLayout->addMultiCellWidget(rec.m_input->getWidget(), 0, 0, col, col+1);
@@ -215,20 +323,20 @@ MixerWindow::MixerWindow(QWidget *parent,
 //!!! tooltips
 
 	rec.m_pan = new RosegardenRotary
-	    (mainBox, -100.0, 100.0, 1.0, 5.0, 0.0, 20);
+	    (m_mainBox, -100.0, 100.0, 1.0, 5.0, 0.0, 20);
 	rec.m_pan->setKnobColour(RosegardenGUIColours::RotaryPastelBlue);
 
 	rec.m_fader = new RosegardenFader
-	    (Rosegarden::AudioLevel::LongFader, 20, 240, mainBox);
+	    (Rosegarden::AudioLevel::LongFader, 20, 240, m_mainBox);
 	rec.m_meter = new AudioVUMeter
-	    (mainBox, VUMeter::AudioPeakHoldLong, true, 20, 240);
+	    (m_mainBox, VUMeter::AudioPeakHoldLong, true, 20, 240);
 
-	rec.m_muteButton = new QPushButton(mainBox);
+	rec.m_muteButton = new QPushButton(m_mainBox);
 	rec.m_muteButton->setText("M");
 	rec.m_muteButton->setToggleButton(true);
 	rec.m_muteButton->setFlat(true);
 
-	QLabel *idLabel = new QLabel(i18n("S%1").arg(count), mainBox);
+	QLabel *idLabel = new QLabel(i18n("S%1").arg(count), m_mainBox);
 	idLabel->setFont(boldFont);
 
 	mainLayout->addWidget(idLabel, 2, col, Qt::AlignCenter);
@@ -265,16 +373,16 @@ MixerWindow::MixerWindow(QWidget *parent,
 //!!! tooltips
 
 	rec.m_fader = new RosegardenFader
-	    (Rosegarden::AudioLevel::LongFader, 20, 240, mainBox);
+	    (Rosegarden::AudioLevel::LongFader, 20, 240, m_mainBox);
 	rec.m_meter = new AudioVUMeter
-	    (mainBox, VUMeter::AudioPeakHoldLong, true, 20, 240);
+	    (m_mainBox, VUMeter::AudioPeakHoldLong, true, 20, 240);
 
-	rec.m_muteButton = new QPushButton(mainBox);
+	rec.m_muteButton = new QPushButton(m_mainBox);
 	rec.m_muteButton->setText("M");
 	rec.m_muteButton->setToggleButton(true);
 	rec.m_muteButton->setFlat(true);
 
-	QLabel *idLabel = new QLabel(i18n("Rec"), mainBox);
+	QLabel *idLabel = new QLabel(i18n("Rec"), m_mainBox);
 	idLabel->setFont(boldFont);
 
 	mainLayout->addMultiCellWidget(idLabel, 2, 2, col, col+1, Qt::AlignCenter);
@@ -298,16 +406,16 @@ MixerWindow::MixerWindow(QWidget *parent,
 	col += 3;
 
 	rec.m_fader = new RosegardenFader
-	    (Rosegarden::AudioLevel::LongFader, 20, 240, mainBox);
+	    (Rosegarden::AudioLevel::LongFader, 20, 240, m_mainBox);
 	rec.m_meter = new AudioVUMeter
-	    (mainBox, VUMeter::AudioPeakHoldLong, true, 20, 240);
+	    (m_mainBox, VUMeter::AudioPeakHoldLong, true, 20, 240);
 
-	rec.m_muteButton = new QPushButton(mainBox);
+	rec.m_muteButton = new QPushButton(m_mainBox);
 	rec.m_muteButton->setText("M");
 	rec.m_muteButton->setToggleButton(true);
 	rec.m_muteButton->setFlat(true);
 
-	idLabel = new QLabel(i18n("M"), mainBox);
+	idLabel = new QLabel(i18n("M"), m_mainBox);
 	idLabel->setFont(boldFont);
 
 	mainLayout->addMultiCellWidget(idLabel, 2, 2, col, col+1, Qt::AlignCenter);
@@ -329,59 +437,8 @@ MixerWindow::MixerWindow(QWidget *parent,
 		this, SLOT(slotMuteChanged()));
     }
 
-    setCentralWidget(mainBox);
-
-    KAction* close = KStdAction::close(this,
-                                       SLOT(slotClose()),
-                                       actionCollection());
-
-    QIconSet icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                                                 ("transport-play")));
-    new KAction(i18n("&Play"), icon, Key_Enter, this,
-		SIGNAL(play()), actionCollection(), "play");
-
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                                                 ("transport-stop")));
-    new KAction(i18n("&Stop"), icon, Key_Insert, this,
-		SIGNAL(stop()), actionCollection(), "stop");
-
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                                                 ("transport-rewind")));
-    new KAction(i18n("Re&wind"), icon, Key_End, this,
-		SIGNAL(rewindPlayback()), actionCollection(),
-		"playback_pointer_back_bar");
-
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                                                 ("transport-ffwd")));
-    new KAction(i18n("&Fast Forward"), icon, Key_PageDown, this,
-		SIGNAL(fastForwardPlayback()), actionCollection(),
-		"playback_pointer_forward_bar");
-
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                                                 ("transport-rewind-end")));
-    new KAction(i18n("Rewind to &Beginning"), icon, 0, this,
-		SIGNAL(rewindPlaybackToBeginning()), actionCollection(),
-		"playback_pointer_start");
-
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                                                 ("transport-ffwd-end")));
-    new KAction(i18n("Fast Forward to &End"), icon, 0, this,
-		SIGNAL(fastForwardPlaybackToEnd()), actionCollection(),
-		"playback_pointer_end");
-
-    createGUI("mixer.rc");
+    m_mainBox->show();
 }
-
-MixerWindow::~MixerWindow()
-{
-
-}
-
-void
-MixerWindow::slotClose()
-{
-    close();
-}    
 
 void
 MixerWindow::slotUpdateInstrument(Rosegarden::InstrumentId id)
@@ -770,10 +827,11 @@ MixerWindow::slotChannelsChanged()
 		    ((instrument->getAudioChannels() > 1) ? 1 : 2);
 		updateStereoButton(instrument->getId());
 		updateRouteButtons(instrument->getId());
+
+		emit instrumentParametersChanged(i->first);
+
 		return;
 	    }
-
-	    emit instrumentParametersChanged(i->first);
 	}
     }
 }
@@ -868,3 +926,72 @@ MixerWindow::updateMeters(SequencerMapper *mapper)
     }
 }
 
+void
+MixerWindow::slotSetInputCountFromAction()
+{
+    const QObject *s = sender();
+    QString name = s->name();
+
+    if (name.left(7) == "inputs_") {
+
+	int count = name.right(name.length() - 7).toInt();
+
+	Rosegarden::RecordInList ins = m_studio->getRecordIns();
+	int current = ins.size();
+
+	if (count == current) return;
+
+	m_studio->clearRecordIns(); // leaves the default 1
+
+	for (int i = 1; i < count; ++i) {
+	    m_studio->addRecordIn(new Rosegarden::RecordIn());
+	}
+    }
+    
+    m_document->initialiseStudio();
+    
+    for (FaderMap::iterator i = m_faders.begin();
+	 i != m_faders.end(); ++i) {
+	updateRouteButtons(i->first);
+    }
+}
+
+void
+MixerWindow::slotSetSubmasterCountFromAction()
+{
+    const QObject *s = sender();
+    QString name = s->name();
+
+    if (name.left(11) == "submasters_") {
+
+	int count = name.right(name.length() - 11).toInt();
+
+	Rosegarden::BussList busses = m_studio->getBusses();
+	int current = busses.size();
+
+	// offset by 1 generally to take into account the fact that
+	// the first buss in the studio is the master, not a submaster
+
+	if (count + 1 == current) return;
+
+	Rosegarden::BussList dups;
+	for (int i = 0; i < count; ++i) {
+	    if (i + 1 < busses.size()) {
+		dups.push_back(new Rosegarden::Buss(*busses[i+1]));
+	    } else {
+		dups.push_back(new Rosegarden::Buss(i + 1));
+	    }
+	}
+
+	m_studio->clearBusses();
+
+	for (Rosegarden::BussList::iterator i = dups.begin();
+	     i != dups.end(); ++i) {
+	    m_studio->addBuss(*i);
+	}
+    }
+
+    m_document->initialiseStudio();
+
+    populate();
+}

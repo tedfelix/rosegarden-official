@@ -1048,6 +1048,21 @@ void RosegardenGUIApp::initView()
 
     }
 
+    delete m_playList;
+    m_playList = 0;
+
+    delete m_deviceManager;
+    m_deviceManager = 0;
+
+    delete m_mixer;
+    m_mixer = 0;
+
+    delete m_bankEditor;
+    m_bankEditor = 0;
+
+    delete m_markerEditor;
+    m_markerEditor = 0;
+
     delete oldView;
 
     // set the highlighted track
@@ -5141,6 +5156,8 @@ RosegardenGUIApp::slotDeviceManagerClosed()
 void
 RosegardenGUIApp::slotMixerClosed()
 {
+    RG_DEBUG << "RosegardenGUIApp::slotMixerClosed()\n";
+
     m_mixer = 0;
 }
 

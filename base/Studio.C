@@ -246,7 +246,7 @@ Studio::addBuss(Buss *buss)
 RecordIn *
 Studio::getRecordIn(int number)
 {
-    if (number >= 0 && number < m_recordIns.size()) return m_recordIns[number];
+    if (number >= 0 && number < int(m_recordIns.size())) return m_recordIns[number];
     else return 0;
 }
 
@@ -531,7 +531,11 @@ Studio::clearBusses()
     }
     m_busses.clear();
     m_busses.push_back(new Buss(0));
+}
 
+void
+Studio::clearRecordIns()
+{
     for (size_t i = 0; i < m_recordIns.size(); ++i) {
 	delete m_recordIns[i];
     }
