@@ -834,8 +834,8 @@ int MatrixMover::handleMouseMove(Rosegarden::timeT newTime,
 
         if (diffY && element->event()->has(PITCH))
         {
-            Rosegarden::Event *e = new Event(*(element->event()));
-            int newPitch = e->get<Rosegarden::Int>(PITCH) + diffPitch;
+            //Rosegarden::Event *e = new Event(*(element->event()));
+            //int newPitch = e->get<Rosegarden::Int>(PITCH) + diffPitch;
 
             //m_mParentView->playNote(selection->getSegment(), newPitch);
         }
