@@ -45,22 +45,21 @@ public:
     unsigned int getNbBars() const;
     void setNbBars(unsigned int);
 
+    struct TrackCmp
+    {
+        bool operator()(const Track* a, const Track* b) const 
+        {
+            if (a->getInstrument() == b->getInstrument())
+                return a->getStartIndex() < b->getStartIndex();
+
+            return a->getInstrument() < b->getInstrument();
+        }
+    };
+
 protected:
     unsigned int m_startIdx;
     unsigned int m_nbBars;
     unsigned int m_instrument;
-};
-
-struct TrackCompare
-{
-    bool operator()(const Track* a, const Track* b) const 
-    {
-        if (a->getInstrument() == b->getInstrument())
-            return a->getStartIndex() < b->getStartIndex();
-
-        return a->getInstrument() < b->getInstrument();
-    }
-
 };
 
 }

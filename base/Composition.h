@@ -37,7 +37,7 @@ class Composition
 {
     
 public:
-    typedef std::set<Track*, TrackCompare> trackcontainer;
+    typedef std::set<Track*, Track::TrackCmp> trackcontainer;
 
     typedef trackcontainer::iterator iterator;
     typedef trackcontainer::const_iterator const_iterator;
@@ -77,7 +77,13 @@ protected:
     unsigned int m_nbTicksPerBar;
     unsigned int m_tempo;
 };
- 
+
+class MIDIComposition
+{
+    
+};
+
+
 }
 
 
