@@ -34,7 +34,6 @@
 #include <kmainwindow.h>
 #include <kaccel.h>
 
-#include "audiopluginmanager.h"
 #include "dialogs.h"
 #include "rosegardendcop.h"
 #include "rosegardenguiiface.h"
@@ -56,9 +55,10 @@ template <class T> class ZoomSlider;
 
 namespace Rosegarden
 {
-    class SequenceManager;
     class AudioManagerDialog;
+    class AudioPluginManager;
     class RosegardenTransportDialog;
+    class SequenceManager;
 }
 
 /**
@@ -886,7 +886,7 @@ private:
 
     bool m_useSequencer;
 
-    Rosegarden::AudioPluginManager m_pluginManager;
+    Rosegarden::AudioPluginManager *m_pluginManager;
 
 };
 

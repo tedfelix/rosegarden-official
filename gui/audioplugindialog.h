@@ -17,7 +17,12 @@
     COPYING included with this distribution for more information.
 */
 
+#include <vector.h>
+
 #include <kdialogbase.h>
+
+#include <qhbox.h>
+#include <qdial.h>
 
 #include "Instrument.h"
 
@@ -25,10 +30,47 @@
 #define _AUDIOPLUGINDIALOG_H_
 
 
+// Attempt to dynamically create plugin dialogs for the plugins
+// that the sequencer has discovered for us and returned into the
+// AudioPluginManager.  Based on plugin port descriptions we 
+// attempt to represent a meaningful plugin layout.
+//
+//
+
+class RosegardenComboBox;
+
 namespace Rosegarden
 {
 
 class AudioPluginManager;
+class PluginPort;
+
+class PluginControl : public QHBox
+{
+public:
+
+    typedef enum
+    {
+        Rotary,
+        Slider,
+        NumericSlider
+    } ControlType;
+
+    PluginControl(QWidget *parent,
+                  ControlType type,
+                  PluginPort *port);
+
+protected:
+
+    ControlType  m_type;
+    PluginPort  *m_port;
+
+    int          m_multiplier;
+    QDial       *m_dial;
+
+};
+
+typedef std::vector<PluginControl*>::iterator ControlIterator;
 
 class AudioPluginDialog : public KDialogBase
 {
@@ -37,14 +79,24 @@ class AudioPluginDialog : public KDialogBase
 public:
     AudioPluginDialog(QWidget *parent,
                       AudioPluginManager *aPM,
-                      InstrumentId id);
+                      Instrument *instrument);
+
+public slots:
+    void slotPluginSelected(int);
 
 signals:
 
 protected:
 
-    AudioPluginManager *m_pluginManager;
-    InstrumentId        m_instrumentId;
+    AudioPluginManager  *m_pluginManager;
+    Instrument          *m_instrument;
+
+    RosegardenComboBox  *m_pluginList;
+
+    std::vector<PluginControl*> m_pluginWidgets;
+
+    int                  m_headHeight;
+
 
 };
 

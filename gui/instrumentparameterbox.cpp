@@ -692,9 +692,8 @@ InstrumentParameterBox::slotSelectPlugin(int /*index*/) // no index 4 moment
     Rosegarden::AudioPluginDialog *aPD = 
         new Rosegarden::AudioPluginDialog(this,
                                           m_pluginManager,
-                                          m_selectedInstrument->getId());
-
-    aPD->exec();
+                                          m_selectedInstrument);
+    aPD->show();
 
 }
 
