@@ -385,6 +385,10 @@ SequenceManager::play()
     //
     preparePlayback();
 
+    // Send audio latencies
+    //
+    sendAudioLatencies();
+
     // make sure we toggle the play button
     // 
     m_transport->PlayButton->setOn(true);
@@ -1271,6 +1275,28 @@ SequenceManager::suspendSequencer(bool value)
                                   "suspend(bool)", data))
     {
       throw(i18n("Failed to contact Rosegarden sequencer to attempt suspend"));
+    }
+}
+
+void
+SequenceManager::sendAudioLatencies()
+{
+    QByteArray data;
+    QDataStream streamOut(data, IO_WriteOnly);
+
+    KConfig* config = kapp->config();
+
+    streamOut << config->readLongNumEntry("jackplaybacklatencysec", 0);
+    streamOut << config->readLongNumEntry("jackplaybacklatencyusec", 0);
+
+    streamOut << config->readLongNumEntry("jackrecordlatencysec", 0);
+    streamOut << config->readLongNumEntry("jackrecordlatencyusec", 0);
+
+    if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
+                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                                  "setAudioLatencies(long int, long int, long int, long int)", data))
+    {
+      throw(i18n("Failed to contact Rosegarden sequencer to send audio latenices"));
     }
 }
 

@@ -185,6 +185,13 @@ public:
     //
     virtual void suspend(bool value);
 
+    // Set both the audio latencies
+    //
+    virtual void setAudioLatencies(long playTimeSec,
+                                   long playTimeUsec,
+                                   long recordTimeSec,
+                                   long recordTimeUsec);
+
     //
     //
     //

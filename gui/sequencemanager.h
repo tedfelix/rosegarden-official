@@ -113,6 +113,11 @@ public:
     // other.
     //
     void suspendSequencer(bool value);
+
+    // Send the audio latencies over to the sequencer
+    //
+    void sendAudioLatencies();
+
 private:
 
     Rosegarden::MappedComposition m_mC;

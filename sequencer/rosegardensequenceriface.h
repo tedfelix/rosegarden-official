@@ -137,6 +137,14 @@ public:
     //
     virtual void suspend(bool value) = 0;
 
+    // Set the audio latencies if we need them to differ from
+    // overall (MIDI) latencies.
+    //
+    virtual void setAudioLatencies(long playTimeSec,
+                                   long playTimeUsec,
+                                   long recordTimeSec,
+                                   long recordTimeUsec) = 0;
+
 };
 
 #endif // _ROSEGARDENSEQUENCERIFACE_H_

@@ -893,4 +893,21 @@ RosegardenSequencerApp::suspend(bool value)
     }
 }
 
+void
+RosegardenSequencerApp::setAudioLatencies(long playTimeSec,
+                                          long playTimeUsec,
+                                          long recordTimeSec,
+                                          long recordTimeUsec)
+{
+    m_audioPlayLatency = Rosegarden::RealTime(playTimeSec, playTimeUsec);
+    m_audioRecordLatency = Rosegarden::RealTime(recordTimeSec, recordTimeUsec);
+
+    std::cout << "RosegardenSequencerApp::setAudioLatencies - " 
+              << "playback latency = " << m_audioPlayLatency << std::endl;
+
+    std::cout << "RosegardenSequencerApp::setAudioLatencies - "
+              << "record latency = " << m_audioRecordLatency << std::endl;
+}
+
+
 

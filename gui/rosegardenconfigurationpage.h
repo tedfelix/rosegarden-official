@@ -184,27 +184,33 @@ protected:
 
 
 /**
- * Playback Configuration page
+ * Latency Configuration page
  *
  * (application-wide settings)
  */
-class PlaybackConfigurationPage : public TabbedConfigurationPage
+class LatencyConfigurationPage : public TabbedConfigurationPage
 {
 public:
-    PlaybackConfigurationPage(KConfig *cfg,
+    LatencyConfigurationPage(KConfig *cfg,
                               QWidget *parent=0, const char *name=0);
 
     virtual void apply();
 
-    static QString iconLabel() { return i18n("Playback"); }
-    static QString title()     { return i18n("Sequencer and Playback"); }
+    static QString iconLabel() { return i18n("Latency"); }
+    static QString title()     { return i18n("Sequencer Latency"); }
 
     int getReadAheadValue() { return m_readAhead->value(); }
     int getPlaybackValue()  { return m_playback->value(); }
 
+    int getJACKPlaybackValue() { return m_jackPlayback->value(); }
+    int getJACKRecordValue() { return m_jackRecord->value(); }
+
 protected:
     QSlider* m_readAhead;
     QSlider* m_playback;
+
+    QSlider* m_jackPlayback;
+    QSlider* m_jackRecord;
 };
 
 
