@@ -3022,13 +3022,17 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                     (inst->getMappedStudio()->
                          getAudioFader(inst->getAudioMonitoringInstrument()));
 
-            int channels = fader->
-                getPropertyList(MappedAudioFader::Channels)[0].toInt();
+            int channels = 1;
+            int connection = 0;
 
-            int connection = fader->
-                getPropertyList(MappedAudioObject::ConnectionsIn)[0].toInt();
+            if (fader)
+            {
+                channels = fader->getPropertyList(
+                        MappedAudioFader::Channels)[0].toInt();
 
-            //std::cout << "FADER CHANNELS = " << channels << endl;
+                connection = fader->getPropertyList(
+                        MappedAudioObject::ConnectionsIn)[0].toInt();
+            }
                 
             // Get input buffer
             //
@@ -3439,11 +3443,12 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                 PluginInstances list =
                     inst->getInstrumentPlugins((*it)->getInstrument());
 
-
                 if (list.size())
                 {
-                    //cout << "GOT " << list.size() << " PLUGINS" << endl;
-                    //int c = 0;
+                    /*
+                    cout << "GOT " << list.size() << " PLUGINS" << endl;
+                    int c = 0;
+                    */
 
                     PluginIterator pIt = list.begin();
                     for (; pIt != list.end(); ++pIt)
@@ -3452,6 +3457,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                         //
                         if ((*pIt)->isBypassed())
                         {
+                            //cout << "BYPASSING " << c << endl;
                             for (unsigned int i = 0; i < nframes; ++i)
                             {
                                 _pluginBufferOut1[i] = _pluginBufferIn1[i];
@@ -3469,27 +3475,21 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                                  */
                         }
 
-                        // Now mix the signal
+                        // Copy across the out buffers if we're a channel
+                        // short - ensures mono/stereo plugins works with
+                        // streams of either nicely.
                         //
-                        for (unsigned int i = 0; i < nframes; ++i)
+                        if ((*pIt)->getAudioChannelsOut() == 1)
                         {
-                            _tempOutBuffer1[i] += _pluginBufferOut1[i];
-                            
-                            if ((*pIt)->getAudioChannelsOut() >= 2)
-                            {
-                                _tempOutBuffer2[i] += _pluginBufferOut2[i];
-                            }
-                            else
-                            {
-                                _tempOutBuffer2[i] += _pluginBufferOut1[i];
-                            }
+                            for (unsigned int i = 0; i < nframes; ++i)
+                                _pluginBufferOut2[i] = _pluginBufferOut1[i];
                         }
 
-                        // If we've got more than one plugin then now copy
-                        // back the out buffer into the input for reprocessing
-                        // by the next plugin.
+                        // If we've got another plugin to process then copy
+                        // back the out buffers into the input buffers for
+                        // reprocessing in the next pass.
                         // 
-                        if ((*pIt) != list.back())
+                        if (pIt != list.end())
                         {
                             for (unsigned int i = 0; i < nframes; ++i)
                             {
@@ -3498,6 +3498,15 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                             }
                         }
                     }
+
+                    // Now mix the post-plugin signal into the out buffer
+                    //
+                    for (unsigned int i = 0; i < nframes; ++i)
+                    {
+                        _tempOutBuffer1[i] += _pluginBufferOut1[i];
+                        _tempOutBuffer2[i] += _pluginBufferOut2[i];
+                    }
+
                 }
 #else
                 if (0) {}
@@ -3537,6 +3546,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                 PluginIterator it = list.begin();
                 for (; it != list.end(); ++it)
                 {
+                    /*
                     float volume = 1.0f;
     
                     MappedAudioFader *fader =
@@ -3550,6 +3560,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                             fader->getPropertyList(MappedAudioFader::FaderLevel);
                         volume = float(result[0].toFloat())/127.0;
                     }
+                    */
 
                     /*
                     cout << "UNPROC INSTRUMENT = " << (*it)->getInstrument()
@@ -3565,15 +3576,15 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                     //
                     for (unsigned int i = 0; i < nframes; ++i)
                     {
-                        _tempOutBuffer1[i] += _pluginBufferOut1[i] * volume;
+                        _tempOutBuffer1[i] += _pluginBufferOut1[i]; // * volume;
                             
                         if ((*it)->getAudioChannelsOut() >= 2)
                         {
-                            _tempOutBuffer2[i] += _pluginBufferOut2[i] * volume;
+                            _tempOutBuffer2[i] += _pluginBufferOut2[i]; // * volume;
                         }
                         else
                         {
-                            _tempOutBuffer2[i] += _pluginBufferOut1[i] * volume;
+                            _tempOutBuffer2[i] += _pluginBufferOut1[i]; // * volume;
                         }
                     }
                 }

@@ -1153,6 +1153,16 @@ RosegardenSequencerApp::createMappedObject(int type)
               m_studio->createObject(
                       Rosegarden::MappedObject::MappedObjectType(type), false);
 
+    SEQUENCER_DEBUG << "createMappedObject - type = " << type
+                    << " object = " << object << endl;
+
+    if (object)
+    {
+        SEQUENCER_DEBUG << "createMappedObject - object id = "
+                        << object->getId() << endl;
+    }
+
+
     return object->getId();
 }
 

@@ -450,7 +450,7 @@ RosegardenFader::RosegardenFader(QWidget *parent):
     m_floatTimer(new QTimer()),
     m_prependText("")
 {
-    connect(this, SIGNAL(sliderMoved(int)),
+    connect(this, SIGNAL(valueChanged(int)),
             this, SLOT(slotValueChanged(int)));
 
     connect(this, SIGNAL(sliderPressed()),

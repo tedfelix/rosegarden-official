@@ -1121,10 +1121,13 @@ AudioInstrumentParameterPanel::slotSetPan(float pan)
 void
 AudioInstrumentParameterPanel::setAudioMeter(double ch1, double ch2)
 {
-    if (m_selectedInstrument->getAudioChannels() == 1)
-        m_audioFader->m_vuMeter->setLevel(ch1);
-    else
-        m_audioFader->m_vuMeter->setLevel(ch1, ch2);
+    if (m_selectedInstrument)
+    {
+        if (m_selectedInstrument->getAudioChannels() == 1)
+            m_audioFader->m_vuMeter->setLevel(ch1);
+        else
+            m_audioFader->m_vuMeter->setLevel(ch1, ch2);
+    }
 }
 
 
