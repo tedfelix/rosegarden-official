@@ -420,6 +420,13 @@ NotationStaff::positionElements()
 	    
 	    if (spanning) {
 
+		needNewSprite = true;
+
+		/*!!! Can't be this simple, I'm afraid: we probably need
+		  the next-contiguous event, but what about chords?  Still,
+		  might be worth trying to catch the case however complex
+		  it is -- it's still cheaper than re-rendering
+
 		int myCanvasX = (*it)->getCanvasItem()->x();
 		NotationElementList::iterator scooter(it);
 		++scooter;
@@ -431,6 +438,7 @@ NotationStaff::positionElements()
 			needNewSprite = true;
 		    }
 		}
+		*/
 	    }
 	}
 

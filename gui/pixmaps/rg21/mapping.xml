@@ -20,6 +20,8 @@
              http://www.unicode.org/charts/PDF/U2600.pdf
              http://www.unicode.org/charts/PDF/U1D100.pdf -->
 
+	<symbol name="__UNKNOWN__" src="unknown"/>
+
         <symbol name="MUSIC SHARP SIGN" src="notemod-sharp"/>
         <symbol name="MUSIC NATURAL SIGN" src="notemod-natural"/>
         <symbol name="MUSIC FLAT SIGN" src="notemod-flat"/>

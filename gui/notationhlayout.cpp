@@ -403,10 +403,16 @@ NotationHLayout::scanStaff(StaffType &staff)
                 }
 
                 baseWidth += mw;
-            }
+
+	    } else {
+		
+		kdDebug(KDEBUG_AREA) << "Found something I don't know about" << endl;
+		fixedWidth += mw;
+	    }
 
             el->event()->setMaybe<Int>(MIN_WIDTH, mw);
-        }
+	}
+
 
         addNewBar(staff, barNo, to,
                   getIdealBarWidth(staff, fixedWidth, baseWidth, shortest, 
