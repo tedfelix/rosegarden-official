@@ -7,97 +7,86 @@
 #include <arts/connect.h>
 
 
+using std::cout;
+using std::cerr;
+using std::endl;
 
 int
 main(int argc, char **argv)
 {
-    Rosegarden::Sequencer seq;
-/*
-    Arts::AudioManager obMan();
-    Arts::AudioManagerClient *audioManClient;
-    Arts::AudioManager artsAudio;
-*/
-/*
-    Arts::AudioManager audioManager =
-        Arts::Reference("global:Arts_AudioManager");
-
-    if (audioManager.isNull())
+    if (argc < 2)
     {
-        std::cerr << "Couldn't get Arts::AudioManager" << std::endl;
+        cout << "usage: audiotest <.wav file>" << endl;
         exit(1);
     }
 
-    Arts::AudioManagerClient amClient(Arts::amPlay, "aRts play port","Rosegarden Audio Play");
+    string wavFile = argv[1];
 
-    vector<Arts::AudioManagerInfo> *info = audioManager.clients();
-    vector<Arts::AudioManagerInfo>::iterator it;
-
-    for (it = info->begin(); it != info->end(); it++)
-    {
-        cout << "TITLE = " << (*it).title;
-    }
-
-
-*/
-
-    //Arts::SoundServer as = Arts::Reference("global:Arts_SoundServer");
-
-
-/*
-    Arts::AudioManagerClient audioManagerClient(Arts::amRecord,
-              string("Rosegarden audio manager"), string("rg audio man"));
-*/
-
-
-/*
-    Arts::Synth_AMAN_RECORD record;
-    record.title(string("firstwav.wav"));
-*/
-
-
-/*
-    audioManClient = new Arts::AudioManagerClient();
-
-    Arts::AudioManagerInfo audioManInfo;
-  
-    std::cout << "TITLE = " << audioManInfo.title << endl;
-
-
-*/
+    // start sequencer
+    //
+    Rosegarden::Sequencer seq;
 
     Arts::SoundServerV2 server = Arts::Reference("global:Arts_SoundServerV2");
-
-    //Arts::AudioManagerClient amClient = Arts::DynamicCast(server.createObject("Arts::AudioManagerClient"));
-
-    //Arts::AudioManagerClient amClient(Arts::amRecord, "aRts record port","Rosegarden Audio Record");
-
-    //amClient.direction(Arts::amRecord);
 
     Arts::Synth_AMAN_PLAY amanPlay;
     Arts::Synth_AMAN_RECORD amanRecord;
     Arts::Synth_CAPTURE_WAV captureWav;
+    Arts::Synth_PLAY_WAV playWav;
 
     if (server.fullDuplex())
-    {
-        std::cout << "SOUND SERVER is FULL DUPLEX" << endl;
-    }
+        cout << "SOUND SERVER is FULL DUPLEX" << endl;
 
-    std::cout << "SAMPLING RATE = " << server.samplingRate() << endl;
-    std::cout << "SAMPLE SIZE   = " << server.bits() << " bits" << endl;
+    cout << "SAMPLING RATE = " << server.samplingRate() << endl;
+    cout << "SAMPLE SIZE   = " << server.bits() << " bits" << endl;
 
     if ( !server.isNull() )
     {
-       amanPlay = Arts::DynamicCast(server.createObject("Arts::Synth_AMAN_PLAY"));
+       amanPlay=Arts::DynamicCast(server.createObject("Arts::Synth_AMAN_PLAY"));
        amanPlay.title("Rosegarden Audio Play");
        amanPlay.autoRestoreID("Rosegarden Play");
 
-
-       //Arts::Synth_BUS_DOWNLINK downlink = Arts::DynamicCast(player._getChild( "uplink" ));
        if (amanPlay.isNull())
        {
            std::cerr << "Cannot create audio play object" << std::endl;
            exit(1);
        }
+
+       playWav = Arts::DynamicCast(
+                server.createObject("Arts::Synth_PLAY_WAV"));
+
+       // set a file name
+       //
+       playWav.filename(wavFile);
+
+       cout << "PLAYING SAMPLE once" << endl;
+       playWav.start();
+       amanPlay.start();
+       connect(playWav, "left", amanPlay, "left");
+       connect(playWav, "right", amanPlay, "right");
+
+       sleep(2);
+
+       disconnect(playWav, "left", amanPlay, "left");
+       disconnect(playWav, "right", amanPlay, "right");
+
+       playWav.stop();
+       amanPlay.stop();
+
+       cout << "PLAYING SAMPLE twice" << endl;
+       playWav.filename(wavFile);
+       playWav.start();
+       amanPlay.start();
+       connect(playWav, "left", amanPlay, "left");
+       connect(playWav, "right", amanPlay, "right");
+
+       sleep(2);
+       
+       disconnect(playWav, "left", amanPlay, "left");
+       disconnect(playWav, "right", amanPlay, "right");
+
+       playWav.stop();
+       amanPlay.stop();
+
 
        // Synth_AMAN_RECORD - sends to a file: /tmp/mcop-USER/capture.wav
        //
@@ -110,7 +99,6 @@ main(int argc, char **argv)
            exit(1);
        }
 
-       //amanRecord.direction(Arts::amRecord);
        amanRecord.title("Rosegarden Audio Record");
        amanRecord.autoRestoreID("Rosegarden Record");
 
@@ -123,37 +111,27 @@ main(int argc, char **argv)
            exit(1);
        }
 
+/*
+       Arts::StereoVolumeControl volumeControl  =
+           Arts::DynamicCast(server.createObject("Arts::StereoVolumeControl"));
+*/
+
+       cout << "RECORDING 10 seconds of AUDIO" << endl;
+
+       amanRecord.start();
+       captureWav.start();
        
        Arts::connect(captureWav, "left", amanRecord, "left");
        Arts::connect(captureWav, "right", amanRecord, "right");
 
-/*
-       amanRecord.streamInit();
-       captureWav.streamInit();
-       amanRecord.streamStart();
-       captureWav.streamStart();
-*/
-
-       amanRecord.start();
-       captureWav.start();
-
        sleep(10);
-
-       amanRecord.stop();
-       captureWav.stop();
 
        Arts::disconnect(captureWav, "left", amanRecord, "left");
        Arts::disconnect(captureWav, "right", amanRecord, "right");
-
-/*
-       amanRecord.streamEnd();
-       captureWav.streamEnd();
-*/
-
+       amanRecord.stop();
+       captureWav.stop();
+ 
     }
-
-
-
 
     exit(0);
 
