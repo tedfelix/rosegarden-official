@@ -19,59 +19,6 @@
 
 #include "rosedebug.h"
 
-Event::timeT
-XMLStorableEvent::noteName2Duration(const QString &nn)
-{
-    if (m_noteName2DurationMap.empty())
-        initMap();
-
-    string noteName(nn.latin1());
-
-    namedurationmap::iterator it(m_noteName2DurationMap.find(noteName));
-
-    if (it == m_noteName2DurationMap.end()) {
-        // note name doesn't exist
-        kdDebug(KDEBUG_AREA) << "Bad note name : " << nn << endl;
-        return 0;
-    }
-
-
-    return it->second;
-}
-
-void
-XMLStorableEvent::initMap()
-{
-    if (! m_noteName2DurationMap.empty())
-        return;
-
-    m_noteName2DurationMap["64th"]               = 6;
-    m_noteName2DurationMap["hemidemisemiquaver"] = 6;
-
-    m_noteName2DurationMap["32nd"]               = 12;
-    m_noteName2DurationMap["demisemiquaver"]     = 12;
-
-    m_noteName2DurationMap["16th"]               = 24;
-    m_noteName2DurationMap["semiquaver"]         = 24;
-
-    m_noteName2DurationMap["8th"]                = 48;
-    m_noteName2DurationMap["quaver"]             = 48;
-
-    m_noteName2DurationMap["quarter"]            = 96;
-    m_noteName2DurationMap["crotchet"]           = 96;
-
-    m_noteName2DurationMap["half"]               = 192;
-    m_noteName2DurationMap["minim"]              = 192;
-
-    m_noteName2DurationMap["whole"]              = 384;
-    m_noteName2DurationMap["semibreve"]          = 384;
-
-    // what is the american name ??
-    m_noteName2DurationMap["breve"]              = 768;
-
-}
-
-
 XMLStorableEvent::XMLStorableEvent(const QXmlAttributes &attributes)
 {
     for (int i = 0; i < attributes.length(); ++i) {
@@ -132,6 +79,120 @@ XMLStorableEvent::XMLStorableEvent(const QXmlAttributes &attributes)
 
     }
 }
+
+XMLStorableEvent::XMLStorableEvent(const Event &e)
+    : Event(e)
+{
+}
+
+
+QString
+XMLStorableEvent::toXMLString() const
+{
+    QString res = "<event";
+
+    if (package().length())
+        res += QString(" package=\"%1\"").arg(package().c_str());
+
+    if (type().length())
+        res += QString(" type=\"%1\"").arg(type().c_str());
+
+    res += QString(" duration=\"%1\"").arg(duration());
+
+
+    for (PropertyMap::const_iterator i = properties().begin();
+         i != properties().end(); ++i) {
+
+        res += QString(" %1=\"%2\"")
+            .arg((*i).first.c_str())
+            .arg((*i).second->unparse().c_str());
+    }
+    
+
+    res += "/>";
+    return res;
+}
+
+QString
+XMLStorableEvent::toXMLString(const Event &e)
+{
+    QString res = "<event";
+
+    if (e.package().length())
+        res += QString(" package=\"%1\"").arg(e.package().c_str());
+
+    if (e.type().length())
+        res += QString(" type=\"%1\"").arg(e.type().c_str());
+
+    res += QString(" duration=\"%1\"").arg(e.duration());
+
+
+    for (PropertyMap::const_iterator i = e.properties().begin();
+         i != e.properties().end(); ++i) {
+
+        res += QString(" %1=\"%2\"")
+            .arg((*i).first.c_str())
+            .arg((*i).second->unparse().c_str());
+    }
+    
+
+    res += "/>";
+    return res;
+}
+
+Event::timeT
+XMLStorableEvent::noteName2Duration(const QString &nn)
+{
+    if (m_noteName2DurationMap.empty())
+        initMap();
+
+    string noteName(nn.latin1());
+
+    namedurationmap::iterator it(m_noteName2DurationMap.find(noteName));
+
+    if (it == m_noteName2DurationMap.end()) {
+        // note name doesn't exist
+        kdDebug(KDEBUG_AREA) << "Bad note name : " << nn << endl;
+        return 0;
+    }
+
+
+    return it->second;
+}
+
+void
+XMLStorableEvent::initMap()
+{
+    if (! m_noteName2DurationMap.empty())
+        return;
+
+    m_noteName2DurationMap["64th"]               = 6;
+    m_noteName2DurationMap["hemidemisemiquaver"] = 6;
+
+    m_noteName2DurationMap["32nd"]               = 12;
+    m_noteName2DurationMap["demisemiquaver"]     = 12;
+
+    m_noteName2DurationMap["16th"]               = 24;
+    m_noteName2DurationMap["semiquaver"]         = 24;
+
+    m_noteName2DurationMap["8th"]                = 48;
+    m_noteName2DurationMap["quaver"]             = 48;
+
+    m_noteName2DurationMap["quarter"]            = 96;
+    m_noteName2DurationMap["crotchet"]           = 96;
+
+    m_noteName2DurationMap["half"]               = 192;
+    m_noteName2DurationMap["minim"]              = 192;
+
+    m_noteName2DurationMap["whole"]              = 384;
+    m_noteName2DurationMap["semibreve"]          = 384;
+
+    // what is the american name ??
+    m_noteName2DurationMap["breve"]              = 768;
+
+}
+
+
 
 XMLStorableEvent::namedurationmap
 XMLStorableEvent::m_noteName2DurationMap;

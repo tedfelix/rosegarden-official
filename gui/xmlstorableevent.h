@@ -26,9 +26,15 @@
   *@author Guillaume Laurent, Chris Cannam, Rich Bown
   */
 
-class XMLStorableEvent : public Event  {
+class XMLStorableEvent : public Event
+{
 public:
     XMLStorableEvent(const QXmlAttributes& atts);
+    XMLStorableEvent(const Event&);
+
+    QString        toXMLString() const;
+    static QString toXMLString(const Event&);
+    
 protected:
     timeT noteName2Duration(const QString &noteName);
     void initMap();
