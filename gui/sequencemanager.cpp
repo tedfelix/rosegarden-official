@@ -163,43 +163,68 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
             //
             segmentStartTime -= jackPlaybackLatencyTimeT;
 
+            Rosegarden::RealTime segmentStart =
+                comp.getElapsedRealTime(segmentStartTime);
+
+            Rosegarden::RealTime segmentEnd =
+                comp.getElapsedRealTime(segmentEndTime);
+
+            Rosegarden::RealTime audioStart = (*it)->getAudioStartTime();
+            Rosegarden::RealTime audioDuration =
+                (*it)->getAudioEndTime() - audioStart;
+
+            Rosegarden::RealTime audioEnd = (*it)->getAudioEndTime() -
+                                            (*it)->getAudioStartTime() +
+                                            segmentStart;
+
+            // Oh this freak fuction just does my head - take a guess,
+            // move a clause - see if it still works.  Bet it doesn't.
+            //
             if ((segmentStartTime < sliceStartElapsed ||
                  segmentStartTime > sliceEndElapsed) &&
                  firstFetch == false)
-                continue;
+            {
+                if ((*it)->isRepeating())
+                {
+                    Rosegarden::RealTime repeatEnd =
+                        comp.getElapsedRealTime((*it)->getRepeatEndTime());
 
-            /*
-            cout << "AUDIO START = " << (*it)->getAudioStartTime() << endl;
-            cout << "AUDIO END   = " << (*it)->getAudioEndTime() << endl;
-            cout << "SLICE START = " << sliceStartElapsed << endl;
-            cout << "SLICE END   = " << sliceEndElapsed << endl << endl;
-            */
+                    // If we've stopped repeating
+                    if (sliceStart > repeatEnd)
+                        continue;
+                    
+                    // Otherwise see if repeat event lies within
+                    // this slice
+                    //
+                    Rosegarden::RealTime segmentDuration =
+                        segmentEnd - segmentStart;
 
-            eventTime = comp.getElapsedRealTime(segmentStartTime);
-            Rosegarden::RealTime startTime;
+                    while (segmentStart < sliceStart)
+                    {
+                        segmentStart = segmentStart + segmentDuration;
+                    }
 
-            startTime = (*it)->getAudioStartTime();
-            duration = (*it)->getAudioEndTime() - startTime;
+                    if (segmentStart > sliceEnd)
+                        continue;
+                }
+                else
+                    continue;
+            }
 
-            // If we're first fetching and an audio Segment overlaps
-            // the current slice with it's duration then we should
-            // adjust for the slice and play the sample.
+            // If we're starting in the middle of a Segment then
+            // make an adjustment to start time and duration.
             //
-            Rosegarden::RealTime audioEnd = (*it)->getAudioEndTime() -
-                                            (*it)->getAudioStartTime() +
-                                            eventTime;
-
             if (firstFetch == true &&
                 segmentStartTime <= sliceStartElapsed &&
                 audioEnd >= sliceStart)
             {
-                // reset startTime and duration to shorter values
+                // reset audioStart and duration to shorter values
                 Rosegarden::RealTime moveTime = comp.
                     getElapsedRealTime(sliceStartElapsed - segmentStartTime);
 
                 //cout << "DURATION was   " << duration << endl;
-                startTime = startTime + moveTime;
-                duration = duration - moveTime;
+                audioStart = audioStart + moveTime;
+                audioDuration = audioDuration - moveTime;
                 //cout << "DURATION is now " << duration << endl;
             }
             else
@@ -207,25 +232,16 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
                 // bail out if we're first fetching and the above
                 // condition doesn't hold.
                 if (firstFetch)
-                {
-                    //cout << "SKIPPING" << endl;
                     continue;
-                }
             }
-
-            /*
-            cout << "EVENT TIME = "  << eventTime << endl;
-            cout << "AUDIO START = " << startTime << endl;
-            cout << "DURATION   = "  << duration << endl << endl;
-            */
 
             // Insert Audio event
             Rosegarden::MappedEvent *me =
                     new Rosegarden::MappedEvent(track->getInstrument(),
                                                 (*it)->getAudioFileId(),
-                                                eventTime,
-                                                duration,
-                                                startTime);
+                                                segmentStart,
+                                                audioDuration,
+                                                audioStart);
             m_mC.insert(me);
             continue; // next Segment
         }

@@ -1,8 +1,6 @@
 0.2 tasks
 =========
 
-o Sync audio and MIDI [PARTIAL - manual JACK sliders]
-
 o Audio file playing feedback - async events and how to
   operate outside the ALSA timing loop
 
@@ -59,6 +57,8 @@ o selection of ALSA recording device
 
 Completed for 0.1.7 (0.2.0)
 ===========================
+
+o Sync audio and MIDI [using JACK sliders]
 
 o Get first fetch audio working - partial segments [DONE]
 
