@@ -263,9 +263,11 @@ public:
     // 
     void removeFromSelection(Rosegarden::Segment *);
 
-    // Add the given Segment to the selection, if we have a SegmentItem for it
+    // Add the given Segment to the selection, if we have a
+    // SegmentItem for it.  Return true if the selection was changed,
+    // false if the segment was already selected.
     // 
-    void addToSelection(Rosegarden::Segment *);
+    bool addToSelection(Rosegarden::Segment *);
 
     // These two alter the behaviour of the selection mode
     //
@@ -307,7 +309,7 @@ protected slots:
 protected:
     SegmentSelector(SegmentCanvas*, RosegardenGUIDoc*);
 
-    void addToSelection(SegmentItem*);
+    bool addToSelection(SegmentItem*);
     void updateSelectionRect(int w, int h);
 
     //--------------- Data members ---------------------------------

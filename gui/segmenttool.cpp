@@ -925,16 +925,16 @@ SegmentSelector::removeFromSelection(Rosegarden::Segment *segment)
     }
 }
 
-void
+bool
 SegmentSelector::addToSelection(Rosegarden::Segment *segment)
 {
     SegmentItem *item = m_canvas->getSegmentItem(segment);
-    if (!item) return;
+    if (!item) return false;
 
-    addToSelection(item); 
+    return addToSelection(item); 
 }
 
-void
+bool
 SegmentSelector::addToSelection(SegmentItem* item)
 {
 //    RG_DEBUG << "SegmentSelector::addToSelection() SegmentItem = "
@@ -946,7 +946,7 @@ SegmentSelector::addToSelection(SegmentItem* item)
 //         RG_DEBUG << "SegmentSelector::addToSelection() SegmentItem already in selection\n";
 	if (i->second == item) {
 	    i->first = QPoint(int(item->x()), int(item->y()));
-	    return;
+	    return false;
 	}
     }
 
@@ -955,6 +955,8 @@ SegmentSelector::addToSelection(SegmentItem* item)
 
     connect(item, SIGNAL(destroyed(QObject*)),
             this, SLOT(slotDestroyedSegmentItem(QObject*)));
+
+    return true;
 }
 
 void
@@ -1130,11 +1132,17 @@ SegmentSelector::slotSelectSegmentItem(SegmentItem *selectedItem)
     // If we're selecting a Segment through this method
     // then don't set the m_currentItem
     //
-    selectedItem->setSelected(true, 
-                              GUIPalette::convertColour(m_doc->getComposition().getSegmentColourMap()
-        .getColourByIndex(selectedItem->getSegment()->getColourIndex())).dark(200));
-    addToSelection(selectedItem);
-    m_canvas->canvas()->update();
+    if (addToSelection(selectedItem)) {
+
+	selectedItem->setSelected
+	    (true, 
+	     GUIPalette::convertColour
+	     (m_doc->getComposition().getSegmentColourMap()
+	      .getColourByIndex(selectedItem->getSegment()->getColourIndex()))
+	     .dark(200));
+	
+	m_canvas->canvas()->update();
+    }
 }
 
 void
