@@ -248,6 +248,11 @@ protected:
     void setupActions();
 
     /**
+     * Set up the 'Add control ruler' sub-menu
+     */
+    void setupAddControlRulerMenu();
+    
+    /**
      * Create an action menu for inserting notes from the PC keyboard,
      * and add it to the action collection.  This is one of the methods
      * called by setupActions().

@@ -179,6 +179,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     // do this after we have a canvas
     setupActions();
+    setupAddControlRulerMenu();
 
     // tool bars
     initActionsToolbar();

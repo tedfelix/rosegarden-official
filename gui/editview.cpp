@@ -21,6 +21,7 @@
 
 #include <qlayout.h>
 #include <qtabwidget.h>
+#include <qpopupmenu.h>
 
 #include <kapp.h>
 #include <kconfig.h>
@@ -570,6 +571,17 @@ EditView::setupActions()
 
 
 }
+
+void
+EditView::setupAddControlRulerMenu()
+{
+    QPopupMenu* addControlRulerMenu = dynamic_cast<QPopupMenu*>(factory()->container("add_control_ruler", this));
+
+    if (addControlRulerMenu) {
+        addControlRulerMenu->insertItem("Insert your items here");
+    }
+}
+
 
 void
 EditView::createInsertPitchActionMenu()

@@ -241,6 +241,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_hlayout->setNotePixmapFactory(m_notePixmapFactory);
     
     setupActions();
+    setupAddControlRulerMenu();
     initLayoutToolbar();
     initStatusBar();
     
