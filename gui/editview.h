@@ -242,6 +242,12 @@ protected:
     BarButtons  *m_topBarButtons;
     BarButtons  *m_bottomBarButtons;
 
+
+    static const unsigned int TOPBARBUTTONS_ROW;
+    static const unsigned int CANVASVIEW_ROW;
+    static const unsigned int HSCROLLBAR_ROW;
+    static const unsigned int BOTTOMBARBUTTONS_ROW;
+
 };
 
 #endif

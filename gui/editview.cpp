@@ -45,6 +45,10 @@
 #include "rosedebug.h"
 
 //----------------------------------------------------------------------
+const unsigned int EditView::TOPBARBUTTONS_ROW    = 1;
+const unsigned int EditView::CANVASVIEW_ROW       = 2;
+const unsigned int EditView::BOTTOMBARBUTTONS_ROW = 3;
+const unsigned int EditView::HSCROLLBAR_ROW       = 4;
 
 EditView::EditView(RosegardenGUIDoc *doc,
                    std::vector<Rosegarden::Segment *> segments,
@@ -60,7 +64,7 @@ EditView::EditView(RosegardenGUIDoc *doc,
     m_topBarButtons(0),
     m_bottomBarButtons(0)
 {
-    m_grid->addWidget(m_horizontalScrollBar, 4, m_mainCol);
+    m_grid->addWidget(m_horizontalScrollBar, HSCROLLBAR_ROW, m_mainCol);
     m_grid->addLayout(m_rulerBox, 0, m_mainCol);
     m_grid->addMultiCellLayout(m_controlBox, 0, 0, 0, 1);
     m_controlBox->setAlignment(AlignRight);
@@ -116,7 +120,7 @@ void EditView::setBottomBarButtons(BarButtons* w)
 {
     delete m_bottomBarButtons;
     m_bottomBarButtons = w;
-    m_grid->addWidget(w, 3, m_mainCol);
+    m_grid->addWidget(w, BOTTOMBARBUTTONS_ROW, m_mainCol);
 
     connect(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
             m_bottomBarButtons, SLOT(slotScrollHoriz(int)));
@@ -178,7 +182,7 @@ void EditView::setCanvasView(RosegardenCanvasView *canvasView)
 {
     delete m_canvasView;
     m_canvasView = canvasView;
-    m_grid->addWidget(m_canvasView, 2, m_mainCol);
+    m_grid->addWidget(m_canvasView, CANVASVIEW_ROW, m_mainCol);
     m_canvasView->setHScrollBarMode(QScrollView::AlwaysOff);
 
     m_horizontalScrollBar->setRange(m_canvasView->horizontalScrollBar()->minValue(),
