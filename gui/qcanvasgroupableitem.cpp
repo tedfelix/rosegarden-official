@@ -17,11 +17,16 @@
 
 #include "qcanvasgroupableitem.h"
 
-QCanvasGroupableItem::QCanvasGroupableItem(QCanvasItem *i, QCanvasItemGroup *g)
+QCanvasGroupableItem::QCanvasGroupableItem(QCanvasItem *i,
+                                           QCanvasItemGroup *g,
+                                           bool withRelativeCoords)
     : m_group(g),
       m_item(i)
 {
-    group()->addItem(item());
+    if (withRelativeCoords)
+        group()->addItemWithRelativeCoords(item());
+    else
+        group()->addItem(item());
 }
 
 QCanvasGroupableItem::~QCanvasGroupableItem()
@@ -29,3 +34,9 @@ QCanvasGroupableItem::~QCanvasGroupableItem()
     group()->removeItem(item());
 }
 
+void
+QCanvasGroupableItem::relativeMoveBy(double dx, double dy)
+{
+    m_item->moveBy(dx + m_group->x(),
+                   dy + m_group->y());
+}

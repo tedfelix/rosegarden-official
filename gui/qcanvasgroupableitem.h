@@ -20,24 +20,44 @@
 
 #include "qcanvasitemgroup.h"
 
-/**This class is meant to be inherited by QCanvasItem children to make them groupable.
-@see QCanvasSpriteGroupable
-@see QCanvasLineGroupable
+/**
+ * This class is meant to be inherited by QCanvasItem children to make
+ * them groupable.
 
-  *@author Guillaume Laurent
-  */
+ @see QCanvasSpriteGroupable
+ @see QCanvasLineGroupable
+
+* @author Guillaume Laurent
+*/
 
 class QCanvasGroupableItem {
 public:
-    QCanvasGroupableItem(QCanvasItem*, QCanvasItemGroup*);
-    ~QCanvasGroupableItem();
+
+    /**
+     * Create a groupable item, e.g. put the item in the specified
+     * QCanvasItemGroup. If withRelativeCoords is true, the item's
+     * position will be translated so that it's coordinates are
+     * relative to those of the item group.
+     *
+     * @ see QCanvasItemGroup::addItemWithRelativeCoords()
+     */
+    QCanvasGroupableItem(QCanvasItem*, QCanvasItemGroup*,
+                         bool withRelativeCoords = false);
+
+    virtual ~QCanvasGroupableItem();
 
     QCanvasItemGroup* group() { return m_group; }
     QCanvasItem*      item()  { return m_item; }
 
+    /** same as moveBy(), except that the move is done relative to the
+       item group's coordinates
+    */
+    virtual void relativeMoveBy(double dx, double dy);
+
 private:
     QCanvasItemGroup* m_group;
     QCanvasItem*      m_item;
+
 };
 
 #endif
