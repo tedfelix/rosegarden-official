@@ -346,24 +346,17 @@ int RosegardenApplication::newInstance()
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
-    if (RosegardenGUIApp::self())
+    if (RosegardenGUIApp::self() && args->count() &&
+        RosegardenGUIApp::self()->getDocument() &&
+        RosegardenGUIApp::self()->getDocument()->saveIfModified())
     {
-        if (args->count())
-        {
-            // Check for modifications and save if necessary - if cancelled
-            // then don't load the new file.
-            //
-            if(RosegardenGUIApp::self()->getDocument() &&
-               RosegardenGUIApp::self()->getDocument()->saveIfModified())
-                RosegardenGUIApp::self()->openFile(args->arg(0));
-        }
-        else
-        {
-            RosegardenGUIApp::self()->raise();
-        }
+        // Check for modifications and save if necessary - if cancelled
+        // then don't load the new file.
+        //
+        RosegardenGUIApp::self()->openFile(args->arg(0));
     }
 
-    return 0;
+    return KUniqueApplication::newInstance();
 }
 
 // -----------------------------------------------------------------
