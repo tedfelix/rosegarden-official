@@ -4687,80 +4687,83 @@ RosegardenGUIApp::createNewAudioFile()
 void
 RosegardenGUIApp::slotAudioManager()
 {
-    if (!m_audioManagerDialog) {
-        
-        m_audioManagerDialog =
-            new Rosegarden::AudioManagerDialog(this, m_doc);
-
-        connect(m_audioManagerDialog,
-                SIGNAL(playAudioFile(Rosegarden::AudioFileId,
-                                     const Rosegarden::RealTime &,
-                                     const Rosegarden::RealTime&)),
-                SLOT(slotPlayAudioFile(Rosegarden::AudioFileId,
-                                       const Rosegarden::RealTime &,
-                                       const Rosegarden::RealTime &)));
-
-        connect(m_audioManagerDialog,
-                SIGNAL(addAudioFile(Rosegarden::AudioFileId)),
-                SLOT(slotAddAudioFile(Rosegarden::AudioFileId)));
-
-        connect(m_audioManagerDialog,
-                SIGNAL(deleteAudioFile(Rosegarden::AudioFileId)),
-                SLOT(slotDeleteAudioFile(Rosegarden::AudioFileId)));
-
-        //
-        // Sync segment selection between audio man. dialog and main window
-        //
-
-        // from dialog to us...
-        connect(m_audioManagerDialog,
-                SIGNAL(segmentsSelected(const Rosegarden::SegmentSelection&)),
-                m_view,
-                SLOT(slotSetSelectedSegments(const Rosegarden::SegmentSelection&)));
-
-        // and from us to dialog
-        connect(this, SIGNAL(segmentsSelected(const Rosegarden::SegmentSelection&)),
-                m_audioManagerDialog,
-                SLOT(slotSegmentSelection(const Rosegarden::SegmentSelection&)));
-
-
-        connect(m_audioManagerDialog,
-                SIGNAL(deleteSegments(const Rosegarden::SegmentSelection&)),
-                SLOT(slotDeleteSegments(const Rosegarden::SegmentSelection&)));
-
-        connect(m_audioManagerDialog,
-                SIGNAL(insertAudioSegment(Rosegarden::AudioFileId,
-                                          const Rosegarden::RealTime&,
-                                          const Rosegarden::RealTime&)),
-                m_view,
-                SLOT(slotAddAudioSegmentDefaultPosition(Rosegarden::AudioFileId,
-                                                        const Rosegarden::RealTime&,
-                                                        const Rosegarden::RealTime&)));
-        connect(m_audioManagerDialog,
-                SIGNAL(cancelPlayingAudioFile(Rosegarden::AudioFileId)),
-                SLOT(slotCancelAudioPlayingFile(Rosegarden::AudioFileId)));
-
-        connect(m_audioManagerDialog,
-                SIGNAL(deleteAllAudioFiles()),
-                SLOT(slotDeleteAllAudioFiles()));
-
-        // Make sure we know when the audio man. dialog is closing
-        //
-        connect(m_audioManagerDialog,
-                SIGNAL(closing()),
-                SLOT(slotAudioManagerClosed()));
-
-        // And that it goes away when the current document is changing
-        //
-        connect(this, SIGNAL(documentAboutToChange()),
-                m_audioManagerDialog, SLOT(close()));
-
-        m_audioManagerDialog->setAudioSubsystemStatus(m_seqManager->getSoundDriverStatus() & Rosegarden::AUDIO_OK);
-
-
-        plugAccelerators(m_audioManagerDialog,
-                         m_audioManagerDialog->getAccelerators());
+    if (m_audioManagerDialog)
+    {
+        m_audioManagerDialog->raise();
+        return;
     }
+        
+    m_audioManagerDialog =
+        new Rosegarden::AudioManagerDialog(this, m_doc);
+
+    connect(m_audioManagerDialog,
+            SIGNAL(playAudioFile(Rosegarden::AudioFileId,
+                                 const Rosegarden::RealTime &,
+                                 const Rosegarden::RealTime&)),
+            SLOT(slotPlayAudioFile(Rosegarden::AudioFileId,
+                                   const Rosegarden::RealTime &,
+                                   const Rosegarden::RealTime &)));
+
+    connect(m_audioManagerDialog,
+            SIGNAL(addAudioFile(Rosegarden::AudioFileId)),
+            SLOT(slotAddAudioFile(Rosegarden::AudioFileId)));
+
+    connect(m_audioManagerDialog,
+            SIGNAL(deleteAudioFile(Rosegarden::AudioFileId)),
+            SLOT(slotDeleteAudioFile(Rosegarden::AudioFileId)));
+
+    //
+    // Sync segment selection between audio man. dialog and main window
+    //
+
+    // from dialog to us...
+    connect(m_audioManagerDialog,
+            SIGNAL(segmentsSelected(const Rosegarden::SegmentSelection&)),
+            m_view,
+            SLOT(slotSetSelectedSegments(const Rosegarden::SegmentSelection&)));
+
+    // and from us to dialog
+    connect(this, SIGNAL(segmentsSelected(const Rosegarden::SegmentSelection&)),
+            m_audioManagerDialog,
+            SLOT(slotSegmentSelection(const Rosegarden::SegmentSelection&)));
+
+
+    connect(m_audioManagerDialog,
+            SIGNAL(deleteSegments(const Rosegarden::SegmentSelection&)),
+            SLOT(slotDeleteSegments(const Rosegarden::SegmentSelection&)));
+
+    connect(m_audioManagerDialog,
+            SIGNAL(insertAudioSegment(Rosegarden::AudioFileId,
+                                      const Rosegarden::RealTime&,
+                                      const Rosegarden::RealTime&)),
+            m_view,
+            SLOT(slotAddAudioSegmentDefaultPosition(Rosegarden::AudioFileId,
+                                                    const Rosegarden::RealTime&,
+                                                    const Rosegarden::RealTime&)));
+    connect(m_audioManagerDialog,
+            SIGNAL(cancelPlayingAudioFile(Rosegarden::AudioFileId)),
+            SLOT(slotCancelAudioPlayingFile(Rosegarden::AudioFileId)));
+
+    connect(m_audioManagerDialog,
+            SIGNAL(deleteAllAudioFiles()),
+            SLOT(slotDeleteAllAudioFiles()));
+
+    // Make sure we know when the audio man. dialog is closing
+    //
+    connect(m_audioManagerDialog,
+            SIGNAL(closing()),
+            SLOT(slotAudioManagerClosed()));
+
+    // And that it goes away when the current document is changing
+    //
+    connect(this, SIGNAL(documentAboutToChange()),
+            m_audioManagerDialog, SLOT(close()));
+
+    m_audioManagerDialog->setAudioSubsystemStatus(
+            m_seqManager->getSoundDriverStatus() & Rosegarden::AUDIO_OK);
+
+    plugAccelerators(m_audioManagerDialog,
+                     m_audioManagerDialog->getAccelerators());
     
     m_audioManagerDialog->show();
 }

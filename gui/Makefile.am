@@ -254,7 +254,8 @@ rosegarden_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 DISTCLEANFILES = $(rosegarden_METASOURCES)
 
 rcdir = $(kde_datadir)/rosegarden
-rc_DATA = bankeditor.rc \
+rc_DATA = audiomanager.rc \
+        bankeditor.rc \
         controleditor.rc \
 	eventlist.rc \
 	tempoview.rc \

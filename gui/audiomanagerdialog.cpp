@@ -36,6 +36,8 @@
 #include <klineeditdlg.h>
 #include <klistview.h>
 #include <kio/netaccess.h>
+#include <kaction.h>
+#include <kstdaction.h>
 
 #include "audiomanagerdialog.h"
 #include "dialogs.h"
@@ -44,11 +46,15 @@
 #include "rosegardenguiview.h"
 #include "rosestrings.h"
 #include "rosedebug.h"
-#include "audiocommands.h"
 
 #include "WAVAudioFile.h"
 
 using std::endl;
+
+
+// Define this to enable buttons on the AudioFileManager
+//
+//#define SHOW_BUTTONS
 
 namespace Rosegarden
 {
@@ -164,20 +170,60 @@ const char* const AudioManagerDialog::m_listViewLayoutName = "AudioManagerDialog
 
 AudioManagerDialog::AudioManagerDialog(QWidget *parent,
                                        RosegardenGUIDoc *doc):
-    KDialogBase(parent, "", false,
-                i18n("Rosegarden Audio File Manager"), Close),
+    KMainWindow(parent, "audioManagerDialog"),
     m_doc(doc),
     m_playingAudioFile(0),
     m_audioPlayingDialog(0),
     m_playTimer(new QTimer(this)),
     m_audiblePreview(true)
 {
+    setCaption(i18n("Audio File Manager"));
     setWFlags(WDestructiveClose);
 
-    QHBox *h = makeHBoxMainWidget();
-    QVButtonGroup *v = new QVButtonGroup(i18n("Audio File actions"), h);
+    QHBox *h = new QHBox(this);
+    setCentralWidget(h);
+    h->setMargin(10);
+    h->setSpacing(5);
+
+    m_fileList        = new AudioListView(h);
+
+    m_addAction = new KAction(i18n("&Add Audio File"), 0, 0, this,
+                              SLOT(slotAdd()), actionCollection(), "add_audio");
+
+    m_deleteAction = new KAction(i18n("&Remove Audio File"), 0, 0, this,
+                                 SLOT(slotDelete()), 
+                                 actionCollection(), "delete_audio");
+
+    m_playAction = new KAction(i18n("&Play Preview"), 0, 0, this,
+                               SLOT(slotPlayPreview()), 
+                               actionCollection(), "play_audio");
+
+    m_renameAction = new KAction(i18n("&Rename File"), 0, 0, this,
+                                 SLOT(slotRename()), 
+                                 actionCollection(), "rename_audio");
+
+    m_insertAction = new KAction(i18n("&Insert into selected Audio Track"), 
+                                 0, 0, this, SLOT(slotInsert()), 
+                                 actionCollection(), "insert_audio");
+
+    m_deleteAllAction = new KAction(i18n("Remo&ve all Audio Files"), 0, 0, this,
+                                    SLOT(slotDeleteAll()), 
+                                    actionCollection(), "remove_audio");
+
+    m_exportAction = new KAction(i18n("&Export Audio File"), 0, 0, this,
+                                 SLOT(slotExportAudio()), 
+                                 actionCollection(), "export_audio");
+
+    m_distributeMidiAction = new KAction(i18n("Distribute Audio on &MIDI"), 
+                                         0, 0, this,
+                                         SLOT(slotDistributeOnMidiSegment()), 
+                                         actionCollection(), 
+                                         "distribute_audio");
 
     // create widgets
+#ifdef SHOW_BUTTONS
+    QVButtonGroup *v = new QVButtonGroup(i18n("Audio File actions"), h);
+
     m_addButton       = new QPushButton(i18n("Add Audio File"), v);
     m_deleteButton    = new QPushButton(i18n("Remove Audio File"), v);
     m_playButton      = new QPushButton(i18n("Play Preview"), v);
@@ -187,8 +233,6 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     m_exportButton    = new QPushButton(i18n("Export Audio File"), v);
     m_distributeMidiButton = new 
         QPushButton(i18n("Distribute Audio on MIDI"), v);
-
-    m_fileList        = new AudioListView(h);
 
     QToolTip::add(m_addButton,
             i18n("Add an audio file to this manager dialog."));
@@ -216,6 +260,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
 
     QToolTip::add(m_distributeMidiButton,
             i18n("Turn a MIDI Segment into a set of audio Segments triggered by the MIDI events"));
+#endif
 
     // Set the column names
     //
@@ -244,6 +289,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     // show tooltips when columns are partially hidden
     m_fileList->setShowToolTips(true);
 
+#ifdef SHOW_BUTTONS
     // connect buttons
     connect(m_deleteButton, SIGNAL(clicked()), SLOT(slotDelete()));
     connect(m_addButton, SIGNAL(clicked()), SLOT(slotAdd()));
@@ -254,6 +300,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     connect(m_exportButton, SIGNAL(clicked()), SLOT(slotExportAudio()));
     connect(m_distributeMidiButton, SIGNAL(clicked()), 
             SLOT(slotDistributeOnMidiSegment()));
+#endif
 
     // connect selection mechanism
     connect(m_fileList, SIGNAL(selectionChanged(QListViewItem*)),
@@ -279,17 +326,23 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     connect(getCommandHistory(), SIGNAL(commandExecuted(KCommand *)),
                         this, SLOT(slotCommandExecuted(KCommand *)));
 
-    setInitialSize(configDialogSize(AudioManagerDialogConfigGroup));
+    //setInitialSize(configDialogSize(AudioManagerDialogConfigGroup));
 
     connect(m_playTimer, SIGNAL(timeout()), 
             this, SLOT(slotCancelPlayingAudio()));
+
+    KStdAction::close(this,
+                      SLOT(slotClose()),
+                      actionCollection());
+
+    createGUI("audiomanager.rc");
 }
 
 AudioManagerDialog::~AudioManagerDialog()
 {
     RG_DEBUG << "\n*** AudioManagerDialog::~AudioManagerDialog\n" << endl;
     m_fileList->saveLayout(kapp->config(), m_listViewLayoutName);
-    saveDialogSize(AudioManagerDialogConfigGroup);
+    //saveDialogSize(AudioManagerDialogConfigGroup);
 }
 
 // Scan the AudioFileManager and populate the m_fileList
@@ -324,13 +377,24 @@ AudioManagerDialog::slotPopulateFileList()
     // clear file list and disable associated action buttons
     m_fileList->clear();
 
+#ifdef SHOW_BUTTONS
     m_deleteButton->setDisabled(true);
     m_playButton->setDisabled(true);
     m_renameButton->setDisabled(true);
     m_insertButton->setDisabled(true);
-    m_distributeMidiButton->setDisabled(true);
     m_deleteAllButton->setDisabled(true);
     m_exportButton->setDisabled(true);
+    m_distributeMidiButton->setDisabled(true);
+#endif
+
+    m_deleteAction->setEnabled(false);
+    m_playAction->setEnabled(false);
+    m_renameAction->setEnabled(false);
+    m_insertAction->setEnabled(false);
+    m_deleteAllAction->setEnabled(false);
+    m_exportAction->setEnabled(false);
+    m_distributeMidiAction->setEnabled(false);
+
 
     if (m_doc->getAudioFileManager().begin() ==
             m_doc->getAudioFileManager().end())
@@ -345,8 +409,10 @@ AudioManagerDialog::slotPopulateFileList()
         return;
     }
 
+#ifdef SHOW_BUTTONS
     // we have at least one audio file
     m_deleteAllButton->setDisabled(false);
+#endif
 
     // show tree hierarchy
     m_fileList->setRootIsDecorated(true);
@@ -748,17 +814,35 @@ AudioManagerDialog::slotAdd()
 void
 AudioManagerDialog::enableButtons()
 {
+#ifdef SHOW_BUTTONS
     m_deleteButton->setEnabled(true);
     m_renameButton->setEnabled(true);
     m_insertButton->setEnabled(isSelectedTrackAudio());
-    m_distributeMidiButton->setEnabled(isSelectedSegmentMidi());
     m_deleteAllButton->setEnabled(true);
     m_exportButton->setDisabled(true);
+    m_distributeMidiButton->setEnabled(true);
+#endif
+
+    m_renameAction->setEnabled(true);
+    m_insertAction->setEnabled(isSelectedTrackAudio());
+    m_deleteAllAction->setEnabled(true);
+    m_exportAction->setEnabled(true);
+    m_distributeMidiAction->setEnabled(true);
 
     if (m_audiblePreview)
-        m_playButton->setDisabled(false);
+    {
+#ifdef SHOW_BUTTONS
+        m_playButton->setEnabled(true);
+#endif
+        m_playAction->setEnabled(true);
+    }
     else
-        m_playButton->setDisabled(true);
+    {
+#ifdef SHOW_BUTTONS
+        m_playButton->setEnabled(false);
+#endif
+        m_playAction->setEnabled(false);
+    }
 
 }
 
@@ -1110,14 +1194,15 @@ AudioManagerDialog::closeEvent(QCloseEvent *e)
 {
     RG_DEBUG << "AudioManagerDialog::closeEvent()\n";
     emit closing();
-    KDialogBase::closeEvent(e);
+    KMainWindow::closeEvent(e);
 }
 
 void
 AudioManagerDialog::slotClose()
 {
     emit closing();
-    KDialogBase::slotClose();
+    close();
+    //KDockMainWindow::slotClose();
 //     delete this;
 }
 
@@ -1161,28 +1246,6 @@ AudioManagerDialog::isSelectedTrackAudio()
     
 }
 
-bool
-AudioManagerDialog::isSelectedSegmentMidi() const
-{
-    QList<RosegardenGUIView>& viewList = m_doc->getViewList();
-    RosegardenGUIView *w = 0;
-    Rosegarden::SegmentSelection selection;
-
-    for(w = viewList.first(); w != 0; w = viewList.next())
-        selection = w->getSelection();
-
-
-    for (Rosegarden::SegmentSelection::iterator i = selection.begin();
-         i != selection.end(); ++i)
-    {
-        if ((*i)->getType() == Rosegarden::Segment::Internal)
-            return true;
-    }
-
-    return false;
-}
-
-
 void
 AudioManagerDialog::slotDistributeOnMidiSegment()
 {
@@ -1195,28 +1258,35 @@ AudioManagerDialog::slotDistributeOnMidiSegment()
     Rosegarden::SegmentSelection selection;
 
     for(w = viewList.first(); w != 0; w = viewList.next())
-        selection = w->getSelection();
-
-    AudioFile *audioFile = getCurrentSelection();
-    if (audioFile)
     {
-        DistributeAudioCommand *command =
-            new DistributeAudioCommand(&m_doc->getComposition(),
-                                       selection,
-                                       audioFile);
-        getCommandHistory()->addCommand(command);
-
+        selection = w->getSelection();
     }
-    else
+
+    // Store the insert times in a local vector
+    //
+    std::vector<Rosegarden::timeT> insertTimes;
+
+    for (Rosegarden::SegmentSelection::iterator i = selection.begin();
+         i != selection.end(); ++i)
+    {
+        // For MIDI (Internal) Segments only of course
+        //
+        if ((*i)->getType() == Rosegarden::Segment::Internal)
+        {
+            for (Segment::iterator it = (*i)->begin(); it != (*i)->end(); ++it)
+            {
+                if ((*it)->isa(Rosegarden::Note::EventType))
+                    insertTimes.push_back((*it)->getAbsoluteTime());
+            }
+        }
+    }
+
+    for (unsigned int i = 0; i < insertTimes.size(); ++i)
     {
         RG_DEBUG << "AudioManagerDialog::slotDistributeOnMidiSegment - "
-                 << "no audio file selected" << endl;
+                 << "insert audio segment at " << insertTimes[i]
+                 << endl;
     }
-
-    selection.clear();
-
-    for(w = viewList.first(); w != 0; w = viewList.next())
-        w->slotSetSelectedSegments(selection);
 }
 
 

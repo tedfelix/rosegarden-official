@@ -54,7 +54,7 @@ namespace Rosegarden
 
 class AudioFileManager;
 
-class AudioManagerDialog : public KDialogBase
+class AudioManagerDialog : public KMainWindow
 {
     Q_OBJECT
 
@@ -171,7 +171,6 @@ protected slots:
 protected:
     bool addFile(const KURL& kurl);
     bool isSelectedTrackAudio();
-    bool isSelectedSegmentMidi() const;
     void selectFileListItemNoSignal(QListViewItem*);
     void enableButtons();
 
@@ -188,6 +187,16 @@ protected:
     QPushButton      *m_deleteAllButton;
     QPushButton      *m_exportButton;
     QPushButton      *m_distributeMidiButton;
+
+
+    KAction          *m_addAction;
+    KAction          *m_deleteAction;
+    KAction          *m_playAction;
+    KAction          *m_renameAction;
+    KAction          *m_insertAction;
+    KAction          *m_deleteAllAction;
+    KAction          *m_exportAction;
+    KAction          *m_distributeMidiAction;
 
     RosegardenGUIDoc *m_doc;
 

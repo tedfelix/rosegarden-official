@@ -697,14 +697,25 @@ void TrackEditor::dropEvent(QDropEvent* event)
 
     // Adjust any drop event height position by visible rulers
     //
-    if (m_topBarButtons && m_topBarButtons->isVisible()) heightAdjust += m_topBarButtons->height();
-    if (m_tempoRuler && m_tempoRuler->isVisible()) heightAdjust += m_tempoRuler->height();
-    if (m_chordNameRuler && m_chordNameRuler->isVisible()) heightAdjust += m_chordNameRuler->height();
+    if (m_topBarButtons && m_topBarButtons->isVisible()) 
+        heightAdjust += m_topBarButtons->height();
 
-    QPoint posInSegmentCanvas = m_segmentCanvas->viewportToContents(m_segmentCanvas->viewport()->mapFrom(this, event->pos()));
+    if (m_tempoRuler && m_tempoRuler->isVisible()) 
+        heightAdjust += m_tempoRuler->height();
+
+    if (m_chordNameRuler && m_chordNameRuler->isVisible()) 
+        heightAdjust += m_chordNameRuler->height();
+
+    QPoint posInSegmentCanvas = 
+        m_segmentCanvas->inverseWorldMatrix().map(
+            (m_segmentCanvas->viewportToContents(m_segmentCanvas->
+                viewport()->mapFrom(this, event->pos()))));
+
     int trackPos = m_segmentCanvas->grid().getYBin(posInSegmentCanvas.y());
+
     Rosegarden::timeT time =
-        m_segmentCanvas->grid().getRulerScale()->getTimeForX(posInSegmentCanvas.x());
+        m_segmentCanvas->grid().getRulerScale()->
+            getTimeForX(posInSegmentCanvas.x());
     
 
     if (QUriDrag::decode(event, uri)) {
