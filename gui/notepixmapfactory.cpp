@@ -2005,14 +2005,25 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above, bool smooth,
 
     if (length < nbw * 2) length = nbw * 2;
 
+    // Experiment with rotating the painter rather than the control points.
+    double theta = 0;
+    bool rotate = false;
+    if (dy != 0) {
+	// We have opposite (dy) and adjacent (length).
+	theta = atan(double(dy) / double(length)) * 180.0 / M_PI;
+	NOTATION_DEBUG << "slur: dy is " << dy << ", length " << length << ", rotating through " << theta << endl;
+	rotate = true;
+//	dy = 0;
+    }
+
     // For the purpose of our calculations, we assume the slur is
     // above the notes.  If this is not the case, we flip the sign of
     // the y-axis both before and after the calculation.
 
-    if (!above) dy = -dy;
+//    if (!above) dy = -dy;
 
     Equation::Point a(0, 0);
-    Equation::Point b(length, dy);
+    Equation::Point b(length, 0);// dy);
 
     int mx1 = length/6;
     int mx2 = length - length/6;
@@ -2021,11 +2032,11 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above, bool smooth,
     Equation::solveForYByEndPoints(a, b, mx1, my1);
     Equation::solveForYByEndPoints(a, b, mx2, my2);
 
-    int y1 = 0, y2 = dy;
+    int y1 = 0, y2 = 0;//dy;
 
     // As remarked above, we can assume here that the slur is above
     // the notes.
-
+#ifdef NOT_DEFINED
     if (length < nbw * 10) {
 	my1 -= nbh;
 	my2 -= nbh;
@@ -2050,7 +2061,11 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above, bool smooth,
     
     if      (y2 > my2 + nbh*2) y2 = (int)my2 + nbh*2;
     else if (y2 < my2 - nbh/2) my2 = y2 + nbh/2;
-    
+#endif
+
+    my1 = y1 - sqrt(length);
+    my2 = y2 - sqrt(length);
+
     if (!above) {
 	y1  = -y1;
 	y2  = -y2;
@@ -2077,30 +2092,48 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above, bool smooth,
 
 	if (!havePixmap) {
 	    int width  = bottomRight.x() - topLeft.x();
-	    int height = bottomRight.y() - topLeft.y() + thickness - 1;
-	    hotspot = QPoint(-topLeft.x(), -topLeft.y());
+	    int height = bottomRight.y() - topLeft.y() + thickness - 1 +
+		abs(dy);
+	    hotspot = QPoint(0, -topLeft.y());
+
+	    NOTATION_DEBUG << "slur: bottomRight " << bottomRight << ", topLeft " << topLeft << ", width " << width << ", height " << height << ", hotspot " << hotspot << ", dy " << dy << endl;
 
 	    if (painter) {
-
-		painter->save();
 
 		// This conditional is because we're also called with
 		// a painter arg from non-printer drawTie.  It's a big
 		// hack.
 
 		if (m_inPrinterMethod) {
+		    painter->save();
 		    m_p->beginExternal(painter);
+		    painter->translate(x, y);
+		    if (rotate) painter->rotate(theta);
 		} else {
+		    m_p->painter().save();
 		    m_p->maskPainter().save();
-		    m_p->maskPainter().translate(x - hotspot.x(), y - hotspot.y());
+		    m_p->painter().translate(x/* - hotspot.x()*/, y/* - hotspot.y()*/);
+		    m_p->maskPainter().translate(x/* - hotspot.x()*/, y/* - hotspot.y()*/);
+		    if (rotate) {
+			m_p->painter().rotate(theta);
+			m_p->maskPainter().rotate(theta);
+		    }
+		    m_p->painter().translate(hotspot.x(), hotspot.y());
+		    m_p->maskPainter().translate(hotspot.x(), hotspot.y());
 		}
-
-		painter->translate(x - hotspot.x(), y - hotspot.y());
 
 	    } else {
 		createPixmapAndMask(smooth ? width*2+1  : width,
 				    smooth ? height*2+thickness*2 : height + thickness,
 				    width, height);
+
+		if (rotate) {
+		    m_p->painter().rotate(theta);
+		    m_p->maskPainter().rotate(theta);
+		}
+
+		m_p->painter().translate(hotspot.x(), hotspot.y());
+		m_p->maskPainter().translate(hotspot.x(), hotspot.y());
 	    }
 
 	    if (m_selected)
@@ -2113,8 +2146,8 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above, bool smooth,
 
 	for (int j = 0; j < ppc; ++j) {
 	    qp.setPoint(j,
-			hotspot.x() + (*polyPoints)[j].x(),
-			hotspot.y() + (*polyPoints)[j].y());
+			/*	hotspot.x() + */ (*polyPoints)[j].x(),
+			/*hotspot.y() + */ (*polyPoints)[j].y());
 	}
 
 	delete polyPoints;
