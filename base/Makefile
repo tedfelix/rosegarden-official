@@ -14,4 +14,7 @@ NotationTypes.o:	NotationTypes.h
 clean:
 	rm -f *.o test speedtrial
 
+distclean:	clean
+	rm -f libcore.a
+
 # DO NOT DELETE
