@@ -33,6 +33,7 @@ libbase_la_SOURCES = AnalysisTypes.C \
 		     SegmentPerformanceHelper.C \
 		     Selection.C \
 		     SnapGrid.C \
+		     StringHash.C \
                      Studio.C \
                      Track.C \
 		     ViewElement.C \

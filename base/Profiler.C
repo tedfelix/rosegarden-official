@@ -20,6 +20,8 @@
     COPYING included with this distribution for more information.
 */
 
+#include <iostream>
+
 #include "Profiler.h"
 
 using std::cerr;

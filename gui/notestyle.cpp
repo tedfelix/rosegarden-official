@@ -70,7 +70,6 @@ private:
 };
 
 
-
 const NoteStyleName NoteStyleFactory::DefaultStyle = "Classical";
 
 std::vector<NoteStyleName>

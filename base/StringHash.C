@@ -20,63 +20,11 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _PROFILER_H_
-#define _PROFILER_H_
-
-#include <sys/times.h>
-#include <unistd.h>
-
 #include "StringHash.h"
-
 
 namespace Rosegarden 
 {
 
-/**
- * Profiling classes
- */
+__HASH_NS::hash<const char *> hashstring::_H;
 
-/**
- * The class holding all profiling data
- *
- * This class is a singleton
- */
-class Profiles
-{
-public:
-    static Profiles* getInstance();
-
-    ~Profiles();
-
-    void accumulate(const char* id, clock_t time);
-
-    void dump();
-
-    typedef hash_char<clock_t> profilesmap;
-    
-
-protected:
-    Profiles();
-
-    profilesmap m_profiles;
-
-    static Profiles* m_instance;
-};
-
-class Profiler
-{
-public:
-    Profiler(const char*, bool showOnDestruct=false);
-    ~Profiler();
-
-protected:
-    const char* m_c;
-    clock_t m_startTime;
-    bool m_showOnDestruct;
-
-    static struct tms m_spare;
-};
- 
 }
-
-#endif

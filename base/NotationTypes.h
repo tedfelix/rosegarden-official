@@ -28,6 +28,8 @@
 #include "Event.h"
 #include "Instrument.h"
 
+#include "StringHash.h"
+
 /*
  * NotationTypes.h
  *
@@ -225,22 +227,6 @@ private:
     std::string m_clef;
 };
 
-
-struct eqstring {
-    bool operator() (const std::string &s1, const std::string &s2) const {
-        return s1 == s2;
-    }
-};
-
-struct hashstring {
-    static __HASH_NS::hash<const char *> _H;
-    size_t operator() (const std::string &s) const { return _H(s.c_str()); }
-};
-
-#if !defined(__GNUC__) || __GNUC__ < 3
-__HASH_NS::hash<const char *> hashstring::_H;
-#endif
-
 /**
  * All we store in a key Event is the name of the key.  A Key object
  * can be constructed from such an Event or just from its name, and
@@ -423,8 +409,7 @@ private:
     };
 
 
-    typedef __HASH_NS::hash_map<std::string, KeyDetails, hashstring, eqstring>
-        KeyDetailMap;
+    typedef hash_string<KeyDetails> KeyDetailMap;
     static KeyDetailMap m_keyDetailMap;
     static void checkMap();
     void checkAccidentalHeights() const;

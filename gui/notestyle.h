@@ -22,28 +22,12 @@
 #ifndef _NOTE_STYLE_H_
 #define _NOTE_STYLE_H_
 
-#include "NotationTypes.h"
-#include "notecharname.h"
-#include <qxml.h>
 #include <vector>
 
-#if (__GNUC__ < 3)
+#include "StringHash.h"
+#include "NotationTypes.h"
 
-#include <hash_map>
-#define __HASH_NS std
-
-#else
-
-#include <ext/hash_map>
-#if (__GNUC_MINOR__ >= 1)
-#define __HASH_NS __gnu_cxx
-#else
-#define __HASH_NS std
-#endif
-
-#endif
-
-
+#include "notecharname.h"
 
 class NoteStyle;
 
@@ -53,20 +37,6 @@ class NoteStyle;
 // on demand within each run of the program, they don't persist.
 
 typedef std::string NoteStyleName;
-
-struct NoteStyleNamesEqual {
-    bool operator()(const NoteStyleName &s1, const NoteStyleName &s2) const {
-	return s1 == s2;
-    }
-};
-
-struct NoteStyleNameHash {
-    static std::hash<const char *> _H;
-    size_t operator() (const NoteStyleName &s) const {
-	return _H(s.c_str());
-    }
-};
-
 
 class NoteStyleFactory
 {
@@ -83,10 +53,7 @@ public:
     };
 
 private:
-    typedef __HASH_NS::hash_map<NoteStyleName,
-				NoteStyle *,
-				NoteStyleNameHash,
-				NoteStyleNamesEqual> StyleMap;
+    typedef Rosegarden::hash_string<NoteStyle*> StyleMap;
     static StyleMap m_styles;
 };
 

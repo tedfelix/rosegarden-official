@@ -246,7 +246,7 @@ protected:
 	                        CharNameHash, CharNamesEqual> NotePixmapCache;
     mutable NotePixmapCache m_dottedRestCache;
 
-    typedef __HASH_NS::hash_map<const char *, QFont> TextFontCache;
+    typedef Rosegarden::hash_char<QFont> TextFontCache;
     mutable TextFontCache m_textFontCache;
 
     static QPoint m_pointZero;
