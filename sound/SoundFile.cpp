@@ -69,7 +69,6 @@ int
 SoundFile::getIntegerFromLittleEndian(const std::string &s)
 {
     int r = 0;
-    int shift = 0;
 
     for (unsigned int i = 0; i < s.length(); i++)
     {
@@ -84,15 +83,13 @@ SoundFile::getIntegerFromLittleEndian(const std::string &s)
 std::string
 SoundFile::getLittleEndianFromInteger(unsigned int value, unsigned int length)
 {
-    std::string r;
-    int i = 0;
+    std::string r = "";
 
     do
     {
-        r[i++] = value & 0xff;
-        value >> 8;
+        r += (unsigned char)((value >> (8 * r.length())) & 0xff);
     }
-    while (i < length);
+    while (r.length() < length);
 
     return r;
 }

@@ -434,12 +434,27 @@ AudioFile::getSampleFrameSlice(std::ifstream *file, const RealTime &time)
 void
 AudioFile::close()
 {
-    if (m_outFile)
-    {
-        m_outFile->close();
-    }
+    if (m_outFile == 0)
+        return;
 
-    // do the rest of the checking and fixing
+    m_outFile->seekp(0, std::ios::end);
+    unsigned int totalSize = m_outFile->tellp();
+
+    // seek to first length position
+    m_outFile->seekp(4, std::ios::beg);
+
+    // write complete file size minus 8 bytes to here
+    putBytes(m_outFile, getLittleEndianFromInteger(totalSize - 8, 4));
+
+    // reseek from start forward 40
+    m_outFile->seekp(40, std::ios::beg);
+
+    // write the data chunk size to end
+    putBytes(m_outFile, getLittleEndianFromInteger(totalSize - 44, 4));
+
+    m_outFile->close();
+    delete m_outFile;
+
 }
 
 }
