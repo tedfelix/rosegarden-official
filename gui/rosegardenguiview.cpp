@@ -230,11 +230,6 @@ void RosegardenGUIView::selectTrack(int trackId)
 }
 
 
-// Highlight all the Segments on a Track because the Track has been selected
-// We have to ensure we create a Selector object before we can highlight
-// these tracks.
-//
-//
 void RosegardenGUIView::slotSelectTrackSegments(int trackId)
 {
     std::vector<Rosegarden::Segment*> segments;

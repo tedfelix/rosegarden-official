@@ -145,9 +145,16 @@ public slots:
     void slotEditSegmentMatrix(Rosegarden::Segment*);
     void slotEditSegmentAudio(Rosegarden::Segment*);
 
-    // Called by signal from Track selection routine to highlight
-    // all available Segments on a Track
-    //
+    /**
+     *
+    * Highlight all the Segments on a Track because the Track has been selected
+    * We have to ensure we create a Selector object before we can highlight
+    * these tracks.
+    *
+    * Called by signal from Track selection routine to highlight
+    * all available Segments on a Track
+    *
+    */
     void slotSelectTrackSegments(int);
 
     void slotSelectedSegments(std::vector<Rosegarden::Segment*> segments);
