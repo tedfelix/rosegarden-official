@@ -1330,31 +1330,50 @@ void NotationView::slotGroupAutoBeam()
 
 void NotationView::slotGroupSimpleTuplet()
 {
-    //!!! Should take this stuff out into a separate method: we do this
-    // in a few places now
+    timeT t = 0;
+    timeT unit = 0;
+    int tupled = 2;
+    int untupled = 3;
+    Segment *segment = 0;
 
-    NotationStaff *staff = m_staffs[m_currentStaff];
-    Segment &segment = staff->getSegment();
-    
-    double layoutX = staff->getLayoutXOfInsertCursor();
-    if (layoutX < 0) {
-	slotStatusHelpMsg(i18n("Couldn't make tuplet at this point"));
-	return;
-    }
+    if (m_currentEventSelection) {
 
-    Rosegarden::Event *timeSig, *clef, *key;
+	t = m_currentEventSelection->getBeginTime();
 
-    NotationElementList::iterator i = staff->getClosestElementToLayoutX
-	(layoutX, timeSig, clef, key, false, -1);
+	timeT duration = m_currentEventSelection->getTotalDuration();
+	unit = Note::getNearestNote(duration / 3).getDuration();
 
-    timeT insertionTime = segment.getEndTime();
-    if (i != staff->getViewElementList()->end()) {
-	insertionTime = (*i)->getAbsoluteTime();
+	segment = &m_currentEventSelection->getSegment();
+
+    } else {
+
+	//!!! Should take this stuff out into a separate method: we do
+	//this in a few places now
+
+	NotationStaff *staff = m_staffs[m_currentStaff];
+	segment = &staff->getSegment();
+        
+	double layoutX = staff->getLayoutXOfInsertCursor();
+	if (layoutX < 0) {
+	    slotStatusHelpMsg(i18n("Couldn't make tuplet at this point"));
+	    return;
+	}
+
+	Rosegarden::Event *timeSig, *clef, *key;
+	NotationElementList::iterator i = staff->getClosestElementToLayoutX
+	    (layoutX, timeSig, clef, key, false, -1);
+
+	t = segment->getEndTime();
+	if (i != staff->getViewElementList()->end()) {
+	    t = (*i)->getAbsoluteTime();
+	}
+
+	//!!! use currently-selected note for unit
+	unit = Note(Note::Quaver).getDuration();
     }
 
     addCommandToHistory(new GroupMenuTupletCommand
-			(segment, insertionTime,
-			 Note(Note::Quaver).getDuration())); //!!! for now 
+			(*segment, t, unit, untupled, tupled));
 }
 
 
