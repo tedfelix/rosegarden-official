@@ -124,6 +124,11 @@ public slots:
      */
     void slotToggleToolBar();
 
+    void slotToggleNotesToolBar();
+    void slotToggleRestsToolBar();
+    void slotToggleAccidentalsToolBar();
+    void slotToggleClefsToolBar();
+
     /** toggles the statusbar
      */
     void slotToggleStatusBar();
@@ -181,7 +186,7 @@ public slots:
     void slotDottedR64th();
 
     // accidental switch slots
-    void slotNoAccidenta();
+    void slotNoAccidental();
     void slotSharp();
     void slotFlat();
     void slotNatural();
@@ -233,6 +238,7 @@ protected:
      */
     void initStatusBar();
 
+    void toggleNamedToolBar(const QString& toolBarName);
     
     /**
      * redo the layout after insertion

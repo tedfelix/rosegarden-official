@@ -371,8 +371,7 @@ void NotationView::setupActions()
     //
     // Edition tools (at the moment, there's only an eraser)
     //
-    noteAction = new KRadioAction(i18n("Erase"), "eraser",
-                                  0,
+    noteAction = new KRadioAction(i18n("Erase"), "eraser", 0,
                                   this, SLOT(slotEraseSelected()),
                                   actionCollection(), "erase");
     noteAction->setExclusiveGroup("notes");
@@ -389,20 +388,32 @@ void NotationView::setupActions()
     KStdAction::paste   (this, SLOT(slotEditPaste()),      actionCollection());
 
     // setup Settings menu
-    KStdAction::showToolbar
-        (this, SLOT(slotToggleToolBar()), actionCollection());
-    KStdAction::showStatusbar
-        (this, SLOT(slotToggleStatusBar()), actionCollection());
+    KStdAction::showToolbar(this, SLOT(slotToggleToolBar()), actionCollection());
 
-    KStdAction::saveOptions
-        (this, SLOT(save_options()), actionCollection());
-    KStdAction::preferences
-        (this, SLOT(customize()), actionCollection());
+    static const char* actionsToolbars[][3] = 
+        {
+            { "Show Notes Toolbar",  "1slotToggleNotesToolBar()",  "show_notes_toolbar" },
+            { "Show Rests Toolbar",  "1slotToggleRestsToolBar()",  "show_rests_toolbar" },
+            { "Show Accidentals Toolbar",   "1slotToggleAccidentalsToolBar()",  "show_accidentals_toolbar" },
+            { "Show Clefs Toolbar",         "1slotToggleClefsToolBar()",        "show_clefs_toolbar" }
+        };
 
-    KStdAction::keyBindings 
-        (this, SLOT(editKeys()), actionCollection());
-    KStdAction::configureToolbars
-        (this, SLOT(editToolbars()), actionCollection());
+    for (unsigned int i = 0; i < 4; ++i) {
+
+        KToggleAction* toolbarAction = new KToggleAction(i18n(actionsToolbars[i][0]), 0,
+                                                         this, actionsToolbars[i][1],
+                                                         actionCollection(), actionsToolbars[i][2]);
+
+        toolbarAction->setChecked(true);
+    }
+    
+    KStdAction::showStatusbar(this, SLOT(slotToggleStatusBar()), actionCollection());
+
+    KStdAction::saveOptions(this, SLOT(save_options()), actionCollection());
+    KStdAction::preferences(this, SLOT(customize()), actionCollection());
+
+    KStdAction::keyBindings(this, SLOT(editKeys()), actionCollection());
+    KStdAction::configureToolbars(this, SLOT(editToolbars()), actionCollection());
 
     createGUI("notation.rc");
 }
@@ -781,6 +792,41 @@ void NotationView::slotToggleToolBar()
     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
+void NotationView::slotToggleNotesToolBar()
+{
+    toggleNamedToolBar("notesToolBar");
+}
+
+void NotationView::slotToggleRestsToolBar()
+{
+    toggleNamedToolBar("restsToolBar");
+}
+
+void NotationView::slotToggleAccidentalsToolBar()
+{
+    toggleNamedToolBar("accidentalsToolBar");
+}
+
+void NotationView::slotToggleClefsToolBar()
+{
+    toggleNamedToolBar("clefsToolBar");
+}
+
+void NotationView::toggleNamedToolBar(const QString& toolBarName)
+{
+    KToolBar *namedToolBar = toolBar(toolBarName);
+    if (!namedToolBar) {
+        kdDebug(KDEBUG_AREA) << "NotationView::toggleNamedToolBar() : toolBar "
+                             << toolBarName << " not found" << endl;
+        return;
+    }
+    
+    if (namedToolBar->isVisible())
+        namedToolBar->hide();
+    else
+        namedToolBar->show();
+}
+
 void NotationView::slotToggleStatusBar()
 {
     slotStatusMsg(i18n("Toggle the statusbar..."));
@@ -1015,7 +1061,7 @@ void NotationView::slotDottedR64th()
 //----------------------------------------
 // Accidentals
 //----------------------------------------
-void NotationView::slotNoAccidenta()
+void NotationView::slotNoAccidental()
 {
     NoteInserter::setAccidental(Rosegarden::NoAccidental);
 }

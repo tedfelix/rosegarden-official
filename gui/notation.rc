@@ -45,12 +45,29 @@
   <Action name="dotted_64th_rest" />
 </Menu>
 
+<Menu noMerge="1" name="Accidentals">
+  <text>Accidentals</text>
+  <Action name="no_accidental" />
+  <Action name="sharp_accidental" />
+  <Action name="flat_accidental" />
+  <Action name="natural_accidental" />
+  <Action name="double_sharp_accidental" />
+  <Action name="double_flat_accidental" />
+</Menu>
+
 <Menu noMerge="1" name="Clefs">
   <text>Clefs</text>
   <Action name="treble_clef" />
   <Action name="tenor_clef" />
   <Action name="alto_clef" />
   <Action name="bass_clef" />
+</Menu>
+
+<Menu  name="settings"><text>&amp;Settings</text>
+  <Action name="show_notes_toolbar"        append="show_merge" />
+  <Action name="show_rests_toolbar"        append="show_merge" />
+  <Action name="show_accidentals_toolbar"  append="show_merge" />
+  <Action name="show_clefs_toolbar"        append="show_merge" />
 </Menu>
 
 </MenuBar>
@@ -97,20 +114,29 @@
 
 </ToolBar>
 
-<ToolBar name="clefToolBar">
+<ToolBar name="clefsToolBar">
   <Action name="treble_clef" />
   <Action name="tenor_clef" />
   <Action name="alto_clef" />
   <Action name="bass_clef" />
 </ToolBar>
 
-<ToolBar name="accidentsToolBar">
+<ToolBar name="accidentalsToolBar">
   <Action name="no_accidental" />
   <Action name="sharp_accidental" />
   <Action name="flat_accidental" />
   <Action name="natural_accidental" />
   <Action name="double_sharp_accidental" />
   <Action name="double_flat_accidental" />
+</ToolBar>
+
+<ToolBar name="metaToolbar" newline="true">
+  <Action name="show_notes_toolbar"        />
+  <Action name="show_rests_toolbar"        />
+  <Action name="show_dotted_notes_toolbar" />
+  <Action name="show_dotted_rests_toolbar" />
+  <Action name="show_accidentals_toolbar"  />
+  <Action name="show_clefs_toolbar"        />
 </ToolBar>
 
 <ToolBar name="toolsToolBar" newline="true">
