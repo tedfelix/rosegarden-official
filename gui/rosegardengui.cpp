@@ -125,6 +125,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     // the alive() call in initDocument() is eventually caught.
     //
     if (m_useSequencer) {
+        RG_DEBUG << "RosegardenGUIApp : starting sequencer\n";
 	emit startupStatusMessage(i18n("Starting sequencer..."));
 	launchSequencer();
     } else RG_DEBUG << "RosegardenGUIApp : don't use sequencer\n";
@@ -200,10 +201,13 @@ RosegardenGUIApp::~RosegardenGUIApp()
 {
     RG_DEBUG << "~RosegardenGUIApp()\n";
 
-    if (m_sequencerProcess) {
+    if (isSequencerRunning() && !isSequencerExternal()) {
         m_sequencerProcess->blockSignals(true);
         delete m_sequencerProcess;
     }
+
+    if (m_transport)
+        delete m_transport;
 }
 
 
@@ -2145,11 +2149,14 @@ void RosegardenGUIApp::slotRefreshTimeDisplay()
 
 bool RosegardenGUIApp::launchSequencer()
 {
-    if (!isUsingSequencer() || isSequencerRunning())
+    if (!isUsingSequencer()) {
+        RG_DEBUG << "RosegardenGUIApp::launchSequencer() - not using seq. - returning\n";
         return false; // no need to launch anything
-
-    if (m_sequencerProcess)
+    }
+    
+    if (isSequencerRunning())
     {
+        RG_DEBUG << "RosegardenGUIApp::launchSequencer() - sequencer already launched by us - returning\n";
         if (m_seqManager) m_seqManager->checkSoundDriverStatus();
         return true;
     }
@@ -2160,7 +2167,9 @@ bool RosegardenGUIApp::launchSequencer()
     if (kapp->dcopClient()->
         isApplicationRegistered(QCString(ROSEGARDEN_SEQUENCER_APP_NAME)))
     {
+        RG_DEBUG << "RosegardenGUIApp::launchSequencer() - sequencer already running - returning\n";
         if (m_seqManager) m_seqManager->checkSoundDriverStatus();
+        m_sequencerProcess = SequencerExternal;
         return true;
     }
 
@@ -2202,15 +2211,25 @@ bool RosegardenGUIApp::launchSequencer()
         // point in case it crashed between the moment we check res above
         // and now.
         //
+        //usleep(1000 * 1000); // even wait half a sec. to make sure it's actually running
         if (m_sequencerProcess->isRunning()) {
 
-            connect(m_sequencerProcess, SIGNAL(processExited(KProcess*)),
-                    this, SLOT(slotSequencerExited(KProcess*)));
             try {
+                RG_DEBUG << "RosegardenGUIApp::launchSequencer : checking sound driver status\n";
+
                 if (m_seqManager) m_seqManager->checkSoundDriverStatus();
+
+                stateChanged("sequencer_running");
+                slotEnableTransport(true);
+
+                connect(m_sequencerProcess, SIGNAL(processExited(KProcess*)),
+                        this, SLOT(slotSequencerExited(KProcess*)));
+
             } catch (Rosegarden::Exception e) {
                 m_sequencerProcess = 0;
                 m_useSequencer = false;
+                stateChanged("sequencer_running", KXMLGUIClient::StateReverse);
+                slotEnableTransport(false);
             }
 
         } else { // if it crashed so fast, it's probably pointless
@@ -2218,6 +2237,8 @@ bool RosegardenGUIApp::launchSequencer()
             // sequencer mode
             m_sequencerProcess = 0;
             m_useSequencer = false;
+            stateChanged("sequencer_running", KXMLGUIClient::StateReverse);
+            slotEnableTransport(false);
         }
             
     }
@@ -3557,6 +3578,4 @@ RosegardenGUIApp::slotModifyMIDIFilters()
     }
 }
 
-
-
-
+const void* RosegardenGUIApp::SequencerExternal = (void*)-1;

@@ -245,6 +245,11 @@ public:
      * status.
      */
     bool isSequencerRunning() { return m_useSequencer && (m_sequencerProcess != 0); }
+
+    /**
+     * Returns true if the sequencer wasn't started by us
+     */
+    bool isSequencerExternal() { return m_useSequencer && (m_sequencerProcess == SequencerExternal); }
     
     /**
      * Set the sequencer status - pass through DCOP as an int
@@ -274,6 +279,8 @@ public:
     bool performAutoload();
 
 protected:
+
+    static const void* SequencerExternal;
 
     virtual void paintEvent(QPaintEvent*);
 

@@ -197,4 +197,16 @@
      </enable>
 </State>
 
+<State name="sequencer_running">
+     <enable>
+       <Action name="rewindtobeginning" />
+       <Action name="rewind" />
+       <Action name="play" />
+       <Action name="fast_forward" />
+       <Action name="fastforwardtoend" />
+       <Action name="stop" />
+       <Action name="record" />
+     </enable>
+</State>
+
 </kpartgui>
