@@ -535,7 +535,7 @@ DSSIPluginInstance::selectProgramAux(QString program, bool backupPortValues)
 
     // DSSI select_program is an audio context call
     pthread_mutex_lock(&m_processLock);
-    m_descriptor->select_program(m_instanceHandle, programNo, bankNo);
+    m_descriptor->select_program(m_instanceHandle, bankNo, programNo);
     pthread_mutex_unlock(&m_processLock);
 
     if (backupPortValues) {
