@@ -157,13 +157,15 @@ protected:
     QPopupMenu* m_menu;
 
     RosegardenTextFloat  *m_numberFloat;
+
+    bool m_hposUpdatePending;
 };
 
 /**
  * PropertyControlRuler : edit a property on events on a staff (only
  * events with a ViewElement attached, mostly notes)
  */
-class PropertyControlRuler : public ControlRuler, public Rosegarden::StaffObserver
+class PropertyControlRuler : public ControlRuler, public Rosegarden::StaffObserver, public Rosegarden::SegmentObserver
 {
 public:
     PropertyControlRuler(Rosegarden::PropertyName propertyName,
@@ -190,6 +192,12 @@ public:
     virtual void staffDeleted(const Rosegarden::Staff *);
     virtual void startPropertyLine();
     virtual void selectAllProperties();
+
+    /// SegmentObserver interface
+    virtual void eventAdded(const Rosegarden::Segment *, Rosegarden::Event *);
+    virtual void eventRemoved(const Rosegarden::Segment *, Rosegarden::Event *);
+    virtual void endMarkerTimeChanged(const Rosegarden::Segment *, bool shorten);
+    virtual void segmentDeleted(const Rosegarden::Segment *);
 
 protected:
 

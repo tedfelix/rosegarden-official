@@ -334,6 +334,8 @@ void ControlItem::updateValue()
 
 void ControlItem::updateFromValue()
 {
+    RG_DEBUG << "ControlItem::updateFromValue() : " << this << endl;
+
     if (m_elementAdapter->getValue(m_value)) {
 //         RG_DEBUG << "ControlItem::updateFromValue() : value = " << m_value << endl;
         setHeight(m_controlRuler->valueToHeight(m_value));
@@ -1016,11 +1018,12 @@ ControlRuler::clearSelectedItems()
 
 void ControlRuler::clear()
 {
-    QCanvasItemList list = canvas()->allItems();
-    QCanvasItemList::Iterator it = list.begin();
-    for (; it != list.end(); ++it) {
-	if (*it != m_selectionRect)
-	    delete *it;
+    QCanvasItemList allItems = canvas()->allItems();
+
+    for (QCanvasItemList::Iterator it=allItems.begin(); it!=allItems.end(); ++it) {
+        if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
+            delete item;
+        }
     }
 }
 
@@ -1141,6 +1144,7 @@ PropertyControlRuler::PropertyControlRuler(Rosegarden::PropertyName propertyName
     m_propertyLineY(0)
 {
     m_staff->addObserver(this);
+    m_segment->addObserver(this);
     m_propertyLine->setZ(1000); // bring to front
 
     setMenuName("property_ruler_menu");
@@ -1154,9 +1158,11 @@ PropertyControlRuler::setStaff(Rosegarden::Staff *staff)
     RG_DEBUG << "PropertyControlRuler::setStaff(" << staff << ")" << endl;
 
     m_staff->removeObserver(this);
+    m_segment->removeObserver(this);
     m_staff = staff;
     m_segment = &m_staff->getSegment();
     m_staff->addObserver(this);
+    m_segment->addObserver(this);
 
     //!!! need to delete the control items here
 
@@ -1207,8 +1213,11 @@ PropertyControlRuler::drawBackground()
 
 PropertyControlRuler::~PropertyControlRuler()
 {
-    if (m_staff)
+    if (m_staff) {
         m_staff->removeObserver(this);
+        m_staff->getSegment().removeObserver(this);
+    }
+    
 }
 
 QString PropertyControlRuler::getName()
@@ -1270,6 +1279,39 @@ void PropertyControlRuler::staffDeleted(const Rosegarden::Staff *)
 {
     m_staff = 0;
 }
+
+
+void
+PropertyControlRuler::eventAdded(const Rosegarden::Segment *, Rosegarden::Event *e)
+{
+    // nothing to do
+}
+
+void
+PropertyControlRuler::eventRemoved(const Rosegarden::Segment *, Rosegarden::Event *e)
+{
+    // nothing to do
+}
+
+void
+PropertyControlRuler::endMarkerTimeChanged(const Rosegarden::Segment *s, bool shorten)
+{
+    timeT endMarkerTime = s->getEndMarkerTime();
+
+    RG_DEBUG << "PropertyControlRuler::endMarkerTimeChanged() " << endMarkerTime << endl;
+
+    clearSelectedItems();
+
+    clear();
+    init();
+    
+}
+
+void
+PropertyControlRuler::segmentDeleted(const Rosegarden::Segment *)
+{
+}
+
 
 void PropertyControlRuler::computeStaffOffset()
 {
@@ -1501,6 +1543,7 @@ PropertyControlRuler::selectAllProperties()
 
     emit stateChange("have_controller_item_selected", true);
 }
+
 
 //----------------------------------------
 ControllerEventsRuler::ControllerEventsRuler(Rosegarden::Segment *segment,
