@@ -119,8 +119,6 @@ public:
     virtual void setLoop(const RealTime &/*loopStart*/,
                          const RealTime &/*loopEnd*/) {;}
 
-    virtual void sendMidiClock() {;}
-
     virtual void getAudioInstrumentNumbers(InstrumentId &audioInstrumentBase,
 					   int &audioInstrumentCount) {
 	audioInstrumentBase = AudioInstrumentBase;

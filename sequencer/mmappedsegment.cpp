@@ -384,7 +384,7 @@ bool MmappedSegmentsMetaIterator::acceptEvent(MappedEvent *evt, bool evtIsFromMe
 
 
 bool
-MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool firstFetch,
+MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool /*firstFetch*/,
                                                             Rosegarden::MappedComposition* c,
                                                             const Rosegarden::RealTime& startTime,
                                                             const Rosegarden::RealTime& endTime)
@@ -487,6 +487,10 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool firstFetch,
 
 		    c->insert(evt);
 
+                } else if (evt->getType() == MappedEvent::MidiSystemMessage) {
+
+                    c->insert(evt);
+
                 } else if (acceptEvent(evt, evtIsFromMetronome) &&
 
 			   (evt->getEventTime() + evt->getDuration() > startTime)) {
@@ -502,7 +506,13 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool firstFetch,
 
                 } else {
                     
-                    //std::cout << "skipping event" << std::endl;
+                    /*
+                    std::cout << "skipping event"
+                        << " - event time = " << evt->getEventTime()
+                        << ", duration = " << evt->getDuration()
+                        << ", startTime = " << startTime << std::endl;
+                        */
+
 		    delete evt;
                 }
             

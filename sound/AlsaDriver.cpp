@@ -1329,6 +1329,35 @@ AlsaDriver::initialisePlayback(const RealTime &position)
 
     m_startPlayback = true;
 
+    // Get time from current alsa time to start of alsa timing -
+    // add the initial starting point and divide by the total
+    // single clock length.  Divide this result by 6 for the SPP
+    // position.
+    //
+    long spp =
+      long(((getAlsaTime() - m_alsaPlayStartTime + m_playStartPosition) /
+                     m_midiClockInterval) / 6.0);
+
+    // Only send if it's changed
+    //
+    /*
+    if (m_midiSongPositionPointer != spp)
+    {
+        m_midiSongPositionPointer = spp;
+        */
+        MidiByte lsb = spp & 0x7f;
+        MidiByte msb = (spp << 8) & 0x7f;
+        std::string args;
+        args += lsb;
+        args += msb;
+
+        sendSystemDirect(SND_SEQ_EVENT_SONGPOS, args);
+    //}
+
+        std::cout << "AlsaDriver::initialisePlayback - "
+                  << " sending song position pointer = " 
+                  << getAlsaTime() - m_alsaPlayStartTime + m_playStartPosition
+                  << std::endl;
 }
 
 
@@ -1342,10 +1371,6 @@ AlsaDriver::stopPlayback()
     allNotesOff();
     m_playing = false;
     
-    // reset the clock send time
-    //
-    m_midiClockSendTime = RealTime::zeroTime;
-
     // Flush the output and input queues
     //
     snd_seq_remove_events_t *info;
@@ -1511,10 +1536,6 @@ AlsaDriver::setMIDIClockInterval(RealTime interval)
     snd_seq_remove_events(m_midiHandle, info);
     }
 
-    // Resend clocks at new interval
-    //
-    m_midiClockSendTime = RealTime::zeroTime;
-    sendMidiClock();
 }
 
 
@@ -2154,12 +2175,16 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 
                         case Rosegarden::MIDI_TIMING_CLOCK:
                             {
-                                std::cerr << "AlsaDriver::processMidiOut - "
-                                          << "send clock" << std::endl;
+                                Rosegarden::RealTime rt =
+                                    Rosegarden::RealTime(time.tv_sec, time.tv_nsec);
+
                                 /*
-                                sendSystemQueued(SND_SEQ_EVENT_CLOCK, 
-                                                 "", m_midiClockSendTime);
-                                                 */
+                                std::cerr << "AlsaDriver::processMidiOut - "
+                                          << "send clock @ " << rt << std::endl;
+                                          */
+
+                                sendSystemQueued(SND_SEQ_EVENT_CLOCK, "", rt);
+
                                 continue;
 
                             }
@@ -2305,23 +2330,6 @@ AlsaDriver::startClocks()
     //
     if (m_midiClockEnabled)
     {
-        // Last clock sent should always be ahead of current
-        // ALSA time - adjust for latency and find nearest
-        // clock for start time.
-        //
-        m_midiClockSendTime = RealTime::zeroTime;
-        RealTime alsaClockSent = m_midiClockSendTime;
-
-        while (alsaClockSent > m_alsaPlayStartTime)
-            alsaClockSent = alsaClockSent - m_midiClockInterval;
-
-        /*
-        std::cout << "START ADJUST FROM " << m_alsaPlayStartTime
-             << " to " << alsaClockSent << endl;
-             */
-
-        m_alsaPlayStartTime = alsaClockSent;
-
         if (m_playStartPosition == RealTime::zeroTime)
             sendSystemQueued(SND_SEQ_EVENT_START, "",
                              m_alsaPlayStartTime);
@@ -3230,14 +3238,13 @@ AlsaDriver::unsetRecordDevices()
 
         int error = snd_seq_unsubscribe_port(m_midiHandle, dSubs);
 
-#ifdef DEBUG_ALSA
         if (error < 0)
         {
+#ifdef DEBUG_ALSA
             std::cerr << "AlsaDriver::unsetRecordDevices - "
                       << "can't unsubscribe record port" << std::endl;
-
-        }
 #endif
+        }
 
         snd_seq_query_subscribe_set_index(qSubs,
                 snd_seq_query_subscribe_get_index(qSubs) + 1);
@@ -3389,14 +3396,14 @@ AlsaDriver::sendSystemDirect(MidiByte command, const std::string &args)
 
             int error = snd_seq_event_output_direct(m_midiHandle, &event);
 
-#ifdef DEBUG_ALSA
             if (error < 0)
             {
+#ifdef DEBUG_ALSA
                 std::cerr << "AlsaDriver::sendSystemDirect - "
                           << "can't send event (" << int(command) << ")"
                           << std::endl;
-            }
 #endif
+            }
         }
     }
 
@@ -3460,104 +3467,21 @@ AlsaDriver::sendSystemQueued(MidiByte command,
 
             int error = snd_seq_event_output(m_midiHandle, &event);
 
-#ifdef DEBUG_ALSA
             if (error < 0)
             {
+#ifdef DEBUG_ALSA
                 std::cerr << "AlsaDriver::sendSystemQueued - "
                           << "can't send event (" << int(command) << ")"
                           << " - error = (" << error << ")"
                           << std::endl;
-            }
 #endif
+            }
         }
     }
 
     if (m_queueRunning) {
 	snd_seq_drain_output(m_midiHandle);
     }
-}
-
-// Send the MIDI clock signal
-//
-void
-AlsaDriver::sendMidiClock()
-{
-    // Don't send the clock if it's disabled
-    //
-    if (!m_midiClockEnabled) return;
-
-    // Get the number of ticks in (say) two seconds
-    //
-    unsigned int numTicks =
-        (unsigned int)(RealTime(2, 0) / m_midiClockInterval);
-
-    // First time through set the clock send time - this will also
-    // ensure we send the first batch of clock events
-    //
-    if (m_midiClockSendTime == RealTime::zeroTime)
-    {
-        m_midiClockSendTime = getAlsaTime();
-        /*
-        std::cout << "INITIAL ALSA TIME = " << m_midiClockSendTime << endl;
-        */
-    }
-
-    // If we're within a tenth of a second of running out of clock
-    // then send a new batch of clock signals.
-    //
-    if ((getAlsaTime()) >
-        (m_midiClockSendTime - RealTime(0, 100000000)))
-    {
-        /*
-        std::cout << "SENDING " << numTicks
-             << " CLOCK TICKS @ " << m_midiClockSendTime << endl;
-             */
-
-        for (unsigned int i = 0; i < numTicks; i++)
-        {
-            sendSystemQueued(SND_SEQ_EVENT_CLOCK, "", m_midiClockSendTime);
-
-            // increment send time
-            m_midiClockSendTime = m_midiClockSendTime + m_midiClockInterval;
-        }
-    }
-    /*
-    else
-        std::cout << "NOT SENDING" << 
-            "MIDI CLOCK SEND = " << m_midiClockSendTime
-            << ", ALSA TIME = " << getAlsaTime() << std::endl;
-            */
-
-    // If we're playing then send the song position pointer.
-    //
-    if (m_playing)
-    {
-        // Get time from current alsa time to start of alsa timing -
-        // add the initial starting point and divide by the total
-        // single clock length.  Divide this result by 6 for the SPP
-        // position.
-        //
-        long spp =
-          long(((getAlsaTime() - m_alsaPlayStartTime + m_playStartPosition) /
-                         m_midiClockInterval) / 6.0);
-
-        // Only send if it's changed
-        //
-        if (m_midiSongPositionPointer != spp)
-        {
-            m_midiSongPositionPointer = spp;
-            MidiByte lsb = spp & 0x7f;
-            MidiByte msb = (spp << 8) & 0x7f;
-            std::string args;
-            args += lsb;
-            args += msb;
-
-            sendSystemDirect(SND_SEQ_EVENT_SONGPOS, args);
-        }
-
-    }
-
-
 }
 
 QString

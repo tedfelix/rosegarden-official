@@ -156,10 +156,6 @@ public:
 
     virtual void setLoop(const RealTime &loopStart, const RealTime &loopEnd);
 
-    // Send the MIDI clock
-    //
-    virtual void sendMidiClock();
-
     virtual void sleep(const RealTime &);
 
     // ----------------------- End of Virtuals ----------------------

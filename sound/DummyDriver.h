@@ -96,8 +96,6 @@ public:
     virtual void setLoop(const RealTime &/*loopStart*/,
                          const RealTime &/*loopEnd*/) {;}
 
-    virtual void sendMidiClock() {;}
-
     virtual std::vector<PlayableAudioFile*> getPlayingAudioFiles()
         { return std::vector<PlayableAudioFile*>(); }
 

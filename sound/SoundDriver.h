@@ -199,10 +199,6 @@ public:
 
     virtual void sleep(const RealTime &rt);
 
-    // Send the MIDI clock
-    //
-    virtual void sendMidiClock() = 0;
-
     virtual QString getStatusLog() { return ""; }
 
     // Mapped Instruments

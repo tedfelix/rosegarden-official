@@ -323,10 +323,6 @@ RosegardenSequencerApp::updateClocks()
 
 //SEQUENCER_DEBUG << "RosegardenSequencerApp::updateClocks" << endl; 
 
-    // Attempt to send MIDI clock 
-    //
-    m_sequencer->sendMidiClock();
-
     // If we're not playing etc. then that's all we need to do
     //
     if (m_transportStatus != PLAYING &&

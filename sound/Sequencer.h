@@ -339,11 +339,6 @@ public:
     void setMIDIClockInterval(RealTime interval)
         { m_soundDriver->setMIDIClockInterval(interval); }
 
-    // Send the MIDI clock now
-    //
-    void sendMidiClock()
-        { m_soundDriver->sendMidiClock(); }
-
     void setSequencerDataBlock(SequencerDataBlock *db)
         { m_soundDriver->setSequencerDataBlock(db); }
 
