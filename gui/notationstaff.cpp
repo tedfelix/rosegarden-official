@@ -305,6 +305,11 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 {
     kdDebug(KDEBUG_AREA) << "NotationStaff " << this << "::renderElements()" << endl;
     START_TIMING;
+    if (m_progressDlg) {
+	m_progressDlg->setLabelText
+	    (i18n("Rendering staff %1...").arg(getId() + 1));
+	m_progressDlg->processEvents();
+    }
 
     Clef currentClef; // default is okay to start with
 
@@ -351,6 +356,11 @@ NotationStaff::positionElements(timeT from, timeT to)
     kdDebug(KDEBUG_AREA) << "NotationStaff " << this << "::positionElements()"
                          << from << " -> " << to << "\n";
     START_TIMING;
+    if (m_progressDlg) {
+	m_progressDlg->setLabelText
+	    (i18n("Positioning staff %1...").arg(getId() + 1));
+	m_progressDlg->processEvents();
+    }
 
     int elementsPositioned = 0;
     int elementsRendered = 0; // diagnostic

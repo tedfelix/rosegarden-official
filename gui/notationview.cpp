@@ -272,21 +272,25 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
                                         true, getCentralFrame());
     setBottomBarButtons(m_bottomBarButtons);
 
-    if (showProgressive) {
-	show();
-	m_progressDlg = new RosegardenProgressDialog
-	    (kapp, i18n("Starting..."), i18n("Cancel"), 100, this,
-	     i18n("Notation progress"), true);
-	m_progressDlg->setAutoClose(false);
-    }
-    m_chordNameRuler->setComposition(&doc->getComposition());
-
     for (unsigned int i = 0; i < segments.size(); ++i) {
         m_staffs.push_back(new NotationStaff(canvas(), segments[i], i,
 					     m_legatoQuantizer,
 					     m_properties, false, width() - 50,
                                              m_fontName, m_fontSize));
     }
+
+    if (showProgressive) {
+	show();
+	m_progressDlg = new RosegardenProgressDialog
+	    (kapp, i18n("Starting..."), i18n("Cancel"), 100, this,
+	     i18n("Notation progress"), true);
+	m_progressDlg->setAutoClose(false);
+	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+	    m_staffs[i]->setProgressDialog(m_progressDlg);
+	}
+    }
+
+    m_chordNameRuler->setComposition(&doc->getComposition());
 
     positionStaffs();
     m_currentStaff = 0;
@@ -300,30 +304,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	KMessageBox::sorry(0, i18n("Couldn't apply score layout"));
     } else {
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-            
-	    if (showProgressive) {
-		if (m_staffs.size() == 1) {
-		    m_progressDlg->setLabelText(i18n("Rendering..."));
-		} else {
-		    m_progressDlg->setLabelText
-			(i18n("Rendering staff %1...").arg(i + 1));
-		}
-		m_staffs[i]->setProgressDialog(m_progressDlg);
-	    }
 
-            m_staffs[i]->renderAllElements();
-
-	    if (showProgressive) {
-		m_staffs[i]->setProgressDialog(0);
-		if (m_staffs.size() == 1) {
-		    m_progressDlg->setLabelText(i18n("Positioning..."));
-		} else {
-		    m_progressDlg->setLabelText
-			(i18n("Positioning staff %1...").arg(i + 1));
-		}
-		m_progressDlg->processEvents();
-	    }
-
+//!!!            m_staffs[i]->renderAllElements();
             m_staffs[i]->positionAllElements();
             m_staffs[i]->getSegment().getRefreshStatus
 		(m_segmentsRefreshStatusIds[i]).setNeedsRefresh(false);
@@ -335,6 +317,9 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     if (showProgressive) {
 	delete m_progressDlg;
 	m_progressDlg = 0;
+	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+	    m_staffs[i]->setProgressDialog(0);
+	}
     }
 
     //
