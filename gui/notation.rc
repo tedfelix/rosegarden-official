@@ -170,6 +170,8 @@
   <Action name="playback_pointer_forward_bar"/>
   <Action name="playback_pointer_start"/>
   <Action name="playback_pointer_end"/>
+  <Separator />
+  <Action name="toggle_solo"/>
   </Menu>
 
 <Menu name="Tools">
@@ -266,7 +268,7 @@
   <Action name="show_font_toolbar"         append="show_merge" />
   <Separator                               append="show_merge" />
   <Action name="show_chords_ruler"         append="show_merge" />
-  <Action name="show_raw_note_ruler"         append="show_merge" />
+  <Action name="show_raw_note_ruler"       append="show_merge" />
   <Action name="show_tempo_ruler"          append="show_merge" />
   <Action name="show_annotations"          append="show_merge" />
 </Menu> 
@@ -288,6 +290,8 @@
   <Action name="stop" />
   <Action name="playback_pointer_to_cursor" />
   <Action name="cursor_to_playback_pointer" />
+  <Separator />
+  <Action name="toggle_solo"/>
 </ToolBar>
 
 <ToolBar name="notesToolBar" newline="true">
