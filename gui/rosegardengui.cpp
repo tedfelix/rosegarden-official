@@ -1160,7 +1160,7 @@ void RosegardenGUIApp::slotFileNew()
     
     if (!m_doc->isModified()) {
         makeNew = true;
-        m_doc->closeDocument();
+        // m_doc->closeDocument();
     } else if (m_doc->saveIfModified()) {
         makeNew = true;
     }

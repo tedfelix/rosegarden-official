@@ -107,11 +107,6 @@ public:
     void detachView(RosegardenGUIView *view);
 
     /**
-     * deletes the document views
-     */
-    void deleteViews();
-
-    /**
      * adds an Edit View (notation, matrix, event list)
      */
     void attachEditView(EditViewBase*);
@@ -148,11 +143,6 @@ public:
      * get the autosave interval in seconds
      */
     unsigned int getAutoSavePeriod() const;
-
-    /**
-     * deletes the document's contents
-     */
-    void deleteContents();
 
     /**
      * initializes the document generally

@@ -104,7 +104,7 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
 {
     syncDevices();
 
-    m_viewList.setAutoDelete(true);
+    m_viewList.setAutoDelete(false);
     m_editViewList.setAutoDelete(false);
 
     connect(m_commandHistory, SIGNAL(commandExecuted(KCommand *)),
@@ -138,12 +138,6 @@ void RosegardenGUIDoc::attachView(RosegardenGUIView *view)
 void RosegardenGUIDoc::detachView(RosegardenGUIView *view)
 {
     m_viewList.remove(view);
-}
-
-void RosegardenGUIDoc::deleteViews()
-{
-    // auto-deletion is enabled : GUIViews will be deleted
-    m_viewList.clear();
 }
 
 void RosegardenGUIDoc::attachEditView(EditViewBase *view)
@@ -280,13 +274,12 @@ bool RosegardenGUIDoc::saveIfModified()
 
             }
 
-            //deleteContents();
             completed=true;
             break;
 
         case KMessageBox::No:
             setModified(false);
-            //deleteContents();
+
             // delete the autosave file so it won't annoy
             // the user when reloading the file.
             QFile::remove(getAutoSaveFileName());
@@ -308,7 +301,7 @@ bool RosegardenGUIDoc::saveIfModified()
 
 void RosegardenGUIDoc::closeDocument()
 {
-    deleteContents();
+
 }
 
 bool RosegardenGUIDoc::newDocument()
@@ -642,20 +635,6 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
     setAutoSaved(true);
 
     return true;
-}
-
-void RosegardenGUIDoc::deleteContents()
-{
-    RG_DEBUG << "RosegardenGUIDoc::deleteContents()\n";
-
-    deleteEditViews();
-    deleteViews();
-    
-    m_commandHistory->clear();
-
-    m_composition.clear();
-    m_audioFileManager.clear();
-    m_studio.unassignAllInstruments();
 }
 
 bool RosegardenGUIDoc::isSequencerRunning()
