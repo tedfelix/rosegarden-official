@@ -325,7 +325,7 @@ AudioFileManager::getLastAudioFile()
     std::vector<AudioFile*>::iterator it = m_audioFiles.end();
     it--;
 
-    if (it != 0)
+    if (it != m_audioFiles.begin())
         return *it;
 
     return 0;

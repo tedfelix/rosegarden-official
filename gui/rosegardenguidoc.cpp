@@ -287,7 +287,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
                                     const char* /*format*/ /*=0*/)
 {
     kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::saveDocument("
-                         << filename << ")" << std::endl;
+                         << filename << ")\n";
 
     QString outText;
     QTextStream outStream(&outText, IO_WriteOnly);
@@ -302,10 +302,10 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
     // and Time Signature changes and any other sub-objects)
     //
     outStream << QString(strtoqstr(m_composition.toXmlString()))
-              << std::endl << std::endl;
+              << endl << endl;
 
     outStream << QString(strtoqstr(m_audioFileManager.toXmlString()))
-              << std::endl << std::endl;
+              << endl << endl;
 
     // output all elements
     //
