@@ -7,13 +7,14 @@ $RG_DIR = "/home/glaurent/rosegarden"
 #
 def check_stray_sequencer
 
-  processes = `ps auxww`.grep(/rosegarden/)
+  processes = `ps alxww`.grep(/rosegarden/)
 
   if (processes.length == 1)
     # Check if the lone process is the sequencer
-    pid, processName = processes[0].split.indexes(1, 10)
+    pid, ppid, processName = processes[0].split.indexes(2, 3, 12)
+    #puts "processName : #{processName} - pid : #{pid} - ppid #{ppid}"
 
-    if processName =~ /sequencer/
+    if processName =~ /sequencer/ && ppid.to_i == 1
       puts "Found stray sequencer running, pid #{pid} - terminating"
       Process::kill "SIGTERM", pid.to_i
     end
@@ -24,13 +25,13 @@ end
 #
 # Check for core files older than the main exec
 #
-def check_core_files
+def check_core_files (path, execname)
   begin
 
-    rgMainExecMTime = File.stat("gui/rosegarden").mtime
+    rgMainExecMTime = File.stat(path + "/" + execname).mtime
 
     # Remove core files older than binary
-    obsoleteCoreFiles = (Dir["gui/core.*"].sort{ |a,b| File.stat(a).mtime <=> File.stat(b).mtime })
+    obsoleteCoreFiles = (Dir[path + "/core.*"].sort{ |a,b| File.stat(a).mtime <=> File.stat(b).mtime })
 
     mostRecentCoreFile = obsoleteCoreFiles.pop
 
@@ -60,7 +61,8 @@ while 1
   Dir.chdir $RG_DIR
 
   check_stray_sequencer
-  check_core_files
+  check_core_files "gui", "rosegarden"
+  check_core_files "sequencer", "rosegardensequencer"
 
   sleep 5
 
