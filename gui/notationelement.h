@@ -84,23 +84,11 @@ public:
 
     void erase(iterator pos);
 
-    iterator findPrevious(const string &package, const string &type, iterator i) {
-        //!!! what to return on failure? I think probably
-        // end(), as begin() could be a success case
-        if (i == begin()) return end();
-        --i;
-        for (;;) {
-            if ((*i)->event()->isa(package, type)) return i;
-            if (i == begin()) return end();
-            --i;
-        }
-    }
+    iterator findPrevious(const string &package,
+                          const string &type, iterator i);
 
-    iterator findNext(const string &package, const string &type, iterator i) {
-        if (i == end()) return i;
-        for (++i; i != end() && !(*i)->event()->isa(package, type); ++i);
-        return i;
-    }
+    iterator findNext(const string &package,
+                      const string &type, iterator i);
 };
 
 #ifndef NDEBUG

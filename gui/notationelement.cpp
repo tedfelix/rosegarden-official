@@ -80,6 +80,30 @@ NotationElementList::erase(NotationElementList::iterator pos)
     multiset<NotationElement*, NotationElementCmp>::erase(pos);
 }
 
+NotationElementList::iterator
+NotationElementList::findPrevious(const string &package,
+                                  const string &type, iterator i)
+
+{
+    //!!! what to return on failure? I think probably
+    // end(), as begin() could be a success case
+    if (i == begin()) return end();
+    --i;
+    for (;;) {
+        if ((*i)->event()->isa(package, type)) return i;
+        if (i == begin()) return end();
+        --i;
+    }
+}
+
+NotationElementList::iterator
+NotationElementList::findNext(const string &package,
+                              const string &type, iterator i)
+{
+    if (i == end()) return i;
+    for (++i; i != end() && !(*i)->event()->isa(package, type); ++i);
+    return i;
+}
 
 #ifndef NDEBUG
 kdbgstream& operator<<(kdbgstream &dbg, NotationElement &e)
