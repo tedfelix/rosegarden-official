@@ -284,13 +284,16 @@ SoundDriver::removeAudioFile(unsigned int id)
     {
         if ((*it)->getId() == id)
         {
+            std::cout << "Sequencer::removeAudioFile() = \"" <<
+                          (*it)->getFilename() << "\"" << std::endl;
+
             delete (*it);
             m_audioFiles.erase(it);
             return true;
         }
     }
 
-    return true;
+    return false;
 }
 
 AudioFile*

@@ -2703,10 +2703,43 @@ RosegardenGUIApp::slotAddAudioFile(unsigned int id)
     }
 }
 
+// File has already been removed locally - remove it from the
+// sequencer too.
+//
 void
 RosegardenGUIApp::slotDeleteAudioFile(unsigned int id)
 {
-    cout << "DELETE AUDIO FILE = " << id << endl;
+    QCString replyType;
+    QByteArray replyData;
+    QByteArray data;
+    QDataStream streamOut(data, IO_WriteOnly);
+
+    // file id
+    //
+    streamOut << id;
+
+    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
+                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                                  "removeAudioFile(int)", data,
+                                  replyType, replyData))
+    {
+        std::cerr << "RosegardenGUIApp::slotDeleteAudioFile - "
+                  << "couldn't add audio file"
+                  << std::endl;
+        return;
+    }
+    else
+    {
+        QDataStream streamIn(replyData, IO_ReadOnly);
+        int result;
+        streamIn >> result;
+        if (!result)
+        {
+            std::cerr << "RosegardenGUIApp::slotDeleteAudioFile - "
+                      << "failed to remove file id "
+                      << id << endl;
+        }
+    }
 
 }
 

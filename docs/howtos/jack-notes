@@ -1,0 +1,12 @@
+Some different slice sizes and parameters to try and improve
+JACK reliability.  YMMV depending on soundcard:
+
+jackd -R -v -d alsa -d hw:0
+jackd -R -d alsa -d hw:0
+jackd -d alsa -p 4096 -n 3
+
+I find with my SBLive the following setting works:
+
+jackd -d alsa -p 4096 -n 2
+
+

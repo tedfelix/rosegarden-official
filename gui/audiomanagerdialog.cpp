@@ -60,10 +60,11 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     }
 
     // create widgets
-    m_addButton    = new QPushButton(i18n("Add File"), v);
-    m_deleteButton = new QPushButton(i18n("Delete File"), v);
-    m_playButton   = new QPushButton(i18n("Play File"), v);
-    m_renameButton = new QPushButton(i18n("Rename File"), v);
+    m_addButton    = new QPushButton(i18n("Add"), v);
+    m_deleteButton = new QPushButton(i18n("Remove"), v);
+    m_playButton   = new QPushButton(i18n("Play"), v);
+    m_renameButton = new QPushButton(i18n("Rename"), v);
+    m_insertButton = new QPushButton(i18n("Insert"), v);
     m_fileList     = new QListView(h);
 
     // Set the column names

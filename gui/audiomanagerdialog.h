@@ -108,6 +108,7 @@ protected:
     QPushButton      *m_deleteButton;
     QPushButton      *m_playButton;
     QPushButton      *m_renameButton;
+    QPushButton      *m_insertButton;
 
     AudioFileManager *m_audioFileManager;
 
