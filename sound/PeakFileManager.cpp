@@ -32,11 +32,12 @@
 #include <string>
 #include <vector>
 
+#include <qobject.h>
+
 #include "PeakFileManager.h"
 #include "AudioFile.h"
 #include "RealTime.h"
 #include "PeakFile.h"
-#include "Progress.h"
 
 namespace Rosegarden
 {
@@ -170,7 +171,7 @@ PeakFileManager::hasValidPeaks(AudioFile *audioFile)
 //
 void
 PeakFileManager::generatePeaks(AudioFile *audioFile,
-                               Progress *progress,
+                               QObject *progress,
                                unsigned short updatePercentage)
 {
     std::cout << "PeakFileManager::generatePeaks - generating peaks for \""
@@ -180,9 +181,12 @@ PeakFileManager::generatePeaks(AudioFile *audioFile,
     {
         PeakFile *peakFile = getPeakFile(audioFile);
 
+        QObject::connect(peakFile, SIGNAL(setProgress(int)),
+                         progress, SLOT(setValue(int)));
+
         // Just write out a peak file
         //
-        if(peakFile->write(progress, updatePercentage) == false)
+        if(peakFile->write(updatePercentage) == false)
         {
             std::string rS = std::string("Can't write peak file for \"") +
                              audioFile->getFilename() +
@@ -192,6 +196,8 @@ PeakFileManager::generatePeaks(AudioFile *audioFile,
 
         // close writes out important things
         peakFile->close();
+        peakFile->disconnect();
+
     }
     else if (audioFile->getType() == BWF)
     {

@@ -18,6 +18,9 @@
   COPYING included with this distribution for more information.
 */
 
+#ifndef _AUDIOFILEMANAGER_H_
+#define _AUDIOFILEMANAGER_H_
+
 #include <string>
 #include <vector>
 #include <map>
@@ -28,10 +31,6 @@
 #include "XmlExportable.h"
 #include "PeakFileManager.h"
 #include "PeakFile.h"
-
-
-#ifndef _AUDIOFILEMANAGER_H_
-#define _AUDIOFILEMANAGER_H_
 
 // AudioFileManager loads and maps audio files to their
 // internal references (ids).  A point of contact for
@@ -47,10 +46,11 @@ using std::cout;
 using std::cerr;
 using std::endl;
 
+class QObject;
+
 namespace Rosegarden
 {
 
-class Progress;
 
 typedef std::vector<AudioFile*>::const_iterator AudioFileManagerIterator;
 
@@ -121,11 +121,11 @@ public:
     // Convenience function generate all previews on the audio file.
     // 
     //
-    void generatePreviews(Progress *progress);
+    void generatePreviews(QObject *progress);
 
     // Generate for a single audio file
     //
-    bool generatePreview(Progress *progress, AudioFileId id);
+    bool generatePreview(QObject *progress, AudioFileId id);
 
     // Get a preview for an AudioFile adjusted to Segment start and
     // end parameters (assuming they fall within boundaries).

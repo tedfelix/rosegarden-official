@@ -530,7 +530,7 @@ AudioFileManager::toXmlString()
 // to file type.
 //
 void
-AudioFileManager::generatePreviews(Progress *progress)
+AudioFileManager::generatePreviews(QObject *progress)
 {
     std::cout << "AudioFileManager::generatePreviews - "
               << "for " << m_audioFiles.size() << " files"
@@ -554,7 +554,7 @@ AudioFileManager::generatePreviews(Progress *progress)
 // modified.
 //
 bool
-AudioFileManager::generatePreview(Progress *progress,
+AudioFileManager::generatePreview(QObject *progress,
                                   AudioFileId id)
 {
     AudioFile *audioFile = getAudioFile(id);

@@ -79,6 +79,9 @@ MidiArts.mcopclass: MidiArts.h
 MidiArts.mcoptype: MidiArts.h
 MidiRecord.cpp: MidiArts.h
 
+
+libRosegardenSound_la_METASOURCES = AUTO
+
 # when cleaning
 #
 CLEANFILES = MidiArts.h MidiArts.cc

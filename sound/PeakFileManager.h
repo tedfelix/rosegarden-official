@@ -27,6 +27,9 @@
 //
 //
 
+#ifndef _PEAKFILEMANAGER_H_
+#define _PEAKFILEMANAGER_H_
+
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -35,16 +38,13 @@
 
 #include "PeakFile.h"
 
-#ifndef _PEAKFILEMANAGER_H_
-#define _PEAKFILEMANAGER_H_
+class QObject;
 
 namespace Rosegarden
 {
 
 class AudioFile;
 class RealTime;
-class Progress;
-
 
 class PeakFileManager
 {
@@ -70,7 +70,7 @@ public:
     //
     //
     void generatePeaks(AudioFile *audioFile,
-                       Progress *progress,
+                       QObject *progress,
                        unsigned short updatePercentage);
 
     // Get a vector of floats as the preview

@@ -20,6 +20,7 @@
 
 #include <vector>
 
+#include <qobject.h>
 #include <qdatetime.h>
 
 #include "SoundFile.h"
@@ -46,13 +47,14 @@ namespace Rosegarden
 {
 
 class AudioFile;
-class Progress;
 
 
 typedef std::pair<RealTime, RealTime> SplitPointPair;
 
-class PeakFile : public SoundFile
+class PeakFile : public QObject, public SoundFile
 {
+    Q_OBJECT
+
 public:
     PeakFile(AudioFile *audioFile);
     virtual ~PeakFile();
@@ -66,9 +68,9 @@ public:
     //
     virtual bool write();
 
-    // Write the file with a progress dialog
+    // Write the file, emit progress signal and process app events
     //
-    virtual bool write(Progress *progress, unsigned short updatePercentage);
+    virtual bool write(unsigned short updatePercentage);
 
     // Write peak chunk to file handle (BWF)
     //
@@ -102,13 +104,14 @@ public:
     std::vector<SplitPointPair> getSplitPoints(const RealTime &startTime,
                                                const RealTime &endTime,
                                                int threshold);
-
+signals:
+    void setProgress(int);
+    
 protected:
     // Write the peak header and the peaks themselves
     //
     void writeHeader(std::ofstream *file);
-    void writePeaks(Progress *progress,
-                    unsigned short updatePercentage,
+    void writePeaks(unsigned short updatePercentage,
                     std::ofstream *file);
 
     // Get the position of a peak for a given time

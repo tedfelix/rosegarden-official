@@ -178,11 +178,11 @@ PeakFile::printStats()
 bool
 PeakFile::write()
 {
-    return write(0, 5); // default update every 5%
+    return write(5); // default update every 5%
 }
 
 bool
-PeakFile::write(Progress *progress, unsigned short updatePercentage)
+PeakFile::write(unsigned short updatePercentage)
 {
     if (m_outFile)
     {
@@ -214,7 +214,7 @@ PeakFile::write(Progress *progress, unsigned short updatePercentage)
     writeHeader(m_outFile);
 
     // and now the peak values
-    writePeaks(progress, updatePercentage, m_outFile);
+    writePeaks(updatePercentage, m_outFile);
 
     return true;
 }
@@ -450,8 +450,7 @@ PeakFile::scanForward(int numberOfPeaks)
 
 
 void
-PeakFile::writePeaks(Progress *progress,
-                     unsigned short /*updatePercentage*/,
+PeakFile::writePeaks(unsigned short /*updatePercentage*/,
                      std::ofstream *file)
 {
     if(!file || !(*file)) return;
@@ -508,9 +507,9 @@ PeakFile::writePeaks(Progress *progress,
 
         byteCount += samples.length();
 
-        if (progress)
-            progress->setCompleted((int)(double(byteCount)/
-                                   double(apprxTotalBytes) * 100.0));
+        emit setProgress((int)(double(byteCount)/
+                               double(apprxTotalBytes) * 100.0));
+        kapp->processEvents();
 
         samplePtr = (char *)samples.c_str();
 
@@ -585,11 +584,6 @@ PeakFile::writePeaks(Progress *progress,
 
         // increment number of peak frames
         m_numberOfPeaks++;
-
-        // Keep the gui updated
-        //
-        if (progress)
-            progress->processEvents();
     }
 
     // set format number
