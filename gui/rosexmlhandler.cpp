@@ -708,9 +708,11 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             m_currentSegment->setLabel(qstrtostr(labelStr));
         
         m_currentSegment->setTrack(track);
-        m_currentSegment->setStartTime(startTime);
+        //m_currentSegment->setStartTime(startTime);
+
 	m_currentTime = startTime;
         getComposition().addSegment(m_currentSegment);
+        getComposition().setSegmentStartTime(m_currentSegment, startTime);
 
 	QString endMarkerStr = atts.value("endmarker");
 	if (endMarkerStr) {

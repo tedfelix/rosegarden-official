@@ -99,9 +99,11 @@ LADSPAPluginInstance::activate()
 {
     if (m_instanceHandle && m_descriptor->activate)
         m_descriptor->activate(m_instanceHandle);
+    /*
     else
         std::cerr << "LADSPAPluginInstance::activate - no ACTIVATE method"
                   << std::endl;
+                  */
 }
 
 void
@@ -193,9 +195,11 @@ LADSPAPluginInstance::deactivate()
     {
         m_descriptor->deactivate(m_instanceHandle);
     }
+    /*
     else
         std::cout << "LADSPAPluginInstance::deactivate - " 
                   << "no DEACTIVATE method" << std::endl;
+                  */
 }
 
 void

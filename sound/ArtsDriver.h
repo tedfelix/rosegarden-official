@@ -108,6 +108,8 @@ public:
     virtual void removePluginInstance(InstrumentId /*id*/,
                                       int /*position*/) {;}
 
+    virtual void removePluginInstances();
+
     virtual void setPluginInstancePortValue(InstrumentId /*id*/,
                                             int /*position*/,
                                             unsigned long /*portNumber*/,

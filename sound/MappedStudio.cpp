@@ -793,8 +793,6 @@ MappedAudioFader::setProperty(const MappedObjectProperty &property,
 {
     if (property == MappedAudioFader::FaderLevel)
     {
-        std::cout << "MappedAudioFader::setProperty - "
-                  << "fader = " << value << std::endl;
         m_level = value;
     }
     else if (property == MappedObject::Instrument)
@@ -803,35 +801,23 @@ MappedAudioFader::setProperty(const MappedObjectProperty &property,
     }
     else if (property ==  MappedAudioFader::FaderRecordLevel)
     {
-        std::cout << "MappedAudioFader::setProperty - "
-                  << "record fader = " << value << std::endl;
         m_recordLevel = value;
     }
     else if (property ==  MappedAudioObject::Channels)
     {
-        std::cout << "MappedAudioFader::setProperty - "
-                  << "channels = " << value << std::endl;
         m_channels = value;
     }
     else if (property ==  MappedAudioFader::Pan)
     {
-        std::cout << "MappedAudioFader::setProperty - "
-                  << "pan = " << value << std::endl;
         m_pan = value;
     }
     else if (property == MappedAudioObject::ConnectionsIn)
     {
-        std::cout << "MappedAudioFader::setProperty - "
-                  << "connectionsIn = " << value << std::endl;
-
         m_connectionsIn.clear();
         m_connectionsIn.push_back(value);
     }
     else if (property == MappedAudioObject::ConnectionsOut)
     {
-        std::cout << "MappedAudioFader::setProperty - "
-                  << "connectionsOut = " << value << std::endl;
-
         m_connectionsOut.clear();
         m_connectionsOut.push_back(value);
     }
@@ -839,7 +825,13 @@ MappedAudioFader::setProperty(const MappedObjectProperty &property,
     {
         std::cerr << "MappedAudioFader::setProperty - "
                   << "unsupported property" << std::endl;
+        return;
     }
+
+    /*
+    std::cout << "MappedAudioFader::setProperty - "
+              << property << " = " << value << std::endl;
+              */
 
 
 }

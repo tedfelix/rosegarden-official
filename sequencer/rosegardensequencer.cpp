@@ -1062,8 +1062,10 @@ RosegardenSequencerApp::setMappedProperty(int id,
                                           const QString &property,
                                           float value)
 {
+    /*
     SEQUENCER_DEBUG << "setProperty: id = " << id
                     << " : property = \"" << property << "\"" << endl;
+                    */
 
     Rosegarden::MappedObject *object = m_studio->getObject(id);
 
@@ -1153,17 +1155,15 @@ RosegardenSequencerApp::createMappedObject(int type)
               m_studio->createObject(
                       Rosegarden::MappedObject::MappedObjectType(type), false);
 
-    SEQUENCER_DEBUG << "createMappedObject - type = " << type
-                    << " object = " << object << endl;
-
     if (object)
     {
-        SEQUENCER_DEBUG << "createMappedObject - object id = "
+        SEQUENCER_DEBUG << "createMappedObject - type = "
+                        << type << ", object id = "
                         << object->getId() << endl;
+        return object->getId();
     }
 
-
-    return object->getId();
+    return 0;
 }
 
 // Destroy an object
@@ -1192,6 +1192,7 @@ void
 RosegardenSequencerApp::clearStudio()
 {
     SEQUENCER_DEBUG << "clearStudio()" << endl;
+    m_sequencer->removePluginInstances();
     m_studio->clearTemporaries();
 } 
 

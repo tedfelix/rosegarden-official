@@ -466,7 +466,7 @@ AlsaDriver::generatePortList(AlsaPortList *newPorts)
                 if (firstSpace < 0) firstSpace = fullClientName.length();
 
                 if (firstSpace &&
-		    fullPortName.length() >= firstSpace &&
+		    int(fullPortName.length()) >= firstSpace &&
 		    fullPortName.substr(0, firstSpace) ==
 		    fullClientName.substr(0, firstSpace)) {
 		    name = portId + fullPortName;
@@ -2899,11 +2899,33 @@ AlsaDriver::removePluginInstance(InstrumentId id, int position)
 
             delete *it;
             m_pluginInstances.erase(it);
-            break;
+
+            return;
         }
     }
 
 
+#endif // HAVE_LADSPA
+}
+
+void
+AlsaDriver::removePluginInstances()
+{
+#ifdef HAVE_LADSPA
+    std::cout << "AlsaDriver::removePluginInstances" << std::endl;
+
+    PluginIterator it = m_pluginInstances.begin();
+
+    for (; it != m_pluginInstances.end(); ++it)
+    {
+        (*it)->deactivate();
+        (*it)->cleanup();
+        m_studio->unloadPlugin((*it)->getLADSPAId());
+
+        delete (*it);
+    }
+
+    m_pluginInstances.clear();
 #endif // HAVE_LADSPA
 }
 
