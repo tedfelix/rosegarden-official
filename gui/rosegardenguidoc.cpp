@@ -970,8 +970,13 @@ RosegardenGUIDoc::alive()
     //
     m_studio.clear();
 
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::getMappedDevice - devices = "
+                         << devices << endl;
+
     for (unsigned int i = 0; i < devices; i++)
     {
+        kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::getMappedDevice - i = "
+                             << i << endl;
         getMappedDevice(i);
     }
 
@@ -1026,10 +1031,22 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
         return;
     }
 
+    kdDebug(KDEBUG_AREA)  << "RosegardenGUIDoc::getMappedDevice() - check if we've got this device already\n";
+
     // See if we've got this device already
     //
     Rosegarden::Device *device = m_studio.getDevice(id);
     Rosegarden::Instrument::InstrumentType type;
+
+    kdDebug(KDEBUG_AREA)  << "RosegardenGUIDoc::getMappedDevice() - device = "
+                          << device << endl;
+
+    if (mD->size() == 0)
+    {
+        kdDebug(KDEBUG_AREA)  << "RosegardenGUIDoc::getMappedDevice() - 0 instrument found\n";
+        return;
+    }
+    
 
     if(device == 0 && (*(mD->begin())))
     {
