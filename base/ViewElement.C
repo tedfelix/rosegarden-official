@@ -28,13 +28,18 @@ using std::endl;
 ViewElement::ViewElement(Event *e)
     : m_event(e)
 {
+    if (m_event)
+        m_event->viewElementRef();
     // nothing
 }
 
 ViewElement::~ViewElement()
 {
-    // nothing
+    if (m_event)
+        m_event->viewElementUnRef();
 }
+
+//////////////////////////////////////////////////////////////////////
 
 ViewElements::~ViewElements()
 {
