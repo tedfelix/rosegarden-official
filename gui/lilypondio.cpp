@@ -36,6 +36,7 @@
 #include <qstring.h>
 #include <qregexp.h> // QT3.0 replace()
 #include <qtextcodec.h>
+#include <qfileinfo.h> // for filename name doctoring
 
 #include "lilypondio.h"
 #include "config.h"
@@ -473,25 +474,37 @@ LilypondExporter::protectIllegalChars(std::string inStr) {
 bool
 LilypondExporter::write()
 {
-    QString tmp_fileName = strtoqstr(m_fileName);
+    QString tmpName = strtoqstr(m_fileName);
+
+    // dmm - modified to act upon the filename itself, rather than the whole
+    // path; fixes bug #855349
+
+    // split name into parts:
+    QFileInfo nfo(tmpName);
+    QString dirName = nfo.dirPath();
+    QString baseName = nfo.fileName();
     
-    bool illegalFilename = (tmp_fileName.contains(' ') || tmp_fileName.contains("\\"));            
-    tmp_fileName.replace(QRegExp(" "), "");
-    tmp_fileName.replace(QRegExp("\\\\"), "");
-    tmp_fileName.replace(QRegExp("'"), "");
-    tmp_fileName.replace(QRegExp("\""), "");
+    // sed Lilypond-choking chars out of the filename proper
+    bool illegalFilename = (baseName.contains(' ') || baseName.contains("\\"));            
+    baseName.replace(QRegExp(" "), "");
+    baseName.replace(QRegExp("\\\\"), "");
+    baseName.replace(QRegExp("'"), "");
+    baseName.replace(QRegExp("\""), "");
+
+    // cat back together
+    tmpName = dirName + baseName;
             
     if (illegalFilename) {
         CurrentProgressDialog::freeze();
         int reply = KMessageBox::warningContinueCancel(
-            0, i18n("Lilypond does not allow spaces or backslashes in filenames.  "
-                     "Would you like to use\n\n %1\n\n instead?").arg(tmp_fileName)); 
+            0, i18n("Lilypond does not allow spaces or backslashes in filenames.\n\n"
+                     "Would you like to use\n\n %1\n\n instead?").arg(baseName)); 
         if (reply != KMessageBox::Continue) return false;
     }
 
-    std::ofstream str(qstrtostr(tmp_fileName).c_str(), std::ios::out);
+    std::ofstream str(qstrtostr(tmpName).c_str(), std::ios::out);
     if (!str) {
-        std::cerr << "LilypondExporter::write() - can't write file " << tmp_fileName << std::endl;
+        std::cerr << "LilypondExporter::write() - can't write file " << tmpName << std::endl;
         return false;
     }
 
