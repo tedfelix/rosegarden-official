@@ -17,11 +17,36 @@
 
 #include "trackseditor.h"
 #include "trackscanvas.h"
+#include "rosegardenguidoc.h"
 
 #include "rosedebug.h"
 
 #include <qlayout.h>
 #include <qcanvas.h>
+
+
+TracksEditor::TracksEditor(RosegardenGUIDoc* doc,
+                           QWidget* parent, const char* name,
+                           WFlags)
+    : QWidget(parent, name),
+      m_document(doc),
+      m_tracksCanvas(0),
+      m_hHeader(0), m_vHeader(0)
+{
+    unsigned int docNbTracks = 0,
+        docNbBars = 0;
+
+    if (doc) {
+        docNbTracks = doc->getNbTracks();
+        docNbBars = doc->getNbBars();
+    }
+
+    if ( docNbTracks > 0 && docNbBars > 0)
+        init(docNbTracks, docNbBars);
+    else
+        init(64, 100);
+}
+
 
 TracksEditor::TracksEditor(unsigned int nbTracks,
                            unsigned int nbBars,
@@ -29,8 +54,15 @@ TracksEditor::TracksEditor(unsigned int nbTracks,
                            const char *name,
                            WFlags)
     : QWidget(parent, name),
+      m_document(0),
       m_tracksCanvas(0),
       m_hHeader(0), m_vHeader(0)
+{
+    init(nbTracks, nbBars);
+}
+
+void
+TracksEditor::init(unsigned int nbTracks, unsigned int nbBars)
 {
     QGridLayout *grid = new QGridLayout(this, 2, 2);
 

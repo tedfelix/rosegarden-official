@@ -24,19 +24,25 @@
 
 class TrackPart;
 class TracksCanvas;
+class RosegardenGUIDoc;
 
-/**Global widget for track edition.
-Shows a global overview of the composition.
-
-  *@author Guillaume Laurent, Chris Cannam, Rich Bown
-  */
+/**
+ * Global widget for track edition.
+ * Shows a global overview of the composition.
+ *
+ *@author Guillaume Laurent, Chris Cannam, Rich Bown
+ */
 
 class TracksEditor : public QWidget  {
    Q_OBJECT
 public: 
+    TracksEditor(RosegardenGUIDoc* doc,
+                 QWidget* parent = 0, const char* name = 0,
+                 WFlags f=0);
+
     TracksEditor(unsigned int nbTracks,
                  unsigned int nbBars,
-                 QWidget *parent = 0, const char *name = 0,
+                 QWidget* parent = 0, const char* name = 0,
                  WFlags f=0);
 
     void clear();
@@ -53,6 +59,11 @@ signals:
     void needUpdate();
 
 protected:
+
+    void init(unsigned int nbTracks, unsigned int nbBars);
+    
+    RosegardenGUIDoc* m_document;
+
     TracksCanvas *m_tracksCanvas;
     QHeader *m_hHeader, *m_vHeader;
 
