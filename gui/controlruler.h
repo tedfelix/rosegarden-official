@@ -77,8 +77,6 @@ public:
 
     Rosegarden::RulerScale* getRulerScale() { return m_rulerScale; }
 
-    void layoutItem(ControlItem*);
-
     static const int DefaultRulerHeight;
     static const int MinItemHeight;
     static const int MaxItemHeight;
@@ -100,6 +98,8 @@ protected:
     virtual void contentsContextMenuEvent(QContextMenuEvent*);
 
     virtual void computeStaffOffset() {};
+
+    virtual void layoutItem(ControlItem*);
 
     int valueToHeight(long val);
     long heightToValue(int height);
@@ -218,6 +218,8 @@ protected:
     virtual void contentsMousePressEvent(QMouseEvent*);
     virtual void contentsMouseReleaseEvent(QMouseEvent*);
     virtual void contentsMouseMoveEvent(QMouseEvent*);
+
+    virtual void layoutItem(ControlItem*);
 
     void drawControlLine(Rosegarden::timeT startTime,
                          Rosegarden::timeT endTime,

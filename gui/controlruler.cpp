@@ -105,6 +105,7 @@ public:
     virtual bool   getValue(long&) = 0;
     virtual void   setValue(long)  = 0;
     virtual timeT  getTime()       = 0;
+    virtual timeT  getDuration()   = 0;
     virtual Event* getEvent()      = 0;
 };
 
@@ -115,9 +116,10 @@ class ViewElementAdapter : public ElementAdapter
 public:
     ViewElementAdapter(ViewElement*, const PropertyName&);
 
-    virtual bool getValue(long&);
-    virtual void setValue(long);
+    virtual bool  getValue(long&);
+    virtual void  setValue(long);
     virtual timeT getTime();
+    virtual timeT getDuration();
 
     virtual Event* getEvent() { return m_viewElement->event(); }
     ViewElement* getViewElement() { return m_viewElement; }
@@ -151,6 +153,11 @@ timeT ViewElementAdapter::getTime()
     return m_viewElement->getViewAbsoluteTime();
 }
 
+timeT ViewElementAdapter::getDuration()
+{
+    return m_viewElement->getViewDuration();
+}
+
 //////////////////////////////
 
 class ControllerEventAdapter : public ElementAdapter
@@ -161,6 +168,7 @@ public:
     virtual bool getValue(long&);
     virtual void setValue(long);
     virtual timeT getTime();
+    virtual timeT getDuration();
 
     virtual Event* getEvent() { return m_event; }
 
@@ -184,6 +192,11 @@ void ControllerEventAdapter::setValue(long val)
 timeT ControllerEventAdapter::getTime()
 {
     return m_event->getAbsoluteTime();
+}
+
+timeT ControllerEventAdapter::getDuration()
+{
+    return m_event->getDuration();
 }
 
 //
@@ -215,9 +228,6 @@ public:
     virtual void handleMouseWheel(QWheelEvent *e);
 
     virtual void setSelected(bool yes);
-
-    /// update horizontal position
-    void updateHPos();
 
     /// recompute height according to represented value prior to a canvas repaint
     virtual void updateFromValue();
@@ -334,12 +344,6 @@ void ControlItem::setSelected(bool s)
 
     canvas()->update();
 }
-
-void ControlItem::updateHPos()
-{
-    m_controlRuler->layoutItem(this);
-}
-
 
 //////////////////////////////////////////////////////////////////////
 
@@ -591,11 +595,12 @@ void ControlRuler::slotUpdateElementsHPos()
     computeStaffOffset();
 
     QCanvasItemList list = canvas()->allItems();
+
     QCanvasItemList::Iterator it = list.begin();
     for (; it != list.end(); ++it) {
         ControlItem* item = dynamic_cast<ControlItem*>(*it);
         if (!item) continue;
-        item->updateHPos();
+        layoutItem(item);
     }
 
     canvas()->update();
@@ -603,7 +608,20 @@ void ControlRuler::slotUpdateElementsHPos()
 
 void ControlRuler::layoutItem(ControlItem* item)
 {
-    item->setX(m_rulerScale->getXForTime(item->getElementAdapter()->getTime()) + m_staffOffset);
+    timeT itemTime = item->getElementAdapter()->getTime();
+    
+    double x = m_rulerScale->getXForTime(itemTime) + m_staffOffset;
+    
+    item->setX(x);
+    int itemElementDuration = item->getElementAdapter()->getDuration();
+    
+    int width = getDefaultItemWidth();
+    if (itemDuration > 1)
+        width = int(m_rulerScale->getXForTime(itemTime + itemElementDuration) - x);
+
+    item->setWidth(width);
+
+a    RG_DEBUG << "layoutItem ControlItem x = " << x << " - width = " << width << endl;
 }
 
 void ControlRuler::setControlTool(ControlTool* tool)
