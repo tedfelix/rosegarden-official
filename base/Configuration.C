@@ -73,7 +73,7 @@ Configuration::toXmlString()
 
     RealTime r = get<RealTimeT>("fetchlatency");
     
-    config << "<fetchLatency>" << r.sec << "," << r.usec << "</fetchlatency>" << endl;
+    config << "<fetchlatency>" << r.sec << "," << r.usec << "</fetchlatency>" << endl;
 
     r =  get<RealTimeT>("metronomeduration");
 

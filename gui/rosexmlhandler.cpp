@@ -74,7 +74,8 @@ RoseXmlHandler::RoseXmlHandler(RosegardenGUIDoc *doc,
       m_instrument(0),
       m_totalElements(elementCount),
       m_elementsSoFar(0),
-      m_progress(progress)
+      m_progress(progress),
+      m_deprecation(false)
 {
 }
 
@@ -184,6 +185,9 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             return false;
         }
         
+	m_deprecation = true;
+	kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement: Warning: group element is deprecated, recommend re-saving file from this version of Rosegarden to assure your ability to re-load it in future versions" << endl;
+
         m_inGroup = true;
         m_groupId = m_currentSegment->getNextId();
         m_groupType = atts.value("type");
@@ -473,6 +477,9 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 	m_groupIdMap.clear();
 
     } else if (lcName == "resync") {
+
+	m_deprecation = true;
+	kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement: Warning: resync element is deprecated, recommend re-saving file from this version of Rosegarden to assure your ability to re-load it in future versions" << endl;
 	
 	QString time(atts.value("time"));
 	bool isNumeric;
@@ -980,10 +987,9 @@ RoseXmlHandler::fatalError(const QXmlParseException& exception)
 bool
 RoseXmlHandler::endDocument()
 {
-  if (m_foundTempo == false)
-    getComposition().setDefaultTempo(120.0);
+    if (m_foundTempo == false) getComposition().setDefaultTempo(120.0);
 
-  return true;
+    return true;
 }
 
 

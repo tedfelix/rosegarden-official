@@ -78,6 +78,8 @@ public:
 
     virtual bool endDocument (); // [rwb] - for tempo element catch
 
+    bool isDeprecated() { return m_deprecation; }
+
     /// Return the error string set during the parsing (if any)
     QString errorString();
 
@@ -127,6 +129,7 @@ protected:
     unsigned int            m_totalElements;
     unsigned int            m_elementsSoFar;
     Rosegarden::Progress   *m_progress;
+    bool		    m_deprecation;
 };
 
 #endif

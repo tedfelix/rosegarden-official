@@ -550,6 +550,11 @@ RosegardenGUIDoc::xmlParse(QString &fileContents, QString &errMsg,
     PRINT_ELAPSED("RosegardenGUIDoc::xmlParse (reader.parse())");
 
     if (!ok) errMsg = handler.errorString();
+    else if (handler.isDeprecated()) {
+        QString msg(i18n("This file contains one or more old element types that are now deprecated.\nSupport for these elements may disappear in future versions of Rosegarden.\nWe recommend you re-save this file from this version of Rosegarden,\nto ensure that it can still be re-loaded in future versions."));
+        
+        KMessageBox::information(0, msg);
+    }
 
     return ok;
 }
