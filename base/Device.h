@@ -20,6 +20,7 @@
 */
 
 #include "XmlExportable.h"
+#include "Instrument.h"
 #include <string>
 #include <vector>
 
@@ -50,7 +51,13 @@ public:
     Device(DeviceId id, const std::string &name, DeviceType type):
         m_name(name), m_label(""), m_type(type), m_id(id) { }
 
-    virtual ~Device() {;}
+    virtual ~Device() 
+    {
+        InstrumentList::iterator it = m_instruments.begin();
+        for (; it != m_instruments.end(); it++)
+            delete (*it);
+        m_instruments.erase(m_instruments.begin(), m_instruments.end());
+    }
 
     void setType(DeviceType type) { m_type = type; }
     DeviceType getType() const { return m_type; }
@@ -74,8 +81,8 @@ public:
     // Device - one to return all Instruments that a user
     // is allowed to select (Presentation Instruments).
     //
-    virtual InstrumentList& getAllInstruments() = 0;
-    virtual InstrumentList& getPresentationInstruments() = 0;
+    virtual InstrumentList getAllInstruments() const = 0;
+    virtual InstrumentList getPresentationInstruments() const = 0;
 
 protected:
     InstrumentList     m_instruments;

@@ -102,6 +102,13 @@ MidiDevice::MidiDevice(const MidiDevice &dev):
         m_bankList->push_back(bank);
     }
 
+    // Copy the instruments
+    //
+    InstrumentList insList = dev.getAllInstruments();
+    InstrumentList::iterator iIt = insList.begin();
+    for (; iIt != insList.end(); iIt++)
+        m_instruments.push_back(new Instrument(**iIt));
+
 }
 
 
@@ -335,16 +342,16 @@ MidiDevice::toXmlString()
 
 // Only copy across non System instruments
 //
-InstrumentList&
-MidiDevice::getAllInstruments()
+InstrumentList
+MidiDevice::getAllInstruments() const
 {
     return m_instruments;
 }
 
 // Omitting special system Instruments
 //
-InstrumentList&
-MidiDevice::getPresentationInstruments()
+InstrumentList
+MidiDevice::getPresentationInstruments() const
 {
     return m_presentationInstrumentList;
 }

@@ -114,6 +114,7 @@ Instrument::Instrument(InstrumentId id,
 }
 
 Instrument::Instrument(const Instrument &ins):
+    XmlExportable(),
     m_id(ins.getId()),
     m_name(ins.getName()),
     m_type(ins.getType()),

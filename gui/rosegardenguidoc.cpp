@@ -151,8 +151,8 @@ RosegardenGUIDoc::RosegardenGUIDoc(RosegardenGUIDoc *doc)
 
     m_composition = doc->getComposition();
     m_audioFileManager = doc->getAudioFileManager();
-
     m_studio = doc->getStudio();
+
     m_config = doc->getConfiguration();
 }
 
@@ -174,8 +174,8 @@ RosegardenGUIDoc::operator=(const RosegardenGUIDoc &doc)
 
     m_composition = doc.getComposition();
     m_audioFileManager = doc.getAudioFileManager();
-
     m_studio = doc.getStudio();
+
     m_config = doc.getConfiguration();
 
     return *this;

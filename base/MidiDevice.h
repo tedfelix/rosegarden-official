@@ -85,8 +85,8 @@ public:
 
     virtual std::string toXmlString();
 
-    virtual InstrumentList& getAllInstruments();
-    virtual InstrumentList& getPresentationInstruments();
+    virtual InstrumentList getAllInstruments() const;
+    virtual InstrumentList getPresentationInstruments() const;
 
     // Return a copy of banks and programs
     //

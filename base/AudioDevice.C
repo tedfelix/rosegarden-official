@@ -51,6 +51,14 @@ AudioDevice::AudioDevice(DeviceId id, const std::string &name):
 AudioDevice::AudioDevice(const AudioDevice &dev):
     Device(dev.getId(), dev.getName(), dev.getType())
 {
+    m_label = dev.getUserLabel();
+
+    // Copy the instruments
+    //
+    InstrumentList insList = dev.getAllInstruments();
+    InstrumentList::iterator iIt = insList.begin();
+    for (; iIt != insList.end(); iIt++)
+        m_instruments.push_back(new Instrument(**iIt));
 }
 
 AudioDevice::~AudioDevice()
