@@ -878,7 +878,35 @@
       </sect2>
 
       <!-- Tuplets -->
+
+      <sect2 id="nv-tuplets">
+	<title>Triplets and other tuplets</title>
+
+	<para>A triplet group consists of three notes or chords played
+	in the time of two.  (More precisely, it consists of notes
+	with a total duration of three arbitrary units played in the
+	time of two of those units.)</para>
+
+	<para>We use the word "tuplet" to describe the general
+	situation in which notes with a total duration of any given
+	number of units are played in the time of a different number
+	of those units: nine notes in the time of eight, or six in the
+	time of four, or a crotchet and a quaver in the time of a
+	single crotchet, or even two notes in the time of three.  (At
+	present Rosegarden does not support the last example -- tuplet
+	groups must always be played with a shorter duration than
+	written.)</para>
+
+	<para>To make a general tuplet group, we need to know what the
+	base note is (for example, if we play three crotchets in the
+	time of two then the base is a crotchet) and the ratio of the
+	number of base notes written to the number played.</para>
+
+      </sect2>
+
       <!-- Grace notes -->
+
+      <!-- Paste -->
 
       <sect2 id="nv-paste-types">
 	<title>Paste types</title>

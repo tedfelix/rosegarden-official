@@ -51,20 +51,26 @@ The complete set of properties associated with a tupled note or rest:
     of a quaver if the group is made up of quaver triplets.
 
     This could be calculated from the duration of the event and
-    the tupled and untupled lengths of the group -- although there
-    may be some rounding error.
+    the tuplet counts of the group -- although there may be some
+    rounding error.
 
- -- BaseProperties::BEAMED_GROUP_TUPLED_LENGTH
-    The total duration of the group as performed, for example the
-    duration of a crotchet if the group is made up of quaver triplets.
-
- -- BaseProperties::BEAMED_GROUP_UNTUPLED_LENGTH
-    The total duration of the group as displayed, for example the
-    duration of a dotted crotchet if the group is made up of quaver
-    triplets.
+ -- BaseProperties::BEAMED_GROUP_UNTUPLED_COUNT
+    Number to be drawn on the tupling line.  For a tuplet group
+    that consists of "N notes of time T played in the time of M",
+    this is N.
 
  -- BaseProperties::BEAMED_GROUP_TUPLED_COUNT
-    Number to be drawn on the tupling line.
+    For a tuplet group that consists of "N notes of time T played
+    in the time of M", this is M.
+
+ -- BaseProperties::BEAMED_GROUP_TUPLET_BASE
+    For a tuplet group that consists of "N notes of time T played
+    in the time of M", this is T.  This is almost redundant, and
+    indeed is not actually used anywhere except as an indication
+    that a note is in a tuplet group in the first place -- but it
+    has a potential use (which we don't take advantage of yet)
+    for regrouping according to the intended group specifications
+    after a modification.
 
 (The effective duration is not necessarily exact, although for
 triplets it will be.  Our base unit of time was originally 6 units to
