@@ -39,6 +39,8 @@
 #include <klocale.h>
 #include <kapp.h>
 
+#include <algorithm>
+
 #include "Midi.h"
 #include "Instrument.h"
 #include "MidiDevice.h"

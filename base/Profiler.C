@@ -22,6 +22,9 @@
 #include <iostream>
 #include "Profiler.h"
 
+#include <vector>
+#include <algorithm>
+
 using std::cerr;
 using std::endl;
 

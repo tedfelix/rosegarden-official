@@ -24,11 +24,10 @@
 #define _NOTATION_TYPES_H_
 
 #include <list>
+#include <map>
 
 #include "Event.h"
 #include "Instrument.h"
-
-#include "StringHash.h"
 
 /*
  * NotationTypes.h
@@ -510,7 +509,7 @@ private:
         std::string m_rg2name;
 	int    m_tonicPitch;
 
-        KeyDetails(); // ctor needed in order to live in a hash_map
+        KeyDetails(); // ctor needed in order to live in a map
 
         KeyDetails(bool sharps, bool minor, int sharpCount,
                    std::string equivalence, std::string rg2name,
@@ -522,7 +521,7 @@ private:
     };
 
 
-    typedef hash_string<KeyDetails> KeyDetailMap;
+    typedef std::map<std::string, KeyDetails> KeyDetailMap;
     static KeyDetailMap m_keyDetailMap;
     static void checkMap();
     void checkAccidentalHeights() const;

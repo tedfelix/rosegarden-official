@@ -49,6 +49,8 @@
 #include <kmessagebox.h>
 #include <kcombobox.h>
 
+#include <algorithm>
+
 #include "RealTime.h"
 #include "BaseProperties.h"
 #include "MidiTypes.h"

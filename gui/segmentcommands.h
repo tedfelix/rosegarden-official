@@ -390,7 +390,7 @@ private:
 class SegmentMergeCommand : public KNamedCommand
 {
 public:
-    SegmentMergeCommand(const Rosegarden::SegmentSelection &segments);
+    SegmentMergeCommand(Rosegarden::SegmentSelection &segments);
     virtual ~SegmentMergeCommand();
 
     virtual void execute();
@@ -741,7 +741,7 @@ private:
 class SegmentLabelCommand : public KNamedCommand
 {
 public:
-    SegmentLabelCommand(const Rosegarden::SegmentSelection &segments,
+    SegmentLabelCommand(Rosegarden::SegmentSelection &segments,
                         const QString &label);
     virtual ~SegmentLabelCommand();
 
@@ -761,7 +761,7 @@ protected:
 class SegmentColourCommand : public KNamedCommand
 {
 public:
-    SegmentColourCommand(const Rosegarden::SegmentSelection &segments,
+    SegmentColourCommand(Rosegarden::SegmentSelection &segments,
                          const unsigned int index);
     virtual ~SegmentColourCommand();
 

@@ -335,7 +335,7 @@ StudioControl::sendMappedComposition(const Rosegarden::MappedComposition &mC)
     QCString replyType;
     QByteArray replyData;
 
-    MappedComposition::iterator it = mC.begin();
+    MappedComposition::const_iterator it = mC.begin();
 
     for (; it != mC.end(); it++)
     {

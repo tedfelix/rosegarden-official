@@ -26,6 +26,8 @@
 #include <qpixmap.h>
 #include <qtimer.h>
 
+#include <algorithm>
+
 #include <kmessagebox.h>
 #include <kstatusbar.h>
 #include <klocale.h>

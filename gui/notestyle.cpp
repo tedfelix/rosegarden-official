@@ -36,9 +36,7 @@
 
 
 using Rosegarden::Accidental;
-using Rosegarden::Accidentals;
 using Rosegarden::Mark;
-using Rosegarden::Marks;
 using Rosegarden::Clef;
 using Rosegarden::Note;
 using Rosegarden::String;
@@ -348,27 +346,27 @@ NoteStyle::getNoteHeadCharName(Note::Type type)
 CharName
 NoteStyle::getAccidentalCharName(const Accidental &a)
 {
-    if      (a == Accidentals::Sharp)        return NoteCharacterNames::SHARP;
-    else if (a == Accidentals::Flat)         return NoteCharacterNames::FLAT;
-    else if (a == Accidentals::Natural)      return NoteCharacterNames::NATURAL;
-    else if (a == Accidentals::DoubleSharp)  return NoteCharacterNames::DOUBLE_SHARP;
-    else if (a == Accidentals::DoubleFlat)   return NoteCharacterNames::DOUBLE_FLAT;
+    if      (a == Rosegarden::Accidentals::Sharp)        return NoteCharacterNames::SHARP;
+    else if (a == Rosegarden::Accidentals::Flat)         return NoteCharacterNames::FLAT;
+    else if (a == Rosegarden::Accidentals::Natural)      return NoteCharacterNames::NATURAL;
+    else if (a == Rosegarden::Accidentals::DoubleSharp)  return NoteCharacterNames::DOUBLE_SHARP;
+    else if (a == Rosegarden::Accidentals::DoubleFlat)   return NoteCharacterNames::DOUBLE_FLAT;
     return NoteCharacterNames::UNKNOWN;
 }
 
 CharName
 NoteStyle::getMarkCharName(const Mark &mark)
 {
-    if      (mark == Marks::Accent)    return NoteCharacterNames::ACCENT;
-    else if (mark == Marks::Tenuto)    return NoteCharacterNames::TENUTO;
-    else if (mark == Marks::Staccato)  return NoteCharacterNames::STACCATO;
-    else if (mark == Marks::Staccatissimo) return NoteCharacterNames::STACCATISSIMO;
-    else if (mark == Marks::Marcato)   return NoteCharacterNames::MARCATO;
-    else if (mark == Marks::Trill)     return NoteCharacterNames::TRILL;
-    else if (mark == Marks::Turn)      return NoteCharacterNames::TURN;
-    else if (mark == Marks::Pause)     return NoteCharacterNames::FERMATA;
-    else if (mark == Marks::UpBow)     return NoteCharacterNames::UP_BOW;
-    else if (mark == Marks::DownBow)   return NoteCharacterNames::DOWN_BOW;
+    if      (mark == Rosegarden::Marks::Accent)    return NoteCharacterNames::ACCENT;
+    else if (mark == Rosegarden::Marks::Tenuto)    return NoteCharacterNames::TENUTO;
+    else if (mark == Rosegarden::Marks::Staccato)  return NoteCharacterNames::STACCATO;
+    else if (mark == Rosegarden::Marks::Staccatissimo) return NoteCharacterNames::STACCATISSIMO;
+    else if (mark == Rosegarden::Marks::Marcato)   return NoteCharacterNames::MARCATO;
+    else if (mark == Rosegarden::Marks::Trill)     return NoteCharacterNames::TRILL;
+    else if (mark == Rosegarden::Marks::Turn)      return NoteCharacterNames::TURN;
+    else if (mark == Rosegarden::Marks::Pause)     return NoteCharacterNames::FERMATA;
+    else if (mark == Rosegarden::Marks::UpBow)     return NoteCharacterNames::UP_BOW;
+    else if (mark == Rosegarden::Marks::DownBow)   return NoteCharacterNames::DOWN_BOW;
     // Things like "sf" and "rf" are generated from text fonts
     return NoteCharacterNames::UNKNOWN;
 }

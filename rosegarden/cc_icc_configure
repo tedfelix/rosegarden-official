@@ -1,0 +1,5 @@
+make -f Makefile.cvs
+
+CC=/opt/intel_cc_80/bin/icc CXX=/opt/intel_cc_80/bin/icc CFLAGS='-tpp6 -w -D_XOPEN_SOURCE=500 -D_BSD_SOURCE -O0 -g -I/opt/intel_cc_80/include -I/usr/local/include' CXXFLAGS='-cxxlib-gcc -tpp6 -w1 -D_XOPEN_SOURCE=500 -D_BSD_SOURCE -O0 -g -gall -I/opt/intel_cc_80/include/c++ -I/opt/intel_cc_80/include -I/usr/local/include' CPPFLAGS='-I/opt/intel_cc_80/include -I/usr/local/include' LDFLAGS='-L/opt/intel_cc_80/lib -L/usr/local/lib' ./configure
+
+

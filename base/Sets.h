@@ -109,7 +109,7 @@ public:
     static Event *getAsEvent(const Iterator &i);
 
 protected:
-    AbstractSet(const Container &c, Iterator elementInSet, const Quantizer *);
+    AbstractSet(Container &c, Iterator elementInSet, const Quantizer *);
     void initialise();
 
     /// Return true if this element is not definitely beyond bounds of set
@@ -118,12 +118,12 @@ protected:
     /// Return true if this element, known to test() true, is a set member
     virtual bool sample(const Iterator &i, bool goingForwards);
 
-    const Container &getContainer() const { return m_container; }
+    Container &getContainer() const { return m_container; }
     const Quantizer &getQuantizer() const { return *m_quantizer; }
 
     // Data members:
 
-    const Container &m_container;
+    Container &m_container;
     Iterator m_initial, m_final, m_initialNote, m_finalNote;
     Iterator m_shortest, m_longest, m_highest, m_lowest;
     Iterator m_baseIterator;
@@ -165,7 +165,7 @@ public:
        making up your chord lack HEIGHT_ON_STAFF properties, in
        which case this constructor will write those properties
        in to the chord for you */
-    GenericChord(const Container &c,
+    GenericChord(Container &c,
 		 Iterator elementInChord,
 		 const Quantizer *quantizer,
 		 PropertyName stemUpProperty = PropertyName::EmptyPropertyName);
@@ -258,8 +258,8 @@ setMaybe__String(Event *e, const PropertyName &name, const std::string &value);
 
 
 template <class Element, class Container>
-AbstractSet<Element, Container>::AbstractSet(const Container &c,
-					   Iterator i, const Quantizer *q):
+AbstractSet<Element, Container>::AbstractSet(Container &c,
+					     Iterator i, const Quantizer *q):
     m_container(c),
     m_initial(c.end()),
     m_final(c.end()),
@@ -358,7 +358,7 @@ AbstractSet<Element, Container>::sample(const Iterator &i, bool)
 //////////////////////////////////////////////////////////////////////
  
 template <class Element, class Container, bool singleStaff>
-GenericChord<Element, Container, singleStaff>::GenericChord(const Container &c,
+GenericChord<Element, Container, singleStaff>::GenericChord(Container &c,
 							    Iterator i,
 							    const Quantizer *q,
 							    PropertyName stemUpProperty) :

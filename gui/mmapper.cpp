@@ -28,6 +28,7 @@
 #include <qdir.h>
 #include <kstddirs.h>
 #include <kconfig.h>
+#include <algorithm>
 
 #include "mmapper.h"
 
@@ -59,7 +60,7 @@ using Rosegarden::MappedEvent;
 using Rosegarden::timeT;
 using Rosegarden::Int;
 using Rosegarden::Bool;
-using Rosegarden::BaseProperties;
+using namespace Rosegarden::BaseProperties;
 
 ControlBlockMmapper::ControlBlockMmapper(RosegardenGUIDoc* doc)
     : m_doc(doc),
@@ -478,8 +479,7 @@ void SegmentMmapper::dump()
 	    if (!usingi) { // don't permit nested triggered segments
 
 		long triggerId = -1;
-		(**k)->get<Int>(Rosegarden::BaseProperties::TRIGGER_SEGMENT_ID,
-				triggerId);
+		(**k)->get<Int>(TRIGGER_SEGMENT_ID, triggerId);
 
 		if (triggerId >= 0) {
 
@@ -628,24 +628,24 @@ SegmentMmapper::mergeTriggerSegment(Rosegarden::Segment **target,
     if (trDuration == 0) return;
 
     bool retune = false;
-    std::string timeAdjust = BaseProperties::TRIGGER_SEGMENT_ADJUST_NONE;
+    std::string timeAdjust = TRIGGER_SEGMENT_ADJUST_NONE;
 
     trigger->get<Bool>
-	(BaseProperties::TRIGGER_SEGMENT_RETUNE, retune);
+	(TRIGGER_SEGMENT_RETUNE, retune);
     
     trigger->get<Rosegarden::String>
-	(BaseProperties::TRIGGER_SEGMENT_ADJUST_TIMES, timeAdjust);
+	(TRIGGER_SEGMENT_ADJUST_TIMES, timeAdjust);
 
     long evPitch = rec->getBasePitch();
-    (void)trigger->get<Int>(BaseProperties::PITCH, evPitch);
+    (void)trigger->get<Int>(PITCH, evPitch);
     int pitchDiff = evPitch - rec->getBasePitch();
 
     long evVelocity = rec->getBaseVelocity();
-    (void)trigger->get<Int>(BaseProperties::VELOCITY, evVelocity);
+    (void)trigger->get<Int>(VELOCITY, evVelocity);
     int velocityDiff = evVelocity - rec->getBaseVelocity();
 
     Rosegarden::timeT offset = 0;
-    if (timeAdjust == BaseProperties::TRIGGER_SEGMENT_ADJUST_SYNC_END) {
+    if (timeAdjust == TRIGGER_SEGMENT_ADJUST_SYNC_END) {
 	offset = evDuration - trDuration;
     }
 
@@ -656,7 +656,7 @@ SegmentMmapper::mergeTriggerSegment(Rosegarden::Segment **target,
 	Rosegarden::timeT d = (*i)->getDuration();
 
 	if (evDuration != trDuration &&
-	    timeAdjust == BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH) {
+	    timeAdjust == TRIGGER_SEGMENT_ADJUST_SQUISH) {
 	    t = Rosegarden::timeT(double(t * evDuration) / double(trDuration));
 	    d = Rosegarden::timeT(double(d * evDuration) / double(trDuration));
 	}
@@ -671,7 +671,7 @@ SegmentMmapper::mergeTriggerSegment(Rosegarden::Segment **target,
 	    }
 	}
 	
-	if (timeAdjust == BaseProperties::TRIGGER_SEGMENT_ADJUST_SYNC_START) {
+	if (timeAdjust == TRIGGER_SEGMENT_ADJUST_SYNC_START) {
 	    if (t + d > evTime + evDuration) {
 		if (t >= evTime + evDuration) continue;
 		else {
@@ -682,18 +682,18 @@ SegmentMmapper::mergeTriggerSegment(Rosegarden::Segment **target,
 
 	Rosegarden::Event *newEvent = new Rosegarden::Event(**i, t, d);
 
-	if (retune && newEvent->has(BaseProperties::PITCH)) {
-	    int pitch = newEvent->get<Int>(BaseProperties::PITCH) + pitchDiff;
+	if (retune && newEvent->has(PITCH)) {
+	    int pitch = newEvent->get<Int>(PITCH) + pitchDiff;
 	    if (pitch > 127) pitch = 127;
 	    if (pitch < 0) pitch = 0;
-	    newEvent->set<Int>(BaseProperties::PITCH, pitch);
+	    newEvent->set<Int>(PITCH, pitch);
 	}
 
-	if (newEvent->has(BaseProperties::VELOCITY)) {
-	    int velocity = newEvent->get<Int>(BaseProperties::VELOCITY) + velocityDiff;
+	if (newEvent->has(VELOCITY)) {
+	    int velocity = newEvent->get<Int>(VELOCITY) + velocityDiff;
 	    if (velocity > 127) velocity = 127;
 	    if (velocity < 0) velocity = 0;
-	    newEvent->set<Int>(BaseProperties::VELOCITY, velocity);
+	    newEvent->set<Int>(VELOCITY, velocity);
 	}
 
 	(*target)->insert(newEvent);

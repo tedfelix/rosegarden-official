@@ -132,17 +132,29 @@ public:
      */
     iterator findSingle(ViewElement *);
 
+    const_iterator findSingle(ViewElement *e) const {
+	return const_iterator(((const ViewElementList *)this)->findSingle(e));
+    }
+
     /**
      * Returns first iterator pointing at or after the given time,
      * end() if time is beyond the end of the list
      */ 
-    iterator findTime(timeT time) const;
+    iterator findTime(timeT time);
+
+    const_iterator findTime(timeT time) const {
+	return const_iterator(((const ViewElementList *)this)->findTime(time));
+    }
 
     /**
      * Returns iterator pointing to the first element starting at
      * or before the given absolute time
      */
-    iterator findNearestTime(timeT time) const;
+    iterator findNearestTime(timeT time);
+
+    const_iterator findNearestTime(timeT time) const {
+	return const_iterator(((const ViewElementList *)this)->findNearestTime(time));
+    }
 };
 
 }

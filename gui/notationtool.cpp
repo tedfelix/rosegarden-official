@@ -53,7 +53,6 @@
 #include "colours.h"
 
 using Rosegarden::Accidental;
-using Rosegarden::Accidentals;
 using Rosegarden::Event;
 using Rosegarden::EventSelection;
 using Rosegarden::Clef;
@@ -164,7 +163,7 @@ NoteInserter::NoteInserter(NotationView* view)
       m_noteType(Rosegarden::Note::Quaver),
       m_noteDots(0),
       m_autoBeam(true),
-      m_accidental(Accidentals::NoAccidental)
+      m_accidental(Rosegarden::Accidentals::NoAccidental)
 {
     QIconSet icon;
 
@@ -230,7 +229,7 @@ NoteInserter::NoteInserter(const QString& menuName, NotationView* view)
       m_noteDots(0),
       m_autoBeam(false),
       m_clickHappened(false),
-      m_accidental(Accidentals::NoAccidental)
+      m_accidental(Rosegarden::Accidentals::NoAccidental)
 {
     connect(m_parentView, SIGNAL(changeAccidental(Rosegarden::Accidental)),
             this,         SLOT(slotSetAccidental(Rosegarden::Accidental)));
@@ -688,17 +687,17 @@ void NoteInserter::slotRestsSelected()
 const char* NoteInserter::m_actionsAccidental[][5] = 
     {
         { "No accidental",  "1slotNoAccidental()",  "no_accidental",
-          "accidental-none", Accidentals::NoAccidental.c_str() },
+          "accidental-none", Rosegarden::Accidentals::NoAccidental.c_str() },
         { "Sharp",          "1slotSharp()",         "sharp_accidental",
-          "accidental-sharp", Accidentals::Sharp.c_str() },
+          "accidental-sharp", Rosegarden::Accidentals::Sharp.c_str() },
         { "Flat",           "1slotFlat()",          "flat_accidental",
-          "accidental-flat", Accidentals::Flat.c_str() },
+          "accidental-flat", Rosegarden::Accidentals::Flat.c_str() },
         { "Natural",        "1slotNatural()",       "natural_accidental",
-          "accidental-natural", Accidentals::Natural.c_str() },
+          "accidental-natural", Rosegarden::Accidentals::Natural.c_str() },
         { "Double sharp",   "1slotDoubleSharp()",   "double_sharp_accidental",
-          "accidental-doublesharp", Accidentals::DoubleSharp.c_str() },
+          "accidental-doublesharp", Rosegarden::Accidentals::DoubleSharp.c_str() },
         { "Double flat",    "1slotDoubleFlat()",    "double_flat_accidental",
-          "accidental-doubleflat", Accidentals::DoubleFlat.c_str() }
+          "accidental-doubleflat", Rosegarden::Accidentals::DoubleFlat.c_str() }
     };
 
 //------------------------------
@@ -1338,7 +1337,7 @@ void NotationSelector::drag(int x, int y, bool final)
     
     timeT clickedTime = m_clickedElement->event()->getNotationAbsoluteTime();
 
-    Accidental clickedAccidental = Accidentals::NoAccidental;
+    Accidental clickedAccidental = Rosegarden::Accidentals::NoAccidental;
     (void)m_clickedElement->event()->get<String>(ACCIDENTAL, clickedAccidental);
 
     long clickedPitch = 0;

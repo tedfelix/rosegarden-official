@@ -360,12 +360,12 @@ Event *Clef::getAsEvent(timeT absoluteTime) const
 // Key
 //////////////////////////////////////////////////////////////////////
 
+Key::KeyDetailMap Key::m_keyDetailMap = Key::KeyDetailMap();
+
 const string Key::EventType = "keychange";
 const int Key::EventSubOrdering = -200;
 const PropertyName Key::KeyPropertyName = "key";
 const Key Key::DefaultKey = Key("C major");
-
-Key::KeyDetailMap Key::m_keyDetailMap = Key::KeyDetailMap();
 
 Key::Key() :
     m_name(DefaultKey.m_name),

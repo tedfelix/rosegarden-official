@@ -32,6 +32,8 @@
 #include <klineeditdlg.h>
 #include <kprinter.h>
 
+#include <algorithm>
+
 #include "notationview.h"
 
 #include "NotationTypes.h"

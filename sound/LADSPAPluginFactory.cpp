@@ -26,6 +26,8 @@
 
 #include <dlfcn.h>
 #include <qdir.h>
+#include <cmath>
+
 #include "AudioPluginInstance.h"
 #include "LADSPAPluginInstance.h"
 #include "MappedStudio.h"

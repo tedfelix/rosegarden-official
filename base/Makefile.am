@@ -46,7 +46,6 @@ libbase_la_SOURCES = AnalysisTypes.C \
 		     SnapGrid.C \
 		     SoftSynthDevice.C \
 		     Staff.C \
-		     StringHash.C \
                      Studio.C \
                      Track.C \
 		     TriggerSegment.C \

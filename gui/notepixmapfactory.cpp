@@ -25,6 +25,7 @@
 #include <set>
 #include <string>
 #include <algorithm>
+#include <map>
 
 #include <qbitmap.h>
 #include <qimage.h>
@@ -56,7 +57,6 @@
 
 // #define DUMP_STATS 1
 
-
 #include <iostream>
 using std::endl;
 
@@ -80,8 +80,7 @@ static clock_t makeNotesTime = 0;
 static int drawBeamsCount = 0;
 static int drawBeamsBeamCount = 0;
 
-class NotePixmapCache : public __HASH_NS::hash_map<CharName, QCanvasPixmap*,
-                                                   CharNameHash, CharNamesEqual>
+class NotePixmapCache : public std::map<CharName, QCanvasPixmap*>
 {
     // nothing to add -- just so we can predeclare it in the header
 };

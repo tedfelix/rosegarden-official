@@ -933,8 +933,8 @@ AudioManagerDialog::slotSelectionChanged(QListViewItem *item)
 // purpose.  Set segment to 0 for parent audio entries.
 //
 void
-AudioManagerDialog::setSelected(Rosegarden::AudioFileId id,
-                                Rosegarden::Segment *segment,
+AudioManagerDialog::setSelected(Rosegarden::AudioFileId id, 
+                                const Rosegarden::Segment *segment,
                                 bool propagate)
 {
     QListViewItem *it = m_fileList->firstChild();
@@ -1024,9 +1024,9 @@ void
 AudioManagerDialog::slotSegmentSelection(
         const Rosegarden::SegmentSelection &segments)
 {
-    Rosegarden::Segment *segment = 0;
+    const Rosegarden::Segment *segment = 0;
 
-    for (SegmentSelection::iterator it = segments.begin();
+    for (SegmentSelection::const_iterator it = segments.begin();
                                     it != segments.end(); ++it)
     {
         if ((*it)->getType() == Rosegarden::Segment::Audio) 

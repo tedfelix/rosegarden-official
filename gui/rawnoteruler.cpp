@@ -35,7 +35,6 @@
 using Rosegarden::RulerScale;
 using Rosegarden::Composition;
 using Rosegarden::Segment;
-using Rosegarden::BaseProperties;
 using Rosegarden::BaseProperties::PITCH;
 using Rosegarden::Event;
 using Rosegarden::Note;
@@ -288,7 +287,7 @@ RawNoteRuler::drawNode(QPainter &paint, DefaultVelocityColour &vc,
     int myPitch = (*node->node)->get<Int>(PITCH);
 
     long velocity = 100;
-    (*node->node)->get<Int>(BaseProperties::VELOCITY, velocity);
+    (*node->node)->get<Int>(Rosegarden::BaseProperties::VELOCITY, velocity);
     QColor colour = vc.getColour(velocity);
     
     timeT start = (*node->node)->getAbsoluteTime();

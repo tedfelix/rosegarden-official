@@ -23,53 +23,14 @@
 #include "Property.h"
 #include "PropertyName.h"
 
-#ifdef PROPERTY_MAP_IS_HASH_MAP
-
-#if (__GNUC__ < 3)
-
-#include <hash_map>
-#define __HASH_NS std
-
-#else
-
-#include <ext/hash_map>
-#if (__GNUC_MINOR__ >= 1)
-#define __HASH_NS __gnu_cxx
-#else
-#define __HASH_NS std
-#endif
-
-#endif
-
-#else
-
 #include <map>
-
-#endif
 
 namespace Rosegarden {
 
-#ifdef PROPERTY_MAP_IS_HASH_MAP
-
-class PropertyMap : public __HASH_NS::hash_map<PropertyName,
-					       PropertyStoreBase *,
-					       PropertyNameHash,
-					       PropertyNamesEqual>
-
-#else
-
 class PropertyMap : public std::map<PropertyName, PropertyStoreBase *>
-
-#endif
-
 {
 public:
-    PropertyMap()
-#ifdef PROPERTY_MAP_IS_HASH_MAP
-	;
-#else
-	{ }
-#endif
+    PropertyMap() { }
     PropertyMap(const PropertyMap &pm);
 
     ~PropertyMap();

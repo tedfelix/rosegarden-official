@@ -855,7 +855,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
     if (m_doc == 0 || mC.size() == 0) return;
 
-    MappedComposition::iterator i;
+    MappedComposition::const_iterator i;
 
     // Thru filtering is done at the sequencer for the actual sound
     // output, but here we need both filtered (for OUT display) and
@@ -1459,7 +1459,7 @@ SequenceManager::panic()
 void
 SequenceManager::showVisuals(const MappedComposition &mC)
 {
-    MappedComposition::iterator it = mC.begin();
+    MappedComposition::const_iterator it = mC.begin();
     if (it != mC.end()) m_transport->setMidiOutLabel(*it);
 }
 
@@ -1471,7 +1471,7 @@ SequenceManager::applyFiltering(const MappedComposition &mC,
                                 MappedEvent::MappedEventType filter)
 {
     MappedComposition retMc;
-    MappedComposition::iterator it = mC.begin();
+    MappedComposition::const_iterator it = mC.begin();
 
     for (; it != mC.end(); it++)
     {

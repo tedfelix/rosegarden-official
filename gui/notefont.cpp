@@ -29,6 +29,8 @@
 #include <qregexp.h>
 #include <qfontdatabase.h>
 
+#include <algorithm>
+
 #include <kglobal.h>
 #include <kstddirs.h>
 #include <klocale.h>

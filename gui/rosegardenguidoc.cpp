@@ -1287,7 +1287,7 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
 
     if (mC.size() > 0 && m_recordSegment) 
     { 
-        Rosegarden::MappedComposition::iterator i;
+        Rosegarden::MappedComposition::const_iterator i;
         Rosegarden::Event *rEvent = 0;
         timeT duration, absTime;
 	timeT updateFrom = m_recordSegment->getEndTime();

@@ -25,9 +25,9 @@
 
 #include <ctime>
 #include <sys/time.h>
+#include <map>
 
 #include "RealTime.h"
-#include "StringHash.h"
 
 
 namespace Rosegarden 
@@ -56,7 +56,7 @@ protected:
 
     typedef std::pair<clock_t, RealTime> TimePair;
     typedef std::pair<int, TimePair> ProfilePair;
-    typedef hash_char<ProfilePair>  ProfileMap; // hash_char maps char* -> pair
+    typedef std::map<const char *, ProfilePair> ProfileMap;
     ProfileMap m_profiles;
 
     static Profiles* m_instance;

@@ -40,8 +40,6 @@
 #include "notationstrings.h"
 #include "rosedebug.h"
 
-
-using Rosegarden::BaseProperties;
 using Rosegarden::Bool;
 using Rosegarden::Clef;
 using Rosegarden::Composition;
@@ -56,7 +54,7 @@ using Rosegarden::SegmentNotationHelper;
 using Rosegarden::String;
 using Rosegarden::timeT;
 using Rosegarden::TimeSignature;
-
+using namespace Rosegarden::BaseProperties;
 
 MusicXmlExporter::MusicXmlExporter(QObject *parent,
                                    RosegardenGUIDoc *doc,
@@ -92,19 +90,19 @@ MusicXmlExporter::writeNote(Event *e, Rosegarden::timeT lastNoteTime,
 	    accTable.update();
 	}
 
-	if (e->has(BaseProperties::TIED_BACKWARD) &&
-	    e->get<Bool>(BaseProperties::TIED_BACKWARD)) {
+	if (e->has(TIED_BACKWARD) &&
+	    e->get<Bool>(TIED_BACKWARD)) {
 	    str << "\t\t\t\t<tie type=\"stop\"/>" << std::endl;
 	}
-	if (e->has(BaseProperties::TIED_FORWARD) &&
-	    e->get<Bool>(BaseProperties::TIED_FORWARD)) {
+	if (e->has(TIED_FORWARD) &&
+	    e->get<Bool>(TIED_FORWARD)) {
 	    str << "\t\t\t\t<tie type=\"start\"/>" << std::endl;
 	}
 
         str << "\t\t\t\t<pitch>" << std::endl;
 
         long p = 0;
-        e->get<Int>(BaseProperties::PITCH, p);
+        e->get<Int>(PITCH, p);
 	Rosegarden::Pitch pitch(p);
 
         str << "\t\t\t\t\t<step>" << pitch.getNoteName(key) << "</step>" << std::endl;
@@ -148,16 +146,16 @@ MusicXmlExporter::writeNote(Event *e, Rosegarden::timeT lastNoteTime,
 	}
 
 	bool haveNotations = false;
-	if (e->has(BaseProperties::TIED_BACKWARD) &&
-	    e->get<Bool>(BaseProperties::TIED_BACKWARD)) {
+	if (e->has(TIED_BACKWARD) &&
+	    e->get<Bool>(TIED_BACKWARD)) {
 	    if (!haveNotations) {
 		str << "\t\t\t\t<notations>" << std::endl;
 		haveNotations = true;
 	    }
 	    str << "\t\t\t\t\t<tied type=\"stop\"/>" << std::endl;
 	}
-	if (e->has(BaseProperties::TIED_FORWARD) &&
-	    e->get<Bool>(BaseProperties::TIED_FORWARD)) {
+	if (e->has(TIED_FORWARD) &&
+	    e->get<Bool>(TIED_FORWARD)) {
 	    if (!haveNotations) {
 		str << "\t\t\t\t<notations>" << std::endl;
 		haveNotations = true;

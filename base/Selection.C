@@ -121,7 +121,7 @@ void EventSelection::addFromSelection(EventSelection *sel)
 
 void EventSelection::removeEvent(Event *e) 
 {
-    std::pair<eventcontainer::iterator,eventcontainer::iterator> 
+    std::pair<eventcontainer::iterator, eventcontainer::iterator> 
 	interval = m_segmentEvents.equal_range(e);
 
     for (eventcontainer::iterator it = interval.first;
@@ -136,10 +136,10 @@ void EventSelection::removeEvent(Event *e)
 
 bool EventSelection::contains(Event *e) const
 {
-    std::pair<eventcontainer::iterator,eventcontainer::iterator> 
+    std::pair<eventcontainer::const_iterator, eventcontainer::const_iterator> 
 	interval = m_segmentEvents.equal_range(e);
 
-    for (eventcontainer::iterator it = interval.first;
+    for (eventcontainer::const_iterator it = interval.first;
          it != interval.second; ++it)
     {
         if (*it == e) return true;
@@ -150,7 +150,7 @@ bool EventSelection::contains(Event *e) const
 
 bool EventSelection::contains(const std::string &type) const
 {
-    for (eventcontainer::iterator i = m_segmentEvents.begin();
+    for (eventcontainer::const_iterator i = m_segmentEvents.begin();
 	 i != m_segmentEvents.end(); ++i) {
 	if ((*i)->isa(type)) return true;
     }
@@ -226,7 +226,7 @@ EventSelection::segmentDeleted(const Segment *)
 
 bool SegmentSelection::hasNonAudioSegment() const
 {
-    for(iterator i = begin(); i != end(); ++i) {
+    for (const_iterator i = begin(); i != end(); ++i) {
         if ((*i)->getType() == Segment::Internal)
             return true;
     }

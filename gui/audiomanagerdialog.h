@@ -75,7 +75,7 @@ public:
     // Scroll and expand to show this selected item
     //
     void setSelected(Rosegarden::AudioFileId id,
-                     Rosegarden::Segment *segment,
+                     const Rosegarden::Segment *segment,
                      bool propagate); // if true then we tell the segmentcanvas
 
     MultiViewCommandHistory *getCommandHistory();

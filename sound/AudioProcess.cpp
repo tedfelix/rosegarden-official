@@ -33,6 +33,7 @@
 #include "PluginFactory.h"
 
 #include <sys/time.h>
+#include <pthread.h>
 
 #include <cmath>
 

@@ -69,7 +69,6 @@
 
 using Rosegarden::Int;
 using Rosegarden::String;
-using Rosegarden::BaseProperties;
 
 // EventView specialisation of a QListViewItem with the
 // addition of a segment pointer
@@ -443,16 +442,16 @@ EventView::applyLayout(int /*staffNo*/)
 
 	    // avoid debug stuff going to stderr if no properties found
 
-	    if ((*it)->has(BaseProperties::PITCH)) {
+	    if ((*it)->has(Rosegarden::BaseProperties::PITCH)) {
 		pitchStr = QString("%1  ").
-                    arg((*it)->get<Int>(BaseProperties::PITCH));
+                    arg((*it)->get<Int>(Rosegarden::BaseProperties::PITCH));
 	    } else if ((*it)->isa(Rosegarden::Note::EventType)) {
 		pitchStr = "<not set>";
 	    }
 
-	    if ((*it)->has(BaseProperties::VELOCITY)) {
+	    if ((*it)->has(Rosegarden::BaseProperties::VELOCITY)) {
 		velyStr = QString("%1  ").
-                    arg((*it)->get<Int>(BaseProperties::VELOCITY));
+                    arg((*it)->get<Int>(Rosegarden::BaseProperties::VELOCITY));
 	    } else if ((*it)->isa(Rosegarden::Note::EventType)) {
 		velyStr = "<not set>";
 	    }
@@ -481,10 +480,10 @@ EventView::applyLayout(int /*staffNo*/)
 	    } else if ((*it)->has(Rosegarden::PitchBend::MSB)) {
                 data1Str = QString("%1  ").
                     arg((*it)->get<Int>(Rosegarden::PitchBend::MSB));
-            } else if ((*it)->has(BaseProperties::BEAMED_GROUP_TYPE)) {
+            } else if ((*it)->has(Rosegarden::BaseProperties::BEAMED_GROUP_TYPE)) {
 		data1Str = QString("%1  ").
 		    arg(strtoqstr((*it)->get<String>
-				  (BaseProperties::BEAMED_GROUP_TYPE)));
+				  (Rosegarden::BaseProperties::BEAMED_GROUP_TYPE)));
 	    }
 
             if ((*it)->has(Rosegarden::Controller::VALUE)) {
@@ -504,9 +503,9 @@ EventView::applyLayout(int /*staffNo*/)
 	    } else if ((*it)->has(Rosegarden::PitchBend::LSB)) {
                 data2Str = QString("%1  ").
                     arg((*it)->get<Int>(Rosegarden::PitchBend::LSB));
-            } else if ((*it)->has(BaseProperties::BEAMED_GROUP_ID)) {
+            } else if ((*it)->has(Rosegarden::BaseProperties::BEAMED_GROUP_ID)) {
 		data2Str = i18n("(group %1)  ").
-		    arg((*it)->get<Int>(BaseProperties::BEAMED_GROUP_ID));
+		    arg((*it)->get<Int>(Rosegarden::BaseProperties::BEAMED_GROUP_ID));
 	    }
 
             if ((*it)->has(Rosegarden::ProgramChange::PROGRAM)) {

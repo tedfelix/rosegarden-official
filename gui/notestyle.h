@@ -23,8 +23,8 @@
 #define _NOTE_STYLE_H_
 
 #include <vector>
+#include <map>
 
-#include "StringHash.h"
 #include "NotationTypes.h"
 #include "Exception.h"
 
@@ -51,7 +51,7 @@ public:
     typedef Rosegarden::Exception StyleUnavailable;
 
 private:
-    typedef Rosegarden::hash_string<NoteStyle*> StyleMap;
+    typedef std::map<std::string, NoteStyle *> StyleMap;
     static StyleMap m_styles;
 };
 
@@ -131,8 +131,7 @@ protected:
 	    hfix(_hfix), vfix(_vfix) { }
     };
 
-    typedef __HASH_NS::hash_map<Rosegarden::Note::Type,
-				NoteDescription> NoteDescriptionMap;
+    typedef std::map<Rosegarden::Note::Type, NoteDescription> NoteDescriptionMap;
 
     NoteDescriptionMap m_notes;
     NoteStyle *m_baseStyle;

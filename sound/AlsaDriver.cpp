@@ -24,6 +24,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <cstdio>
+#include <algorithm>
 
 #ifdef HAVE_ALSA
 
@@ -2033,7 +2034,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 
     // NB the MappedComposition is implicitly ordered by time (std::multiset)
 
-    for (MappedComposition::iterator i = mC.begin(); i != mC.end(); ++i)
+    for (MappedComposition::const_iterator i = mC.begin(); i != mC.end(); ++i)
     {
         if ((*i)->getType() >= MappedEvent::Audio)
             continue;
@@ -2524,7 +2525,7 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
     bool haveNewAudio = false;
 
     // insert audio events if we find them
-    for (MappedComposition::iterator i = mC.begin(); i != mC.end(); ++i)
+    for (MappedComposition::const_iterator i = mC.begin(); i != mC.end(); ++i)
     {
 #ifdef HAVE_LIBJACK
 

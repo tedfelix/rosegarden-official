@@ -24,6 +24,7 @@
 
 #include <vector>
 #include <set>
+#include <map>
 
 #include <qcanvas.h>
 #include <qpainter.h>
@@ -342,7 +343,7 @@ protected:
 
     mutable NotePixmapCache *m_dottedRestCache;
 
-    typedef Rosegarden::hash_char<QFont> TextFontCache;
+    typedef std::map<const char *, QFont> TextFontCache;
     mutable TextFontCache m_textFontCache;
 
     static QPoint m_pointZero;

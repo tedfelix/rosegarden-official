@@ -150,7 +150,7 @@ ViewElementList::findSingle(ViewElement *el)
 }
 
 ViewElementList::iterator
-ViewElementList::findTime(timeT time) const
+ViewElementList::findTime(timeT time)
 {
     Event dummy("dummy", time, 0, MIN_SUBORDERING);
     ViewElement dummyT(&dummy);
@@ -158,7 +158,7 @@ ViewElementList::findTime(timeT time) const
 }
 
 ViewElementList::iterator
-ViewElementList::findNearestTime(timeT t) const
+ViewElementList::findNearestTime(timeT t)
 {
     iterator i = findTime(t);
     if (i == end() || (*i)->getViewAbsoluteTime() > t) {

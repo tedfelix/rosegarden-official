@@ -52,7 +52,6 @@ using Rosegarden::Text;
 using Rosegarden::Accidental;
 using namespace Rosegarden::Accidentals;
 using Rosegarden::Mark;
-using Rosegarden::Marks;
 using Rosegarden::Indication;
 using Rosegarden::EventSelection;
 
@@ -1693,26 +1692,26 @@ AdjustMenuInterpretCommand::articulate()
 	for (std::vector<Mark>::iterator i = marks.begin();
 	     i != marks.end(); ++i) {
 
-	    if (*i == Marks::Accent) {
+	    if (*i == Rosegarden::Marks::Accent) {
 		velocityChange += 30;
-	    } else if (*i == Marks::Tenuto) {
+	    } else if (*i == Rosegarden::Marks::Tenuto) {
 		tenuto = true;
-	    } else if (*i == Marks::Staccato) {
+	    } else if (*i == Rosegarden::Marks::Staccato) {
 		staccato = true;
-	    } else if (*i == Marks::Staccatissimo) {
+	    } else if (*i == Rosegarden::Marks::Staccatissimo) {
 		staccatissimo = true;
 		velocityChange -= 5;
-	    } else if (*i == Marks::Marcato) {
+	    } else if (*i == Rosegarden::Marks::Marcato) {
 		marcato = true;
 		velocityChange += 15;
-	    } else if (*i == Marks::Sforzando) {
+	    } else if (*i == Rosegarden::Marks::Sforzando) {
 		velocityChange += 35;
-	    } else if (*i == Marks::Rinforzando) {
+	    } else if (*i == Rosegarden::Marks::Rinforzando) {
 		rinforzando = true;
 		velocityChange += 15;
-	    } else if (*i == Marks::DownBow) {
+	    } else if (*i == Rosegarden::Marks::DownBow) {
 		velocityChange += 5;
-	    } else if (*i == Marks::UpBow) {
+	    } else if (*i == Rosegarden::Marks::UpBow) {
 		velocityChange -= 5;
 	    }
 	}

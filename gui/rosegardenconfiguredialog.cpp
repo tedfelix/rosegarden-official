@@ -33,6 +33,8 @@
 
 #include "config.h"
 
+#include <algorithm>
+
 #include <qspinbox.h>
 #include <qslider.h>
 #include <qcombobox.h>

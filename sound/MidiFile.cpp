@@ -24,6 +24,7 @@
 #include <fstream>
 #include <string>
 #include <cstdio>
+#include <algorithm>
 
 #include "Midi.h"
 #include "MidiFile.h"

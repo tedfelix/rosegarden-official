@@ -26,6 +26,7 @@
 #include <qhbox.h>
 #include <qpushbutton.h>
 #include <qregexp.h>
+#include <algorithm>
 
 #include <klocale.h>
 #include <kmessagebox.h>

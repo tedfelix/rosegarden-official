@@ -44,7 +44,7 @@ MappedComposition::MappedComposition(const MappedComposition &mC):
     clear();
 
     // deep copy
-    for (MappedCompositionIterator it = mC.begin(); it != mC.end(); it++)
+    for (MappedComposition::const_iterator it = mC.begin(); it != mC.end(); it++)
         this->insert(new MappedEvent(**it));
 
 }
@@ -69,7 +69,7 @@ operator<<(QDataStream &dS, const MappedComposition &mC)
 {
     dS << mC.size();
 
-    for (MappedCompositionIterator it = mC.begin(); it != mC.end(); ++it )
+    for (MappedComposition::const_iterator it = mC.begin(); it != mC.end(); ++it )
 	dS << (*it);
 
     return dS;
@@ -179,7 +179,7 @@ MappedComposition::moveStartTime(const Rosegarden::RealTime &mT)
 MappedComposition&
 MappedComposition::operator+(const MappedComposition &mC)
 {
-    for (MappedCompositionIterator it = mC.begin(); it != mC.end(); it++)
+    for (MappedComposition::const_iterator it = mC.begin(); it != mC.end(); it++)
         this->insert(new MappedEvent(**it)); // deep copy
 
     return *this;
@@ -195,7 +195,7 @@ MappedComposition::operator=(const MappedComposition &mC)
     clear();
 
     // deep copy
-    for (MappedCompositionIterator it = mC.begin(); it != mC.end(); it++)
+    for (MappedComposition::const_iterator it = mC.begin(); it != mC.end(); it++)
         this->insert(new MappedEvent(**it));
 
     return *this;

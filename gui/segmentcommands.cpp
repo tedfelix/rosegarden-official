@@ -1224,7 +1224,7 @@ SegmentAutoSplitCommand::unexecute()
 }
 
 
-SegmentMergeCommand::SegmentMergeCommand(const Rosegarden::SegmentSelection &
+SegmentMergeCommand::SegmentMergeCommand(Rosegarden::SegmentSelection &
 					 segments) :
     KNamedCommand(getGlobalName()),
     m_newSegment(0),
@@ -2250,7 +2250,7 @@ SegmentSplitByPitchCommand::getSplitPitchAt(Segment::iterator i,
 
 
 SegmentLabelCommand::SegmentLabelCommand(
-        const Rosegarden::SegmentSelection &segments,
+        Rosegarden::SegmentSelection &segments,
         const QString &label):
     KNamedCommand(i18n("Label Segments")),
     m_newLabel(label)
@@ -2288,7 +2288,7 @@ SegmentLabelCommand::unexecute()
 // Alter colour
 
 SegmentColourCommand::SegmentColourCommand(
-        const Rosegarden::SegmentSelection &segments,
+        Rosegarden::SegmentSelection &segments,
         const unsigned int index):
     KNamedCommand(i18n("Change Segment Color")),
     m_newColourIndex(index)

@@ -344,7 +344,7 @@ protected:
     
     /// Find earliest element with quantized time of t or greater
     NotationElementList::iterator getStartOfQuantizedSlice 
-    (const NotationElementList *, Rosegarden::timeT t) const;
+    (NotationElementList *, Rosegarden::timeT t) const;
 
     void scanChord
     (NotationElementList *notes, NotationElementList::iterator &i,

@@ -72,11 +72,9 @@ using Rosegarden::String;
 using Rosegarden::timeT;
 using Rosegarden::TimeSignature;
 using Rosegarden::Accidental;
-using Rosegarden::Accidentals;
 using Rosegarden::Text;
 using Rosegarden::PropertyName;
 using Rosegarden::Mark;
-using Rosegarden::Marks;
 using Rosegarden::Configuration;
 
 const Rosegarden::PropertyName LilypondExporter::SKIP_PROPERTY
@@ -229,7 +227,7 @@ LilypondExporter::convertPitchToLilyNote(int pitch, Accidental accidental,
         
     // assign out-of-key accidentals first, by BaseProperty::ACCIDENTAL
     if (accidental != "") {
-        if (accidental == Accidentals::Sharp) {
+        if (accidental == Rosegarden::Accidentals::Sharp) {
             switch (pitchNote) {
                 case  5: lilyNote = "eis"; // 5 + Sharp = E#
                          break;
@@ -245,7 +243,7 @@ LilypondExporter::convertPitchToLilyNote(int pitch, Accidental accidental,
                          break;
                 case 10: lilyNote = "ais";
             }
-        } else if (accidental == Accidentals::Flat) {
+        } else if (accidental == Rosegarden::Accidentals::Flat) {
             switch (pitchNote) {
                 case 11: lilyNote = "ces"; // 11 + Flat = Cb
                          break;
@@ -261,7 +259,7 @@ LilypondExporter::convertPitchToLilyNote(int pitch, Accidental accidental,
                          break;
                 case 10: lilyNote = "bes";
             }
-        } else if (accidental == Accidentals::DoubleSharp) {
+        } else if (accidental == Rosegarden::Accidentals::DoubleSharp) {
             switch (pitchNote) {
                 case  1: lilyNote = "bisis"; // 1 + ## = B##
                          break;
@@ -278,7 +276,7 @@ LilypondExporter::convertPitchToLilyNote(int pitch, Accidental accidental,
                 case 11: lilyNote = "aisis"; //11 + ## = A##
                          break;
             }
-        } else if (accidental == Accidentals::DoubleFlat) {
+        } else if (accidental == Rosegarden::Accidentals::DoubleFlat) {
             switch (pitchNote) {
                 case 10: lilyNote = "ceses"; //10 + bb = Cbb
                          break;
@@ -295,7 +293,7 @@ LilypondExporter::convertPitchToLilyNote(int pitch, Accidental accidental,
                 case  9: lilyNote = "beses"; // 9 + bb = Bbb
                          break;
             }
-        } else if (accidental == Accidentals::Natural) {
+        } else if (accidental == Rosegarden::Accidentals::Natural) {
             // do we have anything explicit left to do in this
             // case?  probably not, but I'll leave this placeholder for now
             //
@@ -351,10 +349,10 @@ LilypondExporter::convertPitchToLilyNote(int pitch, Accidental accidental,
 
     lilyNote += (char)tolower(p.getNoteName(key));
     Accidental acc = p.getAccidental(key.isSharp());
-    if      (acc == Accidentals::DoubleFlat)  lilyNote += "eses";
-    else if (acc == Accidentals::Flat)        lilyNote += "es";
-    else if (acc == Accidentals::Sharp)       lilyNote += "is";
-    else if (acc == Accidentals::DoubleSharp) lilyNote += "isis";
+    if      (acc == Rosegarden::Accidentals::DoubleFlat)  lilyNote += "eses";
+    else if (acc == Rosegarden::Accidentals::Flat)        lilyNote += "es";
+    else if (acc == Rosegarden::Accidentals::Sharp)       lilyNote += "is";
+    else if (acc == Rosegarden::Accidentals::DoubleSharp) lilyNote += "isis";
     
     if (lilyNote != origLilyNote) {
 	std::cerr << "WARNING: LilypondExporter::convertPitchToLilyNote: " << lilyNote << " != " << origLilyNote << std::endl;
@@ -377,8 +375,8 @@ LilypondExporter::composeLilyMark(std::string eventMark, bool stemUp) {
     std::string prefix = (stemUp) ? "_" : "^";
     
     // shoot text mark straight through unless it's sf or rf
-    if (Marks::isTextMark(eventMark)) {
-        inStr = protectIllegalChars(Marks::getTextFromMark(eventMark));
+    if (Rosegarden::Marks::isTextMark(eventMark)) {
+        inStr = protectIllegalChars(Rosegarden::Marks::getTextFromMark(eventMark));
         
         if (inStr == "sf") {
             inStr = "\\sf";
@@ -391,12 +389,12 @@ LilypondExporter::composeLilyMark(std::string eventMark, bool stemUp) {
 
         outStr = prefix + inStr;
 
-    } else if (Marks::isFingeringMark(eventMark)) {
+    } else if (Rosegarden::Marks::isFingeringMark(eventMark)) {
 	
 	// treat fingering marks like text marks for the moment,
 	// though they probably shouldn't be
 
-        inStr = protectIllegalChars(Marks::getFingeringFromMark(eventMark));
+        inStr = protectIllegalChars(Rosegarden::Marks::getFingeringFromMark(eventMark));
 	
 	// FIX 1.X / 2.X VERSION DIFFERENCE HERE
 	inStr = "#'(italic \"" + inStr + "\")";
@@ -408,25 +406,25 @@ LilypondExporter::composeLilyMark(std::string eventMark, bool stemUp) {
 
         // use full \accent format for everything, even though some shortcuts
         // exist, for the sake of consistency
-        if (eventMark == Marks::Accent) {
+        if (eventMark == Rosegarden::Marks::Accent) {
             outStr += "\\accent";
-        } else if (eventMark == Marks::Tenuto) {
+        } else if (eventMark == Rosegarden::Marks::Tenuto) {
             outStr += "\\tenuto";
-        } else if (eventMark == Marks::Staccato) {
+        } else if (eventMark == Rosegarden::Marks::Staccato) {
             outStr += "\\staccato";
-        } else if (eventMark == Marks::Staccatissimo) {
+        } else if (eventMark == Rosegarden::Marks::Staccatissimo) {
             outStr += "\\staccatissimo";
-        } else if (eventMark == Marks::Marcato) {
+        } else if (eventMark == Rosegarden::Marks::Marcato) {
             outStr += "\\marcato";
-        } else if (eventMark == Marks::Trill) {
+        } else if (eventMark == Rosegarden::Marks::Trill) {
             outStr += "\\trill";
-        } else if (eventMark == Marks::Turn) {
+        } else if (eventMark == Rosegarden::Marks::Turn) {
             outStr += "\\turn";
-        } else if (eventMark == Marks::Pause) {
+        } else if (eventMark == Rosegarden::Marks::Pause) {
             outStr += "\\fermata";
-        } else if (eventMark == Marks::UpBow) {
+        } else if (eventMark == Rosegarden::Marks::UpBow) {
             outStr += "\\upbow";
-        } else if (eventMark == Marks::DownBow) {
+        } else if (eventMark == Rosegarden::Marks::DownBow) {
             outStr += "\\downbow";
         } else {
             outStr = "";

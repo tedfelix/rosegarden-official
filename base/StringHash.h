@@ -73,6 +73,5 @@ class hash_string : public __HASH_NS::hash_map<std::string, T, hashstring, eqstr
  
 }
 
-
 #endif
 

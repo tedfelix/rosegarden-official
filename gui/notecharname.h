@@ -25,9 +25,6 @@
 #include "PropertyName.h"
 
 typedef Rosegarden::PropertyName CharName;
-typedef Rosegarden::PropertyNameHash CharNameHash;
-typedef Rosegarden::PropertyNamesEqual CharNamesEqual;
-
 
 /// A selection of Unicode character names for symbols in a note font
 

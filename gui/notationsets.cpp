@@ -40,7 +40,6 @@ using Rosegarden::Clef;
 using Rosegarden::Key;
 using Rosegarden::Note;
 using Rosegarden::Mark;
-using Rosegarden::Marks;
 using Rosegarden::Segment;
 using Rosegarden::Equation;
 using Rosegarden::Quantizer;
@@ -61,7 +60,7 @@ AbstractSet<NotationElement, NotationElementList>::getAsEvent(const NotationElem
 
 }
 
-NotationChord::NotationChord(const NotationElementList &c,
+NotationChord::NotationChord(NotationElementList &c,
 			     NotationElementList::iterator i,
 			     const Rosegarden::Quantizer *quantizer,
 			     const NotationProperties &properties,
@@ -324,7 +323,7 @@ NotationChord::getAccidentalShift(const Iterator &i, bool &extra) const
 
 //////////////////////////////////////////////////////////////////////
 
-NotationGroup::NotationGroup(const NotationElementList &nel,
+NotationGroup::NotationGroup(NotationElementList &nel,
                              NELIterator i, const Quantizer *q,
 			     std::pair<timeT, timeT> barRange,
 			     const NotationProperties &p,
@@ -359,7 +358,7 @@ NotationGroup::NotationGroup(const NotationElementList &nel,
     */
 }
 
-NotationGroup::NotationGroup(const NotationElementList &nel,
+NotationGroup::NotationGroup(NotationElementList &nel,
 			     const Quantizer *q,
 			     const NotationProperties &p,
 			     const Clef &clef, const Key &key) :

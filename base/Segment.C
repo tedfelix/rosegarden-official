@@ -100,7 +100,7 @@ Segment::Segment(const Segment &segment):
     m_fadeInTime(segment.getFadeInTime()),
     m_fadeOutTime(segment.getFadeOutTime())
 {
-    for (iterator it = segment.begin();
+    for (const_iterator it = segment.begin();
 	 segment.isBeforeEndMarker(it); ++it) {
         insert(new Event(**it));
     }
@@ -274,7 +274,7 @@ Segment::setEndTime(timeT t)
 }
 
 Segment::iterator 
-Segment::getEndMarker() const
+Segment::getEndMarker()
 {
     if (m_endMarkerTime) {
 	return findTime(*m_endMarkerTime);
@@ -284,7 +284,7 @@ Segment::getEndMarker() const
 }
 
 bool
-Segment::isBeforeEndMarker(iterator i) const
+Segment::isBeforeEndMarker(const_iterator i) const
 { 
     if (i == end()) return false;
 
@@ -438,13 +438,13 @@ Segment::eraseSingle(Event* e)
 
 
 Segment::iterator
-Segment::findSingle(Event* e) const
+Segment::findSingle(Event* e) 
 {
     iterator res = end();
 
     std::pair<iterator, iterator> interval = equal_range(e);
 
-    for(iterator i = interval.first; i != interval.second; ++i) {
+    for (iterator i = interval.first; i != interval.second; ++i) {
         if (*i == e) {
             res = i;
             break;
@@ -455,7 +455,7 @@ Segment::findSingle(Event* e) const
 
 
 Segment::iterator
-Segment::findTime(timeT t) const
+Segment::findTime(timeT t)
 {
     Event dummy("dummy", t, 0, MIN_SUBORDERING);
     return lower_bound(&dummy);
@@ -463,7 +463,7 @@ Segment::findTime(timeT t) const
 
 
 Segment::iterator
-Segment::findNearestTime(timeT t) const
+Segment::findNearestTime(timeT t)
 {
     iterator i = findTime(t);
     if (i == end() || (*i)->getAbsoluteTime() > t) {
@@ -764,7 +764,6 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 
 
 void Segment::getTimeSlice(timeT absoluteTime, iterator &start, iterator &end)
-    const
 {
     Event dummy("dummy", absoluteTime, 0, MIN_SUBORDERING);
 
@@ -778,6 +777,18 @@ void Segment::getTimeSlice(timeT absoluteTime, iterator &start, iterator &end)
 //    end = res.second;
 
     // Got to do this instead:
+
+    start = end = lower_bound(&dummy);
+
+    while (end != this->end() &&
+	   (*end)->getAbsoluteTime() == (*start)->getAbsoluteTime())
+	++end;
+}
+
+void Segment::getTimeSlice(timeT absoluteTime, const_iterator &start, const_iterator &end)
+    const
+{
+    Event dummy("dummy", absoluteTime, 0, MIN_SUBORDERING);
 
     start = end = lower_bound(&dummy);
 
@@ -814,7 +825,7 @@ Segment::setQuantizeLevel(timeT unit)
     if (m_quantize) m_quantizer->quantize(this, begin(), end());
 }
 
-const BasicQuantizer *const
+const BasicQuantizer *
 Segment::getQuantizer() const
 {
     return m_quantizer;

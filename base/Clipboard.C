@@ -115,10 +115,10 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to)
 
     s->erase(s->begin(), s->end());
 
-    Segment::iterator ifrom = copyFrom->findTime(from);
-    Segment::iterator ito   = copyFrom->findTime(to);
+    Segment::const_iterator ifrom = copyFrom->findTime(from);
+    Segment::const_iterator ito   = copyFrom->findTime(to);
 
-    for (Segment::iterator i = ifrom; i != ito && i != copyFrom->end(); ++i) {
+    for (Segment::const_iterator i = ifrom; i != ito && i != copyFrom->end(); ++i) {
 	s->insert(new Event(**i));
     }
 
@@ -135,7 +135,7 @@ Clipboard::newSegment(const EventSelection *copyFrom)
     s->erase(s->begin(), s->end());
 
     const EventSelection::eventcontainer &events(copyFrom->getSegmentEvents());
-    for (EventSelection::eventcontainer::iterator i = events.begin();
+    for (EventSelection::eventcontainer::const_iterator i = events.begin();
 	 i != events.end(); ++i) {
 	s->insert(new Event(**i));
     }
@@ -151,7 +151,7 @@ Clipboard::copyFrom(const Clipboard *c)
     if (c == this) return;
     clear();
 
-    for (Clipboard::iterator i = c->begin(); i != c->end(); ++i) {
+    for (Clipboard::const_iterator i = c->begin(); i != c->end(); ++i) {
 	newSegment(*i);
     }
 

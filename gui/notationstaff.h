@@ -23,6 +23,7 @@
 #define NOTATION_STAFF_H
 
 #include <string>
+#include <map>
 
 #include "notepixmapfactory.h"
 #include "notationelement.h"
@@ -438,7 +439,7 @@ protected:
     QPainter *m_printPainter;
 
     enum BarStatus { UnRendered = 0, Rendered, Positioned };
-    typedef __HASH_NS::hash_map<int, BarStatus> BarStatusMap;
+    typedef std::map<int, BarStatus> BarStatusMap;
     BarStatusMap m_status;
     std::pair<int, int> m_lastRenderCheck;
     bool m_ready;

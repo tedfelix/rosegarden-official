@@ -215,7 +215,7 @@ public:
      * Return an iterator pointing to the nominal end of the
      * Segment.  This may be earlier than the end() iterator.
      */
-    iterator getEndMarker() const;
+    iterator getEndMarker();
 
     /**
      * Return true if the given iterator points earlier in the
@@ -238,7 +238,7 @@ public:
      * value is already beyond the end marker.  (Also takes the
      * Composition's end marker into account.)
      */
-    bool isBeforeEndMarker(iterator) const;
+    bool isBeforeEndMarker(const_iterator) const;
 
     /**
      * Remove the end marker, thus making the Segment end
@@ -280,7 +280,7 @@ public:
     /**
      * Get the quantizer currently in (or not in) use.
      */
-    const BasicQuantizer *const getQuantizer() const;
+    const BasicQuantizer *getQuantizer() const;
 
 
 
@@ -318,20 +318,32 @@ public:
      * Returns an iterator pointing to that specific element,
      * end() otherwise
      */
-    iterator findSingle(Event*) const;
+    iterator findSingle(Event*);
+
+    const_iterator findSingle(Event *e) const {
+	return const_iterator(((const Segment *)this)->findSingle(e));
+    }
 
     /**
      * Returns an iterator pointing to the first element starting at
      * or beyond the given absolute time
      */
-    iterator findTime(timeT time) const;
+    iterator findTime(timeT time);
+
+    const_iterator findTime(timeT time) const {
+	return const_iterator(((const Segment *)this)->findTime(time));
+    }
 
     /**
      * Returns an iterator pointing to the first element starting at
      * or before the given absolute time (so returns end() if the
      * time precedes the first event, not if it follows the last one)
      */
-    iterator findNearestTime(timeT time) const;
+    iterator findNearestTime(timeT time);
+
+    const_iterator findNearestTime(timeT time) const {
+	return const_iterator(((const Segment *)this)->findNearestTime(time));
+    }
 
 
     //////
@@ -341,7 +353,12 @@ public:
     /**
      * Returns the range [start, end[ of events which are at absoluteTime
      */
-    void getTimeSlice(timeT absoluteTime, iterator &start, iterator &end) const;
+    void getTimeSlice(timeT absoluteTime, iterator &start, iterator &end);
+
+    /**
+     * Returns the range [start, end[ of events which are at absoluteTime
+     */
+    void getTimeSlice(timeT absoluteTime, const_iterator &start, const_iterator &end) const;
     
     /**
      * Return the starting time of the bar that contains time t.  This
@@ -681,7 +698,7 @@ protected:
     Segment::iterator begin() { return segment().begin(); }
     Segment::iterator end()   { return segment().end();   }
 
-    bool isBeforeEndMarker(Segment::iterator i) {
+    bool isBeforeEndMarker(Segment::const_iterator i) {
 	return segment().isBeforeEndMarker(i);
     }
 

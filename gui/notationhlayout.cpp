@@ -140,7 +140,7 @@ NotationHLayout::getBarData(Staff &staff) const
 
 
 NotationElementList::iterator
-NotationHLayout::getStartOfQuantizedSlice(const NotationElementList *notes,
+NotationHLayout::getStartOfQuantizedSlice(NotationElementList *notes,
 					  timeT t)
     const
 {

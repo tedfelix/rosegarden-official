@@ -32,10 +32,11 @@ namespace Rosegarden
 
 /**
 
-  A PropertyName is something that can be constructed from a
-  string, hashed as a key in a hash map, and streamed out again as
-  a string.  It must have accompanying functors PropertyNamesEqual
-  and PropertyNameHash which compare and hash PropertyName objects.
+  A PropertyName is something that can be constructed from a string,
+  compared quickly as an int, hashed as a key in a hash map, and
+  streamed out again as a string.  It must have accompanying functors
+  PropertyNamesEqual and PropertyNameHash which compare and hash
+  PropertyName objects.
 
   The simplest implementation is a string:
 

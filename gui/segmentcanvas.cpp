@@ -30,6 +30,8 @@
 #include <qtimer.h>
 #include <qobject.h>
 
+#include <algorithm>
+
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kapp.h>

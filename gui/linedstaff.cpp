@@ -27,6 +27,8 @@
 #include "qcanvas.h"
 #include "qcolor.h"
 
+#include <algorithm>
+
 #include "LayoutEngine.h"
 #include "Profiler.h"
 

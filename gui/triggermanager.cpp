@@ -54,7 +54,6 @@
 using Rosegarden::Composition;
 using Rosegarden::CompositionTimeSliceAdapter;
 using Rosegarden::TriggerSegmentId;
-using Rosegarden::BaseProperties;
 using Rosegarden::timeT;
 using Rosegarden::Int;
 
@@ -274,8 +273,8 @@ TriggerSegmentManager::slotUpdate()
 	CompositionTimeSliceAdapter tsa(&m_doc->getComposition());
 	for (CompositionTimeSliceAdapter::iterator ci = tsa.begin();
 	     ci != tsa.end(); ++ci) {
-	    if ((*ci)->has(BaseProperties::TRIGGER_SEGMENT_ID) &&
-		(*ci)->get<Int>(BaseProperties::TRIGGER_SEGMENT_ID) == (long)(*it)->getId()) {
+	    if ((*ci)->has(Rosegarden::BaseProperties::TRIGGER_SEGMENT_ID) &&
+		(*ci)->get<Int>(Rosegarden::BaseProperties::TRIGGER_SEGMENT_ID) == (long)(*it)->getId()) {
 		++uses;
 		if (tracks.empty()) {
 		    first = (*ci)->getAbsoluteTime();

@@ -141,8 +141,10 @@ Staff::eventRemoved(const Segment *t, Event *e)
 }
 
 void
-Staff::endMarkerTimeChanged(const Segment *s, bool shorten)
+Staff::endMarkerTimeChanged(const Segment *segment, bool shorten)
 {
+    Segment *s = const_cast<Segment *>(segment);
+
     assert(s == &m_segment);
 
     if (shorten) {

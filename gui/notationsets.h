@@ -37,7 +37,7 @@ class NotationChord : public Rosegarden::GenericChord<NotationElement,
 		                                      true>
 {
 public:
-    NotationChord(const NotationElementList &c,
+    NotationChord(NotationElementList &c,
 		  NotationElementList::iterator i,
 		  const Rosegarden::Quantizer *quantizer,
 		  const NotationProperties &properties,
@@ -87,14 +87,14 @@ public:
     enum Type { Beamed, Tupled, Grace };
 
     /// Group contents will be sampled from elements surrounding elementInGroup
-    NotationGroup(const NotationElementList &nel, NELIterator elementInGroup,
+    NotationGroup(NotationElementList &nel, NELIterator elementInGroup,
 		  const Rosegarden::Quantizer *,
 		  std::pair<Rosegarden::timeT, Rosegarden::timeT> barRange,
 		  const NotationProperties &properties,
                   const Rosegarden::Clef &clef, const Rosegarden::Key &key);
 
     /// Caller intends to call sample() for each item in the group, _in order_
-    NotationGroup(const NotationElementList &nel,
+    NotationGroup(NotationElementList &nel,
 		  const Rosegarden::Quantizer *,
 		  const NotationProperties &properties,
                   const Rosegarden::Clef &clef, const Rosegarden::Key &key);
