@@ -78,7 +78,7 @@ namespace Marks
     }
 
     string getTextFromMark(Mark mark) {
-	if (!isTextMark) return string();
+	if (!isTextMark()) return string();
 	else return string(mark).substr(5);
     }
 }

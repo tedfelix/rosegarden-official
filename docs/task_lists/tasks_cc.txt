@@ -77,6 +77,12 @@ Post-0.1.1 task list
 
 20. Fix ties, which are currently not appearing every time they should
 
+21. Do start index thing in Segment:
+
+    "- we add a setSegmentStartIndex method in Composition
+     - we move Segment::setStartIndex() to protected"
+
+
 
 Task list from 18/19th August meetings
 ======================================
