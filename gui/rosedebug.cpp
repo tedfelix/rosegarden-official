@@ -40,12 +40,14 @@ operator<<(kdbgstream &dbg, const Event &e)
         << "\n\tAbsolute Time : " << e.absoluteTime()
         << endl;
 
-//     for (PropertyMap::const_iterator i = e.m_properties.begin();
-//          i != m_properties.end(); ++i) {
-//         dbg << "\t\t" << (*i).first << '\t'
-//             << *((*i).second) << '\n';
+//     for (Event::PropertyMap::const_iterator i = e.properties().begin();
+//          i != e.properties().end(); ++i) {
+//         dbg << "\t\t" << (*i).first << " : "
+//             << ((*i).second)->unparse() << '\n';
 //     }
 
+    e.dump(cerr);
+    
     return dbg;
 }
 
@@ -160,3 +162,16 @@ ostream& endl( ostream &s)
 {
     s << "\n"; return s;
 }
+
+void DBCheckThrow()
+{
+    Event ev;
+    
+    try {
+        int pitch = ev.get<Int>("BLAH");
+
+    } catch (Event::NoData) {
+        kdDebug(KDEBUG_AREA) << "DBCheckThrow()" << endl;
+    }
+}
+

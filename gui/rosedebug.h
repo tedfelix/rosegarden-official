@@ -64,4 +64,7 @@ protected:
 
 ostream& endl(ostream& s);
 
+void DBCheckThrow();
+
+
 #endif
