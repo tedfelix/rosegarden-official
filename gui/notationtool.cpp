@@ -961,11 +961,7 @@ void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)
 	    // we aren't double-clicking -- consider using a timer
 	    // to establish whether a double-click is going to happen
 
-	    NotationStaff *staff = m_nParentView->getStaff(m_clickedStaff);
-	    if (staff) {
-		staff->setInsertCursorPosition(e->x(), e->y());
-		m_nParentView->canvas()->update();
-	    }
+	    m_nParentView->slotSetInsertCursorPosition(e->x(), (int)e->y());
 	}
     }
 }

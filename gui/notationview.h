@@ -333,8 +333,14 @@ public slots:
     /// Set the time pointer position during playback
     void slotSetPointerPosition(Rosegarden::timeT position);
 
-    /// Set the insertion pointer position (from the bottom LoopRuler)
+    /// Set the current staff to the one containing the given canvas Y coord
+    void slotSetCurrentStaff(int canvasY);
+
+    /// Set the insertion pointer position (from the top LoopRuler)
     void slotSetInsertCursorPosition(Rosegarden::timeT position);
+
+    /// Set the insertion pointer position from a mouse event location
+    void slotSetInsertCursorPosition(double canvasX, int canvasY);
 
     /// Step back one event with the insertion pointer position
     void slotStepBackward();
@@ -493,6 +499,7 @@ protected:
     std::vector<NotationStaff*> m_staffs;
     int m_currentStaff;
     int m_lastFinishingStaff;
+    Rosegarden::timeT m_insertionTime;
 
     Rosegarden::Accidental m_currentAccidental;
 

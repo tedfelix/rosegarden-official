@@ -152,6 +152,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_hoveredOverNoteName(0),
     m_hoveredOverAbsoluteTime(0),
     m_lastFinishingStaff(-1),
+    m_insertionTime(0),
     m_fontName(NotePixmapFactory::getDefaultFont()),
     m_fontSize(NotePixmapFactory::getDefaultSize(m_fontName)),
     m_notePixmapFactory(new NotePixmapFactory(m_fontName, m_fontSize)),
@@ -679,10 +680,21 @@ void NotationView::setupActions()
     }
 
     QAccel *accelerators(getAccelerators());
+
     accelerators->connectItem(accelerators->insertItem(Key_Left),
 			      this, SLOT(slotStepBackward()));
     accelerators->connectItem(accelerators->insertItem(Key_Right),
 			      this, SLOT(slotStepForward()));
+
+    accelerators->connectItem(accelerators->insertItem(Key_Up),
+			      this, SLOT(slotTransformsTransposeUp()));
+    accelerators->connectItem(accelerators->insertItem(Key_Down),
+			      this, SLOT(slotTransformsTransposeDown()));
+
+    accelerators->connectItem(accelerators->insertItem(Key_Up + CTRL),
+			      this, SLOT(slotTransformsTransposeUpOctave()));
+    accelerators->connectItem(accelerators->insertItem(Key_Down + CTRL),
+			      this, SLOT(slotTransformsTransposeDownOctave()));
     
     KStdAction::showStatusbar(this, SLOT(slotToggleStatusBar()), actionCollection());
 
@@ -1140,16 +1152,22 @@ NotationView::getInsertionTime(Event *&clefEvt,
     if (layoutX < 0) layoutX = 0;
 
     //!!! hang on. don't we want airspace here rather than closest element?
-    // point is it should be unambiguous.
-    NotationElementList::iterator i = staff->getClosestElementToLayoutX
-	(layoutX, clefEvt, keyEvt, false, -1);
+    // point is it should be unambiguous.  not sure
+    NotationElementList::iterator i = staff->getElementUnderLayoutX
+	(layoutX, clefEvt, keyEvt);
+//    NotationElementList::iterator i = staff->getClosestElementToLayoutX
+//	(layoutX, clefEvt, keyEvt, false, -1);
 
+    return m_insertionTime;
+
+/*!!!
     timeT insertionTime = segment.getEndTime();
     if (i != staff->getViewElementList()->end()) {
 	insertionTime = (*i)->getAbsoluteTime();
     }
 
     return insertionTime;
+*/
 }
 
 
@@ -1881,12 +1899,56 @@ NotationView::slotSetPointerPosition(timeT time)
 }
 
 void
-NotationView::slotSetInsertCursorPosition(timeT time)
+NotationView::slotSetCurrentStaff(int y)
 {
-    //!!! For now.  Probably unlike slotSetPointerPosition this one
-    // should snap to the nearest event.
+    unsigned int staffNo;
+    for (staffNo = 0; staffNo < m_staffs.size(); ++staffNo) {
+	if (m_staffs[staffNo]->containsCanvasY(y)) break;
+    }
+    
+    if (staffNo < m_staffs.size()) {
+	if (m_currentStaff != signed(staffNo)) {
+	    m_staffs[m_currentStaff]->setCurrent(false);
+	    m_currentStaff = staffNo;
+	    m_staffs[m_currentStaff]->setCurrent(true, y);
+	}
+    }
+    
+    updateView();
+}
 
-    m_staffs[m_currentStaff]->setInsertCursorPosition(m_hlayout, time);
+void
+NotationView::slotSetInsertCursorPosition(double x, int y)
+{
+    slotSetCurrentStaff(y);
+
+    NotationStaff *staff = m_staffs[m_currentStaff];
+    Rosegarden::Event *clefEvt, *keyEvt;
+    NotationElementList::iterator i =
+	staff->getElementUnderCanvasCoords(x, y, clefEvt, keyEvt);
+
+    if (i == staff->getViewElementList()->end()) {
+	slotSetInsertCursorPosition(staff->getSegment().getEndTime());
+    } else {
+	slotSetInsertCursorPosition((*i)->getAbsoluteTime());
+    }
+}    
+
+void
+NotationView::slotSetInsertCursorPosition(timeT t)
+{
+    m_insertionTime = t;
+
+    NotationStaff *staff = m_staffs[m_currentStaff];
+    NotationElementList::iterator i = 
+	staff->getViewElementList()->findNearestTime(t);
+
+    if (i == staff->getViewElementList()->end()) {
+	staff->setInsertCursorPosition(m_hlayout, t);
+    } else {
+	staff->setInsertCursorPosition((*i)->getCanvasX(), (*i)->getCanvasY());
+    }
+
     updateView();
 }
 
@@ -1895,7 +1957,7 @@ NotationView::slotStepBackward()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
     Segment &segment = staff->getSegment();
-    timeT time = getInsertionTime();
+    timeT time = m_insertionTime;
     Segment::iterator i = segment.findTime(time);
 
     while (i != segment.begin() &&
@@ -1908,7 +1970,7 @@ NotationView::slotStepForward()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
     Segment &segment = staff->getSegment();
-    timeT time = getInsertionTime();
+    timeT time = m_insertionTime;
     Segment::iterator i = segment.findTime(time);
 
     while (i != segment.end() && (*i)->getAbsoluteTime() == time) ++i;
@@ -2100,24 +2162,7 @@ void NotationView::slotItemPressed(int height, int staffNo,
 
     if (btnState & ShiftButton) { // on shift-click, set cursor position
 
-	unsigned int staffNo;
-	for (staffNo = 0; staffNo < m_staffs.size(); ++staffNo) {
-	    if (m_staffs[staffNo]->containsCanvasY((int)e->y())) break;
-	}
-
-	if (staffNo < m_staffs.size()) {
-	    
-	    if (m_currentStaff != signed(staffNo)) {
-		m_staffs[m_currentStaff]->setCurrent(false);
-		m_currentStaff = staffNo;
-		m_staffs[m_currentStaff]->setCurrent(true, (int)e->y());
-	    }
-
-	    m_staffs[m_currentStaff]->setInsertCursorPosition
-		(e->x(), (int)e->y());
-	}
-
-	updateView();
+	slotSetInsertCursorPosition(e->x(), (int)e->y());
 
     } else {
 

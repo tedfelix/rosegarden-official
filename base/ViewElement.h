@@ -108,7 +108,13 @@ public:
      * Returns first iterator pointing at or after the given time,
      * end() if time is beyond the end of the list
      */ 
-    iterator findTime(Rosegarden::timeT time) const;
+    iterator findTime(timeT time) const;
+
+    /**
+     * Returns iterator pointing to the first element starting at
+     * or before the given absolute time
+     */
+    iterator findNearestTime(timeT time) const;
 };
 
 
@@ -194,6 +200,18 @@ ViewElementList<T>::findTime(timeT time) const
     Event dummy("dummy", time, 0, MIN_SUBORDERING);
     T dummyT(&dummy);
     return lower_bound(&dummyT);
+}
+
+template <class T>
+ViewElementList<T>::iterator
+ViewElementList<T>::findNearestTime(timeT t) const
+{
+    iterator i = findTime(t);
+    if (i == end() || (*i)->getAbsoluteTime() > t) {
+	if (i == begin()) return end();
+	else --i;
+    }
+    return i;
 }
 
 
