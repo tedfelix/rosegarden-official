@@ -1,0 +1,36 @@
+
+From: "cannam" <cannam@all-day-breakfast.com>
+To: Guillaume Laurent <glaurent@telegraph-road.org>, rosegarden-admin@lists.sourceforge.net, cannam@all-day-breakfast.com
+Subject: Re: [Rosegarden-admin]data structures
+Date: Tue,  8 May 2001 13:36:20 GMT
+
+[...]
+
+    Counterpoint.  Let's get some terminology straight, and
+    assume that "counterpoint" refers to otherwise independent
+    lines of music that happen to share a staff, and normally
+    also an instrument.  This is much the same thing as "layers"
+    in any other sort of program (and probably in sequencers too).
+
+    A reasonable editing paradigm for layers is to have a single
+    layer selected at a given time, and for all edits on a staff
+    will take place within that layer only.  The layers are
+    entirely separate except that they all need to be considered
+    when doing horizontal layout (just as the bars on all staffs
+    do, in point 2 above).  Non-selected layers could be grey
+    or something.
+
+    Chords are sets of notes that share both start time and layer.
+
+    Music that originated in something like a MIDI file or
+    played on a keyboard will often have multiple themes per
+    track, without having them explicitly separated into layers.
+    Therefore there should be a process for guessing the layer
+    structure of a track (I can think of a few fuzzy methods)
+    and adding layer hints to all the events.  If a notator
+    is asked to render a track that hasn't been annotated with
+    layer hints, it should probably demand that the fuzzy
+    annotation is done first.  The annotation should obviously
+    be saved with the track (i.e. it should be done with the
+    usual [Event] properties).
+
