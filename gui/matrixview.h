@@ -572,6 +572,7 @@ protected:
     std::vector<std::pair<int, int> > m_pendingInsertableNotes;
 
     bool m_playTracking;
+    bool m_dockVisible;
 };
 
 // Commented this out - was a MatrixView inner class, but we get a warning

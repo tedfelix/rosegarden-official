@@ -1151,6 +1151,8 @@ SequencerConfigurationPage::SequencerConfigurationPage(
 
     m_smallFile->setMinValue(5);
     m_smallFile->setMaxValue(15);
+    m_smallFile->setLineStep(1);
+    m_smallFile->setPageStep(1);
 
     int smallFileValue = m_cfg->readLongNumEntry("smallaudiofilekbytes", 128);
     int powerOfTwo = 1;

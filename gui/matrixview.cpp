@@ -111,7 +111,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
       m_quantizations(Rosegarden::BasicQuantizer::getStandardQuantizations()),
       m_chordNameRuler(0),
       m_tempoRuler(0),
-      m_playTracking(true)
+      m_playTracking(true),
+      m_dockVisible(true)
 {
     MATRIX_DEBUG << "MatrixView ctor\n";
 
@@ -151,6 +152,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 	    tCanvas->setBackgroundPixmap(background);
 	}
     }
+
     m_config->setGroup(ConfigGroup);
 
     MATRIX_DEBUG << "MatrixView : creating staff\n";
@@ -424,6 +426,8 @@ void MatrixView::slotSaveOptions()
 
     m_config->writeEntry("Show Chord Name Ruler", getToggleAction("show_chords_ruler")->isChecked());
     m_config->writeEntry("Show Tempo Ruler",      getToggleAction("show_tempo_ruler")->isChecked());
+    m_config->writeEntry("Show Parameters",       m_dockVisible);
+    //getToggleAction("m_dockLeft->isVisible());
 
     m_config->sync();
 }
@@ -442,6 +446,16 @@ void MatrixView::readOptions()
     opt = m_config->readBoolEntry("Show Tempo Ruler", false);
     getToggleAction("show_tempo_ruler")->setChecked(opt);
     slotToggleTempoRuler();
+
+    opt = m_config->readBoolEntry("Show Parameters", true);
+    if (!opt)
+    {
+        m_dockLeft->undock();
+        m_dockLeft->hide();
+        stateChanged("parametersbox_closed", KXMLGUIClient::StateNoReverse);
+        m_dockVisible = false;
+    }
+
 }
 
 void MatrixView::setupActions()
@@ -729,12 +743,16 @@ void MatrixView::slotDockParametersBack()
 void MatrixView::slotParametersClosed()
 {
     stateChanged("parametersbox_closed");
+    m_dockVisible = false;
 }
 
 void MatrixView::slotParametersDockedBack(KDockWidget* dw, KDockWidget::DockPosition)
 {
     if (dw == m_dockLeft)
+    {
         stateChanged("parametersbox_closed", KXMLGUIClient::StateReverse);
+        m_dockVisible = true;
+    }
 }
 
 
