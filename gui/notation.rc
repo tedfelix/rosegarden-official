@@ -46,7 +46,7 @@
 </Menu>
 </MenuBar>
 
-<ToolBar fullWidth="true" name="notesToolBar" newline="true">
+<ToolBar name="notesToolBar" newline="true">
   <Action name="breve" />
   <Action name="whole_note" />
   <Action name="half" />
@@ -66,7 +66,7 @@
   <Action name="dotted_64th" />
 </ToolBar>
 
-<ToolBar fullWidth="true" name="restsToolBar" newline="true">
+<ToolBar name="restsToolBar" newline="true">
 
   <Action name="breve_rest" />
   <Action name="whole_note_rest" />
