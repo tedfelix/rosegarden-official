@@ -63,6 +63,11 @@ Rosegarden apparently saves in a binary format, where can I find the format defi
 
 Actually it's just gzipped XML.
 
+gzip has a bit of trouble with gzipped files that don't end in .gz, so the
+easy way to have a look is to use
+
+	gunzip -c somefile.rg > somefile.xml
+
 
 Compilation or installation problems
 ------------------------------------
@@ -165,7 +170,6 @@ dependency, resulting in a broken set of plugins.  If you find that
 installing sfftw2 fixes the problem, you might also want to submit a
 bug report to the maintainer of your distro's swh-plugins package.
 
-
 I'm having trouble building with Mandrake 8.2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -222,6 +226,18 @@ aRts support), plus the -dev versions of all of those.
 Note that at the time of writing RedHat don't ship ALSA 0.9.x, so if
 you want to build on a RedHat system with ALSA support you have to
 upgrade rather than using the ALSA packages they supply.
+
+ladspa.h: No such file or directory
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This is a known build problem that we haven't been able to fix.  You
+don't have LADSPA installed, so we shouldn't try to compile against
+it, but we can't get automake to behave, and it's doing the wrong
+thing.
+
+Your two possible remedies are to configure --with-ladspa=no or to
+scrounge up a ladspa.h from somewhere.  Many distros have a ladspa
+package, which will include this header.
 
 
 The Composition View
