@@ -92,7 +92,7 @@ WAVAudioFile::open()
     }
     catch(std::string s)
     {
-        throw(s);
+        //throw(s);
         return false;
     }
 
