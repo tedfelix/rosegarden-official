@@ -307,6 +307,8 @@ void MatrixView::refreshSegment(Segment *segment,
 
     applyLayout();
 
+    if (!segment) segment = m_segments[0];
+
     if (endTime == 0) endTime = segment->getEndTime();
     else if (startTime == endTime) {
         startTime = segment->getStartTime();
