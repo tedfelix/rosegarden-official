@@ -261,9 +261,7 @@ void RosegardenGUIApp::setupActions()
     KStdAction::print (this, SLOT(slotFilePrint()),         actionCollection());
     KStdAction::printPreview (this, SLOT(slotFilePrintPreview()),         actionCollection());
 
-    new KAction(i18n("Re&vert"), 0, 0, this,
-                SLOT(slotRevertToSaved()), actionCollection(),
-                "file_revert");
+    KStdAction::revert(this, SLOT(slotRevertToSaved()),      actionCollection());
 
     new KAction(i18n("Import &MIDI file..."), 0, 0, this,
                 SLOT(slotImportMIDI()), actionCollection(),

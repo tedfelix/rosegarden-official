@@ -4,7 +4,6 @@
 
 <MenuBar>
   <Menu name="file">
-  <Action name="file_revert"/>
     <!-- these two would like to be open_merge, but that sticks them at
 	 the very bottom in older KDE3 versions: -->
     <Menu name="import" append="new_merge"><text>&amp;Import</text>
