@@ -3022,6 +3022,9 @@ void RosegardenGUIApp::slotDeleteTrack()
     Rosegarden::TrackId trackId = comp.getSelectedTrack();
     Rosegarden::Track *track = comp.getTrackById(trackId);
 
+    RG_DEBUG << "RosegardenGUIApp::slotDeleteTrack() : about to delete track id "
+             << trackId << endl;
+
     if (track == 0) return;
 
     // Always have at least one track in a composition

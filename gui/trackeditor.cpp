@@ -370,7 +370,7 @@ TrackEditor::setupSegments()
 	RG_DEBUG << "TrackEditor::setupSegments() add segment"
 			     << " - start idx : " << (*i)->getStartTime()
 			     << " - nb time steps : " << ((*i)->getEndTime() - (*i)->getStartTime())
-			     << " - track : " << (*i)->getTrack()
+			     << " - track id : " << (*i)->getTrack()
 			     << endl;
 
 	m_segmentCanvas->addSegmentItem((*i));

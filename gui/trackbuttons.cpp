@@ -535,8 +535,7 @@ TrackButtons::slotUpdateTracks()
                 }
             }
             else
-                RG_DEBUG << "TrackButtons::slotUpdateTracks - "
-                         << "can't find TrackId for position " << i << endl;
+                RG_DEBUG << "TrackButtons::slotUpdateTracks - can't find TrackId for position " << i << endl;
         }
     }
 
@@ -560,9 +559,12 @@ TrackButtons::slotUpdateTracks()
 		    trackLabel->setText(i18n("<untitled>"));
 		}
 	    }
-	    else
+	    else {
 		trackLabel->setText(strtoqstr(track->getLabel()));
-	    
+            }
+            
+            RG_DEBUG << "TrackButtons::slotUpdateTracks - set button mapping at pos "
+                     << i << " to track id " << track->getId() << endl;
 	    setButtonMapping(m_trackLabels[i], track->getId());
 	}
     }
