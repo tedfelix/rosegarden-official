@@ -1109,6 +1109,13 @@ AlsaDriver::sendDeviceController(const ClientPortPair &device,
     delete event;
 }
 
+void
+AlsaDriver::processPending()
+{
+    processNotesOff(getSequencerTime());
+}
+
+
 }
 
 

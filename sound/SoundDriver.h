@@ -204,6 +204,10 @@ public:
     //
     virtual void record(const RecordStatus& recordStatus) = 0;
 
+    // Process anything that's pending
+    //
+    virtual void processPending() = 0;
+
     // Mapped Instruments
     //
     void setMappedInstrument(MappedInstrument *mI);

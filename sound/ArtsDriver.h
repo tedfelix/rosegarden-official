@@ -65,6 +65,8 @@ public:
 
     virtual void record(const RecordStatus& recordStatus);
 
+    virtual void processPending();
+
     void processMidiIn(const Arts::MidiCommand &midiCommand,
                        const Arts::TimeStamp &timeStamp,
                        const Rosegarden::RealTime &playLatency);

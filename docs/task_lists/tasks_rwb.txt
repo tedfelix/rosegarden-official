@@ -4,18 +4,16 @@ updated 12.04.2002
 
 Currently looking at:
 
-o Sequencer's getMappedComposition for sync and async is
-  suddenly bombing out post aRts/ALSA split
-  [DONE]
-
 o ALSA:
   - ffwd/rwding/looping [DONE - still not wonderful but will do for mo]
   - MIDI recording timestamps [DONE]
   - first pass Audio
   - latencies
-  - hanging notes on stop [DONE - VOICES_OFF type controller call]
+  - hanging notes on stop [DONE - VOICES_OFF type controller call and
+                                  processPending()]
   - configure
   - start-up bug
+  - metronome broken with ALSA?
 
 o MappedDevice transmission is breaking occasionally [HOPEFULLY FIXED
   in MappedDevice itself]
@@ -74,6 +72,9 @@ Completed POST 0.1.4
 
 - Latency dialog [DONE]
 
+o Sequencer's getMappedComposition for sync and async is
+  suddenly bombing out post aRts/ALSA split
+  [DONE]
 
 --
 

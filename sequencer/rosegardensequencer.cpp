@@ -437,6 +437,9 @@ RosegardenSequencerApp::processAsynchronousEvents()
         m_transportStatus = STOPPING;
     }
 
+    // Process any pending events (Note Offs) as part of same procedure
+    //
+    m_sequencer->processPending();
 }
 
 

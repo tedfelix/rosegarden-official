@@ -156,6 +156,11 @@ public:
     const MappedDevice& getMappedDevice()
         { return m_soundDriver->getMappedDevice(); }
 
+
+    // Process anything that needs to go on in the background 
+    // (NoteOffs etc).
+    //
+    void processPending() { m_soundDriver->processPending(); }
     
 protected:
     std::vector<AudioFile*>::iterator getAudioFile(const unsigned int &id);

@@ -927,6 +927,12 @@ ArtsDriver::record(const RecordStatus& recordStatus)
     }
 }
 
+void
+ArtsDriver::processPending()
+{
+    processNotesOff(getSequencerTime());
+}
+
 
 
 }

@@ -121,6 +121,7 @@ protected:
                                 bool now);
 
     virtual void processAudioQueue();
+    virtual void processPending();
 
 private:
     RealTime getAlsaTime();
