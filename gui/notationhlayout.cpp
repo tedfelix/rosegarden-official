@@ -493,8 +493,11 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 			   actualBarEnd - barTimes.first);
 	}
 
-        emit setProgress((barTimes.second - startTime) * 95 / (endTime - startTime));
-        kapp->processEvents(50);
+	if (endTime > startTime) {
+	    emit setProgress((barTimes.second - startTime) * 95 /
+			     (endTime - startTime));
+	    kapp->processEvents(50);
+	}
 
         if (isOperationCancelled()) throw Cancelled();
 	++barNo;
