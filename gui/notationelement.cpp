@@ -66,7 +66,7 @@ NotationElementList::~NotationElementList()
 kdbgstream& operator<<(kdbgstream &dbg, NotationElement &e)
 {
     dbg << "NotationElement - x : " << e.x() << " - y : " << e.y();
-    e.event()->dump(cerr);
+    e.event()->dump(cout);
 
     return dbg;
 }
