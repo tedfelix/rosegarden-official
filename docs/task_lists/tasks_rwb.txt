@@ -18,7 +18,7 @@ o Tidy up AudioFiles:
 
 o "Revert file" option
 
-o sweep selection on Matrix
+o sweep selection on Matrix [DONE - almost complete]
 
 
 Post 0.2

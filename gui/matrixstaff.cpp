@@ -34,11 +34,13 @@ using Rosegarden::Segment;
 using Rosegarden::timeT;
 
 MatrixStaff::MatrixStaff(QCanvas *canvas, Segment *segment,
-			 int id, int vResolution) :
+			 int id, int vResolution,
+                         const Rosegarden::PropertyName &selectedProperty) :
     LinedStaff<MatrixElement>(canvas, segment, id, vResolution, 1),
     m_scaleFactor
         (1.5 / Rosegarden::Note(Rosegarden::Note::Shortest).getDuration()),
-    m_elementColour(0)
+    m_elementColour(0),
+    m_selectedProperty(selectedProperty)
 {
 
     // Create a velocity colouring object
@@ -98,21 +100,22 @@ void MatrixStaff::positionElement(MatrixElement* el)
     LinedStaffCoords coords = getCanvasCoordsForLayoutCoords
 	(el->getLayoutX(), int(el->getLayoutY()));
 
-    // get velocity for colouring
+    // Get velocity for colouring
+    //
     using Rosegarden::BaseProperties::VELOCITY;
     long velocity = 127;
-    el->event()->get<Rosegarden::Int>(VELOCITY, velocity);
+    if (el->event()->has(VELOCITY))
+        el->event()->get<Rosegarden::Int>(VELOCITY, velocity);
 
     el->setCanvas(m_canvas);
 
-    /*
-    if (el->event()->isSelected())
-    {
-    }
-    */
+    // Is the event currently selected?  Colour accordingly.
+    //
+    if (el->event()->has(m_selectedProperty))
+        el->setColour(RosegardenGUIColours::SelectedElement);
+    else
+        el->setColour(m_elementColour->getColour(velocity));
 
-
-    el->setColour(m_elementColour->getColour(velocity));
     el->setCanvasX(coords.first);
     el->setCanvasY((double)coords.second);
 }

@@ -30,7 +30,8 @@ class VelocityColour;
 class MatrixStaff : public LinedStaff<MatrixElement>
 {
 public:
-    MatrixStaff(QCanvas *, Rosegarden::Segment *, int id, int vResolution);
+    MatrixStaff(QCanvas *, Rosegarden::Segment *, int id, int vResolution,
+                const Rosegarden::PropertyName &selectedProperty);
     virtual ~MatrixStaff();
 
 protected:
@@ -62,10 +63,17 @@ public:
 
     QString getNoteNameForPitch(unsigned int pitch);
 
+    // Return this so that the tools can use it for recolouring
+    // unselected elements.
+    //
+    VelocityColour* getVelocityColour() { return m_elementColour; }
+
 private:
     double m_scaleFactor;
 
     VelocityColour *m_elementColour;
+    Rosegarden::PropertyName m_selectedProperty;
+
 };
 
 #endif

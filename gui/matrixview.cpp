@@ -83,8 +83,6 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     m_toolBox = new MatrixToolBox(this);
 
-    setupActions();
-
     initStatusBar();
 
     readOptions();
@@ -96,7 +94,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     for (unsigned int i = 0; i < segments.size(); ++i) {
         m_staffs.push_back(new MatrixStaff(tCanvas, segments[i], i,
-                                           8)); //!!! so random, so rare
+                                           8, //!!! so random, so rare
+                                           m_selectedProperty));
 	if (i == 0) m_staffs[i]->setCurrent(true);
     }
 
@@ -121,6 +120,9 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 					m_horizontalScrollBar,
                                         tCanvas, getCentralFrame());
     setCanvasView(m_canvasView);
+
+    // do this after we have a canvas
+    setupActions();
 
     // Connect vertical scrollbars between matrix and piano
     //
@@ -314,6 +316,14 @@ void MatrixView::setupActions()
     //
     KRadioAction* toolAction = 0;
 
+    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+    QIconSet icon(QPixmap(pixmapDir + "/toolbar/select.xpm"));
+
+    toolAction = new KRadioAction(i18n("Select"), icon, 0,
+                                  this, SLOT(slotSelectSelected()),
+                                  actionCollection(), "select");
+    toolAction->setExclusiveGroup("tools");
+
     toolAction = new KRadioAction(i18n("Paint"), "pencil", 0,
                                   this, SLOT(slotPaintSelected()),
                                   actionCollection(), "paint");
@@ -322,14 +332,6 @@ void MatrixView::setupActions()
     toolAction = new KRadioAction(i18n("Erase"), "eraser", 0,
                                   this, SLOT(slotEraseSelected()),
                                   actionCollection(), "erase");
-    toolAction->setExclusiveGroup("tools");
-
-    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QIconSet icon(QPixmap(pixmapDir + "/toolbar/select.xpm"));
-
-    toolAction = new KRadioAction(i18n("Select"), icon, 0,
-                                  this, SLOT(slotSelectSelected()),
-                                  actionCollection(), "select");
     toolAction->setExclusiveGroup("tools");
 
     toolAction = new KRadioAction(i18n("Move"), "move", 0,
@@ -353,7 +355,7 @@ void MatrixView::setupActions()
 
     createGUI(getRCFileName());
 
-    actionCollection()->action("paint")->activate();
+    actionCollection()->action("select")->activate();
 }
 
 void MatrixView::initStatusBar()
@@ -852,7 +854,7 @@ void MatrixView::setSelectedElements(const SelectedElements &eS)
     m_selectedElements.erase(m_selectedElements.begin(),
                              m_selectedElements.end());
 
-    SelectedElements::iterator it = eS.begin();
+    SelectedElements::const_iterator it = eS.begin();
     
     for (; it != eS.end(); it++)
         m_selectedElements.push_back(*it);

@@ -29,6 +29,7 @@
 #include "matrixtool.h"
 #include "matrixview.h"
 #include "matrixstaff.h"
+#include "velocitycolour.h"
 
 #include "rosestrings.h"
 #include "rosedebug.h"
@@ -602,7 +603,17 @@ bool MatrixSelector::handleMouseMove(timeT, int,
         if (found == false)
         {
             m_mParentView->removeElementFromSelection(*oIt);
-            (*oIt)->setColour(RosegardenGUIColours::MatrixElementBlock);
+
+            // attempt to get original velocity colouring from
+            // the matrixstaff
+            //
+            using Rosegarden::BaseProperties::VELOCITY;
+            long velocity = 127;
+            if ((*oIt)->event()->has(VELOCITY))
+                (*oIt)->event()->get<Rosegarden::Int>(VELOCITY, velocity);
+
+            (*oIt)->setColour(m_mParentView->
+                getStaff(0)->getVelocityColour()->getColour(velocity));
             m_mParentView->canvas()->update();
         }
     }
@@ -615,6 +626,12 @@ void MatrixSelector::handleMouseRelease(timeT, int, QMouseEvent*)
     kdDebug(KDEBUG_AREA) << "MatrixSelector::handleMouseRelease" << endl;
     m_updateRect = false;
     setViewCurrentSelection();
+
+    if (m_selectionRect)
+    {
+        m_selectionRect->hide();
+        m_mParentView->canvas()->update();
+    }
 
     // If we didn't drag out a meaningful area, but _did_ click on
     // an individual event, then select just that event
@@ -637,20 +654,25 @@ void MatrixSelector::handleMouseRelease(timeT, int, QMouseEvent*)
 
 void MatrixSelector::ready()
 {
-    m_selectionRect = new QCanvasRectangle(m_mParentView->canvas());
-    
-    m_selectionRect->hide();
-    m_selectionRect->setPen(RosegardenGUIColours::SelectionRectangle);
+    if (m_mParentView)
+    {
+        m_selectionRect = new QCanvasRectangle(m_mParentView->canvas());
+        m_selectionRect->hide();
+        m_selectionRect->setPen(RosegardenGUIColours::SelectionRectangle);
 
-    m_mParentView->setCanvasCursor(Qt::arrowCursor);
-//     m_mParentView->setPositionTracking(false);
+        m_mParentView->setCanvasCursor(Qt::arrowCursor);
+        //m_mParentView->setPositionTracking(false);
+    }
 }
 
 void MatrixSelector::stow()
 {
-    delete m_selectionRect;
-    m_selectionRect = 0;
-    m_mParentView->canvas()->update();
+    if (m_selectionRect)
+    {
+        delete m_selectionRect;
+        m_selectionRect = 0;
+        m_mParentView->canvas()->update();
+    }
 }
 
 

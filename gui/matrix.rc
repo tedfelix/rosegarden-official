@@ -14,10 +14,10 @@
 
 
 <ToolBar name="toolsToolBar">
-  <Action name="paint" />
-  <Action name="erase" />
   <Action name="select" />
   <Action name="move" />
+  <Action name="paint" />
+  <Action name="erase" />
   <Action name="resize" />
 </ToolBar>
 
