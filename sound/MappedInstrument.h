@@ -52,12 +52,18 @@ public:
                      const std::string &name);
     ~MappedInstrument();
 
+    void setId(InstrumentId id) { m_id = id; }
     InstrumentId getID() const { return m_id; }
-    MidiByte getChannel() const { return m_channel; }
-    Instrument::InstrumentType getType() const { return m_type; }
 
     void setChannel(MidiByte channel) { m_channel = channel; }
+    MidiByte getChannel() const { return m_channel; }
+
     void setType(Instrument::InstrumentType type) { m_type = type; }
+    Instrument::InstrumentType getType() const { return m_type; }
+
+    void setName(const std::string &name) { m_name = name; }
+    const std::string& getName() const { return m_name; }
+
 
 private:
 

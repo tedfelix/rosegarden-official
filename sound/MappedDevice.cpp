@@ -39,6 +39,32 @@ operator>>(QDataStream &dS, MappedDevice *mD)
     int instruments;
     dS >> instruments;
 
+    unsigned int type;
+    unsigned int channel;
+    unsigned int id;
+    QString name;
+
+    while (!dS.atEnd() && instruments)
+    {
+        dS >> type;
+        dS >> channel;
+        dS >> id;
+        dS >> name;
+
+        mD->push_back(new MappedInstrument((Instrument::InstrumentType)type,
+                                           (MidiByte)channel,
+                                           (InstrumentId)id,
+                                           std::string(name.data())));
+
+        instruments--;
+    }
+
+    if (instruments)
+    {
+        std::cerr << "MappedDevice::operator>> - "
+                  << "wrong number of events received" << std::endl;
+    }
+
     return dS;
 }
 
@@ -49,6 +75,32 @@ operator>>(QDataStream &dS, MappedDevice &mD)
     int instruments;
     dS >> instruments;
 
+    unsigned int type;
+    unsigned int channel;
+    unsigned int id;
+    QString name;
+
+    while (!dS.atEnd() && instruments)
+    {
+        dS >> type;
+        dS >> channel;
+        dS >> id;
+        dS >> name;
+
+        mD.push_back(new MappedInstrument((Instrument::InstrumentType)type,
+                                          (MidiByte)channel,
+                                          (InstrumentId)id,
+                                          std::string(name.data())));
+
+        instruments--;
+    }
+
+    if (instruments)
+    {
+        std::cerr << "MappedDevice::operator>> - "
+                  << "wrong number of events received" << std::endl;
+    }
+
     return dS;
 }
 
@@ -56,6 +108,15 @@ QDataStream&
 operator<<(QDataStream &dS, MappedDevice *mD)
 {
     dS << mD->size();
+
+    for (MappedDeviceIterator it = mD->begin(); it != mD->end(); it++)
+    {
+        dS << (unsigned int)(*it)->getType();
+        dS << (unsigned int)(*it)->getChannel();
+        dS << (unsigned int)(*it)->getID();
+        dS << QString((*it)->getName().c_str());
+    }
+
     return dS;
 }
 
@@ -63,6 +124,15 @@ QDataStream&
 operator<<(QDataStream &dS, const MappedDevice &mD)
 {
     dS << mD.size();
+
+    for (MappedDeviceConstIterator it = mD.begin(); it != mD.end(); it++)
+    {
+        dS << (unsigned int)(*it)->getType();
+        dS << (unsigned int)(*it)->getChannel();
+        dS << (unsigned int)(*it)->getID();
+        dS << QString((*it)->getName().c_str());
+    }
+
     return dS;
 }
 

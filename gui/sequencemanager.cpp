@@ -1108,16 +1108,24 @@ SequenceManager::alive()
         return;
     }
 
+    Rosegarden::MappedDevice *mD = new Rosegarden::MappedDevice();
     QDataStream reply(replyData, IO_ReadOnly);
+
     if (replyType == "Rosegarden::MappedDevice")
     {
         std::cout << "SequenceManager::alive() - "
                   << "got Rosegarden::MappedDevice" << std::endl;
 
-        Rosegarden::MappedDevice *mD = new Rosegarden::MappedDevice();
-
         // unfurl
         reply >> mD;
+    }
+
+
+    cout << "SequenceManager::alive() - MappedDevices" << std::endl;
+    for (Rosegarden::MappedDeviceIterator it = mD->begin();
+         it = mD->end(); it++)
+    {
+        cout << "    " << (*it)->getName() << endl;
     }
 
     std::cout << "SequenceManager::alive() - "

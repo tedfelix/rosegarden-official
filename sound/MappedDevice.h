@@ -47,6 +47,16 @@ private:
 
 };
 
+typedef std::vector<Rosegarden::MappedInstrument*>::const_iterator
+    MappedDeviceConstIterator;
+
+typedef std::vector<Rosegarden::MappedInstrument*>::iterator
+    MappedDeviceIterator;
+
+
+
+
+
 }
 
 #endif // _MAPPEDDEVICE_H_
