@@ -97,18 +97,18 @@ PlayableAudioFile::getSampleFrames(unsigned int frames)
 
     if (m_audioFile)
     {
-#ifdef DEBUG_PLAYABLE
         int bytes = frames * getBytesPerSample();
         size_t count = m_ringBuffer->read(&data, bytes);
 
         if (count != size_t(bytes))
         {
+#ifdef DEBUG_PLAYABLE
             std::cerr << "PlayableAudioFile::getSampleFrames - "
                       << "got fewer audio file bytes than required : "
                       << count << " out of " << bytes
                       << std::endl;
-        }
 #endif
+        }
     }
 
     return data;
@@ -158,11 +158,13 @@ PlayableAudioFile::fillRingBuffer(int bytes)
 
         }
 
-#ifdef DEBUG_PLAYABLE
         size_t writtenBytes = m_ringBuffer->write(data);
 
+#ifdef DEBUG_PLAYABLE
         std::cerr << "PlayableAudioFile::fillRingBuffer - "
                   << "written " << writtenBytes << " bytes" << std::endl;
+#else
+	(void)writtenBytes; // avoid warning
 #endif
 
     }
