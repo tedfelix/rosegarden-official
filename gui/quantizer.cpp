@@ -23,7 +23,7 @@ unsigned int
 Quantizer::defaultWholeNoteDuration = 384;
 
 Quantizer::Quantizer()
-    : m_durationTable(0),
+    : m_durationTable(size_t(LastNote)),
       m_wholeNoteDuration(defaultWholeNoteDuration)
 {
     computeNoteDurations();
@@ -39,8 +39,6 @@ Quantizer::setWholeNoteDuration(unsigned int d)
 void
 Quantizer::computeNoteDurations()
 {
-    m_durationTable.clear();
-
     m_durationTable[Whole]        = m_wholeNoteDuration;
     m_durationTable[Half]         = m_wholeNoteDuration / 2;
     m_durationTable[Quarter]      = m_wholeNoteDuration / 4;
@@ -57,6 +55,10 @@ Quantizer::computeNoteDurations()
     m_durationTable[ThirtySecondDotted] = m_durationTable[ThirtySecond] + m_durationTable[SixtyFourth];
     m_durationTable[SixtyFourthDotted]  = m_durationTable[SixtyFourth] + m_durationTable[SixtyFourth] / 2;
 
+    for(unsigned int i = 0; i < m_durationTable.size(); ++i) {
+        kdDebug(KDEBUG_AREA) << "m_durationTable[" << i << "] = "
+                             << m_durationTable[i] << endl;
+    }
 }
 
 
@@ -90,6 +92,8 @@ Quantizer::quantizeToNoteType(Event::duration drt)
     //
     Note note = WholeDotted;
 
+    kdDebug(KDEBUG_AREA) << "quantizeToNoteType : duration " << drt << endl;
+
     // Find which note the event's duration is closest to
     //
     DurationMap::iterator lb = lower_bound(m_durationTable.begin(),
@@ -101,6 +105,7 @@ Quantizer::quantizeToNoteType(Event::duration drt)
         // linked together, or actually broken down in several events,
         // themselves linked together... big TODO here
         note = WholeDotted;
+        kdDebug(KDEBUG_AREA) << "quantizeToNoteType : lb == m_durationTable.begin()" << endl;
 
     } else {
 
