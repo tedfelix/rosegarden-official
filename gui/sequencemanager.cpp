@@ -1718,6 +1718,17 @@ SequenceManager::reinitialiseSequencerStudio()
         }
     }
 
+    // Setup JACK audio inputs
+    //
+    int jackAudioInputs = config->readNumEntry("jackaudioinputs", 2);
+
+    Rosegarden::MappedEvent *mE =
+        new Rosegarden::MappedEvent(
+            Rosegarden::MidiInstrumentBase, // InstrumentId
+            Rosegarden::MappedEvent::SystemAudioInputs,
+            Rosegarden::MidiByte(jackAudioInputs));
+
+    Rosegarden::StudioControl::sendMappedEvent(mE);
 
 }
 

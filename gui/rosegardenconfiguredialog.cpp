@@ -1016,6 +1016,22 @@ SequencerConfigurationPage::SequencerConfigurationPage(
         m_recordDevice->setEnabled(false);
     }
 
+#ifdef HAVE_LIBJACK
+    label = new QLabel(i18n("Number of JACK audio inputs"), frame);
+    m_jackInputs = new QSpinBox(frame);
+
+    layout->addWidget(label,        1, 0);
+    layout->addWidget(m_jackInputs, 1, 1);
+
+    int jackAudioInputs = m_cfg->readNumEntry("jackaudioinputs", 2);
+
+    m_jackInputs->setValue(jackAudioInputs);
+    m_jackInputs->setMinValue(2);
+    m_jackInputs->setMaxValue(24); // completely arbitrary of course!
+
+#endif // HAVE_LIBJACK
+
+
     addTab(frame, i18n("Recording"));
 
     //  -------------- Synchronisation tab -----------------
@@ -1146,6 +1162,19 @@ SequencerConfigurationPage::apply()
     }
 
     m_cfg->writeEntry("midirecorddevice", device);
+
+    // Jack audio inputs
+    //
+    m_cfg->writeEntry("jackaudioinputs", m_jackInputs->value());
+
+    mE = new Rosegarden::MappedEvent(
+                Rosegarden::MidiInstrumentBase, // InstrumentId
+                Rosegarden::MappedEvent::SystemAudioInputs,
+                Rosegarden::MidiByte(m_jackInputs->value()));
+
+    Rosegarden::StudioControl::sendMappedEvent(mE);
+
+
 
     // Write the JACK entry
     //

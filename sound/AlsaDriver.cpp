@@ -2108,6 +2108,14 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
                 setRecordDevice(recordDevice, recordPort);
             }
         }
+
+        if ((*i)->getType() == MappedEvent::SystemAudioInputs)
+        {
+            std::cerr << "AlsaDriver::processEventsOut - "
+                      << "set audio record inputs - not yet implemented"
+                      << std::endl;
+        }
+
     }
 
     // Process Midi and Audio

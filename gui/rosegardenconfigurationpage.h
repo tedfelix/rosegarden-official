@@ -32,6 +32,7 @@
 #include <string>
 
 #include "Device.h"
+#include "config.h"
 
 class RosegardenGUIDoc;
 class QTabWidget;
@@ -410,6 +411,15 @@ protected:
     // Recording
     QComboBox *m_recordDevice;
     std::vector<Rosegarden::DeviceId> m_devices;
+
+#ifdef HAVE_LIBJACK
+    // Number of JACK input ports our RG client creates - 
+    // this decides how many audio input destinations
+    // we have.
+    //
+    QSpinBox     *m_jackInputs;
+
+#endif // HAVE_LIBJACK
 
 };
  
