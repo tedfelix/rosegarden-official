@@ -5,6 +5,8 @@
  1. Lyrics.  And a bouncing ball to track them with during playback.
 
  2. Better-calculated progress bars in notation view [DONEish]
+    [No -- still open.  Need to manage them better across multiple
+    open views of the same segment.]
 
  3. User docs / help
 

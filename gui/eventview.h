@@ -56,7 +56,9 @@ class EventView : public EditViewBase
         ProgramChange      = 0x0020,
         PitchBend          = 0x0040,
         ChannelPressure    = 0x0080,
-        KeyPressure        = 0x0100
+        KeyPressure        = 0x0100,
+	Indication	   = 0x0200,
+	Other		   = 0x0400
     };
 
 public:
@@ -116,6 +118,8 @@ protected:
     QCheckBox      *m_pitchBendCheckBox;
     QCheckBox      *m_keyPressureCheckBox;
     QCheckBox      *m_channelPressureCheckBox;
+    QCheckBox      *m_indicationCheckBox;
+    QCheckBox      *m_otherCheckBox;
 
     RosegardenGUIDoc *m_doc;
     static const char* const LayoutConfigGroupName;

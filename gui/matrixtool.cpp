@@ -910,6 +910,12 @@ void MatrixMover::handleMouseRelease(Rosegarden::timeT newTime,
     int diffPitch = newPitch -
         m_currentElement->event()->get<Rosegarden::Int>(PITCH);
 
+    if (diffTime == 0 && diffPitch == 0) { // don't generate command or refresh
+	m_mParentView->canvas()->update();
+	m_currentElement = 0;
+	return;
+    }
+
     SelectedElements selection = m_mParentView->getSelectedElements();
 
     if (selection.size() == 0)

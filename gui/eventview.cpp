@@ -57,14 +57,21 @@ class EventViewItem : public QListViewItem
 {
 public:
     EventViewItem(Rosegarden::Segment *segment,
-                  QListView *parent):QListViewItem(parent),
-                                     m_segment(segment) {;}
+		  Rosegarden::Event *event,
+                  QListView *parent) : 
+	QListViewItem(parent),
+	m_segment(segment),
+	m_event(event) {;}
+    
+    EventViewItem(Rosegarden::Segment *segment,
+		  Rosegarden::Event *event,
+                  QListViewItem *parent) : 
+	QListViewItem(parent),
+	m_segment(segment),
+	m_event(event) {;}
 
     EventViewItem(Rosegarden::Segment *segment,
-                  QListViewItem *parent):QListViewItem(parent),
-                                         m_segment(segment) {;}
-
-    EventViewItem(Rosegarden::Segment *segment,
+		  Rosegarden::Event *event,
                   QListView *parent, QString label1,
                   QString label2 = QString::null,
                   QString label3 = QString::null,
@@ -72,11 +79,14 @@ public:
                   QString label5 = QString::null,
                   QString label6 = QString::null,
                   QString label7 = QString::null,
-                  QString label8 = QString::null)
-        :QListViewItem(parent, label1, label2, label3, label4,
-                       label5, label6, label7, label8), m_segment(segment) {;}
+                  QString label8 = QString::null) :
+	QListViewItem(parent, label1, label2, label3, label4,
+		      label5, label6, label7, label8),
+	m_segment(segment),
+	m_event(event) {;}
 
     EventViewItem(Rosegarden::Segment *segment,
+		  Rosegarden::Event *event,
                   QListViewItem *parent, QString label1,
                   QString label2 = QString::null,
                   QString label3 = QString::null,
@@ -84,12 +94,14 @@ public:
                   QString label5 = QString::null,
                   QString label6 = QString::null,
                   QString label7 = QString::null,
-                  QString label8 = QString::null)
-        :QListViewItem(parent, label1, label2, label3, label4,
-                       label5, label6, label7, label8), m_segment(segment) {;}
+                  QString label8 = QString::null) :
+	QListViewItem(parent, label1, label2, label3, label4,
+		      label5, label6, label7, label8), 
+	m_segment(segment),
+	m_event(event) {;}
 
-    void setSegment(Rosegarden::Segment *segment) { m_segment = segment; }
     Rosegarden::Segment* getSegment() { return m_segment; }
+    Rosegarden::Event* getEvent() { return m_event; }
 
     // Reimplement so that we can sort numerically
     //
@@ -98,6 +110,7 @@ public:
 protected:
 
     Rosegarden::Segment *m_segment;
+    Rosegarden::Event *m_event;
 };
 
 
@@ -121,7 +134,8 @@ EventView::EventView(RosegardenGUIDoc *doc,
                      std::vector<Rosegarden::Segment *> segments,
                      QWidget *parent):
     EditViewBase(doc, segments, 2, parent, "eventview"),
-    m_eventFilter(Note|Text|SystemExclusive|Controller|ProgramChange|PitchBend),
+    m_eventFilter(Note | Text | SystemExclusive | Controller |
+		  ProgramChange | PitchBend | Indication | Other),
     m_doc(doc)
 {
 
@@ -147,10 +161,12 @@ EventView::EventView(RosegardenGUIDoc *doc,
     m_controllerCheckBox = new QCheckBox(i18n("Controller"), m_filterGroup);
     m_pitchBendCheckBox = new QCheckBox(i18n("Pitch Bend"), m_filterGroup);
     m_sysExCheckBox = new QCheckBox(i18n("System Exclusive"), m_filterGroup);
-    m_textCheckBox = new QCheckBox(i18n("Text"), m_filterGroup);
-    m_restCheckBox = new QCheckBox(i18n("Rest"), m_filterGroup);
     m_keyPressureCheckBox = new QCheckBox(i18n("Key Pressure"), m_filterGroup);
     m_channelPressureCheckBox = new QCheckBox(i18n("Channel Pressure"), m_filterGroup);
+    m_restCheckBox = new QCheckBox(i18n("Rest"), m_filterGroup);
+    m_indicationCheckBox = new QCheckBox(i18n("Indication"), m_filterGroup);
+    m_textCheckBox = new QCheckBox(i18n("Text"), m_filterGroup);
+    m_otherCheckBox = new QCheckBox(i18n("Other"), m_filterGroup);
 
     // Connect up
     //
@@ -233,33 +249,40 @@ EventView::applyLayout(int /*staffNo*/)
 
             // Event filters
             //
-            if((*it)->isa(Rosegarden::Note::EventRestType) &&
-               !(m_eventFilter & Rest))
-                continue;
 
-            if((*it)->isa(Rosegarden::Note::EventType) &&
-               !(m_eventFilter & Note))
-                continue;
+            if ((*it)->isa(Rosegarden::Note::EventRestType)) {
+		if (!(m_eventFilter & Rest)) continue;
 
-            if((*it)->isa(Rosegarden::PitchBend::EventType) &&
-               !(m_eventFilter & PitchBend))
-                continue;
+	    } else if ((*it)->isa(Rosegarden::Note::EventType)) {
+		if (!(m_eventFilter & Note)) continue;
 
-            if((*it)->isa(Rosegarden::SystemExclusive::EventType) &&
-               !(m_eventFilter & SystemExclusive)) 
-                continue;
+	    } else if ((*it)->isa(Rosegarden::Indication::EventType)) {
+		if (!(m_eventFilter & Indication)) continue;
 
-            if((*it)->isa(Rosegarden::ProgramChange::EventType) &&
-               !(m_eventFilter & ProgramChange)) 
-                continue;
+	    } else if ((*it)->isa(Rosegarden::PitchBend::EventType)) {
+		if (!(m_eventFilter & PitchBend)) continue;
 
-            if((*it)->isa(Rosegarden::ChannelPressure::EventType) &&
-               !(m_eventFilter & ChannelPressure)) 
-                continue;
+	    } else if ((*it)->isa(Rosegarden::SystemExclusive::EventType)) {
+		if (!(m_eventFilter & SystemExclusive)) continue;
 
-            if((*it)->isa(Rosegarden::KeyPressure::EventType) &&
-               !(m_eventFilter & KeyPressure)) 
-                continue;
+	    } else if ((*it)->isa(Rosegarden::ProgramChange::EventType)) {
+		if (!(m_eventFilter & ProgramChange)) continue;
+
+	    } else if ((*it)->isa(Rosegarden::ChannelPressure::EventType)) {
+		if (!(m_eventFilter & ChannelPressure)) continue;
+
+	    } else if ((*it)->isa(Rosegarden::KeyPressure::EventType)) {
+		if (!(m_eventFilter & KeyPressure)) continue;
+
+	    } else if ((*it)->isa(Rosegarden::Controller::EventType)) {
+		if (!(m_eventFilter & Controller)) continue;
+
+	    } else if ((*it)->isa(Rosegarden::Text::EventType)) {
+		if (!(m_eventFilter & Text)) continue;
+
+	    } else {
+		if (!(m_eventFilter & Other)) continue;
+	    }
 
 	    // avoid debug stuff going to stderr if no properties found
 
@@ -304,6 +327,7 @@ EventView::applyLayout(int /*staffNo*/)
 	    }
 
             new EventViewItem(m_segments[i],
+			      *it,
                               m_eventList,
                               QString("%1").arg(eventTime),
                               QString("%1").arg((*it)->getDuration()),
@@ -444,19 +468,27 @@ EventView::slotModifyFilter(int button)
                 break;
 
             case 5:
-                m_eventFilter |= EventView::Text;
-                break;
-
-            case 6:
-                m_eventFilter |= EventView::Rest;
-                break;
-
-            case 7:
                 m_eventFilter |= EventView::KeyPressure;
                 break;
 
-            case 8:
+            case 6:
                 m_eventFilter |= EventView::ChannelPressure;
+                break;
+
+            case 7:
+                m_eventFilter |= EventView::Rest;
+                break;
+
+            case 8:
+                m_eventFilter |= EventView::Indication;
+                break;
+
+            case 9:
+                m_eventFilter |= EventView::Text;
+                break;
+
+            case 10:
+                m_eventFilter |= EventView::Other;
                 break;
 
             default:
@@ -489,19 +521,27 @@ EventView::slotModifyFilter(int button)
                 break;
 
             case 5:
-                m_eventFilter ^= EventView::Text;
-                break;
-
-            case 6:
-                m_eventFilter ^= EventView::Rest;
-                break;
-
-            case 7:
                 m_eventFilter ^= EventView::KeyPressure;
                 break;
 
-            case 8:
+            case 6:
                 m_eventFilter ^= EventView::ChannelPressure;
+                break;
+
+            case 7:
+                m_eventFilter ^= EventView::Rest;
+                break;
+
+            case 8:
+                m_eventFilter ^= EventView::Indication;
+                break;
+
+            case 9:
+                m_eventFilter ^= EventView::Text;
+                break;
+
+            case 10:
+                m_eventFilter ^= EventView::Other;
                 break;
 
             default:
@@ -560,6 +600,18 @@ EventView::setButtonsToFilter()
         m_keyPressureCheckBox->setChecked(true);
     else
         m_keyPressureCheckBox->setChecked(false);
+
+    if (m_eventFilter & Indication) {
+	m_indicationCheckBox->setChecked(true);
+    } else {
+	m_indicationCheckBox->setChecked(false);
+    }
+
+    if (m_eventFilter & Other) {
+	m_otherCheckBox->setChecked(true);
+    } else {
+	m_otherCheckBox->setChecked(false);
+    }
 }
 
 void
@@ -573,6 +625,7 @@ EventView::slotPopupEventEditor(QListViewItem *item)
     {
         // For the moment just get one event
         //
+/*!!!
         Rosegarden::Segment::iterator it = eItem->getSegment()->
             findTime(eItem->text(0).toInt());
 
@@ -615,12 +668,16 @@ EventView::slotPopupEventEditor(QListViewItem *item)
         // we've modified the event.
         //
         EventEditDialog *dialog = new EventEditDialog(this, **it);
+*/
+
+	Rosegarden::Event *event = eItem->getEvent();
+        EventEditDialog *dialog = new EventEditDialog(this, *event);
 
         if (dialog->exec() == QDialog::Accepted && dialog->isModified())
         {
             EventEditCommand *command =
                 new EventEditCommand(*(eItem->getSegment()),
-                                     (*it),
+                                     event,
                                      dialog->getEvent());
 
             addCommandToHistory(command);

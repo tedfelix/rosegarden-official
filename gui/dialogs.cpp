@@ -1183,46 +1183,51 @@ EventEditDialog::EventEditDialog(QWidget *parent,
 	addPersistentProperty(*i);
     }
 
-    QGroupBox *nonPersistentBox = new QGroupBox
-	(1, Horizontal, i18n("Non-persistent properties"), vbox);
-    new QLabel(i18n("These are cached values, lost if the event is modified."),
-	       nonPersistentBox);
-
-    m_nonPersistentView = new QScrollView(nonPersistentBox);
-    //m_nonPersistentView->setHScrollBarMode(QScrollView::AlwaysOff);
-    m_nonPersistentView->setResizePolicy(QScrollView::AutoOneFit);
-
-    m_nonPersistentGrid = new QGrid
-	(4, QGrid::Horizontal, m_nonPersistentView->viewport());
-    m_nonPersistentView->addChild(m_nonPersistentGrid);
-
-    m_nonPersistentGrid->setSpacing(4);
-    m_nonPersistentGrid->setMargin(5);
-
-    label = new QLabel(i18n("Name       "), m_nonPersistentGrid);
-    label->setFont(font);
-    label = new QLabel(i18n("Type       "), m_nonPersistentGrid);
-    label->setFont(font);
-    label = new QLabel(i18n("Value      "), m_nonPersistentGrid);
-    label->setFont(font);
-    label = new QLabel("", m_nonPersistentGrid);
-    label->setFont(font);
-
     p = event.getNonPersistentPropertyNames();
 
-    for (Rosegarden::Event::PropertyNames::iterator i = p.begin();
-	 i != p.end(); ++i) {
+    if (p.begin() == p.end()) {
+	m_nonPersistentView = 0;
+	m_nonPersistentGrid = 0;
+    } else {
 
-	new QLabel(strtoqstr(*i), m_nonPersistentGrid, strtoqstr(*i));
-	new QLabel(strtoqstr(event.getPropertyTypeAsString(*i)), m_nonPersistentGrid, strtoqstr(*i));
-	new QLabel(strtoqstr(event.getAsString(*i)), m_nonPersistentGrid, strtoqstr(*i));
-	QPushButton *button = new QPushButton("P", m_nonPersistentGrid, strtoqstr(*i));
-	button->setFixedSize(QSize(24, 24));
-	QToolTip::add(button, i18n("Make persistent"));
-	QObject::connect(button, SIGNAL(clicked()),
-			 this, SLOT(slotPropertyMadePersistent()));
+	QGroupBox *nonPersistentBox = new QGroupBox
+	    (1, Horizontal, i18n("Non-persistent properties"), vbox);
+	new QLabel(i18n("These are cached values, lost if the event is modified."),
+		   nonPersistentBox);
+	
+	m_nonPersistentView = new QScrollView(nonPersistentBox);
+	//m_nonPersistentView->setHScrollBarMode(QScrollView::AlwaysOff);
+	m_nonPersistentView->setResizePolicy(QScrollView::AutoOneFit);
+	
+	m_nonPersistentGrid = new QGrid
+	    (4, QGrid::Horizontal, m_nonPersistentView->viewport());
+	m_nonPersistentView->addChild(m_nonPersistentGrid);
+	
+	m_nonPersistentGrid->setSpacing(4);
+	m_nonPersistentGrid->setMargin(5);
+	
+	label = new QLabel(i18n("Name       "), m_nonPersistentGrid);
+	label->setFont(font);
+	label = new QLabel(i18n("Type       "), m_nonPersistentGrid);
+	label->setFont(font);
+	label = new QLabel(i18n("Value      "), m_nonPersistentGrid);
+	label->setFont(font);
+	label = new QLabel("", m_nonPersistentGrid);
+	label->setFont(font);
+	
+	for (Rosegarden::Event::PropertyNames::iterator i = p.begin();
+	     i != p.end(); ++i) {
+	    
+	    new QLabel(strtoqstr(*i), m_nonPersistentGrid, strtoqstr(*i));
+	    new QLabel(strtoqstr(event.getPropertyTypeAsString(*i)), m_nonPersistentGrid, strtoqstr(*i));
+	    new QLabel(strtoqstr(event.getAsString(*i)), m_nonPersistentGrid, strtoqstr(*i));
+	    QPushButton *button = new QPushButton("P", m_nonPersistentGrid, strtoqstr(*i));
+	    button->setFixedSize(QSize(24, 24));
+	    QToolTip::add(button, i18n("Make persistent"));
+	    QObject::connect(button, SIGNAL(clicked()),
+			     this, SLOT(slotPropertyMadePersistent()));
+	}
     }
-  
 }
 
 void
