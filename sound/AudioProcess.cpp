@@ -33,7 +33,7 @@
 #include "Profiler.h"
 #include "AudioLevel.h"
 
-#include <unistd.h> // for usleep
+#include <sys/time.h>
 
 #include <cmath>
 
@@ -887,10 +887,10 @@ AudioMixer::threadRun(void *arg)
 	    inst->kick(false);
 	}
 
-	RealTime length = inst->m_driver->getAudioMixBufferLength();
-	length = length / 4;
+	RealTime t = inst->m_driver->getAudioMixBufferLength();
+	t = t / 2;
 
-//	if (length > RealTime(0, 20000000)) length = RealTime(0, 20000000);
+//	if (t > RealTime(0, 20000000)) t = RealTime(0, 20000000);
 
 //	int sleepusec = bufferLength.usec() + bufferLength.sec * 1000000;
 //	sleepusec /= 4;
@@ -899,10 +899,14 @@ AudioMixer::threadRun(void *arg)
 	//!!! actually this is probably too demanding... we probably
 	// only want to do this every occasionally as before... restore
 	// a nanosleep or something here? ... but not in write thread.
+	
+	struct timeval now;
+	gettimeofday(&now, 0);
+	t = t + RealTime(now.tv_sec, now.tv_usec * 1000);
 
 	struct timespec timeout;
-	timeout.tv_sec = length.sec;
-	timeout.tv_nsec = length.nsec;
+	timeout.tv_sec = t.sec;
+	timeout.tv_nsec = t.nsec;
 	pthread_cond_timedwait(&inst->m_condition, &inst->m_lock, &timeout);
 
     }
@@ -1110,12 +1114,16 @@ AudioFileReader::threadRun(void *arg)
 
 	if (!inst->kick(false)) {
 
-	    RealTime length = inst->m_driver->getAudioReadBufferLength();
-	    length = length / 2;
+	    RealTime t = inst->m_driver->getAudioReadBufferLength();
+	    t = t / 2;
+
+	    struct timeval now;
+	    gettimeofday(&now, 0);
+	    t = t + RealTime(now.tv_sec, now.tv_usec * 1000);
 
 	    struct timespec timeout;
-	    timeout.tv_sec = length.sec;
-	    timeout.tv_nsec = length.nsec;
+	    timeout.tv_sec = t.sec;
+	    timeout.tv_nsec = t.nsec;
 	    pthread_cond_timedwait(&inst->m_condition, &inst->m_lock, &timeout);
 	}
     }
@@ -1359,12 +1367,16 @@ AudioFileWriter::threadRun(void *arg)
 
 	inst->kick(false);
 
-	RealTime length = inst->m_driver->getAudioWriteBufferLength();
-	length = length / 2;
+	RealTime t = inst->m_driver->getAudioWriteBufferLength();
+	t = t / 2;
 	
+	struct timeval now;
+	gettimeofday(&now, 0);
+	t = t + RealTime(now.tv_sec, now.tv_usec * 1000);
+
 	struct timespec timeout;
-	timeout.tv_sec = length.sec;
-	timeout.tv_nsec = length.nsec;
+	timeout.tv_sec = t.sec;
+	timeout.tv_nsec = t.nsec;
 	pthread_cond_timedwait(&inst->m_condition, &inst->m_lock, &timeout);
     }
 

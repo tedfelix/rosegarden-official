@@ -100,19 +100,19 @@ protected:
 
     RosegardenTextFloat *m_float;
     QTimer              *m_floatTimer;
-/*
+
     QPixmap *groovePixmap();
     QPixmap *buttonPixmap();
 
     typedef std::pair<int, int> SizeRec;
-    typedef std::pair<QPixmap, QPixmap> PixmapRec;
+    typedef std::pair<QPixmap *, QPixmap *> PixmapRec;
     typedef std::map<SizeRec, PixmapRec> PixmapCache;
     static PixmapCache m_pixmapCache;
-*/
+
     //!!! we should really get all sophisticated and cache these
     //shared among faders of a given dimension
-    QPixmap *m_groovePixmap;
-    QPixmap *m_buttonPixmap;
+//    QPixmap *m_groovePixmap;
+//    QPixmap *m_buttonPixmap;
 };
     
 

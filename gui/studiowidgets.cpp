@@ -40,6 +40,8 @@
 
 //----------------------------------------
 
+RosegardenFader::PixmapCache RosegardenFader::m_pixmapCache;
+
 RosegardenFader::RosegardenFader(Rosegarden::AudioLevel::FaderType type,
 				 int w, int h, QWidget *parent) :
     QWidget(parent),
@@ -50,9 +52,7 @@ RosegardenFader::RosegardenFader(Rosegarden::AudioLevel::FaderType type,
     m_type(type),
     m_clickMousePos(-1),
     m_float(new RosegardenTextFloat(this)),
-    m_floatTimer(new QTimer()),
-    m_groovePixmap(0),
-    m_buttonPixmap(0)
+    m_floatTimer(new QTimer())
 {
     setBackgroundMode(Qt::NoBackground);
     setFixedSize(w, h); // provisional
@@ -64,10 +64,10 @@ RosegardenFader::RosegardenFader(Rosegarden::AudioLevel::FaderType type,
 //    }
 
     if (m_vertical) {
-	m_sliderMin = m_buttonPixmap->height()/2 + 2;
+	m_sliderMin = buttonPixmap()->height()/2 + 2;
 	m_sliderMax = height() - m_sliderMin;
     } else {
-	m_sliderMin = m_buttonPixmap->width()/2 + 2;
+	m_sliderMin = buttonPixmap()->width()/2 + 2;
 	m_sliderMax = width() - m_sliderMin;
     }	
 
@@ -87,9 +87,7 @@ RosegardenFader::RosegardenFader(int min, int max, int deflt,
     m_max(max),
     m_clickMousePos(-1),
     m_float(new RosegardenTextFloat(this)),
-    m_floatTimer(new QTimer()),
-    m_groovePixmap(0),
-    m_buttonPixmap(0)
+    m_floatTimer(new QTimer())
 {
     setBackgroundMode(Qt::NoBackground);
     setFixedSize(w, h); // provisional
@@ -101,10 +99,10 @@ RosegardenFader::RosegardenFader(int min, int max, int deflt,
 //    }
 
     if (m_vertical) {
-	m_sliderMin = m_buttonPixmap->height()/2 + 2;
+	m_sliderMin = buttonPixmap()->height()/2 + 2;
 	m_sliderMax = height() - m_sliderMin;
     } else {
-	m_sliderMin = m_buttonPixmap->width()/2 + 2;
+	m_sliderMin = buttonPixmap()->width()/2 + 2;
 	m_sliderMax = width() - m_sliderMin;
     }	
 
@@ -124,9 +122,7 @@ RosegardenFader::RosegardenFader(int min, int max, int deflt,
     m_max(max),
     m_clickMousePos(-1),
     m_float(new RosegardenTextFloat(this)),
-    m_floatTimer(new QTimer()),
-    m_groovePixmap(0),
-    m_buttonPixmap(0)
+    m_floatTimer(new QTimer())
 {
     setBackgroundMode(Qt::NoBackground);
     calculateButtonPixmap();
@@ -134,15 +130,15 @@ RosegardenFader::RosegardenFader(int min, int max, int deflt,
 //	setFixedSize(m_buttonPixmap->width(),
 //		     (max - min) + m_buttonPixmap->height() + 4);
 //    } else {
-//	setFixedSize((max - min) + m_buttonPixmap->height() + 4,
-//		     m_buttonPixmap->height());
+//	setFixedSize((max - min) + buttonPixmap()->height() + 4,
+//		     buttonPixmap()->height());
 //    }
 
     if (m_vertical) {
-	m_sliderMin = m_buttonPixmap->height()/2 + 2;
+	m_sliderMin = buttonPixmap()->height()/2 + 2;
 	m_sliderMax = height() - m_sliderMin;
     } else {
-	m_sliderMin = m_buttonPixmap->width()/2 + 2;
+	m_sliderMin = buttonPixmap()->width()/2 + 2;
 	m_sliderMax = width() - m_sliderMin;
     }	
 
@@ -155,8 +151,22 @@ RosegardenFader::RosegardenFader(int min, int max, int deflt,
 
 RosegardenFader::~RosegardenFader()
 {
-    delete m_groovePixmap;
-    delete m_buttonPixmap;
+}
+
+QPixmap *
+RosegardenFader::groovePixmap()
+{
+    PixmapCache::iterator i = m_pixmapCache.find(SizeRec(width(), height()));
+    if (i != m_pixmapCache.end()) return i->second.first;
+    else return 0;
+}
+
+QPixmap *
+RosegardenFader::buttonPixmap()
+{
+    PixmapCache::iterator i = m_pixmapCache.find(SizeRec(width(), height()));
+    if (i != m_pixmapCache.end()) return i->second.second;
+    else return 0;
 }
 
 float
@@ -216,61 +226,61 @@ RosegardenFader::paintEvent(QPaintEvent *)
 
     if (m_vertical) {
 
-	int aboveButton = height() - position - m_sliderMin - m_buttonPixmap->height()/2;
-	int belowButton = position + m_sliderMin - m_buttonPixmap->height()/2;
+	int aboveButton = height() - position - m_sliderMin - buttonPixmap()->height()/2;
+	int belowButton = position + m_sliderMin - buttonPixmap()->height()/2;
 
 	if (aboveButton > 0) {
 	    paint.drawPixmap(0, 0,
-			     *m_groovePixmap,
+			     *groovePixmap(),
 			     0, 0,
-			     m_groovePixmap->width(), aboveButton);
+			     groovePixmap()->width(), aboveButton);
 	}
 
 	if (belowButton > 0) {
-	    paint.drawPixmap(0, aboveButton + m_buttonPixmap->height(),
-			     *m_groovePixmap,
-			     0, aboveButton + m_buttonPixmap->height(),
-			     m_groovePixmap->width(), belowButton);
+	    paint.drawPixmap(0, aboveButton + buttonPixmap()->height(),
+			     *groovePixmap(),
+			     0, aboveButton + buttonPixmap()->height(),
+			     groovePixmap()->width(), belowButton);
 	}
 
-	int buttonMargin = (width() - m_buttonPixmap->width()) / 2;
+	int buttonMargin = (width() - buttonPixmap()->width()) / 2;
 
-	paint.drawPixmap(buttonMargin, aboveButton, *m_buttonPixmap);
+	paint.drawPixmap(buttonMargin, aboveButton, *buttonPixmap());
 
 	paint.drawPixmap(0, aboveButton,
-			 *m_groovePixmap,
+			 *groovePixmap(),
 			 0, aboveButton,
-			 buttonMargin, m_buttonPixmap->height());
+			 buttonMargin, buttonPixmap()->height());
 
-	paint.drawPixmap(m_buttonPixmap->width(), aboveButton,
-			 *m_groovePixmap,
-			 m_buttonPixmap->width(), aboveButton,
-			 width() - m_buttonPixmap->width(),
-			 m_buttonPixmap->height());
+	paint.drawPixmap(buttonMargin + buttonPixmap()->width(), aboveButton,
+			 *groovePixmap(),
+			 buttonMargin + buttonPixmap()->width(), aboveButton,
+			 width() - buttonMargin - buttonPixmap()->width(),
+			 buttonPixmap()->height());
 
     } else {
 //!!!update
 	int leftOfButton =
-	    (m_sliderMax - m_sliderMin) - position - m_buttonPixmap->width()/2;
+	    (m_sliderMax - m_sliderMin) - position - buttonPixmap()->width()/2;
 
 	int rightOfButton =
-	    position - m_buttonPixmap->width()/2;
+	    position - buttonPixmap()->width()/2;
 
 	if (leftOfButton > 0) {
 	    paint.drawPixmap(0, 0,
-			     *m_groovePixmap,
+			     *groovePixmap(),
 			     0, 0,
-			     leftOfButton, m_groovePixmap->height());
+			     leftOfButton, groovePixmap()->height());
 	}
 
 	if (rightOfButton > 0) {
-	    paint.drawPixmap(rightOfButton + m_buttonPixmap->width(), 0,
-			     *m_groovePixmap,
-			     m_groovePixmap->width() - rightOfButton, 0,
-			     rightOfButton, m_groovePixmap->height());
+	    paint.drawPixmap(rightOfButton + buttonPixmap()->width(), 0,
+			     *groovePixmap(),
+			     groovePixmap()->width() - rightOfButton, 0,
+			     rightOfButton, groovePixmap()->height());
 	}
 
-	paint.drawPixmap(leftOfButton, 0, *m_buttonPixmap);
+	paint.drawPixmap(leftOfButton, 0, *buttonPixmap());
     }
 
     paint.end();
@@ -287,8 +297,8 @@ RosegardenFader::mousePressEvent(QMouseEvent *e)
 	    int buttonPosition = value_to_position(m_value);
 	    int clickPosition = height() - e->y() - m_sliderMin;
 	    
-	    if (clickPosition < buttonPosition + m_buttonPixmap->height()/2 &&
-		clickPosition > buttonPosition - m_buttonPixmap->height()/2) {
+	    if (clickPosition < buttonPosition + buttonPixmap()->height()/2 &&
+		clickPosition > buttonPosition - buttonPixmap()->height()/2) {
 		m_clickMousePos = clickPosition;
 		m_clickButtonPos = value_to_position(m_value);
 		showFloatText();
@@ -391,11 +401,17 @@ RosegardenFader::slotFloatTimeout()
 void
 RosegardenFader::calculateGroovePixmap()
 {
+    PixmapCache::iterator i = m_pixmapCache.find(SizeRec(width(), height()));
+    if (i != m_pixmapCache.end() && i->second.first) return;
+    
+    QPixmap *& map = m_pixmapCache[SizeRec(width(), height())].first;
+
+    map = new QPixmap(width(), height());
+    map->fill(colorGroup().background());
+    QPainter paint(map);
+    paint.setBrush(colorGroup().background());
+
     if (m_vertical) {
-	m_groovePixmap = new QPixmap(width(), height());
-	m_groovePixmap->fill(colorGroup().background());
-	QPainter paint(m_groovePixmap);
-	paint.setBrush(colorGroup().background());
 
 	paint.setPen(colorGroup().mid());
 	paint.drawRect(0, 0, width(), height());
@@ -430,6 +446,11 @@ RosegardenFader::calculateGroovePixmap()
 void
 RosegardenFader::calculateButtonPixmap()
 {
+    PixmapCache::iterator i = m_pixmapCache.find(SizeRec(width(), height()));
+    if (i != m_pixmapCache.end() && i->second.second) return;
+    
+    QPixmap *& map = m_pixmapCache[SizeRec(width(), height())].second;
+
     if (m_vertical) {
 
 	int buttonHeight = height()/7;
@@ -443,13 +464,13 @@ RosegardenFader::calculateButtonPixmap()
 	buttonWidth *= 5;
 	if (buttonWidth > width()-2) buttonWidth = width()-2;
 
-	m_buttonPixmap = new QPixmap(buttonWidth, buttonHeight);
-	m_buttonPixmap->fill(colorGroup().background());
+	map = new QPixmap(buttonWidth, buttonHeight);
+	map->fill(colorGroup().background());
 
 	int x = 0;
 	int y = 0;
 
-	QPainter paint(m_buttonPixmap);
+	QPainter paint(map);
 
 	paint.setPen(colorGroup().light());
 	paint.drawLine(x + 1, y, x + buttonWidth - 2, y);

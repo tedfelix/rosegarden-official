@@ -728,7 +728,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
     }
 
     if (m_alsaDriver->isPlaying()) m_mixer->signal();
-    if (wroteSomething) m_fileWriter->signal();
+    if (wroteSomething) m_fileWriter->signal(); //???
 
     return 0;
 }
