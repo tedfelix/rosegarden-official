@@ -268,6 +268,15 @@ class RosegardenRotary : public QWidget
 {
     Q_OBJECT
 public:
+
+    enum TickMode {
+	NoTicks,        // plain circle with no marks for end points etc
+	LimitTicks,     // marks at end points but not any intermediate points
+	IntervalTicks,  // end points plus quarter, half, three-quarters
+	PageStepTicks,  // end points plus every page-step interval
+	StepTicks       // end points plus every step interval
+    };
+
     RosegardenRotary(QWidget *parent,
                      float minValue = 0.0,
                      float maxValue = 100.0,
@@ -275,7 +284,8 @@ public:
                      float pageStep = 10.0,
                      float initialPosition = 50.0,
                      int size = 20,
-		     bool showTicks = false);
+		     TickMode ticks = NoTicks,
+		     bool snapToTicks = false);
 
     void setMinValue(float min) { m_minValue = min; }
     float getMinValue() const { return m_minValue; }
@@ -314,17 +324,21 @@ protected:
     virtual void mouseMoveEvent(QMouseEvent *e);
     virtual void wheelEvent(QWheelEvent *e);
 
+    void snapPosition();
     void drawPosition();
+    void drawTick(QPainter &paint, double angle);
 
     float                m_minValue;
     float                m_maxValue;
     float                m_step;
     float                m_pageStep;
     int                  m_size;
-    bool                 m_showTicks;
+    TickMode             m_tickMode;
+    bool                 m_snapToTicks;
 
     float                m_lastPosition;
     float                m_position;
+    float                m_snapPosition;
     bool                 m_buttonPressed;
     int                  m_lastY;
     int                  m_lastX;

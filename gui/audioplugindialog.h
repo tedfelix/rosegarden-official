@@ -53,7 +53,7 @@ namespace Rosegarden
 class PluginPort;
 class AudioPluginManager;
 
-class PluginControl : public QFrame
+class PluginControl : public QObject
 {
     Q_OBJECT
 public:
@@ -66,6 +66,7 @@ public:
     } ControlType;
 
     PluginControl(QWidget *parent,
+		  QGridLayout *layout,
                   ControlType type,
                   PluginPort *port,
                   AudioPluginManager *pluginManager,

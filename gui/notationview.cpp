@@ -836,9 +836,9 @@ void NotationView::positionStaffs()
     m_config->setGroup(NotationView::ConfigGroup);
     m_printSize = m_config->readUnsignedNumEntry("printingnotesize", 5);
 
-    Rosegarden::TrackId minTrack = 0, maxTrack = 0;
+    int minTrack = 0, maxTrack = 0;
     bool haveMinTrack = false;
-    typedef std::map<Rosegarden::TrackId, int> TrackIntMap;
+    typedef std::map<int, int> TrackIntMap;
     TrackIntMap trackHeights;
     TrackIntMap trackCoords;
 
@@ -869,27 +869,35 @@ void NotationView::positionStaffs()
 	    m_staffs[i]->setLegerLineCount(legerLines);
 
 	    int height = m_staffs[i]->getHeightOfRow();
-	    Rosegarden::TrackId track = m_staffs[i]->getSegment().getTrack();
+	    Rosegarden::TrackId trackId = m_staffs[i]->getSegment().getTrack();
+	    Rosegarden::Track *track =
+		m_staffs[i]->getSegment().getComposition()->
+		getTrackById(trackId);
 
-	    TrackIntMap::iterator hi = trackHeights.find(track);
+	    if (!track) continue; // This Should Not Happen, My Friend
+
+	    int trackPosition = track->getPosition();
+
+	    TrackIntMap::iterator hi = trackHeights.find(trackPosition);
 	    if (hi == trackHeights.end()) {
-		trackHeights.insert(TrackIntMap::value_type(track, height));
+		trackHeights.insert(TrackIntMap::value_type
+				    (trackPosition, height));
 	    } else if (height > hi->second) {
 		hi->second = height;
 	    }
 	
 	    if (height > maxTrackHeight) maxTrackHeight = height;
 
-	    if (track < minTrack || !haveMinTrack) {
-		minTrack = track;
+	    if (trackPosition < minTrack || !haveMinTrack) {
+		minTrack = trackPosition;
 		haveMinTrack = true;
 	    }
-	    if (track > maxTrack) {
-		maxTrack = track;
+	    if (trackPosition > maxTrack) {
+		maxTrack = trackPosition;
 	    }
 	}
 
-	for (Rosegarden::TrackId i = minTrack; i <= maxTrack; ++i) {
+	for (int i = minTrack; i <= maxTrack; ++i) {
 	    TrackIntMap::iterator hi = trackHeights.find(i);
 	    if (hi != trackHeights.end()) {
 		trackCoords[i] = accumulatedHeight;
@@ -959,15 +967,23 @@ void NotationView::positionStaffs()
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 
-	Rosegarden::TrackId track = m_staffs[i]->getSegment().getTrack();
+	Rosegarden::TrackId trackId = m_staffs[i]->getSegment().getTrack();
+	Rosegarden::Track *track =
+	    m_staffs[i]->getSegment().getComposition()->
+	    getTrackById(trackId);
+
+	if (!track) continue; // Once Again, My Friend, You Should Never See Me Here
+	
+	int trackPosition = track->getPosition();
 
         m_staffs[i]->setRowSpacing(accumulatedHeight);
 	
-        if (track < maxTrack) {
-            m_staffs[i]->setConnectingLineLength(trackHeights[track]);
+        if (trackPosition < maxTrack) {
+            m_staffs[i]->setConnectingLineLength(trackHeights[trackPosition]);
         }
 
-	if (track == minTrack && m_pageMode != LinedStaff::LinearMode) {
+	if (trackPosition == minTrack &&
+	    m_pageMode != LinedStaff::LinearMode) {
 	    m_staffs[i]->setBarNumbersEvery(5);
 	} else {
 	    m_staffs[i]->setBarNumbersEvery(0);
@@ -975,14 +991,14 @@ void NotationView::positionStaffs()
         
 	m_staffs[i]->setX(20);
 	m_staffs[i]->setY((m_pageMode == LinedStaff::MultiPageMode ? 20 : 0) +
-			  trackCoords[track] + topMargin);
+			  trackCoords[trackPosition] + topMargin);
 	m_staffs[i]->setPageWidth(pageWidth - leftMargin * 2);
 	m_staffs[i]->setRowsPerPage(rowsPerPage);
         m_staffs[i]->setPageMode(m_pageMode);
 	m_staffs[i]->setMargin(leftMargin);
 
-    NOTATION_DEBUG << "NotationView::positionStaffs: set staff's page width to "
-		   << (pageWidth - leftMargin * 2) << endl;
+	NOTATION_DEBUG << "NotationView::positionStaffs: set staff's page width to "
+		       << (pageWidth - leftMargin * 2) << endl;
 
     }
 }    

@@ -652,7 +652,7 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
     m_monoPixmap.load(QString("%1/misc/mono.xpm").arg(pixmapDir));
     m_stereoPixmap.load(QString("%1/misc/stereo.xpm").arg(pixmapDir));
 
-    m_pan = new RosegardenRotary(this, -100.0, 100.0, 1.0, 5.0, 0.0, 24);
+    m_pan = new RosegardenRotary(this, -100.0, 100.0, 1.0, 5.0, 0.0, 23);
 
     QLabel *panLabel = 0;
 
@@ -682,12 +682,12 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
     m_recordButton->setText("R");
     m_recordButton->setToggleButton(true);
 
-    m_muteButton->setMaximumWidth(m_stereoButton->width());
-    m_soloButton->setMaximumWidth(m_stereoButton->width());
-    m_recordButton->setMaximumWidth(m_stereoButton->width());
-    m_muteButton->setMaximumHeight(m_stereoButton->height());
-    m_soloButton->setMaximumHeight(m_stereoButton->height());
-    m_recordButton->setMaximumHeight(m_stereoButton->height());
+    m_muteButton->setFixedWidth(m_stereoButton->width());
+    m_soloButton->setFixedWidth(m_stereoButton->width());
+    m_recordButton->setFixedWidth(m_stereoButton->width());
+    m_muteButton->setFixedHeight(m_stereoButton->height());
+    m_soloButton->setFixedHeight(m_stereoButton->height());
+    m_recordButton->setFixedHeight(m_stereoButton->height());
 
     if (haveInOut) {
 	m_audioInput = new KComboBox(this);

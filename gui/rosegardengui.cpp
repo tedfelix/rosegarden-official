@@ -4896,6 +4896,11 @@ RosegardenGUIApp::slotPopulateTrackInstrumentPopup()
     Rosegarden::Composition &comp = m_doc->getComposition();
     Rosegarden::Track *track = comp.getTrackById(comp.getSelectedTrack());
 
+    if (!track) {
+	RG_DEBUG << "Weird: no track available for instrument popup!" << endl;
+	return;
+    }
+
     Rosegarden::Instrument* instrument = m_doc->getStudio().getInstrumentById(track->getInstrument());
 
     QPopupMenu* popup = dynamic_cast<QPopupMenu*>(factory()->container("set_track_instrument", this));

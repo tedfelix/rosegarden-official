@@ -668,30 +668,29 @@ MappedStudio::clearTemporaries()
     for (MappedObjectMap::iterator i = m_objects.begin();
 	 i != m_objects.end(); ++i) {
 
-	for (MappedObjectCategory::iterator j = i->second.begin();
-	     j != i->second.end(); ) {
+	// Temporaries are normally near the end
+	
+	bool done = false;
 
-	    MappedObjectCategory::iterator k = j;
-	    ++k;
+	while (!done) {
 
-	    if (!j->second->isReadOnly()) {
+	    MappedObjectCategory::iterator j = i->second.end();
+	    if (j == i->second.begin()) done = true;
 
-		// if the object has a parent other than the studio,
-		// persuade that parent to abandon it
-		MappedObject *parent = j->second->getParent();
-		if (parent && !dynamic_cast<MappedStudio *>(parent)) {
-		    parent->removeChild(j->second);
-		}
-
-		delete j->second;
-		i->second.erase(j);
-	    } else {
-		if (j->second->getId() > maxId) {
-		    maxId = j->second->getId();
+	    while (j != i->second.begin()) {
+		--j;
+		if (j->second->isReadOnly()) {
+		    if (j->second->getId() > maxId) maxId = j->second->getId();
+		    if (j == i->second.begin()) done = true;
+		} else {
+		    // This calls back extensively on the studio, among other
+		    // things invalidating j and possibly some other iterators
+		    // on the same container -- which is why we start again
+		    // with the loop as soon as we've done this.
+		    j->second->destroy();
+		    break;
 		}
 	    }
-
-	    j = k;
 	}
     }
 
@@ -1300,7 +1299,6 @@ MappedAudioPluginManager::getPropertyList(const MappedObjectProperty &property)
 
                     list.push_back(MappedObjectProperty
                             ("%1").arg(port->getDefault()));
-
                 }
 
                 plugin = dynamic_cast<MappedLADSPAPlugin*>
@@ -1735,6 +1733,8 @@ MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
 		
 		plugin->setLibraryName(path);
 		plugin->populate(descriptor, category);
+
+		int controlPortNumber = 1;
 		
 		for (unsigned long i = 0; i < descriptor->PortCount; i++)
 		{
@@ -1750,25 +1750,35 @@ MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
 		    port->setPortName(descriptor->PortNames[i]);
 		    port->setDescriptor(descriptor->PortDescriptors[i]);
 		    
+		    std::cout << "port " << i << " name " << port->getPortName() << std::endl;
+
 		    port->setRangeHint(
 			descriptor->PortRangeHints[i].HintDescriptor,
 			descriptor->PortRangeHints[i].LowerBound,
 			descriptor->PortRangeHints[i].UpperBound);
 		    
 		    port->setPortNumber(i);
+
+		    if (LADSPA_IS_PORT_CONTROL(port->getDescriptor())) {
+
+			// apply default
+
 #ifdef HAVE_LIBLRDF
-		    if (def_uri)
-		    {
-			for (int j = 0; j < defs->count; j++)
+			if (def_uri)
 			{
-			    if (defs->items[j].pid == ((int)i))
+			    for (int j = 0; j < defs->count; j++)
 			    {
-				std::cout << "Default for this port (" << defs->items[j].pid << ", " << defs->items[j].label << ") is " << defs->items[j].value << std::endl;
-				port->setDefault(defs->items[j].value);
+				if (defs->items[j].pid == controlPortNumber)
+				{
+				    std::cout << "Default for this port (" << defs->items[j].pid << ", " << defs->items[j].label << ") is " << defs->items[j].value << "; applying this to port number " << i << " with name " << port->getPortName() << std::endl;
+				    port->setDefault(defs->items[j].value);
+				}
 			    }
 			}
-		    }
 #endif // HAVE_LIBLRDF
+
+			++controlPortNumber;
+		    }
 		}
 #ifdef HAVE_LIBLRDF
 		if (defs) {

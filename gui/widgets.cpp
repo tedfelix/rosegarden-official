@@ -365,16 +365,19 @@ RosegardenRotary::RosegardenRotary(QWidget *parent,
                                    float pageStep,
                                    float initialPosition,
                                    int size,
-				   bool showTicks) :
+				   TickMode ticks,
+				   bool snapToTicks) :
     QWidget(parent),
     m_minValue(minValue),
     m_maxValue(maxValue),
     m_step(step),
     m_pageStep(pageStep),
     m_size(size),
-    m_showTicks(showTicks),
+    m_tickMode(ticks),
+    m_snapToTicks(snapToTicks),
     m_lastPosition(initialPosition),
     m_position(initialPosition),
+    m_snapPosition(m_position),
     m_buttonPressed(false),
     m_lastY(0),
     m_lastX(0),
@@ -394,6 +397,7 @@ RosegardenRotary::RosegardenRotary(QWidget *parent,
     // set the initial position
     drawPosition();
 
+    emit valueChanged(m_snapPosition);
 }
 
 void
@@ -401,7 +405,6 @@ RosegardenRotary::slotFloatTimeout()
 {
     m_float->hide();
 }
-
 
 void
 RosegardenRotary::setKnobColour(const QColor &colour)
@@ -426,43 +429,127 @@ RosegardenRotary::paintEvent(QPaintEvent *e)
         paint.setBrush(
                 kapp->palette().color(QPalette::Active, QColorGroup::Base));
 
-    if (!m_showTicks) {
+    if (m_tickMode == NoTicks) {
 
 	paint.drawEllipse(0, 0, m_size, m_size);
 	drawPosition();
 
     } else {
 
-	paint.drawEllipse(m_size * 0.1, m_size * 0.1,
-			  m_size * 0.8, m_size * 0.8);
+	paint.drawEllipse(int(m_size * 0.1), int(m_size * 0.1),
+			  int(m_size * 0.8), int(m_size * 0.8));
 	drawPosition();
 
-	// draw min and max ticks
+	// if we have ticks at all, we always have start and end ticks
+	
+	drawTick(paint, ROTARY_MIN);
+	drawTick(paint, ROTARY_MAX);
 
-	double hyp = double(m_size) / 2.0;
+	switch (m_tickMode) {
 
-	double angle = ROTARY_MIN;
+	case NoTicks:
+	case LimitTicks:
+	    break; // done that already
 
-	double x0 = hyp - hyp * sin(angle);
-	double y0 = hyp + hyp * cos(angle);
-	double x1 = hyp - 1.2 * hyp * sin(angle);
-	double y1 = hyp + 1.2 * hyp * cos(angle);
+	case IntervalTicks:
+	    drawTick(paint, ROTARY_MIN * 0.75 + ROTARY_MAX * 0.25);
+	    drawTick(paint, ROTARY_MIN * 0.50 + ROTARY_MAX * 0.50);
+	    drawTick(paint, ROTARY_MIN * 0.25 + ROTARY_MAX * 0.75);
+	    break;
 
-	paint.drawLine(int(x0), int(y0), int(x1), int(y1));
+	case PageStepTicks:
+	    for (double value = m_minValue; value < m_maxValue; value += m_pageStep) {
 
-	angle = ROTARY_MAX;
-    
-	x0 = hyp - hyp * sin(angle);
-	y0 = hyp + hyp * cos(angle);
-	x1 = hyp - 1.2 * hyp * sin(angle);
-	y1 = hyp + 1.2 * hyp * cos(angle);
+		float angle = ROTARY_MIN
+                   + (ROTARY_RANGE *
+		      (double(value - m_minValue) /
+		       (double(m_maxValue) - double(m_minValue))));
 
-	paint.drawLine(int(x0), int(y0), int(x1), int(y1));
+		drawTick(paint, angle);
+	    }
+	    break;
+
+	case StepTicks:
+	    for (double value = m_minValue; value < m_maxValue; value += m_step) {
+
+		float angle = ROTARY_MIN
+                   + (ROTARY_RANGE *
+		      (double(value - m_minValue) /
+		       (double(m_maxValue) - double(m_minValue))));
+
+		drawTick(paint, angle);
+	    }
+	    break;
+	}
     }
 }
 
+void
+RosegardenRotary::drawTick(QPainter &paint, double angle)
+{
+    double hyp = double(m_size) / 2.0;
+    double x0 = hyp - hyp * sin(angle);
+    double y0 = hyp + hyp * cos(angle);
+    
+    if (angle < ROTARY_MIN + 0.001 || angle > ROTARY_MAX - 0.001) {
+
+	double len = hyp / 5;
+	double x1 = hyp - (hyp + len) * sin(angle);
+	double y1 = hyp + (hyp + len) * cos(angle);
+    
+	paint.drawLine(int(x0), int(y0), int(x1), int(y1));
+
+    } else {
+
+	paint.drawPoint(int(x0), int(y0));
+    }
+}
+    
+
+
+void
+RosegardenRotary::snapPosition()
+{
+    m_snapPosition = m_position;
+
+    if (m_snapToTicks) {
+
+	switch (m_tickMode) {
+
+	case NoTicks: break; // meaningless
+
+	case LimitTicks:
+	    if (m_position < (m_minValue + m_maxValue) / 2.0) {
+		m_snapPosition = m_minValue;
+	    } else {
+		m_snapPosition = m_maxValue;
+	    }
+	    break;
+
+	case IntervalTicks:
+	    m_snapPosition = m_minValue +
+		(m_maxValue - m_minValue) / 4.0 *
+		int((m_snapPosition - m_minValue) /
+		    ((m_maxValue - m_minValue) / 4.0));
+	    break;
+
+	case PageStepTicks:
+	    m_snapPosition = m_minValue +
+		m_pageStep *
+		int((m_snapPosition - m_minValue) / m_pageStep);
+	    break;
+
+	case StepTicks:
+	    m_snapPosition = m_minValue +
+		m_step *
+		int((m_snapPosition - m_minValue) / m_step);
+	    break;
+	}
+    }
+}
+    
 // Draw the position line - note that we adjust for the minimum value
-// so that the knobs always work "vertically"
+// so that the knobs always work "vertically".
 //
 void
 RosegardenRotary::drawPosition()
@@ -470,9 +557,9 @@ RosegardenRotary::drawPosition()
     QPainter paint(this);
 
     double hyp = double(m_size) / 2.0;
-    double len = hyp * 0.8;
-
-    if (m_showTicks) len = 0.9 * len;
+    double len = hyp;
+    if (m_tickMode != NoTicks) len = 0.8 * len;
+    --len;
 
     // Undraw the previous line
     //
@@ -481,12 +568,8 @@ RosegardenRotary::drawPosition()
 		      (double(m_lastPosition - m_minValue) /
 		       (double(m_maxValue) - double(m_minValue))));
 
-    double x0 = hyp - len/3 * sin(angle);
-    double y0 = hyp + len/3 * cos(angle);
-    
-    if (m_lastPosition <= m_minValue + (m_maxValue - m_minValue) / 2) {
-//	--x0;
-    }
+    double x0 = hyp - len/4 * sin(angle);
+    double y0 = hyp + len/4 * cos(angle);
 
     double x = hyp - len * sin(angle);
     double y = hyp + len * cos(angle);
@@ -504,43 +587,30 @@ RosegardenRotary::drawPosition()
     // Draw the new position
     //
     angle = ROTARY_MIN // offset 
-                   + (ROTARY_RANGE * (double(m_position - m_minValue) /
+                   + (ROTARY_RANGE * (double(m_snapPosition - m_minValue) /
                      (double(m_maxValue) - double(m_minValue))));
 
-//    x0 = hyp;
-//    y0 = hyp;
-    x0 = hyp - len/3 * sin(angle);
-    y0 = hyp + len/3 * cos(angle);
-
-    if (m_position <= m_minValue + (m_maxValue - m_minValue) / 2) {
-//	--x0;
-    }
+    x0 = hyp - len/4 * sin(angle);
+    y0 = hyp + len/4 * cos(angle);
 
     x = hyp - len * sin(angle);
     y = hyp + len * cos(angle);
-//!!!
-//    paint.setPen(kapp->palette().color(QPalette::Active, QColorGroup::Mid));
-//    double xoff = -cos(angle), yoff = sin(angle);
-//    paint.drawLine(int(x0 - xoff), int(y0 - yoff), int(x), int(y));
-//    paint.drawLine(int(x0 + xoff), int(y0 + yoff), int(x), int(y));
 
-//    paint.setPen(kapp->palette().color(QPalette::Active, QColorGroup::Dark));
-//    paint.setPen(Qt::black);
     pen.setColor(Qt::black);
     paint.setPen(pen);
 
     paint.drawLine(int(x0), int(y0), int(x), int(y));
 
-    m_lastPosition = m_position;
+    m_lastPosition = m_snapPosition;
 
-    pen.setWidth(1);
+    pen.setWidth(0);
     paint.setPen(pen);
     paint.setBrush(Qt::NoBrush);
-    if (!m_showTicks) {
+    if (m_tickMode == NoTicks) {
 	paint.drawEllipse(0, 0, m_size, m_size);
     } else {
-	paint.drawEllipse(m_size * 0.1, m_size * 0.1,
-			  m_size * 0.8, m_size * 0.8);
+	paint.drawEllipse(int(m_size * 0.1), int(m_size * 0.1),
+			  int(m_size * 0.8), int(m_size * 0.8));
     }
 } 
 
@@ -555,7 +625,7 @@ RosegardenRotary::mousePressEvent(QMouseEvent *e)
         m_lastX = e->x();
 
         // draw on the float text
-        m_float->setText(QString("%1").arg(m_position));
+        m_float->setText(QString("%1").arg(m_snapPosition));
 
         // Reposition - remap to topLevel or dialog to please move().
         //
@@ -574,8 +644,9 @@ RosegardenRotary::mousePressEvent(QMouseEvent *e)
     else if (e->button() == RightButton) // reset to centre position
     {
         m_position = (m_maxValue + m_minValue) / 2.0;
+	snapPosition();
         drawPosition();
-        emit valueChanged(m_position);
+        emit valueChanged(m_snapPosition);
     }
 
 }
@@ -614,18 +685,20 @@ RosegardenRotary::mouseMoveEvent(QMouseEvent *e)
         else
             m_position = newValue;
 
-        // don't update if there's nothing to update
-        if (m_lastPosition == m_position) return;
-
         m_lastY = e->y();
         m_lastX = e->x();
 
+	snapPosition();
+
+        // don't update if there's nothing to update
+        if (m_lastPosition == m_snapPosition) return;
+
         drawPosition();
 
-        emit valueChanged(m_position);
+        emit valueChanged(m_snapPosition);
 
         // draw on the float text
-        m_float->setText(QString("%1").arg(m_position));
+        m_float->setText(QString("%1").arg(m_snapPosition));
     }
 }
 
@@ -643,10 +716,11 @@ RosegardenRotary::wheelEvent(QWheelEvent *e)
     if (m_position < m_minValue)
         m_position = m_minValue;
 
+    snapPosition();
     drawPosition();
 
     // draw on the float text
-    m_float->setText(QString("%1").arg(m_position));
+    m_float->setText(QString("%1").arg(m_snapPosition));
 
     // Reposition - we need to sum the relative positions up to the
     // topLevel or dialog to please move().
@@ -668,7 +742,7 @@ RosegardenRotary::wheelEvent(QWheelEvent *e)
     m_floatTimer->start(500, true);
 
     // set it to show for a timeout value
-    emit valueChanged(m_position);
+    emit valueChanged(m_snapPosition);
 }
 
 
@@ -676,11 +750,12 @@ void
 RosegardenRotary::setPosition(float position)
 {
     m_position = position;
+    
+    snapPosition();
+    drawPosition();
 
     // modify tip
-    m_float->setText(QString("%1").arg(m_position));
-
-    drawPosition();
+    m_float->setText(QString("%1").arg(m_snapPosition));
 }
 
 

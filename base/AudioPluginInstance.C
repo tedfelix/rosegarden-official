@@ -1,3 +1,4 @@
+// -*- c-basic-offset: 4 -*-
 /*
     Rosegarden-4
     A sequencer and musical notation editor.
@@ -18,6 +19,8 @@
 */
 
 #include "AudioPluginInstance.h"
+
+#include <iostream>
 
 #if (__GNUC__ < 3)
 #include <strstream>
@@ -47,6 +50,7 @@ PluginPort::PluginPort(int id,
     m_upperBound(upperBound),
     m_default(defaultValue)
 {
+    std::cerr << "Plugin port created: name " << name << ", default " << defaultValue << std::endl;
 }
 
 AudioPluginInstance::AudioPluginInstance(unsigned int position):

@@ -1135,21 +1135,6 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
     //
     setRotaryToValue(int(Rosegarden::MIDI_CONTROLLER_PAN), instrument->getPan());
     setRotaryToValue(int(Rosegarden::MIDI_CONTROLLER_VOLUME), instrument->getVolume());
-
-    /*
-
-    m_panRotary->setPosition((float)instrument->getPan());
-    m_volumeRotary->setPosition((float)instrument->getVolume());
-    // Advanced MIDI controllers
-    //
-    m_chorusRotary->setPosition(float(instrument->getChorus()));
-    m_reverbRotary->setPosition(float(instrument->getReverb()));
-    m_highPassRotary->setPosition(float(instrument->getFilter()));
-    m_resonanceRotary->setPosition(float(instrument->getResonance()));
-    m_attackRotary->setPosition(float(instrument->getAttack()));
-    m_releaseRotary->setPosition(float(instrument->getRelease()));
-    */
-
 }
 
 void
@@ -1243,7 +1228,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
 		 smallStep,
 		 bigStep,
 		 it->getDefault(),
-		 20);
+		 21);
 
 	    rotary->setKnobColour(knobColour);
 

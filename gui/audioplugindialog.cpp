@@ -180,10 +180,12 @@ AudioPluginDialog::makePluginParamsBox(QWidget *parent)
     m_pluginParamsBox = new QFrame(parent);
 
     m_gridLayout = new QGridLayout(m_pluginParamsBox,
-                                   1,   // rows (will expand)
-                                   2,  // columns
+                                   1,  // rows (will expand)
+                                   8,  // columns
                                    5); // margin
 
+    m_gridLayout->setColStretch(1, 2);
+    m_gridLayout->setColStretch(3, 2);
 }
 
 void
@@ -273,19 +275,18 @@ AudioPluginDialog::slotPluginSelected(int i)
                 // slotPluginPortChanged signal.
                 //
                 if (inst->getPort(count) == 0) {
-//                    inst->addPort(count, 0.0);
                     inst->addPort(count, (float)(*it)->getDefaultValue());
 		    std::cerr << "Plugin port name " << (*it)->getName() << ", default: " << (*it)->getDefaultValue() << std::endl;
 		}
 
                 PluginControl *control =
                     new PluginControl(m_pluginParamsBox,
+				      m_gridLayout,
                                       PluginControl::Rotary,
                                       *it,
                                       m_pluginManager,
                                       count,
                                       inst->getPort(count)->value);
-		m_gridLayout->addItem(new QWidgetItem(control));
 
                 connect(control, SIGNAL(valueChanged(float)),
                         this, SLOT(slotPluginPortChanged(float)));
@@ -360,28 +361,25 @@ AudioPluginDialog::slotClose()
 // --------------------- PluginControl -------------------------
 //
 PluginControl::PluginControl(QWidget *parent,
+			     QGridLayout *layout,
                              ControlType type,
                              PluginPort *port,
                              AudioPluginManager *aPM,
                              int index,
                              float initialValue):
-    QFrame(parent),
+    QObject(parent),
+    m_layout(layout),
     m_type(type),
     m_port(port),
     m_pluginManager(aPM),
     m_index(index)
 {
-    m_layout = new QGridLayout(this, 4, 1);
-
     QFont plainFont;
     plainFont.setPointSize((plainFont.pointSize() * 9 )/ 10);
 
-    QLabel *controlTitle = new QLabel(strtoqstr(port->getName()), this);
+    QLabel *controlTitle =
+	new QLabel(QString("%1    ").arg(strtoqstr(port->getName())), parent);
     controlTitle->setFont(plainFont);
-    m_layout->addWidget(controlTitle, 0, 0, Qt::AlignRight | Qt::AlignVCenter);
-
-//    QLabel *controlValue = new QLabel(this);
-//    controlValue->setFont(plainFont);
 
     if (type == Rotary)
     {
@@ -396,22 +394,38 @@ PluginControl::PluginControl(QWidget *parent,
             lowerBound = swap;
         }
 
-        QLabel *low = new QLabel(QString("%1").arg(lowerBound), this);
-//        low->setIndent(10);
-        low->setAlignment(AlignRight|AlignBottom);
+        QLabel *low = new QLabel(QString("%1").arg(lowerBound), parent);
         low->setFont(plainFont);
-	m_layout->addWidget(low, 0, 1, Qt::AlignRight | Qt::AlignBottom);
 
         float step = (upperBound - lowerBound) / 100.0;
+	float pageStep = step * 10.0;
+	RosegardenRotary::TickMode ticks = RosegardenRotary::PageStepTicks;
+	bool snapToTicks = false;
 
-        m_dial = new RosegardenRotary(this,
+	if (port->getDisplayHint() & Rosegarden::PluginPort::Integer) {
+	    step = 1.0;
+	    ticks = RosegardenRotary::StepTicks;
+	    if (upperBound - lowerBound > 30.0) pageStep = 10.0;
+	    snapToTicks = true;
+	}
+	if (port->getDisplayHint() & Rosegarden::PluginPort::Toggled) {
+	    lowerBound = -0.0001;
+	    upperBound = 1.0001;
+	    step = 1.0;
+	    pageStep = 1.0;
+	    ticks = RosegardenRotary::StepTicks;
+	    snapToTicks = true;
+	}
+
+        m_dial = new RosegardenRotary(parent,
                                       lowerBound,   // min
                                       upperBound,   // max
                                       step,         // step
-                                      step * 10.0,
+                                      pageStep,     // page step
                                       initialValue, // initial
-                                      30,           // size
-				      true);        // showTicks
+                                      29,           // size
+				      ticks,
+				      snapToTicks);
 
         m_dial->setKnobColour(RosegardenGUIColours::RotaryPlugin);
 
@@ -421,26 +435,30 @@ PluginControl::PluginControl(QWidget *parent,
         connect(m_dial, SIGNAL(valueChanged(float)),
                 this, SLOT(slotValueChanged(float)));
 
-	m_layout->addWidget(m_dial, 0, 2);
-
-        QLabel *upp = new QLabel(QString("%1").arg(upperBound), this);
-//        upp->setIndent(10);
-        upp->setAlignment(AlignLeft|AlignBottom);
+        QLabel *upp = new QLabel(QString("%1").arg(upperBound), parent);
         upp->setFont(plainFont);
-	m_layout->addWidget(upp, 0, 3, Qt::AlignLeft | Qt::AlignBottom);
 
         controlTitle->show();
-//        controlValue->show();
         low->show();
         m_dial->show();
         upp->show();
-/*
-        m_layout->addItem(new QWidgetItem(controlTitle));
-        m_layout->addItem(new QWidgetItem(controlValue));
-        m_layout->addItem(new QWidgetItem(low));
-        m_layout->addItem(new QWidgetItem(m_dial));
-        m_layout->addItem(new QWidgetItem(upp));
-*/
+
+	QWidgetItem *item = new QWidgetItem(controlTitle);
+	item->setAlignment(Qt::AlignRight | Qt::AlignBottom);
+	m_layout->addItem(item);
+
+	item = new QWidgetItem(low);
+	item->setAlignment(Qt::AlignRight | Qt::AlignBottom);
+	m_layout->addItem(item);
+	
+	item = new QWidgetItem(m_dial);
+	item->setAlignment(Qt::AlignCenter);
+	m_layout->addItem(item);
+	
+	item = new QWidgetItem(upp);
+	item->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
+	m_layout->addItem(item);
+
         RG_DEBUG << "setting port value = " << initialValue << endl;
     }
 }
