@@ -19,36 +19,51 @@
   COPYING included with this distribution for more information.
 */
 
-#include "MappedInstrument.h"
+#include "MappedDevice.h"
 
 namespace Rosegarden
 {
 
-
-MappedInstrument::MappedInstrument(Instrument::InstrumentType type,
-                                   MidiByte channel,
-                                   InstrumentId id):
-    m_type(type),
-    m_channel(channel),
-    m_id(id),
-    m_name(std::string(""))
+MappedDevice::MappedDevice()
 {
 }
 
-MappedInstrument::MappedInstrument(Instrument::InstrumentType type,
-                                   MidiByte channel,
-                                   InstrumentId id,
-                                   const std::string &name):
-    m_type(type),
-    m_channel(channel),
-    m_id(id),
-    m_name(name)
+MappedDevice::~MappedDevice()
 {
 }
 
 
-MappedInstrument::~MappedInstrument()
+QDataStream&
+operator>>(QDataStream &dS, MappedDevice *mD)
 {
+    int instruments;
+    dS >> instruments;
+
+    return dS;
+}
+
+
+QDataStream&
+operator>>(QDataStream &dS, MappedDevice &mD)
+{
+    int instruments;
+    dS >> instruments;
+
+    return dS;
+}
+
+QDataStream&
+operator<<(QDataStream &dS, MappedDevice *mD)
+{
+    dS << mD->size();
+    return dS;
+}
+
+QDataStream&
+operator<<(QDataStream &dS, const MappedDevice &mD)
+{
+    dS << mD.size();
+    return dS;
 }
 
 }

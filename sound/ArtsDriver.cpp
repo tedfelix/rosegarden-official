@@ -814,6 +814,8 @@ ArtsDriver::processMidiIn(const Arts::MidiCommand &midiCommand,
             break;
 
         case MIDI_SYSTEM_EXCLUSIVE:
+            std::cout << "ArtsDriver - SYSTEM EXCLUSIVE EVENT not supported"
+                      << std::endl;
             break;
 
         default:

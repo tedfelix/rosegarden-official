@@ -146,6 +146,10 @@ private:
 
     NoteOffQueue                 m_noteOffQueue;
 
+    // Because can fail even if the driver's up
+    bool                         m_midiInputPortConnected;
+    bool                         m_midiOutputPortConnected;
+
     //m_alsaRecordStartTime;
 
 };

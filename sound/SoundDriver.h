@@ -32,6 +32,7 @@
 #include "MappedInstrument.h"
 #include "RealTime.h"
 #include "AudioFile.h"
+#include "MappedDevice.h"
 
 // Abstract base to support SoundDrivers such as aRts and ALSA.
 //
@@ -240,17 +241,19 @@ protected:
     std::map<unsigned int, MappedEvent*> m_noteOnMap;
     NoteOffQueue                         m_noteOffQueue;
 
-    // Audio stuff - in here?
+    // Audio stuff - this class will do?
     //
     std::vector<PlayableAudioFile*> m_audioPlayQueue;
 
     //std::vector<AudioFile*> m_audioFiles;
     //
-    // This is our driver's own Instrument list to be returned
-    // and merged at the Sequencer before sending up to the
-    // application.
+
+    // This is our driver's own list of MappedInstruments.
+    // MappedDevice is wrapper to enable sending over DCOP
+    // as a whole.  MappedDevice is really just a fancy
+    // vector of MappedInstruments and can be used as such.
     //
-    std::vector<Rosegarden::MappedInstrument*> m_instruments;
+    MappedDevice             m_instruments;
 
     MappedComposition        m_recordComposition;
     RecordStatus             m_recordStatus;

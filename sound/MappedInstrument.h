@@ -35,7 +35,21 @@ namespace Rosegarden
 class MappedInstrument
 {
 public:
-    MappedInstrument(Instrument::InstrumentType type, MidiByte channel, InstrumentId id);
+
+    // GUI uses this constructor because it already knows
+    // the name of the Instrument
+    //
+    MappedInstrument(Instrument::InstrumentType type,
+                     MidiByte channel,
+                     InstrumentId id);
+
+    // Driver uses this constructor (because the gui will want
+    // to know the name)
+    //
+    MappedInstrument(Instrument::InstrumentType type,
+                     MidiByte channel,
+                     InstrumentId id,
+                     const std::string &name);
     ~MappedInstrument();
 
     InstrumentId getID() const { return m_id; }
@@ -50,6 +64,7 @@ private:
     Instrument::InstrumentType  m_type;
     MidiByte                    m_channel;
     InstrumentId                m_id;
+    std::string                 m_name;
 
 };
 

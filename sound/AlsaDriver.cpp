@@ -40,7 +40,10 @@ AlsaDriver::AlsaDriver():
     m_midiQueue(-1),
     m_maxClients(-1),
     m_maxPorts(-1),
-    m_maxQueues(-1)
+    m_maxQueues(-1),
+    m_midiInputPortConnected(false),
+    m_midiOutputPortConnected(false)
+
 {
     std::cout << "Rosegarden AlsaDriver - " << m_name << std::endl;
 }
@@ -240,11 +243,11 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
 void
 AlsaDriver::initialiseMidi()
 { 
-    // Create a handle
+    // Create a non-blocking handle.
+    // ("hw" will possibly give in to other handles in future?)
     //
     if (snd_seq_open(&m_midiHandle,
-                     "hw",                // "hw" will possibly give in
-                                          // to networked ideas at some point?
+                     "hw",                
                      SND_SEQ_OPEN_DUPLEX,
                      SND_SEQ_NONBLOCK) < 0)
     {
@@ -254,8 +257,6 @@ AlsaDriver::initialiseMidi()
         m_driverStatus = NO_DRIVER;
         return;
     }
-
-    snd_seq_nonblock(m_midiHandle, 0);
 
     // Now we have a handle generate some possible destinations
     // through the Instrument metaphor
@@ -322,9 +323,10 @@ AlsaDriver::initialiseMidi()
         std::cerr << "AlsaDriver::initialiseMidi() - "
                   << "can't subscribe output client/port"
                   << std::endl;
-        m_driverStatus = NO_DRIVER;
-        return;
+        m_midiOutputPortConnected = false;
     }
+    else
+        m_midiOutputPortConnected = true;
 
     // Connect from the input port
     //
@@ -336,9 +338,13 @@ AlsaDriver::initialiseMidi()
         std::cerr << "AlsaDriver::initialiseMidi() - "
                   << "can't subscribe input client/port"
                   << std::endl;
-        m_driverStatus = NO_DRIVER;
-        return;
+        // Not the end of the world if this fails but we
+        // have to flag it internally.
+        //
+        m_midiInputPortConnected = false;
     }
+    else
+        m_midiInputPortConnected = true;
 
     // Erm?
     //
@@ -590,6 +596,10 @@ AlsaDriver::allNotesOff()
         m_noteOffQueue.erase(i);
     }
 
+    // drop - does this work?
+    //
+    snd_seq_drop_output(m_midiHandle);
+
     // and flush them
     snd_seq_drain_output(m_midiHandle);
 
@@ -684,63 +694,123 @@ AlsaDriver::getMappedComposition(const RealTime & /*playLatency*/)
 {
     m_recordComposition.clear();
 
+    // If the input port hasn't connected we shouldn't poll it
+    //
+    if(m_midiInputPortConnected == false)
+        return &m_recordComposition;
+
     do
     {
         snd_seq_event_t *event;
 
+        // Check for input events and return if nothing returned
+        //
         if (snd_seq_event_input(m_midiHandle, &event) < 0)
-        {
-            std::cerr << "AlsaDriver::getMappedComposition - "
-                      << "can't get MIDI events" << std::endl;
             return &m_recordComposition;
-        }
 
-        if (m_playing)
-        {
-        }
-
-        //MidiByte channel = event->channel;
-        //unsigned int chanNoteKey = ( channel << 8 ) + midiCommand.data1;
+        MidiByte channel = event->data.note.channel;
+        unsigned int chanNoteKey = ( channel << 8 ) + event->data.note.note;
 
         switch(event->type)
         {
 
             case SND_SEQ_EVENT_NOTE:
-            case SND_SEQ_EVENT_KEYPRESS:
-            case SND_SEQ_EVENT_SYSEX:
-                break;
-
             case SND_SEQ_EVENT_NOTEON:
-                //m_noteOnMap[chanNoteKey] = new MappedEvent();
-                //m_noteOnMap[chanNoteKey]->setPitch(event->
-                //m_noteOnMap[chanNoteKey]->setVelocity(event->
+                if (event->data.note.velocity > 0)
+                {
+                    m_noteOnMap[chanNoteKey] = new MappedEvent();
+                    m_noteOnMap[chanNoteKey]->setPitch(event->data.note.note);
+                    m_noteOnMap[chanNoteKey]->
+                        setVelocity(event->data.note.velocity);
 
-                std::cout << "TIME = " << event->time.time.tv_sec
-                          << " . " << event->time.time.tv_nsec << std::endl;
+                    std::cout << "NOTE ON TIMESTAMP = "
+                              << event->time.time.tv_sec
+                              << " . "
+                              << event->time.time.tv_nsec
+                              << std::endl;
+                    break;
+                }
 
-                cout << "AlsaDriver::getMappedComposition - "
-                     << "GOT NOTEON" << std::endl;
-                break;
+                // fall through (velocity 0 == NOTEOFF)
 
             case SND_SEQ_EVENT_NOTEOFF:
+                if (m_noteOnMap[chanNoteKey] != 0)
+                {
+                    m_noteOnMap[chanNoteKey]->setDuration(RealTime(0, 1000));
+                    m_recordComposition.insert(m_noteOnMap[chanNoteKey]);
+
+                    // reset the reference
+                    //
+                    m_noteOnMap[chanNoteKey] = 0;
+                }
+                break;
+
+            case SND_SEQ_EVENT_KEYPRESS:
+                {
+                    MappedEvent *mE = new MappedEvent();
+                    mE->setType(MappedEvent::MidiKeyPressure);
+                    //mE->setEventTime(guiTimeStamp);
+                    mE->setData1(event->data.control.value >> 7);
+                    mE->setData2(event->data.control.value & 0x7f);
+                    m_recordComposition.insert(mE);
+                }
                 break;
 
             case SND_SEQ_EVENT_CONTROLLER:
+                {
+                    MappedEvent *mE = new MappedEvent();
+                    mE->setType(MappedEvent::MidiController);
+                    //mE->setEventTime(guiTimeStamp);
+                    mE->setData1(event->data.control.param);
+                    mE->setData2(event->data.control.value);
+                    m_recordComposition.insert(mE);
+                }
                 break;
 
             case SND_SEQ_EVENT_PGMCHANGE:
+                {
+                    MappedEvent *mE = new MappedEvent();
+                    mE->setType(MappedEvent::MidiProgramChange);
+                    //mE->setEventTime(guiTimeStamp);
+                    mE->setData1(event->data.control.value);
+                    m_recordComposition.insert(mE);
+
+                }
                 break;
 
             case SND_SEQ_EVENT_PITCHBEND:
+                {
+                    MappedEvent *mE = new MappedEvent();
+                    mE->setType(MappedEvent::MidiPitchWheel);
+                    //mE->setEventTime(guiTimeStamp);
+                    mE->setData1(event->data.control.value >> 7);
+                    mE->setData2(event->data.control.value & 0x7f);
+                    m_recordComposition.insert(mE);
+                }
                 break;
 
             case SND_SEQ_EVENT_CHANPRESS:
+                {
+                    MappedEvent *mE = new MappedEvent();
+                    mE->setType(MappedEvent::MidiChannelPressure);
+                    //mE->setEventTime(guiTimeStamp);
+                    mE->setData1(event->data.control.value >> 7);
+                    mE->setData2(event->data.control.value & 0x7f);
+                    m_recordComposition.insert(mE);
+                }
                break;
 
             default:
                std::cerr << "AlsaDriver::getMappedComposition - "
                          << "got unrecognised MIDI event" << std::endl;
                break;
+
+            case SND_SEQ_EVENT_SYSEX:
+                std::cout << "AlsaDriver - SYSTEM EXCLUSIVE EVENT not supported"
+                          << std::endl;
+
+                break;
+
         }
 
         snd_seq_free_event(event);
@@ -894,6 +964,9 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
                              const Rosegarden::RealTime &playLatency,
                              bool now)
 {
+    // If our output port hasn't connected 
+    if (m_midiOutputPortConnected == false)
+        return;
 
     if (m_startPlayback)
     {

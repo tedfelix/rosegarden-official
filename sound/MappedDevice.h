@@ -19,37 +19,34 @@
   COPYING included with this distribution for more information.
 */
 
+#include <vector>
+#include <qdatastream.h>
 #include "MappedInstrument.h"
+
+#ifndef _MAPPEDDEVICE_H_
+#define _MAPPEDDEVICE_H_
+
+// A DCOP wrapper to get MappedInstruments across to the GUI
+//
 
 namespace Rosegarden
 {
 
-
-MappedInstrument::MappedInstrument(Instrument::InstrumentType type,
-                                   MidiByte channel,
-                                   InstrumentId id):
-    m_type(type),
-    m_channel(channel),
-    m_id(id),
-    m_name(std::string(""))
+class MappedDevice : public std::vector<Rosegarden::MappedInstrument*>
 {
-}
+public:
+    MappedDevice();
+    ~MappedDevice();
 
-MappedInstrument::MappedInstrument(Instrument::InstrumentType type,
-                                   MidiByte channel,
-                                   InstrumentId id,
-                                   const std::string &name):
-    m_type(type),
-    m_channel(channel),
-    m_id(id),
-    m_name(name)
-{
-}
+    friend QDataStream& operator>>(QDataStream &dS, MappedDevice *mD);
+    friend QDataStream& operator<<(QDataStream &dS, MappedDevice *mD);
+    friend QDataStream& operator>>(QDataStream &dS, MappedDevice &mD);
+    friend QDataStream& operator<<(QDataStream &dS, const MappedDevice &mD);
 
+private:
 
-MappedInstrument::~MappedInstrument()
-{
-}
+};
 
 }
 
+#endif // _MAPPEDDEVICE_H_

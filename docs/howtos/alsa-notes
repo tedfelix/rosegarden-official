@@ -17,7 +17,7 @@ There is the "Mandrake devfs problem" as documented in this link:
 
   http://www.mail-archive.com/alsa-user@lists.sourceforge.net/msg02737.html
 
-This is a majot gotcha.  Switching off devfs support in your lilo or
+This is a major gotcha.  Switching off devfs support in your lilo or
 grub boot menu should fix this problem.
 
 Search the alsa-users list archive for any other specific problems:
@@ -25,3 +25,10 @@ Search the alsa-users list archive for any other specific problems:
  http://www.mail-archive.com/alsa-user@lists.sourceforge.net/
 
 
+
+More Notes
+----------
+
+Note that OSS/aRts likes to grab the external MIDI ports.  If the
+ALSA client isn't connecting to the input MIDI port then try 
+shutting down aRts.
