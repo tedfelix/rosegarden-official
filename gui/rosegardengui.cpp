@@ -5599,7 +5599,9 @@ RosegardenGUIApp::slotPluginSelected(Rosegarden::InstrumentId instrumentId,
 	//
 	if (inst->isAssigned())
 	{
-	    // unassign, destroy and recreate
+	    RG_DEBUG << "RosegardenGUIApp::slotPluginSelected - "
+		     << " setting identifier for mapper id " << inst->getMappedId()
+		     << " to " << inst->getIdentifier() << endl;
 
 	    Rosegarden::StudioControl::setStudioObjectProperty
 		(inst->getMappedId(),

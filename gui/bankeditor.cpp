@@ -63,6 +63,7 @@
 
 #include "Studio.h"
 #include "MidiDevice.h"
+#include "SoftSynthDevice.h"
 #include "MidiProgram.h"
 
 using Rosegarden::MidiBank;
@@ -2130,11 +2131,20 @@ RemapInstrumentDialog::populateCombo(int id)
 	    Rosegarden::MidiDevice *md =
 		dynamic_cast<Rosegarden::MidiDevice *>(*it);
 
-	    if (md && md->getDirection() == Rosegarden::MidiDevice::Play)
-	    {
-		m_devices.push_back(*it);
-		m_fromCombo->insertItem(strtoqstr((*it)->getName()));
-		m_toCombo->insertItem(strtoqstr((*it)->getName()));
+	    if (md) {
+		if (md->getDirection() == Rosegarden::MidiDevice::Play) {
+		    m_devices.push_back(*it);
+		    m_fromCombo->insertItem(strtoqstr((*it)->getName()));
+		    m_toCombo->insertItem(strtoqstr((*it)->getName()));
+		}
+	    } else {
+		Rosegarden::SoftSynthDevice *sd = 
+		    dynamic_cast<Rosegarden::SoftSynthDevice *>(*it);
+		if (sd) {
+		    m_devices.push_back(*it);
+		    m_fromCombo->insertItem(strtoqstr((*it)->getName()));
+		    m_toCombo->insertItem(strtoqstr((*it)->getName()));
+		}
 	    }
         }
 

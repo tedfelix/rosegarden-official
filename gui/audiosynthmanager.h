@@ -27,7 +27,7 @@
 #include "Instrument.h"
 
 class RosegardenGUIDoc;
-class QTable;
+class KComboBox;
 
 namespace Rosegarden {
     class Studio;
@@ -51,19 +51,17 @@ signals:
 
 protected slots:
     void slotClose();
-    void slotValueChanged(int row, int col);
+    void slotPluginChanged(int index);
 
 protected:
     virtual void closeEvent(QCloseEvent *);
-    void populate();
 
 protected:
     RosegardenGUIDoc *m_document;
     Rosegarden::Studio *m_studio;
     Rosegarden::AudioPluginManager *m_pluginManager;
-
-    QTable *m_synthTable;
     std::vector<int> m_synthPlugins;
+    std::vector<KComboBox *> m_synthCombos;
 
     static const char* const SynthPluginManagerConfigGroup;
 };

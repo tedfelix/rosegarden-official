@@ -800,6 +800,7 @@ TrackButtons::populateInstrumentPopup(Rosegarden::Instrument *thisTrackInstr, QP
 	QString pname(strtoqstr((*it)->getProgramName()));
 	Rosegarden::Device *device = (*it)->getDevice();
         Rosegarden::DeviceId devId = device->getId();
+	bool connected = false;
 
 	if ((*it)->getType() == Rosegarden::Instrument::SoftSynth) {
 	    pname = "";
@@ -807,15 +808,25 @@ TrackButtons::populateInstrumentPopup(Rosegarden::Instrument *thisTrackInstr, QP
 		(Rosegarden::Instrument::SYNTH_PLUGIN_POSITION);
 	    if (plugin) {
 		pname = strtoqstr(plugin->getProgram());
-		QString type, soName, label;
-		Rosegarden::PluginIdentifier::parseIdentifier
-		    (strtoqstr(plugin->getIdentifier()), type, soName, label);
-		if (pname != "") {
-		    pname = QString("%1: %2").arg(label).arg(pname);
+		QString identifier = strtoqstr(plugin->getIdentifier());
+		if (identifier != "") {
+		    connected = true;
+		    QString type, soName, label;
+		    Rosegarden::PluginIdentifier::parseIdentifier
+			(identifier, type, soName, label);
+		    if (pname != "") {
+			pname = QString("%1: %2").arg(label).arg(pname);
+		    } else {
+			pname = label;
+		    }
 		} else {
-		    pname = label;
+		    connected = false;
 		}
 	    }
+	} else if ((*it)->getType() == Rosegarden::Instrument::Audio) {
+	    connected = true;
+	} else {
+	    connected = (device->getConnection() != "");
 	}
 
 	bool instrUsedByMe = false;
@@ -851,11 +862,11 @@ TrackButtons::populateInstrumentPopup(Rosegarden::Instrument *thisTrackInstr, QP
 	    }
 
 	    QIconSet iconSet
-		(device->getConnection() == "" ?
+		(connected ?
 		 (deviceUsedByAnyone ? 
-		  unconnectedUsedPixmap : unconnectedPixmap) :
+		  connectedUsedPixmap : connectedPixmap) :
 		 (deviceUsedByAnyone ? 
-		  connectedUsedPixmap : connectedPixmap));
+		  unconnectedUsedPixmap : unconnectedPixmap));
 
             currentDevId = int(devId);
 
@@ -883,15 +894,15 @@ TrackButtons::populateInstrumentPopup(Rosegarden::Instrument *thisTrackInstr, QP
 	}
 
 	QIconSet iconSet
-	    (device->getConnection() == "" ?
-	     (instrUsedByAnyone ? 
-	      instrUsedByMe ?
-	      unconnectedSelectedPixmap :
-	      unconnectedUsedPixmap : unconnectedPixmap) :
+	    (connected ?
 	     (instrUsedByAnyone ? 
 	      instrUsedByMe ?
 	      connectedSelectedPixmap :
-	      connectedUsedPixmap : connectedPixmap));
+	      connectedUsedPixmap : connectedPixmap) :
+	     (instrUsedByAnyone ? 
+	      instrUsedByMe ?
+	      unconnectedSelectedPixmap :
+	      unconnectedUsedPixmap : unconnectedPixmap));
 
 	if (pname != "") iname += " (" + pname + ")";
 

@@ -617,7 +617,7 @@ AlsaDriver::generateInstruments()
         for (int channel = 0; channel < audioCount; ++channel)
         {
             sprintf(number, " #%d", channel + 1);
-            audioName = "JACK Audio" + std::string(number);
+            audioName = "Audio" + std::string(number);
             instr = new MappedInstrument(Instrument::Audio,
                                          channel,
                                          m_audioRunningId,
@@ -645,7 +645,7 @@ AlsaDriver::generateInstruments()
         MappedDevice *device =
                         new MappedDevice(audioDeviceId,
                                          Device::Audio,
-                                         "JACK Audio",
+                                         "Audio",
                                          "Audio connection");
         m_devices.push_back(device);
     }
