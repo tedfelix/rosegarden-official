@@ -1436,8 +1436,22 @@ Composition::getTrackByPosition(int position)
 Rosegarden::TrackId
 Composition::getNewTrackId() const
 {
-    if (m_tracks.size() == 0) return 0;
-    return m_tracks.size();
+    // Re BR #1070325: another track deletion problem
+    // Formerly this was returning the count of tracks currently in
+    // existence -- returning a duplicate ID if some had been deleted
+    // from the middle.  Let's find one that's really available instead.
+
+    TrackId highWater = 0;
+
+    trackconstiterator it = m_tracks.begin();
+
+    for (; it != m_tracks.end(); it++)
+    {
+        if ((*it).second->getId() >= highWater)
+            highWater = (*it).second->getId() + 1;
+    }
+
+    return highWater;
 }
 
 
