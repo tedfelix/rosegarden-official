@@ -12,14 +12,15 @@ A.  Features without which nobody will even believe we're serious:
 
 3.  track part deletion : DONE
 
-4.  proper saving/restoring of track part start time DONE
+4.  proper saving/restoring of track part start time : DONE
 
 5.  note insertion (by replacing rests) : DONE
 
 6.  note deletion
 
 7.  chording of a note which is of a different length than the ones already
-    present (the longer note must be split)
+    present (the longer note must be split) : DONE (inserting short over long
+    case only)
 
 8.  proper handling of time sigs. Tracks should be positioned at
     absolute steps, not bars : DONEish
@@ -66,9 +67,10 @@ C.  Cleaning up the code and organisation such that it's as pleasant as
     possible for other people to read and work with:
  
 1.  sort the source files in rosegardengui a bit better (core/,
-    gui/main/, gui/notation/, gui/trackedit)
+    gui/main/, gui/notation/, gui/trackedit) : DONE (not quite the planned
+    structure, but done nonetheless).
 
-2.  do a global core + rosegardengui Makefile
+2.  do a global core + rosegardengui Makefile : DONE
 
 3.  clean up XML code so that it's not spread over RosegardenGUIDoc and
     RoseXMLHandler
