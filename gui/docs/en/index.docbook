@@ -80,11 +80,32 @@
     abstract. -->
 
     <para>
-
       <application>Rosegarden</application> is a MIDI and audio
-      sequencer and musical notation editor.  This Handbook describes
-      how to use it.
+      sequencer and musical notation editor.  It allows the user to
+      record, arrange and compose music.  Music is represented either
+      by traditional score/MIDI data or by sets of audio files either
+      imported or recorded from a microphone, guitar or whatever audio
+      source you care to specify.  Music data can be edited to create a
+      composition, effects can be applied and the resulting mix can be
+      burnt to CD or turned into MP3/ogg format suitable for distributio
+      on the web.  Professional notation editing support also provides high
+      quality printed output of the composition.
+    </para>
 
+    <para>
+      <application>Rosegarden</application> is designed to look and
+      act in a manner familiar to experienced users coming to Linux
+      from other platforms whilst also being accessible and friendly
+      to users new to music software generally.
+    </para>
+
+    <para>
+    This help will guide you through the major features of the
+    software and provide help with basic concepts.  If there's something
+    you don't understand or require further help with the please
+    visit 
+    <ulink url="http://www.all-day-breakfast.com/rosegarden/">the Rosegarden website</ulink>
+    for the FAQ and mailing list instructions.
     </para>
 
     <!-- Note that the revhistory tags apply to the documentation
@@ -96,8 +117,32 @@
       <para>
 	<itemizedlist>
 	  <listitem><para>
-	      0.1 - first public release
-	    </para></listitem>
+	      0.8 - October 2002: printing, LADSPA plugins, improved Matrix View
+	  </para></listitem>
+	  <listitem><para>
+	      0.2.0 - August 2002: WAV file support, sweep selections, contrapuntal staves
+	  </para></listitem>
+	  <listitem><para>
+	      0.1.6 - June 2002: configuration dialog, Lilypond support, quantize dialog
+	  </para></listitem>
+	  <listitem><para>
+	      0.1.5 - May 2002: KDE 3, ALSA support, JACK audio support
+	  </para></listitem>
+	  <listitem><para>
+	      0.1.4 - March 2002: more undo, segment editing, audio playback
+	  </para></listitem>
+	  <listitem><para>
+	      0.1.3 - January 2002: piano-roll/matrix view, MIDI recording
+	  </para></listitem>
+	  <listitem><para>
+	      0.1.2 - November 2001: notation undo, transport dialog, position pointer
+	  </para></listitem>
+	  <listitem><para>
+	      0.1.1 - October 2001: scalable notation
+	  </para></listitem>
+	  <listitem><para>
+	      0.1   - June 2001: first public release of Rosegarden4
+	  </para></listitem>
 	</itemizedlist>
       </para>
     </sect1>

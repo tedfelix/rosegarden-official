@@ -80,6 +80,12 @@ o Segment colouring
 
 o selection of ALSA recording device
 
+Post 0.8 completed
+=================
+
+o ALSA seq bug on incoming events (infinite length) [FIXED]
+
+
 Completed for 0.8
 =================
 

@@ -1455,7 +1455,6 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
                                         (*i)->getPitch(),
                                         (*i)->getVelocity(),
                                         duration);
-                    cout << "ONE SHOT" << endl;
                 }
                 break;
 
