@@ -1,16 +1,30 @@
 
+/*
+    Rosegarden-4 v0.1
+    A sequencer and musical notation editor.
+
+    This program is Copyright 2000-2001
+        Guillaume Laurent   <glaurent@telegraph-road.org>,
+        Chris Cannam        <cannam@all-day-breakfast.com>,
+        Richard Bown        <bownie@bownie.com>
+
+    The moral right of the authors to claim authorship of this work
+    has been asserted.
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as
+    published by the Free Software Foundation; either version 2 of the
+    License, or (at your option) any later version.  See the file
+    COPYING included with this distribution for more information.
+*/
+
 #ifndef _EVENT_H_
 #define _EVENT_H_
 
-// Std
 #include <list>
 #include <multiset.h>
-//#include <map>
 #include <hash_map>
 #include <string>
-
-//#include <cstring>
-// #include <cstdio>
 
 // Need to associate one of those param names (Int, String etc) with a
 // storage type and a parser/writer.  The storage-type association
