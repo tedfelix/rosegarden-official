@@ -16,3 +16,4 @@ rosegarden
 *_skel.cpp
 *_meta_unload.cpp
 *.kidl
+core.*
