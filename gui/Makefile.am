@@ -125,6 +125,8 @@ SUBDIRS = docs
 EXTRA_DIST = \
 	fonts/*.pfa \
 	fonts/mappings/*.xml \
+	pixmaps/icons/*.xpm \
+	pixmaps/icons/*.png \
 	pixmaps/rg21/4/*.xpm \
 	pixmaps/rg21/8/*.xpm \
 	pixmaps/feta/4/*.xpm \
