@@ -79,8 +79,12 @@ public:
     void setBypass(bool bypass) { m_bypass = bypass; }
     bool isBypassed() const { return m_bypass; }
 
+    int getMappedId() const { return m_mappedId; }
+    void setMappedId(int value) { m_mappedId = value; }
+
 protected:
 
+    int                                m_mappedId;
     unsigned long                      m_id;
     std::vector<PluginPortInstance*>   m_ports;
     unsigned int                       m_position;

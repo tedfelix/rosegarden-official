@@ -1,0 +1,39 @@
+Rosegarden-4 Design Documentation
+=================================
+Richard Bown
+9.9.2002
+
+The Sequencer
+=============
+
+The Rosegarden-4 sequencer is comprises of code from two directories
+in the rosegarden CVS tree.  Of course there's the code in the
+rosegarden/sequencer which defines the application itself and top
+level behaviours as well as the vital DCOP interface it uses to
+communicate with the Rosegarden main process.  Additionally there
+is code in two libraries built out of the rosegarden/sound
+directory.  These are libRosegardenSequencer and libRosegardenSound.
+
+RosegardenSequencer library
+===========================
+
+SoundDriver and related code that the sequencer alone is interested
+in.  Conditional compilation occurs according to the type of sound
+support required.  ALSA, JACK and aRts are supported at the sequencer.
+ALSA and aRts are mutually exclusive options - JACK is an additional
+option for the ALSA sequencer.
+
+The ALSA/JACK combination is the preferred and better supported. 
+
+
+RosegardenSound library
+=======================
+
+Contains MappedComposition and other Mapped definitions (includind
+MappedObject and MappedStudio).  Also PeakFile generation and
+management code.  WAV/RIFF/BWF file format handling.  MidiFile
+handling as well.   This library is required by the main 
+Rosegarden process as well as the Sequencer itself.
+
+
+

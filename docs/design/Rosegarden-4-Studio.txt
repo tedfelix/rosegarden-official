@@ -1,0 +1,30 @@
+Rosegarden-4 Design Documentation
+=================================
+Richard Bown
+9.9.2002
+
+The Studio
+==========
+
+The (virtual) Studio is a concept that allows the user to create
+and manipulate virtual instruments and virtual connections in the
+Rosegarden world.  MIDI and audio datastreams can be connected 
+to each other to sources and to sinks and to virtual devices within
+the Studio.
+
+The initial design for the Rosegarden-4 Studio was inspired by the 
+virtual instruments that many leading sequencers employ along with
+the so-called "Environment" layers that professional sequencers
+implement.  These layers allow a level of virtual functionality
+that operates solely in software.
+
+The first component of the Studio to be properly implemented are audio
+volume faders and associated plugin lists.
+
+
+MappedObjects
+=============
+
+
+Read-only and Writeable MappedObjects
+=====================================

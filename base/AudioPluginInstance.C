@@ -23,6 +23,7 @@ namespace Rosegarden
 {
 
 AudioPluginInstance::AudioPluginInstance(unsigned int position):
+    m_mappedId(-1),
     m_id(0),
     m_position(position),
     m_assigned(false),
@@ -32,6 +33,7 @@ AudioPluginInstance::AudioPluginInstance(unsigned int position):
 
 AudioPluginInstance::AudioPluginInstance(unsigned long id,
                                          unsigned int position):
+                m_mappedId(-1),
                 m_id(id),
                 m_position(position),
                 m_assigned(true)

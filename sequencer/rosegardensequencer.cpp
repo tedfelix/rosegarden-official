@@ -1056,4 +1056,27 @@ RosegardenSequencerApp::getSampleRate() const
     return 0;
 }
 
+// Creates an object of a type
+//
+int 
+RosegardenSequencerApp::createMappedObject(int type)
+{
+    Rosegarden::MappedObject *object =
+              m_studio->createObject(
+                      Rosegarden::MappedObject::MappedObjectType(type), false);
+
+    return object->getId();
+}
+
+// Destroy an object
+//
+int 
+RosegardenSequencerApp::destroyMappedObject(int id)
+{
+    return int(m_studio->destroyObject(Rosegarden::MappedObjectId(id)));
+}
+
+
+
+
 

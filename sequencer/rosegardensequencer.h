@@ -205,6 +205,12 @@ public:
     //
     virtual QValueVector<QString> getPropertyList(int id,
                                                   const QString &property);
+    // Create a MappedObject
+    virtual int createMappedObject(int type);
+
+    // Destroy an object
+    //
+    virtual int destroyMappedObject(int id);
 
     // Sample rate
     //

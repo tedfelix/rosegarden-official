@@ -171,13 +171,12 @@ AudioPluginDialog::slotPluginSelected(int number)
                 // store so we can remove it later
                 m_controlLines.push_back(controlLine);
             }
-            /*
             else
             {
                 // spacer
-                new QLabel(QString("   "), controlLine);
+                QLabel *label = new QLabel(QString("   "), controlLine);
+                label->show();
             }
-            */
 
 
             // Weed out non-control ports and those which have erroneous

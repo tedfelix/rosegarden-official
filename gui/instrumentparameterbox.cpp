@@ -40,6 +40,7 @@
 #include "instrumentparameterbox.h"
 #include "audiopluginmanager.h"
 #include "widgets.h"
+#include "studiocontrol.h"
 
 #include "rosestrings.h"
 #include "rosedebug.h"
@@ -723,11 +724,49 @@ InstrumentParameterBox::slotPluginSelected(int index, int plugin)
         }
         else
         {
+            /*
             std::cout << "InstrumentParameterBox::slotPluginSelected" 
                       << std::endl;
+                      */
 
             Rosegarden::AudioPlugin *plgn = 
                 m_pluginManager->getPlugin(plugin);
+
+            // If unassigned then create a sequencer instance of this
+            // AudioPluginInstance.
+            //
+            if (inst->isAssigned())
+            {
+                // unassign, destory and recreate
+                //cout << "MODIFY assigned " << inst->getMappedId() << endl;
+                std::cout << "InstrumentParameterBox::slotPluginSelected - "
+                          << "modifying MappedObjectId = "
+                          << inst->getMappedId() << std::endl;
+            }
+            else
+            {
+                // create a studio object at the sequencer
+                Rosegarden::MappedObjectId newId =
+                    Rosegarden::StudioControl::createStudioObject
+                        (Rosegarden::MappedObject::LADSPAPlugin);
+
+                std::cout << "InstrumentParameterBox::slotPluginSelected - "
+                             " new MappedObjectId = " << newId << std::endl;
+
+                // set the new Mapped ID and that this instance
+                // is assigned
+                inst->setMappedId(newId);
+                inst->setAssigned(true);
+            }
+
+
+            /*
+            if (plgn == 0)
+            {
+                cout << "No instance" << endl;
+            }
+            */
+
 
             // initialise the instance from the plugin
             //

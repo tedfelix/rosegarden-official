@@ -163,9 +163,19 @@ public:
     virtual QValueVector<QString> getPropertyList(int id,
                                                   const QString &property) = 0;
 
+    // Create a (transient, writeable) object
+    //
+    virtual int createMappedObject(int type) = 0;
+
+    // Destroy an object (returns a bool but for KDE2 DCOP compat we
+    // use an int of course).
+    //
+    virtual int destroyMappedObject(int id) = 0;
+
     // Driver sample rate
     //
     virtual unsigned int getSampleRate() const = 0;
+
 
 };
 
