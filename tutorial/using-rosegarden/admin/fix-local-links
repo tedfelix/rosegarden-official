@@ -1,0 +1,20 @@
+#!/bin/bash
+#
+# fix-local-links
+#
+# Copyright (c) 2004  D. Michael McIntyre <dmmcintyr@users.sourceforge.net>
+# Released under the GPL
+#
+# Part of "Silvan's Sysadmin Suite" of scripts for lazy people.
+#
+# REQUIRES: 
+
+# OO does retarded things with local links.  Things like http://somefile.html
+# need to be repaired
+
+for file in $1/*.html;do
+    sed s@http://chapter@chapter@g $file > /tmp/$(basename $file)||exit 1
+    mv -f /tmp/$(basename $file) $file||exit 1
+done
+
+exit 0
