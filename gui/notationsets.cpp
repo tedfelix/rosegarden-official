@@ -441,10 +441,11 @@ NotationGroup::calculateBeam(NotationStaff &staff)
         && (*finalNote)->getAbsoluteTime() > (*initialNote)->getAbsoluteTime();
     if (!beam.necessary) return beam;
 
+//!!! shouldn't be using legato quantizer
     Chord initialChord(getList(), initialNote,
-                       &staff.getQuantizer(), m_clef, m_key),
+                       &staff.getLegatoQuantizer(), m_clef, m_key),
             finalChord(getList(),   finalNote,
-                       &staff.getQuantizer(), m_clef, m_key);
+                       &staff.getLegatoQuantizer(), m_clef, m_key);
 
     if (initialChord.getInitialElement() == finalChord.getInitialElement()) {
         return beam;
@@ -586,7 +587,8 @@ NotationGroup::applyBeam(NotationStaff &staff)
 
         if ((*i)->isNote()) {
 
-	    Chord chord(getList(), i, &staff.getQuantizer(), m_clef, m_key);
+//!!! shouldn't be using legato quantizer
+	    Chord chord(getList(), i, &staff.getLegatoQuantizer(), m_clef, m_key);
 	    unsigned int j;
 
             kdDebug(KDEBUG_AREA) << "NotationGroup::applyBeam: Found chord" << endl;

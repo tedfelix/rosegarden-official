@@ -349,7 +349,7 @@ public slots:
     void changeStretch(int newStretch);
 
     /// Changes the display quantization of the staffs on the view
-    void changeQuantization(int newQuantIndex);
+    void changeLegato(int newLegatoIndex);
 
 signals:
     /**
@@ -510,11 +510,18 @@ protected:
     
     ZoomSlider<int> *m_fontSizeSlider;
 
-    std::vector<int> m_quantizationDurations;
+    std::vector<int> m_legatoDurations;
 
     KAction* m_selectDefaultNote;
 
     QCanvasLine *m_pointer;
+
+    typedef std::set<NotationView *> NotationViewSet;
+    static NotationViewSet m_viewsExtant;
+
+    void redoLayoutAdvised(Rosegarden::Track *track = 0,
+			   Rosegarden::timeT startTime = 0,
+			   Rosegarden::timeT endTime = -1); // -1 => end of staff
 };
 
 //////////////////////////////////////////////////////////////////////

@@ -184,6 +184,8 @@ void EventSelection::updateBeginEndTime() const
 
 //////////////////////////////////////////////////////////////////////
 
+NotationView::NotationViewSet NotationView::m_viewsExtant;
+
 NotationView::NotationView(RosegardenGUIDoc* doc,
                            std::vector<Track *> tracks,
                            QWidget *parent) :
@@ -282,10 +284,14 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     }
 
     m_selectDefaultNote->activate();
+
+    m_viewsExtant.insert(this);
 }
 
 NotationView::~NotationView()
 {
+    m_viewsExtant.erase(this);
+
     kdDebug(KDEBUG_AREA) << "-> ~NotationView()\n";
 
     saveOptions();
@@ -650,22 +656,19 @@ void NotationView::initFontToolbar()
     connect(stretchSlider, SIGNAL(valueChanged(int)),
             this, SLOT(changeStretch(int)));
 
-/*!!! Removed temporarily because the implementation is so deficient
+    new QLabel("  Legato:  ", fontToolbar);
 
-    new QLabel("  Quantization:  ", fontToolbar);
-
-    if (m_quantizationDurations.size() == 0) {
+    if (m_legatoDurations.size() == 0) {
         for (int type = Note::Shortest; type <= Note::Longest; ++type) {
-            m_quantizationDurations.push_back
+            m_legatoDurations.push_back
                 ((int)(Note(type).getDuration()));
         }
     }
     QSlider *quantizeSlider = new ZoomSlider<int>
-        (m_quantizationDurations, Note(Note::Shortest).getDuration(),
+        (m_legatoDurations, Note(Note::Shortest).getDuration(),
          QSlider::Horizontal, fontToolbar);
     connect(quantizeSlider, SIGNAL(valueChanged(int)),
-            this, SLOT(changeQuantization(int)));
-*/
+            this, SLOT(changeLegato(int)));
 }
 
 void NotationView::initStatusBar()
@@ -725,13 +728,13 @@ NotationView::changeStretch(int n)
 }
 
 void
-NotationView::changeQuantization(int n)
+NotationView::changeLegato(int n)
 {
-    if (n >= (int)m_quantizationDurations.size())
-        n = m_quantizationDurations.size() - 1;
+    if (n >= (int)m_legatoDurations.size())
+        n = m_legatoDurations.size() - 1;
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-        m_staffs[i]->setQuantizationDuration(m_quantizationDurations[n]);
+        m_staffs[i]->setLegatoDuration(m_legatoDurations[n]);
     }
 
     applyLayout();
@@ -937,8 +940,6 @@ void NotationView::slotEditCut()
     redoLayout(0, // TODO : get the right staff
                m_currentEventSelection->getBeginTime(),
                m_currentEventSelection->getEndTime());
-
-    canvas()->update();
 
     kdDebug(KDEBUG_AREA) << "NotationView::slotEditCut() : selection duration = "
                          << m_currentEventSelection->getTotalDuration() << endl;
@@ -1442,31 +1443,45 @@ NotationView::findClosestNote(double eventX, Event *&timeSignature,
 
 void NotationView::redoLayout(int staffNo, timeT startTime, timeT endTime)
 {
-    applyLayout(staffNo);
+    Track *track = 0;
+    if (staffNo >= 0) track = &m_staffs[staffNo]->getTrack();
+    for (NotationViewSet::iterator i = m_viewsExtant.begin();
+	 i != m_viewsExtant.end(); ++i) {
+	(*i)->redoLayoutAdvised(track, startTime, endTime);
+    }
+}
+
+void NotationView::redoLayoutAdvised(Track *track, timeT startTime, timeT endTime)
+{
+    if (track == 0) applyLayout();
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 
-        Track &track = m_staffs[i]->getTrack();
+        Track *strack = &m_staffs[i]->getTrack();
+	bool thisStaff = (strack == track || track == 0);
+
+	if (thisStaff && (track != 0)) applyLayout(i);
 
         NotationElementList *notes = m_staffs[i]->getViewElementList();
         NotationElementList::iterator starti = notes->begin();
         NotationElementList::iterator endi = notes->end();
 
         if (startTime > 0) {
-            timeT barStartTime = track.findBarStartTime(startTime);
+            timeT barStartTime = strack->findBarStartTime(startTime);
             starti = notes->findTime(barStartTime);
         }
 
         if (endTime >= 0) {
-            timeT barEndTime = track.findBarEndTime(endTime);
+            timeT barEndTime = strack->findBarEndTime(endTime);
             endi = notes->findTime(barEndTime);
         }
 
-        m_staffs[i]->showElements(starti, endi,
-                                  (staffNo >= 0 && (int)i != staffNo));
+        m_staffs[i]->showElements(starti, endi, !thisStaff);
+//                                  (staffNo >= 0 && (int)i != staffNo));
         showBars(i);
     }
 
+    canvas()->update();
     PixmapArrayGC::deleteAll();
 }
 
@@ -1871,8 +1886,6 @@ void NotationSelectionPaster::handleMousePress(int /*height*/, int staffNo,
         m_parentView.redoLayout(staffNo,
                                 0,
                                 time + m_selection.getTotalDuration() + 1);
-
-        m_parentView.canvas()->update();
 
     } else {
         

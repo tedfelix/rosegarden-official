@@ -721,18 +721,24 @@ NotePixmapFactory::makeRestPixmap(const Note &restType)
     m_p.drawPixmap(0, 0, pixmap);
     m_pm.drawPixmap(0, 0, *(pixmap.mask()));
 
+    QPoint hotspot(m_font->getHotspot(charName));
+    hotspot.setX(0);
+
+    int restY = hotspot.y() - dot.height() - getStaffLineThickness();
+    if (restType.getNoteType() == Note::Semibreve ||
+	restType.getNoteType() == Note::Breve) {
+	restY += getLineSpacing();
+    }
+
     for (int i = 0; i < restType.getDots(); ++i) {
         int x = pixmap.width() + i * dot.width();
-        int y = getLineSpacing()*5 / 4;
-        m_p.drawPixmap(x, y, dot); 
-        m_pm.drawPixmap(x, y, *(dot.mask()));
+        m_p.drawPixmap(x, restY, dot); 
+        m_pm.drawPixmap(x, restY, *(dot.mask()));
     }
 
     m_p.end();
     m_pm.end();
 
-    QPoint hotspot(m_font->getHotspot(charName));
-    hotspot.setX(0);
     QCanvasPixmap restPixmap(*m_generatedPixmap, hotspot);
     QBitmap mask(*m_generatedMask);
     restPixmap.setMask(mask);

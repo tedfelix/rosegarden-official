@@ -69,7 +69,7 @@ NotationStaff::NotationStaff(QCanvas *canvas, Track *track,
     m_npf(0),
     m_haveSelection(false)
 {
-    setQuantizationDuration(Note(Note::Shortest).getDuration());
+    setLegatoDuration(Note(Note::Shortest).getDuration());
     int w = canvas->width();
     m_horizLineLength = w - 20;
     changeFont(fontName, resolution);
@@ -168,7 +168,7 @@ NotationStaff::changeFont(string fontName, int resolution)
 }    
 
 void
-NotationStaff::setQuantizationDuration(Rosegarden::timeT duration)
+NotationStaff::setLegatoDuration(Rosegarden::timeT duration)
 {
     m_quantizer = Rosegarden::Quantizer(duration, 2);
 }

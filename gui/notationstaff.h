@@ -65,8 +65,10 @@ public:
      */
     void changeFont(std::string fontName, int resolution);
 
-    void setQuantizationDuration(Rosegarden::timeT duration);
-    const Rosegarden::Quantizer &getQuantizer() const { return m_quantizer; }
+    void setLegatoDuration(Rosegarden::timeT duration);
+    const Rosegarden::Quantizer &getLegatoQuantizer() const {
+	return m_quantizer;
+    }
 
     /**
      * Gets a read-only reference to the pixmap factory used by the

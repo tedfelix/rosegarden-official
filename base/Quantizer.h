@@ -34,19 +34,26 @@
 namespace Rosegarden {
 
 /**
-    Quantizes Event durations, and calculates quantized values
-    for durations not in Events.  When quantizing an Event, the
-    quantized values are stored in the Event in properties
-    separate from the original duration, so quantization is
-    non-destructive (apart from losing any previous quantized
-    values with different quantization parameters).
 
-    The quantizer does two sorts of quantization: unit and note.
-    Unit quantization is the usual sort a sequencer will expect:
-    each event has its duration rounded to an integral multiple of
-    a given unit duration.  Note quantization instead rounds each
-    event to the closest duration expressible as a single note
-    with a maximum number of dots.
+    The Quantizer class quantizes starting time and duration for
+    Events, and will also calculate quantized values for durations not
+    in Events.  When quantizing an Event, the quantized values are
+    stored in the Event in properties separate from the original
+    duration, so quantization is non-destructive (apart from losing
+    any previously quantized values).
+
+    The quantizer can quantize events' starting times by unit, and
+    events' durations by unit or by note.  The default behaviour is to
+    quantize both start times and durations, so if you ask for note
+    quantization you'll still get the start times quantized by unit.
+
+    Unit quantization is the sort usually used when tidying recorded
+    music in a sequencer: each event has its starting time and
+    duration rounded to an integral multiple of a given unit time.
+
+    Note quantization instead rounds the durations to the closest
+    duration expressible as a single note with a maximum number of
+    dots.
 
     For example, say you have an event with duration 110.  A unit
     quantizer with a hemidemisemi unit (duration 6) will quantize
@@ -54,9 +61,21 @@ namespace Rosegarden {
     108 is not a good note duration: a note quantizer would
     instead quantize to 96 (the nearest note duration: a crotchet).
     
-    If you request note quantization, it does unit quantization as
-    well -- the results are stored in separate Event properties
-    and do not conflict.
+    In any case, if you request note quantization, it does unit
+    quantization of the duration as well -- the results are stored in
+    separate Event properties and do not conflict.  Note quantization
+    is obviously slower though.
+
+    If you just tell the quantizer to quantize, it will do note
+    quantization and will quantize both starting times and durations.
+
+    Note that quantizing a Track, or a section of a Track, is not the
+    same as individually quantizing each of the events in that Track.
+    The behaviour differs for rest events, which are treated the same
+    as notes if treated in isolation but which are considered as gaps
+    between the notes if part of a Track.
+
+    (This introductory comment could really do with a rewrite.)
 */
 
 class Quantizer
@@ -69,9 +88,11 @@ public:
      * "maxDots" dots per note.
      */
     Quantizer(int unit = -1, int maxDots = 2,
+	      PropertyName absTimeProperty = AbsoluteTimeProperty,
               PropertyName durationProperty = DurationProperty,
               PropertyName noteDurationProperty = NoteDurationProperty) :
 	m_unit(unit), m_maxDots(maxDots),
+	m_absoluteTimeProperty(absTimeProperty),
         m_durationProperty(durationProperty),
         m_noteDurationProperty(noteDurationProperty)
     {
@@ -80,6 +101,7 @@ public:
 
     ~Quantizer() { }
 
+    static const PropertyName AbsoluteTimeProperty;
     static const PropertyName DurationProperty;
     static const PropertyName NoteDurationProperty;
 
@@ -175,6 +197,7 @@ protected:
 
     int m_unit;
     int m_maxDots;
+    PropertyName m_absoluteTimeProperty;
     PropertyName m_durationProperty;
     PropertyName m_noteDurationProperty;
 };

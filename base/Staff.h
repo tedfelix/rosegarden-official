@@ -209,6 +209,8 @@ Staff<T>::eventAdded(const Track *t, Event *e)
     // is rather slow, and if all goes according to plan we should
     // eventually be able to lose it.
 
+    //!!! [Note to self: Lose this eventually]
+
     if (findEvent(e) == m_viewElementList->end()) {
         T *el = new T(e);
         m_viewElementList->insert(el);

@@ -26,6 +26,7 @@
 
 namespace Rosegarden {
 
+const PropertyName Quantizer::AbsoluteTimeProperty = "QuantizedAbsoluteTime";
 const PropertyName Quantizer::DurationProperty = "QuantizedDuration";
 const PropertyName Quantizer::NoteDurationProperty = "QuantizedNoteDuration";
 

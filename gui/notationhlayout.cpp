@@ -979,6 +979,6 @@ NotationHLayout::getQuantizer(const StaffType &staff) const
 {
     const NotationStaff &notationStaff = 
         dynamic_cast<const NotationStaff &>(staff);
-    return notationStaff.getQuantizer();
+    return notationStaff.getLegatoQuantizer();
 }
 

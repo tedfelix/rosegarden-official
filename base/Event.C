@@ -49,7 +49,6 @@ Event::EventData::EventData(const std::string &type) :
 
 Event::EventData *Event::EventData::unshare()
 {
-    cout << "EventData::unshare: lowering m_refCount from " << m_refCount << endl;
     --m_refCount;
 
     EventData *newData = new EventData(m_type); 
@@ -68,7 +67,6 @@ Event::EventData *Event::EventData::unshare()
 
 Event::EventData::~EventData()
 {
-    cout << "EventData dtor: m_refCount is " << m_refCount << endl;
     for (PropertyMap::iterator i = m_properties.begin();
          i != m_properties.end(); ++i) {
         delete i->second;

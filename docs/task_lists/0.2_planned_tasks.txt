@@ -12,7 +12,7 @@ Work required to fix existing stuff
 1.  updating one edit window when something is edited in another
     (however crudely we do it at first).  -- at the moment if you
     delete a note in one window then insert in another, it crashes
-    [carried over from 0.1]
+    [carried over from 0.1] [DONE -- dead slow though]
 
 2.  better time signature support.  The way things are at the
     moment, if you insert a time sig into a track it gets copied
@@ -28,7 +28,7 @@ Work required to fix existing stuff
 3.  leger lines [DONE]
 
 4.  ties (rendering them; they already are stored and handled in
-    playback - qcanvasspline is here though)
+    playback - qcanvasspline is here though) [DONE]
 
 5.  possibly quite a bit of work needed on improving the "feel" of
     insertion, track dragging etc: they currently feel rather
@@ -45,6 +45,7 @@ Work required to fix existing stuff
 
 7.  a few fixes to basic note drawing -- sometimes shifts the
     wrong notehead, note's stem sometimes doesn't meet its beam &c
+    [some DONE]
 
 8.  mucho cleaning up and tidying in the GUI: toolbars, menus,
     palettes etc.  kind of obvious
