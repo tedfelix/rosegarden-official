@@ -20,6 +20,11 @@
 */
 
 #include "widgets.h"
+#include "Quantizer.h"
+#include "Selection.h"
+
+
+#include <vector>
 
 #ifndef _MATRIXPARAMETERBOX_H_
 #define _MATRIXPARAMETERBOX_H_
@@ -38,11 +43,17 @@ public:
     MatrixParameterBox(QWidget *parent=0);
     ~MatrixParameterBox();
 
+    void initBox();
+
 public slots:
 
 signals:
 
 protected:
+
+    RosegardenComboBox         *m_quantizeValue;
+
+    std::vector<Rosegarden::StandardQuantization> m_standardQuantizations;
 
 };
 
