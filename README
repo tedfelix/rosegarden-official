@@ -102,6 +102,7 @@ starting-points include:
   docs/data_struct/units.txt -- how we store pitch and time
   docs/data_struct/sets.txt -- some terminology explained
 
+  docs/discussion/tasks_available.txt and
   docs/discussion/0.2_planned_tasks.txt -- ideas for what to do next
 
 
