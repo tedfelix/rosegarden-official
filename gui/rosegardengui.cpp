@@ -598,7 +598,7 @@ void RosegardenGUIApp::openURL(const KURL& url)
 
 void RosegardenGUIApp::fileOpen()
 {
-    KTmpStatusMsg msg(i18n("Opening file..."), statusBar());
+    statusHelpMsg(i18n("Opening file..."));
 
     KURL url = KFileDialog::getOpenURL(QString::null, "*.xml", this,
                                        i18n("Open File"));
