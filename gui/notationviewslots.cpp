@@ -1906,16 +1906,35 @@ NotationView::slotSetPointerPosition(timeT time, bool scroll)
     Rosegarden::Composition &comp = getDocument()->getComposition();
     int barNo = comp.getBarNumber(time);
 
-    double layoutX = m_hlayout->getXForTimeByEvent(time);
-
     int minCy = 0;
     double cx = 0;
     bool haveMinCy = false;
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-        if (barNo < m_hlayout->getFirstVisibleBarOnStaff(*m_staffs[i]) ||
-            barNo > m_hlayout-> getLastVisibleBarOnStaff(*m_staffs[i])) {
+
+	double layoutX = m_hlayout->getXForTimeByEvent(time);
+	Segment &seg = m_staffs[i]->getSegment();
+
+	bool good = true;
+
+	if (barNo >= m_hlayout->getLastVisibleBarOnStaff(*m_staffs[i])) {
+	    if (seg.isRepeating() && time < seg.getRepeatEndTime()) {
+		timeT mappedTime =
+		    seg.getStartTime() +
+		    ((time - seg.getStartTime()) %
+		     (seg.getEndMarkerTime() - seg.getStartTime()));
+		layoutX = m_hlayout->getXForTimeByEvent(mappedTime);
+	    } else {
+		good = false;
+	    }
+	} else if (barNo < m_hlayout->getFirstVisibleBarOnStaff(*m_staffs[i])) {
+	    good = false;
+	}
+
+	if (!good) {
+
             m_staffs[i]->hidePointer();
+
         } else {
 
             m_staffs[i]->setPointerPosition(layoutX);

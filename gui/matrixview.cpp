@@ -1355,9 +1355,23 @@ MatrixView::slotSetPointerPosition(timeT time, bool scroll)
     Rosegarden::Composition &comp = getDocument()->getComposition();
     int barNo = comp.getBarNumber(time);
 
-    if (barNo < m_hlayout.getFirstVisibleBarOnStaff(*m_staffs[0]) ||
-        barNo > m_hlayout. getLastVisibleBarOnStaff(*m_staffs[0])) {
-        m_staffs[0]->hidePointer();
+    if (barNo >= m_hlayout.getLastVisibleBarOnStaff(*m_staffs[0])) {
+
+	Segment &seg = m_staffs[0]->getSegment();
+
+	if (seg.isRepeating() && time < seg.getRepeatEndTime()) {
+	    time =
+		seg.getStartTime() +
+		((time - seg.getStartTime()) %
+		 (seg.getEndMarkerTime() - seg.getStartTime()));
+	    m_staffs[0]->setPointerPosition(m_hlayout, time);
+	} else {
+	    m_staffs[0]->hidePointer();
+	    scroll = false;
+	}
+    } else if (barNo < m_hlayout.getFirstVisibleBarOnStaff(*m_staffs[0])) {
+	m_staffs[0]->hidePointer();
+	scroll = false;
     } else {
         m_staffs[0]->setPointerPosition(m_hlayout, time);
     }
