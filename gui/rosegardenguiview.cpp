@@ -421,10 +421,12 @@ void RosegardenGUIView::setLoopMarker(Rosegarden::timeT startLoop,
 }
 
 
-void RosegardenGUIView::showVisuals(const Rosegarden::MappedEvent &mE)
+// Send a MappedEvent to the track meter
+//
+void RosegardenGUIView::showVisuals(const Rosegarden::MappedEvent *mE)
 {
-    double value = ((double)mE.getPitch()) / 127.0;
-    emit signalSetTrackMeter(value, mE.getTrack());
+    double value = ((double)mE->getPitch()) / 127.0;
+    emit signalSetTrackMeter(value, mE->getTrack());
 }
 
 

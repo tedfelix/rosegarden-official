@@ -151,7 +151,7 @@ public:
     /**
      * Show output levels
      */
-    void showVisuals(const Rosegarden::MappedEvent &mE);
+    void showVisuals(const Rosegarden::MappedEvent *mE);
     
 public slots:
     void editSegmentNotation(Rosegarden::Segment*);
@@ -202,6 +202,7 @@ signals:
 
     void signalSetLoopMarker(Rosegarden::timeT, Rosegarden::timeT);
 
+    // Send a value to the a track meter
     void signalSetTrackMeter(double, int);
 
 

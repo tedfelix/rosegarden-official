@@ -2091,7 +2091,7 @@ RosegardenGUIApp::showVisuals(const Rosegarden::MappedComposition &mC)
         if ((*it)->getType() == Rosegarden::MappedEvent::Internal)
         {
             m_transport->setMidiOutLabel(*it);
-            m_view->showVisuals(**it);
+            m_view->showVisuals(*it);
         }
     }
 
