@@ -25,6 +25,7 @@ using namespace std;
 using namespace Rosegarden;
 
 static const PropertyName DURATION_PROPERTY = "duration";
+static const PropertyName SOME_INT_PROPERTY = "someIntProp";
 static const PropertyName SOME_BOOL_PROPERTY = "someBoolProp";
 static const PropertyName SOME_STRING_PROPERTY = "someStringProp";
 static const PropertyName NONEXISTENT_PROPERTY = "nonexistentprop";
@@ -35,7 +36,7 @@ int main(int argc, char **argv)
         clock_t st, et;
         struct tms spare;
 
-        cout << "Testing Event..." << endl
+        cout << "\nTesting Event..." << endl
              << "sizeof Event : " << sizeof(Event) << endl;
 
         Event e("note");
@@ -48,9 +49,6 @@ int main(int argc, char **argv)
         cout << "sizeof event after some properties set : "
              << sizeof e << endl;
 
-        cout << "Testing debug dump : " << endl;
-        e.dump(cout);
-        cout << endl << "dump finished" << endl;
 /*
         try {
                 cout << "duration is " << e.get<String>(DURATION_PROPERTY) << endl;
@@ -95,6 +93,35 @@ int main(int argc, char **argv)
                 cout << "annotation is " << s << endl;
         else
                 cerr << "ERROR AT " << __LINE__ << endl;
+
+	cout << "\nTesting persistence & setMaybe..." << endl;
+
+	e.setMaybe<Int>(SOME_INT_PROPERTY, 1);
+	if (e.get<Int>(SOME_INT_PROPERTY) == 1) {
+	    cout << "a. Correct: 1" << endl;
+	} else {
+	    cout << "a. ERROR: " << e.get<Int>(SOME_INT_PROPERTY) << endl;
+	}
+
+	e.set<Int>(SOME_INT_PROPERTY, 2, false);
+	e.setMaybe<Int>(SOME_INT_PROPERTY, 3);
+	if (e.get<Int>(SOME_INT_PROPERTY) == 3) {
+	    cout << "b. Correct: 3" << endl;
+	} else {
+	    cout << "b. ERROR: " << e.get<Int>(SOME_INT_PROPERTY) << endl;
+	}
+
+	e.set<Int>(SOME_INT_PROPERTY, 4);
+	e.setMaybe<Int>(SOME_INT_PROPERTY, 5);
+	if (e.get<Int>(SOME_INT_PROPERTY) == 4) {
+	    cout << "c. Correct: 4" << endl;
+	} else {
+	    cout << "c. ERROR: " << e.get<Int>(SOME_INT_PROPERTY) << endl;
+	}
+
+        cout << "\nTesting debug dump : " << endl;
+        e.dump(cout);
+        cout << endl << "dump finished" << endl;
 
 #if TEST_SPEED
         cout << "Testing speed of Event..." << endl;

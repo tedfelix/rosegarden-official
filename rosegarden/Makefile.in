@@ -224,7 +224,7 @@ config.h.in configure configure.in install-sh
 
 #>- DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 #>+ 4
-KDE_DIST=Doxyfile rg-splash-aristocrat.xcf stop.xpm ffwd.xpm splash.gif unnamed0.not.sav circle-1.xpm circle.xpm rb_configure play.xpm splash.xcf cc_show_todo rosegarden.psd record.xpm cc_gcc3_configure timings.txt splash-24.png 1.gif rg_1.1.2_screengrab.png cc_bsd_configure rg-splash-banknote.png rg_1.1.2_screengrab.gif rcslog make_distrib rg-splash-banknote.gif cc_linux_configure x.xml Makefile.cvs rg-splash-banknote.xcf Makefile.dist rg_smooth_score.png pause.xpm a.gif b.gif c.gif rg-splash-ramona.xcf expensive-functions.txt configure.in.in rwd.xpm start.xpm gl_configure todo before.gif end.xpm 8.xpm splash.png 
+KDE_DIST=Doxyfile stop.xpm ffwd.xpm splash.gif unnamed0.not.sav circle-1.xpm circle.xpm rb_configure play.xpm splash.xcf cc_show_todo rosegarden.psd record.xpm cc_gcc3_configure timings.txt splash-24.png 1.gif rg_1.1.2_screengrab.png cc_bsd_configure rg_1.1.2_screengrab.gif rcslog make_distrib cc_linux_configure x.xml Makefile.cvs Makefile.dist rg_smooth_score.png pause.xpm a.gif b.gif c.gif expensive-functions.txt configure.in.in rwd.xpm start.xpm gl_configure todo before.gif end.xpm 8.xpm splash.png 
 
 DISTFILES= $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST) $(KDE_DIST)
 

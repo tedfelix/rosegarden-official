@@ -115,7 +115,7 @@ BasicSelectionCommand::BasicSelectionCommand(const QString &name,
 		 selection.getEndTime(),
 		 bruteForceRedo)
 {
-    // nothing else
+    // nothing
 }
 
 BasicSelectionCommand::~BasicSelectionCommand()

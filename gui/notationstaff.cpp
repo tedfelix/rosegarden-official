@@ -192,14 +192,12 @@ NotationStaff::getClosestElementToCanvasCoords(double cx, int cy,
 	}
 
 	double dx = layoutCoords.first - (*it)->getLayoutX();
-	kdDebug(KDEBUG_AREA) << "dx: " << dx << endl;
 	if (dx < 0) dx = -dx;
 
 	if (dx < minDist) {
 	    minDist = dx;
 	    result = it;
 	} else if (!before) {
-	    kdDebug(KDEBUG_AREA) << "break" << endl;
 	    break;
 	}
 
@@ -321,6 +319,8 @@ NotationStaff::positionElements(timeT from, timeT to)
 	    if (candidate != nel->end()) {
 		to = (*candidate)->getAbsoluteTime();
 		if (nextBarTime < 0) nextBarTime = to;
+	    } else {
+		nextBarTime = getSegment().getEndIndex();
 	    }
 	    ++changedBarCount;
 	} while (changedBarCount < 4 &&
@@ -446,11 +446,11 @@ NotationStaff::elementShiftedOnly(NotationElementList::iterator i)
 	    break;
 	}
     }
-/*
+
     kdDebug(KDEBUG_AREA)
 	<< "elementShiftedOnly: elt at " << (*i)->getAbsoluteTime() <<
 	", ok is " << ok << endl;
-*/
+
     return ok;
 }
 

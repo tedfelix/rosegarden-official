@@ -213,8 +213,13 @@ private:
 	m_data->m_refCount++;
     }
 
-    void unshare() {
-	if (m_data->m_refCount > 1) m_data = m_data->unshare();
+    bool unshare() { // returns true if unshare was necessary
+	if (m_data->m_refCount > 1) {
+	    m_data = m_data->unshare();
+	    return true;
+	} else {
+	    return false;
+	}
     }
 
     void lose() {
@@ -354,7 +359,7 @@ Event::set(const PropertyName &name, PropertyDefn<P>::basic_type value,
             sb->setPersistence(persistent);
         } else {
 #ifndef NDEBUG
-            std::cerr << "Error: Element: Attempt to set property \"" << name
+            std::cerr << "Error: Event: Attempt to set property \"" << name
                  << "\" as " << PropertyDefn<P>::typeName() <<", actual type is "
                  << sb->getTypeName() << std::endl;
 #endif
@@ -386,14 +391,19 @@ Event::setMaybe(const PropertyName &name, PropertyDefn<P>::basic_type value)
     if (i != m_data->m_properties.end()) {
 
         PropertyStoreBase *sb = i->second;
+
         if (sb->getType() == P) {
 	    if (!sb->isPersistent()) {
-		unshare();
+		if (unshare()) {
+		    // the unshare means sb now belongs to another event,
+		    // so look it up again
+		    sb = m_data->m_properties.find(name)->second;
+		}
 		(static_cast<PropertyStore<P> *>(sb))->setData(value);
 	    }
         } else {
 #ifndef NDEBUG
-            std::cerr << "Error: Element: Attempt to setMaybe property \"" << name
+            std::cerr << "Error: Event: Attempt to setMaybe property \"" << name
                  << "\" as " << PropertyDefn<P>::typeName() <<", actual type is "
                  << sb->getTypeName() << std::endl;
 #endif

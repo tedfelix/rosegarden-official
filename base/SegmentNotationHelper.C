@@ -643,8 +643,8 @@ void
 SegmentNotationHelper::makeBeamedGroup(iterator from, iterator to, string type)
 {
     makeBeamedGroupAux
-	(segment().findTime((*from)->getAbsoluteTime()),
-	 (to == end()) ? to : segment().findTime((*to)->getAbsoluteTime()),
+      ((from == end()) ? from : segment().findTime((*from)->getAbsoluteTime()),
+	 (to == end()) ? to   : segment().findTime((*to  )->getAbsoluteTime()),
 	 type);
 }
 
@@ -656,7 +656,7 @@ SegmentNotationHelper::makeBeamedGroupAux(iterator from, iterator to,
     
     for (iterator i = from; i != to; ++i) {
         (*i)->setMaybe<Int>(BEAMED_GROUP_ID, groupId);
-        (*i)->set<String>(BEAMED_GROUP_TYPE, type);
+        (*i)->setMaybe<String>(BEAMED_GROUP_TYPE, type);
     }
 }
 
@@ -670,8 +670,8 @@ void
 SegmentNotationHelper::unbeam(iterator from, iterator to)
 {
     unbeamAux
-	(segment().findTime((*from)->getAbsoluteTime()),
-	 (to == end()) ? to : segment().findTime((*to)->getAbsoluteTime()));
+     ((from == end()) ? from : segment().findTime((*from)->getAbsoluteTime()),
+        (to == end()) ? to   : segment().findTime((*to  )->getAbsoluteTime()));
 }
 
 void

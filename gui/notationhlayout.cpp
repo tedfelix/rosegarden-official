@@ -1130,6 +1130,7 @@ NotationHLayout::positionChord(StaffType &staff,
 	NotationElementList::iterator subItr = chord[i];
 	if (subItr == to) barEndsInChord = true;
 	(*subItr)->setLayoutX(baseX);
+	if (groupId < 0) (*chord[i])->event()->unset(BEAMED);
     }
 
     itr = chord.getFinalElement();
