@@ -409,7 +409,8 @@ EventView::applyLayout(int /*staffNo*/)
                     arg((*it)->get<Int>(Rosegarden::ChannelPressure::PRESSURE));
             }
 
-            if ((*it)->has(Rosegarden::KeyPressure::PITCH)) {
+            if ((*it)->isa(Rosegarden::KeyPressure::EventType) &&
+		(*it)->has(Rosegarden::KeyPressure::PITCH)) {
                 data1Str = QString("%1  ").
                     arg((*it)->get<Int>(Rosegarden::KeyPressure::PITCH));
             }

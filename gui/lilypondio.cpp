@@ -742,8 +742,14 @@ LilypondExporter::write() {
 		 barNo <= m_composition->getBarNumber((*i)->getEndMarkerTime());
 		 ++barNo) {
 
+		str << std::endl << indent(col);
+
 		writeBar(*i, barNo, col, key,
 			 lilyLyrics, prevStyle, eventsInProgress, str);
+
+		if (exportBarChecks) {
+		    str << " |";
+		}
 	    }
 
 #ifdef NOT_DEFINED
@@ -1248,6 +1254,7 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	writeInventedRests(timeSignature, 0, writtenDuration, str);
     }
 
+    timeT prevDuration = -1;
     eventstartlist eventsToStart;
 
     while (s->isBeforeEndMarker(i)) {
@@ -1295,25 +1302,32 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 
 	    //!!! note style here
 	    //!!! tuplet stuff here
+
+	    // look for starting slurs/hairpins in this chord
+	    for (i = chord.getInitialElement(); s->isBeforeEndMarker(i); ++i) {
+		if ((*i)->isa(Indication::EventType)) {
+		    eventsToStart.insert(*i);
+		    eventsInProgress.insert(*i);
+		}
+		if (i == chord.getFinalElement()) break;
+	    }		
 	    
-	    // close out any pending slurs/hairpins
 	    handleEndingEvents(eventsInProgress, i, str);
 
 	    if (chord.size() > 1) str << "< ";
 
 	    for (i = chord.getInitialElement(); s->isBeforeEndMarker(i); ++i) {
 
-		if ((*i)->isa(Indication::EventType)) {
-		    eventsToStart.insert(*i);
-		    eventsInProgress.insert(*i);
-
-		} else if ((*i)->isa(Text::EventType)) {
+		if ((*i)->isa(Text::EventType)) {
 		    //!!!
 
 		} else if ((*i)->isa(Note::EventType)) {
 
 		    writePitch(*i, key, str);
-		    writeDuration(duration, str);
+		    if (duration != prevDuration) {
+			writeDuration(duration, str);
+			prevDuration = duration;
+		    }
 		    writtenDuration += duration;
 		    writeMarks(*i, str);
 
@@ -1332,14 +1346,22 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	    }
 
 	    if (chord.size() > 1) str << ">";
+	    handleStartingEvents(eventsToStart, str);
 	    if (tiedForward) str << "~ ";
 
 	} else if ((*i)->isa(Note::EventRestType)) {
 	    
+	    handleEndingEvents(eventsInProgress, i, str);
+
 	    str << "r";
-	    writeDuration(duration, str);
+	    if (duration != prevDuration) {
+		writeDuration(duration, str);
+		prevDuration = duration;
+	    }
 	    writtenDuration += duration;
 	    //!!! text?
+
+	    handleStartingEvents(eventsToStart, str);
 	    str << " ";
 
 	} else if ((*i)->isa(Clef::EventType)) {
@@ -1364,7 +1386,7 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	    str << std::endl << indent(col);
 
 	} else if ((*i)->isa(Rosegarden::Key::EventType)) {
-	    
+
 	    str << "\\key ";
 	    key = Rosegarden::Key(**i);
 	    
@@ -1379,12 +1401,9 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	    str << std::endl << indent(col);
 
 	} else if ((*i)->isa(Indication::EventType)) {
-	    
 	    eventsToStart.insert(*i);
 	    eventsInProgress.insert(*i);
 	}
-
-	handleStartingEvents(eventsToStart, str);
 
 	++i;
     }
