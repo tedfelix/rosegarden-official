@@ -1387,6 +1387,8 @@ SegmentCanvas::findRepeatClickedOn(QPoint pos)
 
 void SegmentCanvas::contentsMousePressEvent(QMouseEvent* e)
 {
+    startAutoScroll();
+
     switch (e->button()) {
     case LeftButton:
     case MidButton:
@@ -1431,6 +1433,8 @@ void SegmentCanvas::contentsMouseDoubleClickEvent(QMouseEvent* e)
 
 void SegmentCanvas::contentsMouseReleaseEvent(QMouseEvent *e)
 {
+    stopAutoScroll();
+
     if (!m_tool) return;
 
     if (e->button() == LeftButton ||
@@ -1443,15 +1447,16 @@ void SegmentCanvas::contentsMouseMoveEvent(QMouseEvent* e)
 
     int follow = m_tool->handleMouseMove(e);
     
-    if (follow != SegmentTool::NoFollow && isTimeForSmoothScroll()) {
+    if (follow != SegmentTool::NoFollow) {
+        doAutoScroll();
 
-        if (follow & EditTool::FollowHorizontal) {
-            slotScrollHorizSmallSteps(e->pos().x());
-        }
+//         if (follow & EditTool::FollowHorizontal) {
+//             slotScrollHorizSmallSteps(e->x());
+//         }
 
-        if (follow & EditTool::FollowVertical) {
-            slotScrollVertSmallSteps(e->pos().y());
-        }
+//         if (follow & EditTool::FollowVertical) {
+//             slotScrollVertSmallSteps(e->y());
+//         }
     }
 }
 

@@ -20,6 +20,8 @@
 */
 
 #include <qlayout.h>
+#include <qapplication.h>
+#include <qcursor.h>
 
 #include "rosestrings.h"
 #include "rosegardencanvasview.h"
@@ -34,8 +36,13 @@ RosegardenCanvasView::RosegardenCanvasView(QCanvas* canvas,
       m_currentBottomWidgetHeight(-1),
       m_smoothScroll(true),
       m_smoothScrollTimeInterval(DefaultSmoothScrollTimeInterval),
-      m_minDeltaScroll(DefaultMinDeltaScroll)
+      m_minDeltaScroll(DefaultMinDeltaScroll),
+      m_autoScrollTime(InitialScrollTime),
+      m_autoScrollAccel(InitialScrollAccel)
 {
+    setDragAutoScroll(true);
+    connect( &m_autoScrollTimer, SIGNAL( timeout() ),
+             this, SLOT( doAutoScroll() ) );
 }
 
 void RosegardenCanvasView::fitWidthToContents()
@@ -69,6 +76,107 @@ void RosegardenCanvasView::slotUpdate()
 {
     CanvasItemGC::gc();
     canvas()->update();
+}
+
+
+
+// Smooth scroll checks
+//
+
+const int RosegardenCanvasView::AutoscrollMargin = 16;
+const int RosegardenCanvasView::InitialScrollTime = 30;
+const int RosegardenCanvasView::InitialScrollAccel = 5;
+
+/// Copied from QScrollView
+void RosegardenCanvasView::startAutoScroll()
+{
+    if ( !m_autoScrollTimer.isActive() ) {
+        m_autoScrollTime = InitialScrollTime;
+        m_autoScrollAccel = InitialScrollAccel;
+        m_autoScrollTimer.start( m_autoScrollTime );
+    }
+
+    m_autoScrollStartPoint = viewport()->mapFromGlobal( QCursor::pos() );
+    m_autoScrollYMargin = m_autoScrollStartPoint.y() / 10;
+    m_autoScrollXMargin = m_autoScrollStartPoint.x() / 10;
+
+}
+
+void RosegardenCanvasView::stopAutoScroll()
+{
+    m_autoScrollTimer.stop();
+    m_minDeltaScroll = DefaultMinDeltaScroll;
+}
+
+void RosegardenCanvasView::doAutoScroll()
+{
+    QPoint p = viewport()->mapFromGlobal( QCursor::pos() );
+
+    m_autoScrollTimer.start( m_autoScrollTime );
+
+//     if ( m_autoScrollAccel-- <= 0 && m_autoScrollTime ) {
+//         m_autoScrollAccel = InitialScrollAccel;
+//         m_autoScrollTime--;
+//         m_autoScrollTimer.start( m_autoScrollTime );
+//     }
+
+    int dx = 0, dy = 0;
+    if ( p.y() < m_autoScrollYMargin ) {
+        dy = -m_minDeltaScroll;
+    } else if ( p.y() > visibleHeight() - m_autoScrollYMargin ) {
+        dy = +m_minDeltaScroll;
+    }
+    if ( p.x() < m_autoScrollXMargin ) {
+        dx = -m_minDeltaScroll;
+    } else if ( p.x() > visibleWidth() - m_autoScrollXMargin ) {
+        dx = +m_minDeltaScroll;
+    }
+    if ( dx || dy ) {
+        scrollBy(dx,dy);
+        m_minDeltaScroll *= 1.1;
+    } else {
+        stopAutoScroll();
+    }
+}
+
+
+const int RosegardenCanvasView::DefaultSmoothScrollTimeInterval = 20;
+const int RosegardenCanvasView::DefaultMinDeltaScroll = 2;
+
+bool RosegardenCanvasView::isTimeForSmoothScroll()
+{
+    static int desktopWidth = QApplication::desktop()->width(),
+        desktopHeight = QApplication::desktop()->height();
+
+    if (m_smoothScroll) {
+        int ta = m_scrollAccelerationTimer.elapsed();
+        int t = m_scrollTimer.elapsed();
+
+	RG_DEBUG << "t = " << t << ", ta = " << ta << ", int " << m_smoothScrollTimeInterval << ", delta " << m_minDeltaScroll << endl;
+
+        if (t < m_smoothScrollTimeInterval) {
+
+            return false;
+
+        } else {
+            
+            if (ta > 300) {
+                // reset smoothScrollTimeInterval
+                m_smoothScrollTimeInterval = DefaultSmoothScrollTimeInterval;
+                m_minDeltaScroll = DefaultMinDeltaScroll;
+                m_scrollAccelerationTimer.restart();
+            } else if (ta > 50) {
+//                 m_smoothScrollTimeInterval /= 2;
+                m_minDeltaScroll *= 1.08;
+                m_scrollAccelerationTimer.restart();
+            }
+            
+            m_scrollTimer.restart();
+            return true;
+        }
+    }
+
+    return true;
 }
 
 // This scrolling model pages the CanvasView across the screen
@@ -155,41 +263,6 @@ void RosegardenCanvasView::slotScrollHorizSmallSteps(int hpos)
 
     }
 }
-
-const int RosegardenCanvasView::DefaultSmoothScrollTimeInterval = 20;
-const int RosegardenCanvasView::DefaultMinDeltaScroll = 2;
-
-bool RosegardenCanvasView::isTimeForSmoothScroll()
-{
-    if (m_smoothScroll) {
-        int ta = m_scrollAccelerationTimer.elapsed();
-        int t = m_scrollTimer.elapsed();
-
-	RG_DEBUG << "t = " << t << ", ta = " << ta << ", int " << m_smoothScrollTimeInterval << ", delta " << m_minDeltaScroll << endl;
-
-        if (t < m_smoothScrollTimeInterval) {
-
-            return false;
-
-        } else {
-
-            if (ta > 300) {
-                // reset smoothScrollTimeInterval
-                m_smoothScrollTimeInterval = DefaultSmoothScrollTimeInterval;
-                m_minDeltaScroll = DefaultMinDeltaScroll;
-                m_scrollAccelerationTimer.restart();
-            } else if (ta > 50) {
-                m_smoothScrollTimeInterval /= 2;
-                m_minDeltaScroll *= 1.08;
-                m_scrollAccelerationTimer.restart();
-            }
-            
-            m_scrollTimer.restart();
-            return true;
-        }
-    }
-}
-
 
 void RosegardenCanvasView::slotScrollVertSmallSteps(int vpos)
 {

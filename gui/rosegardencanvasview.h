@@ -27,6 +27,7 @@
 #include <qcanvas.h>
 #include <qwmatrix.h>
 #include <qdatetime.h>
+#include <qtimer.h>
 
 class QScrollBar;
 class QGridLayout;
@@ -112,6 +113,12 @@ protected:
 
     virtual QScrollBar* getMainHorizontalScrollBar() { return horizontalScrollBar(); }
 
+    void startAutoScroll();
+    void stopAutoScroll();
+protected slots:
+    void doAutoScroll();
+    
+
     //--------------- Data members ---------------------------------
 
     QWidget* m_bottomWidget;
@@ -122,8 +129,21 @@ protected:
     float m_minDeltaScroll;
     QTime m_scrollTimer;
     QTime m_scrollAccelerationTimer;
+
+    QTimer m_autoScrollTimer;
+    int m_autoScrollTime;
+    int m_autoScrollAccel;
+    QPoint m_autoScrollStartPoint;
+    int m_autoScrollYMargin;
+    int m_autoScrollXMargin;
+    
     static const int DefaultSmoothScrollTimeInterval;
     static const int DefaultMinDeltaScroll;
+
+    static const int AutoscrollMargin;
+    static const int InitialScrollTime;
+    static const int InitialScrollAccel;
+
 };
 
 
