@@ -1538,9 +1538,9 @@ AdjustMenuInterpretCommand::applyHairpins()
 	    --itr;
 	}
 
-	int startingVelocity = 100;
+	long startingVelocity = 100;
 	if (itr != segment.end()) {
-	    startingVelocity = (*itr)->get<Int>(VELOCITY);
+	    (*itr)->get<Int>(VELOCITY, startingVelocity);
 	}
 	
 	// The ending velocity is harder.  If there's a dynamic change
@@ -1550,7 +1550,7 @@ AdjustMenuInterpretCommand::applyHairpins()
 	// we should probably make the degree of change caused by the
 	// hairpin depend on its total duration.
 
-	int endingVelocity = startingVelocity;
+	long endingVelocity = startingVelocity;
 	timeT hairpinEndTime = inditr->first +
                                inditr->second->getIndicationDuration();
 	itr = segment.findTime(hairpinEndTime);

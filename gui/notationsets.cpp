@@ -556,6 +556,7 @@ NotationGroup::applyStemProperties()
 	el->event()->setMaybe<Bool>(NotationProperties::BEAM_ABOVE, aboveNotes);
         
         if (el->isNote() &&
+	    el->event()->has(NOTE_TYPE) &&
 	    el->event()->get<Int>(NOTE_TYPE) < Note::Crotchet &&
 	    el->event()->has(BEAMED_GROUP_ID) &&
 	    el->event()->get<Int>(BEAMED_GROUP_ID) == m_groupNo) {
@@ -588,6 +589,7 @@ NotationGroup::haveInternalRest() const
         NotationElement* el = static_cast<NotationElement*>(*i);
 
 	if (el->isNote() &&
+	    el->event()->has(NOTE_TYPE) &&
 	    el->event()->get<Int>(NOTE_TYPE) < Note::Crotchet &&
 	    el->event()->has(BEAMED_GROUP_ID) &&
 	    el->event()->get<Int>(BEAMED_GROUP_ID) == m_groupNo) {
@@ -900,6 +902,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
 	el->event()->unset(m_properties.TUPLING_LINE_MY_Y);
         
         if (el->isNote() &&
+	    el->event()->has(NOTE_TYPE) &&
 	    el->event()->get<Int>(NOTE_TYPE) < Note::Crotchet &&
 	    el->event()->has(BEAMED_GROUP_ID) &&
 	    el->event()->get<Int>(BEAMED_GROUP_ID) == m_groupNo) {

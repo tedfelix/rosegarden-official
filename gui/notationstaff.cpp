@@ -1633,8 +1633,8 @@ NotationStaff::setTuplingParameters(NotationElement *elt,
 	}
 
 	long tuplingLineGradient = 0;
-	if (!(elt->event()->get<Int>(properties.TUPLING_LINE_GRADIENT),
-	      tuplingLineGradient)) {
+	if (!(elt->event()->get<Int>(properties.TUPLING_LINE_GRADIENT,
+	      tuplingLineGradient))) {
 	    std::cerr << "WARNING: Tupled event at " << elt->event()->getAbsoluteTime() << " has no tupling line gradient" << std::endl;
 	}
 

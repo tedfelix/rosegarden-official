@@ -420,7 +420,8 @@ NoteInserter::computeLocationAndPreview(QMouseEvent *e)
 	while (i != segment.end()) {
 	    if ((*i)->isa(Rosegarden::Key::EventType)) break;
 	    if ((*i)->isa(Rosegarden::Note::EventType)) {
-		if ((*i)->has(NotationProperties::HEIGHT_ON_STAFF)) {
+		if ((*i)->has(NotationProperties::HEIGHT_ON_STAFF) &&
+		    (*i)->has(Rosegarden::BaseProperties::PITCH)) {
 		    int h = (*i)->get<Int>(NotationProperties::HEIGHT_ON_STAFF);
 		    if (h == height) {
 			pitch = (*i)->get<Int>(Rosegarden::BaseProperties::PITCH);
