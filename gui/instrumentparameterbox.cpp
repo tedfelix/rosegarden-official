@@ -29,6 +29,7 @@
 #include <qlabel.h>
 #include <qcheckbox.h>
 
+#include "Midi.h"
 #include "Instrument.h"
 #include "MidiDevice.h"
 #include "instrumentparameterbox.h"
@@ -357,6 +358,14 @@ InstrumentParameterBox::slotSelectProgram(int index)
 
     m_selectedInstrument->setProgramChange(prg->program);
 
+    Rosegarden::MappedEvent *mE = 
+        new Rosegarden::MappedEvent(m_selectedInstrument->getID(), 
+                                    Rosegarden::MappedEvent::MidiProgramChange,
+                                    prg->program,
+                                    (Rosegarden::MidiByte)0);
+    // Send the controller change
+    //
+    emit sendMappedEvent(mE);
 }
 
 
@@ -368,11 +377,15 @@ InstrumentParameterBox::slotSelectPan(int index)
 
     m_selectedInstrument->setPan(index);
 
+    Rosegarden::MappedEvent *mE = 
+        new Rosegarden::MappedEvent(m_selectedInstrument->getID(), 
+                                    Rosegarden::MappedEvent::MidiController,
+                                    Rosegarden::MIDI_CONTROLLER_PAN,
+                                    (Rosegarden::MidiByte)index);
     // Send the controller change
     //
-    emit sendMidiController(m_selectedInstrument->getID(), 
-                            (Rosegarden::MidiByte)10,
-                            (Rosegarden::MidiByte)index);
+    emit sendMappedEvent(mE);
+
 }
 
 void

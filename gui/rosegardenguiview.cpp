@@ -112,13 +112,9 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
     // Re-emit the sendMidiController
     //
     connect(m_instrumentParameterBox,
-            SIGNAL(sendMidiController(Rosegarden::InstrumentId,
-                                      Rosegarden::MidiByte,
-                                      Rosegarden::MidiByte)),
+            SIGNAL(sendMappedEvent(Rosegarden::MappedEvent*)),
             this,
-            SLOT(slotSendMidiController(Rosegarden::InstrumentId,
-                                        Rosegarden::MidiByte,
-                                        Rosegarden::MidiByte)));
+            SLOT(slotSendMappedEvent(Rosegarden::MappedEvent*)));
 
     if (doc)
         m_trackEditor->setupSegments();
@@ -319,14 +315,9 @@ RosegardenGUIView::slotAddCommandToHistory(KCommand *command)
 
 
 void 
-RosegardenGUIView::slotSendMidiController(Rosegarden::InstrumentId id,
-                                          Rosegarden::MidiByte controller,
-                                          Rosegarden::MidiByte value)
+RosegardenGUIView::slotSendMappedEvent(Rosegarden::MappedEvent *mE)
 {
-    emit sendMidiController(id, controller, value);
+    emit sendMappedEvent(mE);
 }
-
-
-
 
 

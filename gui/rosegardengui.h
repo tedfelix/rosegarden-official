@@ -533,9 +533,7 @@ public slots:
     /*
      * slotSendMidiController
      **/
-    void slotSendMidiController(Rosegarden::InstrumentId id,
-                                Rosegarden::MidiByte controller,
-                                Rosegarden::MidiByte value);
+    void slotSendMappedEvent(Rosegarden::MappedEvent *mE);
 
 private:
 

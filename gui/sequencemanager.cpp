@@ -1047,17 +1047,11 @@ SequenceManager::sendMappedComposition(const Rosegarden::MappedComposition &mC)
 }
 
 void
-SequenceManager::sendMidiController(Rosegarden::InstrumentId id,
-                                    Rosegarden::MidiByte control,
-                                    Rosegarden::MidiByte value)
+SequenceManager::sendMappedEvent(Rosegarden::MappedEvent *mE)
 {
     Rosegarden::MappedComposition mC;
 
-    mC.insert
-        (new Rosegarden::MappedEvent(id,
-                                     Rosegarden::MappedEvent::MidiController,
-                                     control,
-                                     value));
+    mC.insert(mE);
     sendMappedComposition(mC);
 }
 

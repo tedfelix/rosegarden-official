@@ -97,10 +97,7 @@ public:
     // For immediate processing at the other end - use this method
     //
     void sendMappedComposition(const Rosegarden::MappedComposition &mC);
-
-    void sendMidiController(Rosegarden::InstrumentId id,
-                            Rosegarden::MidiByte control,
-                            Rosegarden::MidiByte value);
+    void sendMappedEvent(Rosegarden::MappedEvent *mE);
 
 private:
 

@@ -105,6 +105,13 @@ const MidiByte MIDI_TIME_SIGNATURE         = 0x58;
 const MidiByte MIDI_KEY_SIGNATURE          = 0x59;
 const MidiByte MIDI_SEQUENCER_SPECIFIC     = 0x7F;
 
+// Some controllers
+//
+const MidiByte MIDI_CONTROLLER_BANK_MSB    = 0x00;
+const MidiByte MIDI_CONTROLLER_BANK_LSB    = 0x20;
+const MidiByte MIDI_CONTROLLER_MODULATION  = 0x01;
+const MidiByte MIDI_CONTROLLER_PAN         = 0x0A;
+
 
 }
 

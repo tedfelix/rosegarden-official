@@ -154,9 +154,7 @@ public slots:
     /*
      * For re-emission purposes
      */
-    void slotSendMidiController(Rosegarden::InstrumentId id,
-                                Rosegarden::MidiByte controller,
-                                Rosegarden::MidiByte value);
+    void slotSendMappedEvent(Rosegarden::MappedEvent *mE);
 
 signals:
     void activateTool(SegmentCanvas::ToolType);
@@ -164,9 +162,7 @@ signals:
     // Re-emit sendMidiController (going up towards SequenceManager
     // through the GUIApp)
     //
-    void sendMidiController(Rosegarden::InstrumentId,
-                            Rosegarden::MidiByte,
-                            Rosegarden::MidiByte);
+    void sendMappedEvent(Rosegarden::MappedEvent *mE);
 
 protected:
     //--------------- Data members ---------------------------------

@@ -425,14 +425,8 @@ void RosegardenGUIApp::initView()
 
     // So that the GUIView can send immediate controllers
     //
-    connect(m_view,
-            SIGNAL(sendMidiController(Rosegarden::InstrumentId,
-                                      Rosegarden::MidiByte,
-                                      Rosegarden::MidiByte)),
-            this,
-            SLOT(slotSendMidiController(Rosegarden::InstrumentId,
-                                        Rosegarden::MidiByte,
-                                        Rosegarden::MidiByte)));
+    connect(m_view, SIGNAL(sendMappedEvent(Rosegarden::MappedEvent*)),
+            this, SLOT(slotSendMappedEvent(Rosegarden::MappedEvent*)));
 
     m_doc->addView(m_view);
     setCentralWidget(m_view);
@@ -1732,11 +1726,9 @@ RosegardenGUIApp::slotUnsetLoop()
 }
 
 void
-RosegardenGUIApp::slotSendMidiController(Rosegarden::InstrumentId id,
-                                         Rosegarden::MidiByte controller,
-                                         Rosegarden::MidiByte value)
+RosegardenGUIApp::slotSendMappedEvent(Rosegarden::MappedEvent *mE)
 {
-    m_seqManager->sendMidiController(id, controller, value);
+    m_seqManager->sendMappedEvent(mE);
 }
 
 

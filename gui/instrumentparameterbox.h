@@ -22,6 +22,7 @@
 #include <qgroupbox.h>
 
 #include "Instrument.h"
+#include "MappedEvent.h"
 
 #ifndef _INSTRUMENTPARAMETERBOX_H_
 #define _INSTRUMENTPARAMETERBOX_H_
@@ -60,9 +61,7 @@ signals:
     // This is necessary for controlling MIDI devices in
     // real time during playback.
     //
-    void sendMidiController(Rosegarden::InstrumentId,
-                            Rosegarden::MidiByte,
-                            Rosegarden::MidiByte);
+    void sendMappedEvent(Rosegarden::MappedEvent *mE);
 
 protected:
     void populateProgramList();
