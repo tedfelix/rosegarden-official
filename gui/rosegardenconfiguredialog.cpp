@@ -1313,6 +1313,9 @@ SequencerConfigurationPage::SequencerConfigurationPage(
 
 #endif // HAVE_LIBJACK
 
+/*  #1045380 ("minutes of audio recording" just insanely confusing)
+    Remove this option.
+
     label = new QLabel(i18n("Minutes of audio recording:"), frame);
     m_audioRecordMinutes = new QSpinBox(frame);
 
@@ -1324,7 +1327,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     m_audioRecordMinutes->setValue(audioRecordMinutes);
     m_audioRecordMinutes->setMinValue(1);
     m_audioRecordMinutes->setMaxValue(60);
-
+*/
     addTab(frame, i18n("Record and Mix"));
 
     //  -------------- Synchronisation tab -----------------
@@ -1630,7 +1633,9 @@ SequencerConfigurationPage::apply()
 
     // Audio record minutes
     //
+/*  #1045380 ("minutes of audio recording" just insanely confusing) -- remove
     m_cfg->writeEntry("audiorecordminutes", m_audioRecordMinutes->value());
+*/
 
     Rosegarden::MidiByte ports = 0;
     if (m_createFaderOuts->isChecked()) {

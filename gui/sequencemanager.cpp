@@ -837,6 +837,10 @@ punchin:
 	    Rosegarden::RealTime rtd = comp.getElapsedRealTime(d);
 	    int seconds = rtd.sec;
 
+	    /* #1045380 ("minutes of audio recording" just insanely
+	       confusing) -- No, let's not use this.  We should count
+	       to the end of the composition in both cases.
+
 	    // if we're recording audio, and if the audio recording limit is
 	    // less than the total available time, adjust the time down to the
 	    // audio limit
@@ -848,6 +852,7 @@ punchin:
 		    (config->readNumEntry("audiorecordminutes", 5));
 		if (s < seconds) seconds = s;
 	    }
+	    */
 
 	    // re-initialise
 	    m_countdownDialog->setTotalTime(seconds);

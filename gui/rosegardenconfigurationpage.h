@@ -541,7 +541,9 @@ protected:
 
     // How many minutes of audio recording should we allow?
     //
+/*  #1045380 ("minutes of audio recording" just insanely confusing) -- remove
     QSpinBox     *m_audioRecordMinutes;
+*/
 
 };
  

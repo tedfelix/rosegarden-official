@@ -83,7 +83,7 @@ AudioPreviewThread::process()
 						req.showMinima);
 	    } catch (std::string e) {
 	
-		RG_DEBUG << "AudioPreviewThread::process: failed to update preview for audio file " << req.audioFileId << ":\n" << e.c_str() << endl;
+//		RG_DEBUG << "AudioPreviewThread::process: failed to update preview for audio file " << req.audioFileId << ":\n" << e.c_str() << endl;
 	
 		// OK, we hope this just means we're still recording -- so
 		// leave this one in the queue

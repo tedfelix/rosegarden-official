@@ -2131,6 +2131,7 @@ RosegardenGUIDoc::finalizeAudioFile(Rosegarden::AudioFileId /*id*/)
     //
     RosegardenProgressDialog progressDlg(i18n("Generating audio preview..."),
                                          100, (QWidget*)parent());
+    progressDlg.show();
 
     connect(&progressDlg, SIGNAL(cancelClicked()),
             this, SLOT(slotPreviewCancel()));
