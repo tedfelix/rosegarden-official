@@ -19,6 +19,9 @@
     COPYING included with this distribution for more information.
 */
 
+#ifndef _WIDGETS_H_
+#define _WIDGETS_H_
+
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qlabel.h>
@@ -31,12 +34,13 @@
 #include <qcolor.h>
 #include <qdatetime.h>
 
+#ifdef RGKDE3
 #define private protected // ugly hack but we want to access KProgressDialog::mShowTimer
 #include <kprogress.h>
 #undef private
-
-#ifndef _WIDGETS_H_
-#define _WIDGETS_H_
+#else // include without the hack
+#include <kprogress.h>
+#endif
 
 /** Create out own check box which is always Tristate 
  * and allows us to click only between on and off
@@ -156,6 +160,12 @@ private:
     QFont m_font;
 };
 
+// KDE2 goo 
+#ifndef RGKDE3
+#define KProgressDialog RGKProgressDialog
+#include "kprogress_imported.h"
+#endif
+
 class RosegardenProgressDialog : public KProgressDialog
 {
     Q_OBJECT
@@ -169,6 +179,8 @@ public:
                              QWidget *creator = 0,
                              const char *name = 0,
                              bool modal = true);
+
+    virtual void polish();
 
 public slots:
     void slotSetOperationName(QString);
@@ -194,7 +206,6 @@ protected:
     bool m_wasVisible;
     bool m_frozen;
 };
-
 
 class RosegardenProgressBar : public KProgress
 {

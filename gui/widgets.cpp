@@ -175,7 +175,6 @@ void RosegardenParameterBox::init()
     setFont(boldFont);
 }
 
-
 RosegardenProgressDialog::RosegardenProgressDialog(QWidget *creator,
                                                    const char *name,
                                                    bool modal):
@@ -185,8 +184,8 @@ RosegardenProgressDialog::RosegardenProgressDialog(QWidget *creator,
     m_frozen(false)
 {
     setCaption(i18n("Processing..."));
-    RG_DEBUG << "RosegardenProgressDialog::RosegardenProgressDialog - "
-             << labelText() << endl;
+    RG_DEBUG << "RosegardenProgressDialog::RosegardenProgressDialog type 1 - "
+             << labelText() << " - modal : " << modal << endl;
 
     connect(progressBar(), SIGNAL(percentageChanged (int)),
             this,          SLOT(slotCheckShow(int)));
@@ -212,8 +211,8 @@ RosegardenProgressDialog::RosegardenProgressDialog(
     m_frozen(false)
 {
     progressBar()->setTotalSteps(totalSteps);
-    RG_DEBUG << "RosegardenProgressDialog::RosegardenProgressDialog - "
-             << labelText << endl;
+    RG_DEBUG << "RosegardenProgressDialog::RosegardenProgressDialog type 2 - "
+             << labelText << " - modal : " << modal << endl;
 
     connect(progressBar(), SIGNAL(percentageChanged (int)),
             this,          SLOT(slotCheckShow(int)));
@@ -221,6 +220,14 @@ RosegardenProgressDialog::RosegardenProgressDialog(
     m_chrono.start();
 
     CurrentProgressDialog::set(this);
+}
+
+void
+RosegardenProgressDialog::polish()
+{
+    KProgressDialog::polish();
+    QApplication::setOverrideCursor(Qt::ArrowCursor, true);
+    kapp->processEvents();
 }
 
 void
@@ -248,7 +255,9 @@ void RosegardenProgressDialog::slotCheckShow(int)
     if (!isVisible() &&
         !m_frozen &&
         m_chrono.elapsed() > minimumDuration()) {
+        RG_DEBUG << "RosegardenProgressDialog::slotCheckShow() : showing dialog\n";
         show();
+        kapp->processEvents();
     }
 }
 
@@ -274,8 +283,6 @@ void RosegardenProgressDialog::slotThaw()
     m_frozen = false;
     m_chrono.restart();
 }
-
-
 
 //----------------------------------------
 
