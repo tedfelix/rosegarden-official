@@ -19,3 +19,4 @@ MidiArts.cc
 MidiArts.mcopclass
 MidiArts.mcoptype
 *.loT
+*.moc

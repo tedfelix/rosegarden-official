@@ -949,3 +949,4 @@ AudioFileManager::getSplitPoints(AudioFileId id,
 }
 
 
+#include "AudioFileManager.moc"

@@ -2208,3 +2208,4 @@ MidiFile::close()
 
 }
 
+#include "MidiFile.moc"

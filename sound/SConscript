@@ -5,7 +5,7 @@
 ## use the environment set in the top-level
 ## SConstruct file
 
-Import( "env" )
+Import( '*' )
 myenv=env.Copy()
 
 
