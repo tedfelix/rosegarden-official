@@ -24,19 +24,19 @@
 
 namespace Rosegarden {
 
-EventSelection::EventSelection(Segment& t)
-    : m_originalSegment(t),
-      m_beginTime(0),
-      m_endTime(0),
-      m_haveRealStartTime(false)
+EventSelection::EventSelection(Segment& t) :
+    m_originalSegment(t),
+    m_beginTime(0),
+    m_endTime(0),
+    m_haveRealStartTime(false)
 {
 }
 
-EventSelection::EventSelection(Segment& t, timeT beginTime, timeT endTime)
-    : m_originalSegment(t),
-      m_beginTime(0),
-      m_endTime(0),
-      m_haveRealStartTime(false)
+EventSelection::EventSelection(Segment& t, timeT beginTime, timeT endTime) :
+    m_originalSegment(t),
+    m_beginTime(0),
+    m_endTime(0),
+    m_haveRealStartTime(false)
 {
     Segment::iterator i = t.findTime(beginTime);
     Segment::iterator j = t.findTime(endTime);
@@ -71,6 +71,15 @@ void EventSelection::addEvent(Event *e)
 bool EventSelection::contains(Event *e) const
 {
     return m_segmentEvents.find(e) != m_segmentEvents.end();
+}
+
+bool EventSelection::contains(const std::string &type) const
+{
+    for (eventcontainer::iterator i = m_segmentEvents.begin();
+	 i != m_segmentEvents.end(); ++i) {
+	if ((*i)->isa(type)) return true;
+    }
+    return false;
 }
 
 timeT EventSelection::getTotalDuration() const

@@ -219,6 +219,10 @@ Post-0.1.5-and-a-bit task list
     silence? after time sig change? after clef change? after key
     change?
 
+35a.i. And have a dialog with options: split after (n) bars of
+    silence? after time sig change? after clef change? after key
+    change?
+
 35b. And perhaps a "collapse" option
 
 36. Add configuration parameters for notation:

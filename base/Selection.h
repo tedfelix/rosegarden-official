@@ -68,6 +68,12 @@ public:
     bool contains(Event *e) const;
 
     /**
+     * Return true if there are any events of the given type in
+     * this selection.  Slow.
+     */
+    bool contains(const std::string &eventType) const;
+
+    /**
      * Return the time at which the first Event in the selection
      * begins.
      */

@@ -321,20 +321,33 @@ etc
     <Action name="delete"/>
     <Action name="cut_and_close"/>
     <Action name="debug_dump"/>
+  </enable>
+</State>
+
+<State name="have_rests_in_selection">
+  <enable>
+    <Action name="style_classical"/>
+    <Action name="style_x"/>
+    <Action name="style_triangle"/>
+    <Action name="style_mensural"/>
+    <Action name="remove_marks"/>
+    <Action name="add_pause"/>
+    <Action name="add_text_mark"/>
+    <Action name="normalize_rests"/>
+    <Action name="collapse_rests_aggressively"/>
+  </enable>
+</State>
+
+<State name="have_notes_in_selection">
+  <enable>
     <Action name="beam"/>
     <Action name="auto_beam"/>
     <Action name="break_group"/>
-    <!-- Action name="tuplet"/ -->
-    <!-- Action name="simple_tuplet"/ -->
     <Action name="break_tuplets"/>
     <Action name="slur"/>
     <Action name="crescendo"/>
     <Action name="decrescendo"/>
     <Action name="remove_indications"/>
-    <Action name="style_classical"/>
-    <Action name="style_x"/>
-    <Action name="style_triangle"/>
-    <Action name="style_mensural"/>
     <Action name="stems_up"/>
     <Action name="stems_down"/>
     <Action name="restore_stems"/>
@@ -344,6 +357,10 @@ etc
     <Action name="slashes_3"/>
     <Action name="slashes_4"/>
     <Action name="slashes_5"/>
+    <Action name="style_classical"/>
+    <Action name="style_x"/>
+    <Action name="style_triangle"/>
+    <Action name="style_mensural"/>
     <Action name="remove_marks"/>
     <Action name="add_accent"/>
     <Action name="add_tenuto"/>
@@ -358,8 +375,6 @@ etc
     <Action name="add_up-bow"/>
     <Action name="add_down-bow"/>
     <Action name="add_text_mark"/>
-    <Action name="normalize_rests"/>
-    <Action name="collapse_rests_aggressively"/>
     <Action name="collapse_notes"/>
     <Action name="tie_notes"/>
     <Action name="untie_notes"/>

@@ -146,6 +146,9 @@ public:
     /// Remove any visible preview note
     void clearPreviewNote();
 
+    /// Changes the font of the staffs on the view, gets font name from sender
+    void slotChangeFontFromAction();
+
     /// Changes the font of the staffs on the view
     void slotChangeFont(std::string newFont);
 

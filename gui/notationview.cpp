@@ -371,6 +371,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	 this, SLOT(slotTestClipboard()));
 
     stateChanged("have_selection", KXMLGUIClient::StateReverse);
+    stateChanged("have_notes_in_selection", KXMLGUIClient::StateReverse);
+    stateChanged("have_rests_in_selection", KXMLGUIClient::StateReverse);
     stateChanged("have_multiple_staffs",
 		 (m_staffs.size() > 1 ? KXMLGUIClient::StateNoReverse :
 		                        KXMLGUIClient::StateReverse));
@@ -1024,19 +1026,32 @@ void NotationView::initFontToolbar(int legatoUnit, bool multiStaff)
     std::sort(f.begin(), f.end());
 
     bool foundFont = false;
+    QPtrList<KAction> actions;
+
     for (vector<string>::iterator i = f.begin(); i != f.end(); ++i) {
-        fontCombo->insertItem(strtoqstr(*i));
+
+	QString fontQName(strtoqstr(*i));
+
+        fontCombo->insertItem(fontQName);
         if (*i == m_fontName) {
             fontCombo->setCurrentItem(fontCombo->count() - 1);
 	    foundFont = true;
         }
+
+	KAction *action = new KAction
+	    (fontQName, 0, this, SLOT(slotChangeFontFromAction()),
+	     actionCollection(), "note_font_" + fontQName);
+	actions.append(action);
     }
+
     if (!foundFont) {
 	KMessageBox::sorry
 	    (this, QString(i18n("Unknown font \"%1\", using default")).arg
 	     (strtoqstr(m_fontName)));
 	m_fontName = NotePixmapFactory::getDefaultFont();
     }
+    
+    plugActionList("note_fonts", actions);
 
     connect(fontCombo, SIGNAL(activated(const QString &)),
             this,        SLOT(slotChangeFont(const QString &)));
@@ -1139,6 +1154,21 @@ void NotationView::slotChangeLegato(int n)
     }
 
     updateView();
+}
+
+
+void
+NotationView::slotChangeFontFromAction()
+{
+    const QObject *s = sender();
+    QString name = s->name();
+    if (name.left(10) == "note_font_") {
+	name = name.right(name.length() - 10);
+	slotChangeFont(name);
+    } else {
+	KMessageBox::sorry
+	    (this, QString(i18n("Unknown font action %1").arg(name)));
+    }
 }
 
 
@@ -1383,16 +1413,29 @@ void NotationView::setCurrentSelection(EventSelection* s)
     delete m_currentEventSelection;
     m_currentEventSelection = s;
 
+#ifdef RGKDE3
+    // Clear states first, then enter only those ones that apply
+    // (so as to avoid ever clearing one after entering another, in
+    // case the two overlap at all)
+    stateChanged("have_selection", KXMLGUIClient::StateReverse);
+    stateChanged("have_notes_in_selection", KXMLGUIClient::StateReverse);
+    stateChanged("have_rests_in_selection", KXMLGUIClient::StateReverse);
+#endif
+
     if (s) {
         s->recordSelectionOnSegment(m_properties.SELECTED);
         getStaff(s->getSegment())->positionElements(s->getStartTime(),
                                                     s->getEndTime());
 #ifdef RGKDE3
 	stateChanged("have_selection", KXMLGUIClient::StateNoReverse);
-#endif
-    } else {
-#ifdef RGKDE3
-	stateChanged("have_selection", KXMLGUIClient::StateReverse);
+	if (s->contains(Rosegarden::Note::EventType)) {
+	    stateChanged("have_notes_in_selection",
+			 KXMLGUIClient::StateNoReverse);
+	}
+	if (s->contains(Rosegarden::Note::EventRestType)) {
+	    stateChanged("have_rests_in_selection",
+			 KXMLGUIClient::StateNoReverse);
+	}
 #endif
     }
 
