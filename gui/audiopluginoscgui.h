@@ -122,7 +122,13 @@ public:
 
     void setGUIUrl(QString url);
 
-    void sendToGUI(OSCMessage *message); // I take ownership of message, will delete when done
+    void show();
+    void hide();
+    void quit();
+    void sendProgram(QString program);
+    void sendPortValue(int port, float value);
+    void sendConfiguration(QString key, QString value);
+    void send(OSCMessage *message); // I take ownership of message, will delete when done
 
     static QString getGUIFilePath(QString identifier);
 

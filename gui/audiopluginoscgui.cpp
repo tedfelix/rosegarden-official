@@ -232,11 +232,7 @@ AudioPluginOSCGUIManager::showGUI(InstrumentId instrument, int position)
 {
     if (m_guis.find(instrument) != m_guis.end() &&
 	m_guis[instrument].find(position) != m_guis[instrument].end()) {
-	
-	OSCMessage *showMessage = new OSCMessage;
-	showMessage->setMethod("show");
-	m_guis[instrument][position]->sendToGUI(showMessage);
-
+	m_guis[instrument][position]->show();
     } else {
 	startGUI(instrument, position);
     }
@@ -689,7 +685,78 @@ AudioPluginOSCGUI::setGUIUrl(QString url)
 }
 
 void
-AudioPluginOSCGUI::sendToGUI(OSCMessage *message)
+AudioPluginOSCGUI::show()
+{
+    OSCMessage *m = new OSCMessage;
+    m->setMethod("show");
+    send(m);
+}
+
+void
+AudioPluginOSCGUI::hide()
+{
+    OSCMessage *m = new OSCMessage;
+    m->setMethod("hide");
+    send(m);
+}
+
+void
+AudioPluginOSCGUI::quit()
+{
+    OSCMessage *m = new OSCMessage;
+    m->setMethod("quit");
+    send(m);
+}
+
+void
+AudioPluginOSCGUI::sendProgram()
+{
+    OSCMessage *m = new OSCMessage;
+    m->setMethod("program");
+
+    //!!! need to get bank and program # for program
+//!!!    m->addArg
+//    send(m);
+}
+
+void
+AudioPluginOSCGUI::sendPortValue(int port, float value)
+{
+    OSCMessage *m = new OSCMessage;
+    lo_arg arg;
+
+    m->setMethod("control");
+
+    arg.i = port;
+    m->addArg('i', &arg);
+
+    arg.f = value;
+    m->addArg('f', &arg);
+
+    send(m);
+}
+    
+void
+AudioPluginOSCGUI::sendConfiguration(QString key, QString value)
+{
+    OSCMessage *m = new OSCMessage;
+    lo_arg *arg;
+
+    arg = (lo_arg *)malloc(std::max(std::max(sizeof(lo_arg),
+					     key.length()),
+				    value.length()));
+    
+    strcpy(&arg.s, key.data());
+    m->addArg('s', &arg);
+
+    strcpy(&arg.s, value.data());
+    m->addArg('s', &arg);
+
+    send(m);
+}
+
+void
+AudioPluginOSCGUI::send(OSCMessage *message)
 {
     if (!m_address) {
 	RG_DEBUG << "AudioPluginOSCGUI::sendToGUI: no address available for GUI"
