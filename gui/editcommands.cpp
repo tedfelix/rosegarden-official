@@ -179,7 +179,7 @@ CopyCommand::~CopyCommand()
 void
 CopyCommand::execute()
 {
-    RG_DEBUG << "CopyCommand::execute" << endl;
+//    RG_DEBUG << "CopyCommand::execute" << endl;
 
     Rosegarden::Clipboard temp(*m_targetClipboard);
     m_targetClipboard->copyFrom(m_sourceClipboard);
@@ -189,7 +189,7 @@ CopyCommand::execute()
 void
 CopyCommand::unexecute()
 {
-    RG_DEBUG << "CopyCommand::unexecute" << endl;
+//    RG_DEBUG << "CopyCommand::unexecute" << endl;
 
     Rosegarden::Clipboard temp(*m_sourceClipboard);
     m_sourceClipboard->copyFrom(m_targetClipboard);
@@ -361,7 +361,7 @@ PasteEventsCommand::getEffectiveEndTime(Rosegarden::Segment &segment,
 	     << clipboard->getSingleSegment()->getStartTime()
 	     << " -> "
 	     << clipboard->getSingleSegment()->getEndTime() << endl;
-    
+
     timeT d = clipboard->getSingleSegment()->getEndTime() -
  	      clipboard->getSingleSegment()->getStartTime();
 
@@ -397,7 +397,7 @@ PasteEventsCommand::isPossible()
     timeT origin = source->getStartTime();
     timeT duration = source->getEndTime() - origin;
 
-    RG_DEBUG << "NotationView::slotEditPaste: paste time is " << pasteTime << ", origin is " << origin << ", duration is " << duration << endl;
+    RG_DEBUG << "PasteEventsCommand::isPossible: paste time is " << pasteTime << ", origin is " << origin << ", duration is " << duration << endl;
 
     SegmentNotationHelper helper(getSegment());
     return helper.removeRests(pasteTime, duration, true);

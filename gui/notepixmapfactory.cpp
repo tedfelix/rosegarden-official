@@ -253,7 +253,7 @@ NotePixmapParameters::getNormalMarks() const
 { 
     std::vector<Rosegarden::Mark> marks;
 
-    for (std::vector<Rosegarden::Mark>::iterator mi = m_marks.begin();
+    for (std::vector<Rosegarden::Mark>::const_iterator mi = m_marks.begin();
 	 mi != m_marks.end(); ++mi) {
 
 	if (*mi == Rosegarden::Marks::Pause ||
@@ -271,7 +271,7 @@ NotePixmapParameters::getAboveMarks() const
 { 
     std::vector<Rosegarden::Mark> marks;
 
-    for (std::vector<Rosegarden::Mark>::iterator mi = m_marks.begin();
+    for (std::vector<Rosegarden::Mark>::const_iterator mi = m_marks.begin();
 	 mi != m_marks.end(); ++mi) {
 
 	if (*mi == Rosegarden::Marks::Pause ||
@@ -814,6 +814,8 @@ NotePixmapFactory::makeRoomForAccidental(Accidental a,
 	    m_left += shift * step;
 	}
     }
+
+    if (cautionary) m_left += m_noteBodyWidth;
 
     int above = ah.y() - m_noteBodyHeight/2;
     int below = (ac.getHeight() - ah.y()) -
@@ -2237,6 +2239,57 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above,
     if (painter) {
 	painter->restore();
 	if (!m_inPrinterMethod) m_p->maskPainter().restore();
+    }
+}
+
+void
+NotePixmapFactory::drawBracket(int length, bool left, bool curly, int x, int y)
+{
+    // curly mode not yet implemented
+
+    int thickness = getStemThickness() * 2;
+    
+    int m1 = length/6;
+    int m2 = length - length/6;
+
+    int off0 = 0, moff = 0;
+
+    int nbh = getNoteBodyHeight(), nbw = getNoteBodyWidth();
+    float noteLengths = float(length) / nbw;
+    if (noteLengths < 1) noteLengths = 1;
+    moff = int(0 - nbh * sqrt(noteLengths) / 2);
+
+    if (left) moff = -moff;
+
+    QPoint topLeft, bottomRight;
+
+    for (int i = 0; i < thickness; ++i) {
+
+	Spline::PointList pl;
+	pl.push_back(QPoint((int)moff, m1));
+	pl.push_back(QPoint((int)moff, m2));
+
+	Spline::PointList *polyPoints = Spline::calculate
+	    (QPoint(off0, 0), QPoint(off0, length-1), pl, topLeft, bottomRight);
+
+	int ppc = polyPoints->size();
+	QPointArray qp(ppc);
+
+	for (int j = 0; j < ppc; ++j) {
+	    qp.setPoint(j, (*polyPoints)[j].x(), (*polyPoints)[j].y());
+	}
+
+	delete polyPoints;
+
+	m_p->drawPolyline(qp);
+
+	if (!left) {
+	    ++moff;
+	    if (i % 2) ++off0;
+	} else {
+	    --moff;
+	    if (i % 2) --off0;
+	}
     }
 }
 

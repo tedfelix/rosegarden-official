@@ -281,6 +281,8 @@ protected:
                          bool smooth);
     void drawTie(bool above, int length, int shift);
 
+    void drawBracket(int length, bool left, bool curly, int x, int y);
+
     QFont getTextFont(const Rosegarden::Text &text) const;
 
     QCanvasPixmap* makeAnnotationPixmap(const Rosegarden::Text &text);
