@@ -30,7 +30,7 @@ TrackLabel::TrackLabel(Rosegarden::TrackId id,
                        int position,
                        QWidget *parent,
                        const char *name, WFlags f):
-    QWidgetStack(parent, name, f),
+    QWidgetStack(parent, name),
     m_instrumentLabel(new QLabel(this)),
     m_trackLabel(new QLabel(this)),
     m_id(id),

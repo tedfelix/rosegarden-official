@@ -44,7 +44,9 @@
 
 #include "Composition.h"
 #include "BaseProperties.h"
-//#include "SegmentNotationHelper.h"
+#include "SegmentNotationHelper.h"
+#include "NotationTypes.h"
+#include "Sets.h"
 
 #include <iostream>
 #include <fstream>
@@ -60,7 +62,6 @@ using Rosegarden::Int;
 using Rosegarden::Key;
 using Rosegarden::Note;
 using Rosegarden::Segment;
-//using Rosegarden::SegmentNotationHelper;
 using Rosegarden::String;
 using Rosegarden::timeT;
 using Rosegarden::TimeSignature;
@@ -103,7 +104,7 @@ LilypondExporter::handleStartingEvents(eventstartlist &eventsToStart,
             // Not an indication
         }
         
-        // Incomplete: erase during iteration not guaranteed
+        //!!! Incomplete: erase during iteration not guaranteed
         // This is bad, but can't find docs on return value at end
         // i.e. I want to increment m with m = events...erase(m), but
         // what is returned when erase(eventsToStart.end())?
@@ -405,6 +406,7 @@ LilypondExporter::indent(const int &column) {
 // this was originally a part of handleStartingEvents, but I split it out
 // into this because handleStartingEvents was doing indescribably terrible
 // things to slurs/hairpins involving chords
+/*!!!
 void
 LilypondExporter::closeChordWriteTie(bool &addTie, bool &currentlyWritingChord,
                                      std::ofstream &str) {
@@ -419,6 +421,7 @@ LilypondExporter::closeChordWriteTie(bool &addTie, bool &currentlyWritingChord,
         str << "~ ";
     }
 }    
+*/
 
 // find/protect illegal chars in user-supplied strings
 //
@@ -633,14 +636,14 @@ LilypondExporter::write() {
         emit setProgress(int(double(trackNo++)/
                              double(m_composition->getNbTracks()) * 100.0));
         kapp->processEvents(50);
-
+/*!!!
         timeT lastChordTime = m_composition->getStartMarker() - 1;
         bool currentlyWritingChord = false;
       
         // We may need to wait before adding a tie if we are currently in a
         // chord
         bool addTie = false;
-
+*/
         // do nothing if track is muted...  this provides a crude but easily implemented
         // method for users to selectively export tracks...
         Rosegarden::Track *track = m_composition->getTrackById((*i)->getTrack());
@@ -690,9 +693,19 @@ LilypondExporter::write() {
             
             str << indent(col++) << "\\context Voice = \"" << voiceNumber.str()
                 << "\" {"; // indent+
+
+	    Rosegarden::SegmentNotationHelper helper(**i);
+	    helper.setNotationProperties();
             
             timeT segmentStart = (*i)->getStartTime(); // getFirstEventTime
-            
+
+            //!!! Reconcile this with the writeInventedRests call at the start of
+	    // writeBar -- keeping both in their current form won't work.  writeBar's
+	    // version is not sufficient on its own: do we want to keep it and
+	    // truncate this to skip whole bars only, or do we want to keep this?
+	    //!!! truncate this to skip whole bars only, I think, as we want the
+	    // other to cope with strange cases in which findTime(barStart) returns
+	    // an event whose notation absolute time is not barStart
             if (segmentStart > 0) {
                 long curNote = long(Note(Note::WholeNote).getDuration());
                 long wholeNoteDuration = curNote;
@@ -711,18 +724,30 @@ LilypondExporter::write() {
                     curNote /= 2;
                 }
             }
-
+/*!!!
             // declare these outside the scope of the coming for loop
             timeT prevTime = -1;
             int accidentalCount = 0; 
             bool thisNoteIsTupled = false;
             bool previouslyWritingTuplet = false;
             bool isFirstBar = true;
-
-            std::string lilyText = "";      // text events
+*/
+//!!!            std::string lilyText = "";      // text events
             std::ostringstream lilyLyrics;  // stream to collect/hold lyric events
             std::string prevStyle = "";     // track note styles 
-            
+
+	    Rosegarden::Key key;
+//!!!:	    
+	    for (int barNo = m_composition->getBarNumber((*i)->getStartTime());
+		 barNo <= m_composition->getBarNumber((*i)->getEndMarkerTime());
+		 ++barNo) {
+
+		writeBar(*i, barNo, col, key,
+			 lilyLyrics, prevStyle, eventsInProgress, str);
+	    }
+
+#ifdef NOT_DEFINED
+//!!!
             // Write out all events for this Segment
             for (Segment::iterator j = (*i)->begin(); j != (*i)->end(); ++j) {
 
@@ -1131,6 +1156,7 @@ LilypondExporter::write() {
             }
 
             closeChordWriteTie(addTie, currentlyWritingChord, str);
+#endif
             
             // close Voice context
             str << std::endl << indent(--col) << "} % Voice" << std::endl;  // indent-  
@@ -1190,6 +1216,315 @@ LilypondExporter::write() {
     return true;
 }
 
+void
+LilypondExporter::writeBar(Rosegarden::Segment *s,
+			   int barNo, int col,
+			   Rosegarden::Key &key,
+			   std::ostringstream &lilyLyrics,
+			   std::string &prevStyle,
+			   eventendlist &eventsInProgress,
+			   std::ofstream &str)
+{
+    timeT barStart = m_composition->getBarStart(barNo);
+    timeT barEnd = m_composition->getBarEnd(barNo);
+
+    if (barStart >= s->getEndMarkerTime()) return;
+
+    bool isNew = false;
+    TimeSignature timeSignature = m_composition->getTimeSignatureInBar(barNo, isNew);
+    if (isNew && !timeSignature.isHidden()) {
+	str << "\\time "
+	    << timeSignature.getNumerator() << "/"
+	    << timeSignature.getDenominator()
+	    << std::endl << indent(col);
+    }
+
+    Segment::iterator i = s->findTime(barStart);
+    timeT absTime = (*i)->getNotationAbsoluteTime();
+    timeT writtenDuration = 0;
+
+    if (absTime > barStart) {
+	writtenDuration = absTime - barStart;
+	writeInventedRests(timeSignature, 0, writtenDuration, str);
+    }
+
+    eventstartlist eventsToStart;
+
+    while (s->isBeforeEndMarker(i)) {
+
+	timeT duration = (*i)->getNotationDuration();
+	absTime = (*i)->getNotationAbsoluteTime();
+
+	if (absTime < barStart) {
+	    duration -= (barStart - absTime);
+	    if (duration <= 0) continue;
+	    absTime = barStart;
+	}
+
+	if (absTime >= barEnd) {
+	    break;
+	}
+
+	if (absTime + duration > barEnd) {
+	    duration = barEnd - absTime;
+	}
+
+	if ((*i)->isa(Note::EventType)) {
+
+	    Rosegarden::Chord chord(*s, i, m_composition->getNotationQuantizer());
+	    Rosegarden::Event *e = *chord.getInitialNote();
+	    bool tiedForward = false;
+	    
+	    try {
+		// tuplet compensation, etc
+		Note::Type type = e->get<Int>(BaseProperties::NOTE_TYPE);
+		int dots = e->get<Int>(BaseProperties::NOTE_DOTS);
+		duration = Note(type, dots).getDuration();
+	    } catch (Rosegarden::Exception e) { // no properties
+		std::cerr
+		    << "WARNING: LilypondExporter::writeBar: incomplete note properties: "
+		    << e.getMessage() << std::endl;
+	    }
+
+	    timeT toNext = duration;
+	    Segment::iterator nextElt = chord.getFinalElement();
+	    if (s->isBeforeEndMarker(++nextElt)) {
+		toNext = (*nextElt)->getNotationAbsoluteTime() - absTime;
+		if (toNext < duration) duration = toNext;
+	    }
+
+	    //!!! note style here
+	    //!!! tuplet stuff here
+	    
+	    // close out any pending slurs/hairpins
+	    handleEndingEvents(eventsInProgress, i, str);
+
+	    if (chord.size() > 1) str << "< ";
+
+	    for (i = chord.getInitialElement(); s->isBeforeEndMarker(i); ++i) {
+
+		if ((*i)->isa(Indication::EventType)) {
+		    eventsToStart.insert(*i);
+		    eventsInProgress.insert(*i);
+
+		} else if ((*i)->isa(Text::EventType)) {
+		    //!!!
+
+		} else if ((*i)->isa(Note::EventType)) {
+
+		    writePitch(*i, key, str);
+		    writeDuration(duration, str);
+		    writtenDuration += duration;
+		    writeMarks(*i, str);
+
+		    //!!! text (follows note?)
+
+		    writeSlashes(*i, str);
+		    
+		    bool noteTiedForward = false;
+		    (*i)->get<Bool>(BaseProperties::TIED_FORWARD, noteTiedForward);
+		    if (noteTiedForward) tiedForward = true;
+
+		    str << " ";
+		}
+		
+		if (i == chord.getFinalElement()) break;
+	    }
+
+	    if (chord.size() > 1) str << ">";
+	    if (tiedForward) str << "~ ";
+
+	} else if ((*i)->isa(Note::EventRestType)) {
+	    
+	    str << "r";
+	    writeDuration(duration, str);
+	    writtenDuration += duration;
+	    //!!! text?
+	    str << " ";
+
+	} else if ((*i)->isa(Clef::EventType)) {
+	    
+	    // Incomplete: Set which note the clef should center on  (DMM - why?)
+	    str << "\\clef ";
+
+	    //!!! handle exceptions from NotationTypes ctors here and elsewhere
+	    
+	    Rosegarden::Clef clef(**i);
+	    
+	    if (clef.getClefType() == Clef::Treble) {
+		str << "treble" << std::endl;
+	    } else if (clef.getClefType() == Clef::Tenor) {
+		str << "tenor" << std::endl;
+	    } else if (clef.getClefType() == Clef::Alto) {
+		str << "alto" << std::endl;
+	    } else if (clef.getClefType() == Clef::Bass) {
+		str << "bass" << std::endl;
+	    }
+	    
+	    str << std::endl << indent(col);
+
+	} else if ((*i)->isa(Rosegarden::Key::EventType)) {
+	    
+	    str << "\\key ";
+	    key = Rosegarden::Key(**i);
+	    
+	    str << convertPitchToLilyNote(key.getTonicPitch(), !key.isSharp(),
+					  key.getAccidentalCount(), "");
+	    
+	    if (key.isMinor()) {
+		str << " \\minor";
+	    } else {
+		str << " \\major";
+	    }
+	    str << std::endl << indent(col);
+
+	} else if ((*i)->isa(Indication::EventType)) {
+	    
+	    eventsToStart.insert(*i);
+	    eventsInProgress.insert(*i);
+	}
+
+	handleStartingEvents(eventsToStart, str);
+
+	++i;
+    }
+
+    if (writtenDuration < barEnd - barStart) {
+	writeInventedRests(timeSignature, writtenDuration,
+			   (barEnd - barStart) - writtenDuration, str);
+    }
+}
+
+void
+LilypondExporter::writeInventedRests(Rosegarden::TimeSignature &timeSig,
+				     timeT offset,
+				     timeT duration,
+				     std::ofstream &str)
+{
+    str << " ";
+    Rosegarden::DurationList dlist;
+    timeSig.getDurationListForInterval(dlist, duration, offset);
+    for (Rosegarden::DurationList::iterator i = dlist.begin();
+	 i != dlist.end(); ++i) {
+	writeDuration(*i, str);
+	str << "r;";
+    }
+}
+
+void
+LilypondExporter::writePitch(Rosegarden::Event *note,
+			     Rosegarden::Key &key,
+			     std::ofstream &str)
+{
+    // Note pitch (need name as well as octave)
+    // It is also possible to have "relative" pitches,
+    // but for simplicity we always use absolute pitch
+    // 60 is middle C, one unit is a half-step
+    
+    long pitch = 60;
+    note->get<Int>(BaseProperties::PITCH, pitch);
+
+    Rosegarden::Accidental accidental = Rosegarden::Accidentals::NoAccidental;
+    note->get<String>(BaseProperties::ACCIDENTAL, accidental);
+
+    // format of Lilypond note is:
+    // name + (duration) + octave + text markup
+    
+    // calculate note name and write note
+    std::string lilyNote;
+
+    lilyNote = convertPitchToLilyNote(pitch, !key.isSharp(), key.getAccidentalCount(),
+				      accidental);
+    
+    str << lilyNote;
+    
+    // generate and write octave marks
+    std::string octaveMarks = "";
+    int octave = (int)(pitch / 12);
+    
+    // tweak the octave break for B# / Cb
+    if ((lilyNote == "bisis")||(lilyNote == "bis")) {
+	octave--;
+    } else if ((lilyNote == "ceses")||(lilyNote == "ces")) {
+	octave++;
+    }
+    
+    if (octave < 4) {
+	for (; octave < 4; octave++) octaveMarks += ",";
+    } else {
+	for (; octave > 4; octave--) octaveMarks += "\'";
+    }
+    
+    str << octaveMarks;
+}
+
+void
+LilypondExporter::writeDuration(Rosegarden::timeT duration,
+				std::ofstream &str)
+{
+    Note note(Note::getNearestNote(duration, 2));
+    
+    switch (note.getNoteType()) {
+
+    case Note::SixtyFourthNote:
+	str << "64"; break;
+
+    case Note::ThirtySecondNote:
+	str << "32"; break;
+
+    case Note::SixteenthNote:
+	str << "16"; break;
+
+    case Note::EighthNote:
+	str << "8"; break;
+
+    case Note::QuarterNote:
+	str << "4"; break;
+
+    case Note::HalfNote:
+	str << "2"; break;
+
+    case Note::WholeNote:
+	str << "1"; break;
+
+    case Note::DoubleWholeNote:
+	str << "\\breve"; break;
+    }
+    
+    for (int numDots = 0; numDots < note.getDots(); numDots++) {
+	str << ".";
+    }
+}
+
+void
+LilypondExporter::writeMarks(Rosegarden::Event *note, std::ofstream &str)
+{
+    std::vector<Rosegarden::Mark> marks = Rosegarden::Marks::getMarks(*note);
+    bool stemUp = true;
+    note->get<Bool>(BaseProperties::STEM_UP, stemUp);
+
+    for (unsigned int i = 0; i < marks.size(); ++i) {
+	std::string mark = composeLilyMark(marks[i], stemUp);
+	str << mark;
+    }
+} 
+
+void
+LilypondExporter::writeSlashes(Rosegarden::Event *note, std::ofstream &str)
+{
+    // write slashes after text
+    // / = 8 // = 16 /// = 32, etc.
+    long slashes = 0;
+    note->get<Int>(NotationProperties::SLASHES, slashes);
+    if (slashes > 0) {
+	str << ":";
+	int length = 4;
+	for (int c = 1; c <= slashes; c++) {
+	    length *= 2;
+	}
+	str << length;
+    }
+}
 
 
 // DMM

@@ -28,6 +28,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <set>
 #include <string>
 #include <vector>
@@ -54,6 +55,12 @@ public:
 protected:
     Rosegarden::Composition *m_composition;
     std::string m_fileName;
+
+    void writeBar(Rosegarden::Segment *, int barNo, int col,
+		  Rosegarden::Key &key, std::ostringstream &lilyLyrics,
+		  std::string &prevStyle, eventendlist &eventsInProgress,
+		  std::ofstream &str);
+
     void handleStartingEvents(eventstartlist &eventsToStart, std::ofstream &str);
     void handleEndingEvents(eventendlist &eventsInProgress, Rosegarden::Segment::iterator &j, std::ofstream &str);
 
@@ -76,14 +83,25 @@ protected:
                   
     // close chord if necessary, and/or add tie if necessary; can do one or
     // both independantly
+/*!!!
     void closeChordWriteTie(bool &addTie, bool &currentlyWritingChord, std::ofstream &str);
-
+*/
     // start/stop tuplet bracket
     void startStopTuplet(bool &thisNoteIsTupled, bool &previouslyWritingTuplet,
                          const int &numerator, const int &denominator,
                          std::ofstream &str);
-        
- private:
+
+    void writeInventedRests(Rosegarden::TimeSignature &timeSig,
+			    Rosegarden::timeT offset,
+			    Rosegarden::timeT duration,
+			    std::ofstream &);
+
+    void writePitch(Rosegarden::Event *note, Rosegarden::Key &key, std::ofstream &);
+    void writeDuration(Rosegarden::timeT duration, std::ofstream &);
+    void writeMarks(Rosegarden::Event *note, std::ofstream &);
+    void writeSlashes(Rosegarden::Event *note, std::ofstream &);
+       
+private:
     static const int MAX_DOTS = 4;
 };
 
