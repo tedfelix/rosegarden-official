@@ -41,7 +41,9 @@ NotationVLayout::layout(NotationElement *el)
 
     } else if (el->isRest()) {
 
-        el->setY(m_staff.pitchYOffset(17)); // 
+        el->setY(m_staff.pitchYOffset(17));
+        // all rest pixmaps are sized so that they will be correctly
+        // displayed when placed at that pitch height
 
     } else {
 
