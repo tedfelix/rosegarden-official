@@ -470,10 +470,23 @@ NotePixmapFactory::makeNotePixmap(Note::Type note,
 //#define ROSE_XDEBUG_NOTE_PIXMAP_FACTORY
 #ifdef ROSE_XDEBUG_NOTE_PIXMAP_FACTORY
     m_p.setPen(Qt::red); m_p.setBrush(Qt::red);
+
     m_p.drawLine(0,0,0,m_generatedPixmap->height() - 1);
     m_p.drawLine(m_generatedPixmap->width() - 1,0,m_generatedPixmap->width() - 1,m_generatedPixmap->height() - 1);
+
     m_pm.drawLine(0,0,0,m_generatedPixmap->height() - 1);
     m_pm.drawLine(m_generatedPixmap->width() - 1,0,m_generatedPixmap->width() - 1,m_generatedPixmap->height() - 1);
+
+    {
+	int hsx = m_offsets.getHotSpot().x();
+	int hsy = m_offsets.getHotSpot().y();
+	m_p.drawLine(hsx - 2, hsy - 2, hsx + 2, hsy + 2);
+	m_pm.drawLine(hsx - 2, hsy - 2, hsx + 2, hsy + 2);
+	m_p.drawLine(hsx - 2, hsy + 2, hsx + 2, hsy - 2);
+	m_pm.drawLine(hsx - 2, hsy + 2, hsx + 2, hsy - 2);
+    }
+
+
 /*
     m_p.drawPoint(0,0);
     m_p.drawPoint(0,m_offsets.getHotSpot().y());

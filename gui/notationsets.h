@@ -68,23 +68,23 @@ public:
      * the set.  getInitialElement() == getFinalElement() if there is
      * only one element in the set
      */
-    virtual NELIterator getInitialElement() const  { return m_initial;  }
-    virtual NELIterator getFinalElement() const    { return m_final;    }
+    NELIterator getInitialElement() const  { return m_initial;  }
+    NELIterator getFinalElement() const    { return m_final;    }
 
     /// only return note elements; will return end() if there are none
-    virtual NELIterator getInitialNote() const;
-    virtual NELIterator getFinalNote() const;
+    NELIterator getInitialNote() const;
+    NELIterator getFinalNote() const;
 
     /**
      * only elements with duration > 0 are candidates for shortest and
      * longest; these will return end() if there are no such elements
      */
-    virtual NELIterator getLongestElement() const  { return m_longest;  }
-    virtual NELIterator getShortestElement() const { return m_shortest; }
+    NELIterator getLongestElement() const  { return m_longest;  }
+    NELIterator getShortestElement() const { return m_shortest; }
 
     /// these will return end() if there are no note elements in the set
-    virtual NELIterator getHighestNote() const     { return m_highest;  }
-    virtual NELIterator getLowestNote() const      { return m_lowest;   }
+    NELIterator getHighestNote() const     { return m_highest;  }
+    NELIterator getLowestNote() const      { return m_lowest;   }
 
 protected:
     NotationSet(const NotationElementList &nel, NELIterator elementInSet,
