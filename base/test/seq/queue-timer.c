@@ -28,6 +28,7 @@ main(int argc, char **argv)
     int i;
     int rval;
     struct timeval starttv, prevdiff;
+    int countdown = -1;
 
     if (snd_seq_open(&handle, "hw", SND_SEQ_OPEN_DUPLEX, 0) < 0) {
 	fprintf(stderr, "failed to open ALSA sequencer interface\n");
@@ -55,7 +56,7 @@ main(int argc, char **argv)
     prevdiff.tv_sec = 0;
     prevdiff.tv_usec = 0;
 
-    while (1) {
+    while (countdown != 0) {
 
 	snd_seq_queue_status_t *status;
 	const snd_seq_real_time_t *rtime;
@@ -90,7 +91,9 @@ main(int argc, char **argv)
 	if (diffdiff.tv_usec >  5000 ||
 	    diffdiff.tv_usec < -5000) {
 	    fprintf(stderr, "oops! queue slipped\n");
-	    exit(1);
+	    countdown = 2;
+	} else {
+	    if (countdown > 0) --countdown;
 	}
 
 	fprintf(stderr, "\n");
