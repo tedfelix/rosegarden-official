@@ -1098,9 +1098,9 @@ static void dumpTracks(Composition::trackcontainer& tracks)
 }
 #endif
 
-Track* Composition::getTrackById(TrackId track)
+Track* Composition::getTrackById(TrackId track) const
 {
-    trackiterator i = m_tracks.find(track);
+    trackconstiterator i = m_tracks.find(track);
 
     if (i != m_tracks.end())
         return (*i).second;
@@ -1109,7 +1109,7 @@ Track* Composition::getTrackById(TrackId track)
 	      << track << ") - WARNING - track id not found, this is probably a BUG "
 	      << __FILE__ << ":" << __LINE__ << std::endl;
     std::cerr << "Available track ids are: " << std::endl;
-    for (trackiterator i = m_tracks.begin(); i != m_tracks.end(); ++i) {
+    for (trackconstiterator i = m_tracks.begin(); i != m_tracks.end(); ++i) {
 	std::cerr << (*i).second->getId() << std::endl;
     }
 
@@ -1419,9 +1419,9 @@ Composition::clearTracks()
 }
 
 Track*
-Composition::getTrackByPosition(int position)
+Composition::getTrackByPosition(int position) const
 {
-    trackiterator it = m_tracks.begin();
+    trackconstiterator it = m_tracks.begin();
 
     for (; it != m_tracks.end(); it++)
     {

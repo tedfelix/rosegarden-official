@@ -40,25 +40,25 @@ RulerScale::~RulerScale()
 }
 
 int
-RulerScale::getFirstVisibleBar()
+RulerScale::getFirstVisibleBar() const
 {
     return m_composition->getBarNumber(m_composition->getStartMarker());
 }
 
 int
-RulerScale::getLastVisibleBar()
+RulerScale::getLastVisibleBar() const
 {
     return m_composition->getBarNumber(m_composition->getEndMarker());
 }
 
 double
-RulerScale::getBarWidth(int n)
+RulerScale::getBarWidth(int n) const
 {
     return getBarPosition(n + 1) - getBarPosition(n);
 }
 
 double
-RulerScale::getBeatWidth(int n)
+RulerScale::getBeatWidth(int n) const
 {
     std::pair<timeT, timeT> barRange = m_composition->getBarRange(n);
     timeT barDuration = barRange.second - barRange.first;
@@ -75,7 +75,7 @@ RulerScale::getBeatWidth(int n)
 }
 
 int
-RulerScale::getBarForX(double x)
+RulerScale::getBarForX(double x) const
 {
     // binary search
 
@@ -96,7 +96,7 @@ RulerScale::getBarForX(double x)
 }
 
 timeT
-RulerScale::getTimeForX(double x)
+RulerScale::getTimeForX(double x) const
 {
     int n = getBarForX(x);
 
@@ -117,7 +117,7 @@ RulerScale::getTimeForX(double x)
 }
 
 double
-RulerScale::getXForTime(timeT time)
+RulerScale::getXForTime(timeT time) const
 {
     int n = m_composition->getBarNumber(time);
 
@@ -137,18 +137,19 @@ RulerScale::getXForTime(timeT time)
 }
 
 timeT
-RulerScale::getDurationForWidth(double x, double width)
+RulerScale::getDurationForWidth(double x, double width) const
 {
     return getTimeForX(x + width) - getTimeForX(x);
 }
 
 double
-RulerScale::getWidthForDuration(timeT startTime, timeT duration) {
+RulerScale::getWidthForDuration(timeT startTime, timeT duration) const
+{
     return getXForTime(startTime + duration) - getXForTime(startTime);
 }
 
 double
-RulerScale::getTotalWidth()
+RulerScale::getTotalWidth() const
 {
     int n = getLastVisibleBar();
     return getBarPosition(n) + getBarWidth(n);
@@ -186,21 +187,21 @@ SimpleRulerScale::~SimpleRulerScale()
 }
 
 double
-SimpleRulerScale::getBarPosition(int n)
+SimpleRulerScale::getBarPosition(int n) const
 {
     timeT barStart = m_composition->getBarRange(n).first;
     return getXForTime(barStart);
 }
 
 double
-SimpleRulerScale::getBarWidth(int n)
+SimpleRulerScale::getBarWidth(int n) const
 {
     std::pair<timeT, timeT> range = m_composition->getBarRange(n);
     return (double)(range.second - range.first) / m_ratio;
 }
 
 double
-SimpleRulerScale::getBeatWidth(int n)
+SimpleRulerScale::getBeatWidth(int n) const
 {
     bool isNew;
     TimeSignature timeSig(m_composition->getTimeSignatureInBar(n, isNew));
@@ -208,13 +209,13 @@ SimpleRulerScale::getBeatWidth(int n)
 }
 
 int
-SimpleRulerScale::getBarForX(double x)
+SimpleRulerScale::getBarForX(double x) const
 {
     return m_composition->getBarNumber(getTimeForX(x));
 }
 
 timeT
-SimpleRulerScale::getTimeForX(double x)
+SimpleRulerScale::getTimeForX(double x) const
 {
     timeT t = (timeT)((x - m_origin) * m_ratio);
 
@@ -227,7 +228,7 @@ SimpleRulerScale::getTimeForX(double x)
 }
 
 double
-SimpleRulerScale::getXForTime(timeT time)
+SimpleRulerScale::getXForTime(timeT time) const
 {
     int firstBar = getFirstVisibleBar();
     if (firstBar != 0) {

@@ -48,7 +48,7 @@
 #include "rosegardenguidoc.h"
 #include "rosegardengui.h"
 #include "trackeditor.h"
-#include "segmentcanvas.h"
+#include "compositionview.h"
 #include "segmenttool.h"
 #include "notationview.h"
 #include "matrixview.h"
@@ -161,7 +161,6 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
             SLOT(slotChangeInstrumentLabel(Rosegarden::InstrumentId, QString)));
 
     if (doc) {
-        m_trackEditor->setupSegments();
 	connect(doc, SIGNAL(recordingSegmentUpdated(Rosegarden::Segment *,
 						    Rosegarden::timeT)),
 		this, SLOT(slotUpdateRecordingSegment(Rosegarden::Segment *,
@@ -230,6 +229,11 @@ Rosegarden::SegmentSelection
 RosegardenGUIView::getSelection()
 {
     return m_trackEditor->getSegmentCanvas()->getSelectedSegments();
+}
+
+void RosegardenGUIView::updateSelectionContents()
+{
+    m_trackEditor->getSegmentCanvas()->updateSelectionContents();
 }
 
 void
@@ -773,23 +777,13 @@ void RosegardenGUIView::setZoomSize(double size)
 
     double duration44 = Rosegarden::TimeSignature(4,4).getBarDuration();
 
-    QWMatrix zoomMatrix;
     double xScale = duration44/(size * barWidth44);
     RG_DEBUG << "RosegardenGUIView::setZoomSize - xScale =  " << xScale << endl;
 
-    zoomMatrix.scale(xScale, 1.0);
-    m_trackEditor->getSegmentCanvas()->setWorldMatrix(zoomMatrix);
+    m_trackEditor->getSegmentCanvas()->slotSetHZoomFactor(xScale);
 
     m_trackEditor->slotSetPointerPosition
 	(getDocument()->getComposition().getPosition());
-
-    for (Composition::iterator i = 
-              getDocument()->getComposition().begin();
-         i != getDocument()->getComposition().end(); i++) {
-	m_trackEditor->getSegmentCanvas()->updateSegmentItem(*i);
-    }
-
-    m_trackEditor->getSegmentCanvas()->slotUpdate();
 
     if (m_trackEditor->getTempoRuler()) {
 	m_trackEditor->getTempoRuler()->repaint();
@@ -806,12 +800,6 @@ void RosegardenGUIView::setZoomSize(double size)
     if (m_trackEditor->getBottomBarButtons()) {
 	m_trackEditor->getBottomBarButtons()->repaint();
     }
-
-    // Update the SegmentItem Selection in the canvas with
-    // new canvas positional values (as we're currently
-    // changing the canvas size).
-    //
-    m_trackEditor->updateSegmentItemSelection();
 }
 
 
@@ -1192,10 +1180,11 @@ void RosegardenGUIView::slotShowPreviews(bool v)
 
 void RosegardenGUIView::slotUpdateAudioPreviews(Rosegarden::InstrumentId id)
 {
-    if (!m_trackEditor->getSegmentCanvas()->isShowingPreviews()) return;
-    RG_DEBUG << "RosegardenGUIView::slotUpdateAudioPreviews" << endl;
-    m_trackEditor->getSegmentCanvas()->canvas()->setAllChanged();
-    m_trackEditor->getSegmentCanvas()->canvas()->update();
+    // nothing to do anymore with the new canvas
+//     if (!m_trackEditor->getSegmentCanvas()->isShowingPreviews()) return;
+//     RG_DEBUG << "RosegardenGUIView::slotUpdateAudioPreviews" << endl;
+//     m_trackEditor->getSegmentCanvas()->canvas()->setAllChanged();
+//     m_trackEditor->getSegmentCanvas()->canvas()->update();
 }
 	
 void RosegardenGUIView::slotAddTracks(unsigned int nbTracks,

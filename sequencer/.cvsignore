@@ -4,6 +4,7 @@ Makefile
 Makefile.in
 rosegardensequencer
 *.moc.cpp
+*.moc
 *_skel.cpp
 *_meta_unload.cpp
 *.kidl

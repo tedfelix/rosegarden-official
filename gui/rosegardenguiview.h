@@ -155,6 +155,7 @@ public:
     
     bool haveSelection();
     Rosegarden::SegmentSelection getSelection();
+    void updateSelectionContents();
 
 public slots:
     void slotEditSegment(Rosegarden::Segment*);

@@ -111,9 +111,9 @@ public:
     //
     //  INSTRUMENT & TRACK
 
-    Track* getTrackById(TrackId track);
+    Track* getTrackById(TrackId track) const;
 
-    Track* getTrackByPosition(int position);
+    Track* getTrackByPosition(int position) const;
  
     trackcontainer& getTracks() { return m_tracks; }
  

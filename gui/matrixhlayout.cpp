@@ -163,17 +163,17 @@ void MatrixHLayout::scanStaff(Staff &staffBase,
     }
 }
 
-double MatrixHLayout::getTotalWidth()
+double MatrixHLayout::getTotalWidth() const
 {
     return m_totalWidth;
 }
 
-int MatrixHLayout::getFirstVisibleBar()
+int MatrixHLayout::getFirstVisibleBar() const
 {
     return m_firstBar;
 }
 
-int MatrixHLayout::getLastVisibleBar()
+int MatrixHLayout::getLastVisibleBar() const
 {
     int barNo = m_firstBar + m_barData.size() - 2;
     if (barNo < m_firstBar + 1) barNo = m_firstBar + 1;
@@ -181,7 +181,7 @@ int MatrixHLayout::getLastVisibleBar()
     return barNo;
 }
 
-double MatrixHLayout::getBarPosition(int barNo)
+double MatrixHLayout::getBarPosition(int barNo) const
 {
     if (barNo < getFirstVisibleBar()) {
         return getBarPosition(getFirstVisibleBar());

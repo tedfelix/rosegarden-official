@@ -13,6 +13,7 @@ rosegardentempo.h
 rosegardentempo.moc
 rosegarden
 *.moc.cpp
+*.moc
 *_skel.cpp
 *_meta_unload.cpp
 *.kidl

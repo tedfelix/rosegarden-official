@@ -153,7 +153,7 @@ public:
      * This is the x-coord of the end of the last element on the longest
      * staff, plus the space allocated to that element
      */
-    virtual double getTotalWidth() { return m_totalWidth; }
+    virtual double getTotalWidth() const { return m_totalWidth; }
 
     /**
      * Returns the number of the first visible bar line on the given
@@ -165,29 +165,29 @@ public:
      * Returns the number of the first visible bar line on any
      * staff
      */
-    virtual int getFirstVisibleBar();
+    virtual int getFirstVisibleBar() const;
 
     /**
      * Returns the number of the last visible bar line on the given
      * staff
      */
-    virtual int getLastVisibleBarOnStaff(Rosegarden::Staff &staff);
+    virtual int getLastVisibleBarOnStaff(Rosegarden::Staff &staff) const;
 
     /**
      * Returns the number of the first visible bar line on any
      * staff
      */
-    virtual int getLastVisibleBar();
+    virtual int getLastVisibleBar() const;
 
     /**
      * Returns the x-coordinate of the given bar number
      */
-    virtual double getBarPosition(int barNo);
+    virtual double getBarPosition(int barNo) const;
 
     /**
      * Returns the nearest time value to the given X coord.
      */
-    virtual Rosegarden::timeT getTimeForX(double x);
+    virtual Rosegarden::timeT getTimeForX(double x) const;
 
     /**
      * Returns the X coord corresponding to the given time value.
@@ -195,14 +195,14 @@ public:
      * (the inverse of the way getTimeForX works), and should be used
      * for any rulers associated with the layout.
      */
-    virtual double getXForTime(Rosegarden::timeT time);
+    virtual double getXForTime(Rosegarden::timeT time) const;
 
     /**
      * Returns the X coord corresponding to the given time value.
      * This method works by interpolating between event positions, and
      * should be used for position pointer tracking during playback.
      */
-    virtual double getXForTimeByEvent(Rosegarden::timeT time);
+    virtual double getXForTimeByEvent(Rosegarden::timeT time) const;
 
     /**
      * Returns true if the specified bar has the correct length

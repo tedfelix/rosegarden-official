@@ -50,22 +50,22 @@ public:
      * This is the x-coord of the end of the last element on the
      * longest staff
      */
-    virtual double getTotalWidth();
+    virtual double getTotalWidth() const;
 
     /**
      * Returns the number of the first visible bar line
      */
-    virtual int getFirstVisibleBar();
+    virtual int getFirstVisibleBar() const;
 
     /**
      * Returns the number of the first visible bar line
      */
-    virtual int getLastVisibleBar();
+    virtual int getLastVisibleBar() const;
 
     /**
      * Returns the x-coordinate of the given bar number
      */
-    virtual double getBarPosition(int barNo);
+    virtual double getBarPosition(int barNo) const;
 
     /**
      * Precomputes layout data for a single staff, updating any

@@ -41,7 +41,8 @@ namespace Rosegarden {
 }
 
 class SegmentItem;
-class SegmentCanvas;
+class CompositionView;
+class CompositionModel;
 class RosegardenGUIDoc;
 class BarButtons;
 class TempoRuler;
@@ -49,7 +50,6 @@ class ChordNameRuler;
 class TrackButtons;
 class MultiViewCommandHistory;
 class KCommand;
-class QCanvasRectangle;
 class QDeferScrollView;
 class QScrollBar;
 
@@ -78,9 +78,7 @@ public:
 
     ~TrackEditor();
 
-    static const double PointerWidth;
-
-    SegmentCanvas* getSegmentCanvas()       { return m_segmentCanvas; }
+    CompositionView* getSegmentCanvas()       { return m_segmentCanvas; }
     TempoRuler*    getTempoRuler()          { return m_tempoRuler; }
     ChordNameRuler*getChordNameRuler()      { return m_chordNameRuler; }
     BarButtons*    getTopBarButtons()       { return m_topBarButtons; }
@@ -89,13 +87,6 @@ public:
     Rosegarden::RulerScale*    getRulerScale() { return m_rulerScale; }
 
     int getTrackCellHeight() const;
-
-    /**
-     * Must be called after construction and signal connection
-     * if a document was passed to ctor, otherwise segments will
-     * be created but not registered in the main doc
-     */
-    void setupSegments();
 
     /**
      * Add a new segment - DCOP interface
@@ -107,11 +98,6 @@ public:
      */
     MultiViewCommandHistory *getCommandHistory();
     void addCommandToHistory(KCommand *command);
-
-    /*
-     * Update the selection tools selection - used on zoom
-     */
-    void updateSegmentItemSelection();
 
 
 public slots:
@@ -239,8 +225,8 @@ protected:
     BarButtons              *m_topBarButtons;
     BarButtons              *m_bottomBarButtons;
     TrackButtons            *m_trackButtons;
-    SegmentCanvas           *m_segmentCanvas;
-    CanvasCursor            *m_pointer;
+    CompositionView         *m_segmentCanvas;
+    CompositionModel        *m_compositionModel;
     QDeferScrollView        *m_trackButtonScroll;
 
     bool                     m_showTrackLabels;

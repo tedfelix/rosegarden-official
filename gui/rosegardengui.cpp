@@ -87,6 +87,7 @@
 #include "trackbuttons.h"
 #include "tracklabel.h"
 #include "trackeditor.h"
+#include "compositionview.h"
 #include "dialogs.h"
 #include "editcommands.h"
 #include "notationcommands.h"
@@ -2361,6 +2362,7 @@ void RosegardenGUIApp::slotJoinSegments()
     }
 
     m_view->slotAddCommandToHistory(new SegmentMergeCommand(selection));
+    m_view->updateSelectionContents();
 }
 
 void RosegardenGUIApp::slotRescaleSelection()

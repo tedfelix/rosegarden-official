@@ -17,6 +17,7 @@ rosegarden_SOURCES = \
 	colours.cpp \
 	colourwidgets.cpp \
         commondialogs.cpp \
+        compositionview.cpp \
         constants.cpp \
         controleditor.cpp \
         controlruler.cpp \
@@ -97,10 +98,10 @@ rosegarden_SOURCES = \
 	rosegardenguiview.cpp \
         rosegardentransport.ui \
         rosegardentransportdialog.cpp \
+	rosegardenscrollview.cpp \
 	rosestrings.cpp \
 	rosexmlhandler.cpp \
 	scrollbox.cpp \
-	segmentcanvas.cpp \
         segmentcommands.cpp \
         segmentparameterbox.cpp \
         segmenttool.cpp \

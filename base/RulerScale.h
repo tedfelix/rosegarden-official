@@ -61,60 +61,60 @@ public:
     /**
      * Return the number of the first visible bar.
      */
-    virtual int getFirstVisibleBar();
+    virtual int getFirstVisibleBar() const;
 
     /**
      * Return the number of the last visible bar.  (The last
      * visible bar_line_ will be at the end of this bar.)
      */
-    virtual int getLastVisibleBar();
+    virtual int getLastVisibleBar() const;
 
     /**
      * Return the x-coordinate at which bar number n starts.
      */
-    virtual double getBarPosition(int n) = 0;
+    virtual double getBarPosition(int n) const = 0;
 
     /**
      * Return the width of bar number n.
      */
-    virtual double getBarWidth(int n);
+    virtual double getBarWidth(int n) const;
 
     /**
      * Return the width of each beat subdivision in bar n.
      */
-    virtual double getBeatWidth(int n);
+    virtual double getBeatWidth(int n) const;
 
     /**
      * Return the number of the bar containing the given x-coord.
      */
-    virtual int getBarForX(double x);
+    virtual int getBarForX(double x) const;
 
     /**
      * Return the nearest time value to the given x-coord.
      */
-    virtual timeT getTimeForX(double x);
+    virtual timeT getTimeForX(double x) const;
 
     /**
      * Return the x-coord corresponding to the given time value.
      */
-    virtual double getXForTime(timeT time);
+    virtual double getXForTime(timeT time) const;
 
     /**
      * Return the duration corresponding to the given delta-x
      * starting at the given x-coord.
      */
-    virtual timeT getDurationForWidth(double x, double width);
+    virtual timeT getDurationForWidth(double x, double width) const;
 
     /**
      * Return the width corresponding to the given duration
      * starting at the given time.
      */
-    virtual double getWidthForDuration(timeT startTime, timeT duration);
+    virtual double getWidthForDuration(timeT startTime, timeT duration) const;
 
     /**
      * Return the width of the entire scale.
      */
-    virtual double getTotalWidth();
+    virtual double getTotalWidth() const;
 
 protected:
     RulerScale(Composition *c);
@@ -146,12 +146,12 @@ public:
     double getUnitsPerPixel() const { return m_ratio; }
     void   setUnitsPerPixel(double ratio) { m_ratio = ratio; }
 
-    virtual double getBarPosition(int n);
-    virtual double getBarWidth(int n);
-    virtual double getBeatWidth(int n);
-    virtual int getBarForX(double x);
-    virtual timeT getTimeForX(double x);
-    virtual double getXForTime(timeT time);
+    virtual double getBarPosition(int n) const;
+    virtual double getBarWidth(int n) const;
+    virtual double getBeatWidth(int n) const;
+    virtual int getBarForX(double x) const;
+    virtual timeT getTimeForX(double x) const;
+    virtual double getXForTime(timeT time) const;
 
 protected:
     double m_origin;

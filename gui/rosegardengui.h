@@ -34,7 +34,6 @@
 #include "dialogs.h"
 #include "rosegardendcop.h"
 #include "rosegardenguiiface.h"
-#include "segmentcanvas.h"
 
 #include "AudioFile.h"
 #include "Sound.h"

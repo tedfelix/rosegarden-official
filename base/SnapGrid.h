@@ -146,6 +146,10 @@ public:
 	return m_rulerScale;
     }
 
+    const RulerScale *getRulerScale() const {
+	return m_rulerScale;
+    }
+
 protected:
     RulerScale *m_rulerScale; // I don't own this
     timeT m_snapTime;

@@ -2216,11 +2216,11 @@ RosegardenGUIDoc::finalizeAudioFile(Rosegarden::AudioFileId /*id*/)
 
 	// Update preview
 	//
-	RosegardenGUIView *w;
-	for(w=m_viewList.first(); w!=0; w=m_viewList.next()) {
-	    w->getTrackEditor()->
-		getSegmentCanvas()->updateSegmentItem(m_recordSegment);
-	}
+// 	RosegardenGUIView *w;
+// 	for(w=m_viewList.first(); w!=0; w=m_viewList.next()) {
+// 	    w->getTrackEditor()->
+// 		getSegmentCanvas()->updateSegmentItem(m_recordSegment);
+// 	}
 
 	// update views
 	slotUpdateAllViews(0);

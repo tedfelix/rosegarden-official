@@ -39,9 +39,10 @@
 #include "Track.h"
 #include "NotationTypes.h"
 
+#include "compositionview.h"
+#include "compositionitemhelper.h"
 #include "constants.h"
 #include "trackeditor.h"
-#include "segmentcanvas.h"
 #include "temporuler.h"
 #include "chordnameruler.h"
 #include "rosestrings.h"
@@ -64,8 +65,6 @@ using Rosegarden::RulerScale;
 using Rosegarden::timeT;
 using Rosegarden::Segment;
 using Rosegarden::TrackId;
-
-const double TrackEditor::PointerWidth = 3.0;
 
 TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
                          QWidget* rosegardenguiview,
@@ -99,32 +98,12 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
 TrackEditor::~TrackEditor()
 {
     delete m_chordNameRuler;
-
-    // flush gc (i.e. forget what's in there).
-    // All remaining items will be deleted by the canvas anyway.
-    //
-    CanvasItemGC::flush();
 }
 
 void
 TrackEditor::init(QWidget* rosegardenguiview)
 {
     QGridLayout *grid = new QGridLayout(this, 4, 2);
-
-    QCanvas *canvas = new QCanvas(this);
-    canvas->resize(100, 100); // call slotReadjustCanvasSize later
-    canvas->setBackgroundColor(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::SegmentCanvas));
-    //canvas->retune(128);
-
-    kapp->config()->setGroup(Rosegarden::GeneralOptionsConfigGroup);
-    if (kapp->config()->readBoolEntry("backgroundtextures", false)) {
-	QPixmap background;
-	QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-	if (background.load(QString("%1/misc/bg-segmentcanvas.xpm").
-			    arg(pixmapDir))) {
-	    canvas->setBackgroundPixmap(background);
-	}
-    }
 
     int trackLabelWidth = 230;
     int barButtonsHeight = 25;
@@ -161,11 +140,13 @@ TrackEditor::init(QWidget* rosegardenguiview)
     //
     // Segment Canvas
     //
-    m_segmentCanvas = new SegmentCanvas(m_doc,
-                                        new Rosegarden::SimpleRulerScale(*(
-                                            dynamic_cast<Rosegarden::SimpleRulerScale*>(m_rulerScale))),
-                                        getTrackCellHeight(),
-                                        canvas, this);
+
+    Rosegarden::SimpleRulerScale* rulerScale = new Rosegarden::SimpleRulerScale(*(dynamic_cast<Rosegarden::SimpleRulerScale*>(m_rulerScale)));
+ 
+    m_compositionModel = new CompositionModelImpl(m_doc->getComposition(),
+                                                  rulerScale, getTrackCellHeight());
+    
+    m_segmentCanvas = new CompositionView(m_doc, m_compositionModel, this);
 
     //
     // Bottom Bar Buttons
@@ -290,56 +271,11 @@ TrackEditor::init(QWidget* rosegardenguiview)
     connect(m_doc, SIGNAL(loopChanged(Rosegarden::timeT,
                                       Rosegarden::timeT)),
 	    this, SLOT(slotSetLoop(Rosegarden::timeT, Rosegarden::timeT)));
-
-    // create the position pointer
-    m_pointer = new CanvasCursor(canvas, int(PointerWidth));
-    m_pointer->updateHeight();
-    m_pointer->setX(-2);
-    m_pointer->setY(0);
-    m_pointer->setZ(10);
-    m_pointer->show();
 }
 
 void TrackEditor::slotReadjustCanvasSize()
 {
-    Composition &comp = m_doc->getComposition();
-    int lastBar = comp.getBarNumber(comp.getEndMarker());
-    
-    RulerScale *ruler = m_segmentCanvas->grid().getRulerScale();
-    m_canvasWidth = (int)(ruler->getBarPosition(lastBar) +
-                          ruler->getBarWidth(lastBar));
-
-    // Not very satisfactory
-    //
-//     int canvasHeight = std::max(getTrackCellHeight() * comp.getNbTracks(),
-//                                 m_segmentCanvas->viewport()->height()
-//                                 //QApplication::desktop()->height()
-//                                 );
-
-    RG_DEBUG << "TrackEditor::slotReadjustCanvasSize() : width = "
-	     << m_canvasWidth << ", nbTracks = "
-             << comp.getNbTracks() << endl;
-
-    int canvasHeight = getTrackCellHeight() * std::max(40u, comp.getNbTracks());
-
-    int chunkSize = 100;
-    if (m_canvasWidth > 20000) {
-	chunkSize = m_canvasWidth / 1000;
-    }
-    m_segmentCanvas->canvas()->retune(chunkSize);
-
-    m_segmentCanvas->canvas()->resize(m_canvasWidth, canvasHeight);
-
-
-    Rosegarden::SimpleRulerScale *sRuler = 
-        dynamic_cast<Rosegarden::SimpleRulerScale*>(m_rulerScale);
-
-    int width = int(rint((PointerWidth * sRuler->getUnitsPerPixel())/ m_initialUnitsPerPixel));
-    width = int(PointerWidth);
-
-    m_pointer->updateHeight();
-
-    RG_DEBUG << "TrackEditor::slotReadjustCanvasSize - done" << endl;
+    m_segmentCanvas->updateSize();
 }
 
 void TrackEditor::slotTrackButtonsWidthChanged()
@@ -373,29 +309,6 @@ int TrackEditor::getTrackCellHeight() const
     return size + 12;
 }
 
-void
-TrackEditor::setupSegments()
-{
-    RG_DEBUG << "TrackEditor::setupSegments() begin" << endl;
-
-    if (!m_doc) return; // sanity check
-    
-    Composition &comp = m_doc->getComposition();
-
-    for (Composition::iterator i = comp.begin(); i != comp.end(); ++i) {
-
-        if (!(*i)) continue;
-
-	RG_DEBUG << "TrackEditor::setupSegments() add segment"
-			     << " - start idx : " << (*i)->getStartTime()
-			     << " - nb time steps : " << ((*i)->getEndTime() - (*i)->getStartTime())
-			     << " - track id : " << (*i)->getTrack()
-			     << endl;
-
-	m_segmentCanvas->addSegmentItem((*i));
-    }
-}
-
 bool TrackEditor::isCompositionModified()
 {
     return m_doc->getComposition().getRefreshStatus
@@ -416,8 +329,8 @@ void TrackEditor::paintEvent(QPaintEvent* e)
         RG_DEBUG << "TrackEditor::paintEvent: composition is modified, update everything\n";
 
 	slotReadjustCanvasSize();
-        m_segmentCanvas->updateAllSegmentItems();
         m_trackButtons->slotUpdateTracks();
+        m_segmentCanvas->updateContents();
 
 	Composition &composition = m_doc->getComposition();
 
@@ -434,36 +347,6 @@ void TrackEditor::paintEvent(QPaintEvent* e)
         }
 
         setCompositionModified(false);
-
-    } else if (m_segmentCanvas->isShowingPreviews()) { 
-
-	for (Composition::iterator i = m_doc->getComposition().begin();
-	     i != m_doc->getComposition().end(); ++i) {
-
-	    SegmentRefreshStatusIdMap::iterator ri =
-		m_segmentsRefreshStatusIds.find(*i);
-
-	    bool refresh = false;
-
-	    if (ri == m_segmentsRefreshStatusIds.end()) {
-		
-		//RG_DEBUG << "TrackEditor::paintEvent: adding segment " << *i << " to map" << endl;
-		m_segmentsRefreshStatusIds[*i] = (*i)->getNewRefreshStatusId();
-
-	    } else {
-	    
-		unsigned int refreshStatusId = m_segmentsRefreshStatusIds[*i];
-		Rosegarden::SegmentRefreshStatus &refreshStatus =
-		    (*i)->getRefreshStatus(refreshStatusId);
-
-		refresh = refreshStatus.needsRefresh();
-		refreshStatus.setNeedsRefresh(false);
-	    }
-
-	    if (refresh) {
-		m_segmentCanvas->updateSegmentItem(*i);
-	    }
-	}
     }
 
     QWidget::paintEvent(e);
@@ -528,47 +411,31 @@ TrackEditor::slotCanvasScrolled(int x, int y)
 void
 TrackEditor::slotSetPointerPosition(Rosegarden::timeT position)
 {
-
-//     RG_DEBUG << "TrackEditor::setPointerPosition: time is " << position << endl;
-
-    if (!m_pointer) return;
-
     Rosegarden::SimpleRulerScale *ruler = 
         dynamic_cast<Rosegarden::SimpleRulerScale*>(m_rulerScale);
 
     if (!ruler) return;
 
-    // scale by the x scale factor
-    /*
-    RG_DEBUG << "TrackEditor::setPointerPosition - scale = " << ruler->getUnitsPerPixel() << endl;
-    */
-
-    m_pointer->updateHeight();
-
     double pos = m_segmentCanvas->grid().getRulerScale()->getXForTime(position);
-    double distance = pos - m_pointer->x();
 
-    if (distance < 0.0) distance = -distance;
-    if (distance >= 1.0) {
-
-	m_pointer->setX(pos);
+    m_segmentCanvas->setPointerPos(pos);
 
 // 	if (m_playTracking) {
 // 	    getSegmentCanvas()->slotScrollHoriz(int(double(position) / ruler->getUnitsPerPixel()));
 // 	}
 	
-	if (m_doc && m_doc->getSequenceManager() &&
-	    (m_doc->getSequenceManager()->getTransportStatus() != STOPPED)) {
+    if (m_doc && m_doc->getSequenceManager() &&
+        (m_doc->getSequenceManager()->getTransportStatus() != STOPPED)) {
 
-	    if (m_playTracking) {
-		getSegmentCanvas()->slotScrollHoriz(int(double(position) / ruler->getUnitsPerPixel()));
-	    }
-	} else if (!getSegmentCanvas()->isAutoScrolling()) {
-	    getSegmentCanvas()->slotScrollHoriz(int(double(position) / ruler->getUnitsPerPixel()));
+        if (m_playTracking) {
+            getSegmentCanvas()->slotScrollHoriz(int(double(position) / ruler->getUnitsPerPixel()));
         }
-
-	emit needUpdate();
+    } else if (!getSegmentCanvas()->isAutoScrolling()) {
+        getSegmentCanvas()->slotScrollHoriz(int(double(position) / ruler->getUnitsPerPixel()));
     }
+
+    emit needUpdate();
+
 }
 
 void
@@ -607,6 +474,7 @@ TrackEditor::slotSetFineGrain(bool value)
 void
 TrackEditor::slotUpdateRecordingSegmentItem(Rosegarden::Segment *segment)
 {
+    /*
     Composition &comp = m_doc->getComposition();
     //int y = segment->getTrack() * getTrackCellHeight();
 
@@ -614,8 +482,8 @@ TrackEditor::slotUpdateRecordingSegmentItem(Rosegarden::Segment *segment)
     // current point position
     //
     timeT endTime = comp.getPosition();
-
-    m_segmentCanvas->showRecordingSegmentItem(segment, endTime);
+    */
+    m_segmentCanvas->getModel()->setRecordingItem(CompositionItemHelper::makeCompositionItem(segment));
 
     emit needUpdate();
 }
@@ -623,10 +491,9 @@ TrackEditor::slotUpdateRecordingSegmentItem(Rosegarden::Segment *segment)
 void
 TrackEditor::slotDeleteRecordingSegmentItem()
 {
-    m_segmentCanvas->deleteRecordingSegmentItem();
+    m_segmentCanvas->getModel()->clearRecordingItem();
     emit needUpdate();
 }
-
 
 MultiViewCommandHistory*
 TrackEditor::getCommandHistory()
@@ -671,7 +538,7 @@ TrackEditor::slotDeleteSelectedSegments()
     // Clear the selection before erasing the Segments
     // the selection points to
     //
-    m_segmentCanvas->clearSelected();
+    m_segmentCanvas->getModel()->clearSelected();
 
     // Create the compound command
     //
@@ -752,7 +619,7 @@ void TrackEditor::dropEvent(QDropEvent* event)
         heightAdjust += m_chordNameRuler->height();
 
     QPoint posInSegmentCanvas = 
-        m_segmentCanvas->inverseWorldMatrix().map(
+        m_segmentCanvas->inverseZoomMatrix().map(
             (m_segmentCanvas->viewportToContents(m_segmentCanvas->
                 viewport()->mapFrom(this, event->pos()))));
 
@@ -876,10 +743,5 @@ void TrackEditor::dropEvent(QDropEvent* event)
         // EXIST AT THIS POINT.
 
     }
-}
-
-void TrackEditor::updateSegmentItemSelection()
-{
-    if (m_segmentCanvas) m_segmentCanvas->updateSegmentItemSelection();
 }
 

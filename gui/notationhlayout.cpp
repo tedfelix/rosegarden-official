@@ -1799,11 +1799,11 @@ NotationHLayout::resetStaff(Staff &staff, timeT startTime, timeT endTime)
 }
 
 int
-NotationHLayout::getFirstVisibleBar()
+NotationHLayout::getFirstVisibleBar() const
 {
     int bar = 0;
     bool haveBar = false;
-    for (BarDataMap::iterator i(m_barData.begin()); i != m_barData.end(); ++i) {
+    for (BarDataMap::const_iterator i = m_barData.begin(); i != m_barData.end(); ++i) {
 	if (i->second.begin() == i->second.end()) continue;
 	int barHere = i->second.begin()->first;
 	if (barHere < bar || !haveBar) {
@@ -1831,11 +1831,11 @@ NotationHLayout::getFirstVisibleBarOnStaff(Staff &staff)
 }
 
 int
-NotationHLayout::getLastVisibleBar()
+NotationHLayout::getLastVisibleBar() const
 {
     int bar = 0;
     bool haveBar = false;
-    for (BarDataMap::iterator i = m_barData.begin();
+    for (BarDataMap::const_iterator i = m_barData.begin();
 	 i != m_barData.end(); ++i) {
 	if (i->second.begin() == i->second.end()) continue;
 	int barHere = getLastVisibleBarOnStaff(*i->first);
@@ -1851,13 +1851,13 @@ NotationHLayout::getLastVisibleBar()
 }
 
 int
-NotationHLayout::getLastVisibleBarOnStaff(Staff &staff)
+NotationHLayout::getLastVisibleBarOnStaff(Staff &staff) const
 {
-    BarDataList &bdl(getBarData(staff));
+    const BarDataList &bdl(getBarData(staff));
     int bar = 0;
 
     if (bdl.begin() != bdl.end()) {
-	BarDataList::iterator i(bdl.end());
+	BarDataList::const_iterator i = bdl.end();
 	bar = ((--i)->first) + 1; // last visible bar_line_
     }
 
@@ -1867,11 +1867,11 @@ NotationHLayout::getLastVisibleBarOnStaff(Staff &staff)
 }
 
 double
-NotationHLayout::getBarPosition(int bar)
+NotationHLayout::getBarPosition(int bar) const
 {
     double position = 0.0;
 
-    BarPositionList::iterator i = m_barPositions.find(bar);
+    BarPositionList::const_iterator i = m_barPositions.find(bar);
 
     if (i != m_barPositions.end()) {
 
@@ -1922,23 +1922,23 @@ bool NotationHLayout::getTimeSignaturePosition(Staff &staff,
 }
 
 Rosegarden::timeT
-NotationHLayout::getTimeForX(double x)
+NotationHLayout::getTimeForX(double x) const
 {
     return RulerScale::getTimeForX(x);
 }
 
 double
-NotationHLayout::getXForTime(Rosegarden::timeT t)
+NotationHLayout::getXForTime(Rosegarden::timeT t) const
 {
     return RulerScale::getXForTime(t);
 }
 
 double
-NotationHLayout::getXForTimeByEvent(Rosegarden::timeT time)
+NotationHLayout::getXForTimeByEvent(Rosegarden::timeT time) const
 {
 //    NOTATION_DEBUG << "NotationHLayout::getXForTime(" << time << ")" << endl;
 
-    for (BarDataMap::iterator i(m_barData.begin()); i != m_barData.end(); ++i) {
+    for (BarDataMap::const_iterator i = m_barData.begin(); i != m_barData.end(); ++i) {
 
 	Rosegarden::Staff *staff = i->first;
 

@@ -31,8 +31,10 @@
 #include "NotationTypes.h"
 
 #include "segmentcommands.h" // for SegmentRecSet
-#include "segmentcanvas.h"
+#include "compositionview.h"
+#include "compositionitemhelper.h"
 #include "colours.h"
+#include "rosegardencanvasview.h"
 
 #include "rosegardengui.h"
 #include "rosedebug.h"
@@ -48,7 +50,7 @@ using Rosegarden::GUIPalette;
 //                 Segment Tools
 //////////////////////////////////////////////////////////////////////
 
-SegmentToolBox::SegmentToolBox(SegmentCanvas* parent, RosegardenGUIDoc* doc)
+SegmentToolBox::SegmentToolBox(CompositionView* parent, RosegardenGUIDoc* doc)
     : BaseToolBox(parent),
       m_canvas(parent),
       m_doc(doc)
@@ -107,15 +109,11 @@ SegmentTool* SegmentToolBox::getTool(const QString& toolName)
 
 
 // TODO : relying on doc->parent being a KMainWindow sucks
-SegmentTool::SegmentTool(SegmentCanvas* canvas, RosegardenGUIDoc *doc)
+SegmentTool::SegmentTool(CompositionView* canvas, RosegardenGUIDoc *doc)
     : BaseTool("segment_tool_menu", dynamic_cast<KMainWindow*>(doc->parent())->factory(), canvas),
       m_canvas(canvas),
-      m_currentItem(0),
       m_doc(doc)
 {
-
-    connect(this,     SIGNAL(selectedSegments(const Rosegarden::SegmentSelection &)),
-            m_canvas, SIGNAL(selectedSegments(const Rosegarden::SegmentSelection &)));
 }
 
 SegmentTool::~SegmentTool()
@@ -134,25 +132,21 @@ SegmentTool::handleRightButtonPress(QMouseEvent *e)
     
     RG_DEBUG << "SegmentTool::handleRightButtonPress()\n";
 
-    QWMatrix matrix = m_canvas->worldMatrix().invert();
-    QPoint tPos = matrix.map(e->pos());
+    QPoint tPos = m_canvas->inverseMapPoint(e->pos());
 
-    SegmentItem *item = m_canvas->findSegmentClickedOn(tPos);
+    setCurrentItem(m_canvas->getFirstItemAt(tPos));
 
-    if (item) {
-        m_currentItem = item;
-        if (!item->isSelected() && (item->getSegment() != 0)) {
+    if (m_currentItem) {
+        if (!m_canvas->getModel()->isSelected(m_currentItem)) {
 
-            SegmentSelector* selector = dynamic_cast<SegmentSelector*>(getToolBox()->getTool("segmentselector"));
-            selector->clearSelected();
-            selector->slotSelectSegmentItem(item);
-            emit selectedSegments(selector->getSelectedSegments());
-            
+            m_canvas->getModel()->clearSelected();
+            m_canvas->getModel()->setSelected(m_currentItem);
+            m_canvas->getModel()->signalSelection();
         }
     }
     
     showMenu();
-    m_currentItem = 0;
+    setCurrentItem(CompositionItem());
 }
 
 void
@@ -191,7 +185,7 @@ SegmentToolBox* SegmentTool::getToolBox()
 // SegmentPencil
 //////////////////////////////
 
-SegmentPencil::SegmentPencil(SegmentCanvas *c, RosegardenGUIDoc *d)
+SegmentPencil::SegmentPencil(CompositionView *c, RosegardenGUIDoc *d)
     : SegmentTool(c, d),
       m_newRect(false),
       m_track(0),
@@ -229,17 +223,20 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
     if (e->button() == RightButton) return;
     
     m_newRect = false;
-    m_currentItem = 0;
 
-    QWMatrix matrix = m_canvas->worldMatrix().invert();
-    QPoint tPos = matrix.map(e->pos());
+    QPoint tPos = m_canvas->inverseMapPoint(e->pos());
 
-    // Check if we're clicking on a rect
+    // Check if mouse click was on a rect
     //
-    SegmentItem *item = m_canvas->findSegmentClickedOn(tPos);
+    CompositionItem item = m_canvas->getFirstItemAt(tPos);
 
-    if (item) return;
-
+    if (item) {
+        delete item;
+        return; // mouse click was on a rect, nothing to do
+    }
+    
+    // make new item
+    //
     m_canvas->setSnapGrain(false);
 
     int trackPosition = m_canvas->grid().getYBin(tPos.y());
@@ -256,35 +253,38 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
     timeT time = m_canvas->grid().snapX(tPos.x(), SnapGrid::SnapLeft);
     timeT duration = m_canvas->grid().getSnapTime(double(tPos.x()));
     if (duration == 0) duration = Note(Note::Shortest).getDuration();
-    
-    m_currentItem = m_canvas->
-        addSegmentItem(trackPosition, time, time + duration);
-    m_newRect = true;
-    
-    m_canvas->slotUpdate();
 
+    QRect tmpRect;
+    tmpRect.setX(int(m_canvas->grid().getRulerScale()->getXForTime(time)));
+    tmpRect.setY(m_canvas->grid().getYBinCoordinate(trackPosition));
+    tmpRect.setHeight(m_canvas->grid().getYSnap());
+    tmpRect.setWidth(int(m_canvas->grid().getRulerScale()->getWidthForDuration(time, duration)));
+
+    m_canvas->setTmpRect(tmpRect);
+    m_newRect = true;
+    m_origPos = e->pos();
+
+    updateOnTmpRect(tmpRect);
 }
 
 void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
 {
     if (e->button() == RightButton) return;
 
-    if (!m_currentItem) return;
-    m_currentItem->normalize();
-
     if (m_newRect) {
 
-        Rosegarden::Track *track = m_doc->getComposition().
-            getTrackByPosition(m_currentItem->getTrackPosition());
+        QRect tmpRect = m_canvas->getTmpRect();
+        
+        int trackPosition = m_canvas->grid().getYBin(tmpRect.y());
+        Rosegarden::Track *track = m_doc->getComposition().getTrackByPosition(trackPosition);
+        timeT startTime = m_canvas->grid().getRulerScale()->getTimeForX(tmpRect.x()),
+            endTime = m_canvas->grid().getRulerScale()->getTimeForX(tmpRect.x() + tmpRect.width());
+        
 
         SegmentInsertCommand *command =
-            new SegmentInsertCommand(m_doc,
-                                     track->getId(),
-                                     m_currentItem->getStartTime(),
-                                     m_currentItem->getEndTime());
+            new SegmentInsertCommand(m_doc, track->getId(),
+                                     startTime, endTime);
 
-	delete m_currentItem;
-	m_currentItem = 0;
 	m_newRect = false;
 
         addCommandToHistory(command);
@@ -294,74 +294,86 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
 	// segment as we add it; otherwise we'd have no way to know
 	// that the segment was created by this tool rather than by
 	// e.g. a simple file load
-	SegmentSelector* selector = dynamic_cast<SegmentSelector*>
-	    (getToolBox()->getTool("segmentselector"));
-	Rosegarden::Segment *segment = command->getSegment();
-	SegmentItem *item = m_canvas->addSegmentItem(segment);
 
-	Rosegarden::SegmentSelection selection;
-	selection.insert(segment);
-	selector->clearSelected();
-	emit selectedSegments(selection);
-	selector->slotSelectSegmentItem(item);
+	Rosegarden::Segment *segment = command->getSegment();
+
+        CompositionItem item = CompositionItemHelper::makeCompositionItem(segment);
+        m_canvas->getModel()->clearSelected();
+        m_canvas->getModel()->setSelected(item);
+        m_canvas->getModel()->setSelected(item);
+        m_canvas->getModel()->signalSelection();
+        m_canvas->setTmpRect(QRect());
+        updateOnTmpRect(tmpRect);
 
     } else {
 
-	delete m_currentItem;
-	m_currentItem = 0;
 	m_newRect = false;
     }
 }
 
 int SegmentPencil::handleMouseMove(QMouseEvent *e)
 {
-    QPoint pos = e->pos();
+    if (!m_newRect) return RosegardenCanvasView::NoFollow;
 
-    if (!m_currentItem) return RosegardenCanvasView::NoFollow;
+    QRect tmpRect =  m_canvas->getTmpRect();
+    QRect oldTmpRect = tmpRect;
 
     m_canvas->setSnapGrain(false);
 
-    QPoint tPos = m_canvas->inverseMapPoint(pos);
-
-//     RG_DEBUG << "SegmentPencil::handleMouseMove: pos " << pos << ", tPos "
-// 	     << tPos << endl;
+    QPoint tPos = m_canvas->inverseMapPoint(e->pos());
 
     SnapGrid::SnapDirection direction = SnapGrid::SnapRight;
-    if (tPos.x() < m_currentItem->x()) direction = SnapGrid::SnapLeft;
+    if (tPos.x() <= m_origPos.x()) direction = SnapGrid::SnapLeft;
 
     timeT snap = m_canvas->grid().getSnapTime(double(tPos.x()));
     if (snap == 0) snap = Note(Note::Shortest).getDuration();
 
     timeT time = m_canvas->grid().snapX(tPos.x(), direction);
-    timeT startTime = m_currentItem->getStartTime();
 
-    if (time >= startTime) {
-	if ((time - startTime) < snap) {
-	    time = startTime + snap;
-	}
-    } else {
-	if ((startTime - time) < snap) {
-	    time = startTime - snap;
-	}
+    timeT startTime = m_canvas->grid().getRulerScale()->getTimeForX(tmpRect.x()),
+        endTime = m_canvas->grid().getRulerScale()->getTimeForX(tmpRect.right());
+
+    if (direction == SnapGrid::SnapRight) {
+        
+        if (time >= startTime) {
+            if ((time - startTime) < snap) {
+                time = startTime + snap;
+            }
+        } else {
+            if ((startTime - time) < snap) {
+                time = startTime - snap;
+            }
+        }
+
+        int w = int(m_canvas->grid().getRulerScale()->getWidthForDuration(startTime, time - startTime));
+        tmpRect.setWidth(w);
+
+    } else { // SnapGrid::SnapLeft
+
+//             time += std::max(endTime - startTime, timeT(0));
+        tmpRect.setX(int(m_canvas->grid().getRulerScale()->getXForTime(time)));
+
     }
 
-    if (direction == SnapGrid::SnapLeft) {
-	time += std::max(m_currentItem->getEndTime() -
-			 m_currentItem->getStartTime(), timeT(0));
-    }
-
-    m_currentItem->setEndTime(time);
-
-    m_canvas->slotUpdate();
-
+    m_canvas->setTmpRect(tmpRect);
+    updateOnTmpRect(oldTmpRect | tmpRect);
     return RosegardenCanvasView::FollowHorizontal;
 }
+
+void SegmentPencil::updateOnTmpRect(QRect tmpRect)
+{
+    if (tmpRect.x() > 2)
+        tmpRect.setX(tmpRect.x() - 2);
+    tmpRect.setWidth(tmpRect.width() + 2);
+    m_canvas->updateContents(tmpRect);
+}
+
 
 //////////////////////////////
 // SegmentEraser
 //////////////////////////////
 
-SegmentEraser::SegmentEraser(SegmentCanvas *c, RosegardenGUIDoc *d)
+SegmentEraser::SegmentEraser(CompositionView *c, RosegardenGUIDoc *d)
     : SegmentTool(c, d)
 {
     RG_DEBUG << "SegmentEraser()\n";
@@ -374,23 +386,23 @@ void SegmentEraser::ready()
 
 void SegmentEraser::handleMouseButtonPress(QMouseEvent *e)
 {
-    QWMatrix matrix = m_canvas->worldMatrix().invert();
-    QPoint tPos = matrix.map(e->pos());
+    QPoint tPos = m_canvas->inverseMapPoint(e->pos());
 
-    m_currentItem = m_canvas->findSegmentClickedOn(tPos);
+    setCurrentItem(m_canvas->getFirstItemAt(tPos));
 }
 
 void SegmentEraser::handleMouseButtonRelease(QMouseEvent*)
 {
     if (m_currentItem)
     {
-        addCommandToHistory(
-                new SegmentEraseCommand(m_currentItem->getSegment()));
+        // no need to test the result, we know it's good (see handleMouseButtonPress)
+        CompositionItemImpl* item = dynamic_cast<CompositionItemImpl*>((_CompositionItem*)m_currentItem);
+        
+        addCommandToHistory(new SegmentEraseCommand(item->getSegment()));
+        m_canvas->updateContents();
     }
 
-    m_canvas->canvas()->update();
-    
-    m_currentItem = 0;
+    setCurrentItem(CompositionItem());
 }
 
 int SegmentEraser::handleMouseMove(QMouseEvent*)
@@ -402,23 +414,9 @@ int SegmentEraser::handleMouseMove(QMouseEvent*)
 // SegmentMover
 //////////////////////////////
 
-SegmentMover::SegmentMover(SegmentCanvas *c, RosegardenGUIDoc *d)
-    : SegmentTool(c, d),
-    m_foreGuide(new QCanvasRectangle(m_canvas->canvas())),
-    m_topGuide(new QCanvasRectangle(m_canvas->canvas()))
+SegmentMover::SegmentMover(CompositionView *c, RosegardenGUIDoc *d)
+    : SegmentTool(c, d)
 {
-    m_foreGuide->setPen(GUIPalette::getColour(GUIPalette::MovementGuide));
-    m_foreGuide->setBrush(GUIPalette::getColour(GUIPalette::MovementGuide));
-    m_foreGuide->setSize(1, m_canvas->canvas()->height());
-    m_foreGuide->setZ(10);
-    m_foreGuide->hide();
-
-    m_topGuide->setPen(GUIPalette::getColour(GUIPalette::MovementGuide));
-    m_topGuide->setBrush(GUIPalette::getColour(GUIPalette::MovementGuide));
-    m_topGuide->setSize(m_canvas->canvas()->width(), 1);
-    m_topGuide->setZ(10);
-    m_topGuide->hide();
-
     RG_DEBUG << "SegmentMover()\n";
 }
 
@@ -447,174 +445,159 @@ void SegmentMover::slotCanvasScrolled(int newX, int newY)
 
 void SegmentMover::handleMouseButtonPress(QMouseEvent *e)
 {
-    QWMatrix matrix = m_canvas->worldMatrix().invert();
-    QPoint tPos = matrix.map(e->pos());
+    QPoint tPos = m_canvas->inverseMapPoint(e->pos());
 
-    SegmentItem *item = m_canvas->findSegmentClickedOn(tPos);
+    CompositionItem item = m_canvas->getFirstItemAt(tPos);
     SegmentSelector* selector = dynamic_cast<SegmentSelector*>
             (getToolBox()->getTool("segmentselector"));
 
     // #1027303: Segment move issue
     // Clear selection if we're clicking on an item that's not in it
     // and we're not in add mode
-    if (selector && item &&
-	!item->isSelected() && !selector->isSegmentAdding()) {
-	selector->clearSelected();
-    }
+
+    // TODO
+//     if (selector && item &&
+// 	!item->isSelected() && !selector->isSegmentAdding()) {
+// 	selector->clearSelected();
+//     }
 
     if (item) {
 
-        m_currentItem = item;
-	m_currentItemStartX = item->x();
+        setCurrentItem(item);
 	m_clickPoint = tPos;
+        Rosegarden::Segment* s = CompositionItemHelper::getSegment(m_currentItem);
 
-        m_foreGuide->setX(int(m_canvas->grid().getRulerScale()->
-                          getXForTime(item->getSegment()->getStartTime())));
-        m_foreGuide->setY(0);
-        m_foreGuide->show();
+        int x = int(m_canvas->grid().getRulerScale()->getXForTime(s->getStartTime()));
+        int y = int(m_canvas->grid().getYBinCoordinate(s->getTrack()));
 
-        m_topGuide->setX(0);
-        m_topGuide->setY(int(m_canvas->grid().getYBinCoordinate(
-                              item->getSegment()->getTrack())));
-        m_topGuide->show();
+        m_canvas->setGuidesPos(x, y);
+        m_canvas->setDrawGuides(true);
 
-        if (selector)
-        {
-            selector->slotSelectSegmentItem(item);
+        if (m_canvas->getModel()->haveSelection()) {
+            RG_DEBUG << "SegmentMover::handleMouseButtonPress() : haveSelection\n";
+            // startMove on all selected segments
+            m_canvas->getModel()->startMoveSelection();
+
+
+            CompositionModel::itemcontainer& movingItems = m_canvas->getModel()->getMovingItems();
+            // set m_currentItem to its "sibling" among selected (now moving) items
+            setCurrentItem(CompositionItemHelper::findSiblingCompositionItem(movingItems, m_currentItem));
+
+        } else {
+            RG_DEBUG << "SegmentMover::handleMouseButtonPress() : no selection\n";
+            m_canvas->getModel()->startMove(item);
         }
+        
+        m_canvas->updateContents();
 
 	m_passedInertiaEdge = false;
 
     } else {
 
         // check for addmode - clear the selection if not
-        selector->clearSelected();
+        RG_DEBUG << "SegmentMover::handleMouseButtonPress() : clear selection\n";
+        m_canvas->getModel()->clearSelected();
+        m_canvas->getModel()->signalSelection();
+        m_canvas->updateContents();
     }
 
 }
 
 void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
 {
-    if (m_currentItem)
-    {
+    if (m_currentItem) {
 	bool haveChange = false;
 
-        SegmentSelector* 
-            selector = dynamic_cast<SegmentSelector*>
-            (getToolBox()->getTool("segmentselector"));
-
-        if (selector)
-            m_selectedItems = selector->getSegmentItemList();
-        else
-           return;
+        CompositionModel::itemcontainer& movingItems = m_canvas->getModel()->getMovingItems();
+        
 
 	SegmentReconfigureCommand *command =
 	    new SegmentReconfigureCommand
-	    (m_selectedItems->size() == 1 ? i18n("Move Segment") :
-	                                   i18n("Move Segments"));
+	    (movingItems.size() == 1 ? i18n("Move Segment") : i18n("Move Segments"));
 
-	SegmentItemList::iterator it;
-        SegmentSelection newSelection;
-	for (it = m_selectedItems->begin();
-	     it != m_selectedItems->end();
-	     it++)
-	{
 
-	    SegmentItem *item = it->second;
+	CompositionModel::itemcontainer::iterator it;
 
-            Rosegarden::Composition &comp = m_doc->getComposition();
-            Rosegarden::Track *track = 
-                comp.getTrackByPosition(item->getTrackPosition());
+	for (it = movingItems.begin();
+	     it != movingItems.end();
+	     it++) {
 
-            Rosegarden::TrackId trackId = track->getId();
+            CompositionItem item = *it;
+            Rosegarden::Segment* segment = CompositionItemHelper::getSegment(item);
 
-	    if (item->getStartTime() != item->getSegment()->getStartTime() ||
-		item->getEndTime()   != item->getSegment()->getEndMarkerTime() 
-                || trackId              != item->getSegment()->getTrack()) {
+            Rosegarden::TrackId itemTrackId = m_canvas->grid().getYBin(item->rect().y());
 
-		command->addSegment(item->getSegment(),
-				    item->getStartTime(),
-				    item->getEndTime(),
-				    trackId);
+            timeT itemStartTime = CompositionItemHelper::getStartTime(item, m_canvas->grid());
+            timeT itemEndTime   = CompositionItemHelper::getEndTime(item, m_canvas->grid());
 
-                newSelection.insert(item->getSegment());
-		haveChange = true;
-	    }
-	}
+            if (itemStartTime != segment->getStartTime() ||
+                itemEndTime   != segment->getEndMarkerTime() ||
+                itemTrackId   != segment->getTrack()) {
 
-        addCommandToHistory(command);
-
-        m_foreGuide->hide();
-        m_topGuide->hide();
-        m_canvas->hideTextFloat();
-
-        selector->clearSelected();
-        for (SegmentSelection::const_iterator nIt = newSelection.begin();
-                nIt != newSelection.end(); ++nIt)
-        {
-            selector->slotSelectSegmentItem(m_canvas->getSegmentItem(*nIt));
+                command->addSegment(segment,
+                                    itemStartTime,
+                                    itemEndTime,
+                                    itemTrackId);
+                haveChange = true;
+            }
         }
+
+        if (haveChange) addCommandToHistory(command);
+
+        m_canvas->hideTextFloat();
+        m_canvas->setDrawGuides(false);
+        m_canvas->getModel()->endMove();
+        m_canvas->updateContents();
+
     }
 
-    m_currentItem = 0;
+    m_currentItem = CompositionItem();
 }
 
 int SegmentMover::handleMouseMove(QMouseEvent *e)
 {
     m_canvas->setSnapGrain(true);
-    QWMatrix matrix = m_canvas->worldMatrix().invert();
-    QPoint tPos = matrix.map(e->pos());
+    QPoint tPos = m_canvas->inverseMapPoint(e->pos());
 
-    if (m_currentItem && m_currentItem->isSelected())
-    {
-	SegmentItemList::iterator it;
+    if (m_currentItem) {
+        CompositionModel::itemcontainer& movingItems = m_canvas->getModel()->getMovingItems();
+
+        RG_DEBUG << "SegmentMover::handleMouseMove : nb movingItems = "
+                 << movingItems.size() << endl;
+
+	CompositionModel::itemcontainer::iterator it;
         int guideX = 0;
         int guideY = 0;
 
-        SegmentSelector* 
-            selector = dynamic_cast<SegmentSelector*>
-            (getToolBox()->getTool("segmentselector"));
+	for (it = movingItems.begin();
+	     it != movingItems.end();
+	     it++) {
+//             it->second->showRepeatRect(false);
 
-        if (selector)
-            m_selectedItems = selector->getSegmentItemList();
-        else
-            return RosegardenCanvasView::NoFollow;
-	
-	for (it = m_selectedItems->begin();
-	     it != m_selectedItems->end();
-	     it++)
-	{
-            it->second->showRepeatRect(false);
+            int dx = tPos.x() - m_clickPoint.x(),
+                dy = tPos.y() - m_clickPoint.y();
 
-	    int x = tPos.x() - m_clickPoint.x(),
-		y = tPos.y() - m_clickPoint.y();
+            const int inertiaDistance = m_canvas->grid().getYSnap() / 3;
+            if (!m_passedInertiaEdge &&
+                (dx < inertiaDistance && dx > -inertiaDistance) &&
+                (dy < inertiaDistance && dy > -inertiaDistance)) {
+                return RosegardenCanvasView::NoFollow;
+            } else {
+                m_passedInertiaEdge = true;
+            }
 
-	    const int inertiaDistance = m_canvas->grid().getYSnap() / 3;
-	    if (!m_passedInertiaEdge &&
-		(x < inertiaDistance && x > -inertiaDistance) &&
-		(y < inertiaDistance && y > -inertiaDistance)) {
-		return false;
-	    } else {
-		m_passedInertiaEdge = true;
-	    }
+            timeT newStartTime = m_canvas->grid().snapX((*it)->savedRect().x() + dx);
 
-
-	    timeT newStartTime = m_canvas->grid().snapX(it->first.x() + x);
-	    it->second->setEndTime(it->second->getEndTime() + newStartTime -
-				   it->second->getStartTime());
-	    it->second->setStartTime(newStartTime);
-
-	    TrackId track;
-            int newY=it->first.y() + y;
-
+            int newX = int(m_canvas->grid().getRulerScale()->getXForTime(newStartTime));
+            int newY = m_canvas->grid().snapY((*it)->savedRect().y() + dy);
             // Make sure we don't set a non-existing track
             if (newY < 0) { newY = 0; }
-            track = m_canvas->grid().getYBin(newY);
+            TrackId track = m_canvas->grid().getYBin(newY);
 
-	    RG_DEBUG << "SegmentMover::handleMouseMove: orig y " 
-                     << it->first.y()
-		     << ", dy " << y << ", newY " << newY 
-                     << ", track " << track << endl;
+//             RG_DEBUG << "SegmentMover::handleMouseMove: orig y " 
+//                      << (*it)->savedRect().y()
+//                      << ", dy " << dy << ", newY " << newY 
+//                      << ", track " << track << endl;
 
             // Make sure we don't set a non-existing track (c'td)
             // TODO: make this suck less. Either the tool should
@@ -624,34 +607,36 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
             if (track >= TrackId(m_doc->getComposition().getNbTracks()))
                 track  = TrackId(m_doc->getComposition().getNbTracks() - 1);
 
-            // This is during a "mover" so don't use the normalised (i.e.
-            // proper) TrackPosition value yet.
-            //
-	    it->second->setTrackPosition(track);
-	}
+            newY = m_canvas->grid().getYBinCoordinate(track);
 
-        guideX = int(m_currentItem->x());
-        guideY = int(m_currentItem->y());
+//             RG_DEBUG << "SegmentMover::handleMouseMove: moving to "
+//                      << newX << "," << newY << endl;
 
-        m_foreGuide->setX(guideX);
-        m_topGuide->setY(guideY);
+            (*it)->moveTo(newX, newY);
+        }
+
+        guideX = m_currentItem->rect().x();
+        guideY = m_currentItem->rect().y();
+
+        m_canvas->setGuidesPos(guideX, guideY);
+
+        timeT currentItemStartTime = m_canvas->grid().snapX(m_currentItem->rect().x());
 
         Rosegarden::Composition &comp = m_doc->getComposition();
         Rosegarden::RealTime time = 
-            comp.getElapsedRealTime(m_currentItem->getStartTime());
+            comp.getElapsedRealTime(currentItemStartTime);
         QString ms;
         ms.sprintf("%03d", time.msec());
 
         int bar, beat, fraction, remainder;
-        comp.getMusicalTimeForAbsoluteTime(
-                m_currentItem->getStartTime(), bar, beat, fraction, remainder);
+        comp.getMusicalTimeForAbsoluteTime(currentItemStartTime, bar, beat, fraction, remainder);
 
         QString posString = QString("%1.%2s (%3, %4, %5)")
             .arg(time.sec).arg(ms)
             .arg(bar+1).arg(beat).arg(fraction);
 
         m_canvas->setTextFloat(guideX + 10, guideY - 30, posString);
-	m_canvas->canvas()->update();
+	m_canvas->updateContents();
 
 	return RosegardenCanvasView::FollowHorizontal | RosegardenCanvasView::FollowVertical;
     }
@@ -663,7 +648,7 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
 // SegmentResizer
 //////////////////////////////
 
-SegmentResizer::SegmentResizer(SegmentCanvas *c, RosegardenGUIDoc *d,
+SegmentResizer::SegmentResizer(CompositionView *c, RosegardenGUIDoc *d,
 			       int edgeThreshold)
     : SegmentTool(c, d),
       m_edgeThreshold(edgeThreshold)
@@ -697,20 +682,16 @@ void SegmentResizer::slotCanvasScrolled(int newX, int newY)
 void SegmentResizer::handleMouseButtonPress(QMouseEvent *e)
 {
     RG_DEBUG << "SegmentResizer::handleMouseButtonPress" << endl;
-    SegmentSelector* selector = dynamic_cast<SegmentSelector*>
-            (getToolBox()->getTool("segmentselector"));
-    if (selector) selector->clearSelected();
+    m_canvas->getModel()->clearSelected();
 
-    QWMatrix matrix = m_canvas->worldMatrix().invert();
-    QPoint tPos = matrix.map(e->pos());
+    QPoint tPos = m_canvas->inverseMapPoint(e->pos());
 
-    SegmentItem* item = m_canvas->findSegmentClickedOn(tPos);
+    CompositionItem item = m_canvas->getFirstItemAt(tPos);
 
     if (item) {
         RG_DEBUG << "SegmentResizer::handleMouseButtonPress - got item" << endl;
-        m_currentItem = item;
-
-        if (selector) selector->slotSelectSegmentItem(item);
+        setCurrentItem(item);
+        m_canvas->getModel()->startMove(item);
 
 	// Are we resizing from start or end?
 	if (item->rect().x() + item->rect().width()/2 > tPos.x()) {
@@ -727,55 +708,48 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent*)
 {
     if (!m_currentItem) return;
 
-    if (m_resizeStart &&
-	(m_currentItem->getStartTime() < m_currentItem->getEndTime())) {
+    timeT newStartTime = CompositionItemHelper::getStartTime(m_currentItem, m_canvas->grid());
+    timeT newEndTime = CompositionItemHelper::getEndTime(m_currentItem, m_canvas->grid());
+    Rosegarden::Segment* segment = CompositionItemHelper::getSegment(m_currentItem);
 
-	addCommandToHistory(new SegmentResizeFromStartCommand
-			    (m_currentItem->getSegment(),
-			     m_currentItem->getStartTime()));
+    if (m_resizeStart && (newStartTime < newEndTime)) {
+
+	addCommandToHistory(new SegmentResizeFromStartCommand(segment, newStartTime));
 
     } else {
 
-	m_currentItem->normalize();
-
-	// normalisation may mean start time has changed as well as duration
 	SegmentReconfigureCommand *command =
 	    new SegmentReconfigureCommand("Resize Segment");
+
+        int trackPos = CompositionItemHelper::getTrackPos(m_currentItem, m_canvas->grid());
 	
 	Rosegarden::Composition &comp = m_doc->getComposition();
-	Rosegarden::Track *track =
-	    comp.getTrackByPosition(m_currentItem->getTrackPosition());
+	Rosegarden::Track *track = comp.getTrackByPosition(trackPos);
 	
-	command->addSegment(m_currentItem->getSegment(),
-			    m_currentItem->getStartTime(),
-			    m_currentItem->getEndTime(),
+	command->addSegment(segment,
+			    newStartTime,
+			    newEndTime,
 			    track->getId());
 	addCommandToHistory(command);
     }
 
-    if (m_previewSuspended) { 
-	m_currentItem->setShowPreview(true);
-	m_previewSuspended = false;
-    }
+    m_canvas->updateContents();
+    m_canvas->getModel()->endMove();
 
-    if (m_currentItem->getPreview()) {
-	m_currentItem->getPreview()->clearPreview();
-    }
-
-    m_canvas->canvas()->update();
-
-    m_currentItem = 0;
+    m_currentItem = CompositionItem();
 }
 
 int SegmentResizer::handleMouseMove(QMouseEvent *e)
 {
     if (!m_currentItem) return RosegardenCanvasView::NoFollow;
 
+    Rosegarden::Segment* segment = CompositionItemHelper::getSegment(m_currentItem);
+
     // Don't allow Audio segments to resize yet
     //
-    if (m_currentItem->getSegment()->getType() == Rosegarden::Segment::Audio)
+    if (segment->getType() == Rosegarden::Segment::Audio)
     {
-        m_currentItem = 0;
+        m_currentItem = CompositionItem();
         KMessageBox::information(m_canvas,
                 i18n("You can't yet resize an audio segment!"));
         return RosegardenCanvasView::NoFollow;
@@ -783,58 +757,71 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
 
     m_canvas->setSnapGrain(true);
 
-    QWMatrix matrix = m_canvas->worldMatrix().invert();
-    QPoint tPos = matrix.map(e->pos());
+    QPoint tPos = m_canvas->inverseMapPoint(e->pos());
 
     timeT time = m_canvas->grid().snapX(tPos.x());
     timeT snap = m_canvas->grid().getSnapTime(double(tPos.x()));
     if (snap == 0) snap = Note(Note::Shortest).getDuration();
 
+    timeT itemStartTime = CompositionItemHelper::getStartTime(m_currentItem, m_canvas->grid());
+    timeT itemEndTime = CompositionItemHelper::getEndTime(m_currentItem, m_canvas->grid());
+
+
     if (m_resizeStart) {
 
-	timeT duration = m_currentItem->getEndTime() - time;
+	timeT duration = itemEndTime - time;
+        RG_DEBUG << "SegmentResizer::handleMouseMove() : duration = "
+                 << duration << " - snap = " << snap
+                 << " - itemEndTime : " << itemEndTime
+                 << " - time : " << time
+                 << endl;
 
 	if ((duration > 0 && duration <  snap) ||
 	    (duration < 0 && duration > -snap)) {
-	    m_currentItem->setStartTime(m_currentItem->getEndTime() -
-					(duration < 0 ? -snap : snap));
+	    CompositionItemHelper::setStartTime(m_currentItem,
+                                                itemEndTime - (duration < 0 ? -snap : snap),
+                                                m_canvas->grid());
 	} else {
-	    m_currentItem->setStartTime(m_currentItem->getEndTime() -
-					duration);
+            CompositionItemHelper::setStartTime(m_currentItem,
+                                                itemEndTime - duration,
+                                                m_canvas->grid());
 	}
 
 	// avoid updating preview, as it will update incorrectly
 	// (moving the events rather than leaving them alone and
 	// truncating if appropriate)
-	if (m_currentItem->getShowPreview()) {
-	    m_previewSuspended = true;
-	    m_currentItem->setShowPreview(false);
-	}
+// 	if (m_currentItem->getShowPreview()) {
+// 	    m_previewSuspended = true;
+// 	    m_currentItem->setShowPreview(false);
+// 	}
 
     } else {
 
-	timeT duration = time - m_currentItem->getStartTime();
+	timeT duration = time - itemStartTime;
 
 	if ((duration > 0 && duration <  snap) ||
 	    (duration < 0 && duration > -snap)) {
-	    m_currentItem->setEndTime((duration < 0 ? -snap : snap) +
-				      m_currentItem->getStartTime());
+            CompositionItemHelper::setEndTime(m_currentItem,
+                                              (duration < 0 ? -snap : snap) + itemStartTime,
+                                              m_canvas->grid());
 	} else {
-	    m_currentItem->setEndTime(duration +
-				      m_currentItem->getStartTime());
+
+            CompositionItemHelper::setEndTime(m_currentItem,
+                                              duration + itemStartTime,
+                                              m_canvas->grid());
 	}
 
 	// update preview
-	if (m_currentItem->getPreview())
-	    m_currentItem->getPreview()->setPreviewCurrent(false);
+// 	if (m_currentItem->getPreview())
+// 	    m_currentItem->getPreview()->setPreviewCurrent(false);
     }
 
-    m_canvas->canvas()->update();
+    m_canvas->updateContents();
 
     return RosegardenCanvasView::FollowHorizontal;
 }
 
-bool SegmentResizer::cursorIsCloseEnoughToEdge(SegmentItem* p, const QPoint &coord,
+bool SegmentResizer::cursorIsCloseEnoughToEdge(const CompositionItem& p, const QPoint &coord,
 					       int edgeThreshold, bool &start)
 {
     if (abs(p->rect().x() + p->rect().width() - coord.x()) < edgeThreshold) {
@@ -852,28 +839,14 @@ bool SegmentResizer::cursorIsCloseEnoughToEdge(SegmentItem* p, const QPoint &coo
 // SegmentSelector (bo!)
 //////////////////////////////
 
-SegmentSelector::SegmentSelector(SegmentCanvas *c, RosegardenGUIDoc *d)
+SegmentSelector::SegmentSelector(CompositionView *c, RosegardenGUIDoc *d)
     : SegmentTool(c, d),
       m_segmentAddMode(false),
       m_segmentCopyMode(false),
       m_segmentQuickCopyDone(false),
-      m_dispatchTool(0),
-      m_foreGuide(new QCanvasRectangle(m_canvas->canvas())),
-      m_topGuide(new QCanvasRectangle(m_canvas->canvas()))
+      m_dispatchTool(0)
 {
     RG_DEBUG << "SegmentSelector()\n";
-
-    m_foreGuide->setPen(GUIPalette::getColour(GUIPalette::MovementGuide));
-    m_foreGuide->setBrush(GUIPalette::getColour(GUIPalette::MovementGuide));
-    m_foreGuide->setSize(1, m_canvas->canvas()->height());
-    m_foreGuide->setZ(10);
-    m_foreGuide->hide();
-
-    m_topGuide->setPen(GUIPalette::getColour(GUIPalette::MovementGuide));
-    m_topGuide->setBrush(GUIPalette::getColour(GUIPalette::MovementGuide));
-    m_topGuide->setSize(m_canvas->canvas()->width(), 1);
-    m_topGuide->setZ(10);
-    m_topGuide->hide();
 }
 
 SegmentSelector::~SegmentSelector()
@@ -890,17 +863,10 @@ void SegmentSelector::ready()
 
 void SegmentSelector::stow()
 {
-    // don't clear selection, it's nice to still have it when you
-    // switch back to the selector tool
-    //
-    // clearSelected();
-    disconnect(m_canvas, SIGNAL(contentsMoving (int, int)),
-               this, SLOT(slotCanvasScrolled(int, int)));
 }
 
 void SegmentSelector::slotCanvasScrolled(int newX, int newY)
 {
-    if (!m_canvas->getSelectionRectangle()) return;
     QMouseEvent tmpEvent(QEvent::MouseMove,
                          m_canvas->viewport()->mapFromGlobal(QCursor::pos()) + QPoint(newX, newY),
                          Qt::NoButton, Qt::NoButton);
@@ -908,109 +874,26 @@ void SegmentSelector::slotCanvasScrolled(int newX, int newY)
 }
 
 void
-SegmentSelector::removeFromSelection(Rosegarden::Segment *segment)
-{
-    for (SegmentItemList::iterator i = m_selectedItems.begin();
-	 i != m_selectedItems.end(); ++i) {
-	if (i->second->getSegment() == segment) {
-
-//             RG_DEBUG << "SegmentSelector::removeFromSelection() SegmentItem = "
-//                      << i->second << endl;
-
-            i->second->disconnect(this); // disconnect the item's 'destroyed' signal
-	    m_selectedItems.erase(i);
-	    return;
-	}
-    }
-}
-
-bool
-SegmentSelector::addToSelection(Rosegarden::Segment *segment)
-{
-    SegmentItem *item = m_canvas->getSegmentItem(segment);
-    if (!item) return false;
-
-    return addToSelection(item); 
-}
-
-bool
-SegmentSelector::addToSelection(SegmentItem* item)
-{
-//    RG_DEBUG << "SegmentSelector::addToSelection() SegmentItem = "
-//             << item << endl;
-
-    // Check that the segment isn't already selected
-    for (SegmentItemList::iterator i = m_selectedItems.begin();
-	 i != m_selectedItems.end(); ++i) {
-//         RG_DEBUG << "SegmentSelector::addToSelection() SegmentItem already in selection\n";
-	if (i->second == item) {
-	    i->first = QPoint(int(item->x()), int(item->y()));
-	    return false;
-	}
-    }
-
-    m_selectedItems.push_back
-	(SegmentItemPair(QPoint(int(item->x()), int(item->y())), item));
-
-    connect(item, SIGNAL(destroyed(QObject*)),
-            this, SLOT(slotDestroyedSegmentItem(QObject*)));
-
-    return true;
-}
-
-void
-SegmentSelector::clearSelected()
-{
-    // For the moment only clear all selected
-    //
-    SegmentItemList::iterator it;
-    for (it = m_selectedItems.begin();
-         it != m_selectedItems.end();
-         it++)
-    {
-        it->second->disconnect(this);
-        it->second->setSelected(false, 
-                                GUIPalette::convertColour(m_doc->getComposition().getSegmentColourMap()
-                        .getColourByIndex(it->second->getSegment()->getColourIndex())));
-    }
-
-    // now clear the selection
-    //
-    m_selectedItems.clear();
-
-    RG_DEBUG << "SegmentSelector::clearSelected()" << endl;
-
-    // clear the current item
-    //
-    m_currentItem = 0;
-
-    // send update
-    //
-    m_canvas->canvas()->update();
-}
-
-void
 SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 {
-    RG_DEBUG << "SegmentSelector::handleMouseButtonPress" << endl;
-    QWMatrix matrix = m_canvas->worldMatrix().invert();
-    QPoint tPos = matrix.map(e->pos());
-    SegmentItem *item = m_canvas->findSegmentClickedOn(tPos);
+    RG_DEBUG << "SegmentSelector::handleMouseButtonPress\n";
+    QPoint tPos = m_canvas->inverseMapPoint(e->pos());
+    CompositionItem item = m_canvas->getFirstItemAt(tPos);
 
     // If we're in segmentAddMode or not clicking on an item then we don't 
     // clear the selection vector.  If we're clicking on an item and it's 
     // not in the selection - then also clear the selection.
     //
     if ((!m_segmentAddMode && !item) || 
-        (!m_segmentAddMode && !(item->isSelected()))) {
-        clearSelected();
+        (!m_segmentAddMode && !(m_canvas->getModel()->isSelected(item)))) {
+        m_canvas->getModel()->clearSelected();
     }
 
     if (item) {
 	
         // Ten percent of the width of the SegmentItem
         //
-        int threshold = int(float(item->width()) * 0.15);
+        int threshold = int(float(item->rect().width()) * 0.15);
         if (threshold  == 0) threshold = 1;
         if (threshold > 10) threshold = 10;
 
@@ -1020,16 +903,14 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 	    SegmentResizer::cursorIsCloseEnoughToEdge(item, tPos, threshold, start)) {
 
             SegmentResizer* resizer = 
-                dynamic_cast<SegmentResizer*>(getToolBox()->
-                    getTool(SegmentResizer::ToolName));
+                dynamic_cast<SegmentResizer*>(getToolBox()->getTool(SegmentResizer::ToolName));
 
             resizer->setEdgeThreshold(threshold);
 
             // For the moment we only allow resizing of a single segment
             // at a time.
             //
-            clearSelected();
-            slotSelectSegmentItem(item);
+            m_canvas->getModel()->clearSelected();
 
 	    m_dispatchTool = resizer;
             
@@ -1038,32 +919,19 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 	    return;
 	}
 
-        if (item->getSegment()) {
-            // Moving
-            //
-            m_currentItem = item;
-            m_clickPoint = e->pos();
-            m_clickPoint = tPos;
 
-            slotSelectSegmentItem(m_currentItem);
+        m_canvas->getModel()->startMove(item);
+        m_canvas->getModel()->setSelected(item);
 
-            m_foreGuide->setX(int(m_canvas->grid().getRulerScale()->
-                                  getXForTime(item->getSegment()->
-                                      getStartTime())));
-            m_foreGuide->setY(0);
+        // Moving
+        //
+//         RG_DEBUG << "SegmentSelector::handleMouseButtonPress - m_currentItem = " << item << endl;
+        m_currentItem = item;
+        m_clickPoint = tPos;
 
-            m_topGuide->setX(0);
-            m_topGuide->setY(int(m_canvas->grid().getYBinCoordinate(
-                            item->getSegment()->getTrack())));
+        m_canvas->setGuidesPos(item->rect().topLeft());
 
-            m_foreGuide->show();
-            m_topGuide->show();
-
-            // Don't update until the move - lazy way of making sure the
-            // guides don't flash on while we're double clicking
-            //
-            //m_canvas->canvas()->update();
-        }
+        m_canvas->setDrawGuides(true);
         
     } else {
 
@@ -1081,104 +949,31 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 	    return;
 	}
         else {
-            // do a bounding box
-            QCanvasRectangle *rect  = m_canvas->getSelectionRectangle();
 
-            if (rect) {
+            m_canvas->setSelectionRectPos(tPos);
+            m_canvas->setSelectionRectSize(0,0);
+            m_canvas->setDrawSelectionRect(true);
+            if (!m_segmentAddMode)
+                m_canvas->getModel()->clearSelected();
 
-                rect->show();
-                rect->setX(tPos.x());
-                rect->setY(tPos.y());
-                rect->setSize(0, 0);
-            }
         }
     }
  
     // Tell the RosegardenGUIView that we've selected some new Segments -
     // when the list is empty we're just unselecting.
     //
-    emit selectedSegments(getSelectedSegments());
+    m_canvas->getModel()->signalSelection();
 
     m_passedInertiaEdge = false;
 }
 
-SegmentSelection
-SegmentSelector::getSelectedSegments()
-{
-    SegmentSelection segments;
-    SegmentItemList::iterator it;
-
-    for (it = m_selectedItems.begin();
-         it != m_selectedItems.end();
-         ++it)
-    {
-        segments.insert(it->second->getSegment());
-    }
-
-    return segments;
-}
-
-
-void
-SegmentSelector::slotSelectSegmentItem(SegmentItem *selectedItem)
-{
-    if (!selectedItem || !selectedItem->getSegment()) return; // yes, this can happen
-    // if the user draws a segment with the middle button (using the
-    // selector tool) and left-clicks while maintaining the middle
-    // button down - reported by Vladimir Savic <vlada@rockforums.net>
-    // who really deserves credit for finding this one :-)
-    
-    // If we're selecting a Segment through this method
-    // then don't set the m_currentItem
-    //
-    if (addToSelection(selectedItem)) {
-
-	selectedItem->setSelected
-	    (true, 
-	     GUIPalette::convertColour
-	     (m_doc->getComposition().getSegmentColourMap()
-	      .getColourByIndex(selectedItem->getSegment()->getColourIndex()))
-	     .dark(200));
-	
-	m_canvas->canvas()->update();
-    }
-}
-
-void
-SegmentSelector::slotDestroyedSegmentItem(QObject *destroyedObject)
-{
-    // doesn't work, because the signal is emitted from the QObject's dtor
-    //
-//  SegmentItem* destroyedItem = dynamic_cast<SegmentItem*>(destroyedObject);
-
-    RG_DEBUG << "SegmentSelector::slotDestroyedSegmentItem : "
-             << "destroyedObject : " << destroyedObject << endl;
-
-    for (SegmentItemList::iterator i = m_selectedItems.begin();
-         i != m_selectedItems.end(); ++i) {
-        
-        if (i->second == destroyedObject) {
-            RG_DEBUG << "SegmentSelector::slotDestroyedSegmentItem : "
-                     << "found destroyedObject\n";
-            m_selectedItems.erase(i);
-            return;
-        }
-    }
-    
-    RG_DEBUG << "SegmentSelector::slotDestroyedSegmentItem : WARNING - "
-             << "destroyedObject not found - this is probably a bug\n";
-}
-
-
 void
 SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 {
-    // Hide guides
+    // Hide guides and stuff
     //
-    m_foreGuide->hide();
-    m_topGuide->hide();
+    m_canvas->setDrawGuides(false);
     m_canvas->hideTextFloat();
-    m_canvas->canvas()->update();
 
     if (m_dispatchTool) {
 	m_dispatchTool->handleMouseButtonRelease(e);
@@ -1188,26 +983,19 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
     }
 
     if (!m_currentItem) {
-        QCanvasRectangle *rect  = m_canvas->getSelectionRectangle();
-
-        if (rect) {
-            rect->hide();
-	    m_canvas->canvas()->update();
-        }
+        m_canvas->setDrawSelectionRect(false);
+        m_canvas->getModel()->finalizeSelectionRect();
+        m_canvas->updateContents();
+        m_canvas->getModel()->signalSelection();
         return;
     }
 
-    /*
-    RG_DEBUG << "SegmentSelector::handleMouseButtonRelease - "
-             << "selection size = " << m_selectedItems.size()
-             << endl;
-             */
-
     m_canvas->viewport()->setCursor(Qt::arrowCursor);
 
-    if (m_currentItem->isSelected())
-    {
-	SegmentItemList::iterator it;
+    if (m_canvas->getModel()->isSelected(m_currentItem)) {
+
+        CompositionModel::itemcontainer& movingItems = m_canvas->getModel()->getMovingItems();
+	CompositionModel::itemcontainer::iterator it;
 
 	bool haveChange = false;
 
@@ -1218,51 +1006,36 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 
         SegmentSelection newSelection;
 
-	for (it = m_selectedItems.begin();
-	     it != m_selectedItems.end();
-	     it++)
-	{
+	for (it = movingItems.begin();
+	     it != movingItems.end();
+	     it++) {
 
-	    SegmentItem *item = it->second;
+            CompositionItem item = *it;
+            Rosegarden::Segment* segment = CompositionItemHelper::getSegment(item);
 
-            Rosegarden::Composition &comp = m_doc->getComposition();
-            Rosegarden::Track *track = 
-                comp.getTrackByPosition(item->getTrackPosition());
+            Rosegarden::TrackId itemTrackId = m_canvas->grid().getYBin(item->rect().y());
 
-            Rosegarden::TrackId trackId = track->getId();
+            timeT itemStartTime = CompositionItemHelper::getStartTime(item, m_canvas->grid());
+            timeT itemEndTime   = CompositionItemHelper::getEndTime(item, m_canvas->grid());
 
-	    if (item->getStartTime() != item->getSegment()->getStartTime() ||
-		item->getEndTime()   != item->getSegment()->getEndMarkerTime() 
-                || trackId              != item->getSegment()->getTrack()) {
+            if (itemStartTime != segment->getStartTime() ||
+                itemEndTime   != segment->getEndMarkerTime() ||
+                itemTrackId   != segment->getTrack()) {
 
-		command->addSegment(item->getSegment(),
-				    item->getStartTime(),
-				    item->getEndTime(),
-				    trackId);
-		haveChange = true;
-	    }
-            newSelection.insert(item->getSegment());
+                command->addSegment(segment,
+                                    itemStartTime,
+                                    itemEndTime,
+                                    itemTrackId);
+
+                haveChange = true;
+            }
 	}
 
 	if (haveChange) addCommandToHistory(command);
 
-        /*
-        RG_DEBUG << "SegmentSelector::handleMouseButtonRelease - "
-                 << "clearing selection" << endl;
-                 */
+        m_canvas->getModel()->endMove();
+	m_canvas->updateContents();
 
-        // Update selection
-        clearSelected();
-
-        for (SegmentSelection::const_iterator nIt = newSelection.begin();
-                nIt != newSelection.end(); ++nIt)
-        {
-            slotSelectSegmentItem(m_canvas->getSegmentItem(*nIt));
-        }
-
-	m_canvas->canvas()->update();
-
-	emit selectedSegments(newSelection);
     }
     
     // if we've just finished a quick copy then drop the Z level back
@@ -1272,7 +1045,7 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 //        m_currentItem->setZ(2); // see SegmentItem::setSelected  --??
     }
 
-    m_currentItem = 0;
+    m_currentItem = CompositionItem();
 }
 
 // In Select mode we implement movement on the Segment
@@ -1281,118 +1054,106 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 int
 SegmentSelector::handleMouseMove(QMouseEvent *e)
 {
+//     RG_DEBUG << "SegmentSelector::handleMouseMove\n";
+
     if (m_dispatchTool) {
 	return m_dispatchTool->handleMouseMove(e);
     }
 
-    if (!m_currentItem && 
-	(!m_canvas->getSelectionRectangle() ||
-	 !m_canvas->getSelectionRectangle()->visible())) {
-	return RosegardenCanvasView::NoFollow;
-    }
-
-    QWMatrix matrix = m_canvas->worldMatrix().invert();
-    QPoint tPos = matrix.map(e->pos());
+    QPoint tPos = m_canvas->inverseMapPoint(e->pos());
 
     if (!m_currentItem)  {
 
 // 	RG_DEBUG << "SegmentSelector::handleMouseMove: no current item\n";
 
         // do a bounding box
-        QCanvasRectangle *selectionRect  = m_canvas->getSelectionRectangle();
+        QRect selectionRect  = m_canvas->getSelectionRect();
 
-        if (selectionRect) {
-            selectionRect->show();
+        m_canvas->setDrawSelectionRect(true);
 
-            // same as for notation view
-            int w = int(tPos.x() - selectionRect->x());
-            int h = int(tPos.y() - selectionRect->y());
-            if (w > 0) ++w; else --w;
-            if (h > 0) ++h; else --h;
+        // same as for notation view
+        int w = int(tPos.x() - selectionRect.x());
+        int h = int(tPos.y() - selectionRect.y());
+        if (w > 0) ++w; else --w;
+        if (h > 0) ++h; else --h;
 
-            updateSelectionRect(w, h);
+        // Translate these points
+        //
+        m_canvas->setSelectionRectSize(w, h);
 
-        }
+        m_canvas->updateContents(selectionRect.normalize() | m_canvas->getSelectionRect().normalize());
+
+        m_canvas->getModel()->signalSelection();
         return RosegardenCanvasView::FollowHorizontal | RosegardenCanvasView::FollowVertical;
     }
 
     m_canvas->viewport()->setCursor(Qt::sizeAllCursor);
 
-    if (m_segmentCopyMode && !m_segmentQuickCopyDone)
-    {
+    if (m_segmentCopyMode && !m_segmentQuickCopyDone) {
 	KMacroCommand *mcommand = new KMacroCommand
 	    (SegmentQuickCopyCommand::getGlobalName());
 
-	SegmentItemList::iterator it;
-	for (it = m_selectedItems.begin();
-	     it != m_selectedItems.end();
-	     it++)
-	{
-	    SegmentQuickCopyCommand *command =
-		new SegmentQuickCopyCommand(it->second->getSegment());
+        Rosegarden::SegmentSelection selectedItems = m_canvas->getSelectedSegments();
+	Rosegarden::SegmentSelection::iterator it;
+	for (it = selectedItems.begin();
+	     it != selectedItems.end();
+	     it++) {
+            SegmentQuickCopyCommand *command =
+                new SegmentQuickCopyCommand(*it);
 
-	    mcommand->addCommand(command);
-	}
+            mcommand->addCommand(command);
+        }
 
         addCommandToHistory(mcommand);
 
-//        Rosegarden::Segment *newSegment = command->getCopy();
-
         // generate SegmentItem
         //
-	m_canvas->updateAllSegmentItems();
+	m_canvas->updateContents();
         m_segmentQuickCopyDone = true;
-
-        // Don't understand why swapping selected item is causing
-        // problem hereafter - so leaving this commented out.
-        //
-        //SegmentItem *newItem = m_canvas->getSegmentItem(newSegment);
-        //clearSelected();
-        //m_currentItem = newItem;
-        //m_currentItem->setZ(3); // bring it to the top
-        //slotSelectSegmentItem(newItem);
     }
 
     m_canvas->setSnapGrain(true);
 
-    if (m_currentItem->isSelected())
-    {
-	SegmentItemList::iterator it;
+    if (m_canvas->getModel()->isSelected(m_currentItem)) {
+// 	RG_DEBUG << "SegmentSelector::handleMouseMove: current item is selected\n";
+
+        m_canvas->getModel()->startMoveSelection();
+        CompositionModel::itemcontainer& movingItems = m_canvas->getModel()->getMovingItems();
+        setCurrentItem(CompositionItemHelper::findSiblingCompositionItem(movingItems, m_currentItem));
+
+	CompositionModel::itemcontainer::iterator it;
         int guideX = 0;
         int guideY = 0;
 
-	for (it = m_selectedItems.begin();
-	     it != m_selectedItems.end();
-	     it++)
-	{
-	    int x = tPos.x() - m_clickPoint.x(),
-		y = tPos.y() - m_clickPoint.y();
+	for (it = movingItems.begin();
+	     it != movingItems.end();
+	     ++it) {
+
+//             RG_DEBUG << "SegmentSelector::handleMouseMove() : movingItem at "
+//                      << (*it)->rect().x() << "," << (*it)->rect().y() << endl;
+
+	    int dx = tPos.x() - m_clickPoint.x(),
+		dy = tPos.y() - m_clickPoint.y();
 
 	    const int inertiaDistance = m_canvas->grid().getYSnap() / 3;
 	    if (!m_passedInertiaEdge &&
-		(x < inertiaDistance && x > -inertiaDistance) &&
-		(y < inertiaDistance && y > -inertiaDistance)) {
-		return false;
+		(dx < inertiaDistance && dx > -inertiaDistance) &&
+		(dy < inertiaDistance && dy > -inertiaDistance)) {
+		return RosegardenCanvasView::NoFollow;
 	    } else {
 		m_passedInertiaEdge = true;
 	    }
 
-	    timeT newStartTime = m_canvas->grid().snapX(it->first.x() + x);
+	    timeT newStartTime = m_canvas->grid().snapX((*it)->savedRect().x() + dx);
 
-	    it->second->setEndTime(it->second->getEndTime() + newStartTime -
-				   it->second->getStartTime());
-	    it->second->setStartTime(newStartTime);
-            it->second->showRepeatRect(false);
-
-
-	    TrackId track;
-            int newY=it->first.y() + y;
+            int newX = int(m_canvas->grid().getRulerScale()->getXForTime(newStartTime));
+            int newY = m_canvas->grid().snapY((*it)->savedRect().y() + dy);
             // Make sure we don't set a non-existing track
             if (newY < 0) { newY = 0; }
-            track = m_canvas->grid().getYBin(newY);
+            TrackId track = m_canvas->grid().getYBin(newY);
 
-	    RG_DEBUG << "SegmentSelector::handleMouseMove: orig y " << it->first.y()
-		     << ", dy " << y << ", newY " << newY << ", track " << track << endl;
+// 	    RG_DEBUG << "SegmentSelector::handleMouseMove: orig y " << (*it)->rect().y()
+// 		     << ", dy " << dy << ", newY " << newY << ", track " << track << endl;
 
             // Make sure we don't set a non-existing track (c'td)
             // TODO: make this suck less. Either the tool should
@@ -1402,107 +1163,40 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
             if (track >= TrackId(m_doc->getComposition().getNbTracks()))
                 track  = TrackId(m_doc->getComposition().getNbTracks() - 1);
 
-            // This is during a "mover" so don't use the normalised (i.e.
-            // proper) TrackPosition value yet.
-            //
-	    it->second->setTrackPosition(track);
+            newY = m_canvas->grid().getYBinCoordinate(track);
+
+            (*it)->moveTo(newX, newY);
 	}
 
-        guideX = int(m_currentItem->x());
-        guideY = int(m_currentItem->y());
+        guideX = m_currentItem->rect().x();
+        guideY = m_currentItem->rect().y();
 
-        m_foreGuide->setX(guideX);
-        m_topGuide->setY(guideY);
+        m_canvas->setGuidesPos(guideX, guideY);
+
+        timeT currentItemStartTime = m_canvas->grid().snapX(m_currentItem->rect().x());
 
         Rosegarden::Composition &comp = m_doc->getComposition();
         Rosegarden::RealTime time = 
-            comp.getElapsedRealTime(m_currentItem->getStartTime());
+            comp.getElapsedRealTime(currentItemStartTime);
         QString ms;
         ms.sprintf("%03d", time.msec());
 
         int bar, beat, fraction, remainder;
-        comp.getMusicalTimeForAbsoluteTime(
-                m_currentItem->getStartTime(), bar, beat, fraction, remainder);
+        comp.getMusicalTimeForAbsoluteTime(currentItemStartTime, bar, beat, fraction, remainder);
 
         QString posString = QString("%1.%2s (%3, %4, %5)")
             .arg(time.sec).arg(ms)
             .arg(bar+1).arg(beat).arg(fraction);
 
         m_canvas->setTextFloat(guideX + 10, guideY - 30, posString);
-	m_canvas->canvas()->update();
+	m_canvas->updateContents();
+
+    } else {
+// 	RG_DEBUG << "SegmentSelector::handleMouseMove: current item not selected\n";
     }
 
     return RosegardenCanvasView::FollowHorizontal | RosegardenCanvasView::FollowVertical;
 }
-
-void SegmentSelector::updateSelectionRect(int w, int h) 
-{
-    QCanvasRectangle *selectionRect  = m_canvas->getSelectionRectangle();
-    if (!selectionRect) return;
-
-    selectionRect->setSize(w, h);
-
-    m_canvas->canvas()->update();
-
-    // Get collisions and do selection (true for exact collisions)
-    //
-    QCanvasItemList l = selectionRect->collisions(true);
-
-    // selection management
-    SegmentSelection oldSelection = getSelectedSegments();
-    SegmentSelection newSelection;
-
-    int segCount = 0;
-
-    if (l.count()) {
-        for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it) {
-            if (SegmentItem *item = dynamic_cast<SegmentItem*>(*it)) {
-                if (m_segmentAddMode) {
-                    slotSelectSegmentItem(item);
-                } else {
-                    segCount++;
-                    slotSelectSegmentItem(item);
-                    newSelection.insert(item->getSegment());
-                }
-            }
-        }
-    }
-
-    if (m_segmentAddMode) { 
-        emit selectedSegments(getSelectedSegments());
-    } else {
-
-        // Check for unselected items with this piece of crap
-        //
-        bool found = false;
-
-        for (SegmentSelection::const_iterator oIt = oldSelection.begin();
-             oIt != oldSelection.end(); oIt++) {
-            found = false;
-            for (SegmentSelection::const_iterator nIt = newSelection.begin();
-                 nIt != newSelection.end(); nIt++) {
-                if (*oIt == *nIt) {
-                    found = true;
-                    break;
-                }
-            }
-            if (found == false) {
-                removeFromSelection(*oIt);
-                m_canvas->getSegmentItem(*oIt)->
-                    setSelected(false, GUIPalette::convertColour(m_doc->getComposition().getSegmentColourMap().
-                                                                 getColourByIndex(m_canvas->getSegmentItem(*oIt)
-                                                                                  ->getSegment()->getColourIndex())));
-            }
-        }
-
-        if (segCount) {
-            emit selectedSegments(getSelectedSegments());
-        }
-    }
-            
-    
-}
-
 
 //////////////////////////////
 //
@@ -1511,8 +1205,10 @@ void SegmentSelector::updateSelectionRect(int w, int h)
 //////////////////////////////
 
 
-SegmentSplitter::SegmentSplitter(SegmentCanvas *c, RosegardenGUIDoc *d)
-    : SegmentTool(c, d)
+SegmentSplitter::SegmentSplitter(CompositionView *c, RosegardenGUIDoc *d)
+    : SegmentTool(c, d),
+      m_prevX(0),
+      m_prevY(0)
 {
     RG_DEBUG << "SegmentSplitter()\n";
 }
@@ -1529,17 +1225,18 @@ void SegmentSplitter::ready()
 void
 SegmentSplitter::handleMouseButtonPress(QMouseEvent *e)
 {
-    QWMatrix matrix = m_canvas->worldMatrix().invert();
-    QPoint tPos = matrix.map(e->pos());
+    QPoint tPos = m_canvas->inverseMapPoint(e->pos());
 
     // Remove cursor and replace with line on a SegmentItem
     // at where the cut will be made
-    SegmentItem *item = m_canvas->findSegmentClickedOn(tPos);
+    CompositionItem item = m_canvas->getFirstItemAt(tPos);
 
-    if (item)
-    {
+    if (item) {
         m_canvas->viewport()->setCursor(Qt::blankCursor);
+        m_prevX = item->rect().x();
+        m_prevX = item->rect().y();
         drawSplitLine(e);
+        delete item;
     }
 
 }
@@ -1551,32 +1248,31 @@ SegmentSplitter::handleMouseButtonPress(QMouseEvent *e)
 void
 SegmentSplitter::handleMouseButtonRelease(QMouseEvent *e)
 {
-    QWMatrix matrix = m_canvas->worldMatrix().invert();
-    QPoint tPos = matrix.map(e->pos());
+    QPoint tPos = m_canvas->inverseMapPoint(e->pos());
 
-    SegmentItem *item = m_canvas->findSegmentClickedOn(tPos);
+    CompositionItem item = m_canvas->getFirstItemAt(tPos);
 
-    if (item)
-    {
+    if (item) {
 	m_canvas->setSnapGrain(true);
-
-        if (item->getSegment()->getType() == Rosegarden::Segment::Audio)
+        Rosegarden::Segment* segment = CompositionItemHelper::getSegment(item);
+        
+        if (segment->getType() == Rosegarden::Segment::Audio)
         {
             AudioSegmentSplitCommand *command =
-                new AudioSegmentSplitCommand( item->getSegment(),
-                                    m_canvas->grid().snapX(tPos.x()));
+                new AudioSegmentSplitCommand(segment, m_canvas->grid().snapX(tPos.x()));
             addCommandToHistory(command);
         }
         else
         {
             SegmentSplitCommand *command =
-                new SegmentSplitCommand(item->getSegment(),
-                                    m_canvas->grid().snapX(tPos.x()));
+                new SegmentSplitCommand(segment, m_canvas->grid().snapX(tPos.x()));
             addCommandToHistory(command);
         }
 
+        m_canvas->updateContents(item->rect());
+        delete item;
     }
- 
+
     // Reinstate the cursor
     m_canvas->viewport()->setCursor(Qt::splitHCursor);
     m_canvas->slotHideSplitLine();
@@ -1586,15 +1282,15 @@ SegmentSplitter::handleMouseButtonRelease(QMouseEvent *e)
 int
 SegmentSplitter::handleMouseMove(QMouseEvent *e)
 {
-    QWMatrix matrix = m_canvas->worldMatrix().invert();
-    QPoint tPos = matrix.map(e->pos());
+    QPoint tPos = m_canvas->inverseMapPoint(e->pos());
 
-    SegmentItem *item = m_canvas->findSegmentClickedOn(tPos);
+    CompositionItem item = m_canvas->getFirstItemAt(tPos);
 
     if (item)
     {
         m_canvas->viewport()->setCursor(Qt::blankCursor);
         drawSplitLine(e);
+        delete item;
 	return RosegardenCanvasView::FollowHorizontal;
     }
     else
@@ -1612,8 +1308,7 @@ SegmentSplitter::drawSplitLine(QMouseEvent *e)
 { 
     m_canvas->setSnapGrain(true);
 
-    QWMatrix matrix = m_canvas->worldMatrix().invert();
-    QPoint tPos = matrix.map(e->pos());
+    QPoint tPos = m_canvas->inverseMapPoint(e->pos());
 
     // Turn the real X into a snapped X
     //
@@ -1627,12 +1322,18 @@ SegmentSplitter::drawSplitLine(QMouseEvent *e)
 
     m_canvas->slotShowSplitLine(x, y);
 
+    QRect updateRect(std::max(0, std::min(x, m_prevX) - 5), y,
+                     std::max(m_prevX, x) + 5, m_prevY + m_canvas->grid().getYSnap());
+    m_canvas->updateContents(updateRect);
+    m_prevX = x;
+    m_prevY = y;
 }
 
 
 void
 SegmentSplitter::contentsMouseDoubleClickEvent(QMouseEvent*)
 {
+    // DO NOTHING
 }
 
 
@@ -1641,10 +1342,10 @@ SegmentSplitter::contentsMouseDoubleClickEvent(QMouseEvent*)
 // SegmentJoiner
 //
 //////////////////////////////
-SegmentJoiner::SegmentJoiner(SegmentCanvas *c, RosegardenGUIDoc *d)
+SegmentJoiner::SegmentJoiner(CompositionView *c, RosegardenGUIDoc *d)
     : SegmentTool(c, d)
 {
-    RG_DEBUG << "SegmentJoiner()\n";
+    RG_DEBUG << "SegmentJoiner() - not implemented\n";
 }
 
 SegmentJoiner::~SegmentJoiner()

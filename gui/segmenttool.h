@@ -30,14 +30,14 @@
 #include "Selection.h"
 
 #include "edittool.h"
+#include "compositionitem.h"
 
-class SegmentCanvas;
+namespace Rosegarden { class SegmentSelection; class Segment; }
 class RosegardenGUIDoc;
 class RosegardenGUIApp;
-class SegmentItem;
 class KCommand;
-class QCanvasRectangle;
 class QPopupMenu;  // LDB
+class CompositionView;
 
 namespace Rosegarden { class RulerScale; }
 
@@ -48,12 +48,11 @@ namespace Rosegarden { class RulerScale; }
 // Allow the tools to share the Selector tool's selection
 // through these.
 //
-typedef std::pair<QPoint, SegmentItem *> SegmentItemPair;
+typedef std::pair<QPoint, CompositionItem> SegmentItemPair;
 typedef std::vector<SegmentItemPair> SegmentItemList;
 
 class SegmentTool : public BaseTool
 {
-    Q_OBJECT
 public:
     friend class SegmentToolBox;
 
@@ -73,28 +72,28 @@ public:
 
     void addCommandToHistory(KCommand *command);
 
-signals:
-    void selectedSegments(const Rosegarden::SegmentSelection &);
-
 protected:
-    SegmentTool(SegmentCanvas*, RosegardenGUIDoc *doc);
+    SegmentTool(CompositionView*, RosegardenGUIDoc *doc);
 
     virtual void createMenu();
     virtual bool hasMenu() { return true; }
+
+    void setCurrentItem(CompositionItem item) { if (item != m_currentItem) { delete m_currentItem; m_currentItem = item; } }
 
     SegmentToolBox* getToolBox();
 
     //--------------- Data members ---------------------------------
 
-    SegmentCanvas*  m_canvas;
-    SegmentItem* m_currentItem;
+    CompositionView*  m_canvas;
+    CompositionItem   m_currentItem;
     RosegardenGUIDoc* m_doc;
+    QPoint            m_origPos;
 };
 
 class SegmentToolBox : public BaseToolBox
 {
 public:
-    SegmentToolBox(SegmentCanvas* parent, RosegardenGUIDoc*);
+    SegmentToolBox(CompositionView* parent, RosegardenGUIDoc*);
 
     virtual SegmentTool* getTool(const QString& toolName);
     
@@ -103,7 +102,7 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    SegmentCanvas* m_canvas;
+    CompositionView* m_canvas;
     RosegardenGUIDoc* m_doc;
 };
 
@@ -133,7 +132,9 @@ protected slots:
     void slotCanvasScrolled(int newX, int newY);
     
 protected:
-    SegmentPencil(SegmentCanvas*, RosegardenGUIDoc*);
+    SegmentPencil(CompositionView*, RosegardenGUIDoc*);
+
+    void updateOnTmpRect(QRect);
 
     //--------------- Data members ---------------------------------
 
@@ -160,7 +161,7 @@ public:
     static const QString ToolName;
 
 protected:
-    SegmentEraser(SegmentCanvas*, RosegardenGUIDoc*);
+    SegmentEraser(CompositionView*, RosegardenGUIDoc*);
 };
 
 class SegmentMover : public SegmentTool
@@ -184,17 +185,11 @@ protected slots:
     void slotCanvasScrolled(int newX, int newY);
 
 protected:
-    SegmentMover(SegmentCanvas*, RosegardenGUIDoc*);
+    SegmentMover(CompositionView*, RosegardenGUIDoc*);
 
     //--------------- Data members ---------------------------------
 
     QPoint            m_clickPoint;
-    double            m_currentItemStartX;
-
-    QCanvasRectangle *m_foreGuide;
-    QCanvasRectangle *m_topGuide;
-
-    SegmentItemList  *m_selectedItems;
     bool              m_passedInertiaEdge;
 };
 
@@ -217,7 +212,7 @@ public:
     virtual void handleMouseButtonRelease(QMouseEvent*);
     virtual int  handleMouseMove(QMouseEvent*);
 
-    static bool cursorIsCloseEnoughToEdge(SegmentItem*, const QPoint&, int, bool &);
+    static bool cursorIsCloseEnoughToEdge(const CompositionItem&, const QPoint&, int, bool &);
 
     void setEdgeThreshold(int e) { m_edgeThreshold = e; }
     int getEdgeThreshold() { return m_edgeThreshold; }
@@ -228,7 +223,7 @@ protected slots:
     void slotCanvasScrolled(int newX, int newY);
 
 protected:
-    SegmentResizer(SegmentCanvas*, RosegardenGUIDoc*, int edgeThreshold = 10);
+    SegmentResizer(CompositionView*, RosegardenGUIDoc*, int edgeThreshold = 10);
 
     //--------------- Data members ---------------------------------
 
@@ -255,20 +250,6 @@ public:
     virtual void handleMouseButtonRelease(QMouseEvent*);
     virtual int  handleMouseMove(QMouseEvent*);
 
-    // Clear all Segments in our vector and on the view
-    //
-    void clearSelected();
-
-    // Remove the given Segment from the selection, if it's in it
-    // 
-    void removeFromSelection(Rosegarden::Segment *);
-
-    // Add the given Segment to the selection, if we have a
-    // SegmentItem for it.  Return true if the selection was changed,
-    // false if the segment was already selected.
-    // 
-    bool addToSelection(Rosegarden::Segment *);
-
     // These two alter the behaviour of the selection mode
     //
     // - SegmentAdd (usually when SHIFT is held down) allows
@@ -283,34 +264,17 @@ public:
     bool isSegmentAdding() const { return m_segmentAddMode; }
     bool isSegmentCopying() const { return m_segmentCopyMode; }
 
-    // Return a set of selected Segments
-    //
-    Rosegarden::SegmentSelection getSelectedSegments();
-
     // Return the SegmentItem list for other tools to use
     //
     SegmentItemList* getSegmentItemList() { return &m_selectedItems; }
 
     static const QString ToolName;
 
-public slots:
-    void slotSelectSegmentItem(SegmentItem *selectedItem);
-
-    /**
-     * Connected to the destroyed() signal of the selected segment items
-     *
-     * This is for maintaining the list of selected items
-     */
-    void slotDestroyedSegmentItem(QObject*);
-
 protected slots:
     void slotCanvasScrolled(int newX, int newY);
 
 protected:
-    SegmentSelector(SegmentCanvas*, RosegardenGUIDoc*);
-
-    bool addToSelection(SegmentItem*);
-    void updateSelectionRect(int w, int h);
+    SegmentSelector(CompositionView*, RosegardenGUIDoc*);
 
     //--------------- Data members ---------------------------------
 
@@ -323,10 +287,6 @@ protected:
     bool m_passedInertiaEdge;
 
     SegmentTool *m_dispatchTool;
-
-    QCanvasRectangle *m_foreGuide;
-    QCanvasRectangle *m_topGuide;
-
 };
 
 
@@ -352,11 +312,15 @@ public:
     static const QString ToolName;
 
 protected:
-    SegmentSplitter(SegmentCanvas*, RosegardenGUIDoc*);
+    SegmentSplitter(CompositionView*, RosegardenGUIDoc*);
     
     void drawSplitLine(QMouseEvent*);
     void splitSegment(Rosegarden::Segment *segment,
                       Rosegarden::timeT &splitTime);
+
+    //--------------- Data members ---------------------------------
+    int m_prevX;
+    int m_prevY;
 };
 
 class SegmentJoiner : public SegmentTool
@@ -379,7 +343,7 @@ public:
     static const QString ToolName;
 
 protected:
-    SegmentJoiner(SegmentCanvas*, RosegardenGUIDoc*);
+    SegmentJoiner(CompositionView*, RosegardenGUIDoc*);
 };
 
 
@@ -389,7 +353,7 @@ protected:
 class SegmentItemPreview 
 {
 public:
-    SegmentItemPreview(SegmentItem& parent,
+    SegmentItemPreview(Rosegarden::Segment& parent,
                        Rosegarden::RulerScale* scale);
     virtual ~SegmentItemPreview();
 
@@ -423,7 +387,6 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    SegmentItem& m_parent;
     Rosegarden::Segment *m_segment;
     Rosegarden::RulerScale *m_rulerScale;
 
