@@ -256,9 +256,6 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     connect(m_mainDockWidget, SIGNAL(docking(KDockWidget*, KDockWidget::DockPosition)),
             this, SLOT(slotParametersDockedBack(KDockWidget*, KDockWidget::DockPosition)));
 
-    bool visible = kapp->config()->readBoolEntry("Show Parameters", true);
-    if (!visible) m_mainDockWidget->hide();
-
     stateChanged("parametersbox_closed", KXMLGUIClient::StateReverse);
 
     RosegardenGUIDoc* doc = new RosegardenGUIDoc(this, m_pluginManager);
@@ -1528,6 +1525,14 @@ void RosegardenGUIApp::readOptions()
     opt = kapp->config()->readBoolEntry("Show Previews", true);
     m_viewPreviews->setChecked(opt);
     slotTogglePreviews();
+
+    opt = kapp->config()->readBoolEntry("Show Parameters", true);
+    if (!opt)
+    {
+        m_dockLeft->undock();
+        m_dockLeft->hide();
+        stateChanged("parametersbox_closed", KXMLGUIClient::StateNoReverse);
+    }
 
     // initialise the recent file list
     //
