@@ -104,7 +104,8 @@ RosegardenSequencerApp::play(const Rosegarden::timeT &position,
 int
 RosegardenSequencerApp::stop()
 {
-  cout << "MEEP" << endl;
+  // process pending NOTE OFFs and stop the Sequencer
+  m_transportStatus = STOPPING;
   return true;
 }
 
@@ -178,14 +179,36 @@ RosegardenSequencerApp::startPlaying()
 bool
 RosegardenSequencerApp::keepPlaying()
 {
+  Rosegarden::MappedComposition mappedComp;
+  mappedComp = fetchEvents(m_songPosition, m_songPosition + m_fetchLatency);
+
+  m_sequencer->processMidiOut(&mappedComp, m_playLatency);
+
   return true;
 }
 
 // return current Sequencer time in GUI compatible terms
-Rosegarden::timeT
-RosegardenSequencerApp::getSequencerTime()
+void
+RosegardenSequencerApp::updateClocks()
 {
-  return 0;
+  QByteArray data, replyData;
+  QCString replyType;
+  QDataStream arg(data, IO_WriteOnly);
+
+  m_songPosition = m_sequencer->getSequencerTime();
+  arg << m_songPosition;
+
+  cout << "SONG POSITION = " << m_songPosition << endl;
+  if (!kapp->dcopClient()->call(ROSEGARDEN_GUI_APP_NAME,
+                                ROSEGARDEN_GUI_IFACE_NAME,
+                                "setPointerPosition(int)",
+                                data, replyType, replyData))
+  {
+    cerr <<
+     "RosegardenSequencer::fetchEvents() - can't call RosegardenGUI client"
+         << endl;
+    m_transportStatus = STOPPING;
+  }
 }
 
 

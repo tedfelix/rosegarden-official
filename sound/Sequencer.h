@@ -57,11 +57,12 @@ namespace Rosegarden
     {
       bool operator()(NoteOffEvent *nO1, NoteOffEvent *nO2)
       { 
-        return nO1->midiTime() < nO2->midiTime();
+        return nO1->getMidiTime() < nO2->getMidiTime();
       }
     };
     
-    unsigned int midiTime() { return _midiTime; }
+    unsigned int getMidiTime() { return _midiTime; }
+    Rosegarden::MidiByte getPitch() { return _pitch; }
 
   private: 
     unsigned int _midiTime;
@@ -143,6 +144,11 @@ namespace Rosegarden
                                   (double) _tempo / 60.0 );
     }
 
+    inline unsigned int convertToMidiTime(const Rosegarden::timeT &position)
+    {
+      return ((unsigned int) position * 4);
+    }
+
     // We're leaving the calculations expanded for the moment
     // to ease understanding of what we're doing with the maths.
     //
@@ -157,6 +163,11 @@ namespace Rosegarden
       return (Arts::TimeStamp(sec, usec));
     }
 
+    inline Rosegarden::timeT convertToGuiTime(unsigned int &midiTime)
+    {
+      return ((Rosegarden::timeT) midiTime);
+    }
+
     // process a raw aRTS MIDI event into internal representation
     void processMidiIn(const Arts::MidiCommand &midiCommand,
                        const Arts::TimeStamp &timeStamp);
@@ -168,6 +179,12 @@ namespace Rosegarden
     // Reset internal states ready for new playback to commence
     //
     void initializePlayback(const timeT &position);
+
+    Rosegarden::timeT getSequencerTime();
+
+    bool isPlaying() { return _playing; }
+
+    void stopPlayback();
 
   private:
 
@@ -197,6 +214,7 @@ namespace Rosegarden
     RecordStatus _recordStatus;
 
     bool _startPlayback;
+    bool _playing;
 
     unsigned int _ppq;   // sequencer resolution
     unsigned int _tempo; // Beats Per Minute

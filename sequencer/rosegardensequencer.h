@@ -86,9 +86,8 @@ public slots:
   // Process all subsequent events
   bool keepPlaying();
 
-  // get the current Sequencer Time (in GUI speak)
-  //
-  Rosegarden::timeT getSequencerTime();
+  // Update internal clock and send GUI position pointer movement
+  void updateClocks();
 
 private:
   Rosegarden::MappedComposition fetchEvents(const Rosegarden::timeT &start,

@@ -188,7 +188,14 @@ int main(int argc, char *argv[])
 
   while(true)
   {
-    app.processOneEvent();
+    // process any pending events
+    app.processEvents();
+
+    // Update internal clock and send pointer position
+    // change event to GUI
+    if (roseSeq->getStatus() == PLAYING ||
+        roseSeq->getStatus() == STARTING_TO_PLAY )
+      roseSeq->updateClocks();
 
     if(roseSeq)
     {
@@ -214,6 +221,9 @@ int main(int argc, char *argv[])
           break;
 
         case STOPPING:
+          roseSeq->setStatus(STOPPED);
+          break;
+
         case STOPPED:
         default:
           break;
