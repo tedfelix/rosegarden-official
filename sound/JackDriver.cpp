@@ -192,8 +192,10 @@ JackDriver::~JackDriver()
 }
 
 void
-JackDriver::initialise()
+JackDriver::initialise(bool reinitialise)
 {
+    m_ok = false;
+
     Audit audit;
     audit << std::endl;
 
@@ -233,25 +235,28 @@ JackDriver::initialise()
     // Get the initial buffer size before we activate the client
     //
 
-    // create processing buffer(s)
-    //
-    m_tempOutBuffer = new sample_t[m_bufferSize];
+    if (!reinitialise) {
+	
+	// create processing buffer(s)
+	//
+	m_tempOutBuffer = new sample_t[m_bufferSize];
+	
+	audit << "JackDriver::initialiseAudio - "
+	      << "creating disk thread" << std::endl;
+	
+	m_fileReader = new AudioFileReader(m_alsaDriver, m_sampleRate);
+	m_fileWriter = new AudioFileWriter(m_alsaDriver, m_sampleRate);
+	m_instrumentMixer = new AudioInstrumentMixer
+	    (m_alsaDriver, m_fileReader, m_sampleRate, m_bufferSize);
+	m_bussMixer = new AudioBussMixer
+	    (m_alsaDriver, m_instrumentMixer, m_sampleRate, m_bufferSize);
+	m_instrumentMixer->setBussMixer(m_bussMixer);
 
-    audit << "JackDriver::initialiseAudio - "
-	  << "creating disk thread" << std::endl;
-
-    m_fileReader = new AudioFileReader(m_alsaDriver, m_sampleRate);
-    m_fileWriter = new AudioFileWriter(m_alsaDriver, m_sampleRate);
-    m_instrumentMixer = new AudioInstrumentMixer
-	(m_alsaDriver, m_fileReader, m_sampleRate, m_bufferSize);
-    m_bussMixer = new AudioBussMixer
-	(m_alsaDriver, m_instrumentMixer, m_sampleRate, m_bufferSize);
-    m_instrumentMixer->setBussMixer(m_bussMixer);
-
-    // We run the file reader whatever, but we only run the other
-    // threads (instrument mixer, buss mixer, file writer) when we
-    // actually need them.  (See updateAudioData and createRecordFile.)
-    m_fileReader->run();
+	// We run the file reader whatever, but we only run the other
+	// threads (instrument mixer, buss mixer, file writer) when we
+	// actually need them.  (See updateAudioData and createRecordFile.)
+	m_fileReader->run();
+    }
 
     // Create and connect the default numbers of ports.  We always create
     // one stereo pair each of master and monitor outs, and then we create
@@ -1496,6 +1501,9 @@ JackDriver::jackShutdown(void *arg)
     //
     JackDriver *inst = static_cast<JackDriver*>(arg);
     inst->reportFailure(Rosegarden::MappedEvent::FailureJackDied);
+
+    inst->m_ok = false;
+    inst->initialise(); // try to reconnect; m_ok will remain false if we fail
 }
 
 int

@@ -1467,7 +1467,7 @@ void MatrixView::slotKeyPressed(unsigned int y, bool repeating)
     if (!repeating) m_firstNote = evPitch;
 
     Rosegarden::Track *track = comp.getTrackById(
-            m_staffs[0]->getSegment().getTrack());
+            staff.getSegment().getTrack());
 
     Rosegarden::Instrument *ins =
         studio.getInstrumentById(track->getInstrument());
@@ -1479,7 +1479,7 @@ void MatrixView::slotKeyPressed(unsigned int y, bool repeating)
 
     Rosegarden::MappedEvent mE(ins->getId(),
                                Rosegarden::MappedEvent::MidiNoteOneShot,
-                               evPitch,
+                               evPitch + staff.getSegment().getTranspose(),
                                Rosegarden::MidiMaxValue,
                                Rosegarden::RealTime::zeroTime,
                                Rosegarden::RealTime(0, 250000000),
@@ -1548,7 +1548,7 @@ void MatrixView::slotKeySelected(unsigned int y, bool repeating)
 
     Rosegarden::MappedEvent mE(ins->getId(),
                                Rosegarden::MappedEvent::MidiNoteOneShot,
-                               evPitch,
+                               evPitch + segment.getTranspose(),
                                Rosegarden::MidiMaxValue,
                                Rosegarden::RealTime::zeroTime,
                                Rosegarden::RealTime(0, 250000000),
@@ -1674,7 +1674,8 @@ void MatrixView::playNote(Rosegarden::Event *event)
                                Rosegarden::MappedEvent::MidiNoteOneShot,
                                (Rosegarden::MidiByte)
                                event->get<Rosegarden::Int>
-                               (Rosegarden::BaseProperties::PITCH),
+                               (Rosegarden::BaseProperties::PITCH) +
+			       m_staffs[0]->getSegment().getTranspose(),
                                velocity,
                                Rosegarden::RealTime::zeroTime,
                                duration,
@@ -1704,7 +1705,7 @@ void MatrixView::playNote(const Rosegarden::Segment &segment, int pitch,
 
     Rosegarden::MappedEvent mE(ins->getId(),
                                Rosegarden::MappedEvent::MidiNoteOneShot,
-                               pitch,
+                               pitch + segment.getTranspose(),
                                velocity,
                                Rosegarden::RealTime::zeroTime,
                                Rosegarden::RealTime(0, 250000000),

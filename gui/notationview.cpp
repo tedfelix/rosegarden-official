@@ -2811,7 +2811,7 @@ void NotationView::playNote(Rosegarden::Segment &s, int pitch, int velocity)
 
     Rosegarden::MappedEvent mE(ins->getId(),
                                Rosegarden::MappedEvent::MidiNoteOneShot,
-                               pitch,
+                               pitch + s.getTranspose(),
                                velocity,
                                Rosegarden::RealTime::zeroTime,
                                Rosegarden::RealTime(0, 250000000),

@@ -213,7 +213,7 @@ protected:
 
     // other helper methods:
 
-    void initialise();
+    void initialise(bool reinitialise = false);
 
     bool createMainOutputs();
     bool createFaderOutputs(int pairs);
