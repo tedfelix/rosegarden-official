@@ -407,6 +407,22 @@ EventView::applyLayout(int /*staffNo*/)
                     arg((*it)->get<Int>(Rosegarden::ProgramChange::PROGRAM));
             }
 
+            if ((*it)->has(Rosegarden::ChannelPressure::PRESSURE)) {
+                data1Str = QString("%1  ").
+                    arg((*it)->get<Int>(Rosegarden::ChannelPressure::PRESSURE));
+            }
+
+            if ((*it)->has(Rosegarden::KeyPressure::PITCH)) {
+                data1Str = QString("%1  ").
+                    arg((*it)->get<Int>(Rosegarden::KeyPressure::PITCH));
+            }
+
+            if ((*it)->has(Rosegarden::KeyPressure::PRESSURE)) {
+                data2Str = QString("%1  ").
+                    arg((*it)->get<Int>(Rosegarden::KeyPressure::PRESSURE));
+            }
+
+
 	    if ((*it)->getDuration() > 0 ||
 		(*it)->isa(Rosegarden::Note::EventType) ||
 		(*it)->isa(Rosegarden::Note::EventRestType)) {

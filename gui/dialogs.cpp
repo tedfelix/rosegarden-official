@@ -1578,6 +1578,9 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
     m_typeCombo->insertItem(strtoqstr(Rosegarden::PitchBend::EventType));
     m_typeCombo->insertItem(strtoqstr(Rosegarden::Indication::EventType));
     m_typeCombo->insertItem(strtoqstr(Rosegarden::Text::EventType));
+    m_typeCombo->insertItem(strtoqstr(Rosegarden::Note::EventRestType));
+    m_typeCombo->insertItem(strtoqstr(Rosegarden::Clef::EventType));
+    m_typeCombo->insertItem(strtoqstr(Rosegarden::Key::EventType));
 
     // Connect up the combos
     //
@@ -1650,11 +1653,15 @@ SimpleEventEditDialog::setupForEvent()
     m_velocitySpinBox->blockSignals(true);
     m_metaEdit->blockSignals(true);
 
+    // Some common settings
+    //
+    m_durationLabel->setText(i18n("Duration:"));
+    m_timeLabel->show();
+    m_timeSpinBox->show();
+
+
     if (m_type == Rosegarden::Note::EventType)
     {
-        m_timeLabel->show();
-        m_timeSpinBox->show();
-
         m_durationLabel->show();
         m_durationSpinBox->show();
 
@@ -1697,9 +1704,6 @@ SimpleEventEditDialog::setupForEvent()
     }
     else if (m_type == Rosegarden::Controller::EventType)
     {
-        m_timeLabel->show();
-        m_timeSpinBox->show();
-
         m_durationLabel->hide();
         m_durationSpinBox->hide();
 
@@ -1709,6 +1713,7 @@ SimpleEventEditDialog::setupForEvent()
 
         m_controllerLabel->show();
         m_controllerLabelValue->show();
+        m_controllerLabel->setText(i18n("Controller name:"));
 
         m_velocityLabel->show();
         m_velocityLabel->setText(i18n("Controller value:"));
@@ -1743,9 +1748,6 @@ SimpleEventEditDialog::setupForEvent()
     }
     else if (m_type == Rosegarden::KeyPressure::EventType)
     {
-        m_timeLabel->show();
-        m_timeSpinBox->show();
-
         m_durationLabel->hide();
         m_durationSpinBox->hide();
 
@@ -1788,9 +1790,6 @@ SimpleEventEditDialog::setupForEvent()
     }
     else if (m_type == Rosegarden::ChannelPressure::EventType)
     {
-        m_timeLabel->show();
-        m_timeSpinBox->show();
-
         m_durationLabel->hide();
         m_durationSpinBox->hide();
 
@@ -1823,9 +1822,6 @@ SimpleEventEditDialog::setupForEvent()
     }
     else if (m_type == Rosegarden::ProgramChange::EventType)
     {
-        m_timeLabel->show();
-        m_timeSpinBox->show();
-
         m_durationLabel->hide();
         m_durationSpinBox->hide();
 
@@ -1858,28 +1854,35 @@ SimpleEventEditDialog::setupForEvent()
     }
     else if (m_type == Rosegarden::SystemExclusive::EventType)
     {
-        m_timeLabel->show();
-        m_timeSpinBox->show();
-
         m_durationLabel->hide();
         m_durationSpinBox->hide();
 
         m_pitchLabel->hide();
         m_pitchSpinBox->hide();
 
-        m_controllerLabel->hide();
-        m_controllerLabelValue->hide();
+        m_controllerLabel->show();
+        m_controllerLabelValue->show();
 
         m_velocityLabel->hide();
         m_velocitySpinBox->hide();
 
+        m_controllerLabel->setText(i18n("Data length:"));
+        try
+        {
+            Rosegarden::SystemExclusive sysEx(m_event);
+            m_controllerLabelValue->setText(QString("%1").
+                    arg(sysEx.getRawData().length()));
+        }
+        catch(...)
+        {
+            m_controllerLabelValue->setText("0");
+        }
+
+        m_timeSpinBox->setValue(m_event.getAbsoluteTime());
         m_typeCombo->setCurrentItem(5);
     }
     else if (m_type == Rosegarden::PitchBend::EventType)
     {
-        m_timeLabel->show();
-        m_timeSpinBox->show();
-
         m_durationLabel->hide();
         m_durationSpinBox->hide();
 
@@ -1945,22 +1948,41 @@ SimpleEventEditDialog::setupForEvent()
         m_pitchLabel->hide();
         m_pitchSpinBox->hide();
 
-        m_controllerLabel->hide();
-        m_controllerLabelValue->hide();
+        m_controllerLabel->show();
+        m_controllerLabelValue->show();
 
         m_velocityLabel->hide();
         m_velocitySpinBox->hide();
 
+        m_metaLabel->show();
+        m_metaEdit->show();
+
+        m_controllerLabel->setText(i18n("Text type:"));
+        m_metaLabel->setText(i18n("Text:"));
+
+        // get the text event
+        try
+        {
+            Rosegarden::Text text(m_event);
+            m_controllerLabelValue->setText(strtoqstr(text.getTextType()));
+            m_metaEdit->setText(strtoqstr(text.getText()));
+        }
+        catch(...)
+        {
+            m_controllerLabelValue->setText(i18n("<none>"));
+            m_metaEdit->setText(i18n("<none>"));
+        }
+
+        m_timeSpinBox->setValue(m_event.getAbsoluteTime());
+
+        // getTextType();
+
         m_typeCombo->setCurrentItem(8);
     }
-    else
+    else if (m_type == Rosegarden::Note::EventRestType)
     {
-        m_timeLabel->show();
-        m_timeSpinBox->show();
-
-        m_durationLabel->setText(i18n("<unknown event type>"));
         m_durationLabel->show();
-        m_durationSpinBox->hide();
+        m_durationSpinBox->show();
 
         m_pitchLabel->hide();
         m_pitchSpinBox->hide();
@@ -1974,7 +1996,98 @@ SimpleEventEditDialog::setupForEvent()
         m_metaLabel->hide();
         m_metaEdit->hide();
 
+        m_timeSpinBox->setValue(m_event.getAbsoluteTime());
+        m_durationSpinBox->setValue(m_event.getDuration());
+
+        m_typeCombo->setCurrentItem(9);
+    }
+    else if (m_type == Rosegarden::Clef::EventType)
+    {
+        m_durationLabel->hide();
+        m_durationSpinBox->hide();
+
+        m_pitchLabel->hide();
+        m_pitchSpinBox->hide();
+
+        m_controllerLabel->show();
+        m_controllerLabelValue->show();
+
+        m_controllerLabel->setText(i18n("Clef type:"));
+
+        try
+        {
+            Rosegarden::Clef clef(m_event);
+            m_controllerLabelValue->setText(strtoqstr(clef.getClefType()));
+        }
+        catch(...)
+        {
+            m_controllerLabelValue->setText(i18n("<none>"));
+        }
+
+        m_velocityLabel->hide();
+        m_velocitySpinBox->hide();
+
+        m_metaLabel->hide();
+        m_metaEdit->hide();
+
+        m_timeSpinBox->setValue(m_event.getAbsoluteTime());
+
+        m_typeCombo->setCurrentItem(10);
+    }
+    else if (m_type == Rosegarden::Key::EventType)
+    {
+        m_durationLabel->hide();
+        m_durationSpinBox->hide();
+
+        m_pitchLabel->hide();
+        m_pitchSpinBox->hide();
+
+        m_controllerLabel->show();
+        m_controllerLabelValue->show();
+
+        m_controllerLabel->setText(i18n("Key name:"));
+
+        try
+        {
+            Rosegarden::Key key(m_event);
+            m_controllerLabelValue->setText(strtoqstr(key.getName()));
+        }
+        catch(...)
+        {
+            m_controllerLabelValue->setText(i18n("<none>"));
+        }
+
+        m_velocityLabel->hide();
+        m_velocitySpinBox->hide();
+
+        m_metaLabel->hide();
+        m_metaEdit->hide();
+
+        m_timeSpinBox->setValue(m_event.getAbsoluteTime());
+
+        m_typeCombo->setCurrentItem(11);
+    }
+    else
+    {
+        m_durationLabel->setText(i18n("Unsupported event type:"));
+        m_durationLabel->show();
+        m_durationSpinBox->hide();
+
+        m_pitchLabel->hide();
+        m_pitchSpinBox->hide();
+
+        m_controllerLabel->hide();
+        m_controllerLabelValue->show();
+        m_controllerLabelValue->setText(strtoqstr(m_type));
+
+        m_velocityLabel->hide();
+        m_velocitySpinBox->hide();
+
+        m_metaLabel->hide();
+        m_metaEdit->hide();
+
         m_typeCombo->setEnabled(false);
+        m_timeSpinBox->setValue(m_event.getAbsoluteTime());
     }
 
     m_typeCombo->blockSignals(false);
@@ -1996,7 +2109,7 @@ SimpleEventEditDialog::getEvent() const
 
     switch(m_typeCombo->currentItem())
     {
-        case 0:
+        case 0: // Note
             try
             {
                 data1 = m_event.get<Int>(Rosegarden::BaseProperties::PITCH);
@@ -2011,7 +2124,8 @@ SimpleEventEditDialog::getEvent() const
 
             break;
 
-        case 1:
+        case 1: // Controller
+
             try
             {
                 data1 = m_event.get<Int>(Rosegarden::Controller::NUMBER);
@@ -2028,7 +2142,8 @@ SimpleEventEditDialog::getEvent() const
 
             break;
 
-        case 2:
+        case 2: // KeyPressure
+
             try
             {
                 data1 = m_event.get<Int>(Rosegarden::KeyPressure::PITCH);
@@ -2045,7 +2160,8 @@ SimpleEventEditDialog::getEvent() const
 
             break;
 
-        case 3:
+        case 3: // ChannelPressure
+
             try
             {
                 data1 = m_event.get<Int>(Rosegarden::ChannelPressure::PRESSURE);
@@ -2058,7 +2174,8 @@ SimpleEventEditDialog::getEvent() const
 
             break;
 
-        case 4:
+        case 4: // ProgramChange
+
             try
             {
                 data1 = m_event.get<Int>(Rosegarden::ProgramChange::PROGRAM);
@@ -2071,11 +2188,13 @@ SimpleEventEditDialog::getEvent() const
 
             break;
 
-        case 5:
-            // nothing yet
+        case 5: // SystemExclusive
+
+            // we should copy across raw data
             break;
 
-        case 6:
+        case 6: // PitchBend
+
             try
             {
                 event.set<Int>(Rosegarden::PitchBend::MSB,
@@ -2090,12 +2209,23 @@ SimpleEventEditDialog::getEvent() const
             }
             break;
 
-        case 7:
+        case 7: // Indication
+
             // nothing yet
             break;
 
-        case 8:
+        case 8: // Text
+
             // nothing yet
+            break;
+
+        case 9: //  Rest
+            break;
+
+        case 10: // Clef
+            break;
+
+        case 11: // Key
             break;
 
         default:
