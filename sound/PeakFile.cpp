@@ -429,7 +429,7 @@ PeakFile::scanToPeak(int peak)
     if (off == 0) {
 	return true;
     } else if (off < 0) {
-	std::cerr << "PeakFile::scanToPeak: warning: seeking backwards for peak " << peak << " (" << m_inFile->tellg() << " -> " << pos << ")" << std::endl;
+//	std::cerr << "PeakFile::scanToPeak: warning: seeking backwards for peak " << peak << " (" << m_inFile->tellg() << " -> " << pos << ")" << std::endl;
 	m_inFile->seekg(pos);
     } else {
 	m_inFile->seekg(off, std::ios::cur);
@@ -777,7 +777,7 @@ PeakFile::getPreview(const RealTime &startTime,
 
         // Get peak value over channels
         //
-	for (int k = 0; peakNumber < nextPeakNumber; ++k) //!!! peakNumber + k < nextPeakNumber; ++k)
+	for (int k = 0; peakNumber < nextPeakNumber; ++k)
 	{
 	    for (int j = 0; j < m_channels; j++)
 	    {

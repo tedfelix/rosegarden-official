@@ -52,6 +52,7 @@ public:
     };
 
     virtual int requestPreview(const Request &request);
+    virtual void cancelPreview(int token);
     virtual void getPreview(int token, unsigned int &channels,
 			    std::vector<float> &values);
 

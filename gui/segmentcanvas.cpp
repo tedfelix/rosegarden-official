@@ -171,6 +171,7 @@ class SegmentAudioPreview : public QObject, public SegmentItemPreview
 {
 public:
     SegmentAudioPreview(SegmentItem& parent, Rosegarden::RulerScale* scale);
+    virtual ~SegmentAudioPreview();
 
     virtual void drawShape(QPainter&);
     virtual void clearPreview();
@@ -196,6 +197,14 @@ SegmentAudioPreview::SegmentAudioPreview(SegmentItem& parent,
       m_channels(0)
 {
 }
+
+SegmentAudioPreview::~SegmentAudioPreview()
+{
+    if (m_previewToken >= 0) {
+	AudioPreviewThread &thread = m_parent.getDocument()->getAudioPreviewThread();
+	thread.cancelPreview(m_previewToken);
+    }
+}	
 
 void SegmentAudioPreview::drawShape(QPainter& painter)
 {
@@ -411,6 +420,7 @@ void SegmentAudioPreview::updatePreview(const QWMatrix &matrix)
     request.width = tRect.width();
     request.showMinima = m_showMinima;
     request.notify = this;
+    if (m_previewToken >= 0) thread.cancelPreview(m_previewToken);
     m_previewToken = thread.requestPreview(request);
 
     m_previewState = PreviewCalculating;
@@ -426,10 +436,12 @@ SegmentAudioPreview::event(QEvent *e)
 	if (ev) {
 	    int token = (int)ev->data();
 	    AudioPreviewThread &thread = m_parent.getDocument()->getAudioPreviewThread();
-	    thread.getPreview(token, m_channels, m_values);
 
 	    RG_DEBUG << "SegmentAudioPreview::token " << token << ", my token " << m_previewToken <<endl;
-	    if (token >= m_previewToken) {
+
+	    if (m_previewToken >= 0 && token >= m_previewToken) {
+		m_previewToken = -1;
+		thread.getPreview(token, m_channels, m_values);
 		setPreviewCurrent(true);
 		if (m_parent.canvas()) {
 		    m_parent.canvas()->setChanged(m_parent.rect());
@@ -437,7 +449,8 @@ SegmentAudioPreview::event(QEvent *e)
 		}
 	    } else {
 		// this one is out of date already
-		m_values.clear();
+		std::vector<float> tmp;
+		thread.getPreview(token, m_channels, tmp);
 	    }
 	    return true;
 	}
