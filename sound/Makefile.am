@@ -33,6 +33,7 @@ libRosegardenSound_la_SOURCES = AudioFile.cpp \
                                 PeakFileManager.cpp \
                                 Plugins.cpp \
                                 RIFFAudioFile.cpp \
+                                RingBuffer.cpp \
                                 SF2PatchExtractor.cpp \
                                 SoundFile.cpp \
                                 WAVAudioFile.cpp
