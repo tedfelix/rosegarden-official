@@ -1147,32 +1147,17 @@ EventSelection* NotationSelector::getSelection()
         
         if ((sprite = dynamic_cast<QCanvasNotationSprite*>(item))) {
 
-            if (!rect.contains(int(item->x()), int(item->y()), true)) {
-/*
-                NOTATION_DEBUG << "NotationSelector::getSelection Skipping item not really in selection rect\n";
-                NOTATION_DEBUG << "NotationSelector::getSelection Rect: x,y: " << rect.x() << ","
-                                     << rect.y() << "; w,h: " << rect.width()
-                                     << "," << rect.height() << " / Item: x,y: "
-                                     << item->x() << "," << item->y() << endl;
-*/
-                continue;
-            } else {
-/*                
-                NOTATION_DEBUG << "NotationSelector::getSelection Item in rect : Rect: x,y: " << rect.x() << ","
-                                     << rect.y() << "; w,h: " << rect.width()
-                                     << "," << rect.height() << " / Item: x,y: "
-                                     << item->x() << "," << item->y() << endl;
-*/
-            }
+            if (!rect.contains(int(item->x()), int(item->y()), true)) continue;
             
             NotationElement &el = sprite->getNotationElement();
 
-            selection->addEvent(el.event());
-
-            //             NOTATION_DEBUG << "Selected event : \n";
-            //             el.event()->dump(std::cerr);
+	    // must be in the same segment as we first started on,
+	    // we can't select events across multiple segments
+	    if (selection->getSegment().findSingle(el.event()) !=
+		selection->getSegment().end()) {
+		selection->addEvent(el.event());
+	    }
         }
-        
     }
 
     return (selection->getAddedEvents() > 0) ? selection : 0;

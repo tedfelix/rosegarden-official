@@ -295,6 +295,8 @@ void NotationView::slotEditPaste()
 	slotStatusHelpMsg(i18n("Couldn't paste at this point"));
     } else {
 	addCommandToHistory(command);
+	//!!! well, we really just want to select the events
+	// we just pasted
 	setCurrentSelection(new Rosegarden::EventSelection
 			    (segment, insertionTime, endTime));
     }
