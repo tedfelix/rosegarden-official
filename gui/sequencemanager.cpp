@@ -1276,19 +1276,21 @@ SequenceManager::resetControllers()
     InstrumentList list = m_doc->getStudio().getPresentationInstruments();
     InstrumentList::iterator it;
 
+    MappedComposition mC;
+
     for (it = list.begin(); it != list.end(); it++)
     {
         if ((*it)->getType() == Instrument::Midi)
         {
-            MappedEvent 
-                mE((*it)->getId(),
-                   MappedEvent::MidiController,
-                   MIDI_CONTROLLER_RESET,
-                   0);
-            StudioControl::sendMappedEvent(mE);
+            MappedEvent *mE = new MappedEvent((*it)->getId(),
+					      MappedEvent::MidiController,
+					      MIDI_CONTROLLER_RESET,
+					      0);
+	    mC.insert(mE);
         }
     }
 
+    StudioControl::sendMappedComposition(mC);
     //showVisuals(mC);
 }
 

@@ -170,7 +170,7 @@
 		<scaled y="0.4"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL COMBINING TRILL LINE">
-		<scaled x="0.3" y="0.5"/>
+		<scaled x="0.4" y="0.5"/>
         </hotspot>
 </font-hotspots>
 

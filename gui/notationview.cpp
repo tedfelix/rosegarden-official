@@ -1563,7 +1563,7 @@ void NotationView::setupActions()
                 SLOT(slotGroupSlur()), actionCollection(), "slur");
 
     new KAction(NotesMenuAddIndicationCommand::getGlobalName
-                (Rosegarden::Indication::PhrasingSlur), 0, 0, this,
+                (Rosegarden::Indication::PhrasingSlur), 0, Key_ParenRight + CTRL, this,
                 SLOT(slotGroupPhrasingSlur()), actionCollection(), "phrasing_slur");
 
     icon = QIconSet

@@ -918,12 +918,16 @@ NotePixmapFactory::makeRoomForMarks(bool isStemmed,
 
 	if (!Rosegarden::Marks::isFingeringMark(*i)) {
 
-	    if (*i == Rosegarden::Marks::LongTrill ||
-		*i == Rosegarden::Marks::TrillLine) {
+	    Rosegarden::Mark m(*i);
+
+	    if (m == Rosegarden::Marks::TrillLine) 
+		m  = Rosegarden::Marks::LongTrill;
+
+	    if (m == Rosegarden::Marks::LongTrill) {
 		m_right = std::max(m_right, params.m_width);
 	    }
 
-	    NoteCharacter character(m_font->getCharacter(m_style->getMarkCharName(*i)));
+	    NoteCharacter character(m_font->getCharacter(m_style->getMarkCharName(m)));
 	    height += character.getHeight() + gap;
 	    if (character.getWidth() > width) width = character.getWidth();
 
@@ -1028,6 +1032,15 @@ NotePixmapFactory::drawMarks(bool isStemmed,
 		x += character.getWidth();
 
 		dy += character.getHeight() + gap;
+
+	    } else {
+
+		NoteCharacter character
+		    (getCharacter
+		     (m_style->getMarkCharName(Rosegarden::Marks::Trill), PlainColour,
+		      false));
+		y -= character.getHeight()/2;
+		dy += character.getHeight() + gap;
 	    }
 
 	    if (*i == Rosegarden::Marks::LongTrill ||
@@ -1035,6 +1048,7 @@ NotePixmapFactory::drawMarks(bool isStemmed,
 		NoteCharacter extension;
 		if (getCharacter(NoteCharacterNames::TRILL_LINE, extension,
 				 PlainColour, false)) {
+		    x += extension.getHotspot().x();
 		    while (x < m_left + params.m_width - extension.getWidth()) {
 			x -= extension.getHotspot().x();
 			m_p->drawNoteCharacter(x, y, extension);

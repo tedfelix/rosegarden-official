@@ -714,16 +714,21 @@ SelectionPropertyCommand::modifySegment()
 
     Rosegarden::timeT endTime = 0;
     Rosegarden::timeT startTime = 0;
+    bool haveStart = false, haveEnd = false;
 
     // Get start and end times
     //
     for (;i != m_selection->getSegmentEvents().end(); ++i)
     {
-        if ((*i)->getAbsoluteTime() < startTime)
+        if ((*i)->getAbsoluteTime() < startTime || !haveStart) {
             startTime = (*i)->getAbsoluteTime();
+	    haveStart = true;
+	}
         
-        if ((*i)->getAbsoluteTime() > endTime)
+        if ((*i)->getAbsoluteTime() > endTime || !haveEnd) {
             endTime = (*i)->getAbsoluteTime();
+	    haveEnd = true;
+	}
     }
 
     double step = double(m_value1 - m_value2) / double(endTime - startTime);
@@ -743,24 +748,27 @@ SelectionPropertyCommand::modifySegment()
 
         } else if (m_pattern == Rosegarden::CrescendoPattern)
         {
-
             (*i)->set<Rosegarden::Int>(m_property,
                                        m_value2 +
-                                       int(step * (*i)->getAbsoluteTime()));
+                                       int(step *
+					   ((*i)->getAbsoluteTime() - startTime)));
         } else if (m_pattern == Rosegarden::DecrescendoPattern)
         {
             (*i)->set<Rosegarden::Int>(m_property,
                                        m_value1 -
-                                       int(step * (*i)->getAbsoluteTime()));
+                                       int(step *
+					   ((*i)->getAbsoluteTime() - startTime)));
         } else if (m_pattern == Rosegarden::RingingPattern)
         {
             if (count % 2 == 0)
                 (*i)->set<Rosegarden::Int>
                     (m_property,
-                     m_value1 - int(step * (*i)->getAbsoluteTime()));
+                     m_value1 - int(step * 
+				    ((*i)->getAbsoluteTime() - startTime)));
             else
             {
-                int value = m_value2 - int(lowStep * (*i)->getAbsoluteTime());
+                int value = m_value2 - int(lowStep *
+					   ((*i)->getAbsoluteTime() - startTime));
                 if (value < 0) value = 0;
 
                 (*i)->set<Rosegarden::Int>(m_property, value);
