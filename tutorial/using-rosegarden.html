@@ -1,0 +1,690 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Using Rosegarden</title>
+    <link rel="stylesheet" href="rose.css" media="screen">
+    <meta name="robots" content="index">
+    <meta name="keywords" content="Rosegarden tutorial, music notation, score, MIDI, sequencer, open source, free, shareware, Unix, Linux, SGI">
+    <meta name="description" content="Using Rosegarden is a ">
+  </head>
+  <body>
+    <div id="heading">
+      <img src="roses.png" alt="" width="183" height="104"><img src="title-rosegarden.png" alt="Rosegarden" width="400" height="104">
+    </div>
+
+    <div id="main">
+
+        <b><i>        This document is in a state of transition.  Please forgive the mess!
+        I wanted to get it further along before doing another update, but
+        we've been shuffling things around a bit, and I lost track of the more
+        "stable" version of this document.  Consider it a preview of things to
+come.</i></b>
+
+<H1 ALIGN=LEFT>1. Introduction</H1>
+<P ALIGN=LEFT>This tutorial assumes that you have a recent version of
+Rosegarden 4, and that it's working properly. I leave it to you to
+surf to the <A HREF="http://www.all-day-breakfast.com/rosegarden/download.html">Rosegarden
+download</A> page and work outward from there. Several distros
+already have a rosegarden4 or rosegarden-4 package available through
+mainstream or third-party channels, and if it isn't already, yours
+will probably be among them soon.</P>
+<P STYLE="font-style: normal">My goal in writing this tutorial is to
+learn through teaching. You and I are in this together every step of
+the way. I'm an author of documentation, not of source code, and much
+of the inner working of Rosegarden is just as much of a magical
+mystery to me as it is to you. In short, I'm a user, just like you,
+with user problems and a user perspective.</P>
+<P>My aim here is not to write an exhaustive technical manual that
+covers every single possibility in dry detail. This is a meandering
+journey through Rosegarden, taking you through a real-world project
+one concept at a time, and showing you things of interest along the
+way. I expect that once I've lead you to water, you can choose a spot
+from which to drink for yourself. I hope that by sharing my
+experiences with you, we'll both be able to get more out of this
+exciting new package.</P>
+<H2>1.2 The Tutorial's Project</H2>
+<P>One of the most important personal uses I have for Rosegarden is
+creating and printing playable scores and accompaniment for my own musical
+purposes.  I'm surrounded by people who think a C# is some kind of saltwater
+fish, and so I make heavy use of my computer so that I'm not always playing
+alone.  Toward that end, I often cheat by starting with a MIDI file of some
+piece I like, then
+re-arranging it however necessary so that I have a part that I can play on my flute, as well as
+accompaniment.</P>
+<P>I begin these projects with a wide variety of source material, but
+for the purpose of this tutorial, I will stick with a completely
+original composition, so as to avoid any potential copyright issues.</P>
+<P>
+Inspiration to compose only strikes me a few times a decade, and I'm
+not currently inspired. As such, I'm pulling something out of the
+archives. This may not be a <I>good</I> composition, but I own
+the rights to it, and can mangle it any way I choose without fear of
+any consequence more dire than rotten food being thrown at my head.</P>
+<P>So let's start with this little piece that I arranged for eventual
+inclusion in a computer game. So you can follow along at home, you
+can get a copy of the file here: <A
+    HREF="midi/ultima.mid">ultima.mid</A></P><P>
+This file was last touched with a sequencer running on a completely
+different platform, and affords us the opportunity to deal with some
+of the issues involved when importing foreign files into Rosegarden.</P>
+<P>The piece is short and simple, intended to be looped as background
+music for an adventure game. I gave no particular thought to ever
+playing this live on real instruments, and it's quite likely that
+none of the parts will be playable on the instruments I assigned to
+them. As a flutist, I am primarily concerned with the creation of a
+playable flute part, so that is where most of my score editing effort
+will go in writing this tutorial.</P>
+<P>With that background in place, I shall endeavor to lead you
+through as many of Rosegarden's features as I can, within the context
+of this project. I expect to transform it along the way, and indeed
+to make up excuses to use new features. When we're finished, we
+should both have a good understanding of how to use Rosegarden to
+solve real-world problems.</P>
+<H2>1.3 The Author's Studio</H2>
+<P>There is a wide array of hardware available on the market. Some of
+you will have inexpensive soundcards, and others will have expensive,
+professional studio cards with more bells and whistles than you can
+shake a stick at. Some of you will be using your soundcard's on-board
+synth, others will be using one or myriad external synths. All of the
+source MIDI files that I work with in this tutorial are tailored to
+take advantages of features on 
+</P>
+<P>Obviously, I can only show you what I can do myself, and that is
+hardware dependant. I'd like you to bear in mind what is sitting in
+front of me as I write this, and thus I will share the details of my
+&ldquo;studio.&rdquo; 
+</P>
+<P>I'm running a 1.0 GHz Athlon system. The box runs Debian Woody
+with aftermarket KDE 3.0.3 from a third-party apt-source, and a
+variety of other add-ons that I've had to compile for myself along
+the way in order to get my build environment in line for software
+such as Rosegarden. I'm running a completely stock kernel 2.4.19 that
+has had no patches applied.</P>
+<P>On the audio side of things, my sole soundcard is a Sound Blaster
+PCI 128, driven by ALSA 0.9.0rc6 and Jack from CVS, with Woody's
+supplied LADSPA SDK and plugins.</P>
+<P>On the MIDI side of things, I have a joystick port MIDI box for
+the Sound Blaster, to which I attach a Fatar MIDI-72 controller
+keyboard and a Roland SC-33 Sound Canvas. All of the source MIDI
+files that I work with in this tutorial were sequenced to make use of
+this particular GS synth, and as such, some of what I say in that
+area will not apply or even make sense to you if you're using an XG
+or other synth to follow along.</P>
+<P>In addition to the Roland, I'm running an IWU Soft Synth via
+iiwusynth 0.2.2. Details of getting these working successfully are
+covered in the <A HREF="http://faq.html/">FAQ.</A></P>
+<P>As previously mentioned, I run Rosegarden from CVS, which I
+compile frequently. You may wish to take a look at the <A HREF="http://extras/get-rg">script</A>
+I use for that purpose, which has been doing a good job of grabbing
+the updates, building them, and managing installed packages via
+checkinstall. I offer no support or suggestion for modification of
+the script; offering it only as a convenience, and leaving you to
+your own devices to figure out how to adapt it to suit your own
+environment. To get the pretty, Mandrake-style [&nbsp;OK&nbsp;] and
+[FAILED] messages going, you'll also need to snag <A HREF="http://extras/ANSI_defs">ANSI_defs</A>.</P>
+<H2 ALIGN=LEFT>1.4 Changelog</H2>
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=0 CELLSPACING=0>
+	<COL WIDTH=64*>
+	<COL WIDTH=64*>
+	<COL WIDTH=64*>
+	<COL WIDTH=64*>
+	<TR VALIGN=TOP>
+		<TD WIDTH=25%>
+			<P ALIGN=LEFT><U><B>Version</B></U></P>
+		</TD>
+		<TD WIDTH=25%>
+			<P ALIGN=LEFT><U><B>Date</B></U></P>
+		</TD>
+		<TD WIDTH=25%>
+			<P ALIGN=LEFT><U><B>By</B></U></P>
+		</TD>
+		<TD WIDTH=25%>
+			<P ALIGN=LEFT><U><B>Notes</B></U></P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=25% VALIGN=TOP>
+			<P ALIGN=LEFT>0.pre1</P>
+		</TD>
+		<TD WIDTH=25% VALIGN=BOTTOM SDVAL="37600" SDNUM="1033;0;MM/DD/YY">
+			<P ALIGN=LEFT>12/10/02</P>
+		</TD>
+		<TD WIDTH=25% VALIGN=TOP>
+			<P ALIGN=LEFT>DMM</P>
+		</TD>
+		<TD WIDTH=25% VALIGN=TOP>
+			<P ALIGN=LEFT>Initial public draft</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=25% VALIGN=BOTTOM SDVAL="0.1" SDNUM="1033;">
+			<P ALIGN=LEFT>0.1</P>
+		</TD>
+		<TD WIDTH=25% VALIGN=BOTTOM SDVAL="37605" SDNUM="1033;0;MM/DD/YY">
+			<P ALIGN=LEFT>12/15/02</P>
+		</TD>
+		<TD WIDTH=25% VALIGN=TOP>
+			<P ALIGN=LEFT>DMM</P>
+		</TD>
+		<TD WIDTH=25% VALIGN=TOP>
+			<P ALIGN=LEFT>Merged into CVS</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=25% VALIGN=BOTTOM SDVAL="0.2" SDNUM="1033;">
+			<P ALIGN=LEFT>0.2</P>
+		</TD>
+		<TD WIDTH=25% VALIGN=BOTTOM SDVAL="37606" SDNUM="1033;0;MM/DD/YY">
+			<P ALIGN=LEFT>12/16/02</P>
+		</TD>
+		<TD WIDTH=25% VALIGN=TOP>
+			<P ALIGN=LEFT>DMM</P>
+		</TD>
+		<TD WIDTH=25% VALIGN=TOP>
+			<P ALIGN=LEFT>Re-structuring...</P>
+		</TD>
+	</TR>
+</TABLE>
+<H2>1.5 Getting This Tutorial</H2>
+<P>The latest version of the Rosegarden Tutorial is always available
+from [URL]. You can also get it from CVS in the same way you get
+Rosegarden. The module is called <B>tutorial</B>. I'm too lazy to go
+dig out and prettily format the instructions for this at the moment,
+but I've given you enough of a hint to get there if you dig for it a
+bit. :)</P>
+<H2>1.6 Copyright and License</H2>
+<P>Copyright &copy; 2002 by D. Michael McIntyre
+&lt;dmmcintyr@users.sourceforge.net&gt;</P>
+<P>As it has been incorporated into the Rosegarden CVS tree, this
+document is now released under the same terms as Rosegarden itself.</P>
+<P>Please contact the author (hey, that's me!) with any suggested
+corrections, changes or feature requests. All are welcome, but as an
+author, I'm also an artist, and as such, I reserve the right to
+express anything said in this document in accordance with my own
+personal style.</P>
+<H1 ALIGN=LEFT>2. The Main Window</H1>
+<P ALIGN=LEFT>Let's begin by starting Rosegarden, and having a look
+at the <B>Main Window</B><SPAN STYLE="font-weight: medium">.</SPAN></P>
+<P ALIGN=LEFT><I>TIP: You might want to consider running Rosegarden
+from a command line, or by way of this </I><A HREF="http://extras/start-rg"><I>script<SPAN STYLE="text-decoration: none">,
+</SPAN></I></A><I>which you can easily associate with an icon, so
+that you have the benefit of seeing Rosegarden's status and error
+messages. This can be a great help in working the kinks out of
+operation or debugging problems, and it can sometimes be a
+reassurance to see it working when Rosegarden is processing something
+particularly hefty and is too busy to bother re-painting its window.</I></P>
+<P ALIGN=LEFT><I>The </I><A HREF="http://extras/start-rg"><I>startrg</I></A><I>
+script can be configured (read the script) to start and wait for Jack
+and IIWU Synth with output messages in separate xterms, as well as
+starting an xterm for Rosegarden itself. Close the associated xterm
+to kill any unwanted processes after Rosegarden exits This is another
+of my personal convenience scripts, and isn't extremely robust. Feel
+free to improve it, or to suggest improvements.</I></P>
+<P ALIGN=LEFT STYLE="font-style: normal">Now that Rosegarden is
+running, let's take a first look around the <B>Main Window</B>. This
+is where you get an overall view of your composition. There are a
+number of optional toggles.</P>
+<P ALIGN=LEFT STYLE="font-style: normal">In order to share a common
+frame of reference, let's turn on anything that isn't already
+displayed by default.</P>
+<P ALIGN=LEFT STYLE="font-style: normal; font-weight: medium">Use the
+<B>Settings</B> menu to toggle these options. Observe that I had not
+toggled on the <B>Chord Name Ruler</B> when I took this snapshot.
+Also note that this is, unsurprisingly, where a number of Rosegarden
+settings can be configured. We'll come back to some of those later
+on:</P>
+<P ALIGN=CENTER STYLE="font-style: normal; font-weight: medium"><IMG SRC="pixmaps/settings-menu.png" NAME="Graphic32" ALIGN=BOTTOM WIDTH=262 HEIGHT=386 BORDER=0></P>
+<P>In the <B>Main Window</B>, clockwise from the top left corner, you
+will see the...</P>
+<P><B>Segment Parameters Pane</B>, where several segment playback
+parameters can be set:</P>
+<P ALIGN=CENTER STYLE="font-weight: medium"><IMG SRC="pixmaps/segment-parameters.png" NAME="Graphic33" ALT="Segment Parameters" ALIGN=BOTTOM WIDTH=242 HEIGHT=137 BORDER=0></P>
+<P><B>Tracklist</B>, where you manipulate your sequence on a track
+level. Notice that each track has a <B>Mute Button </B>
+<IMG SRC="pixmaps/mute-button.png" NAME="Graphic34" ALIGN=BOTTOM WIDTH=14 HEIGHT=17 BORDER=0>,
+to allow you to mute individual tracks, and a<B> Record Button </B>
+<IMG SRC="pixmaps/record-button.png" NAME="Graphic35" ALIGN=BOTTOM WIDTH=16 HEIGHT=17 BORDER=0>,
+which selects the destination track for record operations.</P>
+<P ALIGN=CENTER><IMG SRC="pixmaps/tracklist.png" NAME="Graphic36" ALIGN=BOTTOM WIDTH=229 HEIGHT=48 BORDER=0></P>
+<P>Let's go ahead and play with the <B>Tracklist</B><SPAN STYLE="font-weight: medium">,
+though we'll be importing tracks later on and over-writing anything
+we do here.  Click on the &lt;untitled&gt; in one of the tracks, and
+you'll see an instrument configuration dialog like this one where you
+can choose the device and channel for the track.  Your menus will
+almost certainly differ, but this is what mine looks like with an
+out-of-the-box Rosegarden:</SPAN></P>
+<P ALIGN=CENTER STYLE="font-weight: medium"><IMG SRC="pixmaps/ins3.png" NAME="Graphic37" ALIGN=BOTTOM WIDTH=206 HEIGHT=26 BORDER=0><IMG SRC="pixmaps/ins2.png" NAME="Graphic38" ALIGN=BOTTOM WIDTH=240 HEIGHT=356 BORDER=0></P>
+<P>This is where we stop for today...</P>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<H3 ALIGN=CENTER>Importing a MIDI File</H3>
+<P>Start Rosegarden, then use <B>File -&gt; Import -&gt; Import MIDI
+File</B>... from the menu. Navigate to the location of the file and
+import it. 
+</P>
+<P>Once imported, your screen should resemble this. If it doesn't,
+take a look at the <B>Settings</B> menu and toggle all the optional
+displays on: 
+</P>
+<P ALIGN=CENTER><FONT COLOR="#000080"><A HREF="pixmaps/snapshot1.png"><FONT COLOR="#000080"><IMG SRC="pixmaps/snapshot1.png" NAME="Graphic1" ALT="screenshot" ALIGN=BOTTOM WIDTH=256 HEIGHT=192 BORDER=2></FONT></A></FONT><A HREF="pixmaps/snapshot1.png">
+</A>
+</P>
+<P>Now that we've imported the file, let's see how it fared. 
+</P>
+<H3 ALIGN=LEFT><BR><BR>
+</H3>
+<H3 ALIGN=CENTER>Playing With Transport Tools</H3>
+<H4 ALIGN=CENTER>Playback Pointer</H4>
+<P>First, we need to see what it sounds like. Let's get to know the
+<B>Transport</B> window, and the<B> Playback Pointer</B>,<B> </B>which
+are two of the tools we'll use to get around in our compositions.</P>
+<P>Notice that there's a vertical blue bar in the <B>Segment Pane</B>
+of the main window. That is the <B>Playback Pointer</B>. You can move
+it to any arbitrary point in the composition by clicking on the <B>Ruler</B>
+at the top, or you can use the <B>Transport</B> to move it around. If
+you don't see it, play with the <B>Transport</B> or the <B>Ruler
+</B>until you move it out of hiding.</P>
+<H2 ALIGN=CENTER STYLE="font-weight: medium"><IMG SRC="pixmaps/playback-pointer.png" NAME="Graphic31" ALIGN=BOTTOM WIDTH=104 HEIGHT=198 BORDER=0></H2>
+<H4 ALIGN=CENTER>Transport Window</H4>
+<P>You'll initially have a separate, floating <B>Transport</B> window
+like this one.</P>
+<P ALIGN=CENTER><IMG SRC="pixmaps/snapshot2.png" NAME="Graphic2" ALT="Transport Window" ALIGN=BOTTOM WIDTH=428 HEIGHT=161 BORDER=0></P>
+<P>If you can't figure out what any of the buttons do, hover over
+them a bit, and context-sensitive help will pop up. Of special note
+are the<B> Panic</B>,<B> Metronome</B>,<B> </B>and<B> Solo </B>buttons.</P>
+<P ALIGN=CENTER><I><IMG SRC="pixmaps/transport-play-panic.png" NAME="Graphic15" ALIGN=BOTTOM WIDTH=135 HEIGHT=52 BORDER=0></I></P>
+<P>The <B>Panic</B> button transmits an &ldquo;all notes off&rdquo;
+message. Use it, for example, when your synth has gotten a note stuck
+and the incessant droning of that low C# is driving you up the wall.</P>
+<P>The <B>Metronome</B> does what you'd probably expect. You can turn
+the metronome on during normal playback, as well as recording, and it
+is a useful tool to use when practicing playing along with your
+composition.</P>
+<P STYLE="font-weight: medium">The <B>Solo</B> button mutes all
+tracks except for the one that's currently selected, allowing you a
+convenient way to hear just one part.</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<H2 ALIGN=CENTER>Tweaking the Import</H2>
+<H3 ALIGN=CENTER>Changing the Program, Part One</H3>
+<P ALIGN=LEFT>Find the<B> Play/Pause </B>button and give this
+composition a listen. It sounds rather lame after this initial
+import, doesn't it? <I>(Of course, your results will vary depending
+on the synth you have available as well.)</I></P>
+<P ALIGN=LEFT>Before you write me off as a terrible composer, let's
+get this back to the condition it was in when it left Cakewalk last
+year. We need to correct for what has been lost in the translation
+from raw MIDI to Rosegarden's internal format, and then we'll play
+with it. You'll find the <B>Instrument Parameters</B> here:</P>
+<P ALIGN=CENTER STYLE="font-weight: medium"><I><IMG SRC="pixmaps/instrument-parameters.png" NAME="Graphic3" ALIGN=BOTTOM WIDTH=243 HEIGHT=349 BORDER=0></I></P>
+<P>First, we really need to change the drum kit. This piece is
+supposed to use the Orchestral set. It sounds pretty lame with the
+standard drum kit, and Rosegarden has dropped the program change from
+that track, possibly due to my <B>Studio</B> settings. Well, no
+matter, we'll work around it now and worry about doing it elegantly
+later. (Much later. The <B>Studio</B> is undergoing some exciting new
+changes at the moment, and will be <I>very</I> useful by the time I
+get around to writing about it. That's why I'm putting off mentioning
+one of Rosegarden's most important features until nearer the end of
+my tutorial, in <B>Changing the Program Part Two</B>.)</P>
+<P>Until we do something about drum kit patch names in the <B>Studio</B>,
+we'll just use the default General MIDI patch names. About the best
+we can do at this point is click through the various names until we
+find our drum kit. First we need to select the first of the two drum
+tracks, the one labeled &ldquo;Orchestral bass, crash &amp; snare&rdquo;
+so that its parameters are displayed in the<B> Instrument Parameters</B>
+pane.</P>
+<P>Click on the track name to select it. Now click on the <B>Program</B>
+button. If the checkbox isn't checked, check it. Now you can scroll
+through with your mouse wheel, or select a name from the drop-down
+list. 
+</P>
+<P ALIGN=CENTER><IMG SRC="pixmaps/dropdown.png" NAME="Graphic5" ALT="dropdown list" ALIGN=BOTTOM WIDTH=100 HEIGHT=202 BORDER=0>
+</P>
+<P><I>(It so happens that &ldquo;String Ensemble&rdquo; corresponds
+to the GS program number for the &ldquo;OrcheSet&rdquo; drum kit...
+YMMV. I discovered this by trial and error, as you must. We'll do
+this more elegantly later, don't worry.)</I></P>
+<P>Now it's starting to sound better, but there's still work to do.
+Let's move on to playing with segments.</P>
+<H2><BR><BR>
+</H2>
+<H2 ALIGN=CENTER STYLE="font-style: normal">A First Look at Segments</H2>
+<H3 ALIGN=CENTER>Using Segments to Layer Parts</H3>
+<P STYLE="font-style: normal">Now is a good time to take a first look
+at what segments are all about.</P>
+<P ALIGN=LEFT STYLE="font-style: normal">What <B>are</B> these
+segments anyway? They're one of Rosegarden's most powerful features,
+allowing you to slide notes and audio samples around at will, to cut
+them up, re-combine them, overlap them, and so on, giving you a high
+degree of control over the sound of your composition. Let's make use
+of this feature immediately to deal with an import problem.</P>
+<P STYLE="font-style: normal">You may have noticed some raunchy piano
+notes that were supposed to be a conga. When I created this file, I
+had two different percussion tracks tied to channel 10. That was
+Cakewalk. This is Rosegarden, so let's deal with this the Rosegarden
+way.</P>
+<P STYLE="font-style: normal">Rather assigning two tracks to the same
+channel, inviting opportunities for one to interfere with the other,
+we'll take advantage of overlapping segments to achieve the same
+result. This will allow us to keep the two portions of the drum
+pattern separate from each other in a single track.</P>
+<P>Take a look at the <B>Segment Pane</B> to the right. This is where
+you can re-arrange things on a large scale. Notice the <B>Ruler</B>
+at the top, the <B>Chord Indicator Bar</B>, the <B>Track Names</B>
+and the <B>Segments</B>. Observe that each track has a <B>Mute</B>
+and <B>Record</B> button. If any of these features are missing from
+your display, you can toggle them via the <B>Settings</B> menu:</P>
+<H2 ALIGN=CENTER><IMG SRC="pixmaps/segment-pane.png" NAME="Graphic29" ALIGN=BOTTOM WIDTH=502 HEIGHT=284 BORDER=0></H2>
+<P>Let's start by cutting out all the empty spaces, and cutting these
+huge segments into smaller pieces. 
+</P>
+<P>Use <B>Edit -&gt; Select All Segments</B> from the menu to
+highlight all of the segments. Then use <B>Segments -&gt; Auto-Split</B>
+to automatically split them, eliminating sections of silence, and
+leaving you with little islands of notey bits. 
+</P>
+<P>To get a better overview of the composition, use the <B>Zoom</B>
+slider at the top right of the main window to zoom out a bit.</P>
+<H2 ALIGN=CENTER><IMG SRC="pixmaps/zoom.png" NAME="Graphic30" ALIGN=BOTTOM WIDTH=277 HEIGHT=122 BORDER=0></H2>
+<P>Your screen should then resemble this: 
+</P>
+<P ALIGN=CENTER><FONT COLOR="#000080"><A HREF="snapshot4.png"><FONT COLOR="#000080"><IMG SRC="pixmaps/snapshot4.png" NAME="Graphic7" ALT="screenshot" ALIGN=BOTTOM WIDTH=256 HEIGHT=192 BORDER=2></FONT></A></FONT><A HREF="pixmaps/snapshot4.png">
+</A>
+</P>
+<H3 ALIGN=LEFT>2.5.2 Segment Previews</H3>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT>Look closely, and you'll notice that each one of the
+segments contains a miniature &ldquo;matrix&rdquo; or &ldquo;piano
+roll&rdquo; view. You can get some sense of what that bit of music is
+like just by looking at the segment display, which is a useful visual
+aid when dragging things around. If this feature is not turned on,
+turn it on with <B>Settings -&gt; Segment Previews</B></P>
+<P ALIGN=CENTER STYLE="font-style: normal"><IMG SRC="pixmaps/snapshot5.png" NAME="Graphic8" ALT="enlarged view of segments" ALIGN=BOTTOM WIDTH=501 HEIGHT=283 BORDER=0>
+</P>
+<P ALIGN=LEFT STYLE="font-style: normal">Now, let's overlap the
+segments. Select the &ldquo;Conga&rdquo; segment, and drag it up to
+the &ldquo;Orchestral bass, crash &amp; snare&rdquo; track. 
+</P>
+<P>Your screen should now resemble this: 
+</P>
+<P ALIGN=CENTER><FONT COLOR="#000080"><A HREF="post-overlap-layer.png"><FONT COLOR="#000080"><IMG SRC="pixmaps/post-overlap-layer.png" NAME="Graphic4" ALT="screenshot" ALIGN=BOTTOM WIDTH=256 HEIGHT=192 BORDER=2></FONT></A></FONT></P>
+<P ALIGN=LEFT>For now, we'll leave the &ldquo;Conga&rdquo; track in
+place. The layering we've done gets both of these tracks into the
+same MIDI channel with aplomb, but we may need to drag the big track
+back out so that we can more readily get to the smaller ones beneath.
+I don't see a way to select a segment that's buried entirely beneath
+another segment.</P>
+<P ALIGN=LEFT>Now that the drum kit has been corrected and both drum
+parts are playing on the correct channel, it's starting to shape up.
+The only thing missing is reverb. It sounds rather dull without it.</P>
+<H2 ALIGN=CENTER>Instrument Parameters</H2>
+<P>The SysEx bank that Cakewalk included with this file has been lost
+in the translation. Luckily, Rosegarden makes it easy to set the
+initial values for the most common controllers right there in the
+<B>Instrument Parameters</B> pane of the main window. If this is
+missing from your display, toggle it on with <B>Settings -&gt; Show
+Instrument Parameters.</B></P>
+<P ALIGN=CENTER><I><IMG SRC="pixmaps/instrument-parameters.png" NAME="Graphic6" ALIGN=BOTTOM WIDTH=243 HEIGHT=349 BORDER=0></I></P>
+<P>Let's select each track in turn, and dial up the 'verb. Click on
+the <B>Reverb</B> knob and either use your mouse wheel or else drag
+the cursor in a straight horizontal or vertical line (don't try to
+drag it around in a circle) to change the position of the knob. Crank
+it up. You can never have too much reverb. Now lather, rinse, repeat
+until every track has major 'verbage. (Or reverbificate to taste, if
+you insist on having less than maximal 'verbage...) 
+</P>
+<P>Depending on your synth's implementation, you can control several
+other parameters from this panel as well. <B>Volume</B>, <B>Pan</B>,
+<B>Chorus</B>, and <B>Reverb</B> are perhaps the most commonly-used.
+If any of these knobs don't seem to have any effect, blame it on your
+synth.</P>
+<P>Now is a good time to save. Remember to <B><U>save early, save
+often</U></B>. Rosegarden is still under heavy development, and it's
+not fun to see your work evaporate. If you do discover a bug, try to
+determine a way to repeat it consistently, and let the Rosegarden
+team know about it. 
+</P>
+<P><BR><BR>
+</P>
+<H1 ALIGN=CENTER>Making the Flute Part Playable 
+</H1>
+<P>We'll do more with segments as we progress. For the moment, let's
+consider that flute part. It's way, way too high to be playable, so
+it needs to be transposed.</P>
+<H2 ALIGN=CENTER>Segment Parameters</H2>
+<P ALIGN=LEFT>There are several ways to transpose in Rosegarden,
+depending on what you want to do. If you just want to affect
+playback, you can configure the transposition in the <B>Segment
+Parameters</B> pane of the main window. This allows you to add a
+playback delay, on-the-fly quantization, segment repeat or, of
+course, transposition for any segment. Now is a good time to play
+with these, and see some of the things they can do, though we can't
+use them for the task at hand, since they only affect performance.</P>
+<P ALIGN=CENTER><IMG SRC="pixmaps/segment-parameters.png" NAME="Graphic11" ALIGN=BOTTOM WIDTH=242 HEIGHT=137 BORDER=0></P>
+<H2 ALIGN=CENTER>Opening the Notation Editor</H2>
+<P>Since we want to make changes with the eventual aim of printing a
+playable score, we're going to need to &ldquo;physically&rdquo; move
+the notes. So, for starters, let's see what this actually looks like
+in terms of notation.</P>
+<P>Let's open the <B>Notation Editor</B> and have a look. Highlight a
+segment from the &ldquo;Flute&rdquo; track. Open the <B>Notation
+Editor</B> by right-clicking on the segment, and choosing &ldquo;<B>Edit
+as Notation</B>&rdquo; from the context submenu. You can also
+configure this to be your default view via <B>Settings -&gt;
+Configure Rosegarden... -&gt; Default Editor</B>, and thereafter you
+can get to the <B>Notation Editor</B> by merely double-clicking the
+desired segment.</P>
+<P>We'll be spending a lot of time here in the <B>Notation Editor</B>.
+As you'd expect, this is where you go to view your data as standard
+notation. In addition to displaying the note data on a human-readable
+staff, it allows you add performance instructions to the score.</P>
+<P>One of the first things you'll want to do is get yourself a local
+set of <B>Transport</B> tools. Check <B>Settings -&gt; Show Transport
+Toolbar</B> and the <B>Transport Toolbar</B> should appear. Notice
+that it has buttons not found on the main <B>Transport</B> window.
+These extra buttons are useful for controlling playback when the
+<B>Playback Pointer</B> is outside the segment you're editing, and
+you want to hear what you're working on.</P>
+<H2 ALIGN=CENTER>Notation Editor Controls</H2>
+<P STYLE="font-weight: medium">Let's move the playback cursor to the
+beginning of this segment. Click on the ruler above the staff to
+position the local cursor, just as the ruler in the main window
+positions the playback pointer itself. Click the <B>Playback Pointer
+to Cursor 
+<IMG SRC="pixmaps/notation-pointer-to-cursor.png" NAME="Graphic14" ALIGN=BOTTOM WIDTH=39 HEIGHT=37 BORDER=0>
+</B>button to move the playback pointer to the position of the
+cursor. Now playback will begin from that point. You can set it back
+&ldquo;out of sight&rdquo; so that playback will begin before the
+start of the segment you're editing by shifting it to the left via
+the 
+<IMG SRC="pixmaps/notation-rewind.png" NAME="Graphic17" ALIGN=BOTTOM WIDTH=33 HEIGHT=31 BORDER=0>
+button.</P>
+<P>Notice the <B>Size</B>, <B>Spacing</B>, and <B>Smoothing</B>
+sliders.</P>
+<P>The <B>Size</B> slider changes the size of the font used to render
+the notes.</P>
+<P>The <B>Spacing</B> slider can be used to adjust the horizontal
+spacing of the notes, to draw them closer or further apart. Useful
+for spreading out particularly complicated rhythms for easier
+reading.</P>
+<P>The <B>Smoothing</B> slider is useful for cleaning up performance
+data somewhat, to make it more legible.</P>
+<P>All of these controls are also available from the <B>View</B>
+menu. <I>(Note that there is also a <B>View -&gt; Note Font</B>
+option that isn't available graphically. Use this to switch between
+&ldquo;feta&rdquo; and the &ldquo;rg2.1&rdquo; font. The latter isn't
+is as pretty, but it renders more quickly on slower hardware.)</I></P>
+<P ALIGN=CENTER><FONT COLOR="#000080"><A HREF="snapshot7.png"><FONT COLOR="#000080"><IMG SRC="pixmaps/snapshot7.png" NAME="Graphic9" ALT="screenshot" ALIGN=BOTTOM WIDTH=256 HEIGHT=192 BORDER=2></FONT></A></FONT><A HREF="snapshot7.png">
+</A>
+</P>
+<H2 ALIGN=CENTER>Editing the Part</H2>
+<H3 ALIGN=CENTER>Transposing</H3>
+<P>Well, let's look at the part. This definitely should have been a
+piccolo part. My head hurts just looking at this stuff. Let's
+transpose it down an octave and see what it looks like. Let's make
+that <B>two</B> octaves! I can get that high with my flute, but my
+dog would hate me. Two octaves are good.</P>
+<P>Select <B>Edit -&gt; Select Whole Staff</B>, then go to the
+<B>Transforms</B> menu. Lots of good stuff to play with here, but we
+want <B>Transpose...</B> Since we're going to go down two octaves, we
+might as well go for the <B>Transpose...</B> option at the bottom.
+Use the arrows to dial down, or else enter -24 into the input box.
+Positive numbers mean an upward transposition, and negative numbers
+will transpose downward.</P>
+<P ALIGN=CENTER><IMG SRC="pixmaps/transpose-box.png" NAME="Graphic10" ALIGN=BOTTOM WIDTH=408 HEIGHT=115 BORDER=0></P>
+<H3 ALIGN=CENTER>Cleaning Up Ugly Data</H3>
+<P STYLE="font-weight: medium">Now that we're down to a reasonable
+register, let's do something about the ugly notes. The problem with
+human performance data is that it doesn't scale well into notation.
+You'll notice that some of the notes are displaying in yellow. That's
+because they're notes whose timing and duration don't quite make
+sense to Rosegarden within the context of this measure, so it has
+colored them to let you know that the notes on the page are only an
+approximation of what will actually be played. To see a view of the
+data in a more pure format, use the <B>Matrix</B> or <B>Event List</B>
+editors, which we'll take a look at later on.</P>
+<P STYLE="font-weight: medium">Since our objective here is to make
+the notation more readable, we might as well remain here and alter
+the data until it better fits into place within the context of
+notation. In this instance, readability is more important to us than
+the faithful rendering of a human performance, so we're going to end
+up making &ldquo;physical&rdquo; changes to the data along the way.</P>
+<P STYLE="font-weight: medium">Let's start by seeing what that
+<B>Smoothing</B> slider can do for us... Each notch makes the rhythm
+progressively less obnoxious to read, leaving the notes in place.
+Adjust the slider, and see what results. I found that the final notch
+was too high, and the next lower notch was looking better, but wasn't
+really quite there.</P>
+<P STYLE="font-weight: medium">Let's try making these smoothed values
+permanent. Select the whole staff, and let's try <B>Transform -&gt;
+Fix Smoothed Values</B>...</P>
+<P ALIGN=CENTER><IMG SRC="pixmaps/post-fix-smoothed.png" NAME="Graphic12" ALIGN=BOTTOM WIDTH=630 HEIGHT=123 BORDER=0></P>
+<P STYLE="font-weight: medium">Well, that didn't quite have the
+desired effect, did it? The timings are still too far off. Remember
+<B>ctrl-Z</B> is a shortcut for <B>Edit -&gt; Undo</B>.</P>
+<H3 ALIGN=CENTER>Quantize</H3>
+<P STYLE="font-weight: medium">I think this data is so messy that
+we're going to have to quantize it. Let's <B>Undo</B> that last
+change, and play with <B>Transform -&gt; Quantize</B> instead. Let's
+tell it to <B>Quantize: Event positions, and round durations to exact
+notes</B>. We'll leave the <B>Base duration unit</B> at 16<SUP>th</SUP>,
+and accept the default <B>Note rounding</B> values and see where that
+gets us:</P>
+<P ALIGN=CENTER><IMG SRC="pixmaps/quantize.png" NAME="Graphic13" ALIGN=BOTTOM WIDTH=468 HEIGHT=250 BORDER=0></P>
+<P STYLE="font-weight: medium">Not too bad. It's looking much better:</P>
+<P ALIGN=CENTER STYLE="font-weight: medium"><IMG SRC="pixmaps/post-quantized.png" NAME="Graphic18" ALIGN=BOTTOM WIDTH=466 HEIGHT=128 BORDER=0></P>
+<P ALIGN=LEFT STYLE="font-weight: medium">Let's see how those changes
+sound, and then we'll see about turning those 16<SUP>th</SUP>
+note/rest pairs into something a little easier to read...</P>
+<P ALIGN=LEFT STYLE="font-weight: medium">The quantized notes seem to
+have fallen into place along sane boundaries without having an undue
+impact on the rhythm or feel of the piece. Bearing that in mind,
+let's back up a step and see what would have happened if we had
+quantized on 8<SUP>th</SUP> note boundaries. Hit<B> ctrl-Z</B> or use<B>
+Edit -&gt; Undo</B>, then run through the<B> Transformations -&gt;
+Quantize</B> dialog again, specifying a base duration of 8<SUP>th</SUP>
+note this time around.</P>
+<P ALIGN=LEFT STYLE="font-weight: medium">Very nice indeed, and
+Rosegarden has rendered some 16<SUP>th</SUP> notes and other odd bits
+as required, ignoring the base duration when it really had to. That's
+one of the best jobs of quantization I've seen in a notation editor.
+There won't be much clean-up to do from here:</P>
+<P ALIGN=CENTER STYLE="font-weight: medium"><IMG SRC="pixmaps/post-quantized2.png" NAME="Graphic19" ALIGN=BOTTOM WIDTH=360 HEIGHT=78 BORDER=0></P>
+<H3 ALIGN=CENTER>Adding Marks</H3>
+<P ALIGN=LEFT STYLE="font-weight: medium">We've changed the flavor
+somewhat by lengthening those notes. Let's make them stacatto. There
+isn't currently an icon for this, but you'll find it on the menu.
+First you'll need to make a selection.</P>
+<P ALIGN=LEFT STYLE="font-weight: medium">If it's not already the
+default, choose the<B> Select</B> cursor 
+<IMG SRC="pixmaps/notation-selection-cursor.png" NAME="Graphic24" ALIGN=BOTTOM WIDTH=51 HEIGHT=55 BORDER=0>
+from the<B> Toolbar</B>. Click at a point to the left of one of the
+notes to begin the selection.<B> </B>Drag the blue selection box so
+that it includes the first two 8<SUP>th</SUP> notes. When they're
+selected, they'll turn blue. Now use <B>Marks -&gt; Add Stacatto</B>.
+The dots appear:</P>
+<P ALIGN=CENTER STYLE="font-weight: medium"><IMG SRC="pixmaps/post-quantized3.png" NAME="Graphic20" ALIGN=BOTTOM WIDTH=280 HEIGHT=64 BORDER=0></P>
+<H3 ALIGN=CENTER>Auto-Beam</H3>
+<P ALIGN=LEFT STYLE="font-weight: medium">Now let's add beams. <B>Edit
+-&gt; Select Whole Staff</B>, then <B>Group -&gt; Auto Beam</B> to
+beam these notes into logical groupings:</P>
+<P ALIGN=CENTER STYLE="font-weight: medium"><IMG SRC="pixmaps/post-quantized4.png" NAME="Graphic21" ALIGN=BOTTOM WIDTH=348 HEIGHT=94 BORDER=0></P>
+<H3 ALIGN=CENTER>Changing Note Durations</H3>
+<P ALIGN=LEFT STYLE="font-weight: medium">One measure further into
+the segment, there are some rhythms that could probably be written so
+that they're less awkward to count. Let's see about changing them.</P>
+<P ALIGN=LEFT STYLE="font-weight: medium">There's an odd dotted 16<SUP>th</SUP>
+with 32<SUP>nd</SUP> rest combination that should probably be another
+stacatto 8<SUP>th</SUP> note:</P>
+<P ALIGN=CENTER><IMG SRC="pixmaps/post-quantized5.png" NAME="Graphic22" ALIGN=BOTTOM WIDTH=584 HEIGHT=94 BORDER=0></P>
+<P ALIGN=LEFT STYLE="font-weight: medium">Let's convert that into an
+8<SUP>th</SUP> note. Click the 8<SUP>th</SUP> note button 
+<IMG SRC="pixmaps/notation-8th-note-button.png" NAME="Graphic25" ALIGN=BOTTOM WIDTH=53 HEIGHT=52 BORDER=0>
+on the <B>Toolbar</B>, then click on the offending dotted 16<SUP>th</SUP>
+note's head. It changes into an 8<SUP>th</SUP> note, and the rest
+disappears. <I>Note that Rosegarden pads out the rests as necessary,
+to keep the correct time in the measure. </I>
+</P>
+<H3 ALIGN=CENTER>Let's Add Some Slurs</H3>
+<P ALIGN=LEFT STYLE="font-weight: medium">Let's add some slurs as
+well. Highlight the first two 8<SUP>th</SUP> notes in this measure,
+then use <B>Group -&gt; Add Slur</B>. You should be looking at
+something very like this:</P>
+<P ALIGN=CENTER STYLE="font-weight: medium"><IMG SRC="pixmaps/post-quantized6.png" NAME="Graphic23" ALIGN=BOTTOM WIDTH=398 HEIGHT=84 BORDER=0></P>
+<H3 ALIGN=CENTER>Manual Beaming</H3>
+<P ALIGN=LEFT STYLE="font-weight: medium">Now let's do two more
+things to enhance readability. I'm used to reading beamed groups that
+count out to one beat. Let's separate those two groups, and add
+another slur. Select the first two 8<SUP>th</SUP> notes in that
+four-note group, then use <B>Group -&gt; Beam Group</B> to fuse those
+two together. The remaining two notes adapt automatically, and remain
+beamed. Now select all four of the 8<SUP>th</SUP> notes plus the half
+note and add a slur. Finally, notice that the note stems are in the
+way of the slur. Let's select the second pair of 8<SUP>th</SUP> notes
+and use <B>Notes -&gt; Stem Direction -&gt; Stems Down</B> or else
+<B>ctrl-PageDown</B> to change their direction. You should wind up
+with a measure resembling this one:</P>
+<P ALIGN=CENTER STYLE="font-weight: medium"><IMG SRC="pixmaps/post-quantized7.png" NAME="Graphic26" ALIGN=BOTTOM WIDTH=350 HEIGHT=112 BORDER=0></P>
+<P ALIGN=LEFT STYLE="font-weight: medium">Continue in this fashion
+until you finish altering the notation so that it's nice and tidy. I
+think you should have a pretty good idea how to proceed from here, so
+I'm not going to walk you through the rest of this job.</P>
+<H3 ALIGN=CENTER>The Text Cursor</H3>
+<P ALIGN=LEFT STYLE="font-weight: medium">Now let's add some
+directions. Exchange your <B>Select</B> cursor for a <B>Text 
+<IMG SRC="pixmaps/text-cursor.png" NAME="Graphic16" ALIGN=BOTTOM WIDTH=40 HEIGHT=34 BORDER=0></B>cursor.
+Click toward the beginning of the staff, near the clef. Let's start
+by adding a tempo and a dynamic of ff, (since my dynamic range is
+from ff to fffff :). Click the cursor where you want the text to
+appear, then configure it via the dialog.</P>
+<P ALIGN=CENTER STYLE="font-weight: medium"><IMG SRC="pixmaps/text-box.png" NAME="Graphic27" ALIGN=BOTTOM WIDTH=253 HEIGHT=265 BORDER=0></P>
+<P ALIGN=LEFT STYLE="font-weight: medium">It's pretty
+self-explanatory. My score ended up looking like:</P>
+<P ALIGN=CENTER STYLE="font-weight: medium"><IMG SRC="pixmaps/post-quantized8.png" NAME="Graphic28" ALIGN=BOTTOM WIDTH=288 HEIGHT=184 BORDER=0></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P><I>Adventuresome people--especially Debian users--wanting to play
+with the CVS may wish to take a look at my </I><A HREF="get-rg.tar.gz"><I>get-rg</I></A><I>
+script. I'm not going to go into detail on how to use it, or how to
+alter it to suit different environments. Its purpose is to simplify
+the job of staying up to date with CVS by logging in, updating,
+compiling, and then managing packages via checkinstall. I include it
+only because it's so extremely convenient to use that I hate to keep
+it to myself. I eventually plan to make it universal enough to
+compile anything from CVS, and install packages on any distro that
+checkinstall supports, but that is low on my list of priorities at
+the moment.</I></P>
+<H2 ALIGN=LEFT><BR><BR>
+</H2>
+<P ALIGN=CENTER><BR><BR>
+</P>
+<P ALIGN=CENTER><BR><BR>
+</P>
+</BODY>
+</HTML>
