@@ -202,41 +202,52 @@ void RosegardenGUIApp::setupActions()
     // use 1 (End) and 3 (Page Down) for Rwd and Ffwd and
     // 0 (insert) and Enter for Play and Stop 
     //
-    KAction *transportAction;
-    transportAction = new KAction(i18n("Play"), 0, 0, this,
+    m_playTransport = new KAction(i18n("Play"), 0, Key_Enter, this,
                                   SLOT(play()), actionCollection(),
                                   "play");
-    transportAction->setGroup("transportcontrols");
-    transportAction->setAccel(Key_Insert);
+    m_playTransport->setGroup("transportcontrols");
+    //m_playTransport->setAccel(Key_Enter);
 
-    transportAction = new KAction(i18n("Stop"), 0, 0, this,
+    m_stopTransport = new KAction(i18n("Stop"), 0, 0, this,
                                   SLOT(stop()), actionCollection(),
                                   "stop");
-    transportAction->setGroup("transportcontrols");
-    transportAction->setAccel(Key_Enter);
+    m_stopTransport->setGroup("transportcontrols");
+    m_stopTransport->setAccel(Key_Insert);
 
-    transportAction = new KAction(i18n("Fast Forward"), 0, 0, this,
+    m_ffwdTransport = new KAction(i18n("Fast Forward"), 0, 0, this,
                                   SLOT(fastforward()), actionCollection(),
                                   "fast_forward");
-    transportAction->setGroup("transportcontrols");
-    transportAction->setAccel(Key_PageDown);
+    m_ffwdTransport->setGroup("transportcontrols");
+    m_ffwdTransport->setAccel(Key_PageDown);
 
-    transportAction = new KAction(i18n("Rewind"), 0, 0, this,
+    m_rewindTransport = new KAction(i18n("Rewind"), 0, 0, this,
                                   SLOT(rewind()), actionCollection(),
                                   "rewind");
 
-    transportAction->setGroup("transportcontrols");
-    transportAction->setAccel(Key_End);
+    m_rewindTransport->setGroup("transportcontrols");
+    m_rewindTransport->setAccel(Key_End);
 
     // create the Transport GUI and add the callbacks
     //
     m_transport = new Rosegarden::RosegardenTransportDialog(this, "",
                 Rosegarden::Note(Rosegarden::Note::Crotchet).getDuration());
 
+    // We should be plugging the actions into the buttons
+    // on the transport - but this doesn't seem to work
+    // at the moment so we bodge it.
+    //
+    //
+/*
+    m_playTransport->plug(m_transport->PlayButton);
+    m_stopTransport->plug(m_transport->StopButton);
+    m_rewindTransport->plug(m_transport->RewindButton);
+    m_ffwdTransport->plug(m_transport->FfwdButton);
+*/
+
     connect((QObject *) m_transport->PlayButton,
              SIGNAL(released()),
              SLOT(play()));
-             
+
     connect((QObject *) m_transport->StopButton,
              SIGNAL(released()),
              SLOT(stop()));
@@ -252,7 +263,10 @@ void RosegardenGUIApp::setupActions()
     // Ensure that the checkbox is unchecked if the dialog
     // is destroyed.
     //
-    connect((QObject *)m_transport, SIGNAL(destroyed),
+    // *sigh* -   Why isn't the dialog sending this signal?
+    //
+    //
+    connect((QObject *)m_transport, SIGNAL(destroyed()),
             (QObject *)m_viewTransport, SLOT(setChecked(false)));
                 
     createGUI("rosegardenui.rc");
@@ -287,7 +301,13 @@ void RosegardenGUIApp::initView()
     setCentralWidget(m_view);
     setCaption(m_doc->getTitle());
 
+    // set the pointer position
+    //
     setPointerPosition(m_doc->getComposition().getPosition());
+
+    // set the tempo in the transport
+    //
+    m_transport->setTempo(m_doc->getComposition().getTempo());
 
     // bring the transport to the front 
     //
@@ -1058,7 +1078,7 @@ void RosegardenGUIApp::play()
                   m_doc->getComposition().getTempo() << endl;
     }
 
-    // set the tempo in the transport HERE for the moment
+    // set the tempo in the transport
     //
     m_transport->setTempo(m_doc->getComposition().getTempo());
 
@@ -1336,6 +1356,12 @@ void RosegardenGUIApp::exportMIDIFile(const QString &file)
         KMessageBox::sorry(this, i18n("The MIDI File has not been exported."));
         return;
     }
+}
+
+void
+RosegardenGUIApp::closeTransport()
+{
+  cerr << "TRANSPORT CLOSED" << endl;
 }
 
 

@@ -416,6 +416,10 @@ public slots:
      */
     bool launchSequencer();
 
+    // When the transport closes 
+    //
+    void closeTransport();
+
 private:
 
 
@@ -460,6 +464,14 @@ private:
     KToggleAction* m_viewTracksToolBar;
     KToggleAction* m_viewStatusBar;
     KToggleAction* m_viewTransport;
+    KAction *m_playTransport;
+    KAction *m_stopTransport;
+    KAction *m_rewindTransport;
+    KAction *m_ffwdTransport; 
+    KAction *m_pauseTransport;
+    KAction *m_recordTransport;
+    KAction *m_rewindEndTransport;
+    KAction *m_ffwdEndTransport;
 
     /**
      * Transport (Playback and Recording) status

@@ -29,6 +29,8 @@
 #include <qspinbox.h>
 #include <qlineedit.h>
 
+#include <iostream>
+
 namespace Rosegarden
 {
 
@@ -69,6 +71,10 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     // create the playbutton as toggleable
     //
     PlayButton->setToggleButton(true);
+
+    // read only tempo
+    //
+    TempoLineEdit->setReadOnly(true);
 
     loadPixmaps();
 }
@@ -189,9 +195,11 @@ void
 RosegardenTransportDialog::setTempo(const double &tempo)
 {
   m_tempo = tempo;
-  TempoLineEdit->setText(QString("%1").arg(tempo));
-}
 
+  QString tempoString;
+  tempoString.sprintf("%4.4f", tempo);
+  TempoLineEdit->setText(tempoString);
+}
 
 
 }
