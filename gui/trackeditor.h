@@ -68,7 +68,7 @@ protected slots:
     void addTrack(TrackItem*);
     void deleteTrack(Rosegarden::Track*);
     void resizeTrack(Rosegarden::Track*); // TODO : get rid of this
-    void updateTrackInstrument(TrackItem*);
+    void updateTrackInstrumentAndStartIndex(TrackItem*);
 
 signals:
     void needUpdate();

@@ -123,7 +123,7 @@ signals:
     void addTrack(TrackItem*);
     void deleteTrack(Rosegarden::Track*);
     void resizeTrack(Rosegarden::Track*);
-    void updateTrackInstrument(TrackItem*);
+    void updateTrackInstrumentAndStartIndex(TrackItem*);
     void editTrack(Rosegarden::Track*);
     void editTrackSmall(Rosegarden::Track*);
 
@@ -211,7 +211,7 @@ public:
     virtual void handleMouseMove(QMouseEvent*);
 
 signals:
-    void updateTrackInstrument(TrackItem*);
+    void updateTrackInstrumentAndStartIndex(TrackItem*);
 };
 
 /**

@@ -384,8 +384,8 @@ TrackMover::TrackMover(TracksCanvas *c)
 {
     m_canvas->setCursor(Qt::pointingHandCursor);
 
-    connect(this, SIGNAL(updateTrackInstrument(TrackItem*)),
-            c,    SIGNAL(updateTrackInstrument(TrackItem*)));
+    connect(this, SIGNAL(updateTrackInstrumentAndStartIndex(TrackItem*)),
+            c,    SIGNAL(updateTrackInstrumentAndStartIndex(TrackItem*)));
 
     kdDebug(KDEBUG_AREA) << "TrackMover()\n";
 }
@@ -403,10 +403,10 @@ void TrackMover::handleMouseButtonPress(QMouseEvent *e)
 void TrackMover::handleMouseButtonRelase(QMouseEvent*)
 {
     if (m_currentItem) {
-        m_currentItem->getTrack()->setStartIndex(m_currentItem->x() / m_canvas->grid().hstep());
-        kdDebug(KDEBUG_AREA) << "TrackMover::handleMouseButtonRelase() : set part start time to "
-                             << m_currentItem->getTrack()->getStartIndex() << endl;
-        emit updateTrackInstrument(m_currentItem);
+//         m_currentItem->getTrack()->setStartIndex(m_currentItem->x() / m_canvas->grid().hstep());
+//         kdDebug(KDEBUG_AREA) << "TrackMover::handleMouseButtonRelase() : set part start time to "
+//                              << m_currentItem->getTrack()->getStartIndex() << endl;
+        emit updateTrackInstrumentAndStartIndex(m_currentItem);
     }
 
     m_currentItem = 0;
