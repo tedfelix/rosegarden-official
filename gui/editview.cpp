@@ -97,9 +97,11 @@ EditView::~EditView()
 void EditView::saveOptions()
 {
     m_config->writeEntry("Geometry", size());
-    m_config->writeEntry("Show Toolbar", toolBar()->isVisible());
-    m_config->writeEntry("Show Statusbar",statusBar()->isVisible());
-//     m_config->writeEntry("ToolBarPos", (int) toolBar()->barPos());
+    m_config->writeEntry("Show Toolbar",
+                         getToggleAction("options_show_toolbar")->isChecked());
+    m_config->writeEntry("Show Statusbar",
+                         getToggleAction("options_show_statusbar")->isChecked());
+
     toolBar()->saveSettings(m_config, m_config->group() + " Toolbar");
 }
 
@@ -129,13 +131,6 @@ void EditView::readOptions()
         statusBar()->hide();
 
     toolBar()->applySettings(m_config, m_config->group() + " Toolbar");
-
-//     KToolBar::BarPosition pos;
-
-//     pos = KToolBar::BarPosition(m_config->readNumEntry("ToolBarPos",
-//                                                        KToolBar::Top));
-//     toolBar()->setBarPos(pos);
-
 }
 
 
