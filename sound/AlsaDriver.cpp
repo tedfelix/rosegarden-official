@@ -1113,6 +1113,8 @@ AlsaDriver::createJackInputPorts(unsigned int totalPorts, bool deactivate)
 {
     if (!m_audioClient) return;
 
+    AUDIT_START;
+
     // Out port connetions if we need them
     //
     const char **outLeftPort = 0, **outRightPort = 0;
@@ -1128,8 +1130,8 @@ AlsaDriver::createJackInputPorts(unsigned int totalPorts, bool deactivate)
 
         if (jack_deactivate(m_audioClient))
         {
-            std::cerr << "AlsaDriver::createJackInputPorts - "
-                      << "client deactivation failed" << std::endl;
+            AUDIT_STREAM << "AlsaDriver::createJackInputPorts - "
+                         << "client deactivation failed" << std::endl;
         }
     }
 
@@ -1152,16 +1154,16 @@ AlsaDriver::createJackInputPorts(unsigned int totalPorts, bool deactivate)
          m_jackInputPorts.push_back(inputPort);
 
 
-         std::cout << "AlsaDriver::createJackInputPorts - "
-                   << "adding input port " << i + 1 << std::endl;
+         AUDIT_STREAM << "AlsaDriver::createJackInputPorts - "
+                      << "adding input port " << i + 1 << std::endl;
     }
     
     // reactivate client
     //
     if (jack_activate(m_audioClient))
     {
-        std::cerr << "AlsaDriver::createJackInputPorts - "
-                  << "client deactivation failed" << std::endl;
+        AUDIT_STREAM << "AlsaDriver::createJackInputPorts - "
+                     << "client deactivation failed" << std::endl;
     }
 
     std::string capture_1, capture_2;
@@ -1175,38 +1177,62 @@ AlsaDriver::createJackInputPorts(unsigned int totalPorts, bool deactivate)
     }
     else // match from JACK
     {
-        std::cout << "AlsaDriver::createJackInputPorts - "
-                  << "getting ports" << std::endl;
+        AUDIT_STREAM << "AlsaDriver::createJackInputPorts - "
+                     << "getting ports" << std::endl;
         const char **ports =
             jack_get_ports(m_audioClient, NULL, NULL,
                            JackPortIsPhysical|JackPortIsOutput);
 
-        capture_1 = std::string(ports[0]);
-        capture_2 = std::string(ports[1]);
+        if (ports)
+        {
+            if (ports[0]) capture_1 = std::string(ports[0]);
+            if (ports[1]) capture_2 = std::string(ports[1]);
+
+            // count ports
+            unsigned int i = 0;
+            for (i = 0; ports[i]; i++);
+            AUDIT_STREAM << "AlsaDriver::createJackInputPorts - "
+                         << "found " << i << " JACK physical inputs"
+                         << std::endl;
+        }
+        else
+            AUDIT_STREAM << "AlsaDriver::createJackInputPorts - "
+                         << "no JACK physical inputs found"
+                         << std::endl;
         free(ports);
     }
 
-    std::cout << "AlsaDriver::createJackInputPorts - attempting connect from "
-              << "\"" << capture_1.c_str() << "\" to \""
-              << jack_port_name(m_jackInputPorts[0]) << "\"" << endl;
-
-    // now input
-    if (jack_connect(m_audioClient, capture_1.c_str(),
-                     jack_port_name(m_jackInputPorts[0])))
+    if (capture_1 != "")
     {
-        std::cerr << "AlsaDriver::createJackInputPorts - "
-                  << "cannot connect to JACK input port" << std::endl;
+        AUDIT_STREAM << "AlsaDriver::createJackInputPorts - "
+                     << "attempting connect from "
+                     << "\"" << capture_1.c_str() << "\" to \""
+                     << jack_port_name(m_jackInputPorts[0]) << "\""
+                     << std::endl;
+
+        // now input
+        if (jack_connect(m_audioClient, capture_1.c_str(),
+                         jack_port_name(m_jackInputPorts[0])))
+        {
+            AUDIT_STREAM << "AlsaDriver::createJackInputPorts - "
+                         << "cannot connect to JACK input port" << std::endl;
+        }
     }
 
-    std::cout << "AlsaDriver::createJackInputPorts - attempting connect from "
-              << "\"" << capture_2.c_str() << "\" to \""
-              << jack_port_name(m_jackInputPorts[1]) << "\"" << endl;
-
-    if (jack_connect(m_audioClient, capture_2.c_str(),
-                     jack_port_name(m_jackInputPorts[1])))
+    if (capture_2 != "")
     {
-        std::cerr << "AlsaDriver::createJackInputPorts - "
-                  << "cannot connect to JACK input port" << std::endl;
+        AUDIT_STREAM << "AlsaDriver::createJackInputPorts - "
+                     << "attempting connect from "
+                     << "\"" << capture_2.c_str() << "\" to \""
+                     << jack_port_name(m_jackInputPorts[1]) << "\""
+                     << std::endl;
+
+        if (jack_connect(m_audioClient, capture_2.c_str(),
+                         jack_port_name(m_jackInputPorts[1])))
+        {
+            AUDIT_STREAM << "AlsaDriver::createJackInputPorts - "
+                         << "cannot connect to JACK input port" << std::endl;
+        }
     }
 
     // Reconnect out ports
@@ -1218,9 +1244,9 @@ AlsaDriver::createJackInputPorts(unsigned int totalPorts, bool deactivate)
                              jack_port_name(m_jackOutputPortLeft),
                              outLeftPort[0]))
             {
-                std::cerr << "AlsaDriver::createJackInputPorts - "
-                          << "cannot reconnect JACK output port (left)"
-                          << std::endl;
+                AUDIT_STREAM << "AlsaDriver::createJackInputPorts - "
+                             << "cannot reconnect JACK output port (left)"
+                             << std::endl;
             }
         }
 
@@ -1230,13 +1256,14 @@ AlsaDriver::createJackInputPorts(unsigned int totalPorts, bool deactivate)
                              jack_port_name(m_jackOutputPortRight),
                              outRightPort[0]))
             {
-                std::cerr << "AlsaDriver::createJackInputPorts - "
-                          << "cannot reconnect JACK output port (right)"
-                          << std::endl;
+                AUDIT_STREAM << "AlsaDriver::createJackInputPorts - "
+                             << "cannot reconnect JACK output port (right)"
+                             << std::endl;
             }
         }
     }
 
+    AUDIT_UPDATE;
 }
 
 #endif
@@ -1349,8 +1376,22 @@ AlsaDriver::initialiseAudio()
             jack_get_ports(m_audioClient, NULL, NULL,
                            JackPortIsPhysical|JackPortIsInput);
 
-        playback_1 = std::string(ports[0]);
-        playback_2 = std::string(ports[1]);
+        if (ports)
+        {
+            if (ports[0]) playback_1 = std::string(ports[0]);
+            if (ports[1]) playback_2 = std::string(ports[1]);
+
+            // count ports
+            unsigned int i = 0;
+            for (i = 0; ports[i]; i++);
+            AUDIT_STREAM << "AlsaDriver::initialiseAudio - "
+                         << "found " << i << " JACK physical outputs"
+                         << std::endl;
+        }
+        else
+            AUDIT_STREAM << "AlsaDriver::createJackInputPorts - "
+                         << "no JACK physical outputs found"
+                         << std::endl;
         free(ports);
     }
 
