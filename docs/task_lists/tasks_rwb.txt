@@ -6,6 +6,7 @@ o basic JACK audio
   - multiple sample (Segments problem?) [FIXED]
   - audio recording [DONE]
   - saving RG files with audio [HALF COMPLETE - absolute paths need sorting]
+  - partial/overlapping audio files playback/start index movement [DONE]
   - audio file selection dialog
 
 o Create WAV files [DONE]

@@ -393,7 +393,7 @@ AudioFile::scanTo(std::ifstream *file, const RealTime &time)
     file->seekg(totalBytes,  std::ios::cur);
 
     std::cout << "AudioFile::scanTo - seeking to " << time
-              << "(" << totalBytes << " bytes)" << std::endl;
+              << " (" << totalBytes << " bytes)" << std::endl;
 
     return true;
 }

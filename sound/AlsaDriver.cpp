@@ -1372,6 +1372,23 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
                                           (*i)->getAudioStartMarker(),
                                           (*i)->getDuration());
 
+                // If the start index is non-zero then we must scan to
+                // the required starting position in the sample
+                if (audioFile->getStartIndex() != RealTime(0, 0))
+                {
+                    // If there's a problem with the scan (most likely
+                    // we've moved beyond the end of the sample) then
+                    // cast it away.
+                    //
+                    if(audioFile->scanTo(audioFile->getStartIndex()) == false)
+                    {
+                        std::cerr << "AlsaDriver::processEventsOut - "
+                                  << "skipping audio file" << std::endl;
+                        delete audioFile;
+                        continue;
+                    }
+                }
+
                 queueAudio(audioFile);
             }
             else
