@@ -119,7 +119,6 @@ Composition::ReferenceSegment::swap(Composition::ReferenceSegment &r)
     }
     temp.erase(temp.begin(), temp.end());
 }
-	
 
 Composition::ReferenceSegment::iterator
 Composition::ReferenceSegment::find(Event *e)
@@ -232,6 +231,8 @@ void Composition::swap(Composition& c)
 {
     // ugh.
 
+    //!!! some data members are not being swapped yet
+
     Composition *that = &c;
 
     double tp = this->m_defaultTempo;
@@ -265,6 +266,67 @@ void Composition::swap(Composition& c)
     this->m_tempoTimestampsNeedCalculating = true;
     that->m_tempoTimestampsNeedCalculating = true;
 }
+
+#ifdef NOT_DEFINED
+
+void
+Composition::mergeFrom(Composition &c, MergeType type)
+{
+    // We want to make new Segments from the Segments in the other
+    // Composition, and we want to apply the time signatures and
+    // tempos only if the merge type is MergeAtEnd (actually we should
+    // have more merge types to select this capability more
+    // accurately).  The new Segments always have to go in new Tracks,
+    // but I'm not quite sure how best to create them, or to manage
+    // the Studio side of things yet.  For the moment let's leave our
+    // own Studio unchanged.
+
+    // What we need to do is go through each of the other
+    // Composition's Tracks, look for an instrument, and use our own
+    // Studio's assignMidiProgramToInstrument on that instrument's
+    // program and bank in order to get a "local" Instrument that we
+    // can attach a new Track to.
+
+    // But, we can't iterate through a Composition's Tracks and then
+    // iterate through the Segments for each Track; we have to iterate
+    // through the Tracks, create a new local Track for each, record
+    // the offset of the first TrackId, then iterate through the
+    // Segments placing each on the Track with the appropriately
+    // offset TrackId.
+
+    TrackId maxOldTrackId = getMaxTrackId();
+    TrackId minNewTrackId = c.getMinTrackId();
+    TrackId prevOrigId = 0;
+
+    for (iterator i = c.begin(); i != c.end(); ++i) {
+
+	TrackId origId = (*i)->getTrack();
+	TrackId localId = id + maxOldTrackId - minNewTrackId;
+
+	if (i == c.begin() || origId != prevOrigId) {
+	    
+	    // new track
+
+	    Instrument *remoteInstrument = c.getTrackByIndex(origId)->getInstrument();
+	    
+
+	    Track *track = new Track(localId,
+				     instrument,
+				     getTracks()->size(),
+				     name,
+				     false);
+
+
+    for (trackcontainer::iterator i = c.getTracks()->begin();
+	 i != c.getTracks()->end(); ++i) {
+	if (long((*i)->getId()) < minNewTrackId || minNewTrackId == -1) {
+	    minNewTrackId = (*i)->getId();
+	}
+    }
+
+
+#endif
+
 
 void
 Composition::setLegatoQuantizerDuration(timeT duration)
@@ -899,6 +961,39 @@ void Composition::deleteTrack(const int &track)
      m_tracks.erase(titerator);
     updateRefreshStatuses();
 }
+
+TrackId
+Composition::getMinTrackId() const
+{
+    long m = -1;
+
+    for (trackcontainer::const_iterator i = getTracks()->begin();
+	 i != getTracks()->end(); ++i) {
+	if (long(i->second->getId()) < m || m == -1) {
+	    m = i->second->getId();
+	}
+    }
+
+    if (m == -1) return 0;
+    else return TrackId(m);
+}
+
+TrackId
+Composition::getMaxTrackId() const
+{
+    long m = -1;
+
+    for (trackcontainer::const_iterator i = getTracks()->begin();
+	 i != getTracks()->end(); ++i) {
+	if (long(i->second->getId()) > m) {
+	    m = i->second->getId();
+	}
+    }
+
+    if (m == -1) return 0;
+    else return TrackId(m);
+}
+
 
 // Export the Composition as XML, also iterates through
 // Tracks and any further sub-objects

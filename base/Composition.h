@@ -1,3 +1,4 @@
+// -*- c-basic-offset: 4 -*-
 
 /*
     Rosegarden-4
@@ -54,11 +55,13 @@ public:
     typedef std::map<TrackId, Track*> trackcontainer;
     typedef trackcontainer::iterator trackiterator;
 
+    enum MergeType { MergeAtStart, MergeAtEnd };
+
     Composition();
     virtual ~Composition();
 
     /// swap the contents with another composition
-    void swap(Composition&);
+    void swap(Composition &);
 
     /**
      * Remove all Segments from the Composition and destroy them
@@ -96,10 +99,19 @@ public:
     trackcontainer* getTracks() {
 	return &m_tracks;
     }
+ 
+    const trackcontainer* getTracks() const {
+	return &m_tracks;
+    }
+
+    TrackId getMinTrackId() const;
+
+    TrackId getMaxTrackId() const;
 
     TrackId getRecordTrack() const {
 	return m_recordTrack;
     }
+
     void setRecordTrack(TrackId recordTrack) {
 	m_recordTrack = recordTrack;
     }

@@ -96,14 +96,16 @@ public:
     virtual bool write();
     virtual void close();
 
-    const int& timingDivision() { return m_timingDivision; }
-    const MIDIFileFormatType& format() { return m_format; }
-    const unsigned int& numberOfTracks() { return m_numberOfTracks; }
+    int timingDivision() { return m_timingDivision; }
+    MIDIFileFormatType format() { return m_format; }
+    unsigned int numberOfTracks() { return m_numberOfTracks; }
+    bool hasTimeChanges() { return m_containsTimeChanges; }
 
     // Conversion in and out of Rosegarden
     //
     Rosegarden::Composition* convertToRosegarden(Rosegarden::Composition *
-						 preexistingComposition = 0);
+						 preexistingComposition = 0,
+						 bool append = false);
     void convertToMidi(Rosegarden::Composition &comp);
 
 signals:
@@ -115,6 +117,7 @@ private:
     int                    m_timingDivision;   // pulses per quarter note
     MIDIFileFormatType     m_format;
     unsigned int           m_numberOfTracks;
+    bool                   m_containsTimeChanges;
 
     // Internal counters
     //

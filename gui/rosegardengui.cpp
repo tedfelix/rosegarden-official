@@ -1826,14 +1826,16 @@ void RosegardenGUIApp::mergeMIDIFile(const QString &file)
 
 void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
 {
+    if (!merge && !m_doc->saveIfModified()) return;
+
     Rosegarden::MidiFile *midiFile;
+
+    midiFile = new Rosegarden::MidiFile(qstrtostr(file),
+                                        &m_doc->getStudio());
 
     RosegardenProgressDialog progressDlg(i18n("Importing MIDI file..."),
                                          100,
                                          this);
-
-    midiFile = new Rosegarden::MidiFile(qstrtostr(file),
-                                        &m_doc->getStudio());
 
     connect(midiFile, SIGNAL(setProgress(int)),
             progressDlg.progressBar(), SLOT(setValue(int)));
@@ -1867,9 +1869,41 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
 
     } else {
 
+	bool append = false;
+
+	if (midiFile->hasTimeChanges() &&
+	    m_doc->getComposition().getDuration() > 0) {
+
+	    //!!! This isn't adequate.  We really need to know whether
+	    // the tempo/timesig stuff is _different_ from that in the
+	    // existing composition.
+
+	    CurrentProgressDialog::freeze();
+	    int mergeType =
+		KMessageBox::warningYesNoCancel
+		(this,
+		 i18n("This file contains tempo and/or time signature data.\n\n"
+		      "If you wish, I can append it to the composition instead\n"
+		      "of merging it from the start, so as to avoid changing\n"
+		      "the existing timing information in the composition."),
+		 i18n("MIDI Merge"),
+		 i18n("Yes, append"),
+		 i18n("No, merge as normal"));
+	    CurrentProgressDialog::thaw();
+
+	    if (mergeType == KMessageBox::Cancel) {
+		delete midiFile;
+		return;
+	    } else if (mergeType == KMessageBox::Yes) {
+		append = true;
+	    }
+	}
+	    
 	Rosegarden::Composition *tmpComp = midiFile->convertToRosegarden
-	    (&m_doc->getComposition());
+	    (&m_doc->getComposition(), append);
     }
+
+    delete midiFile;
 
     // Set modification flag
     //
@@ -1877,13 +1911,12 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
 
     // Set the caption
     //
-    m_doc->setTitle(file);
+    if (!merge) m_doc->setTitle(file);
+
     m_fileRecent->addURL(file);
 
     // Reinitialise
     //
-//!!!    if (merge) update();
-//    else
     initView();
 }
 
@@ -1908,6 +1941,8 @@ void RosegardenGUIApp::slotImportRG21()
 
 void RosegardenGUIApp::importRG21File(const QString &file)
 {
+    if (!m_doc->saveIfModified()) return;
+
     RosegardenProgressDialog progressDlg(i18n("Importing Rosegarden 2.1 file..."),
                                          100,
                                          this);

@@ -244,9 +244,9 @@ void RosegardenGUIDoc::closeDocument()
 
 bool RosegardenGUIDoc::newDocument()
 {
-    m_modified=false;
-    m_absFilePath=QString::null;
-    m_title=i18n("Untitled");
+    m_modified = false;
+    m_absFilePath = QString::null;
+    m_title = i18n("Untitled");
 
     m_commandHistory->clear();
 
