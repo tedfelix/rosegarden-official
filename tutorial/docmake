@@ -71,14 +71,13 @@ translate_ru() {
 
 Put() {
     if [ `whoami` == "silvan" ]; then
-	echo "Previewing in kghostivew..."
-	kghostview $1
+	echo "Previewing in xpdf..."
+	xpdf $1
 	md5sum $1 > /tmp/$1.md5
 
 	read -p "Do you want to publish? (y/N)" key
-	glee=
 	tries=0
-	until [ glee ] || [ tries == 5 ]; do
+	until [ $tries == 5 ]; do
 	    if [ "$key" == "y" ]; then
 		printf "Publishing \"$1\"... \t"
 		user=$(cat /home/silvan/ZTQXP3)
@@ -93,7 +92,8 @@ Put() {
 
 		if [ $? ]; then
 		    echo OK
-		    glee=true
+		    popd
+		    return
 		else
 		    echo FAILED
 		fi
@@ -186,10 +186,12 @@ for target in $*; do
 done
 
 read -p "Do you want to commit?  (y/N) " key
-read -p "Enter one-line message: " message
-if [ "$key" == "y" ];then
-	echo Attempting an automatic CVS commit...
-	cvs -f commit -m "* automatic commit by $0 - \" $message \"" '.' 
+if [ $key == "y" ];then
+    read -p "Enter one-line message: " message
+    if [ "$key" == "y" ];then
+	    echo Attempting an automatic CVS commit...
+	    cvs -f commit -m "* automatic commit by $0 - \" $message \"" '.' 
+    fi
 fi
     
 exit 0
