@@ -1481,17 +1481,12 @@ void MatrixView::playNote(Rosegarden::Event *event)
 
     if (!canPreviewAnotherNote()) return;
 
-    // check for null instrument
-    //
-
     // Get a velocity
     //
-    Rosegarden::MidiByte velocity = Rosegarden::MidiMaxValue;
-    if (event->has(Rosegarden::BaseProperties::VELOCITY))
-    {
-        velocity = event->get<Rosegarden::Int>
-                    (Rosegarden::BaseProperties::VELOCITY);
-    }
+    Rosegarden::MidiByte velocity = Rosegarden::MidiMaxValue / 4; // be easy on the user's ears
+    long eventVelocity = 0;
+    if (event->get<Rosegarden::Int>(Rosegarden::BaseProperties::VELOCITY, eventVelocity))
+        velocity = eventVelocity;
 
     Rosegarden::RealTime duration =
             comp.getElapsedRealTime(event->getDuration());
