@@ -1479,7 +1479,8 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
 	if (timeSigToPlace) {
 	    // no other events in this bar, so we never managed to place it
-	    x = x + delta - m_npf->getTimeSigWidth(bdi->second.basicData.timeSignature);
+//!!!	    x = x + delta - m_npf->getTimeSigWidth(bdi->second.basicData.timeSignature);
+	    x = barX + offset;
 	    NOTATION_DEBUG << "Placing timesig reluctantly at " << x << endl;
 	    bdi->second.layoutData.timeSigX = (int)(x);
 	    timeSigToPlace = false;
