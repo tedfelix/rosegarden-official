@@ -246,6 +246,9 @@ Segment::setEndMarkerTime(timeT t)
 	} else {
 	    // only need to do this if we aren't inserting or
 	    // deleting any actual events
+	    if (oldEndMarker < t) {
+	        updateRefreshStatuses(oldEndMarker, t);
+	    }
 	    updateRefreshStatuses(t, endTime);
 	}
 
