@@ -734,7 +734,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 
     KFilterDev* fileCompressedDevice = static_cast<KFilterDev*>(KFilterDev::deviceForFile(QFile::encodeName(filename),
                                                                                           "application/x-gzip"));
-    fileCompressedDevice->setOrigFileName("ROSEGARDEN4");
+    fileCompressedDevice->setOrigFileName("audio/x-rosegarden");
     fileCompressedDevice->open(IO_WriteOnly);
     QTextStream outStream(fileCompressedDevice);
 
@@ -841,7 +841,7 @@ bool RosegardenGUIDoc::exportStudio(const QString& filename,
 
     KFilterDev* fileCompressedDevice = static_cast<KFilterDev*>(KFilterDev::deviceForFile(QFile::encodeName(filename),
                                                                                           "application/x-gzip"));
-    fileCompressedDevice->setOrigFileName("ROSEGARDEN4");
+    fileCompressedDevice->setOrigFileName("audio/x-rosegarden-device");
     fileCompressedDevice->open(IO_WriteOnly);
     QTextStream outStream(fileCompressedDevice);
 
