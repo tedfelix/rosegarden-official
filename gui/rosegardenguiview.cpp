@@ -40,6 +40,7 @@
 #include "chord.h"
 #include "notepixmapfactory.h"
 #include "qcanvassimplesprite.h"
+#include "quantizer.h"
 
 RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char *name)
     : QCanvasView(new QCanvas(parent->width(), parent->height()),
@@ -52,7 +53,7 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char *name)
 
     setBackgroundMode(PaletteBase);
 
-    // #define TEST_CANVAS
+    //#define TEST_CANVAS
 #ifndef TEST_CANVAS
 
     // Add a new staff
@@ -294,14 +295,17 @@ RosegardenGUIView::showElements(EventList::iterator from,
                                 double dxoffset, double dyoffset)
 {
     static NotePixmapFactory npf;
+    Quantizer quantizer;
+
+    quantizer.quantizeToNoteTypes(from, to);
 
     for(EventList::iterator it = from; it != to; ++it) {
         
-        // TODO : Extract note duration
-        unsigned int duration = (*it)->getDuration();
+        Note note = Note((*it)->get<Int>("Notation::NoteType"));
         
-        QPixmap note(npf.makeNotePixmap(Whole/*duration*/, true, true));
-        QCanvasSimpleSprite *noteSprite = new QCanvasSimpleSprite(&note, canvas());
+        QPixmap notePixmap(npf.makeNotePixmap(note, true, true));
+        QCanvasSimpleSprite *noteSprite = new QCanvasSimpleSprite(&notePixmap,
+                                                                  canvas());
         noteSprite->move(dxoffset + (*it)->get<Int>("Notation::X"),
                          dyoffset + (*it)->get<Int>("Notation::Y"));
         
