@@ -790,7 +790,7 @@ punchin:
                     (config->readNumEntry("audiorecordminutes", 5));
 
 		// DMM
-                // adjust recording time down if document is shorter than
+		// adjust recording time down if document is shorter than
 		// user-specified record time, or not enough time remains
 		// before the end marker for a full recording
 		// 
