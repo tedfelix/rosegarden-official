@@ -550,6 +550,7 @@ private:
 
     Rosegarden::RealTime m_playLatency;
     Rosegarden::RealTime m_fetchLatency;
+    Rosegarden::RealTime m_readAhead;
 
     /**
      * Transport (Playback and Recording) status

@@ -75,12 +75,14 @@ public slots:
     //
     int play(const Rosegarden::RealTime &position,
              const Rosegarden::RealTime &playLatency,
-             const Rosegarden::RealTime &fetchLatency);
+             const Rosegarden::RealTime &fetchLatency,
+             const Rosegarden::RealTime &readAhead);
 
     // recording
     int record(const Rosegarden::RealTime &position,
                const Rosegarden::RealTime &playLatency,
                const Rosegarden::RealTime &fetchLatency,
+               const Rosegarden::RealTime &readAhead,
                const int &recordMode);
 
     // looping
@@ -95,7 +97,9 @@ public slots:
                      const long &playLatencySec,
                      const long &playLatencyUSec,
                      const long &fetchLatencySec,
-                     const long &fetchLatencyUSec);
+                     const long &fetchLatencyUSec,
+                     const long &readAheadSec,
+                     const long &readAheadUSec);
 
     // Record wrapper for DCOP
     //
@@ -105,6 +109,8 @@ public slots:
                        const long &playLatencyUSec,
                        const long &fetchLatencySec,
                        const long &fetchLatencyUSec,
+                       const long &readAheadSec,
+                       const long &readAheadUSec,
                        const int &recordMode);
 
     

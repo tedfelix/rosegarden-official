@@ -18,6 +18,8 @@ o bar and loop ruler bar widths for partial bars
 
 o tidy up getSequencerSlice and MappedEvent [MappedEvent DONE]
 
+o smooth position pointer
+
 
 ==
 

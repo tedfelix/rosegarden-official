@@ -42,7 +42,9 @@ public:
                      const long &playLatencySec,
                      const long &playLatencyUSec,
                      const long &fetchLatencySec,
-                     const long &fetchLatencyUSec) = 0;
+                     const long &fetchLatencyUSec,
+                     const long &readAheadSec,
+                     const long &readAheadUSec) = 0;
 
     // record from a given time with given parameters
     //
@@ -52,6 +54,8 @@ public:
                        const long &playLatencyUSec,
                        const long &fetchLatencySec,
                        const long &fetchLatencyUSec,
+                       const long &readAheadSec,
+                       const long &readAheadUSec,
                        const int &recordMode) = 0;
 
     // stop the sequencer

@@ -68,8 +68,9 @@ RosegardenGUIApp::RosegardenGUIApp()
       m_fileRecent(0),
       m_view(0),
       m_doc(0),
-      m_playLatency(0, 100000),
-      m_fetchLatency(0, 50000),
+      m_playLatency(0, 100000), // the sequencer's head start
+      m_fetchLatency(0, 30000), // how long we allow to fetch and queue new events
+      m_readAhead(0, 20000),    // how many events to fetch (microseconds)
       m_transportStatus(STOPPED),
       m_sequencerProcess(0),
       m_soundSystemStatus(Rosegarden::NO_SEQUENCE_SUBSYS)
@@ -1281,7 +1282,6 @@ void RosegardenGUIApp::setPointerPosition(const long &posSec,
     //       pointer position after a document load, so for the
     //       moment we lose this
     //
-    //if (m_doc->getComposition().getPosition() == position) return;
 
     Rosegarden::RealTime rT(posSec, posUsec);
     Rosegarden::Composition &comp = m_doc->getComposition();
@@ -1295,7 +1295,7 @@ void RosegardenGUIApp::setPointerPosition(const long &posSec,
         elapsedTime = 0;
     }
 
-    // set the composition time
+    // Set the composition time
     comp.setPosition(elapsedTime);
 
     // and the gui time
@@ -1308,6 +1308,7 @@ void RosegardenGUIApp::setPointerPosition(const long &posSec,
     // and the tempo
     m_transport->setTempo(comp.getTempoAt(elapsedTime));
 
+    //cout << "POSITION = " << elapsedTime << " : " << rT << endl;
 }
 
 void RosegardenGUIApp::setPointerPosition(timeT t)
@@ -1420,10 +1421,14 @@ void RosegardenGUIApp::play()
     streamOut << m_fetchLatency.sec;
     streamOut << m_fetchLatency.usec;
 
+    // read ahead slice
+    streamOut << m_readAhead.sec;
+    streamOut << m_readAhead.usec;
+
     // Send Play to the Sequencer
     if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
                                   ROSEGARDEN_SEQUENCER_IFACE_NAME,
-            "play(long int, long int, long int, long int, long int, long int)",
+                                  "play(long int, long int, long int, long int, long int, long int, long int, long int)",
                                   data, replyType, replyData))
     {
         // failed - pop up and disable sequencer options
@@ -1828,13 +1833,17 @@ RosegardenGUIApp::record()
     streamOut << m_fetchLatency.sec;
     streamOut << m_fetchLatency.usec;
 
+    // read ahead slice
+    streamOut << m_readAhead.sec;
+    streamOut << m_readAhead.usec;
+
     // record type
     streamOut << (int)recordType;
 
     // Send Play to the Sequencer
     if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
                                   ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "record(long int, long int, long int, long int, long int, long int, int)",
+                                  "record(long int, long int, long int, long int, long int, long int, long int, long int, int)",
                                   data, replyType, replyData))
     {
         // failed - pop up and disable sequencer options
