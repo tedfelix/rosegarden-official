@@ -953,9 +953,16 @@ NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
 		    indicationType == Indication::Decrescendo) {
 
 		    if (m_printPainter) {
-			m_notePixmapFactory->drawHairpin
-			    (length, indicationType == Indication::Crescendo,
-			     *m_printPainter, int(coords.first), coords.second);
+			double w = -1, inc = 0;
+			while (w != 0) {
+			    w = setPainterWindow(m_printPainter, elt->getLayoutX(),
+						 inc, length);
+			    m_notePixmapFactory->drawHairpin
+				(length, indicationType == Indication::Crescendo,
+				 *m_printPainter, int(coords.first), coords.second);
+			    m_printPainter->restore();
+			    inc += w;
+			}
 		    } else {
 			pixmap = m_notePixmapFactory->makeHairpinPixmap
 			    (length, indicationType == Indication::Crescendo);
@@ -1049,6 +1056,32 @@ NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
 	elt->event()->dump(std::cerr);
     }
 }
+
+double
+NotationStaff::setPainterWindow(QPainter *painter, double lx, double dx, double w)
+{
+    painter->save();
+
+    NOTATION_DEBUG << "NotationStaff::setPainterWindow: lx " << lx << ", dx " << dx << ", w " << w << endl;
+
+    LinedStaffCoords coords = getCanvasCoordsForLayoutCoords(lx + dx, 0);
+    int row = getRowForLayoutX(lx + dx);
+    double rightMargin = getCanvasXForRightOfRow(row);
+    double available = rightMargin - coords.first;
+
+    NOTATION_DEBUG << "NotationStaff::setPainterWindow: row " << row << ", rightMargin " << rightMargin << ", available " << available << endl;
+
+    if (w - dx < available + m_notePixmapFactory->getNoteBodyWidth()) {
+	return 0.0;
+    }
+
+    painter->setWindow(int(x), 0, int(available), getRowSpacing());
+
+//    painter->translate( //!!!!???
+
+    return available;
+}
+
 
 void
 NotationStaff::setPixmap(NotationElement *elt, QCanvasPixmap *pixmap, int z)
