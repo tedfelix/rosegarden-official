@@ -598,9 +598,22 @@ EditView::setupActions()
     new KAction(i18n("Insert item"), 0, this,
 		SLOT(slotInsertControlRulerItem()), actionCollection(),
 		"insert_control_ruler_item");
-    new KAction(i18n("Erase selected item(s)"), 0, this,
+
+    new KAction(i18n("Erase selected items"), 0, this,
 		SLOT(slotEraseControlRulerItem()), actionCollection(),
 		"erase_control_ruler_item");
+
+    new KAction(i18n("Clear ruler"), 0, this,
+		SLOT(slotClearControlRulerItem()), actionCollection(),
+		"clear_control_ruler_item");
+
+    new KAction(i18n("Start control line"), 0, this,
+		SLOT(slotStartControlLineItem()), actionCollection(),
+		"start_control_line_item");
+
+    new KAction(i18n("Close Ruler"), 0, this,
+		SLOT(slotCloseControlRulerItem()), actionCollection(),
+		"close_control_ruler_item");
 
 
 }
@@ -644,7 +657,7 @@ EditView::setupControllerTabs()
         {
             // Get ControlParameter object from controller value
             //
-            Rosegarden::ControlParameter *controlParameter = studio.getControlParameter(int(*it));
+            Rosegarden::ControlParameter *controlParameter = studio.getControlParameter(*it);
 
             if (controlParameter)
             {
@@ -693,7 +706,7 @@ EditView::slotAddControlRuler(int controller)
         // remember what we've opened against it.
         //
         Rosegarden::Staff *staff = getCurrentStaff();
-        staff->getSegment().addController(Rosegarden::MidiByte(controller));
+        staff->getSegment().addController(control->getControllerValue());
     }
 }
 
@@ -1053,6 +1066,54 @@ EditView::slotEraseControlRulerItem()
 {
     ControllerEventsRuler* ruler = dynamic_cast<ControllerEventsRuler*>(getCurrentControlRuler());
     if (ruler) ruler->eraseControllerEvent();
+}
+
+void
+EditView::slotStartControlLineItem()
+{
+    ControllerEventsRuler* ruler = dynamic_cast<ControllerEventsRuler*>(getCurrentControlRuler());
+    if (ruler) ruler->startControlLine();
+}
+
+void
+EditView::slotClearControlRulerItem()
+{
+    ControllerEventsRuler* ruler = dynamic_cast<ControllerEventsRuler*>(getCurrentControlRuler());
+    if (ruler) ruler->clearControllerEvents();
+}
+
+void
+EditView::slotCloseControlRulerItem()
+{
+    ControllerEventsRuler* ruler = dynamic_cast<ControllerEventsRuler*>(getCurrentControlRuler());
+    
+    if (ruler)
+    {
+        Rosegarden::ControlParameter *controller = ruler->getControlParameter();
+
+        // remove the control parameter from the "showing controllers" list on the segment
+        //
+        if (controller) 
+        {
+            Rosegarden::Staff *staff = getCurrentStaff();
+            bool value = staff->getSegment().deleteController(controller->getControllerValue());
+
+            if (value) 
+                std::cerr << "slotClearControlRulerItem - removed controller from segment" << std::endl;
+            else
+                std::cerr << "slotClearControlRulerItem - couldn't remove controller from segment - " 
+                          << int(controller->getControllerValue())
+                          << std::endl;
+
+        }
+
+        m_controlRulers->removePage(ruler);
+        ruler->close();
+
+        // if we now have no rulers then reverse this state
+        if (m_controlRulers->count() == 0)
+            m_controlRulers->hide();
+    }
 }
 
 void EditView::slotTranspose()

@@ -2291,7 +2291,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
                            const RealTime &playLatency,
                            bool now)
 {
-    if (m_midiHandle == 0) return;
+    if (_threadAlsaClosing == true) return;
 
     RealTime midiRelativeTime;
     RealTime midiRelativeStopTime;

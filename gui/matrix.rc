@@ -152,8 +152,14 @@
 <!--     RMB Menus           -->
 
 <Menu noMerge="1" name="controller_events_ruler_menu">
+   <Text>Control Ruler actions</Text>
    <Action name="insert_control_ruler_item"/>
    <Action name="erase_control_ruler_item"/>
+   <Action name="clear_control_ruler_item"/>
+   <Separator/>
+   <Action name="start_control_line_item"/>
+   <Separator/>
+   <Action name="close_control_ruler_item"/>
 </Menu>
 
 <!--     Application States           -->

@@ -703,6 +703,20 @@ Studio::getControlParameter(int id)
     return 0;
 }
 
+ControlParameter*
+Studio::getControlParameter(Rosegarden::MidiByte controllerValue)
+{
+    ControlListConstIterator it = m_controls.begin();
+
+    for (; it != m_controls.end(); ++it)
+    {
+        if ((*it)->getControllerValue() == controllerValue)
+            return (*it);
+    }
+
+    return 0;
+}
+
 
 
 }

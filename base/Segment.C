@@ -1000,7 +1000,7 @@ Segment::deleteController(MidiByte controller)
 
     for (it = m_controllerList.begin(); it != m_controllerList.end(); ++it)
     {
-        if ((*it) == controller)
+        if (*it == controller)
         {
             m_controllerList.erase(it);
             return true;

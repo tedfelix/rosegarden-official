@@ -178,6 +178,9 @@ public slots:
     /// Control ruler actions
     void slotInsertControlRulerItem();
     void slotEraseControlRulerItem();
+    void slotClearControlRulerItem();
+    void slotStartControlLineItem();
+    void slotCloseControlRulerItem();
 
     // add control ruler
     void slotAddControlRuler(int);

@@ -178,6 +178,7 @@ public:
     // Access ControlParameters
     //
     ControlParameter* getControlParameter(int id);
+    ControlParameter* getControlParameter(Rosegarden::MidiByte controllerNumber);
 
     // Modify ControlParameters
     //

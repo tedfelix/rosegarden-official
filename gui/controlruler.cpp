@@ -45,6 +45,7 @@
 #include "RulerScale.h"
 #include "velocitycolour.h"
 #include "basiccommand.h"
+#include "editcommands.h"
 #include "editviewbase.h"
 #include "ControlParameter.h"
 #include "Property.h"
@@ -899,7 +900,13 @@ ControllerEventsRuler::~ControllerEventsRuler()
 
 QString ControllerEventsRuler::getName()
 {
-    if (m_controller) return strtoqstr(m_controller->getName());
+    if (m_controller) 
+    {
+        QString name = QString("%1 (%2)").arg(strtoqstr(m_controller->getName()))
+                                         .arg(int(m_controller->getControllerValue()));
+
+        return name;
+    }
     else return i18n("Controller Events");
 }
 
@@ -1008,6 +1015,46 @@ void ControllerEventsRuler::eraseControllerEvent()
     m_parentEditView->addCommandToHistory(command);
     clearSelectedItems();
 }
+
+void ControllerEventsRuler::clearControllerEvents()
+{
+    Rosegarden::EventSelection *es = new Rosegarden::EventSelection(m_segment);
+
+    for(Segment::iterator it = m_segment.begin(); it != m_segment.end(); ++it)
+    {
+        if (!(*it)->isa(Rosegarden::Controller::EventType)) continue;
+        {
+            if (m_controller) // ensure we have only the controller events we want for this ruler
+            {
+                try
+                {
+                    if ((*it)->get<Rosegarden::Int>(Rosegarden::Controller::NUMBER)
+                                                !=  m_controller->getControllerValue())
+                        continue;
+                }
+                catch(...)
+                {
+                    continue;
+                }
+
+                es->addEvent(*it);
+            }
+        }
+    }
+
+    EraseCommand *command = new EraseCommand(*es);
+    m_parentEditView->addCommandToHistory(command);
+
+}
+
+void ControllerEventsRuler::startControlLine()
+{
+}
+
+void ControllerEventsRuler::completeControlLine()
+{
+}
+
 
 //----------------------------------------
 

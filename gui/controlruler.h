@@ -194,6 +194,11 @@ public:
 
     virtual void insertControllerEvent();
     virtual void eraseControllerEvent();
+    virtual void clearControllerEvents();
+    virtual void startControlLine();
+    virtual void completeControlLine();
+
+    Rosegarden::ControlParameter* getControlParameter() { return m_controller; }
 
 protected:
     //--------------- Data members ---------------------------------
