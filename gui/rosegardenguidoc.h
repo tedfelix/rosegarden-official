@@ -49,6 +49,7 @@ class ViewElementsManager;
 class SegmentItem;
 class RosegardenProgressDialog;
 class EditViewBase;
+class KProgress;
 
 namespace Rosegarden
 {
@@ -494,6 +495,11 @@ protected:
      * Returns the name of the autosave file
      */
     QString getAutoSaveFileName();
+
+    /**
+     * Save one segment to the given text stream
+     */
+    void saveSegment(QTextStream&, Rosegarden::Segment*, KProgress* = 0, int totalNbOfEvents = 0);
 
     //--------------- Data members ---------------------------------
 

@@ -46,6 +46,7 @@
 using std::cerr;
 using std::endl;
 using std::cout;
+using Rosegarden::MappedEvent;
 
 // Seems not to be properly defined under some gcc 2.95 setups
 #ifndef MREMAP_MAYMOVE
@@ -63,48 +64,43 @@ public:
 
     bool remap();
     QString getFileName() { return m_filename; }
-    QByteArray getByteArray() { return m_byteArray; }
+    MappedEvent* getBuffer() { return m_mmappedBuffer; }
+    size_t getSize() { return m_mmappedSize; }
+    unsigned int getNbMappedEvents() { return m_nbMappedEvents; }
 
     class iterator 
     {
     public:
-        iterator() : m_pastEnd(true), m_s(0), m_dataStream(0) {};
+        iterator() : m_s(0), m_currentEvent(0) {};
         iterator(MmappedSegment* s, bool atEnd = false);
-
-        ~iterator() { delete m_dataStream; }
 
         iterator& operator=(const iterator&);
         bool operator==(const iterator&);
         bool operator!=(const iterator& it) { return !operator==(it); }
 
-        bool atEnd() { return m_pastEnd; }
+        bool atEnd() const { return m_currentEvent > (m_s->getBuffer() + m_s->getNbMappedEvents() - 1); }
 
         /// go back to beginning of stream
         void reset();
-        /// rebuild the stream (called after a remap)
-        void resetStream();
 
         iterator& operator++();
         iterator  operator++(int);
         iterator& operator+=(int);
         iterator& operator-=(int);
 
-        Rosegarden::MappedEvent operator*();
+        MappedEvent operator*();
 
         MmappedSegment* getSegment() { return m_s; }
 
     protected:
         //--------------- Data members ---------------------------------
-        bool m_pastEnd;
-        bool m_firstEventRead;
 
         MmappedSegment* m_s;
-        QDataStream *m_dataStream;
-        Rosegarden::MappedEvent m_currentEvent;
+        MappedEvent* m_currentEvent;
     };
 
     iterator begin();
-    iterator end(); // TODO : replace this by iterator::pastEnd()
+    iterator end();
 
 protected:
     void map();
@@ -113,15 +109,16 @@ protected:
     //--------------- Data members ---------------------------------
     int m_fd;
     size_t m_mmappedSize;
-    char* m_mmappedBuffer;
-    QByteArray m_byteArray;
+    unsigned int m_nbMappedEvents;
+    MappedEvent* m_mmappedBuffer;
     QString m_filename;
 };
 
 MmappedSegment::MmappedSegment(const QString filename)
     : m_fd(-1),
       m_mmappedSize(0),
-      m_mmappedBuffer((char*)0),
+      m_nbMappedEvents(0),
+      m_mmappedBuffer((MappedEvent*)0),
       m_filename(filename)
 {
     SEQUENCER_DEBUG << "mmapping " << filename << endl;
@@ -132,20 +129,20 @@ void MmappedSegment::map()
 {
     QFileInfo fInfo(m_filename);
     m_mmappedSize = fInfo.size();
+    m_nbMappedEvents = m_mmappedSize / sizeof(MappedEvent);
 
     m_fd = ::open(m_filename.latin1(), O_RDWR);
 
-    m_mmappedBuffer = (char*)::mmap(0, m_mmappedSize, PROT_READ, MAP_SHARED, m_fd, 0);
+    m_mmappedBuffer = (MappedEvent*)::mmap(0, m_mmappedSize, PROT_READ, MAP_SHARED, m_fd, 0);
 
     if (m_mmappedBuffer == (void*)-1) {
         SEQUENCER_DEBUG << QString("mmap failed : (%1) %2\n").arg(errno).arg(strerror(errno));
         throw Rosegarden::Exception("mmap failed");
     }
 
-    SEQUENCER_DEBUG << "MmappedSegment::map() : setRawData("
-                    << (void*)m_mmappedBuffer << "," << m_mmappedSize << ")\n";
+    SEQUENCER_DEBUG << "MmappedSegment::map() : "
+                    << (void*)m_mmappedBuffer << "," << m_mmappedSize << ", " << m_nbMappedEvents << " events\n";
 
-    m_byteArray.setRawData(m_mmappedBuffer, m_mmappedSize);
 }
 
 MmappedSegment::~MmappedSegment()
@@ -155,7 +152,6 @@ MmappedSegment::~MmappedSegment()
 
 void MmappedSegment::unmap()
 {
-    m_byteArray.resetRawData(m_mmappedBuffer, m_mmappedSize);
     ::munmap(m_mmappedBuffer, m_mmappedSize);
     ::close(m_fd);
 }
@@ -176,13 +172,11 @@ bool MmappedSegment::remap()
     SEQUENCER_DEBUG << "MmappedSegment::remap() : resetRawData(" << (void*)m_mmappedBuffer
                     << "," << m_mmappedSize << ")\n";
 
-    m_byteArray.resetRawData(m_mmappedBuffer, m_mmappedSize);
-
 #ifdef linux
-    m_mmappedBuffer = (char*)::mremap(m_mmappedBuffer, m_mmappedSize, newSize, MREMAP_MAYMOVE);
+    m_mmappedBuffer = (MappedEvent*)::mremap(m_mmappedBuffer, m_mmappedSize, newSize, MREMAP_MAYMOVE);
 #else
     ::munmap(m_mmappedBuffer, m_mmappedSize);
-    m_mmappedBuffer = (char *)::mmap(0, newSize, PROT_READ, MAP_SHARED, m_fd, 0);
+    m_mmappedBuffer = (MappedEvent*)::mmap(0, newSize, PROT_READ, MAP_SHARED, m_fd, 0);
 #endif
 
     if (m_mmappedBuffer == (void*)-1) {
@@ -191,8 +185,6 @@ bool MmappedSegment::remap()
     }
     
     m_mmappedSize = newSize;
-
-    m_byteArray.setRawData(m_mmappedBuffer, m_mmappedSize);
 
     return true;
 }
@@ -207,22 +199,17 @@ MmappedSegment::iterator MmappedSegment::end()
     return iterator(this, true);
 }
 
-MmappedSegment::iterator::iterator(MmappedSegment* s, bool atEnd)
-    : m_pastEnd(atEnd), m_firstEventRead(false), m_s(s),
-      m_dataStream(new QDataStream(m_s->getByteArray(), IO_ReadOnly))
+MmappedSegment::iterator::iterator(MmappedSegment* s, bool endIterator)
+    : m_s(s), m_currentEvent(m_s->getBuffer())
 {
-    if (atEnd) // actually jump to end of device
-        m_dataStream->device()->at(m_dataStream->device()->size());
-};
+    if (endIterator) m_currentEvent += m_s->getNbMappedEvents();
+}
 
 MmappedSegment::iterator& MmappedSegment::iterator::operator=(const iterator& it)
 {
     if (&it == this) return *this;
 
-    m_pastEnd = it.m_pastEnd;
     m_s = it.m_s;
-    delete m_dataStream;
-    m_dataStream = new QDataStream(it.m_s->getByteArray(), IO_ReadOnly);
     m_currentEvent = it.m_currentEvent;
 
     return *this;
@@ -230,22 +217,19 @@ MmappedSegment::iterator& MmappedSegment::iterator::operator=(const iterator& it
 
 MmappedSegment::iterator& MmappedSegment::iterator::operator++()
 {
-    if (!m_dataStream->atEnd()) {
-//         SEQUENCER_DEBUG << "MmappedSegment::iterator::operator++() " << this << " - at "
-//                         << m_dataStream->device()->at() << endl;
+    if (!atEnd()) {
+
         do
-            (*m_dataStream) >> m_currentEvent;
-        while ((m_currentEvent.getType() == 0) && !m_dataStream->atEnd());
+            ++m_currentEvent;
+        while ((m_currentEvent->getType() == 0) && !atEnd());
         // skip null events - there can be some if the file has been
         // zeroed out after events have been deleted
 
-//         SEQUENCER_DEBUG << "MmappedSegment::iterator::operator++() " << this << " - at "
-//                         << m_dataStream->device()->at() << " after event read\n";
     } else {
 
-//         SEQUENCER_DEBUG << "MmappedSegment::iterator::operator*() " << this
-//                         << " - reached end of stream\n";
-        m_pastEnd = true;
+        SEQUENCER_DEBUG << "MmappedSegment::iterator::operator++() " << this
+                        << " - reached end of stream\n";
+
     }
 
     return *this;
@@ -255,66 +239,51 @@ MmappedSegment::iterator MmappedSegment::iterator::operator++(int)
 {
     iterator r = *this;
 
-    if (!m_dataStream->atEnd()) {
+    if (!atEnd()) {
         do
-            (*m_dataStream) >> m_currentEvent;
-        while (m_currentEvent.getType() == 0 && !m_dataStream->atEnd());
+            ++m_currentEvent;
+        while (m_currentEvent->getType() == 0 && !atEnd());
 
-    } else {
-
-        m_pastEnd = true;
     }
-
 
     return r;
 }
 
 MmappedSegment::iterator& MmappedSegment::iterator::operator+=(int offset)
 {
-    QIODevice::Offset currentPos = m_dataStream->device()->at();
-    m_dataStream->device()->at(currentPos + (offset * Rosegarden::MappedEvent::streamedSize));
+    m_currentEvent += offset;
 
+    if (atEnd()) {
+        m_currentEvent = m_s->getBuffer() + m_s->getNbMappedEvents();
+    }
+    
     return *this;
 }
 
 MmappedSegment::iterator& MmappedSegment::iterator::operator-=(int offset)
 {
-    QIODevice::Offset currentPos = m_dataStream->device()->at();
-    m_dataStream->device()->at(currentPos - (offset * Rosegarden::MappedEvent::streamedSize));
-
+    m_currentEvent -= offset;
+    if (m_currentEvent < m_s->getBuffer()) {
+        m_currentEvent = m_s->getBuffer();
+    }
+    
     return *this;
 }
 
 
 bool MmappedSegment::iterator::operator==(const iterator& it)
 {
-    return ((m_s == it.m_s) && (m_pastEnd == it.m_pastEnd) &&
-            (m_dataStream->device()->at() == it.m_dataStream->device()->at()));
+    return (m_currentEvent == it.m_currentEvent) || (atEnd() == it.atEnd());
 }
 
 void MmappedSegment::iterator::reset()
 {
-    m_dataStream->device()->reset();
-    m_firstEventRead = false;
-    m_pastEnd = false;
+    m_currentEvent = m_s->getBuffer();
 }
 
-void MmappedSegment::iterator::resetStream()
+MappedEvent MmappedSegment::iterator::operator*()
 {
-    delete m_dataStream;
-    m_dataStream = new QDataStream(m_s->getByteArray(), IO_ReadOnly);
-    m_firstEventRead = false;
-    m_pastEnd = false;
-}
-
-Rosegarden::MappedEvent MmappedSegment::iterator::operator*()
-{
-    if (!m_firstEventRead) { // then read it...
-        ++(*this);
-        m_firstEventRead = true;
-    }
-
-    return m_currentEvent;
+    return *m_currentEvent;
 }
 
 void RosegardenSequencerApp::dumpFirstSegment()
@@ -322,12 +291,13 @@ void RosegardenSequencerApp::dumpFirstSegment()
     SEQUENCER_DEBUG << "Dumping 1st segment data :\n";
 
     unsigned int i = 0;
-    
-    for (MmappedSegment::iterator it = m_mmappedSegments[0]->begin();
-         it != m_mmappedSegments[0]->end();
+    MmappedSegment* firstMappedSegment = (*(m_mmappedSegments.begin())).second;
+
+    for (MmappedSegment::iterator it = firstMappedSegment->begin();
+         it != firstMappedSegment->end();
          ++it) {
 
-        Rosegarden::MappedEvent evt = (*it);
+        MappedEvent evt = (*it);
         SEQUENCER_DEBUG << i << " : inst = "  << evt.getInstrument()
                         << " - type = "       << evt.getType()
                         << " - data1 = "      << (unsigned int)evt.getData1()
@@ -339,6 +309,8 @@ void RosegardenSequencerApp::dumpFirstSegment()
 
         ++i;
     }
+
+    SEQUENCER_DEBUG << "Dumping 1st segment data - done\n";
     
 }
 
@@ -543,7 +515,7 @@ bool MmappedSegmentsMetaIterator::moveIteratorToTime(MmappedSegment::iterator& i
 {
     MmappedSegment* mmappedSegment = iter.getSegment();
 
-    Rosegarden::MappedEvent e = *iter;
+    MappedEvent e = *iter;
 
     while ((e.getEventTime() < startTime) && (iter != mmappedSegment->end())) {
         ++iter;
@@ -594,7 +566,7 @@ bool MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(Rosegarden::Map
                 continue;
             }
 
-            Rosegarden::MappedEvent *evt = new Rosegarden::MappedEvent(*(*iter));
+            MappedEvent *evt = new MappedEvent(*(*iter));
 
             if (evt->getEventTime() < endTime) {
                 evt->setInstrument(m_controlBlockMmapper->getInstrumentForTrack(evt->getTrackId()));
@@ -637,7 +609,6 @@ void MmappedSegmentsMetaIterator::resetIteratorForSegment(const QString& filenam
 
         if (iter->getSegment()->getFileName() == filename) {
 //             SEQUENCER_DEBUG << "resetIteratorForSegment(" << filename << ") : found iterator\n";
-            iter->resetStream();
             moveIteratorToTime(*iter, m_currentTime);
             break;
         }
@@ -1392,7 +1363,7 @@ void RosegardenSequencerApp::remapSegment(const QString& filename)
 
 void RosegardenSequencerApp::addSegment(const QString& filename)
 {
-    if (m_transportStatus != PLAYING) return;
+//     if (m_transportStatus != PLAYING) return;
 
     SEQUENCER_DEBUG << "MmappedSegment::addSegment(" << filename << ")\n";
 
@@ -1578,10 +1549,10 @@ RosegardenSequencerApp::processMappedEvent(unsigned int id,
                                            long audioStartMarkerSec,
                                            long audioStartMarkerUSec)
 {
-    Rosegarden::MappedEvent *mE =
-        new Rosegarden::MappedEvent(
+    MappedEvent *mE =
+        new MappedEvent(
             (InstrumentId)id,
-            (Rosegarden::MappedEvent::MappedEventType)type,
+            (MappedEvent::MappedEventType)type,
             (Rosegarden::MidiByte)pitch,
             (Rosegarden::MidiByte)velocity,
             Rosegarden::RealTime(absTimeSec, absTimeUsec),
@@ -1606,10 +1577,10 @@ RosegardenSequencerApp::processMappedEvent(unsigned int id,
 }
 
 void
-RosegardenSequencerApp::processMappedEvent(Rosegarden::MappedEvent mE)
+RosegardenSequencerApp::processMappedEvent(MappedEvent mE)
 {
     Rosegarden::MappedComposition mC;
-    mC.insert(new Rosegarden::MappedEvent(mE));
+    mC.insert(new MappedEvent(mE));
     m_sequencer->processEventsOut(mC, Rosegarden::RealTime(0, 0), true);
 }
 

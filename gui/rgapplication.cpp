@@ -50,25 +50,41 @@ bool RosegardenApplication::isSequencerRegistered()
     return dcopClient()->isApplicationRegistered(ROSEGARDEN_SEQUENCER_APP_NAME);
 }
 
-void RosegardenApplication::sequencerSend(QCString s, QByteArray params)
+void RosegardenApplication::sequencerSend(QCString dcopCall, QByteArray params)
 {
     if (noSequencerMode()) return;
 
-    if (!dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                            ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                            s, params))
+    if (!trySequencerSend(dcopCall, params))
         throw Rosegarden::Exception("failed to reach the sequencer through DCOP");
 }
 
-void RosegardenApplication::sequencerCall(QCString s, QCString& replyType, QByteArray& replyData, QByteArray params, bool useEventLoop)
+void RosegardenApplication::sequencerCall(QCString dcopCall, QCString& replyType, QByteArray& replyData, QByteArray params, bool useEventLoop)
 {
     if (noSequencerMode()) return;
 
-    if (!dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-                            ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                            s, params, replyType, replyData, useEventLoop))
+    if (!trySequencerCall(dcopCall, replyType, replyData, params, useEventLoop))
         throw Rosegarden::Exception("failed to reach the sequencer through DCOP");
 }
+
+bool RosegardenApplication::trySequencerSend(QCString dcopCall, QByteArray params = Empty)
+{
+    if (noSequencerMode()) return false;
+
+    return dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
+                              ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                              dcopCall, params);
+}
+
+bool RosegardenApplication::trySequencerCall(QCString dcopCall, QCString& replyType, QByteArray& replyData,
+                                             QByteArray params = Empty, bool useEventLoop = false)
+{
+    if (noSequencerMode()) return false;
+    return dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
+                              ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                              dcopCall, params, replyType, replyData, useEventLoop);
+}
+
+
 
 RosegardenApplication* RosegardenApplication::rgApp()
 {

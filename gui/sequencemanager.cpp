@@ -231,9 +231,6 @@ public:
     size_t computeMmappedSize();
 
 protected:
-    /// put all data to be dumped in internal byte array
-    void prepareDump();
-
     /// set the size of the mmapped filed
     void setFileSize(size_t);
 
@@ -253,8 +250,7 @@ protected:
 
     int m_fd;
     size_t m_mmappedSize;
-    char* m_mmappedBuffer;
-    QByteArray m_byteArray;
+    MappedEvent* m_mmappedBuffer;
 };
 
 //----------------------------------------
@@ -1898,7 +1894,7 @@ SegmentMmapper::SegmentMmapper(RosegardenGUIDoc* doc,
       m_fileName(fileName),
       m_fd(-1),
       m_mmappedSize(computeMmappedSize()),
-      m_mmappedBuffer((char*)0)
+      m_mmappedBuffer((MappedEvent*)0)
 {
     SEQMAN_DEBUG << "SegmentMmapper : " << this
                  << " trying to mmap " << m_fileName
@@ -1928,7 +1924,7 @@ size_t SegmentMmapper::computeMmappedSize()
 {
     int repeatCount = getSegmentRepeatCount();
 
-    return (repeatCount + 1) * m_segment->size() * MappedEvent::streamedSize;
+    return (repeatCount + 1) * m_segment->size() * sizeof(MappedEvent);
 }
 
 
@@ -2028,11 +2024,11 @@ void SegmentMmapper::remap(size_t newsize)
     } else {
 
 #ifdef linux
-        m_mmappedBuffer = (char*)::mremap(m_mmappedBuffer, m_mmappedSize,
+        m_mmappedBuffer = (MappedEvent*)::mremap(m_mmappedBuffer, m_mmappedSize,
                                           newsize, MREMAP_MAYMOVE);
 #else
 	::munmap(m_mmappedBuffer, m_mmappedSize);
-	m_mmappedBuffer = (char *)::mmap(0, newsize,
+	m_mmappedBuffer = (MappedEvent *)::mmap(0, newsize,
 					 PROT_READ|PROT_WRITE,
 					 MAP_SHARED, m_fd, 0);
 #endif
@@ -2054,9 +2050,9 @@ void SegmentMmapper::doMmap()
     //
     // mmap() file for writing
     //
-    m_mmappedBuffer = (char*)::mmap(0, m_mmappedSize,
-                                    PROT_READ|PROT_WRITE,
-                                    MAP_SHARED, m_fd, 0);
+    m_mmappedBuffer = (MappedEvent*)::mmap(0, m_mmappedSize,
+                                           PROT_READ|PROT_WRITE,
+                                           MAP_SHARED, m_fd, 0);
 
     if (m_mmappedBuffer == (void*)-1) {
         SEQMAN_DEBUG << QString("mmap failed : (%1) %2\n").arg(errno).arg(strerror(errno));
@@ -2068,12 +2064,8 @@ void SegmentMmapper::doMmap()
     
 }
 
-void SegmentMmapper::prepareDump()
+void SegmentMmapper::dump()
 {
-    // temporary byte array on which we dump the events
-    QByteArray byteArray;
-    QDataStream stream(byteArray, IO_WriteOnly);
-
     Composition &comp = m_doc->getComposition();
 
     Rosegarden::RealTime eventTime;
@@ -2093,6 +2085,7 @@ void SegmentMmapper::prepareDump()
     if (repeatCount > 0) repeatEndTime = m_segment->getRepeatEndTime();
 
     unsigned int nbEvents = 0;
+    MappedEvent* bufPos = m_mmappedBuffer;
 
     for (int repeatNo = 0; repeatNo <= repeatCount; ++repeatNo) {
 
@@ -2117,60 +2110,23 @@ void SegmentMmapper::prepareDump()
                 continue;
 	    
             try {
-                // Create mapped event
-                MappedEvent mE(0, // the instrument will be extracted from the ControlBlock by the sequencer
-                               **j,
-                               eventTime,
-                               duration);
-                mE.setTrackId(track->getId());
+                // Create mapped event in mmapped buffer
+                MappedEvent *mE = new (bufPos) MappedEvent(0, // the instrument will be extracted from the ControlBlock by the sequencer
+                                                           **j,
+                                                           eventTime,
+                                                           duration);
+                mE->setTrackId(track->getId());
 
-                // dump it on stream
-                //             SEQMAN_DEBUG << "SegmentMmapper::dump - event "
-                //                          << nbEvents++ << " at "
-                //                          << stream.device()->at() << endl;
-                stream << mE;
-                //             SEQMAN_DEBUG << "SegmentMmapper::dump - now at "
-                //                          << stream.device()->at() << endl;
+                ++bufPos;
+
             } catch(...) {
                 SEQMAN_DEBUG << "SegmentMmapper::dump - caught exception while trying to create MappedEvent\n";
             }
         }
     }
 
-    m_byteArray = byteArray;
-}
 
-void SegmentMmapper::dump()
-{
-    prepareDump();
-
-    if (m_byteArray.size() > 0) {
-
-        // "Safe" way to do things : resize the mmapped file if the QByteArray has grown larger
-        //
-//         if (m_byteArray.size() > m_mmappedSize) {
-//             SEQMAN_DEBUG << QString("SegmentMmapper::dump : internal byte array has grown larger (%1) than mmapped buffer (%2), enlarging buffer\n")
-//                 .arg(m_byteArray.size()).arg(m_mmappedSize);
-//             setFileSize(m_byteArray.size());
-//             remap(m_byteArray.size());
-//         }
-
-        // But apparently simply copying the smaller of both sizes works just as well
-        //
-        size_t sizeToMap = m_byteArray.size();
-        if (sizeToMap > m_mmappedSize) sizeToMap = m_mmappedSize;
-        
-        // copy byte array on mmapped zone
-        //
-        SEQMAN_DEBUG << QString("SegmentMmapper::dump : memcpy from %1 to %2 of size %3 (actual size) - mmapped size is %4 - sizeToMap : %5\n")
-            .arg((unsigned int)m_byteArray.data(), 0, 16)
-            .arg((unsigned int)m_mmappedBuffer, 0, 16)
-            .arg(m_byteArray.size()).arg(m_mmappedSize).arg(sizeToMap);
-
-        memcpy(m_mmappedBuffer, m_byteArray.data(), sizeToMap);
-        ::msync(m_mmappedBuffer, sizeToMap, MS_ASYNC);
-    }
-    
+    ::msync(m_mmappedBuffer, m_mmappedSize, MS_ASYNC);
 }
 
 unsigned int SegmentMmapper::getSegmentRepeatCount()

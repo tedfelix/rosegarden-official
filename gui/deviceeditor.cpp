@@ -176,9 +176,7 @@ DeviceEditorDialog::makeConnectionList(unsigned int direction,
     arg << (int)Rosegarden::Device::Midi;
     arg << direction;
 
-    try {
-        rgapp->sequencerCall("getConnections(int, unsigned int)", replyType, replyData, data);
-    } catch (Rosegarden::Exception e) {
+    if (!rgapp->trySequencerCall("getConnections(int, unsigned int)", replyType, replyData, data)) {
 	RG_DEBUG << "DeviceEditorDialog: can't call Sequencer" << endl;
 	list.append(i18n("No connection"));
 	return;
@@ -198,10 +196,9 @@ DeviceEditorDialog::makeConnectionList(unsigned int direction,
 	arg << direction;
 	arg << i;
 	    
-	try {
-            rgapp->sequencerCall("getConnection(int, unsigned int, unsigned int)",
-                                 replyType, replyData, data);
-        } catch (Rosegarden::Exception e) {
+	
+        if(!rgapp->trySequencerCall("getConnection(int, unsigned int, unsigned int)",
+                                    replyType, replyData, data)) {
 	    RG_DEBUG << "DeviceEditorDialog: can't call Sequencer" << endl;
 	    list.append(i18n("No connection"));
 	    return;

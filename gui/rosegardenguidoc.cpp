@@ -733,18 +733,16 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
     // Send out Composition (this includes Tracks, Instruments, Tempo
     // and Time Signature changes and any other sub-objects)
     //
-    outStream << QString(strtoqstr(getComposition().toXmlString()))
+    outStream << strtoqstr(getComposition().toXmlString())
               << endl << endl;
 
-    outStream << QString(strtoqstr(getAudioFileManager().toXmlString()))
+    outStream << strtoqstr(getAudioFileManager().toXmlString())
               << endl << endl;
 
-    outStream << QString(strtoqstr(getConfiguration().toXmlString()))
+    outStream << strtoqstr(getConfiguration().toXmlString())
               << endl << endl;
 
-    QString time;
-
-    long totalEvents = 0, count = 0;
+    long totalEvents = 0;
     for (Composition::iterator segitr = m_composition.begin();
          segitr != m_composition.end(); ++segitr) {
 	totalEvents += (*segitr)->size();
@@ -758,64 +756,110 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 
 	Segment *segment = *segitr;
 
-        //--------------------------
-        outStream << QString("<segment track=\"%1\" start=\"%2\" ") 
-                            .arg(segment->getTrack())
-                            .arg(segment->getStartTime());
+        saveSegment(outStream, segment, progress, totalEvents);
 
-        outStream << "label=\"" <<
-	    strtoqstr(Rosegarden::XmlExportable::encode(segment->getLabel()));
+    }
 
-        if (segment->isRepeating()) {
-            outStream << "\" repeat=\"true";
-	}
+    // Put a break in the file
+    //
+    outStream << endl << endl;
 
-	if (segment->getTranspose() != 0) {
-	    outStream << "\" transpose=\"" << segment->getTranspose();
-	}
+    // Send out the studio - a self contained command
+    //
+    outStream << strtoqstr(m_studio.toXmlString()) << endl << endl;
+    
 
-	if (segment->getDelay() != 0) {
-	    outStream << "\" delay=\"" << segment->getDelay();
-	}
+    // Send out the appearance data
+    outStream << "<appearance>" << endl;
+    outStream << strtoqstr(getComposition().getSegmentColourMap().toXmlString("segmentmap"));
+    outStream << "</appearance>" << endl << endl << endl;
 
-	if (segment->getRealTimeDelay() != Rosegarden::RealTime(0, 0)) {
-	    outStream << "\" rtdelaysec=\"" << segment->getRealTimeDelay().sec 
-		      << "\" rtdelayusec=\"" << segment->getRealTimeDelay().usec;
-	}
+    // close the top-level XML tag
+    //
+    outStream << "</rosegarden-data>\n";
 
-        if (segment->getColourIndex() != 0) {
-            outStream << "\" colourindex=\"" << segment->getColourIndex();
-        }
+    bool okay = writeToFile(filename, outText);
+    if (!okay) return false;
 
-	const Rosegarden::timeT *endMarker = segment->getRawEndMarkerTime();
-	if (endMarker) {
-	    outStream << "\" endmarker=\"" << *endMarker;
-	}
+    RG_DEBUG << endl << "RosegardenGUIDoc::saveDocument() finished\n";
 
-        if (segment->getType() == Rosegarden::Segment::Audio) {
-            outStream << "\" type=\"audio\" "
-                      << "file=\""
-                      << segment->getAudioFileId()
-                      << "\">\n";
+    if (!autosave) {
+        emit documentModified(false);
+	setModified(false);
+	m_commandHistory->documentSaved();
+	delete progressDlg;
+    } else {
+	progress->setProgress(0);
+    }
 
-            // convert out - should do this as XmlExportable really
-            // once all this code is centralised
-            //
-            time.sprintf("%ld.%06ld", segment->getAudioStartTime().sec,
-                                      segment->getAudioStartTime().usec);
+    setAutoSaved(true);
 
-            outStream << "   <begin index=\""
-                      << time
-                      << "\"/>\n";
+    return true;
+}
 
-            time.sprintf("%ld.%06ld", segment->getAudioEndTime().sec,
-                                      segment->getAudioEndTime().usec);
+void RosegardenGUIDoc::saveSegment(QTextStream& outStream, Segment *segment, KProgress* progress, int totalEvents)
+{
+    QString time;
 
-            outStream << "   <end index=\""
-                      << time
-                      << "\"/>\n";
-        }
-        else // Internal type
+    long count = 0;
+
+    outStream << QString("<segment track=\"%1\" start=\"%2\" ") 
+        .arg(segment->getTrack())
+        .arg(segment->getStartTime());
+
+    outStream << "label=\"" <<
+        strtoqstr(Rosegarden::XmlExportable::encode(segment->getLabel()));
+
+    if (segment->isRepeating()) {
+        outStream << "\" repeat=\"true";
+    }
+
+    if (segment->getTranspose() != 0) {
+        outStream << "\" transpose=\"" << segment->getTranspose();
+    }
+
+    if (segment->getDelay() != 0) {
+        outStream << "\" delay=\"" << segment->getDelay();
+    }
+
+    if (segment->getRealTimeDelay() != Rosegarden::RealTime(0, 0)) {
+        outStream << "\" rtdelaysec=\"" << segment->getRealTimeDelay().sec 
+                  << "\" rtdelayusec=\"" << segment->getRealTimeDelay().usec;
+    }
+
+    if (segment->getColourIndex() != 0) {
+        outStream << "\" colourindex=\"" << segment->getColourIndex();
+    }
+
+    const Rosegarden::timeT *endMarker = segment->getRawEndMarkerTime();
+    if (endMarker) {
+        outStream << "\" endmarker=\"" << *endMarker;
+    }
+
+    if (segment->getType() == Rosegarden::Segment::Audio) {
+        outStream << "\" type=\"audio\" "
+                  << "file=\""
+                  << segment->getAudioFileId()
+                  << "\">\n";
+
+        // convert out - should do this as XmlExportable really
+        // once all this code is centralised
+        //
+        time.sprintf("%ld.%06ld", segment->getAudioStartTime().sec,
+                     segment->getAudioStartTime().usec);
+
+        outStream << "   <begin index=\""
+                  << time
+                  << "\"/>\n";
+
+        time.sprintf("%ld.%06ld", segment->getAudioEndTime().sec,
+                     segment->getAudioEndTime().usec);
+
+        outStream << "   <end index=\""
+                  << time
+                  << "\"/>\n";
+    }
+    else // Internal type
         {
             outStream << "\">\n";
 
@@ -860,7 +904,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 		    expectedTime = absTime + (*i)->getDuration();
 	        }
 
-		if (++count % 500 == 0) {
+		if ((++count % 500 == 0) && progress) {
 		    progress->setValue(count * 100 / totalEvents);
 		}
             }
@@ -870,46 +914,10 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 	    }
         }
 
-        outStream << "</segment>\n"; //-------------------------
+    outStream << "</segment>\n"; //-------------------------
 
-    }
-
-    // Put a break in the file
-    //
-    outStream << endl << endl;
-
-    // Send out the studio - a self contained command
-    //
-    outStream << strtoqstr(m_studio.toXmlString()) << endl << endl;
-    
-
-    // Send out the appearance data
-    outStream << "<appearance>" << endl;
-    outStream << strtoqstr(getComposition().getSegmentColourMap().toXmlString("segmentmap"));
-    outStream << "</appearance>" << endl << endl << endl;
-
-    // close the top-level XML tag
-    //
-    outStream << "</rosegarden-data>\n";
-
-    bool okay = writeToFile(filename, outText);
-    if (!okay) return false;
-
-    RG_DEBUG << endl << "RosegardenGUIDoc::saveDocument() finished\n";
-
-    if (!autosave) {
-        emit documentModified(false);
-	setModified(false);
-	m_commandHistory->documentSaved();
-	delete progressDlg;
-    } else {
-	progress->setProgress(0);
-    }
-
-    setAutoSaved(true);
-
-    return true;
 }
+
 
 bool RosegardenGUIDoc::isSequencerRunning()
 {
@@ -1324,7 +1332,7 @@ RosegardenGUIDoc::syncDevices()
     //
     while (isSequencerRunning() && !rgapp->isSequencerRegistered()) {
         RG_DEBUG << "RosegardenGUIDoc::syncDevices - "
-                     << "waiting for Sequencer to come up" << endl;
+                 << "waiting for Sequencer to come up" << endl;
 
         kapp->processEvents(1000);
         sleep(1); // 1s
