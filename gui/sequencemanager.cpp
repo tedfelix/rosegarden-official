@@ -510,10 +510,10 @@ SequenceManager::stop()
     //
     QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
 
-    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
+    if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
                                   ROSEGARDEN_SEQUENCER_IFACE_NAME,
                                   "stop()",
-                                  data, replyType, replyData, true))
+                                  data/*, replyType, replyData, true*/))
     {
         // failed - pop up and disable sequencer options
         throw(i18n("Failed to contact Rosegarden sequencer"));
