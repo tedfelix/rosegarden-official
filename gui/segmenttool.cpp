@@ -1012,7 +1012,20 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 	    it->second->setEndTime(it->second->getEndTime() + newStartTime -
 				   it->second->getStartTime());
 	    it->second->setStartTime(newStartTime);
-	    TrackId track = m_canvas->grid().getYBin(it->first.y() + y);
+
+	    TrackId track;
+            int newY=it->first.y() + y;
+            // Make sure we don't set a non-existing track
+            if (newY < 0) { newY = 0; }
+            track = m_canvas->grid().getYBin(newY);
+
+            // Make sure we don't set a non-existing track (c'td)
+            // TODO: make this suck less. Either the tool should
+            // not allow it in the first place, or we automatically
+            // create new tracks - might make undo very tricky though
+            //
+            if (track >= TrackId(m_doc->getComposition().getNbTracks()))
+                track  = TrackId(m_doc->getComposition().getNbTracks() - 1);
 
             if (it == m_selectedItems.begin())
             {
@@ -1030,14 +1043,6 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
                 if (y < guideY)
                     guideY = m_canvas->grid().getYBinCoordinate(track);
             }
-
-            // Make sure we don't set a non-existing track
-            // TODO: make this suck less. Either the tool should
-            // not allow it in the first place, or we automatically
-            // create new tracks - might make undo very tricky though
-            //
-            if (track >= TrackId(m_doc->getComposition().getNbTracks())) 
-                track  = TrackId(m_doc->getComposition().getNbTracks() - 1);
 
             // This is during a "mover" so don't use the normalised (i.e.
             // proper) TrackPosition value yet.
