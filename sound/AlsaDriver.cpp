@@ -3853,6 +3853,18 @@ AlsaDriver::sleep(const RealTime &rt)
     poll(pfd, npfd, rt.sec * 1000 + rt.msec());
 }
 
+void
+AlsaDriver::runTasks()
+{
+#ifdef HAVE_LIBJACK
+    if (m_jackDriver) {
+	if (!m_jackDriver->isOK()) {
+	    m_jackDriver->restoreIfRestorable();
+	}
+    }
+#endif
+}
+
 void 
 AlsaDriver::reportFailure(Rosegarden::MappedEvent::FailureCode code)
 {

@@ -415,6 +415,11 @@ public:
 	m_externalTransport = transport;
     }
 
+    // Do any bits and bobs of work that need to be done continuously
+    // (this is called repeatedly whether playing or not).
+    //
+    virtual void runTasks() { }
+
     // Report a failure back to the GUI - ideally.  Default does nothing.
     //
     virtual void reportFailure(Rosegarden::MappedEvent::FailureCode) { }

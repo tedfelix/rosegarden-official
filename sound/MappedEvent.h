@@ -168,7 +168,7 @@ public:
     {
         // JACK is having some xruns - warn the user maybe
 	FailureXRuns             = 0,
-        // JACK has died
+        // JACK has died or kicked us out
         FailureJackDied          = 1,
         // Audio subsystem failed to read from disc fast enough
         FailureDiscUnderrun      = 2,
@@ -181,7 +181,9 @@ public:
 	// Using a timer that has too low a resolution (e.g. 100Hz system timer)
 	WarningImpreciseTimer    = 6,
 	// Too much CPU time spent in audio processing -- risk of xruns and lockup
-	FailureCPUOverload       = 7
+	FailureCPUOverload       = 7,
+        // JACK kicked us out, but we've reconnected
+        FailureJackRestart       = 8,
     } FailureCode;	
 
     MappedEvent(): m_trackId(0),

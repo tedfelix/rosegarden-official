@@ -1016,6 +1016,12 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                         dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(),
                         i18n("JACK Audio subsystem has died or it has stopped Rosegarden from processing audio.\nPlease restart Rosegarden to continue working with audio.\nQuitting other running applications may improve Rosegarden's performance."));
 
+		    } else if ((*i)->getData1() == MappedEvent::FailureJackRestart) {
+
+			KMessageBox::error(
+			    dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(),
+			    i18n("The JACK Audio subsystem has stopped Rosegarden from processing audio,\nprobably because of a processing overload.\nAn attempt to restart the audio service has been made,\nbut some problems may remain.\nQuitting other running applications may improve Rosegarden's performance."));
+
 		    } else if ((*i)->getData1() == MappedEvent::FailureXRuns) {
 
 #define REPORT_XRUNS 1

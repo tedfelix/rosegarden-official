@@ -185,6 +185,10 @@ public:
     // For audit purposes only.
     size_t getFramesProcessed() const { return m_framesProcessed; }
 
+    // Reinitialise if we've been kicked off JACK -- if we can
+    // 
+    void restoreIfRestorable();
+
     // Report back to GUI via the AlsaDriver
     //
     void reportFailure(Rosegarden::MappedEvent::FailureCode code);
@@ -262,6 +266,7 @@ protected:
     int                          m_recordInputChannel; // -1 -> stereo
     float                        m_recordLevel;
 
+    time_t                       m_kickedOutAt;
     size_t                       m_framesProcessed;
     bool                         m_ok;
 };

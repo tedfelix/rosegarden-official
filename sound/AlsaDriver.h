@@ -341,6 +341,8 @@ public:
 
     virtual QString getStatusLog();
 
+    virtual void runTasks();
+
     // Report a failure back to the GUI
     //
     virtual void reportFailure(Rosegarden::MappedEvent::FailureCode code);

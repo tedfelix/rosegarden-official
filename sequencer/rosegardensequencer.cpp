@@ -345,6 +345,8 @@ RosegardenSequencerApp::updateClocks()
 {
     Rosegarden::Profiler profiler("RosegardenSequencerApp::updateClocks");
 
+    m_driver->runTasks();
+
     checkExternalTransport();
 
 //SEQUENCER_DEBUG << "RosegardenSequencerApp::updateClocks" << endl; 

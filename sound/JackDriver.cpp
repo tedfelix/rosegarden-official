@@ -66,6 +66,7 @@ JackDriver::JackDriver(AlsaDriver *alsaDriver) :
     m_recordInput(1000),
     m_recordInputChannel(-1),
     m_recordLevel(0.0),
+    m_kickedOutAt(0),
     m_framesProcessed(0),
     m_ok(false)
 {
@@ -1550,15 +1551,9 @@ JackDriver::jackShutdown(void *arg)
               << "informing GUI" << std::endl;
 #endif
 
-    // Report to GUI
-    //
     JackDriver *inst = static_cast<JackDriver*>(arg);
-    inst->reportFailure(Rosegarden::MappedEvent::FailureJackDied);
-
     inst->m_ok = false;
-
-//!!! can't do this here, need to do it after a pause from AlsaDriver etc
-    inst->initialise(); // try to reconnect; m_ok will remain false if we fail
+    inst->m_kickedOutAt = time(0);
 }
 
 int
@@ -1584,6 +1579,25 @@ JackDriver::jackXRun(void *arg)
 
     return 0;
 }
+
+void
+JackDriver::restoreIfRestorable()
+{
+    if (m_kickedOutAt == 0) return;
+
+    time_t now = time(0);
+
+    if (now < m_kickedOutAt || now >= m_kickedOutAt + 5) {
+	initialise(true);
+	if (m_ok) {
+	    reportFailure(Rosegarden::MappedEvent::FailureJackRestart);
+	} else {
+	    reportFailure(Rosegarden::MappedEvent::FailureJackDied);
+	}
+    }
+
+    m_kickedOutAt = 0;
+}	
 
 void
 JackDriver::prebufferAudio()
