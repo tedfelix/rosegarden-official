@@ -67,8 +67,6 @@ protected:
     /// the staff line over which the mouse cursor is
     StaffLine* m_currentHighlightedLine;
 
-    QCanvasSimpleSprite* m_dualArrow;
-
     // Used for a note-shaped cursor - leaving around just in case
 //     QCanvasSprite *m_currentNotePixmap;
 //     NotePixmapFactory m_notePixmapFactory;

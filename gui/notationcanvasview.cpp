@@ -32,18 +32,13 @@ NotationCanvasView::NotationCanvasView(QCanvas *viewing, QWidget *parent,
     : QCanvasView(viewing, parent, name, f),
       m_currentHighlightedLine(0),
       //!!! resolution from staff! or get the NPF to make arrow, or whatever
-      m_dualArrow(new QCanvasSimpleSprite("pixmaps/9/dual-arrow.xpm", canvas())),
       m_lastYPosNearStaff(0)
 {
-//     setCurrentNotePixmap(m_notePixmapFactory.makeNotePixmap(Note::WholeNote));
-
     viewport()->setMouseTracking(true);
 }
 
 NotationCanvasView::~NotationCanvasView()
 {
-    m_dualArrow->hide();
-    delete m_dualArrow;
 }
 
 
@@ -63,7 +58,6 @@ NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
     if(itemList.isEmpty() && posIsTooFarFromStaff(e->pos())) {
 
         m_currentHighlightedLine = 0;
-//         m_dualArrow->hide();
 
         needUpdate = true;
 
@@ -80,17 +74,8 @@ NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
             if ((staffLine = dynamic_cast<StaffLine*>(item))) {
                 m_currentHighlightedLine = staffLine;
 
-//                 // the offset is needed to avoid that the pixmap is
-//                 // hidden by the mouse pointer
-//                 m_dualArrow->setX(e->x() + 10);
-
                 QPoint point = m_currentHighlightedLine->startPoint();
 
-//                 // TODO : change this when Chris finishes pitch<->y stuff
-//                 //
-//                 m_dualArrow->setY(point.y() + m_currentHighlightedLine->y());
-
-//                 m_dualArrow->show();
                 m_lastYPosNearStaff = e->y();
 
                 needUpdate = true;
@@ -108,7 +93,7 @@ NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 {
     kdDebug(KDEBUG_AREA) << "mousepress" << endl;
 
-    if (m_currentHighlightedLine /* && m_dualArrow->visible()*/) {
+    if (m_currentHighlightedLine) {
         kdDebug(KDEBUG_AREA) << "mousepress : m_currentHighlightedLine != 0 - inserting note - staff pitch : "
                              << "(no longer relevant)" << endl;
 //!!!                             << m_currentHighlightedLine->associatedPitch() << endl;
