@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "POT-Creation-Date: 2003-04-26 11:56+0200\n"
-"PO-Revision-Date: 2003-04-25 10:48+0400\n"
+"PO-Revision-Date: 2003-04-26 15:55+0400\n"
 "Last-Translator: Alexandre Prokoudine <avp@altlinux.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -327,9 +327,8 @@ msgid "&Studio"
 msgstr "&Студия"
 
 #: rc.cpp:49
-#, fuzzy
 msgid "Tracks Toolbar"
-msgstr "Панель \"Пометки\""
+msgstr "Панель \"Дорожки\""
 
 #: rc.cpp:50
 msgid "Editors Toolbar"
@@ -834,8 +833,7 @@ msgid "Export Banks"
 msgstr "Экспортировать банки"
 
 #: bankeditor.cpp:714
-msgid ""
-"Import Bank and Program data from a Rosegarden file to the current Device"
+msgid "Import Bank and Program data from a Rosegarden file to the current Device"
 msgstr ""
 "Импортировать данные о банке и программах\n"
 "из файла Rosegarden в текущее устройство"
@@ -1179,9 +1177,8 @@ msgid "Show T&ools Toolbar"
 msgstr "Показывать панель \"&Дорожки\""
 
 #: rosegardengui.cpp:298
-#, fuzzy
 msgid "Show Trac&ks Toolbar"
-msgstr "Показывать панель \"&Пометки\""
+msgstr "Показывать панель \"&Дорожки\""
 
 #: rosegardengui.cpp:302
 msgid "Show &Editors Toolbar"
@@ -1500,9 +1497,8 @@ msgid "Toggle the toolbar..."
 msgstr "Переключить отображение панели..."
 
 #: rosegardengui.cpp:1789
-#, fuzzy
 msgid "Toggle the tools toolbar..."
-msgstr "Переключить отображение панели масштабирования..."
+msgstr "Переключить отображение панели инструментов..."
 
 #: rosegardengui.cpp:1799
 msgid "Toggle the tracks toolbar..."
@@ -3317,6 +3313,8 @@ msgid ""
 "Send MIDI Controllers at start of playback\n"
 "     (will incur noticeable initial delay)"
 msgstr ""
+"Посылать MIDI-контроллеры в начале воспроизведения\n"
+"      (заметно замедлит начало воспроизведения)"
 
 #: rosegardenconfiguredialog.cpp:964
 msgid ""
@@ -3362,7 +3360,7 @@ msgstr "Идёт запись"
 
 #: rosegardenconfiguredialog.cpp:1087
 msgid "Send MIDI Clock and System messages"
-msgstr ""
+msgstr "Посылать сообщения MIDI Clock и System"
 
 #: rosegardenconfiguredialog.cpp:1097
 msgid "JACK transport mode"
@@ -3706,8 +3704,7 @@ msgstr "  Шрифт:  "
 
 #: notationview.cpp:1432
 msgid "Unknown font \"%1\", using default"
-msgstr ""
-"Размер шрифта \"%1\" не подходит - вместо него используется стандартный"
+msgstr "Размер шрифта \"%1\" не подходит - вместо него используется стандартный"
 
 #: notationview.cpp:1440
 msgid "  Size:  "
@@ -4047,11 +4044,11 @@ msgstr "Экспортировать аудиофайл"
 
 #: audiomanagerdialog.cpp:176
 msgid "Add an audio file to this manager dialog."
-msgstr ""
+msgstr "Добавить аудиофайл в этот диалог"
 
 #: audiomanagerdialog.cpp:179
 msgid "Remove an audio file from this manager dialog."
-msgstr ""
+msgstr "Удалить аудиофайл из этого диалога"
 
 #: audiomanagerdialog.cpp:182
 msgid "Hear a preview of the currently selected audio file."
@@ -4084,6 +4081,9 @@ msgid ""
 "You can drag and drop .wav files here to insert them from Konqueror or other "
 "KDE file browsers."
 msgstr ""
+"Вы можете перетаскивать и бросать сюда WAV-файлы "
+"прямо из Konqueror или другого файлового менеджера "
+"KDE."
 
 #: audiomanagerdialog.cpp:203
 msgid "Duration"
@@ -4119,8 +4119,7 @@ msgstr "Экспортируется аудиофайл..."
 
 #: audiomanagerdialog.cpp:606
 msgid "Really delete audio file \"%1\" and all associated audio segments ?"
-msgstr ""
-"Вы действительно хотите удалить аудиофайл \"%1\" и связанные с ним сегменты?"
+msgstr "Вы действительно хотите удалить аудиофайл \"%1\" и связанные с ним сегменты?"
 
 #: audiomanagerdialog.cpp:679
 msgid "Select one or more Audio Files"
@@ -4556,8 +4555,7 @@ msgid "global element must precede note elements"
 msgstr "глобальный элемент должен предшествовать нотным эелементам"
 
 #: notestyle.cpp:595
-msgid ""
-"global and note elements may have shape or charname attribute, but not both"
+msgid "global and note elements may have shape or charname attribute, but not both"
 msgstr ""
 
 #: rosegardentransportdialog.cpp:617 rosegardentransportdialog.cpp:691
@@ -4646,7 +4644,7 @@ msgstr "(ничего)"
 
 #: audioplugindialog.cpp:73 audioplugindialog.cpp:159
 msgid "Select a plugin from this list."
-msgstr ""
+msgstr "Выбрать модуль из этого списка"
 
 #: audioplugindialog.cpp:78
 msgid "Bypass"
@@ -4657,9 +4655,8 @@ msgid "Bypass this plugin."
 msgstr ""
 
 #: audioplugindialog.cpp:84 audioplugindialog.cpp:154
-#, fuzzy
 msgid "<id>"
-msgstr "<нет ID>"
+msgstr "<id>"
 
 #: audioplugindialog.cpp:86
 msgid "Unique ID of plugin."
@@ -5221,3 +5218,4 @@ msgstr "Заново присоединить устройство"
 
 #~ msgid "  Smoothing:  "
 #~ msgstr "  Сглаживание:  "
+
