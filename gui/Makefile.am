@@ -154,10 +154,14 @@ install-data-local:
 	$(mkinstalldirs) $(kde_icondir)/hicolor/32x32/apps/
 	- $(INSTALL_DATA) $(srcdir)/rosegarden.xpm $(DESTDIR)$(kde_icondir)/locolor/32x32/apps
 	- $(INSTALL_DATA) $(srcdir)/rosegarden.xpm $(DESTDIR)$(kde_icondir)/hicolor/32x32/apps
+	- $(INSTALL_DATA) $(srcdir)/pixmaps/mime-rosegarden-4.xpm $(DESTDIR)$(kde_icondir)/hicolor/32x32/mimetypes/x-rosegarden.xpm
+	- $(INSTALL_DATA) $(srcdir)/pixmaps/mime-rosegarden-4.xpm $(DESTDIR)$(kde_icondir)/locolor/32x32/mimetypes/x-rosegarden.xpm
 	$(mkinstalldirs) $(kde_icondir)/locolor/16x16/apps/
 	$(mkinstalldirs) $(kde_icondir)/hicolor/16x16/apps/
 	- $(INSTALL_DATA) $(srcdir)/mini-rosegarden.xpm $(DESTDIR)$(kde_icondir)/locolor/16x16/apps
 	- $(INSTALL_DATA) $(srcdir)/mini-rosegarden.xpm $(DESTDIR)$(kde_icondir)/hicolor/16x16/apps
+	- $(INSTALL_DATA) $(srcdir)/pixmaps/mime-mini-rosegarden-4.xpm $(DESTDIR)$(kde_icondir)/hicolor/16x16/mimetypes/x-rosegarden.xpm
+	- $(INSTALL_DATA) $(srcdir)/pixmaps/mime-mini-rosegarden-4.xpm $(DESTDIR)$(kde_icondir)/locolor/16x16/mimetypes/x-rosegarden.xpm
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/styles
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/misc
