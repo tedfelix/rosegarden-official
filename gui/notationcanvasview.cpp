@@ -20,6 +20,7 @@
 #include "qcanvasitemgroup.h"
 #include "qcanvassimplesprite.h"
 #include "staffline.h"
+#include "NotationTypes.h"
 
 #include "rosedebug.h"
 
@@ -106,8 +107,9 @@ NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
     kdDebug(KDEBUG_AREA) << "mousepress" << endl;
 
     if (m_currentHighlightedLine && m_currentNotePixmap->visible()) {
-        kdDebug(KDEBUG_AREA) << "mousepress : m_currentHighlightedLine != 0 - inserting note - staff pitch :"
-                             << m_currentHighlightedLine->associatedPitch() << endl;
+        kdDebug(KDEBUG_AREA) << "mousepress : m_currentHighlightedLine != 0 - inserting note - staff pitch : "
+                             << "(no longer relevant)" << endl;
+//!!!                             << m_currentHighlightedLine->associatedPitch() << endl;
         insertNote(m_currentHighlightedLine, e->pos());
 
         return;
@@ -131,7 +133,8 @@ NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
     
         if ((staffLine = dynamic_cast<StaffLine*>(item))) {
             kdDebug(KDEBUG_AREA) << "mousepress : on a staff Line - insert note - staff pitch : "
-                                 << staffLine->associatedPitch() << endl;
+                             << "(no longer relevant)" << endl;
+//!!!                                 << staffLine->associatedPitch() << endl;
             insertNote(staffLine, e->pos());
             // staffLine->setPen(blue); - debug feedback to confirm which line what clicked on
         
@@ -162,11 +165,17 @@ NotationCanvasView::setCurrentNotePixmap(QCanvasPixmap note)
 void
 NotationCanvasView::insertNote(const StaffLine *line, const QPoint &pos)
 {
-    kdDebug(KDEBUG_AREA) << "NotationCanvasView::insertNote() : insertNote at pitch "
-                         << line->associatedPitch() << endl;
+    int h = line->getHeight();
 
-    emit noteInserted(line->associatedPitch(), pos);
-    
+    //!!! TODO -- take clef & key into account, and then accidental
+    int pitch = NotationDisplayPitch(h, NoAccidental).
+        getPerformancePitch(Clef::DefaultClef, ::Key::DefaultKey);
+
+    kdDebug(KDEBUG_AREA) << "NotationCanvasView::insertNote() : insertNote at pitch "
+                             << pitch << endl;
+
+    //!!! TODO -- get the right pitch
+    emit noteInserted(pitch, pos);
 }
 
 bool

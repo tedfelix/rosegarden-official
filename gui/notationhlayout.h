@@ -60,7 +60,7 @@ public:
 
     Scale::KeySignature currentKey() const { return m_currentScale->key(); }
     /// the object takes ownership of the Scale
-    void setCurrentKey(Scale::KeySignature);
+/*!    void setCurrentKey(Scale::KeySignature); */
 
 protected:
 
@@ -78,7 +78,7 @@ protected:
     NotationElementList::iterator getPreviousNote(NotationElementList::iterator pos);
 
     /// returns the current key at 'pos'
-    Scale::KeySignature getKeyAtPos(NotationElementList::iterator pos);
+/*!    Scale::KeySignature getKeyAtPos(NotationElementList::iterator pos); */
 
     Quantizer m_quantizer;
 

@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE rosegarden-data>
 <rosegarden-data>
-<Track>
-	<event type="note" duration="quarter" pitch="0"/>
-	<event type="note" duration="quarter" pitch="1"/>
-	<event type="note" duration="quarter" pitch="2"/>
-	<event type="note" duration="quarter" pitch="3"/>
-	<event type="note" duration="quarter" pitch="4"/>
-	<event type="note" duration="quarter" pitch="5"/>
-	<event type="note" duration="quarter" pitch="6"/>
-	<event type="note" duration="quarter" pitch="7"/>
-	<event type="note" duration="quarter" pitch="8"/>
-	<event type="keychange" key="0"/>
-	<event type="note" duration="quarter" pitch="9"/>
-	<event type="note" duration="quarter" pitch="10"/>
-	<event type="note" duration="quarter" pitch="11"/>
-	<event type="note" duration="quarter" pitch="12"/>
-	<event type="note" duration="quarter" pitch="13"/>
-	<event type="note" duration="quarter" pitch="14"/>
-	<event type="note" duration="quarter" pitch="15"/>
-	<event type="note" duration="quarter" pitch="16"/>
-	<event type="note" duration="quarter" pitch="17"/>
+<Track nb="2" start="10">
+	<event type="note" duration="quarter" pitch="60"/>
+	<event type="note" duration="quarter" pitch="61"/>
+	<event type="note" duration="quarter" pitch="62"/>
+	<event type="note" duration="quarter" pitch="63"/>
+	<event type="note" duration="quarter" pitch="64"/>
+	<event type="note" duration="quarter" pitch="65"/>
+	<event type="note" duration="quarter" pitch="66"/>
+	<event type="note" duration="quarter" pitch="67"/>
+	<event type="note" duration="quarter" pitch="68"/>
+	<event type="keychange" key="D minor"/>
+	<event type="note" duration="quarter" pitch="69"/>
+	<event type="note" duration="quarter" pitch="70"/>
+	<event type="note" duration="quarter" pitch="71"/>
+	<event type="note" duration="quarter" pitch="72"/>
+	<event type="note" duration="quarter" pitch="73"/>
+	<event type="note" duration="quarter" pitch="74"/>
+	<event type="note" duration="quarter" pitch="75"/>
+	<event type="note" duration="quarter" pitch="76"/>
+	<event type="note" duration="quarter" pitch="77"/>
 
 </Track>
 </rosegarden-data>

@@ -343,12 +343,12 @@ NotationView::showElements(NotationElementList::iterator from,
                 Note::Type note = (*it)->event()->get<Int>("Notation::NoteType");
                 QCanvasPixmap notePixmap(npf.makeRestPixmap(note));
                 noteSprite = new QCanvasSimpleSprite(&notePixmap, canvas());
-
+/*! key & clef conflated
             } else if ((*it)->event()->type() == "keychange") {
 
                 QCanvasPixmap clefPixmap("pixmaps/clef-treble.xpm");
                 noteSprite = new QCanvasSimpleSprite(&clefPixmap, canvas());
-
+*/
             } else {
                     
                 kdDebug(KDEBUG_AREA) << "NotationElement type is neither a note nor a rest - type is "
@@ -882,12 +882,17 @@ NotationView::test()
     }
 #endif
 
-    chordpitches pitches;
+    ChordPitches pitches;
     pitches.push_back(6); // something wrong here - pitches aren't in the right order
     pitches.push_back(4);
     pitches.push_back(0);
 
-    QPixmap chord(npf.makeChordPixmap(pitches, 6, true, false));
+    Accidentals accidentals;
+    accidentals.push_back(NoAccidental);
+    accidentals.push_back(Sharp);
+    accidentals.push_back(NoAccidental);
+
+    QPixmap chord(npf.makeChordPixmap(pitches, accidentals, 6, true, false));
 
     QCanvasSprite *chordSprite = new QCanvasSimpleSprite(&chord, canvas());
 

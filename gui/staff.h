@@ -24,27 +24,15 @@
 
 class QCanvasLineGroupable;
 
-/**
- * A Staff (treble and bass clef + lines) as displayed on screen.
- *
- *@author Guillaume Laurent
- */
 
 class Staff : public QCanvasItemGroup
 {
 public:
-/*!    enum Clef { Treble, Bass, Alto, Tenor };
- */
     typedef vector<QCanvasLineGroupable*> barlines;
     
-    Staff(QCanvas* /*!, Clef clef = Treble */);
+    Staff(QCanvas*);
     ~Staff();
 
-    /**
-     * Returns the Y offset at which a note with pitch 'p'
-     * should be displayed on this staff
-     */
-    int pitchYOffset(int p) const;
     int yCoordOfHeight(int height) const;
 
     /// Returns the height of a bar line
@@ -63,15 +51,8 @@ public:
     static const unsigned int linesOffset;
 
 protected:
-
-    void makeInvisibleLine(int y, int pitch, const QColor& = white);
-
-/*!    Clef m_currentKey; */
     unsigned int m_barLineHeight;
     unsigned int m_horizLineLength;
-
-    //!!! don't want to be doing this
-    vector<int> m_pitchToHeight;
 
     barlines m_barLines;
 };

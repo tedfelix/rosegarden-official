@@ -25,6 +25,7 @@
 #include "rosegardenguiview.h"
 #include "notepixmapfactory.h"
 #include "staff.h"
+#include "NotationTypes.h"
 
 
 NotePixmapOffsets::NotePixmapOffsets()
@@ -589,6 +590,97 @@ ChordPixmapFactory::ChordPixmapFactory(const Staff &s)
 
 
 QCanvasPixmap
+ChordPixmapFactory::makeChordPixmap(const ChordPitches &pitches,
+                                    const Accidentals &accidentals,
+                                    Note::Type note, bool drawTail,
+                                    bool stalkGoesUp)
+{
+    // The heights we calculate are in the default clef, but they're
+    // just used to calculate relative distances &c so that should be
+    // okay.  What _won't_ be okay is using the default key, because
+    // the relative height of an item can depend on the key (e.g. is
+    // this a C-sharp or a D-flat?)
+
+    int topHeight =
+        NotationDisplayPitch(pitches[pitches.size()-1],
+                             Clef::DefaultClef, Key::DefaultKey).getHeightOnStaff(); //!!! no -- default key may produce incorrect result
+    int topY = m_referenceStaff.yCoordOfHeight(topHeight);
+
+    int bottomHeight =
+        NotationDisplayPitch(pitches[0],
+                             Clef::DefaultClef, Key::DefaultKey).getHeightOnStaff();  //!!! no -- default key may produce incorrect result
+    int bottomY = m_referenceStaff.yCoordOfHeight(bottomHeight);
+
+    bool noteHasStalk = note < Note::WholeNote;
+
+    m_generatedPixmapHeight = topY - bottomY + m_noteBodyHeight;
+
+    if (noteHasStalk)
+        m_generatedPixmapHeight += Staff::stalkLen;
+
+    kdDebug(KDEBUG_AREA) << "m_generatedPixmapHeight : " << m_generatedPixmapHeight << endl
+                         << "topHeight : " << topHeight << " - bottomHeight : " << bottomHeight << endl;
+    
+
+    //readjustGeneratedPixmapHeight(note);
+
+    // X-offset at which the tail should be drawn
+    //unsigned int tailOffset = (note < Quarter && stalkGoesUp) ? m_tailWidth : 0;
+
+    createPixmapAndMask(/*tailOffset*/);
+
+    // paint note bodies
+
+    // set mask painter RasterOp to Or
+    m_pm.setRasterOp(Qt::OrROP);
+
+    QPixmap *body = (note >= Note::HalfNote) ? &m_noteBodyEmpty : &m_noteBodyFilled;
+
+    if (stalkGoesUp) {
+        int offset = m_generatedPixmap->height() - body->height() - topY;
+        
+        for (int i = pitches.size() - 1; i >= 0; --i) {
+            int y = m_referenceStaff.yCoordOfHeight
+                (NotationDisplayPitch(pitches[i], Clef::DefaultClef,
+                                      Key::DefaultKey).getHeightOnStaff());
+            m_p.drawPixmap (0, y + offset, *body);
+            m_pm.drawPixmap(0, y + offset, *(body->mask()));
+        }
+        
+    } else {
+        int offset = bottomY;
+        for (unsigned int i = 0; i < pitches.size(); ++i) {
+            int y = m_referenceStaff.yCoordOfHeight
+                (NotationDisplayPitch(pitches[i], Clef::DefaultClef,
+                                      Key::DefaultKey).getHeightOnStaff());
+            m_p.drawPixmap (0, y - offset, *body);
+            m_pm.drawPixmap(0, y - offset, *(body->mask()));
+        }
+    }
+
+    // restore mask painter RasterOp to Copy
+    m_pm.setRasterOp(Qt::CopyROP);
+
+    if (noteHasStalk)
+        drawStalk(note, drawTail, stalkGoesUp);
+
+    m_p.end();
+    m_pm.end();
+
+    QCanvasPixmap notePixmap(*m_generatedPixmap, m_pointZero);
+    QBitmap mask(*m_generatedMask);
+    notePixmap.setMask(mask);
+
+    delete m_generatedPixmap;
+    delete m_generatedMask;
+
+    return notePixmap;
+
+}
+
+
+/*!
+QCanvasPixmap
 ChordPixmapFactory::makeChordPixmap(const chordpitches &pitches,
                                     Note::Type note, bool drawTail,
                                     bool stalkGoesUp)
@@ -615,7 +707,7 @@ ChordPixmapFactory::makeChordPixmap(const chordpitches &pitches,
     // X-offset at which the tail should be drawn
     //unsigned int tailOffset = (note < Quarter && stalkGoesUp) ? m_tailWidth : 0;
 
-    createPixmapAndMask(/*tailOffset*/);
+    createPixmapAndMask();
 
     // paint note bodies
 
@@ -660,3 +752,4 @@ ChordPixmapFactory::makeChordPixmap(const chordpitches &pitches,
 
 }
 
+*/

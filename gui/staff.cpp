@@ -26,178 +26,41 @@
 Staff::Staff(QCanvas *canvas)
     : QCanvasItemGroup(canvas),
       m_barLineHeight(0),
-      m_horizLineLength(0),
-      m_pitchToHeight(32)
+      m_horizLineLength(0)
 {
-
-    // clef
-    //
-    QCanvasPixmapArray *clefPixmap;
-
-    //!!!
-//    if (clef == Treble) {
-        
-        clefPixmap = new QCanvasPixmapArray("pixmaps/clef-treble.xpm");
-/*!
-    } else if (clef == Bass) {
-
-        clefPixmap = new QCanvasPixmapArray("pixmaps/clef-bass.xpm");
-
-    } else if (clef == Alto) {
-
-        clefPixmap = new QCanvasPixmapArray("pixmaps/clef-alto.xpm");
-
-    } else if (clef == Tenor) {
-        
-        clefPixmap = new QCanvasPixmapArray("pixmaps/clef-tenor.xpm");
-
-    }
-*/ 
-    
-    QCanvasSpriteGroupable *clef = new QCanvasSpriteGroupable(clefPixmap, canvas, this);
-
-    clef->moveBy(8, 0);
-
     // horizontal lines
-    //
+
     int w = canvas->width();
     m_horizLineLength = w - (w / 10);
 
-// Pitch : 0  - C  - line 5 (leger)
-// Pitch : 1  - C# - line 5
-// Pitch : 2  - D  - line 4.5
-// Pitch : 3  - D# - line 4.5
-// Pitch : 4  - E  - line 4
-// Pitch : 5  - F  - line 3.5
-// Pitch : 6  - F# - line 3.5
-// Pitch : 7  - G  - line 3
-// Pitch : 8  - G# - line 3
-// Pitch : 9  - A  - line 2.5
-// Pitch : 10 - A# - line 2.5
-// Pitch : 11 - B  - line 2
-// Pitch : 12 - C  - line 1.5
-// Pitch : 13 - C# - line 1.5
-// Pitch : 14 - D  - line 1
-// Pitch : 15 - D# - line 1
-// Pitch : 16 - E  - line 0.5
-// Pitch : 17 - F  - line 0
-// Pitch : 18 - F# - line 0
-// Pitch : 19 - G  - line -0.5
-// Pitch : 20 - G# - line -0.5
-// Pitch : 21 - A  - line -1
+    // Pitch is represented with the MIDI pitch scale; NotationTypes.h
+    // contains methods to convert this to and from staff-height
+    // according to the current clef and key.  Staff-height is
+    // represented with signed integers such that the bottom staff
+    // line is 0, the space immediately above it is 1, and so on up to
+    // the top staff line which has a height of 8.  We shouldn't be
+    // concerned with pitch in this class, only with staff-height.
 
-    unsigned int pitch = 17, // F
-        l = 0;
+    // Now, the y-coord of a staff m whole-lines below the top
+    // staff-line (where 0 <= m <= 4) is m * lineWidth + linesOffset.
+    // For a staff at height h, m = (8-h)/2.  Therefore the y-coord of
+    // a staff at height h is (8-h)/2 * lineWidth + linesOffset
 
-    // staff lines are numbered from 0 to 4, in a top-down order. Yes,
-    // the code below is butt ugly, but it works and it's fairly easy
-    // to maintain. For once I don't think trying to make this fit in
-    // a loop will do any good.
-    //
+    // Let's just make the regular staff lines for now, not the leger
+    // lines...
 
-    // Line 0 : Top-most line (F - pitch 17 in a Treble clef)
-    //
-    StaffLine *staffLine = new StaffLine(canvas, this);
+    for (int h = 0; h <= 8; ++h) {
 
-    int y = l * lineWidth + linesOffset;
+        StaffLine *line = new StaffLine(canvas, this, h);
+        int y = yCoordOfHeight(h);
+        line->setPoints(0, y, m_horizLineLength, y);
 
-    staffLine->setPoints(0,y, m_horizLineLength,y);
-    // staffLine->moveBy(0,linesOffset);
-    staffLine->setAssociatedPitch(pitch);
-    
-    m_pitchToHeight[pitch] = y; // F
-    m_pitchToHeight[pitch + 1] = y; // F#
-
-    m_pitchToHeight[pitch + 2] = y - lineWidth / 2; // G
-    m_pitchToHeight[pitch + 3] = y - lineWidth / 2; // G#
-    m_pitchToHeight[pitch + 4] = y - lineWidth;     // A
-
-    // Intermediate invisible line just above this one
-    //
-    makeInvisibleLine(y - lineWidth / 2, pitch + 2); // G
-    
-    // Line 1 : D - pitch 14
-    //
-    ++l; pitch = 14;
-    staffLine = new StaffLine(canvas, this);
-    
-    y = l * lineWidth + linesOffset;
-
-    staffLine->setPoints(0,y, m_horizLineLength,y);
-    // staffLine->moveBy(0,linesOffset);
-    staffLine->setAssociatedPitch(pitch);
-
-    m_pitchToHeight[pitch] = y; // D
-    m_pitchToHeight[pitch + 1] = y; // D#
-    m_pitchToHeight[pitch + 2] = y - lineWidth / 2; // E
-    
-    makeInvisibleLine(y - lineWidth / 2, pitch + 2); // E
-
-    // Line 2 : B - pitch 11
-    //
-    ++l; pitch = 11;
-    staffLine = new StaffLine(canvas, this);
-
-    y = l * lineWidth + linesOffset;
-
-    staffLine->setPoints(0,y, m_horizLineLength,y);
-    // staffLine->moveBy(0,linesOffset);
-    staffLine->setAssociatedPitch(pitch);
-
-    m_pitchToHeight[pitch] = y; // B
-    m_pitchToHeight[pitch + 1] = y - lineWidth / 2; // C
-    m_pitchToHeight[pitch + 2] = y - lineWidth / 2; // C#
-    
-    makeInvisibleLine(y - lineWidth / 2, pitch + 1); // C
-
-    // Line 3 : G - pitch 7
-    //
-    ++l; pitch = 7;
-    staffLine = new StaffLine(canvas, this);
-
-    y = l * lineWidth + linesOffset;
-
-    staffLine->setPoints(0,y, m_horizLineLength,y);
-    // staffLine->moveBy(0,linesOffset);
-    staffLine->setAssociatedPitch(pitch);
-
-    m_pitchToHeight[pitch] = y; // G
-    m_pitchToHeight[pitch + 1] = y; // G#
-    m_pitchToHeight[pitch + 2] = y - lineWidth / 2; // A
-    m_pitchToHeight[pitch + 3] = y - lineWidth / 2; // A#
-    
-    makeInvisibleLine(y - lineWidth / 2, pitch + 2); // A
-
-    // Line 4 : E - pitch 4
-    //
-    ++l; pitch = 4;
-    staffLine = new StaffLine(canvas, this);
-
-    y = l * lineWidth + linesOffset;
-
-    staffLine->setPoints(0,y, m_horizLineLength,y);
-    // staffLine->moveBy(0,linesOffset);
-    staffLine->setAssociatedPitch(pitch);
-
-    m_pitchToHeight[pitch] = y; // E
-    m_pitchToHeight[pitch + 1] = y - lineWidth / 2; // F
-    m_pitchToHeight[pitch + 2] = y - lineWidth / 2; // F#
-
-    makeInvisibleLine(y - lineWidth / 2, pitch + 1); // F
-
-    // Line 5 : middle C - pitch 0 (not actually displayed)
-    //
-    ++l; pitch = 0;
-    y = l * lineWidth + linesOffset;
-
-    makeInvisibleLine(y, pitch);
-
-    m_pitchToHeight[pitch] = y; // C
-    m_pitchToHeight[pitch + 1] = y; // C#
-    m_pitchToHeight[pitch + 2] = y - lineWidth / 2; // D
-    m_pitchToHeight[pitch + 3] = y - lineWidth / 2; // D#
-    
-    makeInvisibleLine(y - lineWidth / 2, pitch + 2); // D
+        if (h % 2 == 1) {
+            // make the line invisible
+            line->setPen(QPen(white, 1)); // invisibleLineWidth
+            line->setZ(-1);
+        }
+    }
 
     //
     // Add vertical lines
@@ -234,48 +97,15 @@ Staff::~Staff()
 //         delete (*i);
 }
 
-int Staff::yCoordOfHeight(int height) const
+int Staff::yCoordOfHeight(int h) const
 {
     // 0 is bottom staff-line, 8 is top one
-    return linesOffset + (8 - height) * (lineWidth / 2);
-}
-
-
-int
-Staff::pitchYOffset(int pitch) const
-{
-    cerr << "Staff::pitchYOffset called" << endl;
-    assert(0);
-
-    if (pitch >= 0 && pitch <= 21)
-        return m_pitchToHeight[pitch];
-    else {
-        kdDebug(KDEBUG_AREA) << "Staff::pitchYOffset(" << pitch << ") : pitch too high\n";
-        return m_pitchToHeight[pitch % 22];
-    }
-}
-
-
-void
-Staff::makeInvisibleLine(int y, int pitch, const QColor& col)
-{
-    static const unsigned int invisibleLineWidth = 1;
-
-    // Intermediate invisible line
-    //
-    StaffLine *invisibleLine = new StaffLine(canvas(), this);
-    invisibleLine->setPen(QPen(col, invisibleLineWidth));
-
-#ifdef RG_STAFF_SHOW_INVISIBLE_LINES
-    if (pitch)
-        invisibleLine->setPen(QPen(red, invisibleLineWidth));
-    else
-        invisibleLine->setPen(QPen(blue, invisibleLineWidth)); // middle C
-#endif
-
-    invisibleLine->setPoints(0,y, m_horizLineLength,y);
-    invisibleLine->setZ(-1);
-    invisibleLine->setAssociatedPitch(pitch);
+    int y = ((8 - h) * lineWidth) / 2 + linesOffset + ((h % 2 == 1) ? 1 : 0);
+    kdDebug(KDEBUG_AREA) << "Staff::yCoordOfHeight: height is " << h
+                         << ", lineWidth is " << lineWidth
+                         << ", linesOffset is " << linesOffset
+                         << ", y is " << y << endl;
+    return y;
 }
 
 static bool

@@ -24,7 +24,8 @@
 #include "staff.h"
 #include "NotationTypes.h"
 
-typedef vector<int> chordpitches;
+typedef vector<int> ChordPitches;
+typedef vector<Accidental> Accidentals;
 
 //!!! some of the stuff in the Note class could simplify a few bits of this
 
@@ -202,7 +203,8 @@ public:
      *   (useful when the tail should be collapsed with the one of a neighboring chord)
      * @param stalkGoesUp : if the note's stalk should go up or down
      */
-    QCanvasPixmap makeChordPixmap(const chordpitches &pitches,
+    QCanvasPixmap makeChordPixmap(const ChordPitches &pitches,
+                                  const Accidentals &accidentals,
                                   Note::Type note, bool drawTail,
                                   bool stalkGoesUp = true);
 

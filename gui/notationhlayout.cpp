@@ -73,7 +73,7 @@ NotationHLayout::getPreviousNote(NotationElementList::iterator pos)
         (Note::EventPackage, Note::EventType, pos);
 }
 
-
+/*!
 Scale::KeySignature
 NotationHLayout::getKeyAtPos(NotationElementList::iterator pos)
 {
@@ -95,7 +95,7 @@ NotationHLayout::getKeyAtPos(NotationElementList::iterator pos)
 
     return res;
 }
-
+*/
 void
 NotationHLayout::layout(NotationElementList::iterator from,
                         NotationElementList::iterator to)
@@ -105,7 +105,7 @@ NotationHLayout::layout(NotationElementList::iterator from,
     if (from == m_notationElements.begin()) {
 
         //!!! make broadly as in notationvlayout
-        setCurrentKey(Scale::C); // TODO add document-wide scale
+/*!        setCurrentKey(Scale::C); // TODO add document-wide scale */
         
         m_currentPos = m_barMargin; // we are at the beginning of the elements
         m_nbTimeUnitsInCurrentBar = 0;
@@ -131,7 +131,7 @@ NotationHLayout::layout(NotationElementList::iterator from,
 
         m_nbTimeUnitsInCurrentBar = barTimeAtPos(oneBeforeFrom);
 
-        setCurrentKey(getKeyAtPos(from));
+/*!        setCurrentKey(getKeyAtPos(from)); */
     }
     
     m_barPositions.clear();
@@ -144,10 +144,11 @@ NotationHLayout::layout(NotationElementList::iterator from,
     
         // Key Change
         //
+
         if (nel->event()->type() == "keychange") {
             try {
-                Scale::KeySignature key = Scale::KeySignature(nel->event()->get<Int>("key"));
-                setCurrentKey(key);
+                Key key(nel->event()->get<String>("key"));
+/*!                setCurrentKey(key); */
                 nel->setX(m_currentPos);
 
                 m_currentPos += 24 + m_noteMargin; // TODO
@@ -289,16 +290,17 @@ NotationHLayout::reset()
     m_nbTimeUnitsInCurrentBar = 0;
     m_previousNbTimeUnitsInCurrentBar = 0;
     m_barPositions.clear();
-    setCurrentKey(Scale::C);
+/*!    setCurrentKey(Scale::C); */
 }
 
+/*!
 void
 NotationHLayout::setCurrentKey(Scale::KeySignature key)
 {
     delete m_currentScale;
     m_currentScale = new Scale(key);
 }
-
+*/
 
 
 // const vector<unsigned int>&

@@ -157,7 +157,6 @@ kdbgostreamAdapter::operator<<(double d)
     return *this;
 }
 
-
 // ostream& endl( ostream &s)
 // {
 //     s << "\n"; return s;

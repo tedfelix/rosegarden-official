@@ -19,10 +19,11 @@
 
 #include "rosedebug.h"
 
-StaffLine::StaffLine(QCanvas *c, QCanvasItemGroup *g)
-    : QCanvasLineGroupable(c, g),
-      m_pitch(0)
+StaffLine::StaffLine(QCanvas *c, QCanvasItemGroup *g, int height) :
+    QCanvasLineGroupable(c, g),
+    m_height(height)
 {
+    // empty
 }
 
 void
