@@ -74,7 +74,7 @@ NotationElementList::erase(NotationElementList::iterator pos)
 kdbgstream& operator<<(kdbgstream &dbg, NotationElement &e)
 {
     dbg << "NotationElement - x : " << e.x() << " - y : " << e.y()
-        << *e.event() << endl;
+        << endl << *e.event() << endl;
 
 //     e.event()->dump(cout);
 
