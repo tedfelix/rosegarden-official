@@ -1,48 +1,60 @@
+# Original Author was Kalle@kde.org
+# I lifted it in some mater. (Stephan Kulow)
+# I used much code from Janos Farkas
 
-dnl without this order in this file, autoconf will not work!
-dnl the argument is a source file out of your sources. But
-dnl acinclude.m4 makes the job for all programs ;-)
-AC_INIT(acinclude.m4)
+dnl Process this file with autoconf to produce a configure script.
 
-dnl without this order in this file, automake will be confused!
-dnl the argument 
-AM_CONFIG_HEADER(config.h)
+AC_INIT(acinclude.m4) dnl a source file from your sub dir
 
-dnl inits some variables needed by automake's Makefiles.
-dnl add here the package name and it's version number. It will
-dnl be defined in config.h and in the Makefiles
-AM_INIT_AUTOMAKE(rosegardengui,0.1)
+dnl This is so we can use kde-common
+AC_CONFIG_AUX_DIR(admin)
 
-dnl sets the prefix to $KDEDIR or /usr/local/kde (if no $KDEDIR
-dnl set) for the case, that there is no --prefix
-AC_PREFIX_DEFAULT(${KDEDIR:-/usr/local/kde})
+AC_CANONICAL_SYSTEM 
+AC_ARG_PROGRAM
 
-dnl the first KDE macro to check for the Compilers needed. The
-dnl default autoconf macro had not the best support for C++ compilers.
+dnl Automake doc recommends to do this only here. (Janos)
+AM_INIT_AUTOMAKE(rosegardengui, 0.1) dnl searches for some needed programs
+
+KDE_SET_PREFIX
+
+dnl generate the config header
+AM_CONFIG_HEADER(config.h) dnl at the distribution this done
+
+dnl Checks for programs.
 AC_CHECK_COMPILERS
-
-dnl don't build libraries. This mainly disables the configure switches
-dnl --enable-shared and --enable-static, since they don't make that much
-dnl sense then :)
-AM_DISABLE_LIBRARIES
-
-dnl let libtool configure. Checks for the way to handle your compiler
-dnl to do some magic 
+AC_ENABLE_SHARED(yes)
+AC_ENABLE_STATIC(no)
 KDE_PROG_LIBTOOL
 
-dnl adds --disable-nls to not install the .gmo files out of po. If you
-dnl don't have i18n support, you may want to remove this, but leaving it
-dnl here doesn't hurt
+dnl for NLS support. Call them in this order!
+dnl WITH_NLS is for the po files
 AM_KDE_WITH_NLS
 
-dnl definitly the biggest macro. Checks for X, qt, moc, KDE and the
-dnl correct paths to install to. This macro adds about 1700 lines to
-dnl your configure, so be aware not to remove it!
-AC_PATH_KDE    
+AC_PATH_KDE
 
-dnl in this space add everything you want to check for;
-dnl examples are specific headers, libraries, etc.
-dnl everything to compile and run a KDE program is already checked
+dnl Perform program name transformation
+AC_ARG_PROGRAM
 
-dnl add here all your Makefiles. This are created by configure
-AC_OUTPUT(Makefile rosegardengui/Makefile rosegardengui/docs/Makefile rosegardengui/docs/en/Makefile po/Makefile )
+#MIN_CONFIG
+
+dnl PACKAGE set before
+
+dnl These are common macros that you might or might not want to use
+
+dnl Image readers/writers
+KDE_CHECK_KIMGIO
+ 
+dnl Checks for header files.
+AC_HEADER_DIRENT
+AC_HEADER_STDC
+AC_HEADER_TIME
+AC_CHECK_HEADERS(fcntl.h sys/time.h unistd.h stdlib.h paths.h)
+AC_CHECK_FUNCS(usleep)
+KDE_CREATE_SUBDIRSLIST
+AC_OUTPUT( \
+./Makefile \
+po/Makefile \
+rosegardengui/Makefile \
+rosegardengui/docs/Makefile \
+rosegardengui/docs/en/Makefile \
+)
