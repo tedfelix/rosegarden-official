@@ -58,16 +58,12 @@ public:
     void writeAdvance(size_t cnt);
     void readAdvance(size_t cnt);
     
-    // information methods
+    // Information
+    //
     size_t writeSpace();
     size_t readSpace();
 
-    // std::string methods are nice and convenient
-    //
-    size_t read(std::string *bytes, size_t cnt);
-    size_t write(const std::string &bytes);
-
-    // and some horrible char* ones too
+    // Read and write the buffers
     //
     size_t read(char *dest, size_t cnt);
     size_t write(char *src, size_t cnt);

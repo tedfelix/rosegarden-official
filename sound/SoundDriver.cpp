@@ -121,17 +121,28 @@ PlayableAudioFile::initialise()
 
     int size = m_ringBuffer->getSize();
 
+    // Create a play buffer here
+    //
     m_playBuffer = new char[m_playBufferSize];
 
     // Put a random amount of something into the buffer to start with
+    // - this ensures that lots of audio files starting concurrently
+    // don't require the same servicing.
     //
-    int initialSize = size / 4 + int(double(size)/2.0 * double(rand()) / double(RAND_MAX));
-    //std::cout << "PlayableAudioFile::initialise - initial buffer size = " << initialSize << std::endl;
+    int initialSize =
+        m_playBufferSize +
+            int(double(m_playBufferSize) * 2.0 * 
+                    double(rand()) / double(RAND_MAX));
+
+#ifdef DEBUG_PLAYABLE_CONSTRUCTION
+    std::cout << "PlayableAudioFile::initialise - initial buffer size = " 
+              << initialSize << std::endl;
+#endif
 
     m_ringBufferThreshold = size / 4;
 
-    // hard code to output buffer size initialy
-    initialSize = m_playBufferSize * 2;
+    // First fill of buffer
+    //
     fillRingBuffer(initialSize);
 
     // ensure we can't do this again
@@ -235,7 +246,9 @@ PlayableAudioFile::fillRingBuffer()
         if (fetchSize > int(m_ringBuffer->writeSpace()))
         {
             fetchSize = m_ringBuffer->writeSpace();
-            std::cerr << "PlayableAudioFile::fillRingBuffer - buffer maxed out" << std::endl;
+            std::cerr << "PlayableAudioFile::fillRingBuffer - buffer maxed out"
+                      << std::endl;
+            return;
         }
 
         fillRingBuffer(fetchSize);
@@ -278,7 +291,7 @@ PlayableAudioFile::fillRingBuffer(int bytes)
 
         }
 
-        size_t writtenBytes = m_ringBuffer->write(data);
+        size_t writtenBytes = m_ringBuffer->write((char *)data.c_str(), data.size());
 
 #ifdef DEBUG_PLAYABLE
         std::cerr << "PlayableAudioFile::fillRingBuffer - "

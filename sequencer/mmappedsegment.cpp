@@ -446,34 +446,7 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool firstFetch,
                                     << "adjusting event audio start marker to "
                                     << startTime << endl;
 
-                    /*
-                    std::cout << "RESETTING AUDIO MARKER - event time" 
-                              << evt->getEventTime()
-                              << " - id = "
-                              << evt->getInstrument()
-                              << std::endl;
-                              */
-
                     evt->setAudioStartMarker(startTime);
-                    m_playingAudioSegments.push_back(new MappedEvent(*evt));
-
-                    /*
-                    std::cout << "SETTING RUNTIME SEGMENT ID = " << evt->getRuntimeSegmentId()
-                              << std::endl;
-                    std::cout << "AUDIO INSTRUMENT = " << evt->getInstrument() << std::endl;
-                              */
-                }
-                else
-                if (evt->getType() == MappedEvent::Audio) 
-                {
-                    m_playingAudioSegments.push_back(new MappedEvent(*evt));
-
-                    /*
-                    std::cout << "SETTING RUNTIME SEGMENT ID = " << evt->getRuntimeSegmentId()
-                              << std::endl;
-                    std::cout << "STRAIGHT AUDIO INSTRUMENT = " << evt->getInstrument() << std::endl;
-                              */
-
                 }
 
                 if (evt->getType() == MappedEvent::TimeSignature) {
