@@ -556,6 +556,7 @@ class NoteInserter : public NotationTool
 {
 public:
     NoteInserter(Rosegarden::Note::Type, unsigned int dots, NotationView&);
+    ~NoteInserter();
     
     virtual void handleMousePress(int height, int staffNo,
                                   const QPoint &eventPos,
@@ -673,6 +674,7 @@ class NotationSelectionPaster : public NotationTool
 {
 public:
     NotationSelectionPaster(NotationView&, EventSelection&);
+    ~NotationSelectionPaster();
     
     virtual void handleMousePress(int height, int staffNo,
                                   const QPoint &eventPos,

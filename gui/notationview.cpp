@@ -1564,8 +1564,14 @@ NoteInserter::NoteInserter(Rosegarden::Note::Type type,
       m_noteType(type),
       m_noteDots(dots)
 {
+    m_parentView.setCursor(Qt::ibeamCursor);
 }
-    
+
+NoteInserter::~NoteInserter()
+{
+    m_parentView.setCursor(Qt::arrowCursor);
+}
+
 void    
 NoteInserter::handleMousePress(int height, int staffNo,
                                const QPoint &eventPos,
@@ -1731,12 +1737,15 @@ NotationSelector::NotationSelector(NotationView& view)
 
     connect(&m_parentView, SIGNAL(usedSelection()),
             this,          SLOT(hideSelection()));
+
+    m_parentView.setCursor(Qt::crossCursor);
 }
 
 NotationSelector::~NotationSelector()
 {
     delete m_selectionRect;
     m_parentView.canvas()->update();
+    m_parentView.setCursor(Qt::arrowCursor);
 }
 
 void NotationSelector::handleMousePress(int /*height*/, int /*staffNo*/,
@@ -1831,8 +1840,14 @@ NotationSelectionPaster::NotationSelectionPaster(NotationView& parent,
     : NotationTool(parent),
       m_selection(es)
 {
+    m_parentView.setCursor(Qt::crossCursor);
 }
-    
+
+NotationSelectionPaster::~NotationSelectionPaster()
+{
+    m_parentView.setCursor(Qt::arrowCursor);
+}
+
 void NotationSelectionPaster::handleMousePress(int /*height*/, int staffNo,
                                                const QPoint &eventPos,
                                                NotationElement* /*el*/)
