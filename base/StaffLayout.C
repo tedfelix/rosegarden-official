@@ -21,17 +21,5 @@
 
 namespace Rosegarden {
 
-template <class T>
-StaffLayout<T>::StaffLayout()
-{
-    // empty
-}
-    
-template <class T>
-StaffLayout<T>::~StaffLayout()
-{
-    // empty
-}
-
 }
 

@@ -57,8 +57,8 @@ public:
      * Creates a new NotationStaff for the specified Segment
      * \a id is the id of the staff in the NotationView
      */
-    NotationStaff(QCanvas *, Rosegarden::Segment *,
-		  unsigned int id,
+    NotationStaff(QCanvas *, Rosegarden::Segment *, unsigned int id,
+		  bool pageMode, int lineBreakGap,
                   std::string fontName, int resolution);
     ~NotationStaff();
 
@@ -271,8 +271,16 @@ protected:
 
     int m_id;
 
+    bool m_pageMode;
+    int m_lineBreakGap;
+
     int m_horizLineLength;
     int m_resolution;
+
+    int getPageWidth();
+    int getRowForLayoutX(int x);
+    int getXForLayoutX(int x);
+    int getTopLineOffsetForRow(int row);
 
     LineList m_barLines;
     LineList m_staffLines;

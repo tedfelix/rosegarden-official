@@ -55,8 +55,8 @@ template <class T>
 class StaffLayout
 {
 public: 
-    StaffLayout();
-    virtual ~StaffLayout();
+    StaffLayout() { }
+    virtual ~StaffLayout() { }
 
     /**
      * Find the Staff whose Y coord range includes y, and return a

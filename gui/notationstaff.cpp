@@ -61,11 +61,14 @@ const int NotationStaff::nbLegerLines = 8;
 using std::string;
 
 NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment,
-                             unsigned int id,
+                             unsigned int id, bool pageMode,
+			     int lineBreakGap,
                              string fontName, int resolution) :
     Rosegarden::Staff<NotationElement>(*segment),
     QCanvasItemGroup(canvas),
     m_id(id),
+    m_pageMode(pageMode),
+    m_lineBreakGap(lineBreakGap),
     m_horizLineLength(0),
     m_initialBarA(0),
     m_initialBarB(0),
@@ -834,5 +837,31 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
     QCanvasPixmap notePixmap(m_npf->makeNotePixmap(params));
     return new QCanvasNotationSprite(*elt,
                                      new QCanvasPixmap(notePixmap), canvas());
+}
+
+int
+NotationStaff::getPageWidth()
+{
+    return canvas()->width() - (2 * x());
+}
+
+int
+NotationStaff::getRowForLayoutX(int lx)
+{
+    if (!m_pageMode) return 0;
+    else return (lx / getPageWidth());
+}
+
+int
+NotationStaff::getXForLayoutX(int lx)
+{
+    if (!m_pageMode) return lx + x();
+    else return (lx - (getPageWidth() * getRowForLayoutX(lx))) + x();
+}
+
+int
+NotationStaff::getTopLineOffsetForRow(int row)
+{
+    return (getTopLineOffset() + (m_lineBreakGap * row));
 }
 
