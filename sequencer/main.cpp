@@ -4,7 +4,7 @@
   Rosegarden-4
   A sequencer and musical notation editor.
 
-  This program is Copyright 2000-2002
+  This program is Copyright 2000-2003
   Guillaume Laurent   <glaurent@telegraph-road.org>,
   Chris Cannam        <cannam@all-day-breakfast.com>,
   Richard Bown        <bownie@bownie.com>
@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
     KAboutData aboutData( "rosegardensequencer",
                           I18N_NOOP("RosegardenSequencer"),
                           VERSION, description, KAboutData::License_GPL,
-                          "(c) 2000-2002, Guillaume Laurent, Chris Cannam, Richard Bown");
+                          "(c) 2000-2003, Guillaume Laurent, Chris Cannam, Richard Bown");
     aboutData.addAuthor("Guillaume Laurent, Chris Cannam, Richard Bown",0, "glaurent@telegraph-road.org, cannam@all-day-breakfast.com, bownie@bownie.com");
     KCmdLineArgs::init( argc, argv, &aboutData );
     KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
