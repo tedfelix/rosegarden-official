@@ -59,8 +59,10 @@ ArtsDriver::ArtsDriver(MappedStudio *studio):
 
     if (m_soundServer.isNull())
     {
+#ifdef DEBUG_ARTS
 	    cerr << "ArtsDriver - can't find aRts SoundServer - " <<
                 "ensure that artsd is running!" << endl;
+#endif
         m_driverStatus = NO_DRIVER;
         return;
     }
@@ -69,7 +71,10 @@ ArtsDriver::ArtsDriver(MappedStudio *studio):
 
 ArtsDriver::~ArtsDriver()
 {
+#ifdef DEBUG_ARTS
     std::cout << "ArtsDriver::~ArtsDriver" << std::endl;
+#endif
+
     m_midiRecordClient.removePort(m_midiRecordPort);
     m_midiPlayClient.removePort(m_midiPlayPort);
 
@@ -141,7 +146,9 @@ ArtsDriver::initialiseMidi()
     m_midiManager = Arts::Reference("global:Arts_MidiManager");
     if (m_midiManager.isNull())
     {
+#ifdef DEBUG_ARTS
         cerr << "ArtsDriver - can't get aRts MidiManager" << endl;
+#endif
         return;
     }
 
@@ -150,12 +157,14 @@ ArtsDriver::initialiseMidi()
 
     if (m_midiRecordPort.isNull())
     {
+#ifdef DEBUG_ARTS
         cerr << "ArtsDriver - can't create aRts MidiRecorder"
              << endl << endl;
         cerr << "Most likely this is because you've not updated your "
              << "~/.mcoprc file yet." << endl
              << "Please look in :" << endl
              << "  rosegarden/docs/howtos/artsd-mcop-notes" << endl << endl;
+#endif
         exit(1);
     }
 
@@ -164,15 +173,19 @@ ArtsDriver::initialiseMidi()
                                                "Rosegarden (play)","rosegarden");
     if (m_midiPlayClient.isNull())
     {
+#ifdef DEBUG_ARTS
         cerr << "ArtsDriver - can't create aRts MidiClient" << endl;
+#endif
         return;
     }
 
     m_midiPlayPort = m_midiPlayClient.addOutputPort();
     if (m_midiPlayPort.isNull())
     {
+#ifdef DEBUG_ARTS
         cerr << "ArtsDriver - can't create aRts Midi Output Port"
              << endl;
+#endif
         return;
     }
 
@@ -182,8 +195,10 @@ ArtsDriver::initialiseMidi()
                                                  "rosegarden");
     if (m_midiRecordClient.isNull())
     {
+#ifdef DEBUG_ARTS
         cerr << "ArtsDriver - can't create aRts MidiRecordClient"
              << endl;
+#endif
         return;
     }
 
@@ -200,7 +215,9 @@ ArtsDriver::initialiseMidi()
     m_midiRecordPort.record(true);
 
 
+#ifdef DEBUG_ARTS
     cout << "ArtsDriver - initialised MIDI subsystem" << endl;
+#endif
 
     m_driverStatus |= MIDI_OK;
 
@@ -222,7 +239,9 @@ ArtsDriver::initialiseAudio()
 
     if (m_amanPlay.isNull())
     {
+#ifdef DEBUG_ARTS
         cerr << "ArtsDriver - can't create audio play object" << endl;
+#endif
         return;
     }
 
@@ -234,8 +253,10 @@ ArtsDriver::initialiseAudio()
 
     if (m_amanRecord.isNull())
     {
+#ifdef DEBUG_ARTS
         cerr << "ArtsDriver - can't create audio record object" <<
              endl;
+#endif
         return;
     }
 
@@ -251,7 +272,9 @@ ArtsDriver::initialiseAudio()
 
     if (captureWav.isNull())
     {
+#ifdef DEBUG_ARTS
         cerr << "ArtsDriver - can't create .wav record object" << endl;
+#endif
         return;
     }
 
@@ -260,7 +283,9 @@ ArtsDriver::initialiseAudio()
 
     if (playWav.isNull())
     {
+#ifdef DEBUG_ARTS
         cerr << "ArtsDriver - can't create .wav play object "<< endl;
+#endif
         return;
     }
 
@@ -281,6 +306,7 @@ ArtsDriver::initialiseAudio()
     disconnect(captureWav, "right", m_amanRecord, "right");
     captureWav.stop();
 
+#ifdef DEBUG_ARTS
     // Seems the audio is OK, report some figures and exit
     //
     if (m_soundServer.fullDuplex())
@@ -295,6 +321,8 @@ ArtsDriver::initialiseAudio()
 
     cout << "ArtsDriver - initialised audio subsystem" << endl;
 
+#endif
+
     m_driverStatus |= AUDIO_OK;
 }
 
@@ -302,7 +330,9 @@ void
 ArtsDriver::initialisePlayback(const Rosegarden::RealTime &position,
                                const Rosegarden::RealTime &/*playLatency*/)
 {
+#ifdef DEBUG_ARTS
     cout << "ArtsDriver - initialisePlayback" << endl;
+#endif
     m_startPlayback = true;
     m_artsPlayStartTime.sec = 0;
     m_artsPlayStartTime.usec = 0;
@@ -644,8 +674,10 @@ ArtsDriver::processMidiOut(const MappedComposition &mC,
                 break;
 
             default:
+#ifdef DEBUG_ARTS
                  std::cerr << "processMidiOut() - got unrecognized event"
                             << endl;
+#endif
                  break;
         }
 
@@ -672,12 +704,14 @@ ArtsDriver::processMidiOut(const MappedComposition &mC,
     
             if (secAhead < 0)
             {
+#ifdef DEBUG_ARTS
                 std::cerr <<
                     "Sequencer::processMidiOut: MIDI processing lagging by "
                           << -secAhead
                           << "s and "
                           << uSecAhead
                           << "us" << endl;
+#endif
             }
         }
 
@@ -845,8 +879,10 @@ ArtsDriver::processMidiIn(const Arts::MidiCommand &midiCommand,
                 // reset the reference
                 m_noteOnMap[chanNoteKey] = 0;
             }
+#ifdef DEBUG_ARTS
             else
                 cerr << "MIDI_NOTE_OFF with no matching MIDI_NOTE_ON" << endl;
+#endif
             break;
 
         case MIDI_POLY_AFTERTOUCH:
@@ -905,12 +941,16 @@ ArtsDriver::processMidiIn(const Arts::MidiCommand &midiCommand,
             break;
 
         case MIDI_SYSTEM_EXCLUSIVE:
+#ifdef DEBUG_ARTS
             std::cout << "ArtsDriver - SYSTEM EXCLUSIVE EVENT not supported"
                       << std::endl;
+#endif
             break;
 
         default:
+#ifdef DEBUG_ARTS
             cout << "ArtsDriver - UNSUPPORTED MIDI EVENT RECEIVED" << endl;
+#endif
             break;
     }
 }
@@ -967,8 +1007,10 @@ ArtsDriver::record(RecordStatus recordStatus)
     }
     else if (recordStatus == RECORD_AUDIO)
     {
+#ifdef DEBUG_ARTS
         std::cerr << "ArtsDriver - record() - AUDIO RECORDING not yet supported"
                   << std::endl;
+#endif
         return false;
     }
     else if (recordStatus == ASYNCHRONOUS_MIDI)
@@ -979,11 +1021,13 @@ ArtsDriver::record(RecordStatus recordStatus)
     {
         m_recordStatus = ASYNCHRONOUS_AUDIO;
     }
+#ifdef DEBUG_ARTS
     else
     {
         std::cerr << "ArtsDriver  - record() - Unsupported recording mode"
                   << std::endl;
     }
+#endif
 
     return true;
 }

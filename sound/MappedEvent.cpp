@@ -108,17 +108,41 @@ MappedEvent::MappedEvent(InstrumentId id,
                 m_type = InvalidMappedEvent;
             }
     } catch (MIDIValueOutOfRange r) {
+
+#ifdef DEBUG_MAPPEDEVENT
 	std::cerr << "MIDI value out of range in MappedEvent ctor"
 		  << std::endl;
+#else
+        ;
+#endif
+
     } catch (Event::NoData d) {
+
+#ifdef DEBUG_MAPPEDEVENT
 	std::cerr << "Caught Event::NoData in MappedEvent ctor, message is:"
 		  << std::endl << d.getMessage() << std::endl;
+#else
+        ;
+#endif
+
     } catch (Event::BadType b) {
+
+#ifdef DEBUG_MAPPEDEVENT
 	std::cerr << "Caught Event::BadType in MappedEvent ctor, message is:"
 		  << std::endl << b.getMessage() << std::endl;
+#else
+        ;
+#endif
+
     } catch (SystemExclusive::BadEncoding e) {
+
+#ifdef DEBUG_MAPPEDEVENT
 	std::cerr << "Caught bad SysEx encoding in MappedEvent ctor"
 		  << std::endl;
+#else
+        ;
+#endif
+
     }
 }
 
@@ -445,7 +469,9 @@ DataBlockRepository::DataBlockRepository()
 
 void DataBlockRepository::clear()
 {
+#ifdef DEBUG_MAPPEDEVENT
     std::cerr << "DataBlockRepository::clear()\n";
+#endif
 
     // Erase all 'datablock_*' files
     //

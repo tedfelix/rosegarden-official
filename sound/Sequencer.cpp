@@ -79,7 +79,9 @@ Sequencer::~Sequencer()
 {
     if (m_soundDriver)
     {
+#ifdef DEBUG_SEQUENCER
         std::cout << "Sequencer::~Sequencer" << std::endl;
+#endif
         delete m_soundDriver;
     }
 }

@@ -80,8 +80,11 @@ PeakFile::open()
     }
     catch(std::string s)
     {
+
+#ifdef DEBUG_PEAKFILE
         cerr << "PeakFile::open - EXCEPTION \"" << s << "\""
              << endl;
+#endif
         return false;
     }
     
@@ -199,7 +202,9 @@ PeakFile::write(unsigned short updatePercentage)
     }
     catch(std::string e)
     {
+#ifdef DEBUG_PEAKFILE
         std::cerr << "PeakFile::write - \"" << e << "\"" << std::endl;
+#endif
         return false;
     }
 
@@ -454,7 +459,9 @@ PeakFile::writePeaks(unsigned short /*updatePercentage*/,
 {
     if(!file || !(*file)) return;
 
+#ifdef DEBUG_PEAKFILE
     cout << "PeakFile::writePeaks - calculating peaks" << endl;
+#endif
 
     // Scan to beginning of audio data
     m_audioFile->scanTo(RealTime(0, 0));
@@ -588,8 +595,10 @@ PeakFile::writePeaks(unsigned short /*updatePercentage*/,
     // set format number
     m_format = bytes;
 
+#ifdef DEBUG_PEAKFILE
     cout << "PeakFile::writePeaks - "
               << "completed peaks" << endl;
+#endif
 
 }
 
@@ -621,8 +630,10 @@ PeakFile::getPreview(const RealTime &startTime,
     float hiValue = 0.0f;
     float loValue = 0.0f;
 
+#ifdef DEBUG_PEAKFILE
     cout << "PeakFile::getPreview - getting preview for \""
               << m_audioFile->getFilename() << "\"" << endl;
+#endif
 
     // Get a divisor
     //
@@ -638,9 +649,11 @@ PeakFile::getPreview(const RealTime &startTime,
             break;
 
         default:
+#ifdef DEBUG_PEAKFILE
             cerr << "PeakFile::getPreview - "
                       << "unsupported peak length format (" << m_format << ")"
                       << endl;
+#endif
             return ret;
     }
 
@@ -670,8 +683,10 @@ PeakFile::getPreview(const RealTime &startTime,
                 // Problem with the get - probably an EOF
                 // return the results so far.
                 //
+#ifdef DEBUG_PEAKFILE
                 cout << "PeakFile::getPreview - \"" << e << "\"\n"
                           << endl;
+#endif
                 resetStream();
 
                 return ret;
@@ -708,9 +723,11 @@ PeakFile::getPreview(const RealTime &startTime,
                 // We didn't get the whole peak block - return what
                 // we've got so far
                 //
+#ifdef DEBUG_PEAKFILE
                 cerr << "PeakFile::getPreview - "
                           << "failed to get complete peak block"
                           << endl;
+#endif
 
                 resetStream();
                 return ret;

@@ -86,7 +86,9 @@ AudioFileManager::addFile(const std::string &filePath)
 
     if (subType == BWF)
     {
+#ifdef DEBUG_AUDIOFILEMANAGER
         std::cout << "FOUND BWF" << std::endl;
+#endif
         aF = new BWFAudioFile(id, getShortFilename(filePath), filePath);
     }
     else if (subType == WAV)
@@ -396,12 +398,14 @@ AudioFileManager::createRecordingAudioFile()
         }
 
     }
+#ifdef DEBUG_AUDIOFILEMANAGER
     else
     {
         std::cerr << "AudioFileManager::createRecordingAudioFile - "
                   << "can't access recording directory \'"
                   << m_audioPath << "\'" << std::endl;
     }
+#endif
 
     // start from 1, not 0 if we've not found anything
     if (audioFileNumber == 0)
@@ -502,8 +506,11 @@ AudioFileManager::toXmlString()
         // have the audio path in it but has our home directory in it
         // then swap this out for a tilde '~'
         //
+#ifdef DEBUG_AUDIOFILEMANAGER
         std::cout << "DIR = " << getDirectory(fileName) << " : "
                 " PATH = " << m_audioPath << std::endl;
+#endif
+
         if (getDirectory(fileName) == m_audioPath)
             fileName = getShortFilename(fileName);
         else
@@ -535,9 +542,11 @@ AudioFileManager::toXmlString()
 void
 AudioFileManager::generatePreviews()
 {
+#ifdef DEBUG_AUDIOFILEMANAGER
     std::cout << "AudioFileManager::generatePreviews - "
               << "for " << m_audioFiles.size() << " files"
               << std::endl;
+#endif
 
 
     // Generate peaks if we need to
@@ -633,8 +642,10 @@ AudioFileManager::drawPreview(AudioFileId id,
 
     if (values.size() == 0)
     {
+#ifdef DEBUG_AUDIOFILEMANAGER
         std::cerr << "AudioFileManager::drawPreview - "
                   << "no preview values returned!" << std::endl;
+#endif
         return;
     }
 
@@ -644,8 +655,10 @@ AudioFileManager::drawPreview(AudioFileId id,
 
     if (channels == 0)
     {
+#ifdef DEBUG_AUDIOFILEMANAGER
         std::cerr << "AudioFileManager::drawPreview - "
                   << "no channels in audio file!" << std::endl;
+#endif
         return;
     }
 
@@ -740,6 +753,7 @@ AudioFileManager::drawHighlightedPreview(AudioFileId id,
 void
 AudioFileManager::print()
 {
+#ifdef DEBUG_AUDIOFILEMANAGER
     std::cout << "AudioFileManager - " << m_audioFiles.size() << " entr";
 
     if (m_audioFiles.size() == 1)
@@ -755,6 +769,7 @@ AudioFileManager::print()
         std::cout << (*it)->getId() << " : " << (*it)->getName()
                   << " : \"" << (*it)->getFilename() << "\"" << std::endl;
     }
+#endif
 }
 
 std::vector<SplitPointPair>

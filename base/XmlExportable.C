@@ -24,10 +24,13 @@
 namespace Rosegarden
 {
 
+static std::string s1;
+static std::string multibyte;
+
 std::string XmlExportable::encode(const std::string &s0)
 {
-    std::string s1;
-    std::string multibyte;
+    s1 = "";
+    multibyte = "";
 
     // Escape any xml special characters, and also make sure we have
     // valid utf8 -- otherwise we won't be able to re-read the xml.

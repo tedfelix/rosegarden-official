@@ -138,11 +138,13 @@ operator>>(QDataStream &dS, MappedDevice *mD)
     mD->setConnection(connection.data());
     mD->setDirection(MidiDevice::DeviceDirection(direction));
 
+#ifdef DEBUG_MAPPEDDEVICE
     if (instruments)
     {
         std::cerr << "MappedDevice::operator>> - "
                   << "wrong number of events received" << std::endl;
     }
+#endif
 
     return dS;
 }
@@ -179,11 +181,13 @@ operator>>(QDataStream &dS, MappedDevice &mD)
     mD.setConnection(connection.data());
     mD.setDirection(MidiDevice::DeviceDirection(direction));
 
+#ifdef DEBUG_MAPPEDDEVICE
     if (instruments)
     {
         std::cerr << "MappedDevice::operator>> - "
                   << "wrong number of events received" << std::endl;
     }
+#endif
 
     return dS;
 }
@@ -201,8 +205,11 @@ operator<<(QDataStream &dS, MappedDevice *mD)
     dS << QString(mD->getName().c_str());
     dS << QString(mD->getConnection().c_str());
     dS << mD->getDirection();
+
+#ifdef DEBUG_MAPPEDDEVICE
     std::cerr << "MappedDevice::operator>> - wrote \"" << mD->getConnection() << "\""
 	      << std::endl;
+#endif
 
     return dS;
 }
@@ -220,8 +227,11 @@ operator<<(QDataStream &dS, const MappedDevice &mD)
     dS << QString(mD.getName().c_str());
     dS << QString(mD.getConnection().c_str());
     dS << mD.getDirection();
+
+#ifdef DEBUG_MAPPEDDEVICE
     std::cerr << "MappedDevice::operator>> - wrote \"" << mD.getConnection() << "\""
 	      << std::endl;
+#endif
 
     return dS;
 }

@@ -151,20 +151,26 @@ RIFFAudioFile::scanTo(std::ifstream *file, const RealTime &time)
         // check we've got data chunk start
         if (getBytes(file, 4) != "data")
         {
+#ifdef DEBUG_RIFF
             std::cerr << "RIFFAudioFile::scanTo() - can't find data chunk where "
                       << "it was expected" << std::endl;
+#endif
             return false;
         }
 
         // get the length of the data chunk
+#ifdef DEBUG_RIFF
         std::cout << "RIFFAudioFile::scanTo() - data chunk size = "
                   << getIntegerFromLittleEndian(getBytes(file, 4)) << std::endl;
+#endif
 
     }
     catch(std::string s)
     {
+#ifdef DEBUG_RIFF
         std::cerr << "RIFFAudioFile::scanTo - EXCEPTION - \""
                   << s << "\"" << std::endl;
+#endif
         return false;
     }
         
@@ -180,15 +186,19 @@ RIFFAudioFile::scanTo(std::ifstream *file, const RealTime &time)
     //
     if (totalBytes > m_fileSize - (lengthOfFormat + 16 + 8))
     {
+#ifdef DEBUG_RIFF
         std::cerr << "RIFFAudioFile::scanTo() - attempting to move past end of "
                   << "data block" << std::endl;
+#endif
         return false;
     }
 
     file->seekg(totalBytes,  std::ios::cur);
 
+#ifdef DEBUG_RIFF
     std::cout << "RIFFAudioFile::scanTo - seeking to " << time
               << " (" << totalBytes << " bytes)" << std::endl;
+#endif
 
     return true;
 }
@@ -309,8 +319,10 @@ RIFFAudioFile::readFormatChunk()
     if (hS.compare(0, 4, Rosegarden::AUDIO_RIFF_ID) != 0)
 #endif
     {
+#ifdef DEBUG_RIFF
         std::cerr << "RIFFAudioFile::readFormatChunk - "
                   << "can't find RIFF identifier\n";
+#endif
         throw((std::string("RIFFAudioFile::readFormatChunk - can't find RIFF identifier")));
     }
 
@@ -322,7 +334,9 @@ RIFFAudioFile::readFormatChunk()
     if (hS.compare(8, 4, Rosegarden::AUDIO_WAVE_ID) != 0)
 #endif
     {
+#ifdef DEBUG_RIFF
         std::cerr << "Can't find WAV identifier\n";
+#endif
         throw((std::string("Can't find WAV identifier")));
     }
 
@@ -337,7 +351,9 @@ RIFFAudioFile::readFormatChunk()
     if (hS.compare(12, 4, Rosegarden::AUDIO_FORMAT_ID) != 0)
 #endif
     {
+#ifdef DEBUG_RIFF
         std::cerr << "Can't find FORMAT identifier\n";
+#endif
         throw((std::string("Can't find FORMAT identifier")));
     }
 
@@ -365,18 +381,23 @@ RIFFAudioFile::readFormatChunk()
     //
     if (lengthOfFormat > 0x10)
     {
+#ifdef DEBUG_RIFF
         std::cerr << "RIFFAudioFile::readFormatChunk - "
                   << "extended Format Chunk (" << lengthOfFormat << ")"
                   << std::endl;
+#endif
 
         // ignore any overlapping bytes 
         m_inFile->seekg(lengthOfFormat - 0x10, std::ios::cur);
     }
     else if (lengthOfFormat < 0x10)
     {
+#ifdef DEBUG_RIFF
         std::cerr << "RIFFAudioFile::readFormatChunk - "
                   << "truncated Format Chunk (" << lengthOfFormat << ")"
                   << std::endl;
+#endif
+
         m_inFile->seekg(lengthOfFormat - 0x10, std::ios::cur);
         //throw(std::string("Format chunk too short"));
     }

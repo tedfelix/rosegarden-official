@@ -101,11 +101,12 @@ operator>>(QDataStream &dS, MappedComposition *mC)
 
     }
 
+#ifdef DEBUG_MAPPEDCOMPOSITION
     if (sliceSize)
     {
 	cerr << "operator>> - wrong number of events received" << endl;
     }
-    
+#endif
 
     return dS;
 }
@@ -134,10 +135,12 @@ operator>>(QDataStream &dS, MappedComposition &mC)
 
     }
 
+#ifdef DEBUG_MAPPEDCOMPOSITION
     if (sliceSize)
     {
 	cerr << "operator>> - wrong number of events received" << endl;
     }
+#endif
     
 
     return dS;

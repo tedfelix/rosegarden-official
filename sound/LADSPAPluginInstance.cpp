@@ -59,9 +59,11 @@ LADSPAPluginInstance::LADSPAPluginInstance(Rosegarden::InstrumentId instrument,
             m_controlPorts.push_back(
                     std::pair<unsigned long, LADSPA_Data*>(i, data));
         }
+#ifdef DEBUG_LADSPA
         else
             std::cerr << "LADSPAPluginInstance::LADSPAPluginInstance - "
                       << "unrecognised port type" << std::endl;
+#endif
     }
 
     /*
@@ -88,8 +90,10 @@ LADSPAPluginInstance::~LADSPAPluginInstance()
 void
 LADSPAPluginInstance::instantiate(unsigned long sampleRate)
 {
+#ifdef DEBUG_LADSPA
     std::cout << "LADSPAPluginInstance::instantiate - plugin unique id = "
               << m_descriptor->UniqueID << std::endl;
+#endif
 
     m_instanceHandle = m_descriptor->instantiate(m_descriptor, sampleRate);
 }

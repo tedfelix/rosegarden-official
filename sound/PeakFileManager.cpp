@@ -137,8 +137,10 @@ PeakFileManager::hasValidPeaks(AudioFile *audioFile)
 
         if (peakFile == 0)
         {
+#ifdef DEBUG_PEAKFILEMANAGER
             std::cerr << "PeakFileManager::hasValidPeaks - no peak file found"
                       << std::endl;
+#endif
             return false;
         }
         // If it doesn't open and parse correctly
@@ -156,8 +158,10 @@ PeakFileManager::hasValidPeaks(AudioFile *audioFile)
     }
     else
     {
+#ifdef DEBUG_PEAKFILEMANAGER
         std::cout << "PeakFileManager::hasValidPeaks - unsupported file type"
                   << std::endl;
+#endif
         return false;
     }
 
@@ -173,8 +177,10 @@ void
 PeakFileManager::generatePeaks(AudioFile *audioFile,
                                unsigned short updatePercentage)
 {
+#ifdef DEBUG_PEAKFILEMANAGER
     std::cout << "PeakFileManager::generatePeaks - generating peaks for \""
               << audioFile->getFilename() << "\"" << std::endl;
+#endif
 
     if (audioFile->getType() == WAV)
     {
@@ -204,8 +210,10 @@ PeakFileManager::generatePeaks(AudioFile *audioFile,
     }
     else
     {
+#ifdef DEBUG_PEAKFILEMANAGER
         std::cerr << "PeakFileManager::generatePeaks - unsupported file type"
                   << std::endl;
+#endif
         return;
     }
 
@@ -241,19 +249,25 @@ PeakFileManager::getPreview(AudioFile *audioFile,
         }
         catch(std::string e)
         {
+#ifdef DEBUG_PEAKFILEMANAGER
             std::cout << "PeakFileManager::getPreview "
                       << "\"" << e << "\"" << std::endl;
+#else
+            ;
+#endif
         }
     }
     else if (audioFile->getType() == BWF)
     {
         // write the file out and incorporate the peak chunk
     }
+#ifdef DEBUG_PEAKFILEMANAGER
     else
     {
         std::cerr << "PeakFileManager::getPreview - unsupported file type"
                   << std::endl;
     }
+#endif
 
     return rV;
 }

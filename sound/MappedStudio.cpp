@@ -246,12 +246,17 @@ MappedObject::clone(MappedObject *object)
                 dynamic_cast<MappedStudio*>(studio)
                     ->createObject((*it)->getType(), false);
             object->addChild(child);
+#ifdef DEBUG_MAPPEDSTUDIO
             std::cout << "MappedObject::clone - add child" << std::endl;
+#endif
             (*it)->clone(child);
         }
     }
+#ifdef DEBUG_MAPPEDSTUDIO
     else
         std::cerr << "MappedObject::clone - no children to clone" << std::endl;
+#endif
+
 }
 
 
@@ -271,7 +276,9 @@ MappedStudio::MappedStudio():MappedObject(0,
 
 MappedStudio::~MappedStudio()
 {
+#ifdef DEBUG_MAPPEDSTUDIO
     std::cout << "MappedStudio::~MappedStudio" << std::endl;
+#endif
     clear();
 }
 
@@ -519,9 +526,11 @@ MappedStudio::clearTemporaries()
 
     if (dIt != dead.begin())
     {
+#ifdef DEBUG_MAPPEDSTUDIO
         std::cout << "MappedStudio::clearTemporaries - "
                   << "clearing " << dead.size() << " temporary objects"
                   << std::endl;
+#endif
         do
         {
             dIt--;
@@ -592,8 +601,10 @@ MappedStudio::getPluginInstance(Rosegarden::InstrumentId id,
 const LADSPA_Descriptor*
 MappedStudio::createPluginDescriptor(unsigned long uniqueId)
 {
+#ifdef DEBUG_MAPPEDSTUDIO
     std::cout << "MappedStudio::createPluginInstance of id = "
               << uniqueId << std::endl;
+#endif
 
     // Get the pluginmanager
     //
@@ -602,14 +613,18 @@ MappedStudio::createPluginDescriptor(unsigned long uniqueId)
             (getObjectOfType(AudioPluginManager));
     if (pm)
     {
+#ifdef DEBUG_MAPPEDSTUDIO
         std::cout << "MappedStudio::createPluginInstance - "
                   << "getting plugin descriptor" << std::endl;
+#endif
         return pm->getPluginDescriptor(uniqueId);
     }
     else
     {
+#ifdef DEBUG_MAPPEDSTUDIO
         std::cout << "MappedStudio::createPluginInstance - "
                   << "plugin manager not found" << std::endl;
+#endif
         return 0;
     }
 }
@@ -823,8 +838,10 @@ MappedAudioFader::setProperty(const MappedObjectProperty &property,
     }
     else
     {
+#ifdef DEBUG_MAPPEDSTUDIO
         std::cerr << "MappedAudioFader::setProperty - "
                   << "unsupported property" << std::endl;
+#endif
         return;
     }
 
@@ -1001,8 +1018,11 @@ MappedAudioPluginManager::discoverPlugins(MappedStudio *studio)
     clearPlugins(studio);
 
 
+#ifdef DEBUG_MAPPEDSTUDIO
     std::cout << "MappedAudioPluginManager::discoverPlugins - "
 	      << "discovering plugins" << std::endl;
+#endif
+
 #ifdef HAVE_LIBLRDF
     // Initialise liblrdf and read the description files 
     //
@@ -1010,8 +1030,11 @@ MappedAudioPluginManager::discoverPlugins(MappedStudio *studio)
     if (lrdf_read_file("file:ladspa.rdfs") ||
         lrdf_read_file("file:example.rdf"))
     {
+#ifdef DEBUG_MAPPEDSTUDIO
 	std::cerr << "MappedAudioPluginManager::discoverPlugins - "
 	          << "can't find plugin description files" << std::endl;
+#endif
+        return;
     }
 
 
@@ -1117,8 +1140,10 @@ MappedAudioPluginManager::getPluginDescriptor(unsigned long uniqueId)
 
     if (plugin == 0)
     {
+#ifdef DEBUG_MAPPEDSTUDIO
         std::cerr << "MappedAudioPluginManager::getPluginDescriptor - "
                   << "can't find read-only plugin" << std::endl;
+#endif
         return 0;
     }
 
@@ -1151,8 +1176,10 @@ MappedAudioPluginManager::getPluginDescriptor(unsigned long uniqueId)
 void
 MappedAudioPluginManager::unloadPlugin(unsigned long uniqueId)
 {
+#ifdef DEBUG_MAPPEDSTUDIO
     std::cout << "MappedAudioPluginManager::unloadPlugin - "
               << "unloading plugin " << uniqueId << std::endl;
+#endif
 
     // Find the plugin
     //
@@ -1161,8 +1188,10 @@ MappedAudioPluginManager::unloadPlugin(unsigned long uniqueId)
 
     if (plugin == 0)
     {
+#ifdef DEBUG_MAPPEDSTUDIO
         std::cerr << "MappedAudioPluginManager::unloadPlugin - "
                   << "can't find plugin to unload" << std::endl;
+#endif
         return;
     }
 
@@ -1181,8 +1210,10 @@ MappedAudioPluginManager::unloadPlugin(unsigned long uniqueId)
     
     if (pluginHandle == 0)
     {
+#ifdef DEBUG_MAPPEDSTUDIO
         std::cout << "MappedAudioPluginManager::unloadPlugin - "
                   << "can't find plugin library to unload" << std::endl;
+#endif
         return;
     }
 
@@ -1199,9 +1230,11 @@ MappedAudioPluginManager::unloadPlugin(unsigned long uniqueId)
             return;
     }
 
+#ifdef DEBUG_MAPPEDSTUDIO
     std::cout << "MappedAudioPluginManager::unloadPlugin - "
               << "unloading library \"" 
               << plugin->getLibraryName() << "\"" << std::endl;
+#endif
 
     dlclose(pluginHandle);
     m_pluginHandles.erase(it);
@@ -1211,9 +1244,11 @@ MappedAudioPluginManager::unloadPlugin(unsigned long uniqueId)
 void
 MappedAudioPluginManager::unloadAllPluginLibraries()
 {
+#ifdef DEBUG_MAPPEDSTUDIO
     std::cout << "MappedAudioPluginManager::unloadAllPluginLibraries - "
               << "unloading " << m_pluginHandles.size() << " libraries"
               << std::endl;
+#endif
 
     LADSPAIterator it = m_pluginHandles.begin();
     for (; it != m_pluginHandles.end(); it++)
@@ -1263,8 +1298,10 @@ MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
     pluginHandle = dlopen(path.c_str(), RTLD_LAZY);
 
     if (!pluginHandle) {
+#ifdef DEBUG_MAPPEDSTUDIO
         std::cout << "MappedAudioPluginManager::enumeratePlugin : couldn't dlopen "
                   << path << " - " << dlerror() << std::endl;
+#endif
         return;
     }
 
@@ -1395,8 +1432,14 @@ MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
     }
 
     if(dlclose(pluginHandle) != 0)
+    {
+#ifdef DEBUG_MAPPEDSTUDIO
+
         std::cerr << "PluginManager::loadPlugin - can't unload plugin"
                   << std::endl;
+#endif
+        return;
+    }
 
 #endif // HAVE_LADSPA
 
@@ -1600,8 +1643,10 @@ MappedLADSPAPlugin::setProperty(const MappedObjectProperty &property,
 
         if (roPlugin == 0)
         {
+#ifdef DEBUG_MAPPEDSTUDIO
             std::cerr << "MappedLADSPAPlugin::setProperty - "
                       << "can't get read-only copy to clone" << std::endl;
+#endif
             return;
         }
 
@@ -1618,21 +1663,27 @@ MappedLADSPAPlugin::setProperty(const MappedObjectProperty &property,
     else if (property == MappedLADSPAPlugin::Instrument)
     {
         m_instrument = Rosegarden::InstrumentId(value);
+#ifdef DEBUG_MAPPEDSTUDIO
         std::cout << "MappedLADSPAPlugin::setProperty - "
                   << "setting instrument id to " << m_instrument << std::endl;
+#endif
     }
     else if (property == Rosegarden::MappedObject::Position)
     {
         m_position = int(value);
+#ifdef DEBUG_MAPPEDSTUDIO
         std::cout << "MappedLADSPAPlugin::setProperty - "
                   << "setting position to " << m_position << std::endl;
+#endif
 
     }
     else if (property == Rosegarden::MappedLADSPAPlugin::Bypassed)
     {
         m_bypassed = bool(value);
+#ifdef DEBUG_MAPPEDSTUDIO
         std::cout << "MappedLADSPAPlugin::setProperty - "
                   << "setting bypassed to " << m_bypassed << std::endl;
+#endif
 
         MappedStudio *studio =
             dynamic_cast<MappedStudio*>(getParent()->getParent());
@@ -1652,8 +1703,10 @@ MappedLADSPAPlugin::clone(MappedObject *object)
     //
     if (m_children.size())
     {
+#ifdef DEBUG_MAPPEDSTUDIO
         std::cout << "MappedLADSPAPlugin::clone - cloning "
                   << m_children.size() << " children" << std::endl;
+#endif
 
         MappedObject *studio = getParent();
         while(!(dynamic_cast<MappedStudio*>(studio)))
@@ -1671,9 +1724,11 @@ MappedLADSPAPlugin::clone(MappedObject *object)
             (*it)->clone(child);
         }
     }
+#ifdef DEBUG_MAPPEDSTUDIO
     else
         std::cerr << "MappedLADSPAPlugin::clone - " 
                   << "no children to clone" << std::endl;
+#endif
 }
 
 void
@@ -1734,8 +1789,10 @@ MappedLADSPAPort::getPropertyList(const MappedObjectProperty &property)
     {
         if (property == MappedLADSPAPort::Value)
         {
+#ifdef DEBUG_MAPPEDSTUDIO
             std::cout << "MappedLADSPAPort::MappedLADSPAPort - "
                       << "value = " << m_value << std::endl;
+#endif
             list.push_back(MappedObjectProperty("%1").arg(m_value));
         }
     }

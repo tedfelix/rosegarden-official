@@ -253,8 +253,10 @@ AlsaDriver::~AlsaDriver()
     if (_threadJackClosing == false && m_audioClient)
     {
         _threadJackClosing = true;
+#ifdef DEBUG_ALSA
         std::cerr << "AlsaDriver::~AlsaDriver - closing JACK client"
                   << std::endl;
+#endif
 
         if (jack_deactivate(m_audioClient))
         {
