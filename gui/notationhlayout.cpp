@@ -1124,7 +1124,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 	bool timeSigToPlace = false;
 	if (bdi->second.basicData.newTimeSig) {
 	    timeSignature = bdi->second.basicData.timeSignature;
-	    timeSigToPlace = true;
+	    timeSigToPlace = !bdi->second.basicData.timeSignature.isHidden();
 	}
 
         if (timeSigToPlace) {

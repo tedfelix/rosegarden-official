@@ -1241,7 +1241,7 @@ std::string Composition::toXmlString()
 	if (common) composition << " common=\"true\"";
 
 	bool hidden = false;
-	(*i)->get<Bool>(TimeSignature::IsHiddenPropertyName, common);
+	(*i)->get<Bool>(TimeSignature::IsHiddenPropertyName, hidden);
 	if (hidden) composition << " hidden=\"true\"";
 
 	composition << "/>" << endl;
