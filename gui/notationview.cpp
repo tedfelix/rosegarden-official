@@ -541,9 +541,9 @@ void NotationView::setupActions()
          actionCollection(), "page_mode");
     pageModeAction->setExclusiveGroup("layoutMode");
 
-    new KToggleAction
-	(i18n("Label &Chords"), 0, this, SLOT(slotLabelChords()),
-	 actionCollection(), "label_chords");
+    (new KToggleAction
+     (i18n("Label &Chords"), 0, this, SLOT(slotLabelChords()),
+      actionCollection(), "label_chords"))->setChecked(true);
 
     new KToggleAction
 	(i18n("Display &Tempo Changes"), 0, this, SLOT(slotShowTempos()),
@@ -696,6 +696,16 @@ void NotationView::setupActions()
     accelerators->connectItem(accelerators->insertItem(Key_Right),
 			      this, SLOT(slotStepForward()));
 
+    accelerators->connectItem(accelerators->insertItem(Key_Left + CTRL),
+			      this, SLOT(slotJumpBackward()));
+    accelerators->connectItem(accelerators->insertItem(Key_Right + CTRL),
+			      this, SLOT(slotJumpForward()));
+
+    accelerators->connectItem(accelerators->insertItem(Key_Left + SHIFT),
+			      this, SLOT(slotExtendSelectionBackward()));
+    accelerators->connectItem(accelerators->insertItem(Key_Right + SHIFT),
+			      this, SLOT(slotExtendSelectionForward()));
+
     accelerators->connectItem(accelerators->insertItem(Key_Up),
 			      this, SLOT(slotTransformsTransposeUp()));
     accelerators->connectItem(accelerators->insertItem(Key_Down),
@@ -705,6 +715,11 @@ void NotationView::setupActions()
 			      this, SLOT(slotTransformsTransposeUpOctave()));
     accelerators->connectItem(accelerators->insertItem(Key_Down + CTRL),
 			      this, SLOT(slotTransformsTransposeDownOctave()));
+
+    accelerators->connectItem(accelerators->insertItem(Key_Up + SHIFT),
+			      this, SLOT(slotCurrentStaffUp()));
+    accelerators->connectItem(accelerators->insertItem(Key_Down + SHIFT),
+			      this, SLOT(slotCurrentStaffDown()));
     
     KStdAction::showStatusbar(this, SLOT(slotToggleStatusBar()), actionCollection());
 
@@ -774,7 +789,7 @@ void NotationView::initFontToolbar(int legatoUnit)
     connect(stretchSlider, SIGNAL(valueChanged(int)),
             this, SLOT(slotChangeStretch(int)));
 
-    new QLabel(i18n("  Legato:  "), fontToolbar);
+    new QLabel(i18n("  Smoothing:  "), fontToolbar);
 
     if (m_legatoDurations.size() == 0) {
         for (int type = Note::Shortest; type <= Note::Longest; ++type) {
@@ -1901,6 +1916,26 @@ NotationView::slotSetCurrentStaff(int y)
 }
 
 void
+NotationView::slotCurrentStaffUp()
+{
+    if (m_staffs.size() < 2) return;
+    m_staffs[m_currentStaff]->setCurrent(false);
+    if (m_currentStaff-- <= 0) m_currentStaff = m_staffs.size()-1;
+    m_staffs[m_currentStaff]->setCurrent(true);
+    slotSetInsertCursorPosition(m_insertionTime);
+}
+
+void
+NotationView::slotCurrentStaffDown()
+{
+    if (m_staffs.size() < 2) return;
+    m_staffs[m_currentStaff]->setCurrent(false);
+    if (++m_currentStaff >= m_staffs.size()) m_currentStaff = 0;
+    m_staffs[m_currentStaff]->setCurrent(true);
+    slotSetInsertCursorPosition(m_insertionTime);
+}
+
+void
 NotationView::slotSetInsertCursorPosition(double x, int y)
 {
     slotSetCurrentStaff(y);
@@ -1927,8 +1962,11 @@ NotationView::slotSetInsertCursorPosition(timeT t)
 	staff->getViewElementList()->findNearestTime(t);
 
     if (i == staff->getViewElementList()->end() ||
-	t == staff->getSegment().getEndTime()) {
+	t == staff->getSegment().getEndTime() ||
+	t == staff->getSegment().getBarStartForTime(t)) {
+
 	staff->setInsertCursorPosition(m_hlayout, t);
+
     } else {
 
 	// prefer a note or rest, if there is one, to a non-spacing event
@@ -1976,6 +2014,24 @@ NotationView::slotStepForward()
     while (i != segment.end() && (*i)->getAbsoluteTime() == time) ++i;
     if (i == segment.end()) slotSetInsertCursorPosition(segment.getEndTime());
     else slotSetInsertCursorPosition((*i)->getAbsoluteTime());
+}
+
+void
+NotationView::slotJumpBackward()
+{
+    NotationStaff *staff = m_staffs[m_currentStaff];
+    Segment &segment = staff->getSegment();
+    timeT time = segment.getBarStartForTime(m_insertionTime - 1);
+    slotSetInsertCursorPosition(time);
+}
+
+void
+NotationView::slotJumpForward()
+{
+    NotationStaff *staff = m_staffs[m_currentStaff];
+    Segment &segment = staff->getSegment();
+    timeT time = segment.getBarEndForTime(m_insertionTime);
+    slotSetInsertCursorPosition(time);
 }
     
 

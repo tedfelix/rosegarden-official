@@ -348,6 +348,18 @@ public slots:
     /// Step forward one event with the insertion pointer position
     void slotStepForward();
 
+    /// Step back one bar with the insertion pointer position
+    void slotJumpBackward();
+
+    /// Step forward one bar with the insertion pointer position
+    void slotJumpForward();
+
+    /// Change the current staff to the one preceding the current one
+    void slotCurrentStaffUp();
+
+    /// Change the current staff to the one following the current one
+    void slotCurrentStaffDown();
+
     /// Changes the font of the staffs on the view
     void slotChangeFont(const QString &newFont);
 
