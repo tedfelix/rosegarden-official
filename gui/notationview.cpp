@@ -173,10 +173,17 @@ void EventSelection::updateBeginEndTime() const
         // this has already been calculated
         return;
 
-    eventcontainer::const_iterator iter = m_ownEvents.begin();
+    if (m_ownEvents.empty() && m_trackEvents.empty())
+        // selection is empty
+        return;
+
+    const eventcontainer* selectedEvents = m_ownEvents.empty() ?
+        &m_trackEvents : &m_ownEvents;
+    
+    eventcontainer::const_iterator iter = selectedEvents->begin();
     
     m_beginTime = (*iter)->getAbsoluteTime();
-    iter = m_ownEvents.end(); --iter;
+    iter = selectedEvents->end(); --iter;
     m_endTime = (*iter)->getAbsoluteTime();
 
     kdDebug(KDEBUG_AREA) << "EventSelection::updateBeginEndTime() : begin : "
