@@ -341,32 +341,28 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
 	return;
     }
 
-    // create keyboard accelerators on view
-    //
-    RosegardenGUIApp *par = dynamic_cast<RosegardenGUIApp*>(parent());
-
     // For tempo changes (ugh -- it'd be nicer to make a tempo change
     // command that could interpret all this stuff from the dialog)
     //
     connect(notationView, SIGNAL(changeTempo(Rosegarden::timeT, double,
 					     TempoDialog::TempoDialogAction)),
-	    par, SLOT(slotChangeTempo(Rosegarden::timeT, double,
+	    parent(), SLOT(slotChangeTempo(Rosegarden::timeT, double,
 				      TempoDialog::TempoDialogAction)));
 
     connect(notationView, SIGNAL(windowRaised()),
-	    par, SLOT(slotRaiseTransport()));
+	    parent(), SLOT(slotRaiseTransport()));
     connect(notationView, SIGNAL(play()),
-	    par, SLOT(slotPlay()));
+	    parent(), SLOT(slotPlay()));
     connect(notationView, SIGNAL(stop()),
-	    par, SLOT(slotStop()));
+	    parent(), SLOT(slotStop()));
     connect(notationView, SIGNAL(fastForwardPlayback()),
-	    par, SLOT(slotFastforward()));
+	    parent(), SLOT(slotFastforward()));
     connect(notationView, SIGNAL(rewindPlayback()),
-	    par, SLOT(slotRewind()));
+	    parent(), SLOT(slotRewind()));
     connect(notationView, SIGNAL(fastForwardPlaybackToEnd()),
-	    par, SLOT(slotFastForwardToEnd()));
+	    parent(), SLOT(slotFastForwardToEnd()));
     connect(notationView, SIGNAL(rewindPlaybackToBeginning()),
-	    par, SLOT(slotRewindToBeginning()));
+	    parent(), SLOT(slotRewindToBeginning()));
     connect(notationView, SIGNAL(jumpPlaybackTo(Rosegarden::timeT)),
 	    getDocument(), SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
@@ -420,22 +416,20 @@ void RosegardenGUIView::slotEditSegmentMatrix(Rosegarden::Segment* p)
                                             segmentsToEdit,
                                             this);
 
-    // create keyboard accelerators on view
-    //
-    RosegardenGUIApp *par = dynamic_cast<RosegardenGUIApp*>(parent());
-
+    connect(matrixView, SIGNAL(windowRaised()),
+	    parent(), SLOT(slotRaiseTransport()));
     connect(matrixView, SIGNAL(play()),
-	    par, SLOT(slotPlay()));
+	    parent(), SLOT(slotPlay()));
     connect(matrixView, SIGNAL(stop()),
-	    par, SLOT(slotStop()));
+	    parent(), SLOT(slotStop()));
     connect(matrixView, SIGNAL(fastForwardPlayback()),
-	    par, SLOT(slotFastforward()));
+	    parent(), SLOT(slotFastforward()));
     connect(matrixView, SIGNAL(rewindPlayback()),
-	    par, SLOT(slotRewind()));
+	    parent(), SLOT(slotRewind()));
     connect(matrixView, SIGNAL(fastForwardPlaybackToEnd()),
-	    par, SLOT(slotFastForwardToEnd()));
+	    parent(), SLOT(slotFastForwardToEnd()));
     connect(matrixView, SIGNAL(rewindPlaybackToBeginning()),
-	    par, SLOT(slotRewindToBeginning()));
+	    parent(), SLOT(slotRewindToBeginning()));
     connect(matrixView, SIGNAL(jumpPlaybackTo(Rosegarden::timeT)),
 	    getDocument(), SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
@@ -489,6 +483,9 @@ void RosegardenGUIView::slotEditSegmentEventList(Rosegarden::Segment *p)
     EventView *eventView = new EventView(getDocument(),
                                          segmentsToEdit,
                                          this);
+
+    connect(eventView, SIGNAL(windowRaised()),
+	    parent(), SLOT(slotRaiseTransport()));
 
     // create keyboard accelerators on view
     //
