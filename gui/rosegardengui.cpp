@@ -1018,12 +1018,12 @@ void RosegardenGUIApp::initView()
 
     }
 
+    delete oldView;
+
     // set the highlighted track
     m_view->slotSelectTrackSegments(comp.getSelectedTrack());
 
     m_view->show();
-
-    delete oldView;
 
     // We have to do this to make sure that the 2nd call ("select")
     // actually has any effect. Activating the same radio action
@@ -3692,9 +3692,9 @@ void RosegardenGUIApp::notifySequencerStatus(const int& status)
 //
 void RosegardenGUIApp::processAsynchronousMidi(const Rosegarden::MappedComposition &mC)
 {
-    if (m_seqManager)
-	m_seqManager->processAsynchronousMidi(mC, 0);
+    if (!m_seqManager) return; // probably getting this from a not-yet-killed runaway sequencer
 
+    m_seqManager->processAsynchronousMidi(mC, 0);
     SequencerMapper *mapper = m_seqManager->getSequencerMapper();
     if (mapper) m_view->updateMeters(mapper);
 }
