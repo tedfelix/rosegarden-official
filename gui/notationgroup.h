@@ -21,7 +21,9 @@
 #ifndef _NOTATION_GROUP_H_
 #define _NOTATION_GROUP_H_
 
+#include "NotationTypes.h"
 #include "notationelement.h"
+#include "notepixmapfactory.h"
 
 // Structurally this has a lot in common with Chord; it's just a
 // collection of pointers to things in the main list.  Don't store
@@ -42,10 +44,20 @@ public:
     // doesn't point to an element with a GroupNo at all, we will have
     // size 0.
     
-    Group(const NotationElementList &nel, NELIterator elementInGroup);
-    virtual ~Group();
+    NotationGroup(const NotationElementList &nel, NELIterator elementInGroup);
+    virtual ~NotationGroup();
 
     Type getGroupType() { return m_type; }
+    
+    struct Beam
+    {                           // if a beam has a line equation y = mx + c,
+        double gradient;        // -- then this is m
+        double startHeight;     // -- and this is c (in height-on-staff units,
+        bool aboveNotes;        //                   relative to 1st notehead)
+    };
+
+    Beam calculateBeam(const NotePixmapFactory &npf,
+                       const Clef &clef, const Key &key);
 
 private:
     class GroupMembershipTest {
@@ -55,12 +67,14 @@ private:
                 m_groupNo = -1;
         }
         bool operator()(const NELIterator &i) {
-            int n;
+            long n;
             return ((*i)->event()->get<Int>("GroupNo", n) && n == m_groupNo);
         }
     private:
-        int m_groupNo;
+        long m_groupNo;
     };
+
+    int height(const NELIterator &, const Clef &clef, const Key &key);
 
     const NotationElementList &m_nel;
     Type m_type;

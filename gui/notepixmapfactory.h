@@ -25,6 +25,7 @@
 #include <qcanvas.h>
 
 #include "NotationTypes.h"
+#include "notepixmapfactory.h"
 
 typedef vector<int> ChordPitches;
 typedef vector<Accidental> Accidentals;

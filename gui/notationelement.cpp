@@ -207,8 +207,8 @@ Chord::Chord(const NotationElementList &nel, NELIterator i,
          (i, ChordMembershipTest(i)));
 
     long d;
-    int maxDuration = 0;
-    int minDuration = 1000000;
+    Event::timeT maxDuration = 0;
+    Event::timeT minDuration = 1000000;
 
     i = pair.first;
     m_initial = i;
