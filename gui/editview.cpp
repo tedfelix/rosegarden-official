@@ -883,6 +883,8 @@ EditView::slotAddControlRuler(int controller)
     //
     Rosegarden::Staff *staff = getCurrentStaff();
     staff->getSegment().addEventRuler(control.getType(), control.getControllerValue());
+
+    getDocument()->slotDocumentModified();
 }
 
 void EditView::slotRemoveControlRuler(QWidget* w)
@@ -926,6 +928,7 @@ void EditView::slotRemoveControlRuler(QWidget* w)
         updateBottomWidgetGeometry();
     }
     
+    getDocument()->slotDocumentModified();
 }
 
 
@@ -1229,9 +1232,9 @@ ControlRuler* EditView::getCurrentControlRuler()
 void EditView::slotShowVelocityControlRuler()
 {
     showPropertyControlRuler(Rosegarden::BaseProperties::VELOCITY);
-
     Rosegarden::Segment &seg = getCurrentStaff()->getSegment();
     seg.setViewFeatures(seg.getViewFeatures() | FeatureShowVelocity);
+    getDocument()->slotDocumentModified();
 }
 
 /* 
