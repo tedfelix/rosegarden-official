@@ -16,39 +16,60 @@
  ***************************************************************************/
 
 #include "pitchtoheight.h"
+#include "staff.h"
 
-PitchToHeight::PitchToHeight(unsigned short staffLineWidth)
-  : vector<int>(12)
+vector<int> *
+PitchToHeight::m_pitchToHeight(0);
+
+void
+PitchToHeight::createInstance(unsigned short staffLineWidth)
 {
-    int height = 12 + 5 * staffLineWidth,
-        offset = 0;
+    if (!m_pitchToHeight) {
 
-    for(unsigned int note = 0, pitch = 0; pitch < size(); ++pitch)
-        {
-            (*this)[pitch] = height;
+        m_pitchToHeight = new vector<int>(12);
 
-            if(pitch != 4 && // E
-               pitch != 11) // B
-                {
-                    (*this)[++pitch] = height;
+        // commodity ref
+        vector<int>& pitchToHeight(*m_pitchToHeight);
+
+        int height = 12 + 5 * staffLineWidth,
+            offset = 0;
+
+        for(unsigned int note = 0, pitch = 0; pitch < pitchToHeight.size(); ++pitch)
+            {
+                pitchToHeight[pitch] = height;
+
+                if(pitch != 4 && // E
+                   pitch != 11) // B
+                    {
+                        pitchToHeight[++pitch] = height;
+                    }
+
+                if(pitch == 1 ||
+                   pitch == 3 ||
+                   pitch == 4 ||
+                   pitch == 6 ||
+                   pitch == 8 ||
+                   pitch == 10) {
+                    ++note;
+                    if(pitch == 1 || pitch == 4 || pitch == 8) ++offset;
+                    else if(pitch == 3 || pitch == 6) --offset;
                 }
-
-            if(pitch == 1 ||
-               pitch == 3 ||
-               pitch == 4 ||
-               pitch == 6 ||
-               pitch == 8 ||
-               pitch == 10) {
-                ++note;
-                if(pitch == 1 || pitch == 4 || pitch == 8) ++offset;
-                else if(pitch == 3 || pitch == 6) --offset;
-            }
 	
-            height -= staffLineWidth / 2 + offset;
-        }
+                height -= staffLineWidth / 2 + offset;
+            }
 
-    for(unsigned int pitch = 0; pitch < size(); ++pitch)
-        cout << "Pitch : " << pitch << " - " << (*this)[pitch]
-             << endl;
+        for(unsigned int pitch = 0; pitch < pitchToHeight.size(); ++pitch)
+            cout << "Pitch : " << pitch << " - " << pitchToHeight[pitch]
+                 << endl;
+    }
+}
 
+
+const vector<int>&
+PitchToHeight::instance()
+{
+    if (!m_pitchToHeight) {
+        createInstance(Staff::lineWidth);
+    }
+    return *m_pitchToHeight;
 }

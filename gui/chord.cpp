@@ -32,9 +32,10 @@ Chord::Chord(QCanvas *c)
 void
 Chord::addNote(int pitch)
 {
-    static PitchToHeight pitchToHeight(Staff::noteHeight);
+    const vector<int>& pitchToHeight(PitchToHeight::instance());
 
     if(m_pitches.contains(pitch)) return;
+
     m_pitches.append(pitch);
 
     QCanvasSpriteGroupable *newNote = new QCanvasSpriteGroupable(m_notePixmapArray,

@@ -47,7 +47,7 @@ public:
     /**
      * Generate a pixmap for a chord
      *
-     * @param pitches : a vector of relative pitches
+     * @param pitches : a \b sorted vector of relative pitches
      * @param duration : chord duration
      * @param drawTail : if the pixmap should have a tail or not
      *   (useful when the tail should be collapsed with the one of a neighboring chord)
@@ -59,11 +59,16 @@ public:
 
 protected:
     void drawStalk(unsigned int duration, bool drawTail, bool stalkGoesUp);
+    void readjustGeneratedPixmapHeight(unsigned int duration);
+    void createPixmapAndMask(unsigned int tailOffset);
 
     unsigned int m_generatedPixmapHeight;
     unsigned int m_noteBodyHeight;
     unsigned int m_noteBodyWidth;
     unsigned int m_tailWidth;
+
+    QPixmap *m_generatedPixmap;
+    QBitmap *m_generatedMask;
 
     QPainter m_p, m_pm;
 

@@ -39,9 +39,15 @@ Pitch : 11 - B
   *@author Guillaume Laurent
   */
 
-class PitchToHeight : public vector<int> {
-public: 
-	PitchToHeight(unsigned short notePixmapHeight);
+class PitchToHeight
+{
+public:
+    static const vector<int>& instance();
+
+protected:
+    static void createInstance(unsigned short notePixmapHeight);
+
+    static vector<int> *m_pitchToHeight;
 };
 
 #endif
