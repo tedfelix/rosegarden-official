@@ -632,6 +632,7 @@ void
 EditViewBase::slotStateChanged(const QString& s,
                                bool noReverse)
 {
+    RG_DEBUG << "EditViewBase::slotStateChanged " << s << ", " << noReverse << endl;
     stateChanged(s, noReverse ? KXMLGUIClient::StateNoReverse : KXMLGUIClient::StateReverse);
 }
 

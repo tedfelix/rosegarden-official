@@ -112,7 +112,6 @@ EditView::EditView(RosegardenGUIDoc *doc,
     
     m_controlRulers->hide();
     m_controlRulers->setTabPosition(QTabWidget::Bottom);
-
 }
 
 EditView::~EditView()
@@ -127,7 +126,6 @@ void EditView::updateBottomWidgetGeometry()
     getBottomWidget()->updateGeometry();
     getCanvasView()->updateBottomWidgetGeometry();
 }
-
 
 void EditView::paintEvent(QPaintEvent* e)
 {
@@ -346,7 +344,9 @@ void EditView::addControlRuler(ControlRuler* ruler)
         connect(m_canvasView->horizontalScrollBar(), SIGNAL(sliderMoved(int)),
                 ruler->horizontalScrollBar(), SIGNAL(sliderMoved(int)));
     }
-    
+
+    connect(ruler, SIGNAL(stateChange(const QString&, bool)),
+            this, SLOT(slotStateChanged(const QString&, bool)));
 
     stateChanged("have_control_ruler", KXMLGUIClient::StateReverse);
 }

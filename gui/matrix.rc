@@ -256,6 +256,12 @@
   </enable>
 </State>
 
+<State name="have_note_events_in_segment">
+  <enable>
+   <Action name="draw_property_line"/>
+  </enable>
+</State>
+
 <State name="have_control_ruler">
   <enable>
     <Action name="show_control_rulers"/>

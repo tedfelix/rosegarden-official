@@ -33,6 +33,7 @@
 
 #include <klocale.h>
 #include <klineeditdlg.h>
+#include <kactioncollection.h>
 
 #include "MidiTypes.h"
 #include "Selection.h"
@@ -1279,7 +1280,7 @@ void PropertyControlRuler::computeStaffOffset()
 
 void PropertyControlRuler::startPropertyLine()
 {
-    RG_DEBUG << "PropertyControlRuler::startPropertyLine" << endl;
+    RG_DEBUG << "PropertyControlRuler::startPropertyLine\n";
     m_propertyLineShowing = true;
     this->setCursor(Qt::pointingHandCursor);
 }
@@ -1287,7 +1288,7 @@ void PropertyControlRuler::startPropertyLine()
 void
 PropertyControlRuler::contentsMousePressEvent(QMouseEvent *e)
 {
-    RG_DEBUG << "PropertyControlRuler::contentsMousePressEvent" << endl;
+    RG_DEBUG << "PropertyControlRuler::contentsMousePressEvent\n";
 
     if (!m_propertyLineShowing)
     {
@@ -1324,7 +1325,7 @@ PropertyControlRuler::contentsMousePressEvent(QMouseEvent *e)
 void 
 PropertyControlRuler::contentsMouseReleaseEvent(QMouseEvent *e)
 {
-    RG_DEBUG << "PropertyControlRuler::contentsMouseReleaseEvent" << endl;
+    RG_DEBUG << "PropertyControlRuler::contentsMouseReleaseEvent\n";
 
     /*
     if (m_propertyLineShowing)
@@ -1374,7 +1375,7 @@ PropertyControlRuler::contentsMouseReleaseEvent(QMouseEvent *e)
 void 
 PropertyControlRuler::contentsMouseMoveEvent(QMouseEvent *e)
 {
-    RG_DEBUG << "PropertyControlRuler::contentsMouseMoveEvent" << endl;
+    RG_DEBUG << "PropertyControlRuler::contentsMouseMoveEvent\n";
 
     if (!m_propertyLineShowing)
     {
@@ -1396,6 +1397,34 @@ PropertyControlRuler::contentsMouseMoveEvent(QMouseEvent *e)
     canvas()->update();
 }
 
+void PropertyControlRuler::contentsContextMenuEvent(QContextMenuEvent* e)
+{
+    RG_DEBUG << "PropertyControlRuler::contentsContextMenuEvent\n";
+
+    // check if we actually have some control items
+    QCanvasItemList list = canvas()->allItems();
+    bool haveItems = false;
+    
+    QCanvasItemList::Iterator it = list.begin();
+    for (; it != list.end(); ++it) {
+        if (dynamic_cast<ControlItem*>(*it)) {
+            haveItems = true;
+            break;
+        }
+    }
+
+    RG_DEBUG << "PropertyControlRuler::contentsContextMenuEvent : haveItems = "
+             << haveItems << endl;
+
+    emit stateChange("have_note_events_in_segment", haveItems);
+
+    // TODO : figure out why we have to do this (the stateChange doesn't seem to work)
+    //
+    m_parentEditView->actionCollection()->action("draw_property_line")->setEnabled(haveItems);
+
+    ControlRuler::contentsContextMenuEvent(e);
+}
+
 void 
 PropertyControlRuler::drawPropertyLine(Rosegarden::timeT startTime,
                                        Rosegarden::timeT endTime,
@@ -1408,8 +1437,8 @@ PropertyControlRuler::drawPropertyLine(Rosegarden::timeT startTime,
         std::swap(startValue, endValue);
     }
 
-    RG_DEBUG << "PropertyControlRuler::drawPropertyLine - "
-             << "set velocity from " << startTime 
+    RG_DEBUG << "PropertyControlRuler::drawPropertyLine - set velocity from "
+             << startTime 
              << " to " << endTime << endl;
 
     // Add the "true" to catch Events overlapping this line
@@ -1417,15 +1446,24 @@ PropertyControlRuler::drawPropertyLine(Rosegarden::timeT startTime,
     Rosegarden::EventSelection selection(*m_segment, startTime, endTime, true);
     Rosegarden::PropertyPattern pattern = Rosegarden::DecrescendoPattern;
 
-    SelectionPropertyCommand *command = 
-        new SelectionPropertyCommand(&selection,
-                                     Rosegarden::BaseProperties::VELOCITY,
-                                     pattern,
-                                     startValue,
-                                     endValue);
+    bool haveNotes = selection.contains(Rosegarden::Note::EventType);
 
-    m_parentEditView->addCommandToHistory(command);
+    if (haveNotes) {
+        
+        SelectionPropertyCommand *command = 
+            new SelectionPropertyCommand(&selection,
+                                         Rosegarden::BaseProperties::VELOCITY,
+                                         pattern,
+                                         startValue,
+                                         endValue);
 
+        m_parentEditView->addCommandToHistory(command);
+
+    } else {
+
+        RG_DEBUG << "PropertyControlRuler::drawPropertyLine - no notes in selection\n";
+
+    }
 }
 
 void

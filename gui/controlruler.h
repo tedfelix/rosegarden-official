@@ -196,6 +196,7 @@ protected:
     virtual void contentsMousePressEvent(QMouseEvent*);
     virtual void contentsMouseReleaseEvent(QMouseEvent*);
     virtual void contentsMouseMoveEvent(QMouseEvent*);
+    virtual void contentsContextMenuEvent(QContextMenuEvent*);
 
     void drawPropertyLine(Rosegarden::timeT startTime,
                           Rosegarden::timeT endTime,
