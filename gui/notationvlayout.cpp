@@ -49,9 +49,14 @@ NotationVLayout::layout(NotationElementList::iterator from,
     i = m_elements.findPrevious(Key::EventPackage, Key::EventType, from);
     if (i != m_elements.end()) key = Key(*(*i)->event());
 
+    int lookedAt = 0;//!!!
+
     for (i = from; i != to; ++i) {
 
         NotationElement *el = (*i);
+
+	kdDebug(KDEBUG_AREA) << "looking at an element" << endl;
+	++lookedAt;
 
         if (el->isRest()) {
 
@@ -88,5 +93,8 @@ NotationVLayout::layout(NotationElementList::iterator from,
             }
         }
     }
+
+    
+    kdDebug(KDEBUG_AREA) << "vlayout: looked at " << lookedAt << " elements" << endl;
 }
 

@@ -171,8 +171,8 @@ NotationCanvasView::insertNote(const StaffLine *line, const QPoint &pos)
     int pitch = NotationDisplayPitch(h, NoAccidental).
         getPerformancePitch(Clef::DefaultClef, ::Key::DefaultKey);
 
-    kdDebug(KDEBUG_AREA) << "NotationCanvasView::insertNote() : insertNote at pitch "
-                             << pitch << endl;
+    kdDebug(KDEBUG_AREA) << "NotationCanvasView::insertNote() : insertNote at height " << h << " ( = pitch "
+			 << pitch << " )" << endl;
 
     //!!! TODO -- get the right pitch
     emit noteInserted(pitch, pos);

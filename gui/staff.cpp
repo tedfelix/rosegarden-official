@@ -171,11 +171,11 @@ Staff::deleteBars()
 }
 
 
-const unsigned int Staff::noteHeight = 8;
-const unsigned int Staff::lineWidth = noteHeight + 1;
-const unsigned int Staff::noteWidth = 9;
-const unsigned int Staff::accidentWidth = 6;
-const unsigned int Staff::stalkLen = noteHeight * 7/2 - 6;
-const unsigned int Staff::nbLines = 5;
-const unsigned int Staff::linesOffset = 8;
+const int Staff::noteHeight = 8;
+const int Staff::lineWidth = noteHeight + 1;
+const int Staff::noteWidth = 9;
+const int Staff::accidentWidth = 6;
+const int Staff::stalkLen = noteHeight * 7/2 - 6;
+const int Staff::nbLines = 5;
+const int Staff::linesOffset = 8;
 

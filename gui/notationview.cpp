@@ -614,7 +614,8 @@ NotationView::insertNote(int pitch, const QPoint &eventPos)
     //
     Event *insertedEvent = new Event;
 
-    insertedEvent->setType("note"); // TODO : we can insert rests too
+    insertedEvent->setPackage(Note::EventPackage);
+    insertedEvent->setType(Note::EventType); // TODO : we can insert rests too
     
     // set its duration and pitch
     //
@@ -658,6 +659,9 @@ NotationView::insertNote(int pitch, const QPoint &eventPos)
 
             newNotationElement->setAbsoluteTime((*closestNote)->absoluteTime());
             // m_notationElements->insert(newNotationElement);
+
+	    kdDebug(KDEBUG_AREA) << "new event is: " << (*newNotationElement) << endl;
+
             m_viewElementsManager->insert(newNotationElement);
             
         }

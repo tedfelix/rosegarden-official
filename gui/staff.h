@@ -42,17 +42,17 @@ public:
     void deleteBars(unsigned int fromPos);
     void deleteBars();
 
-    static const unsigned int noteHeight;
-    static const unsigned int noteWidth;
-    static const unsigned int lineWidth;
-    static const unsigned int accidentWidth;
-    static const unsigned int stalkLen;
-    static const unsigned int nbLines;
-    static const unsigned int linesOffset;
+    static const int noteHeight;
+    static const int noteWidth;
+    static const int lineWidth;
+    static const int accidentWidth;
+    static const int stalkLen;
+    static const int nbLines;
+    static const int linesOffset;
 
 protected:
-    unsigned int m_barLineHeight;
-    unsigned int m_horizLineLength;
+    int m_barLineHeight;
+    int m_horizLineLength;
 
     barlines m_barLines;
 };
