@@ -56,6 +56,13 @@ public:
 
     void setPositionTracking(bool t);
 
+    /**
+     * Render segments on printing painter
+     *
+     * @see NotationView#print
+     */
+    virtual void print(QPainter*);
+
 public slots:
 
 signals:

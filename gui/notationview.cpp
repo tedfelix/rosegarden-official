@@ -2007,6 +2007,12 @@ void NotationView::update()
     canvas()->update();
 }
 
+void NotationView::print(QPainter* printpainter)
+{
+    getCanvasView()->print(printpainter);
+}
+
+
 void NotationView::refreshSegment(Segment *segment,
 				  timeT startTime, timeT endTime)
 {

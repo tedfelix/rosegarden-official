@@ -20,14 +20,14 @@
 */
 
 // include files for Qt
-#include <qprinter.h>
+#include <qhbox.h>
+#include <qvbox.h>
+#include <qpushbutton.h>
 
 // KDE includes
 #include <kdebug.h>
 #include <kmessagebox.h>
-#include <qhbox.h>
-#include <qvbox.h>
-#include <qpushbutton.h>
+#include <kprinter.h>
 
 // application specific includes
 #include "MappedEvent.h"
@@ -267,12 +267,20 @@ RosegardenGUIView::getDocument() const
     return theApp->getDocument();
 }
 
-void RosegardenGUIView::print(QPrinter *pPrinter)
+void RosegardenGUIView::print(KPrinter *pPrinter, Rosegarden::Composition* p)
 {
     QPainter printpainter;
     printpainter.begin(pPrinter);
-        
-    // TODO: add your printing code here
+
+    std::vector<Rosegarden::Segment *> segmentsToEdit;
+
+    for (Rosegarden::Composition::iterator i = p->begin(); i != p->end(); ++i) {
+        segmentsToEdit.push_back(*i);
+    }
+
+    NotationView *notationView = new NotationView(this, segmentsToEdit, this);
+//     notationView->show();
+    notationView->print(&printpainter);
 
     printpainter.end();
 }

@@ -20,9 +20,6 @@
 */
 
 // include files for QT
-#include <qdir.h>
-#include <qprinter.h>
-#include <qpainter.h>
 #include <qdragobject.h>
 
 // include files for KDE
@@ -36,6 +33,7 @@
 #include <klocale.h>
 #include <kconfig.h>
 #include <kprocess.h>
+#include <kprinter.h>
 #include <dcopclient.h>
 #include <qiconset.h>
 #include <kstddirs.h>
@@ -815,12 +813,19 @@ void RosegardenGUIApp::fileClose()
 
 void RosegardenGUIApp::filePrint()
 {
+    if (m_doc->getComposition().getNbSegments() == 0) {
+        KMessageBox::sorry(0, "Please create some tracks first (until we implement menu state management)");
+        return;
+    }
+
     KTmpStatusMsg msg(i18n("Printing..."), statusBar());
 
-    QPrinter printer;
+    KPrinter printer;
+
+    printer.setFullPage(true);
 
     if (printer.setup(this)) {
-        m_view->print(&printer);
+        m_view->print(&printer, &m_doc->getComposition());
     }
 }
 

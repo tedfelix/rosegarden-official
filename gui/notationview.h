@@ -149,6 +149,13 @@ public:
      */
     virtual void update();
 
+    /**
+     * Render segments on printing painter
+     *
+     * @see NotationCanvasView#print
+     */
+    virtual void print(QPainter*);
+
 public slots:
 
 

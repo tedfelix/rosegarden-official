@@ -62,7 +62,7 @@ rosegarden_SOURCES = \
         vumeter.cpp \
 	xmlstorableevent.cpp
 
-rosegarden_LDADD   = ../sound/libRosegardenSound.la ../base/libbase.la -lqt -lkfile -lkdeui -lkdecore -lXext -lX11 $(LIBSOCKET)
+rosegarden_LDADD   = ../sound/libRosegardenSound.la ../base/libbase.la -lqt -lkfile -lkdeui -lkdecore -lkdeprint -lXext -lX11 $(LIBSOCKET)
 
 SUBDIRS = docs
 

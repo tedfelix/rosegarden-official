@@ -40,6 +40,7 @@ class QScrollView;
 class RosegardenGUIDoc;
 class TrackEditor;
 class RulerScale;
+class KPrinter;
 
 /**
  * The RosegardenGUIView class provides the view widget for the
@@ -81,7 +82,7 @@ public:
     /**
      * contains the implementation for printing functionality
      */
-    void print(QPrinter *pPrinter);
+    void print(KPrinter *pPrinter, Rosegarden::Composition*);
 
     // the following aren't slots because they're called from
     // RosegardenGUIApp

@@ -368,3 +368,8 @@ NotationCanvasView::getElementAtXCoord(QMouseEvent *e) // any old element
     return 0;
 }
 
+void NotationCanvasView::print(QPainter* printpainter)
+{
+    drawContents(printpainter, 0, 0,
+                 canvas()->width(), canvas()->height());
+}
