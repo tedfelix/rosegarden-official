@@ -37,6 +37,7 @@ class QCanvasItem;
 namespace Rosegarden { class Track; }
 class RosegardenGUIDoc;
 class NotationTool;
+class StaffRuler;
 
 /**
  * This class holds a selection of Events, used for cut'n paste
@@ -416,7 +417,12 @@ protected:
     /**
      * show bar lines
      */
-    bool showBars(int staffNo);
+    void showBars(int staffNo);
+
+    /**
+     * update the top ruler according to bar lines
+     */
+    void updateRuler();
     
     /**
      * find the Staff whose Y coord range includes y, and return the
@@ -481,6 +487,8 @@ protected:
     int m_currentStaff;
 
     std::vector<NotationStaff*> m_staffs;
+
+    StaffRuler* m_ruler;
 
     std::string m_fontName;
     int m_fontSize;

@@ -184,6 +184,176 @@ void EventSelection::updateBeginEndTime() const
 
 //////////////////////////////////////////////////////////////////////
 
+class StaffRuler
+{
+public:
+    typedef std::vector<double> Steps;
+
+    StaffRuler(int xPos, int yPos, QCanvas*);
+
+    void clearSteps();
+    void addStep(double stepPos);
+    void update();
+
+protected:
+    struct StepElement
+    {
+        StepElement(QCanvasLine* l, QCanvasText* t);
+        StepElement(const StepElement&);
+        StepElement& operator=(const StepElement& e);
+
+        void addSubStep(QCanvasLine*);
+
+        QCanvasLine* stepLine;
+        QCanvasText* label;
+        std::vector<QCanvasLine*> subSteps;
+    };
+    
+    void makeStep(int stepValue,
+                  double pos, double nextStepPos,
+                  unsigned short nbSubsteps);
+
+    QCanvas* m_canvas;
+
+    int m_xPos; // mainLine X pos
+    int m_yPos; // mainLine Y pos
+
+    int m_stepLineHeight,
+        m_subStepLineHeight;
+
+    QCanvasLine* m_mainLine;
+
+    Steps m_steps;
+    
+    std::vector<StepElement> m_stepElements;
+};
+
+StaffRuler::StepElement::StepElement(QCanvasLine* l, QCanvasText* t)
+    : stepLine(l), label(t)
+{
+}
+
+StaffRuler::StepElement::StepElement(const StepElement& e)
+    : stepLine(e.stepLine), label(e.label),
+      subSteps(e.subSteps)
+{
+}
+
+StaffRuler::StepElement& StaffRuler::StepElement::operator=(const StaffRuler::StepElement& e)
+{
+    stepLine = e.stepLine;
+    label = e.label;
+    subSteps = e.subSteps;
+
+    return *this;
+}
+
+
+void StaffRuler::StepElement::addSubStep(QCanvasLine* l)
+{
+    subSteps.push_back(l);
+}
+
+
+StaffRuler::StaffRuler(int xPos, int yPos, QCanvas* c)
+    : m_canvas(c),
+      m_xPos(xPos),
+      m_yPos(yPos),
+      m_stepLineHeight(10),
+      m_subStepLineHeight(5),
+      m_mainLine(new QCanvasLine(m_canvas))
+{
+    m_mainLine->setPoints(m_xPos, m_yPos, m_xPos, m_yPos);
+    
+    m_mainLine->show();
+}
+
+void StaffRuler::clearSteps()
+{
+    m_steps.clear();
+
+    // TODO: recycle items instead
+    for (unsigned int i = 0; i < m_stepElements.size(); ++i) {
+        StepElement& stepEl = m_stepElements[i];
+        delete stepEl.stepLine;
+        delete stepEl.label;
+        for (unsigned int j = 0; j < stepEl.subSteps.size(); ++j)
+            delete stepEl.subSteps[j];
+    }
+
+    m_stepElements.clear();
+
+}
+
+void StaffRuler::addStep(double stepPos)
+{
+    m_steps.push_back(stepPos);
+}
+
+void StaffRuler::update()
+{
+    // TODO: perhaps recycle instead
+    for(unsigned int i = 0; i < m_steps.size() - 1; ++i)
+        makeStep(i, m_steps[i], m_steps[i + 1], 4);
+    // TODO: this last param ('4') should be according to time sig
+
+    m_mainLine->setPoints(m_xPos, m_yPos,
+                          m_xPos + int(m_steps[m_steps.size() - 1]) + 10, m_yPos);
+
+}
+
+void StaffRuler::makeStep(int stepValue,
+                          double stepPos, double nextStepPos,
+                          unsigned short nbSubsteps)
+{
+    // Make step line
+    //
+    QCanvasLine* stepLine = new QCanvasLine(m_canvas);
+    
+    stepLine->setPoints(int(stepPos) + m_xPos, m_yPos,
+                        int(stepPos) + m_xPos, m_yPos - m_stepLineHeight);
+    
+    stepLine->show();
+
+    // Make label
+    //
+    QString labelText;
+    labelText.setNum(stepValue);
+
+    QCanvasText* label = new QCanvasText(labelText, m_canvas);
+    label->setX(stepPos + m_xPos);
+    label->setY(m_yPos + 5);
+    //if (stepPos != 0) label->setTextFlags(Qt::AlignHCenter);
+
+    // Prepare StepElement
+    StepElement stepEl(stepLine, label);
+    
+
+    // Make substeps
+    //
+    double incr = (nextStepPos - stepPos) / nbSubsteps;
+
+    for (double subStepPos = (stepPos + incr);
+         subStepPos <= (nextStepPos - incr);
+         subStepPos += incr) {
+
+        QCanvasLine* subStep = new QCanvasLine(m_canvas);
+    
+        subStep->setPoints(int(subStepPos) + m_xPos, m_yPos,
+                           int(subStepPos) + m_xPos, m_yPos - m_subStepLineHeight);
+        subStep->show();
+
+        stepEl.addSubStep(subStep);
+    }
+
+    label->show();
+
+    m_stepElements.push_back(stepEl);
+}
+
+
+//////////////////////////////////////////////////////////////////////
+
 NotationView::NotationViewSet NotationView::m_viewsExtant;
 
 NotationView::NotationView(RosegardenGUIDoc* doc,
@@ -199,6 +369,7 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     m_canvasView(new NotationCanvasView(new QCanvas(width() * 2,
                                                     height() * 2),
                                         this)),
+    m_ruler(new StaffRuler(20, 10, canvas())),
     m_hlayout(0),
     m_vlayout(0),
     m_tool(0),
@@ -621,7 +792,7 @@ void NotationView::initFontToolbar()
         return;
     }
 
-    new QLabel("  Font:  ", fontToolbar);
+    new QLabel(i18n("  Font:  "), fontToolbar);
 
     QComboBox *fontCombo = new QComboBox(fontToolbar);
     fontCombo->setEditable(false);
@@ -640,7 +811,7 @@ void NotationView::initFontToolbar()
     connect(fontCombo, SIGNAL(activated(const QString &)),
             this,        SLOT(changeFont(const QString &)));
 
-    new QLabel("  Size:  ", fontToolbar);
+    new QLabel(i18n("  Size:  "), fontToolbar);
 
     vector<int> sizes = NotePixmapFactory::getAvailableSizes(m_fontName);
     m_fontSizeSlider = new ZoomSlider<int>
@@ -648,7 +819,7 @@ void NotationView::initFontToolbar()
     connect(m_fontSizeSlider, SIGNAL(valueChanged(int)),
             this, SLOT(changeFontSizeFromIndex(int)));
 
-    new QLabel("  Spacing:  ", fontToolbar);
+    new QLabel(i18n("  Spacing:  "), fontToolbar);
 
     vector<double> spacings = NotationHLayout::getAvailableSpacings();
     QSlider *stretchSlider = new ZoomSlider<double>
@@ -656,7 +827,7 @@ void NotationView::initFontToolbar()
     connect(stretchSlider, SIGNAL(valueChanged(int)),
             this, SLOT(changeStretch(int)));
 
-    new QLabel("  Legato:  ", fontToolbar);
+    new QLabel(i18n("  Legato:  "), fontToolbar);
 
     if (m_legatoDurations.size() == 0) {
         for (int type = Note::Shortest; type <= Note::Longest; ++type) {
@@ -675,7 +846,9 @@ void NotationView::initStatusBar()
 {
     KStatusBar* sb = statusBar();
 
-    sb->insertItem(KTmpStatusMsg::getDefaultMsg(), KTmpStatusMsg::getDefaultId());
+    sb->insertItem(KTmpStatusMsg::getDefaultMsg(),
+                   KTmpStatusMsg::getDefaultId());
+
     m_currentNotePixmap       = new QLabel(sb);
     m_hoveredOverNoteName     = new QLabel(sb);
     m_hoveredOverAbsoluteTime = new QLabel(sb);
@@ -690,10 +863,10 @@ void NotationView::initStatusBar()
 //NotationStaff instead (it should be intelligent enough to query the
 //notationhlayout itself)
 
-bool NotationView::showBars(int staffNo)
+void NotationView::showBars(int staffNo)
 {
     NotationStaff &staff = *m_staffs[staffNo];
-    staff.deleteBars(0);
+    staff.deleteBars();
 
     for (unsigned int i = 0; i < m_hlayout->getBarLineCount(staff); ++i) {
 
@@ -703,7 +876,24 @@ bool NotationView::showBars(int staffNo)
         }
     }
 
-    return true;
+    updateRuler();
+}
+
+void NotationView::updateRuler()
+{
+    int staffNo = 0; // get the longest staff from the hlayout
+
+    NotationStaff &staff = *m_staffs[staffNo];
+
+    m_ruler->clearSteps();
+    
+    for (unsigned int i = 0; i < m_hlayout->getBarLineCount(staff); ++i) {
+
+        m_ruler->addStep(m_hlayout->getBarLineX(staff, i));
+        
+    }
+
+    m_ruler->update();
 }
 
 
