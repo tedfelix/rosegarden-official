@@ -1,0 +1,22 @@
+#!/bin/bash
+#
+# rgedit - handy dandy RG file editor
+#
+# D. Michael McIntyre <dmmcintyr@users.sourceforge.net>
+#
+
+if (file $1|grep gzip); then
+    echo Uncompressing $1 for editing...
+    gunzip -c $1 > /tmp/$1.xml
+    editor /tmp/$1.xml
+    holder=$PWD
+    cd /tmp
+    gzip $1.xml
+    cd $holder
+    mv -f /tmp/$1.xml.gz $1 > /dev/null
+    echo Wrote edited file to $1
+else
+    /usr/bin/less $1
+fi
+exit 0
+
