@@ -1,9 +1,9 @@
 <tip category="Rosegarden|General">
 <html>
 <p>To configure a track to play using a particular instrument:</p>
-&nbsp;&nbsp;* click on the track label and hold a moment
-&nbsp;&nbsp;* select an output device
-&nbsp;&nbsp;* select one of that device's available instruments (#1 - #16)
+&nbsp;&nbsp;* click on the track label and hold a moment<br>
+&nbsp;&nbsp;* select an output device<br>
+&nbsp;&nbsp;* select one of that device's available instruments (#1 - #16)<br>
 &nbsp;&nbsp;* adjust that instrument's output channel, program, bank, and
 controllers via the instrument parameters box
 </html>
@@ -202,7 +202,7 @@ matrix allows you to edit their performance duration.</p>
 <html>
 <p>If you're working with a human performance and you need to insert some new
 notes, these new notes will sound for their entire written duration.  To blend
-these new notes into a human performance, use <b>Adjust -> Notes ->
+these new notes into a human performance, select them, then use <b>Adjust -> Notes ->
 Interpret</b> from the notation view to interpret any marks and  massage their performance
 durations to something less mechanical.</p>
 </html>
