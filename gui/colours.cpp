@@ -96,7 +96,7 @@ namespace RosegardenGUIColours
     const QColor AudioCountdownBackground = Qt::darkGray;
     const QColor AudioCountdownForeground = Qt::red;
 
-    const QColor RotaryFloatBackground = Qt::red;
+    const QColor RotaryFloatBackground = Qt::cyan;
     const QColor RotaryFloatForeground = Qt::black;
 
 }

@@ -549,6 +549,23 @@ RosegardenRotary::mousePressEvent(QMouseEvent *e)
 
         // draw on the float text
         m_float->setText(QString("%1").arg(m_position));
+
+        // Reposition - we need to sum the relative positions up to the
+        // topLevel or dialog to please move().
+        //
+        QWidget *par = parentWidget();
+        QPoint totalPos = this->pos();
+
+        while (par->parentWidget() && !par->isTopLevel() && !par->isDialog())
+        {
+            totalPos += par->pos();
+            par = par->parentWidget();
+        }
+        // Move just top/right of the rotary
+        //
+        m_float->move(totalPos + QPoint(width() + 2, -height()/2));
+
+        // Show
         m_float->show();
     }
     else if (e->button() == RightButton) // reset to centre position
@@ -972,7 +989,9 @@ RosegardenTextFloat::RosegardenTextFloat(QWidget *parent):
     QWidget *par = parentWidget();
     QPoint pos = parent->pos() + par->pos();
 
-    while (par->parentWidget() && par->parentWidget() != par)
+    // Get position and reparent to either top level or dialog
+    //
+    while (par->parentWidget() && !par->isTopLevel() && !par->isDialog())
     {
         par = par->parentWidget();
         pos += par->pos();
