@@ -69,15 +69,19 @@ SegmentParameterBox::initBox()
     // handle state changes
     connect(m_repeatValue, SIGNAL(pressed()), SLOT(repeatPressed()));
 
-    m_quantizeValue = new QComboBox(false, this); // motif style read-only
+    // motif style read-only combo
+    m_quantizeValue = new RosegardenComboBox(false, this);
+
     m_quantizeValue->setFont(font);
     m_quantizeValue->setFixedSize(comboWidth, comboHeight);
 
-    m_transposeValue = new QComboBox(false, this); // motif style read-only
+    // motif style read-only combo
+    m_transposeValue = new RosegardenComboBox(false, this);
     m_transposeValue->setFont(font);
     m_transposeValue->setFixedSize(comboWidth, comboHeight);
 
-    m_delayValue = new QComboBox(false, this); // motif style read-only
+    // motif style read-only combo
+    m_delayValue = new RosegardenComboBox(false, this);
     m_delayValue->setFont(font);
     m_delayValue->setFixedSize(comboWidth, comboHeight);
 

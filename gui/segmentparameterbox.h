@@ -57,6 +57,40 @@ protected:
 private:
 };
 
+// Turn a normal QComboBox into one that accepts mouse wheel
+// events to change the value
+//
+class RosegardenComboBox : public QComboBox
+{
+public:
+    RosegardenComboBox(QWidget *parent=0, const char *name=0):
+        QComboBox(parent, name) {;}
+
+    RosegardenComboBox(bool rw, QWidget *parent=0, const char *name=0):
+        QComboBox(rw, parent, name) {;}
+
+
+protected:
+    virtual void wheelEvent(QWheelEvent *e)
+    {  e->accept();
+       
+        if (e->delta() < 0)
+        {
+            if (currentItem() < count() - 1)
+                setCurrentItem(currentItem() + 1);
+        }
+        else
+        {
+            if (currentItem() > 0)
+                setCurrentItem(currentItem() - 1);
+        }
+    }
+
+private:
+
+};
+
+
 
 class SegmentParameterBox : public QFrame
 {
@@ -88,9 +122,9 @@ private:
     void populateBoxFromSegments();
 
     RosegardenTristateCheckBox *m_repeatValue;
-    QComboBox *m_quantizeValue;
-    QComboBox *m_transposeValue;
-    QComboBox *m_delayValue;
+    RosegardenComboBox         *m_quantizeValue;
+    RosegardenComboBox         *m_transposeValue;
+    RosegardenComboBox         *m_delayValue;
 
     std::vector<Rosegarden::Segment*> m_segments;
 };
