@@ -70,6 +70,7 @@ if test "$with_alsa" = "no"; then
   AC_CHECK_FILE($kde_includes/arts/reference.h,, AC_MSG_ERROR("aRts headers are missing"))
   with_jack=no
   with_ladspa=no
+  with_dssi=no
   with_liblrdf=no
 else
   dnl ALSA is good
@@ -269,15 +270,15 @@ if test "$with_xft" = "no"; then
     echo "present in your distribution though."
     echo
 fi
-if test "$with_sound" = "no" -o "with_alsa" = "no"; then
+if test "$with_sound" = "no" -o "$with_alsa" = "no"; then
     echo "* Rosegarden requires the ALSA (Advanced Linux Sound Architecture) drivers"
-    echo "for MIDI and the JACK audio framework for audio sample sequencing."
+    echo "for MIDI, and the JACK audio framework for audio sequencing."
     echo "Please see the documentation at http://www.rosegardenmusic.com/getting/"
     echo "for more information about these dependencies."
     echo
     if test "$with_sound" != "no"; then
-	echo "(Rosegarden does contain some support for audio and MIDI using the KDE"
-	echo "aRts multimedia service.  You're unlikely to find that it works, however.)"
+	echo "(Rosegarden does contain some code for audio and MIDI using the KDE"
+	echo "aRts multimedia service.  But it's unlikely to compile, let alone work.)"
     fi
     echo
 else
