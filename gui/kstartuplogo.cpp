@@ -22,6 +22,10 @@
 // This file contains code borrowed from KDevelop 2.0
 // (c) The KDevelop Development Team
 
+#include "config.h"
+
+#include <qpainter.h>
+
 #include "kstartuplogo.h"
 #include <kapp.h>
 #include <kstddirs.h>
@@ -31,18 +35,32 @@ KStartupLogo::KStartupLogo(QWidget * parent, const char *name)
               WStyle_NoBorderEx | WStyle_Customize | WDestructiveClose),
     m_bReadyToHide(false)
 {
-    QPixmap pm;
-    pm.load(locate("appdata", "pixmaps/splash.png"));
-    setBackgroundPixmap(pm);
-    setGeometry(QApplication::desktop()->width()/2-pm.width()/2,
-                QApplication::desktop()->height()/2-pm.height()/2,
-                pm.width(),pm.height());
+    m_pixmap.load(locate("appdata", "pixmaps/splash.png"));
+    setBackgroundPixmap(m_pixmap);
+    setGeometry(QApplication::desktop()->width()/2-m_pixmap.width()/2,
+                QApplication::desktop()->height()/2-m_pixmap.height()/2,
+                m_pixmap.width(),m_pixmap.height());
 }
 
 KStartupLogo::~KStartupLogo()
 {
 }
- 
+
+void KStartupLogo::paintEvent(QPaintEvent*)
+{
+    // Print version number
+    QPainter paint(this);
+    paint.setPen(QColor(255,105,180));
+
+    QFont defaultFont;
+    defaultFont.setPixelSize(30);
+    paint.setFont(defaultFont);
+
+    paint.drawText(m_pixmap.width() - 80,
+                   m_pixmap.height() - 15,
+                   VERSION);
+}
+
 void KStartupLogo::mousePressEvent( QMouseEvent*)
 {
     // for the haters of raising startlogos

@@ -26,7 +26,7 @@
 #define KSTARTUPLOGO_H
 
 #include <qwidget.h>
-
+#include <qpixmap.h>
 
 /**
   *@author ??
@@ -44,9 +44,13 @@ public:
 
 protected:
 
+
+    virtual void paintEvent(QPaintEvent*);
     virtual void mousePressEvent( QMouseEvent*);
 
     bool m_bReadyToHide;
+
+    QPixmap m_pixmap;
 };
 
 #endif
