@@ -230,7 +230,7 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 {
     START_TIMING;
 
-    Segment &t(staff.getSegment());
+    Segment &segment(staff.getSegment());
     NotationElementList *notes = staff.getViewElementList();
     BarDataList &barList(getBarData(staff));
 
@@ -239,22 +239,24 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
     TimeSignature timeSignature;
 
     bool isFullScan = (startTime == endTime);
-    //!!!   bool isFullScan = true;
-
     bool allDone = false; // used in partial scans
 
     if (isFullScan) {
 	clearBarList(staff);
-	startTime = t.getStartTime();
-	endTime = t.getEndTime();
+	startTime = segment.getStartTime();
+	endTime = segment.getEndTime();
     }
 
-    int barNo = getComposition()->getBarNumber(t.getStartTime());
-    int endBarNo = getComposition()->getBarNumber(t.getEndTime());
+    int barNo = getComposition()->getBarNumber(segment.getStartTime());
+    int endBarNo = getComposition()->getBarNumber(segment.getEndTime());
+    if (endBarNo > barNo &&
+	getComposition()->getBarStart(endBarNo) == segment.getEndTime()) {
+	--endBarNo;
+    }
 
     kdDebug(KDEBUG_AREA) << "NotationHLayout::scanStaff: full scan " << isFullScan << ", times " << startTime << "->" << endTime << ", bars " << barNo << "->" << endBarNo << endl;
 
-    SegmentNotationHelper nh(t);
+    SegmentNotationHelper nh(segment);
     nh.quantize();
 
     PRINT_ELAPSED("NotationHLayout::scanStaff: after quantize");
@@ -300,7 +302,7 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 	    continue;
 	}
 
-	kdDebug(KDEBUG_AREA) << "NotationHLayout::scanStaff: bar " << barNo << ", from " << barTimes.first << ", to " << barTimes.second << " (end " << t.getEndTime() << "); from is at " << (from == notes->end() ? -1 : (*from)->getAbsoluteTime()) << ", to is at " << (to == notes->end() ? -1 : (*to)->getAbsoluteTime()) << endl;
+	kdDebug(KDEBUG_AREA) << "NotationHLayout::scanStaff: bar " << barNo << ", from " << barTimes.first << ", to " << barTimes.second << " (end " << segment.getEndTime() << "); from is at " << (from == notes->end() ? -1 : (*from)->getAbsoluteTime()) << ", to is at " << (to == notes->end() ? -1 : (*to)->getAbsoluteTime()) << endl;
 
         NotationElementList::iterator shortest = notes->end();
         int shortCount = 0;
@@ -438,6 +440,8 @@ NotationHLayout::setBarBasicData(StaffType &staff,
 				 bool correct,
 				 bool fake)
 {
+    kdDebug(KDEBUG_AREA) << "setBarBasicData for " << barNo << endl;
+
     BarDataList &bdl(m_barData[&staff]);
 
     while (barNo >= bdl.size()) {
@@ -458,6 +462,8 @@ NotationHLayout::setBarSizeData(StaffType &staff,
 				Rosegarden::Event *timeSig,
 				Rosegarden::timeT actualDuration)
 {
+    kdDebug(KDEBUG_AREA) << "setBarSizeData for " << barNo << endl;
+
     BarDataList &bdl(m_barData[&staff]);
 
     while (barNo >= bdl.size()) {
@@ -1438,7 +1444,7 @@ NotationHLayout::getLastVisibleBar()
     int bar = -1;
     for (BarDataMap::iterator i = m_barData.begin();
 	 i != m_barData.end(); ++i) {
-	int barHere = i->second.size() - 1;
+	int barHere = i->second.size()/* - 1*/; // last visible bar_line_
 	if (barHere > bar) bar = barHere;
     }
     return bar;
@@ -1448,7 +1454,7 @@ int
 NotationHLayout::getLastVisibleBarOnStaff(StaffType &staff)
 {
     BarDataList &bdl(getBarData(staff));
-    return bdl.size() - 1;
+    return bdl.size() /*- 1*/; // last visible bar_line_
 }
 
 double
@@ -1460,9 +1466,14 @@ NotationHLayout::getBarPosition(int bar)
 	 i != m_barData.end(); ++i) {
 	int barHere = i->second.size() - 1;
 	if (barHere >= bar) return i->second[bar].layoutData.x;
+	else if (barHere == bar-1 && barHere >= 0) {
+	    return i->second[bar-1].layoutData.x +
+		   i->second[bar-1].sizeData.idealWidth;
+	}
     }
 
     int lvb = getLastVisibleBar();
+    
     if (lvb < 0) return 0;
     return getBarPosition(lvb);
 }

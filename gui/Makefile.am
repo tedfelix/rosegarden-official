@@ -36,8 +36,8 @@ rosegarden_SOURCES = \
 	notationview.cpp \
 	notationvlayout.cpp \
 	notefont.cpp \
-	pianokeyboard.cpp \
 	notepixmapfactory.cpp \
+	pianokeyboard.cpp \
 	qcanvasgroupableitem.cpp \
 	qcanvassimplesprite.cpp \
 	qdeferscrollview.cpp \
@@ -67,8 +67,8 @@ rosegarden_SOURCES = \
         tracklabel.cpp \
 	trackseditoriface.skel \
         trackvumeter.cpp \
-        vumeter.cpp \
         velocitycolour.cpp \
+        vumeter.cpp \
         widgets.cpp \
 	xmlstorableevent.cpp
 
