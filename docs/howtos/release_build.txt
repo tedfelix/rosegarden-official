@@ -1,0 +1,46 @@
+How to make a new release
+
+Main steps :
+
+1. build a tarball
+
+2. make the tarball available on SourceForge
+
+
+1. Bulding the tarball
+
+From the top level source dir :
+
+- edit configure.in.in and set the version number on the line AM_INIT_AUTOMAKE
+- do 'make -f Makefile.cvs; make clean'
+
+Clone (cp -R) the whole directory tree to another dir, named
+rosegarden-$version (for instance, rosegarden-0.1).
+
+cd to that new directory and do 'make distrib'
+
+the tarball should be built in the new directory, that is at
+rosegarden-0.1/rosegarden-0.1.tar.gz
+
+
+2. making the tarball available on SourceForge
+
+This is the rather non-trivial step.
+
+- copy the tarball to ftp://upload.sf.net/incoming/
+- log on to SourceForge
+- go to the 'admin' page of Rosegarden, then to the 'Edit/Release files' page.
+  The direct URL should be :
+  https://sourceforge.net/project/admin/editpackages.php?group_id=4932
+
+- go to QRS - Quick Release a File
+
+- fill up the form. The package name is 'rosegarden', the release name
+  should simply be the version number. For the file name, you're
+  offerred a selection among the lists of the files recently uploaded
+  (on upload.sf.net). DO NOT select another one than the one you just
+  uploaded (yes, you can actually "release" files which have nothing
+  to do with the project, and this whole system suck quite a bit).
+
+That's it, the file will be effectively available within the next few
+hours.
