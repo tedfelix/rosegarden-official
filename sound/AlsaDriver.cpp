@@ -4870,7 +4870,7 @@ AlsaDriver::jackDiskThread(void *arg)
         pthread_setcanceltype (PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
         pthread_mutex_lock(&_diskThreadLock);
 
-        std::vector<PlayableAudioFile*> &audioQueue = inst->getAudioPlayQueue();
+        std::vector<PlayableAudioFile*> &audioQueue = inst->getAudioPlayQueueNotDefunct();
         std::vector<PlayableAudioFile*>::iterator it;
 
         while(true)

@@ -25,12 +25,6 @@
 
 #define DEBUG_PLAYABLE 1
 
-#ifdef HAVE_LIBJACK
-// To ensure thread-safe access to the audio file list vector
-//
-pthread_mutex_t      _audioFileList = PTHREAD_MUTEX_INITIALIZER;
-#endif
-
 namespace Rosegarden
 {
 
@@ -279,20 +273,34 @@ SoundDriver::getMappedInstrument(InstrumentId id)
     return 0;
 }
 
+// Generates a list of queued PlayableAudioFiles that aren't marked
+// as defunct (and hence likely to be garbage collected by another
+// thread).
+//
+std::vector<PlayableAudioFile*>
+SoundDriver::getAudioPlayQueueNotDefunct()
+{
+    std::vector<PlayableAudioFile*> rq;
+    std::vector<PlayableAudioFile*>::const_iterator it;
+
+    for (it = m_audioPlayQueue.begin(); it != m_audioPlayQueue.end(); ++it)
+    {
+        if ((*it)->getStatus() != PlayableAudioFile::DEFUNCT)
+            rq.push_back(*it);
+    }
+
+    return rq;
+}
+
+
 void
 SoundDriver::queueAudio(PlayableAudioFile *audioFile)
 {
-#ifdef HAVE_LIBJACK
-    pthread_mutex_lock(&_audioFileList);
-
     // Push to the back of the thread queue and then we must
     // process this across to the proper audio queue when
     // it's safe to do so - use the method below
     //
     m_audioPlayThreadQueue.push_back(audioFile);
-
-    pthread_mutex_unlock(&_audioFileList);
-#endif
 }
 
 // Move the pending thread queue across to the real queue
@@ -302,7 +310,7 @@ SoundDriver::queueAudio(PlayableAudioFile *audioFile)
 void
 SoundDriver::pushPlayableAudioQueue()
 {
-#ifdef HAVE_LIBJACK
+
     std::vector<PlayableAudioFile*>::iterator it;
 
     for (it = m_audioPlayThreadQueue.begin();
@@ -315,7 +323,6 @@ SoundDriver::pushPlayableAudioQueue()
 
     m_audioPlayThreadQueue.erase(m_audioPlayThreadQueue.begin(),
                                  m_audioPlayThreadQueue.end());
-#endif
 }
 
 void

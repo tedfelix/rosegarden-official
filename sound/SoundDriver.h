@@ -351,10 +351,13 @@ public:
 				  unsigned int) { return ""; }
     virtual void setConnection(DeviceId, QString) { }
 
-    // Return the audio play queue
+    // Return the whole audio play queue
     //
-    std::vector<PlayableAudioFile*>& getAudioPlayQueue()
-        { return m_audioPlayQueue; }
+    std::vector<PlayableAudioFile*>& getAudioPlayQueue() { return m_audioPlayQueue; }
+
+    // Just non-defunct queue members
+    //
+    std::vector<PlayableAudioFile*> getAudioPlayQueueNotDefunct();
 
     // Clear the queue
     //

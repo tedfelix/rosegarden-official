@@ -61,12 +61,16 @@ void MmappedSegment::map()
     m_mmappedBuffer = (MappedEvent*)::mmap(0, m_mmappedSize, PROT_READ, MAP_SHARED, m_fd, 0);
 
     if (m_mmappedBuffer == (void*)-1) {
-        SEQUENCER_DEBUG << QString("mmap failed : (%1) %2\n").arg(errno).arg(strerror(errno));
+
+        SEQUENCER_DEBUG << QString("mmap failed : (%1) %2\n").
+            arg(errno).arg(strerror(errno));
+
         throw Rosegarden::Exception("mmap failed");
     }
 
     SEQUENCER_DEBUG << "MmappedSegment::map() : "
-                    << (void*)m_mmappedBuffer << "," << m_mmappedSize << ", " << m_nbMappedEvents << " events\n";
+                    << (void*)m_mmappedBuffer << "," << m_mmappedSize 
+                    << ", " << m_nbMappedEvents << " events\n";
 
 }
 
@@ -90,7 +94,9 @@ bool MmappedSegment::remap()
                     << newSize << endl;
 
     if (m_mmappedSize == newSize) {
-        SEQUENCER_DEBUG << "remap() : sizes are identical, remap not forced - nothing to do\n";
+
+        SEQUENCER_DEBUG << "remap() : sizes are identical, remap not forced - "
+                        << "nothing to do\n";
         return false;
     }
 
@@ -102,7 +108,10 @@ bool MmappedSegment::remap()
 #endif
 
     if (m_mmappedBuffer == (void*)-1) {
-            SEQUENCER_DEBUG << QString("mremap failed : (%1) %2\n").arg(errno).arg(strerror(errno));
+
+            SEQUENCER_DEBUG << QString("mremap failed : (%1) %2\n").
+                arg(errno).arg(strerror(errno));
+
             throw Rosegarden::Exception("mremap failed");
     }
     
@@ -337,6 +346,8 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil
 
             MmappedSegment::iterator* iter = m_iterators[i];
 
+            //std::cerr << "Iterating on Segment #" << i << std::endl;
+
             SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : "
                             << "checking segment #" << i << " " 
                             << iter->getSegment()->getFileName() << endl;
@@ -361,6 +372,12 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil
             }
 
             MappedEvent *evt = new MappedEvent(*(*iter));
+
+            if (evt->getType() == MappedEvent::Audio) {
+                
+                if (evt->getEventTime() < endTime + (Rosegarden::RealTime(1, 0)))
+                    c->insert(evt);
+            }
 
             if (evt->getEventTime() < endTime) {
                 if (evtIsFromMetronome) {
@@ -388,6 +405,7 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil
                                 << " - metronome event: " << evtIsFromMetronome
                                 << endl;
 
+
                 if (evt->getType() == MappedEvent::TimeSignature) {
                     // do something
                     SEQUENCER_DEBUG << "timeSig event\n";
@@ -398,21 +416,8 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil
 
                 } else if (acceptEvent(evt, evtIsFromMetronome)) {
                     SEQUENCER_DEBUG << "inserting event\n";
+                    std::cerr << "TYPE = " << evt->getType() << std::endl;
                     c->insert(evt);
-
-                } else if (evt->getType() == MappedEvent::Audio) {
-
-                    // audio event - shift it backwards by the playback
-                    // latency prior to insert
-
-                    MappedEvent *mE = new MappedEvent(evt);
-                    mE->setEventTime(evt->getEventTime() - 
-                            Rosegarden::RealTime(1, 0));
-                            //Rosegarden::RealTime(getAudioPlayLatency()));
-
-                    c->insert(mE);
-
-                    SEQUENCER_DEBUG << "insert shifted audio event\n";
 
                 } else {
                     
