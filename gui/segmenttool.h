@@ -285,6 +285,7 @@ protected:
     QPoint m_clickPoint;
     bool m_segmentQuickCopyDone;
     bool m_passedInertiaEdge;
+    bool m_buttonPressed;
 
     SegmentTool *m_dispatchTool;
 };

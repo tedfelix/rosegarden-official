@@ -844,6 +844,7 @@ SegmentSelector::SegmentSelector(CompositionView *c, RosegardenGUIDoc *d)
       m_segmentAddMode(false),
       m_segmentCopyMode(false),
       m_segmentQuickCopyDone(false),
+      m_buttonPressed(false),
       m_dispatchTool(0)
 {
     RG_DEBUG << "SegmentSelector()\n";
@@ -877,6 +878,8 @@ void
 SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 {
     RG_DEBUG << "SegmentSelector::handleMouseButtonPress\n";
+    m_buttonPressed = true;
+
     QPoint tPos = m_canvas->inverseMapPoint(e->pos());
     CompositionItem item = m_canvas->getFirstItemAt(tPos);
 
@@ -947,8 +950,8 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 	    }
 
 	    return;
-	}
-        else {
+
+	} else {
 
             m_canvas->setSelectionRectPos(tPos);
             m_canvas->setSelectionRectSize(0,0);
@@ -970,6 +973,8 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 void
 SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 {
+    m_buttonPressed = false;
+
     // Hide guides and stuff
     //
     m_canvas->setDrawGuides(false);
@@ -1056,6 +1061,9 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 {
 //     RG_DEBUG << "SegmentSelector::handleMouseMove\n";
 
+    if (!m_buttonPressed)
+        return RosegardenCanvasView::FollowHorizontal | RosegardenCanvasView::FollowVertical;
+
     if (m_dispatchTool) {
 	return m_dispatchTool->handleMouseMove(e);
     }
@@ -1064,7 +1072,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 
     if (!m_currentItem)  {
 
-// 	RG_DEBUG << "SegmentSelector::handleMouseMove: no current item\n";
+	RG_DEBUG << "SegmentSelector::handleMouseMove: no current item\n";
 
         // do a bounding box
         QRect selectionRect  = m_canvas->getSelectionRect();
