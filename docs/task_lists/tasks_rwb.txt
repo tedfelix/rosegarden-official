@@ -4,11 +4,9 @@ updated 18.04.2002
 
 Immediate usability work:
 
-o copying segments quickly
-
-o horizontal zoom would be really useful
-
 o sweep selection on Matrix
+
+o Event playback on selection movement
 
 Other pending tasks:
 
@@ -21,9 +19,8 @@ o MidiNote sending from Matrix view
 o Matrix view scrolling
 
 o Segment labelling
-  [HMM, first cut in but much more involved than first appears]
-
-o Last Note seems broken again
+  [HMM, first cut in but much more involved than first appears
+   cc IN PROGRESS ]
 
 o ALSA:
   - ffwd/rwding/looping [DONE - still not wonderful but will do for mo]
@@ -129,6 +126,11 @@ Completed POST 0.1.4
 
 - quantize to only quantize [cc DONE]
 
+- copying segments quickly [DONE]
+
+- horizontal zoom would be really useful [cc DONE]
+
+- Last Note seems broken again [FIXED]
 
 
 

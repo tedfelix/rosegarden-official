@@ -572,7 +572,7 @@ void MatrixView::slotKeyPressed(unsigned int y, bool repeating)
                                     Rosegarden::MappedEvent::MidiNoteOneShot,
                                     evPitch,
                                     Rosegarden::MidiMaxValue,
-                                    Rosegarden::RealTime(0,0),
+                                    Rosegarden::RealTime(0, 0),
                                     Rosegarden::RealTime(0, 500000),
                                     Rosegarden::RealTime(0, 0));
 
@@ -589,6 +589,58 @@ void MatrixView::closeWindow()
 {
     delete this;
 }
+
+void MatrixView::playNote(Rosegarden::Event *event)
+{
+    // Only play note events
+    //
+    if (!event->isa(Rosegarden::Note::EventType))
+        return;
+
+    Rosegarden::Composition &comp = m_document->getComposition();
+    Rosegarden::Studio &studio = m_document->getStudio();
+
+    // Get the Instrument
+    //
+    Rosegarden::Track *track = comp.getTrackByIndex(
+            m_staffs[0]->getSegment().getTrack());
+
+    Rosegarden::Instrument *ins =
+        studio.getInstrumentById(track->getInstrument());
+
+    if (ins == 0)
+        return;
+
+    // check for null instrument
+    //
+
+    // Get a velocity
+    //
+    Rosegarden::MidiByte velocity = Rosegarden::MidiMaxValue;
+    if (event->has(Rosegarden::BaseProperties::VELOCITY))
+    {
+        velocity = event->get<Rosegarden::Int>
+                    (Rosegarden::BaseProperties::VELOCITY);
+    }
+
+    Rosegarden::RealTime duration =
+            comp.getElapsedRealTime(event->getDuration());
+
+    // create
+    Rosegarden::MappedEvent *mE = 
+        new Rosegarden::MappedEvent(ins->getID(),
+                                    Rosegarden::MappedEvent::MidiNoteOneShot,
+                                    (Rosegarden::MidiByte)
+                                        event->get<Rosegarden::Int>
+                                            (Rosegarden::BaseProperties::PITCH),
+                                    velocity,
+                                    Rosegarden::RealTime(0, 0),
+                                    duration,
+                                    Rosegarden::RealTime(0, 0));
+
+    emit keyPressed(mE);
+}
+
 
 
 

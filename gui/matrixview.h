@@ -104,6 +104,10 @@ public:
 
     void setCurrentSelection(Rosegarden::EventSelection* s);
 
+    // Play a Note Event using the keyPressed() signal
+    //
+    void playNote(Rosegarden::Event *event);
+
 signals:    
     /**
      * Emitted when the selection has been cut or copied
@@ -112,9 +116,10 @@ signals:
      */
     void usedSelection();
 
-    // Return a pressed key
+    // Play a pressed key 
     //
     void keyPressed(Rosegarden::MappedEvent*);
+
 
 public slots:
 
