@@ -5,6 +5,7 @@ rosegardensequencer_SOURCES = mmappedcontrolblock.cpp \
                               mmappedsegment.cpp \
                               rosegardensequencer.cpp \
 			      main.cpp \
+                              sequencermapper.cpp \
 			      rosegardensequenceriface.skel
 
 rosegardensequencer_LDADD   = -lkdeui -lkdecore $(LIB_QT) $(LIBSOCKET) ../sound/libRosegardenSound.la ../sound/libRosegardenSequencer.la ../base/libbase.la $(LIB_KFILE)
