@@ -29,6 +29,10 @@
 #include "rosegardensequencer.h"
 #include <MappedComposition.h>
 
+using std::cout;
+using std::cerr;
+using std::endl;
+
 // the name of our rosegarden gui application
 //
 #define ROSEGARDEN_GUI_APP "rosegardengui"

@@ -295,7 +295,7 @@ protected:
     mutable int m_groupId;
     BarPositionList m_barPositions;
 
-    typedef set<TrackObserver *> ObserverSet;
+    typedef std::set<TrackObserver *> ObserverSet;
     ObserverSet m_observers;
 
     void notifyAdd(Event *);

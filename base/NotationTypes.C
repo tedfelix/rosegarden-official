@@ -23,8 +23,6 @@
 #include <iostream>
 #include <cstring> // for atoi
 
-// couldn't get g++-v3 stringstreams to work (probably I'm just
-// stupid) so I'm reverting to strstream...
 #if (__GNUC__ < 3)
 #include <strstream>
 #else
@@ -471,8 +469,6 @@ const string Note::EventRestType = "rest";
 
 const string Note::NoteType = "NoteType";
 const string Note::NoteDots = "NoteDots";
-//!!! worry about this later -- simple solution currently in place ain't bad
-const string Note::NotePropertyName = "duration";
 
 const string Note::TiedBackwardPropertyName = "TiedBackward";
 const string Note::TiedForwardPropertyName  = "TiedForward";
