@@ -115,7 +115,7 @@ rosegarden_SOURCES = \
         widgets.cpp \
 	xmlstorableevent.cpp
 
-rosegarden_LDADD   = ../sound/libRosegardenSound.la ../base/libbase.la -lkdeui -lkdecore -lkdeprint $(LIB_QT) $(LIBSOCKET) $(LIB_KFILE) @XFT_LIBS@
+rosegarden_LDADD   = ../sound/libRosegardenSound.la ../base/libbase.la -lkdeui -lkdecore -lkdeprint $(LIB_QT) $(LIBSOCKET) $(LIB_KFILE) @XFT_LIBS@ @JACK_LIBS@
 
 SUBDIRS = docs
 

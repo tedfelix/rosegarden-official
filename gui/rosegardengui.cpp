@@ -56,6 +56,8 @@
 #include <kfilemetainfo.h>
 
 // application specific includes
+#include <jack/jack.h>
+
 #include "Clipboard.h"
 #include "Configuration.h"
 #include "SegmentNotationHelper.h"
@@ -166,11 +168,24 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     if (m_useSequencer) {
 
 #ifdef HAVE_LIBJACK
-        // Try to launch JACK - if the configuration wants us to.
+        // First we check if jackd is running allready
+
+        std::string jackClientName = "rosegarden";
+
+        // attempt connection to JACK server
         //
-        if (!launchJack())
-        {
-            KMessageBox::error(this, i18n("Attempted to launch JACK audio daemon failed.  Audio will be disabled.\nPlease check configuration (Settings->Configure Rosegarden->Sequencer->JACK control)\n and restart."));
+        jack_client_t* testJackClient;
+        testJackClient =jack_client_new(jackClientName.c_str());
+        if (testJackClient == 0 ) {
+
+            // If no connection to JACK
+            // try to launch JACK - if the configuration wants us to.
+            if (!launchJack()) {
+                KMessageBox::error(this, i18n("Attempted to launch JACK audio daemon failed.  Audio will be disabled.\nPlease check configuration (Settings->Configure Rosegarden->Sequencer->JACK control)\n and restart."));
+            }
+        } else {
+            //this client was just for testing
+            jack_client_close(testJackClient);
         }
 #endif // HAVE_LIBJACK
 
@@ -185,99 +200,99 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     m_pluginManager = new Rosegarden::AudioPluginManager();
 
     ///////////////////////////////////////////////////////////////////
-    // call inits to invoke all other construction parts
-    //
-    emit startupStatusMessage(i18n("Initialising view..."));
-    initStatusBar();
-    setupActions();
-    iFaceDelayedInit(this);
-    initZoomToolbar();
+        // call inits to invoke all other construction parts
+        //
+        emit startupStatusMessage(i18n("Initialising view..."));
+        initStatusBar();
+        setupActions();
+        iFaceDelayedInit(this);
+        initZoomToolbar();
 
-    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QPixmap mainPixmap(pixmapDir + "/toolbar/matrix.xpm");
-    m_mainDockWidget = createDockWidget("Rosegarden MainDockWidget", mainPixmap, 0L, "main_dock_widget");
-    // allow others to dock to the left and right sides only
-    m_mainDockWidget->setDockSite(KDockWidget::DockLeft | KDockWidget::DockRight);
-    // forbit docking abilities of m_mainDockWidget itself
-    m_mainDockWidget->setEnableDocking(KDockWidget::DockNone);
-    setView(m_mainDockWidget); // central widget in a KDE mainwindow
-    setMainDockWidget(m_mainDockWidget); // master dockwidget
+        QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+        QPixmap mainPixmap(pixmapDir + "/toolbar/matrix.xpm");
+        m_mainDockWidget = createDockWidget("Rosegarden MainDockWidget", mainPixmap, 0L, "main_dock_widget");
+        // allow others to dock to the left and right sides only
+        m_mainDockWidget->setDockSite(KDockWidget::DockLeft | KDockWidget::DockRight);
+        // forbit docking abilities of m_mainDockWidget itself
+        m_mainDockWidget->setEnableDocking(KDockWidget::DockNone);
+        setView(m_mainDockWidget); // central widget in a KDE mainwindow
+        setMainDockWidget(m_mainDockWidget); // master dockwidget
 
-    m_dockLeft = createDockWidget("params dock", mainPixmap, 0L,
-                                  i18n("Segment & Instrument Parameters"));
-    m_dockLeft->manualDock(m_mainDockWidget,            // dock target
-                           KDockWidget::DockLeft, // dock site
-                           20);                   // relation target/this (in percent)
+        m_dockLeft = createDockWidget("params dock", mainPixmap, 0L,
+                                      i18n("Segment & Instrument Parameters"));
+        m_dockLeft->manualDock(m_mainDockWidget,            // dock target
+                               KDockWidget::DockLeft, // dock site
+                               20);                   // relation target/this (in percent)
 
-    connect(m_dockLeft, SIGNAL(iMBeingClosed()),
-            this, SLOT(slotParametersClosed()));
-    connect(m_dockLeft, SIGNAL(hasUndocked()),
-            this, SLOT(slotParametersClosed()));
-    // Apparently, hasUndocked() is emitted when the dock widget's
-    // 'close' button on the dock handle is clicked.
-    connect(m_mainDockWidget, SIGNAL(docking(KDockWidget*, KDockWidget::DockPosition)),
-            this, SLOT(slotParametersDockedBack(KDockWidget*, KDockWidget::DockPosition)));
+        connect(m_dockLeft, SIGNAL(iMBeingClosed()),
+                this, SLOT(slotParametersClosed()));
+        connect(m_dockLeft, SIGNAL(hasUndocked()),
+                this, SLOT(slotParametersClosed()));
+        // Apparently, hasUndocked() is emitted when the dock widget's
+        // 'close' button on the dock handle is clicked.
+        connect(m_mainDockWidget, SIGNAL(docking(KDockWidget*, KDockWidget::DockPosition)),
+                this, SLOT(slotParametersDockedBack(KDockWidget*, KDockWidget::DockPosition)));
 
-    stateChanged("parametersbox_closed", KXMLGUIClient::StateReverse);
+        stateChanged("parametersbox_closed", KXMLGUIClient::StateReverse);
 
-    RosegardenGUIDoc* doc = new RosegardenGUIDoc(this, m_pluginManager);
+        RosegardenGUIDoc* doc = new RosegardenGUIDoc(this, m_pluginManager);
 
-    QFrame* vbox = new QFrame(m_dockLeft);
-    QVBoxLayout* vboxLayout = new QVBoxLayout(vbox, 5);
-    m_dockLeft->setWidget(vbox);
-    m_segmentParameterBox = new SegmentParameterBox(doc, vbox);
-    vboxLayout->addWidget(m_segmentParameterBox);
-    m_instrumentParameterBox = new InstrumentParameterBox(doc, vbox);
-    vboxLayout->addWidget(m_instrumentParameterBox);
-    vboxLayout->addStretch();
+        QFrame* vbox = new QFrame(m_dockLeft);
+        QVBoxLayout* vboxLayout = new QVBoxLayout(vbox, 5);
+        m_dockLeft->setWidget(vbox);
+        m_segmentParameterBox = new SegmentParameterBox(doc, vbox);
+        vboxLayout->addWidget(m_segmentParameterBox);
+        m_instrumentParameterBox = new InstrumentParameterBox(doc, vbox);
+        vboxLayout->addWidget(m_instrumentParameterBox);
+        vboxLayout->addStretch();
 
 
-    // Load the initial document (this includes doc's own autoload)
-    //
-    setDocument(doc);
+        // Load the initial document (this includes doc's own autoload)
+        //
+        setDocument(doc);
 
-    emit startupStatusMessage(i18n("Starting sequence manager..."));
+        emit startupStatusMessage(i18n("Starting sequence manager..."));
 
-    // transport is created by setupActions()
-    m_seqManager = new Rosegarden::SequenceManager(m_doc, m_transport);
+        // transport is created by setupActions()
+        m_seqManager = new Rosegarden::SequenceManager(m_doc, m_transport);
 
-    // Make sure we get the sequencer status now
-    //
-    emit startupStatusMessage(i18n("Getting sound driver status..."));
-    (void)m_seqManager->getSoundDriverStatus();
+        // Make sure we get the sequencer status now
+        //
+        emit startupStatusMessage(i18n("Getting sound driver status..."));
+        (void)m_seqManager->getSoundDriverStatus();
 
-    // If we're restarting the gui then make sure any transient
-    // studio objects are cleared away.
-    emit startupStatusMessage(i18n("Clearing studio data..."));
-    m_seqManager->reinitialiseSequencerStudio();
+        // If we're restarting the gui then make sure any transient
+        // studio objects are cleared away.
+        emit startupStatusMessage(i18n("Clearing studio data..."));
+        m_seqManager->reinitialiseSequencerStudio();
 
-    // Send the transport control statuses for MMC and JACK
-    //
-    m_seqManager->sendTransportControlStatuses();
+        // Send the transport control statuses for MMC and JACK
+        //
+        m_seqManager->sendTransportControlStatuses();
 
-    // Get the plugins available at the sequencer
-    //
-    emit startupStatusMessage(i18n("Enumerating plugins..."));
-    m_seqManager->getSequencerPlugins(m_pluginManager);
+        // Get the plugins available at the sequencer
+        //
+        emit startupStatusMessage(i18n("Enumerating plugins..."));
+        m_seqManager->getSequencerPlugins(m_pluginManager);
 
-    // Now autoload
-    //
-    stateChanged("new_file");
-    stateChanged("have_segments",    KXMLGUIClient::StateReverse);
-    stateChanged("have_selection",   KXMLGUIClient::StateReverse);
-    slotTestClipboard();
+        // Now autoload
+        //
+        stateChanged("new_file");
+        stateChanged("have_segments",    KXMLGUIClient::StateReverse);
+        stateChanged("have_selection",   KXMLGUIClient::StateReverse);
+        slotTestClipboard();
 
-    // Check for lack of MIDI devices and disable Studio options accordingly
-    //
-    if (!m_doc->getStudio().haveMidiDevices())
-        stateChanged("got_midi_devices", KXMLGUIClient::StateReverse);
+        // Check for lack of MIDI devices and disable Studio options accordingly
+        //
+        if (!m_doc->getStudio().haveMidiDevices())
+            stateChanged("got_midi_devices", KXMLGUIClient::StateReverse);
 
-    emit startupStatusMessage(i18n("Starting..."));
+        emit startupStatusMessage(i18n("Starting..."));
 
-    // All toolbars should be created before this is called
-    setAutoSaveSettings(RosegardenGUIApp::MainWindowConfigGroup, true);
+        // All toolbars should be created before this is called
+        setAutoSaveSettings(RosegardenGUIApp::MainWindowConfigGroup, true);
 
-    readOptions();
+        readOptions();
 }
 
 RosegardenGUIApp::~RosegardenGUIApp()
@@ -3270,7 +3285,7 @@ bool RosegardenGUIApp::launchJack()
 
     emit startupStatusMessage(i18n("Clearing down jackd..."));
 
-    KProcess *proc = new KProcess;
+    KProcess *proc = new KProcess; // TODO: do it in a less clumsy way
     *proc << "/usr/bin/killall";
     *proc << "-9";
     *proc << "jackd";
@@ -3284,41 +3299,26 @@ bool RosegardenGUIApp::launchJack()
 
     emit startupStatusMessage(i18n("Starting jackd..."));
 
-    if (jackPath != "")
-    {
+    if (jackPath != "") {
+
         RG_DEBUG << "starting jack \"" << jackPath << "\"" << endl;
 
-        QString args;
         QStringList splitCommand;
-        splitCommand == QStringList::split(" ", jackPath);
+        splitCommand = QStringList::split(" ", jackPath);
 
+        RG_DEBUG << "RosegardenGUIApp::launchJack() : splitCommand length : "
+                 << splitCommand.size() << endl;
+        
         // start jack process
         m_jackProcess = new KProcess;
-        int i = 0;
-
-        for (QStringList::Iterator it = splitCommand.begin();
-             it != splitCommand.end(); ++it)
-        {
-            if (i == 0)
-            {
-                std::cout << "PROCESS = " << (*it) << std::endl;
-                *m_jackProcess << (*it);
-            }
-            else
-                args += (*it);
-
-            i++;
-        }
-
-        *m_jackProcess << args;
-
-        std::cout << "ARGS = " << args << std::endl;
+        
+        *m_jackProcess << splitCommand;
 
         m_jackProcess->start();
     }
 
 
-    return true;
+    return m_jackProcess != 0 ? m_jackProcess->isRunning() : true;
 }
 #endif //HAVE_LIBJACK
 
