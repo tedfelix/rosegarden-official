@@ -901,6 +901,7 @@ void SegmentSelector::stow()
 
 void SegmentSelector::slotCanvasScrolled(int newX, int newY)
 {
+    if (!m_canvas->getSelectionRectangle()) return;
     QMouseEvent tmpEvent(QEvent::MouseMove,
                          m_canvas->viewport()->mapFromGlobal(QCursor::pos()) + QPoint(newX, newY),
                          Qt::NoButton, Qt::NoButton);
@@ -936,8 +937,8 @@ SegmentSelector::addToSelection(Rosegarden::Segment *segment)
 void
 SegmentSelector::addToSelection(SegmentItem* item)
 {
-    RG_DEBUG << "SegmentSelector::addToSelection() SegmentItem = "
-             << item << endl;
+//    RG_DEBUG << "SegmentSelector::addToSelection() SegmentItem = "
+//             << item << endl;
 
     // Check that the segment isn't already selected
     for (SegmentItemList::iterator i = m_selectedItems.begin();
@@ -1277,6 +1278,10 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
     if (m_dispatchTool) {
 	return m_dispatchTool->handleMouseMove(e);
     }
+
+    if (!m_canvas->getSelectionRectangle() ||
+	!m_canvas->getSelectionRectangle()->visible()) 
+	return RosegardenCanvasView::NoFollow;
 
     QWMatrix matrix = m_canvas->worldMatrix().invert();
     QPoint tPos = matrix.map(e->pos());
