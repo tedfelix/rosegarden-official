@@ -332,18 +332,18 @@ LilypondExporter::convertPitchToLilyNote(int pitch, Accidental accidental,
 
     // leave this in to see if there are any _other_ problems that are going
     // to break this method...
-    if (lilyNote == "") {
+//    if (lilyNote == "") {   //!! force extra debugging
         std::cerr << "LilypondExporter::convertPitchToLilyNote() -  WARNING: cannot resolve note"
                   << std::endl << "pitch = " << pitchNote << "\tkey sig. = "
                   << ((isFlatKeySignature) ? "flat" : "sharp") << "\tno. of accidentals = "
                   << accidentalCount << "\textra accidental = \"" << accidental << "\""
                   << std::endl;
         
-    }
+//    }
 
     //!!! Alternative implementation in test:
 
-    Rosegarden::Pitch p(pitch, accidental);
+    Rosegarden::Pitch p(pitch, accidental);  // pitch + accidental, but no key?
     std::string origLilyNote = lilyNote;
     lilyNote = "";
 
@@ -356,6 +356,8 @@ LilypondExporter::convertPitchToLilyNote(int pitch, Accidental accidental,
     
     if (lilyNote != origLilyNote) {
 	std::cerr << "WARNING: LilypondExporter::convertPitchToLilyNote: " << lilyNote << " != " << origLilyNote << std::endl;
+	lilyNote = origLilyNote;  // makes it return the correct value with my old, trusted code
+	                          // until I can fix this properly
     }
 
     return lilyNote;
