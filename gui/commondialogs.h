@@ -28,6 +28,7 @@
 #include <qspinbox.h>
 #include <qvalidator.h>
 
+#include <cmath>
 #include <string>
 
 #include "NotationTypes.h"
