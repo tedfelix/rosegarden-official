@@ -151,12 +151,10 @@ public:
 				       double gradient);
     
     QCanvasPixmap makeRestPixmap(Rosegarden::Note::Type note, bool dotted);
-    QCanvasPixmap makeClefPixmap(Rosegarden::Clef clef) const;
-    QCanvasPixmap makeKeyPixmap(std::string type, std::string cleftype);
+    QCanvasPixmap makeClefPixmap(const Rosegarden::Clef &clef) const;
+    QCanvasPixmap makeKeyPixmap(const Rosegarden::Key &key,
+				const Rosegarden::Clef &clef);
     QCanvasPixmap makeTimeSigPixmap(const Rosegarden::TimeSignature& sig);
-//    QCanvasPixmap makeBeamSectionPixmap(int myTailCount, int nextTailCount,
-//					bool aboveNotes, int width,
-//					double gradient);
     QCanvasPixmap makeUnknownPixmap();
 
     int getNoteBodyHeight() const   { return m_noteBodyEmpty.height(); }

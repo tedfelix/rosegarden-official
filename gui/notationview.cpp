@@ -53,8 +53,8 @@ using Rosegarden::NoAccidental;
 using Rosegarden::Note;
 using Rosegarden::Track;
 using Rosegarden::Clef;
-using Rosegarden::Accidental;
 using Rosegarden::Key;
+using Rosegarden::Accidental;
 using Rosegarden::TimeSignature;
 
 class RestSplitter
@@ -473,7 +473,7 @@ NotationView::showElements(NotationElementList::iterator from,
 //    static ChordPixmapFactory npf(*m_mainStaff);
     // let's revert to this for now
     NotePixmapFactory &npf(m_notePixmapFactory);
-    std::string currentClef = Clef::DefaultClef.getClefType();
+    Clef currentClef; // default is okay to start with
 
     for (NotationElementList::iterator it = from; it != to; ++it) {
 
@@ -569,16 +569,16 @@ NotationView::showElements(NotationElementList::iterator from,
 
             } else if ((*it)->event()->isa(Clef::EventType)) {
 
-                QCanvasPixmap clefPixmap
-                    (npf.makeClefPixmap(Clef(*(*it)->event())));
+		currentClef = Clef(*(*it)->event());
+                QCanvasPixmap clefPixmap(npf.makeClefPixmap(currentClef));
                 sprite = new QCanvasSimpleSprite(&clefPixmap, canvas());
 
             } else if ((*it)->event()->isa(Rosegarden::Key::EventType)) {
 
-                // Key is a Qt type as well, so we have to specify ::Key
                 QCanvasPixmap keyPixmap
                     (npf.makeKeyPixmap
-                     ((*it)->event()->get<String>(Rosegarden::Key::KeyPropertyName),
+                     (Rosegarden::Key((*it)->event()->get<String>
+			  (Rosegarden::Key::KeyPropertyName)),
                       currentClef));
                 sprite = new QCanvasSimpleSprite(&keyPixmap, canvas());
 

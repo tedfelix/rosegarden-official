@@ -726,7 +726,7 @@ NotePixmapFactory::makeRestPixmap(Note::Type note, bool dotted)
 }
 
 QCanvasPixmap
-NotePixmapFactory::makeClefPixmap(Clef clef) const
+NotePixmapFactory::makeClefPixmap(const Clef &clef) const
 {
     QString filename = m_pixmapDirectory;
     filename += QString("/clef-") + clef.getClefType().c_str() + ".xpm";
@@ -749,61 +749,48 @@ NotePixmapFactory::makeUnknownPixmap()
 }
 
 QCanvasPixmap
-NotePixmapFactory::makeKeyPixmap(std::string type, std::string cleftype)
+NotePixmapFactory::makeKeyPixmap(const Key &key, const Clef &clef)
 {
-    try {
-        // Key is a Qt type as well, so we have to specify ::Key
+    std::vector<int> ah = key.getAccidentalHeights(clef);
 
-        ::Key key(type);
-        Clef clef(cleftype);
-        std::vector<int> ah = key.getAccidentalHeights(clef);
+    QPixmap &accidentalPixmap
+	(key.isSharp() ? m_accidentalSharp : m_accidentalFlat);
 
-        QPixmap &accidentalPixmap
-            (key.isSharp() ? m_accidentalSharp : m_accidentalFlat);
+    int x = 0;
+    int lw = getLineSpacing();
+    int delta = getAccidentalWidth() - (key.isSharp() ? 1 : 2);
 
-        int x = 0;
-        int lw = getLineSpacing();
-        int delta = getAccidentalWidth() - (key.isSharp() ? 1 : 2);
+    createPixmapAndMask(delta * ah.size() + 2, lw * 8 + 1);
 
-        createPixmapAndMask(delta * ah.size() + 2, lw * 8 + 1);
+    for (unsigned int i = 0; i < ah.size(); ++i) {
 
-        for (unsigned int i = 0; i < ah.size(); ++i) {
+	int h = ah[i];
+	int y = (lw * 2) + ((8 - h) * lw) / 2// + ((h % 2 == 1) ? 1 : 0)
+	    - (getAccidentalHeight() / 2);
 
-            int h = ah[i];
-            int y = (lw * 2) + ((8 - h) * lw) / 2// + ((h % 2 == 1) ? 1 : 0)
-                - (getAccidentalHeight() / 2);
+	// tricky one: sharps and flats are the same size, but
+	// they have different "centres"
+	if (!key.isSharp()) y -= 2;
 
-            // tricky one: sharps and flats are the same size, but
-            // they have different "centres"
-            if (!key.isSharp()) y -= 2;
+	kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeKeyPixmap: Have height " << h << ", translates to y " << y << endl;
 
-            kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeKeyPixmap: Have height " << h << ", translates to y " << y << endl;
+	m_p.drawPixmap(x, y, accidentalPixmap);
+	m_pm.drawPixmap(x, y, *(accidentalPixmap.mask()));
 
-            m_p.drawPixmap(x, y, accidentalPixmap);
-            m_pm.drawPixmap(x, y, *(accidentalPixmap.mask()));
-
-            x += delta;
-        }
-
-        m_p.end();
-        m_pm.end();
-
-        QCanvasPixmap p(*m_generatedPixmap, m_pointZero);
-        QBitmap m(*m_generatedMask);
-        p.setMask(m);
-
-        delete m_generatedPixmap;
-        delete m_generatedMask;
-
-        return p;
-
-    } catch (Key::BadKeyName) {
-        kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeKeyPixmap: Bad key name " << type << endl;
-        return QCanvasPixmap(m_pixmapDirectory + "/blank.xpm");
-    } catch (Clef::BadClefName) {
-        kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeKeyPixmap: Bad clef name " << cleftype << endl;
-        return QCanvasPixmap(m_pixmapDirectory + "/blank.xpm");
+	x += delta;
     }
+
+    m_p.end();
+    m_pm.end();
+
+    QCanvasPixmap p(*m_generatedPixmap, m_pointZero);
+    QBitmap m(*m_generatedMask);
+    p.setMask(m);
+
+    delete m_generatedPixmap;
+    delete m_generatedMask;
+
+    return p;
 }
 
 QCanvasPixmap
