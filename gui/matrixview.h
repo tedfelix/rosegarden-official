@@ -139,6 +139,9 @@ public slots:
      */
     void slotHoveredOverAbsoluteTimeChanged(unsigned int);
 
+    /// Set the time pointer position during playback
+    void slotSetPointerPosition(Rosegarden::timeT time);
+
 protected:
 
     /**

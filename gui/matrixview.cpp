@@ -110,6 +110,9 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
         (getCanvasView(), SIGNAL(hoveredOverAbsoluteTimeChanged(unsigned int)),
          this,         SLOT  (slotHoveredOverAbsoluteTimeChanged(unsigned int)));
 
+    QObject::connect
+	(doc, SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
+	 this, SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
     kdDebug(KDEBUG_AREA) << "MatrixView : applying layout\n";
 
@@ -374,6 +377,21 @@ MatrixView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
     m_hoveredOverAbsoluteTime->setText(message);
 }
 
+void
+MatrixView::slotSetPointerPosition(timeT time)
+{
+    Rosegarden::Composition &comp = m_document->getComposition();
+    int barNo = comp.getBarNumber(time);
+
+    if (barNo < m_hlayout->getFirstVisibleBarOnStaff(*m_staffs[0]) ||
+        barNo > m_hlayout-> getLastVisibleBarOnStaff(*m_staffs[0])) {
+        m_staffs[0]->hidePointer();
+    } else {
+        m_staffs[0]->setPointerPosition(*m_hlayout, time);
+    }
+
+    update();
+}
 
 
 //////////////////////////////////////////////////////////////////////
