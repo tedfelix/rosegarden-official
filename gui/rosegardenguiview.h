@@ -28,12 +28,15 @@
 // include files for Qt
 #include <qvbox.h>
 
+#include "trackscanvas.h" // needed for TracksCanvas::ToolType
+
 #include "rosedebug.h"
 
 
 class RosegardenGUIDoc;
 class NotationView;
 class TrackPart;
+class TracksEditor;
 
 /**
  * The RosegardenGUIView class provides the view widget for the
@@ -90,6 +93,9 @@ public:
 public slots:
     void editTrackNotation(TrackPart*);
     void editTrackNotationSmall(TrackPart*);
+
+signals:
+    void setTool(TracksCanvas::ToolType);
 
 protected:
     NotationView* m_notationView;

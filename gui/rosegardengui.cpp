@@ -115,7 +115,7 @@ void RosegardenGUIApp::setupActions()
     // TODO : add some shortcuts here
     action = new KRadioAction(i18n("Erase"), "eraser",
                               0,
-                              m_view, SLOT(eraseSelected()),
+                              this, SLOT(eraseSelected()),
                               actionCollection(), "erase");
     action->setExclusiveGroup("tracktools");
 

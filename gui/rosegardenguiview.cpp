@@ -63,6 +63,9 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     connect(tracksEditor,  SIGNAL(createNewTrack(unsigned int, unsigned int, unsigned int)),
             getDocument(), SLOT  (createNewTrack(unsigned int, unsigned int, unsigned int)));
 
+    connect(this,                   SIGNAL(setTool(TracksCanvas::ToolType)),
+            tracksEditor->canvas(), SLOT(setTool(TracksCanvas::ToolType)));
+
 //     if (getDocument()) {
         
 //         m_notationView = new NotationView(getDocument(), this);
@@ -107,16 +110,22 @@ void RosegardenGUIView::print(QPrinter *pPrinter)
     printpainter.end();
 }
 
-void RosegardenGUIView::eraseSelected()
-{
-}
-
 void RosegardenGUIView::drawSelected()
 {
+    //m_tracksEditor->canvas()->setTool(TracksCanvas::Pencil);
+    emit setTool(TracksCanvas::Pencil);
+}
+
+void RosegardenGUIView::eraseSelected()
+{
+    //m_tracksEditor->canvas()->setTool(TracksCanvas::Eraser);
+    emit setTool(TracksCanvas::Eraser);
 }
 
 void RosegardenGUIView::moveSelected()
 {
+    //m_tracksEditor->canvas()->setTool(TracksCanvas::Mover);
+    emit setTool(TracksCanvas::Mover);
 }
 
 

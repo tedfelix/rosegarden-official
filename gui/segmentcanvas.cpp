@@ -21,6 +21,7 @@
 #include <qpopupmenu.h>
 
 #include <klocale.h>
+#include <kmessagebox.h>
 
 #include "trackscanvas.h"
 
@@ -85,6 +86,8 @@ TracksCanvas::TracksCanvas(int gridH, int gridV,
                            QCanvas& c, QWidget* parent,
                            const char* name, WFlags f) :
     QCanvasView(&c,parent,name,f),
+    m_toolType(Pencil),
+    m_tool(new TrackPencil(this)),
     m_newRect(false),
     m_editMenuOn(false),
     m_grid(gridH, gridV),
@@ -108,6 +111,30 @@ void
 TracksCanvas::update()
 {
     canvas()->update();
+}
+
+void
+TracksCanvas::setTool(ToolType t)
+{
+    if (t == m_toolType) return;
+
+    delete m_tool;
+    m_tool = 0;
+    m_toolType = t;
+
+    switch(t) {
+    case Pencil:
+        m_tool = new TrackPencil(this);
+        break;
+    case Eraser:
+        m_tool = new TrackEraser(this);
+        break;
+    case Mover:
+        m_tool = new TrackMover(this);
+        break;
+    default:
+        KMessageBox::error(0, QString("TracksCanvas::setTool() : unknown tool id %1").arg(t));
+    }
 }
 
 TrackPartItem*
@@ -273,3 +300,83 @@ TracksCanvas::onEditSmall()
 {
     emit editTrackPartSmall(m_currentItem->part());
 }
+
+//////////////////////////////////////////////////////////////////////
+//                 Track Tools
+//////////////////////////////////////////////////////////////////////
+
+TrackTool::TrackTool(TracksCanvas* canvas)
+    : m_canvas(canvas)
+{
+}
+
+TrackTool::~TrackTool()
+{
+}
+
+//////////////////////////////
+// TrackPencil
+//////////////////////////////
+
+TrackPencil::TrackPencil(TracksCanvas *c)
+    : TrackTool(c)
+{
+    kdDebug(KDEBUG_AREA) << "TrackPencil()\n";
+}
+
+void TrackPencil::handleMouseButtonPress(QMouseEvent *e)
+{
+}
+
+void TrackPencil::handleMouseButtonRelase(QMouseEvent *e)
+{
+}
+
+void TrackPencil::handleMouseButtonMove(QMouseEvent *e)
+{
+}
+
+//////////////////////////////
+// TrackEraser
+//////////////////////////////
+
+TrackEraser::TrackEraser(TracksCanvas *c)
+    : TrackTool(c)
+{
+    kdDebug(KDEBUG_AREA) << "TrackEraser()\n";
+}
+
+void TrackEraser::handleMouseButtonPress(QMouseEvent *e)
+{
+}
+
+void TrackEraser::handleMouseButtonRelase(QMouseEvent *e)
+{
+}
+
+void TrackEraser::handleMouseButtonMove(QMouseEvent *e)
+{
+}
+
+//////////////////////////////
+// TrackMover
+//////////////////////////////
+
+TrackMover::TrackMover(TracksCanvas *c)
+    : TrackTool(c)
+{
+    kdDebug(KDEBUG_AREA) << "TrackMover()\n";
+}
+
+void TrackMover::handleMouseButtonPress(QMouseEvent *e)
+{
+}
+
+void TrackMover::handleMouseButtonRelase(QMouseEvent *e)
+{
+}
+
+void TrackMover::handleMouseButtonMove(QMouseEvent *e)
+{
+}
+
