@@ -154,10 +154,10 @@ MarkerEditorDialog::updatePosition()
     m_absoluteTime->setText(QString("%1").arg(pos));
 
     Rosegarden::RealTime rT = m_doc->getComposition().getElapsedRealTime(pos);
-    int hours = rT.sec / (60 * 60);
-    int mins = rT.sec / 60;
-    int secs = rT.sec;
-    int msecs = rT.usec / 1000;
+    long hours = rT.sec / (60 * 60);
+    long mins = rT.sec / 60;
+    long secs = rT.sec;
+    long msecs = rT.usec / 1000;
 
     QString realTime, secsStr;
     if (hours) realTime += QString("%1h ").arg(hours);
@@ -168,12 +168,20 @@ MarkerEditorDialog::updatePosition()
     // only update if we need to to try and avoid flickering
     if (m_realTime->text() != realTime) m_realTime->setText(realTime);
 
+    QString barTime = 
+        QString("%1").arg(m_doc->getComposition().getBarNumber(pos) + 1);
+
     // again only update if needed
-    if (m_barTime->text().toInt() != m_doc->getComposition().getBarNumber(pos))
-    {
-        m_barTime->setText(QString("%1").
-              arg(m_doc->getComposition().getBarNumber(pos)));
-    }
+    if (m_barTime->text() != barTime) m_barTime->setText(barTime);
+
+    // Don't allow us to add another marker if there's already one
+    // at the current position.
+    //
+    if (m_doc->getComposition().
+            isMarkerAtPosition(m_doc->getComposition().getPosition()))
+        m_addButton->setEnabled(false);
+    else
+        m_addButton->setEnabled(true);
 }
 
 
@@ -240,15 +248,9 @@ MarkerEditorDialog::slotUpdate()
 }
 
 void 
-MarkerEditorDialog::slotEditCopy()
+MarkerEditorDialog::slotDeleteAll()
 {
-    RG_DEBUG << "MarkerEditorDialog::slotEditCopy" << endl;
-}
-
-void
-MarkerEditorDialog::slotEditPaste()
-{
-    RG_DEBUG << "MarkerEditorDialog::slotEditPaste" << endl;
+    RG_DEBUG << "MarkerEditorDialog::slotDeleteAll" << endl;
 }
 
 void
@@ -293,9 +295,6 @@ MarkerEditorDialog::setupActions()
 
     m_closeButton->setText(close->text());
     connect(m_closeButton, SIGNAL(released()), this, SLOT(slotClose()));
-
-    KStdAction::copy   (this, SLOT(slotEditCopy()),     actionCollection());
-    KStdAction::paste  (this, SLOT(slotEditPaste()),    actionCollection());
 
     // some adjustments
     new KToolBarPopupAction(i18n("Und&o"),
@@ -348,12 +347,6 @@ MarkerEditorDialog::checkModified()
     RG_DEBUG << "MarkerEditorDialog::checkModified(" << m_modified << ")" 
              << endl;
 
-}
-
-
-void
-MarkerEditorDialog::slotEdit()
-{
 }
 
 void

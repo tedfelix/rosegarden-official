@@ -70,14 +70,10 @@ public:
 public slots:
     void slotUpdate();
 
-    void slotEditCopy();
-    void slotEditPaste();
-
     void slotAdd();
     void slotDelete();
+    void slotDeleteAll();
     void slotClose();
-
-    void slotEdit();
     void slotEdit(QListViewItem *);
 
 signals:
