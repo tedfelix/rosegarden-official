@@ -1443,13 +1443,16 @@ LilypondExporter::handleText(const Rosegarden::Event *textEvent,
 
 	} else if (text.getTextType() == Text::Direction) {
 
-	    lilyText += " \\mark \"" + s + "\"";
+	    // \mark is syntactically a different thing from the
+	    // others here, they don't mix
+//	    lilyText += " \\mark \"" + s + "\" ";
+	    lilyText += "^\\markup { " + s + " } ";
 
 	} else if (text.getTextType() == Text::LocalDirection) {
 
 	    // print below staff, bold italics, small
 	    if (languageLevel < 1) {
-		lilyText += "_#'((bold italic) \"" + s + "\")";
+		lilyText += "_#'((bold italic) \"" + s + "\") ";
 	    } else {
 		lilyText += "_\\markup { \\bold \\italic " + s + " } ";
 	    }
