@@ -882,9 +882,11 @@ void RosegardenGUIView::showVisuals(const Rosegarden::MappedEvent *mE)
     {
 
         // Send to the high sensitivity instrument parameter box 
+	// (if any)
         //
-        if (mE->getInstrument() ==
-                m_instrumentParameterBox->getSelectedInstrument()->getId())
+        if (m_instrumentParameterBox->getSelectedInstrument() &&
+	    mE->getInstrument() ==
+	        m_instrumentParameterBox->getSelectedInstrument()->getId())
         {
             m_instrumentParameterBox->setAudioMeter(valueLeft, valueRight);
         }

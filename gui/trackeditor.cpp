@@ -395,6 +395,7 @@ void TrackEditor::paintEvent(QPaintEvent* e)
 
         RG_DEBUG << "TrackEditor::paintEvent: composition is modified, update everything\n";
 
+	slotReadjustCanvasSize();
         m_segmentCanvas->updateAllSegmentItems();
         m_trackButtons->slotUpdateTracks();
 

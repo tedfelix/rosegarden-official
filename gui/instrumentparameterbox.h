@@ -243,7 +243,7 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    QLabel             *m_deviceLabel;
+    QLabel             *m_connectionLabel;
 
     KComboBox          *m_bankValue;
     RosegardenComboBox *m_channelValue; 

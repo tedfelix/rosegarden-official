@@ -2796,7 +2796,7 @@ CompositionLengthDialog::getEndMarker()
 
 
 SplitByPitchDialog::SplitByPitchDialog(QWidget *parent) :
-    KDialogBase(parent, 0, true, i18n("Split by Pitch"))
+    KDialogBase(parent, 0, true, i18n("Split by Pitch"), Ok | Cancel)
 {
     QVBox *vBox = makeVBoxMainWidget();
 

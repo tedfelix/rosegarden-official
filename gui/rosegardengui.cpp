@@ -950,11 +950,16 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
     newDocument->syncDevices();
     newDocument->clearModifiedStatus();
 
+    if (newDocument->getStudio().haveMidiDevices()) {
+	stateChanged("got_midi_devices");
+    } else {
+	stateChanged("got_midi_devices", KXMLGUIClient::StateReverse);
+    }
+
     // Ensure the sequencer knows about any audio files
     // we've loaded as part of the new Composition
     //
     m_doc->prepareAudio();
-
 
     emit documentChanged(newDocument);
 }
@@ -2814,6 +2819,12 @@ bool RosegardenGUIApp::launchSequencer()
     // Sync current devices with the sequencer
     //
     if (m_doc) m_doc->syncDevices();
+
+    if (m_doc && m_doc->getStudio().haveMidiDevices()) {
+	stateChanged("got_midi_devices");
+    } else {
+	stateChanged("got_midi_devices", KXMLGUIClient::StateReverse);
+    }
     
     return res;
 }
@@ -3214,6 +3225,12 @@ RosegardenGUIApp::processAsynchronousMidi(const Rosegarden::MappedComposition &m
 {
     if (m_seqManager)
         m_seqManager->processAsynchronousMidi(mC, m_audioManagerDialog);
+
+    if (m_doc && m_doc->getStudio().haveMidiDevices()) {
+	stateChanged("got_midi_devices");
+    } else {
+	stateChanged("got_midi_devices", KXMLGUIClient::StateReverse);
+    }
 }
 
 
@@ -3355,6 +3372,12 @@ RosegardenGUIApp::slotSetLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs)
 void RosegardenGUIApp::alive()
 {
     if (m_doc) m_doc->syncDevices();
+
+    if (m_doc && m_doc->getStudio().haveMidiDevices()) {
+	stateChanged("got_midi_devices");
+    } else {
+	stateChanged("got_midi_devices", KXMLGUIClient::StateReverse);
+    }
 }
 
 void RosegardenGUIApp::slotPlay()

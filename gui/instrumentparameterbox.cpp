@@ -1249,58 +1249,122 @@ AudioInstrumentParameterPanel::slotSelectAudioInput(int value)
 
 
 MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc, QWidget* parent)
-    : InstrumentParameterPanel(doc, parent),
-      m_deviceLabel(new QLabel(this)),
-      m_bankValue(new KComboBox(false, this)),
-      m_channelValue(new RosegardenComboBox(true, false, this)),
-      m_programValue(new KComboBox(this)),
-      m_panRotary(new RosegardenRotary(this, 0.0, 127.0, 1.0, 5.0, 64.0, 20)),
-      m_volumeRotary(new RosegardenRotary(this, 0.0, 127.0, 1.0, 5.0, 64.0, 20)),
-      m_bankCheckBox(new QCheckBox(this)),
-      m_programCheckBox(new QCheckBox(this)),
-      m_chorusRotary(new RosegardenRotary(this, 0.0, 127.0, 1.0, 5.0, 0.0, 20)),
-      m_reverbRotary(new RosegardenRotary(this, 0.0, 127.0, 1.0, 5.0, 0.0, 20)),
-      m_highPassRotary(new RosegardenRotary(this, 0.0, 127.0, 1.0, 5.0, 0.0, 20)),
-      m_resonanceRotary(new RosegardenRotary(this, 0.0, 127.0, 1.0, 5.0, 0.0, 20)),
-      m_attackRotary(new RosegardenRotary(this, 0.0, 127.0, 1.0, 5.0, 0.0, 20)),
-      m_releaseRotary(new RosegardenRotary(this, 0.0, 127.0, 1.0, 5.0, 0.0, 20))
+    : InstrumentParameterPanel(doc, parent)
 {
+    QGridLayout *gridLayout = new QGridLayout(this, 9, 6, 8, 1);
 
-    /*
-    for (int i = -Rosegarden::MidiMidValue;
-             i < Rosegarden::MidiMidValue + 1; i++)
-    {
-        if (i > 0)
-            m_panValue->insertItem(QString("+%1").arg(i));
-        else
-            m_panValue->insertItem(QString("%1").arg(i));
-    }
-    */
+    // Some top space
+//    gridLayout->addRowSpacing(0, 8);
+//    gridLayout->addRowSpacing(1, 30);
 
-    /*
-    // volume values
-    //
-    for (int i = 0; i < Rosegarden::MidiMaxValue + 1; i++)
-        m_volumeValue->insertItem(QString("%1").arg(i));
-        */
+//    QFrame *rotaryFrame = new QFrame(this);
+//    rotaryFrame->setFrameStyle(QFrame::NoFrame);
+//    comboLayout->addMultiCellWidget(rotaryFrame, 5, 5, 0, 2, AlignCenter);
+//    QGridLayout *rotaryLayout = new QGridLayout(rotaryFrame, 4, 4, 8, 1);
+        
+    m_connectionLabel = new QLabel(this);
+    m_bankValue = new KComboBox(false, this);
+    m_channelValue = new RosegardenComboBox(true, false, this);
+    m_programValue = new KComboBox(this);
+    m_bankCheckBox = new QCheckBox(this);
+    m_programCheckBox = new QCheckBox(this);
 
-
-    QLabel* channelLabel = new QLabel(i18n("Channel"), this);
-    QLabel* panLabel = new QLabel(i18n("Pan"), this);
-    QLabel* volumeLabel= new QLabel(i18n("Volume"), this);
-    QLabel* programLabel = new QLabel(i18n("Program"), this);
     QLabel* bankLabel = new QLabel(i18n("Bank"), this);
+    QLabel* programLabel = new QLabel(i18n("Program"), this);
+    QLabel* channelLabel = new QLabel(i18n("Channel"), this);
 
-    QLabel* chorusLabel = new QLabel(i18n("Chorus"), this);
-    QLabel* reverbLabel = new QLabel(i18n("Reverb"), this);
-    QLabel* highPassLabel = new QLabel(i18n("Filter"), this);
-    QLabel* resonanceLabel = new QLabel(i18n("Resonance"), this);
-    QLabel* attackLabel = new QLabel(i18n("Attack"), this);
-    QLabel* releaseLabel = new QLabel(i18n("Release"), this);
+    // Ensure a reasonable amount of space in the program dropdowns even
+    // if no instrument initially selected
+    QFontMetrics metrics(m_programValue->font());
+    int width = metrics.width("Acoustic Grand Piano 123");
+    m_bankValue->setMinimumWidth(width);
+    m_programValue->setMinimumWidth(width);
+
+    int   allMinCol = 0,   allMaxCol = 5;
+    int comboMinCol = 2, comboMaxCol = 5;
+    int  leftMinCol = 0,  leftMaxCol = 2;
+    int rightMinCol = 3, rightMaxCol = 5;
+
+    gridLayout->addMultiCellWidget
+	(m_instrumentLabel, 0, 0, allMinCol, allMaxCol, AlignCenter);
+    gridLayout->addMultiCellWidget
+	(m_connectionLabel, 1, 1, allMinCol, allMaxCol, AlignCenter);
+
+    gridLayout->addWidget(bankLabel,      2, 0, AlignLeft);
+    gridLayout->addWidget(m_bankCheckBox, 2, 1);
+    gridLayout->addMultiCellWidget
+	(m_bankValue, 2, 2, comboMinCol, comboMaxCol, AlignRight);
+
+    gridLayout->addWidget(programLabel,      3, 0);
+    gridLayout->addWidget(m_programCheckBox, 3, 1);
+    gridLayout->addMultiCellWidget
+	(m_programValue, 3, 3, comboMinCol, comboMaxCol, AlignRight);
+
+    gridLayout->addMultiCellWidget
+	(channelLabel, 4, 4, 0, 1, AlignLeft);
+    gridLayout->addMultiCellWidget
+	(m_channelValue, 4, 4, comboMinCol, comboMaxCol, AlignRight);
+
+    QHBox *hbox;
+
+    hbox = new QHBox(this);
+    hbox->setSpacing(8);
+    m_panRotary = new RosegardenRotary(hbox, 0.0, 127.0, 1.0, 5.0, 64.0, 20);
+    QLabel* panLabel = new QLabel(i18n("Pan"), hbox);
+    gridLayout->addMultiCellWidget
+	(hbox, 5, 5, leftMinCol, leftMaxCol, AlignLeft);
+
+    hbox = new QHBox(this);
+    hbox->setSpacing(8);
+    m_volumeRotary = new RosegardenRotary(hbox, 0.0, 127.0, 1.0, 5.0, 64.0, 20);
+    QLabel* volumeLabel= new QLabel(i18n("Volume"), hbox);
+    gridLayout->addMultiCellWidget
+	(hbox, 6, 6, leftMinCol, leftMaxCol, AlignLeft);
+
+    hbox = new QHBox(this);
+    hbox->setSpacing(8);
+    m_attackRotary = new RosegardenRotary(hbox, 0.0, 127.0, 1.0, 5.0, 0.0, 20);
+    QLabel* attackLabel = new QLabel(i18n("Attack"), hbox);
+    gridLayout->addMultiCellWidget
+	(hbox, 7, 7, leftMinCol, leftMaxCol, AlignLeft);
+
+    hbox = new QHBox(this);
+    hbox->setSpacing(8);
+    m_releaseRotary = new RosegardenRotary(hbox, 0.0, 127.0, 1.0, 5.0, 0.0, 20);
+    QLabel* releaseLabel = new QLabel(i18n("Release"), hbox);
+    gridLayout->addMultiCellWidget
+	(hbox, 8, 8, leftMinCol, leftMaxCol, AlignLeft);
+
+    hbox = new QHBox(this);
+    hbox->setSpacing(8);
+    m_chorusRotary = new RosegardenRotary(hbox, 0.0, 127.0, 1.0, 5.0, 0.0, 20);
+    QLabel* chorusLabel = new QLabel(i18n("Chorus"), hbox);
+    gridLayout->addMultiCellWidget
+	(hbox, 5, 5, rightMinCol, rightMaxCol, AlignLeft);
+
+    hbox = new QHBox(this);
+    hbox->setSpacing(8);
+    m_reverbRotary = new RosegardenRotary(hbox, 0.0, 127.0, 1.0, 5.0, 0.0, 20);
+    QLabel* reverbLabel = new QLabel(i18n("Reverb"), hbox);
+    gridLayout->addMultiCellWidget
+	(hbox, 6, 6, rightMinCol, rightMaxCol, AlignLeft);
+
+    hbox = new QHBox(this);
+    hbox->setSpacing(8);
+    m_highPassRotary = new RosegardenRotary(hbox, 0.0, 127.0, 1.0, 5.0, 0.0, 20);
+    QLabel* highPassLabel = new QLabel(i18n("Filter"), hbox);
+    gridLayout->addMultiCellWidget
+	(hbox, 7, 7, rightMinCol, rightMaxCol, AlignLeft);
+
+    hbox = new QHBox(this);
+    hbox->setSpacing(8);
+    m_resonanceRotary = new RosegardenRotary(hbox, 0.0, 127.0, 1.0, 5.0, 0.0, 20);
+    QLabel* resonanceLabel = new QLabel(i18n("Resonance"), hbox);
+    gridLayout->addMultiCellWidget
+	(hbox, 8, 8, rightMinCol, rightMaxCol, AlignLeft);
 
     // Set some nice pastel knob colours
     //
-
     // light blue
     m_volumeRotary->setKnobColour(RosegardenGUIColours::RotaryPastelBlue);
 
@@ -1319,63 +1383,31 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     m_attackRotary->setKnobColour(RosegardenGUIColours::RotaryPastelYellow);
     m_releaseRotary->setKnobColour(RosegardenGUIColours::RotaryPastelYellow);
 
-    QGridLayout *gridLayout = new QGridLayout(this, 12, 3, 8, 1);
-
-    // Some top space
-    gridLayout->addRowSpacing(0, 8);
-    gridLayout->addRowSpacing(1, 30);
-
-    // Ensure a reasonable amount of space in the program dropdowns even
-    // if no instrument initially selected
-    QFontMetrics metrics(m_programValue->font());
-    int width = metrics.width("Acoustic Grand Piano 123");
-    m_bankValue->setMinimumWidth(width);
-    m_programValue->setMinimumWidth(width);
-
 /*!!!
-    m_bankValue->setMinimumWidth(100);
-    m_programValue->setMinimumWidth(100);
+    gridLayout->addWidget(volumeLabel,      0, 1, AlignLeft);
+    gridLayout->addWidget(m_volumeRotary,   0, 0, AlignRight);
+
+    gridLayout->addWidget(panLabel,      1, 1, AlignLeft);
+    gridLayout->addWidget(m_panRotary,   1, 0, AlignRight);
+
+    gridLayout->addWidget(chorusLabel,    2, 1, AlignLeft);
+    gridLayout->addWidget(m_chorusRotary, 2, 0, AlignRight);
+
+    gridLayout->addWidget(reverbLabel,    3, 1, AlignLeft);
+    gridLayout->addWidget(m_reverbRotary, 3, 0, AlignRight);
+
+    gridLayout->addWidget(highPassLabel,    0, 3, AlignLeft);
+    gridLayout->addWidget(m_highPassRotary, 0, 2, AlignRight);
+
+    gridLayout->addWidget(resonanceLabel,    1, 3, AlignLeft);
+    gridLayout->addWidget(m_resonanceRotary, 1, 2, AlignRight);
+
+    gridLayout->addWidget(attackLabel,    2, 3, AlignLeft);
+    gridLayout->addWidget(m_attackRotary, 2, 2, AlignRight);
+
+    gridLayout->addWidget(releaseLabel,    3, 3, AlignLeft);
+    gridLayout->addWidget(m_releaseRotary, 3, 2, AlignRight);
 */
-
-    // MIDI widgets
-    //
-    gridLayout->addMultiCellWidget(m_instrumentLabel, 0, 0, 0, 2, AlignCenter);
-    gridLayout->addMultiCellWidget(m_deviceLabel, 1, 1, 0, 2, AlignCenter);
-
-    gridLayout->addWidget(bankLabel,      2, 0, AlignLeft);
-    gridLayout->addWidget(m_bankCheckBox, 2, 1);
-    gridLayout->addWidget(m_bankValue,    2, 2, AlignRight);
-
-    gridLayout->addWidget(programLabel,      3, 0);
-    gridLayout->addWidget(m_programCheckBox, 3, 1);
-    gridLayout->addWidget(m_programValue,    3, 2, AlignRight);
-
-    gridLayout->addMultiCellWidget(channelLabel, 4, 4, 0, 1, AlignLeft);
-    gridLayout->addWidget(m_channelValue, 4, 2, AlignRight);
-
-    gridLayout->addWidget(volumeLabel,      5, 0, AlignLeft);
-    gridLayout->addWidget(m_volumeRotary,   5, 2, AlignRight);
-
-    gridLayout->addWidget(panLabel,      6, 0, AlignLeft);
-    gridLayout->addWidget(m_panRotary,   6, 2, AlignRight);
-
-    gridLayout->addWidget(chorusLabel,    7, 0, AlignLeft);
-    gridLayout->addWidget(m_chorusRotary, 7, 2, AlignRight);
-
-    gridLayout->addWidget(reverbLabel,    8, 0, AlignLeft);
-    gridLayout->addWidget(m_reverbRotary, 8, 2, AlignRight);
-
-    gridLayout->addWidget(highPassLabel,    9, 0, AlignLeft);
-    gridLayout->addWidget(m_highPassRotary, 9, 2, AlignRight);
-
-    gridLayout->addWidget(resonanceLabel,    10, 0, AlignLeft);
-    gridLayout->addWidget(m_resonanceRotary, 10, 2, AlignRight);
-
-    gridLayout->addWidget(attackLabel,    11, 0, AlignLeft);
-    gridLayout->addWidget(m_attackRotary, 11, 2, AlignRight);
-
-    gridLayout->addWidget(releaseLabel,    12, 0, AlignLeft);
-    gridLayout->addWidget(m_releaseRotary, 12, 2, AlignRight);
 
     // Populate channel list
     for (int i = 0; i < 16; i++)
@@ -1387,7 +1419,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     m_programValue->setDisabled(true);
     m_bankValue->setDisabled(true);
 
-    // Only active is we have an Instrument selected
+    // Only active if we have an Instrument selected
     //
     m_programCheckBox->setDisabled(true);
     m_bankCheckBox->setDisabled(true);
@@ -1484,16 +1516,15 @@ MIDIInstrumentParameterPanel::setupForInstrument(Rosegarden::Instrument *instrum
     // Set Studio Device name
     //
     if (instrument->getDevice()) {
-	//!!! we should call this the connection label, I guess
-	std::string connection(instrument->getDevice()->getConnection());
+	QString connection(strtoqstr(instrument->getDevice()->getConnection()));
 	if (connection == "") {
-	    m_deviceLabel->setText(i18n("No connection"));
+	    m_connectionLabel->setText(i18n("No connection"));
 	} else {
-	    m_deviceLabel->setText(i18n("Connection: %1").
-				   arg(strtoqstr(connection)));
+	    QFontMetrics metrics(m_connectionLabel->fontMetrics());
+	    m_connectionLabel->setText(i18n("Connection: %1").arg(connection));
 	}
     } else {
-	m_deviceLabel->setText("");
+	m_connectionLabel->setText("");
     }
 
     // Enable all check boxes

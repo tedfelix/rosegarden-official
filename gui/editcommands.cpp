@@ -26,6 +26,7 @@
 #include "SegmentNotationHelper.h"
 #include "BaseProperties.h"
 #include "Clipboard.h"
+#include "Profiler.h"
 
 #include "notationproperties.h"
 #include "segmentcommands.h"
@@ -732,6 +733,8 @@ EventQuantizeCommand::getGlobalName(Rosegarden::Quantizer *quantizer)
 void
 EventQuantizeCommand::modifySegment()
 {
+    Rosegarden::Profiler profiler("EventQuantizeCommand::modifySegment", true);
+
     Segment &segment = getSegment();
     SegmentNotationHelper helper(segment);
 

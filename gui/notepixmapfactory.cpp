@@ -1019,14 +1019,14 @@ NotePixmapFactory::drawTuplingLine(const NotePixmapParameters &params)
     if (startY == endY) ++thickness;
 
     int tickOffset = (params.m_tuplingLineY < 0) ? 3 : -3;
-
+/*
     RG_DEBUG << "adjusted params.m_tuplingLineWidth = "
 			 << tlw
 			 << ", cr.width = " << cr.width()
 			 << ", tickOffset = " << tickOffset << endl;
     RG_DEBUG << "line: (" << startX << "," << startY << ") -> ("
 			 << endX << "," << endY << ")" << endl;
-
+*/
     bool smooth = m_font->getNoteFontMap().isSmooth();
 
     m_p.drawLine(startX, startY, startX, startY + tickOffset);

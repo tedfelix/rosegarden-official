@@ -450,7 +450,8 @@ NotationStaff::positionElements(timeT from, timeT to)
 	    // user inserts a new clef; unfortunately this means
 	    // inserting clefs is rather slow.
 	    
-	    needNewSprite = needNewSprite || !elementNotMovedInY(static_cast<NotationElement*>(*it));
+	    needNewSprite = needNewSprite ||
+		!elementNotMovedInY(static_cast<NotationElement*>(*it));
 	    
 	    if (!needNewSprite) {
 
@@ -912,7 +913,10 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
     params.setIsOnLine(heightOnStaff % 2 == 0);
     params.removeMarks();
 
-    if (elt->event()->get<Bool>(properties.CHORD_PRIMARY_NOTE)) {
+    bool primary = false;
+
+    if (elt->event()->get<Bool>(properties.CHORD_PRIMARY_NOTE, primary)
+	&& primary) {
 	long markCount = 0;
 	(void)(elt->event()->get<Int>(MARK_COUNT, markCount));
 	if (markCount == 0) {
@@ -939,7 +943,8 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
 
     if (beamed) {
 
-        if (elt->event()->get<Bool>(properties.CHORD_PRIMARY_NOTE)) {
+        if (elt->event()->get<Bool>(properties.CHORD_PRIMARY_NOTE, primary)
+	    && primary) {
 
             int myY = elt->event()->get<Int>(properties.BEAM_MY_Y);
 

@@ -339,6 +339,20 @@ Composition::getDuration() const
 }
 
 void
+Composition::setStartMarker(const timeT &sM)
+{
+    m_startMarker = sM;
+    updateRefreshStatuses();
+}
+
+void
+Composition::setEndMarker(const timeT &eM)
+{
+    m_endMarker = eM;
+    updateRefreshStatuses();
+}
+
+void
 Composition::clear()
 {
     for (segmentcontainer::iterator i = m_segments.begin();

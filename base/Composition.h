@@ -86,9 +86,8 @@ public:
     timeT getStartMarker() const { return m_startMarker; }
     timeT getEndMarker() const { return m_endMarker; }
 
-    void setStartMarker(const timeT &sM) { m_startMarker = sM; }
-    void setEndMarker(const timeT &eM) { m_endMarker = eM; }
-
+    void setStartMarker(const timeT &sM);
+    void setEndMarker(const timeT &eM);
 
 
     //////
