@@ -200,6 +200,9 @@ class RosegardenGUIApp : public KMainWindow, virtual public RosegardenGUIIface
     /** import MIDI file */
     void importMIDI();
 
+    /** import Rosegarden 2.1 file */
+    void importRG21();
+
     /**
      * closes all open windows by calling close() on each memberList
      * item until the list is empty, then quits the application.  If
@@ -295,7 +298,6 @@ private:
      * The default tool selected on startup
      */
     KAction* m_selectDefaultTool;
-    KAction *m_importMIDI;
 
 };
  

@@ -79,8 +79,17 @@ bool RG21Loader::parseChordItem()
     using Rosegarden::timeT;
 
     if (m_tokens.count() < 4) return false;
-    
+
     QString durationString = m_tokens[0].lower();
+    QStringList::Iterator i = m_tokens.begin(); 
+    ++i;
+    
+    if (durationString == "dotted") {
+        durationString += ' ';
+        durationString += m_tokens[1].lower();
+        ++i;
+    }
+    
     Rosegarden::timeT duration = 0;
 
     try {
@@ -92,11 +101,12 @@ bool RG21Loader::parseChordItem()
         return false;
     }
 
-    QStringList::Iterator i = m_tokens.begin(); 
 
+    // get chord mod flags and nb of notes
     int chordMods = (*i).toInt(); ++i;
     int nbNotes   = (*i).toInt(); ++i;
 
+    // now get notes
     for(;i != m_tokens.end(); ++i) {
         long pitch = (*i).toInt();
 
@@ -117,7 +127,6 @@ void RG21Loader::closeTrackOrComposition()
 {
     if (m_currentTrack) {
         m_currentTrack->setInstrument(m_currentTrackNb);
-//        m_composition->insert(m_currentTrack);
         m_composition->addTrack(m_currentTrack);
         m_currentTrack = 0;
         m_currentTrackTime = 0;
@@ -154,7 +163,7 @@ bool RG21Loader::parse()
 
             parseClef();
 
-        } else if (firstToken == ":") {
+        } else if (firstToken == ":") { // chord
 
             m_tokens.remove(m_tokens.begin()); // get rid of 1st token ':'
             parseChordItem();

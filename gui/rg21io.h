@@ -34,7 +34,7 @@ public:
     RG21Loader(const QString& fileName);
     ~RG21Loader();
     
-    Rosegarden::Composition* getComposition();
+    Rosegarden::Composition* getComposition() { return m_composition; }
 
 protected:
 

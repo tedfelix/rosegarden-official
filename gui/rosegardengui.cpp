@@ -43,7 +43,7 @@
 #include "rosegardenguidoc.h"
 #include "resource.h"
 #include "MidiFile.h"
-
+#include "rg21io.h"
 
 RosegardenGUIApp::RosegardenGUIApp()
     : KMainWindow(0), DCOPObject("RosegardenGUIIface"),
@@ -96,11 +96,13 @@ void RosegardenGUIApp::setupActions()
     KStdAction::close (this, SLOT(fileClose()),         actionCollection());
     KStdAction::print (this, SLOT(filePrint()),         actionCollection());
 
-    // need to get this onto the File menu
-    //
-    m_importMIDI = new KAction(i18n("Import MIDI file"), 0, 0, this,
-                               SLOT(importMIDI()), actionCollection(),
-                               "file_import_midi");
+    new KAction(i18n("Import MIDI file"), 0, 0, this,
+                SLOT(importMIDI()), actionCollection(),
+                "file_import_midi");
+
+    new KAction(i18n("Import Rosegarden 2.1 file"), 0, 0, this,
+                SLOT(importRG21()), actionCollection(),
+                "file_import_rg21");
 
     KStdAction::quit  (this, SLOT(quit()),              actionCollection());
 
@@ -726,17 +728,16 @@ RosegardenGUIApp::getSequencerSlice(const int &sliceStart, const int &sliceEnd)
 }
 
 
-void
-RosegardenGUIApp::importMIDI()
+void RosegardenGUIApp::importMIDI()
 {
   Rosegarden::MidiFile *midiFile;
 
   KURL url = KFileDialog::getOpenURL(QString::null, "*.mid", this,
-                                      i18n("Open File"));
-  if ( url.isEmpty() ) { return; }
+                                     i18n("Open MIDI File"));
+  if (url.isEmpty()) { return; }
 
   QString tmpfile;
-  KIO::NetAccess::download( url, tmpfile );
+  KIO::NetAccess::download(url, tmpfile);
   midiFile = new Rosegarden::MidiFile(tmpfile.ascii());
 
   midiFile->open();
@@ -744,9 +745,39 @@ RosegardenGUIApp::importMIDI()
   KIO::NetAccess::removeTempFile( tmpfile );
 
   m_doc->closeDocument();
-  m_doc->getComposition() = *(midiFile->convertToRosegarden());
+  m_doc->newDocument();
+
+  Rosegarden::Composition *tmpComp = midiFile->convertToRosegarden();
+
+  m_doc->getComposition().swap(*tmpComp);
+
+  delete tmpComp;
 
   initView();
 
+}
+
+void RosegardenGUIApp::importRG21()
+{
+  KURL url = KFileDialog::getOpenURL(QString::null, "*.rose", this,
+                                     i18n("Open Rosegarden 2.1 File"));
+  if (url.isEmpty()) { return; }
+
+  QString tmpfile;
+  KIO::NetAccess::download(url, tmpfile);
+
+  RG21Loader rg21Loader(tmpfile);
+
+  KIO::NetAccess::removeTempFile(tmpfile);
+
+  m_doc->closeDocument();
+  m_doc->newDocument();
+  Rosegarden::Composition *tmpComp = rg21Loader.getComposition();
+
+  m_doc->getComposition().swap(*tmpComp);
+
+  delete tmpComp;
+
+  initView();
 }
 
