@@ -1,6 +1,7 @@
 // -*- c-basic-offset: 4 -*-
 
 #include "rosedebug.h"
+#include "colours.h"
 
 #include "staffruler.h"
 
