@@ -5,15 +5,15 @@ Current Task list
 
 - insertion in the middle of rests DONE (by Chris)
 
-- look for a way to represent overlapping segments
+- look for a way to represent overlapping segments DONE
 
-- look if note pixmaps gain from being turned into real QCanvasItems
+- look if note pixmaps gain from being turned into real QCanvasItems - PROBABLY NO
 
-- look to use a pixmap cache for notation
+- look to use a pixmap cache for notation - CHRIS SAYS WON'T HELP
 
 - use KFilterBase/KFilterDev for accessing .rg files (rather than calling zlib directly)
 
-- printing (at least the beginnings of it) DONE
+- printing (at least the beginnings of it) - DONE
 
 - harmonize namings of m_view* toggle actions, slotToggleXXX(), slotShowXXX()
  (m_viewSegmentParameters / slotToggleSegmentParameters / slotShowSegmentParameters)
@@ -28,7 +28,7 @@ Current Task list
 
 - tidy up exceptions, make a Rosegarden::Exception class
 
-- have several kdDebug() channels
+- have several kdDebug() channels - DONE
 
 Task list from 18/19th August meetings
 ======================================
