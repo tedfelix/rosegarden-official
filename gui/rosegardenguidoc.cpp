@@ -35,9 +35,7 @@
 // include files for KDE
 #include <klocale.h>
 #include <kcmdlineargs.h>
-#include <dcopclient.h>
 #include <kmessagebox.h>
-#include <kapp.h>
 #include <kconfig.h>
 #include <kstddirs.h>
 
@@ -59,6 +57,7 @@
 #include "Profiler.h"
 #include "Midi.h"
 
+#include "rgapplication.h"
 #include "constants.h"
 #include "editviewbase.h"
 #include "rosestrings.h"
@@ -531,19 +530,7 @@ RosegardenGUIDoc::mergeDocument(RosegardenGUIDoc *doc,
 
 void RosegardenGUIDoc::clearStudio()
 {
-    QByteArray data;
-    QDataStream streamOut(data, IO_WriteOnly);
-
-    if (!kapp->dcopClient()->
-            send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                 ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                 "clearStudio()",
-                 data))
-    {
-        RG_DEBUG << "failed to clear studio" << endl;
-        return;
-    }
-
+    rgapp->sequencerSend("clearStudio()");
     RG_DEBUG << "cleared studio\n";
 }
 
@@ -1284,23 +1271,11 @@ RosegardenGUIDoc::prepareAudio()
 
     // Clear down the sequencer AudioFilePlayer object
     //
-    QByteArray data;
-    QDataStream streamOut(data, IO_WriteOnly);
-
-    if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "clearAllAudioFiles()", data))
-    {
-        RG_DEBUG << "prepareAudio() - "
-                     << "couldn't delete all audio files from sequencer"
-                     << endl;
-        return;
-    }
+    rgapp->sequencerSend("clearAllAudioFiles()");
     
     for (Rosegarden::AudioFileManagerIterator it = m_audioFileManager.begin();
-         it != m_audioFileManager.end();
-         it++)
-    {
+         it != m_audioFileManager.end(); it++) {
+
         QByteArray data;
         QDataStream streamOut(data, IO_WriteOnly);
 
@@ -1309,26 +1284,14 @@ RosegardenGUIDoc::prepareAudio()
         streamOut << QString(strtoqstr((*it)->getFilename()));
         streamOut << (*it)->getId();
 
-        if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                      ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                      "addAudioFile(QString, int)", data, replyType, replyData))
-        {
-            RG_DEBUG << "prepareAudio() - couldn't add audio file "
-                         << (*it)->getFilename()
-                         << endl;
-            return;
-        }
-        else
-        {
-            QDataStream streamIn(replyData, IO_ReadOnly);
-            int result;
-            streamIn >> result;
-            if (!result)
-            {
+        rgapp->sequencerCall("addAudioFile(QString, int)", replyType, replyData, data);
+        QDataStream streamIn(replyData, IO_ReadOnly);
+        int result;
+        streamIn >> result;
+        if (!result) {
                 RG_DEBUG << "prepareAudio() - failed to add file \"" 
-                             << (*it)->getFilename() << "\"" << endl;
+                         << (*it)->getFilename() << "\"" << endl;
             }
-        }
     }
 }
 
@@ -1360,10 +1323,7 @@ RosegardenGUIDoc::syncDevices()
 
     // Start up the sequencer
     //
-    while (isSequencerRunning() &&
-	   !kapp->dcopClient()->
-            isApplicationRegistered(QCString(ROSEGARDEN_SEQUENCER_APP_NAME)))
-    {
+    while (isSequencerRunning() && !rgapp->isSequencerRegistered()) {
         RG_DEBUG << "RosegardenGUIDoc::syncDevices - "
                      << "waiting for Sequencer to come up" << endl;
 
@@ -1374,22 +1334,12 @@ RosegardenGUIDoc::syncDevices()
     if (!isSequencerRunning())
         return;
 
-    QByteArray data;
     QByteArray replyData;
     QCString replyType;
-    QDataStream arg(data, IO_WriteOnly);
 
     // Get number of devices the sequencer has found
     //
-    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "getDevices()",
-                                  data, replyType, replyData, true))
-    {
-        RG_DEBUG << "RosegardenGUIDoc::syncDevices - "
-                     << "can't get number of devices" << endl;
-        return;
-    }
+    rgapp->sequencerCall("getDevices()", replyType, replyData, RosegardenApplication::Empty, true);
 
     unsigned int devices = 0;
 
@@ -1436,15 +1386,8 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
 
     arg << (unsigned int)id;
 
-    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "getMappedDevice(unsigned int)",
-                                  data, replyType, replyData, false))
-    {
-        RG_DEBUG << "RosegardenGUIDoc::getMappedDevice() - "
-                     << "can't call Sequencer" << endl;
-        return;
-    }
+    rgapp->sequencerCall("getMappedDevice(unsigned int)",
+                         replyType, replyData, data);
 
     Rosegarden::MappedDevice *mD = new Rosegarden::MappedDevice();
     QDataStream reply(replyData, IO_ReadOnly);
@@ -1638,7 +1581,7 @@ RosegardenGUIDoc::createNewAudioFile()
 
 
 void
-RosegardenGUIDoc::insertRecordedAudio(const Rosegarden::RealTime &time,
+RosegardenGUIDoc::insertRecordedAudio(const Rosegarden::RealTime& /*time*/,
                                       TransportStatus status)
 {
     if (status != RECORDING_AUDIO)
@@ -1832,18 +1775,9 @@ RosegardenGUIDoc::finalizeAudioFile(Rosegarden::AudioFileId /*id*/)
     QDataStream streamOut(data, IO_WriteOnly);
     streamOut << QString(strtoqstr(newAudioFile->getFilename()));
     streamOut << newAudioFile->getId();
-    if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "addAudioFile(QString, int)", data))
-    {
-        RG_DEBUG << "prepareAudio() - couldn't add audio file"
-                     << endl;
-        return;
-    }
-
+    rgapp->sequencerSend("addAudioFile(QString, int)", data);
     // clear down
     m_recordSegment = 0;
-
 }
 
 void
@@ -1896,30 +1830,14 @@ RosegardenGUIDoc::setAudioMonitoringState(bool value,
 
     streamOut << id;
 
-    if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "setAudioMonitoringInstrument(unsigned int)",
-                                  data))
-    {
-        RG_DEBUG << "RosegardenGUIDoc::setAudioMonitoringState - "
-                 << "can't set monitoring instrument at sequencer"
-                 << endl;
-    }
-
+    rgapp->sequencerSend("setAudioMonitoringInstrument(unsigned int)", data);
+    
     QByteArray data2;
     QDataStream streamOut2(data, IO_WriteOnly);
 
     streamOut2 << long(value);
 
-    if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "setAudioMonitoring(long int)",
-                                  data))
-    {
-        RG_DEBUG << "RosegardenGUIDoc::setAudioMonitoringState - "
-                 << "can't turn on audio monitoring at sequencer"
-                 << endl;
-    }
+    rgapp->sequencerSend("setAudioMonitoring(long int)", data);
 
     RG_DEBUG << "setAudioMonitoringState - " << value
              << " - instrument = " << id << endl;
@@ -1929,58 +1847,49 @@ RosegardenGUIDoc::setAudioMonitoringState(bool value,
 Rosegarden::RealTime
 RosegardenGUIDoc::getAudioPlayLatency()
 {
-    QByteArray data;
     QCString replyType;
     QByteArray replyData;
 
-    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "getAudioPlayLatency()",
-                                  data, replyType, replyData))
-    {
+    try {
+        rgapp->sequencerCall("getAudioPlayLatency()", replyType, replyData);
+    } catch (Rosegarden::Exception e) {
         RG_DEBUG << "RosegardenGUIDoc::getAudioPlayLatency - "
                  << "Playback failed to contact Rosegarden sequencer"
                  << endl;
         return Rosegarden::RealTime(0, 0);
     }
-    else
-    {
-        // ensure the return type is ok
-        QDataStream streamIn(replyData, IO_ReadOnly);
-        Rosegarden::MappedRealTime result;
-        streamIn >> result;
 
-        return (result.getRealTime());
-    }
+    // ensure the return type is ok
+    QDataStream streamIn(replyData, IO_ReadOnly);
+    Rosegarden::MappedRealTime result;
+    streamIn >> result;
+
+    return (result.getRealTime());
 }
 
 Rosegarden::RealTime
 RosegardenGUIDoc::getAudioRecordLatency()
 {
-
-    QByteArray data;
     QCString replyType;
     QByteArray replyData;
 
-    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "getAudioRecordLatency()",
-                                  data, replyType, replyData))
-    {
+    try {
+        
+        rgapp->sequencerCall("getAudioRecordLatency()", replyType, replyData);
+
+    } catch (Rosegarden::Exception e) {
         RG_DEBUG << "RosegardenGUIDoc::getAudioRecordLatency - "
                  << "Playback failed to contact Rosegarden sequencer"
                  << endl;
         return Rosegarden::RealTime(0, 0);
     }
-    else
-    {
-        // ensure the return type is ok
-        QDataStream streamIn(replyData, IO_ReadOnly);
-        Rosegarden::MappedRealTime result;
-        streamIn >> result;
 
-        return (result.getRealTime());
-    }
+    // ensure the return type is ok
+    QDataStream streamIn(replyData, IO_ReadOnly);
+    Rosegarden::MappedRealTime result;
+    streamIn >> result;
+
+    return (result.getRealTime());
 }
 
 // This is like SequenceManager::preparePlayback() but we only do it

@@ -44,6 +44,11 @@ int RosegardenApplication::newInstance()
     return KUniqueApplication::newInstance();
 }
 
+bool RosegardenApplication::isSequencerRegistered()
+{
+    return dcopClient()->isApplicationRegistered(ROSEGARDEN_SEQUENCER_APP_NAME);
+}
+
 void RosegardenApplication::sequencerSend(QCString s, QByteArray params)
 {
     if (!dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
@@ -52,11 +57,11 @@ void RosegardenApplication::sequencerSend(QCString s, QByteArray params)
         throw Rosegarden::Exception("failed to reach the sequencer through DCOP");
 }
 
-void RosegardenApplication::sequencerCall(QCString s, QCString& replyType, QByteArray& replyData, QByteArray params)
+void RosegardenApplication::sequencerCall(QCString s, QCString& replyType, QByteArray& replyData, QByteArray params, bool useEventLoop)
 {
     if (!dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
                             ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                            s, params, replyType, replyData))
+                            s, params, replyType, replyData, useEventLoop))
         throw Rosegarden::Exception("failed to reach the sequencer through DCOP");
 }
 

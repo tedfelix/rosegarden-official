@@ -19,9 +19,7 @@
 
 #include <iostream>
 
-#include <kapp.h>
-#include <dcopclient.h>
-
+#include "rgapplication.h"
 #include "audiopluginmanager.h"
 #include "rosegardendcop.h"
 
@@ -131,26 +129,13 @@ AudioPluginManager::fetchSampleRate()
 {
     QCString replyType;
     QByteArray replyData;
-    QByteArray data;
 
-    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "getSampleRate()", data,
-                                  replyType, replyData))
-    {
-        std::cerr << "AudioPluginManager::fetchSampleRate - "
-                  << "couldn't fetch sample rate"
-                  << std::endl;
-        return;
-    }
-    else
-    {
-        QDataStream streamIn(replyData, IO_ReadOnly);
-        unsigned int result;
-        streamIn >> result;
-        m_sampleRate = result;
-    }
+    rgapp->sequencerCall("getSampleRate()", replyType, replyData);
 
+    QDataStream streamIn(replyData, IO_ReadOnly);
+    unsigned int result;
+    streamIn >> result;
+    m_sampleRate = result;
 }
 
 

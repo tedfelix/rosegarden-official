@@ -27,11 +27,10 @@
 #include <qpushbutton.h>
 #include <qregexp.h>
 
-#include <kapp.h>
 #include <klocale.h>
-#include <dcopclient.h>
 #include <kmessagebox.h>
 
+#include "rgapplication.h"
 #include "rosegardenguidoc.h"
 #include "rosestrings.h"
 #include "rosedebug.h"
@@ -177,10 +176,9 @@ DeviceEditorDialog::makeConnectionList(unsigned int direction,
     arg << (int)Rosegarden::Device::Midi;
     arg << direction;
 
-    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-				  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-				  "getConnections(int, unsigned int)",
-				  data, replyType, replyData, false)) {
+    try {
+        rgapp->sequencerCall("getConnections(int, unsigned int)", replyType, replyData, data);
+    } catch (Rosegarden::Exception e) {
 	RG_DEBUG << "DeviceEditorDialog: can't call Sequencer" << endl;
 	list.append(i18n("No connection"));
 	return;
@@ -200,10 +198,10 @@ DeviceEditorDialog::makeConnectionList(unsigned int direction,
 	arg << direction;
 	arg << i;
 	    
-	if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-				      ROSEGARDEN_SEQUENCER_IFACE_NAME,
-				      "getConnection(int, unsigned int, unsigned int)",
-				      data, replyType, replyData, false)) {
+	try {
+            rgapp->sequencerCall("getConnection(int, unsigned int, unsigned int)",
+                                 replyType, replyData, data);
+        } catch (Rosegarden::Exception e) {
 	    RG_DEBUG << "DeviceEditorDialog: can't call Sequencer" << endl;
 	    list.append(i18n("No connection"));
 	    return;

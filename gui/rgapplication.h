@@ -48,8 +48,9 @@ public:
         KApplication::commitData( sm );
     }
 
+    bool isSequencerRegistered();
     void sequencerSend(QCString dcopCall, QByteArray params = Empty);
-    void sequencerCall(QCString dcopCall, QCString& replyType, QByteArray& replyData, QByteArray params = Empty);
+    void sequencerCall(QCString dcopCall, QCString& replyType, QByteArray& replyData, QByteArray params = Empty, bool useEventLoop = false);
 
     static RosegardenApplication* rgApp();
 

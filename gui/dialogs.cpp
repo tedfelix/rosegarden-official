@@ -41,10 +41,8 @@
 #include <qregexp.h>
 #include <qstringlist.h>
 #include <qtextedit.h>
-#include <dcopclient.h>
 #include <qaccel.h>
 
-#include <kapp.h>
 #include <klocale.h>
 #include <karrowbutton.h>
 #include <kfiledialog.h>
@@ -56,6 +54,7 @@
 #include "MidiTypes.h"
 
 #include "dialogs.h"
+#include "rgapplication.h"
 #include "notepixmapfactory.h"
 #include "notationview.h"
 #include "rosestrings.h"
@@ -2925,7 +2924,7 @@ RescaleDialog::slotToChanged(int i)
 
 
 FileMergeDialog::FileMergeDialog(QWidget *parent,
-				 QString fileName,
+				 QString /*fileName*/,
 				 bool timingsDiffer) :
     KDialogBase(parent, 0, true, i18n("Merge File"), Ok | Cancel)
 {
@@ -3784,19 +3783,18 @@ ShowSequencerStatusDialog::ShowSequencerStatusDialog(QWidget *parent) :
     QByteArray replyData;
     QByteArray data;
 
-    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "getStatusLog()", data, replyType, replyData)) {
+    try { rgapp->sequencerCall("getStatusLog()", replyType, replyData);
+    } catch (Rosegarden::Exception e) {
 	status = i18n("Sequencer is not running or is not responding.");
+    }
+    
+    QDataStream streamIn(replyData, IO_ReadOnly);
+    QString result;
+    streamIn >> result;
+    if (!result) {
+        status = i18n("Sequencer is not returning a valid status report.");
     } else {
-	QDataStream streamIn(replyData, IO_ReadOnly);
-	QString result;
-	streamIn >> result;
-	if (!result) {
-	    status = i18n("Sequencer is not returning a valid status report.");
-	} else {
-	    status = result;
-	}
+        status = result;
     }
 
     QTextEdit *text = new QTextEdit(vbox);
