@@ -95,7 +95,7 @@ public:
      * \a xPos : position of the first step
      * \a thickness : thickness (height) of the ruler
      */
-    StaffRuler(int xPos, int thickness, QCanvas*);
+    StaffRuler(int xPos, int yPos, int thickness, QCanvas*);
 
     /**
      * Clear all steps and substeps
@@ -126,6 +126,9 @@ public:
 
     /// reset ruler width to canvas width
     void resize();
+
+    /// set horizontal position
+    void setXPos(int);
 
     /// set vertical position
     void setYPos(int);

@@ -60,45 +60,41 @@ void StaffRuler::StepElement::addSubStep(QCanvasLine* l)
 }
 
 
-StaffRuler::StaffRuler(int xPos, int yPos,
+StaffRuler::StaffRuler(int xPos, int yPos, int thickness,
                        QCanvas* c)
     : QCanvasItemGroup(c),
       m_xPos(xPos),
       m_yPos(yPos),
-      m_thickness(15),
-      m_mainLinePos(m_yPos + m_thickness),
-      m_stepLineHeight(10),
-      m_subStepLineHeight(5),
+      m_thickness(thickness),
+      m_mainLinePos(m_yPos + m_thickness / 2),
+      m_stepLineHeight(thickness / 3),
+      m_subStepLineHeight(thickness / 6),
       m_mainLine(new QCanvasLineGroupable(c, this)),
       m_greyBackground(new QCanvasRectangleGroupable(c, this)),
       m_whiteBackground(new QCanvasRectangleGroupable(c, this)),
-      m_cursor(new PositionCursor(m_mainLinePos + m_yPos + 20, canvas(), canvas()))
+      m_cursor(new PositionCursor(m_mainLinePos + m_yPos + thickness/2,
+				  canvas(), canvas()))
 {
     m_greyBackground->setX(0);
     m_greyBackground->setY(m_yPos);
     m_greyBackground->setZ(-1);
-    m_greyBackground->setSize(canvas()->width(), m_thickness);
+    m_greyBackground->setSize(canvas()->width(), m_thickness / 2);
 
     m_whiteBackground->setX(0);
     m_whiteBackground->setY(m_yPos);
-    m_whiteBackground->setSize(canvas()->width(), m_thickness + 15);
+    m_whiteBackground->setSize(canvas()->width(), m_thickness);
     
     m_greyBackground->setBrush(RosegardenGUIColours::StaffRulerBackground);
     m_greyBackground->setPen(RosegardenGUIColours::StaffRulerBackground);
-    m_greyBackground->show();
+    m_whiteBackground->setZ(-4);
 
     m_whiteBackground->setBrush(white);
     m_whiteBackground->setPen(white);
-    m_whiteBackground->show();
-    m_whiteBackground->setZ(-2);
+    m_whiteBackground->setZ(-5);
 
     m_mainLine->setPoints(0, m_mainLinePos,
                           canvas()->width(), m_mainLinePos);
-    //m_mainLine->setPen(red); // DEBUG
     m_mainLine->setZ(1);
-
-    m_mainLine->show();
-    m_cursor->show();
 
     setActive(true);
 }
@@ -131,11 +127,19 @@ void StaffRuler::update()
 
     // TODO: perhaps recycle instead
 
+    double maxStepPos = 0;
+
     for (unsigned int i = 0; i < m_steps.size() - 1; ++i) {
-         makeStep(i, m_steps[i].first, m_steps[i + 1].first, m_steps[i].second);
+	makeStep(i, m_steps[i].first, m_steps[i + 1].first, m_steps[i].second);
+	maxStepPos = m_steps[i + 1].first;
     }
 
     m_cursor->setMinPosition(int(m_steps[0].first) + m_xPos);
+
+    m_greyBackground->setSize(maxStepPos, m_greyBackground->height());
+    m_whiteBackground->setSize(maxStepPos, m_whiteBackground->height());
+    m_mainLine->setPoints(0, m_mainLinePos + m_yPos,
+			  maxStepPos, m_mainLinePos + m_yPos);
 
     setActive(true); // set steps active
 }
@@ -158,7 +162,6 @@ void StaffRuler::makeStep(int stepValue,
     stepLine->setPoints(int(stepPos) + m_xPos, 0,
                         int(stepPos) + m_xPos, -m_stepLineHeight);
     stepLine->setY(m_mainLinePos + m_yPos);
-    stepLine->show();
 
     // Make label
     //
@@ -187,12 +190,9 @@ void StaffRuler::makeStep(int stepValue,
         subStep->setPoints(int(subStepPos) + m_xPos, 0,
                            int(subStepPos) + m_xPos, -m_subStepLineHeight);
         subStep->setY(m_mainLinePos + m_yPos);
-        subStep->show();
 
         stepEl.addSubStep(subStep);
     }
-
-    label->show();
 
     m_stepElements.push_back(stepEl);
 }
@@ -201,7 +201,16 @@ void StaffRuler::resize()
 {
     m_greyBackground->setSize(canvas()->width(), m_greyBackground->height());
     m_whiteBackground->setSize(canvas()->width(), m_whiteBackground->height());
-    m_mainLine->setPoints(0, m_mainLinePos + m_yPos, canvas()->width(), m_mainLinePos + m_yPos);
+    m_mainLine->setPoints(0, m_mainLinePos + m_yPos,
+			  canvas()->width(), m_mainLinePos + m_yPos);
+}
+
+void StaffRuler::setXPos(int xpos)
+{
+    double deltaX = xpos - m_xPos;
+
+    moveBy(deltaX, 0);
+    m_xPos = xpos;
 }
 
 void StaffRuler::setYPos(int ypos)

@@ -54,7 +54,6 @@
 #include "BaseProperties.h"
 #include "SegmentNotationHelper.h"
 #include "Quantizer.h"
-#include "staffruler.h"
 #include "notationcommands.h"
 
 using Rosegarden::Event;
@@ -95,7 +94,6 @@ NotationView::NotationView(RosegardenGUIView* rgView,
                                         new QCanvas(width() * 2, height() * 2),
                                         this)),
     m_lastFinishingStaff(-1),
-    m_ruler(new StaffRuler(20, 0, canvas())),
     m_activeItem(0),
     m_hlayout(0),
     m_vlayout(0),
@@ -188,6 +186,7 @@ NotationView::NotationView(RosegardenGUIView* rgView,
 
     positionStaffs();
     m_currentStaff = 0;
+    m_staffs[0]->setCurrent(true);
     
     //
     // Layout setup
@@ -203,8 +202,6 @@ NotationView::NotationView(RosegardenGUIView* rgView,
             m_staffs[i]->renderElements();
             m_staffs[i]->positionElements();
         }
-
-        updateRuler();
     }
 
     //
@@ -259,7 +256,7 @@ void NotationView::positionStaffs()
         }
         
         m_staffs[i]->setX(20);
-        m_staffs[i]->setY(h + 45);
+        m_staffs[i]->setY(h);
 
         h += staffHeights[i];
     }
@@ -754,30 +751,6 @@ void NotationView::setViewSize(QSize s)
     canvas()->resize(s.width(), s.height());
 }
 
-void NotationView::updateRuler()
-{
-    if (m_lastFinishingStaff < 0 ||
-        unsigned(m_lastFinishingStaff) >= m_staffs.size()) return;
-
-    NotationStaff &staff = *m_staffs[m_lastFinishingStaff];
-    TimeSignature timeSignature;
-
-    m_ruler->clearSteps();
-    
-    for (unsigned int i = 0; i < m_hlayout->getBarLineCount(staff); ++i) {
-
-        double x;
-        Event *timeSigEvent = m_hlayout->getTimeSignatureInBar(staff, i, x);
-        if (timeSigEvent) timeSignature = TimeSignature(*timeSigEvent);
-
-        m_ruler->addStep(m_hlayout->getBarLineX(staff, i),
-                         timeSignature.getBeatsPerBar());
-    }
-
-    m_ruler->update();
-}
-
-
 void
 NotationView::changeStretch(int n)
 {
@@ -810,17 +783,6 @@ void NotationView::changeLegato(int n)
     }
 
     canvas()->update();
-}
-
-void NotationView::setCursorPosition(unsigned int n)
-{
-    m_ruler->setCursorPosition(n);
-    canvas()->update();
-}
-
-unsigned int NotationView::getCursorPosition() const
-{
-    return m_ruler->getCursorPosition();
 }
 
 
@@ -1040,11 +1002,6 @@ void NotationView::setHLayout(NotationHLayout* l)
     m_hlayout = l;
 }
 
-PositionCursor* NotationView::getCursor()
-{
-    return getRuler()->getCursor();
-}
-
 //////////////////////////////////////////////////////////////////////
 //                    Slots
 //////////////////////////////////////////////////////////////////////
@@ -1103,8 +1060,14 @@ void NotationView::slotEditPaste()
     int staffNo = 0; // TODO : how to select on which staff we're pasting ?
 
     //!!! No damn use
+
+/*!!! fix
     NotationElementList::iterator closestNote =
         findClosestNote(getCursorPosition(), 50, //!!! random number, first row
+                        tsig, clef, key, staffNo);
+*/
+    NotationElementList::iterator closestNote =
+        findClosestNote(0, 50, //!!! random number, first row
                         tsig, clef, key, staffNo);
 
     if (closestNote == getStaff(staffNo)->getViewElementList()->end()) {
@@ -1797,7 +1760,7 @@ void NotationView::itemPressed(int height, int staffNo,
 
     if (btnState & ShiftButton) { // on shift-click, set cursor position
 
-        setCursorPosition(e->x());
+//!!!        setCursorPosition(e->x());
 
     } else {
 
@@ -2044,8 +2007,6 @@ void NotationView::refreshSegment(Segment *segment,
         }
         m_staffs[i]->positionElements(barStartTime, barEndTime);
     }
-
-    updateRuler(); //!!! to staff
 
     PRINT_ELAPSED("NotationView::refreshSegment (without update/GC)");
 

@@ -160,8 +160,8 @@ NotationVLayout::scanStaff(StaffType &staffBase)
                     stemLength = staff.getLayoutYForHeight(h[flaggedNote]) -
                         staff.getLayoutYForHeight(h[j]);
                     if (stemLength < 0) stemLength = -stemLength;
-                    kdDebug(KDEBUG_AREA) << "Setting stem length to "
-                                         << stemLength << endl;
+//                    kdDebug(KDEBUG_AREA) << "Setting stem length to "
+//                                         << stemLength << endl;
                 }
                 el->event()->setMaybe<Int>(UNBEAMED_STEM_LENGTH,
                                            stemLength);

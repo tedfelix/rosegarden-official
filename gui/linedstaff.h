@@ -27,11 +27,14 @@
 #include "LayoutEngine.h"
 #include "FastVector.h"
 
+#include "staffruler.h"
+
 #include <string>
 #include <vector>
 
 #include "qcolor.h"
 #include "qcanvas.h"
+
 
 /**
  * LinedStaffManager is a trivial abstract base for classes that own
@@ -168,6 +171,10 @@ protected:
 	return false;
     }
 
+    virtual int getStaffRulerHeight() const {
+	return m_resolution * 2;
+    }
+
 protected:
     /// Subclass may wish to expose this
     virtual void setResolution(int resolution);
@@ -283,6 +290,17 @@ public:
     virtual QRect getBarExtents(double x, int y) const;
 
     /**
+     * Set whether this is the current staff or not.  A staff that is
+     * current will have a staff ruler above its current row, and may
+     * differ visually from non-current staffs.
+     * 
+     * The owner of the staffs should normally ensure that one staff
+     * is current (the default is non-current, even if there only is
+     * one staff) and that only one staff is current at once.
+     */
+    virtual void setCurrent(bool current);
+
+    /**
      * Query the given horizontal layout object (which is assumed to
      * have just completed its layout procedure) to determine the
      * required extents of the staff and the positions of the bars,
@@ -356,7 +374,7 @@ protected:
 
     int getRowForCanvasCoords(double x, int y) const {
 	if (!m_pageMode) return (int)((x - m_x) / m_pageWidth);
-	else return ((y - m_y) / m_rowSpacing);
+	else return ((y - (m_y + getStaffRulerHeight())) / m_rowSpacing);
     }
 
     double getCanvasXForLayoutX(double x) const {
@@ -368,8 +386,8 @@ protected:
     }
 
     int getCanvasYForTopOfStaff(int row = -1) const {
-	if (!m_pageMode || row <= 0) return m_y;
-	else return m_y + (row * m_rowSpacing);
+	if (!m_pageMode || row <= 0) return m_y + getStaffRulerHeight();
+	else return m_y + getStaffRulerHeight() + (row * m_rowSpacing);
     }
 
     int getCanvasYForTopLine(int row = -1) const {
@@ -417,6 +435,8 @@ protected:
     virtual void insertTimeSignature(int layoutX,
 				     const Rosegarden::TimeSignature &);
 
+    virtual void updateRuler(Rosegarden::HorizontalLayoutEngine<T> &layout);
+
 protected:
 
     //--------------- Data members ---------------------------------
@@ -438,6 +458,8 @@ protected:
     double   m_startLayoutX;
     double   m_endLayoutX;
 
+    bool     m_current;
+
     typedef std::vector<QCanvasLine *> LineList;
     typedef std::vector<LineList> LineMatrix;
     LineMatrix m_staffLines;
@@ -449,6 +471,8 @@ protected:
     static bool compareBarToLayoutX(const BarLine &, int);
     BarLineList m_barLines;
     BarLineList m_barConnectingLines;
+
+    StaffRuler *m_ruler;
 };
 
 #include "linedstaff.cpp"

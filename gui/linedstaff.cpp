@@ -38,9 +38,11 @@ LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_rowSpacing(0),
     m_connectingLineLength(0),
     m_startLayoutX(0),
-    m_endLayoutX(0)
+    m_endLayoutX(0),
+    m_current(false),
+    m_ruler(new StaffRuler(0, 0, getStaffRulerHeight(), canvas))
 {
-    // nothing
+    m_ruler->hide(); // we are not the current staff unless indicated
 }
 
 template <class T>
@@ -59,9 +61,11 @@ LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_rowSpacing(rowSpacing),
     m_connectingLineLength(0),
     m_startLayoutX(0),
-    m_endLayoutX(0)
+    m_endLayoutX(0),
+    m_current(false),
+    m_ruler(new StaffRuler(0, 0, getStaffRulerHeight(), canvas))
 {
-    // nothing
+    m_ruler->hide(); // we are not the current staff unless indicated
 }
 
 template <class T>
@@ -80,9 +84,11 @@ LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_rowSpacing(rowSpacing),
     m_connectingLineLength(0),
     m_startLayoutX(0),
-    m_endLayoutX(0)
+    m_endLayoutX(0),
+    m_current(false),
+    m_ruler(new StaffRuler(0, 0, getStaffRulerHeight(), canvas))
 {
-    // nothing
+    m_ruler->hide(); // we are not the current staff unless indicated
 }
 
 template <class T>
@@ -90,6 +96,7 @@ LinedStaff<T>::~LinedStaff()
 {
     deleteBars();
     for (int i = 0; i < (int)m_staffLines.size(); ++i) clearStaffLineRow(i);
+    delete m_ruler;
 }
 
 template <class T>
@@ -145,6 +152,7 @@ template <class T>
 void
 LinedStaff<T>::setX(double x)
 {
+    m_ruler->setXPos(x);
     m_x = x;
 }
 
@@ -159,6 +167,7 @@ template <class T>
 void
 LinedStaff<T>::setY(int y)
 {
+    m_ruler->setYPos(y);
     m_y = y;
 }
 
@@ -185,7 +194,7 @@ int
 LinedStaff<T>::getTotalHeight() const
 {
     return getCanvasYForTopOfStaff(getRowForLayoutX(m_endLayoutX)) +
-        getHeightOfRow() - m_y;
+        getHeightOfRow() + getStaffRulerHeight() - m_y;
 }
 
 template <class T>
@@ -360,9 +369,9 @@ LinedStaff<T>::sizeStaff(Rosegarden::HorizontalLayoutEngine<T> &layout)
 
     m_startLayoutX = xleft;
     m_endLayoutX = xright;
-    resizeStaffLines();
 
-    //!!! updateRuler();
+    resizeStaffLines();
+    if (m_current) updateRuler(layout);
 }
 
 template <class T>
@@ -616,9 +625,9 @@ LinedStaff<T>::resizeStaffLineRow(int row, double x, double length)
 		y -= getLineSpacing()/2 + 1;
 	    }
 
-            kdDebug(KDEBUG_AREA) << "LinedStaff: drawing line from ("
-                                 << x << "," << y << ") to (" << (x+length-1)
-                                 << "," << y << ")" << endl;
+//            kdDebug(KDEBUG_AREA) << "LinedStaff: drawing line from ("
+//                                 << x << "," << y << ") to (" << (x+length-1)
+//                                 << "," << y << ")" << endl;
 
             line->setPoints(int(x), y, int(x + length - 1), y);
 
@@ -643,6 +652,46 @@ LinedStaff<T>::resizeStaffLineRow(int row, double x, double length)
         ++lineIndex;
     }
 }    
+
+template <class T>
+void
+LinedStaff<T>::setCurrent(bool current)
+{
+    m_current = current;
+    if (m_current) {
+	m_ruler->show();
+	m_ruler->getCursor()->show();
+    } else {
+	m_ruler->hide();
+	m_ruler->getCursor()->hide();
+    }
+}
+
+template <class T>
+void
+LinedStaff<T>::updateRuler(Rosegarden::HorizontalLayoutEngine<T> &layout)
+{
+    Rosegarden::TimeSignature timeSignature;
+
+    m_ruler->clearSteps();
+    
+    for (unsigned int i = 0; i < layout.getBarLineCount(*this); ++i) {
+
+        double x;
+        Rosegarden::Event *timeSigEvent =
+	    layout.getTimeSignatureInBar(*this, i, x);
+
+        if (timeSigEvent)
+	    timeSignature = Rosegarden::TimeSignature(*timeSigEvent);
+
+        m_ruler->addStep(layout.getBarLineX(*this, i),
+                         timeSignature.getBeatsPerBar());
+    }
+
+//    m_ruler->resize();
+    m_ruler->update();
+    m_ruler->show();
+}
 
 template <class T>
 void

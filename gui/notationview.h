@@ -39,7 +39,6 @@ namespace Rosegarden { class Segment; }
 class RosegardenGUIView;
 class NotationTool;
 class NotationToolBox;
-class StaffRuler;
 class PositionCursor;
 class ActiveItem;
 class BasicCommand;
@@ -134,22 +133,14 @@ public:
 	return &m_toolbarNotePixmapFactory;
     }
 
-   
-    /// Sets the position of the cursor to the given pixel X coord
-    void setCursorPosition(unsigned int);
-
-    /// Gets the position of the cursor as a pixel X coord
-    unsigned int getCursorPosition() const;
+    virtual void refreshSegment(Rosegarden::Segment *segment,
+				Rosegarden::timeT startTime,
+				Rosegarden::timeT endTime); // -1 => end of staff
 
     /**
      * From LinedStaffManager
      */
     virtual NotationStaff *getStaffForCanvasY(int y) const;
-
-    virtual void refreshSegment(Rosegarden::Segment *segment,
-				Rosegarden::timeT startTime,
-				Rosegarden::timeT endTime); // -1 => end of staff
-
 
 public slots:
 
@@ -425,16 +416,6 @@ protected:
     virtual void setViewSize(QSize);
 
     /**
-     * show bar lines
-     */
-//!!!    void showBars(int staffNo);
-
-    /**
-     * update the top ruler according to bar lines
-     */
-    void updateRuler();
-
-    /**
      * find the NotationElement whose coords are closest to (x,y)
      *
      * If the closest event is further than \a proximityThreshold
@@ -461,17 +442,6 @@ protected:
      * The previous layout is deleted
      */
     void setHLayout(NotationHLayout*);
-
-
-    /**
-     * Return the staff ruler
-     */
-    StaffRuler* getRuler() { return m_ruler; }
-
-    /**
-     * Return the cursor
-     */
-    PositionCursor* getCursor();
 
     /**
      * Set the active item
@@ -506,7 +476,6 @@ protected:
 
     Rosegarden::Accidental m_currentAccidental;
 
-    StaffRuler* m_ruler;
     ActiveItem* m_activeItem;
 
     std::string m_fontName;

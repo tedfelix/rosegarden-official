@@ -407,9 +407,11 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     kdDebug(KDEBUG_AREA) << "MatrixView : creating staff\n";
 
-    for (unsigned int i = 0; i < segments.size(); ++i)
+    for (unsigned int i = 0; i < segments.size(); ++i) {
         m_staffs.push_back(new MatrixStaff(tCanvas, segments[i], i,
                                            10)); //!!!
+	if (i == 0) m_staffs[i]->setCurrent(true);
+    }
 
     kdDebug(KDEBUG_AREA) << "MatrixView : creating canvas view\n";
 
