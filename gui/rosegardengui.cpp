@@ -1164,13 +1164,12 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
 
 
 void
-RosegardenGUIApp::openFile(QString filePath)
+RosegardenGUIApp::openFile(QString filePath, ImportType type)
 {
     RG_DEBUG << "RosegardenGUIApp::openFile " << filePath << endl;
 
-    RosegardenGUIDoc *doc = createDocument(filePath);
-    if (doc)
-    {
+    RosegardenGUIDoc *doc = createDocument(filePath, type);
+    if (doc) {
         setDocument(doc);
         QFileInfo fInfo(filePath);
         m_fileRecent->addURL(fInfo.absFilePath());
@@ -1178,7 +1177,7 @@ RosegardenGUIApp::openFile(QString filePath)
 }
 
 RosegardenGUIDoc*
-RosegardenGUIApp::createDocument(QString filePath)
+RosegardenGUIApp::createDocument(QString filePath, ImportType importType)
 {
     QFileInfo info(filePath);
     RosegardenGUIDoc *doc = 0;
@@ -1215,19 +1214,16 @@ RosegardenGUIApp::createDocument(QString filePath)
 
     slotEnableTransport(false);
 
-    if (filePath.lower().endsWith(".mid")) {
-
+    switch (importType) {
+    case ImportMIDI:
         doc = createDocumentFromMIDIFile(filePath);
-
-    } else if (filePath.lower().endsWith(".rose")) {
-
+        break;
+    case ImportRG21:
         doc = createDocumentFromRG21File(filePath);
-    }
-    else
-    {
+    default:
         doc = createDocumentFromRGFile(filePath);
     }
-
+    
     slotEnableTransport(true);
 
     return doc;
@@ -2649,7 +2645,7 @@ void RosegardenGUIApp::slotImportMIDI()
 
     QString tmpfile;
     KIO::NetAccess::download(url, tmpfile);
-    openFile(tmpfile); // does everything including setting the document
+    openFile(tmpfile, ImportMIDI); // does everything including setting the document
 
     KIO::NetAccess::removeTempFile( tmpfile );
 }
@@ -2822,7 +2818,7 @@ void RosegardenGUIApp::slotImportRG21()
 
     QString tmpfile;
     KIO::NetAccess::download(url, tmpfile);
-    openFile(tmpfile);
+    openFile(tmpfile, ImportRG21);
 
     KIO::NetAccess::removeTempFile(tmpfile);
 }

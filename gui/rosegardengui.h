@@ -119,10 +119,17 @@ public:
      */ 
     RosegardenGUIDoc *getDocument() const;      
 
+    enum ImportType { ImportRG4, ImportMIDI, ImportRG21 };
+
     /**
-     * open a file
+     * open a Rosegarden file
      */
-    virtual void openFile(QString filePath);
+    virtual void openFile(QString filePath) { openFile(filePath, ImportRG4); }
+
+    /**
+     * open a file, explicitly specifying its type
+     */
+    void openFile(QString filePath, ImportType type);
 
     /**
      * open a URL
@@ -273,7 +280,7 @@ protected:
     /**
      * Create document from a file
      */
-    RosegardenGUIDoc* createDocument(QString filePath);
+    RosegardenGUIDoc* createDocument(QString filePath, ImportType type = ImportRG4);
 
     /**
      * Create a document from RG file
