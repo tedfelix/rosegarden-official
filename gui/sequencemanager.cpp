@@ -2145,22 +2145,29 @@ void SegmentMmapper::dump()
 
     if (m_byteArray.size() > 0) {
 
-        if (m_byteArray.size() > m_mmappedSize) {
-            SEQMAN_DEBUG << QString("SegmentMmapper::dump : internal byte array has grown larger (%1) than mmapped buffer (%2), enlarging buffer\n")
-                .arg(m_byteArray.size()).arg(m_mmappedSize);
-            setFileSize(m_byteArray.size());
-            remap(m_byteArray.size());
-        }
+        // "Safe" way to do things : resize the mmapped file if the QByteArray has grown larger
+        //
+//         if (m_byteArray.size() > m_mmappedSize) {
+//             SEQMAN_DEBUG << QString("SegmentMmapper::dump : internal byte array has grown larger (%1) than mmapped buffer (%2), enlarging buffer\n")
+//                 .arg(m_byteArray.size()).arg(m_mmappedSize);
+//             setFileSize(m_byteArray.size());
+//             remap(m_byteArray.size());
+//         }
+
+        // But apparently simply copying the smaller of both sizes works just as well
+        //
+        size_t sizeToMap = m_byteArray.size();
+        if (sizeToMap > m_mmappedSize) sizeToMap = m_mmappedSize;
         
         // copy byte array on mmapped zone
         //
-        SEQMAN_DEBUG << QString("SegmentMmapper::dump : memcpy from %1 to %2 of size %3 (actual size) - mmapped size is %4\n")
+        SEQMAN_DEBUG << QString("SegmentMmapper::dump : memcpy from %1 to %2 of size %3 (actual size) - mmapped size is %4 - sizeToMap : %5\n")
             .arg((unsigned int)m_byteArray.data(), 0, 16)
             .arg((unsigned int)m_mmappedBuffer, 0, 16)
-            .arg(m_byteArray.size()).arg(m_mmappedSize);
+            .arg(m_byteArray.size()).arg(m_mmappedSize).arg(sizeToMap);
 
-        memcpy(m_mmappedBuffer, m_byteArray.data(), m_byteArray.size());
-        ::msync(m_mmappedBuffer, m_mmappedSize, MS_ASYNC);
+        memcpy(m_mmappedBuffer, m_byteArray.data(), sizeToMap);
+        ::msync(m_mmappedBuffer, sizeToMap, MS_ASYNC);
     }
     
 }
