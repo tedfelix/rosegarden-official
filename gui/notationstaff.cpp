@@ -323,14 +323,12 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 void
 NotationStaff::positionElements(timeT from, timeT to)
 {
-    kdDebug(KDEBUG_AREA) << "NotationStaff " << this << "::positionElements()" << endl;
-
+    kdDebug(KDEBUG_AREA) << "NotationStaff " << this << "::positionElements()"
+                         << from << " -> " << to << std::endl;
     START_TIMING;
 
     int elementsPositioned = 0, elementsRendered = 0; // diagnostic
     
-    std::cerr << "positionElements: " << from << " -> " << to << std::endl;
-
     timeT nextBarTime;
     NotationElementList::iterator beginAt = findUnchangedBarStart(from);
     NotationElementList::iterator endAt = findUnchangedBarEnd(to, nextBarTime);
