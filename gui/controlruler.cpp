@@ -1420,7 +1420,8 @@ void PropertyControlRuler::contentsContextMenuEvent(QContextMenuEvent* e)
 
     // TODO : figure out why we have to do this (the stateChange doesn't seem to work)
     //
-    m_parentEditView->actionCollection()->action("draw_property_line")->setEnabled(haveItems);
+//     m_parentEditView->actionCollection()->action("draw_property_line")->setEnabled(haveItems);
+    // apparently a KDE 3.3beta2 bug
 
     ControlRuler::contentsContextMenuEvent(e);
 }
