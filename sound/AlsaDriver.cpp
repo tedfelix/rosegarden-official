@@ -524,7 +524,8 @@ AlsaDriver::generateInstruments()
         MappedDevice *device =
                         new MappedDevice(audioDeviceId,
                                          Device::Audio,
-                                         "JACK Audio");
+                                         "JACK Audio",
+                                         "Audio connection");
         m_devices.push_back(device);
     }
 
@@ -2716,6 +2717,15 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
         if (inst->getRecordStatus() == RECORD_AUDIO ||
             inst->getRecordStatus() == ASYNCHRONOUS_AUDIO)
         {
+            // Get the audio input port from the audio fader
+            //
+            /*
+            MappedAudioFader *fader =
+                dynamic_cast<MappedAudioFader*>
+                    (inst->getMappedStudio()->
+                         getAudioFader((*it)->getInstrument()));
+                         */
+                
             // Get input buffer
             //
             sample_t *inputBufferLeft = static_cast<sample_t*>
