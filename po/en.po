@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-01-18 13:29+0100\n"
+"POT-Creation-Date: 2003-01-18 19:47+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,16 +39,7 @@ msgstr ""
 msgid ""
 " The wrong versions of Rosegarden's data files were\n"
 " found in the standard KDE installation directories.\n"
-" (I am "
-msgstr ""
-
-#: main.cpp:342
-msgid ", but the installed files are for version "
-msgstr ""
-
-#: main.cpp:342
-msgid ""
-".)\n"
+" (I am %1, but the installed files are for version %2.)\n"
 "\n"
 " This may mean one of the following:\n"
 "\n"
@@ -1095,7 +1086,7 @@ msgstr ""
 msgid "The MusicXml file has not been exported."
 msgstr ""
 
-#: rosegardengui.cpp:3078 matrixview.cpp:1759
+#: rosegardengui.cpp:3078 matrixview.cpp:1762
 #, c-format
 msgid "%1%"
 msgstr ""
@@ -1622,7 +1613,7 @@ msgstr ""
 msgid "Transpose into appropriate octave"
 msgstr ""
 
-#: dialogs.cpp:1948 segmentparameterbox.cpp:75 matrixview.cpp:1684
+#: dialogs.cpp:1948 segmentparameterbox.cpp:75 matrixview.cpp:1687
 msgid "Quantize"
 msgstr ""
 
@@ -1922,15 +1913,7 @@ msgid "Re&do"
 msgstr ""
 
 #: multiviewcommandhistory.cpp:285
-msgid "Nothing to "
-msgstr ""
-
-#: multiviewcommandhistory.cpp:290
-msgid " "
-msgstr ""
-
-#: multiviewcommandhistory.cpp:326
-msgid " %1"
+msgid "Nothing to %1"
 msgstr ""
 
 #: basiccommand.moc.cpp:42 basiccommand.moc.cpp:47
@@ -2365,7 +2348,7 @@ msgstr ""
 msgid "Repeat"
 msgstr ""
 
-#: segmentparameterbox.cpp:76 matrixview.cpp:948 notationviewslots.cpp:1009
+#: segmentparameterbox.cpp:76 matrixview.cpp:948 notationviewslots.cpp:1011
 msgid "Transpose"
 msgstr ""
 
@@ -2808,7 +2791,7 @@ msgstr ""
 msgid "Really remove all audio files and associated segments?"
 msgstr ""
 
-#: audiomanagerdialog.cpp:914 rosegardenguidoc.cpp:1538
+#: audiomanagerdialog.cpp:914 rosegardenguidoc.cpp:1541
 msgid "Generating audio preview..."
 msgstr ""
 
@@ -2956,31 +2939,31 @@ msgstr ""
 msgid "  No selection "
 msgstr ""
 
-#: matrixview.cpp:935 matrixview.cpp:1591 notationviewslots.cpp:1061
+#: matrixview.cpp:935 matrixview.cpp:1594 notationviewslots.cpp:1063
 msgid "Quantizing..."
 msgstr ""
 
-#: matrixview.cpp:949 notationviewslots.cpp:1010
+#: matrixview.cpp:949 notationviewslots.cpp:1012
 msgid "Enter the number of semitones to transpose by:"
 msgstr ""
 
-#: matrixview.cpp:953 notationviewslots.cpp:1014
+#: matrixview.cpp:953 notationviewslots.cpp:1016
 msgid "Transposing..."
 msgstr ""
 
-#: matrixview.cpp:961 notationviewslots.cpp:1022
+#: matrixview.cpp:961 notationviewslots.cpp:1024
 msgid "Transposing up one semitone..."
 msgstr ""
 
-#: matrixview.cpp:969 notationviewslots.cpp:1030
+#: matrixview.cpp:969 notationviewslots.cpp:1032
 msgid "Transposing up one octave..."
 msgstr ""
 
-#: matrixview.cpp:977 notationviewslots.cpp:1038
+#: matrixview.cpp:977 notationviewslots.cpp:1040
 msgid "Transposing down one semitone..."
 msgstr ""
 
-#: matrixview.cpp:985 notationviewslots.cpp:1046
+#: matrixview.cpp:985 notationviewslots.cpp:1048
 msgid "Transposing down one octave..."
 msgstr ""
 
@@ -2992,51 +2975,51 @@ msgstr ""
 msgid "Deleting selection..."
 msgstr ""
 
-#: matrixview.cpp:1309 notationviewslots.cpp:936
+#: matrixview.cpp:1311 notationviewslots.cpp:938
 msgid "Unknown note insert action %1"
 msgstr ""
 
-#: matrixview.cpp:1313 notationviewslots.cpp:940
+#: matrixview.cpp:1315 notationviewslots.cpp:942
 msgid "Inserting note"
 msgstr ""
 
-#: matrixview.cpp:1605
+#: matrixview.cpp:1608
 msgid "Unquantizing..."
 msgstr ""
 
-#: matrixview.cpp:1636
+#: matrixview.cpp:1639
 msgid "Grid"
 msgstr ""
 
-#: matrixview.cpp:1660
+#: matrixview.cpp:1663
 msgid "None"
 msgstr ""
 
-#: matrixview.cpp:1662
+#: matrixview.cpp:1665
 msgid "Unit"
 msgstr ""
 
-#: matrixview.cpp:1664
+#: matrixview.cpp:1667
 msgid "Beat"
 msgstr ""
 
-#: matrixview.cpp:1666
+#: matrixview.cpp:1669
 msgid "Bar"
 msgstr ""
 
-#: matrixview.cpp:1976
+#: matrixview.cpp:1979
 msgid "Raising velocities..."
 msgstr ""
 
-#: matrixview.cpp:1985
+#: matrixview.cpp:1988
 msgid "Lowering velocities..."
 msgstr ""
 
-#: matrixview.cpp:2020
+#: matrixview.cpp:2023
 msgid "Set Event Velocities"
 msgstr ""
 
-#: matrixview.cpp:2025
+#: matrixview.cpp:2028
 msgid "Setting Velocities..."
 msgstr ""
 
@@ -3328,57 +3311,57 @@ msgstr ""
 msgid "Unknown style action %1"
 msgstr ""
 
-#: notationviewslots.cpp:923 notationviewslots.cpp:987
+#: notationviewslots.cpp:923 notationviewslots.cpp:989
 msgid "No note duration selected"
 msgstr ""
 
-#: notationviewslots.cpp:955 notationviewslots.cpp:967
+#: notationviewslots.cpp:957 notationviewslots.cpp:969
 msgid "No rest duration selected"
 msgstr ""
 
-#: notationviewslots.cpp:1073
+#: notationviewslots.cpp:1075
 msgid "Fixing smoothed values..."
 msgstr ""
 
-#: notationviewslots.cpp:1083
+#: notationviewslots.cpp:1085
 msgid "Interpreting selection..."
 msgstr ""
 
-#: notationviewslots.cpp:1187
+#: notationviewslots.cpp:1189
 msgid "Estimated time signature shown"
 msgstr ""
 
-#: notationviewslots.cpp:1240
+#: notationviewslots.cpp:1242
 msgid "Estimated key signature shown"
 msgstr ""
 
-#: rosegardenguidoc.cpp:286
+#: rosegardenguidoc.cpp:289
 msgid ""
 "The current file has been modified.\n"
 "Do you want to save it?"
 msgstr ""
 
-#: rosegardenguidoc.cpp:361
+#: rosegardenguidoc.cpp:364
 msgid "Can't open file '"
 msgstr ""
 
-#: rosegardenguidoc.cpp:370
+#: rosegardenguidoc.cpp:373
 msgid "Reading file..."
 msgstr ""
 
-#: rosegardenguidoc.cpp:391
+#: rosegardenguidoc.cpp:394
 msgid "Error when parsing file '%1' : \"%2\""
 msgstr ""
 
-#: rosegardenguidoc.cpp:414
+#: rosegardenguidoc.cpp:417
 msgid "Generating audio previews..."
 msgstr ""
 
-#: rosegardenguidoc.cpp:715
+#: rosegardenguidoc.cpp:718
 msgid "File Loading Cancelled"
 msgstr ""
 
-#: rosegardenguidoc.cpp:726
+#: rosegardenguidoc.cpp:729
 msgid ""
 "This file contains one or more old element types that are now deprecated.\n"
 "Support for these elements may disappear in future versions of Rosegarden.\n"
