@@ -15,9 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <kdebug.h>
-#define KDEBUG_AREA 1010
-
+#include "rosedebug.h"
 #include "rosexmlhandler.h"
 #include "xmlstorableevent.h"
 

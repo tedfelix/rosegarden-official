@@ -17,10 +17,7 @@
 
 #include "xmlstorableevent.h"
 
-#include <kdebug.h>
-
-#define KDEBUG_AREA 1010 // ok, this is a duplicate, but right now
-// I just don't care
+#include "roseebug.h"
 
 Event::duration
 XMLStorableEvent::noteName2Duration(const QString &nn)
