@@ -1072,15 +1072,6 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
         m_currentItem = item;
         m_clickPoint = e->pos();
         slotSelectSegmentItem(m_currentItem);
-
-        // emit this time for movement tracking (as we can move
-        // through the Selector)
-        //
-/*!!!
-        emit changeSegmentTrackAndStartTime(m_currentItem->getSegment(),
-					    m_currentItem->getTrack(),
-					    m_currentItem->getStartTime());
-*/
     }
  
     // Tell the RosegardenGUIView that we've selected some new Segments -
@@ -1142,34 +1133,25 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent * /*e*/)
 
     if (m_currentItem->isSelected())
     {
-	SegmentReconfigureCommand::SegmentRecSet set;
 	SegmentItemList::iterator it;
-	
+
+	SegmentReconfigureCommand *command =
+	    new SegmentReconfigureCommand
+	    (m_selectedItems.size() == 1 ? "Move Segment" :
+	                                   "Move Segments");
+
 	for (it = m_selectedItems.begin();
 	     it != m_selectedItems.end();
 	     it++)
 	{
-	    if ((it->second->getSegment()->getStartTime() !=
-		 it->second->getStartTime()) ||
-                (it->second->getSegment()->getTrack() !=
-                 it->second->getTrack())) {
-		SegmentReconfigureCommand::SegmentRec rec;
-		rec.segment = it->second->getSegment();
-		rec.startTime = it->second->getStartTime();
-		rec.duration = it->second->getDuration();
-		rec.track = it->second->getTrack();
-		set.push_back(rec);
-	    }
+	    command->addSegment(it->second->getSegment(),
+				it->second->getStartTime(),
+				it->second->getDuration(),
+				it->second->getTrack());
 	}
 
-	if (set.size() > 0) {
-            SegmentReconfigureCommand *command =
-                    new SegmentReconfigureCommand("Move Segment");
-            command->addSegments(set);
-            addCommandToHistory(command);
-
-	    m_canvas->canvas()->update();
-	}
+	addCommandToHistory(command);
+	m_canvas->canvas()->update();
     }
     
     m_currentItem = 0;

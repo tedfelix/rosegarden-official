@@ -60,7 +60,7 @@ Post-0.1.4 task list
 
 15. Work out why clicking on a segment with the SegmentSelector or
     SegmentMover without moving it still causes a move command to
-    happen, and stop it
+    happen, and stop it [DONE maybe -- there was an emit on click]
 
 16. The NormalizeRestsCommand in notationcommands.cpp has the wrong
     undo/redo extents, because the normalization function may modify
@@ -87,7 +87,7 @@ Post-0.1.4 task list
     dialog when editing the transport's time sig [DONE]
 
 20a. Why is the notation view's time sig dialog now getting the
-     wrong default time sig? (i.e. it's always 4/4)
+     wrong default time sig? (i.e. it's always 4/4) [DONE]
 
 21. Load test_tuplets, open score editor, then on segment editor
     extend the first segment to the same length as the second -- blam!
