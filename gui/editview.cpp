@@ -599,7 +599,7 @@ EditView::setupActions()
 		SLOT(slotInsertControlRulerItem()), actionCollection(),
 		"insert_control_ruler_item");
 
-    new KAction(i18n("Erase selected items"), 0, this,
+    new KAction(i18n("Erase selected items"), Key_Delete, this,
 		SLOT(slotEraseControlRulerItem()), actionCollection(),
 		"erase_control_ruler_item");
 
@@ -607,7 +607,7 @@ EditView::setupActions()
 		SLOT(slotClearControlRulerItem()), actionCollection(),
 		"clear_control_ruler_item");
 
-    new KAction(i18n("Start control line"), 0, this,
+    new KAction(i18n("Insert line of controllers"), 0, this,
 		SLOT(slotStartControlLineItem()), actionCollection(),
 		"start_control_line_item");
 
@@ -631,7 +631,8 @@ EditView::setupAddControlRulerMenu()
         int i = 0;
         for (Rosegarden::ControlListConstIterator it = list->begin(); it != list->end(); ++it)
         {
-            QString itemStr = i18n("%1 ruler").arg(strtoqstr((*it)->getName()));
+            QString itemStr = i18n("%1 ruler (%2)").arg(strtoqstr((*it)->getName()))
+                                                   .arg(int((*it)->getControllerValue()));
             addControlRulerMenu->insertItem(itemStr, i++);
         }
 

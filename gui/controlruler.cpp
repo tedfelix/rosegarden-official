@@ -76,7 +76,7 @@ public:
 };
 
 
-int TestTool::operator()(double x, int val)
+int TestTool::operator()(double /*x*/, int val)
 {
 //     int res = (int)x / 10 + val;
 
@@ -846,7 +846,11 @@ ControllerEventsRuler::ControllerEventsRuler(Rosegarden::Segment& segment,
                                              const char* name, WFlags f)
     : ControlRuler(segment, rulerScale, parentView, c, parent, name, f),
       m_segmentDeleted(false),
-      m_defaultItemWidth(20)
+      m_defaultItemWidth(20),
+      m_controlLine(new QCanvasLine(canvas())),
+      m_controlLineShowing(false),
+      m_controlLineX(0),
+      m_controlLineY(0)
 {
     // Make a copy of the ControlParameter if we have one
     //
@@ -1049,11 +1053,116 @@ void ControllerEventsRuler::clearControllerEvents()
 
 void ControllerEventsRuler::startControlLine()
 {
+    m_controlLineShowing = true;
 }
 
-void ControllerEventsRuler::completeControlLine()
+void ControllerEventsRuler::contentsMousePressEvent(QMouseEvent *e)
 {
+    if (!m_controlLineShowing)
+    {
+        ControlRuler::contentsMousePressEvent(e); // send super
+        return;
+    }
+
+    // cancel control line mode
+    if (e->button() == RightButton)
+    {
+        m_controlLineShowing = false;
+        m_controlLine->hide();
+        return;
+    }
+
+    if (e->button() == LeftButton)
+    {
+        m_controlLine->show();
+        m_controlLineX = e->x();
+        m_controlLineY = e->y();
+        m_controlLine->setPoints(m_controlLineX, m_controlLineY, m_controlLineX, m_controlLineY);
+        canvas()->update();
+    }
 }
+
+void ControllerEventsRuler::contentsMouseReleaseEvent(QMouseEvent *e)
+{
+    if (!m_controlLineShowing)
+    {
+        ControlRuler::contentsMouseReleaseEvent(e); // send super
+        return;
+    }
+    else
+    {
+        timeT startTime = m_rulerScale->getTimeForX(m_lastEventPos.x());
+        timeT endTime = m_rulerScale->getTimeForX(e->x());
+
+        long startValue = heightToValue(m_lastEventPos.y() - canvas()->height());
+        long endValue = heightToValue(e->y() - canvas()->height());
+
+        /*
+        std::cout << "ControllerEventsRuler::contentsMouseReleaseEvent - "
+                  << "starttime = " << startTime
+                  << ", endtime = " << endTime
+                  << ", startValue = " << startValue
+                  << ", endValue = " << endValue
+                  << std::endl;
+                  */
+
+        drawControlLine(startTime, endTime, startValue, endValue);
+
+        m_controlLineShowing = false;
+        m_controlLine->hide();
+        canvas()->update();
+    }
+
+}
+
+void ControllerEventsRuler::contentsMouseMoveEvent(QMouseEvent *e)
+{
+    if (!m_controlLineShowing)
+    {
+        ControlRuler::contentsMouseMoveEvent(e); // send super
+        return;
+    }
+
+    m_controlLine->setPoints(m_controlLineX, m_controlLineY, e->x(), e->y());
+    canvas()->update();
+
+}
+
+void
+ControllerEventsRuler::drawControlLine(Rosegarden::timeT startTime,
+                                       Rosegarden::timeT endTime,
+                                       int startValue,
+                                       int endValue)
+{
+    if (m_controller == 0) return;
+
+    Rosegarden::timeT quantDur = Rosegarden::Note(Rosegarden::Note::Quaver).getDuration();
+
+    // for the moment enter a quantized set of events
+    Rosegarden::timeT time = startTime, newTime = 0;
+    double step = double(endValue - startValue) / double(endTime - startTime);
+
+    KMacroCommand *macro = new KMacroCommand(i18n("Add line of controllers"));
+
+    while (time < endTime)
+    {
+        int value = startValue + int(step * double(time));
+
+        ControllerEventInsertCommand* command = 
+            new ControllerEventInsertCommand(time, m_controller->getControllerValue(), value, m_segment);
+
+        macro->addCommand(command);
+
+        // get new time - do it by quantized distances
+        newTime = (time / quantDur) * quantDur;
+        if (newTime > time) time = newTime;
+        else time += quantDur;
+    }
+
+    m_parentEditView->addCommandToHistory(macro);
+}
+
+
 
 
 //----------------------------------------

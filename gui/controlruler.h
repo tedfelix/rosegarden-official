@@ -196,16 +196,32 @@ public:
     virtual void eraseControllerEvent();
     virtual void clearControllerEvents();
     virtual void startControlLine();
-    virtual void completeControlLine();
 
     Rosegarden::ControlParameter* getControlParameter() { return m_controller; }
 
 protected:
+
+    // Let's override these again here
+    //
+    virtual void contentsMousePressEvent(QMouseEvent*);
+    virtual void contentsMouseReleaseEvent(QMouseEvent*);
+    virtual void contentsMouseMoveEvent(QMouseEvent*);
+
+    void drawControlLine(Rosegarden::timeT startTime,
+                         Rosegarden::timeT endTime,
+                         int startValue,
+                         int endValue);
+
     //--------------- Data members ---------------------------------
     bool                          m_segmentDeleted;
     int                           m_defaultItemWidth;
 
     Rosegarden::ControlParameter  *m_controller;
+    QCanvasLine                   *m_controlLine;
+    
+    bool                           m_controlLineShowing;
+    int                            m_controlLineX;
+    int                            m_controlLineY;
 };
 
 /**
