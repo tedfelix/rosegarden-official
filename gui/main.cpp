@@ -410,7 +410,7 @@ int main(int argc, char *argv[])
                           VERSION, description, KAboutData::License_GPL,
                           I18N_NOOP("Copyright 2000 - 2004 Guillaume Laurent, Chris Cannam, Richard Bown\nParts copyright 1994 - 2004 Chris Cannam, Andy Green, Richard Bown, Guillaume Laurent\nLilypond fonts copyright 1997 - 2004 Han-Wen Nienhuys and Jan Nieuwenhuizen"),
                           0,
-                          "http://www.all-day-breakfast.com/rosegarden/",
+                          "http://www.rosegardenmusic.com/",
                           "rosegarden-devel@sf.net");
 
     aboutData.addAuthor("Guillaume Laurent", 0, "glaurent@telegraph-road.org", "http://telegraph-road.org");

@@ -9,7 +9,7 @@ expected for 1.0 but without all of the correctness and stability.
 
 Please keep an eye on the FAQ for known problems and workarounds:
 
-  http://www.all-day-breakfast.com/rosegarden/faq.html
+  http://www.rosegardenmusic.com/resources/faq/
 
 When you find bugs, first check whether a newer version of Rosegarden
 has been released yet; if not, please check whether your bug has
@@ -80,7 +80,7 @@ started, provided it has been correctly installed (by "make install")
 in the global KDE directories.  If you have any problems running the
 application, consult the FAQ:
 
-  http://www.all-day-breakfast.com/rosegarden
+  http://www.rosegardenmusic.com/resources/faq/
 
 or if that doesn't answer your question then use the rosegarden-user
 mailing list on Sourceforge.

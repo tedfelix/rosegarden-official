@@ -1239,7 +1239,7 @@ MidiFile::convertToMidi(Composition &comp)
     m_midiComposition[trackNumber].push_back(midiEvent);
 
     midiEvent = new MidiEvent(0, MIDI_FILE_META_EVENT, MIDI_TEXT_MARKER,
-                              "http://www.all-day-breakfast.com/rosegarden");
+                              "http://www.rosegardenmusic.com/");
 
     m_midiComposition[trackNumber].push_back(midiEvent);
 
