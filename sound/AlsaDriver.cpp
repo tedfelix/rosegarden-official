@@ -4933,7 +4933,7 @@ AlsaDriver::getPlayingAudioFiles()
     return std::vector<PlayableAudioFile*>();
 
 #else
-    return m_playingAudioSegments;
+    return m_playingAudioFiles;
 #endif
 }
 
