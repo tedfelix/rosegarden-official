@@ -4882,7 +4882,7 @@ AlsaDriver::jackDiskThread(void *arg)
 #endif 
                     // Add this to the segment audio vector
                     //
-                    inst->addPlayingAudioSegmentId((*it)->getRuntimeSegmentId());
+                    inst->addPlayingAudioFile(*it);
 
                 }
 
@@ -4915,18 +4915,22 @@ AlsaDriver::jackDiskThread(void *arg)
 
 #endif // HAVE_LIBJACK
 
-std::vector<int>
+std::vector<PlayableAudioFile*>
 AlsaDriver::getPlayingAudioFiles()
 {
 #ifdef HAVE_LIBJACK
     if (pthread_mutex_trylock(&_diskThreadLock) != EBUSY)
     {
-        std::vector<int> tempVector = m_playingAudioSegments;
+        std::vector<PlayableAudioFile*> tempVector;
+        for (std::vector<PlayableAudioFile*>::iterator it = m_playingAudioFiles.begin();
+             it != m_playingAudioFiles.end(); ++it)
+            tempVector.push_back(*it);
+
         pthread_mutex_unlock(&_diskThreadLock);
         return tempVector;
     }
 
-    return std::vector<int>();
+    return std::vector<PlayableAudioFile*>();
 
 #else
     return m_playingAudioSegments;

@@ -102,7 +102,8 @@ public:
 
     virtual void sendMidiClock(const RealTime &/*playLatency*/) {;}
 
-    virtual std::vector<int> getPlayingAudioFiles() { return std::vector<int>(); }
+    virtual std::vector<PlayableAudioFile*> getPlayingAudioFiles()
+        { return std::vector<PlayableAudioFile*>(); }
 
 protected:
     virtual void processMidiOut(const MappedComposition & /*mC*/,

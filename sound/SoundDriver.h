@@ -96,6 +96,7 @@ public:
                       const RealTime &duration,
                       unsigned int playBufferSize = 1024,
                       RingBuffer *ringBuffer = 0);
+    PlayableAudioFile(const PlayableAudioFile &pAF);
 
     ~PlayableAudioFile();
 
@@ -106,6 +107,7 @@ public:
     RealTime getStartTime() const { return m_startTime; }
 
     void setDuration(const RealTime &time) { m_duration = time; }
+    RealTime getDuration() const { return m_duration; }
     RealTime getEndTime() const { return m_startTime + m_duration; }
 
     void setStartIndex(const RealTime &time) { m_startIndex = time; }
@@ -113,12 +115,12 @@ public:
 
     // Get audio file for interrogation
     //
-    AudioFile* getAudioFile() { return m_audioFile; }
+    AudioFile* getAudioFile() const { return m_audioFile; }
 
     // Get instrument ID - we need to be able to map back
     // at the GUI.
     //
-    InstrumentId getInstrument() { return m_instrumentId; }
+    InstrumentId getInstrument() const { return m_instrumentId; }
 
     // Reaches through to AudioFile interface using our local file handle
     //
@@ -143,7 +145,10 @@ public:
     // old buffer if we change.
     //
     void setRingBuffer(RingBuffer *rB) { m_ringBuffer = rB; }
-    RingBuffer* getRingBuffer() { return m_ringBuffer; }
+    RingBuffer* getRingBuffer() const { return m_ringBuffer; }
+    int getRingBufferThreshold() const { return m_ringBufferThreshold; }
+
+    unsigned int getPlayBufferSize() const { return m_playBufferSize; }
 
     // Let this object work out whether the RingBuffer needs filling -
     // this will hopefully provide better performance when multiple audio
@@ -418,7 +423,7 @@ public:
     // Get a list of run time segment ids from the playing audio files - subclasses
     // might need to make sure this is thread safe.
     //
-    virtual std::vector<int> getPlayingAudioFiles() = 0;
+    virtual std::vector<PlayableAudioFile*> getPlayingAudioFiles() = 0;
 
     // Return the whole audio play queue
     //

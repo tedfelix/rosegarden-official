@@ -44,6 +44,7 @@
 #include "ControlBlock.h"
 #include "Sequencer.h"
 #include "MappedInstrument.h"
+#include "SoundDriver.h"
 
 // The default latency and read-ahead values are actually sent
 // down from the GUI every time playback or recording starts
@@ -326,7 +327,7 @@ RosegardenSequencerApp::keepPlaying()
         //
         if (m_metaIterator)
         {
-            rationalisePlayingAudio(m_metaIterator->getPlayingAudioSegments(m_songPosition));
+            rationalisePlayingAudio(m_metaIterator->getPlayingAudioFiles(m_songPosition));
         }
 
     }
@@ -1453,22 +1454,25 @@ void RosegardenSequencerApp::dumpFirstSegment()
 }
 
 
-void RosegardenSequencerApp::rationalisePlayingAudio(const std::vector<int> &segmentAudio)
+void RosegardenSequencerApp::rationalisePlayingAudio(const std::vector<MappedEvent*> &segmentAudio)
 {
-    std::vector<int> driverAudio = m_sequencer->getPlayingAudioFiles();
+    using Rosegarden::PlayableAudioFile;
+
+    std::vector<PlayableAudioFile*> driverAudio = m_sequencer->getPlayingAudioFiles();
 
     //std::cout << "DRIVER FILES  = " << driverAudio.size() << std::endl;
     //std::cout << "SEGMENT FILES = " << segmentAudio.size() << std::endl << std::endl;
 
     // Check for playing audio that shouldn't be
     //
-    for (std::vector<int>::const_iterator it = driverAudio.begin(); it != driverAudio.end(); ++it)
+    for (std::vector<PlayableAudioFile*>::const_iterator it = driverAudio.begin();
+         it != driverAudio.end(); ++it)
     {
         bool segment = false;
-        for (std::vector<int>::const_iterator sIt = segmentAudio.begin();
+        for (std::vector<MappedEvent*>::const_iterator sIt = segmentAudio.begin();
              sIt != segmentAudio.end(); ++sIt)
         {
-            if ((*it) == (*sIt))
+            if ((*it)->getRuntimeSegmentId() == (*sIt)->getRuntimeSegmentId())
             {
                 segment = true;
                 break;
@@ -1482,21 +1486,21 @@ void RosegardenSequencerApp::rationalisePlayingAudio(const std::vector<int> &seg
             //
             MappedEvent mE;
             mE.setType(Rosegarden::MappedEvent::AudioCancel);
-            mE.setRuntimeSegmentId(*it);
+            mE.setRuntimeSegmentId((*it)->getRuntimeSegmentId());
             processMappedEvent(mE);
         }
     }
 
     // Check for audio that should be that isn't
     //
-    for (std::vector<int>::const_iterator sIt = segmentAudio.begin();
+    for (std::vector<MappedEvent*>::const_iterator sIt = segmentAudio.begin();
          sIt != segmentAudio.end(); ++sIt)
     {
         bool driver = false;
-        for (std::vector<int>::const_iterator it = driverAudio.begin();
+        for (std::vector<PlayableAudioFile*>::const_iterator it = driverAudio.begin();
              it != driverAudio.end(); ++it)
         {
-            if ((*it) == (*sIt))
+            if ((*it)->getRuntimeSegmentId() == (*sIt)->getRuntimeSegmentId())
             {
                 driver = true;
                 break;
@@ -1508,7 +1512,7 @@ void RosegardenSequencerApp::rationalisePlayingAudio(const std::vector<int> &seg
             // There's an audio event that should be playing that isn't - start
             // it adjusting for current position.
             //
-            MappedEvent *audioSegment = m_metaIterator->getAudioSegment(*sIt);
+            MappedEvent *audioSegment = m_metaIterator->getAudioSegment((*sIt)->getRuntimeSegmentId());
 
             if (audioSegment)
             {

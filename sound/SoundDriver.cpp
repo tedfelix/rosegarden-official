@@ -57,6 +57,25 @@ PlayableAudioFile::PlayableAudioFile(InstrumentId instrumentId,
 
 }
 
+
+PlayableAudioFile::PlayableAudioFile(const PlayableAudioFile &pAF)
+{
+    m_startTime = pAF.getStartTime();
+    m_startIndex = pAF.getStartIndex();
+    m_duration = pAF.getDuration();
+    m_status = pAF.getStatus();
+    m_file = 0;
+    m_audioFile = pAF.getAudioFile();
+    m_instrumentId = pAF.getInstrument();
+    m_ringBuffer = pAF.getRingBuffer();
+    m_ringBufferThreshold = pAF.getRingBufferThreshold();
+    m_playBufferSize = pAF.getPlayBufferSize();
+    m_initialised = false;
+    m_externalRingbuffer = false;
+    m_runtimeSegmentId = pAF.getRuntimeSegmentId();
+}
+
+
 void
 PlayableAudioFile::initialise()
 {

@@ -154,7 +154,7 @@ public:
     // hope.
     //
     void clearPlayingAudioSegments() { m_playingAudioSegments.clear(); }
-    std::vector<int>& getPlayingAudioSegments(const Rosegarden::RealTime &songPosition);
+    std::vector<MappedEvent*>& getPlayingAudioFiles(const Rosegarden::RealTime &songPosition);
     void stopPlayingAudioSegment(int audioSegmentRuntimeId);
 
 protected:
@@ -173,9 +173,9 @@ protected:
     mmappedsegments& m_segments;
 
     typedef std::vector<MmappedSegment::iterator*> segmentiterators;
-    segmentiterators m_iterators;
+    segmentiterators                               m_iterators;
 
-    std::vector<int> m_playingAudioSegments;
+    std::vector<MappedEvent*>                      m_playingAudioSegments;
 };
 
 

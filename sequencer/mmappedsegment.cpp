@@ -455,7 +455,7 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool firstFetch,
                               */
 
                     evt->setAudioStartMarker(startTime);
-                    m_playingAudioSegments.push_back(evt->getRuntimeSegmentId());
+                    m_playingAudioSegments.push_back(new MappedEvent(*evt));
 
                     /*
                     std::cout << "SETTING RUNTIME SEGMENT ID = " << evt->getRuntimeSegmentId()
@@ -465,7 +465,7 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool firstFetch,
 
                 if (evt->getType() == MappedEvent::Audio) 
                 {
-                    m_playingAudioSegments.push_back(evt->getRuntimeSegmentId());
+                    m_playingAudioSegments.push_back(new MappedEvent(*evt));
 
                     /*
                     std::cout << "SETTING RUNTIME SEGMENT ID = " << evt->getRuntimeSegmentId()
@@ -537,19 +537,20 @@ void MmappedSegmentsMetaIterator::resetIteratorForSegment(const QString& filenam
 void
 MmappedSegmentsMetaIterator::stopPlayingAudioSegment(int segmentRuntimeId)
 {
-    for (std::vector<int>::iterator it = m_playingAudioSegments.begin();
+    for (std::vector<MappedEvent*>::iterator it = m_playingAudioSegments.begin();
          it != m_playingAudioSegments.end(); ++it)
     {
-        if ((*it) == segmentRuntimeId)
+        if ((*it)->getRuntimeSegmentId() == segmentRuntimeId)
         {
+            delete *it;
             m_playingAudioSegments.erase(it);
             break;
         }
     }
 }
 
-std::vector<int>& 
-MmappedSegmentsMetaIterator::getPlayingAudioSegments(const Rosegarden::RealTime &songPosition)
+std::vector<MappedEvent*>& 
+MmappedSegmentsMetaIterator::getPlayingAudioFiles(const Rosegarden::RealTime &songPosition)
 {
     m_playingAudioSegments.clear();
 
@@ -577,7 +578,7 @@ MmappedSegmentsMetaIterator::getPlayingAudioSegments(const Rosegarden::RealTime 
 
                             */
                 {
-                    m_playingAudioSegments.push_back(evt.getRuntimeSegmentId());
+                    m_playingAudioSegments.push_back(new MappedEvent(evt));
                 }
             }
 

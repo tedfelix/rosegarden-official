@@ -329,7 +329,7 @@ public:
     // be - a vector of playing audio files from the metaiterator is compared
     // against the PlayableAudioFiles at the SoundDriver.
     //
-    void rationalisePlayingAudio(const std::vector<int> &playingAudioSegments);
+    void rationalisePlayingAudio(const std::vector<MappedEvent*> &playingAudioSegments);
 
 public slots:
 
