@@ -87,9 +87,29 @@ public:
     typedef std::pair<double, unsigned short> StepDef;
     typedef std::vector<StepDef> Steps;
 
-    StaffRuler(int xPos, int yPos, QCanvas*);
+    /**
+     * \a xPos : position of the first step
+     * \a thickness : thickness (height) of the ruler
+     */
+    StaffRuler(int xPos, int thickness, QCanvas*);
 
+    /**
+     * Clear all steps and substeps
+     * (delete both the internal representation and the graphic
+     * items)
+     */
     void clearSteps();
+
+    /**
+     * Add a step position and the number of substeps which should
+     * be created after it
+     *
+     * Should be used only after clearing all steps, and prior
+     * to updating the ruler
+     *
+     * @see clearSteps()
+     * @see update()
+     */
     void addStep(double stepPos, unsigned short subSteps);
 
     /// Re-create all the steps and substeps
@@ -102,6 +122,9 @@ public:
 
     /// reset ruler width to canvas width
     void resize();
+
+    /// set vertical position
+    void setYPos(int);
 
     // ActiveItem interface
     virtual void handleMousePress(QMouseEvent*);
@@ -126,9 +149,11 @@ protected:
                   double pos, double nextStepPos,
                   unsigned short nbSubsteps);
 
-    int m_xPos; // mainLine X pos
-    int m_yPos; // mainLine Y pos
-
+    int m_xPos;
+    int m_yPos;
+    int m_thickness;
+    int m_mainLinePos;
+    
     int m_stepLineHeight,
         m_subStepLineHeight;
 

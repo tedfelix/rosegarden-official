@@ -41,28 +41,29 @@ void StaffRuler::StepElement::addSubStep(QCanvasLine* l)
 }
 
 
-StaffRuler::StaffRuler(int xPos, int yPos, QCanvas* c)
+StaffRuler::StaffRuler(int xPos, int yPos,
+                       QCanvas* c)
     : QCanvasItemGroup(c),
       m_xPos(xPos),
       m_yPos(yPos),
+      m_thickness(15),
+      m_mainLinePos(m_yPos + m_thickness),
       m_stepLineHeight(10),
       m_subStepLineHeight(5),
       m_mainLine(new QCanvasLineGroupable(c, this)),
       m_greyBackground(new QCanvasRectangleGroupable(c, this)),
       m_whiteBackground(new QCanvasRectangleGroupable(c, this)),
-      m_cursor(new PositionCursor(yPos + 20, canvas(), canvas()))
+      m_cursor(new PositionCursor(m_mainLinePos + 20, canvas(), canvas()))
 {
-
     m_greyBackground->setX(0);
-    m_greyBackground->setY(0);
-    m_greyBackground->setSize(canvas()->width(), m_yPos);
+    m_greyBackground->setY(m_yPos);
+    m_greyBackground->setSize(canvas()->width(), m_thickness);
 
     m_whiteBackground->setX(0);
-    m_whiteBackground->setY(0);
-    m_whiteBackground->setSize(canvas()->width(), m_yPos + 15);
+    m_whiteBackground->setY(m_yPos);
+    m_whiteBackground->setSize(canvas()->width(), m_thickness + 15);
 
-//    QColor bgColor(105, 170, 228);
-    QColor bgColor(212, 212, 212);
+    QColor bgColor(212, 212, 212); // light grey
     
     m_greyBackground->setBrush(bgColor);
     m_greyBackground->setPen(bgColor);
@@ -73,7 +74,8 @@ StaffRuler::StaffRuler(int xPos, int yPos, QCanvas* c)
     m_whiteBackground->show();
     m_whiteBackground->setZ(-1);
 
-    m_mainLine->setPoints(0, m_yPos, canvas()->width(), m_yPos);
+    m_mainLine->setPoints(0, m_mainLinePos,
+                          canvas()->width(), m_mainLinePos);
     
     m_mainLine->show();
     m_cursor->show();
@@ -137,8 +139,8 @@ void StaffRuler::makeStep(int stepValue,
     //
     QCanvasLineGroupable* stepLine = new QCanvasLineGroupable(canvas(), this);
     
-    stepLine->setPoints(int(stepPos) + m_xPos, m_yPos,
-                        int(stepPos) + m_xPos, m_yPos - m_stepLineHeight);
+    stepLine->setPoints(int(stepPos) + m_xPos, m_mainLinePos,
+                        int(stepPos) + m_xPos, m_mainLinePos - m_stepLineHeight);
     stepLine->show();
 
     // Make label
@@ -148,7 +150,7 @@ void StaffRuler::makeStep(int stepValue,
 
     QCanvasText* label = new QCanvasText(labelText, canvas());
     label->setX(stepPos + m_xPos);
-    label->setY(m_yPos + 4);
+    label->setY(m_mainLinePos + 4);
     label->setTextFlags(Qt::AlignHCenter);
 
     // Prepare StepElement
@@ -165,8 +167,8 @@ void StaffRuler::makeStep(int stepValue,
 
         QCanvasLineGroupable* subStep = new QCanvasLineGroupable(canvas(), this);
     
-        subStep->setPoints(int(subStepPos) + m_xPos, m_yPos,
-                           int(subStepPos) + m_xPos, m_yPos - m_subStepLineHeight);
+        subStep->setPoints(int(subStepPos) + m_xPos, m_mainLinePos,
+                           int(subStepPos) + m_xPos, m_mainLinePos - m_subStepLineHeight);
         subStep->show();
 
         stepEl.addSubStep(subStep);
@@ -182,6 +184,13 @@ void StaffRuler::resize()
     m_greyBackground->setSize(canvas()->width(), m_greyBackground->height());
     m_whiteBackground->setSize(canvas()->width(), m_whiteBackground->height());
     m_mainLine->setPoints(0, m_yPos, canvas()->width(), m_yPos);
+}
+
+void StaffRuler::setYPos(int ypos)
+{
+    double deltaY = ypos - m_yPos;
+
+    moveBy(0, deltaY);
 }
 
 void StaffRuler::handleMousePress(QMouseEvent* e)
