@@ -647,7 +647,8 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
     }
 
     if (params.m_tied) {
-        drawTie(!params.m_stemGoesUp, params.m_tieLength);
+        drawTie(!params.m_stemGoesUp, params.m_tieLength,
+		dotWidth * params.m_dots);
     }
     
     if (painter) {
@@ -673,14 +674,6 @@ NotePixmapFactory::getStemLength(const NotePixmapParameters &params) const
 	stemLength += getLineSpacing() * (flagCount - 2);
     }
 
-//!!!    switch (flagCount) {
-//    case 1: stemLength += nbh / 3; break;
-//    case 2: stemLength += nbh * 3 / 4; break;
-//    case 3: stemLength += nbh + nbh / 4; break;
-//    case 4: stemLength += nbh * 2 - nbh / 4; break;
-//    default: break;
-//    }
-    
     int width = 0, height = 0;
 
     if (flagCount > 0) {
@@ -886,26 +879,20 @@ NotePixmapFactory::drawLegerLines(const NotePixmapParameters &params)
 	offset = -offset;
     }
 
-    if (legerLines % 2) { // note is between lines
-	if (below) {
-	    // note below staff
-	    y = m_above - getLegerLineThickness() + getLegerLineThickness()/2;
-	} else {
-	    // note above staff
-	    y = m_above + m_noteBodyHeight - getLegerLineThickness()/2;
-	}
-    } else { // note is on a leger line
-	if (below) {
-	    // note below staff
-	    y = m_above + m_noteBodyHeight / 2 - getLegerLineThickness()/2;
-	} else {
-	    // note above staff
-	    y = m_above + m_noteBodyHeight / 2 - getLegerLineThickness()/2;
+    if (!below) { // note above staff
+	if (legerLines % 2) { // note is between lines
+	    y = m_above + m_noteBodyHeight;
+	} else { // note is on a line
+	    y = m_above + m_noteBodyHeight / 2 - getStaffLineThickness()/2;
+	} 
+    } else { // note below staff
+	if (legerLines % 2) { // note is between lines
+	    y = m_above - getStaffLineThickness();
+	} else { // note is on a line
+	    y = m_above + m_noteBodyHeight / 2;
 	}
     }
 
-//!!! STILL WRONG HERE!
-    
 //    NOTATION_DEBUG << "draw leger lines: " << legerLines << " lines, below "
 //		   << below
 //		   << ", note body height " << m_noteBodyHeight
@@ -915,7 +902,7 @@ NotePixmapFactory::drawLegerLines(const NotePixmapParameters &params)
 
     bool first = true;
     
-    for (int i = legerLines - 1; i >= 0/*-1*/; --i) { //!!! one too many for test purposes
+    for (int i = legerLines - 1; i >= 0; --i) { 
 	if (i % 2) {
 //	    NOTATION_DEBUG << "drawing at y = " << y << endl;
 	    for (int j = 0; j < getLegerLineThickness(); ++j) {
@@ -927,12 +914,7 @@ NotePixmapFactory::drawLegerLines(const NotePixmapParameters &params)
 		x1 -= getStemThickness();
 		first = false;
 	    }
-	}/* else if (first) {
-	    y += offset/2;
-	    if (legerLines < 0) {
-		y -= getLegerLineThickness();
-	    }
-	    }  */              
+	}
     }
 }
 
@@ -1440,8 +1422,10 @@ NotePixmapFactory::drawTuplingLine(const NotePixmapParameters &params)
 
 
 void
-NotePixmapFactory::drawTie(bool above, int length) 
+NotePixmapFactory::drawTie(bool above, int length, int shift)
 {
+#ifdef NASTY_OLD_FLAT_TIE_CODE
+
     int tieThickness = getStaffLineThickness() * 2;
     int tieCurve = m_font->getSize() * 2 / 3;
     int height = tieCurve + tieThickness;
@@ -1456,19 +1440,6 @@ NotePixmapFactory::drawTie(bool above, int length)
 	length += m_noteBodyWidth - 2;
 	x -= m_noteBodyWidth/2 - 1;
     }
-
-//    if (m_inPrinterMethod) {
-	//!!!experimental! -- if on screen, we probably ought to be
-	//calling makeSlurPixmap and copying the results -- otherwise
-        //we can't use the faux-smoothing that drawSlurAux does
-    // 
-	QPoint hotspot;
-//	bool smooth = false;
-//	if (!m_inPrinterMethod) smooth = m_font->isSmooth() && getNoteBodyHeight() > 5;
-	drawSlurAux(length, 0, above, false, hotspot,
-		    &m_p->painter(), x, above ? m_above : m_above + m_noteBodyHeight);
-	return;
-//    }
 
     for (i = 0; i < tieThickness; ++i) {
 
@@ -1498,6 +1469,27 @@ NotePixmapFactory::drawTie(bool above, int length)
                  tieCurve*2, tieCurve*2, 270*16, 70*16);
         }
     }
+#else
+
+    int x = m_left + m_noteBodyWidth + m_noteBodyWidth / 3 + shift;
+
+    length = length - m_noteBodyWidth - m_noteBodyWidth / 2 - shift;
+    if (length < m_noteBodyWidth) {
+	length = m_noteBodyWidth;
+    }
+
+    // We can't request a smooth slur here, because that always involves
+    // creating a new pixmap
+    
+    QPoint hotspot;
+    drawSlurAux(length, 0, above, false, hotspot,
+		&m_p->painter(),
+		x,
+		above ? m_above : m_above + m_noteBodyHeight);
+//		above ? m_above - m_noteBodyHeight/2 :
+//		        m_above + m_noteBodyHeight + m_noteBodyHeight/2);
+
+#endif
 }
 
 QCanvasPixmap*
@@ -1929,6 +1921,10 @@ NotePixmapFactory::drawHairpinAux(int length, bool isCrescendo,
 	createPixmapAndMask(length, height);
     }
 
+    if (m_selected) {
+	m_p->painter().setPen(RosegardenGUIColours::SelectedElement);
+    }
+
     int left = 1, right = length - 2*nbw/3 + 1;
 
     bool smooth = m_font->isSmooth();
@@ -1942,6 +1938,8 @@ NotePixmapFactory::drawHairpinAux(int length, bool isCrescendo,
 	drawShallowLine(left, height - thickness - 1,
 			right, height/2-1, thickness, smooth);
     }
+
+    m_p->painter().setPen(Qt::black);
 
     if (painter) {
 	painter->restore();
@@ -1957,7 +1955,6 @@ NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
     // sizing so that any horizontal part was rescaled down to exactly
     // 1 pixel wide instead of blurring
     bool smooth = m_font->isSmooth() && getNoteBodyHeight() > 5;
-
     QPoint hotspot;
     drawSlurAux(length, dy, above, smooth, hotspot, 0, 0, 0);
 
@@ -2004,6 +2001,9 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above, bool smooth,
 			       QPoint &hotspot,
 			       QPainter *painter, int x, int y)
 {
+    QWMatrix::TransformationMode mode = QWMatrix::transformationMode();
+    QWMatrix::setTransformationMode(QWMatrix::Points);
+
     int thickness = getStaffLineThickness() * 2;
     int nbh = getNoteBodyHeight(), nbw = getNoteBodyWidth();
 
@@ -2023,7 +2023,11 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above, bool smooth,
     int mx2 = length - length/6;
 
     int y0 = 0, my = 0;
-    my = int(0 - nbh * sqrt(float(length) / nbw) / 2);
+
+    float noteLengths = float(length) / nbw;
+    if (noteLengths < 1) noteLengths = 1;
+    my = int(0 - nbh * sqrt(noteLengths) / 2);
+
     if (!above) my = -my;
 
     bool havePixmap = false;
@@ -2045,7 +2049,7 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above, bool smooth,
 	    int height = bottomRight.y() - topLeft.y() + thickness - 1 + abs(dy);
 	    hotspot = QPoint(0, -topLeft.y() + (dy < 0 ? -dy : 0));
 
-//	    NOTATION_DEBUG << "slur: bottomRight (" << bottomRight.x() << "," << bottomRight.y() << "), topLeft (" << topLeft.x() << "," << topLeft.y() << "), width " << width << ", height " << height << ", hotspot (" << hotspot.x() << "," << hotspot.y() << "), dy " << dy << endl;
+	    NOTATION_DEBUG << "slur: bottomRight (" << bottomRight.x() << "," << bottomRight.y() << "), topLeft (" << topLeft.x() << "," << topLeft.y() << "), width " << width << ", height " << height << ", hotspot (" << hotspot.x() << "," << hotspot.y() << "), dy " << dy << ", thickness " << thickness << endl;
 
 	    if (painter) {
 
@@ -2074,18 +2078,15 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above, bool smooth,
 				    smooth ? height*2+thickness*2 : height + thickness,
 				    width, height);
 
-		if (rotate) {
-		    m_p->painter().rotate(theta);
-		    m_p->maskPainter().rotate(theta);
-		}
+//		m_p->drawLine(0, 0, width*2, 0);
+//		m_p->drawLine(0, height*2+thickness*2-1, width*2, height*2+thickness*2-1);
 
-		if (smooth) {
-		    m_p->painter().translate(2*hotspot.x(), 2*hotspot.y());
-		    m_p->maskPainter().translate(2*hotspot.x(), 2*hotspot.y());
-		} else {
-		    m_p->painter().translate(hotspot.x(), hotspot.y());
-		    m_p->maskPainter().translate(hotspot.x(), hotspot.y());
-		}		    
+		QWMatrix m;
+		if (smooth) m.translate(2 * hotspot.x(), 2 * hotspot.y());
+		else m.translate(hotspot.x(), hotspot.y());
+		m.rotate(theta);
+		m_p->painter().setWorldMatrix(m);
+		m_p->maskPainter().setWorldMatrix(m);
 	    }
 
 	    if (m_selected)
@@ -2129,6 +2130,8 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above, bool smooth,
     if (m_selected) {
         m_p->painter().setPen(Qt::black);
     }
+
+    QWMatrix::setTransformationMode(mode);
 
     if (painter) {
 	painter->restore();

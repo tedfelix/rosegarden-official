@@ -171,6 +171,7 @@ public:
 
     virtual ~GenericChord();
 
+    virtual int getMarkCountForChord() const;
     virtual std::vector<Rosegarden::Mark> getMarksForChord() const;
     virtual std::vector<int> getPitches() const;
     virtual bool contains(const Iterator &) const;
@@ -444,6 +445,28 @@ GenericChord<Element, Container, singleStaff>::sample(const Iterator &i)
     AbstractSet<Element, Container>::sample(i);
     push_back(i);
     return true;
+}
+
+
+template <class Element, class Container, bool singleStaff>
+int
+GenericChord<Element, Container, singleStaff>::getMarkCountForChord() const
+{
+    // need to weed out duplicates
+
+    std::set<Mark> cmarks;
+
+    for (unsigned int i = 0; i < size(); ++i) {
+
+	Event *e = getAsEvent((*this)[i]);
+	std::vector<Mark> marks(Marks::getMarks(*e));
+
+	for (std::vector<Mark>::iterator j = marks.begin(); j != marks.end(); ++j) {
+	    cmarks.insert(*j);
+	}
+    }
+
+    return cmarks.size();
 }
 
 

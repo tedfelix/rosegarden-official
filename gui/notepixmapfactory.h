@@ -269,7 +269,7 @@ protected:
 
     void drawShallowLine(int x0, int y0, int x1, int y1, int thickness,
                          bool smooth);
-    void drawTie(bool above, int length);
+    void drawTie(bool above, int length, int shift);
 
     QFont getTextFont(const Rosegarden::Text &text) const;
 

@@ -111,6 +111,12 @@ namespace Marks
         else return string(mark).substr(5);
     }
 
+    int getMarkCount(const Event &e) {
+	long markCount = 0;
+	e.get<Int>(BaseProperties::MARK_COUNT, markCount);
+	return markCount;
+    }
+
     std::vector<Mark> getMarks(const Event &e) {
 
 	std::vector<Mark> marks;

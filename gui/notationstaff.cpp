@@ -891,9 +891,12 @@ NotationStaff::renderSingleElement(ViewElement *velt,
 	    timeT indicationDuration =
 		elt->event()->get<Int>
 		(Indication::IndicationDurationPropertyName);
+
+	    timeT indicationEndTime =
+		elt->getViewAbsoluteTime() + indicationDuration;
+
 	    NotationElementList::iterator indicationEnd =
-		getViewElementList()->findTime(elt->getViewAbsoluteTime() +
-					       indicationDuration);
+		getViewElementList()->findTime(indicationEndTime);
 
 	    string indicationType = 
 		elt->event()->get<String>
@@ -906,18 +909,37 @@ NotationStaff::renderSingleElement(ViewElement *velt,
 		--indicationEnd;
 	    }
 
-	    if (indicationEnd != getViewElementList()->end()) {
+	    if (indicationType != Indication::Slur &&
+		indicationEnd != getViewElementList()->begin() &&
+
+		(indicationEnd == getViewElementList()->end() ||
+
+		 indicationEndTime ==
+		 getSegment().getBarStartForTime(indicationEndTime))) {
+
+		--indicationEnd;
+
+		double x, w;
+		static_cast<NotationElement *>(*indicationEnd)->
+		    getLayoutAirspace(x, w);
+		length = (int)(x + w - elt->getLayoutX() -
+			       m_notePixmapFactory->getBarMargin());
+
+	    } else /*if (indicationEnd != getViewElementList()->end()) */ {
+
 		length = (int)((*indicationEnd)->getLayoutX() -
 			       elt->getLayoutX());
-		y1 = (int)(*indicationEnd)->getLayoutY();
+
+/*
 	    } else {
-		//!!! imperfect
 		--indicationEnd;
 		length = (int)((*indicationEnd)->getLayoutX() +
 			       m_notePixmapFactory->getNoteBodyWidth() * 3 -
 			       elt->getLayoutX());
-		y1 = (int)(*indicationEnd)->getLayoutY();
+*/
 	    }
+		
+	    y1 = (int)(*indicationEnd)->getLayoutY();
 
 	    if (length < m_notePixmapFactory->getNoteBodyWidth()) {
 		length = m_notePixmapFactory->getNoteBodyWidth();

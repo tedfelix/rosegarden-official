@@ -131,13 +131,6 @@ RosegardenFader::RosegardenFader(int min, int max, int deflt,
 {
     setBackgroundMode(Qt::NoBackground);
     calculateButtonPixmap();
-//    if (vertical) {
-//	setFixedSize(m_buttonPixmap->width(),
-//		     (max - min) + m_buttonPixmap->height() + 4);
-//    } else {
-//	setFixedSize((max - min) + buttonPixmap()->height() + 4,
-//		     buttonPixmap()->height());
-//    }
 
     if (m_vertical) {
 	m_sliderMin = buttonPixmap()->height()/2 + 2;
@@ -197,11 +190,13 @@ RosegardenFader::position_to_value(int position)
 	float sliderLength = float(m_sliderMax) - float(m_sliderMin);
 	value = float(position)
 	    * float(m_max - m_min) / sliderLength - float(m_min);
+        if (value > m_max) value = float(m_max);
+        if (value < m_min) value = float(m_min);
     } else {
 	value = Rosegarden::AudioLevel::fader_to_dB
 	    (position, m_sliderMax - m_sliderMin, m_type);
     }
-
+/*
     RG_DEBUG << "RosegardenFader::position_to_value - position = " << position
              << ", new value = " << value << endl;
 
@@ -212,7 +207,7 @@ RosegardenFader::position_to_value(int position)
     }
 
     RG_DEBUG << "RosegardenFader::position_to_value - limited value = " << value << endl;
-
+*/
     return value;
 }
 
@@ -224,7 +219,7 @@ RosegardenFader::value_to_position(float value)
     if (m_integral) {
 	float sliderLength = float(m_sliderMax) - float(m_sliderMin);
 	position = 
-	    int(sliderLength * (value - float(m_min)) / float(m_max - m_min));
+	    int(sliderLength * (value - float(m_min)) / float(m_max - m_min) + 0.1);
     } else {
 	position = 
 	    Rosegarden::AudioLevel::dB_to_fader
@@ -361,11 +356,12 @@ RosegardenFader::wheelEvent(QWheelEvent *e)
 	if (e->delta() > 0) buttonPosition += 10;
 	else buttonPosition -= 10;
     } else {
-	if (e->delta() > 0) buttonPosition += 2;
-	else buttonPosition -= 2;
+	if (e->delta() > 0) buttonPosition += 1;
+	else buttonPosition -= 1;
     }
     RG_DEBUG << "RosegardenFader::wheelEvent - button position = " << buttonPosition << endl;
     setFader(position_to_value(buttonPosition));
+    RG_DEBUG << "RosegardenFader::wheelEvent - value = " << m_value << endl;
 
     showFloatText();
 }

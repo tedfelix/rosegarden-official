@@ -293,22 +293,21 @@ NotationVLayout::positionSlur(NotationStaff &staff,
     bool haveStart = false;
 
     int startTopHeight = 4, endTopHeight = 4,
-	startBottomHeight = 4, endBottomHeight = 4;
+	startBottomHeight = 4, endBottomHeight = 4,
+	maxTopHeight = 4, minBottomHeight = 4,
+	maxCount = 0, minCount = 0;
 
     int startX = (int)(*i)->getLayoutX(), endX = startX + 10;
     bool startStemUp = false, endStemUp = false;
     long startMarks = 0, endMarks = 0;
+    bool startTied = false, endTied = false;
     bool beamAbove = false, beamBelow = false;
 
     std::vector<Event *> stemUpNotes, stemDownNotes;
 
     // Scan the notes spanned by the slur, recording the top and
     // bottom heights of the first and last chords, plus the presence
-    // of any troublesome beams.
-
-    //!!! We should also be recording the presence of notes that are
-    //high or low enough in the body to get in the way of our slur --
-    //not implemented yet.
+    // of any troublesome beams and high or low notes in the body.
 
     while (scooter != staff.getViewElementList()->end()) {
 
@@ -316,22 +315,24 @@ NotationVLayout::positionSlur(NotationStaff &staff,
 
 	if (static_cast<NotationElement*>(*scooter)->isNote()) {
 
+	    Event *event = (*scooter)->event();
+
 	    long h = 0;
-	    if (!(*scooter)->event()->get<Int>(m_properties.HEIGHT_ON_STAFF, h)) {
+	    if (!event->get<Int>(m_properties.HEIGHT_ON_STAFF, h)) {
 		KMessageBox::sorry
 		    ((QWidget *)parent(), QString(i18n("Spanned note at %1 has no HEIGHT_ON_STAFF property!\nThis is a bug (the program would previously have crashed by now)").arg((*scooter)->getViewAbsoluteTime())));
-		(*scooter)->event()->dump(std::cerr);
+		event->dump(std::cerr);
 	    }
 
 	    bool stemUp = (h <= 4);
-	    (*scooter)->event()->get<Bool>(m_properties.VIEW_LOCAL_STEM_UP, stemUp);
+	    event->get<Bool>(m_properties.VIEW_LOCAL_STEM_UP, stemUp);
 	    
 	    bool beamed = false;
-	    (*scooter)->event()->get<Bool>(m_properties.BEAMED, beamed);
+	    event->get<Bool>(m_properties.BEAMED, beamed);
 	    
 	    bool primary = false;
 
-	    if ((*scooter)->event()->get<Bool>
+	    if (event->get<Bool>
 		(m_properties.CHORD_PRIMARY_NOTE, primary) && primary) {
 
 		NotationChord chord(*(staff.getViewElementList()), scooter,
@@ -343,24 +344,51 @@ NotationVLayout::positionSlur(NotationStaff &staff,
 		} 
 
 		if (!haveStart) {
+
 		    startBottomHeight = chord.getLowestNoteHeight();
 		    startTopHeight = chord.getHighestNoteHeight();
+		    minBottomHeight = startBottomHeight;
+		    maxTopHeight = startTopHeight;
+
 		    startX = (int)(*scooter)->getLayoutX();
 		    startStemUp = stemUp;
-		    startMarks = chord.getMarksForChord().size();
+		    startMarks = chord.getMarkCountForChord();
+
+		    bool tied = false;
+		    if ((event->get<Bool>(TIED_FORWARD, tied) && tied) ||
+			(event->get<Bool>(TIED_BACKWARD, tied) && tied)) {
+			startTied = true;
+		    }
+
 		    haveStart = true;
+
+		} else {
+		    if (chord.getLowestNoteHeight() < minBottomHeight) {
+			minBottomHeight = chord.getLowestNoteHeight();
+			++minCount;
+		    }
+		    if (chord.getHighestNoteHeight() > maxTopHeight) {
+			maxTopHeight = chord.getHighestNoteHeight();
+			++maxCount;
+		    }
 		}
 
 		endBottomHeight = chord.getLowestNoteHeight();
 		endTopHeight = chord.getHighestNoteHeight();
 		endX = (int)(*scooter)->getLayoutX();
 		endStemUp = stemUp;
-		endMarks = chord.getMarksForChord().size();
+		endMarks = chord.getMarkCountForChord();
+
+		bool tied = false;
+		if ((event->get<Bool>(TIED_FORWARD, tied) && tied) ||
+		    (event->get<Bool>(TIED_BACKWARD, tied) && tied)) {
+		    endTied = true;
+		}
 	    }
 
 	    if (!beamed) {
-		if (stemUp) stemUpNotes.push_back((*scooter)->event());
-		else stemDownNotes.push_back((*scooter)->event());
+		if (stemUp) stemUpNotes.push_back(event);
+		else stemDownNotes.push_back(event);
 	    }
 	}
 
@@ -397,33 +425,44 @@ NotationVLayout::positionSlur(NotationStaff &staff,
     // we've decided to put it on
 
     int startHeight, endHeight;
+    int startOffset = 2, endOffset = 2;
+
+    startOffset += startMarks * 2;
+    endOffset += endMarks * 2;
+
+    if (startTied) ++startOffset;
+    if (endTied) ++endOffset;
 
     if (above) {
-	startHeight = startTopHeight + 2 + startMarks*2;
-	endHeight = endTopHeight + 2 + endMarks*2;
+	startHeight = startTopHeight + startOffset;
+	endHeight = endTopHeight + endOffset;
+	bool maxRelevant = ((maxTopHeight != endTopHeight) || (maxCount > 1));
+	if (maxRelevant) {
+	    int midHeight = (startHeight + endHeight)/2;
+	    if (maxTopHeight > midHeight - 1) {
+		startHeight += maxTopHeight - midHeight + 1;
+		endHeight   += maxTopHeight - midHeight + 1;
+	    }
+	}
     } else {
-	startHeight = startBottomHeight - 2 - startMarks*2;
-	endHeight = endBottomHeight - 2 - endMarks*2;
+	startHeight = startBottomHeight - startOffset;
+	endHeight = endBottomHeight - endOffset;
+	bool minRelevant = ((minBottomHeight != endBottomHeight) || (minCount > 1));
+	if (minRelevant) {
+	    int midHeight = (startHeight + endHeight)/2;
+	    if (minBottomHeight < midHeight + 1) {
+		startHeight -= midHeight - minBottomHeight + 1;
+		endHeight   -= midHeight - minBottomHeight + 1;
+	    }
+	}
     }
 
     int y0 = staff.getLayoutYForHeight(startHeight),
 	y1 = staff.getLayoutYForHeight(endHeight);
 
-    // in some circumstances it pays to make the slur a bit less
-    // slopey -- we don't always need to reach all the way to the
-    // target note
-
     int dy = y1 - y0;
-    if (above) {
-	if (dy < 0) y0 -= dy / 5;
-	dy = dy * 4 / 5;
-    } else {
-	if (dy > 0) y0 += dy / 5;
-	dy = dy * 4 / 5;
-    }
-
     int length = endX - startX;
-    int diff = staff.getLayoutYForHeight(0) - staff.getLayoutYForHeight(2);
+    int diff = staff.getLayoutYForHeight(0) - staff.getLayoutYForHeight(3);
     if (length < diff*10) diff /= 2;
     if (length > diff*3) length -= diff/2;
     startX += diff;

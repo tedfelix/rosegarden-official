@@ -729,6 +729,12 @@ RecordableAudioFile::~RecordableAudioFile()
 void 
 RecordableAudioFile::buffer(const sample_t *data, int channel, size_t frames)
 {
+    if (channel >= m_ringBuffers.size()) {
+	std::cerr << "RecordableAudioFile::buffer: No such channel as "
+		  << channel << std::endl;
+	return;
+    }
+
     size_t available = m_ringBuffers[channel]->getWriteSpace();
 
     if (frames > available) {

@@ -1629,6 +1629,14 @@ MappedAudioPluginManager::discoverPlugins(MappedStudio *studio)
     
 }
 
+
+// It is only later, after they've gone,
+// I realize they have delivered a letter.
+// It's a letter from my wife.  "What are you doing
+// there?" my wife asks.  "Are you drinking?"
+// I study the postmark for hours.  Then it, too, begins to fade.
+// I hope someday to forget all this.
+//
 void
 MappedAudioPluginManager::clearPlugins(MappedStudio *studio)
 {
