@@ -490,7 +490,6 @@ MatrixSelector::MatrixSelector(MatrixView* view)
     : MatrixTool("MatrixSelector", view),
       m_selectionRect(0),
       m_updateRect(false),
-      m_greedy(true),
       m_currentStaff(0),
       m_clickedElement(0),
       m_dispatchTool(0)
@@ -820,6 +819,8 @@ EventSelection* MatrixSelector::getSelection()
     return (selection->getAddedEvents() > 0) ? selection : 0;
     */
 }
+
+bool MatrixSelector::m_greedy = true;
 
 //------------------------------
 

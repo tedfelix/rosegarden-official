@@ -200,14 +200,14 @@ public:
      *
      * @see #isGreedy
      */
-    void setGreedyMode(bool s) { m_greedy = s; }
+    static void setGreedyMode(bool s) { m_greedy = s; }
 
     /**
      * Returns whether the selector is in "greedy" mode
      *
      * @see #setGreedy
      */
-    bool isGreedy() const      { return m_greedy; }
+    static bool isGreedy() { return m_greedy; }
 
     static const QString ToolName;
 
@@ -229,7 +229,7 @@ protected:
 
     QCanvasRectangle* m_selectionRect;
     bool m_updateRect;
-    bool m_greedy;
+    static bool m_greedy;
 
     int m_clickedStaff;
     MatrixStaff* m_currentStaff;
