@@ -374,6 +374,11 @@ protected slots:
      */
     void slotOnEditAudio();
 
+    /**
+     * AutoSplit audio segment
+     */ 
+    void slotOnAutoSplitAudio();
+
     /*
      * pop-up an event list
      */
@@ -384,6 +389,7 @@ signals:
     void editSegmentMatrix(Rosegarden::Segment*);
     void editSegmentAudio(Rosegarden::Segment*);
     void editSegmentEventList(Rosegarden::Segment*);
+    void audioSegmentAutoSplit(Rosegarden::Segment*);
 
     void selectedSegments(const Rosegarden::SegmentSelection &);
 

@@ -250,6 +250,7 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
         m_bankCheckBox->show();
         m_programCheckBox->show();
         m_panCheckBox->show();
+        m_velocityCheckBox->show();
     }
 
     // Set instrument name

@@ -1004,6 +1004,8 @@ void SegmentCanvas::contentsMousePressEvent(QMouseEvent* e)
                 m_editMenu->clear();
                 m_editMenu->insertItem(i18n("Edit Audio"),
                                        this, SLOT(slotOnEditAudio()));
+                m_editMenu->insertItem(i18n("AutoSplit Audio"),
+                                       this, SLOT(slotOnAutoSplitAudio()));
             }
             else
             {
@@ -1166,6 +1168,12 @@ void SegmentCanvas::slotOnEditAudio()
 {
     emit editSegmentAudio(m_currentItem->getSegment());
 }
+
+void SegmentCanvas::slotOnAutoSplitAudio()
+{
+    emit audioSegmentAutoSplit(m_currentItem->getSegment());
+}
+
 
 void SegmentCanvas::slotOnEditEventList()
 {
