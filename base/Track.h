@@ -52,7 +52,7 @@ public:
 
     Track();
     Track(const int &id, const bool &muted,
-          const TrackType &tt, const string &label,
+          const TrackType &tt, const std::string &label,
           const int &position, const int &instrument);
     ~Track();
 
@@ -60,26 +60,26 @@ public:
     bool isMuted() { return m_muted; }
     int getPosition() { return m_position; }
     int getInstrument() { return m_instrument; }
-    string const getLabel() { return m_label; }
+    std::string const getLabel() { return m_label; }
     TrackType getType() { return m_type; }
 
     void setID(const int &id) { m_id = id; }
     void setMuted(const bool& muted) { m_muted = muted; }
     void setType(const TrackType &type) { m_type = type; }
     void setPosition(const int &position) { m_position = position; }
-    void setLabel(const string &label) { m_label = label; }
+    void setLabel(const std::string &label) { m_label = label; }
     void setInstrument(const int &instrument) { m_instrument = instrument; }
 
     // Implementation of virtual
     //
-    virtual string toXmlString();
+    virtual std::string toXmlString();
 
 private:
 
     int       m_id;
     bool      m_muted;
     TrackType m_type;
-    string    m_label;
+    std::string    m_label;
     int       m_position;
     int       m_instrument;
 

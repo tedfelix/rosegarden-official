@@ -606,7 +606,7 @@ Composition::getTempoAt(timeT t) const
 
     double tempo = (double)((*i)->get<Int>(TempoProperty)) / 60.0;
 
-    std::cerr << "Composition: Found tempo " << tempo << " at " << t << endl;
+    std::cerr << "Composition: Found tempo " << tempo << " at " << t << std::endl;
     return tempo;
 }
 
@@ -619,7 +619,7 @@ Composition::addTempo(timeT time, double tempo)
     m_tempoSegment.insert(tempoEvent);
     m_tempoTimestampsNeedCalculating = true;
 
-    std::cerr << "Composition: Added tempo " << tempo << " at " << time << endl;
+    std::cerr << "Composition: Added tempo " << tempo << " at " << time << std::endl;
 }
 
 void
@@ -631,7 +631,7 @@ Composition::addRawTempo(timeT time, int tempo)
     m_tempoSegment.insert(tempoEvent);
     m_tempoTimestampsNeedCalculating = true;
 
-    std::cerr << "Composition: Added tempo " << tempo << " at " << time << endl;
+    std::cerr << "Composition: Added tempo " << tempo << " at " << time << std::endl;
 }
 int
 Composition::getTempoChangeCount() const
@@ -693,7 +693,7 @@ Composition::calculateTempoTimestamps() const
     timeT base = 0;
     double tempo = m_defaultTempo;
 
-    cerr << "Composition::calculateTempoTimestamps: Tempo events are:" << endl;
+    std::cerr << "Composition::calculateTempoTimestamps: Tempo events are:" << std::endl;
 
     for (ReferenceSegment::iterator i = m_tempoSegment.begin();
 	 i != m_tempoSegment.end(); ++i) {
@@ -812,35 +812,35 @@ void Composition::deleteInstrument(const int &instrument)
 // Instruments, Tracks and any further sub-objects
 //
 //
-string Composition::toXmlString()
+std::string Composition::toXmlString()
 {
-    stringstream composition;
+    std::stringstream composition;
 
     composition << "<composition recordtrack=\"";
     composition << m_recordTrack;
     composition << "\" pointer=\"" << m_position;
     composition << "\" defaultTempo=\"";
-    composition << setiosflags(ios::fixed)
-                << setprecision(4) << m_defaultTempo;
-    composition << "\">" << endl << endl;
+    composition << std::setiosflags(std::ios::fixed)
+                << std::setprecision(4) << m_defaultTempo;
+    composition << "\">" << std::endl << std::endl;
 
     for (instrumentiterator iit = getInstruments()->begin();
                             iit != getInstruments()->end();
                             iit++ )
     {
-        composition << "  " << (*iit).second.toXmlString() << endl;
+        composition << "  " << (*iit).second.toXmlString() << std::endl;
     }
 
-    composition << endl;
+    composition << std::endl;
 
     for (trackiterator tit = getTracks()->begin();
                         tit != getTracks()->end();
                         tit++ )
     {
-        composition << "  " << (*tit).second.toXmlString() << endl;
+        composition << "  " << (*tit).second.toXmlString() << std::endl;
     }
 
-    composition << endl;
+    composition << std::endl;
 
     for (ReferenceSegment::iterator i = m_timeSigSegment.begin();
 	 i != m_timeSigSegment.end(); ++i) {
@@ -854,22 +854,22 @@ string Composition::toXmlString()
 		    << (*i)->get<Int>(TimeSignature::NumeratorPropertyName)
 		    << "\" denominator=\""
 		    << (*i)->get<Int>(TimeSignature::DenominatorPropertyName)
-		    << "\"/>" << endl;
+		    << "\"/>" << std::endl;
     }
 
-    composition << endl;
+    composition << std::endl;
 
     for (ReferenceSegment::iterator i = m_tempoSegment.begin();
 	 i != m_tempoSegment.end(); ++i) {
 
 	composition << "  <tempo time=\"" << (*i)->getAbsoluteTime()
 		    << "\" bph=\""
-		    << (*i)->get<Int>(TempoProperty) << "\"/>" << endl;
+		    << (*i)->get<Int>(TempoProperty) << "\"/>" << std::endl;
     }
 
-    composition << endl;
+    composition << std::endl;
 
-    composition << "</composition>" << ends;
+    composition << "</composition>" << std::ends;
 
     return composition.str();
 }

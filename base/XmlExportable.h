@@ -44,7 +44,7 @@ public:
     XmlExportable() {;}
     virtual ~XmlExportable() {;}
 
-    virtual string toXmlString() = 0;
+    virtual std::string toXmlString() = 0;
 private:
 };
 

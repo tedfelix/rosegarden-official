@@ -158,13 +158,13 @@ Event::dumpStats(ostream& out)
     clock_t now = clock();
     int ms = (now - m_lastStats) * 1000 / CLOCKS_PER_SEC;
     out << "\nEvent stats, since start of run or last report ("
-	<< ms << "ms ago):" << endl;
+	<< ms << "ms ago):" << std::endl;
 
-    out << "Calls to get<>: " << m_getCount << endl;
-    out << "Calls to set<>: " << m_setCount << endl;
-    out << "Calls to setMaybe<>: " << m_setMaybeCount << endl;
-    out << "Calls to has: " << m_hasCount << endl;
-    out << "Calls to unset: " << m_unsetCount << endl;
+    out << "Calls to get<>: " << m_getCount << std::endl;
+    out << "Calls to set<>: " << m_setCount << std::endl;
+    out << "Calls to setMaybe<>: " << m_setMaybeCount << std::endl;
+    out << "Calls to has: " << m_hasCount << std::endl;
+    out << "Calls to unset: " << m_unsetCount << std::endl;
 
     m_getCount = m_setCount = m_setMaybeCount = m_hasCount = m_unsetCount = 0;
     m_lastStats = clock();

@@ -38,11 +38,11 @@ Quantizer::Quantizer(int unit, int maxDots) :
     if (unit < 0) setUnit(Note(Note::Shortest));
 
     if (m_maxDots != 1 && m_maxDots != 2) {
-	cerr << "Quantizer::Quantizer: WARNING: m_maxDots = " << m_maxDots
-	     << endl;
+	std::cerr << "Quantizer::Quantizer: WARNING: m_maxDots = " << m_maxDots
+	     << std::endl;
 	// dump core, please
 	char *myString = (char *)1;
-	cerr << "myString -> " << myString << endl;
+	std::cerr << "myString -> " << myString << std::endl;
     }
 }
 
@@ -79,14 +79,14 @@ timeT
 Quantizer::NoteQuantizer::quantize(int unit, int maxDots,
 				   timeT duration, timeT) const
 {
-//    cerr << "NoteQuantizer::quantize: unit is " << unit << ", duration is " << duration << endl;
+//    cerr << "NoteQuantizer::quantize: unit is " << unit << ", duration is " << duration << std::endl;
 
     duration = UnitQuantizer().quantize(unit, maxDots, duration, 0);
     Note shortNote = Note::getNearestNote(duration, maxDots);
 
     timeT shortTime = shortNote.getDuration();
     if (shortTime == duration) {
-//	cerr << "returning(1) " << shortTime << endl;
+//	cerr << "returning(1) " << shortTime << std::endl;
 	return shortTime;
     }
 
@@ -94,15 +94,15 @@ Quantizer::NoteQuantizer::quantize(int unit, int maxDots,
 
     if (shortTime < unit) { // original duration probably quantized to zero
 
-//	cerr << "shortTime is " << shortTime << endl;
+//	cerr << "shortTime is " << shortTime << std::endl;
 	longNote = Note::getNearestNote(unit, maxDots);
-//	cerr << "longTime is " << longNote.getDuration() << endl;
+//	cerr << "longTime is " << longNote.getDuration() << std::endl;
 
     } else if ((shortNote.getDots() > 0 ||
 		shortNote.getNoteType() == Note::Shortest)) { // can't dot that
 
 	if (shortNote.getNoteType() == Note::Longest) {
-//	    cerr << "returning(2) " << shortTime << endl;
+//	    cerr << "returning(2) " << shortTime << std::endl;
 	    return shortTime;
 	}
 
@@ -117,10 +117,10 @@ Quantizer::NoteQuantizer::quantize(int unit, int maxDots,
 
     if (shortTime < unit || 
 	(longTime - duration < duration - shortTime)) {
-//	cerr << "returning(3) " << longTime << endl;
+//	cerr << "returning(3) " << longTime << std::endl;
 	return longTime;
     } else {
-//	cerr << "returning(4) " << shortTime << endl;
+//	cerr << "returning(4) " << shortTime << std::endl;
 	return shortTime;
     }
 };
@@ -140,7 +140,7 @@ timeT
 Quantizer::LegatoQuantizer::quantize(int unit, int maxDots, timeT duration,
 				     timeT followingRestDuration) const
 {
-//    cerr << "LegatoQuantizer::quantize: followingRestDuration is " << followingRestDuration << endl;
+//    cerr << "LegatoQuantizer::quantize: followingRestDuration is " << followingRestDuration << std::endl;
 
     if (followingRestDuration > 0) {
 

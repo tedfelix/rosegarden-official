@@ -41,7 +41,7 @@ Instrument::Instrument():
 
 Instrument::Instrument(const int &id,
                        const InstrumentType &it,
-                       const string &name):
+                       const std::string &name):
     m_id(id),
     m_name(name),
     m_type(it)
@@ -56,10 +56,10 @@ Instrument::~Instrument()
 // as XML
 //
 //
-string
+std::string
 Instrument::toXmlString()
 {
-    stringstream instrument;
+    std::stringstream instrument;
 
     instrument << "<instrument id=\"";
     instrument << m_id << "\" type=\"";
@@ -80,7 +80,7 @@ Instrument::toXmlString()
     }
 
     instrument << "\" name=\"" << m_name << "\"";
-    instrument << "/>" << ends;
+    instrument << "/>" << std::ends;
 
     return instrument.str();
 

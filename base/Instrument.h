@@ -40,10 +40,10 @@ public:
     enum InstrumentType { Midi, Audio };
 
     Instrument();
-    Instrument(const int &id, const InstrumentType &it, const string &name);
+    Instrument(const int &id, const InstrumentType &it, const std::string &name);
     ~Instrument();
 
-    string getName() { return m_name; }
+    std::string getName() { return m_name; }
     InstrumentType getInstrumentType() { return m_type; }
     int getID() const { return m_id; }
 
@@ -51,7 +51,7 @@ public:
     int getMidiTranspose() { return m_midiTranspose; }
 
     void setID(const int &id) { m_id = id; }
-    void setName(const string &name) { m_name = name; }
+    void setName(const std::string &name) { m_name = name; }
     void setType(const InstrumentType &type) { m_type = type; }
 
     void setMidiChannel(const int &mC) { m_midiChannel = mC; }
@@ -59,12 +59,12 @@ public:
 
     // Implementation of virtual function
     //
-    virtual string toXmlString();
+    virtual std::string toXmlString();
 
 private:
 
     int m_id;
-    string m_name;
+    std::string m_name;
     InstrumentType m_type;
     
     int m_midiChannel;

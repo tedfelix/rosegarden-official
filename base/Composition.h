@@ -60,9 +60,14 @@ struct RealTime
 	return RealTime(sec - r.sec, usec - r.usec);
     }
 
-    bool operator<(const RealTime &r) const {
+    bool operator <(const RealTime &r) const {
 	if (sec == r.sec) return usec < r.usec;
 	else return sec < r.sec;
+    }
+
+    bool operator >(const RealTime &r) const {
+	if (sec == r.sec) return usec > r.usec;
+	else return sec > r.sec;
     }
 };
     
@@ -405,7 +410,7 @@ public:
 
     // XML exportable method
     //
-    virtual string toXmlString();
+    virtual std::string toXmlString();
 
     static RealTime getTempoTimestamp(const Event *e);
     static void setTempoTimestamp(Event *e, RealTime r);

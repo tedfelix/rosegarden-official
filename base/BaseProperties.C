@@ -64,8 +64,8 @@ PropertyName getMarkPropertyName(int markNo)
     // the PropertyName interning process for each string -- hence the
     // firstFive cache
 
-    stringstream markPropertyName;
-    markPropertyName << "mark" << (markNo + 1) << ends;
+    std::stringstream markPropertyName;
+    markPropertyName << "mark" << (markNo + 1) << std::ends;
     return markPropertyName.str();
 }
 

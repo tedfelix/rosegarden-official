@@ -44,7 +44,7 @@ Track::Track():
 }
 
 Track::Track(const int &id, const bool &muted, 
-             const TrackType &tt, const string &label,
+             const TrackType &tt, const std::string &label,
              const int &position, const int &instrument):
    m_id(id),
    m_muted(muted),
@@ -66,10 +66,10 @@ Track::~Track()
 // Our virtual method for exporting Xml.
 //
 //
-string
+std::string
 Track::toXmlString()
 {
-    stringstream track;
+    std::stringstream track;
 
     track << "<track id=\"";
     track << m_id << "\" type=\"";
@@ -102,7 +102,7 @@ Track::toXmlString()
 
     track << " instrument=\"" << m_instrument << "\"";
 
-    track << "/>" << ends;
+    track << "/>" << std::ends;
 
     return track.str();
 
