@@ -15,6 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <qcanvas.h>
+
 #include "notationelement.h"
 #include "rosedebug.h"
 
@@ -27,6 +29,14 @@ NotationElement::NotationElement(Event *event)
 NotationElement::~NotationElement()
 {
     // de-register from "observer"
+    delete m_canvasItem;
+}
+
+void
+NotationElement::setCanvasItem(QCanvasItem *e)
+{
+    delete m_canvasItem;
+    m_canvasItem = e;
 }
 
 bool operator<(NotationElement &e1, NotationElement &e2)

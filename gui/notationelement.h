@@ -39,7 +39,8 @@ public:
     void setX(double x) { m_x = x; }
     void setY(double y) { m_y = y; }
 
-    void setCanvasItem(QCanvasItem *e) { m_canvasItem = e; }
+    /// The object takes ownership of its canvas item
+    void setCanvasItem(QCanvasItem *e);
     QCanvasItem* canvasItem() { return m_canvasItem; }
 
     friend bool operator<(NotationElement&, NotationElement&);
