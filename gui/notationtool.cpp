@@ -506,6 +506,8 @@ NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
 
     for (Segment::iterator i = segment.findTime(time); ; --i) {
 
+	if (!segment.isBeforeEndMarker(i)) break;
+
 	if ((*i)->isa(Rosegarden::Note::EventType) &&
 	    (*i)->has(NotationProperties::OTTAVA_SHIFT)) {
 	    ottavaShift = (*i)->get<Int>(NotationProperties::OTTAVA_SHIFT);
