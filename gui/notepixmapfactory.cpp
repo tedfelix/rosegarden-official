@@ -539,21 +539,23 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
     int numerator = sig.getNumerator(),
         denominator = sig.getDenominator();
 
-    char numC = numerator + '0',
-        denomC = denominator + '0';
-    
-    QRect r = m_timeSigFontMetrics.boundingRect(numC);
+    QString numS, denomS;
+
+    numS.setNum(numerator);
+    denomS.setNum(denominator);
+
+    QRect r = m_timeSigFontMetrics.boundingRect(denomS);
 
     createPixmapAndMask(r.width(), r.height() * 2);
 
     m_p.setFont(m_timeSigFont);
     m_pm.setFont(m_timeSigFont);
 
-    m_p.drawText(0, r.height(),     QString(QChar(numC)));
-    m_p.drawText(0, r.height() * 2, QString(QChar(denomC)));
+    m_p.drawText(0, r.height(),     numS);
+    m_p.drawText(0, r.height() * 2, denomS);
 
-    m_pm.drawText(0, r.height(),     QString(QChar(numC)));
-    m_pm.drawText(0, r.height() * 2, QString(QChar(denomC)));
+    m_pm.drawText(0, r.height(),     numS);
+    m_pm.drawText(0, r.height() * 2, denomS);
 
     m_p.end();
     m_pm.end();
