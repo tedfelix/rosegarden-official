@@ -56,6 +56,8 @@ public:
     Quantizer& quantizer() { return m_quantizer; }
 
 protected:
+
+    void layoutGroup(NotationElementList::iterator from, NotationElementList::iterator to);
     /*
      * Breaks down a note which doesn't fit in a bar into shorter notes - disabled for now
      */

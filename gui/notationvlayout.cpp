@@ -26,7 +26,22 @@ NotationVLayout::NotationVLayout(Staff &s)
 void
 NotationVLayout::layout(NotationElement *el)
 {
-    int pitch = el->event()->get<Int>("pitch");
+
+    if (el->isGroup()) {
+
+        kdDebug(KDEBUG_AREA) << "NotationVLayout::layout : processing group" << endl;
+
+        // layout the group
+        NotationElementList *group = el->group();
+
+        for (NotationElementList::iterator i = group->begin();
+             i != group->end();
+             ++i)
+            layout(*i);
+
+    } else {
+
+        int pitch = el->event()->get<Int>("pitch");
 
 //     kdDebug(KDEBUG_AREA) << "pitch : " << pitch
 //                          << " - height : " << m_pitchToHeight[pitch]
@@ -34,6 +49,10 @@ NotationVLayout::layout(NotationElement *el)
 //                          << " - height + staffOffset : " << m_pitchToHeight[pitch] + m_staffOffsetY
 //                          << endl;
 
-    el->setY(m_staff.pitchYOffset(pitch));
-    kdDebug(KDEBUG_AREA) << "NotationVLayout::layout : pitch : " << pitch << " - y : " << el->y() << endl;
+        el->setY(m_staff.pitchYOffset(pitch));
+    
+        kdDebug(KDEBUG_AREA) << "NotationVLayout::layout : pitch : "
+                             << pitch << " - y : " << el->y() << endl;
+    }
+
 }

@@ -22,6 +22,7 @@
 #include "Element2.h"
 
 class QCanvasItem;
+class NotationElementList;
 
 /**
   *@author Guillaume Laurent, Chris Cannam, Rich Bown
@@ -41,6 +42,10 @@ public:
     void setY(double y) { m_y = y; }
 
     bool isRest() const;
+    bool isGroup() const;
+
+    const NotationElementList* group() const { return m_group; }
+    NotationElementList* group()             { return m_group; }
 
     /// The object takes ownership of its canvas item
     void setCanvasItem(QCanvasItem *e);
@@ -51,6 +56,8 @@ public:
 protected:
     double m_x;
     double m_y;
+
+    NotationElementList *m_group;
 
     QCanvasItem *m_canvasItem;
 };
@@ -64,7 +71,12 @@ public:
     }
 };
 
-typedef multiset<NotationElement*, NotationElementCmp> NotationElementList;
+class NotationElementList : public multiset<NotationElement*, NotationElementCmp>
+{
+public:
+    NotationElementList() : multiset<NotationElement*, NotationElementCmp>() {};
+    ~NotationElementList();
+};
 
 // inline bool operator<(NotationElement &e1, NotationElement &e2)
 // {

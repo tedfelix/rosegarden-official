@@ -217,23 +217,49 @@ NotationView::showElements(NotationElementList::iterator from,
                            NotationElementList::iterator to,
                            double dxoffset, double dyoffset)
 {
+    kdDebug(KDEBUG_AREA) << "NotationElement::showElements()" << endl;
+
     if (from == to) return true;
 
     static ChordPixmapFactory npf(*m_mainStaff);
 
     for(NotationElementList::iterator it = from; it != to; ++it) {
 
-        Note note = Note((*it)->event()->get<Int>("Notation::NoteType"));
-        
-        QCanvasPixmap notePixmap(npf.makeNotePixmap(note, true, true));
-        QCanvasSimpleSprite *noteSprite = new QCanvasSimpleSprite(&notePixmap,
-                                                                  canvas());
-        noteSprite->move(dxoffset + (*it)->x(),
-                         dyoffset + (*it)->y());
-        noteSprite->show();
+        if ((*it)->isGroup()) {
+            //
+            // process group first
+            //
+            NotationElementList *group = (*it)->group();
 
-        (*it)->setCanvasItem(noteSprite);
+            showElements(group->begin(), group->end(),
+                         dxoffset, dyoffset);
+        } else {
+
+            //
+            // process single element
+            //
+            try {
+                Note note = Note((*it)->event()->get<Int>("Notation::NoteType"));
+        
+                QCanvasPixmap notePixmap(npf.makeNotePixmap(note, true, true));
+                QCanvasSimpleSprite *noteSprite = new QCanvasSimpleSprite(&notePixmap,
+                                                                          canvas());
+                noteSprite->move(dxoffset + (*it)->x(),
+                                 dyoffset + (*it)->y());
+                noteSprite->show();
+
+                (*it)->setCanvasItem(noteSprite);
+
+            } catch (...) {
+                kdDebug(KDEBUG_AREA) << "NotationElement doesn't have a 'Notation::NoteType' property"
+                                     << endl;
+            }
+        }
     }
+
+    kdDebug(KDEBUG_AREA) << "NotationElement::showElements() exiting" << endl;
+
+    return true;
 
     // Display bars
     const NotationHLayout::barpositions& barPositions(m_hlayout->barPositions());
@@ -265,6 +291,8 @@ NotationView::applyLayout()
     bool rch = applyHorizontalLayout();
     bool rcv = applyVerticalLayout();
 
+    kdDebug(KDEBUG_AREA) << "NotationView::applyLayout() : done" << endl;
+
     return rch && rcv;
 }
 
@@ -280,6 +308,8 @@ NotationView::applyHorizontalLayout()
     m_hlayout->reset();
 
     m_hlayout->layout(m_notationElements->begin(), m_notationElements->end());
+
+    kdDebug(KDEBUG_AREA) << "NotationView::applyHorizontalLayout() : done" << endl;
 
     return m_hlayout->status();
 }
@@ -297,6 +327,8 @@ NotationView::applyVerticalLayout()
          i != m_notationElements->end(); ++i)
         (*m_vlayout)(*i);
     
+    kdDebug(KDEBUG_AREA) << "NotationView::applyVerticalLayout() : done" << endl;
+
     return m_vlayout->status();
 }
 

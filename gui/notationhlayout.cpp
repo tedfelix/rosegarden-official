@@ -64,6 +64,7 @@ NotationHLayout::layout(NotationElementList::iterator from, NotationElementList:
         m_currentPos = m_barMargin; // we are at the beginning of the elements
         m_nbTimeUnitsInCurrentBar = 0;
     } else {
+
         NotationElementList::iterator oneBeforeFrom = from;
         --oneBeforeFrom;
         NotationElement *elementBeforeFrom = (*oneBeforeFrom);
@@ -74,43 +75,73 @@ NotationHLayout::layout(NotationElementList::iterator from, NotationElementList:
         m_currentPos += m_noteWidthTable[previousNote] + Staff::noteWidth + m_noteMargin;
 
         m_nbTimeUnitsInCurrentBar = barTimeAtPos(oneBeforeFrom);
+
     }
     
     m_barPositions.clear();
 
     for (NotationElementList::iterator it = from; it != to; ++it) {
         
-        NotationElement *el = (*it);
+        NotationElement *nel = (*it);
     
-        // if (el) is time sig change, reflect that
+        // if (nel) is time sig change, reflect that
 
         // kdDebug(KDEBUG_AREA) << "Layout" << endl;
 
-        m_quantizer.quantize(el->event());
+        if (nel->isGroup()) {
+            //
+            // layout group
+            //
+            kdDebug(KDEBUG_AREA) << "NotationHLayout::layout() : layout group" << endl;
+            NotationElementList *group = nel->group(); // TODO - how do I make this ?
+            layoutGroup(group->begin(), group->end());
 
-        // kdDebug(KDEBUG_AREA) << "Quantized" << endl;
+        } else {
+            //
+            // layout single event
+            //
+            m_quantizer.quantize(nel->event());
+        
+            // kdDebug(KDEBUG_AREA) << "Quantized" << endl;
 
-        // Add note to current bar
-        m_previousNbTimeUnitsInCurrentBar = m_nbTimeUnitsInCurrentBar;
-        m_nbTimeUnitsInCurrentBar += el->event()->get<Int>("QuantizedDuration");
+            // Add note to current bar
+            m_previousNbTimeUnitsInCurrentBar = m_nbTimeUnitsInCurrentBar;
+            m_nbTimeUnitsInCurrentBar += nel->event()->get<Int>("QuantizedDuration");
 
-        el->setX(m_currentPos);
+            nel->setX(m_currentPos);
 
-        Note note = Note(el->event()->get<Int>("Notation::NoteType")); // check the property is here ?
+            Note note = Note(nel->event()->get<Int>("Notation::NoteType")); // check the property is here ?
 
-        // Move current pos to next note
-        m_currentPos += m_noteWidthTable[note] + Staff::noteWidth + m_noteMargin;
+            // Move current pos to next note
+            m_currentPos += m_noteWidthTable[note] + Staff::noteWidth + m_noteMargin;
 
-        // See if we've completed a bar
-        //
-        if (m_nbTimeUnitsInCurrentBar > m_timeUnitsPerBar) {
-            kdDebug(KDEBUG_AREA) << "Bar has wrong length" << endl;
-            // TODO
-        } else if (m_nbTimeUnitsInCurrentBar == m_timeUnitsPerBar) {
-            m_nbTimeUnitsInCurrentBar = 0;
-            addNewBar(m_currentPos + m_noteMargin);
-            m_currentPos += 2 * m_noteMargin + Staff::noteWidth;
+            // See if we've completed a bar
+            //
+            if (m_nbTimeUnitsInCurrentBar > m_timeUnitsPerBar) {
+                kdDebug(KDEBUG_AREA) << "Bar has wrong length" << endl;
+                // TODO
+            } else if (m_nbTimeUnitsInCurrentBar == m_timeUnitsPerBar) {
+                m_nbTimeUnitsInCurrentBar = 0;
+                addNewBar(m_currentPos + m_noteMargin);
+                m_currentPos += 2 * m_noteMargin + Staff::noteWidth;
+            }
         }
+    }
+    
+}
+
+void
+NotationHLayout::layoutGroup(NotationElementList::iterator from, NotationElementList::iterator to)
+{
+    kdDebug(KDEBUG_AREA) << "NotationHLayout::layout() : layout group to pos "
+                         << m_currentPos << endl;
+
+    for (NotationElementList::iterator it = from; it != to; ++it) {
+        
+        NotationElement *el = (*it);
+
+        m_quantizer.quantize(el->event());
+        el->setX(m_currentPos);
     }
 }
 
@@ -164,23 +195,6 @@ NotationHLayout::reset()
     m_nbTimeUnitsInCurrentBar = 0;
     m_previousNbTimeUnitsInCurrentBar = 0;
     m_barPositions.clear();
-}
-
-bool compareNoteElement(NotationElement *el1, NotationElement *el2)
-{
-    kdDebug(KDEBUG_AREA) << "compareNoteElement : el1->x : " << el1->x()
-                         << "(item : " << el1->canvasItem()->x()
-                         << ") - el2->x : "<< el2->x() << endl;
-
-    // Nifty trick to show what items we're comparing with
-    //
-//     QCanvas *canvas = el1->canvasItem()->canvas();
-    
-//     QCanvasLine *mark = new QCanvasLine(canvas);
-//     mark->setPoints(el1->canvasItem()->x(), 0, el1->canvasItem()->x(), el1->x());
-//     mark->show();
-
-    return el1->canvasItem()->x() < el2->x();
 }
 
 NotationElementList::iterator
@@ -273,4 +287,21 @@ NotationHLayout::insertNote(NotationElement *el)
 
 //     return notes;
     
+// }
+
+// bool compareNoteElement(NotationElement *el1, NotationElement *el2)
+// {
+//     kdDebug(KDEBUG_AREA) << "compareNoteElement : el1->x : " << el1->x()
+//                          << "(item : " << el1->canvasItem()->x()
+//                          << ") - el2->x : "<< el2->x() << endl;
+
+//     // Nifty trick to show what items we're comparing with
+//     //
+// //     QCanvas *canvas = el1->canvasItem()->canvas();
+    
+// //     QCanvasLine *mark = new QCanvasLine(canvas);
+// //     mark->setPoints(el1->canvasItem()->x(), 0, el1->canvasItem()->x(), el1->x());
+// //     mark->show();
+
+//     return el1->canvasItem()->x() < el2->x();
 // }

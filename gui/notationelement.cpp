@@ -17,18 +17,29 @@
 
 #include <qcanvas.h>
 
+#include "viewelementsmanager.h"
 #include "notationelement.h"
 #include "rosedebug.h"
 
 NotationElement::NotationElement(Event *event)
     : ViewElement(event),
+      m_x(0),
+      m_y(0),
+      m_group(0),
       m_canvasItem(0)
 {
+    if (isGroup()) {
+        EventList *g = event->group();
+        
+        m_group = ViewElementsManager::notationElementList(g->begin(),
+                                                           g->end());
+    }
 }
 
 NotationElement::~NotationElement()
 {
     // de-register from "observer"
+    delete m_group;
     delete m_canvasItem;
 }
 
@@ -36,6 +47,12 @@ bool
 NotationElement::isRest() const
 {
     return event()->type() == "rest";
+}
+
+bool
+NotationElement::isGroup() const
+{
+    return event()->type() == "group";
 }
 
 
@@ -48,7 +65,17 @@ NotationElement::setCanvasItem(QCanvasItem *e)
 
 bool operator<(NotationElement &e1, NotationElement &e2)
 {
-    kdDebug(KDEBUG_AREA) << "operator<(e1.m_x = "
-                         << e1.m_x << ", e2.m_x = " << e2.m_x << endl;
+//     kdDebug(KDEBUG_AREA) << "operator<(e1.m_x = "
+//                          << e1.m_x << ", e2.m_x = " << e2.m_x << ")" << endl;
     return e1.m_x < e2.m_x;
+}
+
+
+//////////////////////////////////////////////////////////////////////
+
+NotationElementList::~NotationElementList()
+{
+    for(iterator i = begin(); i != end(); ++i) {
+        delete (*i);
+    }
 }
