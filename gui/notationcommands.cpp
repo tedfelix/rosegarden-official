@@ -1410,8 +1410,8 @@ TransformsMenuInterpretCommand::articulate()
     // -- Anything unmarked and unslurred, or marked tenuto and
     //    slurred, gets 90% of duration.
 
-    std::vector<Event *> toErase;
-    std::vector<Event *> toInsert;
+    std::set<Event *> toErase;
+    std::set<Event *> toInsert;
     Segment &segment(getSegment());
 
     for (EventSelection::eventcontainer::iterator ecitr =
@@ -1527,10 +1527,9 @@ TransformsMenuInterpretCommand::articulate()
 		Event *newEvent = new Event
 		    (*e, e->getAbsoluteTime(),
 		     duration + duration * durationChange / 100);
-		//!!! pretend quantizer's been here -- fix
-		newEvent->setMaybe<Int>("NotationDurationTarget", duration);
-		toInsert.push_back(newEvent);
-		toErase.push_back(e);
+		newEvent->setNotationDuration(duration);
+		toInsert.insert(newEvent);
+		toErase.insert(e);
 	    }
 	}
 
@@ -1538,16 +1537,16 @@ TransformsMenuInterpretCommand::articulate()
 	// assignment doesn't work -- itr is not what we're iterating
 	// with -- hence crash
 
-	itr = chord.getFinalElement();
+//!!!	itr = chord.getFinalElement();
     }
 
-    for (unsigned int j = 0; j < toErase.size(); ++j) {
-	Segment::iterator jtr(segment.findSingle(toErase[j]));
+    for (std::set<Event *>::iterator j = toErase.begin(); j != toErase.end(); ++j) {
+	Segment::iterator jtr(segment.findSingle(*j));
 	if (jtr != segment.end()) segment.erase(jtr);
     }
 	       
-    for (unsigned int j = 0; j < toInsert.size(); ++j) {
-	segment.insert(toInsert[j]);
+    for (std::set<Event *>::iterator j = toInsert.begin(); j != toInsert.end(); ++j) {
+	segment.insert(*j);
     }
 }
 

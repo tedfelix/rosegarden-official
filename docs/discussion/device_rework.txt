@@ -104,7 +104,7 @@ be available to external processes for automation through DCOP.
 
  3. Then worry about channel groups.  I'm very vague on this still.
 
- 4. ...
+ 4. ???
 
  5. Profit!
 
