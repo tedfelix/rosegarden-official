@@ -674,7 +674,6 @@ protected:
     bool                              m_solo;
     Rosegarden::TrackId               m_selectedTrack;
 
-public:
     /**
      * This is a bit like a segment, but can only contain one sort of
      * event, and can only have one event at each absolute time
@@ -716,10 +715,6 @@ public:
   	iterator find(Event *e);
 	std::string m_eventType;
     };
-
-    const ReferenceSegment& getTimeSigSegment() { return m_timeSigSegment; }
-    const ReferenceSegment& getTempoSegment()   { return m_tempoSegment; }
-protected:
 
     /// Contains time signature events
     mutable ReferenceSegment          m_timeSigSegment;

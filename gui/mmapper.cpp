@@ -820,47 +820,76 @@ void MetronomeMmapper::sortTicks()
 
 
 //----------------------------------------
+
 using Rosegarden::Composition;
 
-ReferenceSegmentMmapper::ReferenceSegmentMmapper(RosegardenGUIDoc* doc,
-                                                 const Composition::ReferenceSegment& refSeg,
-                                                 QString baseFileName)
-    : SegmentMmapper(doc, 0, createFileName(baseFileName)),
-      m_referenceSegment(refSeg)
+SpecialSegmentMmapper::SpecialSegmentMmapper(RosegardenGUIDoc* doc,
+                                             QString baseFileName)
+    : SegmentMmapper(doc, 0, createFileName(baseFileName))
 {
 }
 
-unsigned int ReferenceSegmentMmapper::getSegmentRepeatCount()
+unsigned int SpecialSegmentMmapper::getSegmentRepeatCount()
 {
     return 1;
 }
 
-size_t ReferenceSegmentMmapper::computeMmappedSize()
-{
-    return m_referenceSegment.size() * sizeof(MappedEvent);
-}
-
-QString ReferenceSegmentMmapper::createFileName(QString baseFileName)
+QString SpecialSegmentMmapper::createFileName(QString baseFileName)
 {
     return KGlobal::dirs()->resourceDirs("tmp").first() + "/" + baseFileName;
 }
 
-void ReferenceSegmentMmapper::dump()
+//----------------------------------------
+
+size_t TempoSegmentMmapper::computeMmappedSize()
+{
+    return m_doc->getComposition().getTempoChangeCount() * sizeof(MappedEvent);
+}
+
+void TempoSegmentMmapper::dump()
 {
     Rosegarden::RealTime eventTime;
-    static Rosegarden::RealTime noDuration(0,0);
 
     Composition& comp = m_doc->getComposition();
     MappedEvent* bufPos = m_mmappedBuffer;
 
-    for (Composition::ReferenceSegment::iterator i = m_referenceSegment.begin();
-         i != m_referenceSegment.end(); ++i) {
+    for (int i = 0; i < comp.getTempoChangeCount(); ++i) {
 
-        Rosegarden::Event* event = *i;
+        std::pair<timeT, long> tempoChange = comp.getRawTempoChange(i);
 
-        eventTime = comp.getElapsedRealTime(event->getAbsoluteTime());
-        new (bufPos) MappedEvent(0, *event, eventTime, noDuration);
+        eventTime = comp.getElapsedRealTime(tempoChange.first);
+        MappedEvent* mappedEvent = new (bufPos) MappedEvent();
+        mappedEvent->setEventTime(eventTime);
+        mappedEvent->setData1(tempoChange.second);
+        
+        ++bufPos;
+    }
+}
 
+//----------------------------------------
+
+size_t TimeSigSegmentMmapper::computeMmappedSize()
+{
+    return m_doc->getComposition().getTimeSignatureCount() * sizeof(MappedEvent);
+}
+
+void TimeSigSegmentMmapper::dump()
+{
+    Rosegarden::RealTime eventTime;
+
+    Composition& comp = m_doc->getComposition();
+    MappedEvent* bufPos = m_mmappedBuffer;
+
+    for (int i = 0; i < comp.getTimeSignatureCount(); ++i) {
+
+        std::pair<timeT, Rosegarden::TimeSignature> timeSigChange = comp.getTimeSignatureChange(i);
+
+        eventTime = comp.getElapsedRealTime(timeSigChange.first);
+        MappedEvent* mappedEvent = new (bufPos) MappedEvent();
+        mappedEvent->setEventTime(eventTime);
+        mappedEvent->setData1(timeSigChange.second.getNumerator());
+        mappedEvent->setData2(timeSigChange.second.getDenominator());
+        
         ++bufPos;
     }
 }
@@ -905,21 +934,17 @@ MetronomeMmapper* SegmentMmapperFactory::makeMetronome(RosegardenGUIDoc* doc)
     return mmapper;
 }
 
-ReferenceSegmentMmapper* SegmentMmapperFactory::makeTimeSig(RosegardenGUIDoc* doc)
+TimeSigSegmentMmapper* SegmentMmapperFactory::makeTimeSig(RosegardenGUIDoc* doc)
 {
-    ReferenceSegmentMmapper* mmapper = new ReferenceSegmentMmapper(doc,
-                                                                   doc->getComposition().getTimeSigSegment(),
-                                                                   "rosegarden_timesig");
+    TimeSigSegmentMmapper* mmapper = new TimeSigSegmentMmapper(doc, "rosegarden_timesig");
     
     mmapper->init();
     return mmapper;
 }
 
-ReferenceSegmentMmapper* SegmentMmapperFactory::makeTempo(RosegardenGUIDoc* doc)
+TempoSegmentMmapper* SegmentMmapperFactory::makeTempo(RosegardenGUIDoc* doc)
 {
-    ReferenceSegmentMmapper* mmapper = new ReferenceSegmentMmapper(doc,
-                                                                   doc->getComposition().getTempoSegment(),
-                                                                   "rosegarden_tempo");
+    TempoSegmentMmapper* mmapper = new TempoSegmentMmapper(doc, "rosegarden_tempo");
     
     mmapper->init();
     return mmapper;

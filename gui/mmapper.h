@@ -174,30 +174,58 @@ protected:
 
 //----------------------------------------
 
-class ReferenceSegmentMmapper : public SegmentMmapper
+class SpecialSegmentMmapper : public SegmentMmapper
+{
+public:
+    // overrides from SegmentMmapper
+    virtual unsigned int getSegmentRepeatCount();
+
+protected:
+    SpecialSegmentMmapper(RosegardenGUIDoc* doc,
+                          QString baseFileName);
+
+    QString createFileName(QString baseFileName);
+};
+
+//----------------------------------------
+
+class TempoSegmentMmapper : public SpecialSegmentMmapper
 {
     friend class SegmentMmapperFactory;
 
 public:
 
     // overrides from SegmentMmapper
-    virtual unsigned int getSegmentRepeatCount();
     virtual size_t computeMmappedSize();
 
 protected:
-    ReferenceSegmentMmapper(RosegardenGUIDoc* doc,
-                            const Rosegarden::Composition::ReferenceSegment&,
-                            QString baseFileName);
+    TempoSegmentMmapper(RosegardenGUIDoc* doc,
+                        QString baseFileName)
+        : SpecialSegmentMmapper(doc, baseFileName) {}
 
-    QString createFileName(QString baseFileName);
 
     // override from SegmentMmapper
     virtual void dump();
+};
 
-    //--------------- Data members ---------------------------------
+//----------------------------------------
 
-    const Rosegarden::Composition::ReferenceSegment& m_referenceSegment;
+class TimeSigSegmentMmapper : public SpecialSegmentMmapper
+{
+    friend class SegmentMmapperFactory;
 
+public:
+
+    // overrides from SegmentMmapper
+    virtual size_t computeMmappedSize();
+
+protected:
+    TimeSigSegmentMmapper(RosegardenGUIDoc* doc,
+                          QString baseFileName)
+        : SpecialSegmentMmapper(doc, baseFileName) {}
+
+    // override from SegmentMmapper
+    virtual void dump();
 };
 
 //----------------------------------------
@@ -210,8 +238,8 @@ public:
                                                  const QString& fileName);
 
     static MetronomeMmapper* makeMetronome(RosegardenGUIDoc*);
-    static ReferenceSegmentMmapper* makeTimeSig(RosegardenGUIDoc*);
-    static ReferenceSegmentMmapper* makeTempo(RosegardenGUIDoc*);
+    static TimeSigSegmentMmapper* makeTimeSig(RosegardenGUIDoc*);
+    static TempoSegmentMmapper* makeTempo(RosegardenGUIDoc*);
 };
 
 //----------------------------------------

@@ -103,21 +103,6 @@ MappedEvent::MappedEvent(InstrumentId id,
                 std::string dataBlock = s.getRawData();
                 DataBlockRepository::getInstance()->registerDataBlockForEvent(dataBlock, this);
             }
-        else if (e.isa(TimeSignature::EventType))
-            {
-                m_type = TimeSignature;
-                long numerator = e.get<Int>(Rosegarden::TimeSignature::NumeratorPropertyName);
-                long denominator = e.get<Int>(Rosegarden::TimeSignature::DenominatorPropertyName);
-                m_data1 = numerator;
-                m_data2 = denominator;
-                
-            } 
-        else if (e.isa(Composition::TempoEventType))
-            {
-                m_type = Tempo;
-                long tempo = e.get<Int>(Composition::TempoProperty);
-                m_data1 = tempo;
-            }
 	else 
             {
                 m_type = InvalidMappedEvent;
