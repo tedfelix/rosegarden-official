@@ -20,6 +20,7 @@
 */
 
 #include "rosegardentransportdialog.h"
+#include "MidiPitchLabel.h"
 #include <kglobal.h>
 #include <kstddirs.h>
 #include <klocale.h>
@@ -83,6 +84,16 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     setMaximumSize(width(), height());
 
     loadPixmaps();
+
+    // Create Midi label timers
+    m_midiInTimer = new QTimer(this);
+    m_midiOutTimer = new QTimer(this);
+
+    connect(m_midiInTimer, SIGNAL(timeout()),
+            SLOT(clearMidiInLabel()));
+
+    connect(m_midiOutTimer, SIGNAL(timeout()),
+            SLOT(clearMidiOutLabel()));
 
     // clear labels
     //
@@ -211,17 +222,21 @@ RosegardenTransportDialog::setTempo(const double &tempo)
 // Set the midi label to this MappedEvent
 //
 void
-RosegardenTransportDialog::setMidiInLabel(const Rosegarden::MappedEvent &mE)
+RosegardenTransportDialog::setMidiInLabel(const Rosegarden::MappedEvent *mE)
 {
-    QString midiInLabel;
-    midiInLabel.sprintf("   %d", mE.getPitch());
-    MidiInLabel->setText(midiInLabel);
+    assert(mE > 0);
 
-    QTimer *midiInTimer = new QTimer(this);
-    connect(midiInTimer, SIGNAL(timeout()),
-            SLOT(clearMidiInLabel()));
+    MidiPitchLabel *midiPitchLabel = new MidiPitchLabel(mE->getPitch());
+    MidiInLabel->setText(midiPitchLabel->getQString());
 
-    midiInTimer->start(1000, true);
+    // Reset the timer if it's already running
+    //
+    if (m_midiInTimer->isActive())
+        m_midiInTimer->stop();
+
+    // 1.5 second timeout for MIDI event
+    //
+    m_midiInTimer->start(1500, true);
 }
 
 
@@ -234,21 +249,30 @@ RosegardenTransportDialog::clearMidiInLabel()
 }
 
 
+// Set the outgoing MIDI label
+//
 void
-RosegardenTransportDialog::setMidiOutLabel(const Rosegarden::MappedEvent &mE)
+RosegardenTransportDialog::setMidiOutLabel(const Rosegarden::MappedEvent *mE)
 {
+    assert(mE > 0);
+
     QString midiOutLabel;
-    midiOutLabel.sprintf("   %d", mE.getPitch());
+    midiOutLabel.sprintf("   %d", mE->getPitch());
     MidiOutLabel->setText(midiOutLabel);
 
-    QTimer *midiOutTimer = new QTimer(this);
-    connect(midiOutTimer, SIGNAL(timeout()),
-            SLOT(clearMidiOutLabel()));
+    // Reset the timer if it's already running
+    //
+    if (m_midiOutTimer->isActive())
+        m_midiOutTimer->stop();
 
-    midiOutTimer->start(1000, true);
+    // 1.5 second timeout
+    //
+    m_midiOutTimer->start(1500, true);
 }
 
 
+// Clear the outgoing MIDI label
+//
 void
 RosegardenTransportDialog::clearMidiOutLabel()
 {

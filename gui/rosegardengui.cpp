@@ -1565,13 +1565,13 @@ RosegardenGUIApp::processAsynchronousMidi(const Rosegarden::MappedComposition &m
         cout << "RosegardenGUIApp::processAsynchronousMidi - GOT " << mC.size() << " ASYNC EVENT(S)" << endl;
 
         Rosegarden::MappedComposition::iterator i;
-        i = mC.end();
 
-        // set the field on the Transport - just to the last
-        // event in the list for the moment
+        // send all events to the MIDI in label
         //
-        m_transport->setMidiInLabel(**i);
-
+        for (i = mC.begin(); i != mC.end(); ++i )
+        {
+            m_transport->setMidiInLabel(*i);
+        }
     }
 }
 

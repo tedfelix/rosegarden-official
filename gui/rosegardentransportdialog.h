@@ -25,6 +25,7 @@
 #include "rosegardentransport.h"
 #include "Composition.h" // for RealTime
 #include "MappedEvent.h"
+#include <qtimer.h>
 #include <map>
 #include <qpixmap.h>
 
@@ -47,8 +48,8 @@ public:
   // Called indirectly from the sequencer and from the GUI to
   // show incoming and outgoing MIDI events on the Transport
   //
-  void setMidiInLabel(const Rosegarden::MappedEvent &mE);
-  void setMidiOutLabel(const Rosegarden::MappedEvent &mE);
+  void setMidiInLabel(const Rosegarden::MappedEvent *mE);
+  void setMidiOutLabel(const Rosegarden::MappedEvent *mE);
 
 public slots:
 
@@ -90,6 +91,9 @@ private:
 
   double m_tempo;
   double m_ppq;
+
+  QTimer *m_midiInTimer;
+  QTimer *m_midiOutTimer;
 };
 
 }
