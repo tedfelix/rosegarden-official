@@ -719,8 +719,7 @@ public slots:
      * Get rid of this eventually
      * - will be in KMainWindow
      */
-    void slotStateChanged(const QString&,
-                          KXMLGUIClient::ReverseStateChange);
+    void slotStateChanged(const QString&, bool);
 #endif
 
     /**

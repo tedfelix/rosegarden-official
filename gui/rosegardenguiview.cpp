@@ -356,7 +356,7 @@ void RosegardenGUIView::slotSelectTrackSegments(int trackId)
     comp.setSelectedTrack(trackId);
 
 #ifdef RGKDE3
-    emit stateChange("segment_selected", KXMLGUIClient::StateNoReverse);
+    emit stateChange("segment_selected", false);
 #endif
 }
 
@@ -412,7 +412,7 @@ void RosegardenGUIView::slotSelectAllSegments()
     //comp.setSelectedTrack(trackId);
 
 #ifdef RGKDE3
-    emit stateChange("segment_selected", KXMLGUIClient::StateNoReverse);
+    emit stateChange("segment_selected", false);
 #endif
 }
     

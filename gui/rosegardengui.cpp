@@ -2458,9 +2458,9 @@ RosegardenGUIApp::slotDocumentModified()
 #ifdef RGKDE3
 void
 RosegardenGUIApp::slotStateChanged(const QString& s,
-                                   KXMLGUIClient::ReverseStateChange reverse)
+                                   bool reverse)
 {
-    stateChanged(s, reverse);
+    stateChanged(s, reverse ? KXMLGUIClient::StateReverse : KXMLGUIClient::StateNoReverse);
 }
 #endif
 

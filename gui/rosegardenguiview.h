@@ -31,10 +31,6 @@
 #include <qvbox.h>
 #include <list>
 
-#ifdef RGKDE3
-#include <kxmlguiclient.h>
-#endif
-
 #include "segmentcanvas.h" // needed for SegmentCanvas::ToolType
 
 #include "rosedebug.h"
@@ -209,7 +205,7 @@ signals:
     void sendMappedEvent(Rosegarden::MappedEvent *mE);
 
 #ifdef RGKDE3
-    void stateChange(const QString&, KXMLGUIClient::ReverseStateChange);
+    void stateChange(const QString&, bool);
 #endif
 
 protected:

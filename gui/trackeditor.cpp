@@ -237,6 +237,9 @@ TrackEditor::init(QWidget* rosegardenguiview,
     connect(m_trackButtons, SIGNAL(instrumentSelected(int)),
             rosegardenguiview, SLOT(slotUpdateInstrumentParameterBox(int)));
 
+    connect(this, SIGNAL(stateChange(const QString&, bool)),
+            rosegardenguiview, SIGNAL(stateChange(const QString&, bool)));
+
     // Synchronize bar buttons' scrollview with segment canvas' scrollbar
     //
     connect(m_segmentCanvas->verticalScrollBar(), SIGNAL(valueChanged(int)),
@@ -381,6 +384,22 @@ void TrackEditor::paintEvent(QPaintEvent* e)
         m_segmentCanvas->canvas()->resize(m_canvasWidth,
                                           getTrackCellHeight() * m_document->getComposition().getNbTracks());
                                           */
+
+#ifdef RGKDE3
+
+        if (composition.getNbSegments() == 0) {
+            emit stateChange("have_segments", true); // no segments : reverse state
+            emit stateChange("segment_selected", true); // no segments : reverse state
+        }
+        else {
+            emit stateChange("have_segments", false);
+            if (m_segmentCanvas->haveSelection())
+                emit stateChange("segment_selected", false);
+            else
+                emit stateChange("segment_selected", true); // no selection : reverse state
+        }
+
+#endif
 
         setCompositionModified(false);
     }
