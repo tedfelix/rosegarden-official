@@ -322,7 +322,7 @@ NotationView::showElements(NotationElementList::iterator from,
 
             QCanvasSimpleSprite *noteSprite = 0;
 
-            if ((*it)->event()->type() == "note") {
+            if ((*it)->isNote()) {
 
                 Note::Type note = (*it)->event()->get<Int>("Notation::NoteType");
               
@@ -340,7 +340,7 @@ NotationView::showElements(NotationElementList::iterator from,
                                                             true, false));
                 noteSprite = new QCanvasSimpleSprite(&notePixmap, canvas());
 
-            } else if ((*it)->event()->type() == "rest") {
+            } else if ((*it)->isRest()) {
 
                 Note::Type note = (*it)->event()->get<Int>("Notation::NoteType");
                 QCanvasPixmap notePixmap(npf.makeRestPixmap(note));
@@ -775,6 +775,7 @@ NotationView::replaceRestWithNote(NotationElementList::iterator rest,
                                  << " at time " << restAbsoluteTime << endl;
 
             Event *newRest = new Event;
+	    newRest->setPackage("core");
             newRest->setType("rest");
             newRest->setTimeDuration(bit);
             newRest->setAbsoluteTime(restAbsoluteTime);
