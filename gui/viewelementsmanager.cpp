@@ -178,17 +178,16 @@ void ViewElementsManager::eraseSingle(NotationElement* el)
 }
 
 
-//!!! rework.  probably should be in track
-
 void ViewElementsManager::tryCollapse(NotationElement* el)
 {
     bool collapseForward;
 
-    NotationElementList::iterator elPos = m_notationElements->findSingle(el);
-    Rosegarden::Event* deletedEvent = 0;
-    
-    if (m_track.collapse(el->event(), collapseForward, deletedEvent)) {
+//!!!    NotationElementList::iterator elPos = m_notationElements->findSingle(el);
 
+    Rosegarden::Event* deletedEvent = 0;
+  
+    if (m_track.collapse(el->event(), collapseForward, deletedEvent)) {
+/*!!!
         if (collapseForward) {
             
             // dumb implementation
@@ -207,7 +206,7 @@ void ViewElementsManager::tryCollapse(NotationElement* el)
             else
                 m_notationElements->erase(elPos);
         }
-
+*/
     }
 
 }
