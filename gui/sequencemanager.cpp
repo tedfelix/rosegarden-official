@@ -96,6 +96,10 @@ SequenceManager::~SequenceManager()
 
 void SequenceManager::setDocument(RosegardenGUIDoc* doc)
 {
+    SEQMAN_DEBUG << "SequenceManager::setDocument()\n";
+
+    DataBlockRepository::clear();
+
     m_doc->getComposition().removeObserver(this);
     disconnect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()));
     
@@ -129,8 +133,6 @@ void SequenceManager::setDocument(RosegardenGUIDoc* doc)
     }
 
     resetCompositionMmapper();
-
-    DataBlockRepository::clear();
 }
 
 RosegardenGUIDoc* SequenceManager::getDocument()

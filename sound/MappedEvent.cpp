@@ -303,12 +303,16 @@ DataBlockFile::DataBlockFile(DataBlockRepository::blockid id)
       m_file(m_fileName),
       m_cleared(false)
 {
-    std::cerr << "DataBlockFile " << m_fileName.latin1() << endl;
+    std::cerr << "DataBlockFile " << m_fileName.latin1() << std::endl;
 }
 
 DataBlockFile::~DataBlockFile()
 {
-    if (m_cleared) QFile::remove(m_fileName);
+    if (m_cleared) {
+        std::cerr << "~DataBlockFile : removing " << m_fileName.latin1() << std::endl;
+        QFile::remove(m_fileName);
+    }
+    
 }
 
 bool DataBlockFile::exists()
@@ -318,6 +322,7 @@ bool DataBlockFile::exists()
 
 void DataBlockFile::setData(const std::string& s)
 {
+    std::cerr << "DataBlockFile::setData() : setting data to " << m_fileName << std::endl;
     prepareToWrite();
 
     QDataStream stream(&m_file);
@@ -331,10 +336,10 @@ std::string DataBlockFile::getData()
     prepareToRead();
 
     QDataStream stream(&m_file);
+    std::cerr << "DataBlockFile::getData() : file size = " << m_file.size() << std::endl;
     char* tmp = new char[m_file.size()];
     stream.readRawBytes(tmp, m_file.size());
-    std::string res(tmp);
-
+    std::string res(tmp, m_file.size());
     delete[] tmp;
 
     return res;
@@ -357,7 +362,7 @@ void DataBlockFile::prepareToWrite()
 {    
     if (!m_file.isWritable()) {
         m_file.close();
-        m_file.open(IO_WriteOnly | IO_Append);
+        assert(m_file.open(IO_WriteOnly | IO_Append));
     }
 }
 
@@ -365,7 +370,7 @@ void DataBlockFile::prepareToRead()
 {
     if (!m_file.isReadable()) {
         m_file.close();
-        m_file.open(IO_ReadOnly);
+        assert(m_file.open(IO_ReadOnly));
     }
 }
 
@@ -436,11 +441,12 @@ void DataBlockRepository::unregisterDataBlockForEvent(MappedEvent* e)
 DataBlockRepository::DataBlockRepository()
     : m_lastId(1)
 {
-    clear();
 }
 
 void DataBlockRepository::clear()
 {
+    std::cerr << "DataBlockRepository::clear()\n";
+
     // Erase all 'datablock_*' files
     //
     QString tmpPath = KGlobal::dirs()->resourceDirs("tmp").first();
