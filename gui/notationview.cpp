@@ -1817,7 +1817,7 @@ int NotationView::findClosestStaff(double y) const
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
         int top = m_staffs[i]->getStaffHeight() * i;
         int bottom = top + m_staffs[i]->getStaffHeight() + 45;
-        if (eventY >= top && eventY < bottom) return i;
+        if (y >= top && y < bottom) return i;
     }
     return -1;
 }
