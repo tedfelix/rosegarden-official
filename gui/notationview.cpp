@@ -1135,13 +1135,13 @@ void NotationView::slotEditCopy()
 }
 
 void NotationView::slotEditPaste()
-{
+{/*!!!
     if (!m_currentEventSelection) {
         slotStatusHelpMsg(i18n("Clipboard is empty"));
         slotQuarter(); //!!!why?
         return;
     }
-
+ */
     slotStatusHelpMsg(i18n("Inserting clipboard contents..."));
 
     kdDebug(KDEBUG_AREA) << "NotationView::slotEditPaste() : selection duration = "
