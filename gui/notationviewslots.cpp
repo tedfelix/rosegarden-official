@@ -174,8 +174,7 @@ NotationView::slotChangeProportionFromAction()
 
     if (name.left(11) == "proportion_") {
         int proportion = name.right(name.length() - 11).toInt();
-
-        if (proportion > 0) slotChangeProportion(proportion);
+        slotChangeProportion(proportion);
 
     } else {
         KMessageBox::sorry
@@ -1999,7 +1998,7 @@ NotationView::slotRenderSomething()
     
     clock_t now = clock();
     long elapsed = ((now - lastWork) * 1000 / CLOCKS_PER_SEC);
-    if (elapsed < 100) {
+    if (elapsed < 70) {
 	m_renderTimer = new QTimer(this);
 	connect(m_renderTimer, SIGNAL(timeout()), SLOT(slotRenderSomething()));
 	m_renderTimer->start(0, true);

@@ -454,7 +454,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     m_proportion->setEditable(false);
 
     s = NotationHLayout::getAvailableProportions();
-    int defaultProportion = m_cfg->readNumEntry("proportion", 40);
+    int defaultProportion = m_cfg->readNumEntry("proportion", 60);
 
     for (std::vector<int>::iterator i = s.begin(); i != s.end(); ++i) {
 

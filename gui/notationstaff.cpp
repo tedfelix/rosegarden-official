@@ -165,15 +165,16 @@ NotationStaff::drawStaffName()
 	getSegment().getComposition()->
 	getTrackById(getSegment().getTrack())->getLabel();
 
-    m_staffName = new QCanvasSimpleSprite
-	(m_notePixmapFactory->makeTextPixmap
-	  (Rosegarden::Text(name, Rosegarden::Text::StaffName)),
-	 m_canvas);
+    QCanvasPixmap *map = 
+	m_notePixmapFactory->makeTextPixmap
+	(Rosegarden::Text(name, Rosegarden::Text::StaffName));
 
-    int layoutY = getLayoutYForHeight(5);
+    m_staffName = new QCanvasSimpleSprite(map, m_canvas);
+
+    int layoutY = getLayoutYForHeight(3);
     LinedStaffCoords coords = getCanvasCoordsForLayoutCoords(0, layoutY);
     m_staffName->move(getX() + getMargin() + m_notePixmapFactory->getNoteBodyWidth(),
-		      (double)coords.second);
+		      coords.second - map->height()/2);
     m_staffName->show();
 }
 

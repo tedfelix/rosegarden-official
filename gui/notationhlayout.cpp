@@ -76,7 +76,7 @@ NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf,
     m_pageMode(false),
     m_pageWidth(0.),
     m_spacing(100),
-    m_proportion(40),
+    m_proportion(60),
     m_npf(npf),
     m_notationQuantizer(c->getNotationQuantizer()),
     m_properties(properties),
@@ -232,14 +232,17 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 
 	float fixedWidth = 0.0;
 	if (newTimeSig && !timeSignature.isHidden()) {
-	    fixedWidth += getFixedItemSpacing() * 2 +
+	    fixedWidth += m_npf->getNoteBodyWidth() +
 		m_npf->getTimeSigWidth(timeSignature);
 	}
 
 	setBarBasicData(staff, barNo, from, barCorrect, timeSignature, newTimeSig);
-	barList.find(barNo)->second.layoutData.needsLayout = true;
+	BarDataList::iterator bdli(barList.find(barNo));
+	bdli->second.layoutData.needsLayout = true;
 
-	ChunkList chunks;
+	ChunkList &chunks = bdli->second.chunks;
+	chunks.clear();
+
 	float lyricWidth = 0;
 
 	typedef std::set<long> GroupIdSet;
@@ -331,7 +334,7 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 	if (actualBarEnd == barTimes.first) actualBarEnd = barTimes.second;
 	barCorrect = (actualBarEnd == barTimes.second);
 
-	setBarSizeData(staff, barNo, chunks, fixedWidth,
+	setBarSizeData(staff, barNo, fixedWidth,
 		       actualBarEnd - barTimes.first);
 
 	if ((endTime > startTime) && (barNo % 20 == 0)) {
@@ -366,7 +369,7 @@ NotationHLayout::setBarBasicData(Staff &staff,
 				 Rosegarden::TimeSignature timeSig,
 				 bool newTimeSig)
 {
-    NOTATION_DEBUG << "setBarBasicData for " << barNo << endl;
+//    NOTATION_DEBUG << "setBarBasicData for " << barNo << endl;
 
     BarDataList &bdl(m_barData[&staff]);
 
@@ -387,11 +390,10 @@ NotationHLayout::setBarBasicData(Staff &staff,
 void
 NotationHLayout::setBarSizeData(Staff &staff,
 				 int barNo,
-				 const ChunkList &chunks,
 				 float fixedWidth,
 				 Rosegarden::timeT actualDuration)
 {
-    NOTATION_DEBUG << "setBarSizeData for " << barNo << endl;
+//    NOTATION_DEBUG << "setBarSizeData for " << barNo << endl;
 
     BarDataList &bdl(m_barData[&staff]);
 
@@ -403,7 +405,6 @@ NotationHLayout::setBarSizeData(Staff &staff,
 	i = bdl.find(barNo);
     }
 
-    i->second.chunks = chunks;
     i->second.sizeData.actualDuration = actualDuration;
     i->second.sizeData.idealWidth = 0.0;
     i->second.sizeData.reconciledWidth = 0.0;
@@ -604,7 +605,7 @@ NotationHLayout::preSquishBar(int barNo)
 	if (prevRate > 0.0) x += (time - prevTime) / prevRate;
 	
 	for (ChunkRefList::iterator j = list.begin(); j != list.end(); ++j) {
-	    NOTATION_DEBUG << "Setting x for time " << time << " to " << x << " in chunk at " << *j << endl;
+//	    NOTATION_DEBUG << "Setting x for time " << time << " to " << x << " in chunk at " << *j << endl;
 	    (*j)->x = x;
 	}
 	
@@ -805,6 +806,9 @@ NotationHLayout::reconcileBarsPage()
 	    // If the next stretch factor is less than 1 and would
 	    // make this bar on any of the staffs narrower than it can
 	    // afford to be, then we've got too many bars
+	    //!!! rework this -- we have no concept of "too narrow"
+	    // any more but we can declare we don't want it any
+	    // narrower than e.g. 90% or something based on the spacing
 /*!!!
 	    if (!tooFar && (nextStretchFactor < 1.0)) {
 
@@ -1138,49 +1142,6 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 	    continue;
 	}
 		
-
-#ifdef NOT_DEFINED
-        if (!isFullLayout &&
-	    !bdi->second.layoutData.needsLayout &&
-	    (from == notes->end() ||
-	     (*from)->getViewAbsoluteTime() > endTime)) {
-
-	    //!!! don't seem to be getting here when we should
-	    NOTATION_DEBUG << "Shifting elements only" << endl;
-
-            // Find how far to move everything if necessary
-            if (!haveSimpleOffset) {
-                simpleOffset = barX - bdi->second.layoutData.x;
-                haveSimpleOffset = true;
-            }
-
-            // Move all elements
-
-            bdi->second.layoutData.x += simpleOffset;
-	    
-            if (bdi->second.basicData.newTimeSig)
-                bdi->second.layoutData.timeSigX += (int) simpleOffset;
-
-            for (NotationElementList::iterator it = from;
-		 it != notes->end() && it != to; ++it) {
-                NotationElement* nel = static_cast<NotationElement*>(*it);
-                nel->setLayoutX((*it)->getLayoutX() + simpleOffset);
-		double airX, airWidth;
-		nel->getLayoutAirspace(airX, airWidth);
-		nel->setLayoutAirspace(airX + simpleOffset, airWidth);
-            }
-
-            // And skip the real layout work
-//!!!            bdi->second.layoutData.needsLayout = false;
-            continue;
-        }
-
-        if (!bdi->second.layoutData.needsLayout) {
-            NOTATION_DEBUG << "NotationHLayout::layout(): bar " << barNo << " has needsLayout false" << endl;
-            continue;
-        }
-#endif
-
 	bdi->second.layoutData.x = barX;
 //	x = barX + getPostBarMargin();
 
@@ -1236,7 +1197,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 		!el->event()->isa(Rosegarden::Key::EventType)) {
 		NOTATION_DEBUG << "Placing timesig at " << x << endl;
 		bdi->second.layoutData.timeSigX = (int)x;
-		double shift = getFixedItemSpacing()*2 +
+		double shift = getFixedItemSpacing() +
 		    m_npf->getTimeSigWidth(timeSignature);
 		offset += shift;
 		x += shift;
@@ -1244,7 +1205,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 		timeSigToPlace = false;
 	    }
 
-            NOTATION_DEBUG << "NotationHLayout::layout(): setting element's x to " << x << endl;
+//            NOTATION_DEBUG << "NotationHLayout::layout(): setting element's x to " << x << endl;
 
 	    el->setLayoutX(x);
 	    el->setLayoutAirspace(x, int(delta));
@@ -1578,44 +1539,19 @@ NotationHLayout::getLayoutWidth(Rosegarden::ViewElement &ve) const
 	} else {
 	    bw = m_npf->getRestWidth(Note(noteType, dots));
 	}
+	
+	double multiplier = double(Note(noteType, dots).getDuration()) /
+	                    double(Note(Note::Quaver)  .getDuration());
+	multiplier -= 1.0;
+	multiplier *= m_proportion / 100.0;
+	multiplier += 1.0;
 
-	double multipliers[][8] = {
-	    { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 },
-	    { 0.4, 0.6, 0.8, 1.0, 1.4, 2.0, 2.7, 4.0 },
-	    { 0.2, 0.2, 0.5, 1.0, 1.5, 3.0, 4.5, 7.0 },
-	    { 0.2, 0.2, 0.5, 1.0, 1.5, 3.0, 4.5, 7.0 },
-	    { 0.2, 0.2, 0.5, 1.0, 1.5, 3.0, 4.5, 7.0 },
-	    { 0.2, 0.2, 0.5, 1.0, 1.5, 3.0, 4.5, 7.0 }
-	};
-
-	int proportionIndex = m_proportion / 20;
-	if (proportionIndex < 0) proportionIndex = 0;
-	if (proportionIndex > 5) proportionIndex = 5;
-	if (noteType < 0) noteType = 0;
-	if (noteType > 7) noteType = 7;
-	double multiplier = multipliers[proportionIndex][noteType];
-	if (noteType < 7 && dots > 0) {
-	    multiplier += multipliers[proportionIndex][noteType+1];
-	    multiplier /= 2;
-	}
 	double gap = m_npf->getNoteBodyWidth(noteType) * multiplier;
+
+	NOTATION_DEBUG << "note type " << noteType << ", dots " << dots << ", multiplier " << multiplier << ", gap " << gap << endl;
+
 	gap = gap * m_spacing / 100.0;
 	return bw + gap;
-
-/*!!!
-	//!!! This is where we plug in different spacings...
-	switch (noteType) {
-	case Note::Hemidemisemiquaver:
-	case Note::Demisemiquaver:
-	case Note::Semiquaver:         gap = bw / 3;     break;
-	case Note::Quaver:             gap = bw * 2 / 3; break;
-	case Note::Crotchet:           gap = bw * 3 / 2; break;
-	case Note::Minim:              gap = bw * 3;     break;
-	case Note::Semibreve:          gap = bw * 9 / 2; break;
-	case Note::Breve:              gap = bw * 7;     break;
-	}
-*/
-//	return bw + m_spacing * gap / 100;
 
     } else {
 
@@ -1635,11 +1571,11 @@ NotationHLayout::getLayoutWidth(Rosegarden::ViewElement &ve) const
 	    w = 0;
 
 	} else {
-	    NOTATION_DEBUG << "NotationHLayout::getMinWidth(): no case for event type " << e.event()->getType() << endl;
+	    NOTATION_DEBUG << "NotationHLayout::getLayoutWidth(): no case for event type " << e.event()->getType() << endl;
 	    w += 24;
 	}
 
-	return w + m_spacing * w / 300;
+	return w;
     }
 }
 
@@ -1661,7 +1597,7 @@ int NotationHLayout::getPostBarMargin() const
 
 int NotationHLayout::getFixedItemSpacing() const
 {
-    return (int)((m_npf->getNoteBodyWidth() / 5) * m_spacing / 100.0);
+    return (int)((m_npf->getNoteBodyWidth() * 2.0 / 3.0) * m_spacing / 100.0);
 }
 
 void

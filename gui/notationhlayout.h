@@ -314,8 +314,7 @@ protected:
      * records and/or fill with empty ones as appropriate.
      */
     void setBarSizeData(Rosegarden::Staff &staff, int barNo,
-			const ChunkList &chunks, float fixedWidth,
-			Rosegarden::timeT actualDuration);
+			float fixedWidth, Rosegarden::timeT actualDuration);
 
     /**
      * Returns the bar positions for a given staff, provided that

@@ -197,20 +197,16 @@ NotePixmapFactory::init(std::string fontName, int size)
     // Resize the fonts, because the original constructor used point
     // sizes only and we want pixels
 
-    // 8 => 20, 4 => 10
     m_timeSigFont.setPixelSize(size * 5 / 2);
     m_timeSigFontMetrics = QFontMetrics(m_timeSigFont);
 
-    // 8 => 34, 4 => 18
     m_bigTimeSigFont.setPixelSize(size * 4 + 2);
     m_bigTimeSigFontMetrics = QFontMetrics(m_bigTimeSigFont);
 
-    // 8 => 12, 4 => 6
-    m_tupletCountFont.setPixelSize(size * 3 / 2);
+    m_tupletCountFont.setPixelSize(size * 2);
     m_tupletCountFontMetrics = QFontMetrics(m_tupletCountFont);
 
-    // 8 => 12, 4 => 6
-    m_textMarkFont.setPixelSize(size * 3 / 2);
+    m_textMarkFont.setPixelSize(size * 2);
     m_textMarkFontMetrics = QFontMetrics(m_textMarkFont);
 
     unsigned int x, y;
@@ -1989,16 +1985,15 @@ NotePixmapFactory::getTextFont(const Rosegarden::Text &text) const
 	serif = false;
 	textFont = QFont("lucida");
     }
-
-    int size = (large ? 16 : (serif ? 12 : 10));
 	
     textFont.setStyleHint(serif ? QFont::Serif : QFont::SansSerif);
     textFont.setWeight(weight);
     textFont.setItalic(italic);
 
-    if (large) size = getLineSpacing() * 2;
-    else if (serif) size = getLineSpacing() * 5 / 3;
-    else size = getLineSpacing() * 6 / 5;
+    int size;
+    if (large) size = getLineSpacing() * 7 / 2;
+    else if (serif) size = getLineSpacing() * 2;
+    else size = getLineSpacing() * 3 / 2;
 
     textFont.setPixelSize(size);
 
@@ -2198,7 +2193,8 @@ int NotePixmapFactory::getRestWidth(const Rosegarden::Note &restType) const {
 
 int NotePixmapFactory::getKeyWidth(const Rosegarden::Key &key) const {
     return 2*m_origin.x() + (key.getAccidentalCount() *
-                             (getAccidentalWidth(key.isSharp() ? Sharp : Flat)));
+                             (getAccidentalWidth(key.isSharp() ? Sharp : Flat) -
+				 2 * m_origin.x()));
 }
 
 int NotePixmapFactory::getTextWidth(const Rosegarden::Text &text) const {
