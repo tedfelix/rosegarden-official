@@ -180,6 +180,7 @@ class ViewElement;
 class ViewElements : public vector<ViewElement*>
 {
 public:
+    ViewElements() : vector<ViewElement*>() {}
     ViewElements(const ViewElements &e) : vector<ViewElement*>(e) {}
     ~ViewElements();
 };
@@ -191,6 +192,7 @@ typedef Element2 Event;
 class EventList : public list<Event*>
 {
 public:
+    EventList() : list<Event*>() {}
     EventList(const EventList &e) : list<Event*>(e) {}
     ~EventList();
 };
