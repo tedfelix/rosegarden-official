@@ -2547,11 +2547,11 @@ void NotationView::slotMouseMoved(QMouseEvent *e)
         if(getCanvasView()->isTimeForSmoothScroll()) {
             
             if (follow & EditTool::FollowHorizontal) {
-                getCanvasView()->slotScrollHorizSmallSteps(e->pos().x());
+                getCanvasView()->slotScrollHorizSmallSteps(e->x());
             }
 
             if (follow & EditTool::FollowVertical) {
-                getCanvasView()->slotScrollVertSmallSteps(e->pos().y());
+                getCanvasView()->slotScrollVertSmallSteps(e->y());
             }
 
         }

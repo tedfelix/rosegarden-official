@@ -1265,11 +1265,11 @@ void MatrixView::slotMouseMoved(Rosegarden::timeT time, int pitch, QMouseEvent* 
         if (getCanvasView()->isTimeForSmoothScroll()) {
             
             if (follow & EditTool::FollowHorizontal) {
-                getCanvasView()->slotScrollHorizSmallSteps(e->pos().x());
+                getCanvasView()->slotScrollHorizSmallSteps(e->x());
             }
 
             if (follow & EditTool::FollowVertical) {
-                getCanvasView()->slotScrollVertSmallSteps(e->pos().y());
+                getCanvasView()->slotScrollVertSmallSteps(e->y());
             }
 
         }
