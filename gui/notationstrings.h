@@ -42,6 +42,13 @@ public:
     NotationStrings();
     ~NotationStrings();
 
+
+    //!!! We need a method to convert a note name (any format) to a
+    //note, for use in NoteStyleFileReader etc (because the Note ctor
+    //will no longer recognise non-reference names except through a
+    //brutal hack)
+
+
     /**
      * Return a string representing the dotted version of the input str.
      */

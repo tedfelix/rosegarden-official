@@ -852,7 +852,8 @@ Note::Note(const string &n)
 
     Type t;
     for (t = Shortest; t <= Longest; ++t) {
-        if (name == getReferenceName(false, t)) {
+        if (name == getReferenceName(false, t) ||
+	    (t < Quaver && name == (getReferenceName(false, t) + "quaver"))) {
             m_type = t;
             break;
         }
@@ -911,7 +912,7 @@ static string addDots(int dots, string s, bool hyphenate = false)
 
 string Note::getReferenceName(bool isRest, Type type, int dots) const {
     static const string names[] = {
-        "hemidemisemiquaver", "demisemiquaver", "semiquaver",
+        "hemidemisemi", "demisemi", "semiquaver",
         "quaver", "crotchet", "minim", "semibreve", "breve"
     };
     if (type < 0) { type = m_type; dots = m_dots; }
