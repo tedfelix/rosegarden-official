@@ -159,67 +159,6 @@ void EditView::readjustViewSize(QSize requestedSize, bool exact)
     getCanvasView()->slotUpdate();
 }
 
-// This scrolling model pages the EditView's canvas across the screen
-//
-void EditView::slotScrollHoriz(int hpos)
-{
-    QScrollView* scrollView = getCanvasView();
-    QScrollBar* hbar = m_horizontalScrollBar;
-
-    if (hpos == 0) {
-	
-	// returning to zero
-        hbar->setValue(0);
-
-    } else if (hpos > (scrollView->contentsX() +
-		       scrollView->visibleWidth() * 1.6) ||
-	       hpos < (scrollView->contentsX() -
-		       scrollView->visibleWidth() * 0.7)) {
-	
-	// miles off one side or the other
-	hbar->setValue(hpos - int(scrollView->visibleWidth() * 0.4));
-
-    } else if (hpos > (scrollView->contentsX() + 
-		       scrollView->visibleWidth() * 0.9)) {
-
-	// moving off the right hand side of the view   
-	hbar->setValue(hbar->value() + int(scrollView->visibleWidth() * 0.6));
-
-    } else if (hpos < (scrollView->contentsX() +
-		       scrollView->visibleWidth() * 0.1)) {
-
-	// moving off the left
-	hbar->setValue(hbar->value() - int(scrollView->visibleWidth() * 0.6));
-    }
-}
-
-void EditView::slotScrollHorizSmallSteps(int hpos)
-{
-    QScrollView* scrollView = getCanvasView();
-    QScrollBar* hbar = m_horizontalScrollBar;
-
-    int diff = 0;
-
-    if (hpos == 0) {
-	
-	// returning to zero
-        hbar->setValue(0);
-
-    } else if ((diff = int(hpos - (scrollView->contentsX() + 
-				   scrollView->visibleWidth() * 0.9))) > 0) {
-
-	// moving off the right hand side of the view   
-	hbar->setValue(hbar->value() + diff);
-
-    } else if ((diff = int(hpos - (scrollView->contentsX() +
-				   scrollView->visibleWidth() * 0.1))) < 0) {
-
-	// moving off the left
-	hbar->setValue(hbar->value() + diff);
-
-    }
-}
-
 void EditView::setCanvasView(RosegardenCanvasView *canvasView)
 {
     delete m_canvasView;

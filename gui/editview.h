@@ -107,20 +107,6 @@ public:
 
 public slots:
     /**
-     * Scroll horizontally to make the given position visible,
-     * paging to as to get some visibility of the next screenful
-     * (for playback etc)
-     */
-    void slotScrollHoriz(int hpos);
-
-    /**
-     * Scroll horizontally to make the given position somewhat
-     * nearer to visible, scrolling by only "a small distance"
-     * at a time
-     */
-    void slotScrollHorizSmallSteps(int hpos);
-
-    /**
      * Called when a mouse press occurred on an active canvas item
      *
      * @see ActiveItem
