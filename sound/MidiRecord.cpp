@@ -24,7 +24,6 @@
 namespace Rosegarden
 {
 
-REGISTER_IMPLEMENTATION(RosegardenMidiRecord_impl);
 RosegardenMidiRecord_impl::RosegardenMidiRecord_impl(): _record(false)
 {
   _midiEventQueue = new vector<Arts::MidiEvent>();
@@ -47,6 +46,7 @@ RosegardenMidiRecord_impl::processCommand(const Arts::MidiCommand &midiCommand)
 void
 RosegardenMidiRecord_impl::processEvent(const Arts::MidiEvent &midiEvent)
 {
+  
   _midiThru.processEvent(midiEvent);
   addToList(midiEvent);
 }
@@ -54,17 +54,21 @@ RosegardenMidiRecord_impl::processEvent(const Arts::MidiEvent &midiEvent)
 void
 RosegardenMidiRecord_impl::addToList(const Arts::MidiEvent &midiEvent)
 {
-  if (_record)
+  if (_record == true)
+  {
     _midiEventQueue->push_back(midiEvent);
+  }
 }
 
 vector<Arts::MidiEvent> *
 RosegardenMidiRecord_impl::getQueue()
 {
-  vector<Arts::MidiEvent> *foo = _midiEventQueue;
+  vector<Arts::MidiEvent> *returnQueue = _midiEventQueue;
   _midiEventQueue = new vector<Arts::MidiEvent>();
-  return foo;
+  return returnQueue;
 }
+
+REGISTER_IMPLEMENTATION(RosegardenMidiRecord_impl);
 
 }
 

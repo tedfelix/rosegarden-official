@@ -28,6 +28,7 @@
 #include "Track.h"
 #include "Event.h"
 #include "MidiRecord.h"
+#include "Sequencer.h"
 
 
 
@@ -40,7 +41,7 @@ main(int argc, char **argv)
 
   // Create a Rosegarden composition
   Rosegarden::Composition comp;
-  comp.addTrack();
+  //comp.addTrack();
 
 
   /////  OK, test the MIDI file opens and parses
@@ -52,73 +53,9 @@ main(int argc, char **argv)
   comp = midiFile->convertToRosegarden();
 
 
-  ///// NOW test the arts recording interface - note that at
-  ///// the moment this code appears to work but I haven't
-  ///// actually mangaed to capture any notes yet.. (RB 6.01)
-
-  Arts::Dispatcher dispatcher;
-  Arts::MidiManager midiManager;
-  Arts::MidiClient midiClient;
-  Arts::MidiClient midiClientRecord;
-  Arts::MidiPort midiPort;
-  Arts::SoundServer soundServer;
-  RosegardenMidiRecord midiRecorder;
-
-  midiManager = Arts::Reference("global:Arts_MidiManager");
-  if (midiManager.isNull())
-  {
-    cerr << "Can't get MidiManager" << endl;
-    exit(1);
-  }
-
-  soundServer = Arts::Reference("global:Arts_SoundServer");
-  if (soundServer.isNull())
-  {
-    cerr << "Can't start SoundServer" << endl;
-    exit(1);
-  }
-
-  midiRecorder = Arts::DynamicCast(soundServer.createObject("RosegardenMidiRecord"));
-  if (midiRecorder.isNull())
-  {
-    cerr << "Can't create MidiRecorder" << endl;
-    exit(1);
-  }
-
-  midiClient = midiManager.addClient(Arts::mcdPlay,Arts::mctApplication,
-                                     "Rosegarden (play)","Rosegarden");
-
-  midiPort = midiClient.addOutputPort();
-  if (midiPort.isNull())
-  {
-    cerr << "Can't create Midi Output Port" << endl;
-  }
-
-  if (midiClient.isNull())
-  {
-    cerr << "Can't create MidiClient" << endl;
-  }
-
-  midiClientRecord = midiManager.addClient(Arts::mcdRecord,Arts::mctApplication,
-                                     "Rosegarden (record)","Rosegarden");
-
-  if (midiClientRecord.isNull())
-  {
-    cerr << "Can't create MidiClient" << endl;
-    exit(1);
-  }
-
-  // Create our recording midi port
+  // Create and initialize MIDI
   //
-  midiClientRecord.addInputPort(midiRecorder);
-
-  // MIDI THRU
-  //
-  midiRecorder.setMidiThru(midiPort);
-
-  // Turn on recording
-  //
-  midiRecorder.record(true);
+  Rosegarden::Sequencer sequencer;
 
 
   // pause and wait for notes to queue
@@ -127,27 +64,48 @@ main(int argc, char **argv)
   vector<Arts::MidiEvent>::iterator midiQueueIt;
   vector<Arts::MidiEvent> *midiQueue;
 
-  while(true)
+  cout << "MIDI Recording ready" << endl;
+
+  Arts::TimeStamp midiTime;
+  Arts::MidiEvent event;
+  
+  int noteVal = 50;
+
+  // record MIDI events
+  //
+  sequencer.record(Rosegarden::Sequencer::RECORD_MIDI);
+
+  while(sequencer.isPlaying())
   {
-    // pause and collect events from MIDI
-    //
-    cout << "waiting..." << endl;
+
+    // pause
     for (i = 0; i < 100000000; i++);
 
-    midiQueue = midiRecorder.getQueue();
+    midiQueue = sequencer.getMidiQueue();
 
-    cout << "Events Read: " << midiQueue->size() << endl;
-
-
-    for (midiQueueIt = midiQueue->begin();
-         midiQueueIt != midiQueue->end();
-         midiQueueIt++)
+    if (midiQueue->size() > 0)
     {
-      cout << "MIDI COMMAND" << endl;
-      cout << midiQueueIt->time.usec << endl;
-      cout << "Data1 = " << midiQueueIt->command.data1 << endl;
-      cout << "Data2 = " << midiQueueIt->command.data2 << endl << endl;
-    }
+      cout << "SONG POSITION = " << sequencer.songPositionSeconds() << endl;
+      cout << endl;
+      cout << midiQueue->size() << " MIDI events read" << endl;
+
+      for (midiQueueIt = midiQueue->begin();
+           midiQueueIt != midiQueue->end();
+           midiQueueIt++)
+      {
+        cout << "MIDI COMMAND" << endl;
+        cout << midiQueueIt->time.usec << endl;
+        cout << "Data1 = " << (Rosegarden::MidiByte) midiQueueIt->command.data1 << endl;
+        cout << "Data2 = " << (Rosegarden::MidiByte) midiQueueIt->command.data2 << endl << endl;
+        cout << "Time = " << (long)(midiQueueIt->time.sec) << " : " << (long)(midiQueueIt->time.usec) << endl;
+      }
+      cout << endl;
+   }
+
+   //sequencer.incrementSongPosition(60000);
+
+   //midiQueueIt = midiQueue->begin();
+  
 
   }
 
