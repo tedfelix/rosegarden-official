@@ -242,10 +242,11 @@ echo
 echo "Installation Summary"
 echo "--------------------"
 echo
-echo "Install Directory         :  $prefix"
+echo "Install Directory            :  $prefix"
 echo
+echo "Xft notation font support    : ${with_xft}"
 if test "$with_sound" = "no"; then
-    echo "No sound support configured"
+    echo "No sound support configured."
 else
     echo "ALSA MIDI support            : ${with_alsa}"
     echo "JACK audio support           : ${with_jack}"
@@ -253,13 +254,59 @@ else
     echo "DSSI synth plugin support    : ${with_dssi}"
     echo "LRDF plugin metadata support : ${with_liblrdf}"
 
-    if test "$with_alsa" = "yes"; then
-        echo "aRts MIDI and audio          : no"
-    else
+    if test "$with_alsa" = "no"; then
         echo "aRts MIDI and audio          : yes"
     fi
-
-    echo "Xft notation font support    : ${with_xft}"
 fi
 echo
 echo
+
+if test "$with_xft" = "no"; then
+    echo "* Score rendering quality and performance may be"
+    echo "improved if Xft 2.1.0 and Freetype 2 are available, to permit"
+    echo "Rosegarden to override the Qt font selection mechanism.  It"
+    echo "may not be worth trying to install them if they aren't already" 
+    echo "present in your distribution though."
+    echo
+fi
+if test "with_sound" = "no" -o "with_alsa" = "no"; then
+    echo "* Rosegarden requires the ALSA (Advanced Linux Sound Architecture) drivers"
+    echo "for MIDI and the JACK audio framework for audio sample sequencing."
+    echo "Please see the documentation at http://www.rosegardenmusic.com/getting/"
+    echo "for more information about these dependencies."
+    echo
+    if test "$with_sound" != "no"; then
+	echo "(Rosegarden does contain some support for audio and MIDI using the KDE"
+	echo "aRts multimedia service.  You're unlikely to find that it works, however.)"
+    fi
+    echo
+else
+    if test "with_jack" = "no"; then
+	echo "* Rosegarden uses the JACK audio server for audio recording and"
+	echo "sequencing.  See http://jackit.sf.net/ for more information about"
+	echo "getting and installing JACK.  If you want to use Rosegarden only"
+	echo "for MIDI, then you do not need JACK."
+	echo
+    fi
+    if test "with_ladspa" = "no"; then
+	echo "* Rosegarden supports LADSPA audio plugins if available.  See"	
+	echo "http://www.ladspa.org/ for more information about LADSPA.  To"
+	echo "build LADSPA support into Rosegarden, you need to make sure"
+	echo "you have ladspa.h available on your system."
+	echo
+    fi
+    if test "with_dssi" = "no"; then
+	echo "* Rosegarden supports DSSI soft synth plugins if available.  See"	
+	echo "http://dssi.sf.net/ for more information about DSSI.  To"
+	echo "build DSSI support into Rosegarden, you need to make sure"
+	echo "you have dssi.h available on your system."
+	echo
+    fi
+    if test "with_liblrdf" = "no"; then
+	echo "* Rosegarden supports the LRDF metadata format for classification"
+	echo "of LADSPA and DSSI plugins.  This will improve the usability of"
+	echo "plugin selection dialogs.  You can obtain LRDF from"
+	echo "http://www.plugin.org.uk/lrdf/."
+	echo
+    fi
+fi
