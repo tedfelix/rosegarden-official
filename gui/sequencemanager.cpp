@@ -789,7 +789,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
     Rosegarden::MappedComposition::iterator i;
 
     // Thru filtering is done at the sequencer for the actual sound
-    // output, but here we need both filtered (for IN display) and
+    // output, but here we need both filtered (for OUT display) and
     // unfiltered (for insertable note callbacks) compositions, so
     // we've received the unfiltered copy and will filter here
     Rosegarden::MappedComposition tempMC =
@@ -797,10 +797,15 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 		       Rosegarden::MappedEvent::MappedEventType(
 			   m_doc->getStudio().getMIDIThruFilter()));
     
-    // send to the MIDI in label (which can only hold one event at a time)
+    // send to the MIDI labels (which can only hold one event at a time)
+    i = mC.begin();
+    if (i != mC.end()) {
+	m_transport->setMidiInLabel(*i);
+    }
+
     i = tempMC.begin();
     if (i != tempMC.end()) {
-	m_transport->setMidiInLabel(*i);
+	m_transport->setMidiOutLabel(*i);
     }
 
     for (i = mC.begin(); i != mC.end(); ++i )
