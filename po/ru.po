@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "POT-Creation-Date: 2003-05-05 10:01-0400\n"
-"PO-Revision-Date: 2003-05-16 16:29+0400\n"
+"PO-Revision-Date: 2003-05-30 18:25+0400\n"
 "Last-Translator: Alexandre Prokoudine <avp@altlinux.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -2142,7 +2142,7 @@ msgstr ""
 
 #: notationstrings.cpp:45
 msgid "dotted-%1"
-msgstr ""
+msgstr "увеличенная-%1"
 
 #: notationstrings.cpp:46
 msgid "dotted %1"
@@ -3335,15 +3335,15 @@ msgstr "Экспортировать в &MIDI-файл..."
 
 #: rosegardengui.cpp:251
 msgid "Export &Lilypond file..."
-msgstr "Экспортировать как партитуру &Lilypond..."
+msgstr "Экспортировать в партитуру &Lilypond..."
 
 #: rosegardengui.cpp:255
 msgid "Export Music&XML file..."
-msgstr "Экспортировать как файл Music&XML..."
+msgstr "Экспортировать в файл Music&XML..."
 
 #: rosegardengui.cpp:259
 msgid "Export &Csound score file..."
-msgstr "Экспортировать как партитуру &Csound..."
+msgstr "Экспортировать в партитуру &Csound..."
 
 #: rosegardengui.cpp:298
 msgid "Show Trac&ks Toolbar"
@@ -3931,15 +3931,15 @@ msgstr "Путь к звуковому устройству не задан"
 
 #: rosexmlhandler.cpp:838
 msgid "found audio begin index in non audio segment"
-msgstr ""
+msgstr "Найден индекс начала звука в незвуковом сегменте"
 
 #: rosexmlhandler.cpp:861
 msgid "found audio end index in non audio segment"
-msgstr ""
+msgstr "Найден индекс конца звука в незвуковом сегменте"
 
 #: rosexmlhandler.cpp:871
 msgid "audio end index before audio start marker"
-msgstr ""
+msgstr "индекс конца звука перед маркером начала звука"
 
 #: rosexmlhandler.cpp:891
 msgid "Found Device outside Studio"
@@ -4271,7 +4271,7 @@ msgstr "Индикатор уровня для звука"
 
 #: studiowidgets.cpp:80
 msgid "Audio Fader"
-msgstr ""
+msgstr "Изменение громкости аудио"
 
 #: studiowidgets.cpp:90
 msgid "Set the audio pan position in the stereo field"
@@ -4291,7 +4291,7 @@ msgstr "Сделать солирующей дорожку, с которой а
 
 #: studiowidgets.cpp:120
 msgid "Arm recording for this audio Instrument"
-msgstr ""
+msgstr "Запись вручную для этого инструмента"
 
 #: studiowidgets.cpp:122
 msgid "Audio Input"
@@ -4816,6 +4816,8 @@ msgid ""
 "always\n"
 "insert at the bottom of the track list?</p>\n"
 msgstr ""
+"<p>...что все звуковые сегменты по умолчанию вставляются в "
+"конец списка дорожек?</p>\n"
 
 #: tips.cpp:67
 msgid ""
@@ -4824,6 +4826,10 @@ msgid ""
 "other options simultaneously with <b>Settings -> Toggle All of the Above</b>?"
 "</p>\n"
 msgstr ""
+"<p>...что вы можете переключать отображение всех шкал, панели "
+"свойств \nинструментов и некоторых других параметров сразу"
+"через меню <b>Настройка -> Переключить все вышеприведённые</b>?"
+"</p>\n"
 
 #: tips.cpp:72
 msgid ""
@@ -4833,6 +4839,11 @@ msgid ""
 "From the <b>File</b> menu, navigate to <b>Export -> Export Lilypond File</"
 "b></p>\n"
 msgstr ""
+"<p>...что Rosegarden умеет экспортировать свои файлы проектов "
+"в формат Lilypond - системы выскококачественной печати партитур?\n"
+"\n"
+"Воспользуйтесь меню  <b>Файлe -> Экспортировать -> В партитуру "
+"Lilypond</b></p>\n"
 
 #: tips.cpp:78
 msgid ""
@@ -4841,6 +4852,11 @@ msgid ""
 "Notation\n"
 "-> Lilypond?</p>\n"
 msgstr ""
+"<p>...что вы можете изменить различные параметры экспорта в\n"
+"партитуры Lilypond в диалоге. доступном по  <b>Настройка -> "
+"Настроить Rosegarden... -> "
+"Редактор нотной партитуры\n"
+"-> Lilypond?</p>\n"
 
 #: tips.cpp:84
 msgid ""
@@ -4848,6 +4864,10 @@ msgid ""
 "quantize only the timing used for notation -- making it possible to have "
 "good looking notation <b>and</b> a completely human MIDI performance?</p>\n"
 msgstr ""
+"<p>...что если использовать квантователь из окна редактора партитуры, "
+"квантование будет доступно только для тайминга нотации, что, однако, "
+"позволит получить красиво выглядящую партитуру <b>и</b> вместе с тем "
+"корректный поток MIDI-событий?</p>\n"
 
 #: tips.cpp:88
 msgid ""
@@ -4855,6 +4875,9 @@ msgid ""
 "Parameters box\n"
 "in the main window?</p>\n"
 msgstr ""
+"<p>...что вы можете изменить метки сегментов из панели Параметры "
+"сегмента\n"
+"в главном окне программы?</p>\n"
 
 #: tips.cpp:93
 msgid ""
