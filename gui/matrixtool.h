@@ -54,8 +54,20 @@ protected:
 
 class MatrixTool : public EditTool
 {
+    Q_OBJECT
+
 public:
 //     virtual void ready();
+
+protected slots:
+
+    // For switching between tools on RMB
+    //
+    void slotSelectSelected();
+    void slotMoveSelected();
+    void slotEraseSelected();
+    void slotResizeSelected();
+    void slotDrawSelected();
 
 protected:
     MatrixTool(const QString& menuName, MatrixView*);

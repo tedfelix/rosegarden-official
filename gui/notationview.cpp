@@ -1390,7 +1390,7 @@ void NotationView::setupActions()
     noteAction->setExclusiveGroup("notes");
 
     icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("select")));
-    noteAction = new KRadioAction(i18n("&Select"), icon, 0,
+    noteAction = new KRadioAction(i18n("&Select"), icon, Key_F1,
                                   this, SLOT(slotSelectSelected()),
                                   actionCollection(), "select");
     noteAction->setExclusiveGroup("notes");

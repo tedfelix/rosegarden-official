@@ -450,28 +450,28 @@ void MatrixView::setupActions()
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
     QIconSet icon(QPixmap(pixmapDir + "/toolbar/select.xpm"));
 
-    toolAction = new KRadioAction(i18n("&Select"), icon, 0,
+    toolAction = new KRadioAction(i18n("&Select"), icon, Key_F1,
                                   this, SLOT(slotSelectSelected()),
                                   actionCollection(), "select");
     toolAction->setExclusiveGroup("tools");
 
-    toolAction = new KRadioAction(i18n("&Draw"), "pencil", 0,
+    toolAction = new KRadioAction(i18n("&Draw"), "pencil", Key_F2,
                                   this, SLOT(slotPaintSelected()),
                                   actionCollection(), "draw");
     toolAction->setExclusiveGroup("tools");
 
-    toolAction = new KRadioAction(i18n("&Erase"), "eraser", 0,
+    toolAction = new KRadioAction(i18n("&Erase"), "eraser", Key_F3,
                                   this, SLOT(slotEraseSelected()),
                                   actionCollection(), "erase");
     toolAction->setExclusiveGroup("tools");
 
-    toolAction = new KRadioAction(i18n("&Move"), "move", 0,
+    toolAction = new KRadioAction(i18n("&Move"), "move", Key_F4,
                                   this, SLOT(slotMoveSelected()),
                                   actionCollection(), "move");
     toolAction->setExclusiveGroup("tools");
 
     icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/resize.xpm"));
-    toolAction = new KRadioAction(i18n("Resi&ze"), icon, 0,
+    toolAction = new KRadioAction(i18n("Resi&ze"), icon, Key_F5,
                                   this, SLOT(slotResizeSelected()),
                                   actionCollection(), "resize");
     toolAction->setExclusiveGroup("tools");

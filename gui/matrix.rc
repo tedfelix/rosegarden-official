@@ -98,9 +98,9 @@
   <text>&amp;Tools</text>
 
   <Action name="select" />
-  <Action name="move" />
   <Action name="draw" />
   <Action name="erase" />
+  <Action name="move" />
   <Action name="resize" />
 
   <Separator/>
@@ -125,9 +125,9 @@
   <text>Tools Toolbar</text>
 
   <Action name="select" />
-  <Action name="move" />
   <Action name="draw" />
   <Action name="erase" />
+  <Action name="move" />
   <Action name="resize" />
   <Separator/>
   <Action name="toggle_step_by_step"/>

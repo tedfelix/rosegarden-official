@@ -1,0 +1,12 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+
+<kpartgui name="Rosegarden::MatrixTool" version="096">
+
+<Menu name="MatrixPainter">
+  <Action name="select" />
+  <Action name="move"/>
+  <Action name="erase"/>
+  <Action name="resize"/>
+</Menu>
+
+</kpartgui>

@@ -303,8 +303,8 @@
 
 <ToolBar name="Tools Toolbar">
   <text>Tools Toolbar</text>
-  <Action name="erase" />
   <Action name="select" />
+  <Action name="erase" />
   <Action name="text" />
   <Separator/>
   <Action name="toggle_step_by_step"/>

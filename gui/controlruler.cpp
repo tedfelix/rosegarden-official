@@ -51,6 +51,7 @@
 #include "Property.h"
 #include "widgets.h"
 #include "linedstaff.h"
+#include "editview.h"
 
 using Rosegarden::RulerScale;
 using Rosegarden::Segment;
@@ -622,8 +623,7 @@ ControlRuler::ControlRuler(Segment& segment,
     m_selecting(false),
     m_selector(new ControlSelector(this)),
     m_selectionRect(new QCanvasRectangle(canvas())),
-    m_menu(0),
-    m_numberFloat(new RosegardenTextFloat(parent))
+    m_menu(0)
 {
     setHScrollBarMode(QScrollView::AlwaysOff);
 
@@ -635,6 +635,7 @@ ControlRuler::ControlRuler(Segment& segment,
     connect(this, SIGNAL(stateChange(const QString&, bool)),
             m_parentEditView, SLOT(slotStateChanged(const QString&, bool)));
 
+    m_numberFloat = new RosegardenTextFloat(this);
     m_numberFloat->hide();
 
     emit stateChange("have_controller_item_selected", false);
@@ -697,6 +698,7 @@ void ControlRuler::contentsMousePressEvent(QMouseEvent* e)
     if (e->button() != Qt::LeftButton)
     {
         m_numberFloat->hide();
+        m_selecting = false;
         return;
     }
 
@@ -755,6 +757,7 @@ void ControlRuler::contentsMouseReleaseEvent(QMouseEvent* e)
     if (e->button() != Qt::LeftButton)
     {
         m_numberFloat->hide();
+        m_selecting = false;
         return;
     }
     
@@ -815,11 +818,22 @@ void ControlRuler::contentsMouseMoveEvent(QMouseEvent* e)
 
     // Borrowed from RosegardenRotary - compute total position within window
     //
-    QPoint totalPos = mapTo(topLevelWidget(), e->pos());
+    QPoint totalPos = mapTo(topLevelWidget(), QPoint(0, 0));
+
+    int scrollX = dynamic_cast<EditView*>(m_parentEditView)->getRawCanvasView()->
+        horizontalScrollBar()->value();
+
+    /*
+    RG_DEBUG << "ControlRuler::contentsMouseMoveEvent - total pos = " << totalPos.x()
+             << ",e pos = " << e->pos().x()
+             << ", scroll bar = " << scrollX
+             << endl;
+             */
 
     // Allow for scrollbar
     //
-    m_numberFloat->move(totalPos.x() + 20 - horizontalScrollBar()->value(), totalPos.y() - 10);
+    m_numberFloat->move(totalPos.x() + e->pos().x() - scrollX + 20, 
+                        totalPos.y() + e->pos().y() - 10);
 
     int value = 0;
 

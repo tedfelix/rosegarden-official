@@ -135,6 +135,8 @@ public:
     Rosegarden::EventSelection* getCurrentSelection()
         { return m_currentEventSelection; }
 
+    RosegardenCanvasView* getRawCanvasView() { return m_canvasView; }
+
 signals:
     void changeTempo(Rosegarden::timeT,  // tempo change time
                      double,             // tempo value

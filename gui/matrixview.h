@@ -549,7 +549,8 @@ protected:
     std::vector<std::pair<PropertyViewRuler*, PropertyBox*> >  m_propertyViewRulers;
 
     ChordNameRuler *m_chordNameRuler;
-    QWidget *m_tempoRuler;
+    QWidget        *m_tempoRuler;
+
 };
 
 // Commented this out - was a MatrixView inner class, but we get a warning

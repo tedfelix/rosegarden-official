@@ -252,6 +252,11 @@ rc_DATA = bankeditor.rc \
 	tempoview.rc \
         devicemanager.rc \
 	matrix.rc \
+        matrixselector.rc \
+        matrixeraser.rc \
+        matrixresizer.rc \
+        matrixmover.rc \
+        matrixpainter.rc \
 	notationeraser.rc \
 	notation.rc \
 	notationselector.rc \

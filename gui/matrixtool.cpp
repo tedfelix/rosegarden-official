@@ -21,6 +21,8 @@
 
 #include <kmessagebox.h>
 #include <klocale.h>
+#include <kaction.h>
+#include <kstddirs.h>
 
 #include "BaseProperties.h"
 #include "SegmentMatrixHelper.h"
@@ -102,6 +104,37 @@ MatrixTool::MatrixTool(const QString& menuName, MatrixView* parent)
 {
 }
 
+void
+MatrixTool::slotSelectSelected()
+{
+    m_parentView->actionCollection()->action("select")->activate();
+}
+
+
+void
+MatrixTool::slotMoveSelected()
+{
+    m_parentView->actionCollection()->action("move")->activate();
+}
+
+void
+MatrixTool::slotEraseSelected()
+{
+    m_parentView->actionCollection()->action("erase")->activate();
+}
+
+void
+MatrixTool::slotResizeSelected()
+{
+    m_parentView->actionCollection()->action("resize")->activate();
+}
+
+void 
+MatrixTool::slotDrawSelected()
+{
+    m_parentView->actionCollection()->action("draw")->activate();
+}
+
 
 //------------------------------
 
@@ -111,6 +144,27 @@ MatrixPainter::MatrixPainter(MatrixView* parent)
       m_currentElement(0),
       m_currentStaff(0)
 {
+    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+    QIconSet icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/select.xpm"));
+
+    new KAction(i18n("Switch to Select Tool"), icon, 0, this,
+                SLOT(slotSelectSelected()), actionCollection(),
+                "select");
+
+    new KAction(i18n("Switch to Erase Tool"), "eraser", 0, this,
+                SLOT(slotEraseSelected()), actionCollection(),
+                "erase");
+
+    new KAction(i18n("Switch to Move Tool"), "move", 0, this,
+                SLOT(slotMoveSelected()), actionCollection(),
+                "move");
+
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/resize.xpm"));
+    new KAction(i18n("Switch to Resize Tool"), icon, 0, this,
+                SLOT(slotResizeSelected()), actionCollection(),
+                "resize");
+
+    createMenu("matrixpainter.rc");
 }
 
 MatrixPainter::MatrixPainter(QString name, MatrixView* parent)
@@ -256,6 +310,27 @@ MatrixEraser::MatrixEraser(MatrixView* parent)
     : MatrixTool("MatrixEraser", parent),
       m_currentStaff(0)
 {
+    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+    QIconSet icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/select.xpm"));
+
+    new KAction(i18n("Switch to Select Tool"), icon, 0, this,
+                SLOT(slotSelectSelected()), actionCollection(),
+                "select");
+
+    new KAction(i18n("Switch to Draw Tool"), "pencil", 0, this,
+                SLOT(slotDrawSelected()), actionCollection(),
+                "draw");
+
+    new KAction(i18n("Switch to Move Tool"), "move", 0, this,
+                SLOT(slotMoveSelected()), actionCollection(),
+                "move");
+
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/resize.xpm"));
+    new KAction(i18n("Switch to Resize Tool"), icon, 0, this,
+                SLOT(slotResizeSelected()), actionCollection(),
+                "resize");
+
+    createMenu("matrixeraser.rc");
 }
 
 void MatrixEraser::handleLeftButtonPress(Rosegarden::timeT,
@@ -292,6 +367,27 @@ MatrixSelector::MatrixSelector(MatrixView* view)
 {
     connect(m_parentView, SIGNAL(usedSelection()),
             this,         SLOT(slotHideSelection()));
+
+    new KAction(i18n("Switch to Draw Tool"), "pencil", 0, this,
+                SLOT(slotDrawSelected()), actionCollection(),
+                "draw");
+
+    new KAction(i18n("Switch to Erase Tool"), "eraser", 0, this,
+                SLOT(slotEraseSelected()), actionCollection(),
+                "erase");
+
+    new KAction(i18n("Switch to Move Tool"), "move", 0, this,
+                SLOT(slotMoveSelected()), actionCollection(),
+                "move");
+
+    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+    QIconSet icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/resize.xpm"));
+
+    new KAction(i18n("Switch to Resize Tool"), icon, 0, this,
+                SLOT(slotResizeSelected()), actionCollection(),
+                "resize");
+
+    createMenu("matrixselector.rc");
 }
 
 void MatrixSelector::handleEventRemoved(Rosegarden::Event *event)
@@ -579,6 +675,27 @@ MatrixMover::MatrixMover(MatrixView* parent)
       m_oldX(0),
       m_oldY(0)
 {
+    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+    QIconSet icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/select.xpm"));
+
+    new KAction(i18n("Switch to Select Tool"), icon, 0, this,
+                SLOT(slotSelectSelected()), actionCollection(),
+                "select");
+
+    new KAction(i18n("Switch to Draw Tool"), "pencil", 0, this,
+                SLOT(slotDrawSelected()), actionCollection(),
+                "draw");
+
+    new KAction(i18n("Switch to Erase Tool"), "eraser", 0, this,
+                SLOT(slotEraseSelected()), actionCollection(),
+                "erase");
+
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/resize.xpm"));
+    new KAction(i18n("Switch to Resize Tool"), icon, 0, this,
+                SLOT(slotResizeSelected()), actionCollection(),
+                "resize");
+
+    createMenu("matrixmover.rc");
 }
 
 void MatrixMover::handleEventRemoved(Rosegarden::Event *event)
@@ -831,6 +948,26 @@ MatrixResizer::MatrixResizer(MatrixView* parent)
       m_currentElement(0),
       m_currentStaff(0)
 {
+    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+    QIconSet icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/select.xpm"));
+
+    new KAction(i18n("Switch to Select Tool"), icon, 0, this,
+                SLOT(slotSelectSelected()), actionCollection(),
+                "select");
+
+    new KAction(i18n("Switch to Draw Tool"), "pencil", 0, this,
+                SLOT(slotDrawSelected()), actionCollection(),
+                "draw");
+
+    new KAction(i18n("Switch to Erase Tool"), "eraser", 0, this,
+                SLOT(slotEraseSelected()), actionCollection(),
+                "erase");
+
+    new KAction(i18n("Switch to Move Tool"), "move", 0, this,
+                SLOT(slotMoveSelected()), actionCollection(),
+                "move");
+
+    createMenu("matrixresizer.rc");
 }
 
 void MatrixResizer::handleEventRemoved(Rosegarden::Event *event)
