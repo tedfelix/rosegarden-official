@@ -243,7 +243,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
          trks != m_composition.end(); ++trks) {
 
         //--------------------------
-        fileStream << QString("<Track instrument=\"%1\" start=\"%2\">")
+        fileStream << QString("<track instrument=\"%1\" start=\"%2\">")
             .arg((*trks)->getInstrument())
             .arg((*trks)->getStartIndex()) << endl;
 
@@ -293,7 +293,11 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
             fileStream << XmlStorableEvent::toXmlString(*(*i)) << endl;
         }
 
-        fileStream << "</Track>" << endl; //-------------------------
+        if (currentGroup != -1) {
+            fileStream << "</group>" << endl;
+        }
+
+        fileStream << "</track>" << endl; //-------------------------
 
     }
     
