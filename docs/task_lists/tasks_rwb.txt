@@ -4,6 +4,9 @@ updated 27.04.2002
 
 Immediate work:
 
+o KDE3 bug fixes
+
+
 o selection of ALSA recording device
 
 o basic JACK audio

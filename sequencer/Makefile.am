@@ -5,7 +5,7 @@ rosegardensequencer_SOURCES = rosegardensequencer.cpp \
 			      main.cpp \
 			      rosegardensequenceriface.skel
 
-rosegardensequencer_LDADD   = -lkfile -lkdeui -lkdecore $(LIB_QT) $(LIBSOCKET) ../sound/libRosegardenSound.la ../sound/libRosegardenSequencer.la ../base/libbase.la
+rosegardensequencer_LDADD   = -lkdeui -lkdecore $(LIB_QT) $(LIBSOCKET) ../sound/libRosegardenSound.la ../sound/libRosegardenSequencer.la ../base/libbase.la $(KFILELIB)
 
 EXTRA_DIST = rosegardensequenceriface.kidl
 

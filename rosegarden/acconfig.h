@@ -29,9 +29,3 @@
 /* Define if you need the GNU extensions to compile */
 #undef _GNU_SOURCE
 
-#ifndef HAVE_BOOL
-#define HAVE_BOOL
-typedef int bool;
-const bool false = 0;
-const bool true = 1;
-#endif
