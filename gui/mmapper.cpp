@@ -292,6 +292,12 @@ void SegmentMmapper::setFileSize(size_t size)
 {
     SEQMAN_DEBUG << "SegmentMmapper : setting size of "
                  << m_fileName << " to " << size << endl;
+
+    if (size == 0) {
+        SEQMAN_DEBUG << "SegmentMmapper : size == 0 : no resize to do\n";
+        return;
+    }
+    
     // rewind
     ::lseek(m_fd, 0, SEEK_SET);
 
@@ -571,6 +577,8 @@ MetronomeMmapper::MetronomeMmapper(RosegardenGUIDoc* doc,
       m_beatVelocity(80),
       m_tickDuration(0, 10000)
 {
+    SEQMAN_DEBUG << "MetronomeMmapper ctor : " << this << endl;
+
     setupMetronome();
 
     Composition& c = m_doc->getComposition();
@@ -603,14 +611,16 @@ MetronomeMmapper::MetronomeMmapper(RosegardenGUIDoc* doc,
     sortTicks();
 
     m_mmappedSize = computeMmappedSize();
-    setFileSize(m_mmappedSize);
-    doMmap();
-    dump();
-
+    if (m_mmappedSize > 0) {
+        setFileSize(m_mmappedSize);
+        doMmap();
+        dump();
+    }
 }
 
 MetronomeMmapper::~MetronomeMmapper()
 {
+    SEQMAN_DEBUG << "~MetronomeMmapper " << this << endl;
     if (m_deleteMetronome) delete m_metronome;
 }
 
