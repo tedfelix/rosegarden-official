@@ -867,6 +867,7 @@ void NotationView::slotChangeLegato(int n)
     applyLayout();
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+        m_staffs[i]->renderAllElements();
         m_staffs[i]->positionAllElements();
     }
 

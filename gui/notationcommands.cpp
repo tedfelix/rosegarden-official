@@ -505,9 +505,7 @@ TransformsMenuCollapseNotesCommand::modifySegment()
     i = m_selection->getSegmentEvents().end();
 
     while (i-- != m_selection->getSegmentEvents().begin()) {
-
 	helper.collapseNoteAggressively((*i), endTime);
-	helper.makeNoteViable(helper.segment().findSingle(*i));
     }
 }
 
