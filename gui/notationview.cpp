@@ -140,12 +140,12 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
          this,         SLOT  (activeItemPressed(QMouseEvent*, QCanvasItem*)));
 
     QObject::connect
-        (m_canvasView, SIGNAL(mouseMove(QMouseEvent*)),
-         this,         SLOT  (mouseMove(QMouseEvent*)));
+        (m_canvasView, SIGNAL(mouseMoved(QMouseEvent*)),
+         this,         SLOT  (mouseMoved(QMouseEvent*)));
 
     QObject::connect
-        (m_canvasView, SIGNAL(mouseRelease(QMouseEvent*)),
-         this,         SLOT  (mouseRelease(QMouseEvent*)));
+        (m_canvasView, SIGNAL(mouseReleased(QMouseEvent*)),
+         this,         SLOT  (mouseReleased(QMouseEvent*)));
 
     QObject::connect
         (m_canvasView, SIGNAL(hoveredOverNoteChange (const QString&)),
@@ -1852,17 +1852,18 @@ void NotationView::activeItemPressed(QMouseEvent* e,
 
 }
 
-void NotationView::mouseMove(QMouseEvent *e)
+void NotationView::mouseMoved(QMouseEvent *e)
 {
     if (activeItem()) {
         activeItem()->handleMouseMove(e);
         canvas()->update();
     }
-    else
-        m_tool->handleMouseMove(e);
+    else 
+        m_tool->handleMouseMove(0, 0, // unknown height and time
+                                e);
 }
 
-void NotationView::mouseRelease(QMouseEvent *e)
+void NotationView::mouseReleased(QMouseEvent *e)
 {
     if (activeItem()) {
         activeItem()->handleMouseRelease(e);
@@ -1870,7 +1871,8 @@ void NotationView::mouseRelease(QMouseEvent *e)
         canvas()->update();
     }
     else
-        m_tool->handleMouseRelease(e);
+        m_tool->handleMouseRelease(0, 0, // unknown height and time
+                                   e);
 }
 
 
@@ -2100,7 +2102,7 @@ void NotationView::readjustCanvasSize()
     }
 
     // now get the EditView to do the biz
-    readjustViewSize(QSize(maxWidth, maxHeight));
+    readjustViewSize(QSize(int(maxWidth), maxHeight));
 
     PRINT_ELAPSED("NotationView::readjustCanvasWidth total");
 }

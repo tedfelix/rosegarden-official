@@ -532,7 +532,8 @@ void NotationSelector::handleMouseDblClick(int,
     return;
 }
 
-void NotationSelector::handleMouseMove(QMouseEvent* e)
+void NotationSelector::handleMouseMove(int, timeT,
+                                       QMouseEvent* e)
 {
     if (!m_updateRect) return;
 
@@ -548,7 +549,7 @@ void NotationSelector::handleMouseMove(QMouseEvent* e)
     m_nParentView->canvas()->update();
 }
 
-void NotationSelector::handleMouseRelease(QMouseEvent*)
+void NotationSelector::handleMouseRelease(int, timeT, QMouseEvent*)
 {
     kdDebug(KDEBUG_AREA) << "NotationSelector::handleMouseRelease" << endl;
     m_updateRect = false;
@@ -617,7 +618,7 @@ EventSelection* NotationSelector::getSelection()
         m_selectionRect->height() <  3) return 0;
 
     double middleY = m_selectionRect->y() + m_selectionRect->height()/2;
-    NotationStaff *staff = m_nParentView->getStaffForCanvasY(middleY);
+    NotationStaff *staff = m_nParentView->getStaffForCanvasY(int(middleY));
 
     if (!staff) return 0;
     Segment& originalSegment = staff->getSegment();

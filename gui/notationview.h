@@ -306,8 +306,8 @@ public slots:
      */
     void activeItemPressed(QMouseEvent*, QCanvasItem*);
 
-    void mouseMove(QMouseEvent*);
-    void mouseRelease(QMouseEvent*);
+    void mouseMoved(QMouseEvent*);
+    void mouseReleased(QMouseEvent*);
 
     /**
      * Called when the mouse cursor moves over a different height on

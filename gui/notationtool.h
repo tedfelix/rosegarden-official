@@ -281,8 +281,13 @@ public:
                                        QMouseEvent*,
                                        Rosegarden::ViewElement* el);
 
-    virtual void handleMouseMove(QMouseEvent*);
-    virtual void handleMouseRelease(QMouseEvent*);
+    virtual void handleMouseMove(int height,
+                                 Rosegarden::timeT,
+                                 QMouseEvent*);
+
+    virtual void handleMouseRelease(int height,
+                                    Rosegarden::timeT time,
+                                    QMouseEvent*);
 
     virtual void handleMouseDblClick(int height,
                                      Rosegarden::timeT,
