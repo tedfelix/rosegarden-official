@@ -158,7 +158,7 @@ public:
     QCanvas* canvas() { return m_canvasView->canvas(); }
     
     void setCanvasCursor(const QCursor &cursor) {
-	m_canvasView->setCursor(cursor);
+	m_canvasView->viewport()->setCursor(cursor);
     }
 
     /**
