@@ -1,3 +1,5 @@
+// -*- c-basic-offset: 4 -*-
+
 #include "staffruler.h"
 
 #include "qcanvaslinegroupable.h"
