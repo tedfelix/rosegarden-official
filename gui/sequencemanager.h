@@ -52,14 +52,16 @@ class CountdownDialog;
 class QTimer;
 class QTime;
 
+class SegmentMmapper;
+class CompositionMmapper;
+class ControlBlockMmapper;
+class MetronomeMmapper;
+
 namespace Rosegarden
 {
 
 class AudioPluginManager;
 class RosegardenTransportDialog;
-class SegmentMmapper;
-class CompositionMmapper;
-class ControlBlockMmapper;
 
 class SequenceManager : public QObject, public CompositionObserver
 {
@@ -198,12 +200,12 @@ public:
     virtual void segmentRemoved(const Composition *c, Segment *s);
     virtual void endMarkerTimeChanged(const Composition *, bool shorten);
     virtual void trackChanged(const Composition *, Track*);
+    virtual void metronomeChanged(const Composition *, bool playMetronome, bool recordMetronome);
     virtual void compositionDeleted(const Composition*);
 
     void processAddedSegment(Segment*);
     void processRemovedSegment(Segment*);
     void segmentModified(Segment*);
-    void controlBlockModified();
 
     virtual bool event(QEvent *e);
     
@@ -231,6 +233,7 @@ protected:
     RosegardenGUIDoc    *m_doc;
     CompositionMmapper  *m_compositionMmapper;
     ControlBlockMmapper *m_controlBlockMmapper;
+    MetronomeMmapper    *m_metronomeMmapper;
 
     std::vector<Segment*> m_addedSegments;
     std::vector<Segment*> m_removedSegments;

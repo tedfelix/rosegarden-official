@@ -38,7 +38,7 @@ MappedEvent::MappedEvent(InstrumentId id,
        m_eventTime(eventTime),
        m_duration(duration),
        m_audioStartMarker(0, 0),
-       m_dataBlock(""),
+//        m_dataBlock(""),
        m_isPersistent(false)
 {
     try {
@@ -94,7 +94,7 @@ MappedEvent::MappedEvent(InstrumentId id,
 	{
 	    m_type = MidiSystemExclusive;
 	    SystemExclusive s(e);
-	    m_dataBlock = s.getRawData();
+// 	    m_dataBlock = s.getRawData();
 	}
 	else 
 	{
@@ -134,7 +134,7 @@ MappedEvent::operator=(const MappedEvent &mE)
     m_eventTime = mE.getEventTime();
     m_duration = mE.getDuration();
     m_audioStartMarker = mE.getAudioStartMarker();
-    m_dataBlock = mE.getDataBlock();
+//     m_dataBlock = mE.getDataBlock();
 
     return *this;
 }
@@ -155,10 +155,10 @@ operator<<(QDataStream &dS, MappedEvent *mE)
     dS << (unsigned int)mE->getDuration().usec;
     dS << (unsigned int)mE->getAudioStartMarker().sec;
     dS << (unsigned int)mE->getAudioStartMarker().usec;
-    dS << (unsigned int)mE->getDataBlock().length();
+//     dS << (unsigned int)mE->getDataBlock().length();
 
-    for (unsigned int i = 0; i < mE->getDataBlock().length(); i++)
-        dS << (unsigned int)(mE->getDataBlock()[i]);
+//     for (unsigned int i = 0; i < mE->getDataBlock().length(); i++)
+//         dS << (unsigned int)(mE->getDataBlock()[i]);
 
     return dS;
 }
@@ -177,10 +177,10 @@ operator<<(QDataStream &dS, const MappedEvent &mE)
     dS << (unsigned int)mE.getDuration().usec;
     dS << (unsigned int)mE.getAudioStartMarker().sec;
     dS << (unsigned int)mE.getAudioStartMarker().usec;
-    dS << (unsigned int)mE.getDataBlock().length();
+//     dS << (unsigned int)mE.getDataBlock().length();
 
-    for (unsigned int i = 0; i < mE.getDataBlock().length(); i++)
-        dS << (unsigned int)(mE.getDataBlock()[i]);
+//     for (unsigned int i = 0; i < mE.getDataBlock().length(); i++)
+//         dS << (unsigned int)(mE.getDataBlock()[i]);
 
     return dS;
 }
@@ -205,13 +205,13 @@ operator>>(QDataStream &dS, MappedEvent *mE)
     dS >> durationUsec;
     dS >> audioSec;
     dS >> audioUsec;
-    dS >> dataLength;
+//     dS >> dataLength;
 
-    for (unsigned int i = 0; i < dataLength; i++)
-    {
-        dS >> dataElement;
-        dataBlock += (char)dataElement;
-    }
+//     for (unsigned int i = 0; i < dataLength; i++)
+//     {
+//         dS >> dataElement;
+//         dataBlock += (char)dataElement;
+//     }
 
     mE->setTrackId((TrackId)trackId);
     mE->setInstrument((InstrumentId)instrument);
@@ -221,7 +221,7 @@ operator>>(QDataStream &dS, MappedEvent *mE)
     mE->setEventTime(RealTime(eventTimeSec, eventTimeUsec));
     mE->setDuration(RealTime(durationSec, durationUsec));
     mE->setAudioStartMarker(RealTime(audioSec, audioUsec));
-    mE->setDataBlock(dataBlock);
+//     mE->setDataBlock(dataBlock);
 
     return dS;
 }
@@ -246,13 +246,13 @@ operator>>(QDataStream &dS, MappedEvent &mE)
     dS >> durationUsec;
     dS >> audioSec;
     dS >> audioUsec;
-    dS >> dataLength;
+//     dS >> dataLength;
 
-    for (unsigned int i = 0; i < dataLength; i++)
-    {
-        dS >> dataElement;
-        dataBlock += dataElement;
-    }
+//     for (unsigned int i = 0; i < dataLength; i++)
+//     {
+//         dS >> dataElement;
+//         dataBlock += dataElement;
+//     }
 
     mE.setTrackId((TrackId)trackId);
     mE.setInstrument((InstrumentId)instrument);
@@ -262,7 +262,7 @@ operator>>(QDataStream &dS, MappedEvent &mE)
     mE.setEventTime(RealTime(eventTimeSec, eventTimeUsec));
     mE.setDuration(RealTime(durationSec, durationUsec));
     mE.setAudioStartMarker(RealTime(audioSec, audioUsec));
-    mE.setDataBlock(dataBlock);
+//     mE.setDataBlock(dataBlock);
 
     return dS;
 }
@@ -272,13 +272,13 @@ operator>>(QDataStream &dS, MappedEvent &mE)
 void
 MappedEvent::addDataByte(MidiByte byte)
 {
-    m_dataBlock += byte;
+//     m_dataBlock += byte;
 }
 
 void 
 MappedEvent::addDataString(const std::string &data)
 {
-    m_dataBlock += data;
+//     m_dataBlock += data;
 }
 
 

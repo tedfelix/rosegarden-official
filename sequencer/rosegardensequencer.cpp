@@ -64,6 +64,7 @@ public:
 
     bool remap();
     QString getFileName() { return m_filename; }
+    bool isMetronome();
     MappedEvent* getBuffer() { return m_mmappedBuffer; }
     size_t getSize() { return m_mmappedSize; }
     unsigned int getNbMappedEvents() { return m_nbMappedEvents; }
@@ -71,14 +72,12 @@ public:
     class iterator 
     {
     public:
-        iterator() : m_s(0), m_currentEvent(0) {};
         iterator(MmappedSegment* s, bool atEnd = false);
-
         iterator& operator=(const iterator&);
         bool operator==(const iterator&);
         bool operator!=(const iterator& it) { return !operator==(it); }
 
-        bool atEnd() const { return m_currentEvent > (m_s->getBuffer() + m_s->getNbMappedEvents() - 1); }
+        bool atEnd() const { return (m_currentEvent == 0) || (m_currentEvent > (m_s->getBuffer() + m_s->getNbMappedEvents() - 1)); }
 
         /// go back to beginning of stream
         void reset();
@@ -92,6 +91,9 @@ public:
         const MappedEvent* peek() const { return m_currentEvent; }
 
         MmappedSegment* getSegment() { return m_s; }
+
+    private:
+         iterator();
 
     protected:
         //--------------- Data members ---------------------------------
@@ -126,9 +128,22 @@ MmappedSegment::MmappedSegment(const QString filename)
 
     map();
 }
+
+bool MmappedSegment::isMetronome()
+{
+    return (getFileName().contains("metronome", false) > 0);
+}
+
+
+
 void MmappedSegment::map()
 {
     QFileInfo fInfo(m_filename);
+    if (!fInfo.exists()) {
+        SEQUENCER_DEBUG << "MmappedSegment::map() : file " << m_filename << " doesn't exist\n";
+        throw Rosegarden::Exception("file not found");
+    }
+
     m_mmappedSize = fInfo.size();
     m_nbMappedEvents = m_mmappedSize / sizeof(MappedEvent);
 
@@ -335,11 +350,16 @@ public:
     ~ControlBlockMmapper();
     
     QString getFileName() { return m_fileName; }
+
+    // should be called only when control block changes size, i.e. not very often
     void refresh();
 
     // delegate ControlBlock's interface
     InstrumentId getInstrumentForTrack(unsigned int trackId);
     bool isTrackMuted(unsigned int trackId);
+
+    InstrumentId getInstrumentForMetronome();
+    bool isMetronomeMuted();
 
 protected:
 
@@ -355,7 +375,7 @@ ControlBlockMmapper::ControlBlockMmapper(QString fileName)
     : m_fileName(fileName),
       m_fd(-1),
       m_mmappedBuffer(0),
-      m_mmappedSize(ControlBlock::getSize()),
+      m_mmappedSize(sizeof(ControlBlock)),
       m_controlBlock(0)
 {
     m_fd = ::open(m_fileName.latin1(), O_RDWR);
@@ -392,7 +412,7 @@ ControlBlockMmapper::~ControlBlockMmapper()
 
 void ControlBlockMmapper::refresh()
 {
-    ::msync(m_mmappedBuffer, m_mmappedSize, MS_ASYNC);
+    SEQMAN_DEBUG << "ControlBlockMmapper::refresh() : Not implemented yet\n";
 }
 
 InstrumentId ControlBlockMmapper::getInstrumentForTrack(unsigned int trackNb)
@@ -403,6 +423,16 @@ InstrumentId ControlBlockMmapper::getInstrumentForTrack(unsigned int trackNb)
 bool ControlBlockMmapper::isTrackMuted(unsigned int trackNb)
 {
     return m_controlBlock->isTrackMuted(trackNb);
+}
+
+InstrumentId ControlBlockMmapper::getInstrumentForMetronome()
+{
+    return m_controlBlock->getInstrumentForMetronome();
+}
+
+bool ControlBlockMmapper::isMetronomeMuted()
+{
+    return m_controlBlock->isMetronomeMuted();
 }
 
 //----------------------------------------
@@ -550,6 +580,7 @@ bool MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(Rosegarden::Map
             }
 
             MmappedSegment::iterator* iter = m_iterators[i];
+            bool evtIsFromMetronome = iter->getSegment()->isMetronome();
 
             if (*iter == iter->getSegment()->end()) {
 //                 SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : " << endTime
@@ -561,8 +592,12 @@ bool MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(Rosegarden::Map
             MappedEvent *evt = new MappedEvent(*(*iter));
 
             if (evt->getEventTime() < endTime) {
-                evt->setInstrument(m_controlBlockMmapper->getInstrumentForTrack(evt->getTrackId()));
-
+                if (evtIsFromMetronome) {
+                    evt->setInstrument(m_controlBlockMmapper->getInstrumentForMetronome());
+                } else {
+                    evt->setInstrument(m_controlBlockMmapper->getInstrumentForTrack(evt->getTrackId()));
+                }
+                
                 SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : " << endTime
                                 << " inserting evt from segment #"
                                 << i
@@ -573,11 +608,19 @@ bool MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(Rosegarden::Map
                                 << " - duration: " << evt->getDuration()
                                 << " - data1: " << (unsigned int)evt->getData1()
                                 << " - data2: " << (unsigned int)evt->getData2()
+                                << " - metronome event: " << evtIsFromMetronome
                                 << endl;
-                if (evt->getType() != 0 && !m_controlBlockMmapper->isTrackMuted(evt->getTrackId())) {
+                if (
+                    (!evtIsFromMetronome && evt->getType() != 0 && !m_controlBlockMmapper->isTrackMuted(evt->getTrackId())) || // regular event
+                    (evtIsFromMetronome && !m_controlBlockMmapper->isMetronomeMuted()) // metronome event
+                     ) {
+                    SEQUENCER_DEBUG << "inserting event\n";
                     c->insert(evt);
+                } else {
+                    
+                    SEQUENCER_DEBUG << "skipping event\n";
                 }
-
+            
                 foundOneEvent = true;
                 ++(*iter);
 
@@ -1288,20 +1331,32 @@ RosegardenSequencerApp::play(const Rosegarden::RealTime &time,
 
 
     cleanupMmapData();
-    
+
+    // Map all segments
+    //
     QDir segmentsDir(m_segmentFilesPath, "segment_*");
     for (unsigned int i = 0; i < segmentsDir.count(); ++i) {
         mmapSegment(m_segmentFilesPath + "/" + segmentsDir[i]);
     }
 
+    // Map metronome
+    //
+    QString metronomeFileName = KGlobal::dirs()->resourceDirs("tmp").first() + "/rosegarden_metronome";
+    QFileInfo metronomeFileInfo(metronomeFileName);
+    if (metronomeFileInfo.exists())
+        mmapSegment(metronomeFileName);
+    else 
+        SEQUENCER_DEBUG << "RosegardenSequencerApp::play() - no metronome found\n";
+
+    // Map control block
+    //
     m_controlBlockMmapper = new ControlBlockMmapper(KGlobal::dirs()->resourceDirs("tmp").first() + "/rosegarden_control_block");
 
     initMetaIterator();
 
     // report
     //
-    SEQUENCER_DEBUG << "RosegardenSequencerApp::play() - starting to play"
-                    << endl;
+    SEQUENCER_DEBUG << "RosegardenSequencerApp::play() - starting to play\n";
 
     // Test bits
 //     m_metaIterator = new MmappedSegmentsMetaIterator(m_mmappedSegments);
@@ -1317,7 +1372,17 @@ RosegardenSequencerApp::play(const Rosegarden::RealTime &time,
 
 MmappedSegment* RosegardenSequencerApp::mmapSegment(const QString& file)
 {
-    MmappedSegment* m = new MmappedSegment(file);
+    MmappedSegment* m = 0;
+    
+    try {
+        m = new MmappedSegment(file);
+    } catch (Rosegarden::Exception e) {
+        SEQUENCER_DEBUG << "RosegardenSequencerApp::mmapSegment() - couldn't map file " << file
+                        << " : " << e.getMessage().c_str() << endl;
+        return 0;
+    }
+    
+    
     m_mmappedSegments[file] = m;
     return m;
 }

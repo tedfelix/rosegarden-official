@@ -910,6 +910,19 @@ Composition::setPosition(timeT position)
     m_position = position;
 }
 
+void Composition::setPlayMetronome(bool value)
+{
+    m_playMetronome = value;
+    notifyMetronomeChanged();
+}
+
+void Composition::setRecordMetronome(bool value)
+{
+    m_recordMetronome = value;
+    notifyMetronomeChanged();
+}
+
+
 #ifdef TRACK_DEBUG
 // track debug convenience function
 //
@@ -1268,6 +1281,15 @@ Composition::notifyTrackChanged(Track *t) const
     for (ObserverSet::const_iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
 	(*i)->trackChanged(this, t);
+    }
+}
+
+void
+Composition::notifyMetronomeChanged() const
+{
+    for (ObserverSet::const_iterator i = m_observers.begin();
+	 i != m_observers.end(); ++i) {
+	(*i)->metronomeChanged(this, usePlayMetronome(), useRecordMetronome());
     }
 }
 

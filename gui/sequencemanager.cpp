@@ -19,269 +19,35 @@
     COPYING included with this distribution for more information.
 */
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <sys/mman.h>
-#include <unistd.h>
-#include <errno.h>
-
-#include <qdir.h>
-#include <qbutton.h>
 #include <qpushbutton.h>
 #include <qcursor.h>
 #include <qtimer.h>
 
 #include <klocale.h>
 #include <kconfig.h>
-#include <kmessagebox.h>
-#include <kstddirs.h>
 
 #include "rgapplication.h"
 #include "constants.h"
 #include "audiopluginmanager.h"
 #include "ktmpstatusmsg.h"
-#include "rosestrings.h"
 #include "rosegardenguidoc.h"
 #include "rosegardentransportdialog.h"
 #include "rosegardenguiview.h"
 #include "sequencemanager.h"
-#include "ControlBlock.h"
-#include "SegmentPerformanceHelper.h"
 #include "SoundDriver.h"
-#include "MappedRealTime.h"
+#include "BaseProperties.h"
 #include "studiocontrol.h"
 #include "MidiDevice.h"
-#include "widgets.h"
-#include "dialogs.h"
+#include "rosestrings.h"
+#include "mmapper.h"
+// #include "widgets.h"
+// #include "dialogs.h"
 #include "diskspace.h"
 
-using std::cout;
-using std::cerr;
-using std::endl;
-
-// Seems not to be properly defined under some gcc 2.95 setups
-#ifndef MREMAP_MAYMOVE
-#define MREMAP_MAYMOVE 1
-#endif
 
 namespace Rosegarden
 {
 
-class ControlBlockMmapper
-{
-public:
-    ControlBlockMmapper(RosegardenGUIDoc*);
-    ~ControlBlockMmapper();
-    
-    QString getFileName() { return m_fileName; }
-    void refresh();
-    void updateTrackData(Track*);
-
-protected:
-    void initControlBlock();
-    void setFileSize(size_t);
-    QString createFileName();
-
-    //--------------- Data members ---------------------------------
-    RosegardenGUIDoc* m_doc;
-    QString m_fileName;
-    bool m_needsRefresh;
-    int m_fd;
-    void* m_mmappedBuffer;
-    size_t m_mmappedSize;
-    ControlBlock* m_controlBlock;
-};
-
-ControlBlockMmapper::ControlBlockMmapper(RosegardenGUIDoc* doc)
-    : m_doc(doc),
-      m_fileName(createFileName()),
-      m_needsRefresh(true),
-      m_fd(-1),
-      m_mmappedBuffer(0),
-      m_mmappedSize(ControlBlock::getSize()),
-      m_controlBlock(0)
-{
-    // just in case
-    QFile::remove(m_fileName);
-
-    m_fd = ::open(m_fileName.latin1(), O_RDWR|O_CREAT|O_TRUNC,
-                  S_IRUSR|S_IWUSR);
-    if (m_fd < 0) {
-        SEQMAN_DEBUG << "ControlBlockMmapper : Couldn't open " << m_fileName
-                     << endl;
-        throw Rosegarden::Exception("Couldn't open " + qstrtostr(m_fileName));
-    }
-
-    setFileSize(m_mmappedSize);
-
-    //
-    // mmap() file for writing
-    //
-    m_mmappedBuffer = ::mmap(0, m_mmappedSize,
-                             PROT_READ|PROT_WRITE,
-                             MAP_SHARED, m_fd, 0);
-
-    if (m_mmappedBuffer == (void*)-1) {
-        SEQMAN_DEBUG << QString("mmap failed : (%1) %2\n").arg(errno).arg(strerror(errno));
-        throw Rosegarden::Exception("mmap failed");
-    }
-
-    SEQMAN_DEBUG << "ControlBlockMmapper : mmap size : " << m_mmappedSize
-                 << " at " << (void*)m_mmappedBuffer << endl;
-
-    // Create new control block on file
-    m_controlBlock = new (m_mmappedBuffer) ControlBlock(doc->getComposition().getNbTracks());
-
-    initControlBlock();
-}
-
-ControlBlockMmapper::~ControlBlockMmapper()
-{
-    ::munmap(m_mmappedBuffer, m_mmappedSize);
-    ::close(m_fd);
-}
-
-
-QString ControlBlockMmapper::createFileName()
-{
-    return KGlobal::dirs()->resourceDirs("tmp").first() + "/rosegarden_control_block";
-}
-
-void ControlBlockMmapper::refresh()
-{
-    SEQMAN_DEBUG << "ControlBlockMmapper : refresh\n";
-
-    if (m_needsRefresh) {
-        ::msync(m_mmappedBuffer, m_mmappedSize, MS_ASYNC);
-
-        rgapp->sequencerSend("remapControlBlock()");
-
-        m_needsRefresh = false;
-    }
-}
-
-void ControlBlockMmapper::updateTrackData(Track *t)
-{
-    m_controlBlock->updateTrackData(t);
-    m_needsRefresh = true;
-}
-
-
-void ControlBlockMmapper::initControlBlock()
-{
-    Composition& comp = m_doc->getComposition();
-    
-    for(Composition::trackiterator i = comp.getTracks().begin(); i != comp.getTracks().end(); ++i) {
-        Track* track = i->second;
-        if (track == 0) continue;
-        
-        m_controlBlock->updateTrackData(track);
-    }
-
-    refresh();
-}
-
-
-void ControlBlockMmapper::setFileSize(size_t size)
-{
-    SEQMAN_DEBUG << "ControlBlockMmapper : setting size of "
-                 << m_fileName << " to " << size << endl;
-    // rewind
-    ::lseek(m_fd, 0, SEEK_SET);
-
-    //
-    // enlarge the file
-    // (seek() to wanted size, then write a byte)
-    //
-    if (::lseek(m_fd, size - 1, SEEK_SET) == -1) {
-        SEQMAN_DEBUG << "ControlBlockMmapper : Couldn't lseek in " << m_fileName
-                     << " to " << size << endl;
-        throw Rosegarden::Exception("lseek failed");
-    }
-    
-    if (::write(m_fd, "\0", 1) != 1) {
-        SEQMAN_DEBUG << "ControlBlockMmapper : Couldn't write byte in  "
-                     << m_fileName << endl;
-        throw Rosegarden::Exception("write failed");
-    }
-    
-}
-
-//----------------------------------------
-
-
-class SegmentMmapper
-{
-public:
-    SegmentMmapper(RosegardenGUIDoc*, Segment*,
-                   const QString& fileName);
-    ~SegmentMmapper();
-
-    /**
-     * refresh the object after the segment has been modified
-     * returns true if size changed (and thus the sequencer
-     * needs to be told about it
-     */
-    bool refresh();
-
-    QString getFileName() { return m_fileName; }
-
-    unsigned int getSegmentRepeatCount();
-    size_t computeMmappedSize();
-
-protected:
-    /// set the size of the mmapped filed
-    void setFileSize(size_t);
-
-    /// perform the mmap() of the file
-    void doMmap();
-
-    /// mremap() the file after a size change
-    void remap(size_t newsize);
-
-    /// dump all segment data in the file
-    void dump();
-
-    //--------------- Data members ---------------------------------
-    RosegardenGUIDoc* m_doc;
-    Segment* m_segment;
-    QString m_fileName;
-
-    int m_fd;
-    size_t m_mmappedSize;
-    MappedEvent* m_mmappedBuffer;
-};
-
-//----------------------------------------
-
-class CompositionMmapper
-{
-    friend class SequenceManager;
-
-public:
-    CompositionMmapper(RosegardenGUIDoc *doc);
-    ~CompositionMmapper();
-
-    QString getSegmentFileName(Segment*);
-
-    void cleanup();
-
-protected:
-    bool segmentModified(Segment*);
-    void segmentAdded(Segment*);
-    void segmentDeleted(Segment*);
-
-    void mmapSegment(Segment*);
-    QString makeFileName(Segment*);
-
-    //--------------- Data members ---------------------------------
-
-    RosegardenGUIDoc* m_doc;
-    typedef std::map<Segment*, SegmentMmapper*> segmentmmapers;
-
-    segmentmmapers m_segmentMmappers;
-};
 
 //----------------------------------------
 
@@ -290,6 +56,7 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
     m_doc(doc),
     m_compositionMmapper(new CompositionMmapper(m_doc)),
     m_controlBlockMmapper(new ControlBlockMmapper(m_doc)),
+    m_metronomeMmapper(0),
     m_transportStatus(STOPPED),
     m_soundDriverStatus(NO_DRIVER),
     m_transport(transport),
@@ -324,6 +91,7 @@ SequenceManager::~SequenceManager()
     SEQMAN_DEBUG << "SequenceManager::~SequenceManager()\n";   
     delete m_compositionMmapper;
     delete m_controlBlockMmapper;
+    delete m_metronomeMmapper;
 }
 
 void SequenceManager::setDocument(RosegardenGUIDoc* doc)
@@ -1771,381 +1539,11 @@ void SequenceManager::resetCompositionMmapper()
     SEQMAN_DEBUG << "SequenceManager::resetCompositionMmapper()\n";
     delete m_compositionMmapper;
     m_compositionMmapper = new CompositionMmapper(m_doc);
+
+
+    delete m_metronomeMmapper;
+    m_metronomeMmapper = new MetronomeMmapper(m_doc, 2); // metronome depth
 }
-
-//----------------------------------------
-
-CompositionMmapper::CompositionMmapper(RosegardenGUIDoc *doc)
-    : m_doc(doc)
-{
-    SEQMAN_DEBUG << "CompositionMmapper() - doc = " << doc << endl;
-    Composition &comp = m_doc->getComposition();
-
-    for (Composition::iterator it = comp.begin(); it != comp.end(); it++) {
-
-        Rosegarden::Track* track = comp.getTrackById((*it)->getTrack());
-
-        // check to see if track actually exists
-        //
-        if (track == 0)
-            continue;
-
-        mmapSegment(*it);
-    }
-}
-
-CompositionMmapper::~CompositionMmapper()
-{
-    SEQMAN_DEBUG << "~CompositionMmapper()\n";
-
-    //
-    // Clean up possible left-overs
-    //
-    cleanup();
-
-    for(segmentmmapers::iterator i = m_segmentMmappers.begin();
-        i != m_segmentMmappers.end(); ++i)
-        delete i->second;
-}
-
-void CompositionMmapper::cleanup()
-{
-    // In case the sequencer is still running, mapping some segments
-    //
-    rgapp->sequencerSend("closeAllSegments()");
-
-    // Erase all 'segment_*' files
-    //
-    QString tmpPath = KGlobal::dirs()->resourceDirs("tmp").first();
-
-    QDir segmentsDir(tmpPath, "segment_*");
-    for (unsigned int i = 0; i < segmentsDir.count(); ++i) {
-        QString segmentName = tmpPath + '/' + segmentsDir[i];
-        SEQMAN_DEBUG << "CompositionMmapper : cleaning up " << segmentName << endl;
-        QFile::remove(segmentName);
-    }
-    
-}
-
-
-bool CompositionMmapper::segmentModified(Segment* segment)
-{
-    SegmentMmapper* mmapper = m_segmentMmappers[segment];
-
-    SEQMAN_DEBUG << "CompositionMmapper::segmentModified(" << segment << ") - mmapper = "
-                 << mmapper << endl;
-
-    return mmapper->refresh();
-}
-
-void CompositionMmapper::segmentAdded(Segment* segment)
-{
-    SEQMAN_DEBUG << "CompositionMmapper::segmentAdded(" << segment << ")\n";
-
-    mmapSegment(segment);
-}
-
-void CompositionMmapper::segmentDeleted(Segment* segment)
-{
-    SEQMAN_DEBUG << "CompositionMmapper::segmentDeleted(" << segment << ")\n";
-    SegmentMmapper* mmapper = m_segmentMmappers[segment];
-    m_segmentMmappers.erase(segment);
-    SEQMAN_DEBUG << "CompositionMmapper::segmentDeleted() : deleting SegmentMmapper " << mmapper << endl;
-
-    delete mmapper;
-}
-
-void CompositionMmapper::mmapSegment(Segment* segment)
-{
-    SEQMAN_DEBUG << "CompositionMmapper::mmapSegment(" << segment << ")\n";
-
-    SegmentMmapper* mmapper = new SegmentMmapper(m_doc, segment,
-                                                 makeFileName(segment));
-
-    m_segmentMmappers[segment] = mmapper;
-}
-
-QString CompositionMmapper::makeFileName(Segment* segment)
-{
-    QStringList tmpDirs = KGlobal::dirs()->resourceDirs("tmp");
-
-    return QString("%1/segment_%2")
-        .arg(tmpDirs.first())
-        .arg((unsigned int)segment, 0, 16);
-}
-
-QString CompositionMmapper::getSegmentFileName(Segment* s)
-{
-    SegmentMmapper* mmapper = m_segmentMmappers[s];
-    
-    if (mmapper)
-        return mmapper->getFileName();
-    else
-        return QString::null;
-}
-
-
-//----------------------------------------
-
-SegmentMmapper::SegmentMmapper(RosegardenGUIDoc* doc,
-                               Segment* segment, const QString& fileName)
-    : m_doc(doc),
-      m_segment(segment),
-      m_fileName(fileName),
-      m_fd(-1),
-      m_mmappedSize(computeMmappedSize()),
-      m_mmappedBuffer((MappedEvent*)0)
-{
-    SEQMAN_DEBUG << "SegmentMmapper : " << this
-                 << " trying to mmap " << m_fileName
-                 << endl;
-
-    m_fd = ::open(m_fileName.latin1(), O_RDWR|O_CREAT|O_TRUNC,
-                  S_IRUSR|S_IWUSR);
-    if (m_fd < 0) {
-        SEQMAN_DEBUG << "SegmentMmapper : Couldn't open " << m_fileName
-                     << endl;
-        throw Rosegarden::Exception("Couldn't open " + qstrtostr(m_fileName));
-    }
-
-    SEQMAN_DEBUG << "SegmentMmapper : mmap size = " << m_mmappedSize
-                 << endl;
-
-    if (m_mmappedSize > 0) {
-        setFileSize(m_mmappedSize);
-        doMmap();
-        dump();
-    } else {
-        SEQMAN_DEBUG << "SegmentMmapper : mmap size = 0 - skipping mmapping for now\n";
-    }
-}
-
-size_t SegmentMmapper::computeMmappedSize()
-{
-    int repeatCount = getSegmentRepeatCount();
-
-    return (repeatCount + 1) * m_segment->size() * sizeof(MappedEvent);
-}
-
-
-SegmentMmapper::~SegmentMmapper()
-{
-    SEQMAN_DEBUG << "~SegmentMmapper : " << this
-                 << " unmapping " << (void*)m_mmappedBuffer
-                 << " of size " << m_mmappedSize
-                 << endl;
-
-    if (m_mmappedBuffer && m_mmappedSize)
-        ::munmap(m_mmappedBuffer, m_mmappedSize);
-
-    ::close(m_fd);
-    SEQMAN_DEBUG << "~SegmentMmapper : removing " << m_fileName << endl;
-
-    QFile::remove(m_fileName);
-}
-
-
-bool SegmentMmapper::refresh()
-{
-    bool res = false;
-
-    int repeatCount = getSegmentRepeatCount();
-
-    size_t newMmappedSize = computeMmappedSize();
-
-    SEQMAN_DEBUG << "SegmentMmapper::refresh() - m_mmappedBuffer = "
-                 << (void*)m_mmappedBuffer << " - size = " << newMmappedSize << endl;
-
-    // always zero out
-    memset(m_mmappedBuffer, 0, m_mmappedSize);
-
-    if (newMmappedSize != m_mmappedSize) {
-
-        if (newMmappedSize == 0) {
-
-            // nothing to do, just msync and go
-            ::msync(m_mmappedBuffer, m_mmappedSize, MS_ASYNC);
-            m_mmappedSize = 0;
-            return true;
-
-        } else if (newMmappedSize > m_mmappedSize) {
-
-            setFileSize(newMmappedSize);
-            remap(newMmappedSize);
-            res = true;
-        }
-    }
-    
-    SEQMAN_DEBUG << "SegmentMmapper::refresh : mmap size = " << m_mmappedSize
-                 << endl;
-
-    dump();
-
-    return res;
-}
-
-void SegmentMmapper::setFileSize(size_t size)
-{
-    SEQMAN_DEBUG << "SegmentMmapper : setting size of "
-                 << m_fileName << " to " << size << endl;
-    // rewind
-    ::lseek(m_fd, 0, SEEK_SET);
-
-    //
-    // enlarge the file
-    // (seek() to wanted size, then write a byte)
-    //
-    if (::lseek(m_fd, size - 1, SEEK_SET) == -1) {
-        SEQMAN_DEBUG << "SegmentMmapper : Couldn't lseek in " << m_fileName
-                     << " to " << size << endl;
-        throw Rosegarden::Exception("lseek failed");
-    }
-    
-    if (::write(m_fd, "\0", 1) != 1) {
-        SEQMAN_DEBUG << "SegmentMmapper : Couldn't write byte in  "
-                     << m_fileName << endl;
-        throw Rosegarden::Exception("write failed");
-    }
-    
-}
-
-void SegmentMmapper::remap(size_t newsize)
-{
-    SEQMAN_DEBUG << "SegmentMmapper : remapping " << m_fileName
-                 << " from size " << m_mmappedSize
-                 << " to size " << newsize << endl;
-
-    if (!m_mmappedBuffer) { // nothing to mremap, just mmap
-        
-        SEQMAN_DEBUG << "SegmentMmapper : nothing to remap - mmap instead\n";
-        m_mmappedSize = newsize;
-        doMmap();
-
-    } else {
-
-#ifdef linux
-        m_mmappedBuffer = (MappedEvent*)::mremap(m_mmappedBuffer, m_mmappedSize,
-                                          newsize, MREMAP_MAYMOVE);
-#else
-	::munmap(m_mmappedBuffer, m_mmappedSize);
-	m_mmappedBuffer = (MappedEvent *)::mmap(0, newsize,
-					 PROT_READ|PROT_WRITE,
-					 MAP_SHARED, m_fd, 0);
-#endif
-    
-        if (m_mmappedBuffer == (void*)-1) {
-            SEQMAN_DEBUG << QString("mremap failed : (%1) %2\n").arg(errno).arg(strerror(errno));
-            throw Rosegarden::Exception("mremap failed");
-
-        }
-
-        m_mmappedSize = newsize;
-
-    }
-    
-}
-
-void SegmentMmapper::doMmap()
-{
-    //
-    // mmap() file for writing
-    //
-    m_mmappedBuffer = (MappedEvent*)::mmap(0, m_mmappedSize,
-                                           PROT_READ|PROT_WRITE,
-                                           MAP_SHARED, m_fd, 0);
-
-    if (m_mmappedBuffer == (void*)-1) {
-        SEQMAN_DEBUG << QString("mmap failed : (%1) %2\n").arg(errno).arg(strerror(errno));
-        throw Rosegarden::Exception("mmap failed");
-    }
-
-    SEQMAN_DEBUG << "SegmentMmapper::doMmap() - mmap size : " << m_mmappedSize
-                 << " at " << (void*)m_mmappedBuffer << endl;
-    
-}
-
-void SegmentMmapper::dump()
-{
-    Composition &comp = m_doc->getComposition();
-
-    Rosegarden::RealTime eventTime;
-    Rosegarden::RealTime duration;
-    Rosegarden::Instrument *instrument = 0;
-    Rosegarden::Track* track = comp.getTrackById(m_segment->getTrack());
-    
-    SegmentPerformanceHelper helper(*m_segment);
-
-    timeT segmentStartTime = m_segment->getStartTime();
-    timeT segmentEndTime = m_segment->getEndMarkerTime();
-    timeT segmentDuration = segmentEndTime - segmentStartTime;
-    timeT repeatEndTime = segmentEndTime;
-
-    int repeatCount = getSegmentRepeatCount();
-
-    if (repeatCount > 0) repeatEndTime = m_segment->getRepeatEndTime();
-
-    unsigned int nbEvents = 0;
-    MappedEvent* bufPos = m_mmappedBuffer;
-
-    for (int repeatNo = 0; repeatNo <= repeatCount; ++repeatNo) {
-
-        for (Segment::iterator j = m_segment->begin();
-             j != m_segment->end(); ++j) {
-
-            if ((*j)->isa(Rosegarden::Note::EventRestType)) continue;
-
-            timeT playTime =
-                helper.getSoundingAbsoluteTime(j) + repeatNo * segmentDuration;
-            if (playTime >= repeatEndTime) break;
-
-            eventTime = comp.getElapsedRealTime(playTime);
-
-            duration = helper.getRealSoundingDuration(j);
-
-            // No duration and we're a note?  Probably in a tied
-            // series, but not as first note
-            //
-            if (duration == Rosegarden::RealTime(0, 0) &&
-                (*j)->isa(Rosegarden::Note::EventType))
-                continue;
-	    
-            try {
-                // Create mapped event in mmapped buffer
-                MappedEvent *mE = new (bufPos) MappedEvent(0, // the instrument will be extracted from the ControlBlock by the sequencer
-                                                           **j,
-                                                           eventTime,
-                                                           duration);
-                mE->setTrackId(track->getId());
-
-                ++bufPos;
-
-            } catch(...) {
-                SEQMAN_DEBUG << "SegmentMmapper::dump - caught exception while trying to create MappedEvent\n";
-            }
-        }
-    }
-
-
-    ::msync(m_mmappedBuffer, m_mmappedSize, MS_ASYNC);
-}
-
-unsigned int SegmentMmapper::getSegmentRepeatCount()
-{
-    int repeatCount = 0;
-
-    timeT segmentStartTime = m_segment->getStartTime();
-    timeT segmentEndTime = m_segment->getEndMarkerTime();
-    timeT segmentDuration = segmentEndTime - segmentStartTime;
-    timeT repeatEndTime = segmentEndTime;
-
-    if (m_segment->isRepeating() && segmentDuration > 0) {
-	repeatEndTime = m_segment->getRepeatEndTime();
-	repeatCount = 1 + (repeatEndTime - segmentEndTime) / segmentDuration;
-    }
-
-    return repeatCount;
-}
-
 
 
 bool SequenceManager::event(QEvent *e)
@@ -2154,6 +1552,7 @@ bool SequenceManager::event(QEvent *e)
 	if (m_updateRequested) {
 	    checkRefreshStatus();
             m_controlBlockMmapper->refresh();
+            m_metronomeMmapper->refresh();
 	    m_updateRequested = false;
 	}
 	return true;
@@ -2279,7 +1678,7 @@ void SequenceManager::segmentAdded(const Composition*, Segment* s)
     m_addedSegments.push_back(s);
 }
 
-void SequenceManager::segmentRemoved(const Composition *c, Segment* s)
+void SequenceManager::segmentRemoved(const Composition*, Segment* s)
 {
     SEQMAN_DEBUG << "SequenceManager::segmentRemoved(" << s << ")\n";
     m_removedSegments.push_back(s);
@@ -2351,6 +1750,13 @@ void SequenceManager::compositionDeleted(const Composition *)
 void SequenceManager::trackChanged(const Composition *, Track* t)
 {
     m_controlBlockMmapper->updateTrackData(t);
+}
+
+void SequenceManager::metronomeChanged(const Composition *, bool playMetronome, bool recordMetronome)
+{
+    SEQMAN_DEBUG << "SequenceManager::metronomeChanged(playMetronome = " << playMetronome
+                 << ", recordMetronome = " << recordMetronome << endl;
+    m_controlBlockMmapper->updateMetronomeData(m_metronomeMmapper->getMetronomeInstrument(), playMetronome, recordMetronome);
 }
 
 void
@@ -2457,5 +1863,7 @@ SequenceManager::slotCountdownStop()
 
     stopping(); // erm - simple as that
 }
+
+
 
 }

@@ -62,13 +62,18 @@ public:
     void setTrackMuted(TrackId trackId, bool);
     bool isTrackMuted(TrackId trackId);
 
-    static size_t getSize(); // update this when adding new members
+    void setInstrumentForMetronome(InstrumentId);
+    InstrumentId getInstrumentForMetronome();
+
+    void setMetronomeMuted(bool);
+    bool isMetronomeMuted();
 
 protected:
     //--------------- Data members ---------------------------------
-    // ONLY PUT PLAIN DATA HERE - NO POINTERS EVER
+    // PUT ONLY PLAIN DATA HERE - NO POINTERS EVER
     int m_nbTracks;
-    TrackInfo m_trackInstruments[CONTROLBLOCK_MAX_NB_TRACKS]; // should be high enough for the moment
+    TrackInfo m_metronomeInfo;
+    TrackInfo m_trackInfo[CONTROLBLOCK_MAX_NB_TRACKS]; // should be high enough for the moment
 };
 
 }

@@ -21,6 +21,8 @@
 
 #include <cstring>
 
+#include "rosedebug.h" // remove this
+
 #include "ControlBlock.h"
 
 namespace Rosegarden
@@ -29,7 +31,9 @@ namespace Rosegarden
 ControlBlock::ControlBlock(unsigned int nbTracks)
     : m_nbTracks(nbTracks)
 {
-    memset(m_trackInstruments, 0, CONTROLBLOCK_MAX_NB_TRACKS * sizeof(InstrumentId));
+    m_metronomeInfo.muted = true;
+    m_metronomeInfo.instrumentId = 0;
+    memset(m_trackInfo, 0, sizeof(m_trackInfo));
 }
 
 ControlBlock::ControlBlock()
@@ -46,32 +50,48 @@ void ControlBlock::updateTrackData(Track* t)
     }
 }
 
+void ControlBlock::setInstrumentForMetronome(InstrumentId instId)
+{
+    m_metronomeInfo.instrumentId = instId;
+}
+
+InstrumentId ControlBlock::getInstrumentForMetronome()
+{
+    return m_metronomeInfo.instrumentId;
+}
+
+
+void ControlBlock::setMetronomeMuted(bool mute)
+{
+    RG_DEBUG << "ControlBlock::setMetronomeMuted(" << mute << ")\n";
+    m_metronomeInfo.muted = mute;
+}
+
+bool ControlBlock::isMetronomeMuted()
+{
+    return m_metronomeInfo.muted;
+}
 
 void ControlBlock::setInstrumentForTrack(TrackId trackId, InstrumentId instId)
 {
-    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS) m_trackInstruments[trackId].instrumentId = instId;
+    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS) m_trackInfo[trackId].instrumentId = instId;
 }
 
 InstrumentId ControlBlock::getInstrumentForTrack(TrackId trackId)
 {
-    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS) return m_trackInstruments[trackId].instrumentId;
+    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS) return m_trackInfo[trackId].instrumentId;
     return 0;
 }
 
 void ControlBlock::setTrackMuted(TrackId trackId, bool mute)
 {
-    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS) m_trackInstruments[trackId].muted = mute;
+    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS) m_trackInfo[trackId].muted = mute;
 }
 
 bool ControlBlock::isTrackMuted(TrackId trackId)
 {
-    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS) return m_trackInstruments[trackId].muted;
+    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS) return m_trackInfo[trackId].muted;
     return true;
-}
-
-size_t ControlBlock::getSize()
-{
-    return CONTROLBLOCK_MAX_NB_TRACKS * sizeof(TrackInfo) + 20;
 }
 
 }

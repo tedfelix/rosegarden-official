@@ -114,7 +114,7 @@ public:
                    m_eventTime(0, 0),
                    m_duration(0, 0),
                    m_audioStartMarker(0, 0),
-                   m_dataBlock(""),
+//                    m_dataBlock(""),
                    m_isPersistent(false) {}
 
     // Construct from Events to Internal (MIDI) type MappedEvent
@@ -143,7 +143,7 @@ public:
         m_eventTime(absTime),
         m_duration(duration),
         m_audioStartMarker(RealTime(0,0)),
-        m_dataBlock(""),
+//         m_dataBlock(""),
         m_isPersistent(false) {}
 
     // A general MappedEvent constructor for any MappedEvent type
@@ -163,7 +163,7 @@ public:
         m_eventTime(absTime),
         m_duration(duration),
         m_audioStartMarker(audioStartMarker),
-        m_dataBlock(""),
+//         m_dataBlock(""),
         m_isPersistent(false) {}
 
     // Audio MappedEvent shortcut constructor
@@ -181,7 +181,7 @@ public:
          m_eventTime(eventTime),
          m_duration(duration),
          m_audioStartMarker(audioStartMarker),
-         m_dataBlock(""),
+//          m_dataBlock(""),
          m_isPersistent(false) {}
 
     // More generalised MIDI event containers for
@@ -199,7 +199,7 @@ public:
          m_eventTime(RealTime(0, 0)),
          m_duration(RealTime(0, 0)),
          m_audioStartMarker(RealTime(0, 0)),
-         m_dataBlock(""),
+//          m_dataBlock(""),
          m_isPersistent(false) {}
 
     MappedEvent(InstrumentId id,
@@ -213,7 +213,7 @@ public:
         m_eventTime(RealTime(0, 0)),
         m_duration(RealTime(0, 0)),
         m_audioStartMarker(RealTime(0, 0)),
-        m_dataBlock(""),
+//         m_dataBlock(""),
         m_isPersistent(false) {}
 
 
@@ -229,7 +229,7 @@ public:
         m_eventTime(RealTime(0, 0)),
         m_duration(RealTime(0, 0)),
         m_audioStartMarker(RealTime(0, 0)),
-        m_dataBlock(""),
+//         m_dataBlock(""),
         m_isPersistent(false) {}
 
     // Copy constructor
@@ -244,7 +244,7 @@ public:
         m_eventTime(mE.getEventTime()),
         m_duration(mE.getDuration()),
         m_audioStartMarker(mE.getAudioStartMarker()),
-        m_dataBlock(mE.getDataBlock()),
+//         m_dataBlock(mE.getDataBlock()),
         m_isPersistent(false){}
 
     // Copy from pointer
@@ -258,7 +258,7 @@ public:
         m_eventTime(mE->getEventTime()),
         m_duration(mE->getDuration()),
         m_audioStartMarker(mE->getAudioStartMarker()),
-        m_dataBlock(mE->getDataBlock()),
+//         m_dataBlock(mE->getDataBlock()),
         m_isPersistent(false) {}
 
     ~MappedEvent() {;}
@@ -322,8 +322,8 @@ public:
 
     // Data block
     //
-    std::string getDataBlock() const { return m_dataBlock; }
-    void setDataBlock(const std::string &dataBlock) { m_dataBlock = dataBlock; }
+//     std::string getDataBlock() const { return m_dataBlock; }
+//     void setDataBlock(const std::string &dataBlock) { m_dataBlock = dataBlock; }
     
     // How MappedEvents are ordered in the MappedComposition
     //
@@ -368,7 +368,7 @@ private:
     // Use this when we want to store something in addition to the
     // other bytes in this type, e.g. System Exclusive.
     //
-    std::string      m_dataBlock;
+//     std::string      m_dataBlock;
 
     // Should a MappedComposition try and delete this MappedEvent or
     // if it persistent?

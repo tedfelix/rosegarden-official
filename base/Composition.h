@@ -580,8 +580,8 @@ public:
     bool usePlayMetronome() const { return m_playMetronome; }
     bool useRecordMetronome() const { return m_recordMetronome; }
 
-    void setPlayMetronome(bool value) { m_playMetronome = value; }
-    void setRecordMetronome(bool value) { m_recordMetronome = value; }
+    void setPlayMetronome(bool value);
+    void setRecordMetronome(bool value);
 
     // Expose these
     //
@@ -750,6 +750,7 @@ protected:
     void notifySegmentRemoved(Segment *) const;
     void notifyEndMarkerChange(bool shorten) const;
     void notifyTrackChanged(Track*) const;
+    void notifyMetronomeChanged() const;
     void notifySourceDeletion() const;
 
     BasicQuantizer                   *m_basicQuantizer;
@@ -813,6 +814,11 @@ public:
      */
     virtual void trackChanged(const Composition *, Track*) = 0;
 
+    /**
+     * Called when metronome status has changed (on/off)
+     */
+    virtual void metronomeChanged(const Composition *, bool playMetronome, bool recordMetronome) = 0;
+    
     /**
      * Called from the composition dtor
      */
