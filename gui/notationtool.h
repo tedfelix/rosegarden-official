@@ -301,7 +301,7 @@ public:
     /**
      * Create the selection rect
      *
-     * We need this because so NotationView deletes all QCanvasItems
+     * We need this because NotationView deletes all QCanvasItems
      * along with it. This happens before the NotationSelector is
      * deleted, so we can't delete the selection rect in
      * ~NotationSelector because that leads to double deletion.
