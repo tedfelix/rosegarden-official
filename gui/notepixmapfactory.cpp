@@ -229,6 +229,10 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
         default: break;
         }
     }
+
+    if (params.m_marks.size() > 0) {
+	makeRoomForMarks(isStemmed, params);
+    }
     
     if (isStemmed) {
         if (params.m_stemGoesUp) {
@@ -424,6 +428,10 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
         }
     }        
 
+    if (params.m_marks.size() > 0) {
+	drawMarks(isStemmed, params);
+    }
+
     if (params.m_legerLines != 0) {
 
         s0.setX(m_left - getStemThickness());
@@ -521,6 +529,48 @@ NotePixmapFactory::drawAccidental(Accidental a)
 
     m_p.drawPixmap(0, m_above + m_noteBodyHeight/2 - ah.y(), ap);
     m_pm.drawPixmap(0, m_above + m_noteBodyHeight/2 - ah.y(), *(ap.mask()));
+}
+
+void
+NotePixmapFactory::makeRoomForMarks(bool isStemmed,
+				    const NotePixmapParameters &params)
+{
+    int height = 0, width = 0;
+    for (int i = 0; i < params.m_marks.size(); ++i) {
+	//!!! Deal with textual marks (sf, rf) -- or make them not marks
+	// at all?
+	QPixmap pixmap(m_font->getPixmap(getMarkCharName(params.m_marks[i])));
+	height += pixmap.height();
+	if (pixmap.width() > width) width = pixmap.width();
+    }
+    if (isStemmed && params.m_stemGoesUp) {
+	m_below += height + 1;
+    } else {
+	m_above += height + 1;
+    }
+    m_left = std::max(m_left, width/2 - m_noteBodyWidth/2);
+    m_right = std::max(m_right, width/2 - m_noteBodyWidth/2);
+}
+
+void
+NotePixmapFactory::drawMarks(bool isStemmed,
+			     const NotePixmapParameters &params)
+{
+    bool marksAbove = !(isStemmed && params.m_stemGoesUp);
+    int dy = 0;
+
+    for (int i = 0; i < params.m_marks.size(); ++i) {
+	//!!! Deal with textual marks (sf, rf) -- or make them not marks
+	// at all?
+	QPixmap pixmap(m_font->getPixmap(getMarkCharName(params.m_marks[i])));
+	m_p.drawPixmap(m_left + m_noteBodyWidth/2 - pixmap.width()/2,
+		       (marksAbove ? (m_above - dy - pixmap.height() - 1) :
+			(m_above + m_noteBodyWidth + dy)), pixmap);
+	m_pm.drawPixmap(m_left + m_noteBodyWidth/2 - pixmap.width()/2,
+			(marksAbove ? (m_above - dy - pixmap.height() - 1) :
+			 (m_above + m_noteBodyWidth + dy)), *(pixmap.mask()));
+	dy += pixmap.height();
+    }
 }
 
 

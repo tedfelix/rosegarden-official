@@ -667,7 +667,7 @@ NoteFont::recolour(QPixmap in, PixmapColour colour) const
 
     QImage image = in.convertToImage();
 
-    int hue, s, v;
+    int hue = 0, s, v;
 
     switch (colour) {
     case Red:   hue = 0;   break;
@@ -794,6 +794,15 @@ const CharName SIXTY_FOURTH_REST = "MUSICAL SYMBOL SIXTY-FOURTH REST";
 
 const CharName DOT = "MUSICAL SYMBOL COMBINING AUGMENTATION DOT";
 
+const CharName ACCENT = "MUSICAL SYMBOL COMBINING ACCENT";
+const CharName TENUTO = "MUSICAL SYMBOL COMBINING TENUTO";
+const CharName STACCATO = "MUSICAL SYMBOL COMBINING STACCATO";
+const CharName FERMATA = "MUSICAL SYMBOL FERMATA";
+const CharName TRILL = "MUSICAL SYMBOL TR";
+const CharName TURN = "MUSICAL SYMBOL TURN";
+const CharName UP_BOW = "MUSICAL SYMBOL COMBINING UP BOW";
+const CharName DOWN_BOW = "MUSICAL SYMBOL COMBINING DOWN BOW";
+
 const CharName C_CLEF = "MUSICAL SYMBOL C CLEF";
 const CharName G_CLEF = "MUSICAL SYMBOL G CLEF";
 const CharName F_CLEF = "MUSICAL SYMBOL F CLEF";
@@ -804,10 +813,11 @@ const CharName UNKNOWN = "__UNKNOWN__";
 
 
 using Rosegarden::Accidental;
+using Rosegarden::Mark;
 using Rosegarden::Clef;
 using Rosegarden::Note;
 
-CharName NoteCharacterNameLookup::getAccidentalCharName(const Accidental &a)
+CharName NoteCharacterNameLookup::getAccidentalCharName(Accidental a)
 {
     switch (a) {
     case Rosegarden::Sharp:        return NoteCharacterNames::SHARP;
@@ -820,6 +830,23 @@ CharName NoteCharacterNameLookup::getAccidentalCharName(const Accidental &a)
     }
 }
 
+CharName NoteCharacterNameLookup::getMarkCharName(Mark mark)
+{
+    switch (mark) {
+    case Rosegarden::Accent:    return NoteCharacterNames::ACCENT;
+    case Rosegarden::Tenuto:	return NoteCharacterNames::TENUTO;
+    case Rosegarden::Staccato:	return NoteCharacterNames::STACCATO;
+    case Rosegarden::Trill:	return NoteCharacterNames::TRILL;
+    case Rosegarden::Turn:	return NoteCharacterNames::TURN;
+    case Rosegarden::Pause:	return NoteCharacterNames::FERMATA;
+    case Rosegarden::UpBow:	return NoteCharacterNames::UP_BOW;
+    case Rosegarden::DownBow:	return NoteCharacterNames::DOWN_BOW;
+    default:
+	// Things like "sf" and "rf" are generated from text fonts
+	return NoteCharacterNames::UNKNOWN;
+    }
+}
+ 
 CharName NoteCharacterNameLookup::getClefCharName(const Clef &clef)
 {
     string clefType(clef.getClefType());

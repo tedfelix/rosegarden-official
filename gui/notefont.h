@@ -367,6 +367,15 @@ extern const CharName SIXTY_FOURTH_REST;
 
 extern const CharName DOT;
 
+extern const CharName ACCENT;
+extern const CharName TENUTO;
+extern const CharName STACCATO;
+extern const CharName FERMATA;
+extern const CharName TRILL;
+extern const CharName TURN;
+extern const CharName UP_BOW;
+extern const CharName DOWN_BOW;
+
 extern const CharName C_CLEF;
 extern const CharName G_CLEF;
 extern const CharName F_CLEF;
@@ -377,7 +386,8 @@ extern const CharName UNKNOWN;
 class NoteCharacterNameLookup
 {
 public:
-    static CharName getAccidentalCharName(const Rosegarden::Accidental &);
+    static CharName getAccidentalCharName(Rosegarden::Accidental);
+    static CharName getMarkCharName(Rosegarden::Mark);
     static CharName getClefCharName(const Rosegarden::Clef &);
     static CharName getRestCharName(const Rosegarden::Note::Type &);
     static CharName getFlagCharName(int flagCount);

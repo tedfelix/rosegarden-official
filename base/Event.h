@@ -273,6 +273,9 @@ Event::get(const PropertyName &name) const
 
     // If debug is off, we just do the quickest possible thing and let
     // the property map implementation worry about absent entries
+    //!!! Nah, bad idea -- we really do want to catch the exception in
+    // some cases.  Could possible get away with returning a default
+    // value though...
 
     return (static_cast<PropertyStore<P> *>
 	    (m_data->m_properties[name]))->getData();

@@ -315,7 +315,7 @@ NotationHLayout::scanStaff(StaffType &staff)
                     Accidental explicitAccidental = NoAccidental;
                     if (el->event()->has(ACCIDENTAL)) {
                         explicitAccidental =
-                            Rosegarden::NotationDisplayPitch::getAccidentalByName
+                            Note::getAccidentalByName
                             (el->event()->get<String>(ACCIDENTAL));
                     }
 

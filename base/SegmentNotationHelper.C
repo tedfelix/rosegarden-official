@@ -511,8 +511,7 @@ SegmentNotationHelper::insertSingleSomething(iterator i, int duration,
     if (!isRest) {
         e->set<Int>(PITCH, pitch);
         if (acc != NoAccidental) {
-            e->set<String>(ACCIDENTAL,
-                           NotationDisplayPitch::getAccidentalName(acc));
+            e->set<String>(ACCIDENTAL, Note::getAccidentalName(acc));
         }
         setInsertedNoteGroup(e, i);
     }

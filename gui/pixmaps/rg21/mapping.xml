@@ -55,6 +55,15 @@
 
         <symbol name="MUSICAL SYMBOL COMBINING AUGMENTATION DOT" src="dot"/>
 
+	<symbol name="MUSICAL SYMBOL COMBINING ACCENT" src="chordmod-accent"/>
+	<symbol name="MUSICAL SYMBOL COMBINING TENUTO" src="chordmod-legato"/>
+	<symbol name="MUSICAL SYMBOL COMBINING STACCATO" src="chordmod-dot"/>
+	<symbol name="MUSICAL SYMBOL FERMATA" src="chordmod-pause"/>
+	<symbol name="MUSICAL SYMBOL TR" src="chordmod-trill"/>
+	<symbol name="MUSICAL SYMBOL TURN" src="chordmod-turn"/>
+	<symbol name="MUSICAL SYMBOL COMBINING UP BOW" src="unknown"/>
+	<symbol name="MUSICAL SYMBOL COMBINING DOWN BOW" src="unknown"/>
+
         <!-- Unicode (and Lilypond) just have a single C clef, they
              don't distinguish between alto and tenor.  We'd have to
              use the same clef with an offset. -->

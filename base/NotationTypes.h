@@ -70,16 +70,22 @@ typedef std::list<int> DurationList;
     
 /**
  * Accidental is hardly worth making a class, but there are conversion
- * functions to and from strings available in NotationDisplayPitch.
+ * functions to and from strings available in Note.
  */
 
 enum Accidental {
     NoAccidental, Sharp, Flat, Natural, DoubleSharp, DoubleFlat
 };
 
+   
+/**
+ * Mark is hardly worth making a class, but there are conversion
+ * functions to and from strings available in Note.
+ */
 
 enum Mark {
-    NoMark, Dot, Legato, Accent, Sforzando, Rinforzando, Trill, Turn, Pause
+    NoMark, Accent, Tenuto, Staccato, Sforzando, Rinforzando,
+    Trill, Turn, Pause, UpBow, DownBow
 };
 
 
@@ -356,14 +362,6 @@ public:
      */
     std::string getAsString(const Clef &clef, const Key &key) const;
 
-    struct BadAccidental { };
-
-    /**
-     * Utility functions for accidental names; can throw BadAccidental
-     */
-    static std::string getAccidentalName  (Accidental accidental);
-    static Accidental  getAccidentalByName(const std::string &name);
-
 private:
     int m_heightOnStaff;
     Accidental m_accidental;
@@ -491,6 +489,25 @@ public:
 
     /// Returned event is on heap; caller takes responsibility for ownership
     Event *getAsRestEvent(timeT absoluteTime) const;
+
+
+    struct BadAccidental { };
+
+    /**
+     * Utility functions for accidental names; can throw BadAccidental
+     */
+    static std::string getAccidentalName  (Accidental accidental);
+    static Accidental  getAccidentalByName(const std::string &name);
+
+
+    struct BadMark { };
+
+    /**
+     * Utility functions for mark names; can throw BadMark
+     */
+    static std::string getMarkName  (Mark mark);
+    static Mark getMarkByName(const std::string &name);
+
   
 private:
     Type m_type;

@@ -18,6 +18,8 @@
 */
 
 #include "BaseProperties.h"
+#include <vector>
+#include <strstream>
 
 namespace Rosegarden
 {
@@ -35,6 +37,31 @@ const PropertyName NOTE_DOTS            = "NoteDots";
 const PropertyName PITCH		= "pitch";
 const PropertyName VELOCITY		= "velocity";
 const PropertyName ACCIDENTAL		= "accidental";
+
+const PropertyName MARK_COUNT		= "marks";
+
+PropertyName getMarkPropertyName(int markNo)
+{
+    static std::vector<PropertyName> firstFive;
+
+    if (firstFive.size() == 0) {
+	firstFive.push_back(PropertyName("mark1"));
+	firstFive.push_back(PropertyName("mark2"));
+	firstFive.push_back(PropertyName("mark3"));
+	firstFive.push_back(PropertyName("mark4"));
+	firstFive.push_back(PropertyName("mark5"));
+    }
+
+    if (markNo < 5) return firstFive[markNo];
+
+    // This is slower than it looks, because it means we need to do
+    // the PropertyName interning process for each string -- hence the
+    // firstFive cache
+
+    strstream markPropertyName;
+    markPropertyName << "mark" << (markNo + 1) << ends;
+    return markPropertyName.str();
+}
 
 const PropertyName TIED_BACKWARD	= "TiedBackward";
 const PropertyName TIED_FORWARD		= "TiedForward";

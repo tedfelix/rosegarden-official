@@ -25,6 +25,7 @@
 #include <qstringlist.h>
 #include <qfile.h>
 #include <qtextstream.h>
+#include <vector>
 
 #include "NotationTypes.h"
 
@@ -57,6 +58,17 @@ protected:
            ModNatural = (1<<2)
     };
 
+    // RG21 chord mods
+    enum { ModDot     = (1<<0),
+	   ModLegato  = (1<<1),
+	   ModAccent  = (1<<2),
+	   ModSfz     = (1<<3),
+	   ModRfz     = (1<<4),
+	   ModTrill   = (1<<5),
+	   ModTurn    = (1<<6),
+	   ModPause   = (1<<7)
+    };
+
     bool parse();
     bool parseClef();
     bool parseKey();
@@ -73,8 +85,9 @@ protected:
 
     void setGroupProperties(Rosegarden::Event *);
 
-    long convertRG21Pitch(long rg21pitch, int nodeModifier);
+    long convertRG21Pitch(long rg21pitch, int noteModifier);
     Rosegarden::timeT convertRG21Duration(QStringList::Iterator&);
+    std::vector<std::string> convertRG21ChordMods(int chordMod);
 
     bool readNextLine();
 

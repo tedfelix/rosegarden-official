@@ -31,6 +31,9 @@
 #include "rg21io.h"
 #include "rosedebug.h"
 
+using std::vector;
+using std::string;
+
 using Rosegarden::Event;
 using Rosegarden::Segment;
 using Rosegarden::SegmentNotationHelper;
@@ -44,6 +47,7 @@ using Rosegarden::Sharp;
 using Rosegarden::Flat;
 using Rosegarden::Natural;
 using Rosegarden::NoAccidental;
+using Rosegarden::Mark;
 using Rosegarden::Note;
 using Rosegarden::Indication;
 using Rosegarden::timeT;
@@ -116,6 +120,8 @@ bool RG21Loader::parseChordItem()
     int chordMods = (*i).toInt(); ++i;
     int nbNotes   = (*i).toInt(); ++i;
 
+    vector<string> marks = convertRG21ChordMods(chordMods);
+
     // now get notes
     for(;i != m_tokens.end(); ++i) {
 
@@ -134,6 +140,13 @@ bool RG21Loader::parseChordItem()
 	} else if (m_tieStatus == 2) {
 	    noteEvent->set<Bool>(TIED_BACKWARD, true);
 	}	    
+
+	if (marks.size() > 0) {
+	    noteEvent->set<Int>(MARK_COUNT, marks.size());
+	    for (int j = 0; j < marks.size(); ++j) {
+		noteEvent->set<String>(getMarkPropertyName(j), marks[j]);
+	    }
+	}
 
 //         kdDebug(KDEBUG_AREA) << "RG21Loader::parseChordItem() : insert note pitch " << pitch
 //                              << " at time " << m_currentSegmentTime << endl;
@@ -429,6 +442,53 @@ long RG21Loader::convertRG21Pitch(long pitch, int noteModifier)
 							     m_currentKey);
 
     return rtn;
+}
+
+vector<string> RG21Loader::convertRG21ChordMods(int chordMods)
+{
+    vector<string> marks;
+
+    // bit laborious!
+    if (chordMods & ModDot) 
+	marks.push_back(Note::getMarkName(Rosegarden::Staccato));
+
+    if (chordMods & ModLegato)
+	marks.push_back(Note::getMarkName(Rosegarden::Tenuto));
+
+    if (chordMods & ModAccent)
+	marks.push_back(Note::getMarkName(Rosegarden::Accent));
+
+    if (chordMods & ModSfz)
+	marks.push_back(Note::getMarkName(Rosegarden::Sforzando));
+
+    if (chordMods & ModRfz) {
+
+	// I'm quite confused by this.  Some rg21 files appear to have
+	// chords with mod of 80 (rinforzando plus turn), which is
+	// obviously almost always nonsense but appears to be saved in
+	// place of a pause (and reloaded "correctly" by rg2.1).  What
+	// am I missing here?
+
+	//!!! Aargh!  It's a hex number.  Fix this
+
+	if (chordMods & ModTurn) {
+	    chordMods = chordMods ^= ModTurn;
+	    chordMods = chordMods |= ModPause;
+	} else {
+	    marks.push_back(Note::getMarkName(Rosegarden::Rinforzando));
+	}
+    }
+
+    if (chordMods & ModTrill)
+	marks.push_back(Note::getMarkName(Rosegarden::Trill));
+
+    if (chordMods & ModTurn)
+	marks.push_back(Note::getMarkName(Rosegarden::Turn));
+
+    if (chordMods & ModPause)
+	marks.push_back(Note::getMarkName(Rosegarden::Pause));
+
+    return marks;
 }
 
 bool RG21Loader::readNextLine()

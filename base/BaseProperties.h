@@ -34,6 +34,9 @@ extern const PropertyName PITCH;
 extern const PropertyName VELOCITY;
 extern const PropertyName ACCIDENTAL;
 
+extern const PropertyName MARK_COUNT;
+extern PropertyName getMarkPropertyName(int markNo);
+
 extern const PropertyName TIED_BACKWARD;
 extern const PropertyName TIED_FORWARD;
 

@@ -49,14 +49,17 @@ Post-0.1.1 task list
 
 14. Why does it crash when I try to delete a slur?  Sure, deleting
     slurs probably isn't implemented yet, but that doesn't excuse
-    crashing.
+    crashing. [DONE, I think]
 
 15. Various optimisations to render and relayout -- for example, the
     positionChord thing in notationhlayout will probably help somewhat,
     and we can do things like only repositioning on staffs other than
     the one on which a change happened from the start of the same bar
     as the one the change happened in, and ceasing repositioning
-    afterwards if a position hasn't changed
+    afterwards if a position hasn't changed [DONE]
+
+15a. Optimise NotationStaff::setLines and do "the
+     positionChord thing in notationhlayout"
 
 
 

@@ -66,6 +66,12 @@ public:
     void setTied(bool tied)               { m_tied             = tied;      }
     void setTieLength(int tieLength)      { m_tieLength        = tieLength; }
 
+    void setMarks(const std::vector<Rosegarden::Mark> &marks) {
+	m_marks.clear();
+	for (int i = 0; i < marks.size(); ++i) m_marks.push_back(marks[i]);
+    }
+    void removeMarks() { m_marks.clear(); }
+
 private:
     friend class NotePixmapFactory;
 
@@ -95,6 +101,8 @@ private:
 
     bool    m_tied;
     int     m_tieLength;
+    
+    std::vector<Rosegarden::Mark> m_marks;
 };    
 
 
@@ -159,6 +167,10 @@ protected:
 
     void makeRoomForAccidental(Rosegarden::Accidental);
     void drawAccidental(Rosegarden::Accidental);
+
+    void makeRoomForMarks(bool isStemmed, const NotePixmapParameters &params);
+    void drawMarks(bool isStemmed, const NotePixmapParameters &params);
+    
     void drawBeams(const QPoint &, const NotePixmapParameters &params,
                    int beamCount);
     void drawTuplingLine(const NotePixmapParameters &params);

@@ -706,6 +706,21 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
     params.setBeamed(beamed);
     params.setIsOnLine(heightOnStaff % 2 == 0);
 
+    long markCount = 0;
+    (void)(elt->event()->get<Int>(MARK_COUNT, markCount));
+    if (markCount == 0) {
+	params.removeMarks();
+    } else {
+	std::vector<Rosegarden::Mark> marks;
+	for (int i = 0; i < markCount; ++i) {
+	    std::string markName;
+	    if (elt->event()->get<String>(getMarkPropertyName(i), markName)) {
+		marks.push_back(Note::getMarkByName(markName));
+	    }
+	}
+	params.setMarks(marks);
+    }
+
     long tieLength;
     (void)(elt->event()->get<Int>(TIE_LENGTH, tieLength));
     if (tieLength > 0) {
