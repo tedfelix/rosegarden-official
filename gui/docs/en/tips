@@ -40,7 +40,8 @@ new document you create.</p>
 <tip category="Rosegarden|General">
 <html>
 <p>...that Rosegarden will detect and create a default connection for ALSA soft
-synths that are started after Rosegarden is already running?</html>
+synths that are started after Rosegarden is already running?</p>
+</html>
 </tip>
 <tip category="Rosegarden|General">
 <html>
