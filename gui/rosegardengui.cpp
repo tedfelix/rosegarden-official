@@ -645,9 +645,13 @@ void RosegardenGUIApp::setupActions()
                 actionCollection(), "relabel_segment");
 
     icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/quantize.xpm"));
-    new KAction(i18n("&Quantize..."), icon, 0, this,
+    new KAction(i18n("&Quantize..."), icon, Key_Equal, this,
                 SLOT(slotQuantizeSelection()), actionCollection(),
                 "quantize_selection");
+
+    new KAction(i18n("Repeat Last Quantize"), Key_Plus, this,
+                SLOT(slotRepeatQuantizeSelection()), actionCollection(),
+                "repeat_quantize");
 
     new KAction(SegmentRescaleCommand::getGlobalName(), 0, this,
                 SLOT(slotRescaleSelection()), actionCollection(),
@@ -2002,6 +2006,27 @@ void RosegardenGUIApp::slotQuantizeSelection()
         command->addCommand(new EventQuantizeCommand
                             (**i, (*i)->getStartTime(), (*i)->getEndTime(),
                              dialog.getQuantizer()));
+    }
+
+    m_view->slotAddCommandToHistory(command);
+}
+
+void RosegardenGUIApp::slotRepeatQuantizeSelection()
+{
+    if (!m_view->haveSelection()) return;
+
+    //!!! this should all be in rosegardenguiview
+
+    Rosegarden::SegmentSelection selection = m_view->getSelection();
+    
+    KMacroCommand *command = new KMacroCommand
+        (EventQuantizeCommand::getGlobalName());
+
+    for (Rosegarden::SegmentSelection::iterator i = selection.begin();
+         i != selection.end(); ++i) {
+        command->addCommand(new EventQuantizeCommand
+                            (**i, (*i)->getStartTime(), (*i)->getEndTime(),
+			     "Quantize Dialog Grid", false)); // no i18n (config group name)
     }
 
     m_view->slotAddCommandToHistory(command);

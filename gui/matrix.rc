@@ -48,6 +48,7 @@
 <Menu name="Transforms">
   <text>Trans&amp;forms</text>
   <Action name="quantize"/>
+  <Action name="repeat_quantize"/>
   <Action name="legatoize"/>
   <Separator/>
   <Action name="half_speed"/>

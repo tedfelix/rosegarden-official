@@ -592,6 +592,11 @@ public slots:
     void slotQuantizeSelection();
 
     /**
+     * Quantize the selected segments by repeating the last iterative quantize
+     */
+    void slotRepeatQuantizeSelection();
+
+    /**
      * Rescale the selected segments by a factor requested from
      * the user
      */

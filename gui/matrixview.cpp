@@ -499,6 +499,10 @@ void MatrixView::setupActions()
                 SLOT(slotTransformsQuantize()), actionCollection(),
                 "quantize");
 
+    new KAction(i18n("Repeat Last Quantize"), Key_Plus, this,
+                SLOT(slotTransformsRepeatQuantize()), actionCollection(),
+                "repeat_quantize");
+
     new KAction(i18n("&Legato"), Key_Minus, this,
                 SLOT(slotTransformsLegato()), actionCollection(),
                 "legatoize");
@@ -1067,6 +1071,18 @@ void MatrixView::slotTransformsQuantize()
 			    (*m_currentEventSelection,
 			     dialog.getQuantizer()));
     }
+}
+
+void MatrixView::slotTransformsRepeatQuantize()
+{
+    using Rosegarden::Quantizer;
+
+    if (!m_currentEventSelection) return;
+
+    KTmpStatusMsg msg(i18n("Quantizing..."), this);
+    addCommandToHistory(new EventQuantizeCommand
+			(*m_currentEventSelection,
+			 "Quantize Dialog Grid", false)); // no i18n (config group name)
 }
 
 void MatrixView::slotTransformsLegato()
@@ -1761,7 +1777,6 @@ MatrixView::slotQuantizeSelection(int q)
 	}
     }
 }
-
 
 void
 MatrixView::initActionsToolbar()

@@ -853,18 +853,22 @@ EventQuantizeCommand::makeQuantizer(QString configGroup,
     int maxTuplet = config->readNumEntry("quantizemaxtuplet", 3);
     bool counterpoint = config->readNumEntry("quantizecounterpoint", false);
     bool articulate = config->readBoolEntry("quantizearticulate", true);
-    
+    int swing = config->readNumEntry("quantizeswing", 0);
+    int iterate = config->readNumEntry("quantizeiterate", 100);
+
     m_quantizer = 0;
 
     if (type == 0) {
 	if (notateOnly) {
 	    m_quantizer = new Rosegarden::BasicQuantizer
 		(Rosegarden::Quantizer::RawEventData,
-		 Rosegarden::Quantizer::NotationPrefix, unit, durations);
+		 Rosegarden::Quantizer::NotationPrefix,
+		 unit, durations, swing, iterate);
 	} else {
 	    m_quantizer = new Rosegarden::BasicQuantizer
 		(Rosegarden::Quantizer::RawEventData,
-		 Rosegarden::Quantizer::RawEventData, unit, durations);
+		 Rosegarden::Quantizer::RawEventData,
+		 unit, durations, swing, iterate);
 	}
     } else if (type == 1) {
 	if (notateOnly) {

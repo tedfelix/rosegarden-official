@@ -596,8 +596,18 @@ BasicQuantizer::quantizeSingle(Segment *s, Segment::iterator i) const
 	
     t += barStart;
 
+    timeT t1(t), d1(d);
     t = (t - t0) * m_iterate / 100 + t0;
     d = (d - d0) * m_iterate / 100 + d0;
+
+    // if an iterative quantize results in something much closer than
+    // the shortest actual note resolution we have, just snap it
+    if (m_iterate != 100) {
+	if (t >= t1 - Note(Note::Shortest).getDuration()/2 &&
+	    t <= t1 + Note(Note::Shortest).getDuration()/2) t = t1;
+	if (d >= d1 - Note(Note::Shortest).getDuration()/2 &&
+	    d <= d1 + Note(Note::Shortest).getDuration()/2) d = d1;
+    }
 
     if (t0 != t || d0 != d) setToTarget(s, i, t, d);
 }
