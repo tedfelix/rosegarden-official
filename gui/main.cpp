@@ -72,12 +72,9 @@ int main(int argc, char *argv[])
 
     QObject::connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
 
-    DCOPClient *client = kapp->dcopClient();
-
-    QCString realAppId = client->registerAs(kapp->name());
+    kapp->dcopClient()->registerAs(kapp->name(), false);
     
     //app.dcopClient()->setDefaultObject("RosegardenGUIIface");
-    
 
     return app.exec();
 }  
