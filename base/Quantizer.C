@@ -341,12 +341,11 @@ Quantizer::quantize(EventSelection *selection)
     }
 
     // Push the new events to the selection
-    //
-    for (int i = 0; i < m_toInsert.size(); ++i)
+    for (int i = 0; i < m_toInsert.size(); ++i) {
 	selection->addEvent(m_toInsert[i]);
-//    m_toInsert.clear();
-//    m_manualClear = false;
+    }
 
+    // and then to the segment
     insertNewEvents(&segment);
 }
 
@@ -433,9 +432,6 @@ Quantizer::quantize(Segment *s, Segment::iterator from, Segment::iterator to,
     timeT excess = 0;
     bool legato = (m_type == LegatoQuantize);
 
-//    timeT fromTime = 0, toTime = 0;
-//    bool haveFromTime = false;
-
     timeT absTimeQuantizeUnit = m_unit;
 
     if (legato) {
@@ -498,14 +494,7 @@ Quantizer::quantize(Segment *s, Segment::iterator from, Segment::iterator to,
 	    }
 	} else continue;
 
-//	if (!haveFromTime) {
-//	    fromTime = qAbsoluteTime;
-//	    haveFromTime = true;
-//	}
-//	toTime = qAbsoluteTime;
-
 	setToTarget(s, from, qAbsoluteTime, qDuration);
-//	cerr << "After set, from is at " << std::distance(s->begin(), from) << " from start, nextFrom is at " << std::distance(s->begin(), nextFrom) << endl;
     }
 }
 
@@ -711,14 +700,20 @@ Quantizer::insertNewEvents(Segment *s) const
 {
     unsigned int sz = m_toInsert.size();
 
+    timeT minTime = 0, maxTime = 0;
+
     for (unsigned int i = 0; i < sz; ++i) {
+
+	timeT myTime = m_toInsert[i]->getAbsoluteTime();
+	timeT myDur  = m_toInsert[i]->getDuration();
+	if (i == 0 || myTime < minTime) minTime = myTime;
+	if (i == 0 || myTime + myDur > maxTime) maxTime = myTime + myDur;
+
 	s->insert(m_toInsert[i]);
     }
 
     if (sz > 0 && m_target == RawEventData) {
-	s->normalizeRests(m_toInsert[0]->getAbsoluteTime(),
-			  m_toInsert[sz-1]->getAbsoluteTime() +
-			  m_toInsert[sz-1]->getDuration());
+	s->normalizeRests(minTime, maxTime);
     }
 
     m_toInsert.clear();
