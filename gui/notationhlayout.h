@@ -109,4 +109,39 @@ inline bool operator>(const ElementHPos &h1, const ElementHPos &h2) { return h1.
 inline bool operator==(const ElementHPos &h1, const ElementHPos &h2) { return h1.pos == h2.pos; }
 
 
+class Scale
+{
+public:
+
+    enum KeySignature {
+        C,      // no sharps
+        G,      // 1 sharp
+        D,      // 2 sharps
+        A,      // 3 sharps
+        E,      // 4 sharps
+        B,      // 5 sharps
+        Fsharp, // 6 sharps
+        Csharp, // 7 sharps
+        F,      // 1 flat
+        Bflat,  // 2 flats
+        Eflat,  // 3 flats
+        Aflat,  // 4 flats
+        Dflat,  // 5 flats
+        Gflat,  // 6 flats
+        Cflat   // 7 flats
+    };
+
+    Scale(KeySignature keysig);
+    bool useSharps() { return m_useSharps; }
+    bool pitchIsInScale(unsigned int pitch);
+    bool pitchIsDecorated(unsigned int pitch) { return !pitchIsInScale(pitch); }
+    bool noteIsDecorated(const NotationElement &el);
+
+protected:
+    KeySignature m_keySignature;
+    bool m_useSharps;
+    vector<bool> m_notes;
+};
+
+
 #endif

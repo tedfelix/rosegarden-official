@@ -156,8 +156,8 @@ NotationView::NotationView(RosegardenGUIDoc* doc, QWidget *parent)
         if (applyLayout()) {
 
             // Show all elements in the staff
-            kdDebug(KDEBUG_AREA) << "Elements after layout : "
-                                 << *m_notationElements << endl;
+//             kdDebug(KDEBUG_AREA) << "Elements after layout : "
+//                                  << *m_notationElements << endl;
             showElements(m_notationElements->begin(), m_notationElements->end(), m_mainStaff);
             showBars(m_notationElements->begin(), m_notationElements->end());
 
@@ -288,6 +288,8 @@ NotationView::showElements(NotationElementList::iterator from,
                            NotationElementList::iterator to,
                            double dxoffset, double dyoffset)
 {
+    static Scale CScale(Scale::C); // big gory test
+
     kdDebug(KDEBUG_AREA) << "NotationElement::showElements()" << endl;
 
     if (from == to) return true;
@@ -306,9 +308,19 @@ NotationView::showElements(NotationElementList::iterator from,
                 
             if ((*it)->event()->type() == "note") {
 
+                Accidental accident = NoAccidental;
+                
+                if (CScale.noteIsDecorated(*(*it))) {
+                    if (CScale.useSharps())
+                        accident = Sharp;
+                    else
+                        accident = Flat;
+                }
+                
+
                 QCanvasPixmap notePixmap(npf.makeNotePixmap(note,
-                                                            NoAccident,
-                                                            true, true));
+                                                            accident,
+                                                            true, false));
                 noteSprite = new QCanvasSimpleSprite(&notePixmap, canvas());
 
             } else if ((*it)->event()->type() == "rest") {
@@ -626,14 +638,14 @@ NotationView::insertNote(int pitch, const QPoint &eventPos)
     // BIG TODO : insert event too
     //
 
-    kdDebug(KDEBUG_AREA) << "NotationView::insertNote() : Elements before relayout : "
-                         << endl << *m_notationElements << endl;
+//     kdDebug(KDEBUG_AREA) << "NotationView::insertNote() : Elements before relayout : "
+//                          << endl << *m_notationElements << endl;
 
     (*m_vlayout)(newNotationElement);
     applyHorizontalLayout(); // TODO : be more subtle than this
 
-    kdDebug(KDEBUG_AREA) << "NotationView::insertNote() : Elements after relayout : "
-                         << endl << *m_notationElements << endl;
+//     kdDebug(KDEBUG_AREA) << "NotationView::insertNote() : Elements after relayout : "
+//                          << endl << *m_notationElements << endl;
 
     // (*m_hlayout)(notationElement);
 
@@ -809,7 +821,7 @@ NotationView::test()
         for(unsigned int i = 0; i < 7; ++i) {
 
             QPixmap note(npf.makeNotePixmap(Note(i),
-                                            NoAccident,
+                                            NoAccidental,
                                             true, true));
 
             QCanvasSimpleSprite *noteSprite = new QCanvasSimpleSprite(&note,

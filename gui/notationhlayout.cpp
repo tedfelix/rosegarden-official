@@ -19,6 +19,74 @@
 #include "notationhlayout.h"
 #include "rosedebug.h"
 
+static unsigned int Scales[][7] = { // pitches defined in staff.cpp
+    { 0, 2, 4, 5, 7, 9,  11 }, // C
+    { 0, 2, 4, 6, 7, 9,  11 }, // G
+    { 1, 2, 4, 6, 7, 9,  11 }, // D
+    { 1, 2, 4, 6, 8, 9,  11 }, // A
+    { 1, 3, 4, 6, 8, 9,  11 }, // E
+    { 1, 3, 4, 6, 8, 10, 11 }, // B
+    { 1, 3, 5, 6, 8, 10, 11 }, // F#
+    { 1, 3, 5, 6, 8, 10, 0 } // C#
+};
+
+Scale::Scale(KeySignature keysig)
+    : m_keySignature(keysig),
+      m_useSharps(keysig < F),
+      m_notes(12)
+{
+    for (unsigned int i = 0; i < m_notes.size(); ++i) {
+        m_notes[i] = false;
+    }
+ 
+    if (keysig > 7) keysig -= 7;
+    
+    for (unsigned int i = 0; i < 7; ++i) {
+//         kdDebug(KDEBUG_AREA) << QString("Scales[%1][%2]").arg(keysig).arg(i)
+//                              << " = " << Scales[keysig][i] << endl;
+
+        m_notes[Scales[keysig][i]] = true;
+    }
+}
+
+bool
+Scale::pitchIsInScale(unsigned int pitch)
+{
+//     kdDebug(KDEBUG_AREA) << QString("Scale::pitchIsInScale(%1)").arg(pitch) << endl;
+    
+    if (pitch >= m_notes.size()) { // TODO - this will break if pitch < 0
+        
+        pitch = pitch % m_notes.size();
+//         kdDebug(KDEBUG_AREA) << "Scale::pitchIsInScale() - pitch corrected to "
+//                              << pitch << endl;
+    }
+    
+    bool res = m_notes[pitch];
+
+//     kdDebug(KDEBUG_AREA) << "Scale::pitchIsInScale() - res = "
+//                          << res << endl;
+
+    return res;
+}
+
+bool
+Scale::noteIsDecorated(const NotationElement &el)
+{
+    try {
+        int pitch = el.event()->get<Int>("pitch");
+
+        return pitchIsDecorated(pitch);
+        
+    } catch (Event::NoData) {
+        kdDebug(KDEBUG_AREA) << "Scale::noteIsDecorated() : couldn't get pitch for element"
+                             << endl;
+        return false;
+    }
+}
+
+//////////////////////////////////////////////////////////////////////
+
+
 NotationHLayout::NotationHLayout(NotationElementList& elements,
                                  unsigned int barWidth,
                                  unsigned int beatsPerBar,
@@ -56,8 +124,11 @@ NotationHLayout::barTimeAtPos(NotationElementList::iterator pos)
 
 
 void
-NotationHLayout::layout(NotationElementList::iterator from, NotationElementList::iterator to)
+NotationHLayout::layout(NotationElementList::iterator from,
+                        NotationElementList::iterator to)
 {
+    static Scale CScale(Scale::C); // big gory test
+    
     // Adjust current pos according to where we are in the NotationElementList
     //
     if (from == m_notationElements.begin()) {
@@ -67,21 +138,28 @@ NotationHLayout::layout(NotationElementList::iterator from, NotationElementList:
 
     } else {
 
+        // we're somewhere further - compute our position
+
         NotationElementList::iterator oneBeforeFrom = from;
         --oneBeforeFrom;
         NotationElement *elementBeforeFrom = (*oneBeforeFrom);
-        // Make sure the event has a note
+        // TODO : Make sure the event has a note
         m_quantizer.quantize(elementBeforeFrom->event());
         Note previousNote = Note(elementBeforeFrom->event()->get<Int>("Notation::NoteType"));
         m_currentPos = elementBeforeFrom->x();
         m_currentPos += m_noteWidthTable[previousNote] + Staff::noteWidth + m_noteMargin;
 
-        m_nbTimeUnitsInCurrentBar = barTimeAtPos(oneBeforeFrom);
+        if (CScale.noteIsDecorated(*elementBeforeFrom)) {
+            m_currentPos += 6; // TODO
+        }
 
+        m_nbTimeUnitsInCurrentBar = barTimeAtPos(oneBeforeFrom);
     }
     
     m_barPositions.clear();
 
+    // Now layout notes of the given interval
+    //
     for (NotationElementList::iterator it = from; it != to; ++it) {
         
         NotationElement *nel = (*it);
@@ -117,6 +195,10 @@ NotationHLayout::layout(NotationElementList::iterator from, NotationElementList:
             // Move current pos to next note
             m_previousPos = m_currentPos;
             m_currentPos += m_noteWidthTable[note] + Staff::noteWidth + m_noteMargin;
+
+            if (CScale.noteIsDecorated(*nel)) {
+                m_currentPos += 6; // TODO
+            }
 
 
             // See if we've completed a bar
