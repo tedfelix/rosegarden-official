@@ -484,6 +484,8 @@ protected:
 	std::string m_eventType;
     };
 
+    static const PropertyName NoAbsoluteTimeProperty;
+
     static const std::string BarEventType;
     static const PropertyName BarNumberProperty;
     static const PropertyName BarHasTimeSigProperty;

@@ -2004,17 +2004,13 @@ void NotationView::refreshSegment(Segment *segment,
 
         timeT barStartTime = -1, barEndTime = -1;
         
-        if (startTime > 0) {
-            barStartTime = ssegment->getBarStart(startTime);
-            //            starti = notes->findTime(barStartTime);
-            starti = notes->findTime(startTime);
-        }
+	barStartTime = ssegment->getBarStart(startTime);
+        starti = notes->findTime(barStartTime);
+	//!!!???starti = notes->findTime(startTime);
 
-        if (endTime >= 0) {
-            barEndTime = ssegment->getBarEnd(endTime);
-            //            endi = notes->findTime(barEndTime);
-            endi = notes->findTime(endTime);
-        }
+	barEndTime = ssegment->getBarEnd(endTime);
+	endi = notes->findTime(barEndTime);
+	//!!!???endi = notes->findTime(endTime);
 
         kdDebug(KDEBUG_AREA) << "NotationView::refreshSegment: "
                              << "start = " << startTime << ", end = " << endTime << ", barStart = " << barStartTime << ", barEnd = " << barEndTime << endl;

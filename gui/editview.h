@@ -64,9 +64,6 @@ public:
      * modification to any Segment; no attempt has been made to check
      * that the given Segment is actually shown in this view, so take
      * care.
-     *
-     * If startTime < 0, start at beginning of Segment; if endTime <
-     * 0, end at end of Segment.
      */
     virtual void refreshSegment(Rosegarden::Segment *segment,
 				Rosegarden::timeT startTime,

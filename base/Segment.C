@@ -313,11 +313,14 @@ int Segment::getNextId() const
 }
 
 
-
-void Segment::fillWithRests(timeT endTime, bool permitQuantize,
-			    timeT startTime)
+void Segment::fillWithRests(timeT endTime, bool permitQuantize)
 {
-    if (startTime < 0) startTime = getDuration();
+    fillWithRests(getDuration(), endTime, permitQuantize);
+}
+
+void Segment::fillWithRests(timeT startTime,
+			    timeT endTime, bool permitQuantize)
+{
     TimeSignature ts;
     timeT sigTime = 0;
 

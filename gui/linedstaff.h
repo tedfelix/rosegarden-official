@@ -365,14 +365,14 @@ public:
      *
      * The implementation is free to render any elements it
      * chooses in this method as well.
-     *
-     * The default of -1 for "from" should be taken to mean "the
-     * start of the staff" and for "to" should be taken to mean
-     * "the end of the staff".  Thus the default arguments should
-     * reposition the entire staff.
      */
-    virtual void positionElements(Rosegarden::timeT from = -1,
-				  Rosegarden::timeT to   = -1) = 0;
+    virtual void positionElements(Rosegarden::timeT from,
+				  Rosegarden::timeT to) = 0;
+ 
+    /**
+     * Call positionElements(from, to) on the whole staff.
+     */
+    virtual void positionElements();
     
 protected:
     // Methods that the subclass may (indeed, should) use to convert

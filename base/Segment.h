@@ -275,16 +275,25 @@ public:
      * resulting score when (for example) interpreting a MIDI file.
      * permitQuantize should not be used if the precise duration of
      * the track will subsequently be of interest.
-     *
-     * If startTime is supplied, this can be used to fill up a
-     * section within a segment (should you have a pathological
-     * segment that contains notes already but not rests).  This
-     * is likely to be dangerous unless you're quite careful 
-     * about making sure the given range doesn't overlap any notes.
-     * The default is to fill from the current end of the segment.
      */
-    void fillWithRests(timeT endTime, bool permitQuantize = false,
-		       timeT startTime = -1);
+    void fillWithRests(timeT endTime, bool permitQuantize = false);
+
+    /**
+     * Fill up a section within a segment with rests, from the
+     * startTime given to the endTime given.  This may be useful if
+     * you have a pathological segment that contains notes already but
+     * not rests, but it is is likely to be dangerous unless you're
+     * quite careful about making sure the given range doesn't overlap
+     * any notes.
+     *
+     * If permitQuantize is true, the rest duration may be rounded
+     * before filling -- this could significantly simplify the
+     * resulting score when (for example) interpreting a MIDI file.
+     * permitQuantize should not be used if the precise duration of
+     * the track will subsequently be of interest.
+     */
+    void fillWithRests(timeT startTime, timeT endTime,
+		       bool permitQuantize = false);
 
     /**
      * The compare class used by Composition

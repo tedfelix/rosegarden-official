@@ -304,15 +304,11 @@ NotationStaff::positionElements(timeT from, timeT to)
     // hasn't changed, and begin the reposition from there
 
     NotationElementList::iterator beginAt = nel->begin();
-    if (from >= 0) {
-	NotationElementList::iterator candidate = nel->begin();
-	do {
-	    candidate = nel->findTime(getSegment().getBarStart(from - 1));
-	    if (candidate != nel->end()) from = (*candidate)->getAbsoluteTime();
-	} while (candidate != nel->begin() &&
-		 (candidate == nel->end() || !elementNotMoved(*candidate)));
-	beginAt = candidate;
-    }
+    do {
+	beginAt = nel->findTime(getSegment().getBarStart(from - 1));
+	if (beginAt != nel->end()) from = (*beginAt)->getAbsoluteTime();
+    } while (beginAt != nel->begin() &&
+	     (beginAt == nel->end() || !elementNotMoved(*beginAt)));
 
     // Track forward to the end, similarly.  Here however it's very
     // common for all the positions to have changed right up to the
@@ -326,21 +322,19 @@ NotationStaff::positionElements(timeT from, timeT to)
     timeT nextBarTime = -1;
 
     int changedBarCount = 0;
-    if (to >= 0) {
-	NotationElementList::iterator candidate = nel->end();
-	do {
-	    candidate = nel->findTime(getSegment().getBarEnd(to));
-	    if (candidate != nel->end()) {
-		to = (*candidate)->getAbsoluteTime();
-		if (nextBarTime < 0) nextBarTime = to;
-	    } else {
-		nextBarTime = getSegment().getEndIndex();
-	    }
-	    ++changedBarCount;
-	} while (changedBarCount < 4 &&
-		 candidate != nel->end() && !elementNotMoved(*candidate));
-	if (changedBarCount < 4) endAt = candidate;
-    }
+    NotationElementList::iterator candidate = nel->end();
+    do {
+	candidate = nel->findTime(getSegment().getBarEnd(to));
+	if (candidate != nel->end()) {
+	    to = (*candidate)->getAbsoluteTime();
+	    if (nextBarTime < 0) nextBarTime = to;
+	} else {
+	    nextBarTime = getSegment().getEndIndex();
+	}
+	++changedBarCount;
+    } while (changedBarCount < 4 &&
+	     candidate != nel->end() && !elementNotMoved(*candidate));
+    if (changedBarCount < 4) endAt = candidate;
 
     for (NotationElementList::iterator it = beginAt; it != endAt; ++it) {
 

@@ -93,6 +93,8 @@ public:
 				NotationElementList::iterator to);
 
     
+    //!!! This surely shouldn't be necessary, but without it I get
+    // "no matching function for call to `NotationStaff::renderElements ()'"
     virtual void renderElements() {
 	LinedStaff<NotationElement>::renderElements();
     }
@@ -129,8 +131,15 @@ public:
      * passing from and to arguments corresponding to the times of those
      * passed to renderElements.
      */
-    virtual void positionElements(Rosegarden::timeT from = -1,
-				  Rosegarden::timeT to = -1);
+    virtual void positionElements(Rosegarden::timeT from,
+				  Rosegarden::timeT to);
+    
+    //!!! This surely shouldn't be necessary, but without it I get
+    // "no matching function for call to `NotationStaff::positionElements ()'"
+    virtual void positionElements() {
+	LinedStaff<NotationElement>::positionElements();
+    }
+
     
     /**
      * Insert time signature at x-coordinate \a x.

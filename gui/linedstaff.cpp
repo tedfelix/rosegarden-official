@@ -787,3 +787,11 @@ LinedStaff<T>::renderElements()
                    getViewElementList()->end());
 }
 
+template <class T>
+void
+LinedStaff<T>::positionElements()
+{
+    positionElements(getSegment().getStartIndex(),
+		     getSegment().getEndIndex());
+}
+

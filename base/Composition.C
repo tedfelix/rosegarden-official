@@ -41,6 +41,8 @@
 namespace Rosegarden 
 {
 
+const PropertyName Composition::NoAbsoluteTimeProperty = "NoAbsoluteTime";
+
 const std::string Composition::BarEventType = "bar";
 const PropertyName Composition::BarNumberProperty = "BarNumber";
 const PropertyName Composition::BarHasTimeSigProperty = "BarHasTimeSig";
@@ -55,13 +57,13 @@ bool
 Composition::ReferenceSegmentEventCmp::operator()(const Event &e1,
 						  const Event &e2) const
 {
-    if (e1.getAbsoluteTime() >= 0 &&
-	e2.getAbsoluteTime() >= 0) {
-	return e1 < e2;
-    } else {
+    if (e1.has(NoAbsoluteTimeProperty) ||
+	e2.has(NoAbsoluteTimeProperty)) {
 	RealTime r1 = getTempoTimestamp(&e1);
 	RealTime r2 = getTempoTimestamp(&e2);
 	return r1 < r2;
+    } else {
+	return e1 < e2;
     }
 }
 
@@ -171,7 +173,8 @@ Composition::ReferenceSegment::iterator
 Composition::ReferenceSegment::findRealTime(RealTime t)
 {
     Event dummy;
-    dummy.setAbsoluteTime(-1);
+    dummy.setAbsoluteTime(0);
+    dummy.set<Bool>(NoAbsoluteTimeProperty, true);
     dummy.setSubOrdering(MIN_SUBORDERING);
     setTempoTimestamp(&dummy, t);
     return find(&dummy);

@@ -65,12 +65,10 @@ MatrixStaff::positionElements(timeT from, timeT to)
 {
     MatrixElementList *mel = getViewElementList();
 
-    MatrixElementList::iterator beginAt = mel->begin();
-    if (from >= 0) beginAt = mel->findTime(from);
+    MatrixElementList::iterator beginAt = mel->findTime(from);
     if (beginAt != mel->begin()) --beginAt;
 
-    MatrixElementList::iterator endAt = mel->end();
-    if (to >= 0) endAt = mel->findTime(to);
+    MatrixElementList::iterator endAt = mel->findTime(to);
 
     for (MatrixElementList::iterator i = beginAt; i != endAt; ++i) {
 	positionElement(*i);

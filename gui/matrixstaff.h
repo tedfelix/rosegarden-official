@@ -55,8 +55,14 @@ public:
 
     int getElementHeight() { return m_resolution; }
 
-    virtual void positionElements(Rosegarden::timeT from = -1,
-				  Rosegarden::timeT to = -1);
+    virtual void positionElements(Rosegarden::timeT from,
+				  Rosegarden::timeT to);
+
+    //!!! This surely shouldn't be necessary, but without it I get
+    // "no matching function for call to `MatrixStaff::positionElements ()'"
+    virtual void positionElements() {
+	LinedStaff<MatrixElement>::positionElements();
+    }
 
     virtual void positionElement(MatrixElement*);
 
