@@ -135,6 +135,8 @@ protected:
 };
 
 //------------------------------------------------------------
+//                       Layouts
+//------------------------------------------------------------
 
 class MatrixVLayout : public Rosegarden::VerticalLayoutEngine<MatrixElement>
 {
@@ -364,6 +366,11 @@ public slots:
      * paste the clipboard into the document
      */
     virtual void slotEditPaste();
+
+    /// edition tools
+    void slotPaintSelected();
+    void slotEraseSelected();
+    void slotSelectSelected();
 
 protected:
 

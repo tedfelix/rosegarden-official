@@ -2,4 +2,10 @@
 
 <kpartgui name="Rosegarden::Matrix" version="1">
 
+<ToolBar name="toolsToolBar">
+  <Action name="paint" />
+  <Action name="erase" />
+  <Action name="select" />
+</ToolBar>
+
 </kpartgui>

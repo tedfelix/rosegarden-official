@@ -20,9 +20,12 @@
 */
 #include <cmath>
 
+#include <qiconset.h>
+
 #include <kapp.h>
 #include <kconfig.h>
 #include <kaction.h>
+#include <kstddirs.h>
 #include <klocale.h>
 #include <kstdaction.h>
 #include <kmessagebox.h>
@@ -432,6 +435,29 @@ void MatrixView::setupActions()
     KStdAction::copy    (this, SLOT(slotEditCopy()),       actionCollection());
     KStdAction::paste   (this, SLOT(slotEditPaste()),      actionCollection());
 
+    //
+    // Edition tools (eraser, selector...)
+    //
+    KRadioAction* toolAction = 0;
+
+    toolAction = new KRadioAction(i18n("Paint"), "pencil", 0,
+                                  this, SLOT(slotEraseSelected()),
+                                  actionCollection(), "paint");
+    toolAction->setExclusiveGroup("tools");
+
+    toolAction = new KRadioAction(i18n("Erase"), "eraser", 0,
+                                  this, SLOT(slotEraseSelected()),
+                                  actionCollection(), "erase");
+    toolAction->setExclusiveGroup("tools");
+
+    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+    QIconSet icon(QPixmap(pixmapDir + "/toolbar/select.xpm"));
+
+    toolAction = new KRadioAction(i18n("Select"), icon, 0,
+                                  this, SLOT(slotSelectSelected()),
+                                  actionCollection(), "select");
+    toolAction->setExclusiveGroup("tools");
+
     createGUI("matrix.rc");
 }
 
@@ -440,7 +466,7 @@ void MatrixView::initStatusBar()
 }
 
 
-bool MatrixView::applyLayout(int staffNo)
+bool MatrixView::applyLayout(int /*staffNo*/)
 {
     m_hlayout->reset();
     m_vlayout->reset();
@@ -468,7 +494,20 @@ void MatrixView::setViewSize(QSize s)
 {
     canvas()->resize(s.width(), s.height());
 }
-    
+
+void MatrixView::slotPaintSelected()
+{
+}
+
+void MatrixView::slotEraseSelected()
+{
+}
+
+void MatrixView::slotSelectSelected()
+{
+}
+
+
 
 
 //////////////////////////////////////////////////////////////////////
