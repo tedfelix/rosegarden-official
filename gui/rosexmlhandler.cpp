@@ -159,14 +159,26 @@ RoseXmlHandler::endElement(const QString& /*namespaceURI*/,
     QString lcName = qName.lower();
 
     if (lcName == "event") {
-        m_currentTrack->insert(m_currentEvent);
-        m_currentEvent = 0;
+
+        if (m_currentTrack && m_currentEvent) {
+            m_currentTrack->insert(m_currentEvent);
+            m_currentEvent = 0;
+        }
+        
     } else if (lcName == "chord") {
+
         m_currentTime += m_chordDuration;
         m_inChord = false;
         m_chordDuration = 0;
+
     } else if (lcName == "group") {
+
         m_inGroup = false;
+
+    } else if (lcName == "track") {
+
+        m_currentTrack = 0;
+
     }
 
     return true;
