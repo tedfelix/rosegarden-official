@@ -47,6 +47,27 @@ BarButtons::BarButtons(RosegardenGUIDoc* doc,
     drawButtons();
 }
 
+BarButtons::BarButtons(RosegardenGUIDoc* doc,
+                       int barWidth,
+                       int barHeight,
+		       int barCount,
+                       QWidget* parent,
+                       const char* name,
+                       WFlags f):
+    QHBox(parent, name), m_doc(doc)
+{
+    m_barHeight = barHeight;
+    m_barWidth = barWidth;
+    m_bars = barCount;
+    
+    m_offset = 4;
+
+    setMinimumHeight(m_barHeight);
+    setMaximumHeight(m_barHeight);
+
+    drawButtons();
+}
+
 BarButtons::~BarButtons()
 {
 }

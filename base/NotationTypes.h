@@ -224,9 +224,9 @@ public:
         return m_keyDetailMap[m_name].m_sharps;
     }
 
-	int getTonicPitch() const {
+    int getTonicPitch() const {
         return m_keyDetailMap[m_name].m_tonicPitch;
-		}
+    }
 
     int getAccidentalCount() const {
         return m_keyDetailMap[m_name].m_sharpCount;

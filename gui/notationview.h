@@ -81,14 +81,14 @@ public:
     /// Return a pointer to the staff corresponding to the given segment
     NotationStaff *getStaff(const Rosegarden::Segment &segment);
 
-    QCanvas* canvas() { return m_canvasView->canvas(); }
+    QCanvas* canvas() { return getCanvasView()->canvas(); }
     
     void setCanvasCursor(const QCursor &cursor) {
-	m_canvasView->viewport()->setCursor(cursor);
+	getCanvasView()->viewport()->setCursor(cursor);
     }
 
     void setPositionTracking(bool t) {
-	m_canvasView->setPositionTracking(t);
+	getCanvasView()->setPositionTracking(t);
     }
 
     /**
@@ -474,8 +474,6 @@ protected:
     /// Displayed in the status bar, shows the absolute time the cursor is at
     QLabel* m_hoveredOverAbsoluteTime;
 
-    NotationCanvasView* m_canvasView;
-
     std::vector<NotationStaff*> m_staffs;
     int m_currentStaff;
     int m_lastFinishingStaff;
@@ -513,6 +511,10 @@ protected:
     KAction* m_selectDefaultNote;
 
     QCanvasLine *m_pointer;
+
+    virtual NotationCanvasView *getCanvasView() {
+	return static_cast<NotationCanvasView *>(m_canvasView);
+    }
 };
 
 #endif

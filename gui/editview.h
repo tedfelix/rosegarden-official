@@ -36,7 +36,11 @@ class EditTool;
 class EditToolBox;
 class BasicCommand;
 class QCanvasItem;
+class QScrollView;
+class QCanvasView;
 class ActiveItem;
+class BarButtons;
+class QVBox;
 
 class EditView : public KMainWindow
 {
@@ -52,9 +56,6 @@ public:
 
     const RosegardenGUIDoc *getDocument() const { return m_document; }
     RosegardenGUIDoc *getDocument() { return m_document; }
-
-    //!!! I don't think we gain anything by specifying this here, do we?
-    virtual bool applyLayout(int staffNo = -1) = 0;
 
     /**
      * Refresh part of a Segment following a modification made in this
@@ -225,6 +226,13 @@ protected:
 
     ActiveItem* m_activeItem;
 
+    virtual QCanvasView *getCanvasView() { return m_canvasView; }
+    virtual void setCanvasView(QCanvasView *cv);
+    QCanvasView *m_canvasView;
+
+    QScrollView *m_barButtonsView;
+    BarButtons *m_barButtons;
+    QVBox *m_topBox;
 };
 
 #endif

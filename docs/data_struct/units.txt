@@ -54,6 +54,13 @@ sounding accidentals independent of the key signature then in force.
 Duration
 --------
 
+[Note: As of 20020128 CVS builds, the following is no longer true.
+Until then, we stored durations at a 96ppq resolution, but that has
+now been increased to 960ppq to cope with the demands of precise
+placement of audio samples as well as of notes.  The following is
+an explanation for our original choice of 96ppq with reference to
+notes only.]
+
 Events store duration as simple integers where 6 units = one
 hemidemisemiquaver.  Thus also 1 unit = 4 MIDI clocks.  Rationale:
 

@@ -21,6 +21,7 @@
 #include <cmath>
 
 #include <qiconset.h>
+#include <qvbox.h>
 
 #include <kapp.h>
 #include <kconfig.h>
@@ -343,7 +344,8 @@ bool MatrixElement::isNote() const
 MatrixStaff::MatrixStaff(QCanvas *canvas, Segment *segment,
 			 int id, int vResolution) :
     LinedStaff<MatrixElement>(canvas, segment, id, vResolution, 1),
-    m_scaleFactor(0.25) //!!!
+    m_scaleFactor
+        (1.5 / Rosegarden::Note(Rosegarden::Note::Shortest).getDuration())
 {
     // nothing else yet
 }
@@ -430,7 +432,6 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
                        std::vector<Segment *> segments,
                        QWidget *parent)
     : EditView(doc, segments, parent),
-      m_canvasView(0),
       m_hlayout(new MatrixHLayout),
       m_vlayout(new MatrixVLayout),
       m_hoveredOverAbsoluteTime(0),
@@ -448,38 +449,40 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     for (unsigned int i = 0; i < segments.size(); ++i) {
         m_staffs.push_back(new MatrixStaff(tCanvas, segments[i], i,
-                                           8)); //!!! kind of random
+                                           8)); //!!! so random, so rare
 	if (i == 0) m_staffs[i]->setCurrent(true);
     }
 
     kdDebug(KDEBUG_AREA) << "MatrixView : creating canvas view\n";
 
-    m_canvasView = new MatrixCanvasView(*m_staffs[0], tCanvas, this);
+    MatrixCanvasView *canvasView =
+	new MatrixCanvasView(*m_staffs[0], tCanvas, m_topBox);
+    setCanvasView(canvasView);
 
-    setCentralWidget(m_canvasView);
+//    setCentralWidget(m_canvasView);
 
     QObject::connect
-        (m_canvasView, SIGNAL(activeItemPressed(QMouseEvent*, QCanvasItem*)),
+        (getCanvasView(), SIGNAL(activeItemPressed(QMouseEvent*, QCanvasItem*)),
          this,         SLOT  (activeItemPressed(QMouseEvent*, QCanvasItem*)));
 
     QObject::connect
-        (m_canvasView, SIGNAL(mousePressed(Rosegarden::timeT, int, QMouseEvent*, MatrixElement*)),
+        (getCanvasView(), SIGNAL(mousePressed(Rosegarden::timeT, int, QMouseEvent*, MatrixElement*)),
          this,         SLOT  (mousePressed(Rosegarden::timeT, int, QMouseEvent*, MatrixElement*)));
 
     QObject::connect
-        (m_canvasView, SIGNAL(mouseMoved(Rosegarden::timeT, QMouseEvent*)),
+        (getCanvasView(), SIGNAL(mouseMoved(Rosegarden::timeT, QMouseEvent*)),
          this,         SLOT  (mouseMoved(Rosegarden::timeT, QMouseEvent*)));
 
     QObject::connect
-        (m_canvasView, SIGNAL(mouseReleased(Rosegarden::timeT, QMouseEvent*)),
+        (getCanvasView(), SIGNAL(mouseReleased(Rosegarden::timeT, QMouseEvent*)),
          this,         SLOT  (mouseReleased(Rosegarden::timeT, QMouseEvent*)));
 
     QObject::connect
-        (m_canvasView, SIGNAL(hoveredOverNoteChanged(const QString&)),
+        (getCanvasView(), SIGNAL(hoveredOverNoteChanged(const QString&)),
          this,         SLOT  (hoveredOverNoteChanged(const QString&)));
 
     QObject::connect
-        (m_canvasView, SIGNAL(hoveredOverAbsoluteTimeChanged(unsigned int)),
+        (getCanvasView(), SIGNAL(hoveredOverAbsoluteTimeChanged(unsigned int)),
          this,         SLOT  (hoveredOverAbsoluteTimeChanged(unsigned int)));
 
 
@@ -573,7 +576,7 @@ void MatrixView::initStatusBar()
     m_hoveredOverAbsoluteTime  = new QLabel(sb);
 
     m_hoveredOverNoteName->setMinimumWidth(32);
-    m_hoveredOverAbsoluteTime->setMinimumWidth(80);
+    m_hoveredOverAbsoluteTime->setMinimumWidth(160);
 
     sb->addWidget(m_hoveredOverAbsoluteTime);
     sb->addWidget(m_hoveredOverNoteName);
@@ -702,7 +705,15 @@ MatrixView::hoveredOverNoteChanged(const QString &noteName)
 void
 MatrixView::hoveredOverAbsoluteTimeChanged(unsigned int time)
 {
-    m_hoveredOverAbsoluteTime->setText(QString(" Time: %1").arg(time));
+    timeT t = time;
+    Rosegarden::RealTime rt =
+	m_document->getComposition().getElapsedRealTime(t);
+    long ms = rt.usec / 1000;
+
+    QString message;
+    message.sprintf(" Time: %ld (%ld.%03lds)", t, rt.sec, ms);
+
+    m_hoveredOverAbsoluteTime->setText(message);
 }
 
 

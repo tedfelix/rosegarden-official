@@ -385,7 +385,7 @@ public:
 				Rosegarden::timeT startTime,
 				Rosegarden::timeT endTime);
 
-    QCanvas* canvas() { return m_canvasView->canvas(); }
+    QCanvas* canvas() { return getCanvasView()->canvas(); }
 
     MatrixStaff* getStaff(int) { return m_staffs[0]; } // deal with 1 staff only
     virtual void update();
@@ -477,8 +477,6 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    MatrixCanvasView* m_canvasView;
-
     std::vector<MatrixStaff*> m_staffs;
     
     MatrixHLayout* m_hlayout;
@@ -487,6 +485,10 @@ protected:
     // Status bar elements
     QLabel* m_hoveredOverAbsoluteTime;
     QLabel* m_hoveredOverNoteName;
+
+    virtual MatrixCanvasView *getCanvasView() {
+	return static_cast<MatrixCanvasView *>(m_canvasView);
+    }
 };
 
 //////////////////////////////////////////////////////////////////////

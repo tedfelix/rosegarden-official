@@ -25,7 +25,7 @@
 #include <qslider.h>
 #include <qcombobox.h>
 #include <qinputdialog.h>
-#include <qhbox.h>
+#include <qvbox.h>
 
 #include <kmessagebox.h>
 #include <kmenubar.h>
@@ -93,9 +93,6 @@ NotationView::NotationView(RosegardenGUIView* rgView,
     m_currentNotePixmap(0),
     m_hoveredOverNoteName(0),
     m_hoveredOverAbsoluteTime(0),
-    m_canvasView(new NotationCanvasView(*this,
-                                        new QCanvas(width() * 2, height() * 2),
-                                        this)),
     m_lastFinishingStaff(-1),
     m_hlayout(0),
     m_vlayout(0),
@@ -124,33 +121,37 @@ NotationView::NotationView(RosegardenGUIView* rgView,
     
     setBackgroundMode(PaletteBase);
 
-    setCentralWidget(m_canvasView);
+    setCanvasView(new NotationCanvasView
+		  (*this, new QCanvas(width() * 2, height() * 2),
+		   m_topBox));
+
+//    setCentralWidget(m_canvasView);
 
     //
     // Connect signals
     //
     QObject::connect
-        (m_canvasView, SIGNAL(itemPressed(int, int, QMouseEvent*, NotationElement*)),
+        (getCanvasView(), SIGNAL(itemPressed(int, int, QMouseEvent*, NotationElement*)),
          this,         SLOT  (itemPressed(int, int, QMouseEvent*, NotationElement*)));
 
     QObject::connect
-        (m_canvasView, SIGNAL(activeItemPressed(QMouseEvent*, QCanvasItem*)),
+        (getCanvasView(), SIGNAL(activeItemPressed(QMouseEvent*, QCanvasItem*)),
          this,         SLOT  (activeItemPressed(QMouseEvent*, QCanvasItem*)));
 
     QObject::connect
-        (m_canvasView, SIGNAL(mouseMoved(QMouseEvent*)),
+        (getCanvasView(), SIGNAL(mouseMoved(QMouseEvent*)),
          this,         SLOT  (mouseMoved(QMouseEvent*)));
 
     QObject::connect
-        (m_canvasView, SIGNAL(mouseReleased(QMouseEvent*)),
+        (getCanvasView(), SIGNAL(mouseReleased(QMouseEvent*)),
          this,         SLOT  (mouseReleased(QMouseEvent*)));
 
     QObject::connect
-        (m_canvasView, SIGNAL(hoveredOverNoteChanged(const QString&)),
+        (getCanvasView(), SIGNAL(hoveredOverNoteChanged(const QString&)),
          this,         SLOT  (hoveredOverNoteChanged(const QString&)));
 
     QObject::connect
-        (m_canvasView, SIGNAL(hoveredOverAbsoluteTimeChanged(unsigned int)),
+        (getCanvasView(), SIGNAL(hoveredOverAbsoluteTimeChanged(unsigned int)),
          this,         SLOT  (hoveredOverAbsoluteTimeChanged(unsigned int)));
 
     QObject::connect
@@ -756,7 +757,7 @@ void NotationView::initStatusBar()
 
     m_currentNotePixmap->setMinimumWidth(20);
     m_hoveredOverNoteName->setMinimumWidth(32);
-    m_hoveredOverAbsoluteTime->setMinimumWidth(80);
+    m_hoveredOverAbsoluteTime->setMinimumWidth(160);
 
     sb->addWidget(m_hoveredOverAbsoluteTime);
     sb->addWidget(m_hoveredOverNoteName);
@@ -1976,83 +1977,6 @@ void NotationView::update()
     canvas()->update();
 }
 
-/*!!!
-NotationElementList::iterator
-NotationView::findClosestNote(double eventX, double eventY,
-                              Event *&timeSignature,
-                              Event *&clef, Event *&key, int staffNo,
-                              unsigned int proximityThreshold)
-{
-    START_TIMING;
-
-    double minDist = 10e9,
-        prevDist = 10e9;
-
-    NotationElementList *notes = m_staffs[staffNo]->getViewElementList();
-
-    NotationElementList::iterator it, res;
-
-    // TODO: this is grossly inefficient
-    //
-    // Possible optimization : make a QRect of width = 2*proximityThreshold,
-    // height = staffHeight, centered at eventX. Get canvas items in this
-    // rectangle (QCanvas::collisions(QRect), and scan this item list only
-    // (though we'd still have to scan back, potentially to the start of
-    // the segment, to find the clef and key).
-    //
-    for (it = notes->begin(); it != notes->end(); ++it) {
-
-	if (!(*it)->isNote() && !(*it)->isRest()) {
-	    if ((*it)->event()->isa(Clef::EventType)) {
-		clef = (*it)->event();
-	    } else if ((*it)->event()->isa(TimeSignature::EventType)) {
-		timeSignature = (*it)->event();
-	    } else if ((*it)->event()->isa(Rosegarden::Key::EventType)) {
-		key = (*it)->event();
-	    }
-	    continue;
-	}
-
-	double xdist, ydist;
-        
-            if ( (*it)->getCanvasX() >= eventX )
-                xdist = (*it)->getCanvasX() - eventX;
-            else
-                xdist = eventX - (*it)->getCanvasX();
-        
-            if ( (*it)->getCanvasY() >= eventY )
-                ydist = (*it)->getCanvasY() - eventY;
-            else
-                ydist = eventY - (*it)->getCanvasY();
-
-            // bit of a hack to get the correct row in page layout:
-            if (ydist > m_staffs[staffNo]->getHeightOfRow()/2) continue;
-
-            if (xdist < minDist) {
-                kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : minDist was "
-                                     << minDist << " now = " << xdist << endl;
-                minDist = xdist;
-                res = it;
-            }
-        
-            // not sure about this
-            if (xdist > prevDist) break; // we can stop right now
-
-            prevDist = xdist;
-        }
-
-    if (minDist > proximityThreshold) {
-        kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : element is too far away : "
-                             << minDist << endl;
-        return notes->end();
-    }
-        
-    PRINT_ELAPSED("NotationView::findClosestNote");
-
-    return res;
-}
-*/
-
 void NotationView::refreshSegment(Segment *segment,
 				  timeT startTime, timeT endTime)
 {
@@ -2151,6 +2075,14 @@ NotationView::hoveredOverNoteChanged(const QString &noteName)
 void
 NotationView::hoveredOverAbsoluteTimeChanged(unsigned int time)
 {
-    m_hoveredOverAbsoluteTime->setText(QString(" Time: %1").arg(time));
+    timeT t = time;
+    Rosegarden::RealTime rt =
+	m_document->getComposition().getElapsedRealTime(t);
+    long ms = rt.usec / 1000;
+
+    QString message;
+    message.sprintf(" Time: %ld (%ld.%03lds)", t, rt.sec, ms);
+
+    m_hoveredOverAbsoluteTime->setText(message);
 }
 

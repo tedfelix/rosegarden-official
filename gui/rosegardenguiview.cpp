@@ -219,13 +219,6 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
 
     if (doc)
         tracksEditor->setupSegments();
-
-//     if (getDocument()) {
-        
-//         m_notationView = new NotationView(getDocument(), this);
- 
-//         m_notationView->show();
-//     }
 }
 
 

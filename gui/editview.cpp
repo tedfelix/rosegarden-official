@@ -25,6 +25,9 @@
 #include <klocale.h>
 #include <kstdaction.h>
 
+#include <qvbox.h>
+#include <qhbox.h>
+
 #include "editview.h"
 #include "edittool.h"
 #include "qcanvasgroupableitem.h"
@@ -34,6 +37,7 @@
 #include "rosedebug.h"
 #include "ktmpstatusmsg.h"
 #include "staffruler.h"
+#include "barbuttons.h"
 
 //----------------------------------------------------------------------
 const unsigned int EditView::ID_STATUS_MSG = 1;
@@ -46,8 +50,47 @@ EditView::EditView(RosegardenGUIDoc *doc,
       m_document(doc),
       m_tool(0),
       m_toolBox(0),
-      m_activeItem(0)
+      m_activeItem(0),
+      m_canvasView(0)
 {
+    m_topBox = new QVBox(this);
+    setCentralWidget(m_topBox);
+
+    QHBox *topSplit = new QHBox(m_topBox);
+    
+    m_topBox->setSpacing(0);
+    m_topBox->setMargin(0);
+
+    topSplit->setMinimumHeight(25);//!!!
+    topSplit->setMaximumHeight(25);//!!!
+    topSplit->setSpacing(0);
+    topSplit->setMargin(0);
+//    topSplit->setFrameStyle(Plain);
+
+    QLabel *label = new QLabel(topSplit);
+    label->setMinimumWidth(20);//!!!
+    label->setMaximumWidth(20);//!!!
+    label->setMinimumHeight(25);//!!!
+    label->setMaximumHeight(25);//!!!
+
+    m_barButtonsView = new QScrollView(topSplit);
+    m_barButtonsView->setHScrollBarMode(QScrollView::AlwaysOff);
+    m_barButtonsView->setVScrollBarMode(QScrollView::AlwaysOff);
+
+    BarButtons *barButtons = new BarButtons
+	(doc,
+	 200, 25, 100, //!!! x3
+	 m_barButtonsView);
+
+//    m_barButtonsView->setFrameStyle(Plain);
+//    barButtons->setFrameStyle(Plain);
+
+    m_barButtonsView->setMinimumHeight(25);//!!!
+    m_barButtonsView->setMaximumHeight(25);//!!!
+
+    m_barButtonsView->addChild(barButtons);
+
+
     // add undo and redo to edit menu and toolbar
     getCommandHistory()->attachView(actionCollection());
     
@@ -60,6 +103,21 @@ EditView::~EditView()
 {
     getCommandHistory()->detachView(actionCollection());
 }
+
+void EditView::setCanvasView(QCanvasView *canvasView)
+{
+    m_canvasView = canvasView;
+
+    if (m_canvasView) {
+	
+//	connect(m_trackEditorScrollView, SIGNAL(contentsMoving(int, int)),
+//		trackButtonsView,        SLOT(setContentsPos(int, int)));
+
+	connect(m_canvasView,    SIGNAL(contentsMoving(int, int)),
+		m_barButtonsView,  SLOT(setContentsPos(int, int)));
+    }
+}
+
 
 void EditView::readjustViewSize(QSize requestedSize, bool exact)
 {

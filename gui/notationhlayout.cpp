@@ -58,6 +58,21 @@ using namespace NotationProperties;
 std::vector<double> NotationHLayout::m_availableSpacings;
 
 
+static int rwms;
+static int rwc;
+
+static int nwms;
+static int nwc;
+
+static int scms;
+static int scc;
+
+static int srms;
+static int src;
+
+static int abms;
+static int abc;
+
 NotationHLayout::NotationHLayout(NotePixmapFactory &npf) :
     m_totalWidth(0.),
     m_pageMode(false),
@@ -213,6 +228,8 @@ NotationHLayout::scanStaff(StaffType &staff)
 {
     START_TIMING;
 
+    rwms = rwc = nwms = nwc = scc = scms = src = srms = abc = abms = 0;
+
     Segment &t(staff.getSegment());
     NotationElementList *notes = staff.getViewElementList();
     BarDataList &barList(getBarData(staff));
@@ -303,16 +320,28 @@ NotationHLayout::scanStaff(StaffType &staff)
 	    } else if (el->isNote()) {
 
 		++totalCount;
+		
+		clock_t c = clock();
+
 		apparentBarDuration +=
 		    scanChord(notes, itr, clef, key, accTable,
 			      fixedWidth, baseWidth, shortest, shortCount, to);
 
+	++scc;
+	scms += (clock() - c) * 1000 / CLOCKS_PER_SEC;
+
 	    } else if (el->isRest()) {
 
 		++totalCount;
+
+clock_t c = clock();
+
 		apparentBarDuration +=
 		    scanRest(notes, itr,
 			     fixedWidth, baseWidth, shortest, shortCount);
+
+	++src;
+	srms += (clock() - c) * 1000 / CLOCKS_PER_SEC;
 
 	    } else if (el->event()->isa(Indication::EventType)) {
 
@@ -332,6 +361,8 @@ NotationHLayout::scanStaff(StaffType &staff)
 
 	if (actualBarEnd == barTimes.first) actualBarEnd = barTimes.second;
 
+clock_t c = clock();
+
         addNewBar(staff, barCounter, to,
                   getIdealBarWidth(staff, fixedWidth, baseWidth, shortest, 
                                    shortCount, totalCount, timeSignature),
@@ -339,11 +370,41 @@ NotationHLayout::scanStaff(StaffType &staff)
                   apparentBarDuration == timeSignature.getBarDuration(),
 		  timeSigEvent, actualBarEnd - barTimes.first); 
 
+	++abc;
+	abms += (clock() - c) * 1000 / CLOCKS_PER_SEC;
+
 	++barCounter;
 	++barNo;
     }
 
     PRINT_ELAPSED("NotationHLayout::scanStaff");
+
+    if (nwc == 0) nwc = 1;
+    if (rwc == 0) rwc = 1;
+    if (src == 0) src = 1;
+    if (scc == 0) scc = 1;
+    if (abc == 0) abc = 1;
+
+    kdDebug(KDEBUG_AREA) << "Calls to getNoteBodyWidth: " << nwc
+			 << " (total " << nwms << "ms, average "
+			 << (nwms/nwc) << "ms)" << endl;
+
+    kdDebug(KDEBUG_AREA) << "Calls to getRestWidth: " << rwc
+			 << " (total " << rwms << "ms, average "
+			 << (rwms/rwc) << "ms)" << endl;
+
+    kdDebug(KDEBUG_AREA) << "Calls to scanChord: " << scc
+			 << " (total " << scms << "ms, average "
+			 << (scms/scc) << "ms)" << endl;
+
+    kdDebug(KDEBUG_AREA) << "Calls to scanRest: " << src
+			 << " (total " << srms << "ms, average "
+			 << (srms/src) << "ms)" << endl;
+
+    kdDebug(KDEBUG_AREA) << "Calls to addNewBar: " << abc
+			 << " (total " << abms << "ms, average "
+			 << (abms/abc) << "ms)" << endl;
+
 }
 
 timeT
@@ -1159,7 +1220,6 @@ NotationHLayout::positionChord(StaffType &staff,
 	!(*scooter)->event()->get<Int>(BEAMED_GROUP_ID, nextGroupId) ||
 	nextGroupId != groupId) {
 	
-	//!!! not very nice
 	NotationStaff &notationStaff = dynamic_cast<NotationStaff &>(staff);
 	NotationGroup group(*staff.getViewElementList(), itr, clef, key);
 	group.applyBeam(notationStaff);
@@ -1177,7 +1237,15 @@ int NotationHLayout::getMinWidth(NotationElement &e) const
     if (e.isNote()) {
 
         long noteType = e.event()->get<Int>(NOTE_TYPE, noteType);
+
+
+	clock_t c = clock();
+
         w += m_npf.getNoteBodyWidth(noteType);
+
+	++nwc;
+	nwms += (clock() - c) * 1000 / CLOCKS_PER_SEC;
+
 
         long dots;
         if (e.event()->get<Int>(NOTE_DOTS, dots)) {
@@ -1188,9 +1256,13 @@ int NotationHLayout::getMinWidth(NotationElement &e) const
 
     } else if (e.isRest()) {
 
-	//!!! This really, really slows things down
+	clock_t c = clock();
+
         w += m_npf.getRestWidth(Note(e.event()->get<Int>(NOTE_TYPE),
                                      e.event()->get<Int>(NOTE_DOTS)));
+
+	++rwc;
+	rwms += (clock() - c) * 1000 / CLOCKS_PER_SEC;
 
         return w;
     }
