@@ -197,7 +197,7 @@ MatrixEraseCommand::modifySegment()
 {
     Rosegarden::SegmentMatrixHelper helper(getSegment());
 
-    string eventType = m_event->getType();
+    std::string eventType = m_event->getType();
 
     if (eventType == Note::EventType) {
 

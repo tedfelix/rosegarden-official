@@ -207,11 +207,13 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     setTopBarButtons(m_topBarButtons);
 
-    QObject::connect(m_topBarButtons->getLoopRuler(),
-                     SIGNAL(setPointerPosition(Rosegarden::timeT)),
-                     this, SLOT(slotSetInsertCursorPosition(Rosegarden::timeT)));
+    QObject::connect
+	(m_topBarButtons->getLoopRuler(),
+	 SIGNAL(setPointerPosition(Rosegarden::timeT)),
+	 this, SLOT(slotSetInsertCursorPosition(Rosegarden::timeT)));
 
-    m_topBarButtons->getLoopRuler()->setBackgroundColor(RosegardenGUIColours::InsertCursorRuler);
+    m_topBarButtons->getLoopRuler()->setBackgroundColor
+	(RosegardenGUIColours::InsertCursorRuler);
 
     m_bottomBarButtons = new BarButtons(m_hlayout, 25,
                                         true, m_centralFrame);

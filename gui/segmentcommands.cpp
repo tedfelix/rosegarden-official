@@ -236,12 +236,8 @@ SegmentReconfigureCommand::swap()
 	TrackId currentTrack = i->segment->getTrack();
 
 	if (currentDuration != i->duration) {
-	    kdDebug(KDEBUG_AREA) << "currentDuration " << currentDuration
-				 << ", i->duration " << i->duration << std::endl;
 	    i->segment->setDuration(i->duration);
 	    i->duration = currentDuration;
-	    kdDebug(KDEBUG_AREA) << "Now currentDuration " << i->segment->getDuration()
-				 << ", i->duration " << i->duration << std::endl;
 	}
 
 	if (currentStartTime != i->startTime || currentTrack != i->track) {
