@@ -1011,7 +1011,8 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     layout->addMultiCellWidget(m_cleardownSequencer, 0, 0, 1, 3);
 
 #ifdef HAVE_LIBJACK
-    label = new QLabel(i18n("It's possible for Rosegarden to check if the JACK audio daemon (jackd) is running when Rosegarden starts and if it isn't\n to bring it up for the current session.\n\nControlling JACK in this manner is recommended for Rosegarden beginners and for those people who use Rosegarden\nfor their main (JACK) audio application it might not be to the liking of some more advanced users.\n\nIf you want to start JACK automatically the command must include a full path (where necessary) and the command line\narguments you want to use i.e. /usr/local/bin/jackd -d alsa -d hw -r44100 -p 2048 -n 2\n"), frame);
+//    label = new QLabel(i18n("It's possible for Rosegarden to check if the JACK audio daemon (jackd) is running when Rosegarden starts and if it isn't\n to bring it up for the current session.\n\nControlling JACK in this manner is recommended for Rosegarden beginners and for those people who use Rosegarden\nfor their main (JACK) audio application it might not be to the liking of some more advanced users.\n\nIf you want to start JACK automatically the command must include a full path (where necessary) and the command line\narguments you want to use i.e. /usr/local/bin/jackd -d alsa -d hw -r44100 -p 2048 -n 2\n"), frame);
+    label = new QLabel(i18n("Rosegarden can start the JACK audio daemon (jackd) for you\nautomatically if it isn't already running when Rosegarden starts.\n\nThis is recommended for beginners and those who use Rosegarden as their main\naudio application, but it might not be to the liking of advanced users.\n\nIf you want to start JACK automatically, make sure the command includes a full\npath where necessary as well as any command-line arguments you want to use.\n\nFor example: /usr/local/bin/jackd -d alsa -d hw -r44100 -p 2048 -n 2\n"), frame);
 
     layout->addMultiCellWidget(label, 2, 2, 0, 3);
 
@@ -1716,11 +1717,11 @@ ColourConfigurationPage::ColourConfigurationPage(RosegardenGUIDoc *doc,
 
     layout->addMultiCellWidget(m_colourtable, 0, 0, 0, 1);
 
-    QPushButton* addColourButton = new QPushButton(i18n("Add New Colour"),
+    QPushButton* addColourButton = new QPushButton(i18n("Add New Color"),
                                                    frame);
     layout->addWidget(addColourButton, 1, 0, Qt::AlignHCenter);
 
-    QPushButton* deleteColourButton = new QPushButton(i18n("Delete Colour"),
+    QPushButton* deleteColourButton = new QPushButton(i18n("Delete Color"),
                                                       frame);
     layout->addWidget(deleteColourButton, 1, 1, Qt::AlignHCenter);
 
@@ -1739,7 +1740,7 @@ ColourConfigurationPage::ColourConfigurationPage(RosegardenGUIDoc *doc,
     connect(m_colourtable, SIGNAL(entryColourChanged(unsigned int, QColor)),
             this,  SLOT(slotColourChanged(unsigned int, QColor)));
 
-    addTab(frame, i18n("Colour Map"));
+    addTab(frame, i18n("Color Map"));
 
 }
 
@@ -1772,7 +1773,7 @@ ColourConfigurationPage::slotAddNew()
 
     bool ok = false;
 
-    QString newName = QInputDialog::getText(i18n("New Colour Name"), i18n("Enter new name"),
+    QString newName = QInputDialog::getText(i18n("New Color Name"), i18n("Enter new name"),
                                             QLineEdit::Normal, i18n("New"), &ok);
     if ((ok == true) && (!newName.isEmpty()))
     {

@@ -18,17 +18,15 @@
 </font-requirements>
 
 <font-sizes>
-        <font-size note-height="4" font-height="32" beam-thickness="2" staff-line-thickness="1" stem-thickness="1" border-x="0" border-y="0"/>
-        <font-size note-height="6" font-height="48" beam-thickness="3" staff-line-thickness="1" stem-thickness="1" border-x="0" border-y="0"/>
-        <font-size note-height="8" font-height="64" beam-thickness="4" staff-line-thickness="1" stem-thickness="1" border-x="0" border-y="0"/>
-        <font-size note-height="10" font-height="80" beam-thickness="5" staff-line-thickness="1" stem-thickness="2" border-x="0" border-y="0"/>
-        <font-size note-height="12" font-height="96" beam-thickness="6" staff-line-thickness="2" stem-thickness="2" border-x="0" border-y="0"/>
+	<font-scale font-height="8.0" beam-thickness="0.5" staff-line-thickness="0.1" stem-thickness="0.1" border-x="0" border-y="0"/>
 </font-sizes>
 
 <font-symbol-map>
         <!-- Symbol names are from the Unicode code charts: see
              http://www.unicode.org/charts/PDF/U2600.pdf
              http://www.unicode.org/charts/PDF/U1D100.pdf -->
+
+	<codebase font-id="0" base="61440"/> <!-- Unicode private-use area -->
 
 	<symbol name="__UNKNOWN__" font-id="1" code="63"/> <!-- question mark -->
 
@@ -105,88 +103,40 @@
      and we'll need that if we ever support scalable fonts: -->
 <font-hotspots>
         <hotspot name="MUSIC FLAT SIGN">
-                <when note-height="4" y="8"/>
-                <when note-height="6" y="12"/>
-                <when note-height="8" y="15"/>
-                <when note-height="10" y="19"/>
-                <when note-height="12" y="22"/>
+		<scaled y="2.0"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL C CLEF">
-                <when note-height="4" y="9"/>
-                <when note-height="6" y="13"/>
-                <when note-height="8" y="16"/>
-                <when note-height="10" y="20"/>
-                <when note-height="12" y="24"/>
+		<scaled y="2.0"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL G CLEF">
-                <when note-height="4" y="19"/>
-                <when note-height="6" y="29"/>
-                <when note-height="8" y="38"/>
-                <when note-height="10" y="48"/>
-                <when note-height="12" y="58"/>
+		<scaled y="4.8"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL F CLEF">
-                <when note-height="4" y="5"/>
-                <when note-height="6" y="7"/>
-                <when note-height="8" y="9"/>
-                <when note-height="10" y="11"/>
-                <when note-height="12" y="13"/>
+		<scaled y="1.1"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL MULTI REST">
-                <when note-height="4" y="0"/>
-                <when note-height="6" y="0"/>
-                <when note-height="8" y="0"/>
-                <when note-height="10" y="0"/>
-                <when note-height="12" y="0"/>
+		<scaled y="0"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL WHOLE REST">
-                <when note-height="4" y="1"/>
-                <when note-height="6" y="1"/>
-                <when note-height="8" y="1"/>
-                <when note-height="10" y="1"/>
-                <when note-height="12" y="1"/>
+		<scaled y="0"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL HALF REST">
-                <when note-height="4" y="3"/>
-                <when note-height="6" y="4"/>
-                <when note-height="8" y="6"/>
-                <when note-height="10" y="7"/>
-                <when note-height="12" y="8"/>
+		<scaled y="0"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL QUARTER REST">
-                <when note-height="4" y="6"/>
-                <when note-height="6" y="9"/>
-                <when note-height="8" y="12"/>
-                <when note-height="10" y="15"/>
-                <when note-height="12" y="19"/>
+		<scaled y="1.5"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL EIGHTH REST">
-                <when note-height="4" y="4"/>
-                <when note-height="6" y="6"/>
-                <when note-height="8" y="7"/>
-                <when note-height="10" y="9"/>
-                <when note-height="12" y="11"/>
+		<scaled y="0.9"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL SIXTEENTH REST">
-                <when note-height="4" y="5"/>
-                <when note-height="6" y="7"/>
-                <when note-height="8" y="8"/>
-                <when note-height="10" y="10"/>
-                <when note-height="12" y="12"/>
+		<scaled y="1.0"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL THIRTY-SECOND REST">
-                <when note-height="4" y="6"/>
-                <when note-height="6" y="8"/>
-                <when note-height="8" y="9"/>
-                <when note-height="10" y="11"/>
-                <when note-height="12" y="13"/>
+		<scaled y="1.15"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL SIXTY-FOURTH REST">
-                <when note-height="4" y="7"/>
-                <when note-height="6" y="9"/>
-                <when note-height="8" y="10"/>
-                <when note-height="10" y="12"/>
-                <when note-height="12" y="14"/>
+		<scaled y="1.3"/>
         </hotspot>
 </font-hotspots>
 

@@ -67,6 +67,7 @@ public:
     bool getStaffLineThickness(int size, unsigned int &thickness) const;
     bool getStemThickness(int size, unsigned int &thickness) const;
     bool getBeamThickness(int size, unsigned int &thickness) const;
+    bool getFlagSpacing(int size, unsigned int &spacing) const;
     bool getBorderThickness(int size, unsigned int &X, unsigned int &y) const;
     
     bool hasInversion(int size, CharName charName) const;
@@ -74,7 +75,7 @@ public:
     bool getSrc(int size, CharName charName, std::string &src) const;
     bool getInversionSrc(int size, CharName charName, std::string &src) const;
 
-    bool getFont(int size, CharName charName, QFont &font) const;
+    bool getFont(int size, CharName charName, QFont &font, int &charBase) const;
     bool getCode(int size, CharName charName, int &code) const;
     bool getInversionCode(int size, CharName charName, int &code) const;
 
@@ -151,18 +152,7 @@ private:
 	    m_scaled = ScaledPoint(x, y);
 	}
 
-        bool getHotspot(int size, int &x, int &y) const {
-            DataMap::const_iterator i = m_data.find(size);
-            if (i == m_data.end()) {
-		x = 0;
-		if (m_scaled.first  >= 0) x = toSize(size, m_scaled.first,  false);
-		if (m_scaled.second >= 0) y = toSize(size, m_scaled.second, false);
-		else return false;
-	    }
-            x = i->second.first;
-            y = i->second.second;
-            return true;
-        }
+        bool getHotspot(int size, int &x, int &y) const;
 
     private:
         DataMap m_data;
@@ -174,6 +164,7 @@ private:
     public:
         SizeData() : m_stemThickness(-1),
                      m_beamThickness(-1),
+                     m_flagSpacing(-1),
                      m_staffLineThickness(-1),
                      m_borderX(-1), m_borderY(-1),
 		     m_fontHeight(-1) { }
@@ -184,6 +175,9 @@ private:
         }
         void setBeamThickness(unsigned int i) {
             m_beamThickness = (int)i;
+        }
+        void setFlagSpacing(unsigned int i) {
+            m_flagSpacing = (int)i;
         }
         void setStaffLineThickness(unsigned int i) {
             m_staffLineThickness = (int)i;
@@ -208,6 +202,13 @@ private:
         bool getBeamThickness(unsigned int &i) const {
             if (m_beamThickness >= 0) {
                 i = (unsigned int)m_beamThickness;
+                return true;
+            } else return false;
+        }
+
+        bool getFlagSpacing(unsigned int &i) const {
+            if (m_flagSpacing >= 0) {
+                i = (unsigned int)m_flagSpacing;
                 return true;
             } else return false;
         }
@@ -237,6 +238,7 @@ private:
     private:
         int m_stemThickness;
         int m_beamThickness;
+        int m_flagSpacing;
         int m_staffLineThickness;
         int m_borderX;
         int m_borderY;
@@ -266,6 +268,9 @@ private:
 
     typedef __HASH_NS::hash_map<int, QFont> SystemFontMap;
     SystemFontMap m_fonts;
+
+    typedef __HASH_NS::hash_map<int, int> CharBaseMap;
+    CharBaseMap m_bases;
 
     // For use when reading the XML file:
     bool m_expectingCharacters;
@@ -299,6 +304,9 @@ public:
 
     /// Returns false + a guess at suitable thickness if not specified
     bool getBeamThickness(unsigned int &thickness) const;
+
+    /// Returns false + a guess at suitable spacing if not specified
+    bool getFlagSpacing(unsigned int &spacing) const;
 
     /// Returns false + thickness=1 if not specified
     bool getStaffLineThickness(unsigned int &thickness) const;
@@ -362,7 +370,7 @@ private:
     static std::set<std::string> getAvailableFontNames();
     std::set<int> getSizes() const { return m_fontMap.getSizes(); }
 
-    QPixmap *lookup(CharName charName, bool inverted) const;
+    bool lookup(CharName charName, bool inverted, QPixmap *&pixmap) const;
     void add(CharName charName, bool inverted, QPixmap *pixmap) const;
 
     CharName getNameWithColour(CharName origName, int hue) const;

@@ -18,6 +18,7 @@
 </font-requirements>
 
 <font-sizes>
+	<font-scale font-height="4.0" beam-thickness="0.5" staff-line-thickness="0.1" stem-thickness="0.1" border-x="0" border-y="0"/>
         <font-size note-height="4" beam-thickness="2" staff-line-thickness="1" stem-thickness="1" border-x="1" border-y="1"/>
         <font-size note-height="6" beam-thickness="3" staff-line-thickness="1" stem-thickness="1" border-x="1" border-y="1"/>
         <font-size note-height="8" beam-thickness="4" staff-line-thickness="1" stem-thickness="1" border-x="1" border-y="1"/>

@@ -80,7 +80,7 @@ SegmentParameterBox::initBox()
     QLabel *quantizeLabel  = new QLabel(i18n("Quantize"), this);
     QLabel *transposeLabel = new QLabel(i18n("Transpose"), this);
     QLabel *delayLabel     = new QLabel(i18n("Delay"), this);
-    QLabel *colourLabel    = new QLabel(i18n("Colour"), this);
+    QLabel *colourLabel    = new QLabel(i18n("Color"), this);
 
     // HBox for label
     //
@@ -281,7 +281,7 @@ SegmentParameterBox::slotDocColoursChanged()
         QPixmap colour(15,15);
         colour.fill(RosegardenGUIColours::convertColour(it->second.first));
         if (it->second.second == std::string(""))
-            m_colourValue->insertItem(colour, i18n("Default Colour"), i);
+            m_colourValue->insertItem(colour, i18n("Default Color"), i);
         else
             m_colourValue->insertItem(colour, strtoqstr(it->second.second), i);
         m_colourList[it->first] = i;

@@ -44,7 +44,7 @@ RosegardenColourTable::RosegardenColourTable
     setSorting(FALSE);
     setSelectionMode(QTable::SingleRow);
     horizontalHeader()->setLabel(0, i18n("Name"));
-    horizontalHeader()->setLabel(1, i18n("Colour"));
+    horizontalHeader()->setLabel(1, i18n("Color"));
     populate_table(input, list);
     connect(this, SIGNAL(doubleClicked(int, int, int, const QPoint&)),
             SLOT(slotEditEntry(int, int)));
@@ -61,7 +61,7 @@ RosegardenColourTable::slotEditEntry(int row, int col)
         {
             if (row == 0) return;
             bool ok = false;
-            QString newName = QInputDialog::getText(i18n("Modify Colour Name"), i18n("Enter new name"), 
+            QString newName = QInputDialog::getText(i18n("Modify Color Name"), i18n("Enter new name"), 
                                                     QLineEdit::Normal, item(row, col)->text(), &ok);
 
             if ((ok == true) && (!newName.isEmpty()))
@@ -104,7 +104,7 @@ RosegardenColourTable::populate_table(Rosegarden::ColourMap &input, ColourList &
     for (Rosegarden::RCMap::const_iterator it=input.begin(); it!=input.end(); ++it)
     {
         if (it->second.second == std::string(""))
-            name = i18n("Default Colour");
+            name = i18n("Default Color");
         else
             name = strtoqstr(it->second.second);
 

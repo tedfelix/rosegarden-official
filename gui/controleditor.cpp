@@ -56,7 +56,7 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
     m_listView->addColumn(i18n("Max  "));
     m_listView->addColumn(i18n("Min  "));
     m_listView->addColumn(i18n("Default  "));
-    m_listView->addColumn(i18n("Colour  "));
+    m_listView->addColumn(i18n("Color  "));
 
     // Align centrally
     for (int i = 0; i < 8; ++i)
@@ -430,7 +430,7 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     m_defaultBox = new QSpinBox(frame);
     layout->addWidget(m_defaultBox, 6, 1);
 
-    layout->addWidget(new QLabel(i18n("Colour:"), frame), 7, 0);
+    layout->addWidget(new QLabel(i18n("Color:"), frame), 7, 0);
     m_colourCombo = new RosegardenComboBox(frame);
     layout->addWidget(m_colourCombo, 7, 1);
 

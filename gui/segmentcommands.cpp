@@ -2075,7 +2075,7 @@ SegmentLabelCommand::unexecute()
 SegmentColourCommand::SegmentColourCommand(
         const Rosegarden::SegmentSelection &segments,
         const unsigned int index):
-    KNamedCommand(i18n("Change Segment Colour")),
+    KNamedCommand(i18n("Change Segment Color")),
     m_newColourIndex(index)
 {
     for (Rosegarden::SegmentSelection::iterator i = segments.begin(); i != segments.end(); ++i) 
@@ -2107,7 +2107,7 @@ SegmentColourCommand::unexecute()
 SegmentColourMapCommand::SegmentColourMapCommand(
               RosegardenGUIDoc      *doc,
         const Rosegarden::ColourMap &map):
-    KNamedCommand(i18n("Change Segment Colour Map")),
+    KNamedCommand(i18n("Change Segment Color Map")),
     m_doc(doc),
     m_oldMap(m_doc->getComposition().getSegmentColourMap()),
     m_newMap(map)

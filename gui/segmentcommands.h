@@ -686,7 +686,7 @@ public:
     virtual ~SegmentColourCommand();
 
     static QString getGlobalName()
-        { return i18n("Change Segment Colour..."); }
+        { return i18n("Change Segment Color..."); }
 
     virtual void execute();
     virtual void unexecute();
@@ -705,7 +705,7 @@ public:
     virtual ~SegmentColourMapCommand();
 
     static QString getGlobalName()
-        { return i18n("Change Segment Colour Map..."); }
+        { return i18n("Change Segment Color Map..."); }
 
     virtual void execute();
     virtual void unexecute();

@@ -211,10 +211,12 @@ protected:
     void drawLegerLines(const NotePixmapParameters &params);
 
     void makeRoomForStemAndFlags(int flagCount, int stemLength,
-				 const NotePixmapParameters &params);
-    void drawStemAndFlags(int flagCount, int stemLength,
-			  const NotePixmapParameters &params,
-			  QPoint &startPoint, QPoint &endPoint);
+				 const NotePixmapParameters &params,
+				 QPoint &startPoint, QPoint &endPoint);
+    void drawFlags(int flagCount, const NotePixmapParameters &params,
+		   const QPoint &startPoint, const QPoint &endPoint);
+    void drawStem(const NotePixmapParameters &params,
+		  const QPoint &startPoint, const QPoint &endPoint);
 
     void makeRoomForBeams(const NotePixmapParameters &params);
     void drawBeams(const QPoint &, const NotePixmapParameters &params,

@@ -316,9 +316,9 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
     if (params.m_marks.size() > 0) {
 	makeRoomForMarks(isStemmed, params);
     }
-    
-    if (isStemmed && params.m_drawStem) {
-	makeRoomForStemAndFlags(drawFlag ? flagCount : 0, stemLength, params);
+
+    if (params.m_legerLines != 0) {
+	makeRoomForLegerLines(params);
     }
 
     if (isStemmed && params.m_drawStem && params.m_beamed) {
@@ -332,10 +332,6 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
 
     if (params.m_tupletCount > 0) {
 	makeRoomForTuplingLine(params);
-    }
-
-    if (params.m_legerLines != 0) {
-	makeRoomForLegerLines(params);
     }
 
     m_right = std::max(m_right, params.m_dots * dot.width() + dot.width()/2);
@@ -359,12 +355,22 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
             m_above = std::max(m_above, m_noteBodyHeight * 2);
         }
     }
+    
+    QPoint startPoint, endPoint;
+    if (isStemmed && params.m_drawStem) {
+	makeRoomForStemAndFlags(drawFlag ? flagCount : 0, stemLength, params,
+				startPoint, endPoint);
+    }
 
     createPixmapAndMask(m_noteBodyWidth + m_left + m_right,
                         m_noteBodyHeight + m_above + m_below);
 
     if (params.m_tupletCount > 0) {
 	drawTuplingLine(params);
+    }
+
+    if (isStemmed && params.m_drawStem && drawFlag) {
+	drawFlags(flagCount, params, startPoint, endPoint);
     }
 
     if (params.m_accidental != NoAccidental) {
@@ -428,10 +434,7 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
 
     if (isStemmed && params.m_drawStem) {
 
-	QPoint startPoint, endPoint;
-
-	drawStemAndFlags(drawFlag ? flagCount : 0, stemLength, params,
-			 startPoint, endPoint);
+	drawStem(params, startPoint, endPoint);
 
 	if (flagCount > 0 && !drawFlag && params.m_beamed) {
 	    drawBeams(endPoint, params, flagCount);
@@ -636,7 +639,8 @@ NotePixmapFactory::drawLegerLines(const NotePixmapParameters &params)
 
 void
 NotePixmapFactory::makeRoomForStemAndFlags(int flagCount, int stemLength,
-					   const NotePixmapParameters &params)
+					   const NotePixmapParameters &params,
+					   QPoint &s0, QPoint &s1)
 {
     if (params.m_stemGoesUp) {
 	m_above = std::max
@@ -652,15 +656,8 @@ NotePixmapFactory::makeRoomForStemAndFlags(int flagCount, int stemLength,
 		(m_style->getFlagCharName(flagCount));
 	}
     }
-}
 
-void
-NotePixmapFactory::drawStemAndFlags(int flagCount, int stemLength,
-				    const NotePixmapParameters &params,
-				    QPoint &s0, QPoint &s1)
-{
-    unsigned int stemThickness = 1;
-    m_font->getStemThickness(stemThickness);
+    unsigned int stemThickness = getStemThickness();
 
     NoteStyle::HFixPoint hfix;
     NoteStyle::VFixPoint vfix;
@@ -714,31 +711,61 @@ NotePixmapFactory::drawStemAndFlags(int flagCount, int stemLength,
     }
 
     s1.setX(s0.x());
+}
 
+void
+NotePixmapFactory::drawFlags(int flagCount, 
+			     const NotePixmapParameters &params,
+			     const QPoint &s0, const QPoint &s1)
+{
     if (flagCount > 0) {
 
-	QPixmap flags = m_font->getPixmap
-	    (m_style->getFlagCharName(flagCount),
-	     !params.m_stemGoesUp);
+	//!!! also where getWidth(getFlagCharName) is used above
+
+	QPixmap flagMap;
+	bool found = m_font->getPixmap(m_style->getFlagCharName(flagCount),
+				       flagMap,
+				       !params.m_stemGoesUp);
 	
-	if (params.m_stemGoesUp) {
-	    m_p.drawPixmap(s1.x() - m_origin.x(),
-			   s1.y(), flags);
-	    m_pm.drawPixmap(s1.x() - m_origin.x(),
-			    s1.y(), *(flags.mask()));
-	} else {
-	    m_p.drawPixmap(s1.x() - m_origin.x(),
-			   s1.y() - flags.height(), flags);
-	    m_pm.drawPixmap(s1.x() - m_origin.x(),
-			    s1.y() - flags.height(), *(flags.mask()));
+	// Handle fonts that don't have all the flags in separate
+	// characters
+	//!!! do they have a separate "combining flag" character? [yes - use it]
+	if (!found && flagCount > 1) {
+
+	    flagMap = m_font->getPixmap(m_style->getFlagCharName(1),
+					!params.m_stemGoesUp);
+
+	    unsigned int flagSpace = 0;
+	    (void)m_font->getFlagSpacing(flagSpace);
+
+	    for (int flag = 0; flag < flagCount; ++flag) {
+
+		int y = s1.y();
+		if (params.m_stemGoesUp) y += flag * flagSpace;
+		else y -= (flag * flagSpace) + flagMap.height();
+		
+		m_p.drawPixmap(s1.x() - m_origin.x(), y, flagMap);
+		m_pm.drawPixmap(s1.x() - m_origin.x(), y, *(flagMap.mask()));
+	    }
+
+	} else { // the normal case
+
+	    int y = s1.y();
+	    if (!params.m_stemGoesUp) y -= flagMap.height();
+
+	    m_p.drawPixmap(s1.x() - m_origin.x(), y, flagMap);
+	    m_pm.drawPixmap(s1.x() - m_origin.x(), y, *(flagMap.mask()));
 	}
     }
+}
 
-    for (unsigned int i = 0; i < stemThickness; ++i) {
-	m_p.drawLine(s0, s1);
-	m_pm.drawLine(s0, s1);
-	++s0.rx();
-	++s1.rx();
+void
+NotePixmapFactory::drawStem(const NotePixmapParameters &params,
+			    const QPoint &s0, const QPoint &s1)
+{
+    for (unsigned int i = 0; i < getStemThickness(); ++i) {
+	m_p.drawLine(s0.x() + i, s0.y(), s1.x() + i, s1.y());
+	m_pm.drawLine(s0.x() + i, s0.y(), s1.x() + i, s1.y());
     }
 }
 
@@ -1967,8 +1994,8 @@ int NotePixmapFactory::getNoteBodyWidth(Note::Type type)
 int NotePixmapFactory::getNoteBodyHeight(Note::Type type)
     const {
     // this is by definition
-//!!!    return m_font->getSize();
-    return m_font->getHeight(m_style->getNoteHeadCharName(type).first) -2*m_origin.y();
+    return m_font->getSize();
+//!!!    return m_font->getHeight(m_style->getNoteHeadCharName(type).first) -2*m_origin.y();
 }
 
 int NotePixmapFactory::getLineSpacing() const {
@@ -1989,7 +2016,7 @@ int NotePixmapFactory::getStemLength() const {
 }
 
 int NotePixmapFactory::getStemThickness() const {
-    unsigned int i;
+    unsigned int i = 1;
     (void)m_font->getStemThickness(i);
     return i;
 }

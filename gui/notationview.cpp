@@ -70,9 +70,16 @@
 #include "notationhlayout.h"
 #include "notationvlayout.h"
 #include "sequencemanager.h"
-
-#include "qcanvassimplesprite.h"
 #include "ktmpstatusmsg.h"
+
+
+//!!! TESTING:
+#include "qcanvassimplesprite.h"
+#include <qpixmap.h>
+#include <qfont.h>
+#include <qfontmetrics.h>
+#include <qpainter.h>
+
 
 using Rosegarden::Event;
 using Rosegarden::Note;
@@ -237,6 +244,145 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     QCanvas *tCanvas = new QCanvas(this);
     tCanvas->resize(width() * 2, height() * 2);
+
+
+    //!!! TESTING
+    {
+/*!!!
+	int y = 0;
+
+	QPixmap *pixmap = new QPixmap(3000, 100);
+	pixmap->fill();
+	QFont font("opus");
+	font.setPixelSize(16);
+	QFontMetrics metrics(font);
+	QPainter painter;
+	painter.begin(pixmap);
+	painter.setFont(font);
+	painter.drawLine(0, 50, 3000, 50);
+	int x = 0;
+	for (int c = 32; c < 256; ++c) {
+	    QChar cc(0xf000 + c);
+	    painter.drawText(x, 50, cc);
+	    x += metrics.width(cc);
+	}
+	painter.end();
+	QCanvasSimpleSprite *sprite = new QCanvasSimpleSprite
+	    (pixmap, tCanvas);
+	sprite->move(0, y);
+	sprite->show();
+	y += 100;
+
+	pixmap = new QPixmap(3000, 100);
+	pixmap->fill();
+	painter.begin(pixmap);
+	painter.setFont(font);
+	painter.drawLine(0, 50, 3000, 50);
+	x = 0;
+	for (int c = 32; c < 256; ++c) {
+	    QChar cc(c);
+	    painter.drawText(x, 50, cc);
+	    x += metrics.width(cc);
+	}
+	painter.end();
+	sprite = new QCanvasSimpleSprite
+	    (pixmap, tCanvas);
+	sprite->move(0, y);
+	sprite->show();
+	y += 100;
+
+	pixmap = new QPixmap(3000, 100);
+	pixmap->fill();
+	painter.begin(pixmap);
+	painter.setFont(font);
+	painter.drawLine(0, 50, 3000, 50);
+	x = 0;
+	for (int c = 32; c < 256; ++c) {
+	    QChar cc(0xe000 + c);
+	    painter.drawText(x, 50, cc);
+	    x += metrics.width(cc);
+	}
+	painter.end();
+	sprite = new QCanvasSimpleSprite
+	    (pixmap, tCanvas);
+	sprite->move(0, y);
+	sprite->show();
+	y += 100;
+
+	pixmap = new QPixmap(3000, 100);
+	pixmap->fill();
+	painter.begin(pixmap);
+	painter.setFont(font);
+	painter.drawLine(0, 50, 3000, 50);
+	x = 0;
+	QString s("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
+	painter.drawText(x, 50, s);
+	x += metrics.width(s);
+	painter.end();
+	sprite = new QCanvasSimpleSprite
+	    (pixmap, tCanvas);
+	sprite->move(0, y);
+	sprite->show();
+	y += 100;
+
+	pixmap = new QPixmap(3000, 100);
+	pixmap->fill();
+	font = QFont("maestro");
+	font.setPixelSize(16);
+	metrics = QFontMetrics(font);
+	painter.begin(pixmap);
+	painter.setFont(font);
+	painter.drawLine(0, 50, 3000, 50);
+	x = 0;
+	for (int c = 32; c < 256; ++c) {
+	    QChar cc(0xf000 + c);
+	    painter.drawText(x, 50, cc);
+	    x += metrics.width(cc);
+	}
+	painter.end();
+	sprite = new QCanvasSimpleSprite
+	    (pixmap, tCanvas);
+	sprite->move(0, y);
+	sprite->show();
+	y += 100;
+
+	pixmap = new QPixmap(3000, 100);
+	pixmap->fill();
+	painter.begin(pixmap);
+	painter.setFont(font);
+	painter.drawLine(0, 50, 3000, 50);
+	x = 0;
+	for (int c = 32; c < 256; ++c) {
+	    QChar cc(c);
+	    painter.drawText(x, 50, cc);
+	    x += metrics.width(cc);
+	}
+	painter.end();
+	sprite = new QCanvasSimpleSprite
+	    (pixmap, tCanvas);
+	sprite->move(0, y);
+	sprite->show();
+	y += 100;
+
+	pixmap = new QPixmap(3000, 100);
+	pixmap->fill();
+	painter.begin(pixmap);
+	painter.setFont(font);
+	painter.drawLine(0, 50, 3000, 50);
+	x = 0;
+	s = QString("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
+	painter.drawText(x, 50, s);
+	x += metrics.width(s);
+	painter.end();
+	sprite = new QCanvasSimpleSprite
+	    (pixmap, tCanvas);
+	sprite->move(0, y);
+	sprite->show();
+	y += 100;
+*/
+    }
+    
+
 
     m_config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
     if (m_config->readBoolEntry("backgroundtextures", false)) {

@@ -171,7 +171,7 @@ NoteFontMap::startElement(const QString &, const QString &,
 
         QString s = attributes.value("note-height");
         if (!s) {
-            m_errorString = i18n("note-height not found");
+            m_errorString = i18n("note-height is a required attribute of font-size");
             return false;
         }
         int noteHeight = s.toInt();
@@ -187,6 +187,9 @@ NoteFontMap::startElement(const QString &, const QString &,
         s = attributes.value("beam-thickness");
         if (s) sizeData.setBeamThickness(s.toInt());
 
+        s = attributes.value("flag-spacing");
+        if (s) sizeData.setFlagSpacing(s.toInt());
+
         s = attributes.value("border-x");
         if (s) sizeData.setBorderX(s.toInt());
 
@@ -198,75 +201,67 @@ NoteFontMap::startElement(const QString &, const QString &,
 
     } else if (lcName == "font-scale") {
 	
-	double fontHeight = 0.0;
-	double beamThickness = 0.0;
-	double staffLineThickness = 0.0;
-	double stemThickness = 0.0;
-	double borderX = 0.0;
-	double borderY = 0.0;
+	double fontHeight = -1.0;
+	double beamThickness = -1.0;
+	double flagSpacing = -1.0;
+	double staffLineThickness = -1.0;
+	double stemThickness = -1.0;
+	double borderX = -1.0;
+	double borderY = -1.0;
 
 	QString s;
-	bool ok = false;
-
-        s = attributes.value("staff-line-thickness");
-	if (s) staffLineThickness = s.toDouble(&ok);
-	if (!ok) {
-	    m_errorString = i18n("staff-line-thickness is a required attribute of font-scale");
-	    return false;
-	}
-
-        s = attributes.value("stem-thickness");
-	if (s) stemThickness = s.toDouble(&ok);
-	if (!ok) {
-	    m_errorString = i18n("stem-thickness is a required attribute of font-scale");
-	    return false;
-	}
-
-        s = attributes.value("beam-thickness");
-	if (s) beamThickness = s.toDouble(&ok);
-	if (!ok) {
-	    m_errorString = i18n("beam-thickness is a required attribute of font-scale");
-	    return false;
-	}
-
-        s = attributes.value("border-x");
-	if (s) borderX = s.toDouble(&ok);
-	if (!ok) {
-	    m_errorString = i18n("border-x is a required attribute of font-scale");
-	    return false;
-	}
-
-        s = attributes.value("border-y");
-	if (s) borderY = s.toDouble(&ok);
-	if (!ok) {
-	    m_errorString = i18n("border-y is a required attribute of font-scale");
-	    return false;
-	}
 
         s = attributes.value("font-height");
-	if (s) fontHeight = s.toDouble(&ok);
-	if (!ok) {
+	if (s) fontHeight = s.toDouble();
+	else {
 	    m_errorString = i18n("font-height is a required attribute of font-scale");
 	    return false;
 	}
+
+        s = attributes.value("staff-line-thickness");
+	if (s) staffLineThickness = s.toDouble();
+
+        s = attributes.value("stem-thickness");
+	if (s) stemThickness = s.toDouble();
+
+        s = attributes.value("beam-thickness");
+	if (s) beamThickness = s.toDouble();
+
+        s = attributes.value("flag-spacing");
+	if (s) flagSpacing = s.toDouble();
+
+        s = attributes.value("border-x");
+	if (s) borderX = s.toDouble();
+
+        s = attributes.value("border-y");
+	if (s) borderY = s.toDouble();
 
 	for (int sz = 2; sz <= 80; sz += (sz < 8 ? 1 : 2)) {
 
 	    SizeData &sizeData = m_sizes[sz];
 	    unsigned int temp, temp1;
 
-	    if (sizeData.getStaffLineThickness(temp) == false)
+	    if (sizeData.getStaffLineThickness(temp) == false &&
+		staffLineThickness >= 0.0)
 		sizeData.setStaffLineThickness(toSize(sz, staffLineThickness, true));
 
-	    if (sizeData.getStemThickness(temp) == false)
+	    if (sizeData.getStemThickness(temp) == false &&
+		stemThickness >= 0.0)
 		sizeData.setStemThickness(toSize(sz, stemThickness, true));
 
-	    if (sizeData.getBeamThickness(temp) == false)
+	    if (sizeData.getBeamThickness(temp) == false &&
+		beamThickness >= 0.0)
 		sizeData.setBeamThickness(toSize(sz, beamThickness, true));
 
+	    if (sizeData.getFlagSpacing(temp) == false &&
+		flagSpacing >= 0.0)
+		sizeData.setFlagSpacing(toSize(sz, flagSpacing, true));
+
 	    if (sizeData.getBorderThickness(temp, temp1) == false) {
-		sizeData.setBorderX(toSize(sz, borderX, false));
-		sizeData.setBorderY(toSize(sz, borderY, false));
+		if (borderX >= 0.0)
+		    sizeData.setBorderX(toSize(sz, borderX, false));
+		if (borderY >= 0.0)
+		    sizeData.setBorderY(toSize(sz, borderY, false));
 	    }
 
 	    if (sizeData.getFontHeight(temp) == false)
@@ -274,6 +269,38 @@ NoteFontMap::startElement(const QString &, const QString &,
 	}
 
     } else if (lcName == "font-symbol-map") {
+
+    } else if (lcName == "codebase") {
+
+	int bn = 0, fn = 0;
+	bool ok;
+	QString base = attributes.value("base");
+	if (!base) {
+	    m_errorString = i18n("base is a required attribute of codebase");
+	    return false;
+	}
+	bn = base.toInt(&ok);
+	if (!ok || bn < 0) {
+	    m_errorString =
+		i18n("invalid base attribute \"%1\" (must be integer >= 0)").
+		arg(base);
+	    return false;
+	}
+	
+	QString fontId = attributes.value("font-id");
+	if (!fontId) {
+	    m_errorString = i18n("font-id is a required attribute of codebase");
+	    return false;
+	}
+	fn = fontId.stripWhiteSpace().toInt(&ok);
+	if (!ok || fn < 0) {
+	    m_errorString =
+		i18n("invalid font-id attribute \"%1\" (must be integer >= 0)").
+		arg(fontId);
+	    return false;
+	}
+
+	m_bases[fn] = bn;
 
     } else if (lcName == "symbol") {
 
@@ -619,7 +646,8 @@ NoteFontMap::getInversionSrc(int size, CharName charName, string &src) const
 }
 
 bool
-NoteFontMap::getFont(int size, CharName charName, QFont &font) const
+NoteFontMap::getFont(int size, CharName charName, QFont &font, int &charBase)
+    const
 {
     SymbolDataMap::const_iterator i = m_data.find(charName);
     if (i == m_data.end()) return false;
@@ -639,6 +667,10 @@ NoteFontMap::getFont(int size, CharName charName, QFont &font) const
 
     font = fi->second;
     font.setPixelSize(fontHeight);
+
+    CharBaseMap::const_iterator bi = m_bases.find(fontId);
+    if (bi == m_bases.end()) charBase = 0;
+    else charBase = bi->second;
 
     return true;
 }
@@ -691,6 +723,15 @@ NoteFontMap::getBeamThickness(int size, unsigned int &thickness) const
 }
 
 bool
+NoteFontMap::getFlagSpacing(int size, unsigned int &spacing) const
+{
+    SizeDataMap::const_iterator i = m_sizes.find(size);
+    if (i == m_sizes.end()) return false;
+
+    return i->second.getFlagSpacing(spacing);
+}
+
+bool
 NoteFontMap::getBorderThickness(int size,
                                 unsigned int &x, unsigned int &y) const
 {
@@ -706,7 +747,32 @@ NoteFontMap::getHotspot(int size, CharName charName, int &x, int &y) const
     HotspotDataMap::const_iterator i = m_hotspots.find(charName);
     if (i == m_hotspots.end()) return false;
 
+    NOTATION_DEBUG << "NoteFontMap::getHotspot(" <<charName.getName()	
+	   <<"): about to look up hotspot" << endl;
+
     return i->second.getHotspot(size, x, y);
+}
+
+bool
+NoteFontMap::HotspotData::getHotspot(int size, int &x, int &y) const
+{
+    DataMap::const_iterator i = m_data.find(size);
+    if (i == m_data.end()) {
+	x = 0;
+	if (m_scaled.first  >= 0) x = toSize(size, m_scaled.first,  false);
+	if (m_scaled.second >= 0) {
+	    y = toSize(size, m_scaled.second, false);
+	    NOTATION_DEBUG << "NoteFontMap::getHotspot: found scaled at "
+			   << x << "," << y << endl;
+	    return true;
+	}
+	else return false;
+    }
+    x = i->second.first;
+    y = i->second.second;
+    NOTATION_DEBUG << "NoteFontMap::getHotspot: found unscaled at "
+		   << x << "," << y << endl;
+    return true;
 }
 
 void
@@ -741,6 +807,10 @@ NoteFontMap::dump() const
 
         if (getBeamThickness(*sizei, t)) {
             cout << "Beam thickness: " << t << endl;
+        }
+
+        if (getFlagSpacing(*sizei, t)) {
+            cout << "Flag spacing: " << t << endl;
         }
 
         if (getBorderThickness(*sizei, bx, by)) {
@@ -877,9 +947,15 @@ NoteFont::getStemThickness(unsigned int &thickness) const
 bool
 NoteFont::getBeamThickness(unsigned int &thickness) const
 {
-//    thickness = (m_size + 2) / 3;
     thickness = m_size / 2;
     return m_fontMap.getBeamThickness(m_size, thickness);
+}
+
+bool
+NoteFont::getFlagSpacing(unsigned int &spacing) const
+{
+    spacing = m_size;
+    return m_fontMap.getFlagSpacing(m_size, spacing);
 }
 
 bool
@@ -897,15 +973,17 @@ NoteFont::getBorderThickness(unsigned int &x, unsigned int &y) const
     return m_fontMap.getBorderThickness(m_size, x, y);
 }
 
-QPixmap *
-NoteFont::lookup(CharName charName, bool inverted) const
+bool
+NoteFont::lookup(CharName charName, bool inverted, QPixmap *&pixmap) const
 {
     PixmapMap::iterator i = m_map->find(charName);
     if (i != m_map->end()) {
-        if (inverted) return i->second.second;
-        else return i->second.first;
+        if (inverted) pixmap = i->second.second;
+        else pixmap = i->second.first;
+	return true;
     }
-    return 0;
+    pixmap = 0;
+    return false;
 }
 
 void
@@ -932,10 +1010,16 @@ NoteFont::add(CharName charName, bool inverted, QPixmap *pixmap) const
 bool
 NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
 {
-    QPixmap *found = lookup(charName, inverted);
-    if (found != 0) {
-        pixmap = *found;
-        return true;
+    QPixmap *found = 0;
+    bool ok = lookup(charName, inverted, found);
+    if (ok) {
+	if (found) {
+	    pixmap = *found;
+	    return true;
+	} else {
+	    pixmap = *m_blankPixmap;
+	    return false;
+	}
     }
 
     if (inverted && !m_fontMap.hasInversion(m_size, charName)) {
@@ -947,7 +1031,7 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
     }
 
     string src;
-    bool ok = false;
+    ok = false;
 
     if (!inverted) ok = m_fontMap.getSrc(m_size, charName, src);
     else  ok = m_fontMap.getInversionSrc(m_size, charName, src);
@@ -980,6 +1064,8 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
 
 	int code = -1;
 	QFont font;
+	int charBase = 0;
+	int doMultiple = 0;
 	if (!inverted) ok = m_fontMap.getCode(m_size, charName, code);
 	else  ok = m_fontMap.getInversionCode(m_size, charName, code);
 
@@ -987,11 +1073,12 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
 	    cerr << "NoteFont::getPixmap: Warning: No pixmap or code for character \""
 		 << charName << "\"" << (inverted ? " (inverted)" : "")
 		 << " in font \"" << m_fontMap.getName() << "\"" << endl;
+	    add(charName, inverted, 0);
 	    pixmap = *m_blankPixmap;
 	    return false;
 	}
 
-	ok = m_fontMap.getFont(m_size, charName, font);
+	ok = m_fontMap.getFont(m_size, charName, font, charBase);
 
 	if (!ok) {
 	    if (!inverted && m_fontMap.hasInversion(m_size, charName)) {
@@ -1005,13 +1092,13 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
 	    cerr << "NoteFont::getPixmap: Warning: No system font for character \""
 		 << charName << "\"" << (inverted ? " (inverted)" : "")
 		 << " in font \"" << m_fontMap.getName() << "\"" << endl;
+	    add(charName, inverted, 0);
 	    pixmap = *m_blankPixmap;
 	    return false;
 	}
 
 	QFontMetrics metrics(font);
-	QChar qc(code + 0xf000); //!!! should be in mapping file I guess
-
+	QChar qc(code + charBase);
 	QRect bounding = metrics.boundingRect(qc);
 
 	if (m_fontMap.shouldAutocrop()) {
@@ -1043,9 +1130,8 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
 	return true;
     }
 
-    found = new QPixmap(*m_blankPixmap);
-    add(charName, inverted, found);
-    pixmap = *found;
+    add(charName, inverted, 0);
+    pixmap = *m_blankPixmap;
     return false;
 }
 
@@ -1075,16 +1161,29 @@ NoteFont::getColouredPixmap(CharName baseCharName, QPixmap &pixmap,
 {
     CharName charName(getNameWithColour(baseCharName, hue));
 
-    QPixmap *found = lookup(charName, inverted);
-    if (found != 0) {
-        pixmap = *found;
-        return true;
+    QPixmap *found = 0;
+    bool ok = lookup(charName, inverted, found);
+    if (ok) {
+	if (found) {
+	    pixmap = *found;
+	    return true;
+	} else {
+	    pixmap = *m_blankPixmap;
+	    return false;
+	}
     }
 
     QPixmap basePixmap;
-    bool ok = getPixmap(baseCharName, basePixmap, inverted);
+    ok = getPixmap(baseCharName, basePixmap, inverted);
 
-    found = new QPixmap(PixmapFunctions::colourPixmap(basePixmap, hue, minValue));
+    if (!ok) {
+	add(charName, inverted, 0);
+	pixmap = *m_blankPixmap;
+	return false;
+    }
+
+    found = new QPixmap
+	(PixmapFunctions::colourPixmap(basePixmap, hue, minValue));
     add(charName, inverted, found);
     pixmap = *found;
     return ok;
