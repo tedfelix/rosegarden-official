@@ -11,8 +11,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>307</width>
-            <height>122</height>
+            <width>336</width>
+            <height>119</height>
         </rect>
     </property>
     <property stdset="1">
@@ -29,9 +29,9 @@
             <name>geometry</name>
             <rect>
                 <x>0</x>
-                <y>0</y>
-                <width>307</width>
-                <height>122</height>
+                <y>-1</y>
+                <width>340</width>
+                <height>120</height>
             </rect>
         </property>
         <property stdset="1">
@@ -419,7 +419,7 @@
             </property>
             <property stdset="1">
                 <name>cursor</name>
-                <cursor>13</cursor>
+                <cursor>0</cursor>
             </property>
             <property stdset="1">
                 <name>focusPolicy</name>
@@ -455,7 +455,7 @@
             </property>
             <property stdset="1">
                 <name>cursor</name>
-                <cursor>13</cursor>
+                <cursor>0</cursor>
             </property>
             <property stdset="1">
                 <name>focusPolicy</name>
@@ -491,7 +491,7 @@
             </property>
             <property stdset="1">
                 <name>cursor</name>
-                <cursor>13</cursor>
+                <cursor>0</cursor>
             </property>
             <property stdset="1">
                 <name>focusPolicy</name>
@@ -539,7 +539,7 @@
             </property>
             <property stdset="1">
                 <name>cursor</name>
-                <cursor>13</cursor>
+                <cursor>0</cursor>
             </property>
             <property stdset="1">
                 <name>focusPolicy</name>
@@ -575,7 +575,7 @@
             </property>
             <property stdset="1">
                 <name>cursor</name>
-                <cursor>13</cursor>
+                <cursor>0</cursor>
             </property>
             <property stdset="1">
                 <name>focusPolicy</name>
@@ -619,7 +619,7 @@
             </property>
             <property stdset="1">
                 <name>cursor</name>
-                <cursor>13</cursor>
+                <cursor>0</cursor>
             </property>
             <property stdset="1">
                 <name>focusPolicy</name>
@@ -663,7 +663,7 @@
             </property>
             <property stdset="1">
                 <name>cursor</name>
-                <cursor>13</cursor>
+                <cursor>0</cursor>
             </property>
             <property stdset="1">
                 <name>focusPolicy</name>
@@ -699,7 +699,7 @@
             </property>
             <property stdset="1">
                 <name>cursor</name>
-                <cursor>13</cursor>
+                <cursor>0</cursor>
             </property>
             <property stdset="1">
                 <name>focusPolicy</name>
@@ -735,7 +735,7 @@
             </property>
             <property stdset="1">
                 <name>cursor</name>
-                <cursor>13</cursor>
+                <cursor>0</cursor>
             </property>
             <property stdset="1">
                 <name>focusPolicy</name>
@@ -771,154 +771,6 @@
             </property>
         </widget>
         <widget>
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>FfwdButton</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>188</x>
-                    <y>53</y>
-                    <width>40</width>
-                    <height>34</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>cursor</name>
-                <cursor>13</cursor>
-            </property>
-            <property stdset="1">
-                <name>focusPolicy</name>
-                <enum>NoFocus</enum>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string></string>
-            </property>
-            <property stdset="1">
-                <name>pixmap</name>
-                <pixmap>image11</pixmap>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Fast forward</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QLineEdit</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>TempoLineEdit</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>232</x>
-                    <y>93</y>
-                    <width>68</width>
-                    <height>22</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>focusPolicy</name>
-                <enum>NoFocus</enum>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Tempo</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QLabel</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>TextLabel1</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>261</x>
-                    <y>76</y>
-                    <width>40</width>
-                    <height>16</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>Tempo</string>
-            </property>
-            <property>
-                <name>buddy</name>
-                <cstring></cstring>
-            </property>
-        </widget>
-        <widget>
-            <class>QFrame</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>Frame8</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>232</x>
-                    <y>7</y>
-                    <width>69</width>
-                    <height>35</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>frameShape</name>
-                <enum>Box</enum>
-            </property>
-            <property stdset="1">
-                <name>frameShadow</name>
-                <enum>Raised</enum>
-            </property>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>MidiInLabel</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>3</x>
-                        <y>8</y>
-                        <width>35</width>
-                        <height>16</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>   --</string>
-                </property>
-            </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>MidiOutLabel</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>30</x>
-                        <y>8</y>
-                        <width>36</width>
-                        <height>16</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>   --</string>
-                </property>
-            </widget>
-        </widget>
-        <widget>
             <class>QFrame</class>
             <property stdset="1">
                 <name>name</name>
@@ -927,10 +779,10 @@
             <property stdset="1">
                 <name>geometry</name>
                 <rect>
-                    <x>232</x>
-                    <y>47</y>
-                    <width>69</width>
-                    <height>28</height>
+                    <x>276</x>
+                    <y>82</y>
+                    <width>59</width>
+                    <height>33</height>
                 </rect>
             </property>
             <property stdset="1">
@@ -950,11 +802,18 @@
                 <property stdset="1">
                     <name>geometry</name>
                     <rect>
-                        <x>8</x>
-                        <y>5</y>
+                        <x>7</x>
+                        <y>8</y>
                         <width>24</width>
                         <height>16</height>
                     </rect>
+                </property>
+                <property stdset="1">
+                    <name>font</name>
+                    <font>
+                        <family>lucidatypewriter</family>
+                        <pointsize>8</pointsize>
+                    </font>
                 </property>
                 <property stdset="1">
                     <name>text</name>
@@ -970,17 +829,260 @@
                 <property stdset="1">
                     <name>geometry</name>
                     <rect>
-                        <x>39</x>
-                        <y>5</y>
+                        <x>32</x>
+                        <y>8</y>
                         <width>24</width>
                         <height>17</height>
                     </rect>
+                </property>
+                <property stdset="1">
+                    <name>font</name>
+                    <font>
+                        <family>lucidatypewriter</family>
+                        <pointsize>8</pointsize>
+                    </font>
                 </property>
                 <property stdset="1">
                     <name>text</name>
                     <string>/16</string>
                 </property>
             </widget>
+        </widget>
+        <widget>
+            <class>QFrame</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>Frame8</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>230</x>
+                    <y>6</y>
+                    <width>104</width>
+                    <height>69</height>
+                </rect>
+            </property>
+            <property stdset="1">
+                <name>frameShape</name>
+                <enum>Box</enum>
+            </property>
+            <property stdset="1">
+                <name>frameShadow</name>
+                <enum>Raised</enum>
+            </property>
+            <widget>
+                <class>QLabel</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>TextLabel1_2</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>7</x>
+                        <y>4</y>
+                        <width>81</width>
+                        <height>16</height>
+                    </rect>
+                </property>
+                <property stdset="1">
+                    <name>font</name>
+                    <font>
+                        <family>lucidatypewriter</family>
+                        <pointsize>8</pointsize>
+                    </font>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>MIDI activity</string>
+                </property>
+            </widget>
+            <widget>
+                <class>QFrame</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>Frame7_2</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>6</x>
+                        <y>23</y>
+                        <width>94</width>
+                        <height>39</height>
+                    </rect>
+                </property>
+                <property stdset="1">
+                    <name>frameShape</name>
+                    <enum>StyledPanel</enum>
+                </property>
+                <property stdset="1">
+                    <name>frameShadow</name>
+                    <enum>Raised</enum>
+                </property>
+                <widget>
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>MidiOutLabel</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>geometry</name>
+                        <rect>
+                            <x>7</x>
+                            <y>3</y>
+                            <width>80</width>
+                            <height>16</height>
+                        </rect>
+                    </property>
+                    <property stdset="1">
+                        <name>font</name>
+                        <font>
+                            <family>lucidatypewriter</family>
+                            <pointsize>8</pointsize>
+                        </font>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>no events in</string>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>MidiInLabel</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>geometry</name>
+                        <rect>
+                            <x>7</x>
+                            <y>19</y>
+                            <width>80</width>
+                            <height>16</height>
+                        </rect>
+                    </property>
+                    <property stdset="1">
+                        <name>font</name>
+                        <font>
+                            <family>lucidatypewriter</family>
+                            <pointsize>8</pointsize>
+                        </font>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>no events out</string>
+                    </property>
+                </widget>
+            </widget>
+        </widget>
+        <widget>
+            <class>QLabel</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>TextLabel1</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>237</x>
+                    <y>76</y>
+                    <width>35</width>
+                    <height>16</height>
+                </rect>
+            </property>
+            <property stdset="1">
+                <name>font</name>
+                <font>
+                    <family>lucidatypewriter</family>
+                    <pointsize>8</pointsize>
+                </font>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>Tempo</string>
+            </property>
+            <property>
+                <name>buddy</name>
+                <cstring></cstring>
+            </property>
+        </widget>
+        <widget>
+            <class>QLineEdit</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>TempoLineEdit</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>201</x>
+                    <y>92</y>
+                    <width>68</width>
+                    <height>22</height>
+                </rect>
+            </property>
+            <property stdset="1">
+                <name>font</name>
+                <font>
+                    <family>lucidatypewriter</family>
+                </font>
+            </property>
+            <property stdset="1">
+                <name>focusPolicy</name>
+                <enum>NoFocus</enum>
+            </property>
+            <property stdset="1">
+                <name>alignment</name>
+                <set>AlignRight</set>
+            </property>
+            <property>
+                <name>hAlign</name>
+            </property>
+            <property>
+                <name>toolTip</name>
+                <string>Tempo</string>
+            </property>
+            <property>
+                <name>vAlign</name>
+            </property>
+        </widget>
+        <widget>
+            <class>QPushButton</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>FfwdButton</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>188</x>
+                    <y>53</y>
+                    <width>40</width>
+                    <height>34</height>
+                </rect>
+            </property>
+            <property stdset="1">
+                <name>cursor</name>
+                <cursor>0</cursor>
+            </property>
+            <property stdset="1">
+                <name>focusPolicy</name>
+                <enum>NoFocus</enum>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string></string>
+            </property>
+            <property stdset="1">
+                <name>pixmap</name>
+                <pixmap>image11</pixmap>
+            </property>
+            <property>
+                <name>toolTip</name>
+                <string>Fast forward</string>
+            </property>
         </widget>
     </widget>
 </widget>

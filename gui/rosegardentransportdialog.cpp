@@ -229,7 +229,8 @@ RosegardenTransportDialog::setMidiInLabel(const Rosegarden::MappedEvent *mE)
     assert(mE > 0);
 
     MidiPitchLabel *midiPitchLabel = new MidiPitchLabel(mE->getPitch());
-    MidiInLabel->setText(midiPitchLabel->getQString());
+    MidiInLabel->setText(midiPitchLabel->getQString() +
+                         QString("  %1").arg(mE->getVelocity()));
 
     // Reset the timer if it's already running
     //
@@ -247,7 +248,7 @@ RosegardenTransportDialog::setMidiInLabel(const Rosegarden::MappedEvent *mE)
 void
 RosegardenTransportDialog::clearMidiInLabel()
 {
-    MidiInLabel->setText(QString("   --"));
+    MidiInLabel->setText(QString("no events in"));
 }
 
 
@@ -259,7 +260,8 @@ RosegardenTransportDialog::setMidiOutLabel(const Rosegarden::MappedEvent *mE)
     assert(mE > 0);
 
     MidiPitchLabel *midiPitchLabel = new MidiPitchLabel(mE->getPitch());
-    MidiOutLabel->setText(midiPitchLabel->getQString());
+    MidiOutLabel->setText(midiPitchLabel->getQString() +
+                          QString("  %1").arg(mE->getVelocity()));
 
     // Reset the timer if it's already running
     //
@@ -277,7 +279,7 @@ RosegardenTransportDialog::setMidiOutLabel(const Rosegarden::MappedEvent *mE)
 void
 RosegardenTransportDialog::clearMidiOutLabel()
 {
-    MidiOutLabel->setText(QString("   --"));
+    MidiOutLabel->setText(QString("no events out"));
 }
 
 void
