@@ -34,12 +34,29 @@ namespace Rosegarden
 class ScriptRep
 {
 public:
-    GlobalChord *chord;
-    // blah
+
+    //!!! Needs to be a SegmentObserver _and_ CompositionObserver.
+    // If an event is removed from a segment, we have to drop it too.
+    // If a segment is removed from a composition likewise
+
+    Event *getEvent(ScriptInterface::EventId id);
+    
+
+protected:
+    Composition *m_composition;
+    CompositionTimeSliceAdapter *m_adapter;
+    GlobalChord *m_chord;
+    std::map<ScriptInterface::EventId, Event *> m_events;
 };
 
-class ScriptContainer :
-    public std::map<ScriptInterface::ScriptId, ScriptRep *> { };
+Event *
+ScriptRep::getEvent(ScriptInterface::EventId id)
+{
+    return m_events[id];
+}
+    
+class ScriptInterface::ScriptContainer :
+    public std::map<ScriptId, ScriptRep *> { };
 
 ScriptInterface::ScriptInterface(Rosegarden::Composition *composition) :
     m_composition(composition),
@@ -49,6 +66,18 @@ ScriptInterface::ScriptInterface(Rosegarden::Composition *composition) :
 
 ScriptInterface::~ScriptInterface()
 {
+}
+
+std::string
+ScriptInterface::getEventType(ScriptId id, EventId eventId)
+{
+    ScriptRep *rep = (*m_scripts)[id];
+    if (!rep) return "";
+
+    Event *event = rep->getEvent(eventId);
+    if (!event) return "";
+
+    return event->getType();
 }
 
 

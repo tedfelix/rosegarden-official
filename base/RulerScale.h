@@ -137,7 +137,6 @@ public:
      */
     SimpleRulerScale(Composition *composition,
 		     double origin, double unitsPerPixel);
-    SimpleRulerScale(const SimpleRulerScale &ruler);
     virtual ~SimpleRulerScale();
 
     double getOrigin() const { return m_origin; }
@@ -156,6 +155,10 @@ public:
 protected:
     double m_origin;
     double m_ratio;
+
+private:
+    SimpleRulerScale(const SimpleRulerScale &ruler);
+    SimpleRulerScale &operator=(const SimpleRulerScale &ruler);
 };
 
 }

@@ -28,7 +28,6 @@ namespace Rosegarden
 {
 
 class Composition;
-class ScriptContainer;
 
 class ScriptInterface
 {
@@ -114,8 +113,10 @@ public:
     std::string getProperty(ScriptId id, EventId event, std::string property);
     void setProperty(ScriptId id, EventId event, std::string property, std::string value);
 
-private:
+protected:
     Composition *m_composition;
+
+    class ScriptContainer;
     ScriptContainer *m_scripts;
 };
 
