@@ -16,6 +16,8 @@ o Matrix width bug [HALF COMPLETED]
 
 o Matrix pointer width
 
+o File loading blank-out
+
 o Drum bank selects and different MIDI drums
 
 o Real time plugins

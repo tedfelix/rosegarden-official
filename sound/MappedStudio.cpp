@@ -123,27 +123,49 @@ MappedObject::getChildren(MappedObjectType type)
 }
 
 void
-MappedObject::clearChildren()
+MappedObject::destroyChildren()
 {
     // remove references from the studio as well as from the object
     MappedObject *studioObject = getParent();
     while (!dynamic_cast<MappedStudio*>(studioObject))
         studioObject = studioObject->getParent();
 
-    MappedStudio *studio = dynamic_cast<MappedStudio*>(studioObject);
-
     std::vector<MappedObject*>::iterator it = m_children.begin();
     for (; it != m_children.end(); it++)
-        studio->destroyObject(*it); // remove from studio and destroy
+        (*it)->destroy(); // remove from studio and destroy
 
     m_children.erase(m_children.begin(), m_children.end());
 
 }
 
+// Destroy this object and remove it from the studio and 
+// do the same for all its children.
+//
+void
+MappedObject::destroy()
+{
+    MappedObject *studioObject = getParent();
+    while (!dynamic_cast<MappedStudio*>(studioObject))
+        studioObject = studioObject->getParent();
+
+    MappedStudio *studio = dynamic_cast<MappedStudio*>(studioObject);
+    
+    std::vector<MappedObject*>::iterator it = m_children.begin();
+    for (; it != m_children.end(); it++)
+    {
+        (*it)->destroy();
+    }
+
+    cout << "DESTROYING ID = " << m_id << endl;
+    (void)studio->clearObject(m_id);
+    delete this;
+}
+
+
 void
 MappedObject::clone(MappedObject *object)
 {
-    object->clearChildren();
+    object->destroyChildren();
 
     // If we have children then create new versions and clone then
     //
@@ -283,25 +305,16 @@ MappedStudio::getObjectOfType(MappedObjectType type)
 
 
 bool
-MappedStudio::destroyObject(MappedObject *object)
-{
-    return destroyObject(object->getId());
-}
-
-bool
 MappedStudio::destroyObject(MappedObjectId id)
 {
-    std::vector<MappedObject*>::iterator it;
-    for (it = m_objects.begin(); it != m_objects.end(); it++)
+    MappedObject *obj =  getObject(id);
+
+    if (obj)
     {
-        if ((*it)->getId() == id)
-        {
-            delete (*it);
-            m_objects.erase(it);
-            return true;
-        }
+        obj->destroy();
+        return true;
     }
-   
+
     return false;
 }
 
@@ -329,6 +342,23 @@ MappedStudio::clear()
     m_objects.erase(m_objects.begin(), m_objects.end());
 
 }
+
+bool
+MappedStudio::clearObject(MappedObjectId id)
+{
+    std::vector<MappedObject*>::iterator it;
+    for (it = m_objects.begin(); it != m_objects.end(); it++)
+    {
+        if ((*it)->getId() == id)
+        {
+            m_objects.erase(it);
+            return true;
+        }
+
+    }
+    return false;
+}
+
 
 MappedObjectPropertyList
 MappedStudio::getPropertyList(const MappedObjectProperty &property)
@@ -546,20 +576,6 @@ MappedStudio::setPluginInstancePort(InstrumentId id,
 
 // ------------ MappedAudioFader ----------------
 //
-
-/*
-MappedObjectValue
-MappedAudioFader::getLevel()
-{
-    return m_level;
-}
-
-void
-MappedAudioFader::setLevel(MappedObjectValue param)
-{
-    m_level = param;
-}
-*/
 
 MappedObjectPropertyList 
 MappedAudioFader::getPropertyList(const MappedObjectProperty &property)
@@ -1179,17 +1195,20 @@ MappedAudioPluginManager::getPluginInstance(InstrumentId instrument,
 
 MappedLADSPAPlugin::~MappedLADSPAPlugin()
 {
+    /*
     MappedStudio *studio =
         dynamic_cast<MappedStudio*>(getParent()->getParent());
 
+    std::cout << "MappedLADSPAPlugin::~MappedLADSPAPlugin" << std::endl;
+
     if (studio)
     {
-        /* not quite working yet 
         Rosegarden::Sequencer *seq = studio->getSequencer();
+        cout << "HERE" << endl;
         if (seq)
             seq->removePluginInstance(m_instrument, m_position);
-        */
     }
+    */
 }
 
 
@@ -1330,7 +1349,7 @@ MappedLADSPAPlugin::setProperty(const MappedObjectProperty &property,
 void
 MappedLADSPAPlugin::clone(MappedObject *object)
 {
-    object->clearChildren();
+    object->destroyChildren();
 
     // If we have children then create new versions and clone then
     //

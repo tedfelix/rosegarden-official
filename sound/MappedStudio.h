@@ -140,7 +140,12 @@ public:
     //
     void addChild(MappedObject *mO);
     void removeChild(MappedObject *mO);
-    void clearChildren();
+
+
+    // Destruction
+    //
+    void destroy();
+    void destroyChildren();
 
     std::vector<MappedObject*> getChildObjects() { return m_children; }
 
@@ -191,10 +196,9 @@ public:
     bool connectInstrument(InstrumentId iId, MappedObjectId mId);
     bool connectObjects(MappedObjectId mId1, MappedObjectId mId2);
 
-    // Destroy a MappedObject
+    // Destroy a MappedObject by ID
     //
     bool destroyObject(MappedObjectId id);
-    bool destroyObject(MappedObject *object);
 
     // Get an object
     //
@@ -216,6 +220,10 @@ public:
     // elements in place.
     //
     void clearTemporaries();
+
+    // Clear a MappedObject reference from the Studio
+    //
+    bool clearObject(MappedObjectId id);
 
     // Property list
     //
@@ -321,15 +329,11 @@ public:
                      readOnly),
                      m_level(80), // assume 100 is max for the moment
                      m_channels(channels),
-                     m_instrumentId(0) {;}
+                     m_instrumentId(0),
+                     m_bypassed(false),
+                     m_pan(0.0) {;}
 
     ~MappedAudioFader() {;}
-
-    /*
-    // level
-    MappedObjectValue getLevel();
-    void setLevel(MappedObjectValue param);
-    */
 
     virtual MappedObjectPropertyList getPropertyList(
                         const MappedObjectProperty &property);
@@ -339,9 +343,19 @@ public:
 
 protected:
 
-    MappedObjectValue m_level;
-    MappedObjectValue m_channels;
+    MappedObjectValue             m_level;
+    MappedObjectValue             m_channels;
     Rosegarden::InstrumentId      m_instrumentId;
+
+    // Are the plugins for this instrument to be bypassed?
+    // (while the plugins don't reside here we use this as
+    // the central point of contact)
+    //
+    bool                          m_bypassed;
+
+    // Stereo pan (-1.0 to +1.0)
+    //
+    MappedObjectValue             m_pan;
 
 };
 

@@ -1078,7 +1078,24 @@ RosegardenSequencerApp::createMappedObject(int type)
 int 
 RosegardenSequencerApp::destroyMappedObject(int id)
 {
-    return int(m_studio->destroyObject(Rosegarden::MappedObjectId(id)));
+    Rosegarden::MappedLADSPAPlugin *plugin =
+        dynamic_cast<Rosegarden::MappedLADSPAPlugin*>(m_studio->getObject(id));
+
+    if (plugin)
+    {
+        std::cout << "RosegardenSequencerApp::destroyMappedObject - "
+                  << "removing plugin instance" << std::endl;
+        m_sequencer->removePluginInstance(plugin->getInstrument(),
+                                          plugin->getPosition());
+    }
+    bool ret = m_studio->destroyObject(Rosegarden::MappedObjectId(id));
+
+    if (ret)
+        cout << "RosegardenSequencerApp::destroyMappedObject = TRUE" << endl;
+    else
+        cout << "RosegardenSequencerApp::destroyMappedObject = FALSE" << endl;
+
+    return int(ret);
 }
 
 

@@ -77,16 +77,11 @@ AudioPluginInstance::toXmlString()
 
     for (unsigned int i = 0; i < m_ports.size(); i++)
     {
-        PluginPortInstance *port = getPort(i);
-
-        if (port)
-        {
-            plugin << "                <port id=\""
-                   << port->id
-                   << "\" value=\""
-                   << port->value
-                   << "\"/>" << std::endl;
-        }
+        plugin << "                <port id=\""
+               << m_ports[i]->id
+               << "\" value=\""
+               << m_ports[i]->value
+               << "\"/>" << std::endl;
     }
 
     plugin << "            </plugin>"

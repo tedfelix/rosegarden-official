@@ -1013,6 +1013,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             m_instrument->setSendVelocity(true);
         }
 
+#ifdef HAVE_LADSPA
+
     } else if (lcName == "plugin") {
 
         if (m_section != InInstrument)
@@ -1039,33 +1041,43 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         //
         if (plugin)
         {
-            RG_DEBUG << "Adding plugin id = " << m_pluginId << endl;
-
             m_plugin = m_instrument->getPlugin(position);
             m_plugin->setAssigned(true);
             m_plugin->setBypass(bypassed);
 
+            // Creating the Plugin creates the ports too
+            //
             Rosegarden::MappedObjectId mappedId =
                 Rosegarden::StudioControl::createStudioObject(
                         Rosegarden::MappedObject::LADSPAPlugin);
+
+            m_plugin->setMappedId(mappedId);
+            m_plugin->setId(id);
+
+            Rosegarden::StudioControl::setStudioObjectProperty
+                (mappedId,
+                 Rosegarden::MappedObject::Instrument,
+                 m_instrument->getId());
 
             Rosegarden::StudioControl::setStudioObjectProperty
                 (mappedId,
                  Rosegarden::MappedObject::Position,
                  Rosegarden::MappedObjectValue(position));
 
+            // Setting the id also sets up the plugin so that it's
+            // ready to run.
+            // 
             Rosegarden::StudioControl::setStudioObjectProperty
                 (mappedId,
-#ifdef HAVE_LADSPA
                  Rosegarden::MappedLADSPAPlugin::UniqueId,
-#else
-                 0,
-#endif
                  Rosegarden::MappedObjectValue(id));
 
-            m_plugin->setMappedId(mappedId);
-
             m_section = InPlugin;
+        }
+        else
+        {
+            m_errorString = i18n("Can't find Plugin");
+            return false;
         }
 
     } else if (lcName == "port") {
@@ -1075,7 +1087,27 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             m_errorString = i18n("Found Port outside Plugin");
             return false;
         }
+        unsigned long portId = atts.value("id").toULong();
+        Rosegarden::MappedObjectValue value = atts.value("value").toFloat();
 
+        if (m_plugin)
+        {
+            // Set the port at the sequencer and in the AudioPluginInstance
+            //
+            Rosegarden::StudioControl::setStudioPluginPort
+                (m_plugin->getMappedId(),
+                 portId,
+                 value);
+
+            m_plugin->addPort(portId, value);
+        }
+        else
+        {
+            m_errorString = i18n("No Plugin object found for Port");
+            return false;
+        }
+
+#endif // HAVE_LADSPA
 
     } else if (lcName == "metronome") {
 

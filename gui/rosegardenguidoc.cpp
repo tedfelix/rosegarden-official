@@ -1640,6 +1640,8 @@ RosegardenGUIDoc::initialiseControllers()
 void
 RosegardenGUIDoc::clearAllPlugins()
 {
+    RG_DEBUG << "clearAllPlugins" << endl;
+
     Rosegarden::InstrumentList list = m_studio.getAllInstruments();
     Rosegarden::MappedComposition mC;
 

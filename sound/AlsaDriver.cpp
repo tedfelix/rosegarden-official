@@ -2611,6 +2611,11 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                     for (; pIt != list.end(); pIt++)
                     {
     
+                        cout << "PROCESSING PLUGIN INST = "
+                             << (*pIt)->getInstrument()
+                             << " : POSITION = "
+                             << (*pIt)->getPosition() << endl;
+
                         (*pIt)->run(_jackBufferSize);
 
                         // Now mix the signal
@@ -2690,6 +2695,9 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                         volume = float(result[0].toFloat())/127.0;
                     }
 
+                    cout << "UNPROC INSTRUMENT = " << (*it)->getInstrument()
+                         << " : POS = " << (*it)->getPosition()
+                         << endl;
                     // Run the plugin
                     //
                     (*it)->run(_jackBufferSize);

@@ -905,6 +905,10 @@ InstrumentParameterBox::slotSelectPlugin(int index)
 
         aPD->show();
     }
+    else
+    {
+        cout << "NO AudioPluginInstance found for index " << index << endl;
+    }
 }
 
 void
@@ -922,7 +926,14 @@ InstrumentParameterBox::slotPluginSelected(int index, int plugin)
                        << "no plugin selected" << std::endl;
 
             // Destroy plugin instance
-            Rosegarden::StudioControl::destroyStudioObject(inst->getMappedId());
+            if (Rosegarden::StudioControl::
+                    destroyStudioObject(inst->getMappedId()))
+            {
+                std::cout << "InstrumentParameterBox::slotPluginSelected - "
+                          << "cannot destroy Studio object "
+                          << inst->getMappedId() << std::endl;
+            }
+
             inst->setAssigned(false);
             m_pluginButtons[index]->setText(i18n("<no plugin>"));
         }
