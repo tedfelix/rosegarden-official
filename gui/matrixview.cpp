@@ -1341,6 +1341,9 @@ MatrixView::slotChangeHorizontalZoom(int)
     barButtons = dynamic_cast<BarButtons*>(m_bottomBarButtons);
     if (barButtons) barButtons->setHScaleFactor(value);
 
+    for (unsigned int i = 0; i < m_controlRulers.size(); ++i)
+        m_controlRulers[i].first->setHScaleFactor(value);
+
 //     for (unsigned int i = 0; i < m_staffs.size(); ++i)
 //     {
 //         m_staffs[i]->setTimeScaleFactor(1.0/m_hZoomSlider->getCurrentSize());
