@@ -550,10 +550,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	 this,            SLOT(slotCheckRendered(double, double)));
 
     QObject::connect
-	(this,            SIGNAL(renderComplete()),
-	 getCanvasView(), SLOT(slotRenderComplete()));
-
-    QObject::connect
 	(m_topBarButtons->getLoopRuler(),
 	 SIGNAL(setPointerPosition(Rosegarden::timeT)),
 	 this, SLOT(slotSetInsertCursorPosition(Rosegarden::timeT)));
@@ -629,6 +625,10 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     slotCheckRendered(0, getCanvasView()->visibleWidth());
     getCanvasView()->repaintContents();
+
+    QObject::connect
+	(this,            SIGNAL(renderComplete()),
+	 getCanvasView(), SLOT(slotRenderComplete()));
 
     setConfigDialogPageIndex(1);
     setOutOfCtor();
