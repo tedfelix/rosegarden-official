@@ -885,6 +885,8 @@ void SegmentCanvas::updateSegmentItem(Segment *segment)
     } else {
 	item->recalculateRectangle(true);
     }
+
+    slotUpdate();
 }
 
 void SegmentCanvas::removeSegmentItem(Segment *segment)

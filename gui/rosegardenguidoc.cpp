@@ -63,6 +63,7 @@
 #include "xmlstorableevent.h"
 #include "rosegardendcop.h"
 #include "widgets.h"
+#include "trackeditor.h"
 
 
 QList<RosegardenGUIView> *RosegardenGUIDoc::pViewList = 0L;
@@ -1279,7 +1280,6 @@ RosegardenGUIDoc::stopRecordingAudio()
     // something in the record segment (that's why it was added
     // to the composition)
     m_commandHistory->addCommand (new SegmentRecordCommand(m_recordSegment));
-    m_recordSegment = 0;
 
     // Get the last added audio file - the one we've just recorded
     // and generate a preview of this audio file for population
@@ -1311,6 +1311,18 @@ RosegardenGUIDoc::stopRecordingAudio()
 
     if (progressDlg) delete progressDlg;
 
+
+    // Update preview
+    //
+    if(pViewList)
+    {
+        for(w=pViewList->first(); w!=0; w=pViewList->next())
+        {
+            w->getTrackEditor()->
+                getSegmentCanvas()->updateSegmentItem(m_recordSegment);
+        }
+    }
+
     // update views
     slotUpdateAllViews(0);
 
@@ -1335,6 +1347,8 @@ RosegardenGUIDoc::stopRecordingAudio()
         return;
     }
 
+    // clear down
+    m_recordSegment = 0;
 }
 
 void

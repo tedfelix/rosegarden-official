@@ -1016,6 +1016,11 @@ void RosegardenGUIApp::slotFileOpen()
 {
     slotStatusHelpMsg(i18n("Opening file..."));
 
+
+    KURL url = KFileDialog::getOpenURL(QString::null, "*.rg", this,
+                                       i18n("Open File"));
+    if ( url.isEmpty() ) { return; }
+
     if (m_doc) {
         
         if (!m_doc->saveIfModified()) {
@@ -1026,10 +1031,6 @@ void RosegardenGUIApp::slotFileOpen()
         }
     
     }
-
-    KURL url = KFileDialog::getOpenURL(QString::null, "*.rg", this,
-                                       i18n("Open File"));
-    if ( url.isEmpty() ) { return; }
 
     openURL(url);
 }
