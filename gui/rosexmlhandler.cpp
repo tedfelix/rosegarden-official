@@ -52,6 +52,132 @@ using Rosegarden::DeviceListIterator;
 
 using namespace Rosegarden::BaseProperties;
 
+class XmlSubHandler
+{
+public:
+    XmlSubHandler();
+    virtual ~XmlSubHandler();
+    
+    virtual bool startElement(const QString& namespaceURI,
+                              const QString& localName,
+                              const QString& qName,
+                              const QXmlAttributes& atts) = 0;
+
+    /**
+     * @param finished : if set to true on return, means that
+     * the handler should be deleted
+     */
+    virtual bool endElement(const QString& namespaceURI,
+                            const QString& localName,
+                            const QString& qName,
+                            bool& finished) = 0;
+
+    virtual bool characters(const QString& ch) = 0;
+};
+
+XmlSubHandler::XmlSubHandler()
+{
+}
+
+XmlSubHandler::~XmlSubHandler()
+{
+}
+
+//----------------------------------------
+
+class ConfigurationXmlSubHandler : public XmlSubHandler
+{
+public:
+    ConfigurationXmlSubHandler(RosegardenGUIDoc* doc);
+    
+    virtual bool startElement(const QString& namespaceURI,
+                              const QString& localName,
+                              const QString& qName,
+                              const QXmlAttributes& atts);
+
+    virtual bool endElement(const QString& namespaceURI,
+                            const QString& localName,
+                            const QString& qName,
+                            bool& finished);
+
+    virtual bool characters(const QString& ch);
+
+    //--------------- Data members ---------------------------------
+
+    RosegardenGUIDoc* m_doc;
+
+    QString m_propertyName;
+    QString m_propertyType;
+};
+
+ConfigurationXmlSubHandler::ConfigurationXmlSubHandler(RosegardenGUIDoc* doc)
+    : m_doc(doc)
+{
+}
+
+bool ConfigurationXmlSubHandler::startElement(const QString&, const QString&,
+                                              const QString& lcName,
+                                              const QXmlAttributes& atts)
+{
+    m_propertyName = lcName;
+    m_propertyType = atts.value("type");
+
+    return true;
+}
+
+bool ConfigurationXmlSubHandler::characters(const QString& ch)
+{
+    if (m_propertyType == "Int") {
+        long i = ch.toInt();
+        m_doc->getConfiguration().set<Int>(m_propertyName.data(), i);
+
+        return true;
+    }
+    
+    if (m_propertyType == "RealTime") {
+        Rosegarden::RealTime rt;
+        int sepIdx = ch.find(',');
+        
+        rt.sec = ch.left(sepIdx).toInt();
+        rt.usec = ch.mid(sepIdx + 1).toInt();
+
+        kdDebug(KDEBUG_AREA) << "sec = " << rt.sec << ", usec = " << rt.usec << endl;
+
+        m_doc->getConfiguration().set<Rosegarden::RealTimeT>(m_propertyName.data(), rt);
+
+        return true;
+    }
+
+    if (m_propertyType == "Bool") {
+        QString chLc = ch.lower();
+        
+        bool b = (chLc == "true" ||
+                  chLc == "1"    ||
+                  chLc == "on");
+        
+        m_doc->getConfiguration().set<Rosegarden::Bool>(m_propertyName.data(), b);
+
+        return true;
+    }
+    
+
+    return true;
+}
+
+bool
+ConfigurationXmlSubHandler::endElement(const QString&,
+                                       const QString&,
+                                       const QString& lcName,
+                                       bool& finished)
+{
+    finished = (lcName == "configuration");
+    return true;
+}
+
+
+//----------------------------------------
+
+
 
 RoseXmlHandler::RoseXmlHandler(RosegardenGUIDoc *doc,
                                unsigned int elementCount,
@@ -75,12 +201,14 @@ RoseXmlHandler::RoseXmlHandler(RosegardenGUIDoc *doc,
       m_totalElements(elementCount),
       m_elementsSoFar(0),
       m_progress(progress),
+      m_subHandler(0),
       m_deprecation(false)
 {
 }
 
 RoseXmlHandler::~RoseXmlHandler()
 {
+    delete m_subHandler;
 }
 
 bool
@@ -98,11 +226,15 @@ RoseXmlHandler::startDocument()
 }
 
 bool
-RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
-                             const QString& /*localName*/,
+RoseXmlHandler::startElement(const QString& namespaceURI,
+                             const QString& localName,
                              const QString& qName, const QXmlAttributes& atts)
 {
     QString lcName = qName.lower();
+
+    if (getSubHandler()) {
+        return getSubHandler()->startElement(namespaceURI, localName, lcName, atts);
+    }
 
     if (lcName == "event") {
 
@@ -869,6 +1001,10 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         m_section = InAudio;
 
 
+    } else if (lcName == "configuration") {
+
+        setSubHandler(new ConfigurationXmlSubHandler(m_doc));
+
     } else {
         kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement : Don't know how to parse this : " << qName << endl;
     }
@@ -877,9 +1013,17 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 }
 
 bool
-RoseXmlHandler::endElement(const QString& /*namespaceURI*/,
-                           const QString& /*localName*/, const QString& qName)
+RoseXmlHandler::endElement(const QString& namespaceURI,
+                           const QString& localName,
+                           const QString& qName)
 {
+    if (getSubHandler()) {
+        bool finished;
+        bool res = getSubHandler()->endElement(namespaceURI, localName, qName.lower(), finished);
+        if (finished) setSubHandler(0);
+        return res;
+    }
+
     // Set percentage done
     //
     if (m_progress &&
@@ -952,8 +1096,11 @@ RoseXmlHandler::endElement(const QString& /*namespaceURI*/,
 }
 
 bool
-RoseXmlHandler::characters(const QString&)
+RoseXmlHandler::characters(const QString& s)
 {
+    if (m_subHandler)
+        return m_subHandler->characters(s);
+
     return true;
 }
 
@@ -993,3 +1140,9 @@ RoseXmlHandler::endDocument()
 }
 
 
+void
+RoseXmlHandler::setSubHandler(XmlSubHandler* sh)
+{
+    delete m_subHandler;
+    m_subHandler = sh;
+}

@@ -32,6 +32,7 @@
 #include "rosegardenguidoc.h"
 
 class XmlStorableEvent;
+class XmlSubHandler;
 
 /**
  * Handler for the Rosegarden XML format
@@ -96,6 +97,9 @@ protected:
         { return m_doc->getStudio(); }
     Rosegarden::AudioFileManager& getAudioFileManager()
         { return m_doc->getAudioFileManager(); }
+
+    void setSubHandler(XmlSubHandler* sh);
+    XmlSubHandler* getSubHandler() { return m_subHandler; }
                                          
     //--------------- Data members ---------------------------------
 
@@ -129,6 +133,8 @@ protected:
     unsigned int            m_totalElements;
     unsigned int            m_elementsSoFar;
     Rosegarden::Progress   *m_progress;
+
+    XmlSubHandler          *m_subHandler;
     bool		    m_deprecation;
 };
 
