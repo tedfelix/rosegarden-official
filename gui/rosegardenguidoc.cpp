@@ -584,11 +584,11 @@ RosegardenGUIDoc::mergeDocument(RosegardenGUIDoc *doc,
 	for (int i = 0; i < doc->getComposition().getTimeSignatureCount(); ++i) {
 	    std::pair<timeT, Rosegarden::TimeSignature> ts =
 		doc->getComposition().getTimeSignatureChange(i);
-	    getComposition().addTimeSignature(ts.first, ts.second);
+	    getComposition().addTimeSignature(ts.first + time0, ts.second);
 	}
 	for (int i = 0; i < doc->getComposition().getTempoChangeCount(); ++i) {
 	    std::pair<timeT, long> t = doc->getComposition().getRawTempoChange(i);
-	    getComposition().addRawTempo(t.first, t.second);
+	    getComposition().addRawTempo(t.first + time0, t.second);
 	}
     }
 

@@ -3598,9 +3598,16 @@ void NotationView::updateViewCaption()
 {
     if (m_segments.size() == 1) {
 
+	Rosegarden::TrackId trackId = m_segments[0]->getTrack();
+	Rosegarden::Track *track =
+	    m_segments[0]->getComposition()->getTrackById(trackId);
+
+	int trackPosition = -1;
+	if (track) trackPosition = track->getPosition();
+
         setCaption(i18n("%1 - Segment Track #%2 - Notation")
                    .arg(getDocument()->getTitle())
-                   .arg(m_segments[0]->getTrack() + 1));
+                   .arg(trackPosition + 1));
 
     } else if (m_segments.size() == getDocument()->getComposition().getNbSegments()) {
 
