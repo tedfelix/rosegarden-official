@@ -56,9 +56,9 @@ convertTime(Rosegarden::timeT t)
 bool
 CsoundExporter::write()
 {
-    std::ofstream str(m_fileName.c_str(), ios::out);
+    std::ofstream str(m_fileName.c_str(), std::ios::out);
     if (!str) {
-        std::cerr << "CsoundExporter::write() - can't write file" << endl;
+        std::cerr << "CsoundExporter::write() - can't write file" << std::endl;
         return false;
     }
 
@@ -115,10 +115,10 @@ CsoundExporter::write()
 	str << convertTime(m_composition->getRawTempoChange(tempoCount-1).first)
 	    << " "
 	    << m_composition->getRawTempoChange(tempoCount-1).second/60
-	    << endl;
+	    << std::endl;
     }
 
-    str << "e" << endl;
+    str << "e" << std::endl;
     str.close();
     return true;
 }
