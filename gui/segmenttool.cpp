@@ -19,6 +19,9 @@
     COPYING included with this distribution for more information.
 */
 
+#include <qpopupmenu.h>
+#include <qcursor.h>
+
 #include "segmenttool.h"
 
 #include "SnapGrid.h"
@@ -28,6 +31,7 @@
 #include "segmentcanvas.h"
 #include "colours.h"
 
+#include "rosegardengui.h"
 #include "rosedebug.h"
 
 using Rosegarden::TrackId;
@@ -46,10 +50,51 @@ SegmentTool::SegmentTool(SegmentCanvas* canvas, RosegardenGUIDoc *doc)
       m_doc(doc)
 {
     m_canvas->setCursor(Qt::arrowCursor);
+    createMenu("rosegardenui.rc");
 }
 
 SegmentTool::~SegmentTool()
+{}
+
+void 
+SegmentTool::handleRightButtonPress(QMouseEvent *e)
 {
+    SegmentItem *item = m_canvas->findSegmentClickedOn(e->pos());
+    if (item) {
+        m_currentItem = item;
+    }
+    showMenu();
+}
+
+void
+SegmentTool::createMenu(const QString& rcFileName)
+{
+    setXMLFile(rcFileName);    
+    RosegardenGUIApp *app =
+        dynamic_cast<RosegardenGUIApp*>(m_doc->parent());
+
+    if (app) {
+        app->factory()->addClient(this);
+        m_menu = static_cast<QPopupMenu*>(app->factory()->container("segment_tool_menu", app));
+        if (!m_menu) {
+            RG_DEBUG << "SegmentTool::createMenu(" << rcFileName
+                     << ") : menu creation failed (name : "
+                     << "segment_tool_menu" << ")\n";
+        }
+    } else {
+        RG_DEBUG << "SegmentTool::createMenu(" << rcFileName
+                 << ") : menu creation failed (name : "
+                 << "segment_tool_menu" << ")\n";
+    }
+}
+
+void
+SegmentTool::showMenu()
+{
+    if (m_menu)
+        m_menu->popup(QCursor::pos());
+    else
+        RG_DEBUG << "SegmentTool::showMenu() : no menu to show\n";
 }
 
 void

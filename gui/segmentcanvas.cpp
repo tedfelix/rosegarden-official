@@ -729,7 +729,6 @@ SegmentCanvas::SegmentCanvas(RosegardenGUIDoc *doc,
     m_brush(RosegardenGUIColours::SegmentBlock),
     m_highlightBrush(RosegardenGUIColours::SegmentHighlightBlock),
     m_pen(RosegardenGUIColours::SegmentBorder),
-    m_editMenu(new QPopupMenu(this)),
     m_fineGrain(false),
     m_showPreviews(true),
     m_doc(doc),
@@ -936,75 +935,25 @@ SegmentCanvas::findSegmentClickedOn(QPoint pos)
 
 void SegmentCanvas::contentsMousePressEvent(QMouseEvent* e)
 {
-    if (e->button() == LeftButton ||
-        e->button() == MidButton) { // delegate event handling to tool
-
-        // ensure that we have a valid tool
-        //
-        if (m_tool)
-            m_tool->handleMouseButtonPress(e);
+    switch (e->button()) {
+    case LeftButton:
+    case MidButton:
+        if (m_tool) m_tool->handleMouseButtonPress(e);
         else
             RG_DEBUG << "SegmentCanvas::contentsMousePressEvent() :"
-                                 << this << " no tool\n";
-
-    } else if (e->button() == RightButton) { // popup menu if over a part
-
-        SegmentItem *item = findSegmentClickedOn(e->pos());
-
-        if (item) {
-            m_currentItem = item;
-            //             RG_DEBUG << "SegmentCanvas::contentsMousePressEvent() : edit m_currentItem = "
-            //                                  << m_currentItem << endl;
-
-            if (m_currentItem->getSegment()->getType() == 
-                                             Rosegarden::Segment::Audio)
-            {
-                m_editMenu->clear();
-                m_editMenu->insertItem(i18n("Edit Audio"), 0);
-                m_editMenu->insertItem(i18n("AutoSplit Audio"), 1);
-
-                switch(m_editMenu->exec(QCursor::pos()))
-                {
-                    case 0:
-                        emit editSegmentAudio(m_currentItem->getSegment());
-                        break;
-
-                    case 1:
-                        emit audioSegmentAutoSplit(m_currentItem->getSegment());
-                        break;
-
-                    default:
-                        // do nothing
-                        break;
-                }
-
-            }
-            else
-            {
-                m_editMenu->clear();
-                m_editMenu->insertItem(i18n("Edit as Notation"), 0);
-                m_editMenu->insertItem(i18n("Edit as Matrix"), 1);
-                m_editMenu->insertItem(i18n("Edit as Event List"), 2);
-
-                switch(m_editMenu->exec(QCursor::pos()))
-                {
-                    case 0:
-                        emit editSegmentNotation(m_currentItem->getSegment());
-                        break;
-                    case 1:
-                        emit editSegmentMatrix(m_currentItem->getSegment());
-                        break;
-                    case 2:
-                        emit editSegmentEventList(m_currentItem->getSegment());
-                        break;
-
-                    default:
-                        // do nothing
-                        break;
-                }
-            }
-        }
+                     << this << " no tool\n";
+        break;
+    case RightButton:
+        if (m_tool) m_tool->handleRightButtonPress(e);
+        else
+            RG_DEBUG << "SegmentCanvas::contentsMousePressEvent() :"
+                     << this << " no tool\n";
+        break;
+    default:
+        break;
     }
+
+    return;
 }
 
 void SegmentCanvas::contentsMouseDoubleClickEvent(QMouseEvent* e)

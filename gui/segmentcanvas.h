@@ -393,7 +393,6 @@ private:
     QBrush m_brush;
     QBrush m_highlightBrush;
     QPen m_pen;
-    QPopupMenu *m_editMenu;
 
     bool m_fineGrain;
     bool m_showPreviews;

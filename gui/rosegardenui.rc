@@ -133,6 +133,24 @@
 <ToolBar name="zoomToolBar">
 </ToolBar>
 
+<!--     RMB Menus           -->
+
+<Menu name="segment_tool_menu">
+   <Action name="edit_undo"/>
+   <Action name="edit_redo"/>
+   <Separator/>
+   <Action name="edit_cut"/>
+   <Action name="edit_copy"/>
+   <Separator/>
+   <Action name="delete"/>
+   <Separator/>
+   <Action name="edit_default"/>
+   <Separator/>
+   <Action name="edit_matrix"/>
+   <Action name="edit_notation"/>
+   <Action name="edit_event_list"/>
+</Menu>
+
 <!--     Application States           -->
 
 <State name="new_file">
