@@ -479,8 +479,8 @@ void RosegardenGUIApp::initDocument()
 
     m_doc->getCommandHistory()->attachView(actionCollection());
 
-    connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted(Command *)),
-            SLOT(slotCommandExecuted(Command *)));
+    connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted(KCommand *)),
+            SLOT(slotCommandExecuted(KCommand *)));
 }
 
 void RosegardenGUIApp::initView()

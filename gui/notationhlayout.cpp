@@ -244,7 +244,7 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
     bool allDone = false; // used in partial scans
 
     if (isFullScan) {
-	barList.clear();
+	clearBarList(staff);
 	startTime = t.getStartTime();
 	endTime = t.getEndTime();
     }
@@ -259,11 +259,21 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
     PRINT_ELAPSED("NotationHLayout::scanStaff: after quantize");
 
     BarDataList &bdl(m_barData[&staff]);
+    //!!! actually we probably want fakeBarCount so as to make
+// some of the accessors at the bottom of this file quicker
 //!!!    int fakeBarCount = m_fakeBarCountMap[&staff];
 
-    //!!! need to invalidate any stray iterators in "start" fields
-    // of bar data records that are no longer in the range of this
-    // staff
+    // need to invalidate any stray iterators in bar data records
+    // that are no longer in the range of this staff
+
+    if (!isFullScan) {
+	for (int barScooter = 0;
+	     barScooter < barNo && barScooter < barList.size();
+	     ++barScooter) {
+	    barList[barScooter].basicData.start = notes->end();
+	    barList[barScooter].basicData.fake = true;
+	}
+    }
 
 
 /*!!!
@@ -475,6 +485,19 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 
     PRINT_ELAPSED("NotationHLayout::scanStaff");
 }
+
+void
+NotationHLayout::clearBarList(StaffType &staff)
+{
+    BarDataList &bdl = m_barData[&staff];
+
+    for (int j = 0; j < bdl.size(); ++j) {
+	delete bdl[j].sizeData.timeSignature;
+    }
+    
+    bdl.clear();
+}
+    
 
 void
 NotationHLayout::setBarBasicData(StaffType &staff,
@@ -1527,14 +1550,7 @@ NotationHLayout::reset()
 {
     for (BarDataMap::iterator i = m_barData.begin();
 	 i != m_barData.end(); ++i) {
-
-	BarDataList &bdl = i->second;
-
-	for (int j = 0; j < bdl.size(); ++j) {
-	    delete bdl[j].sizeData.timeSignature;
-	}
-
-	bdl.erase(bdl.begin(), bdl.end());
+	clearBarList(*i->first);
     }
 
     m_barData.clear();

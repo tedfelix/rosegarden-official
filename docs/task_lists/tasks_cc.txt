@@ -99,6 +99,9 @@ Post-0.1.4 task list
 23. Final bar in a notation staff doesn't seem to resize correctly
     when things are inserted into it
 
+24. Make tempo/timesig ruler a la text ruler, add it to segment view
+
+
 20020301 task list (based on outstanding items from post-0.1.3 list below)
 ==================
 

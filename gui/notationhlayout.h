@@ -242,6 +242,8 @@ protected:
     typedef std::map<StaffType *, BarDataList> BarDataMap;
 //!!!    typedef std::map<StaffType *, int> FakeBarCountMap;
 
+    void clearBarList(StaffType &);
+
     /**
      * Set the basic data for the given barNo.  If barNo is
      * beyond the end of the existing bar data list, create new
