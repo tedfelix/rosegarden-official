@@ -533,13 +533,13 @@ NotationStaff::elementNotMovedInY(NotationElement *elt)
 
     bool ok = (int)(elt->getCanvasY()) == (int)(coords.second);
 
-    if (!ok) {
-	kdDebug(KDEBUG_AREA)
-	    << "elementNotMovedInY: elt at " << elt->getAbsoluteTime() <<
-	    ", ok is " << ok << endl;
-	std::cerr << "(cf " << (int)(elt->getCanvasY()) << " vs "
-		  << (int)(coords.second) << ")" << std::endl;
-    }
+//     if (!ok) {
+// 	kdDebug(KDEBUG_AREA)
+// 	    << "elementNotMovedInY: elt at " << elt->getAbsoluteTime() <<
+// 	    ", ok is " << ok << endl;
+// 	std::cerr << "(cf " << (int)(elt->getCanvasY()) << " vs "
+// 		  << (int)(coords.second) << ")" << std::endl;
+//     }
     return ok;
 }
 

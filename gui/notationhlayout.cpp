@@ -736,17 +736,20 @@ NotationHLayout::reconcileBarsPage()
     // original total width, for each row
     std::vector<std::pair<int, double> > rowData;
 
-    double pageWidthSoFar = 0.0;
     double stretchFactor = 10.0;
-    m_totalWidth = 0.0;
+    double maxStaffNameWidth = 0.0;
 
     for (StaffIntMap::iterator i = m_staffNameWidths.begin();
 	 i != m_staffNameWidths.end(); ++i) {
-	if (i->second > m_totalWidth) {
-	    m_totalWidth = double(i->second);
-	    pageWidthSoFar = m_totalWidth + getPreBarMargin();
+	if (i->second > maxStaffNameWidth) {
+	    maxStaffNameWidth = double(i->second);
 	}
     }
+
+    double pageWidthSoFar = maxStaffNameWidth;
+    m_totalWidth = maxStaffNameWidth + getPreBarMargin();
+
+    kdDebug(KDEBUG_AREA) << "NotationHLayout::reconcileBarsPage: pageWidthSoFar is " << pageWidthSoFar << endl;
 
     for (;;) {
 	
@@ -768,6 +771,8 @@ NotationHLayout::reconcileBarsPage()
 
 	double nextPageWidth = pageWidthSoFar + maxWidth;
 	double nextStretchFactor = m_pageWidth / nextPageWidth;
+
+	kdDebug(KDEBUG_AREA) << "barNo is " << barNo << ", maxWidth " << maxWidth << ", nextPageWidth " << nextPageWidth << ", nextStretchFactor " << nextStretchFactor << ", m_pageWidth " << m_pageWidth << endl;
 
 	// We have to have at least one bar per row
 	
@@ -834,7 +839,7 @@ NotationHLayout::reconcileBarsPage()
 	barNoThisRow = barNo;
 	int finalBarThisRow = barNo + rowData[row].first - 1;
 
-	pageWidthSoFar = 0;
+	pageWidthSoFar = (row > 0 ? 0 : maxStaffNameWidth + getPreBarMargin());
 	stretchFactor = m_pageWidth / rowData[row].second;
 
 	for (; barNoThisRow <= finalBarThisRow; ++barNoThisRow, ++barNo) {

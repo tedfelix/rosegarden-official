@@ -1181,6 +1181,9 @@ void NotationView::setCurrentSelection(EventSelection* s)
 void NotationView::setSingleSelectedEvent(int staffNo, Event *event)
 {
     setSingleSelectedEvent(getStaff(staffNo)->getSegment(), event);
+    //!!! bring event into view -- setScrollHoriz with the canvas x-coord
+    // corresponding to layout x-coord calculated by notationhlayout given
+    // the time of the given event...
 }
 
 void NotationView::setSingleSelectedEvent(Segment &segment, Event *event)
