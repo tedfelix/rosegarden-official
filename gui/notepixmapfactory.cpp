@@ -44,6 +44,7 @@
 #include "rosegardenconfigurationpage.h"
 #include "notationstrings.h"
 #include "notepixmapfactory.h"
+#include "notationview.h"
 #include "pixmapfunctions.h"
 #include "NotationTypes.h"
 #include "Equation.h"
@@ -53,7 +54,6 @@
 #include "notefont.h"
 #include "notestyle.h"
 #include "spline.h"
-
 
 // #define DUMP_STATS 1
 
@@ -329,17 +329,17 @@ NotePixmapParameters::getAboveMarks() const
 NotePixmapFactory::NotePixmapFactory(std::string fontName, int size) :
     m_selected(false),
     m_shaded(false),
-    m_tupletCountFont(defaultSerifFont, 8, QFont::Bold),
+    m_tupletCountFont(defaultSerifFontFamily, 8, QFont::Bold),
     m_tupletCountFontMetrics(m_tupletCountFont),
-    m_textMarkFont(defaultSerifFont, 8, QFont::Bold, true),
+    m_textMarkFont(defaultSerifFontFamily, 8, QFont::Bold, true),
     m_textMarkFontMetrics(m_textMarkFont),
-    m_fingeringFont(defaultSerifFont, 8, QFont::Bold),
+    m_fingeringFont(defaultSerifFontFamily, 8, QFont::Bold),
     m_fingeringFontMetrics(m_fingeringFont),
-    m_timeSigFont(defaultTimeSigFont, 8, QFont::Bold),
+    m_timeSigFont(defaultTimeSigFontFamily, 8, QFont::Bold),
     m_timeSigFontMetrics(m_timeSigFont),
-    m_bigTimeSigFont(defaultTimeSigFont, 12, QFont::Normal),
+    m_bigTimeSigFont(defaultTimeSigFontFamily, 12, QFont::Normal),
     m_bigTimeSigFontMetrics(m_bigTimeSigFont),
-    m_ottavaFont(defaultSerifFont, 8, QFont::Normal, true),
+    m_ottavaFont(defaultSerifFontFamily, 8, QFont::Normal, true),
     m_ottavaFontMetrics(m_ottavaFont),
     m_generatedPixmap(0),
     m_generatedMask(0),
@@ -365,7 +365,7 @@ NotePixmapFactory::NotePixmapFactory(const NotePixmapFactory &npf) :
     m_timeSigFontMetrics(m_timeSigFont),
     m_bigTimeSigFont(npf.m_bigTimeSigFont),
     m_bigTimeSigFontMetrics(m_bigTimeSigFont),
-    m_ottavaFont(defaultSerifFont, 8, QFont::Normal, true),
+    m_ottavaFont(defaultSerifFontFamily, 8, QFont::Normal, true),
     m_ottavaFontMetrics(m_ottavaFont),
     m_generatedPixmap(0),
     m_generatedMask(0),
@@ -439,22 +439,37 @@ NotePixmapFactory::init(std::string fontName, int size)
 
     // Resize the fonts, because the original constructor used point
     // sizes only and we want pixels
+    QFont timeSigFont(defaultTimeSigFontFamily),
+        textFont(defaultSerifFontFamily);
+    KConfig* config = kapp->config();
+    config->setGroup(NotationView::ConfigGroup);
 
+    m_timeSigFont = config->readFontEntry("timesigfont", &timeSigFont);
+    m_timeSigFont.setBold(true);
     m_timeSigFont.setPixelSize(size * 5 / 2);
     m_timeSigFontMetrics = QFontMetrics(m_timeSigFont);
 
+    m_bigTimeSigFont = config->readFontEntry("timesigfont", &timeSigFont);
     m_bigTimeSigFont.setPixelSize(size * 4 + 2);
     m_bigTimeSigFontMetrics = QFontMetrics(m_bigTimeSigFont);
 
+    m_tupletCountFont = config->readFontEntry("textfont", &textFont);
+    m_tupletCountFont.setBold(true);
     m_tupletCountFont.setPixelSize(size * 2);
     m_tupletCountFontMetrics = QFontMetrics(m_tupletCountFont);
-
+    
+    m_textMarkFont = config->readFontEntry("textfont", &textFont);
+    m_textMarkFont.setBold(true);
+    m_textMarkFont.setItalic(true);
     m_textMarkFont.setPixelSize(size * 2);
     m_textMarkFontMetrics = QFontMetrics(m_textMarkFont);
 
+    m_fingeringFont = config->readFontEntry("textfont", &textFont);
+    m_fingeringFont.setBold(true);
     m_fingeringFont.setPixelSize(size * 5 / 3);
     m_fingeringFontMetrics = QFontMetrics(m_fingeringFont);
 
+    m_ottavaFont = config->readFontEntry("textfont", &textFont);
     m_ottavaFont.setPixelSize(size * 2);
     m_ottavaFontMetrics = QFontMetrics(m_ottavaFont);
 }
@@ -1901,7 +1916,10 @@ NotePixmapFactory::makeClefPixmap(const Clef &clef)
     int oct = clef.getOctaveOffset();
     if (oct == 0) return plain.getCanvasPixmap();
 
-    QFont octaveFont(defaultSerifFont);
+    QFont defaultOctaveFont(defaultSerifFontFamily);
+    KConfig* config = kapp->config();
+    config->setGroup(NotationView::ConfigGroup);
+    QFont octaveFont = config->readFontEntry("textfont", &defaultOctaveFont);
     QFontMetrics octaveFontMetrics(octaveFont);
     QString text = QString("%1").arg(8 * (oct < 0 ? -oct : oct));
     QRect rect = octaveFontMetrics.boundingRect(text);
@@ -2862,7 +2880,9 @@ NotePixmapFactory::getTextFont(const Rosegarden::Text &text) const
 	large = true;
     }
 
-    QFont textFont(defaultSerifFont);
+    QFont defaultTextFont(defaultSerifFontFamily);
+    KConfig* config = kapp->config();
+    QFont textFont = config->readFontEntry("textfont", &defaultTextFont);
     textFont.setStyleStrategy(QFont::StyleStrategy(QFont::PreferDefault | QFont::PreferMatch));
 
     if (type == Rosegarden::Text::Annotation) {
@@ -3259,8 +3279,8 @@ int NotePixmapFactory::getTextWidth(const Rosegarden::Text &text) const {
     return metrics.boundingRect(strtoqstr(text.getText())).width() + 4;
 }
 
-const char* const NotePixmapFactory::defaultSerifFont = "Times New Roman";
-const char* const NotePixmapFactory::defaultTimeSigFont = "Century Schoolbook";
+const char* const NotePixmapFactory::defaultSerifFontFamily = "Times New Roman";
+const char* const NotePixmapFactory::defaultTimeSigFontFamily = "Century Schoolbook";
 
 
 

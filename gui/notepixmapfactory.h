@@ -251,8 +251,8 @@ public:
     static void dumpStats(std::ostream &);
 
 
-    static const char* const defaultSerifFont;
-    static const char* const defaultTimeSigFont;
+    static const char* const defaultSerifFontFamily;
+    static const char* const defaultTimeSigFontFamily;
     
 
 protected:

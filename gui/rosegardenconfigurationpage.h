@@ -35,6 +35,7 @@
 #include <klocale.h>
 #include <kcolordialog.h>
 #include <kcolorbutton.h>
+#include <kfontrequester.h>
 
 #include <string>
 
@@ -238,6 +239,8 @@ protected:
     QComboBox *m_singleStaffSize;
     QComboBox *m_multiStaffSize;
     QComboBox *m_printingSize;
+    KFontRequester* m_textFont;
+    KFontRequester* m_timeSigFont;
     QPushButton *m_viewButton;
     QLabel *m_fontOriginLabel;
     QLabel *m_fontCopyrightLabel;

@@ -86,7 +86,6 @@
 #include "widgets.h"
 #include "colourwidgets.h"
 #include "audiopluginmanager.h"
-// #include "diskspace.h"
 #include "segmentcommands.h"
 #include "rgapplication.h"
 
@@ -335,11 +334,12 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
 
     QFrame *frame = new QFrame(m_tabWidget);
     QGridLayout *layout = new QGridLayout(frame,
-                                          6, 2, // nbrow, nbcol
+                                          8, 2, // nbrow, nbcol
                                           10, 5);
 
     layout->addWidget
-        (new QLabel(i18n("Notation font"), frame), 0, 0);
+        (new QLabel(i18n("Notation font"), frame),
+         0, 0);
     layout->addWidget
         (new QLabel(i18n("Font size for single-staff views"), frame),
          2, 0);
@@ -349,6 +349,12 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     layout->addWidget
         (new QLabel(i18n("Font size for printing (pt)"), frame),
          4, 0);
+    layout->addWidget
+        (new QLabel(i18n("Text font"), frame),
+         5, 0);
+    layout->addWidget
+        (new QLabel(i18n("Time Signature font"), frame),
+         6, 0);
 
     QFrame *subFrame = new QFrame(frame);
     QGridLayout *subLayout = new QGridLayout(subFrame,
@@ -431,6 +437,22 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     layout->addWidget(m_singleStaffSize, 2, 1);
     layout->addWidget(m_multiStaffSize, 3, 1);
     layout->addWidget(m_printingSize, 4, 1);
+
+    m_textFont = new KFontRequester(frame);
+    m_timeSigFont = new KFontRequester(frame);
+
+    QFont defaultTextFont(NotePixmapFactory::defaultSerifFontFamily),
+        defaultTimeSigFont(NotePixmapFactory::defaultTimeSigFontFamily);
+    
+    QFont textFont    = m_cfg->readFontEntry("textfont", &defaultTextFont);
+    QFont timeSigFont = m_cfg->readFontEntry("timesigfont", &defaultTimeSigFont);
+
+    m_textFont->setFont(textFont);
+    m_timeSigFont->setFont(timeSigFont);
+
+    layout->addWidget(m_textFont, 5, 1);
+    layout->addWidget(m_timeSigFont, 6, 1);
+    
 
     addTab(frame, i18n("Font"));
 
@@ -752,6 +774,10 @@ NotationConfigurationPage::apply()
                       m_multiStaffSize->currentText().toUInt());
     m_cfg->writeEntry("printingnotesize",
                       m_printingSize->currentText().toUInt());
+    m_cfg->writeEntry("textfont",
+                      m_textFont->font());
+    m_cfg->writeEntry("timesigfont",
+                      m_timeSigFont->font());
 
     std::vector<int> s = NotationHLayout::getAvailableSpacings();
     m_cfg->writeEntry("spacing", s[m_spacing->currentItem()]);
