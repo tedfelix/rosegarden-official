@@ -696,16 +696,16 @@ NotationView::insertNote(int pitch, const QPoint &eventPos)
     // set its duration and pitch
     //
 /*!    insertedEvent->setTimeDuration(m_hlayout->quantizer().noteDuration(m_currentSelectedNote)); */
-    //!!! no dottedness yet
-    insertedEvent->setDuration(Note(m_currentSelectedNote).getDuration());
+
     insertedEvent->set<Int>("pitch", pitch);
 
     // Create associated notationElement and set its note type
     //
     NotationElement *newNotationElement = new NotationElement(insertedEvent);
 
-    newNotationElement->event()->set<Int>(P_NOTE_TYPE, m_currentSelectedNote);
-    newNotationElement->event()->set<Bool>(P_NOTE_DOTTED, false);
+    //!!! no dottedness yet
+    newNotationElement->setNote(Note(m_currentSelectedNote));
+    
     newNotationElement->event()->set<String>("Name", "INSERTED_NOTE");
 
     NotationElementList::iterator redoLayoutStart = closestNote;
@@ -737,6 +737,13 @@ NotationView::insertNote(int pitch, const QPoint &eventPos)
         kdDebug(KDEBUG_AREA) << "NotationHLayout::insertNote : insert over note - absoluteTime = "
                              << (*closestNote)->getAbsoluteTime()
                              << endl;
+
+        if ((*closestNote)->event()->getDuration() < insertedEvent->getDuration()) {
+            // new note is being chorded with notes which are shorter
+            // set its duration to same one as other notes
+            newNotationElement->setNote((*closestNote)->getNote());
+        }
+        
 
         newNotationElement->setAbsoluteTime((*closestNote)->getAbsoluteTime());
         // m_notationElements->insert(newNotationElement);
