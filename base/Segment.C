@@ -351,6 +351,14 @@ void Track::getTimeSlice(timeT absoluteTime, iterator &start, iterator &end)
     end = res.second;
 }
 
+bool Track::noteIsInChord(Event *note)
+{
+    std::pair<iterator, iterator> res = equal_range(note);
+
+    int dist = distance(res.first,res.second);
+
+    return dist > 1;
+}
 
 
 bool Track::checkExpansionValid(timeT maxDuration, timeT minDuration)

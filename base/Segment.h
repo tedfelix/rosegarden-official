@@ -112,6 +112,12 @@ public:
     void getTimeSlice(timeT absoluteTime, iterator &start, iterator &end);
 
     /**
+     * Returns if the note is part of a chord
+     * e.g. if there are more notes at the same absolute time
+     */
+    bool noteIsInChord(Event *note);
+
+    /**
      * The compare class used by Composition
      */
     struct TrackCmp
