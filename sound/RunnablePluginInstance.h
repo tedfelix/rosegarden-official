@@ -55,11 +55,8 @@ public:
 
     virtual void setPortValue(unsigned int port, float value) = 0;
 
-    bool isBypassed() const { return m_bypassed; }
-    void setBypassed(bool value) { m_bypassed = value; }
-
-private:
-    bool m_bypassed;
+    virtual bool isBypassed() const = 0;
+    virtual void setBypassed(bool value) = 0;
 };
 
 typedef std::vector<RunnablePluginInstance *> RunnablePluginInstances;

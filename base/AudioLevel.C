@@ -86,7 +86,7 @@ AudioLevel::dB_to_fader(float dB, int maxLevel, FaderType type)
 	float value = sqrtf(dB);
 	float scale = (maxLevel - zeroLevel) / sqrtf(faderTypes[type].maxDb);
 	value *= scale;
-	int level = int(value) + zeroLevel;
+	int level = int(value + 0.01) + zeroLevel;
 	if (level > maxLevel) level = maxLevel;
 	return level;
 
@@ -95,7 +95,7 @@ AudioLevel::dB_to_fader(float dB, int maxLevel, FaderType type)
 	float value = sqrtf(-dB);
 	float scale = zeroLevel / sqrtf(-faderTypes[type].minDb);
 	value *= scale;
-	int level = zeroLevel - int(value);
+	int level = zeroLevel - int(value + 0.01);
 	if (level < 0) level = 0;
 	return level;
 

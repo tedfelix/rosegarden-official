@@ -1263,26 +1263,16 @@ RosegardenSequencerApp::setMappedProperty(int id,
                                           const QString &property,
                                           float value)
 {
-    /*
+
     SEQUENCER_DEBUG << "setProperty: id = " << id
-                    << " : property = \"" << property << "\"" << endl;
-                    */
+                    << " : property = \"" << property << "\""
+		    << ", value = " << value << endl;
+
 
     Rosegarden::MappedObject *object = m_studio->getObject(id);
 
     if (object)
         object->setProperty(property, value);
-
-    /*
-    Rosegarden::MappedAudioFader *fader = 
-        dynamic_cast<Rosegarden::MappedAudioFader*>(object);
-
-    if (fader)
-    {
-        if (property == Rosegarden::MappedAudioFader::FaderLevel)
-            fader->setLevel(value);
-    }
-    */
 }
 
 void

@@ -25,6 +25,8 @@
 
 #ifdef HAVE_LADSPA
 
+#define DEBUG_LADSPA 1
+
 namespace Rosegarden
 {
 
@@ -41,7 +43,6 @@ LADSPAPluginInstance::LADSPAPluginInstance(Rosegarden::InstrumentId instrument,
     m_instanceHandle(0),
     m_descriptor(descriptor),
     m_bufferSize(bufferSize),
-    m_processed(false),
     m_bypassed(false)
 {
     init();
@@ -85,7 +86,6 @@ LADSPAPluginInstance::LADSPAPluginInstance(Rosegarden::InstrumentId instrument,
     m_inputBuffers(inputBuffers),
     m_outputBuffers(outputBuffers),
     m_ownBuffers(false),
-    m_processed(false),
     m_bypassed(false)
 {
     init();
@@ -241,7 +241,6 @@ LADSPAPluginInstance::run()
                   << "for " << sampleCount << " frames" << std::endl;
                   */
         m_descriptor->run(m_instanceHandle, m_bufferSize);
-        m_processed = true;
     }
 }
 

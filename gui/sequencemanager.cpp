@@ -1045,11 +1045,13 @@ SequenceManager::preparePlayback(bool forceProgramChanges)
             }
 
         }
+/*!!!
         else if ((*it)->getType() == Instrument::Audio)
         {
             Rosegarden::StudioControl::setStudioObjectProperty(
                     (*it)->getId(), "value", (*it)->getVolume());
         }
+*/
         else
         {
             RG_DEBUG << "SequenceManager::preparePlayback - "

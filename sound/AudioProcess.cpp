@@ -456,11 +456,10 @@ AudioMixer::processBlocks(bool forceFill)
 	    m_bufferMap[id].volume    = 0.0;
 	} else {
 	    	    
-	    float faderLevel = 107;
+	    float faderLevel = 0.0;
 	    (void)fader->getProperty(MappedAudioFader::FaderLevel, faderLevel);
 
-	    float volume = AudioLevel::fader_to_multiplier
-		(int(faderLevel), 127, AudioLevel::ShortFader);
+	    float volume = AudioLevel::dB_to_multiplier(faderLevel);
 
 	    float pan = 0.0;
 	    (void)fader->getProperty(MappedAudioFader::Pan, pan);
@@ -595,6 +594,9 @@ AudioMixer::processBlock(InstrumentId id, PlayableAudioFileList &audioQueue,
     }
 
     PluginList &plugins = m_plugins[id];
+#ifdef DEBUG_MIXER
+    if (id == 1000 && !plugins.empty()) std::cerr << "AudioMixer::processBlock(" << id << "): have " << plugins.size() << " plugin(s)" << std::endl;
+#endif
 
     for (PlayableAudioFileList::iterator it = audioQueue.begin();
 	 it != audioQueue.end(); ++it) {
@@ -739,6 +741,11 @@ AudioMixer::processBlock(InstrumentId id, PlayableAudioFileList &audioQueue,
 	    }
 	    ++ch;
 	}
+
+#ifdef DEBUG_MIXER
+	std::cerr << "Running plugin with " << plugin->getAudioInputCount()
+		  << " inputs, " << plugin->getAudioOutputCount() << " outputs" << std::endl;
+#endif
 
 	plugin->run();
 

@@ -151,13 +151,7 @@ VUMeter::setLevel(double leftLevel, double rightLevel)
 	    meterStart();
 	}
     }    
-/*
-    if (m_levelLeft  == 0 &&
-	m_levelRight == 0) {
-	meterStop();
-	return;
-    }
-*/
+
     // Reset level and reset timer if we're exceeding the
     // current peak
     //
@@ -217,9 +211,9 @@ VUMeter::drawMeterLevel(QPainter* paint)
 {
     // Clear the rectangle.
     //
-    paint->setPen(Qt::black);
-    paint->setBrush(Qt::black);
-    paint->drawRect(0, 0, width(), height());
+//!!!    paint->setPen(Qt::black);
+//!!!    paint->setBrush(Qt::black);
+//!!!    paint->drawRect(0, 0, width(), height());
 
 
     // Get the colour from the VelocityColour helper.
@@ -241,6 +235,10 @@ VUMeter::drawMeterLevel(QPainter* paint)
             int y = height() - (m_levelLeft * height()) / 100;
             paint->drawRect(0, y, hW - 1, height() - y);
 
+	    paint->setPen(Qt::black);
+	    paint->setBrush(Qt::black);
+	    paint->drawRect(0, 0, hW, y);
+
             if (m_showPeakLevel)
             {
                 paint->setPen(Qt::white);
@@ -248,7 +246,7 @@ VUMeter::drawMeterLevel(QPainter* paint)
 
                 y = height() - (m_peakLevelLeft * height()) / 100;
 
-                paint->drawLine(0, y, hW - 1, y);
+                paint->drawLine(0, y, hW - 2, y);
             }
 
             // Select new colour for right bar
@@ -261,6 +259,10 @@ VUMeter::drawMeterLevel(QPainter* paint)
             y = height() - (m_levelRight * height()) / 100;
             paint->drawRect(hW + 1, y, width(), height() - y);
 
+	    paint->setPen(Qt::black);
+	    paint->setBrush(Qt::black);
+	    paint->drawRect(hW, 0, hW, y);
+
             if (m_showPeakLevel)
             {
                 paint->setPen(Qt::white);
@@ -270,12 +272,14 @@ VUMeter::drawMeterLevel(QPainter* paint)
 
                 paint->drawLine(hW + 1, y, width(), y);
             }
-
-
         }
         else // horizontal
         {
-            cout << "HERE HORIZ STERE" << endl;
+	    paint->setPen(Qt::black);
+	    paint->setBrush(Qt::black);
+	    paint->drawRect(0, 0, width(), height());
+
+            cout << "HERE HORIZ STEREO" << endl;
             int x = (m_levelLeft * width()) / 100;
             paint->drawRect(0, 0, x, height());
 
@@ -297,6 +301,10 @@ VUMeter::drawMeterLevel(QPainter* paint)
     }
     else
     {
+	paint->setPen(Qt::black);
+	paint->setBrush(Qt::black);
+	paint->drawRect(0, 0, width(), height());
+
         paint->setPen(mixedColour);
         paint->setBrush(mixedColour);
 

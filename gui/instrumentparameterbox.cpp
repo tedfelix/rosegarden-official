@@ -44,6 +44,7 @@
 #include "MidiDevice.h"
 #include "MappedStudio.h"
 #include "ControlParameter.h"
+#include "AudioLevel.h"
 
 #include "audioplugindialog.h"
 #include "instrumentparameterbox.h"
@@ -250,22 +251,32 @@ AudioInstrumentParameterPanel::slotSelectAudioLevel(int value)
         if (m_audioFader->m_recordButton->isOn())
         {
             //cout << "SETTING STORED RECORD LEVEL = " << value << endl;
-            m_selectedInstrument->setRecordLevel(Rosegarden::MidiByte(value));
+
+	    float dB = 
+		Rosegarden::AudioLevel::fader_to_dB
+		(value, 127, Rosegarden::AudioLevel::ShortFader);
+
+	    m_selectedInstrument->setRecordLevel(dB);
 
             Rosegarden::StudioControl::setStudioObjectProperty
               (Rosegarden::MappedObjectId(m_selectedInstrument->getMappedId()),
                Rosegarden::MappedAudioFader::FaderRecordLevel,
-               Rosegarden::MappedObjectValue(value));
+               Rosegarden::MappedObjectValue(dB));
         }
         else
         {
             //cout << "SETTING STORED LEVEL = " << value << endl;
-            m_selectedInstrument->setVolume(Rosegarden::MidiByte(value));
+
+	    float dB = 
+		Rosegarden::AudioLevel::fader_to_dB
+		(value, 127, Rosegarden::AudioLevel::ShortFader);
+
+	    m_selectedInstrument->setLevel(dB);
 
             Rosegarden::StudioControl::setStudioObjectProperty
               (Rosegarden::MappedObjectId(m_selectedInstrument->getMappedId()),
                Rosegarden::MappedAudioFader::FaderLevel,
-               Rosegarden::MappedObjectValue(value));
+               Rosegarden::MappedObjectValue(dB));
         }
     }
 
@@ -314,7 +325,12 @@ AudioInstrumentParameterPanel::slotSetRecord(bool value)
                        this, SLOT(slotSelectAudioLevel(int)));
 
             m_audioFader->m_fader->
-                setFader(m_selectedInstrument->getRecordLevel());
+//                setFader(m_selectedInstrument->getRecordLevel());
+		setFader(Rosegarden::AudioLevel::dB_to_fader
+			 (m_selectedInstrument->getRecordLevel(),
+			  127,
+			  Rosegarden::AudioLevel::ShortFader));
+
             //cout << "SETTING VISIBLE FADER RECORD LEVEL = " << 
                     //int(m_selectedInstrument->getRecordLevel()) << endl;
 
@@ -337,7 +353,11 @@ AudioInstrumentParameterPanel::slotSetRecord(bool value)
 
             // set the fader value to the playback value
             m_audioFader->m_fader->
-                setFader(m_selectedInstrument->getVolume());
+//                setFader(m_selectedInstrument->getVolume());
+		setFader(Rosegarden::AudioLevel::dB_to_fader
+			 (m_selectedInstrument->getLevel(),
+			  127,
+			  Rosegarden::AudioLevel::ShortFader));
 
             //cout << "SETTING VISIBLE FADER LEVEL = " << 
                     //int(m_selectedInstrument->getVolume()) << endl;
@@ -735,7 +755,10 @@ AudioInstrumentParameterPanel::slotRecord()
 
             // set the fader value to the record value
             m_audioFader->m_fader->
-                setFader(m_selectedInstrument->getRecordLevel());
+                setFader
+		(Rosegarden::AudioLevel::dB_to_fader
+		 (m_selectedInstrument->getRecordLevel(),
+		  127, Rosegarden::AudioLevel::ShortFader));
         }
 
         emit recordButton(m_selectedInstrument->getId(),
@@ -1851,158 +1874,3 @@ MIDIInstrumentParameterPanel::getValueFromRotary(int rotary)
     return -1;
 }
 
-
-
-/*
-void
-MIDIInstrumentParameterPanel::slotSelectPan(float value)
-{
-
-    // For audio instruments we pan from -100 to +100 but storage
-    // within an unsigned char is 0 - 200 - so we adjust by 100
-    //
-    float adjValue = value;
-    if (m_selectedInstrument->getType() == Instrument::Audio)
-        value += 100;
-
-    m_selectedInstrument->setPan(Rosegarden::MidiByte(adjValue));
-
-    Rosegarden::MappedEvent *mE = 
-     new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
-                                 Rosegarden::MappedEvent::MidiController,
-                                 Rosegarden::MIDI_CONTROLLER_PAN,
-                                 (Rosegarden::MidiByte)value);
-    Rosegarden::StudioControl::sendMappedEvent(mE);
-
-    emit updateAllBoxes();
-}
-
-void
-MIDIInstrumentParameterPanel::slotSelectVolume(float value)
-{
-    if (m_selectedInstrument == 0)
-        return;
-
-    m_selectedInstrument->setVolume(Rosegarden::MidiByte(value));
-
-    Rosegarden::MappedEvent *mE = 
-     new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
-                                 Rosegarden::MappedEvent::MidiController,
-                                 Rosegarden::MIDI_CONTROLLER_VOLUME,
-                                 (Rosegarden::MidiByte)value);
-    Rosegarden::StudioControl::sendMappedEvent(mE);
-
-    emit updateAllBoxes();
-}
-
-void
-MIDIInstrumentParameterPanel::slotSelectChorus(float index)
-{
-    if (m_selectedInstrument == 0)
-        return;
-
-    m_selectedInstrument->setChorus(Rosegarden::MidiByte(index));
-
-    Rosegarden::MappedEvent *mE = 
-     new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
-                                 Rosegarden::MappedEvent::MidiController,
-                                 Rosegarden::MIDI_CONTROLLER_CHORUS,
-                                 (Rosegarden::MidiByte)index);
-    Rosegarden::StudioControl::sendMappedEvent(mE);
-
-    updateAllBoxes();
-}
-
-void
-MIDIInstrumentParameterPanel::slotSelectReverb(float index)
-{
-    if (m_selectedInstrument == 0)
-        return;
-
-    m_selectedInstrument->setReverb(Rosegarden::MidiByte(index));
-
-    Rosegarden::MappedEvent *mE = 
-     new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
-                                 Rosegarden::MappedEvent::MidiController,
-                                 Rosegarden::MIDI_CONTROLLER_REVERB,
-                                 (Rosegarden::MidiByte)index);
-    Rosegarden::StudioControl::sendMappedEvent(mE);
-
-    updateAllBoxes();
-}
-
-
-void
-MIDIInstrumentParameterPanel::slotSelectHighPass(float index)
-{
-    if (m_selectedInstrument == 0)
-        return;
-
-    m_selectedInstrument->setFilter(Rosegarden::MidiByte(index));
-
-    Rosegarden::MappedEvent *mE = 
-     new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
-                                 Rosegarden::MappedEvent::MidiController,
-                                 Rosegarden::MIDI_CONTROLLER_FILTER,
-                                 (Rosegarden::MidiByte)index);
-    Rosegarden::StudioControl::sendMappedEvent(mE);
-
-    updateAllBoxes();
-}
-
-void
-MIDIInstrumentParameterPanel::slotSelectResonance(float index)
-{
-    if (m_selectedInstrument == 0)
-        return;
-
-    m_selectedInstrument->setResonance(Rosegarden::MidiByte(index));
-
-    Rosegarden::MappedEvent *mE = 
-     new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
-                                 Rosegarden::MappedEvent::MidiController,
-                                 Rosegarden::MIDI_CONTROLLER_RESONANCE,
-                                 (Rosegarden::MidiByte)index);
-    Rosegarden::StudioControl::sendMappedEvent(mE);
-
-    updateAllBoxes();
-}
-
-
-void
-MIDIInstrumentParameterPanel::slotSelectAttack(float index)
-{
-    if (m_selectedInstrument == 0)
-        return;
-
-    m_selectedInstrument->setAttack(Rosegarden::MidiByte(index));
-
-    Rosegarden::MappedEvent *mE = 
-     new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
-                                 Rosegarden::MappedEvent::MidiController,
-                                 Rosegarden::MIDI_CONTROLLER_ATTACK,
-                                 (Rosegarden::MidiByte)index);
-    Rosegarden::StudioControl::sendMappedEvent(mE);
-
-    updateAllBoxes();
-}
-
-void
-MIDIInstrumentParameterPanel::slotSelectRelease(float index)
-{
-    if (m_selectedInstrument == 0)
-        return;
-
-    m_selectedInstrument->setRelease(Rosegarden::MidiByte(index));
-
-    Rosegarden::MappedEvent *mE = 
-     new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
-                                 Rosegarden::MappedEvent::MidiController,
-                                 Rosegarden::MIDI_CONTROLLER_RELEASE,
-                                 (Rosegarden::MidiByte)index);
-    Rosegarden::StudioControl::sendMappedEvent(mE);
-
-    updateAllBoxes();
-}
-
-*/

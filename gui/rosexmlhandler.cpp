@@ -38,6 +38,7 @@
 #include "MappedStudio.h"
 #include "Instrument.h"
 #include "Midi.h"
+#include "AudioLevel.h"
 
 #include "widgets.h"
 #include "rosestrings.h"
@@ -1270,9 +1271,30 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (m_instrument)
         {
-            m_instrument->setVolume(value);
-            m_instrument->setSendVolume(true);
+	    if (m_instrument->getType() == Rosegarden::Instrument::Audio) {
+		// Backward compatibility: "volume" was in a 0-127
+		// range and we now store "level" (float dB) instead.
+		// Note that we have no such compatibility for
+		// "recordLevel", whose range has changed silently.
+		m_instrument->setLevel
+		    (Rosegarden::AudioLevel::multiplier_to_dB(float(value) / 100.0));
+	    } else {
+		m_instrument->setVolume(value);
+		m_instrument->setSendVolume(true);
+	    }
         }
+
+    } else if (lcName == "level") {
+	
+        if (m_section != InInstrument ||
+	    !m_instrument ||
+	    m_instrument->getType() != Rosegarden::Instrument::Audio) {
+            m_errorString = "Found Level outside (audio) Instrument";
+            return false;
+        }
+    
+	float value = atts.value("value").toFloat();
+	m_instrument->setLevel(value);
 
     } else if (lcName == "controlchange") {
 
@@ -1482,10 +1504,16 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             return false;
         }
 
-        int value = atts.value("value").toInt();
+        float value = atts.value("value").toFloat();
+
+	// if the value retrieved is greater than (say) 15 then we
+	// must have an old-style 0-127 value instead of a shiny new
+	// dB value, so convert it
+	if (value > 15.0) {
+	    value = Rosegarden::AudioLevel::multiplier_to_dB(value / 100);
+	}
 
         if (m_instrument) m_instrument->setRecordLevel(value);
-
 
     } else if (lcName == "audioinput") {
 

@@ -574,7 +574,7 @@ void RosegardenGUIDoc::initialiseStudio()
             //
             Rosegarden::StudioControl::setStudioObjectProperty(mappedId,
                 Rosegarden::MappedAudioFader::FaderLevel,
-                Rosegarden::MappedObjectValue((*it)->getVolume()));
+                Rosegarden::MappedObjectValue((*it)->getLevel()));
 
             // Set the record level
             //

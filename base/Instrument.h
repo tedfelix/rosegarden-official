@@ -111,14 +111,11 @@ public:
     void setPan(MidiByte pan) { m_pan = pan; }
     MidiByte getPan() const { return m_pan; }
 
+    // Volume is 0-127 for MIDI instruments.  It's not used for
+    // audio instruments -- see "level" instead.
+    // 
     void setVolume(MidiByte volume) { m_volume = volume; }
     MidiByte getVolume() const { return m_volume; }
-
-    //!!! hmm, not sure about this -- previously we stored lsb, msb,
-    //program literally as ints (or MidiBytes) and that may have been
-    //preferable, as we generally need to refer to them individually
-    //(for example, we use the program number but not the lsb/msb if
-    //the sendBankSelect switch is off).
 
     void setProgram(const MidiProgram &program) { m_program = program; }
     const MidiProgram &getProgram() const { return m_program; }
@@ -154,8 +151,11 @@ public:
 
     // --------------- Audio Controllers -----------------
     //
-    void setRecordLevel(MidiByte level) { m_recordLevel = level; }
-    MidiByte getRecordLevel() const { return m_recordLevel; }
+    void setLevel(float dB) { m_level = dB; }
+    float getLevel() const { return m_level; }
+
+    void setRecordLevel(float dB) { m_recordLevel = dB; }
+    float getRecordLevel() const { return m_recordLevel; }
 
     void setAudioChannels(unsigned int ch) { m_channel = MidiByte(ch); }
     unsigned int getAudioChannels() const { return (unsigned int)(m_channel); }
@@ -215,14 +215,15 @@ private:
     MidiProgram     m_program;
     MidiByte        m_transpose;
     MidiByte        m_pan;  // required by audio
-
-    // Used for Audio volume (0dB == 100)
-    //
     MidiByte        m_volume;
 
-    // Record level for Audio recording (0dB == 100)
+    // Used for Audio volume (dB value)
     //
-    MidiByte        m_recordLevel;
+    float           m_level;
+
+    // Record level for Audio recording (dB value)
+    //
+    float           m_recordLevel;
 
     Device         *m_device;
 

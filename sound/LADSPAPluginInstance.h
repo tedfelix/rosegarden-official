@@ -87,6 +87,9 @@ public:
     void deactivate();
     void cleanup();
 
+    virtual bool isBypassed() const { return m_bypassed; }
+    virtual void setBypassed(bool bypassed) { m_bypassed = bypassed; }
+
     // Order by instrument and then position
     //
     struct PluginCmp
@@ -125,7 +128,6 @@ protected:
     sample_t                **m_outputBuffers;
     bool                      m_ownBuffers;
     
-    bool                      m_processed;
     bool                      m_bypassed;
 };
 

@@ -22,6 +22,7 @@
 #include "Instrument.h"
 #include "MidiDevice.h"
 #include "AudioPluginInstance.h"
+#include "AudioLevel.h"
 
 #if (__GNUC__ < 3)
 #include <strstream>
@@ -44,7 +45,8 @@ Instrument::Instrument(InstrumentId id, InstrumentType it,
     m_transpose(MidiMidValue),
     m_pan(MidiMidValue),
     m_volume(100),
-    m_recordLevel(100),
+    m_level(0.0),
+    m_recordLevel(0.0),
     m_device(device),
     m_sendBankSelect(false),
     m_sendProgramChange(false),
@@ -87,7 +89,8 @@ Instrument::Instrument(InstrumentId id,
     m_transpose(MidiMidValue),
     m_pan(MidiMidValue),
     m_volume(100),
-    m_recordLevel(100),
+    m_level(0.0),
+    m_recordLevel(0.0),
     m_device(device),
     m_sendBankSelect(false),
     m_sendProgramChange(false),
@@ -141,6 +144,7 @@ Instrument::Instrument(const Instrument &ins):
     m_transpose(ins.getMidiTranspose()),
     m_pan(ins.getPan()),
     m_volume(ins.getVolume()),
+    m_level(ins.getLevel()),
     m_recordLevel(ins.getRecordLevel()),
     m_device(ins.getDevice()),
     m_sendBankSelect(ins.sendsBankSelect()),
@@ -182,6 +186,7 @@ Instrument::operator=(const Instrument &ins)
     m_transpose = ins.getMidiTranspose();
     m_pan = ins.getPan();
     m_volume = ins.getVolume();
+    m_level = ins.getLevel();
     m_recordLevel = ins.getRecordLevel();
     m_device = ins.getDevice();
     m_sendBankSelect = ins.sendsBankSelect();
@@ -290,20 +295,6 @@ Instrument::toXmlString()
         return instrument.str();
     } 
 
-    // only export if there's anything worth sending
-    //
-    //
-    /*
-    if (!m_sendBankSelect &&
-        !m_sendProgramChange &&
-        !m_sendPan &&
-        !m_sendVolume)
-    {
-        instrument << std::ends;
-        return instrument.str();
-    }
-    */
-
     instrument << "        <instrument id=\"" << m_id;
     instrument << "\" channel=\"" << (int)m_channel;
     instrument << "\" type=\"";
@@ -348,11 +339,11 @@ Instrument::toXmlString()
         instrument << "            <pan value=\""
                    << (int)m_pan << "\"/>" << std::endl;
 
-        instrument << "            <volume value=\""
-                   << (int)m_volume << "\"/>" << std::endl;
+        instrument << "            <level value=\""
+                   << m_level << "\"/>" << std::endl;
 
         instrument << "            <recordLevel value=\""
-                   << (int)m_recordLevel << "\"/>" << std::endl;
+                   << m_recordLevel << "\"/>" << std::endl;
 
         instrument << "            <audioInput value=\""
                    << m_mappedAudioInput << "\"/>" << std::endl;
