@@ -33,7 +33,8 @@ ViewElementsManager::notationElementList(EventList::iterator from,
     NotationElementList *res = new NotationElementList;
     
     for (EventList::iterator i = from; i != to; ++i) {
-        res->push_back(new NotationElement(*i));
+//         res->push_back(new NotationElement(*i));
+        res->insert(new NotationElement(*i));
     }
 
     return res;

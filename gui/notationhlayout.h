@@ -63,6 +63,9 @@ protected:
 
     void initNoteWidthTable();
 
+    NotationElementList::iterator findClosestNote(NotationElementList::iterator insertPoint,
+                                                  bool &noteIsRest);
+
     unsigned int barTimeAtPos(NotationElementList::iterator pos);
     void addNewBar(unsigned int barPos);
 
@@ -79,7 +82,7 @@ protected:
 
     unsigned int m_nbTimeUnitsInCurrentBar;
     unsigned int m_previousNbTimeUnitsInCurrentBar;
-    unsigned int m_currentPos;
+    double m_currentPos;
 
     typedef vector<unsigned int> NoteWidthTable;
 

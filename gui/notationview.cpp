@@ -217,6 +217,8 @@ NotationView::showElements(NotationElementList::iterator from,
                            NotationElementList::iterator to,
                            double dxoffset, double dyoffset)
 {
+    if (from == to) return true;
+
     static ChordPixmapFactory npf(*m_mainStaff);
 
     for(NotationElementList::iterator it = from; it != to; ++it) {
@@ -461,7 +463,8 @@ NotationView::insertNote(int pitch, QMouseEvent *e)
     // the horiz. layout will readjust X and tell where to insert the event
     NotationElementList::iterator insertPosition = m_hlayout->insertNote(notationElement);
 
-    m_notationElements->insert(insertPosition, notationElement);
+    // no need to tell where to insert - container is sorted in element's X
+    m_notationElements->insert(notationElement);
 
     // TODO : insert insertedEvent too
 

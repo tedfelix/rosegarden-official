@@ -183,6 +183,37 @@ bool compareNoteElement(NotationElement *el1, NotationElement *el2)
     return el1->canvasItem()->x() < el2->x();
 }
 
+NotationElementList::iterator
+NotationHLayout::findClosestNote(NotationElementList::iterator insertPoint,
+                                 bool &noteIsRest)
+{
+    NotationElementList::iterator nextEl = insertPoint,
+        prevEl = insertPoint, result = insertPoint;
+
+    ++nextEl;
+
+    if (prevEl != m_notationElements.begin()) --prevEl;
+
+    double distToNext = 10e9,
+        distToPrevious = 10e9;
+    
+    // Compute dist. to next note
+    if (nextEl != m_notationElements.end())
+        distToNext = (*nextEl)->x() - (*insertPoint)->x();
+
+    if (prevEl != m_notationElements.begin())
+        distToPrevious = (*insertPoint)->x() - (*prevEl)->x();
+
+    if (distToPrevious > distToNext)
+        result = nextEl;
+    else
+        result = prevEl;
+
+    noteIsRest = ((*result)->isRest());
+
+    return result;
+}
+
 
 NotationElementList::iterator
 NotationHLayout::insertNote(NotationElement *el)
@@ -191,31 +222,26 @@ NotationHLayout::insertNote(NotationElement *el)
     
     kdDebug(KDEBUG_AREA) << "insertNote : approx. x : " << el->x() << endl;
 
-    NotationElementList::iterator insertPoint = lower_bound(m_notationElements.begin(),
-                                                            m_notationElements.end(),
-                                                            el, compareNoteElement);
-    
-    if (insertPoint != m_notationElements.end()) {
+    NotationElementList::iterator insertPoint = m_notationElements.insert(el);
 
-        // readjust horizontal position of inserted element
-        el->setX((*insertPoint)->x());
+    bool noteIsRest = false;
 
-        kdDebug(KDEBUG_AREA) << "insertNote : adjusted x : " << el->x() << endl;
-        
-        // TODO
-        // reapply layout on all following notes
+    NotationElementList::iterator closestNote = findClosestNote(insertPoint, noteIsRest);
 
-        return insertPoint;
+    if (closestNote != m_notationElements.end()) {
+
+        el->setX((*closestNote)->x());
+
+        if (noteIsRest) {} // replace rest (or part of it) with note
+        // else don't do anything special, just put note where it is
 
     } else {
-        --insertPoint;
-        el->setX((*insertPoint)->x() + Staff::noteWidth + m_noteMargin);
-
-        kdDebug(KDEBUG_AREA) << "insertNote : adjusted x : " << el->x() << endl;
-
-        return m_notationElements.end();
+        --closestNote;
+        el->setX((*closestNote)->x() + Staff::noteWidth + m_noteMargin);
     }
+    
 
+    return insertPoint;
 }
 
 
