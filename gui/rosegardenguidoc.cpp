@@ -274,22 +274,16 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 	    fileStream << XmlStorableEvent::toXmlString(*(*i)) << endl;
 	}
     }
-    fileStream << "</reference-segment>" << endl;
+    fileStream << "</reference-segment>" << endl << endl;
 
-    fileStream << endl;
+    // Send out Composition
+    //
+    fileStream << QString(m_composition.toXmlString().c_str()) << endl << endl;
 
-    // output Tracks and Instruments
-    for (trackiterator tit = m_composition.getTracks().begin();
-                       tit != m_composition.getTracks().end();
-                       tit++ )
-    {
-        fileStream << QString((*tit).second.toXmlString().c_str()) << endl;
-    }
-
-    fileStream << endl;
-
-    for (instrumentiterator iit = m_composition.getInstruments().begin();
-                            iit != m_composition.getInstruments().end();
+    // send out Tracks and Instruments
+    //
+    for (instrumentiterator iit = m_composition.getInstruments()->begin();
+                            iit != m_composition.getInstruments()->end();
                             iit++ )
     {
         fileStream << QString((*iit).second.toXmlString().c_str()) << endl;
@@ -298,6 +292,16 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 
     fileStream << endl;
 
+    for (trackiterator tit = m_composition.getTracks()->begin();
+                       tit != m_composition.getTracks()->end();
+                       ++tit )
+    {
+        fileStream << QString((*tit).second.toXmlString().c_str()) << endl;
+    }
+
+    fileStream << endl;
+
+
     // output all elements
     //
     // Iterate on segments
@@ -305,7 +309,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
          trks != m_composition.end(); ++trks) {
 
         //--------------------------
-        fileStream << QString("<segment instrument=\"%1\" start=\"%2\">")
+        fileStream << QString("<segment track=\"%1\" start=\"%2\">")
             .arg((*trks)->getTrack())
             .arg((*trks)->getStartIndex()) << endl;
 

@@ -22,7 +22,7 @@
 #ifndef _INSTRUMENT_H_
 #define _INSTRUMENT_H_
 
-#include "XmlObject.h"
+#include "XmlExportable.h"
 #include <string>
 
 // An Instrument connects a Track (which itself contains
@@ -34,7 +34,7 @@
 namespace Rosegarden
 {
 
-class Instrument : public XmlObject
+class Instrument : public XmlExportable
 {
 public:
     enum InstrumentType { Midi, Audio };

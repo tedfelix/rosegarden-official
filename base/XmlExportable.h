@@ -19,8 +19,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _XMLOBJECT_H_
-#define _XMLOBJECT_H_
+#ifndef _XMLEXPORTABLE_H_
+#define _XMLEXPORTABLE_H_
 
 #include <string>
 
@@ -38,11 +38,11 @@
 namespace Rosegarden
 {
 
-class XmlObject
+class XmlExportable
 {
 public:
-    XmlObject() {;}
-    virtual ~XmlObject() {;}
+    XmlExportable() {;}
+    virtual ~XmlExportable() {;}
 
     virtual string toXmlString() = 0;
 private:
@@ -50,5 +50,5 @@ private:
 
 }
 
-#endif // _XMLOBJECT_H_
+#endif // _XMLEXPORTABLE_H_
 

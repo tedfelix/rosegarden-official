@@ -55,8 +55,25 @@ Instrument::toXmlString()
     stringstream instrument;
 
     instrument << "<instrument id=\"";
-    instrument << m_id;
-    instrument << "\"/>";
+    instrument << m_id << "\" type=\"";
+
+    switch(m_type)
+    {
+        case Midi:
+            instrument << "midi";
+            break;
+
+        case Audio:
+            instrument << "audio";
+            break;
+
+        default:
+            instrument << "unknown";
+            break;
+    }
+
+    instrument << "\" name=\"" << m_name << "\"";
+    instrument << "/>";
 
     return instrument.str();
 

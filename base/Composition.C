@@ -24,6 +24,7 @@
 #include "FastVector.h"
 
 #include <iostream>
+#include <sstream>
 
 
 namespace Rosegarden 
@@ -588,8 +589,6 @@ void Composition::addInstrument(const Instrument &inst)
     //
     // 
     m_instruments[inst.getID()] = inst;
-    std::cerr << "ADDED INSTRUMENT OBJECT" << endl;
-
 }
 
 // Insert a Track representation into the Composition
@@ -597,7 +596,6 @@ void Composition::addInstrument(const Instrument &inst)
 void Composition::addTrack(const Track &track)
 {
     m_tracks[track.getID()] = track;
-    std::cerr << "ADDED TRACK OBJECT" << endl;
 }
 
 
@@ -613,6 +611,17 @@ void Composition::deleteInstrument(const int &instrument)
      instrumentiterator iiterator = m_instruments.find(instrument);
 
      m_instruments.erase(iiterator);
+}
+
+string Composition::toXmlString()
+{
+     stringstream composition;
+
+     composition << "<recordtrack id=\"";
+     composition << m_recordTrack;
+     composition << "\"/>";
+
+     return composition.str();
 }
 
 

@@ -52,14 +52,49 @@ Track::~Track()
 {
 }
 
+
+
+
+// Our virtual method for exporting Xml.
+//
+//
 string
 Track::toXmlString()
 {
     stringstream track;
 
     track << "<track id=\"";
-    track << m_id;
-    track << "\"/>";
+    track << m_id << "\" type=\"";
+
+    switch(m_type)
+    {
+        case Midi:
+            track << "midi";
+            break;
+
+        case Audio:
+            track << "audio";
+            break;
+
+        default:
+            track << "unknown";
+            break;
+    }
+
+
+    track << "\" label=\"" << m_label;
+    track << "\" position=\"" << m_position;
+
+    track << "\" muted=";
+
+    if (m_muted)
+        track << "\"true\"";
+    else
+        track << "\"false\"";
+
+    track << " instrument=\"" << m_instrument << "\"";
+
+    track << "/>";
 
     return track.str();
 

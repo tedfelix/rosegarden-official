@@ -28,6 +28,7 @@
 #include "Quantizer.h"
 #include "Instrument.h"
 #include "Track.h"
+#include "XmlExportable.h"
 
 namespace Rosegarden 
 {
@@ -51,7 +52,7 @@ typedef trackcontainer::iterator trackiterator;
 // gradually increasing the amount of stuff stored in the Composition
 // as opposed to in individual Segments.
 
-class Composition : public SegmentObserver
+class Composition : public SegmentObserver, public XmlExportable
 {
     
 public:
@@ -91,8 +92,8 @@ public:
     Instrument* getInstrumentByIndex(const int &instr)
             { return &(m_instruments[instr]); }
  
-    trackcontainer getTracks() { return m_tracks; }
-    instrumentcontainer getInstruments() { return m_instruments; }
+    trackcontainer* getTracks() { return &m_tracks; }
+    instrumentcontainer* getInstruments() { return &m_instruments; }
 
     int getRecordTrack() { return m_recordTrack; }
     void setRecordTrack(const int &recordTrack) { m_recordTrack = recordTrack; }
@@ -259,6 +260,10 @@ public:
 
     virtual void eventAdded(const Segment *, Event *);
     virtual void eventRemoved(const Segment *, Event *);
+
+    // XML exportable method
+    //
+    virtual string toXmlString();
 
 protected:
     trackcontainer m_tracks;

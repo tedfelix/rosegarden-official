@@ -49,7 +49,6 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
     int tracks = doc->getNbTracks();
     int bars = doc->getNbBars();
 
-    cout << "TRACKS = " << tracks << endl;
     if (tracks == 0) tracks = 10;
     if (bars == 0) bars = 100;
 

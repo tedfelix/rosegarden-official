@@ -27,7 +27,7 @@
 #ifndef _TRACK_H_
 #define _TRACK_H_
 
-#include "XmlObject.h"
+#include "XmlExportable.h"
 #include <string>
 
 // A Track contains information pertaining to a graphical
@@ -44,7 +44,7 @@
 namespace Rosegarden
 {
 
-class Track : public XmlObject
+class Track : public XmlExportable
 {
 
 public:
