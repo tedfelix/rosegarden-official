@@ -119,7 +119,7 @@ protected:
 
     bool m_smoothScroll;
     int m_smoothScrollTimeInterval;
-    int m_minDeltaScroll;
+    float m_minDeltaScroll;
     QTime m_scrollTimer;
     QTime m_scrollAccelerationTimer;
     static const int DefaultSmoothScrollTimeInterval;
