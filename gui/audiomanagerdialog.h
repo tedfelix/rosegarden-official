@@ -29,6 +29,7 @@
 #include "AudioFileManager.h"
 #include "rosegardenguidoc.h"
 #include "Segment.h"
+#include "Selection.h"
 #include "Track.h"
 
 // This dialog presents and allows editing of the Audio files that
@@ -151,6 +152,10 @@ public slots:
     // Commands
     //
     void slotCommandExecuted(KCommand *);
+
+    // Accept a list of Segments and highlight accordingly
+    //
+    void slotSegmentSelection(const Rosegarden::SegmentSelection &);
 
 signals:
 

@@ -545,6 +545,10 @@ void RosegardenGUIApp::initView()
     connect(m_view, SIGNAL(sendMappedEvent(Rosegarden::MappedEvent*)),
             this, SLOT(slotSendMappedEvent(Rosegarden::MappedEvent*)));
 
+    connect(m_view,
+            SIGNAL(segmentsSelected(const Rosegarden::SegmentSelection &)),
+            SLOT(slotSegmentsSelected(const Rosegarden::SegmentSelection &)));
+
     m_doc->addView(m_view);
     setCentralWidget(m_view);
     setCaption(m_doc->getTitle());
@@ -2818,5 +2822,14 @@ RosegardenGUIApp::slotInsertAudioSegment(unsigned int id,
     //cout << "ID = " << id << endl;
 }
 
+// Tell whoever is interested that a SegmentSelection has changed
+//
+void
+RosegardenGUIApp::slotSegmentsSelected(
+        const Rosegarden::SegmentSelection &segments)
+{
+    if (m_audioManagerDialog)
+        m_audioManagerDialog->slotSegmentSelection(segments);
+}
 
 

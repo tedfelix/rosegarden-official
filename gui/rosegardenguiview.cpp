@@ -419,6 +419,9 @@ void RosegardenGUIView::slotSelectTrackSegments(int trackId)
     comp.setSelectedTrack(trackId);
 
     slotSetSelectedSegments(segments);
+
+    // inform
+    emit segmentsSelected(segments);
 }
 
 void RosegardenGUIView::slotSetSelectedSegments(
@@ -497,6 +500,9 @@ void RosegardenGUIView::slotSelectAllSegments()
 #ifdef RGKDE3
     emit stateChange("segment_selected", false);
 #endif
+
+    // inform
+    emit segmentsSelected(segments);
 }
     
 
@@ -557,6 +563,7 @@ RosegardenGUIView::slotSelectedSegments(const Rosegarden::SegmentSelection &segm
 {
     // update the segment parameter box
     m_segmentParameterBox->useSegments(segments);
+    emit segmentsSelected(segments);
 }
 
 void RosegardenGUIView::slotShowSegmentParameters(bool v)

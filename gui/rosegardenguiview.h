@@ -212,6 +212,10 @@ signals:
 
     void stateChange(const QString&, bool);
 
+    // Inform that we've got a SegmentSelection
+    //
+    void segmentsSelected(const Rosegarden::SegmentSelection&);
+
 protected:
     //--------------- Data members ---------------------------------
 

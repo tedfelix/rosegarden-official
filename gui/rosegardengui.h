@@ -774,6 +774,7 @@ public slots:
                                 Rosegarden::TrackId,
                                 const Rosegarden::RealTime &,
                                 const Rosegarden::RealTime &);
+    void slotSegmentsSelected(const Rosegarden::SegmentSelection &);
 
 private:
 

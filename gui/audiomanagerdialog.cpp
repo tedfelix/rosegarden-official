@@ -339,15 +339,15 @@ AudioManagerDialog::slotDelete()
             id = aItem->getId();
         }
 
-        // Do the things
-        //
-        emit deleteSegment(item->getSegment());
-        slotPopulateFileList();
-
-        // Now show new selection with stored values
+        // Jump to new selection
         //
         if (newItem)
             setSelected(id, segment);
+
+        // Do it - will force update
+        //
+        emit deleteSegment(item->getSegment());
+
 
         return;
     }
@@ -364,7 +364,6 @@ AudioManagerDialog::slotDelete()
 
     unsigned int id = audioFile->getId();
     m_doc->getAudioFileManager().removeFile(id);
-    slotPopulateFileList();
 
     // tell the sequencer
     emit deleteAudioFile(id);
@@ -537,6 +536,8 @@ AudioManagerDialog::slotSelectionChanged(QListViewItem *item)
 
 
 // Select a Segment - traverse the tree and locate the correct child
+// or parent.  We need both id and segment because of this duality of
+// purpose.  Set segment to 0 for parent audio entries.
 //
 void
 AudioManagerDialog::setSelected(unsigned int id, Rosegarden::Segment *segment)
@@ -601,16 +602,57 @@ AudioManagerDialog::slotCommandExecuted(KCommand * /*command */)
 {
     AudioListItem *item =
             dynamic_cast<AudioListItem*>(m_fileList->selectedItem());
-    unsigned int id = item->getId();
-    Rosegarden::Segment *segment = item->getSegment();
 
     // repopulate
     slotPopulateFileList();
 
-    // set selected
-    setSelected(id, segment);
+    if (item)
+    {
+        unsigned int id = item->getId();
+        Rosegarden::Segment *segment = item->getSegment();
+
+        // set selected
+        setSelected(id, segment);
+    }
 
 }
+
+
+// Pass in a set of Segment to select - we check for embedded audio
+// segments and if we find exactly one we highlight it.  If we don't
+// we unselect everything.
+//
+void
+AudioManagerDialog::slotSegmentSelection(
+        const Rosegarden::SegmentSelection &segments)
+{
+    Rosegarden::Segment *segment = 0;
+
+    for (SegmentSelection::iterator it = segments.begin();
+                                    it != segments.end(); it++)
+    {
+        if ((*it)->getType() == Rosegarden::Segment::Audio) 
+        {
+            // Only get one audio segment
+            if (segment == 0)
+                segment = *it;
+            else
+                segment = 0;
+        }
+
+    }
+
+    if (segment)
+    {
+        setSelected(segment->getAudioFileID(), segment);
+    }
+    else
+    {
+        m_fileList->clearSelection();
+    }
+
+}
+
 
 }
 
