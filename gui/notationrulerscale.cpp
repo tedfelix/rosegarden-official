@@ -30,7 +30,8 @@ using Rosegarden::Composition;
 using Rosegarden::TimeSignature;
 
 
-NotationRulerScale::NotationRulerScale() :
+NotationRulerScale::NotationRulerScale(Rosegarden::Composition *c) :
+    RulerScale(c),
     m_layout(0),
     m_lastFinishingStaff(0),
     m_firstBar(0)
@@ -53,13 +54,26 @@ void
 NotationRulerScale::setFirstStartingStaff(NotationStaff *staff)
 {
     timeT t = staff->getSegment().getStartTime();
-    m_firstBar = staff->getSegment().getComposition()->getBarNumber(t);
+    m_firstBar = m_composition->getBarNumber(t);
 }
 
 void
 NotationRulerScale::setLastFinishingStaff(NotationStaff *staff)
 {
     m_lastFinishingStaff = staff;
+}
+
+int
+NotationRulerScale::getFirstBarNumber()
+{
+    return m_firstBar;
+}
+
+int
+NotationRulerScale::getLastBarNumber()
+{
+    return m_composition->getBarNumber
+	(m_lastFinishingStaff->getSegment().getEndTime());
 }
 
 double
@@ -81,11 +95,11 @@ NotationRulerScale::getBarWidth(int n)
 double
 NotationRulerScale::getBeatWidth(int n)
 {
-    std::pair<timeT, timeT> barRange = getComposition()->getBarRange(n);
+    std::pair<timeT, timeT> barRange = m_composition->getBarRange(n);
     timeT barDuration = barRange.second - barRange.first;
 
     bool isNew;
-    TimeSignature timeSig = getComposition()->getTimeSignatureInBar(n, isNew);
+    TimeSignature timeSig = m_composition->getTimeSignatureInBar(n, isNew);
 
     // cope with partial bars
     double theoreticalWidth =
@@ -130,7 +144,7 @@ NotationRulerScale::getTimeForX(double x)
     int n = getBarForX(x);
 
     double barWidth = getBarWidth(n);
-    std::pair<timeT, timeT> barRange = getComposition()->getBarRange(n);
+    std::pair<timeT, timeT> barRange = m_composition->getBarRange(n);
     timeT barDuration = barRange.second - barRange.first;
 
     x -= getBarPosition(n);
@@ -142,10 +156,10 @@ NotationRulerScale::getTimeForX(double x)
 double
 NotationRulerScale::getXForTime(timeT time)
 {
-    int n = getComposition()->getBarNumber(time);
+    int n = m_composition->getBarNumber(time);
 
     double barWidth = getBarWidth(n);
-    std::pair<timeT, timeT> barRange = getComposition()->getBarRange(n);
+    std::pair<timeT, timeT> barRange = m_composition->getBarRange(n);
     timeT barDuration = barRange.second - barRange.first;
 
     time -= barRange.first;
@@ -165,12 +179,5 @@ NotationRulerScale::getLayoutBarNumber(int n)
 	return m_layout->getBarLineCount(*m_lastFinishingStaff) - 1;
 
     return n;
-}
-
-Composition *
-NotationRulerScale::getComposition()
-{
-    assert(m_lastFinishingStaff);
-    return m_lastFinishingStaff->getSegment().getComposition();
 }
 

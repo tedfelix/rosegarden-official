@@ -100,7 +100,8 @@ NotationView::NotationView(RosegardenGUIView* rgView,
     m_vlayout(0),
     m_fontSizeSlider(0),
     m_selectDefaultNote(0),
-    m_pointer(0)
+    m_pointer(0),
+    m_rulerScale(&rgView->getDocument()->getComposition())
 {
     m_toolBox = new NotationToolBox(this);
 

@@ -22,43 +22,16 @@
 
 #include "colours.h"
 
-/*
-
-namespace RosegardenGUIColours
-{
-    const QColor ActiveRecordTrack = Qt::red;
-
-    const QColor SegmentCanvas = Qt::lightGrey;
-    const QColor SegmentBorder = Qt::black;
-    const QColor SegmentBlock = Qt::blue;
-    const QColor SegmentHighlightBlock = Qt::darkBlue;
-  
-    const QColor BarLine = Qt::black;
-    const QColor BarLineIncorrect = Qt::red;
-    const QColor StaffConnectingLine = QColor(192,192,192);
-    const QColor StaffConnectingTerminatingLine = QColor(128,128,128);
-    const QColor StaffRulerBackground = QColor(212,212,212);
-
-    const QColor PositionCursor = Qt::magenta;
-    const QColor SelectionRectangle = Qt::blue;
-    const QColor SelectedElement = Qt::blue;
-    const int SelectedElementHue = 240;
-}
-
-*/
-
-// alternative set of colours that goes a bit better with the splash
-// screen... although probably not with your KDE theme
 
 namespace RosegardenGUIColours
 {
     const QColor ActiveRecordTrack = Qt::red;
 
     const QColor SegmentCanvas = QColor(230, 230, 230);
-    const QColor SegmentBorder = Qt::black;
     const QColor SegmentBlock = QColor(197, 211, 125);
+    const QColor SegmentBorder = Qt::black;
     const QColor SegmentHighlightBlock = QColor(98, 102, 78);
-    const QColor RecordingSegmentCanvas = QColor(255, 182, 193);
+    const QColor RecordingSegmentBlock = QColor(255, 182, 193);
     const QColor RecordingSegmentBorder = Qt::black;
 
     const QColor MatrixElementBorder = Qt::black;
@@ -68,9 +41,9 @@ namespace RosegardenGUIColours
     const QColor LoopRulerForeground = Qt::white;
     const QColor LoopHighlight = Qt::white;
   
-    extern const QColor LevelMeterGreen = QColor(0, 100, 0);
-    extern const QColor LevelMeterOrange = QColor(255, 140, 0);
-    extern const QColor LevelMeterRed = QColor(100, 0, 0);
+    const QColor LevelMeterGreen = QColor(0, 100, 0);
+    const QColor LevelMeterOrange = QColor(255, 140, 0);
+    const QColor LevelMeterRed = QColor(100, 0, 0);
 
     const QColor BarLine = Qt::black;
     const QColor BarLineIncorrect = QColor(211, 0, 31);

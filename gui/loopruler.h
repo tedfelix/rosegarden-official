@@ -55,8 +55,6 @@ public:
 
     virtual void paintEvent(QPaintEvent*);
 
-    void calculateExtents();
-
 public slots:
     void setLoopingMode(bool value) { m_loop = value; }
     void setLoopMarker(Rosegarden::timeT startLoop, Rosegarden::timeT endLoop);
@@ -90,9 +88,6 @@ private:
 
     int m_height;
     int m_snap;            // snap the loop to the nearest
-
-    int m_firstBar;
-    int m_lastBar;
 
     RosegardenGUIDoc *m_doc;
     RulerScale *m_rulerScale;

@@ -23,9 +23,13 @@
 #include "loopruler.h"
 #include "rulerscale.h"
 #include "colours.h"
+
 #include <qvbox.h>
 #include <qlabel.h>
 #include <qcanvas.h>
+
+#include "rosedebug.h"
+
 
 
 BarButtons::BarButtons(RosegardenGUIDoc* doc,
@@ -43,11 +47,6 @@ BarButtons::BarButtons(RosegardenGUIDoc* doc,
 
     setMinimumHeight(m_barHeight);
     setMaximumHeight(m_barHeight);
-
-    Rosegarden::Composition &comp = doc->getComposition();
-
-    m_firstBar = comp.getBarNumber(comp.getStartMarker());
-    m_lastBar  = comp.getBarNumber(comp.getEndMarker());
 
     drawButtons();
 }
@@ -105,9 +104,19 @@ BarButtons::drawButtons()
     //
     QHBox *hButtonBar = new QHBox(buttonBar);
 
-    int x = 0;
+    int firstBar = m_rulerScale->getFirstBarNumber(),
+	 lastBar = m_rulerScale->getLastBarNumber();
+    int x = (int)m_rulerScale->getBarPosition(firstBar);
 
-    for (int i = m_firstBar; i <= m_lastBar; i++)
+    kdDebug(KDEBUG_AREA) << "BarButtons::drawButtons: firstBar " << firstBar
+			 << ", lastBar " << lastBar << ", x " << x << std::endl;
+
+    kdDebug(KDEBUG_AREA) << "bar positions: " << std::endl;
+    for (int j = firstBar; j <= lastBar; ++j) {
+	kdDebug(KDEBUG_AREA) << j << ":" << m_rulerScale->getBarPosition(j) << endl;
+    }
+
+    for (int i = firstBar; i <= lastBar; i++)
     {
         bar = new QVBox(hButtonBar);
         bar->setSpacing(0);
@@ -117,12 +126,18 @@ BarButtons::drawButtons()
 	// error through integer rounding
 
 	int width;
-	if (i < m_lastBar) {
+	if (i < lastBar) {
 	    width = (int)(m_rulerScale->getBarPosition(i+1) - (double)x);
 	    x += width;
 	} else {
 	    width = (int)(m_rulerScale->getBarWidth(i));
 	}
+
+	kdDebug(KDEBUG_AREA) << "BarButtons::drawButtons: bar " << i
+			     << ", width " << width << ", x " << x << std::endl;
+
+
+	if (width == 0) continue;
 
 	bar->setMinimumSize(width, m_barHeight - loopBarHeight);
 	bar->setMaximumSize(width, m_barHeight - loopBarHeight);

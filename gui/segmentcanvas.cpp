@@ -158,7 +158,7 @@ SegmentCanvas::SegmentCanvas(RulerScale *rulerScale, int vStep,
 			     const char* name, WFlags f) :
     QCanvasView(&c, parent, name, f),
     m_tool(0),
-    m_grid(dynamic_cast<SimpleRulerScale *>(rulerScale), vStep),
+    m_grid(rulerScale, vStep),
     m_currentItem(0),
     m_recordingSegment(0),
     m_brush(RosegardenGUIColours::SegmentBlock),
@@ -346,7 +346,7 @@ SegmentCanvas::showRecordingSegmentItem(int y, timeT startTime, timeT duration)
 	m_recordingSegment->
             setPen(RosegardenGUIColours::RecordingSegmentBorder);
         m_recordingSegment->
-            setBrush(RosegardenGUIColours::RecordingSegmentCanvas);
+            setBrush(RosegardenGUIColours::RecordingSegmentBlock);
 	m_recordingSegment->setZ(2);
     }
 }
@@ -455,7 +455,7 @@ const timeT SegmentCanvas::SnapGrid::NoSnap     = -3;
 const timeT SegmentCanvas::SnapGrid::SnapToBar  = -2;
 const timeT SegmentCanvas::SnapGrid::SnapToBeat = -1;
 
-SegmentCanvas::SnapGrid::SnapGrid(SimpleRulerScale *rulerScale, int vstep) :
+SegmentCanvas::SnapGrid::SnapGrid(RulerScale *rulerScale, int vstep) :
     m_rulerScale(rulerScale),
     m_snapTime(SnapToBeat),
     m_vstep(vstep)

@@ -129,7 +129,6 @@ public:
     /// Available tools
     enum ToolType { NoTool, Pencil, Eraser, Mover, Resizer, Selector };
 
-    // ruler scale must be a SimpleRulerScale, in fact
     SegmentCanvas(RulerScale *, int vStep, QCanvas&,
 		  QWidget* parent=0, const char* name=0, WFlags f=0);
     ~SegmentCanvas();
@@ -143,8 +142,7 @@ public:
     class SnapGrid
     {
     public:
-        SnapGrid(SimpleRulerScale *rulerScale,
-		 int vstep);
+        SnapGrid(RulerScale *rulerScale, int vstep);
 
 	static const timeT NoSnap;
 	static const timeT SnapToBar;
@@ -188,7 +186,7 @@ public:
 	RulerScale *getRulerScale() { return m_rulerScale; }
 
     protected:
-	SimpleRulerScale *m_rulerScale; // I don't own this
+	RulerScale *m_rulerScale; // I don't own this
 	timeT m_snapTime;
 	int m_vstep;
     };

@@ -40,7 +40,7 @@ LoopRuler::LoopRuler(RosegardenGUIDoc *doc,
       m_loop(false),
       m_startLoop(0), m_endLoop(0)
 {
-    calculateExtents();
+    // nothing
 }
 
 LoopRuler::~LoopRuler()
@@ -60,11 +60,13 @@ void LoopRuler::drawBarSections(QPainter* paint)
     if (!m_doc) return;
     Rosegarden::Composition &comp = m_doc->getComposition();
 
-    double x = 0;
+    int firstBar = m_rulerScale->getFirstBarNumber(),
+	 lastBar = m_rulerScale->getLastBarNumber();
+    double x = m_rulerScale->getBarPosition(firstBar);
 
     paint->setPen(RosegardenGUIColours::LoopRulerForeground);
 
-    for (int i = m_firstBar; i <= m_lastBar; i++)
+    for (int i = firstBar; i <= lastBar; i++)
     {
 	paint->drawLine((int)x, 2 * m_height / 7, (int)x, m_height);
 
@@ -185,13 +187,5 @@ LoopRuler::setLoopMarker(Rosegarden::timeT startLoop, Rosegarden::timeT endLoop)
     drawLoopMarker(&paint);
 
     update();
-}
-
-void
-LoopRuler::calculateExtents()
-{
-    Rosegarden::Composition &comp = m_doc->getComposition();
-    m_firstBar = comp.getBarNumber(comp.getStartMarker());
-    m_lastBar = comp.getBarNumber(comp.getEndMarker());
 }
 

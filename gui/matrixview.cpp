@@ -61,7 +61,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
       m_vlayout(new MatrixVLayout),
       m_hoveredOverAbsoluteTime(0),
       m_hoveredOverNoteName(0),
-      m_rulerScale(&doc->getComposition(), 0, 0,
+      m_rulerScale(&doc->getComposition(), 0,
 		   Rosegarden::Note(Rosegarden::Note::Crotchet).getDuration()
 		   / 20)
 {

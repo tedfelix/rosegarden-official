@@ -40,7 +40,18 @@ namespace Rosegarden { class Composition; }
 class RulerScale
 {
 public:
-    virtual ~RulerScale() { }
+    virtual ~RulerScale();
+    Rosegarden::Composition *getComposition() { return m_composition; }
+
+    /**
+     * Return the number of the first visible bar.
+     */
+    virtual int getFirstBarNumber();
+
+    /**
+     * Return the number of the last visible bar.
+     */
+    virtual int getLastBarNumber();
 
     /**
      * Return the x-coordinate at which bar number n starts.
@@ -90,7 +101,8 @@ public:
     }
 
 protected:
-    RulerScale() { }
+    RulerScale(Rosegarden::Composition *c);
+    Rosegarden::Composition *m_composition;
 };
 
 
@@ -108,14 +120,9 @@ public:
      * 10 means that one pixel equals 10 time units.)
      */
     SimpleRulerScale(Rosegarden::Composition *composition,
-		     int firstBarNo, double origin, double unitsPerPixel);
+		     double origin, double unitsPerPixel);
     virtual ~SimpleRulerScale();
 
-    Rosegarden::Composition *getComposition() { return m_composition; }
-
-    int    getFirstBarNumber() { return m_firstBar; }
-    void   setFirstBarNumber(int firstBar) { m_firstBar = firstBar; }
-    
     double getOrigin() { return m_origin; }
     void   setOrigin(double origin) { m_origin = origin; }
 
@@ -130,8 +137,6 @@ public:
     virtual double getXForTime(Rosegarden::timeT time);
 
 protected:
-    Rosegarden::Composition *m_composition;
-    int m_firstBar;
     double m_origin;
     double m_ratio;
 };

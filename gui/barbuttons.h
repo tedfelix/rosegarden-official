@@ -77,9 +77,6 @@ private:
     int m_barHeight;
     int m_offset;
 
-    int m_firstBar;
-    int m_lastBar;
-
     RosegardenGUIDoc *m_doc;
     RulerScale *m_rulerScale;
 };

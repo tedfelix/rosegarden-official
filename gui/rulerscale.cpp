@@ -26,11 +26,33 @@ using Rosegarden::TimeSignature;
 using Rosegarden::timeT;
 
 
+RulerScale::RulerScale(Rosegarden::Composition *c) :
+    m_composition(c)
+{ 
+    // nothing
+}
+
+RulerScale::~RulerScale()
+{
+    // nothing
+}
+
+int
+RulerScale::getFirstBarNumber()
+{
+    return m_composition->getBarNumber(m_composition->getStartMarker());
+}
+
+int
+RulerScale::getLastBarNumber()
+{
+    return m_composition->getBarNumber(m_composition->getEndMarker());
+}
+
+
 SimpleRulerScale::SimpleRulerScale(Composition *composition,
-				   int firstBarNo,
 				   double origin, double ratio) :
-    m_composition(composition),
-    m_firstBar(firstBarNo),
+    RulerScale(composition),
     m_origin(origin),
     m_ratio(ratio)
 {
@@ -74,18 +96,23 @@ timeT
 SimpleRulerScale::getTimeForX(double x)
 {
     timeT t = (timeT)((x - m_origin) * m_ratio);
-    if (m_firstBar != 0) {
-	t += m_composition->getBarRange(m_firstBar).first;
+
+    int firstBar = getFirstBarNumber();
+    if (firstBar != 0) {
+	t += m_composition->getBarRange(firstBar).first;
     }
+
     return t;
 }
 
 double
 SimpleRulerScale::getXForTime(timeT time)
 {
-    if (m_firstBar != 0) {
-	time -= m_composition->getBarRange(m_firstBar).first;
+    int firstBar = getFirstBarNumber();
+    if (firstBar != 0) {
+	time -= m_composition->getBarRange(firstBar).first;
     }
+
     return m_origin + (double)time / m_ratio;
 }
 
