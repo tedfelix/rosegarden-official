@@ -24,13 +24,16 @@
 #include <qpainter.h>
 #include <qtooltip.h>
 
+#include "rosedebug.h"
+
 PianoKeyboard::PianoKeyboard(QSize keySize, QWidget *parent,
                              const char* name, WFlags f)
     : QWidget(parent, name, f),
-      m_keySize(48, 19), // keySize),
-      m_blackKeySize(24, 9),
+      m_keySize(48, 18), // keySize),
+      m_blackKeySize(24, 8),
       m_nbKeys(88)
 {
+    computeKeyPos();
     addTips();
 }
 
@@ -45,108 +48,87 @@ QSize PianoKeyboard::minimumSizeHint() const
     return m_keySize;
 }
 
-void PianoKeyboard::paintEvent(QPaintEvent*)
+void PianoKeyboard::computeKeyPos()
 {
-    QPainter paint(this);
-
-    QPoint pos(0, 4);
-
-    // Draw 1st white key
-    QRect firstWhiteKeyRect(pos, m_keySize);
-
-    firstWhiteKeyRect.setHeight(firstWhiteKeyRect.height() -
-                                m_blackKeySize.height() / 2);
-
-    paint.drawRect(firstWhiteKeyRect);
-
-    // Draw 1st black key
-    paint.save();
-
-    paint.setBrush(colorGroup().foreground());
-
-    QPoint bPos = pos;
-
-    bPos.setY(bPos.y() + firstWhiteKeyRect.height() - m_blackKeySize.height() / 2 - 1);
-            
-    paint.drawRect(QRect(bPos, m_blackKeySize));
+    unsigned const int smallWhiteKeyHeight = 14,
+        whiteKeyHeight = 18;
     
-    paint.restore();
+    unsigned int y = 4;
 
+    unsigned int posInOctave = 1,
+        keyHeight = smallWhiteKeyHeight;
 
-    // Draw the rest
-    pos.setY(pos.y() + firstWhiteKeyRect.height() - 1);
-
-    unsigned int posInOctave = 1;
-
-    for(unsigned int i = 1; i < m_nbKeys; ++i) {
+    for(unsigned int i = 0; i < m_nbKeys; ++i) {
         posInOctave = i % 7;
 
-        QRect whiteKeyRect(pos, m_keySize);
-        
-        if (posInOctave == 2 ||
+        m_whiteKeyPos.push_back(y);
+
+        if (posInOctave == 0 ||
+            posInOctave == 2 ||
             posInOctave == 6 ||
-            posInOctave == 3 ||
-            posInOctave == 7) { // draw shorter white key
+            posInOctave == 3) { // draw shorter white key
 
-            whiteKeyRect.setHeight(firstWhiteKeyRect.height());
+
+            keyHeight = smallWhiteKeyHeight;
+
+            if (posInOctave == 2 ||
+                posInOctave == 6) --keyHeight;
+            
+        } else {
+
+            keyHeight = whiteKeyHeight;
+
         }
-
-        paint.drawRect(whiteKeyRect);
 
         if (posInOctave != 2 && posInOctave != 6) { // draw black key
 
-            paint.save();
+            unsigned int bY = y + keyHeight - m_blackKeySize.height() / 2;
 
-            paint.setBrush(colorGroup().foreground());
-
-            QPoint bPos = pos;
-
-            bPos.setY(bPos.y() + whiteKeyRect.height() -
-                      m_blackKeySize.height() / 2 - 1);
-            
-            paint.drawRect(QRect(bPos, m_blackKeySize));
-
-            // Debug
-            //             paint.setPen(red);
-            //             paint.drawLine(bPos, bPos);
-            // Debug
-
-            paint.restore();
+            m_blackKeyPos.push_back(bY);
 
         }
 
-        pos.setY(pos.y() + whiteKeyRect.height() - 1);
-        
+        y += keyHeight;
     }
     
 }
 
+void PianoKeyboard::paintEvent(QPaintEvent*)
+{
+    QPainter paint(this);
+
+    for(unsigned int i = 0; i < m_whiteKeyPos.size(); ++i)
+        paint.drawLine(0, m_whiteKeyPos[i],
+                       m_keySize.width(), m_whiteKeyPos[i]);
+
+    paint.setBrush(colorGroup().foreground());
+
+    for(unsigned int j = 0; j < m_blackKeyPos.size(); ++j)
+        paint.drawRect(0, m_blackKeyPos[j],
+                       m_blackKeySize.width(), m_blackKeySize.height());
+}
+
 void PianoKeyboard::addTips()
 {
-    QPoint pos;
-    unsigned int posInOctave = 0;
-    
-    for(unsigned int i = 0; i < m_nbKeys; ++i) {
-        posInOctave = i % 7;
+    unsigned int prevY = 0;
 
-        QRect rect(pos, m_keySize);
-        rect.setWidth(rect.width() - m_blackKeySize.width());
+    for(unsigned int i = 0; i < m_whiteKeyPos.size(); ++i) {
+        unsigned int y = m_whiteKeyPos[i];
+        
+        QRect rect(0, prevY, m_keySize.width(), y - prevY);
 
         QToolTip::add(this, rect, QString("%1").arg(i));
+        prevY = y;
+    }
+    
+    prevY = 0;
 
-        if (posInOctave != 2 && posInOctave != 6) { // draw black key
+    for(unsigned int j = 0; j < m_blackKeyPos.size(); ++j) {
+        
+        unsigned int y = m_blackKeyPos[j];
+        QRect rect(0, prevY, m_blackKeySize.width(), y - prevY);
 
-            QPoint bPos = pos;
-            bPos.setX(bPos.x() + m_keySize.width() / 2);
-            bPos.setY(bPos.y() + m_keySize.height() / 2
-                      + m_blackKeySize.height() / 2 + 1);
-            
-            QRect bRect(bPos, m_blackKeySize);
-            QToolTip::add(this, bRect, QString("black %1").arg(i));
-
-        }
-
-        pos.setY(pos.y() + m_keySize.height());
-
+        QToolTip::add(this, rect, QString("black %1").arg(j));
+        prevY = y;
     }
 }

@@ -22,6 +22,8 @@
 #ifndef PIANOKEYBOARD_H
 #define PIANOKEYBOARD_H
 
+#include <vector>
+
 #include <qwidget.h>
 
 class PianoKeyboard : public QWidget
@@ -48,11 +50,15 @@ protected:
     virtual void paintEvent(QPaintEvent*);
 
     void addTips();
+    void computeKeyPos();
 
     //--------------- Data members ---------------------------------
     QSize m_keySize;
     QSize m_blackKeySize;
     unsigned int m_nbKeys;
+
+    std::vector<unsigned int> m_whiteKeyPos;
+    std::vector<unsigned int> m_blackKeyPos;
 };
 
 
