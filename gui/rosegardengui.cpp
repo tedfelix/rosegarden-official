@@ -558,7 +558,7 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotRemapInstruments()),
                 actionCollection(), "remap_instruments");
 
-    new KAction(i18n("&Save Studio as Default"), 0, this,
+    new KAction(i18n("&Save Current Document as Default Studio"), 0, this,
                 SLOT(slotSaveDefaultStudio()),
                 actionCollection(), "save_default_studio");
 
@@ -4074,7 +4074,7 @@ RosegardenGUIApp::slotSaveDefaultStudio()
 {
     RG_DEBUG << "RosegardenGUIApp::slotSaveDefaultStudio\n";
 
-    KTmpStatusMsg msg(i18n("Saving current studio as default..."), this);
+    KTmpStatusMsg msg(i18n("Saving current document as default studio..."), this);
 
     QString autoloadFile = ::locateLocal("appdata", "autoload.rg");
 
