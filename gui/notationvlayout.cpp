@@ -53,6 +53,42 @@ NotationVLayout::layout(NotationElementList::iterator from,
 
         } else if (el->isNote()) {
 
+            Chord chord(m_elements, i);
+            if (chord.size() == 0) continue;
+
+            vector<int> h;
+            for (unsigned int j = 0; j < chord.size(); ++j) {
+                h.push_back((*chord[j])->event()->get<Int>(P_HEIGHT_ON_STAFF));
+            }
+            int top = h.size()-1;
+
+            bool stalkUp = true;
+            if (h[top] > 4) {
+                if (h[0] > 4) stalkUp = false;
+                else stalkUp = (h[top] - 4) < (5 - h[0]);
+            }
+
+            for (unsigned int j = 0; j < chord.size(); ++j) {
+                el = *chord[j];
+                try {
+
+                    el->setLayoutY(m_staff.yCoordOfHeight(h[j]));
+                    el->event()->setMaybe<Bool>(P_STALK_UP, stalkUp);
+
+                    el->event()->setMaybe<Bool>
+                        (P_DRAW_TAIL,
+                         ((stalkUp && j == chord.size()-1) ||
+                          (!stalkUp && j == 0)));
+
+                } catch (Event::NoData) {
+                    kdDebug(KDEBUG_AREA) <<
+                        "NotationVLayout::layout : couldn't get properties for element (has NotationHLayout::preparse run?)" << endl;
+                }
+            }
+
+            i = chord.getFinalNote();
+            
+/*!
             NotationElementList::iterator inext(i);
             Event::timeT d; // unwanted
             vector<NotationElementList::iterator> notes =
@@ -90,7 +126,7 @@ NotationVLayout::layout(NotationElementList::iterator from,
             }
 
             i = inext;
-        
+*/        
         } else {
 
             if (el->event()->isa(Clef::EventType)) {

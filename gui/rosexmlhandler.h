@@ -60,9 +60,12 @@ protected:
     Track *m_currentTrack;
 
     Event::timeT m_currentTime;
-
     Event::timeT m_chordDuration;
+
     bool m_inChord;
+    bool m_inGroup;
+    string m_groupType;
+    int m_groupNo;
 };
 
 #endif

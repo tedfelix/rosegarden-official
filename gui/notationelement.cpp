@@ -143,70 +143,9 @@ NotationElementList::findNext(const string &type, iterator i)
     return i;
 }
 
-class PitchGreater {
-public:
-    bool operator()(const NotationElementList::iterator &a,
-                    const NotationElementList::iterator &b) {
-        try {
-            return ((*a)->event()->get<Int>("pitch") <
-                    (*b)->event()->get<Int>("pitch"));
-        } catch (Event::NoData) {
-            kdDebug(KDEBUG_AREA) << "Bad karma: PitchGreater failed to find one or both pitches" << endl;
-            return false;
-        }
-    }
-};
-
-vector<NotationElementList::iterator>
-NotationElementList::findSucceedingChordElements(iterator i,
-                                                 iterator &inext,
-                                                 Event::timeT &maxDuration,
-                                                 bool quantized) 
-{
-    // I think we're trying to please rather too many different people
-    // in this method
-
-    vector<NotationElementList::iterator> v;
-    Event::timeT myTime = (*i)->getAbsoluteTime();
-    long d;
-    maxDuration = 0;
-
-    // A chord can only contain notes; anything else having the same
-    // time as this is probably a bogoid of some nature.  We succeed
-    // trivially for the first element, if there is one & it's a note
-    while (i != end() && (*i)->isNote() && (*i)->getAbsoluteTime() == myTime) {
-
-        if (quantized) {
-            bool done = (*i)->event()->get<Int>(P_QUANTIZED_DURATION, d);
-            if (!done) {
-                m_quantizer.quantize((*i)->event());
-                d = (*i)->event()->get<Int>(P_QUANTIZED_DURATION);
-            }
-        } else {
-            d = (*i)->event()->getDuration();
-        }
-
-        if (d > maxDuration) maxDuration = d;
-        v.push_back(i);
-        inext = i;
-        ++i;
-    }
-
-    if (v.size() > 1) {
-        stable_sort(v.begin(), v.end(), PitchGreater());
-    }
-
-    kdDebug(KDEBUG_AREA) << "NotationElementList::findSucceedingChordElements: pitches are:" << endl;
-    for (unsigned int i = 0; i < v.size(); ++i) {
-        kdDebug(KDEBUG_AREA) << ((*v[i])->event()->get<Int>("pitch")) <<endl;
-    }
-
-    return v;
-}
-
 bool NotationElementList::hasSucceedingChordElements(iterator i)
 {
-    // find out whether findSucceedingChordElements would return >1 elt
+    // find out whether there are any following chord elements
     int c = 0;
     Event::timeT myTime = (*i)->getAbsoluteTime();
     while (i != end() && (*i)->isNote() && (*i)->getAbsoluteTime() == myTime) {
@@ -236,4 +175,95 @@ kdbgstream& operator<<(kdbgstream &dbg, NotationElementList &l)
 
     return dbg;
 }
+
+
+class PitchGreater {
+public:
+    bool operator()(const NotationElementList::iterator &a,
+                    const NotationElementList::iterator &b) {
+        try {
+            return ((*a)->event()->get<Int>("pitch") <
+                    (*b)->event()->get<Int>("pitch"));
+        } catch (Event::NoData) {
+            kdDebug(KDEBUG_AREA) << "Bad karma: PitchGreater failed to find one or both pitches" << endl;
+            return false;
+        }
+    }
+};
+
+Chord::Chord(const NotationElementList &nel, NELIterator i,
+             bool quantized) :
+    m_nel(nel),
+    m_initial(nel.end()),
+    m_final(nel.end()),
+    m_shortest(nel.end()),
+    m_longest(nel.end())
+{
+    if (i == nel.end()) return;
+    Event::timeT myTime = (*i)->getAbsoluteTime();
+    long d;
+    int maxDuration = 0;
+    int minDuration = 1e6;
+
+    // first scan back to find an element not in the chord, and leave
+    // i pointing at the element after it, i.e. the first one that is
+    // in the chord
+
+    NELIterator j(i);
+    for (;;) {
+        i = j;
+        if (i == nel.begin()) break;
+        --j;
+        if (!((*j)->isNote() && (*j)->getAbsoluteTime() == myTime)) {
+            break;
+        }
+    }
+        
+    m_initial = i;
+
+    // A chord can only contain notes; anything else having the same
+    // time as this is probably a bogoid of some nature.  We succeed
+    // trivially for the first element, if there is one & it's a note
+    
+    while (i != nel.end() && (*i)->isNote() &&
+           (*i)->getAbsoluteTime() == myTime) {
+
+        if (quantized) {
+            bool done = (*i)->event()->get<Int>(P_QUANTIZED_DURATION, d);
+            if (!done) {
+                Quantizer().quantize((*i)->event());
+                d = (*i)->event()->get<Int>(P_QUANTIZED_DURATION);
+            }
+        } else {
+            d = (*i)->event()->getDuration();
+        }
+
+        if (d > maxDuration) {
+            maxDuration = d;
+            m_longest = i;
+        }
+
+        if (d < minDuration) {
+            minDuration = d;
+            m_shortest = i;
+        }
+
+        push_back(i);
+        m_final = i;
+        ++i;
+    }
+
+    if (size() > 1) {
+        stable_sort(begin(), end(), PitchGreater());
+    }
+
+    kdDebug(KDEBUG_AREA) << "Chord::Chord: pitches are:" << endl;
+    for (unsigned int i = 0; i < size(); ++i) {
+        kdDebug(KDEBUG_AREA) << ((*(*this)[i])->event()->get<Int>("pitch")) <<endl;
+    }
+}    
+
+Chord::~Chord() { }
+
+
 #endif

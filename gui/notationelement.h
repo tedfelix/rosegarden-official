@@ -104,6 +104,7 @@ public:
     }
 };
 
+
 /**
  * This class owns the NotationElements its items are pointing at
  */
@@ -118,25 +119,11 @@ public:
     iterator findPrevious(const string &type, iterator i);
     iterator findNext(const string &type, iterator i);
 
-    // If passed iterator points at a note, return a set of iterators
-    // pointing to it and all succeeding notes that have the same
-    // absolute time.  If this is the only one, returned vector has
-    // size 1; if this is not a note at all, it has size 0.  Results
-    // are sorted by pitch, lowest first.  Also returns duration of
-    // longest note in chord, and iterator pointing to the last
-    // element in the chord (unchanged from value passed in if there's
-    // no chord)
-
-    // Be aware that this only finds all notes of a chord if the
-    // passed item is the first note in it.
-    vector<iterator> findSucceedingChordElements(iterator i,
-                                                 iterator &inext,
-                                                 Event::timeT &maxDuration,
-                                                 bool quantized = false);
-
-    // Discovers whether this note is in a chord (at a position other
-    // than the end), i.e. whether findSucceedingChordElements would
-    // return a vector of length > 1
+    // Discovers whether this note is in a chord at some position
+    // other than at the end, i.e. it is true if you could construct a
+    // Chord object (see below) from the passed iterator and the
+    // getFinalNote() method on that object would succeed and return
+    // something other than this iterator
     bool hasSucceedingChordElements(iterator i);
 
 private:
@@ -149,6 +136,49 @@ kdbgstream& operator<<(kdbgstream&, NotationElementList&);
 inline kndgstream& operator<<(kdbgstream &e, NotationElementList&)
 { return e; }
 #endif
+
+
+class Chord : public vector<NotationElementList::iterator>
+{
+public:
+    typedef NotationElementList::iterator NELIterator;
+
+    // If the iterator passed in to the constructor points at a note,
+    // the resulting Chord will contain iterators pointing to it and
+    // all surrounding notes that have the same absolute time, sorted
+    // in ascending order of pitch.  If no other surrounding notes
+    // have the same absolute time as this one, we will have size 1;
+    // if this iterator doesn't point to a note at all, we will have
+    // size 0.
+
+    Chord(const NotationElementList &nel, NELIterator noteInChord,
+          bool quantized = false);
+    virtual ~Chord();
+
+    // These are the initial and final iterators in the chord in the
+    // order in which they appear in the original list, not the order
+    // in which they appear after sorting in this class
+
+    NELIterator getInitialNote()  { return m_initial;  }
+    NELIterator getFinalNote()    { return m_final;    }
+
+    NELIterator getLongestNote()  { return m_longest;  }
+    NELIterator getShortestNote() { return m_shortest; }
+
+    NELIterator getHighestNote() {
+        if (size() == 0) return m_nel.end();
+        else return (*this)[size()-1];
+    }
+
+    NELIterator getLowestNote() {
+        if (size() == 0) return m_nel.end();
+        return (*this)[0];
+    }
+
+private:
+    const NotationElementList &m_nel;
+    NELIterator m_initial, m_final, m_shortest, m_longest;
+};
 
 
 // inline bool operator<(NotationElement &e1, NotationElement &e2)
