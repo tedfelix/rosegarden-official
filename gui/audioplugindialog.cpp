@@ -395,7 +395,12 @@ PluginControl::PluginControl(QWidget *parent,
             lowerBound = swap;
         }
 
-        QLabel *low = new QLabel(QString("%1").arg(lowerBound), parent);
+        QLabel *low;
+	if (port->getDisplayHint() & Rosegarden::PluginPort::Integer) {
+	    low = new QLabel(QString("%1").arg(int(lowerBound)), parent);
+	} else {
+	    low = new QLabel(QString("%1").arg(lowerBound), parent);
+	}
         low->setFont(plainFont);
 
         float step = (upperBound - lowerBound) / 100.0;
@@ -436,7 +441,12 @@ PluginControl::PluginControl(QWidget *parent,
         connect(m_dial, SIGNAL(valueChanged(float)),
                 this, SLOT(slotValueChanged(float)));
 
-        QLabel *upp = new QLabel(QString("%1").arg(upperBound), parent);
+        QLabel *upp;
+	if (port->getDisplayHint() & Rosegarden::PluginPort::Integer) {
+	    upp = new QLabel(QString("%1").arg(int(upperBound)), parent);
+	} else {
+	    upp = new QLabel(QString("%1").arg(upperBound), parent);
+	}
         upp->setFont(plainFont);
 
         controlTitle->show();

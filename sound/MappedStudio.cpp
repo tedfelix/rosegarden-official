@@ -400,13 +400,6 @@ MappedStudio::createObject(MappedObjectType type,
 
         // push to the plugin manager's child stack
         mLP->addChild(mO);
-/*!!!
-	std::cerr << "Adding plugin object " << id << " to manager: its children now are: " << std::endl;
-	std::vector<MappedObject *> children = mLP->getChildObjects();
-	for (int i = 0; i < children.size(); ++i) {
-	    std::cerr << children[i]->getId() << std::endl;
-	}
-*/
     }
     else if (type == MappedObject::LADSPAPort)
     {
@@ -419,8 +412,7 @@ MappedStudio::createObject(MappedObjectType type,
     // Insert
     if (mO)
     {
-	std::cerr << "Adding object " << id << " to category " << type << std::endl;
-
+//	std::cerr << "Adding object " << id << " to category " << type << std::endl;
         m_objects[type][id] = mO;
     }
 
@@ -1397,6 +1389,7 @@ MappedAudioPluginManager::MappedAudioPluginManager(
                   id,
                   readOnly)
 {
+    getenvLADSPAPath();
 }
 
 MappedAudioPluginManager::~MappedAudioPluginManager()
@@ -1567,7 +1560,12 @@ MappedAudioPluginManager::discoverPlugins(MappedStudio *studio)
 
 #ifdef DEBUG_MAPPEDSTUDIO
     std::cout << "MappedAudioPluginManager::discoverPlugins - "
-	      << "discovering plugins; path is " << m_path << std::endl;
+	      << "discovering plugins; path is ";
+    for (std::vector<std::string>::iterator i = m_path.begin();
+	 i != m_path.end(); ++i) {
+	std::cout << "[" << *i << "] ";
+    }
+    std::cout << std::endl;
 #endif
 
 #ifdef HAVE_LIBLRDF
@@ -1576,9 +1574,15 @@ MappedAudioPluginManager::discoverPlugins(MappedStudio *studio)
     lrdf_init();
 
     std::vector<QString> lrdfPaths;
-    lrdfPaths.push_back("/usr/share/ladspa/rdf");
+
     lrdfPaths.push_back("/usr/local/share/ladspa/rdf");
-    lrdfPaths.push_back(QString(m_path.c_str()) + "/rdf");
+    lrdfPaths.push_back("/usr/share/ladspa/rdf");
+
+    for (std::vector<std::string>::iterator i = m_path.begin();
+	 i != m_path.end(); ++i) {
+	lrdfPaths.push_back(QString(i->c_str()) + "/rdf");
+    }
+
     bool haveSomething = false;
 
     for (size_t i = 0; i < lrdfPaths.size(); ++i) {
@@ -1604,11 +1608,16 @@ MappedAudioPluginManager::discoverPlugins(MappedStudio *studio)
     }
 #endif // HAVE_LIBLRDF
 
-    QDir pluginDir(QString(m_path.c_str()), "*.so");
+    for (std::vector<std::string>::iterator i = m_path.begin();
+	 i != m_path.end(); ++i) {
 
-    for (unsigned int i = 0; i < pluginDir.count(); i++ ) {
-        enumeratePlugin(studio,
-                m_path + std::string("/") + std::string(pluginDir[i].data()));
+	QDir pluginDir(QString(i->c_str()), "*.so");
+
+	for (unsigned int j = 0; j < pluginDir.count(); ++j) {
+	    enumeratePlugin
+		(studio,
+		 *i + std::string("/") + std::string(pluginDir[j].data()));
+	}
     }
 
 #ifdef HAVE_LIBLRDF
@@ -1636,28 +1645,29 @@ MappedAudioPluginManager::clearPlugins(MappedStudio *studio)
 void
 MappedAudioPluginManager::getenvLADSPAPath()
 {
-    char *path = getenv("LADSPA_PATH");
+    std::string path;
 
-    if (!path) m_path = "";
-    else m_path = std::string(path);
+    char *cpath = getenv("LADSPA_PATH");
+    if (cpath) path = cpath;
 
-    // try a default value
-    if (m_path == "")
-        m_path = "/usr/lib/ladspa";
+    if (path == "") {
+	char *home = getenv("HOME");
+	if (home) {
+	    path = std::string(home) +
+		"/.ladspa:/usr/local/lib/ladspa:/usr/lib/ladspa";
+	} else {
+	    path = "/usr/local/lib/ladspa:/usr/lib/ladspa";
+	}
+    }
 
-}
+    std::string::size_type index = 0, newindex = 0;
 
-void
-MappedAudioPluginManager::setLADSPAPath(const std::string &path)
-{
-    m_path = path;
-}
-
-
-void
-MappedAudioPluginManager::addLADSPAPath(const std::string &path)
-{
-    m_path += path;
+    while ((newindex = path.find(':', index)) >= 0 && newindex < path.size()) {
+	m_path.push_back(path.substr(index, newindex - index));
+	index = newindex + 1;
+    }
+    
+    m_path.push_back(path.substr(index));
 }
 
 
@@ -1957,8 +1967,6 @@ MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
 		    port->setPortName(descriptor->PortNames[i]);
 		    port->setDescriptor(descriptor->PortDescriptors[i]);
 		    
-		    std::cout << "port " << i << " name " << port->getPortName() << std::endl;
-
 		    port->setRangeHint(
 			descriptor->PortRangeHints[i].HintDescriptor,
 			descriptor->PortRangeHints[i].LowerBound,
@@ -2053,11 +2061,8 @@ MappedAudioPluginManager::getPluginInstance(unsigned long uniqueId,
             MappedLADSPAPlugin *plugin =
                 dynamic_cast<MappedLADSPAPlugin*>(*it);
 
-//!!!	    std::cerr << "Looking at plugin at " << *it << " (type " << (*it)->getType() << ", id " << (*it)->getId() << ")" << std::endl;
-
             if (plugin->getUniqueId() == uniqueId) {
 		pthread_mutex_unlock(&_mappedObjectContainerLock);
-//!!!		std::cerr << "it's the one" << std::endl;
                 return *it;
 	    }
         }

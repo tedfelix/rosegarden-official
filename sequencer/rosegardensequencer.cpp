@@ -1253,10 +1253,6 @@ RosegardenSequencerApp::initialiseStudio()
     if (pM)
         SEQUENCER_DEBUG << "created plugin manager" << endl;
 
-#ifdef HAVE_LADSPA 
-    pM->getenvLADSPAPath();
-#endif
-
     // This creates new MappedPlugin objects under the studio
     //
     pM->discoverPlugins(m_studio);

@@ -1855,6 +1855,8 @@ AlsaDriver::getMappedComposition()
     return &m_recordComposition;
 }
     
+static size_t _debug_jack_frame_count = 0;
+
 void
 AlsaDriver::processMidiOut(const MappedComposition &mC,
                            bool now)
@@ -1885,6 +1887,16 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 
 	RealTime alsaTimeNow = getAlsaTime();
 	std::cerr << "processMidiOut[" << now << "]: event is at " << midiRelativeTime << " (" << midiRelativeTime - alsaTimeNow << " ahead of queue time)" << std::endl;
+
+#ifdef HAVE_LIBJACK
+	if (m_jackDriver) {
+	    size_t frameCount = m_jackDriver->getFramesProcessed();
+	    size_t elapsed = frameCount - _debug_jack_frame_count;
+	    RealTime rt = RealTime::frame2RealTime(elapsed, m_jackDriver->getSampleRate());
+	    rt = rt - getAlsaTime();
+	    std::cerr << "processMidiOut[" << now << "]: JACK time is " << rt << " ahead of ALSA time" << std::endl;
+	}
+#endif
 
         // Second and nanoseconds for ALSA
         //
@@ -2143,6 +2155,7 @@ AlsaDriver::startClocks()
 
     if (m_jackDriver && !m_jackDriver->start()) {
 	// need to wait for transport sync
+	_debug_jack_frame_count = m_jackDriver->getFramesProcessed();
 	return;
     }
 #endif
@@ -2162,6 +2175,12 @@ AlsaDriver::startClocks()
     std::cerr << "AlsaDriver::startClocks: started clocks" << std::endl;
 
     m_queueRunning = true;
+
+#ifdef HAVE_LIBJACK
+    if (m_jackDriver) {
+	_debug_jack_frame_count = m_jackDriver->getFramesProcessed();
+    }
+#endif
 
     // process pending MIDI events
     snd_seq_drain_output(m_midiHandle);

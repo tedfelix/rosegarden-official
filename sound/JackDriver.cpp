@@ -55,6 +55,7 @@ JackDriver::JackDriver(AlsaDriver *alsaDriver) :
     m_alsaDriver(alsaDriver),
     m_masterLevel(1.0),
     m_directMasterInstruments(0L),
+    m_framesProcessed(0),
     m_ok(false)
 {
     assert(sizeof(sample_t) == sizeof(float));
@@ -776,6 +777,8 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	m_bussMixer->signal();
     }
 
+    m_framesProcessed += nframes;
+
     return 0;
 }
 
@@ -811,6 +814,8 @@ JackDriver::jackProcessEmpty(jack_nframes_t nframes)
 	    (jack_port_get_buffer(m_outputInstruments[i], nframes));
 	if (buffer) memset(buffer, 0, nframes * sizeof(sample_t));
     }
+
+    m_framesProcessed += nframes;
 
     return 0;
 }

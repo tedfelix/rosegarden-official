@@ -87,6 +87,9 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
 
     m_doc->getComposition().addObserver(this);
 
+    // This check may throw an exception
+    checkSoundDriverStatus();
+
     // Try to map the sequencer file
     //
     mapSequencer();
@@ -634,6 +637,7 @@ punchin:
         QByteArray replyData;
 
         switch (studio.getInstrumentById(inst)->getType()) {
+
         case Rosegarden::Instrument::Midi:
             recordType = STARTING_TO_RECORD_MIDI;
             SEQMAN_DEBUG << "SequenceManager::record() - starting to record MIDI\n";
@@ -679,7 +683,7 @@ punchin:
         }
             
         default:
-            SEQMAN_DEBUG << "SequenceManager::record() - unrecognised instrument type\n";
+            SEQMAN_DEBUG << "SequenceManager::record() - unrecognised instrument type " << studio.getInstrumentById(inst)->getType() << " for instrument " << inst << "\n";
             return;
             break;
         }

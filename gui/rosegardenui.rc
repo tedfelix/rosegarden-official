@@ -78,7 +78,7 @@
   </Menu>
   <Menu name="Studio">
         <text>&amp;Studio</text>
-        <Action name="open_mixer"/>
+        <Action name="audio_mixer"/>
         <Separator/>
         <Action name="manage_devices"/>
 	<Action name="manage_metronome"/>
@@ -289,6 +289,13 @@
      <enable>
        <Action name="modify_banks"/>
        <Action name="remap_instruments"/>
+     </enable>
+</State>
+
+<State name="got_audio">
+     <enable>
+	<Action name="audio_manager"/>
+	<Action name="audio_mixer"/>
      </enable>
 </State>
 

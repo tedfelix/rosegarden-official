@@ -271,6 +271,12 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     emit startupStatusMessage(i18n("Getting sound driver status..."));
     (void)m_seqManager->getSoundDriverStatus();
 
+    if (m_seqManager->getSoundDriverStatus() & Rosegarden::AUDIO_OK) {
+	slotStateChanged("got_audio", true);
+    } else {
+	slotStateChanged("got_audio", false);
+    }
+
     // If we're restarting the gui then make sure any transient
     // studio objects are cleared away.
     emit startupStatusMessage(i18n("Clearing studio data..."));
@@ -707,7 +713,7 @@ void RosegardenGUIApp::setupActions()
     //
     new KAction(i18n("Audio Mi&xer"), 0, this,
 		SLOT(slotOpenMixer()),
-		actionCollection(), "open_mixer");
+		actionCollection(), "audio_mixer");
 
     new KAction(i18n("Manage MIDI &Devices"), 0, this,
                 SLOT(slotManageMIDIDevices()),
@@ -3839,6 +3845,8 @@ void RosegardenGUIApp::slotPlay()
         if (!launchSequencer(false))
             return;
     }
+
+    if (!m_seqManager) return;
 
     // If we're armed and ready to record then do this instead (calling
     // slotRecord ensures we don't toggle the recording state in

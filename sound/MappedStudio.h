@@ -21,6 +21,7 @@
 
 #include <map>
 #include <string>
+#include <vector>
 #include <qdatastream.h>
 
 #include "MappedCommon.h"
@@ -722,14 +723,6 @@ public:
     void clearPlugins(MappedStudio *studio);
 
 #ifdef HAVE_LADSPA
-
-    // Just some LADSPA paths 
-    //
-    void getenvLADSPAPath();
-    std::string getLADSPAPath() { return m_path; }
-    void setLADSPAPath(const std::string &path);
-    void addLADSPAPath(const std::string &path);
-
     // Locate and load a plugin from its uniqueId.  The caller
     // can then use the descriptor to create and control a plugin 
     // instance.
@@ -769,6 +762,11 @@ protected:
     void enumeratePlugin(MappedStudio *studio, const std::string& path);
 
 #ifdef HAVE_LADSPA
+
+    // Look up and remember the LADSPA path
+    //
+    void getenvLADSPAPath();
+
     const LADSPA_Descriptor* getDescriptorFromHandle(unsigned long uniqueId,
                                                      void *pluginHandle);
 
@@ -779,7 +777,7 @@ protected:
 
 #endif // HAVE_LADSPA
 
-    std::string m_path;
+    std::vector<std::string> m_path;
 
 };
 

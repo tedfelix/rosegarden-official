@@ -135,6 +135,9 @@ public:
 
     RealTime getNextSliceStart(const RealTime &now) const;
 
+    // For audit purposes only.
+    size_t getFramesProcessed() const { return m_framesProcessed; }
+
 protected:
 
     // static methods for JACK process thread:
@@ -202,6 +205,7 @@ protected:
     float                        m_masterLevel;
     unsigned long                m_directMasterInstruments; // bitmap
 
+    size_t                       m_framesProcessed;
     bool                         m_ok;
 };
 
