@@ -106,6 +106,11 @@ public slots:
      */
     void setPointerPosition(int position);
 
+    /**
+     * Create a Segment Item from a Segment (after recording)
+     *
+     */
+    void addSegmentItem(Rosegarden::Segment *segment);
 
     /**
      * c.f. what we have in rosegardenguiview.h

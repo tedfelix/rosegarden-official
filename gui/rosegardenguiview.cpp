@@ -195,6 +195,9 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     connect(this, SIGNAL(selectSegments(list<Rosegarden::Segment*>)),
             tracksEditor->canvas(), SLOT(selectSegments(list<Rosegarden::Segment*>)));
 
+    connect(this,         SIGNAL(addSegmentItem(Rosegarden::Segment*)),
+            tracksEditor, SLOT(addSegmentItem(Rosegarden::Segment*)));
+
     if (doc)
         tracksEditor->setupSegments();
 
@@ -369,4 +372,12 @@ void RosegardenGUIView::selectTrackSegments(int trackId)
     emit selectSegments(segments);
 }
 
+
+// Insert a newly created Segment (usually recorded) into
+// the view - create a SegmentItem for it
+//
+void RosegardenGUIView::createSegmentItem(Rosegarden::Segment* segment)
+{
+    emit addSegmentItem(segment);
+}
 

@@ -506,9 +506,11 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
     {
         m_recordSegment = new Segment();
         m_recordSegment->setTrack(m_composition.getRecordTrack());
+        m_recordSegment->setStartIndex(0);
         m_endOfLastRecordedNote = 0;
-        firstEvent = true;       
         m_composition.addSegment(m_recordSegment);
+
+        firstEvent = true; // use this flag to move the start index 
     }
 
     
@@ -578,8 +580,19 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
 void
 RosegardenGUIDoc::stopRecordingMidi()
 {
+    RosegardenGUIView *w;
+    if(pViewList)
+    {
+        for(w=pViewList->first(); w!=0; w=pViewList->next())
+        {
+            w->createSegmentItem(m_recordSegment);
+        }
+    }
+
     m_recordSegment = 0;
     m_endOfLastRecordedNote = 0;
+
+    slotUpdateAllViews(0);
 }
 
 

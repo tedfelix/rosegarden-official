@@ -281,7 +281,9 @@ void SegmentCanvas::clear()
     }
 }
 
-/// called when reading a music file
+// Called when reading a music file or after we've finished recording
+// a new Segment
+//
 SegmentItem*
 SegmentCanvas::addPartItem(int x, int y, unsigned int nbBars)
 {

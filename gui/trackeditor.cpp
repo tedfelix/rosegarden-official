@@ -404,3 +404,30 @@ TrackEditor::setSelectCopy(bool value)
 }
 
 
+// Just like setupSegments() this creates a SegmentItem
+// on the SegmentCanvas after we've recorded a Segment.
+//
+//
+void
+TrackEditor::addSegmentItem(Rosegarden::Segment *segment)
+{
+    if (!m_document) return; // sanity check
+
+    Composition &comp = m_document->getComposition();
+
+    int startBar = comp.getBarNumber(segment->getStartIndex(), true);
+    int barCount = comp.getBarNumber(segment->getEndIndex(), true)
+                        - startBar +1;
+
+    int y = m_vHeader->sectionPos(segment->getTrack());
+    int x = m_hHeader->sectionPos(startBar);
+
+    SegmentItem *newItem = m_segmentsCanvas->addPartItem(x, y, barCount);
+    newItem->setSegment(segment);
+
+    emit needUpdate();
+
+}
+
+
+

@@ -134,6 +134,12 @@ public:
     void setSelectAdd(const bool &value)  { emit signalSetSelectAdd(value); }
     void setSelectCopy(const bool &value) { emit signalSetSelectCopy(value); }
 
+    /**
+     * A newly recorded Segment has to be added to the view
+     *
+     */
+    void createSegmentItem(Rosegarden::Segment* segment);
+
     
 public slots:
     void editSegmentNotation(Rosegarden::Segment*);
@@ -160,6 +166,8 @@ signals:
 
     void signalSetSelectAdd(bool);
     void signalSetSelectCopy(bool);
+
+    void addSegmentItem(Rosegarden::Segment*);
 
 
 protected:
