@@ -18,7 +18,40 @@
 #ifndef ROSEDEBUG_H
 #define ROSEDEBUG_H
 
+#include <iostream>
 #include <kdebug.h>
 #define KDEBUG_AREA 1010
+
+// This doesn't work - keeping it just in case I somehow get it
+// working someday
+
+class kdbgostreamAdapter : public ostream
+{
+public:
+    kdbgostreamAdapter(kdbgstream &e) : m_kdbgStream(e) {}
+
+    ostream& operator<<(bool i);
+    ostream& operator<<(short i);
+    ostream& operator<<(unsigned short i);
+    ostream& operator<<(char i);
+    ostream& operator<<(unsigned char i);
+    ostream& operator<<(int i);
+    ostream& operator<<(unsigned int i);
+    ostream& operator<<(long i);
+    ostream& operator<<(unsigned long i);
+    ostream& operator<<(const QString& string);
+    ostream& operator<<(const char *string);
+    ostream& operator<<(const QCString& string);
+    ostream& operator<<(void * p);
+    ostream& operator<<(KDBGFUNC f);
+    ostream& operator<<(double d);
+
+    kdbgstream& dbgStream() { return m_kdbgStream; }
+
+protected:
+    kdbgstream &m_kdbgStream;
+};
+
+ostream& endl(ostream& s);
 
 #endif
