@@ -1,0 +1,68 @@
+
+Sets of events
+==============
+
+Chord
+-----
+
+A set of notes that share a common starting time.
+
+Has no explicit representation, except as a set of note events that
+have the same absoluteTime value.
+
+Can be pulled out of a track using Track::getTimeSlice in
+core/Track.h, or (with more notation-related data) using the Chord
+class in rosegardengui/notationsets.h.
+
+Group
+-----
+
+A series of events in a relationship that is normally represented in
+notation by using a beam, e.g. beamed groups, tuplets, grace notes.
+Not every event in the group will necessarily have to possess a beam
+when it's rendered (e.g. a rest in the middle of a beamed group, or a
+crotchet grace note).  Groups do not nest.
+
+Represented internally using GroupId (int) and GroupType (string)
+properties on the events, such that all events sharing a GroupId are
+in the same group (and should also share the same GroupType).
+Represented in XML with <group type="yyy">...</group> around the set
+of events in the group; GroupId and GroupType properties should not
+appear in the XML, and the GroupId is assigned to a group when the XML
+is parsed.
+
+Beamed groups can be pulled out of a track using the BeamedGroup class
+in rosegardengui/notationsets.h.  There's currently no API for
+extracting tupled or grace-note groups.
+
+Tie
+---
+
+A connection made between two notes of the same pitch that should be
+played as if they were a single continuous note.  Observe that the
+notes don't have to be adjoining in an event list.  For example, one
+of them might be part of a chord and so other chord members might
+appear between the two.  It is however unambiguous to record that a
+note is tied with "the following note", because the note with which
+it's tied must be the next one that has the same pitch as it.  A note
+can be tied with "the following note" or "the preceding note" or both
+(or neither).
+
+We don't have a representation for ties yet, although it seems
+plausible that we could get away with boolean tied-forward and
+tied-backward properties.
+
+Mark
+----
+
+Some notational indication that spans a series of events.  Unlike
+groups, marks can nest and overlap, and do not normally affect the way
+the events they span are drawn (although of course they may affect the
+way the events they span are performed).  Examples include slurs and
+hairpin dynamic marks.
+
+We don't have a representation for marks yet, although it's likely
+that a mark will be a distinct type of event, appearing in the event
+list immediately before the series of events it spans and with a
+property indicating the duration of that series.
+
