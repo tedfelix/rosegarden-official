@@ -26,6 +26,7 @@
 #include <qbitmap.h>
 #include <qdir.h>
 #include <qpainter.h>
+#include <qregexp.h>
 #include <qfontdatabase.h>
 
 #include <kglobal.h>
@@ -73,9 +74,11 @@ NoteFontMap::NoteFontMap(string name) :
 
     if (!mapFileMixedInfo.isReadable()) {
 
+	QString lowerName = strtoqstr(name).lower();
+	lowerName.replace(QRegExp(" "), "_");
 	QString mapFileLowerName = QString("%1/mappings/%2.xml")
 	    .arg(m_fontDirectory)
-	    .arg(strtoqstr(name).lower());
+	    .arg(lowerName);
 
 	QFileInfo mapFileLowerInfo(mapFileLowerName);
 
