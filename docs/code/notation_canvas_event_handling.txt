@@ -1,0 +1,73 @@
+The mouse event handling for the NotationView is done first in
+NotationCanvasView.
+
+The main methods are NotationCanvasView::contentsMouseMoveEvent and
+NotationCanvasView::contentsMousePressEvent.
+
+1. NotationCanvasView::contentsMouseMoveEvent
+
+which handles mouse move events in order to maintain
+
+- the staff line on which the mouse pointer is on (m_currentHighlightedLine)
+
+  NOTE: a staff has 5 visible lines but also many invisible ones,
+  which correpond to leger lines and lines in-between the visible
+  ones. Any of these can be the current highlighted line
+  ("highlighted" not being quite the right term, it's here for
+  historical reasons).
+
+- the status bar items displaying the name of the note the pointer
+  height corresponds to (through the hoveredOverNoteChange signal)
+
+- the absolute time of the notation element (note, rest...) the
+  pointer is hovering on, if the pointer is over a notation element.
+
+(tracking is on for the canvas, so really all mouse move events are
+processed, not just those with button down)
+
+This method also emits the mouseMove signal, which is handled by the
+NotationView.
+
+2. NotationCanvasView::contentsMousePressEvent
+
+Depending on what was clicked on and if the cursor is on a staff line,
+this method will either
+
+- call NotationCanvasView::handleMousePress which in turn will emit
+  the itemPressed signal (which is for when a mouse press occurred
+  somewhere on the staff, generally to change the staff contents,
+  e.g. inserting/deleting a note)
+
+- call processActiveItems which may emit the activeItemPressed signal,
+  which is for when a mouse press occurred on an active item
+  :-). Current active items are the staff ruler or the cursor.
+
+Active items take precedence over notation elements. If the mouse
+press occurred somewhere on the staff, but on an active item (this can
+happen if the user clicked on the cursor line), then the event will be
+handled as an active item press.
+
+In implementation terms, an active item is a QCanvasItem on which
+QCanvasItem::setActive(true) was called, and which implements the
+ActiveItem interface.
+
+
+Finally, the contentsMouseReleaseEvent merely emit the mouseRelease
+signal and updates the canvas.
+
+
+
+The next level of event handling is in the NotationView, in the
+itemPressed and activeItemPressed slots.
+
+1. itemPressed just passes the handling to the currently selected tool
+   (those on the various toolbars : note inserter, eraser, etc...)
+
+2. activeItemPressed checks if the QCanvasItem is was passed is an
+   ActiveItem. If yes it sets the current active item to that item,
+   and defers the handling to it.
+
+Other slots (mouseMove, mouseRelease) first check if there is a
+current active item, and if yes defer the handling to it. Otherwise,
+the handling is defered to the current tool.
+
