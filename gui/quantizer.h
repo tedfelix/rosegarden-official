@@ -30,20 +30,37 @@ class Quantizer
 public:
     Quantizer();
 
-    /// actually changes the element duration
+    /// does not changes the element duration - just sets the 'QuantizedDuration' property
     void quantize(EventList::iterator from,
                   EventList::iterator to);
 
     /// does not change the element duration - just sets the 'Notation::NoteType' property
     void quantizeToNoteTypes(EventList::iterator from,
                              EventList::iterator to);
+
+    /**
+     * quantize a raw duration to a Note
+     * (@see notepixmapfactory.h)
+     */
     Note quantizeToNoteType(Event::duration drt);
+
+    /**
+     * quantize a raw duration to a note duration (e.g. a subdivision
+     * of the duration of a whole note)
+     */
+    Event::duration quantize(Event::duration drt);
 
     unsigned int wholeNoteDuration()           { return m_wholeNoteDuration; }
     void  setWholeNoteDuration(unsigned int d);
 
 protected:
+
     typedef vector<unsigned int> DurationMap;
+
+    /// actual quantizer
+    void quantize(Event::duration drt,
+                  DurationMap::iterator &high, 
+                  DurationMap::iterator &low);
 
     DurationMap m_durationTable;
 

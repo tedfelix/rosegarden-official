@@ -66,7 +66,15 @@ void
 Quantizer::quantize(EventList::iterator from,
                     EventList::iterator to)
 {
-    // TODO
+    EventList::iterator it = from;
+
+    while (it != to) {
+
+        Event::duration duration = quantize( (*it)->getDuration() );
+        (*it)->set<Int>("QuantizedDuration", duration);
+
+        ++it;
+    }
 }
 
 void
@@ -87,10 +95,52 @@ Quantizer::quantizeToNoteTypes(EventList::iterator from,
 Note
 Quantizer::quantizeToNoteType(Event::duration drt)
 {
-    // In the following comments, "note" means "note type", as in
-    // "whole", "halfdotted", "sixteenth", etc...
-    //
-    Note note = WholeDotted;
+    Note note = Whole;
+
+    DurationMap::iterator high, low;
+    
+    quantize(drt, high, low);
+
+    Event::duration highDuration = *high,
+        lowDuration = *(low);
+
+    //         kdDebug(KDEBUG_AREA) << "highDuration : " << highDuration
+    //                              << " - lowDuration : " << lowDuration << "\n";
+
+    if ((highDuration - drt) > (drt - lowDuration)) {
+        note = Note(distance(m_durationTable.begin(), low));
+    } else {
+        note = Note(distance(m_durationTable.begin(), high));
+    }
+
+    //     kdDebug(KDEBUG_AREA) << "Quantized to note : " << note << "\n";
+
+    return note;
+}
+
+Event::duration
+Quantizer::quantize(Event::duration drt)
+{
+    DurationMap::iterator high, low;
+    
+    quantize(drt, high, low);
+
+    Event::duration highDuration = *high,
+        lowDuration = *(low),
+        quantizedDuration = 0;
+
+    if ((highDuration - drt) > (drt - lowDuration)) {
+        quantizedDuration = lowDuration;
+    } else {
+        quantizedDuration = highDuration;
+    }
+    return quantizedDuration;
+}
+
+void
+Quantizer::quantize(Event::duration drt, DurationMap::iterator &high, 
+                    DurationMap::iterator &low)
+{
 
 //     kdDebug(KDEBUG_AREA) << "quantizeToNoteType : duration " << drt << endl;
 
@@ -101,10 +151,13 @@ Quantizer::quantizeToNoteType(Event::duration drt)
                                            drt);
     if (lb == m_durationTable.begin()) {
         // event duration is longer than a WholeDotted note
-        // the event should either be displayed as several whole notes
+        // the event should either be treated as several whole notes
         // linked together, or actually broken down in several events,
         // themselves linked together... big TODO here
-        note = WholeDotted;
+
+        high = lb;
+        low = lb;
+
 //         kdDebug(KDEBUG_AREA) << "quantizeToNoteType : lb == m_durationTable.begin()" << endl;
 
     } else {
@@ -118,26 +171,14 @@ Quantizer::quantizeToNoteType(Event::duration drt)
         //
 
         // Now we have to check if the event's duration is closer to
-        // the note lb points to, or the one before
+        // the duration of the note which lb points to, or the one before
+        //
         // e.g. Given the same set of values
         // lower_bound(5.7) is 6 -> quantize to 6
         // lower_bound(4.5) is 6 -> quantize to 4,
         // because it's closer to 4 than to 6
         //
-        Event::duration highDuration = *lb,
-            lowDuration = *(lb - 1);
-
-//         kdDebug(KDEBUG_AREA) << "highDuration : " << highDuration
-//                              << " - lowDuration : " << lowDuration << "\n";
-
-        if ((highDuration - drt) > (drt - lowDuration)) {
-            note = Note(distance(m_durationTable.begin(), lb - 1));
-        } else {
-            note = Note(distance(m_durationTable.begin(), lb));
-        }
+        high = lb;
+        low = lb - 1;
     }
-
-//     kdDebug(KDEBUG_AREA) << "Quantized to note : " << note << "\n";
-
-    return note;
 }
