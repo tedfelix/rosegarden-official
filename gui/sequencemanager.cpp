@@ -60,7 +60,8 @@ SequenceManager::setTransportStatus(const TransportStatus &status)
 //
 MappedComposition*
 SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
-                                   const Rosegarden::RealTime &sliceEnd)
+                                   const Rosegarden::RealTime &sliceEnd,
+                                   bool firstFetch)
 {
     Composition &comp = m_doc->getComposition();
     Studio &studio = m_doc->getStudio();
@@ -194,6 +195,10 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 	seekStartTime = seekStartTime - repeatNo * segmentDuration;
 	Segment::iterator i0 = (*it)->findTime(seekStartTime);
 
+        // start from the beginning if it's the first fetch
+        if (firstFetch)
+            i0 = (*it)->begin();
+
 	// Now, we end at the slice's end, except where we're a
 	// repeating segment followed by another segment on the same
 	// track when we end at that other segment's start time
@@ -241,24 +246,13 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
             // RealTimes again give us rounding problems that can drop
             // events.
 	    // 
-            if (playTime < sliceStartElapsed)
+            if (playTime < sliceStartElapsed && firstFetch == false)
                 continue;
 
             // Escape if we're beyond the slice
 	    // 
             if (playTime >= sliceEndElapsed)
                 break;
-
-	    // Convert to real-time
-	    // 
-            eventTime = comp.getElapsedRealTime(playTime);
-
-	    // Add any performance delay.  Note that simply adding
-	    // comp.getElapsedRealTime((*it)->getDelay()) would fail to
-	    // take tempo changes into account correctly
-	    // 
-	    eventTime = eventTime + comp.getRealTimeDifference
-		(playTime, playTime + (*it)->getDelay());
 
 	    // Find the performance duration, i.e. taking into account
 	    // any ties etc that this note may have
@@ -269,6 +263,34 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 	    //
 	    if (duration == Rosegarden::RealTime(0, 0))
 		continue;
+
+	    // Convert to real-time
+	    // 
+            eventTime = comp.getElapsedRealTime(playTime);
+
+            // If we've got a note overlapping with the start of this slice
+            // but it doesn't actually start in the slice then we still
+            // need to play it but with reduced duration.
+            //
+            if (firstFetch == true)
+            {
+                if(playTime < sliceStartElapsed)
+                {
+                    duration = duration - (sliceStart - eventTime);
+                    eventTime = sliceStart;
+                }
+                else
+                    continue;
+            }
+
+
+	    // Add any performance delay.  Note that simply adding
+	    // comp.getElapsedRealTime((*it)->getDelay()) would fail to
+	    // take tempo changes into account correctly
+	    // 
+	    eventTime = eventTime + comp.getRealTimeDifference
+		(playTime, playTime + (*it)->getDelay());
+
 
 	    // Make mapped event
 	    // 

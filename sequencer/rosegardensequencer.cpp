@@ -125,7 +125,8 @@ RosegardenSequencerApp::stop()
 //
 Rosegarden::MappedComposition*
 RosegardenSequencerApp::fetchEvents(const Rosegarden::RealTime &start,
-                                    const Rosegarden::RealTime &end)
+                                    const Rosegarden::RealTime &end,
+                                    bool firstFetch)
 {
     // Always return nothing if we're stopped
     //
@@ -145,9 +146,9 @@ RosegardenSequencerApp::fetchEvents(const Rosegarden::RealTime &start,
         Rosegarden::RealTime loopOverlap = end - m_loopEnd;
         Rosegarden::MappedComposition *endLoop, *beginLoop;
 
-        endLoop = getSlice(start, m_loopEnd);
+        endLoop = getSlice(start, m_loopEnd, firstFetch);
         beginLoop = getSlice(m_loopStart,
-                             m_loopStart + loopOverlap);
+                             m_loopStart + loopOverlap, firstFetch);
 
         // move the start time of the begin section one loop width
         // into the future and ensure that we keep the clocks level
@@ -160,13 +161,14 @@ RosegardenSequencerApp::fetchEvents(const Rosegarden::RealTime &start,
         return endLoop;
     }
     else
-        return getSlice(start, end);
+        return getSlice(start, end, firstFetch);
 }
 
 
 Rosegarden::MappedComposition*
 RosegardenSequencerApp::getSlice(const Rosegarden::RealTime &start,
-                                 const Rosegarden::RealTime &end)
+                                 const Rosegarden::RealTime &end,
+                                 bool firstFetch)
 {
     QByteArray data, replyData;
     QCString replyType;
@@ -176,6 +178,7 @@ RosegardenSequencerApp::getSlice(const Rosegarden::RealTime &start,
     arg << start.usec;
     arg << end.sec;
     arg << end.usec;
+    arg << firstFetch;
 
     Rosegarden::MappedComposition *mC = new Rosegarden::MappedComposition();
 
@@ -186,7 +189,7 @@ RosegardenSequencerApp::getSlice(const Rosegarden::RealTime &start,
 
     if (!kapp->dcopClient()->call(ROSEGARDEN_GUI_APP_NAME,
                                   ROSEGARDEN_GUI_IFACE_NAME,
-                    "getSequencerSlice(long int, long int, long int, long int)",
+                                  "getSequencerSlice(long int, long int, long int, long int, bool)",
                                   data, replyType, replyData, true))
     {
         cerr << "RosegardenSequencer::getSlice()"
@@ -236,7 +239,7 @@ RosegardenSequencerApp::startPlaying()
 
     // Send the first events (starting the clock)
     Rosegarden::MappedComposition *mC =
-        fetchEvents(m_songPosition, m_songPosition + m_readAhead);
+        fetchEvents(m_songPosition, m_songPosition + m_readAhead, true);
 
     // process whether we need to or not as this also processes
     // the audio queue for us
@@ -294,7 +297,8 @@ RosegardenSequencerApp::keepPlaying()
 
         Rosegarden::MappedComposition *mC =
                         fetchEvents(m_lastFetchSongPosition,
-                                    m_lastFetchSongPosition + m_readAhead);
+                                    m_lastFetchSongPosition + m_readAhead,
+                                    false);
 
         // Again, process whether we need to or not to keep
         // the Sequencer up-to-date with audio events

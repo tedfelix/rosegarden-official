@@ -60,7 +60,8 @@ public:
     // Called from the sequencer - gets a slice of events
     //
     MappedComposition* getSequencerSlice(const RealTime &sliceStart,
-                                         const RealTime &sliceEnd);
+                                         const RealTime &sliceEnd,
+                                         bool firstFetch);
 
     // Transport controls
     void play();
