@@ -424,6 +424,8 @@ RosegardenGUIView::createNotationView(std::vector<Rosegarden::Segment *> segment
 	    this, SLOT(slotEditSegmentsNotation(std::vector<Rosegarden::Segment *>)));
     connect(notationView, SIGNAL(openInMatrix(std::vector<Rosegarden::Segment *>)),
 	    this, SLOT(slotEditSegmentsMatrix(std::vector<Rosegarden::Segment *>)));
+    connect(notationView, SIGNAL(openInPercussionMatrix(std::vector<Rosegarden::Segment *>)),
+	    this, SLOT(slotEditSegmentsPercussionMatrix(std::vector<Rosegarden::Segment *>)));
     connect(notationView, SIGNAL(openInEventList(std::vector<Rosegarden::Segment *>)),
 	    this, SLOT(slotEditSegmentsEventList(std::vector<Rosegarden::Segment *>)));
     connect(notationView, SIGNAL(editTimeSignature(Rosegarden::timeT)),
@@ -499,23 +501,66 @@ void RosegardenGUIView::slotEditSegmentMatrix(Rosegarden::Segment* p)
     slotEditSegmentsMatrix(segmentsToEdit);
 }
 
+void RosegardenGUIView::slotEditSegmentPercussionMatrix(Rosegarden::Segment* p)
+{
+    SetWaitCursor waitCursor;
+
+    std::vector<Rosegarden::Segment *> segmentsToEdit;
+
+    // unlike notation, if we're calling for this on a particular
+    // segment we don't open all the other selected segments as well
+    // (fine in notation because they're in a single window)
+
+    if (p) {
+	if (p->getType() != Rosegarden::Segment::Audio) {
+	    segmentsToEdit.push_back(p);
+	}
+    } else {
+	Rosegarden::SegmentSelection selection = getSelection();
+	for (Rosegarden::SegmentSelection::iterator i = selection.begin();
+	     i != selection.end(); ++i) {
+	    slotEditSegmentPercussionMatrix(*i);
+	}
+	return;
+    }
+
+    if (segmentsToEdit.empty()) {
+	KMessageBox::sorry(this, i18n("No non-audio segments selected"));
+	return;
+    }
+
+    slotEditSegmentsPercussionMatrix(segmentsToEdit);
+}
+
 void RosegardenGUIView::slotEditSegmentsMatrix(std::vector<Rosegarden::Segment *> segmentsToEdit)
 {
     for (std::vector<Rosegarden::Segment *>::iterator i = segmentsToEdit.begin();
 	 i != segmentsToEdit.end(); ++i) {
 	std::vector<Rosegarden::Segment *> tmpvec;
 	tmpvec.push_back(*i);
-	MatrixView *view = createMatrixView(tmpvec);
+	MatrixView *view = createMatrixView(tmpvec, false);
+	if (view) view->show();
+    }
+}
+
+void RosegardenGUIView::slotEditSegmentsPercussionMatrix(std::vector<Rosegarden::Segment *> segmentsToEdit)
+{
+    for (std::vector<Rosegarden::Segment *>::iterator i = segmentsToEdit.begin();
+	 i != segmentsToEdit.end(); ++i) {
+	std::vector<Rosegarden::Segment *> tmpvec;
+	tmpvec.push_back(*i);
+	MatrixView *view = createMatrixView(tmpvec, true);
 	if (view) view->show();
     }
 }
 
 MatrixView *
-RosegardenGUIView::createMatrixView(std::vector<Rosegarden::Segment *> segmentsToEdit)
+RosegardenGUIView::createMatrixView(std::vector<Rosegarden::Segment *> segmentsToEdit, bool drumMode)
 {
     MatrixView *matrixView = new MatrixView(getDocument(),
                                             segmentsToEdit,
-                                            this);
+                                            this,
+					    drumMode);
 
     // For tempo changes (ugh -- it'd be nicer to make a tempo change
     // command that could interpret all this stuff from the dialog)
@@ -651,6 +696,8 @@ EventView *RosegardenGUIView::createEventView(std::vector<Rosegarden::Segment *>
 	    this, SLOT(slotEditSegmentsNotation(std::vector<Rosegarden::Segment *>)));
     connect(eventView, SIGNAL(openInMatrix(std::vector<Rosegarden::Segment *>)),
 	    this, SLOT(slotEditSegmentsMatrix(std::vector<Rosegarden::Segment *>)));
+    connect(eventView, SIGNAL(openInPercussionMatrix(std::vector<Rosegarden::Segment *>)),
+	    this, SLOT(slotEditSegmentsPercussionMatrix(std::vector<Rosegarden::Segment *>)));
     connect(eventView, SIGNAL(openInEventList(std::vector<Rosegarden::Segment *>)),
 	    this, SLOT(slotEditSegmentsEventList(std::vector<Rosegarden::Segment *>)));
     connect(eventView, SIGNAL(editTriggerSegment(int)),

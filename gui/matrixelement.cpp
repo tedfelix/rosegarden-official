@@ -21,12 +21,15 @@
 
 #include "NotationTypes.h"
 
+#include "qpainter.h"
 #include "matrixelement.h"
 #include "colours.h"
 
-MatrixElement::MatrixElement(Rosegarden::Event *event) :
+MatrixElement::MatrixElement(Rosegarden::Event *event, bool drum) :
     Rosegarden::ViewElement(event),
-    m_canvasRect(new QCanvasMatrixRectangle(*this, 0))
+    m_canvasRect(drum ?
+		 new QCanvasMatrixDiamond(*this, 0) :
+		 new QCanvasMatrixRectangle(*this, 0))
 {
 //     MATRIX_DEBUG << "new MatrixElement "
 //                          << this << " wrapping " << event << endl;
@@ -72,5 +75,41 @@ QCanvasMatrixRectangle::QCanvasMatrixRectangle(MatrixElement& n,
 
 QCanvasMatrixRectangle::~QCanvasMatrixRectangle()
 {
+}
+
+
+QCanvasMatrixDiamond::QCanvasMatrixDiamond(MatrixElement &n,
+					   QCanvas* canvas) :
+    QCanvasMatrixRectangle(n, canvas)
+{
+}
+
+QCanvasMatrixDiamond::~QCanvasMatrixDiamond()
+{
+    hide();
+}
+
+QPointArray QCanvasMatrixDiamond::areaPoints() const
+{
+    QPointArray pa(4);
+    int pw = (pen().width()+1)/2;
+    if ( pw < 1 ) pw = 1;
+    if ( pen() == NoPen ) pw = 0;
+    pa[0] = QPoint((int)x()-height()/2-pw,(int)y()-pw);
+    pa[1] = pa[0] + QPoint(height()+pw*2,0);
+    pa[2] = pa[1] + QPoint(0,height()+pw*2);
+    pa[3] = pa[0] + QPoint(0,height()+pw*2);
+    return pa;
+}
+
+void QCanvasMatrixDiamond::drawShape(QPainter & p)
+{
+    QPointArray pa(4);
+    int q = height() / 2 + 2;
+    pa[0] = QPoint((int)x(), (int)y() - 3);
+    pa[1] = QPoint((int)x() + q, (int)y() - 3 + q);
+    pa[2] = pa[0] + QPoint(0, q * 2);
+    pa[3] = pa[1] - QPoint(q * 2, 0);
+    p.drawConvexPolygon(pa);
 }
 

@@ -82,7 +82,7 @@ class MatrixView : public EditView
 public:
     MatrixView(RosegardenGUIDoc *doc,
                std::vector<Rosegarden::Segment *> segments,
-               QWidget *parent);
+               QWidget *parent, bool drumMode);
 
     virtual ~MatrixView();
 
@@ -111,6 +111,8 @@ public:
     MatrixStaff *getStaff(const Rosegarden::Segment &segment);
 
     virtual void updateView();
+
+    bool isDrumMode() { return m_drumMode; }
 
     /**
      * Discover whether chord-mode insertions are enabled (as opposed
@@ -603,6 +605,7 @@ protected:
 
     bool m_playTracking;
     bool m_dockVisible;
+    bool m_drumMode;
 };
 
 // Commented this out - was a MatrixView inner class, but we get a warning

@@ -241,7 +241,7 @@ void MatrixPainter::handleLeftButtonPress(Rosegarden::timeT time,
     ev->set<Rosegarden::Int>(Rosegarden::BaseProperties::PITCH, pitch);
     ev->set<Rosegarden::Int>(Rosegarden::BaseProperties::VELOCITY, 100);
 
-    m_currentElement = new MatrixElement(ev);
+    m_currentElement = new MatrixElement(ev, false); //!!! for now
 
     int y = m_currentStaff->getLayoutYForHeight(pitch) -
             m_currentStaff->getElementHeight() / 2;

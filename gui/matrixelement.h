@@ -47,10 +47,25 @@ protected:
 
 };
 
+/**
+ * A QCanvas diamond shape referencing a MatrixElement
+ */
+class QCanvasMatrixDiamond : public QCanvasMatrixRectangle
+{
+public:
+    QCanvasMatrixDiamond(MatrixElement&, QCanvas *);
+    ~QCanvasMatrixDiamond();
+
+    QPointArray areaPoints() const;
+
+protected:
+    void drawShape(QPainter &);
+};
+
 class MatrixElement : public Rosegarden::ViewElement
 {
 public:
-    MatrixElement(Rosegarden::Event *event);
+    MatrixElement(Rosegarden::Event *event, bool drum);
 
     virtual ~MatrixElement();
 
@@ -101,7 +116,7 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    QCanvasMatrixRectangle* m_canvasRect;
+    QCanvasMatrixRectangle *m_canvasRect;
 };
 
 

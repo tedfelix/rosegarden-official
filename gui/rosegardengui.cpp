@@ -761,6 +761,12 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotEditInMatrix()), actionCollection(),
                 "edit_matrix");
 
+    pixmap.load(pixmapDir + "/toolbar/matrix.xpm");
+    icon = QIconSet(pixmap);
+    new KAction(i18n("Open in &Percussion Matrix Editor"), icon, Key_D, this,
+                SLOT(slotEditInPercussionMatrix()), actionCollection(),
+                "edit_percussion_matrix");
+
     pixmap.load(pixmapDir + "/toolbar/notation.xpm");
     icon = QIconSet(pixmap);
     new KAction(i18n("Open in &Notation Editor"), icon, Key_N, this,
@@ -2707,6 +2713,11 @@ void RosegardenGUIApp::slotEditAsNotation()
 void RosegardenGUIApp::slotEditInMatrix()
 {
     m_view->slotEditSegmentMatrix(0);
+}
+
+void RosegardenGUIApp::slotEditInPercussionMatrix()
+{
+    m_view->slotEditSegmentPercussionMatrix(0);
 }
 
 void RosegardenGUIApp::slotEditInEventList()

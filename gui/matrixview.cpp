@@ -97,7 +97,8 @@ static double xorigin = 0.0;
 
 MatrixView::MatrixView(RosegardenGUIDoc *doc,
                        std::vector<Segment *> segments,
-                       QWidget *parent)
+                       QWidget *parent,
+		       bool drumMode)
     : EditView(doc, segments, 3, parent, "matrixview"),
       m_hlayout(&doc->getComposition()),
       m_vlayout(),
@@ -116,7 +117,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
       m_chordNameRuler(0),
       m_tempoRuler(0),
       m_playTracking(true),
-      m_dockVisible(true)
+      m_dockVisible(true),
+      m_drumMode(drumMode)
 {
     RG_DEBUG << "MatrixView ctor\n";
 

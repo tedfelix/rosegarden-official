@@ -163,6 +163,8 @@ public slots:
     void slotEditSegmentsNotation(std::vector<Rosegarden::Segment*>);
     void slotEditSegmentMatrix(Rosegarden::Segment*);
     void slotEditSegmentsMatrix(std::vector<Rosegarden::Segment*>);
+    void slotEditSegmentPercussionMatrix(Rosegarden::Segment*);
+    void slotEditSegmentsPercussionMatrix(std::vector<Rosegarden::Segment*>);
     void slotEditSegmentEventList(Rosegarden::Segment*);
     void slotEditSegmentsEventList(std::vector<Rosegarden::Segment*>);
     void slotEditTriggerSegment(int);
@@ -311,7 +313,7 @@ signals:
 protected:
 
     NotationView *createNotationView(std::vector<Rosegarden::Segment *>);
-    MatrixView   *createMatrixView  (std::vector<Rosegarden::Segment *>);
+    MatrixView   *createMatrixView  (std::vector<Rosegarden::Segment *>, bool drumMode);
     EventView    *createEventView   (std::vector<Rosegarden::Segment *>);
 
     //--------------- Data members ---------------------------------

@@ -81,7 +81,7 @@ void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
 
         QCanvasItem *item = *it;
 
-        QCanvasMatrixRectangle* mRect = 0;
+        QCanvasMatrixRectangle *mRect = 0;
         
         if (item->active()) {
             activeItem = item;
@@ -98,7 +98,7 @@ void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
             mel = &(mRect->getMatrixElement());
 	    MATRIX_DEBUG << "MatrixCanvasView::contentsMousePressEvent: collision with an existing matrix element" << endl;
             break;
-        }    
+	}	
     }
 
     if (activeItem) { // active item takes precedence over notation elements

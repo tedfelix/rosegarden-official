@@ -498,7 +498,6 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s,
     } else {
         w = int(nearbyint(grid.getRulerScale()->getWidthForDuration(startTime, endTime - startTime)));
         RG_DEBUG << "CompositionModelImpl::computeSegmentRect : s is NOT repeating";
-                 << " w = " << w << endl;
     }
 
     return CompositionRect(x, y, w, h);

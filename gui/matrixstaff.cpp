@@ -137,6 +137,6 @@ MatrixStaff::eventRemoved(const Rosegarden::Segment *segment,
 Rosegarden::ViewElement*
 MatrixStaff::makeViewElement(Rosegarden::Event* e)
 {
-    return new MatrixElement(e);
+    return new MatrixElement(e, m_view->isDrumMode());
 }
 

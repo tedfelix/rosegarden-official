@@ -75,6 +75,7 @@
 	    <Action name="edit_default"/>
 	    <Separator/>
 	    <Action name="edit_matrix"/>
+	    <Action name="edit_percussion_matrix"/>
 	    <Action name="edit_notation"/>
 	    <Action name="edit_event_list"/>
 	</Menu>
@@ -197,6 +198,7 @@
 <ToolBar name="Editors Toolbar">
      <text>Editors Toolbar</text>
         <Action name="edit_matrix"/>
+        <Action name="edit_percussion_matrix"/>
         <Action name="edit_notation"/>
         <Action name="edit_event_list"/>
         <Action name="quantize_selection"/>
@@ -227,6 +229,7 @@
    <Action name="edit_default"/>
    <Separator/>
    <Action name="edit_matrix"/>
+   <Action name="edit_percussion_matrix"/>
    <Action name="edit_notation"/>
    <Action name="edit_event_list"/>
    <Separator/>
@@ -293,6 +296,7 @@
         <Action name="delete"/>
         <Action name="edit_default"/>
         <Action name="edit_matrix"/>
+        <Action name="edit_percussion_matrix"/>
         <Action name="edit_notation"/>
         <Action name="edit_event_list"/>
         <Action name="quantize_selection"/>
@@ -327,6 +331,7 @@
         <Action name="edit_default"/>
         <Action name="edit_notation"/>
         <Action name="edit_matrix"/>
+        <Action name="edit_percussion_matrix"/>
         <Action name="edit_event_list"/>
         <Action name="quantize_selection"/>
         <Action name="repeat_quantize"/>

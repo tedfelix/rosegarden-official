@@ -707,6 +707,11 @@ public slots:
     void slotEditInMatrix();
 
     /**
+     * open a percussion matrix view for each of the currently-selected segments
+     */
+    void slotEditInPercussionMatrix();
+
+    /**
      * open a notation view with all currently-selected segments in it
      */
     void slotEditAsNotation();
