@@ -1002,7 +1002,7 @@ RosegardenSequencerApp::setMappedProperty(int id,
 
     if (fader)
     {
-        if (property == Rosegarden::MappedObject::FaderLevel)
+        if (property == Rosegarden::MappedAudioFader::FaderLevel)
             fader->setLevel(value);
     }
 }

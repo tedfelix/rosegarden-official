@@ -56,7 +56,7 @@ public:
 
     // Some common properties
     //
-    static const MappedObjectProperty FaderLevel;
+    static const MappedObjectProperty Name;
 
     // The object we can create
     //
@@ -107,6 +107,11 @@ public:
     MappedObject* getParent() { return m_parent; }
     void setParent(MappedObject *parent) { m_parent = parent; }
 
+    void addChild(MappedObject *mO);
+    void removeChild(MappedObject *mO);
+
+    std::vector<MappedObject*> getChildren() { return m_children; }
+
 protected:
 
     MappedObjectType m_type;
@@ -114,7 +119,8 @@ protected:
     bool             m_static;
     std::string      m_name;
 
-    MappedObject    *m_parent;
+    MappedObject                *m_parent;
+    std::vector<MappedObject*>   m_children;
 };
 
 
@@ -204,6 +210,11 @@ private:
 class MappedAudioFader : public MappedObject
 {
 public:
+
+    // properties
+    //
+    static const MappedObjectProperty FaderLevel;
+
     MappedAudioFader(MappedObject *parent,
                      MappedObjectId id,
                      MappedObjectValue channels):
@@ -234,6 +245,14 @@ protected:
 class MappedLADSPAPlugin : public MappedObject, public LADSPAPlugin
 {
 public:
+    // properties
+    static const MappedObjectProperty UniqueId;
+    static const MappedObjectProperty PluginName;
+    static const MappedObjectProperty Label;
+    static const MappedObjectProperty Author;
+    static const MappedObjectProperty Copyright;
+    static const MappedObjectProperty PortCount;
+
     MappedLADSPAPlugin(MappedObject *parent, MappedObjectId id):
         MappedObject(parent,
                      "MappedLADSPAPlugin",
@@ -243,12 +262,36 @@ public:
     virtual MappedObjectPropertyList getPropertyList(
                         const MappedObjectProperty &property);
 
+    unsigned long getUniqueId() const { return m_uniqueId;}
+    std::string getLabel() const { return m_label; }
+    std::string getAuthor() const { return m_author; }
+    std::string getCopyright() const { return m_copyright; }
+    unsigned long getPortCount() const { return m_portCount; }
+
+    // populate this object with descriptor information
+    void populate(const LADSPA_Descriptor *descriptor);
+
 protected:
+
+    unsigned long m_uniqueId;
+    std::string   m_label;
+    std::string   m_author;
+    std::string   m_copyright;
+    unsigned long m_portCount;
+
 };
 
 class MappedLADSPAPort : public MappedObject
 {
 public:
+
+    // properties
+    //
+    static const MappedObjectProperty Descriptor;
+    static const MappedObjectProperty RangeHint;
+    static const MappedObjectProperty RangeLower;
+    static const MappedObjectProperty RangeUpper;
+
     MappedLADSPAPort(MappedObject *parent, MappedObjectId id);
 
     virtual MappedObjectPropertyList getPropertyList(
@@ -257,8 +300,12 @@ public:
     void setPortName(const std::string &name) { m_portName = name; }
     std::string getPortName() const { return m_portName; }
 
-    void setRangeHint(const LADSPA_PortRangeHint &pRH)
-        { m_portRangeHint = pRH; }
+    void setRangeHint(LADSPA_PortRangeHintDescriptor hd,
+                      LADSPA_Data lowerBound,
+                      LADSPA_Data upperBound)
+        { m_portRangeHint.HintDescriptor = hd;
+          m_portRangeHint.LowerBound = lowerBound;
+          m_portRangeHint.UpperBound= upperBound; }
     LADSPA_PortRangeHint getRangeHint() const { return m_portRangeHint; }
 
     void setDescriptor(const LADSPA_PortDescriptor &pD)
@@ -283,8 +330,11 @@ protected:
 class MappedAudioPluginManager : public MappedObject
 {
 public:
-    static const MappedObjectProperty Plugins;
 
+    // public properties for the query interface
+    //
+    static const MappedObjectProperty Plugins;
+    static const MappedObjectProperty PluginIds;
 
     MappedAudioPluginManager(MappedObject *parent, MappedObjectId id);
     ~MappedAudioPluginManager();

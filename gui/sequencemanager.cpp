@@ -1627,15 +1627,29 @@ SequenceManager::getSequencerPlugins(Rosegarden::AudioPluginManager *aPM)
         = getSequencerPropertyList(id, 
                                Rosegarden::MappedAudioPluginManager::Plugins);
 
-    Rosegarden::MappedObjectPropertyList::iterator it;
-    Rosegarden::PluginId count = 0;
+    Rosegarden::MappedObjectPropertyList seqPluginIds
+        = getSequencerPropertyList(id,
+                               Rosegarden::MappedAudioPluginManager::PluginIds);
 
-    for (it = seqPlugins.begin(); it != seqPlugins.end(); it++)
+    Rosegarden::MappedObjectPropertyList::iterator it;
+
+    for (unsigned int i = 0; i != seqPlugins.size(); i++)
     {
-        aPM->addPlugin(qstrtostr(*it),
-                       count++,
+        /*
+        aPM->addPlugin(qstrtostr(seqPlugins[i]),
+                       i,
                        true);
-        //cout << "PLUGIN = \"" << (*it) << "\"" << std::endl;
+                       */
+
+        //cout << " = " << seqPlugins[i] << endl;
+
+        /*
+        Rosegarden::MappedObjectPropertyList author =
+            getSequencerPropertyList(seqPluginIds[i].toInt(), "author");
+
+        if (author.size() == 1)
+            cout << "PLUGIN AUTHOR = \"" << author[0] << "\"" << std::endl;
+            */
     }
 }
 

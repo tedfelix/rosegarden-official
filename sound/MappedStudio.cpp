@@ -28,8 +28,23 @@
 namespace Rosegarden
 {
 
-const MappedObjectProperty MappedObject::FaderLevel = "faderLevel";
+// Define our object properties - these can be queried and in some
+// cases set too.
+//
+const MappedObjectProperty MappedObject::Name = "name";
+const MappedObjectProperty MappedAudioFader::FaderLevel = "faderLevel";
+const MappedObjectProperty MappedLADSPAPlugin::UniqueId = "uniqueId";
+const MappedObjectProperty MappedLADSPAPlugin::PluginName = "pluginname";
+const MappedObjectProperty MappedLADSPAPlugin::Label = "label";
+const MappedObjectProperty MappedLADSPAPlugin::Author = "author";
+const MappedObjectProperty MappedLADSPAPlugin::Copyright = "copyright";
+const MappedObjectProperty MappedLADSPAPlugin::PortCount = "portcount";
+const MappedObjectProperty MappedLADSPAPort::Descriptor = "descriptor";
+const MappedObjectProperty MappedLADSPAPort::RangeHint = "rangehint";
+const MappedObjectProperty MappedLADSPAPort::RangeLower = "rangelower";
+const MappedObjectProperty MappedLADSPAPort::RangeUpper = "rangeupper";
 const MappedObjectProperty MappedAudioPluginManager::Plugins = "plugins";
+const MappedObjectProperty MappedAudioPluginManager::PluginIds = "pluginids";
 
 MappedStudio::MappedStudio():MappedObject(0,
                                           "MappedStudio",
@@ -78,12 +93,18 @@ MappedStudio::createObject(MappedObjectType type, MappedObjectId id)
     if (type == MappedObject::AudioPluginManager)
     {
         mO = new MappedAudioPluginManager(this, id);
+
+        // push to the studio's child stack
+        addChild(mO);
     }
     else if (type == MappedObject::AudioFader)
     {
         mO = new MappedAudioFader(this,
                                   id,
                                   2); // channels
+
+        // push to the studio's child stack
+        addChild(mO);
     }
     else if (type == MappedObject::LADSPAPlugin)
     {
@@ -93,10 +114,13 @@ MappedStudio::createObject(MappedObjectType type, MappedObjectId id)
             getObjectOfType(MappedObject::AudioPluginManager);
 
         mO = new MappedLADSPAPlugin(mLP, id);
+
+        // push to the plugin manager's child stack
+        mLP->addChild(mO);
     }
     else if (type == MappedObject::LADSPAPort)
     {
-        // reset the parent after creation
+        // reset the parent after creation outside this method
         mO = new MappedLADSPAPort(this, id);
     }
 
@@ -119,6 +143,32 @@ MappedStudio::getObjectOfType(MappedObjectType type)
     return 0;
 }
 
+
+void
+MappedObject::addChild(MappedObject *object)
+{
+    std::vector<MappedObject*>::iterator it = m_children.begin();
+    for (; it != m_children.end(); it++)
+        if ((*it) == object)
+            return;
+
+    m_children.push_back(object);
+}
+
+void
+MappedObject::removeChild(MappedObject *object)
+{
+    std::vector<MappedObject*>::iterator it = m_children.begin();
+
+    for (; it != m_children.end(); it++)
+    {
+        if ((*it) == object)
+        {
+            m_children.erase(it);
+            return;
+        }
+    }
+}
 
 
 bool
@@ -331,15 +381,12 @@ MappedAudioPluginManager::getPropertyList(const MappedObjectProperty &property)
     if (property == "")
     {
         list.push_back(MappedAudioPluginManager::Plugins);
-        /*
-        PluginIterator it;
-        for (it = m_plugins.begin(); it != m_plugins.end(); it++)
-            list.push_back(MappedObjectProperty((*it)->getName().c_str()));
-            */
-
+        list.push_back(MappedAudioPluginManager::PluginIds);
     }
-    else if (property == MappedAudioPluginManager::Plugins)
+    else if (property == MappedAudioPluginManager::PluginIds)
     {
+        // get the list of plugin ids
+        //
         MappedStudio *studio = dynamic_cast<MappedStudio*>(m_parent);
 
         if (studio)
@@ -351,13 +398,81 @@ MappedAudioPluginManager::getPropertyList(const MappedObjectProperty &property)
             while (plugin)
             {
                 list.push_back(MappedObjectProperty
-                            (plugin->getPluginName().c_str()));
+                            ("%1").arg(plugin->getId()));
                 plugin = dynamic_cast<MappedLADSPAPlugin*>
                             (studio->getNext(plugin));
             }
         }
     }
+    else if (property == MappedAudioPluginManager::Plugins)
+    {
+        // get a full list of plugin descriptions
+        //
+        MappedStudio *studio = dynamic_cast<MappedStudio*>(m_parent);
 
+        if (studio)
+        {
+            MappedLADSPAPlugin *plugin =
+                dynamic_cast<MappedLADSPAPlugin*>
+                    (studio->getFirst(MappedObject::LADSPAPlugin));
+
+            while (plugin)
+            {
+                list.push_back(MappedObjectProperty
+                            ("%1").arg(plugin->getId()));
+
+                list.push_back(MappedObjectProperty
+                        (plugin->getPluginName().c_str()));
+
+                list.push_back(MappedObjectProperty
+                        ("%1").arg(plugin->getUniqueId()));
+
+                list.push_back(MappedObjectProperty
+                        (plugin->getLabel().c_str()));
+
+                list.push_back(MappedObjectProperty
+                        (plugin->getAuthor().c_str()));
+
+                list.push_back(MappedObjectProperty
+                        (plugin->getCopyright().c_str()));
+
+                list.push_back(MappedObjectProperty
+                        ("%1").arg(plugin->getPortCount()));
+
+                std::vector<MappedObject*> children =
+                    plugin->getChildren();
+
+                for (unsigned int i = 0; i < children.size(); i++)
+                {
+                    MappedLADSPAPort *port =
+                        dynamic_cast<MappedLADSPAPort*>(children[i]);
+
+                    list.push_back(MappedObjectProperty
+                            ("%1").arg(port->getId()));
+
+                    list.push_back(MappedObjectProperty
+                            (port->getPortName().c_str()));
+
+                    list.push_back(MappedObjectProperty
+                            ("%1").arg(port->getRangeHint().HintDescriptor));
+
+                    list.push_back(MappedObjectProperty
+                            ("%1").arg(port->getRangeHint().LowerBound));
+
+                    list.push_back(MappedObjectProperty
+                            ("%1").arg(port->getRangeHint().UpperBound));
+
+                    list.push_back(MappedObjectProperty
+                            ("%1").arg(port->getDescriptor()));
+
+                }
+
+
+                plugin = dynamic_cast<MappedLADSPAPlugin*>
+                            (studio->getNext(plugin));
+            }
+        }
+    }
 
     return list;
 }
@@ -448,7 +563,7 @@ MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
                                  (MappedObject::LADSPAPlugin));
 
                     plugin->setLibraryName(path);
-                    plugin->setPluginName(descriptor->Name);
+                    plugin->populate(descriptor);
 
                     for (unsigned long i = 0; i < descriptor->PortCount; i++)
                     {
@@ -457,8 +572,17 @@ MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
                             (studio->createObject
                              (MappedObject::LADSPAPort));
 
+                        // tie up relationships
+                        plugin->addChild(port);
                         port->setParent(plugin);
+
                         port->setPortName(descriptor->PortNames[i]);
+                        port->setDescriptor(descriptor->PortDescriptors[i]);
+
+                        port->setRangeHint(
+                                descriptor->PortRangeHints[i].HintDescriptor,
+                                descriptor->PortRangeHints[i].LowerBound,
+                                descriptor->PortRangeHints[i].UpperBound);
                     }
 
                     
@@ -478,6 +602,20 @@ MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
 }
 
 #ifdef HAVE_LADSPA
+void
+MappedLADSPAPlugin::populate(const LADSPA_Descriptor *descriptor)
+{
+    if (descriptor)
+    {
+        m_uniqueId = descriptor->UniqueID;
+        m_label = descriptor->Label;
+        m_author = descriptor->Maker;
+        m_copyright = descriptor->Copyright;
+        m_portCount = descriptor->PortCount;
+        m_pluginName = descriptor->Name;
+    }
+
+}
 MappedObjectPropertyList
 MappedLADSPAPlugin::getPropertyList(const MappedObjectProperty &property)
 {
@@ -486,27 +624,27 @@ MappedLADSPAPlugin::getPropertyList(const MappedObjectProperty &property)
     if (property == "")
     {
         // our LADSPA properties
-        list.push_back(MappedObjectProperty("id"));
-        list.push_back(MappedObjectProperty("label"));
-        list.push_back(MappedObjectProperty("name"));
-        list.push_back(MappedObjectProperty("author"));
-        list.push_back(MappedObjectProperty("copyright"));
-        list.push_back(MappedObjectProperty("numberofports"));
+        list.push_back(UniqueId);
+        list.push_back(PluginName);
+        list.push_back(Label);
+        list.push_back(Author);
+        list.push_back(Copyright);
+        list.push_back(PortCount);
     }
-    else if (m_descriptor)
+    else
     {
         if (property == "id")
-            list.push_back(MappedObjectProperty("%1").arg(m_descriptor->UniqueID));
+            list.push_back(MappedObjectProperty("%1").arg(m_uniqueId));
         else if (property == "label")
-            list.push_back(MappedObjectProperty(m_descriptor->Label));
+            list.push_back(MappedObjectProperty(m_label.c_str()));
         else if (property == "name")
-            list.push_back(MappedObjectProperty(m_descriptor->Name));
+            list.push_back(MappedObjectProperty(m_pluginName.c_str()));
         else if (property == "author")
-            list.push_back(MappedObjectProperty(m_descriptor->Maker));
+            list.push_back(MappedObjectProperty(m_author.c_str()));
         else if (property == "copyright")
-            list.push_back(MappedObjectProperty(m_descriptor->Copyright));
+            list.push_back(MappedObjectProperty(m_copyright.c_str()));
         else if (property == "numberofports")
-            list.push_back(MappedObjectProperty("%1").arg(m_descriptor->PortCount));
+            list.push_back(MappedObjectProperty("%1").arg(m_portCount));
     }
 
     return list;
@@ -524,6 +662,15 @@ MappedObjectPropertyList
 MappedLADSPAPort::getPropertyList(const MappedObjectProperty &property)
 {
     MappedObjectPropertyList list;
+
+    if (property == "")
+    {
+        list.push_back("name");
+        list.push_back("descriptor");
+        list.push_back("rangehint");
+        list.push_back("rangelower");
+        list.push_back("rangeupper");
+    }
 
     return list;
 }

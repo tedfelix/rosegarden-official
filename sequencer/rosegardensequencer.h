@@ -201,7 +201,7 @@ public:
     //
     virtual int getMappedObjectId(int type);
 
-    // get a Property list from an Object
+    // Get a Property list from an Object
     //
     virtual QValueVector<QString> getPropertyList(int id,
                                                   const QString &property);
