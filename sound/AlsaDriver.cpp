@@ -43,8 +43,9 @@
 namespace Rosegarden
 {
 
+#ifdef HAVE_JACK
 static nframes_t _jackBufferSize;
-
+#endif
 
 AlsaDriver::AlsaDriver():
     SoundDriver(std::string("alsa-lib version ") + std::string(SND_LIB_VERSION_STR)),
@@ -61,7 +62,9 @@ AlsaDriver::AlsaDriver():
     m_addedMetronome(false)
 {
     std::cout << "Rosegarden AlsaDriver - " << m_name << std::endl;
+#ifdef HAVE_JACK
     _jackBufferSize = 0;
+#endif
 }
 
 AlsaDriver::~AlsaDriver()
