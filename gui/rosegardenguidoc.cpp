@@ -100,7 +100,7 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
     : QObject(parent, name),
       m_modified(false),
       m_autoSaved(false),
-      m_recordSegment(0), m_endOfLastRecordedNote(0),
+      m_recordSegment(0),
       m_commandHistory(new MultiViewCommandHistory()),
       m_pluginManager(pluginManager),
       m_autoSavePeriod(0),
@@ -1107,7 +1107,6 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
         m_recordSegment->setLabel(label);
     }
 
-
     if (mC.size() > 0 && m_recordSegment) 
     { 
         Rosegarden::MappedComposition::iterator i;
@@ -1128,21 +1127,59 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
                duration = m_composition.getElapsedTimeForRealTime((*i)->getDuration());
             */
             duration = m_composition.
-                    getElapsedTimeForRealTime((*i)->getEventTime() + (*i)->getDuration()) - absTime;
+                    getElapsedTimeForRealTime((*i)->getEventTime() +
+					      (*i)->getDuration()) - absTime;
 
             rEvent = 0;
+	    bool isNoteOn = false;
+	    int pitch = 0;
 
             switch((*i)->getType()) {
                 case Rosegarden::MappedEvent::MidiNote:
-                    if ((*i)->getDuration() < Rosegarden::RealTime::zeroTime)
-                        duration = -1;
-	
-                    rEvent = new Event(Rosegarden::Note::EventType,
-                                       absTime,
-                               duration);
 
-                    rEvent->set<Int>(PITCH, (*i)->getPitch());
-                    rEvent->set<Int>(VELOCITY, (*i)->getVelocity());
+                    if ((*i)->getDuration() < Rosegarden::RealTime::zeroTime) {
+
+			// it's a note-on; give it a default duration
+			// for insertion into the segment, and make a
+			// mental note to stick it in the note-on map
+			// for when we see the corresponding note-off
+
+                        duration =
+			    Rosegarden::Note(Rosegarden::Note::Crotchet).getDuration();
+			pitch = (*i)->getPitch();
+			isNoteOn = true;
+
+			rEvent = new Event(Rosegarden::Note::EventType,
+					   absTime,
+					   duration);
+
+			rEvent->set<Int>(PITCH, (*i)->getPitch());
+			rEvent->set<Int>(VELOCITY, (*i)->getVelocity());
+
+		    } else {
+
+			// it's a note-off
+	
+			NoteOnMap::iterator mi = m_noteOnEvents.find((*i)->getPitch());
+
+			if (mi != m_noteOnEvents.end()) {
+
+			    // modify the previously held note-on event,
+			    // instead of assigning to rEvent
+			    Rosegarden::Event *oldEv = *mi->second;
+			    Rosegarden::Event *newEv = new Rosegarden::Event
+				(*oldEv, oldEv->getAbsoluteTime(), duration);
+			    m_recordSegment->erase(mi->second);
+			    m_recordSegment->insert(newEv);
+			    m_noteOnEvents.erase(mi);
+
+			    // at this point we could quantize the bar if we were
+			    // tracking in a notation view
+
+			} else {
+			    std::cerr << "WARNING: NOTE OFF received without corresponding NOTE ON" << std::endl;
+			}
+		    }
 
                     break;
 
@@ -1211,18 +1248,16 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
             {
                 m_recordSegment->setStartTime (m_composition.getBarStartForTime(absTime));
                 m_recordSegment->fillWithRests(absTime);
-                m_endOfLastRecordedNote = m_composition.getPosition();
                 m_composition.addSegment(m_recordSegment);
             }
 
             // Now insert the new event
             //
-            m_recordSegment->insert(rEvent);
-
-            // Update our counter
-            //
-            m_endOfLastRecordedNote = absTime + duration;
-
+	    if (isNoteOn) {
+		m_noteOnEvents[pitch] = m_recordSegment->insert(rEvent);
+	    } else {
+		m_recordSegment->insert(rEvent);
+	    }
         }
     }
 
@@ -1258,12 +1293,18 @@ RosegardenGUIDoc::stopRecordingMidi()
         w->deleteRecordingSegmentItem();
     }
 
-    // Roll out any NOTE ON/NOTE OFFs we've had to insert.
-    // These are indicated by a negative time on the first
-    // event.  We can only do this after we've recorded the
-    // whole.
-    //
-    convertToSinglePoint(m_recordSegment);
+    for (NoteOnMap::iterator mi = m_noteOnEvents.begin(); mi != m_noteOnEvents.end();
+	 ++mi) {
+	// anything remaining in the note-on map should be made to end at
+	// the end of the segment
+	Rosegarden::Event *oldEv = *mi->second;
+	Rosegarden::Event *newEv = new Rosegarden::Event
+	    (*oldEv, oldEv->getAbsoluteTime(),
+	     m_recordSegment->getEndTime() - oldEv->getAbsoluteTime());
+	m_recordSegment->erase(mi->second);
+	m_recordSegment->insert(newEv);
+    }
+    m_noteOnEvents.clear();
         
     // the record segment will have already been added to the
     // composition if there was anything in it; otherwise we
@@ -1290,7 +1331,6 @@ RosegardenGUIDoc::stopRecordingMidi()
     }
 
     m_recordSegment = 0;
-    m_endOfLastRecordedNote = 0;
 
     slotUpdateAllViews(0);
 }
@@ -1557,72 +1597,6 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
     }
 
     delete mD;
-}
-
-// Convert a single-point recorded Segment to a proper Segment
-// clear of all the NOTE OFF event types.
-//
-void
-RosegardenGUIDoc::convertToSinglePoint(Rosegarden::Segment *segment)
-{
-    if (segment == 0) return;
-
-    Rosegarden::Segment::iterator it, oIt;
-    Rosegarden::Event *event;
-
-    std::vector<Event *> toInsert;
-    std::vector<Segment::iterator> toErase;
-
-    for (it = segment->begin(); it != segment->end(); it++)
-    {
-        if ((*it)->isa(Rosegarden::Note::EventType) &&
-            (*it)->getDuration() == -1)
-        {
-            // start from here
-            oIt = it;
-
-            // no, sorry, next one
-            oIt++;
-
-            for (; oIt != segment->end(); oIt++)
-            {
-                if ((*oIt)->isa(Rosegarden::Note::EventType) &&
-                    ((*oIt)->get<Int>(Rosegarden::BaseProperties::PITCH) ==
-                     (*it)->get<Int>(Rosegarden::BaseProperties::PITCH)) &&
-                     (*oIt)->getDuration() >= 0)
-                {
-                    event = new Event(Rosegarden::Note::EventType,
-                                      (*it)->getAbsoluteTime(),
-                                      (*oIt)->getDuration());
-
-                    event->set<Int>(PITCH,
-                        (*it)->get<Int>(Rosegarden::BaseProperties::PITCH));
-
-                    event->set<Int>(VELOCITY,
-                        (*it)->get<Int>(Rosegarden::BaseProperties::VELOCITY));
-
-                    // replace NOTE ON event with one of proper duration
-                    //
-                    toErase.push_back(it);
-                    toInsert.push_back(event);
-
-                    // remove the NOTE OFF helper
-                    //
-                    segment->eraseSingle(*oIt);
-
-                    break;
-                }
-            }
-        }
-    }
-
-    for (unsigned int i = 0; i < toInsert.size(); ++i) {
-        segment->insert(toInsert[i]);
-    }
-
-    for (unsigned int i = 0; i < toErase.size(); ++i) {
-        segment->erase(toErase[i]);
-    }
 }
 
 std::string

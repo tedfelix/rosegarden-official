@@ -475,14 +475,6 @@ protected:
      */
     bool readFromFile(const QString &fileName, QString &text);
 
-    /*
-     * Recording might have to insert NOTE ONs and NOTE OFFs
-     * (NOTE ONs marked with negative duration) - this rolls
-     * them out.
-     *
-     */
-    void convertToSinglePoint(Rosegarden::Segment *segment);
-
     /**
      * Set the "auto saved" status of the document
      * Doc. modification sets it to false, autosaving
@@ -551,7 +543,15 @@ protected:
      * a Segment onto which we can record events
      */
     Rosegarden::Segment *m_recordSegment;
-    Rosegarden::timeT m_endOfLastRecordedNote;  // we use this for rest filling
+
+    typedef std::map<int, Rosegarden::Segment::iterator> NoteOnMap;
+
+    /**
+     * During recording, we collect note-ons that haven't yet had a note-off
+     * in here
+     */
+    NoteOnMap m_noteOnEvents;
+
 
     MultiViewCommandHistory *m_commandHistory;
 

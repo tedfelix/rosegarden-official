@@ -1568,7 +1568,7 @@ NotationView::doDeferredCursorMove()
         // get current canvas x of insert cursor, which might not be
         // what we just set
     
-        double ccx;
+        double ccx = 0.0;
 
         NotationElementList::iterator i = 
             staff->getViewElementList()->findTime(t);
