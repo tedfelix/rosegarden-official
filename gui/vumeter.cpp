@@ -34,14 +34,15 @@ VUMeter::VUMeter(QWidget *parent,
                  const int &width,
                  const int &height,
                  const char *name):
-    QWidget(parent, name),
+    QLabel(parent, name),
     m_type(type),
     m_level(0),
     m_peakLevel(0),
-    m_levelStep(3)
+    m_levelStep(3),
+    m_originalHeight(height)
 {
-    setMinimumSize(width, height);
-    setMaximumSize(width, height);
+    setMinimumSize(width, m_originalHeight);
+    setMaximumSize(width, m_originalHeight);
 
     connect(&m_fallTimer, SIGNAL(timeout()),
             this,         SLOT(reduceLevel()));
@@ -66,7 +67,10 @@ VUMeter::setLevel(const double &level)
 
     // Only start the timer when we need it
     if(m_fallTimer.isActive() == false)
+    {
         m_fallTimer.start(40);
+        meterStart();
+    }
 
     QPainter paint(this);
     drawMeterLevel(&paint);
@@ -76,7 +80,17 @@ void
 VUMeter::paintEvent(QPaintEvent*)
 {
     QPainter paint(this);
-    drawMeterLevel(&paint);
+
+    if (m_fallTimer.isActive())
+    {
+        drawMeterLevel(&paint);
+    }
+    else
+    {
+        meterStop();
+        drawFrame(&paint);
+        drawContents(&paint);
+    }
 }
 
 void
@@ -123,10 +137,10 @@ VUMeter::reduceLevel()
 
         // Always stop the timer when we don't need it
         m_fallTimer.stop();
+        meterStop();
     }
 
     QPainter paint(this);
     drawMeterLevel(&paint);
 }
-
 

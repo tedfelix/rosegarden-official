@@ -47,7 +47,7 @@ Tasks suggested by Bownie (MIDI and audio guy):
  of the project.  I would do it myself but there's so much else
  Instrument/Environment-wise to come to support all that fun stuff.
 
- -- Someone should investigate and implement the LADSPA plugins as
- well (www.plugin.org.uk, www.ladspa.org).
+ -- Someone should investigate and possibly implement the LADSPA plugins
+ as well (www.plugin.org.uk, www.ladspa.org).
 
 

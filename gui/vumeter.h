@@ -20,14 +20,14 @@
 */
 
 
-#include <qwidget.h>
+#include <qlabel.h>
 #include <qpainter.h>
 #include <qtimer.h>
 
 #ifndef _VUMETER_H_
 #define _VUMETER_H_
 
-class VUMeter : public QWidget
+class VUMeter : public QLabel
 {
 Q_OBJECT
 
@@ -49,8 +49,15 @@ public:
 
     virtual void paintEvent(QPaintEvent*);
 
+protected:
+    virtual void meterStart() = 0;
+    virtual void meterStop() = 0;
+
 private slots:
     void reduceLevel();
+
+protected:
+    int         m_originalHeight;
 
 private:
 
