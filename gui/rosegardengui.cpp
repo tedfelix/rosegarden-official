@@ -4116,11 +4116,8 @@ RosegardenGUIApp::slotEditBanks()
     connect(bankEditor, SIGNAL(closing(bool)),
             this, SLOT(slotBankEditorClosed(bool)));
 
-    connect(bankEditor, SIGNAL(saveAsDefaultStudio()),
-            this, SLOT(slotSaveDefaultStudio()));
-
     connect(this, SIGNAL(documentAboutToChange()),
-            bankEditor, SLOT(slotFileCloseAndDiscard()));
+            bankEditor, SLOT(slotFileClose()));
 
     stateChanged("bankeditor_shown");    
     bankEditor->show();

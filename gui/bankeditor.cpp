@@ -710,20 +710,7 @@ BankEditorDialog::~BankEditorDialog()
 void
 BankEditorDialog::setupActions()
 {
-    KAction *action =
-        KStdAction::save  (this, SLOT(slotFileSave()),          actionCollection());
-
-    action->setText(i18n("&Save as Default Studio"));
-
-    action = KStdAction::saveAs(this, SLOT(slotFileSaveAs()),        actionCollection());
-    action->setText(i18n("Save Studio as..."));
-
     KStdAction::close (this, SLOT(slotFileClose()),         actionCollection());
-
-    new KAction(i18n("Close and &Discard"), 0, 0, this,
-                SLOT(slotFileCloseAndDiscard()), actionCollection(),
-                "file_close_discard");
-
 
     KStdAction::copy     (this, SLOT(slotEditCopy()),       actionCollection());
     KStdAction::paste    (this, SLOT(slotEditPaste()),      actionCollection());
@@ -1524,6 +1511,9 @@ BankEditorDialog::slotImport()
 
                             // No need to redraw the dialog, this is done by
                             // slotUpdate, signalled by the MultiViewCommandHistory
+                            Rosegarden::MidiDevice *device = getMidiDevice(deviceItem);
+                            if (device)
+                                selectDeviceItem(device);
                         }
                     }
                 }
@@ -1751,18 +1741,6 @@ BankEditorDialog::slotExport()
 }
 
 void
-BankEditorDialog::slotFileSave()
-{
-    emit saveAsDefaultStudio();
-}
-
-void
-BankEditorDialog::slotFileSaveAs()
-{
-    emit saveAsOtherStudio();
-}
-
-void
 BankEditorDialog::slotFileClose()
 {
     RG_DEBUG << "BankEditorDialog::slotFileClose()\n";
@@ -1775,13 +1753,6 @@ BankEditorDialog::slotFileClose()
     m_doc->getCommandHistory()->detachView(actionCollection());
     m_doc = 0;
     close();
-}
-
-void
-BankEditorDialog::slotFileCloseAndDiscard()
-{
-    setKeepChanges(false);
-    slotFileClose();
 }
 
 void

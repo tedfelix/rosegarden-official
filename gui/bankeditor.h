@@ -213,18 +213,13 @@ public slots:
 
     void slotModifyDeviceOrBankName(QListViewItem*, const QString&,int);
 
-    void slotFileSave();
-    void slotFileSaveAs();
     void slotFileClose();
-    void slotFileCloseAndDiscard();
 
     void slotEditCopy();
     void slotEditPaste();
 
 signals:
     void closing(bool changesMade);
-    void saveAsDefaultStudio();
-    void saveAsOtherStudio();
 
 protected:
     virtual void closeEvent(QCloseEvent*);
