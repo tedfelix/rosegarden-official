@@ -1,18 +1,48 @@
 0.2 TO-DO for rwb
 -----------------
-updated 31.1.2001
+updated 05.02.2001
 
 Currently looking at:
 
 - Playing Audio files
   o synchronisation with MIDI [SITUATION IMPROVED]
-  o clearing down handles without crashing aRTS [DONE]
+  o clearing down handles without crashing aRTS [STILL BUGGY]
 
-- Looping at the origin
+- Sequencer memory leak
 
-- Recording segments - trails
+- SoundFile file reading debacle
+
+- Looping at the origin - Looping bug?
+
+- Recording segments - trails [PARTIALLY DONE]
 
 ==
+
+
+o Track addition/deletion and moving on TrackButtons canvas - needs UNDO
+  
+o Complete segment edit shortcuts (click/copy/multiple
+  segment drag)
+
+o Segment colouring
+
+o Instrument display - aRTS environment, MIDI/Audio assignable
+  parameters
+
+o More MIDI events at Composition level. Sys Exs, Program Changes,
+  Controller changes etc. etc.
+
+o Segment Zooming - (midi and audio previews of Segments)
+
+o Segment paramters and modifiers - looping of Segments, quantisation
+
+o Allow negative time on segment canvas and transport
+
+o Audio noise eliminator - recording
+
+o Audio output VU meters
+
+o MIDI CC, PC and sysex handling
 
 o Bar lines widget (similar to TrackButtons).
   Implementation to allow for:
@@ -20,33 +50,6 @@ o Bar lines widget (similar to TrackButtons).
   - Looping [DONE]
 
   - Start and End Markers for Composition growth and shrinkage [ALMOST DONE]
-
-o Allow negative time on segment canvas and transport
-
-o Track addition/deletion and moving on TrackButtons canvas
-
-o Complete segment edit shortcuts (click/copy/multiple
-  segment drag)
-
-o Segment colouring
-
-o Segment paramters and modifiers - looping of Segments, quantisation
-
-o Instrument display - aRTS environment, MIDI/Audio assignable
-  parameters
-
-o Segment movement resolution
-
-o Segment Zooming - (midi and audio previews of Segments)
-
-o More MIDI events at Composition level. Sys Exs, Program Changes,
-  Controller changes etc. etc.
-
-o Audio noise eliminator - recording
-
-o Audio output VU meters
-
-o MIDI CC, PC and sysex handling
 
 o basic MIDI recording [DONE]
 
@@ -61,6 +64,7 @@ o Audio file support in rg file. [DONE]
   Audio recording proof of concept [DONE]
   Sequencing of plain Audio files [DONE]
 
+o Segment movement resolution [CC]
 
 Current Bugs
 ============

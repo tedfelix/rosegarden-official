@@ -631,7 +631,7 @@ void SegmentPencil::handleMouseMove(QMouseEvent *e)
 
     if ((duration > 0 && duration <  snap) ||
 	(duration < 0 && duration > -snap)) {
-	m_currentItem->setDuration(d < 0 ? -snap : snap);
+	m_currentItem->setDuration(duration < 0 ? -snap : snap);
     } else {
 	m_currentItem->setDuration(duration);
     }
@@ -762,7 +762,7 @@ void SegmentResizer::handleMouseMove(QMouseEvent *e)
 
     if ((duration > 0 && duration <  snap) ||
 	(duration < 0 && duration > -snap)) {
-	m_currentItem->setDuration(d < 0 ? -snap : snap);
+	m_currentItem->setDuration(duration < 0 ? -snap : snap);
     } else {
 	m_currentItem->setDuration(duration);
     }
