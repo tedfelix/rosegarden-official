@@ -13,6 +13,8 @@
     </Menu>
   </Menu>
   <Menu name="edit">
+      	<Action name="delete"/>
+	<Separator/>
       	<Action name="select_all"/>
 	<Separator/>
       	<Action name="edit_in_matrix"/>

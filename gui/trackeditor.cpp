@@ -276,11 +276,12 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
 					   Rosegarden::timeT)),
 	    this, SLOT(slotSetLoop(Rosegarden::timeT, Rosegarden::timeT)));
  
-
+/*!!! now handled in rosegardengui.cpp as Edit | Delete
     QAccel *a = new QAccel(this);
     a->connectItem(a->insertItem(Key_Delete),
                    this,
                    SLOT(slotDeleteSelectedSegments()));
+*/
 
     // create the position pointer
     m_pointer = new QCanvasRectangle(canvas);

@@ -23,15 +23,16 @@ etc
 
 <Menu name="edit">
   <Action name="general_paste"/>
+  <Action name="delete"/>
   <Separator/>
   <Action name="select_from_start"/>
   <Action name="select_to_end"/>
   <Action name="select_whole_staff"/>
   <Separator/>
-  <Action name="add_clef"/>
-  <Action name="add_key_signature"/>
   <Action name="add_tempo"/>
   <Action name="add_time_signature"/>
+  <Action name="add_clef"/>
+  <Action name="add_key_signature"/>
 </Menu>
 
 <Menu name="Tools">

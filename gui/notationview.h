@@ -198,6 +198,11 @@ public slots:
     void slotEditGeneralPaste();
 
     /**
+     * delete the selection (cut without the copy)
+     */
+    void slotEditDelete();
+
+    /**
      * toggles the notes toolbar
      */
     void slotToggleNotesToolBar();

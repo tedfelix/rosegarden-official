@@ -404,6 +404,11 @@ public slots:
     void slotSelectAll();
 
     /**
+     * delete selected segments, duh
+     */
+    void slotDeleteSelectedSegments();
+
+    /**
      * open a matrix view for each of the currently-selected segments
      */
     void slotEditInMatrix();

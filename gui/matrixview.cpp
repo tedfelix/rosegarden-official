@@ -269,7 +269,7 @@ void MatrixView::readOptions()
 void MatrixView::setupActions()
 {   
     // File menu
-    KStdAction::close   (this, SLOT(closeWindow()),        actionCollection());
+    KStdAction::close   (this, SLOT(slotCloseWindow()),    actionCollection());
 
     // Edit menu
     KStdAction::cut     (this, SLOT(slotEditCut()),        actionCollection());

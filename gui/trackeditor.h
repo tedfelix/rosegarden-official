@@ -143,14 +143,14 @@ public slots:
      */
     void slotAddTracks(unsigned int nbTracks);
 
+    void slotDeleteSelectedSegments();
+
 protected slots:
     void slotSegmentOrderChanged(int section, int fromIdx, int toIdx);
 
     void slotTrackButtonsWidthChanged();
 
     void slotSelectedSegments(const Rosegarden::SegmentSelection &segments);
-
-    void slotDeleteSelectedSegments();
 
     /// Scroll the track buttons along with the segment canvas
     void slotVerticalScrollTrackButtons(int y);

@@ -305,6 +305,10 @@ void RosegardenGUIApp::setupActions()
 		SLOT(slotSelectAll()), actionCollection(),
 		"select_all");
 
+    new KAction(i18n("De&lete"), Key_Delete, this,
+		SLOT(slotDeleteSelectedSegments()), actionCollection(),
+		"delete");
+
     new KAction(i18n("Open in &Matrix Editor"), 0, this,
 		SLOT(slotEditInMatrix()), actionCollection(),
 		"edit_in_matrix");
@@ -1073,6 +1077,11 @@ void RosegardenGUIApp::slotEditPaste()
 void RosegardenGUIApp::slotSelectAll()
 {
     m_view->slotSelectAllSegments();
+}
+
+void RosegardenGUIApp::slotDeleteSelectedSegments()
+{
+    m_view->getTrackEditor()->slotDeleteSelectedSegments();
 }
 
 void RosegardenGUIApp::slotEditAsNotation()

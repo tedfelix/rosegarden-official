@@ -506,7 +506,7 @@ void NotationView::setupActions()
     
 
     // File menu
-    KStdAction::close (this, SLOT(closeWindow()),          actionCollection());
+    KStdAction::close (this, SLOT(slotCloseWindow()),      actionCollection());
 
     // Edit menu
     new KAction(i18n("Select from St&art"), 0, this,
@@ -524,6 +524,10 @@ void NotationView::setupActions()
     new KAction(i18n("P&aste..."), 0, this,
 		SLOT(slotEditGeneralPaste()), actionCollection(),
 		"general_paste");
+
+    new KAction(i18n("De&lete"), Key_Delete, this,
+		SLOT(slotEditDelete()), actionCollection(),
+		"delete");
 
     KStdAction::cut     (this, SLOT(slotEditCut()),        actionCollection());
     KStdAction::copy    (this, SLOT(slotEditCopy()),       actionCollection());
@@ -1197,6 +1201,14 @@ void NotationView::slotEditCut()
 
     addCommandToHistory(new CutCommand(*m_currentEventSelection,
 				       m_document->getClipboard()));
+}
+
+void NotationView::slotEditDelete()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Deleting selection..."), statusBar());
+
+    addCommandToHistory(new EraseCommand(*m_currentEventSelection));
 }
 
 void NotationView::slotEditCopy()
