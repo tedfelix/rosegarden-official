@@ -1405,8 +1405,8 @@ SequencerConfigurationPage::slotSmallFileChanged(int v)
 void
 SequencerConfigurationPage::slotShowStatus()
 {
-    ShowSequencerStatusDialog *dialog = new ShowSequencerStatusDialog(this);
-    dialog->exec();
+    ShowSequencerStatusDialog dialog(this);
+    dialog.exec();
 }
 
 void

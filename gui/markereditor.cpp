@@ -376,20 +376,19 @@ MarkerEditorDialog::slotEdit(QListViewItem *i)
 {
     RG_DEBUG << "MarkerEditorDialog::slotEdit" << endl;
 
-    MarkerModifyDialog *dialog = 
-        new MarkerModifyDialog(this,
-			       &m_doc->getComposition(),
-			       i->text(0).toInt(),
-                               i->text(1), i->text(2));
+    MarkerModifyDialog dialog(this,
+			      &m_doc->getComposition(),
+			      i->text(0).toInt(),
+			      i->text(1), i->text(2));
 
-    if (dialog->exec() == QDialog::Accepted)
+    if (dialog.exec() == QDialog::Accepted)
     {
         ModifyMarkerCommand *command =
             new ModifyMarkerCommand(&m_doc->getComposition(),
-                                    dialog->getOriginalTime(),
-                                    dialog->getTime(),
-                                    qstrtostr(dialog->getName()),
-                                    qstrtostr(dialog->getDescription()));
+                                    dialog.getOriginalTime(),
+                                    dialog.getTime(),
+                                    qstrtostr(dialog.getName()),
+                                    qstrtostr(dialog.getDescription()));
 
         addCommandToHistory(command);
     }

@@ -687,6 +687,7 @@ AudioManagerDialog::slotPlayPreview()
     if (m_audioPlayingDialog->exec() == QDialog::Rejected)
         emit cancelPlayingAudioFile(m_playingAudioFile);
 
+    delete m_audioPlayingDialog;
     m_audioPlayingDialog = 0;
 
 }

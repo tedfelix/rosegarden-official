@@ -1047,13 +1047,13 @@ void MatrixView::slotTransformsQuantize()
 
     if (!m_currentEventSelection) return;
 
-    QuantizeDialog *dialog = new QuantizeDialog(this);
+    QuantizeDialog dialog(this);
 
-    if (dialog->exec() == QDialog::Accepted) {
+    if (dialog.exec() == QDialog::Accepted) {
 	KTmpStatusMsg msg(i18n("Quantizing..."), this);
 	addCommandToHistory(new EventQuantizeCommand
 			    (*m_currentEventSelection,
-			     dialog->getQuantizer()));
+			     dialog.getQuantizer()));
     }
 }
 
@@ -1100,7 +1100,7 @@ MatrixView::slotRescale()
 {
     if (!m_currentEventSelection) return;
 
-    RescaleDialog *dialog = new RescaleDialog
+    RescaleDialog dialog
 	(this,
 	 &getDocument()->getComposition(),
 	 m_currentEventSelection->getStartTime(),
@@ -1108,12 +1108,12 @@ MatrixView::slotRescale()
 	 m_currentEventSelection->getStartTime(),
 	 true);
 
-    if (dialog->exec() == QDialog::Accepted) {
+    if (dialog.exec() == QDialog::Accepted) {
 	KTmpStatusMsg msg(i18n("Rescaling..."), this);
 	addCommandToHistory(new RescaleCommand
 			    (*m_currentEventSelection,
-			     dialog->getNewDuration(),
-			     dialog->shouldCloseGap()));
+			     dialog.getNewDuration(),
+			     dialog.shouldCloseGap()));
     }
 }
 
@@ -2199,20 +2199,19 @@ MatrixView::slotSetVelocities()
     if (count > 0) avVely = int(double(avVely)/double(count));
     else avVely = 100;
 	
-    EventParameterDialog *dialog
-        = new EventParameterDialog(this,
-                                   i18n("Set Event Velocities"),
-                                   Rosegarden::BaseProperties::VELOCITY,
-                                   avVely);
+    EventParameterDialog dialog(this,
+				i18n("Set Event Velocities"),
+				Rosegarden::BaseProperties::VELOCITY,
+				avVely);
 
-    if (dialog->exec() == QDialog::Accepted) {
+    if (dialog.exec() == QDialog::Accepted) {
 	KTmpStatusMsg msg(i18n("Setting Velocities..."), this);
 	addCommandToHistory(new SelectionPropertyCommand
 			    (m_currentEventSelection,
                              Rosegarden::BaseProperties::VELOCITY,
-                             dialog->getPattern(),
-                             dialog->getValue1(),
-                             dialog->getValue2()));
+                             dialog.getPattern(),
+                             dialog.getValue1(),
+                             dialog.getValue2()));
     }
 }
 

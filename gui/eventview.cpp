@@ -848,14 +848,13 @@ EventView::slotEditInsert()
     event->set<Int>(Rosegarden::BaseProperties::PITCH, 70);
     event->set<Int>(Rosegarden::BaseProperties::VELOCITY, 100);
 
-    SimpleEventEditDialog *dialog =
-        new SimpleEventEditDialog(this, getDocument(), *event, true);
+    SimpleEventEditDialog dialog(this, getDocument(), *event, true);
 
-    if (dialog->exec() == QDialog::Accepted)
+    if (dialog.exec() == QDialog::Accepted)
     {
         EventInsertionCommand *command = 
             new EventInsertionCommand(*m_segments[0],
-                                      new Rosegarden::Event(dialog->getEvent()));
+                                      new Rosegarden::Event(dialog.getEvent()));
         addCommandToHistory(command);
     }
 }
@@ -875,15 +874,14 @@ EventView::slotEditEvent()
         if (item)
         {
             Rosegarden::Event *event = item->getEvent();
-            SimpleEventEditDialog *dialog = 
-                new SimpleEventEditDialog(this, getDocument(), *event, false);
+            SimpleEventEditDialog dialog(this, getDocument(), *event, false);
 
-            if (dialog->exec() == QDialog::Accepted && dialog->isModified())
+            if (dialog.exec() == QDialog::Accepted && dialog.isModified())
             {
                 EventEditCommand *command =
                     new EventEditCommand(*(item->getSegment()),
                                          event,
-                                         dialog->getEvent());
+                                         dialog.getEvent());
 
                 addCommandToHistory(command);
             }
@@ -906,14 +904,14 @@ EventView::slotEditEventAdvanced()
         if (item)
         {
             Rosegarden::Event *event = item->getEvent();
-            EventEditDialog *dialog = new EventEditDialog(this, *event);
+            EventEditDialog dialog(this, *event);
 
-            if (dialog->exec() == QDialog::Accepted && dialog->isModified())
+            if (dialog.exec() == QDialog::Accepted && dialog.isModified())
             {
                 EventEditCommand *command =
                     new EventEditCommand(*(item->getSegment()),
                                          event,
-                                         dialog->getEvent());
+                                         dialog.getEvent());
 
                 addCommandToHistory(command);
             }

@@ -2514,33 +2514,32 @@ SimpleEventEditDialog::slotMetaChanged(const QString &)
 void
 SimpleEventEditDialog::slotEditAbsoluteTime()
 {
-    TimeDialog *dialog = new TimeDialog(this, i18n("Edit Event Time"),
-					&m_doc->getComposition(),
-					m_timeSpinBox->value());
-    if (dialog->exec() == QDialog::Accepted) {
-	m_timeSpinBox->setValue(dialog->getTime());
+    TimeDialog dialog(this, i18n("Edit Event Time"),
+		      &m_doc->getComposition(),
+		      m_timeSpinBox->value());
+    if (dialog.exec() == QDialog::Accepted) {
+	m_timeSpinBox->setValue(dialog.getTime());
     }
 }
 
 void
 SimpleEventEditDialog::slotEditDuration()
 {
-    TimeDialog *dialog = new TimeDialog(this, i18n("Edit Duration"),
-					&m_doc->getComposition(),
-					m_timeSpinBox->value(),
-					m_durationSpinBox->value());
-    if (dialog->exec() == QDialog::Accepted) {
-	m_durationSpinBox->setValue(dialog->getTime());
+    TimeDialog dialog(this, i18n("Edit Duration"),
+		      &m_doc->getComposition(),
+		      m_timeSpinBox->value(),
+		      m_durationSpinBox->value());
+    if (dialog.exec() == QDialog::Accepted) {
+	m_durationSpinBox->setValue(dialog.getTime());
     }
 }
 
 void
 SimpleEventEditDialog::slotEditPitch()
 {
-    PitchDialog *dialog = new PitchDialog(this, i18n("Edit Pitch"),
-					  m_pitchSpinBox->value());
-    if (dialog->exec() == QDialog::Accepted) {
-	m_pitchSpinBox->setValue(dialog->getPitch());
+    PitchDialog dialog(this, i18n("Edit Pitch"), m_pitchSpinBox->value());
+    if (dialog.exec() == QDialog::Accepted) {
+	m_pitchSpinBox->setValue(dialog.getPitch());
     }
 }
 

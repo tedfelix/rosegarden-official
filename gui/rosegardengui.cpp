@@ -1933,8 +1933,8 @@ void RosegardenGUIApp::slotQuantizeSelection()
 
     //!!! this should all be in rosegardenguiview
 
-    QuantizeDialog *dialog = new QuantizeDialog(m_view);
-    if (dialog->exec() != QDialog::Accepted) return;
+    QuantizeDialog dialog(m_view);
+    if (dialog.exec() != QDialog::Accepted) return;
 
     Rosegarden::SegmentSelection selection = m_view->getSelection();
     
@@ -1945,7 +1945,7 @@ void RosegardenGUIApp::slotQuantizeSelection()
          i != selection.end(); ++i) {
         command->addCommand(new EventQuantizeCommand
                             (**i, (*i)->getStartTime(), (*i)->getEndTime(),
-                             dialog->getQuantizer()));
+                             dialog.getQuantizer()));
     }
 
     m_view->slotAddCommandToHistory(command);
@@ -1992,10 +1992,10 @@ void RosegardenGUIApp::slotRescaleSelection()
 	}
     }
 
-    RescaleDialog *dialog = new RescaleDialog(m_view, &m_doc->getComposition(),
-					      startTime, endTime - startTime,
-					      false);
-    if (dialog->exec() != QDialog::Accepted) return;
+    RescaleDialog dialog(m_view, &m_doc->getComposition(),
+			 startTime, endTime - startTime,
+			 false);
+    if (dialog.exec() != QDialog::Accepted) return;
 
     KMacroCommand *command = new KMacroCommand
         (SegmentRescaleCommand::getGlobalName());
@@ -2003,7 +2003,7 @@ void RosegardenGUIApp::slotRescaleSelection()
     for (Rosegarden::SegmentSelection::iterator i = selection.begin();
          i != selection.end(); ++i) {
         command->addCommand(new SegmentRescaleCommand(*i,
-						      dialog->getNewDuration(),
+						      dialog.getNewDuration(),
                                                       endTime - startTime));
     }
 
@@ -2082,8 +2082,8 @@ void RosegardenGUIApp::slotSplitSelectionByPitch()
 {
     if (!m_view->haveSelection()) return;
 
-    SplitByPitchDialog *dialog = new SplitByPitchDialog(m_view);
-    if (dialog->exec() != QDialog::Accepted) return;
+    SplitByPitchDialog dialog(m_view);
+    if (dialog.exec() != QDialog::Accepted) return;
 
     Rosegarden::SegmentSelection selection = m_view->getSelection();
 
@@ -2101,11 +2101,11 @@ void RosegardenGUIApp::slotSplitSelectionByPitch()
             command->addCommand
                 (new SegmentSplitByPitchCommand
                  (*i,
-                  dialog->getPitch(),
-                  dialog->getShouldRange(),
-                  dialog->getShouldDuplicateNonNoteEvents(),
+                  dialog.getPitch(),
+                  dialog.getShouldRange(),
+                  dialog.getShouldDuplicateNonNoteEvents(),
                   (SegmentSplitByPitchCommand::ClefHandling)
-                  dialog->getClefHandling()));
+                  dialog.getClefHandling()));
             haveSomething = true;
         }
     }
@@ -2125,11 +2125,11 @@ RosegardenGUIApp::slotSetSegmentStartTimes()
 
     Rosegarden::timeT someTime = (*selection.begin())->getStartTime();
 
-    TimeDialog *dialog = new TimeDialog(m_view, i18n("Segment Start Time"),
-					&m_doc->getComposition(),
-					someTime);
+    TimeDialog dialog(m_view, i18n("Segment Start Time"),
+		      &m_doc->getComposition(),
+		      someTime);
 
-    if (dialog->exec() == QDialog::Accepted) {
+    if (dialog.exec() == QDialog::Accepted) {
 
 	bool plural = (selection.size() > 1);
 	
@@ -2142,8 +2142,8 @@ RosegardenGUIApp::slotSetSegmentStartTimes()
 	     i != selection.end(); ++i) {
 
 	    command->addSegment
-		(*i, dialog->getTime(),
-		 (*i)->getEndMarkerTime() - (*i)->getStartTime() + dialog->getTime(),
+		(*i, dialog.getTime(),
+		 (*i)->getEndMarkerTime() - (*i)->getStartTime() + dialog.getTime(),
 		 (*i)->getTrack());
 	}
 
@@ -2167,12 +2167,12 @@ RosegardenGUIApp::slotSetSegmentDurations()
 	(*selection.begin())->getEndMarkerTime() -
 	(*selection.begin())->getStartTime();
 
-    TimeDialog *dialog = new TimeDialog(m_view, i18n("Segment Duration"),
-					&m_doc->getComposition(),
-					someTime,
-					someDuration);
+    TimeDialog dialog(m_view, i18n("Segment Duration"),
+		      &m_doc->getComposition(),
+		      someTime,
+		      someDuration);
 
-    if (dialog->exec() == QDialog::Accepted) {
+    if (dialog.exec() == QDialog::Accepted) {
 
 	bool plural = (selection.size() > 1);
 	
@@ -2186,7 +2186,7 @@ RosegardenGUIApp::slotSetSegmentDurations()
 
 	    command->addSegment
 		(*i, (*i)->getStartTime(),
-		 (*i)->getStartTime() + dialog->getTime(),
+		 (*i)->getStartTime() + dialog.getTime(),
 		 (*i)->getTrack());
 	}
 
@@ -3157,9 +3157,9 @@ RosegardenGUIApp::mergeFile(QString filePath)
 		}
 	    }
 
-	    FileMergeDialog *dialog = new FileMergeDialog(this, filePath, timingsDiffer);
-	    if (dialog->exec() == QDialog::Accepted) {
-		m_doc->mergeDocument(doc, dialog->getMergeOptions());
+	    FileMergeDialog dialog(this, filePath, timingsDiffer);
+	    if (dialog.exec() == QDialog::Accepted) {
+		m_doc->mergeDocument(doc, dialog.getMergeOptions());
 	    }
 
 	    delete doc;
@@ -3677,8 +3677,8 @@ void RosegardenGUIApp::slotExportLilypond()
 
 void RosegardenGUIApp::exportLilypondFile(QString file)
 {
-    LilypondOptionsDialog *dialog = new LilypondOptionsDialog(this);
-    if (dialog->exec() != QDialog::Accepted) return;
+    LilypondOptionsDialog dialog(this);
+    if (dialog.exec() != QDialog::Accepted) return;
 
     RosegardenProgressDialog progressDlg(i18n("Exporting Lilypond file..."),
                                          100,
@@ -4322,25 +4322,22 @@ void RosegardenGUIApp::slotEditTimeSignature(QWidget *parent)
     Rosegarden::timeT time = composition.getPosition();
     Rosegarden::TimeSignature sig = composition.getTimeSignatureAt(time);
 
-    TimeSignatureDialog *dialog = new TimeSignatureDialog
-        (parent, &composition, time, sig);
+    TimeSignatureDialog dialog(parent, &composition, time, sig);
 
-    if (dialog->exec() == QDialog::Accepted) {
+    if (dialog.exec() == QDialog::Accepted) {
 
-	time = dialog->getTime();
+	time = dialog.getTime();
 
-        if (dialog->shouldNormalizeRests()) {
+        if (dialog.shouldNormalizeRests()) {
             m_doc->getCommandHistory()->addCommand
                 (new AddTimeSignatureAndNormalizeCommand
-                 (&composition, time, dialog->getTimeSignature()));
+                 (&composition, time, dialog.getTimeSignature()));
         } else { 
             m_doc->getCommandHistory()->addCommand
                 (new AddTimeSignatureCommand
-                 (&composition, time, dialog->getTimeSignature()));
+                 (&composition, time, dialog.getTimeSignature()));
         }
     }
-
-    delete dialog;
 }
 
 void RosegardenGUIApp::slotChangeZoom(int)
@@ -4835,17 +4832,15 @@ RosegardenGUIApp::slotRelabelSegments()
 void
 RosegardenGUIApp::slotChangeCompositionLength()
 {
-    CompositionLengthDialog *dialog =
-        new CompositionLengthDialog(this,
-                                    &m_doc->getComposition());
+    CompositionLengthDialog dialog(this, &m_doc->getComposition());
 
-    if (dialog->exec() == QDialog::Accepted)
+    if (dialog.exec() == QDialog::Accepted)
     {
         ChangeCompositionLengthCommand *command
             = new ChangeCompositionLengthCommand(
                     &m_doc->getComposition(),
-                    dialog->getStartMarker(),
-                    dialog->getEndMarker());
+                    dialog.getStartMarker(),
+                    dialog.getEndMarker());
 
         m_doc->getCommandHistory()->addCommand(command);
     }

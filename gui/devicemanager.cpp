@@ -743,6 +743,8 @@ DeviceManagerDialog::slotImport()
 
 	if (dialog->shouldRename()) emit deviceNamesChanged();
     }
+
+    delete dialog;
 }
 
 void
@@ -793,10 +795,9 @@ DeviceManagerDialog::slotExport()
 	md = dynamic_cast<Rosegarden::MidiDevice *>(m_studio->getDevice(id));
     }
     if (md) {
-	ExportDeviceDialog *ed = new ExportDeviceDialog
-	    (this, strtoqstr(md->getName()));
-	if (ed->exec() != QDialog::Accepted) return;
-	if (ed->getExportType() == ExportDeviceDialog::ExportOne) {
+	ExportDeviceDialog ed(this, strtoqstr(md->getName()));
+	if (ed.exec() != QDialog::Accepted) return;
+	if (ed.getExportType() == ExportDeviceDialog::ExportOne) {
 	    devices.push_back(id);
 	}
     }

@@ -383,16 +383,16 @@ ControlEditorDialog::slotEdit(QListViewItem *i)
 
     if (item && md)
     {
-        ControlParameterEditDialog *dialog = 
-            new ControlParameterEditDialog::ControlParameterEditDialog(
-                    this, md->getControlParameter(item->getId()), m_doc);
+        ControlParameterEditDialog dialog
+	    (this,
+	     md->getControlParameter(item->getId()), m_doc);
 
-        if (dialog->exec() == QDialog::Accepted)
+        if (dialog.exec() == QDialog::Accepted)
         {
             ModifyControlParameterCommand *command =
                 new ModifyControlParameterCommand(m_studio,
 						  m_device,
-						  dialog->getControl(),
+						  dialog.getControl(),
 						  item->getId());
 
             addCommandToHistory(command);

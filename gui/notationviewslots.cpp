@@ -543,13 +543,12 @@ void NotationView::slotEditGeneralPaste()
         config->readUnsignedNumEntry("pastetype",
                                      PasteEventsCommand::Restricted);
     
-    PasteNotationDialog *dialog =
-        new PasteNotationDialog(this, defaultType);
+    PasteNotationDialog dialog(this, defaultType);
 
-    if (dialog->exec() == QDialog::Accepted) {
+    if (dialog.exec() == QDialog::Accepted) {
 
-        PasteEventsCommand::PasteType type = dialog->getPasteType();
-        if (dialog->setAsDefault()) {
+        PasteEventsCommand::PasteType type = dialog.getPasteType();
+        if (dialog.setAsDefault()) {
             config->writeEntry("pastetype", type);
         }
 
@@ -799,11 +798,11 @@ void NotationView::slotGroupTuplet(bool simple)
         unit = Rosegarden::Note(unitType).getDuration();
 
         if (!simple) {
-            TupletDialog *dialog = new TupletDialog(this, unitType, duration);
-            if (dialog->exec() != QDialog::Accepted) return;
-            unit = Rosegarden::Note(dialog->getUnitType()).getDuration();
-            tupled = dialog->getTupledCount();
-            untupled = dialog->getUntupledCount();
+            TupletDialog dialog(this, unitType, duration);
+            if (dialog.exec() != QDialog::Accepted) return;
+            unit = Rosegarden::Note(dialog.getUnitType()).getDuration();
+            tupled = dialog.getTupledCount();
+            untupled = dialog.getUntupledCount();
         }
 
         segment = &m_currentEventSelection->getSegment();
@@ -826,11 +825,11 @@ void NotationView::slotGroupTuplet(bool simple)
         unit = Rosegarden::Note(unitType).getDuration();
 
         if (!simple) {
-            TupletDialog *dialog = new TupletDialog(this, unitType);
-            if (dialog->exec() != QDialog::Accepted) return;
-            unit = Rosegarden::Note(dialog->getUnitType()).getDuration();
-            tupled = dialog->getTupledCount();
-            untupled = dialog->getUntupledCount();
+            TupletDialog dialog(this, unitType);
+            if (dialog.exec() != QDialog::Accepted) return;
+            unit = Rosegarden::Note(dialog.getUnitType()).getDuration();
+            tupled = dialog.getTupledCount();
+            untupled = dialog.getUntupledCount();
         }
 
         segment = &m_staffs[m_currentStaff]->getSegment();
@@ -1228,13 +1227,13 @@ void NotationView::slotTransformsQuantize()
 {
     if (!m_currentEventSelection) return;
 
-    QuantizeDialog *dialog = new QuantizeDialog(this, true);
+    QuantizeDialog dialog(this, true);
 
-    if (dialog->exec() == QDialog::Accepted) {
+    if (dialog.exec() == QDialog::Accepted) {
         KTmpStatusMsg msg(i18n("Quantizing..."), this);
         addCommandToHistory(new EventQuantizeCommand
                             (*m_currentEventSelection,
-                             dialog->getQuantizer()));
+                             dialog.getQuantizer()));
     }
 }
 
@@ -1242,14 +1241,14 @@ void NotationView::slotTransformsInterpret()
 {
     if (!m_currentEventSelection) return;
 
-    InterpretDialog *dialog = new InterpretDialog(this);
+    InterpretDialog dialog(this);
 
-    if (dialog->exec() == QDialog::Accepted) {
+    if (dialog.exec() == QDialog::Accepted) {
 	KTmpStatusMsg msg(i18n("Interpreting selection..."), this);
 	addCommandToHistory(new TransformsMenuInterpretCommand
 			    (*m_currentEventSelection,
 			     getDocument()->getComposition().getNotationQuantizer(),
-			     dialog->getInterpretations()));
+			     dialog.getInterpretations()));
     }
 }
     
@@ -1296,22 +1295,20 @@ void NotationView::slotEditAddClef()
     Rosegarden::Key key;
     timeT insertionTime = getInsertionTime(clef, key);
     
-    ClefDialog *dialog = new ClefDialog(this, m_notePixmapFactory, clef);
+    ClefDialog dialog(this, m_notePixmapFactory, clef);
     
-    if (dialog->exec() == QDialog::Accepted) {
+    if (dialog.exec() == QDialog::Accepted) {
         
-        ClefDialog::ConversionType conversion = dialog->getConversionType();
+        ClefDialog::ConversionType conversion = dialog.getConversionType();
         
         bool shouldChangeOctave = (conversion != ClefDialog::NoConversion);
         bool shouldTranspose = (conversion == ClefDialog::Transpose);
         
         addCommandToHistory
             (new ClefInsertionCommand
-             (segment, insertionTime, dialog->getClef(),
+             (segment, insertionTime, dialog.getClef(),
               shouldChangeOctave, shouldTranspose));
     }
-    
-    delete dialog;
 }                       
 
 void NotationView::slotEditAddKeySignature()
@@ -1329,37 +1326,34 @@ void NotationView::slotEditAddKeySignature()
     Rosegarden::AnalysisHelper helper;
     key = helper.guessKey(adapter);
 
-    KeySignatureDialog *dialog =
-        new KeySignatureDialog
+    KeySignatureDialog dialog
         (this, m_notePixmapFactory, clef, key, true, true,
          i18n("Estimated key signature shown"));
     
-    if (dialog->exec() == QDialog::Accepted &&
-        dialog->isValid()) {
+    if (dialog.exec() == QDialog::Accepted &&
+        dialog.isValid()) {
         
         KeySignatureDialog::ConversionType conversion =
-            dialog->getConversionType();
+            dialog.getConversionType();
         
-        bool applyToAll = dialog->shouldApplyToAll();
+        bool applyToAll = dialog.shouldApplyToAll();
         
         if (applyToAll) {
             addCommandToHistory
                 (new MultiKeyInsertionCommand
                  (getDocument()->getComposition(),
-                  insertionTime, dialog->getKey(),
+                  insertionTime, dialog.getKey(),
                   conversion == KeySignatureDialog::Convert,
                   conversion == KeySignatureDialog::Transpose));
         } else {
             addCommandToHistory
                 (new KeyInsertionCommand
                  (segment,
-                  insertionTime, dialog->getKey(),
+                  insertionTime, dialog.getKey(),
                   conversion == KeySignatureDialog::Convert,
                   conversion == KeySignatureDialog::Transpose));
         }
     }
-
-    delete dialog;
 }                       
 
 void NotationView::slotEditElement(NotationStaff *staff,
@@ -1949,12 +1943,12 @@ void NotationView::slotEditLyrics()
     NotationStaff *staff = m_staffs[m_currentStaff];
     Segment &segment = staff->getSegment();
 
-    LyricEditDialog *dialog = new LyricEditDialog(this, &segment);
+    LyricEditDialog dialog(this, &segment);
 
-    if (dialog->exec() == QDialog::Accepted) {
+    if (dialog.exec() == QDialog::Accepted) {
         
         SetLyricsCommand *command = new SetLyricsCommand
-            (&segment, dialog->getLyricData());
+            (&segment, dialog.getLyricData());
 
         addCommandToHistory(command);
     }

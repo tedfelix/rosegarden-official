@@ -521,25 +521,22 @@ TempoView::slotEditInsertTimeSignature()
     Rosegarden::Composition &composition(m_doc->getComposition());
     Rosegarden::TimeSignature sig = composition.getTimeSignatureAt(insertTime);
 
-    TimeSignatureDialog *dialog = new TimeSignatureDialog
-        (this, &composition, insertTime, sig, true);
+    TimeSignatureDialog dialog(this, &composition, insertTime, sig, true);
 
-    if (dialog->exec() == QDialog::Accepted) {
+    if (dialog.exec() == QDialog::Accepted) {
 
-	insertTime = dialog->getTime();
+	insertTime = dialog.getTime();
 
-        if (dialog->shouldNormalizeRests()) {
+        if (dialog.shouldNormalizeRests()) {
 	    addCommandToHistory
                 (new AddTimeSignatureAndNormalizeCommand
-                 (&composition, insertTime, dialog->getTimeSignature()));
+                 (&composition, insertTime, dialog.getTimeSignature()));
         } else { 
 	    addCommandToHistory
                 (new AddTimeSignatureCommand
-                 (&composition, insertTime, dialog->getTimeSignature()));
+                 (&composition, insertTime, dialog.getTimeSignature()));
         }
     }
-
-    delete dialog;
 }
 
 void
@@ -803,25 +800,22 @@ TempoView::slotPopupEditor(QListViewItem *qitem)
 	Rosegarden::Composition &composition(getDocument()->getComposition());
 	Rosegarden::TimeSignature sig = composition.getTimeSignatureAt(time);
 	
-	TimeSignatureDialog *dialog = new TimeSignatureDialog
-	    (this, &composition, time, sig, true);
+	TimeSignatureDialog dialog(this, &composition, time, sig, true);
 	
-	if (dialog->exec() == QDialog::Accepted) {
+	if (dialog.exec() == QDialog::Accepted) {
 	    
-	    time = dialog->getTime();
+	    time = dialog.getTime();
 	    
-	    if (dialog->shouldNormalizeRests()) {
+	    if (dialog.shouldNormalizeRests()) {
 		addCommandToHistory
 		    (new AddTimeSignatureAndNormalizeCommand
-		     (&composition, time, dialog->getTimeSignature()));
+		     (&composition, time, dialog.getTimeSignature()));
 	    } else { 
 		addCommandToHistory
 		    (new AddTimeSignatureCommand
-		     (&composition, time, dialog->getTimeSignature()));
+		     (&composition, time, dialog.getTimeSignature()));
 	    }
 	}
-	
-	delete dialog;
     }
     
     default:

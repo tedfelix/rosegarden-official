@@ -447,7 +447,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 	if (inputStr) {
 	    int inputs = inputStr.toInt();
 	    if (inputs < 1) inputs = 1; // we simply don't permit no inputs
-	    while (getStudio().getRecordIns().size() < inputs) {
+	    while (int(getStudio().getRecordIns().size()) < inputs) {
 		getStudio().addRecordIn(new Rosegarden::RecordIn());
 	    }
 	}
@@ -861,15 +861,14 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             do
             {
 
-                FileLocateDialog *fL =
-                    new FileLocateDialog((RosegardenGUIApp *)m_doc->parent(),
-                        file,
-                        QString(getAudioFileManager().getAudioPath().c_str()));
+                FileLocateDialog fL((RosegardenGUIApp *)m_doc->parent(),
+				    file,
+				    QString(getAudioFileManager().getAudioPath().c_str()));
 
-                if(fL->exec() == QDialog::Accepted)
+                if (fL.exec() == QDialog::Accepted)
                 {
-                    newFilename = fL->getFilename();
-                    newPath = fL->getDirectory();
+                    newFilename = fL.getFilename();
+                    newPath = fL.getDirectory();
                 }
                 else
                 {

@@ -1897,6 +1897,7 @@ BankEditorDialog::slotImport()
 	    selectDeviceItem(device);
     }
 
+    delete dialog;
     updateDialog();
 }
 
