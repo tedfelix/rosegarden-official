@@ -27,7 +27,6 @@
 #include <qtooltip.h>
 
 #include <klocale.h>
-#include <kapp.h>
 #include <kglobal.h>
 #include <kstddirs.h>
 
@@ -43,6 +42,37 @@
 #include "rosegardenguidoc.h"
 
 using Rosegarden::TrackId;
+
+/**
+ * @author Stefan Schimanski
+ * Taken from KMix code,
+ * Copyright (C) 2000 Stefan Schimanski <1Stein@gmx.de>
+ */
+KLedButton::KLedButton(const QColor &col, QWidget *parent, const char *name)
+   : KLed( col, parent, name )
+{	
+}
+
+KLedButton::KLedButton(const QColor& col, KLed::State st, KLed::Look look,
+		       KLed::Shape shape, QWidget *parent, const char *name)
+   : KLed( col, st, look, shape, parent, name )
+{
+}
+
+KLedButton::~KLedButton()
+{
+}
+
+void KLedButton::mousePressEvent( QMouseEvent *e )
+{
+   if (e->button() == LeftButton)
+   {
+      toggle();
+      emit stateChanged( state() );
+   }
+}
+///////////////////////////////////////////////////////////
+
 
 TrackVUMeter::TrackVUMeter(QWidget *parent,
                            VUMeterType type,
@@ -85,7 +115,7 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
     : QFrame(parent, name, f),
       m_doc(doc),
       m_recordButtonGroup(new QButtonGroup(this)),
-      m_muteButtonGroup(new QButtonGroup(this)),
+      m_muteSigMapper(new QSignalMapper(this)),
       m_layout(new QVBoxLayout(this)),
       m_clickedSigMapper(new QSignalMapper(this)),
       m_instListSigMapper(new QSignalMapper(this)),
@@ -114,10 +144,6 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
     //
     m_recordButtonGroup->setExclusive(true);
 
-    // Create a buttongroup for muting
-    //
-    m_muteButtonGroup->setExclusive(false);
-
     // Now draw the buttons and labels and meters
     //
     makeButtons();
@@ -127,7 +153,7 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
     connect(m_recordButtonGroup, SIGNAL(clicked(int)),
             this, SLOT(slotSetRecordTrack(int)));
 
-    connect(m_muteButtonGroup, SIGNAL(clicked(int)),
+    connect(m_muteSigMapper, SIGNAL(mapped(int)),
             this, SLOT(slotToggleMutedTrack(int)));
 
     // connect signal mappers
@@ -190,7 +216,7 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
 
     QFrame *trackHBox = 0;
 
-    QPushButton *mute = 0;
+    KLedButton *mute = 0;
     QPushButton *record = 0;
 
     TrackVUMeter *vuMeter = 0;
@@ -239,15 +265,24 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
     hblayout->addSpacing(vuSpacing);
 
     // Create buttons
-    mute = new QPushButton(trackHBox);
+    mute = new KLedButton(Qt::green, trackHBox);
     QToolTip::add(mute, i18n("Mute track"));
     hblayout->addWidget(mute);
     record = new QPushButton(trackHBox);
     QToolTip::add(record, i18n("Record on this track"));
     hblayout->addWidget(record);
 
-    mute->setFlat(true);
     record->setFlat(true);
+    mute->setLook(KLed::Sunken);
+
+    connect(mute, SIGNAL(stateChanged(bool)),
+            m_muteSigMapper, SLOT(map()));
+    m_muteSigMapper->setMapping(mute, trackId);
+
+    // Store the KLedButton
+    //
+    m_muteLeds.push_back(mute);
+
 
     //
     // Track label
@@ -305,12 +340,7 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
     // Insert the buttons into groups
     //
     m_recordButtonGroup->insert(record, trackId);
-    m_muteButtonGroup->insert(mute, track->getPosition());
-
-    mute->setToggleButton(true);
     record->setToggleButton(true);
-
-    mute->setText("M");
     record->setText("R"); 
 
     mute->setFixedSize(m_cellSize - buttonGap, m_cellSize - buttonGap);
@@ -319,7 +349,7 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
     // set the mute button
     //
     if (track->isMuted())
-        mute->setOn(true);
+        mute->off();
 
     return trackHBox;
 }
@@ -366,9 +396,9 @@ TrackButtons::populateButtons()
             // Set mute button from track
             //
             if (track->isMuted())
-                m_muteButtonGroup->find(i)->setDown(true);
+                m_muteLeds[i]->off();
             else
-                m_muteButtonGroup->find(i)->setDown(false);
+                m_muteLeds[i]->on();
 
             // Set record button from track
             //
@@ -414,7 +444,7 @@ TrackButtons::mutedTracks()
 
     for (TrackId i = 0; i < m_tracks; i++)
     {
-        if (m_muteButtonGroup->find(i)->isDown())
+        if (m_muteLeds[i]->state() == KLed::Off)
             mutedTracks.push_back(i);
     }
 
@@ -428,14 +458,16 @@ TrackButtons::mutedTracks()
 void
 TrackButtons::slotToggleMutedTrack(int mutedTrack)
 {
+    RG_DEBUG << "TrackButtons::slotToggleMutedTrack(" << mutedTrack << ")\n";
+
     if (mutedTrack < 0 || mutedTrack > (int)m_tracks )
         return;
 
     Rosegarden::Track *track = 
         m_doc->getComposition().getTrackByPosition(mutedTrack);
 
-    //RG_DEBUG << "TrackButtons::slotToggleMutedTrack - track = " << mutedTrack
-             //<< " is " << !track->isMuted() << endl;
+    RG_DEBUG << "TrackButtons::slotToggleMutedTrack - track = " << mutedTrack
+             << " is " << !track->isMuted() << endl;
 
     emit muteButton(track->getId(), !track->isMuted()); // will set the value
 }
@@ -488,17 +520,32 @@ TrackButtons::removeButtons(unsigned int position)
         m_trackMeters.erase(vit);
     }
 
+    std::vector<KLedButton*>::iterator mit = m_muteLeds.begin();
+    mit += position;
+    m_muteLeds.erase(mit);
+    
+//     i = 0;
+//     std::vector<KLedButton*>::iterator mit;
+//     for (mit = m_muteLeds.begin(); mit != m_muteLeds.end(); ++mit)
+//     {
+//         if (i == position) break;
+//         i++;
+//     }
+
+//     if (mit != m_muteLeds.end())
+//     {
+//         //delete (*vit);
+//         m_muteLeds.erase(mit);
+//     }
+
     // Get rid of the buttons
     //
-    QButton *button = m_muteButtonGroup->find(position);
-    m_muteButtonGroup->remove(button);
-    //delete button;
 
-    button = m_recordButtonGroup->find(position);
+    QButton* button = m_recordButtonGroup->find(position);
     m_recordButtonGroup->remove(button);
     //delete button;
 
-    delete m_trackHBoxes[position];
+    delete m_trackHBoxes[position]; // deletes all child widgets (button, led, label...)
 
 }
 
@@ -1003,11 +1050,9 @@ TrackButtons::slotSynchroniseWithComposition()
         if (track)
         {
             if (track->isMuted())
-                dynamic_cast<QPushButton*>(
-                        m_muteButtonGroup->find(i))->setOn(true);
+                m_muteLeds[i]->on();
             else
-                dynamic_cast<QPushButton*>(
-                        m_muteButtonGroup->find(i))->setOn(false);
+                m_muteLeds[i]->off();
 
             Rosegarden::Instrument *ins = studio.
                 getInstrumentById(track->getInstrument());
@@ -1042,8 +1087,7 @@ TrackButtons::setMuteButton(TrackId track, bool value)
     Rosegarden::Track *trackObj = m_doc->getComposition().getTrackById(track);
     if (trackObj == 0) return;
 
-    dynamic_cast<QPushButton*>(m_muteButtonGroup->find(trackObj->getPosition()))
-        ->setOn(value);
+    m_muteLeds[trackObj->getPosition()]->setState(value ? KLed::Off : KLed::On);
 }
 
 

@@ -29,6 +29,8 @@
 #include <qframe.h>
 #include <qpopupmenu.h>
 
+#include <kled.h>
+
 #include "Instrument.h"
 #include "Track.h"
 
@@ -41,6 +43,28 @@ class TrackVUMeter;
 class RosegardenGUIDoc;
 class InstrumentLabel;
 class QSignalMapper;
+
+
+/**
+ * @author Stefan Schimanski
+ * Taken from KMix code,
+ * Copyright (C) 2000 Stefan Schimanski <1Stein@gmx.de>
+ */
+class KLedButton : public KLed  {
+   Q_OBJECT
+  public: 
+   KLedButton(const QColor &col=Qt::green, QWidget *parent=0, const char *name=0);
+   KLedButton(const QColor& col, KLed::State st, KLed::Look look, KLed::Shape shape,
+	      QWidget *parent=0, const char *name=0);
+   ~KLedButton();	
+
+  signals:
+   void stateChanged( bool newState );
+
+  protected:	
+   void mousePressEvent ( QMouseEvent *e );
+};
+
 
 // This class creates a list of mute and record buttons
 // based on the rosegarden document and a specialisation
@@ -207,9 +231,10 @@ protected:
     RosegardenGUIDoc                 *m_doc;
 
     QButtonGroup                     *m_recordButtonGroup;
-    QButtonGroup                     *m_muteButtonGroup;
+    QSignalMapper                    *m_muteSigMapper;
     QVBoxLayout                      *m_layout;
 
+    std::vector<KLedButton *>         m_muteLeds;
     std::vector<TrackLabel *>         m_trackLabels;
     std::vector<TrackVUMeter *>       m_trackMeters;
     std::vector<QFrame *>             m_trackHBoxes;
