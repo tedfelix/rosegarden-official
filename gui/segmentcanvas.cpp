@@ -1040,7 +1040,7 @@ void SegmentCanvas::contentsMouseDoubleClickEvent(QMouseEvent* e)
         if (rect) {
 	    Rosegarden::timeT time = rect->getRepeatStartTime(e->x());
 
-	    RG_DEBUG << "editRepeat at time " << time << endl;
+//	    RG_DEBUG << "editRepeat at time " << time << endl;
 	
 	    emit editRepeat(rect->getSegment(), time);
         }
@@ -1107,6 +1107,8 @@ SegmentCanvas::addSegmentItem(TrackId track, timeT startTime, timeT endTime)
     SegmentItem *newItem = new SegmentItem
 	(track, startTime, endTime, m_showPreviews, &m_grid, canvas(), m_doc);
 
+//    RG_DEBUG << "addSegmentItem from data: new item is " << newItem << endl;
+
     newItem->setPen(m_pen);
 //    newItem->setBrush(RosegardenGUIColours::convertColour(m_doc->getComposition().getSegmentColourMap().getColourByIndex(0)));
     newItem->setVisible(true);     
@@ -1121,6 +1123,8 @@ SegmentCanvas::addSegmentItem(Segment *segment)
     SegmentItem *newItem = new SegmentItem
 	(segment, m_showPreviews, &m_grid, canvas(), m_doc);
 
+//    RG_DEBUG << "addSegmentItem from segment: new item is " << newItem << endl;
+
     newItem->setPen(m_pen);
 //    newItem->setBrush(RosegardenGUIColours::convertColour(m_doc->getComposition().getSegmentColourMap().getColourByIndex(segment->getColourIndex())));
     newItem->setVisible(true);     
@@ -1132,6 +1136,9 @@ SegmentCanvas::addSegmentItem(Segment *segment)
 void SegmentCanvas::showRecordingSegmentItem(TrackId track,
                                              timeT startTime, timeT endTime)
 {
+//    RG_DEBUG << "SegmentCanvas::showRecordingSegmentItem(" << track << ", "
+//	     << startTime << ", " << endTime << ") (seg now is " << m_recordingSegment << ")" << endl;
+
     if (m_recordingSegment) {
 
 	m_recordingSegment->setStartTime(startTime);
@@ -1144,12 +1151,16 @@ void SegmentCanvas::showRecordingSegmentItem(TrackId track,
 	m_recordingSegment->setPen(RosegardenGUIColours::RecordingSegmentBorder);
         m_recordingSegment->setColour(RosegardenGUIColours::RecordingSegmentBlock);
 	m_recordingSegment->setZ(2);
+
+//	RG_DEBUG << "(recording segment now is " << m_recordingSegment << ")" << endl;
     }
 }
 
 
 void SegmentCanvas::deleteRecordingSegmentItem()
 {
+//    RG_DEBUG << "SegmentCanvas::deleteRecordingSegmentItem (seg is " << m_recordingSegment << ")" << endl;
+
     if (m_recordingSegment) {
 
 	m_recordingSegment->setVisible(false);

@@ -348,7 +348,12 @@ SequenceManager::stop()
     //
     QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
 
-    rgapp->sequencerSend("stop()");
+    QCString replyType;
+    QByteArray replyData;
+
+    if (!rgapp->sequencerCall("stop()", replyType, replyData)) {
+        throw(Rosegarden::Exception("Failed to contact Rosegarden sequencer with stop command"));
+    }
 
     // restore
     QApplication::restoreOverrideCursor();

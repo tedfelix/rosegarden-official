@@ -1917,7 +1917,6 @@ RosegardenTimeWidget::slotBarBeatOrFractionChanged(int)
     int beat = m_beat->value();
     int fraction = m_fraction->value();
 
-
     if (m_isDuration) {
 	Rosegarden::TimeSignature timeSig =
 	    m_composition->getTimeSignatureAt(m_startTime);
