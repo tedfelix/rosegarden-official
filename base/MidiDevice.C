@@ -190,7 +190,7 @@ MidiDevice::toXmlString()
 {
     std::stringstream midiDevice;
 
-    midiDevice << "    <device name=\""  << m_name 
+    midiDevice << "    <device id=\""  << m_id 
                << "\" type=\"midi\">" << std::endl << std::endl;
 
     // Write out the metronome - watch the MidiBytes

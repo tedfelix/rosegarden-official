@@ -1031,6 +1031,8 @@ SequenceManager::preparePlayback()
         //
         if ((*it)->getType() == Instrument::Midi)
         {
+            // send bank select always before program change
+            //
             if ((*it)->sendsBankSelect())
             {
                 mE = new MappedEvent((*it)->getID(),
@@ -1046,11 +1048,24 @@ SequenceManager::preparePlayback()
                 mC.insert(mE);
             }
 
+            // send program change
+            //
             if ((*it)->sendsProgramChange())
             {
                 mE = new MappedEvent((*it)->getID(),
                                      Rosegarden::MappedEvent::MidiProgramChange,
                                      (*it)->getProgramChange());
+                mC.insert(mE);
+            }
+
+            // send pan
+            //
+            if ((*it)->sendsPan())
+            {
+                mE = new MappedEvent((*it)->getID(),
+                                     Rosegarden::MappedEvent::MidiController,
+                                     Rosegarden::MIDI_CONTROLLER_PAN,
+                                     (*it)->getPan());
                 mC.insert(mE);
             }
         }

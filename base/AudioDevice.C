@@ -82,7 +82,7 @@ AudioDevice::toXmlString()
     std::stringstream audioDevice;
     InstrumentList::iterator iit;
 
-    audioDevice << "    <device name=\""  << m_name
+    audioDevice << "    <device id=\""  << m_id
                 << "\" type=\"audio\">" << std::endl;
 
     for (iit = m_instruments.begin(); iit != m_instruments.end(); iit++)

@@ -557,7 +557,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
                 return false;
             }
 
-            QString nameStr = (atts.value("name"));
+            QString nameStr = atts.value("name");
             m_msb = (atts.value("msb")).toInt();
             m_lsb = (atts.value("lsb")).toInt();
 
