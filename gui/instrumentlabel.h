@@ -52,7 +52,6 @@ public:
     void setSelected(bool value);
 
 public slots:
-    void slotChangeToInstrumentList();
     //
     // Set an alternative label
     //
@@ -60,11 +59,8 @@ public slots:
     void clearAlternativeLabel() { m_alternativeLabel = ""; }
 
 signals:
-    // Our version of released() has an int id associated with it
-    //
-    void released(int); // TODO - rename this to 'clicked(int)'
-
-    void changeToInstrumentList(int);
+    void clicked();
+    void changeToInstrumentList();
 
 protected:
 

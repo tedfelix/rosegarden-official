@@ -19,7 +19,6 @@
 
 #include "instrumentlabel.h"
 
-
 InstrumentLabel::InstrumentLabel(const QString &label,
                                  Rosegarden::TrackId id,
                                  QWidget *parent,
@@ -33,7 +32,7 @@ InstrumentLabel::InstrumentLabel(const QString &label,
     m_pressTimer = new QTimer();
 
     connect(m_pressTimer, SIGNAL(timeout()),
-            this, SLOT(slotChangeToInstrumentList()));
+            this, SIGNAL(changeToInstrumentList()));
 }
 
 InstrumentLabel::InstrumentLabel(Rosegarden::TrackId id,
@@ -45,7 +44,7 @@ InstrumentLabel::InstrumentLabel(Rosegarden::TrackId id,
     m_pressTimer = new QTimer();
 
     connect(m_pressTimer, SIGNAL(timeout()),
-            this, SLOT(slotChangeToInstrumentList()));
+            this, SIGNAL(changeToInstrumentList()));
 }
 
 InstrumentLabel::~InstrumentLabel()
@@ -56,7 +55,7 @@ void
 InstrumentLabel::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() != LeftButton)
-                return;
+        return;
 
     // store the press coords for positioning the popup
     m_pressPosition = e->globalPos();
@@ -73,14 +72,8 @@ InstrumentLabel::mouseReleaseEvent(QMouseEvent * /*e*/)
     if (m_pressTimer->isActive())
         m_pressTimer->stop();
 
-    // now send released signal to update selected track
-    emit released(m_id);
-}
-
-void
-InstrumentLabel::slotChangeToInstrumentList()
-{
-    emit changeToInstrumentList(m_id);
+    // now send clicked signal to update selected track
+    emit clicked();
 }
 
 void
