@@ -837,10 +837,36 @@ AlsaDriver::stopPlayback()
 void
 AlsaDriver::resetPlayback(const RealTime &position, const RealTime &latency)
 {
-    allNotesOff();
+    // Reset note offs to correct positions
+    //
+    RealTime modifyNoteOff = m_playStartPosition - m_alsaPlayStartTime;
+
+    // set new
     m_playStartPosition = position;
     m_alsaPlayStartTime = getAlsaTime() - latency;
+
+    // add
+    modifyNoteOff = modifyNoteOff - m_playStartPosition + m_alsaPlayStartTime;
+
+    // modify the note offs that exist as they're relative to the
+    // playStartPosition terms.
+    //
+    for (NoteOffQueue::iterator i = m_noteOffQueue.begin();
+                                i != m_noteOffQueue.end(); i++)
+    {
+
+        // if we're fast forwarding then we bring the note off closer
+        if (modifyNoteOff <= RealTime(0, 0))
+        {
+            (*i)->setRealTime((*i)->getRealTime() + modifyNoteOff);
+        }
+        else // we're rewinding - kill the note immediately
+        {
+            (*i)->setRealTime(m_playStartPosition);
+        }
+    }
 }
+
 
 void
 AlsaDriver::allNotesOff()
@@ -854,7 +880,7 @@ AlsaDriver::allNotesOff()
     snd_seq_ev_set_source(event, m_port);
 
     for (NoteOffQueue::iterator i = m_noteOffQueue.begin();
-                                i != m_noteOffQueue.end(); ++i)
+                                i != m_noteOffQueue.end(); i++)
     {
         // Set destination according to instrument mapping to port
         //
@@ -901,7 +927,7 @@ AlsaDriver::processNotesOff(const RealTime &time)
     snd_seq_ev_set_source(event, m_port);
 
     for (NoteOffQueue::iterator i = m_noteOffQueue.begin();
-                      i != m_noteOffQueue.end(); ++i)
+         i != m_noteOffQueue.end(); i++)
     {
         if ((*i)->getRealTime() <= time)
         {
@@ -1306,7 +1332,6 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
                           << std::endl;
                 delete event;
                 snd_seq_drain_output(m_midiHandle);
-                processNotesOff(midiRelativeTime);
                 return;
         }
 
@@ -1335,7 +1360,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
     }
 
     snd_seq_drain_output(m_midiHandle);
-    processNotesOff(midiRelativeTime);
+    //processNotesOff(midiRelativeTime);
 
     delete event;
 }
@@ -1547,13 +1572,13 @@ AlsaDriver::sendDeviceController(const ClientPortPair &device,
     delete event;
 }
 
+// We only process note offs in this section
+//
 void
 AlsaDriver::processPending(const RealTime &playLatency)
 {
     if (m_playing)
-    {
-        processNotesOff(getAlsaTime() + m_playStartPosition + playLatency);
-    }
+        processNotesOff(getAlsaTime());
 }
 
 float

@@ -164,7 +164,9 @@ public:
         }
     };
 
+    void setRealTime(const RealTime &time) { m_realTime = time; }
     Rosegarden::RealTime getRealTime() const { return m_realTime; }
+
     Rosegarden::MidiByte getPitch() const { return m_pitch; }
     Rosegarden::MidiByte getChannel() const { return m_channel; }
     Rosegarden::InstrumentId getInstrument() const { return m_instrument; }
