@@ -40,8 +40,362 @@ using Rosegarden::Segment;
 using Rosegarden::timeT;
 using Rosegarden::PropertyName;
 
+/**
+ * Control Tool
+ */
+class ControlTool
+{
+public:
+    virtual ~ControlTool() {};
+    virtual int operator()(double x, int val) = 0;
+};
 
-ControlRuler::ControlRuler(RulerScale *rulerScale,
+class TestTool : public ControlTool
+{
+public:
+    int operator()(double, int);
+};
+
+
+int TestTool::operator()(double x, int val)
+{
+    int res = (int)x / 10 + val;
+
+    qDebug("TestTool::operator() : x = %g, val = %d res = %d", x, val, res);
+
+    return res;
+}
+
+//
+// ------------------
+//
+class ControlItem : public QCanvasRectangle
+{
+public:
+    ControlItem(ControlRuler* controlRuler);
+
+    virtual void setValue(int);
+
+    void setWidth(int w)  { setSize(w, height()); }
+    void setHeight(int h) { setSize(width(), h); }
+    int getHeight()       { return size().height(); }
+
+    virtual void draw(QPainter &painter);
+
+    virtual void handleMouseButtonPress(QMouseEvent *e);
+    virtual void handleMouseButtonRelease(QMouseEvent *e);
+    virtual void handleMouseMove(QMouseEvent *e, int deltaX, int deltaY);
+    virtual void handleMouseWheel(QWheelEvent *e);
+
+    virtual void setSelected(bool yes);
+
+protected:
+
+    virtual int valueToHeight(int);
+    virtual int heightToValue(int);
+    virtual QColor valueToColor(int);
+
+    //--------------- Data members ---------------------------------
+
+    int m_value;
+
+    ControlRuler* m_controlRuler;
+    
+    static const unsigned int borderThickness;
+};
+
+const unsigned int ControlItem::borderThickness = 2;
+
+ControlItem::ControlItem(ControlRuler* ruler)
+    : QCanvasRectangle(ruler->canvas()),
+      m_controlRuler(ruler)
+{
+    setWidth(20);
+    setPen(QPen(Qt::black, borderThickness));
+    setBrush(Qt::blue);
+
+    setX(0); setY(canvas()->height() - 10);
+}
+
+void ControlItem::setValue(int v)
+{
+//     std::cerr << "ControlItem::setValue(" << v << ") x = " << x() << std::endl;
+
+    m_value = v;
+}
+
+int ControlItem::valueToHeight(int val)
+{
+    return -val;
+}
+
+int ControlItem::heightToValue(int h)
+{
+    return -h;
+}
+
+QColor ControlItem::valueToColor(int val)
+{
+    QColor b = Qt::blue;
+    return b.light(100 + val);
+}
+
+void ControlItem::draw(QPainter &painter)
+{
+    setHeight(valueToHeight(m_value));
+    setBrush(valueToColor(m_value));
+
+    QCanvasRectangle::draw(painter);
+}
+
+void ControlItem::handleMouseButtonPress(QMouseEvent *e)
+{
+}
+
+void ControlItem::handleMouseButtonRelease(QMouseEvent *e)
+{
+}
+
+void ControlItem::handleMouseMove(QMouseEvent *e, int deltaX, int deltaY)
+{
+    // qDebug("ControlItem::handleMouseMove(x = %g) %p", x(), this);
+
+    m_controlRuler->applyTool(x(), deltaY);
+
+    setHeight(getHeight() + deltaY);
+
+    setValue(heightToValue(getHeight()));
+    canvas()->update();
+}
+
+void ControlItem::handleMouseWheel(QWheelEvent *e)
+{
+}
+
+void ControlItem::setSelected(bool s)
+{
+    QCanvasItem::setSelected(s);
+
+    if (s) setPen(QPen(Qt::red, borderThickness));
+    else setPen(QPen(Qt::black, borderThickness));
+
+    canvas()->update();
+}
+
+
+//////////////////////////////////////////////////////////////////////
+class ControlSelector : public QObject
+{
+public:
+    ControlSelector(ControlRuler* parent);
+    virtual ~ControlSelector() {};
+    
+    virtual void handleMouseButtonPress(QMouseEvent *e);
+    virtual void handleMouseButtonRelease(QMouseEvent *e);
+    virtual void handleMouseMove(QMouseEvent *e, int deltaX, int deltaY);
+
+    QCanvasRectangle* getSelectionRectangle() { return m_ruler->getSelectionRectangle(); }
+protected:
+    //--------------- Data members ---------------------------------
+
+    ControlRuler* m_ruler;
+};
+
+ControlSelector::ControlSelector(ControlRuler* parent)
+    : QObject(parent),
+      m_ruler(parent)
+{
+}
+
+
+void ControlSelector::handleMouseButtonPress(QMouseEvent *e)
+{
+    qDebug("ControlSelector::handleMouseButtonPress(%d, %d)", e->x(), e->y());
+    
+    getSelectionRectangle()->setX(e->x());
+    getSelectionRectangle()->setY(e->y());
+    getSelectionRectangle()->setSize(0,0);
+
+    getSelectionRectangle()->show();
+    m_ruler->canvas()->update();
+}
+
+void ControlSelector::handleMouseButtonRelease(QMouseEvent *e)
+{
+    qDebug("ControlSelector::handleMouseButtonRelease");
+    getSelectionRectangle()->hide();
+    m_ruler->canvas()->update();
+}
+
+void ControlSelector::handleMouseMove(QMouseEvent *e, int deltaX, int deltaY)
+{
+    int w = int(e->x() - getSelectionRectangle()->x());
+    int h = int(e->y() - getSelectionRectangle()->y());
+    if (w > 0) ++w; else --w;
+    if (h > 0) ++h; else --h;
+
+    getSelectionRectangle()->setSize(w, h);
+
+    m_ruler->canvas()->update();
+}
+
+//////////////////////////////////////////////////////////////////////
+
+ControlRuler::ControlRuler(QCanvas* c, QWidget* parent,
+                           const char* name, WFlags f) :
+    QCanvasView(c,parent,name,f),
+    m_currentItem(0),
+    m_tool(0),
+    m_currentX(0.0),
+    m_selecting(false),
+    m_selector(new ControlSelector(this)),
+    m_selectionRect(new QCanvasRectangle(canvas()))
+{
+    setControlTool(new TestTool);
+    m_selectionRect->setPen(Qt::red);
+}
+
+
+ControlRuler::~ControlRuler()
+{
+}
+
+void
+ControlRuler::update()
+{
+    canvas()->update();
+}
+
+void ControlRuler::setControlTool(ControlTool* tool)
+{
+    if (m_tool) delete m_tool;
+    m_tool = tool;
+}
+
+void ControlRuler::contentsMousePressEvent(QMouseEvent* e)
+{
+    QCanvasItemList l=canvas()->collisions(e->pos());
+
+    if (l.count() == 0) { // de-select current item
+        clearSelectedItems();
+        m_selecting = true;
+        m_selector->handleMouseButtonPress(e);
+        qDebug("ControlRuler::contentsMousePressEvent : entering selection mode");
+        return;
+    }
+
+    for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it) {
+
+        if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
+            if (item->isSelected()) continue;
+
+            // clear selection unless shift was pressed
+            if (!(e->state() && QMouseEvent::ShiftButton)) { clearSelectedItems(); }
+            m_selectedItems << item;
+            item->setSelected(true);
+            item->handleMouseButtonPress(e);
+
+        }
+    }
+
+    m_lastEventPos = e->pos();
+}
+
+void ControlRuler::contentsMouseReleaseEvent(QMouseEvent* e)
+{
+    if (m_selecting) {
+        updateSelection();
+        m_selector->handleMouseButtonRelease(e);
+        qDebug("ControlRuler::contentsMousePressEvent : leaving selection mode");
+        m_selecting = false;
+        return;
+    }
+
+    if (m_currentItem)
+        m_currentItem->handleMouseButtonRelease(e);
+
+    m_lastEventPos = e->pos();
+}
+
+void ControlRuler::contentsMouseMoveEvent(QMouseEvent* e)
+{
+    int deltaX = e->x() - m_lastEventPos.x(),
+        deltaY = e->y() - m_lastEventPos.y();
+    m_lastEventPos = e->pos();
+
+    if (m_selecting) {
+        updateSelection();
+        m_selector->handleMouseMove(e, deltaX, deltaY);
+        return;
+    }
+
+    if (m_lastEventPos.isNull()) m_lastEventPos = e->pos();
+    
+    for (QCanvasItemList::Iterator it=m_selectedItems.begin(); it!=m_selectedItems.end(); ++it) {
+        if (ControlItem *item = dynamic_cast<ControlItem*>(*it))
+            item->handleMouseMove(e, deltaX, deltaY);
+    
+    }
+
+}
+
+void
+ControlRuler::contentsWheelEvent(QWheelEvent *e)
+{
+    // not sure what to do yet
+    QCanvasView::contentsWheelEvent(e);
+}
+
+void ControlRuler::updateSelection()
+{
+    clearSelectedItems();
+
+    QCanvasItemList l=getSelectionRectangle()->collisions(true);
+
+    for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it) {
+
+        if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
+            item->setSelected(true);
+            m_selectedItems << item;
+        }
+    }
+}
+
+void
+ControlRuler::clearSelectedItems()
+{
+    for (QCanvasItemList::Iterator it=m_selectedItems.begin(); it!=m_selectedItems.end(); ++it) {
+        (*it)->setSelected(false);
+    }
+    m_selectedItems.clear();
+}
+
+double ControlRuler::getNextX()
+{
+    m_currentX += 30.0;
+
+    return m_currentX;
+}
+
+void ControlRuler::clear()
+{
+    QCanvasItemList list = canvas()->allItems();
+    QCanvasItemList::Iterator it = list.begin();
+    for (; it != list.end(); ++it) {
+	if (*it != m_selectionRect)
+	    delete *it;
+    }
+}
+
+int ControlRuler::applyTool(double x, int val)
+{
+    if (m_tool) return (*m_tool)(x, val);
+    return val;
+}
+
+//----------------------------------------
+
+PropertyViewRuler::PropertyViewRuler(RulerScale *rulerScale,
                            Segment *segment,
                            const PropertyName &property,
                            VelocityColour *velocityColour,
@@ -69,20 +423,20 @@ ControlRuler::ControlRuler(RulerScale *rulerScale,
     QToolTip::add(this, tip);
 }
 
-ControlRuler::~ControlRuler()
+PropertyViewRuler::~PropertyViewRuler()
 {
     // nothing
 }
 
 void
-ControlRuler::slotScrollHoriz(int x)
+PropertyViewRuler::slotScrollHoriz(int x)
 {
     m_currentXOffset = int((double(-x)) / getHScaleFactor());
     repaint();
 }
 
 QSize
-ControlRuler::sizeHint() const
+PropertyViewRuler::sizeHint() const
 {
     double width =
        m_rulerScale->getBarPosition(m_rulerScale->getLastVisibleBar()) +
@@ -95,7 +449,7 @@ ControlRuler::sizeHint() const
 }
 
 QSize
-ControlRuler::minimumSizeHint() const
+PropertyViewRuler::minimumSizeHint() const
 {
     double firstBarWidth = m_rulerScale->getBarWidth(0) + m_xorigin;
     QSize res = QSize(int(firstBarWidth), m_height);
@@ -103,7 +457,7 @@ ControlRuler::minimumSizeHint() const
 }
 
 void
-ControlRuler::paintEvent(QPaintEvent* e)
+PropertyViewRuler::paintEvent(QPaintEvent* e)
 {
     QPainter paint(this);
 
@@ -155,10 +509,10 @@ ControlRuler::paintEvent(QPaintEvent* e)
 }
 
 
-// ----------------------------- ControlBox -------------------------------
+// ----------------------------- PropertyBox -------------------------------
 //
 
-ControlBox::ControlBox(QString label,
+PropertyBox::PropertyBox(QString label,
                        int width,
                        int height,
                        QWidget *parent,
@@ -171,20 +525,20 @@ ControlBox::ControlBox(QString label,
 }
 
 QSize
-ControlBox::sizeHint() const
+PropertyBox::sizeHint() const
 {
     return QSize(m_width, m_height);
 }
 
 
 QSize
-ControlBox::minimumSizeHint() const
+PropertyBox::minimumSizeHint() const
 {
     return QSize(m_width, m_height);
 }
 
 void
-ControlBox::paintEvent(QPaintEvent *e)
+PropertyBox::paintEvent(QPaintEvent *e)
 {
     QPainter paint(this);
 

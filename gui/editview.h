@@ -159,10 +159,12 @@ public slots:
     void slotAddTempo();
     void slotAddTimeSignature();
 
+    void slotShowControlRuler(bool);
+
 protected:
 
     virtual void paintEvent(QPaintEvent* e);
-    
+
     /**
      * Locate the given widget in the top bar-buttons position and
      * connect up its scrolling signals.
@@ -254,10 +256,12 @@ protected:
     QScrollBar  *m_horizontalScrollBar;
     QVBoxLayout *m_rulerBox;
     QVBoxLayout *m_controlBox;
+    QVBoxLayout *m_bottomBox;
     BarButtons  *m_topBarButtons;
     BarButtons  *m_bottomBarButtons;
 
-
+    static const unsigned int RULERS_ROW;
+    static const unsigned int CONTROLS_ROW;
     static const unsigned int TOPBARBUTTONS_ROW;
     static const unsigned int CANVASVIEW_ROW;
     static const unsigned int HSCROLLBAR_ROW;

@@ -24,6 +24,7 @@
 #define _CONTROLRULER_H_
 
 #include <qstring.h>
+#include <qcanvas.h>
 
 #include "PropertyName.h"
 
@@ -40,20 +41,69 @@ class QFontMetrics;
 class VelocityColour;
 
 
-/**
- * ControlRuler is a widget that shows and allows modification of
- * a range of Property values for a set of Rosegarden Events.  
- * Designed to be able to modify groups of common controllers like
- * volume, pan as well as the more exotic ones.
- *
- */
+class ControlItem;
+class ControlTool;
+class ControlSelector;
 
-class ControlRuler : public QWidget, public HZoomable
+/**
+ * Property Control Ruler : edit range of event properties
+ */
+class ControlRuler : public QCanvasView
 {
     Q_OBJECT
 
 public:
-    ControlRuler(Rosegarden::RulerScale *rulerScale,
+    ControlRuler(QCanvas*,
+                 QWidget* parent=0, const char* name=0, WFlags f=0);
+    ~ControlRuler();
+
+    void clear();
+
+    void setControlTool(ControlTool*);
+
+    int applyTool(double x, int val);
+
+    QCanvasRectangle* getSelectionRectangle() { return m_selectionRect; }
+
+public slots:
+    virtual void update();
+    
+protected:
+    virtual void contentsMousePressEvent(QMouseEvent*);
+    virtual void contentsMouseReleaseEvent(QMouseEvent*);
+    virtual void contentsMouseMoveEvent(QMouseEvent*);
+    virtual void contentsWheelEvent(QWheelEvent*);
+
+    double getNextX();
+    void clearSelectedItems();
+    void updateSelection();
+
+private:
+    ControlItem* m_currentItem;
+    QCanvasItemList m_selectedItems;
+
+    ControlTool *m_tool;
+
+    double m_currentX;
+
+    QPoint m_lastEventPos;
+
+    bool m_selecting;
+    ControlSelector* m_selector;
+    QCanvasRectangle* m_selectionRect;
+};
+
+
+/**
+ * PropertyViewRuler is a widget that shows a range of Property values
+ * for a set of Rosegarden Events.
+ */
+class PropertyViewRuler : public QWidget, public HZoomable
+{
+    Q_OBJECT
+
+public:
+    PropertyViewRuler(Rosegarden::RulerScale *rulerScale,
 	         Rosegarden::Segment *segment,
                  const Rosegarden::PropertyName &property,
                  VelocityColour *velocityColour,
@@ -62,7 +112,7 @@ public:
 	         QWidget* parent = 0,
 	         const char *name = 0);
 
-    ~ControlRuler();
+    ~PropertyViewRuler();
 
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;
@@ -103,12 +153,12 @@ private:
  * and provide extra information or options.
  *
  */
-class ControlBox : public QWidget
+class PropertyBox : public QWidget
 {
     Q_OBJECT
 
 public:
-    ControlBox(QString label,
+    PropertyBox(QString label,
                int width,
                int height,
                QWidget *parent=0,

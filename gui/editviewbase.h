@@ -50,6 +50,7 @@ class BasicCommand;
 class EditViewBase : public KMainWindow
 {
     static const unsigned int ID_STATUS_MSG;
+    static const unsigned int NbLayoutRows;
 
     Q_OBJECT
 
@@ -243,7 +244,7 @@ protected slots:
     
 protected:
     QFrame* getCentralFrame() { return m_centralFrame; }
-
+        
     void initSegmentRefreshStatusIds();
 
     bool isCompositionModified();

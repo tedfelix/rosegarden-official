@@ -48,10 +48,12 @@
 #include "rosedebug.h"
 
 //----------------------------------------------------------------------
-const unsigned int EditView::TOPBARBUTTONS_ROW    = 1;
-const unsigned int EditView::CANVASVIEW_ROW       = 2;
-const unsigned int EditView::BOTTOMBARBUTTONS_ROW = 3;
-const unsigned int EditView::HSCROLLBAR_ROW       = 4;
+const unsigned int EditView::CONTROLS_ROW         = 0;
+const unsigned int EditView::RULERS_ROW           = CONTROLS_ROW + 1;
+const unsigned int EditView::TOPBARBUTTONS_ROW    = RULERS_ROW + 1;
+const unsigned int EditView::CANVASVIEW_ROW       = TOPBARBUTTONS_ROW + 1;
+const unsigned int EditView::BOTTOMBARBUTTONS_ROW = CANVASVIEW_ROW + 1;
+const unsigned int EditView::HSCROLLBAR_ROW       = BOTTOMBARBUTTONS_ROW + 1;
 
 EditView::EditView(RosegardenGUIDoc *doc,
                    std::vector<Rosegarden::Segment *> segments,
@@ -62,14 +64,20 @@ EditView::EditView(RosegardenGUIDoc *doc,
     m_activeItem(0),
     m_canvasView(0),
     m_horizontalScrollBar(new QScrollBar(Horizontal, m_centralFrame)),
-    m_rulerBox(new QVBoxLayout), // added to grid later on
-    m_controlBox(new QVBoxLayout), // added to grid later on
+    m_rulerBox(new QVBoxLayout), // top ruler box - added to grid later on
+    m_controlBox(new QVBoxLayout), // top control ruler box - added to grid later on
+    m_bottomBox(new QVBoxLayout), // bottom box - added to grid later on
     m_topBarButtons(0),
     m_bottomBarButtons(0)
 {
-    m_grid->addWidget(m_horizontalScrollBar, HSCROLLBAR_ROW, m_mainCol);
-    m_grid->addLayout(m_rulerBox, 0, m_mainCol);
-    m_grid->addMultiCellLayout(m_controlBox, 0, 0, 0, 1);
+    m_grid->addWidget(m_horizontalScrollBar, HSCROLLBAR_ROW,       m_mainCol);
+    m_grid->addLayout(m_bottomBox,           BOTTOMBARBUTTONS_ROW, m_mainCol);
+
+    QLabel* controlRuler = new QLabel("CONTROL RULER", getCentralFrame()); // TEST ONLY - REMOVE THIS
+    m_bottomBox->addWidget(controlRuler);
+
+    m_grid->addLayout(m_rulerBox, RULERS_ROW, m_mainCol);
+    m_grid->addMultiCellLayout(m_controlBox, CONTROLS_ROW, CONTROLS_ROW, 0, 1);
     m_controlBox->setAlignment(AlignRight);
     
 }
@@ -109,21 +117,20 @@ void EditView::setTopBarButtons(BarButtons* w)
 {
     delete m_topBarButtons;
     m_topBarButtons = w;
-    m_grid->addWidget(w, 1, m_mainCol);
+    m_grid->addWidget(w, TOPBARBUTTONS_ROW, m_mainCol);
 
     connect(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
             m_topBarButtons, SLOT(slotScrollHoriz(int)));
     connect(m_horizontalScrollBar, SIGNAL(sliderMoved(int)),
             m_topBarButtons, SLOT(slotScrollHoriz(int)));
-
-    
 }
 
 void EditView::setBottomBarButtons(BarButtons* w)
 {
     delete m_bottomBarButtons;
     m_bottomBarButtons = w;
-    m_grid->addWidget(w, BOTTOMBARBUTTONS_ROW, m_mainCol);
+
+    m_bottomBox->insertWidget(0, w);
 
     connect(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
             m_bottomBarButtons, SLOT(slotScrollHoriz(int)));
@@ -692,3 +699,8 @@ void EditView::slotAddTimeSignature()
     
     delete dialog;
 }                       
+
+void EditView::slotShowControlRuler(bool show)
+{
+    
+}

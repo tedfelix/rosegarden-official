@@ -150,7 +150,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     m_pianoView->addChild(m_pianoKeyboard);
     m_pianoView->setFixedWidth(m_pianoView->contentsWidth());
 
-    m_grid->addWidget(m_pianoView, 2, 1);
+    m_grid->addWidget(m_pianoView, CANVASVIEW_ROW, 1);
 
     m_parameterBox = new MatrixParameterBox(getCentralFrame(), getDocument());
 
@@ -166,7 +166,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     //
     m_parameterBox->useInstrument(instr);
 
-    m_grid->addWidget(m_parameterBox, 2, 0);
+    m_grid->addWidget(m_parameterBox, CANVASVIEW_ROW, 0);
 
     m_snapGrid->setSnapTime(Rosegarden::SnapGrid::SnapToBeat);
 
@@ -303,7 +303,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     // Add a velocity ruler
     //
-    addControlRuler(Rosegarden::BaseProperties::VELOCITY);
+    addPropertyViewRuler(Rosegarden::BaseProperties::VELOCITY);
 
     m_chordNameRuler = new ChordNameRuler
 	(&m_hlayout, &doc->getComposition(), 0, 20, getCentralFrame());
@@ -735,8 +735,8 @@ void MatrixView::setViewSize(QSize s)
 
 void MatrixView::repaintRulers()
 {
-    for (unsigned int i = 0; i != m_controlRulers.size(); i++)
-        m_controlRulers[i].first->repaint();
+    for (unsigned int i = 0; i != m_propertyViewRulers.size(); i++)
+        m_propertyViewRulers[i].first->repaint();
 }
 
 
@@ -1829,10 +1829,10 @@ MatrixView::slotChangeHorizontalZoom(int)
     if (m_topBarButtons) m_topBarButtons->setHScaleFactor(zoomValue);
     if (m_bottomBarButtons) m_bottomBarButtons->setHScaleFactor(zoomValue);
 
-    for (unsigned int i = 0; i < m_controlRulers.size(); ++i)
+    for (unsigned int i = 0; i < m_propertyViewRulers.size(); ++i)
     {
-        m_controlRulers[i].first->setHScaleFactor(zoomValue);
-        m_controlRulers[i].first->repaint();
+        m_propertyViewRulers[i].first->setHScaleFactor(zoomValue);
+        m_propertyViewRulers[i].first->repaint();
     }
 
     if (m_topBarButtons) m_topBarButtons->update();
@@ -1866,56 +1866,55 @@ MatrixView::scrollToTime(timeT t) {
 }
 
 unsigned int
-MatrixView::addControlRuler(const Rosegarden::PropertyName &property)
+MatrixView::addPropertyViewRuler(const Rosegarden::PropertyName &property)
 {
     // Try and find this controller if it exists
     //
-    for (unsigned int i = 0; i != m_controlRulers.size(); i++)
+    for (unsigned int i = 0; i != m_propertyViewRulers.size(); i++)
     {
-        if (m_controlRulers[i].first->getPropertyName() == property)
+        if (m_propertyViewRulers[i].first->getPropertyName() == property)
             return i;
     }
 
     int height = 20;
 
-    ControlRuler *newRuler = new ControlRuler(&m_hlayout,
-	                                      m_segments[0],
-                                              property,
-                                              m_staffs[0]->getVelocityColour(),
-                                              xorigin,
-                                              height,
-                                              getCentralFrame());
+    PropertyViewRuler *newRuler = new PropertyViewRuler(&m_hlayout,
+                                                        m_segments[0],
+                                                        property,
+                                                        m_staffs[0]->getVelocityColour(),
+                                                        xorigin,
+                                                        height,
+                                                        getCentralFrame());
 
     addRuler(newRuler);
 
-    ControlBox *newControl =
-        new ControlBox(strtoqstr(property), 
-                       m_parameterBox->width() + m_pianoKeyboard->width(),
-                       height,
-                       getCentralFrame());
+    PropertyBox *newControl = new PropertyBox(strtoqstr(property), 
+                                              m_parameterBox->width() + m_pianoKeyboard->width(),
+                                              height,
+                                              getCentralFrame());
 
     addControl(newControl);
 
-    m_controlRulers.push_back(
-            std::pair<ControlRuler*, ControlBox*>(newRuler, newControl));
+    m_propertyViewRulers.push_back(
+            std::pair<PropertyViewRuler*, PropertyBox*>(newRuler, newControl));
                              
-    return m_controlRulers.size() - 1;
+    return m_propertyViewRulers.size() - 1;
 }
 
 
 bool
-MatrixView::removeControlRuler(unsigned int number)
+MatrixView::removePropertyViewRuler(unsigned int number)
 {
-    if (number > m_controlRulers.size() - 1)
+    if (number > m_propertyViewRulers.size() - 1)
         return false;
 
-    std::vector<std::pair<ControlRuler*, ControlBox*> >::iterator it 
-        = m_controlRulers.begin();
+    std::vector<std::pair<PropertyViewRuler*, PropertyBox*> >::iterator it 
+        = m_propertyViewRulers.begin();
     while(number--) it++;
 
     delete it->first;
     delete it->second;
-    m_controlRulers.erase(it);
+    m_propertyViewRulers.erase(it);
 
     return true;
 }

@@ -55,7 +55,8 @@ class MatrixParameterBox;
 class KComboBox;
 template <class T> class ZoomSlider;
 class ControlRuler;
-class ControlBox;
+class PropertyViewRuler;
+class PropertyBox;
 
 class QMouseEvent;
 class QLabel;
@@ -158,12 +159,12 @@ public:
      * return the number of the added ruler
      * 
      */
-    unsigned int addControlRuler(const Rosegarden::PropertyName &property);
+    unsigned int addPropertyViewRuler(const Rosegarden::PropertyName &property);
 
     /**
      * Remove a control ruler - return true if it's a valid ruler number
      */
-    bool removeControlRuler(unsigned int number);
+    bool removePropertyViewRuler(unsigned int number);
 
     /**
      * Adjust an X coord by world matrix
@@ -510,7 +511,7 @@ protected:
     std::vector<Rosegarden::timeT> m_quantizations;
     std::vector<Rosegarden::timeT> m_snapValues;
 
-    std::vector<std::pair<ControlRuler*, ControlBox*> >  m_controlRulers;
+    std::vector<std::pair<PropertyViewRuler*, PropertyBox*> >  m_propertyViewRulers;
 
     QWidget *m_chordNameRuler;
     QWidget *m_tempoRuler;

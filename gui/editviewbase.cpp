@@ -48,6 +48,7 @@
 
 //----------------------------------------------------------------------
 const unsigned int EditViewBase::ID_STATUS_MSG = 1;
+const unsigned int EditViewBase::NbLayoutRows = 6;
 
 EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
                            std::vector<Rosegarden::Segment *> segments,
@@ -62,7 +63,7 @@ EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
     m_tool(0),
     m_toolBox(0),
     m_centralFrame(new QFrame(this)),
-    m_grid(new QGridLayout(m_centralFrame, 5, cols)),
+    m_grid(new QGridLayout(m_centralFrame, NbLayoutRows, cols)),
     m_mainCol(cols - 1),
     m_compositionRefreshStatusId(doc->getComposition().getNewRefreshStatusId()),
     m_needUpdate(false),
