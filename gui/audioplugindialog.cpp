@@ -181,7 +181,7 @@ AudioPluginDialog::makePluginParamsBox(QWidget *parent)
 
     m_gridLayout = new QGridLayout(m_pluginParamsBox,
                                    1,   // rows (will expand)
-                                   10,  // columns
+                                   2,  // columns
                                    5); // margin
 
 }
@@ -280,12 +280,12 @@ AudioPluginDialog::slotPluginSelected(int i)
 
                 PluginControl *control =
                     new PluginControl(m_pluginParamsBox,
-                                      m_gridLayout,
                                       PluginControl::Rotary,
                                       *it,
                                       m_pluginManager,
                                       count,
                                       inst->getPort(count)->value);
+		m_gridLayout->addItem(new QWidgetItem(control));
 
                 connect(control, SIGNAL(valueChanged(float)),
                         this, SLOT(slotPluginPortChanged(float)));
@@ -360,27 +360,28 @@ AudioPluginDialog::slotClose()
 // --------------------- PluginControl -------------------------
 //
 PluginControl::PluginControl(QWidget *parent,
-                             QGridLayout *layout,
                              ControlType type,
                              PluginPort *port,
                              AudioPluginManager *aPM,
                              int index,
                              float initialValue):
-    QObject(parent),
-    m_layout(layout),
+    QFrame(parent),
     m_type(type),
     m_port(port),
     m_pluginManager(aPM),
     m_index(index)
 {
+    m_layout = new QGridLayout(this, 4, 1);
+
     QFont plainFont;
     plainFont.setPointSize((plainFont.pointSize() * 9 )/ 10);
 
-    QLabel *controlTitle = new QLabel(strtoqstr(port->getName()), parent);
+    QLabel *controlTitle = new QLabel(strtoqstr(port->getName()), this);
     controlTitle->setFont(plainFont);
+    m_layout->addWidget(controlTitle, 0, 0, Qt::AlignRight | Qt::AlignVCenter);
 
-    QLabel *controlValue = new QLabel(parent);
-    controlValue->setFont(plainFont);
+//    QLabel *controlValue = new QLabel(this);
+//    controlValue->setFont(plainFont);
 
     if (type == Rotary)
     {
@@ -395,14 +396,15 @@ PluginControl::PluginControl(QWidget *parent,
             lowerBound = swap;
         }
 
-        QLabel *low = new QLabel(QString("%1").arg(lowerBound), parent);
-        low->setIndent(10);
+        QLabel *low = new QLabel(QString("%1").arg(lowerBound), this);
+//        low->setIndent(10);
         low->setAlignment(AlignRight|AlignBottom);
         low->setFont(plainFont);
+	m_layout->addWidget(low, 0, 1, Qt::AlignRight | Qt::AlignBottom);
 
         float step = (upperBound - lowerBound) / 100.0;
 
-        m_dial = new RosegardenRotary(parent,
+        m_dial = new RosegardenRotary(this,
                                       lowerBound,   // min
                                       upperBound,   // max
                                       step,         // step
@@ -419,23 +421,26 @@ PluginControl::PluginControl(QWidget *parent,
         connect(m_dial, SIGNAL(valueChanged(float)),
                 this, SLOT(slotValueChanged(float)));
 
-        QLabel *upp = new QLabel(QString("%1").arg(upperBound), parent);
-        upp->setIndent(10);
+	m_layout->addWidget(m_dial, 0, 2);
+
+        QLabel *upp = new QLabel(QString("%1").arg(upperBound), this);
+//        upp->setIndent(10);
         upp->setAlignment(AlignLeft|AlignBottom);
         upp->setFont(plainFont);
+	m_layout->addWidget(upp, 0, 3, Qt::AlignLeft | Qt::AlignBottom);
 
         controlTitle->show();
-        controlValue->show();
+//        controlValue->show();
         low->show();
         m_dial->show();
         upp->show();
-
+/*
         m_layout->addItem(new QWidgetItem(controlTitle));
         m_layout->addItem(new QWidgetItem(controlValue));
         m_layout->addItem(new QWidgetItem(low));
         m_layout->addItem(new QWidgetItem(m_dial));
         m_layout->addItem(new QWidgetItem(upp));
-
+*/
         RG_DEBUG << "setting port value = " << initialValue << endl;
     }
 }

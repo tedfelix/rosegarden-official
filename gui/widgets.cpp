@@ -461,6 +461,89 @@ RosegardenRotary::paintEvent(QPaintEvent *e)
     }
 }
 
+// Draw the position line - note that we adjust for the minimum value
+// so that the knobs always work "vertically"
+//
+void
+RosegardenRotary::drawPosition()
+{
+    QPainter paint(this);
+
+    double hyp = double(m_size) / 2.0;
+    double len = hyp * 0.8;
+
+    if (m_showTicks) len = 0.9 * len;
+
+    // Undraw the previous line
+    //
+    double angle = ROTARY_MIN // offset 
+                   + (ROTARY_RANGE *
+		      (double(m_lastPosition - m_minValue) /
+		       (double(m_maxValue) - double(m_minValue))));
+
+    double x0 = hyp - len/3 * sin(angle);
+    double y0 = hyp + len/3 * cos(angle);
+    
+    if (m_lastPosition <= m_minValue + (m_maxValue - m_minValue) / 2) {
+//	--x0;
+    }
+
+    double x = hyp - len * sin(angle);
+    double y = hyp + len * cos(angle);
+
+    QPen pen;
+    pen.setColor(m_knobColour);
+    pen.setWidth(2);
+    if (m_knobColour == Qt::black) {
+	pen.setColor(kapp->palette().color(QPalette::Active, QColorGroup::Base));
+    }
+
+    paint.setPen(pen);
+    paint.drawLine(int(x0), int(y0), int(x), int(y));
+
+    // Draw the new position
+    //
+    angle = ROTARY_MIN // offset 
+                   + (ROTARY_RANGE * (double(m_position - m_minValue) /
+                     (double(m_maxValue) - double(m_minValue))));
+
+//    x0 = hyp;
+//    y0 = hyp;
+    x0 = hyp - len/3 * sin(angle);
+    y0 = hyp + len/3 * cos(angle);
+
+    if (m_position <= m_minValue + (m_maxValue - m_minValue) / 2) {
+//	--x0;
+    }
+
+    x = hyp - len * sin(angle);
+    y = hyp + len * cos(angle);
+//!!!
+//    paint.setPen(kapp->palette().color(QPalette::Active, QColorGroup::Mid));
+//    double xoff = -cos(angle), yoff = sin(angle);
+//    paint.drawLine(int(x0 - xoff), int(y0 - yoff), int(x), int(y));
+//    paint.drawLine(int(x0 + xoff), int(y0 + yoff), int(x), int(y));
+
+//    paint.setPen(kapp->palette().color(QPalette::Active, QColorGroup::Dark));
+//    paint.setPen(Qt::black);
+    pen.setColor(Qt::black);
+    paint.setPen(pen);
+
+    paint.drawLine(int(x0), int(y0), int(x), int(y));
+
+    m_lastPosition = m_position;
+
+    pen.setWidth(1);
+    paint.setPen(pen);
+    paint.setBrush(Qt::NoBrush);
+    if (!m_showTicks) {
+	paint.drawEllipse(0, 0, m_size, m_size);
+    } else {
+	paint.drawEllipse(m_size * 0.1, m_size * 0.1,
+			  m_size * 0.8, m_size * 0.8);
+    }
+} 
+
 
 void
 RosegardenRotary::mousePressEvent(QMouseEvent *e)
@@ -588,50 +671,6 @@ RosegardenRotary::wheelEvent(QWheelEvent *e)
     emit valueChanged(m_position);
 }
 
-// Draw the position line - note that we adjust for the minimum value
-// so that the knobs always work "vertically"
-//
-void
-RosegardenRotary::drawPosition()
-{
-    QPainter paint(this);
-
-    double hyp = double(m_size) / 2.0;
-    double len = hyp * 0.8;
-
-    if (m_showTicks) len = 0.9 * len;
-
-    // Undraw the previous line
-    //
-    double angle = ROTARY_MIN // offset 
-                   + (ROTARY_RANGE * (double(m_lastPosition - m_minValue) /
-                     (double(m_maxValue) - double(m_minValue))));
-
-    double x = hyp - len * sin(angle);
-    double y = hyp + len * cos(angle);
-
-    if (m_knobColour != Qt::black)
-        paint.setPen(m_knobColour);
-    else
-        paint.setPen
-            (kapp->palette().color(QPalette::Active, QColorGroup::Base));
-
-    paint.drawLine(int(hyp), int(hyp), int(x), int(y));
-
-    // Draw the new position
-    //
-    angle = ROTARY_MIN // offset 
-                   + (ROTARY_RANGE * (double(m_position - m_minValue) /
-                     (double(m_maxValue) - double(m_minValue))));
-
-    x = hyp - len * sin(angle);
-    y = hyp + len * cos(angle);
-
-    paint.setPen(kapp->palette().color(QPalette::Active, QColorGroup::Dark));
-    paint.drawLine(int(hyp), int(hyp), int(x), int(y));
-
-    m_lastPosition = m_position;
-} 
 
 void
 RosegardenRotary::setPosition(float position)
