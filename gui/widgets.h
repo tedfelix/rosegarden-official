@@ -19,9 +19,6 @@
     COPYING included with this distribution for more information.
 */
 
-#include <ctime>
-
-#include <qapplication.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qlabel.h>
@@ -32,6 +29,7 @@
 #include <qslider.h>
 #include <qvbox.h>
 #include <qcolor.h>
+#include <qdatetime.h>
 #include <kprogress.h>
 
 #ifndef _WIDGETS_H_
@@ -172,9 +170,18 @@ public:
 public slots:
     void slotSetOperationName(QString);
     void slotCancel();
-    
+
+protected slots:
+    void slotCheckShow(int);
+
 signals:
     void operationCancelled();
+
+protected:
+
+    //--------------- Data members ---------------------------------
+
+    QTime m_chrono;
 };
 
 

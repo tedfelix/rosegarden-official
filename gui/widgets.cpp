@@ -175,6 +175,7 @@ void RosegardenParameterBox::init()
     setFont(boldFont);
 }
 
+
 RosegardenProgressDialog::RosegardenProgressDialog(QWidget *creator,
                                                    const char *name,
                                                    bool modal):
@@ -185,7 +186,10 @@ RosegardenProgressDialog::RosegardenProgressDialog(QWidget *creator,
     RG_DEBUG << "RosegardenProgressDialog::RosegardenProgressDialog - "
              << labelText() << endl;
 
-    QTimer::singleShot(20, this, SLOT(slotShowMyself()));
+    connect(progressBar(), SIGNAL(percentageChanged (int)),
+            this,          SLOT(slotCheckShow(int)));
+    
+    m_chrono.start();
 }
 
 
@@ -204,13 +208,17 @@ RosegardenProgressDialog::RosegardenProgressDialog(
     progressBar()->setTotalSteps(totalSteps);
     RG_DEBUG << "RosegardenProgressDialog::RosegardenProgressDialog - "
              << labelText << endl;
+
+    connect(progressBar(), SIGNAL(percentageChanged (int)),
+            this,          SLOT(slotCheckShow(int)));
+    m_chrono.start();
 }
 
 void
 RosegardenProgressDialog::slotSetOperationName(QString name)
 {
-    RG_DEBUG << "RosegardenProgressDialog::slotSetOperationName("
-             << name << ") visible : " << isVisible() << endl;
+//     RG_DEBUG << "RosegardenProgressDialog::slotSetOperationName("
+//              << name << ") visible : " << isVisible() << endl;
     
     setLabel(name);
 }
@@ -218,8 +226,21 @@ RosegardenProgressDialog::slotSetOperationName(QString name)
 void RosegardenProgressDialog::slotCancel()
 {
     RG_DEBUG << "RosegardenProgressDialog::slotCancel()\n";
+    KProgressDialog::slotCancel();
     emit operationCancelled();
 }
+
+void RosegardenProgressDialog::slotCheckShow(int)
+{
+//     RG_DEBUG << "RosegardenProgressDialog::slotCheckShow() : "
+//              << m_chrono.elapsed() << " - " << minimumDuration()
+//              << endl;
+
+    if (!isVisible() && m_chrono.elapsed() > minimumDuration()) {
+        show();
+    }
+}
+
 
 
 //----------------------------------------
