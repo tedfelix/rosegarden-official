@@ -436,9 +436,9 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
     } else if (lcName == "audio") {
 
-        if (m_inComposition == false)
+        if (m_section != InAudio)
         {
-            m_errorString = i18n("Audio object found outside Composition");
+            m_errorString = i18n("Audio object found outside Audio section");
             return false;
         }
 
@@ -466,13 +466,13 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         
     } else if (lcName == "audiopath") {
 
-        if (m_inComposition == false)
+        if (m_section != InAudio)
         {
-            m_errorString = i18n("Audiopath object found outside Composition");
+            m_errorString = i18n("Audiopath object found outside AudioFiles section");
             return false;
         }
 
-        QString search(atts.value("search"));
+        QString search(atts.value("value"));
 
         if (search.isEmpty())
         {
@@ -483,17 +483,17 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         m_audioFileManager.addSearchPath(qstrtostr(search));
 
     } else if (lcName == "begin") {
-        int marker = atts.value("marker").toInt();
+        int marker = atts.value("index").toInt();
 
         if (!m_currentSegment)
         {
-            m_errorString = i18n("found sample begin marker outside segment");
+            m_errorString = i18n("found audio begin index outside segment");
             return false;
         }
 
         if (m_currentSegment->getType() != Rosegarden::Segment::Audio)
         {
-            m_errorString = i18n("found sample begin marker in non audio segment");
+            m_errorString = i18n("found audio begin index in non audio segment");
             return false;
         }
 
@@ -501,23 +501,23 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
 
     } else if (lcName == "end") {
-        int marker = atts.value("marker").toInt();
+        int marker = atts.value("index").toInt();
 
         if (!m_currentSegment)
         {
-            m_errorString = i18n("found sample end marker outside segment");
+            m_errorString = i18n("found audio end index outside segment");
             return false;
         }
 
         if (m_currentSegment->getType() != Rosegarden::Segment::Audio)
         {
-            m_errorString = i18n("found sample end marker in non audio segment");
+            m_errorString = i18n("found audio end index in non audio segment");
             return false;
         }
 
         if (marker < m_currentSegment->getAudioStartTime())
         {
-            m_errorString = i18n("audio end marker before audio start marker");
+            m_errorString = i18n("audio end index before audio start marker");
             return false;
         }
 
@@ -740,6 +740,17 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             m_instrument->setMidiChannel(channel);
         }
 
+    } else if (lcName == "audiofiles") {
+
+        if (m_section != NoSection)
+        {
+            m_errorString = i18n("Found AudioFiles inside another section");
+            return false;
+        }
+
+        m_section = InAudio;
+
+
     } else {
         kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement : Don't know how to parse this : " << qName << endl;
     }
@@ -796,6 +807,10 @@ RoseXmlHandler::endElement(const QString& /*namespaceURI*/,
     } else if (lcName == "device") {
 
         m_device = 0;
+    } else if (lcName == "audiofiles") {
+
+        m_section = NoSection;
+
     }
 
 

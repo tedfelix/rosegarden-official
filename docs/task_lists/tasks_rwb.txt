@@ -2,14 +2,16 @@
 ====================================
 
 o basic JACK audio
-  - click on sample start (resampling probably required)
+  - click on sample start (resampling probably required) [DONE]
   - multiple sample (Segments problem?) [FIXED]
-  - audio recording
+  - audio recording [DONE]
+  - saving RG files with audio
 
-o Create WAV files
-
+o Create WAV files [DONE]
 
 o Audio previews
+
+o Some state we're getting into with mute buttons and file saving
 
 o Jumping vertical scroll thumb on playback [RosegardenCanvasView::slotUpdate]
 

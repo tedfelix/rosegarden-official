@@ -43,7 +43,8 @@ public:
         InComposition,
         InSegment,
         InStudio,
-        InInstrument
+        InInstrument,
+        InAudio
     } RosegardenFileSection;
 
     /**

@@ -18,13 +18,14 @@
   COPYING included with this distribution for more information.
 */
 
+#include <string>
+#include <vector>
+
+#include "AudioFile.h"
+#include "XmlExportable.h"
 
 #ifndef _AUDIOFILEMANAGER_H_
 #define _AUDIOFILEMANAGER_H_
-
-#include "AudioFile.h"
-#include <string>
-#include <vector>
 
 // AudioFileManager loads and maps audio files to their
 // internal references (ids).  A point of contact for
@@ -45,7 +46,7 @@ namespace Rosegarden
 
 typedef std::vector<AudioFile*>::const_iterator AudioFileManagerIterator;
 
-class AudioFileManager
+class AudioFileManager : public XmlExportable
 {
 public:
     AudioFileManager();
@@ -99,6 +100,10 @@ public:
     // return the last file in the vector - the last created
     //
     AudioFile* getLastAudioFile();
+
+    // Export to XML
+    //
+    virtual std::string toXmlString();
 
 private:
     std::string getFileInPath(const std::string &file);

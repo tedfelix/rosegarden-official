@@ -25,6 +25,14 @@
 #include <dirent.h> // for new recording file
 #include <cstdio>   // sprintf
 
+#if (__GNUC__ < 3)
+#include <strstream>
+#define stringstream strstream
+#else
+#include <sstream>
+#endif
+
+
 #include "AudioFile.h"
 #include "AudioFileManager.h"
 
@@ -59,14 +67,11 @@ AudioFileManager::insertFile(const std::string &name,
 
     // if we don't recognise the file then don't insert it
     //
-    /*
     if (aF->open() == false)
     {
         delete aF;
-        return -1;
+        throw("AudioFileManager::insertFile - don't recognise file type");
     }
-    */
-
     m_audioFiles.push_back(aF);
 
     return (unsigned int)id;
@@ -160,6 +165,12 @@ AudioFileManager::addSearchPath(const std::string &path)
         hPath.erase(0, 1);
         hPath = std::string(getenv("HOME")) + hPath;
     }
+
+    // If this is the first path we've added then set the record
+    // path to it.
+    //
+    if (m_audioSearchPath.size() == 0)
+         m_audioRecordPath = hPath;
 
     m_audioSearchPath.push_back(hPath);
 }
@@ -320,6 +331,43 @@ AudioFileManager::getLastAudioFile()
     return 0;
 }
 
+
+// Export audio file
+std::string
+AudioFileManager::toXmlString()
+{
+    std::stringstream audioFiles;
+
+    audioFiles << "<audiofiles>" << std::endl;
+
+    std::vector<AudioFile*>::iterator it;
+
+    std::vector<std::string>::iterator pit;
+
+    for (pit = m_audioSearchPath.begin();
+         pit != m_audioSearchPath.end();
+         pit++)
+    {
+        audioFiles << "    <audiopath value=\""
+                   << *pit << "\"/>" << std::endl;
+    }
+
+    for (it = m_audioFiles.begin(); it != m_audioFiles.end(); it++)
+    {
+        audioFiles << "    <audio id=\""
+                   << (*it)->getId()
+                   << "\" file=\""
+                   << (*it)->getFilename()
+                   << "\" label=\""
+                   << encode((*it)->getName())
+                   << "\"/>" << std::endl;
+    }
+
+    audioFiles << "</audiofiles>" << std::endl;
+    audioFiles << std::ends;
+
+    return audioFiles.str();
+}
 
 
 }

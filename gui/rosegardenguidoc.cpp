@@ -287,7 +287,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
                                     const char* /*format*/ /*=0*/)
 {
     kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::saveDocument("
-                         << filename << ")" << endl;
+                         << filename << ")" << std::endl;
 
     QString outText;
     QTextStream outStream(&outText, IO_WriteOnly);
@@ -301,7 +301,11 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
     // Send out Composition (this includes Tracks, Instruments, Tempo
     // and Time Signature changes and any other sub-objects)
     //
-    outStream << QString(strtoqstr(m_composition.toXmlString())) << endl << endl;
+    outStream << QString(strtoqstr(m_composition.toXmlString()))
+              << std::endl << std::endl;
+
+    outStream << QString(strtoqstr(m_audioFileManager.toXmlString()))
+              << std::endl << std::endl;
 
     // output all elements
     //
@@ -317,95 +321,113 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
                             .arg(segment->getStartTime());
 
         outStream << "label=\"" <<
-	    strtoqstr(Rosegarden::XmlExportable::encode(segment->getLabel()))
-		  << "\">\n";
+	    strtoqstr(Rosegarden::XmlExportable::encode(segment->getLabel()));
 
-        long currentGroup = -1;
-	bool inChord = false;
-	timeT chordStart = 0, chordDuration = 0;
-	timeT expectedTime = segment->getStartTime();
+        if (segment->getType() == Rosegarden::Segment::Audio) {
+            outStream << "\" type=\"audio\" "
+                      << "file=\""
+                      << segment->getAudioFileID()
+                      << "\">\n";
 
-        for (Segment::iterator i = segment->begin();
-             i != segment->end(); ++i) {
+            outStream << "    <begin index=\""
+                      << segment->getAudioStartTime()
+                      << "\"/>\n";
 
-            long group;
-            if ((*i)->get<Int>(BEAMED_GROUP_ID, group)) {
-                if (group != currentGroup) {
-                    if (currentGroup != -1) outStream << "</group>" << endl;
-                    std::string type = (*i)->get<String>(BEAMED_GROUP_TYPE);
-                    outStream << "<group type=\"" << strtoqstr(type) << "\"";
-		    if (type == GROUP_TYPE_TUPLED) {
-			outStream
-			    << " base=\""
-			    << (*i)->get<Int>(BEAMED_GROUP_TUPLET_BASE)
-			    << "\" untupled=\""
-			    << (*i)->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT)
-			    << "\" tupled=\""
-			    << (*i)->get<Int>(BEAMED_GROUP_TUPLED_COUNT)
-			    << "\"";
-		    }
-			    
-		    outStream << ">\n";
-                    currentGroup = group;
+            outStream << "   <end index=\""
+                      << segment->getAudioEndTime()
+                      << "\"/>\n";
+        }
+        else // Internal type
+        {
+            outStream << "\">\n";
+
+            long currentGroup = -1;
+	    bool inChord = false;
+	    timeT chordStart = 0, chordDuration = 0;
+	    timeT expectedTime = segment->getStartTime();
+
+            for (Segment::iterator i = segment->begin();
+                 i != segment->end(); ++i) {
+
+                long group;
+                if ((*i)->get<Int>(BEAMED_GROUP_ID, group)) {
+                    if (group != currentGroup) {
+                        if (currentGroup != -1) outStream << "</group>" << endl;
+                        std::string type = (*i)->get<String>(BEAMED_GROUP_TYPE);
+                        outStream << "<group type=\"" << strtoqstr(type) << "\"";
+		        if (type == GROUP_TYPE_TUPLED) {
+			    outStream
+			        << " base=\""
+			        << (*i)->get<Int>(BEAMED_GROUP_TUPLET_BASE)
+			        << "\" untupled=\""
+			        << (*i)->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT)
+			        << "\" tupled=\""
+			        << (*i)->get<Int>(BEAMED_GROUP_TUPLED_COUNT)
+			        << "\"";
+		        }
+			        
+		        outStream << ">\n";
+                        currentGroup = group;
+                    }
+                } else if (currentGroup != -1) {
+                    outStream << "</group>\n";
+                    currentGroup = -1;
                 }
-            } else if (currentGroup != -1) {
-                outStream << "</group>\n";
-                currentGroup = -1;
+
+	        timeT absTime = (*i)->getAbsoluteTime();
+
+                Segment::iterator nextEl = i;
+                ++nextEl;
+
+                if (nextEl != segment->end() &&
+                    (*nextEl)->getAbsoluteTime() == absTime &&
+		    (*i)->getDuration() != 0 &&
+		    !inChord) {
+		    outStream << "<chord>" << endl;
+		    inChord = true;
+		    chordStart = absTime;
+		    chordDuration = 0;
+	        }
+
+	        if (inChord && (*i)->getDuration() > 0)
+		    if (chordDuration == 0 || (*i)->getDuration() < chordDuration)
+		        chordDuration = (*i)->getDuration();
+
+	        //!!! The SegmentQ-properties need to be backed up despite
+	        //being non-persistent (they're non-persistent because we
+	        //want to lose them when copying the events, not when
+	        //saving them).  What's the best way to do that?  We want
+	        //to do it here, not in XmlStorableEvent, because the
+	        //XmlStorableEvent _is_ the class of Event that's placed
+	        //into the segment when reading, so it doesn't want to be
+	        //burdened with a separate record of the unquantized 
+	        //values or knowledge about the quantizer.  We probably
+	        //just want to make versions of the getFromSource/setToXX
+	        //methods public in the Quantizer
+    
+	        outStream << '\t'
+		    << XmlStorableEvent(**i).toXmlString(expectedTime) << endl;
+
+	        if (nextEl != segment->end() &&
+		    (*nextEl)->getAbsoluteTime() != absTime &&
+		    inChord) {
+		    outStream << "</chord>\n";
+		    inChord = false;
+		    expectedTime = chordStart + chordDuration;
+	        } else if (inChord) {
+		    expectedTime = absTime;
+	        } else {
+		    expectedTime = absTime + (*i)->getDuration();
+	        }
             }
 
-	    timeT absTime = (*i)->getAbsoluteTime();
-
-            Segment::iterator nextEl = i;
-            ++nextEl;
-
-            if (nextEl != segment->end() &&
-                (*nextEl)->getAbsoluteTime() == absTime &&
-		(*i)->getDuration() != 0 &&
-		!inChord) {
-		outStream << "<chord>" << endl;
-		inChord = true;
-		chordStart = absTime;
-		chordDuration = 0;
+	    if (inChord) {
+	        outStream << "</chord>\n";
 	    }
 
-	    if (inChord && (*i)->getDuration() > 0)
-		if (chordDuration == 0 || (*i)->getDuration() < chordDuration)
-		    chordDuration = (*i)->getDuration();
-
-	    //!!! The SegmentQ-properties need to be backed up despite
-	    //being non-persistent (they're non-persistent because we
-	    //want to lose them when copying the events, not when
-	    //saving them).  What's the best way to do that?  We want
-	    //to do it here, not in XmlStorableEvent, because the
-	    //XmlStorableEvent _is_ the class of Event that's placed
-	    //into the segment when reading, so it doesn't want to be
-	    //burdened with a separate record of the unquantized 
-	    //values or knowledge about the quantizer.  We probably
-	    //just want to make versions of the getFromSource/setToXX
-	    //methods public in the Quantizer
-
-	    outStream << '\t'
-		<< XmlStorableEvent(**i).toXmlString(expectedTime) << endl;
-
-	    if (nextEl != segment->end() &&
-		(*nextEl)->getAbsoluteTime() != absTime &&
-		inChord) {
-		outStream << "</chord>\n";
-		inChord = false;
-		expectedTime = chordStart + chordDuration;
-	    } else if (inChord) {
-		expectedTime = absTime;
-	    } else {
-		expectedTime = absTime + (*i)->getDuration();
-	    }
-        }
-
-	if (inChord) {
-	    outStream << "</chord>\n";
-	}
-
-        if (currentGroup != -1) {
-            outStream << "</group>\n";
+            if (currentGroup != -1) {
+                outStream << "</group>\n";
+            }
         }
 
         outStream << "</segment>\n"; //-------------------------
