@@ -84,43 +84,6 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
     // accept dnd
     setAcceptDrops(true);
 
-    Composition &comp = doc->getComposition();
-
-    int tracks = comp.getNbTracks();
-
-    // If we have no Track then create a default document with 64 of them
-    //
-    if (tracks == 0)
-    {
-        // default number of Tracks
-        //
-        tracks = 64;
-
-        // instrument assignment
-        //
-        Rosegarden::InstrumentId instBase = Rosegarden::MidiInstrumentBase;
-
-        // Create the Tracks on the Composition
-        //
-        Rosegarden::Track *track;
-        for (int i = 0; i < tracks; i++)
-        {
-            char tmp[256];
-            sprintf(tmp, "#%d", i);
-            std::string label = "untitled ";
-            label += tmp;
-
-            track = new Rosegarden::Track(i,                       // id
-                                          (i + instBase) % 16,     // instrument
-                                          i,                       // position
-                                          label, 
-                                          false);                  // mute
-
-            comp.addTrack(track);
-        }
-
-    }
-
     init(rosegardenguiview);
     slotReadjustCanvasSize();
 }

@@ -404,6 +404,31 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
                          << " - m_composition->getDuration() : "
                          << m_composition.getDuration() << endl;
 
+    // Ensure a minimum of 256 tracks
+    //
+    int nbTracks = m_composition.getNbTracks();
+    Rosegarden::TrackId maxTrackId = m_composition.getMaxTrackId();
+    Rosegarden::InstrumentId instBase = Rosegarden::MidiInstrumentBase;
+
+    for(int i = nbTracks; i < 256; ++i) {
+
+        Rosegarden::Track *track;
+
+        char tmp[256];
+        sprintf(tmp, "#%d", i);
+        std::string label = "untitled ";
+        label += tmp;
+
+        track = new Rosegarden::Track(maxTrackId + 1,          // id
+                                      (i + instBase) % 16,     // instrument
+                                      i,                       // position
+                                      label, 
+                                      false);                  // mute
+
+        m_composition.addTrack(track);
+        ++maxTrackId;
+    }
+    
     // We might need a progress dialog when we generate previews,
     // reuse the previous one
     progressDlg.setLabel(i18n("Generating audio previews..."));
