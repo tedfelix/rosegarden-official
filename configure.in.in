@@ -27,15 +27,18 @@ AC_ARG_WITH(arts, [  --with-arts             enable aRts support (at cost of ALS
 
 if test "$with_alsa" = "yes"; then
   AM_PATH_ALSA(0.9.0, with_alsa=yes, with_alsa=no)
-else
+fi
+
+dnl ARTS if no ALSA
+if test "$with_alsa" = "no"; then
   AC_CHECK_FILE($kde_includes/arts/reference.h,, AC_MSG_ERROR("aRts headers are missing"))
-fi
-
-if test "$with_alsa" = "yes"; then
+  with_jack=no
+  with_ladspa=no
+else
+  dnl ALSA is good
   AC_DEFINE(HAVE_ALSA, 1, [Define if you have ALSA support])
-fi
 
-dnl check whether user wants to use JACK
+  dnl check whether user wants to use JACK
 AC_ARG_WITH(jack, [  --with-jack             enable JACK support (enabled by default when installed. requires ALSA.)],
 [
    if test "$withval" = "yes"; then
@@ -45,8 +48,8 @@ AC_ARG_WITH(jack, [  --with-jack             enable JACK support (enabled by def
   fi
 ], with_jack=$with_alsa)
 
-dnl only use JACK when jack/jack.h is found
-if test "$ac_header_jack_jack_h" = "no"; then
+   dnl only use JACK when jack/jack.h is found
+if test "$ac_header_jack_jack_h" != "yes"; then
   with_jack=no
 fi
 
@@ -55,9 +58,32 @@ if test "$with_jack" = "yes"; then
 
 dnl  AC_DEFINE(HAVE_JACK, 1, [Define if you have JACK support])
 dnl  AC_SUBST(JACKLIB)
-dnl  AC_CHECK_FUNCS(libRosegaddenSequencer.la, [],
+dnl  AC_CHECK_FUNCS(libRosegardenSequencer.la, [],
 dnl                 [JACKLIB="-ljack"])
 
+fi
+
+dnl check whether user wants to have LADSPA
+AC_ARG_WITH(ladspa, [  --with-ladspa           enable LADSPA plugins (enabled by default when installed)],
+[
+   if test "$withval" = "yes"; then
+     with_ladspa=yes
+   else
+     with_ladspa=no
+  fi
+], with_ladspa=yes)
+
+dnl only use LADSPA when ladspa.h is found
+if test "$ac_header_ladspa_h" != "yes"; then
+  with_ladspa=no
+fi
+
+if test "$with_ladspa" = "yes"; then
+  AC_DEFINE(HAVE_LADSPA, 1, [Define if you have LADSPA])
+  AC_CHECK_LIB(lrdf, lrdf_dump)
+fi
+
+dnl fi is for ALSA
 fi
 
 dnl append RDKDE3 flag if we've found KDE3
@@ -85,27 +111,6 @@ dnl automake conditionals
 dnl
 AM_CONDITIONAL(NO_SOUND, test "$with_sound" = "no")
 AM_CONDITIONAL(HAVE_ALSA, test "$with_alsa" = "yes")
-
-
-dnl check whether user wants to have LADSPA
-AC_ARG_WITH(ladspa, [  --with-ladspa           enable LADSPA plugins (enabled by default when installed)],
-[
-   if test "$withval" = "yes"; then
-     with_ladspa=yes
-   else
-     with_ladspa=no
-  fi
-], with_ladspa=yes)
-
-dnl only use LADSPA when ladspa.h is found
-if test "$ac_header_ladspa_h" = "no"; then
-  with_ladspa=no
-fi
-
-if test "$with_ladspa" = "yes"; then
-  AC_DEFINE(HAVE_LADSPA, 1, [Define if you have LADSPA])
-  AC_CHECK_LIB(lrdf, lrdf_dump)
-fi
 
 ###################
 # Try to be a bit more clever with kde dirs :
