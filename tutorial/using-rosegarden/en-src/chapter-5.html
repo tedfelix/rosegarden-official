@@ -5,7 +5,7 @@
 	<TITLE></TITLE>
 	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.2  (Linux)">
 	<META NAME="CREATED" CONTENT="20040613;311800">
-	<META NAME="CHANGED" CONTENT="20040815;15210200">
+	<META NAME="CHANGED" CONTENT="20040815;19204400">
 	<STYLE>
 	<!--
 		@page { size: 8.5in 11in }
@@ -229,30 +229,26 @@ you may need to check <B>Settings -&gt; Configure Rosegarden -&gt;
 Sequencer -&gt; Send all MIDI Controllers at start of playback [x]</B></I></P>
 <P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
 <IMG SRC="../pixmaps/document-transmit-controllers.png" NAME="Graphic13" ALIGN=BOTTOM WIDTH=304 HEIGHT=65 BORDER=0></P>
-<H2 CLASS="western" STYLE="font-weight: medium"><BR><BR>
+<H2 CLASS="western"><BR><BR>
 </H2>
 <P><BR><BR>
 </P>
 <H2 CLASS="western">Audio Instrument Parameters</H2>
-<P>If you want to use a track for audio, you'll need to make it a
-JACK track by routing it to the &quot;Audio&quot; device. (If you do
+<P>If you want to use a track for audio, you'll need to make it an
+audio track by routing it to the &quot;Audio&quot; device. (If you do
 not have an &quot;Audio&quot; device available, please ensure that
-your JACK server is running.</P>
+your JACK server is running.)</P>
 <P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
 <IMG SRC="../pixmaps/select-jack.png" NAME="Graphic5" ALIGN=BOTTOM WIDTH=252 HEIGHT=284 BORDER=0></P>
-<H2 CLASS="western">JACK Instrument Parameters</H2>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">JACK
-&quot;instruments&quot; have different controls available in the
-<B>Instrument Parameters</B> box.. They allow you to control the
-routing of the audio [In: Out: I have no clue what these are actually
-good for. This is what I mean by &quot;routing of the audio.&quot;],
-and to add layers of plugins. There are redundant Mute, Solo and
-Record toggles, as well as volume sliders for left and right</P>
+<H2 CLASS="western">Audio Instrument Parameters</H2>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Audio
+instruments have different controls available in the <B>Instrument
+Parameters</B> box..</P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">stereo
 channels, and a mono/stereo toggle. (<IMG SRC="../pixmaps/audio-mono.png" NAME="Graphic8" ALIGN=BOTTOM WIDTH=24 HEIGHT=24 BORDER=0>
 <IMG SRC="../pixmaps/audio-stereo.png" NAME="Graphic9" ALIGN=BOTTOM WIDTH=24 HEIGHT=25 BORDER=0>).</P>
 <P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-<IMG SRC="../pixmaps/instrument-parameters-audio.png" NAME="Graphic7" ALIGN=BOTTOM WIDTH=258 HEIGHT=282 BORDER=0></P>
+<IMG SRC="../pixmaps/instrument-parameters-audio.png" NAME="Graphic7" ALIGN=BOTTOM WIDTH=228 HEIGHT=208 BORDER=0></P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">If you
 wish to assign LADSPA plugins to the track, you may use one of the
 &quot;&lt;no plugin&gt;&quot; buttons to summon a dialog similar to
@@ -272,37 +268,36 @@ resources, so using too many may cause performance problems.</P>
 sequencer for Linux to employ the new DSSI plugin architecture. If
 you have your JACK server running, and your Rosegarden package was
 built correctly, you should have a &quot;Synth plugin&quot; device
-available.  Each of the 16 synth plugin instruments can take a
+available. Each of the 16 synth plugin instruments can take a
 different synth plugin, and can have up to five LADSPA plugins
 layered on top of the basic sound the synth plugin produces.</P>
 <P>Begin by routing a track first to this device, and then to one of
 the 16 available instruments.</P>
 <P ALIGN=CENTER><IMG SRC="../pixmaps/select-synth-pluging.png" NAME="Graphic17" ALIGN=BOTTOM WIDTH=228 HEIGHT=141 BORDER=0></P>
 <H3 CLASS="western">Select a Synth Plugin</H3>
-<P><SPAN STYLE="font-weight: medium">After routing a track to a synth
-plugin instrument, the </SPAN><B>Instrument Parameters</B><SPAN STYLE="font-weight: medium">
-box will show a new set of controls.  These are similar to the
-controls for audio instruments.  To configure this synth plugin
+<P>After routing a track to a synth plugin instrument, the <B>Instrument
+Parameters</B> box will show a new set of controls. These are similar
+to the controls for audio instruments. To configure this synth plugin
 instrument, begin by clicking on the &quot;&lt;no synth&gt;&quot;
-button.</SPAN></P>
-<P ALIGN=CENTER STYLE="font-weight: medium"><IMG SRC="../pixmaps/synth-plugin-ipb.png" NAME="Graphic18" ALIGN=BOTTOM WIDTH=228 HEIGHT=211 BORDER=0></P>
+button.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/synth-plugin-ipb.png" NAME="Graphic18" ALIGN=BOTTOM WIDTH=228 HEIGHT=211 BORDER=0></P>
 <P>After first clicking the button, you will need to dial in one of
 the plugins you have installed.</P>
 <P ALIGN=CENTER><IMG SRC="../pixmaps/synth-plugin-no-plugin.png" NAME="Graphic19" ALIGN=BOTTOM WIDTH=228 HEIGHT=147 BORDER=0></P>
 <P><BR><BR>
 </P>
 <H4 CLASS="western">Xsynth</H4>
-<P>After dialing the <B>Plugin</B><SPAN STYLE="font-weight: medium">
-combo box to &quot;Xsynth DSSI Plugin&quot; the dialog box will
-transform itself into something like this:</SPAN></P>
-<P ALIGN=CENTER STYLE="font-weight: medium"><IMG SRC="../pixmaps/synth-plugin-xsynth.png" NAME="Graphic20" ALIGN=BOTTOM WIDTH=456 HEIGHT=372 BORDER=0></P>
+<P>After dialing the <B>Plugin</B> combo box to &quot;Xsynth DSSI
+Plugin&quot; the dialog box will transform itself into something like
+this:</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/synth-plugin-xsynth.png" NAME="Graphic20" ALIGN=BOTTOM WIDTH=456 HEIGHT=372 BORDER=0></P>
 <P>I have to leave it up to you to play with the knobs and discover
-how to twiddle this into making interesting noises.  This synth
-plugin is not nearly as complex as ZynAddSubFX, but having it
-effectively built right into Rosegarden has some advantages.</P>
+how to twiddle this into making interesting noises. This synth plugin
+is not nearly as complex as ZynAddSubFX, but having it effectively
+built right into Rosegarden has some advantages.</P>
 <UL>
-	<LI><P><SPAN STYLE="font-weight: medium">no need to tinker with JACK
-	routing, since it plays through Rosegarden's JACK connection</SPAN></P>
+	<LI><P STYLE="font-weight: medium">no need to tinker with JACK
+	routing, since it plays through Rosegarden's JACK connection</P>
 	<LI><P STYLE="font-weight: medium">settings for the knobs are saved
 	with the composition, which allows you to dial up custom patches and
 	save them with your file without having to fool with the external
@@ -316,30 +311,30 @@ effectively built right into Rosegarden has some advantages.</P>
 <IMG SRC="../pixmaps/synth-plugin-editor-button.png" NAME="Graphic21" ALIGN=BOTTOM WIDTH=110 HEIGHT=32 BORDER=0>
 button you can use Xsynth's external editor to manage its controls in
 a different way, change several parameters, and to manage your
-collection of custom patches.  While it isn't necessary to do this,
+collection of custom patches. While it isn't necessary to do this,
 you may find it useful to save named presets to disk, and you might
 find the plugin's own native GUI is slightly more informative with
-respect to what the various knobs are for.  (In particular, the
-native GUI tells you what kind of wave form the various numbers
-represent, while Rosegarden's plugin interface does not.)  The GUI is
-an independent module unrelated to Rosegarden, which is why the look
-and feel are so different.</P>
+respect to what the various knobs are for. (In particular, the native
+GUI tells you what kind of wave form the various numbers represent,
+while Rosegarden's plugin interface does not.) The GUI is an
+independent module unrelated to Rosegarden, which is why the look and
+feel are so different.</P>
 <P ALIGN=CENTER><IMG SRC="../pixmaps/synth-plugin-xsynth-gui.png" NAME="Graphic22" ALIGN=BOTTOM WIDTH=224 HEIGHT=380 BORDER=0></P>
-<P ALIGN=LEFT><I>TIP:  This thing is uncomfortably large for my
-screen.  If you have the same problem, remember that you can drag it
-around even when its title bar is hidden off the top of the screen. 
+<P ALIGN=LEFT><I>TIP: This thing is uncomfortably large for my
+screen. If you have the same problem, remember that you can drag it
+around even when its title bar is hidden off the top of the screen.
 Hold down the Alt key while clicking on the window with your mouse,
 and reposition it as necessary to get to all of the controls.</I></P>
 <H4 CLASS="western">FluidSynth</H4>
 <P>FluidSynth-DSSI is a plugin built around the same underlying
-engine that powers QSynth.  The plugin implementation isn't quite as
+engine that powers QSynth. The plugin implementation isn't quite as
 friendly to use as QSynth, but it affords most of the same
 functionality in a package that's integrated into Rosegarden's user
 interface.</P>
-<P>After dialing the <B>Plugin</B><SPAN STYLE="font-weight: medium">
-combo box to &quot;FluidSynth-DSSI Plugin&quot; the dialog box will
-transform itself into something like this:</SPAN></P>
-<P ALIGN=CENTER STYLE="font-weight: medium"><IMG SRC="../pixmaps/synth-plugin-fluidsynth.png" NAME="Graphic24" ALIGN=BOTTOM WIDTH=228 HEIGHT=179 BORDER=0></P>
+<P>After dialing the <B>Plugin</B> combo box to &quot;FluidSynth-DSSI
+Plugin&quot; the dialog box will transform itself into something like
+this:</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/synth-plugin-fluidsynth.png" NAME="Graphic24" ALIGN=BOTTOM WIDTH=228 HEIGHT=179 BORDER=0></P>
 <H5 CLASS="western" ALIGN=LEFT STYLE="font-weight: medium">FluidSynth's
 External Editor</H5>
 <P ALIGN=LEFT STYLE="font-weight: medium">There are no knobs for this
@@ -352,17 +347,17 @@ button.</P>
 button.</P>
 <P ALIGN=CENTER><IMG SRC="../pixmaps/synth-plugin-fluidsynth-gui.png" NAME="Graphic25" ALIGN=BOTTOM WIDTH=456 HEIGHT=360 BORDER=0></P>
 <H5 CLASS="western">Selecting a Program</H5>
-<P>After you have loaded a soundfont, you can use the <B>Program</B><SPAN STYLE="font-weight: medium">
-combo box to dial in any of the programs available in the soundfont. 
+<P>After you have loaded a soundfont, you can use the <B>Program</B>
+combo box to dial in any of the programs available in the soundfont.
 This interface does not separate them into individual banks in the
-same fashion you saw elsewhere.  Instead, all available programs in
-the entire soundfont are presented within one top to bottom list.</SPAN></P>
-<P ALIGN=CENTER STYLE="font-weight: medium"><IMG SRC="../pixmaps/synth-plugin-select-program.png" NAME="Graphic27" ALIGN=BOTTOM WIDTH=228 HEIGHT=179 BORDER=0></P>
+same fashion you saw elsewhere. Instead, all available programs in
+the entire soundfont are presented within one top to bottom list.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/synth-plugin-select-program.png" NAME="Graphic27" ALIGN=BOTTOM WIDTH=228 HEIGHT=179 BORDER=0></P>
 <P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
-<I>NOTE:   In the case of the particular soundfont I have loaded in
-the example above, the extra drum kits that are normally found in
-bank 1 0 (using QSynth or the Sound Blaster Live!) are instead
-located starting at program number 128.  There is, in effect, only
-one gigantic bank.</I></P>
+<I>NOTE: In the case of the particular soundfont I have loaded in the
+example above, the extra drum kits that are normally found in bank 1
+0 (using QSynth or the Sound Blaster Live!) are instead located
+starting at program number 128. There is, in effect, only one
+gigantic bank.</I></P>
 </BODY>
 </HTML>

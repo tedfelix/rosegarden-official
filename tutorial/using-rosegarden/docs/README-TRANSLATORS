@@ -24,38 +24,17 @@ using-rosegarden/en			the "compiled" publication version;
 					not to be edited by hand
 
 The en-src and pixmaps directories are the heart and soul of "Using
-Rosegarden."  I own these, and while I'm alive, I will exert the final,
-controlling interest in what goes on here.  English language corrections and
-additions may be welcome, but only subject to my editorial approval.
+Rosegarden."  I own the master .html files in en-src and the English language
+pixmaps, and you are not invited to change anything.
 
 
 GETTING STARTED
 
-To begin a new translation, you need to create a new ??-src directory for your
-source files.  I suggest that you just take a copy of the entire en-src
-directory as your starting point.  You may rename the "chapter-??" files to
-anything you deem appropriate.  For example, the German translation uses
-"kapitel-??" files.
-
-Once you have the translation under way, let me know.  Those of you with CVS
-access may feel free to go ahead and add your new ??-src directory and commit
-your files.  Those without can send me (dmmcintyr@users.sourceforge.net) a
-tarball of your new directory.
-
-For example, you're picking up the Spanish translation, and you've made an
-es-src directory.  You can just
-
-	cd tutorial/using-rosegarden
-	tar cjf es-src.tar.bz2 es-src
-
-then email me the resulting tarball.
-
-Once the files are in, I will take care of the administrativa.  I'll need to
-modify the .book files and make adjustments to tutorial/docmake so that your
-translation can be "compiled" into a finished product.  My build system is
-definitely rather less than elegant, and I would never ask anyone else to deal
-with that mess.  I'll also take care of modifying the master
-tutorial/index.html to point to your new translation.
+If you're interested in doing a new translation, drop me a line at
+dmmcintyr@users.sourceforge.net and I'll set you up a ??-src directory for
+your language.  I'll take care of the administrativa, so you needn't concern
+yourself with compiling the sources into a finished product, or with publishing
+anything.
 
 I'm using htmldoc to assemble all of this, and the navigation headers it
 provides are in English.  My docmake script will take care of translating
@@ -66,27 +45,16 @@ that I can make the necessary additions to the build script.
 
 Make sure I now which is which.
 
+(NOTE:  There are probably encoding issues with non-Latin languages.  I will
+probably need additional assistance tweaking up my build script to handle
+these translations.  A quick test seems to reveal I'm going to run into
+trouble with Russian, for example.)
+
 
 PUBLICATION
 
-Once I've added your translation to the build system, you'll be able to
-compile it and have a look at it for yourself by running tutorial/docmake
-
-For example, to build the German web version, change to the tutorial directory
-and run
-
-	./docmake de-web
-
-The resulting files can be browsed from ./index.html or
-using-rosegarden/de/kapitel-0.html
-
-To build a pdf, run
-
-	./docmake de-pdf
-
-The result goes in de/arbeiten-mit-rosegarden.pdf
-
-I'll put together something similar for your language.
+The build system is in CVS, but I'd prefer to do all the publication myself.
+Commit (or send me) your own ??-src/*.html files and leave the rest to me.
 
 
 PIXMAPS
@@ -99,30 +67,21 @@ the original pixmaps as possible, to save yourself needless toil, but I leave
 it up to you, the translator, to make all final decisions about the pixmaps
 you include with your translation.
 
-For the time being, due to some ugly considerations in the build system, all
-the pixmaps need to go into the using-rosegarden/pixmaps directory.  It would
-be most helpful if you could make yours distinguishable by prefixing them with
-your language code, so that I can pick them out of the crowd.  Something like
+There are many diagrams published as pixmaps that probably need translation as
+well.  The vector sources for these are not available in CVS, and I would
+prefer not to clutter up CVS with even more binary files.  If the prospect of
+replacing the text with the GIMP is too daunting, I can send you the .sxd
+originals so you can export new graphics.
 
-	de-segment-parameters-box.png
+To avoid breaking my fragile build system, all the pixmaps need to go into the
+using-rosegarden/pixmaps directory.  Use the original filenames with your
+language code tacked on as an extra extension, like:
 
-would be great.  I will eventually work out a more elegant way of dealing with
-this problem, and will create separate directories for language-specific
-pixmaps, with some sort of common pool to allow documents to share the common
-English versions.  We'll just have to see how it goes once a number of
-different translations are floating around.
+	segment-parameters-box.png.de
 
 
-QUESTIONS?
+THANKS
 
-This is the largest document I've ever written, and the need to make it
-something that can be translated by several people into several languages
-concurrently is a rather involved problem.  I've spent a lot of time trying to
-devise a system that will allow all of us to focus on the meat of the matter
-and ignore the technical details as much as possible, but I'm open to
-suggestions if anyone has ideas for a more translator-friendly setup.
-
-At least I'm not longer maintaining the master version in a single .sxw file.
+Thanks for your interest, and your hard work!  I know this hasn't been easy to
+translate.  Your only consolation is that it hasn't been easy to write either.
 :)
-
-Thanks for your interest, and your hard work!

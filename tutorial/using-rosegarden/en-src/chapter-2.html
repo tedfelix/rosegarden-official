@@ -5,7 +5,7 @@
 	<TITLE></TITLE>
 	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.2  (Linux)">
 	<META NAME="CREATED" CONTENT="20040613;311200">
-	<META NAME="CHANGED" CONTENT="20040815;1303200">
+	<META NAME="CHANGED" CONTENT="20040827;22121700">
 	<STYLE>
 	<!--
 		@page { size: 8.5in 11in }
@@ -319,9 +319,12 @@ to snag the PCMCIA modules as well):</P>
 <P STYLE="margin-left: 0.49in"><FONT FACE="Courier 10 Pitch">alsa-modules-2.4.25-1-multimedia-686</FONT></P>
 <P STYLE="margin-left: 0.49in"><FONT FACE="Courier 10 Pitch">kernel-image-2.4.25-1-multimedia-686</FONT></P>
 <P><FONT FACE="Times New Roman"><I>NOTE: Your mileage may vary if you
-want to use a newer 2.6-series kernel. As of this writing, they are
-still rather immature and experimental, and I am not using one, so I
-can't very well write about it.</I></FONT></P>
+want to use a newer 2.6-series kernel. As of this writing (2.6.8 is
+currently in Debian unstable), I have not yet heard of anyone having
+good results doing audio work with the new kernels.  Some of the
+features patched into the AGNULA kernel have been incorporated into
+the mainline 2.6 tree, but not all of them.  I recommend that you
+stick with a 2.4 series kernel for now.</I></FONT></P>
 <H3 CLASS="western">Starting and Tweaking JACK</H3>
 <P>The simplest way to control your JACK server is to use <A HREF="http://qjackctl.sourceforge.net/"><FONT FACE="Courier 10 Pitch">qjackctl</FONT></A>.
 It is a very useful utility that provides a convenient way to start
@@ -343,7 +346,11 @@ ordinary user.
 <P ALIGN=CENTER><IMG SRC="../pixmaps/qjackctl-silvan.png" NAME="Graphic25" ALIGN=BOTTOM WIDTH=494 HEIGHT=359 BORDER=0></P>
 <P ALIGN=LEFT STYLE="font-weight: medium">The settings displayed are
 those that work best for me on my Sound Blaster Live!, and you may
-well have some fiddling to do from here. Discovering the best
+well have some fiddling to do from here.  If you have more than one
+soundcard, you may need to twiddle the  &quot;Interface&quot;
+setting.  I don't actually have any experience in such a situation,
+so you are on your own to experiment in that case.</P>
+<P ALIGN=LEFT STYLE="font-weight: medium"> Discovering the best
 combination is a process of playing with the &quot;Frames/Period&quot;,
 &quot;Sample Rate&quot; and &quot;Periods/Buffer&quot; settings. Your
 objective here is to find the lowest possible latency, as reported in
@@ -355,11 +362,11 @@ low.</P>
 lowest possible latency, click on <B>OK</B>, then try to start the
 JACK server with the <B>Start</B> button on the main dialog. If the
 server fails to start, come back to this dialog and keep working up,
-one setting at a time, until you find a combination that works.  Many
+one setting at a time, until you find a combination that works. Many
 combinations of settings will probably cause JACK to fail
-immediately.  You should quickly begin to get an idea of the range of
+immediately. You should quickly begin to get an idea of the range of
 possible values you can use that will actually work, and then you can
-home in on the ideal settings from there.  (For example, it isn't
+home in on the ideal settings from there. (For example, it isn't
 possible to start JACK on my hardware with a periods/buffer other
 than two, so there is nothing for it but to use that setting and move
 on to a different parameter.)</P>

@@ -234,28 +234,24 @@ SRC="../pixmaps/matrix-pick-tr-808.png" ></P>
 <P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic13" SRC="../pixmaps/document-transmit-controllers.png"
 ></P>
-<H2 CLASS="western" STYLE="font-weight: medium"><A NAME="5_4">5.4 
+<H2 CLASS="western"><A NAME="5_4">5.4 
 <BR>
 <BR></A></H2>
 <P>
 <BR>
 <BR></P>
 <H2 CLASS="western"><A NAME="5_5">5.5 Audio Instrument Parameters</A></H2>
-<P>If you want to use a track for audio, you'll need to make it a JACK
+<P>If you want to use a track for audio, you'll need to make it an audio
  track by routing it to the &quot;Audio&quot; device. (If you do not have an
  &quot;Audio&quot; device available, please ensure that your JACK server is
- running.</P>
+ running.)</P>
 <P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic5" SRC="../pixmaps/select-jack.png"
 ></P>
-<H2 CLASS="western"><A NAME="5_6">5.6 JACK Instrument Parameters</A></H2>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">JACK
- &quot;instruments&quot; have different controls available in the<B> Instrument
- Parameters</B> box.. They allow you to control the routing of the audio
- [In: Out: I have no clue what these are actually good for. This is what
- I mean by &quot;routing of the audio.&quot;], and to add layers of plugins. There
- are redundant Mute, Solo and Record toggles, as well as volume sliders
- for left and right</P>
+<H2 CLASS="western"><A NAME="5_6">5.6 Audio Instrument Parameters</A></H2>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Audio
+ instruments have different controls available in the<B> Instrument
+ Parameters</B> box..</P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">stereo
  channels, and a mono/stereo toggle. (<IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic8" SRC="../pixmaps/audio-mono.png" > <IMG ALIGN="BOTTOM" BORDER="0"
 NAME="Graphic9" SRC="../pixmaps/audio-stereo.png" >).</P>
@@ -291,16 +287,12 @@ NAME="Graphic9" SRC="../pixmaps/audio-stereo.png" >).</P>
 <P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic17"
 SRC="../pixmaps/select-synth-pluging.png" ></P>
 <H3 CLASS="western"><A NAME="5_7_1">5.7.1 Select a Synth Plugin</A></H3>
-<P>
-<!--SPAN STYLE="font-weight: medium"-->
-After routing a track to a synth plugin instrument, the<B> Instrument
- Parameters</B>
-<!--SPAN STYLE="font-weight: medium"-->
- box will show a new set of controls. These are similar
+<P>After routing a track to a synth plugin instrument, the<B> Instrument
+ Parameters</B> box will show a new set of controls. These are similar
  to the controls for audio instruments. To configure this synth plugin
  instrument, begin by clicking on the &quot;&lt;no synth&gt;&quot; button.</P>
-<P ALIGN="CENTER" STYLE="font-weight: medium"><IMG ALIGN="BOTTOM" BORDER="0"
-NAME="Graphic18" SRC="../pixmaps/synth-plugin-ipb.png" ></P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic18"
+SRC="../pixmaps/synth-plugin-ipb.png" ></P>
 <P>After first clicking the button, you will need to dial in one of the
  plugins you have installed.</P>
 <P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic19"
@@ -309,22 +301,18 @@ SRC="../pixmaps/synth-plugin-no-plugin.png" ></P>
 <BR>
 <BR></P>
 <H4 CLASS="western"><A NAME="5_7_1_1">5.7.1.1 Xsynth</A></H4>
-<P>After dialing the<B> Plugin</B>
-<!--SPAN STYLE="font-weight: medium"-->
- combo box to &quot;Xsynth DSSI Plugin&quot; the
+<P>After dialing the<B> Plugin</B> combo box to &quot;Xsynth DSSI Plugin&quot; the
  dialog box will transform itself into something like this:</P>
-<P ALIGN="CENTER" STYLE="font-weight: medium"><IMG ALIGN="BOTTOM" BORDER="0"
-NAME="Graphic20" SRC="../pixmaps/synth-plugin-xsynth.png" ></P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic20"
+SRC="../pixmaps/synth-plugin-xsynth.png" ></P>
 <P>I have to leave it up to you to play with the knobs and discover how
  to twiddle this into making interesting noises. This synth plugin is
  not nearly as complex as ZynAddSubFX, but having it effectively built
  right into Rosegarden has some advantages.</P>
 <UL>
 <LI>
-<P>
-<!--SPAN STYLE="font-weight: medium"-->
-no need to tinker with JACK routing, since it plays through
- Rosegarden's JACK connection</P>
+<P STYLE="font-weight: medium">no need to tinker with JACK routing,
+ since it plays through Rosegarden's JACK connection</P>
 </LI>
 <LI>
 <P STYLE="font-weight: medium">settings for the knobs are saved with the
@@ -362,13 +350,10 @@ SRC="../pixmaps/synth-plugin-xsynth-gui.png" ></P>
  that powers QSynth. The plugin implementation isn't quite as friendly
  to use as QSynth, but it affords most of the same functionality in a
  package that's integrated into Rosegarden's user interface.</P>
-<P>After dialing the<B> Plugin</B>
-<!--SPAN STYLE="font-weight: medium"-->
- combo box to &quot;FluidSynth-DSSI Plugin&quot;
+<P>After dialing the<B> Plugin</B> combo box to &quot;FluidSynth-DSSI Plugin&quot;
  the dialog box will transform itself into something like this:</P>
-<P ALIGN="CENTER" STYLE="font-weight: medium"><IMG ALIGN="BOTTOM" BORDER="0"
-NAME="Graphic24" SRC="../pixmaps/synth-plugin-fluidsynth.png" >
-</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic24"
+SRC="../pixmaps/synth-plugin-fluidsynth.png" ></P>
 <H5 ALIGN="LEFT" CLASS="western" STYLE="font-weight: medium"><A NAME="5_7_1_2_1">
 5.7.1.2.1 FluidSynth's External Editor</A></H5>
 <P ALIGN="LEFT" STYLE="font-weight: medium">There are no knobs for this
@@ -383,15 +368,12 @@ SRC="../pixmaps/synth-plugin-fluidsynth-gui.png" ></P>
 <H5 CLASS="western"><A NAME="5_7_1_2_2">5.7.1.2.2 Selecting a Program</A>
 </H5>
 <P>After you have loaded a soundfont, you can use the<B> Program</B>
-<!--SPAN STYLE="font-weight: medium"-->
-
  combo box to dial in any of the programs available in the soundfont.
  This interface does not separate them into individual banks in the same
  fashion you saw elsewhere. Instead, all available programs in the
  entire soundfont are presented within one top to bottom list.</P>
-<P ALIGN="CENTER" STYLE="font-weight: medium"><IMG ALIGN="BOTTOM" BORDER="0"
-NAME="Graphic27" SRC="../pixmaps/synth-plugin-select-program.png" >
-</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic27"
+SRC="../pixmaps/synth-plugin-select-program.png" ></P>
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
 <I> NOTE: In the case of the particular soundfont I have loaded in the
  example above, the extra drum kits that are normally found in bank 1 0

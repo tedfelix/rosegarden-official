@@ -5,7 +5,7 @@
 	<TITLE></TITLE>
 	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.2  (Linux)">
 	<META NAME="CREATED" CONTENT="20040613;312100">
-	<META NAME="CHANGED" CONTENT="20040815;15204200">
+	<META NAME="CHANGED" CONTENT="20040822;14322800">
 	<STYLE>
 	<!--
 		@page { size: 8.5in 11in }
@@ -31,7 +31,7 @@
 the main window, and have not really edited anything. Rosegarden
 provides three different editors, each with its own unique view of
 the data. You can view the raw Rosegarden events with the Event List
-Editor, you can work with a piano roll metaphor with the Matrix
+Editor, you can work with a piano roll metaphor with the matrix
 Editor, or you can see your data as notation with the Notation
 Editor. Each of these editors works on a segment level, so you must
 have at least one segment selected in order to open one. If you wish
@@ -209,14 +209,17 @@ be loaded into RG.</P>
 <P>Use the &quot;Save Data&quot; button to store the payload of an
 existing SysEx event into an external &quot;SYX&quot; file.</P>
 <H2 CLASS="western">The Matrix Editor</H2>
-<P>The Matrix editor is based around the familiar piano roll metaphor
+<P>The matrix editor is based around the familiar piano roll metaphor
 you have probably seen in other packages. It is useful for taking a
 hands on approach to tweaking notes where their performance is more
-important than their visual appearance as notation. I find myself
-using the Matrix most often for two main purposes. It's my preferred
-method of sequencing percussion parts, and I use it to knock notes
-out of precise alignment on purpose; for example, when sequencing
-rolled chords in order to make a MIDI guitar sound more credible.</P>
+important than their visual appearance as notation.  The matrix is my
+preferred method of sequencing percussion parts, and I use it
+whenever the notation editor is simply unable to cope with my data,
+and needs a bit of a brute force shove to get things to come out
+right.  There hasn't been a quantizer written yet that can make
+consistently good decisions in the face of the kind of mistakes I
+tend to make while playing my keyboard, and I spend quite a lot of
+time flipping back and forth between matrix and notation views.</P>
 <H3 CLASS="western">Special Considerations of Performance vs. Display</H3>
 <P STYLE="font-style: normal">It is important to note that Rosegarden
 is not purely a MIDI sequencer, and at no time can you ever directly
@@ -230,11 +233,11 @@ maintains independent duration values for performance and display.
 This makes it possible to create a composition that looks good
 printed on paper, and yet preserves all of the slight human
 imperfections that give a performance its character.</P>
-<P STYLE="font-style: normal">In version 1.0, the Matrix can only
+<P STYLE="font-style: normal">In version 1.0, the matrix can only
 edit <B>performance</B> attributes. This can create interesting
 challenges both for performance and notation. If you are working on a
 human performance, and you draw notes to their full length here in
-the Matrix, you may damage the character of the performance slightly.
+the matrix, you may damage the character of the performance slightly.
 On the other hand, if you draw slightly long or short notes here, or
 knock the timing off the grid lines intentionally, you will create
 ugly notation in the process. In either case, you can make
@@ -242,7 +245,7 @@ adjustments to massage away these differences from the Notation
 Editor, as I will explain in the next chapter.</P>
 <P STYLE="font-style: normal; font-weight: medium">One particularly
 noteworthy side effect of the way Rosegarden stores events is that
-tied notes are a series of discrete dashes here on the Matrix. It is
+tied notes are a series of discrete dashes here on the matrix. It is
 really not possible to determine whether a series of notes at the
 same pitch will sound as one note or several without looking at the
 affected area from the Notation Editor.</P>
@@ -312,21 +315,23 @@ any number of pitches in this fashion.</P>
 of notes by sweeping the arrow cursor across the keys while holding
 shift.</P>
 <P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-sweep-selection.png" NAME="Graphic16" ALIGN=BOTTOM WIDTH=205 HEIGHT=138 BORDER=0></P>
-<P ALIGN=LEFT>Finally, you can use the selection event filter to cull
-events from your selection. Start by making a broad selection, and
-then click on the filter icon to summon my dialog. You can then dial
-in various criteria for the notes you wish to remain selected after
-the filter is applied.</P>
+<P ALIGN=LEFT>Finally, if you have some need to select ranges of
+notes within an area less than the entire segment, you can use the
+selection event filter. Start by making a broad selection, and then
+click on the filter icon to summon the dialog. You can then dial in
+various criteria for the notes you wish to remain selected after the
+filter is applied.  I'll demonstrate one use for it later on in this
+chapter.</P>
 <P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-event-filter.png" NAME="Graphic17" ALIGN=BOTTOM WIDTH=263 HEIGHT=254 BORDER=0></P>
-<P ALIGN=LEFT><I>(The event selection filter is an example of how
-different developers on Open Source projects have different ideas how
-things should work, and they implement parallel ways of accomplishing
-the same thing. I put a considerable amount of effort into developing
-the event selection filter, but once I discovered the ways to make
-selections using the matrix keyboard, I never actually use the fruit
-of my own labor. I don't even feel like it's important enough to
-bother documenting its use in detail. Ironic, isn't it? At least I
-can laugh at myself.)</I></P>
+<P ALIGN=LEFT><I>NOTE:  If you ever find a good use for this dialog's
+ability to filter on controller or wheel events, please let me know. 
+I implemented this dialog before Rosegarden had control rulers, when
+the only way to get to these outside the event list editor, which
+didn't actually work at that time, was to manipulate them as little
+question marks in the notation view.  I'm not convinced these last
+two event categories are actually still useful, and I expect to
+remove them from the dialog for Rosegarden 1.1 unless I get feedback
+requesting otherwise.</I></P>
 <H3 CLASS="western">Velocity</H3>
 <P>Velocity is a MIDI parameter that describes how hard a note was
 hit on the keyboard or other device. It allows for finer expression
@@ -347,32 +352,34 @@ velocity of 100, and they show up as orange bars on the ruler.</P>
 <P ALIGN=LEFT STYLE="font-weight: medium">They can be changed by
 dragging them up and down, and the bars change colors to reflect
 their value. Here I've arranged them so that you can see each bar.
-Notice that the notes on the Matrix itself change to reflect these
+Notice that the notes on the matrix itself change to reflect these
 same colors.</P>
 <P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-arranged-velocity.png" NAME="Graphic20" ALIGN=BOTTOM WIDTH=167 HEIGHT=112 BORDER=0></P>
 <P ALIGN=LEFT STYLE="font-weight: medium"><I>NOTE: It can indeed be
 somewhat tricky to know which note you're adjusting if there are
-several notes of the same duration at the same time. I truthfully
-have no idea if there is some trick to this to make managing the
-process more foolproof. If anyone knows, email me, and I will mention
-in the next edition.</I></P>
-<H4 CLASS="western">What If There's No Velocity Property?</H4>
-<P>Sometimes note events are created without velocity properties. In
-that case, there will be nothing to see or do on the Velocity Ruler
-until you add some velocities. You'll need to select a range of notes
-and then use <B>Adjust -&gt; Velocity -&gt; Set Event Velocities</B>
-to create some. This presents you with a dialog box that offers you
-several different options for how to set these up. The Value ranges
-from 0, which is the softest possible key strike, to 127, which is
-the most forceful.</P>
+several notes of the same duration at the same time.  When multiple
+notes occur at the same time, use the </I><SPAN STYLE="font-style: normal"><B>[</B><SPAN STYLE="font-weight: medium">
+<SPAN STYLE="font-weight: medium"><I>and</I></SPAN> </SPAN><B>] </B></SPAN><I><SPAN STYLE="font-weight: medium">keys
+to flip through the available choices, then watch the matrix above
+for the color change that reveals which note you are adjusting.</SPAN></I></P>
+<H4 CLASS="western">Setting Multiple Velocity Properties</H4>
+<P>It is possible to adjust the velocities for an entire selection of
+notes.  <B>Adjust -&gt; Velocity -&gt; Set Event Velocities</B>
+presents you with a dialog box that allows you to choose from several
+different patterns. The Value ranges from 0, which is the softest
+possible key strike, to 127, which is the most forceful.</P>
 <P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-adjust-velocities.png" NAME="Graphic18" ALIGN=BOTTOM WIDTH=381 HEIGHT=115 BORDER=0></P>
+<P ALIGN=LEFT><I>TIP:  If you find that you have notes that don't
+have velocity properties for some reason (there are no bars on the
+velocity ruler for those notes), you can also use <B>Set Event
+Velocities</B><SPAN STYLE="font-weight: medium"> to create new ones.</SPAN></I></P>
 <H4 CLASS="western"><BR><BR>
 </H4>
 <H3 CLASS="western">Controllers</H3>
 <P>It's possible to transmit controllers from here in the matrix with
-the various Control Rulers. Let's add a Modulation ruler. Choose <B>View
+the various control rulers. Let's add a Modulation ruler. Choose <B>View
 -&gt; Add Event Ruler -&gt; Modulation Controller</B> and you should
-now have a new tab at the bottom of your Matrix.</P>
+now have a new tab at the bottom of your matrix.</P>
 <P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-mod-ruler.png" NAME="Graphic21" ALIGN=BOTTOM WIDTH=296 HEIGHT=121 BORDER=0></P>
 <P ALIGN=LEFT STYLE="font-weight: medium">If you right click on the
 ruler you can insert a controller event, or even an entire line of
@@ -398,9 +405,30 @@ drag these up and down as a group, they all move at once.</P>
 <H2 CLASS="western">Example Uses</H2>
 <H3 CLASS="western" STYLE="font-style: normal"><FONT FACE="Arial">Sequencing
 a Drum Pattern</FONT></H3>
-<P STYLE="font-style: normal"><FONT FACE="Arial">If you need to do a
-lot of complicated drum patterns, you might be better off to use
-Hydrogen. Rosegarden can import Hydrogen patterns</FONT></P>
+<P STYLE="font-style: normal"><FONT FACE="Arial">I find it rather
+difficult and tedious to do drums with the notation editor for
+several reasons.  It does not yet support standard percussion
+notation, and it is yet very well capable of handling multi-voice
+parts with different rhythms in different lines within the same
+segment.  For this reason, the matrix is my editor of choice for drum
+parts.</FONT></P>
+<P><FONT FACE="Arial"><I>NOTE:  For more complicated parts, I favor
+doing them with Hydrogen, and then importing the patterns.  However,
+this can present special challenges too, as Hydrogen's drum kits
+rarely map out to the General MIDI standard.  That leaves me with the
+hard choice of rearranging the patterns to play on my GM and GS
+equipment, by physically moving all the notes to different places, or
+assigning affected tracks to an instrument that's connected to
+Hydrogen, and letting it do the playing.  In this last case, there is
+no way to change the drum kit Hydrogen is using without manipulating
+its GUI, so it isn't really possible to save a Rosegarden composition
+whose Hydrogen drums are guaranteed to play correctly without  manual
+user intervention.  Muddying the waters further, Rosegarden doesn't
+really provide any good , built-in facility for my letting others
+know what they need to go do to Hydrogen in order to play my files. 
+As a result, I do tend to do most of my drum work with Rosegarden's
+admittedly less capable facilities, if only for the sake of
+convenience in distributing the results to others.</I></FONT></P>
 <H4 CLASS="western">Create a New Segment</H4>
 <P>In order to have some place to put the drums, create a new segment
 four bars long.</P>
@@ -467,6 +495,65 @@ copies, selected all four segments, and used <B>Segments -&gt; Splint
 and Join -&gt; Join</B> to join them back into one; then I finished
 by un-checking repeat for the segment. It's a toss-up whether method
 B is faster, but it's definitely more precise.</I></P>
+<H3 CLASS="western">Adjusting Velocities with the Selection Event
+Filter</H3>
+<P>One place where the selection event filter shines is in its
+ability to quickly focus in on a particular range of notes within a
+selection.  In this example, I had an arpeggiated part that I entered
+with flat velocities, and I wanted to add some life to the
+performance by accenting the top and bottom notes, while bringing
+down the velocity in the middle.  As the part cycled up and down
+through several chords, it was impossible to use the
+click-on-the-keyboard method I described earlier in this chapter to
+select only the events I wanted.</P>
+<H4 CLASS="western">Make a Selection</H4>
+<P>The first step is to select all the events in the four bars of the
+first chord using the 
+<IMG SRC="../pixmaps/matrix-arrow-cursor.png" NAME="Graphic55" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0>
+tool.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-event-filter-A.png" NAME="Graphic54" ALIGN=BOTTOM WIDTH=380 HEIGHT=272 BORDER=0></P>
+<H4 CLASS="western">Configure the Selection Event Filter</H4>
+<P>Next, I wanted to catch the middle notes notes, so I used the 
+<IMG SRC="../pixmaps/event-list-filter-selection.png" NAME="Graphic56" ALIGN=BOTTOM WIDTH=30 HEIGHT=27 BORDER=0>
+icon to summon the event filter dialog.</P>
+<P>Then I used the 
+<IMG SRC="../pixmaps/dot-dot-dot-button.png" NAME="Graphic57" ALIGN=BOTTOM WIDTH=83 HEIGHT=35 BORDER=0>
+icon to pop up the pitch chooser for the f<B>rom:</B><SPAN STYLE="font-weight: medium">
+pitch.  In this case, E3.</SPAN></P>
+<P ALIGN=CENTER STYLE="font-weight: medium"><IMG SRC="../pixmaps/matrix-event-filter-B.png" NAME="Graphic58" ALIGN=BOTTOM WIDTH=380 HEIGHT=182 BORDER=0></P>
+<P ALIGN=LEFT STYLE="font-weight: medium"><I>TIP:  I find it a bit
+tricky to use the pitch picker in this dialog from the matrix view
+because I'm comparing a constantly changing clef and staff to a pitch
+on a piano keyboard.  I find it error prone, personally, and so I
+have taken to looking at the status bar at the bottom of the window
+as I hover over notes.  It shows the absolute MIDI pitch, and makes
+it a breeze dialing the values I want straight in.</I></P>
+<P ALIGN=LEFT><SPAN STYLE="font-weight: medium">I repeated the
+process for the <B>to:</B> pitch, selecting B#3.  Since I wanted to
+select the notes in between these two extremes first, I left the
+associated combo box set to &quot;include.&quot;  This caused it to
+include all the notes between E3 and B#3.  <SPAN STYLE="font-weight: medium">Since
+ I wanted to grab notes irrespective of duration or velocity, I left
+these filters at all-inclusive settings. </SPAN></SPAN>
+</P>
+<H4 CLASS="western" ALIGN=LEFT STYLE="font-weight: medium">Adjust the
+Velocities</H4>
+<P ALIGN=LEFT>After clicking OK to apply the filter, the following
+selection resulted:</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-event-filter-C.png" NAME="Graphic59" ALIGN=BOTTOM WIDTH=380 HEIGHT=129 BORDER=0></P>
+<P ALIGN=LEFT><I>NOTE:  If you didn't get quite what you were after,
+hit the filter again.  It remembers the last settings you used, and
+you can fine tune it on subsequent runs until you get it just right.</I></P>
+<P>Now that I had filtered the selection to the range of notes I
+wanted to affect, I used <B>shift+down</B> to lower all of these
+velocities at once, producing the following result:</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-event-filter-D.png" NAME="Graphic60" ALIGN=BOTTOM WIDTH=380 HEIGHT=204 BORDER=0></P>
+<P ALIGN=LEFT>I could have used the filter the other way as well.  By
+setting the combo box to &quot;exclude&quot; the range, I could have
+selected and adjusted the high and low notes to a higher velocity...</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-event-filter-E1.png" NAME="Graphic61" ALIGN=BOTTOM WIDTH=304 HEIGHT=56 BORDER=0></P>
+<P ALIGN=LEFT>With the following result...</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-event-filter-E2.png" NAME="Graphic62" ALIGN=BOTTOM WIDTH=380 HEIGHT=216 BORDER=0></P>
 <P><BR><BR>
 </P>
 </BODY>

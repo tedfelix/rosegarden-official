@@ -10,6 +10,8 @@
 # necessary for getting the job done.  So instead I wrote a script to make the
 # various docs.
 
+langs="en de es ru"
+
 startdir=$PWD
 
 Usage(){
@@ -24,7 +26,7 @@ EOF
 }
 
 translate_de() {
-    	echo Translating auto-generated nav headers...
+    	echo Translating auto-generated nav headers into German...
 	cd ../de
 	mv chapter-0.html kapitel-0.html
 	for file in *.html;do
@@ -36,44 +38,46 @@ translate_de() {
 	done
 }
 
-web() {
-	echo Making web book, language $1
-	cd using-rosegarden/$1-src
-	mkdir /tmp/$1-src
-	htmldoc --batch $1-web.book
-	echo Moving files, fixing links...
-	mv -f /tmp/$1-src/index.html ../$1/chapter-0.html
-	mv -f /tmp/$1-src/*.html ../$1
-	../admin/fix-links ../$1       # repair HTMLDOC-mangled links
-#	../admin/fix-local-links ../$1 # repair Open Office-mangled links
-	echo Done...
-	case $1 in
-	    "en") ;;
-	    "de") translate_de ;;
-	esac
-	cd $startdir
+translate_es() {
+    	echo Translating auto-generated nav headers into Spanish...
+	cd ../es
+	mv chapter-0.html capitulo-0.html
+	for file in *.html;do
+	    	echo translating headers in $file...
+		Sed index.html capitulo-0.html $file
+		Sed Contents Contenido $file
+		Sed Next Adelante $file
+		Sed Previous Atrás $file
+	done
 }
 
-pdf() {
-	echo Making .pdf book, language $1
-	cd using-rosegarden/$1-src
-	htmldoc --batch $1-pdf.book
-	mv -f /tmp/$1-src/*.pdf ../$1
-	echo Done...
-	cd $startdir
-}
-
-Sed() {
-    sed s@$1@$2@g $3 > /tmp/blurfl&&mv /tmp/blurfl $3
+# this will probably require some thought, such as whether this script itself
+# is properly encoded to allow Russian characters in the first place.
+# (looks like that is indeed not the case, and some special treatment must be
+#  thought up to deal with this.)
+translate_ru() {
+    exit 0
+    echo Translating auto-generated nav headers...
+    cd ../ru
+    mv chapter-0.html kapitel-0.html
+    for file in *.html;do
+	    echo translating headers in $file...
+	    Sed index.html kapitel-0.html $file
+	    Sed Contents Inhaltsverzeichnis $file
+	    Sed Next Vor $file
+	    Sed Previous Zurück $file
+    done
 }
 
 Put() {
     if [ `whoami` == "silvan" ]; then
+	echo "Previewing in kghostivew..."
+	kghostview $1
 
+	read -p "Do you want to publish? (y/N)" key
+	if [ "key" == "y" ]; then
 	    printf "Publishing \"$1\"... \t"
-    
 	    user=$(cat /home/silvan/ZTQXP3)
-
 	    curl -u "$user" -T "$1" ftp://users.adelphia.net/public_html/
 
 	    if [ $? ]; then
@@ -81,25 +85,44 @@ Put() {
 	    else
 		echo FAILED
 	    fi
-
-    fi 
+	fi 
+    fi
 }
 
-# broken -- don't use yet
-Debork () {
-    echo "Deborking the PDF.  Doo dah, doo dah, this will take a loooong time...."
-    dir=`dirname  $1`
-    name=`basename $1`
-    echo change to $dir
-    echo cd $dir
-    echo Convert PDF to PS
-    echo pdf2ps $name
-    echo Convert PS back to PDF
-    echo ps2pdf $name
-    echo Whee.  Are you still awake?
+web() {
+    echo Making web book, language $1
+    cd using-rosegarden/$1-src
+    mkdir /tmp/$1-src
+    htmldoc --batch $1-web.book
+    echo Moving files, fixing links...
+    mv -f /tmp/$1-src/index.html ../$1/chapter-0.html
+    mv -f /tmp/$1-src/*.html ../$1
+    ../admin/fix-links ../$1       # repair HTMLDOC-mangled links
+#	../admin/fix-local-links ../$1 # repair Open Office-mangled links
+    echo Done...
+    case $1 in
+	"en") ;;
+	"de") translate_de ;;
+	"es") translate_es ;;
+	"ru") translate_ru ;;
+    esac
+    cd $startdir
 }
 
-dopdf=false
+pdf() {
+    echo Making .pdf book, language $1
+    cd using-rosegarden/$1-src
+    htmldoc --batch $1-pdf.book
+    mv -f /tmp/$1-src/*.pdf ../$1
+    echo Done...
+    cd ../$1
+    Put *.pdf
+    cd $startdir
+}
+
+Sed() {
+    sed s@$1@$2@g $3 > /tmp/blurfl&&mv /tmp/blurfl $3
+}
 
 case $1 in 
     "en-web")
@@ -107,7 +130,6 @@ case $1 in
     	;;
     "en-pdf")
     		pdf en
-	        dopdf=true
     	;;
     "de-web") 
     		web de
@@ -115,26 +137,40 @@ case $1 in
     "de-pdf") 
     		pdf de
 	;;
-    "put")
-#		Debork using-rosegarden/en/using-rosegarden.pdf
-#	        Put using-rosegarden/en/using-rosegarden.pdf
-#		Put using-rosegarden/de/arbeiten-mit-rosegarden.pdf
-		echo Attempting an automatic CVS commit...
-	        cvs -f commit -m "* automatic commit by $0 - \" $2 \"" '.' 
-    	;;	
+    "es-web") 
+    		web es
+	;;
+    "es-pdf") 
+    		pdf es
+	;;
+    "ru-web") 
+    		web ru
+	;;
+    "ru-pdf") 
+    		pdf ru
+	;;
+    "all-web") for l in $langs; do
+                   web $l
+	       done
+        ;;
+    "all-pdf") for l in $langs; do
+    		   pdf $l
+	       done
+	;;
     "all") 
-    		web en
-		pdf en
-		dopdf=true
-#		web de
-#		pdf de
+    		for l in $langs; do
+		    web $l
+		    pdf $l
+		done
 	;;
     *) Usage
     	;;
 esac
 
-if [ dopdf ]; then
-    echo "Remember to fix the PDFs manually with xpdf and then run \"docmake put\" to upload..."
+read -p "Do you want to commit?  (y/N) " key
+if [ "$key" == "y" ];then
+	echo Attempting an automatic CVS commit...
+	cvs -f commit -m "* automatic commit by $0 - \" $2 \"" '.' 
 fi
-
+    
 exit 0
