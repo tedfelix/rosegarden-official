@@ -227,14 +227,10 @@ SequenceManager::play()
     streamOut << config->readLongNumEntry("readaheadusec", 40000);
 
     // Send Play to the Sequencer
-    try {
-        
-        rgapp->sequencerCall("play(long int, long int, long int, long int, long int, long int, long int, long int)",
-                             replyType, replyData, data);
-    
-    } catch (Rosegarden::Exception e) {
+    if (!rgapp->sequencerCall("play(long int, long int, long int, long int, long int, long int, long int, long int)",
+                              replyType, replyData, data)) {
         m_transportStatus = STOPPED;
-        throw(e);
+        return;
     }
 
     // ensure the return type is ok
@@ -653,14 +649,11 @@ SequenceManager::record(bool toggled)
         streamOut << (int)recordType;
     
         // Send Play to the Sequencer
-        try {
-            
-            rgapp->sequencerCall("record(long int, long int, long int, long int, long int, long int, long int, long int, int)",
-                                 replyType, replyData, data);
-        } catch(Rosegarden::Exception e) {
+        if (!rgapp->sequencerCall("record(long int, long int, long int, long int, long int, long int, long int, long int, int)",
+                                  replyType, replyData, data)) {
             // failed
             m_transportStatus = STOPPED;
-            throw(e);
+            return;
         }
 
         // ensure the return type is ok
@@ -947,13 +940,9 @@ SequenceManager::checkSoundDriverStatus()
     QCString replyType;
     QByteArray replyData;
 
-    try {
-        rgapp->sequencerCall("getSoundDriverStatus()", replyType, replyData);
-
-    } catch (Rosegarden::Exception e) {
-        // failed
+    if (! rgapp->sequencerCall("getSoundDriverStatus()", replyType, replyData)) {
 	m_soundDriverStatus = NO_DRIVER;
-        throw(e);
+        return;
     }
 
     QDataStream streamIn(replyData, IO_ReadOnly);
@@ -1510,12 +1499,7 @@ void SequenceManager::segmentModified(Segment* s)
 
         streamOut << m_compositionMmapper->getSegmentFileName(s);
         
-        try { rgapp->sequencerSend("remapSegment(QString)", data); }
-        catch(Rosegarden::Exception e) {
-            // failed
-            m_transportStatus = STOPPED;
-            throw(e);
-        }
+        rgapp->sequencerSend("remapSegment(QString)", data);
     }
 }
 
@@ -1544,11 +1528,8 @@ void SequenceManager::processAddedSegment(Segment* s)
 
         streamOut << m_compositionMmapper->getSegmentFileName(s);
         
-        try { rgapp->sequencerSend("addSegment(QString)", data); }
-        catch (Rosegarden::Exception e) {
-            // failed
+        if (!rgapp->sequencerSend("addSegment(QString)", data)) {
             m_transportStatus = STOPPED;
-            throw(e);
         }
     }
 
@@ -1572,11 +1553,9 @@ void SequenceManager::processRemovedSegment(Segment* s)
 
         streamOut << filename;
 
-        try { rgapp->sequencerSend("deleteSegment(QString)", data); }
-        catch (Rosegarden::Exception e) {
+        if (!rgapp->sequencerSend("deleteSegment(QString)", data)) {
             // failed
             m_transportStatus = STOPPED;
-            throw(e);
         }
     }
 

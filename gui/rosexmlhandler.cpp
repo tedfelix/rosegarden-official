@@ -19,6 +19,11 @@
     COPYING included with this distribution for more information.
 */
 
+#include <qtextstream.h>
+
+#include <klocale.h>
+#include <kmessagebox.h>
+
 #include "rosestrings.h"
 #include "rosedebug.h"
 #include "rosexmlhandler.h"
@@ -32,19 +37,14 @@
 #include "AudioDevice.h"
 #include "MappedStudio.h"
 #include "Instrument.h"
+
 #include "widgets.h"
 #include "rosestrings.h"
 #include "dialogs.h"
 #include "audiopluginmanager.h"
 #include "studiocontrol.h"
 #include "kstartuplogo.h"
-
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <dcopclient.h>
-#include <kapp.h>
-
-#include <qtextstream.h>
+#include "rgapplication.h"
 
 using Rosegarden::Composition;
 using Rosegarden::Studio;
@@ -1644,10 +1644,7 @@ RoseXmlHandler::addMIDIDevice(QString name)
     arg << (int)Device::Midi;
     arg << (unsigned int)Rosegarden::MidiDevice::Play;
 
-    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "addDevice(int, unsigned int)",
-                                  data, replyType, replyData, false)) {
+    if (!rgapp->sequencerCall("addDevice(int, unsigned int)", replyType, replyData, data)) {
         SEQMAN_DEBUG << "RoseXmlHandler::addMIDIDevice - "
                      << "can't call sequencer addDevice" << endl;
         return;
@@ -1694,19 +1691,8 @@ RoseXmlHandler::setMIDIDeviceConnection(QString connection)
     arg << (unsigned int)md->getId();
     arg << connection;
 
-    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "setConnection(unsigned int, QString)",
-                                  data, replyType, replyData, false)) {
-        SEQMAN_DEBUG << "RoseXmlHandler::setMIDIDeviceConnection - "
-                     << "can't call sequencer setConnection" << endl;
-        return;
-    }
-
-    SEQMAN_DEBUG << "RoseXmlHandler::setMIDIDeviceConnection - "
-		 << " set connection for " << md->getId() << " to "
-		 << connection << endl;
-
+    rgapp->sequencerCall("setConnection(unsigned int, QString)",
+                         replyType, replyData, data);
     // connection should be sync'd later in the natural course of things
 }
 

@@ -23,7 +23,6 @@
 #include <dcopclient.h>
 
 #include "rgapplication.h"
-#include "Exception.h"
 #include "rosegardengui.h"
 #include "rosegardenguidoc.h"
 
@@ -50,23 +49,7 @@ bool RosegardenApplication::isSequencerRegistered()
     return dcopClient()->isApplicationRegistered(ROSEGARDEN_SEQUENCER_APP_NAME);
 }
 
-void RosegardenApplication::sequencerSend(QCString dcopCall, QByteArray params)
-{
-    if (noSequencerMode()) return;
-
-    if (!trySequencerSend(dcopCall, params))
-        throw Rosegarden::Exception("failed to send to the sequencer through DCOP");
-}
-
-void RosegardenApplication::sequencerCall(QCString dcopCall, QCString& replyType, QByteArray& replyData, QByteArray params, bool useEventLoop)
-{
-    if (noSequencerMode()) return;
-
-    if (!trySequencerCall(dcopCall, replyType, replyData, params, useEventLoop))
-        throw Rosegarden::Exception("failed to call the sequencer through DCOP");
-}
-
-bool RosegardenApplication::trySequencerSend(QCString dcopCall, QByteArray params = Empty)
+bool RosegardenApplication::sequencerSend(QCString dcopCall, QByteArray params)
 {
     if (noSequencerMode()) return false;
 
@@ -75,8 +58,8 @@ bool RosegardenApplication::trySequencerSend(QCString dcopCall, QByteArray param
                               dcopCall, params);
 }
 
-bool RosegardenApplication::trySequencerCall(QCString dcopCall, QCString& replyType, QByteArray& replyData,
-                                             QByteArray params = Empty, bool useEventLoop = false)
+bool RosegardenApplication::sequencerCall(QCString dcopCall, QCString& replyType, QByteArray& replyData,
+                                          QByteArray params, bool useEventLoop)
 {
     if (noSequencerMode()) return false;
     return dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,

@@ -130,7 +130,7 @@ AudioPluginManager::fetchSampleRate()
     QCString replyType;
     QByteArray replyData;
 
-    if (rgapp->trySequencerCall("getSampleRate()", replyType, replyData)) {
+    if (rgapp->sequencerCall("getSampleRate()", replyType, replyData)) {
 
         QDataStream streamIn(replyData, IO_ReadOnly);
         unsigned int result;

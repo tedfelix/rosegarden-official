@@ -49,12 +49,8 @@ public:
     }
 
     bool isSequencerRegistered();
-    void sequencerSend(QCString dcopCall, QByteArray params = Empty);
-    void sequencerCall(QCString dcopCall, QCString& replyType, QByteArray& replyData, QByteArray params = Empty, bool useEventLoop = false);
-
-    // same as above, but just return false instead of throwing
-    bool trySequencerSend(QCString dcopCall, QByteArray params = Empty);
-    bool trySequencerCall(QCString dcopCall, QCString& replyType, QByteArray& replyData, QByteArray params = Empty, bool useEventLoop = false);
+    bool sequencerSend(QCString dcopCall, QByteArray params = Empty);
+    bool sequencerCall(QCString dcopCall, QCString& replyType, QByteArray& replyData, QByteArray params = Empty, bool useEventLoop = false);
 
     static RosegardenApplication* rgApp();
 

@@ -17,13 +17,12 @@
     COPYING included with this distribution for more information.
 */
 
-#include <kapp.h>
-#include <dcopclient.h>
+#include "Midi.h"
 
+#include "rgapplication.h"
 #include "studiocontrol.h"
 #include "rosedebug.h"
 #include "rosegardendcop.h"
-#include "Midi.h"
 
 namespace Rosegarden
 {
@@ -39,10 +38,8 @@ StudioControl::createStudioObject(MappedObject::MappedObjectType type)
 
     streamOut << type;
 
-    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "createMappedObject(int)",
-                                  data, replyType, replyData))
+    if (!rgapp->sequencerCall("createMappedObject(int)",
+                              replyType, replyData, data))
     {
         SEQMAN_DEBUG << "createStudioObject - "
                      << "failed to contact Rosegarden sequencer"
@@ -68,10 +65,8 @@ StudioControl::destroyStudioObject(MappedObjectId id)
 
     streamOut << int(id);
 
-    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "destroyMappedObject(int)",
-                                  data, replyType, replyData))
+    if (!rgapp->sequencerCall("destroyMappedObject(int)",
+                              replyType, replyData, data))
     {
         SEQMAN_DEBUG << "destroyStudioObject - "
                      << "failed to contact Rosegarden sequencer"
@@ -103,10 +98,8 @@ StudioControl::getStudioObjectProperty(MappedObjectId id,
     streamOut << id;
     streamOut << QString(property);
 
-    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "getPropertyList(int, QString)",
-                                  data, replyType, replyData))
+    if (!rgapp->sequencerCall("getPropertyList(int, QString)",
+                              replyType, replyData, data))
     {
         SEQMAN_DEBUG << "getStudioObjectProperty - "
                      << "failed to contact Rosegarden sequencer"
@@ -135,15 +128,7 @@ StudioControl::setStudioObjectProperty(MappedObjectId id,
     streamOut << property;
     streamOut << value;
 
-    if (!kapp->dcopClient()->
-            send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                 ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                 "setMappedProperty(int, QString, float)",
-                 data))
-    {
-        SEQMAN_DEBUG << "setStudioObjectProperty - "
-                     << "failed to contact Rosegarden sequencer" << endl;
-    }
+    rgapp->sequencerSend("setMappedProperty(int, QString, float)", data);
 
     return true;
 }
@@ -162,16 +147,9 @@ StudioControl::setStudioObjectProperty(MappedObjectId id,
     streamOut << property;
     streamOut << value;
 
-    if (!kapp->dcopClient()->
-            send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                 ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                 "setMappedProperty(int, QString, std::vector<float>)",
-                 data))
-    {
-        SEQMAN_DEBUG << "setStudioObjectProperty - "
-                     << "failed to contact Rosegarden sequencer" << endl;
-    }
-
+    rgapp->sequencerSend("setMappedProperty(int, QString, std::vector<float>)",
+                         data);
+    
     return true;
 }
 
@@ -186,10 +164,8 @@ StudioControl::getStudioObjectByType(MappedObject::MappedObjectType type)
 
     streamOut << type;
 
-    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "getMappedObjectId(int)",
-                                  data, replyType, replyData))
+    if (!rgapp->sequencerCall("getMappedObjectId(int)",
+                              replyType, replyData, data))
     {
         SEQMAN_DEBUG << "getStudioObjectByType - "
                      << "failed to contact Rosegarden sequencer"
@@ -218,14 +194,7 @@ StudioControl::setStudioPluginPort(MappedObjectId pluginId,
     streamOut << portId;
     streamOut << value;
 
-    if (!kapp->dcopClient()->
-            send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                 ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                 "setMappedPort(int, unsigned long int, float)",
-                 data))
-    {
-        RG_DEBUG << "failed to contact RG sequencer" << endl;
-    }
+    rgapp->sequencerSend("setMappedPort(int, unsigned long int, float)", data);
 }
 
 
@@ -254,13 +223,7 @@ StudioControl::sendMappedComposition(const Rosegarden::MappedComposition &mC)
         QDataStream streamOut(data, IO_WriteOnly);
 
         streamOut << (*it);
-        if (!kapp->dcopClient()->
-                send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                     ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                     "processMappedEvent(Rosegarden::MappedEvent)", data))
-        {
-            RG_DEBUG << "failed to contact RG sequencer" << endl;
-        }
+        rgapp->sequencerSend("processMappedEvent(Rosegarden::MappedEvent)", data);
     }
 }
 
@@ -274,12 +237,7 @@ StudioControl::sendMappedInstrument(const Rosegarden::MappedInstrument &mI)
     streamOut << mI.getChannel();
     streamOut << mI.getId();
 
-    if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-             "setMappedInstrument(int, unsigned char, unsigned int)", data))
-    {
-        RG_DEBUG << "failed to contact RG sequencer" << endl;
-    }
+    rgapp->sequencerSend("setMappedInstrument(int, unsigned char, unsigned int)", data);
 }
 
 
@@ -292,12 +250,7 @@ StudioControl::sendQuarterNoteLength(const Rosegarden::RealTime &length)
     streamOut << length.sec;
     streamOut << length.usec;
 
-    if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                           "setQuarterNoteLength(long int, long int)", data))
-    {
-        RG_DEBUG << "failed to contact RG sequencer" << endl;
-    }
+    rgapp->sequencerSend("setQuarterNoteLength(long int, long int)", data);
 }
 
 

@@ -1857,9 +1857,7 @@ RosegardenGUIDoc::getAudioPlayLatency()
     QCString replyType;
     QByteArray replyData;
 
-    try {
-        rgapp->sequencerCall("getAudioPlayLatency()", replyType, replyData);
-    } catch (Rosegarden::Exception e) {
+    if (!rgapp->sequencerCall("getAudioPlayLatency()", replyType, replyData)) {
         RG_DEBUG << "RosegardenGUIDoc::getAudioPlayLatency - "
                  << "Playback failed to contact Rosegarden sequencer"
                  << endl;
@@ -1880,11 +1878,7 @@ RosegardenGUIDoc::getAudioRecordLatency()
     QCString replyType;
     QByteArray replyData;
 
-    try {
-        
-        rgapp->sequencerCall("getAudioRecordLatency()", replyType, replyData);
-
-    } catch (Rosegarden::Exception e) {
+    if (!rgapp->sequencerCall("getAudioRecordLatency()", replyType, replyData)) {
         RG_DEBUG << "RosegardenGUIDoc::getAudioRecordLatency - "
                  << "Playback failed to contact Rosegarden sequencer"
                  << endl;

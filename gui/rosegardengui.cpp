@@ -52,6 +52,11 @@
 #include <ktip.h>
 
 // application specific includes
+#include "Clipboard.h"
+#include "Configuration.h"
+#include "SegmentNotationHelper.h"
+#include "MidiFile.h"
+
 #include "constants.h"
 #include "kstartuplogo.h"
 #include "rosestrings.h"
@@ -60,7 +65,6 @@
 #include "rosegardenguidoc.h"
 #include "rosegardenconfiguredialog.h"
 #include "rosegardentransportdialog.h"
-#include "MidiFile.h"
 #include "rg21io.h"
 #include "mupio.h"
 #include "csoundio.h"
@@ -93,12 +97,10 @@
 #include "bankeditor.h"
 #include "deviceeditor.h"
 #include "midifilter.h"
-#include "SegmentNotationHelper.h"
-#include "Clipboard.h"
-#include "Configuration.h"
 #include "controleditor.h"
 #include "markereditor.h"
 #include "studiocommands.h"
+#include "rgapplication.h"
 
 //!!! ditch these when harmonize() moves out
 #include "CompositionTimeSliceAdapter.h"
@@ -4171,25 +4173,13 @@ RosegardenGUIApp::slotAddAudioFile(unsigned int id)
     streamOut << QString(strtoqstr(aF->getFilename()));
     streamOut << aF->getId();
 
-    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "addAudioFile(QString, int)", data, replyType, replyData))
-    {
-        std::cerr << "RosegardenGUIApp::slotAddAudioFile - "
-                  << "couldn't add audio file"
-                  << std::endl;
-        return;
-    }
-    else
-    {
+    if (rgapp->sequencerCall("addAudioFile(QString, int)", replyType, replyData, data)) {
         QDataStream streamIn(replyData, IO_ReadOnly);
         int result;
         streamIn >> result;
-        if (!result)
-        {
-            std::cerr << "RosegardenGUIApp::slotAddAudioFile - "
-                      << "failed to add file \""
-                      << aF->getFilename() << "\"" << std::endl;
+        if (!result) {
+            KMessageBox::error(this, QString(i18n("Sequencer failed to add audio file %1"))
+                               .arg(aF->getFilename().c_str()));
         }
     }
 }
@@ -4212,29 +4202,15 @@ RosegardenGUIApp::slotDeleteAudioFile(unsigned int id)
     //
     streamOut << id;
 
-    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "removeAudioFile(int)", data,
-                                  replyType, replyData))
-    {
-        std::cerr << "RosegardenGUIApp::slotDeleteAudioFile - "
-                  << "couldn't delete audio file"
-                  << std::endl;
-        return;
-    }
-    else
-    {
+    if (rgapp->sequencerCall("removeAudioFile(int)", replyType, replyData, data)) {
         QDataStream streamIn(replyData, IO_ReadOnly);
         int result;
         streamIn >> result;
-        if (!result)
-        {
-            std::cerr << "RosegardenGUIApp::slotDeleteAudioFile - "
-                      << "failed to remove file id "
-                      << id << std::endl;
+        if (!result) {
+            KMessageBox::error(this, QString(i18n("Sequencer failed to remove audio file id %1"))
+                               .arg(id));
         }
     }
-
 }
 
 void
@@ -4289,17 +4265,7 @@ RosegardenGUIApp::slotDeleteAllAudioFiles()
     QByteArray replyData;
     QByteArray data;
 
-    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "clearAllAudioFiles()", data,
-                                  replyType, replyData))
-    {
-        std::cerr << "RosegardenGUIApp::slotDeleteAudioFile - "
-                  << "couldn't delete all audio files"
-                  << std::endl;
-        return;
-    }
-
+    rgapp->sequencerCall("clearAllAudioFiles()", replyType, replyData, data);
 }
 
 void

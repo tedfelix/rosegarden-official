@@ -3783,7 +3783,7 @@ ShowSequencerStatusDialog::ShowSequencerStatusDialog(QWidget *parent) :
     QByteArray replyData;
     QByteArray data;
 
-    if (!rgapp->trySequencerCall("getStatusLog()", replyType, replyData)) {
+    if (!rgapp->sequencerCall("getStatusLog()", replyType, replyData)) {
 	status = i18n("Sequencer is not running or is not responding.");
     }
     

@@ -18,19 +18,17 @@
     COPYING included with this distribution for more information.
 */
 
-#include "studiocommands.h"
-#include "rosegardenguidoc.h"
-#include "rosedebug.h"
-#include "rosestrings.h"
+#include <qtextstream.h>
 
 #include "Composition.h"
 #include "Studio.h"
 #include "MidiDevice.h"
 
-#include <dcopclient.h>
-#include <kapp.h>
-#include <qtextstream.h>
-
+#include "studiocommands.h"
+#include "rosegardenguidoc.h"
+#include "rosedebug.h"
+#include "rosestrings.h"
+#include "rgapplication.h"
 
 ModifyDeviceCommand::ModifyDeviceCommand(
         Rosegarden::Studio *studio,
@@ -370,64 +368,52 @@ CreateOrDeleteDeviceCommand::execute()
 	// don't want to do this again on undo even if it fails -- only on redo
 	m_deviceCreated = true;
 
-	{
-	    QByteArray data;
-	    QByteArray replyData;
-	    QCString replyType;
-	    QDataStream arg(data, IO_WriteOnly);
 
-	    arg << (int)m_type;
-	    arg << (unsigned int)m_direction;
+        QByteArray data;
+        QByteArray replyData;
+        QCString replyType;
+        QDataStream arg(data, IO_WriteOnly);
 
-	    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-					  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-					  "addDevice(int, unsigned int)",
-					  data, replyType, replyData, false) ||
-		replyType != "unsigned int") { 
-		SEQMAN_DEBUG << "CreateDeviceCommand::execute - "
-			     << "failure in sequencer addDevice" << endl;
-		return;
-	    }
+        arg << (int)m_type;
+        arg << (unsigned int)m_direction;
 
-	    QDataStream reply(replyData, IO_ReadOnly);
-	    reply >> m_deviceId;
+        if (!rgapp->sequencerCall("addDevice(int, unsigned int)",
+                                  replyType, replyData, data)) { 
+            SEQMAN_DEBUG << "CreateDeviceCommand::execute - "
+                         << "failure in sequencer addDevice" << endl;
+            return;
+        }
 
-	    if (m_deviceId == Rosegarden::Device::NO_DEVICE) {
-		SEQMAN_DEBUG << "CreateDeviceCommand::execute - "
-			     << "sequencer addDevice failed" << endl;
-		return;
-	    }
+        QDataStream reply(replyData, IO_ReadOnly);
+        reply >> m_deviceId;
 
-	    SEQMAN_DEBUG << "CreateDeviceCommand::execute - "
-			 << " added device " << m_deviceId << endl;
-	}
+        if (m_deviceId == Rosegarden::Device::NO_DEVICE) {
+            SEQMAN_DEBUG << "CreateDeviceCommand::execute - "
+                         << "sequencer addDevice failed" << endl;
+            return;
+        }
 
-	{
-	    QByteArray data;
-	    QByteArray replyData;
-	    QCString replyType;
-	    QDataStream arg(data, IO_WriteOnly);
+        SEQMAN_DEBUG << "CreateDeviceCommand::execute - "
+                     << " added device " << m_deviceId << endl;
 
-	    arg << (unsigned int)m_deviceId;
-	    arg << strtoqstr(m_connection);
+        arg.device()->reset();
+        arg << (unsigned int)m_deviceId;
+        arg << strtoqstr(m_connection);
 
-	    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-					  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-					  "setConnection(unsigned int, QString)",
-					  data, replyType, replyData, false)) {
-		SEQMAN_DEBUG << "CreateDeviceCommand::execute - "
-			     << "failure in sequencer setConnection" << endl;
-		return;
-	    }
+        if (!rgapp->sequencerCall("setConnection(unsigned int, QString)",
+                                  replyType, replyData, data)) {
+            SEQMAN_DEBUG << "CreateDeviceCommand::execute - "
+                         << "failure in sequencer setConnection" << endl;
+            return;
+        }
 
-	    SEQMAN_DEBUG << "CreateDeviceCommand::execute - "
-			 << " reconnected device " << m_deviceId
-			 << " to " << m_connection << endl;
-	}
+        SEQMAN_DEBUG << "CreateDeviceCommand::execute - "
+                     << " reconnected device " << m_deviceId
+                     << " to " << m_connection << endl;
 
-	// Add the device to the Studio now, so that we can name it --
-	// otherwise the name will be lost
-	m_studio->addDevice(m_name, m_deviceId, m_type);
+        // Add the device to the Studio now, so that we can name it --
+        // otherwise the name will be lost
+        m_studio->addDevice(m_name, m_deviceId, m_type);
 
     } else {
 
@@ -442,10 +428,8 @@ CreateOrDeleteDeviceCommand::execute()
 
 	arg << (int)m_deviceId;
 
-	if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-				      ROSEGARDEN_SEQUENCER_IFACE_NAME,
-				      "removeDevice(unsigned int)",
-				      data, replyType, replyData, false)) {
+	if (!rgapp->sequencerCall("removeDevice(unsigned int)",
+                                  replyType, replyData, data)) {
 	    SEQMAN_DEBUG << "CreateDeviceCommand::execute - "
 			 << "failure in sequencer addDevice" << endl;
 	    return;
@@ -478,10 +462,8 @@ ReconnectDeviceCommand::execute()
 	arg << (unsigned int)m_deviceId;
 	arg << strtoqstr(m_newConnection);
 
-	if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-				      ROSEGARDEN_SEQUENCER_IFACE_NAME,
-				      "setConnection(unsigned int, QString)",
-				      data, replyType, replyData, false)) { 
+	if (!rgapp->sequencerCall("setConnection(unsigned int, QString)",
+                                 replyType, replyData, data)) {
 	    SEQMAN_DEBUG << "ReconnectDeviceCommand::execute - "
 			 << "failure in sequencer setConnection" << endl;
 	    return;
@@ -508,10 +490,8 @@ ReconnectDeviceCommand::unexecute()
 	arg << (unsigned int)m_deviceId;
 	arg << strtoqstr(m_oldConnection);
 
-	if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-				      ROSEGARDEN_SEQUENCER_IFACE_NAME,
-				      "setConnection(unsigned int, QString)",
-				      data, replyType, replyData, false)) { 
+	if (!rgapp->sequencerCall("setConnection(unsigned int, QString)",
+                                  replyType, replyData, data)) { 
 	    SEQMAN_DEBUG << "ReconnectDeviceCommand::unexecute - "
 			 << "failure in sequencer setConnection" << endl;
 	    return;
