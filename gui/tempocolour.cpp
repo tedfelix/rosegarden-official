@@ -31,10 +31,9 @@ TempoColour::getColour(double tempo)
     v += 20;
     if (v > 255) v = 255;
 
-    h = 220 - int(tempo);
-
-    while (h < 0) h += 360;
-    while (h >= 360) h -= 360;
+    h = (90 + int(tempo));
+    if (h > 360) h -= 360;
+    if (h < 0) h += 360;
 
     return QColor(h, s, v, QColor::Hsv);
 }
