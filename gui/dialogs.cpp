@@ -4555,6 +4555,8 @@ ManageMetronomeDialog::slotApply()
 void
 ManageMetronomeDialog::slotPreviewPitch(int pitch)
 {
+    RG_DEBUG << "ManageMetronomeDialog::slotPreviewPitch" << endl;
+
     Rosegarden::DeviceList *devices = m_doc->getStudio().getDevices();
     Rosegarden::DeviceListConstIterator it;
     int count = 0;
@@ -4585,6 +4587,8 @@ ManageMetronomeDialog::slotPreviewPitch(int pitch)
     
     if (inst)
     {
+        RG_DEBUG << "ManageMetronomeDialog::slotPreviewPitch" 
+                 << " - previewing" << endl;
 	Rosegarden::MappedEvent mE(inst->getId(),
                                    Rosegarden::MappedEvent::MidiNoteOneShot,
                                    pitch,

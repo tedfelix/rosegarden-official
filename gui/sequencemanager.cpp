@@ -241,6 +241,14 @@ SequenceManager::play()
             SEQMAN_DEBUG << "SequenceManager::play() - starting to play\n";
     }
 
+    // Send initial tempo
+    //
+    double qnD = 60.0/comp.getTempo();
+    Rosegarden::RealTime qnTime =
+        Rosegarden::RealTime(long(qnD), 
+                long((qnD - double(long(qnD))) * 1000000000.0));
+    StudioControl::sendQuarterNoteLength(qnTime);
+
     // set the tempo in the transport
     m_transport->setTempo(comp.getTempo());
 

@@ -1478,6 +1478,9 @@ RosegardenSequencerApp::slotCheckForNewClients()
 void
 RosegardenSequencerApp::setQuarterNoteLength(long timeSec, long timeNSec)
 {
+    SEQUENCER_DEBUG << "RosegardenSequencerApp::setQuarterNoteLength"
+                    << Rosegarden::RealTime(timeSec, timeNSec) << endl;
+
     m_sequencer->setMIDIClockInterval(
             Rosegarden::RealTime(timeSec, timeNSec) / 24);
 }

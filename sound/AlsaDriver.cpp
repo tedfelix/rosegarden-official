@@ -1429,7 +1429,15 @@ AlsaDriver::setMIDIClockInterval(RealTime interval)
     //
     snd_seq_remove_events_t *info;
     snd_seq_remove_events_alloca(&info);
-    //snd_seq_remove_events_set_event_type(info, 
+
+    //if (snd_seq_type_check(SND_SEQ_EVENT_CLOCK, SND_SEQ_EVFLG_CONTROL))
+    //{
+        //snd_seq_remove_events_set_event_type(info, 
+        snd_seq_remove_events_set_event_type(info, SND_SEQ_EVFLG_CONTROL);
+        std::cout << "AlsaDriver::setMIDIClockInterval - "
+                  << "MIDI CLOCK TYPE IS CONTROL" << std::endl;
+    //}
+
     snd_seq_remove_events_set_condition(info, SND_SEQ_REMOVE_OUTPUT);
     snd_seq_remove_events(m_midiHandle, info);
 

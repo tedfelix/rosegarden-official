@@ -1392,6 +1392,9 @@ RosegardenPitchChooser::RosegardenPitchChooser(QString title,
     connect(m_pitch, SIGNAL(valueChanged(int)),
 	    this, SIGNAL(pitchChanged(int)));
 
+    connect(m_pitch, SIGNAL(valueChanged(int)),
+            this, SIGNAL(preview(int)));
+
     connect(m_pitchDragLabel, SIGNAL(pitchChanged(int)),
 	    this, SLOT(slotSetPitch(int)));
 
@@ -1400,6 +1403,7 @@ RosegardenPitchChooser::RosegardenPitchChooser(QString title,
 
     connect(m_pitchDragLabel, SIGNAL(preview(int)),
 	    this, SIGNAL(preview(int)));
+
 }
 
 int

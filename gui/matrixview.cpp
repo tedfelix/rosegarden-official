@@ -1204,7 +1204,8 @@ MatrixView::slotHoveredOverKeyChanged(unsigned int y)
 
     if (evPitch != m_previousEvPitch) {
 	Rosegarden::MidiPitchLabel label(evPitch);
-        m_hoveredOverNoteName->setText(label.getQString());
+        m_hoveredOverNoteName->setText(QString("%1 (%2)"). 
+                    arg(label.getQString()).arg(evPitch));
         m_previousEvPitch = evPitch;
     }
 }

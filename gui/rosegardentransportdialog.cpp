@@ -559,6 +559,9 @@ RosegardenTransportDialog::updateTimeDisplay()
 void
 RosegardenTransportDialog::setTempo(const double &tempo)
 {
+    if (m_tempo == tempo) return;
+    m_tempo = tempo;
+
     // Send the quarter note length to the sequencer - shouldn't
     // really hang this off here but at least it's a single point
     // where the tempo should always be consistent.  Quarter Note
@@ -570,9 +573,6 @@ RosegardenTransportDialog::setTempo(const double &tempo)
                              long((qnD - double(long(qnD))) * 1000000000.0));
 
     StudioControl::sendQuarterNoteLength(qnTime);
-
-    if (m_tempo == tempo) return;
-    m_tempo = tempo;
 
     QString tempoString;
     tempoString.sprintf("%4.3f", tempo);
