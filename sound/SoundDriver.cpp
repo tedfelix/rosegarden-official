@@ -635,10 +635,11 @@ SoundDriver::queueAudio(InstrumentId instrumentId,
 
 
 // Close down any playing audio files - we can manipulate the
-// live play stack as we're only changing state.
+// live play stack as we're only changing state.  Switch on
+// segment id first and then drop to instrument/audio file.
 //
 void
-SoundDriver::cancelAudioFile(InstrumentId instrumentId, AudioFileId audioFileId)
+SoundDriver::cancelAudioFile(MappedEvent *mE)
 {
     std::vector<PlayableAudioFile*>::iterator it;
 
@@ -646,14 +647,19 @@ SoundDriver::cancelAudioFile(InstrumentId instrumentId, AudioFileId audioFileId)
          it != m_audioPlayQueue.end();
          it++)
     {
-        if((*it)->getInstrument() == instrumentId &&
-           (*it)->getAudioFile()->getId() == audioFileId)
+        if (mE->getRuntimeSegmentId() == -1)
         {
-            (*it)->setStatus(PlayableAudioFile::DEFUNCT);
+            if((*it)->getInstrument() == mE->getInstrument() &&
+               (*it)->getAudioFile()->getId() == mE->getAudioID())
+                (*it)->setStatus(PlayableAudioFile::DEFUNCT);
+        }
+        else
+        {
+            if ((*it)->getRuntimeSegmentId() == mE->getRuntimeSegmentId())
+                (*it)->setStatus(PlayableAudioFile::DEFUNCT);
         }
     }
 }
-
 
 }
 

@@ -326,7 +326,7 @@ RosegardenSequencerApp::keepPlaying()
         //
         if (m_metaIterator)
         {
-            rationalisePlayingAudio(m_metaIterator->getPlayingAudioSegments());
+            rationalisePlayingAudio(m_metaIterator->getPlayingAudioSegments(m_songPosition));
         }
 
     }
@@ -1477,16 +1477,25 @@ void RosegardenSequencerApp::rationalisePlayingAudio(const std::vector<int> &seg
 
         if (segment == false)
         {
-            std::cerr << "SHOULDN'T BE PLAYING " << *it << std::endl;
+            // We're found an audio segment that shouldn't be playing - stop it
+            // through the normal channels.  Send a cancel event to the driver.
+            //
+            MappedEvent *mE = new MappedEvent();
+            mE->setType(Rosegarden::MappedEvent::AudioCancel);
+            mE->setRuntimeSegmentId(*it);
+            processMappedEvent(*mE);
+            delete mE;
         }
     }
 
     // Check for audio that should be that isn't
     //
-    for (std::vector<int>::const_iterator sIt = segmentAudio.begin(); sIt != segmentAudio.end(); ++sIt)
+    for (std::vector<int>::const_iterator sIt = segmentAudio.begin();
+         sIt != segmentAudio.end(); ++sIt)
     {
         bool driver = false;
-        for (std::vector<int>::const_iterator it = driverAudio.begin(); it != driverAudio.end(); ++it)
+        for (std::vector<int>::const_iterator it = driverAudio.begin();
+             it != driverAudio.end(); ++it)
         {
             if ((*it) == (*sIt))
             {
@@ -1497,9 +1506,29 @@ void RosegardenSequencerApp::rationalisePlayingAudio(const std::vector<int> &seg
 
         if (driver == false)
         {
-            std::cerr << "SHOULD BE PLAYING " << *sIt << std::endl;
-        }
+            // There's an audio event that should be playing that isn't - start
+            // it adjusting for current position.
+            //
+            MappedEvent *audioSegment = m_metaIterator->getAudioSegment(*sIt);
 
+            if (audioSegment)
+            {
+                audioSegment->setAudioStartMarker
+                    (audioSegment->getAudioStartMarker() + m_songPosition);
+
+                // Reset duration firstly
+                //
+                audioSegment->
+                    setDuration(audioSegment->getDuration() - 
+                                (m_songPosition - audioSegment->getEventTime()));
+
+                // Set start time to now
+                //
+                audioSegment->setEventTime(m_songPosition);
+                processMappedEvent(*audioSegment);
+                delete audioSegment;
+            }
+        }
     }
 }
 

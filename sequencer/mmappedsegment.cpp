@@ -548,3 +548,82 @@ MmappedSegmentsMetaIterator::stopPlayingAudioSegment(int segmentRuntimeId)
     }
 }
 
+std::vector<int>& 
+MmappedSegmentsMetaIterator::getPlayingAudioSegments(const Rosegarden::RealTime &songPosition)
+{
+    m_playingAudioSegments.clear();
+
+    MmappedSegment::iterator *iter;
+
+    for(mmappedsegments::iterator i = m_segments.begin(); i != m_segments.end(); ++i)
+    {
+        iter = new MmappedSegment::iterator(i->second);
+
+        while (!iter->atEnd()) 
+        {
+            MappedEvent *evt = new MappedEvent(*(*iter));
+
+            // If there's an audio event and it should be playing at this time
+            // then flag as such.
+            // 
+            if (evt->getType() == MappedEvent::Audio && 
+                songPosition > evt->getEventTime() &&
+                songPosition < evt->getEventTime() + evt->getDuration())
+            {
+                // Check for this track being muted
+                //
+                if (m_controlBlockMmapper->isTrackMuted(evt->getTrackId()) == false)
+                   /* &&
+                    if (m_controlBlockMmapper->isSolo() == false ||
+                            return (evt->getTrackId() == m_controlBlockMmapper->getSelectedTrack());
+
+                            */
+                {
+                    m_playingAudioSegments.push_back(evt->getRuntimeSegmentId());
+                }
+            }
+
+            delete evt;
+
+            ++(*iter);
+        }
+
+        delete iter;
+    }
+
+    return m_playingAudioSegments;
+}
+
+
+// Get a MappedEvent that describes an audio segment - the caller frees this
+//
+MappedEvent* 
+MmappedSegmentsMetaIterator::getAudioSegment(int segmentId)
+{
+    MmappedSegment::iterator *iter;
+
+    for (mmappedsegments::iterator i = m_segments.begin(); i != m_segments.end(); ++i)
+    {
+        iter = new MmappedSegment::iterator(i->second);
+
+         while (!iter->atEnd())
+         {
+            MappedEvent *evt = new MappedEvent(*(*iter));
+
+            if (evt->getType() == MappedEvent::Audio &&
+                evt->getRuntimeSegmentId() == segmentId)
+                return evt;
+
+            delete evt;
+            ++(*iter);
+         }
+
+        delete iter;
+    }
+
+
+    return 0;
+}
+
+
+

@@ -94,7 +94,7 @@ public:
                       const RealTime &startTime,
                       const RealTime &startIndex,
                       const RealTime &duration,
-                      unsigned int playBufferSize,
+                      unsigned int playBufferSize = 1024,
                       RingBuffer *ringBuffer = 0);
 
     ~PlayableAudioFile();
@@ -481,9 +481,10 @@ public:
     void setAudioRecordLatency(const RealTime &l) { m_audioRecordLatency = l; }
     RealTime getAudioRecordLatency() { return m_audioRecordLatency; }
 
-    // Cancel the playback of an audio file
+    // Cancel the playback of an audio file - either by instrument and audio file id
+    // or by audio segment id.
     //
-    void cancelAudioFile(InstrumentId instrumentId, AudioFileId audioFileId);
+    void cancelAudioFile(MappedEvent *mE);
 
     // Studio linkage
     //

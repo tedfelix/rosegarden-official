@@ -2779,12 +2779,12 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
             }
         }
 
-        // Cancel a playing audio file
+        // Cancel a playing audio file preview (this is predicated on Instrument
+        // and 
         //
         if ((*i)->getType() == MappedEvent::AudioCancel)
         {
-            cancelAudioFile(InstrumentId((*i)->getInstrument()),
-                             AudioFileId((*i)->getData1()));
+            cancelAudioFile(*i);
         }
 
         if ((*i)->getType() == MappedEvent::SystemMIDIClock)
