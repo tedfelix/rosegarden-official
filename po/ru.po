@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
-"POT-Creation-Date: 2003-07-05 18:30+0400\n"
-"PO-Revision-Date: 2003-07-05 19:24+0400\n"
+"POT-Creation-Date: 2003-07-05 19:39+0400\n"
+"PO-Revision-Date: 2003-07-05 19:42+0400\n"
 "Last-Translator: Alexandre Prokoudine <avp@altlinux.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -169,12 +169,12 @@ msgid "Show Variation list based on "
 msgstr "Показать список вариаций на основе "
 
 #: bankeditor.cpp:896 rosegardengui.cpp:300 editviewbase.cpp:146
-#: controleditor.cpp:275 markereditor.cpp:301
+#: controleditor.cpp:275 markereditor.cpp:291
 msgid "Und&o"
 msgstr "От&менить"
 
 #: bankeditor.cpp:902 rosegardengui.cpp:306 editviewbase.cpp:152
-#: controleditor.cpp:281 markereditor.cpp:307
+#: controleditor.cpp:281 markereditor.cpp:297
 msgid "Re&do"
 msgstr "По&вторить"
 
@@ -1104,15 +1104,15 @@ msgstr "Задержка"
 msgid "%1 ms"
 msgstr "%1 мс"
 
-#: segmentparameterbox.cpp:648 rosegardengui.cpp:4282
+#: segmentparameterbox.cpp:648 rosegardengui.cpp:4287
 msgid "Modify Segment label"
 msgstr "Изменить метку сегмента"
 
-#: segmentparameterbox.cpp:649 rosegardengui.cpp:4283
+#: segmentparameterbox.cpp:649 rosegardengui.cpp:4288
 msgid "Modify Segments label"
 msgstr "Изменить метки сегментов"
 
-#: segmentparameterbox.cpp:660 rosegardengui.cpp:4300
+#: segmentparameterbox.cpp:660 rosegardengui.cpp:4305
 #: audiomanagerdialog.cpp:801
 msgid "Enter new label"
 msgstr "Введите новую метку"
@@ -2156,7 +2156,7 @@ msgstr "Выделение копируется в буфер обмена..."
 msgid "Can't join Audio segments"
 msgstr "Не удаётся объединить звуковые сегменты"
 
-#: rosegardengui.cpp:1798 rosegardengui.cpp:3845
+#: rosegardengui.cpp:1798 rosegardengui.cpp:3850
 msgid "Set Global Tempo"
 msgstr "Установить темп для всей композиции"
 
@@ -2369,29 +2369,29 @@ msgstr "XML-файлы"
 msgid "%1%"
 msgstr "%1%"
 
-#: rosegardengui.cpp:3828
+#: rosegardengui.cpp:3833
 msgid "Replace Tempo Change at %1"
 msgstr "Заменить изменение темпа в позиции %1"
 
-#: rosegardengui.cpp:3862
+#: rosegardengui.cpp:3867
 msgid "Set Global and Default Tempo"
 msgstr "Установить глобальный и стандартный темпы"
 
-#: rosegardengui.cpp:4285
+#: rosegardengui.cpp:4290
 msgid "Relabelling selection..."
 msgstr "Выделение переразмечается..."
 
-#: rosegardengui.cpp:4428
+#: rosegardengui.cpp:4433
 msgid "Sending MIDI panic..."
 msgstr "Снимаются все MIDI-события (MIDI panic)..."
 
-#: rosegardengui.cpp:4465
+#: rosegardengui.cpp:4470
 msgid "Are you sure you want to save this as your default studio?"
 msgstr ""
 "Вы действительно хотите сделать этот документ\n"
 "стандартным описанием студии?"
 
-#: rosegardengui.cpp:4469
+#: rosegardengui.cpp:4474
 msgid "Saving current document as default studio..."
 msgstr "Документ сохраняется как стандартное описание студии..."
 
@@ -3791,6 +3791,10 @@ msgstr "&Добавить маркер"
 msgid "&Remove Marker"
 msgstr "&Удалить маркер"
 
+#: editcommands.h:446
+msgid "&Modify Marker"
+msgstr "&Изменить маркер"
+
 #: midipitchlabel.cpp:33
 msgid "C%1"
 msgstr "До%1"
@@ -4512,7 +4516,7 @@ msgid "Controller name:"
 msgstr "Имя контроллера:"
 
 #: dialogs.cpp:1618 dialogs.cpp:1972 dialogs.cpp:1973 dialogs.cpp:2024
-#: dialogs.cpp:2057 controleditor.cpp:192 markereditor.cpp:228
+#: dialogs.cpp:2057 controleditor.cpp:192 markereditor.cpp:227
 msgid "<none>"
 msgstr "<ничего>"
 
@@ -4531,12 +4535,10 @@ msgid "Note velocity:"
 msgstr "Сила нажатия:"
 
 #: dialogs.cpp:1711
-#, fuzzy
 msgid "Controller number:"
 msgstr "Номер контроллера:"
 
 #: dialogs.cpp:1719 controleditor.cpp:417
-#, fuzzy
 msgid "Controller value:"
 msgstr "Значение контроллера:"
 
@@ -4986,11 +4988,11 @@ msgstr "Изменить параметр контроллера"
 msgid "Control Parameter Properties"
 msgstr "Свойства параметров контроллеров"
 
-#: controleditor.cpp:405
+#: controleditor.cpp:405 markereditor.cpp:399
 msgid "Name:"
 msgstr "Имя:"
 
-#: controleditor.cpp:413
+#: controleditor.cpp:413 markereditor.cpp:403
 msgid "Description:"
 msgstr "Описание:"
 
@@ -5050,25 +5052,29 @@ msgstr "Реальное время:"
 msgid "Bars:"
 msgstr "Деления:"
 
-#: markereditor.cpp:89
-msgid "Add a Marker to the Studio"
-msgstr "Добавить маркер к Студии"
+#: markereditor.cpp:87
+msgid "Add a Marker"
+msgstr "Добавить маркер"
 
-#: markereditor.cpp:92
-msgid "Delete a Marker from the Studio"
-msgstr "Удалить маркер из Студии"
+#: markereditor.cpp:90
+msgid "Delete a Marker"
+msgstr "Удалить маркер"
 
-#: markereditor.cpp:95
-msgid "Close the Marker editor"
+#: markereditor.cpp:93
+msgid "Delete All Markers"
+msgstr "Удалить все маркеры"
+
+#: markereditor.cpp:96
+msgid "Close the Marker Editor"
 msgstr "Закрыть редактор маркеров"
 
-#: markereditor.cpp:98
-msgid "Copy a Marker"
-msgstr "Скопировать маркер"
+#: markereditor.cpp:388
+msgid "Edit Marker"
+msgstr "Изменить маркер"
 
-#: markereditor.cpp:101
-msgid "Paste a Marker"
-msgstr "Вставить маркер"
+#: markereditor.cpp:393
+msgid "Marker Properties"
+msgstr "Свойства маркера"
 
 #: rc.cpp:1 rc.cpp:14 rc.cpp:35 rc.cpp:53
 msgid "Tools Toolbar"
@@ -5474,7 +5480,8 @@ msgid ""
 msgstr ""
 "<p>...что если вы можете изменить знак альтерации для ноты в нотном "
 "редакторе (не изменяя высоту тона ноты), выбрав её\n"
-"и нажав клавишами со стрелками  \"вверх\" и \"вниз\" вместе с Ctrl и Shift?</p>\n"
+"и нажав клавишами со стрелками  \"вверх\" и \"вниз\" вместе с Ctrl и Shift?</"
+"p>\n"
 
 #: tips.cpp:56
 msgid ""
@@ -5702,6 +5709,15 @@ msgid ""
 "p>\n"
 msgstr ""
 
+#~ msgid "Add a Marker to the Studio"
+#~ msgstr "Добавить маркер к Студии"
+
+#~ msgid "Delete a Marker from the Studio"
+#~ msgstr "Удалить маркер из Студии"
+
+#~ msgid "Copy a Marker"
+#~ msgstr "Скопировать маркер"
+
 #~ msgid "We're sorry.  This feature is under development.  Coming soon!"
 #~ msgstr ""
 #~ "К сожалению, эта функция всё ещё на стадии разработки.  Но скоро она "
@@ -5726,9 +5742,6 @@ msgstr ""
 
 #~ msgid "Delete Bank"
 #~ msgstr "Удалить банк"
-
-#~ msgid "Delete All Banks"
-#~ msgstr "Удалить все банки"
 
 #~ msgid "Import Banks"
 #~ msgstr "Импортировать банки"
