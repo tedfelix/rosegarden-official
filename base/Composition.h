@@ -822,7 +822,7 @@ public:
     /**
      * Called when metronome status has changed (on/off)
      */
-    virtual void metronomeChanged(const Composition *, bool playMetronome, bool recordMetronome) = 0;
+    virtual void metronomeChanged(const Composition *) = 0;
 
     /**
      * Called when solo status changes (solo on/off, and selected track)

@@ -4218,13 +4218,8 @@ ManageMetronomeDialog::slotApply()
     metronome->setSubBeatVelocity(
             Rosegarden::MidiByte(m_metronomeSubBeatVely->value()));
 
-    // using frigged method for the moment
-    if (depthChanged || deviceChanged) {
-	RG_DEBUG << "ManageMetronomeDialog::slotApply: depth or device changed" << endl;
-	m_doc->getSequenceManager()->timeSignatureChanged(0);
-    }
-    m_doc->getSequenceManager()->
-	metronomeChanged(metronome->getInstrument(), true, true);
+    m_doc->getSequenceManager()->metronomeChanged
+	(metronome->getInstrument(), depthChanged || deviceChanged);
 
     m_doc->slotDocumentModified();
     setModified(false);

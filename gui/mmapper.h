@@ -44,8 +44,9 @@ public:
     QString getFileName() { return m_fileName; }
     void refresh();
     void updateTrackData(Rosegarden::Track*);
-    void updateMetronomeData(Rosegarden::InstrumentId instId,
-                             bool playMetronome, bool recordMetronome);
+    void updateMetronomeData(Rosegarden::InstrumentId instId);
+    void updateMetronomeForPlayback();
+    void updateMetronomeForRecord();
     void updateSoloData(bool solo, Rosegarden::TrackId selectedTrack);
     void setDocument(RosegardenGUIDoc*);
 

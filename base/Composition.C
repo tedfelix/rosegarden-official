@@ -1321,7 +1321,7 @@ Composition::notifyMetronomeChanged() const
 {
     for (ObserverSet::const_iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
-	(*i)->metronomeChanged(this, usePlayMetronome(), useRecordMetronome());
+	(*i)->metronomeChanged(this);
     }
 }
 

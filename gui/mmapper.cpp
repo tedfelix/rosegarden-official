@@ -127,12 +127,27 @@ void ControlBlockMmapper::updateTrackData(Track *t)
     m_needsRefresh = true;
 }
 
-void ControlBlockMmapper::updateMetronomeData(Rosegarden::InstrumentId instId,
-                                              bool playMetronome,
-                                              bool /*recordMetronome*/)
+void ControlBlockMmapper::updateMetronomeData(Rosegarden::InstrumentId instId)
 {
     m_controlBlock->setInstrumentForMetronome(instId);
-    m_controlBlock->setMetronomeMuted(!playMetronome);
+    m_needsRefresh = true;
+}
+
+void ControlBlockMmapper::updateMetronomeForPlayback()
+{
+    bool muted = !m_doc->getComposition().usePlayMetronome();
+    SEQMAN_DEBUG << "ControlBlockMmapper::updateMetronomeForPlayback: muted=" << muted << endl;
+    if (m_controlBlock->isMetronomeMuted() == muted) return;
+    m_controlBlock->setMetronomeMuted(muted);
+    m_needsRefresh = true;
+}
+
+void ControlBlockMmapper::updateMetronomeForRecord()
+{
+    bool muted = !m_doc->getComposition().useRecordMetronome();
+    SEQMAN_DEBUG << "ControlBlockMmapper::updateMetronomeForRecord: muted=" << muted << endl;
+    if (m_controlBlock->isMetronomeMuted() == muted) return;
+    m_controlBlock->setMetronomeMuted(muted);
     m_needsRefresh = true;
 }
 
@@ -675,7 +690,7 @@ MetronomeMmapper::MetronomeMmapper(RosegardenGUIDoc* doc)
     : SegmentMmapper(doc, 0, createFileName()),
       m_deleteMetronome(false),
       m_metronome(0), // no metronome to begin with
-      m_tickDuration(0, 10000)
+      m_tickDuration(0, 30000)
 {
     SEQMAN_DEBUG << "MetronomeMmapper ctor : " << this << endl;
 

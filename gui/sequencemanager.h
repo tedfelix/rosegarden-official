@@ -186,7 +186,7 @@ public:
     virtual void endMarkerTimeChanged(const Composition*, bool shorten);
     virtual void trackChanged        (const Composition*, Track*);
     virtual void timeSignatureChanged(const Composition*);
-    virtual void metronomeChanged    (const Composition*, bool playMetronome, bool recordMetronome);
+    virtual void metronomeChanged    (const Composition*);
     virtual void soloChanged         (const Composition*, bool solo, TrackId selectedTrack);
     virtual void tempoChanged        (const Composition*);
     virtual void compositionDeleted  (const Composition*);
@@ -197,10 +197,8 @@ public:
 
     virtual bool event(QEvent *e);
 
-    // test method for the moment
-    void metronomeChanged(Rosegarden::InstrumentId id,
-                          bool playMetronome,
-                          bool recordMetronome);
+    // for the gui to call to indicate that the metronome needs to be remapped
+    void metronomeChanged(Rosegarden::InstrumentId id, bool regenerateTicks);
     
 public slots:
     // Empty the m_clearToSend flag

@@ -178,6 +178,12 @@ SequenceManager::play()
     //
     preparePlayback();
 
+    // Update play metronome status
+    // 
+    m_controlBlockMmapper->updateMetronomeData
+	(m_metronomeMmapper->getMetronomeInstrument());
+    m_controlBlockMmapper->updateMetronomeForPlayback();
+
     // Send audio latencies
     //
     //sendAudioLatencies();
@@ -533,6 +539,12 @@ SequenceManager::record(bool toggled)
 
         // toggle the Metronome button if it's in use
         m_transport->MetronomeButton()->setOn(comp.useRecordMetronome());
+
+	// Update record metronome status
+	// 
+	m_controlBlockMmapper->updateMetronomeData
+	    (m_metronomeMmapper->getMetronomeInstrument());
+	m_controlBlockMmapper->updateMetronomeForRecord();
 
         // If we are looping then jump to start of loop and start recording,
         // if we're not take off the number of count-in bars and start 
@@ -1504,34 +1516,46 @@ void SequenceManager::trackChanged(const Composition *, Track* t)
 }
 
 void SequenceManager::metronomeChanged(Rosegarden::InstrumentId id,
-                                       bool playMetronome,
-                                       bool recordMetronome)
+				       bool regenerateTicks)
 {
+    // This method is called when the user has changed the
+    // metronome instrument, pitch etc
+
     SEQMAN_DEBUG << "SequenceManager::metronomeChanged (simple)"
-                 << " - playMetronome = " 
-                 << playMetronome
-                 << ", recordMetronome = " 
-                 << recordMetronome 
                  << ", instrument = "
                  << id
                  << endl;
 
-    m_controlBlockMmapper->updateMetronomeData(id, playMetronome, recordMetronome);
+    if (regenerateTicks) resetMetronomeMmapper();
+
+    m_controlBlockMmapper->updateMetronomeData(id);
+    if (m_transportStatus == PLAYING) {
+	m_controlBlockMmapper->updateMetronomeForPlayback();
+    } else {
+	m_controlBlockMmapper->updateMetronomeForRecord();
+    }
+
     m_metronomeMmapper->refresh();
 }
 
-void SequenceManager::metronomeChanged(const Composition *, bool playMetronome, bool recordMetronome)
+void SequenceManager::metronomeChanged(const Composition *)
 {
-    SEQMAN_DEBUG << "SequenceManager::metronomeChanged - playMetronome = " 
-                 << playMetronome
-                 << ", recordMetronome = " 
-                 << recordMetronome 
+    // This method is called when the muting status in the composition
+    // has changed -- the metronome itself has not actually changed
+
+    SEQMAN_DEBUG << "SequenceManager::metronomeChanged " 
                  << ", instrument = "
                  << m_metronomeMmapper->getMetronomeInstrument()
                  << endl;
 
-    m_controlBlockMmapper->updateMetronomeData(m_metronomeMmapper->getMetronomeInstrument(), playMetronome, recordMetronome);
-    m_metronomeMmapper->refresh();
+    m_controlBlockMmapper->updateMetronomeData
+	(m_metronomeMmapper->getMetronomeInstrument());
+
+    if (m_transportStatus == PLAYING) {
+	m_controlBlockMmapper->updateMetronomeForPlayback();
+    } else {
+	m_controlBlockMmapper->updateMetronomeForRecord();
+    }
 }
 
 void SequenceManager::soloChanged(const Composition *, bool solo, TrackId selectedTrack)
