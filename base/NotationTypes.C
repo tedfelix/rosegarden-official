@@ -1519,16 +1519,18 @@ const PropertyName TimeSignature::NumeratorPropertyName = "numerator";
 const PropertyName TimeSignature::DenominatorPropertyName = "denominator";
 const PropertyName TimeSignature::ShowAsCommonTimePropertyName = "common";
 const PropertyName TimeSignature::IsHiddenPropertyName = "hidden";
+const PropertyName TimeSignature::HasHiddenBarsPropertyName = "hiddenbars";
 const TimeSignature TimeSignature::DefaultTimeSignature = TimeSignature(4, 4);
 
 TimeSignature::TimeSignature(int numerator, int denominator,
-                             bool preferCommon, bool hidden)
+                             bool preferCommon, bool hidden, bool hiddenBars)
     // throw (BadTimeSignature)
     : m_numerator(numerator), m_denominator(denominator),
       m_common(preferCommon &&
                (m_denominator == m_numerator &&
                 (m_numerator == 2 || m_numerator == 4))),
-      m_hidden(hidden)
+      m_hidden(hidden),
+      m_hiddenBars(hiddenBars)
 {
     if (numerator < 1 || denominator < 1) {
         throw BadTimeSignature("Numerator and denominator must be positive");
@@ -1550,6 +1552,9 @@ TimeSignature::TimeSignature(const Event &e)
     m_hidden = false;
     e.get<Bool>(IsHiddenPropertyName, m_hidden);
 
+    m_hiddenBars = false;
+    e.get<Bool>(HasHiddenBarsPropertyName, m_hiddenBars);
+
     if (m_numerator < 1 || m_denominator < 1) {
         throw BadTimeSignature("Numerator and denominator must be positive");
     }
@@ -1562,6 +1567,7 @@ TimeSignature& TimeSignature::operator=(const TimeSignature &ts)
     m_denominator = ts.m_denominator;
     m_common = ts.m_common;
     m_hidden = ts.m_hidden;
+    m_hiddenBars = ts.m_hiddenBars;
     return *this;
 }
 
@@ -1602,6 +1608,7 @@ Event *TimeSignature::getAsEvent(timeT absoluteTime) const
     e->set<Int>(DenominatorPropertyName, m_denominator);
     e->set<Bool>(ShowAsCommonTimePropertyName, m_common);
     e->set<Bool>(IsHiddenPropertyName, m_hidden);
+    e->set<Bool>(HasHiddenBarsPropertyName, m_hiddenBars);
     return e;
 }
 

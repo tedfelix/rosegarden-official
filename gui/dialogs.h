@@ -98,6 +98,7 @@ protected:
 
     QCheckBox *m_commonTimeButton;
     QCheckBox *m_hideSignatureButton;
+    QCheckBox *m_hideBarsButton;
     QCheckBox *m_normalizeRestsButton;
 
     QRadioButton *m_asGivenButton;

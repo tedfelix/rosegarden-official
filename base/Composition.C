@@ -1365,6 +1365,10 @@ std::string Composition::toXmlString()
 	(*i)->get<Bool>(TimeSignature::IsHiddenPropertyName, hidden);
 	if (hidden) composition << " hidden=\"true\"";
 
+	bool hiddenBars = false;
+	(*i)->get<Bool>(TimeSignature::HasHiddenBarsPropertyName, hiddenBars);
+	if (hiddenBars) composition << " hiddenbars=\"true\"";
+
 	composition << "/>" << endl;
     }
 

@@ -793,7 +793,13 @@ NotationHLayout::preSquishBar(int barNo)
 	if (bdli != bdl.end()) {
 
 	    bdli->second.sizeData.idealWidth =
-		bdli->second.sizeData.fixedWidth + x + getBarMargin();
+		bdli->second.sizeData.fixedWidth + x;
+
+	    if (!bdli->second.basicData.timeSignature.hasHiddenBars()) {
+		bdli->second.sizeData.idealWidth += getBarMargin();
+	    } else if (bdli->second.basicData.newTimeSig) {
+		bdli->second.sizeData.idealWidth += getPostBarMargin();
+	    }
 
 	    bdli->second.sizeData.reconciledWidth =
 		bdli->second.sizeData.idealWidth;
@@ -1301,7 +1307,10 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 	    reconciledWidth -= offset;
 	}
 
-	offset += getPostBarMargin();
+	if (bdi->second.basicData.newTimeSig ||
+	    !bdi->second.basicData.timeSignature.hasHiddenBars()) {
+	    offset += getPostBarMargin();
+	}
 
 	ChunkList &chunks = bdi->second.chunks;
 	ChunkList::iterator chunkitr = chunks.begin();

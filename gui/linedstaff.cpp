@@ -83,14 +83,14 @@ BarLine::drawShape(QPainter &painter)
 	break;
 
     case LinedStaff::HeavyDoubleBar:
-	bx -= m_baseBarThickness * 6;
+	bx -= m_baseBarThickness * 5;
 	painter.drawRect(bx, by, m_baseBarThickness, m_barLineHeight);
 	painter.drawRect(bx + m_baseBarThickness * 3, by,
 			 m_baseBarThickness * 3, m_barLineHeight);
 	break;
 
     case LinedStaff::RepeatEndBar:
-	bx -= m_baseBarThickness * 6 + m_lineSpacing * 2 / 3;
+	bx -= m_baseBarThickness * 5 + m_lineSpacing * 2 / 3;
 	painter.drawEllipse(bx, by + m_barLineHeight / 2 - (m_lineSpacing * 2 / 3),
 			    m_lineSpacing / 3, m_lineSpacing / 3);
 	painter.drawEllipse(bx, by + m_barLineHeight / 2 + (m_lineSpacing / 3),
@@ -811,6 +811,13 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
 
     if (firstBarInRow) insertRepeatedClefAndKey(layoutX, barNo);
 
+    // If we're supposed to be hiding bar lines, we do just that --
+    // create them as normal, then hide them.  We can't simply not
+    // create them because we rely on this to find bar extents for
+    // things like double-click selection in notation.
+    bool hidden = false;
+    if (style == PlainBar && timeSig.hasHiddenBars()) hidden = true;
+
     BarLine *line = new BarLine(m_canvas, layoutX,
 				getBarLineHeight(), barThickness, getLineSpacing(),
 				style);
@@ -826,7 +833,8 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
     }
 
     line->setZ(-1);
-    line->show();
+    if (hidden) line->hide();
+    else line->show();
 
     // The bar lines have to be in order of layout-x (there's no
     // such interesting stipulation for beat or connecting lines)
@@ -849,7 +857,8 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
 	eline->setBrush(RosegardenGUIColours::BarLine);
 
 	eline->setZ(-1);
-	eline->show();
+	if (hidden) eline->hide();
+	else eline->show();
 
 	BarLineList::iterator insertPoint = lower_bound
 	    (m_barLines.begin(), m_barLines.end(), eline, compareBars);
@@ -867,7 +876,8 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
 	barNoText->setX(x);
 	barNoText->setY(y - metrics.height() - m_resolution * 2);
 	barNoText->setZ(-1);
-	barNoText->show();
+	if (hidden) barNoText->hide();
+	else barNoText->show();
 
 	m_barNumbers.push_back(barNoText);
     }
@@ -888,7 +898,7 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
 
 	double dx = width / gridLines;
 
-	for (int gridLine = 1; gridLine < gridLines; ++gridLine) {
+	for (int gridLine = hidden ? 0 : 1; gridLine < gridLines; ++gridLine) {
 
 	    rect = new QCanvasRectangle
 		(0, 0, barThickness, getBarLineHeight(), m_canvas);
@@ -909,7 +919,7 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
             }
 
 	    rect->setZ(-1);
-	    rect->show();
+	    rect->show(); // show beat lines even if the bar lines are hidden
 
 	    LineRec beatLine(layoutX + gridLine * dx, rect);
 	    m_beatLines.push_back(beatLine);
@@ -926,7 +936,8 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
 	rect->setPen(RosegardenGUIColours::StaffConnectingLine);
 	rect->setBrush(RosegardenGUIColours::StaffConnectingLine);
 	rect->setZ(-3);
-	rect->show();
+	if (hidden) rect->hide();
+	else rect->show();
 	
 	LineRec connectingLine(layoutX, rect);
 	m_barConnectingLines.push_back(connectingLine);

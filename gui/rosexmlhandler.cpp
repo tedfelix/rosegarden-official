@@ -524,8 +524,12 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 	QString hiddenStr = atts.value("hidden");
 	if (hiddenStr) hidden = (hiddenStr == "true");
 
+	bool hiddenBars = false;
+	QString hiddenBarsStr = atts.value("hiddenbars");
+	if (hiddenBarsStr) hiddenBars = (hiddenBarsStr == "true");
+
 	getComposition().addTimeSignature
-	    (t, Rosegarden::TimeSignature(num, denom, common, hidden));
+	    (t, Rosegarden::TimeSignature(num, denom, common, hidden, hiddenBars));
 
     } else if (lcName == "tempo") {
 

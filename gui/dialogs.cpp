@@ -233,6 +233,11 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
     m_hideSignatureButton->setChecked
 	(config->readBoolEntry("timesigdialogmakehidden", false));
 
+    m_hideBarsButton = new QCheckBox
+	(i18n("Make subsequent bar lines hidden"), groupBox);
+    m_hideBarsButton->setChecked
+	(config->readBoolEntry("timesigdialogmakehiddenbars", false));
+
     m_commonTimeButton = new QCheckBox
 	(i18n("Show as common time"), groupBox);
     m_commonTimeButton->setChecked
@@ -256,6 +261,7 @@ TimeSignatureDialog::getTimeSignature() const
     config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
 
     config->writeEntry("timesigdialogmakehidden", m_hideSignatureButton->isChecked());
+    config->writeEntry("timesigdialogmakehiddenbars", m_hideBarsButton->isChecked());
     config->writeEntry("timesigdialogshowcommon", m_commonTimeButton->isChecked());
     config->writeEntry("timesigdialognormalize", m_normalizeRestsButton->isChecked());
 
@@ -266,7 +272,10 @@ TimeSignatureDialog::getTimeSignature() const
 		      m_commonTimeButton->isChecked()),
 		     (m_hideSignatureButton &&
 		      m_hideSignatureButton->isEnabled() &&
-		      m_hideSignatureButton->isChecked()));
+		      m_hideSignatureButton->isChecked()),
+		     (m_hideBarsButton &&
+		      m_hideBarsButton->isEnabled() &&
+		      m_hideBarsButton->isChecked()));
     return ts;
 }
 

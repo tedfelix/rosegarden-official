@@ -971,25 +971,29 @@ public:
     TimeSignature() :
         m_numerator(DefaultTimeSignature.m_numerator),
         m_denominator(DefaultTimeSignature.m_denominator),
-	m_common(false), m_hidden(false) { }
+	m_common(false), m_hidden(false), m_hiddenBars(false) { }
 
     /**
      * Construct a TimeSignature object describing a time signature
-     * with the given numerator and denominator.  If preferCommon
-     * is true and the time signature is a common or cut-common
-     * time, the constructed object will return true for isCommon;
-     * if hidden is true, the time signature is intended not to
-     * be displayed and isHidden will return true.
+     * with the given numerator and denominator.  If preferCommon is
+     * true and the time signature is a common or cut-common time, the
+     * constructed object will return true for isCommon; if hidden is
+     * true, the time signature is intended not to be displayed and
+     * isHidden will return true; if hiddenBars is true, the bar lines
+     * between this time signature and the next will not be shown.
      */
     TimeSignature(int numerator, int denominator,
-		  bool preferCommon = false, bool hidden = false)
+		  bool preferCommon = false,
+		  bool hidden = false,
+		  bool hiddenBars = false)
         /* throw (BadTimeSignature) */;
     
     TimeSignature(const TimeSignature &ts) :
         m_numerator(ts.m_numerator),
         m_denominator(ts.m_denominator),
 	m_common(ts.m_common),
-	m_hidden(ts.m_hidden) { }
+	m_hidden(ts.m_hidden),
+	m_hiddenBars(ts.m_hiddenBars) { }
 
     ~TimeSignature() { }
 
@@ -1007,6 +1011,7 @@ public:
     
     bool isCommon()        const { return m_common; }
     bool isHidden()	   const { return m_hidden; }
+    bool hasHiddenBars()   const { return m_hiddenBars; }
 
     timeT getBarDuration() const;
 
@@ -1090,6 +1095,7 @@ private:
     static const PropertyName DenominatorPropertyName;
     static const PropertyName ShowAsCommonTimePropertyName;
     static const PropertyName IsHiddenPropertyName;
+    static const PropertyName HasHiddenBarsPropertyName;
 
     /// Returned event is on heap; caller takes responsibility for ownership
     Event *getAsEvent(timeT absoluteTime) const;
@@ -1100,6 +1106,7 @@ private:
 
     bool m_common;
     bool m_hidden;
+    bool m_hiddenBars;
 
     mutable int  m_barDuration;
     mutable int  m_beatDuration;
