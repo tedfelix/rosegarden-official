@@ -121,7 +121,7 @@ EventView::EventView(RosegardenGUIDoc *doc,
                      std::vector<Rosegarden::Segment *> segments,
                      QWidget *parent):
     EditViewBase(doc, segments, 2, parent, "eventview"),
-    m_eventFilter(Note|Text|SysEx|Controller|ProgramChange|Rest|PitchBend),
+    m_eventFilter(Note|Text|SysEx|Controller|ProgramChange|PitchBend),
     m_doc(doc)
 {
 
@@ -143,12 +143,12 @@ EventView::EventView(RosegardenGUIDoc *doc,
         new QButtonGroup(1, Horizontal, i18n("Event filters"), filterBox);
 
     m_noteCheckBox = new QCheckBox(i18n("Note"), m_filterGroup);
-    m_restCheckBox = new QCheckBox(i18n("Rest"), m_filterGroup);
-    m_pitchBendCheckBox = new QCheckBox(i18n("Pitch Bend"), m_filterGroup);
     m_programCheckBox = new QCheckBox(i18n("Program Change"), m_filterGroup);
     m_controllerCheckBox = new QCheckBox(i18n("Controller"), m_filterGroup);
+    m_pitchBendCheckBox = new QCheckBox(i18n("Pitch Bend"), m_filterGroup);
     m_sysExCheckBox = new QCheckBox(i18n("System Exclusive"), m_filterGroup);
     m_textCheckBox = new QCheckBox(i18n("Text"), m_filterGroup);
+    m_restCheckBox = new QCheckBox(i18n("Rest"), m_filterGroup);
 
     // Connect up
     //
@@ -210,6 +210,8 @@ EventView::applyLayout(int /*staffNo*/)
 
             QString velyStr;
             QString pitchStr;
+            QString data1Str = "";
+            QString data2Str = "";
 	    QString durationStr;
 
             // Event filters
@@ -242,6 +244,26 @@ EventView::applyLayout(int /*staffNo*/)
 		velyStr = "<not set>";
 	    }
 
+            if ((*it)->has(Rosegarden::Controller::DATA1)) {
+                data1Str = QString("%1  ").
+                    arg((*it)->get<Int>(Rosegarden::Controller::DATA1));
+            }
+
+            if ((*it)->has(Rosegarden::Controller::DATA2)) {
+                data2Str = QString("%1  ").
+                    arg((*it)->get<Int>(Rosegarden::Controller::DATA2));
+            }
+
+            if ((*it)->has(Rosegarden::PitchBend::MSB)) {
+                data1Str = QString("%1  ").
+                    arg((*it)->get<Int>(Rosegarden::PitchBend::MSB));
+            }
+
+            if ((*it)->has(Rosegarden::PitchBend::LSB)) {
+                data2Str = QString("%1  ").
+                    arg((*it)->get<Int>(Rosegarden::PitchBend::LSB));
+            }
+
 	    if ((*it)->getDuration() > 0 ||
 		(*it)->isa(Rosegarden::Note::EventType) ||
 		(*it)->isa(Rosegarden::Note::EventRestType)) {
@@ -255,8 +277,8 @@ EventView::applyLayout(int /*staffNo*/)
                               QString((*it)->getType().c_str()),
                               pitchStr,
                               velyStr,
-			      "",
-			      "");
+			      data1Str,
+			      data2Str);
         }
     }
 

@@ -328,9 +328,9 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 		}
 	    }
 
-            // Skip this event if it isn't a note
+            // Skip this event if it's a rest
             //
-            if (!(*j)->isa(Rosegarden::Note::EventType))
+            if (!(*j)->isa(Rosegarden::Note::EventRestType))
                 continue;
 
             // Get the performance time, adjusted for repeats

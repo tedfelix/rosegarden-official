@@ -21,6 +21,7 @@
 
 #include "MappedEvent.h"
 #include "BaseProperties.h"
+#include "MidiTypes.h"
  
 namespace Rosegarden
 {
@@ -31,25 +32,47 @@ MappedEvent::MappedEvent(InstrumentId id,
                          const Rosegarden::RealTime &duration):
        m_instrument(id),
        m_type(MidiNote),
-       m_data1(e.get<Int>(BaseProperties::PITCH)),
+       m_data1(0),
        m_data2(MidiMaxValue),
        m_eventTime(eventTime),
        m_duration(duration),
        m_audioStartMarker(0, 0)
 {
-    if (e.has(BaseProperties::VELOCITY)) {
+    if (e.isa(Rosegarden::Note::EventType))
+    {
+        if (e.get<Int>(BaseProperties::PITCH))
+            m_data1 = e.get<Int>(BaseProperties::PITCH);
+        else
+            m_data1 = 0;
 
-	// Attempt to get a velocity - if it fails then
-	// set the velocity to default maximum
-	//
-	try
-	{
-	    m_data2 = e.get<Int>(BaseProperties::VELOCITY);
-	}
-	catch(...)
-	{
-	    m_data2 = MidiMaxValue;
-	}
+        if (e.has(BaseProperties::VELOCITY))
+        {
+	    try {
+	        m_data2 = e.get<Int>(BaseProperties::VELOCITY);
+	    }
+	    catch(...)
+	    {
+	        m_data2 = MidiMaxValue;
+	    }
+        }
+    }
+    else if (e.isa(Rosegarden::PitchBend::EventType))
+    {
+        if (e.has(Rosegarden::PitchBend::MSB))
+            m_data1 = e.get<Int>(Rosegarden::PitchBend::LSB);
+        else
+            m_data1 = 0;
+
+        if (e.has(Rosegarden::PitchBend::LSB))
+            m_data2 = e.get<Int>(Rosegarden::PitchBend::LSB);
+        else
+            m_data2 = 0;
+    }
+    else
+    {
+        std::cerr << "MappedEvent::MappedEvent - "
+                  << "can't handle ("
+                  << e.getType() << ") internal event yet" << std::endl;
     }
 }
 
