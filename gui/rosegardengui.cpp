@@ -231,6 +231,25 @@ void RosegardenGUIApp::setupActions()
 
     m_recordTransport->setGroup("transportcontrols");
 
+    m_pauseTransport = new KAction(i18n("&Pause"), 0, Key_Delete, this,
+                                  SLOT(pause()), actionCollection(),
+                                  "pause");
+
+    m_pauseTransport->setGroup("transportcontrols");
+
+
+    m_rewindEndTransport = new KAction(i18n("Rewind to Beginning"), 0, 0, this,
+                                  SLOT(rewindToBeginning()), actionCollection(),
+                                  "rewindtobeginning");
+
+    m_rewindEndTransport->setGroup("transportcontrols");
+
+    m_ffwdEndTransport = new KAction(i18n("Fast Forward to End"), 0, 0, this,
+                                  SLOT(fastforwardtoEnd()), actionCollection(),
+                                   "fastforwardtoend");
+
+    m_ffwdEndTransport->setGroup("transportcontrols");
+
     // create the Transport GUI and add the callbacks
     //
     m_transport = new Rosegarden::RosegardenTransportDialog(this, "",
@@ -291,6 +310,25 @@ void RosegardenGUIApp::setupActions()
                    this,
                    SLOT(record()));
 
+    connect((QObject *) m_transport->PauseButton,
+             SIGNAL(released()),
+             SLOT(pause()));
+
+    a->connectItem(a->insertItem(Key_Delete),
+                   this,
+                   SLOT(pause()));
+
+    connect((QObject *) m_transport->RewindEndButton,
+             SIGNAL(released()),
+             SLOT(rewindToBeginning()));
+
+
+    connect((QObject *) m_transport->FfwdEndButton,
+             SIGNAL(released()),
+             SLOT(fastForwardToEnd()));
+
+    createGUI("rosegardenui.rc");
+
     // Ensure that the checkbox is unchecked if the dialog
     // is destroyed.
     //
@@ -298,9 +336,9 @@ void RosegardenGUIApp::setupActions()
     //
     //
     connect((QObject *)m_transport, SIGNAL(destroyed()),
-            (QObject *)m_viewTransport, SLOT(setChecked(false)));
-	                    
-    createGUI("rosegardenui.rc");
+                                    SLOT(closeTransport()));
+// (QObject *)m_viewTransport, SLOT(setChecked(false)));
+
 }
 
 
@@ -1436,7 +1474,7 @@ void RosegardenGUIApp::exportMIDIFile(const QString &file)
 void
 RosegardenGUIApp::closeTransport()
 {
-  cerr << "TRANSPORT CLOSED" << endl;
+    cerr << "RosegardenGUIApp::closeTransport() - callback activated" << endl;
 }
 
 // Called when we want to start recording from the GUI.
@@ -1615,5 +1653,52 @@ RosegardenGUIApp::processAsynchronousMidi(const Rosegarden::MappedComposition &m
     }
 }
 
+
+// Tell the sequencer to pause
+//
+void
+RosegardenGUIApp::pause()
+{
+    // We can only pause if we're playing or recording
+    //
+    if (m_transportStatus == STOPPED)
+    {
+        if (m_transport->PauseButton->state() == QButton::On)
+            m_transport->PauseButton->toggle();
+        return;
+    }
+       
+    cout << "RosegardenGUIApp::pause()" << endl;
+}
+
+
+// Double stop always does the trick
+void
+RosegardenGUIApp::rewindToBeginning()
+{
+    cout << "RosegardenGUIApp::rewindToBeginning()" << endl;
+
+    if ( m_transportStatus == PLAYING ||
+         m_transportStatus == RECORDING_MIDI ||
+         m_transportStatus == RECORDING_AUDIO )
+    {
+        sendSequencerJump(0);
+    }
+    else
+    {
+        setPointerPosition(0);
+    }
+
+
+}
+
+
+void
+RosegardenGUIApp::fastForwardToEnd()
+{
+    cout << "RosegardenGUIApp::fastForwardToEnd()" << endl;
+}
+
+// Double stop always does the trick
 
 

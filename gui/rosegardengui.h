@@ -405,6 +405,9 @@ public slots:
     void rewind();
     void fastforward();
     void record();
+    void pause();
+    void rewindToBeginning();
+    void fastForwardToEnd();
 
     /**
      * Set the sequencer status - pass through DCOP as an int
