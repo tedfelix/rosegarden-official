@@ -149,6 +149,15 @@ public:
 #endif
     }
 
+    virtual float getPluginInstancePortValue(InstrumentId id,
+					     int position,
+					     unsigned long portNumber) {
+#ifdef HAVE_LIBJACK
+	if (m_jackDriver) return m_jackDriver->getPluginInstancePortValue(id, position, portNumber);
+#endif
+	return 0;
+    }
+
     virtual void setPluginInstanceBypass(InstrumentId id,
                                          int position,
                                          bool value) {

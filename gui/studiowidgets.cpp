@@ -19,6 +19,8 @@
     COPYING included with this distribution for more information.
 */
 
+#include "config.h"
+
 #include <kapp.h>
 #include <klocale.h>
 #include <kstddirs.h>
@@ -40,6 +42,8 @@
 #include "Studio.h"
 #include "MappedStudio.h"
 #include "studiocontrol.h"
+#include "rosegardengui.h"
+#include "audiopluginoscgui.h"
 
 #include <cmath>
 
@@ -1015,6 +1019,9 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
     connect(m_stereoButton, SIGNAL(clicked()),
 	    this, SLOT(slotChannelStateChanged()));
 
+    m_synthGUIButton = new QPushButton(this);
+    m_synthGUIButton->setText(i18n("Editor"));
+
     if (haveInOut) {
 	m_audioInput  = new AudioRouteMenu(this,
 					   AudioRouteMenu::In,
@@ -1030,7 +1037,10 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
     }
 
     QToolTip::add(m_pan, i18n("Set the audio pan position in the stereo field"));
+    QToolTip::add(m_synthGUIButton, i18n("Open synth plugin's native editor"));
     QToolTip::add(m_stereoButton, i18n("Mono or Stereo Instrument"));
+    QToolTip::add(m_recordFader, i18n("Record level"));
+    QToolTip::add(m_fader, i18n("Playback level"));
     QToolTip::add(m_vuMeter, i18n("Audio level"));
 
     QGridLayout *grid = new QGridLayout(this, 3, 6, 4, 4);
@@ -1049,12 +1059,7 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
     grid->addMultiCellWidget(pluginVbox,   2, 2, 0, 2);
     grid->addMultiCellWidget(faderHbox,    1, 2, 3, 5);
 
-/*
-    grid->addMultiCellWidget(m_recordFader, 1, 2, 3, 3);
-    grid->addMultiCellWidget(m_vuMeter,     1, 2, 4, 4);
-    grid->addMultiCellWidget(m_fader,       1, 2, 5, 5);
-*/
-
+    grid->addWidget(m_synthGUIButton,       1, 0);
     grid->addWidget(m_pan,                  1, 2);
     grid->addWidget(m_stereoButton,         1, 1);
 
@@ -1065,6 +1070,7 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
     m_synthButton->setFixedWidth(m_plugins[0]->width());
     
     m_synthButton->hide();
+    m_synthGUIButton->hide();
 }
 
 void
@@ -1073,10 +1079,12 @@ AudioFaderBox::setIsSynth(bool isSynth)
     if (isSynth) {
 	m_inputLabel->hide();
 	m_synthButton->show();
+	m_synthGUIButton->show();
 	m_audioInput->getWidget()->hide();
 	m_recordFader->hide();
     } else {
 	m_synthButton->hide();
+	m_synthGUIButton->hide();
 	m_inputLabel->show();
 	m_audioInput->getWidget()->show();
 	m_recordFader->show();
@@ -1090,7 +1098,22 @@ AudioFaderBox::slotSetInstrument(Rosegarden::Studio *studio,
     if (m_audioInput) m_audioInput->slotSetInstrument(studio, instrument);
     if (m_audioOutput) m_audioOutput->slotSetInstrument(studio, instrument);
     if (instrument) setAudioChannels(instrument->getAudioChannels());
-    if (instrument) setIsSynth(instrument->getType() == Rosegarden::Instrument::SoftSynth);
+    if (instrument) {
+
+	RG_DEBUG << "AudioFaderBox::slotSetInstrument(" << instrument->getId() << ")" << endl;
+
+	setIsSynth(instrument->getType() == Rosegarden::Instrument::SoftSynth);
+	if (instrument->getType() == Rosegarden::Instrument::SoftSynth) {
+	    bool gui = false;
+	    RG_DEBUG << "AudioFaderBox::slotSetInstrument(" << instrument->getId() << "): is soft synth" << endl;
+#ifdef HAVE_LIBLO
+	    gui = RosegardenGUIApp::self()->getPluginGUIManager()->hasGUI
+		(instrument->getId(), Rosegarden::Instrument::SYNTH_PLUGIN_POSITION);
+	    RG_DEBUG << "AudioFaderBox::slotSetInstrument(" << instrument->getId() << "): has gui = " << gui << endl;
+#endif
+	    m_synthGUIButton->setEnabled(gui);
+	}	    
+    }
 }
 
 bool

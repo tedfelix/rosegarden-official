@@ -83,8 +83,8 @@ SegmentParameterBox::initBox()
     QLabel *delayLabel     = new QLabel(i18n("Delay"), this);
     QLabel *colourLabel    = new QLabel(i18n("Color"), this);
     m_autoFadeLabel        = new QLabel(i18n("Audio auto-fade"), this);
-    m_fadeInLabel          = new QLabel(i18n("Fade in (ms)"), this);
-    m_fadeOutLabel         = new QLabel(i18n("Fade out (ms)"), this);
+    m_fadeInLabel          = new QLabel(i18n("Fade in"), this);
+    m_fadeOutLabel         = new QLabel(i18n("Fade out"), this);
 
     // HBox for label
     //
@@ -170,12 +170,14 @@ SegmentParameterBox::initBox()
     m_fadeInSpin = new QSpinBox(this);
     m_fadeInSpin->setMinValue(0);
     m_fadeInSpin->setMaxValue(5000);
+    m_fadeInSpin->setSuffix(i18n(" ms"));
     connect(m_fadeInSpin, SIGNAL(valueChanged(int)),
             this, SLOT(slotFadeInChanged(int)));
 
     m_fadeOutSpin = new QSpinBox(this);
     m_fadeOutSpin->setMinValue(0);
     m_fadeOutSpin->setMaxValue(5000);
+    m_fadeOutSpin->setSuffix(i18n(" ms"));
     connect(m_fadeOutSpin, SIGNAL(valueChanged(int)),
             this, SLOT(slotFadeOutChanged(int)));
 

@@ -5790,12 +5790,12 @@ msgid "Audio auto-fade"
 msgstr "Automatisk ljudtoning"
 
 #: segmentparameterbox.cpp:86
-msgid "Fade in (ms)"
-msgstr "Tona in (ms)"
+msgid "Fade in"
+msgstr "Tona in"
 
 #: segmentparameterbox.cpp:87
-msgid "Fade out (ms)"
-msgstr "Tona ut (ms)"
+msgid "Fade out"
+msgstr "Tona ut"
 
 #: segmentparameterbox.cpp:273 segmentparameterbox.cpp:602
 msgid "%1 ms"

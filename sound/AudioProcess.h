@@ -188,6 +188,8 @@ public:
     void removeAllPlugins();
     void setPluginPortValue(InstrumentId id, int position,
 			    unsigned int port, float value);
+    float getPluginPortValue(InstrumentId id, int position,
+			     unsigned int port);
     void setPluginBypass(InstrumentId, int position, bool bypass);
     QStringList getPluginPrograms(InstrumentId, int);
     QString getPluginProgram(InstrumentId, int);

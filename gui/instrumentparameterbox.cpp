@@ -118,9 +118,9 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
 	    SIGNAL(selectPlugin(QWidget *, Rosegarden::InstrumentId, int)));
 
     connect(m_audioInstrumentParameters,
-	    SIGNAL(startPluginGUI(Rosegarden::InstrumentId, int)),
+	    SIGNAL(showPluginGUI(Rosegarden::InstrumentId, int)),
 	    this,
-	    SIGNAL(startPluginGUI(Rosegarden::InstrumentId, int)));
+	    SIGNAL(showPluginGUI(Rosegarden::InstrumentId, int)));
     
     connect(m_midiInstrumentParameters, SIGNAL(updateAllBoxes()),
             this, SLOT(slotUpdateAllBoxes()));
@@ -340,6 +340,9 @@ AudioInstrumentParameterPanel::slotPluginSelected(Rosegarden::InstrumentId instr
     QPushButton *button = 0;
     QString noneText;
 
+    // updates synth gui button &c:
+    m_audioFader->slotSetInstrument(&m_doc->getStudio(), m_selectedInstrument);
+
     if (index == Rosegarden::Instrument::SYNTH_PLUGIN_POSITION) {
 	button = m_audioFader->m_synthButton;
 	noneText = i18n("<no synth>");
@@ -495,6 +498,9 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenGUIDoc* d
 
     connect(m_audioFader->m_synthButton, SIGNAL(clicked()),
 	    this, SLOT(slotSynthButtonClicked()));
+
+    connect(m_audioFader->m_synthGUIButton, SIGNAL(clicked()),
+	    this, SLOT(slotSynthGUIButtonClicked()));
 }
 
 void
@@ -502,14 +508,13 @@ AudioInstrumentParameterPanel::slotSynthButtonClicked()
 {
     slotSelectPlugin(Rosegarden::Instrument::SYNTH_PLUGIN_POSITION);
 }
-/*
+
 void
 AudioInstrumentParameterPanel::slotSynthGUIButtonClicked()
 {
-    emit startPluginGUI(m_selectedInstrument->getId(),
+    emit showPluginGUI(m_selectedInstrument->getId(),
 			Rosegarden::Instrument::SYNTH_PLUGIN_POSITION);
 }
-*/
 
 void
 AudioInstrumentParameterPanel::slotSetPan(float pan)
@@ -556,6 +561,8 @@ AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
     m_audioFader->slotSetInstrument(&m_doc->getStudio(), instrument);
 
     int start = 0;
+
+    if (instrument->getType() == Rosegarden::Instrument::SoftSynth) start = -1;
 
     for (int i = start; i < int(m_audioFader->m_plugins.size()); i++)
     {

@@ -1495,6 +1495,25 @@ RosegardenSequencerApp::setMappedPort(int pluginId,
     }
 }
 
+float
+RosegardenSequencerApp::getMappedPort(int pluginId,
+                                      unsigned long portId)
+{
+    Rosegarden::MappedObject *object =
+        m_studio->getObjectById(pluginId);
+
+    Rosegarden::MappedPluginSlot *slot = 
+        dynamic_cast<Rosegarden::MappedPluginSlot *>(object);
+
+    if (slot) {
+        return slot->getPort(portId);
+    } else {
+	SEQUENCER_DEBUG << "no such slot" << endl;
+    }
+    
+    return 0;
+}
+
 void
 RosegardenSequencerApp::slotCheckForNewClients()
 {

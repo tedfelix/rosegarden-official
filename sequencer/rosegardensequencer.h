@@ -264,6 +264,9 @@ public:
                                unsigned long portId,
                                float value);
 
+    virtual float getMappedPort(int pluginId,
+				unsigned long portId);
+
     // Create a MappedObject
     virtual int createMappedObject(int type);
 

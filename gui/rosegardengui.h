@@ -270,18 +270,17 @@ public:
      */
     virtual void alive();
 
-
-    /*
-     * If the sequencer is skipping slices due to the gui probably
-     * not being to service it then it can call this method to let
-     * the gui know and tell the user.
-     */
-    virtual void skippedSlices(unsigned int slices);
-
     /*
      * Return the clipboard
      */
     Rosegarden::Clipboard* getClipboard() { return m_clipboard; }
+
+#ifdef HAVE_LIBLO
+    /**
+     * Return the plugin native GUI manager, if we have one
+     */
+    AudioPluginOSCGUIManager *getPluginGUIManager() { return m_pluginGUIManager; }
+#endif
 
     /**
      * Plug a widget into our common accelerators
@@ -415,7 +414,6 @@ protected:
 
     /*
      * Return AudioManagerDialog
-     *
      */
     Rosegarden::AudioManagerDialog* getAudioManagerDialog() { return m_audioManagerDialog; }
 

@@ -536,6 +536,23 @@ DSSIPluginInstance::setPortValue(unsigned int portNumber, float value)
     }
 }
 
+float
+DSSIPluginInstance::getPortValue(unsigned int portNumber)
+{
+#ifdef DEBUG_DSSI
+    std::cerr << "DSSIPluginInstance::getPortValue(" << portNumber << ")" << std::endl;
+#endif
+    for (unsigned int i = 0; i < m_controlPortsIn.size(); ++i)
+    {
+        if (m_controlPortsIn[i].first == portNumber)
+        {
+            return (*m_controlPortsIn[i].second);
+        }
+    }
+
+    return 0.0;
+}
+
 QString
 DSSIPluginInstance::configure(QString key,
 			      QString value)

@@ -874,6 +874,19 @@ AudioInstrumentMixer::setPluginPortValue(InstrumentId id, int position,
     }
 }
 
+float
+AudioInstrumentMixer::getPluginPortValue(InstrumentId id, int position,
+					 unsigned int port)
+{
+    RunnablePluginInstance *instance = getPluginInstance(id, position);
+
+    if (instance) {
+	return instance->getPortValue(port);
+    }
+
+    return 0;
+}
+
 void
 AudioInstrumentMixer::setPluginBypass(InstrumentId id, int position, bool bypass)
 {

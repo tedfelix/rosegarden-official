@@ -733,7 +733,7 @@ AudioPluginOSCGUI::getGUIFilePath(QString identifier)
     QFileInfo soInfo(soName);
     if (soInfo.isRelative()) {
 	//!!!
-	RG_DEBUG << "AudioPluginOSCGUI::AudioPluginOSCGUI: Unable to deal with relative .so path " << soName << " yet" << endl;
+	RG_DEBUG << "AudioPluginOSCGUI::AudioPluginOSCGUI: Unable to deal with relative .so path \"" << soName << "\" in identifier \"" << identifier << "\" yet" << endl;
 	throw Rosegarden::Exception("Can't deal with relative .soname");
     }
 

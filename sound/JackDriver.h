@@ -86,6 +86,10 @@ public:
                                             unsigned long portNumber,
                                             float value);
 
+    virtual float getPluginInstancePortValue(InstrumentId id,
+					     int position,
+					     unsigned long portNumber);
+
     virtual void setPluginInstanceBypass(InstrumentId id,
                                          int position,
                                          bool value);

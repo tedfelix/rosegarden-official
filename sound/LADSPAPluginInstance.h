@@ -54,6 +54,7 @@ public:
     virtual void run(const RealTime &rt);
 
     virtual void setPortValue(unsigned int portNumber, float value);
+    virtual float getPortValue(unsigned int portNumber);
 
     virtual size_t getBufferSize() { return m_blockSize; }
     virtual size_t getAudioInputCount() { return m_instanceCount * m_audioPortsIn.size(); }

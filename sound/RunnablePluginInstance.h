@@ -80,6 +80,7 @@ public:
     virtual void selectProgram(QString) { }
 
     virtual void setPortValue(unsigned int port, float value) = 0;
+    virtual float getPortValue(unsigned int port) = 0;
 
     virtual QString configure(QString /* key */, QString /* value */) { return QString(); }
 

@@ -1530,6 +1530,22 @@ MappedPluginSlot::setPort(unsigned long portNumber, float value)
     }
 }
 
+float
+MappedPluginSlot::getPort(unsigned long portNumber)
+{
+    std::vector<MappedObject*> ports = getChildObjects();
+    std::vector<MappedObject*>::iterator it = ports.begin();
+    MappedPluginPort *port = 0;
+
+    for (; it != ports.end(); it++) {
+        port = dynamic_cast<MappedPluginPort *>(*it);
+        if (port && (unsigned long)port->getPortNumber() == portNumber) {
+            return port->getValue();
+	}
+    }
+
+    return 0;
+}
 
 
 MappedPluginPort::MappedPluginPort(MappedObject *parent, MappedObjectId id) :
@@ -1577,7 +1593,7 @@ MappedPluginPort::getProperty(const MappedObjectProperty &property,
     } else if (property == DisplayHint) {
 	value = m_displayHint;
     } else if (property == Value) {
-	value = m_value;
+	return getValue();
     } else {
 #ifdef DEBUG_MAPPEDSTUDIO
         std::cerr << "MappedPluginPort::getProperty - "
@@ -1608,8 +1624,6 @@ MappedPluginPort::getProperty(const MappedObjectProperty &property,
 void
 MappedPluginPort::setValue(MappedObjectValue value)
 {
-    m_value = value;
-
     MappedPluginSlot *slot =
 	dynamic_cast<MappedPluginSlot *>(getParent());
 
@@ -1624,10 +1638,36 @@ MappedPluginPort::setValue(MappedObjectValue value)
 	    if (drv) {
 		drv->setPluginInstancePortValue(slot->getInstrument(),
 						slot->getPosition(),
-						m_portNumber, m_value);
+						m_portNumber, value);
 	    }
 	}
     }
+}    
+
+float
+MappedPluginPort::getValue() const
+{
+    const MappedPluginSlot *slot =
+	dynamic_cast<const MappedPluginSlot *>(getParent());
+
+    if (slot) {
+    
+	const MappedStudio *studio =
+	    dynamic_cast<const MappedStudio *>(slot->getParent());
+    
+	if (studio) {
+	    Rosegarden::SoundDriver *drv =
+		const_cast<Rosegarden::SoundDriver *>(studio->getSoundDriver());
+	
+	    if (drv) {
+		return drv->getPluginInstancePortValue(slot->getInstrument(),
+						       slot->getPosition(),
+						       m_portNumber);
+	    }
+	}
+    }
+
+    return 0;
 }    
 
 void

@@ -278,6 +278,9 @@ public:
                                unsigned long id,
                                float value) = 0;
 
+    virtual float getMappedPort(int pluginIn,
+				unsigned long id) = 0;
+
     // Create a (transient, writeable) object
     //
     virtual int createMappedObject(int type) = 0;

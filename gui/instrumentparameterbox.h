@@ -99,7 +99,7 @@ signals:
     void changeInstrumentLabel(Rosegarden::InstrumentId id, QString label);
 
     void selectPlugin(QWidget*, Rosegarden::InstrumentId id, int index);
-    void startPluginGUI(Rosegarden::InstrumentId id, int index);
+    void showPluginGUI(Rosegarden::InstrumentId id, int index);
 
     void instrumentParametersChanged(Rosegarden::InstrumentId);
 
@@ -184,17 +184,16 @@ public slots:
     void slotPluginBypassed(Rosegarden::InstrumentId id, int pluginIndex, bool bp);
 
     void slotSynthButtonClicked();
-//    void slotSynthGUIButtonClicked();
+    void slotSynthGUIButtonClicked();
 
 signals:
     void selectPlugin(QWidget *, Rosegarden::InstrumentId, int index);
     void instrumentParametersChanged(Rosegarden::InstrumentId);
-    void startPluginGUI(Rosegarden::InstrumentId, int index);
+    void showPluginGUI(Rosegarden::InstrumentId, int index);
 
 protected:
     //--------------- Data members ---------------------------------
 
-//    QPushButton *m_synthGUIButton;
     AudioFaderBox   *m_audioFader;
 
 private:

@@ -292,6 +292,8 @@ public:
     AudioRouteMenu            *m_audioInput; 
     AudioRouteMenu            *m_audioOutput; 
 
+    QPushButton               *m_synthGUIButton;
+
     QString                    m_id;
 
     bool                       isStereo() const { return m_isStereo; }

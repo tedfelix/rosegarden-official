@@ -213,6 +213,35 @@ StudioControl::setStudioPluginPort(MappedObjectId pluginId,
     rgapp->sequencerSend("setMappedPort(int, unsigned long int, float)", data);
 }
 
+MappedObjectValue
+StudioControl::getStudioPluginPort(MappedObjectId pluginId,
+                                   unsigned long portId)
+{
+    Rosegarden::MappedObjectValue value = 0.0;
+    QByteArray data;
+    QCString replyType;
+    QByteArray replyData;
+    QDataStream streamOut(data, IO_WriteOnly);
+
+    streamOut << pluginId;
+    streamOut << portId;
+
+    if (!rgapp->sequencerCall("getMappedPort(int, unsigned long int)",
+                              replyType, replyData, data))
+    {
+        SEQMAN_DEBUG << "getStudioPluginPort - "
+                     << "failed to contact Rosegarden sequencer"
+                     << endl;
+    }
+    else
+    {
+        QDataStream streamIn(replyData, IO_ReadOnly);
+        streamIn >> value;
+    }
+
+    return value;
+}
+
 
 MappedObjectPropertyList
 StudioControl::getPluginInformation()

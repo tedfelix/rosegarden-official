@@ -70,11 +70,12 @@ public:
 					    const MappedObjectProperty &property,
 					    const MappedObjectPropertyList &values);
 
-    // cheat so we can avoid making calls() during playback
-    //
     static void setStudioPluginPort(MappedObjectId pluginId,
                                     unsigned long portId,
                                     MappedObjectValue value);
+
+    static MappedObjectValue getStudioPluginPort(MappedObjectId pluginId,
+						 unsigned long portId);
 
     // Get all plugin information
     //

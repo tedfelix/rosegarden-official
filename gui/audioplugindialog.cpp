@@ -98,10 +98,12 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     m_pluginCategoryBox = new QHBox(pluginSelectionBox);
     new QLabel(i18n("Category:"), m_pluginCategoryBox);
     m_pluginCategoryList = new KComboBox(m_pluginCategoryBox);
+    m_pluginCategoryList->setSizeLimit(30);
 
     QHBox *hbox = new QHBox(pluginSelectionBox);
     m_pluginLabel = new QLabel(i18n("Plugin:"), hbox);
     m_pluginList = new KComboBox(hbox);
+    m_pluginList->setSizeLimit(30);
     QToolTip::add(m_pluginList, i18n("Select a plugin from this list."));
 
     QHBox *h = new QHBox(pluginSelectionBox);
@@ -331,6 +333,8 @@ AudioPluginDialog::slotPluginSelected(int i)
 
 	m_programLabel = new QLabel(i18n("Program:  "), m_pluginParamsBox);
 	m_programCombo = new KComboBox(m_pluginParamsBox);
+	m_programCombo->setSizeLimit(30);
+	m_programCombo->insertItem(i18n("<none selected>"));
 	m_gridLayout->addMultiCellWidget(m_programLabel,
 					 0, 0, 0, 0, Qt::AlignRight);
 	m_gridLayout->addMultiCellWidget(m_programCombo,
@@ -376,7 +380,7 @@ AudioPluginDialog::slotPluginSelected(int i)
                     inst->addPort(count, (float)(*it)->getDefaultValue());
 		    std::cerr << "Plugin port name " << (*it)->getName() << ", default: " << (*it)->getDefaultValue() << std::endl;
 		} else {
-		    inst->getPort(count)->value = (*it)->getDefaultValue();
+//!!!!		    inst->getPort(count)->value = (*it)->getDefaultValue();
 		}
 
                 PluginControl *control =
@@ -425,12 +429,16 @@ AudioPluginDialog::slotPluginSelected(int i)
     emit pluginSelected(m_instrument->getId(), m_index, number - 1);
 
     if (plugin && plugin->isSynth()) {
-	int current = 0;
+
+	int current = -1;
 	QStringList programs = getProgramsForInstance(inst, current);
     
 	if (programs.count() > 0) {
+	    m_programCombo->clear();
+	    m_programCombo->insertItem(i18n("<none selected>"));
 	    m_programCombo->insertStringList(programs);
-	    m_programCombo->setCurrentItem(current);
+	    m_programCombo->setCurrentItem(current + 1);
+	    m_programCombo->adjustSize();
 	} else {
 	    m_programLabel->hide();
 	    m_programCombo->hide();
@@ -458,6 +466,8 @@ AudioPluginDialog::getProgramsForInstance(AudioPluginInstance *inst, int &curren
 
     MappedObjectPropertyList propertyList = StudioControl::getStudioObjectProperty
 	(mappedId, MappedPluginSlot::Programs);
+
+    current = -1;
 
     for (MappedObjectPropertyList::iterator i = propertyList.begin();
 	 i != propertyList.end(); ++i) {
@@ -490,9 +500,13 @@ AudioPluginDialog::slotPluginProgramChanged(const QString &value)
 {
     // store the new value
     AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
-    inst->setProgram(qstrtostr(value));
 
-    emit pluginProgramChanged(m_instrument->getId(), m_index, value);
+    if (m_programCombo && value == m_programCombo->text(0)) { // "<none set>"
+	inst->setProgram("");
+    } else {
+	inst->setProgram(qstrtostr(value));
+	emit pluginProgramChanged(m_instrument->getId(), m_index, value);
+    }
 }
 
 void
@@ -518,7 +532,7 @@ AudioPluginDialog::updatePluginPortControl(int port)
 	    for (std::vector<PluginControl *>::iterator i = m_pluginWidgets.begin();
 		 i != m_pluginWidgets.end(); ++i) {
 		if ((*i)->getIndex() == port) {
-		    (*i)->setValue(pti->value, false);
+		    (*i)->setValue(pti->value, false); // don't emit
 		    return;
 		}
 	    }
@@ -537,6 +551,13 @@ AudioPluginDialog::updatePluginProgramControl()
 	    m_programCombo->setCurrentText(strtoqstr(program));
 	    m_programCombo->blockSignals(false);
 	}
+	for (std::vector<PluginControl *>::iterator i = m_pluginWidgets.begin();
+	     i != m_pluginWidgets.end(); ++i) {
+	    PluginPortInstance *pti = inst->getPort((*i)->getIndex());
+	    if (pti) {
+		(*i)->setValue(pti->value, false); // don't emit
+	    }
+	}
     }
 }
 
@@ -554,14 +575,16 @@ AudioPluginDialog::updatePluginProgramList()
 	m_programCombo->removeItem(0);
     }
 
-    int current = 0;
+    int current = -1;
     QStringList programs = getProgramsForInstance(inst, current);
     
     if (programs.count() > 0) {
 	m_programCombo->show();
 	m_programLabel->show();
+	m_programCombo->clear();
+	m_programCombo->insertItem(i18n("<none selected>"));
 	m_programCombo->insertStringList(programs);
-	m_programCombo->setCurrentItem(current);
+	m_programCombo->setCurrentItem(current + 1);
     } else {
 	m_programLabel->hide();
 	m_programCombo->hide();

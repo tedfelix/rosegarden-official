@@ -1884,6 +1884,15 @@ JackDriver::setPluginInstancePortValue(InstrumentId id, int position,
     if (m_instrumentMixer) m_instrumentMixer->setPluginPortValue(id, position, portNumber, value);
 }
 
+float
+JackDriver::getPluginInstancePortValue(InstrumentId id, int position,
+				       unsigned long portNumber)
+{
+    if (m_instrumentMixer)
+	return m_instrumentMixer->getPluginPortValue(id, position, portNumber);
+    return 0;
+}
+
 void
 JackDriver::setPluginInstanceBypass(InstrumentId id, int position, bool value)
 {

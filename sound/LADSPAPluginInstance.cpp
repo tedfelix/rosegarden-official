@@ -305,6 +305,20 @@ LADSPAPluginInstance::setPortValue(unsigned int portNumber, float value)
     }
 }
 
+float
+LADSPAPluginInstance::getPortValue(unsigned int portNumber)
+{
+    for (unsigned int i = 0; i < m_controlPortsIn.size(); ++i)
+    {
+        if (m_controlPortsIn[i].first == portNumber)
+        {
+            return (*m_controlPortsIn[i].second);
+        }
+    }
+
+    return 0.0;
+}
+
 void
 LADSPAPluginInstance::run(const RealTime &)
 {

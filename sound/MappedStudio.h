@@ -476,7 +476,8 @@ public:
     virtual void setPropertyList(const MappedObjectProperty &,
 				 const MappedObjectPropertyList &);
 
-    void setPort(unsigned long portNumber, float value);
+    void  setPort(unsigned long portNumber, float value);
+    float getPort(unsigned long portNumber);
 
     InstrumentId getInstrument() const { return m_instrument; }
     int getPosition() const { return m_position; }
@@ -531,7 +532,7 @@ public:
                              QString value);
 
     void setValue(MappedObjectValue value);
-    MappedObjectValue getValue() const { return m_value; }
+    MappedObjectValue getValue() const;
 
     int getPortNumber() const { return m_portNumber; }
 
@@ -542,7 +543,6 @@ protected:
     MappedObjectValue       m_maximum;
     MappedObjectValue       m_default;
     PluginPort::PortDisplayHint m_displayHint;
-    MappedObjectValue       m_value;
 
 };
 
