@@ -474,7 +474,7 @@ PlayableAudioFile::updateBuffers()
 	      << m_totalFrames << ", plus frames " << fileFrames << ": nextDuration " << nextDuration << ", m_duration " << m_duration << std::endl;
 #endif
     
-    // Test for file end marker and reset frames accodingly
+    // Test for file end marker and reset frames accordingly
     //
     if (nextDuration > m_startIndex + m_duration)
     {

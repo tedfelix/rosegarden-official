@@ -2341,6 +2341,7 @@ QCanvasPixmap*
 NotePixmapFactory::makeOttavaPixmap(int length, int octavesUp)
 {
     Rosegarden::Profiler profiler("NotePixmapFactory::makeOttavaPixmap");
+    m_inPrinterMethod = false;
     drawOttavaAux(length, octavesUp, 0, 0, 0);
     return makeCanvasPixmap(QPoint(0, m_generatedHeight-1));
 }
@@ -2379,11 +2380,12 @@ NotePixmapFactory::drawOttavaAux(int length, int octavesUp,
 	m_p->beginExternal(painter);
 	painter->translate(x - backpedal, y - height);
     } else {
+	NOTATION_DEBUG << "NotePixmapFactory::drawOttavaAux: making pixmap and mask " << width << "x" << height << endl;
 	createPixmapAndMask(width, height);
     }
 
-    QPen pen(Qt::DashLine);
-    pen.setWidth(getStemThickness());
+    int thickness = getStemThickness();
+    QPen pen(Qt::black, thickness, Qt::DashLine);
 
     if (m_selected) {
 	m_p->painter().setPen(RosegardenGUIColours::SelectedElement);
@@ -2398,18 +2400,20 @@ NotePixmapFactory::drawOttavaAux(int length, int octavesUp,
     m_p->painter().setPen(pen);
     if (!m_inPrinterMethod) m_p->maskPainter().setPen(pen);
 
-    int y0 = m_ottavaFontMetrics.ascent() * 2 / 3 - getStemThickness()/2;
+    int x0 = m_ottavaFontMetrics.width(label) + thickness;
+    int x1 = width - thickness;
+    int y0 = m_ottavaFontMetrics.ascent() * 2 / 3 - thickness/2;
     int y1 = (octavesUp < 0 ? 0 : m_ottavaFontMetrics.ascent());
     
-    m_p->drawLine(m_ottavaFontMetrics.width(label) + getStemThickness(),
-		  y0, width - 1, y0);
+    NOTATION_DEBUG << "NotePixmapFactory::drawOttavaAux: drawing " << x0 << "," << y0 << " to " << x1 << "," << y0 << ", thickness " << thickness << endl;
+
+    m_p->drawLine(x0, y0, x1, y0);
 
     pen.setStyle(Qt::SolidLine);
     m_p->painter().setPen(pen);
     if (!m_inPrinterMethod) m_p->maskPainter().setPen(pen);
 
-    m_p->drawLine(width - getStemThickness() * 2, y0,
-		  width - getStemThickness() * 2, y1);
+    m_p->drawLine(x1, y0, x1, y1);
 
     m_p->painter().setPen(QPen());
     if (!m_inPrinterMethod) m_p->maskPainter().setPen(QPen());
