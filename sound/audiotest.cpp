@@ -1,13 +1,10 @@
 #include <iostream>
 #include <artsmidi.h>
 #include "Sequencer.h"
-/*
-#include <arts/audioio.h>
 #include <arts/artsflow.h>
 #include <arts/artsmodules.h>
-#include <arts/objectmanager.h>
-*/
 #include <arts/soundserver.h>
+#include <arts/connect.h>
 
 
 
@@ -20,6 +17,7 @@ main(int argc, char **argv)
     Arts::AudioManagerClient *audioManClient;
     Arts::AudioManager artsAudio;
 */
+/*
     Arts::AudioManager audioManager =
         Arts::Reference("global:Arts_AudioManager");
 
@@ -29,15 +27,33 @@ main(int argc, char **argv)
         exit(1);
     }
 
-    Arts::SoundServer as = Arts::Reference("global:Arts_SoundServer");
+    Arts::AudioManagerClient amClient(Arts::amPlay, "aRts play port","Rosegarden Audio Play");
+
+    vector<Arts::AudioManagerInfo> *info = audioManager.clients();
+    vector<Arts::AudioManagerInfo>::iterator it;
+
+    for (it = info->begin(); it != info->end(); it++)
+    {
+        cout << "TITLE = " << (*it).title;
+    }
 
 
-    Arts::AudioManagerClient audioClient = Arts::Reference("global:Arts_AudioManagerClient");
+*/
+
+    //Arts::SoundServer as = Arts::Reference("global:Arts_SoundServer");
+
 
 /*
-    audioManClient = new Arts::AudioManagerClient(Arts::amRecord,
-                  string("rosegarden audio manager"), string("rg audio man"));
+    Arts::AudioManagerClient audioManagerClient(Arts::amRecord,
+              string("Rosegarden audio manager"), string("rg audio man"));
 */
+
+
+/*
+    Arts::Synth_AMAN_RECORD record;
+    record.title(string("firstwav.wav"));
+*/
+
 
 /*
     audioManClient = new Arts::AudioManagerClient();
@@ -49,14 +65,26 @@ main(int argc, char **argv)
 */
 
 
-/*
-    Arts::Synth_AMAN_RECORD *aManRecord;
 
-    aManRecord = new Arts::Synth_AMAN_RECORD(*audioManClient);
-    aManRecord->title(string("firstwav.wav"));
-*/
 
-    //Arts::Synth_CAPTURE_WAV CaptureWav;
+    Arts::SoundServerV2 server = Arts::Reference("global:Arts_SoundServerV2");
+    Arts::Synth_AMAN_PLAY amanPlay;
+    Arts::Synth_AMAN_RECORD amanRecord;
+    Arts::Synth_CAPTURE_WAV captureWav;
+
+    if ( !server.isNull() )
+    {
+       amanPlay = Arts::DynamicCast(
+                server.createObject("Arts::Synth_AMAN_PLAY"));
+       cout << "HERE" << endl;
+
+       amanRecord = Arts::DynamicCast(
+                server.createObject("Arts::Synth_AMAN_RECORD"));
+
+       //Arts::connect(amanRecord, captureWav);
+    }
+
+
 
     sleep(10);
 
