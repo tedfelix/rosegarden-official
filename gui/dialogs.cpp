@@ -50,7 +50,12 @@
 #include <qvbuttongroup.h>
 #include <qregexp.h>
 #include <qstringlist.h>
+
+#ifdef RGKDE3
 #include <qtextedit.h>
+#else
+#include <qmultilineedit.h>
+#endif
 
 #include <kapp.h>
 #include <klocale.h>
@@ -2531,8 +2536,13 @@ LyricEditDialog::LyricEditDialog(QWidget *parent,
     QGroupBox *groupBox = new QGroupBox
 	(1, Horizontal, i18n("Lyrics for this segment"), vbox);
 
+#ifdef RGKDE3
     m_textEdit = new QTextEdit(groupBox);
     m_textEdit->setTextFormat(Qt::PlainText);
+#else
+    m_textEdit = new QMultiLineEdit(groupBox);
+#endif
+
     m_textEdit->setMinimumWidth(300);
     m_textEdit->setMinimumHeight(200);
 

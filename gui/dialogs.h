@@ -45,7 +45,12 @@ class NotePixmapFactory;
 class QGrid;
 class RosegardenGUIDoc;
 class RosegardenSpinBox;
+
+#ifdef RGKDE3
 class QTextEdit;
+#else
+class QMultiLineEdit;
+#endif
 
 
 // Definitions of various simple dialogs that may be used in multiple
@@ -582,7 +587,13 @@ public:
 
 protected:
     Rosegarden::Segment *m_segment;
-    QTextEdit *m_textEdit;
+
+#ifdef RGKDE3
+    QTextEdit           *m_textEdit;
+#else
+    QMultiLineEdit      *m_textEdit;
+#endif
+
     void unparse();
 };
 
