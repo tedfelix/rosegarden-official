@@ -2565,7 +2565,8 @@ AlsaDriver::record(RecordStatus recordStatus)
     {
         // start recording
         m_recordStatus = RECORD_MIDI;
-        m_alsaRecordStartTime = getAlsaTime();
+//!!!        m_alsaRecordStartTime = getAlsaTime();
+	m_alsaRecordStartTime = RealTime::zeroTime;
     }
     else if (recordStatus == RECORD_AUDIO)
     {

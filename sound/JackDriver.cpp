@@ -599,12 +599,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
     int instruments;
     m_alsaDriver->getAudioInstrumentNumbers(instrumentBase, instruments);
 
-    if (m_alsaDriver->getRecordStatus() == RECORD_AUDIO &&
-	m_alsaDriver->areClocksRunning()) {
-
-	jackProcessRecord(nframes);
-
-    }
+    jackProcessRecord(nframes);
 
     // We always have the master out
 
@@ -754,126 +749,8 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	sdb->setMasterLevel(info);
     }
 
-#ifdef NOT_DEFINED
-    for (InstrumentId id = instrumentBase + instruments - 1;
-	 /*	 id >= 0 */;
-	 --id) {
-
-	if (id == instrumentBase - 1) {
-	    id = m_bussMixer->getSubmasterCount();
-	}
-
-//	if (id == m_mixer->getSubmasterCount() + 1) {
-//	    id = instrumentBase;
-//	}
-
-	bool dormant = false;
-	if (id >= instrumentBase) dormant = m_mixer->isInstrumentDormant(id);
-
-	sample_t *left = 0;
-	sample_t *right = 0;
-
-	if (!dormant) {
-	    if (id == 0) { // master
-		left = static_cast<sample_t *>
-		    (jack_port_get_buffer(m_outputMasters[0],
-					  nframes));
-		right = static_cast<sample_t *>
-		    (jack_port_get_buffer(m_outputMasters[1],
-					  nframes));
-	    } else if (id < instrumentBase) { // submaster
-		if (m_outputSubmasters.size() > (id - 1) * 2 + 1) {
-		    left = static_cast<sample_t *>
-			(jack_port_get_buffer(m_outputSubmasters[(id - 1) * 2],
-					      nframes));
-		    right = static_cast<sample_t *>
-			(jack_port_get_buffer(m_outputSubmasters[(id - 1) * 2 + 1],
-					      nframes));
-		}
-	    } else { // instrument
-		if (m_outputInstruments.size() > (id - instrumentBase) * 2 + 1) {
-		    left = static_cast<sample_t *>
-			(jack_port_get_buffer(m_outputInstruments
-					      [(id - instrumentBase) * 2],
-					      nframes));
-		    right = static_cast<sample_t *>
-			(jack_port_get_buffer(m_outputInstruments
-					      [(id - instrumentBase) * 2 + 1],
-					      nframes));
-		}
-	    }
-	}
-
-	float peakLeft = 0.0;
-	float peakRight = 0.0;
-
-	RingBuffer<AudioInstrumentMixer::sample_t> *rb = m_mixer->getRingBuffer(id, 0);
-
-	if (rb) {
-	    if (!left) rb->skip(nframes);
-	    else {
-		size_t actual = rb->read(left, nframes);
-		if (actual < nframes) {
-		    std::cerr << "WARNING: buffer underrun in left  mix ringbuffer " << id << " (wanted " << m_bufferSize << ", got " << actual << ")" << std::endl;
-		}
-
-		for (size_t i = 0; i < nframes; ++i) {
-		    float sample = left[i];
-		    if (sample > peakLeft) peakLeft = sample;
-		}
-	    }
-	} else if (left) {
-	    memset(left, 0, nframes * sizeof(sample_t));
-	}
-
-	rb = m_mixer->getRingBuffer(id, 1);
-
-	if (rb) {
-	    if (!right) rb->skip(nframes);
-	    else {
-		size_t actual = rb->read(right, nframes);
-		if (actual < nframes) {
-		    std::cerr << "WARNING: buffer underrun in right mix ringbuffer " << id << " (wanted " << m_bufferSize << ", got " << actual << ")" << std::endl;
-		}
-
-		for (size_t i = 0; i < nframes; ++i) {
-		    float sample = right[i];
-		    if (sample > peakRight) peakRight = sample;
-		}
-	    }
-	} else if (right) {
-	    if (left) {
-		for (size_t i = 0; i < m_bufferSize; ++i) {
-		    right[i] = left[i];
-		}
-	    } else {
-		memset(right, 0, nframes * sizeof(sample_t));
-	    }
-	}	    
-
-	if (sdb && (left || right)) {
-	    Rosegarden::LevelInfo info;
-	    info.level = AudioLevel::multiplier_to_fader
-		(peakLeft, 127, AudioLevel::LongFader);
-	    info.levelRight = AudioLevel::multiplier_to_fader
-		(peakRight, 127, AudioLevel::LongFader);
-
-	    if (id == 0) {
-		sdb->setMasterLevel(info);
-	    } else if (id < instrumentBase) {
-		sdb->setSubmasterLevel(id - 1, info);
-	    } else {
-		sdb->setInstrumentLevel(id, info);
-	    }
-	}
-
-	if (id == 0) break;
-    }
-#endif
-
     if (m_alsaDriver->isPlaying()) {
 	m_bussMixer->signal();
-//	m_instrumentMixer->signal();
     }
 
     return 0;
@@ -916,36 +793,42 @@ JackDriver::jackProcessRecord(jack_nframes_t nframes)
     //!!! want an actual instrument id
     //!!! want file writer to apply volume from fader?
     
-    m_fileWriter->write(m_alsaDriver->getAudioMonitoringInstrument(),
-			inputBufferLeft, 0, nframes);
-    
-    if (channels == 2) {
+    if (m_alsaDriver->getRecordStatus() == RECORD_AUDIO &&
+	m_alsaDriver->areClocksRunning()) {
+
 	m_fileWriter->write(m_alsaDriver->getAudioMonitoringInstrument(),
-			    inputBufferLeft, 1, nframes);
+			    inputBufferLeft, 0, nframes);
+    
+	if (channels == 2) {
+	    m_fileWriter->write(m_alsaDriver->getAudioMonitoringInstrument(),
+				inputBufferRight, 1, nframes);
+	} else {
+	    m_fileWriter->write(m_alsaDriver->getAudioMonitoringInstrument(),
+				inputBufferLeft, 1, nframes);
+	}
+    
+	wroteSomething = true;
     }
-    
-    wroteSomething = true;
-    
-    sample_t totalLeft = 0.0, totalRight = 0.0;
-/*!!! monitoring
-  for (size_t i = 0; i < nframes; ++i) {
-  leftBuffer[i] = inputBufferLeft[i];
-  totalLeft += leftBuffer[i];
-  }
   
-  if (channels == 2) {
-  for (size_t i = 0; i < nframes; ++i) {
-  rightBuffer[i] = inputBufferRight[i];
-  totalRight += rightBuffer[i];
-  }
-  }
-*/
+    sample_t peakLeft = 0.0, peakRight = 0.0;
+  
+    for (size_t i = 0; i < nframes; ++i) {
+	if (inputBufferLeft[i] > peakLeft) peakLeft = inputBufferLeft[i];
+    }
+    if (channels == 2) {
+	for (size_t i = 0; i < nframes; ++i) {
+	    if (inputBufferRight[i] > peakRight) peakRight = inputBufferRight[i];
+	}
+    } else {
+	peakRight = peakLeft;
+    }
+
     if (sdb) {
 	Rosegarden::LevelInfo info;
 	info.level = AudioLevel::multiplier_to_fader
-	    (totalLeft / nframes, 127, AudioLevel::LongFader);
+	    (peakLeft, 127, AudioLevel::LongFader);
 	info.levelRight = AudioLevel::multiplier_to_fader
-	    (totalRight / nframes, 127, AudioLevel::LongFader);
+	    (peakRight, 127, AudioLevel::LongFader);
 	sdb->setRecordLevel(info);
     }
 
