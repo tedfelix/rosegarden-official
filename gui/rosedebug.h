@@ -22,9 +22,9 @@
 #include <iostream>
 #include <kdebug.h>
 
-#define KDEBUG_AREA 1010
+class Event;
 
-typedef class Element2 Event;
+#define KDEBUG_AREA 1010
 
 kdbgstream&
 operator<<(kdbgstream&, const string&);

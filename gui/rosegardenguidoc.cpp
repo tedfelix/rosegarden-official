@@ -34,7 +34,7 @@
 #include "rosexmlhandler.h"
 #include "viewelementsmanager.h"
 #include "xmlstorableevent.h"
-#include "Element2.h"
+#include "Event.h"
 
 QList<RosegardenGUIView> *RosegardenGUIDoc::pViewList = 0L;
 

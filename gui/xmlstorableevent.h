@@ -20,7 +20,7 @@
 
 #include <qxml.h>
 
-#include "Element2.h"
+#include "Event.h"
 
 /**
   *@author Guillaume Laurent, Chris Cannam, Rich Bown

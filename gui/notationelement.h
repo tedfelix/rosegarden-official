@@ -19,7 +19,7 @@
 #define NOTATIONELEMENT_H
 
 #include <multiset.h>
-#include "Element2.h"
+#include "Event.h"
 
 class QCanvasItem;
 class NotationElementList;

@@ -18,7 +18,7 @@
 #ifndef VIEWELEMENTSMANAGER_H
 #define VIEWELEMENTSMANAGER_H
 
-#include "Element2.h"
+#include "Event.h"
 #include "notationelement.h"
 
 /**

@@ -17,7 +17,7 @@
 
 #include "rosedebug.h"
 
-#include "Element2.h"
+#include "Event.h"
 
 kdbgstream&
 operator<<(kdbgstream &dbg, const string &s)

@@ -21,7 +21,7 @@
 // Layout stuff
 #include <algorithm>
 
-#include "Element2.h"
+#include "Event.h"
 #include "notationelement.h"
 
 /**

@@ -26,7 +26,7 @@
 #endif
 
 #include "NotationTypes.h"
-#include "Element2.h"
+#include "Event.h"
 
 NotationElement::NotationElement(Event *event)
     : ViewElement(event),

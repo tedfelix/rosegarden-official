@@ -28,8 +28,7 @@
 #include <qlist.h>
 #include <qxml.h>
 
-// Element
-#include "Element2.h"
+#include "Event.h"
 
 // forward declaration of the RosegardenGUI classes
 class RosegardenGUIView;
