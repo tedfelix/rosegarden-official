@@ -80,7 +80,7 @@ void RosegardenGUIDoc::setTitle(const QString &_t)
     m_title=_t;
 }
 
-const QString &RosegardenGUIDoc::getTitle() const
+const QString& RosegardenGUIDoc::getTitle() const
 {
     return m_title;
 }
@@ -157,7 +157,7 @@ bool RosegardenGUIDoc::newDocument()
     return true;
 }
 
-bool RosegardenGUIDoc::openDocument(const QString &filename,
+bool RosegardenGUIDoc::openDocument(const QString& filename,
                                     const char* /*format*/ /*=0*/)
 {
     kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::openDocument("
@@ -201,7 +201,7 @@ bool RosegardenGUIDoc::openDocument(const QString &filename,
     return true;
 }
 
-bool RosegardenGUIDoc::saveDocument(const QString &filename,
+bool RosegardenGUIDoc::saveDocument(const QString& filename,
                                     const char* /*format*/ /*=0*/)
 {
     kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::saveDocument("
@@ -281,13 +281,15 @@ void RosegardenGUIDoc::deleteContents()
     for(Composition::iterator trks = m_composition.begin();
         trks != m_composition.end(); ++trks) {
 
-        for(EventList::iterator i = (*trks)->begin();
-            i != (*trks)->end(); ++i) {
-            delete *i;
+        if (*trks) {
+
+            for(EventList::iterator i = (*trks)->begin();
+                i != (*trks)->end(); ++i) {
+                delete *i;
+            }
+
+            (*trks)->clear();
         }
-
-        (*trks)->clear();
-
     }
     
     m_composition.clear();
