@@ -193,6 +193,7 @@ public:
 
 signals:
     void closing();
+    void pluginSelected(Rosegarden::InstrumentId, int pluginIndex, int plugin);
 
 protected slots:
     void slotClose();

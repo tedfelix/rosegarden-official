@@ -26,7 +26,7 @@
 
 #ifdef HAVE_DSSI
 
-//#define DEBUG_DSSI 1
+#define DEBUG_DSSI 1
 
 namespace Rosegarden
 {

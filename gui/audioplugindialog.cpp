@@ -654,6 +654,9 @@ SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
 
     m_synthTable->setCurrentCell(-1, 0);
 
+    connect(m_synthTable, SIGNAL(valueChanged(int, int)),
+	    this, SLOT(slotValueChanged (int, int)));
+
     setAutoSaveSettings(SynthPluginManagerConfigGroup, true);
 
     populate();
@@ -668,14 +671,31 @@ SynthPluginManagerDialog::~SynthPluginManagerDialog()
 void
 SynthPluginManagerDialog::populate()
 {
-    for (int i = 0; i < 16; ++i) {
+    m_synthTable->blockSignals(true);
 
-	m_synthTable->insertRows(i, 1);
-	m_synthTable->setText(i, 0, QString("%1").arg(i + 1));
+    m_synthPlugins.clear();
+    m_synthPlugins.push_back(-1);
+
+    int count = 0;
+
+    for (Rosegarden::PluginIterator itr = m_pluginManager->begin();
+	 itr != m_pluginManager->end(); ++itr) {
+	
+	if ((*itr)->isSynth()) {
+	    m_synthPlugins.push_back(count);
+	}
+
+	++count;
+    }
+
+    for (int i = 0; i < 16; ++i) {
 
 	Rosegarden::InstrumentId id = Rosegarden::SoftSynthInstrumentBase + i;
 	Rosegarden::Instrument *instrument = m_studio->getInstrumentById(id);
 	if (!instrument) continue;
+
+	m_synthTable->insertRows(i, 1);
+	m_synthTable->setText(i, 0, instrument->getPresentationName().c_str());
 	
 	Rosegarden::AudioPluginInstance *plugin = instrument->getPlugin
 	    (Rosegarden::Instrument::SYNTH_PLUGIN_POSITION);
@@ -683,33 +703,33 @@ SynthPluginManagerDialog::populate()
 	std::string identifier;
 	if (plugin) identifier = plugin->getIdentifier();
 
-	int count = 0;
 	QStringList plugins;
-	int currentPluginIndex = 0;
-	m_synthPlugins.clear();
-
 	plugins.append(i18n("<none>"));
+	int currentItem = 0;
 
-	for (Rosegarden::PluginIterator itr = m_pluginManager->begin();
-	     itr != m_pluginManager->end(); ++itr) {
+	for (size_t j = 0; j < m_synthPlugins.size(); ++j) {
 
-	    ++count;
+	    if (m_synthPlugins[j] == -1) continue;
 
-	    if ((*itr)->isSynth()) {
+	    Rosegarden::AudioPlugin *plugin =
+		m_pluginManager->getPlugin(m_synthPlugins[j]);
 
-		plugins.append((*itr)->getName());
-		m_synthPlugins.push_back(count);
-
-		if ((*itr)->getIdentifier() == identifier.c_str()) {
-		    currentPluginIndex = m_synthPlugins.size() - 1;
-		}
+	    plugins.append(plugin->getName());
+	    if (plugin->getIdentifier() == identifier.c_str()) {
+		currentItem = plugins.size() - 1;
 	    }
 	}
 
 	QComboTableItem *item = new QComboTableItem(m_synthTable, plugins, false);
-	item->setCurrentItem(currentPluginIndex);
+	item->setCurrentItem(currentItem);
 	m_synthTable->setItem(i, 1, item);
     }
+
+    m_synthTable->adjustColumn(0);
+    m_synthTable->adjustColumn(1);
+    if (m_synthTable->columnWidth(1) < 200) m_synthTable->setColumnWidth(1, 200);
+
+    m_synthTable->blockSignals(false);
 }
 
 
@@ -729,5 +749,45 @@ SynthPluginManagerDialog::closeEvent(QCloseEvent *e)
 void
 SynthPluginManagerDialog::slotValueChanged(int row, int col)
 {
+    RG_DEBUG << "SynthPluginManagerDialog::slotValueChanged(" << row << "," << col
+	     << ")" << endl;
+
+    if (col != 1) return;
+
+    QComboTableItem *combo = dynamic_cast<QComboTableItem *>
+	(m_synthTable->item(row, col));
+    if (!combo) return;
+
+    Rosegarden::InstrumentId id = Rosegarden::SoftSynthInstrumentBase + row;
+    int item = combo->currentItem();
+
+    RG_DEBUG << "SynthPluginManagerDialog::slotValueChanged(" << row << "," << col
+	     << "): id " << id << ", item " << item << endl;
+
+    
+    if (item >= m_synthPlugins.size()) {
+	RG_DEBUG << "WARNING: SynthPluginManagerDialog::slotValueChanged("
+		 << row << "," << col << "): synth " << item << " out of range"
+		 << endl;
+	return;
+    }
+
+    // NB m_synthPlugins[0] is -1 to represent the <none> item
+    
+    emit pluginSelected(id, Rosegarden::Instrument::SYNTH_PLUGIN_POSITION,
+			m_synthPlugins[item]);
+
+    Rosegarden::AudioPlugin *plugin = m_pluginManager->getPlugin(m_synthPlugins[item]);
+    Rosegarden::Instrument *instrument = m_studio->getInstrumentById(id);
+
+    if (instrument && plugin) {
+
+	Rosegarden::AudioPluginInstance *pluginInstance = instrument->getPlugin
+	    (Rosegarden::Instrument::SYNTH_PLUGIN_POSITION);
+
+	if (pluginInstance) {
+	    pluginInstance->setIdentifier(plugin->getIdentifier().data());
+	}
+    }
 }
 

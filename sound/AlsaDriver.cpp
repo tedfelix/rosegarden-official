@@ -47,8 +47,8 @@
 #include <qregexp.h>
 #include <pthread.h>
 
-//#define DEBUG_ALSA 1
-//#define DEBUG_PROCESS_MIDI_OUT
+#define DEBUG_ALSA 1
+#define DEBUG_PROCESS_MIDI_OUT 1
 
 // This driver implements MIDI in and out via the ALSA (www.alsa-project.org)
 // sequencer interface.
@@ -2300,12 +2300,19 @@ AlsaDriver::processSoftSynthEventOut(InstrumentId id, const snd_seq_event_t *ev,
 {
     std::cerr << "AlsaDriver::processSoftSynthEventOut: instrument " << id << ", now " << now << std::endl;
 #ifdef HAVE_LIBJACK
+
     if (!m_jackDriver) return;
     RunnablePluginInstance *synthPlugin = m_jackDriver->getSynthPlugin(id);
+
     if (synthPlugin) {
+
 	RealTime t(ev->time.time.tv_sec, ev->time.time.tv_nsec);
+
 	if (now) t = getSequencerTime();
+	else t = t + m_playStartPosition - m_alsaPlayStartTime;
+
 	std::cerr << "AlsaDriver::processSoftSynthEventOut: time " << t << std::endl;
+
 	synthPlugin->sendEvent(t, ev);
     }
 #endif

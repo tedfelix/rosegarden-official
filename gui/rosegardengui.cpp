@@ -5135,6 +5135,11 @@ RosegardenGUIApp::slotManageSynths()
     connect(this, SIGNAL(documentAboutToChange()),
             m_synthManager, SLOT(close()));
 
+    connect(m_synthManager,
+	    SIGNAL(pluginSelected(Rosegarden::InstrumentId, int, int)),
+	    this,
+	    SLOT(slotPluginSelected(Rosegarden::InstrumentId, int, int)));
+
     m_synthManager->show();
 }
 

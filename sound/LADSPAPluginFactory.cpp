@@ -408,7 +408,7 @@ LADSPAPluginFactory::getLADSPADescriptor(QString identifier)
 void
 LADSPAPluginFactory::loadLibrary(QString soName)
 {
-    void *libraryHandle = dlopen(soName.data(), RTLD_LAZY);
+    void *libraryHandle = dlopen(soName.data(), RTLD_NOW);
     if (libraryHandle) m_libraryHandles[soName] = libraryHandle;
 }
 
