@@ -167,6 +167,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
       m_storedLoopStart(0),
       m_storedLoopEnd(0),
       m_useSequencer(useSequencer),
+      m_dockVisible(true),
       m_autoSaveTimer(new QTimer(this)),
       m_clipboard(new Rosegarden::Clipboard),
       m_playList(0),
@@ -1456,10 +1457,10 @@ void RosegardenGUIApp::slotSaveOptions()
     kapp->config()->writeEntry("Show Tempo Ruler",             m_viewTempoRuler->isChecked());
     kapp->config()->writeEntry("Show Chord Name Ruler",        m_viewChordNameRuler->isChecked());
     kapp->config()->writeEntry("Show Previews",                m_viewPreviews->isChecked());
-    kapp->config()->writeEntry("Show Parameters",              m_dockLeft->isVisible());
+    kapp->config()->writeEntry("Show Parameters",              m_dockVisible);
 
 #ifdef SETTING_LOG_DEBUG
-    RG_DEBUG << "SHOW PARAMETERS = " << m_dockLeft->isVisible() << endl;
+    RG_DEBUG << "SHOW PARAMETERS = " << m_dockVisible << endl;
 #endif
 
     m_fileRecent->saveEntries(kapp->config());
@@ -1536,6 +1537,7 @@ void RosegardenGUIApp::readOptions()
         m_dockLeft->undock();
         m_dockLeft->hide();
         stateChanged("parametersbox_closed", KXMLGUIClient::StateNoReverse);
+        m_dockVisible = false;
     }
 
     // initialise the recent file list
@@ -1622,10 +1624,6 @@ bool RosegardenGUIApp::queryClose()
                    this, SLOT(slotCloseTransport()));
     }
 
-    // Don't do this in queryExit
-    //
-    if (m_actionsSetup) slotSaveOptions();
-
     return canClose;
 
 }
@@ -1633,6 +1631,8 @@ bool RosegardenGUIApp::queryClose()
 bool RosegardenGUIApp::queryExit()
 {
     RG_DEBUG << "RosegardenGUIApp::queryExit" << endl;
+    if (m_actionsSetup) slotSaveOptions();
+
     return true;
 }
 
@@ -2528,12 +2528,15 @@ void RosegardenGUIApp::slotDockParametersBack()
 void RosegardenGUIApp::slotParametersClosed()
 {
     stateChanged("parametersbox_closed");
+    m_dockVisible = false;
 }
 
 void RosegardenGUIApp::slotParametersDockedBack(KDockWidget* dw, KDockWidget::DockPosition)
 {
-    if (dw == m_dockLeft)
+    if (dw == m_dockLeft) {
         stateChanged("parametersbox_closed", KXMLGUIClient::StateReverse);
+        m_dockVisible = true;
+    }
 }
 
 void RosegardenGUIApp::slotToggleAll()

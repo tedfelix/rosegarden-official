@@ -1297,6 +1297,7 @@ private:
     Rosegarden::timeT m_storedLoopEnd;
 
     bool m_useSequencer;
+    bool m_dockVisible;
 
     Rosegarden::AudioPluginManager *m_pluginManager;
 
