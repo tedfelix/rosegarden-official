@@ -515,7 +515,7 @@ RosegardenSequencerApp::processAsynchronousEvents()
 	m_sequencerMapper.setControlBlock(m_controlBlockMmapper->getControlBlock());
     }
 
-    SEQUENCER_DEBUG << "processAsynchronousEvents: have " << mC->size() << " events" << endl;
+//    SEQUENCER_DEBUG << "processAsynchronousEvents: have " << mC->size() << " events" << endl;
 
     int instrumentId = m_controlBlockMmapper->getInstrumentForTrack
 	(m_controlBlockMmapper->getSelectedTrack());
@@ -531,7 +531,7 @@ RosegardenSequencerApp::processAsynchronousEvents()
     applyFiltering(mC, m_controlBlockMmapper->getThruFilter());
     m_driver->processEventsOut(*mC);
 
-    SEQUENCER_DEBUG << "processAsynchronousEvents: sent " << mC->size() << " events" << endl;
+//    SEQUENCER_DEBUG << "processAsynchronousEvents: sent " << mC->size() << " events" << endl;
 
     if (!kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
                                  ROSEGARDEN_GUI_IFACE_NAME,

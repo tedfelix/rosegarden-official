@@ -1006,6 +1006,10 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                         i18n("JACK Audio subsystem has died or it has stopped Rosegarden from processing audio.\nPlease restart Rosegarden to continue working with audio.\nQuitting other running applications may improve Rosegarden's performance."));
 
 		    } else if ((*i)->getData1() == MappedEvent::FailureXRuns) {
+
+#define REPORT_XRUNS 1
+#ifdef REPORT_XRUNS
+
 			struct timeval tv;
 			(void)gettimeofday(&tv, 0);
 
@@ -1021,6 +1025,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 			    (void)gettimeofday(&tv, 0);
 			    warningShownAt = tv.tv_sec;
 			}
+#endif
 
 		    } else if (!m_shownOverrunWarning) {
 			
@@ -1344,7 +1349,7 @@ SequenceManager::getSequencerPlugins(AudioPluginManager *aPM)
         QString category = seqPlugins[i++];
         unsigned int portCount = seqPlugins[i++].toInt();
 
-	std::cerr << "PLUGIN: " << identifier << " / CATEGORY: \"" << (category ? category : "(null)") << "\"" << std::endl;
+//	std::cerr << "PLUGIN: " << identifier << " / CATEGORY: \"" << (category ? category : "(null)") << "\"" << std::endl;
 
         AudioPlugin *aP = aPM->addPlugin(identifier,
                                          name,

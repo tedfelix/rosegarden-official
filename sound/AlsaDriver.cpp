@@ -1773,7 +1773,7 @@ AlsaDriver::getMappedComposition()
 
     while (_failureReportReadIndex != _failureReportWriteIndex) {
 	MappedEvent::FailureCode code = _failureReports[_failureReportReadIndex];
-	std::cerr << "AlsaDriver::reportFailure(" << code << ")" << std::endl;
+//	std::cerr << "AlsaDriver::reportFailure(" << code << ")" << std::endl;
 	Rosegarden::MappedEvent *mE = new Rosegarden::MappedEvent
 	    (0, Rosegarden::MappedEvent::SystemFailure, code, 0);
 	m_returnComposition.insert(mE);
