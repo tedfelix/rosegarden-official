@@ -1429,7 +1429,6 @@ void
 RosegardenSequencerApp::clearStudio()
 {
     SEQUENCER_DEBUG << "clearStudio()" << endl;
-//!!!    m_studio->clearTemporaries();
     m_studio->clear();
     m_sequencerMapper.getSequencerDataBlock()->clearTemporaries();
 
@@ -1446,8 +1445,12 @@ RosegardenSequencerApp::setMappedPort(int pluginId,
     Rosegarden::MappedPluginSlot *slot = 
         dynamic_cast<Rosegarden::MappedPluginSlot *>(object);
 
+    SEQUENCER_DEBUG << "setMappedPort(" << pluginId << ", " << portId << ") to " << value << endl;
+
     if (slot) {
         slot->setPort(portId, value);
+    } else {
+	SEQUENCER_DEBUG << "no such slot" << endl;
     }
 }
 

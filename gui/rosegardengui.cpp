@@ -5606,7 +5606,8 @@ RosegardenGUIApp::slotPluginPortChanged(Rosegarden::InstrumentId instrumentId,
                                 value);
                                 
         RG_DEBUG << "RosegardenGUIApp::slotPluginPortChanged - "
-                 << "setting plugin port (" << portIndex << ") to "
+                 << "setting plugin port ("
+		 << inst->getMappedId() << ", " << portIndex << ") to "
                  << value << endl;
 
         // Set modified

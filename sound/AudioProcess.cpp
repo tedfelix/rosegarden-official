@@ -765,11 +765,23 @@ AudioInstrumentMixer::setPluginPortValue(InstrumentId id, int position,
     //!!! surely we don't need a lock for something like this?
     getLock();
     
-    PluginList::iterator i = m_plugins[id].find(position);
-    if (i != m_plugins[id].end()) {
+    RunnablePluginInstance *instance = 0;
+
+    if (position == int(Instrument::SYNTH_PLUGIN_POSITION)) {
+	
+	instance = m_synths[id];
+
+    } else {
+
+	PluginList::iterator i = m_plugins[id].find(position);
+	if (i != m_plugins[id].end()) {
+	    instance = i->second;
+	}
+    }
+
+    if (instance) {
 	std::cerr << "Setting plugin port " << port << " to value " << value << std::endl;
-	RunnablePluginInstance *instance = i->second;
-	if (instance) instance->setPortValue(port, value);
+	instance->setPortValue(port, value);
     }
     
     releaseLock();
@@ -780,11 +792,21 @@ AudioInstrumentMixer::setPluginBypass(InstrumentId id, int position, bool bypass
 {
     getLock();
     
-    PluginList::iterator i = m_plugins[id].find(position);
-    if (i != m_plugins[id].end()) {
-	RunnablePluginInstance *instance = i->second;
-	if (instance) instance->setBypassed(bypass);
+    RunnablePluginInstance *instance = 0;
+
+    if (position == int(Instrument::SYNTH_PLUGIN_POSITION)) {
+	
+	instance = m_synths[id];
+
+    } else {
+
+	PluginList::iterator i = m_plugins[id].find(position);
+	if (i != m_plugins[id].end()) {
+	    instance = i->second;
+	}
     }
+    
+    if (instance) instance->setBypassed(bypass);
     
     releaseLock();
 }
