@@ -79,6 +79,8 @@ public:
     //
     virtual std::string toXmlString();
 
+    static std::string getNewUntitledLabel();
+
 private:
 
     TrackId        m_id;

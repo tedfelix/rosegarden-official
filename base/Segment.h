@@ -96,6 +96,8 @@ public:
     virtual ~Segment();
 
 
+    static std::string getNewUntitledLabel();
+
     //////
     //
     // BASIC SEGMENT ATTRIBUTES
@@ -483,7 +485,6 @@ public:
     }
 
     void updateRefreshStatuses(timeT startTime, timeT endTime);
-
 
 private:
     Composition *m_composition; // owns me, if it exists
