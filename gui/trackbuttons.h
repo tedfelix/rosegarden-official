@@ -86,6 +86,13 @@ public:
     //
     void populateInstrumentPopup();
 
+    // Populate the track buttons themselves with Instrument information
+    //
+    void populateButtons();
+
+    // Remove buttons and clear iterators for a position
+    //
+    void removeButtons(unsigned int position);
 
     // Change the instrument label to something else like
     // an actual program name rather than a meaningless
@@ -96,6 +103,10 @@ public:
     // Set record button down - graphically only
     //
     void setRecordButtonDown(int recordTrack);
+
+    // Select a label from outside this class
+    //
+    void selectLabel(int id);
 
 signals:
     // to emit what Track has been selected
@@ -118,7 +129,6 @@ public slots:
     void slotSetRecordTrack(int id);
     void slotToggleMutedTrack(int mutedTrack);
     void slotUpdateTracks();
-    void slotLabelSelected(int id);
     void slotRenameTrack(QString newName, int trackNumber);
     void slotSetTrackMeter(double value, int position);
     void slotSetMetersByInstrument(double value, Rosegarden::InstrumentId id);
@@ -131,6 +141,10 @@ public slots:
     //
     void slotSynchroniseWithComposition();
 
+    // Convert a positional selection into a track selection and re-emit
+    //
+    void slotLabelSelected(int position);
+
 private:
 
     /**
@@ -138,46 +152,46 @@ private:
      */
     void makeButtons();
 
-    QFrame* makeButton(unsigned int trackId);
+    QFrame* makeButton(Rosegarden::TrackId trackId);
     
 
     //--------------- Data members ---------------------------------
 
-    RosegardenGUIDoc *m_doc;
+    RosegardenGUIDoc                 *m_doc;
 
-    QButtonGroup *m_recordButtonGroup;
-    QButtonGroup *m_muteButtonGroup;
-    QVBoxLayout *m_layout;
+    QButtonGroup                     *m_recordButtonGroup;
+    QButtonGroup                     *m_muteButtonGroup;
+    QVBoxLayout                      *m_layout;
 
-    std::vector<TrackLabel *> m_trackLabels;
-    std::vector<TrackVUMeter *> m_trackMeters;
-    std::vector<InstrumentLabel *> m_instrumentLabels;
-    std::vector<QFrame *> m_trackHBoxes;
+    std::vector<TrackLabel *>         m_trackLabels;
+    std::vector<TrackVUMeter *>       m_trackMeters;
+    std::vector<InstrumentLabel *>    m_instrumentLabels;
+    std::vector<QFrame *>             m_trackHBoxes;
 
-    QPopupMenu               *m_instrumentPopup;
-    std::vector<QPopupMenu*>  m_instrumentSubMenu;
+    QPopupMenu                       *m_instrumentPopup;
+    std::vector<QPopupMenu*>          m_instrumentSubMenu;
 
     // Number of tracks on our view
     //
-    unsigned int m_tracks;
+    unsigned int                      m_tracks;
 
     // The pixel offset from the top - just to overcome
     // the borders
-    int m_offset;
+    int                               m_offset;
 
     // The height of the cells
     //
-    int m_cellSize;
+    int                               m_cellSize;
 
     // gaps between elements
     //
-    int m_borderGap;
+    int                               m_borderGap;
 
-    int m_lastID;
-    int m_trackLabelWidth;
-    int m_popupItem;
+    int                               m_lastID;
+    int                               m_trackLabelWidth;
+    int                               m_popupItem;
 
-    InstrumentTrackLabels m_trackInstrumentLabels;
+    InstrumentTrackLabels             m_trackInstrumentLabels;
 
 };
 

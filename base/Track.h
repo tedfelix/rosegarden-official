@@ -54,7 +54,7 @@ public:
     Track();
     Track(TrackId id,
           InstrumentId instrument, 
-          TrackId position,
+          int position,
           const std::string &label,
           bool muted);
 
@@ -72,8 +72,8 @@ public:
     void setMuted(bool muted) { m_muted = muted; }
     bool isMuted() const { return m_muted; }
 
-    void setPosition(TrackId position) { m_position = position; }
-    TrackId getPosition() const { return m_position; }
+    void setPosition(int position) { m_position = position; }
+    int getPosition() const { return m_position; }
 
     void setLabel(const std::string &label) { m_label = label; }
     std::string getLabel() const { return m_label; }
@@ -90,7 +90,7 @@ private:
     TrackId        m_id;
     bool           m_muted;
     std::string    m_label;
-    TrackId        m_position;  // we can use TrackId for position
+    int            m_position;
     InstrumentId   m_instrument;
 
 };

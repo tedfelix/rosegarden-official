@@ -37,14 +37,14 @@ namespace Rosegarden
 Track::Track():
    m_id(0),
    m_muted(false),
-   m_position(0),
+   m_position(-1),
    m_instrument(0)
 {
 }
 
 Track::Track(TrackId id,
              InstrumentId instrument,
-             TrackId position,
+             int position,
              const std::string &label,
              bool muted):
    m_id(id),

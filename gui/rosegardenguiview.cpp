@@ -618,7 +618,9 @@ void RosegardenGUIView::setZoomSize(double size)
 //
 void RosegardenGUIView::slotSelectTrackSegments(int trackId)
 {
-    m_trackEditor->getTrackButtons()->slotLabelSelected(trackId);
+    // Show the selection
+    //
+    m_trackEditor->getTrackButtons()->selectLabel(trackId);
 
     Rosegarden::SegmentSelection segments;
 

@@ -21,11 +21,14 @@
 #ifndef _TRACK_LABEL_H_
 #define _TRACK_LABEL_H_
 
+#include <iostream>
+
 #include <qstring.h>
 #include <qlabel.h>
 #include <qtimer.h>
 #include <qinputdialog.h>
-#include <iostream>
+
+#include "Track.h"
 
 // Specialises QLabel to create in effect a toggleable and
 // hence selectable label/label list.  In conjunction with
@@ -38,7 +41,8 @@ class TrackLabel : public QLabel
 {
 Q_OBJECT
 public:
-    TrackLabel(const int &position,
+    TrackLabel(Rosegarden::TrackId id,
+               int position,
                QWidget *parent,
                const char *name=0,
                WFlags f=0);
@@ -49,8 +53,13 @@ public:
     //
     void setLabelHighlight(const bool &on);
 
-    bool isSelected() { return m_selected; }
-    int getPosition() { return m_position; }
+    void setId(Rosegarden::TrackId id) { m_id = id; }
+    Rosegarden::TrackId getId() const { return m_id; }
+
+    void setPosition(int position) { m_position = position; }
+    int getPosition() const { return m_position; }
+
+    bool isSelected() const { return m_selected; }
 
     QPoint getPressPosition() const { return m_pressPosition; }
 
@@ -73,13 +82,14 @@ signals:
 
     void changeToInstrumentList(int);
 
-private:
+protected:
 
-    int  m_position;
-    bool m_selected;
+    Rosegarden::TrackId  m_id;
+    int                  m_position;
+    bool                 m_selected;
 
-    QTimer *m_pressTimer;
-    QPoint m_pressPosition;
+    QTimer              *m_pressTimer;
+    QPoint               m_pressPosition;
 
 };
 

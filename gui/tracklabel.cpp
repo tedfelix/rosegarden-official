@@ -20,9 +20,14 @@
 
 #include "tracklabel.h"
 
-TrackLabel::TrackLabel(const int &position, QWidget *parent,
+TrackLabel::TrackLabel(Rosegarden::TrackId id,
+                       int position,
+                       QWidget *parent,
                        const char *name, WFlags f):
-    QLabel(parent, name, f), m_position(position), m_pressPosition(0, 0)
+    QLabel(parent, name, f),
+    m_id(id),
+    m_position(position),
+    m_pressPosition(0, 0)
 {
     m_pressTimer = new QTimer();
 

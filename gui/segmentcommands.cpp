@@ -1490,7 +1490,35 @@ void DeleteTracksCommand::execute()
                 std::cerr << "DeleteTracksCommand::execute - "
                           << "can't detach track" << std::endl;
             }
+        }
+    }
 
+    // Remap positions and track numbers
+    //
+    Rosegarden::Composition::trackcontainer
+                *tracks = m_composition->getTracks();
+    Rosegarden::Composition::trackiterator tit;
+
+    std::vector<Rosegarden::Track*>::iterator otIt;
+    for (otIt = m_oldTracks.begin(); otIt != m_oldTracks.end(); ++otIt)
+    {
+        for (tit = tracks->begin(); tit != tracks->end(); ++tit)
+        {
+            /*
+            if ((*tit).second->getId() > (*otIt)->getId())
+            {
+                (*tit).second->setId((*tit).second->getId() - 1);
+
+                // Don't forget we're using a map for the tracks too
+                // and the map value needs to be updated.  Urgh.
+                //
+            }
+            */
+
+            if ((*tit).second->getPosition() > (*otIt)->getPosition())
+            {
+                (*tit).second->setPosition((*tit).second->getPosition() - 1);
+            }
         }
     }
 
@@ -1500,9 +1528,30 @@ void DeleteTracksCommand::execute()
 void DeleteTracksCommand::unexecute()
 {
     // Add the tracks and the segments back in
+    //
 
-    for (unsigned int i = 0; i < m_oldTracks.size(); ++i)
-        m_composition->addTrack(m_oldTracks[i]);
+    // Remap positions and track numbers
+    //
+    Rosegarden::Composition::trackcontainer
+                *tracks = m_composition->getTracks();
+    Rosegarden::Composition::trackiterator tit;
+
+    std::vector<Rosegarden::Track*>::iterator otIt;
+    for (otIt = m_oldTracks.begin(); otIt != m_oldTracks.end(); ++otIt)
+    {
+        for (tit = tracks->begin(); tit != tracks->end(); ++tit)
+        {
+            /*
+            if ((*tit).second->getId() >= (*otIt)->getId())
+                (*tit).second->setId((*tit).second->getId() + 1);
+                */
+
+            if ((*tit).second->getPosition() >= (*otIt)->getPosition())
+                (*tit).second->setPosition((*tit).second->getPosition() + 1);
+        }
+
+        m_composition->addTrack(*otIt);
+    }
 
     for (unsigned int i = 0; i < m_oldSegments.size(); ++i)
         m_composition->addSegment(m_oldSegments[i]);
