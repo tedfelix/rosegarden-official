@@ -56,6 +56,7 @@ public:
     static const unsigned int noteHeight;
     static const unsigned int noteWidth;
     static const unsigned int lineWidth;
+    static const unsigned int accidentWidth;
     static const unsigned int stalkLen;
     static const unsigned int nbLines;
     static const unsigned int linesOffset;
