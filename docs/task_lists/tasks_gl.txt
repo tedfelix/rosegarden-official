@@ -1,8 +1,6 @@
 Current Task list
 ======================================
 
-- save/load of instrument config in bank editor dialog
-
 - add signals for progress reporting in layout classes DONE
 
 - use a QWidgetStack for the InstrumentParameterBox DONE
