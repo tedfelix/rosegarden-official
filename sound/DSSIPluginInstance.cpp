@@ -39,7 +39,7 @@ namespace Rosegarden
 DSSIPluginInstance::GroupMap DSSIPluginInstance::m_groupMap;
 snd_seq_event_t **DSSIPluginInstance::m_groupLocalEventBuffers = 0;
 size_t DSSIPluginInstance::m_groupLocalEventBufferCount = 0;
-Scavenger<DSSIPluginInstance::ScavengerWrapper> DSSIPluginInstance::m_bufferScavenger(2, 10);
+Scavenger<ScavengerArrayWrapper<snd_seq_event_t *> > DSSIPluginInstance::m_bufferScavenger(2, 10);
 
 
 DSSIPluginInstance::DSSIPluginInstance(PluginFactory *factory,
@@ -290,7 +290,8 @@ DSSIPluginInstance::initialiseGroupMembership()
 	}
 
 	if (m_groupLocalEventBuffers) {
-	    m_bufferScavenger.claim(new ScavengerWrapper(m_groupLocalEventBuffers));
+	    m_bufferScavenger.claim(new ScavengerArrayWrapper<snd_seq_event_t *>
+				    (m_groupLocalEventBuffers));
 	}
 
 	m_groupLocalEventBuffers = eventLocalBuffers;

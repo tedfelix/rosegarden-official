@@ -1449,6 +1449,9 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
 #endif
 
 	if (!acceptable) {
+
+	    std::cerr << "AudioInstrumentMixer::processBlock(" << id <<"): file " << file->getAudioFile()->getFilename() << " has " << frames << " frames available, says isBuffered " << file->isBuffered() << std::endl;
+
 	    if (!m_driver->getLowLatencyMode()) {
 
 		// Not a serious problem, just block on this

@@ -25,6 +25,8 @@
 #include <sys/types.h>
 #include <sys/mman.h>
 
+#include <Scavenger.h>
+
 namespace Rosegarden
 {
 
@@ -55,6 +57,13 @@ public:
     size_t getSize() const;
 
     /**
+     * Resize the ring buffer.  This also empties it.  Actually swaps
+     * in a new, larger buffer; the old buffer is scavenged after a
+     * seemly delay.  Should be called from the write thread.
+     */
+    void resize(size_t newSize);
+
+    /**
      * Lock the ring buffer into physical memory.  Returns true
      * for success.
      */
@@ -62,6 +71,7 @@ public:
 
     /**
      * Reset read and write pointers, thus emptying the buffer.
+     * Should be called from the write thread.
      */
     void reset();
 
@@ -136,7 +146,12 @@ protected:
     volatile size_t  m_readers[N];
     size_t           m_size;
     bool             m_mlocked;
+
+    static Scavenger<ScavengerArrayWrapper<T> > m_scavenger;
 };
+
+template <typename T, int N>
+Scavenger<ScavengerArrayWrapper<T> > RingBuffer<T, N>::m_scavenger;
 
 template <typename T, int N>
 RingBuffer<T, N>::RingBuffer(size_t n) :
@@ -152,7 +167,7 @@ template <typename T, int N>
 RingBuffer<T, N>::~RingBuffer()
 {
     if (m_mlocked) {
-	munlock((void *)m_buffer, m_size);
+	::munlock((void *)m_buffer, m_size * sizeof(T));
     }
     delete[] m_buffer;
 }
@@ -165,10 +180,31 @@ RingBuffer<T, N>::getSize() const
 }
 
 template <typename T, int N>
+void
+RingBuffer<T, N>::resize(size_t newSize)
+{
+    if (m_mlocked) {
+	::munlock((void *)m_buffer, m_size * sizeof(T));
+    }
+
+    m_scavenger.claim(new ScavengerArrayWrapper<T>(m_buffer));
+
+    reset();
+    m_buffer = new T[newSize];
+    m_size = newSize;
+
+    if (m_mlocked) {
+	if (::mlock((void *)m_buffer, m_size * sizeof(T))) {
+	    m_mlocked = false;
+	}
+    }
+}
+
+template <typename T, int N>
 bool
 RingBuffer<T, N>::mlock()
 {
-    if (::mlock((void *)m_buffer, m_size)) return false;
+    if (::mlock((void *)m_buffer, m_size * sizeof(T))) return false;
     m_mlocked = true;
     return true;
 }

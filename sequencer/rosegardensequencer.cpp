@@ -1645,7 +1645,7 @@ RosegardenSequencerApp::transportChange(TransportRequest request)
     TransportPair pair(request, Rosegarden::RealTime::zeroTime);
     m_transportRequests.push_back(pair);
 
-    std::cout << "RosegardenSequencerApp::transportJump: " << request << std::endl;
+    std::cout << "RosegardenSequencerApp::transportChange: " << request << std::endl;
 
     if (request == TransportNoChange) return m_transportToken;
     else return m_transportToken + 1;

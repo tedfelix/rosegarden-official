@@ -1066,6 +1066,9 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 			    break;
 
 			case MappedEvent::FailureBussMixUnderrun:
+			    message = i18n("The audio mixing subsystem is failing to keep up.");
+			    break;
+
 			case MappedEvent::FailureMixUnderrun:
 			    message = i18n("The audio subsystem is failing to keep up.");
 			    break;

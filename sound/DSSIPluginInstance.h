@@ -167,12 +167,7 @@ protected:
     static snd_seq_event_t **m_groupLocalEventBuffers;
     static size_t m_groupLocalEventBufferCount;
 
-    struct ScavengerWrapper {
-	ScavengerWrapper(snd_seq_event_t **arr) : m_arr(arr) { }
-	~ScavengerWrapper() { delete[] m_arr; }
-	snd_seq_event_t **m_arr;
-    };
-    static Scavenger<ScavengerWrapper> m_bufferScavenger;
+    static Scavenger<ScavengerArrayWrapper<snd_seq_event_t *> > m_bufferScavenger;
 };
 
 };

@@ -682,13 +682,18 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	return jackProcessEmpty(nframes);
     }
 
+    bool lowLatencyMode = m_alsaDriver->getLowLatencyMode();
+    bool clocksRunning = m_alsaDriver->areClocksRunning();
+    bool playing = m_alsaDriver->isPlaying();
+    bool asyncAudio = m_haveAsyncAudioEvent;
+ 
 #ifdef DEBUG_JACK_PROCESS
     Rosegarden::Profiler profiler("jackProcess", true);
 #endif
 
-    if (m_alsaDriver->getLowLatencyMode()) {
-	if (m_alsaDriver->areClocksRunning()) {
-	    if (m_alsaDriver->isPlaying() || m_haveAsyncAudioEvent) {
+    if (lowLatencyMode) {
+	if (clocksRunning) {
+	    if (playing || asyncAudio) {
 
 		if (m_instrumentMixer->tryLock() == 0) {
 		    m_instrumentMixer->kick(false);
@@ -724,14 +729,17 @@ JackDriver::jackProcess(jack_nframes_t nframes)
     SequencerDataBlock *sdb = m_alsaDriver->getSequencerDataBlock();
     
     jack_position_t position;
+    jack_transport_state_t state = JackTransportRolling;
+
     if (m_jackTransportEnabled) {
-	jack_transport_state_t state = jack_transport_query(m_client, &position);
+
+	state = jack_transport_query(m_client, &position);
+
 #ifdef DEBUG_JACK_PROCESS
 	std::cerr << "JackDriver::jackProcess: JACK transport state is " << state << std::endl;
 #endif
 	if (state == JackTransportStopped) {
-	    if (m_alsaDriver->isPlaying() &&
-		m_alsaDriver->areClocksRunning()) {
+	    if (playing && clocksRunning) {
 		ExternalTransport *transport = 
 		    m_alsaDriver->getExternalTransportControl();
 		if (transport) {
@@ -744,44 +752,48 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 			 RealTime::frame2RealTime(position.frame,
 						  position.frame_rate));
 		}
-	    } else if (m_alsaDriver->areClocksRunning()) {
-		if (!m_haveAsyncAudioEvent) {
+	    } else if (clocksRunning) {
+		if (!asyncAudio) {
 #ifdef DEBUG_JACK_PROCESS
 		    std::cerr << "JackDriver::jackProcess: no interesting async events" << std::endl;
 #endif
 		    // do this before record monitor, otherwise we lost monitor out
 		    jackProcessEmpty(nframes);
 		}
-		return jackProcessRecord(nframes, 0, 0); // for monitoring
+		return jackProcessRecord(nframes, 0, 0, clocksRunning); // for monitoring
 	    } else {
 		return jackProcessEmpty(nframes);
 	    }
 	} else if (state == JackTransportStarting) {
 	    return jackProcessEmpty(nframes);
-	} else if (state == JackTransportRolling) {
-	    if (m_waiting) {
-#ifdef DEBUG_JACK_TRANSPORT
-		std::cerr << "JackDriver::jackProcess: transport rolling, telling ALSA driver to go!" << std::endl;
-#endif
-		m_alsaDriver->startClocksApproved();
-		m_waiting = false;
-	    }
+	} else if (state != JackTransportRolling) {
+	    std::cerr << "JackDriver::jackProcess: unexpected JACK transport state " << state << std::endl;
 	}
-    } else {
-#ifdef DEBUG_JACK_PROCESS
-	std::cerr << "JackDriver::jackProcess (not on JACK transport)" << std::endl;
+    }
+
+    if (state == JackTransportRolling) { // also covers not-on-transport case
+	if (m_waiting) {
+#ifdef DEBUG_JACK_TRANSPORT
+	    std::cerr << "JackDriver::jackProcess: transport rolling, telling ALSA driver to go!" << std::endl;
 #endif
-	if (!m_alsaDriver->areClocksRunning()) {
+	    m_alsaDriver->startClocksApproved();
+	    m_waiting = false;
+	}
+
+#ifdef DEBUG_JACK_PROCESS
+	std::cerr << "JackDriver::jackProcess (rolling or not on JACK transport)" << std::endl;
+#endif
+	if (!clocksRunning) {
 #ifdef DEBUG_JACK_PROCESS
 	    std::cerr << "JackDriver::jackProcess: clocks stopped" << std::endl;
 #endif
 	    return jackProcessEmpty(nframes);
 
-	} else if (!m_alsaDriver->isPlaying()) {
+	} else if (!playing) {
 #ifdef DEBUG_JACK_PROCESS
 	    std::cerr << "JackDriver::jackProcess: not playing" << std::endl;
 #endif
-	    if (!m_haveAsyncAudioEvent) {
+	    if (!asyncAudio) {
 #ifdef DEBUG_JACK_PROCESS
 		std::cerr << "JackDriver::jackProcess: no interesting async events" << std::endl;
 #endif
@@ -789,9 +801,9 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 		jackProcessEmpty(nframes);
 	    }
 
-	    int rv = jackProcessRecord(nframes, 0, 0); // for monitoring
+	    int rv = jackProcessRecord(nframes, 0, 0, clocksRunning); // for monitoring
 
-	    if (!m_haveAsyncAudioEvent) {
+	    if (!asyncAudio) {
 		return rv;
 	    }
 	}
@@ -873,7 +885,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	}
 
 	if (buss + 1 == m_recordInput) {
-	    jackProcessRecord(nframes, submaster[0], submaster[1]);
+	    jackProcessRecord(nframes, submaster[0], submaster[1], clocksRunning);
 	    doneRecord = true;
 	}
     }
@@ -959,7 +971,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 
 		if (actual < nframes) {
 
-		    std::cerr << "JackDriver::jackProcess: read " << actual << " of " << nframes << " frames for instrument " << id << " channel " << ch << std::endl;
+		    std::cerr << "JackDriver::jackProcess: read " << actual << " of " << nframes << " frames for " << id << " ch " << ch << " (pl " << playing << ", cl " << clocksRunning << ", aa " << asyncAudio << ")" << std::endl;
 
 		    reportFailure(Rosegarden::MappedEvent::FailureMixUnderrun);
 		}
@@ -991,7 +1003,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	}
     }
 
-    if (m_haveAsyncAudioEvent) {
+    if (asyncAudio) {
 	if (!allInstrumentsDormant) {
 	    dormantTime = RealTime::zeroTime;
 	} else {
@@ -1026,13 +1038,13 @@ JackDriver::jackProcess(jack_nframes_t nframes)
     }
 
     if (m_recordInput == 0) {
-	jackProcessRecord(nframes, master[0], master[1]);
+	jackProcessRecord(nframes, master[0], master[1], clocksRunning);
     } else if (!doneRecord) {
-	jackProcessRecord(nframes, 0, 0);
+	jackProcessRecord(nframes, 0, 0, clocksRunning);
     }
 
-    if (m_alsaDriver->isPlaying()) {
-	if (!m_alsaDriver->getLowLatencyMode()) {
+    if (playing) {
+	if (!lowLatencyMode) {
 	    if (m_bussMixer->getBussCount() == 0) {
 		m_instrumentMixer->signal();
 	    } else {
@@ -1104,7 +1116,9 @@ JackDriver::jackProcessEmpty(jack_nframes_t nframes)
     
 int
 JackDriver::jackProcessRecord(jack_nframes_t nframes,
-			      sample_t *sourceBufferLeft, sample_t *sourceBufferRight)
+			      sample_t *sourceBufferLeft,
+			      sample_t *sourceBufferRight,
+			      bool clocksRunning)
 {
     SequencerDataBlock *sdb = m_alsaDriver->getSequencerDataBlock();
     bool wroteSomething = false;
@@ -1161,7 +1175,7 @@ JackDriver::jackProcessRecord(jack_nframes_t nframes,
     float gain = AudioLevel::dB_to_multiplier(m_recordLevel);
     
     if (m_alsaDriver->getRecordStatus() == RECORD_AUDIO &&
-	m_alsaDriver->areClocksRunning()) {
+	clocksRunning) {
 
 #ifdef DEBUG_JACK_PROCESS
 	std::cerr << "JackDriver::jackProcessRecord: recording" << std::endl;
@@ -1542,6 +1556,8 @@ JackDriver::jackShutdown(void *arg)
     inst->reportFailure(Rosegarden::MappedEvent::FailureJackDied);
 
     inst->m_ok = false;
+
+//!!! can't do this here, need to do it after a pause from AlsaDriver etc
     inst->initialise(); // try to reconnect; m_ok will remain false if we fail
 }
 
@@ -1731,7 +1747,12 @@ JackDriver::updateAudioData()
 	    }
 	}
 
-	size_t pluginLatency = m_instrumentMixer->getPluginLatency(id);
+	size_t pluginLatency = 0;
+	bool empty = m_instrumentMixer->isInstrumentEmpty(id);
+
+	if (!empty) {
+	    pluginLatency = m_instrumentMixer->getPluginLatency(id);
+	}
 
 	// If we find the object is connected to no output, or to buss
 	// number 0 (the master), then we set the bit appropriately.
@@ -1745,16 +1766,19 @@ JackDriver::updateAudioData()
 	    } else {
 		directMasterSynthInstruments |= (1 << (i - audioInstruments));
 	    }		
-	} else {
+	} else if (!empty) {
 	    pluginLatency +=
 		m_instrumentMixer->getPluginLatency((unsigned int)*connections.begin());
 	}
 
-	m_instrumentLatencies[id] = jackLatency +
-	    RealTime::frame2RealTime(pluginLatency, m_sampleRate);
-
-	if (m_instrumentLatencies[id] > maxLatency) {
-	    maxLatency = m_instrumentLatencies[id];
+	if (empty) {
+	    m_instrumentLatencies[id] = RealTime::zeroTime;
+	} else {
+	    m_instrumentLatencies[id] = jackLatency +
+		RealTime::frame2RealTime(pluginLatency, m_sampleRate);
+	    if (m_instrumentLatencies[id] > maxLatency) {
+		maxLatency = m_instrumentLatencies[id];
+	    }
 	}
     }
 

@@ -67,6 +67,22 @@ protected:
     unsigned int m_scavenged;
 };
 
+/**
+ * A wrapper to permit arrays to be scavenged.
+ */
+
+template <typename T>
+class ScavengerArrayWrapper
+{
+public:
+    ScavengerArrayWrapper(T *array) : m_array(array) { }
+    ~ScavengerArrayWrapper() { delete[] m_array; }
+
+private:
+    T *m_array;
+};
+
+
 template <typename T>
 Scavenger<T>::Scavenger(int sec, int defaultObjectListSize) :
     m_objects(ObjectTimeList(defaultObjectListSize)),
