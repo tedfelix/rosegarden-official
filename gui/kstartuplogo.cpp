@@ -59,7 +59,7 @@ void KStartupLogo::paintEvent(QPaintEvent*)
     paint.setFont(defaultFont);
 
     paint.drawText(m_pixmap.width() - 60,
-                   m_pixmap.height() - 10,
+                   m_pixmap.height() - 12,
                    QString("r4 v") + VERSION);
     raise();
 }

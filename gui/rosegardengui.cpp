@@ -1701,6 +1701,20 @@ void
 RosegardenGUIApp::fastForwardToEnd()
 {
     cout << "RosegardenGUIApp::fastForwardToEnd()" << endl;
+
+    Rosegarden::Composition &composition = m_doc->getComposition();
+    timeT jumpTo = composition.getDuration();
+
+    if ( m_transportStatus == PLAYING ||
+         m_transportStatus == RECORDING_MIDI ||
+         m_transportStatus == RECORDING_AUDIO )
+    {
+        sendSequencerJump(jumpTo);
+    }
+    else
+    {
+        setPointerPosition(jumpTo);
+    }
 }
 
 // Double stop always does the trick
