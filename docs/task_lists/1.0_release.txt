@@ -1,26 +1,11 @@
-Features for 1.0 - updated 20040226
+Features for 1.0 - updated 20040331
 -----------------------------------
 
 - request: notation segment expanding itself as you enter
            notes past the end of it [or at least resizing the segment
            explicitly from within the editor]
 
-- punch in record [cc]
-
-- matrix view 
-  o double/half speed of selection [DONE]
-  o force legato [this should be a quantizer]
-
-- multiple document interface (switchable buffers, loading while playing) [rwb]
-
-- fix lilypond lyric duration bug [dmm]
-
-- find decent home for event filter toolbar icons [cc? dmm?]
-
-- Tempo ruler in main window: need control-ruler-like interface,
-  ideally from control-ruler code.  This one is a lot more important
-  than we've given it credit for so far, I think.  [We now have a
-  tempo event editor, so this has become less critical than it was]
+- BUG - matrix resizes itself by default when adding notes
 
 - add pitch bend control events to all existing .rgd files
 
@@ -44,9 +29,47 @@ Features for 1.0 - updated 20040226
 
 - implement "always use default studio"
 
+- punch in record [DONE?]
 
-Completed
----------
+- audio cutting and moving causes some issues still
+
+- matrix collision problems - alignment issues?
+
+- settings amnesia still
+
+- negative delays and latency compensation for softsynths
+
+- latency compensation for plugins
+
+- plugins - randomise button and time related frequency parameters
+
+
+
+POST 1.0
+--------
+
+- multiple document interface (switchable buffers, loading while playing) [rwb]
+  POSTPONE to POST 1.0
+
+- Tempo ruler in main window: need control-ruler-like interface,
+  ideally from control-ruler code.  This one is a lot more important
+  than we've given it credit for so far, I think.  [We now have a
+  tempo event editor, so this has become less critical than it was]
+  [POST 1.0]
+
+- Repeating segment doesn't ghost when moving them.
+
+
+DONE
+----
+
+- matrix view 
+  o double/half speed of selection [DONE]
+  o force legato [DONE]
+
+- fix lilypond lyric duration bug [dmm] [QUERY]
+
+- find decent home for event filter toolbar icons [cc? dmm?] [QUERY]
 
 - integrate new JACK transport and synchronisation [DONE --cc]
 
@@ -159,9 +182,6 @@ To be ignored
   closely with the fluidsynth team and get their support.  There are
   things that both of us dislike about current implementation. [rwb]
 
-Postponed
----------
-
 - LADCCA integration
 
 - completely rewrite tutorial for 1.0, using fewer/smaller pixmaps, better
@@ -170,15 +190,3 @@ Postponed
 - look at other updates for RG manual [dmm]
 
 
-Bugs
-----
-
-Many - but additional ones are:
-
-- audio cutting and moving is right off
-- select a load of notes in the matrix view and quantize - the
-  view screws up quite a bit.
-- can't move the start time of a segment
-- Repeating segment ghosts when moving them.
-- segment preview ghosts when moving them
-- opening files during playback
