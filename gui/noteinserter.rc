@@ -11,6 +11,9 @@
   <Action name="double_flat_accidental" />
   <Separator/>
   <Action name="toggle_dot" />
+  <Separator/>
+  <Action name="erase" />
+  <Action name="select" />
 </Menu>
 
 </kpartgui>
