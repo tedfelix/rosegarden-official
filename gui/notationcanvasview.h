@@ -58,15 +58,6 @@ public:
 
     void setHeightTracking(bool t);
 
-    /**
-     * Render segments on printing painter
-     *
-     * @see NotationView#print
-     */
-    virtual void print(QPainter*);
-
-public slots:
-
 signals:
 
     /**
