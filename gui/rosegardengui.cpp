@@ -177,6 +177,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
       m_midiMixer(0),
       m_bankEditor(0),
       m_markerEditor(0),
+      m_triggerSegmentManager(0),
       m_playTimer(new QTimer(this)),
       m_stopTimer(new QTimer(this))
 {
