@@ -488,14 +488,12 @@ RosegardenGUIDoc::createNewSegment(SegmentItem *p, int track)
 
 }
 
-// Take a MappedComposition from the Sequencer and turn it
-// into an Event-rich Segment ripe for insertion into the
-// Composition (once a "stop" is called).
+// Take a MappedComposition from the Sequencer and turn it into an
+// Event-rich, Composition-inserted, mouthwateringly ripe Segment.
 //
 //
 void
-RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
-                                     const Rosegarden::RealTime &playLatency)
+RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC)
 {
     bool firstEvent = false;
 
@@ -564,11 +562,6 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
         //
         m_endOfLastRecordedNote = absTime + duration;
 
-/*
-        cout << "insertRecordedMidi() - RECORD TIME = " 
-             << (*i)->getAbsoluteTime() - playLatency
-             << endl;
-*/
     }
 
 }

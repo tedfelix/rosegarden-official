@@ -1735,7 +1735,7 @@ RosegardenGUIApp::processRecordedMidi(const Rosegarden::MappedComposition &mC)
 
         // send the events to a Segment for storage and display
         //
-        m_doc->insertRecordedMidi(mC, m_playLatency);
+        m_doc->insertRecordedMidi(mC);
     }
 }
 

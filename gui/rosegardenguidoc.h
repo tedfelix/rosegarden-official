@@ -171,8 +171,7 @@ public:
      * insert some recorded MIDI events into our recording Segment
      *
      */
-    void insertRecordedMidi(const Rosegarden::MappedComposition &mc,
-                            const Rosegarden::RealTime &playLatency);
+    void insertRecordedMidi(const Rosegarden::MappedComposition &mc);
 
     /*
      * Tidy up the recording Segment

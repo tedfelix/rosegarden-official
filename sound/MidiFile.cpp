@@ -825,9 +825,8 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
     int trackNumber = 0;
 
     int midiEventAbsoluteTime;
+    int midiVelocity;
     int midiChannel = 0;
-
-    //int midiInstrument;
 
     // [cc] int rather than floating point
     //
@@ -908,13 +907,24 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
 		// [cc] -- avoiding floating-point
 		midiEventAbsoluteTime =
 		    (*el)->getAbsoluteTime() * m_timingDivision / crotchetDuration;
+                try
+                {
+                    midiVelocity = (*el)->get<Int>(BaseProperties::VELOCITY);
+                }
+                catch(...)
+                {
+                    std::cerr << "MidiFile::convertToMidi() - " <<
+                                 "couldn't get velocity - " << 
+                                 "using default (127)" << std::endl;
+                    midiVelocity = 127;
+                }
                               
 		// insert the NOTE_ON at the appropriate channel
 		//
-		midiEvent = new MidiEvent(midiEventAbsoluteTime,        // time
-					  MIDI_NOTE_ON + midiChannel,   // eventcode
-					  (*el)->get<Int>(BaseProperties::PITCH),     // pitch
-					  (*el)->get<Int>(BaseProperties::VELOCITY));                         // velocity
+		midiEvent = new MidiEvent(midiEventAbsoluteTime,
+					MIDI_NOTE_ON + midiChannel,
+                                        (*el)->get<Int>(BaseProperties::PITCH),
+                                        midiVelocity);
 
 		m_midiComposition[trackNumber].push_back(*midiEvent);
 
