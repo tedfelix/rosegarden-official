@@ -218,8 +218,15 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
     trackLabel = new TrackLabel(trackId, track->getPosition(), trackHBox);
     hblayout->addWidget(trackLabel);
 
-    if (track->getLabel() == std::string(""))
-        trackLabel->getTrackLabel()->setText(i18n("<untitled>"));
+    if (track->getLabel() == std::string("")) {
+	Rosegarden::Instrument *ins =
+	    m_doc->getStudio().getInstrumentById(track->getInstrument());
+	if (ins && ins->getType() == Rosegarden::Instrument::Audio) {
+	    trackLabel->getTrackLabel()->setText(i18n("<untitled audio>"));
+	} else {
+	    trackLabel->getTrackLabel()->setText(i18n("<untitled>"));
+	}
+    }
     else
         trackLabel->getTrackLabel()->setText(strtoqstr(track->getLabel()));
 
