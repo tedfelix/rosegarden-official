@@ -19,6 +19,8 @@
     COPYING included with this distribution for more information.
 */
 
+#include <cassert>
+
 #include <qcolor.h>
 #include "colours.h"
 
