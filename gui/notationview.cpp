@@ -987,8 +987,8 @@ bool NotationView::applyLayout(int staffNo)
 */
 
     readjustCanvasSize();
-    if (m_topBarButtons) m_topBarButtons->recalculate();
-    if (m_bottomBarButtons) m_bottomBarButtons->recalculate();
+    if (m_topBarButtons) m_topBarButtons->update();
+    if (m_bottomBarButtons) m_bottomBarButtons->update();
 
     PRINT_ELAPSED("NotationView::applyLayout");
     return true;
