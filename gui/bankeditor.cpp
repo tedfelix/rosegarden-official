@@ -632,17 +632,10 @@ BankEditorDialog::slotPopulateDevice(QListViewItem* item)
     MidiBankListViewItem* bankItem = dynamic_cast<MidiBankListViewItem*>(item);
     
     if (!bankItem) {
-        RG_DEBUG << "BankEditorDialog::slotPopulateDevice : not a bank item - trying first child\n";
-        QListViewItem* child = item->firstChild();
-        if (child) { // try it
-            m_listView->setCurrentItem(child);
-        } else {
-            RG_DEBUG << "BankEditorDialog::slotPopulateDevice : not a bank item - no child\n";
-            m_deleteBank->setEnabled(false);
-            m_deleteAllBanks->setEnabled(false);
-            m_programEditor->clearAll();
-        }
-
+        RG_DEBUG << "BankEditorDialog::slotPopulateDevice : not a bank item - disabling\n";
+        m_deleteBank->setEnabled(false);
+        m_deleteAllBanks->setEnabled(false);
+        m_programEditor->clearAll();
         return;
     }
     
