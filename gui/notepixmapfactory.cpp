@@ -285,12 +285,7 @@ NotePixmapFactory::NotePixmapFactory(int resolution) :
     m_resolution(resolution),
     m_pixmapDirectory(QString("pixmaps/%1").arg(resolution)),
     m_generatedPixmapHeight(0),
-
-    m_timeSigFont("new century schoolbook", (resolution - 1) * 3),
-    
-    // or how about this?
-//    m_timeSigFont("utopia", ((resolution + 1) * 5) / 2 - 1),
-
+    m_timeSigFont("new century schoolbook", 8),
     m_timeSigFontMetrics(m_timeSigFont),
     m_noteBodyFilled(m_pixmapDirectory + "/note-bodyfilled.xpm"),
     m_noteBodyEmpty(m_pixmapDirectory + "/note-bodyempty.xpm"),
@@ -300,7 +295,9 @@ NotePixmapFactory::NotePixmapFactory(int resolution) :
     m_dot(m_pixmapDirectory + "/dot.xpm"),
     m_clefWidth(-1)
 {
-    m_timeSigFont.setPixelSize((resolution - 1) * 3);
+    // 9 => 20, 5 => 10
+    m_timeSigFont.setPixelSize((resolution - 1) * 5 / 2);
+    m_timeSigFontMetrics = QFontMetrics(m_timeSigFont);
 
     QString pixmapTailUpFileName(m_pixmapDirectory + "/tail-up-%1.xpm"),
           pixmapTailDownFileName(m_pixmapDirectory + "/tail-down-%1.xpm");
@@ -541,18 +538,23 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
     numS.setNum(numerator);
     denomS.setNum(denominator);
 
-    QRect r = m_timeSigFontMetrics.boundingRect(denomS);
+    QRect numR = m_timeSigFontMetrics.boundingRect(numS);
+    QRect denomR = m_timeSigFontMetrics.boundingRect(denomS);
+    int width = max(numR.width(), denomR.width()) + 2;
+    int x;
 
-    createPixmapAndMask(r.width(), r.height() * 2);
+    createPixmapAndMask(width, denomR.height() * 2 + getNoteBodyHeight());
 
     m_p.setFont(m_timeSigFont);
     m_pm.setFont(m_timeSigFont);
 
-    m_p.drawText(0, r.height(),     numS);
-    m_p.drawText(0, r.height() * 2, denomS);
+    x = (width - numR.width()) / 2 - 1;
+    m_p.drawText(x, denomR.height(), numS);
+    m_pm.drawText(x, denomR.height(), numS);
 
-    m_pm.drawText(0, r.height(),     numS);
-    m_pm.drawText(0, r.height() * 2, denomS);
+    x = (width - denomR.width()) / 2 - 1;
+    m_p.drawText(x, denomR.height() * 2 + (getNoteBodyHeight()/2) - 1, denomS);
+    m_pm.drawText(x, denomR.height() * 2 + (getNoteBodyHeight()/2) - 1, denomS);
 
     m_p.end();
     m_pm.end();

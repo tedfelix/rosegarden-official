@@ -143,8 +143,7 @@ NotationVLayout::layout(NotationElementList::iterator from,
 
             } else if (el->event()->isa(TimeSignature::EventType)) {
 
-                el->setLayoutY(m_staff.yCoordOfHeight(8) + 2 -
-                               npf.getNoteBodyHeight()/4);
+                el->setLayoutY(m_staff.yCoordOfHeight(8) + 2);
             }
         }
     }
