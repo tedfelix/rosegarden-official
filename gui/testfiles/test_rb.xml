@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rosegarden-data>
+<rosegarden-data>
+<tempo value="120"/>
+<track nb="1" start="0">
+        <event type="timesignature" numerator="9" denominator="16"/>
+        <event type="keychange"><property name="key" string="C# major"/></event>
+        <event type="clefchange" clef="treble"/>
+        <event type="note" duration="breve" pitch="64"/>
+        <event type="note" duration="crotchet" pitch="64"/>
+        <event type="note" duration="crotchet" pitch="65"/>
+        <event type="rest" duration="crotchet"/>
+        <event type="note" duration="dotted crotchet" pitch="64"/>
+        <event type="keychange" key="Cb major"/>
+        <event type="clefchange" clef="bass"/>
+        <event type="keychange" key="Cb major"/>
+        <group type="beamed">
+        <event type="note" duration="semiquaver" pitch="49"/>
+        <event type="note" duration="semiquaver" pitch="48"/>
+        <chord>
+        <event type="note" duration="quaver" pitch="50"/>
+        <event type="note" duration="quaver" pitch="54"/>
+        </chord>
+        <event type="note" duration="quaver" pitch="51"/>
+        </group>
+        <event type="note" duration="crotchet" pitch="44"/>
+        <event type="note" duration="crotchet" pitch="45"/>
+        <event type="timesignature" numerator="12" denominator="8"/>
+        <event type="keychange" key="C# major"/>
+        <event type="rest" duration="crotchet"/>
+        <event type="note" duration="crotchet" pitch="44"/>
+        <event type="note" duration="crotchet" pitch="45"/>
+        <event type="note" duration="minim" pitch="44"/>
+        <event type="note" duration="crotchet" pitch="45"/>
+        <event type="note" duration="crotchet" pitch="44"/>
+        <event type="note" duration="crotchet" pitch="45"/>
+</track>
+</rosegarden-data>
