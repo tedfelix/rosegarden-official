@@ -163,6 +163,7 @@ public:
     { return value; }
 #endif
 
+#ifdef RGKDE3
     /*
      * Get world matrices
      */
@@ -170,6 +171,7 @@ public:
         { return m_canvasView->worldMatrix(); }
     const QWMatrix & getInverseWorldMatrix () const
         { return m_canvasView->inverseWorldMatrix(); }
+#endif
 
     /*
      * Repaint the control rulers

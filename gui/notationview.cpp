@@ -495,9 +495,12 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     QPaintDeviceMetrics pdm(printer);
 
     QCanvas *tCanvas = new QCanvas(this);
+
+#ifdef RGKDE3
     RG_DEBUG << "Print area size : "
              << pdm.width() << ", " << pdm.height()
              << " - printer resolution : " << printer->resolution() << "\n";
+#endif
 
     unsigned int scaleFactor = 5;
     tCanvas->resize(pdm.width() / scaleFactor, pdm.height() / scaleFactor);
@@ -1949,11 +1952,13 @@ void NotationView::print(KPrinter* printer)
     
     QPainter printpainter(printer);
 
+#ifdef RGKDE3
     RG_DEBUG << "Printing total height "  << fullHeight
              << ", nbStaffRowsPerPage = " << nbStaffRowsPerPage
              << ", printSliceHeight = "   << printSliceHeight
              << ", printer Resolution = " << printer->resolution()
              << endl;
+#endif
 
     unsigned int pageNum = 1;
 

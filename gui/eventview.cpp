@@ -400,12 +400,22 @@ EventView::setupActions()
     EditViewBase::setupActions("eventlist.rc");
 
     // File menu
-    KStdAction::close   (this, SLOT(slotCloseWindow()),    actionCollection());
+    KStdAction::close   ((const QObject *)this,
+                         SLOT(slotCloseWindow()),
+                         (QObject*)actionCollection());
 
     // Edit menu
-    KStdAction::cut     (this, SLOT(slotEditCut()),        actionCollection());
-    KStdAction::copy    (this, SLOT(slotEditCopy()),       actionCollection());
-    KStdAction::paste   (this, SLOT(slotEditPaste()),      actionCollection());
+    KStdAction::cut     ((const QObject *)this,
+                         SLOT(slotEditCut()),
+                         (QObject*)actionCollection());
+
+    KStdAction::copy    ((const QObject *)this,
+                         SLOT(slotEditCopy()),
+                         (QObject*)actionCollection());
+
+    KStdAction::paste   ((const QObject *)this,
+                         SLOT(slotEditPaste()),
+                         (QObject*)actionCollection());
 
     createGUI(getRCFileName());
 }

@@ -291,14 +291,18 @@ void MatrixPainter::handleLeftButtonPress(Rosegarden::timeT time,
     MATRIX_DEBUG << "MatrixPainter::handleLeftButtonPress : pitch = "
                          << pitch << ", time : " << time << endl;
 
+#ifdef RGKDE3
     QPoint p = m_mParentView->getInverseWorldMatrix().map(inE->pos());
     QMouseEvent *e =
         new QMouseEvent(inE->type(), p, inE->button(), inE->state());
+#else
+    QMouseEvent *e = inE;
+#endif
 
     // Don't create an overlapping event on the same note on the same channel
     if (dynamic_cast<MatrixElement*>(element))
     {
-        cout << "OVERLAP" << endl;
+        //cout << "OVERLAP" << endl;
         return;
     }
 
