@@ -68,7 +68,7 @@ public slots:
 signals:
     // Our version of released() has an int id associated with it
     //
-    void released(int);
+    void released(int); // TODO : rename this to 'clicked(int)'
 
     // We emit this once we've renamed a track
     //
