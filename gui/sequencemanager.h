@@ -145,7 +145,7 @@ public:
 
     // Send all note offs and resets to MIDI devices
     //
-    void panic();
+    void panic(RosegardenProgressDialog *progress);
 
     // Send an MC to the view
     //

@@ -1148,8 +1148,10 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             return false;
         }
 
-        // only create if we have a device
-        if (m_device)
+        // Only create if we have a device and we don't already
+        // have a metronome.
+        //
+        if (m_device && getStudio().getMetronome() == 0)
         {
             int msb = atts.value("msb").toInt();
             int lsb = atts.value("lsb").toInt();

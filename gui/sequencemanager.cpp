@@ -40,6 +40,7 @@
 #include "MappedRealTime.h"
 #include "studiocontrol.h"
 #include "MidiDevice.h"
+#include "widgets.h"
 
 using std::cout;
 using std::cerr;
@@ -1667,22 +1668,29 @@ SequenceManager::reinitialiseSequencerStudio()
 // Clear down all playing notes and reset controllers
 //
 void
-SequenceManager::panic()
+SequenceManager::panic(RosegardenProgressDialog *progress)
 {
     SEQMAN_DEBUG << "panic button" << endl;
 
     Studio &studio = m_doc->getStudio();
 
     InstrumentList list = studio.getPresentationInstruments();
-    InstrumentList::iterator it = list.begin();
+    InstrumentList::iterator it;
 
     Rosegarden::MappedComposition mC;
     Rosegarden::MappedEvent *mE;
 
-    for (; it != list.end(); it++)
+    int maxDevices = 0, device = 0;
+    for (it = list.begin(); it != list.end(); it++)
+        if ((*it)->getType() == Instrument::Midi)
+            maxDevices++;
+
+    progress->setCompleted(10);
+    for (it = list.begin(); it != list.end(); it++)
     {
         if ((*it)->getType() == Instrument::Midi)
         {
+            progress->setCompleted(int(70.0 * float(device)/float(maxDevices)));
             for (unsigned int i = 0; i < 128; i++)
             {
                 try
@@ -1701,11 +1709,14 @@ SequenceManager::panic()
                 } 
                 mC.insert(mE);
             }
+            progress->processEvents();
+
+            device++;
         }
     }
 
-    showVisuals(mC);
     Rosegarden::StudioControl::sendMappedComposition(mC);
+    progress->setCompleted(90);
 
     resetControllers();
 }

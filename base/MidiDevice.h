@@ -47,6 +47,7 @@ public:
     virtual void createInstruments();
     virtual void addInstrument(Instrument*);
 
+    void removeMetronome();
     void setMetronome(InstrumentId instrument,
                       MidiByte msb, MidiByte lsb, MidiByte program,
                       MidiByte pitch,
@@ -86,6 +87,9 @@ public:
     //
     std::vector<MidiBank> getBanks() const;
     std::vector<MidiProgram> getPrograms() const;
+
+    void replaceBankList(const std::vector<Rosegarden::MidiBank> &bank);
+    void replaceProgramList(const std::vector<Rosegarden::MidiProgram> &program);
 
 private:
     void generatePresentationList();

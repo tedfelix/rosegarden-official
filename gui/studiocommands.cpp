@@ -19,31 +19,47 @@
 
 #include "studiocommands.h"
 
-ModifyBankCommand::ModifyBankCommand(Rosegarden::Studio *studio,
-                                     int device,
-                                     int bank,
-                                     int msb,
-                                     int lsb,
-                                     std::vector<Rosegarden::MidiProgram> programList):
+#include "Studio.h"
+#include "MidiDevice.h"
+
+ModifyDeviceCommand::ModifyDeviceCommand(
+        Rosegarden::Studio *studio,
+        int device,
+        const std::string &name,
+        std::vector<Rosegarden::MidiBank> bankList,
+        std::vector<Rosegarden::MidiProgram> programList):
     XKCommand(getGlobalName()),
     m_studio(studio),
     m_device(device),
-    m_bank(bank),
-    m_msb(msb),
-    m_lsb(lsb),
+    m_name(name),
+    m_bankList(bankList),
     m_programList(programList)
 {
 }
 
 void
-ModifyBankCommand::execute()
+ModifyDeviceCommand::execute()
 {
+    Rosegarden::MidiDevice *device = m_studio->getMidiDevice(m_device);
 
+    m_oldName = device->getName();
+    m_oldBankList = device->getBanks();
+    m_oldProgramList = device->getPrograms();
+
+    device->setName(m_name);
+    device->replaceBankList(m_bankList);
+    device->replaceProgramList(m_programList);
 }
 
 void
-ModifyBankCommand::unexecute()
+ModifyDeviceCommand::unexecute()
 {
+    Rosegarden::MidiDevice *device = m_studio->getMidiDevice(m_device);
+
+    device->setName(m_oldName);
+    device->replaceBankList(m_oldBankList);
+    device->replaceProgramList(m_oldProgramList);
+
 }
 
 

@@ -7,9 +7,14 @@
 
 - Management of the user's setup (autoload.rg)
 
-- MIDI export
+- Fix MIDI export
 
 - Improve GUI response when playing (multithread / mmap) (after 1.0 ?)
 
-- ??
+- Simulataneous multiple audio track record
+
+- Score Scanning?
+
+- MIDI clock support
+
 

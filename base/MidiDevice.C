@@ -39,7 +39,7 @@ MidiDevice::MidiDevice():
     Device(0, "Default Midi Device", Device::Midi),
     m_programList(new ProgramList()),
     m_bankList(new BankList()),
-    m_metronome(new MidiMetronome())
+    m_metronome(0)
 {
     createInstruments();
 }
@@ -48,7 +48,7 @@ MidiDevice::MidiDevice(DeviceId id, const std::string &name):
     Device(id, name, Device::Midi),
     m_programList(new ProgramList()),
     m_bankList(new BankList()),
-    m_metronome(new MidiMetronome())
+    m_metronome(0)
 {
     createInstruments();
 }
@@ -57,19 +57,12 @@ MidiDevice::~MidiDevice()
 {
     delete m_programList;
     delete m_bankList;
-    delete m_metronome;
+    if (m_metronome) delete m_metronome;
 }
 
 void
 MidiDevice::createInstruments()
 {
-    // initialise metronome
-    m_metronome->instrument = 0;
-    m_metronome->msb = 0;
-    m_metronome->lsb = 0;
-    m_metronome->program = 0;
-    m_metronome->pitch = 0;
-
     // Create metronome instrument
     //
     m_instruments.push_back(
@@ -124,11 +117,27 @@ MidiDevice::addBank(MidiBank *bank)
 }
 
 void
+MidiDevice::removeMetronome()
+{
+    if (m_metronome)
+    {
+        delete m_metronome;
+        m_metronome = 0;
+    }
+
+}
+
+void
 MidiDevice::setMetronome(InstrumentId instrument,
                          MidiByte msb, MidiByte lsb, MidiByte program,
                          MidiByte pitch,
                          const std::string &name)
 {
+
+    if (m_metronome == 0)
+    {
+        m_metronome = new MidiMetronome();
+    }
 
     m_metronome->pitch = pitch;
     m_metronome->program = program;
@@ -193,16 +202,19 @@ MidiDevice::toXmlString()
     midiDevice << "    <device id=\""  << m_id 
                << "\" type=\"midi\">" << std::endl << std::endl;
 
-    // Write out the metronome - watch the MidiBytes
-    // when using the stringstream
-    //
-    midiDevice << "        <metronome "
-               << "instrument=\"" << m_metronome->instrument << "\" "
-               << "msb=\"" << (int)m_metronome->msb << "\" "
-               << "lsb=\"" << (int)m_metronome->lsb << "\" " 
-               << "program=\"" << (int)m_metronome->program << "\" "
-               << "pitch=\"" << (int)m_metronome->pitch << "\"/>"
-               << std::endl << std::endl;
+    if (m_metronome)
+    {
+        // Write out the metronome - watch the MidiBytes
+        // when using the stringstream
+        //
+        midiDevice << "        <metronome "
+                   << "instrument=\"" << m_metronome->instrument << "\" "
+                   << "msb=\"" << (int)m_metronome->msb << "\" "
+                   << "lsb=\"" << (int)m_metronome->lsb << "\" " 
+                   << "program=\"" << (int)m_metronome->program << "\" "
+                   << "pitch=\"" << (int)m_metronome->pitch << "\"/>"
+                   << std::endl << std::endl;
+    }
 
     // and now bank information
     //
@@ -326,6 +338,31 @@ MidiDevice::getPrograms() const
         program.push_back(**it);
 
     return program;
+}
+
+void
+MidiDevice::replaceBankList(const std::vector<Rosegarden::MidiBank> &bank)
+{
+    clearBankList();
+
+    std::vector<Rosegarden::MidiBank>::const_iterator it = bank.begin();
+    for (; it != bank.end(); it++)
+    {
+        addBank(new MidiBank(*it));
+    }
+
+}
+
+void
+MidiDevice::replaceProgramList(const std::vector<Rosegarden::MidiProgram> &program)
+{
+    clearProgramList();
+
+    std::vector<Rosegarden::MidiProgram>::const_iterator it = program.begin();
+    for (; it != program.end(); it++)
+    {
+        addProgram(new MidiProgram(*it));
+    }
 }
 
 

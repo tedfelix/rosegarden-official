@@ -3343,7 +3343,16 @@ RosegardenGUIApp::slotEditBanks()
 void
 RosegardenGUIApp::slotPanic()
 {
-    if (m_seqManager) m_seqManager->panic();
+    if (m_seqManager)
+    {
+        RosegardenProgressDialog *progressDlg =
+            new RosegardenProgressDialog(i18n("Sending MIDI panic..."),
+                                         100,
+                                         this);
+        m_seqManager->panic(progressDlg);
+
+        delete progressDlg;
+    }
 }
 
 

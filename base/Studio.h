@@ -43,6 +43,8 @@ typedef std::vector<Instrument *> InstrumentList;
 typedef std::vector<Device*> DeviceList;
 typedef std::vector<Device*>::iterator DeviceListIterator;
 
+class MidiDevice;
+
 
 class Studio : public XmlExportable
 {
@@ -107,6 +109,11 @@ public:
     // Get a device by ID
     //
     Device* getDevice(DeviceId id);
+
+    // Useful for combo boxes
+    //
+    MidiDevice *getMidiDevice(int id);
+    Device *getDeviceOfType(int id, Device::DeviceType type);
 
     // Export as XML string
     //

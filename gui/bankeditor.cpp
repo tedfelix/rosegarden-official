@@ -32,12 +32,14 @@
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qspinbox.h>
+#include <qcheckbox.h>
 
 #include "bankeditor.h"
 #include "widgets.h"
 #include "rosestrings.h"
 #include "rosegardenguidoc.h"
 #include "studiocommands.h"
+#include "rosedebug.h"
 
 #include "Studio.h"
 #include "MidiDevice.h"
@@ -52,21 +54,55 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
                 Ok | Apply | Cancel),
     m_studio(&doc->getStudio()),
     m_doc(doc),
-    m_modified(false)
+    m_modified(false),
+    m_lastDevice(0),
+    m_lastMSB(0),
+    m_lastLSB(0)
 {
 
 
     QVBox *vBox = makeVBoxMainWidget();
 
-    QGroupBox *deviceBox  = new QGroupBox(3,
+    QGroupBox *deviceBox  = new QGroupBox(5,
                                           Qt::Horizontal,
                                           i18n("Select MIDI Device..."),
                                           vBox);
 
     deviceBox->addSpace(0);
-    deviceBox->addSpace(0);
     m_deviceCombo = new RosegardenComboBox(false, deviceBox);
     m_deviceCombo->setEditable(true);
+    deviceBox->addSpace(0);
+    deviceBox->addSpace(0);
+    deviceBox->addSpace(0);
+
+    /*
+    deviceBox->addSpace(0);
+    deviceBox->addSpace(0);
+    deviceBox->addSpace(0);
+    m_metronomeCheckBox =
+        new QCheckBox(i18n("use as Metronome device"), deviceBox);
+    deviceBox->addSpace(0);
+
+    connect(m_metronomeCheckBox, SIGNAL(stateChanged(int)),
+            this, SLOT(slotMetronomeChecked(int)));
+
+    deviceBox->addSpace(0);
+    deviceBox->addSpace(0);
+    deviceBox->addSpace(0);
+    m_instrumentLabel = new QLabel(i18n("Metronome instrument"), deviceBox);
+    m_metronomeInstrument = new RosegardenComboBox(true, deviceBox);
+
+    deviceBox->addSpace(0);
+    deviceBox->addSpace(0);
+    deviceBox->addSpace(0);
+    m_pitchLabel = new QLabel(i18n("Metronome voice"), deviceBox);
+    m_metronomePitch = new QSpinBox(deviceBox);
+
+    m_instrumentLabel->setDisabled(true);
+    m_metronomeInstrument->setDisabled(true);
+    m_pitchLabel->setDisabled(true);
+    m_metronomePitch->setDisabled(true);
+    */
 
     Rosegarden::DeviceList *devices = m_studio->getDevices();
     Rosegarden::DeviceListIterator it;
@@ -248,6 +284,17 @@ BankEditorDialog::slotPopulateDeviceBank(int deviceNo, int bank)
             m_lsb->setValue(m_bankList[bank].lsb);
 
             m_bankCombo->setCurrentItem(bank);
+
+            /*
+            if (device->getMetronome())
+            {
+                m_instrumentLabel->setDisabled(false);
+                m_metronomeInstrument->setDisabled(false);
+                m_pitchLabel->setDisabled(false);
+                m_metronomePitch->setDisabled(false);
+            }
+            */
+
             slotPopulateBank(bank);
         }
         else
@@ -259,11 +306,18 @@ BankEditorDialog::slotPopulateDeviceBank(int deviceNo, int bank)
     }
 
     _newBank = false;
+
+    // remember last device
+    m_lastDevice = deviceNo;
+    m_lastMSB = m_bankList[bank].msb;
+    m_lastLSB = m_bankList[bank].lsb;
 }
 
 void
 BankEditorDialog::slotPopulateDevice(int devNo)
 {
+    _newBank = true;
+
     if (m_modified)
     {
         // then ask if we want to apply the changes
@@ -272,15 +326,14 @@ BankEditorDialog::slotPopulateDevice(int devNo)
 
         if (reply == KMessageBox::Yes)
         {
-            std::cout << "APPLY" << std::endl;
-            ModifyBankCommand *command =
-                new ModifyBankCommand(m_studio,
-                                      devNo,
-                                      0,
-                                      0,
-                                      0,
-                                      m_programList);
+            ModifyDeviceCommand *command =
+                new ModifyDeviceCommand(m_studio,
+                                        m_lastDevice,
+                                        qstrtostr(m_deviceCombo->currentText()),
+                                        m_bankList,
+                                        m_programList);
 
+            addCommandToHistory(command);
         }
 
     }
@@ -304,6 +357,7 @@ BankEditorDialog::slotPopulateDevice(int devNo)
 
     slotPopulateDeviceBank(devNo, 0);
 
+    _newBank = false;
 }
 
 
@@ -370,13 +424,36 @@ BankEditorDialog::getBankSubset(Rosegarden::MidiByte msb,
 
 
 void
-BankEditorDialog::slotOK()
+BankEditorDialog::slotOk()
 {
+    if (m_modified)
+    {
+        ModifyDeviceCommand *command =
+            new ModifyDeviceCommand(m_studio,
+                                    m_lastDevice,
+                                    qstrtostr(m_deviceCombo->currentText()),
+                                    m_bankList,
+                                    m_programList);
+
+        addCommandToHistory(command);
+        accept();
+    }
 }
 
 void
 BankEditorDialog::slotApply()
 {
+    if (m_modified)
+    {
+        ModifyDeviceCommand *command =
+            new ModifyDeviceCommand(m_studio,
+                                    m_lastDevice,
+                                    qstrtostr(m_deviceCombo->currentText()),
+                                    m_bankList,
+                                    m_programList);
+
+        addCommandToHistory(command);
+    }
 }
 
 void
@@ -396,6 +473,7 @@ BankEditorDialog::slotAddBank()
         newBank->msb = bank.first;
         newBank->lsb = bank.second;
         newBank->name = std::string("<new bank>");
+        setModified(true);
 
         m_bankList.push_back(*newBank);
 
@@ -417,7 +495,11 @@ BankEditorDialog::slotDeleteBank()
 
     if (device)
     {
-        slotPopulateDevice(m_deviceCombo->currentItem());
+        int newBank = m_bankCombo->currentItem() - 1;
+        if (newBank < 0) newBank = 0;
+
+        m_bankList.erase(&(m_bankList[m_bankCombo->currentItem()]));
+        slotPopulateDeviceBank(m_deviceCombo->currentItem(), newBank);
     }
 
     _newBank = false;
@@ -438,6 +520,8 @@ BankEditorDialog::slotDeleteAllBanks()
         device->clearBankList();
         slotPopulateDevice(m_deviceCombo->currentItem());
     }
+
+    setModified(true);
 
     _newBank = false;
 
@@ -555,15 +639,53 @@ BankEditorDialog::setModified(bool value)
 }
 
 void
-BankEditorDialog::slotProgramChanged(const QString &program, int id)
+BankEditorDialog::slotProgramChanged(const QString &programName, int id)
 {
     //RG_DEBUG << "PROGRAM (" << id << ") = \"" << program << "\"" << endl;
-    if (qstrtostr(program) != m_programList[id].name)
+
+    Rosegarden::MidiProgram *program =
+        getProgram(m_bankList[m_bankCombo->currentItem()].msb,
+                   m_bankList[m_bankCombo->currentItem()].lsb,
+                   id);
+
+    if (program == 0)
     {
-        m_programList[id].name = qstrtostr(program);
+        program = new Rosegarden::MidiProgram();
+        program->msb = m_bankList[m_bankCombo->currentItem()].msb;
+        program->lsb = m_bankList[m_bankCombo->currentItem()].lsb;
+        program->program = id;
+        m_programList.push_back(*program);
+
+        // Now, get with the program
+        //
+        program =
+            getProgram(m_bankList[m_bankCombo->currentItem()].msb,
+                       m_bankList[m_bankCombo->currentItem()].lsb,
+                       id);
+    }
+
+    if (qstrtostr(programName) != program->name)
+    {
+        program->name = qstrtostr(programName);
         setModified(true);
     }
 }
+
+Rosegarden::MidiProgram*
+BankEditorDialog::getProgram(int msb, int lsb, int program)
+{
+    std::vector<Rosegarden::MidiProgram>::iterator it = m_programList.begin();
+
+    for (; it != m_programList.end(); it++)
+    {
+        if (it->msb == msb && it->lsb == lsb && it->program == program)
+            return it;
+    }
+
+    return 0;
+
+}
+
 
 void
 BankEditorDialog::slotNewMSB(int value)
@@ -584,6 +706,11 @@ BankEditorDialog::slotNewMSB(int value)
         {
             msb = m_bankList[m_bankCombo->currentItem()].msb;
         }
+
+        modifyCurrentPrograms(m_bankList[m_bankCombo->currentItem()].msb,
+                              m_bankList[m_bankCombo->currentItem()].lsb,
+                              msb,
+                              m_bankList[m_bankCombo->currentItem()].lsb);
 
         m_msb->setValue(msb);
         m_bankList[m_bankCombo->currentItem()].msb = msb;
@@ -615,6 +742,11 @@ BankEditorDialog::slotNewLSB(int value)
         {
             lsb = m_bankList[m_bankCombo->currentItem()].lsb;
         }
+
+        modifyCurrentPrograms(m_bankList[m_bankCombo->currentItem()].msb,
+                              m_bankList[m_bankCombo->currentItem()].lsb,
+                              m_bankList[m_bankCombo->currentItem()].msb,
+                              lsb);
 
         m_lsb->setValue(lsb);
         m_bankList[m_bankCombo->currentItem()].lsb = lsb;
@@ -673,6 +805,31 @@ BankEditorDialog::banklistContains(int msb, int lsb)
 void
 BankEditorDialog::addCommandToHistory(KCommand *command)
 {
+    getCommandHistory()->addCommand(command);
+    setModified(false);
+}
+
+
+MultiViewCommandHistory*
+BankEditorDialog::getCommandHistory()
+{
+    return m_doc->getCommandHistory();
+}
+
+void
+BankEditorDialog::modifyCurrentPrograms(int oldMSB, int oldLSB,
+                                        int msb, int lsb)
+{
+    std::vector<Rosegarden::MidiProgram>::iterator it;
+
+    for (it = m_programList.begin(); it != m_programList.end(); it++)
+    {
+        if (it->msb == oldMSB && it->lsb == oldLSB)
+        {
+            it->msb = msb;
+            it->lsb = lsb;
+        }
+    }
 }
 
 

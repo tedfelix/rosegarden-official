@@ -29,7 +29,9 @@ class RosegardenComboBox;
 class QPushButton;
 class QFrame;
 class QSpinBox;
+class QCheckBox;
 class RosegardenGUIDoc;
+class MultiViewCommandHistory;
 class KCommand;
 
 namespace Rosegarden { class Studio; class MidiDevice; }
@@ -79,17 +81,27 @@ public:
     //
     bool banklistContains(int msb, int lsb);
 
+    // Set the currently loaded programs to new MSB and LSB
+    //
+    void modifyCurrentPrograms(int oldMSB, int oldLSB,
+                               int msb, int lsb);
+
     void setModified(bool value);
 
     void addCommandToHistory(KCommand *command);
 
+    MultiViewCommandHistory* getCommandHistory();
+
+    // Get a program
+    //
+    Rosegarden::MidiProgram* getProgram(int msb, int lsb, int program);
 
 public slots:
     void slotPopulateBank(int bank);
     void slotPopulateDevice(int device);
     void slotPopulateDeviceBank(int device, int bank);
 
-    void slotOK();
+    void slotOk();
     void slotApply();
 
     void slotAddBank();
@@ -133,6 +145,9 @@ protected:
 
     bool                     m_modified;
 
+    int                      m_lastDevice;
+    int                      m_lastMSB;
+    int                      m_lastLSB;
 };
 
 #endif // _BANKEDITOR_H_

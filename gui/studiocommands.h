@@ -27,15 +27,14 @@
 
 namespace Rosegarden { class Studio; }
 
-class ModifyBankCommand : public XKCommand
+class ModifyDeviceCommand : public XKCommand
 {
 public:
-    ModifyBankCommand(Rosegarden::Studio *studio,
-                      int device,
-                      int bank,
-                      int msb,
-                      int lsb,
-                      std::vector<Rosegarden::MidiProgram> programList);
+    ModifyDeviceCommand(Rosegarden::Studio *studio,
+                        int device,
+                        const std::string &name,
+                        std::vector<Rosegarden::MidiBank> bankList,
+                        std::vector<Rosegarden::MidiProgram> programList);
 
     static QString getGlobalName() { return i18n("Modify &MIDI Bank"); }
 
@@ -46,10 +45,14 @@ protected:
 
     Rosegarden::Studio                    *m_studio;
     int                                    m_device;
-    int                                    m_bank;
-    int                                    m_msb;
-    int                                    m_lsb;
+    std::string                            m_name;
+    std::vector<Rosegarden::MidiBank>      m_bankList;
     std::vector<Rosegarden::MidiProgram>   m_programList;
+
+    std::string                            m_oldName;
+    std::vector<Rosegarden::MidiBank>      m_oldBankList;
+    std::vector<Rosegarden::MidiProgram>   m_oldProgramList;
+
 };
 
 

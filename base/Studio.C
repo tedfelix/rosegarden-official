@@ -236,7 +236,7 @@ Studio::getMetronome()
     {
         midiDevice = dynamic_cast<MidiDevice*>(*it);
 
-        if (midiDevice)
+        if (midiDevice && midiDevice->getMetronome())
         {
             return midiDevice->getMetronome();
         }
@@ -481,8 +481,38 @@ Studio::getAudioPreviewInstrument()
 }
 
 
+Device*
+Studio::getDeviceOfType(int id, Device::DeviceType type)
+{
+    if (id > int(m_devices.size()))
+        return 0;
+
+    int count = 0;
+    Rosegarden::DeviceListIterator it = m_devices.begin();
+    for (; it != m_devices.end(); it++)
+    {
+        if ((*it)->getType() == type)
+        {
+            if (count == id)
+                break;
+            count++;
+        }
+    }
+
+    if (it == m_devices.end())
+        return 0;
+
+    return *it;
+}
+
+MidiDevice*
+Studio::getMidiDevice(int id)
+{
+    return dynamic_cast<MidiDevice*>(getDeviceOfType(id, Device::Midi));
+}
 
 
 }
+
 
 
