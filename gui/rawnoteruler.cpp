@@ -70,6 +70,7 @@ RawNoteRuler::slotScrollHoriz(int x)
 {
     int w = width(), h = height();
     int dx = x - (-m_currentXOffset);
+    if (dx == 0) return;
     m_currentXOffset = -x;
 
     if (dx > w*3/4 || dx < -w*3/4) {

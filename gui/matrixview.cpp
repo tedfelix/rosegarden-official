@@ -309,6 +309,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     m_chordNameRuler = new ChordNameRuler
 	(&m_hlayout, &doc->getComposition(), 0, 20, getCentralFrame());
+    m_chordNameRuler->setStudio(&getDocument()->getStudio());
     addRuler(m_chordNameRuler);
 
     m_tempoRuler = new TempoRuler
@@ -352,6 +353,8 @@ MatrixView::~MatrixView()
     }
 
     slotSaveOptions();
+
+    delete m_chordNameRuler;
 
     delete m_currentEventSelection;
     m_currentEventSelection = 0;

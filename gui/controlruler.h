@@ -78,9 +78,9 @@ public:
     const Rosegarden::PropertyName& getPropertyName()     { return m_propertyName; }
 
     // StaffObserver interface
-    virtual void elementAdded(Rosegarden::ViewElement*);
-    virtual void elementRemoved(Rosegarden::ViewElement*);
-    virtual void sourceDeleted();
+    virtual void elementAdded(const Rosegarden::Staff *, Rosegarden::ViewElement*);
+    virtual void elementRemoved(const Rosegarden::Staff *, Rosegarden::ViewElement*);
+    virtual void staffDeleted(const Rosegarden::Staff *);
 
     static const int DefaultRulerHeight;
     static const int MinItemHeight;

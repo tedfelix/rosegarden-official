@@ -169,13 +169,20 @@ Staff::endMarkerTimeChanged(const Segment *s, bool shorten)
 	}
     }
 }
+void
+Staff::segmentDeleted(const Segment *s)
+{
+    assert(s == &m_segment);
+    std::cerr << "WARNING: Staff notified of segment deletion: this is probably a bug "
+	      << "(staff should have been deleted before segment)" << std::endl;
+}
 
 void
 Staff::notifyAdd(ViewElement *e) const
 {
     for (ObserverSet::const_iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
-	(*i)->elementAdded(e);
+	(*i)->elementAdded(this, e);
     }
 }
 
@@ -184,7 +191,7 @@ Staff::notifyRemove(ViewElement *e) const
 {
     for (ObserverSet::const_iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
-	(*i)->elementRemoved(e);
+	(*i)->elementRemoved(this, e);
     }
 }
 
@@ -193,7 +200,7 @@ Staff::notifySourceDeletion() const
 {
     for (ObserverSet::const_iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
-	(*i)->sourceDeleted();
+	(*i)->staffDeleted(this);
     }
 }
 

@@ -35,12 +35,17 @@
 #include "Composition.h"
 #include "CompositionTimeSliceAdapter.h"
 #include "RulerScale.h"
+#include "Studio.h"
+#include "Track.h"
+#include "Instrument.h"
+#include "Profiler.h"
 
 using Rosegarden::timeT;
 using Rosegarden::Int;
 using Rosegarden::String;
 using Rosegarden::RulerScale;
 using Rosegarden::Segment;
+using Rosegarden::SegmentSelection;
 using Rosegarden::SegmentNotationHelper;
 using Rosegarden::Composition;
 using Rosegarden::CompositionTimeSliceAdapter;
@@ -61,12 +66,13 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
     m_width(-1),
     m_rulerScale(rulerScale),
     m_composition(composition),
+    m_needsRecalculate(true),
     m_currentSegment(0),
+    m_studio(0),
+    m_chordSegment(0),
     m_fontMetrics(m_boldFont),
     TEXT_FORMAL_X("TextFormalX"),
-    TEXT_ACTUAL_X("TextActualX"),
-    m_labelSegment(0),
-    m_needRecalc(true)
+    TEXT_ACTUAL_X("TextActualX")
 {
     m_font.setPointSize(11);
     m_font.setPixelSize(12);
@@ -79,47 +85,37 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
 
 ChordNameRuler::~ChordNameRuler()
 {
-    if (m_currentSegment) {
-	m_currentSegment->removeObserver(this);
+    for (SegmentSelection::iterator si = m_segments.begin();
+	 si != m_segments.end(); ++si) {
+	(*si)->removeObserver(this);
     }
+    delete m_chordSegment;
 }
 
 void
 ChordNameRuler::setComposition(Rosegarden::Composition *composition)
 {
-    if (m_currentSegment) {
-	m_currentSegment->removeObserver(this);
+    for (SegmentSelection::iterator si = m_segments.begin();
+	 si != m_segments.end(); ++si) {
+	(*si)->removeObserver(this);
     }
+    m_segments.clear();
+
     m_composition = composition;
+    m_compositionRefreshStatusId = composition->getNewRefreshStatusId();
     m_currentSegment = 0;
 }
 
 void
 ChordNameRuler::setCurrentSegment(Rosegarden::Segment *segment)
 {
-    if (m_currentSegment) {
-	m_currentSegment->removeObserver(this);
-    }
     m_currentSegment = segment;
-    m_currentSegment->addObserver(this);
 }
 
 void
-ChordNameRuler::eventAdded(const Segment *s, Rosegarden::Event *)
+ChordNameRuler::setStudio(Rosegarden::Studio *studio)
 {
-    if (s == m_currentSegment) m_needRecalc = true;
-}
-
-void
-ChordNameRuler::eventRemoved(const Segment *s, Rosegarden::Event *)
-{
-    if (s == m_currentSegment) m_needRecalc = true;
-}
-
-void
-ChordNameRuler::endMarkerTimeChanged(const Segment *s, bool)
-{
-    if (s == m_currentSegment) m_needRecalc = true;
+    m_studio = studio;
 }
 
 void
@@ -129,7 +125,13 @@ ChordNameRuler::slotScrollHoriz(int x)
     int dx = x - (-m_currentXOffset);
     m_currentXOffset = -x;
 
-    if (dx > w*3/4 || dx < -w*3/4) {
+    if (m_needsRecalculate) {
+	update();
+	return;
+    }
+    if (dx == 0) return;
+
+    if (dx > w*7/8 || dx < -w*7/8) {
 	update();
 	return;
     }
@@ -150,7 +152,7 @@ ChordNameRuler::sizeHint() const
 	m_rulerScale->getBarPosition(m_rulerScale->getLastVisibleBar()) +
 	m_rulerScale->getBarWidth(m_rulerScale->getLastVisibleBar());
 
-    NOTATION_DEBUG << "Returning chord-label ruler width as " << width << endl;
+    RG_DEBUG << "Returning chord-label ruler width as " << width << endl;
 
     QSize res(std::max(int(width), m_width), m_height);
 
@@ -166,9 +168,162 @@ ChordNameRuler::minimumSizeHint() const
 }
 
 void
+ChordNameRuler::eventAdded(const Rosegarden::Segment *s, Rosegarden::Event *)
+{
+    if (m_segments.find((Rosegarden::Segment *)s) != m_segments.end())
+	m_needsRecalculate = true;
+}
+
+void
+ChordNameRuler::eventRemoved(const Rosegarden::Segment *s, Rosegarden::Event *)
+{
+    if (m_segments.find((Rosegarden::Segment *)s) != m_segments.end())
+	m_needsRecalculate = true;
+}
+
+void
+ChordNameRuler::endMarkerTimeChanged(const Rosegarden::Segment *s, bool)
+{
+    if (m_segments.find((Rosegarden::Segment *)s) != m_segments.end())
+	m_needsRecalculate = true;
+}
+
+void
+ChordNameRuler::segmentDeleted(const Rosegarden::Segment *s)
+{
+    m_segments.erase((Rosegarden::Segment *)s);
+    if (m_currentSegment == s) m_currentSegment = 0;
+    ((Rosegarden::Segment *)s)->removeObserver(this);
+    m_needsRecalculate = true;
+}
+
+void
+ChordNameRuler::recalculate(bool regetSegments)
+{
+    Rosegarden::Profiler profiler("ChordNameRuler::recalculate", true);
+    std::cerr << "ChordNameRuler::recalculate(" << regetSegments << ")" << std::endl;
+
+    if (regetSegments) {
+
+	SegmentSelection ss;
+
+	for (Composition::iterator ci = m_composition->begin();
+	     ci != m_composition->end(); ++ci) {
+
+	    if (m_studio) {
+
+		Rosegarden::TrackId ti = (*ci)->getTrack();
+
+		Rosegarden::Instrument *instr = m_studio->getInstrumentById
+		    (m_composition->getTrackById(ti)->getInstrument());
+
+		//!!! Need general percussion-bank technique:
+		if (instr && instr->getInstrumentType() == Rosegarden::Instrument::Midi &&
+		    instr->getMidiChannel() == 9) { //!!! hardcoded...
+		    continue;
+		}
+	    }
+
+	    ss.insert(*ci);
+	}
+
+	for (SegmentSelection::iterator si = m_segments.begin();
+	     si != m_segments.end(); ++si) {
+
+	    if (ss.find(*si) == ss.end()) {
+		//!!! this is probably unsafe -- the segment has been removed
+		// from the composition so it might have been destroyed
+		(*si)->removeObserver(this);
+		m_segments.erase(*si);
+	    }
+	}
+
+	for (SegmentSelection::iterator si = ss.begin();
+	     si != ss.end(); ++si) {
+
+	    if (m_segments.find(*si) == m_segments.end()) {
+		(*si)->addObserver(this);
+		m_segments.insert(*si);
+	    }
+	}
+
+	if (m_currentSegment &&
+	    ss.find(m_currentSegment) == ss.end()) {
+	    m_currentSegment = 0;
+	}
+    }	    
+
+    if (m_chordSegment) m_chordSegment->clear();
+    else m_chordSegment = new Segment();
+    
+    if (m_segments.empty()) return;
+
+    if (!m_currentSegment) { //!!! arbitrary, must do better
+	//!!! need a segment starting at zero or so with a clef and key in it!
+	m_currentSegment = *m_segments.begin();
+    }
+
+/*!!!
+
+	for (Composition::iterator ci = m_composition->begin();
+	     ci != m_composition->end(); ++ci) {
+
+	    if ((*ci)->getEndMarkerTime() >= from &&
+		((*ci)->getStartTime() <= from ||
+		 (clefKeySegment &&
+		  (*ci)->getStartTime() < clefKeySegment->getStartTime()))) {
+
+		clefKeySegment = *ci;
+	    }
+	}
+
+	if (!clefKeySegment) return;
+    }
+*/    
+    timeT clefKeyTime = m_currentSegment->getStartTime();
+	//(from < m_currentSegment->getStartTime() ?
+	//	        m_currentSegment->getStartTime() : from);
+
+    Rosegarden::Clef clef = m_currentSegment->getClefAtTime(clefKeyTime);
+    m_chordSegment->insert(clef.getAsEvent(-1));
+    
+    Rosegarden::Key key = m_currentSegment->getKeyAtTime(clefKeyTime);
+    m_chordSegment->insert(key.getAsEvent(-1));
+
+    CompositionTimeSliceAdapter adapter(m_composition, &m_segments);
+    
+    AnalysisHelper helper;
+    helper.labelChords(adapter, *m_chordSegment);
+
+    m_needsRecalculate = false;
+}
+
+void
 ChordNameRuler::paintEvent(QPaintEvent* e)
 {
     if (!m_composition) return;
+
+    if (m_segments.empty()) {
+	
+	recalculate(true);
+
+    } else {
+
+	Rosegarden::RefreshStatus &rs =
+	    m_composition->getRefreshStatus(m_compositionRefreshStatusId);
+
+	if (rs.needsRefresh()) {
+
+	    recalculate(true);
+	    rs.setNeedsRefresh(false);
+
+	} else if (m_needsRecalculate) {
+
+	    recalculate(false);
+	}
+    }
+
+    Rosegarden::Profiler profiler("ChordNameRuler::paintEvent (body)", true);
 
     QPainter paint(this);
     paint.setPen(RosegardenGUIColours::ChordNameRulerForeground);
@@ -179,53 +334,9 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
     QRect clipRect = paint.clipRegion().boundingRect();
 
     timeT from = m_rulerScale->getTimeForX
-	(clipRect.x() - m_currentXOffset - m_xorigin - 100);
+	(clipRect.x() - m_currentXOffset - m_xorigin - 50);
     timeT   to = m_rulerScale->getTimeForX
-	(clipRect.x() + clipRect.width() - m_currentXOffset - m_xorigin + 100);
-
-//!!! This optimisation doesn't work -- it'd demand that we were
-//notified each time anything in any segment changed (as we might not
-//have a current segment and in any case show chords from across all
-//segments) -- remove segment observer stuff from this class unless 
-//a cleverer way turns up
-//   if (m_needRecalc || !m_labelSegment) {
-
-    if (true) {
-
-	if (m_labelSegment) m_labelSegment->clear();
-	else m_labelSegment = new Segment();
-
-	CompositionTimeSliceAdapter adapter(m_composition, from, to + 1);
-
-	// Populate the segment with the current clef and key at the
-	// time at which analysis starts, taken from the "current segment"
-	// if we have one.  If we don't have one, use the first segment
-	// that contains our start time
-
-	Segment *clefKeySegment = m_currentSegment;
-	if (!clefKeySegment) {
-	    for (Composition::iterator ci = m_composition->begin();
-		 ci != m_composition->end(); ++ci) {
-		if ((*ci)->getStartTime() <= from &&
-		    (*ci)->getEndMarkerTime() >= from) {
-		    clefKeySegment = *ci;
-		    break;
-		}
-	    }
-	    if (!clefKeySegment) return;
-	}
-	
-	Rosegarden::Clef clef = clefKeySegment->getClefAtTime(from);
-	m_labelSegment->insert(clef.getAsEvent(from - 1));
-	
-	Rosegarden::Key key = clefKeySegment->getKeyAtTime(from);
-	m_labelSegment->insert(key.getAsEvent(from - 1));
-	
-	AnalysisHelper helper;
-	helper.labelChords(adapter, *m_labelSegment);
-
-	m_needRecalc = false;
-    }
+	(clipRect.x() + clipRect.width() - m_currentXOffset - m_xorigin + 50);
 
     QRect boundsForHeight = m_fontMetrics.boundingRect("^j|lM");
     int fontHeight = boundsForHeight.height();
@@ -235,10 +346,14 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
     timeT keyAt = from - 1;
     std::string keyText;
 
-    for (Segment::iterator i = m_labelSegment->findTime(from);
-	 i != m_labelSegment->findTime(to) &&
-	     m_labelSegment->isBeforeEndMarker(i); ++i) {
+    std::cerr << "*** Chord Name Ruler: paint " << from << " -> " << to << std::endl;
+
+    for (Segment::iterator i = m_chordSegment->findTime(from);
+	 i != m_chordSegment->findTime(to); ++i) {
 	
+	std::cerr << "type " << (*i)->getType() << " at " << (*i)->getAbsoluteTime()
+		  << std::endl;
+
 	if (!(*i)->isa(Text::EventType)) continue;
 
 	std::string text((*i)->get<String>(Text::TextPropertyName));
@@ -264,9 +379,8 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
 	prevX = x + width;
     }
 
-    for (Segment::iterator i = m_labelSegment->findTime(from);
-	 i != m_labelSegment->findTime(to) &&
-	     m_labelSegment->isBeforeEndMarker(i); ++i) {
+    for (Segment::iterator i = m_chordSegment->findTime(from);
+	 i != m_chordSegment->findTime(to); ++i) {
 	
 	if (!(*i)->isa(Text::EventType)) continue;
 	std::string text((*i)->get<String>(Text::TextPropertyName));

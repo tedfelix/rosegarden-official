@@ -99,7 +99,7 @@ AnalysisHelper::labelChords(CompositionTimeSliceAdapter &c, Segment &s)
 
 	timeT time = (*i)->getAbsoluteTime();
 
-//	std::cerr << "AnalysisHelper::labelChords: time is " << time << ", type is " << (*i)->getType() << ", event is " << *i << " (itr is " << &i << ")" << std::endl;
+	std::cerr << "AnalysisHelper::labelChords: time is " << time << ", type is " << (*i)->getType() << ", event is " << *i << " (itr is " << &i << ")" << std::endl;
 
 	if ((*i)->isa(Key::EventType)) {
 	    key = Key(**i);
@@ -135,7 +135,7 @@ AnalysisHelper::labelChords(CompositionTimeSliceAdapter &c, Segment &s)
 
 	    if (ch.isValid())
 	    {
-//            std::cerr << ch.getName(key) << " at time " << time << std::endl;
+            std::cerr << ch.getName(key) << " at time " << time << std::endl;
 		
 		Text text(ch.getName(key), Text::ChordName);
 		s.insert(text.getAsEvent(time));

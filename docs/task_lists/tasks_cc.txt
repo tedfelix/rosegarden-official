@@ -62,7 +62,7 @@ Post-0.9 task list
 25. Chord computations: don't include percussion tracks
 
 26. Chord-name ruler, raw-note ruler, etc: cache calculations in a
-    segment or something
+    segment or something [DONE -- more general optimisation found]
 
 27. Notation needs a plain "collapse ties" that reverts tied notes to
     their performance durations

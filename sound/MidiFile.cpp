@@ -40,6 +40,8 @@
 #include "Studio.h"
 #include "MidiTypes.h"
 
+#define MIDI_DEBUG 1
+
 #if (__GNUC__ < 3)
 #include <strstream>
 #define stringstream strstream
@@ -173,10 +175,6 @@ MidiFile::getMidiBytes(ifstream* midiFile, unsigned long numberOfBytes)
            midiFile->read(&fileMidiByte, 1))
     {
         stringRet += fileMidiByte;
-#ifdef MIDI_DEBUG
-        cout << " STR = " << (int)stringRet[stringRet.length()-1] <<
-            " - " << (int) fileMidiByte << endl;
-#endif
     }
 
     // if we've reached the end of file without fulfilling the
@@ -332,6 +330,10 @@ MidiFile::open()
                     m_format = MIDI_FILE_NOT_LOADED;
                     return(false);
                 }
+
+#ifdef MIDI_DEBUG
+		std::cout << "Track has " << m_trackByteCount << " bytes" << std::endl;
+#endif
 
                 // Run through the events taking them into our internal
                 // representation.

@@ -55,6 +55,7 @@ class MatrixParameterBox;
 class KComboBox;
 template <class T> class ZoomSlider;
 class ControlRuler;
+class ChordNameRuler;
 class PropertyViewRuler;
 class PropertyBox;
 
@@ -524,7 +525,7 @@ protected:
 
     std::vector<std::pair<PropertyViewRuler*, PropertyBox*> >  m_propertyViewRulers;
 
-    QWidget *m_chordNameRuler;
+    ChordNameRuler *m_chordNameRuler;
     QWidget *m_tempoRuler;
 };
 

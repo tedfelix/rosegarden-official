@@ -192,4 +192,11 @@ EventSelection::eventRemoved(const Segment *s, Event *e)
     }
 }
 
+void
+EventSelection::segmentDeleted(const Segment *s)
+{
+    std::cerr << "WARNING: EventSelection notified of segment deletion: this is probably a bug "
+	      << "(selection should have been deleted before segment)" << std::endl;
+}
+
 }

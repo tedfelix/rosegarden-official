@@ -91,6 +91,8 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
 
 TrackEditor::~TrackEditor()
 {
+    delete m_chordNameRuler;
+
     // flush gc (i.e. forget what's in there).
     // All remaining items will be deleted by the canvas anyway.
     //
@@ -124,7 +126,6 @@ TrackEditor::init(QWidget* rosegardenguiview)
 					  0.0,
 					  20,
 					  this);
-
     grid->addWidget(m_chordNameRuler, 0, 1);
 
     m_tempoRuler = new TempoRuler(m_rulerScale,

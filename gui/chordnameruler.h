@@ -27,10 +27,12 @@
 
 #include "PropertyName.h"
 #include "Segment.h"
+#include "Selection.h"
 
 namespace Rosegarden {
     class RulerScale;
     class Composition;
+    class Studio;
 }
 
 class QFont;
@@ -61,8 +63,14 @@ public:
 
     ~ChordNameRuler();
 
+    // must have one of these:
     void setComposition(Rosegarden::Composition *composition);
+
+    // may have one of these; can be changed at any time (to any in given composition):
     void setCurrentSegment(Rosegarden::Segment *segment);
+
+    // may have one of these (to avoid using percussion tracks in chords):
+    void setStudio(Rosegarden::Studio *studio);
 
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;
@@ -72,6 +80,7 @@ public:
     virtual void eventAdded(const Rosegarden::Segment *, Rosegarden::Event *);
     virtual void eventRemoved(const Rosegarden::Segment *, Rosegarden::Event *);
     virtual void endMarkerTimeChanged(const Rosegarden::Segment *, bool);
+    virtual void segmentDeleted(const Rosegarden::Segment *);
 
 public slots:
     void slotScrollHoriz(int x);
@@ -86,8 +95,16 @@ private:
     int    m_width;
 
     Rosegarden::RulerScale  *m_rulerScale;
+
     Rosegarden::Composition *m_composition;
+    unsigned int m_compositionRefreshStatusId;
+    bool m_needsRecalculate;
+
+    Rosegarden::SegmentSelection m_segments;
     Rosegarden::Segment *m_currentSegment;
+    Rosegarden::Studio *m_studio;
+
+    Rosegarden::Segment *m_chordSegment;
 
     QFont m_font;
     QFont m_boldFont;
@@ -96,8 +113,7 @@ private:
     const Rosegarden::PropertyName TEXT_FORMAL_X;
     const Rosegarden::PropertyName TEXT_ACTUAL_X;
 
-    Rosegarden::Segment *m_labelSegment;
-    bool m_needRecalc;
+    void recalculate(bool regetSegments);
 };
 
 #endif // _LOOPRULER_H_

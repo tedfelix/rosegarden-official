@@ -325,7 +325,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
         m_progressDisplayer = PROGRESS_DIALOG;
     }
 
-    m_chordNameRuler->setComposition(&(getDocument()->getComposition()));
+    m_chordNameRuler->setComposition(&getDocument()->getComposition());
+    m_chordNameRuler->setStudio(&getDocument()->getStudio());
 
     positionStaffs();
     m_currentStaff = 0;
@@ -567,6 +568,8 @@ NotationView::~NotationView()
     }
 
     if (!m_printMode) slotSaveOptions();
+
+    delete m_chordNameRuler;
 
     delete m_currentEventSelection;
     m_currentEventSelection = 0;

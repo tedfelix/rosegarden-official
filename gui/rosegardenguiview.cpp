@@ -977,6 +977,7 @@ void RosegardenGUIView::slotShowTempoRuler(bool v)
 void RosegardenGUIView::slotShowChordNameRuler(bool v)
 {
     if (v) {
+	m_trackEditor->getChordNameRuler()->setStudio(&getDocument()->getStudio());
         m_trackEditor->getChordNameRuler()->show();
     } else {
         m_trackEditor->getChordNameRuler()->hide();

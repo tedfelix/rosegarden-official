@@ -94,6 +94,8 @@ Segment::Segment(const Segment &segment):
 
 Segment::~Segment()
 {
+    notifySourceDeletion();
+
     if (m_observers.size() > 0) {
 	cerr << "Warning: Segment::~Segment() with " << m_observers.size()
 	     << " observers still extant" << endl;
@@ -897,6 +899,16 @@ Segment::notifyEndMarkerChange(bool shorten) const
     for (ObserverSet::const_iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
 	(*i)->endMarkerTimeChanged(this, shorten);
+    }
+}
+
+
+void
+Segment::notifySourceDeletion() const
+{
+    for (ObserverSet::const_iterator i = m_observers.begin();
+	 i != m_observers.end(); ++i) {
+	(*i)->segmentDeleted(this);
     }
 }
 

@@ -136,6 +136,7 @@ public:
     virtual void eventAdded(const Segment *, Event *) { }
     virtual void eventRemoved(const Segment *, Event *);
     virtual void endMarkerTimeChanged(const Segment *, bool) { }
+    virtual void segmentDeleted(const Segment *);
     
 private:
     EventSelection &operator=(const EventSelection &);

@@ -89,6 +89,11 @@ public:
      */
     virtual void endMarkerTimeChanged(const Segment *, bool shorten);
 
+    /**
+     * SegmentObserver method - called from Segment dtor
+     */
+    virtual void segmentDeleted(const Segment *);
+
     void addObserver   (StaffObserver *obs) { m_observers.push_back(obs); }
     void removeObserver(StaffObserver *obs) { m_observers.remove(obs); }
 
@@ -125,11 +130,11 @@ private: // not provided
 class StaffObserver
 {
 public:
-    virtual void elementAdded(ViewElement *) = 0;
-    virtual void elementRemoved(ViewElement *) = 0;
+    virtual void elementAdded(const Staff *, ViewElement *) = 0;
+    virtual void elementRemoved(const Staff *, ViewElement *) = 0;
 
     /// called when the observed object is being deleted
-    virtual void sourceDeleted() = 0;
+    virtual void staffDeleted(const Staff *) = 0;
 };
 
 

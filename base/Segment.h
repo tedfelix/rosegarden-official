@@ -542,6 +542,7 @@ private: // stuff to support SegmentObservers
     void notifyAdd(Event *) const;
     void notifyRemove(Event *) const;
     void notifyEndMarkerChange(bool shorten) const;
+    void notifySourceDeletion() const;
 
 private: // assignment operator not provided
 
@@ -569,6 +570,11 @@ public:
      * changed
      */
     virtual void endMarkerTimeChanged(const Segment *, bool shorten) = 0;
+
+    /**
+     * Called from the segment dtor
+     */
+    virtual void segmentDeleted(const Segment *) = 0;
 };
 
 

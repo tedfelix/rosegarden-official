@@ -331,7 +331,7 @@ void ControlRuler::init()
     }
 }
 
-void ControlRuler::elementAdded(ViewElement *el)
+void ControlRuler::elementAdded(const Rosegarden::Staff *, ViewElement *el)
 {
     RG_DEBUG << "ControlRuler::elementAdded()\n";
 
@@ -342,7 +342,7 @@ void ControlRuler::elementAdded(ViewElement *el)
                                                   el->getViewDuration()) - x));
 }
 
-void ControlRuler::elementRemoved(ViewElement *el)
+void ControlRuler::elementRemoved(const Rosegarden::Staff *, ViewElement *el)
 {
     RG_DEBUG << "ControlRuler::elementRemoved(\n";
 
@@ -358,7 +358,7 @@ void ControlRuler::elementRemoved(ViewElement *el)
     }
 }
 
-void ControlRuler::sourceDeleted()
+void ControlRuler::staffDeleted(const Rosegarden::Staff *)
 {
     m_staff = 0;
 }
