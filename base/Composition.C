@@ -329,6 +329,9 @@ Composition::setSegmentStartIndexAndTrack(Segment *s, timeT t, unsigned int trac
     else
         std::cerr << "Composition::setSegmentStartIndex: re-added segment failed\n";
 
+    // actually only true if we changed the effective end of the composition:
+    m_barPositionsNeedCalculating = true;
+
     return true;
 }
 
