@@ -25,7 +25,7 @@
 #include "notationstaff.h"
 #include "qcanvassimplesprite.h"
 #include "notationproperties.h"
-#include "notationview.h" // for EventSelection
+#include "eventselection.h"
 #include "BaseProperties.h"
 
 #include "rosedebug.h"
