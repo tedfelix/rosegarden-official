@@ -172,6 +172,14 @@ SegmentReconfigureCommand::addSegment(Segment *segment,
 }
 
 void
+SegmentReconfigureCommand::addSegments(const SegmentRecSet &records)
+{
+    for (SegmentRecSet::iterator i = records.begin(); i != records.end(); ++i) {
+	m_records.push_back(*i);
+    }
+}
+
+void
 SegmentReconfigureCommand::execute()
 {
     swap();

@@ -31,6 +31,7 @@
 #include <qwidget.h>
 
 #include "rosegardencanvasview.h"
+#include "segmentcommands.h" // for SegmentRecSet
 
 namespace Rosegarden {
     class Segment;
@@ -192,6 +193,8 @@ public:
                   Rosegarden::RulerScale *,QScrollBar*,  int vStep,
                   QCanvas*,
 		  QWidget* parent=0, const char* name=0, WFlags f=0);
+
+    virtual ~SegmentCanvas();
 
     /// Remove all items
     void clear();
@@ -363,6 +366,12 @@ signals:
 					Rosegarden::TrackId track,
 					Rosegarden::timeT startTime);
 
+    /**
+     * Emitted when many Segments are moved to a different start time
+     * (horizontally) or instrument (vertically)
+     */
+    void changeSegmentTrackAndStartTime(const SegmentReconfigureCommand::SegmentRecSet &);
+
     /*
      * Split a Segment - send it to the doc
      */
@@ -371,9 +380,6 @@ signals:
     void editSegmentNotation(Rosegarden::Segment*);
     void editSegmentMatrix(Rosegarden::Segment*);
     void editSegmentAudio(Rosegarden::Segment*);
-
-    //!!! what if the staff ruler changes (because of a change in time
-    //sig or whatever)?
 
     void selectedSegments(std::vector<Rosegarden::Segment*>);
 
@@ -541,9 +547,7 @@ public slots:
     void slotSelectSegmentItem(SegmentItem *selectedItem);
 
 signals:
-    void changeSegmentTrackAndStartTime(Rosegarden::Segment *,
-					Rosegarden::TrackId,
-					Rosegarden::timeT);
+    void changeSegmentTrackAndStartTime(const SegmentReconfigureCommand::SegmentRecSet &);
 
     void selectedSegments(std::vector<Rosegarden::Segment*>);
 

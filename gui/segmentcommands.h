@@ -98,15 +98,6 @@ public:
     SegmentReconfigureCommand(QString name);
     virtual ~SegmentReconfigureCommand();
 
-    void addSegment(Rosegarden::Segment *segment,
-                    Rosegarden::timeT startTime,
-                    Rosegarden::timeT duration,
-                    Rosegarden::TrackId track);
-
-    void execute();
-    void unexecute();
-
-private:
     struct SegmentRec {
         Rosegarden::Segment *segment;
         Rosegarden::timeT startTime;
@@ -114,6 +105,18 @@ private:
         Rosegarden::TrackId track;
     };
     typedef std::vector<SegmentRec> SegmentRecSet;
+
+    void addSegment(Rosegarden::Segment *segment,
+                    Rosegarden::timeT startTime,
+                    Rosegarden::timeT duration,
+                    Rosegarden::TrackId track);
+
+    void addSegments(const SegmentRecSet &records);
+
+    void execute();
+    void unexecute();
+
+private:
     SegmentRecSet m_records;
     void swap();
 };

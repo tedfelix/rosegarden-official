@@ -29,6 +29,8 @@
 #include "Event.h" // for timeT
 #include "Track.h"
 
+#include "segmentcommands.h" // for SegmentReconfigureCommand::SegmentRec
+
 namespace Rosegarden { class Segment; class RulerScale; }
 class SegmentItem;
 class SegmentCanvas;
@@ -157,6 +159,8 @@ protected slots:
     void slotChangeSegmentTrackAndStartTime(Rosegarden::Segment *,
 					    Rosegarden::TrackId,
 					    Rosegarden::timeT);
+
+    void slotChangeSegmentTrackAndStartTime(const SegmentReconfigureCommand::SegmentRecSet &);
 
     void slotSplitSegment(Rosegarden::Segment *, Rosegarden::timeT);
 

@@ -257,7 +257,7 @@
 <customwidgets>
     <customwidget>
         <class>RosegardenSpinBox</class>
-        <header location="local">gui/widgets.h</header>
+        <header location="local">widgets.h</header>
         <sizehint>
             <width>-1</width>
             <height>-1</height>

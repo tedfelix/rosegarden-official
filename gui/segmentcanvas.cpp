@@ -91,13 +91,21 @@ SegmentItem::~SegmentItem()
 {
     kdDebug(KDEBUG_AREA) << "SegmentItem::~SegmentItem" << endl;
 
-    //!!! oh arse.  I was thinking we didn't need to delete the
-    // other rectangle and label here 'cos the canvas would,
-    // but of course if we're deleted for some other reason
-    // like the segment has gone, then of course we want to
-    // be rid of them.  perhaps this means the ownership
-    // chain is just not very sensible -- we shouldn't really
-    // have one canvas item owning another
+    if (canvas()) {
+
+	// ugh.  need to do this because we own some of our peers
+	// and we don't know whether they've already been deleted
+	// (as part of the general cleanup on exit) or whether
+	// they aren't going to be (because we're being deleted
+	// on our own as our segment has gone)
+
+	QCanvasItemList l = canvas()->allItems();
+    
+	for (QCanvasItemList::Iterator it = l.begin(); it != l.end(); ++it) {
+	    if (*it == m_repeatRectangle) delete m_repeatRectangle;
+	    else if (*it == m_label) delete m_label;
+	}
+    }
 }
 
 void
@@ -291,6 +299,10 @@ SegmentCanvas::SegmentCanvas(RosegardenGUIDoc *doc,
 {
     QWhatsThis::add(this, i18n("Segments Canvas - Create and manipulate your segments here"));
 
+}
+
+SegmentCanvas::~SegmentCanvas()
+{
 }
 
 void SegmentCanvas::slotSetTool(ToolType t)
@@ -996,8 +1008,8 @@ SegmentSelector::SegmentSelector(SegmentCanvas *c)
 {
     kdDebug(KDEBUG_AREA) << "SegmentSelector()\n";
 
-    connect(this, SIGNAL(changeSegmentTrackAndStartTime(Rosegarden::Segment *, Rosegarden::TrackId, Rosegarden::timeT)),
-            c,    SIGNAL(changeSegmentTrackAndStartTime(Rosegarden::Segment *, Rosegarden::TrackId, Rosegarden::timeT)));
+    connect(this, SIGNAL(changeSegmentTrackAndStartTime(const SegmentReconfigureCommand::SegmentRecSet &)),
+            c,    SIGNAL(changeSegmentTrackAndStartTime(const SegmentReconfigureCommand::SegmentRecSet &)));
 
     connect(this, SIGNAL(selectedSegments(std::vector<Rosegarden::Segment*>)),
             c,     SIGNAL(selectedSegments(std::vector<Rosegarden::Segment*>)));
@@ -1054,10 +1066,11 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
         // emit this time for movement tracking (as we can move
         // through the Selector)
         //
+/*!!!
         emit changeSegmentTrackAndStartTime(m_currentItem->getSegment(),
 					    m_currentItem->getTrack(),
 					    m_currentItem->getStartTime());
-
+*/
     }
  
     // Tell the RosegardenGUIView that we've selected some new Segments -
@@ -1097,10 +1110,6 @@ SegmentSelector::slotSelectSegmentItem(SegmentItem *selectedItem)
     m_canvas->canvas()->update();
 }
 
-
-// Don't need to do anything - for the moment we do this
-// all on click, not release
-//
 void
 SegmentSelector::handleMouseButtonRelease(QMouseEvent * /*e*/)
 {
@@ -1114,29 +1123,30 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent * /*e*/)
 
     if (m_currentItem->isSelected())
     {
+	SegmentReconfigureCommand::SegmentRecSet set;
 	SegmentItemList::iterator it;
 	
 	for (it = m_selectedItems.begin();
 	     it != m_selectedItems.end();
 	     it++)
 	{
-	    //!!! we don't really want a command to happen for every
-	    //single segment.  The trackeditor is using a command that
-	    //can change the positions of many tracks together; we
-	    //need to get our data to it somehow and let it collate
-	    // the segments into a single command
-
 	    if ((it->second->getSegment()->getStartTime() !=
 		 it->second->getStartTime()) ||
                 (it->second->getSegment()->getTrack() !=
                  it->second->getTrack())) {
-		emit changeSegmentTrackAndStartTime(it->second->getSegment(),
-						    it->second->getTrack(),
-						    it->second->getStartTime());
+		SegmentReconfigureCommand::SegmentRec rec;
+		rec.segment = it->second->getSegment();
+		rec.startTime = it->second->getStartTime();
+		rec.duration = it->second->getDuration();
+		rec.track = it->second->getTrack();
+		set.push_back(rec);
 	    }
 	}
 
-	m_canvas->canvas()->update();
+	if (set.size() > 0) {
+	    emit changeSegmentTrackAndStartTime(set);
+	    m_canvas->canvas()->update();
+	}
     }
     
     m_currentItem = 0;

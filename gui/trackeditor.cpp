@@ -296,6 +296,11 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
 							  Rosegarden::TrackId,
 							  Rosegarden::timeT)));
 
+    connect(m_segmentCanvas, SIGNAL(changeSegmentTrackAndStartTime
+				    (const SegmentReconfigureCommand::SegmentRecSet &)),
+	    this, SLOT(slotChangeSegmentTrackAndStartTime
+		       (const SegmentReconfigureCommand::SegmentRecSet &)));
+
     connect(m_segmentCanvas, SIGNAL(splitSegment(Rosegarden::Segment*,
 						 Rosegarden::timeT)),
 	    this, SLOT(slotSplitSegment(Rosegarden::Segment*,
@@ -476,6 +481,14 @@ void TrackEditor::slotChangeSegmentTrackAndStartTime(Segment *s, TrackId track,
     SegmentReconfigureCommand *command =
 	new SegmentReconfigureCommand("Move Segment");
     command->addSegment(s, time, s->getDuration(), track);
+    addCommandToHistory(command);
+}
+
+void TrackEditor::slotChangeSegmentTrackAndStartTime(const SegmentReconfigureCommand::SegmentRecSet &recSet)
+{
+    SegmentReconfigureCommand *command =
+	new SegmentReconfigureCommand("Move Segment");
+    command->addSegments(recSet);
     addCommandToHistory(command);
 }
 
