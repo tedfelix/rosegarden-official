@@ -240,7 +240,7 @@ void MatrixPainter::handleLeftButtonPress(Rosegarden::timeT time,
     m_currentElement->setHeight(m_currentStaff->getElementHeight());
 
     double width = ev->getDuration() * m_currentStaff->getTimeScaleFactor();
-    m_currentElement->setWidth(width + 1); // fiddle factor
+    m_currentElement->setWidth(int(width + 1.0)); // fiddle factor
 
     m_currentStaff->positionElement(m_currentElement);
     m_mParentView->update();
@@ -300,6 +300,9 @@ void MatrixPainter::handleMouseRelease(Rosegarden::timeT endTime,
     // discard it otherwise
     //
     timeT time = m_currentElement->getViewAbsoluteTime();
+
+    if (time > endTime) std::swap(time, endTime);
+
     if (endTime == time) endTime = time + m_currentElement->getViewDuration();
 
     Rosegarden::SegmentMatrixHelper helper(m_currentStaff->getSegment());
