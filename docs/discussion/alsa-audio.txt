@@ -1,0 +1,119 @@
+Re: [Alsa-devel] Migration from 0.5 to 0.9?
+From: Takashi Iwai <tiwai@suse.de>
+ To: Leif Lindholm <leif.lindholm@i3micro.com>
+ Cc: alsa-devel@alsa-project.org
+ Date: Mon, 08 Apr 2002 16:55:28 +0200
+ 
+At 04 Apr 2002 15:41:36 +0200,
+Leif Lindholm wrote:
+> 
+> Hello
+> 
+> I'm working on a set-top-box based on the National Semiconductor SC1200
+> Geode integrated microprocessor.
+> 
+> National have been nice enough to write an Alsa-driver for the built-in
+> AC97-controller/audio thingy - unfortunetaly it is written for 0.5.10b.
+> 
+> So now I need to modify this one to use with 0.9.
+> 
+> Can someone give me a few tips/hints or is there possibly a document
+> about this that I failed to google up?
+
+unfortunatley (as always :) there is no documentation about the kernel
+stuff yet.
+since you have already a working 0.5.x driver, it's not too difficult,
+though. 
+
+as far as i can remember..
+
+- renaming
+
+        fragment -> period
+        channel -> stream
+        voice -> channel
+        snd_pcm_subchannel -> snd_pcm_substream
+
+- renaming of constants
+
+        generally:
+                SND_XXX -> SNDRV_XXX
+
+        some other changes, too: e.g.
+                SND_PCM_TRIGGER_GO -> SNDDRV_PCM_TRIGGER_START
+
+- snd_assert() is used instead of snd_debug_check()
+  (note that the argument is opposite, assert(x) means that "x" is true .)
+
+- no longer difference of stream/blocking modes
+
+- general hardware information is stored in snd_pcm_hardware_t
+  and passed to the runtime struct in open().
+  the information is intuitive, look at other sources.
+
+- abstracted ops.
+
+        open(substream)
+                - open the device
+                - copy the substream->runtime->hw parameter
+                  (not pass the pointer)
+                - set up the constraints (if any)
+
+        hw_params(substream, hw_params)
+                - allocate a buffer
+                  usually via snd_pcm_lib_malloc_pages
+
+        prepare(substream)
+                - set up the hardware parameters (like 0.5.x)
+
+                  note that parameters in runtime struct are
+                  stored in frames, not in bytes.
+                  there are functions, snd_pcm_lib_buffer_bytes()
+                  and snd_pcm_lib_period_bytes()
+
+        trigger(substream, cmd)
+                - start, stop, pause (like 0.5.x)
+
+        pointer(substream)
+                - returns the current pointer where the hw refers.
+                  (in frames!)
+
+        hw_free(substream)
+                - free the buffer
+                  usually via snd_pcm_lib_free_pages(substream)
+
+        close(substream)
+                - close the device, clean up.
+
+        copy, silence
+                - needed only if you don't (can't) use mmap.
+
+  they are defiend in snd_pcm_ops_t struct and set up in
+  pcm initizliation routine via snd_pcm_set_ops().
+
+- when the interrupt occurs at period (fragment), call
+
+        snd_pcm_period_elapsed(substream)
+
+  just once per interrupt.
+
+- no longer snd-xxx functions for allocating port, dma and irqs.
+  you need to use standard functions.
+  for releasing struct resources *, you have to use kfree_nocheck()
+  to avoid malloc-wrapper.
+
+- definitions of pci id table, probe(), remove() (suspend() and
+  remove() if possible) on struct pci_driver.
+  
+- finally and best way - look at drivers on a same chip of both 0.5.x
+  and 0.9.0, and compare them :)
+
+
+
+Takashi
+
+_______________________________________________
+Alsa-devel mailing list
+Alsa-devel@lists.sourceforge.net
+https://lists.sourceforge.net/lists/listinfo/alsa-devel
+
