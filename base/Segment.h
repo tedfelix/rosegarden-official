@@ -134,7 +134,8 @@ public:
 
     /**
      * Returns the time at which the bar containing the given time
-     * starts.  Returns -1 if the given time is somehow out of range.
+     * starts.  Returns end-of-track if the given time exceeds the
+     * track's length.
      *
      * Do not call this unless the track is in a Composition.
      */
@@ -142,7 +143,8 @@ public:
 
     /**
      * Returns the time at which the bar containing the given time
-     * ends.  Returns -1 if the given time is somehow out of range.
+     * ends.  Returns end-of-track if the given time exceeds the
+     * track's length.
      *
      * Do not call this unless the track is in a Composition.
      */

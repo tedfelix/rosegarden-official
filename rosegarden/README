@@ -50,7 +50,7 @@ If you obtained the source code from a distribution tarball:
 
   Just run 
 
-    CXXFLAGS="-g3 -gstabs+ -fexceptions" ./configure
+    ./configure
 
   plus appropriate "--with-qt-dir=..." and "--prefix=..." options.
   The prefix should be the same as the one of your KDE installation.
