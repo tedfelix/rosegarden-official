@@ -208,6 +208,7 @@ public slots:
                              const Rosegarden::RealTime &endTime);
 
     void slotDroppedAudio(QString audioDesc);
+    void slotDroppedNewAudio(QString audioDesc);
 
     /*
      * Commands

@@ -661,7 +661,28 @@ void TrackEditor::dropEvent(QDropEvent* event)
         if (uriPath.endsWith(".rg")) {
             emit droppedDocument(uriPath);
         } else {
-            emit droppedAudio(uriPath);
+
+            int trackPos = m_segmentCanvas->grid().
+                getYBin(event->pos().y() + 
+                        m_segmentCanvas->verticalScrollBar()->value());
+
+            Rosegarden::timeT time = 
+                m_segmentCanvas->grid().getRulerScale()->
+                getTimeForX(event->pos().y() + 
+                            m_segmentCanvas->horizontalScrollBar()->value());
+
+            if (m_doc->getComposition().getTrackById(trackPos))
+            {
+                QString audioText;
+                QTextOStream t(&audioText);
+
+                t << uriPath;
+                t << trackPos;
+                t << time;
+
+                emit droppedNewAudio(audioText);
+            }
+
         }
             
     } else if (QTextDrag::decode(event, text)) {

@@ -197,6 +197,13 @@ signals:
      */
     void droppedAudio(QString audioDesc);
 
+    /**
+     * And audio file was dropped from konqi say and needs to be
+     * inserted into AudioManagerDialog before adding to the 
+     * composition.
+     */
+    void droppedNewAudio(QString audioDesc);
+
 protected:
 
     virtual void dragEnterEvent(QDragEnterEvent *event);

@@ -146,12 +146,15 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
             parent,
             SLOT(slotOpenDroppedURL(QString)));
 
-
     connect(m_trackEditor,
             SIGNAL(droppedAudio(QString)),
             this,
             SLOT(slotDroppedAudio(QString)));
     
+    connect(m_trackEditor,
+            SIGNAL(droppedNewAudio(QString)),
+            this,
+            SLOT(slotDroppedNewAudio(QString)));
 
     connect(m_instrumentParameterBox,
             SIGNAL(changeInstrumentLabel(Rosegarden::InstrumentId, QString)),
@@ -1065,6 +1068,25 @@ RosegardenGUIView::slotAddAudioSegmentAndTrack(
     m_trackEditor->getTrackButtons()->selectLabel(comp.getNbTracks() - 1);
 
     slotSelectTrackSegments(newTrackId);
+}
+
+
+void
+RosegardenGUIView::slotDroppedNewAudio(QString audioDesc)
+{
+    QTextIStream s(&audioDesc);
+
+    QString audioFile;
+    Rosegarden::TrackId trackId;
+    Rosegarden::timeT time;
+    s >> audioFile;
+    s >> trackId;
+    s >> time;
+
+    RG_DEBUG << "RosegardenGUIView::slotDroppedNewAudio("
+             << "filename = " << audioFile 
+             << ", trackid = " << trackId
+             << ", time = " << time << endl;
 }
 
 void
