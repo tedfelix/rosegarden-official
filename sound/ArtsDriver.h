@@ -18,17 +18,20 @@
   COPYING included with this distribution for more information.
 */
 
-// EXPERIMENTAL - SHOULDN'T EVEN BE IN THE BUILD YET!!!!
-//
-// rwb 04.04.2002
 
+#include <arts/artsmidi.h>
+#include <arts/soundserver.h>
+#include <arts/artsflow.h>     // aRts audio subsys
+#include <arts/artsmodules.h>  // aRts wav modules
+
+#include "MidiRecord.h"        // local MIDI record implementation
 #include "SoundDriver.h"
 
 
-// Specialisation of SoundDriver to support aRts
+// Specialisation of SoundDriver to support aRts (http://www.arts-project.org)
+// Supports version 0.6.0
 //
 //
-
 
 #ifndef _ARTSDRIVER_H_
 #define _ARTSDRIVER_H_
@@ -42,29 +45,75 @@ public:
     ArtsDriver();
     virtual ~ArtsDriver();
 
-    virtual void generateInstruments();
     virtual void initialiseMidi();
     virtual void initialiseAudio();
-    virtual void initialisePlayback();
+    virtual void initialisePlayback(const RealTime &position);
     virtual void stopPlayback();
-    virtual void resetPlayback();
+    virtual void resetPlayback(const RealTime &position,
+                               const RealTime &latency);
     virtual void allNotesOff();
     virtual void processNotesOff(const RealTime &time);
-    virtual void processAudioQueue();
 
     virtual RealTime getSequencerTime();
-
-    virtual void
-        immediateProcessEventsOut(MappedComposition &mC);
 
     virtual MappedComposition*
         getMappedComposition(const RealTime &playLatency);
     
+    virtual void processEventsOut(const MappedComposition &mC,
+                                  const RealTime &playLatency,
+                                  bool now);
+
+    virtual void record(const RecordStatus& recordStatus);
+
+    void processMidiIn(const Arts::MidiCommand &midiCommand,
+                       const Arts::TimeStamp &timeStamp,
+                       const Rosegarden::RealTime &playLatency);
+
+    // Some Arts helper methods 'cos the basic Arts::TimeStamp
+    // method is a bit unhelpful
+    //
+    Arts::TimeStamp aggregateTime(const Arts::TimeStamp &ts1,
+                                  const Arts::TimeStamp &ts2);
+
+    Arts::TimeStamp deltaTime(const Arts::TimeStamp &ts1,
+                              const Arts::TimeStamp &ts2);
+
+    inline Arts::TimeStamp recordTime(Arts::TimeStamp const &ts)
+    {
+        return (aggregateTime(deltaTime(ts, m_artsRecordStartTime),
+                Arts::TimeStamp(m_playStartPosition.sec,
+                m_playStartPosition.usec)));
+    }
+
+
+protected:
+    virtual void generateInstruments();
+    virtual void processAudioQueue();
     virtual void processMidiOut(const MappedComposition &mC,
                                 const RealTime &playLatency,
                                 bool now);
 
 private:
+    // aRts sound server reference
+    //
+    Arts::SoundServerV2      m_soundServer;
+
+    // aRts MIDI devices
+    //
+    Arts::MidiManager        m_midiManager;
+    Arts::Dispatcher         m_dispatcher;
+    Arts::MidiClient         m_midiPlayClient;
+    Arts::MidiClient         m_midiRecordClient;
+    RosegardenMidiRecord     m_midiRecordPort;
+    Arts::MidiPort           m_midiPlayPort;
+
+    // aRts Audio devices
+    //
+    Arts::Synth_AMAN_PLAY    m_amanPlay;
+    Arts::Synth_AMAN_RECORD  m_amanRecord;
+
+    Arts::TimeStamp          m_artsPlayStartTime;
+    Arts::TimeStamp          m_artsRecordStartTime;
 
 };
 

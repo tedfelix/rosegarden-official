@@ -18,22 +18,16 @@
   COPYING included with this distribution for more information.
 */
 
-// EXPERIMENTAL - SHOULDN'T EVEN BE IN THE BUILD YET!!!!
-//
-// rwb 04.04.2002
-
-
 #include <vector>
 #include <alsa/asoundlib.h> // ALSA
-
-#include "Sequencer.h" // temporary - for NoteOffQueue
 
 #include "SoundDriver.h"
 #include "Instrument.h"
 #include "Device.h"
 
 
-// Specialisation of SoundDriver to support ALSA
+// Specialisation of SoundDriver to support ALSA (http://www.alsa-project.org)
+// Currently supports version 0.9beta12
 //
 //
 
@@ -79,27 +73,21 @@ public:
     AlsaDriver();
     virtual ~AlsaDriver();
 
-    virtual void generateInstruments();
     virtual void initialiseMidi();
     virtual void initialiseAudio();
-    virtual void initialisePlayback();
+    virtual void initialisePlayback(const RealTime &position);
     virtual void stopPlayback();
-    virtual void resetPlayback();
+    virtual void resetPlayback(const RealTime &position,
+                               const RealTime &latency);
     virtual void allNotesOff();
     virtual void processNotesOff(const RealTime &time);
-    virtual void processAudioQueue();
 
     virtual RealTime getSequencerTime();
-
-    virtual void
-        immediateProcessEventsOut(MappedComposition &mC);
 
     virtual MappedComposition*
         getMappedComposition(const RealTime &playLatency);
     
-    virtual void processMidiOut(const MappedComposition &mC,
-                                const RealTime &playLatency,
-                                bool now);
+    virtual void record(const RecordStatus& recordStatus);
 
     void addInstrument(Instrument::InstrumentType type,
                        const std::string &name, 
@@ -107,11 +95,22 @@ public:
                        int port,
                        int channel);
 
+    virtual void processEventsOut(const MappedComposition &mC,
+                                  const Rosegarden::RealTime &playLatency, 
+                                  bool now);
 
     // Some stuff to help us debug this
     //
     void getSystemInfo();
     void showQueueStatus(int queue);
+
+protected:
+    virtual void generateInstruments();
+    virtual void processMidiOut(const MappedComposition &mC,
+                                const RealTime &playLatency,
+                                bool now);
+
+    virtual void processAudioQueue();
 
 private:
     std::vector<AlsaInstrument*> m_alsaInstruments;
@@ -130,6 +129,7 @@ private:
 
     NoteOffQueue                 m_noteOffQueue;
 
+    //m_alsaRecordStartTime;
 
 };
 

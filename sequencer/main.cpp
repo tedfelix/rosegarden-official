@@ -59,6 +59,17 @@ int main(int argc, char *argv[])
     RosegardenSequencerApp *roseSeq = 0;
 
 
+    if (argc > 1)
+    {
+        std::cerr
+          << "RosegardenSequencer - doesn't accept any command line arguments"
+          << std::endl
+          << "RosegardenSequencer - exiting"
+          << std::endl;
+
+        exit(1);
+    }
+
     if (app.isRestored())
     {
         RESTORE(RosegardenSequencerApp);

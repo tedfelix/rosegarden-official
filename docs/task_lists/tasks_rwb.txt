@@ -1,8 +1,11 @@
 0.2 TO-DO for rwb
 -----------------
-updated 25.03.2001
+updated 09.04.2002
 
 Currently looking at:
+
+o Sequencer's getMappedComposition for sync and async is
+  suddenly bombing out post aRts/ALSA split
 
 
 o Looping marker set from file load/top level - Looping

@@ -73,7 +73,7 @@ RosegardenSequencerApp::RosegardenSequencerApp():
 
     // set this here and now so we can accept async midi events
     //
-    m_sequencer->record(Rosegarden::Sequencer::ASYNCHRONOUS_MIDI);
+    m_sequencer->record(Rosegarden::ASYNCHRONOUS_MIDI);
 
 }
 
@@ -236,13 +236,10 @@ RosegardenSequencerApp::startPlaying()
     Rosegarden::MappedComposition *mC =
         fetchEvents(m_songPosition, m_songPosition + m_readAhead);
 
-    if (mC != 0)
-    {
-        m_sequencer->processEventsOut(*mC, m_playLatency, false);
-        delete mC;
-    }
-
-    m_sequencer->processAudioQueue();
+    // process whether we need to or not as this also processes
+    // the audio queue for us
+    //
+    m_sequencer->processEventsOut(*mC, m_playLatency, false);
 
     return true;
 }
@@ -263,16 +260,14 @@ RosegardenSequencerApp::keepPlaying()
                         fetchEvents(m_lastFetchSongPosition,
                                     m_lastFetchSongPosition + m_readAhead);
 
-        if (mC != 0)
-        {
-            m_sequencer->processEventsOut(*mC, m_playLatency, false);
-            delete mC;
-        }
+        // Again, process whether we need to or not to keep
+        // the Sequencer up-to-date with audio events
+        //
+        m_sequencer->processEventsOut(*mC, m_playLatency, false);
+        delete mC;
 
         m_lastFetchSongPosition = m_lastFetchSongPosition + m_readAhead;
     }
-
-    m_sequencer->processAudioQueue();
 
     return true;
 }
@@ -393,6 +388,7 @@ RosegardenSequencerApp::processRecordedMidi()
 
     arg << m_sequencer->getMappedComposition(m_playLatency);
 
+
     if (!kapp->dcopClient()->call(ROSEGARDEN_GUI_APP_NAME,
                                   ROSEGARDEN_GUI_IFACE_NAME,
                                  "processRecordedMidi(Rosegarden::MappedComposition)",
@@ -459,7 +455,7 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
 
         // Get the Sequencer to prepare itself for recording
         //
-        m_sequencer->record(Rosegarden::Sequencer::RECORD_MIDI);
+        m_sequencer->record(Rosegarden::RECORD_MIDI);
     }
     else if (localRecordMode == STARTING_TO_RECORD_AUDIO)
     {
@@ -600,7 +596,7 @@ RosegardenSequencerApp::setLoop(long loopStartSec,
 int
 RosegardenSequencerApp::getSoundSystemStatus()
 {
-    return m_sequencer->getStatus();
+    return m_sequencer->getDriverStatus();
 }
 
 
@@ -643,9 +639,9 @@ RosegardenSequencerApp::setMappedInstrument(int type, unsigned char channel,
 void
 RosegardenSequencerApp::processSequencerSlice(Rosegarden::MappedComposition mC)
 {
-    //std::cout << "processSequencerSlice() - processing slice immediately"
-              //<< std:: endl;
-    m_sequencer->immediateProcessEventsOut(mC);
+    // Use the "now" API
+    //
+    m_sequencer->processEventsOut(mC, Rosegarden::RealTime(0, 0), true);
 }
 
 void
@@ -684,7 +680,7 @@ RosegardenSequencerApp::processMappedEvent(unsigned int id,
 
     mC.insert(mE);
 
-    m_sequencer->immediateProcessEventsOut(mC);
+    m_sequencer->processEventsOut(mC, Rosegarden::RealTime(0, 0), true);
 }
 
 

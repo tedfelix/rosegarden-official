@@ -1,13 +1,6 @@
-Rosegarden sound module v0.1
+09.04.2002
+----------
 
-18.6.2001
+First split of aRts code from Sequencer into ArtsDriver.
+AlsaDriver first cut also available.
 
-At a reasonable stage to check in the initial code for the
-sound subsystem for Rosegarden.  At the moment this code is
-not integrated with the main rosegarden code - examples of
-how it is used can be found in the sound.c example file.
-
-functionality:
-
- - read and parse MIDI file to internal representation
- - connect recording client with aRts and read incoming events

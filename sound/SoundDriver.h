@@ -31,8 +31,14 @@
 #include "MappedComposition.h"
 #include "MappedInstrument.h"
 #include "RealTime.h"
+#include "AudioFile.h"
 
-// Abstract base to support SoundDrivers such as aRts and ALSA
+// Abstract base to support SoundDrivers such as aRts and ALSA.
+//
+// This base class provides the generic driver support for
+// these drivers with the Sequencer class owning an instance
+// of a sub class of this class and directing it and required
+// by the rosegardensequencer itself.
 //
 //
 
@@ -42,45 +48,218 @@
 namespace Rosegarden
 {
 
+// PlayableAudioFile is queued on the m_audioPlayQueue and
+// played by processAudioQueue() in Sequencer.  State changes
+// through playback and it's finally discarded when done.
+//
+// We've removed any driver dependencies (aRts) from here so
+// Audio is broken for the moment.
+//
+//
+class PlayableAudioFile
+{
+public:
+
+    typedef enum
+    {
+        IDLE,
+        PLAYING,
+        DEFUNCT
+    } PlayStatus;
+
+
+    PlayableAudioFile(AudioFile *audioFile,
+                      const RealTime &startTime,
+                      const RealTime &startIndex,
+                      const RealTime &duration):
+        m_id(audioFile->getID()),
+        m_startTime(startTime),
+        m_startIndex(startIndex),
+        m_duration(duration),
+        m_status(IDLE)
+    {
+    }
+
+    PlayableAudioFile(unsigned int id,
+                      const RealTime &startTime,
+                      const RealTime &startIndex,
+                      const RealTime &duration):
+        m_id(id),
+        m_startTime(startTime),
+        m_startIndex(startIndex),
+        m_duration(duration),
+        m_status(IDLE)
+    {
+    }
+
+    ~PlayableAudioFile() {;}
+
+    void setStatus(const PlayStatus &status) { m_status = status; }
+    PlayStatus getStatus() const { return m_status; }
+
+    RealTime getStartTime() const { return m_startTime; }
+    RealTime getEndTime() const { return m_startTime + m_duration; }
+
+private:
+    unsigned int          m_id;
+    RealTime              m_startTime;
+    RealTime              m_startIndex;
+    RealTime              m_duration;
+    PlayStatus            m_status;
+};
+
+
+typedef enum
+{
+    ASYNCHRONOUS_MIDI,
+    ASYNCHRONOUS_AUDIO,
+    RECORD_MIDI,
+    RECORD_AUDIO
+} RecordStatus;
+
+
+
+typedef enum
+{
+    MIDI_AND_AUDIO_OK,  // Everything's OK
+    MIDI_OK,            // MIDI's OK
+    AUDIO_OK,           // AUDIO's OK
+    NO_DRIVER           // Nothing's OK
+} SoundDriverStatus;
+
+// The NoteOffQueue holds a time ordered set of
+// pending MIDI NOTE OFF events.
+//
+class NoteOffEvent
+{
+public:
+    NoteOffEvent() {;}
+    NoteOffEvent(const Rosegarden::RealTime &realTime,
+                 unsigned int pitch,
+                 Rosegarden::MidiByte channel):
+        m_realTime(realTime),
+        m_pitch(pitch),
+        m_channel(channel) {;}
+    ~NoteOffEvent() {;}
+
+    struct NoteOffEventCmp
+    {
+        bool operator()(NoteOffEvent *nO1, NoteOffEvent *nO2)
+        {
+            return nO1->getRealTime() < nO2->getRealTime();
+        }
+    };
+
+    Rosegarden::RealTime getRealTime() const { return m_realTime; }
+    Rosegarden::MidiByte getPitch() const { return m_pitch; }
+    Rosegarden::MidiByte getChannel() const { return m_channel; }
+
+private:
+    Rosegarden::RealTime m_realTime;
+    Rosegarden::MidiByte m_pitch;
+    Rosegarden::MidiByte m_channel;
+
+};
+
+class NoteOffQueue : public std::multiset<NoteOffEvent *,
+                     NoteOffEvent::NoteOffEventCmp>
+{
+public:
+    NoteOffQueue() {;}
+    ~NoteOffQueue() {;}
+private:
+};
+
+
 class SoundDriver
 {
 public:
     SoundDriver(const std::string &name);
     virtual ~SoundDriver();
 
-    virtual void generateInstruments() = 0;
-
     virtual void initialiseMidi() = 0;
     virtual void initialiseAudio() = 0;
-    virtual void initialisePlayback() = 0;
+    virtual void initialisePlayback(const RealTime &position) = 0;
     virtual void stopPlayback() = 0;
-    virtual void resetPlayback() = 0;
+    virtual void resetPlayback(const RealTime &position,
+                               const RealTime &latency) = 0;
     virtual void allNotesOff() = 0;
     virtual void processNotesOff(const RealTime &time) = 0;
-    virtual void processAudioQueue() = 0;
     
     virtual RealTime getSequencerTime() = 0;
-
-    virtual void
-        immediateProcessEventsOut(MappedComposition &mC) = 0;
 
     virtual MappedComposition*
         getMappedComposition(const RealTime &playLatency) = 0;
 
+    virtual void processEventsOut(const MappedComposition &mC,
+                                  const Rosegarden::RealTime &playLatency,
+                                  bool now) = 0;
+
+    // Activate a recording state
+    //
+    virtual void record(const RecordStatus& recordStatus) = 0;
+
+    // Mapped Instruments
+    //
+    void setMappedInstrument(MappedInstrument *mI);
+    MappedInstrument* getMappedInstrument(InstrumentId id);
+
+    // Return the current status of the driver
+    //
+    SoundDriverStatus getStatus() const { return m_driverStatus; }
+
+    // Queue an audio file for playback
+    //
+    void queueAudio(PlayableAudioFile *audioFile);
+
+    // Are we playing?
+    //
+    bool isPlaying() const { return m_playing; }
+
+    RealTime getStartPosition() const { return m_playStartPosition; }
+    RecordStatus getRecordStatus() const { return m_recordStatus; }
+
+protected:
+    // Helper functions to be implemented by subclasses
+    //
     virtual void processMidiOut(const MappedComposition &mC,
                                 const RealTime &playLatency,
                                 bool now) = 0;
+    virtual void processAudioQueue() = 0;
+    virtual void generateInstruments() = 0;
 
-    MappedInstrument* getMappedInstrument(InstrumentId id);
 
-protected:
-    std::string    m_name;
-    //InstrumentList m_instruments;
+    std::string            m_name;
+    SoundDriverStatus      m_driverStatus;
+    Rosegarden::RealTime   m_playStartPosition;
+    bool                   m_startPlayback;
+    bool                   m_playing;
+
+    // Note-off handling
+    //
+    std::map<unsigned int, MappedEvent*> m_noteOnMap;
+    NoteOffQueue                         m_noteOffQueue;
+
+    // Audio stuff - in here?
+    //
+    std::vector<PlayableAudioFile*> m_audioPlayQueue;
+
+    //std::vector<AudioFile*> m_audioFiles;
+    //
+    // This is our driver's own Instrument list to be returned
+    // and merged at the Sequencer before sending up to the
+    // application.
+    //
     std::vector<Rosegarden::MappedInstrument*> m_instruments;
+
+    MappedComposition        m_recordComposition;
+    RecordStatus             m_recordStatus;
+
+
 
 };
 
 }
 
-#endif // _ALSADRIVER_H_
+#endif // _SOUNDDRIVER_H_
 

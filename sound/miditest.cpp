@@ -40,6 +40,20 @@ using Rosegarden::ArtsDriver;
 int
 main(int /*argc*/, char ** /*argv*/)
 {
+    ArtsDriver *arts = new ArtsDriver();
+    arts->initialiseMidi();
+    arts->initialiseAudio();
+    Rosegarden::MappedComposition *mC;
+
+    while (true)
+    {
+       mC = arts->getMappedComposition(Rosegarden::RealTime(0, 40));
+       cout << "COMPOSITION = " << mC->size() << endl;
+       sleep(1);
+    }
+
+    
+    /*
     int destclient = 65;
     int destport = 1;
 
@@ -107,7 +121,7 @@ main(int /*argc*/, char ** /*argv*/)
         snd_seq_ev_schedule_real(event, queue, 0, &time);
 
         // send program change
-        snd_seq_ev_set_pgmchange(event, 0, 3);
+        snd_seq_ev_set_pgmchange(event, 0, 34);
         snd_seq_event_output(seq, event);
 
         // send note on
@@ -124,4 +138,5 @@ main(int /*argc*/, char ** /*argv*/)
 
         // drain
     }
+*/
 }
