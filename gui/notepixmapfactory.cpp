@@ -19,8 +19,9 @@
 
 #include <algorithm>
 
-#include <kdebug.h>
+#include <kmessagebox.h>
 
+#include "rosedebug.h"
 #include "rosegardenguiview.h"
 #include "notepixmapfactory.h"
 #include "staff.h"
@@ -41,6 +42,9 @@ NotePixmapOffsets::offsetsFor(Note note,
     m_drawTail = drawTail;
     m_stalkGoesUp = stalkGoesUp;
     m_noteHasStalk = note < Whole;
+
+    m_bodyOffset.setX(0); m_bodyOffset.setY(0);
+    m_hotSpot.setX(0); m_hotSpot.setY(0);
 
     if (note > QuarterDotted)
         m_bodySize = m_noteBodyEmptySize;
@@ -121,10 +125,19 @@ NotePixmapOffsets::computeBodyOffset()
         m_bodyOffset.setY(m_pixmapSize.height() - m_bodySize.height());
         m_hotSpot.setY(m_pixmapSize.height() - m_bodySize.height() / 2);
 
+        m_stalkPoints.first.setY(m_pixmapSize.height() - m_bodySize.height() / 2 - 1);
+
+        m_stalkPoints.second.setY(0);
+
     } else {
 
         m_hotSpot.setY(m_bodySize.height() / 2);
 
+        m_stalkPoints.first.setX(m_bodyOffset.x());
+        m_stalkPoints.first.setY(m_bodySize.height() / 2);
+
+        m_stalkPoints.second.setX(m_stalkPoints.first.x());
+        m_stalkPoints.second.setY(m_pixmapSize.height());
     }   
 
     switch (m_accident) {
@@ -139,9 +152,12 @@ NotePixmapOffsets::computeBodyOffset()
         if (m_stalkGoesUp) {
             m_bodyOffset.ry() -= 3;
             m_hotSpot.ry() -= 3;
+            m_stalkPoints.first.ry() -= 3;
+            
         } else {
             m_bodyOffset.ry() += 3;
             m_hotSpot.ry() += 3;
+            m_stalkPoints.first.ry() += 3;
         }
 
         break;
@@ -153,6 +169,7 @@ NotePixmapOffsets::computeBodyOffset()
         if (!m_stalkGoesUp) {
             m_bodyOffset.ry() += 4;
             m_hotSpot.ry() += 4;
+            m_stalkPoints.first.ry() += 4;
         }
 
         break;
@@ -164,9 +181,11 @@ NotePixmapOffsets::computeBodyOffset()
         if (m_stalkGoesUp) {
             m_bodyOffset.ry() -= 3;
             m_hotSpot.ry() -= 3;
+            m_stalkPoints.first.ry() -= 3;
         } else {
             m_bodyOffset.ry() += 3;
             m_hotSpot.ry() += 3;
+            m_stalkPoints.first.ry() += 3;
         }
 
         break;
@@ -176,6 +195,19 @@ NotePixmapOffsets::computeBodyOffset()
     if (m_accident != NoAccident)
         m_hotSpot.setX(m_bodyOffset.x());
     
+
+    m_stalkPoints.first.setX(m_bodyOffset.x() + m_bodySize.width() - 2);
+
+    m_stalkPoints.second.setX(m_stalkPoints.first.x());
+
+    kdDebug(KDEBUG_AREA) << "NotePixmapOffsets::computeBodyOffset() : bodyOffset = "
+                         << m_bodyOffset.x() << ","
+                         << m_bodyOffset.y()
+                         << " - stalkPoints : "
+                         << m_stalkPoints.first.x() << "," << m_stalkPoints.first.y() << " - "
+                         << m_stalkPoints.second.x() << "," << m_stalkPoints.second.y()
+                         << endl;
+
 }
 
 
@@ -299,6 +331,11 @@ NotePixmapFactory::makeNotePixmap(Note note,
     if (noteHasStalk)
         drawStalk(note, drawTail, stalkGoesUp);
 
+    // paint accident (if needed)
+    //
+    if (accident != NoAccident)
+        drawAccident(accident, stalkGoesUp);
+    
 
 #ifdef ROSE_DEBUG_NOTE_PIXMAP_FACTORY
     // add red dots at each corner of the pixmap
@@ -437,19 +474,13 @@ void
 NotePixmapFactory::drawStalk(Note note,
                              bool drawTail, bool stalkGoesUp)
 {
-    if (stalkGoesUp) {
+    QPoint lineOrig, lineDest;
 
-        m_p.drawLine(m_noteBodyWidth - 2, m_generatedPixmapHeight - m_noteBodyHeight / 2 - 1,
-                     m_noteBodyWidth - 2, 0);
-        m_pm.drawLine(m_noteBodyWidth - 2, m_generatedPixmapHeight - m_noteBodyHeight / 2 - 1,
-                      m_noteBodyWidth - 2, 0);
-    } else {
+    lineOrig = m_offsets.stalkPoints().first;
+    lineDest = m_offsets.stalkPoints().second;
 
-        m_p.drawLine(0, m_noteBodyHeight / 2,
-                     0, m_generatedPixmapHeight);
-        m_pm.drawLine(0, m_noteBodyHeight / 2,
-                      0, m_generatedPixmapHeight);
-    }
+    m_p.drawLine(lineOrig, lineDest);
+    m_pm.drawLine(lineOrig, lineDest);
 
     if (drawTail && note < Quarter) {
         // need to add a tail pixmap
@@ -459,8 +490,8 @@ NotePixmapFactory::drawStalk(Note note,
         if (stalkGoesUp) {
             tailPixmap = tailUp(note);
 
-            m_p.drawPixmap (m_noteBodyWidth - 1, 0, *tailPixmap);
-            m_pm.drawPixmap(m_noteBodyWidth - 1, 0, *(tailPixmap->mask()));
+            m_p.drawPixmap (m_offsets.stalkPoints().first.x() + 1 , 0, *tailPixmap);
+            m_pm.drawPixmap(m_offsets.stalkPoints().first.x() + 1 , 0, *(tailPixmap->mask()));
 
         } else {
 
@@ -476,6 +507,40 @@ NotePixmapFactory::drawStalk(Note note,
         }
 
     }
+}
+
+void
+NotePixmapFactory::drawAccident(Accident accident, bool stalkGoesUp)
+{
+    const QPixmap *accidentPixmap = 0;
+
+    switch (accident) {
+
+    case NoAccident:
+        kdDebug(KDEBUG_AREA) << "NotePixmapFactory::drawAccident() called with NoAccident"
+                             << endl;
+        KMessageBox::error(0, "NotePixmapFactory::drawAccident() called with NoAccident");
+        return;
+        break;
+        
+    case Sharp:
+        accidentPixmap = &m_accidentSharp;
+        break;
+
+    case Flat:
+        accidentPixmap = &m_accidentFlat;
+
+    case Natural:
+        accidentPixmap = &m_accidentNatural;
+        break;
+    }
+
+    m_p.drawPixmap(0, m_offsets.bodyOffset().y(),
+                   *accidentPixmap);
+
+    m_pm.drawPixmap(0, m_offsets.bodyOffset().y(),
+                    *(accidentPixmap->mask()));
+    
 }
 
 

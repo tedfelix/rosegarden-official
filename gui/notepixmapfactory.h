@@ -55,6 +55,9 @@ enum Accident { NoAccident, Sharp, Flat, Natural };
 class NotePixmapOffsets
 {
 public:
+
+    typedef pair<QPoint, QPoint> stalkpoints;
+
     NotePixmapOffsets();
 
     void offsetsFor(Note,
@@ -62,9 +65,11 @@ public:
                     bool drawTail,
                     bool stalkGoesUp);
     
-    const QPoint& bodyOffset() { return m_bodyOffset; }
-    const QSize&  pixmapSize() { return m_pixmapSize; }
-    const QPoint& hotSpot()    { return m_hotSpot; }
+    const QPoint&      bodyOffset()  { return m_bodyOffset; }
+    const QSize&       pixmapSize()  { return m_pixmapSize; }
+    const QPoint&      hotSpot()     { return m_hotSpot; }
+    const stalkpoints& stalkPoints() { return m_stalkPoints; }
+
 
     void setNoteBodySizes(QSize empty, QSize filled);
     void setTailWidth(unsigned int);
@@ -98,6 +103,7 @@ protected:
     QSize m_pixmapSize;
     QSize m_accidentStalkSize;
 
+    stalkpoints m_stalkPoints;
 };
 
 
@@ -146,6 +152,8 @@ protected:
     const QPixmap* tailDown(Note note) const;
 
     void drawStalk(Note note, bool drawTail, bool stalkGoesUp);
+    void drawAccident(Accident, bool stalkGoesUp);
+
     void createPixmapAndMask();
 
     NotePixmapOffsets m_offsets;
