@@ -100,7 +100,7 @@ protected:
     QSpinBox                     *m_defaultBox;
     RosegardenComboBox           *m_colourCombo;
     RosegardenComboBox           *m_ipbPosition;
-
+    QLabel                       *m_hexValue;
 };
 
 

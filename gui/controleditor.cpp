@@ -184,12 +184,15 @@ ControlEditorDialog::slotUpdate()
         QString position = QString("%1").arg((*it)->getIPBPosition());
         if (position.toInt() == -1) position = notShowing;
 
+        QString value;
+        value.sprintf("%d (0x%x)", (*it)->getControllerValue(),
+                                 (*it)->getControllerValue());
+
         item = new ControlParameterItem(i++,
                                         m_listView,
                                         strtoqstr((*it)->getName()),
                                         strtoqstr((*it)->getType()),
-                                        QString("%1").arg(
-                                            int((*it)->getControllerValue())),
+                                        value,
                                         strtoqstr((*it)->getDescription()),
                                         QString("%1").arg((*it)->getMin()),
                                         QString("%1").arg((*it)->getMax()),
@@ -422,7 +425,7 @@ ControlParameterEditDialog::ControlParameterEditDialog(
 
     QFrame *frame = new QFrame(groupBox);
 
-    QGridLayout *layout = new QGridLayout(frame, 4, 2, 10, 5);
+    QGridLayout *layout = new QGridLayout(frame, 4, 3, 10, 5);
 
     layout->addWidget(new QLabel(i18n("Name:"), frame), 0, 0);
     m_nameEdit = new QLineEdit(frame);
@@ -430,35 +433,39 @@ ControlParameterEditDialog::ControlParameterEditDialog(
 
     layout->addWidget(new QLabel(i18n("Type:"), frame), 1, 0);
     m_typeCombo = new RosegardenComboBox(frame);
-    layout->addWidget(m_typeCombo, 1, 1);
+    layout->addMultiCellWidget(m_typeCombo, 1, 1, 1, 2);
 
     layout->addWidget(new QLabel(i18n("Description:"), frame), 2, 0);
     m_description = new QLineEdit(frame);
-    layout->addWidget(m_description, 2, 1);
+    layout->addMultiCellWidget(m_description, 2, 2, 1, 2);
+
+    // hex value alongside decimal value
+    m_hexValue = new QLabel(frame);
+    layout->addWidget(m_hexValue, 3, 1);
 
     layout->addWidget(new QLabel(i18n("Controller value:"), frame), 3, 0);
     m_controllerBox = new QSpinBox(frame);
-    layout->addWidget(m_controllerBox, 3, 1);
+    layout->addWidget(m_controllerBox, 3, 2);
 
     layout->addWidget(new QLabel(i18n("Minimum value:"), frame), 4, 0);
     m_minBox = new QSpinBox(frame);
-    layout->addWidget(m_minBox, 4, 1);
+    layout->addMultiCellWidget(m_minBox, 4, 4, 1, 2);
 
     layout->addWidget(new QLabel(i18n("Maximum value:"), frame), 5, 0);
     m_maxBox = new QSpinBox(frame);
-    layout->addWidget(m_maxBox, 5, 1);
+    layout->addMultiCellWidget(m_maxBox, 5, 5, 1, 2);
 
     layout->addWidget(new QLabel(i18n("Default value:"), frame), 6, 0);
     m_defaultBox = new QSpinBox(frame);
-    layout->addWidget(m_defaultBox, 6, 1);
+    layout->addMultiCellWidget(m_defaultBox, 6, 6, 1, 2);
 
     layout->addWidget(new QLabel(i18n("Color:"), frame), 7, 0);
     m_colourCombo = new RosegardenComboBox(frame);
-    layout->addWidget(m_colourCombo, 7, 1);
+    layout->addMultiCellWidget(m_colourCombo, 7, 7, 1, 2);
 
     layout->addWidget(new QLabel(i18n("Instrument Parameter Box position:"), frame), 8, 0);
     m_ipbPosition = new RosegardenComboBox(frame);
-    layout->addWidget(m_ipbPosition, 8, 1);
+    layout->addMultiCellWidget(m_ipbPosition, 8, 8, 1, 2);
 
     connect(m_nameEdit, SIGNAL(textChanged(const QString&)),
             SLOT(slotNameChanged(const QString&)));
@@ -545,6 +552,11 @@ ControlParameterEditDialog::ControlParameterEditDialog(
 
     m_description->setText(strtoqstr(control->getDescription()));
     m_controllerBox->setValue(int(control->getControllerValue()));
+
+    QString hexValue;
+    hexValue.sprintf("(0x%x)", control->getControllerValue());
+    m_hexValue->setText(hexValue);
+
     m_minBox->setValue(control->getMin());
     m_maxBox->setValue(control->getMax());
     m_defaultBox->setValue(control->getDefault());
@@ -580,6 +592,11 @@ ControlParameterEditDialog::slotControllerChanged(int value)
 {
     RG_DEBUG << "ControlParameterEditDialog::slotControllerChanged" << endl;
     m_dialogControl.setControllerValue(value);
+
+    // set hex value
+    QString hexValue;
+    hexValue.sprintf("(0x%x)", value);
+    m_hexValue->setText(hexValue);
 }
 
 void 

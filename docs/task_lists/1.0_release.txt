@@ -4,7 +4,7 @@ Features for 1.0 - updated 20030923
 - integrate new JACK transport and synchronisation - also
   investigate MIDI clock, MTC and MMC [IN PROGRESS - rwb]
 
-- punch in record [rwb]
+- punch in record [rwb] [HALF COMPLETE]
 
 - audio threading for file r/w access [rwb]
   o ringbuffer  [DONE]
