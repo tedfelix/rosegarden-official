@@ -481,14 +481,14 @@ Quantizer::getFromSource(Event *e, ValueType v) const
 		    
 		    timeT currentTargetValue = getFromTarget(e, v);
 		    if (currentTargetValue != targetValueBackup) {
-			e->set<Int>(m_source + tag, currentTargetValue);
+			e->setMaybe<Int>(m_source + tag, currentTargetValue);
 			return currentTargetValue;
 		    }
 		}
 	    }
 	} else {
 	    timeT currentTargetValue = getFromTarget(e, v);
-	    e->set<Int>(m_source + tag, currentTargetValue);
+	    e->setMaybe<Int>(m_source + tag, currentTargetValue);
 	    return currentTargetValue;
 	}
 
@@ -525,14 +525,14 @@ Quantizer::setToSource(Event *e, ValueType v, timeT time) const
     } else {
 
 	std::string tag(v == AbsoluteTimeValue ? "AbsoluteTime" : "Duration");
-	e->set<Int>(m_source + tag, time);
+	e->setMaybe<Int>(m_source + tag, time);
     }
 }
 
 void
 Quantizer::setToTarget(Event *e, ValueType v, timeT time) const
 {
-    cerr << "Quantizer::setToTarget: target is \"" << m_target << "\", time is " << time << " (unit is " << m_unit << ", sort is " << (v == AbsoluteTimeValue ? "absolute time" : "duration") << ", original value is " << (v == AbsoluteTimeValue ? e->getAbsoluteTime() : e->getDuration()) << endl;
+    cerr << "Quantizer::setToTarget: target is \"" << m_target << "\", time is " << time << " (unit is " << m_unit << ", sort is " << (v == AbsoluteTimeValue ? "absolute time" : "duration") << ", original value is " << (v == AbsoluteTimeValue ? e->getAbsoluteTime() : e->getDuration()) << ")" << endl;
 
     std::string tag(v == AbsoluteTimeValue ? "AbsoluteTime" : "Duration");
 
@@ -543,12 +543,12 @@ Quantizer::setToTarget(Event *e, ValueType v, timeT time) const
 
     } else {
 
-	e->set<Int>(m_target + tag, time);
+	e->setMaybe<Int>(m_target + tag, time);
     }
 
     //!!! which things are setMaybes and which are sets?
 
-    e->set<Int>(m_source + tag + "TargetBackup", time);
+    e->setMaybe<Int>(m_source + tag + "TargetBackup", time);
 }
 
 void

@@ -1,6 +1,7 @@
 CC	 = g++
 # debug flags need to be consistent with base build
-CPPFLAGS = -O2 
+#CPPFLAGS = -O2 
+CPPFLAGS = -g 
 
 LIBBASE  = ../.libs/libbase.a
 ###LIBBASE  = ../Property.o ../Event.o ../NotationTypes.o ../Track.o ../Quantizer.o

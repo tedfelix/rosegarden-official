@@ -697,14 +697,13 @@ MidiFile::convertToRosegarden()
                 endOfLastNote = rosegardenTime + rosegardenDuration;
 
                 // create and populate event
-                rosegardenEvent = new Event(Rosegarden::Note::EventType);
-                rosegardenEvent->setAbsoluteTime(rosegardenTime);
-                rosegardenEvent->setType(Note::EventType);
+                rosegardenEvent = new Event(Rosegarden::Note::EventType,
+					    rosegardenTime,
+					    rosegardenDuration);
                 rosegardenEvent->set<Int>(BaseProperties::PITCH,
                                           (*midiEvent)->getPitch());
                 rosegardenEvent->set<Int>(BaseProperties::VELOCITY,
                                           (*midiEvent)->getVelocity());
-                rosegardenEvent->setDuration(rosegardenDuration);
 
                 {
                     // insert into Segment

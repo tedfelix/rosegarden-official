@@ -169,10 +169,8 @@ int Clef::getAxisHeight() const
 
 Event *Clef::getAsEvent(timeT absoluteTime) const
 {
-    Event *e = new Event(EventType);
+    Event *e = new Event(EventType, absoluteTime, 0, EventSubOrdering);
     e->set<String>(ClefPropertyName, m_clef);
-    e->setAbsoluteTime(absoluteTime);
-    e->setSubOrdering(EventSubOrdering);
     return e;
 }
 
@@ -359,10 +357,8 @@ int Key::transposeFrom(int pitch, const Key &previousKey) const
 
 Event *Key::getAsEvent(timeT absoluteTime) const
 {
-    Event *e = new Event(EventType);
+    Event *e = new Event(EventType, absoluteTime, 0, EventSubOrdering);
     e->set<String>(KeyPropertyName, m_name);
-    e->setAbsoluteTime(absoluteTime);
-    e->setSubOrdering(EventSubOrdering);
     return e;
 }
 
@@ -489,11 +485,9 @@ Indication::operator=(const Indication &m)
 Event *
 Indication::getAsEvent(timeT absoluteTime) const
 {
-    Event *e = new Event(EventType);
+    Event *e = new Event(EventType, absoluteTime, 0, EventSubOrdering);
     e->set<String>(IndicationTypePropertyName, m_indicationType);
     e->set<Int>(IndicationDurationPropertyName, m_duration);
-    e->setAbsoluteTime(absoluteTime);
-    e->setSubOrdering(EventSubOrdering);
     return e;
 }
 
@@ -530,11 +524,9 @@ Text::~Text()
 Event *
 Text::getAsEvent(timeT absoluteTime) const
 {
-    Event *e = new Event(EventType);
+    Event *e = new Event(EventType, absoluteTime, 0, EventSubOrdering);
     e->set<String>(TextPropertyName, m_text);
     e->set<String>(TextTypePropertyName, m_type);
-    e->setAbsoluteTime(absoluteTime);
-    e->setSubOrdering(EventSubOrdering);
     return e;
 }
 
@@ -916,18 +908,14 @@ Note Note::getNearestNote(timeT duration, int maxDots)
 
 Event *Note::getAsNoteEvent(timeT absoluteTime, int pitch) const
 {
-    Event *e = new Event(EventType);
+    Event *e = new Event(EventType, absoluteTime, getDuration());
     e->set<Int>(BaseProperties::PITCH, pitch);
-    e->setAbsoluteTime(absoluteTime);
-    e->setDuration(getDuration());
     return e;
 }
 
 Event *Note::getAsRestEvent(timeT absoluteTime) const
 {
-    Event *e = new Event(EventRestType);
-    e->setAbsoluteTime(absoluteTime);
-    e->setDuration(getDuration());
+    Event *e = new Event(EventRestType, absoluteTime, getDuration());
     return e;
 }
 
@@ -998,11 +986,9 @@ bool TimeSignature::isDotted() const
 
 Event *TimeSignature::getAsEvent(timeT absoluteTime) const
 {
-    Event *e = new Event(EventType);
+    Event *e = new Event(EventType, absoluteTime, 0, EventSubOrdering);
     e->set<Int>(NumeratorPropertyName, m_numerator);
     e->set<Int>(DenominatorPropertyName, m_denominator);
-    e->setAbsoluteTime(absoluteTime);
-    e->setSubOrdering(EventSubOrdering);
     return e;
 }
 

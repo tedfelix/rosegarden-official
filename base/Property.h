@@ -103,9 +103,6 @@ public:
     virtual PropertyStoreBase *clone() = 0;
     virtual std::string unparse() const = 0;
 
-    virtual bool isPersistent() const = 0;
-    virtual void setPersistence(bool) = 0;
-
     virtual size_t getStorageSize() const = 0; // for debugging
 
 #ifndef NDEBUG
@@ -124,10 +121,10 @@ template <PropertyType P>
 class PropertyStore : public PropertyStoreBase
 {
 public:
-    PropertyStore(PropertyDefn<P>::basic_type d, bool persistent = true) :
-        m_data(d), m_persistent(persistent) { }
+    PropertyStore(PropertyDefn<P>::basic_type d) :
+        m_data(d) { }
     PropertyStore(const PropertyStore<P> &p) :
-        PropertyStoreBase(p), m_data(p.m_data), m_persistent(p.m_persistent) { }
+        PropertyStoreBase(p), m_data(p.m_data) { }
     PropertyStore &operator=(const PropertyStore<P> &p);
 
     virtual PropertyType getType() const;
@@ -140,9 +137,6 @@ public:
     PropertyDefn<P>::basic_type getData() { return m_data; }
     void setData(PropertyDefn<P>::basic_type data) { m_data = data; }
 
-    bool isPersistent() const { return m_persistent; }
-    void setPersistence(bool p) { m_persistent = p; }
-
     virtual size_t getStorageSize() const { return sizeof(*this); }
 
 #ifndef NDEBUG
@@ -151,7 +145,6 @@ public:
 
 private:
     PropertyDefn<P>::basic_type m_data;
-    bool m_persistent;
 };
 
 template <PropertyType P>
@@ -159,7 +152,6 @@ PropertyStore<P>&
 PropertyStore<P>::operator=(const PropertyStore<P> &p) {
     if (this != &p) {
         m_data = p.m_data;
-        m_persistent = p.m_persistent;
     }
     return *this;
 }

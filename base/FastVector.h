@@ -135,17 +135,21 @@ private:
 	    return (m_v != i.m_v || m_i != i.m_i);
 	}
 
-	iterator_base &operator+=(difference_type i) { m_i += i; return *this; }
-	iterator_base &operator-=(difference_type i) { m_i -= i; return *this; }
+	iterator_base &operator+=(FastVector<T>::difference_type i) {
+	    m_i += i; return *this;
+	}
+	iterator_base &operator-=(FastVector<T>::difference_type i) {
+	    m_i -= i; return *this;
+	}
 
-	iterator_base operator+(difference_type i) const {
+	iterator_base operator+(FastVector<T>::difference_type i) const {
 	    iterator_base n(*this); n += i; return n;
 	}
-	iterator_base operator-(difference_type i) const {
+	iterator_base operator-(FastVector<T>::difference_type i) const {
 	    iterator_base n(*this); n -= i; return n;
 	}
 
-	difference_type operator-(const iterator_base &i) const {
+	FastVector<T>::difference_type operator-(const iterator_base &i) const{
 	    assert(m_v == i.m_v);
             return m_i - i.m_i;
 	}

@@ -153,13 +153,13 @@ SegmentNotationHelper::collapseIfValid(Event* e, bool& collapseForward)
 	    segment().getBarEndForTime(e->getAbsoluteTime())) {
 
         // collapse right is OK; collapse e with nextEvent
-
-        e->setDuration(e->getDuration() + (*nextEvent)->getDuration());
-
-        legatoQuantizer().unquantize(e);
+	Event *e1(new Event(*e, e->getAbsoluteTime(),
+			    e->getDuration() + (*nextEvent)->getDuration()));
 
         collapseForward = true;
+	erase(elPos);
         erase(nextEvent);
+	insert(e1);
 	return true;
     }
 
@@ -169,15 +169,17 @@ SegmentNotationHelper::collapseIfValid(Event* e, bool& collapseForward)
 			myDuration) &&
 	(*previousEvent)->getAbsoluteTime() >
 	    segment().getBarStartForTime(e->getAbsoluteTime())) {
-	
+			    
         // collapse left is OK; collapse e with previousEvent
-        (*previousEvent)->setDuration(e->getDuration() +
-                                      (*previousEvent)->getDuration());
-
-        legatoQuantizer().unquantize(*previousEvent);
+	Event *e1(new Event(**previousEvent,
+			    (*previousEvent)->getAbsoluteTime(),
+			    e->getDuration() +
+			    (*previousEvent)->getDuration()));
 
         collapseForward = false;
         erase(elPos);
+	erase(previousEvent);
+	insert(e1);
 	return true;
     }
     
@@ -231,6 +233,7 @@ SegmentNotationHelper::expandIntoTie(iterator from, iterator to, timeT baseDurat
 
     iterator last = end();
     list<Event *> toInsert;
+    list<Event *> toErase;
           
     // Expand all the events in range [from, to[
     //
@@ -256,25 +259,24 @@ SegmentNotationHelper::expandIntoTie(iterator from, iterator to, timeT baseDurat
         }
 
 	// set the initial event's duration to base
-	(*i)->setDuration(baseDuration);
-	legatoQuantizer().unquantize(*i);
+	Event *eva = new Event(*(*i), (*i)->getAbsoluteTime(),
+				   baseDuration);
             
 	// Add 2nd event
-	Event* ev = new Event(*(*i));
-	ev->setDuration(eventDuration - baseDuration);
-	ev->setAbsoluteTime((*i)->getAbsoluteTime() + baseDuration);
+	Event* evb = new Event(*(*i), (*i)->getAbsoluteTime() + baseDuration,
+			       eventDuration - baseDuration);
 
 	// we only want to tie Note events:
 
-	if ((*i)->isa(Note::EventType)) {
+	if (eva->isa(Note::EventType)) {
 
 	    // if the first event was already tied forward, the
 	    // second one will now be marked as tied forward
 	    // (which is good).  set up the relationship between
 	    // the original (now shorter) event and the new one.
 
-  	      ev->set<Bool>(TIED_BACKWARD, true);
-	    (*i)->set<Bool>(TIED_FORWARD, true);
+	    evb->set<Bool>(TIED_BACKWARD, true);
+	    eva->set<Bool>(TIED_FORWARD, true);
 	}
 
 	// we may also need to change some group information: if
@@ -286,18 +288,24 @@ SegmentNotationHelper::expandIntoTie(iterator from, iterator to, timeT baseDurat
 	// was created using the copy constructor).
 
 	if (firstGroupId != -1 && nextGroupId != firstGroupId) {
-	    ev->unset(BEAMED_GROUP_ID);
-	    ev->unset(BEAMED_GROUP_TYPE);
+	    evb->unset(BEAMED_GROUP_ID);
+	    evb->unset(BEAMED_GROUP_TYPE);
 	}
-
-	legatoQuantizer().unquantize(ev);
 
         // We don't want to do the insert yet, as we'd find ourselves
         // iterating over the new event unexpectedly (symptom: we get
         // to see the baseTime WARNING above, even though the "to"
         // iterator was fine when we entered the function).  Not quite
         // clear why this happens though
-        toInsert.push_back(ev);
+	toInsert.push_back(eva);
+        toInsert.push_back(evb);
+	toErase.push_back(*i);
+    }
+
+    // erase the old events
+    for (list<Event *>::iterator i = toErase.begin();
+	 i != toErase.end(); ++i) {
+	segment().eraseSingle(*i);
     }
 
     // now insert the new events
@@ -352,9 +360,7 @@ SegmentNotationHelper::makeRestViable(iterator i)
 	cerr << "SegmentNotationHelper::makeRestViable: Inserting rest of duration "
 	     << duration << " at time " << absTime << endl;
 
-	Event *e = new Event(Note::EventRestType);
-	e->setDuration(duration);
-	e->setAbsoluteTime(absTime);
+	Event *e = new Event(Note::EventRestType, absTime, duration);
 
 	insert(e);
 	absTime += duration;
@@ -393,6 +399,7 @@ SegmentNotationHelper::makeNoteViable(iterator i)
 
     e->set<Bool>(TIED_FORWARD, true);
     erase(i);
+    acc = e->getAbsoluteTime();
 
     for (DurationList::iterator i = dl.begin(); i != dl.end(); ++i) {
 
@@ -401,9 +408,8 @@ SegmentNotationHelper::makeNoteViable(iterator i)
             e->unset(TIED_FORWARD);
         }
 
-        e->setDuration(*i);
-        insert(new Event(*e));
-        e->addAbsoluteTime(*i);
+        insert(new Event(*e, acc, *i));
+	acc += *i;
 
         e->set<Bool>(TIED_BACKWARD, true);
     }
@@ -451,6 +457,9 @@ SegmentNotationHelper::insertRest(timeT absoluteTime, Note note)
 }
 
 
+// return an iterator pointing to the "same" event as the original
+// iterator (which will have been replaced)
+
 Segment::iterator
 SegmentNotationHelper::collapseRestsForInsert(iterator i,
 					      timeT desiredDuration)
@@ -461,13 +470,15 @@ SegmentNotationHelper::collapseRestsForInsert(iterator i,
 
     timeT d = (*i)->getDuration();
     iterator j = segment().findContiguousNext(i);
-    if (d >= desiredDuration || j == end()) return ++i;
+    if (d >= desiredDuration || j == end()) return i;
 
-    (*i)->setDuration(d + (*j)->getDuration());
-    legatoQuantizer().unquantize(*i);
+    Event *e(new Event(**i, (*i)->getAbsoluteTime(), d + (*j)->getDuration()));
+
+    iterator ii(insert(e));
+    erase(i);
     erase(j);
 
-    return collapseRestsForInsert(i, desiredDuration);
+    return collapseRestsForInsert(ii, desiredDuration);
 }
 
 
@@ -503,7 +514,7 @@ SegmentNotationHelper::insertSomething(iterator i, int duration, int pitch,
     // If there's a rest at the insertion position, merge it with any
     // following rests, if available, until we have at least the
     // duration of the new note.
-    collapseRestsForInsert(i, duration);
+    i = collapseRestsForInsert(i, duration);
 
     timeT existingDuration = (*i)->getDuration();
 
@@ -622,9 +633,8 @@ SegmentNotationHelper::insertSingleSomething(iterator i, int duration,
 	if (isRest || (*i)->isa(Note::EventRestType)) eraseI = true;
     }
 
-    Event *e = new Event(isRest ? Note::EventRestType : Note::EventType);
-    e->setAbsoluteTime(time);
-    e->setDuration(duration);
+    Event *e = new Event(isRest ? Note::EventRestType : Note::EventType,
+			 time, duration);
 
     if (!isRest) {
         e->set<Int>(PITCH, pitch);
@@ -696,9 +706,8 @@ SegmentNotationHelper::deleteNote(Event *e, bool collapseRest)
     } else {
 	
 	// replace with a rest
-	Event *newRest = new Event(Note::EventRestType);
-	newRest->setAbsoluteTime(e->getAbsoluteTime());
-	newRest->setDuration(e->getDuration());
+	Event *newRest = new Event(Note::EventRestType,
+				   e->getAbsoluteTime(), e->getDuration());
 	insert(newRest);
 	erase(i);
 
@@ -1096,10 +1105,8 @@ SegmentNotationHelper::guessClef(iterator from, iterator to)
 bool
 SegmentNotationHelper::removeRests(timeT time, timeT &duration, bool testOnly)
 {
-    Event dummy;
+    Event dummy("dummy", time, 0, MIN_SUBORDERING);
     
-    dummy.setAbsoluteTime(time);
-
     cerr << "SegmentNotationHelper::removeRests(" << time
          << ", " << duration << ")\n";
 
@@ -1167,10 +1174,9 @@ SegmentNotationHelper::removeRests(timeT time, timeT &duration, bool testOnly)
 
 	if (!testOnly) {
 	    // can't safely change the absolute time of an event in a segment
-	    Event *newEvent = new Event(**lastEvent);
-	    newEvent->setAbsoluteTime(finalTime);
-	    newEvent->setDuration((*lastEvent)->getDuration() -
-				  (finalTime - eventTime));
+	    Event *newEvent = new Event(**lastEvent, finalTime,
+					(*lastEvent)->getDuration() -
+					(finalTime - eventTime));
 	    segment().erase(lastEvent);
 	    segment().insert(newEvent);
 	    duration = finalTime + (*lastEvent)->getDuration() - time;
@@ -1317,9 +1323,7 @@ SegmentNotationHelper::normalizeRests(timeT startTime, timeT endTime)
 	timeT acc = startTime;
 
 	for (DurationList::iterator di = dl.begin(); di != dl.end(); ++di) {
-	    Event *e = new Event(Note::EventRestType);
-	    e->setDuration(*di);
-	    e->setAbsoluteTime(acc);
+	    Event *e = new Event(Note::EventRestType, acc, *di);
 //	    cerr<<"inserting:\n"<<endl;
 //	    e->dump(cerr);
 	    segment().insert(e);
@@ -1415,9 +1419,7 @@ SegmentNotationHelper::normalizeContiguousRests(timeT startTime,
     timeT acc = startTime;
 
     for (DurationList::iterator i = dl.begin(); i != dl.end(); ++i) {
-	Event *e = new Event(Note::EventRestType);
-	e->setDuration(*i);
-	e->setAbsoluteTime(acc);
+	Event *e = new Event(Note::EventRestType, acc, *i);
 	toInsert.push_back(e);
 	acc += *i;
     }
@@ -1433,9 +1435,7 @@ SegmentNotationHelper::mergeContiguousRests(timeT startTime,
 
 	timeT d = Note::getNearestNote(duration).getDuration();
 
-	Event *e = new Event(Note::EventRestType);
-	e->setDuration(d);
-	e->setAbsoluteTime(startTime);
+	Event *e = new Event(Note::EventRestType, startTime, d);
 	toInsert.push_back(e);
 
 	startTime += d;
@@ -1457,13 +1457,16 @@ SegmentNotationHelper::collapseNoteAggressively(Event *note,
     timeT iEnd = (*i)->getAbsoluteTime() + (*i)->getDuration();
     timeT jEnd = (*j)->getAbsoluteTime() + (*j)->getDuration();
 
-    (*i)->setDuration(std::max(iEnd, jEnd) - (*i)->getAbsoluteTime());
-    (*i)->unset(TIED_BACKWARD);
-    (*i)->unset(TIED_FORWARD);
-    legatoQuantizer().unquantize(*i);
-    //!!! TUPLET_NOMINAL_DURATION?
+    Event *newEvent = new Event
+	(**i, (*i)->getAbsoluteTime(),
+	 (std::max(iEnd, jEnd) - (*i)->getAbsoluteTime()));
 
+    newEvent->unset(TIED_BACKWARD);
+    newEvent->unset(TIED_FORWARD);
+
+    segment().erase(i);
     segment().erase(j);
+    segment().insert(newEvent);
     return true;
 }
 

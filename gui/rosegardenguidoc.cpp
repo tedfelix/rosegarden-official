@@ -493,14 +493,12 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC)
             // all we get from the Sequencer is Notes)
             //
             //
-            rEvent = new Event(Rosegarden::Note::EventType);
 
             absTime = m_composition.
                           getElapsedTimeForRealTime((*i)->getEventTime());
             duration = m_composition.getElapsedTimeForRealTime((*i)->getDuration());
+            rEvent = new Event(Rosegarden::Note::EventType, absTime, duration);
 
-            rEvent->setAbsoluteTime(absTime);
-            rEvent->setDuration(duration);
             rEvent->set<Int>(PITCH, (*i)->getPitch());
             rEvent->set<Int>(VELOCITY, (*i)->getVelocity());
 

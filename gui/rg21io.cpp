@@ -135,9 +135,8 @@ bool RG21Loader::parseChordItem()
 	int noteMods = (*i).toInt(0, 16);
         pitch = convertRG21Pitch(pitch, noteMods);
 
-        Event *noteEvent = new Event(Rosegarden::Note::EventType);
-        noteEvent->setDuration(duration);
-        noteEvent->setAbsoluteTime(m_currentSegmentTime);
+        Event *noteEvent = new Event(Rosegarden::Note::EventType,
+				     m_currentSegmentTime, duration);
         noteEvent->set<Int>(PITCH, pitch);
 
 	if (m_tieStatus == 1) {
@@ -175,9 +174,8 @@ bool RG21Loader::parseRest()
     QStringList::Iterator i = m_tokens.begin();
     timeT duration = convertRG21Duration(i);
     
-    Event *restEvent = new Event(Rosegarden::Note::EventRestType);
-    restEvent->setDuration(duration);
-    restEvent->setAbsoluteTime(m_currentSegmentTime);
+    Event *restEvent = new Event(Rosegarden::Note::EventRestType,
+				 m_currentSegmentTime, duration);
 
     setGroupProperties(restEvent);
 
@@ -314,6 +312,8 @@ void RG21Loader::closeGroup()
     if (m_groupType == GROUP_TYPE_TUPLED) {
 
 	Segment::iterator i = m_currentSegment->end();
+	vector<Event *> toInsert;
+	vector<Segment::iterator> toErase;
 
 	if (i != m_currentSegment->begin()) {
 
@@ -324,11 +324,12 @@ void RG21Loader::closeGroup()
 	    while ((*i)->get<Int>(BEAMED_GROUP_ID, groupId) &&
 		   groupId == m_groupId) {
 
-		(*i)->setMaybe<Int>
+		(*i)->set<Int>
 		    (BEAMED_GROUP_UNTUPLED_LENGTH, m_groupUntupledLength);
 
 		timeT duration = (*i)->getDuration();
-		timeT offset = (*i)->getAbsoluteTime() - m_groupStartTime;
+		timeT absoluteTime = (*i)->getAbsoluteTime();
+		timeT offset = absoluteTime - m_groupStartTime;
 		timeT intended =
 		    (offset * m_groupTupledLength) / m_groupUntupledLength;
 /*
@@ -343,15 +344,26 @@ void RG21Loader::closeGroup()
 		    << ", new absolute time = " <<
 		    ((*i)->getAbsoluteTime() + intended - offset) << endl;
 */
-		(*i)->addAbsoluteTime(intended - offset);
-		(*i)->setDuration(prev - (*i)->getAbsoluteTime());
-		prev = (*i)->getAbsoluteTime();
+		Event *e(new Event(**i,
+				   absoluteTime + intended - offset,
+				   prev - absoluteTime));
+		prev = absoluteTime;
 
-		(*i)->set<Int>(TUPLET_NOMINAL_DURATION, duration);
+		e->set<Int>(TUPLET_NOMINAL_DURATION, duration);
+
+		toInsert.push_back(e);
+		toErase.push_back(i);
 
 		if (i == m_currentSegment->begin()) break;
 		--i;
 	    }
+	}
+
+	for (unsigned int i = 0; i < toInsert.size(); ++i) {
+	    m_currentSegment->insert(toInsert[i]);
+	}
+	for (unsigned int i = 0; i < toErase.size(); ++i) {
+	    m_currentSegment->erase(toErase[i]);
 	}
 
 	m_currentSegmentTime = m_groupStartTime + m_groupTupledLength;

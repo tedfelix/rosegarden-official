@@ -69,9 +69,23 @@ void Segment::setStartTime(timeT idx)
 {
     int idxDiff = idx - m_startIdx;
 
-    // reset the time of all events
-    for (iterator i = begin(); i != end(); ++i)
-        (*i)->addAbsoluteTime(idxDiff);
+    // reset the time of all events.  can't just setAbsoluteTime on these,
+    // partly 'cos we're not allowed, partly 'cos it might screw up the
+    // quantizer (which is why we're not allowed)
+
+    // still, this is rather unsatisfactory
+    
+    FastVector<Event *> events;
+
+    for (iterator i = begin(); i != end(); ++i) {
+	events.push_back(new Event(**i, (*i)->getAbsoluteTime() + idxDiff));
+    }
+
+    erase(begin(), end());
+
+    for (int i = 0; i < events.size(); ++i) {
+	insert(events[i]);
+    }
         
     m_startIdx = idx;
 }
@@ -294,9 +308,7 @@ Segment::iterator Segment::findSingle(Event* e) const
 
 Segment::iterator Segment::findTime(timeT t) const
 {
-    Event dummy;
-    dummy.setAbsoluteTime(t);
-    dummy.setSubOrdering(MIN_SUBORDERING);
+    Event dummy("dummy", t, 0, MIN_SUBORDERING);
     return lower_bound(&dummy);
 }
 
@@ -370,9 +382,7 @@ void Segment::fillWithRests(timeT startTime,
     timeT acc = startTime;
 
     for (DurationList::iterator i = dl.begin(); i != dl.end(); ++i) {
-	Event *e = new Event(Note::EventRestType);
-	e->setDuration(*i);
-	e->setAbsoluteTime(acc);
+	Event *e = new Event(Note::EventRestType, acc, *i);
 	insert(e);
 	acc += *i;
     }
@@ -383,10 +393,8 @@ void Segment::fillWithRests(timeT startTime,
 void Segment::getTimeSlice(timeT absoluteTime, iterator &start, iterator &end)
     const
 {
-    Event dummy;
-    
-    dummy.setAbsoluteTime(absoluteTime);
-  
+    Event dummy("dummy", absoluteTime, 0, MIN_SUBORDERING);
+
     // No, this won't work -- we need to include things that don't
     // compare equal because they have different suborderings, as long
     // as they have the same times
@@ -398,7 +406,6 @@ void Segment::getTimeSlice(timeT absoluteTime, iterator &start, iterator &end)
 
     // Got to do this instead:
 
-    dummy.setSubOrdering(MIN_SUBORDERING);
     start = end = lower_bound(&dummy);
 
     while (end != this->end() &&

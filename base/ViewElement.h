@@ -191,11 +191,9 @@ template <class T>
 ViewElementList<T>::iterator
 ViewElementList<T>::findTime(timeT time) const
 {
-    Event e;
-    e.setAbsoluteTime(time);
-    e.setSubOrdering(Rosegarden::MIN_SUBORDERING);
-    T dummy(&e);
-    return lower_bound(&dummy);
+    Event dummy("dummy", time, 0, MIN_SUBORDERING);
+    T dummyT(&dummy);
+    return lower_bound(&dummyT);
 }
 
 

@@ -300,13 +300,11 @@ SegmentSplitCommand::execute()
 	    --it;
 
 	    if (!clefEvent && (*it)->isa(Rosegarden::Clef::EventType)) {
-		clefEvent = new Event(**it);
-		clefEvent->setAbsoluteTime(m_splitTime);
+		clefEvent = new Event(**it, m_splitTime);
 	    }
 
 	    if (!keyEvent && (*it)->isa(Rosegarden::Key::EventType)) {
-		keyEvent = new Event(**it);
-		keyEvent->setAbsoluteTime(m_splitTime);
+		keyEvent = new Event(**it, m_splitTime);
 	    }
 
 	    if (clefEvent && keyEvent) break;
@@ -347,8 +345,12 @@ SegmentSplitCommand::execute()
     Segment::iterator it = m_segment->end();
 
     if (it != m_segment->begin() &&
-	(*(--it))->isa(Rosegarden::Note::EventRestType))
-        (*it)->setDuration(m_splitTime - (*it)->getAbsoluteTime());
+	(*(--it))->isa(Rosegarden::Note::EventRestType)) {
+	Event *e = new Event(**it, (*it)->getAbsoluteTime(),
+			     m_splitTime - (*it)->getAbsoluteTime());
+	m_segment->erase(it);
+	m_segment->insert(e);
+    }
 
     if (!m_newSegment->getComposition()) {
 	m_segment->getComposition()->addSegment(m_newSegment);

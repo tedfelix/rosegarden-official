@@ -158,19 +158,15 @@ Composition::ReferenceSegment::erase(Event *e)
 Composition::ReferenceSegment::iterator
 Composition::ReferenceSegment::findTime(timeT t)
 {
-    Event dummy;
-    dummy.setAbsoluteTime(t);
-    dummy.setSubOrdering(MIN_SUBORDERING);
+    Event dummy("dummy", t, 0, MIN_SUBORDERING);
     return find(&dummy);
 }
 
 Composition::ReferenceSegment::iterator
 Composition::ReferenceSegment::findRealTime(RealTime t)
 {
-    Event dummy;
-    dummy.setAbsoluteTime(0);
+    Event dummy("dummy", 0, 0, MIN_SUBORDERING);
     dummy.set<Bool>(NoAbsoluteTimeProperty, true);
-    dummy.setSubOrdering(MIN_SUBORDERING);
     setTempoTimestamp(&dummy, t);
     return find(&dummy);
 }
@@ -489,7 +485,7 @@ Composition::getBarRange(int n) const
 {
     calculateBarPositions();
 
-    Event dummy;
+    Event dummy("dummy", 0);
     dummy.set<Int>(BarNumberProperty, n);
 
     ReferenceSegment::iterator j = std::lower_bound
@@ -648,8 +644,7 @@ Composition::getTempoAt(timeT t) const
 void
 Composition::addTempo(timeT time, double tempo)
 {
-    Event *tempoEvent = new Event(TempoEventType);
-    tempoEvent->setAbsoluteTime(time);
+    Event *tempoEvent = new Event(TempoEventType, time);
     tempoEvent->set<Int>(TempoProperty, (long)(tempo * 60));
     m_tempoSegment.insert(tempoEvent);
     m_tempoTimestampsNeedCalculating = true;
@@ -662,8 +657,7 @@ Composition::addTempo(timeT time, double tempo)
 void
 Composition::addRawTempo(timeT time, int tempo)
 {
-    Event *tempoEvent = new Event(TempoEventType);
-    tempoEvent->setAbsoluteTime(time);
+    Event *tempoEvent = new Event(TempoEventType, time);
     tempoEvent->set<Int>(TempoProperty, tempo);
     m_tempoSegment.insert(tempoEvent);
     m_tempoTimestampsNeedCalculating = true;

@@ -200,8 +200,7 @@ PasteCommand::modifySegment()
 	std::vector<Event *> copies;
 	for (Segment::iterator i = destination->findTime(pasteTime);
 	     i != destination->end(); ++i) {
-	    Event *e = new Event(**i);
-	    e->setAbsoluteTime(e->getAbsoluteTime() + duration);
+	    Event *e = new Event(**i, e->getAbsoluteTime() + duration);
 	    copies.push_back(e);
 	}
 
@@ -228,8 +227,8 @@ PasteCommand::modifySegment()
 			 pitch, explicitAccidental);
 		}
 	    } else {
-		Event *e = new Event(**i);
-		e->setAbsoluteTime(e->getAbsoluteTime() - origin + pasteTime);
+		Event *e = new Event
+		    (**i, e->getAbsoluteTime() - origin + pasteTime);
 		destination->insert(e);
 	    }
 	}
@@ -241,16 +240,16 @@ PasteCommand::modifySegment()
 
 	    if ((*i)->isa(Note::EventRestType)) continue;
 
-	    Event *e = new Event(**i);
-	    e->setAbsoluteTime(e->getAbsoluteTime() - origin + pasteTime);
+	    Event *e = new Event
+		(**i, e->getAbsoluteTime() - origin + pasteTime);
 	    destination->insert(e);
 	}
 	break;
     }
 
     for (Segment::iterator i = source->begin(); i != source->end(); ++i) {
-	Event *e = new Event(**i);
-	e->setAbsoluteTime(e->getAbsoluteTime() - origin + pasteTime);
+	Event *e = new Event
+	    (**i, e->getAbsoluteTime() - origin + pasteTime);
 	destination->insert(e);
 
 	if (e->isa(Note::EventType)) {

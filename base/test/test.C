@@ -39,7 +39,7 @@ int main(int argc, char **argv)
         cout << "\nTesting Event..." << endl
              << "sizeof Event : " << sizeof(Event) << endl;
 
-        Event e("note");
+        Event e("note", 0);
         e.set<Int>(DURATION_PROPERTY, 20);
         cout << "duration is " << e.get<Int>(DURATION_PROPERTY) << endl;
 
@@ -139,7 +139,7 @@ int main(int argc, char **argv)
             names[i] = b;
         }
 
-        Event e1("note");
+        Event e1("note", 0);
         int gsCount = 20000;
 
         st = times(&spare);
@@ -344,9 +344,7 @@ int main(int argc, char **argv)
         SegmentNotationHelper nh(t);
         SegmentPerformanceHelper ph(t);
 
-        Event *ev = new Event("note");
-        ev->setAbsoluteTime(0);
-        ev->setDuration(384);
+        Event *ev = new Event("note", 0, 384);
         ev->set<Int>("pitch", 60);
         t.insert(ev);
 

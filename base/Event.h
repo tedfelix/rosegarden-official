@@ -65,16 +65,50 @@ class Event
 {
 public:
     friend class ViewElement;
+    friend class Quantizer;
 
     struct NoData { };
     struct BadType { };
 
-    Event() :
-	m_data(new EventData()), m_viewElementRefCount(0) { }
-    Event(const std::string &type) :
-	m_data(new EventData(type)), m_viewElementRefCount(0) { }
+    Event(const std::string &type,
+	  timeT absoluteTime, timeT duration = 0, int subOrdering = 0) :
+	m_data(new EventData(type, absoluteTime, duration, subOrdering)),
+	m_viewElementRefCount(0),
+	m_nonPersistentProperties(0) { }
+
     Event(const Event &e) :
-	m_viewElementRefCount(0) { share(e); }
+	m_viewElementRefCount(0),
+	m_nonPersistentProperties(0) { share(e); }
+
+    // next 3 ctors can't use default args: default has to be obtained from e
+
+    Event(const Event &e, timeT absoluteTime) :
+	m_viewElementRefCount(0),
+	m_nonPersistentProperties(0) {
+	share(e);
+	unshare();
+	m_data->m_absoluteTime = absoluteTime;
+    }
+
+    Event(const Event &e, timeT absoluteTime, timeT duration) :
+	m_viewElementRefCount(0),
+	m_nonPersistentProperties(0) {
+	share(e);
+	unshare();
+	m_data->m_absoluteTime = absoluteTime;
+	m_data->m_duration = duration;
+    }
+
+    Event(const Event &e, timeT absoluteTime, timeT duration, int subOrdering):
+	m_viewElementRefCount(0),
+	m_nonPersistentProperties(0) {
+	share(e);
+	unshare();
+	m_data->m_absoluteTime = absoluteTime;
+	m_data->m_duration = duration;
+	m_data->m_subOrdering = subOrdering;
+    }
+
     ~Event() { lose(); }
 
     Event &operator=(const Event &e) {
@@ -85,20 +119,11 @@ public:
     friend bool operator<(const Event&, const Event&);
 
     // Accessors
-    const std::string &getType() const    { return m_data->m_type; }
-    void setType(const std::string &t)    { unshare(); m_data->m_type = t; }
-
-    bool isa(const std::string &t) const  { return (m_data->m_type == t); }
-
+    const std::string &getType() const    { return  m_data->m_type; }
+    bool  isa(const std::string &t) const { return (m_data->m_type == t); }
     timeT getAbsoluteTime() const    { return m_data->m_absoluteTime; }
-    void  setAbsoluteTime(timeT d)   { unshare(); m_data->m_absoluteTime = d; }
-    void  addAbsoluteTime(timeT d)   { unshare(); m_data->m_absoluteTime += d; }
-
     timeT getDuration()     const    { return m_data->m_duration; }
-    void  setDuration(timeT d)       { unshare(); m_data->m_duration = d; }
-
     int   getSubOrdering()  const    { return m_data->m_subOrdering; }
-    void  setSubOrdering(int o)      { unshare(); m_data->m_subOrdering = o; }
 
     bool  has(const PropertyName &name) const;
 
@@ -181,23 +206,50 @@ protected:
     void viewElementRef()   { ++m_viewElementRefCount; }
     void viewElementUnRef() { --m_viewElementRefCount; }
 
+    // these are for subclasses, some are also used by Quantizer
+    // (though we'd like to lose the Quantizer friendship eventually)
+
+    Event() :
+	m_data(new EventData("", 0, 0, 0)),
+	m_viewElementRefCount(0),
+	m_nonPersistentProperties(0) { }
+    
+    void setType(const std::string &t)    { unshare(); m_data->m_type = t; }
+    void setAbsoluteTime(timeT t) { unshare(); m_data->m_absoluteTime = t; }
+    void setDuration(timeT d)     { unshare(); m_data->m_duration = d; }
+    void setSubOrdering(int o)      { unshare(); m_data->m_subOrdering = o; }
+
 private:
-    struct EventData
+    struct PropertyMap : public std::hash_map<PropertyName,
+					      PropertyStoreBase *,
+					      PropertyNameHash,
+					      PropertyNamesEqual>
     {
-	EventData();
-	EventData(const std::string &type);
+	~PropertyMap() {
+	    clear();
+	}
+
+	void clear() {
+	    for (iterator i = begin(); i != end(); ++i) delete i->second;
+	    erase(begin(), end());
+	}
+    };
+
+    typedef PropertyMap::value_type PropertyPair;
+
+    struct EventData // Data that are shared between shallow-copied instances
+    {
+	EventData(const std::string &type,
+		  timeT absoluteTime, timeT duration, int subOrdering);
 	EventData *unshare();
 	~EventData();
 	unsigned int m_refCount;
 
 	std::string m_type;
-	timeT m_duration;
 	timeT m_absoluteTime;
+	timeT m_duration;
 	int m_subOrdering;
 
-	typedef std::hash_map<PropertyName, PropertyStoreBase*,
-			      PropertyNameHash, PropertyNamesEqual> PropertyMap;
-	typedef PropertyMap::value_type PropertyPair;
 	PropertyMap m_properties;
 
     private:
@@ -207,6 +259,7 @@ private:
 
     EventData *m_data;
     unsigned int m_viewElementRefCount;
+    PropertyMap *m_nonPersistentProperties; // Unique to an instance
 
     void share(const Event &e) {
 	m_data = e.m_data;
@@ -225,6 +278,25 @@ private:
     void lose() {
 	m_viewElementRefCount = 0;
 	if (--m_data->m_refCount == 0) delete m_data;
+	delete m_nonPersistentProperties;
+	m_nonPersistentProperties = 0;
+    }
+
+    // returned iterator (in i) only valid if return map value is non-zero
+    PropertyMap *find(const PropertyName &name, PropertyMap::iterator &i);
+    const PropertyMap *find(const PropertyName &name,
+			    PropertyMap::const_iterator &i) const {
+	PropertyMap::iterator j;
+	PropertyMap *map = const_cast<Event *>(this)->find(name, j);
+	i = j;
+	return map;
+    }
+
+    PropertyMap::iterator insert(const PropertyPair &pair, bool persistent) {
+	PropertyMap *map =
+	    (persistent ? &m_data->m_properties : m_nonPersistentProperties);
+	if (!map) map = m_nonPersistentProperties = new PropertyMap();
+	return map->insert(pair).first;
     }
 
 #ifndef NDEBUG
@@ -246,8 +318,10 @@ Event::get(const PropertyName &name, PropertyDefn<P>::basic_type &val) const
     ++m_getCount;
 #endif
 
-    EventData::PropertyMap::const_iterator i = m_data->m_properties.find(name);
-    if (i != m_data->m_properties.end()) { 
+    PropertyMap::const_iterator i;
+    const PropertyMap *map = find(name, i);
+
+    if (map) { 
 
         PropertyStoreBase *sb = i->second;
         if (sb->getType() == P) {
@@ -278,8 +352,10 @@ Event::get(const PropertyName &name) const
     ++m_getCount;
 #endif
 
-    EventData::PropertyMap::const_iterator i = m_data->m_properties.find(name);
-    if (i != m_data->m_properties.end()) { 
+    PropertyMap::const_iterator i;
+    const PropertyMap *map = find(name, i);
+
+    if (map) { 
 
         PropertyStoreBase *sb = i->second;
         if (sb->getType() == P)
@@ -309,9 +385,12 @@ bool
 Event::isPersistent(const PropertyName &name) const
     // throw (NoData)
 {
-    EventData::PropertyMap::const_iterator i = m_data->m_properties.find(name);
-    if (i != m_data->m_properties.end()) return i->second->isPersistent();
-    else {
+    PropertyMap::const_iterator i;
+    const PropertyMap *map = find(name, i);
+
+    if (map) {
+	return (map == &m_data->m_properties);
+    } else {
 #ifndef NDEBUG
         std::cerr << "Event::get() Error: Attempt to get persistence of property \""
              << name << "\" which doesn't exist for this element" << std::endl;
@@ -327,9 +406,13 @@ Event::setPersistence(const PropertyName &name, bool persistent)
     // throw (NoData)
 {
     unshare();
-    EventData::PropertyMap::const_iterator i = m_data->m_properties.find(name);
-    if (i != m_data->m_properties.end()) i->second->setPersistence(persistent);
-    else {
+    PropertyMap::iterator i;
+    PropertyMap *map = find(name, i);
+
+    if (map) {
+	insert(*i, persistent);
+	map->erase(i);
+    } else {
 #ifndef NDEBUG
         std::cerr << "Event::get() Error: Attempt to set persistence of property \""
              << name << "\" which doesn't exist for this element" << std::endl;
@@ -349,14 +432,22 @@ Event::set(const PropertyName &name, PropertyDefn<P>::basic_type value,
     ++m_setCount;
 #endif
 
+    // this is a little slow, could bear improvement
+
     unshare();
-    EventData::PropertyMap::const_iterator i = m_data->m_properties.find(name);
-    if (i != m_data->m_properties.end()) {
+    PropertyMap::iterator i;
+    PropertyMap *map = find(name, i);
+
+    if (map) {
+	bool persistentBefore = (map == &m_data->m_properties);
+	if (persistentBefore != persistent) {
+	    i = insert(*i, persistent);
+	    map->erase(name);
+	}
 
         PropertyStoreBase *sb = i->second;
         if (sb->getType() == P) {
             (static_cast<PropertyStore<P> *>(sb))->setData(value);
-            sb->setPersistence(persistent);
         } else {
 #ifndef NDEBUG
             std::cerr << "Error: Event: Attempt to set property \"" << name
@@ -367,8 +458,8 @@ Event::set(const PropertyName &name, PropertyDefn<P>::basic_type value,
         }
 	    
     } else {
-        PropertyStoreBase *p = new PropertyStore<P>(value, persistent);
-        m_data->m_properties.insert(EventData::PropertyPair(name, p));
+        PropertyStoreBase *p = new PropertyStore<P>(value);
+	insert(PropertyPair(name, p), persistent);
     }
 }
 
@@ -387,20 +478,17 @@ Event::setMaybe(const PropertyName &name, PropertyDefn<P>::basic_type value)
     ++m_setMaybeCount;
 #endif
 
-    EventData::PropertyMap::const_iterator i = m_data->m_properties.find(name);
-    if (i != m_data->m_properties.end()) {
+    unshare();
+    PropertyMap::iterator i;
+    PropertyMap *map = find(name, i);
+    
+    if (map) {
+	if (map == &m_data->m_properties) return; // persistent, so ignore it
 
         PropertyStoreBase *sb = i->second;
 
         if (sb->getType() == P) {
-	    if (!sb->isPersistent()) {
-		if (unshare()) {
-		    // the unshare means sb now belongs to another event,
-		    // so look it up again
-		    sb = m_data->m_properties.find(name)->second;
-		}
-		(static_cast<PropertyStore<P> *>(sb))->setData(value);
-	    }
+	    (static_cast<PropertyStore<P> *>(sb))->setData(value);
         } else {
 #ifndef NDEBUG
             std::cerr << "Error: Event: Attempt to setMaybe property \"" << name
@@ -409,11 +497,9 @@ Event::setMaybe(const PropertyName &name, PropertyDefn<P>::basic_type value)
 #endif
             throw BadType();
         }
-	    
     } else {
-	unshare();
-        PropertyStoreBase *p = new PropertyStore<P>(value, false);
-        m_data->m_properties.insert(EventData::PropertyPair(name, p));
+        PropertyStoreBase *p = new PropertyStore<P>(value);
+	insert(PropertyPair(name, p), false);
     }
 }
 
