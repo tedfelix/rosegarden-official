@@ -392,17 +392,18 @@ NotationGroup::NotationGroup(const NotationElementList &nel,
             kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: Warning: No GroupType in grouped element, defaulting to Beamed" << endl;
         }
     }
-
-//    kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: id is " << m_groupNo << endl;
+/*
+    kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: id is " << m_groupNo << endl;
     i = getInitialElement(); 
     while (i != getList().end()) {
         long gid = -1;
         (*i)->event()->get<Int>(BEAMED_GROUP_ID, gid);
-//        kdDebug(KDEBUG_AREA) << "Found element with group id "
-//                             << gid << endl;
+        kdDebug(KDEBUG_AREA) << "Found element with group id "
+                             << gid << endl;
         if (i == getFinalElement()) break;
         ++i;
     }
+*/
 }
 
 NotationGroup::~NotationGroup()
@@ -608,7 +609,13 @@ NotationGroup::applyBeam(NotationStaff &staff)
 //    kdDebug(KDEBUG_AREA) << "NotationGroup::applyBeam, group no is " << m_groupNo << endl;
 
     Beam beam(calculateBeam(staff));
-    if (!beam.necessary) return;
+    if (!beam.necessary) {
+	for (NELIterator i = getInitialNote(); i != getList().end(); ++i) {
+	    (*i)->event()->unset(BEAMED);
+	    if (i == getFinalNote()) break;
+	}
+	return;
+    }
 
 //    kdDebug(KDEBUG_AREA) << "NotationGroup::applyBeam: Beam is necessary" << endl;
 
