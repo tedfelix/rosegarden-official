@@ -99,7 +99,8 @@ NotationElement::isTuplet() const
 bool
 NotationElement::isGrace() const
 {
-    return event()->has(Rosegarden::BaseProperties::GRACE_NOMINAL_DURATION);
+    return event()->has(Rosegarden::BaseProperties::IS_GRACE_NOTE) &&
+	event()->get<Bool>(Rosegarden::BaseProperties::IS_GRACE_NOTE);
 }
 
 void

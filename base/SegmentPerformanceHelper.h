@@ -91,10 +91,11 @@ public:
      * any tempo changes occurring during the event at i.
      */
     RealTime getRealSoundingDuration(iterator i);
-
+/*!!
 protected:
     timeT adjustAbsoluteTimeForGraceNotes(iterator i);
     timeT adjustDurationForGraceNotes(iterator i, timeT t);
+*/
 };
 
 }

@@ -446,6 +446,43 @@ GroupMenuGraceCommand::modifySegment()
     Segment &s(getSegment());
     timeT startTime = getStartTime();
     timeT endOfLastGraceNote = startTime;
+
+    // first turn the selected events into grace notes
+
+    for (EventSelection::eventcontainer::iterator i =
+	     m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
+
+	if ((*i)->isa(Note::EventType)) {
+	    (*i)->set<Bool>(IS_GRACE_NOTE, true);
+	}
+
+	if ((*i)->getAbsoluteTime() + (*i)->getDuration() >
+	    endOfLastGraceNote) {
+	    endOfLastGraceNote = 
+		(*i)->getAbsoluteTime() + (*i)->getDuration();
+	}
+    }
+
+    // then indicate that the following chord has grace notes
+    
+    Segment::iterator i0, i1;
+    s.getTimeSlice(endOfLastGraceNote, i0, i1);
+
+    while (i0 != i1 && i0 != s.end()) {
+	if (!(*i0)->isa(Note::EventType)) continue;
+	(*i0)->set<Bool>(HAS_GRACE_NOTES, true);
+	++i0;
+    }
+}
+
+/*!!!
+void
+GroupMenuGraceCommand::modifySegment()
+{
+    Segment &s(getSegment());
+    timeT startTime = getStartTime();
+    timeT endOfLastGraceNote = startTime;
     int graceGroupId = s.getNextId();
     int subordering = -1;
 
@@ -512,6 +549,8 @@ GroupMenuGraceCommand::modifySegment()
 	s.insert(newEvents[i]);
     }
 }
+*/
+
 
 void
 GroupMenuUnGraceCommand::modifySegment()

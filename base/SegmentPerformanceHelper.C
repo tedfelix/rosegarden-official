@@ -85,15 +85,17 @@ SegmentPerformanceHelper::getTiedNotes(iterator i)
 timeT
 SegmentPerformanceHelper::getSoundingAbsoluteTime(iterator i)
 {
+/*!!!
     if ((*i)->has(GRACE_NOMINAL_DURATION) ||
 	((*i)->has(HAS_GRACE_NOTES) && (*i)->get<Bool>(HAS_GRACE_NOTES))) {
 
 	return adjustAbsoluteTimeForGraceNotes(i);
     }
-
+*/
     return (*i)->getAbsoluteTime();
 }
 
+/*!!!
 timeT
 SegmentPerformanceHelper::adjustAbsoluteTimeForGraceNotes(iterator i)
 {
@@ -132,7 +134,7 @@ SegmentPerformanceHelper::adjustAbsoluteTimeForGraceNotes(iterator i)
 	    cerr<<"returning(2):"<<adjustedTime<<endl;
     return adjustedTime;
 }
-
+*/
 
 timeT
 SegmentPerformanceHelper::getSoundingDuration(iterator i)
@@ -151,7 +153,7 @@ SegmentPerformanceHelper::getSoundingDuration(iterator i)
 	    d += (**ci)->getDuration();
 	}
     }
-
+/*!!!
     if (d == 0) {
 	if ((*i)->has(GRACE_NOMINAL_DURATION)) {
 	    return (*i)->get<Int>(GRACE_NOMINAL_DURATION);
@@ -160,16 +162,17 @@ SegmentPerformanceHelper::getSoundingDuration(iterator i)
 	       (*i)->get<Bool>(HAS_GRACE_NOTES)) {
 	return adjustDurationForGraceNotes(i, d);
     }
-
+*/
     return d;
 }
 
-
+/*!!!
 timeT
 SegmentPerformanceHelper::adjustDurationForGraceNotes(iterator i, timeT d)
 {
     return d;//!!!
 }
+*/
 
 
 // In theory we can do better with tuplets, because real time has

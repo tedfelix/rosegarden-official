@@ -87,7 +87,7 @@ const PropertyName BEAMED_GROUP_UNTUPLED_COUNT	 = "untupledcount";
 const PropertyName TUPLET_NOMINAL_DURATION	 = "TupletNominalDuration";
 
 // persistent
-const PropertyName GRACE_NOMINAL_DURATION        = "GraceNominalDuration";
+const PropertyName IS_GRACE_NOTE                 = "IsGraceNote";
 const PropertyName HAS_GRACE_NOTES               = "HasGraceNotes";
 
 const std::string GROUP_TYPE_BEAMED		 = "beamed";
