@@ -11,8 +11,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>155</width>
-            <height>105</height>
+            <width>282</width>
+            <height>199</height>
         </rect>
     </property>
     <property stdset="1">
@@ -29,91 +29,10 @@
             <name>geometry</name>
             <rect>
                 <x>0</x>
-                <y>66</y>
-                <width>159</width>
-                <height>39</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>frameShape</name>
-            <enum>StyledPanel</enum>
-        </property>
-        <property stdset="1">
-            <name>frameShadow</name>
-            <enum>Raised</enum>
-        </property>
-        <widget>
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>OKButton</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>3</x>
-                    <y>3</y>
-                    <width>75</width>
-                    <height>33</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>caption</name>
-                <string></string>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>OK</string>
-            </property>
-            <property stdset="1">
-                <name>default</name>
-                <bool>true</bool>
-            </property>
-        </widget>
-        <widget>
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>CancelButton</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>79</x>
-                    <y>3</y>
-                    <width>75</width>
-                    <height>33</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>caption</name>
-                <string></string>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>Cancel</string>
-            </property>
-        </widget>
-    </widget>
-    <widget>
-        <class>QFrame</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>Frame17</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>0</x>
                 <y>0</y>
-                <width>159</width>
-                <height>66</height>
+                <width>282</width>
+                <height>199</height>
             </rect>
-        </property>
-        <property stdset="1">
-            <name>font</name>
-            <font>
-            </font>
         </property>
         <property stdset="1">
             <name>frameShape</name>
@@ -124,27 +43,23 @@
             <enum>Raised</enum>
         </property>
         <widget>
-            <class>QFrame</class>
+            <class>QGroupBox</class>
             <property stdset="1">
                 <name>name</name>
-                <cstring>Frame5</cstring>
+                <cstring>GroupBox1</cstring>
             </property>
             <property stdset="1">
                 <name>geometry</name>
                 <rect>
-                    <x>5</x>
-                    <y>7</y>
-                    <width>147</width>
-                    <height>50</height>
+                    <x>6</x>
+                    <y>4</y>
+                    <width>268</width>
+                    <height>148</height>
                 </rect>
             </property>
             <property stdset="1">
-                <name>frameShape</name>
-                <enum>StyledPanel</enum>
-            </property>
-            <property stdset="1">
-                <name>frameShadow</name>
-                <enum>Sunken</enum>
+                <name>title</name>
+                <string>Modify tempo</string>
             </property>
             <widget>
                 <class>RosegardenSpinBox</class>
@@ -155,11 +70,51 @@
                 <property stdset="1">
                     <name>geometry</name>
                     <rect>
-                        <x>64</x>
-                        <y>5</y>
+                        <x>145</x>
+                        <y>95</y>
                         <width>74</width>
                         <height>21</height>
                     </rect>
+                </property>
+            </widget>
+            <widget>
+                <class>QLabel</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>TempoLabel</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>16</x>
+                        <y>95</y>
+                        <width>122</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>Change this tempo to</string>
+                </property>
+            </widget>
+            <widget>
+                <class>QLabel</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>TextLabel1</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>40</x>
+                        <y>34</y>
+                        <width>100</width>
+                        <height>16</height>
+                    </rect>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>Tempo at time</string>
                 </property>
             </widget>
             <widget>
@@ -171,9 +126,9 @@
                 <property stdset="1">
                     <name>geometry</name>
                     <rect>
-                        <x>49</x>
-                        <y>26</y>
-                        <width>88</width>
+                        <x>162</x>
+                        <y>34</y>
+                        <width>61</width>
                         <height>20</height>
                     </rect>
                 </property>
@@ -198,9 +153,9 @@
                 <property stdset="1">
                     <name>geometry</name>
                     <rect>
-                        <x>9</x>
-                        <y>26</y>
-                        <width>67</width>
+                        <x>54</x>
+                        <y>57</y>
+                        <width>86</width>
                         <height>20</height>
                     </rect>
                 </property>
@@ -214,36 +169,95 @@
                 </property>
                 <property stdset="1">
                     <name>text</name>
-                    <string>Time</string>
+                    <string>is currently</string>
                 </property>
             </widget>
             <widget>
                 <class>QLabel</class>
                 <property stdset="1">
                     <name>name</name>
-                    <cstring>TempoLabel</cstring>
+                    <cstring>CurrentTempo</cstring>
                 </property>
                 <property stdset="1">
                     <name>geometry</name>
                     <rect>
-                        <x>9</x>
-                        <y>5</y>
-                        <width>56</width>
+                        <x>156</x>
+                        <y>57</y>
+                        <width>61</width>
                         <height>20</height>
                     </rect>
                 </property>
                 <property stdset="1">
                     <name>text</name>
-                    <string>Tempo</string>
+                    <string>0</string>
+                </property>
+                <property stdset="1">
+                    <name>alignment</name>
+                    <set>AlignVCenter|AlignRight</set>
+                </property>
+                <property>
+                    <name>hAlign</name>
                 </property>
             </widget>
+        </widget>
+        <widget>
+            <class>QPushButton</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>CancelButton</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>201</x>
+                    <y>159</y>
+                    <width>75</width>
+                    <height>33</height>
+                </rect>
+            </property>
+            <property stdset="1">
+                <name>caption</name>
+                <string></string>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>Cancel</string>
+            </property>
+        </widget>
+        <widget>
+            <class>QPushButton</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>OKButton</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>125</x>
+                    <y>159</y>
+                    <width>75</width>
+                    <height>33</height>
+                </rect>
+            </property>
+            <property stdset="1">
+                <name>caption</name>
+                <string></string>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>OK</string>
+            </property>
+            <property stdset="1">
+                <name>default</name>
+                <bool>true</bool>
+            </property>
         </widget>
     </widget>
 </widget>
 <customwidgets>
     <customwidget>
         <class>RosegardenSpinBox</class>
-        <header location="local">widgets.h</header>
+        <header location="local">/home/bownie/rosegarden/gui/widgets.h</header>
         <sizehint>
             <width>-1</width>
             <height>-1</height>

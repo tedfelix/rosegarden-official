@@ -9,13 +9,13 @@ o quantisation problems - shifting notes further away from where
 
 o copying segments quickly
 
-o segment movement is broken?
+o segment movement is broken? [FIXED]
 
 o horizontal zoom would be really useful
 
 o Instrument list labels - change the Instrument and the old
   label is stored behind the current one when a program is
-  active
+  active [FIXED]
 
 
 Currently looking at:

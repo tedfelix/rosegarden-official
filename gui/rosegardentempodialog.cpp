@@ -81,6 +81,7 @@ RosegardenTempoDialog::showTempo()
     QString tempoString;
     tempoString.sprintf("%4.3f", tempo);
     TempoSpin->setValue((int)tempo);
+    CurrentTempo->setText(tempoString);
 }
 
 void

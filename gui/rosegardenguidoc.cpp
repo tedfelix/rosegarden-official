@@ -1010,9 +1010,10 @@ RosegardenGUIDoc::convertToSinglePoint(Rosegarden::Segment *segment)
         segment->erase(toErase[i]);
     }
 
-    // Always fill with rests
+    // Always fill with rests if we have some events
     //
-    segment->normalizeRests(segment->getStartTime(), segment->getEndTime());
+    if(segment->begin() != segment->end())
+        segment->normalizeRests(segment->getStartTime(), segment->getEndTime());
 
 }
 
