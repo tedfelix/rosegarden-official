@@ -1590,8 +1590,8 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
     QGridLayout *layout = new QGridLayout(frame, 2, 2, 10, 5);
 
     m_metadata = new KListView(frame);
-    m_metadata->addColumn("Name");
-    m_metadata->addColumn("Value");
+    m_metadata->addColumn(i18n("Name"));
+    m_metadata->addColumn(i18n("Value"));
     m_metadata->setFullWidth();
     m_metadata->setItemsRenameable(true);
     m_metadata->setRenameable(0);

@@ -177,6 +177,7 @@ public:
 
     static QString iconLabel() { return i18n("General"); }
     static QString title()     { return i18n("General Configuration"); }
+    static QString iconName()  { return "configure"; }
 
     int getCountInSpin()            { return m_countIn->value(); }
     int getDblClickClient()         { return m_client->currentItem(); }
@@ -222,6 +223,7 @@ public:
 
     static QString iconLabel() { return i18n("Notation"); }
     static QString title()     { return i18n("Notation"); }
+    static QString iconName()  { return "fonts"; }
 
 protected slots:
     void slotFontComboChanged(const QString &);
@@ -331,6 +333,7 @@ public:
 
     static QString iconLabel() { return i18n("About"); }
     static QString title() { return i18n("About"); }
+    static QString iconName()  { return "contents"; }
 
 protected slots:
     void slotAddNewProperty();
@@ -359,6 +362,7 @@ public:
 
     static QString iconLabel() { return i18n("Audio"); }
     static QString title()     { return i18n("Audio Settings"); }
+    static QString iconName()  { return "folder"; }
 
 protected slots:
     void slotFileDialog();
@@ -396,6 +400,7 @@ public:
 
     static QString iconLabel() { return i18n("Color"); }
     static QString title()     { return i18n("Color Settings"); }
+    static QString iconName()  { return "colorize"; }
 
 signals:
     void docColoursChanged();
@@ -430,6 +435,7 @@ public:
 
     static QString iconLabel() { return i18n("Sequencer"); }
     static QString title()     { return i18n("Sequencer Settings"); }
+    static QString iconName()  { return "player_play"; }
 
 #ifdef HAVE_LIBJACK
     QString getJackPath() { return m_jackPath->text(); }

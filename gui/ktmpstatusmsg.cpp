@@ -67,4 +67,4 @@ int  KTmpStatusMsg::getDefaultId()
 
 
 int KTmpStatusMsg::m_defaultId = 1;
-QString KTmpStatusMsg::m_defaultMsg = i18n("  Ready.");
+QString KTmpStatusMsg::m_defaultMsg = "";

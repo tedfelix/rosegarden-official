@@ -126,7 +126,6 @@
          <Action name="toggle_all"                 append="show_merge" />
   </Menu>
   <Menu name="help">
-        <Action name="help_show_tip"/>
   </Menu>
 
 </MenuBar>

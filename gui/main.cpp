@@ -406,7 +406,7 @@ int main(int argc, char *argv[])
 {
     KAboutData aboutData( "rosegarden", I18N_NOOP("Rosegarden"),
                           VERSION, description, KAboutData::License_GPL,
-                          "Copyright 2000 - 2003 Guillaume Laurent, Chris Cannam, Richard Bown\nParts copyright 1994 - 2001 Chris Cannam, Andy Green, Richard Bown, Guillaume Laurent\nLilypond fonts copyright 1997 - 2001 Han-Wen Nienhuys and Jan Nieuwenhuizen",
+                          I18N_NOOP("Copyright 2000 - 2003 Guillaume Laurent, Chris Cannam, Richard Bown\nParts copyright 1994 - 2001 Chris Cannam, Andy Green, Richard Bown, Guillaume Laurent\nLilypond fonts copyright 1997 - 2001 Han-Wen Nienhuys and Jan Nieuwenhuizen"),
                           0,
                           "http://www.all-day-breakfast.com/rosegarden/",
                           "rosegarden-devel@sf.net");
@@ -415,18 +415,18 @@ int main(int argc, char *argv[])
     aboutData.addAuthor("Chris Cannam", 0, "cannam@all-day-breakfast.com", "http://all-day-breakfast.com");
     aboutData.addAuthor("Richard Bown", 0, "bownie@bownie.com", "http://bownie.com");
 
-    aboutData.addCredit("Randall Farmer", "Chord labelling code", " rfarme@simons-rock.edu");
-    aboutData.addCredit("Hans  Kieserman", "Lilypond output\nassorted other patches\ni18n-ization", "hkieserman@mail.com");
-    aboutData.addCredit("Michael McIntyre", "Lilypond output fixes and improvements\nmiscellaneous patches\nsundry pixmaps and toolbars\nSpanish translation", "dmmcintyr@users.sourceforge.net");
-    aboutData.addCredit("Levi Burton", "UI improvements\nbug fixes", "donburton@sbcglobal.net");
-    aboutData.addCredit("Alexandre Prokoudine", "Russian translation\ni18n-ization", "avp@altlinux.ru");
-    aboutData.addCredit("Pedro Lopez-Cabanillas", "Spanish translatio\nALSA research", "plcl@bigfoot.com");
-    aboutData.addCredit("Jörg Schumann", "German translation", "jrschumann@gmx.de");
-    aboutData.addCredit("Kevin Donnelly", "Welsh translation");
-    aboutData.addCredit("Didier Burli", "French translation", "didierburli@bluewin.ch");
-    aboutData.addCredit("Daniele Medri", "Italian translation", "madrid@linuxmeeting.net");
-    aboutData.addCredit("Stefan Asserh�ll", "Swedish translation", "stefan.asserhall@comhem.se");
-    aboutData.addCredit("Hasso Tepper", "Estonian translation", "hasso@estpak.ee");
+    aboutData.addCredit("Randall Farmer", I18N_NOOP("Chord labelling code"), " rfarme@simons-rock.edu");
+    aboutData.addCredit("Hans  Kieserman", I18N_NOOP("Lilypond output\nassorted other patches\ni18n-ization"), "hkieserman@mail.com");
+    aboutData.addCredit("Michael McIntyre", I18N_NOOP("Lilypond output fixes and improvements\nmiscellaneous patches\nsundry pixmaps and toolbars\nSpanish translation"), "dmmcintyr@users.sourceforge.net");
+    aboutData.addCredit("Levi Burton", I18N_NOOP("UI improvements\nbug fixes"), "donburton@sbcglobal.net");
+    aboutData.addCredit("Alexandre Prokoudine", I18N_NOOP("Russian translation\ni18n-ization"), "avp@altlinux.ru");
+    aboutData.addCredit("Pedro Lopez-Cabanillas", I18N_NOOP("Spanish translatio\nALSA research"), "plcl@bigfoot.com");
+    aboutData.addCredit("Jörg Schumann", I18N_NOOP("German translation"), "jrschumann@gmx.de");
+    aboutData.addCredit("Kevin Donnelly", I18N_NOOP("Welsh translation"));
+    aboutData.addCredit("Didier Burli", I18N_NOOP("French translation"), "didierburli@bluewin.ch");
+    aboutData.addCredit("Daniele Medri", I18N_NOOP("Italian translation"), "madrid@linuxmeeting.net");
+    aboutData.addCredit("Stefan Asserhäll", I18N_NOOP("Swedish translation"), "stefan.asserhall@comhem.se");
+    aboutData.addCredit("Hasso Tepper", I18N_NOOP("Estonian translation"), "hasso@estpak.ee");
 
     aboutData.setTranslator(I18N_NOOP("_: NAME OF TRANSLATORS\nYour names") ,I18N_NOOP("_: EMAIL OF TRANSLATORS\nYour emails"));
     
@@ -587,8 +587,7 @@ int main(int argc, char *argv[])
         QFileInfo sfxLoadInfo(sfxLoadPath), soundFontInfo(soundFontPath);
         if (sfxLoadInfo.isExecutable() && soundFontInfo.isReadable()) {
             KProcess sfxLoadProcess;
-            sfxLoadProcess.setExecutable(sfxLoadPath);
-            sfxLoadProcess << soundFontPath;
+            sfxLoadProcess << sfxLoadPath << soundFontPath;
             RG_DEBUG << "Starting sfxload : " << sfxLoadPath << " " << soundFontPath << endl;
             sfxLoadProcess.start();
 

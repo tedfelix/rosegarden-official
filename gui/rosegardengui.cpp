@@ -918,6 +918,7 @@ void RosegardenGUIApp::initZoomToolbar()
 
 void RosegardenGUIApp::initStatusBar()
 {
+    KTmpStatusMsg::setDefaultMsg(i18n("  Ready."));
     statusBar()->insertItem(KTmpStatusMsg::getDefaultMsg(),
                             KTmpStatusMsg::getDefaultId(), 1);
     statusBar()->setItemAlignment(KTmpStatusMsg::getDefaultId(), 
