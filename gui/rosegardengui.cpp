@@ -1199,7 +1199,8 @@ void RosegardenGUIApp::slotFileClose()
 
     initView();
 
-    close();
+    // Don't close the whole view (i.e. Quit), just close the doc.
+    //    close();
 }
 
 void RosegardenGUIApp::slotFilePrint()
