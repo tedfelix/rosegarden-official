@@ -37,7 +37,7 @@
 
 KStartupLogo::KStartupLogo(QWidget * parent, const char *name)
     : QWidget(parent,name,
-	      WStyle_Dialog  | WStyle_StaysOnTop | WStyle_NoBorderEx | WStyle_Customize | WDestructiveClose),
+	      WStyle_Customize | WStyle_Splash /*WStyle_Dialog  | WStyle_StaysOnTop | WStyle_NoBorderEx | WStyle_Customize | WDestructiveClose*/),
     m_readyToHide(false)
 {
     QString pixmapFile = locate("appdata", "pixmaps/splash.png");
