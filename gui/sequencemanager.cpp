@@ -120,6 +120,9 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 
         instrument = studio.getInstrumentById(track->getInstrument());
 
+        if (instrument == 0)
+            continue;
+
         // Skip if track is muted
         if (track->isMuted())
             continue;
