@@ -356,22 +356,36 @@ NoteFontMap::startElement(const QString &, const QString &,
 
         QString src = attributes.value("src");
 	QString code = attributes.value("code");
+	QString glyph = attributes.value("glyph");
 
-	int n = -1;
+	int icode = -1;
 	bool ok = false;
 	if (code) {
-	    n = code.stripWhiteSpace().toInt(&ok);
-	    if (!ok || n < 0) {
+	    icode = code.stripWhiteSpace().toInt(&ok);
+	    if (!ok || icode < 0) {
 		m_errorString =
 		    QString("invalid code attribute \"%1\" (must be integer >= 0)").
 		    arg(code);
 		return false;
 	    }
-	    symbolData.setCode(n);
+	    symbolData.setCode(icode);
 	}
 
-        if (!src && n < 0) {
-            m_errorString = "symbol must have either src or code attribute";
+	int iglyph = -1;
+	ok = false;
+	if (glyph) {
+	    iglyph = glyph.stripWhiteSpace().toInt(&ok);
+	    if (!ok || iglyph < 0) {
+		m_errorString =
+		    QString("invalid glyph attribute \"%1\" (must be integer >= 0)").
+		    arg(glyph);
+		return false;
+	    }
+	    symbolData.setGlyph(iglyph);
+	}
+
+        if (!src && icode < 0 && iglyph < 0) {
+            m_errorString = "symbol must have either src, code, or glyph attribute";
             return false;
         }
         if (src) symbolData.setSrc(qstrtostr(src));
@@ -381,19 +395,31 @@ NoteFontMap::startElement(const QString &, const QString &,
 
         QString inversionCode = attributes.value("inversion-code");
         if (inversionCode) {
-	    n = inversionCode.stripWhiteSpace().toInt(&ok);
-	    if (!ok || n < 0) {
+	    icode = inversionCode.stripWhiteSpace().toInt(&ok);
+	    if (!ok || icode < 0) {
 		m_errorString =
 		    QString("invalid inversion code attribute \"%1\" (must be integer >= 0)").
 		    arg(inversionCode);
 		return false;
 	    }
-	    symbolData.setInversionCode(n);
+	    symbolData.setInversionCode(icode);
+	}
+
+        QString inversionGlyph = attributes.value("inversion-glyph");
+        if (inversionGlyph) {
+	    iglyph = inversionGlyph.stripWhiteSpace().toInt(&ok);
+	    if (!ok || iglyph < 0) {
+		m_errorString =
+		    QString("invalid inversion glyph attribute \"%1\" (must be integer >= 0)").
+		    arg(inversionGlyph);
+		return false;
+	    }
+	    symbolData.setInversionGlyph(iglyph);
 	}
 
 	QString fontId = attributes.value("font-id");
 	if (fontId) {
-	    n = fontId.stripWhiteSpace().toInt(&ok);
+	    int n = fontId.stripWhiteSpace().toInt(&ok);
 	    if (!ok || n < 0) {
 		m_errorString =
 		    QString("invalid font-id attribute \"%1\" (must be integer >= 0)").
@@ -726,6 +752,26 @@ NoteFontMap::getInversionCode(int, CharName charName, int &code) const
 }
 
 bool
+NoteFontMap::getGlyph(int, CharName charName, int &glyph) const
+{
+    SymbolDataMap::const_iterator i = m_data.find(charName);
+    if (i == m_data.end()) return false;
+
+    glyph = i->second.getGlyph();
+    return (glyph >= 0);
+}
+
+bool
+NoteFontMap::getInversionGlyph(int, CharName charName, int &glyph) const
+{
+    SymbolDataMap::const_iterator i = m_data.find(charName);
+    if (i == m_data.end()) return false;
+
+    glyph = i->second.getInversionGlyph();
+    return (glyph >= 0);
+}
+
+bool
 NoteFontMap::getStaffLineThickness(int size, unsigned int &thickness) const
 {
     SizeDataMap::const_iterator i = m_sizes.find(size);
@@ -886,6 +932,14 @@ NoteFontMap::dump() const
 
             if (getInversionCode(*sizei, *namei, c)) {
                 cout << "Inversion code: " << c << endl;
+            }
+            
+            if (getGlyph(*sizei, *namei, c)) {
+                cout << "Glyph: " << c << endl;
+            }
+            
+            if (getInversionGlyph(*sizei, *namei, c)) {
+                cout << "Inversion glyph: " << c << endl;
             }
             
             if (getHotspot(*sizei, *namei, x, y)) {
@@ -1096,12 +1150,15 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
     } else {
 
 	int code = -1;
-	int charBase = 0;
 	if (!inverted) ok = m_fontMap.getCode(m_size, charName, code);
 	else  ok = m_fontMap.getInversionCode(m_size, charName, code);
 
-	if (!ok) {
-	    cerr << "NoteFont::getPixmap: Warning: No pixmap or code for character \""
+	int glyph = -1;
+	if (!inverted) ok = m_fontMap.getGlyph(m_size, charName, glyph);
+	else  ok = m_fontMap.getInversionGlyph(m_size, charName, glyph);
+
+	if (code < 0 && glyph < 0) {
+	    cerr << "NoteFont::getPixmap: Warning: No pixmap, code, or glyph for character \""
 		 << charName << "\"" << (inverted ? " (inverted)" : "")
 		 << " in font \"" << m_fontMap.getName() << "\"" << endl;
 	    add(charName, inverted, 0);
@@ -1109,6 +1166,7 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
 	    return false;
 	}
 
+	int charBase = 0;
 	SystemFont *systemFont =
 	    m_fontMap.getSystemFont(m_size, charName, charBase);
 
@@ -1129,7 +1187,8 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
 	    return false;
 	}
 	
-	found = new QPixmap(systemFont->renderChar(code + charBase,
+	found = new QPixmap(systemFont->renderChar(glyph,
+						   code + charBase,
 						   m_fontMap.shouldAutocrop()));
 	add(charName, inverted, found);
 	pixmap = *found;
@@ -1408,15 +1467,20 @@ public:
     SystemFontQt(QFont &font) : m_font(font) { }
     virtual ~SystemFontQt() { }
 
-    virtual QPixmap renderChar(unsigned int code, bool autocrop);
+    virtual QPixmap renderChar(int glyph, int code, bool autocrop);
 
 private:
     QFont m_font;
 };
 
 QPixmap
-SystemFontQt::renderChar(unsigned int code, bool autocrop)
+SystemFontQt::renderChar(int glyph, int code, bool autocrop)
 {
+    if (code < 0) {
+	NOTATION_DEBUG << "SystemFontQt::renderChar: Can't render using Qt with only glyph value (" << glyph << "), need a code point" << endl;
+	return QPixmap();
+    }
+
     QFontMetrics metrics(m_font);
     QChar qc(code);
     QRect bounding = metrics.boundingRect(qc);
@@ -1458,7 +1522,7 @@ public:
     SystemFontXft(Display *dpy, XftFont *font) : m_dpy(dpy), m_font(font) { }
     virtual ~SystemFontXft() { if (m_font) XftFontClose(m_dpy, m_font); }
     
-    virtual QPixmap renderChar(unsigned int code, bool autocrop);
+    virtual QPixmap renderChar(int glyph, int code, bool autocrop);
 
 private:
     Display *m_dpy;
@@ -1466,11 +1530,22 @@ private:
 };
 
 QPixmap
-SystemFontXft::renderChar(unsigned int code, bool)
+SystemFontXft::renderChar(int glyph, int code, bool)
 {
+    if (glyph < 0 && code < 0) {
+	NOTATION_DEBUG << "SystemFontXft::renderChar: Have neither glyph nor code point, can't render" << endl;
+	return QPixmap();
+    }
+
     XGlyphInfo extents;
-    FcChar32 char32(code);
-    XftTextExtents32(m_dpy, m_font, &char32, 1, &extents);
+
+    if (glyph >= 0) {
+	FT_UInt ui(glyph);
+	XftGlyphExtents(m_dpy, m_font, &ui, 1, &extents);
+    } else {
+	FcChar32 char32(code);
+	XftTextExtents32(m_dpy, m_font, &char32, 1, &extents);
+    }
 
     QPixmap map(extents.width, extents.height);
     map.fill();
@@ -1496,8 +1571,15 @@ SystemFontXft::renderChar(unsigned int code, bool)
 
     NOTATION_DEBUG << "SystemFontXft::renderChar: rendering character code "
 		   << code << endl;
-    
-    XftDrawString32(draw, &col, m_font, extents.x, extents.y, &char32, 1);
+
+    if (glyph >= 0) {
+	FT_UInt ui(glyph);
+	XftDrawGlyphs(draw, &col, m_font, extents.x, extents.y, &ui, 1);
+    } else {
+	FcChar32 char32(code);
+	XftDrawString32(draw, &col, m_font, extents.x, extents.y, &char32, 1);
+    }
+
     XftDrawDestroy(draw);
 
     map.setMask(PixmapFunctions::generateMask(map, Qt::white.rgb()));
@@ -1543,10 +1625,6 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
     result = FcResultMatch;
     match = FcFontMatch(FcConfigGetCurrent(), pattern, &result);
     FcPatternDestroy(pattern);
-
-    FcPatternGetString(match, FC_FAMILY, 0, &matchFamily);
-    NOTATION_DEBUG << "SystemFont::loadSystemFont[Xft]: match family is "
-		   << (char *)matchFamily << endl;
     
     if (!match || result != FcResultMatch) {
 	NOTATION_DEBUG << "SystemFont::loadSystemFont[Xft]: No match for font "
@@ -1555,6 +1633,10 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
 	if (match) FcPatternDestroy(match);
 	goto qfont;
     }
+
+    FcPatternGetString(match, FC_FAMILY, 0, &matchFamily);
+    NOTATION_DEBUG << "SystemFont::loadSystemFont[Xft]: match family is "
+		   << (char *)matchFamily << endl;
 
     if (QString((char *)matchFamily).lower() != name.lower()) {
 	NOTATION_DEBUG << "SystemFont::loadSystemFont[Xft]: Wrong family returned, falling back on QFont" << endl;

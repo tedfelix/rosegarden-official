@@ -113,6 +113,27 @@ installed into a non-standard place which you need to add to your
 KDEDIRS environment variable before you can start it correctly.
 
 
+Rosegarden hangs on the splash screen at startup
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When built with optimisation using the gcc-3.3.1 compiler included
+with SuSE 9.0, Rosegarden may hang on startup displaying the
+"Enumerating plugins" message on the splash screen.  This is caused by
+a compiler bug.
+
+To fix this, configure with
+
+  $ CXXFLAGS='-fno-gcse' ./configure
+
+to disable the particular optimisation that is causing the problem.
+
+Note that this also affects the Rosegarden-4 0.9.1 package shipped
+with the distribution itself; SuSE 9.0 is therefore the second SuSE
+release in a row to include a version of Rosegarden that doesn't work
+because of a compiler bug.  (See "Playback is only happening once
+every second" below for details of the SuSE 8.2 bug.)
+
+
 Rosegarden is crashing at startup
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Try running up the sequencer by itself first to see if it's a problem
@@ -539,24 +560,23 @@ application itself.  Go to:
 Playback is only happening once every second
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We haven't quite got to the bottom of this one yet, but it's been
-affecting people who build Rosegarden with optimisation using the
-gcc-3.3-pre compiler included with SuSE 8.2.  The effect is that all
-playback is neatly lined up on one-second boundaries -- all notes
-happening during a second are played at once at the end of the second.
-Very odd.
+When built with optimisation using the gcc-3.3-pre compiler included
+with SuSE 8.2, Rosegarden-4 0.9.1 and earlier will incorrectly play
+all notes on one-second boundaries -- all notes happening during a
+second are played at once at the end of the second.  (More recent
+versions of Rosegarden will play correctly, but the transport window
+will still only update once per second.)
 
-If you configure with
+To fix this, configure with
 
   $ CXXFLAGS='-O0' ./configure
 
-you should find this problem goes away (at the loss of some
-optimisation, obviously).
+to disable optimisation (a pity, but that's life).
 
-Note that the Rosegarden-4 0.8.5 package included with the
-distribution itself is also affected by this problem: obviously nobody
-actually tested it.  (They also forgot to include the help file, icon
-etc -- it's not a very well-made package.)
+Note that this also affects the Rosegarden-4 0.8.5 package shipped
+included with the distribution itself.  Obviously nobody actually
+tested it.  (They also forgot to include the help file, icon etc --
+it's not a very well-made package.)
 
 
 What if I see Rosegarden itself in the client list when I start the sequencer?

@@ -41,7 +41,7 @@ typedef std::pair<QString, int> SystemFontSpec;
 class SystemFont
 {
 public:
-    virtual QPixmap renderChar(unsigned int code, bool autocrop) = 0;
+    virtual QPixmap renderChar(int glyph, int code, bool autocrop) = 0;
 
     static SystemFont *loadSystemFont(const SystemFontSpec &spec);
 };
@@ -91,6 +91,8 @@ public:
     SystemFont *getSystemFont(int size, CharName charName, int &charBase) const;
     bool getCode(int size, CharName charName, int &code) const;
     bool getInversionCode(int size, CharName charName, int &code) const;
+    bool getGlyph(int size, CharName charName, int &glyph) const;
+    bool getInversionGlyph(int size, CharName charName, int &glyph) const;
 
     bool getHotspot(int size, CharName charName, int &x, int &y) const;
 
@@ -116,7 +118,8 @@ private:
     public:
         SymbolData() : m_fontId(0),
 		       m_src(""), m_inversionSrc(""),
-		       m_code(-1), m_inversionCode(-1) { }
+		       m_code(-1), m_inversionCode(-1),
+		       m_glyph(-1), m_inversionGlyph(-1) { }
         ~SymbolData() { }
 
 	void setFontId(int id) { m_fontId = id; }
@@ -128,14 +131,22 @@ private:
 	void setCode(int code) { m_code = code; }
 	int  getCode() const { return m_code; }
 
+	void setGlyph(int glyph) { m_glyph = glyph; }
+	int  getGlyph() const { return m_glyph; }
+
         void setInversionSrc(std::string inversion) { m_inversionSrc = inversion; }
         std::string getInversionSrc() const { return m_inversionSrc; }
 
         void setInversionCode(int code) { m_inversionCode = code; }
         int  getInversionCode() const { return m_inversionCode; }
 
+        void setInversionGlyph(int glyph) { m_inversionGlyph = glyph; }
+        int  getInversionGlyph() const { return m_inversionGlyph; }
+
         bool hasInversion() const {
-	    return m_inversionCode >= 0 || m_inversionSrc != "";
+	    return m_inversionGlyph >= 0 ||
+		   m_inversionCode  >= 0 ||
+		   m_inversionSrc   != "";
 	}
 
     private:
@@ -144,6 +155,8 @@ private:
         std::string m_inversionSrc;
 	int m_code;
 	int m_inversionCode;
+	int m_glyph;
+	int m_inversionGlyph;
     };
 
     class HotspotData

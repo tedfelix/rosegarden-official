@@ -950,6 +950,8 @@ MappedAudioPluginManager::getPropertyList(const MappedObjectProperty &property)
 
             while (plugin)
             {
+		std::cerr << "plugin is " << ((void *)plugin) << std::endl;
+
                 list.push_back(MappedObjectProperty
                             ("%1").arg(plugin->getId()));
 
