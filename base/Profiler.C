@@ -50,10 +50,11 @@ Profiles::~Profiles()
 
 void Profiles::accumulate(const char* id, clock_t time)
 {
-//     cerr << "Profiles::accumulate() : "
-//               << id << " += " << time << endl;
-
-    m_profiles[id] += time;
+#ifndef NO_TIMING    
+    ProfilePair &pair(m_profiles[id]);
+    ++pair.first;
+    pair.second += time;
+#endif
 }
 
 void Profiles::dump()
@@ -61,11 +62,13 @@ void Profiles::dump()
 #ifndef NO_TIMING    
     cerr << "Profiles::dump() :\n";
 
-    for(profilesmap::iterator i = m_profiles.begin();
-        i != m_profiles.end(); ++i) {
+    for (ProfileMap::iterator i = m_profiles.begin();
+	 i != m_profiles.end(); ++i) {
 
-        cerr << (*i).first << " : " 
-	     << (((*i).second * 1000) / CLOCKS_PER_SEC) << "ms" << endl;
+        cerr << (*i).first << ": " 
+	     << (*i).second.first << " calls, "
+	     << (((*i).second.second * 1000) / CLOCKS_PER_SEC) << "ms, "
+	     << (((*i).second.second * 1000000 / (*i).second.first) / CLOCKS_PER_SEC) << "us/call" << endl;
     }
 
     cerr << "Profiles::dump() finished\n";
@@ -76,8 +79,22 @@ Profiler::Profiler(const char* c, bool showOnDestruct)
     : m_c(c),
       m_showOnDestruct(showOnDestruct)
 {
+#ifndef NO_TIMING
     m_startTime = clock();
+#endif
 }
+
+void
+Profiler::update()
+{
+#ifndef NO_TIMING
+    clock_t elapsedTime = clock() - m_startTime;
+
+    cerr << "Profiler : id = " << m_c
+	 << " - elapsed so far = " << ((elapsedTime * 1000) / CLOCKS_PER_SEC)
+	 << "ms" << endl;
+#endif
+}    
 
 Profiler::~Profiler()
 {

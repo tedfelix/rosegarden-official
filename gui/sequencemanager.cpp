@@ -725,7 +725,7 @@ SequenceManager::stop()
                                   "stop()", data))
     {
         // failed - pop up and disable sequencer options
-        throw(i18n("Failed to contact Rosegarden sequencer"));
+        throw(i18n("Failed to contact Rosegarden sequencer with stop command"));
     }
 
     // restore
@@ -851,7 +851,7 @@ SequenceManager::sendSequencerJump(const Rosegarden::RealTime &time)
     {
       // failed - pop up and disable sequencer options
       m_transportStatus = STOPPED;
-      throw(i18n("Failed to contact Rosegarden sequencer"));
+      throw(i18n("Failed to contact Rosegarden sequencer with jumpTo command"));
     }
 
     return;
@@ -1101,7 +1101,7 @@ SequenceManager::record(bool toggled)
         {
             // failed - pop up and disable sequencer options
             m_transportStatus = STOPPED;
-            throw(i18n("Failed to contact Rosegarden sequencer"));
+            throw(i18n("Failed to contact Rosegarden sequencer with record command"));
         }
         else
         {
@@ -1394,7 +1394,7 @@ SequenceManager::setLoop(const timeT &lhs, const timeT &rhs)
                  "setLoop(long int, long int, long int, long int)", data))
     {
         // failed - pop up and disable sequencer options
-        throw(i18n("Failed to contact Rosegarden sequencer"));
+        throw(i18n("Failed to contact Rosegarden sequencer with setLoop command"));
     }
 }
 
@@ -1412,7 +1412,7 @@ SequenceManager::checkSoundDriverStatus()
     {
         // failed - pop up and disable sequencer options
 	m_soundDriverStatus = NO_DRIVER;
-        throw(i18n("Failed to contact Rosegarden sequencer"));
+        throw(i18n("Failed to contact Rosegarden sequencer with getSoundDriverStatus command"));
     }
     else
     {

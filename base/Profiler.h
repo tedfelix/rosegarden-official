@@ -44,20 +44,17 @@ class Profiles
 {
 public:
     static Profiles* getInstance();
-
     ~Profiles();
 
     void accumulate(const char* id, clock_t time);
-
     void dump();
-
-    typedef hash_char<clock_t> profilesmap;
-    
 
 protected:
     Profiles();
 
-    profilesmap m_profiles;
+    typedef std::pair<int, clock_t> ProfilePair;
+    typedef hash_char<ProfilePair>  ProfileMap; // hash_char maps char* -> pair
+    ProfileMap m_profiles;
 
     static Profiles* m_instance;
 };
@@ -65,8 +62,10 @@ protected:
 class Profiler
 {
 public:
-    Profiler(const char*, bool showOnDestruct=false);
+    Profiler(const char*, bool showOnDestruct = false);
     ~Profiler();
+
+    void update();
 
 protected:
     const char* m_c;

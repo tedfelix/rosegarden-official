@@ -26,6 +26,7 @@
 #include "Selection.h"
 #include "Composition.h"
 #include "Sets.h"
+#include "Profiler.h"
 
 #include <iostream>
 #include <cmath>
@@ -35,6 +36,8 @@
 using std::cout;
 using std::cerr;
 using std::endl;
+
+//#define DEBUG_NOTATION_QUANTIZER 1
 
 namespace Rosegarden {
 
@@ -284,6 +287,7 @@ Quantizer::unquantize(EventSelection *selection) const
 timeT
 Quantizer::getFromSource(Event *e, ValueType v) const
 {
+    Profiler profiler("Quantizer::getFromSource");
 
 //    cerr << "Quantizer::getFromSource: source is \"" << m_source << "\"" << endl;
 
@@ -321,6 +325,8 @@ Quantizer::getFromSource(Event *e, ValueType v) const
 timeT
 Quantizer::getFromTarget(Event *e, ValueType v) const
 {
+    Profiler profiler("Quantizer::getFromTarget");
+
     if (m_target == RawEventData) {
 
 	if (v == AbsoluteTimeValue) return e->getAbsoluteTime();
@@ -344,6 +350,8 @@ void
 Quantizer::setToTarget(Segment *s, Segment::iterator i,
 		       timeT absTime, timeT duration) const
 {
+    Profiler profiler("Quantizer::setToTarget");
+
     //cerr << "Quantizer::setToTarget: target is \"" << m_target << "\", absTime is " << absTime << ", duration is " << duration << " (unit is " << m_unit << ", original values are absTime " << (*i)->getAbsoluteTime() << ", duration " << (*i)->getDuration() << ")" << endl;
 
 /*!!! For the moment -- for test purposes -- let's recreate the events
@@ -358,7 +366,7 @@ Quantizer::setToTarget(Segment *s, Segment::iterator i,
     bool haveSt = false, haveSd = false;
     if (m_source != RawEventData) {
 	haveSt = (*i)->get<Int>(m_sourceProperties[AbsoluteTimeValue], st);
-	haveSd = (*i)->get<Int>(m_sourceProperties[DurationValue],	   sd);
+	haveSd = (*i)->get<Int>(m_sourceProperties[DurationValue],     sd);
     }
     
     Event *e;
@@ -662,7 +670,7 @@ public:
     void scanTupletsInBar(Segment *,
 			  timeT barStart, timeT barDuration,
 			  timeT wholeStart, timeT wholeDuration,
-			  std::vector<int> &divisions) const;
+			  const std::vector<int> &divisions) const;
     void scanTupletsAt(Segment *, Segment::iterator, int depth,
 		       timeT base, timeT barStart,
 		       timeT tupletStart, timeT tupletBase) const;
@@ -802,6 +810,8 @@ NotationQuantizer::Impl::unsetProvisionalProperties(Event *e) const
 void
 NotationQuantizer::Impl::quantizeAbsoluteTime(Segment *s, Segment::iterator i) const
 {
+    Profiler profiler("NotationQuantizer::Impl::quantizeAbsoluteTime");
+
     Composition *comp = s->getComposition();
     
     TimeSignature timeSig;
@@ -827,7 +837,8 @@ NotationQuantizer::Impl::quantizeAbsoluteTime(Segment *s, Segment::iterator i) c
     
     timeT base = timeSig.getBarDuration();
 
-    std::pair<timeT, long> best(-2, 0);
+    timeT bestBase = -2;
+    long bestScore = 0;
 
 #ifdef DEBUG_NOTATION_QUANTIZER
     cout << "quantizeAbsoluteTime: t is " << t << ", d is " << d << endl;
@@ -839,20 +850,20 @@ NotationQuantizer::Impl::quantizeAbsoluteTime(Segment *s, Segment::iterator i) c
 	if (base < m_unit) break;
 	long score = scoreAbsoluteTimeForBase(s, i, depth, base, sigTime);
 
-	if (depth == 0 || score < best.second) {
+	if (depth == 0 || score < bestScore) {
 #ifdef DEBUG_NOTATION_QUANTIZER
 	    cout << " [*]";
 #endif
-	    best = std::pair<timeT, long>(base, score);
+	    bestBase = base;
+	    bestScore = score;
 	}
 
 #ifdef DEBUG_NOTATION_QUANTIZER
 	cout << endl;
 #endif
-//	if (distance == 0) break; // we won't do any better by going deeper
     }
 
-    if (best.first == -2) {
+    if (bestBase == -2) {
 #ifdef DEBUG_NOTATION_QUANTIZER
 	cout << "Quantizer::quantizeAbsoluteTime: weirdness: no snap found" << endl;
 #endif
@@ -860,29 +871,31 @@ NotationQuantizer::Impl::quantizeAbsoluteTime(Segment *s, Segment::iterator i) c
 	// we need to snap relative to the time sig, not relative
 	// to the start of the whole composition
 	t -= sigTime;
-	timeT low = (t / best.first) * best.first;
-	timeT high = low + best.first;
+	timeT low = (t / bestBase) * bestBase;
+	timeT high = low + bestBase;
 	t = ((high - t > t - low) ? low : high);
 	t += sigTime;
 	
 #ifdef DEBUG_NOTATION_QUANTIZER
-	cout << "snap duration is " << best.first << ", snapped to " << t << endl;
+	cout << "snap duration is " << bestBase << ", snapped to " << t << endl;
 #endif
     }
 
     setProvisional(*i, AbsoluteTimeValue, t);
-    (*i)->setMaybe<Int>(m_provisionalBase, best.first);
-    (*i)->setMaybe<Int>(m_provisionalScore, best.second);
+    (*i)->setMaybe<Int>(m_provisionalBase, bestBase);
+    (*i)->setMaybe<Int>(m_provisionalScore, bestScore);
 }
 
 long
-NotationQuantizer::Impl::scoreAbsoluteTimeForBase(Segment *s,
+NotationQuantizer::Impl::scoreAbsoluteTimeForBase(Segment *,
 						  Segment::iterator i,
 						  int depth,
 						  timeT base,
 						  timeT sigTime)
     const
 {
+    Profiler profiler("NotationQuantizer::Impl::scoreAbsoluteTimeForBase");
+
     int noteType = (*i)->get<Int>(m_provisionalNoteType);
     bool right = false;
     
@@ -956,9 +969,11 @@ NotationQuantizer::Impl::scoreAbsoluteTimeForBase(Segment *s,
 }
     
 void
-NotationQuantizer::Impl::quantizeDurationProvisional(Segment *s, Segment::iterator i)
+NotationQuantizer::Impl::quantizeDurationProvisional(Segment *, Segment::iterator i)
     const
 {
+    Profiler profiler("NotationQuantizer::Impl::quantizeDurationProvisional");
+
     timeT d = m_q->getFromSource(*i, DurationValue);
     if (d == 0) {
 	setProvisional(*i, DurationValue, d);
@@ -977,8 +992,9 @@ NotationQuantizer::Impl::quantizeDurationProvisional(Segment *s, Segment::iterat
 	if ((shortNote.getDots() > 0 ||
 	     shortNote.getNoteType() == Note::Shortest)) { // can't dot that
 	    
-	    if (shortNote.getNoteType() == Note::Longest) longNote = shortNote;
-	    longNote = Note(shortNote.getNoteType() + 1, 0);
+	    if (shortNote.getNoteType() < Note::Longest) {
+		longNote = Note(shortNote.getNoteType() + 1, 0);
+	    }
 	
 	} else {
 	    longNote = Note(shortNote.getNoteType(), 1);
@@ -1014,11 +1030,13 @@ NotationQuantizer::Impl::quantizeDurationProvisional(Segment *s, Segment::iterat
 void
 NotationQuantizer::Impl::quantizeDuration(Segment *s, Chord &c) const
 {
+    Profiler profiler("NotationQuantizer::Impl::quantizeDuration");
+
     Composition *comp = s->getComposition();
     
     TimeSignature timeSig;
-    timeT t = m_q->getFromSource(*c.getInitialElement(), AbsoluteTimeValue);
-    timeT sigTime = comp->getTimeSignatureAt(t, timeSig);
+//    timeT t = m_q->getFromSource(*c.getInitialElement(), AbsoluteTimeValue);
+//    timeT sigTime = comp->getTimeSignatureAt(t, timeSig);
 
     timeT d = getProvisional(*c.getInitialElement(), DurationValue);
     int noteType = Note::getNearestNote(d).getNoteType();
@@ -1149,8 +1167,10 @@ NotationQuantizer::Impl::scanTupletsInBar(Segment *s,
 					  timeT barDuration,
 					  timeT wholeStart,
 					  timeT wholeEnd,
-					  std::vector<int> &divisions) const
+					  const std::vector<int> &divisions) const
 {
+    Profiler profiler("NotationQuantizer::Impl::scanTupletsInBar");
+
     //!!! need to further constrain the area scanned so as to cope with
     // partial bars
 
@@ -1226,6 +1246,8 @@ NotationQuantizer::Impl::scanTupletsAt(Segment *s,
 				       timeT tupletStart,
 				       timeT tupletBase) const
 {
+    Profiler profiler("NotationQuantizer::Impl::scanTupletsAt");
+
     Segment::iterator j = i;
     timeT tupletEnd = tupletStart + base;
     timeT jTime = tupletEnd;
@@ -1370,10 +1392,13 @@ NotationQuantizer::Impl::scanTupletsAt(Segment *s,
 bool
 NotationQuantizer::Impl::isValidTupletAt(Segment *s,
 					 Segment::iterator i,
-					 int depth, timeT base,
+					 int depth,
+					 timeT /* base */,
 					 timeT sigTime,
 					 timeT tupletBase) const
 {
+    Profiler profiler("NotationQuantizer::Impl::isValidTupletAt");
+
     //!!! This is basically wrong; we need to be able to deal with groups
     // that contain e.g. a crotchet and a quaver, tripleted.
 
@@ -1420,14 +1445,16 @@ NotationQuantizer::quantizeRange(Segment *s,
     m_impl->quantizeRange(s, from, to);
 }
 
-
 void
 NotationQuantizer::Impl::quantizeRange(Segment *s,
 				       Segment::iterator from,
 				       Segment::iterator to) const
 {
+    Profiler *profiler = new Profiler("NotationQuantizer::Impl::quantizeRange");
+
     clock_t start = clock();
     int events = 0, notes = 0, passes = 0;
+    int setGood = 0, setBad = 0;
     
 #ifdef DEBUG_NOTATION_QUANTIZER
     cout << "NotationQuantizer::Impl::quantizeRange: from time "
@@ -1496,12 +1523,14 @@ NotationQuantizer::Impl::quantizeRange(Segment *s,
 
     if (m_maxTuplet >= 2) {
 
+	std::vector<int> divisions = comp->getTimeSignatureAt(wholeStart).getDivisions(7);
+
 	for (int barNo = comp->getBarNumber(wholeStart);
 	     barNo <= comp->getBarNumber(wholeEnd); ++barNo) {
 
 	    bool isNew = false;
 	    TimeSignature timeSig = comp->getTimeSignatureInBar(barNo, isNew);
-	    std::vector<int> divisions = timeSig.getDivisions(7);
+	    if (isNew) divisions = timeSig.getDivisions(7);
 	    scanTupletsInBar(s, comp->getBarStart(barNo),
 			     timeSig.getBarDuration(),
 			     wholeStart, wholeEnd, divisions);
@@ -1636,6 +1665,10 @@ NotationQuantizer::Impl::quantizeRange(Segment *s,
 
 	unsetProvisionalProperties(*i);
 
+	if ((*i)->getAbsoluteTime() == t &&
+	    (*i)->getDuration() == d) ++setBad;
+	else ++setGood;
+
 #ifdef DEBUG_NOTATION_QUANTIZER
 	cout << "Setting to target at " << t << "," << d << endl;
 #endif
@@ -1644,12 +1677,14 @@ NotationQuantizer::Impl::quantizeRange(Segment *s,
     }
     ++passes;
 
-#ifdef DEBUG_NOTATION_QUANTIZER
     cerr << "NotationQuantizer: " << events << " events ("
 	 << notes << " notes), " << passes << " passes, "
+	 << setGood << " good sets, " << setBad << " bad sets, "
 	 << ((clock() - start) * 1000 / CLOCKS_PER_SEC) << "ms elapsed"
 	 << endl;
-#endif
+
+    delete profiler; // on heap so it updates before the next line:
+    Profiles::getInstance()->dump();
 
 }	
     

@@ -849,11 +849,14 @@ void RosegardenGUIApp::initView()
         //
         try
         {
-            m_seqManager->setLoop(0, 0);
+            if (isUsingSequencer()) m_seqManager->setLoop(0, 0);
         }
         catch(QString s)
         {
+	    KStartupLogo::hideIfStillThere();
+	    CurrentProgressDialog::freeze();
             KMessageBox::error(this, s);
+	    CurrentProgressDialog::thaw();
         }
 
     }
@@ -880,6 +883,8 @@ void RosegardenGUIApp::initView()
     //
     if (m_audioManagerDialog)
         m_audioManagerDialog->slotPopulateFileList();
+
+    kapp->processEvents();
 }
 
 void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)

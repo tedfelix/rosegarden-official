@@ -24,6 +24,7 @@
 #include "BaseProperties.h"
 #include "Composition.h"
 #include "Quantizer.h"
+#include "Profiler.h"
 
 #include <iostream>
 #include <algorithm>
@@ -506,6 +507,8 @@ Segment::fillWithRests(timeT startTime, timeT endTime)
 void
 Segment::normalizeRests(timeT startTime, timeT endTime)
 {
+    Profiler profiler("Segment::normalizeRests");
+
     if (startTime < m_startTime) {
         if (m_composition) m_composition->setSegmentStartTime(this, startTime);
 	else m_startTime = startTime;
