@@ -85,7 +85,7 @@ void
 TracksEditor::trackOrderChanged(int section, int fromIdx, int toIdx)
 {
     kdDebug(KDEBUG_AREA) << QString("TracksEditor::trackOrderChanged(section : %1, from %2, to %3)")
-    .arg(section).arg(fromIdx).arg(toIdx);
+        .arg(section).arg(fromIdx).arg(toIdx) << endl;
 
     if (moveTrack(section, fromIdx, toIdx))
         emit needUpdate();
@@ -100,7 +100,7 @@ TracksEditor::addTrackPart(TrackPart *p)
     int trackNb = m_vHeader->sectionAt(static_cast<int>(r->y()));
     p->setTrackNb(trackNb);
     kdDebug(KDEBUG_AREA) << QString("TracksEditor::addTrackPart() : track nb is %1 at %2")
-           .arg(trackNb).arg(r->y());
+        .arg(trackNb).arg(r->y()) << endl;
 
     m_trackParts.push_back(p);
 }
@@ -108,7 +108,7 @@ TracksEditor::addTrackPart(TrackPart *p)
 void
 TracksEditor::deleteTrackPart(TrackPart*)
 {
-    kdDebug(KDEBUG_AREA) << "TracksEditor::deleteTrackPart() : not implemented yet";
+    kdDebug(KDEBUG_AREA) << "TracksEditor::deleteTrackPart() : not implemented yet" << endl;
 }
 
 bool
