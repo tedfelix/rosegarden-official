@@ -2,18 +2,11 @@
 <!DOCTYPE rosegarden-data>
 <rosegarden-data>
 <Track>
-	<event type="note" duration="whole" pitch="7"/>
+	<event type="note" duration="whole" pitch="7" name="A"/>
 
-	<Group>
-	    <event type="note" duration="whole" pitch="8"/>
-	    <event type="note" duration="quarter" pitch="12"/>
-	</Group>
+	<event type="note" duration="whole" pitch="10" name="B"/>
 
-	<event type="note" duration="whole" pitch="10"/>
-	<event type="rest" duration="whole"/>
-	<event type="rest" duration="half"/>
-	<event type="rest" duration="half"/>
-	<event type="note" duration="whole" pitch="7"/>
+	<event type="note" duration="whole" pitch="7" name="C"/>
 
 </Track>
 </rosegarden-data>
