@@ -25,6 +25,7 @@
 #include <klocale.h>
 #include <dcopclient.h>
 #include <iostream>
+#include <unistd.h>
 
 #include "rosegardensequencer.h"
 #include <MappedComposition.h>
@@ -92,15 +93,26 @@ int main(int argc, char *argv[])
 
     // Now we can enter our specialised event loop.
     // For each pass through we wait for some pending
-    // events.
+    // events.  We check status on the way through and
+    // act accordingly.  DCOP events fire back and
+    // forth processed in the event loop changing 
+    // state and hopefully controlling and providing
+    // feedback.  We also put in some sleep time to
+    // make sure the loop doesn't eat up all the
+    // processor - we're not in that much of a rush!
+    //
+    // Soon perhaps we'll put some throttling into
+    // the loop sleep time(s) to allow for dropped
+    // notes etc. .. ?
+    //
     //
     TransportStatus lastSeqStatus = roseSeq->getStatus();
 
     while(roseSeq->getStatus() != QUIT)
     {
-        // process any pending events (10ms of events)
+        // process any pending events (5ms of events)
         //
-        app.processEvents(10);
+        app.processEvents(5);
 
         // Update internal clock and send pointer position
         // change event to GUI - this is the heartbeat of
@@ -215,6 +227,14 @@ int main(int argc, char *argv[])
             roseSeq->notifySequencerStatus();
 
         lastSeqStatus = roseSeq->getStatus();
+
+        // Pause for breath while we're gnashing this loop (5 milliseconds)
+        //
+        // See the notes above the loop regarding getting the sequencer
+        // to throttle - this could be done automatically or within
+        // parameters sent down from the GUI.
+        //
+        usleep(5000);
     }
 
     return app.exec();
