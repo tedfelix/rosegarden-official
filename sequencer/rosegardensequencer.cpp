@@ -1307,6 +1307,24 @@ RosegardenSequencerApp::play(const Rosegarden::RealTime &time,
     else 
         SEQUENCER_DEBUG << "RosegardenSequencerApp::play() - no metronome found\n";
 
+    // Map tempo segment
+    //
+    QString tempoSegmentFileName = KGlobal::dirs()->resourceDirs("tmp").first() + "/rosegarden_tempo";
+    QFileInfo tempoSegmentFileInfo(tempoSegmentFileName);
+    if (tempoSegmentFileInfo.exists())
+        mmapSegment(tempoSegmentFileName);
+    else 
+        SEQUENCER_DEBUG << "RosegardenSequencerApp::play() - no tempo segment found\n";
+
+    // Map time sig segment
+    //
+    QString timeSigSegmentFileName = KGlobal::dirs()->resourceDirs("tmp").first() + "/rosegarden_timesig";
+    QFileInfo timeSigSegmentFileInfo(timeSigSegmentFileName);
+    if (timeSigSegmentFileInfo.exists())
+        mmapSegment(timeSigSegmentFileName);
+    else 
+        SEQUENCER_DEBUG << "RosegardenSequencerApp::play() - no time sig segment found\n";
+
     // Map control block
     //
     m_controlBlockMmapper = new ControlBlockMmapper(KGlobal::dirs()->resourceDirs("tmp").first() + "/rosegarden_control_block");
