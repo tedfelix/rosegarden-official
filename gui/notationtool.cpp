@@ -318,7 +318,8 @@ NoteInserter::handleMouseRelease(Rosegarden::timeT,
 
 void
 NoteInserter::insertNote(Segment &segment, timeT insertionTime,
-			 int pitch, Rosegarden::Accidental accidental)
+			 int pitch, Rosegarden::Accidental accidental,
+			 bool suppressPreview)
 {
     Note note(m_noteType, m_noteDots);
     timeT endTime = insertionTime + note.getDuration();
@@ -348,7 +349,7 @@ NoteInserter::insertNote(Segment &segment, timeT insertionTime,
 	}
     }
 
-    m_nParentView->playNote(segment, pitch);
+    if (!suppressPreview) m_nParentView->playNote(segment, pitch);
 }
 
 

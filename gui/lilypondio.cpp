@@ -117,7 +117,7 @@ LilypondExporter::handleStartingEvents(eventstartlist &eventsToStart,
         } catch (Rosegarden::Event::BadType) {
             // Not an indication
         } catch (Rosegarden::Event::NoData e) {
-	    RG_DEBUG << "Bad indication: " << e.getMessage() << std::endl;
+	    std::cerr << "Bad indication: " << e.getMessage() << std::endl;
 	}
 
 	eventstartlist::iterator n(m);
@@ -168,7 +168,7 @@ LilypondExporter::handleEndingEvents(eventendlist &eventsInProgress,
 	    // not an indication
 
 	} catch (Rosegarden::Event::NoData e) {
-	    RG_DEBUG << "Bad indication: " << e.getMessage() << std::endl;
+	    std::cerr << "Bad indication: " << e.getMessage() << std::endl;
 	}
 
 	k = l;
@@ -328,7 +328,7 @@ LilypondExporter::convertPitchToLilyNote(int pitch, Accidental accidental,
     // leave this in to see if there are any _other_ problems that are going
     // to break this method...
     if (lilyNote == "") {
-        RG_DEBUG << "LilypondExporter::convertPitchToLilyNote() -  WARNING: cannot resolve note"
+        std::cerr << "LilypondExporter::convertPitchToLilyNote() -  WARNING: cannot resolve note"
                   << std::endl << "pitch = " << pitchNote << "\tkey sig. = "
                   << ((isFlatKeySignature) ? "flat" : "sharp") << "\tno. of accidentals = "
                   << accidentalCount << "\textra accidental = \"" << accidental << "\""
@@ -350,7 +350,7 @@ LilypondExporter::convertPitchToLilyNote(int pitch, Accidental accidental,
     else if (acc == Accidentals::DoubleSharp) lilyNote += "isis";
     
     if (lilyNote != origLilyNote) {
-	RG_DEBUG << "WARNING: LilypondExporter::convertPitchToLilyNote: " << lilyNote << " != " << origLilyNote << std::endl;
+	std::cerr << "WARNING: LilypondExporter::convertPitchToLilyNote: " << lilyNote << " != " << origLilyNote << std::endl;
     }
 
     return lilyNote;
@@ -410,7 +410,7 @@ LilypondExporter::composeLilyMark(std::string eventMark, bool stemUp) {
             outStr += "\\downbow";
         } else {
             outStr = "";
-            RG_DEBUG << "LilypondExporter::composeLilyMark() - unhandled mark:  "
+            std::cerr << "LilypondExporter::composeLilyMark() - unhandled mark:  "
                       << eventMark << std::endl;
         }
     }
@@ -488,7 +488,7 @@ LilypondExporter::write()
 
     std::ofstream str(qstrtostr(tmp_fileName).c_str(), std::ios::out);
     if (!str) {
-        RG_DEBUG << "LilypondExporter::write() - can't write file " << tmp_fileName << std::endl;
+        std::cerr << "LilypondExporter::write() - can't write file " << tmp_fileName << std::endl;
         return false;
     }
 
@@ -783,7 +783,7 @@ LilypondExporter::calculateDuration(Rosegarden::Segment *s,
     timeT absTime  = (*i)->getNotationAbsoluteTime();
 
     RG_DEBUG << "LilypondExporter::calculateDuration: first duration, absTime: "
-	      << duration << ", " << absTime << std::endl;
+	      << duration << ", " << absTime << endl;
 
     if ((*i)->isa(Note::EventType) || (*i)->isa(Note::EventRestType)) {
 	try {
@@ -796,7 +796,7 @@ LilypondExporter::calculateDuration(Rosegarden::Segment *s,
     }
 
     RG_DEBUG << "LilypondExporter::calculateDuration: now duration is "
-	      << duration << std::endl;
+	      << duration << endl;
 
     soundingDuration = duration * tupletRatio.first / tupletRatio.second;
 
@@ -808,7 +808,7 @@ LilypondExporter::calculateDuration(Rosegarden::Segment *s,
     }
 
     RG_DEBUG << "LilypondExporter::calculateDuration: first toNext is "
-	      << toNext << std::endl;
+	      << toNext << endl;
 
     // Examine the following event, and truncate our duration
     // if we overlap it.
@@ -848,9 +848,9 @@ LilypondExporter::calculateDuration(Rosegarden::Segment *s,
     }
 
     RG_DEBUG << "LilypondExporter::calculateDuration: second toNext is "
-	      << toNext << std::endl;
+	      << toNext << endl;
 
-    RG_DEBUG << "LilypondExporter::calculateDuration: final duration, soundingDuration: " << duration << ", " << soundingDuration << std::endl;
+    RG_DEBUG << "LilypondExporter::calculateDuration: final duration, soundingDuration: " << duration << ", " << soundingDuration << endl;
 
     return duration;
 }
@@ -943,7 +943,7 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 			(*i)->get<Int>(BEAMED_GROUP_TUPLED_COUNT, numerator);
 			(*i)->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT, denominator);
 			if (numerator == 0 || denominator == 0) {
-			    RG_DEBUG << "WARNING: LilypondExporter::writeBar: "
+			    std::cerr << "WARNING: LilypondExporter::writeBar: "
 				      << "tupled event without tupled/untupled counts"
 				      << std::endl;
 			    groupId = -1;
@@ -1112,7 +1112,7 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 		str << std::endl << indent(col);
 
 	    } catch (Rosegarden::Exception e) {
-		RG_DEBUG << "Bad clef: " << e.getMessage() << std::endl;
+		std::cerr << "Bad clef: " << e.getMessage() << std::endl;
 	    }
 
 	} else if ((*i)->isa(Rosegarden::Key::EventType)) {
@@ -1131,7 +1131,7 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 		str << std::endl << indent(col);
 
 	    } catch (Rosegarden::Exception e) {
-		RG_DEBUG << "Bad key: " << e.getMessage() << std::endl;
+		std::cerr << "Bad key: " << e.getMessage() << std::endl;
 	    }
 
 	} else if ((*i)->isa(Text::EventType)) {
@@ -1248,7 +1248,7 @@ LilypondExporter::handleText(const Rosegarden::Event *textEvent,
 		lilyText = "-\\" + s;
 
 	    } else {
-		RG_DEBUG << "LilypondExporter::write() - illegal Lilypond dynamic: "
+		std::cerr << "LilypondExporter::write() - illegal Lilypond dynamic: "
 			  << s << std::endl;
 	    }
 
@@ -1264,11 +1264,11 @@ LilypondExporter::handleText(const Rosegarden::Event *textEvent,
 	} else {
 
 	    textEvent->get<String>(Text::TextTypePropertyName, s);
-	    RG_DEBUG << "LilypondExporter::write() - unhandled text type: "
+	    std::cerr << "LilypondExporter::write() - unhandled text type: "
 		      << s << std::endl;
 	}
     } catch (Rosegarden::Exception e) {
-	RG_DEBUG << "Bad text: " << e.getMessage() << std::endl;
+	std::cerr << "Bad text: " << e.getMessage() << std::endl;
     }
 }
 

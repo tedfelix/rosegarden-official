@@ -2135,7 +2135,7 @@ SimpleEventEditDialog::getEvent() const
             catch(Rosegarden::Event::NoData)
             {
                 RG_DEBUG  << "SimpleEventEditDialog::getEvent - "
-                          << "can't create Controller event" << std::endl;
+                          << "can't create Controller event" << endl;
             }
 
             event.set<Int>(Rosegarden::Controller::NUMBER, data1);
@@ -2153,7 +2153,7 @@ SimpleEventEditDialog::getEvent() const
             catch(Rosegarden::Event::NoData)
             {
                 RG_DEBUG << "SimpleEventEditDialog::getEvent - "
-                         << "can't create KeyPressure event" << std::endl;
+                         << "can't create KeyPressure event" << endl;
             }
 
             event.set<Int>(Rosegarden::KeyPressure::PITCH, data1);
@@ -2206,7 +2206,7 @@ SimpleEventEditDialog::getEvent() const
             catch(Rosegarden::Event::NoData)
             {
                 RG_DEBUG << "SimpleEventEditDialog::getEvent - "
-                         << "can't create PitchBend event" << std::endl;
+                         << "can't create PitchBend event" << endl;
             }
             break;
 
@@ -3159,7 +3159,7 @@ AudioSplitDialog::drawPreview()
         {
             RG_DEBUG << "AudioSplitDialog::AudioSplitDialog - "
                      << "startY - out of negative range"
-                     << std::endl;
+                     << endl;
             startY = 0;
         }
 
@@ -3167,7 +3167,7 @@ AudioSplitDialog::drawPreview()
         {
             RG_DEBUG << "AudioSplitDialog::AudioSplitDialog - "
                      << "endY - out of negative range"
-                     << std::endl;
+                     << endl;
             endY = 0;
         }
 
@@ -3559,7 +3559,7 @@ EventParameterDialog::slotPatternSelected(int value)
 
         default:
             RG_DEBUG << "EventParameterDialog::slotPatternSelected - "
-                     << "unrecognised pattern number" << std::endl;
+                     << "unrecognised pattern number" << endl;
             break;
     }
 

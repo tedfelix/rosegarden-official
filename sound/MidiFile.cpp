@@ -58,7 +58,7 @@ using std::string;
 using std::ifstream;
 using std::stringstream;
 using std::cerr;
-using std::std::cerr;
+using std::cerr;
 using std::endl;
 using std::ends;
 using std::ios;

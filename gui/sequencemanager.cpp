@@ -764,111 +764,108 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                                          Rosegarden::AudioManagerDialog
                                              *audioManagerDialog)
 {
-    if (m_doc == 0) return;
+    if (m_doc == 0 || mC.size() == 0) return;
 
-    if (mC.size())
+    Rosegarden::MappedComposition::iterator i;
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    Rosegarden::Track *track =
+	comp.getTrackById(comp.getSelectedTrack());
+    Rosegarden::InstrumentId id = track->getInstrument();
+    
+    Rosegarden::MappedComposition tempMC =
+	applyFiltering(mC,
+		       Rosegarden::MappedEvent::MappedEventType(
+			   m_doc->getStudio().getMIDIThruFilter()));
+    
+    Rosegarden::MappedComposition retMC;
+    
+    // send all events to the MIDI in label
+    //
+    for (i = tempMC.begin(); i != tempMC.end(); ++i )
     {
-        Rosegarden::MappedComposition::iterator i;
-        Rosegarden::Composition &comp = m_doc->getComposition();
-        Rosegarden::Track *track =
-                  comp.getTrackById(comp.getSelectedTrack());
-        Rosegarden::InstrumentId id = track->getInstrument();
-
-        Rosegarden::MappedComposition tempMC =
-                applyFiltering(mC,
-                               Rosegarden::MappedEvent::MappedEventType(
-                                   m_doc->getStudio().getMIDIThruFilter()));
-
-        Rosegarden::MappedComposition retMC;
-
-        // send all events to the MIDI in label
-        //
-        for (i = tempMC.begin(); i != tempMC.end(); ++i )
-        {
-            m_transport->setMidiInLabel(*i);
-
-            // Skip all audio events
-            //
-            if ((*i)->getType() >= Rosegarden::MappedEvent::Audio)
-            {
-                if ((*i)->getType() == Rosegarden::MappedEvent::AudioStopped)
-                {
-                    /*
-                    SEQMAN_DEBUG << "AUDIO FILE ID = "
-                                 << int((*i)->getData1())
-                                 << " - FILE STOPPED - " 
-                                 << "INSTRUMENT = "
-                                 << (*i)->getInstrument()
-                                 << endl;
-                    */
-
-                    if (audioManagerDialog && (*i)->getInstrument() == 
-                            m_doc->getStudio().getAudioPreviewInstrument())
-                    {
-                        audioManagerDialog->
-                            closePlayingDialog(
-                                Rosegarden::AudioFileId((*i)->getData1()));
-                    }
-                }
-
-                if ((*i)->getType() == Rosegarden::MappedEvent::AudioLevel)
-                    sendAudioLevel(*i);
-
-                if ((*i)->getType() == 
-                        Rosegarden::MappedEvent::AudioGeneratePreview)
-                {
-                    m_doc->finalizeAudioFile(
-                            Rosegarden::AudioFileId((*i)->getData1()));
-                }
-
-                if ((*i)->getType() ==
-                        Rosegarden::MappedEvent::SystemUpdateInstruments)
-                {
-                    // resync Devices and Instruments
-                    //
-                    m_doc->syncDevices();
-                }
-
-                continue;
-
-            } else {
-
-		// if we aren't playing or recording, consider invoking any
-		// step-by-step clients
-
-		SEQMAN_DEBUG << "m_transportStatus = " << m_transportStatus << endl;
-
-		if (m_transportStatus == STOPPED ||
-		    m_transportStatus == RECORDING_ARMED) {
-
-		    if ((*i)->getType() == Rosegarden::MappedEvent::MidiNote) {
-			if ((*i)->getVelocity() == 0) {
-			    emit insertableNoteOffReceived((*i)->getPitch());
-			} else {
-			    emit insertableNoteOnReceived((*i)->getPitch());
-			}
-		    }
+	m_transport->setMidiInLabel(*i);
+	
+	// Skip all audio events
+	//
+	if ((*i)->getType() >= Rosegarden::MappedEvent::Audio)
+	{
+	    if ((*i)->getType() == Rosegarden::MappedEvent::AudioStopped)
+	    {
+		/*
+		  SEQMAN_DEBUG << "AUDIO FILE ID = "
+		  << int((*i)->getData1())
+		  << " - FILE STOPPED - " 
+		  << "INSTRUMENT = "
+		  << (*i)->getInstrument()
+		  << endl;
+		*/
+		
+		if (audioManagerDialog && (*i)->getInstrument() == 
+		    m_doc->getStudio().getAudioPreviewInstrument())
+		{
+		    audioManagerDialog->
+			closePlayingDialog(
+			    Rosegarden::AudioFileId((*i)->getData1()));
 		}
 	    }
-
+	    
+	    if ((*i)->getType() == Rosegarden::MappedEvent::AudioLevel)
+		sendAudioLevel(*i);
+	    
+	    if ((*i)->getType() == 
+		Rosegarden::MappedEvent::AudioGeneratePreview)
+	    {
+		m_doc->finalizeAudioFile(
+		    Rosegarden::AudioFileId((*i)->getData1()));
+	    }
+	    
+	    if ((*i)->getType() ==
+		Rosegarden::MappedEvent::SystemUpdateInstruments)
+	    {
+		// resync Devices and Instruments
+		//
+		m_doc->syncDevices();
+	    }
+	    
+	    continue;
+	    
+	}
+	
 #ifdef HAVE_ALSA
-            (*i)->setInstrument(id);
+	(*i)->setInstrument(id);
 #endif
-            retMC.insert(new Rosegarden::MappedEvent(*i));
-        }
-
+	retMC.insert(new Rosegarden::MappedEvent(*i));
+    }
+    
 #ifdef HAVE_ALSA
-        // MIDI thru implemented at this layer for ALSA for
-        // the moment.  aRts automatically does MIDI through,
-        // this does it to the currently selected instrument.
-        //
-        showVisuals(retMC);
-
-        // Filter
-        //
-        Rosegarden::StudioControl::sendMappedComposition(retMC);
-
+    // MIDI thru implemented at this layer for ALSA for
+    // the moment.  aRts automatically does MIDI through,
+    // this does it to the currently selected instrument.
+    //
+    showVisuals(retMC);
+    
+    // Filter
+    //
+    Rosegarden::StudioControl::sendMappedComposition(retMC);
+    
 #endif 
+    
+    // if we aren't playing or recording, consider invoking any
+    // step-by-step clients (using unfiltered composition)
+    
+    if (m_transportStatus == STOPPED ||
+	m_transportStatus == RECORDING_ARMED) {
+
+	for (i = mC.begin(); i != mC.end(); ++i )
+	{
+	    if ((*i)->getType() == Rosegarden::MappedEvent::MidiNote) {
+		if ((*i)->getVelocity() == 0) {
+		    emit insertableNoteOffReceived((*i)->getPitch());
+		} else {
+		    emit insertableNoteOnReceived((*i)->getPitch());
+		}
+	    }
+	}
     }
 }
 
@@ -1337,7 +1334,9 @@ void SequenceManager::resetControlBlockMmapper()
 bool SequenceManager::event(QEvent *e)
 {
     if (e->type() == QEvent::User) {
+	SEQMAN_DEBUG << "SequenceManager::event() with user event\n";
 	if (m_updateRequested) {
+	    SEQMAN_DEBUG << "SequenceManager::event(): update requested\n";
 	    checkRefreshStatus();
             m_controlBlockMmapper->refresh();
             m_metronomeMmapper->refresh();

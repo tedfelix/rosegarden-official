@@ -1848,7 +1848,7 @@ NotationView::slotInsertableNoteEventReceived(int pitch, bool noteOn)
 
     NoteInserter *noteInserter = dynamic_cast<NoteInserter *>(m_tool);
     if (!noteInserter) {
-	NOTATION_DEBUG << "No note duration selected" << endl;
+	KMessageBox::sorry(this, i18n("Can't insert note: No note duration selected"));
         return;
     }
 
@@ -1866,7 +1866,8 @@ NotationView::slotInsertableNoteEventReceived(int pitch, bool noteOn)
 	if (!noteOn) return;
 	NOTATION_DEBUG << "Inserting note in chord at pitch " << pitch << endl;
 	noteInserter->insertNote(segment, getInsertionTime(), pitch,
-				 Rosegarden::Accidentals::NoAccidental);
+				 Rosegarden::Accidentals::NoAccidental,
+				 true);
 
     } else {
 
@@ -1886,10 +1887,10 @@ NotationView::slotInsertableNoteEventReceived(int pitch, bool noteOn)
 	    //   note happened less than half way through the first,
 	    //   it's a chord.
 
-	    // for now:
+	    // We haven't implemented these yet... For now:
 	    noteInserter->insertNote(segment, getInsertionTime(), pitch,
-				     Rosegarden::Accidentals::NoAccidental);
-	    
+				     Rosegarden::Accidentals::NoAccidental,
+				     true);
 	}
     }
 }

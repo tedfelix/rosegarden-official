@@ -148,7 +148,8 @@ public:
     void insertNote(Rosegarden::Segment &segment,
 		    Rosegarden::timeT insertionTime,
 		    int pitch,
-		    Rosegarden::Accidental accidental);
+		    Rosegarden::Accidental accidental,
+		    bool suppressPreview = false);
 
     static const QString ToolName;
 

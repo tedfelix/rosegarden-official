@@ -416,7 +416,7 @@ AudioInstrumentParameterPanel::slotSelectPlugin(int index)
         {
             RG_DEBUG << "AudioInstrumentParameterPanel::slotSelectPlugin - "
 		     << "no AudioPluginInstance found for index "
-		     << index << std::endl;
+		     << index << endl;
         }
     }
     else
@@ -436,8 +436,8 @@ AudioInstrumentParameterPanel::slotPluginSelected(int index, int plugin)
     {
         if (plugin == -1)
         {
-            std:: cout << "InstrumentParameterBox::slotPluginSelected - "
-                       << "no plugin selected" << std::endl;
+            RG_DEBUG << "InstrumentParameterBox::slotPluginSelected - "
+                       << "no plugin selected" << endl;
 
             // Destroy plugin instance
             if (Rosegarden::StudioControl::
@@ -532,7 +532,7 @@ AudioInstrumentParameterPanel::slotPluginSelected(int index, int plugin)
     }
     else
         RG_DEBUG << "InstrumentParameterBox::slotPluginSelected - "
-                 << "got index of unknown plugin!" << std::endl;
+                 << "got index of unknown plugin!" << endl;
 }
 
 void
@@ -1125,7 +1125,7 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
 	(instrument->getDevice());
     if (!md) {
 	RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::setupForInstrument: No MidiDevice for Instrument "
-	  << instrument->getId() << std::endl;
+	  << instrument->getId() << endl;
 	return;
     }
 
@@ -1228,7 +1228,7 @@ MIDIInstrumentParameterPanel::populateBankList()
 	(m_selectedInstrument->getDevice());
     if (!md) {
 	RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::populateBankList: No MidiDevice for Instrument "
-                 << m_selectedInstrument->getId() << std::endl;
+                 << m_selectedInstrument->getId() << endl;
 	return;
     }
 
@@ -1328,7 +1328,7 @@ MIDIInstrumentParameterPanel::populateProgramList()
 	(m_selectedInstrument->getDevice());
     if (!md) {
 	RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::populateProgramList: No MidiDevice for Instrument "
-                 << m_selectedInstrument->getId() << std::endl;
+                 << m_selectedInstrument->getId() << endl;
 	return;
     }
 
@@ -1368,7 +1368,7 @@ MIDIInstrumentParameterPanel::populateVariationList()
 	(m_selectedInstrument->getDevice());
     if (!md) {
 	RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::populateVariationList: No MidiDevice for Instrument "
-		  << m_selectedInstrument->getId() << std::endl;
+		  << m_selectedInstrument->getId() << endl;
 	return;
     }
 
@@ -1589,7 +1589,7 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
 	(m_selectedInstrument->getDevice());
     if (!md) {
 	RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::slotSelectBank: No MidiDevice for Instrument "
-		  << m_selectedInstrument->getId() << std::endl;
+		  << m_selectedInstrument->getId() << endl;
 	return;
     }
 
@@ -1636,12 +1636,12 @@ MIDIInstrumentParameterPanel::slotSelectVariation(int index)
 	(m_selectedInstrument->getDevice());
     if (!md) {
 	RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::slotSelectVariation: No MidiDevice for Instrument "
-		  << m_selectedInstrument->getId() << std::endl;
+		  << m_selectedInstrument->getId() << endl;
 	return;
     }
 
     if (index < 0 || index > m_variations.size()) {
-	RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::slotSelectVariation: index " << index << " out of range" << std::endl;
+	RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::slotSelectVariation: index " << index << " out of range" << endl;
 	return;
     }
 
@@ -1666,7 +1666,7 @@ MIDIInstrumentParameterPanel::sendBankAndProgram()
 	(m_selectedInstrument->getDevice());
     if (!md) {
 	RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::slotSelectBank: No MidiDevice for Instrument "
-		  << m_selectedInstrument->getId() << std::endl;
+		  << m_selectedInstrument->getId() << endl;
 	return;
     }
 
