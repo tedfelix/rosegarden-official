@@ -141,29 +141,11 @@ public:
     void quantizeByNote(Track::iterator from, Track::iterator to) const;
 
     /**
-     * Quantizes one event.  Sets the DurationProperty; does not
-     * change the event duration
-     *
-     * @return Quantized duration (same as DurationProperty)
-     */
-//!!!    timeT quantizeByUnit(Rosegarden::Event *el) const;
-
-    /**
      * Quantizes a duration.  
      *
      * @return Quantized duration
      */
     timeT quantizeByUnit(timeT duration) const;
-
-    /**
-     * Quantizes one event.  Sets the DurationProperty,
-     * NoteDurationProperty, Note::NoteType and Note::NoteDots
-     * properties; does not change the event duration.  If the event
-     * is not a note or rest, only sets the first of those properties.
-     *
-     * @return Quantized note duration (same as NoteDurationProperty)
-     */
-//!!!    timeT quantizeByNote(Rosegarden::Event *el) const;
 
     /**
      * Quantizes a duration.
@@ -211,16 +193,8 @@ protected:
 		  const SingleQuantizer &absq, const SingleQuantizer &dq,
 		  PropertyName durationProperty) const;
 
-//!!!    Note requantizeByNote(timeT &unitQuantizedDuration) const;
-//!!!    void requantizeByNote(Event *event) const;
-
     int m_unit;
     int m_maxDots;
-/*!!!
-    PropertyName m_absoluteTimeProperty;
-    PropertyName m_durationProperty;
-    PropertyName m_noteDurationProperty;
-*/
 };
 
 }
