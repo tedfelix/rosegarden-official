@@ -82,7 +82,8 @@ Music structures:
 
 See also docs/data_struct/units.txt for an explanation of the units we
 use for time and pitch values.  See docs/discussion/names.txt for some
-name-related discussion.
+name-related discussion.  See docs/code/creating_events.txt for an
+explanation of how to create new Events and add properties to them.
 
 The base directory also contains various music-related helper classes:
 
@@ -104,6 +105,9 @@ The base directory also contains various music-related helper classes:
     Key::EventType, the type of a key change Event, KeyPropertyName,
     the name of the property that defines the key change, and a set
     of the valid strings for key changes.
+
+ -- BaseProperties.[Ch] contains a set of "standard"-ish Event
+    property names that are not basic enough to go in NotationTypes.
 
  -- SegmentNotationHelper and SegmentPerformanceHelper do tasks that
     may be useful to notation-type code and performer code

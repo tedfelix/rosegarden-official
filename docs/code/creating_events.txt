@@ -1,0 +1,103 @@
+[From email, 20020104]
+
+
+Events
+------
+
+To create a new sort of event, you just create an Event with
+a type name that hasn't been used before, and to add properties,
+you just use a new property name.
+
+(We have a big potential problem with namespacing property
+names, as there's no central registry of names that have been
+used.  I've been considering adding something that might help,
+because we do actually intern PropertyName strings, we just
+don't yet complain about duplicates definitions -- but it won't
+prevent people from using literal strings that collide.  And
+property names are global, they aren't local to a particular
+event type.  Sorry, I digress.)
+
+So, for example, let's say you want a new "cow" event and you
+want to give it a couple of properties, say a string property
+for moo type (Moo, Low or Croak -- cows with colds sound
+terrible) and a bool to indicate whether it is in fact a bull.
+(There are three property types; the other's int, and they're
+defined in Property.h.)
+
+All you have to do to create a cow and insert it in a segment is
+
+  Event *e = new Event("cow");
+  e->setAbsoluteTime(1000); // has to have one
+  e->setDuration(0);        // likewise, even if it's zero
+  e->set<String>("MooType", "Low");
+  e->set<Bool>("isBull", true);
+  segment->insert(e);
+
+The strings are fairly arbitrary -- you just have to ensure
+that nobody else has already used an event called cow or
+properties called MooType and isBull.  Of course, you don't
+see much real code using literal strings; the event types are
+generally just declared as string constants in various places
+(actually almost all in NotationTypes.h), but the property
+names are usually declared as constant PropertyName objects
+(in NotationTypes, BaseProperties or notationproperties, most
+usually) which is a class that's constructed from a string
+constant but interns to an integer for faster lookup, not
+that you need to deal with that at all.
+
+As another example, say you want to add a property to note
+events that indicates the usual fret number.  To do that, you
+could declare a FRET_NUMBER property name in BaseProperties
+or notationproperties (with a value of, say, "FretNumber")
+and then do stuff like
+
+  Segment::iterator i = getIteratorFromSomewhere();
+  Event *e = (*i);
+  e->set<Int>(BaseProperties::FRET_NUMBER, 4);
+  ++i;
+  long fret = (*i)->get<Int>(BaseProperties::FRET_NUMBER);
+
+The get/set code is obviously more laborious than it would
+be with fixed accessor methods in classes, but it's good
+when you haven't quite decided which properties you need,
+and it means you can extend other peoples' events, and it
+means you get I/O done for you.
+
+Another thing is, you may notice various calls to "setMaybe"
+on Events as well as to "set".  This is because Events
+distinguish between persistent properties (which have
+usually been set by the user through the GUI somehow) that
+get streamed out to the XML file, and non-persistent ones
+(usually resulting from caching following some calculation,
+and usually possible to recalculate whenever required if
+necessary) that don't.  The set method can take an extra
+argument specifying whether you're setting a persistent or
+non-persistent property (the default is persistent), but
+it's rarely used: instead to set non-persistent properties
+we generally use setMaybe, which sets a non-persistent
+property only if there is no existing persistent property
+of the same name.  This allows the user easily to override
+computed values, for example in the stem-direction menu
+functions on the score view (the user's settings are
+persistent, the computed ones are not). 
+
+
+XML format
+----------
+
+The most basic XML elements are event and property.
+Event has a type, subordering (sorry, forgot to describe
+that, it's not terribly important, it just indicates the
+ordering of events in a segment where the absolute times
+are equal -- so we can display clef before key before any
+notes at that time, etc) and duration, and then the event
+element contains a series of property elements each of
+which specifies a single property by name and type.  Events
+are assumed to start at the time at which the previous
+event ended, except when overridden by a chord element
+(within which all events start at once) or a resync
+element (which specifies the starting time of the
+following event, after which events continue to count from
+there -- this is too verbose, we should change it to an
+optional absolute time property on the event element). 
+
