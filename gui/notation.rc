@@ -282,6 +282,7 @@
 </MenuBar>
 
 <ToolBar name="Tools Toolbar">
+  <text>Tools Toolbar</text>
   <Action name="erase" />
   <Action name="select" />
   <Action name="text" />

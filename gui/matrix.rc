@@ -2,7 +2,7 @@
 
 <kpartgui name="Rosegarden::Matrix" version="085">
   
-  <MenuBar>
+<MenuBar>
 
 <Menu name="edit" append="new_merge">
   <Action name="select_all"/>
@@ -102,6 +102,8 @@
 </MenuBar>
 
 <ToolBar name="Tools Toolbar">
+  <text>Tools Toolbar</text>
+
   <Action name="select" />
   <Action name="move" />
   <Action name="draw" />
@@ -110,6 +112,8 @@
 </ToolBar>
 
 <ToolBar name="Transport Toolbar">
+  <text>Transport Toolbar</text>
+
   <Action name="playback_pointer_start" />
   <Action name="playback_pointer_back_bar" />
   <Action name="play" />
@@ -122,9 +126,11 @@
 </ToolBar>
 
 <ToolBar name="Actions Toolbar">
+  <text>Actions Toolbar</text>
 </ToolBar>
 
 <ToolBar name="Zoom Toolbar">
+  <text>Zoom Toolbar</text>
 </ToolBar>
 
 <State name="have_selection">
