@@ -30,7 +30,10 @@
 #include <qvbox.h>
 #include <qcolor.h>
 #include <qdatetime.h>
+
+#define private protected // ugly hack but we want to access KProgressDialog::mShowTimer
 #include <kprogress.h>
+#undef private
 
 #ifndef _WIDGETS_H_
 #define _WIDGETS_H_
@@ -171,6 +174,12 @@ public slots:
     void slotSetOperationName(QString);
     void slotCancel();
 
+    /// Stop and hide (if it's shown) the progress dialog
+    void slotFreeze();
+
+    /// Restore the dialog to its normal state
+    void slotThaw();
+
 protected slots:
     void slotCheckShow(int);
 
@@ -182,6 +191,8 @@ protected:
     //--------------- Data members ---------------------------------
 
     QTime m_chrono;
+    bool m_wasVisible;
+    bool m_frozen;
 };
 
 
@@ -205,12 +216,26 @@ class CurrentProgressDialog : public QObject
 public:
     static CurrentProgressDialog* getInstance();
 
-    static RosegardenProgressDialog* getCurrentProgressDialog();
-    static void registerCurrentProgressDialog(RosegardenProgressDialog*);
+    static RosegardenProgressDialog* get();
+    static void set(RosegardenProgressDialog*);
+
+    /**
+     * Block the current progress so that it won't appear
+     * regardless of passing time and occurring events.
+     * This is useful when you want to show another dialog
+     * and you want to make sure the progress dialog is out of the way
+     */
+    static void freeze();
+
+    /**
+     * Restores the progress dialog to its normal state atfer a freeze()
+     */
+    static void thaw();
 
 public slots:
+    /// Called then the current progress dialog is being destroyed
     void slotCurrentProgressDialogDestroyed();
-    
+
 protected:
     CurrentProgressDialog(QObject* parent, const char* name = 0)
         : QObject(parent, name) {}

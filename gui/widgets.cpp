@@ -180,9 +180,11 @@ RosegardenProgressDialog::RosegardenProgressDialog(QWidget *creator,
                                                    const char *name,
                                                    bool modal):
     KProgressDialog(creator, name,
-                    i18n("Processing..."), QString::null, modal)
+                    i18n("Processing..."), QString::null, modal),
+    m_wasVisible(false),
+    m_frozen(false)
 {
-//     setCaption(i18n("Processing..."));
+    setCaption(i18n("Processing..."));
     RG_DEBUG << "RosegardenProgressDialog::RosegardenProgressDialog - "
              << labelText() << endl;
 
@@ -190,7 +192,8 @@ RosegardenProgressDialog::RosegardenProgressDialog(QWidget *creator,
             this,          SLOT(slotCheckShow(int)));
     
     m_chrono.start();
-    CurrentProgressDialog::registerCurrentProgressDialog(this);
+
+    CurrentProgressDialog::set(this);
 }
 
 
@@ -204,7 +207,9 @@ RosegardenProgressDialog::RosegardenProgressDialog(
 		    name,
                     i18n("Processing..."),
                     labelText,
-		    modal)
+		    modal),
+    m_wasVisible(false),
+    m_frozen(false)
 {
     progressBar()->setTotalSteps(totalSteps);
     RG_DEBUG << "RosegardenProgressDialog::RosegardenProgressDialog - "
@@ -212,9 +217,10 @@ RosegardenProgressDialog::RosegardenProgressDialog(
 
     connect(progressBar(), SIGNAL(percentageChanged (int)),
             this,          SLOT(slotCheckShow(int)));
+
     m_chrono.start();
 
-    CurrentProgressDialog::registerCurrentProgressDialog(this);
+    CurrentProgressDialog::set(this);
 }
 
 void
@@ -239,9 +245,34 @@ void RosegardenProgressDialog::slotCheckShow(int)
 //              << m_chrono.elapsed() << " - " << minimumDuration()
 //              << endl;
 
-    if (!isVisible() && m_chrono.elapsed() > minimumDuration()) {
+    if (!isVisible() &&
+        !m_frozen &&
+        m_chrono.elapsed() > minimumDuration()) {
         show();
     }
+}
+
+void RosegardenProgressDialog::slotFreeze()
+{
+    RG_DEBUG << "RosegardenProgressDialog::slotFreeze()\n";
+
+    m_wasVisible = isVisible();
+    if (isVisible()) hide();
+
+    mShowTimer->stop();
+    m_frozen = true;
+}
+
+void RosegardenProgressDialog::slotThaw()
+{
+    RG_DEBUG << "RosegardenProgressDialog::slotThaw()\n";
+
+    if (m_wasVisible) show();
+
+    // Restart timer
+    mShowTimer->start(minimumDuration());
+    m_frozen = false;
+    m_chrono.restart();
 }
 
 
@@ -290,13 +321,13 @@ CurrentProgressDialog* CurrentProgressDialog::getInstance()
 
 
 RosegardenProgressDialog*
-CurrentProgressDialog::getCurrentProgressDialog()
+CurrentProgressDialog::get()
 {
     return m_currentProgressDialog;
 }
 
 void
-CurrentProgressDialog::registerCurrentProgressDialog(RosegardenProgressDialog* d)
+CurrentProgressDialog::set(RosegardenProgressDialog* d)
 {
     if (m_currentProgressDialog)
         m_currentProgressDialog->disconnect(getInstance());
@@ -306,6 +337,18 @@ CurrentProgressDialog::registerCurrentProgressDialog(RosegardenProgressDialog* d
     // this lets the progress dialog deregister itself when it's deleted
     connect(d, SIGNAL(destroyed()),
             getInstance(), SLOT(slotCurrentProgressDialogDestroyed()));
+}
+
+void CurrentProgressDialog::freeze()
+{
+    if (m_currentProgressDialog)
+        m_currentProgressDialog->slotFreeze();
+}
+
+void CurrentProgressDialog::thaw()
+{
+    if (m_currentProgressDialog)
+        m_currentProgressDialog->slotThaw();
 }
 
 void CurrentProgressDialog::slotCurrentProgressDialogDestroyed()
