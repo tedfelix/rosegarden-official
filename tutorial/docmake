@@ -77,31 +77,35 @@ Put() {
 
 	read -p "Do you want to publish? (y/N)" key
 	tries=0
-	until [ $tries == 5 ]; do
+#	until [ $tries == 5 ]; do
 	    if [ "$key" == "y" ]; then
 		printf "Publishing \"$1\"... \t"
-		user=$(cat /home/silvan/ZTQXP3)
-		curl -u "$user" -T "$1" ftp://users.adelphia.net/public_html/
+#		user=$(cat /home/silvan/ZTQXP3)
+#		curl -u "$user" -T "$1" ftp://users.adelphia.net/public_html/
+		scp $1 dmmcintyr@rosegarden.sourceforge.net:/home/groups/r/ro/rosegarden/htdocs/pdf
+		ssh -l dmmcintyr rosegarden.sourceforge.net chmod 644 /home/groups/r/ro/rosegarden/htdocs/pdf/using-rosegarden.pdf
 
-		echo "Verifying..."
-		pushd $PWD
-		cd /tmp
-		wget http://users.adelphia.net/~silvan/$1
-		md5sum $1 > $1.md5.2
-		diff $1.md5 $1.md5.2
-
-		if [ $? ]; then
-		    echo OK
-		    popd
-		    return
-		else
-		    echo FAILED
-		fi
-
-		popd
+# probably don't need this now that I'm using ssh to upload it...
+#
+#		echo "Verifying..."
+#		pushd $PWD
+#		cd /tmp
+#		wget http://users.adelphia.net/~silvan/$1
+#		md5sum $1 > $1.md5.2
+#		diff $1.md5 $1.md5.2
+#
+#		if [ $? ]; then
+#		    echo OK
+#		    popd
+#		    return
+#		else
+#		    echo FAILED
+#		fi
+#
+#		popd
 	    fi 
-	    ((tries++))
-	done
+#	    ((tries++))
+#	done
     fi
 }
 

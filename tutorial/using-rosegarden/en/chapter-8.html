@@ -1112,10 +1112,132 @@ SRC="../pixmaps/I-IV-V.png" ></P>
 <H3 CLASS="western"><A NAME="8_4_1">8.4.1 The Quantizer</A></H3>
 <H3 CLASS="western"><A NAME="8_4_2">8.4.2 Triggered Segments and
  Ornaments</A></H3>
-<P>and stuff. Not quite yet sure exactly where/how this is going.</P>
-<P>Come back after a rainy day or three and see what's here. I've
- already put in another four hours today and it's Miller time folks. Or
- it would be if I weren't about to go do my paying job. :(</P>
+<P>Another way that Rosegarden lets you have your cake and eat it too is
+ in its ability to make use of triggered segments to provide ornaments.
+ The ornament is stored in a special segment apart from the main body of
+ the composition, and is triggered by a special trigger note that can
+ have marks indicating the type of ornament represented by the triggered
+ segment. These ornaments can be recycled as well, because it is
+ possible to have more than one trigger note pointing to the same
+ triggered segment.</P>
+<P>One place where this is particularly useful is when trying to clean
+ up a nice MIDI performance in order to produce a readable score from
+ it. My test score has ornaments that really can't be used directly if I
+ want to reproduce the score exactly, so I will kill two birds with one
+ stone here, demonstrating how to replace a bunch of ugly gibberish with
+ an ornament made from scratch. Unfortunately, yes, this will alter the
+ human performance somewhat, so there is some compromise here between an
+ authentic performance and an exact score.</P>
+<H4 CLASS="western"><A NAME="8_4_2_1">8.4.2.1 Before</A></H4>
+<P>This is a typical example of an ornament in an imported MIDI file.
+ The quantizer really can't really do much to improve the look of this,
+ and it would be awkward to read even if all the short notes were
+ written out neatly. It is a prime candidate for conversion into a
+ triggered segment and a trigger note.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic96"
+SRC="../pixmaps/notation-trigger1.png" ></P>
+<H4 CLASS="western"><A NAME="8_4_2_2">8.4.2.2 The First Try</A></H4>
+<P>To start, I needed to change the first 8<SUP>th</SUP> note into a
+ dotted version. I accomplished this by selecting it, and using<B> Ctrl</B>
+<!--SPAN STYLE="font-weight: medium"-->
+
++<B>.</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ and then I selected the body of the ornament...</P>
+<P ALIGN="CENTER" STYLE="font-weight: medium"><IMG ALIGN="BOTTOM" BORDER="0"
+NAME="Graphic97" SRC="../pixmaps/notation-trigger2.png" ></P>
+<P ALIGN="CENTER">Next, I used<B> Notes -&gt; Ornaments -&gt; Make Ornament</B>
+<!--SPAN STYLE="font-weight: medium"-->
+
+, which presented the following dialog. Since this ornament is a trill
+ up from E to F, I chose E as the base note. I left the suggested name
+ at its default.<IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic98"
+SRC="../pixmaps/notation-trigger3.png" ></P>
+<P STYLE="margin-bottom: 0in">
+<!--SPAN STYLE="font-weight: medium"-->
+The resulting ornament wasn't quite what I
+ was after. There were several distinct notes with fairly long durations
+ bound up in that jumble, which couldn't readily be extracted. I could
+ have set the ornament to play in a shorter duration by selecting this
+ trigger note and changing it to a dotted 8<SUP>th</SUP> note, and could
+ have added extra notes to make up the difference on the page, but those
+ extra notes would have been extra. I wanted to preserve the accuracy of
+ the performance while cleaning up this trill, and this didn't quite
+ work in this case...</P>
+<P STYLE="margin-bottom: 0in; font-weight: medium">
+<BR></P>
+<P ALIGN="CENTER" STYLE="font-weight: medium"><IMG ALIGN="BOTTOM" BORDER="0"
+NAME="Graphic99" SRC="../pixmaps/notation-trigger4.png" ></P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">...so I hit undo (<B>Ctrl</B>
++<B>Z</B>) until I got back to the point before making the ornament, and
+ then I re-selected the events, and then deleted them (<B>Ctrl</B>+<B>X</B>
+).</P>
+<P ALIGN="CENTER" STYLE="font-weight: medium"><IMG ALIGN="BOTTOM" BORDER="0"
+NAME="Graphic100" SRC="../pixmaps/notation-trigger5.png" ></P>
+<H4 CLASS="western"><A NAME="8_4_2_3">8.4.2.3 
+<!--SPAN STYLE="font-weight: medium"-->
+The Second Try</A></H4>
+<P STYLE="font-weight: medium">Next, I inserted the untrilled notes that
+ were bound up with that ornament, and left a rest where the new
+ ornament needed to go...</P>
+<P ALIGN="CENTER" STYLE="font-weight: medium"><IMG ALIGN="BOTTOM" BORDER="0"
+NAME="Graphic101" SRC="../pixmaps/notation-trigger6.png" ></P>
+<P STYLE="font-weight: medium">Then I notated a trill using 32<SUP>nd</SUP>
+ notes, selected it...</P>
+<P ALIGN="CENTER" STYLE="font-weight: medium"><IMG ALIGN="BOTTOM" BORDER="0"
+NAME="Graphic102" SRC="../pixmaps/notation-trigger7.png" ></P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">...and used<B> Notes -&gt;
+ Ornaments -&gt; Make Ornament</B> again, then I followed up by beaming the
+ trigger note to the note after it, and adding a<I> tr</I>
+<!--SPAN STYLE="font-style: normal"-->
+ with a wavy
+ line. (The wavy line was not actually part of the original score if
+ there are any purists in the audience. You got me.) The result is much
+ improved compared to the part that has not yet been similarly doctored:</P>
+<P ALIGN="CENTER" STYLE="font-style: normal; font-weight: medium"><IMG ALIGN="BOTTOM"
+BORDER="0" NAME="Graphic103" SRC="../pixmaps/notation-trigger8.png" >
+</P>
+<H4 CLASS="western"><A NAME="8_4_2_4">8.4.2.4 Reusing Ornaments</A></H4>
+<P>The bottom part in this example is the same as the top, except
+ transposed for trumpet. Having just gone to all the effort documented
+ so far, it sure would be nice if I could avoid having to go to that
+ much trouble a second time. Indeed, I can, and Rosegarden does most of
+ the work for me automagically.</P>
+<P>First I paved the way in the same fashion as before, except I filled
+ in the spot for the ornament with an ordinary note, then selected that
+ note:</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic104"
+SRC="../pixmaps/notation-trigger9.png" ></P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">Next, I used<B> Notes -&gt;
+ Ornaments -&gt; Trigger Ornament</B>, which presented this dialog:</P>
+<P ALIGN="CENTER" STYLE="font-weight: medium"><IMG ALIGN="BOTTOM" BORDER="0"
+NAME="Graphic105" SRC="../pixmaps/notation-trigger10.png" ></P>
+<P ALIGN="LEFT"><B>Perform using triggered segment:</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ allows you to
+ choose which ornament to use in the event that you have more than one.
+ That is why you are able to name each triggered segment as you create
+ it.<B> Perform with timing:</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ isn't really needed in this case
+ because the duration of the two notes is the same, but it can be used
+ to stretch or squash an ornament to fit into a different space of time,
+ or to force the fit in various other ways:</P>
+<P ALIGN="CENTER" STYLE="font-weight: medium"><IMG ALIGN="BOTTOM" BORDER="0"
+NAME="Graphic107" SRC="../pixmaps/notation-trigger12.png" ></P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">Then finally, I moved the
+ note up to the correct pitch. (Oops.) The trill followed along, and I
+ got another trill without having to re-enter all the 32<SUP>nd</SUP>
+ notes.</P>
+<P ALIGN="CENTER" STYLE="font-weight: medium"><IMG ALIGN="BOTTOM" BORDER="0"
+NAME="Graphic106" SRC="../pixmaps/notation-trigger11.png" ></P>
+<P>
+<BR>
+<BR></P>
+<P>
+<BR>
+<BR></P>
+<P>TODO:</P>
 <P>local transport stuff</P>
 <P>paste types ?</P>
 <P>copying/pasting, say performance directions or local tempi onto every
@@ -1131,7 +1253,6 @@ SRC="../pixmaps/I-IV-V.png" ></P>
 <P>hack part writing? RFE 987824</P>
 <P>mention selection filter again</P>
 <P>double-click on thigns to edit them</P>
-<P>cautionary accidentals</P>
 <P>stretch factor (does this print?)</P>
 <P>note style</P>
 <P>raw note ruler</P>
@@ -1139,9 +1260,6 @@ SRC="../pixmaps/I-IV-V.png" ></P>
 <P>ottava signs after make sure GUI is not borked</P>
 <P>velocity ruler from here</P>
 <P>double bar lines? (HTF does that work anyway?)</P>
-<P>thrash on ornaments showing</P>
-<P>how to do one from scratch</P>
-<P>how to take a bunch of imported splurtz and make it look pretty</P>
 <P>mention the pixmap backdrop thing settings -&gt; general -&gt; presentation</P>
 <P>deal with transposing instruments/notation</P>
 <P>cut and close</P>
@@ -1151,15 +1269,6 @@ SRC="../pixmaps/I-IV-V.png" ></P>
 <P>explain busses and faders and allt hat other audio/synth instrument
  whatnot you haven't done yet</P>
 <P>talk about setting tempo from audio segment or a beat segment</P>
-<P>write the chapter after this one you lazy bastard what's taking you
- so long and don't give me any excuses about a kid with a dislocated
- elbow, work, more work, more work on top of that and then more work
- plus all the cub scout stuff and blah blah blah, no excuses, you're on
- the clock here, getting $0.00 an hour and it's about time you earned it
- for once!</P>
-<P>
-<BR>
-<BR></P>
 <HR>
 <A HREF="chapter-0.html">Contents</A>
 <A HREF="chapter-7.html">Previous</A>
