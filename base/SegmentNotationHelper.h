@@ -99,9 +99,11 @@ public:
      *
      * Events may be notes or rests (rests will obviously not be tied)
      *
-     * @return iterator pointing at the last inserted event
+     * @return iterator pointing at the last inserted event.  Also
+     * modifies from to point at the first split event (the original
+     * iterator would have been invalidated).
      */
-    iterator expandIntoTie(iterator from, iterator to, timeT baseDuration);
+    iterator expandIntoTie(iterator &from, iterator to, timeT baseDuration);
 
 
     /**
@@ -114,9 +116,11 @@ public:
      *
      * Events may be notes or rests (rests will obviously not be tied)
      *
-     * @return iterator pointing at the last inserted event
+     * @return iterator pointing at the last inserted event.  Also
+     * modifies i to point at the first split event (the original
+     * iterator would have been invalidated).
      */
-    iterator expandIntoTie(iterator i, timeT baseDuration);
+    iterator expandIntoTie(iterator &i, timeT baseDuration);
 
 
     /**

@@ -200,9 +200,8 @@ SegmentNotationHelper::isExpandValid(timeT a, timeT b)
     return (isViable(a) && isViable(b));
 }
 
-
 Segment::iterator
-SegmentNotationHelper::expandIntoTie(iterator i, timeT baseDuration)
+SegmentNotationHelper::expandIntoTie(iterator &i, timeT baseDuration)
 {
     if (i == end()) return end();
     iterator i2;
@@ -211,7 +210,8 @@ SegmentNotationHelper::expandIntoTie(iterator i, timeT baseDuration)
 }
 
 Segment::iterator
-SegmentNotationHelper::expandIntoTie(iterator from, iterator to, timeT baseDuration)
+SegmentNotationHelper::expandIntoTie(iterator &from, iterator to,
+				     timeT baseDuration)
 {
     // so long as we do the quantization checks for validity before
     // calling this method, we should be fine splitting precise times
@@ -231,7 +231,6 @@ SegmentNotationHelper::expandIntoTie(iterator from, iterator to, timeT baseDurat
 	(*ni)->get<Int>(BEAMED_GROUP_ID, nextGroupId);
     }
 
-    iterator last = end();
     list<Event *> toInsert;
     list<Event *> toErase;
           
@@ -308,10 +307,14 @@ SegmentNotationHelper::expandIntoTie(iterator from, iterator to, timeT baseDurat
 	segment().eraseSingle(*i);
     }
 
+    from = end();
+    iterator last = end();
+
     // now insert the new events
     for (list<Event *>::iterator i = toInsert.begin();
          i != toInsert.end(); ++i) {
         last = insert(*i);
+	if (from == end()) from = last;
     }
 
     return last;
