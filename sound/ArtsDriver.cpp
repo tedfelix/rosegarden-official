@@ -85,6 +85,7 @@ ArtsDriver::generateInstruments()
     std::string name("aRts MIDI");
     std::string channelName;
     char number[100];
+    int deviceId = 0;
 
     for (int channel = 0; channel < 16; ++channel)
     {
@@ -95,11 +96,10 @@ ArtsDriver::generateInstruments()
                                                        channel,
                                                        m_midiRunningId++,
                                                        channelName,
-                                                       m_deviceRunningId);
+                                                       deviceId++);
         m_instruments.push_back(instr);
     }
 
-    m_deviceRunningId++;
     name = "aRts Audio";
 
     for (int channel = 0; channel < 16; ++channel)
@@ -111,7 +111,7 @@ ArtsDriver::generateInstruments()
                                                        channel,
                                                        m_audioRunningId++,
                                                        channelName,
-                                                       m_deviceRunningId);
+                                                       deviceId++);
         m_instruments.push_back(instr);
     }
 
