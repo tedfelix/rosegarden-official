@@ -102,18 +102,35 @@ Quantizer::~Quantizer()
 }
 
 Quantizer::SingleQuantizer::~SingleQuantizer() { }
+Quantizer::PositionQuantizer::~PositionQuantizer() { }
 Quantizer::UnitQuantizer::~UnitQuantizer() { }
 Quantizer::NoteQuantizer::~NoteQuantizer() { }
 Quantizer::LegatoQuantizer::~LegatoQuantizer() { }
 
 timeT
+Quantizer::PositionQuantizer::quantize(int unit, int, timeT duration, timeT,
+				       bool isAbsoluteTime) const
+{
+    if (!isAbsoluteTime) return duration;
+
+    if (duration != 0) {
+	timeT low = (duration / unit) * unit;
+	timeT high = low + unit;
+	if (high - duration > duration - low) duration = low;
+	else duration = high;
+    }
+
+    return duration;
+}
+
+timeT
 Quantizer::UnitQuantizer::quantize(int unit, int, timeT duration, timeT,
-				   bool zeroAcceptable) const
+				   bool isAbsoluteTime) const
 {
     if (duration != 0) {
 	timeT low = (duration / unit) * unit;
 	timeT high = low + unit;
-	if ((low > 0 || zeroAcceptable) &&
+	if ((low > 0 || isAbsoluteTime) &&
 	    (high - duration > duration - low)) duration = low;
 	else duration = high;
     }
@@ -176,14 +193,14 @@ Quantizer::NoteQuantizer::quantize(int unit, int maxDots,
 timeT
 Quantizer::LegatoQuantizer::quantize(int unit, int maxDots, timeT duration,
 				     timeT followingRestDuration,
-				     bool zeroAcceptable) const
+				     bool isAbsoluteTime) const
 {
 //    cerr << "LegatoQuantizer::quantize: followingRestDuration is " << followingRestDuration << std::endl;
 
     if (followingRestDuration > 0) {
 
 	timeT possibleDuration = NoteQuantizer().quantize
-	    (unit, maxDots, duration, 0, zeroAcceptable);
+	    (unit, maxDots, duration, 0, isAbsoluteTime);
 
 	if (possibleDuration > duration) {
 	    if (possibleDuration - duration <= followingRestDuration) {
@@ -192,13 +209,13 @@ Quantizer::LegatoQuantizer::quantize(int unit, int maxDots, timeT duration,
 		return NoteQuantizer().quantize
 		    (Note(Note::Shortest).getDuration(),
 		     maxDots, duration + followingRestDuration, 0,
-		     zeroAcceptable);
+		     isAbsoluteTime);
 	    }
 	}
     }
 
     return NoteQuantizer().quantize(Note(Note::Shortest).getDuration(),
-				    maxDots, duration, 0, zeroAcceptable);
+				    maxDots, duration, 0, isAbsoluteTime);
 }
 
 
@@ -207,6 +224,10 @@ Quantizer::quantize(Segment *s,
 		    Segment::iterator from, Segment::iterator to) const
 {
     switch (m_type) {
+
+    case PositionQuantize:
+	quantize(s, from, to, PositionQuantizer(), PositionQuantizer());
+	break;
 
     case UnitQuantize:
 	quantize(s, from, to, UnitQuantizer(), UnitQuantizer());
@@ -292,6 +313,10 @@ Quantizer::quantizeAbsoluteTime(timeT absoluteTime) const
 
     switch (m_type) {
 
+    case PositionQuantize:
+	d = PositionQuantizer().quantize(m_unit, m_maxDots, absoluteTime, 0, true);
+	break;
+
     case UnitQuantize:
 	d = UnitQuantizer().quantize(m_unit, m_maxDots, absoluteTime, 0, true);
 	break;
@@ -316,6 +341,10 @@ Quantizer::quantizeDuration(timeT duration) const
     timeT d = 0;
 
     switch (m_type) {
+
+    case PositionQuantize:
+	d = PositionQuantizer().quantize(m_unit, m_maxDots, duration, 0, false);
+	break;
 
     case UnitQuantize:
 	d = UnitQuantizer().quantize(m_unit, m_maxDots, duration, 0, false);
@@ -609,7 +638,7 @@ StandardQuantization::getStandardQuantizations()
 
 	    timeT unit = Note(Note::Semibreve).getDuration() / divisor;
 	    
-	    v.push_back(StandardQuantization(Quantizer::UnitQuantize,
+	    v.push_back(StandardQuantization(Quantizer::PositionQuantize,
 					     unit, 2, buf, noteName));
 	}
     }

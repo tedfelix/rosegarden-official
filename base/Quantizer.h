@@ -43,7 +43,12 @@ public:
     static const std::string RawEventData;
     static const std::string DefaultTarget;
 
-    enum QuantizationType { UnitQuantize, NoteQuantize, LegatoQuantize };
+    enum QuantizationType {
+	PositionQuantize,// Snap absolute times to unit boundaries
+	UnitQuantize,    // Snap absolute times and durations to unit boundaries
+	NoteQuantize,    // Snap times to units, durations to note durations
+	LegatoQuantize   // Note quantize that rounds up notes into following rests
+    };
 
     /**
      * Construct a quantizer programmed to do a single sort of
@@ -96,13 +101,20 @@ public:
      *
      * \arg type : Type of quantization to carry out, as follows:
      *
+     *   "UnitQuantize": For note events, starting time is rounded
+     *   to the nearest multiple of a given unit duration (by default,
+     *   the duration of the shortest available note).  Rests are
+     *   quantized in the same way, except where preceded by a note
+     *   that has been relocated by quantization, in which case the
+     *   rest is adjusted correspondingly before rounding.   This is
+     *   the simplest sort of quantization.
+     *
      *   "UnitQuantize": For note events, starting time and duration
      *   are rounded to the nearest multiple of a given unit duration
      *   (by default, the duration of the shortest available note).
      *   Rests are quantized in the same way, except where preceded by
      *   a note that has been lengthened by quantization, in which
      *   case the rest is shortened correspondingly before rounding.
-     *   This is the simplest sort of quantization.
      * 
      *   "Note": Starting time is quantized as in unit quantization,
      *   but duration is first quantized by unit and then rounded to
@@ -277,7 +289,15 @@ protected:
 	virtual ~SingleQuantizer();
 	virtual timeT quantize(int unit, int maxDots, timeT duration,
 			       timeT followingRestDuration,
-			       bool zeroAcceptable) const = 0;
+			       bool isAbsoluteTime) const = 0;
+    };
+
+    class PositionQuantizer : public SingleQuantizer {
+    public:
+	virtual ~PositionQuantizer();
+	virtual timeT quantize(int unit, int maxDots, timeT duration,
+			       timeT followingRestDuration,
+			       bool isAbsoluteTime) const;
     };
 
     class UnitQuantizer : public SingleQuantizer {
@@ -285,7 +305,7 @@ protected:
 	virtual ~UnitQuantizer();
 	virtual timeT quantize(int unit, int maxDots, timeT duration,
 			       timeT followingRestDuration,
-			       bool zeroAcceptable) const;
+			       bool isAbsoluteTime) const;
     };
 
     class NoteQuantizer : public SingleQuantizer {
@@ -293,7 +313,7 @@ protected:
 	virtual ~NoteQuantizer();
 	virtual timeT quantize(int unit, int maxDots, timeT duration,
 			       timeT followingRestDuration,
-			       bool zeroAcceptable) const;
+			       bool isAbsoluteTime) const;
     };
 
     class LegatoQuantizer : public NoteQuantizer {
@@ -301,7 +321,7 @@ protected:
 	virtual ~LegatoQuantizer();
 	virtual timeT quantize(int unit, int maxDots, timeT duration,
 			       timeT followingRestDuration,
-			       bool zeroAcceptable) const;
+			       bool isAbsoluteTime) const;
     };
 
     void quantize(Segment *s, Segment::iterator from, Segment::iterator to,
