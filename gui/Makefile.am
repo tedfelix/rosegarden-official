@@ -6,6 +6,7 @@ rosegarden_SOURCES = \
         audiomanagerdialog.cpp \
         audioplugindialog.cpp \
         audiopluginmanager.cpp \
+        bankeditor.cpp\
         barbuttons.cpp \
 	basiccommand.cpp \
 	chordnameruler.cpp \

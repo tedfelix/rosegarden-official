@@ -83,6 +83,7 @@
 #include "notationtool.h"
 #include "audiopluginmanager.h"
 #include "studiocontrol.h"
+#include "bankeditor.h"
 
 //!!! ditch these when harmonize() moves out
 #include "CompositionTimeSliceAdapter.h"
@@ -462,6 +463,10 @@ void RosegardenGUIApp::setupActions()
     new KAction(i18n("Edit Document P&roperties..."), 0, this,
                 SLOT(slotEditDocumentProperties()),
                 actionCollection(), "edit_doc_properties");
+
+    new KAction(i18n("Edit Patch Banks..."), 0, this,
+                SLOT(slotEditBanks()),
+                actionCollection(), "modify_banks");
 
     // Transport controls [rwb]
     //
@@ -3283,3 +3288,16 @@ RosegardenGUIApp::slotChangeCompositionLength()
 }
 
  
+void
+RosegardenGUIApp::slotEditBanks()
+{
+    BankEditorDialog *dialog =
+        new BankEditorDialog(this, &m_doc->getStudio());
+
+    if (dialog->exec() == QDialog::Accepted)
+    {
+        std::cout << "RosegardenGUIApp::slotEditBanks - "
+                  << "accepted" << std::endl;
+    }
+}
+

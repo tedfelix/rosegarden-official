@@ -552,6 +552,11 @@ public slots:
     void slotEditDocumentProperties();
 
     /**
+     * Edit Banks/Programs
+     */
+    void slotEditBanks();
+
+    /**
      * toggles the toolbar
      */
     void slotToggleToolBar();

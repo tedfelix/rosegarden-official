@@ -50,6 +50,10 @@
         <Action name="select_next_track"/>
         <Action name="select_previous_track"/>
   </Menu>
+  <Menu name="Studio">
+        <text>&amp;Studio</text>
+        <Action name="modify_banks"/>
+  </Menu>
   <Menu name="Transport">
         <text>T&amp;ransport</text>
         <Action name="play"/> 
