@@ -96,12 +96,6 @@ public slots:
 //!!! I suspect most of these of never actually being used as slots, only as plain methods
 
     /**
-     * Receive notification from the command history that a
-     * command has happened
-     */
-    void slotCommandExecuted(Command *);
-
-    /**
      * Set the position pointer during playback
      */
     void slotSetPointerPosition(Rosegarden::timeT position);
@@ -201,8 +195,13 @@ signals:
 
 protected:
     
+    virtual void paintEvent(QPaintEvent* e);
+    
     void init(unsigned int nbTracks, int firstBar, int lastBar);
 
+    bool isCompositionModified();
+    void setCompositionModified(bool);
+    
     //--------------- Data members ---------------------------------
 
     RosegardenGUIDoc        *m_document;
@@ -217,6 +216,7 @@ protected:
 
     bool                     m_showTrackLabels;
     unsigned int             m_canvasWidth;
+    unsigned int             m_compositionRefreshStatusId;
 };
 
 #endif

@@ -69,7 +69,8 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
     m_segmentCanvas(0),
     m_trackButtonScroll(0),
     m_showTrackLabels(showTrackLabels),
-    m_canvasWidth(0)
+    m_canvasWidth(0),
+    m_compositionRefreshStatusId(doc->getComposition().getNewRefreshStatusId())
 {
     Composition &comp = doc->getComposition();
 
@@ -277,8 +278,8 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
             this,
             SLOT(slotSelectedSegments(std::vector<Rosegarden::Segment*>)));
 
-    connect(getCommandHistory(), SIGNAL(commandExecuted(Command *)),
-	    this, SLOT(slotCommandExecuted(Command *)));
+    connect(getCommandHistory(), SIGNAL(commandExecuted()),
+	    this, SLOT(update()));
 
     connect(m_document, SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
 	    this, SLOT(slotSetPointerPosition(Rosegarden::timeT)));
@@ -344,65 +345,91 @@ TrackEditor::setupSegments()
     }
 }
 
-void TrackEditor::slotCommandExecuted(Command *command)
+bool TrackEditor::isCompositionModified()
 {
-    kdDebug(KDEBUG_AREA) << "TrackEditor::commandExecuted" << endl;
-
-    SegmentCommand *segmentCommand = dynamic_cast<SegmentCommand *>(command);
-    if (segmentCommand) {
-	
-	SegmentCommand::SegmentSet segments;
-	segmentCommand->getSegments(segments);
-
-	Composition &composition = m_document->getComposition();
-
-	for (SegmentCommand::SegmentSet::iterator i = segments.begin();
-	     i != segments.end(); ++i) {
-
-	    if (composition.contains(*i)) {
-		kdDebug(KDEBUG_AREA) << "Existing segment" << endl;
-	
-		m_segmentCanvas->updateSegmentItem(*i);
-	    } else {
-		kdDebug(KDEBUG_AREA) << "Defunct segment" << endl;
-		
-		m_segmentCanvas->removeSegmentItem(*i);
-	    }
-	}
-
-	m_segmentCanvas->slotUpdate();
-	return;
-    }
-
-    CompoundCommand *compoundCommand =
-	dynamic_cast<CompoundCommand *>(command);
-    if (compoundCommand) {
-	for (int i = 0; i < compoundCommand->getCommandCount(); ++i) {
-	    slotCommandExecuted(compoundCommand->getCommand(i));
-	}
-	return;
-    }
-
-    AddTempoChangeCommand *tempoCommand =
-                 dynamic_cast<AddTempoChangeCommand *>(command);
-
-    if (tempoCommand) {
-        return;
-    }
-
-    AddTracksCommand *tracksCommand = dynamic_cast<AddTracksCommand *>(command);
-
-    if (tracksCommand) {
-        m_trackButtons->slotUpdateTracks();
-
-        m_segmentCanvas->canvas()->resize(m_canvasWidth,
-                                          getTrackCellHeight() * m_document->getComposition().getNbTracks());
-
-    }
-
-
-    kdDebug(KDEBUG_AREA) << "TrackEditor::commandExecuted: not a presently-supported command type" << endl;
+    return m_document->getComposition().getRefreshStatus(m_compositionRefreshStatusId).needsRefresh();
 }
+
+void TrackEditor::setCompositionModified(bool c)
+{
+    m_document->getComposition().getRefreshStatus(m_compositionRefreshStatusId).setNeedsRefresh(c);
+}
+
+
+void TrackEditor::paintEvent(QPaintEvent* e)
+{
+    Composition &composition = m_document->getComposition();
+
+    if (isCompositionModified()) {
+        m_segmentCanvas->updateAllSegmentItems();
+
+        // TODO : track buttons
+
+        setCompositionModified(false);
+    }
+
+    QWidget::paintEvent(e);
+}
+
+// void TrackEditor::slotCommandExecuted(Command *command)
+// {
+//     kdDebug(KDEBUG_AREA) << "TrackEditor::commandExecuted" << endl;
+
+//     SegmentCommand *segmentCommand = dynamic_cast<SegmentCommand *>(command);
+//     if (segmentCommand) {
+	
+// 	SegmentCommand::SegmentSet segments;
+// 	segmentCommand->getSegments(segments);
+
+// 	Composition &composition = m_document->getComposition();
+
+// 	for (SegmentCommand::SegmentSet::iterator i = segments.begin();
+// 	     i != segments.end(); ++i) {
+
+// 	    if (composition.contains(*i)) {
+// 		kdDebug(KDEBUG_AREA) << "Existing segment" << endl;
+	
+// 		m_segmentCanvas->updateSegmentItem(*i);
+// 	    } else {
+// 		kdDebug(KDEBUG_AREA) << "Defunct segment" << endl;
+		
+// 		m_segmentCanvas->removeSegmentItem(*i);
+// 	    }
+// 	}
+
+// 	m_segmentCanvas->slotUpdate();
+// 	return;
+//     }
+
+//     CompoundCommand *compoundCommand =
+// 	dynamic_cast<CompoundCommand *>(command);
+//     if (compoundCommand) {
+// 	for (int i = 0; i < compoundCommand->getCommandCount(); ++i) {
+// 	    slotCommandExecuted(compoundCommand->getCommand(i));
+// 	}
+// 	return;
+//     }
+
+//     AddTempoChangeCommand *tempoCommand =
+//                  dynamic_cast<AddTempoChangeCommand *>(command);
+
+//     if (tempoCommand) {
+//         return;
+//     }
+
+//     AddTracksCommand *tracksCommand = dynamic_cast<AddTracksCommand *>(command);
+
+//     if (tracksCommand) {
+//         m_trackButtons->slotUpdateTracks();
+
+//         m_segmentCanvas->canvas()->resize(m_canvasWidth,
+//                                           getTrackCellHeight() * m_document->getComposition().getNbTracks());
+
+//     }
+
+
+//     kdDebug(KDEBUG_AREA) << "TrackEditor::commandExecuted: not a presently-supported command type" << endl;
+// }
 
 void TrackEditor::slotAddTracks(unsigned int nbNewTracks)
 {
@@ -645,7 +672,3 @@ TrackEditor::slotDeleteSelectedSegments()
     addCommandToHistory(macro);
 
 }
-
-
-
-
