@@ -67,7 +67,7 @@ public:
     bool isModified(){ return m_modified; };
 
     /** "save modified" - asks the user for saving if the document is modified */
-    bool saveModified();	
+    bool saveIfModified();	
 
     /** deletes the document's contents */
     void deleteContents();

@@ -92,7 +92,7 @@ void RosegardenGUIDoc::slotUpdateAllViews(RosegardenGUIView *sender)
 
 }
 
-bool RosegardenGUIDoc::saveModified()
+bool RosegardenGUIDoc::saveIfModified()
 {
     bool completed=true;
 
