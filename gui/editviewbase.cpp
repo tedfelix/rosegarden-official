@@ -385,6 +385,21 @@ KToggleAction* EditViewBase::getToggleAction(const QString& actionName)
     return dynamic_cast<KToggleAction*>(actionCollection()->action(actionName));
 }
 
+void EditViewBase::toggleWidget(QWidget* widget,
+                                const QString& toggleActionName)
+{
+    KToggleAction* toggleAction = getToggleAction(toggleActionName);
+
+    if (!toggleAction) {
+        RG_DEBUG << "!!! Unknown toggle action : " << toggleActionName << endl;
+        return;
+    }
+
+    widget->setShown(toggleAction->isChecked());
+}
+
+    
+
 void
 EditViewBase::slotTestClipboard()
 {

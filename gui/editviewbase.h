@@ -243,6 +243,12 @@ protected:
     /// Convenience function around actionCollection()->action()
     KToggleAction* getToggleAction(const QString& actionName);
 
+    /**
+     * Make a widget visible depending on the state of a
+     * KToggleAction
+     */
+    virtual void toggleWidget(QWidget* widget, const QString& toggleActionName);
+
     void setRCFileName(QString s) { m_rcFileName = s; }
     QString getRCFileName()       { return m_rcFileName; }
 
