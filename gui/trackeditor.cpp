@@ -194,6 +194,10 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
     connect(m_trackButtons, SIGNAL(widthChanged()),
             this, SLOT(slotTrackButtonsWidthChanged()));
 
+    connect(m_trackButtons, SIGNAL(trackSelected(int)),
+            SIGNAL(trackSelected(int)));
+
+
     //grid->addWidget(m_trackButtons, 1, 0);
 
     // Synchronize bar buttons' scrollview with segment canvas' scrollbar

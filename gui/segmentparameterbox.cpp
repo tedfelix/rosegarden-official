@@ -24,6 +24,8 @@
 #include <qlayout.h>
 
 #include "quantizevalues.h"
+#include "Segment.h"
+#include "Quantizer.h"
 
 SegmentParameterBox::SegmentParameterBox(QWidget *parent,
                                          const char *name,
@@ -39,6 +41,10 @@ SegmentParameterBox::SegmentParameterBox(QWidget *parent,
 
 SegmentParameterBox::~SegmentParameterBox()
 {
+    delete m_repeatValue;
+    delete m_quantizeValue;
+    delete m_transposeValue;
+    delete m_delayValue;
 }
 
 void
@@ -58,8 +64,13 @@ SegmentParameterBox::initBox()
     QLabel *transposeLabel = new QLabel("Transpose", this);
     QLabel *delayLabel = new QLabel("Delay", this);
 
-    m_repeatValue = new QLabel("-", this);
+    m_repeatValue = new RosegardenTristateCheckBox(this);
     m_repeatValue->setFont(font);
+    m_repeatValue->setMinimumHeight(comboHeight);
+    m_repeatValue->setMaximumHeight(comboHeight);
+
+    // handle state changes
+    connect(m_repeatValue, SIGNAL(pressed()), SLOT(repeatPressed()));
 
     m_quantizeValue = new QComboBox(false, this); // motif style read-only
     m_quantizeValue->setFont(font);
@@ -83,11 +94,13 @@ SegmentParameterBox::initBox()
 
     QLabel *title = new QLabel("Segment Parameters", this);
     title->setFont(font);
+    title->setMinimumHeight(comboHeight);
+    title->setMaximumHeight(comboHeight);
 
     gridLayout->addMultiCellWidget(title, 0, 0, 0, 1, AlignLeft);
 
     gridLayout->addWidget(repeatLabel, 1, 0, AlignLeft);
-    gridLayout->addWidget(m_repeatValue, 1, 1, AlignCenter);
+    gridLayout->addWidget(m_repeatValue, 1, 1, AlignRight);
 
     gridLayout->addWidget(quantizeLabel, 2, 0, AlignLeft);
     gridLayout->addWidget(m_quantizeValue, 2, 1, AlignRight);
@@ -125,8 +138,105 @@ SegmentParameterBox::initBox()
     // single value for delay for the moment
     m_delayValue->insertItem(QString("0"));
 
-
 }
+
+void
+SegmentParameterBox::useSegment(Rosegarden::Segment *segment)
+{
+    m_segments.clear();
+    m_segments.push_back(segment);
+    populateBoxFromSegments();
+}
+
+void 
+SegmentParameterBox::useSegments(std::vector<Rosegarden::Segment*> segments)
+{
+    m_segments.clear();
+    m_segments = segments;
+    populateBoxFromSegments();
+}
+
+// Use the currently selected Segments to populate the fields in
+// this box
+//
+void
+SegmentParameterBox::populateBoxFromSegments()
+{
+    std::vector<Rosegarden::Segment*>::iterator it;
+    Tristate repeat = None;
+
+    for (it = m_segments.begin(); it != m_segments.end(); it++)
+    {
+        // Are all, some or none of the Segments repeating?
+        if ((*it)->isRepeating())
+        {
+            if (it == m_segments.begin())
+                repeat = All;
+            else
+            {
+                if (repeat == None)
+                    repeat = Some;
+            }
+        }
+        else
+        {
+            if (repeat == All)
+                repeat = Some;
+        }
+    }
+
+    cout << "REPEAT = " << repeat << endl;
+    switch(repeat)
+    {
+        case All:
+            m_repeatValue->setChecked(true);
+            break;
+
+        case Some:
+            m_repeatValue->setNoChange();
+            break;
+
+        case None:
+        default:
+            m_repeatValue->setChecked(false);
+            break;
+    }
+}
+
+void
+SegmentParameterBox::repeatPressed()
+{
+    bool state;
+    bool update = false;
+
+    switch(m_repeatValue->state())
+    {
+        case QButton::Off:
+            state = true;
+            update = true;
+            break;
+
+        case QButton::NoChange:
+        case QButton::On:
+        default:
+            state = false;
+            update = true;
+            break;
+    }
+
+    // update the check box and all current Segments
+    if (update)
+    {
+        m_repeatValue->setChecked(state);
+
+        std::vector<Rosegarden::Segment*>::iterator it;
+
+        for (it = m_segments.begin(); it != m_segments.end(); it++)
+            (*it)->setRepeating(state);
+
+    }
+}
+
 
 
 

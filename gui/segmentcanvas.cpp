@@ -477,13 +477,13 @@ void SegmentCanvas::slotOnEditAudio()
 // passed Segment pointer
 //
 //
-void SegmentCanvas::slotSelectSegments(std::list<Rosegarden::Segment*> segments)
+void SegmentCanvas::slotSelectSegments(std::vector<Rosegarden::Segment*> segments)
 {
     SegmentSelector* selTool = dynamic_cast<SegmentSelector*>(m_tool);
 
     if (!selTool) return;
 
-    std::list<Rosegarden::Segment*>::iterator segIt;
+    std::vector<Rosegarden::Segment*>::iterator segIt;
     QCanvasItemList itemList = canvas()->allItems();
     QCanvasItemList::Iterator it;
 

@@ -97,6 +97,10 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
             SIGNAL(editSegmentAudio(Rosegarden::Segment*)),
             SLOT(slotEditSegmentAudio(Rosegarden::Segment*)));
 
+    connect(m_trackEditor, SIGNAL(trackSelected(int)),
+            SLOT(slotSelectTrackSegments(int)));
+
+
     if (doc)
         m_trackEditor->setupSegments();
 }
@@ -206,7 +210,7 @@ void RosegardenGUIView::slotSelectTrackSegments(int trackId)
     //
     emit activateTool(SegmentCanvas::Selector);
 
-    std::list<Rosegarden::Segment*> segments;
+    std::vector<Rosegarden::Segment*> segments;
 
     for (Rosegarden::Composition::iterator i =
               getDocument()->getComposition().begin();
@@ -220,6 +224,9 @@ void RosegardenGUIView::slotSelectTrackSegments(int trackId)
     // use that to clear any current selection
     //
     m_trackEditor->getSegmentCanvas()->slotSelectSegments(segments);
+
+    // update the segment parameter box
+    m_segmentParameterBox->useSegments(segments);
 }
 
 // Show a segment as it records

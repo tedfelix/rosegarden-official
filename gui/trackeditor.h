@@ -175,6 +175,12 @@ signals:
      */
     void scrollHorizTo(int);
 
+    /*
+     * Send up to RosegardenGUIView to select track of Segments
+     *
+     */
+    void trackSelected(int);
+
 protected:
     
     void init(unsigned int nbTracks, int firstBar, int lastBar);

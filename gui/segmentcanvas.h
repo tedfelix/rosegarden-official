@@ -22,6 +22,7 @@
 #ifndef SEGMENTCANVAS_H
 #define SEGMENTCANVAS_H
 
+#include <vector>
 #include <list>
 
 #include "Event.h"
@@ -256,7 +257,7 @@ public slots:
     // to automatically set the selection of Segments (say
     // by Track).
     //
-    void slotSelectSegments(std::list<Rosegarden::Segment*> segment);
+    void slotSelectSegments(std::vector<Rosegarden::Segment*> segment);
 
     // These are sent from the top level app when it gets key
     // depresses relating to selection add (usually SHIFT) and

@@ -19,29 +19,80 @@
     COPYING included with this distribution for more information.
 */
 
+#include <vector>
+
 #include <qframe.h>
 #include <qlabel.h>
-#include <qpushbutton.h>
+#include <qcheckbox.h>
 #include <qcombobox.h>
+
+// Provides a mechanism for viewing and modifying the parameters
+// associated with a Rosegarden Segment.
+//
+//
+
+namespace Rosegarden { class Segment; }
 
 #ifndef _SEGMENTPARAMETERBOX_H_
 #define _SEGMENTPARAMETERBOX_H_
+
+// Create out own check box which is always Tristate 
+// and allows us to click only between on and off
+// and only to _show_ the third ("Some") state 
+//
+//
+class RosegardenTristateCheckBox : public QCheckBox
+{
+public:
+    RosegardenTristateCheckBox(QWidget *parent=0,
+                               const char *name=0):QCheckBox(parent, name)
+        { setTristate(true) ;}
+
+    virtual ~RosegardenTristateCheckBox() {;}
+
+protected:
+    // don't emit when the button is released
+    virtual void mouseReleaseEvent(QMouseEvent *) {;}
+
+private:
+};
+
 
 class SegmentParameterBox : public QFrame
 {
 Q_OBJECT
 
 public:
+
+    typedef enum
+    {
+        None,
+        Some,
+        All
+    } Tristate;
+
     SegmentParameterBox(QWidget *parent=0, const char *name=0, WFlags f=0);
     ~SegmentParameterBox();
 
+    // Use Segments to update GUI parameters
+    //
+    void useSegment(Rosegarden::Segment *segment);
+    void useSegments(std::vector<Rosegarden::Segment*> segments);
+
+public slots:
+
+    void repeatPressed();
+
 private:
     void initBox();
+    void populateBoxFromSegments();
 
-    QLabel    *m_repeatValue;
+    RosegardenTristateCheckBox *m_repeatValue;
     QComboBox *m_quantizeValue;
     QComboBox *m_transposeValue;
     QComboBox *m_delayValue;
+
+    std::vector<Rosegarden::Segment*> m_segments;
 };
 
 
