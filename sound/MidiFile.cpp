@@ -651,7 +651,6 @@ MidiFile::convertToRosegarden()
                     break;
 
                 case MIDI_SET_TEMPO:
-
                     {
                         MidiByte m0 = midiEvent->metaMessage()[0];
                         MidiByte m1 = midiEvent->metaMessage()[1];
@@ -672,7 +671,6 @@ MidiFile::convertToRosegarden()
                     break;
 
                 case MIDI_TIME_SIGNATURE:
-
                     numerator = (int) midiEvent->metaMessage()[0];
                     denominator = 1 << ((int) midiEvent->metaMessage()[1]);
 
@@ -884,7 +882,7 @@ MidiFile::convertToMidi(Rosegarden::Composition &comp)
         m_midiComposition[trackNumber].push_back(*midiEvent);
     }
 
-    // Insert time signatures - not really tested! 
+    // Insert time signatures
     //
     //
     for (int i = 0; i < comp.getTimeSignatureCount(); i++)
@@ -892,11 +890,16 @@ MidiFile::convertToMidi(Rosegarden::Composition &comp)
         std::pair<timeT, TimeSignature> timeSig =
                 comp.getTimeSignatureChange(i);
         
+        midiEventAbsoluteTime = timeSig.first * m_timingDivision
+                                 / crotchetDuration;
+
         string timeSigString;
         timeSigString += (MidiByte) (timeSig.second.getNumerator());
         int denominator = timeSig.second.getDenominator();
-        int denPowerOf2;
+        int denPowerOf2 = 0;
 
+        // Work out how many powers of two are in the denominator
+        //
         while (denominator >>= 1)
             denPowerOf2++;
 
@@ -904,7 +907,7 @@ MidiFile::convertToMidi(Rosegarden::Composition &comp)
 
         midiEvent = new MidiEvent(midiEventAbsoluteTime,
                                   MIDI_FILE_META_EVENT,
-                                  MIDI_SET_TEMPO,
+                                  MIDI_TIME_SIGNATURE,
                                   timeSigString);
 
         m_midiComposition[trackNumber].push_back(*midiEvent);
@@ -1028,7 +1031,8 @@ MidiFile::convertToMidi(Rosegarden::Composition &comp)
         m_midiComposition[i].sort();
 
         // insert end of track event
-        endOfSegmentTime = m_midiComposition[i].end()->time();
+        MidiTrackIterator lastEvent = (m_midiComposition[i].end());
+        endOfSegmentTime  = (--lastEvent)->time();
 
         midiEvent = new MidiEvent(endOfSegmentTime, MIDI_FILE_META_EVENT,
                                   MIDI_END_OF_TRACK, "");
