@@ -157,6 +157,8 @@ bool EventSelection::pasteToTrack(Track& t, timeT atTime)
 
 timeT EventSelection::getTotalDuration() const
 {
+    if (m_ownEvents.empty()) return 0;
+
     eventcontainer::const_iterator last = m_ownEvents.end();
     --last;
 
@@ -1010,6 +1012,7 @@ void NotationView::slotEditCopy()
 void NotationView::slotEditPaste()
 {
     if (!m_currentEventSelection) {
+        slotStatusHelpMsg(i18n("Clipboard is empty"));
         slotQuarter();
         return;
     }
@@ -1019,7 +1022,35 @@ void NotationView::slotEditPaste()
     kdDebug(KDEBUG_AREA) << "NotationView::slotEditPaste() : selection duration = "
                          << m_currentEventSelection->getTotalDuration() << endl;
 
-    setTool(new NotationSelectionPaster(*this, *m_currentEventSelection));
+    // Paste at cursor position
+    //
+    Event *tsig = 0, *clef = 0, *key = 0;
+
+    int staffNo = 0; // TODO : how to select on which staff we're pasting ?
+    
+    NotationElementList::iterator closestNote =
+        findClosestNote(getCursorPosition(),
+                        tsig, clef, key, staffNo);
+
+    if (closestNote == getStaff(staffNo)->getViewElementList()->end()) {
+        slotStatusHelpMsg(i18n("Couldn't paste at this point"));
+        return;
+    }
+
+    timeT time = (*closestNote)->getAbsoluteTime();
+
+    Track& track = getStaff(staffNo)->getTrack();
+
+    if (m_currentEventSelection->pasteToTrack(track, time)) {
+
+        redoLayout(staffNo,
+                   0,
+                   time + m_currentEventSelection->getTotalDuration() + 1);
+
+    } else {
+        
+        slotStatusHelpMsg(i18n("Couldn't paste at this point"));
+    }
 }
 
 //
@@ -1851,9 +1882,15 @@ void NotationSelector::hideSelection()
 
 EventSelection* NotationSelector::getSelection()
 {
+    // If selection rect is not visible or too small,
+    // return 0
+    //
     if (!m_selectionRect->visible()) return 0;
 
-    //!!! TODO: get the right track
+    if(m_selectionRect->width() < 2 &&
+       m_selectionRect->height() < 2) return 0;
+
+    //!!! TODO: get the right staff
     Track& originalTrack = m_parentView.getStaff(0)->getTrack();
     
     EventSelection* selection = new EventSelection(originalTrack);
@@ -1890,7 +1927,9 @@ EventSelection* NotationSelector::getSelection()
 
 void NotationSelector::setViewCurrentSelection()
 {
-    m_parentView.setCurrentSelection(getSelection());
+    EventSelection* selection = getSelection();
+    if (selection)
+        m_parentView.setCurrentSelection(selection);
 }
 
 //------------------------------
