@@ -63,7 +63,7 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
 {
     Composition &comp = doc->getComposition();
 
-    int tracks = doc->getNbTracks();
+    int tracks = comp.getNbTracks();
 
     // If we have no Track then create a default document with 10 of them
     //

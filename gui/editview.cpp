@@ -212,22 +212,59 @@ void EditView::slotToggleStatusBar()
 
 void EditView::slotCommandExecuted(KCommand *command)
 {
-    BasicCommand *basicCommand = 0;
-    if ((basicCommand = dynamic_cast<BasicCommand *>(command)) != 0) {
-	refreshSegment
-	    (&basicCommand->getSegment(), basicCommand->getBeginTime(),
-					  basicCommand->getRelayoutEndTime());
-    } else {
-	//!!! deal with other command superclasses from segmentcommands.h
-	// (non-basic-partial-segment-commands -> refresh whole segment;
-	// segment-commands -> redraw ruler if only segment, redraw all
-	// otherwise I fear;
-	// time-and-tempo-commands -> redraw all? hmm)
-	kdDebug(KDEBUG_AREA)
-	    << "Warning: EditView::slotCommandExecuted:\n"
-	    << "KCommand is not a BasicCommand, don't know how to refresh"
-	    << endl;
+    // might be better done with a visitor pattern or some such
+
+    if (dynamic_cast<PartialSegmentCommand *>(command) != 0) {
+
+	BasicCommand *basicCommand = 0;
+
+	if ((basicCommand = dynamic_cast<BasicCommand *>(command)) != 0) {
+	    refreshSegment(&basicCommand->getSegment(),
+			   basicCommand->getBeginTime(),
+			   basicCommand->getRelayoutEndTime());
+	} else {
+	    // partial segment command, but not a basic command
+	    Rosegarden::Segment *segment = &basicCommand->getSegment();
+	    refreshSegment(segment,
+			   segment->getStartTime(),
+			   segment->getEndTime());
+	}
+
+	return;
     }
+
+    SegmentCommand *segmentCommand = dynamic_cast<SegmentCommand *>(command);
+    if (segmentCommand) {
+	
+	SegmentCommand::SegmentSet segments;
+	segmentCommand->getSegments(segments);
+
+	for (SegmentCommand::SegmentSet::iterator i = segments.begin();
+	     i != segments.end(); ++i) {
+
+	    //!!!
+	    // segment-commands -> redraw ruler if only segment, redraw all
+	    // otherwise I fear -- but what if the segment's been deleted?
+
+	}
+
+	return;
+    }
+
+    TimeAndTempoChangeCommand *timeCommand =
+	dynamic_cast<TimeAndTempoChangeCommand *>(command);
+    if (timeCommand) {
+
+	//!!!
+	// time-and-tempo-commands -> redraw all? hmm
+
+	return;
+    }
+
+    kdDebug(KDEBUG_AREA)
+	<< "Warning: EditView::slotCommandExecuted:\n"
+	<< "Unknown sort of KCommand, don't know how to refresh"
+	<< endl;
 }
 
 //

@@ -163,36 +163,33 @@ public:
     Rosegarden::Composition&       getComposition()       { return m_composition; }
     const Rosegarden::Composition& getComposition() const { return m_composition; }
 
-    int getNbTracks() const { return m_composition.getNbTracks(); }
-    unsigned int getNbSegments() const { return m_composition.getNbSegments(); }
-    unsigned int getDuration() const { return m_composition.getDuration(); }
-    unsigned int getNbBars()	     { return m_composition.getNbBars();   }
-
-    /*
+    /**
      * insert some recorded MIDI events into our recording Segment
-     *
      */
     void insertRecordedMidi(const Rosegarden::MappedComposition &mc);
 
-    /*
+    /**
      * Tidy up the recording Segment
-     *
      */
     void stopRecordingMidi();
 
-    /*
+    /**
      * Register audio samples at the sequencer
      */
     void prepareAudio();
 
-    /*
+    /**
      * Set the visible loop on the Segment Canvas or any open clients 
      */
     void setLoopMarker(Rosegarden::timeT startLoop, Rosegarden::timeT endLoop);
 
+    /**
+     * Cause the setGUIPointerPosition signal to be emitted and any
+     * associated internal work in the document to happen
+     */
+//!!!???    void setPointerPosition(Rosegarden::timeT);
 
 public slots:
-
     /**
      * calls repaint() on all views connected to the document object
      * and is called by the view by which the document has been
@@ -203,6 +200,11 @@ public slots:
 
     void documentModified();
     void documentRestored();
+
+signals:
+//!!!???    void setGUIPointerPosition(Rosegarden::timeT);
+//!!!???    void setGUIPlayPosition(Rosegarden::timeT);
+//!!!???    void setGUILoop(Rosegarden::timeT, Rosegarden::timeT);
 
 protected:
 

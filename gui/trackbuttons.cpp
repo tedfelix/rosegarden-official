@@ -37,7 +37,7 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
                            WFlags f)
     : QVBox(parent, name, f),
       m_doc(doc),
-      m_tracks(doc->getNbTracks()),
+      m_tracks(doc->getComposition().getNbTracks()),
       m_offset(4),
       m_cellSize(trackCellHeight),
       m_lastID(-1),

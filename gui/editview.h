@@ -199,7 +199,6 @@ protected:
      */
     virtual void initStatusBar() = 0;
 
-
     /**
      * Abstract method to get the view size
      * Typically implemented as canvas()->size().
@@ -211,6 +210,7 @@ protected:
      * Typically implemented as canvas()->resize().
      */
     virtual void setViewSize(QSize) = 0;
+
 
     //--------------- Data members ---------------------------------
 

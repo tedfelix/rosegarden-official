@@ -456,56 +456,6 @@ RosegardenGUIDoc::readFromFile(const QString &file, QString &text)
     return false;
 }    
 
-/*!!!
-    
-// Delete a SegmentItem from the SegmentCanvas
-//
-void
-RosegardenGUIDoc::deleteSegmentItem(Rosegarden::Segment *segment)
-{
-    RosegardenGUIView *w;
-    if(pViewList)
-    {
-        for(w=pViewList->first(); w!=0; w=pViewList->next())
-        {
-                w->deleteSegmentItem(segment);
-        }
-    }
-
-}
-// Delete a SegmentItem from the SegmentCanvas
-//
-void
-RosegardenGUIDoc::updateSegmentItem(Rosegarden::Segment *segment)
-{
-    RosegardenGUIView *w;
-    if(pViewList)
-    {
-        for(w=pViewList->first(); w!=0; w=pViewList->next())
-        {
-                w->updateSegmentItem(segment);
-        }
-    }
-
-}
-
-// Create a SegmentItem on the SegmentCanvas
-//
-void
-RosegardenGUIDoc::addSegmentItem(Rosegarden::Segment *segment)
-{
-    RosegardenGUIView *w;
-    if(pViewList)
-    {
-        for(w=pViewList->first(); w!=0; w=pViewList->next())
-        {
-                w->createSegmentItem(segment);
-        }
-    }
-}
-
-*/
-
 
 // Take a MappedComposition from the Sequencer and turn it into an
 // Event-rich, Composition-inserted, mouthwateringly-ripe Segment.
