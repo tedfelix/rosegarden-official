@@ -601,7 +601,7 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
 
         QString posString = QString("%1.%2s (%3, %4, %5)")
             .arg(time.sec).arg(ms)
-            .arg(bar).arg(beat).arg(fraction);
+            .arg(bar+1).arg(beat).arg(fraction);
 
         m_canvas->setTextFloat(guideX + 10, guideY - 30, posString);
 	m_canvas->canvas()->update();
@@ -1401,7 +1401,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 
         QString posString = QString("%1.%2s (%3, %4, %5)")
             .arg(time.sec).arg(ms)
-            .arg(bar).arg(beat).arg(fraction);
+            .arg(bar+1).arg(beat).arg(fraction);
 
         m_canvas->setTextFloat(guideX + 10, guideY - 30, posString);
 	m_canvas->canvas()->update();

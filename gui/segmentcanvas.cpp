@@ -210,7 +210,7 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
     int height = rect().height()/2 - 2;
     int halfRectHeight = rect().height()/2;
 
-    float gain = 1.0;
+    float gain[2] = { 1.0, 1.0 };
     if (m_segment && m_parent.getDocument()) {
 	Rosegarden::TrackId trackId = m_segment->getTrack();
 	Rosegarden::Track *track =
@@ -220,7 +220,10 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
 		m_parent.getDocument()->getStudio().getInstrumentById
 		(track->getInstrument());
 	    if (instrument) {
-		gain = Rosegarden::AudioLevel::dB_to_multiplier(instrument->getLevel());
+		float level = Rosegarden::AudioLevel::dB_to_multiplier(instrument->getLevel());
+		float pan = instrument->getPan() - 100.0;
+		gain[0] = level * ((pan > 0.0) ? (1.0 - (pan / 100.0)) : 1.0);
+		gain[1] = level * ((pan < 0.0) ? ((pan + 100.0) / 100.0) : 1.0);
 	    }
 	}
     }
@@ -262,22 +265,28 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
 
         if (m_channels == 1) {
 
-            h1 = m_values[position++] * gain;
+            h1 = m_values[position++];
             h2 = h1;
+
+	    h1 *= gain[0];
+	    h2 *= gain[1];
 
             if (m_showMinima)
             {
-                l1 = m_values[position++] * gain;
+                l1 = m_values[position++];
                 l2 = l1;
+
+		l1 *= gain[0];
+		l2 *= gain[1];
             }
         }
         else {
 
-            h1 = m_values[position++] * gain;
-            if (m_showMinima) l1 = m_values[position++] * gain;
+            h1 = m_values[position++] * gain[0];
+            if (m_showMinima) l1 = m_values[position++] * gain[0];
 
-            h2 = m_values[position++] * gain;
-            if (m_showMinima) l2 = m_values[position++] * gain;
+            h2 = m_values[position++] * gain[1];
+            if (m_showMinima) l2 = m_values[position++] * gain[1];
             
         }
 
