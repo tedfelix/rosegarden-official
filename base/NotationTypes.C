@@ -25,6 +25,7 @@
 #include "BaseProperties.h"
 #include <iostream>
 #include <cstdlib> // for atoi
+#include <limits.h> // for SHRT_MIN
 
 #if (__GNUC__ < 3)
 #include <strstream>
@@ -44,7 +45,7 @@ using std::endl;
 // It must be a multiple of 16, and should ideally be a multiple of 96.
 static const timeT basePPQ = 960;
 
-const int MIN_SUBORDERING = -100000;
+const int MIN_SUBORDERING = SHRT_MIN;
 
 namespace Accidentals
 {

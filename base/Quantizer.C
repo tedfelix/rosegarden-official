@@ -956,6 +956,10 @@ NotationQuantizer::Impl::quantizeDurationProvisional(Segment *s, Segment::iterat
     const
 {
     timeT d = m_q->getFromSource(*i, DurationValue);
+    if (d == 0) {
+	setProvisional(*i, DurationValue, d);
+	return;
+    }
 
     Note shortNote = Note::getNearestNote(d, 2);
 

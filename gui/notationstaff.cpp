@@ -381,6 +381,12 @@ NotationStaff::positionElements(timeT from, timeT to)
     NOTATION_DEBUG << "NotationStaff " << this << "::positionElements()"
                          << from << " -> " << to << "\n";
     START_TIMING;
+
+    KConfig *config = kapp->config();
+    config->setGroup("Notation Options");
+    m_colourQuantize = config->readBoolEntry("colourquantize", true);
+    m_showUnknowns = config->readBoolEntry("showunknowns", true);
+
     emit setOperationName(i18n("Positioning staff %1...").arg(getId() + 1));
     emit setProgress(0);
     kapp->processEvents();

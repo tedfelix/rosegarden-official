@@ -1458,15 +1458,12 @@ NotationHLayout::getSpacingDuration(StaffType &staff,
 				    const NotationElementList::iterator &i)
 {
     SegmentNotationHelper helper(staff.getSegment());
-//!!!    timeT t(helper.getNotationAbsoluteTime((*i)->event()));
-//    timeT d(helper.getNotationDuration((*i)->event()));
     timeT t((*i)->getViewAbsoluteTime());
     timeT d((*i)->getViewDuration());
 
     NotationElementList::iterator j(i), e(staff.getViewElementList()->end());
-    while (j != e &&
-//!!!	   helper.getNotationAbsoluteTime((*j)->event()) == t) {
-	   (*j)->getViewAbsoluteTime() == t) {
+    while (j != e && ((*j)->getViewAbsoluteTime() == t ||
+		      (*j)->getViewDuration() == 0)) {
 	++j;
     }
     if (j == e) return d;
@@ -1480,14 +1477,24 @@ NotationHLayout::getSpacingDuration(StaffType &staff,
     SegmentNotationHelper helper(staff.getSegment());
 
     NotationElementList::iterator i = chord.getShortestElement();
-//    timeT t(helper.getNotationAbsoluteTime((*i)->event()));
     timeT d((*i)->getViewDuration());
 
     NotationElementList::iterator j(i), e(staff.getViewElementList()->end());
-//!!!??? check duration>0 to ensure not e.g. controller in middle of chord
     while (j != e && (chord.contains(j) || (*j)->getViewDuration() == 0)) ++j;
-    if (j == e) return d;
-    else return (*j)->getViewAbsoluteTime() - (*i)->getViewAbsoluteTime();
+
+    if (j != e) {
+	d = (*j)->getViewAbsoluteTime() - (*i)->getViewAbsoluteTime();
+	NOTATION_DEBUG << "getSpacingDuration: stopped by elt at "
+		       << (*j)->getViewAbsoluteTime() << ", d = "
+		       << (*j)->getViewDuration() << ", type "
+		       << (*j)->event()->getType() << endl;
+    }
+
+    NOTATION_DEBUG << "getSpacingDuration for elt at "
+		   << (*i)->getViewAbsoluteTime() << ", d = "
+		   << (*i)->getViewDuration() << ": returning "
+		   << d << endl;
+    return d;
 }
 
 

@@ -149,11 +149,11 @@ NotationStrings::getAmericanName(Note &note, bool plural, bool triplet)
         QString("whole note"), QString("double whole note")
     };
     if (plural && triplet) {        
-        return QString("%s triplets").arg(names[type]);
+        return QString("%1 triplets").arg(names[type]);
     } else if (plural) {
-        return QString("%ss").arg(names[type]);
+        return QString("%1s").arg(names[type]);
     } else if (triplet) {
-        return QString("%s triplet").arg(names[type]);
+        return QString("%1 triplet").arg(names[type]);
     }
     return names[type];
 }
@@ -172,11 +172,11 @@ NotationStrings::getBritishName(Note &note, bool plural, bool triplet)
         QString("semibreve"), QString("double whole note")
     };
     if (plural && triplet) {        
-        return QString("%s triplets").arg(names[type]);
+        return QString("%1 triplets").arg(names[type]);
     } else if (plural) {
-        return QString("%ss").arg(names[type]);
+        return QString("%1s").arg(names[type]);
     } else if (triplet) {
-        return QString("%s triplet").arg(names[type]);
+        return QString("%1 triplet").arg(names[type]);
     }
     return names[type];
 }
