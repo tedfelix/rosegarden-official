@@ -598,7 +598,7 @@ bool MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(Rosegarden::Map
             Rosegarden::MappedEvent *evt = new Rosegarden::MappedEvent(*(*iter));
 
             if (evt->getEventTime() < endTime) {
-                evt->setInstrument(m_controlBlockMmapper->getInstrumentForTrack(evt->getInstrument()));
+                // evt->setInstrument(m_controlBlockMmapper->getInstrumentForTrack(evt->getInstrument()));
 
                 SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : " << endTime
                                 << " inserting evt from segment #"

@@ -151,6 +151,8 @@ QString ControlBlockMmapper::createFileName()
 
 void ControlBlockMmapper::refresh()
 {
+    SEQMAN_DEBUG << "ControlBlockMmapper : refresh\n";
+
     ::msync(m_mmappedBuffer, m_mmappedSize, MS_ASYNC);
 }
 
@@ -171,7 +173,7 @@ void ControlBlockMmapper::initControlBlock()
 
 void ControlBlockMmapper::setFileSize(size_t size)
 {
-    SEQMAN_DEBUG << "SegmentMmapper : setting size of "
+    SEQMAN_DEBUG << "ControlBlockMmapper : setting size of "
                  << m_fileName << " to " << size << endl;
     // rewind
     ::lseek(m_fd, 0, SEEK_SET);
@@ -181,13 +183,13 @@ void ControlBlockMmapper::setFileSize(size_t size)
     // (seek() to wanted size, then write a byte)
     //
     if (::lseek(m_fd, size - 1, SEEK_SET) == -1) {
-        SEQMAN_DEBUG << "SegmentMmapper : Couldn't lseek in " << m_fileName
+        SEQMAN_DEBUG << "ControlBlockMmapper : Couldn't lseek in " << m_fileName
                      << " to " << size << endl;
         throw Rosegarden::Exception("lseek failed");
     }
     
     if (::write(m_fd, "\0", 1) != 1) {
-        SEQMAN_DEBUG << "SegmentMmapper : Couldn't write byte in  "
+        SEQMAN_DEBUG << "ControlBlockMmapper : Couldn't write byte in  "
                      << m_fileName << endl;
         throw Rosegarden::Exception("write failed");
     }
@@ -2226,7 +2228,7 @@ void SegmentMmapper::dump()
 	    
             try {
                 // Create mapped event
-                MappedEvent mE(track->getId(),
+                MappedEvent mE(track->getInstrument(), // track->getId()
                                **j,
                                eventTime,
                                duration);
