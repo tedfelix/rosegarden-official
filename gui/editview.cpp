@@ -539,9 +539,11 @@ EditView::setupActions()
                 SLOT(slotShowControllerEventsRuler()), actionCollection(),
                 "show_controller_events_ruler");
 
-    new KAction(i18n("Add Control Ruler..."), 0, this,
-                SLOT(slotShowPropertyControlRuler()), actionCollection(),
-                "add_control_ruler");
+    // Disabled for now
+    //
+//     new KAction(i18n("Add Control Ruler..."), 0, this,
+//                 SLOT(slotShowPropertyControlRuler()), actionCollection(),
+//                 "add_control_ruler");
 
     //
     // Control Ruler context menu
