@@ -1163,6 +1163,7 @@ SequencerConfigurationPage::apply()
 
     m_cfg->writeEntry("midirecorddevice", device);
 
+#ifdef HAVE_LIBJACK
     // Jack audio inputs
     //
     m_cfg->writeEntry("jackaudioinputs", m_jackInputs->value());
@@ -1213,6 +1214,7 @@ SequencerConfigurationPage::apply()
              Rosegarden::MidiInstrumentBase, // InstrumentId
              Rosegarden::MappedEvent::SystemJackTransport,
              Rosegarden::MidiByte(jackValue));
+#endif // HAVE_LIBJACK
  
     Rosegarden::StudioControl::sendMappedEvent(mE);
 
