@@ -868,8 +868,20 @@ void RosegardenGUIApp::slotFileNew()
     }
 }
 
+/**
+ * Temporarily change the global cursor to waitCursor
+ */
+class SetWaitCursor
+{
+public:
+    SetWaitCursor() { QApplication::setOverrideCursor(QCursor(Qt::waitCursor)); }
+    ~SetWaitCursor() { QApplication::restoreOverrideCursor(); }
+};
+
 void RosegardenGUIApp::openURL(const KURL& url)
 {
+    SetWaitCursor waitCursor;
+
     QString netFile = url.url();
     kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::openURL: " << netFile << endl;
 
