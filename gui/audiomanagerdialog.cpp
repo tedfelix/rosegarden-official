@@ -31,6 +31,7 @@
 #include "WAVAudioFile.h"
 #include "audiomanagerdialog.h"
 #include "widgets.h"
+#include "dialogs.h"
 #include "Progress.h"
 #include "multiviewcommandhistory.h"
 
@@ -48,7 +49,9 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
                                        RosegardenGUIDoc *doc):
     KDialogBase(parent, "", false,
                 i18n("Rosegarden Audio File Manager"), Close),
-    m_doc(doc)
+    m_doc(doc),
+    m_playingAudioFile(0),
+    m_audioPlayingDialog(0)
 {
     QHBox *h = makeHBoxMainWidget();
     QVButtonGroup *v = new QVButtonGroup(i18n("Audio File actions"), h);
@@ -385,10 +388,26 @@ AudioManagerDialog::slotPlayPreview()
 
     if (item == 0 || audioFile == 0) return;
 
+    // store the audio file we're playing
+    m_playingAudioFile = audioFile->getId();
+
     // tell the sequencer
     emit playAudioFile(audioFile->getId(),
                        item->getStartTime(),
                        item->getDuration());
+
+    // now open up the playing dialog
+    //
+    m_audioPlayingDialog =
+        new AudioPlayingDialog(this, QString(audioFile->getFilename().c_str()));
+
+    // just execute
+    //
+    if (m_audioPlayingDialog->exec() == QDialog::Rejected)
+        emit cancelPlayingAudioFile(m_playingAudioFile);
+
+    m_audioPlayingDialog = 0;
+
 }
 
 // Add a file to the audio file manager - allow previews and
@@ -713,6 +732,25 @@ AudioManagerDialog::slotSegmentSelection(
     }
 
 }
+
+void
+AudioManagerDialog::slotCancelPlayingAudioFile()
+{
+    emit cancelPlayingAudioFile(m_playingAudioFile);
+}
+
+
+void
+AudioManagerDialog::closePlayingDialog(Rosegarden::AudioFileId id)
+{
+    if (m_audioPlayingDialog && id == m_playingAudioFile)
+    {
+        delete m_audioPlayingDialog;
+        m_audioPlayingDialog = 0;
+    }
+
+}
+
 
 
 }

@@ -905,7 +905,7 @@ SequenceManager::record()
 void
 SequenceManager::processRecordedMidi(const MappedComposition &mC)
 {
-    processAsynchronousMidi(mC);
+    processAsynchronousMidi(mC, 0);
 
     // Send any recorded Events to a Segment for storage and display.
     // We have to send the transport status because this method is
@@ -928,7 +928,9 @@ SequenceManager::processRecordedMidi(const MappedComposition &mC)
 //
 //
 void
-SequenceManager::processAsynchronousMidi(const MappedComposition &mC)
+SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
+                                         Rosegarden::AudioManagerDialog
+                                             *audioManagerDialog)
 {
     if (m_doc == 0) return;
 
@@ -953,12 +955,22 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC)
             {
                 if ((*i)->getType() == Rosegarden::MappedEvent::AudioStopped)
                 {
+                    /*
                     cout << "AUDIO FILE ID = "
-                         << (*i)->getData1()
+                         << int((*i)->getData1())
                          << " - FILE STOPPED - " 
                          << "INSTRUMENT = "
                          << (*i)->getInstrument()
                          << endl;
+                         */
+
+                    if (audioManagerDialog && (*i)->getInstrument() == 
+                            m_doc->getStudio().getAudioPreviewInstrument())
+                    {
+                        audioManagerDialog->
+                            closePlayingDialog(
+                                Rosegarden::AudioFileId((*i)->getData1()));
+                    }
                 }
 
                 if ((*i)->getType() == Rosegarden::MappedEvent::AudioLevel)

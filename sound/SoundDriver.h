@@ -316,6 +316,10 @@ public:
     void setAudioRecordLatency(const RealTime &l) { m_audioRecordLatency = l; }
     RealTime getAudioRecordLatency() { return m_audioRecordLatency; }
 
+    // Cancel the playback of an audio file
+    //
+    void cancelAudioFile(InstrumentId instrumentId, AudioFileId audioFileId);
+
 protected:
     // Helper functions to be implemented by subclasses
     //

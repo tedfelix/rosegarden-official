@@ -24,6 +24,7 @@
 #include <kapp.h>
 #include <kprocess.h>
 
+#include "audiomanagerdialog.h"
 #include "rosegardendcop.h"
 #include "MappedComposition.h"
 #include "RealTime.h"
@@ -87,7 +88,8 @@ public:
 
     // Events coming in
     void processRecordedMidi(const MappedComposition &mC);
-    void processAsynchronousMidi(const MappedComposition &mC);
+    void processAsynchronousMidi(const MappedComposition &mC,
+                                 Rosegarden::AudioManagerDialog *aMD);
 
     // Before playing and recording (throws exceptions)
     //

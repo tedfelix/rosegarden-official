@@ -2132,7 +2132,7 @@ void
 RosegardenGUIApp::processAsynchronousMidi(const Rosegarden::MappedComposition &mC)
 {
     if (m_seqManager)
-        m_seqManager->processAsynchronousMidi(mC);
+        m_seqManager->processAsynchronousMidi(mC, m_audioManagerDialog);
 }
 
 
@@ -2761,6 +2761,9 @@ RosegardenGUIApp::slotAudioManager()
                                                     Rosegarden::InstrumentId,
                                                     const Rosegarden::RealTime&,
                                                     const Rosegarden::RealTime&)));
+        connect(m_audioManagerDialog,
+                SIGNAL(cancelPlayingAudioFile(Rosegarden::AudioFileId)),
+                SLOT(slotCancelAudioPlayingFile(Rosegarden::AudioFileId)));
 
         m_audioManagerDialog->show();
     }
@@ -2788,7 +2791,7 @@ RosegardenGUIApp::slotPlayAudioFile(unsigned int id,
         new Rosegarden::MappedEvent(m_doc->getStudio().
                                         getAudioPreviewInstrument(),
                                     id,
-                                    Rosegarden::RealTime(0, 0),  // event time
+                                    Rosegarden::RealTime(-120, 0),  // event time
                                     duration,                    // duration
                                     startTime);                  // start index
 
@@ -2919,7 +2922,6 @@ RosegardenGUIApp::slotInsertAudioSegmentAndTrack(
 {
     // Insert a Track and an audio Segment
     //
-    Rosegarden::Composition &comp = m_doc->getComposition();
     m_view->slotAddAudioSegmentAndTrack(audioFileId,
                                         instrumentId,
                                         startTime,
@@ -2936,5 +2938,23 @@ RosegardenGUIApp::slotSegmentsSelected(
         m_audioManagerDialog->slotSegmentSelection(segments);
 }
 
+
+void
+RosegardenGUIApp::slotCancelAudioPlayingFile(Rosegarden::AudioFileId id)
+{
+    Rosegarden::AudioFile *aF = m_doc->getAudioFileManager().getAudioFile(id);
+
+    if (aF == 0)
+        return;
+
+    Rosegarden::MappedEvent *mE =
+        new Rosegarden::MappedEvent(m_doc->getStudio().
+                                        getAudioPreviewInstrument(),
+                                    Rosegarden::MappedEvent::AudioCancel,
+                                    id);
+
+    if (m_seqManager)
+        m_seqManager->sendMappedEvent(mE);
+}
 
 

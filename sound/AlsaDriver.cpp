@@ -1359,6 +1359,12 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
                                           (*i)->getData2());
                 break;
 
+            case MappedEvent::Audio:
+            case MappedEvent::AudioCancel:
+            case MappedEvent::AudioLevel:
+            case MappedEvent::AudioStopped:
+                break;
+
             default:
                 std::cout << "AlsaDriver::processMidiOut - "
                           << "unrecognised event type"
@@ -1420,6 +1426,8 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
     // insert audio events if we find them
     for (MappedComposition::iterator i = mC.begin(); i != mC.end(); ++i)
     {
+        // Play an audio file
+        //
         if ((*i)->getType() == MappedEvent::Audio)
         {
             // Check for existence of file - if the sequencer has died
@@ -1432,10 +1440,33 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
 
             if (audioFile)
             { 
+                Rosegarden::RealTime adjustedEventTime =
+                    (*i)->getEventTime();
+
+                /*
+                    adjustedEventTime == RealTime(0, 0) &&
+                    getSequencerTime() > RealTime(1, 0))
+                    */
+
+                // If we're playing, the event time is two minutes or
+                // more in the past we've sent an async audio event -
+                // if we're playing we have to reset this time to
+                // some point in our playing future - otherwise we
+                // just reset to zero.
+                //
+                if (adjustedEventTime <= RealTime(-120, 0))
+                {
+                    if (m_playing)
+                        adjustedEventTime = getAlsaTime() + RealTime(0, 500000);
+                    else
+                        adjustedEventTime = RealTime(0, 0);
+                }
+
+
                 PlayableAudioFile *audioFile =
                     new PlayableAudioFile((*i)->getInstrument(),
                                           getAudioFile((*i)->getAudioID()),
-                                          (*i)->getEventTime() - playLatency,
+                                          adjustedEventTime - playLatency,
                                           (*i)->getAudioStartMarker(),
                                           (*i)->getDuration());
 
@@ -1468,6 +1499,14 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
                           << "try reloading the current Rosegarden file"
                           << std::endl;
             }
+        }
+
+        // Cancel a playing audio file
+        //
+        if ((*i)->getType() == MappedEvent::AudioCancel)
+        {
+            cancelAudioFile(Rosegarden::InstrumentId((*i)->getInstrument()),
+                             Rosegarden::AudioFileId((*i)->getData1()));
         }
     }
 

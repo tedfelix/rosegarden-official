@@ -523,5 +523,16 @@ protected:
 
 };
   
+class AudioPlayingDialog : public KDialogBase
+{
+    Q_OBJECT
+
+public:
+    AudioPlayingDialog(QWidget *parent, const QString &label);
+
+signals:
+
+};
+
 
 #endif

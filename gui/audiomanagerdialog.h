@@ -31,6 +31,7 @@
 #include "Segment.h"
 #include "Selection.h"
 #include "Track.h"
+#include "dialogs.h"
 
 // This dialog presents and allows editing of the Audio files that
 // are in the Composition.  We edit the AudioFileManager directly
@@ -135,6 +136,10 @@ public:
 
     MultiViewCommandHistory *getCommandHistory();
 
+    // Pop down playing dialog if it's currently up
+    //
+    void closePlayingDialog(Rosegarden::AudioFileId id);
+
 public slots:
     void slotAdd();
     void slotDelete();
@@ -159,6 +164,10 @@ public slots:
     //
     void slotSegmentSelection(const Rosegarden::SegmentSelection &);
 
+    // Cancel the currently playing audio file
+    //
+    void slotCancelPlayingAudioFile();
+
 signals:
 
     // Control signals so we can tell the sequencer about our changes
@@ -169,6 +178,7 @@ signals:
     void playAudioFile(Rosegarden::AudioFileId,
                        const Rosegarden::RealTime &,
                        const Rosegarden::RealTime &);
+    void cancelPlayingAudioFile(Rosegarden::AudioFileId);
 
     // We've selected a segment here, make the canvas select it too
     //
@@ -193,6 +203,9 @@ protected:
     RosegardenGUIDoc *m_doc;
 
     QAccel           *m_accelerator;
+
+    Rosegarden::AudioFileId  m_playingAudioFile;
+    AudioPlayingDialog      *m_audioPlayingDialog;
 
 };
 

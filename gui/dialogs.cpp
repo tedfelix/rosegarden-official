@@ -2195,4 +2195,20 @@ FileLocateDialog::slotUser1()
 }
 
 
+AudioPlayingDialog::AudioPlayingDialog(QWidget *parent,
+                                       const QString &name):
+                                       KDialogBase(parent, "", true,
+                                       i18n("Playing audio file"),
+                                       Cancel)
+{
+    QHBox *w = makeHBoxMainWidget();
+    QLabel *label = new
+        QLabel(i18n("Playing audio file \"") + name + QString("\""), w);
+
+    label->setMinimumHeight(80);
+
+
+}
+
+
 
