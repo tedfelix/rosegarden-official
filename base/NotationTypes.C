@@ -853,7 +853,7 @@ Event *TimeSignature::getAsEvent(timeT absoluteTime) const
 }
 
 
-#define DEBUG_DURATION_LIST_STUFF 1
+//#define DEBUG_DURATION_LIST_STUFF 1
 
 
 void TimeSignature::getDurationListForInterval(DurationList &dlist,

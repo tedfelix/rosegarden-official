@@ -626,7 +626,14 @@ MidiFile::convertToRosegarden()
 		case MIDI_CHANNEL_PREFIX_OR_PORT:
 		    break;
 
-		case MIDI_END_OF_SEGMENT:
+		case MIDI_END_OF_TRACK:
+
+		    if (rosegardenSegment) {
+			if (endOfLastNote < rosegardenTime) {
+			    rosegardenSegment->fillWithRests(rosegardenTime);
+			}
+		    }
+
 		    break;
 
 		case MIDI_SET_TEMPO:
@@ -768,7 +775,8 @@ MidiFile::convertToRosegarden()
 
     // set a tempo based on timing division or default
     //
-    composition->setDefaultTempo((120 * crotchetTime) / divisor);
+//!!! No, divisor has nothing to do with tempo I think
+//    composition->setDefaultTempo((120 * crotchetTime) / divisor);
 
     return composition;
 }
@@ -948,7 +956,7 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
 	endOfSegmentTime = m_midiComposition[i].end()->time();
 
 	midiEvent = new MidiEvent(endOfSegmentTime, MIDI_FILE_META_EVENT,
-				  MIDI_END_OF_SEGMENT, "");
+				  MIDI_END_OF_TRACK, "");
 
 	m_midiComposition[i].push_back(*midiEvent);
 

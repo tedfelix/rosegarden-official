@@ -491,14 +491,23 @@ Composition::getTimeSignatureAt(timeT t, TimeSignature &timeSig) const
 
     Segment::iterator i = m_barSegment.findTime(t);
 
+//    cerr << "Composition::getTimeSignatureAt: event at " << t
+//	 << " is ..." << endl;
+//    if (i == m_barSegment.end()) { cerr << "end" << endl; }
+//    else (*i)->dump(cerr);
+
     timeSig = TimeSignature();
     timeT sigTime = 0;
 
-    if (i != m_barSegment.begin() &&
-	(i == m_barSegment.end() ||
-	 ((*i)->getAbsoluteTime() > t) ||
-	 !(*i)->isa(TimeSignature::EventType))) {
+    //!!! Oh dear.  Excessive slowness here.
+
+    while (i != m_barSegment.begin() &&
+	   (i == m_barSegment.end() ||
+	    ((*i)->getAbsoluteTime() > t) ||
+	    !(*i)->isa(TimeSignature::EventType))) {
 	--i;
+//	cerr << "Composition::getTimeSignatureAt: decrementing to" << endl;
+//	(*i)->dump(cerr);
     }
 
     if (i == m_barSegment.end() ||

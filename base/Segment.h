@@ -64,8 +64,26 @@ public:
     timeT getStartIndex() const { return m_startIdx; }
     void  setStartIndex(timeT i);
 
+    /**
+     * Returns the effective duration of the segment, i.e. the time
+     * at which the final event ends relative to the start time of
+     * the segment.
+     */
     timeT getDuration() const;
-    void  setDuration(timeT); // fills up with rests when lengthening
+
+    /**
+     * Ensures that the duration of the segment reaches the given
+     * time, by filling it with suitable rests if it needs
+     * lengthening.
+     * 
+     * It is not strictly necessary to call setDuration to change the
+     * duration of a segment -- the duration is always taken from the
+     * time and duration of the final event, and events may be
+     * inserted anywhere.  But for segments that may be rendered in
+     * a score it's vital that the filling rests are present, so
+     * in practice setDuration should always be used.
+     */
+    void  setDuration(timeT);
 
     timeT getEndIndex() const { return m_startIdx + getDuration(); }
 

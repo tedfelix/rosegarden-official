@@ -98,7 +98,7 @@ const MidiByte MIDI_CHANNEL_PREFIX         = 0x20;
 // exist.
 const MidiByte MIDI_CHANNEL_PREFIX_OR_PORT = 0x21;
 
-const MidiByte MIDI_END_OF_SEGMENT           = 0x2F;
+const MidiByte MIDI_END_OF_TRACK           = 0x2F;
 const MidiByte MIDI_SET_TEMPO              = 0x51;
 const MidiByte MIDI_SMPTE_OFFSET           = 0x54;
 const MidiByte MIDI_TIME_SIGNATURE         = 0x58;

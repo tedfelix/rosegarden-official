@@ -314,9 +314,14 @@ void Segment::fillWithRests(timeT endTime)
     if (getComposition()) {
 	sigTime = getComposition()->getTimeSignatureAt(duration, ts);
     }
+
+    cerr << "Segment(" << this << ")::fillWithRests: endTime "
+	 << endTime << ", duration " << duration << ", composition "
+	 << (getComposition() ? "exists" : "does not exist") << ", sigTime "
+	 << sigTime << ", timeSig duration " << ts.getBarDuration() << endl;
     
     DurationList dl;
-    ts.getDurationListForInterval(dl, endTime - duration, sigTime);
+    ts.getDurationListForInterval(dl, endTime - duration, duration - sigTime);
 
     timeT acc = getStartIndex() + duration;
 

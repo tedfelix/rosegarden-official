@@ -138,8 +138,8 @@ MidiEvent::print()
 		 << (unsigned int)m_metaMessage[0] << endl;
 	    break;
 
-	case MIDI_END_OF_SEGMENT:
-	    cout << "END OF SEGMENT" << endl;
+	case MIDI_END_OF_TRACK:
+	    cout << "END OF TRACK" << endl;
 	    break;
 
 	case MIDI_SET_TEMPO:
