@@ -42,8 +42,12 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                              const QString& localName,
                              const QString& qName, const QXmlAttributes& atts)
 {
-    if (qName == "event") {
+    QString lcName = qName.lower();
+
+    if (lcName == "event") {
         m_events.push_back(new XMLStorableEvent(atts));
+    } else if (lcName == "track") {
+        // later
     } else {
         kdDebug(KDEBUG_AREA) << "Don't know how to parse this : " << qName << endl;
     }
