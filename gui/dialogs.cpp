@@ -489,13 +489,13 @@ KeySignatureDialog::regenerateKeyCombo()
 
     m_ignoreComboChanges = true;
     QString currentText = m_keyCombo->currentText();
-    Rosegarden::Key::KeySet keys(Rosegarden::Key::getKeys(m_key.isMinor()));
+    Rosegarden::Key::KeyList keys(Rosegarden::Key::getKeys(m_key.isMinor()));
     m_keyCombo->clear();
 
     std::sort(keys.begin(), keys.end(), KeyNameComparator());
     bool textSet = false;
 
-    for (Rosegarden::Key::KeySet::iterator i = keys.begin();
+    for (Rosegarden::Key::KeyList::iterator i = keys.begin();
 	 i != keys.end(); ++i) {
 
 	QString name(strtoqstr(i->getName()));

@@ -56,13 +56,13 @@ namespace Accidentals
     const Accidental DoubleSharp = "double-sharp";
     const Accidental DoubleFlat = "double-flat";
 
-    std::vector<Accidental> getStandardAccidentals() {
+    AccidentalList getStandardAccidentals() {
 
         static Accidental a[] = {
             NoAccidental, Sharp, Flat, Natural, DoubleSharp, DoubleFlat
         };
 
-        static std::vector<Accidental> v;
+        static AccidentalList v;
         if (v.size() == 0) {
             for (unsigned int i = 0; i < sizeof(a)/sizeof(a[0]); ++i)
                 v.push_back(a[i]);
@@ -335,10 +335,10 @@ Key& Key::operator=(const Key &kc)
 }
 
 
-std::vector<Key> Key::getKeys(bool minor)
+Key::KeyList Key::getKeys(bool minor)
 {
     checkMap();
-    std::vector<Key> result;
+    KeyList result;
     for (KeyDetailMap::const_iterator i = m_keyDetailMap.begin();
          i != m_keyDetailMap.end(); ++i) {
         if ((*i).second.m_minor == minor) {
@@ -1128,13 +1128,13 @@ Pitch::getPerformancePitch() const
 }
 
 Accidental
-Pitch::getAccidental(bool keyIsSharp) const
+Pitch::getAccidental(bool useSharps) const
 {
-    return getAccidental(keyIsSharp ? Key("C major") : Key("A minor"));
+    return getDisplayAccidental(useSharps ? Key("C major") : Key("A minor"));
 }
 
 Accidental
-Pitch::getAccidental(const Key &key) const
+Pitch::getDisplayAccidental(const Key &key) const
 {
     NotationDisplayPitch ndp(m_pitch, Clef(), key, m_accidental);
     return ndp.getAccidental();
@@ -1172,12 +1172,12 @@ Pitch::getPitchInOctave() const
 }
 
 std::string
-Pitch::getAsString(const Key &key, bool inclOctave, int octaveBase) const
+Pitch::getAsString(bool useSharps, bool inclOctave, int octaveBase) const
 {
-    Accidental acc = getAccidental(key.isSharp());
+    Accidental acc = getAccidental(useSharps);
 
     std::string s;
-    s += getNoteName(key);
+    s += getNoteName(useSharps ? Key("C major") : Key("A minor"));
 
     if (acc == Accidentals::Sharp) s += "#";
     else if (acc == Accidentals::Flat) s += "b";

@@ -90,11 +90,13 @@ namespace Accidentals
     extern const Accidental DoubleSharp;
     extern const Accidental DoubleFlat;
 
+    typedef std::vector<Accidental> AccidentalList;
+
     /**
      * Get the predefined accidentals (i.e. the ones listed above)
      * in their defined order.
      */
-    extern std::vector<Accidental> getStandardAccidentals();
+    extern AccidentalList getStandardAccidentals();
 }
 
 
@@ -373,13 +375,13 @@ public:
 	return (height > 0) ? (height % 7) : ((7 - (-height % 7)) % 7);
     }
 
-    typedef std::vector<Key> KeySet;
+    typedef std::vector<Key> KeyList;
 
     /**
      * Return all the keys in the given major/minor mode, in
      * no particular order.
      */
-    static KeySet getKeys(bool minor = false);
+    static KeyList getKeys(bool minor = false);
 
 
     /// Returned event is on heap; caller takes responsibility for ownership
@@ -650,35 +652,38 @@ public:
      * Return the accidental for this pitch.  This is the accidental
      * that would be used to display this pitch outside of the context
      * of any key; that is, it may duplicate an accidental actually in
-     * the current key.  The keyIsSharp argument is used to decide
+     * the current key.  The useSharps argument is used to decide
      * whether to prefer sharps over flats if there is any doubt.
      */
-    Accidental getAccidental(bool keyIsSharp) const;
+    Accidental getAccidental(bool useSharps) const;
 
     /**
      * Return the accidental that should be used to display this pitch
      * in a given key.  For example, if the pitch is F-sharp in a key
      * in which F has a sharp, NoAccidental will be returned.  (This
      * is in contrast to getAccidental, which would return Sharp.)
+     * This doesn't take into account things like which accidentals
+     * have already been displayed in the bar, etc.
      */
-    Accidental getAccidental(const Key &key = Key::DefaultKey) const;
+    Accidental getDisplayAccidental(const Key &key = Key::DefaultKey) const;
 
     /**
-     * Return the position in the scale for this pitch.  That is, return
-     * a number in the range 0 to 6 where 0 is C and 6 is the next B.
+     * Return the position in the scale for this pitch, as a number in
+     * the range 0 to 6 where 0 is C and 6 is the next B.
      */
     int getNoteInScale(const Key &key) const;
 
     /**
-     * Return the reference name of the note for this pitch.  The name
-     * is returned as a single character in the range A to G.
+     * Return the reference name of the note for this pitch, as a
+     * single character in the range A to G.
      */
     char getNoteName(const Key &key) const;
 
     /**
      * Return the height at which this pitch should display on a
      * conventional 5-line staff.  0 is the bottom line, 1 the first
-     * space, etc.
+     * space, etc., so for example middle-C in the treble clef would
+     * return -2.
      */
     int getHeightOnStaff(const Clef &clef, const Key &key) const;
 
@@ -697,14 +702,18 @@ public:
     /**
      * Return a reference name for this pitch. (C4, Bb2, etc...)
      * according to http://www.harmony-central.com/MIDI/Doc/table2.html
-     * If inclOctave is false, this will return C, Bb, etc.  Note that
-     * this does not take into account the stored accidental -- this
-     * string is purely an encoding of the MIDI pitch, with the
-     * accidental in the string based on whether the given key is sharp
-     * or flat.
+     * 
+     * Note that this does not take into account the stored accidental
+     * -- this string is purely an encoding of the MIDI pitch, with
+     * the accidental in the string selected according to the
+     * useSharps flag (which may be expected to have come from a call
+     * to Key::isSharp).
+     *
+     * If inclOctave is false, this will return C, Bb, etc.  
      */
-    std::string getAsString(const Key &key,
-			    bool inclOctave = true, int octaveBase = -2) const;
+    std::string getAsString(bool useSharps,
+			    bool inclOctave = true,
+			    int octaveBase = -2) const;
 
 private:
     int m_pitch;
