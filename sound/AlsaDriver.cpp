@@ -2132,8 +2132,6 @@ AlsaDriver::getAlsaTime()
 
     sequencerTime.usec = (int)microSeconds;
 
-    snd_seq_queue_status_free(status);
-
     return sequencerTime;
 }
 
@@ -2393,8 +2391,6 @@ AlsaDriver::getMappedComposition(const RealTime &playLatency)
 
 
         }
-
-        snd_seq_free_event(event);
     }
 
     // reset this always
