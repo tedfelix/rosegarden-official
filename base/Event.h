@@ -260,7 +260,7 @@ private:
 		  timeT absoluteTime, timeT duration, short subOrdering);
 	EventData(const std::string &type,
 		  timeT absoluteTime, timeT duration, short subOrdering,
-		  const PropertyMap &properties);
+		  const PropertyMap *properties);
 	EventData *unshare();
 	~EventData();
 	unsigned int m_refCount;
@@ -270,7 +270,7 @@ private:
 	timeT m_duration;
 	short m_subOrdering;
 
-	PropertyMap m_properties;
+	PropertyMap *m_properties;
 
 	// These are properties because we don't care so much about
 	// raw speed in get/set, but we do care about storage size for
@@ -317,6 +317,7 @@ private:
 
     // returned iterator (in i) only valid if return map value is non-zero
     PropertyMap *find(const PropertyName &name, PropertyMap::iterator &i);
+
     const PropertyMap *find(const PropertyName &name,
 			    PropertyMap::const_iterator &i) const {
 	PropertyMap::iterator j;
@@ -326,10 +327,10 @@ private:
     }
 
     PropertyMap::iterator insert(const PropertyPair &pair, bool persistent) {
-	PropertyMap *map =
-	    (persistent ? &m_data->m_properties : m_nonPersistentProperties);
-	if (!map) map = m_nonPersistentProperties = new PropertyMap();
-	return map->insert(pair).first;
+	PropertyMap **map =
+	    (persistent ? &m_data->m_properties : &m_nonPersistentProperties);
+	if (!*map) *map = new PropertyMap();
+	return (*map)->insert(pair).first;
     }
 
 #ifndef NDEBUG
@@ -419,7 +420,7 @@ Event::isPersistent(const PropertyName &name) const
     const PropertyMap *map = find(name, i);
 
     if (map) {
-	return (map == &m_data->m_properties);
+	return (map == m_data->m_properties);
     } else {
 	throw NoData(name.getName(), __FILE__, __LINE__);
     }
@@ -461,7 +462,7 @@ Event::set(const PropertyName &name, typename PropertyDefn<P>::basic_type value,
     PropertyMap *map = find(name, i);
 
     if (map) {
-	bool persistentBefore = (map == &m_data->m_properties);
+	bool persistentBefore = (map == m_data->m_properties);
 	if (persistentBefore != persistent) {
 	    i = insert(*i, persistent);
 	    map->erase(name);
@@ -502,7 +503,7 @@ Event::setMaybe(const PropertyName &name, typename PropertyDefn<P>::basic_type v
     PropertyMap *map = find(name, i);
     
     if (map) {
-	if (map == &m_data->m_properties) return; // persistent, so ignore it
+	if (map == m_data->m_properties) return; // persistent, so ignore it
 
         PropertyStoreBase *sb = i->second;
 

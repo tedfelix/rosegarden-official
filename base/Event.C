@@ -47,20 +47,21 @@ Event::EventData::EventData(const std::string &type, timeT absoluteTime,
     m_type(type),
     m_absoluteTime(absoluteTime),
     m_duration(duration),
-    m_subOrdering(subOrdering)
+    m_subOrdering(subOrdering),
+    m_properties(0)
 {
     // empty
 }
 
 Event::EventData::EventData(const std::string &type, timeT absoluteTime,
 			    timeT duration, short subOrdering,
-			    const PropertyMap &properties) :
+			    const PropertyMap *properties) :
     m_refCount(1),
     m_type(type),
     m_absoluteTime(absoluteTime),
     m_duration(duration),
     m_subOrdering(subOrdering),
-    m_properties(properties)
+    m_properties(properties ? new PropertyMap(*properties) : 0)
 {
     // empty
 }
@@ -83,43 +84,45 @@ Event::EventData::~EventData()
 timeT
 Event::EventData::getNotationTime() const
 {
-    PropertyMap::const_iterator i = m_properties.find(NotationTime);
-    if (i == m_properties.end()) return m_absoluteTime;
+    if (!m_properties) return m_absoluteTime;
+    PropertyMap::const_iterator i = m_properties->find(NotationTime);
+    if (i == m_properties->end()) return m_absoluteTime;
     else return static_cast<PropertyStore<Int> *>(i->second)->getData();
 }
 
 timeT
 Event::EventData::getNotationDuration() const
 {
-    PropertyMap::const_iterator i = m_properties.find(NotationDuration);
-    if (i == m_properties.end()) return m_duration;
+    if (!m_properties) return m_duration;
+    PropertyMap::const_iterator i = m_properties->find(NotationDuration);
+    if (i == m_properties->end()) return m_duration;
     else return static_cast<PropertyStore<Int> *>(i->second)->getData();
 }
 
 void
 Event::EventData::setTime(const PropertyName &name, timeT t, timeT deft)
 {
-    PropertyMap::iterator i = m_properties.find(name);
+    if (!m_properties) m_properties = new PropertyMap();
+    PropertyMap::iterator i = m_properties->find(name);
 
     if (t != deft) {
-	if (i == m_properties.end()) {
-	    m_properties.insert(PropertyPair(name, new PropertyStore<Int>(t)));
+	if (i == m_properties->end()) {
+	    m_properties->insert(PropertyPair(name, new PropertyStore<Int>(t)));
 	} else {
 	    static_cast<PropertyStore<Int> *>(i->second)->setData(t);
 	}
-    } else if (i != m_properties.end()) {
+    } else if (i != m_properties->end()) {
 	delete i->second;
-	m_properties.erase(i);
+	m_properties->erase(i);
     }
 }
 
 PropertyMap *
 Event::find(const PropertyName &name, PropertyMap::iterator &i)
 {
-    PropertyMap *map = &m_data->m_properties;
-    i = map->find(name);
+    PropertyMap *map = m_data->m_properties;
 
-    if (i == map->end()) {
+    if (!map || ((i = map->find(name)) == map->end())) {
 
 	map = m_nonPersistentProperties;
 	if (!map) return 0;
@@ -303,9 +306,11 @@ Event::dump(ostream& out) const
         << "\n\tSub-ordering : " << m_data->m_subOrdering
         << "\n\tPersistent properties : \n";
 
-    for (PropertyMap::const_iterator i = m_data->m_properties.begin();
-         i != m_data->m_properties.end(); ++i) {
-        out << "\t\t" << i->first << '\t' << *(i->second) << '\n';
+    if (m_data->m_properties) {
+	for (PropertyMap::const_iterator i = m_data->m_properties->begin();
+	     i != m_data->m_properties->end(); ++i) {
+	    out << "\t\t" << i->first << '\t' << *(i->second) << '\n';
+	}
     }
 
     if (m_nonPersistentProperties) {
@@ -360,9 +365,11 @@ Event::PropertyNames
 Event::getPropertyNames() const
 {
     PropertyNames v;
-    for (PropertyMap::const_iterator i = m_data->m_properties.begin();
-         i != m_data->m_properties.end(); ++i) {
-        v.push_back(i->first);
+    if (m_data->m_properties) {
+	for (PropertyMap::const_iterator i = m_data->m_properties->begin();
+	     i != m_data->m_properties->end(); ++i) {
+	    v.push_back(i->first);
+	}
     }
     if (m_nonPersistentProperties) {
 	for (PropertyMap::const_iterator i = m_nonPersistentProperties->begin();
@@ -377,9 +384,11 @@ Event::PropertyNames
 Event::getPersistentPropertyNames() const
 {
     PropertyNames v;
-    for (PropertyMap::const_iterator i = m_data->m_properties.begin();
-         i != m_data->m_properties.end(); ++i) {
-        v.push_back(i->first);
+    if (m_data->m_properties) {
+	for (PropertyMap::const_iterator i = m_data->m_properties->begin();
+	     i != m_data->m_properties->end(); ++i) {
+	    v.push_back(i->first);
+	}
     }
     return v;
 }
@@ -401,10 +410,12 @@ size_t
 Event::getStorageSize() const
 {
     size_t s = sizeof(Event) + sizeof(EventData) + m_data->m_type.size();
-    for (PropertyMap::const_iterator i = m_data->m_properties.begin();
-         i != m_data->m_properties.end(); ++i) {
-        s += sizeof(i->first);
-        s += i->second->getStorageSize();
+    if (m_data->m_properties) {
+	for (PropertyMap::const_iterator i = m_data->m_properties->begin();
+	     i != m_data->m_properties->end(); ++i) {
+	    s += sizeof(i->first);
+	    s += i->second->getStorageSize();
+	}
     }
     if (m_nonPersistentProperties) {
 	for (PropertyMap::const_iterator i = m_nonPersistentProperties->begin();

@@ -240,15 +240,11 @@ int main(int argc, char **argv)
         }
 
         Event e1("note", 0);
-        int gsCount = 20000;
+        int gsCount = 200000;
 
         st = times(&spare);
         for (i = 0; i < gsCount; ++i) {
-#ifdef PROPERTY_NAME_IS_INT
-                e1.set<Int>(i/4, i);
-#else
                 e1.set<Int>(names[i % NAME_COUNT], i);
-#endif
         }
         et = times(&spare);
         cout << "Event: " << gsCount << " setInts: " << (et-st)*10 << "ms\n";
@@ -257,29 +253,21 @@ int main(int argc, char **argv)
         j = 0;
         for (i = 0; i < gsCount; ++i) {
                 if (i%4==0) sprintf(b+4, "%d", i);
-#ifdef PROPERTY_NAME_IS_INT
-                e1.get<Int>(i/4);
-#else
                 j += e1.get<Int>(names[i % NAME_COUNT]);
-#endif
         }
         et = times(&spare);
         cout << "Event: " << gsCount << " getInts: " << (et-st)*10 << "ms (result: " << j << ")\n";
         
         st = times(&spare);
-        for (i = 0; i < 100; ++i) {
+        for (i = 0; i < 1000; ++i) {
                 Event e11(e1);
-#ifdef PROPERTY_NAME_IS_INT
-                (void)e11.get<Int>(0);
-#else
                 (void)e11.get<Int>(names[i % NAME_COUNT]);
-#endif
         }
         et = times(&spare);
-        cout << "Event: 100 copy ctors of " << e1.getStorageSize() << "-byte element: "
+        cout << "Event: 1000 copy ctors of " << e1.getStorageSize() << "-byte element: "
              << (et-st)*10 << "ms\n";
 
-        gsCount = 100000;
+//        gsCount = 100000;
 
         for (i = 0; i < NAME_COUNT; ++i) {
             sprintf(b+4, "%ds", i);
@@ -288,11 +276,7 @@ int main(int argc, char **argv)
 
         st = times(&spare);
         for (i = 0; i < gsCount; ++i) {
-#ifdef PROPERTY_NAME_IS_INT
-                e1.set<String>(i/4 + 1000000, b);
-#else
                 e1.set<String>(names[i % NAME_COUNT], b);
-#endif
         }
         et = times(&spare);
         cout << "Event: " << gsCount << " setStrings: " << (et-st)*10 << "ms\n";
@@ -301,27 +285,73 @@ int main(int argc, char **argv)
         j = 0;
         for (i = 0; i < gsCount; ++i) {
                 if (i%4==0) sprintf(b+4, "%ds", i);
-#ifdef PROPERTY_NAME_IS_INT
-                j += e1.get<String>(i/4 + 1000000).size();
-#else
                 j += e1.get<String>(names[i % NAME_COUNT]).size();
-#endif
         }
         et = times(&spare);
         cout << "Event: " << gsCount << " getStrings: " << (et-st)*10 << "ms (result: " << j << ")\n";
         
         st = times(&spare);
-        for (i = 0; i < 100; ++i) {
+        for (i = 0; i < 1000; ++i) {
                 Event e11(e1);
-#ifdef PROPERTY_NAME_IS_INT
-                (void)e11.get<String>(1000000);
-#else
                 (void)e11.get<String>(names[i % NAME_COUNT]);
-#endif
         }
         et = times(&spare);
-        cout << "Event: 100 copy ctors of " << e1.getStorageSize() << "-byte element: "
+        cout << "Event: 1000 copy ctors of " << e1.getStorageSize() << "-byte element: "
              << (et-st)*10 << "ms\n";
+
+        st = times(&spare);
+        for (i = 0; i < 1000; ++i) {
+                Event e11(e1);
+                (void)e11.get<String>(names[i % NAME_COUNT]);
+		(void)e11.set<String>(names[i % NAME_COUNT], "blah");
+        }
+        et = times(&spare);
+        cout << "Event: 1000 copy ctors plus set<String> of " << e1.getStorageSize() << "-byte element: "
+             << (et-st)*10 << "ms\n";
+
+//	gsCount = 1000000;
+
+        st = times(&spare);
+        for (i = 0; i < gsCount; ++i) {
+	        Event e21("dummy", i, 0, MIN_SUBORDERING);
+        }
+        et = times(&spare);
+        cout << "Event: " << gsCount << " event ctors alone: "
+             << (et-st)*10 << "ms\n";
+	
+        st = times(&spare);
+        for (i = 0; i < gsCount; ++i) {
+	    std::string s0("dummy");
+	    std::string s1 = s0;
+        }
+        et = times(&spare);
+        cout << "Event: " << gsCount << " string ctors+assignents: "
+             << (et-st)*10 << "ms\n";
+	
+        st = times(&spare);
+        for (i = 0; i < gsCount; ++i) {
+	        Event e21("dummy", i, 0, MIN_SUBORDERING);
+                (void)e21.getAbsoluteTime();
+                (void)e21.getDuration();
+                (void)e21.getSubOrdering();
+        }
+        et = times(&spare);
+        cout << "Event: " << gsCount << " event ctors plus getAbsTime/Duration/SubOrdering: "
+             << (et-st)*10 << "ms\n";
+	
+        st = times(&spare);
+        for (i = 0; i < gsCount; ++i) {
+	        Event e21("dummy", i, 0, MIN_SUBORDERING);
+                (void)e21.getAbsoluteTime();
+                (void)e21.getDuration();
+                (void)e21.getSubOrdering();
+		e21.set<Int>(names[0], 40);
+		(void)e21.get<Int>(names[0]);
+        }
+        et = times(&spare);
+        cout << "Event: " << gsCount << " event ctors plus one get/set and getAbsTime/Duration/SubOrdering: "
+             << (et-st)*10 << "ms\n";
+	
 
 #else
         cout << "Skipping test speed of Event\n";
