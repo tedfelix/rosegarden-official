@@ -157,25 +157,25 @@ then
     prefix=$matchDir
 fi
 
-echo "-------------------------------"
-echo "| Installation Summary        |"
-echo "|-----------------------------|"
-echo "| Install Directory           |"
-echo "| $prefix "
-echo "|-----------------------------|"
+echo
+echo
+echo "Installation Summary"
+echo "--------------------"
+echo
+echo "Install Directory     :  $prefix"
+echo
 if test "$with_sound" = "no"; then
-echo "| No Sound Support!           |"
+    echo "No sound support configured"
 else
-	if test "$with_alsa" = "yes"; then
-echo "| ALSA Sound Support          |"
-		if test "$with_jack" = "yes"; then
-echo "| JACK Audio Server           |"
-		fi
-		if test "$with_ladspa" = "yes"; then
-echo "| LADSPA Plugin Support       |"
-		fi
-	else
-echo "| ARTS Sound Support          |"
-	fi
+    echo "ALSA MIDI support     : ${with_alsa}"
+    echo "JACK audio support    : ${with_jack}"
+    echo "LADSPA plugin support : ${with_ladspa}"
+
+    if test "$with_alsa" = "yes"; then
+        echo "aRTS MIDI and audio   : no"
+    else
+        echo "aRTS MIDI and audio   : yes"
+    fi
 fi
-echo "-------------------------------"
+echo
+echo
