@@ -384,10 +384,33 @@ MatrixView::hoveredOverAbsoluteTimeChanged(unsigned int time)
 //
 void MatrixView::slotEditCut()
 {
+    kdDebug(KDEBUG_AREA) << "MatrixView::slotEditCut()\n";
+
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Cutting selection..."), statusBar());
+
+    kdDebug(KDEBUG_AREA) << "MatrixView::slotEditCut() : cutting selection\n";
+
+    m_currentEventSelection->cut();
+
+    emit usedSelection();
+
+    refreshSegment(&m_currentEventSelection->getSegment(),
+		   m_currentEventSelection->getBeginTime(),
+		   m_currentEventSelection->getEndTime());
+
+    kdDebug(KDEBUG_AREA) << "MatrixView::slotEditCut() : selection duration = "
+                         << m_currentEventSelection->getTotalDuration() << endl;
 }
 
 void MatrixView::slotEditCopy()
 {
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Copying selection to clipboard..."), statusBar());
+
+    m_currentEventSelection->copy();
+
+    emit usedSelection();
 }
 
 void MatrixView::slotEditPaste()

@@ -80,7 +80,15 @@ public:
     virtual void update();
 
     void setCurrentSelection(EventSelection* s);
-    
+
+signals:    
+    /**
+     * Emitted when the selection has been cut or copied
+     *
+     * @see MatrixSelector#hideSelection
+     */
+    void usedSelection();
+
 public slots:
 
     /**
