@@ -52,6 +52,8 @@ PluginPort::PluginPort(int number,
 {
 }
 
+const unsigned int AudioPluginInstance::SYNTH_POSITION = 999;
+
 AudioPluginInstance::AudioPluginInstance(unsigned int position):
     m_mappedId(-1),
     m_identifier(""),

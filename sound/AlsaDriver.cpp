@@ -3046,7 +3046,7 @@ AlsaDriver::checkForNewClients()
 	      << std::endl;
     
     AlsaPortList newPorts;
-    generatePortList(&newPorts);
+    generatePortList(&newPorts); // updates m_alsaPorts, returns new ports as well
 
     // If any devices have connections that no longer exist,
     // clear those connections and stick them in the suspended
@@ -3087,6 +3087,16 @@ AlsaDriver::checkForNewClients()
 	     i != newPorts.end(); ++i) {
 
 	    audit << (*i)->m_name << std::endl;
+
+	    if ((*i)->isWriteable()) {
+		if (snd_seq_connect_to(m_midiHandle,
+				       m_port,
+				       (*i)->m_client,
+				       (*i)->m_port) < 0) {
+		    // nothing
+		}
+	    }
+
 	    std::string portName = (*i)->m_name;
 	    ClientPortPair portPair = ClientPortPair((*i)->m_client,
 						     (*i)->m_port);

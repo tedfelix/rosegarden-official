@@ -251,6 +251,8 @@ DSSIPluginFactory::getPluginPath()
     return pathList;
 }
 
+
+#ifdef HAVE_LIBLRDF
 std::vector<QString>
 DSSIPluginFactory::getLRDFPath(QString &baseUri)
 {
@@ -276,6 +278,8 @@ DSSIPluginFactory::getLRDFPath(QString &baseUri)
 
     return lrdfPaths;
 }    
+#endif
+
 
 void
 DSSIPluginFactory::discoverPlugins(QString soName)

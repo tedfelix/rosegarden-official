@@ -64,7 +64,10 @@ protected:
     friend class PluginFactory;
 
     virtual std::vector<QString> getPluginPath();
+
+#ifdef HAVE_LIBLRDF
     virtual std::vector<QString> getLRDFPath(QString &baseUri);
+#endif
 
     virtual void discoverPlugins(QString soName);
     virtual void generateTaxonomy(QString uri, QString base);

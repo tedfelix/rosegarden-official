@@ -489,6 +489,8 @@ LADSPAPluginFactory::getPluginPath()
     return pathList;
 }
 
+
+#ifdef HAVE_LIBLRDF
 std::vector<QString>
 LADSPAPluginFactory::getLRDFPath(QString &baseUri)
 {
@@ -506,6 +508,7 @@ LADSPAPluginFactory::getLRDFPath(QString &baseUri)
     baseUri = LADSPA_BASE;
     return lrdfPaths;
 }    
+#endif
 
 void
 LADSPAPluginFactory::discoverPlugins()

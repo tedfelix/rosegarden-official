@@ -100,6 +100,8 @@ typedef std::vector<PluginPortInstance*>::iterator PortInstanceIterator;
 class AudioPluginInstance : public XmlExportable
 {
 public:
+    static const unsigned int SYNTH_POSITION;
+
     AudioPluginInstance(unsigned int position);
 
     AudioPluginInstance(std::string identifier,

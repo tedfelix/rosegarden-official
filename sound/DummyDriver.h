@@ -42,7 +42,8 @@ public:
     virtual void initialise()  { m_recordComposition.clear();}
     virtual void initialisePlayback(const RealTime & /*position*/) {;}
     virtual void stopPlayback() {;}
-    virtual void resetPlayback(const RealTime & /*position*/) {;}
+    virtual void resetPlayback(const RealTime & /*old position*/,
+			       const RealTime & /*position*/) {;}
     virtual void allNotesOff()  {;}
     virtual void processNotesOff(const RealTime & /*time*/) {;}
     
@@ -74,7 +75,7 @@ public:
     // Plugin instance management
     //
     virtual void setPluginInstance(InstrumentId /*id*/,
-                                   unsigned long /*pluginId*/,
+                                   QString /*pluginIdent*/,
                                    int /*position*/) {;}
 
     virtual void removePluginInstance(InstrumentId /*id*/,
@@ -102,6 +103,8 @@ public:
     virtual void getAudioInstrumentNumbers(InstrumentId &i, int &n) {
 	i = 0; n = 0;
     }
+
+    virtual bool areClocksRunning() const { return true; }
 
 protected:
     virtual void processMidiOut(const MappedComposition & /*mC*/,
