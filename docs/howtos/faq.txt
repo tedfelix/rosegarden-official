@@ -98,6 +98,25 @@ best left to Mandrake themselves to explain.  All in all if it doesn't
 work out of the box for you then it's probably best if you just forgot
 about Mandrake 8.2 altogether and try either 8.1 or a later version.
 
+Can't build MidiArts.h
+~~~~~~~~~~~~~~~~~~~~~~
+
+If the build fails with something like:
+
+  In file included from ArtsDriver.h:30,
+                   from Sequencer.cpp:40:
+                   MidiRecord.h:25:22: MidiArts.h: No such file or directory
+                   make[2]: *** [Sequencer.lo] Error 1
+
+then you've come across our aRts build dependency problem.
+Until we get around to fixing it the workaround is to:
+
+  $ cd rosegarden/sound
+  $ make MidiArts.h
+
+and then continue with the build as normal.
+
+
 The Composition View
 --------------------
 
