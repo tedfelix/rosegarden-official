@@ -456,18 +456,18 @@ class SegmentResizer : public SegmentTool
 {
     Q_OBJECT
 public:
-    SegmentResizer(SegmentCanvas*, RosegardenGUIDoc*);
+    SegmentResizer(SegmentCanvas*, RosegardenGUIDoc*, int edgeThreshold = 10);
 
     virtual void handleMouseButtonPress(QMouseEvent*);
     virtual void handleMouseButtonRelease(QMouseEvent*);
     virtual void handleMouseMove(QMouseEvent*);
 
-protected:
-    bool cursorIsCloseEnoughToEdge(SegmentItem*, QMouseEvent*);
+    static bool cursorIsCloseEnoughToEdge(SegmentItem*, QMouseEvent*, int);
 
+protected:
     //--------------- Data members ---------------------------------
 
-    unsigned int m_edgeThreshold;
+    int m_edgeThreshold;
 };
 
 class SegmentSelector : public SegmentTool
@@ -523,6 +523,8 @@ private:
     bool m_segmentCopyMode;
     QPoint m_clickPoint;
     bool m_segmentQuickCopyDone;
+
+    SegmentTool *m_dispatchTool;
 };
 
 

@@ -1930,7 +1930,7 @@ NotationView::slotCurrentStaffDown()
 {
     if (m_staffs.size() < 2) return;
     m_staffs[m_currentStaff]->setCurrent(false);
-    if (++m_currentStaff >= m_staffs.size()) m_currentStaff = 0;
+    if (++m_currentStaff >= (int)m_staffs.size()) m_currentStaff = 0;
     m_staffs[m_currentStaff]->setCurrent(true);
     slotSetInsertCursorPosition(m_insertionTime);
 }

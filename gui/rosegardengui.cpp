@@ -485,6 +485,10 @@ void RosegardenGUIApp::initView()
 	(comp.getElapsedRealTime(m_doc->getComposition().getPosition()));
 
 
+    actionCollection()->action("select")->activate();
+
+/*!!!
+
     // Set the right track edition tool
     //
     if (comp.getNbSegments() > 0) {
@@ -506,7 +510,8 @@ void RosegardenGUIApp::initView()
         actionCollection()->action("move")->activate();
         actionCollection()->action("draw")->activate();
     }
-     
+
+*/     
 
     //
     // Transport setup

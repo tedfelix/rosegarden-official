@@ -71,7 +71,7 @@ void QCanvasRepeatRectangle::drawShape(QPainter& painter)
 {
     QCanvasRectangle::drawShape(painter);
 
-    unsigned int pos = x() + m_repeatInterval - 1,
+    int pos = (int)x() + m_repeatInterval - 1,
         width = rect().width(),
         height = rect().height();
 
@@ -861,8 +861,7 @@ SegmentPencil::SegmentPencil(SegmentCanvas *c, RosegardenGUIDoc *d)
       m_startTime(0),
       m_duration(0)
 {
-//    m_canvas->setCursor(Qt::ibeamCursor);
-
+    m_canvas->setCursor(Qt::ibeamCursor);
     kdDebug(KDEBUG_AREA) << "SegmentPencil()\n";
 }
 
@@ -1034,9 +1033,10 @@ void SegmentMover::handleMouseMove(QMouseEvent *e)
 // SegmentResizer
 //////////////////////////////
 
-SegmentResizer::SegmentResizer(SegmentCanvas *c, RosegardenGUIDoc *d)
+SegmentResizer::SegmentResizer(SegmentCanvas *c, RosegardenGUIDoc *d,
+			       int edgeThreshold)
     : SegmentTool(c, d),
-      m_edgeThreshold(10)
+      m_edgeThreshold(edgeThreshold)
 {
     m_canvas->setCursor(Qt::sizeHorCursor);
 
@@ -1047,7 +1047,7 @@ void SegmentResizer::handleMouseButtonPress(QMouseEvent *e)
 {
     SegmentItem* item = m_canvas->findSegmentClickedOn(e->pos());
 
-    if (item && cursorIsCloseEnoughToEdge(item, e)) {
+    if (item && cursorIsCloseEnoughToEdge(item, e, m_edgeThreshold)) {
         m_currentItem = item;
     }
 }
@@ -1092,9 +1092,10 @@ void SegmentResizer::handleMouseMove(QMouseEvent *e)
     m_canvas->canvas()->update();
 }
 
-bool SegmentResizer::cursorIsCloseEnoughToEdge(SegmentItem* p, QMouseEvent* e)
+bool SegmentResizer::cursorIsCloseEnoughToEdge(SegmentItem* p, QMouseEvent* e,
+					       int edgeThreshold)
 {
-    return ( abs(p->rect().x() + p->rect().width() - e->x()) < int(m_edgeThreshold));
+    return ( abs(p->rect().x() + p->rect().width() - e->x()) < edgeThreshold);
 }
 
 //////////////////////////////
@@ -1105,8 +1106,8 @@ SegmentSelector::SegmentSelector(SegmentCanvas *c, RosegardenGUIDoc *d)
     : SegmentTool(c, d),
       m_segmentAddMode(false),
       m_segmentCopyMode(false),
-      m_segmentQuickCopyDone(false)
-
+      m_segmentQuickCopyDone(false),
+      m_dispatchTool(0)
 {
     kdDebug(KDEBUG_AREA) << "SegmentSelector()\n";
 
@@ -1117,6 +1118,7 @@ SegmentSelector::SegmentSelector(SegmentCanvas *c, RosegardenGUIDoc *d)
 SegmentSelector::~SegmentSelector()
 {
     clearSelected();
+    delete m_dispatchTool;
 }
 
 void
@@ -1178,14 +1180,30 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
     // If we're in segmentAddMode then we don't clear the
     // selection vector
     //
-    if (!m_segmentAddMode)
-       clearSelected();
+    if (!m_segmentAddMode) {
+	clearSelected();
+    }
 
-    if (item)
-    {
+    if (item) {
+	
+	if (!m_segmentAddMode &&
+	    SegmentResizer::cursorIsCloseEnoughToEdge(item, e, 10)) {
+	    m_dispatchTool = new SegmentResizer(m_canvas, m_doc, 10);
+	    m_dispatchTool->handleMouseButtonPress(e);
+	    return;
+	}
+
         m_currentItem = item;
         m_clickPoint = e->pos();
         slotSelectSegmentItem(m_currentItem);
+
+    } else {
+
+	if (!m_segmentAddMode) {
+	    m_dispatchTool = new SegmentPencil(m_canvas, m_doc);
+	    m_dispatchTool->handleMouseButtonPress(e);
+	    return;
+	}
     }
  
     // Tell the RosegardenGUIView that we've selected some new Segments -
@@ -1228,7 +1246,16 @@ SegmentSelector::slotSelectSegmentItem(SegmentItem *selectedItem)
 void
 SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 {
+    if (m_dispatchTool) {
+	m_dispatchTool->handleMouseButtonRelease(e);
+	delete m_dispatchTool;
+	m_dispatchTool = 0;
+	m_canvas->setCursor(Qt::arrowCursor);
+	return;
+    }
+
     if (!m_currentItem) return;
+    m_canvas->setCursor(Qt::arrowCursor);
 
     if (m_currentItem->isSelected())
     {
@@ -1280,7 +1307,13 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 void
 SegmentSelector::handleMouseMove(QMouseEvent *e)
 {
+    if (m_dispatchTool) {
+	m_dispatchTool->handleMouseMove(e);
+	return;
+    }
+
     if (!m_currentItem) return;
+    m_canvas->setCursor(Qt::sizeAllCursor);
 
     if (m_segmentCopyMode && !m_segmentQuickCopyDone)
     {
