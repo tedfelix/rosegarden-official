@@ -16,22 +16,39 @@ more limiting.
 Build requirements
 ------------------
 
-The big requirement is KDE.  This program depends on KDE 2.1.1
-(including the kdemultimedia package) and Qt 2.2.
+The big requirement is KDE.  This program depends on KDE 2.>=1
+(including the kdemultimedia package) and Qt 2.>=2
 
 
 To compile:
 -----------
 
-You probably won't be able to just run "configure"; instead you should
-edit one of the developers' configure scripts such as "gl_configure"
-script (you just need to change the Qt and KDE2 install paths
-according to your setup) and run that.
+If you obtained the source code from CVS :
+
+Please read the "COMPILING" file from the KDE source code, about
+compiling code from CVS. You may want to use one of the developers'
+configure scripts such as "gl_configure" script (you just need to
+change the Qt and KDE2 install paths according to your setup) and run
+that. The important option is
+
+CXXFLAGS="-g3 -gstabs+ -fexceptions"
+
+before the call to 'configure', as we use exceptions in the code.
 
 Then run "make" and, if the compile succeeds, "make install".  (The
 pixmaps need to be installed to the global KDE directories before the
 application will run correctly.)
 
+
+If you obtained the code from the distribution tarball : 
+
+Just run 
+
+CXXFLAGS="-g3 -gstabs+ -fexceptions" ./configure
+
+witht the appropriate '--with-qt-dir=...' and '--prefix=...'
+options. The prefix should be the same as the one of your KDE
+installation. Then proceed with "make" and "make install".
 
 To run:
 -------
@@ -39,9 +56,11 @@ To run:
 Just run the rosegardengui application (found in the KDE bin directory
 after installation, and also in the gui/ directory of the source tree).
 
-To get the sequencer working properly, you need to use artsd and run
-the separate rosegardensequencer process.  Please read
-docs/howtos/artsd-mcop-notes for instructions.
+To get the sequencer working properly, please read
+docs/howtos/artsd-mcop-notes for instructions. The sequencer process
+is started automatically on first invocation of 'play'. If you get an
+error message saying it failed to connect the sequencer, try 'play'
+again.
 
 
 
