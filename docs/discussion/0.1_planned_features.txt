@@ -13,12 +13,17 @@ Features for release 0.1
 
 - proper saving/restoring of track part start time DONE
 
-- be able to both read and write MIDI files, even if we only handle
-  the most basic events
-
 - note insertion (by replacing rests) : DONE
 
 - note deletion
+
+- proper handling of time sigs. Tracks should be positioned at
+  absolute steps, not bars.
+
+- all the notation elegances (more precise description needed here)
+
+- be able to both read and write MIDI files, even if we only handle
+  the most basic events
 
 - basic MIDI record and playback infrastructure through aRts (RB - 18.06.01)
 
@@ -35,9 +40,9 @@ done as soon as possible
 
 - track properties dialog
 
-- moveable begin and end markers in tracks
+- setting the time default sig of newly created tracks
 
-- all the notation elegances (more precise description needed here)
+- moveable begin and end markers in tracks
 
 - show several tracks in a single notation window
 
