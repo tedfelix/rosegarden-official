@@ -1,6 +1,5 @@
-
-Rosegarden-4 v0.8
-===================
+Rosegarden-4 v0.9
+=================
 
 Rosegarden-4 is a MIDI and audio sequencer and musical notation editor.
 This is an pre-beta release of the application mainly intended for 
@@ -109,7 +108,7 @@ starting-points include:
 Authors and copyright
 ---------------------
 
-* Rosegarden-4 is Copyright 2000-2002 Guillaume Laurent, Chris Cannam
+* Rosegarden-4 is Copyright 2000-2003 Guillaume Laurent, Chris Cannam
   and Richard Bown.
 
 * The moral right of Guillaume Laurent, Chris Cannam and Richard Bown
