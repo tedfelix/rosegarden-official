@@ -20,15 +20,8 @@
 #ifndef NOTATION_COMMANDS_H
 #define NOTATION_COMMANDS_H
 
-#include "BaseProperties.h"
 #include <kcommand.h>
-#include <klocale.h>
-
 #include "basiccommand.h"
-
-namespace Rosegarden {
-    class Clipboard;
-}
 
 
 // Insertion commands
@@ -154,90 +147,6 @@ protected:
     Rosegarden::Event *m_event; // only used on 1st execute (cf bruteForceRedo)
     Rosegarden::timeT m_relayoutEndTime;
     std::string makeName(std::string);
-};
-
-
-// Cut, copy, paste, erase selection
-
-class CutNotationCommand : public CompoundCommand
-{
-public:
-    CutNotationCommand(Rosegarden::EventSelection &selection,
-			Rosegarden::Clipboard *clipboard);
-
-    static QString name() { return "Cu&t"; }
-};
-
-class CopyNotationCommand : public KCommand // no refresh needed
-{
-public:
-    CopyNotationCommand(Rosegarden::EventSelection &selection,
-			Rosegarden::Clipboard *clipboard);
-    virtual ~CopyNotationCommand();
-
-    static QString name() { return "&Copy"; }
-
-    virtual void execute();
-    virtual void unexecute();
-
-protected:
-    Rosegarden::Clipboard *m_sourceClipboard;
-    Rosegarden::Clipboard *m_targetClipboard;
-};
-
-class PasteNotationCommand : public BasicCommand
-{
-public:
-    enum PasteType {
-	PasteIntoGap,
-	PasteDestructive,
-	PasteOverlay,
-	PasteOverlayRaw,
-	OpenAndPaste
-    };
-
-    PasteNotationCommand(Rosegarden::Segment &segment,
-			 Rosegarden::Clipboard *clipboard,
-			 Rosegarden::timeT pasteTime,
-			 PasteType pasteType = getDefaultPasteType());
-
-    static QString name() { return "&Paste"; }
-
-    /// Determine whether this paste will succeed (without executing it yet)
-    bool isPossible();
-
-    virtual Rosegarden::timeT getRelayoutEndTime();
-    
-    static void setDefaultPasteType(PasteType type) { m_defaultPaste = type; }
-    static PasteType getDefaultPasteType() { return m_defaultPaste; }
-
-protected:
-    virtual void modifySegment();
-    Rosegarden::timeT getEffectiveEndTime(Rosegarden::Segment &,
-					  Rosegarden::Clipboard *,
-					  Rosegarden::timeT);
-    Rosegarden::timeT m_relayoutEndTime;
-    Rosegarden::Clipboard *m_clipboard;
-    PasteType m_pasteType;
-
-    static PasteType m_defaultPaste;
-};
-
-class EraseNotationCommand : public BasicSelectionCommand
-{
-public:
-    EraseNotationCommand(Rosegarden::EventSelection &selection);
-
-    static QString name() { return "&Erase"; }
-
-    virtual Rosegarden::timeT getRelayoutEndTime();
-
-protected:
-    virtual void modifySegment();
-
-private:
-    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
-    Rosegarden::timeT m_relayoutEndTime;
 };
 
 

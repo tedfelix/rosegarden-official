@@ -436,7 +436,7 @@ KeySignatureDialog::getKeyName(const QString &s, bool minor)
 
 
 PasteNotationDialog::PasteNotationDialog(QWidget *parent,
-					 PasteNotationCommand::PasteType defaultType) :
+					 PasteCommand::PasteType defaultType) :
     KDialogBase(parent, 0, true, i18n("Paste"), Ok | Cancel),
     m_defaultType(defaultType)
 {
@@ -445,30 +445,30 @@ PasteNotationDialog::PasteNotationDialog(QWidget *parent,
     QButtonGroup *pasteTypeGroup = new QButtonGroup
 	(1, Horizontal, i18n("Paste type"), vbox);
 
-    m_pasteIntoGapButton = new QRadioButton
+    m_restrictedButton = new QRadioButton
 	(i18n("Paste into an existing gap [\"restricted\"]"), pasteTypeGroup);
-    if (m_defaultType == PasteNotationCommand::PasteIntoGap) {
-	m_pasteIntoGapButton->setChecked(true);
+    if (m_defaultType == PasteCommand::Restricted) {
+	m_restrictedButton->setChecked(true);
     }
-    m_pasteDestructiveButton = new QRadioButton
+    m_simpleButton = new QRadioButton
 	(i18n("Erase existing events to make room [\"simple\"]"), pasteTypeGroup);
-    if (m_defaultType == PasteNotationCommand::PasteDestructive) {
-	m_pasteDestructiveButton->setChecked(true);
+    if (m_defaultType == PasteCommand::Simple) {
+	m_simpleButton->setChecked(true);
     }
     m_openAndPasteButton = new QRadioButton
 	(i18n("Move existing events out of the way [\"open-n-paste\"]"), pasteTypeGroup);
-    if (m_defaultType == PasteNotationCommand::OpenAndPaste) {
+    if (m_defaultType == PasteCommand::OpenAndPaste) {
 	m_openAndPasteButton->setChecked(true);
     }
-    m_pasteOverlayButton = new QRadioButton
+    m_noteOverlayButton = new QRadioButton
 	(i18n("Overlay notes, tying against present notes [\"note-overlay\"]"), pasteTypeGroup);
-    if (m_defaultType == PasteNotationCommand::PasteOverlay) {
-	m_pasteOverlayButton->setChecked(true);
+    if (m_defaultType == PasteCommand::NoteOverlay) {
+	m_noteOverlayButton->setChecked(true);
     }
-    m_pasteOverlayRawButton = new QRadioButton
+    m_matrixOverlayButton = new QRadioButton
 	(i18n("Overlay notes, ignoring present notes [\"matrix-overlay\"]"), pasteTypeGroup);
-    if (m_defaultType == PasteNotationCommand::PasteOverlayRaw) {
-	m_pasteOverlayRawButton->setChecked(true);
+    if (m_defaultType == PasteCommand::MatrixOverlay) {
+	m_matrixOverlayButton->setChecked(true);
     }
 
     QButtonGroup *setAsDefaultGroup = new QButtonGroup
@@ -478,31 +478,31 @@ PasteNotationDialog::PasteNotationDialog(QWidget *parent,
 	(i18n("Make this the default paste type"), setAsDefaultGroup);
     m_setAsDefaultButton->setChecked(true);
 
-    QObject::connect(m_pasteIntoGapButton, SIGNAL(released()),
+    QObject::connect(m_restrictedButton, SIGNAL(released()),
 		     this, SLOT(slotPasteTypeChanged()));
-    QObject::connect(m_pasteDestructiveButton, SIGNAL(released()),
+    QObject::connect(m_simpleButton, SIGNAL(released()),
 		     this, SLOT(slotPasteTypeChanged()));
     QObject::connect(m_openAndPasteButton, SIGNAL(released()),
 		     this, SLOT(slotPasteTypeChanged()));
-    QObject::connect(m_pasteOverlayButton, SIGNAL(released()),
+    QObject::connect(m_noteOverlayButton, SIGNAL(released()),
 		     this, SLOT(slotPasteTypeChanged()));
-    QObject::connect(m_pasteOverlayRawButton, SIGNAL(released()),
+    QObject::connect(m_matrixOverlayButton, SIGNAL(released()),
 		     this, SLOT(slotPasteTypeChanged()));
 }
 
-PasteNotationCommand::PasteType
+PasteCommand::PasteType
 PasteNotationDialog::getPasteType() const
 {
-    if (m_pasteIntoGapButton->isChecked()) {
-	return PasteNotationCommand::PasteIntoGap;
-    } else if (m_pasteDestructiveButton->isChecked()) {
-	return PasteNotationCommand::PasteDestructive;
-    } else if (m_pasteOverlayButton->isChecked()) {
-	return PasteNotationCommand::PasteOverlay;
-    } else if (m_pasteOverlayRawButton->isChecked()) {
-	return PasteNotationCommand::PasteOverlayRaw;
+    if (m_restrictedButton->isChecked()) {
+	return PasteCommand::Restricted;
+    } else if (m_simpleButton->isChecked()) {
+	return PasteCommand::Simple;
+    } else if (m_noteOverlayButton->isChecked()) {
+	return PasteCommand::NoteOverlay;
+    } else if (m_matrixOverlayButton->isChecked()) {
+	return PasteCommand::MatrixOverlay;
     } else {
-	return PasteNotationCommand::OpenAndPaste;
+	return PasteCommand::OpenAndPaste;
     }
 }
 

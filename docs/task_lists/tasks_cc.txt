@@ -44,7 +44,8 @@
     options for pasting in a gap (as currently), opening a new gap to
     paste into, and overlaying (possibly even overlaying with ties
     versus overlaying raw), and allows you to choose one of these as
-    the default paste function.  Also implement Cut-&-Close.
+    the default paste function.  [DONEish, needs some work]  Also
+    implement Cut-&-Close.
 
 11. Add choice of start-from-here or start-from-start-of-bar to time
     signature dialog.
@@ -58,6 +59,8 @@
 
 15. Ties don't always appear (e.g. load davy.mid with viability switched
     on in MidiFile.cpp)
+
+16. Parameterise property names for quantizer
 
 
 Post-0.1.3 task list (superseding older ones)

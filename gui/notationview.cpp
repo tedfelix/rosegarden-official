@@ -57,6 +57,7 @@
 #include "SegmentNotationHelper.h"
 #include "Quantizer.h"
 #include "Selection.h"
+#include "editcommands.h"
 #include "notationcommands.h"
 #include "segmentcommands.h"
 #include "dialogs.h"
@@ -1107,10 +1108,10 @@ NotationCanvasView* NotationView::getCanvasView()
 void NotationView::slotEditCut()
 {
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Cutting selection..."), statusBar());
+    KTmpStatusMsg msg(i18n("Cutting selection to clipboard..."), statusBar());
 
-    addCommandToHistory(new CutNotationCommand(*m_currentEventSelection,
-					       m_document->getClipboard()));
+    addCommandToHistory(new CutCommand(*m_currentEventSelection,
+				       m_document->getClipboard()));
 }
 
 void NotationView::slotEditCopy()
@@ -1118,8 +1119,8 @@ void NotationView::slotEditCopy()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Copying selection to clipboard..."), statusBar());
 
-    addCommandToHistory(new CopyNotationCommand(*m_currentEventSelection,
-						m_document->getClipboard()));
+    addCommandToHistory(new CopyCommand(*m_currentEventSelection,
+					m_document->getClipboard()));
 
     emit usedSelection();
 }
@@ -1156,7 +1157,7 @@ void NotationView::slotEditPaste()
 	insertionTime = (*i)->getAbsoluteTime();
     }
 
-    PasteNotationCommand *command = new PasteNotationCommand
+    PasteCommand *command = new PasteCommand
 	(segment, m_document->getClipboard(), insertionTime);
 
     if (!command->isPossible()) {
@@ -1199,15 +1200,15 @@ void NotationView::slotEditGeneralPaste()
     }
 
     PasteNotationDialog *dialog = new PasteNotationDialog
-	(this, PasteNotationCommand::getDefaultPasteType());
+	(this, PasteCommand::getDefaultPasteType());
     if (dialog->exec() == QDialog::Accepted) {
 
-	PasteNotationCommand::PasteType type = dialog->getPasteType();
+	PasteCommand::PasteType type = dialog->getPasteType();
 	if (dialog->setAsDefault()) {
-	    PasteNotationCommand::setDefaultPasteType(type);
+	    PasteCommand::setDefaultPasteType(type);
 	}
 
-	PasteNotationCommand *command = new PasteNotationCommand
+	PasteCommand *command = new PasteCommand
 	    (segment, m_document->getClipboard(), insertionTime, type);
 
 	if (!command->isPossible()) {

@@ -45,6 +45,7 @@
 #include "barbuttons.h"
 #include "loopruler.h"
 #include "pianokeyboard.h"
+#include "editcommands.h"
 
 #include "rosedebug.h"
 
@@ -452,20 +453,10 @@ void MatrixView::slotEditCut()
     kdDebug(KDEBUG_AREA) << "MatrixView::slotEditCut()\n";
 
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Cutting selection..."), statusBar());
+    KTmpStatusMsg msg(i18n("Cutting selection to clipboard..."), statusBar());
 
-    kdDebug(KDEBUG_AREA) << "MatrixView::slotEditCut() : cutting selection\n";
-
-//!!!    m_currentEventSelection->cut();
-
-    emit usedSelection();
-
-    refreshSegment(&m_currentEventSelection->getSegment(),
-		   m_currentEventSelection->getBeginTime(),
-		   m_currentEventSelection->getEndTime());
-
-    kdDebug(KDEBUG_AREA) << "MatrixView::slotEditCut() : selection duration = "
-                         << m_currentEventSelection->getTotalDuration() << endl;
+    addCommandToHistory(new CutCommand(*m_currentEventSelection,
+				       m_document->getClipboard()));
 }
 
 void MatrixView::slotEditCopy()
@@ -473,11 +464,31 @@ void MatrixView::slotEditCopy()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Copying selection to clipboard..."), statusBar());
 
-//!!!    m_currentEventSelection->copy();
+    addCommandToHistory(new CopyCommand(*m_currentEventSelection,
+					m_document->getClipboard()));
 
     emit usedSelection();
 }
 
 void MatrixView::slotEditPaste()
 {
+    if (m_document->getClipboard()->isEmpty()) {
+        slotStatusHelpMsg(i18n("Clipboard is empty"));
+        return;
+    }
+
+    KTmpStatusMsg msg(i18n("Inserting clipboard contents..."), statusBar());
+
+    double ix = m_staffs[0]->getLayoutXOfInsertCursor();
+    timeT time = m_hlayout->getTimeForX(ix);
+    
+    PasteCommand *command = new PasteCommand
+	(m_staffs[0]->getSegment(), m_document->getClipboard(), time,
+	 PasteCommand::MatrixOverlay);
+
+    if (!command->isPossible()) {
+	slotStatusHelpMsg(i18n("Couldn't paste at this point"));
+    } else {
+	addCommandToHistory(command);
+    }
 }

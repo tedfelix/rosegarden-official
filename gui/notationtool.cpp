@@ -39,6 +39,7 @@
 #include "qcanvassimplesprite.h"
 
 #include "notationcommands.h"
+#include "editcommands.h"
 
 #include "rosedebug.h"
 #include "colours.h"
@@ -885,7 +886,7 @@ void NotationSelectionPaster::handleLeftButtonPress(Rosegarden::timeT,
     timeT time = (*closestElement)->getAbsoluteTime();
 
     Segment& segment = staff->getSegment();
-    PasteNotationCommand *command = new PasteNotationCommand
+    PasteCommand *command = new PasteCommand
 	(segment, m_parentView->getDocument()->getClipboard(), time);
 
     if (!command->isPossible()) {

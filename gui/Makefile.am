@@ -9,6 +9,7 @@ rosegarden_SOURCES = \
 	colours.cpp \
 	command.cpp \
 	dialogs.cpp \
+	editcommands.cpp \
 	edittool.cpp \
 	editview.cpp \
         instrumentparameterbox.cpp \
