@@ -164,11 +164,13 @@ public:
 
     void drawNote(const NotePixmapParameters &parameters,
 		  QPainter &painter, int x, int y);
-//!!! omitted for now because of some subtleties    void drawRest(const NotePixmapParameters &parameters,
-//		  QPainter &painter, int x, int y);
+    void drawRest(const NotePixmapParameters &parameters,
+		  QPainter &painter, int x, int y);
     void drawHairpin(int length, bool isCrescendo,
 		     QPainter &painter, int x, int y);
     void drawSlur(int length, int dy, bool above,
+		  QPainter &painter, int x, int y);
+    void drawText(const Rosegarden::Text &text,
 		  QPainter &painter, int x, int y);
 
     // Other support methods for producing pixmaps for other contexts:
@@ -227,11 +229,13 @@ protected:
 
     void drawNoteAux(const NotePixmapParameters &parameters,
 		     QPainter *painter, int x, int y);
-//    void drawRestAux(const NotePixmapParameters &parameters,
-//		     QPainter *painter, int x, int y);
+    void drawRestAux(const NotePixmapParameters &parameters,
+		     QPainter *painter, int x, int y);
     void drawHairpinAux(int length, bool isCrescendo,
 			QPainter *painter, int x, int y);
     void drawSlurAux(int length, int dy, bool above, bool smooth, QPoint &hotspot,
+		     QPainter *painter, int x, int y);
+    void drawTextAux(const Rosegarden::Text &text,
 		     QPainter *painter, int x, int y);
 
     int getStemLength(const NotePixmapParameters &) const;
@@ -303,7 +307,7 @@ protected:
 
     int m_generatedWidth;
     int m_generatedHeight;
-    bool m_inDrawMethod;
+    bool m_inPrinterMethod;
     
     NotePixmapPainter *m_p;
 

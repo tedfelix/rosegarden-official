@@ -763,6 +763,8 @@ NotationStaff::isDirectlyPrintable(ViewElement *velt)
 {
     if (!m_printPainter) return false;
     return (velt->event()->isa(Rosegarden::Note::EventType) ||
+	    velt->event()->isa(Rosegarden::Note::EventRestType) ||
+	    velt->event()->isa(Rosegarden::Text::EventType) ||
 	    velt->event()->isa(Rosegarden::Indication::EventType));
 }
 
@@ -802,6 +804,12 @@ NotationStaff::renderSingleElement(ViewElement *velt,
 	m_notePixmapFactory->setSelected(selected);
 	int z = selected ? 3 : 0;
 
+	// these are actually only used for the printer stuff
+	LinedStaffCoords coords;
+	if (m_printPainter) 
+	    coords = getCanvasCoordsForLayoutCoords
+		(elt->getLayoutX(), (int)elt->getLayoutY());
+
 	if (elt->isNote()) {
 
 	    canvasItem = makeNoteSprite(elt);
@@ -822,7 +830,14 @@ NotationStaff::renderSingleElement(ViewElement *velt,
 		restParams.setDots(dots);
 		setTuplingParameters(elt, restParams);
 		restParams.setQuantized(false);
-		pixmap = m_notePixmapFactory->makeRestPixmap(restParams);
+
+		if (m_printPainter) {
+		    m_notePixmapFactory->drawRest
+			(restParams,
+			 *m_printPainter, int(coords.first), coords.second);
+		} else {
+		    pixmap = m_notePixmapFactory->makeRestPixmap(restParams);
+		}
 	    }
 
 	} else if (elt->event()->isa(Clef::EventType)) {
@@ -855,8 +870,14 @@ NotationStaff::renderSingleElement(ViewElement *velt,
 	    } else {
 
 		try {
-		    pixmap = m_notePixmapFactory->makeTextPixmap
-			(Rosegarden::Text(*elt->event()));
+		    if (m_printPainter) {
+			m_notePixmapFactory->drawText
+			    (Rosegarden::Text(*elt->event()),
+			     *m_printPainter, int(coords.first), coords.second);
+		    } else {
+			pixmap = m_notePixmapFactory->makeTextPixmap
+			    (Rosegarden::Text(*elt->event()));
+		    }
 		} catch (Rosegarden::Exception e) { // Text ctor failed
 		    NOTATION_DEBUG << "Bad text event" << endl;
 		}
@@ -903,8 +924,6 @@ NotationStaff::renderSingleElement(ViewElement *velt,
 		indicationType == Indication::Decrescendo) {
 
 		if (m_printPainter) {
-		    LinedStaffCoords coords = getCanvasCoordsForLayoutCoords
-			(elt->getLayoutX(), (int)elt->getLayoutY());
 		    m_notePixmapFactory->drawHairpin
 			(length, indicationType == Indication::Crescendo,
 			 *m_printPainter, int(coords.first), coords.second);
@@ -924,8 +943,6 @@ NotationStaff::renderSingleElement(ViewElement *velt,
 		elt->event()->get<Int>(properties.SLUR_LENGTH, length);
 
 		if (m_printPainter) {
-		    LinedStaffCoords coords = getCanvasCoordsForLayoutCoords
-			(elt->getLayoutX(), (int)elt->getLayoutY());
 		    m_notePixmapFactory->drawSlur
 			(length, dy, above,
 			 *m_printPainter, int(coords.first), coords.second);

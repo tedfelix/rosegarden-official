@@ -247,7 +247,7 @@ NotePixmapFactory::NotePixmapFactory(std::string fontName, int size) :
     m_generatedMask(0),
     m_generatedWidth(-1),
     m_generatedHeight(-1),
-    m_inDrawMethod(false),
+    m_inPrinterMethod(false),
     m_p(new NotePixmapPainter()),
     m_dottedRestCache(new NotePixmapCache)
 {
@@ -268,7 +268,7 @@ NotePixmapFactory::NotePixmapFactory(const NotePixmapFactory &npf) :
     m_generatedMask(0),
     m_generatedWidth(-1),
     m_generatedHeight(-1),
-    m_inDrawMethod(false),
+    m_inPrinterMethod(false),
     m_p(new NotePixmapPainter()),
     m_dottedRestCache(new NotePixmapCache)
 {
@@ -430,16 +430,16 @@ NotePixmapFactory::drawNote(const NotePixmapParameters &params,
 			    QPainter &painter, int x, int y)
 {
     Rosegarden::Profiler profiler("NotePixmapFactory::drawNote");
-    m_inDrawMethod = true;
+    m_inPrinterMethod = true;
     drawNoteAux(params, &painter, x, y);
-    m_inDrawMethod = false;
+    m_inPrinterMethod = false;
 }
 
 void
 NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
 			       QPainter *painter, int x, int y)
 {
-    NoteFont::CharacterType charType = m_inDrawMethod ? NoteFont::Printer : NoteFont::Screen;
+    NoteFont::CharacterType charType = m_inPrinterMethod ? NoteFont::Printer : NoteFont::Screen;
 
     bool drawFlag = params.m_drawFlag;
 
@@ -651,7 +651,6 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
     
     if (painter) {
 	painter->restore();
-//	painter->translate(-(x - m_left), -(y - m_above));
     }
 }
 
@@ -745,7 +744,7 @@ NotePixmapFactory::drawAccidental(Accidental a)
     NoteCharacter ac
 	(m_font->getCharacter
 	 (m_style->getAccidentalCharName(a),
-	  m_inDrawMethod ? NoteFont::Printer : NoteFont::Screen));
+	  m_inPrinterMethod ? NoteFont::Printer : NoteFont::Screen));
 
     QPoint ah(m_font->getHotspot(m_style->getAccidentalCharName(a)));
 
@@ -808,7 +807,7 @@ NotePixmapFactory::drawMarks(bool isStemmed,
 	    NoteCharacter character
 		(m_font->getCharacter
 		 (m_style->getMarkCharName(params.m_marks[i]),
-		  m_inDrawMethod ? NoteFont::Printer : NoteFont::Screen,
+		  m_inPrinterMethod ? NoteFont::Printer : NoteFont::Screen,
 		  ((params.m_marks[i] == Rosegarden::Marks::Pause) &&
 		   !markAbove)));
 
@@ -826,7 +825,7 @@ NotePixmapFactory::drawMarks(bool isStemmed,
 	    QRect bounds = m_textMarkFontMetrics.boundingRect(text);
 	    
 	    m_p->painter().setFont(m_textMarkFont);
-	    m_p->maskPainter().setFont(m_textMarkFont);
+	    if (!m_inPrinterMethod) m_p->maskPainter().setFont(m_textMarkFont);
 
 	    int x = m_left + m_noteBodyWidth/2 - bounds.width()/2;
 	    int y = (markAbove ? (m_above - dy - 3) :
@@ -1023,7 +1022,7 @@ NotePixmapFactory::drawFlags(int flagCount,
     NoteCharacter flagChar;
     bool found = m_font->getCharacter(m_style->getFlagCharName(flagCount),
 				      flagChar,
-				      m_inDrawMethod ? NoteFont::Printer : NoteFont::Screen,
+				      m_inPrinterMethod ? NoteFont::Printer : NoteFont::Screen,
 				      !params.m_stemGoesUp);
     
     if (!found) {
@@ -1032,7 +1031,7 @@ NotePixmapFactory::drawFlags(int flagCount,
 
 	found = m_font->getCharacter(m_style->getPartialFlagCharName(false),
 				     flagChar,
-				     m_inDrawMethod ? NoteFont::Printer : NoteFont::Screen,
+				     m_inPrinterMethod ? NoteFont::Printer : NoteFont::Screen,
 				     !params.m_stemGoesUp);
 
 	if (!found) {
@@ -1047,7 +1046,7 @@ NotePixmapFactory::drawFlags(int flagCount,
 	    (flagCount > 1 ?
 	     m_font->getCharacter(m_style->getPartialFlagCharName(true),
 				  oneFlagChar,
-				  m_inDrawMethod ? NoteFont::Printer : NoteFont::Screen,
+				  m_inPrinterMethod ? NoteFont::Printer : NoteFont::Screen,
 				  !params.m_stemGoesUp) : false);
 	
 	unsigned int flagSpace = m_noteBodyHeight;
@@ -1063,7 +1062,7 @@ NotePixmapFactory::drawFlags(int flagCount,
 	    if (params.m_stemGoesUp) y += flag * flagSpace;
 	    else y -= (flag * flagSpace) + flagChar.getHeight();
 
-	    if (!m_inDrawMethod) {
+	    if (!m_inPrinterMethod) {
 	    
 		m_p->end();
 
@@ -1137,7 +1136,7 @@ void
 NotePixmapFactory::drawShallowLine(int x0, int y0, int x1, int y1,
                                    int thickness, bool smooth)
 {
-    if (!smooth || m_inDrawMethod || (y0 == y1)) {
+    if (!smooth || m_inPrinterMethod || (y0 == y1)) {
 
 	if (thickness < 4) {
 	    for (int i = 0; i < thickness; ++i) {
@@ -1405,7 +1404,7 @@ NotePixmapFactory::drawTuplingLine(const NotePixmapParameters &params)
     }
 
     m_p->painter().setFont(m_tupletCountFont);
-    m_p->maskPainter().setFont(m_tupletCountFont);
+    if (!m_inPrinterMethod) m_p->maskPainter().setFont(m_tupletCountFont);
 
     int textX = endX + countSpace;
     int textY = endY + cr.height()/2;
@@ -1502,7 +1501,34 @@ NotePixmapFactory::makeRestPixmap(const NotePixmapParameters &params)
 	}
     }
 
+    drawRestAux(params, 0, 0, 0);
+
+    QPoint hotspot(m_font->getHotspot(charName));
+    QCanvasPixmap* canvasMap = makeCanvasPixmap(hotspot);
+    if (encache) {
+	m_dottedRestCache->insert(std::pair<CharName, QCanvasPixmap*>
+				  (charName, new QCanvasPixmap
+				   (*canvasMap, hotspot)));
+    }
+    return canvasMap;
+}
+
+void
+NotePixmapFactory::drawRest(const NotePixmapParameters &params,
+			    QPainter &painter, int x, int y)
+{
+    Rosegarden::Profiler profiler("NotePixmapFactory::drawRest");
+    m_inPrinterMethod = true;
+    drawRestAux(params, &painter, x, y);
+    m_inPrinterMethod = false;
+}
+    
+void
+NotePixmapFactory::drawRestAux(const NotePixmapParameters &params,
+			       QPainter *painter, int x, int y)
+{
     NoteCharacter character;
+    CharName charName(m_style->getRestCharName(params.m_noteType));
 
     if (m_selected || params.m_selected) {
 	character = m_font->getCharacterColoured
@@ -1530,15 +1556,21 @@ NotePixmapFactory::makeRestPixmap(const NotePixmapParameters &params)
     m_noteBodyHeight = character.getHeight();
 
     if (params.m_tupletCount) makeRoomForTuplingLine(params);
+    QPoint hotspot(m_font->getHotspot(charName));
 
-    createPixmapAndMask(m_noteBodyWidth + m_left + m_right,
-                        m_noteBodyHeight + m_above + m_below);
+    if (painter) {
+	painter->save();
+	m_p->beginExternal(painter);
+	painter->translate(x - m_left, y - m_above - hotspot.y());
+    } else {
+	createPixmapAndMask(m_noteBodyWidth + m_left + m_right,
+			    m_noteBodyHeight + m_above + m_below);
+    }
 
     m_p->drawNoteCharacter(m_left, m_above, character);
 
     if (params.m_tupletCount) drawTuplingLine(params);
 
-    QPoint hotspot(m_font->getHotspot(charName));
     hotspot.setX(m_left);
     hotspot.setY(m_above + hotspot.y());
 
@@ -1553,13 +1585,9 @@ NotePixmapFactory::makeRestPixmap(const NotePixmapParameters &params)
         m_p->drawNoteCharacter(x, restY, dot); 
     }
 
-    QCanvasPixmap* canvasMap = makeCanvasPixmap(hotspot);
-    if (encache) {
-	m_dottedRestCache->insert(std::pair<CharName, QCanvasPixmap*>
-				  (charName, new QCanvasPixmap
-				   (*canvasMap, hotspot)));
+    if (painter) {
+	painter->restore();
     }
-    return canvasMap;
 }
 
 
@@ -1596,7 +1624,7 @@ NotePixmapFactory::makeClefPixmap(const Clef &clef)
     m_p->drawNoteCharacter(0, oct < 0 ? 0 : rect.height(), plain);
 
     m_p->painter().setFont(octaveFont);
-    m_p->maskPainter().setFont(octaveFont);
+    if (!m_inPrinterMethod) m_p->maskPainter().setFont(octaveFont);
 
     m_p->drawText(plain.getWidth()/2 - rect.width()/2,
 		  oct < 0 ? plain.getHeight() + rect.height() - 1 :
@@ -1851,9 +1879,9 @@ NotePixmapFactory::drawHairpin(int length, bool isCrescendo,
 			       QPainter &painter, int x, int y)
 {
     Rosegarden::Profiler profiler("NotePixmapFactory::drawHairpin");
-    m_inDrawMethod = true;
+    m_inPrinterMethod = true;
     drawHairpinAux(length, isCrescendo, &painter, x, y);
-    m_inDrawMethod = false;
+    m_inPrinterMethod = false;
 }
 
 void
@@ -1946,9 +1974,9 @@ NotePixmapFactory::drawSlur(int length, int dy, bool above,
 {
     Rosegarden::Profiler profiler("NotePixmapFactory::drawSlur");
     QPoint hotspot;
-    m_inDrawMethod = true;
+    m_inPrinterMethod = true;
     drawSlurAux(length, dy, above, false, hotspot, &painter, x, y);
-    m_inDrawMethod = false;
+    m_inPrinterMethod = false;
 }
 
 void
@@ -2118,7 +2146,7 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
 	}
 	
 	m_p->painter().setFont(m_bigTimeSigFont);
-	m_p->maskPainter().setFont(m_bigTimeSigFont);
+  	if (!m_inPrinterMethod) m_p->maskPainter().setFont(m_bigTimeSigFont);
 
 	m_p->drawText(0, r.height() + dy, c);
 
@@ -2194,7 +2222,7 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
 	}
 
 	m_p->painter().setFont(m_timeSigFont);
-	m_p->maskPainter().setFont(m_timeSigFont);
+	if (!m_inPrinterMethod) m_p->maskPainter().setFont(m_timeSigFont);
 
 	x = (width - numR.width()) / 2 - 1;
 	m_p->drawText(x, denomR.height(), numS);
@@ -2306,13 +2334,40 @@ NotePixmapFactory::makeTextPixmap(const Rosegarden::Text &text)
 {
     Rosegarden::Profiler profiler("NotePixmapFactory::makeTextPixmap");
 
-    QString s(strtoqstr(text.getText()));
     std::string type(text.getTextType());
 
     if (type == Rosegarden::Text::Annotation) {
 	return makeAnnotationPixmap(text);
     }
 
+    drawTextAux(text, 0, 0, 0);
+    return makeCanvasPixmap(QPoint(2, 2), true);
+}
+
+void
+NotePixmapFactory::drawText(const Rosegarden::Text &text,
+			    QPainter &painter, int x, int y)
+{
+    Rosegarden::Profiler profiler("NotePixmapFactory::drawText");
+
+    std::string type(text.getTextType());
+
+    if (type == Rosegarden::Text::Annotation) {
+	QCanvasPixmap *map = makeAnnotationPixmap(text);
+	painter.drawPixmap(x, y, *map);
+	return;
+    }
+
+    m_inPrinterMethod = true;
+    drawTextAux(text, &painter, x, y);
+    m_inPrinterMethod = false;
+}
+
+void
+NotePixmapFactory::drawTextAux(const Rosegarden::Text &text,
+			       QPainter *painter, int x, int y)
+{
+    QString s(strtoqstr(text.getText()));
     QFont textFont(getTextFont(text));
     QFontMetrics textMetrics(textFont);
     
@@ -2320,17 +2375,26 @@ NotePixmapFactory::makeTextPixmap(const Rosegarden::Text &text)
     int width = textMetrics.width(s) + 2*offset;
     int height = textMetrics.height() + 2*offset;
 
-    createPixmapAndMask(width, height);
+    if (painter) {
+	painter->save();
+	m_p->beginExternal(painter);
+	painter->translate(x - offset, y - offset);
+    } else {
+	createPixmapAndMask(width, height);
+    }
     
     if (m_selected) m_p->painter().setPen(RosegardenGUIColours::SelectedElement);
 
     m_p->painter().setFont(textFont);
-    m_p->maskPainter().setFont(textFont);
+    if (!m_inPrinterMethod) m_p->maskPainter().setFont(textFont);
 
     m_p->drawText(offset, textMetrics.ascent() + offset, s);
 
     m_p->painter().setPen(Qt::black);
-    return makeCanvasPixmap(QPoint(2, 2), true);
+
+    if (painter) {
+	painter->restore();
+    }
 }
     
 QCanvasPixmap*
@@ -2359,7 +2423,7 @@ NotePixmapFactory::makeAnnotationPixmap(const Rosegarden::Text &text)
     if (m_selected) m_p->painter().setPen(RosegardenGUIColours::SelectedElement);
 
     m_p->painter().setFont(textFont);
-    m_p->maskPainter().setFont(textFont);
+    if (!m_inPrinterMethod) m_p->maskPainter().setFont(textFont);
 
     m_p->painter().setBrush(RosegardenGUIColours::TextAnnotationBackground);
     m_p->drawRect(0, 0, pixmapWidth, pixmapHeight);

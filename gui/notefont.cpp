@@ -1042,25 +1042,31 @@ NoteFontMap::dump() const
 }
 
 
+class NoteCharacterDrawRep : public QPointArray
+{
+public:
+    NoteCharacterDrawRep(int size = 0) : QPointArray(size) { }
+};
+
 NoteCharacter::NoteCharacter() :
     m_hotspot(0, 0),
     m_pixmap(new QPixmap()),
-    m_lineSegments(0)
+    m_rep(0)
 {
 }
 
 NoteCharacter::NoteCharacter(QPixmap pixmap,
-			     QPoint hotspot, QPointArray *lineSegments) :
+			     QPoint hotspot, NoteCharacterDrawRep *rep) :
     m_hotspot(hotspot),
     m_pixmap(new QPixmap(pixmap)),
-    m_lineSegments(lineSegments)
+    m_rep(rep)
 {
 }
 
 NoteCharacter::NoteCharacter(const NoteCharacter &c) :
     m_hotspot(c.m_hotspot),
     m_pixmap(new QPixmap(*c.m_pixmap)),
-    m_lineSegments(c.m_lineSegments)
+    m_rep(c.m_rep)
 {
     // nothing else
 }
@@ -1071,7 +1077,7 @@ NoteCharacter::operator=(const NoteCharacter &c)
     if (&c == this) return *this;
     m_hotspot = c.m_hotspot;
     m_pixmap = new QPixmap(*c.m_pixmap);
-    m_lineSegments = c.m_lineSegments;
+    m_rep = c.m_rep;
     return *this;
 }
 
@@ -1113,16 +1119,16 @@ NoteCharacter::getCanvasPixmap() const
 void
 NoteCharacter::draw(QPainter *painter, int x, int y) const
 {
-    if (!m_lineSegments) {
+    if (!m_rep) {
 
 	painter->drawPixmap(x, y, *m_pixmap);
 
     } else {
 
-	QPointArray a(m_lineSegments->size());
+	NoteCharacterDrawRep a(m_rep->size());
 
-	for (unsigned int i = 0; i < m_lineSegments->size(); ++i) {
-	    QPoint p(m_lineSegments->point(i));
+	for (unsigned int i = 0; i < m_rep->size(); ++i) {
+	    QPoint p(m_rep->point(i));
 	    a.setPoint(i, p.x() + x, p.y() + y);
 	}
 
@@ -1133,14 +1139,14 @@ NoteCharacter::draw(QPainter *painter, int x, int y) const
 void
 NoteCharacter::drawMask(QPainter *painter, int x, int y) const
 {
-    if (!m_lineSegments && m_pixmap->mask()) {
+    if (!m_rep && m_pixmap->mask()) {
 	painter->drawPixmap(x, y, *(m_pixmap->mask()));
     }
 }
     
 
 NoteFont::FontPixmapMap *NoteFont::m_fontPixmapMap = 0;
-NoteFont::LineSegmentsMap *NoteFont::m_lineCache = 0;
+NoteFont::DrawRepMap *NoteFont::m_drawRepMap = 0;
 QPixmap *NoteFont::m_blankPixmap = 0;
 
 NoteFont::NoteFont(string fontName, int size) :
@@ -1277,16 +1283,14 @@ NoteFont::add(CharName charName, bool inverted, QPixmap *pixmap) const
     }
 }
 
-QPointArray *
-NoteFont::lookupLineSegments(QPixmap *pixmap) const
+NoteCharacterDrawRep *
+NoteFont::lookupDrawRep(QPixmap *pixmap) const
 {
-    //!!! profile this to make sure the cache is working OK
+    if (!m_drawRepMap) m_drawRepMap = new DrawRepMap();
 
-    if (!m_lineCache) m_lineCache = new LineSegmentsMap();
+    if (m_drawRepMap->find(pixmap) != m_drawRepMap->end()) {
 
-    if (m_lineCache->find(pixmap) != m_lineCache->end()) {
-
-	return (*m_lineCache)[pixmap];
+	return (*m_drawRepMap)[pixmap];
 
     } else {
 	
@@ -1297,7 +1301,7 @@ NoteFont::lookupLineSegments(QPixmap *pixmap) const
 	    image = image.convertDepth(1, Qt::MonoOnly | Qt::ThresholdDither);
 	}
 
-	QPointArray *a = new QPointArray();
+	NoteCharacterDrawRep *a = new NoteCharacterDrawRep();
 
 	for (int yi = 0; yi < image.height(); ++yi) {
 
@@ -1330,7 +1334,7 @@ NoteFont::lookupLineSegments(QPixmap *pixmap) const
 	    }
 	}
 
-	(*m_lineCache)[pixmap] = a;
+	(*m_drawRepMap)[pixmap] = a;
 	return a;
     }
 }
@@ -1454,26 +1458,6 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
     return false;
 }
 
-QPixmap
-NoteFont::getPixmap(CharName charName, bool inverted) const
-{
-    QPixmap p;
-    (void)getPixmap(charName, p, inverted);
-    return p;
-}
-
-QCanvasPixmap*
-NoteFont::getCanvasPixmap(CharName charName, bool inverted) const
-{
-    QPixmap p;
-    (void)getPixmap(charName, p, inverted);
-
-    int x, y;
-    (void)getHotspot(charName, x, y, inverted);
-
-    return new QCanvasPixmap(p, QPoint(x, y));
-}
-
 bool
 NoteFont::getColouredPixmap(CharName baseCharName, QPixmap &pixmap,
                             int hue, int minValue, bool inverted) const
@@ -1506,27 +1490,6 @@ NoteFont::getColouredPixmap(CharName baseCharName, QPixmap &pixmap,
     add(charName, inverted, found);
     pixmap = *found;
     return ok;
-}
-
-QPixmap
-NoteFont::getColouredPixmap(CharName charName, int hue, int minValue, bool inverted) const
-{
-    QPixmap p;
-    (void)getColouredPixmap(charName, p, hue, minValue, inverted);
-    return p;
-}
-
-QCanvasPixmap*
-NoteFont::getColouredCanvasPixmap(CharName charName, int hue, int minValue,
-                                  bool inverted) const
-{
-    QPixmap p;
-    (void)getColouredPixmap(charName, p, hue, minValue, inverted);
-
-    int x, y;
-    (void)getHotspot(charName, x, y, inverted);
-
-    return new QCanvasPixmap(p, QPoint(x, y));
 }
 
 CharName
@@ -1606,15 +1569,15 @@ NoteFont::getCharacter(CharName charName,
 	// Get the pointer direct from cache (depends on earlier call
 	// to getPixmap to put it in the cache if available)
 
-	QPointArray *points = 0;
 	QPixmap *pmapptr = 0;
 	bool found = lookup(charName, inverted, pmapptr);
 
-	if (found && pmapptr) points = lookupLineSegments(pmapptr);
+	NoteCharacterDrawRep *rep = 0;
+	if (found && pmapptr) rep = lookupDrawRep(pmapptr);
 
 	character = NoteCharacter(pixmap,
 				  getHotspot(charName, inverted),
-				  points);
+				  rep);
     }
 
     return true;
@@ -1639,9 +1602,6 @@ NoteFont::getCharacterColoured(CharName charName,
 {
     QPixmap pixmap;
     if (!getColouredPixmap(charName, pixmap, hue, minValue, inverted)) {
-
-	NOTATION_DEBUG << "NoteFont::getCharacterColoured: No coloured pixmap available for " << charName.getName() << " in hue " << hue << "!" << endl;
-
 	return false;
     }
 
@@ -1656,16 +1616,16 @@ NoteFont::getCharacterColoured(CharName charName,
 	// Get the pointer direct from cache (depends on earlier call
 	// to getPixmap to put it in the cache if available)
 
-	QPointArray *points = 0;
 	QPixmap *pmapptr = 0;
 	CharName cCharName(getNameWithColour(charName, hue));
 	bool found = lookup(cCharName, inverted, pmapptr);
 
-	if (found && pmapptr) points = lookupLineSegments(pmapptr);
+	NoteCharacterDrawRep *rep = 0;
+	if (found && pmapptr) rep = lookupDrawRep(pmapptr);
 
 	character = NoteCharacter(pixmap,
 				  getHotspot(charName, inverted),
-				  points);
+				  rep);
     }
 
     return true;

@@ -335,6 +335,20 @@ private:
 };
 
 
+class NoteCharacterDrawRep;
+
+/**
+ * NoteCharacter knows how to draw a character from a font.  It may be
+ * optimised for screen (using QPixmap underneath to produce
+ * low-resolution colour or greyscale glyphs) or printer (using some
+ * internal representation to draw in high-resolution monochrome on a
+ * print device).  You can use screen characters on a printer and vice
+ * versa, but the performance and quality might not be as good.
+ *
+ * NoteCharacter objects are always constructed by the NoteFont, never
+ * directly.
+ */
+
 class NoteCharacter
 {
 public:
@@ -356,11 +370,11 @@ public:
 
 private:
     friend class NoteFont;
-    NoteCharacter(QPixmap pixmap, QPoint hotspot, QPointArray *lineSegments);
+    NoteCharacter(QPixmap pixmap, QPoint hotspot, NoteCharacterDrawRep *rep);
 
-    QPoint        m_hotspot;
-    QPixmap      *m_pixmap; // I own this
-    QPointArray  *m_lineSegments; // I don't own this, it's stored in the NoteFont
+    QPoint m_hotspot;
+    QPixmap *m_pixmap; // I own this
+    NoteCharacterDrawRep *m_rep; // I don't own this, it's a reference to a static in the NoteFont
 };
     
 
@@ -397,59 +411,29 @@ public:
     /// Returns false + thickness=1 if not specified
     bool getLegerLineThickness(unsigned int &thickness) const;
 
-
+    /// Returns false if not available
     bool getCharacter(CharName charName,
 		      NoteCharacter &character,
 		      CharacterType type = Screen,
 		      bool inverted = false);
 
+    /// Returns an empty character if not available
     NoteCharacter getCharacter(CharName charName,
 			       CharacterType type = Screen,
 			       bool inverted = false);
 
+    /// Returns false if not available
     bool getCharacterColoured(CharName charName,
 			      int hue, int minValue,
 			      NoteCharacter &character,
 			      CharacterType type = Screen,
 			      bool inverted = false);
 
+    /// Returns an empty character if not available
     NoteCharacter getCharacterColoured(CharName charName,
 				       int hue, int minValue,
 				       CharacterType type = Screen,
 				       bool inverted = false);
-
-protected:
-
-    /// Returns false + blank pixmap if it can't find the right one
-    bool getPixmap(CharName charName, QPixmap &pixmap,
-                   bool inverted = false) const;
-
-    /// Ignores problems, returning blank pixmap if necessary
-    QPixmap getPixmap(CharName charName, bool inverted = false) const;
-
-    /// Ignores problems, returning blank canvas pixmap if necessary
-    QCanvasPixmap* getCanvasPixmap
-    (CharName charName, bool inverted = false) const;
-
-
-
-    /// Returns false + blank pixmap if it can't find the right one
-    bool getColouredPixmap(CharName charName, QPixmap &pixmap,
-                           int hue, int minValue,
-			   bool inverted = false) const;
-
-    /// Ignores problems, returning blank pixmap if necessary
-    QPixmap getColouredPixmap(CharName charName, int hue, int minValue,
-                              bool inverted = false) const;
-
-    /// Ignores problems, returning blank canvas pixmap if necessary
-    QCanvasPixmap* getColouredCanvasPixmap
-    (CharName charName, int hue, int minValue,
-     bool inverted = false) const;
-
-
-
-public:
 
     /// Returns false + dimensions of blank pixmap if none found
     bool getDimensions(CharName charName, int &x, int &y,
@@ -469,6 +453,15 @@ public:
     QPoint getHotspot(CharName charName, bool inverted = false) const;
 
 private:
+    /// Returns false + blank pixmap if it can't find the right one
+    bool getPixmap(CharName charName, QPixmap &pixmap,
+                   bool inverted = false) const;
+
+    /// Returns false + blank pixmap if it can't find the right one
+    bool getColouredPixmap(CharName charName, QPixmap &pixmap,
+                           int hue, int minValue,
+			   bool inverted = false) const;
+
     friend class NoteFontFactory;
     NoteFont(std::string fontName, int size = 0);
     std::set<int> getSizes() const { return m_fontMap.getSizes(); }
@@ -476,7 +469,7 @@ private:
     bool lookup(CharName charName, bool inverted, QPixmap *&pixmap) const;
     void add(CharName charName, bool inverted, QPixmap *pixmap) const;
 
-    QPointArray *lookupLineSegments(QPixmap *pixmap) const;
+    NoteCharacterDrawRep *lookupDrawRep(QPixmap *pixmap) const;
 
     CharName getNameWithColour(CharName origName, int hue) const;
     QPixmap *recolour(QPixmap in, int hue, int minValue) const;
@@ -485,7 +478,7 @@ private:
     typedef std::map<CharName, PixmapPair>     PixmapMap;
     typedef std::map<std::string, PixmapMap *> FontPixmapMap;
 
-    typedef std::map<QPixmap *, QPointArray *> LineSegmentsMap;
+    typedef std::map<QPixmap *, NoteCharacterDrawRep *> DrawRepMap;
 
     //--------------- Data members ---------------------------------
 
@@ -495,7 +488,7 @@ private:
     mutable PixmapMap *m_map; // pointer at a member of m_fontPixmapMap
 
     static FontPixmapMap *m_fontPixmapMap;
-    static LineSegmentsMap *m_lineCache;
+    static DrawRepMap *m_drawRepMap;
 
     static QPixmap *m_blankPixmap;
 };
