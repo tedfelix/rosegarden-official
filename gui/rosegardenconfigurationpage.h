@@ -38,7 +38,7 @@ class QPushButton;
 class QRadioButton;
 class QLabel;
 class QCheckBox;
-class QListView;
+class QTable;
 
 namespace Rosegarden
 {
@@ -330,7 +330,7 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    QListView *m_metadata;
+    QTable *m_metadata;
 };
 
 

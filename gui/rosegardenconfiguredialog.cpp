@@ -35,7 +35,7 @@
 #include <qpushbutton.h>
 #include <qradiobutton.h>
 #include <qlineedit.h>
-#include <qlistview.h>
+#include <qtable.h>
 #include <qtooltip.h>
 #include <qvbox.h>
 
@@ -1076,28 +1076,32 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
     
     addTab(frame, i18n("Summary"));
 
-    frame = new QFrame(m_tabWidget);
+    // Create the "properties" QTable
+    //
+    frame  = new QFrame(m_tabWidget);
     layout = new QGridLayout(frame, 1, 1, 10, 5);
 
-    m_metadata = new QListView(frame);
-    m_metadata->addColumn("Name");
-    m_metadata->addColumn("Value");
+    m_metadata = new QTable(10, 2, frame);
+    m_metadata->setSorting(true);
+    m_metadata->horizontalHeader()->setLabel(0, i18n("Name"));
+    m_metadata->horizontalHeader()->setLabel(1, i18n("Value"));
+    m_metadata->setSelectionMode(QTable::NoSelection);
 
+    m_metadata->horizontalHeader()->setClickEnabled(true);
+    m_metadata->horizontalHeader()->setSortIndicator(0);
+
+    m_metadata->verticalHeader()->setClickEnabled(false);
+    m_metadata->verticalHeader()->setResizeEnabled(false);
+
+    // Fill it up with the values
     Rosegarden::Configuration &metadata = doc->getComposition().getMetadata();
-    std::vector<std::string> names(metadata.getPropertyNames());
+    std::vector<std::string> names = metadata.getPropertyNames();
     for (unsigned int i = 0; i < names.size(); ++i) {
-	new QListViewItem(m_metadata, strtoqstr(names[i]),
-			  strtoqstr(metadata.get<String>(names[i])));
+	m_metadata->setText(i, 0, strtoqstr(names[i]));
+        m_metadata->setText(i, 1, strtoqstr(metadata.get<String>(names[i])));
     }
 
     layout->addWidget(m_metadata, 0, 0);
-
-/*!!!    layout->addWidget(new QLabel(i18n("Copyright"), frame), 3, 0);
-    m_copyright = new QLineEdit
-	(strtoqstr(doc->getComposition().getCopyrightNote()), frame);
-    m_copyright->setMinimumWidth(300);
-    layout->addWidget(m_copyright, 3, 1);
-*/
 
     addTab(frame, i18n("Description"));
 
