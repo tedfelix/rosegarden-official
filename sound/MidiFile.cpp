@@ -97,7 +97,7 @@ MidiFile::~MidiFile()
 // of the STL strings.
 //
 //
-const long
+long
 MidiFile::midiBytesToLong(const string& bytes)
 {
     if (bytes.length() != 4) {
@@ -114,7 +114,7 @@ MidiFile::midiBytesToLong(const string& bytes)
     return longRet;
 }
 
-const int
+int
 MidiFile::midiBytesToInt(const string& bytes)
 {
     if (bytes.length() != 2) {
@@ -136,7 +136,7 @@ MidiFile::midiBytesToInt(const string& bytes)
 // can read only a specified number of bytes held in m_trackByteCount.
 //
 //
-const string
+string
 MidiFile::getMidiBytes(ifstream* midiFile, unsigned long numberOfBytes)
 {
     string stringRet;
@@ -211,7 +211,7 @@ MidiFile::getMidiBytes(ifstream* midiFile, unsigned long numberOfBytes)
 // Get a long number of variable length from the MIDI byte stream.
 //
 //
-const long
+long
 MidiFile::getNumberFromMidiBytes(ifstream* midiFile)
 {
     long longRet = 0;
