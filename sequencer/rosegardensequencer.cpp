@@ -1480,11 +1480,10 @@ void RosegardenSequencerApp::rationalisePlayingAudio(const std::vector<int> &seg
             // We're found an audio segment that shouldn't be playing - stop it
             // through the normal channels.  Send a cancel event to the driver.
             //
-            MappedEvent *mE = new MappedEvent();
-            mE->setType(Rosegarden::MappedEvent::AudioCancel);
-            mE->setRuntimeSegmentId(*it);
-            processMappedEvent(*mE);
-            delete mE;
+            MappedEvent mE;
+            mE.setType(Rosegarden::MappedEvent::AudioCancel);
+            mE.setRuntimeSegmentId(*it);
+            processMappedEvent(mE);
         }
     }
 
