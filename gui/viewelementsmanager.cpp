@@ -47,6 +47,12 @@ ViewElementsManager::notationElementList(Track::iterator from,
 
     for (Track::iterator i = from; i != to; ++i) {
         NotationElement *el = new NotationElement(*i);
+
+//         kdDebug(KDEBUG_AREA) << "ViewElementsManager::notationElementList() : inserting "
+//                              << (*i)->getType() << " of duration "
+//                              << (*i)->getDuration() << " at time " 
+//                              << (*i)->getAbsoluteTime() << endl;
+
         m_notationElements->insert(el);
     }
 
@@ -56,6 +62,9 @@ ViewElementsManager::notationElementList(Track::iterator from,
 void
 ViewElementsManager::insert(NotationElement *e)
 {
+//     kdDebug(KDEBUG_AREA) << "ViewElementsManager::insert("
+//                          << e->event()->getType() << ")\n";
+
     m_notationElements->insert(e);
     m_track.insert(e->event());
 }

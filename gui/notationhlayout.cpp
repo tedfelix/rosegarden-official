@@ -141,6 +141,11 @@ NotationHLayout::preparse(NotationElementList::iterator from,
         NotationElement *el = (*it);
         absoluteTime = el->getAbsoluteTime();
 
+//         kdDebug(KDEBUG_AREA) << "NotationHLayout::preparse() : "
+//                              << el->event()->getType() << " of duration "
+//                              << el->event()->getDuration() << " at time "
+//                              << absoluteTime << endl;
+
         if (startNewBar) {
             addNewBar(it, absoluteTime, -1,
                       getIdealBarWidth(fixedWidth, shortest, npf,
