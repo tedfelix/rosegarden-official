@@ -477,9 +477,10 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 			   ("notefont",
 			    strtoqstr(NotePixmapFactory::getDefaultFont())));
 
-    m_fontSize = m_config->readUnsignedNumEntry
-	((segments.size() > 1 ? "multistaffnotesize" : "singlestaffnotesize"),
-	 NotePixmapFactory::getDefaultSize(m_fontName));
+
+    // Force largest font size
+    std::vector<int> sizes = NotePixmapFactory::getAvailableSizes(m_fontName);
+    m_fontSize = sizes[sizes.size()-1];
 
     int defaultSpacing = m_config->readNumEntry("spacing", 100);
     m_hlayout.setSpacing(defaultSpacing);
@@ -490,12 +491,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     for (int type = Note::Shortest; type <= Note::Longest; ++type) {
 	m_legatoDurations.push_back((int)(Note(type).getDuration()));
     }
-    Rosegarden::Quantizer q(Rosegarden::Quantizer::RawEventData,
-			    getViewLocalPropertyPrefix() + "Q",
-			    Rosegarden::Quantizer::LegatoQuantize,
-			    defaultSmoothing);
-    *m_legatoQuantizer = q;
-    
+
     setBackgroundMode(PaletteBase);
 
     QPaintDeviceMetrics pdm(printer);
@@ -505,7 +501,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
              << pdm.width() << ", " << pdm.height()
              << " - printer resolution : " << printer->resolution() << "\n";
 
-    tCanvas->resize(pdm.width(), pdm.height());
+    unsigned int scaleFactor = 5;
+    tCanvas->resize(pdm.width() / scaleFactor, pdm.height() / scaleFactor);
     
     setCanvasView(new NotationCanvasView(*this, m_horizontalScrollBar,
                                          tCanvas, getCentralFrame()));
@@ -1972,11 +1969,12 @@ void NotationView::print(KPrinter* printer)
         return;
     }
     
+    unsigned int scaleFactor = 5;
 
     QPaintDeviceMetrics pdm(printer);
 
     unsigned int pageHeight = pdm.height(),
-        staffRowSpacing = m_staffs[0]->getRowSpacing();
+        staffRowSpacing = m_staffs[0]->getRowSpacing() * scaleFactor;
 
     RG_DEBUG << "Page height : " << pageHeight << endl;
 
@@ -1986,26 +1984,30 @@ void NotationView::print(KPrinter* printer)
     }
 
     unsigned int nbStaffRowsPerPage = pageHeight / staffRowSpacing;
-    int printSliceHeight = staffRowSpacing * nbStaffRowsPerPage;
+    int printSliceHeight = staffRowSpacing * nbStaffRowsPerPage / scaleFactor;
 
     NotationStaff* lastStaff = m_staffs[getStaffCount() - 1];
 
     int printY = 0,
-        fullHeight = lastStaff->getTotalHeight() + lastStaff->getY();
+        fullHeight = (lastStaff->getTotalHeight() + lastStaff->getY());
     
     QPainter printpainter(printer);
 
-    QWMatrix translator;
-    
-    RG_DEBUG << "Printing total height " << fullHeight
+    RG_DEBUG << "Printing total height "  << fullHeight
              << ", nbStaffRowsPerPage = " << nbStaffRowsPerPage
-             << ", printSliceHeight = " << printSliceHeight
+             << ", printSliceHeight = "   << printSliceHeight
+             << ", printer Resolution = " << printer->resolution()
              << endl;
 
     unsigned int pageNum = 1;
 
     unsigned int canvasWidth = getCanvasView()->canvas()->width(),
         canvasHeight =  getCanvasView()->canvas()->height();
+
+    QWMatrix scale;
+
+    scale.scale(scaleFactor, scaleFactor);
+    printpainter.scale(scaleFactor, scaleFactor);
 
     // Stuff text items for debugging
 //     for (int y = 0; y < canvasHeight; y += 10) {
@@ -2014,7 +2016,6 @@ void NotationView::print(KPrinter* printer)
 //         t->setY(y);
 //         t->show();
 //     }
-
 //     getCanvasView()->canvas()->update();
     // end of stuffing
 
@@ -2024,8 +2025,10 @@ void NotationView::print(KPrinter* printer)
                  << printY + printSliceHeight
                  << endl;
 
-        getCanvasView()->canvas()->drawArea(QRect(0, printY,
-                                                  canvasWidth, printSliceHeight),
+        QRect printRect(0, printY,
+                        canvasWidth, printSliceHeight);
+        
+        getCanvasView()->canvas()->drawArea(printRect,
                                             &printpainter);
 
         printpainter.translate(0, -printSliceHeight);
