@@ -929,7 +929,6 @@ size_t CompositionMmapper::getSegmentFileSize(Segment* s)
 
 MetronomeMmapper::MetronomeMmapper(RosegardenGUIDoc* doc)
     : SegmentMmapper(doc, 0, createFileName()),
-      m_deleteMetronome(false),
       m_metronome(0), // no metronome to begin with
       m_tickDuration(0, 100000000)
 {
@@ -1025,7 +1024,7 @@ MetronomeMmapper::MetronomeMmapper(RosegardenGUIDoc* doc)
 MetronomeMmapper::~MetronomeMmapper()
 {
     SEQMAN_DEBUG << "~MetronomeMmapper " << this << endl;
-    if (m_deleteMetronome) delete m_metronome;
+    delete m_metronome;
 }
 
 Rosegarden::InstrumentId MetronomeMmapper::getMetronomeInstrument()
