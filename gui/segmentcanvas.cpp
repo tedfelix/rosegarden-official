@@ -1031,6 +1031,11 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
     m_canvas->setSnapGrain(false);
 
     TrackId track = m_canvas->grid().getYBin(e->pos().y());
+
+    // Don't do anything if the user clicked beyond the track buttons
+    //
+    if (track >= m_doc->getComposition().getNbTracks()) return;
+
     timeT time = m_canvas->grid().snapX(e->pos().x(), SnapGrid::SnapLeft);
     timeT duration = m_canvas->grid().getSnapTime(e->pos().x());
     if (duration == 0) duration = Note(Note::Shortest).getDuration();
@@ -1507,6 +1512,15 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 	    it->second->setStartTime(m_canvas->grid().snapX(it->first.x() + x));
 
 	    TrackId track = m_canvas->grid().getYBin(it->first.y() + y);
+
+            // Make sure we don't set a non-existing track
+            // TODO: make this suck less. Either the tool should
+            // not allow it in the first place, or we automatically
+            // create new tracks - might make undo very tricky though
+            //
+            if (track >= m_doc->getComposition().getNbTracks()) 
+                track = m_doc->getComposition().getNbTracks() - 1;
+
 	    it->second->setTrack(track);
 	}
 
