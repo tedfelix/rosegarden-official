@@ -174,7 +174,7 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
     QGroupBox *keyFrame = new QGroupBox
 	(1, Horizontal, i18n("Key signature"), vbox);
 
-    QGroupBox *buttonFrame = new QGroupBox
+    QGroupBox *buttonFrame = new QButtonGroup
 	(1, Horizontal, i18n("Scope"), vbox);
     
     QButtonGroup *conversionFrame = new QButtonGroup
