@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # Guillaume Laurent <glaurent@telegraph-road.org>, 2003
-# Burli <didierburli@hotmail.com>, 2003
+# Burli <didierburli@hotmail.com>, 2003,2004
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "POT-Creation-Date: 2003-09-14 17:57+0200\n"
-"PO-Revision-Date: 2003-11-28 21:29+0000\n"
+"PO-Revision-Date: 2004-02-09 22:03+0000\n"
 "Last-Translator: Burli <didierburli@hotmail.com>\n"
 "Language-Team: Français <fr@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -126,7 +126,7 @@ msgstr "Guillaume Laurent - Didier Burli"
 msgid ""
 "_: EMAIL OF TRANSLATORS\n"
 "Your emails"
-msgstr "glaurent@telegraph-road.org - didierburli@hotmail.com"
+msgstr "glaurent@telegraph-road.org - didierburli@bluewin.ch"
 
 #: notationvlayout.cpp:145
 msgid ""
@@ -474,7 +474,7 @@ msgstr "Octave &Inférieur"
 
 #: editview.cpp:772
 msgid "Estimated time signature shown"
-msgstr "Voir la Signature du Temps estimée"
+msgstr "Afficher la Signature du Temps estimée"
 
 #: tips.cpp:3
 msgid ""
@@ -763,7 +763,7 @@ msgstr ""
 "<p>...que vous pouvez voir la différence entre la performance et "
 "la durée d'affichage\n"
 "des notes quantifiées dans l'éditeur de partitions?<br><br>\n"
-"Utilisez <b>Configuration -> Voir la règle des notes brutes</b> pour activer\n"
+"Utilisez <b>Configuration -> Afficher la règle des notes brutes</b> pour activer\n"
 "cette option<br><br>\n"
 "<i>Notez que cette option n'est pas visible lors de la mise en page.</i></p>\n"
 
@@ -803,7 +803,7 @@ msgid ""
 msgstr ""
 "<p>...que vous pouvez définir une boucle dans la fenêtre pricipale, en cliquant et en vous "
 "déplaçant sur la règlette de temps avec la touche Shift enfoncée?  (Si la règlette "
-"n'est pas visible, utilisez <b>Configuration -> Voir les règlettes</b>.)</p>\n"
+"n'est pas visible, utilisez <b>Configuration -> Afficher les règlettes</b>.)</p>\n"
 
 #: tips.cpp:159
 msgid ""
@@ -1033,7 +1033,7 @@ msgstr "&Enlever tous les fichiers audio"
 
 #: notationcommands.h:598
 msgid "Fi&x Notation Quantization"
-msgstr ""
+msgstr "Fi&xer la quantisation de la notation"
 
 #: notationcommands.h:629
 msgid "&Interpret..."
@@ -1046,7 +1046,7 @@ msgid ""
 "control)\n"
 " and restart."
 msgstr ""
-"Le lancement du service JACK audio daemon a échoué.  L'audio sera désactivé.\n"
+"Le lancement du daemon JACK audio a échoué.  L'audio sera désactivé.\n"
 "Veuillez vérifier votre configuration (Configuration->Configurer Rosegarden->Sequencer->JACK "
 "control)\n"
 " et redémarrez."
@@ -1057,7 +1057,7 @@ msgstr "Démarrage du séquenceur..."
 
 #: rosegardengui.cpp:170
 msgid "Initialising plugin manager..."
-msgstr "Initialisation du gestionnaire des plugins"
+msgstr "Initialisation du gestionnaire des plugins..."
 
 #: rosegardengui.cpp:176
 msgid "Initialising view..."
@@ -1129,63 +1129,63 @@ msgstr "Exporter fichier M&up..."
 
 #: rosegardengui.cpp:336 notationview.cpp:1655
 msgid "Show T&ools Toolbar"
-msgstr "Voir &Outils barre d'outil"
+msgstr "Afficher barre d'outil &Outils"
 
 #: rosegardengui.cpp:340
 msgid "Show Trac&ks Toolbar"
-msgstr "Voir barre d'outil &Pistes"
+msgstr "Afficher barre d'outil &Pistes"
 
 #: rosegardengui.cpp:344
 msgid "Show &Editors Toolbar"
-msgstr "Voir barre d'outil &Editeurs"
+msgstr "Afficher barre d'outil &Editeurs"
 
 #: rosegardengui.cpp:348 notationview.cpp:1667
 msgid "Show Trans&port Toolbar"
-msgstr "Voir barre d'outil Trans&port"
+msgstr "Afficher barre d'outil Trans&port"
 
 #: rosegardengui.cpp:352
 msgid "Show &Zoom Toolbar"
-msgstr "Voir barre d'outil &Zoom"
+msgstr "Afficher barre d'outil &Zoom"
 
 #: rosegardengui.cpp:358
 msgid "Show Tra&nsport"
-msgstr "Voir Tra&nsport"
+msgstr "Afficher Tra&nsport"
 
 #: rosegardengui.cpp:363
 msgid "Show Track &Labels"
-msgstr "Voir Pistes et &Etiquettes"
+msgstr "Afficher Pistes et &Etiquettes"
 
 #: rosegardengui.cpp:368
 msgid "Show &Segment Parameters"
-msgstr "Voir paramètres de &Segment"
+msgstr "Afficher paramètres de &Segment"
 
 #: rosegardengui.cpp:373
 msgid "Show &Instrument Parameters"
-msgstr "Voir paramètres &Instrument"
+msgstr "Afficher paramètres &Instrument"
 
 #: rosegardengui.cpp:378
 msgid "Show R&ulers"
-msgstr "Voir &Règlettes"
+msgstr "Afficher &Règlettes"
 
 #: rosegardengui.cpp:383
 msgid "Show Te&mpo Ruler"
-msgstr "Voir règlette te&mpo"
+msgstr "Afficher règlette te&mpo"
 
 #: rosegardengui.cpp:388
 msgid "Show Cho&rd Name Ruler"
-msgstr "Voir règlette nom de l'acco&rd"
+msgstr "Afficher règlette nom de l'acco&rd"
 
 #: rosegardengui.cpp:393
 msgid "Show Segment Pre&views"
-msgstr "Voir les pré&visualisations de segment"
+msgstr "Afficher les pré&visualisations de segment"
 
 #: rosegardengui.cpp:398
 msgid "Toggle &All of the Above"
-msgstr ""
+msgstr "Changer &tout les choix ci-dessus"
 
 #: rosegardengui.cpp:406
 msgid "Show Tip of the &Day"
-msgstr "Voir l' &Astuce du jour"
+msgstr "Afficher l' &Astuce du jour"
 
 #: rosegardengui.cpp:438 notationview.cpp:1316 matrixview.cpp:415
 msgid "&Select"
@@ -1690,7 +1690,7 @@ msgstr "Entrer la nouvelle étiquette"
 
 #: rosegardengui.cpp:4472
 msgid "Sending MIDI panic..."
-msgstr ""
+msgstr "Envoi MIDI panic..."
 
 #: rosegardengui.cpp:4523
 msgid "Are you sure you want to save this as your default studio?"
@@ -1798,7 +1798,7 @@ msgstr "Sélectionner &Tout"
 
 #: notationview.cpp:1340 editcommands.h:77
 msgid "C&ut and Close"
-msgstr ""
+msgstr "Co&uper et fermer"
 
 #: notationview.cpp:1344
 msgid "Pa&ste..."
@@ -1806,11 +1806,11 @@ msgstr "Co&ller..."
 
 #: notationview.cpp:1358
 msgid "&Linear Layout"
-msgstr ""
+msgstr "Layout &linéaire"
 
 #: notationview.cpp:1364
 msgid "&Continuous Page Layout"
-msgstr ""
+msgstr "Layout &Continu"
 
 #: notationview.cpp:1370
 msgid "&Multiple Page Layout"
@@ -1818,19 +1818,19 @@ msgstr "Mise en page &Multiple"
 
 #: notationview.cpp:1375 matrixview.cpp:631
 msgid "Show Ch&ord Name Ruler"
-msgstr "Voir Règlette &Noms accords"
+msgstr "Afficher Règlette &Noms accords"
 
 #: notationview.cpp:1379
 msgid "Show Ra&w Note Ruler"
-msgstr "Voir Règlette Note &Brute"
+msgstr "Afficher Règlette Note &Brute"
 
 #: notationview.cpp:1383 matrixview.cpp:635
 msgid "Show &Tempo Ruler"
-msgstr "Voir Règlette &Tempo"
+msgstr "Afficher Règlette &Tempo"
 
 #: notationview.cpp:1387
 msgid "Show &Annotations"
-msgstr "Voir &Annotations"
+msgstr "Afficher &Annotations"
 
 #: notationview.cpp:1391
 msgid "Open L&yric Editor"
@@ -1842,11 +1842,11 @@ msgstr "Mode insertion &Triolet"
 
 #: notationview.cpp:1438
 msgid "C&hord Insert Mode"
-msgstr "Mode Insertion &Accords"
+msgstr "Mode insertion &Accords"
 
 #: notationview.cpp:1602
 msgid "&Dump selected events to stderr"
-msgstr ""
+msgstr "&Vider les événements sél. vers stderr"
 
 #: notationview.cpp:1636
 msgid "&None"
@@ -1854,43 +1854,43 @@ msgstr "&Aucun"
 
 #: notationview.cpp:1656
 msgid "Show &Notes Toolbar"
-msgstr "Voir Règlette &Notes"
+msgstr "Afficher règlette &Notes"
 
 #: notationview.cpp:1657
 msgid "Show &Rests Toolbar"
-msgstr "Voir Règlette &Silences"
+msgstr "Afficher règlette &Silences"
 
 #: notationview.cpp:1658
 msgid "Show &Accidentals Toolbar"
-msgstr "Voir règlette &Altérations"
+msgstr "Afficher règlette &Altérations"
 
 #: notationview.cpp:1659
 msgid "Show Cle&fs Toolbar"
-msgstr "Voir Règlettes &Clefs"
+msgstr "Afficher règlette &Clefs"
 
 #: notationview.cpp:1661
 msgid "Show &Marks Toolbar"
-msgstr ""
+msgstr "Afficher règlette &Marques"
 
 #: notationview.cpp:1663
 msgid "Show &Group Toolbar"
-msgstr "Voir Règlettes &Groupes"
+msgstr "Afficher règlettes &Groupes"
 
 #: notationview.cpp:1665
 msgid "Show &Layout Toolbar"
-msgstr "Voir Règlettes &Mise en Page"
+msgstr "Afficher règlette &Mise en Page"
 
 #: notationview.cpp:1669
 msgid "Show M&eta Toolbar"
-msgstr "M&eta Toolbar"
+msgstr "Barre d'outil M&eta"
 
 #: notationview.cpp:1683 matrixview.cpp:496
 msgid "Cursor &Back"
-msgstr ""
+msgstr "&Reculer curseur"
 
 #: notationview.cpp:1687 matrixview.cpp:500
 msgid "Cursor &Forward"
-msgstr ""
+msgstr "&Avancer curseur"
 
 #: notationview.cpp:1691 matrixview.cpp:504
 msgid "Cursor Ba&ck Bar"
@@ -1902,11 +1902,11 @@ msgstr ""
 
 #: notationview.cpp:1699 matrixview.cpp:512
 msgid "Cursor Back and Se&lect"
-msgstr ""
+msgstr "Reculer curseur et Sé&lectionner"
 
 #: notationview.cpp:1703 matrixview.cpp:516
 msgid "Cursor Forward and &Select"
-msgstr ""
+msgstr "Avancer curseur et &Sélectionner"
 
 #: notationview.cpp:1707 matrixview.cpp:520
 msgid "Cursor Back Bar and Select"
@@ -1918,11 +1918,11 @@ msgstr ""
 
 #: notationview.cpp:1721 matrixview.cpp:528
 msgid "Cursor to St&art"
-msgstr ""
+msgstr "Curseur au &Début"
 
 #: notationview.cpp:1725 matrixview.cpp:532
 msgid "Cursor to &End"
-msgstr ""
+msgstr "Curseur à la &Fin"
 
 #: notationview.cpp:1729
 msgid "Cursor &Up Staff"
@@ -1946,7 +1946,7 @@ msgstr "&Solo"
 
 #: notationview.cpp:1789 matrixview.cpp:589
 msgid "Set Loop to Selection"
-msgstr ""
+msgstr "Créer boucle avec la sélection"
 
 #: notationview.cpp:1793 matrixview.cpp:593
 msgid "Clear L&oop"
@@ -1958,7 +1958,7 @@ msgstr "Effacer Sélection"
 
 #: notationview.cpp:1804 matrixview.cpp:602
 msgid "&Filter Selection"
-msgstr ""
+msgstr "&Filtrer la sélection"
 
 #: notationview.cpp:1856
 msgid "%1 pixel"
@@ -2006,7 +2006,7 @@ msgstr "  Pas de Sélection "
 
 #: notationview.cpp:2725
 msgid "Sizing and allocating canvas..."
-msgstr ""
+msgstr "Dimensionnement et allocation du canvas..."
 
 #: notationview.cpp:2846
 msgid "note"
@@ -2123,7 +2123,7 @@ msgstr "Groupes"
 
 #: rc.cpp:43
 msgid "Meta Toolbar"
-msgstr ""
+msgstr "Barre d'outil Meta"
 
 #: rc.cpp:44
 msgid "Layout Toolbar"
@@ -2171,7 +2171,7 @@ msgstr "Transport"
 
 #: rc.cpp:61 rosegardentransport.cpp:1721
 msgid "Show additional controls"
-msgstr "Voir autres contrôles"
+msgstr "Afficher autres contrôles"
 
 #: rc.cpp:63 rosegardentransport.cpp:1723
 msgid "Switch between real time, musical time, and SMPTE frames"
@@ -2247,7 +2247,7 @@ msgstr "MESURE"
 
 #: rc.cpp:86 rosegardentransport.cpp:1746
 msgid "Stops playback or recording."
-msgstr ""
+msgstr "Arrêter le Playback ou l'enregistrement."
 
 #: rc.cpp:88 rosegardentransport.cpp:1748
 msgid "Rewind to beginning"
@@ -2265,11 +2265,11 @@ msgstr "Cacher Autres Contrôles"
 
 #: rc.cpp:93 rosegardentransport.cpp:1753
 msgid "Panic Button"
-msgstr ""
+msgstr "Boutton Panic"
 
 #: rc.cpp:94 rosegardentransport.cpp:1754
 msgid "Resets all MIDI devices if you've got stuck notes"
-msgstr ""
+msgstr "Reseter tous les périph. MIDI si vous avez des notes bloquées"
 
 #: rc.cpp:96 rosegardentransport.cpp:1756 rosegardenconfigurationpage.h:452
 msgid "Metronome"
@@ -2285,7 +2285,7 @@ msgstr "Solo"
 
 #: rc.cpp:100 rosegardentransport.cpp:1760
 msgid "Mutes all but the currently selected track"
-msgstr ""
+msgstr "Ettouffer les autres pistes"
 
 #: rc.cpp:102 rosegardentransport.cpp:1762 segmentcommands.cpp:526
 #: deviceeditor.cpp:142 deviceeditor.cpp:365
@@ -2294,7 +2294,7 @@ msgstr "Enregistrer"
 
 #: rc.cpp:103 rosegardentransport.cpp:1763
 msgid "Record either MIDI or audio"
-msgstr ""
+msgstr "Enregistrer Audio ou MIDI"
 
 #: rc.cpp:105 rosegardentransport.cpp:1765
 msgid "Loop"
@@ -2306,7 +2306,7 @@ msgstr ""
 
 #: rc.cpp:107 rosegardentransport.cpp:1767
 msgid "Shows MIDI activity in and out of Rosegarden"
-msgstr ""
+msgstr "Affiche l'activité MIDI, au sein de Rosegarden, ou en dehors"
 
 #: rc.cpp:108 rc.cpp:111 rosegardentransport.cpp:1768
 #: rosegardentransport.cpp:1771
@@ -2331,7 +2331,7 @@ msgstr "Signature Temps"
 
 #: dialogs.cpp:155 dialogs.cpp:332 dialogs.cpp:2425
 msgid "Scope"
-msgstr ""
+msgstr "Portée"
 
 #: dialogs.cpp:164
 msgid "Insertion point is at start of bar %1."
@@ -2363,7 +2363,7 @@ msgstr ""
 
 #: dialogs.cpp:198
 msgid "Show as common time"
-msgstr ""
+msgstr "Afficher comme temps commun"
 
 #: dialogs.cpp:201
 msgid "Normalize subsequent rests"
@@ -2371,7 +2371,7 @@ msgstr ""
 
 #: dialogs.cpp:275
 msgid "Display as common time"
-msgstr ""
+msgstr "Afficher comme temps commun"
 
 #: dialogs.cpp:279
 msgid "Display as cut common time"
@@ -2427,11 +2427,11 @@ msgstr "Clef inconnue"
 
 #: dialogs.cpp:611
 msgid "Paste type"
-msgstr ""
+msgstr "Type de collage"
 
 #: dialogs.cpp:631
 msgid "Make this the default paste type"
-msgstr ""
+msgstr "En faire le type de collage par défaut"
 
 #: dialogs.cpp:663
 msgid "Tuplet"
@@ -3954,7 +3954,7 @@ msgstr ""
 
 #: rosegardenconfiguredialog.cpp:458
 msgid "Show notation-quantized notes in a different colour"
-msgstr "Voir les notes quantifiées dans une couleur différente"
+msgstr "Afficher les notes quantifiées dans une couleur différente"
 
 #: rosegardenconfiguredialog.cpp:463
 msgid "Layout"
@@ -4130,7 +4130,7 @@ msgstr "Pas de Driver"
 
 #: rosegardenconfiguredialog.cpp:988
 msgid "Show detailed status"
-msgstr "Voir statut détaillé"
+msgstr "Afficher statut détaillé"
 
 #: rosegardenconfiguredialog.cpp:996
 msgid ""
