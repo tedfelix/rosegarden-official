@@ -265,15 +265,16 @@ AlsaDriver::shutdown()
 #endif
 
     // to ensure that only one thread does the closing
+    //!!! race condition here, should lock
     if (_threadAlsaClosing) return;
+    _threadAlsaClosing = true;
 
-    if (_threadAlsaClosing == false && m_midiHandle)
+    if (m_midiHandle)
     {
 #ifdef DEBUG_ALSA
         std::cerr << "AlsaDriver::shutdown - closing MIDI client" << std::endl;
 #endif
 
-        _threadAlsaClosing = true;
         snd_seq_stop_queue(m_midiHandle, m_queue, 0);
         snd_seq_close(m_midiHandle);
         m_midiHandle = 0;
@@ -284,6 +285,9 @@ AlsaDriver::shutdown()
     std::cout << "AlsaDriver::shutdown - unloading LADSPA" << std::endl;
 #endif
     m_studio->unloadAllPluginLibraries();
+#ifdef DEBUG_ALSA
+    std::cout << "AlsaDriver::shutdown - unloading LADSPA done" << std::endl;
+#endif
 #endif // HAVE_LADSPA
 
 #ifdef HAVE_LIBJACK
@@ -2770,6 +2774,9 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
                 // All initialisation will occur in the disk thread.
                 //
                 AudioFile *aF = getAudioFile((*i)->getAudioID());
+
+		std::cout << "Creating playable audio file: start marker is " << (*i)->getAudioStartMarker() << ", event time " << adjustedEventTime << ", duration " << (*i)->getDuration() << std::endl;
+
                 PlayableAudioFile *audioFile =
                     new PlayableAudioFile((*i)->getInstrument(),
                                           aF,
