@@ -183,7 +183,7 @@ public slots:
 private:
 
     bool m_firstTimeout;
-
+    bool m_shown;
 };
 
 #endif // _WIDGETS_H_

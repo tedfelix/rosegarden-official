@@ -161,7 +161,8 @@ RosegardenProgressDialog::RosegardenProgressDialog(QWidget *creator,
                                                    WFlags f):
     QProgressDialog(creator, name, modal, f),
     Rosegarden::Progress(100), // default to percent
-    m_firstTimeout(true)
+    m_firstTimeout(true),
+    m_shown(false)
 {
     setCaption(i18n("Processing..."));
     QTimer::singleShot(700, this, SLOT(slotTimerElapsed()));
@@ -188,7 +189,8 @@ RosegardenProgressDialog::RosegardenProgressDialog(
                         modal,
                         f | WDestructiveClose),
         Rosegarden::Progress(100), // default to percent
-        m_firstTimeout(true)
+        m_firstTimeout(true),
+	m_shown(false)
 {
     setCaption(i18n("Processing..."));
     QTimer::singleShot(700, this, SLOT(slotTimerElapsed()));
@@ -208,8 +210,10 @@ RosegardenProgressDialog::setCompleted(int value)
 {
     if (value > m_max)
         m_value = m_max;
+    else
+	m_value = value; //???
 
-    setProgress(value);
+    if (m_shown) setProgress(value);
 }
 
 void
@@ -236,7 +240,9 @@ RosegardenProgressDialog::slotTimerElapsed()
 void
 RosegardenProgressDialog::slotShowMyself()
 {
+    setProgress(m_value);
     show();
+    m_shown = true;
 
     // re-set the cursor
     //QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
