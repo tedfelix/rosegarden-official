@@ -1,0 +1,79 @@
+
+Rosegarden 2.1 file format -- an approximate grammar
+====================================================
+
+There is no formal definition for the Rosegarden 2.1 file format,
+beyond that found in the source code (editor/src/IO.c in RG2.1 and the
+partial reimplementation in RosegardenPCCTS.g in the abandoned GNOME
+RG3 project).  But here's a rough approximation.
+
+Key:
+     something -> a literal
+     Something -> a literal
+     SOMETHING -> an expression defined elsewhere in the grammar
+     [something] -> an expression you can work out for yourself!
+     e.g. [n] -> an integer
+     a | b -> a or b
+     ( a ) -> a (just grouping)
+     a* -> zero or more of a
+     a+ -> one or more of a
+     \n -> carriage return
+     // -> a comment
+
+We assume that whitespace is generally ignored (including
+carriage-returns, except where ending a LONG_STRING).
+
+Oh, and use RG2.1's glazunov.rose file for testing.  If you can read
+that, you can probably read anything.
+
+
+COMPOSITION := HEADER ( STAFF )* FOOTER
+
+HEADER := [RG21_format_string] STAFF_COUNT
+
+STAFF_COUNT := ( Staves | Staffs ) [n]
+
+STAFF := NAME ITEMS
+
+NAME := Name LONG_STRING
+
+LONG_STRING := [A-Za-z 0-9]*\n
+
+SHORT_STRING := [^ ]+
+
+ITEMS := ( GROUP | MARK_ITEM | CHORD_ITEM | CLEF_ITEM | KEY_ITEM |
+           REST_ITEM | TEXT_ITEM | METRONOME_ITEM ) *
+
+GROUP := Group GROUP_TYPE ( ITEMS ) End      // also, groups cannot nest
+
+GROUP_TYPE := Beamed | ( Tupled [n] [m] )
+
+MARK_ITEM := ( START_MARK | END_MARK )       // Marks are slurs, hairpins etc
+
+START_MARK := Mark start [n] SHORT_STRING    // string is the mark type
+
+END_MARK := Mark end [n]
+
+CHORD_ITEM := : NOTE_DURATION CHORD_MODS NOTE_COUNT ( PITCH NOTE_MODS )+
+
+NOTE_DURATION := ( DOTTED_DURATION | UNDOTTED_DURATION )
+
+DOTTED_DURATION := Dotted UNDOTTED_DURATION
+
+UNDOTTED_DURATION := SHORT_STRING                   // not case-sensitive
+
+CHORD_MODS := [n]                            // bitwise OR of dot, legato &c
+					     // -- see Tags.h
+	      
+NOTE_MODS := [n]                             // bitwise OR of sharp, flat &c
+
+CLEF_ITEM := Clef Clef Name SHORT_STRING
+
+KEY_ITEM := Key Key Name LONG_STRING
+
+REST_ITEM := Rest NOTE_DURATION rest
+
+TEXT_ITEM := Text String LONG_STRING Position [n]
+
+METRONOME_ITEM := Metronome NOTE_DURATION [n]
+
