@@ -44,7 +44,6 @@ rosegarden_SOURCES = \
 	qdeferscrollview.cpp \
 	rg21io.cpp \
 	rosedebug.cpp \
-        rosegardenconfigure.ui \
         rosegardenconfiguredialog.cpp \
 	rosegardencanvasview.cpp \
 	rosegardengui.cpp \
