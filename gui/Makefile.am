@@ -5,6 +5,7 @@ bin_PROGRAMS = rosegarden
 rosegarden_SOURCES = \
         barbuttons.cpp \
 	basiccommand.cpp \
+	chordnameruler.cpp \
 	colours.cpp \
 	dialogs.cpp \
 	edittool.cpp \

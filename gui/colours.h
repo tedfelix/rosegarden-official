@@ -53,6 +53,9 @@ namespace RosegardenGUIColours
     extern const QColor TextRulerBackground;
     extern const QColor TextRulerForeground;
   
+    extern const QColor ChordNameRulerBackground;
+    extern const QColor ChordNameRulerForeground;
+  
     extern const QColor LevelMeterGreen;
     extern const QColor LevelMeterOrange;
     extern const QColor LevelMeterRed;

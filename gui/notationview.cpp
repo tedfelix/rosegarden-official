@@ -63,9 +63,10 @@
 #include "dialogs.h"
 #include "staffruler.h" // for ActiveItem
 
-#include "textruler.h"
-#include "CompositionTimeSliceAdapter.h"
-#include "AnalysisTypes.h"
+#include "chordnameruler.h"
+//#include "textruler.h"
+//#include "CompositionTimeSliceAdapter.h"
+//#include "AnalysisTypes.h"
 
 using Rosegarden::Event;
 using Rosegarden::Int;
@@ -218,17 +219,9 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_topBarButtons->getLoopRuler()->setBackgroundColor
 	(RosegardenGUIColours::InsertCursorRuler);
 
-    //!!! Experimental.
-    Segment *textSegment = new Segment;
-    Rosegarden::Composition *composition = &doc->getComposition();
-    Rosegarden::CompositionTimeSliceAdapter adapter
-	(composition,
-	 composition->getBarRange(m_hlayout->getFirstVisibleBar()).first,
-	 composition->getBarRange(m_hlayout->getLastVisibleBar()).second);
-    Rosegarden::AnalysisHelper helper;
-    helper.labelChords(adapter, *textSegment);
-    QWidget *textRuler = new TextRuler(m_hlayout, textSegment, 25, m_centralFrame);
-    setTextRuler(textRuler);
+    ChordNameRuler *cnr = new ChordNameRuler
+	(m_hlayout, &doc->getComposition(), 0, 25, m_centralFrame);
+    setTextRuler(cnr);
 
     m_bottomBarButtons = new BarButtons(m_hlayout, 25,
                                         true, m_centralFrame);
