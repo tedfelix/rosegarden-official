@@ -203,9 +203,11 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     // a minimum width for the list box
     //m_fileList->setMinimumWidth(300);
 
-    // Show focus across all columns
+    // show focus across all columns
     m_fileList->setAllColumnsShowFocus(true);
 
+    // show tooltips when columns are partially hidden
+    m_fileList->setShowToolTips(true);
 
     // connect buttons
     connect(m_deleteButton, SIGNAL(released()), SLOT(slotDelete()));
@@ -252,6 +254,21 @@ AudioManagerDialog::slotPopulateFileList()
 
     // create pixmap of given size
     QPixmap *audioPixmap = new QPixmap(m_maxPreviewWidth, m_previewHeight);
+
+    // Store last selected item if we have one
+    //
+    AudioListItem *selectedItem =
+        dynamic_cast<AudioListItem*>(m_fileList->selectedItem());
+    Rosegarden::AudioFileId lastId = 0;
+    Rosegarden::Segment *lastSegment = 0;
+    bool findSelection = false;
+
+    if (selectedItem)
+    {
+        lastId = selectedItem->getId();
+        lastSegment = selectedItem->getSegment();
+        findSelection = true;
+    }
 
     // clear file list and disable associated action buttons
     m_fileList->clear();
@@ -353,6 +370,14 @@ AudioManagerDialog::slotPopulateFileList()
         sRate.sprintf("%.1f KHz", float((*it)->getSampleRate())/ 1000.0);
         item->setText(6, sRate);
 
+        // Test audio file element for selection criteria
+        //
+        if (findSelection && lastSegment == 0 && lastId == (*it)->getId())
+        {
+            m_fileList->setSelected(item, true);
+            findSelection = false;
+        }
+
         // Add children
         //
         for (iit = segments.begin(); iit != segments.end(); iit++)
@@ -393,6 +418,14 @@ AudioManagerDialog::slotPopulateFileList()
                 // set segment
                 //
                 childItem->setSegment(*iit);
+
+                if (findSelection && lastSegment == (*iit))
+                {
+                    m_fileList->setSelected(childItem, true);
+                    findSelection = false;
+                }
+
+        // Add children
             }
         }
     }
@@ -470,8 +503,9 @@ AudioManagerDialog::slotDelete()
 
         // Do it - will force update
         //
-        emit deleteSegment(item->getSegment());
-
+        Rosegarden::SegmentSelection selection;
+        selection.insert(item->getSegment());
+        emit deleteSegments(selection);
 
         return;
     }
@@ -487,11 +521,28 @@ AudioManagerDialog::slotDelete()
     if (reply != KMessageBox::Yes)
         return;
 
+    // remove segments along with audio file
+    //
     Rosegarden::AudioFileId id = audioFile->getId();
     m_doc->getAudioFileManager().removeFile(id);
 
+    Rosegarden::SegmentSelection selection;
+    Composition &comp = m_doc->getComposition();
+
+    for (Composition::iterator it = comp.begin(); it != comp.end(); it++)
+    {
+        if ((*it)->getType() == Rosegarden::Segment::Audio &&
+            (*it)->getAudioFileId() == id)
+            selection.insert(*it);
+    }
+    // delete segments
+    emit deleteSegments(selection);
+
     // tell the sequencer
     emit deleteAudioFile(id);
+
+    // repopulate
+    slotPopulateFileList();
 }
 
 void
@@ -627,7 +678,23 @@ AudioManagerDialog::slotDeleteAll()
     if (reply != KMessageBox::Yes)
         return;
 
+    Rosegarden::SegmentSelection selection;
+    Composition &comp = m_doc->getComposition();
+
+    for (Composition::iterator it = comp.begin(); it != comp.end(); it++)
+    {
+        if ((*it)->getType() == Rosegarden::Segment::Audio)
+            selection.insert(*it);
+    }
+    // delete segments
+    emit deleteSegments(selection);
+
+    // and now the audio files
     emit deleteAllAudioFiles();
+
+    // clear the file list
+    m_fileList->clear();
+    slotPopulateFileList();
 }
 
 void
@@ -681,7 +748,9 @@ AudioManagerDialog::slotSelectionChanged(QListViewItem *item)
     //
     if (aItem && aItem->getSegment())
     {
-        emit segmentSelected(aItem->getSegment());
+        Rosegarden::SegmentSelection selection;
+        selection.insert(aItem->getSegment());
+        emit segmentsSelected(selection);
     }
 }
 
@@ -731,7 +800,11 @@ AudioManagerDialog::setSelected(Rosegarden::AudioFileId id,
                         
                         // Only propagate to segmentcanvas if asked to
                         if (propagate)
-                            emit segmentSelected(segment);
+                        {
+                            Rosegarden::SegmentSelection selection;
+                            selection.insert(aItem->getSegment());
+                            emit segmentsSelected(selection);
+                        }
 
                         return;
                     }

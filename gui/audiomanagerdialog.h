@@ -134,8 +134,8 @@ signals:
 
     // We've selected a segment here, make the canvas select it too
     //
-    void segmentSelected(Rosegarden::Segment *);
-    void deleteSegment(Rosegarden::Segment *);
+    void segmentsSelected(Rosegarden::SegmentSelection&);
+    void deleteSegments(Rosegarden::SegmentSelection&);
     void insertAudioSegment(Rosegarden::AudioFileId,
                             Rosegarden::InstrumentId,
                             const Rosegarden::RealTime &,

@@ -789,8 +789,8 @@ public slots:
     void slotCancelAudioPlayingFile(Rosegarden::AudioFileId);
     void slotDeleteAllAudioFiles();
 
-    void slotSelectSegment(Rosegarden::Segment *);
-    void slotDeleteSegment(Rosegarden::Segment*);
+    void slotSelectSegments(Rosegarden::SegmentSelection&);
+    void slotDeleteSegments(Rosegarden::SegmentSelection&);
     void slotSegmentsSelected(const Rosegarden::SegmentSelection &);
 
 private:

@@ -2846,12 +2846,12 @@ RosegardenGUIApp::slotAudioManager()
                 SLOT(slotDeleteAudioFile(Rosegarden::AudioFileId)));
 
         connect(m_audioManagerDialog,
-                SIGNAL(segmentSelected(Rosegarden::Segment*)),
-                SLOT(slotSelectSegment(Rosegarden::Segment*)));
+                SIGNAL(segmentsSelected(Rosegarden::SegmentSelection&)),
+                SLOT(slotSelectSegments(Rosegarden::SegmentSelection&)));
 
         connect(m_audioManagerDialog,
-                SIGNAL(deleteSegment(Rosegarden::Segment*)),
-                SLOT(slotDeleteSegment(Rosegarden::Segment*)));
+                SIGNAL(deleteSegments(Rosegarden::SegmentSelection&)),
+                SLOT(slotDeleteSegments(Rosegarden::SegmentSelection&)));
 
         connect(m_audioManagerDialog,
                 SIGNAL(insertAudioSegment(Rosegarden::AudioFileId,
@@ -2966,6 +2966,9 @@ RosegardenGUIApp::slotAddAudioFile(unsigned int id)
 void
 RosegardenGUIApp::slotDeleteAudioFile(unsigned int id)
 {
+    if (m_doc->getAudioFileManager().removeFile(id) == false)
+        return;
+
     QCString replyType;
     QByteArray replyData;
     QByteArray data;
@@ -3016,17 +3019,15 @@ RosegardenGUIApp::checkForStop()
 }
 
 void
-RosegardenGUIApp::slotSelectSegment(Rosegarden::Segment *segment)
+RosegardenGUIApp::slotSelectSegments(Rosegarden::SegmentSelection &selection)
 {
-    Rosegarden::SegmentSelection selection;
-    selection.insert(segment);
     m_view->slotSetSelectedSegments(selection);
 }
 
 void
-RosegardenGUIApp::slotDeleteSegment(Rosegarden::Segment *segment)
+RosegardenGUIApp::slotDeleteSegments(Rosegarden::SegmentSelection &selection)
 {
-    slotSelectSegment(segment);
+    slotSelectSegments(selection);
     slotDeleteSelectedSegments();
 }
 
@@ -3066,6 +3067,8 @@ RosegardenGUIApp::slotCancelAudioPlayingFile(Rosegarden::AudioFileId id)
 void
 RosegardenGUIApp::slotDeleteAllAudioFiles()
 {
+    m_doc->getAudioFileManager().clear();
+
     // Clear at the sequencer
     //
     QCString replyType;

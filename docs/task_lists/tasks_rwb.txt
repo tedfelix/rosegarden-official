@@ -3,34 +3,29 @@
 
 o Matrix Parameter Box [SKELETON]
 
-o Get Segment joining working
-
 o Repeating segments and composition end marker
 
-o aRts 1.0.0 support
+o AudioManager and AudioFile commands
 
 o Fix segment audio drag and drop
 
-o Sequencer Commands undoable audio file and sequencer studio
-
-o Finite audio recording time - check for available disk space
-
-o Toggle record mode for punch in/out [Half complete]
-
-o More MIDI events at Composition level. Sys Exs, Program Changes,
-  Controller changes etc. etc. [DONE at composition level, some
-  bugs and MIDI import/export to sort out]
-
 o Audio volume faders - studio concept on sequencer
-
-o Segment previews still buggy [BETTER but still a glitch]
 
 o Tidy up AudioFiles:
    - hardcoded format segment values
    - BWF format writing/reading
    - exceptions and return values
 
-o Realtime downsampling buggy (8 bit)
+o "Revert file" option
+
+o sweep selection on Matrix
+
+
+Post 0.2
+========
+
+o Complete and make sure segment edit shortcuts are consistent 
+  across segmentcanvas and views (click/copy/multiple segment drag)
 
 o Prove and improve simultaneous audio and MIDI track performance
   Improve performance:
@@ -39,21 +34,27 @@ o Prove and improve simultaneous audio and MIDI track performance
    - memory usage and access
    - build without debug and test
 
+o Get Segment joining working
+
+o More MIDI events at Composition level. Sys Exs, Program Changes,
+  Controller changes etc. etc. [DONE at composition level, some
+  bugs and MIDI import/export to sort out]
+
+o Realtime downsampling buggy (8 bit)
+
+o Matrix view auto scrolling, fix scrolling
+
 o First time run up go to settings and walk user through the
   MIDI and Audio setup to help them understand what they're
   doing.
 
-o "Revert file" option
+o Segment previews still buggy [BETTER but still a glitch]
 
-o sweep selection on Matrix
+o Toggle record mode for punch in/out [Half complete]
 
-o Matrix view auto scrolling
+o Finite audio recording time - check for available disk space
 
-o Complete segment edit shortcuts (click/copy/multiple segment drag)
-
-
-Post 0.2
-========
+o aRts 1.0.0 support
 
 o realtime MIDI filtering - what events are forwarded
 
