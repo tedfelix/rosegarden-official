@@ -98,6 +98,7 @@ EditView::EditView(RosegardenGUIDoc *doc,
 #endif
 {
     m_controlRulers->setHoverCloseButton(true);
+    m_controlRulers->setHoverCloseButtonDelayed(false); 
     connect(m_controlRulers, SIGNAL(closeRequest(QWidget*)),
             this, SLOT(slotRemoveControlRuler(QWidget*)));
 
@@ -296,7 +297,7 @@ ControllerEventsRuler* EditView::makeControllerEventRuler(ControlParameter *cont
 void EditView::addControlRuler(ControlRuler* ruler)
 {
     ruler->setWorldMatrix(m_currentRulerZoomMatrix);
-    m_controlRulers->addTab(ruler, KGlobal::iconLoader()->loadIconSet("viewmag", KIcon::Small),
+    m_controlRulers->addTab(ruler, KGlobal::iconLoader()->loadIconSet("fileclose", KIcon::Small),
                             ruler->getName());
     m_controlRulers->showPage(ruler);
     
