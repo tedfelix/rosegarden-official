@@ -9,7 +9,7 @@
 make -f Makefile.cvs
 
 
-CC="distcc" CXX="distcc" CXXFLAGS="-g3 -gstabs+ -Wall -O0" ./configure --enable-full-debug --prefix=/opt/kde3 --with-jack=yes --with-ladspa
+CXXFLAGS="-g3 -gstabs+ -Wall -O0 -z combreloc" ./configure --enable-full-debug --prefix=/opt/kde3 --with-jack=yes --with-ladspa
 #CC="distcc" CXX="distcc" CXXFLAGS="-g3 -gstabs+ -Wall -O0" ./configure --enable-debug --with-exceptions=YES --prefix=/opt/kde3 --with-jack=yes --with-ladspa
 #CXXFLAGS="-g3 -gstabs+ -fexceptions -DRGKDE3 -DEXPERIMENTAL_ALSA_DRIVER" ./configure --enable-debug --with-exceptions=YES --with-qt-dir=/usr/lib/qt3 --prefix=/opt/kde3 --with-jack=yes --with-ladspa
 #CXXFLAGS="-O3 -fexceptions -DRGKDE3" ./configure --with-exceptions=YES --with-qt-dir=/usr/lib/qt3 --prefix=/opt/kde3 --with-arts

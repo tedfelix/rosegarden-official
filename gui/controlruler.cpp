@@ -50,6 +50,10 @@
 #include "ControlParameter.h"
 #include "Property.h"
 
+#include "matrixcommands.h"
+#include "SegmentMatrixHelper.h"
+
+
 using Rosegarden::RulerScale;
 using Rosegarden::Segment;
 using Rosegarden::Event;
@@ -388,11 +392,12 @@ public:
     ControlChangeCommand(QCanvasItemList selectedItems,
                          Segment &segment,
                          Rosegarden::timeT start, Rosegarden::timeT end);
+    virtual ~ControlChangeCommand() {;}
 
-
-    virtual void modifySegment();
 
 protected:
+
+    virtual void modifySegment();
 
     QCanvasItemList m_selectedItems;
 };
@@ -422,10 +427,12 @@ class ControllerEventInsertCommand : public BasicCommand
 {
 public:
     ControllerEventInsertCommand(timeT insertTime, long number, long initialValue, Segment &segment);
+    virtual ~ControllerEventInsertCommand() {;}
+
+protected:
 
     virtual void modifySegment();
 
-protected:
     long m_number;
     long m_initialValue;
 };
@@ -433,7 +440,10 @@ protected:
 ControllerEventInsertCommand::ControllerEventInsertCommand(timeT insertTime,
                                                            long number, long initialValue,
                                                            Segment &segment)
-    : BasicCommand(i18n("Insert Controller Event"), segment, insertTime, insertTime),
+    : BasicCommand(i18n("Insert Controller Event"),
+                   segment,
+                   insertTime, 
+                   (insertTime + Rosegarden::Note(Rosegarden::Note::Quaver).getDuration())), // must have a duration other undo doesn't work
       m_number(number),
       m_initialValue(initialValue)
 {
@@ -459,13 +469,14 @@ class ControllerEventEraseCommand : public BasicCommand
 public:
 
     ControllerEventEraseCommand(QCanvasItemList selectedItems,
-                         Segment &segment,
-                         Rosegarden::timeT start, Rosegarden::timeT end);
+                                Segment &segment,
+                                Rosegarden::timeT start, Rosegarden::timeT end);
+    virtual ~ControllerEventEraseCommand() {;}
 
-
-    virtual void modifySegment();
 
 protected:
+
+    virtual void modifySegment();
 
     QCanvasItemList m_selectedItems;
 };
@@ -473,7 +484,11 @@ protected:
 ControllerEventEraseCommand::ControllerEventEraseCommand(QCanvasItemList selectedItems,
                                                          Segment &segment,
                                                          Rosegarden::timeT start, Rosegarden::timeT end)
-    : BasicCommand(i18n("Erase Controller Event(s)"), segment, start, end, true),
+    : BasicCommand(i18n("Erase Controller Event(s)"),
+                   segment,
+                   start,
+                   (start == end) ? start + 10 : end, 
+                   true),
       m_selectedItems(selectedItems)
 {
     RG_DEBUG << "ControllerEventEraseCommand : from " << start << " to " << end << endl;
@@ -482,9 +497,11 @@ ControllerEventEraseCommand::ControllerEventEraseCommand(QCanvasItemList selecte
 
 void ControllerEventEraseCommand::modifySegment()
 {
+    Segment &segment(getSegment());
+
     for (QCanvasItemList::Iterator it=m_selectedItems.begin(); it!=m_selectedItems.end(); ++it) {
         if (ControlItem *item = dynamic_cast<ControlItem*>(*it))
-            getSegment().eraseSingle(item->getElementAdapter()->getEvent());
+            segment.eraseSingle(item->getElementAdapter()->getEvent());
     }
 }
 
@@ -599,9 +616,15 @@ void ControlRuler::contentsMouseReleaseEvent(QMouseEvent* e)
     }
 
     for (QCanvasItemList::Iterator it=m_selectedItems.begin(); it!=m_selectedItems.end(); ++it) {
-        if (ControlItem *item = dynamic_cast<ControlItem*>(*it))
+        if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
+
+            ElementAdapter* adapter = item->getElementAdapter();
+            m_eventSelection->addEvent(adapter->getEvent());
             item->handleMouseButtonRelease(e);
+        }
     }
+
+    emit stateChange("have_controller_item_selected", true);
 
     if (m_itemMoved) {
 
@@ -665,6 +688,9 @@ void ControlRuler::updateSelection()
             item->setSelected(true);
             m_selectedItems << item;
             haveSelectedItems = true;
+
+            ElementAdapter* adapter = item->getElementAdapter();
+            m_eventSelection->addEvent(adapter->getEvent());
         }
     }
 
@@ -1002,6 +1028,15 @@ void ControllerEventsRuler::insertControllerEvent()
         if (ok) number = res.toULong();
     }
     
+    /*
+    Event *e = new Event(Rosegarden::Controller::EventType, insertTime);
+    e->set<Rosegarden::Int>(Rosegarden::Controller::VALUE, initialValue);
+    e->set<Rosegarden::Int>(Rosegarden::Controller::NUMBER, number);
+
+    MatrixInsertionCommand *command  = new 
+        MatrixInsertionCommand(m_segment, insertTime, insertTime + 960, e);
+    */
+
     ControllerEventInsertCommand* command = 
         new ControllerEventInsertCommand(insertTime, number, initialValue, m_segment);
 
@@ -1012,12 +1047,13 @@ void ControllerEventsRuler::eraseControllerEvent()
 {
     RG_DEBUG << "ControllerEventsRuler::eraseControllerEvent() : deleting selected events\n";
 
-    ControllerEventEraseCommand* command = new ControllerEventEraseCommand(m_selectedItems,
-                                                                           m_segment,
-                                                                           m_eventSelection->getStartTime(),
-                                                                           m_eventSelection->getEndTime());
+    ControllerEventEraseCommand* command = 
+        new ControllerEventEraseCommand(m_selectedItems,
+                                        m_segment,
+                                        m_eventSelection->getStartTime(),
+                                        m_eventSelection->getEndTime());
     m_parentEditView->addCommandToHistory(command);
-    clearSelectedItems();
+    updateSelection();
 }
 
 void ControllerEventsRuler::clearControllerEvents()
