@@ -140,37 +140,6 @@ RosegardenParameterBox::RosegardenParameterBox(QString label,
 					       const char *name) :
     QGroupBox(label, parent, name)
 {
-
-/*
-    QFontDatabase db;
-    QValueList<int> sizes(db.smoothSizes(m_font.family(),
-					 db.styleString(m_font)));
-
-    RG_DEBUG << "Family: " << m_font.family()
-			 << ", style: " << db.styleString(m_font) << endl;
-    
-    int size = -1;
-    int plainSize = m_font.pointSize();
-
-    for (QValueList<int>::Iterator it = sizes.begin();
-	 it != sizes.end(); ++it) {
-
-	RG_DEBUG << "Found size " << *it << endl;
-
-	// find largest size no more than 90% of the plain size
-	// and at least 9pt, assuming they're in ascending order
-	if (*it >= plainSize) break;
-	else if (*it >= 9 && *it <= (plainSize*9)/10) size = *it;
-    }
-
-    RG_DEBUG << "Default font: " << plainSize
-			 << ", my font: " << size << endl;
-    if (size > 0) {
-	m_font.setPointSize(size);
-    } else {
-	m_font.setPointSize(plainSize * 9 / 10);
-    }
-*/
     init();
 }
 

@@ -60,14 +60,18 @@
 InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
                                                QWidget *parent)
     : RosegardenParameterBox(1, Qt::Horizontal, i18n("Instrument Parameters"), parent),
-      m_widgetStack(new QWidgetStack(this)),
-      m_noInstrumentParameters(new QVBox(m_widgetStack)),
-      m_midiInstrumentParameters(new MIDIInstrumentParameterPanel(doc, m_widgetStack)),
-      m_audioInstrumentParameters(new AudioInstrumentParameterPanel(doc, m_widgetStack)),
+//      m_widgetStack(new QWidgetStack(this)),
+      m_widgetStack(0), //!!!
+      m_noInstrumentParameters(new QVBox(this)),
+      m_midiInstrumentParameters(new MIDIInstrumentParameterPanel(doc, this)),
+      m_audioInstrumentParameters(new AudioInstrumentParameterPanel(doc, this)),
       m_selectedInstrument(0),
       m_doc(doc)
 {
-    m_widgetStack->setFont(getFont());
+//!!!    m_widgetStack->setFont(getFont());
+    m_noInstrumentParameters->setFont(getFont());
+    m_midiInstrumentParameters->setFont(getFont());
+    m_audioInstrumentParameters->setFont(getFont());
 
     bool contains = false;
 
@@ -84,9 +88,9 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
     QLabel *label = new QLabel(i18n("<no instrument>"), m_noInstrumentParameters);
     label->setAlignment(label->alignment() | Qt::AlignHCenter);
 
-    m_widgetStack->addWidget(m_midiInstrumentParameters);
-    m_widgetStack->addWidget(m_audioInstrumentParameters);
-    m_widgetStack->addWidget(m_noInstrumentParameters);
+//!!!    m_widgetStack->addWidget(m_midiInstrumentParameters);
+//    m_widgetStack->addWidget(m_audioInstrumentParameters);
+//    m_widgetStack->addWidget(m_noInstrumentParameters);
 
     m_midiInstrumentParameters->adjustSize();
     m_audioInstrumentParameters->adjustSize();
@@ -145,10 +149,14 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
 {
     RG_DEBUG << "useInstrument() - populate Instrument\n";
 
+    m_noInstrumentParameters->hide();
+    m_midiInstrumentParameters->hide();
+    m_audioInstrumentParameters->hide();
+
     if (instrument == 0)
     {
-        m_widgetStack->raiseWidget(m_noInstrumentParameters);
-
+//!!!        m_widgetStack->raiseWidget(m_noInstrumentParameters);
+	m_noInstrumentParameters->show();
         return;
     } 
 
@@ -160,12 +168,14 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
     if (instrument->getType() == Rosegarden::Instrument::Audio)
     {
         m_audioInstrumentParameters->setupForInstrument(m_selectedInstrument);
-        m_widgetStack->raiseWidget(m_audioInstrumentParameters);
+//!!!        m_widgetStack->raiseWidget(m_audioInstrumentParameters);
+	m_audioInstrumentParameters->show();
 
     } else { // Midi
 
         m_midiInstrumentParameters->setupForInstrument(m_selectedInstrument);
-        m_widgetStack->raiseWidget(m_midiInstrumentParameters);
+//!!!        m_widgetStack->raiseWidget(m_midiInstrumentParameters);
+	m_midiInstrumentParameters->show();
     }
     
 }
@@ -1253,10 +1263,6 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
 {
     QGridLayout *gridLayout = new QGridLayout(this, 9, 6, 8, 1);
 
-    // Some top space
-//    gridLayout->addRowSpacing(0, 8);
-//    gridLayout->addRowSpacing(1, 30);
-
 //    QFrame *rotaryFrame = new QFrame(this);
 //    rotaryFrame->setFrameStyle(QFrame::NoFrame);
 //    comboLayout->addMultiCellWidget(rotaryFrame, 5, 5, 0, 2, AlignCenter);
@@ -1362,6 +1368,11 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     QLabel* resonanceLabel = new QLabel(i18n("Resonance"), hbox);
     gridLayout->addMultiCellWidget
 	(hbox, 8, 8, rightMinCol, rightMaxCol, AlignLeft);
+
+    // Some top space
+    gridLayout->addRowSpacing(0, 8);
+    gridLayout->addRowSpacing(1, 8);
+//    gridLayout->addRowSpacing(1, 30);
 
     // Set some nice pastel knob colours
     //
