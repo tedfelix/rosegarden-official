@@ -300,9 +300,6 @@ RosegardenGUIView::showElements(EventList::iterator from,
                                 double dxoffset, double dyoffset)
 {
     static NotePixmapFactory npf;
-    Quantizer quantizer;
-
-    quantizer.quantizeToNoteTypes(from, to);
 
     for(EventList::iterator it = from; it != to; ++it) {
         

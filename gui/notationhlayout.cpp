@@ -26,6 +26,9 @@ NotationHLayout::NotationHLayout(unsigned int barWidth)
 void
 NotationHLayout::layout(Event *el)
 {
+    Note note = m_quantizer.quantizeToNoteType( el->getDuration() );
+    el->set<Int>("Notation::NoteType", note);
+
     el->set<Int>("Notation::X", m_lastPos + 20);
     m_lastPos += 20;
 }

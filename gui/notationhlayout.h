@@ -18,7 +18,8 @@
 #ifndef NOTATIONHLAYOUT_H
 #define NOTATIONHLAYOUT_H
 
-#include <layoutengine.h>
+#include "layoutengine.h"
+#include "quantizer.h"
 
 /**
   *@author Guillaume Laurent, Chris Cannam, Rich Bown
@@ -29,6 +30,8 @@ public:
     NotationHLayout(unsigned int barWidth);
 protected:
     virtual void layout(Event*);
+
+    Quantizer m_quantizer;
 
     unsigned int m_barWidth;
     unsigned int m_lastPos;
