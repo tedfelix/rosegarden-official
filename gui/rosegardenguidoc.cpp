@@ -263,9 +263,6 @@ bool RosegardenGUIDoc::saveIfModified()
     RG_DEBUG << "RosegardenGUIDoc::saveIfModified()" << endl;
     bool completed=true;
 
-    static QRegExp midiFile("\\.mid$"), rg21File("\\.rose$");
-
-
     if (isModified()) {
         RosegardenGUIApp *win=(RosegardenGUIApp *) parent();
         int want_save = KMessageBox::warningYesNoCancel(win,

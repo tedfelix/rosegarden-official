@@ -1949,8 +1949,7 @@ BankEditorDialog::slotExport()
     //
     if (!extension.isEmpty())
     {
-        QRegExp rgFile("\\." + extension + "$");
-        if (rgFile.match(name) == -1)
+        if (!name.endsWith("." + extension))
         {
             name += "." + extension;
         }

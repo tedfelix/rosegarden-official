@@ -927,16 +927,14 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
 
 void RosegardenGUIApp::openFile(const QString& filePath)
 {
-    static QRegExp midiFile("\\.mid$"), rg21File("\\.rose$");
-
-    if (midiFile.match(filePath.lower()) != -1) {
+    if (filePath.lower().endsWith(".mid")) {
 
         if (!m_doc->saveIfModified()) return;
 
         importMIDIFile(filePath);
         return;
 
-    } else if (rg21File.match(filePath.lower()) != -1) {
+    } else if (filePath.lower().endsWith(".rose")) {
 
         if (!m_doc->saveIfModified()) return;
 
