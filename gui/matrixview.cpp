@@ -56,6 +56,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
                        std::vector<Segment *> segments,
                        QWidget *parent)
     : EditView(doc, segments, parent),
+      m_currentEventSelection(0),
       m_hlayout(new MatrixHLayout),
       m_vlayout(new MatrixVLayout),
       m_hoveredOverAbsoluteTime(0),
@@ -280,6 +281,27 @@ void MatrixView::update()
 {
     canvas()->update();
 }
+
+void MatrixView::setCurrentSelection(EventSelection* s)
+{
+    if (m_currentEventSelection) {
+        m_currentEventSelection->removeSelectionFromSegment();
+        getStaff(0)->positionElements(m_currentEventSelection->getBeginTime(),
+                                      m_currentEventSelection->getEndTime());
+    }
+
+    delete m_currentEventSelection;
+    m_currentEventSelection = s;
+
+    if (s) {
+        s->recordSelectionOnSegment();
+        getStaff(0)->positionElements(s->getBeginTime(),
+                                      s->getEndTime());
+    }
+
+    update();
+}
+
 
 void MatrixView::slotPaintSelected()
 {

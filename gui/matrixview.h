@@ -41,6 +41,7 @@ class MatrixStaff;
 class MatrixCanvasView;
 class MatrixHLayout;
 class MatrixVLayout;
+class EventSelection;
 
 class QMouseEvent;
 
@@ -67,10 +68,19 @@ public:
 
     QCanvas* canvas() { return getCanvasView()->canvas(); }
 
+    void setCanvasCursor(const QCursor &cursor) {
+	getCanvasView()->viewport()->setCursor(cursor);
+    }
+
+//     void setPositionTracking(bool t) {
+// 	getCanvasView()->setPositionTracking(t);
+//     }
+
     MatrixStaff* getStaff(int) { return m_staffs[0]; } // deal with 1 staff only
     virtual void update();
 
-
+    void setCurrentSelection(EventSelection* s);
+    
 public slots:
 
     /**
@@ -157,6 +167,9 @@ protected:
     virtual void setViewSize(QSize);
 
     //--------------- Data members ---------------------------------
+
+    /// The current selection of Events (for cut/copy/paste)
+    EventSelection* m_currentEventSelection;
 
     std::vector<MatrixStaff*> m_staffs;
     

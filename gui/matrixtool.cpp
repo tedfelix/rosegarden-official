@@ -368,6 +368,202 @@ void MatrixEraser::handleLeftButtonPress(Rosegarden::timeT,
     m_mParentView->update();
 }
 
+//------------------------------
+
+MatrixSelector::MatrixSelector(MatrixView* view)
+    : MatrixTool("MatrixSelector", view),
+      m_selectionRect(0),
+      m_updateRect(false),
+      m_clickedStaff(-1),
+      m_clickedElement(0)
+{
+}
+
+void MatrixSelector::handleLeftButtonPress(Rosegarden::timeT,
+                                           int,
+                                           int staffNo,
+                                           QMouseEvent* e,
+                                           Rosegarden::ViewElement *element)
+{
+    kdDebug(KDEBUG_AREA) << "MatrixSelector::handleMousePress" << endl;
+    m_clickedStaff = staffNo;
+    m_clickedElement = dynamic_cast<MatrixElement*>(element);
+
+    m_selectionRect->setX(e->x());
+    m_selectionRect->setY(e->y());
+    m_selectionRect->setSize(0,0);
+
+    m_selectionRect->show();
+    m_updateRect = true;
+
+    //m_parentView->setCursorPosition(p.x());
+}
+
+// void MatrixSelector::handleMouseDblClick(Rosegarden::timeT,
+//                                            int,
+//                                            int staffNo,
+//                                            QMouseEvent* e,
+//                                            ViewElement *element)
+// {
+//     kdDebug(KDEBUG_AREA) << "MatrixSelector::handleMouseDblClick" << endl;
+//     m_clickedStaff = staffNo;
+//     m_clickedElement = dynamic_cast<MatrixElement*>(element);
+    
+//     MatrixStaff *staff = m_mParentView->getStaff(staffNo);
+//     if (!staff) return;
+
+//     QRect rect = staff->getBarExtents(e->x(), e->y());
+
+//     m_selectionRect->setX(rect.x() + 1);
+//     m_selectionRect->setY(rect.y());
+//     m_selectionRect->setSize(rect.width() - 1, rect.height());
+
+//     m_selectionRect->show();
+//     m_updateRect = false;
+//     return;
+// }
+
+void MatrixSelector::handleMouseMove(timeT, int,
+                                     QMouseEvent* e)
+{
+    if (!m_updateRect) return;
+
+    int w = int(e->x() - m_selectionRect->x());
+    int h = int(e->y() - m_selectionRect->y());
+
+    // Qt rectangle dimensions appear to be 1-based
+    if (w > 0) ++w; else --w;
+    if (h > 0) ++h; else --h;
+
+    m_selectionRect->setSize(w,h);
+
+    m_mParentView->canvas()->update();
+}
+
+void MatrixSelector::handleMouseRelease(timeT, int, QMouseEvent*)
+{
+    kdDebug(KDEBUG_AREA) << "MatrixSelector::handleMouseRelease" << endl;
+    m_updateRect = false;
+    setViewCurrentSelection();
+
+    // If we didn't drag out a meaningful area, but _did_ click on
+    // an individual event, then select just that event
+    
+//     if (m_selectionRect->width()  > -3 &&
+//         m_selectionRect->width()  <  3 &&
+//         m_selectionRect->height() > -3 &&
+//         m_selectionRect->height() <  3) {
+
+// 	m_selectionRect->hide();
+
+// 	if (m_clickedElement != 0 &&
+// 	    m_clickedStaff   >= 0) {
+
+// 	    m_mParentView->setSingleSelectedEvent
+// 		(m_clickedStaff, m_clickedElement->event());
+// 	}
+//     }
+}
+
+void MatrixSelector::ready()
+{
+    m_selectionRect = new QCanvasRectangle(m_mParentView->canvas());
+    
+    m_selectionRect->hide();
+    m_selectionRect->setPen(RosegardenGUIColours::SelectionRectangle);
+
+    m_mParentView->setCanvasCursor(Qt::arrowCursor);
+//     m_mParentView->setPositionTracking(false);
+}
+
+void MatrixSelector::stow()
+{
+    delete m_selectionRect;
+    m_selectionRect = 0;
+    m_mParentView->canvas()->update();
+}
+
+
+void MatrixSelector::hideSelection()
+{
+    if (!m_selectionRect) return;
+    m_selectionRect->hide();
+    m_selectionRect->setSize(0,0);
+    m_mParentView->canvas()->update();
+}
+
+void MatrixSelector::setViewCurrentSelection()
+{
+    EventSelection* selection = getSelection();
+    m_mParentView->setCurrentSelection(selection);
+}
+
+EventSelection* MatrixSelector::getSelection()
+{
+    // If selection rect is not visible or too small,
+    // return 0
+    //
+    if (!m_selectionRect->visible()) return 0;
+
+    //    kdDebug(KDEBUG_AREA) << "Selection x,y: " << m_selectionRect->x() << ","
+    //                         << m_selectionRect->y() << "; w,h: " << m_selectionRect->width() << "," << m_selectionRect->height() << endl;
+
+    if (m_selectionRect->width()  > -3 &&
+        m_selectionRect->width()  <  3 &&
+        m_selectionRect->height() > -3 &&
+        m_selectionRect->height() <  3) return 0;
+
+    if (m_clickedStaff == -1) return 0;
+    
+    MatrixStaff *staff = m_mParentView->getStaff(m_clickedStaff);
+
+    if (!staff) return 0;
+
+    Rosegarden::Segment& originalSegment = staff->getSegment();
+    
+    EventSelection* selection = new EventSelection(originalSegment);
+
+    QCanvasItemList itemList = m_selectionRect->collisions(true);
+    QCanvasItemList::Iterator it;
+
+    QRect rect = m_selectionRect->rect().normalize();
+
+    for (it = itemList.begin(); it != itemList.end(); ++it) {
+
+        QCanvasItem *item = *it;
+        QCanvasMatrixRectangle *matrixRect = 0;
+        
+        if ((matrixRect = dynamic_cast<QCanvasMatrixRectangle*>(item))) {
+
+            if (!rect.contains(int(item->x()), int(item->y()), true)) {
+
+                kdDebug(KDEBUG_AREA) << "MatrixSelector::getSelection Skipping item not really in selection rect\n";
+                kdDebug(KDEBUG_AREA) << "MatrixSelector::getSelection Rect: x,y: " << rect.x() << ","
+                                     << rect.y() << "; w,h: " << rect.width()
+                                     << "," << rect.height() << " / Item: x,y: "
+                                     << item->x() << "," << item->y() << endl;
+                continue;
+            } else {
+                
+                kdDebug(KDEBUG_AREA) << "MatrixSelector::getSelection Item in rect : Rect: x,y: " << rect.x() << ","
+                                     << rect.y() << "; w,h: " << rect.width()
+                                     << "," << rect.height() << " / Item: x,y: "
+                                     << item->x() << "," << item->y() << endl;
+            }
+            
+            selection->addEvent(matrixRect->getMatrixElement().event());
+
+            //             kdDebug(KDEBUG_AREA) << "Selected event : \n";
+            //             el.event()->dump(std::cerr);
+        }
+        
+    }
+
+    return (selection->getAddedEvents() > 0) ? selection : 0;
+}
+
+
 const QString MatrixPainter::ToolName = "painter";
 const QString MatrixEraser::ToolName  = "eraser";
+const QString MatrixSelector::ToolName  = "selector";
 

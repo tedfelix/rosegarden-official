@@ -116,8 +116,6 @@ protected:
 
 class MatrixEraser : public MatrixTool
 {
-    Q_OBJECT
-
     friend class MatrixToolBox;
 
 public:
@@ -134,6 +132,85 @@ protected:
     MatrixEraser(MatrixView*);
 
     MatrixStaff* m_currentStaff;
+};
+
+#include "eventselection.h"
+class QCanvasRectangle;
+
+class MatrixSelector : public MatrixTool
+{
+    Q_OBJECT
+
+    friend class MatrixToolBox;
+
+public:
+
+    virtual void handleLeftButtonPress(Rosegarden::timeT,
+                                       int height,
+                                       int staffNo,
+                                       QMouseEvent *event,
+                                       Rosegarden::ViewElement*);
+
+    /**
+     * Set the duration of the element
+     */
+    virtual void handleMouseMove(Rosegarden::timeT,
+                                 int height,
+                                 QMouseEvent*);
+
+    /**
+     * Actually insert the new element
+     */
+    virtual void handleMouseRelease(Rosegarden::timeT,
+                                    int height,
+                                    QMouseEvent*);
+
+    /**
+     * Create the selection rect
+     *
+     * We need this because MatrixView deletes all QCanvasItems
+     * along with it. This happens before the MatrixSelector is
+     * deleted, so we can't delete the selection rect in
+     * ~MatrixSelector because that leads to double deletion.
+     */
+    virtual void ready();
+
+    /**
+     * Delete the selection rect.
+     */
+    virtual void stow();
+
+    /**
+     * Returns the currently selected events
+     *
+     * The returned result is owned by the caller
+     */
+    EventSelection* getSelection();
+
+    static const QString ToolName;
+
+public slots:
+    /**
+     * Hide the selection rectangle
+     *
+     * Should be called after a cut or a copy has been
+     * performed
+     */
+    void hideSelection();
+    
+protected:
+    MatrixSelector(MatrixView*);
+
+    void setViewCurrentSelection();
+    
+    //--------------- Data members ---------------------------------
+
+    QCanvasRectangle* m_selectionRect;
+    bool m_updateRect;
+
+    int m_clickedStaff;
+
+    MatrixElement* m_clickedElement;
 };
 
 
