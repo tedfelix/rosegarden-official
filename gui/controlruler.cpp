@@ -1096,6 +1096,8 @@ ControllerEventsRuler::ControllerEventsRuler(Rosegarden::Segment& segment,
         //
         if (m_controller->getType() != (*i)->getType()) continue;
 
+        int width = getDefaultItemWidth();
+
         // Check for specific controller value if we need to 
         //
         if (m_controller->getType() == Rosegarden::Controller::EventType)
@@ -1111,11 +1113,13 @@ ControllerEventsRuler::ControllerEventsRuler(Rosegarden::Segment& segment,
                 continue;
             }
         }
+        else if (m_controller->getType() == Rosegarden::PitchBend::EventType)
+            width /= 4;
+
         //RG_DEBUG << "ControllerEventsRuler: adding element\n";
 
  	double x = m_rulerScale->getXForTime((*i)->getAbsoluteTime());
- 	new ControlItem(this, new ControllerEventAdapter(*i), int(x + m_staffOffset),
-                        getDefaultItemWidth());
+ 	new ControlItem(this, new ControllerEventAdapter(*i), int(x + m_staffOffset), width);
 
     }
     
@@ -1225,8 +1229,12 @@ void ControllerEventsRuler::eventAdded(const Segment*, Event *e)
 
     double x = m_rulerScale->getXForTime(e->getAbsoluteTime());
 
-    new ControlItem(this, new ControllerEventAdapter(e), int(x + m_staffOffset),
-                    getDefaultItemWidth());
+    int width = getDefaultItemWidth();
+
+    if (m_controller->getType() == Rosegarden::PitchBend::EventType)
+        width /= 4;
+
+    new ControlItem(this, new ControllerEventAdapter(e), int(x + m_staffOffset), width);
 }
 
 void ControllerEventsRuler::eventRemoved(const Segment*, Event *e)
@@ -1449,6 +1457,9 @@ void ControllerEventsRuler::layoutItem(ControlItem* item)
     
     int width = getDefaultItemWidth(); // TODO: how to scale that ??
 
+    if (m_controller->getType() == Rosegarden::PitchBend::EventType)
+        width /= 4;
+
     item->setWidth(width);
 
     //RG_DEBUG << "ControllerEventsRuler::layoutItem ControlItem x = " << x 
@@ -1465,6 +1476,11 @@ ControllerEventsRuler::drawControlLine(Rosegarden::timeT startTime,
     if (startTime > endTime) std::swap(startTime, endTime);
 
     Rosegarden::timeT quantDur = Rosegarden::Note(Rosegarden::Note::Quaver).getDuration();
+
+    // If inserting a line of PitchBends then we want a smoother curve
+    //
+    if (m_controller->getType() == Rosegarden::PitchBend::EventType)
+        quantDur = Rosegarden::Note(Rosegarden::Note::Demisemiquaver).getDuration();
 
     // for the moment enter a quantized set of events
     Rosegarden::timeT time = startTime, newTime = 0;
