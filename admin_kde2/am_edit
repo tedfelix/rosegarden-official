@@ -56,7 +56,6 @@ sub tag_META_INCLUDES ();
 sub tag_METASOURCES ();
 sub tag_POFILES ();
 sub tag_DOCFILES ();
-sub tag_doxygen_docs();
 sub tag_LOCALINSTALL();
 sub tag_IDLFILES();
 sub tag_UIFILES();
@@ -83,7 +82,6 @@ $use_final  = 1;        # create code for --enable-final
 $cleantarget = "clean";
 $dryrun     = 0;
 $pathoption = 0;
-$foreign_libtool = 0;
 
 while (defined ($ARGV[0]))
 {
@@ -134,11 +132,6 @@ while (defined ($ARGV[0]))
     {
 	$use_final = 0;
         $thisProg .= " --no-final";
-    }
-    elsif (/^--foreign-libtool$/)
-    {
-        $foreign_libtool = 1;
-        $thisProg .= " --foreign-libtool";
     }
     elsif (/^-n$/)
     {
@@ -232,8 +225,6 @@ sub processMakefile ($)
     local $cleanMoc       = "";
     local $closure_output = "";
 
-    local %varcontent     = ();
-
     $makefileDir = dirname($makefile);
     chdir ($makefileDir);
     $printname = $makefile;
@@ -288,8 +279,7 @@ sub processMakefile ($)
         appendLines ("$cleantarget-metasources:\n\t-rm -f $cleanMoc\n");
         $target_adds{"$cleantarget-am"} .= "$cleantarget-metasources ";
     }
-    
-    tag_DIST() unless ($kdeopts{"noautodist"});
+    tag_DIST();
 
     if ($idl_output) {
         appendLines ("$cleantarget-idl:\n\t-rm -f $idl_output\n");
@@ -314,7 +304,6 @@ sub processMakefile ($)
 
     tag_POFILES ();             # language rules for po directory
     tag_DOCFILES ();            # language rules for doc directories
-    tag_doxygen_docu();
     tag_LOCALINSTALL();         # add $(DESTDIR) before all kde_ dirs
     tag_ICON();
     tag_SUBDIRS();
@@ -324,7 +313,6 @@ sub processMakefile ($)
     appendLines($tmp);
     
     make_meta_classes();
-    tag_COMPILE_FIRST();
     tag_FINAL() if (!$kdeopts{"nofinal"});
 
     my $final_lines = "final:\n\t\$(MAKE) ";
@@ -360,55 +348,51 @@ sub processMakefile ($)
     appendLines($final_install_lines . "install-am");
     appendLines($nofinal_lines . "all-am");
     appendLines($nofinal_install_lines . "install-am");
-
+    
     my $lookup = 'DEP_FILES\s*=([^\n]*)';
     if ($MakefileData =~ /\n$lookup\n/o) {
         $depfiles = $1;
-
+        
         if ($dep_finals) {
             $lines  = "\@KDE_USE_FINAL_TRUE\@DEP_FILES = $dep_files $dep_finals \034\t$depfiles\n";
             $lines .= "\@KDE_USE_FINAL_FALSE\@DEP_FILES = $dep_files $depfiles\n";
         } else {
             $lines = "DEP_FILES = $dep_files $depfiles\n";
         }
+        
         substituteLine($lookup, $lines);
     }
-
+    
     my $cvs_lines = "cvs-clean:\n";
-    $cvs_lines .= "\t\$(MAKE) admindir=\$(top_srcdir)/admin -f \$(top_srcdir)/admin/Makefile.common cvs-clean\n";
+    $cvs_lines .= "\t\$(MAKE) -f \$(top_srcdir)/admin/Makefile.common cvs-clean\n";
     appendLines($cvs_lines);
-
+    
     $cvs_lines  = "kde-rpo-clean:\n";
     $cvs_lines .= "\t-rm -f *.rpo\n";
     appendLines($cvs_lines);
     $target_adds{"clean"} .= "kde-rpo-clean ";
 
-    my %target_dels = ("install-data-am" => "");
-
     # some strange people like to do a install-exec, and expect that also
     # all modules are installed.  automake doesn't know this, so we need to move
     # this here from install-data to install-exec.
     if ($MakefileData =~ m/\nkde_module_LTLIBRARIES\s*=/) {
-      $target_adds{"install-exec-am"} .= "install-kde_moduleLTLIBRARIES ";
-      $target_dels{"install-data-am"} .= "install-kde_moduleLTLIBRARIES ";
-
+      $target_adds{"install-exec-am"} .= "install-kde_moduleLTLIBRARIES";
+      my $lookup = 'install-data-am:\s*(.*)';
+      if ($MakefileData =~ /\n$lookup\n/) {
+        my $newdeps = $1;
+	$newdeps =~ s/\s*install-kde_moduleLTLIBRARIES\s*/ /g;
+	substituteLine($lookup, "install-data-am: " . $newdeps);
+      }
     }
-
+    
     my $lines = "";
 
     foreach $add (keys %target_adds) {
 	my $lookup = quotemeta($add) . ':([^\n]*)';
         if ($MakefileData =~ /\n$lookup\n/) {
-	  my $newlines = $1;
-	  my $oldlines = $lookup;
-	  if (defined $target_dels{$add}) {
-	    foreach $del (split(' ', $target_dels{$add})) {
-	      $newlines =~ s/\s*$del\s*/ /g;
-	    }
-	  }
-	  substituteLine($oldlines, "$add: " . $target_adds{$add} . $newlines);
+            substituteLine($lookup, "$add: " . $target_adds{$add} . $1);
         } else {
-	  $lines .= "$add: " . $target_adds{$add} . "\n";
+            $lines .= "$add: " . $target_adds{$add} . "\n";
         }
     }
     if ($lines) {
@@ -416,7 +400,7 @@ sub processMakefile ($)
     }
 
     my $found = 1;
-
+    
     while ($found) {
         if ($MakefileData =~ m/\n(.*)\$\(CXXFLAGS\)(.*)\n/) {
             my $vor = $1;   # "vor" means before in German
@@ -432,17 +416,15 @@ sub processMakefile ($)
         }
     }
 
-    if($foreign_libtool == 0) {
-        $lookup = '(\n[^#].*\$\(LIBTOOL\) --mode=link) (\$\(CXXLD\).*\$\(KCXXFLAGS\))';
+    $lookup = '(\n[^#].*\$\(LIBTOOL\) --mode=link) (\$\(CXXLD\).*\$\(KCXXFLAGS\))';
+    
+    if ($MakefileData =~ m/$lookup/ ) {
+        $MakefileData =~ s/$lookup/$1 --tag=CXX $2/;
+    }
 
-        if ($MakefileData =~ m/$lookup/ ) {
-            $MakefileData =~ s/$lookup/$1 --tag=CXX $2/;
-        }
-
-        $lookup = '(\n[^#].*\$\(LIBTOOL\) --mode=compile)\s+(\$\(CXX\)\s+)';
-        if ($MakefileData =~ m/$lookup/ ) {
-            $MakefileData =~ s/$lookup/$1 --tag=CXX $2/;
-        }
+    $lookup = '(\n[^#].*\$\(LIBTOOL\) --mode=compile) (\$\(CXX\).*\$\(KCXXFLAGS\))';
+    if ($MakefileData =~ m/$lookup/ ) {
+        $MakefileData =~ s/$lookup/$1 --tag=CXX $2/;
     }
 
     $MakefileData =~ s/\$\(KCXXFLAGS\)/\$\(CXXFLAGS\)/g;
@@ -458,16 +440,6 @@ sub processMakefile ($)
 }
 
 #-----------------------------------------------------------------------------
-
-# Beware: This procedure is not complete.  E.g. it also parses lines
-# containing a '=' in rules (for instance setting shell vars).  For our
-# usage this us enough, though.
-sub read_variables ()
-{
-    while ($MakefileData =~ /\n\s*(\S+)\s*=([^\n]*)/g) {
-        $varcontent{$1} = $2;
-    }
-}
 
 # Check to see whether we should process this make file.
 # This is where we look for tags that we need to process.
@@ -509,12 +481,7 @@ sub initialise ()
     %kdeopts = ();
     $kdeopts{"foreign"} = 0;
     $kdeopts{"qtonly"} = 0;
-    $kdeopts{"noautodist"} = 0;
-    $kdeopts{"foreign-libtool"} = $foreign_libtool;
     $kdeopts{"nofinal"} = !$use_final; # default
-    $kdeopts{"doxygen"} = 0;
-
-    read_variables();
 
     if ($MakefileData =~ /\nKDE_OPTIONS\s*=\s*([^\n]*)\n/) {
         local @kde_options = split(/[\s\034]/, $1);
@@ -554,40 +521,36 @@ sub initialise ()
 	    }
 	}
     }
-
+                                                     
     while ($MakefileData =~ /\n(\S*)_OBJECTS\s*=[ \t\034]*([^\n]*)\n/g) {
-
+        
         my $program = $1;
         my $objs = $2; # safe them
-
+        
         my $ocv = 0;
-
+        
         my @objlist = split(/[\s\034]+/, $objs);
         foreach $obj (@objlist) {
-            if ($obj =~ /(\S*)\$\((\S+)\)/ ) {
-		my $pre = $1;
-                my $variable = $2;
-		if ($pre eq '' && exists($varcontent{$variable})) {
-		    my @addlist = split(/[\s\034]+/, $varcontent{$variable});
-		    push(@objlist, @addlist);
-                } elsif ($variable !~ 'OBJEXT') {
+            if ($obj =~ /\$\((\S+)\)/ ) {
+                my $variable = $1;
+                if ($variable !~ 'OBJEXT') {
                     $ocv = 1;
-		}
+                }
             }
         }
-
+        
         next if ($ocv);
 
         $program =~ s/^am_// if ($program =~ /^am_/);
-
+        
         my $sourceprogram = $program;
         $sourceprogram =~ s/\@am_/\@/ if($sourceprogram =~ /^.*\@am_.+/);
-
+        
         print STDOUT "found program $program\n" if ($verbose);
         push(@programs, $program);
-
+        
         $realObjs{$program} = $objs;
-
+        
         if ($MakefileData =~ /\n$sourceprogram\_SOURCES\s*=\s*(.*)\n/) {
             $sources{$program} = $1;
         } 
@@ -709,8 +672,8 @@ sub tag_FINAL()
             if ((@sourcelist == 1 && !$mocfiles_in) || $suffix_is_cxx != 1 ) {
                 
                 # we support IDL on our own
-                if ($suffix =~ /^skel$/ || $suffix =~ /^stub/ || $suffix =~ /^signals/ 
-                    || $suffix =~ /^h$/ || $suffix =~ /^ui$/ ) {
+                if ($suffix =~ /^skel$/ || $suffix =~ /^stub/ || $suffix =~ /^h$/
+                    || $suffix =~ /^ui$/ ) {
                     next;
                 }
                 
@@ -785,42 +748,6 @@ sub tag_FINAL()
         }
     }
 }
-
-#-----------------------------------------------------------------------------
-
-sub tag_COMPILE_FIRST()
-{
-  foreach $program (@programs) {
-    my $lookup = "$program" . '_COMPILE_FIRST\s*=\s*(.*)';
-    if ($MakefileData =~ m/\n$lookup\n/) {
-      my @compilefirst = split(/[\s\034]+/, $1);
-      my @progsources = split(/[\s\034]+/, $sources{$program});
-      my %donesources = ();
-      $handling = "";
-      foreach $source (@progsources) {
-        my @deps  = ();
-        my $sdeps = "";
-        if (-f $source) {
-          $sdeps = "\$(srcdir)/$source";
-        } else {
-          $sdeps = "$source";
-        }
-        foreach $depend (@compilefirst) {
-          next if ($source eq $depend);
-          # avoid cyclic dependencies
-          next if defined($donesources{$depend});
-          push @deps, $depend;
-        }
-        $handling .= "$sdeps: " . join(' ', @deps) . "\n" if (@deps);
-        $donesources{$source} = 1;
-      }
-      appendLines($handling) if (length($handling));
-    }
-  }
-}
-
-#-----------------------------------------------------------------------------
-
 
 # Organises the list of headers that we'll use to produce moc files
 # from.
@@ -986,10 +913,8 @@ sub tag_IDLFILES ()
     foreach $source (@psources) {
         
         my $skel = ($source =~ m/\.skel$/);
-        my $stub = ($source =~ m/\.stub$/);
-        my $signals = ($source =~ m/\.signals$/);
         
-        if ($stub || $skel || $signals) {
+        if ($source =~ m/\.stub$/ || $skel) {
             
             my $qs = quotemeta($source);
             $sources{$program} =~ s/$qs//;
@@ -997,16 +922,14 @@ sub tag_IDLFILES ()
             
             print STDOUT "adding IDL file $source\n" if ($verbose);
             
-            $source =~ s/\.(stub|skel|signals)$//;
+            $source =~ s/\.(stub|skel)$//;
             
             my $sourcename;
             
             if ($skel) {
                 $sourcename = "$source\_skel";
-            } elsif ($stub) {
-                $sourcename = "$source\_stub";
             } else {
-                $sourcename = "$source\_signals";
+                $sourcename = "$source\_stub";
             }
             
             my $sourcedir = '';
@@ -1029,21 +952,13 @@ sub tag_IDLFILES ()
             
             if ($allidls !~ /$sourcename/) {
                 
-                $dep_lines_tmp = "";
-
                 if ($skel) {
                     $dep_lines .= "$sourcename.$cxxsuffix: $source.kidl\n";
-                    $dep_lines .= "\t\$(DCOPIDL2CPP) --c++-suffix $cxxsuffix --no-signals --no-stub $source.kidl\n";
-                } elsif ($stub) {
-                    $dep_lines_tmp = "\t\$(DCOPIDL2CPP) --c++-suffix $cxxsuffix --no-signals --no-skel $source.kidl\n";
-                } else { # signals
-                    $dep_lines_tmp = "\t\$(DCOPIDL2CPP) --c++-suffix $cxxsuffix --no-stub --no-skel $source.kidl\n";
-                }
-
-                if ($stub || $signals) {
+                    $dep_lines .= "\t\$(DCOPIDL2CPP) --c++-suffix $cxxsuffix --no-stub $source.kidl\n";
+                } else {
                     $target_adds{"$sourcename.$cxxsuffix"} .= "$sourcename.h ";
                     $dep_lines .= "$sourcename.h: $source.kidl\n";
-                    $dep_lines .= $dep_lines_tmp;
+                    $dep_lines .= "\t\$(DCOPIDL2CPP) --c++-suffix $cxxsuffix --no-skel $source.kidl\n";
                 }
                 
                 $allidls .= $sourcename . " ";
@@ -1119,9 +1034,7 @@ sub tag_UIFILES ()
                 $dep_lines .= "\trm -f $source.$cxxsuffix\n";
                 if (!$kdeopts{"qtonly"}) {
                     $dep_lines .= "\techo '#include <klocale.h>' > $source.$cxxsuffix\n";
-                    my ($mangled_source) = $source;
-                    $mangled_source =~ s/[^A-Za-z0-9]/_/g;  # get rid of garbage
-                    $dep_lines .= "\t\$(UIC) -tr \${UIC_TR} -i $source.h $sourcedir$source.ui | sed -e \"s,\${UIC_TR}( \\\"\\\" ),QString::null,g\" | sed -e \"s,\${UIC_TR}( \\\"\\\"\\, \\\"\\\" ),QString::null,g\" | sed -e \"s,image\\([0-9][0-9]*\\)_data,img\\1_" . $mangled_source . ",g\" >> $source.$cxxsuffix || rm -f $source.$cxxsuffix\n";
+                    $dep_lines .= "\t\$(UIC) -tr \${UIC_TR} -i $source.h $sourcedir$source.ui | sed -e \"s,\${UIC_TR}( \\\"\\\" ),QString::null,g\" | sed -e \"s,\${UIC_TR}( \\\"\\\"\\, \\\"\\\" ),QString::null,g\" >> $source.$cxxsuffix || rm -f $source.$cxxsuffix\n";
                 } else {
                     $dep_lines .= "\t\$(UIC) -i $source.h $sourcedir$source.ui > $source.$cxxsuffix || rm -f $source.$cxxsuffix\n";
                 }
@@ -1189,11 +1102,11 @@ sub tag_ICON()
             if ( $iconauto )
               {
                   push(@files, $entry)
-                    if ($entry =~ /\.xpm/ || $entry =~ /\.png/ || $entry =~ /\.mng/);
+                    if ($entry =~ /\.xpm/ || $entry =~ /\.png/);
               } else {
                   foreach $appname (@appnames) {
                       push(@files, $entry)
-                        if ($entry =~ /-$appname\.xpm/ || $entry =~ /-$appname\.png/ || $entry =~ /-$appname\.mng/);
+                        if ($entry =~ /-$appname\.xpm/ || $entry =~ /-$appname\.png/);
                   }
               }
         }
@@ -1204,7 +1117,7 @@ sub tag_ICON()
         foreach $file (@files) {
             my $newfile = $file;
             my $prefix = $file;
-            $prefix =~ s/\.(png|xpm|mng)$//;
+            $prefix =~ s/\.(png|xpm)$//;
             my $appname = $prefix;
             $appname =~ s/^[^-]+-// if ($appname =~ /-/) ;
             $appname =~ s/^[^-]+-// if ($appname =~ /-/) ;
@@ -1229,12 +1142,12 @@ sub tag_ICON()
                'filesys' => 'filesystems',
                'mime' => 'mimetypes'
               );
-
+            
             if (! defined $type_hash{$type} ) {
                 print STDERR "unknown icon type $type in $printname ($file)\n";
                 next;
             }
-
+            
             my %dir_hash =
               (
                'los' => 'locolor/16x16',
@@ -1252,7 +1165,7 @@ sub tag_ICON()
                'hisc' => 'hicolor/scalable'
               );
             
-            $newfile =~ s@.*-($appname\.(png|xpm|mng?))@$1@;
+            $newfile =~ s@.*-($appname\.(png|xpm?))@$1@;
             
             if (! defined $dir_hash{$prefix}) {
                 print STDERR "unknown icon prefix $prefix in $printname\n";
@@ -1474,7 +1387,7 @@ sub replaceDestDir($) {
       || $line =~ /^\s*(\@.*\@)*\s*\$\(INSTALL\S*\)/
       || $line =~ /^\s*(\@.*\@)*\s*(-?rm.*) \S*$/)
   {
-    $line =~ s/^(.*) ([^\s]+)\s*$/$1 \$(DESTDIR)$2/ if ($line !~ /\$\(DESTDIR\)/);
+    $line =~ s/^(.*) ([^\s]*)\s*$/$1 \$(DESTDIR)$2/ if ($line !~ /\$\(DESTDIR\)/);
   }
 
   if ($line ne $_[0]) {
@@ -1486,7 +1399,7 @@ sub replaceDestDir($) {
 #---------------------------------------------------------------------------
 sub tag_CLOSURE () {
     return if ($program !~ /_la$/);
-
+    
     my $lookup = quotemeta($realname{$program}) . ":.*?\n\t.*?\\((.*?)\\) .*\n";
     $MakefileData =~ m/$lookup/;
     return if ($1 !~ /CXXLINK/);
@@ -1526,8 +1439,7 @@ sub tag_DIST () {
     }
     closedir (THISDIR);
 
-    # doing this for MAINTAINERCLEANFILES would be wrong
-    my @marks = ("EXTRA_DIST", "DIST_COMMON", '\S*_SOURCES', '\S*_HEADERS', 'CLEANFILES', 'DISTCLEANFILES', '\S*_OBJECTS');
+    my @marks = ("EXTRA_DIST", "DIST_COMMON", '\S*_SOURCES', '\S*_HEADERS', 'MAINTAINERCLEANFILES', 'CLEANFILES', 'DISTCLEANFILES', '\S*_OBJECTS');
     foreach $mark (@marks) {
         while ($MakefileData =~ /\n($mark)\s*=\s*([^\n]*)/g) {
             foreach $file (split('[\034\s]', $2)) {
@@ -1550,7 +1462,7 @@ sub tag_DIST () {
     }
     if ($KDE_DIST) {
         print "KDE_DIST $printname $KDE_DIST\n" if ($verbose);
-
+        
         my $lookup = "DISTFILES *=(.*)";
         if ($MakefileData =~ /\n$lookup\n/o) {
             substituteLine($lookup, "KDE_DIST=$KDE_DIST\n\nDISTFILES=$1 \$(KDE_DIST)\n");
@@ -1563,6 +1475,16 @@ sub tag_DIST () {
 # Errors are logged in the global $errorflags
 sub tag_DOCFILES ()
 {
+#    if ($MakefileData =~ /\nSUBDIRS\s*=/) { # subdirs
+#      $MakefileData =~ /\n(.*-recursive:\s*)\n/;
+#      my $orig_rules = $1;
+#      my $rules = $orig_rules;
+#      $rules =~ s/:\s*$//;
+#      substituteLine($orig_rules, "$rules docs-recursive:");
+#      appendLines("docs: docs-recursive docs-am\n");
+#    } else {
+#      appendLines("docs: docs-am\n");
+#    }
     $target_adds{"all"} .= "docs-am ";
 
     my $lookup = 'KDE_DOCS\s*=\s*([^\n]*)';
@@ -1604,7 +1526,7 @@ sub tag_DOCFILES ()
     goto nodocs if (!$files);        # Nothing to do
 
     if ($files =~ /(^| )index\.docbook($| )/) {
-
+      
       my $lines = "";
       my $lookup = 'MEINPROC\s*=';
       if ($MakefileData !~ /\n($lookup)/) {
@@ -1617,11 +1539,11 @@ sub tag_DOCFILES ()
       $lookup = '\nindex.cache.bz2:';
       if ($MakefileData !~ /\n($lookup)/) {
          $lines .= "index.cache.bz2: \$(srcdir)/index.docbook \$(KDE_XSL_STYLESHEET) $files\n";
-         $lines .= "\t\@if test -n \"\$(MEINPROC)\"; then echo \$(MEINPROC) --check --cache index.cache.bz2 \$(srcdir)/index.docbook; \$(MEINPROC) --check --cache index.cache.bz2 \$(srcdir)/index.docbook; fi\n";
+         $lines .= "\t-\@if test -n \"\$(MEINPROC)\"; then echo \$(MEINPROC) --check --cache index.cache.bz2 \$(srcdir)/index.docbook; \$(MEINPROC) --check --cache index.cache.bz2 \$(srcdir)/index.docbook; fi\n";
          $lines .= "\n";
       }
-
-      $lines .= "docs-am: index.cache.bz2\n";
+ 
+      $lines .= "docs-am: index.cache.bz2\n";  
       $lines .= "\n";
       $lines .= "install-docs: docs-am install-nls\n";
       $lines .= "\t\$(mkinstalldirs) \$(DESTDIR)\$(kde_htmldir)/$kdelang/$appname\n";
@@ -1647,7 +1569,7 @@ sub tag_DOCFILES ()
       appendLines("docs-am: $files\n");
     }
 
-    $target_adds{"install-data-am"} .= "install-nls ";
+    $target_adds{"install-data-am"} .= "install-nls";
     $target_adds{"uninstall"} .= "uninstall-nls ";
 
     $tmp = "install-nls:\n";
@@ -1658,13 +1580,13 @@ sub tag_DOCFILES ()
     $tmp .= "\tdone\n";
     if ($appname eq 'common') {
       $tmp .= "\t\@echo \"merging common and language specific dir\" ;\\\n";
-      $tmp .= "\tif test ! -f \$(kde_htmldir)/en/common/kde-common.css; then echo 'no english docs found in \$(kde_htmldir)/en/common/'; exit 1; fi \n";
+      $tmp .= "\tif test ! -e \$(kde_htmldir)/en/common/kde-common.css; then echo 'no english docs found in \$(kde_htmldir)/en/common/'; exit 1; fi \n";
       $tmp .= "\t\@com_files=`cd \$(kde_htmldir)/en/common && echo *` ;\\\n";
       $tmp .= "\tcd \$(DESTDIR)\$(kde_htmldir)/$kdelang/common ;\\\n";
       $tmp .= "\tif test -n \"\$\$com_files\"; then for p in \$\$com_files ; do \\\n";
       $tmp .= "\t  case \" $files \" in \\\n";
       $tmp .= "\t    *\" \$\$p \"*) ;; \\\n";
-      $tmp .= "\t    *) test ! -f \$\$p && echo \$(LN_S) ../../en/common/\$\$p \$(DESTDIR)\$(kde_htmldir)/$kdelang/common/\$\$p && \$(LN_S) ../../en/common/\$\$p \$\$p ;; \\\n";
+      $tmp .= "\t    *) test ! -e \$\$p && echo \$(LN_S) ../../en/common/\$\$p \$(DESTDIR)\$(kde_htmldir)/$kdelang/common/\$\$p && \$(LN_S) ../../en/common/\$\$p \$\$p ;; \\\n";
       $tmp .= "\t  esac ; \\\n";
       $tmp .= "\tdone ; fi ; true\n";
     }
@@ -1691,150 +1613,6 @@ sub tag_DOCFILES ()
     return 1;
 }
 
-sub tag_doxygen_docu()
-{
-  my $lines;
-
-
-
-  my $added_apidox = 0;
-
-  if ($kdeopts{"doxygen"}) {
-    $added_apidox = 1;
-    $lines  = "apidox-am-yes:\n";
-    $lines .= "\t\@echo \"*** Creating API documentation main page\"; \\\n";
-    $lines .= "\tcp \$(top_srcdir)/Doxyfile.global Doxyfile; \\\n";
-    $lines .= "\techo \"PROJECT_NAME           = \$(DOXYGEN_PROJECT_NAME)\" >> Doxyfile ; \\\n";
-    $lines .= "\techo \"PROJECT_NUMBER         = \$(DOXYGEN_PROJECT_NUMBER)\" >> Doxyfile ; \\\n";
-    $lines .= "\techo \"INPUT                  = \$(top_srcdir)\" >> Doxyfile ; \\\n";
-    $lines .= "\techo \"OUTPUT_DIRECTORY       = \$(top_builddir)/apidocs\" >> Doxyfile ; \\\n";
-    $lines .= "\techo \"FILE_PATTERNS          = *.dox\" >> Doxyfile ; \\\n";
-    $lines .= "\techo \"RECURSIVE              = NO\" >> Doxyfile ; \\\n";
-    $lines .= "\techo \"SOURCE_BROWSER         = NO\" >> Doxyfile ; \\\n";
-    $lines .= "\techo \"ALPHABETICAL_INDEX     = NO\" >> Doxyfile ; \\\n";
-    $lines .= "\techo \"HTML_OUTPUT            = .\" >> Doxyfile ; \\\n";
-    $lines .= "\techo \"HTML_HEADER            = apidocs/common/mainheader.html\" >> Doxyfile ; \\\n";
-    $lines .= "\techo \"HTML_FOOTER            = apidocs/common/mainfooter.html\" >> Doxyfile ; \\\n";
-    $lines .= "\techo \"HTML_STYLESHEET        = apidocs/common/doxygen.css\" >> Doxyfile ; \\\n";
-    $lines .= "\techo \"GENERATE_LATEX         = NO\" >> Doxyfile ; \\\n";
-    $lines .= "\techo \"GENERATE_RTF           = NO\" >> Doxyfile ; \\\n";
-    $lines .= "\techo \"GENERATE_MAN           = NO\" >> Doxyfile ; \\\n";
-    $lines .= "\techo \"GENERATE_XML           = NO\" >> Doxyfile ; \\\n";
-    $lines .= "\techo \"GENERATE_AUTOGEN_DEF   = NO\" >> Doxyfile ; \\\n";
-    $lines .= "\techo \"ENABLE_PREPROCESSING   = NO\" >> Doxyfile ; \\\n";
-    $lines .= "\techo \"CLASS_DIAGRAMS         = NO\" >> Doxyfile ; \\\n";
-    $lines .= "\techo \"HAVE_DOT               = NO\" >> Doxyfile ; \\\n";
-    $lines .= "\t\$(mkinstalldirs) \$(top_builddir)/apidocs ; \\\n";
-    $lines .= "\trm -f \$(top_builddir)/apidocs/common ; \\\n";
-    $lines .= "\tcommon_dir=`cd \$(top_srcdir)/doc/common && pwd` ;\\\n";
-    $lines .= "\t\$(LN_S) \$\$common_dir \$(top_builddir)/apidocs/common; \\\n";
-    $lines .= "\tdoxygen Doxyfile; \\\n";
-    $lines .= "\trm -f Doxyfile; \\\n";
-    $lines .= "\techo \"*** Creating a tag file for the Qt library:\"; \\\n";
-    $lines .= "\t\$(mkinstalldirs) \$(top_builddir)/apidocs/qt; \\\n";
-    $lines .= "\tdoxytag -t \$(top_builddir)/apidocs/qt/qt.tag \$(QTDOCDIR)\n";
-  } else {
-    if ($MakefileData =~ /\nDOXYGEN_REFERENCES\s*=/) {
-      $added_apidox = 1;
-      $lines = "## generate API documentation with doxygen\n";
-      $lines .= "apidox-am-yes:\n";
-      $lines .= "\t\@if test \"\$(subdir)\" != \".\"; then \\\n";
-      $lines .= "\t\t\$(mkinstalldirs) \$(top_builddir)/apidocs/\$(subdir) ;\\\n";
-      $lines .= "\t\tif test ! -d \$(top_builddir)/apidocs/common; then \\\n";
-      $lines .= "\t\t\t\$(LN_S) \$(top_srcdir)/doc/common \$(top_builddir)/apidocs/common; \\\n";
-      $lines .= "\t\tfi; \\\n";
-      $lines .= "\t\tcp \$(top_srcdir)/Doxyfile.global Doxyfile; \\\n";
-      $lines .= "\t\techo \"PROJECT_NAME           = \\\"\$(subdir) Library\\\"\" >> Doxyfile; \\\n";
-      $lines .= "\t\techo \"INPUT                  = \$(srcdir)\" >> Doxyfile; \\\n";
-      $lines .= "\t\techo \"OUTPUT_DIRECTORY       = \$(top_builddir)/apidocs\" >> Doxyfile; \\\n";
-      $lines .= "\t\techo \"HTML_OUTPUT            = \$(subdir)/html\" >> Doxyfile; \\\n";
-      $lines .= "\t\techo \"LATEX_OUTPUT           = \$(subdir)/latex\" >> Doxyfile; \\\n";
-      $lines .= "\t\techo \"RTF_OUTPUT             = \$(subdir)/rtf\" >> Doxyfile; \\\n";
-      $lines .= "\t\techo \"MAN_OUTPUT             = \$(subdir)/man\" >> Doxyfile; \\\n";
-      $lines .= "\t\tif test -n \"\$(DOXYGEN_EXCLUDE)\"; then \\\n";
-      $lines .= "\t\t\techo \"EXCLUDE_PATTERNS      += \$(DOXYGEN_EXCLUDE)\" >> Doxyfile; \\\n";
-      $lines .= "\t\tfi ;\\\n";
-      $lines .= "\t\techo \"TAGFILES = \\\\\" >> Doxyfile; \\\n";
-      $lines .= "\t\ttags='\$(DOXYGEN_REFERENCES)'; for tag in \$\$tags; do \\\n";
-      $lines .= "\t\t\techo \"\$(top_builddir)/apidocs/\$\$tag/\$\$tag.tag=../../\$\$tag/html \\\\\" >> Doxyfile ;\\\n";
-      $lines .= "\t\tdone ;\\\n";
-      $lines .= "\t\techo \$(top_builddir)/apidocs/qt/qt.tag=\$(QTDOCDIR) >> Doxyfile ;\\\n";
-      $lines .= "\t\techo \"GENERATE_TAGFILE       = \$(top_builddir)/apidocs/\$(subdir)/\$(subdir).tag\" >> Doxyfile ;\\\n";
-      $lines .= "\t\techo \"IGNORE_PREFIX          = K\" >> Doxyfile ;\\\n";
-      $lines .= "\t\techo \"HAVE_DOT = \$(KDE_HAVE_DOT)\" >> Doxyfile ;\\\n";
-      $lines .= "\t\t\$(DOXYGEN) Doxyfile; \\\n";
-      $lines .= "\t\trm -f Doxyfile ;\\\n";
-      $lines .= "\tfi\n";
-    }
-  }
-
-  if ($added_apidox) {
-    appendLines ($lines);
-    $lines  = "apidox-am-no:\n";
-    $lines .= "apidox-am: apidox-am-\@KDE_HAS_DOXYGEN\@\n";
-
-    appendLines ($lines);
-
-    $lines = "## install API documentation\n";
-    $lines .= "install-apidox:\n";
-    $lines .= "\t\@if test \"\$(subdir)\" != \".\"; then \\\n";
-    $lines .= "\t\t\$(mkinstalldirs) \$(DESTDIR)\$(kde_htmldir)/en/\$(PACKAGE)-apidocs/\$(subdir)/html ; \\\n";
-    $lines .= "\t\tif test -f \$(top_builddir)/apidocs/\$(subdir)/\$(subdir).tag; then \\\n";
-    $lines .= "\t\techo \$(INSTALL_DATA) \$(top_builddir)/apidocs/\$(subdir)/\$(subdir).tag \$(DESTDIR)\$(kde_htmldir)/en/\$(PACKAGE)-apidocs/\$(subdir); \\\n";
-    $lines .= "\t\t\$(INSTALL_DATA) \$(top_builddir)/apidocs/\$(subdir)/\$(subdir).tag \$(DESTDIR)\$(kde_htmldir)/en/\$(PACKAGE)-apidocs/\$(subdir); \\\n";
-    $lines .= "\t\tfi; \\\n";
-    $lines .= "\t\tif test -d \$(top_builddir)/apidocs/\$(subdir)/html; then \\\n";
-    $lines .= "\t\t\tlist=`ls \$(top_builddir)/apidocs/\$(subdir)/html`; \\\n";
-    $lines .= "\t\t\tfor file in \$\$list; do \\\n";
-    $lines .= "\t\t\t\techo \$(INSTALL_DATA) \$(top_builddir)/apidocs/\$(subdir)/html/\$\$file \$(DESTDIR)\$(kde_htmldir)/en/\$(PACKAGE)-apidocs/\$(subdir)/html; \\\n";
-    $lines .= "\t\t\t\t\t\$(INSTALL_DATA) \$(top_builddir)/apidocs/\$(subdir)/html/\$\$file \$(DESTDIR)\$(kde_htmldir)/en/\$(PACKAGE)-apidocs/\$(subdir)/html; \\\n";
-    $lines .= "\t\tdone; \\\n";
-    $lines .= "\t\tfi; \\\n";
-    $lines .= "\t\trm -f \$(DESTDIR)\$(kde_htmldir)/en/\$(PACKAGE)-apidocs/common; \\\n";
-    $lines .= "\t\t\$(LN_S) \$(kde_libs_htmldir)/en/common \$(DESTDIR)\$(kde_htmldir)/en/\$(PACKAGE)-apidocs/common; \\\n";
-    $lines .= "\telse\\\n";
-    $lines .= "\t\t\$(mkinstalldirs) \$(DESTDIR)\$(kde_htmldir)/en/\$(PACKAGE)-apidocs ;\\\n";
-    $lines .= "\t\tlist=`cd \$(top_builddir)/apidocs && ls -1d`; \\\n";
-    $lines .= "\t\tfor file in \$\$list; do \\\n";
-    $lines .= "\t\t\tif test -f \$(top_builddir)/apidocs/\$\$file; then \\\n";
-    $lines .= "\t\t\t\techo \$(INSTALL_DATA) \$(top_builddir)/apidocs/\$\$file \$(DESTDIR)\$(kde_htmldir)/en/\$(PACKAGE)-apidocs; \\\n";
-    $lines .= "\t\t\t\t\$(INSTALL_DATA) \$(top_builddir)/apidocs/\$\$file \$(DESTDIR)\$(kde_htmldir)/en/\$(PACKAGE)-apidocs; \\\n";
-    $lines .= "\t\t\tfi; \\\n";
-    $lines .= "\t\tdone ;\\\n";
-    $lines .= "\tfi\n";
-
-    appendLines($lines);
-    $target_adds{"install-data-am"} .= "install-apidox ";
-
-    $lines = "## uninstall API documentation\n";
-    $lines .= "uninstall-apidox:\n";
-    $lines .= "\t\@if test -d \$(DESTDIR)\$(kde_htmldir)/en/\$(PACKAGE)-apidocs/\$(subdir); then \\\n";
-    $lines .= "\t\trm -rfv \$(DESTDIR)\$(kde_htmldir)/en/\$(PACKAGE)-apidocs/\$(subdir); \\\n";
-    $lines .= "\tfi\n";
-
-    appendLines ($lines);
-    $target_adds{"uninstall-am"} .= "uninstall-apidox ";
-
-  } else {
-    $lines = "apidox-am:\n";
-    appendLines ($lines);
-  }
-
-  if ($MakefileData =~ /\nSUBDIRS\s*=/) { # subdirs
-    $lines  = "apidox: apidox-am\n";
-    $lines .= "\t\@set fnord \$(MAKEFLAGS); amf=\$\$2; \\\n";
-    $lines .= "\tlist='\$(SUBDIRS)'; for subdir in \$\$list; do \\\n";
-    $lines .= "\t\techo \"Making apidox in \$\$subdir\"; \\\n";
-    $lines .= "\t\tif test \"\$\$subdir\" != \".\"; then \\\n";
-    $lines .= "\t\t\t(cd \$\$subdir && \$(MAKE) \$(AM_MAKEFLAGS) apidox) || exit 1; \\\n";
-    $lines .= "\t\tfi ;\\\n";
-    $lines .= "\tdone\n";
-    appendLines($lines);
-  } else {
-    appendLines("apidox: apidox-am\n");
-  }
-}
-
 #-----------------------------------------------------------------------------
 # Find headers in any of the source directories specified previously, that
 # are candidates for "moc-ing".
@@ -1844,7 +1622,7 @@ sub findMocCandidates ()
     {
         my @list = ();
         opendir (SRCDIR, "$dir");
-        @hFiles = grep { /.+\.$hExt$/o && !/^\./ } readdir(SRCDIR);
+        @hFiles = grep { /.+\.$hExt$/o } readdir(SRCDIR);
         closedir SRCDIR;
         foreach $hf (@hFiles)
         {
@@ -1924,8 +1702,7 @@ sub checkMocCandidates ()
     return unless (keys %mocFiles);
     opendir(THISDIR, ".") || return;
     @cppFiles = grep { /.+\.$cppExt$/o  && !/.+\.moc\.$cppExt$/o
-                         && !/.+\.all_$cppExt\.$cppExt$/o
-			 && !/^\./  } readdir(THISDIR);
+                         && !/.+\.all_$cppExt\.$cppExt$/o } readdir(THISDIR);
     closedir THISDIR;
     return unless (@cppFiles);
     my $files = join (" ", @cppFiles);
@@ -1987,11 +1764,9 @@ sub addMocRules ()
         $dir =~ s#^\.#\$(srcdir)#;
         if (defined ($cppFile))
         {
-	  $cppFile =~ s,\.[^.]*$,,;
-	  $target_adds{"$cppFile.o"} .= "$mocFile.moc ";
-	  $target_adds{"$cppFile.lo"} .= "$mocFile.moc ";
-	  appendLines ("$mocFile.moc: $dir/$hFile\n\t\$(MOC) $dir/$hFile -o $mocFile.moc\n");
-	  $cleanMoc .= " $mocFile.moc";
+            $target_adds{"\$(srcdir)/$cppFile"} .= "$mocFile.moc ";
+            appendLines ("$mocFile.moc: $dir/$hFile\n\t\$(MOC) $dir/$hFile -o $mocFile.moc\n");
+            $cleanMoc .= " $mocFile.moc";
         }
         else
         {
@@ -2087,15 +1862,8 @@ sub updateMakefile ()
     open (FILEOUT, "> $makefile")
                         || die "Could not create $makefile: $!\n";
 
+    print FILEOUT "\# $progId - " . '$Revision$ '  . "\n";
     $MakefileData =~ s/\034/\\\n\t/g;    # Restore continuation lines
-    # Append our $progId line, _below_ the "generated by automake" line
-    # because automake-1.6 relies on the first line to be his own.
-    my $progIdLine = "\# $progId - " . '$Revision$ '."\n";
-    if ( !( $MakefileData =~ s/^(.*generated .*by automake.*\n)/$1$progIdLine/ ) ) {
-        warn "automake line not found in $makefile\n";
-	# Fallback: first line
-        print FILEOUT $progIdLine;
-    };
     print FILEOUT $MakefileData;
     close FILEOUT;
 }

@@ -12,7 +12,6 @@ AC_HEADER_DIRENT
 AC_HEADER_STDC
 AC_HEADER_TIME
 AC_CHECK_HEADERS(fcntl.h sys/time.h unistd.h stdlib.h paths.h)
-AC_CHECK_FILE($kde_includes/arts/reference.h,, AC_MSG_ERROR("aRTS headers are missing"))
 AC_CHECK_FUNCS(usleep)
 
 dnl check whether user wants to use ALSA
@@ -27,6 +26,8 @@ AC_ARG_WITH(arts, [  --with-arts             enable aRts support (at cost of ALS
 
 if test "$with_alsa" = "yes"; then
   AM_PATH_ALSA(0.9.0, with_alsa=yes, with_alsa=no)
+else
+  AC_CHECK_FILE($kde_includes/arts/reference.h,, AC_MSG_ERROR("aRTS headers are missing"))
 fi
 
 if test "$with_alsa" = "yes"; then
