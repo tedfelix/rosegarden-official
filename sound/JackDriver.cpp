@@ -1478,7 +1478,7 @@ JackDriver::prebufferAudio()
     m_fileReader->fillBuffers(sliceStart);
 
     if (m_bussMixer->getBussCount() > 0) {
-//	m_instrumentMixer->fillBuffers(sliceStart);
+	m_instrumentMixer->fillBuffers(sliceStart);
 	m_bussMixer->fillBuffers(sliceStart);
     } else {
 	m_instrumentMixer->fillBuffers(sliceStart);
