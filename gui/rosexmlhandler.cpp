@@ -31,6 +31,7 @@
 #include <qtextstream.h>
 
 using Rosegarden::Composition;
+using Rosegarden::Studio;
 using Rosegarden::Int;
 using Rosegarden::String;
 using Rosegarden::Segment;
@@ -41,8 +42,10 @@ using namespace Rosegarden::BaseProperties;
 
 
 RoseXmlHandler::RoseXmlHandler(Composition &composition,
+                               Studio &studio,
                                Rosegarden::AudioFileManager &audioFileManager)
     : m_composition(composition),
+      m_studio(studio),
       m_audioFileManager(audioFileManager),
       m_currentSegment(0),
       m_currentEvent(0),
@@ -521,6 +524,22 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         if (m_section != InStudio)
         {
             m_errorString = i18n("Found Device outside Studio");
+            return false;
+        }
+
+        QString type = (atts.value("type")).lower();
+
+        if (type == "midi")
+        {
+            ;
+        }
+        else if (type == "audio")
+        {
+            ;
+        }
+        else
+        {
+            m_errorString = i18n("Found unknown Device type");
             return false;
         }
 

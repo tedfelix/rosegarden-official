@@ -408,7 +408,7 @@ bool
 RosegardenGUIDoc::xmlParse(QString &fileContents, QString &errMsg)
 {
     // parse xml file
-    RoseXmlHandler handler(m_composition, m_audioFileManager);
+    RoseXmlHandler handler(m_composition, m_studio, m_audioFileManager);
 
     QXmlInputSource source;
     source.setData(fileContents);

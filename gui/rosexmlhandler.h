@@ -26,6 +26,7 @@
 #include "Composition.h"
 #include "Event.h"
 #include "AudioFileManager.h"
+#include "Studio.h"
 
 class XmlStorableEvent;
 
@@ -49,6 +50,7 @@ public:
      * from the XML file into the specified composition
      */
     RoseXmlHandler(Rosegarden::Composition &composition,
+                   Rosegarden::Studio &studio,
                    Rosegarden::AudioFileManager &audioFileManager);
 
     virtual ~RoseXmlHandler();
@@ -82,6 +84,7 @@ protected:
     //--------------- Data members ---------------------------------
 
     Rosegarden::Composition &m_composition;
+    Rosegarden::Studio &m_studio;
     Rosegarden::AudioFileManager &m_audioFileManager;
     Rosegarden::Segment *m_currentSegment;
     XmlStorableEvent *m_currentEvent;

@@ -28,6 +28,7 @@ libbase_la_SOURCES = AnalysisTypes.C \
 		     SegmentNotationHelper.C \
 		     SegmentPerformanceHelper.C \
 		     Selection.C \
+                     Studio.C \
                      Track.C \
 		     ViewElement.C
 

@@ -37,6 +37,7 @@
 #include "MappedComposition.h"
 #include "multiviewcommandhistory.h"
 #include "AudioFileManager.h"
+#include "Studio.h"
 
 // forward declaration of the RosegardenGUI classes
 class RosegardenGUIView;
@@ -165,6 +166,11 @@ public:
      * returns the composition (the principal constituent of the document)
      */
     Rosegarden::Composition&       getComposition()       { return m_composition; }
+
+    /*
+     * return the Studio
+     */
+    Rosegarden::Studio& getStudio() { return m_studio;}
 
     /**
      * returns the composition (the principal constituent of the document)
@@ -299,6 +305,11 @@ private:
     MultiViewCommandHistory *m_commandHistory;
 
     Rosegarden::Clipboard *m_clipboard;
+
+    /*
+     * the Studio
+     **/
+    Rosegarden::Studio m_studio;
 };
 
 #endif // ROSEGARDENGUIDOC_H
