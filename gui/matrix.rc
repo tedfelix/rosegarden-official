@@ -5,8 +5,6 @@
 <MenuBar>
 
 <Menu name="file" append="new_merge">
-  <Action name="open_in_event_list"/>
-  <Action name="open_in_notation"/>
 </Menu>
 
 <Menu name="edit">
@@ -14,13 +12,8 @@
   <Action name="select_all"/>
   <Action name="clear_selection"/>
   <Action name="filter_selection"/>
-  <Separator/>
-  <Action name="add_tempo"/>
-  <Action name="add_time_signature"/>
-  <Separator/>
-  <Action name="set_segment_start"/>
-  <Action name="set_segment_duration"/>
 </Menu>
+
 
 <Menu name="View">
   <text>&amp;View</text>
@@ -48,6 +41,19 @@
     <Menu name="add_control_ruler"><text>Add Event Ruler</text></Menu>
 </Menu> 
 
+<Menu name="document">
+	<text>&amp;Document</text>
+	<Action name="add_tempo"/>
+	<Action name="add_time_signature"/>
+</Menu>
+<Menu name="segments">
+	<text>&amp;Segment</text>
+        <Action name="open_in_event_list"/>
+        <Action name="open_in_notation"/>
+        <Separator/>	
+	<Action name="set_segment_start"/>
+	<Action name="set_segment_duration"/>
+</Menu>
 <Menu name="Transforms">
   <text>Trans&amp;forms</text>
   <Action name="quantize"/>
@@ -82,46 +88,48 @@
   <Action name="remove_trigger"/>
 </Menu>
 
-<Menu name="Move">
-  <text>&amp;Move</text>
-  <Action name="cursor_back"/>
-  <Action name="cursor_forward"/>
-  <Action name="cursor_back_bar"/>
-  <Action name="cursor_forward_bar"/>
-  <Action name="cursor_start"/>
-  <Action name="cursor_end"/>
-  <Separator/>
-  <Action name="extend_selection_backward"/>
-  <Action name="extend_selection_forward"/>
-  <Action name="preview_selection"/>
-  <Action name="clear_loop"/>
-<Separator/>
-  <Action name="cursor_to_playback_pointer"/>
-  <Action name="playback_pointer_to_cursor"/>
-</Menu>
-
-<Menu name="Transport">
-<text>T&amp;ransport</text>
-  <Action name="play"/> 
-  <Action name="stop"/> 
-  <Action name="playback_pointer_back_bar"/>
-  <Action name="playback_pointer_forward_bar"/>
-  <Action name="playback_pointer_start"/>
-  <Action name="playback_pointer_end"/>
-  <Action name="playback_pointer_to_cursor" />
-  <Action name="cursor_to_playback_pointer" />
-  <Action name="toggle_solo"/>
-  <Action name="toggle_tracking"/>
-</Menu>
 
 <Menu name="Tools">
   <text>&amp;Tools</text>
+  <Menu name="edit_tools">
+  	<text>&amp;Edit Tools</text>
+	<Action name="select" />
+	<Action name="draw" />
+	<Action name="erase" />
+	<Action name="move" />
+        <Action name="resize" />
+  </Menu>
+    <Menu name="Move">
+        <text>Local &amp;Cursor</text>
+        <Action name="cursor_back"/>
+        <Action name="cursor_forward"/>
+        <Action name="cursor_back_bar"/>
+        <Action name="cursor_forward_bar"/>
+        <Action name="cursor_start"/>
+        <Action name="cursor_end"/>
+        <Separator/>
+        <Action name="extend_selection_backward"/>
+        <Action name="extend_selection_forward"/>
+        <Action name="preview_selection"/>
+        <Action name="clear_loop"/>
+        <Separator/>
+        <Action name="cursor_to_playback_pointer"/>
+        <Action name="playback_pointer_to_cursor"/>
+    </Menu>
 
-  <Action name="select" />
-  <Action name="draw" />
-  <Action name="erase" />
-  <Action name="move" />
-  <Action name="resize" />
+    <Menu name="Transport">
+    <text>T&amp;ransport</text>
+        <Action name="play"/> 
+        <Action name="stop"/> 
+        <Action name="playback_pointer_back_bar"/>
+        <Action name="playback_pointer_forward_bar"/>
+        <Action name="playback_pointer_start"/>
+        <Action name="playback_pointer_end"/>
+        <Action name="playback_pointer_to_cursor" />
+        <Action name="cursor_to_playback_pointer" />
+        <Action name="toggle_solo"/>
+        <Action name="toggle_tracking"/>
+    </Menu>
 
   <Separator/>
   <Action name="insert_note_actionmenu"/>

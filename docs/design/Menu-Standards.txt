@@ -1,0 +1,65 @@
+Since I have just committed an extremely radical restructuring of the menu
+system, I think it fitting to document the reasoning behind everything I did.
+
+Especially notable changes:
+
+Several top level menus have been pulled down into other menus.  The Move and
+Transport menus in the matrix and notation editors are mostly full of actions
+I expect most people to do with toolbars or keyboard shortcuts.  They don't
+rate a place on the top, and pulling them down reduces clutter.
+
+The entire Studio has been pulled into the new Document menu, and various
+Document-related items have been pulled out of Edit and into Document.  All
+Document-related functions in the matrix/notation editors are on Document now;
+namely the tempo/time actions, which are indeed global to the document.
+
+The notation editor has lost many top level menus.  Arguably the menus are
+more annoying to navigate now because some actions require negotiating three
+layers instead of two.  However, gone is any ambiguity about whether, for
+example, a tie is a group or a mark or a transform.  It doesn't move a note
+anywhere or physically alter its duration in any way, so it will be found on
+Note with all its like-minded brethren.
+
+
+The standard arrangement of menus is:
+
+File Edit View Document Segment [Extras] Tools Settings Help
+
+Each top level menu has a specific purpose we should stick to as closely as
+possible.  Generally they are:
+
+File     - actions that affect file management, such as loading/saving,
+           importing/exporting, and because it's the universal standard
+	   location, printing
+
+Edit     - actions that affect selections, such as select, cut, copy, paste, etc.
+
+View     - actions that affect the current view
+
+Document - actions that affect the document globally and which are unique to
+           the document, such as tempo/time, the entire Studio, and all the
+	   document length/properties functions
+
+Segments - actions that affect either the selected segment(s) or the segment
+           actively being edited
+
+Tools    - things like the various edit cursors, the local cursor control
+           menus, the transport menus, and various other miscellany.
+
+Settings - settings which affect Rosegarden globally, and the various
+           toolbar/ruler toggles
+
+Specific to the notation editor:
+
+Notes:   - these are actions that affect the visual appearance of a note
+           without physically moving it; this sweeping category includes
+	   beams, ties, tuplets, grace notes, slashes, marks, etc. 
+
+Transforms
+         - these are actions that alter the note in some way, by respelling
+	   it, transposing it, decounterpointing it, interpreting it, etc. and
+	   also where "tie notes at barlines" is found, even though this one
+	   really doesn't quite fit into either the "Notes" or "Transforms"
+	   categories as set forth here.
+
+08-06-2004  D. Michael "Silvan" McIntyre

@@ -5,8 +5,6 @@
 <MenuBar>
 
 <Menu name="file" append="new_merge">
-  <Action name="open_in_matrix"/>
-  <Action name="open_in_notation"/>
 </Menu>
 
 <Menu name="edit" append="new_merge">
@@ -29,6 +27,10 @@
   <Action name="time_raw"/>
 </Menu>
 
+<Menu name="segment">
+  <text>Seg&amp;ment</text>
+  <Action name="open_in_matrix"/>
+  <Action name="open_in_notation"/>
 </MenuBar>
 
 <ToolBar name="Actions Toolbar">
