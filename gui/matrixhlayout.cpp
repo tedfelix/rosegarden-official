@@ -145,7 +145,7 @@ void MatrixHLayout::scanStaff(Staff &staffBase,
                           * staff.getTimeScaleFactor());
 
 	double width = (*i)->getViewDuration() * staff.getTimeScaleFactor();
-	static_cast<MatrixElement*>((*i))->setWidth((int)width + 2); // fiddle factor
+	static_cast<MatrixElement*>((*i))->setWidth((int)width + 1); // fiddle factor
 	
 	if (isFullScan) {
 	    m_totalWidth = (*i)->getLayoutX() + width;

@@ -165,7 +165,7 @@ void MatrixPainter::handleLeftButtonPress(Rosegarden::timeT time,
     m_currentElement->setHeight(m_currentStaff->getElementHeight());
 
     double width = ev->getDuration() * m_currentStaff->getTimeScaleFactor();
-    m_currentElement->setWidth(int(width) + 2); // fiddle factor
+    m_currentElement->setWidth(width + 1); // fiddle factor
 
     m_currentStaff->positionElement(m_currentElement);
     m_mParentView->update();
@@ -193,7 +193,7 @@ int MatrixPainter::handleMouseMove(Rosegarden::timeT time,
 
     // ensure we don't have a zero width preview
     if (width == 0) width = initialWidth;
-    else width += 2; // fiddle factor
+    else width += 1; // fiddle factor
 
     m_currentElement->setWidth(int(width));
     
