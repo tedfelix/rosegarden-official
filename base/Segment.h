@@ -67,7 +67,7 @@ public:
 
     /**
      * Expands events in the [from, to[ interval into 
-     * events of duration baseDuration + events of duration R,
+     * tied events of duration baseDuration + events of duration R,
      * with R being equal to the events' initial duration minus baseDuration
      *
      * lastInsertedEvent will point to the last inserted event
@@ -75,8 +75,8 @@ public:
      * The events in [from, to[ must all be at the same absolute time
      *
      */
-    bool expandIntoGroup(iterator from, iterator to,
-                         timeT baseDuration, iterator& lastInsertedEvent);
+    bool expandIntoTie(iterator from, iterator to,
+                       timeT baseDuration, iterator& lastInsertedEvent);
 
     /**
      * Expands the event pointed by i into an event of duration
@@ -90,11 +90,11 @@ public:
      * D = 4*d
      * D = 4*d/3
      */
-    bool expandIntoGroup(iterator i, timeT baseDuration,
-                         iterator& lastInsertedEvent);
+    bool expandIntoTie(iterator i, timeT baseDuration,
+                       iterator& lastInsertedEvent);
 
     /**
-     * Same as expandIntoGroup(), but for an Event which hasn't
+     * Same as expandIntoTie(), but for an Event which hasn't
      * been inserted into a track yet. It will be expanded and
      * inserted along with the new generated event.
      * lastInsertedEvent will point to the 2nd event (the generated

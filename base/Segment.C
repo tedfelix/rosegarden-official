@@ -170,34 +170,34 @@ int Track::getNextGroupId() const
     return m_groupId++;
 }
 
-bool Track::expandIntoGroup(iterator i,
-                            timeT baseDuration,
-                            iterator& lastInsertedEvent)
+bool Track::expandIntoTie(iterator i,
+                          timeT baseDuration,
+                          iterator& lastInsertedEvent)
 {
     if (i == end()) return false;
 
     iterator i2 = i;
     ++i2;
     
-    return expandIntoGroup(i, i2, baseDuration, lastInsertedEvent);
+    return expandIntoTie(i, i2, baseDuration, lastInsertedEvent);
 }
 
-bool Track::expandIntoGroup(iterator from, iterator to,
-                            timeT baseDuration,
-                            iterator& lastInsertedEvent)
+bool Track::expandIntoTie(iterator from, iterator to,
+                          timeT baseDuration,
+                          iterator& lastInsertedEvent)
 {
-    cerr << "Track::expandIntoGroup(" << baseDuration << ")\n";
+    cerr << "Track::expandIntoTie(" << baseDuration << ")\n";
 
     timeT eventDuration = (*from)->getDuration();
     timeT baseTime = (*from)->getAbsoluteTime();
 
     if (baseDuration == eventDuration) {
-        cerr << "Track::expandIntoGroup() : baseDuration == eventDuration\n";
+        cerr << "Track::expandIntoTie() : baseDuration == eventDuration\n";
         return true;
     }
     
     timeT maxDuration = 0,
-        minDuration = 0;
+          minDuration = 0;
     
     if (baseDuration > eventDuration) {
         maxDuration = baseDuration;
@@ -210,27 +210,19 @@ bool Track::expandIntoGroup(iterator from, iterator to,
     // Check if we can perform the operation
     //
     if (checkExpansionValid(maxDuration, minDuration)) {
+  
+        long firstGroupId = -1;
+        (void)(*from)->get<Int>(BeamedGroupIdPropertyName, firstGroupId);
 
-//!!!        long gid = -1;
-//!!!        std::string groupType;
-
-        // if the initial event has a group id, set the new event to it,
-        // otherwise fetch the track's next group id
-        //
-
-/*!!!
-        if (!(*from)->get<Int>("GroupNo", gid)) {
-            cerr << "Track::expandIntoGroup() : creating new gid\n";
-            gid = getNextGroupId();
-            groupType = "beamed";
-        } else {
-            cerr << "Track::expandIntoGroup() : event already has a group\n";
+        long nextGroupId = -1;
+        iterator ni(to);
+        if (ni != end() && ++ni != end()) {
+            (void)(*ni)->get<Int>(BeamedGroupIdPropertyName, nextGroupId);
         }
-*/
-            
+          
         // Expand all the events in range [from, to[
         //
-        for(iterator i = from; i != to; ++i) {
+        for (iterator i = from; i != to; ++i) {
 
             if ((*i)->getAbsoluteTime() != baseTime) {
                 // there's no way to really report an error,
@@ -257,30 +249,33 @@ bool Track::expandIntoGroup(iterator from, iterator to,
               ev->set<Bool>(Note::TiedBackwardPropertyName, true);
             (*i)->set<Bool>(Note:: TiedForwardPropertyName, true);
 
-            /*!!!
-            if (gid >= 0) { // we need to group both notes
-                cerr << "Track::expandIntoGroup() : Setting gid = " << gid << endl;
-                ev->setMaybe<Int>("GroupNo", gid);
-                ev->setMaybe<String>("GroupType", groupType);
+            // we may also need to change some group information: if
+            // the first event is in a beamed group but the event
+            // following the insertion is not or is in a different
+            // group, then the new second event should not be in a
+            // group.  otherwise, it should inherit the grouping info
+            // from the first event (as it already does, because it
+            // was created using the copy constructor).
 
-                (*i)->setMaybe<Int>("GroupNo", gid);
-                (*i)->setMaybe<String>("GroupType", groupType);
+            //!!! Note that the whole division principle collapses if
+            //tuplets are involved.  That might be an acceptable
+            //behaviour, though, as the user can hardly expect an
+            //exact division where tuplets are present.
+
+            if (firstGroupId != -1 && nextGroupId != firstGroupId) {
+                ev->unset(BeamedGroupIdPropertyName);
+                ev->unset(BeamedGroupTypePropertyName);
             }
-            */
-            
-//             long pitch = 0;
-//             if ((*i)->get<Int>("pitch", pitch))
-//                 ev->set<Int>("pitch", pitch);
 
             lastInsertedEvent = insert(ev);
         }
     
-        cerr << "Track::expandIntoGroup() returning true\n";
+        cerr << "Track::expandIntoTie() returning true\n";
         return true;
 
     } else { // expansion is not possible
         
-        cerr << "Track::expandIntoGroup() returning false\n";
+        cerr << "Track::expandIntoTie() returning false\n";
         return false;
     }
 
@@ -312,18 +307,6 @@ bool Track::expandAndInsertEvent(Event *baseEvent, timeT baseDuration,
 
     if (checkExpansionValid(maxDuration, minDuration)) {
 
-//!!!        long gid = -1;
-//!!!        std::string groupType;
-
-        // if the initial event has a group id, set the new event to it,
-        // otherwise fetch the track's next group id
-        //
-/*!!!
-        if (!baseEvent->get<Int>("GroupNo", gid)) {
-            gid = getNextGroupId();
-            groupType = "beamed";
-        }
-*/
         baseEvent->setDuration(minDuration);
 
         // Add 2nd event
@@ -339,16 +322,12 @@ bool Track::expandAndInsertEvent(Event *baseEvent, timeT baseDuration,
                ev->set<Bool>(Note::TiedBackwardPropertyName, true);
         baseEvent->set<Bool>(Note:: TiedForwardPropertyName, true);
 
-/*!!!
-        if (gid >= 0) { // we need to group both notes
-            cerr << "Track::expandIntoGroup() : Setting gid = " << gid << endl;
-            ev->setMaybe<Int>("GroupNo", gid);
-            ev->setMaybe<String>("GroupType", groupType);
+        // we won't bother with the group tests that we do in
+        // expandIntoTie, because there is no "following" event to
+        // compare with yet.  (In theory we could do the tests, but
+        // we're lazy -- let's wait and see whether the behaviour
+        // seems okay in practice first)
 
-            baseEvent->setMaybe<Int>("GroupNo", gid);
-            baseEvent->setMaybe<String>("GroupType", groupType);
-        }
-*/
         lastInsertedEvent = insert(ev);
 
         return true;

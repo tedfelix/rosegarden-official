@@ -122,6 +122,8 @@ public:
     void setFromString(const std::string &name, std::string value,
                        bool persistent = true)
  	/* throw (BadType) */;
+
+    void unset(const std::string &name);
     
     typedef std::vector<std::string> PropertyNames;
     PropertyNames getPropertyNames() const;

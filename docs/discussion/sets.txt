@@ -65,7 +65,10 @@ Tie
 
    Potentially, we could rule that a note can also be "tied" with a
    note that is not of the same pitch (so long as it has an adjoining
-   absolute time); in this case, we have a glissando.
+   absolute time); in this case, we have a glissando.  I think in
+   practice this may be too difficult because either the source or
+   destination note could be part of a chord, making it impossible to
+   locate the correct destination note head for a glissando.
 
  * We don't have a representation for ties yet, although it seems
    plausible that we could get away with boolean tied-forward and

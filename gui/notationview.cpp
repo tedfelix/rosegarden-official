@@ -1046,9 +1046,9 @@ NotationView::insertNote(int height, const QPoint &eventPos)
 
                 // new note is being chorded with notes which are longer
                 // for the moment, do the same as in other case
-                if (track.expandIntoGroup(start, end,
-                                          insertedEvent->getDuration(),
-                                          newEnd)) {
+                if (track.expandIntoTie(start, end,
+                                        insertedEvent->getDuration(),
+                                        newEnd)) {
 
                     // put NotationElements around the newly created events
                     ++newEnd; // insertNewEvents works on a [from,to[ range

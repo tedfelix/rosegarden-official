@@ -93,6 +93,13 @@ Event::copyFrom(const Event &e)
     }
 }
 
+void
+Event::unset(const string &name)
+{
+    m_properties.erase(name);
+}
+    
+
 string
 Event::getPropertyType(const string &name) const
     // throw (NoData)
