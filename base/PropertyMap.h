@@ -64,7 +64,12 @@ class PropertyMap : public std::map<PropertyName, PropertyStoreBase *>
 
 {
 public:
-    PropertyMap() { }
+    PropertyMap()
+#ifdef PROPERTY_MAP_IS_HASH_MAP
+	;
+#else
+	{ }
+#endif
     PropertyMap(const PropertyMap &pm);
 
     ~PropertyMap();

@@ -29,6 +29,17 @@ namespace Rosegarden
 {
 using std::string;
 
+#ifdef PROPERTY_MAP_IS_HASH_MAP
+PropertyMap::PropertyMap() :
+    __HASH_NS::hash_map<PropertyName,
+			PropertyStoreBase *,
+			PropertyNameHash,
+			PropertyNamesEqual>(50, PropertyNameHash())
+{
+    // nothing
+}
+#endif
+
 PropertyMap::PropertyMap(const PropertyMap &pm) :
 
 #ifdef PROPERTY_MAP_IS_HASH_MAP
@@ -36,7 +47,7 @@ PropertyMap::PropertyMap(const PropertyMap &pm) :
     __HASH_NS::hash_map<PropertyName,
 			PropertyStoreBase *,
 			PropertyNameHash,
-			PropertyNamesEqual>()
+			PropertyNamesEqual>(50, PropertyNameHash())
 #else
 
     std::map<PropertyName, PropertyStoreBase *>()
