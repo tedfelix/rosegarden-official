@@ -33,7 +33,7 @@
 
 #include <klocale.h>
 #include <klineeditdlg.h>
-#include <kactioncollection.h>
+// #include <kactioncollection.h>
 
 #include "MidiTypes.h"
 #include "Selection.h"
