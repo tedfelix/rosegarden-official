@@ -23,6 +23,8 @@
 #include "WAVAudioFile.h"
 #include "MappedStudio.h"
 
+#define DEBUG_PLAYABLE 1
+
 // To ensure thread-safe access to the audio file list vector
 //
 pthread_mutex_t      _audioFileList = PTHREAD_MUTEX_INITIALIZER;
@@ -102,8 +104,7 @@ PlayableAudioFile::getSampleFrames(unsigned int frames)
         int bytes = frames * getBytesPerSample();
         size_t count = m_ringBuffer->read(&data, bytes);
 
-        std::cout << "GOT " << count << " BYTES from " << bytes << std::endl;
-
+#ifdef DEBUG_PLAYABLE
         if (count != size_t(bytes))
         {
             std::cerr << "PlayableAudioFile::getSampleFrames - "
@@ -111,6 +112,7 @@ PlayableAudioFile::getSampleFrames(unsigned int frames)
                       << count << " out of " << bytes
                       << std::endl;
         }
+#endif
     }
 
     return data;
@@ -132,7 +134,9 @@ PlayableAudioFile::getSampleFrameSlice(const RealTime &time)
 void
 PlayableAudioFile::fillRingBuffer(int bytes)
 {
+#ifdef DEBUG_PLAYABLE
     std::cerr << "PlayableAudioFile::fillRingBuffer - " << bytes << std::endl;
+#endif
 
     if (m_audioFile) // && !m_audioFile->isEof())
     {
@@ -150,14 +154,29 @@ PlayableAudioFile::fillRingBuffer(int bytes)
             // most likely we've run out of data in the file -
             // we can live with this - just write out what we
             // have got.
+#ifdef DEBUG_PLAYABLE
             std::cerr << "PlayableAudioFile::fillRingBuffer - "
                       << e << std::endl;
+#endif
+            return;
 
         }
 
-        std::cerr << "WRITING " << data.length() << " BYTES" << std::endl;
-        m_ringBuffer->write(data);
+        size_t writtenBytes = m_ringBuffer->write(data);
+
+#ifdef DEBUG_PLAYABLE
+        std::cerr << "PlayableAudioFile::fillRingBuffer - "
+                  << "written " << writtenBytes << " bytes" << std::endl;
+#endif
+
     }
+#ifdef DEBUG_PLAYABLE
+    else
+    {
+        std::cerr << "PlayableAudioFile::fillRingBuffer - no file" << std::endl;
+    }
+#endif
+
 
 }
 

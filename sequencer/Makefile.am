@@ -1,7 +1,9 @@
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
 bin_PROGRAMS = rosegardensequencer
-rosegardensequencer_SOURCES = rosegardensequencer.cpp \
+rosegardensequencer_SOURCES = mmappedcontrolblock.cpp \
+                              mmappedsegment.cpp \
+                              rosegardensequencer.cpp \
 			      main.cpp \
 			      rosegardensequenceriface.skel
 

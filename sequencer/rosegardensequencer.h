@@ -23,11 +23,10 @@
 #define _ROSEGARDEN_SEQUENCER_APP_H_
  
 // RosegardenSequencerApp is the sequencer application for Rosegarden.
-// It owns a Rosegarden::Sequencer object which wraps the aRTS level
-// funtionality.  At this level we deal with comms with the Rosegarden
-// GUI application, the high level marshalling of data and main event
-// loop of the sequencer.  [rwb]
-//
+// It owns a Rosegarden::Sequencer object which wraps the ALSA, JACK,
+// aRTS etc. level funtionality.  At this level we deal with comms with
+// the Rosegarden GUI application, the high level marshalling of data 
+// and main event loop of the sequencer.  [rwb]
 //
 
 
@@ -52,6 +51,7 @@
 #include "Sequencer.h"
 #include "Event.h"
 #include "MappedStudio.h"
+#include "mmappedsegment.h"
 
 class KURL;
 class KRecentFilesAction;
@@ -59,8 +59,6 @@ class KRecentFilesAction;
 // forward declaration of the RosegardenGUI classes
 class RosegardenGUIDoc;
 class RosegardenGUIView;
-class MmappedSegment;
-class MmappedSegmentsMetaIterator;
 class ControlBlockMmapper;
 
 namespace Rosegarden { class MappedInstrument; }
@@ -250,10 +248,6 @@ public:
     //
     virtual void setSliceSize(long timeSec, long timeUSec);
 
-    // Temporarily set slice size (for length of this slice)
-    //
-//     virtual void setTemporarySliceSize(long timeSec, long timeUSec);
-
     // Debug stuff, to check MmappedSegment::iterator
     virtual void dumpFirstSegment();
 
@@ -335,17 +329,11 @@ public:
     //
     void initialiseStudio();
 
-    typedef std::map<QString, MmappedSegment*> mmappedsegments;
-
 public slots:
 
     // Check for new clients - on timeout
     //
     void slotCheckForNewClients();
-
-    // Reset slice size (dynamic slice sizing) - timeout
-    //
-//    void slotRevertSliceSize();
 
 protected:
 
@@ -435,7 +423,7 @@ protected:
     // mmap segments
     //
     QString                         m_segmentFilesPath;
-    mmappedsegments                 m_mmappedSegments;
+    MmappedSegmentsMetaIterator::mmappedsegments    m_mmappedSegments;
     MmappedSegmentsMetaIterator*    m_metaIterator;
     Rosegarden::RealTime            m_lastStartTime;
 
