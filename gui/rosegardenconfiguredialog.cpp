@@ -600,7 +600,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     m_accOctavePolicy = new KComboBox(frame);
     m_accOctavePolicy->insertItem(i18n("Affect only that octave"));
     m_accOctavePolicy->insertItem(i18n("Require cautionaries in other octaves"));
-    m_accOctavePolicy->insertItem(i18n("Affect all octaves"));
+    m_accOctavePolicy->insertItem(i18n("Affect all subsequent octaves"));
     int accOctaveMode = m_cfg->readNumEntry("accidentaloctavemode", 1);
     if (accOctaveMode >= 0 && accOctaveMode < 3) {
 	m_accOctavePolicy->setCurrentItem(accOctaveMode);
@@ -610,7 +610,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     layout->addWidget(new QLabel(i18n("Accidentals in one bar..."), frame), 1, 0);
     m_accBarPolicy = new KComboBox(frame);
     m_accBarPolicy->insertItem(i18n("Affect only that bar"));
-    m_accBarPolicy->insertItem(i18n("Require cautionaries in following bar"));
+    m_accBarPolicy->insertItem(i18n("Require cautionary resets in following bar"));
     m_accBarPolicy->insertItem(i18n("Require explicit resets in following bar"));
     int accBarMode = m_cfg->readNumEntry("accidentalbarmode", 1);
     if (accBarMode >= 0 && accBarMode < 3) {
@@ -621,7 +621,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     layout->addWidget(new QLabel(i18n("Key signature cancellation style:"), frame), 2, 0);
     m_keySigCancelMode = new KComboBox(frame);
     m_keySigCancelMode->insertItem(i18n("Cancel only when entering C major or A minor"));
-    m_keySigCancelMode->insertItem(i18n("Cancel when removing sharps or flats"));
+    m_keySigCancelMode->insertItem(i18n("Cancel whenever removing sharps or flats"));
     m_keySigCancelMode->insertItem(i18n("Cancel always"));
     int cancelMode = m_cfg->readNumEntry("keysigcancelmode", 1);
     if (cancelMode >= 0 && cancelMode < 3) {

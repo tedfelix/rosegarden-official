@@ -245,11 +245,6 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 
     NOTATION_DEBUG << "ottava shift at start:" << ottavaShift << ", ottavaEnd " << ottavaEnd << endl;
 
-    //!!! problematic: if we're scanning from the middle, we won't
-    //have recorded any accidentals in the previous bar for the
-    //desirable BarResetCautionary/BarResetNaturals accidental table
-    //modes
-
     KConfig *config = kapp->config();
     config->setGroup("Notation Options");
 
@@ -266,7 +261,8 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 	 Rosegarden::AccidentalTable::BarResetNaturals);
 
     if (barResetType != Rosegarden::AccidentalTable::BarResetTotal) {
-	//!!! crude and expensive way of making sure we have right accidentals:
+	//!!! very crude and expensive way of making sure we see the
+	// accidentals from previous bar:
 	--startBarNo;
     }
 
