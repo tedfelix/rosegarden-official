@@ -709,6 +709,11 @@ void RosegardenGUIView::slotEditSegmentAudio(Rosegarden::Segment *segment)
         std::cerr << "RosegardenGUIView::slotEditSegmentAudio() - "
                   << "external editor \"" << application.data()
                   << "\" not found" << std::endl;
+
+
+        KMessageBox::sorry(this, 
+                i18n("You've not yet defined an audio editor for Rosegarden to use.\nSee Settings -> Configure Rosegarden -> General -> External Editors."));
+
         return;
     }
 

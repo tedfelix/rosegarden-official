@@ -27,6 +27,8 @@
 #include <qfont.h>
 #include <qfontmetrics.h>
 #include <qbitmap.h>
+#include <qtimer.h>
+#include <qobject.h>
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -963,6 +965,53 @@ void SegmentSplitLine::hideLine()
 }
 
 
+//////////////////////////////////////////////////////////////////////
+// SegmentCanvasTextFloat
+//
+// - based on a QCanvasRectangle
+// - a version of RosegardenTextFloat to be used on the main canvas
+//   (we could probably use that class in preference but this allows
+//    us to make some canvas specific tweaks)
+//
+//////////////////////////////////////////////////////////////////////
+SegmentCanvasTextFloat::SegmentCanvasTextFloat(QCanvas *canvas):
+    QCanvasRectangle(canvas),
+    m_text(new QCanvasText(canvas))
+
+{
+    setBrush(RosegardenGUIColours::RotaryFloatBackground);
+    setPen(RosegardenGUIColours::RotaryFloatForeground);
+    setZ(10000);
+    hide();
+
+    m_text->setColor(RosegardenGUIColours::RotaryFloatForeground);
+    m_text->setZ(10001);
+    m_text->hide();
+}
+
+void
+SegmentCanvasTextFloat::setText(int x, int y, const QString &text)
+{
+    setX(x);
+    setY(y);
+
+    m_text->setX(x + 2);
+    m_text->setY(y + 2);
+    m_text->setText(text);
+    QRect bound = m_text->boundingRect();
+    setSize(bound.width() + 4, bound.height() + 4);
+
+    show();
+    m_text->show();
+}
+
+void
+SegmentCanvasTextFloat::hideText()
+{
+    hide();
+    m_text->hide();
+}
+
 
 //////////////////////////////////////////////////////////////////////
 //                SegmentCanvas
@@ -987,6 +1036,7 @@ SegmentCanvas::SegmentCanvas(RosegardenGUIDoc *doc,
     m_selectionRect(0)
 {
     m_toolBox = new SegmentToolBox(this, m_doc);
+    m_textFloat = new SegmentCanvasTextFloat(canvas());
 
     QWhatsThis::add(this, i18n("Segments Canvas - Create and manipulate your segments here"));
 
@@ -995,6 +1045,10 @@ SegmentCanvas::SegmentCanvas(RosegardenGUIDoc *doc,
     m_selectionRect->setPen(RosegardenGUIColours::SelectionRectangle);
     m_selectionRect->setZ(1000);  // Always in front
     m_selectionRect->hide();
+
+    QObject::connect(&m_showTimer, SIGNAL(timeout()),
+                    this, SLOT(slotTextFloatTimeout()));
+
 }
 
 SegmentCanvas::~SegmentCanvas()
@@ -1011,6 +1065,26 @@ SegmentCanvas::getSelectionRectangle()
 {
     return m_selectionRect;
 }
+
+void 
+SegmentCanvas::slotTextFloatTimeout() 
+{ 
+    hideTextFloat();
+}
+
+void
+SegmentCanvas::setTextFloat(int x, int y, const QString &text)
+{
+    m_textFloat->setText(x, y, text);
+}
+
+void
+SegmentCanvas::hideTextFloat()
+{
+    m_textFloat->hideText();
+}
+
+
 
 void SegmentCanvas::slotSetTool(const QString& toolName)
 {

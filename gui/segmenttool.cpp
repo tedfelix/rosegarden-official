@@ -498,6 +498,7 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
 
         m_foreGuide->hide();
         m_topGuide->hide();
+        m_canvas->hideTextFloat();
 
         selector->clearSelected();
         for (SegmentSelection::const_iterator nIt = newSelection.begin();
@@ -587,6 +588,22 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
 
         m_foreGuide->setX(guideX);
         m_topGuide->setY(guideY);
+
+        Rosegarden::Composition &comp = m_doc->getComposition();
+        Rosegarden::RealTime time = 
+            comp.getElapsedRealTime(m_currentItem->getStartTime());
+        QString ms;
+        ms.sprintf("%03d", time.msec());
+
+        int bar, beat, fraction, remainder;
+        comp.getMusicalTimeForAbsoluteTime(
+                m_currentItem->getStartTime(), bar, beat, fraction, remainder);
+
+        QString posString = QString("%1.%2s ( %3, %4, %5 )")
+            .arg(time.sec).arg(ms)
+            .arg(bar).arg(beat).arg(fraction);
+
+        m_canvas->setTextFloat(guideX + 10, guideY - 30, posString);
 	m_canvas->canvas()->update();
 
 	return FollowHorizontal | FollowVertical;
@@ -1068,6 +1085,7 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
     //
     m_foreGuide->hide();
     m_topGuide->hide();
+    m_canvas->hideTextFloat();
     m_canvas->canvas()->update();
 
     if (m_dispatchTool) {
@@ -1371,6 +1389,21 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
         m_foreGuide->setX(guideX);
         m_topGuide->setY(guideY);
 
+        Rosegarden::Composition &comp = m_doc->getComposition();
+        Rosegarden::RealTime time = 
+            comp.getElapsedRealTime(m_currentItem->getStartTime());
+        QString ms;
+        ms.sprintf("%03d", time.msec());
+
+        int bar, beat, fraction, remainder;
+        comp.getMusicalTimeForAbsoluteTime(
+                m_currentItem->getStartTime(), bar, beat, fraction, remainder);
+
+        QString posString = QString("%1.%2s ( %3, %4, %5 )")
+            .arg(time.sec).arg(ms)
+            .arg(bar).arg(beat).arg(fraction);
+
+        m_canvas->setTextFloat(guideX + 10, guideY - 30, posString);
 	m_canvas->canvas()->update();
     }
 

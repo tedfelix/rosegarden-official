@@ -31,6 +31,7 @@
 #include "Selection.h"
 
 #include <qwidget.h>
+#include <qtimer.h>
 
 #include "rosegardencanvasview.h"
 
@@ -199,6 +200,28 @@ class SegmentSelector;
 class SegmentToolBox;
 
 /**
+ * SegmentCanvasTextFloat
+ *
+ * - based on a QCanvasRectangle
+ * - a version of RosegardenTextFloat to be used on the main canvas
+ *   (we could probably use that class in preference but this allows
+ *    us to make some canvas specific tweaks)
+ *
+ */
+class SegmentCanvasTextFloat : public QCanvasRectangle
+{
+public:
+    SegmentCanvasTextFloat(QCanvas *canvas);
+    void setText(int x, int y, const QString &text);
+    void hideText();
+
+protected:
+    QCanvasText *m_text;
+};
+
+
+
+/**
  * A class to visualize and edit segment items
  *
  * A coordinate grid is used to align SegmentItem objects, which can be
@@ -319,6 +342,15 @@ public:
      */
     void updateSegmentItemSelection();
 
+    /**
+     * Set and hide a text float on this canvas - it can contain
+     * anything and can be left to timeout or you can hide it
+     * explicitly.
+     *
+     */
+    void setTextFloat(int x, int y, const QString &text);
+    void hideTextFloat();
+
 public slots:
 
     /// Set the current segment editing tool
@@ -346,6 +378,9 @@ public slots:
     void slotHideSplitLine();
 
     void slotExternalWheelEvent(QWheelEvent*);
+
+    // TextFloat timer
+    void slotTextFloatTimeout();
 
 protected:
     virtual void contentsMousePressEvent(QMouseEvent*);
@@ -391,6 +426,10 @@ protected:
     // selection bounding box for sweep selections
     //
     QCanvasRectangle* m_selectionRect;
+
+    SegmentCanvasTextFloat *m_textFloat;
+    QTimer                  m_showTimer;
+
 };
 
 #endif
