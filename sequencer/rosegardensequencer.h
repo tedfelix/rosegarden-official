@@ -101,9 +101,14 @@ private:
 
   // Position pointer
   Rosegarden::timeT m_songPosition;
+  Rosegarden::timeT m_lastFetchSongPosition;
 
-  // Latency - time to fetch new events and spool them onto aRTS
-  //         - time to allow at startup and hence generally over the piece
+  // Latency - m_fetchLatency - when we should fetch new events and
+  //                            spool them onto aRTS
+  //
+  //         - m_playLatency  - how long we add to all events to make
+  //                            sure they play in a synchonised manner
+  //                            
   //
   // We can throttle these values internally at first and see how
   // we get on.

@@ -34,8 +34,9 @@ RosegardenSequencerApp::RosegardenSequencerApp():
     m_sequencer(0),
     m_transportStatus(STOPPED),
     m_songPosition(0),
-    m_fetchLatency(200),
-    m_playLatency(200)
+    m_lastFetchSongPosition(0),
+    m_fetchLatency(100),
+    m_playLatency(400)
 {
   // Without DCOP we are nothing
   QCString realAppId = kapp->dcopClient()->registerAs(kapp->name(), false);
@@ -110,6 +111,11 @@ RosegardenSequencerApp::stop()
   // unfinished NOTES)
   m_transportStatus = STOPPING;
 
+  // the Sequencer doesn't need to know these once
+  // we've stopped
+  m_songPosition = 0;
+  m_lastFetchSongPosition = 0;
+
   return true;
 }
 
@@ -164,11 +170,20 @@ RosegardenSequencerApp::fetchEvents(const Rosegarden::timeT &start,
 }
 
 
+// The first fetch of events from the core/ and initialization for
+// this session of playback.  We fetch up to m_playLatency timeT
+// ticks ahead at first at then top up once we're within
+// m_fetchLatency of the end of the last fetch.
+//
 bool
 RosegardenSequencerApp::startPlaying()
 {
   Rosegarden::MappedComposition mappedComp;
-  mappedComp = fetchEvents(m_songPosition, m_songPosition + m_fetchLatency);
+
+  // Fetch up to m_playLatency ahead
+  //
+  mappedComp = fetchEvents(m_songPosition, m_songPosition + m_playLatency);
+  m_lastFetchSongPosition = m_songPosition + m_playLatency;
 
   // This will reset the Sequencer's internal clock
   // ready for new playback
@@ -180,13 +195,22 @@ RosegardenSequencerApp::startPlaying()
   return true;
 }
 
+// Keep playing our fetched events, only top up the queued events
+// once we're within m_fetchLatency of the last fetch.
+//
 bool
 RosegardenSequencerApp::keepPlaying()
 {
-  Rosegarden::MappedComposition mappedComp;
-  mappedComp = fetchEvents(m_songPosition, m_songPosition + m_fetchLatency);
 
-  m_sequencer->processMidiOut(&mappedComp, m_playLatency);
+  if (m_songPosition > m_lastFetchSongPosition - m_fetchLatency )
+  {
+    Rosegarden::MappedComposition mappedComp;
+    mappedComp = fetchEvents(m_lastFetchSongPosition,
+                             m_lastFetchSongPosition + m_playLatency);
+ 
+    m_lastFetchSongPosition = m_lastFetchSongPosition + m_playLatency;
+    m_sequencer->processMidiOut(&mappedComp, m_playLatency);
+  }
 
   return true;
 }
