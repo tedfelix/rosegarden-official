@@ -56,9 +56,7 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
     m_document(doc),
     m_rulerScale(rulerScale),
     m_barButtons(0),
-    m_segmentCanvas(0),
-    m_hHeader(0),
-    m_vHeader(0)
+    m_segmentCanvas(0)
 {
     Composition &comp = doc->getComposition();
 
@@ -105,8 +103,6 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
 
     QGridLayout *grid = new QGridLayout(this, 2, 2);
 
-    setupHorizontalHeader(firstBar, lastBar);
-
     m_barButtons = new BarButtons(m_document,
                                   m_rulerScale,
                                   30, // getVHeader()->sectionSize(0)
@@ -114,41 +110,20 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
                                   this);
 
     grid->addWidget(m_barButtons, 0, 1);
-    grid->addWidget(m_vHeader =
-                    new Rosegarden::TrackHeader(nbTracks, this), 1, 0);
-    m_vHeader->setOrientation(Qt::Vertical);
 
-    // set up vert. header
-    for (int i = 0; i < m_vHeader->count(); ++i) {
-        m_vHeader->resizeSection(i, 25);
-        m_vHeader->setLabel(i, QString("Track %1").arg(i));
-    }
-
-    m_vHeader->setMinimumWidth(100);
-    m_vHeader->setResizeEnabled(false);
-
-//     QObject::connect(m_vHeader, SIGNAL(indexChange(int,int,int)),
-//                      this, SLOT(segmentOrderChanged(int,int,int)));
 
     QCanvas *canvas = new QCanvas(this);
 
     int canvasWidth = (int)(m_rulerScale->getBarPosition(lastBar) +
 			    m_rulerScale->getBarWidth(lastBar));
 
-    canvas->resize(canvasWidth, m_vHeader->sectionSize(0) * nbTracks);
+    canvas->resize(canvasWidth, getTrackCellHeight() * nbTracks);
     canvas->setBackgroundColor(RosegardenGUIColours::SegmentCanvas);
 
     m_segmentCanvas = new SegmentCanvas
-	(m_rulerScale, m_vHeader->sectionSize(0), *canvas, this);
+	(m_rulerScale,  getTrackCellHeight(), *canvas, this);
 
     grid->addWidget(m_segmentCanvas, 1, 1);
-
-    // Hide both headers - we use these for measurement and not show!
-    //
-    //!!! Get rid of the horizontal header -- it doesn't help, it
-    // just confuses matters
-    m_vHeader->hide();
-    m_hHeader->hide();
 
     connect(this, SIGNAL(needUpdate()),
             m_segmentCanvas, SLOT(update()));
@@ -178,6 +153,13 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
     m_pointer->setPoints(0, 0, 0, canvas->height());
     m_pointer->setZ(10);
     m_pointer->show();
+}
+
+int TrackEditor::getTrackCellHeight() const
+{
+    static QFont defaultFont;
+    
+    return defaultFont.pixelSize() + 5; // For the moment
 }
 
 void
@@ -245,23 +227,6 @@ void TrackEditor::addSegment(TrackId track, timeT time, timeT duration)
 	new SegmentInsertCommand(&comp, track, time, duration);
 
     addCommandToHistory(command);
-
-/*!!!    
-
-    Rosegarden::Segment* segment =
-        new Rosegarden::Segment(Rosegarden::Segment::Internal, start);
-
-    segment->setTrack(track);
-    comp.addSegment(segment);
-    segment->setDuration(nbTimeSteps);
-
-    int y = m_vHeader->sectionPos(track);
-    SegmentItem *newItem = m_segmentCanvas->addSegmentItem
-	(y, segment->getStartTime(), segment->getDuration());
-    newItem->setSegment(segment);
-
-    emit needUpdate();
-*/
 }
 
 
@@ -270,7 +235,6 @@ void TrackEditor::segmentOrderChanged(int section, int fromIdx, int toIdx)
     kdDebug(KDEBUG_AREA) << QString("TrackEditor::segmentOrderChanged(section : %1, from %2, to %3)")
         .arg(section).arg(fromIdx).arg(toIdx) << endl;
 
-    updateSegmentOrder();
     emit needUpdate();
 }
 
@@ -324,52 +288,9 @@ void TrackEditor::updateSegmentTrackAndStartTime(Segment *s, TrackId track,
 }
 
 
-void TrackEditor::updateSegmentOrder()
-{
-    QCanvasItemList itemList = getSegmentCanvas()->canvas()->allItems();
-    QCanvasItemList::Iterator it;
-
-    for (it = itemList.begin(); it != itemList.end(); ++it) {
-        QCanvasItem *item = *it;
-        SegmentItem *segmentItem = dynamic_cast<SegmentItem*>(item);
-        
-        if (segmentItem) {
-            segmentItem->setY(m_vHeader->sectionPos(segmentItem->getTrack()));
-        }
-    }
-}
-
-
 void TrackEditor::clear()
 {
     m_segmentCanvas->clear();
-}
-
-
-void TrackEditor::setupHorizontalHeader(int firstBar, int lastBar)
-{
-    QString num;
-    m_hHeader = new QHeader(lastBar - firstBar + 1, this);
-
-    int x = 0;
-
-    for (int i = firstBar; i <= lastBar; ++i) {
-
-	// The (i < lastBar) case resynchronises against the absolute
-	// bar position at each stage so as to avoid gradually increasing
-	// error through integer rounding
-
-	int width;
-	if (i < lastBar) {
-	    width = (int)(m_rulerScale->getBarPosition(i+1) - (double)x);
-	    x += width;
-	} else {
-	    width = (int)(m_rulerScale->getBarWidth(i));
-	}
-
-	m_hHeader->resizeSection(i - firstBar, width);
-        m_hHeader->setLabel(i - firstBar, num.setNum(i));
-    }
 }
 
 
@@ -437,7 +358,8 @@ TrackEditor::addSegmentItem(Rosegarden::Segment *segment)
                 return;
     }
 
-    int y = m_vHeader->sectionPos(segment->getTrack());
+    int y = segment->getTrack() * getTrackCellHeight();
+
     SegmentItem *newItem = m_segmentCanvas->addSegmentItem
 	(y, segment->getStartTime(), segment->getDuration());
     newItem->setSegment(segment);
@@ -505,7 +427,7 @@ void
 TrackEditor::updateRecordingSegmentItem(Rosegarden::Segment *segment)
 {
     Composition &comp = m_document->getComposition();
-    int y = m_vHeader->sectionPos(segment->getTrack());
+    int y = segment->getTrack() * getTrackCellHeight();
 
     timeT startTime = segment->getStartTime();
 

@@ -86,8 +86,8 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
 
     topBox->setSpacing(0);
     topBox->setMargin(0);
-    topSplit->setMinimumHeight(m_trackEditor->getVHeader()->sectionSize(0));
-    topSplit->setMaximumHeight(m_trackEditor->getVHeader()->sectionSize(0));
+    topSplit->setMinimumHeight(m_trackEditor->getTrackCellHeight());
+    topSplit->setMaximumHeight(m_trackEditor->getTrackCellHeight());
     topSplit->setSpacing(0);
     topSplit->setMargin(0);
     topSplit->setFrameStyle(Plain);
@@ -95,8 +95,8 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     QLabel *label = new QLabel(topSplit);
     label->setMinimumWidth(trackLabelWidth);
     label->setMaximumWidth(trackLabelWidth);
-    label->setMinimumHeight(m_trackEditor->getVHeader()->sectionSize(0));
-    label->setMaximumHeight(m_trackEditor->getVHeader()->sectionSize(0));
+    label->setMinimumHeight(m_trackEditor->getTrackCellHeight());
+    label->setMaximumHeight(m_trackEditor->getTrackCellHeight());
 
 //     QScrollView *barButtonsView = new QScrollView(topSplit);
 
@@ -134,9 +134,10 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     //
     //
     QScrollView *trackButtonsView = new QScrollView(mainPane);
-    m_trackButtons = new TrackButtons(doc, trackButtonsView,
-                                      m_trackEditor->getVHeader(),
-                                      trackLabelWidth);
+    m_trackButtons = new TrackButtons(doc,
+                                      m_trackEditor->getTrackCellHeight(),
+                                      trackLabelWidth,
+                                      trackButtonsView);
 
     trackButtonsView->addChild(m_trackButtons);
     trackButtonsView->setFrameStyle(Plain);

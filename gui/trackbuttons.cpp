@@ -30,29 +30,19 @@
 #include "vumeter.h"
 
 TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
+                           unsigned int trackCellHeight,
+                           unsigned int trackLabelWidth,
                            QWidget* parent,
-                           Rosegarden::TrackHeader *vHeader,
-                           const int &trackLabelWidth,
                            const char* name,
-                           WFlags):
-   QVBox(parent, name), m_doc(doc), m_lastID(-1),
-   m_trackLabelWidth(trackLabelWidth)
+                           WFlags f)
+    : QVBox(parent, name, f),
+      m_doc(doc),
+      m_tracks(doc->getNbTracks()),
+      m_offset(4),
+      m_cellSize(trackCellHeight),
+      m_lastID(-1),
+      m_trackLabelWidth(trackLabelWidth)
 {
-    assert(vHeader != 0);
-
-    // Number of tracks on our view
-    //
-    m_tracks = doc->getNbTracks();
-
-    // The pixel offset from the top - just to overcome
-    // the borders
-    //
-    m_offset = 4;
- 
-    // The height of the cells
-    //
-    m_cellSize = vHeader->sectionSize(0);
-
     setFrameStyle(Plain);
 
     // Now draw the buttons and labels and meters

@@ -48,9 +48,9 @@ class TrackButtons : public QVBox
 
 public:
     TrackButtons(RosegardenGUIDoc* doc,
+                 unsigned int trackCellHeight,
+                 unsigned int trackLabelWidth,
                  QWidget* parent = 0,
-                 Rosegarden::TrackHeader* trackHeader = 0,
-                 const int &trackLabelWidth = 0,
                  const char* name = 0,
                  WFlags f=0);
 
@@ -93,17 +93,22 @@ private:
 
     RosegardenGUIDoc *m_doc;
 
-    Rosegarden::TrackHeader *vHeader;
-    QHeader *hHeader;
-
     QButtonGroup *m_recordButtonGroup;
     QButtonGroup *m_muteButtonGroup;
 
     std::vector<TrackLabel *> m_trackLabels;
     std::vector<TrackVUMeter *> m_trackMeters;
 
+    // Number of tracks on our view
+    //
     int m_tracks;
+
+    // The pixel offset from the top - just to overcome
+    // the borders
     int m_offset;
+
+    // The height of the cells
+    //
     int m_cellSize;
     int m_lastID;
     int m_trackLabelWidth;

@@ -64,14 +64,10 @@ public:
     /// Clear the SegmentCanvas
     void clear();
 
-    /**
-     * Reset all the segments Y coordinates after the order of the
-     * instruments has been changed
-     */
-    void updateSegmentOrder();
-
     SegmentCanvas*       getSegmentCanvas()       { return m_segmentCanvas; }
     const SegmentCanvas* getSegmentCanvas() const { return m_segmentCanvas; }
+
+    int getTrackCellHeight() const;
 
     /**
      * Must be called after construction and signal connection
@@ -89,12 +85,6 @@ public:
 		   Rosegarden::timeT(start),
 		   Rosegarden::timeT(nbTimeSteps));
     }
-
-    /**
-     *  Return the track header pointer for scrutiny
-     */
-    Rosegarden::TrackHeader* getVHeader() { return m_vHeader; }
-    QHeader *getHHeader() { return m_hHeader; }
 
     /**
      * Manage command history
@@ -206,8 +196,6 @@ signals:
 protected:
 
     void init(unsigned int nbTracks, int firstBar, int lastBar);
-    void setupHorizontalHeader(int firstBar, int lastBar);
-
 
     //--------------- Data members ---------------------------------
 
@@ -215,8 +203,6 @@ protected:
     Rosegarden::RulerScale  *m_rulerScale;
     BarButtons              *m_barButtons;
     SegmentCanvas           *m_segmentCanvas;
-    QHeader                 *m_hHeader;
-    Rosegarden::TrackHeader *m_vHeader;
     QCanvasLine             *m_pointer;
 };
 
