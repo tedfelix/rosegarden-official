@@ -78,10 +78,12 @@ public:
     // shouldn't be less than zero.  Returns true if the
     // scan time was valid and successful.
     // 
+    virtual bool scanTo(const RealTime &time);
     virtual bool scanTo(std::ifstream *file, const RealTime &time);
 
     // Scan forward in a file by a certain amount of time
     //
+    virtual bool scanForward(const RealTime &time);
     virtual bool scanForward(std::ifstream *file, const RealTime &time);
 
     // Return a number of samples - caller will have to

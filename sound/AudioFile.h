@@ -107,14 +107,19 @@ public:
     //
     virtual void printStats() = 0;
 
-    // Move file pointer to relative time in data chunk -
-    // shouldn't be less than zero.  Returns true if the
-    // scan time was valid and successful.
+    // Move file pointer to relative time in data chunk - shouldn't be
+    // less than zero.  Returns true if the scan time was valid and
+    // successful.  Need two interfaces because when playing we use an
+    // external file handle (one per playback instance - PlayableAudioFile)
     // 
+    virtual bool scanTo(const RealTime &time) = 0;
     virtual bool scanTo(std::ifstream *file, const RealTime &time) = 0;
 
-    // Scan forward in a file by a certain amount of time
+    // Scan forward in a file by a certain amount of time - same
+    // double interface (simple one for peak file generation, other
+    // for playback).
     //
+    virtual bool scanForward(const RealTime &time) = 0;
     virtual bool scanForward(std::ifstream *file, const RealTime &time) = 0;
 
     // Return a number of samples - caller will have to

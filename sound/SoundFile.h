@@ -63,6 +63,9 @@ public:
     std::string getBigEndianFromInteger(unsigned int value,
                                         unsigned int length);
 
+    // Buffered read - allow this to be public
+    //
+    std::string getBytes(unsigned int numberOfBytes);
 
 protected:
     std::string m_fileName;
@@ -70,9 +73,6 @@ protected:
     // get some bytes from an input stream - unbuffered as we can
     // modify the file stream
     std::string getBytes(std::ifstream *file, unsigned int numberOfBytes);
-
-    // buffered read
-    std::string getBytes(unsigned int numberOfBytes);
 
     // write some bytes to an output stream
     void putBytes(std::ofstream *file,

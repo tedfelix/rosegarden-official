@@ -67,6 +67,10 @@ WAVAudioFile::~WAVAudioFile()
 bool
 WAVAudioFile::open()
 {
+    // if already open
+    if (m_inFile && (*m_inFile))
+        return true;
+
     m_inFile = new std::ifstream(m_fileName.c_str(),
                                  std::ios::in | std::ios::binary);
 

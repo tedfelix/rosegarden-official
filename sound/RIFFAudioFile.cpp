@@ -191,6 +191,25 @@ RIFFAudioFile::scanForward(std::ifstream *file, const RealTime &time)
 }
 
 bool
+RIFFAudioFile::scanForward(const RealTime &time)
+{
+    if (*m_inFile)
+        return scanForward(m_inFile, time);
+    else
+        return false;
+}
+
+bool
+RIFFAudioFile::scanTo(const RealTime &time)
+{
+    if (*m_inFile)
+        return scanTo(m_inFile, time);
+    else
+        return false;
+
+}
+
+bool
 RIFFAudioFile::scanTo(std::ifstream *file, const RealTime &time)
 {
     // sanity

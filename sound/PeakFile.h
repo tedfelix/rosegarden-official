@@ -82,7 +82,8 @@ protected:
     // Some Peak Envelope Chunk parameters
     //
     int m_version;
-    int m_channels;
+    int m_format;  // bytes in peak value (1 or 2)
+    int m_blockSize;
     int m_numberOfPeaks;
     int m_positionPeakOfPeaks;
     int m_offsetToPeaks;
@@ -96,6 +97,8 @@ protected:
     short m_minutes;
     short m_seconds;
     short m_milliseconds;
+
+    std::streampos m_chunkStartPosition;
     
 };
 

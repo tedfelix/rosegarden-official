@@ -93,6 +93,7 @@ SoundFile::getBytes(unsigned int numberOfBytes)
 
     std::string rS;
     char *fileBytes = new char[m_readChunkSize];
+    int oldLength;
 
     while (rS.length() < numberOfBytes && !m_inFile->eof())
     {
@@ -122,10 +123,12 @@ SoundFile::getBytes(unsigned int numberOfBytes)
         if (numberOfBytes - rS.length() <= m_readBuffer.length() -
                                            m_readChunkPtr)
         {
+            oldLength = rS.length();
+
             rS += m_readBuffer.substr(m_readChunkPtr,
                                       numberOfBytes - rS.length());
 
-            m_readChunkPtr += (numberOfBytes - rS.length());
+            m_readChunkPtr += (numberOfBytes - oldLength);
         }
         else
         {
