@@ -83,6 +83,9 @@ public:
 
     QString getFileName() { return m_fileName; }
 
+    unsigned int getSegmentRepeatCount();
+    size_t computeMmappedSize();
+
 protected:
     /// set the size of the mmapped filed
     void setFileSize(size_t);
@@ -1859,7 +1862,7 @@ SegmentMmapper::SegmentMmapper(RosegardenGUIDoc* doc,
       m_segment(segment),
       m_fileName(fileName),
       m_fd(-1),
-      m_mmappedSize(m_segment->size() * MappedEvent::streamedSize),
+      m_mmappedSize(computeMmappedSize()),
       m_mmappedBuffer((char*)0)
 {
     SEQMAN_DEBUG << "SegmentMmapper : " << this
@@ -1886,6 +1889,14 @@ SegmentMmapper::SegmentMmapper(RosegardenGUIDoc* doc,
     }
 }
 
+size_t SegmentMmapper::computeMmappedSize()
+{
+    int repeatCount = getSegmentRepeatCount();
+
+    return (repeatCount + 1) * m_segment->size() * MappedEvent::streamedSize;
+}
+
+
 SegmentMmapper::~SegmentMmapper()
 {
     SEQMAN_DEBUG << "~SegmentMmapper : " << this
@@ -1905,20 +1916,9 @@ bool SegmentMmapper::refresh()
 {
     bool res = false;
 
-    int repeatCount = 0;
+    int repeatCount = getSegmentRepeatCount();
 
-    timeT segmentStartTime = m_segment->getStartTime();
-    timeT segmentEndTime = m_segment->getEndMarkerTime();
-    timeT segmentDuration = segmentEndTime - segmentStartTime;
-
-    if (m_segment->isRepeating() && segmentDuration > 0) {
-	timeT repeatEndTime = m_segment->getRepeatEndTime();
-	//!!! this could be fractional, so we use 2 instead of 1 so as to round up:
-	repeatCount = 2 + (repeatEndTime - segmentEndTime) / segmentDuration;
-    }
-
-    size_t newMmappedSize =
-	repeatCount * m_segment->size() * MappedEvent::streamedSize;
+    size_t newMmappedSize = computeMmappedSize();
 
     SEQMAN_DEBUG << "SegmentMmapper::refresh() - m_mmappedBuffer = "
                  << (void*)m_mmappedBuffer << " - size = " << newMmappedSize << endl;
@@ -2046,21 +2046,16 @@ void SegmentMmapper::dump()
     
     SegmentPerformanceHelper helper(*m_segment);
 
-    int repeatCount = 0;
-
     timeT segmentStartTime = m_segment->getStartTime();
     timeT segmentEndTime = m_segment->getEndMarkerTime();
     timeT segmentDuration = segmentEndTime - segmentStartTime;
     timeT repeatEndTime = segmentEndTime;
 
-    if (m_segment->isRepeating() && segmentDuration > 0) {
-	repeatEndTime = m_segment->getRepeatEndTime();
-	repeatCount = 1 + (repeatEndTime - segmentEndTime) / segmentDuration;
-    }
+    int repeatCount = getSegmentRepeatCount();
+
+    if (repeatCount > 0) repeatEndTime = m_segment->getRepeatEndTime();
 
     unsigned int nbEvents = 0;
-
-    repeatCount = 0; // disable repeat, this doesn't work - GL.
 
     for (int repeatNo = 0; repeatNo <= repeatCount; ++repeatNo) {
 
@@ -2116,6 +2111,24 @@ void SegmentMmapper::dump()
     }
     
 }
+
+unsigned int SegmentMmapper::getSegmentRepeatCount()
+{
+    int repeatCount = 0;
+
+    timeT segmentStartTime = m_segment->getStartTime();
+    timeT segmentEndTime = m_segment->getEndMarkerTime();
+    timeT segmentDuration = segmentEndTime - segmentStartTime;
+    timeT repeatEndTime = segmentEndTime;
+
+    if (m_segment->isRepeating() && segmentDuration > 0) {
+	repeatEndTime = m_segment->getRepeatEndTime();
+	repeatCount = 1 + (repeatEndTime - segmentEndTime) / segmentDuration;
+    }
+
+    return repeatCount;
+}
+
 
 
 bool SequenceManager::event(QEvent *e)
