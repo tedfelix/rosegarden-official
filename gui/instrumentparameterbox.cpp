@@ -1211,6 +1211,15 @@ MIDIInstrumentParameterPanel::populateProgramList()
     }
 
     m_programValue->setEnabled(m_selectedInstrument->sendsProgramChange());
+
+    // Ensure that stored program change value is same as the one
+    // we're now showing (BUG 937371)
+    //
+    if (m_programs.size())
+    {
+        m_selectedInstrument->setProgramChange
+            ((m_programs[m_programValue->currentItem()]).getProgram());
+    }
 }
 
 void
@@ -1557,6 +1566,12 @@ MIDIInstrumentParameterPanel::sendBankAndProgram()
                                Rosegarden::MappedEvent::MidiProgramChange,
                                m_selectedInstrument->getProgramChange(),
                                (Rosegarden::MidiByte)0);
+
+    RG_DEBUG << "MIDIInstrumentParameterPanel::sendBankAndProgram - "
+             << "sending program change = " 
+             << int(m_selectedInstrument->getProgramChange()) 
+             << endl;
+
 
     // Send the controller change
     //
