@@ -1,9 +1,49 @@
 #!/usr/bin/python
 ## scons script for building rosegarden, adapted from
 ## the scons script for building the kde test applications
-## Thomas Nagy, 2004
+## by Thomas Nagy, 2004 (bksys)
+##
+##        Guillaume Laurent   <glaurent@telegraph-road.org>,
+##        Chris Cannam        <cannam@all-day-breakfast.com>,
+##        Richard Bown        <bownie@bownie.com>
 
-## This file can be reused freely for any project (see COPYING)
+
+"""
+Extract from bksys doc :
+
+To compile the project, you will then only need to launch
+scons on the top-level directory, the scripts find and
+cache the proper environment automatically :
+-> scons
+(or python scons.py)
+
+To clean the project
+-> scons -c
+(or python scons.py -c)
+
+To install the project
+-> scons install
+(or python scons.py scons install)
+
+To uninstall the project
+-> scons -c install
+
+To compile while being in a subdirectory
+-> cd src; scons -u
+
+To (re)configure the project and give particular arguments, use ie :
+-> scons configure debug=1
+-> scons configure prefix=/tmp/ita debug=full extraincludes=/usr/local/include:/tmp/include prefix=/usr/local
+or -> python scons.py configure debug=1
+etc ..
+The variables are saved automatically after the first run
+(look at kde.cache.py, ..)
+
+You can alternate between debug/non-debug mode very easily :
+
+scons configure debug=1; scons; scons configure ;
+
+"""
 
 import os
 
@@ -21,7 +61,7 @@ def Check_package(context, module, version):
 	context.Result(ret)
 	return ret
 
-env = Environment(tools = ['default', 'config', 'kde'], toolpath='./')
+env = Environment(TARGS=COMMAND_LINE_TARGETS, ARGS=ARGUMENTS, tools = ['default', 'generic', 'kde'], toolpath='./')
 env.AppendUnique( ENV = os.environ )
 
 # The target make dist requires the python module shutil which is in 2.3
