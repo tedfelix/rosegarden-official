@@ -449,20 +449,30 @@ SequenceManager::stop()
     // toggle the metronome button according to state
     m_transport->MetronomeButton->setOn(comp.usePlayMetronome());
 
-    // if we're recording MIDI then tidy up the recording Segment
-    if (m_transportStatus == RECORDING_MIDI)
-        m_doc->stopRecordingMidi();
-
-
+    // "call" the sequencer with a stop so we get a synchronous
+    // response - then we can fiddle about with the audio file
+    // without worrying about extraenous threads causing problems
+    //
+    QCString replyType;
+    QByteArray replyData;
     QByteArray data;
 
-    if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
+    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
                                   ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "stop()", data))
+                                  "stop()", data, replyType, replyData))
     {
         // failed - pop up and disable sequencer options
         throw(i18n("Failed to contact Rosegarden sequencer"));
     }
+
+    // if we're recording MIDI or Audio then tidy up the recording Segment
+    if (m_transportStatus == RECORDING_MIDI)
+        m_doc->stopRecordingMidi();
+
+    if (m_transportStatus == RECORDING_AUDIO)
+        m_doc->stopRecordingAudio();
+
+
 
     // always untoggle the play button at this stage
     //

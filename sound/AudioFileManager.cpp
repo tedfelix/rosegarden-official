@@ -74,7 +74,7 @@ AudioFileManager::insertFile(const std::string &name,
 
 
 bool
-AudioFileManager::removeFile(const unsigned int &id)
+AudioFileManager::removeFile(unsigned int id)
 {
     std::vector<AudioFile*>::iterator it;
 
@@ -118,7 +118,7 @@ AudioFileManager::getFirstUnusedID()
 bool
 AudioFileManager::insertFile(const std::string &name,
                              const std::string &fileName,
-                             const unsigned int &id)
+                             unsigned int id)
 {
     std::string foundFileName = getFileInPath(fileName);
 
@@ -211,7 +211,7 @@ AudioFileManager::getFileInPath(const std::string &file)
 // Does a specific file id exist on the manager?
 //
 bool
-AudioFileManager::fileExists(const unsigned int &id)
+AudioFileManager::fileExists(unsigned int id)
 {
     std::vector<AudioFile*>::iterator it;
 
@@ -307,6 +307,18 @@ AudioFileManager::createRecordingAudioFile()
 
     return file;
 } 
+
+AudioFile*
+AudioFileManager::getLastAudioFile()
+{
+    std::vector<AudioFile*>::iterator it = m_audioFiles.end();
+    it--;
+
+    if (it != 0)
+        return *it;
+
+    return 0;
+}
 
 
 

@@ -207,9 +207,10 @@ public:
                              TransportStatus status);
 
     /**
-     * Tidy up the recording Segment
+     * Tidy up the recording SegmentItems and other post record jobs
      */
     void stopRecordingMidi();
+    void stopRecordingAudio();
 
     /**
      * Register audio samples at the sequencer

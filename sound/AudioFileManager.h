@@ -53,7 +53,6 @@ public:
 
     // insert an audio file into the AudioFileManager and get the
     // first allocated id for it.
-    // 
     //
     unsigned int insertFile(const std::string &name,
                             const std::string &fileName);
@@ -61,11 +60,11 @@ public:
     // And insert an AudioFile and specify an id
     //
     bool insertFile(const std::string &name, const std::string &fileName,
-                    const unsigned int &id);
+                    unsigned int id);
 
     // Remove a file from the AudioManager by id
     //
-    bool removeFile(const unsigned int &id);
+    bool removeFile(unsigned int id);
 
     // Add a directory to the search path
     //
@@ -73,7 +72,7 @@ public:
 
     // does a specific file id exist?
     //
-    bool fileExists(const unsigned int &id);
+    bool fileExists(unsigned int id);
 
     // Get the list of files
     //
@@ -96,6 +95,10 @@ public:
     // Get a new audio filename at the audio record path
     //
     std::string createRecordingAudioFile();
+
+    // return the last file in the vector - the last created
+    //
+    AudioFile* getLastAudioFile();
 
 private:
     std::string getFileInPath(const std::string &file);

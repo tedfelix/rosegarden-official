@@ -1022,30 +1022,108 @@ RosegardenGUIDoc::createNewAudioFile()
 void
 RosegardenGUIDoc::insertRecordedAudio(const Rosegarden::RealTime &time,
                                       float audioLevel,
-                                     TransportStatus status)
+                                      TransportStatus status)
 {
+    if (status != RECORDING_AUDIO)
+        return;
+
     // Just create a new record Segment if we don't have one already.
     // Make sure we don't recreate the m_recordSegment if it's already
     // freed.
     //
-    if (m_recordSegment == 0 && status == RECORDING_AUDIO)
+    if (m_recordSegment == 0)
     {
-        m_recordSegment = new Segment();
+        cout << "CREATED NEW SEGMENT" << endl;
+        m_recordSegment = new Segment(Rosegarden::Segment::Audio);
         m_recordSegment->setTrack(m_composition.getRecordTrack());
         m_recordSegment->setStartTime(m_composition.getPosition());
-    }
-    cout << "TIME = " << time << endl;
 
-    if (status == RECORDING_AUDIO)
+        // new audio file will have been pushed to the back of the
+        // AudioFileManager queue - fetch it out and get the 
+        // AudioFileId
+        //
+        m_recordSegment->
+            setAudioFileID(m_audioFileManager.getLastAudioFile()->getId());
+
+        // always insert straight away for audio
+        m_composition.addSegment(m_recordSegment);
+    }
+
+    Rosegarden::timeT duration = m_composition.getElapsedTimeForRealTime(time)
+                                 - m_recordSegment->getStartTime();
+    m_recordSegment->setDuration(duration);
+
+    // update this segment on the GUI
+    RosegardenGUIView *w;
+    if(pViewList)
     {
-        // update this segment on the GUI
-        RosegardenGUIView *w;
-        if(pViewList)
+        for(w=pViewList->first(); w!=0; w=pViewList->next())
         {
-            for(w=pViewList->first(); w!=0; w=pViewList->next())
-            {
-                w->showRecordingSegmentItem(m_recordSegment);
-            }
+            w->showRecordingSegmentItem(m_recordSegment);
+        }
+    }
+}
+
+// tidy up the recording SegmentItem etc.
+//
+void
+RosegardenGUIDoc::stopRecordingAudio()
+{
+    // If we've created nothing then do nothing with it
+    //
+    if (m_recordSegment == 0)
+        return;
+
+    RosegardenGUIView *w;
+    if(pViewList)
+    {
+        for(w=pViewList->first(); w!=0; w=pViewList->next())
+        {
+            w->deleteRecordingSegmentItem();
+        }
+    }
+
+    // now add the Segment
+    std::cout << "RosegardenGUIDoc::stopRecordingAudio - "
+              << "got recorded segment" << std::endl;
+    // something in the record segment (that's why it was added
+    // to the composition)
+    m_commandHistory->addCommand (new SegmentRecordCommand(m_recordSegment));
+
+    m_recordSegment = 0;
+    slotUpdateAllViews(0);
+
+    // now tell the sequencer about the new file that it's just
+    // finished recording
+    QCString replyType;
+    QByteArray replyData;
+    QByteArray data;
+    QDataStream streamOut(data, IO_WriteOnly);
+
+    // Get the last added audio file - the one we've just recorded.
+    Rosegarden::AudioFile *newAudioFile = m_audioFileManager.getLastAudioFile();
+
+    streamOut << QString(strtoqstr(newAudioFile->getFilename()));
+    streamOut << newAudioFile->getId();
+
+    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
+                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                                  "addAudioFile(QString, int)", data, replyType, replyData))
+    {
+        std::cerr << "prepareAudio() - couldn't add audio file"
+                  << std::endl;
+        return;
+    }
+    else
+    {
+        QDataStream streamIn(replyData, IO_ReadOnly);
+        int result;
+        streamIn >> result;
+        if (!result)
+        {
+            std::cerr << "RosegardenGUIDoc::stopRecordingAudio - "
+                      << "failed to add file \"" 
+                      << newAudioFile->getFilename() << "\"" << endl;
         }
     }
 }

@@ -140,8 +140,12 @@ AudioFile::parseHeader(const std::string &hS)
     unsigned int length = getIntegerFromLittleEndian(hS.substr(4,4)) + 8;
 
     if (length != m_fileSize)
+    {
+        cout << "READ LENGTH = " << length << endl;
+        cout << "REAL LENGTH = " << m_fileSize << endl;
         throw(std::string("AudioFile::parseHeader - file " + m_fileName +
                      " corrupted (wrong length)"));
+    }
 
     // Check the format length (always 0x10)
     //
