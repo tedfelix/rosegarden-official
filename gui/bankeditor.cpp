@@ -18,6 +18,8 @@
     COPYING included with this distribution for more information.
 */
 
+#include <algorithm>
+
 #include <klocale.h>
 #include <qhbox.h>
 #include <qvbox.h>
@@ -40,155 +42,163 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
                                    Rosegarden::Studio *studio):
     KDialogBase(parent, "", true, i18n("Manage Banks and Programs..."),
                 Ok | Apply | Cancel),
-    m_studio(studio)
+    m_studio(studio),
+    m_modified(false)
 {
-   QVBox *vBox = makeVBoxMainWidget();
-
-   QGroupBox *deviceBox  = new QGroupBox(3,
-                                         Qt::Horizontal,
-                                         i18n("Select MIDI Device..."),
-                                         vBox);
-
-   deviceBox->addSpace(0);
-   deviceBox->addSpace(0);
-   m_deviceCombo = new RosegardenComboBox(false, deviceBox);
-   m_deviceCombo->setEditable(true);
-
-   Rosegarden::DeviceList *devices = studio->getDevices();
-   Rosegarden::DeviceListIterator it;
-   for (it = devices->begin(); it != devices->end(); it++)
-   {
-       if ((*it)->getType() == Rosegarden::Device::Midi)
-       {
-           m_deviceCombo->insertItem(strtoqstr((*it)->getName()));
-       }
-   }
-
-   QGroupBox *bankBox  = new QGroupBox(3,
-                                       Qt::Horizontal,
-                                       i18n("Manage Banks..."),
-                                       vBox);
 
 
-   m_addBank = new QPushButton(i18n("Add Bank"), bankBox);
-   m_deleteBank = new QPushButton(i18n("Delete Bank"), bankBox);
-   m_deleteAllBanks = new QPushButton(i18n("Delete All Banks"), bankBox);
+    QVBox *vBox = makeVBoxMainWidget();
 
-   QGroupBox *groupBox = new QGroupBox(1,
-                                       Qt::Horizontal,
-                                       i18n("Bank and Program details"),
-                                       vBox);
+    QGroupBox *deviceBox  = new QGroupBox(3,
+                                          Qt::Horizontal,
+                                          i18n("Select MIDI Device..."),
+                                          vBox);
 
-   m_mainFrame = new QFrame(groupBox);
-   QGridLayout *gridLayout = new QGridLayout(m_mainFrame,
-                                             1,  // rows
-                                             6,  // cols
-                                             2); // margin
+    deviceBox->addSpace(0);
+    deviceBox->addSpace(0);
+    m_deviceCombo = new RosegardenComboBox(false, deviceBox);
+    m_deviceCombo->setEditable(true);
+
+    Rosegarden::DeviceList *devices = studio->getDevices();
+    Rosegarden::DeviceListIterator it;
+    for (it = devices->begin(); it != devices->end(); it++)
+    {
+        if ((*it)->getType() == Rosegarden::Device::Midi)
+        {
+            m_deviceCombo->insertItem(strtoqstr((*it)->getName()));
+        }
+    }
+
+    QGroupBox *bankBox  = new QGroupBox(3,
+                                        Qt::Horizontal,
+                                        i18n("Manage Banks..."),
+                                        vBox);
 
 
-   gridLayout->addWidget(new QLabel(i18n("Bank Name"), m_mainFrame), 0, 4, AlignRight);
-   m_bankCombo = new RosegardenComboBox(false, m_mainFrame);
-   m_bankCombo->setEditable(true);
-   gridLayout->addWidget(m_bankCombo, 0, 5, AlignRight);
+    m_addBank = new QPushButton(i18n("Add Bank"), bankBox);
+    m_deleteBank = new QPushButton(i18n("Delete Bank"), bankBox);
+    m_deleteAllBanks = new QPushButton(i18n("Delete All Banks"), bankBox);
 
-   gridLayout->addWidget(new QLabel(i18n("MSB Value"), m_mainFrame), 1, 4, AlignRight);
-   m_msb = new QSpinBox(m_mainFrame);
-   m_msb->setMinValue(0);
-   m_msb->setMaxValue(127);
-   gridLayout->addWidget(m_msb, 1, 5, AlignRight);
+    QGroupBox *groupBox = new QGroupBox(1,
+                                        Qt::Horizontal,
+                                        i18n("Bank and Program details"),
+                                        vBox);
 
-   gridLayout->addWidget(new QLabel(i18n("LSB Value"), m_mainFrame), 2, 4, AlignRight);
-   m_lsb = new QSpinBox(m_mainFrame);
-   m_lsb->setMinValue(0);
-   m_lsb->setMaxValue(127);
-   gridLayout->addWidget(m_lsb, 2, 5, AlignRight);
+    m_mainFrame = new QFrame(groupBox);
+    QGridLayout *gridLayout = new QGridLayout(m_mainFrame,
+                                              1,  // rows
+                                              6,  // cols
+                                              2); // margin
+ 
 
-   /*
-   gridLayout->addWidget(new QLabel(i18n("Manage Banks:"), frame),
-                         0, 4, AlignCenter);
-   gridLayout->addWidget(m_addBank, 0, 5, AlignLeft);
-   gridLayout->addWidget(m_deleteBank, 1, 5, AlignLeft);
-   gridLayout->addWidget(m_deleteAllBanks, 2, 5, AlignLeft);
-   */
+    gridLayout->addWidget(new QLabel(i18n("Bank Name"), m_mainFrame),
+                          0, 4, AlignRight);
+    m_bankCombo = new RosegardenComboBox(false, m_mainFrame);
+    m_bankCombo->setEditable(true);
+    gridLayout->addWidget(m_bankCombo, 0, 5, AlignRight);
 
-   // spacer
-   //gridLayout->addRowSpacing(3, 15);
+    gridLayout->addWidget(new QLabel(i18n("MSB Value"), m_mainFrame),
+                          1, 4, AlignRight);
+    m_msb = new QSpinBox(m_mainFrame);
+    m_msb->setMinValue(0);
+    m_msb->setMaxValue(127);
+    gridLayout->addWidget(m_msb, 1, 5, AlignRight);
 
-   m_programTab = new QTabWidget(m_mainFrame);
-   m_programTab->setMargin(10);
-   gridLayout->addMultiCellWidget(m_programTab, 4, 4, 0, 6);
+    gridLayout->addWidget(new QLabel(i18n("LSB Value"), m_mainFrame),
+                          2, 4, AlignRight);
+    m_lsb = new QSpinBox(m_mainFrame);
+    m_lsb->setMinValue(0);
+    m_lsb->setMaxValue(127);
+    gridLayout->addWidget(m_lsb, 2, 5, AlignRight);
 
-   QHBox *progHBox = new QHBox(m_mainFrame);
-   QVBox *progVBox;
-   QHBox *numBox;
-   QLabel *label;
+    /*
+    gridLayout->addWidget(new QLabel(i18n("Manage Banks:"), frame),
+                          0, 4, AlignCenter);
+    gridLayout->addWidget(m_addBank, 0, 5, AlignLeft);
+    gridLayout->addWidget(m_deleteBank, 1, 5, AlignLeft);
+    gridLayout->addWidget(m_deleteAllBanks, 2, 5, AlignLeft);
+    */
 
-   for (unsigned int j = 0; j < 4; j++)
-   {
-       progVBox = new QVBox(progHBox);
+    // spacer
+    //gridLayout->addRowSpacing(3, 15);
 
-       for (unsigned int i = 0; i < 16; i++)
-       {
-           numBox = new QHBox(progVBox);
-           label = new QLabel(QString("%1").arg(j*16 + i), numBox);
-           label->setFixedWidth(50);
-           label->setAlignment(AlignHCenter);
+    m_programTab = new QTabWidget(m_mainFrame);
+    m_programTab->setMargin(10);
+    gridLayout->addMultiCellWidget(m_programTab, 4, 4, 0, 6);
 
-           m_programNames.push_back(new QLineEdit(numBox));
-       }
-   }
-   m_programTab->addTab(progHBox, i18n("Programs 0 - 63"));
+    QHBox *progHBox = new QHBox(m_mainFrame);
+    QVBox *progVBox;
+    QHBox *numBox;
+    QLabel *label;
 
-   progHBox = new QHBox(groupBox);
-   for (unsigned int j = 0; j < 4; j++)
-   {
-       progVBox = new QVBox(progHBox);
+    for (unsigned int j = 0; j < 4; j++)
+    {
+        progVBox = new QVBox(progHBox);
 
-       for (unsigned int i = 0; i < 16; i++)
-       {
-           numBox = new QHBox(progVBox);
-           label = new QLabel(QString("%1").arg(64 + j*16 + i), numBox);
-           label->setFixedWidth(50);
-           label->setAlignment(AlignHCenter);
+        for (unsigned int i = 0; i < 16; i++)
+        {
+            numBox = new QHBox(progVBox);
+            label = new QLabel(QString("%1").arg(j*16 + i), numBox);
+            label->setFixedWidth(50);
+            label->setAlignment(AlignHCenter);
 
-           m_programNames.push_back(new QLineEdit(numBox));
-       }
-   }
-   m_programTab->addTab(progHBox, i18n("Programs 64 - 127"));
+            m_programNames.push_back(new QLineEdit(numBox));
+        }
+    }
+    m_programTab->addTab(progHBox, i18n("Programs 0 - 63"));
 
-   connect(m_deviceCombo, SIGNAL(activated(int)),
-           this, SLOT(slotPopulateDevice(int)));
+    progHBox = new QHBox(groupBox);
+    for (unsigned int j = 0; j < 4; j++)
+    {
+        progVBox = new QVBox(progHBox);
 
-   connect(m_deviceCombo, SIGNAL(propagate(int)),
-           this, SLOT(slotPopulateDevice(int)));
+        for (unsigned int i = 0; i < 16; i++)
+        {
+            numBox = new QHBox(progVBox);
+            label = new QLabel(QString("%1").arg(64 + j*16 + i), numBox);
+            label->setFixedWidth(50);
+            label->setAlignment(AlignHCenter);
 
-   connect(m_bankCombo, SIGNAL(activated(int)),
-           this, SLOT(slotPopulateBank(int)));
+            m_programNames.push_back(new QLineEdit(numBox));
+        }
+    }
+    m_programTab->addTab(progHBox, i18n("Programs 64 - 127"));
 
-   connect(m_bankCombo, SIGNAL(propagate(int)),
-           this, SLOT(slotPopulateBank(int)));
+    connect(m_deviceCombo, SIGNAL(activated(int)),
+            this, SLOT(slotPopulateDevice(int)));
 
-   slotPopulateDevice(0);
+    connect(m_deviceCombo, SIGNAL(propagate(int)),
+            this, SLOT(slotPopulateDevice(int)));
 
-   // default buttons states
-   enableButtonOK(false);
-   enableButtonApply(false);
+    connect(m_bankCombo, SIGNAL(activated(int)),
+            this, SLOT(slotPopulateBank(int)));
 
-   // modification
-   connect(m_deviceCombo, SIGNAL(textChanged(const QString&)),
-           this, SLOT(slotModified()));
+    connect(m_bankCombo, SIGNAL(propagate(int)),
+            this, SLOT(slotPopulateBank(int)));
 
-   connect(m_bankCombo, SIGNAL(textChanged(const QString&)),
-           this, SLOT(slotModified()));
+    slotPopulateDevice(0);
 
-   connect(m_addBank, SIGNAL(released()),
-           this, SLOT(slotAddBank()));
+    // default buttons states
+    enableButtonOK(false);
+    enableButtonApply(false);
 
-   connect(m_deleteBank, SIGNAL(released()),
-           this, SLOT(slotDeleteBank()));
+    /*
+    // modification
+    connect(m_deviceCombo, SIGNAL(textChanged(const QString&)),
+            this, SLOT(slotModifyDeviceName(const QString&)));
 
-   connect(m_deleteAllBanks, SIGNAL(released()),
-           this, SLOT(slotDeleteAllBanks()));
+    connect(m_bankCombo, SIGNAL(textChanged(const QString&)),
+            this, SLOT(slotModifyBankName(const QString&)));
+            */
+
+    connect(m_addBank, SIGNAL(released()),
+            this, SLOT(slotAddBank()));
+
+    connect(m_deleteBank, SIGNAL(released()),
+            this, SLOT(slotDeleteBank()));
+
+    connect(m_deleteAllBanks, SIGNAL(released()),
+            this, SLOT(slotDeleteAllBanks()));
 }
 
 void
@@ -199,27 +209,19 @@ BankEditorDialog::slotPopulateDeviceBank(int deviceNo, int bank)
     if (device)
     {
         m_bankCombo->clear();
-        Rosegarden::StringList banks = device->getBankList();
 
-        if (banks.size() > 0)
+        if (m_bankList.size() > 0)
         {
-            // Make local copies of banks and programs
-            //
-            m_bankList.clear();
-            m_bankList = device->getBanks();
-
-            m_programList.clear();
-            m_programList = device->getPrograms();
-
             m_mainFrame->setDisabled(false);
-            for (unsigned int i = 0; i < banks.size(); i++)
+            for (unsigned int i = 0; i < m_bankList.size(); i++)
             {
-                m_bankCombo->insertItem(strtoqstr(banks[i]));
+                m_bankCombo->insertItem(strtoqstr(m_bankList[i].name));
             }
 
-            m_msb->setValue(device->getBankByIndex(0)->msb);
-            m_lsb->setValue(device->getBankByIndex(0)->lsb);
+            m_msb->setValue(m_bankList[bank].msb);
+            m_lsb->setValue(m_bankList[bank].lsb);
 
+            m_bankCombo->setCurrentItem(bank);
             slotPopulateBank(bank);
         }
         else
@@ -232,9 +234,49 @@ BankEditorDialog::slotPopulateDeviceBank(int deviceNo, int bank)
 }
 
 void
-BankEditorDialog::slotPopulateDevice(int device)
+BankEditorDialog::slotPopulateDevice(int devNo)
 {
-    slotPopulateDeviceBank(device, 0);
+    /*
+    disconnect(m_deviceCombo, SIGNAL(textChanged(const QString&)),
+               this, SLOT(slotModifyDeviceName(const QString&)));
+
+    disconnect(m_bankCombo, SIGNAL(textChanged(const QString&)),
+               this, SLOT(slotModifyBankName(const QString&)));
+               */
+
+    if (m_modified)
+    {
+        // then ask if we want to apply the changes
+    }
+
+    // Populate from actual MidiDevice
+    //
+    Rosegarden::MidiDevice *device = getMidiDevice(devNo);
+
+    m_bankList.clear();
+    m_programList.clear();
+
+    if (device)
+    {
+        Rosegarden::StringList banks = device->getBankList();
+
+        m_bankList.clear();
+        m_programList.clear();
+        m_bankList = device->getBanks();
+        m_programList = device->getPrograms();
+    }
+
+    slotPopulateDeviceBank(devNo, 0);
+
+    /*
+
+    connect(m_deviceCombo, SIGNAL(textChanged(const QString&)),
+            this, SLOT(slotModifyDeviceName(const QString&)));
+
+    connect(m_bankCombo, SIGNAL(textChanged(const QString&)),
+            this, SLOT(slotModifyBankName(const QString&)));
+            */
+
 }
 
 
@@ -246,14 +288,22 @@ BankEditorDialog::slotPopulateBank(int bank)
     Rosegarden::MidiDevice *device =
         getMidiDevice(m_deviceCombo->currentItem());
 
+    /*
+    disconnect(m_deviceCombo, SIGNAL(textChanged(const QString&)),
+               this, SLOT(slotModifyDeviceName(const QString&)));
+
+    disconnect(m_bankCombo, SIGNAL(textChanged(const QString&)),
+               this, SLOT(slotModifyBankName(const QString&)));
+    */
+
     if (device)
     {
         // set the bank values
-        m_msb->setValue(device->getBankByIndex(bank)->msb);
-        m_lsb->setValue(device->getBankByIndex(bank)->lsb);
+        m_msb->setValue(m_bankList[bank].msb);
+        m_lsb->setValue(m_bankList[bank].lsb);
         std::vector<Rosegarden::MidiProgram> programSubset 
-            = getBankSubset(device->getBankByIndex(bank)->msb,
-                            device->getBankByIndex(bank)->lsb);
+            = getBankSubset(m_bankList[bank].msb,
+                            m_bankList[bank].lsb);
         std::vector<Rosegarden::MidiProgram>::iterator it;
 
         for (unsigned int i = 0; i < 128; i++)
@@ -274,6 +324,15 @@ BankEditorDialog::slotPopulateBank(int bank)
         }
 
     }
+
+    /*
+    connect(m_deviceCombo, SIGNAL(textChanged(const QString&)),
+            this, SLOT(slotModifyDeviceName(const QString&)));
+
+    connect(m_bankCombo, SIGNAL(textChanged(const QString&)),
+            this, SLOT(slotModifyBankName(const QString&)));
+            */
+
 }
 
 std::vector<Rosegarden::MidiProgram>
@@ -295,13 +354,6 @@ BankEditorDialog::getBankSubset(Rosegarden::MidiByte msb,
 
 
 void
-BankEditorDialog::slotModified()
-{
-   enableButtonOK(true);
-   enableButtonApply(true);
-}
-
-void
 BankEditorDialog::slotOK()
 {
 }
@@ -311,7 +363,6 @@ BankEditorDialog::slotApply()
 {
 }
 
-
 void
 BankEditorDialog::slotAddBank()
 {
@@ -320,12 +371,15 @@ BankEditorDialog::slotAddBank()
 
     if (device)
     {
+        std::pair<int, int> bank =
+            getFirstFreeBank(m_deviceCombo->currentItem());
+
         Rosegarden::MidiBank *newBank = new Rosegarden::MidiBank();
-        newBank->msb = 0;
-        newBank->lsb = 0;
+        newBank->msb = bank.first;
+        newBank->lsb = bank.second;
         newBank->name = std::string("<new bank>");
 
-        device->addBank(newBank);
+        m_bankList.push_back(*newBank);
 
         slotPopulateDeviceBank(m_deviceCombo->currentItem(),
                                m_bankCombo->count());
@@ -387,6 +441,84 @@ BankEditorDialog::getMidiDevice(int number)
     return dynamic_cast<Rosegarden::MidiDevice*>(*it);
 }
 
+std::pair<int, int>
+BankEditorDialog::getFirstFreeBank(int devNo)
+{
+    int msb = 0;
+    int lsb = 0;
 
+    Rosegarden::MidiDevice *device = getMidiDevice(devNo);
+
+    if (device)
+    {
+
+        std::vector<Rosegarden::MidiBank>::iterator it;
+        std::vector<int> allMSB;
+        std::vector<int> allLSB;
+
+        for (it = m_bankList.begin(); it != m_bankList.end(); it++)
+        {
+            allMSB.push_back(it->msb);
+            allLSB.push_back(it->lsb);
+        }
+
+        do
+        {
+            lsb = 0;
+
+            while(std::find(allLSB.begin(), allLSB.end(), lsb) != allLSB.end()
+                  && lsb < 128)
+                lsb++;
+        }
+        while (lsb == 128 && msb++);
+
+        /*
+        while(std::find(allMSB.begin(), allMSB.end(), msb) != allMSB.end()
+              && msb < 128)
+            msb++;
+            */
+
+    }
+
+    return std::pair<int, int>(msb, lsb);
+}
+
+
+
+void
+BankEditorDialog::slotModifyBankName(const QString &label)
+{
+    m_bankList[m_bankCombo->currentItem()].name = qstrtostr(label);
+    m_bankCombo->changeItem(label, m_bankCombo->currentItem());
+
+    setModified(true);
+}
+
+void
+BankEditorDialog::slotModifyDeviceName(const QString &label)
+{
+    m_deviceCombo->changeItem(label, m_deviceCombo->currentItem());
+
+    setModified(true);
+}
+
+void
+BankEditorDialog::setModified(bool value)
+{
+    if (m_modified == value) return;
+
+    if (value)
+    {
+        enableButtonOK(true);
+        enableButtonApply(true);
+    }
+    else
+    {
+        enableButtonOK(false);
+        enableButtonApply(false);
+    }
+
+    m_modified = value;
+}
 
 

@@ -46,21 +46,24 @@ public:
     std::vector<Rosegarden::MidiProgram>
         getBankSubset(Rosegarden::MidiByte msb, Rosegarden::MidiByte lsb);
 
+    std::pair<int, int> getFirstFreeBank(int device);
+
+    void setModified(bool value);
 
 public slots:
     void slotPopulateBank(int bank);
     void slotPopulateDevice(int device);
     void slotPopulateDeviceBank(int device, int bank);
 
-    // something has been modified
-    void slotModified();
-
-    void slotApply();
     void slotOK();
+    void slotApply();
 
     void slotAddBank();
     void slotDeleteBank();
     void slotDeleteAllBanks();
+
+    void slotModifyBankName(const QString&);
+    void slotModifyDeviceName(const QString&);
 
 protected:
     // Get a MidiDevice from an index number
@@ -85,6 +88,8 @@ protected:
 
     std::vector<Rosegarden::MidiBank>        m_bankList;
     std::vector<Rosegarden::MidiProgram>     m_programList;
+
+    bool                     m_modified;
 
 };
 
