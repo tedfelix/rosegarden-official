@@ -51,8 +51,8 @@ public:
     static const std::string Bass;
 
     Clef() : m_clef(DefaultClef.m_clef) { }
-    Clef(const Event &e) throw (Event::NoData, Event::BadType, BadClefName);
-    Clef(const std::string &s) throw (BadClefName);
+    Clef(const Event &e); // throw (Event::NoData, Event::BadType, BadClefName);
+    Clef(const std::string &s); // throw (BadClefName);
     Clef(const Clef &c) : m_clef(c.m_clef) { }
 
     Clef &operator=(const Clef &c) {
@@ -97,8 +97,8 @@ public:
     struct BadKeyName { };
 
     Key() : m_name(DefaultKey.m_name), m_accidentalHeights(0) { checkMap(); }
-    Key(const Event &e) throw (Event::NoData, Event::BadType, BadKeyName);
-    Key(const std::string &name) throw (BadKeyName);
+    Key(const Event &e); // throw (Event::NoData, Event::BadType, BadKeyName);
+    Key(const std::string &name); // throw (BadKeyName);
     Key(const Key &kc) : m_name(kc.m_name), m_accidentalHeights(0) { }
     virtual ~Key() { delete m_accidentalHeights; }
 
@@ -310,8 +310,8 @@ public:
         Longest             = 7;
 
 
-    Note(Type type, int dots = 0) throw (BadType, TooManyDots);
-    Note(const std::string &s) throw (BadType);
+    Note(Type type, int dots = 0); // throw (BadType, TooManyDots);
+    Note(const std::string &s); // throw (BadType);
     Note(const Note &n) : m_type(n.m_type), m_dots(n.m_dots) { }
     virtual ~Note() { }
 
@@ -369,11 +369,11 @@ public:
 
     TimeSignature();
 
-    TimeSignature(int numerator, int denominator)
-        throw (BadTimeSignature);
+    TimeSignature(int numerator, int denominator);
+//         throw (BadTimeSignature);
 
-    TimeSignature(const Event &e)
-        throw (Event::NoData, Event::BadType, BadTimeSignature);
+    TimeSignature(const Event &e);
+//         throw (Event::NoData, Event::BadType, BadTimeSignature);
     
     TimeSignature(const TimeSignature &ts);
 

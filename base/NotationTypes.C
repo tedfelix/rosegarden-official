@@ -39,7 +39,7 @@ const string Clef::Bass = "bass";
 const Clef Clef::DefaultClef = Clef("treble");
 
 Clef::Clef(const Event &e)
-    throw (Event::NoData, Event::BadType, BadClefName)
+//     throw (Event::NoData, Event::BadType, BadClefName)
 {
     if (e.getType() != EventType) {
         throw Event::BadType();
@@ -52,7 +52,7 @@ Clef::Clef(const Event &e)
 }        
 
 Clef::Clef(const std::string &s)
-    throw (BadClefName)
+//     throw (BadClefName)
 {
     if (s != Treble && s != Tenor && s != Alto && s != Bass) {
         throw BadClefName();
@@ -67,8 +67,8 @@ const Key Key::DefaultKey = Key("C major");
 Key::KeyDetailMap Key::m_keyDetailMap = Key::KeyDetailMap();
 
 Key::Key(const Event &e)
-    throw (Event::NoData, Event::BadType, BadKeyName) :
-    m_accidentalHeights(0)
+//     throw (Event::NoData, Event::BadType, BadKeyName)
+    : m_accidentalHeights(0)
 {
     checkMap();
     if (e.getType() != EventType) {
@@ -81,7 +81,7 @@ Key::Key(const Event &e)
 }
 
 Key::Key(const std::string &name)
-    throw (BadKeyName)
+//     throw (BadKeyName)
     : m_name(name), m_accidentalHeights(0)
 {
     checkMap();
@@ -368,8 +368,9 @@ const string Note::NotePropertyName = "duration";
 const int Note::m_shortestTime       = 6;
 //const int Note::m_dottedShortestTime = 9;
 
-Note::Note(Type type, int dots) throw (BadType, TooManyDots) :
-    m_type(type), m_dots(dots)
+Note::Note(Type type, int dots)
+//     throw (BadType, TooManyDots)
+    : m_type(type), m_dots(dots)
 {
     //!!! having exceptions here may really bugger up compiler
     // optimisations for simple uses of Note (e.g. "int d =
@@ -386,8 +387,8 @@ Note::Note(Type type, int dots) throw (BadType, TooManyDots) :
 }
 
 Note::Note(const string &n)
-    throw (BadType) :
-    m_type(-1), m_dots(0)
+//     throw (BadType)
+    : m_type(-1), m_dots(0)
 {
     string name(n);
     if (name.length() > 7 && name.substr(0, 7) == "dotted ") {
@@ -475,14 +476,15 @@ TimeSignature::TimeSignature()
 {
 }
 
-TimeSignature::TimeSignature(int numerator, int denominator) throw (BadTimeSignature)
+TimeSignature::TimeSignature(int numerator, int denominator)
+//     throw (BadTimeSignature)
     : m_numerator(numerator), m_denominator(denominator)
 {
     if (numerator < 1 || denominator < 1) throw BadTimeSignature();
 }
 
 TimeSignature::TimeSignature(const Event &e)
-    throw (Event::NoData, Event::BadType, BadTimeSignature)
+//     throw (Event::NoData, Event::BadType, BadTimeSignature)
 {
     if (e.getType() != EventType) {
         throw Event::BadType();

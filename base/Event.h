@@ -90,40 +90,40 @@ public:
     bool has(const std::string &name) const;
 
     template <PropertyType P>
-    PropertyDefn<P>::basic_type get(const std::string &name) const
-        throw (NoData, BadType);
+    PropertyDefn<P>::basic_type get(const std::string &name) const;
+//         throw (NoData, BadType);
 
     // no throw, returns bool
     template <PropertyType P>
     bool get(const std::string &name, PropertyDefn<P>::basic_type &val) const;
 
     template <PropertyType P>
-    bool isPersistent(const std::string &name) const
-        throw (NoData);
+    bool isPersistent(const std::string &name) const;
+//         throw (NoData);
 
     template <PropertyType P>
-    void setPersistence(const std::string &name, bool persistent)
-        throw (NoData);
+    void setPersistence(const std::string &name, bool persistent);
+//         throw (NoData);
 
-    std::string getPropertyType(const std::string &name) const
-	throw (NoData);
-    std::string getAsString(const std::string &name) const
-	throw (NoData);
+    std::string getPropertyType(const std::string &name) const;
+// 	throw (NoData);
+    std::string getAsString(const std::string &name) const;
+// 	throw (NoData);
 
     template <PropertyType P>
     void set(const std::string &name, PropertyDefn<P>::basic_type value,
-             bool persistent = true)
-	throw (BadType);
+             bool persistent = true);
+// 	throw (BadType);
 
     // set non-persistent, but only if there's no persistent value already
     template <PropertyType P>
-    void setMaybe(const std::string &name, PropertyDefn<P>::basic_type value)
-        throw (BadType);
+    void setMaybe(const std::string &name, PropertyDefn<P>::basic_type value);
+//         throw (BadType);
 
     template <PropertyType P>
     void setFromString(const std::string &name, std::string value,
-                       bool persistent = true)
-	throw (BadType);
+                       bool persistent = true);
+// 	throw (BadType);
     
     typedef std::vector<std::string> PropertyNames;
     PropertyNames getPropertyNames() const;
@@ -213,7 +213,7 @@ Event::get(const std::string &name, PropertyDefn<P>::basic_type &val) const
 template <PropertyType P>
 PropertyDefn<P>::basic_type
 Event::get(const std::string &name) const
-    throw (NoData, BadType)
+//     throw (NoData, BadType)
 {
     PropertyMap::const_iterator i = m_properties.find(name);
     if (i != m_properties.end()) { 
@@ -242,7 +242,7 @@ Event::get(const std::string &name) const
 template <PropertyType P>
 bool
 Event::isPersistent(const std::string &name) const
-    throw (NoData)
+//     throw (NoData)
 {
     PropertyMap::const_iterator i = m_properties.find(name);
     if (i != m_properties.end()) return i->second->isPersistent();
@@ -259,7 +259,7 @@ Event::isPersistent(const std::string &name) const
 template <PropertyType P>
 void
 Event::setPersistence(const std::string &name, bool persistent)
-    throw (NoData)
+//     throw (NoData)
 {
     PropertyMap::const_iterator i = m_properties.find(name);
     if (i != m_properties.end()) i->second->setPersistence(persistent);
@@ -277,7 +277,7 @@ template <PropertyType P>
 void
 Event::set(const std::string &name, PropertyDefn<P>::basic_type value,
            bool persistent)
-    throw (BadType)
+//     throw (BadType)
 {
     PropertyMap::const_iterator i = m_properties.find(name);
     if (i != m_properties.end()) {
@@ -305,7 +305,7 @@ Event::set(const std::string &name, PropertyDefn<P>::basic_type value,
 template <PropertyType P>
 void
 Event::setMaybe(const std::string &name, PropertyDefn<P>::basic_type value)
-    throw (BadType)
+//     throw (BadType)
 {
     // no need to catch NoData from isPersistent, as the has() check
     // should mean it never happens
@@ -317,7 +317,7 @@ Event::setMaybe(const std::string &name, PropertyDefn<P>::basic_type value)
 template <PropertyType P>
 void
 Event::setFromString(const std::string &name, std::string value, bool persistent)
-    throw (BadType)
+//     throw (BadType)
 {
     set<P>(name, PropertyDefn<P>::parse(value), persistent);
 }
