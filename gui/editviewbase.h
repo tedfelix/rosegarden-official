@@ -234,6 +234,12 @@ protected:
     bool isCompositionModified();
     void setCompositionModified(bool);
 
+    /**
+     * Returns true if all of the segments contain
+     * only rests
+     */
+    bool getSegmentsOnlyRests();
+
     /// Convenience function around actionCollection()->action()
     KToggleAction* getToggleAction(const QString& actionName);
 

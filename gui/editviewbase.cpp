@@ -397,6 +397,28 @@ void EditViewBase::setCompositionModified(bool c)
 	(m_compositionRefreshStatusId).setNeedsRefresh(c);
 }
 
+bool EditViewBase::getSegmentsOnlyRests()
+{
+    using Rosegarden::Segment;
+
+    for (unsigned int i = 0; i < m_segments.size(); ++i) {
+        
+        Segment* segment = m_segments[i];
+        
+        for (Segment::iterator iter = segment->begin();
+             iter != segment->end(); ++iter) {
+
+            if ((*iter)->getType() != Rosegarden::Note::EventRestType)
+                return false;
+        }
+        
+    }
+    
+    return true;
+    
+}
+
+
 KToggleAction* EditViewBase::getToggleAction(const QString& actionName)
 {
     return dynamic_cast<KToggleAction*>(actionCollection()->action(actionName));
