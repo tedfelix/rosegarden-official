@@ -303,7 +303,9 @@ void
 SegmentCanvas::selectSegments(list<Rosegarden::Segment*> segments)
 {
     if (m_toolType != Selector)
-      return;
+        return;
+
+    SegmentSelector* selTool = dynamic_cast<SegmentSelector*>(m_tool);
 
     list<Rosegarden::Segment*>::iterator segIt;
     QCanvasItemList list = canvas()->allItems();
@@ -311,18 +313,16 @@ SegmentCanvas::selectSegments(list<Rosegarden::Segment*> segments)
 
     // clear any SegmentItems currently selected
     //
-    dynamic_cast<SegmentSelector*>(m_tool)->clearSelected();
+    selTool->clearSelected();
 
-    for (it = list.begin(); it != list.end(); ++it)
-    {
-        if ((*it)->rtti() == 5) // urgh, hard-coded real time id
-        {
-            for (segIt = segments.begin(); segIt != segments.end(); segIt++)
-            {
-                if(dynamic_cast<SegmentItem*>(*it)->getSegment() == (*segIt))
-                {
-                    dynamic_cast<SegmentSelector*>(m_tool)->selectSegmentItem
-                                  (dynamic_cast<SegmentItem*>(*it));
+    for (it = list.begin(); it != list.end(); ++it) {
+        if ((*it)->rtti() == 5) { // urgh, hard-coded real time id
+
+            for (segIt = segments.begin(); segIt != segments.end(); segIt++) {
+
+                if (dynamic_cast<SegmentItem*>(*it)->getSegment() == (*segIt)) {
+
+                    selTool->selectSegmentItem(dynamic_cast<SegmentItem*>(*it));
                 }
             }
         }
