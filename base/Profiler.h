@@ -23,8 +23,7 @@
 #ifndef _PROFILER_H_
 #define _PROFILER_H_
 
-#include <sys/times.h>
-#include <unistd.h>
+#include <ctime>
 
 #include "StringHash.h"
 
@@ -73,8 +72,6 @@ protected:
     const char* m_c;
     clock_t m_startTime;
     bool m_showOnDestruct;
-
-    static struct tms m_spare;
 };
  
 }

@@ -23,6 +23,8 @@
 #include "rosestrings.h"
 #include "rosedebug.h"
 
+#include "Profiler.h"
+
 // width of pointer
 //
 const int pointerWidth = 3;
@@ -364,6 +366,8 @@ template <class T>
 void
 LinedStaff<T>::sizeStaff(Rosegarden::HorizontalLayoutEngine<T> &layout)
 {
+    Rosegarden::Profiler profiler("LinedStaff::sizeStaff", true);
+
     deleteBars();
     deleteTimeSignatures();
 

@@ -149,15 +149,14 @@ MatrixParameterBox::initBox()
                 // attempt to construct a meaningful note length but just
                 // without the pixmap
 
-                float fValue = float(crotchetDuration) / float(m_snapValues[i]);
+//                float fValue = float(crotchetDuration) / float(m_snapValues[i]);
                 int iValue = crotchetDuration / m_snapValues[i];
 
-                /*
-                if (int(fValue) == iValue)
+		if (iValue * m_snapValues[i] == crotchetDuration) {
                     noteName = i18n("1/%1").arg(iValue);
-                else
-                */
+		} else {
                     noteName = i18n("%1 ticks").arg(m_snapValues[i]);
+		}
             }
 
 
@@ -182,6 +181,8 @@ MatrixParameterBox::initBox()
 void
 MatrixParameterBox::setSelection(Rosegarden::EventSelection *selection)
 {
+    if (!selection) return;
+
     Rosegarden::EventSelection::eventcontainer::iterator
         it = selection->getSegmentEvents().begin();
 

@@ -53,6 +53,8 @@ void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
 {
     updateGridSnap(e);
 
+    MATRIX_DEBUG << "MatrixCanvasView::contentsMousePressEvent: snap time is " << m_snapGrid.getSnapTime(e->x()) << endl;
+
     timeT evTime = m_snapGrid.snapX(e->x(), SnapGrid::SnapLeft);
     int evPitch = m_staff.getHeightAtCanvasY(e->y());
 
@@ -167,6 +169,7 @@ void MatrixCanvasView::updateGridSnap(QMouseEvent *e)
 //     MATRIX_DEBUG << "MatrixCanvasView::updateGridSnap : bs = "
 //                          << bs << " - sm = " << getSmoothModifier() << endl;
 
-    m_snapGrid.setSnapTime((bs & getSmoothModifier()) ?
-                           SnapGrid::NoSnap : SnapGrid::SnapToUnit);
+//!!! not for the moment
+//    m_snapGrid.setSnapTime((bs & getSmoothModifier()) ?
+//                           SnapGrid::NoSnap : SnapGrid::SnapToUnit);
 }

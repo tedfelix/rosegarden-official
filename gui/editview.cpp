@@ -28,6 +28,8 @@
 #include <kstdaction.h>
 #include <kstatusbar.h>
 
+#include "Profiler.h"
+
 #include "editview.h"
 #include "rosestrings.h"
 #include "rosegardencanvasview.h"
@@ -116,6 +118,8 @@ void EditView::addRuler(QWidget* w)
 
 void EditView::readjustViewSize(QSize requestedSize, bool exact)
 {
+    Rosegarden::Profiler profiler("EditView::readjustViewSize", true);
+
     if (exact) {
         setViewSize(requestedSize);
         return;

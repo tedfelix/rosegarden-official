@@ -20,6 +20,7 @@
 */
 
 #include "Composition.h"
+#include "Profiler.h"
 
 #include "matrixhlayout.h"
 #include "matrixstaff.h"
@@ -39,7 +40,7 @@ MatrixHLayout::~MatrixHLayout()
 
 void MatrixHLayout::reset()
 {
-    m_barData.clear();
+//!!!    m_barData.clear();
 }
 
 void MatrixHLayout::resetStaff(StaffType&, timeT, timeT)
@@ -49,6 +50,8 @@ void MatrixHLayout::resetStaff(StaffType&, timeT, timeT)
 void MatrixHLayout::scanStaff(MatrixHLayout::StaffType &staffBase,
 			      timeT startTime, timeT endTime)
 {
+    Rosegarden::Profiler profiler("MatrixHLayout::scanStaff", true);
+
     // The Matrix layout is not currently designed to be able to lay
     // out more than one staff, because we have no requirement to show
     // more than one at once in the Matrix view.  To make it work for
@@ -60,67 +63,75 @@ void MatrixHLayout::scanStaff(MatrixHLayout::StaffType &staffBase,
     MatrixStaff &staff = dynamic_cast<MatrixStaff &>(staffBase);
     bool isFullScan = (startTime == endTime);
 
+    MatrixElementList *notes = staff.getViewElementList();
+    MatrixElementList::iterator startItr = notes->begin();
+    MatrixElementList::iterator endItr = notes->end();
+
+    if (!isFullScan) {
+	startItr = notes->findNearestTime(startTime);
+	if (startItr == notes->end()) startItr = notes->begin();
+	endItr = notes->findTime(endTime);
+    }
+
+    if (endItr == notes->end() && startItr == notes->begin()) {
+	isFullScan = true;
+    }
+
     // Do this in two parts: bar lines separately from elements.
     // (We don't need to do all that stuff notationhlayout has to do,
     // scanning the notes bar-by-bar; we can just place the bar lines
     // in the theoretically-correct places and do the same with the
     // notes quite independently.)
-
-    // 1. Bar lines and time signatures.  For the moment we re-make
-    // these for the entire segment, disregarding startTime and
-    // endTime (this is not as slow as the element layout part)
-
-    for (BarDataList::iterator i = m_barData.begin();
-	 i != m_barData.end(); ++i) delete i->second;
-    m_barData.clear();
+	
     Rosegarden::Segment &segment = staff.getSegment();
     Rosegarden::Composition *composition = segment.getComposition();
-
     m_firstBar = composition->getBarNumber(segment.getStartTime());
     timeT from = composition->getBarStart(m_firstBar),
 	    to = composition->getBarEndForTime(segment.getEndMarkerTime());
-
-    int barNo = m_firstBar;
     double startPosition = from;
 
-    MATRIX_DEBUG << "MatrixHLayout::scanStaff() : start time = " << startTime << ", first bar = " << m_firstBar << ", end time = " << endTime << ", end marker time = "  << segment.getEndMarkerTime() << ", from = " << from << ", to = " << to << endl;
+    // 1. Bar lines and time signatures.  We only re-make these on
+    // full scans.
 
-    while (from < to) {
+    if (isFullScan || m_barData.size() == 0) {
+    
+	for (BarDataList::iterator i = m_barData.begin();
+	     i != m_barData.end(); ++i) delete i->second;
 
- 	bool isNew = false;
-	Rosegarden::TimeSignature timeSig =
-	    composition->getTimeSignatureInBar(barNo, isNew);
-
-	if (isNew) {
-	    m_barData.push_back(BarData((from - startPosition) *
-					staff.getTimeScaleFactor(),
-					timeSig.getAsEvent(from)));
-	} else {
-	    m_barData.push_back(BarData((from - startPosition) *
-					staff.getTimeScaleFactor(),
-					0));
+	m_barData.clear();
+	int barNo = m_firstBar;
+	
+	MATRIX_DEBUG << "MatrixHLayout::scanStaff() : start time = " << startTime << ", first bar = " << m_firstBar << ", end time = " << endTime << ", end marker time = "  << segment.getEndMarkerTime() << ", from = " << from << ", to = " << to << endl;
+	
+	while (from < to) {
+	    
+	    bool isNew = false;
+	    Rosegarden::TimeSignature timeSig =
+		composition->getTimeSignatureInBar(barNo, isNew);
+	    
+	    if (isNew) {
+		m_barData.push_back(BarData((from - startPosition) *
+					    staff.getTimeScaleFactor(),
+					    timeSig.getAsEvent(from)));
+	    } else {
+		m_barData.push_back(BarData((from - startPosition) *
+					    staff.getTimeScaleFactor(),
+					    0));
+	    }
+	    
+	    from = composition->getBarEndForTime(from);
+	    ++barNo;
 	}
 
-	from = composition->getBarEndForTime(from);
-	++barNo;
+	m_barData.push_back(BarData(to * staff.getTimeScaleFactor(), 0));
     }
-
-    m_barData.push_back(BarData(to * staff.getTimeScaleFactor(), 0));
 
     // 2. Elements
 
     m_totalWidth = 0.0;
+    MatrixElementList::iterator i = startItr;
 
-    MatrixElementList *notes = staff.getViewElementList();
-    MatrixElementList::iterator i = notes->begin();
-    MatrixElementList::iterator e = notes->end();
-
-    if (!isFullScan) {
-	i = notes->findNearestTime(startTime);
-	e = notes->findTime(endTime);
-    }
-
-    while (i != e) {
+    while (i != endItr) {
 
 	(*i)->setLayoutX(((*i)->getAbsoluteTime() - startPosition)
                           * staff.getTimeScaleFactor());

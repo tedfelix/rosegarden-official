@@ -39,6 +39,7 @@
 #include "Quantizer.h"
 
 #include "BaseProperties.h"
+#include "Profiler.h"
 #include "matrixview.h"
 #include "matrixstaff.h"
 #include "matrixhlayout.h"
@@ -414,32 +415,39 @@ bool MatrixView::applyLayout(int staffNo,
 			     timeT startTime,
 			     timeT endTime)
 {
+    Rosegarden::Profiler profiler("MatrixView::applyLayout", true);
+    
     m_hlayout.reset();
     m_vlayout.reset();
         
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-        m_hlayout.scanStaff(*m_staffs[i]); //, startTime, endTime);
-        m_vlayout.scanStaff(*m_staffs[i]); //, startTime, endTime);
+        m_hlayout.scanStaff(*m_staffs[i], startTime, endTime);
+        m_vlayout.scanStaff(*m_staffs[i], startTime, endTime);
     }
 
     m_hlayout.finishLayout();
     m_vlayout.finishLayout();
 
-    double maxWidth = 0.0, maxHeight = 0.0;
+    if (startTime == endTime) { // full layout
 
-    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-        m_staffs[i]->sizeStaff(m_hlayout);
+	double maxWidth = 0.0, maxHeight = 0.0;
 
-        if (m_staffs[i]->getX() + m_staffs[i]->getTotalWidth() > maxWidth) {
-            maxWidth = m_staffs[i]->getX() + m_staffs[i]->getTotalWidth();
-        }
+	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+	    m_staffs[i]->sizeStaff(m_hlayout);
+	    
+	    if (m_staffs[i]->getX() +
+		m_staffs[i]->getTotalWidth() > maxWidth) {
+		maxWidth = m_staffs[i]->getX() + m_staffs[i]->getTotalWidth();
+	    }
+	    
+	    if (m_staffs[i]->getY() +
+		m_staffs[i]->getTotalHeight() > maxHeight) {
+		maxHeight = m_staffs[i]->getY() + m_staffs[i]->getTotalHeight();
+	    }
+	}
 
-        if (m_staffs[i]->getY() + m_staffs[i]->getTotalHeight() > maxHeight) {
-            maxHeight = m_staffs[i]->getY() + m_staffs[i]->getTotalHeight();
-        }
+	readjustViewSize(QSize(int(maxWidth), int(maxHeight)), true);
     }
-
-    readjustViewSize(QSize(int(maxWidth), int(maxHeight)), true);
     
     return true;
 }
@@ -447,6 +455,8 @@ bool MatrixView::applyLayout(int staffNo,
 void MatrixView::refreshSegment(Segment *segment,
 				timeT startTime, timeT endTime)
 {
+    Rosegarden::Profiler profiler("MatrixView::refreshSegment", true);
+
     MATRIX_DEBUG << "MatrixView::refreshSegment(" << startTime
                          << ", " << endTime << ")\n";
 
@@ -1054,7 +1064,7 @@ MatrixView::slotNewSelection()
 void
 MatrixView::slotSetSnap(Rosegarden::timeT snapTime)
 {
-    MATRIX_DEBUG << "MatrixView::slotSetSnap\n";
+    MATRIX_DEBUG << "MatrixView::slotSetSnap: time is " << snapTime << endl;;
     m_snapGrid.setSnapTime(snapTime);
     updateView();
 }

@@ -58,37 +58,39 @@ void Profiles::accumulate(const char* id, clock_t time)
 
 void Profiles::dump()
 {
+#ifndef NO_TIMING    
     cerr << "Profiles::dump() :\n";
 
     for(profilesmap::iterator i = m_profiles.begin();
         i != m_profiles.end(); ++i) {
 
-        cerr << (*i).first << " : " << (*i).second << endl;
+        cerr << (*i).first << " : " 
+	     << (((*i).second * 1000) / CLOCKS_PER_SEC) << "ms" << endl;
     }
-    
-    cerr << "Profiles::dump() finished\n";
-}
 
-struct tms Profiler::m_spare;
+    cerr << "Profiles::dump() finished\n";
+#endif
+}
 
 Profiler::Profiler(const char* c, bool showOnDestruct)
     : m_c(c),
       m_showOnDestruct(showOnDestruct)
 {
-//     cerr << "Profiler" << c << endl;
-
-    m_startTime = times(&m_spare);
+    m_startTime = clock();
 }
 
 Profiler::~Profiler()
 {
-    clock_t elapsedTime = times(&m_spare) - m_startTime;
+#ifndef NO_TIMING
+    clock_t elapsedTime = clock() - m_startTime;
 
     Profiles::getInstance()->accumulate(m_c, elapsedTime);
 
     if (m_showOnDestruct)
         cerr << "Profiler : id = " << m_c
-             << " - elapsed = " << elapsedTime << endl;
+             << " - elapsed = " << ((elapsedTime * 1000) / CLOCKS_PER_SEC)
+	     << "ms" << endl;
+#endif
 }
  
 }
