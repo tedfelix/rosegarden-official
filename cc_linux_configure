@@ -8,5 +8,5 @@
 
 make -f Makefile.cvs
 
-#CXXFLAGS="-O3 -DNDEBUG -fexceptions" ./configure --enable-debug --with-qt-dir=/opt/kde2/qt-2.3.0 --prefix=/opt/kde2
-CXXFLAGS="-g -Wall -fexceptions" ./configure --enable-debug --with-qt-dir=/opt/kde2/qt-2.3.0 --prefix=/opt/kde2
+CXXFLAGS="-O3 -DNDEBUG -fexceptions" ./configure --disable-debug --with-qt-dir=/opt/kde2/qt-2.3.0 --prefix=/opt/kde2
+#CXXFLAGS="-g -Wall -fexceptions" ./configure --enable-debug --with-qt-dir=/opt/kde2/qt-2.3.0 --prefix=/opt/kde2
