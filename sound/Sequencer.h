@@ -22,8 +22,9 @@
 // and MIDI are initialised, playback and recording handles
 // are available to the higher levels for sending and 
 // retreiving MIDI and audio.  When the Rosegarden sequencer
-// (sequencer/) initialises it creates a Rosegarden::Sequencer
-// object which prepares itself for playback and recording.
+// (sequencer/) initialises it creates one of these objects
+// (Rosegarden::Sequencer) which prepares itself for playback
+// and recording.
 //
 // At this level we accept MappedCompositions (single point
 // representation - NOTE ONs with durations) and turn them
@@ -31,6 +32,10 @@
 //
 // Recording wise we take aRTS events and turn them into
 // a MappedComposition before sending it up to the gui.
+// Timing is normalised to the GUI and returned as
+// Rosegarden::RealTime timestamps that can be easily
+// converted into the relevant absolute positions.
+//
 //
 //
 
@@ -118,56 +123,47 @@ public:
     //
     RecordStatus recordStatus() { return m_recordStatus; }
     
-    // set and get tempo
+    // Set and get tempo
+    //
     const double getTempo() const { return m_tempo; }
     void setTempo(const double &tempo) { m_tempo = tempo; }
 
     // resolution - required?
     const unsigned int resolution() const { return m_ppq; }
 
-    // get the difference in TimeStamps
+    // Get the difference in TimeStamps - Arts::TimeStamp
+    // doesn't currently have any operators
+    //
+    //
     Arts::TimeStamp deltaTime(const Arts::TimeStamp &ts1,
                               const Arts::TimeStamp &ts2);
 
+    // Aggregate TimeStamps
+    //
     Arts::TimeStamp aggregateTime(const Arts::TimeStamp &ts1,
                                   const Arts::TimeStamp &ts2);
 
-    // get the TimeStamp from the beginning of playing
+    // Get the time from the beginning of playback
+    //
     inline Arts::TimeStamp playTime(Arts::TimeStamp const &ts)
-    { return (deltaTime(ts, m_playStartTime)); }
+               { return (deltaTime(ts, m_playStartTime)); }
 
-    // get the TimeStamp from the beginning of recording
+    // Create a recording TimeStamp - take the current time from the
+    // record start time and then add on any playStartPosition value.
+    //
+    //
     inline Arts::TimeStamp recordTime(Arts::TimeStamp const &ts)
-    { return (deltaTime(ts, m_recordStartTime)); }
+               { return (aggregateTime(deltaTime(ts, m_recordStartTime),
+                            Arts::TimeStamp(m_playStartPosition.sec,
+                                            m_playStartPosition.usec))); }
 
-    // See docs/discussion/sequencer_timing.txt for explanation of
-    // the maths here.
+    // Wrap any recorded MIDI into a MappedComposition and return it
     //
-    //
-    // See docs/discussion/sequencer_timing.txt for explanation of
-    // the maths here.
-    //
-    //
-    inline Arts::TimeStamp convertToArtsTimeStamp(const unsigned int &midiTime)
-    {
-        // We ignore the Time Sigs for the moment
-        //
-        //
-        unsigned int usec = (unsigned int)(((double)60000000.0 *(double)midiTime)/
-                                           ((double)m_ppq * (double)m_tempo));
-        unsigned int sec = usec / 1000000;
-        usec %= 1000000;
-
-        return (Arts::TimeStamp(sec, usec));
-    }
-
-
-    // this method turns any recorded MIDI into a MappedComposition
-    // and returns it to the gui
     //
     MappedComposition getMappedComposition();
 
-    // Process MappedComposition into MIDI events and send to aRTS.
+    // Process MappedComposition into MIDI events and send to aRTS
+    //
     void processMidiOut(Rosegarden::MappedComposition mappedComp,
                         const Rosegarden::RealTime &playLatency);
 

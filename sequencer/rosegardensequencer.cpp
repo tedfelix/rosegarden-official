@@ -401,13 +401,13 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
     {
         std::cout << "RosegardenSequencerApp::record() - starting to record MIDI" << endl;
 
-        // send this to the Sequencer so that it resets its start time
+        // send this to the Sequencer so that it resets its internal start time
         //
         m_sequencer->record(Rosegarden::Sequencer::RECORD_MIDI);
     }
     else if (localRecordMode == STARTING_TO_RECORD_AUDIO)
     {
-        std::cout << "RosegardenSequencerApp::record() - starting to record Audio" << endl;
+        std::cout << "RosegardenSequencerApp::record() - starting to record Audio - not yet supported" << endl;
     }
     else
     {

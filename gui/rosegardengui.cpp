@@ -1243,8 +1243,7 @@ void RosegardenGUIApp::play()
     }
     else
     {
-        cout << "RosegardenGUIApp::play() - playing at tempo " << 
-                  m_doc->getComposition().getTempo() << endl;
+        cout << "RosegardenGUIApp::play() - starting to play" <<  endl;
     }
 
     // set the tempo in the transport
@@ -1637,8 +1636,7 @@ RosegardenGUIApp::record()
     }
     else
     {
-        cout << "RosegardenGUIApp::record() - recording at tempo " << 
-                  m_doc->getComposition().getTempo() << endl;
+        cout << "RosegardenGUIApp::record() - starting to record" << endl;
     }
 
     // set the tempo in the transport

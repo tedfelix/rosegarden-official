@@ -122,15 +122,13 @@ Sequencer::initializeMidi()
 
 }
 
-// Check the recording status and set ourselves accordingly
+// Check the recording status we're moving to and set internal
+// counters or anything else we need to prepare.
 // 
 //
 void
 Sequencer::record(const RecordStatus& recordStatus)
 {
-    if (m_recordStatus == RECORD_MIDI ||
-        m_recordStatus == RECORD_AUDIO)
-        return;
 
     if ( recordStatus == RECORD_MIDI )
     {
@@ -154,8 +152,9 @@ Sequencer::record(const RecordStatus& recordStatus)
     {
         m_recordStatus = ASYNCHRONOUS_AUDIO;
     }
+    else
     {
-        std::cout << "RosegardenSequencer::record() - Unsupported recording mode." << endl;
+        std::cerr << "RosegardenSequencer::record() - Unsupported recording mode." << endl;
     }
   
 }
