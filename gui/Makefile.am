@@ -1,5 +1,5 @@
-bin_PROGRAMS = rosegardengui
-rosegardengui_SOURCES = trackscanvas.cpp \
+bin_PROGRAMS = rosegarden
+rosegarden_SOURCES = trackscanvas.cpp \
 			trackseditor.cpp \
 			notationproperties.cpp \
 			rosedebug.cpp \
@@ -31,7 +31,7 @@ rosegardengui_SOURCES = trackscanvas.cpp \
 			rosegardenguiiface.skel \
 			trackseditoriface.skel
 
-rosegardengui_LDADD   = ../sound/libRosegardenSound.la ../core/libcore.la -lqt -lkfile -lkdeui -lkdecore -lXext -lX11 $(LIBSOCKET)
+rosegarden_LDADD   = ../sound/libRosegardenSound.la ../core/libcore.la -lqt -lkfile -lkdeui -lkdecore -lXext -lX11 $(LIBSOCKET)
 
 SUBDIRS = docs
 
@@ -77,13 +77,13 @@ INCLUDES= $(all_includes) -I../core -I../sound
 # claim, which subdirectories you want to install
 # you can add here more. This one gets installed 
 
-rosegardengui_METASOURCES = AUTO
+rosegarden_METASOURCES = AUTO
 
 # the library search path. 
-rosegardengui_LDFLAGS = $(all_libraries) $(KDE_RPATH)
+rosegarden_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 # them while "make clean", use CLEANFILES
-DISTCLEANFILES = $(rosegardengui_METASOURCES)
+DISTCLEANFILES = $(rosegarden_METASOURCES)
 
 # make messages.po. Move this one to ../po/ and "make merge" in po
 # the -x is for skipping messages already translated in kdelibs
