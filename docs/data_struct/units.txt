@@ -99,3 +99,33 @@ timebase, defined in the MIDI file-format standard as the number of
 delta-time units per crotchet.  So to convert from MIDI file deltas to
 our time units, multiply by 96 and divide by the timebase.
 
+
+Tempo
+-----
+
+Tempo specifications are usually informally described in beats per
+minute (bpm).  However, as far as sequencers are concerned tempo is
+generally measured in crotchets (quarter-notes) per minute, regardless
+of the actual value of a beat in the current time-signature.  And the
+MIDI file format inverts this, recording tempo in pulses per
+quarter-note (ppq).
+
+For Rosegarden 4 we choose to encode tempo in crotchets per minute,
+but because we may want to have non-integral values and the Event
+mechanism doesn't support floating-point properties, we actually store
+crotchets per hour and convert to and from floating-point per-minute
+values in the API.  We will also continue to use the name "bpm" even
+though our "beat" is not always strictly a beat (it is always a
+crotchet).
+
+
+Velocity
+--------
+
+The range used by MIDI to represent velocity (initial relative volume
+of a note) is 0-127, with maximum at 127 and silence at 0.  We use the
+same range to store velocity values.
+
+(But note that some components such as the VU meters refer to levels
+in a floating-point 0.0 -> 1.0 range.)
+
