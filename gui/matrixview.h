@@ -25,6 +25,7 @@
 #include <vector>
 
 #include <qcanvas.h>
+#include <qwmatrix.h>
 #include <kmainwindow.h>
 
 #include "Staff.h"
@@ -230,7 +231,7 @@ public slots:
     /*
      * Set the time pointer position during playback
      */
-    void slotSetPointerPosition(Rosegarden::timeT time);
+    void slotSetPointerPosition(Rosegarden::timeT time, bool scroll = true);
 
     /*
      * Set the insertion pointer position (from the bottom LoopRuler)
@@ -278,6 +279,15 @@ public slots:
      *
      */
     void slotSelectAll();
+
+    /**
+     * Adjust an X coord by world matrix
+     */
+    double getXbyWorldMatrix(double value)
+        { return m_canvasView->worldMatrix().m11() * value; }
+
+    double getXbyInverseWorldMatrix(double value)
+        { return m_canvasView->inverseWorldMatrix().m11() * value; }
 
 protected:
 

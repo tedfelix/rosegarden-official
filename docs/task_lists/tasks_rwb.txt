@@ -22,7 +22,7 @@ o Matrix Hypereditor [HALF COMPLETED]
 
 o Matrix width bug
 
-o Matrix auto-paging during playback
+o Matrix auto-paging during playback [DONE]
 
 o Fix segment audio drag and drop
 

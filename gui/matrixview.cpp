@@ -782,7 +782,7 @@ MatrixView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
 }
 
 void
-MatrixView::slotSetPointerPosition(timeT time)
+MatrixView::slotSetPointerPosition(timeT time, bool scroll)
 {
     Rosegarden::Composition &comp = m_document->getComposition();
     int barNo = comp.getBarNumber(time);
@@ -793,6 +793,9 @@ MatrixView::slotSetPointerPosition(timeT time)
     } else {
         m_staffs[0]->setPointerPosition(m_hlayout, time);
     }
+
+    if (scroll)
+        slotScrollHoriz(getXbyWorldMatrix(m_hlayout.getXForTime(time)));
 
     updateView();
 }
