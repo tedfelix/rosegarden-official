@@ -99,7 +99,7 @@ EditViewBase::~EditViewBase()
 {
     getCommandHistory()->detachView(actionCollection());
     m_viewNumberPool.erase(m_viewNumber);
-//     slotSaveOptions();
+    slotSaveOptions();
 }
 
 void EditViewBase::slotSaveOptions()
