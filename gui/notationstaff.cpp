@@ -250,7 +250,6 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 			      NotationElementList::iterator to)
 {
 //    kdDebug(KDEBUG_AREA) << "NotationStaff " << this << "::renderElements()" << endl;
-
     START_TIMING;
 
     Clef currentClef; // default is okay to start with

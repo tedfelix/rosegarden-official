@@ -196,7 +196,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     else {
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
             
-            m_staffs[i]->renderAllElements();
+//!!!            m_staffs[i]->renderAllElements();
             m_staffs[i]->positionAllElements();
         }
     }
@@ -908,7 +908,7 @@ NotationView::slotChangeFont(string newName, int newSize)
     if (!layoutApplied) KMessageBox::sorry(0, "Couldn't apply layout");
     else {
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-            m_staffs[i]->renderAllElements();
+//!!!            m_staffs[i]->renderAllElements();
             m_staffs[i]->positionAllElements();
         }
     }
@@ -942,7 +942,7 @@ NotationView::setPageMode(bool pageMode)
     if (!layoutApplied) KMessageBox::sorry(0, "Couldn't apply layout");
     else {
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-            m_staffs[i]->renderAllElements();
+//!!!            m_staffs[i]->renderAllElements();
             m_staffs[i]->positionAllElements();
         }
     }
@@ -2123,9 +2123,9 @@ void NotationView::refreshSegment(Segment *segment,
         kdDebug(KDEBUG_AREA) << "NotationView::refreshSegment: "
                              << "start = " << startTime << ", end = " << endTime << ", barStart = " << barStartTime << ", barEnd = " << barEndTime << endl;
 
-        if (thisStaff) {
-            m_staffs[i]->renderElements(starti, endi);
-        }
+//        if (thisStaff) {
+//            m_staffs[i]->renderElements(starti, endi);
+//        }
         m_staffs[i]->positionElements(barStartTime, barEndTime);
     }
 
