@@ -686,6 +686,9 @@ AlsaDriver::addDevice(Device::DeviceType type,
 void
 AlsaDriver::removeDevice(DeviceId id)
 {
+    //!!! fix -- currently erases element it's iterating over
+    //!!! also remove from deviceportmap
+
     for (MappedDeviceList::iterator i = m_devices.begin();
 	 i != m_devices.end(); ++i) {
 	

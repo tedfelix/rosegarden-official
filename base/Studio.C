@@ -470,7 +470,7 @@ Studio::clearMidiBanksAndPrograms()
 Device*
 Studio::getDevice(DeviceId id)
 {
-    cerr << "Studio::getDevice(" << id << ")... ";
+    cerr << "Studio[" << this << "]::getDevice(" << id << ")... ";
 
     std::vector<Device*>::iterator it;
 

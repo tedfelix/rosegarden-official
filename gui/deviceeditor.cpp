@@ -258,7 +258,7 @@ DeviceEditorDialog::slotApply()
 
     std::sort(ids.begin(), ids.end());
 
-    for (int i = ids.size()-1; i >= 0; ++i) {
+    for (int i = ids.size()-1; i >= 0; --i) {
 	command->addCommand(new CreateOrDeleteDeviceCommand(m_studio, ids[i]));
     }
     
