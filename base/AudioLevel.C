@@ -48,14 +48,16 @@ float
 AudioLevel::multiplier_to_dB(float multiplier)
 {
     if (multiplier == 0.0) return DB_FLOOR;
-    return 10 * log10f(multiplier);
+    float dB = 10 * log10f(multiplier);
+    return dB;
 }
 
 float
 AudioLevel::dB_to_multiplier(float dB)
 {
     if (dB == DB_FLOOR) return 0.0;
-    return powf(10.0, dB / 10.0);
+    float m = powf(10.0, dB / 10.0);
+    return m;
 }
 
 /* IEC 60-268-18 fader levels.  Thanks to Steve Harris. */
@@ -132,10 +134,10 @@ AudioLevel::fader_to_dB(int level, int maxLevel, FaderType type)
 	} else {
 	    
 	    float value = zeroLevel - level;
-	    float scale = zeroLevel / sqrtf(-faderTypes[type].minDb);
+	    float scale = zeroLevel / sqrtf(0.0 - faderTypes[type].minDb);
 	    value /= scale;
 	    float dB = powf(value, 2.0);
-	    return -dB;
+	    return 0.0 - dB;
 	}
     }
 }
@@ -164,7 +166,7 @@ AudioLevel::dB_to_fader(float dB, int maxLevel, FaderType type)
     } else {
 
 	int zeroLevel = int(maxLevel * faderTypes[type].zeroPoint);
-    
+
 	if (dB >= 0.0) {
 	    
 	    float value = sqrtf(dB);
@@ -175,9 +177,10 @@ AudioLevel::dB_to_fader(float dB, int maxLevel, FaderType type)
 	    return level;
 	    
 	} else {
-	    
-	    float value = sqrtf(-dB);
-	    float scale = zeroLevel / sqrtf(-faderTypes[type].minDb);
+
+	    dB = 0.0 - dB;
+	    float value = sqrtf(dB);
+	    float scale = zeroLevel / sqrtf(0.0 - faderTypes[type].minDb);
 	    value *= scale;
 	    int level = zeroLevel - int(value + 0.01);
 	    if (level < 0) level = 0;
@@ -198,7 +201,9 @@ int
 AudioLevel::multiplier_to_fader(float multiplier, int maxLevel, FaderType type)
 {
     if (multiplier == 0.0) return 0;
-    return dB_to_fader(multiplier_to_dB(multiplier), maxLevel, type);
+    float dB = multiplier_to_dB(multiplier);
+    float fader = dB_to_fader(dB, maxLevel, type);
+    return fader;
 }
 
 }
