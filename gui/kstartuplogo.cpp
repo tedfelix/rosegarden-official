@@ -46,6 +46,7 @@ KStartupLogo::KStartupLogo(QWidget * parent, const char *name)
 
 KStartupLogo::~KStartupLogo()
 {
+    m_wasClosed = true;
 }
 
 void KStartupLogo::paintEvent(QPaintEvent*)
@@ -69,3 +70,15 @@ void KStartupLogo::mousePressEvent( QMouseEvent*)
     if (m_bReadyToHide)
         hide();
 }
+
+KStartupLogo* KStartupLogo::getInstance()
+{
+    if (m_wasClosed) return 0;
+    
+    if (!m_instance) m_instance = new KStartupLogo;
+
+    return m_instance;
+}
+
+KStartupLogo* KStartupLogo::m_instance = 0;
+bool KStartupLogo::m_wasClosed = false;

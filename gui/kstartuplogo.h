@@ -37,20 +37,24 @@ class KStartupLogo : public QWidget
     Q_OBJECT
 public:
 
-    KStartupLogo(QWidget *parent=0, const char *name=0);
-    ~KStartupLogo();
+    static KStartupLogo* getInstance();
 
     void setHideEnabled(bool bEnabled) { m_bReadyToHide = bEnabled; };
 
 protected:
 
-
+    KStartupLogo(QWidget *parent=0, const char *name=0);
+    ~KStartupLogo();
+    
     virtual void paintEvent(QPaintEvent*);
     virtual void mousePressEvent( QMouseEvent*);
 
     bool m_bReadyToHide;
 
     QPixmap m_pixmap;
+
+    static KStartupLogo* m_instance;
+    static bool m_wasClosed;
 };
 
 #endif
