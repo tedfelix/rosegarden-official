@@ -236,13 +236,21 @@ NotationStaff::positionElements(timeT from, timeT to)
     // end of the piece; so we save time by assuming that to be the
     // case if we get more than (arbitrary) 3 changed bars.
 
+    // We also record the start of the bar following the changed
+    // section, for later use.
+
     NotationElementList::iterator endAt = nel->end();
+    timeT nextBarTime = -1;
+
     int changedBarCount = 0;
     if (to >= 0) {
 	NotationElementList::iterator candidate = nel->end();
 	do {
 	    candidate = nel->findTime(getSegment().getBarEnd(to));
-	    if (candidate != nel->end()) to = (*candidate)->getAbsoluteTime();
+	    if (candidate != nel->end()) {
+		to = (*candidate)->getAbsoluteTime();
+		if (nextBarTime < 0) nextBarTime = to;
+	    }
 	    ++changedBarCount;
 	} while (changedBarCount < 4 &&
 		 candidate != nel->end() && !elementNotMoved(*candidate));
@@ -286,27 +294,11 @@ NotationStaff::positionElements(timeT from, timeT to)
 		(void)((*it)->event()->get<Bool>(TIED_FORWARD, spanning));
 	    
 	    if (spanning) {
-
-		needNewSprite = true;
-
-		/*!!! Can't be this simple, I'm afraid: we probably need
-		  the next-contiguous event, but what about chords?  Still,
-		  might be worth trying to catch the case however complex
-		  it is -- it's still cheaper than re-rendering
-
-		int myCanvasX = (*it)->getCanvasItem()->x();
-		NotationElementList::iterator scooter(it);
-		++scooter;
-
-		if (scooter != end && (*scooter)->getCanvasItem()) {
-		    int nextCanvasX = (*scooter)->getCanvasItem()->x();
-		    if ((nextCanvasX - myCanvasX) !=
-			((*scooter)->getLayoutX() - (*it)->getLayoutX())) {
-			needNewSprite = true;
-		    }
-		}
-		*/
+		needNewSprite = needNewSprite || 
+		    ((*it)->getAbsoluteTime() < nextBarTime ||
+		     !elementShiftedOnly(it));
 	    }
+
 	} else if ((*it)->event()->isa(Indication::EventType)) {
 	    needNewSprite = true;
 	}
@@ -338,28 +330,14 @@ NotationStaff::elementNotMoved(NotationElement *elt)
     LinedStaffCoords coords = getCanvasCoordsForLayoutCoords
 	(elt->getLayoutX(), (int)elt->getLayoutY());
 
-/*!!!    int xoff = (int)coords.first;
-    int yoff = coords.second;
-
-    bool ok =
-	(int)(elt->getCanvasX()) == (int)(elt->getLayoutX() + xoff) &&
-	(int)(elt->getCanvasY()) == (int)(elt->getLayoutY() + yoff);
-*/
-
     bool ok =
 	(int)(elt->getCanvasX()) == (int)(coords.first) &&
 	(int)(elt->getCanvasY()) == (int)(coords.second);
 
-
-    cerr << "elementNotMoved: elt at " << elt->getAbsoluteTime() <<
+    kdDebug(KDEBUG_AREA)
+	<< "elementNotMoved: elt at " << elt->getAbsoluteTime() <<
 	", ok is " << ok << endl;
-/*!!!
-    if (!ok) {
-	cerr << "(cf " << (int)(elt->getCanvasX()) << " vs "
-	     << (int)(elt->getLayoutX() + xoff) << ", "
-	     << (int)(elt->getCanvasY()) << " vs "
-	     << (int)(elt->getLayoutY() + yoff) << ")" << endl;
-*/
+
     if (!ok) {
 	cerr << "(cf " << (int)(elt->getCanvasX()) << " vs "
 	     << (int)(coords.first) << ", "
@@ -369,6 +347,41 @@ NotationStaff::elementNotMoved(NotationElement *elt)
     return ok;
 }
 
+bool
+NotationStaff::elementShiftedOnly(NotationElementList::iterator i)
+{
+    int shift = 0;
+    bool ok = false;
+
+    for (NotationElementList::iterator j = i;
+	 j != getViewElementList()->end(); ++j) {
+
+	NotationElement *elt = *j;
+	if (!elt->getCanvasItem()) break;
+
+	LinedStaffCoords coords = getCanvasCoordsForLayoutCoords
+	    (elt->getLayoutX(), (int)elt->getLayoutY());
+	
+	// regard any shift in y as suspicious
+	if ((int)(elt->getCanvasY()) != (int)(coords.second)) break;
+
+	int myShift = (int)(elt->getCanvasX()) - (int)(coords.first);
+	if (j == i) shift = myShift;
+	else if (myShift != shift) break;
+	
+	if (elt->getAbsoluteTime() > (*i)->getAbsoluteTime()) {
+	    // all events up to and including this one have passed
+	    ok = true;
+	    break;
+	}
+    }
+/*
+    kdDebug(KDEBUG_AREA)
+	<< "elementShiftedOnly: elt at " << (*i)->getAbsoluteTime() <<
+	", ok is " << ok << endl;
+*/
+    return ok;
+}
 
 void
 NotationStaff::renderSingleElement(NotationElement *elt,

@@ -940,14 +940,11 @@ NotationHLayout::positionChord(StaffType &staff,
     // reserved for fixed-width items, and take the same proportion of
     // the remainder as our duration is of the whole bar's duration.
 
-    //!!! In case this chord has various durations in it, we choose an
+    // In case this chord has various durations in it, we choose an
     // effective duration based on the absolute time of the first
-    // following event that is not in the chord
-
-    //!!! We use the shortest note in the chord, should the durations vary
+    // following event not in the chord (see getSpacingDuration)
 
     long delta = (((int)bdi->idealWidth - bdi->fixedWidth) *
-//!!!                  (*chord.getShortestElement())->event()->getDuration()) /
 		  getSpacingDuration(staff, itr)) /
         //!!! not right for partial bar?
         timeSignature.getBarDuration();

@@ -20,6 +20,7 @@
 */
 
 #include <qtimer.h>
+#include <ctime>
 
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
@@ -63,22 +64,22 @@ int main(int argc, char *argv[])
     app.dcopClient()->registerAs(app.name(), false);
     app.dcopClient()->setDefaultObject(ROSEGARDEN_GUI_IFACE_NAME);
 
-
-    //
     // Show Startup logo
     // (this code borrowed from KDevelop 2.0,
     // (c) The KDevelop Development Team
     //
     KConfig* config = KGlobal::config();
     config->setGroup("General Options");
-    KStartupLogo* start_logo = 0L;
+    KStartupLogo* startLogo = 0L;
 
     if (config->readBoolEntry("Logo",true) && (!kapp->isRestored() ) )
-        {
-            kdDebug(KDEBUG_AREA) << "main: Showing startup logo\n";
-            start_logo= new KStartupLogo();
-            start_logo->show();
-        }
+    {
+	kdDebug(KDEBUG_AREA) << "main: Showing startup logo\n";
+	startLogo = new KStartupLogo();
+	startLogo->show();
+    }
+
+    clock_t logoShowTime = clock();
 
     //
     // Start application
@@ -96,9 +97,9 @@ int main(int argc, char *argv[])
 
 	// raise start logo
 	//
-	if (start_logo) {
-	    start_logo->raise();
-	    start_logo->setHideEnabled(true);
+	if (startLogo) {
+	    startLogo->raise();
+	    startLogo->setHideEnabled(true);
 	    QApplication::flushX();
 	}
 
@@ -116,9 +117,9 @@ int main(int argc, char *argv[])
 
     // Now that we've started up, raise start logo
     //
-    if (start_logo) {
-        start_logo->raise();
-	start_logo->setHideEnabled(true);
+    if (startLogo) {
+        startLogo->raise();
+	startLogo->setHideEnabled(true);
         QApplication::flushX();
     }
 
@@ -126,7 +127,21 @@ int main(int argc, char *argv[])
     //
     rosegardengui->launchSequencer();
 
-    QTimer::singleShot(1000, start_logo, SLOT(close()));
+    if (startLogo) {
+	
+	// pause to ensure the logo has been visible for a reasonable
+	// length of time, just 'cos it looks a bit silly to show it
+	// and remove it immediately
+
+	int visibleFor = (clock() - logoShowTime) * 1000 / CLOCKS_PER_SEC;
+
+	if (visibleFor < 2000) {
+	    QTimer::singleShot(2500 - visibleFor, startLogo, SLOT(close()));
+	} else {
+	    startLogo->close();
+	}
+    }
 
     return app.exec();
 }  
+

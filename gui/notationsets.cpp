@@ -245,7 +245,7 @@ Chord::height(const NELIterator &i) const
 
 bool Chord::hasStem() const
 {
-    // true if any of the notes are stemmed
+    // true if any of the notes is stemmed
 
     NELIterator i(getInitialNote());
     for (;;) {
@@ -260,8 +260,14 @@ bool Chord::hasStem() const
 bool Chord::hasStemUp() const
 {
     NELIterator initialNote(getInitialNote());
+
+    // believe whatever's recorded in the first note, if it's
+    // persistent or if it was apparently set by the beaming algorithm
+
     if ((*initialNote)->event()->has(STEM_UP) &&
-	(*initialNote)->event()->isPersistent<Bool>(STEM_UP)) {
+	((*initialNote)->event()->isPersistent<Bool>(STEM_UP) ||
+	 ((*initialNote)->event()->has(BEAMED) &&
+	  ((*initialNote)->event()->get<Bool>(BEAMED))))) {
 	return (*initialNote)->event()->get<Bool>(STEM_UP);
     }
 

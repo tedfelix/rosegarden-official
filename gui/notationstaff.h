@@ -188,6 +188,18 @@ protected:
      */
     virtual bool elementNotMoved(NotationElement *);
 
+    /**
+     * Returns true if the item at the given iterator appears to have
+     * moved horizontally without the spacing around it changing.
+     * 
+     * In practice, calculates the offset between the intended layout
+     * and current canvas coordinates of the item at the given
+     * iterator, and returns true if this offset is equal to those of
+     * all other following iterators at the same time as well as the
+     * first iterator found at a greater time.
+     */
+    virtual bool elementShiftedOnly(NotationElementList::iterator);
+
     typedef std::set<QCanvasSimpleSprite *> SpriteSet;
     SpriteSet m_timeSigs;
 
