@@ -1902,14 +1902,14 @@ void NotationView::itemPressed(int height, int staffNo,
 
     if (btnState & ShiftButton) { // on shift-click, set cursor position
 
-	int staffNo;
+	unsigned int staffNo;
 	for (staffNo = 0; staffNo < m_staffs.size(); ++staffNo) {
 	    if (m_staffs[staffNo]->containsCanvasY((int)e->y())) break;
 	}
 
 	if (staffNo < m_staffs.size()) {
 	    
-	    if (m_currentStaff != staffNo) {
+	    if (m_currentStaff != signed(staffNo)) {
 		m_staffs[m_currentStaff]->setCurrent(false);
 		m_currentStaff = staffNo;
 		m_staffs[m_currentStaff]->setCurrent(true, (int)e->y());
