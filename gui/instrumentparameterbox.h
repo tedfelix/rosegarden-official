@@ -36,8 +36,12 @@ class QSignalMapper;
 class QLabel;
 class RosegardenComboBox;
 class RosegardenGUIDoc;
+class QWidgetStack;
 
 namespace Rosegarden { class AudioPluginManager; }
+
+class AudioInstrumentParameterPanel;
+class MIDIInstrumentParameterPanel;
 
 /**
  * Display and allow modification of Instrument parameters
@@ -53,12 +57,115 @@ public:
 
     void useInstrument(Rosegarden::Instrument *instrument);
 
-    // To update all InstrumentParamterBoxen for an Instrument.
-    //
-    void updateAllBoxes();
-
     Rosegarden::Instrument* getSelectedInstrument()
         { return m_selectedInstrument; }
+
+public slots:
+    // and for the signals that come back
+    //
+    void slotPluginPortChanged(int pluginIndex, int portIndex, float value);
+    void slotBypassed(int pluginIndex, bool bp);
+
+    // To update all InstrumentParamterBoxen for an Instrument.
+    //
+    void slotUpdateAllBoxes();
+
+
+signals:
+
+    // Emit a MIDI controller for immediate processing.
+    // This is necessary for controlling MIDI devices in
+    // real time during playback.
+    //
+    void changeInstrumentLabel(Rosegarden::InstrumentId id, QString label);
+
+protected:
+
+    //--------------- Data members ---------------------------------
+    QWidgetStack                    *m_widgetStack;
+    QFrame                          *m_noInstrumentParameters;
+    MIDIInstrumentParameterPanel    *m_midiInstrumentParameters;
+    AudioInstrumentParameterPanel   *m_audioInstrumentParameters;
+
+    Rosegarden::Instrument          *m_selectedInstrument;
+
+    // So we can setModified()
+    //
+    RosegardenGUIDoc                *m_doc;
+
+};
+
+// Global references
+//
+static std::vector<InstrumentParameterBox*> instrumentParamBoxes;
+
+////////////////////////////////////////////////////////////////////////
+
+class InstrumentParameterPanel : public QFrame
+{
+    Q_OBJECT
+public:
+    InstrumentParameterPanel(QWidget* parent);
+
+    virtual ~InstrumentParameterPanel() {};
+
+    virtual void setupForInstrument(Rosegarden::Instrument*) = 0;
+
+signals:
+    void updateAllBoxes();
+    
+protected:
+    //--------------- Data members ---------------------------------
+    QLabel                          *m_instrumentLabel;
+    Rosegarden::Instrument          *m_selectedInstrument;
+};
+
+
+class AudioInstrumentParameterPanel : public InstrumentParameterPanel
+{
+    Q_OBJECT
+public:
+    AudioInstrumentParameterPanel(RosegardenGUIDoc* doc, QWidget* parent);
+
+    virtual void setupForInstrument(Rosegarden::Instrument*);
+
+public slots:
+    // select a plugin to go at an index number
+    //
+    void slotSelectPlugin(int index);
+    void slotSelectAudioLevel(int index);
+    void slotPluginSelected(int index, int plugin);
+
+protected:
+    //--------------- Data members ---------------------------------
+
+    RosegardenFader    *m_audioLevelFader;
+    QLabel             *m_audioLevelValue;
+    QLabel             *m_pluginLabel;
+
+    std::vector<QPushButton*>       m_pluginButtons;
+
+    QSignalMapper                   *m_signalMapper;
+
+    Rosegarden::AudioPluginManager  *m_pluginManager;
+};
+
+class MIDIInstrumentParameterPanel : public InstrumentParameterPanel
+{
+    Q_OBJECT
+public:
+
+    MIDIInstrumentParameterPanel(QWidget* parent);
+
+    virtual void setupForInstrument(Rosegarden::Instrument*);
+
+signals:
+
+    // Emit a MIDI controller for immediate processing.
+    // This is necessary for controlling MIDI devices in
+    // real time during playback.
+    //
+    void changeInstrumentLabel(Rosegarden::InstrumentId id, QString label);
 
 public slots:
     void slotSelectProgram(int index);
@@ -73,42 +180,15 @@ public slots:
     void slotSelectResonance(float index);
     void slotSelectAttack(float index);
     void slotSelectRelease(float index);
-    void slotSelectAudioLevel(int index);
 
     void slotActivateProgramChange(bool value);
     void slotActivateBank(bool value);
 
-    // select a plugin to go at an index number
-    //
-    void slotSelectPlugin(int index);
-
-    // and for the signals that come back
-    //
-    void slotPluginSelected(int index, int plugin);
-    void slotPluginPortChanged(int pluginIndex, int portIndex, float value);
-    void slotBypassed(int pluginIndex, bool bp);
-
-signals:
-
-    // Emit a MIDI controller for immediate processing.
-    // This is necessary for controlling MIDI devices in
-    // real time during playback.
-    //
-    void changeInstrumentLabel(Rosegarden::InstrumentId id, QString label);
-
 protected:
 
     void populateProgramList();
-    void initBox();
 
     //--------------- Data members ---------------------------------
-
-    QLabel             *m_instrumentLabel;
-    QLabel             *m_channelLabel;
-    QLabel             *m_panLabel;
-    QLabel             *m_volumeLabel;
-    QLabel             *m_programLabel;
-    QLabel             *m_bankLabel;
 
     RosegardenComboBox *m_bankValue;
     RosegardenComboBox *m_channelValue;
@@ -118,10 +198,6 @@ protected:
 
     QCheckBox          *m_bankCheckBox;
     QCheckBox          *m_programCheckBox;
-    RosegardenFader    *m_audioLevelFader;
-    QLabel             *m_audioLevelValue;
-    QLabel             *m_audioLevelLabel;
-    QLabel             *m_pluginLabel;
 
     RosegardenRotary   *m_chorusRotary;
     RosegardenRotary   *m_reverbRotary;
@@ -129,30 +205,7 @@ protected:
     RosegardenRotary   *m_resonanceRotary;
     RosegardenRotary   *m_attackRotary;
     RosegardenRotary   *m_releaseRotary;
-    QLabel             *m_chorusLabel;
-    QLabel             *m_reverbLabel;
-    QLabel             *m_highPassLabel;
-    QLabel             *m_resonanceLabel;
-    QLabel             *m_attackLabel;
-    QLabel             *m_releaseLabel;
-
-    QSignalMapper *m_signalMapper;
-
-    std::vector<QPushButton*>       m_pluginButtons;
-
-    Rosegarden::Instrument          *m_selectedInstrument;
-
-    Rosegarden::AudioPluginManager  *m_pluginManager;
-
-    // So we can setModified()
-    //
-    RosegardenGUIDoc                *m_doc;
-
 };
-
-// Global references
-//
-static std::vector<InstrumentParameterBox*> instrumentParamBoxes;
 
 
 #endif // _INSTRUMENTPARAMETERBOX_H_
