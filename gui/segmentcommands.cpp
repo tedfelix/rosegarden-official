@@ -346,9 +346,8 @@ SegmentSplitCommand::execute()
     // Look for a final rest and shrink it
     Segment::iterator it = m_segment->end();
 
-    if ((*(--it))->isa("rest"))
+    if (it != m_segment->begin() && (*(--it))->isa(Note::EventRestType))
         (*it)->setDuration(m_splitTime - (*it)->getAbsoluteTime());
-
 
     if (!m_newSegment->getComposition()) {
 	m_segment->getComposition()->addSegment(m_newSegment);
@@ -358,6 +357,10 @@ SegmentSplitCommand::execute()
 void
 SegmentSplitCommand::unexecute()
 {
+    if (m_segment->getEndTime() < m_newSegment->getFirstEventTime()) {
+	m_segment->fillWithRests(m_newSegment->getFirstEventTime());
+    }
+
     for (Segment::iterator it = m_newSegment->begin();
 	 it != m_newSegment->end(); ++it) {
 	m_segment->insert(new Event(**it));
