@@ -29,7 +29,7 @@
 /**
  * Horizontal notation layout
  *
- * computes the Y coordinate of notation elements
+ * computes the X coordinate of notation elements
  */
 class NotationHLayout : public LayoutEngine
 {
