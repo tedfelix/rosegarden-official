@@ -4033,7 +4033,7 @@ CompositionLengthDialog::CompositionLengthDialog(
     m_startMarkerSpinBox->setMinValue(-10);
     m_startMarkerSpinBox->setMaxValue(10000);
     m_startMarkerSpinBox->setValue(
-            m_composition->getBarNumber(m_composition->getStartMarker()));
+            m_composition->getBarNumber(m_composition->getStartMarker()) + 1);
 
     QHBox *endBox = new QHBox(vBox);
     new QLabel(i18n("End Bar"), endBox);
@@ -4048,7 +4048,7 @@ CompositionLengthDialog::CompositionLengthDialog(
 Rosegarden::timeT
 CompositionLengthDialog::getStartMarker()
 {
-    return m_composition->getBarStart(m_startMarkerSpinBox->value());
+    return m_composition->getBarStart(m_startMarkerSpinBox->value() - 1);
 }
 
 Rosegarden::timeT
