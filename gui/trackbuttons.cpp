@@ -37,6 +37,7 @@
 #include "colours.h"
 #include "tracklabel.h"
 
+#include "segmentcommands.h"
 #include "rosestrings.h"
 #include "rosedebug.h"
 #include "rosegardenguidoc.h"
@@ -270,8 +271,8 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
     trackLabel->setFixedHeight(m_cellSize - buttonGap);
     trackLabel->setIndent(7);
 
-    connect(trackLabel, SIGNAL(renameTrack(QString, int)),
-            SLOT(slotRenameTrack(QString, int)));
+    connect(trackLabel, SIGNAL(renameTrack(QString, Rosegarden::TrackId)),
+            SLOT(slotRenameTrack(QString, Rosegarden::TrackId)));
 
     // Store the TrackLabel pointer
     //
@@ -652,17 +653,14 @@ TrackButtons::getHighlightedTracks()
 }
 
 void
-TrackButtons::slotRenameTrack(QString newName, int trackNumber)
+TrackButtons::slotRenameTrack(QString newName, Rosegarden::TrackId trackId)
 {
-    Rosegarden::Track *track = m_doc->getComposition().getTrackById(trackNumber);
-    track->setLabel(qstrtostr(newName));
+    m_doc->getCommandHistory()->addCommand
+	(new RenameTrackCommand(&m_doc->getComposition(),
+				trackId,
+				qstrtostr(newName)));
 
-    if (((unsigned int)trackNumber) < m_trackLabels.size())
-    {
-        m_trackLabels[trackNumber]->getTrackLabel()->setText(newName);
-        emit widthChanged();
-        emit nameChanged();
-    }
+    changeTrackLabel(trackId, newName);
 }
 
 
@@ -970,6 +968,26 @@ TrackButtons::changeInstrumentLabel(Rosegarden::InstrumentId id, QString label)
     }
 }
 
+
+void
+TrackButtons::changeTrackLabel(Rosegarden::TrackId id, QString label)
+{
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    Rosegarden::Track *track;
+
+    for (int i = 0; i < (int)m_tracks; i++)
+    {
+        track = comp.getTrackByPosition(i);
+	if (track && track->getId() == id) {
+	    if (m_trackLabels[i]->getTrackLabel()->text() != label) {
+		m_trackLabels[i]->getTrackLabel()->setText(label);
+		emit widthChanged();
+		emit nameChanged();
+	    }
+	    return;
+	}
+    }
+}
 
 void
 TrackButtons::slotSynchroniseWithComposition()

@@ -1818,6 +1818,46 @@ MoveTracksCommand::unexecute()
     m_composition->updateRefreshStatuses();
 }
 
+// ------------------ RenameTrackCommand ---------------------
+//
+RenameTrackCommand::RenameTrackCommand(Rosegarden::Composition *composition,
+				       Rosegarden::TrackId trackId,
+				       std::string name) :
+    KNamedCommand(getGlobalName()),
+    m_composition(composition),
+    m_track(trackId),
+    m_newName(name)
+{
+    Rosegarden::Track *track = composition->getTrackById(m_track);
+    if (!track) {
+	RG_DEBUG << "Hey! No Track in RenameTrackCommand (track id " << track
+		 << ")!" << endl;
+	return;
+    }
+    m_oldName = track->getLabel();
+}
+
+RenameTrackCommand::~RenameTrackCommand()
+{
+}
+
+void
+RenameTrackCommand::execute()
+{
+    Rosegarden::Track *track = m_composition->getTrackById(m_track);
+    if (!track) return;
+    track->setLabel(m_newName);
+}
+
+void
+RenameTrackCommand::unexecute()
+{
+    Rosegarden::Track *track = m_composition->getTrackById(m_track);
+    if (!track) return;
+    track->setLabel(m_oldName);
+}
+    
+    
 
 // ------------------ ChangeCompositionLengthCommand ------------------
 //

@@ -49,6 +49,32 @@
 
 #include "rosedebug.h"
 
+class EditViewTimeSigNotifier : public Rosegarden::CompositionObserver
+{
+public:
+    EditViewTimeSigNotifier(RosegardenGUIDoc *doc) :
+	m_composition(&doc->getComposition()),
+	m_timeSigChanged(false) {
+	m_composition->addObserver(this);
+    }
+    virtual ~EditViewTimeSigNotifier() {
+	if (m_composition) m_composition->removeObserver(this);
+    }
+    virtual void timeSignatureChanged(const Rosegarden::Composition *c) {
+	if (c == m_composition) m_timeSigChanged = true;
+    }
+    virtual void compositionDeleted(const Rosegarden::Composition *c) {
+	if (c == m_composition) m_composition = 0;
+    }
+
+    bool hasTimeSigChanged() const { return m_timeSigChanged; }
+    void reset() { m_timeSigChanged = false; }
+
+protected:
+    Rosegarden::Composition *m_composition;
+    bool m_timeSigChanged;
+};
+
 //----------------------------------------------------------------------
 const unsigned int EditViewBase::ID_STATUS_MSG = 1;
 const unsigned int EditViewBase::NbLayoutRows = 6;
@@ -75,7 +101,8 @@ EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
     m_configDialogPageIndex(0),
     m_shiftDown(false),
     m_controlDown(false),
-    m_inCtor(true)
+    m_inCtor(true),
+    m_timeSigNotifier(new EditViewTimeSigNotifier(doc))
 {
 
     QPixmap dummyPixmap; // any icon will do
@@ -112,6 +139,8 @@ EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
 
 EditViewBase::~EditViewBase()
 {
+    delete m_timeSigNotifier;
+
     m_doc->detachEditView(this);
 
     getCommandHistory()->detachView(actionCollection());
@@ -311,6 +340,14 @@ void EditViewBase::paintEvent(QPaintEvent* e)
 	    segmentsToUpdate = 0;
 	    break;
             
+	} else if (m_timeSigNotifier->hasTimeSigChanged()) {
+
+	    // not exactly optimal!
+	    refreshSegment(0);
+	    segmentsToUpdate = 0;
+	    m_timeSigNotifier->reset();
+	    break;
+
         } else if (refreshStatus.needsRefresh()) {
 
             Rosegarden::timeT startTime = refreshStatus.from(),

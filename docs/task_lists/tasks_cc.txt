@@ -15,7 +15,7 @@ Post-0.9 task list
 
 6. lyrics don't cope with chords [not true?]
 
-7. lilypond i/o shouldn't be using noteIsInChord
+7. lilypond i/o shouldn't be using noteIsInChord [DONE]
 
 8. When inserting a note, use the Interpret code to calculate
     a velocity for it
@@ -29,7 +29,7 @@ Post-0.9 task list
 12. Import MIDI file -> split segments at program change (care with bank
     select!), key change, time sig change
 
-13. Roland Variations controllers / drum banks
+13. Roland Variations controllers / drum banks [DONE]
 
 14. Karaoke file (.kar) import -- and must get around to doing that
     bouncing-ball lyric thing.
@@ -42,7 +42,7 @@ Post-0.9 task list
 
 17. Simplistic chord-recognition code & restructure ChordLabel etc to be more use
 
-18. True page layout in notation view (i.e. current one becomes "Continuous Page")
+18. True page layout in notation view (i.e. current one becomes "Continuous Page") [DONE]
 
 19. In the middle of adding 8ve up/down clef types -- do NotePixmapFactory
     stuff etc [DONE -- could do with a bit of rearrangement in clef dialog]
@@ -57,7 +57,7 @@ Post-0.9 task list
 
 23. Ordered tip-of-the-day
 
-24. Generic file merge -- important feature
+24. Generic file merge -- important feature [DONE]
 
 25. Chord computations: don't include percussion tracks [DONE]
 
@@ -81,7 +81,7 @@ harpsichord upper in dido.rg -- why?
 33. Speed up "sync devices" by storing MappedDevice lists in shared
 memory?
 
-34. Get experimental branch working correctly again
+34. Get experimental branch working correctly again [DONE]
 
     Some problems with experimental branch:
 

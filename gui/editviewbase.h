@@ -47,6 +47,8 @@ class EditTool;
 class EditToolBox;
 class BasicCommand;
 
+class EditViewTimeSigNotifier;
+
 
 class EditViewBase : public KDockMainWindow
 {
@@ -342,6 +344,8 @@ protected:
     bool         m_controlDown;
 
     bool         m_inCtor;
+
+    EditViewTimeSigNotifier *m_timeSigNotifier;
 };
 
 #endif

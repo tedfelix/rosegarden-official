@@ -22,6 +22,7 @@
 
 #include <qlabel.h>
 #include <qinputdialog.h>
+#include <qvalidator.h>
 #include <qtimer.h>
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -1423,39 +1424,82 @@ NotationView::slotSetCurrentStaff(double x, int y)
     }
     
     if (staffNo < m_staffs.size()) {
-        if (m_currentStaff != signed(staffNo)) {
-            m_staffs[m_currentStaff]->setCurrent(false);
-            m_currentStaff = staffNo;
-            m_staffs[m_currentStaff]->setCurrent(true);
-        }
-        m_chordNameRuler->setCurrentSegment
-            (&m_staffs[m_currentStaff]->getSegment());
-        m_rawNoteRuler->setCurrentSegment
-            (&m_staffs[m_currentStaff]->getSegment());
-        m_rawNoteRuler->repaint();
+	slotSetCurrentStaff(staffNo);
     }
-    
-    updateView();
 }
+
+void
+NotationView::slotSetCurrentStaff(int staffNo)
+{
+    if (m_currentStaff != staffNo) {
+	m_staffs[m_currentStaff]->setCurrent(false);
+	m_currentStaff = staffNo;
+	m_staffs[m_currentStaff]->setCurrent(true);
+
+	m_chordNameRuler->setCurrentSegment
+	    (&m_staffs[m_currentStaff]->getSegment());
+	m_rawNoteRuler->setCurrentSegment
+	    (&m_staffs[m_currentStaff]->getSegment());
+	m_rawNoteRuler->repaint();
+	
+	updateView();
+	
+	slotSetInsertCursorPosition(getInsertionTime());
+    }
+}    
 
 void
 NotationView::slotCurrentStaffUp()
 {
     if (m_staffs.size() < 2) return;
-    m_staffs[m_currentStaff]->setCurrent(false);
-    if (m_currentStaff-- <= 0) m_currentStaff = m_staffs.size()-1;
-    m_staffs[m_currentStaff]->setCurrent(true);
-    slotSetInsertCursorPosition(getInsertionTime());
+
+    Rosegarden::Composition *composition =
+	m_staffs[m_currentStaff]->getSegment().getComposition();
+	
+    Rosegarden::Track *track = composition->
+	getTrackById(m_staffs[m_currentStaff]->getSegment().getTrack());
+    if (!track) return;
+
+    int position = track->getPosition();
+    if (position > 0) --position;
+
+    Rosegarden::Track *newTrack = composition->getTrackByPosition(position);
+
+    if (newTrack) {
+	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+	    if (m_staffs[i]->getSegment().getTrack() == newTrack->getId()) {
+		slotSetCurrentStaff(i);
+		break;
+	    }
+	}
+    }
 }
 
 void
 NotationView::slotCurrentStaffDown()
 {
     if (m_staffs.size() < 2) return;
-    m_staffs[m_currentStaff]->setCurrent(false);
-    if (++m_currentStaff >= (int)m_staffs.size()) m_currentStaff = 0;
-    m_staffs[m_currentStaff]->setCurrent(true);
-    slotSetInsertCursorPosition(getInsertionTime());
+
+    Rosegarden::Composition *composition =
+	m_staffs[m_currentStaff]->getSegment().getComposition();
+	
+    Rosegarden::Track *track = composition->
+	getTrackById(m_staffs[m_currentStaff]->getSegment().getTrack());
+    if (!track) return;
+
+    int position = track->getPosition();
+    ++position;
+
+    Rosegarden::Track *newTrack = composition->getTrackByPosition(position);
+
+    if (newTrack) {
+	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+	    if (m_staffs[i]->getSegment().getTrack() == newTrack->getId()) {
+		slotSetCurrentStaff(i);
+		break;
+	    }
+	}
+    }
 }
 
 void
@@ -1857,16 +1901,56 @@ void NotationView::slotItemPressed(int height, int staffNo,
 
         timeT unknownTime = 0;
 
-        // This won't work because a double click event is always
-        // preceded by a single click event
-        if (e->type() == QEvent::MouseButtonDblClick)
+        if (e->type() == QEvent::MouseButtonDblClick) {
             m_tool->handleMouseDoubleClick(unknownTime, height,
 					   staffNo, e, el);
-        else
+	} else {
             m_tool->handleMousePress(unknownTime, height,
                                      staffNo, e, el);
+	}
     }
-    
+}
+
+void NotationView::slotNonNotationItemPressed(QMouseEvent *e, QCanvasItem *it)
+{
+    if (e->type() != QEvent::MouseButtonDblClick) return;
+
+    NotationStaff *staff = dynamic_cast<NotationStaff *>
+	(getStaffForCanvasCoords(e->x(), e->y()));
+    if (!staff) return;
+
+    NOTATION_DEBUG << "NotationView::slotNonNotationItemPressed(doubly)" << endl;
+
+    if (dynamic_cast<QCanvasStaffNameSprite *>(it)) {
+
+	std::string name =
+	    staff->getSegment().getComposition()->
+	    getTrackById(staff->getSegment().getTrack())->getLabel();
+
+	bool ok = false;
+	QRegExpValidator validator(QRegExp(".*"), this); // empty is OK
+
+	QString newText = KLineEditDlg::getText(QString("Change staff name"),
+						QString("Enter new staff name"),
+						strtoqstr(name),
+						&ok,
+						this,
+						&validator);
+
+	if (ok) {
+	    addCommandToHistory(new RenameTrackCommand
+				(staff->getSegment().getComposition(),
+				 staff->getSegment().getTrack(),
+				 qstrtostr(newText)));
+
+	    emit staffLabelChanged(staff->getSegment().getTrack(), newText);
+	}
+
+    } else if (dynamic_cast<QCanvasTimeSigSprite *>(it)) {
+
+	double layoutX = (dynamic_cast<QCanvasTimeSigSprite *>(it))->getLayoutX();
+	emit editTimeSignature(m_hlayout->getTimeForX(layoutX));
+    }
 }
 
 void NotationView::slotMouseMoved(QMouseEvent *e)

@@ -62,7 +62,7 @@ signals:
 
     /**
      * Emitted when the user clicks on a staff (e.g. mouse button press)
-     * \a height is set to the MIDI pitch on which the click occurred
+     * \a pitch is set to the MIDI pitch on which the click occurred
      * \a staffNo is set to the staff on which the click occurred
      * \a point is set to the coordinates of the click event
      * \a el points to the NotationElement which was clicked on, if any
@@ -78,6 +78,13 @@ signals:
      */
     void activeItemPressed(QMouseEvent*,
                            QCanvasItem* item);
+
+    /**
+     * Emitted when the user clicks on a QCanvasItem which is neither
+     * active nor a notation element
+     */
+    void nonNotationItemPressed(QMouseEvent *,
+				QCanvasItem *);
 
     /**
      * Emitted when the mouse cursor moves to a different height

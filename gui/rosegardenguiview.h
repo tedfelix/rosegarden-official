@@ -230,6 +230,11 @@ public slots:
     void slotChangeInstrumentLabel(Rosegarden::InstrumentId id, QString label);
 
     /*
+     * Change the Track Label
+     */
+    void slotChangeTrackLabel(Rosegarden::TrackId id, QString label);
+
+    /*
      * Set the mute button on the track buttons and on the instrument
      * parameter box
      */

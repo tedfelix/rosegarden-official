@@ -134,7 +134,8 @@ NotationStaff::insertTimeSignature(double layoutX,
 {
     m_notePixmapFactory->setSelected(false);
     QCanvasPixmap *pixmap = m_notePixmapFactory->makeTimeSigPixmap(timeSig);
-    QCanvasSimpleSprite *sprite = new QCanvasSimpleSprite(pixmap, m_canvas);
+    QCanvasTimeSigSprite *sprite =
+	new QCanvasTimeSigSprite(layoutX, pixmap, m_canvas);
 
     LinedStaffCoords sigCoords =
 	getCanvasCoordsForLayoutCoords(layoutX, getLayoutYForHeight(4));
@@ -151,7 +152,7 @@ NotationStaff::deleteTimeSignatures()
     
     for (SpriteSet::iterator i = m_timeSigs.begin();
 	 i != m_timeSigs.end(); ++i) {
-        delete (*i);
+        delete *i;
     }
 
     m_timeSigs.clear();
@@ -162,15 +163,15 @@ NotationStaff::drawStaffName()
 {
     delete m_staffName;
 
-    std::string name =
+    m_staffNameText =
 	getSegment().getComposition()->
 	getTrackById(getSegment().getTrack())->getLabel();
 
     QCanvasPixmap *map = 
 	m_notePixmapFactory->makeTextPixmap
-	(Rosegarden::Text(name, Rosegarden::Text::StaffName));
+	(Rosegarden::Text(m_staffNameText, Rosegarden::Text::StaffName));
 
-    m_staffName = new QCanvasSimpleSprite(map, m_canvas);
+    m_staffName = new QCanvasStaffNameSprite(map, m_canvas);
 
     int layoutY = getLayoutYForHeight(3);
     LinedStaffCoords coords = getCanvasCoordsForLayoutCoords(0, layoutY);
@@ -178,6 +179,14 @@ NotationStaff::drawStaffName()
 		      coords.second - map->height()/2);
     m_staffName->show();
 }
+
+bool
+NotationStaff::isStaffNameUpToDate()
+{
+    return (m_staffNameText ==
+	    getSegment().getComposition()->
+	    getTrackById(getSegment().getTrack())->getLabel());
+}	    
 
 void
 NotationStaff::getClefAndKeyAtCanvasCoords(double cx, int cy,

@@ -23,6 +23,7 @@
 #include <qlabel.h>
 #include <qtimer.h>
 #include <klineeditdlg.h>
+#include <qvalidator.h>
 
 #include "rosedebug.h"
 
@@ -167,14 +168,17 @@ TrackLabel::mouseDoubleClickEvent(QMouseEvent *e)
 
     bool ok = false;
 
+    QRegExpValidator validator(QRegExp(".*"), this); // empty is OK
+
     QString newText = KLineEditDlg::getText(QString("Change track name"),
                                             QString("Enter new track name"),
                                             m_trackLabel->text(),
                                             &ok,
-                                            this);
+                                            this,
+					    &validator);
 
-    if ( ok && !newText.isEmpty() )
-        emit renameTrack(newText, m_position);
+    if ( ok )
+        emit renameTrack(newText, m_id);
 }
 
 QLabel* TrackLabel::getVisibleLabel()

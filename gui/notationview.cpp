@@ -579,6 +579,10 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
          this,         SLOT  (slotActiveItemPressed(QMouseEvent*, QCanvasItem*)));
 
     QObject::connect
+        (getCanvasView(), SIGNAL(nonNotationItemPressed(QMouseEvent*, QCanvasItem*)),
+         this,         SLOT  (slotNonNotationItemPressed(QMouseEvent*, QCanvasItem*)));
+
+    QObject::connect
         (getCanvasView(), SIGNAL(mouseMoved(QMouseEvent*)),
          this,         SLOT  (slotMouseMoved(QMouseEvent*)));
 
@@ -2243,6 +2247,8 @@ void
 NotationView::paintEvent(QPaintEvent *e)
 {
     NOTATION_DEBUG << "NotationView::paintEvent: m_hlayout->isPageMode() returns " << m_hlayout->isPageMode() << endl;
+
+    // relayout if the window width changes significantly in continuous page mode
     if (m_pageMode == LinedStaff::ContinuousPageMode) {
 	int diff = int(getPageWidth() - m_hlayout->getPageWidth());
 	NOTATION_DEBUG << "NotationView::paintEvent: diff is " << diff <<endl;
@@ -2251,6 +2257,15 @@ NotationView::paintEvent(QPaintEvent *e)
 	    refreshSegment(0, 0, 0);
 	}
     }
+
+    // check for staff name changes
+    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+	if (!m_staffs[i]->isStaffNameUpToDate()) {
+	    refreshSegment(0);
+	    break;
+	}
+    }
+
     EditView::paintEvent(e);
 }
 
@@ -2466,6 +2481,12 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview,
 		     [getStaff(s->getSegment())->getId()]).
 		    push(startB, endB);
 	    }
+	}
+
+	if (s) {
+	    // make the staff containing the selection current
+	    int staffId = getStaff(s->getSegment())->getId();
+	    if (staffId != m_currentStaff) slotSetCurrentStaff(staffId);
 	}
     }
 

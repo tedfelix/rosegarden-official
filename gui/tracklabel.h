@@ -78,7 +78,7 @@ signals:
 
     // We emit this once we've renamed a track
     //
-    void renameTrack(QString, int);
+    void renameTrack(QString, Rosegarden::TrackId);
 
     void changeToInstrumentList();
 

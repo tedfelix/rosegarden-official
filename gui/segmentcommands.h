@@ -625,6 +625,25 @@ protected:
     Rosegarden::TrackId                m_destTrack;
 };
 
+class RenameTrackCommand : public KNamedCommand
+{
+public:
+    RenameTrackCommand(Rosegarden::Composition *composition,
+		       Rosegarden::TrackId track, 
+		       std::string name);
+    virtual ~RenameTrackCommand();
+
+    static QString getGlobalName() { return i18n("Rename Track"); }
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    Rosegarden::Composition *m_composition;
+    Rosegarden::TrackId      m_track;
+    std::string              m_oldName;
+    std::string              m_newName;
+};
 
 class ChangeCompositionLengthCommand : public KNamedCommand
 {

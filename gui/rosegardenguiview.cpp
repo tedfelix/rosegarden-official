@@ -436,6 +436,10 @@ RosegardenGUIView::createNotationView(std::vector<Rosegarden::Segment *> segment
 	    this, SLOT(slotEditSegmentsMatrix(std::vector<Rosegarden::Segment *>)));
     connect(notationView, SIGNAL(openInEventList(std::vector<Rosegarden::Segment *>)),
 	    this, SLOT(slotEditSegmentsEventList(std::vector<Rosegarden::Segment *>)));
+    connect(notationView, SIGNAL(editTimeSignature(Rosegarden::timeT)),
+	    this, SLOT(slotEditTempos(Rosegarden::timeT)));
+    connect(notationView, SIGNAL(staffLabelChanged(Rosegarden::TrackId, QString)),
+	    this, SLOT(slotChangeTrackLabel(Rosegarden::TrackId, QString)));
 
     Rosegarden::SequenceManager *sM = getDocument()->getSequenceManager();
 
@@ -1139,6 +1143,13 @@ RosegardenGUIView::slotChangeInstrumentLabel(Rosegarden::InstrumentId id,
                                              QString label)
 {
     m_trackEditor->getTrackButtons()->changeInstrumentLabel(id, label);
+}
+
+void
+RosegardenGUIView::slotChangeTrackLabel(Rosegarden::TrackId id,
+					QString label)
+{
+    m_trackEditor->getTrackButtons()->changeTrackLabel(id, label);
 }
 
 

@@ -76,6 +76,34 @@ protected:
 };
 
 /**
+ * A QCanvasSprite used for a time signature
+ */
+class QCanvasTimeSigSprite : public QCanvasSimpleSprite
+{
+public:
+    QCanvasTimeSigSprite(double layoutX, QPixmap *, QCanvas *);
+    QCanvasTimeSigSprite(double layoutX, QCanvasPixmap *, QCanvas *);
+    virtual ~QCanvasTimeSigSprite();
+
+    void setLayoutX(double layoutX) { m_layoutX = layoutX; }
+    double getLayoutX() const { return m_layoutX; }
+
+protected:
+    double m_layoutX;
+};
+
+/**
+ * A QCanvasSprite used for a staff name
+ */
+class QCanvasStaffNameSprite : public QCanvasSimpleSprite
+{
+public:
+    QCanvasStaffNameSprite(QPixmap *, QCanvas *);
+    QCanvasStaffNameSprite(QCanvasPixmap *, QCanvas *);
+    virtual ~QCanvasStaffNameSprite();
+};
+
+/**
  * A GC for QCanvasPixmapArray which have to be deleted seperatly
  */
 class PixmapArrayGC

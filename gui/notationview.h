@@ -471,6 +471,11 @@ public slots:
      */
     void slotItemPressed(int height, int staffNo, QMouseEvent*, NotationElement*);
 
+    /**
+     * Called when a mouse press occurred on a non-notation element 
+     */
+    void slotNonNotationItemPressed(QMouseEvent *e, QCanvasItem *i);
+
     void slotMouseMoved(QMouseEvent*);
     void slotMouseReleased(QMouseEvent*);
 
@@ -506,6 +511,9 @@ public slots:
 
     /// Set the current staff to the one containing the given canvas Y coord
     void slotSetCurrentStaff(double canvasX, int canvasY);
+
+    /// Set the current staff to that with the given id
+    void slotSetCurrentStaff(int staffNo);
 
     /**
      * Set the insert cursor position (from the top LoopRuler).
@@ -654,6 +662,10 @@ signals:
     void stepByStepTargetRequested(QObject *);
 
     void renderComplete();
+
+    void editTimeSignature(Rosegarden::timeT);
+
+    void staffLabelChanged(Rosegarden::TrackId id, QString label);
 
 protected:
 

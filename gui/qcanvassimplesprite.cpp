@@ -139,6 +139,45 @@ QCanvasNotationSprite::~QCanvasNotationSprite()
 {
 }
 
+
+QCanvasTimeSigSprite::QCanvasTimeSigSprite(double layoutX,
+					   QPixmap *pixmap,
+					   QCanvas *canvas) :
+    QCanvasSimpleSprite(pixmap, canvas),
+    m_layoutX(layoutX)
+{
+}
+
+QCanvasTimeSigSprite::QCanvasTimeSigSprite(double layoutX,
+					   QCanvasPixmap *pixmap,
+					   QCanvas *canvas) :
+    QCanvasSimpleSprite(pixmap, canvas),
+    m_layoutX(layoutX)
+{
+}
+
+QCanvasTimeSigSprite::~QCanvasTimeSigSprite()
+{
+}
+
+
+QCanvasStaffNameSprite::QCanvasStaffNameSprite(QPixmap *pixmap,
+					       QCanvas *canvas) :
+    QCanvasSimpleSprite(pixmap, canvas)
+{
+}
+
+QCanvasStaffNameSprite::QCanvasStaffNameSprite(QCanvasPixmap *pixmap,
+					       QCanvas *canvas) :
+    QCanvasSimpleSprite(pixmap, canvas)
+{
+}
+
+QCanvasStaffNameSprite::~QCanvasStaffNameSprite()
+{
+}
+
+
 //////////////////////////////////////////////////////////////////////
 
 void PixmapArrayGC::registerForDeletion(QCanvasPixmapArray* array)

@@ -204,7 +204,16 @@ public:
      */
     virtual void deleteTimeSignatures();
 
+    /**
+     * (Re)draw the staff name from the track's current name
+     */
     virtual void drawStaffName();
+
+    /**
+     * Return true if the staff name as currently drawn is up-to-date
+     * with that in the composition
+     */
+    virtual bool isStaffNameUpToDate();
 
     /**
      * Return the clef and key in force at the given canvas
@@ -388,6 +397,7 @@ protected:
     NotePixmapFactory *m_graceNotePixmapFactory;
     QCanvasSimpleSprite *m_previewSprite;
     QCanvasSimpleSprite *m_staffName;
+    std::string m_staffNameText;
     NotationView *m_notationView;
     int m_legerLineCount;
     int m_barNumbersEvery;

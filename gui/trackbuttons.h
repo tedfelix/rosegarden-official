@@ -103,8 +103,9 @@ public:
      * an actual program name rather than a meaningless
      * device number and midi channel
      */
-
     void changeInstrumentLabel(Rosegarden::InstrumentId id, QString label);
+
+    void changeTrackLabel(Rosegarden::TrackId id, QString label);
 
     // Select a label from outside this class by position
     //
@@ -159,7 +160,7 @@ public slots:
     void slotSetRecordTrack(int position);
     void slotToggleMutedTrack(int mutedTrack);
     void slotUpdateTracks();
-    void slotRenameTrack(QString newName, int trackNumber);
+    void slotRenameTrack(QString newName, Rosegarden::TrackId trackId);
     void slotSetTrackMeter(double value, int position);
     void slotSetMetersByInstrument(double value, Rosegarden::InstrumentId id);
 

@@ -70,6 +70,14 @@ void Track::setMuted(bool muted)
         m_owningComposition->notifyTrackChanged(this);
 }
 
+void Track::setLabel(const std::string &label)
+{
+    m_label = label;
+
+    if (m_owningComposition)
+        m_owningComposition->notifyTrackChanged(this);
+}
+
 void Track::setInstrument(InstrumentId instrument)
 {
     m_instrument = instrument;

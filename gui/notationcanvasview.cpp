@@ -170,7 +170,6 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
     }
 */
     QCanvasItemList::Iterator it;
-    QCanvasItem* activeItem = 0;
     NotationElement *clickedNote = 0;
     NotationElement *clickedVagueNote = 0;
     NotationElement *clickedNonNote = 0;
@@ -185,13 +184,23 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
     for (it = itemList.begin(); it != itemList.end(); ++it) {
 
         if ((*it)->active()) {
-            activeItem = (*it);
-            break;
+	    emit activeItemPressed(e, *it);
+	    return;
         }
 
         QCanvasNotationSprite *sprite =
 	    dynamic_cast<QCanvasNotationSprite*>(*it);
-	if (!sprite) continue;
+	if (!sprite) {
+	    // bit too much inside information here
+	    if (dynamic_cast<QCanvasTimeSigSprite *>(*it) ||
+		dynamic_cast<QCanvasStaffNameSprite *>(*it)) {
+		NOTATION_DEBUG << "not a notation sprite: emitting nonNotationItemPressed"
+			       << endl;
+		emit nonNotationItemPressed(e, *it);
+		return;
+	    }
+	    continue;
+	}
 
 	NotationElement &el = sprite->getNotationElement();
 
@@ -224,11 +233,6 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 	}
     }
 
-    if (activeItem) { // active item takes precedence over notation elements
-        emit activeItemPressed(e, activeItem);
-        return;
-    }
-
     int staffNo = -1;
     if (staff) staffNo = staff->getId();
 
@@ -249,7 +253,7 @@ void NotationCanvasView::contentsMouseDoubleClickEvent(QMouseEvent* e)
     contentsMousePressEvent(e);
 }
 
-
+//!!! obsolete?
 void
 NotationCanvasView::processActiveItems(QMouseEvent* e,
                                        QCanvasItemList itemList)
