@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-07-27 17:57+0100\n"
-"PO-Revision-Date: 2004-07-24 19:21+0200\n"
+"PO-Revision-Date: 2004-07-28 18:31+0200\n"
 "Last-Translator: Pedro Lopez-Cabanillas <plcl@users.sourceforge.net>\n"
 "Language-Team: Español <rosegarden-devel@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -229,8 +229,7 @@ msgid "Export..."
 msgstr "Exportar..."
 
 #: bankeditor.cpp:763
-msgid ""
-"Import Bank and Program data from a Rosegarden file to the current Device"
+msgid "Import Bank and Program data from a Rosegarden file to the current Device"
 msgstr ""
 "Importar datos de Banco y Programa desde un archivo de Rosegarden para el "
 "dispositivo actual"
@@ -670,8 +669,7 @@ msgstr ""
 
 #: fonts.cpp:22
 msgid "Inkpen is part of Sibelius, but other fonts may use the same mappings."
-msgstr ""
-"Inkpen es parte de Sibelius, pero otras fuentes pueden usar el mismo mapa."
+msgstr "Inkpen es parte de Sibelius, pero otras fuentes pueden usar el mismo mapa."
 
 #: fonts.cpp:23 fonts.cpp:33 fonts.cpp:38
 msgid "Copyright Sibelius Software Ltd"
@@ -683,8 +681,7 @@ msgstr ""
 
 #: fonts.cpp:27
 msgid "Maestro is part of Finale, but other fonts use the same mappings."
-msgstr ""
-"Maestro es parte de Finale, pero otras fuentes pueden usar el mismo mapa."
+msgstr "Maestro es parte de Finale, pero otras fuentes pueden usar el mismo mapa."
 
 #: fonts.cpp:28 fonts.cpp:43
 msgid "Copyright Coda Inc"
@@ -700,8 +697,7 @@ msgstr "La tipografía Opus es parte de Sibelius."
 
 #: fonts.cpp:37
 msgid "Opus is part of Sibelius, but other fonts may use the same mappings."
-msgstr ""
-"Opus es parte de Sibelius, pero otras fuentes pueden usar el mismo mapa."
+msgstr "Opus es parte de Sibelius, pero otras fuentes pueden usar el mismo mapa."
 
 #: fonts.cpp:41
 msgid "Petrucci"
@@ -1506,7 +1502,7 @@ msgstr "Modificar camino de archivos de audio"
 
 #: rosegardenconfiguredialog.cpp:2212
 msgid "%1 out of %2 (%3% used)"
-msgstr ""
+msgstr "%1 de %2 (%3% usado)"
 
 #: rosegardenconfiguredialog.cpp:2243
 msgid "minutes at"
@@ -1738,9 +1734,8 @@ msgid "Fade out"
 msgstr ""
 
 #: segmentparameterbox.cpp:173 segmentparameterbox.cpp:180
-#, fuzzy
 msgid " ms"
-msgstr "%1 ms"
+msgstr ""
 
 #: segmentparameterbox.cpp:275 segmentparameterbox.cpp:604
 msgid "%1 ms"
@@ -1894,8 +1889,7 @@ msgstr "Cuantificador heurístico de partitura"
 
 #: widgets.cpp:875
 msgid "Quantize for notation only (leave performance unchanged)"
-msgstr ""
-"Cuantificar para la partitura solamente (dejar la interpretación intacta)"
+msgstr "Cuantificar para la partitura solamente (dejar la interpretación intacta)"
 
 #: widgets.cpp:884
 msgid "Notation parameters"
@@ -2434,8 +2428,7 @@ msgid "JACK Audio subsystem is losing sample frames."
 msgstr "Subsistema de audio JACK está perdiendo muestras."
 
 #: sequencemanager.cpp:1077
-msgid ""
-"Failed to read audio data from disc in time to service the audio subsystem."
+msgid "Failed to read audio data from disc in time to service the audio subsystem."
 msgstr ""
 "Fallo leyendo datos de audio desde disco a tiempo para servir el subsistema "
 "de audio."
@@ -2516,8 +2509,7 @@ msgid "global element must precede note elements"
 msgstr "elemento global debe preceder a elementos de nota"
 
 #: notestyle.cpp:628
-msgid ""
-"global and note elements may have shape or charname attribute, but not both"
+msgid "global and note elements may have shape or charname attribute, but not both"
 msgstr ""
 "elementos globales y notas pueden tener forma o nombre de carácter, pero no "
 "ambos"
@@ -2712,8 +2704,7 @@ msgid "Editor >>"
 msgstr ""
 
 #: tracklabel.cpp:54
-msgid ""
-"Click and hold with left mouse button to assign this Track to an Instrument."
+msgid "Click and hold with left mouse button to assign this Track to an Instrument."
 msgstr ""
 "Pulsar y mantener el botón izquierdo del ratón para asignar esta pista a un "
 "instrumento"
@@ -2876,9 +2867,8 @@ msgid "Play&list"
 msgstr "&Lista de reproducción"
 
 #: rosegardengui.cpp:460
-#, fuzzy
 msgid "Rosegarden Online &Tutorial"
-msgstr "Plugin de Rosegarden"
+msgstr "&Tutorial en línea de Rosegarden"
 
 #: rosegardengui.cpp:494 notationview.cpp:1805
 msgid "Show T&ools Toolbar"
@@ -3465,8 +3455,7 @@ msgstr "Exportar como..."
 #: rosegardengui.cpp:3918 rosegardengui.cpp:3949 rosegardengui.cpp:3981
 #: rosegardengui.cpp:4018 rosegardengui.cpp:4051
 msgid "Export failed.  The file could not be opened for writing."
-msgstr ""
-"Ha fallado la exportación. El archivo no se ha podido abrir para escritura."
+msgstr "Ha fallado la exportación. El archivo no se ha podido abrir para escritura."
 
 #: rosegardengui.cpp:3924 rosegardengui.cpp:3935
 msgid "Exporting Csound score file..."
@@ -3544,10 +3533,8 @@ msgid "Saving current document as default studio..."
 msgstr "Guardando el documento actual como Estudio predeterminado..."
 
 #: rosegardengui.cpp:6172
-msgid ""
-"Are you sure you want to import your default studio and lose the current one?"
-msgstr ""
-"¿Está seguro de querer importar el estudio por omisión y perder el actual?"
+msgid "Are you sure you want to import your default studio and lose the current one?"
+msgstr "¿Está seguro de querer importar el estudio por omisión y perder el actual?"
 
 #: rosegardengui.cpp:6212
 msgid "Import Studio from File"
@@ -3620,23 +3607,20 @@ msgid "Set the audio pan position in the stereo field"
 msgstr "Establecer la posición de panorama de audio en el campo estéreo"
 
 #: studiowidgets.cpp:1062
-#, fuzzy
 msgid "Open synth plugin's native editor"
-msgstr "Abrir en el Editor de Matri&z"
+msgstr "Abrir el editor nativo del plugin de sintetizador"
 
 #: studiowidgets.cpp:1063
 msgid "Mono or Stereo Instrument"
 msgstr "Instrumento Mono o Estéreo"
 
 #: studiowidgets.cpp:1064
-#, fuzzy
 msgid "Record level"
-msgstr "Dispositivos de grabación"
+msgstr "Nivel de grabación"
 
 #: studiowidgets.cpp:1065
-#, fuzzy
 msgid "Playback level"
-msgstr "Dispositivos de reproducción"
+msgstr "Nivel de reproducción"
 
 #: studiowidgets.cpp:1066 mixer.cpp:318 mixer.cpp:319 mixer.cpp:467
 #: mixer.cpp:468
@@ -5754,9 +5738,8 @@ msgstr "Programa:  "
 
 #: audioplugindialog.cpp:337 audioplugindialog.cpp:438
 #: audioplugindialog.cpp:585
-#, fuzzy
 msgid "<none selected>"
-msgstr "<no hay eventos>"
+msgstr "<sin selección>"
 
 #: audioplugindialog.cpp:350
 msgid "Id: %1"
@@ -5872,8 +5855,7 @@ msgstr "Error: Incapaz de emparejar el nombre de fuente %1"
 
 #: notefontviewer.cpp:108
 msgid "Warning: No good match for font name %1 (best is %2)"
-msgstr ""
-"Aviso: No hay buena correspondencia para nombre de fuente %1 (el mejor es %2)"
+msgstr "Aviso: No hay buena correspondencia para nombre de fuente %1 (el mejor es %2)"
 
 #: notefontviewer.cpp:116
 msgid "Error: Unable to open best-match font %1"
@@ -5937,8 +5919,7 @@ msgstr "Solapar notas, enlazando con las preexistentes [\"solapamiento\"]"
 
 #: editcommands.cpp:409
 msgid "Overlay notes, ignoring present notes [\"matrix-overlay\"]"
-msgstr ""
-"Solapar notas, ignorando notas preexistentes [\"solapamiento en matriz\"]"
+msgstr "Solapar notas, ignorando notas preexistentes [\"solapamiento en matriz\"]"
 
 #: editcommands.cpp:841
 msgid "Heuristic Notation &Quantize"
@@ -5974,8 +5955,7 @@ msgstr "No se puede abrir el archivo de mapeado de fuente %1"
 
 #: notefont.cpp:1833
 msgid "Can't obtain a default font -- no fonts found"
-msgstr ""
-"No se puede obtener una fuente por omisión -- no se han encontrado fuentes"
+msgstr "No se puede obtener una fuente por omisión -- no se han encontrado fuentes"
 
 #: tempoview.cpp:128
 msgid "Filter"
@@ -7000,7 +6980,7 @@ msgstr "Ocultar la medida del compás"
 
 #: dialogs.cpp:237
 msgid "Make subsequent bar lines hidden"
-msgstr ""
+msgstr "Ocultar las siguientes líneas de compás"
 
 #: dialogs.cpp:242
 msgid "Show as common time"
@@ -7623,8 +7603,7 @@ msgstr "Crescendo - establecer %1 creciendo desde el mínimo al máximo"
 
 #: dialogs.cpp:3902
 msgid "Diminuendo - set %1 falling from max to min"
-msgstr ""
-"Diminuendo - establecer %1 descendiendo desde el máximo hasta el mínimo"
+msgstr "Diminuendo - establecer %1 descendiendo desde el máximo hasta el mínimo"
 
 #: dialogs.cpp:3905
 msgid "Ringing - set %1 alternating from max to min with both dying to zero"
@@ -7654,8 +7633,7 @@ msgstr "Cambiar Duración de la Composición"
 
 #: dialogs.cpp:4021
 msgid "Set the Start and End bar markers for this Composition"
-msgstr ""
-"Establecer los marcadores de compás Inicial y Final para esta Composición"
+msgstr "Establecer los marcadores de compás Inicial y Final para esta Composición"
 
 #: dialogs.cpp:4025
 msgid "Start Bar"
@@ -7978,3 +7956,4 @@ msgstr "golpe(s)"
 #: dialogs.cpp:5267
 msgid "bar(s)"
 msgstr "compas(es)"
+
