@@ -3274,7 +3274,6 @@ RosegardenGUIApp::slotChangeCompositionLength()
                     dialog->getEndMarker());
 
         m_doc->getCommandHistory()->addCommand(command);
-        std::cout << "slotChangeCompositionLength" << std::endl;
     }
 }
 

@@ -907,6 +907,9 @@ std::string Composition::toXmlString()
         composition << "\" loopend=\"" << m_loopEnd;
     }
 
+    composition << "\" startMarker=\"" << m_startMarker;
+    composition << "\" endMarker=\"" << m_endMarker;
+
     // Add the Solo if set
     //
     if (m_solo)

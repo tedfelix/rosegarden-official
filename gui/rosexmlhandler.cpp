@@ -495,6 +495,19 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 	    getComposition().setCopyrightNote(qstrtostr(copyrightStr));
 	}
 
+        QString startMarkerStr = atts.value("startMarker");
+        QString endMarkerStr = atts.value("endMarker");
+
+        if (startMarkerStr)
+        {
+            getComposition().setStartMarker(startMarkerStr.toInt());
+        }
+
+        if (endMarkerStr)
+        {
+            getComposition().setEndMarker(endMarkerStr.toInt());
+        }
+
     } else if (lcName == "track") {
 
         if (m_inComposition == false)
