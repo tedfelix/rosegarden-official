@@ -702,14 +702,23 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 
 	} else if (elt->isRest()) {
 
-	    Note::Type note =
-		elt->event()->get<Int>(properties.NOTE_TYPE);
-	    int dots = elt->event()->get<Int>(properties.NOTE_DOTS);
-	    restParams.setNoteType(note);
-	    restParams.setDots(dots);
-	    setTuplingParameters(elt, restParams);
-	    restParams.setQuantized(false);
-	    pixmap = m_notePixmapFactory->makeRestPixmap(restParams);
+	    bool ignoreRest = false;
+	    // NotationHLayout sets this property if it finds the rest
+	    // in the middle of a chord -- Quantizer still sometimes gets
+	    // this wrong
+	    elt->event()->get<Bool>(properties.REST_TOO_SHORT, ignoreRest);
+
+	    if (!ignoreRest) {
+
+		Note::Type note =
+		    elt->event()->get<Int>(properties.NOTE_TYPE);
+		int dots = elt->event()->get<Int>(properties.NOTE_DOTS);
+		restParams.setNoteType(note);
+		restParams.setDots(dots);
+		setTuplingParameters(elt, restParams);
+		restParams.setQuantized(false);
+		pixmap = m_notePixmapFactory->makeRestPixmap(restParams);
+	    }
 
 	} else if (elt->event()->isa(Clef::EventType)) {
 

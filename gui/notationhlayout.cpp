@@ -1416,6 +1416,13 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 	    }
         }
 
+	if (timeSigToPlace) {
+	    // no other events in this bar, so we never managed to place it
+	    NOTATION_DEBUG << "Placing timesig at " << x << endl;
+	    bdi->second.layoutData.timeSigX = (int)x;
+	    timeSigToPlace = false;
+	}
+
 	for (NotationGroupMap::iterator mi = m_groupsExtant.begin();
 	     mi != m_groupsExtant.end(); ++mi) {
 	    mi->second->applyBeam(notationStaff);
