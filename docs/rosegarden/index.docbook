@@ -1,0 +1,77 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd" [
+  <!ENTITY kappname "Rosegarden">
+  <!ENTITY % English "INCLUDE" > <!-- change language only here -->
+  <!ENTITY % addindex "IGNORE">
+
+
+]>
+
+<book lang="&language;">
+<bookinfo>
+<title>The Rosegarden Handbook</title>
+
+<authorgroup>
+<author>
+<firstname>Richard</firstname>
+<surname>Bown</surname>
+<affiliation>
+<address><email>bownie@bownie.com</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Chris</firstname>
+<surname>Cannam</surname>
+<affiliation>
+<address><email>cannam@all-day-breakfast.com</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Guillaume</firstname>
+<surname>Laurent</surname>
+<affiliation>
+<address><email>glaurent@telegraph-road.org</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+
+<copyright>
+<year>2002</year>
+<holder>Richard Bown, Chris Cannam, Guillaume Laurent</holder>
+</copyright>
+
+<!-- <legalnotice>&FDLNotice;</legalnotice> -->
+
+<date>2002-07-04</date>
+<releaseinfo>0.1.7</releaseinfo>
+
+<abstract>
+<para>Rosegarden is a MIDI and audio sequencer and musical notation editor.</para>
+</abstract>
+
+<keywordset>
+<keyword>Rosegarden</keyword>
+<keyword>sequencer</keyword>
+<keyword>MIDI</keyword>
+<keyword>audio</keyword>
+<keyword>music</keyword>
+<keyword>notation</keyword>
+<keyword>score</keyword>
+</keywordset>
+</bookinfo>
+
+
+<chapter id="introduction">
+<title>Introduction</title>
+
+<para>
+Rosegarden is a MIDI and audio sequencer and musical notation editor.
+</para>
+
+</chapter>
+
+
+&documentation.index; 
+</book>
+
