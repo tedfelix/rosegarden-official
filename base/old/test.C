@@ -1,5 +1,5 @@
 
-#include "FastVector_new.h"
+#include "FastVector_newer.h"
 #include <iostream>
 
 class Thing
@@ -8,7 +8,7 @@ public:
     Thing(int x) : m_x(x) { }
     ~Thing() { }
 
-    int getX() { return m_x; }
+    int getX() const { return m_x; }
 
 private:
     int m_x;
@@ -25,6 +25,10 @@ main()
 
     for (int i = 0; i < v.size(); ++i) {
         std::cout << "v[" << i << "] is " << v[i].getX() << std::endl;
+    }
+
+    for (FastVector<Thing>::const_iterator j = v.begin(); j != v.end(); ++j) {
+        std::cout << "item is " << j->getX() << std::endl;
     }
 }
 

@@ -5,7 +5,7 @@
 #include "Event.h"
 #include "Track.h"
 
-#define TEST_NOTATION_TYPES 1
+//#define TEST_NOTATION_TYPES 1
 #define TEST_SPEED 1
 
 #ifdef TEST_NOTATION_TYPES

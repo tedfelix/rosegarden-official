@@ -1,4 +1,21 @@
-// -*- c-file-style:  "bsd" -*-
+/*
+    Rosegarden-4 v0.1
+    A sequencer and musical notation editor.
+
+    This program is Copyright 2000-2001
+        Guillaume Laurent   <glaurent@telegraph-road.org>,
+        Chris Cannam        <cannam@all-day-breakfast.com>,
+        Richard Bown        <bownie@bownie.com>
+
+    The moral right of the authors to claim authorship of this work
+    has been asserted.
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as
+    published by the Free Software Foundation; either version 2 of the
+    License, or (at your option) any later version.  See the file
+    COPYING included with this distribution for more information.
+*/
 
 #ifndef _FAST_VECTOR_H_
 #define _FAST_VECTOR_H_
@@ -46,65 +63,109 @@ public:
     typedef T value_type;
     typedef signed long size_type;
 
-    class iterator : public
+private:
+    class iterator_base : public
     std::iterator<std::random_access_iterator_tag, T, size_type>
     {
     public:
-	iterator() :
+	iterator_base() :
 	    m_v(0), m_i(-1) {
 	}
-	iterator(const iterator &i) :
+	iterator_base(const iterator_base &i) :
 	    m_v(i.m_v), m_i(i.m_i) {
 	}
-	~iterator() {
-	}
-
-	iterator &operator=(const iterator &i) {
-	    if (&i != this) {
-		m_v = i.m_v; m_i = i.m_i;
-	    }
+	iterator_base &operator=(const iterator_base &i) {
+	    if (&i != this) { m_v = i.m_v; m_i = i.m_i; }
 	    return *this;
 	}
 
-	iterator &operator--() { --m_i; return *this; }
-	iterator operator--(int) { iterator i(*this); --m_i; return i; }
-	iterator &operator++() { ++m_i; return *this; }
-	iterator operator++(int) { iterator i(*this); ++m_i; return i; }
+	iterator_base &operator--() { --m_i; return *this; }
+	iterator_base operator--(int) {
+            iterator_base i(*this);
+            --m_i;
+            return i;
+        }
+	iterator_base &operator++() { ++m_i; return *this; }
+	iterator_base operator++(int) {
+            iterator_base i(*this);
+            ++m_i;
+            return i;
+        }
 
-	bool operator==(const iterator &i) const {
+	bool operator==(const iterator_base &i) const {
 	    return (m_v == i.m_v && m_i == i.m_i);
 	}
 
-	bool operator!=(const iterator &i) const {
+	bool operator!=(const iterator_base &i) const {
 	    return (m_v != i.m_v || m_i != i.m_i);
 	}
 
-	iterator &operator+=(size_type i) { m_i += i; return *this; }
-	iterator &operator-=(size_type i) { m_i -= i; return *this; }
+	iterator_base &operator+=(size_type i) { m_i += i; return *this; }
+	iterator_base &operator-=(size_type i) { m_i -= i; return *this; }
 
-	iterator operator+(size_type i) const {
-	    iterator n(*this); n += i; return n;
+	iterator_base operator+(size_type i) const {
+	    iterator_base n(*this); n += i; return n;
 	}
-	iterator operator-(size_type i) const {
-	    iterator n(*this); n -= i; return n;
+	iterator_base operator-(size_type i) const {
+	    iterator_base n(*this); n -= i; return n;
 	}
 
-	size_type operator-(const iterator &i) const {
+	size_type operator-(const iterator_base &i) const {
 	    assert(m_v == i.m_v); return m_i - i.m_i;
 	}
+	
+    protected:
+	iterator_base(FastVector<T> *v, size_type i) : m_v(v), m_i(i) { }
+	FastVector<T> *m_v;
+	size_type m_i;
+    };
+
+public:
+
+    class iterator : public
+    iterator_base
+    {
+    public:
+        iterator() : iterator_base() { }
+        iterator(const iterator &i) : iterator_base(i) { }
+        iterator &operator=(const iterator &i) {
+            iterator_base::operator=(i);
+            return *this;
+        }
 
         T &operator*() { return m_v->at(m_i); }
 	T *operator->() { return &(operator*()); }
 
 	const T &operator*() const { return m_v->at(m_i); }
 	const T *operator->() const { return &(operator*()); }
-	
+
     protected:
 	friend class FastVector<T>;
-	iterator(FastVector<T> *v, size_type i) : m_v(v), m_i(i) { }
+	iterator(FastVector<T> *v, size_type i) : iterator_base(v,i) { }
+    };
 
-	FastVector<T> *m_v;
-	size_type m_i;
+    class const_iterator : public
+    iterator_base
+    {
+    public:
+        const_iterator() : iterator_base() { }
+        const_iterator(const iterator &i) : iterator_base(i) { }
+        const_iterator(const const_iterator &i) : iterator_base(i) { }
+        const_iterator &operator=(const iterator &i) {
+            iterator_base::operator=(i);
+            return *this;
+        }
+        const_iterator &operator=(const const_iterator &i) {
+            iterator_base::operator=(i);
+            return *this;
+        }
+
+	const T &operator*() const { return m_v->at(m_i); }
+	const T *operator->() const { return &(operator*()); }
+
+    protected:
+	friend class FastVector<T>;
+	const_iterator(FastVector<T> *v, size_type i) : iterator_base(v,i) { }
     };
 
 public: 
@@ -196,7 +257,7 @@ private:
 	m_gapStart = -1;
     }
 
-    size_type bestNewCount(size_type n, size_t s) const {
+    size_type bestNewCount(size_type n, size_t) const {
 	if (m_size == 0) {
 	    if (n < 8) return 8;
 	    else return n;
@@ -405,10 +466,6 @@ FastVector<T>::iterator FastVector<T>::erase
 (const FastVector<T>::iterator &i, const FastVector<T>::iterator &j)
 {
     assert(i.m_v == this && j.m_v == this && j.m_i >= i.m_i);
-
-    size_type ip = ::std::distance(begin(), i);
-    size_type n = ::std::distance(i, j);
-
     for (size_type k = i.m_i; k < j.m_i; ++k) remove(i.m_i);
     return FastVector<T>::iterator(this, i.m_i);
 }
@@ -445,7 +502,6 @@ bool FastVector<T>::operator==(const FastVector<T> &v) const
     }
     return true;
 }
-
 
 #endif
 
