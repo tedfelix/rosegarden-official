@@ -450,10 +450,25 @@ void MatrixSelector::handleLeftButtonPress(Rosegarden::timeT time,
 
     if (m_clickedElement)
     {
-        // delegate to the move tool (also resize in here at some point)
-        //
-        m_dispatchTool = m_parentView->
-            getToolBox()->getTool(MatrixMover::ToolName);
+        int x = m_clickedElement->getLayoutX();
+        int width = m_clickedElement->getWidth();
+        int resizeStart = int(double(width) * 0.85) + x;
+
+        // max size of 10
+        if ((x + width ) - resizeStart > 10)
+            resizeStart = x + width - 10;
+
+        if (e->x() > resizeStart)
+        {
+            m_dispatchTool = m_parentView->
+                getToolBox()->getTool(MatrixResizer::ToolName);
+        }
+        else
+        {
+            m_dispatchTool = m_parentView->
+                getToolBox()->getTool(MatrixMover::ToolName);
+        }
+
         m_dispatchTool->handleLeftButtonPress(time, 
                                               height,
                                               staffNo,
@@ -937,7 +952,7 @@ bool MatrixResizer::handleMouseMove(Rosegarden::timeT newTime,
         if (element)
         {
             int newWidth = element->getWidth() - diffWidth;
-            if (newWidth == 0) newWidth = 1;
+            if (newWidth <= 0) newWidth = 1; // minimum width
 
             element->setWidth(newWidth);
             m_currentStaff->positionElement(element);
@@ -950,34 +965,14 @@ bool MatrixResizer::handleMouseMove(Rosegarden::timeT newTime,
 
 void MatrixResizer::handleMouseRelease(Rosegarden::timeT newTime,
                                        int,
-                                       QMouseEvent *e)
+                                       QMouseEvent * /*e*/)
 {
     if (!m_currentElement || !m_currentStaff) return;
 
     timeT oldTime = m_currentElement->getAbsoluteTime();
     timeT oldDuration = m_currentElement->getDuration();
     timeT newDuration = newTime - oldTime;
-   
-    bool backUpABit = false;
-
-    if (newDuration < 0)
-    {
-        newDuration = -newDuration;
-        backUpABit = true;
-    }
-    else if (newDuration == 0) {
-	newDuration = m_mParentView->getSnapGrid().getSnapTime(e->x());
-    }
-
     timeT diffDuration = newDuration - oldDuration;
-
-    /*
-    int initialWidth = m_currentElement->getWidth();
-    double width = newDuration * m_currentStaff->getTimeScaleFactor();
-
-    if (width == 0) width = initialWidth;
-    int diffWidth = initialWidth - int(width);
-    */
 
     EventSelection *selection = m_mParentView->getCurrentSelection();
 
@@ -1000,14 +995,18 @@ void MatrixResizer::handleMouseRelease(Rosegarden::timeT newTime,
 
         for (; it != selection->getSegmentEvents().end(); it++)
         {
-            timeT newTime = (*it)->getAbsoluteTime();
+            timeT eventTime = (*it)->getAbsoluteTime();
+            timeT eventDuration = (*it)->getDuration() + diffDuration;
 
-            if (backUpABit) newTime =- newDuration;
+            // ensure the duration is always (arbitrary) positive
+            if (eventDuration <= 0)
+                eventDuration = 50;
+                //m_mParentView->getSnapGrid().getSnapTime(e->x());
             
             Rosegarden::Event *newEvent =
                 new Rosegarden::Event(**it,
-                                      newTime,
-                                      (*it)->getDuration() + diffDuration);
+                                      eventTime,
+                                      eventDuration);
 
             macro->addCommand(
                     new MatrixModifyCommand(m_currentStaff->getSegment(),
