@@ -16,51 +16,83 @@ more limiting.
 Build requirements
 ------------------
 
-The big requirement is KDE.  This program depends on KDE 2.>=1
-(including the kdemultimedia package) and Qt 2.>=2
+The big requirement is KDE.  This program depends on KDE 2.1 or newer
+(including the kdemultimedia package) and Qt 2.2 or newer.  Our code
+should compile with gcc-2.95 or gcc-3.0.
 
 
-To compile:
------------
+Compiling from source
+---------------------
 
-If you obtained the source code from CVS :
+If you obtained the source code from the SourceForge CVS repository:
 
-Please read the "COMPILING" file from the KDE source code, about
-compiling code from CVS. You may want to use one of the developers'
-configure scripts such as "gl_configure" script (you just need to
-change the Qt and KDE2 install paths according to your setup) and run
-that. The important option is
+  This application is packaged in the same way as most other KDE
+  applications.  Please consult the "COMPILING" file found in the KDE
+  source code for a description of how to compile code from CVS.
 
-CXXFLAGS="-g3 -gstabs+ -fexceptions"
+  You may wish to run one of the developers' configure scripts such as
+  "gl_configure"; you will first need to change the Qt and KDE2 install
+  paths in the script according to your setup.  The most important
+  thing in the script is
 
-before the call to 'configure', as we use exceptions in the code.
+    CXXFLAGS="-g3 -gstabs+ -fexceptions"
 
-Then run "make" and, if the compile succeeds, "make install".  (The
-pixmaps need to be installed to the global KDE directories before the
-application will run correctly.)
+  before the call to "configure", as we use exceptions in the code.
+
+  After configuring, run "make" and, if the compile succeeds, "make
+  install".  (The pixmaps need to be installed to the global KDE
+  directories before the application will run correctly.)
 
 
-If you obtained the code from the distribution tarball : 
+If you obtained the source code from a distribution tarball: 
 
-Just run 
+  Just run 
 
-CXXFLAGS="-g3 -gstabs+ -fexceptions" ./configure
+    CXXFLAGS="-g3 -gstabs+ -fexceptions" ./configure
 
-witht the appropriate '--with-qt-dir=...' and '--prefix=...'
-options. The prefix should be the same as the one of your KDE
-installation. Then proceed with "make" and "make install".
+  plus appropriate "--with-qt-dir=..." and "--prefix=..." options.
+  The prefix should be the same as the one of your KDE installation.
+  Then proceed with "make" and "make install".
 
-To run:
--------
+
+Running the application
+-----------------------
 
 Just run the rosegardengui application (found in the KDE bin directory
 after installation, and also in the gui/ directory of the source tree).
 
 To get the sequencer working properly, please read
-docs/howtos/artsd-mcop-notes for instructions. The sequencer process
-is started automatically on first invocation of 'play'. If you get an
-error message saying it failed to connect the sequencer, try 'play'
-again.
+docs/howtos/artsd-mcop-notes for instructions.  The sequencer process
+is started automatically when the gui is started, provided it has been
+correctly installed (by "make install") in the global KDE directories.
+
+
+Notes for developers
+--------------------
+
+We are actively seeking developers who are interested in coding new
+parts of the application, adding features, and fixing bugs.  See
+docs/task_lists/0.2_planned_tasks.txt for some idea of the things
+we're already thinking about doing for the next developer release.
+Good ideas are also welcome.
+
+Be warned that we intend to be fairly strict about code quality... as
+far as that's possible, given the not always superb standards of our
+own code.
+
+
+Documentation
+-------------
+
+All the documentation we have is in the docs/ subdirectory.  Good
+starting-points include:
+
+  docs/howtos/artsd-mcop-notes.txt -- notes on how to get sound
+
+  docs/data_struct/units.txt
+  docs/data_struct/sets.txt -- some terminology explained
+
+  docs/discussion/0.2_planned_tasks.txt -- ideas for what to do next
 
 
 
