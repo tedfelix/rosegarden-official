@@ -880,7 +880,10 @@ void RosegardenSequencerApp::closeAllSegments()
     }
 
     m_mmappedSegments.clear();
-    
+
+    m_sequencerMapper.setControlBlock(0);
+    delete m_controlBlockMmapper;
+    m_controlBlockMmapper = 0;
 }
 
 void RosegardenSequencerApp::remapTracks()

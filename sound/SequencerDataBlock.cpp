@@ -84,7 +84,12 @@ SequencerDataBlock::setVisual(const MappedEvent *ev)
 int
 SequencerDataBlock::getRecordedEvents(MappedComposition &mC) const
 {
-    static int readIndex = 0;
+    static int readIndex = -1;
+
+    if (readIndex == -1) {
+	readIndex = m_recordEventIndex;
+	return 0;
+    }
 
     int currentIndex = m_recordEventIndex;
     int count = 0;
