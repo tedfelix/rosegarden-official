@@ -179,8 +179,7 @@ QCanvasItemGroup::addItemWithRelativeCoords(QCanvasItem *i)
 void
 QCanvasItemGroup::removeItem(QCanvasItem *i)
 {
-    kdDebug(KDEBUG_AREA) << "QCanvasItemGroup::removeItem() - this : "
-                         << this << " - item : " << i << endl;
-
+//     kdDebug(KDEBUG_AREA) << "QCanvasItemGroup::removeItem() - this : "
+//                          << this << " - item : " << i << endl;
     m_items.remove(i);
 }
