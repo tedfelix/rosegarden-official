@@ -1072,16 +1072,7 @@ AudioMixerWindow::updateMeters(SequencerMapper *mapper)
 	rec.m_meter->setLevel(dBleft, dBright);
     }
 
-    Rosegarden::LevelInfo monitorInfo;
-    if (mapper->getRecordLevel(monitorInfo)) {
-
-	float dBleft = Rosegarden::AudioLevel::fader_to_dB
-	    (monitorInfo.level, 127, Rosegarden::AudioLevel::LongFader);
-	float dBright = Rosegarden::AudioLevel::fader_to_dB
-	    (monitorInfo.levelRight, 127, Rosegarden::AudioLevel::LongFader);
-
-	m_monitor.m_meter->setLevel(dBleft, dBright);
-    }
+    updateMonitorMeter(mapper);
 
     Rosegarden::LevelInfo masterInfo;
     if (mapper->getMasterLevel(masterInfo)) {
@@ -1092,6 +1083,21 @@ AudioMixerWindow::updateMeters(SequencerMapper *mapper)
 	    (masterInfo.levelRight, 127, Rosegarden::AudioLevel::LongFader);
 
 	m_master.m_meter->setLevel(dBleft, dBright);
+    }
+}
+
+void
+AudioMixerWindow::updateMonitorMeter(SequencerMapper *mapper)
+{
+    Rosegarden::LevelInfo monitorInfo;
+    if (mapper->getRecordLevel(monitorInfo)) {
+
+	float dBleft = Rosegarden::AudioLevel::fader_to_dB
+	    (monitorInfo.level, 127, Rosegarden::AudioLevel::LongFader);
+	float dBright = Rosegarden::AudioLevel::fader_to_dB
+	    (monitorInfo.levelRight, 127, Rosegarden::AudioLevel::LongFader);
+
+	m_monitor.m_meter->setLevel(dBleft, dBright);
     }
 }
 
@@ -1756,6 +1762,12 @@ MidiMixerWindow::updateMeters(SequencerMapper *mapper)
         m_faders[i]->m_vuMeter->setLevel(double(info.level/127.0));
         RG_DEBUG << "MidiMixerWindow::updateMeters - level  " << info.level << endl;
     }
+}
+
+void
+MidiMixerWindow::updateMonitorMeter(SequencerMapper *)
+{
+    // none here
 }
 
 void 

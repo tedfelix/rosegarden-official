@@ -65,6 +65,7 @@ public:
     ~AudioMixerWindow();
 
     void updateMeters(SequencerMapper *mapper);
+    void updateMonitorMeter(SequencerMapper *mapper);
 
 signals:
     void selectPlugin(QWidget *, Rosegarden::InstrumentId id, int index);
@@ -207,6 +208,7 @@ public:
      * Update the VU meters
      */
     void updateMeters(SequencerMapper *mapper);
+    void updateMonitorMeter(SequencerMapper *mapper);
 
 public slots:
     void slotSynchronise(); // synchronise with updated studio

@@ -1181,6 +1181,12 @@ public slots:
     void slotUpdatePlaybackPosition();
 
     /**
+     * Update the monitor levels from the sequencer mmapped file when not playing
+     * (slotUpdatePlaybackPosition does this among other things when playing)
+     */
+    void slotUpdateMonitoring();
+
+    /**
      * Create a plugin dialog for a given instrument and slot, or
      * raise an exising one.
      */
@@ -1316,7 +1322,8 @@ private:
 
     // Used to fetch the current sequencer position from the mmapped sequencer information file
     //
-    QTimer*  m_playTimer;
+    QTimer *m_playTimer;
+    QTimer *m_stopTimer;
 };
 
 /**

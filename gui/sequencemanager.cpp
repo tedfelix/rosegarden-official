@@ -912,7 +912,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 		    } else if ((*i)->getData1() == Rosegarden::MappedEvent::FailureXRuns) {
 			if (!boolShowingWarning) {
 
-			    QString message = i18n("JACK Audio subsystem is losing resolution.");
+			    QString message = i18n("JACK Audio subsystem is losing sample frames.");
 			    boolShowingWarning = true;
 		    
 			    KMessageBox::information
@@ -937,7 +937,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
 			case Rosegarden::MappedEvent::FailureBussMixUnderrun:
 			case Rosegarden::MappedEvent::FailureMixUnderrun:
-			    message = i18n("The audio subsystem is failing to keep up.\nConsider increasing the mix buffer size in the sequencer configuration.");
+			    message = i18n("The audio subsystem is failing to keep up.");
 			    break;
 
 			default:

@@ -175,7 +175,8 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
       m_midiMixer(0),
       m_bankEditor(0),
       m_markerEditor(0),
-      m_playTimer(new QTimer(this))
+      m_playTimer(new QTimer(this)),
+      m_stopTimer(new QTimer(this))
 {
     m_myself = this;
 
@@ -1227,6 +1228,7 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
     // Connect the playback timer
     //
     connect(m_playTimer, SIGNAL(timeout()), this, SLOT(slotUpdatePlaybackPosition()));
+    connect(m_stopTimer, SIGNAL(timeout()), this, SLOT(slotUpdateMonitoring()));
 
     // finally recreate the main view
     //
@@ -1271,6 +1273,8 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
     // Readjust canvas size
     //
     m_view->getTrackEditor()->slotReadjustCanvasSize();
+
+    m_stopTimer->start(100);
 }
 
 
@@ -3306,6 +3310,23 @@ RosegardenGUIApp::slotUpdatePlaybackPosition()
         slotStop();
 }
 
+void
+RosegardenGUIApp::slotUpdateMonitoring()
+{
+    // Either sequencer mappper or the sequence manager could be missing at
+    // this point.
+    //
+    if (!m_seqManager || !m_seqManager->getSequencerMapper()) return;
+
+    SequencerMapper *mapper = m_seqManager->getSequencerMapper();
+
+    if (m_audioMixer && m_audioMixer->isVisible())
+        m_audioMixer->updateMonitorMeter(mapper);
+
+    if (m_midiMixer && m_midiMixer->isVisible())
+        m_midiMixer->updateMonitorMeter(mapper);
+}
+
 void RosegardenGUIApp::slotSetPointerPosition(timeT t)
 {
     if (!m_seqManager) return;
@@ -4054,6 +4075,7 @@ RosegardenGUIApp::slotRecord()
 
     // Start the playback timer - this fetches the current sequencer position &c
     //
+    m_stopTimer->stop();
     m_playTimer->start(23); // avoid multiples of 10 just so as
 			    // to avoid always having the same digit
 			    // in one place on the transport.  How
@@ -4166,14 +4188,17 @@ void RosegardenGUIApp::slotPlay()
         
             // Start the playback timer - this fetches the current sequencer position &c
             //
+	    m_stopTimer->stop();
             m_playTimer->start(23);
         } else {
             m_playTimer->stop();
+	    m_stopTimer->start(100);
         }
     }
     catch(QString s) {
         KMessageBox::error(this, s);
         m_playTimer->stop();
+	m_stopTimer->start(100);
     }
     
 }
@@ -4210,6 +4235,7 @@ void RosegardenGUIApp::slotStop()
 
     // stop the playback timer
     m_playTimer->stop();
+    m_stopTimer->start(100);
 }
 
 // Jump to previous bar
