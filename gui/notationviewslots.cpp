@@ -521,6 +521,7 @@ void NotationView::slotEditPaste()
         // we just pasted
         setCurrentSelection(new EventSelection
                             (segment, insertionTime, endTime));
+	slotSetInsertCursorPosition(endTime, true, false);
     }
 }
 
@@ -570,6 +571,7 @@ void NotationView::slotEditGeneralPaste()
             addCommandToHistory(command);
             setCurrentSelection(new EventSelection
                                 (segment, insertionTime, endTime));
+	    slotSetInsertCursorPosition(endTime, true, false);
         }
     }
 }
