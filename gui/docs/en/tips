@@ -85,7 +85,7 @@ handles Lilypond export with <b>Settings -> Configure Rosegarden -> Notation
 </tip>
 <tip category="Rosegarden|General">
 <html>
-<p>...that Rosegarden's quantizer affects a separate copy of each event that
+<p>...that if you activate Rosegarden's quantizer from the notation view, it works on a separate copy of each event that
 is only used for display purposes, making it possible to have good looking notation
 while maintaining a completely human MIDI performance?
 </html>

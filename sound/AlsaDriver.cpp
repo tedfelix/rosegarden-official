@@ -158,7 +158,6 @@ static bool              _threadAlsaClosing;
 //
 AudioFile *_recordFile;
 
-
 AlsaDriver::AlsaDriver(MappedStudio *studio):
     SoundDriver(studio, std::string("alsa-lib version ") +
                         std::string(SND_LIB_VERSION_STR)),
@@ -365,7 +364,7 @@ AlsaDriver::generatePortList(AlsaPortList *newPorts)
     snd_seq_client_info_set_client(cinfo, -1);
 
     AUDIT_STREAM << std::endl << "  ALSA Client information:"
-              << std::endl << std::endl;
+		 << std::endl << std::endl;
 
     // Get only the client ports we're interested in and store them
     // for sorting and then device creation.
@@ -392,10 +391,10 @@ AlsaDriver::generatePortList(AlsaPortList *newPorts)
                 ((capability &  readCap) ==  readCap))
             {
                 AUDIT_STREAM << "    "
-                          << client << ","
-                          << port << " - ("
-                          << snd_seq_client_info_get_name(cinfo) << ", "
-                          << snd_seq_port_info_get_name(pinfo) << ")";
+			     << client << ","
+			     << port << " - ("
+			     << snd_seq_client_info_get_name(cinfo) << ", "
+			     << snd_seq_port_info_get_name(pinfo) << ")";
 
                 PortDirection direction;
 
@@ -416,8 +415,6 @@ AlsaDriver::generatePortList(AlsaPortList *newPorts)
                 }
 
 		AUDIT_STREAM << " [type " << type << ", cap " << capability << "]";
-
-		std::cout << " [type " << type << ", cap " << capability << "]";
 
                 // Generate a unique name using the client id
                 //
@@ -524,7 +521,7 @@ AlsaDriver::generateInstruments()
 	    } else {
 		//!!! why do we bother adding instruments for record devices?
 		//!!! answer: we shouldn't (but breaks things if we don't?)
-//!!!		addInstrumentsForDevice(device);
+		//!!!addInstrumentsForDevice(device);
 		m_devices.push_back(device);
 	    }
 	}
@@ -586,23 +583,26 @@ AlsaDriver::generateInstruments()
 
 MappedDevice *
 AlsaDriver::createMidiDevice(AlsaPortDescription *port,
-			     MidiDevice::DeviceDirection requestedDirection)
+			     MidiDevice::DeviceDirection reqDirection)
 {
-    char clientId[60];
+    char deviceName[100];
     std::string connectionName("");
+    AUDIT_START;
 
     static int unknownCounter;
 
-    static int counters[3][2]; // [system/hardware/software][out/in]
-    const int SYSTEM = 0, HARDWARE = 1, SOFTWARE = 2;
-    static const char *firstNames[3][2] = {
+    static int counters[3][2]; // [system/hardware/hardware_out/software][out/in]
+    const int SYSTEM = 0, HARDWARE = 1, HARDWARE_SIMPLEX = 2, SOFTWARE = 3;
+    static const char *firstNames[4][2] = {
 	{ "MIDI output system device", "MIDI input system device" },
 	{ "MIDI external synth", "MIDI hardware input device" },
+	{ "MIDI soundcard synth", "MIDI soundcard input" }, // this is a hack
 	{ "MIDI software device", "MIDI software input" }
     };
-    static const char *countedNames[3][2] = {
+    static const char *countedNames[4][2] = {
 	{ "MIDI output system device %d", "MIDI input system device %d" },
 	{ "MIDI external synth %d", "MIDI hardware input device %d" },
+	{ "MIDI soundcard synth %d", "MIDI soundcard input %d" }, // this is a hack
 	{ "MIDI software device %d", "MIDI software input %d" }
     };
 
@@ -623,48 +623,56 @@ AlsaDriver::createMidiDevice(AlsaPortDescription *port,
 
     if (port) {
 
-	if (requestedDirection == MidiDevice::Record &&
-	    !port->isReadable()) return 0;
-
-	if (requestedDirection == MidiDevice::Play &&
-	    !port->isWriteable()) return 0;
+	if (reqDirection == MidiDevice::Record && !port->isReadable())  return 0;
+	if (reqDirection == MidiDevice::Play   && !port->isWriteable()) return 0;
 
 	int category = (port->m_client <  64 ? SYSTEM :
 			port->m_client < 128 ? HARDWARE : SOFTWARE);
 
 	bool haveName = false;
 
-	if ((category == HARDWARE || category == SOFTWARE) &&
-	    requestedDirection == MidiDevice::Play) {
+	if (category != SYSTEM && reqDirection == MidiDevice::Play) {
 	    
 	    int type =
-		((port->m_clientType & SND_SEQ_PORT_TYPE_SYNTH) ? SYNTH :
+		(((port->m_clientType & SND_SEQ_PORT_TYPE_SYNTH)   ||
+		  (port->m_clientType & SND_SEQ_PORT_TYPE_MIDI_GS) ||
+		  (port->m_clientType & SND_SEQ_PORT_TYPE_MIDI_XG) ||
+		  (port->m_clientType & SND_SEQ_PORT_TYPE_MIDI_MT32))       ? SYNTH  :
 		 ((port->m_clientType & SND_SEQ_PORT_TYPE_DIRECT_SAMPLE) ||
-		  (port->m_clientType & SND_SEQ_PORT_TYPE_SAMPLE)) ? SAMPLE :
-		 (port->m_clientType & SND_SEQ_PORT_TYPE_MIDI_GM) ? GM : -1);
+		  (port->m_clientType & SND_SEQ_PORT_TYPE_SAMPLE))          ? SAMPLE :
+		 ( port->m_clientType & SND_SEQ_PORT_TYPE_MIDI_GM)          ? GM     :
+                                                                             -1);
 
 	    if (type >= 0) {
-		category = (category == SOFTWARE ? 1 : 0);
-		if (specificCounters[type][category] == 0) {
-		    sprintf(clientId, specificNames[type][category]);
-		    ++specificCounters[type][category];
+		int issoft = ((category == SOFTWARE) ? 1 : 0);
+		if (specificCounters[type][issoft] == 0) {
+		    sprintf(deviceName, specificNames[type][issoft]);
+		    ++specificCounters[type][issoft];
 		} else {
-		    sprintf(clientId,
-			    specificCountedNames[type][category],
-			    ++specificCounters[type][category]);
+		    sprintf(deviceName,
+			    specificCountedNames[type][issoft],
+			    ++specificCounters[type][issoft]);
 		}
 		haveName = true;
 	    }
 	}
 
 	if (!haveName) {
-	    if (counters[category][requestedDirection] == 0) {
-		sprintf(clientId, firstNames[category][requestedDirection]);
-		++counters[category][requestedDirection];
+
+	    if (category == HARDWARE) {
+		if ((reqDirection == MidiDevice::Record && !port->isWriteable()) ||
+		    (reqDirection == MidiDevice::Play   && !port->isReadable())) {
+		    category = HARDWARE_SIMPLEX;
+		}
+	    }
+
+	    if (counters[category][reqDirection] == 0) {
+		sprintf(deviceName, firstNames[category][reqDirection]);
+		++counters[category][reqDirection];
 	    } else {
-		sprintf(clientId,
-			countedNames[category][requestedDirection],
-			++counters[category][requestedDirection]);
+		sprintf(deviceName,
+			countedNames[category][reqDirection],
+			++counters[category][reqDirection]);
 	    }
 	}
 
@@ -675,14 +683,21 @@ AlsaDriver::createMidiDevice(AlsaPortDescription *port,
 
     } else {
 
-	sprintf(clientId, "Anonymous MIDI device %d", ++unknownCounter);
+	sprintf(deviceName, "Anonymous MIDI device %d", ++unknownCounter);
     }
+
+    AUDIT_STREAM << "Creating device " << deviceId << " in "
+		 << (reqDirection == MidiDevice::Play ? "Play" : "Record")
+		 << " mode for connection " << connectionName
+		 << "\nDefault device name for this device is " << deviceName
+		 << std::endl;
 	
     MappedDevice *device = new MappedDevice(deviceId,
 					    Device::Midi,
-					    clientId,
+					    deviceName,
 					    connectionName);
-    device->setDirection(requestedDirection);
+    device->setDirection(reqDirection);
+    AUDIT_UPDATE;
     return device;
 }
 

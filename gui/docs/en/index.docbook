@@ -3171,7 +3171,54 @@
 		  <guimenuitem>Interpret...</guimenuitem>
 		</menuchoice></term>
 	      <listitem>
-		<para>to be continued</para>
+		<para><action>Modifies the velocities and timings of
+		notes according to any written or indicated dynamics
+		found.</action> The selection of interpretations
+		available is as follows:
+
+		  <variablelist>
+		    <varlistentry>
+		      <term>Apply text dynamics (p, mf, ff etc)
+		      </term>
+		      <listitem><para> Sets a velocity to each note
+		      based on the last piece of text of "Dynamic"
+		      type seen on the same staff (only texts of the
+		      form pp, p, mp, mf, f, ff, fff etc are matched).
+		      </para></listitem>
+		    </varlistentry>
+
+		    <varlistentry>
+		      <term>Apply hairpin dynamics
+		      </term>
+		      <listitem><para> Makes the notes gradually
+		      increase or decrease in velocity during a
+		      crescendo or decrescendo hairpin.
+		      </para></listitem>
+		    </varlistentry>
+
+		    <varlistentry>
+		      <term>
+			Stress beats
+		      </term>
+		      <listitem><para> Makes notes that land on bar or
+		      beat boundaries slightly louder (greater
+		      velocity) than the surrounding notes.
+		      </para></listitem>
+		    </varlistentry>
+		    
+		    <varlistentry>
+		      <term>
+			Articulate slurs, staccato, tenuto etc
+		      </term>
+		      <listitem><para> Shortens unslurred notes,
+		      shortens staccato notes more, and gives notes
+		      inside slurs and tenuto notes their full length.
+		      </para></listitem>
+		    </varlistentry>
+		  </variablelist>
+
+		</para>
+
 	      </listitem>
 	    </varlistentry>
 

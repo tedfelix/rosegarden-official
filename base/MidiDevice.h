@@ -156,6 +156,8 @@ protected:
     BankList      *m_bankList;
     MidiMetronome *m_metronome;
 
+    double m_garbage; //!!!
+
     // used when we're presenting the instruments
     InstrumentList  m_presentationInstrumentList;
 

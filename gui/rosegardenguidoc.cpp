@@ -1130,7 +1130,7 @@ RosegardenGUIDoc::syncDevices()
                                   "getDevices()",
                                   data, replyType, replyData, true))
     {
-        SEQMAN_DEBUG << "RosegardenGUIDoc::getMappedDevice - "
+        SEQMAN_DEBUG << "RosegardenGUIDoc::syncDevices - "
                      << "can't get number of devices" << endl;
         return;
     }
@@ -1144,25 +1144,29 @@ RosegardenGUIDoc::syncDevices()
     }
     else
     {
-        SEQMAN_DEBUG << "RosegardenGUIDoc::getMappedDevice - "
+        SEQMAN_DEBUG << "RosegardenGUIDoc::syncDevices - "
                      << "got unknown returntype from getDevices()" << endl;
         return;
     }
 
-    SEQMAN_DEBUG << "RosegardenGUIDoc::getMappedDevice - devices = "
+    SEQMAN_DEBUG << "RosegardenGUIDoc::syncDevices - devices = "
                  << devices << endl;
 
     for (unsigned int i = 0; i < devices; i++)
     {
         
-        SEQMAN_DEBUG << "RosegardenGUIDoc::getMappedDevice - i = "
+        SEQMAN_DEBUG << "RosegardenGUIDoc::syncDevices - i = "
                      << i << endl;
 
         getMappedDevice(i);
     }
 
-    SEQMAN_DEBUG << "RosegardenGUIDoc::getMappedDevice - "
+    SEQMAN_DEBUG << "RosegardenGUIDoc::syncDevices - "
                  << "Sequencer alive - Instruments synced" << endl;
+
+//!!! weird -- this prevents crash later in unassignAllInstruments call
+// from MidiFile::openFile or wherever //!!! HACK! FIXME! Shouldn't be needed!
+    m_studio.unassignAllInstruments();
 
     //!!! need to force an update on the instrument parameter box if
     //necessary -- how?

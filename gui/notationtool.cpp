@@ -599,8 +599,13 @@ void NoteInserter::slotToggleDot()
     m_noteDots = (m_noteDots) ? 0 : 1;
     Note note(m_noteType, m_noteDots);
     QString actionName(NotationStrings::getReferenceName(note));
-    actionName.replace(QRegExp(" "), "_");
-    m_parentView->actionCollection()->action(actionName)->activate();
+    actionName.replace(QRegExp("-"), "_");
+    KAction *action = m_parentView->actionCollection()->action(actionName);
+    if (!action) {
+	std::cerr << "WARNING: No such action as " << actionName << std::endl;
+    } else {
+	action->activate();
+    }
 }
 
 void NoteInserter::slotToggleAutoBeam()
@@ -621,10 +626,14 @@ void NoteInserter::slotSelectSelected()
 void NoteInserter::slotRestsSelected()
 {
     Note note(m_noteType, m_noteDots);
-    QString actionName(NotationStrings::getReferenceName(note));
-    actionName.replace(QRegExp(" "), "_");
-    actionName += "_rest";
-    m_parentView->actionCollection()->action(actionName)->activate();
+    QString actionName(NotationStrings::getReferenceName(note, true));
+    actionName.replace(QRegExp("-"), "_");
+    KAction *action = m_parentView->actionCollection()->action(actionName);
+    if (!action) {
+	std::cerr << "WARNING: No such action as " << actionName << std::endl;
+    } else {
+	action->activate();
+    }
 }
 
 const char* NoteInserter::m_actionsAccidental[][5] = 
@@ -715,10 +724,14 @@ void RestInserter::slotToggleDot()
 {
     m_noteDots = (m_noteDots) ? 0 : 1;
     Note note(m_noteType, m_noteDots);
-    QString actionName(NotationStrings::getReferenceName(note));
-    actionName.replace(QRegExp(" "), "_");
-    actionName += "_rest";
-    m_parentView->actionCollection()->action(actionName)->activate();
+    QString actionName(NotationStrings::getReferenceName(note, true));
+    actionName.replace(QRegExp("-"), "_");
+    KAction *action = m_parentView->actionCollection()->action(actionName);
+    if (!action) {
+	std::cerr << "WARNING: No such action as " << actionName << std::endl;
+    } else {
+	action->activate();
+    }
 }
 
 void RestInserter::slotNotesSelected()

@@ -2747,7 +2747,7 @@ InterpretDialog::InterpretDialog(QWidget *parent) :
     m_stressBeats = new QCheckBox
 	(i18n("Stress beats"), groupBox);
     m_articulate = new QCheckBox
-	(i18n("Articulate slurs, staccato, legato etc"), groupBox);
+	(i18n("Articulate slurs, staccato, tenuto etc"), groupBox);
     m_allInterpretations = new QCheckBox
 	(i18n("All available interpretations"), groupBox);
 

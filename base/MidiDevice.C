@@ -23,6 +23,7 @@
 #include "Instrument.h"
 
 #include <cstdio>
+#include <iostream>
 
 #if (__GNUC__ < 3)
 #include <strstream>
@@ -43,6 +44,7 @@ MidiDevice::MidiDevice():
     m_direction(Play),
     m_librarian(std::pair<std::string, std::string>("<none>", "<none>"))
 {
+    std::cerr<< "MidiDevice ctor without data for device " << getId() << std::endl;
     createInstruments();
 }
 
@@ -56,6 +58,8 @@ MidiDevice::MidiDevice(DeviceId id,
     m_direction(dir),
     m_librarian(std::pair<std::string, std::string>("<none>", "<none>"))
 {
+    std::cerr<< "MidiDevice ctor with data for device " << getId() << std::endl;
+
     createInstruments();
 }
 
@@ -67,6 +71,8 @@ MidiDevice::MidiDevice(const MidiDevice &dev):
     m_direction(dev.getDirection()),
     m_librarian(dev.getLibrarian())
 {
+    std::cerr<< "MidiDevice copy ctor for device " << getId() << std::endl;
+
     // Create and assign a metronome if required
     //
     if (dev.getMetronome())
@@ -129,6 +135,8 @@ MidiDevice &
 MidiDevice::operator=(const MidiDevice &dev)
 {
     if (&dev == this) return *this;
+
+    std::cerr<< "MidiDevice assignment operator for device " << getId() << " from " << dev.getId() << std::endl;
 
     m_id = dev.getId();
     m_name = dev.getName();
@@ -214,6 +222,8 @@ MidiDevice::operator=(const MidiDevice &dev)
 
 MidiDevice::~MidiDevice()
 {
+    std::cerr<< "MidiDevice dtor for device " << getId() << std::endl;
+
     delete m_programList;
     delete m_bankList;
     if (m_metronome) delete m_metronome;
@@ -242,11 +252,15 @@ MidiDevice::generatePresentationList()
     //
     m_presentationInstrumentList.clear();
 
+    std::cerr<<"MidiDevice " << getId() << "::generatePresentationList" << std::endl;
+
     InstrumentList::iterator it;
     for (it = m_instruments.begin(); it != m_instruments.end(); it++)
     {
-        if ((*it)->getId() >= MidiInstrumentBase)
+        if ((*it)->getId() >= MidiInstrumentBase) {
             m_presentationInstrumentList.push_back(*it);
+	    std::cerr<<"added instr " << (*it)->getId() << " (" << (void *)(*it) << ")" << std::endl;
+	}
     }
 }
 
@@ -459,6 +473,18 @@ MidiDevice::getAllInstruments() const
 InstrumentList
 MidiDevice::getPresentationInstruments() const
 {
+    std::cerr<<"MidiDevice::getPresentationInstruments: we have " << m_presentationInstrumentList.size() << ", as follows:" << std::endl;
+    for (InstrumentList::const_iterator it = m_presentationInstrumentList.begin();
+	 it != m_presentationInstrumentList.end(); ++it) {
+	std::cerr << (void *)(*it) << " (id " << (*it ? (*it)->getId() : -1) << ")" << std::endl;
+    }
+
+    std::cerr<<"MidiDevice::getPresentationInstruments: and we have " << m_instruments.size() << " instruments total, as follows:" << std::endl;
+    for (InstrumentList::const_iterator it = m_instruments.begin();
+	 it != m_instruments.end(); ++it) {
+	std::cerr << (void *)(*it) << " (id " << (*it ? (*it)->getId() : -1) << ")" << std::endl;
+    }
+
     return m_presentationInstrumentList;
 }
 
