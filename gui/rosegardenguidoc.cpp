@@ -417,8 +417,8 @@ RosegardenGUIDoc::createNewSegment(SegmentItem *p, int instrument)
     kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::createNewSegment() startBar = " 
 			 << startBar << ", barCount = " << barCount << endl;
 
-    timeT startIndex = m_composition.getBarRange(startBar).first;
-    timeT duration = m_composition.getBarRange(startBar + barCount).first -
+    timeT startIndex = m_composition.getBarRange(startBar, false).first;
+    timeT duration = m_composition.getBarRange(startBar + barCount, false).first -
 	startIndex;
 
     kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::createNewSegment() startIndex = " 

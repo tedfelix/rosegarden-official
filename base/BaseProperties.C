@@ -59,7 +59,9 @@ const std::string GROUP_TYPE_BEAMED		 = "beamed";
 const std::string GROUP_TYPE_TUPLED		 = "tupled";
 const std::string GROUP_TYPE_GRACE		 = "grace";
 
+// Hm... it's inconsistent to have MARK_EVENT_TYPE in here
 const std::string MARK_EVENT_TYPE		 = "mark";
+
 const PropertyName MARK_TYPE			 = "MarkType";
 const PropertyName MARK_DURATION		 = "MarkDuration";
 const std::string MARK_TYPE_SLUR		 = "slur";

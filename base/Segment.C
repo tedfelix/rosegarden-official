@@ -23,6 +23,7 @@
 #include "NotationTypes.h"
 #include "Quantizer.h"
 #include "BaseProperties.h"
+#include "Composition.h"
 
 #include <iostream>
 #include <algorithm>
@@ -41,6 +42,7 @@ Segment::Segment(timeT startIdx) :
     m_startIdx(startIdx),
     m_instrument(0),
     m_id(0),
+    m_composition(0),
     m_quantizer(0)
 {
     // nothing
@@ -50,6 +52,13 @@ Segment::~Segment()
 {
     // delete content
     for (iterator it = begin(); it != end(); ++it) delete (*it);
+}
+
+
+const Quantizer *
+Segment::getQuantizer() const
+{
+    return getComposition()->getQuantizer();
 }
 
 
@@ -275,89 +284,17 @@ Segment::iterator Segment::findTime(timeT t) const
 }
 
 
-Segment::iterator Segment::findBarAt(timeT t) const
+timeT
+Segment::getBarStart(timeT t) const
 {
-    const Segment *ref = getReferenceSegment();
-    iterator i = ref->findTime(t);
-    if (i != ref->begin() &&
-	(i == ref->end() || (*i)->getAbsoluteTime() > t)) --i;
-    return i;
+    return getComposition()->getBarStart(t);
 }
 
 
-Segment::iterator Segment::findBarAfter(timeT t) const
+timeT
+Segment::getBarEnd(timeT t) const
 {
-    const Segment *ref = getReferenceSegment();
-    iterator i = ref->findTime(t);
-    return i;
-}
-
-
-static bool isTimeSig(const Event* e)
-{
-    return e->isa(TimeSignature::EventType);
-}
-
-Segment::iterator Segment::findTimeSignatureAt(timeT t) const
-{
-    // We explicitly want to avoid calling getReferenceSegment here,
-    // because we don't need the bars to be recalculated -- we only
-    // want to look at the time signatures
-
-    const Segment *ref = m_referenceSegment;
-    iterator i = ref->findTime(t);
-    
-    while (i != ref->begin() &&
-	   (i == ref->end() ||
-	    ((*i)->getAbsoluteTime() > t) ||
-	    !isTimeSig(*i))) {
-	--i;
-    }
-
-    if (i == ref->end() || !isTimeSig(*i)) {
-	return ref->end();
-    }
-
-    return i;
-}
-
-timeT Segment::findTimeSignatureAt(timeT t, TimeSignature &timeSig) const
-{
-    timeSig = TimeSignature();
-    if (!m_referenceSegment) return 0;
-
-    iterator i = findTimeSignatureAt(t);
-    if (i == m_referenceSegment->end()) return 0;
-
-    timeSig = TimeSignature(**i);
-    return (*i)->getAbsoluteTime();
-}
-
-timeT Segment::findBarStartTime(timeT t) const
-{
-    iterator barItr = findBarAt(t);
-    if (barItr == m_referenceSegment->end()) return getEndIndex();
-    return (*barItr)->getAbsoluteTime();
-}
-
-timeT Segment::findBarEndTime(timeT t) const
-{
-    iterator barItr = findBarAt(t);
-    if (barItr == m_referenceSegment->end() ||
-	++barItr == m_referenceSegment->end()) return getEndIndex();
-    return (*barItr)->getAbsoluteTime();
-}
-
-Segment::iterator Segment::findStartOfBar(timeT t) const
-{
-    t = findBarStartTime(t);
-    return findTime(t);
-}
-
-Segment::iterator Segment::findStartOfNextBar(timeT t) const
-{
-    t = findBarEndTime(t);
-    return findTime(t);
+    return getComposition()->getBarEnd(t);
 }
 
 
@@ -372,7 +309,11 @@ void Segment::fillWithRests(timeT endTime)
 {
     timeT duration = getDuration();
     TimeSignature ts;
-    timeT sigTime = findTimeSignatureAt(duration, ts);
+    timeT sigTime = 0;
+
+    if (getComposition()) {
+	sigTime = getComposition()->getTimeSignatureAt(duration, ts);
+    }
     
     DurationList dl;
     ts.getDurationListForInterval(dl, endTime - duration, sigTime);
@@ -487,15 +428,6 @@ void Segment::notifyRemove(Event *e) const
     for (ObserverSet::iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
 	(*i)->eventRemoved(this, e);
-    }
-}
-
-
-void Segment::notifyReferenceSegmentRequested() const
-{
-    for (ObserverSet::iterator i = m_observers.begin();
-	 i != m_observers.end(); ++i) {
-	(*i)->referenceSegmentRequested(this);
     }
 }
 

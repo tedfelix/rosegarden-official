@@ -53,6 +53,7 @@ namespace Rosegarden
 
 class SegmentObserver;
 class Quantizer;
+class Composition;
 
 class Segment : public std::multiset<Event*, Event::EventCmp>
 {
@@ -72,105 +73,21 @@ public:
     void         setInstrument(unsigned int i) { m_instrument = i; }
 
     /**
-     * Returns the segment storing Bar and TimeSignature events,
-     * or null if none (which should be the case iff the Segment is
-     * not contained in a Composition).
+     * Note that a Segment does not have to be in a Composition;
+     * if it isn't, this will return zero
      */
-    const Segment *getReferenceSegment() const {
-	notifyReferenceSegmentRequested();
-	return m_referenceSegment;
+    Composition *getComposition() const {
+	return m_composition;
     }
 
     /// Should only be called by Composition
-    void setReferenceSegment(const Segment *refsegment) {
-	m_referenceSegment = refsegment;
+    void setComposition(Composition *composition) {
+	m_composition = composition;
     }
-
-    /// Should only be called by Composition
-    void setQuantizer(const Quantizer *q) { m_quantizer = q; }
 
     /// Only valid when in a Composition
-    const Quantizer *getQuantizer() const { return m_quantizer; }
+    const Quantizer *getQuantizer() const;
 
-    /**
-     * Returns an iterator onto the reference segment, pointing to the
-     * last bar or time signature event before (or at) the absolute
-     * time given.  Returns end() of reference segment if there are no
-     * bar or time signature events before this time.
-     *
-     * Do not call this unless the segment is in a Composition.
-     */
-    iterator findBarAt(timeT) const;
-
-    /**
-     * Returns an iterator onto the reference segment, pointing to the
-     * next bar or time signature event after (or at) the absolute
-     * time given.  Returns end() of reference segment if there are no
-     * bar or time signature events after this time.
-     *
-     * Do not call this unless the segment is in a Composition.
-     */
-    iterator findBarAfter(timeT) const;
-
-    /**
-     * Returns an iterator onto the reference segment, pointing to the
-     * last time signature before (or at) the absolute time given.
-     * Returns end() of reference segment if there was no time signature
-     * before this time.
-     * 
-     * Do not call this unless the segment is in a Composition.
-     */
-    iterator findTimeSignatureAt(timeT) const;
-
-    /**
-     * Returns the absolute time of the last time signature before (or
-     * at) the absolute time given, and the time signature itself
-     * through the reference argument.
-     * 
-     * Returns 0 and the default time signature if there was no time
-     * signature before this time.  (You cannot distinguish between
-     * this case and a real default time signature at time 0; use the
-     * previous method if this matters to you.)
-     * 
-     * It is safe to call this if the segment is not in a Composition;
-     * in this case there can be no time signatures and the method
-     * will return 0 and the default.
-     */
-    timeT findTimeSignatureAt(timeT, TimeSignature &) const;
-
-    /**
-     * Returns the time at which the bar containing the given time
-     * starts.  Returns end-of-segment if the given time exceeds the
-     * segment's length.
-     *
-     * Do not call this unless the segment is in a Composition.
-     */
-    timeT findBarStartTime(timeT) const;
-
-    /**
-     * Returns the time at which the bar containing the given time
-     * ends.  Returns end-of-segment if the given time exceeds the
-     * segment's length.
-     *
-     * Do not call this unless the segment is in a Composition.
-     */
-    timeT findBarEndTime(timeT) const;
-
-    /**
-     * Returns an iterator onto this segment, pointing to the first item
-     * in the bar containing the given time.
-     *
-     * Do not call this unless the segment is in a Composition.
-     */
-    iterator findStartOfBar(timeT) const;
-
-    /**
-     * Returns an iterator onto this segment, pointing to the first item
-     * in the bar following the one containing the given time.
-     *
-     * Do not call this unless the segment is in a Composition.
-     */
-    iterator findStartOfNextBar(timeT) const;
 
     /**
      * Inserts a single Event
@@ -225,6 +142,22 @@ public:
      */
     iterator findContiguousPrevious(iterator) const;
     
+    /**
+     * Return the starting time of the bar that contains time t.
+     * This simply delegates to the Composition, and so can only work
+     * if the Segment is in a Composition.  See Composition for some
+     * more interesting time signature and bar related methods.
+     */
+    timeT getBarStart(timeT t) const;
+
+    /**
+     * Return the ending time of the bar that contains time t.
+     * This simply delegates to the Composition, and so can only work
+     * if the Segment is in a Composition.  See Composition for some
+     * more interesting time signature and bar related methods.
+     */
+    timeT getBarEnd(timeT t) const;
+
     /**
      * Returns a numeric id of some sort
      * The id is guaranteed to be unique within the segment, but not to
@@ -296,8 +229,7 @@ private:
 
     mutable int m_id;
 
-    /// contains bar position data etc. I do not own this
-    const Segment *m_referenceSegment;
+    Composition *m_composition; // owns me, if it exists
 
     typedef std::set<SegmentObserver *> ObserverSet;
     ObserverSet m_observers;
@@ -306,7 +238,6 @@ private:
 
     void notifyAdd(Event *) const;
     void notifyRemove(Event *) const;
-    void notifyReferenceSegmentRequested() const;
 
 private:
     Segment(const Segment &);
@@ -323,9 +254,6 @@ public:
     // called after the event has been removed from the segment,
     // and just before it is deleted:
     virtual void eventRemoved(const Segment *, Event *) = 0;
-
-    // probably only of interest to Composition
-    virtual void referenceSegmentRequested(const Segment *) { }
 };
 
 

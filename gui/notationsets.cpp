@@ -311,12 +311,12 @@ NotationGroup::NotationGroup(const NotationElementList &nel,
     
     if ((i = getInitialElement()) != getList().end()) {
 
-	kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: examining group type" << endl;
+//	kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: examining group type" << endl;
 
         try {
             std::string t = (*i)->event()->get<String>(BEAMED_GROUP_TYPE);
 
-	    kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: type is \"" << t << "\"" << endl;
+//	    kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: type is \"" << t << "\"" << endl;
 
             if (t == GROUP_TYPE_BEAMED) {
                 m_type = Beamed;
@@ -332,13 +332,13 @@ NotationGroup::NotationGroup(const NotationElementList &nel,
         }
     }
 
-    kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: id is " << m_groupNo << endl;
+//    kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: id is " << m_groupNo << endl;
     i = getInitialElement(); 
     while (i != getList().end()) {
         long gid = -1;
         (*i)->event()->get<Int>(BEAMED_GROUP_ID, gid);
-        kdDebug(KDEBUG_AREA) << "Found element with group id "
-                             << gid << endl;
+//        kdDebug(KDEBUG_AREA) << "Found element with group id "
+//                             << gid << endl;
         if (i == getFinalElement()) break;
         ++i;
     }
@@ -539,12 +539,12 @@ NotationGroup::calculateBeam(NotationStaff &staff)
 void
 NotationGroup::applyBeam(NotationStaff &staff)
 {
-    kdDebug(KDEBUG_AREA) << "NotationGroup::applyBeam, group no is " << m_groupNo << endl;
+//    kdDebug(KDEBUG_AREA) << "NotationGroup::applyBeam, group no is " << m_groupNo << endl;
 
     Beam beam(calculateBeam(staff));
     if (!beam.necessary) return;
 
-    kdDebug(KDEBUG_AREA) << "NotationGroup::applyBeam: Beam is necessary" << endl;
+//    kdDebug(KDEBUG_AREA) << "NotationGroup::applyBeam: Beam is necessary" << endl;
 
     NELIterator initialNote(getInitialNote()),
 	          finalNote(  getFinalNote());
@@ -580,7 +580,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
 	    Chord chord(getList(), i, m_clef, m_key);
 	    unsigned int j;
 
-            kdDebug(KDEBUG_AREA) << "NotationGroup::applyBeam: Found chord" << endl;
+//            kdDebug(KDEBUG_AREA) << "NotationGroup::applyBeam: Found chord" << endl;
 
 	    for (j = 0; j < chord.size(); ++j) {
 		NotationElement *el = (*chord[j]);
@@ -681,11 +681,11 @@ NotationGroup::applyBeam(NotationStaff &staff)
 void 
 NotationGroup::applyTuplingLine(NotationStaff &staff)
 {
-    kdDebug(KDEBUG_AREA) << "NotationGroup::applyTuplingLine, group no is " << m_groupNo << ", group type is " << m_type << endl;
+//    kdDebug(KDEBUG_AREA) << "NotationGroup::applyTuplingLine, group no is " << m_groupNo << ", group type is " << m_type << endl;
 
     if (m_type != Tupled) return;
 
-    kdDebug(KDEBUG_AREA) << "NotationGroup::applyTuplingLine: line is necessary" << endl;
+//    kdDebug(KDEBUG_AREA) << "NotationGroup::applyTuplingLine: line is necessary" << endl;
 
     Beam beam(calculateBeam(staff));
 
@@ -718,6 +718,6 @@ NotationGroup::applyTuplingLine(NotationStaff &staff)
     (*initialNote)->event()->setMaybe<Int>(TUPLING_LINE_WIDTH, finalX - initialX);
     (*initialNote)->event()->setMaybe<Int>(TUPLING_LINE_GRADIENT, beam.gradient);
 
-    kdDebug(KDEBUG_AREA) << "NotationGroup::applyTuplingLine: my-y: " << startY << ", width: " << (finalX - initialX) << ", gradient: " << beam.gradient << endl;
+//    kdDebug(KDEBUG_AREA) << "NotationGroup::applyTuplingLine: my-y: " << startY << ", width: " << (finalX - initialX) << ", gradient: " << beam.gradient << endl;
 }
 

@@ -1211,7 +1211,7 @@ void RosegardenGUIApp::fastforward()
 
     timeT position = composition.getPosition();
     int  barNumber = composition.getBarNumber(position);
-    timeT   jumpTo = composition.getBarRange(barNumber + 1).first;
+    timeT   jumpTo = composition.getBarRange(barNumber + 1, false).first;
 
     if (jumpTo > composition.getDuration()) jumpTo = composition.getDuration();
 

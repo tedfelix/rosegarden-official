@@ -65,8 +65,8 @@ public:
      * Returns the segment storing Bar and TimeSignature events
      */
     Segment *getReferenceSegment() {
-	referenceSegmentRequested(0);
-	return &m_timeReference;
+	calculateBarPositions();
+	return &m_referenceSegment;
     }
 
     const Quantizer *getQuantizer() const {
@@ -75,6 +75,8 @@ public:
 
     segmentcontainer& getSegments() { return m_segments; }
     const segmentcontainer& getSegments() const { return m_segments; }
+
+    unsigned int getNbSegments() const { return m_segments.size(); }
 
     /**
      * Add a new segment and return an iterator pointing to it
@@ -99,32 +101,43 @@ public:
      */
     bool deleteSegment(Segment*);
 
-    unsigned int getNbSegments() const { return m_segments.size(); }
-
-    /// returns the absolute end time of the segment that ends last
-    timeT getDuration() const;
-
-    /// returns the total number of bars in the composition
-    unsigned int getNbBars() { return getBarNumber(getDuration()) + 1; }
-
     /// Removes all Segments from the Composition and destroys them
     void clear();
 
 
+    /// return the absolute end time of the segment that ends last
+    timeT getDuration() const;
+
+
+    /// return the total number of bars in the composition
+    unsigned int getNbBars() const {
+	return getBarNumber(getDuration()) + 1;
+    }
+
     /**
      * Return the number of the bar that starts at or contains time t
      */
-    int getBarNumber(timeT t);
+    int getBarNumber(timeT t) const;
 
     /**
      * Return the starting time of the bar that contains time t
      */
-    timeT getBarStart(timeT t);
+    timeT getBarStart(timeT t) const;
 
     /**
      * Return the ending time of the bar that contains time t
      */
-    timeT getBarEnd(timeT t);
+    timeT getBarEnd(timeT t) const;
+
+    /**
+     * Return the time range of bar n.  Relatively inefficient.
+     * 
+     * If truncate is true, will stop at end of segment and return last
+     * real bar if n is out of range; otherwise will happily return
+     * theoretical timings for bars beyond the real end of composition
+     * (this is used when extending segments on the segment editor).
+     */
+    std::pair<timeT, timeT> getBarRange(int n, bool truncate) const;
 
     /**
      * Return the starting and ending times of the bar that contains
@@ -132,16 +145,18 @@ public:
      * that actually exist and will stop working at the end of the
      * composition.  It's much, much quicker though.
      */
-    std::pair<timeT, timeT> getBarStartAndEnd(timeT t);
+    std::pair<timeT, timeT> getBarRange(timeT t) const;
 
     /**
-     * Return the time range of bar n.  Relatively inefficient.
-     * If truncate is true, will stop at end of segment and return last
-     * real bar if n is out of range; otherwise will happily return
-     * theoretical timings for bars beyond the real end of composition
-     * (this is used when extending segments on the segment editor).
+     * Return the time signature in effect at time t
      */
-    std::pair<timeT, timeT> getBarRange(int n, bool truncate = false);
+    TimeSignature getTimeSignatureAt(timeT t) const;
+
+    /**
+     * Return the time signature in effect at time t, and the time at
+     * which it came into effect
+     */
+    timeT getTimeSignatureAt(timeT, TimeSignature &) const;
 
 
     // Some set<> API delegation
@@ -167,16 +182,15 @@ public:
 
     virtual void eventAdded(const Segment *, Event *);
     virtual void eventRemoved(const Segment *, Event *);
-    virtual void referenceSegmentRequested(const Segment *);
 
 protected:
     segmentcontainer m_segments;
 
     /// Contains time signature and new-bar events.
-    Segment m_timeReference;
+    mutable Segment m_referenceSegment;
 
     // called from calculateBarPositions
-    Segment::iterator addNewBar(timeT time, int barNo);
+    Segment::iterator addNewBar(timeT time, int barNo) const;
 
     Quantizer m_quantizer;
 
@@ -184,9 +198,9 @@ protected:
 
     timeT m_position;
 
-    /// affects the reference segment in m_timeReference
-    void calculateBarPositions();
-    bool m_barPositionsNeedCalculating;
+    /// affects the reference segment in m_referenceSegment
+    void calculateBarPositions() const;
+    mutable bool m_barPositionsNeedCalculating;
 
 private:
     Composition(const Composition &);

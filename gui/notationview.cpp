@@ -1198,7 +1198,7 @@ NotationView::setPositionPointer(const int& position)
     Rosegarden::Composition &comp = m_document->getComposition();
 
     int barNo = comp.getBarNumber(position);
-    pair<timeT, timeT> times = comp.getBarStartAndEnd(position);
+    pair<timeT, timeT> times = comp.getBarRange(position);
 
     double canvasPosition = m_hlayout->getTotalWidth();
 
@@ -1692,6 +1692,8 @@ void NotationView::redoLayout(Segment *segment, timeT startTime, timeT endTime)
 void NotationView::redoLayoutAdvised(Segment *segment,
 				     timeT startTime, timeT endTime)
 {
+    START_TIMING;
+
     emit usedSelection(); //!!! hardly right
     if (segment == 0) applyLayout();
 
@@ -1707,12 +1709,12 @@ void NotationView::redoLayoutAdvised(Segment *segment,
         NotationElementList::iterator endi = notes->end();
 
         if (startTime > 0) {
-            timeT barStartTime = ssegment->findBarStartTime(startTime);
+            timeT barStartTime = ssegment->getBarStart(startTime);
             starti = notes->findTime(barStartTime);
         }
 
         if (endTime >= 0) {
-            timeT barEndTime = ssegment->findBarEndTime(endTime);
+            timeT barEndTime = ssegment->getBarEnd(endTime);
             endi = notes->findTime(barEndTime);
         }
 
@@ -1722,6 +1724,8 @@ void NotationView::redoLayoutAdvised(Segment *segment,
 
     canvas()->update();
     PixmapArrayGC::deleteAll();
+
+    PRINT_ELAPSED("NotationView::redoLayoutAdvised");
 }
 
 

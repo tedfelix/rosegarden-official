@@ -216,12 +216,15 @@ bool RG21Loader::parseGroupStart()
 
 bool RG21Loader::parseMarkStart()
 {
+    if (m_tokens.count() < 4) return false;
+   
     unsigned int markId = m_tokens[2].toUInt();
     std::string markType = m_tokens[3].lower().latin1();
 
     kdDebug(KDEBUG_AREA) << "Mark start: type is \"" << markType << "\"" << endl;
 
     if (markType == "tie") {
+
 	if (m_tieStatus != 0) {
 	    kdDebug(KDEBUG_AREA)
 		<< "RG21Loader:: parseMarkStart: WARNING: Found tie within "
@@ -241,6 +244,24 @@ bool RG21Loader::parseMarkStart()
 	    }
 	}
 	m_tieStatus = 2;
+
+    } else {
+
+	Event *markEvent = new Event(MARK_EVENT_TYPE);
+	markEvent->set<String>(MARK_TYPE, markType);
+
+	// Jeez.  Whose great idea was it to place marks _after_ the
+	// events they're marking in the RG2.1 file format?
+	
+	timeT markTime = m_currentSegmentTime;
+	Segment::iterator i = m_currentSegment->end();
+	if (i != m_currentSegment->begin()) {
+	    --i;
+	    markTime = (*i)->getAbsoluteTime();
+	}
+	markEvent->setAbsoluteTime(markTime);
+
+	m_marksExtant[markId] = markEvent;
     }
 
     // other marks not handled yet
@@ -249,6 +270,20 @@ bool RG21Loader::parseMarkStart()
 
 void RG21Loader::closeMark()
 {
+    if (m_tokens.count() < 3) return;
+   
+    unsigned int markId = m_tokens[2].toUInt();
+    EventIdMap::iterator i = m_marksExtant.find(markId);
+
+    // this is normal (for ties):
+    if (i == m_marksExtant.end()) return;
+
+    Event *markEvent = i->second;
+    m_marksExtant.erase(i);
+
+    markEvent->set<Int>(MARK_DURATION,
+			m_currentSegmentTime - markEvent->getAbsoluteTime());
+    m_currentSegment->insert(markEvent);
 }
 
 void RG21Loader::closeGroup()
@@ -311,7 +346,8 @@ bool RG21Loader::parseBarType()
     int staffNo = m_tokens[1].toInt();
     if (staffNo > 0) {
 	kdDebug(KDEBUG_AREA)
-	    << "RG21Loader::parseBarType: We do not support different time signatures on\ndifferent staffs; disregarding time signature for staff " << staffNo << endl;
+	    << "RG21Loader::parseBarType: We don't support different time\n"
+	    << "signatures on different staffs; disregarding time signature for staff " << staffNo << endl;
 	return true;
     }
 
@@ -320,7 +356,7 @@ bool RG21Loader::parseBarType()
     int numerator   = m_tokens[4].toInt();
     int denominator = m_tokens[5].toInt();
 
-    timeT sigTime = m_composition->getBarRange(barNo).first;
+    timeT sigTime = m_composition->getBarRange(barNo, true).first;
     TimeSignature timeSig(numerator, denominator);
     m_composition->getReferenceSegment()->insert(timeSig.getAsEvent(sigTime));
 
@@ -348,9 +384,7 @@ timeT RG21Loader::convertRG21Duration(QStringList::Iterator& i)
 
     try {
 
-	kdDebug(KDEBUG_AREA) << "durationString is \"" << durationString << "\"" << endl;
         Rosegarden::Note n(durationString.latin1());
-	kdDebug(KDEBUG_AREA) << "Note duration is " << n.getDuration() << endl;
         return n.getDuration();
 
     } catch (Rosegarden::Note::BadType b) {

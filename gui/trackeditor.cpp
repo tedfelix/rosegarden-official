@@ -241,8 +241,8 @@ void TrackEditor::updateSegmentDuration(SegmentItem *i)
     int startBar = m_hHeader->sectionAt(int(i->x()));
     int barCount = i->getItemNbBars();
 
-    timeT startIndex = composition.getBarRange(startBar).first;
-    timeT duration = composition.getBarRange(startBar + barCount).first -
+    timeT startIndex = composition.getBarRange(startBar, false).first;
+    timeT duration = composition.getBarRange(startBar + barCount, false).first -
 	startIndex;
 
     kdDebug(KDEBUG_AREA) << "TrackEditor::updateSegmentDuration() : set duration to "
@@ -258,7 +258,7 @@ void TrackEditor::updateSegmentInstrumentAndStartIndex(SegmentItem *i)
 
     int instrument = m_vHeader->sectionAt(int(i->y()));
     int startBar = m_hHeader->sectionAt(int(i->x()));
-    timeT startIndex = composition.getBarRange(startBar).first;
+    timeT startIndex = composition.getBarRange(startBar, false).first;
 
     kdDebug(KDEBUG_AREA) << "TrackEditor::updateSegmentInstrumentAndStartIndex() : set instrument to "
                          << instrument
@@ -299,7 +299,7 @@ void TrackEditor::setupHorizontalHeader()
 
     for (int i = 0; i < m_hHeader->count(); ++i) {
 
-	std::pair<timeT, timeT> times = comp.getBarRange(i);
+	std::pair<timeT, timeT> times = comp.getBarRange(i, false);
 
 	//!!! ??? s'pose we should divide by some resolution-dependent thing
 	int width = (times.second - times.first) / 7; // 384 -> 54
@@ -324,7 +324,7 @@ TrackEditor::setPointerPosition(int position)
     Composition &comp = m_document->getComposition();
 
     int barNo = comp.getBarNumber(position);
-    pair<timeT, timeT> times = comp.getBarStartAndEnd(position);
+    pair<timeT, timeT> times = comp.getBarRange(position);
 
     int canvasPosition = m_hHeader->sectionPos(barNo);
 

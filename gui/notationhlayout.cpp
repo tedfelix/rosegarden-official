@@ -28,6 +28,7 @@
 #include "notationproperties.h"
 #include "notationsets.h"
 #include "Quantizer.h"
+#include "Composition.h"
 #include "SegmentNotationHelper.h"
 
 using Rosegarden::Note;
@@ -198,7 +199,7 @@ NotationHLayout::scanStaff(StaffType &staff)
     START_TIMING;
 
     Segment &t(staff.getSegment());
-    const Segment *timeRef = t.getReferenceSegment();
+    const Segment *timeRef = t.getComposition()->getReferenceSegment();
 
     if (timeRef == 0) {
 	kdDebug(KDEBUG_AREA) << "ERROR: NotationHLayout::scanStaff: reference segment required (at least until code\nis written to render a segment without bar lines)" << endl;
@@ -214,9 +215,13 @@ NotationHLayout::scanStaff(StaffType &staff)
     TimeSignature timeSignature;
 
     barList.clear();
-
+/*!!!
     Segment::iterator refStart = t.findBarAt(t.getStartIndex());
     Segment::iterator refEnd = t.findBarAfter(t.getEndIndex());
+*/
+    Segment::iterator refStart = timeRef->findTime(t.getStartIndex());
+    Segment::iterator refEnd = timeRef->findTime(t.getEndIndex());
+    if (refEnd != timeRef->end()) ++refEnd;
     
     int barNo = 0;
 
@@ -240,6 +245,8 @@ NotationHLayout::scanStaff(StaffType &staff)
 
         NotationElementList::iterator from = notes->findTime(barStartTime);
         NotationElementList::iterator to = notes->findTime(barEndTime);
+
+	kdDebug(KDEBUG_AREA) << "NotationHLayout::scanStaff: bar " << barNo << ", from " << barStartTime << ", to " << barEndTime << " (end " << t.getEndIndex() << ")" << endl;
 
         NotationElementList::iterator shortest = notes->end();
         int shortCount = 0;
@@ -455,7 +462,7 @@ NotationHLayout::reconcileBars()
         if (list.size() > 0 && list[0].barNo < 0) continue; // done it already
 
         Segment &segment = staff->getSegment();
-        const Segment &refSegment = *(segment.getReferenceSegment());
+        const Segment &refSegment = *(segment.getComposition()->getReferenceSegment());
 
         for (Segment::const_iterator j = refSegment.begin();
              j != refSegment.end(); ++j) {
@@ -623,8 +630,8 @@ NotationHLayout::layout(BarDataMap::iterator i)
             to = nbdi->start;
         }
 
-        kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): starting a bar, barNo is " << bdi->barNo << ", initial x is "
-                             << x << ", barX is " << barX << ", and bar width is " << bdi->idealWidth << endl;
+        kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): starting barNo " << bdi->barNo << ", x = " << barX << ", width = " << bdi->idealWidth << ", time = " << (from == notes->end() ? -1 : (*from)->getAbsoluteTime()) << endl;
+
         if (from == notes->end()) {
             kdDebug(KDEBUG_AREA) << "Start is end" << endl;
         }
@@ -652,7 +659,6 @@ NotationHLayout::layout(BarDataMap::iterator i)
             continue;
         }
 
-        kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): about to enter loop" << endl;
         if (timeSigToPlace) {
 	    kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): there's a time sig in this bar" << endl;
 	}
@@ -693,25 +699,17 @@ NotationHLayout::layout(BarDataMap::iterator i)
 
 		} else if (el->isRest()) {
 
-		    kdDebug(KDEBUG_AREA) << "rest: delta (before) is " << delta << endl;
 		    delta = positionRest(staff, it, bdi, timeSignature);
 
-		    kdDebug(KDEBUG_AREA) << "rest: delta (after) is " << delta << endl;
-
 		} else if (el->isNote()) {
-
-		    kdDebug(KDEBUG_AREA) << "delta (before) is " << delta << endl;
 
 		    delta = positionNote
 			(staff, it, bdi, timeSignature, clef, key, tieMap,
 			 accidentalInThisChord);
-
-		    kdDebug(KDEBUG_AREA) << "delta (after) is " << delta << endl;
 		}
 	    }
 
             x += delta;
-            kdDebug(KDEBUG_AREA) << "x = " << x << endl;
         }
 
         bdi->needsLayout = false;

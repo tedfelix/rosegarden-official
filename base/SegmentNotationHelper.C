@@ -5,6 +5,7 @@
 #include "NotationTypes.h"
 #include "Quantizer.h"
 #include "BaseProperties.h"
+#include "Composition.h"
 
 #include <iostream>
 #include <algorithm>
@@ -40,7 +41,7 @@ bool SegmentNotationHelper::collapseIfValid(Event* e, bool& collapseForward)
 			myDuration) &&
 	// ...(c) event is in same bar (no cross-bar collapsing)
 	(*nextEvent)->getAbsoluteTime() <
-	    segment().findBarEndTime(e->getAbsoluteTime())) {
+	    segment().getBarEnd(e->getAbsoluteTime())) {
 
         // collapse right is OK; collapse e with nextEvent
 
@@ -58,7 +59,7 @@ bool SegmentNotationHelper::collapseIfValid(Event* e, bool& collapseForward)
 	isCollapseValid(quantizer().getNoteQuantizedDuration(*previousEvent),
 			myDuration) &&
 	(*previousEvent)->getAbsoluteTime() >
-	    segment().findBarStartTime(e->getAbsoluteTime())) {
+	    segment().getBarStart(e->getAbsoluteTime())) {
 	
         // collapse left is OK; collapse e with previousEvent
         (*previousEvent)->setDuration(e->getDuration() +
@@ -215,7 +216,9 @@ void SegmentNotationHelper::makeRestViable(iterator i)
     timeT absTime = (*i)->getAbsoluteTime(); 
 
     TimeSignature timeSig;
-    timeT sigTime = segment().findTimeSignatureAt(absTime, timeSig);
+//!!!    timeT sigTime = segment().findTimeSignatureAt(absTime, timeSig);
+    timeT sigTime = segment().getComposition()->getTimeSignatureAt
+	(absTime, timeSig);
 
     timeSig.getDurationListForInterval
 	(dl, (*i)->getDuration(), absTime - sigTime);
@@ -689,11 +692,18 @@ void SegmentNotationHelper::autoBeam(iterator from, iterator to, string type)
 
 	timeT t = (*from)->getAbsoluteTime();
 
+/*!!!
 	iterator barStart = segment().findStartOfBar(t);
 	iterator barEnd = segment().findStartOfNextBar(t);
+*/
+	iterator barStart =
+	    segment().findTime(segment().getBarStart(t));
+	iterator barEnd = 
+	    segment().findTime(segment().getBarEnd(t));
 
-	TimeSignature timeSig;
-	segment().findTimeSignatureAt(t, timeSig);
+	TimeSignature timeSig =
+	    segment().getComposition()->getTimeSignatureAt(t);
+//!!!	segment().findTimeSignatureAt(t, timeSig);
 
 //	cerr << "SegmentNotationHelper::autoBeam: t is " << t << "; from time " <<
 //	    (*barStart)->getAbsoluteTime() << " to time " <<
@@ -1086,18 +1096,21 @@ void SegmentNotationHelper::normalizeContiguousRests(timeT startTime,
 						     std::vector<Event *> &
 						         toInsert)
 {
-    timeT sigTime = 0;
     TimeSignature ts;
+    timeT sigTime =
+	segment().getComposition()->getTimeSignatureAt(startTime, ts);
 
     cerr << "SegmentNotationHelper::normalizeContiguousRests:"
 	 << " startTime = " << startTime << ", duration = "
 	 << duration << endl;
 
+/*!!!
     iterator tsi = segment().findTimeSignatureAt(startTime);
     if (tsi != segment().getReferenceSegment()->end()) {
 	ts = TimeSignature(**tsi);
 	sigTime = (*tsi)->getAbsoluteTime();
     }
+*/
 
     DurationList dl;
     ts.getDurationListForInterval(dl, duration, sigTime);

@@ -88,6 +88,9 @@ protected:
     Rosegarden::Clef m_currentClef;
     Rosegarden::Key m_currentKey;
 
+    typedef std::map<int, Rosegarden::Event *> EventIdMap;
+    EventIdMap m_marksExtant;
+
     bool m_inGroup;
     unsigned int m_groupId;
     std::string m_groupType;

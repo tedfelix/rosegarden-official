@@ -94,7 +94,7 @@ New features suitable for 0.2
 Basis for later features
 ------------------------
 
-1.  undo that works at least some of the time
+1.  undo that works at least some of the time [DONE]
 
 2.  layers (for counterpoint)
 
