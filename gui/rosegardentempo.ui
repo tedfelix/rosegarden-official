@@ -1,0 +1,241 @@
+<!DOCTYPE UI><UI>
+<class>RosegardenTempo</class>
+<widget>
+    <class>QDialog</class>
+    <property stdset="1">
+        <name>name</name>
+        <cstring>RosegardenTempo</cstring>
+    </property>
+    <property stdset="1">
+        <name>geometry</name>
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>159</width>
+            <height>97</height>
+        </rect>
+    </property>
+    <property stdset="1">
+        <name>caption</name>
+        <string>Set Tempo</string>
+    </property>
+    <widget>
+        <class>QFrame</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>Frame25</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>0</x>
+                <y>58</y>
+                <width>159</width>
+                <height>39</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>frameShape</name>
+            <enum>StyledPanel</enum>
+        </property>
+        <property stdset="1">
+            <name>frameShadow</name>
+            <enum>Raised</enum>
+        </property>
+        <widget>
+            <class>QPushButton</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>OKButton</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>3</x>
+                    <y>3</y>
+                    <width>75</width>
+                    <height>33</height>
+                </rect>
+            </property>
+            <property stdset="1">
+                <name>caption</name>
+                <string></string>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>OK</string>
+            </property>
+        </widget>
+        <widget>
+            <class>QPushButton</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>CancelButton</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>79</x>
+                    <y>3</y>
+                    <width>75</width>
+                    <height>33</height>
+                </rect>
+            </property>
+            <property stdset="1">
+                <name>caption</name>
+                <string></string>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>Cancel</string>
+            </property>
+        </widget>
+    </widget>
+    <widget>
+        <class>QFrame</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>Frame17</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>159</width>
+                <height>58</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>frameShape</name>
+            <enum>StyledPanel</enum>
+        </property>
+        <property stdset="1">
+            <name>frameShadow</name>
+            <enum>Raised</enum>
+        </property>
+        <widget>
+            <class>QLabel</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>TextLabel1</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>12</x>
+                    <y>8</y>
+                    <width>56</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property stdset="1">
+                <name>font</name>
+                <font>
+                    <family>lucida</family>
+                    <italic>1</italic>
+                </font>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>TEMPO</string>
+            </property>
+        </widget>
+        <widget>
+            <class>QLabel</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>TextLabel2</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>83</x>
+                    <y>32</y>
+                    <width>53</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property stdset="1">
+                <name>font</name>
+                <font>
+                    <family>lucida</family>
+                </font>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>0</string>
+            </property>
+            <property stdset="1">
+                <name>alignment</name>
+                <set>AlignVCenter|AlignRight</set>
+            </property>
+            <property>
+                <name>hAlign</name>
+            </property>
+        </widget>
+        <widget>
+            <class>QSpinBox</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>SpinBox2</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>68</x>
+                    <y>8</y>
+                    <width>73</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property stdset="1">
+                <name>font</name>
+                <font>
+                    <family>lucida</family>
+                </font>
+            </property>
+        </widget>
+        <widget>
+            <class>QLabel</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>TextLabel1_2</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>12</x>
+                    <y>32</y>
+                    <width>67</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property stdset="1">
+                <name>font</name>
+                <font>
+                    <family>lucida</family>
+                    <italic>1</italic>
+                </font>
+            </property>
+            <property stdset="1">
+                <name>frameShape</name>
+                <enum>MShape</enum>
+            </property>
+            <property stdset="1">
+                <name>frameShadow</name>
+                <enum>MShadow</enum>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>POSITION</string>
+            </property>
+        </widget>
+    </widget>
+</widget>
+<tabstops>
+    <tabstop>SpinBox2</tabstop>
+    <tabstop>OKButton</tabstop>
+    <tabstop>CancelButton</tabstop>
+</tabstops>
+</UI>

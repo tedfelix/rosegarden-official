@@ -46,6 +46,7 @@
 #include "rosegardenguiview.h"
 #include "rosegardenguidoc.h"
 #include "rosegardenconfiguredialog.h"
+#include "rosegardentempodialog.h"
 #include "MidiFile.h"
 #include "rg21io.h"
 #include "rosegardendcop.h"
@@ -1991,6 +1992,11 @@ void RosegardenGUIApp::slotEditToolbars()
 void RosegardenGUIApp::slotEditTempo()
 {
     kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotEditTempo" << std::endl;
+
+    Rosegarden::RosegardenTempoDialog *tempoDlg = 
+        new Rosegarden::RosegardenTempoDialog(m_doc, this);
+
+    tempoDlg->show();
 }
 
 
