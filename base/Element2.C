@@ -1,3 +1,5 @@
+#include <cstdio>
+
 #include "Element2.h"
 
 string
@@ -18,7 +20,6 @@ PropertyDefn<Int>::unparse(PropertyDefn<Int>::basic_type i)
     static char buffer[20]; sprintf(buffer, "%ld", i);
     return buffer;
 }
-
 
 string
 PropertyDefn<String>::name()
@@ -58,7 +59,6 @@ PropertyDefn<Bool>::unparse(PropertyDefn<Bool>::basic_type i)
 
 
 
-
 PropertyStoreBase::~PropertyStoreBase()
 {
 }
@@ -81,6 +81,9 @@ Element2::Element2(const string &package, const string &type)
 }
 
 Element2::Element2(const Element2 &e)
+    : m_duration(0),
+      m_viewElements(0),
+      m_group(0)
 {
     copyFrom(e);
 }
@@ -121,6 +124,7 @@ void
 Element2::copyFrom(const Element2 &e)
 {
     delete m_viewElements;
+    delete m_group;
     scrapMap();
 
     for (PropertyMap::const_iterator i = e.m_properties.begin();
@@ -128,7 +132,11 @@ Element2::copyFrom(const Element2 &e)
         m_properties.insert(PropertyPair((*i).first, (*i).second->clone()));
     }
 
-    m_viewElements = new ViewElements(*(e.viewElements()));
+    if (e.viewElements())
+        m_viewElements = new ViewElements(*(e.viewElements()));
+
+    if (e.group())
+        m_group = new EventList(*(e.group()));
 }
 
 
@@ -154,6 +162,25 @@ Element2::setViewElements(ViewElements *ve)
     m_viewElements = ve;
 }
 
+void
+Element2::dump(ostream& out)
+{
+#ifndef NDEBUG
+    out << "Event type : " << m_type;
+    if (m_package.length()) out << " - package : " << m_package;
+    out << endl;
+    out << "\tProperties : " << endl;
+
+    for (PropertyMap::const_iterator i = m_properties.begin();
+         i != m_properties.end(); ++i) {
+        out << "\t\t" << (*i).first << '\t';
+//         (*i).second->dump(out);
+        out << *((*i).second);
+        out << endl;
+    }
+#endif
+}
+
 
 
 ViewElement::ViewElement(Event *e)
@@ -175,8 +202,11 @@ EventList::~EventList()
 ViewElements::~ViewElements()
 {
     // delete content
-    for(iterator it = begin(); it != end(); ++it)
+    for(iterator it = begin(); it != end(); ++it) {
+        cerr << "ViewElements delete" << endl;
         delete (*it);
+    }
+
 }
 
 

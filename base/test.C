@@ -18,6 +18,7 @@
 #include <algorithm>
 #include <iostream>
 #include <cstdlib>
+#include <cstdio>
 
 #include <sys/times.h>
 
@@ -61,6 +62,14 @@ int main(int argc, char **argv)
     Element2 e("sys", "note");
     e.set<Int>("duration", 20);
     cout << "duration is " << e.get<Int>("duration") << endl;
+
+    e.set<Bool>("someBoolProp", true);
+    e.set<String>("someStringProp", "foobar");
+
+
+    cout << "Testing debug dump : " << endl;
+    e.dump(cout);
+    cout << endl << "dump finished" << endl;
 
     try {
 	cout << "duration is " << e.get<String>("duration") << endl;

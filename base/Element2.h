@@ -8,8 +8,8 @@
 #include <hash_map>
 #include <string>
 
-#include <cstring>
-#include <cstdio>
+//#include <cstring>
+// #include <cstdio>
 
 // Need to associate one of those param names (Int, String etc) with a
 // storage type and a parser/writer.  The storage-type association
@@ -54,6 +54,7 @@ public:
     typedef PropertyDefnNotDefined basic_type;
     static basic_type parse(string);
     static string unparse(basic_type);
+
 };
 
 template <PropertyType P>
@@ -113,7 +114,17 @@ public:
     virtual string getTypeName() = 0;
     virtual PropertyStoreBase *clone() = 0;
     virtual string unparse() = 0;
+
+#ifndef NDEBUG
+    virtual void dump(ostream&) = 0;
+#else
+    void dump(ostream&) {}
+#endif
 };
+
+#ifndef NDEBUG
+ostream& operator<<(ostream &out, PropertyStoreBase &e) { e.dump(out); }
+#endif
 
 template <PropertyType P>
 class PropertyStore : public PropertyStoreBase
@@ -134,6 +145,10 @@ public:
 
     PropertyDefn<P>::basic_type getData() { return m_data; }
     void setData(PropertyDefn<P>::basic_type data) { m_data = data; }
+
+#ifndef NDEBUG
+    void dump(ostream&);
+#endif
 
 private:
     PropertyDefn<P>::basic_type m_data;
@@ -173,6 +188,16 @@ PropertyStore<P>::unparse()
 {
     return PropertyDefn<P>::unparse(m_data);
 }
+
+#ifndef NDEBUG
+template <PropertyType P>
+void
+PropertyStore<P>::dump(ostream &out)
+{
+    out << getTypeName() << " - " << m_data;
+}
+#endif
+
 
 //////////////////////////////////////////////////////////////////////
 
@@ -254,6 +279,12 @@ public:
     template <PropertyType P>
     void setFromString(const string &name, string value)
 	throw (BadType);
+
+#ifndef NDEBUG
+    void dump(ostream&);
+#else
+    void dump(ostream&) {}
+#endif
 
 private:
     void scrapMap();
