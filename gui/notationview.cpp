@@ -1637,6 +1637,13 @@ void NotationView::refreshSegment(Segment *segment,
 
     //!!! dup with setCurrentSelection, move to other fn somewhere
 
+    if (m_currentEventSelection &&
+	m_currentEventSelection->getSegmentEvents().size() == 0) {
+	delete m_currentEventSelection;
+	m_currentEventSelection = 0;
+	//!!!??? was that the right thing to do?
+    }
+
 #ifdef RGKDE3
     // Clear states first, then enter only those ones that apply
     // (so as to avoid ever clearing one after entering another, in
