@@ -21,7 +21,6 @@
 
 #include "trackbuttons.h"
 
-#include <qframe.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
@@ -52,7 +51,6 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
       m_lastID(-1),
       m_trackLabelWidth(trackLabelWidth)
 {
-    
     setFrameStyle(Plain);
 
     // Now draw the buttons and labels and meters
