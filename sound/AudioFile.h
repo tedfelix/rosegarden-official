@@ -52,13 +52,15 @@ public:
         AUDIO_WAV
     } AudioFileType;
 
-    AudioFile(const int &id, const string &name, const string &fileName);
+    AudioFile(const unsigned int &id,
+              const string &name,
+              const string &fileName);
     ~AudioFile();
 
     std::string getName() const { return m_name; }
-    int getID() const { return m_id; }
-    int getBitsPerSample() const { return m_bitsPerSample; }
-    int getSampleRate() const { return m_sampleRate; }
+    unsigned int getID() const { return m_id; }
+    unsigned int getBitsPerSample() const { return m_bitsPerSample; }
+    unsigned int getSampleRate() const { return m_sampleRate; }
     bool getStereo() const { return m_stereo; }
     
     AudioFileType getType() { return m_type; }
@@ -77,15 +79,15 @@ private:
     void parseHeader(const std::string &headerString);
     void parseBody();
 
-    int            m_id;
+    unsigned int   m_id;
     string         m_name;
-    int            m_bitsPerSample;
-    int            m_sampleRate;
-    int            m_bytesPerSecond;
-    int            m_bytesPerSample;
+    unsigned int   m_bitsPerSample;
+    unsigned int   m_sampleRate;
+    unsigned int   m_bytesPerSecond;
+    unsigned int   m_bytesPerSample;
     bool           m_stereo;
     AudioFileType  m_type;
-    int            m_fileSize;
+    unsigned int   m_fileSize;
 
 };
 

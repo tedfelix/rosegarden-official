@@ -30,7 +30,8 @@ using std::endl;
 namespace Rosegarden
 {
 
-AudioFile::AudioFile(const int &id, const string &name, const string &fileName):
+AudioFile::AudioFile(const unsigned int &id,
+                     const string &name, const string &fileName):
     SoundFile(fileName), m_id(id), m_name(name),
     m_bitsPerSample(0), m_sampleRate(0), m_bytesPerSecond(0),
     m_bytesPerSample(0), m_stereo(false), m_type(AUDIO_NOT_LOADED),
@@ -93,7 +94,7 @@ AudioFile::parseHeader(const std::string &hS)
     // (add on eight for RIFF id and length field and compare to 
     // real file size).
     //
-    int length = getLittleEndian(hS.substr(4,4)) + 8;
+    unsigned int length = getLittleEndian(hS.substr(4,4)) + 8;
 
     if (length != m_fileSize)
         throw(string("AudioFile::parseHeader - file " + m_fileName +
@@ -101,7 +102,7 @@ AudioFile::parseHeader(const std::string &hS)
 
     // Check the format length (always 0x10)
     //
-    int lengthOfFormat = getLittleEndian(hS.substr(16, 4));
+    unsigned int lengthOfFormat = getLittleEndian(hS.substr(16, 4));
 
     if (lengthOfFormat != 0x10)
         throw(string("AudioFile::parseHeader - format length incorrect"));
@@ -109,7 +110,7 @@ AudioFile::parseHeader(const std::string &hS)
 
     // Check this field is one
     //
-    int alwaysOne = getLittleEndian(hS.substr(20, 2));
+    unsigned int alwaysOne = getLittleEndian(hS.substr(20, 2));
     if (alwaysOne != 0x01)
         throw(string("AudioFile::parseHeader - always one byte isn't"));
 
@@ -117,7 +118,7 @@ AudioFile::parseHeader(const std::string &hS)
     // We seem to have a good looking .WAV file - extract the
     // sample information and populate this locally
     //
-    int channelNumbers =  getLittleEndian(hS.substr(22,2));
+    unsigned int channelNumbers =  getLittleEndian(hS.substr(22,2));
     
     switch(channelNumbers)
     {

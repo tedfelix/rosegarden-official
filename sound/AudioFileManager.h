@@ -1,0 +1,76 @@
+// -*- c-indentation-style:"stroustrup" c-basic-offset: 4 -*-
+/*
+  Rosegarden-4 v0.1
+  A sequencer and musical notation editor.
+
+  This program is Copyright 2000-2002
+  Guillaume Laurent   <glaurent@telegraph-road.org>,
+  Chris Cannam        <cannam@all-day-breakfast.com>,
+  Richard Bown        <bownie@bownie.com>
+
+  The moral right of the authors to claim authorship of this work
+  has been asserted.
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License as
+  published by the Free Software Foundation; either version 2 of the
+  License, or (at your option) any later version.  See the file
+  COPYING included with this distribution for more information.
+*/
+
+
+#ifndef _AUDIOFILEMANAGER_H_
+#define _AUDIOFILEMANAGER_H_
+
+#include "AudioFile.h"
+#include <string>
+#include <vector>
+
+// AudioFileManager loads and maps audio files to their
+// internal references (ids).  A point of contact for
+// AudioFile information - loading a Composition should
+// use this class to pick up the AudioFile references,
+// editing the AudioFiles in a Composition will be
+// made through this manager.
+//
+//
+//
+
+using std::cout;
+using std::cerr;
+using std::endl;
+
+namespace Rosegarden
+{
+
+class AudioFileManager
+{
+public:
+    AudioFileManager();
+    ~AudioFileManager();
+
+    // insert an audio file into the AudioFileManager and get the
+    // first allocated id for it.
+    // 
+    //
+    unsigned int addFile(const std::string &name, const std::string &fileName);
+
+    // And insert an AudioFile and specify an id
+    //
+    void addFile(const std::string &name, const std::string &fileName,
+                 const unsigned int &id);
+
+    // Remove a file from the AudioManager by id
+    //
+    void removeFile(const unsigned int &id);
+
+private:
+    unsigned int getFirstUnusedID();
+
+    vector<AudioFile*> m_audioFiles;
+
+};
+
+}
+
+#endif // _AUDIOFILEMANAGER_H_
