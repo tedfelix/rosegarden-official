@@ -458,6 +458,7 @@ protected:
     NotationStaff *getStaffForElement(NotationElement *elt);
 
     void drag(int x, int y, bool final);
+    void dragFine(int x, int y, bool final);
 
     //--------------- Data members ---------------------------------
 
@@ -466,6 +467,8 @@ protected:
 
     NotationStaff *m_selectedStaff;
     NotationElement *m_clickedElement;
+    bool m_clickedShift;
+    bool m_startedFineDrag;
 
     Rosegarden::EventSelection *m_selectionToMerge;
 

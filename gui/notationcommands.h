@@ -825,4 +825,41 @@ private:
     bool m_cautionary;
 };
 
+class IncrementDisplacementsCommand : public BasicSelectionCommand
+{
+public:
+    IncrementDisplacementsCommand(Rosegarden::EventSelection &selection,
+				  long dx, long dy) :
+	BasicSelectionCommand(getGlobalName(), selection, true),
+	m_selection(&selection),
+	m_dx(dx),
+	m_dy(dy) { }
+
+    static QString getGlobalName() { return i18n("Fine Reposition"); }
+
+protected:
+    virtual void modifySegment();
+
+private:
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    long m_dx;
+    long m_dy;
+};
+
+class ResetDisplacementsCommand : public BasicSelectionCommand
+{
+public:
+    ResetDisplacementsCommand(Rosegarden::EventSelection &selection) :
+	BasicSelectionCommand(getGlobalName(), selection, true),
+	m_selection(&selection) { }
+
+    static QString getGlobalName() { return i18n("Restore Computed Positions"); }
+
+protected:
+    virtual void modifySegment();
+
+private:
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+};
+
 #endif

@@ -41,6 +41,7 @@ static const FaderDescription faderTypes[] = {
     FaderDescription(-40.0,  +6.0, 0.75), // short
     FaderDescription(-70.0, +10.0, 0.80), // long
     FaderDescription(-70.0,   0.0, 1.00), // IEC268
+    FaderDescription(-70.0, +10.0, 0.80), // IEC268 long
 };
 
 float
@@ -108,7 +109,7 @@ AudioLevel::fader_to_dB(int level, int maxLevel, FaderType type)
 {
     if (level == 0) return DB_FLOOR;
 
-    if (type == IEC268Meter) {
+    if (type == IEC268Meter || type == IEC268LongMeter) {
 
 	float maxPercent = iec_dB_to_fader(faderTypes[type].maxDb);
 	float percent = float(level) * maxPercent / float(maxLevel);
@@ -145,12 +146,12 @@ AudioLevel::dB_to_fader(float dB, int maxLevel, FaderType type)
 {
     if (dB == DB_FLOOR) return 0;
 
-    if (type == IEC268Meter) {
+    if (type == IEC268Meter || type == IEC268LongMeter) {
 
 	// The IEC scale gives a "percentage travel" for a given dB
 	// level, but it reaches 100% at 0dB.  So we want to treat the
 	// result not as a percentage, but as a scale between 0 and
-	// whatever the "percentage" for our (>0dB) max dB is.
+	// whatever the "percentage" for our (possibly >0dB) max dB is.
 	
 	float maxPercent = iec_dB_to_fader(faderTypes[type].maxDb);
 	float percent = iec_dB_to_fader(dB);

@@ -346,6 +346,7 @@ protected:
 
     float                m_position;
     float                m_snapPosition;
+    float                m_initialPosition;
     bool                 m_buttonPressed;
     int                  m_lastY;
     int                  m_lastX;

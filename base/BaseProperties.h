@@ -67,6 +67,9 @@ extern const std::string TRIGGER_SEGMENT_ADJUST_SYNC_END;
 extern const PropertyName RECORDED_CHANNEL;
 extern const PropertyName RECORDED_PORT;
 
+extern const PropertyName DISPLACED_X;
+extern const PropertyName DISPLACED_Y;
+
 }
 
 }

@@ -313,7 +313,7 @@ AudioMixerWindow::populate()
 	rec.m_fader = new RosegardenFader
 	    (Rosegarden::AudioLevel::LongFader, 20, 240, m_mainBox);
 	rec.m_meter = new AudioVUMeter
-	    (m_mainBox, VUMeter::AudioPeakHoldLong, true, 20, 240);
+	    (m_mainBox, VUMeter::AudioPeakHoldIECLong, true, 20, 240);
 
 	QToolTip::add(rec.m_fader, i18n("Audio level"));
 	QToolTip::add(rec.m_meter, i18n("Audio level"));
@@ -462,7 +462,7 @@ AudioMixerWindow::populate()
 	rec.m_fader = new RosegardenFader
 	    (Rosegarden::AudioLevel::LongFader, 20, 240, m_mainBox);
 	rec.m_meter = new AudioVUMeter
-	    (m_mainBox, VUMeter::AudioPeakHoldLong, true, 20, 240);
+	    (m_mainBox, VUMeter::AudioPeakHoldIECLong, true, 20, 240);
 
 	QToolTip::add(rec.m_fader, i18n("Audio level"));
 	QToolTip::add(rec.m_meter, i18n("Audio level"));
@@ -516,7 +516,7 @@ AudioMixerWindow::populate()
 	rec.m_fader = new RosegardenFader
 	    (Rosegarden::AudioLevel::LongFader, 20, 240, m_mainBox);
 	rec.m_meter = new AudioVUMeter
-	    (m_mainBox, VUMeter::AudioPeakHoldLong, true, 20, 240);
+	    (m_mainBox, VUMeter::AudioPeakHoldIECLong, true, 20, 240);
 
 	QToolTip::add(rec.m_fader, i18n("Audio record level"));
 	QToolTip::add(rec.m_meter, i18n("Audio record level"));

@@ -41,6 +41,7 @@ public:
 	AudioPeakHoldShort, 
         AudioPeakHoldLong,
 	AudioPeakHoldIEC,
+	AudioPeakHoldIECLong,
         FixedHeightVisiblePeakHold
     } VUMeterType;
 

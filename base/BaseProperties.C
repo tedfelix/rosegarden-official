@@ -116,6 +116,9 @@ const std::string TRIGGER_SEGMENT_ADJUST_SYNC_END = "syncend";
 const PropertyName RECORDED_CHANNEL		 = "recordedchannel";
 const PropertyName RECORDED_PORT		 = "recordedport";
 
+const PropertyName DISPLACED_X                   = "displacedx";
+const PropertyName DISPLACED_Y                   = "displacedy";
+
 }
 
 }

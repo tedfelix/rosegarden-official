@@ -38,9 +38,10 @@ public:
     static const float DB_FLOOR;
 
     enum FaderType {
-	ShortFader = 0, // -40 -> +6  dB
-  	 LongFader = 1, // -70 -> +10 dB
-       IEC268Meter = 2  // -70 ->  0  dB
+	     ShortFader = 0, // -40 -> +6  dB
+              LongFader = 1, // -70 -> +10 dB
+            IEC268Meter = 2, // -70 ->  0  dB
+	IEC268LongMeter = 3  // -70 -> +10 dB (0dB aligns with LongFader)
     };
 
     static float multiplier_to_dB(float multiplier);

@@ -18,7 +18,6 @@
   <Action name="select_whole_staff"/>
   <Action name="clear_selection"/>
   <Action name="filter_selection"/>
-  <Separator/>
 </Menu>
 
 <Menu name="View">
@@ -157,7 +156,6 @@
 		<Action name="slashes_4"/>
 		<Action name="slashes_5"/>
 	</Menu>
-	<Separator/>
 </Menu>
 
 <Menu name="Adjust">

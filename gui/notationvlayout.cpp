@@ -116,6 +116,14 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
     for (i = from; i != to; ++i) {
 
         NotationElement *el = static_cast<NotationElement*>(*i);
+
+	// Displaced Y will only be used for elements that don't have
+	// a fixed meaningful Y coordinate (slurs etc), not for notes etc
+	long displacedY = 0;
+	el->event()->get<Int>(DISPLACED_Y, displacedY);
+	displacedY = displacedY * (staff.getLayoutYForHeight(2) -
+				   staff.getLayoutYForHeight(0)) / 1000;
+
         el->setLayoutY(0);
 
         if (el->isRest()) {
@@ -264,12 +272,12 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
 		if (type == Text::Dynamic ||
 		    type == Text::LocalDirection ||
 		    type == Text::UnspecifiedType) {
-		    el->setLayoutY(staff.getLayoutYForHeight(-7));
+		    el->setLayoutY(staff.getLayoutYForHeight(-7) + displacedY);
 		} else if (type == Text::Lyric ||
 			   type == Text::Annotation) {
-		    el->setLayoutY(staff.getLayoutYForHeight(-13));
+		    el->setLayoutY(staff.getLayoutYForHeight(-13) + displacedY);
 		} else {
-		    el->setLayoutY(staff.getLayoutYForHeight(22));
+		    el->setLayoutY(staff.getLayoutYForHeight(22) + displacedY);
 		}
 
             } else if (el->event()->isa(Indication::EventType)) {
@@ -284,9 +292,9 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
 
 		if (indicationType == Indication::OttavaUp ||
 		    indicationType == Indication::QuindicesimaUp) {
-		    el->setLayoutY(staff.getLayoutYForHeight(15));
+		    el->setLayoutY(staff.getLayoutYForHeight(15) + displacedY);
 		} else {
-		    el->setLayoutY(staff.getLayoutYForHeight(-9));
+		    el->setLayoutY(staff.getLayoutYForHeight(-9) + displacedY);
 		}
 	    }
         }
@@ -552,7 +560,16 @@ NotationVLayout::positionSlur(NotationStaff &staff,
     (*i)->event()->setMaybe<Bool>(NotationProperties::SLUR_ABOVE, above);
     (*i)->event()->setMaybe<Int>(m_properties.SLUR_Y_DELTA, dy);
     (*i)->event()->setMaybe<Int>(m_properties.SLUR_LENGTH, length);
-    (*i)->setLayoutX(startX);
-    (*i)->setLayoutY(y0);
+
+    long displacedX = 0, displacedY = 0;
+    (*i)->event()->get<Int>(DISPLACED_X, displacedX);
+    (*i)->event()->get<Int>(DISPLACED_Y, displacedY);
+    displacedX = displacedX * (staff.getLayoutYForHeight(2) -
+			       staff.getLayoutYForHeight(0)) / 1000;
+    displacedY = displacedY * (staff.getLayoutYForHeight(2) -
+			       staff.getLayoutYForHeight(0)) / 1000;
+
+    (*i)->setLayoutX(startX + displacedX);
+    (*i)->setLayoutY(y0 + displacedY);
 }
 

@@ -1117,7 +1117,10 @@ void NotationSelector::handleLeftButtonPress(Rosegarden::timeT t,
     delete m_selectionToMerge;
     const EventSelection *selectionToMerge = 0;
     if (e->state() & ShiftButton) {
+	m_clickedShift = true;
 	selectionToMerge = m_nParentView->getCurrentSelection();
+    } else {
+	m_clickedShift = false;
     }
     m_selectionToMerge =
 	(selectionToMerge ? new EventSelection(*selectionToMerge) : 0);
@@ -1137,6 +1140,7 @@ void NotationSelector::handleLeftButtonPress(Rosegarden::timeT t,
 
     m_selectionRect->show();
     m_updateRect = true;
+    m_startedFineDrag = false;
 
     //m_parentView->setCursorPosition(p.x());
 }
@@ -1231,7 +1235,9 @@ int NotationSelector::handleMouseMove(timeT, int,
 
     if (m_clickedElement && !m_clickedElement->isRest()) {
 
-	if (w > 3 || w < -3 || h > 3 || h < -3) {
+	if (m_clickedShift) {
+	    dragFine(e->x(), e->y(), false);
+	} else if (w > 3 || w < -3 || h > 3 || h < -3) {
 	    drag(e->x(), e->y(), false);
 	}
 
@@ -1305,7 +1311,11 @@ void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)
     } else {
 
 	if (m_clickedElement && !m_clickedElement->isRest()) {
-	    drag(e->x(), e->y(), true);
+	    if (m_clickedShift) {
+		dragFine(e->x(), e->y(), true);
+	    } else {
+		drag(e->x(), e->y(), true);
+	    }
 	} else {
 	    setViewCurrentSelection(false);
 	}
@@ -1483,6 +1493,96 @@ void NotationSelector::drag(int x, int y, bool final)
 	}
     }
 }
+
+void NotationSelector::dragFine(int x, int y, bool final)
+{
+    NOTATION_DEBUG << "NotationSelector::drag " << x << ", " << y << endl;
+
+    if (!m_clickedElement || !m_selectedStaff) return;
+
+    EventSelection *selection = m_nParentView->getCurrentSelection();
+    if (!selection) selection = new EventSelection(m_selectedStaff->getSegment());
+    if (!selection->contains(m_clickedElement->event()))
+	 selection->addEvent(m_clickedElement->event());
+    m_nParentView->setCurrentSelection(selection);
+
+    // Fine drag modifies the DISPLACED_X and DISPLACED_Y properties on
+    // each event.  The modifications have to be relative to the previous
+    // values of these properties, not to zero, so for each event we need
+    // to store the previous value at the time the drag starts.
+
+    static Rosegarden::PropertyName xProperty("temporary-displaced-x");
+    static Rosegarden::PropertyName yProperty("temporary-displaced-y");
+
+    if (!m_startedFineDrag) {
+	// back up original properties
+
+	for (EventSelection::eventcontainer::iterator i =
+		selection->getSegmentEvents().begin();
+	     i != selection->getSegmentEvents().end(); ++i) {
+	    long prevX = 0, prevY = 0;
+	    (*i)->get<Int>(DISPLACED_X, prevX);
+	    (*i)->get<Int>(DISPLACED_Y, prevY);
+	    (*i)->setMaybe<Int>(xProperty, prevX);
+	    (*i)->setMaybe<Int>(yProperty, prevY);
+	}
+
+	m_startedFineDrag = true;
+    }
+
+    // We want the displacements in 1/1000ths of a staff space
+
+    double dx = x - m_selectionRect->x();
+    double dy = y - m_selectionRect->y();
+
+    double lineSpacing = m_nParentView->getNotePixmapFactory()->getLineSpacing();
+    dx = (1000.0 * dx) / lineSpacing;
+    dy = (1000.0 * dy) / lineSpacing;
+
+    if (final) {
+
+	// reset original values (and remove backup values) before
+	// applying command
+
+	for (EventSelection::eventcontainer::iterator i =
+		 selection->getSegmentEvents().begin();
+	     i != selection->getSegmentEvents().end(); ++i) {
+	    long prevX = 0, prevY = 0;
+	    (*i)->get<Int>(xProperty, prevX);
+	    (*i)->get<Int>(yProperty, prevY);
+	    (*i)->set<Int>(DISPLACED_X, prevX);
+	    (*i)->set<Int>(DISPLACED_Y, prevY);
+	    (*i)->unset(xProperty);
+	    (*i)->unset(yProperty);
+	}
+
+	IncrementDisplacementsCommand *command = new IncrementDisplacementsCommand
+	    (*selection, dx, dy);
+	m_nParentView->addCommandToHistory(command);
+
+    } else {
+
+	Rosegarden::timeT startTime = 0, endTime = 0;
+
+	for (EventSelection::eventcontainer::iterator i =
+		 selection->getSegmentEvents().begin();
+	     i != selection->getSegmentEvents().end(); ++i) {
+	    long prevX = 0, prevY = 0;
+	    (*i)->get<Int>(xProperty, prevX);
+	    (*i)->get<Int>(yProperty, prevY);
+	    (*i)->set<Int>(DISPLACED_X, prevX + long(dx));
+	    (*i)->set<Int>(DISPLACED_Y, prevY + long(dy));
+	    if (i == selection->getSegmentEvents().begin()) {
+		startTime = (*i)->getAbsoluteTime();
+	    }
+	    endTime = (*i)->getAbsoluteTime() + (*i)->getDuration();
+	}
+	
+	selection->getSegment().updateRefreshStatuses(startTime, endTime);
+	m_nParentView->update();
+    }
+}
+
 
 void NotationSelector::ready()
 {

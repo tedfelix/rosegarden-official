@@ -385,6 +385,7 @@ RosegardenRotary::RosegardenRotary(QWidget *parent,
     m_centred(centred),
     m_position(initialPosition),
     m_snapPosition(m_position),
+    m_initialPosition(initialPosition),
     m_buttonPressed(false),
     m_lastY(0),
     m_lastX(0),
@@ -680,13 +681,19 @@ RosegardenRotary::mousePressEvent(QMouseEvent *e)
         m_lastX = e->x();
         //_float->setText(QString("%1").arg(m_snapPosition));
     }
+    else if (e->button() == MidButton) // reset to default
+    {
+        m_position = m_initialPosition;
+	snapPosition();
+	update();
+        emit valueChanged(m_snapPosition);
+    }
     else if (e->button() == RightButton) // reset to centre position
     {
         m_position = (m_maxValue + m_minValue) / 2.0;
 	snapPosition();
 	update();
         emit valueChanged(m_snapPosition);
-
     }
 
     QPoint totalPos = mapTo(topLevelWidget(), QPoint(0, 0));
@@ -697,7 +704,7 @@ RosegardenRotary::mousePressEvent(QMouseEvent *e)
     _float->setText(QString("%1").arg(m_position));
     _float->show();
 
-    if (e->button() == RightButton)
+    if (e->button() == RightButton || e->button() == MidButton)
     {
         // one shot, 500ms
         _floatTimer->start(500, true);

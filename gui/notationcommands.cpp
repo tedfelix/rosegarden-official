@@ -1924,4 +1924,35 @@ MakeAccidentalsCautionaryCommand::modifySegment()
 }
 
 
+void
+IncrementDisplacementsCommand::modifySegment()
+{
+    EventSelection::eventcontainer::iterator i;
+
+    for (i  = m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
+
+	long prevX = 0, prevY = 0;
+	(*i)->get<Int>(DISPLACED_X, prevX);
+	(*i)->get<Int>(DISPLACED_Y, prevY);
+	(*i)->set<Int>(DISPLACED_X, prevX + long(m_dx));
+	(*i)->set<Int>(DISPLACED_Y, prevY + long(m_dy));
+    }
+}
+
+
+void
+ResetDisplacementsCommand::modifySegment()
+{
+    EventSelection::eventcontainer::iterator i;
+
+    for (i  = m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
+
+	(*i)->set<Int>(DISPLACED_X, 0);
+	(*i)->set<Int>(DISPLACED_Y, 0);
+    }
+}
+
+
 		

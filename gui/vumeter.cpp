@@ -64,6 +64,7 @@ VUMeter::VUMeter(QWidget *parent,
         case AudioPeakHoldShort:
         case AudioPeakHoldLong:
         case AudioPeakHoldIEC:
+        case AudioPeakHoldIECLong:
         case FixedHeightVisiblePeakHold:
             m_showPeakLevel = true;
             break;
@@ -129,6 +130,11 @@ VUMeter::VUMeter(QWidget *parent,
 	orange = AudioLevel::dB_to_fader(  -6.0, max, AudioLevel::IEC268Meter);
 	green  = AudioLevel::dB_to_fader( -10.0, max, AudioLevel::IEC268Meter);
 	m_background = QColor(50, 50, 50);
+    } else if (m_type == AudioPeakHoldIECLong) {
+	red    = AudioLevel::dB_to_fader(   0.0, max, AudioLevel::IEC268LongMeter);
+	orange = AudioLevel::dB_to_fader(  -6.0, max, AudioLevel::IEC268LongMeter);
+	green  = AudioLevel::dB_to_fader( -10.0, max, AudioLevel::IEC268LongMeter);
+	m_background = QColor(50, 50, 50);
     } else {
 	red    = max * 92 / 100;
 	orange = max * 60 / 100;
@@ -138,7 +144,8 @@ VUMeter::VUMeter(QWidget *parent,
 
     if (m_type == AudioPeakHoldLong ||
 	m_type == AudioPeakHoldShort ||
-	m_type == AudioPeakHoldIEC) {
+	m_type == AudioPeakHoldIEC ||
+	m_type == AudioPeakHoldIECLong) {
 	m_velocityColour =
 	    new VelocityColour(RosegardenGUIColours::LevelMeterSolidRed,
 			       RosegardenGUIColours::LevelMeterSolidOrange,
@@ -187,6 +194,13 @@ VUMeter::setLevel(double leftLevel, double rightLevel)
 	    (leftLevel, m_maxLevel, AudioLevel::IEC268Meter);
 	m_levelRight = AudioLevel::dB_to_fader
 	    (rightLevel, m_maxLevel, AudioLevel::IEC268Meter);
+	break;
+
+    case AudioPeakHoldIECLong:
+	m_levelLeft = AudioLevel::dB_to_fader
+	    (leftLevel, m_maxLevel, AudioLevel::IEC268LongMeter);
+	m_levelRight = AudioLevel::dB_to_fader
+	    (rightLevel, m_maxLevel, AudioLevel::IEC268LongMeter);
 	break;
 
     default:
@@ -254,7 +268,8 @@ VUMeter::paintEvent(QPaintEvent*)
 
     if (m_type == VUMeter::AudioPeakHoldShort ||
 	m_type == VUMeter::AudioPeakHoldLong ||
-	m_type == VUMeter::AudioPeakHoldIEC)
+	m_type == VUMeter::AudioPeakHoldIEC ||
+	m_type == VUMeter::AudioPeakHoldIECLong)
     {
 	paint.setPen(m_background);
 	paint.setBrush(m_background);
@@ -308,7 +323,8 @@ VUMeter::drawColouredBar(QPainter *paint, int channel,
 {
     if (m_type == AudioPeakHoldLong ||
 	m_type == AudioPeakHoldShort ||
-	m_type == AudioPeakHoldIEC) {
+	m_type == AudioPeakHoldIEC ||
+	m_type == AudioPeakHoldIECLong) {
 
 	Qt::BrushStyle style = Qt::SolidPattern;
 
