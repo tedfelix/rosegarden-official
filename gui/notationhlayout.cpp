@@ -65,7 +65,7 @@ NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf,
 				 Quantizer *legatoQuantizer,
 				 const NotationProperties &properties,
                                  QObject* parent, const char* name) :
-    QObject(parent, name),
+    ProgressReporter(parent, name),
     Rosegarden::HorizontalLayoutEngine<NotationElement>(c),
     m_totalWidth(0.),
     m_pageMode(false),

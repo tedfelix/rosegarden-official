@@ -57,7 +57,7 @@ NotationVLayout::NotationVLayout(Rosegarden::Composition *c,
 				 Rosegarden::Quantizer *legatoQuantizer,
 				 const NotationProperties &properties,
                                  QObject* parent, const char* name) :
-    QObject(parent, name),
+    ProgressReporter(parent, name),
     m_composition(c),
     m_legatoQuantizer(legatoQuantizer),
     m_properties(properties)

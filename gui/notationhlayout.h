@@ -24,10 +24,9 @@
 
 #include <vector>
 
-#include <qobject.h>
-
 #include "notationelement.h"
 #include "notepixmapfactory.h"
+#include "progressreporter.h"
 
 #include "Staff.h"
 #include "LayoutEngine.h"
@@ -45,11 +44,9 @@ namespace Rosegarden { class Progress; }
  * computes the X coordinates of notation elements
  */
 
-class NotationHLayout : public QObject,
+class NotationHLayout : public ProgressReporter,
                         public Rosegarden::HorizontalLayoutEngine<NotationElement>
 {
-    Q_OBJECT
-
 public:
     NotationHLayout(Rosegarden::Composition *c, NotePixmapFactory *npf,
 		    Rosegarden::Quantizer *legatoQuantizer,
@@ -188,10 +185,6 @@ public:
     void setStaffCount(int staffCount) {
 	m_staffCount = staffCount;
     }
-
-signals:
-    /// Report progress
-    void progress(int);
 
 protected:
     class AccidentalTable

@@ -22,7 +22,7 @@
 #ifndef NOTATIONVLAYOUT_H
 #define NOTATIONVLAYOUT_H
 
-#include <qobject.h>
+#include "progressreporter.h"
 
 #include "LayoutEngine.h"
 #include "Staff.h"
@@ -38,11 +38,9 @@ class NotationProperties;
  * computes the Y coordinate of notation elements
  */
 
-class NotationVLayout : public QObject,
+class NotationVLayout : public ProgressReporter,
                         public Rosegarden::VerticalLayoutEngine<NotationElement>
 {
-    Q_OBJECT
-
 public:
     NotationVLayout(Rosegarden::Composition *c,
 		    Rosegarden::Quantizer *legatoQuantizer,
@@ -78,10 +76,6 @@ public:
      */
     virtual void finishLayout(Rosegarden::timeT = 0,
 			      Rosegarden::timeT = 0);
-
-signals:
-    /// Report progress
-    void progress(int);
 
 private:
 
