@@ -37,7 +37,7 @@ using std::cerr;
 using std::endl;
 using std::string;
 
-//#define DEBUG_NORMALIZE_RESTS 1    
+#define DEBUG_NORMALIZE_RESTS 1    
 
 static int _runtimeSegmentId = 0;
 
@@ -587,7 +587,7 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 #ifdef DEBUG_NORMALIZE_RESTS
 	cerr << "normalizeRests: empty segment" << endl;
 #endif
-	fillWithRests(endTime);
+	fillWithRests(startTime, endTime);
 	return;
     } else {
 	if (startTime > (*ia)->getNotationAbsoluteTime()) {
