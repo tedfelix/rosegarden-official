@@ -22,15 +22,14 @@
 #define _AUDIO_PLUGIN_OSC_GUI_H_
 
 #include "config.h"
+#include <qobject.h>
 
-// The configure check for DSSI also tests for liblo.
-#ifdef HAVE_DSSI
+#ifdef HAVE_LIBLO
 
 #include <lo/lo.h>
 #include <string>
 #include <vector>
 #include <map>
-#include <qobject.h>
 #include "RingBuffer.h"
 
 namespace Rosegarden {
@@ -66,25 +65,25 @@ private:
 };
 
 
-class AudioPluginOSCGUIManager : public QObject
-{
-    Q_OBJECT
+class TimerCallbackAssistant;
 
+class AudioPluginOSCGUIManager
+{
 public:
     AudioPluginOSCGUIManager();
     virtual ~AudioPluginOSCGUIManager();
 
     void postMessage(OSCMessage *message); // I take over ownership of message
+    void dispatch();
 
-protected slots:
-    void slotDispatch();
+    static void timerCallback(void *data);
 
 protected:
     lo_server_thread m_serverThread;
     Rosegarden::RingBuffer<OSCMessage *> m_oscBuffer;
     typedef std::map<int, AudioPluginOSCGUI *> TargetGUIMap;
     TargetGUIMap m_guis;
-    QTimer *m_dispatchTimer;
+    TimerCallbackAssistant *m_dispatchTimer;
 };
 
 
@@ -104,6 +103,22 @@ protected:
 };
     
 
-#endif
+#endif // HAVE_LIBLO
+
+class TimerCallbackAssistant : public QObject
+{
+    Q_OBJECT
+
+public:
+    TimerCallbackAssistant(int ms, void (*callback)(void *data), void *data);
+    virtual ~TimerCallbackAssistant();
+
+protected slots:
+    void slotCallback();
+    
+private:
+    void (*m_callback)(void *);
+    void *m_data;
+};
 
 #endif

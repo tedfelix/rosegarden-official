@@ -19,8 +19,9 @@
 */
 
 #include "audiopluginoscgui.h"
+#include <qtimer.h>
 
-#ifdef HAVE_DSSI
+#ifdef HAVE_LIBLO
 
 #include <lo/lo.h>
 #include <iostream>
@@ -34,7 +35,6 @@
 #include <kprocess.h>
 #include <qdir.h>
 #include <qfileinfo.h>
-#include <qtimer.h>
 
 
 OSCMessage::~OSCMessage()
@@ -145,13 +145,13 @@ AudioPluginOSCGUIManager::AudioPluginOSCGUIManager() :
 
     lo_server_thread_start(m_serverThread);
 
-    m_dispatchTimer = new QTimer(this);
-    connect(m_dispatchTimer, SIGNAL(timeout()), this, SLOT(slotDispatch()));
-    m_dispatchTimer->start(20, FALSE);
+    m_dispatchTimer = new TimerCallbackAssistant(20, timerCallback, this);
 }
 
 AudioPluginOSCGUIManager::~AudioPluginOSCGUIManager()
 {
+    delete m_dispatchTimer;
+
     //!!! kill all plugin guis?
     //!!! arse -- there is no lo_server_thread_terminate
 }
@@ -164,7 +164,14 @@ AudioPluginOSCGUIManager::postMessage(OSCMessage *message)
 }
 
 void
-AudioPluginOSCGUIManager::slotDispatch()
+AudioPluginOSCGUIManager::timerCallback(void *data)
+{
+    AudioPluginOSCGUIManager *manager = (AudioPluginOSCGUIManager *)data;
+    manager->dispatch();
+}
+
+void
+AudioPluginOSCGUIManager::dispatch()
 {
     while (m_oscBuffer.getReadSpace() > 0) {
 
@@ -251,3 +258,26 @@ AudioPluginOSCGUI::acceptFromGUI(OSCMessage *message)
 
 
 #endif
+
+TimerCallbackAssistant::TimerCallbackAssistant(int ms, void (*callback)(void *data),
+					       void *data) :
+    m_callback(callback),
+    m_data(data)
+{
+    QTimer *timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(slotCallback()));
+    timer->start(ms, FALSE);
+}
+
+TimerCallbackAssistant::~TimerCallbackAssistant()
+{
+    // nothing -- the QTimer is deleted automatically by its parent QObject (me)
+}
+
+void
+TimerCallbackAssistant::slotCallback()
+{
+    m_callback(m_data);
+}
+
+

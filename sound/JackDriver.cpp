@@ -1795,12 +1795,14 @@ QStringList
 JackDriver::getPluginInstancePrograms(InstrumentId id, int position)
 {
     if (m_instrumentMixer) return m_instrumentMixer->getPluginPrograms(id, position);
+    return QStringList();
 }
 
 QString
 JackDriver::getPluginInstanceProgram(InstrumentId id, int position)
 {
     if (m_instrumentMixer) return m_instrumentMixer->getPluginProgram(id, position);
+    return QString();
 }
 
 void 

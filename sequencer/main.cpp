@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
 
     // Parse cmd line args
     //
-    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+    /*KCmdLineArgs *args =*/ KCmdLineArgs::parsedArgs();
     KApplication app;
 
     if (app.isRestored())
