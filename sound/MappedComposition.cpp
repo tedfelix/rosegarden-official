@@ -179,10 +179,7 @@ void
 MappedComposition::moveStartTime(const Rosegarden::RealTime &mT)
 {
     for (it = this->begin(); it != this->end(); it++)
-    {
         (*it)->setAbsoluteTime((*it)->getAbsoluteTime() + mT);
-        cout << "NEW ST = " << (*it)->getAbsoluteTime() << endl;
-    }
 
     m_startTime = m_startTime + mT;
     m_endTime = m_endTime + mT;

@@ -234,14 +234,6 @@ RosegardenSequencerApp::startPlaying()
         delete mappedComp;
     }
 
-    // Adjust for looping
-    //
-    if (isLooping() && m_lastFetchSongPosition > m_loopEnd)
-    {
-        m_lastFetchSongPosition =
-            m_lastFetchSongPosition - (m_loopEnd - m_loopStart);
-    }
-
     return true;
 }
 
@@ -267,14 +259,6 @@ RosegardenSequencerApp::keepPlaying()
         }
 
         m_lastFetchSongPosition = m_lastFetchSongPosition + m_readAhead;
-
-        // Adjust for looping
-        //
-        if (isLooping() && m_lastFetchSongPosition > m_loopEnd)
-        {
-            m_lastFetchSongPosition =
-                m_lastFetchSongPosition - (m_loopEnd - m_loopStart);
-        }
     }
 
     return true;
@@ -307,8 +291,8 @@ RosegardenSequencerApp::updateClocks()
         //
         m_sequencer->resetPlayback(m_loopStart, m_playLatency);
 
-        //cout << "SONG POSITION = " << m_songPosition << endl;
-        //cout << "LAST FETCH = " << m_lastFetchSongPosition << endl;
+        m_lastFetchSongPosition =
+                m_lastFetchSongPosition - (m_loopEnd - m_loopStart);
     }
     else
     {
@@ -376,14 +360,11 @@ RosegardenSequencerApp::jumpTo(const long &posSec, const long &posUsec)
     if (posSec < 0 && posUsec < 0)
         return;
 
-    stop();
-    play(Rosegarden::RealTime(posSec, posUsec), m_playLatency, m_fetchLatency);
+    m_songPosition = m_lastFetchSongPosition =
+            Rosegarden::RealTime(posSec, posUsec);
 
-/* - still doesn't work!
-    m_sequencer->resetPlayback(Rosegarden::RealTime(posSec, posUsec),
+    m_sequencer->resetPlayback(m_songPosition,
                                m_playLatency);
-*/
-  
     return;
 }
 
