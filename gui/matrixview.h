@@ -31,6 +31,7 @@
 #include "RulerScale.h"
 #include "SnapGrid.h"
 #include "Quantizer.h"
+#include "MappedInstrument.h"
 
 #include "editview.h"
 #include "matrixcanvasview.h"
@@ -130,10 +131,11 @@ signals:
      */
     void usedSelection();
 
-    // Play a pressed key 
-    //
-    void keyPressed(Rosegarden::MappedEvent*);
-
+    /*
+     * We're modified the Instrument so inform anyone else
+     *
+     */
+    void sendMappedInstrument(const Rosegarden::MappedInstrument &mI);
 
 public slots:
 

@@ -481,8 +481,6 @@ signals:
      */
     void usedSelection();
 
-    void notePlayed(Rosegarden::MappedEvent *);
-
     void changeTempo(Rosegarden::timeT,  // tempo change time
                      double,             // tempo value
                      TempoDialog::TempoDialogAction); // tempo action

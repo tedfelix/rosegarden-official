@@ -22,6 +22,7 @@
 #include "widgets.h"
 #include "Quantizer.h"
 #include "Selection.h"
+#include "MappedInstrument.h"
 
 #include <vector>
 
@@ -34,7 +35,11 @@
 class RosegardenComboBox;
 class InstrumentParameterBox;
 
-namespace Rosegarden { class Instrument; }
+namespace Rosegarden
+{
+    class Instrument;
+    class MappedEvent;
+}
 
 class MatrixParameterBox : public QFrame
 {
@@ -56,10 +61,12 @@ public slots:
     void slotQuantizeSelected(int);
     void slotSetSnap(int);
 
-
 signals:
     void quantizeSelection(Rosegarden::Quantizer);
     void modifySnapTime(Rosegarden::timeT);
+
+    void sendMappedEvent(Rosegarden::MappedEvent *mE);
+    void sendMappedInstrument(const Rosegarden::MappedInstrument &mI);
 
 protected:
 

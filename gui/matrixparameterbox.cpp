@@ -34,6 +34,7 @@
 #include "rosestrings.h"
 #include "Quantizer.h"
 #include "Selection.h"
+#include "MappedEvent.h"
 
 
 using std::cout;
@@ -181,6 +182,14 @@ MatrixParameterBox::initBox()
 
     m_instrumentParameterBox = new InstrumentParameterBox(this);
 
+    connect(m_instrumentParameterBox,
+            SIGNAL(sendMappedEvent(Rosegarden::MappedEvent*)),
+            SIGNAL(sendMappedEvent(Rosegarden::MappedEvent*)));
+
+    connect(m_instrumentParameterBox,
+            SIGNAL(sendMappedInstrument(const Rosegarden::MappedInstrument&)),
+            SIGNAL(sendMappedInstrument(const Rosegarden::MappedInstrument&)));
+
     // Insert everything
     gridLayout->addMultiCellWidget(m_instrumentParameterBox, 0, 7, 0, 2);
     gridLayout->addWidget(quantizeLabel, 10, 0, AlignLeft|AlignTop);
@@ -213,7 +222,7 @@ MatrixParameterBox::slotQuantizeSelected(int q)
 
     // if we're the last value then we're Off
     //
-    if (q == m_quantizations.size())
+    if ((unsigned int)(q) == m_quantizations.size())
         unit = 0;
 
     emit quantizeSelection(Quantizer(Quantizer::RawEventData,

@@ -46,6 +46,13 @@ public:
 
     void useInstrument(Rosegarden::Instrument *instrument);
 
+    // To update all InstrumentParamterBoxen for an Instrument.
+    //
+    void updateAllBoxes();
+
+    Rosegarden::Instrument* getSelectedInstrument()
+        { return m_selectedInstrument; }
+
 public slots:
     void slotSelectProgram(int index);
     void slotSelectPan(int index);
@@ -65,10 +72,13 @@ signals:
     // real time during playback.
     //
     void sendMappedEvent(Rosegarden::MappedEvent *mE);
-    void sendMappedInstrument(const Rosegarden::MappedInstrument &mI);
     void changeInstrumentLabel(Rosegarden::InstrumentId id, QString label);
 
+    // can only send this from a method
+    void sendMappedInstrument(const Rosegarden::MappedInstrument &mI);
+
 protected:
+
     void populateProgramList();
     void initBox();
 
@@ -95,6 +105,10 @@ protected:
     Rosegarden::Instrument *m_selectedInstrument;
 
 };
+
+// Global references
+//
+static std::vector<InstrumentParameterBox*> instrumentParamBoxes;
 
 
 #endif // _INSTRUMENTPARAMETERBOX_H_

@@ -1500,7 +1500,7 @@ void NotationView::playNote(Rosegarden::Segment &s, int pitch)
                                     Rosegarden::RealTime(0, 500000),
                                     Rosegarden::RealTime(0, 0));
 
-    emit notePlayed(mE);
+    emit sendMappedEvent(mE);
 }
 
 void NotationView::showPreviewNote(int staffNo, double layoutX,

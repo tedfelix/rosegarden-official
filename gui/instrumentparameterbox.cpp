@@ -58,10 +58,34 @@ InstrumentParameterBox::InstrumentParameterBox(QWidget *parent)
       m_selectedInstrument(0)
 {
     initBox();
+
+    bool contains = false;
+
+    std::vector<InstrumentParameterBox*>::iterator it =
+        instrumentParamBoxes.begin();
+
+    for (; it != instrumentParamBoxes.end(); it++)
+        if ((*it) == this)
+            contains = true;
+
+    if (!contains)
+        instrumentParamBoxes.push_back(this);
 }
 
 InstrumentParameterBox::~InstrumentParameterBox()
 {
+    // deregister this paramter box
+    std::vector<InstrumentParameterBox*>::iterator it =
+        instrumentParamBoxes.begin();
+
+    for (; it != instrumentParamBoxes.end(); it++)
+    {
+        if ((*it) == this)
+        {
+            instrumentParamBoxes.erase(it);
+            break;
+        }
+    }
 }
 
 void
@@ -344,6 +368,7 @@ InstrumentParameterBox::slotActivateProgramChange(bool value)
     if (m_selectedInstrument == 0)
     {
         m_programCheckBox->setChecked(false);
+        updateAllBoxes();
         return;
     }
 
@@ -361,12 +386,14 @@ InstrumentParameterBox::slotActivateProgramChange(bool value)
         // Send the controller change
         //
         emit sendMappedEvent(mE);
+        updateAllBoxes();
     }
     catch(...) {;}
 
     emit changeInstrumentLabel(m_selectedInstrument->getId(),
 			       strtoqstr(m_selectedInstrument->
 					 getProgramName()));
+    updateAllBoxes();
 }
 
 void
@@ -375,12 +402,15 @@ InstrumentParameterBox::slotActivateVelocity(bool value)
     if (m_selectedInstrument == 0)
     {
         m_velocityCheckBox->setChecked(false);
+        updateAllBoxes();
         return;
     }
 
     m_selectedInstrument->setSendVelocity(value);
     m_velocityValue->setDisabled(!value);
     m_velocityValue->setCurrentItem(m_selectedInstrument->getVelocity());
+
+    updateAllBoxes();
 }
 
 void
@@ -389,13 +419,15 @@ InstrumentParameterBox::slotActivatePan(bool value)
     if (m_selectedInstrument == 0)
     {
         m_panCheckBox->setChecked(false);
+        updateAllBoxes();
         return;
     }
 
     m_selectedInstrument->setSendPan(value);
     m_panValue->setDisabled(!value);
-
     m_panValue->setCurrentItem(m_selectedInstrument->getPan());
+
+    updateAllBoxes();
 }
 
 void
@@ -404,6 +436,7 @@ InstrumentParameterBox::slotActivateBank(bool value)
     if (m_selectedInstrument == 0)
     {
         m_bankCheckBox->setChecked(false);
+        updateAllBoxes();
         return;
     }
 
@@ -413,6 +446,7 @@ InstrumentParameterBox::slotActivateBank(bool value)
     emit changeInstrumentLabel(m_selectedInstrument->getId(),
 			       strtoqstr(m_selectedInstrument->
 					 getProgramName()));
+    updateAllBoxes();
 }
 
 
@@ -444,7 +478,7 @@ InstrumentParameterBox::slotSelectProgram(int index)
     emit changeInstrumentLabel(m_selectedInstrument->getId(),
 			       strtoqstr(m_selectedInstrument->
 					 getProgramName()));
-
+    updateAllBoxes();
 }
 
 
@@ -468,6 +502,8 @@ InstrumentParameterBox::slotSelectPan(int index)
         emit sendMappedEvent(mE);
     }
     catch(...) {;}
+
+    updateAllBoxes();
 }
 
 void
@@ -477,6 +513,7 @@ InstrumentParameterBox::slotSelectVelocity(int index)
         return;
 
     m_selectedInstrument->setVelocity(index);
+    updateAllBoxes();
 }
 
 void
@@ -518,6 +555,7 @@ InstrumentParameterBox::slotSelectBank(int index)
 
     // also need to resend Program change to activate new program
     slotSelectProgram(m_selectedInstrument->getProgramChange());
+    updateAllBoxes();
 }
 
 void
@@ -528,8 +566,10 @@ InstrumentParameterBox::slotSelectChannel(int index)
 
     m_selectedInstrument->setMidiChannel(index);
 
-
-    emit sendMappedInstrument(Rosegarden::MappedInstrument(m_selectedInstrument));
+    // don't use the emit - use this method instead
+    emit sendMappedInstrument(
+            Rosegarden::MappedInstrument(m_selectedInstrument));
+    updateAllBoxes();
 }
 
 
@@ -568,8 +608,21 @@ InstrumentParameterBox::populateProgramList()
 
     m_programValue->setCurrentItem(
             (int)m_selectedInstrument->getProgramChange());
-
 }
 
+void
+InstrumentParameterBox::updateAllBoxes()
+{
+    std::vector<InstrumentParameterBox*>::iterator it =
+        instrumentParamBoxes.begin();
+
+    for (; it != instrumentParamBoxes.end(); it++)
+    {
+        if ((*it) != this && m_selectedInstrument &&
+            (*it)->getSelectedInstrument() == m_selectedInstrument)
+            (*it)->useInstrument(m_selectedInstrument);
+    }
+
+}
 
 

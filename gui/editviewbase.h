@@ -30,7 +30,7 @@
 
 #include "Event.h" // for timeT -- can't predeclare a typedef
 
-namespace Rosegarden { class Segment; }
+namespace Rosegarden { class Segment; class MappedEvent; }
 
 class QVBox;
 class QGridLayout;
@@ -186,6 +186,12 @@ public slots:
      * need to change state
      */
     virtual void slotTestClipboard();
+
+signals:
+    /*
+     * We want to play a note at the sequencer
+     */
+    void sendMappedEvent(Rosegarden::MappedEvent *mE);
 
 protected:
 

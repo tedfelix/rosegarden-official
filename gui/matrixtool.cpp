@@ -499,7 +499,7 @@ void MatrixSelector::handleLeftButtonPress(Rosegarden::timeT time,
 
         // Clear existing selection if we're not merging
         //
-        if (m_selectionToMerge)
+        if (!m_selectionToMerge)
         {
             m_mParentView->setCurrentSelection(0, false);
             m_mParentView->canvas()->update();

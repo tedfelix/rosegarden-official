@@ -142,6 +142,13 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
             this,
             SLOT(slotSetSnap(Rosegarden::timeT)));
 
+    connect(m_parameterBox,
+            SIGNAL(sendMappedEvent(Rosegarden::MappedEvent *)),
+            SIGNAL(sendMappedEvent(Rosegarden::MappedEvent *)));
+
+    connect(m_parameterBox,
+            SIGNAL(sendMappedInstrument(const Rosegarden::MappedInstrument&)),
+            SIGNAL(sendMappedInstrument(const Rosegarden::MappedInstrument&)));
 
     m_snapGrid.setSnapTime(Rosegarden::SnapGrid::SnapToBeat);
 
@@ -420,7 +427,7 @@ void MatrixView::initStatusBar()
 }
 
 
-bool MatrixView::applyLayout(int staffNo,
+bool MatrixView::applyLayout(int /*staffNo*/,
 			     timeT startTime,
 			     timeT endTime)
 {
@@ -844,6 +851,7 @@ void MatrixView::slotEditDelete()
 //
 void MatrixView::slotKeyPressed(unsigned int y, bool repeating)
 {
+    cout << "HERE = " << y << endl;
     Rosegarden::Composition &comp = m_document->getComposition();
     Rosegarden::Studio &studio = m_document->getStudio();
 
@@ -881,7 +889,7 @@ void MatrixView::slotKeyPressed(unsigned int y, bool repeating)
                                       Rosegarden::RealTime(0, 0),
                                       Rosegarden::RealTime(0, 500000),
                                       Rosegarden::RealTime(0, 0));
-        emit keyPressed(mE);
+        emit sendMappedEvent(mE);
     }
     catch(...) {;}
 
@@ -950,7 +958,7 @@ void MatrixView::playNote(Rosegarden::Event *event)
                                       duration,
                                       Rosegarden::RealTime(0, 0));
 
-        emit keyPressed(mE);
+        emit sendMappedEvent(mE);
     }
     catch(...) {;}
 }
@@ -984,7 +992,7 @@ void MatrixView::playNote(const Rosegarden::Segment &segment, int pitch)
                                       Rosegarden::RealTime(0, 500000),
                                       Rosegarden::RealTime(0, 0));
 
-        emit keyPressed(mE);
+        emit sendMappedEvent(mE);
     }
     catch(...) {;}
 }

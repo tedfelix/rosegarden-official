@@ -287,8 +287,9 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
 
     // For sending note previews
     //
-    connect(notationView, SIGNAL(notePlayed(Rosegarden::MappedEvent*)),
-            this, SIGNAL(sendMappedEvent(Rosegarden::MappedEvent*)));
+    connect(notationView,
+            SIGNAL(sendMappedEvent(Rosegarden::MappedEvent*)),
+            SIGNAL(sendMappedEvent(Rosegarden::MappedEvent*)));
 
     // For tempo changes (ugh -- it'd be nicer to make a tempo change
     // command that could interpret all this stuff from the dialog)
@@ -332,8 +333,13 @@ void RosegardenGUIView::slotEditSegmentMatrix(Rosegarden::Segment* p)
 
     // For sending key presses
     //
-    connect(matrixView, SIGNAL(keyPressed(Rosegarden::MappedEvent*)),
-            this, SIGNAL(sendMappedEvent(Rosegarden::MappedEvent*)));
+    connect(matrixView,
+            SIGNAL(sendMappedEvent(Rosegarden::MappedEvent*)),
+            SIGNAL(sendMappedEvent(Rosegarden::MappedEvent*)));
+
+    connect(matrixView,
+            SIGNAL(sendMappedInstrument(const Rosegarden::MappedInstrument&)),
+            SIGNAL(sendMappedInstrument(const Rosegarden::MappedInstrument&)));
 
     matrixView->show();
 }
