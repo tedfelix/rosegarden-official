@@ -244,7 +244,7 @@ public:
     // Debug stuff, to check MmappedSegment::iterator
     virtual void dumpFirstSegment();
 
-    virtual void remapSegment(const QString& filename);
+    virtual void remapSegment(const QString& filename, size_t newSize);
     virtual void addSegment(const QString& filename);
     virtual void deleteSegment(const QString& filename);
     virtual void closeAllSegments();

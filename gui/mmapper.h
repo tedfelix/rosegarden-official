@@ -268,6 +268,7 @@ public:
     ~CompositionMmapper();
 
     QString getSegmentFileName(Rosegarden::Segment*);
+    size_t  getSegmentFileSize(Rosegarden::Segment*);
 
     void cleanup();
 

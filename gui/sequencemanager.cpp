@@ -1430,11 +1430,12 @@ void SequenceManager::segmentModified(Segment* s)
         QDataStream streamOut(data, IO_WriteOnly);
 
         streamOut << m_compositionMmapper->getSegmentFileName(s);
+	streamOut << m_compositionMmapper->getSegmentFileSize(s);
         
         SEQMAN_DEBUG << "SequenceManager::segmentModified() : DCOP-call sequencer remapSegment"
                      << m_compositionMmapper->getSegmentFileName(s) << endl;
 
-        rgapp->sequencerSend("remapSegment(QString)", data);
+        rgapp->sequencerSend("remapSegment(QString, size_t)", data);
     }
     
 }

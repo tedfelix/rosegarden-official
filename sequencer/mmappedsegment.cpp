@@ -87,10 +87,10 @@ void MmappedSegment::unmap()
     ::close(m_fd);
 }
 
-bool MmappedSegment::remap()
+bool MmappedSegment::remap(size_t newSize)
 {
-    QFileInfo fInfo(m_filename);
-    size_t newSize = fInfo.size();
+//    QFileInfo fInfo(m_filename);
+//    size_t newSize = fInfo.size();
 
     SEQUENCER_DEBUG << "remap() from " << m_mmappedSize << " to "
                     << newSize << endl;
@@ -103,7 +103,12 @@ bool MmappedSegment::remap()
     }
 
 #ifdef linux
+	void *oldBuffer = m_mmappedBuffer;
     m_mmappedBuffer = (MappedEvent*)::mremap(m_mmappedBuffer, m_mmappedSize, newSize, MREMAP_MAYMOVE);
+	if (m_mmappedBuffer != oldBuffer) {
+	    SEQUENCER_DEBUG << "NOTE: buffer moved from " << oldBuffer <<
+		" to " << (void *)m_mmappedBuffer << endl;
+	}
 #else
     ::munmap(m_mmappedBuffer, m_mmappedSize);
     m_mmappedBuffer = (MappedEvent*)::mmap(0, newSize, PROT_READ, MAP_SHARED, m_fd, 0);

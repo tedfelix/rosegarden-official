@@ -259,11 +259,14 @@ public:
     virtual void dumpFirstSegment() = 0;
 
     /// Remap a segment while playing
-    virtual void remapSegment(const QString& filename) = 0;
+    virtual void remapSegment(const QString& filename, size_t newSize) = 0;
+
     /// Add a segment while playing
     virtual void addSegment(const QString& filename) = 0;
+
     /// Delete a segment while playing
     virtual void deleteSegment(const QString& filename) = 0;
+
     /// Close all mmapped segments
     virtual void closeAllSegments() = 0;
 };

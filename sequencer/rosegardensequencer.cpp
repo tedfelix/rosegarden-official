@@ -803,14 +803,14 @@ void RosegardenSequencerApp::cleanupMmapData()
     m_metaIterator = 0;
 }
 
-void RosegardenSequencerApp::remapSegment(const QString& filename)
+void RosegardenSequencerApp::remapSegment(const QString& filename, size_t newSize)
 {
     if (m_transportStatus != PLAYING) return;
 
     SEQUENCER_DEBUG << "RosegardenSequencerApp::remapSegment(" << filename << ")\n";
 
     MmappedSegment* m = m_mmappedSegments[filename];
-    if (m->remap() && m_metaIterator)
+    if (m->remap(newSize) && m_metaIterator)
         m_metaIterator->resetIteratorForSegment(filename);
 }
 

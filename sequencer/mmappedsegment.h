@@ -62,7 +62,7 @@ public:
     MmappedSegment(const QString filename);
     ~MmappedSegment();
 
-    bool remap();
+    bool remap(size_t newSize);
     QString getFileName() const { return m_filename; }
     bool isMetronome();
     MappedEvent* getBuffer() { return m_mmappedBuffer; }

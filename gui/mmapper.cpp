@@ -326,7 +326,7 @@ void SegmentMmapper::setFileSize(size_t size)
 
     if (size < m_mmappedSize) {
 
-        ftruncate(m_fd, size);
+//        ftruncate(m_fd, size);
 
     } else {
 
@@ -377,8 +377,14 @@ void SegmentMmapper::remap(size_t newsize)
     } else {
 
 #ifdef linux
+	void *oldBuffer = m_mmappedBuffer;
         m_mmappedBuffer = (MappedEvent*)::mremap(m_mmappedBuffer, m_mmappedSize,
                                           newsize, MREMAP_MAYMOVE);
+
+	if (m_mmappedBuffer != oldBuffer) {
+	    SEQMAN_DEBUG << "NOTE: buffer moved from " << oldBuffer <<
+		" to " << (void *)m_mmappedBuffer << endl;
+	}
 #else
 	::munmap(m_mmappedBuffer, m_mmappedSize);
 	m_mmappedBuffer = (MappedEvent *)::mmap(0, newsize,
@@ -693,6 +699,16 @@ QString CompositionMmapper::getSegmentFileName(Segment* s)
         return mmapper->getFileName();
     else
         return QString::null;
+}
+
+size_t CompositionMmapper::getSegmentFileSize(Segment* s)
+{
+    SegmentMmapper* mmapper = m_segmentMmappers[s];
+    
+    if (mmapper)
+        return mmapper->computeMmappedSize();
+    else
+        return 0;
 }
 
 
