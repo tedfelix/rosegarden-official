@@ -554,7 +554,15 @@ void RosegardenGUIApp::fileClose()
 {
     KTmpStatusMsg msg(i18n("Closing file..."), statusBar());
 	
-    close();
+    m_doc->saveIfModified();
+
+    m_doc->closeDocument();
+
+    m_doc->newDocument();
+
+    initView();
+
+    //close();
 }
 
 void RosegardenGUIApp::filePrint()
@@ -780,7 +788,12 @@ void RosegardenGUIApp::importMIDIFile(const QString &file)
 
   delete tmpComp;
 
+  // Set modification flag
+  //
+  m_doc->setModified();
+
   initView();
+
 }
 
 void RosegardenGUIApp::importRG21()
@@ -808,6 +821,10 @@ void RosegardenGUIApp::importRG21File(const QString &file)
   m_doc->getComposition().swap(*tmpComp);
 
   delete tmpComp;
+
+  // Set modification flag
+  //
+  m_doc->setModified();
 
   initView();
 }
@@ -844,6 +861,9 @@ RosegardenGUIApp::play()
   QDataStream streamOut(data, IO_WriteOnly);
   streamOut << m_doc->getComposition().getPosition();
   streamOut << 20;  // default latency
+
+  cout << "RosegardenGUIApp::play() - playing at tempo " << 
+                m_doc->getComposition().getTempo() << endl;
 
   // Send Play to the Sequencer
   if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
