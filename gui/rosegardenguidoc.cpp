@@ -198,6 +198,13 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
 
     m_viewElementsManager = new ViewElementsManager(m_composition);
 
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::openDocument() end - "
+                         << "m_composition : " << &m_composition
+                         << " - m_composition->getNbTracks() : "
+                         << m_composition.getNbTracks()
+                         << " - m_composition->getNbBars() : "
+                         << m_composition.getNbBars() << endl;
+
     return true;
 }
 
@@ -278,20 +285,6 @@ void RosegardenGUIDoc::deleteContents()
 
     deleteViews();
 
-    for(Composition::iterator trks = m_composition.begin();
-        trks != m_composition.end(); ++trks) {
-
-        if (*trks) {
-
-            for(Track::iterator i = (*trks)->begin();
-                i != (*trks)->end(); ++i) {
-                delete *i;
-            }
-
-            (*trks)->clear();
-        }
-    }
-    
     m_composition.clear();
 
     delete m_viewElementsManager;
