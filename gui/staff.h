@@ -38,7 +38,14 @@ class QCanvasLineGroupable;
  *
  * Staff owns the ViewElementsManager and NotationElementList objects
  * it contains, but not the Track object it's constructed from.
+ *
+ * Despite appearances, there's very little in here that's notation-
+ * specific.  Probably we should have a base class without the
+ * notation stuff, because LayoutEngine refers to Staff and
+ * LayoutEngine is supposed to be an abstract base independent of the
+ * sort of layout you're doing.
  */
+
 class Staff : public QCanvasItemGroup
 {
 public:
@@ -65,6 +72,13 @@ public:
     }
     NotationElementList* getNotationElementList() {
 	return m_notes;
+    }
+
+    const Rosegarden::Track* getTrack() const {
+        return &m_manager.getTrack();
+    }
+    Rosegarden::Track* getTrack() {
+        return &m_manager.getTrack();
     }
     
     /**
@@ -93,8 +107,8 @@ public:
      * Insert a bar line at X position \a barPos.
      *
      * If \a correct is true, the bar line ends a correct (timewise)
-     * bar. If false, the bar line ends a uncorrect bar (for instance,
-     * 5 quarters in 4:4 time), and will be drawn as red
+     * bar.  If false, the bar line ends an incorrect bar (for instance,
+     * two minims in 3:4 time), and will be drawn as red
      */
     void insertBar(unsigned int barPos, bool correct);
 

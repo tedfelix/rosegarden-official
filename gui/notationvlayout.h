@@ -30,21 +30,33 @@
  *
  * computes the Y coordinate of notation elements
  */
-class NotationVLayout : public LayoutEngine
+
+class NotationVLayout : public VerticalLayoutEngine
 {
 public:
     NotationVLayout();
     virtual ~NotationVLayout();
 
     /**
-     * Applies layout on the specified Staff
+     * Resets internal data stores for all staffs
      */
-    void layout(Staff &staff);
+    virtual void reset() { }
 
     /**
-     * Resets any internal position counters there may happen to be
+     * Resets internal data stores for a specific staff
      */
-    void reset();
+    virtual void resetStaff(Staff &) { }
+
+    /**
+     * Lay out a single staff.
+     */
+    virtual void scanStaff(Staff &staff);
+
+    /**
+     * Do any layout dependent on more than one staff.  As it
+     * happens, we have none.
+     */
+    virtual void finishLayout() { }
 };
 
 #endif

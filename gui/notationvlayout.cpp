@@ -37,20 +37,19 @@ NotationVLayout::NotationVLayout()
     // empty
 }
 
-NotationVLayout::~NotationVLayout() { }
-
-void NotationVLayout::reset() { }
+NotationVLayout::~NotationVLayout()
+{
+    // empty
+}
 
 void
-NotationVLayout::layout(Staff &staff)
+NotationVLayout::scanStaff(Staff &staff)
 { 
     NotationElementList *notes = staff.getNotationElementList();
 
     NotationElementList::iterator from = notes->begin();
     NotationElementList::iterator to = notes->end();
-
     NotationElementList::iterator i;
-    const NotePixmapFactory &npf(staff.getNotePixmapFactory());
 
     for (i = from; i != to; ++i) {
 
@@ -74,7 +73,7 @@ NotationVLayout::layout(Staff &staff)
             }
             bool stalkUp = chord.hasStalkUp();
 
-            int tailedNote = (stalkUp ? chord.size() - 1 : 0);
+            unsigned int tailedNote = (stalkUp ? chord.size() - 1 : 0);
 
 	    for (unsigned int j = 0; j < chord.size(); ++j) {
 		el = *chord[j];

@@ -77,6 +77,9 @@ public:
     /// Return the Track which is wrapped by this object 
     Rosegarden::Track& getTrack() { return m_track; }
 
+    /// Return the Track which is wrapped by this object 
+    const Rosegarden::Track& getTrack() const { return m_track; }
+
 
     // TrackObserver methods:
 

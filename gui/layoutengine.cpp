@@ -28,12 +28,38 @@
 // War and famine would cease, if only we could all
 // move at once onto a system of triangles.
 
-LayoutEngine::LayoutEngine()
-    : m_status(0)
+LayoutEngine::LayoutEngine() :
+    m_status(0)
 {
+    // empty
 }
 
 LayoutEngine::~LayoutEngine()
 {
+    // empty
+}
+
+
+HorizontalLayoutEngine::HorizontalLayoutEngine() :
+    LayoutEngine()
+{
+    // empty
+}
+
+HorizontalLayoutEngine::~HorizontalLayoutEngine()
+{
+    // empty
+}
+
+
+VerticalLayoutEngine::VerticalLayoutEngine() :
+    LayoutEngine()
+{
+    // empty
+}
+
+VerticalLayoutEngine::~VerticalLayoutEngine()
+{
+    // empty
 }
 

@@ -159,12 +159,12 @@ int NotationHLayout::getIdealBarWidth(Staff &staff,
 
 
 void
-NotationHLayout::preparse(Staff &staff)
+NotationHLayout::scanStaff(Staff &staff)
 {
     Track &t(staff.getViewElementsManager()->getTrack());
     const Track *timeRef = t.getReferenceTrack();
     if (timeRef == 0) {
-	kdDebug(KDEBUG_AREA) << "ERROR: NotationHLayout::preparse: reference track required (at least until code\nis written to render a track without bar lines)" << endl;
+	kdDebug(KDEBUG_AREA) << "ERROR: NotationHLayout::scanStaff: reference track required (at least until code\nis written to render a track without bar lines)" << endl;
 	return;
     }
 
@@ -251,7 +251,7 @@ NotationHLayout::preparse(Staff &staff)
                     long pitch = 64;
                     if (!el->event()->get<Int>("pitch", pitch)) {
                         kdDebug(KDEBUG_AREA) <<
-                            "WARNING: NotationHLayout::preparse: couldn't get pitch for element, using default pitch of " << pitch << endl;
+                            "WARNING: NotationHLayout::scanStaff: couldn't get pitch for element, using default pitch of " << pitch << endl;
                     }
 
                     Accidental explicitAccidental = NoAccidental;
@@ -467,6 +467,7 @@ NotationHLayout::reconcileBars()
 
     unsigned int barNo = 0;
     bool reachedEnd = false;
+    bool aWidthChanged = false;
 
     while (!reachedEnd) {
 
@@ -501,8 +502,10 @@ NotationHLayout::reconcileBars()
 			bd.fixedWidth += bd.fixedWidth * int((ratio - 1.0)/2.0);
 		    }
 		    bd.idealWidth = maxWidth;
-                    bd.widthChanged = true;
+                    aWidthChanged = true;
 		}
+
+                bd.needsLayout = aWidthChanged;
 	    }
 	}
 
@@ -511,9 +514,11 @@ NotationHLayout::reconcileBars()
 }	
 
 void
-NotationHLayout::layout()
+NotationHLayout::finishLayout()
 {
-    for (BarDataMap::iterator i = m_barData.begin(); i != m_barData.end(); ++i)
+    reconcileBars();
+    
+    for (BarDataMap::iterator i(m_barData.begin()); i != m_barData.end(); ++i)
 	layout(i);
 }
 
@@ -530,10 +535,6 @@ NotationHLayout::layout(BarDataMap::iterator i)
 
     int x = 0, barX = 0;
     const NotePixmapFactory &npf(staff.getNotePixmapFactory());
-    int noteBodyWidth = npf.getNoteBodyWidth();
-
-    int pGroupNo = -1;
-    NotationElementList::iterator startOfGroup = notes->end();
 
     for (BarDataList::iterator bdi = barList.begin();
          bdi != barList.end(); ++bdi) {
@@ -562,8 +563,7 @@ NotationHLayout::layout(BarDataMap::iterator i)
 	barX += bdi->idealWidth;
 
         if (bdi->barNo < 0) continue; // fake bar
-//!!! This doesn't seem to do what I expect...
-//        if (bdi->widthChanged == false) continue; // laid out already
+        if (!bdi->needsLayout) continue;
 
         bool haveAccidentalInThisChord = false;
 
@@ -595,148 +595,150 @@ NotationHLayout::layout(BarDataMap::iterator i)
 
             } else if (el->isRest()) {
 
-                // To work out how much space to allot a note (or
-                // chord), start with the amount alloted to the
-                // whole bar, subtract that reserved for
-                // fixed-width items, and take the same proportion
-                // of the remainder as our duration is of the
-                // whole bar's duration.
- 
-                delta = ((bdi->idealWidth - bdi->fixedWidth) *
-                         el->event()->getDuration()) /
-                    //!!! not right for partial bar?
-                    timeSignature.getBarDuration();
-
-                // Situate the rest somewhat further into its allotted
-                // space.
-
-                if (delta > noteBodyWidth) {
-                    int shift = (delta - noteBodyWidth) / 4;
-                    shift = std::min(shift, (noteBodyWidth * 4));
-                    el->setLayoutX(el->getLayoutX() + shift);
-                }
-                
-                 kdDebug(KDEBUG_AREA) << "Rest idealWidth : "
-                                      << bdi->idealWidth
-                                      << " - fixedWidth : "
-                                      << bdi->fixedWidth << endl;
-
+                delta = positionRest(staff, npf, it, bdi, timeSignature);
 
             } else if (el->isNote()) {
 
-
-                // To work out how much space to allot a note (or
-                // chord), start with the amount alloted to the whole
-                // bar, subtract that reserved for fixed-width items,
-                // and take the same proportion of the remainder as
-                // our duration is of the whole bar's duration.
-                    
-                delta = ((bdi->idealWidth - bdi->fixedWidth) *
-                         el->event()->getDuration()) /
-                    //!!! not right for partial bar?
-                    timeSignature.getBarDuration();
-
-                // Situate the note somewhat further into its allotted
-                // space.
-
-                if (delta > noteBodyWidth) {
-                    int shift = (delta - noteBodyWidth) / 5;
-                    shift = std::min(shift, (noteBodyWidth * 3));
-                    el->setLayoutX(el->getLayoutX() + shift);
-                }
-                
-                // Retrieve the record the presence of any display
-                // accidental.  We'll need to shift the x-coord
-                // slightly if there is one, because the
-                // notepixmapfactory quite reasonably places the hot
-                // spot at the start of the note head, not at the
-                // start of the whole pixmap.  But we can't do that
-                // here because it needs to be done for all notes in a
-                // chord, when at least one of those notes has an
-                // accidental.
-
-                Accidental acc(NoAccidental);
-                {
-                    long acc0;
-                    if (el->event()->get<Int>
-                        (Properties::DISPLAY_ACCIDENTAL, acc0)) {
-                        acc = (Accidental)acc0;
-                    }
-                }
-                if (acc != NoAccidental) haveAccidentalInThisChord = true;
-                
-                Chord chord(*notes, it);
-                if (chord.size() < 2 || it == chord.getFinalElement()) {
-
-                    // either we're not in a chord, or the chord is
-                    // about to end: update the delta now, and add any
-                    // additional accidental spacing
-
-                    if (haveAccidentalInThisChord) {
-                        for (int i = 0; i < (int)chord.size(); ++i) {
-                            (*chord[i])->setLayoutX
-                                ((*chord[i])->getLayoutX() +
-                                 npf.getAccidentalWidth());
-                        }
-                    }
-
-                    //                    kdDebug(KDEBUG_AREA) << "This is the final chord element (of " << chord.size() << ")" << endl;
-
-//                     kdDebug(KDEBUG_AREA) << "Note idealWidth : "
-//                                          << bdi->idealWidth
-//                                          << " - fixedWidth : "
-//                                          << bdi->fixedWidth << endl;
-
-                } else {
-                    kdDebug(KDEBUG_AREA) << "This is not the final chord element (of " << chord.size() << ")" << endl;
-                    delta = 0;
-                }
-
-                // See if we're in a group, and add the beam if so.
-                // This needs to happen after the chord-related
-                // manipulations abpve because the beam's position
-                // depends on the x-coord of the note, which depends
-                // on the presence of accidentals somewhere in the
-                // chord.  (All notes in a chord should be in the same
-                // group, so the leaving-group calculation will only
-                // happen after all the notes in the final chord of
-                // the group have been processed.)
-
-                long groupNo = -1;
-
-                if (el->event()->get<Int>(TrackNotationHelper::BeamedGroupIdPropertyName,
-                                          groupNo) &&
-                    groupNo != pGroupNo) {
-                    kdDebug(KDEBUG_AREA) << "NotationHLayout::layout: entering group " << groupNo << endl;
-                    startOfGroup = it;
-                }
-
-                long nextGroupNo = -1;
-                NotationElementList::iterator it0(it);
-                ++it0;
-                if (groupNo > -1 &&
-                    (it0 == notes->end() ||
-                     (!(*it0)->event()->get<Int>
-                      (TrackNotationHelper::BeamedGroupIdPropertyName, nextGroupNo) ||
-                      nextGroupNo != groupNo))) {
-                    kdDebug(KDEBUG_AREA) << "NotationHLayout::layout: about to leave group " << groupNo << ", time to do the sums" << endl;
-                
-                    NotationGroup group(*notes, it, clef, key);
-                    kdDebug(KDEBUG_AREA) << "NotationHLayout::layout: group type is " << group.getGroupType() << ", now applying beam" << endl;
-                    group.applyBeam(staff);
-                }
-
-                pGroupNo = groupNo;
+                delta = positionNote(staff, npf,
+                                     it, bdi, timeSignature, clef, key,
+                                     haveAccidentalInThisChord);
             }
 
             x += delta;
             kdDebug(KDEBUG_AREA) << "x = " << x << endl;
         }
 
-        bdi->widthChanged = false;
+        bdi->needsLayout = false;
     }
 
     if (x > m_totalWidth) m_totalWidth = x;
+}
+
+
+long
+NotationHLayout::positionRest(Staff &,
+                              const NotePixmapFactory &npf,
+                              const NotationElementList::iterator &itr,
+                              const BarDataList::iterator &bdi,
+                              const TimeSignature &timeSignature)
+{
+    NotationElement *rest = *itr;
+
+    // To work out how much space to allot a rest, as for a note,
+    // start with the amount alloted to the whole bar, subtract that
+    // reserved for fixed-width items, and take the same proportion of
+    // the remainder as our duration is of the whole bar's duration.
+ 
+    long delta = ((bdi->idealWidth - bdi->fixedWidth) *
+                  rest->event()->getDuration()) /
+        //!!! not right for partial bar?
+        timeSignature.getBarDuration();
+
+    // Situate the rest somewhat further into its allotted space.  Not
+    // convinced this is the right thing to do
+
+    int noteBodyWidth = npf.getNoteBodyWidth();
+    if (delta > noteBodyWidth) {
+        int shift = (delta - noteBodyWidth) / 4;
+        shift = std::min(shift, (noteBodyWidth * 4));
+        rest->setLayoutX(rest->getLayoutX() + shift);
+    }
+                
+    return delta;
+}
+
+
+long
+NotationHLayout::positionNote(Staff &staff,
+                              const NotePixmapFactory &npf,
+                              const NotationElementList::iterator &itr,
+                              const BarDataList::iterator &bdi,
+                              const TimeSignature &timeSignature,
+                              const Clef &clef, const Key &key,
+                              bool &haveAccidentalInThisChord)
+{
+    NotationElement *note = *itr;
+
+    // To work out how much space to allot a note (or chord), start
+    // with the amount alloted to the whole bar, subtract that
+    // reserved for fixed-width items, and take the same proportion of
+    // the remainder as our duration is of the whole bar's duration.
+                    
+    long delta = ((bdi->idealWidth - bdi->fixedWidth) *
+                  note->event()->getDuration()) /
+        //!!! not right for partial bar?
+        timeSignature.getBarDuration();
+
+    // Situate the note somewhat further into its allotted space.  Not
+    // convinced this is the right thing to do
+
+    int noteBodyWidth = npf.getNoteBodyWidth();
+    if (delta > noteBodyWidth) {
+        int shift = (delta - noteBodyWidth) / 5;
+        shift = std::min(shift, (noteBodyWidth * 3));
+        note->setLayoutX(note->getLayoutX() + shift);
+    }
+                
+    // Retrieve the record of the presence of a display accidental.
+    // We'll need to shift the x-coord slightly if there is one,
+    // because the notepixmapfactory quite reasonably places the hot
+    // spot at the start of the note head, not at the start of the
+    // whole pixmap.  But we can't do that here because it needs to be
+    // done for all notes in a chord, when at least one of those notes
+    // has an accidental.
+
+    Accidental acc(NoAccidental);
+    long acc0;
+    if (note->event()->get<Int>(Properties::DISPLAY_ACCIDENTAL, acc0)) {
+        acc = (Accidental)acc0;
+    }
+    if (acc != NoAccidental) haveAccidentalInThisChord = true;
+                
+    Chord chord(*staff.getNotationElementList(), itr);
+    if (chord.size() < 2 || itr == chord.getFinalElement()) {
+
+        // either we're not in a chord, or the chord is about to end:
+        // update the delta now, and add any additional accidental
+        // spacing
+
+        if (haveAccidentalInThisChord) {
+            for (int i = 0; i < (int)chord.size(); ++i) {
+                (*chord[i])->setLayoutX
+                    ((*chord[i])->getLayoutX() + npf.getAccidentalWidth());
+            }
+        }
+
+    } else {
+        delta = 0;
+    }
+
+    // See if we're in a group, and add the beam if so.  This needs to
+    // happen after the chord-related manipulations above because the
+    // beam's position depends on the x-coord of the note, which
+    // depends on the presence of accidentals somewhere in the chord.
+    // (All notes in a chord should be in the same group, so the
+    // leaving-group calculation will only happen after all the notes
+    // in the final chord of the group have been processed.)
+
+    long groupNo = -1;
+    (void)note->event()->get<Int>
+        (TrackNotationHelper::BeamedGroupIdPropertyName, groupNo);
+    if (groupNo == -1) return delta;
+
+    long nextGroupNo = -1;
+    NotationElementList::iterator it0(itr);
+    ++it0;
+
+    if (it0 == staff.getNotationElementList()->end() ||
+        (!(*it0)->event()->get<Int>
+         (TrackNotationHelper::BeamedGroupIdPropertyName, nextGroupNo) ||
+         nextGroupNo != groupNo)) {
+
+        NotationGroup group(*staff.getNotationElementList(), itr, clef, key);
+        group.applyBeam(staff);
+    }
+    
+    return delta;
 }
 
 
@@ -798,15 +800,41 @@ int NotationHLayout::getComfortableGap(const NotePixmapFactory &npf,
 }        
 
 void
-NotationHLayout::reset(Staff *staff)
+NotationHLayout::reset()
 {
-    if (!staff) {
-        m_barData.clear();
-    } else {
-        getBarData(*staff).clear();
-    }
-
+    m_barData.clear();
     m_totalWidth = 0;
+}
+
+void
+NotationHLayout::resetStaff(Staff &staff)
+{
+    getBarData(staff).clear();
+    m_totalWidth = 0;
+}
+
+unsigned int
+NotationHLayout::getBarLineCount(Staff &staff)
+{
+    return getBarData(staff).size();
+}
+
+double
+NotationHLayout::getBarLineX(Staff &staff, unsigned int i)
+{
+    return getBarData(staff)[i].x;
+}
+
+int
+NotationHLayout::getBarLineDisplayNumber(Staff &staff, unsigned int i)
+{
+    return getBarData(staff)[i].barNo;
+}
+
+bool
+NotationHLayout::isBarLineCorrect(Staff &staff, unsigned int i)
+{
+    return getBarData(staff)[i].correct;
 }
 
 

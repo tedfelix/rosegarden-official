@@ -652,20 +652,15 @@ bool NotationView::showBars(int staffNo,
 {
     if (from == to) return true;
 
-    Staff *staff = m_staffs[staffNo];
-    
-    const NotationHLayout::BarDataList &barData(m_hlayout->getBarData(*staff));
-    
-//    m_staffs[staffNo]->deleteBars(int((*from)->getEffectiveX()));
-    m_staffs[staffNo]->deleteBars(0);
+    Staff &staff = *m_staffs[staffNo];
+    staff.deleteBars(0);
 
-    for (NotationHLayout::BarDataList::const_iterator it = barData.begin();
-         it != barData.end(); ++it) {
+    for (unsigned int i = 0; i < m_hlayout->getBarLineCount(staff); ++i) {
 
-//	kdDebug(KDEBUG_AREA) << "Adding bar number " << it->barNo
-//			     << " at pos " << it->x << endl;
-
-	if (it->barNo >= 0) staff->insertBar(it->x, it->correct);
+        if (m_hlayout->isBarLineVisible(staff, i)) {
+            staff.insertBar(m_hlayout->getBarLineX(staff, i),
+                            m_hlayout->isBarLineCorrect(staff, i));
+        }
     }
 
     return true;
@@ -679,75 +674,21 @@ bool NotationView::applyLayout(int staffNo)
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 
         if (staffNo >= 0 && (int)i != staffNo) continue;
-	kdDebug(KDEBUG_AREA) << "NotationView::applyLayout(): staff "<< i << endl;
-        m_hlayout->reset(m_staffs[i]); // state applies to all staffs
-	bool rcp = applyHorizontalPreparse(i);
-	bool rcv = applyVerticalLayout(i);
-	if (!(rcp && rcv)) return false;
+
+        m_hlayout->resetStaff(*m_staffs[i]);
+        m_vlayout->resetStaff(*m_staffs[i]);
+
+        m_hlayout->scanStaff(*m_staffs[i]);
+        m_vlayout->scanStaff(*m_staffs[i]);
     }
 
-    // horizontal layout applies to all staffs, unlike preparse, and
-    // has to be carried out on all staffs even if only one has changed
-    bool rch = applyHorizontalLayout();
-    if (!rch) return false;
+    m_hlayout->finishLayout();
+    m_vlayout->finishLayout();
 
     readjustCanvasWidth();
 
     kdDebug(KDEBUG_AREA) << "NotationView::applyLayout() : done" << endl;
     return true;
-}
-
-
-bool NotationView::applyHorizontalPreparse(int i)
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::applyHorizontalPreparse() : entering" << endl;
-
-    if (!m_hlayout) {
-        KMessageBox::error(0, "No Horizontal Layout engine");
-        return false;
-    }
-
-    m_hlayout->preparse(*m_staffs[i]);
-
-    kdDebug(KDEBUG_AREA) << "NotationView::applyHorizontalPreparse() : done" << endl;
-
-    return m_hlayout->status() == 0;
-}
-
-
-bool NotationView::applyHorizontalLayout()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::applyHorizontalLayout() : entering" << endl;
-
-    if (!m_hlayout) {
-        KMessageBox::error(0, "No Horizontal Layout engine");
-        return false;
-    }
-
-    m_hlayout->reconcileBars();
-    m_hlayout->layout();
-
-    kdDebug(KDEBUG_AREA) << "NotationView::applyHorizontalLayout() : done" << endl;
-
-    return m_hlayout->status() == 0;
-}
-
-
-bool NotationView::applyVerticalLayout(int i)
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::applyVerticalLayout() : entering" << endl;
-
-    if (!m_vlayout) {
-        KMessageBox::error(0, "No Vertical Layout engine");
-        return false;
-    }
-
-    m_vlayout->reset();
-    m_vlayout->layout(*m_staffs[i]);
-    
-    kdDebug(KDEBUG_AREA) << "NotationView::applyVerticalLayout() : done" << endl;
-
-    return m_vlayout->status() == 0;
 }
 
 
