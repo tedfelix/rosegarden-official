@@ -85,12 +85,8 @@ SegmentPerformanceHelper::getTiedNotes(iterator i)
 timeT
 SegmentPerformanceHelper::getSoundingAbsoluteTime(iterator i)
 {
-    if ((*i)->has(GRACE_NOMINAL_DURATION)) {
-
-	return adjustAbsoluteTimeOfGraceNote(i);
-
-    } else if ((*i)->has(HAS_GRACE_NOTES) &&
-	       (*i)->get<Bool>(HAS_GRACE_NOTES)) {
+    if ((*i)->has(GRACE_NOMINAL_DURATION) ||
+	((*i)->has(HAS_GRACE_NOTES) && (*i)->get<Bool>(HAS_GRACE_NOTES))) {
 
 	return adjustAbsoluteTimeForGraceNotes(i);
     }
@@ -99,15 +95,42 @@ SegmentPerformanceHelper::getSoundingAbsoluteTime(iterator i)
 }
 
 timeT
-SegmentPerformanceHelper::adjustAbsoluteTimeOfGraceNote(iterator i)
-{
-    return (*i)->getAbsoluteTime();//!!!
-}
-
-timeT
 SegmentPerformanceHelper::adjustAbsoluteTimeForGraceNotes(iterator i)
 {
-    return (*i)->getAbsoluteTime();//!!!
+    timeT myTime((*i)->getAbsoluteTime());
+    timeT adjustedTime(myTime);
+    iterator j(i);
+
+    cerr << "SegmentPerformanceHelper::adjustAbsoluteTimeForGraceNotes: hasGraceNotes is " << ((*i)->has(HAS_GRACE_NOTES) && (*i)->get<Bool>(HAS_GRACE_NOTES)) << ", grace nominal duration " << ((*i)->has(GRACE_NOMINAL_DURATION) ? (*i)->get<Int>(GRACE_NOMINAL_DURATION) : -1) << endl;
+
+    int lastSubordering = (*i)->getSubOrdering();
+
+    cerr << "SegmentPerformanceHelper::adjustAbsoluteTimeForGraceNotes: myTime " << myTime << ", lastSubordering " << lastSubordering << endl;
+
+    while (j != begin()) {
+
+	--j;
+
+	int subordering = (*j)->getSubOrdering();
+	cerr << "next subordering: " <<subordering<<endl;
+	if (subordering == lastSubordering) continue;
+
+	if ((*j)->getAbsoluteTime() != myTime) {
+	    cerr<<"returning:"<<adjustedTime<<endl;
+	    return adjustedTime;
+	}
+
+	if ((*j)->has(GRACE_NOMINAL_DURATION)) {
+	    cerr << "adding " << (*j)->get<Int>(GRACE_NOMINAL_DURATION)<<endl;
+	    adjustedTime += (*j)->get<Int>(GRACE_NOMINAL_DURATION);
+	}
+
+	cerr <<"ok"<<endl;
+	lastSubordering = subordering;
+    }
+
+	    cerr<<"returning(2):"<<adjustedTime<<endl;
+    return adjustedTime;
 }
 
 

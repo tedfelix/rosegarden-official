@@ -456,8 +456,8 @@ GroupMenuGraceCommand::modifySegment()
     // first turn the selected events into grace notes
 
     for (EventSelection::eventcontainer::iterator i =
-	     m_selection->getSegmentEvents().begin();
-	 i != m_selection->getSegmentEvents().end(); ++i) {
+	     m_selection->getSegmentEvents().end();
+	 i-- != m_selection->getSegmentEvents().begin(); ) {
 
 	if (!(*i)->isa(Note::EventType)) continue;
 

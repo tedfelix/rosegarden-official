@@ -51,7 +51,7 @@ Post-0.1.5-and-a-bit task list
 10a. Also implement Cut-&-Close [DONE]
 
 11. Ties don't always appear (e.g. load davy.mid with viability switched
-    on in MidiFile.cpp)
+    on in MidiFile.cpp) [DONE]
 
 12. Deal with this strstream/stringstream thing -- fix on one or the
     other, and make sure the memory management is correct
@@ -256,6 +256,9 @@ Post-0.1.5-and-a-bit task list
     time (and the same time as their main note), using some other
     property to order them.  I think perhaps we should store their
     durations in a property other than the event's basic duration, too.
+    -- update: not sure this will work, modifying an event's absolute
+    time at performance time seems like a bad idea; perhaps better go
+    for other approach (storing performance time/duration)
 
 
 Post-0.1.4 task list

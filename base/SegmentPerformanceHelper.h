@@ -93,7 +93,6 @@ public:
     RealTime getRealSoundingDuration(iterator i);
 
 protected:
-    timeT adjustAbsoluteTimeOfGraceNote(iterator i);
     timeT adjustAbsoluteTimeForGraceNotes(iterator i);
     timeT adjustDurationForGraceNotes(iterator i, timeT t);
 };
