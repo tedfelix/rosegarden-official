@@ -78,6 +78,8 @@ public:
 
     const SnapGrid& grid() const { return m_grid; }
 
+    TrackPartItem* addPartItem(int x, int y, unsigned int nbBars);
+
 public slots:
     virtual void update();
 

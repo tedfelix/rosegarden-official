@@ -37,6 +37,7 @@ TracksEditor::TracksEditor(RosegardenGUIDoc* doc,
         docNbBars = 0;
 
     if (doc) {
+//         kdDebug(KDEBUG_AREA) << "TracksEditor() : doc " << doc << endl;
         docNbTracks = doc->getNbTracks();
         docNbBars = doc->getNbBars();
     }
@@ -66,6 +67,10 @@ TracksEditor::TracksEditor(unsigned int nbTracks,
 void
 TracksEditor::init(unsigned int nbTracks, unsigned int nbBars)
 {
+    kdDebug(KDEBUG_AREA) << "TracksEditor::init(nbTracks = "
+                         << nbTracks << ", nbBars = " << nbBars
+                         << ")" << endl;
+
     QGridLayout *grid = new QGridLayout(this, 2, 2);
 
     grid->addWidget(m_hHeader = new QHeader(nbBars, this), 0, 1);
@@ -100,8 +105,8 @@ TracksEditor::init(unsigned int nbTracks, unsigned int nbBars)
     canvas->setBackgroundColor(Qt::lightGray);
 
     m_tracksCanvas = new TracksCanvas(m_hHeader->sectionSize(0),
-                                  m_vHeader->sectionSize(0),
-                                  *canvas, this);
+                                      m_vHeader->sectionSize(0),
+                                      *canvas, this);
 
     grid->addWidget(m_tracksCanvas, 1,1);
     connect(this, SIGNAL(needUpdate()),
@@ -118,6 +123,8 @@ TracksEditor::init(unsigned int nbTracks, unsigned int nbBars)
 void
 TracksEditor::setupTracks()
 {
+    kdDebug(KDEBUG_AREA) << "TracksEditor::setupTracks() begin" << endl;
+
     if (!m_document) return; // sanity check
     
     const Composition &comp = m_document->getComposition();
@@ -126,10 +133,19 @@ TracksEditor::setupTracks()
     for (Composition::const_iterator i = comp.begin();
          i != comp.end(); ++i, ++trackNb) {
 
-        if ((*i))
+        if ((*i)) {
+
+            kdDebug(KDEBUG_AREA) << "TracksEditor::setupTracks() add track"
+                                 << "Track Nb : " << trackNb
+                                 << " - start idx : " << (*i)->getStartIndex()
+                                 << " - nb bars : " << (*i)->getNbBars()
+                                 << endl;
+
             addTrackPart(trackNb,
                          (*i)->getStartIndex(),
                          (*i)->getNbBars());
+        }
+        
     }
 }
 
@@ -197,13 +213,10 @@ TracksEditor::addTrackPart(unsigned int trackNb,
 {
     int x = 0, y = 0;
 
-    x = m_vHeader->sectionPos(trackNb);
-    // TODO : compute y according to track start
+    y = m_vHeader->sectionPos(trackNb);
+    // TODO : compute x according to track start
 
-    TrackPartItem* newPartItem = new TrackPartItem(x, y,
-                                                   m_tracksCanvas->gridHStep() * nbBars,
-                                                   m_tracksCanvas->grid().vstep(),
-                                                   m_tracksCanvas->canvas());
+    TrackPartItem* newPartItem = m_tracksCanvas->addPartItem(x, y, nbBars);    
     
     TrackPart *newPart = new TrackPart(newPartItem,
                                        m_tracksCanvas->gridHStep());

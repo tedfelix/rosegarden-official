@@ -54,7 +54,8 @@ TrackPart::TrackPart(TrackPartItem *r, unsigned int widthToLengthRatio)
         m_canvasPartItem->setPart(this);
     }
 
-    kdDebug(KDEBUG_AREA) << "TrackPart::TrackPart : Length = " << m_length;
+    kdDebug(KDEBUG_AREA) << "TrackPart::TrackPart : Length = "
+                         << m_length << endl;
 
 }
 
@@ -67,7 +68,8 @@ void
 TrackPart::updateLength()
 {
     m_length = m_canvasPartItem->width() / m_widthToLengthRatio;
-    kdDebug(KDEBUG_AREA) << "TrackPart::updateLength : Length = " << m_length;
+    kdDebug(KDEBUG_AREA) << "TrackPart::updateLength : Length = "
+                         << m_length << endl;
 }
 
 
@@ -193,3 +195,18 @@ void TracksCanvas::clear()
 	    delete *it;
     }
 }
+
+TrackPartItem*
+TracksCanvas::addPartItem(int x, int y, unsigned int nbBars)
+{
+    TrackPartItem* newPartItem = new TrackPartItem(x, y,
+                                                   gridHStep() * nbBars,
+                                                   grid().vstep(),
+                                                   canvas());
+    newPartItem->setPen(*m_pen);
+    newPartItem->setBrush(*m_brush);
+    newPartItem->setVisible(true);     
+
+    return newPartItem;
+}
+
