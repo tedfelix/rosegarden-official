@@ -55,11 +55,11 @@ public:
 
     ~RIFFAudioFile();
 
-    // Our main control methods
+    // Our main control methods - again keeping abstract at this level
     //
-    virtual bool open();
-    virtual bool write();
-    virtual void close();
+    virtual bool open() = 0;
+    virtual bool write() = 0;
+    virtual void close() = 0;
 
     // Show the information we have on this file
     //
@@ -118,8 +118,8 @@ public:
 
 
 protected:
-    virtual void parseHeader(const std::string &header);
-    virtual void parseBody();
+    //virtual void parseHeader(const std::string &header);
+    //virtual void parseBody();
 
     // Find and read in the format chunk of a RIFF file - without
     // this chunk we don't actually have a RIFF file.

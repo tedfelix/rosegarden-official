@@ -36,8 +36,6 @@ AudioFile::AudioFile(unsigned int id,
     m_sampleRate(0),
     m_channels(0),
     m_fileSize(0),
-    m_inFile(0),
-    m_outFile(0),
     m_dataChunkIndex(-1)
 {
 }
@@ -54,25 +52,12 @@ AudioFile::AudioFile(const std::string &fileName,
     m_sampleRate(sampleRate),
     m_channels(channels),
     m_fileSize(0),
-    m_inFile(0),
-    m_outFile(0),
     m_dataChunkIndex(-1)
 {
 }
 
 AudioFile::~AudioFile()
 {
-    if (m_inFile)
-    {
-        m_inFile->close();
-        delete m_inFile;
-    }
-
-    if (m_outFile)
-    {
-        m_outFile->close();
-        delete m_outFile;
-    }
 }
 
 

@@ -28,32 +28,71 @@ namespace Rosegarden
 SoundFile::SoundFile(const std::string &fileName):
     m_fileName(fileName),
     m_readChunkPtr(-1),
-    m_readChunkSize(4096) // 4k blocks
+    m_readChunkSize(4096), // 4k blocks
+    m_inFile(0),
+    m_outFile(0)
+
 {
 }
 
 SoundFile::~SoundFile()
 {
+    if (m_inFile)
+    {
+        m_inFile->close();
+        delete m_inFile;
+    }
+
+    if (m_outFile)
+    {
+        m_outFile->close();
+        delete m_outFile;
+    }
+
 }
 
 // Read in a specified number of bytes and return them
 // as a string.
 //
 std::string
-SoundFile::getBytes(std::ifstream *file,
-                    unsigned int numberOfBytes)
+SoundFile::getBytes(std::ifstream *file, unsigned int numberOfBytes)
 {
-    std::string rS;
-    char *fileBytes = new char[m_readChunkSize];
-
     if (file->eof())
         throw(std::string("SoundFile::getBytes() - EOF encountered"));
 
-    char fileByte;
-    while((rS.length() < numberOfBytes) && file->read(&fileByte, 1))
-        rS += fileByte;
-    /*
-    while (rS.length() < numberOfBytes && !file->eof())
+    std::string rS;
+    unsigned char *fileBytes = new unsigned char[numberOfBytes];
+
+    file->read(fileBytes, numberOfBytes);
+
+    for (unsigned int i = 0; i < file->gcount(); i++)
+        rS += (unsigned char)fileBytes[i];
+
+    // complain but return
+    //
+    if (rS.length() < numberOfBytes)
+        std::cerr << "SoundFile::getBytes() - couldn't get all bytes ("
+                  << rS.length() << " from " << numberOfBytes << ")"
+                  << std::endl;
+
+    // clear down
+    delete [] fileBytes;
+
+    return rS;
+}
+
+// A buffered read based on the current file handle.
+//
+std::string
+SoundFile::getBytes(unsigned int numberOfBytes)
+{
+    if (m_inFile == 0)
+        throw(std::string("SoundFile::getBytes - no open file handle"));
+
+    std::string rS;
+    unsigned char *fileBytes = new unsigned char[m_readChunkSize];
+
+    while (rS.length() < numberOfBytes && !m_inFile->eof())
     {
         if (m_readChunkPtr == -1)
         {
@@ -65,16 +104,13 @@ SoundFile::getBytes(std::ifstream *file,
 
             // Try to read the whole chunk
             //
-            file->read(fileBytes, m_readChunkSize);
+            m_inFile->read(fileBytes, m_readChunkSize);
 
             // file->gcount holds the number of bytes we've actually read
             // so copy them across into our string
             //
-            for (int i = 0; i< file->gcount(); i++)
-            {
+            for (unsigned int i = 0; i< m_inFile->gcount(); i++)
                 m_readBuffer += (unsigned char)fileBytes[i];
-                //cout << fileBytes[i];
-            }
         }
 
         // Can we fulfill our request at this pass?  If so read the
@@ -101,24 +137,24 @@ SoundFile::getBytes(std::ifstream *file,
 
         // We've reached the end of the file if we can't read
         // all of the required 
-        if (file->gcount() != m_readChunkSize || file->gcount() == 0)
+        if (m_inFile->gcount() != (unsigned int) m_readChunkSize
+            || m_inFile->gcount() == 0)
         {
-            cout << "END OF FILE?? GCOUNT = " << file->gcount() << endl;
+            //cout << "END OF FILE?? GCOUNT = " << m_inFile->gcount() << endl;
             m_readChunkPtr = -1;
             break;
         }
 
     }
 
-    */
-
     // complain but return
     //
     if (rS.length() < numberOfBytes)
-        std::cerr << "SoundFile::getBytes() - couldn't get all bytes"
-                   << std::endl;
+        std::cerr << "SoundFile::getBytes() - couldn't get all bytes ("
+                  << rS.length() << " from " << numberOfBytes << ")"
+                  << std::endl;
 
-    //delete [] fileBytes;
+    delete [] fileBytes;
 
     return rS;
 }

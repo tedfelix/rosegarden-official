@@ -102,11 +102,25 @@ WAVAudioFile::close()
 {
 }
 
-// Set the m_dataChunkIndex and other meta data
+// Set the AudioFile meta data according to WAV file format specification.
 //
 void
 WAVAudioFile::parseHeader()
 {
+    try
+    {
+        // Read the format chunk and populate the file data.  A plain WAV
+        // file only has this chunk.
+        //
+        readFormatChunk();
+    }
+    catch(std::string e)
+    {
+        std::cout << "WAVAudioFile::parseHeader - \"" << m_fileName
+                  << "\" isn't recognised as a wav file" << std::endl;
+
+    }
+   
 }
 
 }

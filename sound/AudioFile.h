@@ -158,8 +158,6 @@ public:
     virtual std::vector<float> getPreview(const RealTime &resolution) = 0;
 
 protected:
-    virtual void parseHeader(const std::string &header) = 0;
-    virtual void parseBody() = 0;
 
     AudioFileType  m_type;   // AudioFile type
     unsigned int   m_id;     // AudioFile ID
@@ -176,8 +174,6 @@ protected:
     //
     long long      m_dataChunkIndex;
 
-    std::ifstream *m_inFile;
-    std::ofstream *m_outFile;
 };
 
 }

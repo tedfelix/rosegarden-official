@@ -530,11 +530,14 @@ AudioFileManager::generatePreviews()
          it != m_audioFiles.end();
          it++)
     {
+        if ((*it)->open())
+        {
         std::cout << "AudioFileManager::generatePreviews - "
                   << "generating preview for \""
                   << (*it)->getFilename() << "\"" << std::endl;
         m_previewMap[(*it)->getId()] =
             (*it)->getPreview(m_previewResolution);
+        }
     }
 }
 

@@ -56,8 +56,12 @@ public:
 protected:
     std::string m_fileName;
 
-    // get some bytes from an input stream
+    // get some bytes from an input stream - unbuffered as we can
+    // modify the file stream
     std::string getBytes(std::ifstream *file, unsigned int numberOfBytes);
+
+    // buffered read
+    std::string getBytes(unsigned int numberOfBytes);
  
     // write some bytes to an output stream
     void putBytes(std::ofstream *file,
@@ -65,9 +69,12 @@ protected:
 
     // Read buffering - define chunk size and buffer file reading
     //
-    int         m_readChunkPtr;
-    int         m_readChunkSize;
-    std::string m_readBuffer;
+    int            m_readChunkPtr;
+    int            m_readChunkSize;
+    std::string    m_readBuffer;
+
+    std::ifstream *m_inFile;
+    std::ofstream *m_outFile;
 
 };
 

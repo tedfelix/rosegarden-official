@@ -59,112 +59,7 @@ RIFFAudioFile::~RIFFAudioFile()
 }
 
 
-void
-RIFFAudioFile::parseHeader(const std::string &hS)
-{
-    // Courtesy of:
-    //   http://www.technology.niagarac.on.ca/courses/comp630/WavFileFormat.html
-    //
-    // 'The WAV file itself consists of three "chunks" of information:
-    //  The RIFF chunk which identifies the file as a WAV file, The FORMAT
-    //  chunk which identifies parameters such as sample rate and the DATA
-    //  chunk which contains the actual data (samples).'
-    //
-    //
-
-    // Look for the RIFF identifier and bomb out if we don't find it
-    //
-#if (__GNUC__ < 3)
-    if (hS.compare(Rosegarden::AUDIO_RIFF_ID, 0, 4) != 0)
-#else
-    if (hS.compare(0, 4, Rosegarden::AUDIO_RIFF_ID) != 0)
-#endif
-    {
-        throw((std::string("RIFFAudioFile::parseHeader - can't find RIFF identifier")));
-    }
-
-    // Look for the WAV identifier
-    //
-#if (__GNUC__ < 3)
-    if (hS.compare(Rosegarden::AUDIO_WAVE_ID, 8, 4) != 0)
-#else
-    if (hS.compare(4, 4, Rosegarden::AUDIO_WAVE_ID) != 0)
-#endif
-    {
-        throw((std::string("RIFFAudioFile::parseHeader - can't find WAV identifier")));
-    }
-
-    // Look for the FORMAT identifier - note that this doesn't actually
-    // have to be in the first chunk we come across, but for the moment
-    // this is the only place we check for it because I'm lazy.
-    //
-    //
-#if (__GNUC__ < 3)
-    if (hS.compare(Rosegarden::AUDIO_FORMAT_ID, 12, 4) != 0)
-#else
-    if (hS.compare(4, 4, Rosegarden::AUDIO_FORMAT_ID) != 0)
-#endif
-    {
-        throw((std::string("RIFFAudioFile::parseHeader - can't find FORMAT identifier")));
-    }
-
-    // Little endian conversion of length bytes into file length
-    // (add on eight for RIFF id and length field and compare to 
-    // real file size).
-    //
-    unsigned int length = getIntegerFromLittleEndian(hS.substr(4,4)) + 8;
-
-    if (length != m_fileSize)
-    {
-        cout << "READ LENGTH = " << length << endl;
-        cout << "REAL LENGTH = " << m_fileSize << endl;
-        throw(std::string("RIFFAudioFile::parseHeader - file " + m_fileName +
-                     " corrupted (wrong length)"));
-    }
-
-    // Check the format length (always 0x10)
-    //
-    unsigned int lengthOfFormat = getIntegerFromLittleEndian(hS.substr(16, 4));
-
-    if (lengthOfFormat != 0x10)
-        throw(std::string("RIFFAudioFile::parseHeader - format length incorrect"));
-
-
-    // Check this field is one
-    //
-    unsigned int alwaysOne = getIntegerFromLittleEndian(hS.substr(20, 2));
-    if (alwaysOne != 0x01)
-        throw(std::string("RIFFAudioFile::parseHeader - \"always one\" byte isn't"));
-
-
-    // We seem to have a good looking .WAV file - extract the
-    // sample information and populate this locally
-    //
-    unsigned int channelNumbers =  getIntegerFromLittleEndian(hS.substr(22,2));
-    
-    switch(channelNumbers)
-    {
-        case 0x01:
-        case 0x02:
-            m_channels = channelNumbers;
-            break;
-
-        default:
-            {
-                throw(std::string("RIFFAudioFile::parseHeader - unsupport number of channels"));
-            }
-            break;
-    }
-
-    // Now the rest of the information
-    //
-    m_sampleRate = getIntegerFromLittleEndian(hS.substr(24,4));
-    m_bytesPerSecond = getIntegerFromLittleEndian(hS.substr(28,4));
-    m_bytesPerSample = getIntegerFromLittleEndian(hS.substr(32,2));
-    m_bitsPerSample = getIntegerFromLittleEndian(hS.substr(34,2));
-   
-}
-
+/*
 bool
 RIFFAudioFile::open()
 {
@@ -211,6 +106,7 @@ RIFFAudioFile::open()
 
     return true;
 }
+*/
 
 // Show some stats on this file
 //
@@ -228,6 +124,7 @@ RIFFAudioFile::printStats()
 // For an RIFFAudioFile we write a header (if we can) and leave
 // the file descriptor open for subsequent appends.
 //
+/*
 bool
 RIFFAudioFile::write()
 {
@@ -250,6 +147,7 @@ RIFFAudioFile::write()
 
     return true;
 }
+*/
 
 bool
 RIFFAudioFile::appendSamples(const std::string &buffer)
@@ -353,19 +251,28 @@ RIFFAudioFile::scanTo(std::ifstream *file, const RealTime &time)
     // seek past header
     file->seekg(36, std::ios::beg);
 
-    // check we've got data chunk start
-    if (getBytes(file, 4) != "data")
+    try
     {
-        std::cerr << "RIFFAudioFile::scanTo() - can't find data chunk where "
-                  << "it was expected" << std::endl;
+        // check we've got data chunk start
+        if (getBytes(file, 4) != "data")
+        {
+            std::cerr << "RIFFAudioFile::scanTo() - can't find data chunk where "
+                      << "it was expected" << std::endl;
+            return false;
+        }
+
+        // get the length of the data chunk
+        std::cout << "RIFFAudioFile::scanTo() - data chunk size = "
+                  << getIntegerFromLittleEndian(getBytes(file, 4)) << std::endl;
+
+    }
+    catch(std::string s)
+    {
+        std::cerr << "RIFFAudioFile::scanTo - EXCEPTION - \""
+                  << s << "\"" << std::endl;
         return false;
     }
-
-    // get the length of the data chunk
-    std::cout << "RIFFAudioFile::scanTo() - data chunk size = "
-              << getIntegerFromLittleEndian(getBytes(file, 4)) << std::endl;
-
-
+        
     // Ok, we're past all the header information in the data chunk.
     // Now, how much do we scan forward?
     //
@@ -429,6 +336,7 @@ RIFFAudioFile::getSampleFrameSlice(std::ifstream *file, const RealTime &time)
 
 // Close the file and calculate the sizes
 //
+/*
 void
 RIFFAudioFile::close()
 {
@@ -451,9 +359,12 @@ RIFFAudioFile::close()
     putBytes(m_outFile, getLittleEndianFromInteger(totalSize - 44, 4));
 
     m_outFile->close();
+
     delete m_outFile;
+    m_outFile = 0;
 
 }
+*/
 
 // Get a normalised (-1.0 to +1.0 float) preview of the audio file
 // at a certain resolution - don't use a small resolution on a large
@@ -469,6 +380,9 @@ RIFFAudioFile::getPreview(const RealTime &resolution)
     std::ifstream *previewFile = new std::ifstream(m_fileName.c_str(),
                                                    std::ios::in |
                                                    std::ios::binary);
+    try
+    {
+
     // move past header to beginning of the data
     scanTo(previewFile, RealTime(0, 0));
 
@@ -531,6 +445,13 @@ RIFFAudioFile::getPreview(const RealTime &resolution)
     previewFile->close();
     delete previewFile;
     
+    }
+    catch(std::string s)
+    {
+        std::cerr << "RIFFAudioFile::getPreview - EXCEPTION - \"" 
+                  << s << "\"" << std::endl;
+    }
+
     return preview;
 }
 
@@ -551,19 +472,130 @@ RIFFAudioFile::getLength()
     return RealTime(secs, usecs);
 }
 
+/*
 // Nothing going on in here for the moment
 //
 void
 RIFFAudioFile::parseBody()
 {
 }
+*/
 
 
-// The RIFF file format chunk defines our internal meta data
+// The RIFF file format chunk defines our internal meta data.
+//
+// Courtesy of:
+//   http://www.technology.niagarac.on.ca/courses/comp630/WavFileFormat.html
+//
+// 'The WAV file itself consists of three "chunks" of information:
+//  The RIFF chunk which identifies the file as a WAV file, The FORMAT
+//  chunk which identifies parameters such as sample rate and the DATA
+//  chunk which contains the actual data (samples).'
+//
 //
 void
 RIFFAudioFile::readFormatChunk()
 {
+    if (m_inFile == 0)
+        return;
+
+    // seek to beginning
+    m_inFile->seekg(0, std::ios::beg);
+
+    // get the header string
+    //
+    std::string hS = getBytes(36);
+
+    // Look for the RIFF identifier and bomb out if we don't find it
+    //
+#if (__GNUC__ < 3)
+    if (hS.compare(Rosegarden::AUDIO_RIFF_ID, 0, 4) != 0)
+#else
+    if (hS.compare(0, 4, Rosegarden::AUDIO_RIFF_ID) != 0)
+#endif
+    {
+        throw((std::string("RIFFAudioFile::parseHeader - can't find RIFF identifier")));
+    }
+
+    // Look for the WAV identifier
+    //
+#if (__GNUC__ < 3)
+    if (hS.compare(Rosegarden::AUDIO_WAVE_ID, 8, 4) != 0)
+#else
+    if (hS.compare(4, 4, Rosegarden::AUDIO_WAVE_ID) != 0)
+#endif
+    {
+        throw((std::string("RIFFAudioFile::parseHeader - can't find WAV identifier")));
+    }
+
+    // Look for the FORMAT identifier - note that this doesn't actually
+    // have to be in the first chunk we come across, but for the moment
+    // this is the only place we check for it because I'm lazy.
+    //
+    //
+#if (__GNUC__ < 3)
+    if (hS.compare(Rosegarden::AUDIO_FORMAT_ID, 12, 4) != 0)
+#else
+    if (hS.compare(4, 4, Rosegarden::AUDIO_FORMAT_ID) != 0)
+#endif
+    {
+        throw((std::string("RIFFAudioFile::parseHeader - can't find FORMAT identifier")));
+    }
+
+    // Little endian conversion of length bytes into file length
+    // (add on eight for RIFF id and length field and compare to 
+    // real file size).
+    //
+    unsigned int length = getIntegerFromLittleEndian(hS.substr(4,4)) + 8;
+
+    if (length != m_fileSize)
+    {
+        cout << "READ LENGTH = " << length << endl;
+        cout << "REAL LENGTH = " << m_fileSize << endl;
+        throw(std::string("RIFFAudioFile::parseHeader - file " + m_fileName +
+                     " corrupted (wrong length)"));
+    }
+
+    // Check the format length (always 0x10)
+    //
+    unsigned int lengthOfFormat = getIntegerFromLittleEndian(hS.substr(16, 4));
+
+    if (lengthOfFormat != 0x10)
+        throw(std::string("RIFFAudioFile::parseHeader - format length incorrect"));
+
+
+    // Check this field is one
+    //
+    unsigned int alwaysOne = getIntegerFromLittleEndian(hS.substr(20, 2));
+    if (alwaysOne != 0x01)
+        throw(std::string("RIFFAudioFile::parseHeader - \"always one\" byte isn't"));
+
+
+    // We seem to have a good looking .WAV file - extract the
+    // sample information and populate this locally
+    //
+    unsigned int channelNumbers =  getIntegerFromLittleEndian(hS.substr(22,2));
+    
+    switch(channelNumbers)
+    {
+        case 0x01:
+        case 0x02:
+            m_channels = channelNumbers;
+            break;
+
+        default:
+            {
+                throw(std::string("RIFFAudioFile::parseHeader - unsupport number of channels"));
+            }
+            break;
+    }
+
+    // Now the rest of the information
+    //
+    m_sampleRate = getIntegerFromLittleEndian(hS.substr(24,4));
+    m_bytesPerSecond = getIntegerFromLittleEndian(hS.substr(28,4));
+    m_bytesPerSample = getIntegerFromLittleEndian(hS.substr(32,2));
+    m_bitsPerSample = getIntegerFromLittleEndian(hS.substr(34,2));
 }
 
 // Write out the format chunk from our internal data
