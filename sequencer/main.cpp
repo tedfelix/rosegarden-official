@@ -139,6 +139,12 @@ int main(int argc, char *argv[])
                             // finished - so stop playing
                             roseSeq->setStatus(STOPPING);
                         }
+                        else
+                        {
+                            // process any async events
+                            //
+                            roseSeq->processAsynchronousEvents();
+                        }
                         break;
 
                     case STARTING_TO_RECORD_MIDI:

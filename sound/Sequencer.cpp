@@ -136,10 +136,6 @@ Sequencer::record(const RecordStatus& recordStatus)
         //
         m_recordStatus = RECORD_MIDI;
         m_recordStartTime = m_midiRecordPort.time();
-
-
-        cout << "RosegardenSequencer::record() - MIDI RECORDING started" << endl;
-
     }
     else
     if ( recordStatus == RECORD_AUDIO )

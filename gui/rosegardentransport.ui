@@ -11,8 +11,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>395</width>
-            <height>106</height>
+            <width>457</width>
+            <height>110</height>
         </rect>
     </property>
     <property stdset="1">
@@ -30,7 +30,7 @@
             <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>400</width>
+                <width>455</width>
                 <height>107</height>
             </rect>
         </property>
@@ -53,7 +53,7 @@
                 <rect>
                     <x>5</x>
                     <y>5</y>
-                    <width>390</width>
+                    <width>445</width>
                     <height>97</height>
                 </rect>
             </property>
@@ -768,6 +768,70 @@
                 <property>
                     <name>toolTip</name>
                 </property>
+            </widget>
+            <widget>
+                <class>QFrame</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>Frame8</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>397</x>
+                        <y>16</y>
+                        <width>40</width>
+                        <height>65</height>
+                    </rect>
+                </property>
+                <property stdset="1">
+                    <name>frameShape</name>
+                    <enum>StyledPanel</enum>
+                </property>
+                <property stdset="1">
+                    <name>frameShadow</name>
+                    <enum>Raised</enum>
+                </property>
+                <widget>
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>MidiInLabel</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>geometry</name>
+                        <rect>
+                            <x>5</x>
+                            <y>5</y>
+                            <width>31</width>
+                            <height>26</height>
+                        </rect>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>   -</string>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>MidiOutLabel</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>geometry</name>
+                        <rect>
+                            <x>5</x>
+                            <y>35</y>
+                            <width>31</width>
+                            <height>26</height>
+                        </rect>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>   -</string>
+                    </property>
+                </widget>
             </widget>
         </widget>
     </widget>

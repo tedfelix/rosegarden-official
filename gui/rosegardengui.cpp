@@ -1551,16 +1551,29 @@ RosegardenGUIApp::processRecordedMidi(const Rosegarden::MappedComposition &mC)
 
 
 
-// Process unexpected MIDI events at the GUI - send them to the
-// Transport or to a MIDI mixer for display purposes only.
+// Process unexpected MIDI events at the GUI - send them to the Transport
+// or to a MIDI mixer for display purposes only.  Useful feature to enable
+// the musician to prove to herself quickly that the MIDI input is still
+// working.
+//
 //
 void
 RosegardenGUIApp::processAsynchronousMidi(const Rosegarden::MappedComposition &mC)
 {
-    cout << "GOT UNEXEPCTED EVENTS (" << mC.size() << ")" << endl;
+    if (mC.size())
+    {
+        cout << "RosegardenGUIApp::processAsynchronousMidi - GOT " << mC.size() << " ASYNC EVENT(S)" << endl;
+
+        Rosegarden::MappedComposition::iterator i;
+        i = mC.end();
+
+        // set the field on the Transport - just to the last
+        // event in the list for the moment
+        //
+        m_transport->setMidiInLabel(**i);
+
+    }
 }
-
-
 
 
 

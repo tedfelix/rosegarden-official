@@ -28,6 +28,7 @@
 #include <qpushbutton.h>
 #include <qspinbox.h>
 #include <qlineedit.h>
+#include <qtimer.h>
 
 #include <iostream>
 
@@ -82,6 +83,11 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     setMaximumSize(width(), height());
 
     loadPixmaps();
+
+    // clear labels
+    //
+    clearMidiInLabel();
+    clearMidiOutLabel();
 }
 
 RosegardenTransportDialog::~RosegardenTransportDialog()
@@ -194,12 +200,63 @@ RosegardenTransportDialog::displayTime(Rosegarden::RealTime rt)
 void
 RosegardenTransportDialog::setTempo(const double &tempo)
 {
-  m_tempo = tempo;
+    m_tempo = tempo;
 
-  QString tempoString;
-  tempoString.sprintf("%4.4f", tempo);
-  TempoLineEdit->setText(tempoString);
+    QString tempoString;
+    tempoString.sprintf("%4.4f", tempo);
+    TempoLineEdit->setText(tempoString);
 }
 
 
+// Set the midi label to this MappedEvent
+//
+void
+RosegardenTransportDialog::setMidiInLabel(const Rosegarden::MappedEvent &mE)
+{
+    QString midiInLabel;
+    midiInLabel.sprintf("   %d", mE.getPitch());
+    MidiInLabel->setText(midiInLabel);
+
+    QTimer *midiInTimer = new QTimer(this);
+    connect(midiInTimer, SIGNAL(timeout()),
+            SLOT(clearMidiInLabel()));
+
+    midiInTimer->start(1000, true);
 }
+
+
+// Clear the MIDI in label - used as timer callback
+//
+void
+RosegardenTransportDialog::clearMidiInLabel()
+{
+    MidiInLabel->setText(QString("   --"));
+}
+
+
+void
+RosegardenTransportDialog::setMidiOutLabel(const Rosegarden::MappedEvent &mE)
+{
+    QString midiOutLabel;
+    midiOutLabel.sprintf("   %d", mE.getPitch());
+    MidiOutLabel->setText(midiOutLabel);
+
+    QTimer *midiOutTimer = new QTimer(this);
+    connect(midiOutTimer, SIGNAL(timeout()),
+            SLOT(clearMidiOutLabel()));
+
+    midiOutTimer->start(1000, true);
+}
+
+
+void
+RosegardenTransportDialog::clearMidiOutLabel()
+{
+    MidiOutLabel->setText(QString("   --"));
+}
+
+
+
+}
+
+
