@@ -1263,17 +1263,13 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 
     if (m_segmentCopyMode && !m_segmentQuickCopyDone)
     {
-	SegmentCopyCommand *command =
-            new SegmentCopyCommand(m_currentItem->getSegment());
+	SegmentQuickCopyCommand *command =
+            new SegmentQuickCopyCommand(m_currentItem->getSegment());
         // addCommand to generate the new Segment
         //
         addCommandToHistory(command);
 
         Rosegarden::Segment *newSegment = command->getCopy();
-
-        // update label
-        std::string copyLabel = newSegment->getLabel() + " (copied)";
-        newSegment->setLabel(copyLabel);
 
         // generate SegmentItem
         //

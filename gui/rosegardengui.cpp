@@ -1138,13 +1138,7 @@ void RosegardenGUIApp::slotEditPaste()
 
 void RosegardenGUIApp::slotSelectAll()
 {
-    SegmentCanvas *canvas = m_view->getTrackEditor()->getSegmentCanvas();
-    Rosegarden::Composition &composition = m_doc->getComposition();
-
-    for (Rosegarden::Composition::iterator i = composition.begin();
-	 i != composition.end(); ++i) {
-	canvas->addToSelection(*i);
-    }
+    m_view->slotSelectAllSegments();
 }
 
 void RosegardenGUIApp::slotEditAsNotation()

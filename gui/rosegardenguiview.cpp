@@ -44,11 +44,13 @@
 #include "barbuttons.h"
 #include "loopruler.h"
 #include "RulerScale.h"
+#include "Instrument.h"
 #include "Selection.h"
 #include "segmentparameterbox.h"
 #include "instrumentparameterbox.h"
 
 using Rosegarden::SimpleRulerScale;
+using Rosegarden::Composition;
 
 
 RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
@@ -70,7 +72,7 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
     double unitsPerPixel =
         Rosegarden::TimeSignature(4, 4).getBarDuration() / barWidth44;
 
-    Rosegarden::Composition *comp = &doc->getComposition();
+    Composition *comp = &doc->getComposition();
     m_rulerScale = new SimpleRulerScale(comp, 0, unitsPerPixel);
 
     QHBox *hbox = new QHBox(this);
@@ -156,7 +158,7 @@ RosegardenGUIView::getDocument() const
     return theApp->getDocument();
 }
 
-void RosegardenGUIView::print(KPrinter *pPrinter, Rosegarden::Composition* p)
+void RosegardenGUIView::print(KPrinter *pPrinter, Composition* p)
 {
     SetWaitCursor waitCursor;
 
@@ -165,7 +167,7 @@ void RosegardenGUIView::print(KPrinter *pPrinter, Rosegarden::Composition* p)
 
     std::vector<Rosegarden::Segment *> segmentsToEdit;
 
-    for (Rosegarden::Composition::iterator i = p->begin(); i != p->end(); ++i) {
+    for (Composition::iterator i = p->begin(); i != p->end(); ++i) {
         segmentsToEdit.push_back(*i);
     }
 
@@ -241,7 +243,7 @@ void RosegardenGUIView::setZoomSize(double size)
 {
     m_rulerScale->setUnitsPerPixel(size);
 
-    for (Rosegarden::Composition::iterator i = 
+    for (Composition::iterator i = 
               getDocument()->getComposition().begin();
          i != getDocument()->getComposition().end(); i++) {
 	m_trackEditor->getSegmentCanvas()->updateSegmentItem(*i);
@@ -274,7 +276,7 @@ void RosegardenGUIView::slotSelectTrackSegments(int trackId)
 {
     Rosegarden::SegmentSelection segments;
 
-    for (Rosegarden::Composition::iterator i =
+    for (Composition::iterator i =
               getDocument()->getComposition().begin();
          i != getDocument()->getComposition().end(); i++)
     {
@@ -297,7 +299,7 @@ void RosegardenGUIView::slotSelectTrackSegments(int trackId)
     m_segmentParameterBox->useSegments(segments);
 
     // update the instrument parameter box
-    Rosegarden::Composition &comp = getDocument()->getComposition();
+    Composition &comp = getDocument()->getComposition();
     slotUpdateInstrumentParameterBox(comp.getTrackByIndex(trackId)->
                                      getInstrument());
 
@@ -306,10 +308,63 @@ void RosegardenGUIView::slotSelectTrackSegments(int trackId)
     comp.setSelectedTrack(trackId);
 }
 
+void RosegardenGUIView::slotSelectAllSegments()
+{
+    Rosegarden::SegmentSelection segments;
+
+    Rosegarden::InstrumentId instrument = 0;
+    bool haveInstrument = false;
+    bool multipleInstruments = false;
+
+    Composition &comp = getDocument()->getComposition();
+
+    for (Composition::iterator i = comp.begin(); i != comp.end(); ++i) {
+
+	Rosegarden::InstrumentId myInstrument = 
+	    comp.getTrackByIndex((*i)->getTrack())->getInstrument();
+
+	if (haveInstrument) {
+	    if (myInstrument != instrument) {
+		multipleInstruments = true;
+	    }
+	} else {
+	    instrument = myInstrument;
+	    haveInstrument = true;
+	}
+
+	segments.insert(*i);
+    }
+
+    // Send this signal to the GUI to activate the correct tool
+    // on the toolbar so that we have a SegmentSelector object
+    // to write the Segments into
+    //
+    if (segments.size() > 0) emit activateTool(SegmentCanvas::Selector);
+
+    // Send the segment list even if it's empty as we
+    // use that to clear any current selection
+    //
+    m_trackEditor->getSegmentCanvas()->slotSelectSegments(segments);
+
+    // update the segment parameter box
+    m_segmentParameterBox->useSegments(segments);
+
+    // update the instrument parameter box
+    if (haveInstrument && !multipleInstruments) {
+	slotUpdateInstrumentParameterBox(instrument);
+    } else {
+	//!!! rwb, how do we tell the instrument parameter box not to bother?
+    }
+
+    //!!! similarly, how to set no selected track?
+    //comp.setSelectedTrack(trackId);
+}
+    
+
 void RosegardenGUIView::slotUpdateInstrumentParameterBox(int id)
 {
     Rosegarden::Studio &studio = getDocument()->getStudio();
-    Rosegarden::Composition &comp = getDocument()->getComposition();
+    Composition &comp = getDocument()->getComposition();
 
     Rosegarden::Instrument *instrument = studio.getInstrumentById(id);
 

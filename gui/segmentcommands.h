@@ -50,11 +50,11 @@ private:
     bool m_detached;
 };
 
-class SegmentCopyCommand : public XKCommand
+class SegmentQuickCopyCommand : public XKCommand
 {
 public:
-    SegmentCopyCommand(Rosegarden::Segment *segment);
-    virtual ~SegmentCopyCommand();
+    SegmentQuickCopyCommand(Rosegarden::Segment *segment);
+    virtual ~SegmentQuickCopyCommand();
 
     virtual void execute();
     virtual void unexecute();

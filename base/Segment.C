@@ -435,6 +435,24 @@ void Segment::fillWithRests(timeT startTime,
 void
 Segment::normalizeRests(timeT startTime, timeT endTime, bool permitQuantize)
 {
+    // Preliminary: If there are any time signature changes between
+    // the start and end times, consider separately each of the sections
+    // they divide the range up into.
+
+    Composition *composition = getComposition();
+    if (composition) {
+	int timeSigNo = composition->getTimeSignatureNumberAt(startTime);
+	if (timeSigNo < composition->getTimeSignatureCount() - 1) {
+	    timeT nextSigTime =
+		composition->getTimeSignatureChange(timeSigNo + 1).first;
+	    if (nextSigTime < endTime) {
+		normalizeRests(startTime, nextSigTime);
+		normalizeRests(nextSigTime, endTime);
+		return;
+	    }
+	}
+    }
+
     // First stage: erase all existing rests in this range.
 
 //    cerr << "Segment::normalizeRests " << startTime << " -> "

@@ -160,6 +160,8 @@ public slots:
     */
     void slotSelectTrackSegments(int);
 
+    void slotSelectAllSegments();
+
     void slotUpdateInstrumentParameterBox(int id);
 
     void slotSelectedSegments(const Rosegarden::SegmentSelection &segments);

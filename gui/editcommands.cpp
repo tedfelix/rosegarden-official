@@ -79,7 +79,8 @@ CopyCommand::CopyCommand(EventSelection &selection,
     m_targetClipboard(clipboard)
 {
     m_sourceClipboard = new Rosegarden::Clipboard;
-    (void)m_sourceClipboard->newSegment(&selection);
+    m_sourceClipboard->newSegment(&selection)->setLabel
+	(selection.getSegment().getLabel() + " " + i18n("(excerpt)").latin1());
 }
 
 CopyCommand::CopyCommand(SegmentSelection &selection,
@@ -91,7 +92,8 @@ CopyCommand::CopyCommand(SegmentSelection &selection,
 
     for (SegmentSelection::iterator i = selection.begin();
 	 i != selection.end(); ++i) {
-	(void)m_sourceClipboard->newSegment(*i);
+	m_sourceClipboard->newSegment(*i)->setLabel((*i)->getLabel() + " " +
+						    i18n("(copied)").latin1());
     }
 }
 

@@ -1003,7 +1003,8 @@ NotePixmapFactory::makeRestPixmap(const NotePixmapParameters &params)
     }
     QPixmap dot = m_font->getPixmap(NoteCharacterNames::DOT);
 
-    m_above = m_below = m_left = 0;
+    m_above = m_left = 0;
+    m_below = dot.height() / 2; // for dotted shallow rests like semibreve
     m_right = dot.width() * params.m_dots;
     m_noteBodyWidth = pixmap.width();
     m_noteBodyHeight = pixmap.height();

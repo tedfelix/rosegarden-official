@@ -71,8 +71,8 @@ SegmentEraseCommand::unexecute()
 
 // --------- Copy Segment ---------
 //
-SegmentCopyCommand::SegmentCopyCommand(Segment *segment):
-    XKCommand("Copy Segment"),
+SegmentQuickCopyCommand::SegmentQuickCopyCommand(Segment *segment):
+    XKCommand("Quick-Copy Segment"),
     m_composition(segment->getComposition()),
     m_segmentToCopy(segment),
     m_segment(0),
@@ -80,7 +80,7 @@ SegmentCopyCommand::SegmentCopyCommand(Segment *segment):
 {
 }
 
-SegmentCopyCommand::~SegmentCopyCommand()
+SegmentQuickCopyCommand::~SegmentQuickCopyCommand()
 {
     if (m_detached) {
         delete m_segment;
@@ -88,15 +88,17 @@ SegmentCopyCommand::~SegmentCopyCommand()
 }
 
 void
-SegmentCopyCommand::execute()
+SegmentQuickCopyCommand::execute()
 {
     m_segment = new Segment(*m_segmentToCopy);
+    m_segment->setLabel
+	(m_segment->getLabel() + " " + i18n("(copied)").latin1());
     m_composition->addSegment(m_segment);
     m_detached = false;
 }
 
 void
-SegmentCopyCommand::unexecute()
+SegmentQuickCopyCommand::unexecute()
 {
     m_composition->detachSegment(m_segment);
     m_detached = true;

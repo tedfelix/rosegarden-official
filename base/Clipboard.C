@@ -93,8 +93,15 @@ Clipboard::newSegment(const Segment *copyFrom)
 Segment *
 Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to)
 {
-    Segment *s = new Segment();
-    m_segments.insert(s);
+    // create with copy ctor so as to inherit track, instrument etc
+    Segment *s = new Segment(*copyFrom);
+
+    if (from == s->getStartTime() && to == s->getEndTime()) {
+	m_segments.insert(s);
+	return s;
+    }
+
+    s->erase(s->begin(), s->end());
 
     Segment::iterator ifrom = copyFrom->findTime(from);
     Segment::iterator ito   = copyFrom->findTime(to);
@@ -104,14 +111,16 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to)
     }
 
     s->recalculateStartTime();
+    m_segments.insert(s);
     return s;
 }
 
 Segment *
 Clipboard::newSegment(const EventSelection *copyFrom)
 {
-    Segment *s = new Segment();
-    m_segments.insert(s);
+    // create with copy ctor so as to inherit track, instrument etc
+    Segment *s = new Segment(copyFrom->getSegment());
+    s->erase(s->begin(), s->end());
 
     const EventSelection::eventcontainer &events(copyFrom->getSegmentEvents());
     for (EventSelection::eventcontainer::iterator i = events.begin();
@@ -120,6 +129,7 @@ Clipboard::newSegment(const EventSelection *copyFrom)
     }
 
     s->recalculateStartTime();
+    m_segments.insert(s);
     return s;
 }
 
