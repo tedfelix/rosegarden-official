@@ -26,7 +26,21 @@
 #include <string>
 #include <iostream>
 
+#if (__GNUC__ < 3)
+
+#include <hash_map>
+#define __HASH_NS std
+
+#else
+
 #include <ext/hash_map>
+#if (__GNUC_MINOR__ >= 1)
+#define __HASH_NS __gnu_cxx
+#else
+#define __HASH_NS std
+#endif
+
+#endif
 
 #include <sys/times.h>
 #include <unistd.h>
@@ -52,9 +66,9 @@ struct StringHash
 {
     size_t operator() (const char* s) const {
         int l = strlen(s);
-        if (l == 0) return 0;
         if (l == 1) return s[0];
         if (l > 1) return s[0] + s[1];
+	return 0;
     }
 };
 
@@ -74,7 +88,7 @@ public:
 
     void dump();
 
-    typedef std::hash_map<const char*, clock_t, StringHash, StringEq> profilesmap;
+    typedef __HASH_NS::hash_map<const char*, clock_t, StringHash, StringEq> profilesmap;
     
 
 protected:
