@@ -1,0 +1,53 @@
+
+Ideas for contributors
+======================
+
+If you're thinking of contributing to Rosegarden, we'd prefer you to
+work on something that interests you.  You're more likely to stick at
+it, and more likely to be able to tell how good a job you're doing.
+
+But, in case you're itching to contribute some code and you really
+can't decide what you'd like to do, here are some ideas.  (Anything
+listed on one of our general task lists that isn't also on one of our
+personal task lists may be a good candidate, too.)
+
+These are all things that we would like to see implemented but feel
+unlikely to get around to doing ourselves.  As such, they're likely to
+be tedious or hard work, because if they were interesting and easy
+we'd be happy to do them.  Don't feel you ought to work on anything
+from this list if it doesn't interest you: find something you really
+want to do instead.
+
+
+Tasks suggested by Chris (notation guy):
+
+ -- Various import/export filters.  These are usually boring to
+ implement, but they're quite useful and help you learn a reasonable
+ amount about the way the data structures work.  Good candidates
+ include import of Finale ETF files (see
+ http://www.cs.uu.nl/~hanwen/lily-devel/etf.html and various sample
+ files at http://www.cpdl.org), import of Brahms files, and export of
+ Lilypond typesetting files.  ETF is difficult, Brahms should be easy,
+ and the Lilypond format is probably best done by someone who's
+ already very familiar with Lilypond (or who really wants to learn all
+ about it).
+
+ -- We're lacking an event list window, and I'd also like to see a
+ window for viewing and editing the properties of a single event,
+ accessible from the notation view.
+
+
+Tasks suggested by Bownie (MIDI and audio guy):
+
+ -- an audio (waveform) editor.  I've talked to the bloke who runs
+ kwave and he's not really up to much with it at the moment, might
+ eventually make a kparts thingy out of it but he's talking about next
+ year.  We would want to use the aRTS extensible plugin architecture
+ for effects stacks so it'd be a really interesting and rewarding part
+ of the project.  I would do it myself but there's so much else
+ Instrument/Environment-wise to come to support all that fun stuff.
+
+ -- Someone should investigate and implement the LADSPA plugins as
+ well (www.plugin.org.uk, www.ladspa.org).
+
+

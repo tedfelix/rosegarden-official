@@ -85,6 +85,9 @@ persistent, the computed ones are not).
 XML format
 ----------
 
+Rosegarden-4's file format is a gzipped XML file with
+a .rg extension.  (We use zlib to read and write files.)
+
 The most basic XML elements are event and property.
 Event has a type, subordering (sorry, forgot to describe
 that, it's not terribly important, it just indicates the

@@ -21,6 +21,8 @@ Post-0.1.3 task list (superseding older ones)
 
  8. Bring LoopRuler into NotationView
 
+8a. Rework SegmentItem so as to make its bar units align with LoopRuler
+
  9. Extend Chord (in notationsets) so as to handle case where some notes
     at a given time have stem up and some have stem down (explicitly set
     by user) -- make two chords instead of one.  NotationElementList is
