@@ -25,6 +25,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <iomanip>
 
 
 namespace Rosegarden 
@@ -624,7 +625,9 @@ string Composition::toXmlString()
     composition << "<composition recordtrack=\"";
     composition << m_recordTrack;
     composition << "\" pointer=\"" << m_position;
-    composition << "\" tempo=\"" << m_currentTempo;
+    composition << "\" tempo=\"";
+    composition << setiosflags(ios::fixed)
+                << setprecision(4) << m_currentTempo;
     composition << "\">" << endl << endl;
 
     for (instrumentiterator iit = getInstruments()->begin();

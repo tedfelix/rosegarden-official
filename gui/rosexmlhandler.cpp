@@ -28,6 +28,7 @@
 #include "Track.h"
 
 #include <klocale.h>
+#include <qtextstream.h>
 
 using Rosegarden::Composition;
 using Rosegarden::Int;
@@ -93,7 +94,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
     } else if (lcName == "default-tempo") {
 
 	QString tempoString = atts.value("value");
-	m_composition.setDefaultTempo(tempoString.toInt());
+	m_composition.setDefaultTempo(tempoString.toDouble());
 	m_foundTempo = true;
 
     } else if (lcName == "instrument") {
@@ -155,7 +156,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             tempo = tempoStr.toDouble();
         }
 
-        //m_composition.setTempo(tempo);
+        m_composition.setDefaultTempo(tempo);
         
 
     } else if (lcName == "track") {
