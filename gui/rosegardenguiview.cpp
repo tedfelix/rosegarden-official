@@ -782,7 +782,8 @@ void RosegardenGUIView::slotUpdateInstrumentParameterBox(int id)
 
     // Then do this instrument/track fiddling
     //
-    if (track && instrument->getType() == Rosegarden::Instrument::Audio)
+    if (track && instrument &&
+            instrument->getType() == Rosegarden::Instrument::Audio)
     {
         // Set the mute status
         m_instrumentParameterBox->setMute(track->isMuted());

@@ -1103,7 +1103,7 @@ AlsaDriver::initialiseMidi()
     snd_seq_drain_output(m_midiHandle);
 
     AUDIT_STREAM << "AlsaDriver::initialiseMidi -  initialised MIDI subsystem"
-              << std::endl;
+              << std::endl << std::endl;
     AUDIT_UPDATE;
 }
 
@@ -1205,7 +1205,7 @@ AlsaDriver::createJackInputPorts(unsigned int totalPorts, bool deactivate)
     if (capture_1 != "")
     {
         AUDIT_STREAM << "AlsaDriver::createJackInputPorts - "
-                     << "attempting connect from "
+                     << "connecting from "
                      << "\"" << capture_1.c_str() << "\" to \""
                      << jack_port_name(m_jackInputPorts[0]) << "\""
                      << std::endl;
@@ -1222,7 +1222,7 @@ AlsaDriver::createJackInputPorts(unsigned int totalPorts, bool deactivate)
     if (capture_2 != "")
     {
         AUDIT_STREAM << "AlsaDriver::createJackInputPorts - "
-                     << "attempting connect from "
+                     << "connecting from "
                      << "\"" << capture_2.c_str() << "\" to \""
                      << jack_port_name(m_jackInputPorts[1]) << "\""
                      << std::endl;
@@ -1238,6 +1238,11 @@ AlsaDriver::createJackInputPorts(unsigned int totalPorts, bool deactivate)
     // Reconnect out ports
     if (deactivate)
     {
+
+        AUDIT_STREAM << "AlsaDriver::createJackInputPorts - "
+                     << "reconnecting JACK output port (left)"
+                     << std::endl;
+
         if (outLeftPort && outLeftPort[0])
         {
             if (jack_connect(m_audioClient,
@@ -1249,6 +1254,10 @@ AlsaDriver::createJackInputPorts(unsigned int totalPorts, bool deactivate)
                              << std::endl;
             }
         }
+
+        AUDIT_STREAM << "AlsaDriver::createJackInputPorts - "
+                     << "reconnecting JACK output port (right)"
+                     << std::endl;
 
         if (outRightPort && outRightPort[0])
         {
@@ -1395,22 +1404,40 @@ AlsaDriver::initialiseAudio()
         free(ports);
     }
 
-    // connect our client up to the ALSA ports - first left output
-    //
-    if (jack_connect(m_audioClient, jack_port_name(m_jackOutputPortLeft),
-                     playback_1.c_str()))
+    if (playback_1 != "")
     {
         AUDIT_STREAM << "AlsaDriver::initialiseAudio - "
-                     << "cannot connect to JACK output port" << std::endl;
-        return;
+                     << "connecting from "
+                     << "\"" << jack_port_name(m_jackOutputPortLeft)
+                     << "\" to \"" << playback_1.c_str() << "\""
+                     << std::endl;
+
+        // connect our client up to the ALSA ports - first left output
+        //
+        if (jack_connect(m_audioClient, jack_port_name(m_jackOutputPortLeft),
+                         playback_1.c_str()))
+        {
+            AUDIT_STREAM << "AlsaDriver::initialiseAudio - "
+                         << "cannot connect to JACK output port" << std::endl;
+            return;
+        }
     }
 
-    if (jack_connect(m_audioClient, jack_port_name(m_jackOutputPortRight),
-                     playback_2.c_str()))
+    if (playback_2 != "")
     {
         AUDIT_STREAM << "AlsaDriver::initialiseAudio - "
-                     << "cannot connect to JACK output port" << std::endl;
-        return;
+                     << "connecting from "
+                     << "\"" << jack_port_name(m_jackOutputPortLeft)
+                     << "\" to \"" << playback_2.c_str() << "\""
+                     << std::endl;
+
+        if (jack_connect(m_audioClient, jack_port_name(m_jackOutputPortRight),
+                         playback_2.c_str()))
+        {
+            AUDIT_STREAM << "AlsaDriver::initialiseAudio - "
+                         << "cannot connect to JACK output port" << std::endl;
+            return;
+        }
     }
 
     // Get the latencies from JACK and set them as RealTime
