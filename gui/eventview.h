@@ -29,8 +29,11 @@
 
 
 #include <vector>
+#include <set>
 
 #include "editviewbase.h"
+
+#include "Segment.h"
 
 class RosegardenGUIDoc;
 class KListView;
@@ -39,7 +42,7 @@ class QPushButton;
 class QCheckBox;
 class QButtonGroup;
 
-class EventView : public EditViewBase
+class EventView : public EditViewBase, public Rosegarden::SegmentObserver
 {
     Q_OBJECT
 
@@ -115,6 +118,10 @@ public slots:
     //
     void slotModifyFilter(int);
 
+    virtual void eventAdded(const Rosegarden::Segment *, Rosegarden::Event *) { }
+    virtual void eventRemoved(const Rosegarden::Segment *, Rosegarden::Event *);
+    virtual void endMarkerTimeChanged(const Rosegarden::Segment *, bool) { }
+
 protected slots:
 
     virtual void slotSaveOptions();
@@ -145,6 +152,7 @@ protected:
     static const char* const LayoutConfigGroupName;
 
     std::vector<int> m_listSelection;
+    std::set<Rosegarden::Event *> m_deletedEvents; // deleted since last refresh
 
     QPopupMenu     *m_menu;
 

@@ -202,6 +202,10 @@ EventView::EventView(RosegardenGUIDoc *doc,
                    .arg(segments.size()));
     }
 
+    for (unsigned int i = 0; i < m_segments.size(); ++i) {
+	m_segments[i]->addObserver(this);
+    }
+
     // Connect double clicker
     //
     connect(m_eventList, SIGNAL(doubleClicked(QListViewItem*)),
@@ -237,7 +241,15 @@ EventView::~EventView()
     if (!getDocument()->isBeingDestroyed()) {
         getDocument()->getSequenceManager()->
             setTemporarySequencerSliceSize(Rosegarden::RealTime(2, 0));
+	for (unsigned int i = 0; i < m_segments.size(); ++i)
+	    m_segments[i]->removeObserver(this);
     }
+}
+
+void
+EventView::eventRemoved(const Rosegarden::Segment *, Rosegarden::Event *e)
+{
+    m_deletedEvents.insert(e);
 }
 
 bool
@@ -446,6 +458,7 @@ EventView::applyLayout(int /*staffNo*/)
     }
 
     m_listSelection.clear();
+    m_deletedEvents.clear();
 
     return true;
 }
@@ -628,6 +641,11 @@ EventView::slotEditDelete()
 
         if (item)
         {
+	    if (m_deletedEvents.find(item->getEvent()) != m_deletedEvents.end()) {
+		++it;
+		continue;
+	    }
+/*!!!
             // Ensure that item to delete is actually still in the
             // Segment - when deleting lots of events the list 
             // view can sometimes get in a mess.  Another bug
@@ -650,7 +668,7 @@ EventView::slotEditDelete()
                 ++it;
                 continue;
             }
-
+*/
             /*
             cout << "DELETE EVENT @ " 
                  << item->getEvent()->getAbsoluteTime() << endl;
