@@ -244,10 +244,27 @@ NotationView::showElements(NotationElementList::iterator from,
             //
             try {
                 Note note = Note((*it)->event()->get<Int>("Notation::NoteType"));
-        
-                QCanvasPixmap notePixmap(npf.makeNotePixmap(note, true, true));
-                QCanvasSimpleSprite *noteSprite = new QCanvasSimpleSprite(&notePixmap,
-                                                                          canvas());
+
+                QCanvasSimpleSprite *noteSprite = 0;
+                
+                if ((*it)->event()->type() == "note") {
+
+                    QCanvasPixmap notePixmap(npf.makeNotePixmap(note, true, true));
+                    noteSprite = new QCanvasSimpleSprite(&notePixmap, canvas());
+
+                } else if ((*it)->event()->type() == "rest") {
+
+                    QCanvasPixmap notePixmap(npf.makeRestPixmap(note));
+                    noteSprite = new QCanvasSimpleSprite(&notePixmap, canvas());
+
+                } else {
+                    
+                    kdDebug(KDEBUG_AREA) << "NotationElement type is neither a note nor a rest"
+                                         << endl;
+                    continue;
+                }
+                
+                
                 noteSprite->move(dxoffset + (*it)->x(),
                                  dyoffset + (*it)->y());
                 noteSprite->show();

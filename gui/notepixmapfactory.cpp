@@ -171,9 +171,9 @@ NotePixmapFactory::makeRestPixmap(Note note)
     case Quarter:
         return QCanvasPixmap(*m_rests[4], m_pointZero);
     case Half:
-        return QCanvasPixmap(*m_rests[5], m_pointZero);
+        return QCanvasPixmap(*m_rests[5], m_pointZero); // QPoint(0, 19)
     case Whole:
-        return QCanvasPixmap(*m_rests[6], m_pointZero);
+        return QCanvasPixmap(*m_rests[6], m_pointZero); // QPoint(0, 9)
     default:
         kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeRestPixmap() for note "
                              << note << " not yet implemented or note out of range\n";

@@ -39,20 +39,31 @@ NotationVLayout::layout(NotationElement *el)
              ++i)
             layout(*i);
 
+    } else if (el->isRest()) {
+
+        el->setY(m_staff.pitchYOffset(17)); // 
+
     } else {
 
-        int pitch = el->event()->get<Int>("pitch");
+        try {
+            int pitch = el->event()->get<Int>("pitch");
 
-//     kdDebug(KDEBUG_AREA) << "pitch : " << pitch
-//                          << " - height : " << m_pitchToHeight[pitch]
-//                          << " - staffOffset : " << m_staffOffsetY
-//                          << " - height + staffOffset : " << m_pitchToHeight[pitch] + m_staffOffsetY
-//                          << endl;
+            //     kdDebug(KDEBUG_AREA) << "pitch : " << pitch
+            //                          << " - height : " << m_pitchToHeight[pitch]
+            //                          << " - staffOffset : " << m_staffOffsetY
+            //                          << " - height + staffOffset : " << m_pitchToHeight[pitch] + m_staffOffsetY
+            //                          << endl;
 
-        el->setY(m_staff.pitchYOffset(pitch));
+            el->setY(m_staff.pitchYOffset(pitch));
     
-        kdDebug(KDEBUG_AREA) << "NotationVLayout::layout : pitch : "
-                             << pitch << " - y : " << el->y() << endl;
+            kdDebug(KDEBUG_AREA) << "NotationVLayout::layout : pitch : "
+                                 << pitch << " - y : " << el->y() << endl;
+        }
+        catch (Event::NoData) {
+            kdDebug(KDEBUG_AREA) << "NotationVLayout::layout : couldn't get pitch for element"
+                                 << endl;
+            el->setY(0);
+        }
+        
     }
-
 }

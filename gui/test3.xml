@@ -10,6 +10,9 @@
 	</Group>
 
 	<event type="note" duration="whole" pitch="10"/>
+	<event type="rest" duration="whole"/>
+	<event type="rest" duration="half"/>
+	<event type="rest" duration="half"/>
 	<event type="note" duration="whole" pitch="7"/>
 
 </Track>
