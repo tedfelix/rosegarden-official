@@ -67,6 +67,7 @@ public:
     void addPort(unsigned int id, PortData value);
     bool removePort(unsigned int id);
     PluginPortInstance* getPort(unsigned int it);
+    void clearPorts();
 
     // export
     std::string toXmlString();

@@ -41,7 +41,8 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     KDialogBase(parent, "", false, i18n("Rosegarden Audio Plugin"), Close),
     m_pluginManager(aPM),
     m_instrument(instrument),
-    m_index(index)
+    m_index(index),
+    m_generating(true)
 {
     QVBox *v = makeVBoxMainWidget();
 
@@ -116,6 +117,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     else
         slotPluginSelected(m_pluginList->currentItem());
 
+    m_generating = false;
 }
 
 void
@@ -157,10 +159,19 @@ AudioPluginDialog::slotPluginSelected(int number)
         setCaption(caption + plugin->getName());
         m_pluginId->setText(QString("%1").arg(plugin->getUniqueId()));
 
-        // Set the unique id on our own instance
+        // Set the unique id on our own instance - clear the ports down
         //
         AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
-        if (inst) { inst->setId(plugin->getUniqueId()); }
+        if (inst)
+        {
+            inst->setId(plugin->getUniqueId());
+
+            // Only clear ports if this method is accessed by user
+            // action (after the constructor)
+            //
+            if (m_generating == false)
+                inst->clearPorts();
+        }
 
         PortIterator it = plugin->begin();
         int count = 0;
@@ -274,7 +285,6 @@ PluginControl::PluginControl(QWidget *parent,
     m_pluginManager(aPM),
     m_index(index)
 {
-    cout << "INITIAL VALUE = " << initialValue << endl;
     QFont plainFont;
     plainFont.setPointSize((plainFont.pointSize() * 9 )/ 10);
     setFont(plainFont);
@@ -335,6 +345,8 @@ PluginControl::PluginControl(QWidget *parent,
 
         m_dial->setValue(value);
         slotValueChanged(value);
+
+        //cout << "INITIAL VALUE = " << value << endl;
 
         connect(m_dial, SIGNAL(valueChanged(int)),
                 this, SLOT(slotValueChanged(int)));

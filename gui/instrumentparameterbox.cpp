@@ -299,6 +299,22 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
         m_volumeFader->setFader(instrument->getVelocity());
         m_pluginButton->show();
 
+        Rosegarden::AudioPluginInstance *inst = 
+            m_selectedInstrument->getPlugin(0);
+
+        if (inst && inst->isAssigned())
+        {
+            Rosegarden::AudioPlugin *pluginClass 
+                = m_pluginManager->getPlugin(
+                        m_pluginManager->getPositionByUniqueId(inst->getId()));
+
+            if (pluginClass)
+                m_pluginButton->setText(pluginClass->getLabel());
+        }
+        else
+            m_pluginButton->setText(i18n("<no plugin>"));
+
+
         return; // for the moment
     }
     else // Midi
@@ -723,7 +739,10 @@ InstrumentParameterBox::slotPluginSelected(int index, int plugin)
             std:: cout << "InstrumentParameterBox::slotPluginSelected - "
                        << "no plugin selected" << std::endl;
 
-            // destroy sequencer instance
+            // Destroy plugin instance
+            Rosegarden::StudioControl::destroyStudioObject(inst->getMappedId());
+            inst->setAssigned(false);
+            m_pluginButton->setText(i18n("<no plugin>"));
         }
         else
         {
@@ -795,18 +814,11 @@ InstrumentParameterBox::slotPluginSelected(int index, int plugin)
 #endif
             }
 
+            Rosegarden::AudioPlugin *pluginClass 
+                = m_pluginManager->getPlugin(plugin);
 
-            /*
-            if (plgn == 0)
-            {
-                cout << "No instance" << endl;
-            }
-            */
-
-
-            // initialise the instance from the plugin
-            //
-            //inst->
+            if (pluginClass)
+                m_pluginButton->setText(pluginClass->getLabel());
         }
     }
     else

@@ -290,6 +290,9 @@ MappedStudio::destroyObject(MappedObject *object)
     {
         if ((*it) == object)
         {
+            std::cout << "MappedStudio::destroyObject - "
+                      << "destroying object id = " << object->getId()
+                      << std::endl;
             delete (*it);
             m_objects.erase(it);
             return true;
@@ -540,7 +543,7 @@ MappedStudio::setPluginInstancePort(InstrumentId id,
                                     unsigned long portNumber,
                                     LADSPA_Data value)
 {
-    cout << "PORT NUMBER = " << portNumber << endl;
+    //cout << "PORT NUMBER = " << portNumber << endl;
 
     if (m_sequencer)
     {

@@ -126,6 +126,8 @@ protected:
     int                  m_headHeight;
     int                  m_index;
 
+    bool                 m_generating;
+
 
 };
 

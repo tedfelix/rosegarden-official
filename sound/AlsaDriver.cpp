@@ -2038,35 +2038,35 @@ LADSPAPluginInstance::connectPorts(LADSPA_Data *dataIn1,
     if (m_audioPortsIn.size() == 1)
     {
         m_descriptor->connect_port(m_instanceHandle,
-                     m_audioPortsIn[0],
-                     dataIn1);
+                                   m_audioPortsIn[0],
+                                   dataIn1);
     }
     else // assume 2
     {
         m_descriptor->connect_port(m_instanceHandle,
-                     m_audioPortsIn[0],
-                     dataIn1);
+                                   m_audioPortsIn[0],
+                                   dataIn1);
 
         m_descriptor->connect_port(m_instanceHandle,
-                     m_audioPortsIn[1],
-                     dataIn2);
+                                   m_audioPortsIn[1],
+                                   dataIn2);
     }
 
     if (m_audioPortsOut.size() == 1)
     {
         m_descriptor->connect_port(m_instanceHandle,
-                     m_audioPortsOut[0],
-                     dataOut1);
+                                   m_audioPortsOut[0],
+                                   dataOut1);
     }
     else
     {
         m_descriptor->connect_port(m_instanceHandle,
-                     m_audioPortsOut[0],
-                     dataOut1);
+                                   m_audioPortsOut[0],
+                                   dataOut1);
 
         m_descriptor->connect_port(m_instanceHandle,
-                     m_audioPortsOut[1],
-                     dataOut2);
+                                   m_audioPortsOut[1],
+                                   dataOut2);
     }
 
     for (unsigned int i = 0; i < m_controlPorts.size(); i++)
@@ -2085,7 +2085,8 @@ LADSPAPluginInstance::setPortValue(unsigned long portNumber, LADSPA_Data value)
     {
         if (m_controlPorts[i].first == portNumber)
         {
-            std::cout << "SETTING PORT TO " << value << std::endl;
+            std::cout << "LADSPAPluginInstance::setPortValue - "
+                      << "setting value = " << value << std::endl;
 
             (*m_controlPorts[i].second) = value;
         }

@@ -87,6 +87,15 @@ AudioPluginInstance::getPort(unsigned int id)
     return 0;
 }
 
+void
+AudioPluginInstance::clearPorts()
+{
+    PortInstanceIterator it = m_ports.begin();
+    for (; it != m_ports.end(); it++)
+        delete (*it);
+    m_ports.erase(m_ports.begin(), m_ports.end());
+
+}
 
 }
 
