@@ -818,7 +818,8 @@ void RosegardenGUIView::deleteRecordingSegmentItem()
 //
 void RosegardenGUIView::showVisuals(const Rosegarden::MappedEvent *mE)
 {
-    double value = ((double)mE->getVelocity()) / 127.0;
+    double valueLeft = ((double)mE->getData1()) / 127.0;
+    double valueRight = ((double)mE->getData2()) / 127.0;
 
     if (mE->getType() == Rosegarden::MappedEvent::AudioLevel)
     {
@@ -828,20 +829,21 @@ void RosegardenGUIView::showVisuals(const Rosegarden::MappedEvent *mE)
         if (mE->getInstrument() ==
                 m_instrumentParameterBox->getSelectedInstrument()->getId())
         {
-            m_instrumentParameterBox->setAudioMeter(value, value);
+            m_instrumentParameterBox->setAudioMeter(valueLeft, valueRight);
         }
 
         // Don't always send all audio levels so we don't
         // get vu meter flickering on track meters
         //
-        if (value < 0.05) return;
+        if (valueLeft < 0.05 && valueRight < 0.05) return;
 
     }
     else if (mE->getType() != Rosegarden::MappedEvent::MidiNote)
         return;
 
     m_trackEditor->getTrackButtons()->
-        slotSetMetersByInstrument(value, mE->getInstrument());
+        slotSetMetersByInstrument((valueLeft + valueRight) / 2, 
+                                  mE->getInstrument());
 
 }
 

@@ -26,6 +26,13 @@ o Audio
    - countdown dialog for audio recording [DONE]
    - check disk space on audio record start [ALMOST DONE]
 
+   - plugins matching stereo/mono instruments??
+   - seperate audio level sends for stereo monitoring [DONE]
+   - improve Audio VU meter
+   - get record fader level working at sequencer
+
+   - get Studio reapplying working
+
 o Audio busses and routing
    - n jack input routes [DONE]
    - multiple audio record arm [HALF DONE - for 0.9.5]

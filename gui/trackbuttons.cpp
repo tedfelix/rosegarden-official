@@ -744,7 +744,10 @@ TrackButtons::slotSetMetersByInstrument(double value,
         track = comp.getTrackByPosition(i);
 
         if (track !=0 && track->getInstrument() == id)
+        {
             m_trackMeters[i]->setLevel(value);
+            //cout << "SETTING LEVEL = " << value << " ON INS " << id << endl;
+        }
     }
 }
 

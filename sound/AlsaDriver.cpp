@@ -147,12 +147,21 @@ static const float  _16bitSampleMax = (float)(0xffff/2);
 static bool _jackTransportEnabled;
 static bool _jackTransportMaster;
 
-static MappedEvent _jackMappedEvent;
+// We use a matrix of pre-allocated MappedEvents to return information
+// to the GUI every so often from the jackProcess loop (where need to
+// be as efficient as possible).
+//
+static const int     _jackMappedEventsMax = 100;
+static MappedEvent*  _jackMappedEvent[_jackMappedEventsMax];
+static int           _jackMappedEventCounter;
 
 // How many passes through JACK's process loop before reporting
 // audio level.  So we avoid flooding.
 //
 static const int reportPasses = 5;
+
+static const int     _jackPeakLevelsMax = 200;
+static float         _jackPeakLevels[_jackPeakLevelsMax];
 
 #endif
 
@@ -206,7 +215,13 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
     // setting this property means that MappedComposition::clear()
     // won't attempt to delete it.
     //
-    _jackMappedEvent.setPersistent(true);
+    for (int i = 0; i < _jackMappedEventsMax; ++i)
+    {
+        _jackMappedEvent[i] = new MappedEvent();
+        _jackMappedEvent[i]->setPersistent(true);
+    }
+
+    _jackMappedEventCounter = 0;
 
 #endif
 
@@ -271,6 +286,10 @@ AlsaDriver::~AlsaDriver()
         jack_client_close(m_audioClient);
         m_audioClient = 0;
     }
+
+    // Get rid of all those static events
+    for (int i = 0; i < _jackMappedEventsMax; ++i)
+        delete _jackMappedEvent[i];
 
 #endif // HAVE_LIBJACK
     AUDIT_UPDATE;
@@ -1866,6 +1885,13 @@ AlsaDriver::getAlsaTime()
 MappedComposition*
 AlsaDriver::getMappedComposition(const RealTime &playLatency)
 {
+
+#ifdef HAVE_LIBJACK
+    // Reset this counter for return MappedEvent usage on every pass through.
+    //
+    _jackMappedEventCounter = 0;
+#endif
+
     // If we're already inserted some audio VU meter events then
     // don't clear them from the composition.
     //
@@ -3028,7 +3054,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
             //
             std::string buffer;
             unsigned char b1, b2;
-            float inputLevel = 0.0f;
+            float inputLevelLeft = 0.0f, inputLevelRight = 0.0f;
 
             for (unsigned int i = 0; i < nframes; ++i)
             {
@@ -3041,7 +3067,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 
                 // We're monitoring levels here 
                 //
-                inputLevel += fabs(inputBufferLeft[i]);
+                inputLevelLeft += fabs(inputBufferLeft[i]);
 
                 if (inputBufferRight)
                 {
@@ -3052,23 +3078,34 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                     buffer += b2;
                     buffer += b1;
 
-                    inputLevel += fabs(inputBufferRight[i]);
+                    inputLevelRight += fabs(inputBufferRight[i]);
                 }
             }
 
-            inputLevel /= float(nframes) * channels;
+            inputLevelLeft /= float(nframes);
+            if (channels == 2) inputLevelRight /= float(nframes);
 
             if (_passThroughCounter++ > reportPasses)
             {
-                // Return an event to inform the GUI that AudioFileId has
-                // now stopped playing.
+                // Report the input level back to the GUI every "reportPasses"
                 //
-                _jackMappedEvent.setInstrument((inst)->
-                        getAudioMonitoringInstrument());
-                _jackMappedEvent.setType(MappedEvent::AudioLevel);
-                _jackMappedEvent.setData1(0);
-                _jackMappedEvent.setData2(int(inputLevel * 127.0));
-                inst->insertMappedEventForReturn(&_jackMappedEvent);
+                //
+                _jackMappedEvent[_jackMappedEventCounter]
+                    ->setInstrument((inst)->getAudioMonitoringInstrument());
+                _jackMappedEvent[_jackMappedEventCounter]
+                    ->setType(MappedEvent::AudioLevel);
+                _jackMappedEvent[_jackMappedEventCounter]
+                    ->setData1(int(inputLevelLeft * 127.0));
+                _jackMappedEvent[_jackMappedEventCounter]
+                    ->setData2(int(inputLevelRight * 127.0));
+                inst->insertMappedEventForReturn(
+                        _jackMappedEvent[_jackMappedEventCounter]);
+
+                _jackMappedEventCounter++;
+
+                // return
+                if (_jackMappedEventCounter >= _jackMappedEventsMax)
+                    _jackMappedEventCounter = 0;
             }
 
             if (inst->getRecordStatus() == RECORD_AUDIO)
@@ -3113,8 +3150,8 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
         double dInSamplesInc = 0.0;
         jack_nframes_t samplesOut = 0;
 
-        std::vector<float> peakLevels;
-        float peakLevel;
+        int audioFilesProcessed = 0;
+        float peakLevelLeft, peakLevelRight;
 
         for (it = audioQueue.begin(); it != audioQueue.end(); ++it)
         {
@@ -3191,11 +3228,22 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                     // Simple event to inform that AudioFileId has
                     // now stopped playing.
                     //
-                    _jackMappedEvent.setInstrument((*it)->getInstrument());
-                    _jackMappedEvent.setType(MappedEvent::AudioStopped);
-                    _jackMappedEvent.setData1((*it)->getAudioFile()->getId());
-                    _jackMappedEvent.setData2(0);
-                    inst->insertMappedEventForReturn(&_jackMappedEvent);
+                    _jackMappedEvent[_jackMappedEventCounter]
+                        ->setInstrument((*it)->getInstrument());
+                    _jackMappedEvent[_jackMappedEventCounter]
+                        ->setType(MappedEvent::AudioStopped);
+                    _jackMappedEvent[_jackMappedEventCounter]
+                        ->setData1((*it)->getAudioFile()->getId());
+                    _jackMappedEvent[_jackMappedEventCounter]
+                        ->setData2(0);
+                    inst->insertMappedEventForReturn(
+                            _jackMappedEvent[_jackMappedEventCounter]);
+
+                    _jackMappedEventCounter++;
+
+                    // return
+                    if (_jackMappedEventCounter >= _jackMappedEventsMax)
+                        _jackMappedEventCounter = 0;
                 }
 
 
@@ -3242,7 +3290,8 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                 char *origSamplePtr = samplePtr;
                 float outBytes;
 
-                peakLevel = 0.0f;
+                peakLevelLeft = 0.0f;
+                peakLevelRight = 0.0f;
 
                 // Get the volume of the audio fader and set a modifier
                 // accordingly.
@@ -3283,8 +3332,8 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                             _pluginBufferIn1[samplesOut] =
                                 outBytes * volume * pan1;
 
-                            if (fabs(outBytes) > peakLevel)
-                                peakLevel = fabs(outBytes);
+                            if (fabs(outBytes) > peakLevelLeft)
+                                peakLevelLeft = fabs(outBytes);
 
                             if (channels == 2)
                             {
@@ -3292,6 +3341,10 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                                     ((short)
                                      (*((unsigned char *)samplePtr + 1))) /
                                           _8bitSampleMax;
+
+                                if (fabs(outBytes) > peakLevelRight)
+                                    peakLevelRight = fabs(outBytes);
+
                             }
 
                             _pluginBufferIn2[samplesOut] =
@@ -3305,8 +3358,8 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                             _pluginBufferIn1[samplesOut] =
                                 outBytes * volume * pan1;
 
-                            if (fabs(outBytes) > peakLevel)
-                                peakLevel = fabs(outBytes);
+                            if (fabs(outBytes) > peakLevelLeft)
+                                peakLevelLeft = fabs(outBytes);
 
                             // Get other sample if we have one
                             //
@@ -3314,6 +3367,10 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                             {
                                 outBytes = (*((short*)(samplePtr + 2))) /
                                            _16bitSampleMax;
+
+                                if (fabs(outBytes) > peakLevelRight)
+                                    peakLevelRight = fabs(outBytes);
+
                             }
                             _pluginBufferIn2[samplesOut] =
                                 outBytes * volume * pan2;
@@ -3368,7 +3425,8 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                     }
                 }
 
-                peakLevels.push_back(peakLevel);
+                _jackPeakLevels[audioFilesProcessed * 2] = peakLevelLeft;
+                _jackPeakLevels[audioFilesProcessed * 2 + 1] = peakLevelRight;
 
                 // Insert plugins go here
                 //
@@ -3453,6 +3511,8 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                     }
                 }
             }
+
+            audioFilesProcessed++;
         }
 
         // Playing plugins that have no current audio input but
@@ -3541,19 +3601,38 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
         //
         if (audioQueue.size() > 0 && _passThroughCounter++ > reportPasses)
         {
-            int i = 0;
+            int audioFileCounter = 0;
             for (it = audioQueue.begin(); it != audioQueue.end(); ++it)
             {
                 if ((*it)->getStatus() == PlayableAudioFile::PLAYING)
                 {
-                    _jackMappedEvent.setInstrument((*it)->getInstrument());
-                    _jackMappedEvent.setType(MappedEvent::AudioLevel);
-                    _jackMappedEvent.setData1((*it)->getAudioFile()->getId());
-                    _jackMappedEvent.setData2(int(peakLevels[i++] * 127.0));
-                    inst->insertMappedEventForReturn(&_jackMappedEvent);
+                    _jackMappedEvent[_jackMappedEventCounter]
+                        ->setInstrument((*it)->getInstrument());
+                    _jackMappedEvent[_jackMappedEventCounter]
+                        ->setType(MappedEvent::AudioLevel);
+                    //_jackMappedEvent[_jackMappedEventCounter]
+                        //->setData1((*it)->getAudioFile()->getId());
+
+                    _jackMappedEvent[_jackMappedEventCounter]->setData1(
+                        int(_jackPeakLevels[audioFileCounter * 2] * 127.0));
+
+                    _jackMappedEvent[_jackMappedEventCounter]->setData2(
+                        int(_jackPeakLevels[audioFileCounter * 2 + 1] * 127.0));
+
+                    inst->insertMappedEventForReturn(
+                            _jackMappedEvent[_jackMappedEventCounter]);
+
+                    _jackMappedEventCounter++;
+
+                    // return
+                    if (_jackMappedEventCounter >= _jackMappedEventsMax)
+                        _jackMappedEventCounter = 0;
+
+                    audioFileCounter++;
                 }
             }
 
+            // throw away the peak levels now
             _passThroughCounter = 0;
         }
 
