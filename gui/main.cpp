@@ -305,9 +305,10 @@ I18N_NOOP("Rosegarden - A sequencer and musical notation editor");
 
 static KCmdLineOptions options[] =
 {
+    { "nosplash", I18N_NOOP("don't show splash screen"), 0 },
+    { "nosequencer", I18N_NOOP("don't use an external sequencer"), 0 },
     { "+[File]", I18N_NOOP("file to open"), 0 },
     { 0, 0, 0 }
-    // INSERT YOUR COMMANDLINE OPTIONS HERE
 };
 
 int main(int argc, char *argv[])
@@ -330,6 +331,11 @@ int main(int argc, char *argv[])
     app.dcopClient()->registerAs(app.name(), false);
     app.dcopClient()->setDefaultObject(ROSEGARDEN_GUI_IFACE_NAME);
 
+
+    // Parse cmd line args
+    //
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+
     // Show Startup logo
     // (this code borrowed from KDevelop 2.0,
     // (c) The KDevelop Development Team
@@ -338,7 +344,8 @@ int main(int argc, char *argv[])
     config->setGroup("General Options");
     KStartupLogo* startLogo = 0L;
 
-    if (config->readBoolEntry("Logo",true) && (!kapp->isRestored() ) )
+
+    if (config->readBoolEntry("Logo",true) && (!kapp->isRestored() && args->isSet("splash")) )
     {
 	kdDebug(KDEBUG_AREA) << "main: Showing startup logo\n";
 	startLogo = new KStartupLogo();
@@ -358,7 +365,7 @@ int main(int argc, char *argv[])
 
     } else {
 
-        rosegardengui = new RosegardenGUIApp();
+        rosegardengui = new RosegardenGUIApp(args->isSet("sequencer"));
         rosegardengui->show();
 
 	// raise start logo
@@ -369,8 +376,6 @@ int main(int argc, char *argv[])
 	    QApplication::flushX();
 	}
 
-        KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-		
         if (args->count()) {
             rosegardengui->openDocumentFile(args->arg(0));
         } else {
