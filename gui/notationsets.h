@@ -57,7 +57,6 @@ public:
     virtual bool hasNoteHeadShifted() const;
     virtual bool isNoteHeadShifted(const NotationElementList::iterator &itr)
 	const;
-    virtual std::vector<Rosegarden::Mark> getMarksForChord() const;
 
 private:
     int getHeight(const Iterator&) const;

@@ -532,37 +532,6 @@ NotationChord::isNoteHeadShifted(const Iterator &itr) const
     return false;
 }
 
-std::vector<Mark>
-NotationChord::getMarksForChord() const
-{
-    std::vector<Mark> marks;
-
-    for (unsigned int i = 0; i < size(); ++i) {
-
-	long markCount = 0;
-	const Iterator &itr((*this)[i]);
-	getAsEvent(itr)->get<Int>(MARK_COUNT, markCount);
-
-	if (markCount == 0) continue;
-
-	for (long j = 0; j < markCount; ++j) {
-
-	    Mark mark(Marks::NoMark);
-	    (void)getAsEvent(itr)->get<String>(getMarkPropertyName(j), mark);
-
-	    unsigned int k;
-	    for (k = 0; k < marks.size(); ++i) {
-		if (marks[k] == mark) break;
-	    }
-	    if (k == marks.size()) {
-		marks.push_back(mark);
-	    }
-	}
-    }
-
-    return marks;
-}
-
 
 
 //////////////////////////////////////////////////////////////////////

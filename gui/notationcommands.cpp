@@ -26,6 +26,7 @@
 #include "Event.h"
 #include "NotationTypes.h"
 #include "Selection.h"
+#include "Sets.h"
 #include "SegmentNotationHelper.h"
 #include "SegmentMatrixHelper.h"
 #include "BaseProperties.h"
@@ -49,6 +50,7 @@ using Rosegarden::String;
 using Rosegarden::Text;
 using Rosegarden::Accidental;
 using Rosegarden::Accidentals::NoAccidental;
+using Rosegarden::Mark;
 using Rosegarden::Marks;
 using Rosegarden::Indication;
 using Rosegarden::NotationDisplayPitch;
@@ -1245,14 +1247,16 @@ TransformsMenuInterpretCommand::articulate()
 
     std::vector<Event *> toErase;
     std::vector<Event *> toInsert;
+    Segment &segment(getSegment());
 
-    for (EventSelection::eventcontainer::iterator itr =
+    for (EventSelection::eventcontainer::iterator ecitr =
 	     m_selection->getSegmentEvents().begin();
-	 itr != m_selection->getSegmentEvents().end(); ++itr) {
+	 ecitr != m_selection->getSegmentEvents().end(); ++ecitr) {
 
-	Event *e = *itr;
+	Event *e = *ecitr;
 	if (!e->isa(Note::EventType)) continue;
-	timeT duration = m_quantizer->getQuantizedDuration(e);
+	Segment::iterator itr = segment.findSingle(e);
+	Rosegarden::Chord chord(segment, itr, m_quantizer);
 
 	// the things that affect duration
 	bool staccato = false;
@@ -1263,39 +1267,33 @@ TransformsMenuInterpretCommand::articulate()
 	bool slurred = false;
 
 	int velocityChange = 0;
+
+	std::vector<Mark> marks(chord.getMarksForChord());
 	
-	long marks = 0;
-	if (e->get<Int>(MARK_COUNT, marks)) {
-	    for (int i = 0; i < marks; ++i) {
-		std::string mark = "";
-		if (e->get<String>(getMarkPropertyName(i), mark)) {
+	for (std::vector<Mark>::iterator i = marks.begin();
+	     i != marks.end(); ++i) {
 
-		    //!!! all this stuff needs to work on a chord level, not
-		    // just a note one
-
-		    if (mark == Marks::Accent) {
-			velocityChange += 30;
-		    } else if (mark == Marks::Tenuto) {
-			tenuto = true;
-		    } else if (mark == Marks::Staccato) {
-			staccato = true;
-		    } else if (mark == Marks::Staccatissimo) {
-			staccatissimo = true;
-			velocityChange -= 5;
-		    } else if (mark == Marks::Marcato) {
-			marcato = true;
-			velocityChange += 15;
-		    } else if (mark == Marks::Sforzando) {
-			velocityChange += 35;
-		    } else if (mark == Marks::Rinforzando) {
-			rinforzando = true;
-			velocityChange += 15;
-		    } else if (mark == Marks::DownBow) {
-			velocityChange += 5;
-		    } else if (mark == Marks::UpBow) {
-			velocityChange -= 5;
-		    }
-		}
+	    if (*i == Marks::Accent) {
+		velocityChange += 30;
+	    } else if (*i == Marks::Tenuto) {
+		tenuto = true;
+	    } else if (*i == Marks::Staccato) {
+		staccato = true;
+	    } else if (*i == Marks::Staccatissimo) {
+		staccatissimo = true;
+		velocityChange -= 5;
+	    } else if (*i == Marks::Marcato) {
+		marcato = true;
+		velocityChange += 15;
+	    } else if (*i == Marks::Sforzando) {
+		velocityChange += 35;
+	    } else if (*i == Marks::Rinforzando) {
+		rinforzando = true;
+		velocityChange += 15;
+	    } else if (*i == Marks::DownBow) {
+		velocityChange += 5;
+	    } else if (*i == Marks::UpBow) {
+		velocityChange -= 5;
 	    }
 	}
 
@@ -1307,8 +1305,10 @@ TransformsMenuInterpretCommand::articulate()
 	    // last note in a slur should be treated as if unslurred
 	    timeT slurEnd =
 		inditr->first + inditr->second->getIndicationDuration();
-	    timeT absTime = m_quantizer->getQuantizedAbsoluteTime(e);
-	    if (slurEnd == absTime + duration) { //!!! not a good enough test
+	    Segment::iterator slurEndItr = segment.findTime(slurEnd);
+	    if (slurEndItr == segment.end() ||
+		(m_quantizer->getQuantizedAbsoluteTime(*slurEndItr) > 
+		 m_quantizer->getQuantizedAbsoluteTime(e))) {
 		slurred = false;
 	    }
 	}
@@ -1329,46 +1329,54 @@ TransformsMenuInterpretCommand::articulate()
 	    else durationChange = -10;
 	}
 
+	for (Rosegarden::Chord::iterator ci = chord.begin();
+	     ci != chord.end(); ++ci) {
+
+	    e = **ci;
+
 	NOTATION_DEBUG << "TransformsMenuInterpretCommand::modifySegment: For note at " << e->getAbsoluteTime() << ", velocityChange is " << velocityChange << " and durationChange is " << durationChange << endl;
 
-	// do this even if velocityChange == 0, in case the event
-	// has no velocity yet
-	long velocity = 100;
-	e->get<Int>(VELOCITY, velocity);
-	velocity += velocity * velocityChange / 100;
-	if (velocity < 0) velocity = 0;
-	if (velocity > 127) velocity = 127;
-	e->set<Int>(VELOCITY, velocity);
-	
-	// don't mess with the duration of a tied note
-	bool tiedForward = false;
-	if (e->get<Bool>(TIED_FORWARD, tiedForward) && tiedForward) {
-	    durationChange = 0;
+	    // do this even if velocityChange == 0, in case the event
+	    // has no velocity yet
+	    long velocity = 100;
+	    e->get<Int>(VELOCITY, velocity);
+	    velocity += velocity * velocityChange / 100;
+	    if (velocity < 0) velocity = 0;
+	    if (velocity > 127) velocity = 127;
+	    e->set<Int>(VELOCITY, velocity);
+	    
+	    timeT duration = m_quantizer->getQuantizedDuration(e);
+	    
+	    // don't mess with the duration of a tied note
+	    bool tiedForward = false;
+	    if (e->get<Bool>(TIED_FORWARD, tiedForward) && tiedForward) {
+		durationChange = 0;
+	    }
+	    
+	    if (durationChange != 0) { 
+		
+		//!!! deal with tuplets
+		//!!! mark this event so that we don't misquantize or
+		// misdisplay because the duration has changed
+		
+		duration += duration * durationChange / 100;
+		
+		Event *newEvent = new Event(*e, e->getAbsoluteTime(), duration);
+		toInsert.push_back(newEvent);
+		toErase.push_back(e);
+	    }
 	}
 
-	if (durationChange != 0) { 
-
-	    //!!! deal with tuplets
-	    //!!! mark this event so that we don't misquantize or
-	    // misdisplay because the duration has changed
-
-	    duration += duration * durationChange / 100;
-
-	    Event *newEvent = new Event(*e, e->getAbsoluteTime(), duration);
-	    toInsert.push_back(newEvent);
-	    toErase.push_back(e);
-	}
+	itr = chord.getFinalElement();
     }
 
-    Segment &s(getSegment());
-    
     for (unsigned int j = 0; j < toErase.size(); ++j) {
-	Segment::iterator jtr(s.findSingle(toErase[j]));
-	s.erase(jtr);
+	Segment::iterator jtr(segment.findSingle(toErase[j]));
+	segment.erase(jtr);
     }
 	       
     for (unsigned int j = 0; j < toInsert.size(); ++j) {
-	s.insert(toInsert[j]);
+	segment.insert(toInsert[j]);
     }
 }
 
