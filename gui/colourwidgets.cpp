@@ -97,24 +97,22 @@ RosegardenColourTable::populate_table(Rosegarden::ColourMap &input, ColourList &
     m_colours.reserve(input.size());
     setNumRows(input.size());
 
+    QString name;
+
     unsigned int i=0;
 
     for (Rosegarden::RCMap::const_iterator it=input.begin(); it!=input.end(); ++it)
     {
         if (it->second.second == std::string(""))
-        {
-            QTableItem *text = new QTableItem(
-                    dynamic_cast<QTable*>(this),
-                    QTableItem::Never, i18n("Default Colour"));
-            setItem(i, 0, text);
-        }
+            name = i18n("Default Colour");
         else
-        {
-            QTableItem *text = new QTableItem(
-                    dynamic_cast<QTable*>(this),
-                    QTableItem::OnTyping, strtoqstr(it->second.second));
-            setItem(i, 0, text);
-        }
+            name = strtoqstr(it->second.second);
+
+        QTableItem *text = new QTableItem(
+                dynamic_cast<QTable*>(this),
+                QTableItem::Never, name);
+
+        setItem(i, 0, text);
 
         list[i] = it->first;
         m_colours[i] = RosegardenGUIColours::convertColour(it->second.first);

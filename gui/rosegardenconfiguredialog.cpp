@@ -47,6 +47,7 @@
 #include <qstringlist.h>
 #include <qtable.h>
 #include <qheader.h>
+#include <qinputdialog.h>
 
 #include <kcombobox.h>
 #include <klistview.h>
@@ -1769,15 +1770,24 @@ ColourConfigurationPage::slotAddNew()
 {
     QColor temp;
 
-    KColorDialog box(this, "", true);
+    bool ok = false;
 
-    int result = box.getColor( temp );
-
-    if (result == KColorDialog::Accepted)
+    QString newName = QInputDialog::getText(i18n("New Colour Name"), i18n("Enter new name"),
+                                            QLineEdit::Normal, i18n("New"), &ok);
+    if ((ok == true) && (!newName.isEmpty()))
     {
-        Rosegarden::Colour temp2 = RosegardenGUIColours::convertColour(temp);
-        m_map.addItem(temp2, i18n("New").ascii());
-        m_colourtable->populate_table(m_map, m_listmap);
+        KColorDialog box(this, "", true);
+
+        int result = box.getColor( temp );
+
+        if (result == KColorDialog::Accepted)
+        {
+            Rosegarden::Colour temp2 = RosegardenGUIColours::convertColour(temp);
+            m_map.addItem(temp2, qstrtostr(newName));
+            m_colourtable->populate_table(m_map, m_listmap);
+        }
+    // Else we don't do anything as they either didn't give a name 
+    //  or didn't give a colour
     }
 
 }

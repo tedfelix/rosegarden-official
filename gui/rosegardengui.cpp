@@ -97,6 +97,7 @@
 #include "Configuration.h"
 #include "controleditor.h"
 #include "markereditor.h"
+#include "studiocommands.h"
 
 //!!! ditch these when harmonize() moves out
 #include "CompositionTimeSliceAdapter.h"
@@ -4510,7 +4511,171 @@ RosegardenGUIApp::slotSaveDefaultStudio()
 void
 RosegardenGUIApp::slotImportStudio()
 {
+    // dmm - derived from code ripped off from the bank editor on 7-1-2003
+    
     RG_DEBUG << "RosegardenGUIApp::slotImportStudio()\n";
+
+//    Rosegarden::Studio m_studio = m_doc->getStudio();
+
+    QString studioDir = KGlobal::dirs()->findResource("appdata", "library/");
+    QDir dir(studioDir);
+    if (!dir.exists()) {
+        studioDir = ":ROSEGARDENDEVICE";
+    } else {
+        studioDir = "file://" + studioDir;
+    }
+
+    KURL url = KFileDialog::getOpenURL
+        (studioDir,
+         "*.rgd *.rg|Rosegarden files\n*.rgd|Rosegarden device file\n*.rg|Rosegarden file\n*|All files",
+         this, i18n("Import Studio from File"));
+
+    if (url.isEmpty()) return;
+
+    QString target;
+    if (KIO::NetAccess::download(url, target) == false) {
+        KMessageBox::error(this, QString(i18n("Cannot download file %1"))
+                           .arg(url.prettyURL()));
+        return;
+    }
+
+    RosegardenGUIDoc *doc = new RosegardenGUIDoc(this, 0, true); // skipAutoload
+
+    // Add some dummy devices for bank population when we open the document.
+    // We guess that the file won't have more than 16 devices.
+    //
+    for (unsigned int i = 0; i < 16; i++)
+    {
+        QString label = QString("MIDI Device %1").arg(i + 1);
+        doc->getStudio().addDevice(qstrtostr(label),
+                                   i,
+                                   Rosegarden::Device::Midi);
+    }
+
+    if (doc->openDocument(target, false))
+    {
+        Rosegarden::DeviceList *list = doc->getStudio().getDevices();
+        Rosegarden::DeviceListIterator it = list->begin();
+
+        if (list->size() == 0)
+        {
+             KMessageBox::sorry(this, i18n("No Devices found in file"));
+             delete doc;
+             return;
+        }
+	else
+	{
+
+/*            std::vector<QString> importList;
+            int count = 0;
+	    bool haveNames = false;
+            
+            for (; it != list->end(); ++it)
+            {
+                Rosegarden::MidiDevice *device = 
+                    dynamic_cast<Rosegarden::MidiDevice*>(*it);
+
+                if (device)
+                {
+                    std::vector<Rosegarden::MidiBank> banks =
+                        device->getBanks();
+
+                    // We've got a bank on a Device fom this file
+                    //
+                    if (banks.size())
+                    {
+                        if (device->getName() == "")
+                        {
+                            QString deviceNo =
+                                QString("Device %1").arg(count++);
+                            importList.push_back(deviceNo);
+                        }
+                        else
+                        {
+                            importList.push_back(strtoqstr(device->getName()));
+			    haveNames = true;
+                        }
+                    }
+                }
+            }
+
+
+            // If we have our devices then we offer the selection otherwise
+            // we just 
+            //
+            if (importList.size())
+            {
+		count = 0;
+		bool found = false;
+		std::vector<Rosegarden::MidiBank> banks;
+		std::vector<Rosegarden::MidiProgram> programs;
+		std::string librarianName, librarianEmail;
+
+		Rosegarden::MidiDevice *device = 0;
+
+		for (it = list->begin(); it != list->end(); ++it)
+		{
+		    device = dynamic_cast<Rosegarden::MidiDevice*>(*it);
+
+		    if (device)
+		    {
+			if (count == deviceIndex)
+			{
+			    banks = device->getBanks();
+			    programs = device->getPrograms();
+			    librarianName = device->getLibrarianName();
+			    librarianEmail = device->getLibrarianEmail();
+			    found = true;
+			    break;
+			}
+			else
+			    count++;
+		    }
+
+		}
+
+                    if (found)
+                    {
+                        MidiDeviceListViewItem* deviceItem =
+                            dynamic_cast<MidiDeviceListViewItem*>
+                                (m_listView->selectedItem());
+
+                        if (deviceItem)
+                        {
+			    if (!overwrite) {
+				// don't record the librarian when
+				// merging banks -- it's misleading
+				librarianName = "";
+				librarianEmail = "";
+			    }
+
+                            ModifyDeviceCommand *command =
+                                new ModifyDeviceCommand(
+                                        m_studio,
+                                        deviceItem->getDeviceId(),
+                                        qstrtostr(importList[deviceIndex]),
+                                        librarianName,
+                                        librarianEmail,
+                                        banks,
+                                        programs,
+                                        overwrite,
+					rename);
+                            addCommandToHistory(command);
+
+                            // No need to redraw the dialog, this is done by
+                            // slotUpdate, signalled by the MultiViewCommandHistory
+                            Rosegarden::MidiDevice *device = getMidiDevice(deviceItem);
+                            if (device)
+                                selectDeviceItem(device);
+                        }
+                    } 
+                } 
+            } */
+	}
+    }
+
+    delete doc;
+
 }
 
 void
