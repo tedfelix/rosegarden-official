@@ -78,6 +78,7 @@
 #include "widgets.h"
 #include "temporuler.h"
 #include "SoundDriver.h"
+#include "segmenttool.h"
 #include "matrixtool.h"
 #include "notationtool.h"
 #include "audiopluginmanager.h"
@@ -727,7 +728,7 @@ void RosegardenGUIApp::initView()
     //
     m_view->show();
 
-    slotChangeZoom(m_zoomSlider->getCurrentSize());
+    slotChangeZoom(int(m_zoomSlider->getCurrentSize()));
 
     // Create a sequence manager
 #ifdef RGKDE3
@@ -782,23 +783,32 @@ void RosegardenGUIApp::openFile(const QString& filePath)
 
     m_doc->closeDocument();
     slotEnableTransport(false);
-    m_doc->openDocument(filePath);
 
-    initView();
+    if (m_doc->openDocument(filePath)) {
+        
+        initView();
+        
+        // Ensure the sequencer knows about any audio files
+        // we've loaded as part of the new Composition
+        //
+        m_doc->prepareAudio();
 
-    // Ensure the sequencer knows about any audio files
-    // we've loaded as part of the new Composition
-    //
-    m_doc->prepareAudio();
+        Rosegarden::Composition &comp = m_doc->getComposition();
 
-    Rosegarden::Composition &comp = m_doc->getComposition();
+        // Set any loaded loop at the Composition and
+        // on the marker on SegmentCanvas and clients
+        //
+        m_doc->setLoop(comp.getLoopStart(), comp.getLoopEnd());
 
-    // Set any loaded loop at the Composition and
-    // on the marker on SegmentCanvas and clients
-    //
-    m_doc->setLoop(comp.getLoopStart(), comp.getLoopEnd());
+        m_doc->setModified(false);
 
-    m_doc->setModified(false);
+    } else {
+        // since we closed the previous document, create a new one
+
+//         kapp->processEvents(); // or else we get a crash
+//         slotFileNew();
+    }
+
 }
 
 

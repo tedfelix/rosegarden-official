@@ -889,18 +889,19 @@ RosegardenGUIView::slotDroppedAudio(QString audioDesc)
     s >> endTime.sec;
     s >> endTime.usec;
 
-//     RG_DEBUG << "RosegardenGUIView::slotDroppedAudio("
-//                          << audioDesc
-//                          << ") : audioFileId = " << audioFileId
-//                          << " - instrumentId = " << instrumentId
-//                          << " - startTime.sec = " << startTime.sec
-//                          << " - startTime.usec = " << startTime.usec
-//                          << " - endTime.sec = " << endTime.sec
-//                          << " - endTime.usec = " << endTime.usec
-//                          << endl;
+    RG_DEBUG << "RosegardenGUIView::slotDroppedAudio("
+                         << audioDesc
+                         << ") : audioFileId = " << audioFileId
+                         << " - instrumentId = " << instrumentId
+                         << " - startTime.sec = " << startTime.sec
+                         << " - startTime.usec = " << startTime.usec
+                         << " - endTime.sec = " << endTime.sec
+                         << " - endTime.usec = " << endTime.usec
+                         << endl;
 
     if (instrumentId != 0)
         slotAddAudioSegmentAndTrack(audioFileId, instrumentId,
                                     startTime, endTime);
-    
+    else
+        RG_DEBUG << "instruement id == 0\n";
 }

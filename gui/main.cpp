@@ -469,11 +469,11 @@ int main(int argc, char *argv[])
     }
     catch(std::string e)
     {
-        std::cout << "RosegardenGUI - " << e << endl;
+        std::cout << "RosegardenGUI - " << e << std::endl;
     }
     catch(QString e)
     {
-        std::cout << "RosegardenGUI - " << e << endl;
+        std::cout << "RosegardenGUI - " << e << std::endl;
     }
 
 

@@ -34,6 +34,7 @@
 #include "segmentcanvas.h" // needed for SegmentCanvas::ToolType
 #include "rosedebug.h"
 
+#include "AudioFile.h"
 #include "MappedCommon.h"
 
 namespace Rosegarden { 

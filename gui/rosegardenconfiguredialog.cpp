@@ -53,7 +53,7 @@
 #include "notepixmapfactory.h"
 #include "matrixtool.h"
 #include "notationtool.h"
-#include "segmentcanvas.h"
+#include "segmenttool.h"
 #include "editcommands.h"
 
 namespace Rosegarden

@@ -69,6 +69,7 @@ rosegarden_SOURCES = \
 	segmentcanvas.cpp \
         segmentcommands.cpp \
         segmentparameterbox.cpp \
+        segmenttool.cpp \
         sequencemanager.cpp \
 	spline.cpp \
 	staffline.cpp \

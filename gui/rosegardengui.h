@@ -39,6 +39,7 @@
 #include "rosegardenguiiface.h"
 #include "segmentcanvas.h"
 
+#include "AudioFile.h"
 #include "Sound.h"
 #include "MappedEvent.h"
 #include "MappedCommon.h"
