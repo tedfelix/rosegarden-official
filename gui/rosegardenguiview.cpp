@@ -1073,7 +1073,8 @@ RosegardenGUIView::updateMeters(SequencerMapper *mapper)
 
 	if (!isNew) continue;
 	
-	if (instrument->getType() == Rosegarden::Instrument::Audio) {
+	if (instrument->getType() == Rosegarden::Instrument::Audio ||
+	    instrument->getType() == Rosegarden::Instrument::SoftSynth) {
 
             // Don't send a 0 to an audio meter
             //

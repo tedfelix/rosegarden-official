@@ -204,6 +204,8 @@ public slots:
     void slotPluginSelected(Rosegarden::InstrumentId id, int index, int plugin);
     void slotPluginBypassed(Rosegarden::InstrumentId id, int pluginIndex, bool bp);
 
+    void slotSynthButtonClicked();
+
 signals:
     void muteButton(Rosegarden::InstrumentId, bool state);
     void soloButton(Rosegarden::InstrumentId, bool state);
@@ -214,6 +216,7 @@ signals:
 protected:
     //--------------- Data members ---------------------------------
 
+    QPushButton *m_synthButton;
     AudioFaderWidget   *m_audioFader;
 
 private:

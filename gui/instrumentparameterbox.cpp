@@ -69,15 +69,14 @@ using Rosegarden::MidiDevice;
 InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
                                                QWidget *parent)
     : RosegardenParameterBox(1, Qt::Horizontal, i18n("Instrument Parameters"), parent),
-//      m_widgetStack(new QWidgetStack(this)),
-      m_widgetStack(0), //!!!
+      m_widgetStack(new QWidgetStack(this)),
       m_noInstrumentParameters(new QVBox(this)),
       m_midiInstrumentParameters(new MIDIInstrumentParameterPanel(doc, this)),
       m_audioInstrumentParameters(new AudioInstrumentParameterPanel(doc, this)),
       m_selectedInstrument(0),
       m_doc(doc)
 {
-//     m_widgetStack->setFont(m_font);
+    m_widgetStack->setFont(m_font);
     m_noInstrumentParameters->setFont(m_font);
     m_midiInstrumentParameters->setFont(m_font);
     m_audioInstrumentParameters->setFont(m_font);
@@ -97,9 +96,9 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
     QLabel *label = new QLabel(i18n("<no instrument>"), m_noInstrumentParameters);
     label->setAlignment(label->alignment() | Qt::AlignHCenter);
 
-//     m_widgetStack->addWidget(m_midiInstrumentParameters);
-//     m_widgetStack->addWidget(m_audioInstrumentParameters);
-//     m_widgetStack->addWidget(m_noInstrumentParameters);
+    m_widgetStack->addWidget(m_midiInstrumentParameters);
+    m_widgetStack->addWidget(m_audioInstrumentParameters);
+    m_widgetStack->addWidget(m_noInstrumentParameters);
 
     m_midiInstrumentParameters->adjustSize();
     m_audioInstrumentParameters->adjustSize();
@@ -209,11 +208,7 @@ InstrumentParameterBox::useInstrument(Instrument *instrument)
 
     if (instrument == 0)
     {
-//         m_widgetStack->raiseWidget(m_noInstrumentParameters);
-	m_audioInstrumentParameters->hide();
-	m_midiInstrumentParameters->hide();
-	if (m_noInstrumentParameters->isHidden()) 
-	    m_noInstrumentParameters->show();
+        m_widgetStack->raiseWidget(m_noInstrumentParameters);
         return;
     } 
 
@@ -222,25 +217,16 @@ InstrumentParameterBox::useInstrument(Instrument *instrument)
 
     // Hide or Show according to Instrument type
     //
-    if (instrument->getType() == Instrument::Audio)
+    if (instrument->getType() == Instrument::Audio ||
+	instrument->getType() == Instrument::SoftSynth)
     {
-	m_noInstrumentParameters->hide();
-	m_midiInstrumentParameters->hide();
         m_audioInstrumentParameters->setupForInstrument(m_selectedInstrument);
-	if (m_audioInstrumentParameters->isHidden())
-	    m_audioInstrumentParameters->show();
-
-//         m_widgetStack->raiseWidget(m_audioInstrumentParameters);
+        m_widgetStack->raiseWidget(m_audioInstrumentParameters);
 
     } else { // Midi
 
-	m_noInstrumentParameters->hide();
-	m_audioInstrumentParameters->hide();
         m_midiInstrumentParameters->setupForInstrument(m_selectedInstrument);
-	if (m_midiInstrumentParameters->isHidden())
-	    m_midiInstrumentParameters->show();
-
-//         m_widgetStack->raiseWidget(m_midiInstrumentParameters);
+	m_widgetStack->raiseWidget(m_midiInstrumentParameters);
     }
     
 }
@@ -426,10 +412,23 @@ AudioInstrumentParameterPanel::slotPluginSelected(Rosegarden::InstrumentId instr
     QColor pluginBackgroundColour = Qt::black;
     bool bypassed = false;
 
+    QPushButton *button = 0;
+    QString noneText;
+
+    if (index == Rosegarden::Instrument::SYNTH_PLUGIN_POSITION) {
+	button = m_synthButton;
+	noneText = i18n("<no synth>");
+    } else {
+	button = m_audioFader->m_plugins[index];
+	noneText = i18n("<no plugin>");
+    }
+
+    if (!button) return;
+
     if (plugin == -1) {
 
-	m_audioFader->m_plugins[index]->setText(i18n("<no plugin>"));
-        QToolTip::add(m_audioFader->m_plugins[index], i18n("<no plugin>"));
+	button->setText(noneText);
+        QToolTip::add(button, noneText);
 
     } else {
 
@@ -438,11 +437,9 @@ AudioInstrumentParameterPanel::slotPluginSelected(Rosegarden::InstrumentId instr
 
 	if (pluginClass)
         {
-	    m_audioFader->m_plugins[index]->
-		setText(pluginClass->getLabel());
+	    button->setText(pluginClass->getLabel());
 
-            QToolTip::add(m_audioFader->m_plugins[index], 
-                    pluginClass->getLabel());
+            QToolTip::add(button, pluginClass->getLabel());
 
             pluginBackgroundColour = pluginClass->getColour();
         }
@@ -496,32 +493,44 @@ AudioInstrumentParameterPanel::setButtonColour(
         << ", bypassState = " << bypassState
         << ", rgb = " << colour.name() << endl;
 
+    QPushButton *button = 0;
+
+    if (pluginIndex == Rosegarden::Instrument::SYNTH_PLUGIN_POSITION) {
+	button = m_synthButton;
+    } else {
+	button = m_audioFader->m_plugins[pluginIndex];
+    }
+
+    if (!button) return;
+
     // Set the bypass colour on the plugin button
     if (bypassState)
     {
-        m_audioFader->m_plugins[pluginIndex]->
+	button->
             setPaletteForegroundColor(kapp->palette().
                     color(QPalette::Active, QColorGroup::Button));
 
-        m_audioFader->m_plugins[pluginIndex]->
+	button->
             setPaletteBackgroundColor(kapp->palette().
                     color(QPalette::Active, QColorGroup::ButtonText));
     }
     else if (colour == Qt::black)
     {
-        m_audioFader->m_plugins[pluginIndex]->
+	button->
             setPaletteForegroundColor(kapp->palette().
                     color(QPalette::Active, QColorGroup::ButtonText));
 
-        m_audioFader->m_plugins[pluginIndex]->
+	button->
             setPaletteBackgroundColor(kapp->palette().
                     color(QPalette::Active, QColorGroup::Button));
     }
     else
     {
-        m_audioFader->m_plugins[pluginIndex]->
+	button->
             setPaletteForegroundColor(Qt::white);
-        m_audioFader->m_plugins[pluginIndex]->setPaletteBackgroundColor(colour);
+
+	button->
+	    setPaletteBackgroundColor(colour);
     }
 }
 
@@ -530,13 +539,19 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenGUIDoc* d
     : InstrumentParameterPanel(doc, parent),
       m_audioFader(new AudioFaderWidget(this, AudioFaderWidget::FaderBox))
 {
-    QGridLayout *gridLayout = new QGridLayout(this, 2, 1, 5, 5);
+    QGridLayout *gridLayout = new QGridLayout(this, 3, 1, 5, 5);
 
     // Instrument label : first row, all cols
     gridLayout->addMultiCellWidget(m_instrumentLabel, 0, 0, 0, 0, AlignCenter);
 
+    m_synthButton = new QPushButton(this);
+    m_synthButton->setText(i18n("<no synth>"));
+    QToolTip::add(m_synthButton, i18n("Synth plugin button"));
+    connect(m_synthButton, SIGNAL(clicked()), this, SLOT(slotSynthButtonClicked()));
+    gridLayout->addMultiCellWidget(m_synthButton, 1, 1, 0, 0, AlignCenter);
+
     // fader and connect it
-    gridLayout->addMultiCellWidget(m_audioFader, 1, 1, 0, 0);
+    gridLayout->addMultiCellWidget(m_audioFader, 3, 3, 0, 0);
 
     connect(m_audioFader, SIGNAL(audioChannelsChanged(int)),
             this, SLOT(slotAudioChannels(int)));
@@ -567,6 +582,12 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenGUIDoc* d
 
     connect(m_audioFader->m_audioInput, SIGNAL(changed()),
             this, SLOT(slotAudioRoutingChanged()));
+}
+
+void
+AudioInstrumentParameterPanel::slotSynthButtonClicked()
+{
+    slotSelectPlugin(Rosegarden::Instrument::SYNTH_PLUGIN_POSITION);
 }
 
 void
@@ -651,11 +672,33 @@ AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
 
     m_audioFader->slotSetInstrument(&m_doc->getStudio(), instrument);
 
-    for (unsigned int i = 0; i < m_audioFader->m_plugins.size(); i++)
-    {
-        m_audioFader->m_plugins[i]->show();
+    int start = 0;
+    if (instrument->getType() == Rosegarden::Instrument::SoftSynth) {
+	m_synthButton->show();
+	start = -1;
+    } else {
+	m_synthButton->hide();
+    }
 
-        Rosegarden::AudioPluginInstance *inst = instrument->getPlugin(i);
+    for (int i = start; i < m_audioFader->m_plugins.size(); i++)
+    {
+	int index;
+	QPushButton *button;
+	QString noneText;
+
+	if (i == -1) {
+	    index = Rosegarden::Instrument::SYNTH_PLUGIN_POSITION;
+	    button = m_synthButton;
+	    noneText = i18n("<no synth>");
+	} else {
+	    index = i;
+	    button = m_audioFader->m_plugins[i];
+	    noneText = i18n("<no plugin>");
+	}
+
+	button->show();
+
+        Rosegarden::AudioPluginInstance *inst = instrument->getPlugin(index);
 
         if (inst && inst->isAssigned())
         {
@@ -666,22 +709,17 @@ AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
 
             if (pluginClass)
             {
-                m_audioFader->m_plugins[i]->
-                    setText(pluginClass->getLabel());
-
-                QToolTip::add(m_audioFader->m_plugins[i], 
-                    pluginClass->getLabel());
-
-                setButtonColour(i, inst->isBypassed(), 
+                button->setText(pluginClass->getLabel());
+                QToolTip::add(button, pluginClass->getLabel());
+                setButtonColour(index, inst->isBypassed(), 
                         pluginClass->getColour());
             }
         }
         else
         {
-            m_audioFader->m_plugins[i]->setText(i18n("<no plugin>"));
-            QToolTip::add(m_audioFader->m_plugins[i], i18n("<no plugin>"));
-
-            setButtonColour(i, inst ? inst->isBypassed() : false, Qt::black);
+            button->setText(noneText);
+            QToolTip::add(button, noneText);
+            setButtonColour(index, inst ? inst->isBypassed() : false, Qt::black);
         }
     }
 
