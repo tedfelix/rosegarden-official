@@ -572,17 +572,14 @@ protected:
     InstrumentId                                m_midiRunningId;
     InstrumentId                                m_audioRunningId;
 
-    // Audio files - both real and the playing abstraction
+    // Audio files playing at the driver are held here - if we're
+    // using threads then make sure you mutex access to this
+    // vector.
     //
     std::vector<PlayableAudioFile*>             m_audioPlayQueue;
 
-    // The Thread queue is used to make sure we don't invalidate
-    // iterators by writing to the audioPlayQueue when another
-    // (JACK) thread is reading from it.  We use the thread queue
-    // as temporary storage and move it along at the end of the
-    // JACK process callback.
+    // A list of AudioFiles that we can play.
     //
-    std::vector<PlayableAudioFile*>             m_audioPlayThreadQueue;
     std::vector<AudioFile*>                     m_audioFiles;
 
     // Filename we should record to

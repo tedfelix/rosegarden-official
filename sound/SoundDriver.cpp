@@ -70,14 +70,11 @@ PlayableAudioFile::PlayableAudioFile(const PlayableAudioFile &pAF)
     m_instrumentId = pAF.getInstrument();
     m_ringBuffer = pAF.getRingBuffer();
     m_ringBufferThreshold = pAF.getRingBufferThreshold();
+    m_playBuffer = 0;
     m_playBufferSize = pAF.getPlayBufferSize();
     m_initialised = false;
     m_externalRingbuffer = false;
     m_runtimeSegmentId = pAF.getRuntimeSegmentId();
-
-    // initialise new play buffer
-    //
-    m_playBuffer = new char[m_playBufferSize];
 
 #ifdef DEBUG_PLAYABLE_CONSTRUCTION
     std::cout << "PlayableAudioFile::PlayableAudioFile - creating " << this
@@ -445,29 +442,7 @@ SoundDriver::queueAudio(PlayableAudioFile *audioFile)
     // process this across to the proper audio queue when
     // it's safe to do so - use the method below
     //
-    m_audioPlayThreadQueue.push_back(audioFile);
-}
-
-// Move the pending thread queue across to the real queue
-// at a safe point in time (when another thread isn't
-// accessing the vector.
-//
-void
-SoundDriver::pushPlayableAudioQueue()
-{
-
-    std::vector<PlayableAudioFile*>::iterator it;
-
-    for (it = m_audioPlayThreadQueue.begin();
-         it != m_audioPlayThreadQueue.end();
-         it++)
-
-    {
-        m_audioPlayQueue.push_back(*it);
-    }
-
-    m_audioPlayThreadQueue.erase(m_audioPlayThreadQueue.begin(),
-                                 m_audioPlayThreadQueue.end());
+    m_audioPlayQueue.push_back(audioFile);
 }
 
 void

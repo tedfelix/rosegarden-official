@@ -329,7 +329,6 @@ RosegardenSequencerApp::keepPlaying()
         {
             rationalisePlayingAudio(m_metaIterator->getPlayingAudioFiles(m_songPosition));
         }
-
     }
 
     return true; // !isEndOfCompReached(); - until we sort this out, we don't stop at end of comp.

@@ -173,6 +173,8 @@ RingBuffer::read(std::string *bytes, size_t cnt)
     for (size_t i = 0; i < num; ++i)
         (*bytes) += buffer[i];
 
+    delete buffer;
+
     return num;
 }
 
@@ -185,7 +187,11 @@ RingBuffer::write(const std::string &bytes)
     for (unsigned int i = 0; i < bytes.length(); ++i)
         buffer[i] = bytes[i];
 
-    return write(buffer, bytes.length());
+    size_t retSize = write(buffer, bytes.length());
+
+    delete buffer;
+
+    return retSize;
 }
 
 

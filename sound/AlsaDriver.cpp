@@ -2761,10 +2761,11 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
                 // segment runtime id
                 audioFile->setRuntimeSegmentId((*i)->getRuntimeSegmentId());
 
-                // This is thread safe as we push the audio file into a holding queue
-                // which is pushed onto the actual audio queue at pushPlayableAudioQueue()
+                // Queue the audio file on the driver stack
                 //
+                pthread_mutex_lock(&_diskThreadLock);
                 queueAudio(audioFile);
+                pthread_mutex_unlock(&_diskThreadLock);
 
             }
             else
@@ -3399,6 +3400,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
         sample_t *rightBuffer = static_cast<sample_t*>
             (jack_port_get_buffer(inst->getJackOutputPortRight(),
                                   nframes));
+
         // Are we recording?
         //
         if (inst->getRecordStatus() == RECORD_AUDIO || inst->getRecordStatus() == ASYNCHRONOUS_AUDIO)
@@ -3538,6 +3540,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 
 
         //int cnt = 0;
+
 
         for (it = audioQueue.begin(); it != audioQueue.end(); ++it)
         {
@@ -3823,6 +3826,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
             }
         }
 
+
         // Playing plugins that have no current audio input but
         // nonetheless could still have audio output.  Also
         // process buffers in case we have recorded audio that
@@ -3923,6 +3927,13 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 
 #endif // HAVE_LADSPA
         
+        // Clear any defunct files from the queue
+        //
+        inst->clearDefunctFromAudioPlayQueue();
+
+        // Ok, now we can release the mutex
+        //
+        pthread_mutex_unlock(&_diskThreadLock);
 
         // Transfer the sum of the samples to the jack output buffers
         //
@@ -3931,18 +3942,6 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
             *(leftBuffer++) = _tempOutBuffer1[i];
             *(rightBuffer++) = _tempOutBuffer2[i];
         }
-
-        // Push Playable onto main queue
-        //
-        inst->pushPlayableAudioQueue();
-
-        // Clear any defunct files from the queue
-        //
-        inst->clearDefunctFromAudioPlayQueue();
-
-        // Ok, now we can release the mutex
-        //
-        pthread_mutex_unlock(&_diskThreadLock);
 
 #ifdef HAVE_LADSPA
         // Reset all plugins so they're processed next time

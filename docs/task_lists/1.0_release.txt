@@ -11,6 +11,8 @@ Features for 1.0 - updated 20030923
   o mp3 support
   o libsndfile support
   o drag and drop [DONE]
+  o dynamic editing [DONE]
+  o memory speedups in the RingBuffer and using MappedStudio in process loop
 
 - caching waveform previews at PeakFile [rwb]
 
