@@ -179,6 +179,7 @@ EventView::EventView(RosegardenGUIDoc *doc,
             SLOT(slotModifyFilter(int)));
 
     m_eventList = new KListView(getCentralFrame());
+    m_eventList->setItemsRenameable(true);
     m_grid->addWidget(m_eventList, 2, 1);
 
     if (segments.size() == 1)
@@ -207,6 +208,9 @@ EventView::EventView(RosegardenGUIDoc *doc,
     m_eventList->addColumn(i18n("Velocity  "));
     m_eventList->addColumn(i18n("Type (Data1)  "));
     m_eventList->addColumn(i18n("Value (Data2)  "));
+
+    for(int col = 0; col < m_eventList->columns(); ++col)
+   	m_eventList->setRenameable(col, true);
 
     readOptions();
     setButtonsToFilter();
