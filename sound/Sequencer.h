@@ -27,9 +27,13 @@
 #ifndef _ROSEGARDEN_SEQUENCER_H_
 #define _ROSEGARDEN_SEQUENCER_H_
 
+#include <map>
 #include <arts/artsmidi.h>
 #include <arts/soundserver.h>
+#include "Midi.h"
 #include "MidiRecord.h"
+#include "MidiEvent.h"
+#include "Track.h"
 
 
 namespace Rosegarden
@@ -89,6 +93,36 @@ namespace Rosegarden
     // get the TimeStamp from the beginning of recording
     Arts::TimeStamp recordTime(Arts::TimeStamp ts);
 
+
+
+    // processMidi - justification for two methods
+    //
+    // Below we have two processMidi methods for the Arts and
+    // our own representation of MIDI (from files).  Arts returns
+    // us a sensible absolute TimeStamp, the file gives us delta
+    // times that we have to roll out.  The implementations of
+    // these two methods are therefore quite different.
+    //
+    // Thankyou.
+
+    // process a raw Arts MIDI event into internal representation
+    void processMidi(const Arts::MidiCommand &midiCommand,
+                     const Arts::TimeStamp &timeStamp);
+
+    // process a raw MIDI file event into internal representation
+    void processMidi(const Rosegarden::MidiEvent &midiEvent);
+
+
+    // Perform conversion from seconds and microseconds (TimeStamp)
+    // to our internal clock representation.
+    //
+    inline unsigned int convertToAbsoluteTime(const Arts::TimeStamp &timeStamp)
+    {
+      return (unsigned int) ( 384.0 * ( (double) timeStamp.sec +
+                              ( ( (double) timeStamp.usec ) / 1000000.0 ) ) *
+                                  (double) _tempo / 60.0 );
+    }
+
   private:
 
     void initializeMidi();
@@ -113,7 +147,11 @@ namespace Rosegarden
     bool _playing;
 
     unsigned int _ppq;   // sequencer resolution
-    unsigned int _tempo; // sequencer tempo
+    unsigned int _tempo; // Beats Per Minute
+
+    Rosegarden::Track *_recordTrack;
+
+    map<unsigned int, Event*> _noteOnMap;
 
   };
 

@@ -68,9 +68,12 @@ main(int argc, char **argv)
   
   int noteVal = 50;
 
-  // record MIDI events
+  // turn MIDI recording on
   //
   sequencer.record(Rosegarden::Sequencer::RECORD_MIDI);
+
+  Arts::TimeStamp timeStamp;
+  Arts::MidiCommand midiCommand;
 
   while(sequencer.isPlaying())
   {
@@ -86,18 +89,25 @@ main(int argc, char **argv)
            midiQueueIt != midiQueue->end();
            midiQueueIt++)
       {
-        Arts::TimeStamp ts = sequencer.recordTime(midiQueueIt->time);
+        // get the timestamp
+        timeStamp = sequencer.recordTime(midiQueueIt->time);
+
+        // and the command
+        midiCommand = midiQueueIt->command;
+
+        // want to send the event both ways - to the track and to the GUI
+        sequencer.processMidi(midiCommand, timeStamp);
 
         //cout << "Data1 = " << (Rosegarden::MidiByte) midiQueueIt->command.data1 << endl;
         //cout << "Data2 = " << (Rosegarden::MidiByte) midiQueueIt->command.data2 << endl << endl;
-        cout << "MIDI EVENT @ " << ts.sec << "s + " << ts.usec << "ms" << endl;
+        //cout << "MIDI EVENT @ " << timeStamp.sec << "s + "
+             //<< timeStamp.usec << "ms" 
+             //<< " ( " << midiQueueIt->time.sec << " ) " << endl;
       }
    }
 
    //sequencer.incrementSongPosition(60000);
-
    //midiQueueIt = midiQueue->begin();
-  
 
   }
 

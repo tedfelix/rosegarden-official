@@ -25,6 +25,7 @@
 #include "Composition.h"
 #include "Track.h"
 #include "Event.h"
+#include "NotationTypes.h"
 
 namespace Rosegarden
 {
@@ -32,7 +33,8 @@ namespace Rosegarden
 Sequencer::Sequencer():
                        _playing(false),
                        _recordStatus(ASYNCHRONOUS_MIDI),
-                       _ppq(960)
+                       _ppq(960),
+                       _recordTrack(0)
 {
   _songTime.usec = 0;
   _songTime.sec = 0;
@@ -145,6 +147,10 @@ Sequencer::record(const RecordStatus& recordStatus)
     cout << "Recording Started at : " << _recordStartTime.sec << " : "
                                       << _recordStartTime.usec << endl;
                                      
+    _recordTrack = new Track;
+    _recordTrack->setInstrument(1);
+    _recordTrack->setStartIndex(0);
+
   }
   else
   {
@@ -190,7 +196,7 @@ Arts::TimeStamp
 Sequencer::recordTime(Arts::TimeStamp ts)
 {
   long usec = ts.usec - _recordStartTime.usec;
-  long sec = ts.sec -  _recordStartTime.sec;
+  long sec = ts.sec - _recordStartTime.sec;
 
   if ( usec < 0 )
   {
@@ -198,10 +204,110 @@ Sequencer::recordTime(Arts::TimeStamp ts)
     usec += 1000000;
   }
 
-  // also should check to see if the clock has
-  // cycled into negative or back to zero
+  // Also should check to see if the clock has
+  // cycled into negative or back to zero.
+  // We just flag this for the moment rather than
+  // doing anything about it.
+  // 
+  if ( sec < 0 )
+  {
+    cerr << "NEGATIVE TimeStamp returned - clock cycled around or other problem"
+         << endl;
+    exit(1);
+  }
 
   return (Arts::TimeStamp(sec, usec));
+}
+
+
+void
+Sequencer::processMidi(const Arts::MidiCommand &midiCommand,
+                       const Arts::TimeStamp &timeStamp)
+{
+  Rosegarden::MidiByte channel;
+  Rosegarden::MidiByte message;
+  Rosegarden::Event *event;
+
+  if (_recordTrack == 0)
+  {
+    cerr << "no Track created to processMidi on to - is recording enabled?" << endl;
+    exit(1);
+  }
+
+  channel = midiCommand.status & MIDI_CHANNEL_NUM_MASK;
+  message = midiCommand.status & MIDI_MESSAGE_TYPE_MASK;
+
+  // Check for a hidden NOTE OFF (NOTE ON with zero velocity)
+  if ( message == MIDI_NOTE_ON && midiCommand.data2 == 0 )
+  {
+    message = MIDI_NOTE_OFF;
+  }
+
+  // we use a map of Notes and this is the key
+  unsigned int chanNoteKey = ( channel << 8 ) + midiCommand.data1;
+  double absoluteSecs;
+  int duration;
+
+  // scan for our event
+  switch(message)
+  {
+    case MIDI_NOTE_ON:
+      if ( _noteOnMap[chanNoteKey] == 0 )
+      {
+        _noteOnMap[chanNoteKey] = new Event;
+
+        // set time since recording started in Absolute internal time
+        _noteOnMap[chanNoteKey]->
+            setAbsoluteTime(convertToAbsoluteTime(timeStamp));
+
+        // set note type and pitch
+        _noteOnMap[chanNoteKey]->setType(Note::EventType);
+        _noteOnMap[chanNoteKey]->set<Int>("pitch", midiCommand.data1);
+      }
+      break;
+
+    case MIDI_NOTE_OFF:
+      // if we match an open NOTE_ON
+      //
+      if ( _noteOnMap[chanNoteKey] != 0 )
+      {
+        duration = convertToAbsoluteTime(timeStamp) -
+                   _noteOnMap[chanNoteKey]->getAbsoluteTime();
+
+        // for the moment, ensure we're positive like this
+        //
+        assert(duration >= 0);
+
+        // set the duration
+        _noteOnMap[chanNoteKey]->setDuration(duration);
+
+        // insert the record
+        //
+        _recordTrack->insert(_noteOnMap[chanNoteKey]);
+
+        // tell us about it
+        cout << "INSERTED NOTE @ " 
+             << _noteOnMap[chanNoteKey]->getAbsoluteTime()
+             << " of "
+             << _noteOnMap[chanNoteKey]->getDuration() << endl;
+
+        // reset the reference
+        _noteOnMap[chanNoteKey] = 0;
+
+      }
+      else
+        cout << "MIDI_NOTE_OFF with no matching MIDI_NOTE_ON" << endl;
+      break;
+
+    default:
+      cout << "OTHER EVENT" << endl;
+      break;
+  }
+}
+
+void
+Sequencer::processMidi(const Rosegarden::MidiEvent &midiEvent)
+{
 }
 
 };
