@@ -19,6 +19,9 @@
 
 #include "ViewElement.h"
 
+namespace Rosegarden 
+{
+
 ViewElement::ViewElement(Event *e)
     : m_event(e)
 {
@@ -47,4 +50,5 @@ operator<(const ViewElement &a, const ViewElement &b)
 {
     return a.event()->getAbsoluteTime() < b.event()->getAbsoluteTime();
 }
-
+ 
+}

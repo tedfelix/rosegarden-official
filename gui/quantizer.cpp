@@ -23,6 +23,13 @@
 #include "NotationTypes.h"
 #include "notationproperties.h"
 
+using Rosegarden::Track;
+using Rosegarden::Event;
+using Rosegarden::Note;
+using Rosegarden::String;
+using Rosegarden::Int;
+using Rosegarden::Bool;
+
 Quantizer::Quantizer()
 {
     // empty

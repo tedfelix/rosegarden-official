@@ -19,6 +19,9 @@
 
 #include "Track.h"
 
+namespace Rosegarden 
+{
+    
 Track::Track(unsigned int nbBars, unsigned int startIdx)
     : multiset<Event*, EventCmp>(),
     m_startIdx(startIdx),
@@ -57,4 +60,5 @@ Track::getNbBars() const
 
     return nbBars;
 }
-
+ 
+}

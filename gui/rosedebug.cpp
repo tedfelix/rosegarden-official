@@ -30,7 +30,7 @@ operator<<(kdbgstream &dbg, const string &s)
 }
 
 kdbgstream&
-operator<<(kdbgstream &dbg, const Event &e)
+operator<<(kdbgstream &dbg, const Rosegarden::Event &e)
 {
     dbg << "Event type : " << e.getType() << endl;
 
@@ -162,12 +162,14 @@ kdbgostreamAdapter::operator<<(double d)
 
 void DBCheckThrow()
 {
-    Event ev;
+    using Rosegarden::Int;
+
+    Rosegarden::Event ev;
     
     try {
         int pitch = ev.get<Int>("BLAH");
 
-    } catch (Event::NoData) {
+    } catch (Rosegarden::Event::NoData) {
         kdDebug(KDEBUG_AREA) << "DBCheckThrow()" << endl;
     }
 }

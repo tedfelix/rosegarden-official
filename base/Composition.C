@@ -21,6 +21,9 @@
 #include "Composition.h"
 #include "Track.h"
 
+namespace Rosegarden 
+{
+
 Composition::Composition(unsigned int nbTracks)
     : m_tracks(nbTracks),
       m_nbTicksPerBar(384)
@@ -116,4 +119,5 @@ Composition::clear()
         (*i) = 0;
     }
 }
-
+ 
+}

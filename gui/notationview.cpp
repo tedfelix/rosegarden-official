@@ -45,6 +45,18 @@
 
 #include "rosedebug.h"
 
+using Rosegarden::Event;
+using Rosegarden::Int;
+using Rosegarden::Bool;
+using Rosegarden::String;
+using Rosegarden::NoAccidental;
+using Rosegarden::Note;
+using Rosegarden::Track;
+using Rosegarden::Clef;
+using Rosegarden::Accidental;
+using Rosegarden::Key;
+using Rosegarden::TimeSignature;
+
 class RestSplitter
 {
 public:
@@ -402,12 +414,12 @@ NotationView::showElements(NotationElementList::iterator from,
                     (npf.makeClefPixmap(Clef(*(*it)->event())));
                 sprite = new QCanvasSimpleSprite(&clefPixmap, canvas());
 
-            } else if ((*it)->event()->isa(::Key::EventType)) {
+            } else if ((*it)->event()->isa(Rosegarden::Key::EventType)) {
 
                 // Key is a Qt type as well, so we have to specify ::Key
                 QCanvasPixmap keyPixmap
                     (npf.makeKeyPixmap
-                     ((*it)->event()->get<String>(::Key::KeyPropertyName),
+                     ((*it)->event()->get<String>(Rosegarden::Key::KeyPropertyName),
                       currentClef));
                 sprite = new QCanvasSimpleSprite(&keyPixmap, canvas());
 
@@ -687,7 +699,7 @@ NotationView::slot64th()
 void
 NotationView::insertNote(int height, const QPoint &eventPos)
 {
-    ::Key key;
+    Rosegarden::Key key;
     Clef clef;
     NotationElementList::iterator closestNote =
         findClosestNote(eventPos.x(), clef, key);
@@ -696,7 +708,7 @@ NotationView::insertNote(int height, const QPoint &eventPos)
                          << height << endl;
 
     //!!! still need to take accidental into account
-    int pitch = NotationDisplayPitch(height, NoAccidental).
+    int pitch = Rosegarden::NotationDisplayPitch(height, NoAccidental).
         getPerformancePitch(clef, key);
 
     kdDebug(KDEBUG_AREA) << "NotationView::insertNote called; pitch is "
@@ -809,7 +821,7 @@ NotationView::insertNote(int height, const QPoint &eventPos)
 
 
 NotationElementList::iterator
-NotationView::findClosestNote(double eventX, Clef &clef, ::Key &key)
+NotationView::findClosestNote(double eventX, Clef &clef, Rosegarden::Key &key)
 {
     static const unsigned int proximityThreshold = 10; // in pixels
 
@@ -828,10 +840,10 @@ NotationView::findClosestNote(double eventX, Clef &clef, ::Key &key)
                 kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : found clef: type is "
                                      << (*it)->event()->get<String>(Clef::ClefPropertyName) << endl;
                 clef = Clef(*(*it)->event());
-            } else if ((*it)->event()->isa(::Key::EventType)) {
+            } else if ((*it)->event()->isa(Rosegarden::Key::EventType)) {
                 kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : found key: type is "
-                                     << (*it)->event()->get<String>(::Key::KeyPropertyName) << endl;
-                key = ::Key(*(*it)->event());
+                                     << (*it)->event()->get<String>(Rosegarden::Key::KeyPropertyName) << endl;
+                key = Rosegarden::Key(*(*it)->event());
             }
             continue;
         }

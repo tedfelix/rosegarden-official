@@ -102,11 +102,11 @@ public:
     /** deletes the document views */
     void deleteViews();
 
-    Composition&       getComposition()       { return m_composition; }
-    const Composition& getComposition() const { return m_composition; }
+    Rosegarden::Composition&       getComposition()       { return m_composition; }
+    const Rosegarden::Composition& getComposition() const { return m_composition; }
 
-    Track*         getTrack(int trackNb)        { return m_composition[trackNb]; }
-    const Track*   getTrack(int trackNb) const  { return m_composition[trackNb]; }
+    Rosegarden::Track*         getTrack(int trackNb)        { return m_composition[trackNb]; }
+    const Rosegarden::Track*   getTrack(int trackNb) const  { return m_composition[trackNb]; }
 
     unsigned int getNbTracks() const { return m_composition.getNbTracks(); }
     unsigned int getNbBars()   const { return m_composition.getNbBars(); }
@@ -145,7 +145,7 @@ private:
     /** the document's data : the events (or elements) constituting
      * the document
      */
-    Composition m_composition;
+    Rosegarden::Composition m_composition;
 
 };
 

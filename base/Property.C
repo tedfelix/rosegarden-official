@@ -21,6 +21,10 @@
 #include "Property.h"
 #include <cstdio>
 
+namespace Rosegarden 
+{
+using std::string;
+    
 string
 PropertyDefn<Int>::name()
 {
@@ -79,4 +83,5 @@ PropertyDefn<Bool>::unparse(PropertyDefn<Bool>::basic_type i)
 PropertyStoreBase::~PropertyStoreBase()
 {
 }
-
+ 
+}

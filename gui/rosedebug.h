@@ -25,7 +25,7 @@
 #include <iostream>
 #include <kdebug.h>
 
-class Event;
+namespace Rosegarden { class Event; }
 
 #define KDEBUG_AREA 1010
 
@@ -33,7 +33,7 @@ kdbgstream&
 operator<<(kdbgstream&, const string&);
 
 kdbgstream&
-operator<<(kdbgstream&, const Event&);
+operator<<(kdbgstream&, const Rosegarden::Event&);
 
 // This doesn't work - keeping it just in case I somehow get it
 // working someday

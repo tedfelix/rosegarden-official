@@ -27,6 +27,7 @@
 #include <qlayout.h>
 #include <qcanvas.h>
 
+using Rosegarden::Composition;
 
 TracksEditor::TracksEditor(RosegardenGUIDoc* doc,
                            QWidget* parent, const char* name,

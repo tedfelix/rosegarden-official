@@ -28,11 +28,11 @@
 /**
   *@author Guillaume Laurent, Chris Cannam, Rich Bown
   */
-class XmlStorableEvent : public Event
+class XmlStorableEvent : public Rosegarden::Event
 {
 public:
     XmlStorableEvent(const QXmlAttributes& atts);
-    XmlStorableEvent(const Event&);
+    XmlStorableEvent(const Rosegarden::Event&);
 
     QString        toXmlString() const;
     static QString toXmlString(const Event&);

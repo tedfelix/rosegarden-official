@@ -32,6 +32,11 @@
 #include "NotationTypes.h"
 #include "Event.h"
 
+using Rosegarden::Event;
+using Rosegarden::Note;
+using Rosegarden::Int;
+using Rosegarden::Bool;
+
 NotationElement::NotationElement(Event *event)
     : ViewElement(event),
       m_x(0),

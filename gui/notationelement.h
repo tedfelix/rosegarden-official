@@ -38,12 +38,12 @@ class NotationElementList;
  * @author Guillaume Laurent, Chris Cannam, Rich Bown
  */
 
-class NotationElement : public ViewElement
+class NotationElement : public Rosegarden::ViewElement
 {
 public:
     struct NoCanvasItem {};
     
-    NotationElement(Event *event);
+    NotationElement(Rosegarden::Event *event);
 
     ~NotationElement();
 
@@ -60,10 +60,10 @@ public:
     void setLayoutY(double y) { m_y = y; }
 
     /// sets the associated event's note type, note dottedness, and duration
-    void setNote(Note);
+    void setNote(Rosegarden::Note);
 
     /// returns a Note corresponding to the state of the associated event
-    Note getNote() const;
+    Rosegarden::Note getNote() const;
 
     bool isRest() const;
     bool isNote() const;
@@ -216,7 +216,7 @@ private:
             return ((*i)->isNote() && ((*i)->getAbsoluteTime() == m_time));
         }
     private:
-        Event::timeT m_time;
+        Rosegarden::Event::timeT m_time;
     };
 
     const NotationElementList &m_nel;

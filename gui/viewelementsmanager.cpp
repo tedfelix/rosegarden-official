@@ -25,6 +25,8 @@
 #include "viewelementsmanager.h"
 #include "notationelement.h"
 
+using Rosegarden::Track;
+
 ViewElementsManager::ViewElementsManager(Track &t)
     : m_track(t),
       m_notationElements(0)

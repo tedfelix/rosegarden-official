@@ -20,6 +20,9 @@
 #include <cstdio>
 #include "Event.h"
 
+namespace Rosegarden 
+{
+
 Event::Event(const Event &e) :
     m_type(e.getType()),
     m_duration(e.getDuration()),
@@ -139,4 +142,6 @@ bool
 operator<(const Event &a, const Event &b)
 {
     return a.getAbsoluteTime() < b.getAbsoluteTime();
+}
+ 
 }

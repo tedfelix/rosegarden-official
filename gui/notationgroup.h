@@ -56,25 +56,29 @@ public:
         bool aboveNotes;        //                   relative to 1st notehead)
     };
 
-    Beam calculateBeam(const NotePixmapFactory &npf,
-                       const Clef &clef, const Key &key);
+    Beam calculateBeam(const NotePixmapFactory&,
+                       const Rosegarden::Clef&,
+                       const Rosegarden::Key&,
+                       int width);
 
 private:
     class GroupMembershipTest {
     public:
         GroupMembershipTest(const NELIterator &i) {
-            if (!(*i)->event()->get<Int>("GroupNo", m_groupNo))
+            if (!(*i)->event()->get<Rosegarden::Int>("GroupNo", m_groupNo))
                 m_groupNo = -1;
         }
         bool operator()(const NELIterator &i) {
             long n;
-            return ((*i)->event()->get<Int>("GroupNo", n) && n == m_groupNo);
+            return ((*i)->event()->get<Rosegarden::Int>("GroupNo", n) && n == m_groupNo);
         }
     private:
         long m_groupNo;
     };
 
-    int height(const NELIterator &, const Clef &clef, const Key &key);
+    int height(const NELIterator&,
+               const Rosegarden::Clef&,
+               const Rosegarden::Key&);
 
     const NotationElementList &m_nel;
     Type m_type;

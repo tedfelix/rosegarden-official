@@ -22,6 +22,11 @@
 #include "rosexmlhandler.h"
 #include "xmlstorableevent.h"
 
+using Rosegarden::Composition;
+using Rosegarden::Int;
+using Rosegarden::String;
+using Rosegarden::Track;
+
 RoseXmlHandler::RoseXmlHandler(Composition &composition)
     : m_composition(composition),
       m_currentTrack(0),

@@ -37,19 +37,19 @@ public:
      * sets the 'Notation::NoteType' and 'QuantizedDuration' properties
      * does not change the element duration
      */
-    void quantize(Track::iterator from,
-                  Track::iterator to);
+    void quantize(Rosegarden::Track::iterator from,
+                  Rosegarden::Track::iterator to);
 
     /**
      * quantize one element to a Note
      * sets the 'Notation::NoteType' and 'QuantizedDuration' properties
      */
-    void quantize(Event *el);
+    void quantize(Rosegarden::Event *el);
 
 protected:
 
     /// actual quantizer
-    void quantize(Event::timeT duration, int &high, int &low);
+    void quantize(Rosegarden::Event::timeT duration, int &high, int &low);
 };
 
 #endif

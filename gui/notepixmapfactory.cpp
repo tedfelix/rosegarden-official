@@ -29,6 +29,16 @@
 #include "notepixmapfactory.h"
 #include "NotationTypes.h"
 
+using Rosegarden::Note;
+using Rosegarden::Clef;
+using Rosegarden::Key;
+using Rosegarden::Accidental;
+using Rosegarden::NoAccidental;
+using Rosegarden::Note;
+using Rosegarden::TimeSignature;
+using Rosegarden::Sharp;
+using Rosegarden::Flat;
+using Rosegarden::Natural;
 
 NotePixmapOffsets::NotePixmapOffsets()
 {

@@ -24,6 +24,13 @@
 #include "notepixmapfactory.h"
 #include "notationproperties.h"
 
+using Rosegarden::Int;
+using Rosegarden::Bool;
+using Rosegarden::Event;
+using Rosegarden::Clef;
+using Rosegarden::Key;
+using Rosegarden::TimeSignature;
+
 NotationVLayout::NotationVLayout(Staff &staff, NotationElementList &elements) :
     m_staff(staff), m_elements(elements)
 {

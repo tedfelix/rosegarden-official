@@ -32,7 +32,7 @@
 
 class RoseXmlHandler : public QXmlDefaultHandler  {
 public:
-    RoseXmlHandler(Composition &composition);
+    RoseXmlHandler(Rosegarden::Composition &composition);
     virtual ~RoseXmlHandler();
 
     // return the error protocol if parsing failed
@@ -56,11 +56,11 @@ public:
     bool fatalError(const QXmlParseException& exception);
 
 protected:
-    Composition &m_composition;
-    Track *m_currentTrack;
+    Rosegarden::Composition &m_composition;
+    Rosegarden::Track *m_currentTrack;
 
-    Event::timeT m_currentTime;
-    Event::timeT m_chordDuration;
+    Rosegarden::Event::timeT m_currentTime;
+    Rosegarden::Event::timeT m_chordDuration;
 
     bool m_inChord;
     bool m_inGroup;

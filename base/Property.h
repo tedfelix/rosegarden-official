@@ -23,6 +23,9 @@
 
 #include <string>
 
+namespace Rosegarden 
+{
+
 enum PropertyType { Int, String, Bool, Tag };
 
 template <PropertyType P>
@@ -191,5 +194,8 @@ PropertyStore<P>::dump(ostream &out) const
     out << getTypeName() << " - " << m_data;
 }
 #endif
+ 
+}
+
 
 #endif

@@ -41,6 +41,11 @@
 
 QList<RosegardenGUIView> *RosegardenGUIDoc::pViewList = 0L;
 
+using Rosegarden::Composition;
+using Rosegarden::Track;
+using Rosegarden::Event;
+
+
 RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent, const char *name)
     : QObject(parent, name)
 {

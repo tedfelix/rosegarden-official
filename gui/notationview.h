@@ -83,9 +83,9 @@ public:
 
     QCanvas* canvas() { return m_canvasView->canvas(); }
 
-    void setCurrentSelectedNote(Note::Type);
+    void setCurrentSelectedNote(Rosegarden::Note::Type);
 
-    Note::Type currentSelectedNote() const { return m_currentSelectedNote; }
+    Rosegarden::Note::Type currentSelectedNote() const { return m_currentSelectedNote; }
 
 public slots:
 
@@ -143,7 +143,7 @@ public slots:
     void hoveredOverNoteChanged(const QString&);
 
 signals:
-    void changeCurrentNote(Note::Type);
+    void changeCurrentNote(Rosegarden::Note::Type);
 
 protected:
 
@@ -179,7 +179,8 @@ protected:
      * find the NotationElement which X is closest to eventX
      */
     NotationElementList::iterator findClosestNote(double eventX,
-                                                  Clef &clef, ::Key &key);
+                                                  Rosegarden::Clef&,
+                                                  Rosegarden::Key&);
 
     /**
      * replace the rest element pointed to by the iterator
@@ -215,7 +216,7 @@ protected:
     NotationHLayout* m_hlayout;
     NotationVLayout* m_vlayout;
 
-    Note::Type m_currentSelectedNote;
+    Rosegarden::Note::Type m_currentSelectedNote;
 };
 
 #endif

@@ -26,7 +26,6 @@
 #include "notationelement.h"
 #include "staff.h"
 
-
 /**
   *@author Guillaume Laurent, Chris Cannam, Rich Bown
   */
@@ -44,7 +43,7 @@ public:
     struct BarPosition
     {
         NotationElementList::iterator start; // i.e. event following barline
-        Event::timeT time;    // absolute time of event at "start"
+        Rosegarden::Event::timeT time;    // absolute time of event at "start"
         int x;                // coordinate for display
         int idealWidth;       // theoretical width
         int fixedWidth;       // minimum possible width
@@ -52,7 +51,8 @@ public:
         bool correct;         // false if preceding bar has incorrect duration
         
         BarPosition(NotationElementList::iterator istart,
-                    Event::timeT itime, int ix, int iwidth, int fwidth,
+                    Rosegarden::Event::timeT itime,
+                    int ix, int iwidth, int fwidth,
                     bool ifixed, bool icorrect) :
             start(istart), time(itime), x(ix), idealWidth(iwidth),
             fixedWidth(fwidth), fixed(ifixed), correct(icorrect) { }
@@ -69,7 +69,8 @@ public:
 
 protected:
     void addNewBar(NotationElementList::iterator start,
-                   Event::timeT time, int x, int width, int fwidth,
+                   Rosegarden::Event::timeT time,
+                   int x, int width, int fwidth,
                    bool, bool);
 
     /// returns the note immediately before 'pos'
@@ -83,11 +84,12 @@ protected:
     unsigned int m_noteMargin;
 
     int getMinWidth(const NotePixmapFactory &, const NotationElement &) const;
-    int getComfortableGap(const NotePixmapFactory &npf, Note::Type type) const;
+    int getComfortableGap(const NotePixmapFactory &npf,
+                          Rosegarden::Note::Type type) const;
     int getIdealBarWidth(int fixedWidth,
                          NotationElementList::iterator shortest,
                          const NotePixmapFactory &npf, int shortCount,
-                         const TimeSignature &timeSignature) const;
+                         const Rosegarden::TimeSignature &timeSignature) const;
 
     BarPositions m_barPositions;
 };

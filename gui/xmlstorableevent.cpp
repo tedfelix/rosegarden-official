@@ -23,6 +23,13 @@
 
 #include "rosedebug.h"
 
+using Rosegarden::Event;
+using Rosegarden::Note;
+using Rosegarden::Bool;
+using Rosegarden::Int;
+using Rosegarden::String;
+
+
 XmlStorableEvent::XmlStorableEvent(const QXmlAttributes &attributes)
 {
     for (int i = 0; i < attributes.length(); ++i) {

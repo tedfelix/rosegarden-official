@@ -25,6 +25,9 @@
 
 #include "Track.h"
 
+namespace Rosegarden 
+{
+    
 /**
  * A set of tracks.
  * This class owns the event lists it is holding
@@ -68,6 +71,9 @@ protected:
 
     unsigned int m_nbTicksPerBar;
 };
+ 
+}
+
 
 #endif
 

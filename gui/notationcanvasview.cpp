@@ -184,14 +184,18 @@ NotationCanvasView::getPitchForLine(const StaffLine *line)
 */
 
 //??? ew... can't be doing this here can we? don't have the right info
+//using Rosegarden;
+
 QString
 NotationCanvasView::getNoteNameForLine(const StaffLine *line)
 {
     int h = line->getHeight();
 
     //!!! TODO -- take clef & key into account, and then accidental
-    string noteName = NotationDisplayPitch(h, NoAccidental).
-        getAsString(Clef::DefaultClef, ::Key::DefaultKey);
+    string noteName = Rosegarden::NotationDisplayPitch(h,
+                                                       Rosegarden::NoAccidental).
+        getAsString(Rosegarden::Clef::DefaultClef,
+                    Rosegarden::Key::DefaultKey);
 
     return QString(noteName.c_str());
 }

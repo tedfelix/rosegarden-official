@@ -32,11 +32,11 @@
 class ViewElementsManager
 {
 public: 
-    ViewElementsManager(Track&);
+    ViewElementsManager(Rosegarden::Track&);
     ~ViewElementsManager();
 
-    NotationElementList* notationElementList(Track::iterator from,
-                                             Track::iterator to);
+    NotationElementList* notationElementList(Rosegarden::Track::iterator from,
+                                             Rosegarden::Track::iterator to);
 
     // overload these for each ViewElement type
     void insert(NotationElement*);
@@ -44,7 +44,7 @@ public:
 
 protected:
 
-    Track               &m_track;
+    Rosegarden::Track               &m_track;
     NotationElementList *m_notationElements;
     
 };

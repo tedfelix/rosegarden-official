@@ -25,6 +25,9 @@
 
 #include <vector>
 
+namespace Rosegarden 
+{
+
 class ViewElement; // defined below
 class ViewElements : public vector<ViewElement*>
 {
@@ -53,6 +56,9 @@ public:
 protected:
     Event *m_event;
 };
+ 
+}
+
 
 #endif
 

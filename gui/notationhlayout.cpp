@@ -25,6 +25,18 @@
 #include "notepixmapfactory.h"
 #include "notationproperties.h"
 
+using Rosegarden::Note;
+using Rosegarden::Int;
+using Rosegarden::Bool;
+using Rosegarden::String;
+using Rosegarden::Event;
+using Rosegarden::Clef;
+using Rosegarden::Key;
+using Rosegarden::Accidental;
+using Rosegarden::NoAccidental;
+using Rosegarden::Note;
+using Rosegarden::TimeSignature;
+
 
 NotationHLayout::NotationHLayout(Staff &staff, //!!! maybe not needed, just trying to build up consistent interfaces for h & v layout
                                  NotationElementList& elements) :
@@ -185,7 +197,7 @@ NotationHLayout::preparse(NotationElementList::iterator from,
                 try {
                     int pitch = el->event()->get<Int>("pitch");
                     kdDebug(KDEBUG_AREA) << "pitch : " << pitch << endl;
-                    NotationDisplayPitch p(pitch, clef, key);
+                    Rosegarden::NotationDisplayPitch p(pitch, clef, key);
                     int h = p.getHeightOnStaff();
                     el->event()->setMaybe<Int>(P_HEIGHT_ON_STAFF, h);
                     el->event()->setMaybe<Int>(P_ACCIDENTAL,

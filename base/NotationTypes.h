@@ -23,6 +23,9 @@
 
 #include "Event.h"
 
+namespace Rosegarden 
+{
+    
 enum Accidental {
     NoAccidental, Sharp, Flat, Natural, DoubleSharp, DoubleFlat
 };
@@ -445,5 +448,8 @@ private:
     int m_numerator;
     int m_denominator;
 };
+ 
+}
+
 
 #endif

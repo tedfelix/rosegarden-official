@@ -4,6 +4,12 @@
 #include "rosedebug.h"
 #include <cstring>
 
+using Rosegarden::Event;
+using Rosegarden::String;
+using Rosegarden::Int;
+using Rosegarden::Clef;
+using Rosegarden::Key;
+
 NotationGroup::NotationGroup(const NotationElementList &nel,
                              NELIterator i) :
     m_nel(nel),
@@ -34,7 +40,7 @@ NotationGroup::NotationGroup(const NotationElementList &nel,
             } else {
                 kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: Warning: Unknown GroupType \"" << t << "\", defaulting to Beamed" << endl;
             }
-        } catch (Event::NoData) {
+        } catch (Rosegarden::Event::NoData) {
             kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: Warning: No GroupType in grouped element, defaulting to Beamed" << endl;
         }
     }
@@ -48,7 +54,7 @@ NotationGroup::height(const NELIterator &i, const Clef &clef, const Key &key)
     long h;
     if ((*i)->event()->get<Int>(P_HEIGHT_ON_STAFF, h)) return h;
     int pitch = (*i)->event()->get<Int>("pitch");
-    NotationDisplayPitch p(pitch, clef, key);
+    Rosegarden::NotationDisplayPitch p(pitch, clef, key);
     h = p.getHeightOnStaff();
     // not setMaybe, as we know the property is absent:
     (*i)->event()->set<Int>(P_HEIGHT_ON_STAFF, h, false);

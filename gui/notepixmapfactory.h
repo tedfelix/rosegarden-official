@@ -28,7 +28,7 @@
 #include "notepixmapfactory.h"
 
 typedef vector<int> ChordPitches;
-typedef vector<Accidental> Accidentals;
+typedef vector<Rosegarden::Accidental> Accidentals;
 
 
 /**
@@ -44,9 +44,9 @@ public:
 
     NotePixmapOffsets();
 
-    void offsetsFor(Note::Type,
+    void offsetsFor(Rosegarden::Note::Type,
                     bool dotted,
-                    Accidental,
+                    Rosegarden::Accidental,
                     bool drawTail,
                     bool stalkGoesUp);
     
@@ -81,8 +81,8 @@ protected:
     unsigned int m_accidentalHeight;
     unsigned int m_stalkLength;
 
-    Note::Type m_note;
-    Accidental m_accidental;
+    Rosegarden::Note::Type m_note;
+    Rosegarden::Accidental m_accidental;
     bool m_drawTail;
     bool m_stalkGoesUp;
     bool m_noteHasStalk;
@@ -121,16 +121,16 @@ public:
      *    neighboring note)
      * @param stalkGoesUp : if the note's stalk should go up or down
      */
-    QCanvasPixmap makeNotePixmap(Note::Type note,
+    QCanvasPixmap makeNotePixmap(Rosegarden::Note::Type note,
                                  bool dotted,
-                                 Accidental accidental = NoAccidental,
+                                 Rosegarden::Accidental accidental = Rosegarden::NoAccidental,
                                  bool drawTail = true,
                                  bool stalkGoesUp = true);
 
-    QCanvasPixmap makeRestPixmap(Note::Type note, bool dotted);
-    QCanvasPixmap makeClefPixmap(Clef clef) const;
+    QCanvasPixmap makeRestPixmap(Rosegarden::Note::Type note, bool dotted);
+    QCanvasPixmap makeClefPixmap(Rosegarden::Clef clef) const;
     QCanvasPixmap makeKeyPixmap(string type, string cleftype);
-    QCanvasPixmap makeTimeSigPixmap(const TimeSignature& sig);
+    QCanvasPixmap makeTimeSigPixmap(const Rosegarden::TimeSignature& sig);
     QCanvasPixmap makeUnknownPixmap();
 
     int getNoteBodyHeight() const   { return m_noteBodyEmpty.height(); }
@@ -141,18 +141,18 @@ public:
     int getStalkLength() const      { return getNoteBodyHeight() * 11/4; }
     int getDotWidth() const         { return m_dot.width(); }
     int getClefWidth() const;
-    int getKeyWidth(const Key &key) const {
+    int getKeyWidth(const Rosegarden::Key &key) const {
         return (key.getAccidentalCount() *
                 (getAccidentalWidth() - (key.isSharp()? 1 : 2)));
     }
 
 protected:
 
-    const QPixmap* tailUp(Note::Type note) const;
-    const QPixmap* tailDown(Note::Type note) const;
+    const QPixmap* tailUp(Rosegarden::Note::Type note) const;
+    const QPixmap* tailDown(Rosegarden::Note::Type note) const;
 
-    void drawStalk(Note::Type note, bool drawTail, bool stalkGoesUp);
-    void drawAccidental(Accidental, bool stalkGoesUp);
+    void drawStalk(Rosegarden::Note::Type note, bool drawTail, bool stalkGoesUp);
+    void drawAccidental(Rosegarden::Accidental, bool stalkGoesUp);
     void drawDot();
 
     void createPixmapAndMask(int width = -1, int height = -1);
@@ -218,7 +218,7 @@ public:
      */
     QCanvasPixmap makeChordPixmap(const ChordPitches &pitches,
                                   const Accidentals &accidentals,
-                                  Note::Type note,
+                                  Rosegarden::Note::Type note,
                                   bool dotted,
                                   bool drawTail = false,
                                   bool stalkGoesUp = true);

@@ -21,6 +21,10 @@
 #include <cstdio> // needed for sprintf()
 #include "NotationTypes.h"
 
+namespace Rosegarden 
+{
+using std::string;
+    
 const string Clef::EventType = "clefchange";
 const string Clef::ClefPropertyName = "clef";
 const string Clef::Treble = "treble";
@@ -497,4 +501,5 @@ int TimeSignature::getBeatDuration() const
         return  getUnitDuration();
     }
 }
-
+ 
+}

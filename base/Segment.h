@@ -24,6 +24,9 @@
 #include <multiset.h>
 #include "Event.h"
 
+namespace Rosegarden 
+{
+    
 /**
  * This class owns the Events its items are pointing at
  */
@@ -42,6 +45,9 @@ protected:
     unsigned int m_startIdx;
     unsigned int m_nbBars;
 };
+ 
+}
+
 
 #endif
 

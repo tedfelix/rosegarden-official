@@ -43,6 +43,9 @@ struct hashstring
 
 hash<const char*> hashstring::_H;
 
+namespace Rosegarden 
+{
+    
 class Event
 {
 private:
@@ -289,5 +292,7 @@ public:
         return *e1 < *e2;
     }
 };
+
+}
 
 #endif
