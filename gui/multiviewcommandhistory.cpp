@@ -60,7 +60,7 @@ MultiViewCommandHistory::attachView(KActionCollection *collection)
 {
     if (m_views.find(collection) != m_views.end()) return;
 
-    RG_DEBUG << "MultiViewCommandHistory::attachView() : creating actions\n";
+    RG_DEBUG << "MultiViewCommandHistory::attachView() : setting up undo/redo actions\n";
     
     KToolBarPopupAction *undo = dynamic_cast<KToolBarPopupAction*>(collection->action(KStdAction::stdName(KStdAction::Undo)));
 
