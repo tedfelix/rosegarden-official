@@ -269,6 +269,17 @@ public:
     Rosegarden::RealTime getAudioPlayLatency();
     Rosegarden::RealTime getAudioRecordLatency();
 
+    // Complete the add of an audio file when a new file has finished
+    // being recorded at the sequencer.  This method will ensure that
+    // the audio file is added to the AudioFileManager, that
+    // a preview is generated and that the sequencer also knows to add
+    // the new file to its own hash table.  Flow of control is a bit
+    // awkward around new audio files as timing is crucial - the gui can't
+    // access the file until lead-out information has been written by the 
+    // sequencer.
+    //
+    void finalizeAudioFile(Rosegarden::AudioFileId id);
+
     /*
     void setAudioRecordLatency(const Rosegarden::RealTime &latency)
         { m_audioRecordLatency = latency; }

@@ -1097,6 +1097,14 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                 if ((*i)->getType() == Rosegarden::MappedEvent::AudioLevel)
                     sendAudioLevel(*i);
 
+                if ((*i)->getType() == 
+                        Rosegarden::MappedEvent::AudioGeneratePreview)
+                {
+                    m_doc->finalizeAudioFile(
+                            Rosegarden::AudioFileId((*i)->getData1()));
+                }
+
+
                 continue;
             }
 #ifdef HAVE_ALSA

@@ -26,12 +26,12 @@
 #include <dcopclient.h>
 #include <iostream>
 #include <unistd.h>
-
-#include "rosegardensequencer.h"
-#include <MappedComposition.h>
-#include "rosegardendcop.h"
-
 #include <signal.h>
+
+#include "MappedComposition.h"
+#include "rosegardendcop.h"
+#include "rosegardensequencer.h"
+#include "rosedebug.h"
 
 using std::cout;
 using std::cerr;
@@ -66,9 +66,7 @@ int main(int argc, char *argv[])
     aboutData.addAuthor("Guillaume Laurent, Chris Cannam, Richard Bown",0, "glaurent@telegraph-road.org, cannam@all-day-breakfast.com, bownie@bownie.com");
     KCmdLineArgs::init( argc, argv, &aboutData );
     KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
-
     KApplication app;
-
 
     if (argc > 1)
     {
@@ -111,7 +109,7 @@ int main(int argc, char *argv[])
 
     // Started OK
     //
-    cout << "RosegardenSequencer - started OK" << endl;
+    SEQUENCER_DEBUG << "RosegardenSequencer - started OK" << std::endl;
 
     // Now we can enter our specialised event loop.
     // For each pass through we wait for some pending
@@ -252,10 +250,11 @@ int main(int argc, char *argv[])
                     break;
 
                 case RECORDING_ARMED:
-                    std::cerr << "RosegardenSequencer - "
-                              << "Sequencer can't enter \""
-                              << "RECORDING_ARMED\" state - internal error"
-                              << std::endl;
+                    SEQUENCER_DEBUG << "RosegardenSequencer - "
+                                    << "Sequencer can't enter \""
+                                    << "RECORDING_ARMED\" state - "
+                                    << "internal error"
+                                    << std::endl;
                     break;
 
                 case STOPPED:

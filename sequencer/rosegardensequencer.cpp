@@ -23,6 +23,7 @@
 #include <iostream>
 #include <qdatetime.h>
 
+#include "rosedebug.h"
 #include "rosegardensequencer.h"
 #include "rosegardendcop.h"
 #include "Sequencer.h"
@@ -59,7 +60,8 @@ RosegardenSequencerApp::RosegardenSequencerApp():
 
     if (realAppId.isNull())
     {
-        cerr << "RosegardenSequencer cannot register with DCOP server" << endl;
+        SEQUENCER_DEBUG << "RosegardenSequencer cannot register "
+                        << "with DCOP server" << endl;
         close();
     }
 
@@ -71,7 +73,8 @@ RosegardenSequencerApp::RosegardenSequencerApp():
 
     if (!m_sequencer)
     {
-        cerr << "RosegardenSequencer object could not be allocated";
+        SEQUENCER_DEBUG << "RosegardenSequencer object could not be allocated"
+                        << std::endl;
         close();
     }
 
@@ -88,7 +91,7 @@ RosegardenSequencerApp::~RosegardenSequencerApp()
 {
     if (m_sequencer)
     {
-        std::cout << "RosegardenSequencer - shutting down" << std::endl;
+        SEQUENCER_DEBUG << "RosegardenSequencer - shutting down" << std::endl;
         delete m_sequencer;
     }
 }
@@ -126,7 +129,7 @@ RosegardenSequencerApp::stop()
 
     // report
     //
-    std::cout << "RosegardenSequencerApp::play() - stopping" << endl;
+    SEQUENCER_DEBUG << "RosegardenSequencerApp::play() - stopping" << endl;
 
 }
 
@@ -201,9 +204,8 @@ RosegardenSequencerApp::getSlice(const Rosegarden::RealTime &start,
                                   "getSequencerSlice(long int, long int, long int, long int, long int)",
                                   data, replyType, replyData, true))
     {
-        cerr << "RosegardenSequencer::getSlice()"
-             << " - can't call RosegardenGUI client"
-             << endl;
+        SEQUENCER_DEBUG << "RosegardenSequencer::getSlice()"
+                        << " - can't call RosegardenGUI client" << std::endl;
 
         // Stop the sequencer so we can see if we can try again later
         //
@@ -220,9 +222,8 @@ RosegardenSequencerApp::getSlice(const Rosegarden::RealTime &start,
         }
         else
         {
-            cerr <<
-                 "RosegardenSequencer::getSlice() - unrecognised type returned"
-                 << endl;
+            SEQUENCER_DEBUG << "RosegardenSequencer::getSlice() - "
+                            << "unrecognised type returned" << std::endl;
         }
     }
 
@@ -298,14 +299,16 @@ RosegardenSequencerApp::keepPlaying()
             unsigned int slices = 
                 (gapLength/sliceSize == 0) ? 1 : gapLength/sliceSize;
 
-            std::cerr << "RosegardenSequencerApp::keepPlaying() - "
-                      << "GUI COULDN'T SERVICE SLICE REQUEST(S)" << std::endl
-                      << "                                        "
-                      << "      -- DROPPED "
-                      << slices
-                      << " SLICE";
-            if (slices > 1) std::cerr << "S";
-            std::cerr <<"! --" << std::endl;
+            SEQUENCER_DEBUG << "RosegardenSequencerApp::keepPlaying() - "
+                            << "GUI COULDN'T SERVICE SLICE REQUEST(S)" 
+                            << std::endl
+                            << "                                        "
+                            << "      -- DROPPED "
+                            << slices
+                            << " SLICE";
+
+            if (slices > 1) SEQUENCER_DEBUG << "S";
+            SEQUENCER_DEBUG <<"! --" << std::endl;
 
             QByteArray data;
             QDataStream arg(data, IO_WriteOnly);
@@ -316,7 +319,7 @@ RosegardenSequencerApp::keepPlaying()
                                           "skippedSlices(unsigned int)",
                                           data)) 
             {
-                cerr << "RosegardenSequencer::keepPlaying()"
+                SEQUENCER_DEBUG << "RosegardenSequencer::keepPlaying()"
                      << " - can't send to RosegardenGUI client" << endl;
             }
         }
@@ -394,9 +397,9 @@ RosegardenSequencerApp::updateClocks(bool clearToSend)
                       "setPointerPosition(long int, long int, long int)",
                       data))
     {
-        cerr << "RosegardenSequencer::updateClocks()"
-             << " - can't send to RosegardenGUI client"
-             << endl;
+        SEQUENCER_DEBUG << "RosegardenSequencer::updateClocks()"
+                        << " - can't send to RosegardenGUI client"
+                        << std::endl;
 
         // Stop the sequencer so we can see if we can try again later
         //
@@ -419,8 +422,9 @@ RosegardenSequencerApp::notifySequencerStatus()
                                   "notifySequencerStatus(int)",
                                   data)) 
     {
-        cerr << "RosegardenSequencer::notifySequencerStatus()"
-             << " - can't send to RosegardenGUI client" << endl;
+        SEQUENCER_DEBUG << "RosegardenSequencer::notifySequencerStatus()"
+                        << " - can't send to RosegardenGUI client"
+                        << std::endl;
 
         // Stop the sequencer
         //
@@ -464,8 +468,9 @@ RosegardenSequencerApp::processRecordedMidi()
                                  "processRecordedMidi(Rosegarden::MappedComposition)",
                                   data/*, replyType, replyData, true*/))
     {
-        cerr << "RosegardenSequencer::processRecordedMidi() - " 
-             <<   "can't call RosegardenGUI client" << endl;
+        SEQUENCER_DEBUG << "RosegardenSequencer::processRecordedMidi() - " 
+                        <<   "can't call RosegardenGUI client" 
+                        << std::endl;
 
         // Stop the sequencer
         //
@@ -495,8 +500,8 @@ RosegardenSequencerApp::processRecordedAudio()
                                  "processRecordedAudio(long int, long int)",
                                   data/*, replyType, replyData, true*/))
     {
-        cerr << "RosegardenSequencer::processRecordedMidi() - " 
-             <<   "can't call RosegardenGUI client" << endl;
+        SEQUENCER_DEBUG << "RosegardenSequencer::processRecordedMidi() - " 
+                        <<   "can't call RosegardenGUI client" << std::endl;
 
         // Stop the sequencer
         //
@@ -522,8 +527,8 @@ RosegardenSequencerApp::processAsynchronousEvents()
                                  ROSEGARDEN_GUI_IFACE_NAME,
                                  "processAsynchronousMidi(Rosegarden::MappedComposition)", data))
     {
-        cerr << "RosegardenSequencer::processAsynchronousEvents() - " <<
-                "can't call RosegardenGUI client" << endl;
+        SEQUENCER_DEBUG << "RosegardenSequencer::processAsynchronousEvents() - "
+                        << "can't call RosegardenGUI client" << std::endl;
 
         // Stop the sequencer so we can see if we can try again later
         //
@@ -549,8 +554,8 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
 
     if (localRecordMode == STARTING_TO_RECORD_MIDI)
     {
-        std::cout << "RosegardenSequencerApp::record()"
-                  << " - starting to record MIDI" << endl;
+        SEQUENCER_DEBUG << "RosegardenSequencerApp::record()"
+                        << " - starting to record MIDI" << std::endl;
 
         // Get the Sequencer to prepare itself for recording
         //
@@ -558,8 +563,8 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
     }
     else if (localRecordMode == STARTING_TO_RECORD_AUDIO)
     {
-        std::cout << "RosegardenSequencerApp::record()"
-                  << " - starting to record Audio" << endl;
+        SEQUENCER_DEBUG << "RosegardenSequencerApp::record()"
+                        << " - starting to record Audio" << std::endl;
 
         QByteArray data, replyData;
         QCString replyType;
@@ -570,9 +575,9 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
                                       "createNewAudioFile()",
                                       data, replyType, replyData, true))
         {
-            std::cerr << "RosegardenSequencer::record()"
-                      << " - can't call RosegardenGUI client"
-                      << std::endl;
+            SEQUENCER_DEBUG << "RosegardenSequencer::record()"
+                            << " - can't call RosegardenGUI client"
+                            << std::endl;
         }
 
         QDataStream reply(replyData, IO_ReadOnly);
@@ -583,8 +588,8 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
         }
         else
         {
-            std::cerr << "RosegardenSequencer::record() - "
-                      << "unrecognised type returned" << std::endl;
+            SEQUENCER_DEBUG << "RosegardenSequencer::record() - "
+                            << "unrecognised type returned" << std::endl;
         }
 
         // set recording filename
@@ -664,7 +669,8 @@ RosegardenSequencerApp::play(const Rosegarden::RealTime &time,
 
     // report
     //
-    std::cout << "RosegardenSequencerApp::play() - starting to play" << endl;
+    SEQUENCER_DEBUG << "RosegardenSequencerApp::play() - starting to play"
+                    << std::endl;
 
     // keep it simple
     return true;
@@ -818,8 +824,8 @@ RosegardenSequencerApp::processMappedEvent(unsigned int id,
 
     Rosegarden::MappedComposition mC;
 
-    std::cout << "processMappedEvent() - sending out single event"
-              << std::endl;
+    SEQUENCER_DEBUG << "processMappedEvent() - sending out single event"
+                    << std::endl;
 
     /*
     std::cout << "ID = " << mE->getInstrument() << std::endl;
@@ -863,9 +869,9 @@ RosegardenSequencerApp::getDevices()
 void
 RosegardenSequencerApp::alive()
 {
-    std::cout << "RosegardenSequencerApp::alive() - "
-              << "GUI (count = " << ++m_guiCount
-              << ") is alive, instruments synced" << std::endl;
+    SEQUENCER_DEBUG << "RosegardenSequencerApp::alive() - "
+                    << "GUI (count = " << ++m_guiCount
+                    << ") is alive, instruments synced" << std::endl;
 
     // now turn off the automatic sendalive
     m_sendAlive = false;
@@ -878,8 +884,8 @@ RosegardenSequencerApp::sequencerAlive()
     if (!kapp->dcopClient()->
         isApplicationRegistered(QCString(ROSEGARDEN_GUI_APP_NAME)))
     {
-        std::cout << "RosegardenSequencerApp::sequencerAlive() - "
-                  << "waiting for GUI to register" << std::endl;
+        SEQUENCER_DEBUG << "RosegardenSequencerApp::sequencerAlive() - "
+                        << "waiting for GUI to register" << std::endl;
         return;
     }
 
@@ -890,13 +896,13 @@ RosegardenSequencerApp::sequencerAlive()
                                  "alive()",
                                   data))
     {
-        std::cerr << "RosegardenSequencer::alive()"
-                  << " - can't call RosegardenGUI client"
-                  << std::endl;
+        SEQUENCER_DEBUG << "RosegardenSequencer::alive()"
+                        << " - can't call RosegardenGUI client"
+                        << std::endl;
     }
 
-    std::cout << "RosegardenSequencerApp::sequencerAlive() - "
-              << "trying to tell GUI that we're alive" << std::endl;
+    SEQUENCER_DEBUG << "RosegardenSequencerApp::sequencerAlive() - "
+                    << "trying to tell GUI that we're alive" << std::endl;
 }
 
 void
@@ -908,16 +914,16 @@ RosegardenSequencerApp::setAudioMonitoring(long value)
             m_sequencer->getRecordStatus() == Rosegarden::ASYNCHRONOUS_MIDI)
     {
         m_sequencer->record(Rosegarden::ASYNCHRONOUS_AUDIO);
-        std::cout << "RosegardenSequencerApp::setAudioMonitoring - "
-                  << "monitoring audio input" << std::endl;
+        SEQUENCER_DEBUG << "RosegardenSequencerApp::setAudioMonitoring - "
+                        << "monitoring audio input" << std::endl;
         return;
     }
 
     if (bValue == false &&
             m_sequencer->getRecordStatus() == Rosegarden::ASYNCHRONOUS_AUDIO)
     {
-        std::cout << "RosegardenSequencerApp::setAudioMonitoring - "
-                  << "monitoring MIDI input" << std::endl;
+        SEQUENCER_DEBUG << "RosegardenSequencerApp::setAudioMonitoring - "
+                        << "monitoring MIDI input" << std::endl;
         m_sequencer->record(Rosegarden::ASYNCHRONOUS_MIDI);
     }
     
@@ -962,8 +968,8 @@ RosegardenSequencerApp::initialiseStudio()
 
     if (pM)
     {
-        std::cout << "RosegardenSequencer - "
-                  << "got plugin manager" << std::endl;
+        SEQUENCER_DEBUG << "RosegardenSequencer - "
+                        << "got plugin manager" << std::endl;
     }
 
     // Create a random number of audio faders
@@ -977,9 +983,9 @@ RosegardenSequencerApp::initialiseStudio()
 
         if (aF)
         {
-            std::cout << "RosegardenSequencer - "
-                      << "adding Audio Fader (object id = "
-                      << aF->getId() << ")" << std::endl;
+            SEQUENCER_DEBUG << "RosegardenSequencer - "
+                            << "adding Audio Fader (object id = "
+                            << aF->getId() << ")" << std::endl;
 
             audioFaders.push_back(aF->getId());
         }

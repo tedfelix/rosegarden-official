@@ -840,9 +840,27 @@ AlsaDriver::stopPlayback()
     if (m_recordStatus == RECORD_AUDIO && _recordFile)
     {
         _recordFile->close();
+
+        // Create event to return to gui to say that we've completed
+        // an audio file and we can generate a preview for it now.
+        //
+        try
+        {
+            MappedEvent *mE =
+                new MappedEvent(_recordFile->getId(),
+                                MappedEvent::AudioGeneratePreview,
+                                0);
+
+            // send completion event
+            insertMappedEventForReturn(mE);
+        }
+        catch(...) {;}
+
         _recordFile = 0;
         m_recordStatus = ASYNCHRONOUS_AUDIO;
+
     }
+        
 
     // Change recorded state if any set
     //

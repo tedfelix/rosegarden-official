@@ -74,7 +74,9 @@ public:
         Audio,               // sent from the gui to play an audio file
         AudioCancel,         // sent from gui to stop playing an audio file
         AudioLevel,          // sent to the gui with audio level on Instrument
-        AudioStopped         // sent to the gui to inform an audio file stopped
+        AudioStopped,        // sent to the gui to inform an audio file stopped
+        AudioGeneratePreview // the gui is clear to generate a preview for a 
+                             // new audio file
     } MappedEventType;
 
     MappedEvent(): m_instrument(0),
