@@ -443,7 +443,7 @@ LilypondExporter::write() {
     const std::string headerTagline = "tagline";
 
     // Lilypond \header block
-    str << "\\version \"1.4.10\"" << std::endl;
+    str << "\\version \"1.6.5\"" << std::endl;
 
     // set indention level to make future changes to horizontal layout less
     // tedious, ++col to indent a new level, --col to de-indent
