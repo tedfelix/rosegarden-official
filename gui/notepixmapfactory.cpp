@@ -2096,7 +2096,7 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above, bool smooth,
 		abs(dy);
 	    hotspot = QPoint(0, -topLeft.y());
 
-	    NOTATION_DEBUG << "slur: bottomRight " << bottomRight << ", topLeft " << topLeft << ", width " << width << ", height " << height << ", hotspot " << hotspot << ", dy " << dy << endl;
+//	    NOTATION_DEBUG << "slur: bottomRight " << bottomRight << ", topLeft " << topLeft << ", width " << width << ", height " << height << ", hotspot " << hotspot << ", dy " << dy << endl;
 
 	    if (painter) {
 
