@@ -1,46 +1,51 @@
 0.9 tasks
 =========
 
-o audio/MIDI looping and start position (performance)
+o Banks/Programs Editor Dialog
 
 o Make RG a jack mixer (transport, control client)
 
+o MIDI Event filters
+
+o MIDI Panic button
+
+o MTC/MMC - transport awareness
+
 o JACK connection management - stereo, panning
-
-o FEATURE - double/half speed event selection in Matrix
-
-o BUG - recorded audio file inserting to AudioManagerDialog before it's ready
-  [DONE]
-
-o BUG - Plugin calls() during playback causing usual problem
-
-o BUG - changing audio file path doesn't work
-
-o File loading blank-out
-
-o Drum bank selects and different MIDI drums
-
-o Real time plugins
-
-o Fix segment audio drag and drop
 
 o Tidy up AudioFiles:
    - hardcoded format segment values
    - BWF format writing/reading
    - exceptions and return values
 
+o MIDI export broken for key sig and SysExs
+
+o multi-threaded base/
+
+
+
+Smaller stuff
+=============
+
+o Fix segment audio drag and drop
+
+o Drum bank selects and different MIDI drums
+
 o "Revert file" option [HALF COMPLETED]
 
 o Matrix tools - cut and join 
 
-o MIDI export broken for key sig and SysExs
+o FEATURE - double/half speed event selection in Matrix
+
+o BUG - Plugin calls() during playback causing usual problem
+
+o BUG - changing audio file path doesn't work
+
+o audio/MIDI looping and start position (performance)
+
+o File loading blank-out
 
 o Finite audio recording time - check for available disk space
-
-
-
-Post 0.8
-========
 
 o Matrix Hypereditor [PENDING]
 
@@ -80,6 +85,9 @@ o selection of ALSA recording device
 
 Post 0.8 completed
 =================
+
+o BUG - recorded audio file inserting to AudioManagerDialog before it's ready
+  [DONE]
 
 o ALSA seq bug on incoming events (infinite length) [FIXED]
 

@@ -82,6 +82,11 @@ public:
     virtual InstrumentList& getAllInstruments();
     virtual InstrumentList& getPresentationInstruments();
 
+    // Return a copy of banks and programs
+    //
+    std::vector<MidiBank> getBanks() const;
+    std::vector<MidiProgram> getPrograms() const;
+
 private:
     void generatePresentationList();
 

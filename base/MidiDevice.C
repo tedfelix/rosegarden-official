@@ -304,6 +304,31 @@ MidiDevice::clearBankList()
 }
 
 
+std::vector<MidiBank>
+MidiDevice::getBanks() const
+{
+    std::vector<MidiBank> bank;
+    std::vector<MidiBank*>::iterator it;
+
+    for (it = m_bankList->begin(); it != m_bankList->end(); it++)
+        bank.push_back(**it);
+
+    return bank;
+}
+
+std::vector<MidiProgram>
+MidiDevice::getPrograms() const
+{
+    std::vector<MidiProgram> program;
+    std::vector<MidiProgram*>::iterator it;
+
+    for (it = m_programList->begin(); it != m_programList->end(); it++)
+        program.push_back(**it);
+
+    return program;
+}
+
+
 }
 
 

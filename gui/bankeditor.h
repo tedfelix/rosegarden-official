@@ -22,13 +22,15 @@
 
 #include <kdialogbase.h>
 
+#include "Instrument.h"
+
 class RosegardenComboBox;
 class QLineEdit;
 class QPushButton;
 class QFrame;
 class QSpinBox;
 
-namespace Rosegarden { class Studio; }
+namespace Rosegarden { class Studio; class MidiDevice; }
 
 #ifndef _BANKEDITOR_H_
 #define _BANKEDITOR_H_
@@ -41,12 +43,29 @@ public:
     BankEditorDialog(QWidget *parent,
                      Rosegarden::Studio *studio);
 
+    std::vector<Rosegarden::MidiProgram>
+        getBankSubset(Rosegarden::MidiByte msb, Rosegarden::MidiByte lsb);
+
 
 public slots:
+    void slotPopulateBank(int bank);
     void slotPopulateDevice(int device);
-    void slotPopulatePrograms(int bank);
+    void slotPopulateDeviceBank(int device, int bank);
+
+    // something has been modified
+    void slotModified();
+
+    void slotApply();
+    void slotOK();
+
+    void slotAddBank();
+    void slotDeleteBank();
+    void slotDeleteAllBanks();
 
 protected:
+    // Get a MidiDevice from an index number
+    //
+    Rosegarden::MidiDevice* getMidiDevice(int number);
 
     //--------------- Data members ---------------------------------
     Rosegarden::Studio      *m_studio;
@@ -63,6 +82,9 @@ protected:
     QPushButton             *m_deleteAllBanks;
 
     QFrame                  *m_mainFrame;
+
+    std::vector<Rosegarden::MidiBank>        m_bankList;
+    std::vector<Rosegarden::MidiProgram>     m_programList;
 
 };
 
