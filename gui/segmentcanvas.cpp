@@ -201,8 +201,11 @@ SegmentAudioPreview::SegmentAudioPreview(SegmentItem& parent,
 SegmentAudioPreview::~SegmentAudioPreview()
 {
     if (m_previewToken >= 0) {
-	AudioPreviewThread &thread = m_parent.getDocument()->getAudioPreviewThread();
-	thread.cancelPreview(m_previewToken);
+	RosegardenGUIDoc *doc = m_parent.getDocument();
+	if (doc && !doc->isBeingDestroyed()) {
+	    AudioPreviewThread &thread = doc->getAudioPreviewThread();
+	    thread.cancelPreview(m_previewToken);
+	}
     }
 }	
 
