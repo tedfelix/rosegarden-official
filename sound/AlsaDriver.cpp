@@ -1017,6 +1017,8 @@ AlsaDriver::setCurrentTimer(QString timer)
 
     std::string name(timer.data());
 
+    stopClocks();
+
     for (unsigned int i = 0; i < m_timers.size(); ++i) {
 	if (m_timers[i].name == name) {
 
@@ -1042,6 +1044,8 @@ AlsaDriver::setCurrentTimer(QString timer)
 	    break;
 	}
     }
+
+    startClocks();
 
     AUDIT_UPDATE;
 }
