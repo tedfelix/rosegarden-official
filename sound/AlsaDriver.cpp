@@ -471,8 +471,8 @@ AlsaDriver::generateInstruments()
 		std::cerr << "WARNING: Failed to create record device" << std::endl;
 	    } else {
 		//!!! why do we bother adding instruments for record devices?
-		//!!! answer: we shouldn't
-		//!!! addInstrumentsForDevice(device);
+		//!!! answer: we shouldn't (but breaks things if we don't?)
+		addInstrumentsForDevice(device);
 		m_devices.push_back(device);
 	    }
 	}
