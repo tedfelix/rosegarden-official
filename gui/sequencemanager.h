@@ -60,12 +60,12 @@ class RosegardenTransportDialog;
 class SegmentMmapper;
 class CompositionMmapper;
 
-class SequenceManager : public QObject, public CompositionObserver
+class SequenceManager : public QObject
 {
     Q_OBJECT
 public:
     SequenceManager(RosegardenGUIDoc *doc,
-                     RosegardenTransportDialog *transport);
+		    RosegardenTransportDialog *transport);
     ~SequenceManager();
 
     /**
@@ -193,18 +193,18 @@ public:
     void dumpCompositionToFileSet(const QString& path);
     void resetCompositionMmapper();
 
+    void segmentAdded(const Composition *c, Segment *s);
+    void segmentRemoved(const Composition *c, Segment *s);
     void segmentModified(Segment* s);
 
-    // CompositionObserver methods
-    virtual void segmentAdded(const Composition *, Segment *);
-    virtual void segmentRemoved(const Composition *, Segment *);
-    virtual void endMarkerTimeChanged(const Composition *, bool) { }
-    virtual void compositionDeleted(const Composition *) { }
+    virtual bool event(QEvent *e);
     
 public slots:
     // Empty the m_clearToSend flag
     //
     //void slotClearToSendElapsed();
+
+    void update();
 
 signals:
     void setProgress(int);
@@ -242,6 +242,12 @@ protected:
     // Keep a track of elapsed record time with this object
     //
     QTime                     *m_recordTime;
+
+    typedef std::map<Rosegarden::Segment *, int> SegmentRefreshMap;
+    SegmentRefreshMap m_segments; // map to refresh status id
+    unsigned int m_compositionRefreshStatusId;
+
+    void checkRefreshStatus();
 };
 
 }

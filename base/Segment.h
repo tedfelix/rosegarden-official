@@ -43,8 +43,8 @@ public:
 
     void push(timeT from, timeT to);
 
-    timeT from() { return m_from; }
-    timeT to()   { return m_to; }
+    timeT from() const { return m_from; }
+    timeT to()   const { return m_to; }
 
 protected:
     timeT m_from;

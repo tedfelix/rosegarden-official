@@ -310,7 +310,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     addPropertyViewRuler(Rosegarden::BaseProperties::VELOCITY);
 
     m_chordNameRuler = new ChordNameRuler
-	(&m_hlayout, &doc->getComposition(), 0, 20, getCentralFrame());
+	(&m_hlayout, doc, 0, 20, getCentralFrame());
     m_chordNameRuler->setStudio(&getDocument()->getStudio());
     addRuler(m_chordNameRuler);
 

@@ -122,7 +122,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
     int barButtonsHeight = 25;
 
     m_chordNameRuler = new ChordNameRuler(m_rulerScale,
-					  &m_doc->getComposition(),
+					  m_doc,
 					  0.0,
 					  20,
 					  this);

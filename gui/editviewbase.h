@@ -30,7 +30,7 @@
 
 #include "Event.h" // for timeT -- can't predeclare a typedef
 
-namespace Rosegarden { class Segment; class MappedEvent; }
+namespace Rosegarden { class Segment; }
 
 class QVBox;
 class QGridLayout;
@@ -243,9 +243,6 @@ protected slots:
     virtual void slotUpdateToolbars();
     
 protected:
-    // tell the document's sequence manager that all segments are modified
-    void remapAllSegments();
-
     QFrame* getCentralFrame() { return m_centralFrame; }
 
     void initSegmentRefreshStatusIds();

@@ -37,6 +37,7 @@ namespace Rosegarden {
 
 class QFont;
 class QFontMetrics;
+class RosegardenGUIDoc;
 
 
 /**
@@ -44,7 +45,7 @@ class QFontMetrics;
  * describing the chords in a composition.
  */
 
-class ChordNameRuler : public QWidget, public Rosegarden::SegmentObserver
+class ChordNameRuler : public QWidget
 {
     Q_OBJECT
 
@@ -55,16 +56,13 @@ public:
      * RulerScale.
      */
     ChordNameRuler(Rosegarden::RulerScale *rulerScale,
-		   Rosegarden::Composition *composition,
+		   RosegardenGUIDoc *doc,
 		   double xorigin = 0.0,
 		   int height = 0,
 		   QWidget* parent = 0,
 		   const char *name = 0);
 
     ~ChordNameRuler();
-
-    // must have one of these:
-    void setComposition(Rosegarden::Composition *composition);
 
     // may have one of these; can be changed at any time (to any in given composition):
     void setCurrentSegment(Rosegarden::Segment *segment);
@@ -76,13 +74,6 @@ public:
     virtual QSize minimumSizeHint() const;
 
     void setMinimumWidth(int width) { m_width = width; }
-
-    virtual void eventAdded(const Rosegarden::Segment *, Rosegarden::Event *);
-    virtual void eventRemoved(const Rosegarden::Segment *, Rosegarden::Event *);
-    virtual void endMarkerTimeChanged(const Rosegarden::Segment *, bool);
-    virtual void segmentDeleted(const Rosegarden::Segment *);
-
-    void initCache() { recalculate(true); }
 
 public slots:
     void slotScrollHoriz(int x);
@@ -100,9 +91,10 @@ private:
 
     Rosegarden::Composition *m_composition;
     unsigned int m_compositionRefreshStatusId;
-    bool m_needsRecalculate;
 
-    Rosegarden::SegmentSelection m_segments;
+    typedef std::map<Rosegarden::Segment *, int> SegmentRefreshMap;
+    SegmentRefreshMap m_segments; // map to refresh status id
+
     Rosegarden::Segment *m_currentSegment;
     Rosegarden::Studio *m_studio;
 
@@ -115,7 +107,7 @@ private:
     const Rosegarden::PropertyName TEXT_FORMAL_X;
     const Rosegarden::PropertyName TEXT_ACTUAL_X;
 
-    void recalculate(bool regetSegments);
+    void recalculate();
 };
 
 #endif // _LOOPRULER_H_

@@ -156,15 +156,14 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
     connect(m_countdownTimer, SIGNAL(timeout()),
             this, SLOT(slotCountdownTimerTimeout()));
 
-    doc->getComposition().addObserver(this);
+    connect(doc->getCommandHistory(), SIGNAL(commandExecuted()),
+	    this, SLOT(update()));
 }
 
 
 SequenceManager::~SequenceManager()
 {
     SEQMAN_DEBUG << "SequenceManager::~SequenceManager()\n";
-
-    if (m_doc) m_doc->getComposition().removeObserver(this);
 
     QByteArray data;
     kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
@@ -176,9 +175,8 @@ SequenceManager::~SequenceManager()
 
 void SequenceManager::setDocument(RosegardenGUIDoc* doc)
 {
-    if (m_doc) m_doc->getComposition().removeObserver(this);
+    m_segments.clear();
     m_doc = doc;
-    if (m_doc) m_doc->getComposition().addObserver(this);
 
     // Must recreate and reconnect the countdown timer and dialog
     // (bug 729039)
@@ -195,13 +193,17 @@ void SequenceManager::setDocument(RosegardenGUIDoc* doc)
     //
     connect(m_countdownTimer, SIGNAL(timeout()),
             this, SLOT(slotCountdownTimerTimeout()));
+
+    if (m_doc) {
+	m_compositionRefreshStatusId =
+	    m_doc->getComposition().getNewRefreshStatusId();
+    }
 }
 
 RosegardenGUIDoc* SequenceManager::getDocument()
 {
     return m_doc;
 }
-
 
 
 void
@@ -2091,6 +2093,88 @@ void SegmentMmapper::dump()
     
 }
 
+
+bool SequenceManager::event(QEvent *e)
+{
+    if (e->type() == QEvent::User) {
+	checkRefreshStatus();
+	return true;
+    } else {
+	return QObject::event(e);
+    }
+}
+
+
+void SequenceManager::update()
+{
+    // schedule a refresh-status check for the next event loop
+    QEvent *e = new QEvent(QEvent::User);
+    QApplication::postEvent(this, e);
+}
+
+
+void SequenceManager::checkRefreshStatus()
+{
+    bool regetSegments = false;
+    
+    if (m_segments.empty()) {
+
+	regetSegments = true;
+
+    } else {
+
+	Rosegarden::RefreshStatus &rs =
+	    m_doc->getComposition().getRefreshStatus
+	    (m_compositionRefreshStatusId);
+
+	if (rs.needsRefresh()) {
+	    rs.setNeedsRefresh(false);
+	    regetSegments = true;
+	}
+    }
+
+    if (regetSegments) {
+	
+	SegmentSelection ss;
+	
+	for (Composition::iterator ci = m_doc->getComposition().begin();
+	     ci != m_doc->getComposition().end(); ++ci) {
+	    ss.insert(*ci);
+	}
+
+	for (SegmentRefreshMap::iterator si = m_segments.begin();
+	     si != m_segments.end(); ++si) {
+
+	    if (ss.find(si->first) == ss.end()) {
+		m_segments.erase(si);
+		RG_DEBUG << "Segment deleted, updating (now have " << m_segments.size() << " segments)" << endl;
+		segmentRemoved(&m_doc->getComposition(), si->first);
+	    }
+	}
+
+	for (SegmentSelection::iterator si = ss.begin();
+	     si != ss.end(); ++si) {
+
+	    if (m_segments.find(*si) == m_segments.end()) {
+		int id = (*si)->getNewRefreshStatusId();
+		m_segments.insert(SegmentRefreshMap::value_type(*si, id));
+		RG_DEBUG << "Segment created, adding (now have " << m_segments.size() << " segments)" << endl;
+		segmentAdded(&m_doc->getComposition(), *si);
+		(*si)->getRefreshStatus(id).setNeedsRefresh(false);
+	    }
+	}
+    }	    
+
+    for (SegmentRefreshMap::iterator i = m_segments.begin();
+	 i != m_segments.end(); ++i) {
+	if (i->first->getRefreshStatus(i->second).needsRefresh()) {
+	    segmentModified(i->first);
+	    i->first->getRefreshStatus(i->second).setNeedsRefresh(false);
+	}
+    }
+}
+
+
 void SequenceManager::segmentModified(Segment* s)
 {
     SEQMAN_DEBUG << "SequenceManager::segmentModified(" << s << ")\n";
@@ -2114,8 +2198,6 @@ void SequenceManager::segmentModified(Segment* s)
         }
     }
 }
-
-
 
 
 void SequenceManager::segmentAdded(const Composition *c, Segment* s)

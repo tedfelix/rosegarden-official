@@ -26,6 +26,7 @@
 #include "notationproperties.h"
 #include "rosestrings.h"
 #include "rosedebug.h"
+#include "rosegardenguidoc.h"
 
 #include "Event.h"
 #include "Segment.h"
@@ -55,7 +56,7 @@ using Rosegarden::Text;
 
 
 ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
-			       Composition *composition,
+			       RosegardenGUIDoc *doc,
 			       double xorigin,
 			       int height,
 			       QWidget *parent,
@@ -66,8 +67,7 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
     m_currentXOffset(0),
     m_width(-1),
     m_rulerScale(rulerScale),
-    m_composition(0),
-    m_needsRecalculate(true),
+    m_composition(&doc->getComposition()),
     m_currentSegment(0),
     m_studio(0),
     m_chordSegment(0),
@@ -82,33 +82,16 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
     m_boldFont.setBold(true);
     m_fontMetrics = QFontMetrics(m_boldFont);
     setBackgroundColor(RosegardenGUIColours::ChordNameRulerBackground);
-    if (composition) setComposition(composition);
+
+    m_compositionRefreshStatusId = m_composition->getNewRefreshStatusId();
+
+    QObject::connect(doc->getCommandHistory(), SIGNAL(commandExecuted()),
+		     this, SLOT(update()));
 }
 
 ChordNameRuler::~ChordNameRuler()
 {
-    for (SegmentSelection::iterator si = m_segments.begin();
-	 si != m_segments.end(); ++si) {
-	(*si)->removeObserver(this);
-    }
     delete m_chordSegment;
-}
-
-void
-ChordNameRuler::setComposition(Rosegarden::Composition *composition)
-{
-    if (m_composition == composition) return;
-
-    for (SegmentSelection::iterator si = m_segments.begin();
-	 si != m_segments.end(); ++si) {
-	(*si)->removeObserver(this);
-    }
-    m_segments.clear();
-
-    m_composition = composition;
-    if (m_composition)
-	m_compositionRefreshStatusId = composition->getNewRefreshStatusId();
-    m_currentSegment = 0;
 }
 
 void
@@ -130,10 +113,6 @@ ChordNameRuler::slotScrollHoriz(int x)
     int dx = x - (-m_currentXOffset);
     m_currentXOffset = -x;
 
-    if (m_needsRecalculate) {
-	update();
-	return;
-    }
     if (dx == 0) return;
 
     if (dx > w*7/8 || dx < -w*7/8) {
@@ -173,47 +152,28 @@ ChordNameRuler::minimumSizeHint() const
 }
 
 void
-ChordNameRuler::eventAdded(const Rosegarden::Segment *s, Rosegarden::Event *)
-{
-    if (m_segments.find((Rosegarden::Segment *)s) != m_segments.end())
-	m_needsRecalculate = true;
-}
-
-void
-ChordNameRuler::eventRemoved(const Rosegarden::Segment *s, Rosegarden::Event *)
-{
-    if (m_segments.find((Rosegarden::Segment *)s) != m_segments.end())
-	m_needsRecalculate = true;
-}
-
-void
-ChordNameRuler::endMarkerTimeChanged(const Rosegarden::Segment *s, bool)
-{
-    if (m_segments.find((Rosegarden::Segment *)s) != m_segments.end())
-	m_needsRecalculate = true;
-}
-
-void
-ChordNameRuler::segmentDeleted(const Rosegarden::Segment *s)
-{
-    m_segments.erase((Rosegarden::Segment *)s);
-    if (m_currentSegment == s) m_currentSegment = 0;
-    m_needsRecalculate = true;
-}
-
-void
-ChordNameRuler::recalculate(bool regetSegments)
+ChordNameRuler::recalculate()
 {
     Rosegarden::Profiler profiler("ChordNameRuler::recalculate", true);
-    RG_DEBUG << "ChordNameRuler[" << this << "]::recalculate(" << regetSegments << ")" << endl;
+    RG_DEBUG << "ChordNameRuler[" << this << "]::recalculate" << endl;
 
-    Rosegarden::RefreshStatus &rs =
-	m_composition->getRefreshStatus(m_compositionRefreshStatusId);
-    if (rs.needsRefresh()) {
+    bool regetSegments = false;
+    bool needRecalc = false;
+
+    if (m_segments.empty()) {
+
 	regetSegments = true;
-	rs.setNeedsRefresh(false);
+
+    } else {
+
+	Rosegarden::RefreshStatus &rs =
+	    m_composition->getRefreshStatus(m_compositionRefreshStatusId);
+
+	if (rs.needsRefresh()) {
+	    rs.setNeedsRefresh(false);
+	    regetSegments = true;
+	}
     }
-    m_needsRecalculate = false;
 
     if (regetSegments) {
 
@@ -239,18 +199,13 @@ ChordNameRuler::recalculate(bool regetSegments)
 	    ss.insert(*ci);
 	}
 
-	for (SegmentSelection::iterator si = m_segments.begin();
+	for (SegmentRefreshMap::iterator si = m_segments.begin();
 	     si != m_segments.end(); ++si) {
 
-	    if (ss.find(*si) == ss.end()) {
-
-		//!!! this is probably unsafe -- the segment has been removed
-		// from the composition so it might have been destroyed
-		(*si)->removeObserver(this);
-		m_segments.erase(*si);
-
+	    if (ss.find(si->first) == ss.end()) {
+		m_segments.erase(si);
+		needRecalc = true;
 		RG_DEBUG << "Segment deleted, updating (now have " << m_segments.size() << " segments)" << endl;
-
 	    }
 	}
 
@@ -258,18 +213,29 @@ ChordNameRuler::recalculate(bool regetSegments)
 	     si != ss.end(); ++si) {
 
 	    if (m_segments.find(*si) == m_segments.end()) {
-		(*si)->addObserver(this);
-		m_segments.insert(*si);
+		m_segments.insert(SegmentRefreshMap::value_type
+				  (*si, (*si)->getNewRefreshStatusId()));
+		needRecalc = true;
 		RG_DEBUG << "Segment created, adding (now have " << m_segments.size() << " segments)" << endl;
-
 	    }
 	}
 
 	if (m_currentSegment &&
 	    ss.find(m_currentSegment) == ss.end()) {
 	    m_currentSegment = 0;
+	    needRecalc = true;
 	}
     }	    
+
+    for (SegmentRefreshMap::iterator i = m_segments.begin();
+	 i != m_segments.end(); ++i) {
+	if (i->first->getRefreshStatus(i->second).needsRefresh()) {
+	    needRecalc = true;
+	    i->first->getRefreshStatus(i->second).setNeedsRefresh(false);
+	}
+    }
+
+    if (!needRecalc) return;
 
     if (m_chordSegment) m_chordSegment->clear();
     else m_chordSegment = new Segment();
@@ -278,7 +244,7 @@ ChordNameRuler::recalculate(bool regetSegments)
 
     if (!m_currentSegment) { //!!! arbitrary, must do better
 	//!!! need a segment starting at zero or so with a clef and key in it!
-	m_currentSegment = *m_segments.begin();
+	m_currentSegment = m_segments.begin()->first;
     }
 
 /*!!!
@@ -308,7 +274,12 @@ ChordNameRuler::recalculate(bool regetSegments)
     Rosegarden::Key key = m_currentSegment->getKeyAtTime(clefKeyTime);
     m_chordSegment->insert(key.getAsEvent(-1));
 
-    CompositionTimeSliceAdapter adapter(m_composition, &m_segments);
+    SegmentSelection selection;
+    for (SegmentRefreshMap::iterator si = m_segments.begin(); si != m_segments.end();
+	 ++si) {
+	selection.insert(si->first);
+    }
+    CompositionTimeSliceAdapter adapter(m_composition, &selection);
     
     AnalysisHelper helper;
     helper.labelChords(adapter, *m_chordSegment, m_composition->getNotationQuantizer());
@@ -319,26 +290,11 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
 {
     if (!m_composition) return;
 
-    if (m_segments.empty()) {
-	
-	recalculate(true);
-
-    } else {
-
-	Rosegarden::RefreshStatus &rs =
-	    m_composition->getRefreshStatus(m_compositionRefreshStatusId);
-
-	if (rs.needsRefresh()) {
-
-	    recalculate(true);
-
-	} else if (m_needsRecalculate) {
-
-	    recalculate(false);
-	}
-    }
+    recalculate();
 
     Rosegarden::Profiler profiler("ChordNameRuler::paintEvent (body)", true);
+
+    if (!m_chordSegment) return;
 
     QPainter paint(this);
     paint.setPen(RosegardenGUIColours::ChordNameRulerForeground);

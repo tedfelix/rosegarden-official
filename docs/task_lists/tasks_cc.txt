@@ -83,6 +83,17 @@ memory?
 
 34. Get experimental branch working correctly again
 
+    Some problems with experimental branch:
+
+    * Remaps appear to be invoked from the edit view code, which seems
+      like a very odd choice.  What if things change while there are no
+      edit views visible?  Or if there are several, do we get several
+      remaps?
+
+    * Segment::setTrack uses weakAdd/weakRemove, which means the
+      composition's refresh status won't be updated, even though it
+      should be
+
 
 Priorities for 0.9
 ==================

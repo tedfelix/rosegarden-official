@@ -273,7 +273,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	(RosegardenGUIColours::InsertCursorRuler);
 
     m_chordNameRuler = new ChordNameRuler
-	(m_hlayout, 0, 20.0, 20, getCentralFrame());
+	(m_hlayout, doc, 20.0, 20, getCentralFrame());
     addRuler(m_chordNameRuler);
     if (showProgressive) m_chordNameRuler->show();
 
@@ -326,7 +326,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
         m_progressDisplayer = PROGRESS_DIALOG;
     }
 
-    m_chordNameRuler->setComposition(&getDocument()->getComposition());
+//!!!    m_chordNameRuler->setComposition(&getDocument()->getComposition());
     m_chordNameRuler->setStudio(&getDocument()->getStudio());
 
     positionStaffs();

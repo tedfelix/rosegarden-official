@@ -42,7 +42,7 @@ namespace Rosegarden
 class Quantizer;
 class BasicQuantizer;
 class NotationQuantizer;
- 
+
 /**
  * Composition contains a complete representation of a piece of music.
  * It is a container for multiple Segments, as well as any associated
