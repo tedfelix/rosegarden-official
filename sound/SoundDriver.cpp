@@ -482,9 +482,10 @@ SoundDriver::getMappedDevice(DeviceId id)
             retDevice.push_back(*it);
     }
 
-    std::cout << "SoundDriver::getMappedDevice - "
+    std::cout << "SoundDriver::getMappedDevice(" << id << ") - "
               << "name = \"" << retDevice.getName() 
               << "\" type = " << retDevice.getType()
+              << " direction = " << retDevice.getDirection()
               << " connection = \"" << retDevice.getConnection()
               << "\"" << std::endl;
 

@@ -414,6 +414,12 @@ CreateOrDeleteDeviceCommand::execute()
         // Add the device to the Studio now, so that we can name it --
         // otherwise the name will be lost
         m_studio->addDevice(m_name, m_deviceId, m_type);
+	Rosegarden::Device *device = m_studio->getDevice(m_deviceId);
+	if (device) {
+	    Rosegarden::MidiDevice *md = dynamic_cast<Rosegarden::MidiDevice *>
+		(device);
+	    if (md) md->setDirection(m_direction);
+	}
 
     } else {
 
