@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rosegarden-data>
+<rosegarden-data>
+<Track>
+	<event type="note" duration="quarter" pitch="0"/>
+	<event type="note" duration="quarter" pitch="1"/>
+	<event type="note" duration="quarter" pitch="2"/>
+	<event type="note" duration="quarter" pitch="3"/>
+	<event type="note" duration="quarter" pitch="4"/>
+	<event type="note" duration="quarter" pitch="5"/>
+	<event type="note" duration="quarter" pitch="6"/>
+	<event type="note" duration="quarter" pitch="7"/>
+	<event type="note" duration="quarter" pitch="8"/>
+	<event type="keychange" key="0"/>
+	<event type="note" duration="quarter" pitch="9"/>
+	<event type="note" duration="quarter" pitch="10"/>
+	<event type="note" duration="quarter" pitch="11"/>
+	<event type="note" duration="quarter" pitch="12"/>
+	<event type="note" duration="quarter" pitch="13"/>
+	<event type="note" duration="quarter" pitch="14"/>
+	<event type="note" duration="quarter" pitch="15"/>
+	<event type="note" duration="quarter" pitch="16"/>
+	<event type="note" duration="quarter" pitch="17"/>
+
+</Track>
+</rosegarden-data>

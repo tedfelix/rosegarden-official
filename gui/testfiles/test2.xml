@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rosegarden-data>
+<rosegarden-data>
+<Track>
+	<event type="note" duration="whole" pitch="4"/>
+
+	<event type="note" duration="quarter" pitch="4"/>
+	<event type="note" duration="quarter" pitch="4"/>
+	<event type="note" duration="half" pitch="4"/>
+
+	<event type="note" duration="whole" pitch="6"/>
+
+	<event type="note" duration="quarter" pitch="6"/>
+	<event type="note" duration="8th" pitch="6"/>
+	<event type="note" duration="8th" pitch="6"/>
+	<event type="note" duration="quarter" pitch="6"/>
+	<event type="note" duration="quarter" pitch="6"/>
+
+	<event type="note" duration="whole" pitch="7"/>
+
+	<event type="note" duration="quarter" pitch="7"/>
+	<event type="note" duration="quarter" pitch="7"/>
+	<event type="note" duration="quarter" pitch="7"/>
+	<event type="note" duration="quarter" pitch="7"/>
+
+	<event type="note" duration="whole" pitch="8"/>
+
+	<event type="note" duration="quarter" pitch="8"/>
+	<event type="note" duration="half" pitch="8"/>
+	<event type="note" duration="semiquaver" pitch="8"/>
+	<event type="note" duration="semiquaver" pitch="8"/>
+	<event type="note" duration="semiquaver" pitch="8"/>
+	<event type="note" duration="semiquaver" pitch="8"/>
+	<event type="note" duration="semiquaver" pitch="8"/>
+	<event type="note" duration="semiquaver" pitch="8"/>
+
+</Track>
+</rosegarden-data>
