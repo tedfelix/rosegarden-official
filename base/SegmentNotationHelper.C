@@ -1297,7 +1297,9 @@ SegmentNotationHelper::unbeamAux(iterator from, iterator to)
 void
 SegmentNotationHelper::autoBeam(timeT from, timeT to, string type)
 {
+    /*
     std::cerr << "autoBeam from " << from << " to " << to << " on segment start time " << segment().getStartTime() << ", end time " << segment().getEndTime() << ", end marker " << segment().getEndMarkerTime() << std::endl;
+    */
 
     autoBeam(segment().findTime(from), segment().findTime(to), type);
 }

@@ -457,14 +457,18 @@ Quantizer::insertNewEvents(Segment *s) const
 	s->insert(m_toInsert[i]);
     }
 
+    /*
     cerr << "Quantizer::insertNewEvents: sz is " << sz
 	      << ", minTime " << minTime << ", maxTime " << maxTime
 	      << endl;
+              */
 
     if (sz > 0 && (m_target == NotationPrefix ||
 		   m_target == RawEventData)) {
+        /*
 	cerr << "Quantizer: calling normalizeRests("
 		  << minTime << ", " << maxTime << ")" << endl;
+                  */
 	s->normalizeRests(minTime, maxTime);
     }
 
@@ -1640,10 +1644,13 @@ NotationQuantizer::Impl::quantizeRange(Segment *s,
     }
     ++passes;
 
+#ifdef DEBUG_NOTATION_QUANTIZER
     cerr << "NotationQuantizer: " << events << " events ("
 	 << notes << " notes), " << passes << " passes, "
 	 << ((clock() - start) * 1000 / CLOCKS_PER_SEC) << "ms elapsed"
 	 << endl;
+#endif
+
 }	
     
     

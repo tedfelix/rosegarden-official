@@ -429,7 +429,7 @@ void TrackEditor::paintEvent(QPaintEvent* e)
 
 	    if (ri == m_segmentsRefreshStatusIds.end()) {
 		
-		RG_DEBUG << "TrackEditor::paintEvent: adding segment " << *i << " to map" << endl;
+		//RG_DEBUG << "TrackEditor::paintEvent: adding segment " << *i << " to map" << endl;
 		m_segmentsRefreshStatusIds[*i] = (*i)->getNewRefreshStatusId();
 
 	    } else {

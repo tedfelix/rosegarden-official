@@ -715,7 +715,10 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
         //
 	if (e->button() == MidButton) {
 	    m_dispatchTool =  getToolBox()->getTool(SegmentPencil::ToolName);
-	    m_dispatchTool->handleMouseButtonPress(e);
+
+            if (m_dispatchTool)
+                m_dispatchTool->handleMouseButtonPress(e);
+
 	    return;
 	}
         else {

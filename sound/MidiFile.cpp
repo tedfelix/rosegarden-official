@@ -452,10 +452,11 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
     // and we need -1 to indicate "not yet used"
     std::vector<int> channelTrackMap(16, -1);
 
-    // This is used to store the last absolute time found on each channel,
+    // This is used to store the last absolute time found on each track,
     // allowing us to modify delta-times correctly when separating events
     // out from one to multiple tracks
-    std::vector<unsigned long> trackTimeMap(16, 0);
+    //
+    std::map<int, unsigned long> trackTimeMap;
 
     // Meta-events don't have a channel, so we place them in a fixed
     // track number instead
@@ -521,6 +522,7 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
 	    }
 
 	    TrackId trackNum = channelTrackMap[channel];
+            //TrackId trackNum = 0;
 	    
 	    // accumulatedTime is abs time of last event on any track;
 	    // trackTimeMap[trackNum] is that of last event on this track
@@ -543,9 +545,12 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
                 // create and store our event
                 midiEvent = new MidiEvent(deltaTime, eventCode, data1, data2);
 
+                /*
 		std::cout << "MIDI event for channel " << channel << " (track "
 			  << trackNum << ")" << std::endl;
 		midiEvent->print();
+                          */
+
 
                 m_midiComposition[trackNum].push_back(midiEvent);
                 break;
@@ -670,6 +675,9 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
     //
     m_studio->unassignAllInstruments();
 
+    cout << "NUMBER OF TRACKS = " << m_numberOfTracks << endl;
+
+    cout << "MIDI COMP SIZE = " << m_midiComposition.size() << endl;
 
     for (TrackId i = 0; i < m_numberOfTracks; i++ )
     {
@@ -865,7 +873,7 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 
                 endOfLastNote = rosegardenTime + rosegardenDuration;
 
-		std::cerr << "MidiFile::convertToRosegarden: note at " << rosegardenTime << ", midi time " << (*midiEvent)->getTime() << std::endl;
+		//std::cerr << "MidiFile::convertToRosegarden: note at " << rosegardenTime << ", midi time " << (*midiEvent)->getTime() << std::endl;
 
                 // create and populate event
                 rosegardenEvent = new Event(Note::EventType,
@@ -1844,7 +1852,7 @@ MidiFile::clearMidiComposition()
     for (MidiComposition::iterator ci = m_midiComposition.begin();
 	 ci != m_midiComposition.end(); ++ci) {
 	
-	std::cerr << "MidiFile::clearMidiComposition: track " << ci->first << std::endl;
+	//std::cerr << "MidiFile::clearMidiComposition: track " << ci->first << std::endl;
 
 	for (MidiTrackIterator ti = ci->second.begin();
 	     ti != ci->second.end(); ++ti) {

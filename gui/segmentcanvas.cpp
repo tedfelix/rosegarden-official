@@ -340,8 +340,8 @@ void SegmentNotationPreview::updatePreview()
 {
     if (isPreviewCurrent()) return;
 
-    RG_DEBUG << "SegmentNotationItem::updatePreview() "
-                         << this << endl;
+    //RG_DEBUG << "SegmentNotationItem::updatePreview() "
+                         //<< this << endl;
 
     m_previewInfo.clear();
 
