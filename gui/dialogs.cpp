@@ -2118,7 +2118,7 @@ SimpleEventEditDialog::setupForEvent()
         try
         {
             m_pitchSpinBox->setValue(m_event.get<Rosegarden::Int>
-                    (Rosegarden::ProgramChange::PROGRAM));
+                    (Rosegarden::ProgramChange::PROGRAM) + 1);
         }
         catch(Rosegarden::Event::NoData)
         {
@@ -2566,7 +2566,8 @@ SimpleEventEditDialog::slotPitchChanged(int value)
 	m_event.set<Int>(Rosegarden::ChannelPressure::PRESSURE, value);
 
     } else if (m_type == Rosegarden::ProgramChange::EventType) {
-	m_event.set<Int>(Rosegarden::ProgramChange::PROGRAM, value);
+	if (value < 1) value = 1;
+	m_event.set<Int>(Rosegarden::ProgramChange::PROGRAM, value - 1);
 
     } else if (m_type == Rosegarden::PitchBend::EventType) {
 	m_event.set<Int>(Rosegarden::PitchBend::MSB, value);

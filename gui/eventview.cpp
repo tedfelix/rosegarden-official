@@ -505,7 +505,7 @@ EventView::applyLayout(int /*staffNo*/)
 
             if ((*it)->has(Rosegarden::ProgramChange::PROGRAM)) {
                 data1Str = QString("%1  ").
-                    arg((*it)->get<Int>(Rosegarden::ProgramChange::PROGRAM));
+                    arg((*it)->get<Int>(Rosegarden::ProgramChange::PROGRAM) + 1);
             }
 
             if ((*it)->has(Rosegarden::ChannelPressure::PRESSURE)) {
