@@ -97,7 +97,7 @@ int main(int argc, char **argv)
         else
                 cerr << "ERROR AT " << __LINE__ << endl;
 
-#define TEST_SPEED 1
+//#define TEST_SPEED 1
 #if TEST_SPEED
         cout << "Testing speed of Event..." << endl;
         int i;
@@ -216,6 +216,8 @@ int main(int argc, char **argv)
         }
 #endif // NOT_DEFINED
 
+#define TEST_NOTATION_TYPES 1
+
 #ifdef TEST_NOTATION_TYPES
         cout << "Testing duration-list stuff\n";
 
@@ -231,6 +233,21 @@ int main(int argc, char **argv)
                 acc += *i;
         }
         cout << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")" << endl;
+
+
+
+        cout << "4/4 96/96..." << endl;
+        ts = TimeSignature(4,4);
+        dlist = DurationList();
+        ts.getDurationListForInterval(dlist, 96, 96);
+        acc = 0;
+        for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
+                cout << "duration: " << *i << endl;
+                acc += *i;
+        }
+        cout << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")" << endl;
+        
+
 
         cout << "6/8..." << endl;
         ts = TimeSignature(6,8);
@@ -284,7 +301,7 @@ int main(int argc, char **argv)
         }
         cout << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")" << endl;
 
-        cout << "Testing Track::expandIntoGroup() - expanding 384 -> 2*192\n";
+        cout << "Testing Track::expandIntoTie() - expanding 384 -> 2*192\n";
 
         Track t;
 
@@ -293,7 +310,7 @@ int main(int argc, char **argv)
         ev->setDuration(384);
         t.insert(ev);
 
-        t.expandIntoGroup(t.begin(), 384/2);
+        t.expandIntoTie(t.begin(), 384/2);
 
         for(Track::iterator i = t.begin(); i != t.end(); ++i) {
                 cout << "Event at " << (*i)->getAbsoluteTime()
@@ -305,7 +322,7 @@ int main(int argc, char **argv)
         
         cout << "Expanding 192 -> (48 + 144) : \n";
 
-        t.expandIntoGroup(t.begin(), 48);
+        t.expandIntoTie(t.begin(), 48);
 
         for(Track::iterator i = t.begin(); i != t.end(); ++i) {
                 cout << "Event at " << (*i)->getAbsoluteTime()
@@ -315,7 +332,7 @@ int main(int argc, char **argv)
         
         cout << "Expanding 192 -> (144 + 48) : \n";
 
-        t.expandIntoGroup(half2, 144);
+        t.expandIntoTie(half2, 144);
 
         for(Track::iterator i = t.begin(); i != t.end(); ++i) {
                 cout << "Event at " << (*i)->getAbsoluteTime()
