@@ -97,8 +97,12 @@ EditView::~EditView()
 void EditView::saveOptions()
 {
     m_config->writeEntry("Geometry", size());
-    m_config->writeEntry("Show Toolbar",
-                         getToggleAction("options_show_toolbar")->isChecked());
+
+    // FIXME: it seems this one doesn't exist in KDE3.1
+    if (getToggleAction("options_show_toolbar"))
+        m_config->writeEntry("Show Toolbar",
+                             getToggleAction("options_show_toolbar")->isChecked());
+
     m_config->writeEntry("Show Statusbar",
                          getToggleAction("options_show_statusbar")->isChecked());
 
@@ -117,7 +121,11 @@ void EditView::readOptions()
     bool opt;
 
     opt = m_config->readBoolEntry("Show Toolbar", true);
-    getToggleAction("options_show_toolbar")->setChecked(opt);
+
+    // FIXME: it seems this one doesn't exist in KDE3.1
+    if (getToggleAction("options_show_toolbar"))
+        getToggleAction("options_show_toolbar")->setChecked(opt);
+
     if (opt)
         toolBar()->show();
     else
