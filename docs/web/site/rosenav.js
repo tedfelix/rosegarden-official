@@ -10,11 +10,11 @@ var zones = [
 { "v":"2.1", "name":"features",    "label":"features",     "url":"features.html" },
 { "v":"2.1", "name":"faq",         "label":"faq",          "url":"faq.html" },
 { "v":"2.1", "name":"pictures",    "label":"pictures",     "url":"pictures.html" },
-{ "v":"2.1", "name":"list",        "label":"mailing-list", "url":"list.html" },
+{ "v":"2.1", "name":"list",        "label":"mailing-list", "url":"list.html" }
 ];
 function makeNav() {
   var url = document.location.toString();
-  var v = 0;
+  var lastv = 0;
   for (var i = 0; i < zones.length; ++i) {
 
     var myv = zones[i].v;
@@ -28,9 +28,9 @@ function makeNav() {
       else pfx = '2.1/';
     }
 
-    if (myv != v) {
-      v = myv;
-      document.write('<div class="navtitle"><a href="' + pfx + 'index.html">Rosegarden-' + v + '</a></div>');
+    if (myv != lastv) {
+      lastv = myv;
+      document.write('<div class="navtitle"><a href="' + pfx + 'index.html">Rosegarden-' + lastv + '</a></div>');
     }
 
     if (inv) {
