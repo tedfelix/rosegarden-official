@@ -26,7 +26,7 @@
   *@author Guillaume Laurent, Chris Cannam, Rich Bown
   */
 
-class LayoutEngine : public unary_function<Element2, void>
+class LayoutEngine : public unary_function<Event, void>
 {
 public: 
     LayoutEngine();
@@ -34,10 +34,10 @@ public:
 
     unsigned int status() const { return m_status; }
 
-    void operator() (Element2 *el) { layout(el); }
+    void operator() (Event *el) { layout(el); }
 
 protected:
-    virtual void layout(Element2*) = 0;
+    virtual void layout(Event*) = 0;
 
     unsigned int m_status;
 };
