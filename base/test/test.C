@@ -36,6 +36,7 @@ int main(int argc, char **argv)
         clock_t st, et;
         struct tms spare;
 
+#ifdef TEST_WIDE_STRING
 	basic_string<wchar_t> widestring(L"This is a test");
 	widestring += L" of wide character strings";
 	for (unsigned int i = 0; i < widestring.length(); ++i) {
@@ -56,6 +57,7 @@ int main(int argc, char **argv)
 	    if (i < widestring.length()-1) cout << " ";
 	    else cout << endl;
 	}
+#endif
 
         cout << "\nTesting Event..." << endl
              << "sizeof Event : " << sizeof(Event) << endl;

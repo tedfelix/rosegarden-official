@@ -61,7 +61,7 @@ Event::EventData::~EventData()
     // nothing -- the PropertyStore objects are deleted in the PropertyMap dtor
 }
 
-Event::PropertyMap *
+PropertyMap *
 Event::find(const PropertyName &name, PropertyMap::iterator &i)
 {
     PropertyMap *map = &m_data->m_properties;

@@ -23,8 +23,7 @@
 #ifndef _EVENT_H_
 #define _EVENT_H_
 
-#include "Property.h"
-#include "PropertyName.h"
+#include "PropertyMap.h"
 
 #include <string>
 #ifndef NDEBUG
@@ -32,21 +31,6 @@
 #include <ctime>
 #endif
 
-#if (__GNUC__ < 3)
-
-#include <hash_map>
-#define __HASH_NS std
-
-#else
-
-#include <ext/hash_map>
-#if (__GNUC_MINOR__ >= 1)
-#define __HASH_NS __gnu_cxx
-#else
-#define __HASH_NS std
-#endif
-
-#endif
 
 namespace Rosegarden 
 {
@@ -231,23 +215,6 @@ protected:
     void setSubOrdering(int o)	       { unshare(); m_data->m_subOrdering = o; }
 
 private:
-    struct PropertyMap : public __HASH_NS::hash_map<PropertyName,
-				         PropertyStoreBase *,
-					 PropertyNameHash,
-					 PropertyNamesEqual>
-    {
-	~PropertyMap() {
-	    clear();
-	}
-
-	void clear() {
-	    for (iterator i = begin(); i != end(); ++i) delete i->second;
-	    erase(begin(), end());
-	}
-    };
-
-    typedef PropertyMap::value_type PropertyPair;
-
     struct EventData // Data that are shared between shallow-copied instances
     {
 	EventData(const std::string &type,

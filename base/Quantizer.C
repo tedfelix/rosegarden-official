@@ -372,13 +372,25 @@ Quantizer::quantize(Segment *s, Segment::iterator from, Segment::iterator to,
     timeT fromTime = 0, toTime = 0;
     bool haveFromTime = false;
 
-    // For the moment, legato quantization always uses the minimum
-    // unit (rather than the potentially large legato unit) for the
-    // absolute time.  Ideally we'd be able to specify both
-    // separately.
+    timeT absTimeQuantizeUnit = m_unit;
 
-    timeT absTimeQuantizeUnit =
-	legato ? Note(Note::Shortest).getDuration() : m_unit;
+    if (legato) {
+
+	int unitNoteType = Note::getNearestNote(m_unit).getNoteType();
+
+	// For legato quantization, the unit specified is potentially
+	// large (the point is to round up notes to this unit only if
+	// there's enough space following them, so the unit can be
+	// larger than it might otherwise be).  This means we need a
+	// much shorter unit for the absolute-time part of the legato
+	// quantization; perhaps ideally the user could specify this
+	// too, but for now we hazard a guess at...
+
+	if (unitNoteType > Note::Shortest + 2) unitNoteType -= 2;
+	else unitNoteType = Note::Shortest;
+
+	absTimeQuantizeUnit = Note(unitNoteType).getDuration();
+    }
 
     for (Segment::iterator nextFrom = from ; from != to; from = nextFrom) {
 
