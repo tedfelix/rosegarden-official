@@ -508,6 +508,8 @@ NotationView::changeResolution(int newResolution)
 	    showBars(i);
         }
     }
+
+    canvas()->update();
 }
 
 
