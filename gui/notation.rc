@@ -136,4 +136,7 @@
   <Action name="select" />
 </ToolBar>
 
+<ToolBar name="zoomToolBar">
+</ToolBar>
+
 </kpartgui>

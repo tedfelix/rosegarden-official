@@ -64,9 +64,6 @@ public:
     const RosegardenGUIDoc *getDocument() const { return m_document; }
     RosegardenGUIDoc *getDocument() { return m_document; }
 
-    /// Changes the resolution of the staffs on the view
-    void changeResolution(int newResolution);
-
     /// Calls all the relevant preparse and layout methods
     virtual bool applyLayout(int staffNo = -1);
 
@@ -250,6 +247,9 @@ public slots:
      */
     void setPositionPointer(const int &position);
 
+    /// Changes the resolution of the staffs on the view
+    void changeResolution(int newResolution);
+
 signals:
     void changeCurrentNote(bool isRest, Rosegarden::Note::Type);
 
@@ -276,6 +276,13 @@ protected:
      * setup status bar
      */
     void initStatusBar();
+
+    /**
+     * setup the "zoom" toolbar
+     *
+     * The zoom slider will be set to \a resolution
+     */
+    void initZoomToolbar(int resolution);
 
     /**
      * Helper function to toggle a toolbar given its name
@@ -330,7 +337,19 @@ protected:
      */
     void setTool(NotationTool*);
 
+    /**
+     * Sets the note pixmap factory
+     *
+     * The previous pixmap factory is deleted
+     */
+    void setNotePixmapFactory(NotePixmapFactory*);
 
+    /**
+     * Sets the horizontal layout
+     *
+     * The previous layout is deleted
+     */
+    void setHLayout(NotationHLayout*);
 
     KConfig* m_config;
 

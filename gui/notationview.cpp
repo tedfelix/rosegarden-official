@@ -22,6 +22,7 @@
 #include <sys/times.h>
 
 #include <qcanvas.h>
+#include <qslider.h>
 
 #include <kmessagebox.h>
 #include <kmenubar.h>
@@ -95,6 +96,7 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     kdDebug(KDEBUG_AREA) << "NotationView ctor" << endl;
 
     setupActions();
+    initZoomToolbar(resolution);
     initStatusBar();
     
     setBackgroundMode(PaletteBase);
@@ -447,6 +449,86 @@ void NotationView::setupActions()
     createGUI("notation.rc");
 }
 
+class ZoomSlider : public QSlider
+{
+public:
+    ZoomSlider(int minValue, int maxValue,
+               int pageStep, int value,
+               Orientation, QWidget * parent, const char * name=0);
+
+    void addAvailableResolution(int res);
+    
+protected:
+    // force value to be one the available res.
+    virtual void valueChange();
+
+    std::vector<int> m_availableResolutions;
+    int m_hiRes, m_loRes;
+
+};
+
+ZoomSlider::ZoomSlider(int minValue, int maxValue,
+                       int pageStep, int value,
+                       Orientation o, QWidget *parent, const char *name)
+    : QSlider(minValue, maxValue, pageStep, value,
+              o, parent, name),
+      m_hiRes(0),
+      m_loRes(0)
+{
+    addAvailableResolution(5);
+    addAvailableResolution(7);
+    addAvailableResolution(9);
+    addAvailableResolution(11);
+    addAvailableResolution(13);
+    setTracking(false);
+}
+
+void ZoomSlider::addAvailableResolution(int res)
+{
+    m_availableResolutions.push_back(res);
+    std::sort(m_availableResolutions.begin(), m_availableResolutions.end());
+
+    m_hiRes = m_availableResolutions[m_availableResolutions.size() - 1];
+    m_loRes = m_availableResolutions[0];
+}
+
+
+void ZoomSlider::valueChange()
+{
+    std::vector<int>::const_iterator newValue =
+        std::lower_bound(m_availableResolutions.begin(),
+                         m_availableResolutions.end(),
+                         value());
+
+    kdDebug(KDEBUG_AREA) << "ZoomSlider::valueChanged() : "
+                         << *newValue << endl;
+
+    directSetValue(*newValue);
+    QSlider::valueChange();
+}
+
+
+
+void NotationView::initZoomToolbar(int resolution)
+{
+    KToolBar *zoomToolbar = toolBar("zoomToolbar");
+    
+    if (!zoomToolbar) {
+        kdDebug(KDEBUG_AREA) << "NotationView::initZoomToolbar() : zoom toolBar not found\n";
+        return;
+    }
+
+    new QLabel("Resolution : ", zoomToolbar);
+
+    QSlider *zoomSlider = new ZoomSlider(5, 13, // min, max
+                                      2, // page step
+                                      resolution, // init value
+                                      QSlider::Horizontal, zoomToolbar);
+    zoomSlider->setLineStep(2);
+
+    connect(zoomSlider, SIGNAL(valueChanged(int)),
+            this,       SLOT(changeResolution(int)));
+}
 
 void NotationView::initStatusBar()
 {
@@ -487,11 +569,19 @@ bool NotationView::showBars(int staffNo)
 void
 NotationView::changeResolution(int newResolution)
 {
-    delete m_notePixmapFactory;
-    m_notePixmapFactory = new NotePixmapFactory(newResolution);
+    kdDebug(KDEBUG_AREA) << "NotationView::changeResolution(" << newResolution << ")\n";
 
-    delete m_hlayout;
-    m_hlayout = new NotationHLayout(*m_notePixmapFactory);
+    NotePixmapFactory* npf = 0;
+    
+    try {
+        npf = new NotePixmapFactory(newResolution);
+    } catch(...) {
+        return;
+    }
+
+    setNotePixmapFactory(npf);
+
+    setHLayout(new NotationHLayout(*m_notePixmapFactory));
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
         m_staffs[i]->move(0, 0);
@@ -555,6 +645,19 @@ void NotationView::setTool(NotationTool* tool)
     delete m_tool;
     m_tool = tool;
 }
+
+void NotationView::setNotePixmapFactory(NotePixmapFactory* f)
+{
+    delete m_notePixmapFactory;
+    m_notePixmapFactory = f;
+}
+
+void NotationView::setHLayout(NotationHLayout* l)
+{
+    delete m_hlayout;
+    m_hlayout = l;
+}
+
 
 
 //////////////////////////////////////////////////////////////////////
@@ -919,8 +1022,6 @@ void NotationView::slotTrebleClef()
     m_currentNotePixmap->setPixmap
         (m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-treble"));
     setTool(new ClefInserter(Clef::Treble, *this));
-    
-    changeResolution(5);
 }
 
 void NotationView::slotTenorClef()
@@ -928,8 +1029,6 @@ void NotationView::slotTenorClef()
     m_currentNotePixmap->setPixmap
         (m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-tenor"));
     setTool(new ClefInserter(Clef::Tenor, *this));
-
-    changeResolution(7);
 }
 
 void NotationView::slotAltoClef()
@@ -937,8 +1036,6 @@ void NotationView::slotAltoClef()
     m_currentNotePixmap->setPixmap
         (m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-alto"));
     setTool(new ClefInserter(Clef::Alto, *this));
-
-    changeResolution(11);
 }
 
 void NotationView::slotBassClef()
@@ -946,8 +1043,6 @@ void NotationView::slotBassClef()
     m_currentNotePixmap->setPixmap
         (m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-bass"));
     setTool(new ClefInserter(Clef::Bass, *this));
-
-    changeResolution(13);
 }
 
 
@@ -1367,7 +1462,7 @@ NotationSelector::~NotationSelector()
 }
 
 void NotationSelector::handleMousePress(int, const QPoint& p,
-                                        NotationElement* element)
+                                        NotationElement*)
 {
     m_selectionRect->setX(p.x());
     m_selectionRect->setY(p.y());
@@ -1381,8 +1476,8 @@ void NotationSelector::handleMouseMove(QMouseEvent* e)
 {
     if (!m_updateRect) return;
 
-    int w = e->x() - m_selectionRect->x();
-    int h = e->y() - m_selectionRect->y();
+    int w = int(e->x() - m_selectionRect->x());
+    int h = int(e->y() - m_selectionRect->y());
 
     m_selectionRect->setSize(w,h);
 
