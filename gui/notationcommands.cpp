@@ -1935,8 +1935,8 @@ IncrementDisplacementsCommand::modifySegment()
 	long prevX = 0, prevY = 0;
 	(*i)->get<Int>(DISPLACED_X, prevX);
 	(*i)->get<Int>(DISPLACED_Y, prevY);
-	(*i)->set<Int>(DISPLACED_X, prevX + long(m_dx));
-	(*i)->set<Int>(DISPLACED_Y, prevY + long(m_dy));
+	(*i)->setMaybe<Int>(DISPLACED_X, prevX + long(m_dx));
+	(*i)->setMaybe<Int>(DISPLACED_Y, prevY + long(m_dy));
     }
 }
 
@@ -1949,8 +1949,8 @@ ResetDisplacementsCommand::modifySegment()
     for (i  = m_selection->getSegmentEvents().begin();
 	 i != m_selection->getSegmentEvents().end(); ++i) {
 
-	(*i)->set<Int>(DISPLACED_X, 0);
-	(*i)->set<Int>(DISPLACED_Y, 0);
+	(*i)->unset(DISPLACED_X);
+	(*i)->unset(DISPLACED_Y);
     }
 }
 
