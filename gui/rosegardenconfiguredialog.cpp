@@ -1172,46 +1172,18 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     // ------------------ Record tab ---------------------
     //
     frame = new QFrame(m_tabWidget);
-    layout = new QGridLayout(frame, 6, 2, 10, 5);
+    layout = new QGridLayout(frame, 4, 2, 10, 5);
 
     int increment = 0;
 
 #ifdef HAVE_LIBJACK
 
-    //!!! Number of audio inputs and submasters should leave here
-    //forthwith as they're now part of the Studio ...
-
-    label = new QLabel(i18n("Number of stereo audio inputs:"), frame);
-    m_jackInputs = new QSpinBox(frame);
-
-    layout->addWidget(label,        0, 0);
-    layout->addWidget(m_jackInputs, 0, 1);
-    ++increment;
-
-    int jackAudioInputs = m_cfg->readNumEntry("audioinputs", 2);
-
-    m_jackInputs->setValue(jackAudioInputs);
-    m_jackInputs->setMinValue(2);
-    m_jackInputs->setMaxValue(64); // completely arbitrary of course!
-
-    label = new QLabel(i18n("Number of stereo audio submasters:"), frame);
-    m_submasters = new QSpinBox(frame);
-
-    layout->addWidget(label,        1, 0);
-    layout->addWidget(m_submasters, 1, 1);
-    ++increment;
-
-    int submasterCount = m_cfg->readNumEntry("audiosubmasters", 4);
-    m_submasters->setValue(submasterCount);
-    m_submasters->setMinValue(0);
-    m_submasters->setMaxValue(8);
-
     label = new QLabel(i18n("Create post-fader outputs for audio instruments"), frame);
     m_createFaderOuts = new QCheckBox(frame);
     m_createFaderOuts->setChecked(m_cfg->readBoolEntry("audiofaderouts", false));
 
-    layout->addWidget(label, 2, 0);
-    layout->addWidget(m_createFaderOuts, 2, 1);
+    layout->addWidget(label, 0, 0);
+    layout->addWidget(m_createFaderOuts, 0, 1);
     ++increment;
 
     label = new QLabel(i18n("Create post-fader outputs for submasters"), frame);
@@ -1219,8 +1191,8 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     m_createSubmasterOuts->setChecked(m_cfg->readBoolEntry("audiosubmasterouts",
 							   false));
 
-    layout->addWidget(label, 3, 0);
-    layout->addWidget(m_createSubmasterOuts, 3, 1);
+    layout->addWidget(label, 1, 0);
+    layout->addWidget(m_createSubmasterOuts, 1, 1);
     ++increment;
 
 #endif // HAVE_LIBJACK
