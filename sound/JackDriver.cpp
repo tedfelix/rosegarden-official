@@ -481,7 +481,7 @@ JackDriver::createFaderOutputs(int pairs)
 	char namebuffer[22];
 	jack_port_t *port;
 
-	snprintf(namebuffer, 21, "fader %d:L", i+1);
+	snprintf(namebuffer, 21, "fader %d out L", i+1);
 
 	port = jack_port_register(m_client,
 				  namebuffer,
@@ -491,7 +491,7 @@ JackDriver::createFaderOutputs(int pairs)
 	if (!port) return false;
 	m_outputInstruments.push_back(port);
 
-	snprintf(namebuffer, 21, "fader %d:R", i+1);
+	snprintf(namebuffer, 21, "fader %d out R", i+1);
 	port = jack_port_register(m_client,
 				  namebuffer,
 				  JACK_DEFAULT_AUDIO_TYPE,
@@ -524,7 +524,7 @@ JackDriver::createSubmasterOutputs(int pairs)
 	char namebuffer[22];
 	jack_port_t *port;
 
-	snprintf(namebuffer, 21, "submaster %d:L", i+1);
+	snprintf(namebuffer, 21, "submaster %d out L", i+1);
 	port = jack_port_register(m_client,
 				  namebuffer,
 				  JACK_DEFAULT_AUDIO_TYPE,
@@ -533,7 +533,7 @@ JackDriver::createSubmasterOutputs(int pairs)
 	if (!port) return false;
 	m_outputSubmasters.push_back(port);
 
-	snprintf(namebuffer, 21, "submaster %d:R", i+1);
+	snprintf(namebuffer, 21, "submaster %d out R", i+1);
 	port = jack_port_register(m_client,
 				  namebuffer,
 				  JACK_DEFAULT_AUDIO_TYPE,
@@ -566,7 +566,7 @@ JackDriver::createRecordInputs(int pairs)
 	char namebuffer[22];
 	jack_port_t *port;
 
-	snprintf(namebuffer, 21, "record in %d:L", i + 1);
+	snprintf(namebuffer, 21, "record in %d L", i + 1);
 	port = jack_port_register(m_client,
 				  namebuffer,
 				  JACK_DEFAULT_AUDIO_TYPE,
@@ -575,7 +575,7 @@ JackDriver::createRecordInputs(int pairs)
 	if (!port) return false;
 	m_inputPorts.push_back(port);
 
-	snprintf(namebuffer, 21, "record in %d:R", i + 1);
+	snprintf(namebuffer, 21, "record in %d R", i + 1);
 	port = jack_port_register(m_client,
 				  namebuffer,
 				  JACK_DEFAULT_AUDIO_TYPE,
