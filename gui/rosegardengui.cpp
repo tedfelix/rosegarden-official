@@ -1601,9 +1601,7 @@ void RosegardenGUIApp::showEvent(QShowEvent* e)
 {
     RG_DEBUG << "RosegardenGUIApp::showEvent()\n";
 
-    if (m_transport)
-        m_transport->raise();
-
+    m_transport->raise();
     KMainWindow::showEvent(e);
 }
 
@@ -1617,6 +1615,7 @@ bool RosegardenGUIApp::queryClose()
 
     bool canClose = m_doc->saveIfModified();
 
+    /*
     if (canClose && m_transport) {
 
         // or else the closing of the transport will toggle off the 
@@ -1627,6 +1626,7 @@ bool RosegardenGUIApp::queryClose()
         disconnect(m_transport, SIGNAL(closed()),
                    this, SLOT(slotCloseTransport()));
     }
+    */
 
     return canClose;
 
@@ -2479,9 +2479,13 @@ void RosegardenGUIApp::slotToggleTransport()
     {
         m_transport->show();
         m_transport->raise();
+        m_transport->blockSignals(false);
     }
     else
+    {
         m_transport->hide();
+        m_transport->blockSignals(true);
+    }
 }
 
 void RosegardenGUIApp::slotToggleTrackLabels()
@@ -3900,7 +3904,7 @@ void
 RosegardenGUIApp::slotCloseTransport()
 {
     m_viewTransport->setChecked(false);
-    m_transport = 0;
+    slotToggleTransport(); // hides the transport
 }
 
 // We use this slot to active a tool mode on the GUI

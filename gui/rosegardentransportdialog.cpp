@@ -746,9 +746,9 @@ RosegardenTransportDialog::slotClearMidiOutLabel()
 }
 
 void
-RosegardenTransportDialog::closeEvent (QCloseEvent * e)
+RosegardenTransportDialog::closeEvent (QCloseEvent * /*e*/)
 {
-    e->accept();  // accept the close event here
+    //e->accept();  // accept the close event here
     emit closed();
 }
 
