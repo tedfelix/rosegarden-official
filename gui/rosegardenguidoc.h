@@ -252,6 +252,7 @@ private:
      * a Segment onto which we can record events
      */
     Rosegarden::Segment *m_recordSegment;
+    Rosegarden::timeT m_endOfLastRecordedNote;  // we use this for rest filling
 
     MultiViewCommandHistory m_commandHistory;
 };

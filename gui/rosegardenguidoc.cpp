@@ -58,7 +58,7 @@ using namespace Rosegarden::BaseProperties;
 
 
 RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent, const char *name)
-    : QObject(parent, name), m_recordSegment(0)
+    : QObject(parent, name), m_recordSegment(0), m_endOfLastRecordedNote(0)
 {
     if(!pViewList) {
         pViewList = new QList<RosegardenGUIView>();
@@ -488,29 +488,90 @@ RosegardenGUIDoc::createNewSegment(SegmentItem *p, int track)
 
 }
 
+// Take a MappedComposition from the Sequencer and turn it
+// into an Event-rich Segment ripe for insertion into the
+// Composition (once a "stop" is called).
+//
+//
 void
 RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
                                      const Rosegarden::RealTime &playLatency)
 {
+    bool firstEvent = false;
+
     // Just create a new record Segment if we don't have one
     // currently open and running
     //
     if (m_recordSegment == 0)
+    {
         m_recordSegment = new Segment();
+        m_recordSegment->setTrack(m_composition.getRecordTrack());
+        m_endOfLastRecordedNote = 0;
+        firstEvent = true;       
+        m_composition.addSegment(m_recordSegment);
+    }
 
     
     Rosegarden::MappedComposition::iterator i;
+    Rosegarden::Event *rEvent;
 
-    // send all events to the MIDI in label
+    // process all the incoming MappedEvents
     //
-    for (i = mC.begin(); i != mC.end(); ++i )
+    for (i = mC.begin(); i != mC.end(); ++i)
     {
+        // Create and populate a new Event (for the moment
+        // all we get from the Sequencer is Notes)
+        //
+        //
+        rEvent = new Event(Rosegarden::Note::EventType);
+
+        rEvent->setAbsoluteTime(m_composition.getElapsedTimeForRealTime(
+                                                    (*i)->getAbsoluteTime()));
+        rEvent->setDuration(m_composition.getElapsedTimeForRealTime(
+                                                    (*i)->getDuration()));
+        rEvent->set<Int>(PITCH, (*i)->getPitch());
+        rEvent->set<Int>(VELOCITY, (*i)->getVelocity());
+
+        // Set the start index
+        //
+        if (firstEvent)
+        {
+            m_recordSegment->setStartIndex(rEvent->getAbsoluteTime());
+            firstEvent = false;
+        }
+
+        // If there was a gap between the last note and this one
+        // then fill it with rests
+        //
+        if (rEvent->getAbsoluteTime() + rEvent->getDuration() >
+            m_endOfLastRecordedNote)
+        {
+            m_recordSegment->fillWithRests(rEvent->getAbsoluteTime() +
+                                           rEvent->getDuration());
+        }
+
+        // Now insert the new event
+        //
+        Segment::iterator loc = m_recordSegment->insert(rEvent);
+
+        // And now fiddle with it
+        //
+        SegmentNotationHelper helper(*m_recordSegment);
+        if (!helper.isViable(rEvent))
+            helper.makeNoteViable(loc);
+
+        // Update counter
+        //
+        m_endOfLastRecordedNote = rEvent->getAbsoluteTime() +
+                                  rEvent->getDuration();
+
         cout << "insertRecordedMidi() - RECORD TIME = " 
              << (*i)->getAbsoluteTime() - playLatency
              << endl;
     }
 
 }
+
 
 
 
