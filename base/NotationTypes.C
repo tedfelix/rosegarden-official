@@ -774,29 +774,29 @@ void TimeSignature::getDurationListForInterval(DurationList &dlist,
     int barDuration = getBarDuration();
     int acc = 0;
 
-    cerr << "TimeSignature::getDurationListForInterval: Desired duration is " << duration << " with startOffset " << startOffset << " and bar duration " << barDuration << endl;
+//    cerr << "TimeSignature::getDurationListForInterval: Desired duration is " << duration << " with startOffset " << startOffset << " and bar duration " << barDuration << endl;
 
     toNextBar = barDuration - (startOffset % barDuration);
 
     if (toNextBar > 0 && toNextBar <= duration && toNextBar < barDuration) {
-        cerr << "TimeSignature::getDurationListForInterval: filling to next bar (duration " << toNextBar << ")" << endl;
+//        cerr << "TimeSignature::getDurationListForInterval: filling to next bar (duration " << toNextBar << ")" << endl;
         getDurationListForShortInterval(dlist, toNextBar, startOffset);
         acc = toNextBar;
     }
 
     while (duration - acc >= barDuration) {
-        cerr << "TimeSignature::getDurationListForInterval: acc is " << acc << ", filling a bar" << endl;
+//        cerr << "TimeSignature::getDurationListForInterval: acc is " << acc << ", filling a bar" << endl;
         getDurationListForBar(dlist);
         acc += barDuration;
     }
     
     if (duration > acc) {
-        cerr << "TimeSignature::getDurationListForInterval: acc is " << acc << ", filling the remaining " << (duration-acc) << endl;
+//        cerr << "TimeSignature::getDurationListForInterval: acc is " << acc << ", filling the remaining " << (duration-acc) << endl;
         getDurationListForShortInterval(dlist, duration - acc, 0);
     }
 
     //!!! Solely for testing.  This obviously slows things down...
-
+/*
     cerr << "Checking duration list: ";
     int d = 0;
     for (DurationList::iterator di = dlist.begin(); di != dlist.end(); ++di) {
@@ -813,7 +813,7 @@ void TimeSignature::getDurationListForInterval(DurationList &dlist,
 	cerr << "(end)" << endl;
 	assert(0);
     }
-
+*/
     //!!! End of testing code
 }
 

@@ -21,6 +21,9 @@
 #include "Composition.h"
 #include "Track.h"
 
+#include <iostream>
+
+
 namespace Rosegarden 
 {
 
