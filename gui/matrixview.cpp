@@ -21,7 +21,7 @@
 #include <cmath>
 
 #include <qiconset.h>
-#include <qvbox.h>
+#include <qlayout.h>
 
 #include <kapp.h>
 #include <kconfig.h>
@@ -44,6 +44,7 @@
 #include "ktmpstatusmsg.h"
 #include "barbuttons.h"
 #include "loopruler.h"
+#include "pianokeyboard.h"
 
 #include "rosedebug.h"
 
@@ -55,7 +56,7 @@ using Rosegarden::timeT;
 MatrixView::MatrixView(RosegardenGUIDoc *doc,
                        std::vector<Segment *> segments,
                        QWidget *parent)
-    : EditView(doc, segments, parent),
+    : EditView(doc, segments, true, parent),
       m_currentEventSelection(0),
       m_pianoKeyboard(0),
       m_hlayout(new MatrixHLayout(&doc->getComposition())),
@@ -82,10 +83,27 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     kdDebug(KDEBUG_AREA) << "MatrixView : creating canvas view\n";
 
+    QScrollView *pianoView = new QScrollView(getCentralFrame());
+    pianoView->setVScrollBarMode(QScrollView::AlwaysOff);
+    pianoView->setHScrollBarMode(QScrollView::AlwaysOff);
+    pianoView->setMinimumWidth(pianoView->contentsWidth());
+
+    m_pianoKeyboard = new PianoKeyboard(QSize(60, 30), pianoView);
+    pianoView->addChild(m_pianoKeyboard);
+    m_grid->addWidget(pianoView, 2, 0);
+
     MatrixCanvasView *canvasView =
 	new MatrixCanvasView(*m_staffs[0], m_horizontalScrollBar,
                              tCanvas, getCentralFrame());
     setCanvasView(canvasView);
+
+    // Connect vertical scrollbars between matrix and piano
+    //
+    connect(canvasView->verticalScrollBar(), SIGNAL(valueChanged(int)),
+            pianoView->verticalScrollBar(), SIGNAL(valueChanged(int)));
+    connect(canvasView->verticalScrollBar(), SIGNAL(sliderMoved(int)),
+            pianoView->verticalScrollBar(), SIGNAL(sliderMoved(int)));
+
 
     QObject::connect
         (getCanvasView(), SIGNAL(activeItemPressed(QMouseEvent*, QCanvasItem*)),

@@ -93,7 +93,7 @@ using namespace Rosegarden::BaseProperties;
 NotationView::NotationView(RosegardenGUIDoc *doc,
                            vector<Segment *> segments,
                            QWidget *parent) :
-    EditView(doc, segments, parent),
+    EditView(doc, segments, false, parent),
     m_currentEventSelection(0),
     m_currentNotePixmap(0),
     m_hoveredOverNoteName(0),

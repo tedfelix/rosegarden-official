@@ -64,9 +64,18 @@ class EditView : public KMainWindow
     Q_OBJECT
 
 public:
+
+    /**
+     * Create an EditView for the segments \a segments from document \a doc.
+     *
+     * \arg hasTwoCols : if true, the View's grid will have two
+     * columns instead of just one
+     */
     EditView(RosegardenGUIDoc *doc,
              std::vector<Rosegarden::Segment *> segments,
+             bool hasTwoCols,
              QWidget *parent);
+
     virtual ~EditView();
 
     const RosegardenGUIDoc *getDocument() const { return m_document; }
@@ -272,6 +281,8 @@ protected:
     QVBoxLayout *m_rulerBox;
     QWidget     *m_topBarButtons;
     QWidget     *m_bottomBarButtons;
+
+    unsigned int m_mainCol;
 };
 
 #endif

@@ -42,6 +42,7 @@ const unsigned int EditView::ID_STATUS_MSG = 1;
 
 EditView::EditView(RosegardenGUIDoc *doc,
                    std::vector<Rosegarden::Segment *> segments,
+                   bool hasTwoCols,
                    QWidget *parent)
     : KMainWindow(parent),
       m_config(kapp->config()),
@@ -53,10 +54,11 @@ EditView::EditView(RosegardenGUIDoc *doc,
       m_canvasView(0),
       m_centralFrame(new QFrame(this)),
       m_horizontalScrollBar(new QScrollBar(Horizontal, m_centralFrame)),
-      m_grid(new QGridLayout(m_centralFrame, 5, 0)), // 5 rows, 0 cols
+      m_grid(new QGridLayout(m_centralFrame, 5, hasTwoCols ? 2 : 1)),
       m_rulerBox(new QVBoxLayout(m_centralFrame)),
       m_topBarButtons(0),
-      m_bottomBarButtons(0)
+      m_bottomBarButtons(0),
+      m_mainCol(hasTwoCols ? 1 : 0)
 {
     setCentralWidget(m_centralFrame);
 
@@ -69,8 +71,8 @@ EditView::EditView(RosegardenGUIDoc *doc,
         (getCommandHistory(), SIGNAL(commandExecuted(KCommand *)),
          this,                      SLOT(slotCommandExecuted(KCommand *)));
 
-    m_grid->addWidget(m_horizontalScrollBar, 4, 0);
-    m_grid->addLayout(m_rulerBox, 0, 0);
+    m_grid->addWidget(m_horizontalScrollBar, 4, m_mainCol);
+    m_grid->addLayout(m_rulerBox, 0, m_mainCol);
 }
 
 EditView::~EditView()
@@ -82,7 +84,7 @@ void EditView::setCanvasView(QCanvasView *canvasView)
 {
     delete m_canvasView;
     m_canvasView = canvasView;
-    m_grid->addWidget(m_canvasView, 2, 0);
+    m_grid->addWidget(m_canvasView, 2, m_mainCol);
     m_canvasView->setHScrollBarMode(QScrollView::AlwaysOff);
 
     m_horizontalScrollBar->setRange(m_canvasView->horizontalScrollBar()->minValue(),
@@ -102,7 +104,7 @@ void EditView::setTopBarButtons(QWidget* w)
 {
     delete m_topBarButtons;
     m_topBarButtons = w;
-    m_grid->addWidget(w, 1, 0);
+    m_grid->addWidget(w, 1, m_mainCol);
 
     connect(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
             m_topBarButtons, SLOT(slotScrollHoriz(int)));
@@ -114,7 +116,7 @@ void EditView::setBottomBarButtons(QWidget* w)
 {
     delete m_bottomBarButtons;
     m_bottomBarButtons = w;
-    m_grid->addWidget(w, 3, 0);
+    m_grid->addWidget(w, 3, m_mainCol);
 
     connect(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
             m_bottomBarButtons, SLOT(slotScrollHoriz(int)));
