@@ -204,12 +204,12 @@ SegmentParameterBox::populateBoxFromSegments()
                 repeat = Some;
         }
 
-        if ((*it)->hasPerformanceQuantization())
+        if ((*it)->hasQuantization())
         {
             if (it == m_segments.begin())
             {
                 quantized = All;
-                qntzLevel = (*it)->getPerformanceQuantizer();
+                qntzLevel = (*it)->getQuantizer();
             }
             else
             {
@@ -217,7 +217,7 @@ SegmentParameterBox::populateBoxFromSegments()
                 if (quantized == None ||
                         (quantized == All &&
                             qntzLevel.getUnit() !=
-                            (*it)->getPerformanceQuantizer().getUnit()))
+                            (*it)->getQuantizer().getUnit()))
                     quantized = Some;
             }
         }
@@ -312,8 +312,8 @@ SegmentParameterBox::slotQuantizeSelected(int qLevel)
     std::vector<Rosegarden::Segment*>::iterator it;
     for (it = m_segments.begin(); it != m_segments.end(); it++)
     {
-        (*it)->setPerformanceQuantization(true);
-        (*it)->setPerformanceQuantizeLevel(m_standardQuantizations[qLevel]);
+        (*it)->setQuantization(true);
+        (*it)->setQuantizeLevel(m_standardQuantizations[qLevel]);
     }
 }
 

@@ -127,6 +127,44 @@ public:
     timeT getEndTime() const { return m_startIdx + getDuration(); }
 
     /**
+     * Get the absolute time of an event, taking into account any
+     * quantization that may be in force.  Editing and performance
+     * code should use this in preference to e->getAbsoluteTime().
+     */
+    timeT getAbsoluteTimeOf(Event *e);
+
+    /**
+     * Get the duration of an event, taking into account any
+     * quantization that may be in force.  Editing and performance
+     * code should use this in preference to e->getDuration().
+     */
+    timeT getDurationOf(Event *);
+
+    /**
+     * Switch quantization on or off.
+     */
+    void setQuantization(bool quantize);
+
+    /**
+     * Find out whether quantization is on or off.
+     */
+    bool hasQuantization() const;
+
+    /**
+     * Set the quantization level to one of a set of standard levels.
+     * (This does not switch quantization on, if it's currently off,
+     * it only changes the level that will be used when it's next
+     * switched on.)
+     */
+    void setQuantizeLevel(const StandardQuantization &);
+
+    /**
+     * Get the quantizer currently in (or not in) use.
+     */
+    const Quantizer &getQuantizer() const;
+
+
+    /**
      * Get the track number this Segment is associated with.
      */
     unsigned int getTrack() const { return m_track; }
@@ -376,14 +414,6 @@ public:
     bool isRepeating() const { return m_repeating; }
     void setRepeating(bool value) { m_repeating = value; }
 
-    // Quantization parameters
-    //
-    void setPerformanceQuantization(bool quantize);
-    bool hasPerformanceQuantization() const;
-
-    void setPerformanceQuantizeLevel(const StandardQuantization &);
-    const Quantizer &getPerformanceQuantizer() const;
-
 private:
     timeT m_startIdx;
     unsigned int m_track;
@@ -397,6 +427,7 @@ private:
 
     void notifyAdd(Event *) const;
     void notifyRemove(Event *) const;
+    void notifyQuantizationChanged(Event *) const;
 
 private:
     Segment(const Segment &);
@@ -410,7 +441,7 @@ private:
     timeT m_audioEndIdx;        // how far into m_audioFileID our Segment ends
 
     bool m_repeating;           // is this segment repeating?
-    Quantizer *m_performanceQuantizer;
+    Quantizer *m_quantizer;
     bool m_quantize;
 };
 
@@ -424,6 +455,9 @@ public:
     // called after the event has been removed from the segment,
     // and just before it is deleted:
     virtual void eventRemoved(const Segment *, Event *) = 0;
+
+    // called after an event's quantized start time and/or duration change:
+    virtual void eventQuantizationChanged(const Segment *, Event *) = 0;
 };
 
 

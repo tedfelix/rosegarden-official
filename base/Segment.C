@@ -49,7 +49,7 @@ Segment::Segment(SegmentType segmentType, timeT startIdx) :
     m_audioStartIdx(0),
     m_audioEndIdx(0),
     m_repeating(false),
-    m_performanceQuantizer(new Quantizer("PerformanceQ")),
+    m_quantizer(new Quantizer("SegmentQ")),
     m_quantize(false)
 {
     // nothing
@@ -60,7 +60,7 @@ Segment::~Segment()
     // delete content
     for (iterator it = begin(); it != end(); ++it) delete (*it);
 
-    delete m_performanceQuantizer;
+    delete m_quantizer;
 }
 
 
@@ -462,35 +462,63 @@ Segment::getNoteTiedWith(Event *note, bool forwards) const
     return end();
 }
 
-void
-Segment::setPerformanceQuantization(bool quantize)
+timeT
+Segment::getAbsoluteTimeOf(Event *e)
 {
-    m_quantize = quantize;
+    if (m_quantize) {
+	return m_quantizer->getQuantizedAbsoluteTime(e);
+    } else {
+	return e->getAbsoluteTime();
+    }
+}
+
+timeT
+Segment::getDurationOf(Event *e)
+{
+    if (m_quantize) {
+	return m_quantizer->getQuantizedDuration(e);
+    } else {
+	return e->getDuration();
+    }
+}
+
+void
+Segment::setQuantization(bool quantize)
+{
+    if (m_quantize != quantize) {
+	m_quantize = quantize;
+	for (iterator i = begin(); i != end(); ++i) {
+	    notifyQuantizationChanged(*i);
+	}
+    }
 }
 
 bool
-Segment::hasPerformanceQuantization() const
+Segment::hasQuantization() const
 {
     return m_quantize;
 }
 
 void
-Segment::setPerformanceQuantizeLevel(const StandardQuantization &q)
+Segment::setQuantizeLevel(const StandardQuantization &q)
 {
-    Quantizer newQ(q, "PerformanceQ");
-    *m_performanceQuantizer = newQ;
+    Quantizer newQ(q, "SegmentQ");
 
-    // may be quicker just to unquantize everything and let the
-    // SegmentPerformanceHelper's calls to Quantizer::getQuantizedDuration
-    // etc quantize on demand
+    if (newQ != *m_quantizer) {
 
-    m_performanceQuantizer->quantize(begin(), end());
+	*m_quantizer = newQ;
+	m_quantizer->quantize(begin(), end());
+
+	for (iterator i = begin(); i != end(); ++i) {
+	    notifyQuantizationChanged(*i);
+	}
+    }
 }
 
 const Quantizer &
-Segment::getPerformanceQuantizer() const
+Segment::getQuantizer() const
 {
-    return *m_performanceQuantizer;
+    return *m_quantizer;
 }
 
 
@@ -508,6 +536,15 @@ void Segment::notifyRemove(Event *e) const
     for (ObserverSet::iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
 	(*i)->eventRemoved(this, e);
+    }
+}
+
+ 
+void Segment::notifyQuantizationChanged(Event *e) const
+{
+    for (ObserverSet::iterator i = m_observers.begin();
+	 i != m_observers.end(); ++i) {
+	(*i)->eventQuantizationChanged(this, e);
     }
 }
 

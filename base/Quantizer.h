@@ -114,7 +114,8 @@ public:
 
     Quantizer(const Quantizer &);
     Quantizer &operator=(const Quantizer &);
-
+    bool operator==(const Quantizer &) const;
+    
     ~Quantizer();
 
     /**

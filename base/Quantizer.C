@@ -70,6 +70,17 @@ Quantizer::operator=(const Quantizer &q)
     return *this;
 }
 
+bool
+Quantizer::operator==(const Quantizer &q) const
+{
+    return
+	(m_type == q.m_type) &&
+	(m_unit == q.m_unit) &&
+	(m_maxDots == q.m_maxDots) &&
+	(m_absoluteTimeProperty == q.m_absoluteTimeProperty) &&
+	(m_durationProperty == q.m_durationProperty);
+}
+
 Quantizer::~Quantizer()
 {
     // nothing

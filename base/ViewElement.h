@@ -45,11 +45,14 @@ public:
     const Event* event() const { return m_event; }
     Event*       event()       { return m_event; }
 
-    timeT getAbsoluteTime() const  { return event()->getAbsoluteTime(); }
-    void  setAbsoluteTime(timeT d) { event()->setAbsoluteTime(d); }
+    // absolute time and duration come from event's quantized properties,
+    // and are generally set by Staff before insertion
 
-    timeT getDuration() const  { return event()->getDuration(); }
-    void  setDuration(timeT d) { event()->setDuration(d); }
+    timeT getAbsoluteTime() const  { return m_absoluteTime; }
+    void  setAbsoluteTime(timeT t) { m_absoluteTime = t; }
+
+    timeT getDuration() const  { return m_duration; }
+    void  setDuration(timeT d) { m_duration = d; }
 
     void dump(std::ostream&) const;
 
@@ -59,6 +62,8 @@ protected:
     ViewElement(Event *);
 
     Event *m_event;
+    timeT m_absoluteTime;
+    timeT m_duration;
 };
 
 
