@@ -310,6 +310,33 @@ void NotationView::setupActions()
     }
 
     //
+    // Accidentals
+    //
+    static const char* actionsAccidental[][3] = 
+        {
+            { "No accidental",  "1slotNoAccidental()",  "no_accidental" },
+            { "Sharp",          "1slotSharp()",         "sharp_accidental" },
+            { "Flat",           "1slotFlat()",          "flat_accidental" },
+            { "Natural",        "1slotNatural()",       "natural_accidental" },
+            { "Double sharp",   "1slotDoubleSharp()",   "double_sharp_accidental" },
+            { "Double flat",    "1slotDoubleFlat()",    "double_flat_accidental" }
+        };
+
+    for (unsigned int i = 0, accidental = NoAccidental;
+         i < 6; ++i, ++accidental) {
+
+        icon = QIconSet(m_toolbarNotePixmapFactory.makeNotePixmap(Note::Crotchet,
+                                                                  false,
+                                                                  Accidental(accidental),
+                                                                  false, true, true, true));
+        noteAction = new KRadioAction(i18n(actionsAccidental[i][0]), icon, 0, this,
+                                      actionsAccidental[i][1],
+                                      actionCollection(), actionsAccidental[i][2]);
+        noteAction->setExclusiveGroup("accidentals");
+    }
+    
+
+    //
     // Clefs
     //
 
@@ -983,6 +1010,34 @@ void NotationView::slotDottedR64th()
 }
 
 //----------------------------------------
+// Accidentals
+//----------------------------------------
+void NotationView::slotNoAccidenta()
+{
+}
+
+void NotationView::slotSharp()
+{
+}
+
+void NotationView::slotFlat()
+{
+}
+
+void NotationView::slotNatural()
+{
+}
+
+void NotationView::slotDoubleSharp()
+{
+}
+
+void NotationView::slotDoubleFlat()
+{
+}
+
+
+//----------------------------------------
 // Clefs
 //----------------------------------------
 void NotationView::slotTrebleClef()
@@ -1247,7 +1302,7 @@ ClefInserter::ClefInserter(std::string clefType, NotationView& view)
 }
     
 void ClefInserter::handleClick(int height, const QPoint &eventPos,
-                               NotationElement* el)
+                               NotationElement*)
 {
     Event *tsig = 0, *clef = 0, *key = 0;
     NotationElementList::iterator closestNote =
@@ -1258,15 +1313,9 @@ void ClefInserter::handleClick(int height, const QPoint &eventPos,
         return;
     }
 
-    Rosegarden::timeT absTime = (*closestNote)->getAbsoluteTime();
-    double closestNoteX = (*closestNote)->getEffectiveX();
+//     Rosegarden::timeT absTime = (*closestNote)->getAbsoluteTime();
+//     double closestNoteX = (*closestNote)->getEffectiveX();
     
-//     if (closestNoteX < eventPos.x() &&
-//         (eventPos.x() - closestNoteX) >  {
-//         // closest note is before click, so add note duration
-//         absTime += (*closestNote)->getDuration();
-//     }
-
     TrackNotationHelper nt(m_parentView.getTrack());
     nt.insertClef(absTime, m_clef);
 

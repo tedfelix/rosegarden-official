@@ -170,7 +170,7 @@ public slots:
     void slotR32nd();
     void slotR64th();
 
-    // rest switch slots
+    // dotted rest switch slots
     void slotDottedRBreve();
     void slotDottedRWhole();
     void slotDottedRHalf();
@@ -179,6 +179,14 @@ public slots:
     void slotDottedR16th();
     void slotDottedR32nd();
     void slotDottedR64th();
+
+    // accidental switch slots
+    void slotNoAccidenta();
+    void slotSharp();
+    void slotFlat();
+    void slotNatural();
+    void slotDoubleSharp();
+    void slotDoubleFlat();
 
     // clef switch slots
     void slotTrebleClef();
