@@ -43,7 +43,7 @@ class Track
 {
 
 public:
-    enum TrackType { midi, audio };
+    enum TrackType { Midi, Audio };
 
     Track();
     ~Track();

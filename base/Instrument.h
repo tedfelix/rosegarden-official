@@ -35,7 +35,7 @@ namespace Rosegarden
 class Instrument
 {
 public:
-    enum InstrumentType { midi, audio };
+    enum InstrumentType { Midi, Audio };
 
     Instrument();
     ~Instrument();
