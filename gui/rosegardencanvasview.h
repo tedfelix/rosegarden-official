@@ -77,9 +77,6 @@ public:
 
     bool isTimeForSmoothScroll();
 
-    void startAutoScroll();
-    void stopAutoScroll();
-
     void setScrollDirectionConstraint(int d) { m_scrollDirectionConstraint = d; }
 
 public slots:
@@ -118,9 +115,9 @@ public slots:
      */
     void slotSetScrollPos(const QPoint &);
 
-    /**
-     * @param scrollDirection ORed combination of the NoFollow,FollowHorizontal,FollowVertical
-     */
+    void startAutoScroll();
+    void startAutoScroll(int directionConstraint);
+    void stopAutoScroll();
     void doAutoScroll();
 
 signals:

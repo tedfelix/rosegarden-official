@@ -25,6 +25,7 @@
 #include "colours.h"
 #include "Event.h"
 #include "rosestrings.h"
+#include "rosegardencanvasview.h"
 #include "rosedebug.h"
 #include "RulerScale.h"
 
@@ -195,6 +196,8 @@ LoopRuler::mousePressEvent(QMouseEvent *mE)
             m_endLoop = m_startLoop = m_grid.snapX(x);
         else
 	    emit setPointerPosition(m_rulerScale->getTimeForX(x));
+
+        emit startMouseMove(RosegardenCanvasView::FollowHorizontal);
     }
 }
 
@@ -223,6 +226,7 @@ LoopRuler::mouseReleaseEvent(QMouseEvent *mE)
             else
                 emit setLoop(m_startLoop, m_endLoop);
         }
+        emit stopMouseMove();
     }
 }
 
@@ -252,6 +256,8 @@ LoopRuler::mouseMoveEvent(QMouseEvent *mE)
     }
     else
         emit setPointerPosition(m_rulerScale->getTimeForX(x));
+
+    emit mouseMove();
 }
 
 void LoopRuler::slotSetLoopingMode(bool value)

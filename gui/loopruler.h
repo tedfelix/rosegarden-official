@@ -85,6 +85,10 @@ signals:
     /// Set a playing loop
     void setLoop(Rosegarden::timeT, Rosegarden::timeT);
 
+    void startMouseMove(int directionConstraint);
+    void stopMouseMove();
+    void mouseMove();
+
 private:
     void drawBarSections(QPainter*);
     void drawLoopMarker(QPainter*);  // between loop positions

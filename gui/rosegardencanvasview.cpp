@@ -94,6 +94,8 @@ const int RosegardenCanvasView::InitialScrollAccel = 5;
 /// Copied from QScrollView
 void RosegardenCanvasView::startAutoScroll()
 {
+    RG_DEBUG << "RosegardenCanvasView::startAutoScroll()\n";
+
     if ( !m_autoScrollTimer.isActive() ) {
         m_autoScrollTime = InitialScrollTime;
         m_autoScrollAccel = InitialScrollAccel;
@@ -106,8 +108,16 @@ void RosegardenCanvasView::startAutoScroll()
 
 }
 
+void RosegardenCanvasView::startAutoScroll(int directionConstraint)
+{
+    setScrollDirectionConstraint(directionConstraint);
+    startAutoScroll();
+}
+
 void RosegardenCanvasView::stopAutoScroll()
 {
+    RG_DEBUG << "RosegardenCanvasView::stopAutoScroll()\n";
+
     m_autoScrollTimer.stop();
     m_minDeltaScroll = DefaultMinDeltaScroll;
     m_currentScrollDirection = None;
@@ -115,6 +125,8 @@ void RosegardenCanvasView::stopAutoScroll()
 
 void RosegardenCanvasView::doAutoScroll()
 {
+    RG_DEBUG << "RosegardenCanvasView::doAutoScroll()\n";
+
     QPoint p = viewport()->mapFromGlobal( QCursor::pos() );
 
     m_autoScrollTimer.start( m_autoScrollTime );

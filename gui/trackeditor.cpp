@@ -65,7 +65,7 @@ using Rosegarden::timeT;
 using Rosegarden::Segment;
 using Rosegarden::TrackId;
 
-static double _pointerWidth = 3.0;
+const double TrackEditor::PointerWidth = 3.0;
 
 TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
                          QWidget* rosegardenguiview,
@@ -227,6 +227,20 @@ TrackEditor::init(QWidget* rosegardenguiview)
     connect(m_trackButtons, SIGNAL(newRecordButton()),
             m_doc, SLOT(slotNewRecordButton()));
 
+    // connect loop rulers' follow-scroll signals
+    connect(m_topBarButtons->getLoopRuler(), SIGNAL(startMouseMove(int)),
+            m_segmentCanvas, SLOT(startAutoScroll(int)));
+    connect(m_topBarButtons->getLoopRuler(), SIGNAL(stopMouseMove()),
+            m_segmentCanvas, SLOT(stopAutoScroll()));
+    connect(m_topBarButtons->getLoopRuler(), SIGNAL(mouseMove()),
+            m_segmentCanvas, SLOT(doAutoScroll()));
+    connect(m_bottomBarButtons->getLoopRuler(), SIGNAL(startMouseMove(int)),
+            m_segmentCanvas, SLOT(startAutoScroll(int)));
+    connect(m_bottomBarButtons->getLoopRuler(), SIGNAL(stopMouseMove()),
+            m_segmentCanvas, SLOT(stopAutoScroll()));
+    connect(m_bottomBarButtons->getLoopRuler(), SIGNAL(mouseMove()),
+            m_segmentCanvas, SLOT(doAutoScroll()));
+
     // Synchronize bar buttons' scrollview with segment canvas' scrollbar
     //
     connect(m_segmentCanvas->verticalScrollBar(), SIGNAL(valueChanged(int)),
@@ -275,13 +289,13 @@ TrackEditor::init(QWidget* rosegardenguiview)
 	    this, SLOT(slotSetPointerPosition(Rosegarden::timeT)));
  
     connect(m_doc, SIGNAL(loopChanged(Rosegarden::timeT,
-					   Rosegarden::timeT)),
+                                      Rosegarden::timeT)),
 	    this, SLOT(slotSetLoop(Rosegarden::timeT, Rosegarden::timeT)));
 
     // create the position pointer
     m_pointer = new QCanvasLine(canvas);
     QPen pen(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::Pointer));
-    pen.setWidth(3);
+    pen.setWidth(int(PointerWidth));
     m_pointer->setPen(pen);
     m_pointer->setBrush(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::Pointer));
     m_pointer->setPoints(0, 0, 0, canvas->height());
@@ -318,8 +332,8 @@ void TrackEditor::slotReadjustCanvasSize()
     Rosegarden::SimpleRulerScale *sRuler = 
         dynamic_cast<Rosegarden::SimpleRulerScale*>(m_rulerScale);
 
-    int width = int(rint((_pointerWidth * sRuler->getUnitsPerPixel())/ m_initialUnitsPerPixel));
-    width = int(_pointerWidth);
+    int width = int(rint((PointerWidth * sRuler->getUnitsPerPixel())/ m_initialUnitsPerPixel));
+    width = int(PointerWidth);
 
     m_pointer->setPoints(0, 0, 0, m_segmentCanvas->canvas()->height());
 
@@ -510,8 +524,8 @@ TrackEditor::slotSetPointerPosition(Rosegarden::timeT position)
     /*
     RG_DEBUG << "TrackEditor::setPointerPosition - scale = " << ruler->getUnitsPerPixel() << endl;
     */
-    int width = int(rint((_pointerWidth * ruler->getUnitsPerPixel())/ m_initialUnitsPerPixel));
-    width = int(_pointerWidth);
+    int width = int(rint((PointerWidth * ruler->getUnitsPerPixel())/ m_initialUnitsPerPixel));
+    width = int(PointerWidth);
 
     m_pointer->setPoints(0, 0, 0, m_segmentCanvas->canvas()->height());
 
@@ -534,9 +548,9 @@ TrackEditor::slotSetPointerPosition(Rosegarden::timeT position)
 		getSegmentCanvas()->slotScrollHoriz(int(double(position) / ruler->getUnitsPerPixel()));
 	    }
 	} else {
-	    if (getSegmentCanvas()->isTimeForSmoothScroll()) {
-		getSegmentCanvas()->slotScrollHorizSmallSteps(int(double(position) / ruler->getUnitsPerPixel()));
-	    }
+// 	    if (getSegmentCanvas()->isTimeForSmoothScroll()) {
+// 		getSegmentCanvas()->slotScrollHorizSmallSteps(int(double(position) / ruler->getUnitsPerPixel()));
+// 	    }
         }
 
 	emit needUpdate();

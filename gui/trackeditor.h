@@ -78,6 +78,8 @@ public:
 
     ~TrackEditor();
 
+    static const double PointerWidth;
+
     SegmentCanvas* getSegmentCanvas()       { return m_segmentCanvas; }
     TempoRuler*    getTempoRuler()          { return m_tempoRuler; }
     ChordNameRuler*getChordNameRuler()      { return m_chordNameRuler; }
