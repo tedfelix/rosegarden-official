@@ -1233,10 +1233,14 @@ int NotationSelector::handleMouseMove(timeT, int,
     int w = int(e->x() - m_selectionRect->x());
     int h = int(e->y() - m_selectionRect->y());
 
-    if (m_clickedElement && !m_clickedElement->isRest()) {
+    if (m_clickedElement /* && !m_clickedElement->isRest() */) {
 
-	if (m_clickedShift) {
+	if (m_startedFineDrag) {
 	    dragFine(e->x(), e->y(), false);
+	} else if (m_clickedShift) {
+	    if (w > 2 || w < -2 || h > 2 || h < -2) {
+		dragFine(e->x(), e->y(), false);
+	    }
 	} else if (w > 3 || w < -3 || h > 3 || h < -3) {
 	    drag(e->x(), e->y(), false);
 	}
@@ -1267,10 +1271,11 @@ void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)
     // how big the rectangle is (if we were dragging an event, the
     // rectangle size will still be zero).
     
-    if ((e->x() - m_selectionRect->x()) > -3 &&
-        (e->x() - m_selectionRect->x()) <  3 &&
-        (e->y() - m_selectionRect->y()) > -3 &&
-        (e->y() - m_selectionRect->y()) <  3) {
+    if (((e->x() - m_selectionRect->x()) > -3 &&
+	 (e->x() - m_selectionRect->x()) <  3 &&
+	 (e->y() - m_selectionRect->y()) > -3 &&
+	 (e->y() - m_selectionRect->y()) <  3) &&
+	!m_startedFineDrag) {
 
 	if (m_clickedElement != 0 && m_selectedStaff) {
 		
@@ -1310,12 +1315,10 @@ void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)
 
     } else {
 
-	if (m_clickedElement && !m_clickedElement->isRest()) {
-	    if (m_clickedShift) {
-		dragFine(e->x(), e->y(), true);
-	    } else {
-		drag(e->x(), e->y(), true);
-	    }
+	if (m_startedFineDrag) {
+	    dragFine(e->x(), e->y(), true);
+	} else if (m_clickedElement /* && !m_clickedElement->isRest() */) {
+	    drag(e->x(), e->y(), true);
 	} else {
 	    setViewCurrentSelection(false);
 	}
@@ -1535,8 +1538,9 @@ void NotationSelector::dragFine(int x, int y, bool final)
     double dx = x - m_selectionRect->x();
     double dy = y - m_selectionRect->y();
 
+    double noteBodyWidth = m_nParentView->getNotePixmapFactory()->getNoteBodyWidth();
     double lineSpacing = m_nParentView->getNotePixmapFactory()->getLineSpacing();
-    dx = (1000.0 * dx) / lineSpacing;
+    dx = (1000.0 * dx) / noteBodyWidth;
     dy = (1000.0 * dy) / lineSpacing;
 
     if (final) {
@@ -1557,7 +1561,7 @@ void NotationSelector::dragFine(int x, int y, bool final)
 	}
 
 	IncrementDisplacementsCommand *command = new IncrementDisplacementsCommand
-	    (*selection, dx, dy);
+	    (*selection, long(dx), long(dy));
 	m_nParentView->addCommandToHistory(command);
 
     } else {
@@ -1578,6 +1582,7 @@ void NotationSelector::dragFine(int x, int y, bool final)
 	    endTime = (*i)->getAbsoluteTime() + (*i)->getDuration();
 	}
 	
+	if (startTime == endTime) ++endTime;
 	selection->getSegment().updateRefreshStatuses(startTime, endTime);
 	m_nParentView->update();
     }

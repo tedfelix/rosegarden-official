@@ -62,11 +62,12 @@ using Rosegarden::Staff;
 using namespace Rosegarden::BaseProperties;
 
 
-NotationVLayout::NotationVLayout(Rosegarden::Composition *c,
+NotationVLayout::NotationVLayout(Rosegarden::Composition *c, NotePixmapFactory *npf,
 				 const NotationProperties &properties,
                                  QObject* parent, const char* name) :
     ProgressReporter(parent, name),
     m_composition(c),
+    m_npf(npf),
     m_notationQuantizer(c->getNotationQuantizer()),
     m_properties(properties)
 {
@@ -117,12 +118,13 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
 
         NotationElement *el = static_cast<NotationElement*>(*i);
 
-	// Displaced Y will only be used for elements that don't have
-	// a fixed meaningful Y coordinate (slurs etc), not for notes etc
-	long displacedY = 0;
-	el->event()->get<Int>(DISPLACED_Y, displacedY);
-	displacedY = displacedY * (staff.getLayoutYForHeight(2) -
-				   staff.getLayoutYForHeight(0)) / 1000;
+	// Displaced Y will only be used for certain events -- in
+	// particular not for notes, whose y-coord is obviously kind
+	// of meaningful.
+	double displacedY = 0.0;
+	long dyRaw = 0;
+	el->event()->get<Int>(DISPLACED_Y, dyRaw);
+	displacedY = double(dyRaw * m_npf->getLineSpacing()) / 1000.0;
 
         el->setLayoutY(0);
 
@@ -134,9 +136,9 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
 
             int noteType = el->event()->get<Int>(NOTE_TYPE);
             if (noteType > Note::Minim) {
-                el->setLayoutY(staff.getLayoutYForHeight(6));
+                el->setLayoutY(staff.getLayoutYForHeight(6) + displacedY);
             } else {
-                el->setLayoutY(staff.getLayoutYForHeight(4));
+                el->setLayoutY(staff.getLayoutYForHeight(4) + displacedY);
             }
 
         } else if (el->isNote()) {
@@ -561,13 +563,15 @@ NotationVLayout::positionSlur(NotationStaff &staff,
     (*i)->event()->setMaybe<Int>(m_properties.SLUR_Y_DELTA, dy);
     (*i)->event()->setMaybe<Int>(m_properties.SLUR_LENGTH, length);
 
-    long displacedX = 0, displacedY = 0;
-    (*i)->event()->get<Int>(DISPLACED_X, displacedX);
-    (*i)->event()->get<Int>(DISPLACED_Y, displacedY);
-    displacedX = displacedX * (staff.getLayoutYForHeight(2) -
-			       staff.getLayoutYForHeight(0)) / 1000;
-    displacedY = displacedY * (staff.getLayoutYForHeight(2) -
-			       staff.getLayoutYForHeight(0)) / 1000;
+    double displacedX = 0.0, displacedY = 0.0;
+
+    long dxRaw = 0;
+    (*i)->event()->get<Int>(DISPLACED_X, dxRaw);
+    displacedX = double(dxRaw * m_npf->getNoteBodyWidth()) / 1000.0;
+
+    long dyRaw = 0;
+    (*i)->event()->get<Int>(DISPLACED_Y, dyRaw);
+    displacedY = double(dyRaw * m_npf->getLineSpacing()) / 1000.0;
 
     (*i)->setLayoutX(startX + displacedX);
     (*i)->setLayoutY(y0 + displacedY);

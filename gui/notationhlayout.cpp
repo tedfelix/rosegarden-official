@@ -1267,9 +1267,10 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
             NOTATION_DEBUG << "NotationHLayout::layout(): setting element's x to " << x << " (was " << el->getLayoutX() << ")" << endl;
 
-	    long displacedX = 0;
-	    el->event()->get<Int>(DISPLACED_X, displacedX);
-	    displacedX = displacedX * m_npf->getLineSpacing() / 1000;
+	    double displacedX = 0.0;
+	    long dxRaw = 0;
+	    el->event()->get<Int>(DISPLACED_X, dxRaw);
+	    displacedX = double(dxRaw * m_npf->getNoteBodyWidth()) / 1000.0;
 
 	    el->setLayoutX(x + displacedX);
 	    el->setLayoutAirspace(x, int(delta));
@@ -1462,9 +1463,10 @@ NotationHLayout::positionChord(Staff &staff,
 
 	NotationElement *elt = static_cast<NotationElement*>(*citr);//!!!
 
-	long displacedX = 0;
-	elt->event()->get<Int>(DISPLACED_X, displacedX);
-	displacedX = displacedX * m_npf->getLineSpacing() / 1000;
+	double displacedX = 0.0;
+	long dxRaw = 0;
+	elt->event()->get<Int>(DISPLACED_X, dxRaw);
+	displacedX = double(dxRaw * m_npf->getNoteBodyWidth()) / 1000.0;
 
 	elt->setLayoutX(baseX + displacedX);
 	elt->setLayoutAirspace(baseX, delta);

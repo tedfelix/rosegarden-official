@@ -93,9 +93,10 @@
 		<Separator/>
 	  	<Menu name="Slurs">
 			<text>Slur &amp;Position</text>
+			<Action name="restore_slurs"/>
+			<Separator/>
 	  		<Action name="slurs_above"/>
 			<Action name="slurs_below"/>
-			<Action name="restore_slurs"/>
 		</Menu>
 		<Separator/>
 		<Action name="tie_notes"/>
@@ -164,13 +165,13 @@
 	<Separator/>
 	<Menu name="Respell">
 		<text>&amp;Accidentals</text>
+		<Action name="respell_restore"/>
+		<Separator/>
 		<Action name="respell_doubleflat"/>
 		<Action name="respell_flat"/>
 		<Action name="respell_natural"/>
 		<Action name="respell_sharp"/>
 		<Action name="respell_doublesharp"/>
-		<Separator/>
-		<Action name="respell_restore"/>
 		<Separator/>
 		<Action name="show_cautionary"/>
 		<Action name="cancel_cautionary"/>
@@ -189,9 +190,10 @@
 	<Action name="note_style_actionmenu"/>
 	<Menu name="Stems">
 		<text>S&amp;tem Direction</text>
+		<Action name="restore_stems"/>
+		<Separator/>
 		<Action name="stems_up"/>
 		<Action name="stems_down"/>
-		<Action name="restore_stems"/>
 	</Menu>
 	<Menu name="rests">
 		<text>R&amp;ests</text>
@@ -208,7 +210,7 @@
 	</Menu>
 	<Separator/>
 	<Menu name="quantize_notes">
-		<text>&amp;Quantize Notes</text>
+		<text>&amp;Quantize</text>
 	        <Action name="quantize"/>
   	        <Action name="fix_quantization"/>
 	        <Action name="remove_quantization"/>
@@ -224,14 +226,26 @@
 	      <Separator/>
 	      <Action name="general_transpose"/>
 	</Menu>
+	<Separator/>
+	<Menu name="fine_positioning">
+		<text>&amp;Fine Positioning</text>
+		<Action name="fine_position_restore"/>
+ 		<Separator/>
+		<Action name="fine_position_left"/>
+		<Action name="fine_position_right"/>
+		<Action name="fine_position_up"/>
+		<Action name="fine_position_down"/>
+	</Menu>
     <!--
       <Separator/>
       <Action name="invert"/>
       <Action name="retrograde"/>
     -->
-	<Separator/>
-        <Action name="jog_left"/>
-        <Action name="jog_right"/>
+	<Menu name="fine_timing">
+		<text>Fine Ti&amp;ming</text>
+	        <Action name="jog_left"/>
+	        <Action name="jog_right"/>
+	</Menu>
 </Menu>
 
 <Menu name="Tools">
@@ -599,6 +613,11 @@
     <Action name="slurs_above"/>
     <Action name="slurs_below"/>
     <Action name="restore_slurs"/>
+    <Action name="fine_position_left"/>
+    <Action name="fine_position_right"/>
+    <Action name="fine_position_up"/>
+    <Action name="fine_position_down"/>
+    <Action name="fine_position_restore"/>
   </enable>
 </State>
 

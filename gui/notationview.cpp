@@ -206,7 +206,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_notePixmapFactory(new NotePixmapFactory(m_fontName, m_fontSize)),
     m_hlayout(new NotationHLayout(&doc->getComposition(), m_notePixmapFactory,
                                   m_properties, this)),
-    m_vlayout(new NotationVLayout(&doc->getComposition(),
+    m_vlayout(new NotationVLayout(&doc->getComposition(), m_notePixmapFactory,
                                   m_properties, this)),
     m_chordNameRuler(0),
     m_tempoRuler(0),
@@ -264,6 +264,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     delete m_notePixmapFactory;
     m_notePixmapFactory = new NotePixmapFactory(m_fontName, m_fontSize);
     m_hlayout->setNotePixmapFactory(m_notePixmapFactory);
+    m_vlayout->setNotePixmapFactory(m_notePixmapFactory);
     
     setupActions();
 //     setupAddControlRulerMenu(); - too early for notation, moved to end of ctor.
@@ -539,7 +540,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_notePixmapFactory(new NotePixmapFactory(m_fontName, m_fontSize)),
     m_hlayout(new NotationHLayout(&doc->getComposition(), m_notePixmapFactory,
 				  m_properties, this)),
-    m_vlayout(new NotationVLayout(&doc->getComposition(),
+    m_vlayout(new NotationVLayout(&doc->getComposition(), m_notePixmapFactory,
                                   m_properties, this)),
     m_chordNameRuler(0),
     m_tempoRuler(0),
@@ -591,6 +592,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     delete m_notePixmapFactory;
     m_notePixmapFactory = new NotePixmapFactory(m_fontName, m_fontSize);
     m_hlayout->setNotePixmapFactory(m_notePixmapFactory);
+    m_vlayout->setNotePixmapFactory(m_notePixmapFactory);
     
     setBackgroundMode(PaletteBase);
     m_config->setGroup(NotationView::ConfigGroup);
@@ -1950,6 +1952,26 @@ void NotationView::setupActions()
                 SLOT(slotFilterSelection()), actionCollection(),
                 "filter_selection");
 
+    new KAction(i18n("Push &Left"), 0, this,
+		SLOT(slotFinePositionLeft()), actionCollection(),
+		"fine_position_left");
+
+    new KAction(i18n("Push &Right"), 0, this,
+		SLOT(slotFinePositionRight()), actionCollection(),
+		"fine_position_right");
+
+    new KAction(i18n("Push &Up"), 0, this,
+		SLOT(slotFinePositionUp()), actionCollection(),
+		"fine_position_up");
+
+    new KAction(i18n("Push &Down"), 0, this,
+		SLOT(slotFinePositionDown()), actionCollection(),
+		"fine_position_down");
+
+    new KAction(i18n("Restore &Computed Positions"), 0, this,
+		SLOT(slotFinePositionRestore()), actionCollection(),
+		"fine_position_restore");
+
     createGUI(getRCFileName(), false);
 }
 
@@ -2723,6 +2745,8 @@ void NotationView::setNotePixmapFactory(NotePixmapFactory* f)
 {
     delete m_notePixmapFactory;
     m_notePixmapFactory = f;
+    if (m_hlayout) m_hlayout->setNotePixmapFactory(m_notePixmapFactory);
+    if (m_vlayout) m_vlayout->setNotePixmapFactory(m_notePixmapFactory);
 }
 
 

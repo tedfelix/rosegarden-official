@@ -86,6 +86,8 @@ BasicCommand::execute()
     }
 
     m_segment.updateRefreshStatuses(getStartTime(), getRelayoutEndTime());
+    RG_DEBUG << "BasicCommand(" << name() << "): updated refresh statuses "
+	     << getStartTime() << " -> " << getRelayoutEndTime() << endl;
 }
 
 void

@@ -356,8 +356,6 @@ NotationView::slotChangeFont(std::string newName, int newSize)
 
     setupFontSizeMenu(oldName);
 
-    m_hlayout->setNotePixmapFactory(m_notePixmapFactory);
-
     if (!changedFont) return; // might have been called to initialise menus etc
 
     NOTATION_DEBUG << "about to change font" << endl;
@@ -662,6 +660,55 @@ void NotationView::slotFilterSelection()
 	else setCurrentSelection(0);
     }
 }
+
+void NotationView::slotFinePositionLeft()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Pushing selection left..."), this);
+
+    // half a note body width
+    addCommandToHistory(new IncrementDisplacementsCommand
+			(*m_currentEventSelection, -500, 0));
+}
+
+void NotationView::slotFinePositionRight()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Pushing selection right..."), this);
+
+    // half a note body width
+    addCommandToHistory(new IncrementDisplacementsCommand
+			(*m_currentEventSelection, 500, 0));
+}
+
+void NotationView::slotFinePositionUp()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Pushing selection up..."), this);
+
+    // half line height
+    addCommandToHistory(new IncrementDisplacementsCommand
+			(*m_currentEventSelection, 0, -500));
+}
+
+void NotationView::slotFinePositionDown()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Pushing selection down..."), this);
+
+    // half line height
+    addCommandToHistory(new IncrementDisplacementsCommand
+			(*m_currentEventSelection, 0, 500));
+}
+
+void NotationView::slotFinePositionRestore()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Restoring computed positions..."), this);
+
+    addCommandToHistory(new ResetDisplacementsCommand(*m_currentEventSelection));
+}
+
 
 void NotationView::slotToggleToolsToolBar()
 {

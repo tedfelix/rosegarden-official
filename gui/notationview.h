@@ -486,6 +486,12 @@ public slots:
     void slotEditAddKeySignature();
     void slotEditElement(NotationStaff *, NotationElement *, bool advanced);
 
+    void slotFinePositionLeft();
+    void slotFinePositionRight();
+    void slotFinePositionUp();
+    void slotFinePositionDown();
+    void slotFinePositionRestore();
+
     void slotDebugDump();
 
     /// Canvas actions slots

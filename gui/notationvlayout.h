@@ -31,6 +31,7 @@
 
 class NotationStaff;
 class NotationProperties;
+class NotePixmapFactory;
 
 /**
  * Vertical notation layout
@@ -42,11 +43,15 @@ class NotationVLayout : public ProgressReporter,
                         public Rosegarden::VerticalLayoutEngine
 {
 public:
-    NotationVLayout(Rosegarden::Composition *c,
+    NotationVLayout(Rosegarden::Composition *c, NotePixmapFactory *npf,
 		    const NotationProperties &properties,
                     QObject* parent, const char* name = 0);
 
     virtual ~NotationVLayout();
+
+    void setNotePixmapFactory(NotePixmapFactory *npf) {
+	m_npf = npf;
+    }
 
     /**
      * Resets internal data stores for all staffs
@@ -89,6 +94,7 @@ private:
     SlurList &getSlurList(Rosegarden::Staff &);
 
     Rosegarden::Composition *m_composition;
+    NotePixmapFactory *m_npf;
     const Rosegarden::Quantizer *m_notationQuantizer;
     const NotationProperties &m_properties;
 };
