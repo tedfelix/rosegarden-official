@@ -56,6 +56,7 @@ using std::endl;
 NoteFontMap::NoteFontMap(string name) :
     m_name(name),
     m_smooth(false),
+    m_srcDirectory(name),
     m_characterDestination(0),
     m_hotspotCharName(""),
     m_ok(true)
@@ -151,7 +152,10 @@ NoteFontMap::startElement(const QString &, const QString &,
 	QString s;
 	
 	s = attributes.value("name");
-	if (s) m_name = qstrtostr(s);
+	if (s) {
+	    m_name = qstrtostr(s);
+	    m_srcDirectory = m_name;
+	}
         
     } else if (lcName == "font-information") { 
 
@@ -311,6 +315,16 @@ NoteFontMap::startElement(const QString &, const QString &,
 	}
 
     } else if (lcName == "font-symbol-map") {
+
+    } else if (lcName == "src-directory") {
+
+	QString d = attributes.value("name");
+	if (!d) {
+	    m_errorString = "name is a required attribute of src-directory";
+	    return false;
+	}
+
+	m_srcDirectory = qstrtostr(d);
 
     } else if (lcName == "codebase") {
 
@@ -664,7 +678,7 @@ NoteFontMap::checkFile(int size, string &src) const
 {
     QString pixmapFileMixedName = QString("%1/%2/%3/%4.xpm")
         .arg(m_fontDirectory)
-        .arg(strtoqstr(m_name))
+        .arg(strtoqstr(m_srcDirectory))
         .arg(size)
         .arg(strtoqstr(src));
 
@@ -674,7 +688,7 @@ NoteFontMap::checkFile(int size, string &src) const
 	
 	QString pixmapFileLowerName = QString("%1/%2/%3/%4.xpm")
 	    .arg(m_fontDirectory)
-	    .arg(strtoqstr(m_name).lower())
+	    .arg(strtoqstr(m_srcDirectory).lower())
 	    .arg(size)
 	    .arg(strtoqstr(src));
 
@@ -727,6 +741,7 @@ NoteFontMap::getInversionSrc(int size, CharName charName, string &src) const
 
     if (!i->second.hasInversion()) return false;
     src = i->second.getInversionSrc();
+    if (src == "") return false;
     return checkFile(size, src);
 }
 
@@ -1494,6 +1509,7 @@ NoteFontFactory::getDefaultFontName()
 {
     std::set<std::string> fontNames = getFontNames();
     if (fontNames.find("Feta") != fontNames.end()) return "Feta";
+    else if (fontNames.find("Feta Pixmaps") != fontNames.end()) return "Feta Pixmaps";
     else if (fontNames.size() == 0) {
 	QString message = i18n("Can't obtain a default font -- no fonts found");
 	KStartupLogo::hideIfStillThere();
@@ -1722,6 +1738,16 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
     if (!dpy) {
 	std::cerr << "SystemFont::loadSystemFont[Xft]: Xft support requested but no X11 display available!" << std::endl;
 	goto qfont;
+    }
+
+    static bool haveFcDirectory = false;
+    if (!haveFcDirectory) {
+	QString fontDir = KGlobal::dirs()->findResource("appdata", "fonts/");
+	if (!FcConfigAppFontAddDir(FcConfigGetCurrent(),
+				   (const FcChar8 *)fontDir.latin1())) {
+	    NOTATION_DEBUG << "SystemFont::loadSystemFont[Xft]: Failed to add font directory " << fontDir << " to fontconfig, continuing without it" << endl;
+	}
+	haveFcDirectory = true;
     }
 
     pattern = FcPatternCreate();

@@ -498,6 +498,10 @@ NotationStaff::positionElements(timeT from, timeT to)
 	    needNewSprite = true;
 	}
 
+	//!!! for the sake of tidying up for a release -- this is definitely
+	// not the Right Thing to do here
+	if (el->getLayoutX() == 0) continue;
+
 	if (needNewSprite) {
 	    renderSingleElement(*it, (nextIt == endAt ? 0 : *nextIt),
 				currentClef, selected);
@@ -945,6 +949,8 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
         params.setTied(false);
     }
 
+    //!!! accidental shifts
+
     if (beamed) {
 
         if (elt->event()->get<Bool>(properties.CHORD_PRIMARY_NOTE, primary)
@@ -1160,7 +1166,7 @@ NotationStaff::markChanged(timeT from, timeT to, bool movedOnly)
 
 	    if (bar > toBar) movedOnly = true;
 	    
-	    NOTATION_DEBUG << "bar " << bar << " status " << m_status[bar] << endl;
+//	    NOTATION_DEBUG << "bar " << bar << " status " << m_status[bar] << endl;
 
 	    if (bar >= m_lastRenderCheck.first &&
 		bar <= m_lastRenderCheck.second) {

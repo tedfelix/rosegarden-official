@@ -376,11 +376,17 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     m_font = new KComboBox(frame);
     m_font->setEditable(false);
 
-    //!!! catch exception
     QString defaultFont = m_cfg->readEntry
         ("notefont", strtoqstr(NoteFontFactory::getDefaultFontName()));
 
-    //!!! catch exception
+    try {
+	(void)NoteFontFactory::getFont
+	    (qstrtostr(defaultFont),
+	     NoteFontFactory::getDefaultSize(qstrtostr(defaultFont)));
+    } catch (Rosegarden::Exception e) {
+	defaultFont = strtoqstr(NoteFontFactory::getDefaultFontName());
+    }
+
     std::set<std::string> fs(NoteFontFactory::getFontNames());
     std::vector<std::string> f(fs.begin(), fs.end());
     std::sort(f.begin(), f.end());

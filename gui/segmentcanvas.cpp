@@ -94,7 +94,9 @@ SegmentRepeatRectangle::SegmentRepeatRectangle(QCanvas *canvas,
       m_snapGrid(snapGrid),
       m_doc(doc)
 {
-    setBrush(RosegardenGUIColours::convertColour(m_doc->getComposition().getSegmentColourMap().getColourByIndex(m_segment->getColourIndex())).light(150));
+    setBrush(RosegardenGUIColours::convertColour
+	     (m_doc->getComposition().getSegmentColourMap().getColourByIndex
+	      (m_segment->getColourIndex())).light(150));
     setPen(RosegardenGUIColours::RepeatSegmentBorder);
 }
 
@@ -122,7 +124,9 @@ void SegmentRepeatRectangle::drawShape(QPainter& painter)
     int rWidth = int(m_snapGrid->getRulerScale()->
 		     getXForTime(m_repeatInterval));
 
-    setBrush(RosegardenGUIColours::convertColour(m_doc->getComposition().getSegmentColourMap().getColourByIndex(m_segment->getColourIndex())).light(150));
+    setBrush(RosegardenGUIColours::convertColour
+	     (m_doc->getComposition().getSegmentColourMap().getColourByIndex
+	      (m_segment->getColourIndex())).light(150));
     painter.setPen(RosegardenGUIColours::RepeatSegmentBorder);
 
     while (pos < width + rWidth)
@@ -439,6 +443,8 @@ SegmentItem::SegmentItem(TrackId trackPosition, timeT startTime, timeT endTime,
     m_selected(false),
     m_snapGrid(snapGrid),
     m_repeatRectangle(0),
+    m_colour(RosegardenGUIColours::convertColour
+	     (doc->getComposition().getSegmentColourMap().getColourByIndex(0))),
     m_preview(0),
     m_showPreview(showPreview)
 {
@@ -460,6 +466,8 @@ SegmentItem::SegmentItem(Segment *segment,
     m_selected(false),
     m_snapGrid(snapGrid),
     m_repeatRectangle(0),
+    m_colour(RosegardenGUIColours::convertColour
+	     (doc->getComposition().getSegmentColourMap().getColourByIndex(0))),
     m_preview(0),
     m_showPreview(showPreview)
 {
@@ -500,6 +508,10 @@ void SegmentItem::setPreview()
                                                m_snapGrid->getRulerScale());
 }
 
+void SegmentItem::setColour(QColor c)
+{
+    m_colour = c;
+}
 
 void SegmentItem::makeFont()
 {
@@ -530,7 +542,10 @@ void SegmentItem::drawShape(QPainter& painter)
         if (!colourset)
         {
             if (m_segment) {
-                painter.setBrush(RosegardenGUIColours::convertColour(m_doc->getComposition().getSegmentColourMap().getColourByIndex(m_segment->getColourIndex())).dark(125));
+                painter.setBrush
+		    (RosegardenGUIColours::convertColour
+		     (m_doc->getComposition().getSegmentColourMap().getColourByIndex
+		      (m_segment->getColourIndex())).dark(125));
 		colourset = true;
 	    }
         }
@@ -596,13 +611,15 @@ void SegmentItem::recalculateRectangle(bool inheritFromSegment)
     canvas()->setChanged(rect());
 
     // Get our segment colour
-/*!!!
     QColor brush;
-    if (m_segment)
-        brush = RosegardenGUIColours::convertColour(m_doc->getComposition().getSegmentColourMap().getColourByIndex(m_segment->getColourIndex()));
-    else
-        brush = RosegardenGUIColours::convertColour(m_doc->getComposition().getSegmentColourMap().getColourByIndex(0));
-*/
+    if (m_segment) {
+        brush = RosegardenGUIColours::convertColour
+	    (m_doc->getComposition().getSegmentColourMap().getColourByIndex
+	     (m_segment->getColourIndex()));
+    } else {
+        brush = m_colour;
+    }
+
     // Compute repeat rectangle if any
     //
     if (m_segment && inheritFromSegment) {
@@ -619,8 +636,8 @@ void SegmentItem::recalculateRectangle(bool inheritFromSegment)
 							       getSegment(),
                                                                m_snapGrid, m_doc);
 
-        // Set the colour for the repeat rectangle
-//!!!        m_repeatRectangle->setBrush(brush.light(150));
+	    // Set the colour for the repeat rectangle
+	    m_repeatRectangle->setBrush(brush.light(150));
 
 	    timeT repeatStart = m_endTime;
 	    timeT repeatEnd = m_segment->getRepeatEndTime();
@@ -650,13 +667,12 @@ void SegmentItem::recalculateRectangle(bool inheritFromSegment)
     setX(m_snapGrid->getRulerScale()->getXForTime(m_startTime));
     setY(m_snapGrid->getYBinCoordinate(m_trackPosition));
 
-/*!!!
     // Set our segment brush colour
     if (m_selected)
         setBrush(brush.dark(200));
     else
         setBrush(brush);
-*/
+
     int h = m_snapGrid->getYSnap();
     double w = m_snapGrid->getRulerScale()->getWidthForDuration
 	(m_startTime, m_endTime - m_startTime);
@@ -1084,7 +1100,7 @@ SegmentCanvas::addSegmentItem(TrackId track, timeT startTime, timeT endTime)
 	(track, startTime, endTime, m_showPreviews, &m_grid, canvas(), m_doc);
 
     newItem->setPen(m_pen);
-    newItem->setBrush(RosegardenGUIColours::convertColour(m_doc->getComposition().getSegmentColourMap().getColourByIndex(0)));
+//    newItem->setBrush(RosegardenGUIColours::convertColour(m_doc->getComposition().getSegmentColourMap().getColourByIndex(0)));
     newItem->setVisible(true);     
     newItem->setZ(1);           // Segment at Z=1, Pointer at Z=10 [rwb]
 
@@ -1098,7 +1114,7 @@ SegmentCanvas::addSegmentItem(Segment *segment)
 	(segment, m_showPreviews, &m_grid, canvas(), m_doc);
 
     newItem->setPen(m_pen);
-    newItem->setBrush(RosegardenGUIColours::convertColour(m_doc->getComposition().getSegmentColourMap().getColourByIndex(segment->getColourIndex())));
+//    newItem->setBrush(RosegardenGUIColours::convertColour(m_doc->getComposition().getSegmentColourMap().getColourByIndex(segment->getColourIndex())));
     newItem->setVisible(true);     
     newItem->setZ(1);           // Segment at Z=1, Pointer at Z=10 [rwb]
 
@@ -1117,10 +1133,8 @@ void SegmentCanvas::showRecordingSegmentItem(TrackId track,
     } else {
 	
 	m_recordingSegment = addSegmentItem(track, startTime, endTime);
-	m_recordingSegment->
-            setPen(RosegardenGUIColours::RecordingSegmentBorder);
-        m_recordingSegment->
-            setBrush(RosegardenGUIColours::RecordingSegmentBlock);
+	m_recordingSegment->setPen(RosegardenGUIColours::RecordingSegmentBorder);
+        m_recordingSegment->setColour(RosegardenGUIColours::RecordingSegmentBlock);
 	m_recordingSegment->setZ(2);
     }
 }

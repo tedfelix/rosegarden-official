@@ -80,6 +80,9 @@ public:
     /// Set the segment this SegmentItem will represent
     void setSegment(Rosegarden::Segment *s);
 
+    /// Set a colour, for a SegmentItem not representing a segment
+    void setColour(QColor c);
+
     /// Update start time of the rectangle (doesn't modify underlying segment)
     void setStartTime(Rosegarden::timeT t);
     Rosegarden::timeT getStartTime() const { return m_startTime; }
@@ -150,8 +153,9 @@ private:
     SegmentRepeatRectangle *m_repeatRectangle;
     QString m_label;
 
-    SegmentItemPreview* m_preview;
+    QColor m_colour; // overridden by m_segment's colour, if any
 
+    SegmentItemPreview* m_preview;
     bool m_showPreview;
 
     static QFont *m_font;

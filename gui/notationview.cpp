@@ -231,6 +231,14 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 			   ("notefont",
 			    strtoqstr(NoteFontFactory::getDefaultFontName())));
 
+    try {
+	(void)NoteFontFactory::getFont
+	    (m_fontName,
+	     NoteFontFactory::getDefaultSize(m_fontName));
+    } catch (Rosegarden::Exception e) {
+	m_fontName = NoteFontFactory::getDefaultFontName();
+    }
+
     m_fontSize = m_config->readUnsignedNumEntry
 	((segments.size() > 1 ? "multistaffnotesize" : "singlestaffnotesize"),
 	 NoteFontFactory::getDefaultSize(m_fontName));

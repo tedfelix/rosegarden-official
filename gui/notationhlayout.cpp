@@ -507,15 +507,20 @@ NotationHLayout::scanChord(NotationElementList *notes,
     float extraWidth = 0;
 
     if (someAccidental != NoAccidental) {
-	extraWidth += m_npf->getAccidentalWidth(someAccidental);
+	extraWidth += m_npf->getAccidentalWidth(someAccidental) +
+	              m_npf->getNoteBodyWidth() * chord.getMaxAccidentalShift();
     }
 
+    float layoutExtra = 0;
     if (chord.hasNoteHeadShifted()) {
-	extraWidth = std::max(extraWidth, float(m_npf->getNoteBodyWidth()));
+	if (chord.hasStemUp()) {
+	    layoutExtra += m_npf->getNoteBodyWidth();
+	} else {
+	    extraWidth = std::max(extraWidth, float(m_npf->getNoteBodyWidth()));
+	}
     }
 
     if (grace) {
-//	fixedWidth += m_npf->getNoteBodyWidth();
 	chunks.push_back(Chunk(-1, extraWidth + m_npf->getNoteBodyWidth()));
 	return;
     }
@@ -528,7 +533,7 @@ NotationHLayout::scanChord(NotationElementList *notes,
     timeT d = (*myLongest)->getViewDuration();
 
     chunks.push_back(Chunk(d, 0, extraWidth,
-			   std::max(getLayoutWidth(**myLongest),
+			   std::max(layoutExtra + getLayoutWidth(**myLongest),
 				    lyricWidth)));
 
     itr = chord.getFinalElement();
@@ -1421,6 +1426,8 @@ NotationHLayout::positionChord(Staff &staff,
 //    long groupId = -1;
 
     for (i = 0; i < chord.size(); ++i) {
+
+	//!!! we should scan all elts not just notes, and set same x to them
 
 	if (chord[i] == to) barEndsInChord = true;
 

@@ -7,15 +7,17 @@
         origin="GNU Lilypond" 
         copyright="Copyright (c) 1997--2001 Han-Wen Nienhuys and Jan Nieuwenhuizen" 
         mapped-by="Chris Cannam"
-        type="pixmap"
+        type="scalable"
         smooth="true"/>
 
+<font-requirements>
+	<font-requirement font-id="0" names="Lilypond-feta,feta,mscore20" strategy="prefer-glyphs"/>
+	<font-requirement font-id="1" names="bitstream vera serif,luxi serif,times new roman,times,DEFAULT" strategy="prefer-codes"/> <!-- text font -->
+</font-requirements>
+
 <font-sizes>
-        <font-size note-height="4" beam-thickness="2" staff-line-thickness="1" stem-thickness="1" border-x="1" border-y="1"/>
-        <font-size note-height="6" beam-thickness="3" staff-line-thickness="1" stem-thickness="1" border-x="1" border-y="1"/>
-        <font-size note-height="8" beam-thickness="4" staff-line-thickness="1" stem-thickness="1" border-x="1" border-y="1"/>
-        <font-size note-height="10" beam-thickness="5" staff-line-thickness="1" stem-thickness="2" border-x="1" border-y="1"/>
-        <font-size note-height="12" beam-thickness="6" staff-line-thickness="2" stem-thickness="2" border-x="1" border-y="1"/>
+	<font-scale font-height="4.5" beam-thickness="0.5" staff-line-thickness="0.18" stem-thickness="0.18"/>
+        <font-scale font-id="1" font-height="2.5"/>
 </font-sizes>
 
 <font-symbol-map>
@@ -23,70 +25,87 @@
              http://www.unicode.org/charts/PDF/U2600.pdf
              http://www.unicode.org/charts/PDF/U1D100.pdf -->
 
-	<symbol name="__UNKNOWN__" src="unknown"/>
+	<codebase font-id="0" base="61440"/> <!-- Unicode private-use area -->
 
-        <symbol name="MUSIC SHARP SIGN" src="accidentals-1"/>
-        <symbol name="MUSIC NATURAL SIGN" src="accidentals-0"/>
-        <symbol name="MUSIC FLAT SIGN" src="accidentals--1"/>
+	<symbol name="__UNKNOWN__" font-id="1" code="63"/> <!-- question mark -->
 
-        <symbol name="MUSICAL SYMBOL DOUBLE SHARP" src="accidentals-2"/>
-        <symbol name="MUSICAL SYMBOL DOUBLE FLAT" src="accidentals--2"/>
+        <symbol name="MUSIC SHARP SIGN" font-id="0" code="63" glyph="17"/>
+        <symbol name="MUSIC NATURAL SIGN" font-id="0" code="64" glyph="18"/>
+        <symbol name="MUSIC FLAT SIGN" font-id="0" code="65" glyph="19"/>
 
-        <symbol name="MUSICAL SYMBOL BREVE" src="noteheads--1"/>
-        <symbol name="MUSICAL SYMBOL WHOLE NOTE" src="noteheads-0"/>
-        <symbol name="MUSICAL SYMBOL VOID NOTEHEAD" src="noteheads-1"/>
-        <symbol name="MUSICAL SYMBOL NOTEHEAD BLACK" src="noteheads-2"/>
+        <symbol name="MUSICAL SYMBOL DOUBLE SHARP" font-id="0" code="67" glyph="21"/>
+        <symbol name="MUSICAL SYMBOL DOUBLE FLAT" font-id="0" code="66" glyph="20"/>
 
-	<symbol name="MUSICAL SYMBOL X NOTEHEAD" src="noteheads-2cross"/>
-	<symbol name="MUSICAL SYMBOL CIRCLE X NOTEHEAD" src="noteheads-2xcircle"/>
-	<symbol name="MUSICAL SYMBOL BREVIS" src="noteheads--1mensural"/>
-	<symbol name="MUSICAL SYMBOL SEMIBREVIS WHITE" src="noteheads-1mensural"/>
-	<symbol name="MUSICAL SYMBOL SEMIBREVIS BLACK" src="noteheads-2mensural"/>
-	<symbol name="MUSICAL SYMBOL TRIANGLE NOTEHEAD UP WHITE" src="noteheads-1triangle"/>
-	<symbol name="MUSICAL SYMBOL TRIANGLE NOTEHEAD UP BLACK" src="noteheads-2triangle"/>
+        <symbol name="MUSICAL SYMBOL BREVE" font-id="0" glyph="25"/>
+        <symbol name="MUSICAL SYMBOL WHOLE NOTE" font-id="0" code="72" glyph="26"/>
+        <symbol name="MUSICAL SYMBOL VOID NOTEHEAD" font-id="0" code="73" glyph="27"/>
+        <symbol name="MUSICAL SYMBOL NOTEHEAD BLACK" font-id="0" code="74" glyph="28"/>
 
-        <!-- There's only one Unicode point for each flag; I guess
-             you're expected to invert them yourself -->
+	<symbol name="MUSICAL SYMBOL X NOTEHEAD" font-id="0" code="86" glyph="40"/>
+	<symbol name="MUSICAL SYMBOL CIRCLE X NOTEHEAD" font-id="0" code="85" glyph="41"/>
+<!--	<symbol name="MUSICAL SYMBOL BREVIS" font-id="0" code="71" glyph=""/> -->
+<!--	<symbol name="MUSICAL SYMBOL SEMIBREVIS WHITE" font-id="0" code="" glyph=""/> -->
+<!--
+	<symbol name="MUSICAL SYMBOL SEMIBREVIS BLACK" font-id="0" code="noteheads-2mensural" glyph=""/>
+	<symbol name="MUSICAL SYMBOL TRIANGLE NOTEHEAD UP WHITE" font-id="0" code="" glyph=""/>
+	<symbol name="MUSICAL SYMBOL TRIANGLE NOTEHEAD UP BLACK" font-id="0" code="" glyph=""/>
+-->
+
         <symbol name="MUSICAL SYMBOL COMBINING FLAG-1"
-                src="flags-u3" inversion-src="flags-d3"/>
+                font-id="0" code="133" glyph="97" inversion-code="137" inversion-glyph="101"/>
         <symbol name="MUSICAL SYMBOL COMBINING FLAG-2"
-                src="flags-u4" inversion-src="flags-d4"/>
+                font-id="0" code="134" inversion-code="140" glyph="98" inversion-glyph="104"/>
         <symbol name="MUSICAL SYMBOL COMBINING FLAG-3" 
-                src="flags-u5" inversion-src="flags-d5"/>
+                font-id="0" code="135" inversion-code="141" glyph="99" inversion-glyph="105"/>
         <symbol name="MUSICAL SYMBOL COMBINING FLAG-4" 
-                src="flags-u6" inversion-src="flags-d6"/>
+                font-id="0" code="136" inversion-code="142" glyph="100" inversion-glyph="106"/>
 
-        <symbol name="MUSICAL SYMBOL MULTI REST" src="rests--1"/>
-        <symbol name="MUSICAL SYMBOL WHOLE REST" src="rests-0"/>
-        <symbol name="MUSICAL SYMBOL HALF REST" src="rests-1"/>
-        <symbol name="MUSICAL SYMBOL QUARTER REST" src="rests-2"/>
-        <symbol name="MUSICAL SYMBOL EIGHTH REST" src="rests-3"/>
-        <symbol name="MUSICAL SYMBOL SIXTEENTH REST" src="rests-4"/>
-        <symbol name="MUSICAL SYMBOL THIRTY-SECOND REST" src="rests-5"/>
-        <symbol name="MUSICAL SYMBOL SIXTY-FOURTH REST" src="rests-6"/>
-        <symbol name="MUSICAL SYMBOL ONE HUNDRED TWENTY-EIGHTH REST" src="rests-7"/>
+        <symbol name="MUSICAL SYMBOL MULTI REST" font-id="0" glyph="8"/>
+        <symbol name="MUSICAL SYMBOL WHOLE REST" font-id="0" code="32" glyph="3"/>
+        <symbol name="MUSICAL SYMBOL HALF REST" font-id="0" code="33" glyph="4"/>
+        <symbol name="MUSICAL SYMBOL QUARTER REST" font-id="0" code="38" glyph="10"/>
+        <symbol name="MUSICAL SYMBOL EIGHTH REST" font-id="0" code="39" glyph="12"/>
+        <symbol name="MUSICAL SYMBOL SIXTEENTH REST" font-id="0" code="41" glyph="13"/>
+        <symbol name="MUSICAL SYMBOL THIRTY-SECOND REST" font-id="0" code="42" glyph="14"/>
+        <symbol name="MUSICAL SYMBOL SIXTY-FOURTH REST" font-id="0" code="43" glyph="15"/>
+        <symbol name="MUSICAL SYMBOL ONE HUNDRED TWENTY-EIGHTH REST" font-id="0" code="44" glyph="16"/>
 
-        <symbol name="MUSICAL SYMBOL COMBINING AUGMENTATION DOT" src="dots-dot"/>
+        <symbol name="MUSICAL SYMBOL COMBINING AUGMENTATION DOT" font-id="0" code="70" glyph="24"/>
 
-	<symbol name="MUSICAL SYMBOL COMBINING ACCENT" src="scripts-sforzato"/>
-	<symbol name="MUSICAL SYMBOL COMBINING TENUTO" src="scripts-tenuto"/>
-	<symbol name="MUSICAL SYMBOL COMBINING STACCATO" src="scripts-staccato"/>
+	<symbol name="MUSICAL SYMBOL COMBINING ACCENT" font-id="0" code="92" glyph="52"/>
+	<symbol name="MUSICAL SYMBOL COMBINING TENUTO" font-id="0" code="96" glyph="56"/>
+	<symbol name="MUSICAL SYMBOL COMBINING STACCATO" font-id="0" code="93" glyph="53"/>
 	<symbol name="MUSICAL SYMBOL COMBINING STACCATISSIMO"
-                src="scripts-ustaccatissimo" inversion-src="scripts-dstaccatissimo"/>
+                font-id="0" code="94" inversion-code="95" glyph="54"/>
 	<symbol name="MUSICAL SYMBOL COMBINING MARCATO"
-                src="scripts-umarcato" inversion-src="scripts-dmarcato"/>
+                font-id="0" code="99" inversion-code="100" glyph="59"/>
 	<symbol name="MUSICAL SYMBOL FERMATA"
-	        src="scripts-ufermata" inversion-src="scripts-dfermata"/>
-	<symbol name="MUSICAL SYMBOL TR" src="scripts-trill"/>
-	<symbol name="MUSICAL SYMBOL TURN" src="scripts-turn"/>
-	<symbol name="MUSICAL SYMBOL COMBINING UP BOW" src="scripts-upbow"/>
-	<symbol name="MUSICAL SYMBOL COMBINING DOWN BOW" src="scripts-downbow"/>
+	        font-id="0" code="89" inversion-code="90" glyph="43" inversion-glyph="44"/>
+	<symbol name="MUSICAL SYMBOL TR" font-id="0" code="107" glyph="67"/>
+	<symbol name="MUSICAL SYMBOL TURN" font-id="0" code="106" glyph="66"/>
+	<symbol name="MUSICAL SYMBOL COMBINING UP BOW" font-id="0" code="103" glyph="63"/>
+	<symbol name="MUSICAL SYMBOL COMBINING DOWN BOW" font-id="0" code="104" glyph="64"/>
         <!-- Unicode (and Lilypond) just have a single G clef, they
              don't distinguish between alto and tenor.  We'll have to
              use the same clef with an offset. -->
-        <symbol name="MUSICAL SYMBOL C CLEF" src="clefs-C"/>
-        <symbol name="MUSICAL SYMBOL G CLEF" src="clefs-G"/>
-        <symbol name="MUSICAL SYMBOL F CLEF" src="clefs-F"/>
+        <symbol name="MUSICAL SYMBOL C CLEF" font-id="0" code="145" glyph="109"/>
+        <symbol name="MUSICAL SYMBOL G CLEF" font-id="0" code="149" glyph="113"/>
+        <symbol name="MUSICAL SYMBOL F CLEF" font-id="0" code="147" glyph="111"/>
+
+	<symbol	name="MUSICAL SYMBOL CUT TIME"  font-id="0" glyph="120"/>
+	<symbol	name="MUSICAL SYMBOL COMMON TIME"  font-id="0" glyph="119"/>
+
+	<symbol	name="DIGIT ZERO"  font-id="1" code="48"/>
+	<symbol	name="DIGIT ONE"   font-id="1" code="49"/>
+	<symbol	name="DIGIT TWO"   font-id="1" code="50"/>
+	<symbol	name="DIGIT THREE" font-id="1" code="51"/>
+	<symbol	name="DIGIT FOUR"  font-id="1" code="52"/>
+	<symbol	name="DIGIT FIVE"  font-id="1" code="53"/>
+	<symbol	name="DIGIT SIX"   font-id="1" code="54"/>
+	<symbol	name="DIGIT SEVEN" font-id="1" code="55"/>
+	<symbol	name="DIGIT EIGHT" font-id="1" code="56"/>
+	<symbol	name="DIGIT NINE"  font-id="1" code="57"/>
+
 </font-symbol-map>
 
 <font-hotspots>
@@ -98,101 +117,44 @@
 		<fixed x="1"/>
                 <scaled y="0.5"/>
         </hotspot>
-        <hotspot name="MUSICAL SYMBOL COMBINING FLAG-1">
-		<fixed x="1"/>
-        </hotspot>
-        <hotspot name="MUSICAL SYMBOL COMBINING FLAG-2">
-		<fixed x="1"/>
-        </hotspot>
-        <hotspot name="MUSICAL SYMBOL COMBINING FLAG-3">
-		<fixed x="1"/>
-        </hotspot>
-        <hotspot name="MUSICAL SYMBOL COMBINING FLAG-4">
-		<fixed x="1"/>
-        </hotspot>
         <hotspot name="MUSIC FLAT SIGN">
-                <when note-height="4" y="8"/>
-                <when note-height="6" y="12"/>
-                <when note-height="8" y="15"/>
-                <when note-height="10" y="19"/>
-                <when note-height="12" y="22"/>
+		<scaled y="0.74"/>
+        </hotspot>
+        <hotspot name="MUSICAL SYMBOL DOUBLE FLAT">
+		<scaled y="0.74"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL C CLEF">
-                <when note-height="4" y="9"/>
-                <when note-height="6" y="13"/>
-                <when note-height="8" y="16"/>
-                <when note-height="10" y="20"/>
-                <when note-height="12" y="24"/>
+		<scaled y="0.47"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL G CLEF">
-                <when note-height="4" y="19"/>
-                <when note-height="6" y="29"/>
-                <when note-height="8" y="38"/>
-                <when note-height="10" y="48"/>
-                <when note-height="12" y="58"/>
+		<scaled y="0.64"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL F CLEF">
-                <when note-height="4" y="5"/>
-                <when note-height="6" y="7"/>
-                <when note-height="8" y="9"/>
-                <when note-height="10" y="11"/>
-                <when note-height="12" y="13"/>
+		<scaled y="0.32"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL MULTI REST">
-                <when note-height="4" y="0"/>
-                <when note-height="6" y="0"/>
-                <when note-height="8" y="0"/>
-                <when note-height="10" y="0"/>
-                <when note-height="12" y="0"/>
+		<scaled y="0"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL WHOLE REST">
-                <when note-height="4" y="1"/>
-                <when note-height="6" y="1"/>
-                <when note-height="8" y="1"/>
-                <when note-height="10" y="1"/>
-                <when note-height="12" y="1"/>
+		<scaled y="0"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL HALF REST">
-                <when note-height="4" y="3"/>
-                <when note-height="6" y="4"/>
-                <when note-height="8" y="6"/>
-                <when note-height="10" y="7"/>
-                <when note-height="12" y="8"/>
+		<scaled y="0.9"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL QUARTER REST">
-                <when note-height="4" y="6"/>
-                <when note-height="6" y="9"/>
-                <when note-height="8" y="12"/>
-                <when note-height="10" y="15"/>
-                <when note-height="12" y="19"/>
+		<scaled y="0.5"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL EIGHTH REST">
-                <when note-height="4" y="4"/>
-                <when note-height="6" y="6"/>
-                <when note-height="8" y="7"/>
-                <when note-height="10" y="9"/>
-                <when note-height="12" y="11"/>
+		<scaled y="0.4"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL SIXTEENTH REST">
-                <when note-height="4" y="5"/>
-                <when note-height="6" y="7"/>
-                <when note-height="8" y="8"/>
-                <when note-height="10" y="10"/>
-                <when note-height="12" y="12"/>
+		<scaled y="0.28"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL THIRTY-SECOND REST">
-                <when note-height="4" y="6"/>
-                <when note-height="6" y="8"/>
-                <when note-height="8" y="9"/>
-                <when note-height="10" y="11"/>
-                <when note-height="12" y="13"/>
+		<scaled y="0.45"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL SIXTY-FOURTH REST">
-                <when note-height="4" y="7"/>
-                <when note-height="6" y="9"/>
-                <when note-height="8" y="10"/>
-                <when note-height="10" y="12"/>
-                <when note-height="12" y="14"/>
+		<scaled y="0.4"/>
         </hotspot>
 </font-hotspots>
 

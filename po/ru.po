@@ -4677,7 +4677,7 @@ msgid "Add Audio File"
 msgstr "Добавить звуковой файл"
 
 #: audiomanagerdialog.cpp:167
-msgid "Remove Audio FIle"
+msgid "Remove Audio File"
 msgstr "Удалить звуковой файл"
 
 #: audiomanagerdialog.cpp:168

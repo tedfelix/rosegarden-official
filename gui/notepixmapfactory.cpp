@@ -187,14 +187,27 @@ NotePixmapFactory::init(std::string fontName, int size)
 	throw;
     }
 
-    try {
-	if (fontName == "") fontName = NoteFontFactory::getDefaultFontName();
-	if (size < 0) size = NoteFontFactory::getDefaultSize(fontName);
-        m_font = NoteFontFactory::getFont(fontName, size);
-    } catch (Rosegarden::Exception f) {
-	KStartupLogo::hideIfStillThere();
-        KMessageBox::error(0, i18n(strtoqstr(f.getMessage())));
-        throw;
+    int origSize = size;
+
+    if (fontName != "") {
+	try {
+	    if (size < 0) size = NoteFontFactory::getDefaultSize(fontName);
+	    m_font = NoteFontFactory::getFont(fontName, size);
+	} catch (Rosegarden::Exception f) {
+	    fontName = "";
+	    // fall through 
+	}
+    }
+
+    if (fontName == "") { // either because it was passed in or because read failed
+	try {
+	    fontName = NoteFontFactory::getDefaultFontName();
+	    size = origSize;
+	    if (size < 0) size = NoteFontFactory::getDefaultSize(fontName);
+	    m_font = NoteFontFactory::getFont(fontName, size);
+	} catch (Rosegarden::Exception f) { // already reported
+	    throw;
+	}
     }
 
     // Resize the fonts, because the original constructor used point
@@ -292,10 +305,10 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
     m_above = m_borderY = (actualNoteBodyHeight - m_noteBodyHeight) / 2;
     m_below = (actualNoteBodyHeight - m_noteBodyHeight) - m_above;
 
-    NOTATION_DEBUG << "actualNoteBodyHeight: " << actualNoteBodyHeight
-		   << ", noteBodyHeight: " << m_noteBodyHeight << ", borderX: "
-		   << m_borderX << ", borderY: "
-		   << m_borderY << endl;
+//    NOTATION_DEBUG << "actualNoteBodyHeight: " << actualNoteBodyHeight
+//		   << ", noteBodyHeight: " << m_noteBodyHeight << ", borderX: "
+//		   << m_borderX << ", borderY: "
+//		   << m_borderY << endl;
 
     bool isStemmed = m_style->hasStem(params.m_noteType);
     int flagCount = m_style->getFlagCount(params.m_noteType);
@@ -1231,7 +1244,7 @@ NotePixmapFactory::drawTuplingLine(const NotePixmapParameters &params)
 
     int textX = endX + countSpace;
     int textY = endY + cr.height()/2;
-    NOTATION_DEBUG << "text: (" << textX << "," << textY << ")" << endl;
+//    NOTATION_DEBUG << "text: (" << textX << "," << textY << ")" << endl;
 
     m_p.drawText(textX, textY, count);
     m_pm.drawText(textX, textY, count);
@@ -1242,8 +1255,8 @@ NotePixmapFactory::drawTuplingLine(const NotePixmapParameters &params)
     startY += (int)(params.m_tuplingLineGradient * (tlw - w));
     endY = startY + (int)(params.m_tuplingLineGradient * w);
 
-    NOTATION_DEBUG << "line: (" << startX << "," << startY << ") -> ("
-			 << endX << "," << endY << ")" << endl;
+//    NOTATION_DEBUG << "line: (" << startX << "," << startY << ") -> ("
+//			 << endX << "," << endY << ")" << endl;
 
     if (!params.m_tuplingLineFollowsBeam) {
 

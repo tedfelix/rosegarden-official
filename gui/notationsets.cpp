@@ -202,13 +202,32 @@ NotationChord::isNoteHeadShifted(const Iterator &itr) const
 int
 NotationChord::getMaxAccidentalShift() const
 {
-    return 0; //!!! 
+    int shift = 0;
+
+    if (!hasStemUp() && hasNoteHeadShifted()) {
+	shift += 1;
+    }
+
+    return shift; //!!! 
 }
 
 int
 NotationChord::getAccidentalShift(const Iterator &) const
 {
-    return 0; //!!!
+    //!!! for this and prior method we really have to study the
+    // chord once on construction
+
+    int shift = 0;
+
+    // If we have any note head shifted left of usual, then we add an
+    // accidental shift of 1 to everything (because we're lazy)
+
+    if (!hasStemUp() && hasNoteHeadShifted()) {
+	shift += 1;
+    }
+
+
+    return shift;
 }
 
 
@@ -296,7 +315,7 @@ NotationGroup::sample(const NELIterator &i)
 
     std::string t;
     if (!(*i)->event()->get<String>(BEAMED_GROUP_TYPE, t)) {
-	NOTATION_DEBUG << "NotationGroup::NotationGroup: Rejecting sample() for non-beamed element" << endl;
+//	NOTATION_DEBUG << "NotationGroup::NotationGroup: Rejecting sample() for non-beamed element" << endl;
 	return false;
     }
 
@@ -305,7 +324,7 @@ NotationGroup::sample(const NELIterator &i)
     if (m_groupNo == -1) {
 	m_groupNo = n;
     } else if (n != m_groupNo) {
-	NOTATION_DEBUG << "NotationGroup::NotationGroup: Rejecting sample() for event with group id " << n << " (mine is " << m_groupNo << ")" << endl;
+//	NOTATION_DEBUG << "NotationGroup::NotationGroup: Rejecting sample() for event with group id " << n << " (mine is " << m_groupNo << ")" << endl;
 	return false;
     }
     
@@ -584,26 +603,51 @@ NotationGroup::calculateBeam(NotationStaff &staff)
 	NOTATION_DEBUG << "(Event dump follows)" << endl;
 	(*getShortestElement())->event()->dump(std::cerr);
     }
-    int nh = staff.getNotePixmapFactory(m_type == Grace).getNoteBodyHeight();
+
+    int lt = staff.getNotePixmapFactory(m_type == Grace).getNoteBodyHeight() +
+ 	     staff.getNotePixmapFactory(m_type == Grace).getStaffLineThickness();
+
+    // minimal stem lengths at start, middle-extreme and end of beam
     int sl = staff.getNotePixmapFactory(m_type == Grace).getStemLength();
+    int ml = lt * 2;
+    int el = sl;
 
+    if (shortestNoteType < Note::Semiquaver) {
+	int off = lt * (Note::Semiquaver - shortestNoteType);
+	sl += off;
+	ml += off;
+	el += off;
+    }
+
+    int midY = staff.getLayoutYForHeight(4);
+
+    // ensure extended to middle line if necessary, and assign suitable stem length
     if (beam.aboveNotes) {
-        beam.startY = min(min(c0 - sl, c1 - nh*2), c2 - sl);
-        if (shortestNoteType < Note::Quaver)
-            beam.startY -= nh * (Note::Quaver - shortestNoteType);
+	if (c0 - sl > midY) sl = c0 - midY;
+	if (c1 - ml > midY) ml = c1 - midY;
+	if (c2 - el > midY) el = c2 - midY;
+	if (extremeDX > 1.0 || extremeDX < -1.0) {
+//	    beam.gradient = int(100 * double(c2 - c0) / double(extremeDX));
+	}
+        beam.startY = min(min(c0 - sl, c1 - ml), c2 - el);
     } else {
-        beam.startY = max(max(c0 + sl, c1 + nh*2), c2 + sl);
-        if (shortestNoteType < Note::Quaver)
-	    beam.startY += nh * (Note::Quaver - shortestNoteType);
+	if (c0 + sl < midY) sl = midY - c0;
+	if (c1 + ml < midY) ml = midY - c1;
+	if (c2 + el < midY) el = midY - c2;
+	if (extremeDX > 1.0 || extremeDX < -1.0) {
+//	    beam.gradient = int(100 * double(c2 - c0) / double(extremeDX));
+	}
+        beam.startY = max(max(c0 + sl, c1 + ml), c2 + el);
     }  
-
-/*
+	    
     NOTATION_DEBUG << "NotationGroup::calculateBeam: beam data:" << endl
-                         << "gradient: " << beam.gradient << endl
-                         << "startY: " << beam.startY << endl
-                         << "aboveNotes: " << beam.aboveNotes << endl
-                         << "necessary: " << beam.necessary << endl;
-*/
+		   << "gradient: " << beam.gradient << endl
+		   << "(c0 " << c0 << ", c2 " << c2 << ", extremeDX " << extremeDX << ")" << endl
+		   << "startY: " << beam.startY << endl
+		   << "aboveNotes: " << beam.aboveNotes << endl
+		   << "shortestNoteType: " << shortestNoteType << endl
+		   << "necessary: " << beam.necessary << endl;
+    
     return beam;
 }
 

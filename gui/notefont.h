@@ -295,6 +295,8 @@ private:
     std::string m_type;
     bool m_smooth;
 
+    std::string m_srcDirectory;
+
     typedef std::map<CharName, SymbolData> SymbolDataMap;
     SymbolDataMap m_data;
 
