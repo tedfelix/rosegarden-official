@@ -462,7 +462,7 @@ public:
     // Who's making this racket?
     //
     std::string getCopyrightNote() const { return m_copyright; }
-    void setCopyrightNote(const string &cr) { m_copyright = cr; }
+    void setCopyrightNote(const std::string &cr) { m_copyright = cr; }
 
     // Recording count-in
     //
