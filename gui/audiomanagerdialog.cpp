@@ -711,8 +711,13 @@ AudioManagerDialog::slotPlayPreview()
 void
 AudioManagerDialog::slotCancelPlayingAudio()
 {
-    delete m_audioPlayingDialog;
-    m_playTimer->stop();
+    //std::cout << "AudioManagerDialog::slotCancelPlayingAudio" << std::endl;
+    if (m_audioPlayingDialog)
+    {
+        m_playTimer->stop();
+        delete m_audioPlayingDialog;
+        m_audioPlayingDialog = 0;
+    }
 }
 
 
@@ -994,8 +999,10 @@ AudioManagerDialog::slotCancelPlayingAudioFile()
 void
 AudioManagerDialog::closePlayingDialog(Rosegarden::AudioFileId id)
 {
+    //std::cout << "AudioManagerDialog::closePlayingDialog" << std::endl;
     if (m_audioPlayingDialog && id == m_playingAudioFile)
     {
+        m_playTimer->stop();
         delete m_audioPlayingDialog;
         m_audioPlayingDialog = 0;
     }
