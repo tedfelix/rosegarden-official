@@ -487,11 +487,16 @@ MidiFile::convertToRosegarden()
 
   // precalculate the timing factor
   //
-  float timingFactor = 0.0;
 
-  if ( _timingDivision )
-    timingFactor = (float) Note(Note::Crotchet).getDuration() /
-                   (float) _timingDivision;
+  //!!! cc -- attempt to avoid floating-point rounding errors
+  timeT crotchetTime = Note(Note::Crotchet).getDuration();
+  int divisor = _timingDivision ? _timingDivision : 1;
+
+//  float timingFactor = 0.0;
+
+//  if ( _timingDivision )
+//    timingFactor = (float) Note(Note::Crotchet).getDuration() /
+//                   (float) _timingDivision;
 
   for ( unsigned int i = 0; i < _numberOfTracks; i++ )
   {
@@ -571,10 +576,17 @@ MidiFile::convertToRosegarden()
             ++midiEvent )
       {
 
+	//!!! cc -- what does it mean if there is no timing division?
+        // we've calculated divisor (or timingFactor) on the basis that
+        // there might not be, so shouldn't we just use it regardless?
         if (_timingDivision)
         {
-          rosegardenTime = (timeT) ( midiEvent->time() * timingFactor ) ;
-          rosegardenDuration = (timeT) ( midiEvent->duration() *  timingFactor );
+          //!!! cc -- avoid floating-point
+          rosegardenTime = ((timeT)midiEvent->time() * crotchetTime) / divisor;
+          rosegardenDuration =
+	    ((timeT)midiEvent->duration() * crotchetTime) / divisor;
+//          rosegardenTime = (timeT) ( midiEvent->time() * timingFactor ) ;
+//          rosegardenDuration = (timeT) ( midiEvent->duration() *  timingFactor );
         }
 
 
@@ -738,7 +750,9 @@ MidiFile::convertToRosegarden()
   if (composition->getTempo() == 0)
   {
     if (_timingDivision)
-      composition->setTempo(((timeT)(timingFactor * 120)));
+      //!!! cc -- avoid floating-point
+      composition->setTempo((120 * crotchetTime) / divisor);
+//      composition->setTempo(((timeT)(timingFactor * 120)));
     else
       composition->setTempo(120);
   }
@@ -1076,9 +1090,11 @@ MidiFile::writeTrack(std::ofstream* midiFile, const unsigned int &trackNumber)
 
   // Our timing factor here converts into the MIDI _timingDivision
   //
+  /*!!! cc -- apparently not needed
   float timingFactor = 0.0;
   timingFactor = (float) _timingDivision /
                  (float) Note(Note::Crotchet).getDuration();
+  */
 
   for ( midiEvent = (_midiComposition[trackNumber].begin());
         midiEvent != (_midiComposition[trackNumber].end()); ++midiEvent )

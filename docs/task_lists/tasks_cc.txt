@@ -61,7 +61,10 @@ References in round brackets are to 0.1_planned_features.txt.
 
  11. Work out why RG2.1 import is getting the wrong pitches
 
- 12. Investigate curious case of the missing notes in playback
+ 12. Investigate curious case of the missing notes in playback [blamed
+ on aRts for now]
+
+ 13. Work out why note stems sometimes don't reach their beams
  
  Throughout: Code documentation
 
