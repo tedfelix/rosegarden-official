@@ -41,7 +41,7 @@
 //#define DEBUG_BUSS_MIXER 1
 //#define DEBUG_MIXER 1
 //#define DEBUG_MIXER_LIGHTWEIGHT 1
-//#define DEBUG_LOCKS 1
+#define DEBUG_LOCKS 1
 //#define DEBUG_READER 1
 //#define DEBUG_WRITER 1
 
@@ -1043,18 +1043,15 @@ AudioInstrumentMixer::getPluginLatency(unsigned int id)
 
     size_t latency = 0;
 
-    if (m_synths.find(id) != m_synths.end()) {
-	if (m_synths[id]) latency += m_synths[id]->getLatency();
+    RunnablePluginInstance *synth = m_synths[id];
+    if (synth) latency += m_synths[id]->getLatency();
+
+    for (PluginList::iterator i = m_plugins[id].begin();
+	 i != m_plugins[id].end(); ++i) {
+	RunnablePluginInstance *plugin = *i;
+	if (plugin) latency += plugin->getLatency();
     }
 
-    if (m_plugins.find(id) != m_plugins.end()) {
-	for (PluginList::iterator i = m_plugins[id].begin();
-	     i != m_plugins[id].end(); ++i) {
-	    if (*i) latency += (*i)->getLatency();
-	}
-    }
-
-    releaseLock();
     return latency;
 }
 
