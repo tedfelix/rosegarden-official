@@ -596,7 +596,7 @@ int
 JackDriver::jackProcess(jack_nframes_t nframes)
 {
     if (!m_bussMixer) {
-	return 0;
+	return jackProcessEmpty(nframes);
     }
 
     SequencerDataBlock *sdb = m_alsaDriver->getSequencerDataBlock();
@@ -621,9 +621,9 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 						  position.frame_rate));
 		}
 	    }
-	    return 0;
+	    return jackProcessEmpty(nframes);
 	} else if (state == JackTransportStarting) {
-	    return 0;
+	    return jackProcessEmpty(nframes);
 	} else if (state == JackTransportRolling) {
 	    if (m_waiting) {
 		m_alsaDriver->startClocksApproved();
@@ -631,7 +631,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	    }
 	}
     } else if (!m_alsaDriver->areClocksRunning()) {
-	return 0;
+	return jackProcessEmpty(nframes);
     }
 
     InstrumentId instrumentBase;
@@ -787,6 +787,42 @@ JackDriver::jackProcess(jack_nframes_t nframes)
     return 0;
 }
 
+int
+JackDriver::jackProcessEmpty(jack_nframes_t nframes)
+{
+    sample_t *buffer;
+
+    buffer = static_cast<sample_t *>
+	(jack_port_get_buffer(m_outputMasters[0], nframes));
+    if (buffer) memset(buffer, 0, nframes * sizeof(sample_t));
+
+    buffer = static_cast<sample_t *>
+	(jack_port_get_buffer(m_outputMasters[1], nframes));
+    if (buffer) memset(buffer, 0, nframes * sizeof(sample_t));
+
+    buffer = static_cast<sample_t *>
+	(jack_port_get_buffer(m_outputMonitors[0], nframes));
+    if (buffer) memset(buffer, 0, nframes * sizeof(sample_t));
+
+    buffer = static_cast<sample_t *>
+	(jack_port_get_buffer(m_outputMonitors[1], nframes));
+    if (buffer) memset(buffer, 0, nframes * sizeof(sample_t));
+
+    for (unsigned int i = 0; i < m_outputSubmasters.size(); ++i) {
+	buffer = static_cast<sample_t *>
+	    (jack_port_get_buffer(m_outputSubmasters[i], nframes));
+	if (buffer) memset(buffer, 0, nframes * sizeof(sample_t));
+    }
+    
+    for (unsigned int i = 0; i < m_outputInstruments.size(); ++i) {
+	buffer = static_cast<sample_t *>
+	    (jack_port_get_buffer(m_outputInstruments[i], nframes));
+	if (buffer) memset(buffer, 0, nframes * sizeof(sample_t));
+    }
+
+    return 0;
+}
+    
 int
 JackDriver::jackProcessRecord(jack_nframes_t nframes)
 {

@@ -237,7 +237,7 @@ protected:
     virtual void processMidiOut(const MappedComposition &mC,
                                 bool now);
 
-    virtual void processAudioQueue(bool now) { }
+    virtual void processAudioQueue(bool /* now */) { }
 
 private:
     RealTime getAlsaTime();

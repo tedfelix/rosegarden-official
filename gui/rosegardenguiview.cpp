@@ -926,6 +926,8 @@ void RosegardenGUIView::showVisuals(const Rosegarden::MappedEvent *mE)
 void
 RosegardenGUIView::updateMeters(SequencerMapper *mapper)
 {
+    std::set<Rosegarden::InstrumentId> doneInstruments;
+
     for (Rosegarden::Composition::trackcontainer::iterator i =
 	     getDocument()->getComposition().getTracks().begin();
 	 i != getDocument()->getComposition().getTracks().end(); ++i) {
@@ -935,16 +937,20 @@ RosegardenGUIView::updateMeters(SequencerMapper *mapper)
 	Rosegarden::LevelInfo info;
 	bool isNew = mapper->getInstrumentLevel(track->getInstrument(), info);
 
+	Rosegarden::InstrumentId instrumentId = track->getInstrument();
+	if (doneInstruments.find(instrumentId) != doneInstruments.end()) {
+	    continue;
+	}
+	doneInstruments.insert(instrumentId);
+
 	Rosegarden::Instrument *instrument =
-	    getDocument()->getStudio().getInstrumentById(track->getInstrument());
+	    getDocument()->getStudio().getInstrumentById(instrumentId);
 	if (!instrument) continue;
 
-	//!!! If we have a mixer and this is an audio instrument, then
-	// our mixer has already used up the "is new?" token.  We need
-	// a better way to manage that, clearly.
+	// Eech.  If we have a mixer and this is an audio instrument, then
+	// our mixer has already used up the "is new?" token.
 	
 	if (instrument->getType() != Rosegarden::Instrument::Audio) {
-//	    RG_DEBUG << "isNew " << isNew << " on MIDI instrument" << endl;
 	    if (!isNew) continue;
 	}
 
@@ -976,8 +982,8 @@ RosegardenGUIView::updateMeters(SequencerMapper *mapper)
 
 	} else {
 
-	    m_trackEditor->getTrackButtons()->slotSetTrackMeter
-		(info.level / 127.0, track->getId());
+	    m_trackEditor->getTrackButtons()->slotSetMetersByInstrument
+		(info.level / 127.0, instrumentId);
 	}
     }
 }    

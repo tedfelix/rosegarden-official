@@ -3122,6 +3122,11 @@ void RosegardenGUIApp::slotDisplayBarTime(timeT t)
 
 void RosegardenGUIApp::slotRefreshTimeDisplay()
 {
+    if ( m_seqManager->getTransportStatus() == PLAYING ||
+         m_seqManager->getTransportStatus() == RECORDING_MIDI ||
+         m_seqManager->getTransportStatus() == RECORDING_AUDIO ) {
+	return; // it'll be refreshed in a moment anyway
+    }
     slotSetPointerPosition(m_doc->getComposition().getPosition());
 }
 
