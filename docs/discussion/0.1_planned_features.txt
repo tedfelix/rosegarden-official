@@ -23,6 +23,7 @@ Features for release 0.1
 
 - do a global core/rosegardengui Makefile
 
+- basic MIDI record and playback infrastructure through aRts (RB - 18.06.01)
 
 Nice to have :
 
@@ -31,3 +32,6 @@ Nice to have :
 - selection/deletion/editing etc of single events and groups thereof
 
 - all the notation elegances (more precise description needed here)
+
+
+
