@@ -35,9 +35,11 @@ namespace Rosegarden
 
 using std::string;
 using std::ifstream;
+using std::strstream;
 using std::cerr;
 using std::cout;
 using std::endl;
+using std::ends;
 using std::ios;
 
 MidiFile::MidiFile():_filename("unnamed.mid"),
@@ -785,7 +787,8 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
   //int midiInstrument;
 
   //!!! cc -- I'm seeing floating-point rounding errors in the resulting file
-  _timingDivision = Note(Note::Crotchet).getDuration() * 120 / comp.getTempo();
+  _timingDivision = Note(Note::Crotchet).getDuration() * 120 / 
+      (int)comp.getTempo(); //!!! cc -- why isn't Composition's tempo an int?
 //  _timingDivision = (int)((float) Note(Note::Crotchet).getDuration() * 120.0 /
 //                          (float) comp.getTempo());
 

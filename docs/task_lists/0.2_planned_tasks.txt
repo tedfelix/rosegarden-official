@@ -25,11 +25,44 @@ Work required to fix existing stuff
 
 3.  leger lines
 
+4.  ties (rendering them; they already are stored and handled in
+    playback)
+
+5.  possibly quite a bit of work needed on improving the "feel" of
+    insertion, track dragging etc: they currently feel rather
+    vague, there's resistance in the GUI, feedback is not good,
+    sometimes insertion just doesn't work (e.g. when height is too
+    far from that of existing note)
+
+6.  a great many optimisations in layout and particularly in
+    relayout after insertion, including some really obvious ones
+    like only re-preparsing the one staff you just inserted onto...
+    probably some optimisations possible in pixmap generation too
+
+7.  a few fixes to basic note drawing -- sometimes shifts the
+    wrong notehead, note's stem sometimes doesn't meet its beam &c
+
 
 New features suitable for 0.2
 -----------------------------
 
-1.  selection
+1.  selection and cut, copy, paste
 
-2.  undo
+2.  dynamics, such as slurs and hairpins
+
+3.  text on the score
+
+4.  generic event property editor dialog
+
+5.  "internationalisation" of gui?  some nice english note names...
+
+
+Basis for later features
+------------------------
+
+1.  undo that works at least some of the time
+
+2.  layers (for counterpoint)
+
+3.  some skeletal help
 

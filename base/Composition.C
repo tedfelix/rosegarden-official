@@ -78,6 +78,10 @@ void Composition::swap(Composition& c)
 	(*i)->addObserver(this);
 	(*i)->setReferenceTrack(&this->m_timeReference);
     }
+
+    this->m_barPositionsNeedCalculating = true;
+    that->m_barPositionsNeedCalculating = true;
+    
 }
 
 Composition::iterator

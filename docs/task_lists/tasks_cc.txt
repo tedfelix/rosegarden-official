@@ -59,7 +59,7 @@ References in round brackets are to 0.1_planned_features.txt.
  10. Work out why clef isn't being properly taken into account on
  insertion
 
- 11. Work out why RG2.1 import is getting the wrong pitches
+ 11. Work out why RG2.1 import is getting the wrong pitches [DONE]
 
  12. Investigate curious case of the missing notes in playback [blamed
  on aRts for now]

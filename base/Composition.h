@@ -109,7 +109,7 @@ public:
     /**
      * Return the time range of bar n
      */
-    pair<timeT, timeT> getBarRange(int n);
+    std::pair<timeT, timeT> getBarRange(int n);
 
 
     //!!! these should go, as the results they return are entirely
