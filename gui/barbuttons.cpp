@@ -36,10 +36,12 @@ using Rosegarden::RulerScale;
 BarButtons::BarButtons(RosegardenGUIDoc* doc,
 		       RulerScale *rulerScale,
                        int barHeight,
+		       bool invert,
                        QWidget* parent,
                        const char* name,
                        WFlags /*f*/):
     QHBox(parent, name),
+    m_invert(invert),
     m_barHeight(barHeight),
     m_doc(doc),
     m_rulerScale(rulerScale)
@@ -77,6 +79,13 @@ BarButtons::drawButtons()
     // Create a vertical box for the loopBar and the bar buttons
     //
     QVBox *buttonBar = new QVBox(this);
+    buttonBar->setSpacing(0);
+
+    QHBox *hButtonBar = 0;
+
+    if (m_invert) {
+	hButtonBar = new QHBox(buttonBar);
+    }
 
     // Loop ruler works its bar spacing out from the scale just
     // like we do in this class.  Then connect up the LoopRuler
@@ -86,6 +95,7 @@ BarButtons::drawButtons()
     LoopRuler *loopRuler = new LoopRuler(m_doc,
                                          m_rulerScale,
                                          loopBarHeight,
+					 m_invert,
                                          buttonBar);
 
     connect(loopRuler, SIGNAL(setPointerPosition(Rosegarden::timeT)),
@@ -103,9 +113,9 @@ BarButtons::drawButtons()
     connect(this,      SIGNAL(signalSetLoopMarker(Rosegarden::timeT, Rosegarden::timeT)),
             loopRuler, SLOT(setLoopMarker(Rosegarden::timeT, Rosegarden::timeT)));
 
-    // Another horizontal layout box..
-    //
-    QHBox *hButtonBar = new QHBox(buttonBar);
+    if (!m_invert) {
+	hButtonBar = new QHBox(buttonBar);
+    }
 
     int firstBar = m_rulerScale->getFirstVisibleBar(),
 	 lastBar = m_rulerScale->getLastVisibleBar();
@@ -142,8 +152,8 @@ BarButtons::drawButtons()
 
 	if (width == 0) continue;
 
-	bar->setMinimumSize(width, m_barHeight - loopBarHeight);
-	bar->setMaximumSize(width, m_barHeight - loopBarHeight);
+	bar->setMinimumSize(width, m_barHeight - loopBarHeight - 2);
+	bar->setMaximumSize(width, m_barHeight - loopBarHeight - 2);
 
         // attempt a style
         //
@@ -155,8 +165,9 @@ BarButtons::drawButtons()
         label->setText(QString("%1").arg(i));
         label->setAlignment(AlignLeft|AlignVCenter);
         label->setIndent(4);
-        label->setMinimumHeight(m_barHeight - loopBarHeight - 2);
-        label->setMaximumHeight(m_barHeight - loopBarHeight - 2);
+
+        label->setMinimumHeight(m_barHeight - loopBarHeight - 4);
+        label->setMaximumHeight(m_barHeight - loopBarHeight - 4);
     }
 }
 

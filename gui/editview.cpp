@@ -61,8 +61,8 @@ EditView::EditView(RosegardenGUIDoc *doc,
     m_topBox->setSpacing(0);
     m_topBox->setMargin(0);
 
-    topSplit->setMinimumHeight(25);//!!!
-    topSplit->setMaximumHeight(25);//!!!
+    topSplit->setMinimumHeight(29);//!!!
+    topSplit->setMaximumHeight(29);//!!!
     topSplit->setSpacing(0);
     topSplit->setMargin(0);
 //    topSplit->setFrameStyle(Plain);
@@ -70,21 +70,17 @@ EditView::EditView(RosegardenGUIDoc *doc,
     QLabel *label = new QLabel(topSplit);
     label->setMinimumWidth(20);//!!!
     label->setMaximumWidth(20);//!!!
-    label->setMinimumHeight(25);//!!!
-    label->setMaximumHeight(25);//!!!
+    label->setMinimumHeight(29);//!!!
+    label->setMaximumHeight(29);//!!!
 
-    m_barButtonsView = new QScrollView(topSplit);
-    m_barButtonsView->setHScrollBarMode(QScrollView::AlwaysOff);
-    m_barButtonsView->setVScrollBarMode(QScrollView::AlwaysOff);
+    m_topBarButtonsView = new QScrollView(topSplit);
+    m_topBarButtonsView->setHScrollBarMode(QScrollView::AlwaysOff);
+    m_topBarButtonsView->setVScrollBarMode(QScrollView::AlwaysOff);
 
-//    BarButtons *barButtons = new BarButtons
-//	(doc, m_rulerScale, 25, m_barButtonsView);
+    m_topBarButtonsView->setMinimumHeight(29);//!!!
+    m_topBarButtonsView->setMaximumHeight(29);//!!!
 
-//    m_barButtonsView->setFrameStyle(Plain);
-//    barButtons->setFrameStyle(Plain);
-
-    m_barButtonsView->setMinimumHeight(25);//!!!
-    m_barButtonsView->setMaximumHeight(25);//!!!
+    m_bottomBarButtonsView = 0; // until later
 
     // add undo and redo to edit menu and toolbar
     getCommandHistory()->attachView(actionCollection());
@@ -104,12 +100,38 @@ void EditView::setCanvasView(QCanvasView *canvasView)
     m_canvasView = canvasView;
 
     if (m_canvasView) {
+
+	//!!! factor out (with ctor)
+
+	QHBox *bottomSplit = new QHBox(m_topBox);
+
+	bottomSplit->setMinimumHeight(29);//!!!
+	bottomSplit->setMaximumHeight(29);//!!!
+	bottomSplit->setSpacing(0);
+	bottomSplit->setMargin(0);
+//    bottomSplit->setFrameStyle(Plain);
+
+	QLabel *label = new QLabel(bottomSplit);
+	label->setMinimumWidth(20);//!!!
+	label->setMaximumWidth(20);//!!!
+	label->setMinimumHeight(29);//!!!
+	label->setMaximumHeight(29);//!!!
 	
+	m_bottomBarButtonsView = new QScrollView(bottomSplit);
+	m_bottomBarButtonsView->setHScrollBarMode(QScrollView::AlwaysOff);
+	m_bottomBarButtonsView->setVScrollBarMode(QScrollView::AlwaysOff);
+	
+	m_bottomBarButtonsView->setMinimumHeight(29);//!!!
+	m_bottomBarButtonsView->setMaximumHeight(29);//!!!
+
 //	connect(m_trackEditorScrollView, SIGNAL(contentsMoving(int, int)),
 //		trackButtonsView,        SLOT(setContentsPos(int, int)));
 
-	connect(m_canvasView,    SIGNAL(contentsMoving(int, int)),
-		m_barButtonsView,  SLOT(setContentsPos(int, int)));
+	connect(m_canvasView,       SIGNAL(contentsMoving(int, int)),
+		m_topBarButtonsView,  SLOT(setContentsPos(int, int)));
+
+	connect(m_canvasView,          SIGNAL(contentsMoving(int, int)),
+		m_bottomBarButtonsView,  SLOT(setContentsPos(int, int)));
     }
 }
 

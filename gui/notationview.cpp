@@ -198,10 +198,14 @@ NotationView::NotationView(RosegardenGUIView* rgView,
         }
     }
 
-    BarButtons *barButtons = new BarButtons
-	(rgView->getDocument(), m_hlayout, 25, m_barButtonsView);
+    BarButtons *topBarButtons = new BarButtons
+	(rgView->getDocument(), m_hlayout, 25, false, m_topBarButtonsView);
+    m_topBarButtonsView->addChild(topBarButtons);
 
-    m_barButtonsView->addChild(barButtons);
+    BarButtons *bottomBarButtons = new BarButtons
+	(rgView->getDocument(), m_hlayout, 25, true, m_bottomBarButtonsView);
+    m_bottomBarButtonsView->addChild(bottomBarButtons);
+
 
     //
     // Position pointer

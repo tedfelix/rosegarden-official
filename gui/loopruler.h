@@ -50,6 +50,7 @@ public:
     LoopRuler(RosegardenGUIDoc *doc,
 	      Rosegarden::RulerScale *rulerScale,
               int height = 0,
+	      bool invert = false,
               QWidget* parent = 0,
               const char *name = 0);
 
@@ -90,6 +91,7 @@ private:
 
     int m_height;
     int m_snap;            // snap the loop to the nearest
+    bool m_invert;
 
     RosegardenGUIDoc *m_doc;
     Rosegarden::RulerScale *m_rulerScale;

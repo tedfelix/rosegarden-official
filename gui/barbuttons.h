@@ -39,6 +39,7 @@ public:
     BarButtons(RosegardenGUIDoc* doc,
 	       Rosegarden::RulerScale *rulerScale,
                int buttonHeight,
+	       bool invert = false,
                QWidget* parent = 0,
                const char* name = 0,
                WFlags f=0);
@@ -76,6 +77,7 @@ public slots:
 private:
     void drawButtons();
 
+    bool m_invert;
     int m_barHeight;
     int m_offset;
 

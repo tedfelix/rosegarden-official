@@ -23,6 +23,7 @@
 #define SEGMENTCANVAS_H
 
 #include "Event.h"
+#include "RulerScale.h"
 
 #include <qwidget.h>
 #include <qcanvas.h>
@@ -31,7 +32,6 @@
 using Rosegarden::timeT;
 namespace Rosegarden {
     class Segment;
-    class RulerScale;
 }
 
 
@@ -137,62 +137,7 @@ public:
     /// Remove all items
     void clear();
 
-    /**
-     * The coordinate grid used to align SegmentItem objects
-     */
-    class SnapGrid
-    {
-    public:
-        SnapGrid(Rosegarden::RulerScale *rulerScale, int vstep);
-
-	static const timeT NoSnap;
-	static const timeT SnapToBar;
-	static const timeT SnapToBeat;
-
-	/**
-	 * Set the snap size of the grid to the given time.
-	 * The snap time must be positive, or else one of the
-	 * special constants NoSnap, SnapToBar or SnapToBeat.
-	 * The default is SnapToBeat.
-	 */
-	void setSnapTime(timeT snap);
-
-	/**
-	 * Return the snap size of the grid, at the given
-	 * x-coordinate.  (The x-coordinate is required in
-	 * case the built-in snap size is SnapToBar or
-	 * SnapToBeat, in which case we need to know the
-	 * current time signature.)
-	 * Returns zero for NoSnap.
-	 */
-	timeT getSnapTime(double x) const;
-
-	/**
-	 * Snap a given x-coordinate to the nearest time on
-	 * the grid.  Of course this also does x-to-time
-	 * conversion, so it's useful even in NoSnap mode.
-	 * If the snap time is greater than the bar duration
-	 * at this point, the bar duration will be used instead.
-	 */
-        timeT snapX(double x) const;
-
-	/**
-	 * Snap a given y-coordinate to the nearest lower
-	 * multiple of the vstep.
-	 */
-	int snapY(int y) const;
-
-	int getYSnap() const { return m_vstep; }
-
-	Rosegarden::RulerScale *getRulerScale() { return m_rulerScale; }
-
-    protected:
-	Rosegarden::RulerScale *m_rulerScale; // I don't own this
-	timeT m_snapTime;
-	int m_vstep;
-    };
-
-    SnapGrid& grid() { return m_grid; }
+    Rosegarden::SnapGrid &grid() { return m_grid; }
 
     /// Return the brush used by all SegmentItem objects (normally, solid blue)
     const QBrush& brush()  const { return m_brush; }
@@ -314,7 +259,7 @@ private:
 
     SegmentTool *m_tool;
 
-    SnapGrid m_grid;
+    Rosegarden::SnapGrid m_grid;
 
     SegmentItem *m_currentItem;
     SegmentItem *m_recordingSegment;

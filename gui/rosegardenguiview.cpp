@@ -107,6 +107,7 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
         (doc,
          m_rulerScale,
          m_trackEditor->getVHeader()->sectionSize(0),
+	 false, 
          barButtonsView);
 
     // set a plain frame for the scrollview

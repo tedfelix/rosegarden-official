@@ -32,17 +32,19 @@ using Rosegarden::RulerScale;
 LoopRuler::LoopRuler(RosegardenGUIDoc *doc,
                      RulerScale *rulerScale,
                      int height,
+		     bool invert,
                      QWidget *parent,
                      const char *name)
     : QWidget(parent, name),
       m_height(height),
       m_snap(0),
+      m_invert(invert),
       m_doc(doc),
       m_rulerScale(rulerScale),
       m_loop(false),
       m_startLoop(0), m_endLoop(0)
 {
-    // nothing
+    setBackgroundColor(RosegardenGUIColours::LoopRulerBackground);
 }
 
 LoopRuler::~LoopRuler()
@@ -60,7 +62,6 @@ void LoopRuler::paintEvent(QPaintEvent*)
 void LoopRuler::drawBarSections(QPainter* paint)
 {
     if (!m_doc) return;
-    Rosegarden::Composition &comp = m_doc->getComposition();
 
     int firstBar = m_rulerScale->getFirstVisibleBar(),
 	 lastBar = m_rulerScale->getLastVisibleBar();
@@ -70,7 +71,11 @@ void LoopRuler::drawBarSections(QPainter* paint)
 
     for (int i = firstBar; i <= lastBar; i++)
     {
-	paint->drawLine((int)x, 2 * m_height / 7, (int)x, m_height);
+	if (m_invert) {
+	    paint->drawLine((int)x, 0, (int)x, 5 * m_height / 7);
+	} else {
+	    paint->drawLine((int)x, 2 * m_height / 7, (int)x, m_height);
+	}
 
 	double width = m_rulerScale->getBarWidth(i);
 	double beatAccumulator = 0;
@@ -79,8 +84,13 @@ void LoopRuler::drawBarSections(QPainter* paint)
 	     beatAccumulator < width;
 	     beatAccumulator += m_rulerScale->getBeatWidth(i)) {
 
-	    paint->drawLine((int)(x + beatAccumulator), 5 * m_height / 7,
-			    (int)(x + beatAccumulator), m_height);
+	    if (m_invert) {
+		paint->drawLine((int)(x + beatAccumulator), 0,
+				(int)(x + beatAccumulator), 2 * m_height / 7);
+	    } else {
+		paint->drawLine((int)(x + beatAccumulator), 5 * m_height / 7,
+				(int)(x + beatAccumulator), m_height);
+	    }
 	}
 
 	x += width;

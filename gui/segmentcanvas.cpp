@@ -39,6 +39,7 @@
 using Rosegarden::Segment;
 using Rosegarden::Note;
 using Rosegarden::RulerScale;
+using Rosegarden::SnapGrid;
 
 //////////////////////////////////////////////////////////////////////
 //                SegmentItem
@@ -456,93 +457,6 @@ SegmentCanvas::setFineGrain(bool value)
 
 
 //////////////////////////////////////////////////////////////////////
-//                 SnapGrid
-//////////////////////////////////////////////////////////////////////
-
-const timeT SegmentCanvas::SnapGrid::NoSnap     = -3;
-const timeT SegmentCanvas::SnapGrid::SnapToBar  = -2;
-const timeT SegmentCanvas::SnapGrid::SnapToBeat = -1;
-
-SegmentCanvas::SnapGrid::SnapGrid(RulerScale *rulerScale, int vstep) :
-    m_rulerScale(rulerScale),
-    m_snapTime(SnapToBeat),
-    m_vstep(vstep)
-{
-    // nothing else 
-}
-
-void
-SegmentCanvas::SnapGrid::setSnapTime(timeT snap)
-{
-    assert(snap > 0 ||
-	   snap == NoSnap ||
-	   snap == SnapToBar ||
-	   snap == SnapToBeat);
-    m_snapTime = snap;
-}
-
-timeT
-SegmentCanvas::SnapGrid::getSnapTime(double x) const
-{
-    if (m_snapTime == NoSnap) return 0;
-    timeT time = m_rulerScale->getTimeForX(x);
-
-    Rosegarden::Composition *composition = m_rulerScale->getComposition();
-    int barNo = composition->getBarNumber(time);
-    std::pair<timeT, timeT> barRange = composition->getBarRange(barNo);
-
-    timeT snapTime = barRange.second - barRange.first;
-
-    if (m_snapTime == SnapToBeat) {
-	snapTime = composition->getTimeSignatureAt(time).getBeatDuration();
-    } else if (m_snapTime != SnapToBar && m_snapTime < snapTime) {
-	snapTime = m_snapTime;
-    }
-
-//    kdDebug(KDEBUG_AREA) << "SnapGrid: snap time is " << snapTime << endl;
-    return snapTime;
-}
-
-timeT
-SegmentCanvas::SnapGrid::snapX(double x) const
-{
-    timeT time = m_rulerScale->getTimeForX(x);
-    if (m_snapTime == NoSnap) return time;
-
-    Rosegarden::Composition *composition = m_rulerScale->getComposition();
-    int barNo = composition->getBarNumber(time);
-    std::pair<timeT, timeT> barRange = composition->getBarRange(barNo);
-
-    timeT snapTime = barRange.second - barRange.first;
-
-    if (m_snapTime == SnapToBeat) {
-	snapTime = composition->getTimeSignatureAt(time).getBeatDuration();
-    } else if (m_snapTime != SnapToBar && m_snapTime < snapTime) {
-	snapTime = m_snapTime;
-    }
-
-    timeT offset = (time - barRange.first);
-    timeT rounded = (offset / snapTime) * snapTime;
-
-    timeT snapped;
-    if ((offset - rounded) > (rounded + snapTime - offset)) {
-	snapped = rounded + snapTime + barRange.first;
-    } else {
-	snapped = rounded + barRange.first;
-    }
-
-//    kdDebug(KDEBUG_AREA) << "SnapGrid: before: " << x << " = " << time << "; after: " << snapped << endl;
-    return snapped;
-}
-
-int
-SegmentCanvas::SnapGrid::snapY(int y) const
-{
-    return y / m_vstep * m_vstep;
-}
-
-
-//////////////////////////////////////////////////////////////////////
 //                 Segment Tools
 //////////////////////////////////////////////////////////////////////
 
@@ -600,9 +514,9 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
 
 	// a little hardcoded, for now
 	if (m_fineGrain) {
-	    m_canvas->grid().setSnapTime(SegmentCanvas::SnapGrid::NoSnap);
+	    m_canvas->grid().setSnapTime(SnapGrid::NoSnap);
 	} else {
-	    m_canvas->grid().setSnapTime(SegmentCanvas::SnapGrid::SnapToBar);
+	    m_canvas->grid().setSnapTime(SnapGrid::SnapToBar);
 	}
 
 	int y = m_canvas->grid().snapY(e->pos().y());
@@ -650,9 +564,9 @@ void SegmentPencil::handleMouseMove(QMouseEvent *e)
     if (!m_currentItem) return;
 
     if (m_fineGrain) {
-	m_canvas->grid().setSnapTime(SegmentCanvas::SnapGrid::NoSnap);
+	m_canvas->grid().setSnapTime(SnapGrid::NoSnap);
     } else {
-	m_canvas->grid().setSnapTime(SegmentCanvas::SnapGrid::SnapToBar);
+	m_canvas->grid().setSnapTime(SnapGrid::SnapToBar);
     }
 
     timeT time = m_canvas->grid().snapX(e->pos().x());
@@ -744,9 +658,9 @@ void SegmentMover::handleMouseMove(QMouseEvent *e)
     if (m_currentItem) {
 
 	if (m_fineGrain) {
-	    m_canvas->grid().setSnapTime(SegmentCanvas::SnapGrid::NoSnap);
+	    m_canvas->grid().setSnapTime(SnapGrid::NoSnap);
 	} else {
-	    m_canvas->grid().setSnapTime(SegmentCanvas::SnapGrid::SnapToBeat);
+	    m_canvas->grid().setSnapTime(SnapGrid::SnapToBeat);
 	}
 
 	int x = e->pos().x() - m_clickPoint.x();
@@ -798,9 +712,9 @@ void SegmentResizer::handleMouseMove(QMouseEvent *e)
     if (!m_currentItem) return;
 
     if (m_fineGrain) {
-	m_canvas->grid().setSnapTime(SegmentCanvas::SnapGrid::NoSnap);
+	m_canvas->grid().setSnapTime(SnapGrid::NoSnap);
     } else {
-	m_canvas->grid().setSnapTime(SegmentCanvas::SnapGrid::SnapToBeat);
+	m_canvas->grid().setSnapTime(SnapGrid::SnapToBeat);
     }
 
     timeT time = m_canvas->grid().snapX(e->pos().x());
@@ -926,9 +840,9 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
     }
 
     if (m_fineGrain) {
-	m_canvas->grid().setSnapTime(SegmentCanvas::SnapGrid::NoSnap);
+	m_canvas->grid().setSnapTime(SnapGrid::NoSnap);
     } else {
-	m_canvas->grid().setSnapTime(SegmentCanvas::SnapGrid::SnapToBeat);
+	m_canvas->grid().setSnapTime(SnapGrid::SnapToBeat);
     }
 
     if (m_currentItem->isSelected())

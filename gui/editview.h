@@ -227,8 +227,9 @@ protected:
     virtual void setCanvasView(QCanvasView *cv);
     QCanvasView *m_canvasView;
 
-    QScrollView *m_barButtonsView;
-    BarButtons *m_barButtons;
+    QScrollView *m_topBarButtonsView;
+    QScrollView *m_bottomBarButtonsView;
+
     QVBox *m_topBox;
 };
 
