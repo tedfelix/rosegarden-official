@@ -66,7 +66,7 @@ NotationElement::getCanvasX()
     if (m_canvasItem)
         return m_canvasItem->x();
     else
-        throw(NoCanvasItem());
+        throw NoCanvasItem();
 }
 
 double
@@ -75,7 +75,7 @@ NotationElement::getCanvasY()
     if (m_canvasItem)
         return m_canvasItem->y();
     else
-        throw(NoCanvasItem());
+        throw NoCanvasItem();
 }
 
 bool
