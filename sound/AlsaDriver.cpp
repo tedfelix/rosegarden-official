@@ -41,14 +41,16 @@
 // sequencer interface.
 //
 // We use JACK (http://jackit.sourceforge.net/) for audio.  It's complicated
-// by the fact there's no simple app-level documentation to explain what's
-// going on.  Here's what I've got so far:
+// by the fact there's not yet any simple app-level documentation to explain
+// what's going on.  Attempting to rectify that here.  So to enable JACK
+// for your app:
 //
 // o Create at least one input port and output port - we might need
 //   more but I'm still not quite sure about the port -> audio channel
 //   relationship yet.
 //
-// o Register callbacks
+// o Register callbacks that JACK uses to push data about and tell the
+//   client what's happening.
 //
 // o Get and store initial sample size
 //
@@ -60,11 +62,17 @@
 // o Connect like-to-like ports for client
 //
 // o Start throwing correct sized chunks of samples at the output
-//   port, get input samples coming the other way
+//   port.  See the jackProcess() method for more information on
+//   how this bit works.
 //
-// Last bit still unproven. [rwb 05.05.2002]
+// o Get samples coming in and store them somewhere.
 //
+// For the moment we access the sample file handles directly and
+// don't cache any data anywhere.  Performance is actually pretty
+// good so far (for pretty small sample sizes obviously) but we'll
+// see how it fails when the audio files get big.
 //
+// updated 10.05.2002, Richard Bown
 //
 //
 
@@ -82,6 +90,10 @@ static unsigned int _jackSampleRate;
 static bool         _usingAudioQueueVector;
 static sample_t    *_leftTempBuffer;
 static sample_t    *_rightTempBuffer;
+
+static const float  _8bitSampleMax  = (float)(0xff/2);
+static const float  _16bitSampleMax = (float)(0xffff/2);
+
 #endif
 
 AlsaDriver::AlsaDriver():
@@ -549,64 +561,13 @@ AlsaDriver::initialiseMidi()
               << std::endl;
 }
 
-// Thanks to Matthias Nagorni's ALSA 0.9.0 HOWTO:
-//
-//    http://www.suse.de/~mana/alsa090_howto.html
-//
+// We don't even attempt to use ALSA audio.  We just use JACK instead.
+// See comment at the top of this file and jackProcess() for further
+// information on how we use this.
 //
 void
 AlsaDriver::initialiseAudio()
 {
-    // abandoned ALSA audio
-    //
-    /*
-    m_audioStream = SND_PCM_STREAM_PLAYBACK;
-
-    // Contains information about hardware
-    //
-    snd_pcm_hw_params_t *hwParams;
-    snd_pcm_hw_params_alloca(&hwParams);
-
-    // Name of the PCM device, like plughw:0,0 
-    // The first number is the number of the soundcard,
-    // the second number is the number of the device.
-    //
-    char *pcmName;
-    pcmName = strdup("plughw:0,0");
-
-    if (snd_pcm_open(&m_audioHandle, pcmName, m_audioStream, 0) < 0)
-    {
-        std::cerr << "AlsaDriver::initialiseAudio - can't open PCM device"
-                  << std::endl;
-
-        return;
-    }
-
-    if (snd_pcm_hw_params_any(m_audioHandle, hwParams) < 0)
-    {
-        std::cerr << "AlsaDriver::initialiseAudio - "
-                  << "can't configure this audio device" << std::endl;
-
-        // Adjust status
-        //
-        if (m_driverStatus == MIDI_AND_AUDIO_OK)
-            m_driverStatus = MIDI_OK;
-        else
-            m_driverStatus = NO_DRIVER;
-
-        return;
-    }
-
-    int rate = 44100; // Sample rate
-    int periods = 2;     // Number of periods
-    int periodsize = 8192; // Periodsize (bytes)
-
-
-    // Adjust driver status according to our success here
-    //
-    std::cout << "AlsaDriver - initialised Audio (PCM) subsystem" << std::endl;
-    */
-
 #ifdef HAVE_JACK
     // Using JACK instead
     //
@@ -946,7 +907,7 @@ void
 AlsaDriver::processAudioQueue(const RealTime &playLatency)
 {
     std::vector<PlayableAudioFile*>::iterator it;
-    RealTime currentTime = getSequencerTime() + playLatency + playLatency;
+    RealTime currentTime = getSequencerTime() - playLatency;
 
     for (it = m_audioPlayQueue.begin(); it != m_audioPlayQueue.end(); ++it)
     {
@@ -1521,9 +1482,13 @@ AlsaDriver::processPending(const RealTime &playLatency)
 #ifdef HAVE_JACK
 
 
-// The "process" callback is where we do all the work of
-// turning a sample file into a sound.  We de-interleave
-// a WAV and send it out as needs be.
+// The "process" callback is where we do all the work of turning a sample
+// file into a sound.  We de-interleave a WAV and send it out as needs be.
+//
+// We perform basic mixing at this level - adding the samples together
+// using the temp buffers and then read out to the audio buffer at the
+// end of the mix stage.  More details supplied within.
+//
 //
 int
 AlsaDriver::jackProcess(nframes_t nframes, void *arg)
@@ -1540,14 +1505,6 @@ AlsaDriver::jackProcess(nframes_t nframes, void *arg)
         sample_t *rightBuffer = static_cast<sample_t*>
             (jack_port_get_buffer(inst->getJackOutputPortRight(),
                                   nframes));
-
-        // Clear temporary buffers
-        //
-        for (unsigned int i = 0 ; i < nframes; i++)
-        {
-            _leftTempBuffer[i] = 0.0f;
-            _rightTempBuffer[i] = 0.0f;
-        }
 
         // Return if we're not playing yet
         //
@@ -1568,9 +1525,20 @@ AlsaDriver::jackProcess(nframes_t nframes, void *arg)
             return 0;
         }
 
-        // Ok, we're playing - so push some samples out if we have
-        // any files that should be playing.
+        // Ok, we're playing - so clear the temporary buffers ready
+        // for writing, get the audio queue, grab the queue vector
+        // for usage and prepate a string for storage of the sample
+        // slice.
         //
+
+        // Clear temporary buffers
+        //
+        for (unsigned int i = 0 ; i < nframes; i++)
+        {
+            _leftTempBuffer[i] = 0.0f;
+            _rightTempBuffer[i] = 0.0f;
+        }
+
         std::vector<PlayableAudioFile*> &audioQueue = inst->getAudioPlayQueue();
         std::vector<PlayableAudioFile*>::iterator it;
 
@@ -1580,24 +1548,24 @@ AlsaDriver::jackProcess(nframes_t nframes, void *arg)
         //
         _usingAudioQueueVector = true;
 
+        // Store returned samples in this string
+        //
+        std::string samples;
 
+        // Some counting
+        //
         int layerCount = 0;
         int elementCount = 0;
 
         for (it = audioQueue.begin(); it != audioQueue.end(); it++)
         {
-
             // Another thread could've cleared down all the
-            // PlayableAudioFiles already.
+            // PlayableAudioFiles already.  As we've already
+            // noted we must be careful.
             //
             if (inst->isPlaying() &&
                 (*it)->getStatus() == PlayableAudioFile::PLAYING)
             {
-                // get the samples from the WAV and then throw at JACK
-                //
-
-                // store the samples in a string
-                std::string samples;
 
                 // make sure we haven't stopped playing because if we
                 // have the iterator is invalid
@@ -1628,40 +1596,67 @@ AlsaDriver::jackProcess(nframes_t nframes, void *arg)
 
                 elementCount = 0;
 
+                // How do we convert the audio files into a format that
+                // JACK can understand?
+                // 
+                // JACK works on a normalised (-1.0 to +1.0) sample basis
+                // so all samples read from the WAV file have to be divided
+                // by their maximum possible value (0xff/2 for 8-bit and
+                // 0xffff/2 for 16-bit samples and so on).
+                //
+                // Multi-channel WAV files have interleaved data bytes
+                // at a given time frame. For a given sample frame there
+                // will be n-samples to extract where n is the number of
+                // channels.
+                //
+                // See docs/discussions/riff-wav-format.txt) for a more
+                // detailed explanation of interleaving.
+                //
+                // The Left and Rightness of these ports isn't in any
+                // way correct I don't think.  Still a bit of a mystery
+                // that bit.
+                //
                 while (samplePtr < endOfSamples)
                 {
                     switch(bytes)
                     {
                         case 1: // for 8-bit samples
-                            /*
-                            *outputBuffer = *samplePtr;
-                            outputBuffer += 1;
-                            i += 1;
-                            */
+                            outBytes =
+                                ((short)(*(unsigned char *)samplePtr)) /
+                                         _8bitSampleMax;
+                            samplePtr++;
+
+                            _leftTempBuffer[elementCount] += outBytes;
+
+                            if (channels == 2)
+                            {
+                                outBytes =
+                                    ((short)(*(unsigned char *)samplePtr)) /
+                                          _8bitSampleMax;
+                                             
+                                samplePtr++;
+                            }
+                            _rightTempBuffer[elementCount] += outBytes;
                             break;
 
                         case 2: // for 16-bit samples
-                            outBytes = (*((short*)(samplePtr))) / 32767.0f;
+                            outBytes = (*((short*)(samplePtr))) /
+                                           _16bitSampleMax;
                             //assert(outBytes >= -1 && outBytes <= 1);
                             samplePtr += 2;
 
-                            //(*leftBuffer) = outBytes;
                             _leftTempBuffer[elementCount] += outBytes;
 
                             // Get other sample if we have one
                             //
                             if (channels == 2)
                             {
-                                outBytes = (*((short*)(samplePtr)))
-                                           / 32767.0f;
+                                outBytes = (*((short*)(samplePtr))) /
+                                           _16bitSampleMax;
                                 //assert(outBytes >= -1 && outBytes <= 1);
                                 samplePtr += 2;
                             }
-
-
-                            //(*rightBuffer) = outBytes;
                             _rightTempBuffer[elementCount] += outBytes;
-                            elementCount++;
                             break;
 
                         default:
@@ -1669,26 +1664,15 @@ AlsaDriver::jackProcess(nframes_t nframes, void *arg)
                                       << "not supported" << std::endl;
                             break;
                     }
+                    
+                    // next out element
+                    elementCount++;
                 }
             }
-            else // assume DEFUNCT
-            {
-                float silence = 0.0;
-
-                for (unsigned int i = 0 ; i < nframes; i++)
-                {
-                    (*leftBuffer) = silence;
-                    leftBuffer++;
-
-                    (*rightBuffer) = silence;
-                    rightBuffer++;
-                }
-            }
-
             layerCount++;
         }
 
-        // Transfer sum
+        // Transfer the sum of the samples
         //
         for (unsigned int i = 0 ; i < nframes; i++)
         {
@@ -1706,7 +1690,6 @@ AlsaDriver::jackProcess(nframes_t nframes, void *arg)
             inst->clearAudioPlayQueue();
 
         _usingAudioQueueVector = false;
-
     }
 
 

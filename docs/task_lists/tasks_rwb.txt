@@ -2,10 +2,12 @@
 ====================================
 
 o basic JACK audio
+  - click on sample start
+  - multiple sample (Segments problem?)
 
 o "Revert file" option
 
-o Get recent file list working again
+o Get recent file list working
 
 o Fix configure to omit aRts when building for ALSA and
   vice versa (proper substiutions in Makefile.am not with
