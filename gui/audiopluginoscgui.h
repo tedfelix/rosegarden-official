@@ -29,10 +29,15 @@
 #include <lo/lo.h>
 #include <string>
 #include <vector>
+#include <map>
 #include <qobject.h>
 #include "RingBuffer.h"
 
-class AudioPluginInstance;
+namespace Rosegarden {
+    class AudioPluginInstance;
+}
+class AudioPluginOSCGUI;
+class KProcess;
 
 
 class OSCMessage
@@ -77,17 +82,25 @@ protected slots:
 protected:
     lo_server_thread m_serverThread;
     Rosegarden::RingBuffer<OSCMessage *> m_oscBuffer;
+    typedef std::map<int, AudioPluginOSCGUI *> TargetGUIMap;
+    TargetGUIMap m_guis;
+    QTimer *m_dispatchTimer;
 };
 
 
 class AudioPluginOSCGUI
 {
 public:
-    AudioPluginOSCGUI(AudioPluginInstance *instance);
+    AudioPluginOSCGUI(Rosegarden::AudioPluginInstance *instance,
+		      QString oscUrl);
     virtual ~AudioPluginOSCGUI();
 
+    void acceptFromGUI(OSCMessage *message); // I take over ownership of message
+
 protected:
-    AudioPluginInstance *m_instance;
+    Rosegarden::AudioPluginInstance *m_instance;
+    KProcess *m_gui;
+    QString m_oscUrl;
 };
     
 

@@ -25,6 +25,8 @@
 #include "rosegardendcop.h"
 #include "rosestrings.h"
 
+#include "PluginIdentifier.h"
+
 namespace Rosegarden
 {
 
@@ -106,38 +108,6 @@ AudioPluginManager::getPlugin(int number)
     return m_plugins[number];
 }
 
-//!!! these two functions duplicate code in MappedStudio.cpp:
-
-void parseIdentifier(QString identifier,
-		     QString &type,
-		     QString &soName,
-		     QString &label)
-{
-    type = identifier.section(':', 0, 0);
-    soName = identifier.section(':', 1, 1);
-    label = identifier.section(':', 2);
-}
-
-bool areIdentifiersSimilar(QString id1, QString id2)
-{
-    QString type1, type2, soName1, soName2, label1, label2;
-
-    parseIdentifier(id1, type1, soName1, label1);
-    parseIdentifier(id2, type2, soName2, label2);
-
-    if (type1 != type2 || label1 != label2) return false;
-
-    std::cerr << "MappedAudioPluginManager::areIdentifiersSimilar(" << id1 << "," << id2 << ")" << std::endl;
-
-    bool similar = (soName1.section('/', -1).section('.', 0, 0) ==
-		    soName2.section('/', -1).section('.', 0, 0));
-
-    if (similar)
-	std::cerr << "(yes)" << std::endl;
-
-    return similar;
-}
-
 int
 AudioPluginManager::getPositionByIdentifier(QString identifier)
 {
@@ -156,7 +126,7 @@ AudioPluginManager::getPositionByIdentifier(QString identifier)
     it = m_plugins.begin();
     for (; it != m_plugins.end(); ++it)
     {
-        if (areIdentifiersSimilar((*it)->getIdentifier(), identifier))
+        if (PluginIdentifier::areIdentifiersSimilar((*it)->getIdentifier(), identifier))
             return pos;
 
         pos++;
@@ -178,7 +148,7 @@ AudioPluginManager::getPluginByIdentifier(QString identifier)
     it = m_plugins.begin();
     for (; it != m_plugins.end(); ++it)
     {
-        if (areIdentifiersSimilar((*it)->getIdentifier(), identifier))
+        if (PluginIdentifier::areIdentifiersSimilar((*it)->getIdentifier(), identifier))
             return (*it);
     }
 

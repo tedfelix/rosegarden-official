@@ -31,6 +31,7 @@
 #include "AudioPluginInstance.h"
 #include "LADSPAPluginInstance.h"
 #include "MappedStudio.h"
+#include "PluginIdentifier.h"
 
 #ifdef HAVE_LIBLRDF
 #include "lrdf.h"
@@ -346,7 +347,7 @@ LADSPAPluginFactory::releasePlugin(RunnablePluginInstance *instance,
     }
 
     QString type, soname, label;
-    parseIdentifier(identifier, type, soname, label);
+    PluginIdentifier::parseIdentifier(identifier, type, soname, label);
 
     m_instances.erase(m_instances.find(instance));
 
@@ -355,7 +356,7 @@ LADSPAPluginFactory::releasePlugin(RunnablePluginInstance *instance,
     for (std::set<RunnablePluginInstance *>::iterator ii = m_instances.begin();
 	 ii != m_instances.end(); ++ii) {
 	QString itype, isoname, ilabel;
-	parseIdentifier((*ii)->getIdentifier(), itype, isoname, ilabel);
+	PluginIdentifier::parseIdentifier((*ii)->getIdentifier(), itype, isoname, ilabel);
 	if (isoname == soname) {
 	    std::cerr << "LADSPAPluginFactory::releasePlugin: dll " << soname << " is still in use for plugin " << ilabel << std::endl;
 	    stillInUse = true;
@@ -373,7 +374,7 @@ const LADSPA_Descriptor *
 LADSPAPluginFactory::getLADSPADescriptor(QString identifier)
 {
     QString type, soname, label;
-    parseIdentifier(identifier, type, soname, label);
+    PluginIdentifier::parseIdentifier(identifier, type, soname, label);
 
     if (m_libraryHandles.find(soname) == m_libraryHandles.end()) {
 	loadLibrary(soname);
@@ -438,7 +439,7 @@ LADSPAPluginFactory::unloadUnusedLibraries()
 	     ii != m_instances.end(); ++ii) {
 
 	    QString itype, isoname, ilabel;
-	    parseIdentifier((*ii)->getIdentifier(), itype, isoname, ilabel);
+	    PluginIdentifier::parseIdentifier((*ii)->getIdentifier(), itype, isoname, ilabel);
 	    if (isoname == i->first) {
 		stillInUse = true;
 		break;
@@ -641,7 +642,8 @@ LADSPAPluginFactory::discoverPlugins(QString soName)
 	}
 #endif // HAVE_LIBLRDF
 
-	QString identifier = createIdentifier("ladspa", soName, descriptor->Label);
+	QString identifier = PluginIdentifier::createIdentifier
+	    ("ladspa", soName, descriptor->Label);
 	m_identifiers.push_back(identifier);
 
 	++index;

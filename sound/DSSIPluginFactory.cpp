@@ -28,6 +28,7 @@
 #include "AudioPluginInstance.h"
 #include "DSSIPluginInstance.h"
 #include "MappedStudio.h"
+#include "PluginIdentifier.h"
 
 #ifdef HAVE_LIBLRDF
 #include "lrdf.h"
@@ -182,7 +183,7 @@ const DSSI_Descriptor *
 DSSIPluginFactory::getDSSIDescriptor(QString identifier)
 {
     QString type, soname, label;
-    parseIdentifier(identifier, type, soname, label);
+    PluginIdentifier::parseIdentifier(identifier, type, soname, label);
 
     if (m_libraryHandles.find(soname) == m_libraryHandles.end()) {
 	loadLibrary(soname);
@@ -354,7 +355,8 @@ DSSIPluginFactory::discoverPlugins(QString soName)
 	}
 #endif // HAVE_LIBLRDF
 
-	QString identifier = createIdentifier("dssi", soName, ladspaDescriptor->Label);
+	QString identifier = PluginIdentifier::createIdentifier
+	    ("dssi", soName, ladspaDescriptor->Label);
 	m_identifiers.push_back(identifier);
 
 	++index;

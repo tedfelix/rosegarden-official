@@ -41,6 +41,7 @@ libRosegardenSound_la_SOURCES = AudioCache.cpp \
                                 PeakFile.cpp \
                                 PeakFileManager.cpp \
 				PluginFactory.cpp \
+				PluginIdentifier.cpp \
                                 RIFFAudioFile.cpp \
 				RunnablePluginInstance.cpp \
 				SequencerDataBlock.cpp \

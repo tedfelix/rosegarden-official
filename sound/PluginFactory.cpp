@@ -20,6 +20,7 @@
 */
 
 #include "PluginFactory.h"
+#include "PluginIdentifier.h"
 
 #ifdef HAVE_LADSPA
 #include "LADSPAPluginFactory.h"
@@ -80,7 +81,7 @@ PluginFactory *
 PluginFactory::instanceFor(QString identifier)
 {
     QString type, soName, label;
-    parseIdentifier(identifier, type, soName, label);
+    PluginIdentifier::parseIdentifier(identifier, type, soName, label);
     return instance(type);
 }
 
@@ -94,48 +95,6 @@ PluginFactory::enumerateAllPlugins(MappedObjectPropertyList &list)
 
     factory = instance("dssi");
     if (factory) factory->enumeratePlugins(list);
-}
-
-QString
-PluginFactory::createIdentifier(QString type,
-				QString soName,
-				QString label)
-{
-    QString identifier = type + ":" + soName + ":" + label;
-    std::cerr << "PluginFactory::createIdentifier: " << identifier << std::endl;
-    return identifier;
-}
-
-void
-PluginFactory::parseIdentifier(QString identifier,
-			       QString &type,
-			       QString &soName,
-			       QString &label)
-{
-    type = identifier.section(':', 0, 0);
-    soName = identifier.section(':', 1, 1);
-    label = identifier.section(':', 2);
-}
-
-bool
-PluginFactory::areIdentifiersSimilar(QString id1, QString id2)
-{
-    QString type1, type2, soName1, soName2, label1, label2;
-
-    parseIdentifier(id1, type1, soName1, label1);
-    parseIdentifier(id2, type2, soName2, label2);
-
-    if (type1 != type2 || label1 != label2) return false;
-
-    std::cerr << "PluginFactory::areIdentifiersSimilar(" << id1 << "," << id2 << ")" << std::endl;
-
-    bool similar = (soName1.section('/', -1).section('.', 0, 0) ==
-		    soName2.section('/', -1).section('.', 0, 0));
-
-    if (similar)
-	std::cerr << "(yes)" << std::endl;
-
-    return similar;
 }
 
 

@@ -83,13 +83,6 @@ public:
 						      unsigned int blockSize,
 						      unsigned int channels) = 0;
 
-    // handy dandy static helper methods:
-
-    static QString createIdentifier(QString type, QString soName, QString label);
-    static void parseIdentifier(QString identifier,
-				QString &type, QString &soName, QString &label);
-    static bool areIdentifiersSimilar(QString id1, QString id2);
-
 protected:
     PluginFactory() { }
 

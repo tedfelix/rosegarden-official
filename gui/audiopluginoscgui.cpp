@@ -25,6 +25,18 @@
 #include <lo/lo.h>
 #include <iostream>
 
+#include "PluginIdentifier.h"
+#include "AudioPluginInstance.h"
+
+#include "rosestrings.h"
+#include "rosedebug.h"
+
+#include <kprocess.h>
+#include <qdir.h>
+#include <qfileinfo.h>
+#include <qtimer.h>
+
+
 OSCMessage::~OSCMessage()
 {
     clearArgs();
@@ -132,6 +144,10 @@ AudioPluginOSCGUIManager::AudioPluginOSCGUIManager() :
 				osc_message_handler, this);
 
     lo_server_thread_start(m_serverThread);
+
+    m_dispatchTimer = new QTimer(this);
+    connect(m_dispatchTimer, SIGNAL(timeout()), this, SLOT(slotDispatch()));
+    m_dispatchTimer->start(20, FALSE);
 }
 
 AudioPluginOSCGUIManager::~AudioPluginOSCGUIManager()
@@ -143,16 +159,95 @@ AudioPluginOSCGUIManager::~AudioPluginOSCGUIManager()
 void
 AudioPluginOSCGUIManager::postMessage(OSCMessage *message)
 {
-    std::cerr << "AudioPluginOSCGUIManager::postMessage" << std::endl;
+    RG_DEBUG << "AudioPluginOSCGUIManager::postMessage" << endl;
     m_oscBuffer.write(&message, 1);
 }
 
 void
 AudioPluginOSCGUIManager::slotDispatch()
 {
-    //...
+    while (m_oscBuffer.getReadSpace() > 0) {
+
+	OSCMessage *message;
+	m_oscBuffer.read(&message, 1);
+
+	int target = message->getTarget();
+
+	if (m_guis.find(target) == m_guis.end()) {
+
+	    std::cerr << "Rosegarden: WARNING: AudioPluginOSCGUIManager::slotDispatch: unknown target " << target << std::endl;
+	    delete message;
+
+	} else {
+	    m_guis[target]->acceptFromGUI(message);
+	}
+    }
 }
 
+AudioPluginOSCGUI::AudioPluginOSCGUI(Rosegarden::AudioPluginInstance *instance,
+				     QString oscUrl) :
+    m_instance(instance),
+    m_gui(0),
+    m_oscUrl(oscUrl)
+{
+    QString identifier = strtoqstr(instance->getIdentifier());
+
+    QString type, soName, label;
+    Rosegarden::PluginIdentifier::parseIdentifier(identifier, type, soName, label);
+
+    QFileInfo soInfo(soName);
+    if (soInfo.isRelative()) {
+	//!!!
+	RG_DEBUG << "AudioPluginOSCGUI::AudioPluginOSCGUI: Unable to deal with relative .so path " << soName << " yet" << endl;
+	return;
+    }
+
+    QDir dir(soInfo.dir());
+    if (!dir.cd(soInfo.baseName(TRUE))) {
+	RG_DEBUG << "AudioPluginOSCGUI::AudioPluginOSCGUI: No GUI subdir for plugin .so " << soName << endl;
+	return;
+    }
+
+    const QFileInfoList *list = dir.entryInfoList();
+
+    for (QFileInfoList::Iterator i = list->begin(); i != list->end(); ++i) {
+
+	if ((*i)->isFile() && (*i)->isExecutable() &&
+	    (*i)->fileName().left(label.length()) == label) { // that'll do
+	    
+	    // arguments: osc url, dll name, label, instance tag
+
+	    m_gui = new KProcess();
+
+	    *m_gui << (*i)->filePath()
+		   << m_oscUrl
+		   << soInfo.fileName()
+		   << label
+		   << "blah"; //!!!
+
+	    if (!m_gui->start(KProcess::NotifyOnExit, KProcess::NoCommunication)) {
+		RG_DEBUG << "AudioPluginOSCGUI::AudioPluginOSCGUI: Couldn't start process " << (*i)->filePath() << endl;
+		delete m_gui;
+		m_gui = 0;
+	    } else {
+		return;
+	    }
+	}
+    }
+}
+
+AudioPluginOSCGUI::~AudioPluginOSCGUI()
+{
+}
+
+void
+AudioPluginOSCGUI::acceptFromGUI(OSCMessage *message)
+{
+    RG_DEBUG << "AudioPluginOSCGUI::acceptFromGUI" << endl;
+
+
+    delete message;
+}
 
 
 #endif
