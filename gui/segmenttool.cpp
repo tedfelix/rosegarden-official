@@ -923,7 +923,6 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 
         // do a bounding box
         QCanvasRectangle *selectionRect  = m_canvas->getSelectionRectangle();
-        QRect rect = selectionRect->rect().normalize();
 
         if (selectionRect) {
             selectionRect->show();

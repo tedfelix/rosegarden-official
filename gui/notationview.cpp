@@ -822,7 +822,7 @@ void NotationView::positionStaffs()
 
     int pageWidth, pageHeight, leftMargin, topMargin;
     int accumulatedHeight;
-    int rowsPerPage;
+    int rowsPerPage = 1;
     int legerLines = 8;
     int rowGapPercent = (m_staffs.size() > 1 ? 40 : 10);
 
@@ -2574,7 +2574,7 @@ void NotationView::print(bool previewOnly)
 
 	QRect pageRect(20 + pageWidth * page, topMargin, pageWidth, pageHeight);
 	
-	for (int i = 0; i < m_staffs.size(); ++i) {
+	for (size_t i = 0; i < m_staffs.size(); ++i) {
 
 	    NotationStaff *staff = m_staffs[i];
 	    
@@ -2612,7 +2612,7 @@ void NotationView::print(bool previewOnly)
 
 	if (pli != pages.end()) printer.newPage();
 	
-	for (int i = 0; i < m_staffs.size(); ++i) {
+	for (size_t i = 0; i < m_staffs.size(); ++i) {
 	    m_staffs[i]->markChanged(); // recover any memory used for this page
 	}
     }

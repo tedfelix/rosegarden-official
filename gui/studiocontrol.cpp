@@ -258,7 +258,7 @@ void
 StudioControl::sendRPN(Rosegarden::InstrumentId instrumentId,
                        Rosegarden::MidiByte paramMSB,
                        Rosegarden::MidiByte paramLSB,
-                       Rosegarden::MidiByte controller,
+                       Rosegarden::MidiByte /* controller */,
                        Rosegarden::MidiByte value)
 {
     Rosegarden::MappedComposition mC;
@@ -304,7 +304,7 @@ void
 StudioControl::sendNRPN(Rosegarden::InstrumentId instrumentId,
                         Rosegarden::MidiByte paramMSB,
                         Rosegarden::MidiByte paramLSB,
-                        Rosegarden::MidiByte controller,
+                        Rosegarden::MidiByte /* controller */,
                         Rosegarden::MidiByte value)
 {
     Rosegarden::MappedComposition mC;

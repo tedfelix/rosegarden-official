@@ -197,7 +197,7 @@ NotationChord::getMaxAccidentalShift() const
 }
 
 int
-NotationChord::getAccidentalShift(const Iterator &itr) const
+NotationChord::getAccidentalShift(const Iterator &) const
 {
     return 0; //!!!
 }

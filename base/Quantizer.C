@@ -915,7 +915,7 @@ NotationQuantizer::Impl::quantizeAbsoluteTime(Segment *s, Segment::iterator i) c
 
 long
 NotationQuantizer::Impl::scoreAbsoluteTimeForBase(Segment *,
-						  const Segment::iterator &i,
+						  const Segment::iterator &,
 						  int depth,
 						  timeT base,
 						  timeT sigTime,
@@ -1602,17 +1602,18 @@ NotationQuantizer::Impl::quantizeRange(Segment *s,
 
     if (m_articulate) {
 
-	bool inSlur = false;
-	timeT slurFrom = s->getEndTime();
-	timeT slurTo = slurFrom;
-	timeT prevQt = slurFrom;
-	int itemsInSlur = 0;
+//!!! dropping this for the moment
+//!!!	bool inSlur = false;
+//!!!	timeT slurFrom = s->getEndTime();
+//!!!	timeT slurTo = slurFrom;
+//!!!	timeT prevQt = slurFrom;
+//!!!	int itemsInSlur = 0;
 
 	for (i = from; i != to; ++i) {
 
 	    if (!(*i)->isa(Note::EventType)) continue;
 
-	    timeT qt = getProvisional(*i, AbsoluteTimeValue);
+//!!!	    timeT qt = getProvisional(*i, AbsoluteTimeValue);
 	    timeT qd = getProvisional(*i, DurationValue);
 	    timeT ud = m_q->getFromSource(*i, DurationValue);
 /*!!!
@@ -1671,11 +1672,11 @@ NotationQuantizer::Impl::quantizeRange(Segment *s,
 	    if (ud < (qd * 3 / 4) &&
 		qd <= Note(Note::Crotchet).getDuration()) {
 		Marks::addMark(**i, Marks::Staccato, true);
-	    } else if (ud >= qd && !inSlur) {
+	    } else if (ud >= qd /*!!! && !inSlur */) {
 		Marks::addMark(**i, Marks::Tenuto, true);
 	    }	    
 
-	    prevQt = qt;
+//!!!	    prevQt = qt;
 	}
 	++passes;
     }

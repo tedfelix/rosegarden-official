@@ -589,9 +589,9 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
     // rather arbitrary
     int barThickness = m_resolution / 12 + 1;
 
-    int testRow = getRowForLayoutX(layoutX);
-    double testX = getCanvasXForLayoutX(layoutX);
-    int starti = 0;
+//!!!    int testRow = getRowForLayoutX(layoutX);
+//!!!    double testX = getCanvasXForLayoutX(layoutX);
+//!!!    int starti = 0;
 /*!!!
     if (testX < getX() + getMargin() + 2 && testRow > 1) {
 	// first bar on new row
@@ -830,7 +830,7 @@ LinedStaff::resizeStaffLineRow(int row, double x, double length)
 
     QColor lineColour(level, level, level);
 
-    int h, j;
+    int h;
 
 /*!!! No longer really good enough. But we could potentially use the
   bar positions to sort this out
@@ -850,7 +850,7 @@ LinedStaff::resizeStaffLineRow(int row, double x, double length)
 	int barThickness = m_resolution / 12 + 1;
         y = getCanvasYForTopLine(row);
 	QCanvasRectangle *line = new QCanvasRectangle
-	    (x + length, y, barThickness, m_connectingLineLength, m_canvas);
+	    (int(x + length), y, barThickness, m_connectingLineLength, m_canvas);
 	line->setPen(RosegardenGUIColours::StaffConnectingTerminatingLine);
 	line->setBrush(RosegardenGUIColours::StaffConnectingTerminatingLine);
         line->setZ(-2);

@@ -188,7 +188,7 @@ NotationStrings::getNoteForName(QString name)
     int pos = name.find('-');
     int dots = 0;
 
-    if (pos > 0 && pos < 6 && pos < name.length()-1) {
+    if (pos > 0 && pos < 6 && pos < int(name.length())-1) {
 	dots = name.left(pos).toInt();
 	name = name.right(name.length() - pos - 1);
 	if (dots < 2) {

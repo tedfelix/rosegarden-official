@@ -111,6 +111,7 @@ void
 Staff::eventAdded(const Segment *t, Event *e)
 {
     assert(t == &m_segment);
+    (void)t; // avoid warnings
 
     if (wrapEvent(e)) {
         ViewElement *el = makeViewElement(e);
@@ -123,6 +124,7 @@ void
 Staff::eventRemoved(const Segment *t, Event *e)
 {
     assert(t == &m_segment);
+    (void)t; // avoid warnings
 
     // If we have it, lose it
 
@@ -172,6 +174,7 @@ void
 Staff::segmentDeleted(const Segment *s)
 {
     assert(s == &m_segment);
+    (void)s; // avoid warnings
     /*
     std::cerr << "WARNING: Staff notified of segment deletion: this is probably a bug "
 	      << "(staff should have been deleted before segment)" << std::endl;

@@ -260,6 +260,7 @@ NotePixmapFactory::dumpStats(std::ostream &s)
     drawBeamsCount = 0;
     drawBeamsBeamCount = 0;
 #endif
+    (void)s; // avoid warnings
 }
 
 
@@ -831,7 +832,7 @@ NotePixmapFactory::makeRoomForStemAndFlags(int flagCount, int stemLength,
 void
 NotePixmapFactory::drawFlags(int flagCount, 
 			     const NotePixmapParameters &params,
-			     const QPoint &s0, const QPoint &s1)
+			     const QPoint &, const QPoint &s1)
 {
     if (flagCount < 1) return;
 
@@ -898,10 +899,10 @@ NotePixmapFactory::drawFlags(int flagCount,
 }
 
 void
-NotePixmapFactory::drawStem(const NotePixmapParameters &params,
+NotePixmapFactory::drawStem(const NotePixmapParameters &,
 			    const QPoint &s0, const QPoint &s1)
 {
-    for (unsigned int i = 0; i < getStemThickness(); ++i) {
+    for (int i = 0; i < getStemThickness(); ++i) {
 	m_p.drawLine (m_left + s0.x() + i, m_above + s0.y(),
 		      m_left + s1.x() + i, m_above + s1.y());
 	m_pm.drawLine(m_left + s0.x() + i, m_above + s0.y(),
@@ -2135,7 +2136,7 @@ int NotePixmapFactory::getNoteBodyWidth(Note::Type type)
     return m_font->getWidth(m_style->getNoteHeadCharName(type).first) -2*m_origin.x();
 }
 
-int NotePixmapFactory::getNoteBodyHeight(Note::Type type)
+int NotePixmapFactory::getNoteBodyHeight(Note::Type )
     const {
     // this is by definition
     return m_font->getSize();

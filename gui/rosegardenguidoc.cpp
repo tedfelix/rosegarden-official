@@ -1267,7 +1267,6 @@ RosegardenGUIDoc::stopRecordingMidi()
 	      m_recordSegment->getStartTime(),
 	      m_recordSegment->getEndTime(),
 	      "Notation Options",
-	      Rosegarden::Quantizer::NotationPrefix,
 	      true));
 
 	command->addCommand

@@ -680,7 +680,7 @@ void ControlRuler::contentsMouseMoveEvent(QMouseEvent* e)
         if (ControlItem *item = dynamic_cast<ControlItem*>(*it))
         {
             item->handleMouseMove(e, deltaX, deltaY);
-            ElementAdapter* adapter = item->getElementAdapter();
+//            ElementAdapter* adapter = item->getElementAdapter();
 
             // set value to highest in selection
             if (item->getValue() > value)

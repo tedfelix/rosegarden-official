@@ -396,10 +396,10 @@ void MatrixSelector::handleMidButtonPress(Rosegarden::timeT time,
 
 // Pop up an event editor - send a signal or something
 //
-void MatrixSelector::handleMouseDoubleClick(Rosegarden::timeT time,
-					    int height,
+void MatrixSelector::handleMouseDoubleClick(Rosegarden::timeT ,
+					    int ,
 					    int staffNo,
-					    QMouseEvent* e,
+					    QMouseEvent* ,
 					    Rosegarden::ViewElement *element)
 {
 /*
@@ -684,9 +684,9 @@ int MatrixMover::handleMouseMove(Rosegarden::timeT newTime,
 			   m_currentElement->getViewAbsoluteTime()) *
 		    m_currentStaff->getTimeScaleFactor());
 
-    int diffY = ((m_currentStaff->getLayoutYForHeight(newPitch) -
-		  m_currentStaff->getElementHeight() / 2) -
-		 m_currentElement->getLayoutY());
+    int diffY = int(((m_currentStaff->getLayoutYForHeight(newPitch) -
+		      m_currentStaff->getElementHeight() / 2) -
+		     m_currentElement->getLayoutY()));
 
     EventSelection* selection = m_mParentView->getCurrentSelection();
     Rosegarden::EventSelection::eventcontainer::iterator it =
@@ -703,13 +703,13 @@ int MatrixMover::handleMouseMove(Rosegarden::timeT newTime,
 
         if (element)
         {
-            int newX = m_currentElement->getLayoutX() +
-		int(double(element->getViewAbsoluteTime() -
-			   m_currentElement->getViewAbsoluteTime()) *
-		    m_currentStaff->getTimeScaleFactor());
+            int newX = int(m_currentElement->getLayoutX() +
+			   double(element->getViewAbsoluteTime() -
+				  m_currentElement->getViewAbsoluteTime()) *
+			   m_currentStaff->getTimeScaleFactor());
             if (newX < 0) newX = 0;
 
-            int newY = element->getLayoutY() + diffY;
+            int newY = int(element->getLayoutY() + diffY);
             if (newY < 0) newY = 0;
             if (newY > maxY) newY = maxY;
 

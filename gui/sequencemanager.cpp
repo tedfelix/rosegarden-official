@@ -607,11 +607,11 @@ punchin:
             // audio recording limit
             //
             config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
-            int audioRecordMinutes = config->
-                readNumEntry("audiorecordminutes", 5);
+//            int audioRecordMinutes = config->
+//                readNumEntry("audiorecordminutes", 5);
 
-            Rosegarden::AudioPluginManager *apm = 
-                m_doc->getPluginManager();
+//            Rosegarden::AudioPluginManager *apm = 
+//                m_doc->getPluginManager();
 
             // Ok, check disk space and compare to limits
             //space->getFreeKBytes()
@@ -652,7 +652,6 @@ punchin:
         //
         Rosegarden::RealTime startPos =
             comp.getElapsedRealTime(comp.getPosition());
-        Rosegarden::Configuration &docConfig = m_doc->getConfiguration();
 
         // playback start position
         streamOut << startPos.sec;

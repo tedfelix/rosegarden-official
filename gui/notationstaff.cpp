@@ -319,7 +319,7 @@ NotationStaff::getElementUnderLayoutX(double x,
  
 string
 NotationStaff::getNoteNameAtCanvasCoords(double x, int y,
-					 Rosegarden::Accidental acc) const
+					 Rosegarden::Accidental) const
 {
     Rosegarden::Clef clef;
     Rosegarden::Key key;
@@ -689,7 +689,7 @@ NotationStaff::elementShiftedOnly(NotationElementList::iterator i)
 
 void
 NotationStaff::renderSingleElement(ViewElement *velt,
-				   ViewElement *vnextElt,
+				   ViewElement * /* vnextElt */,
 				   const Rosegarden::Clef &currentClef,
 				   bool selected)
 {
@@ -1146,7 +1146,7 @@ NotationStaff::markChanged(timeT from, timeT to, bool movedOnly)
 	Rosegarden::Composition *composition = segment->getComposition();
 
 	timeT nextBarTime = 0; // we only use this -- not an ideal api any more
-	NotationElementList::iterator i = findUnchangedBarEnd(to, nextBarTime);
+	(void)findUnchangedBarEnd(to, nextBarTime);
 
 	int finalBar = composition->getBarNumber(segment->getEndMarkerTime());
 	if (nextBarTime > 0) finalBar = composition->getBarNumber(nextBarTime);

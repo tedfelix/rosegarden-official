@@ -97,10 +97,10 @@ PlayableAudioFile::getSampleFrames(unsigned int frames)
 
     if (m_audioFile)
     {
+#ifdef DEBUG_PLAYABLE
         int bytes = frames * getBytesPerSample();
         size_t count = m_ringBuffer->read(&data, bytes);
 
-#ifdef DEBUG_PLAYABLE
         if (count != size_t(bytes))
         {
             std::cerr << "PlayableAudioFile::getSampleFrames - "
@@ -158,9 +158,9 @@ PlayableAudioFile::fillRingBuffer(int bytes)
 
         }
 
+#ifdef DEBUG_PLAYABLE
         size_t writtenBytes = m_ringBuffer->write(data);
 
-#ifdef DEBUG_PLAYABLE
         std::cerr << "PlayableAudioFile::fillRingBuffer - "
                   << "written " << writtenBytes << " bytes" << std::endl;
 #endif
@@ -225,15 +225,15 @@ PlayableAudioFile::getBitsPerSample()
 // ------------- RecordableAudioFile -------------
 //
 //
-RecordableAudioFile::RecordableAudioFile(const std::string &filePath,
-                                         InstrumentId instrumentId,
-                                         AudioFile *audioFile)
+RecordableAudioFile::RecordableAudioFile(const std::string &/* filePath */,
+                                         InstrumentId /* instrumentId */,
+                                         AudioFile * /* audioFile */)
 {
 }
 
 
 void 
-RecordableAudioFile::fillRingBuffer(const std::string &data)
+RecordableAudioFile::fillRingBuffer(const std::string &/* data */)
 {
 }
 

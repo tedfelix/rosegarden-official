@@ -251,13 +251,11 @@ public:
 			 Rosegarden::timeT startTime,
 			 Rosegarden::timeT endTime,
 			 QString configGroup,
-			 std::string target,
 			 bool notationDefault);
     
     /// Constructs own quantizer based on KConfig data in given group
     EventQuantizeCommand(Rosegarden::EventSelection &selection,
 			 QString configGroup,
-			 std::string target,
 			 bool notationDefault);
 
     ~EventQuantizeCommand();
@@ -278,7 +276,7 @@ private:
     int m_progressTotal;
 
     /// Sets to m_quantizer as well as returning value
-    Rosegarden::Quantizer *makeQuantizer(QString, std::string, bool);
+    Rosegarden::Quantizer *makeQuantizer(QString, bool);
 };
 
 // Set the (numerical) property of a selection according given pattern.

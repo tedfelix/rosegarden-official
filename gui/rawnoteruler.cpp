@@ -210,6 +210,7 @@ RawNoteRuler::dumpSubtree(EventTreeNode *node, int depth)
 	dumpSubtree(*i, depth+1);
     }
 #endif
+    (void)depth; // avoid warnings
 }
 
 void
@@ -226,6 +227,7 @@ RawNoteRuler::dumpForest(EventTreeNode::NodeList *forest)
 
     RG_DEBUG << std::endl;
 #endif
+    (void)forest; // avoid warnings
 }
 
 int
@@ -268,9 +270,10 @@ RawNoteRuler::drawNode(QPainter &paint, DefaultVelocityColour &vc,
 {
     int depth = node->getDepth();
     int above = node->getChildrenAboveOrBelow(false);
-    int below = node->getChildrenAboveOrBelow(true);
 
 #ifdef DEBUG_RAW_NOTE_RULER
+    int below = node->getChildrenAboveOrBelow(true);
+
     NOTATION_DEBUG << "RawNoteRuler::drawNode: children above: "
 		   << above << ", below: " << below << endl;
 #endif
@@ -317,7 +320,7 @@ RawNoteRuler::drawNode(QPainter &paint, DefaultVelocityColour &vc,
     int ui0 = int(u0);
     int qi1 = int(q1);
     int ui1 = int(u1);
-    int qiw = int(q1-q0) - 1;
+//    int qiw = int(q1-q0) - 1;
     int uiw = int(u1-u0) - 1;
 //    int iy = int(myOrigin + (height - heightPer) / 2);
     int iy = int(myOrigin);

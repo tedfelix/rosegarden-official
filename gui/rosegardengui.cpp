@@ -2573,8 +2573,7 @@ RosegardenGUIApp::createDocumentFromMIDIFile(const QString &file)
         RG_DEBUG << "segment: start time " << segment.getStartTime() << ", end time " << segment.getEndTime() << ", end marker time " << segment.getEndMarkerTime() << ", events " << segment.size() << endl;
 
 	EventQuantizeCommand *subCommand = new EventQuantizeCommand
-	    (segment, startTime, endTime, "Notation Options",
-	     Rosegarden::Quantizer::NotationPrefix, true);
+	    (segment, startTime, endTime, "Notation Options", true);
 
 	subCommand->setProgressTotal(progressPer + 1);
 	QObject::connect(subCommand, SIGNAL(incrementProgress(int)),
@@ -4606,7 +4605,7 @@ RosegardenGUIApp::slotImportStudio()
     if (doc->openDocument(target, false))
     {
         Rosegarden::DeviceList *list = doc->getStudio().getDevices();
-        Rosegarden::DeviceListIterator it = list->begin();
+//        Rosegarden::DeviceListIterator it = list->begin();
 
         if (list->size() == 0)
         {

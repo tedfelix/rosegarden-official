@@ -1464,7 +1464,7 @@ EventSelection* NotationSelector::getSelection()
         m_selectionRect->height() > -3 &&
         m_selectionRect->height() <  3) return 0;
 
-    double middleY = m_selectionRect->y() + m_selectionRect->height()/2;
+//    double middleY = m_selectionRect->y() + m_selectionRect->height()/2;
 
     QCanvasItemList itemList = m_selectionRect->collisions(true);
     QCanvasItemList::Iterator it;

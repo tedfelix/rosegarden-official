@@ -1462,8 +1462,8 @@ NotationView::doDeferredCursorMove()
         staff->setInsertCursorPosition(*m_hlayout, t);
 
         if (m_deferredCursorMove == CursorMoveAndMakeVisible) {
-            getCanvasView()->slotScrollHoriz(staff->getCanvasXForLayoutX
-                                             (m_hlayout->getXForTime(t)));
+            getCanvasView()->slotScrollHoriz(int(staff->getCanvasXForLayoutX
+						 (m_hlayout->getXForTime(t))));
         }
 
     } else {
@@ -1905,7 +1905,7 @@ NotationView::slotStepByStepTargetRequested(QObject *obj)
 void
 NotationView::slotCheckRendered(double cx0, double cx1)
 {
-    for (int i = 0; i < m_staffs.size(); ++i) {
+    for (size_t i = 0; i < m_staffs.size(); ++i) {
 
 	NotationStaff *staff = m_staffs[i];
 

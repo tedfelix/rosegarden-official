@@ -687,9 +687,8 @@ EventQuantizeCommand::EventQuantizeCommand(Rosegarden::Segment &segment,
 					   Rosegarden::timeT startTime,
 					   Rosegarden::timeT endTime,
 					   QString configGroup,
-					   std::string target,
 					   bool notation):
-    BasicCommand(getGlobalName(makeQuantizer(configGroup, target, notation)),
+    BasicCommand(getGlobalName(makeQuantizer(configGroup, notation)),
 		 segment, startTime, endTime,
 		 true), // bruteForceRedo
     m_selection(0),
@@ -700,9 +699,8 @@ EventQuantizeCommand::EventQuantizeCommand(Rosegarden::Segment &segment,
 
 EventQuantizeCommand::EventQuantizeCommand(Rosegarden::EventSelection &selection,
 					   QString configGroup,
-					   std::string target,
 					   bool notation):
-    BasicCommand(getGlobalName(makeQuantizer(configGroup, target, notation)),
+    BasicCommand(getGlobalName(makeQuantizer(configGroup, notation)),
 		 selection.getSegment(),
 		 selection.getStartTime(),
 		 selection.getEndTime(),
@@ -749,9 +747,9 @@ EventQuantizeCommand::modifySegment()
 	KConfig *config = kapp->config();
 	config->setGroup(m_configGroup);
 
-	bool rebeam = config->readBoolEntry("quantizerebeam", true);
-	bool makeviable = config->readBoolEntry("quantizemakeviable", false);
-	bool decounterpoint = config->readBoolEntry("quantizedecounterpoint", false);
+	rebeam = config->readBoolEntry("quantizerebeam", true);
+	makeviable = config->readBoolEntry("quantizemakeviable", false);
+	decounterpoint = config->readBoolEntry("quantizedecounterpoint", false);
     }
 
     if (m_selection) {
@@ -810,7 +808,7 @@ EventQuantizeCommand::modifySegment()
 }
 
 Rosegarden::Quantizer *
-EventQuantizeCommand::makeQuantizer(QString configGroup, std::string target,
+EventQuantizeCommand::makeQuantizer(QString configGroup,
 				    bool notation)
 {
     //!!! Excessive duplication with
@@ -896,7 +894,7 @@ EventUnquantizeCommand::~EventUnquantizeCommand()
 }
 
 QString
-EventUnquantizeCommand::getGlobalName(Rosegarden::Quantizer *quantizer)
+EventUnquantizeCommand::getGlobalName(Rosegarden::Quantizer *)
 {
 /*!!!
     if (quantizer) {
@@ -1231,8 +1229,8 @@ RemoveMarkerCommand::RemoveMarkerCommand(Rosegarden::Composition *comp,
                                          const std::string &name,
                                          const std::string &description):
     KNamedCommand(getGlobalName()),
-    m_marker(0),
     m_composition(comp),
+    m_marker(0),
     m_time(time),
     m_name(name),
     m_descr(description)

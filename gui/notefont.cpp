@@ -1112,7 +1112,6 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
 	int code = -1;
 	QFont font;
 	int charBase = 0;
-	int doMultiple = 0;
 	if (!inverted) ok = m_fontMap.getCode(m_size, charName, code);
 	else  ok = m_fontMap.getInversionCode(m_size, charName, code);
 

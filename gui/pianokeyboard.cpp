@@ -147,7 +147,7 @@ void PianoKeyboard::leaveEvent(QEvent*)
 
 void PianoKeyboard::drawHoverNote(unsigned int y)
 {
-    unsigned int whiteDiff;
+    unsigned int whiteDiff = 0;
     unsigned int whiteYPos = 0;
     bool shortWhiteKey = false;
 
@@ -182,7 +182,7 @@ void PianoKeyboard::drawHoverNote(unsigned int y)
     */
 
 
-    unsigned int blackDiff;
+    unsigned int blackDiff = 0;
     unsigned int blackYPos = 0;
 
     for (unsigned int i = 0; i < m_blackKeyPos.size(); ++i)

@@ -534,7 +534,7 @@ bool RG21Loader::parseStaveType()
 
     int programNo = m_tokens[8].toInt();
 
-    if (staffNo < m_composition->getNbTracks()) {
+    if (staffNo < (int)m_composition->getNbTracks()) {
 
 	Rosegarden::Track *track = m_composition->getTrackById(staffNo);
 
