@@ -160,8 +160,6 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     m_audioPlayingDialog(0),
     m_audiblePreview(true)
 {
-    setWFlags(WDestructiveClose);
-
     // accept dnd
     setAcceptDrops(true);
 
@@ -1069,6 +1067,13 @@ AudioManagerDialog::closeEvent(QCloseEvent *e)
     RG_DEBUG << "AudioManagerDialog::closeEvent()\n";
     emit closing();
     KDialogBase::closeEvent(e);
+}
+
+void
+AudioManagerDialog::slotClose()
+{
+    emit closing();
+    delete this;
 }
 
 void
