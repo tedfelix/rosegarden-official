@@ -830,7 +830,7 @@ SegmentMmapper* SegmentMmapperFactory::makeMmapperForSegment(RosegardenGUIDoc* d
     return mmapper;
 }
 
-SegmentMmapper* SegmentMmapperFactory::makeMetronome(RosegardenGUIDoc* doc, int depth)
+MetronomeMmapper* SegmentMmapperFactory::makeMetronome(RosegardenGUIDoc* doc, int depth)
 {
     MetronomeMmapper* mmapper = new MetronomeMmapper(doc, depth);
     mmapper->init();

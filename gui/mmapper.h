@@ -185,7 +185,7 @@ public:
     static SegmentMmapper* makeMmapperForSegment(RosegardenGUIDoc*, Rosegarden::Segment*,
                                                  const QString& fileName);
 
-    static SegmentMmapper* makeMetronome(RosegardenGUIDoc*, int depth = 2);
+    static MetronomeMmapper* makeMetronome(RosegardenGUIDoc*, int depth = 2);
 };
 
 namespace Rosegarden { class SequenceManager; }
