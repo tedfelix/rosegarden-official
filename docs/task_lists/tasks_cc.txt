@@ -21,7 +21,7 @@ Post-0.1.3 task list (superseding older ones)
 
  8. Bring LoopRuler into NotationView
 
-8a. Rework SegmentItem so as to make its bar units align with LoopRuler
+8a. Rework SegmentItem so as to make its bar units align with LoopRuler [DONE]
 
  9. Extend Chord (in notationsets) so as to handle case where some notes
     at a given time have stem up and some have stem down (explicitly set
@@ -30,6 +30,14 @@ Post-0.1.3 task list (superseding older ones)
     stem directions sensibly for chords that begin during other chords? 
 
 10. Key signature GUI
+
+11. Rework Composition's bar methods so that truncate argument is no
+    longer requested, assuming truncate = false always.
+    Rename getBarRange(timeT) to getBarRangeForTime or something.
+    We should then be able to substantially simplify getBarRange so as
+    never to need to refer to the barSegment at all, only to time sigs.
+    Ultimately we may find the barSegment isn't needed in any method,
+    but this could take some testing.
 
 
 Post-0.1.1 task list

@@ -34,8 +34,8 @@
 #include <sstream>
 #endif
 
-//#undef DEBUG_BAR_STUFF
-#undef DEBUG_TEMPO_STUFF 
+//#define DEBUG_BAR_STUFF 1
+//#define DEBUG_TEMPO_STUFF 1
 
 
 namespace Rosegarden 
@@ -477,10 +477,18 @@ Composition::calculateBarPositions() const
 	bool haveTimeSig = (s > 0 || section0isTimeSig);
 
 	for (time = start; time < finish; time += sectionTimes[s]) {
+
 	    timeT thisBar = sectionTimes[s];
-	    if (time + thisBar > finish) thisBar = finish - time;
+
+	    // truncate bar if another bar starts "during" it
+	    if ((time + thisBar > finish) &&
+		(s < sections.size() - 2)) {
+		thisBar = finish - time;
+	    }
+
 	    addNewBar(time, thisBar, barNo++, haveTimeSig);
 	    haveTimeSig = false;
+
 #ifdef DEBUG_BAR_STUFF
             std::cerr << "added bar at " << time << std::endl;
 #endif
