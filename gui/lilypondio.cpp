@@ -29,6 +29,7 @@
 #include <klocale.h> // i18n
 #include <kconfig.h> // KConfig
 #include <kapp.h>
+#include <kmessagebox.h>
 
 #include <qstring.h>
 #include <qregexp.h> // QT3.0 replace()
@@ -326,12 +327,6 @@ LilypondExporter::composeLilyMark(std::string eventMark, bool stemUp) {
         outStr = prefix + inStr;
         
     } else {
-        
-        // property calculated by the notation editor at view time.  property
-        // can be made persistent for all notes by changing a single stem
-        // manually, but that leaves much to be desired.  Consequently, we'll
-        // let Lilypond make as many decisions as possible, and will only use
-        // stemUp to make direction decisions when it's unavoidable
         outStr = "-";
 
         // use full \accent format for everything, even though some shortcuts
@@ -398,11 +393,12 @@ LilypondExporter::protectIllegalChars(std::string inStr) {
     tmpStr.replace(QRegExp("\\]"), "");
     tmpStr.replace(QRegExp("\\{"), "");
     tmpStr.replace(QRegExp("\\}"), "");
-    tmpStr.replace(QRegExp("\\("), "");
-    tmpStr.replace(QRegExp("\\)"), "");
+// () seem OK
+//    tmpStr.replace(QRegExp("\\("), "");
+//    tmpStr.replace(QRegExp("\\)"), "");
     tmpStr.replace(QRegExp("\""), "");
     tmpStr.replace(QRegExp("'"), "");
-    tmpStr.replace(QRegExp("\\-"), "\\\\-");
+    tmpStr.replace(QRegExp("-"), "\\-");
 
     // [cc] Convert to latin1, which is what Lilypond expects.
     // I have no idea whether, or how, non-latin1 characters can be
@@ -460,19 +456,14 @@ LilypondExporter::write() {
 
     unsigned int paperSize = cfg->readUnsignedNumEntry("lilypapersize");
     unsigned int fontSize = cfg->readUnsignedNumEntry("lilyfontsize");
-    unsigned int restType = cfg->readUnsignedNumEntry("lilyresttype");
+//!!!    unsigned int restType = cfg->readUnsignedNumEntry("lilyresttype");
     bool exportLyrics = cfg->readBoolEntry("lilyexportlyrics");
     bool exportHeaders = cfg->readBoolEntry("lilyexportheaders");
     bool exportMidi = cfg->readBoolEntry("lilyexportmidi");
     bool exportUnmuted = cfg->readBoolEntry("lilyexportunmuted");
 
-    if (exportUnmuted) {
-        str << "% NOTE: \"do not export muted staffs\" was checked, but this feature hasn't\n"
-            << "% yet been implemented...  Coming soon...  Hang in there.  :)" << std::endl;
-    }
-    
     // Lilypond \header block
-    str << "\\version \"1.6.5\"" << std::endl;
+    str << "\\version \"1.6.0\"" << std::endl;
 
     // set indention level to make future changes to horizontal layout less
     // tedious, ++col to indent a new level, --col to de-indent
@@ -587,508 +578,526 @@ LilypondExporter::write() {
         // if we are currently in a chord
         bool addTie = false;
 
-        if ((int) (*i)->getTrack() != lastTrackIndex) {
-            if (lastTrackIndex != -1) {
-                // close the old track (Staff context)
-                str << std::endl << indent(--col) << "> % Staff" << std::endl;  // indent-
-            }
-            lastTrackIndex = (*i)->getTrack();
-
-            // avoid problem with <untitled> tracks yielding a .ly file that
-            // jumbles all notes together on a single staff...
-            // every Staff context has to have a unique name, even if the
-            // Staff.instrument property is the same for multiple staffs...
-            std::ostringstream staffName;
-            staffName << protectIllegalChars(m_composition->
-                    getTrackByIndex(lastTrackIndex)->getLabel());
-
-            if (staffName.str() == "") {
-                staffName << "track";
-            }
-            
-            str << indent(col) << "\\context Staff = \"" << staffName.str()
-                << " " << (voiceCounter +1) << "\" < " << std::endl;
-
-            str << indent(++col)<< "\\property Staff.instrument = \""  // indent+
-                << staffName.str() <<"\"" << std::endl;;
+        // do nothing if track is muted...  this provides a crude but easily implemented
+        // method for users to selectively export tracks...
+        Rosegarden::Track *track = m_composition->getTrackByIndex((*i)->getTrack());
         
-        }
-        SegmentNotationHelper tmpHelper(**i);
-
-        // Temporary storage for non-atomic events (!BOOM)
-        // ex. Lilypond expects signals when a decrescendo starts 
-        // as well as when it ends
-        eventendlist eventsInProgress;
-        eventstartlist eventsToStart;
-      
-        // If the segment doesn't start at 0, add a "skip" to the start
-        // No worries about overlapping segments, because Voices can overlap
-        // voiceCounter is a hack because Lilypond does not by default make 
-        // them unique
-
-        std::ostringstream voiceNumber, lyricNumber;
-        voiceNumber << "voice " << voiceCounter;
-        lyricNumber << "lyric " << voiceCounter++;
-        
-        str << indent(col++) << "\\context Voice = \"" << voiceNumber.str()
-            << "\" {"; // indent+
-        
-        timeT segmentStart = (*i)->getStartTime(); // getFirstEventTime
-        
-        if (segmentStart > 0) {
-            long curNote = long(Note(Note::WholeNote).getDuration());
-            long wholeNoteDuration = curNote;
-            // Incomplete: Make this a constant!
-            // This is the smallest unit on which a Segment may begin
-            long MIN_NOTE_SKIP_DURATION = long(Note(Note::ThirtySecondNote).getDuration());
-            
-            while (curNote >= MIN_NOTE_SKIP_DURATION) {
-                int numCurNotes = ((int)(segmentStart / curNote));
-                if (numCurNotes > 0) {
-                    // FIXME - use new config data and get some |==rests==|
-                    // going...
-                    if (restType == 1) {
-                        str << std::endl << "% you selected multi-measure rests, but they are not yet implemented...  sorry..." << std::endl;
-                    }
-                    str << indent(col) << "\\skip " << (wholeNoteDuration / curNote)
-                        << "*" << numCurNotes << std::endl;
-                    segmentStart = segmentStart - numCurNotes*curNote;
+        if (exportUnmuted && (!track->isMuted())) {
+            if ((int) (*i)->getTrack() != lastTrackIndex) {
+                if (lastTrackIndex != -1) {
+                    // close the old track (Staff context)
+                    str << std::endl << indent(--col) << "> % Staff" << std::endl;  // indent-
                 }
-                curNote /= 2;
-            }
-        }
+                lastTrackIndex = (*i)->getTrack();
 
-        timeT prevTime = 0;
-        int curTupletNotesRemaining = 0;
-        int accidentalCount = 0; 
-// WIP       int timeSignatureIterator = 0;
+                // avoid problem with <untitled> tracks yielding a .ly file that
+                // jumbles all notes together on a single staff...
+                // every Staff context has to have a unique name, even if the
+                // Staff.instrument property is the same for multiple staffs...
+                std::ostringstream staffName;
+                staffName << protectIllegalChars(m_composition->
+                        getTrackByIndex(lastTrackIndex)->getLabel());
 
-        // declare these outside the scope of the coming for loop
-        std::string lilyText = "";      // text events
-        std::ostringstream lilyLyrics;  // stream to collect/hold lyric events 
-        
-        // Write out all events for this Segment
-        for (Segment::iterator j = (*i)->begin(); j != (*i)->end(); ++j) {
-
-            // We need to deal with absolute time if we don't have 
-            // "complete" lines of music and/or nonoverlapping events
-            // i.e. chords etc.
-            timeT absoluteTime = (*j)->getAbsoluteTime();
-
-            // new bar
-            bool multipleTimeSignatures = ((m_composition->getTimeSignatureCount ()) > 1);
-            
-/*  WIP       long timeSignatureCount = m_composition->getTimeSignatureCount();
-            bool multipleTimeSignatures = (timeSignatureCount > 1);
-
-            if (multipleTimeSignatures) {
-                timeSignatureIterator++;
-                timeSignature = m_composition->getTimeSignatureChange(timeSignatureIterator); */
-            
-            if (j == (*i)->begin() ||
-                (prevTime < m_composition->getBarStartForTime(absoluteTime))) {
-                str << std::endl << indent(col);  // carriage return at end of line
+                if (staffName.str() == "") {
+                    staffName << "track";
+                }
                 
-                // DMM - this is really pretty much an ugly hack, but it works...
-                // check time signature against previous one; if different,
-                // write new one here at bar line...
-                // FIXME - rewrite this to getTimeSignatureChange for time
-                // sig. 1, look at "now" to see if it's time to write it, and
-                // when we get to that point, ++ the time sig iterator to grab
-                // the next change and be looking for that, etc. until out of
-                // events.  Probably much less ugly and worth doing, but the
-                // existing implementation works well enough to put off doing
-                // that until after text events and marks are working....
-                // just basically that the current method wastes a lot of CPU
-                // cycles checking stuff that doesn't really have to be
-                // checked because the times are known in advance if you look.
-                //
-                // (WIP)
-                TimeSignature prevTimeSignature = timeSignature;
+                str << indent(col) << "\\context Staff = \"" << staffName.str()
+                    << " " << (voiceCounter +1) << "\" < " << std::endl;
+
+                str << indent(++col)<< "\\property Staff.instrument = \""  // indent+
+                    << staffName.str() <<"\"" << std::endl;;
+            
+            }
+            SegmentNotationHelper tmpHelper(**i);
+
+            // Temporary storage for non-atomic events (!BOOM)
+            // ex. Lilypond expects signals when a decrescendo starts 
+            // as well as when it ends
+            eventendlist eventsInProgress;
+            eventstartlist eventsToStart;
+          
+            // If the segment doesn't start at 0, add a "skip" to the start
+            // No worries about overlapping segments, because Voices can overlap
+            // voiceCounter is a hack because Lilypond does not by default make 
+            // them unique
+
+            std::ostringstream voiceNumber, lyricNumber;
+            voiceNumber << "voice " << voiceCounter;
+            lyricNumber << "lyric " << voiceCounter++;
+            
+            str << indent(col++) << "\\context Voice = \"" << voiceNumber.str()
+                << "\" {"; // indent+
+            
+            timeT segmentStart = (*i)->getStartTime(); // getFirstEventTime
+            
+            if (segmentStart > 0) {
+                long curNote = long(Note(Note::WholeNote).getDuration());
+                long wholeNoteDuration = curNote;
+                // Incomplete: Make this a constant!
+                // This is the smallest unit on which a Segment may begin
+                long MIN_NOTE_SKIP_DURATION = long(Note(Note::ThirtySecondNote).getDuration());
+                
+                while (curNote >= MIN_NOTE_SKIP_DURATION) {
+                    int numCurNotes = ((int)(segmentStart / curNote));
+                    if (numCurNotes > 0) {
+                        str << std::endl << indent(col) << "\\skip "
+                            << (wholeNoteDuration / curNote)
+                            << "*" << numCurNotes << std::endl;
+                        segmentStart = segmentStart - numCurNotes*curNote;
+                    }
+                    curNote /= 2;
+                }
+            }
+
+            timeT prevTime = 0;
+            int curTupletNotesRemaining = 0;
+            int accidentalCount = 0; 
+    // WIP       int timeSignatureIterator = 0;
+
+            // declare these outside the scope of the coming for loop
+            std::string lilyText = "";      // text events
+            std::ostringstream lilyLyrics;  // stream to collect/hold lyric events 
+            
+            // Write out all events for this Segment
+            for (Segment::iterator j = (*i)->begin(); j != (*i)->end(); ++j) {
+
+                // We need to deal with absolute time if we don't have 
+                // "complete" lines of music and/or nonoverlapping events
+                // i.e. chords etc.
+                timeT absoluteTime = (*j)->getAbsoluteTime();
+
+                // new bar
+                bool multipleTimeSignatures = ((m_composition->getTimeSignatureCount ()) > 1);
+                
+    /*  WIP       long timeSignatureCount = m_composition->getTimeSignatureCount();
+                bool multipleTimeSignatures = (timeSignatureCount > 1);
+
                 if (multipleTimeSignatures) {
-                    timeSignature = m_composition->getTimeSignatureAt(absoluteTime);
-                    if (
-                        (timeSignature.getNumerator() != prevTimeSignature.getNumerator())
-                        || 
-                        (timeSignature.getDenominator() != prevTimeSignature.getDenominator())
-                        &&
-                        !(timeSignature.isHidden())
-                       ) {
-                        str << "\\time "
-                            << timeSignature.getNumerator() << "/"
-                            << timeSignature.getDenominator() << indent(col) << std::endl;
+                    timeSignatureIterator++;
+                    timeSignature = m_composition->getTimeSignatureChange(timeSignatureIterator); */
+                
+                if (j == (*i)->begin() ||
+                    (prevTime < m_composition->getBarStartForTime(absoluteTime))) {
+                    str << std::endl << indent(col);  // carriage return at end of line
+                    
+                    // DMM - this is really pretty much an ugly hack, but it works...
+                    // check time signature against previous one; if different,
+                    // write new one here at bar line...
+                    // FIXME - rewrite this to getTimeSignatureChange for time
+                    // sig. 1, look at "now" to see if it's time to write it, and
+                    // when we get to that point, ++ the time sig iterator to grab
+                    // the next change and be looking for that, etc. until out of
+                    // events.  Probably much less ugly and worth doing, but the
+                    // existing implementation works well enough to put off doing
+                    // that until some day when I run out of more exciting
+                    // things to do...
+                    //
+                    // (WIP)
+                    TimeSignature prevTimeSignature = timeSignature;
+                    if (multipleTimeSignatures) {
+                        timeSignature = m_composition->getTimeSignatureAt(absoluteTime);
+                        if (
+                            (timeSignature.getNumerator() != prevTimeSignature.getNumerator())
+                            || 
+                            (timeSignature.getDenominator() != prevTimeSignature.getDenominator())
+                            &&
+                            !(timeSignature.isHidden())
+                           ) {
+                            str << "\\time "
+                                << timeSignature.getNumerator() << "/"
+                                << timeSignature.getDenominator() << std::endl << indent(col);
+                        }
                     }
                 }
-            }
-            
-            prevTime = absoluteTime;
-
-            timeT duration = (*j)->getNotationDuration();
-
-            // handle text events...  unhandled text types:
-            // UnspecifiedType, StaffName, ChordName, KeyName, Annotation
-            //
-            // text must be bound to a note, and it needs to be bound to the
-            // note immediately after receiving the text event, so we'll
-            // process it, then continue out of the loop, and then
-            // write it out the next time we have a Note event.
-            //
-            // Incomplete?  There may be cases where binding it to the next
-            // note arbitrarily is the wrong thing to do...
-            if ((*j)->isa(Text::EventType)) {
                 
-                std::string text = "";
-                (*j)->get<String>(Text::TextPropertyName, text);
-                text = protectIllegalChars(text);
+                prevTime = absoluteTime;
 
-                // Incomplete - these interpretations aren't that great, but
-                // this is about all we can do to represent what the notation
-                // editor displays for these text types without getting into highly
-                // arcane, complicated Lilypond twiddling...
+                timeT duration = (*j)->getNotationDuration();
 
-                if (Text::isTextOfType(*j, Text::Tempo)) {
-                    // print above staff, bold, large
-                    lilyText = "^#'((bold Large)\"" + text + "\")";
-                } else if (Text::isTextOfType(*j, Text::LocalTempo)) {
-                    // print above staff, bold, small
-                    lilyText = "^#'(bold \"" + text + "\")";
-                } else if (Text::isTextOfType(*j, Text::Lyric)) {
-//                    lilyText = "_#\"" + text + "\"";
-                    lilyLyrics << text << " ";
-                } else if (Text::isTextOfType(*j, Text::Dynamic)) {
-                    // pass through only supported types
-                    if (text == "ppp" || text == "pp"  || text == "p"  ||
-                        text == "mp"  || text == "mf"  || text == "f"  ||
-                        text == "ff"  || text == "fff" || text == "rfz" ||
-                        text == "sf") {
-                        
-                        lilyText = "-\\" + text;
+                // handle text events...  unhandled text types:
+                // UnspecifiedType, StaffName, ChordName, KeyName, Annotation
+                //
+                // text must be bound to a note, and it needs to be bound to the
+                // note immediately after receiving the text event, so we'll
+                // process it, then continue out of the loop, and then
+                // write it out the next time we have a Note event.
+                //
+                // Incomplete?  There may be cases where binding it to the next
+                // note arbitrarily is the wrong thing to do...
+                if ((*j)->isa(Text::EventType)) {
+                    
+                    std::string text = "";
+                    (*j)->get<String>(Text::TextPropertyName, text);
+                    text = protectIllegalChars(text);
+
+                    // Incomplete - these interpretations aren't that great, but
+                    // this is about all we can do to represent what the notation
+                    // editor displays for these text types without getting into highly
+                    // arcane, complicated Lilypond twiddling...
+
+                    if (Text::isTextOfType(*j, Text::Tempo)) {
+                        // print above staff, bold, large
+                        lilyText = "^#'((bold Large)\"" + text + "\")";
+                    } else if (Text::isTextOfType(*j, Text::LocalTempo)) {
+                        // print above staff, bold, small
+                        lilyText = "^#'(bold \"" + text + "\")";
+                    } else if (Text::isTextOfType(*j, Text::Lyric)) {
+                        lilyLyrics << text << " ";
+                    } else if (Text::isTextOfType(*j, Text::Dynamic)) {
+                        // pass through only supported types
+                        if (text == "ppp" || text == "pp"  || text == "p"  ||
+                            text == "mp"  || text == "mf"  || text == "f"  ||
+                            text == "ff"  || text == "fff" || text == "rfz" ||
+                            text == "sf") {
+                            
+                            lilyText = "-\\" + text;
+                        } else {
+                            std::cerr << "LilypondExporter::write() - illegal Lilypond dynamic: "
+                                      << text << std::endl;
+                        }                         
+                    } else if (Text::isTextOfType(*j, Text::Direction)) {
+                        // print above staff, large
+//                        lilyText = "^#'(Large\"" + text + "\")";
+                        lilyText = " \\mark \"" + text + "\"";
+                    } else if (Text::isTextOfType(*j, Text::LocalDirection)) {
+                        // print below staff, bold italics, small
+                        lilyText = "_#'((bold italic) \"" + text + "\")";
                     } else {
-                        std::cerr << "LilypondExporter::write() - illegal Lilypond dynamic: "
+                        (*j)->get<String>(Text::TextTypePropertyName, text);
+                        std::cerr << "LilypondExporter::write() - unhandled text type: "
                                   << text << std::endl;
-                    }                         
-                } else if (Text::isTextOfType(*j, Text::Direction)) {
-                    // print above staff, large
-                    lilyText = "^#'(Large\"" + text + "\")";
-//                  lilyText = " \\mark \"" + text + "\"";  // better compromise?
-                } else if (Text::isTextOfType(*j, Text::LocalDirection)) {
-                    // print below staff, bold italics, small
-                    lilyText = "_#'((bold italic) \"" + text + "\")";
-                } else {
-                    (*j)->get<String>(Text::TextTypePropertyName, text);
-                    std::cerr << "LilypondExporter::write() - unhandled text type: "
-                              << text << std::endl;
-                }
-                
-                // jump out of this for loop so that lilyText can be attached
-                // to the next note we come to...  this might actually be
-                // redundant, but it shouldn't hurt anything just in case
-                continue;
-
-            } else if ((*j)->isa(Note::EventType) ||
-                        (*j)->isa(Note::EventRestType)) {
-                // Tuplet code from notationhlayout.cpp
-                int tcount = 0;
-                int ucount = 0;
-                if ((*j)->has(BaseProperties::BEAMED_GROUP_TUPLET_BASE)) {
-                    tcount = (*j)->get<Int>(BaseProperties::BEAMED_GROUP_TUPLED_COUNT);
-                    ucount = (*j)->get<Int>(BaseProperties::BEAMED_GROUP_UNTUPLED_COUNT);
-                    assert(tcount != 0);
-
-                    duration = ((*j)->getNotationDuration() / tcount) * ucount;
-                    if (curTupletNotesRemaining == 0) {
-                        // +1 is a hack so we can close the tuplet bracket
-                        // at the right time
-                        curTupletNotesRemaining = ucount + 1;
                     }
-                }
-                
-                Note tmpNote = Note::getNearestNote(duration, MAX_DOTS);
-                std::string lilyMark = "";
+                    
+                    // jump out of this for loop so that lilyText can be attached
+                    // to the next note we come to...  this might actually be
+                    // redundant, but it shouldn't hurt anything just in case
+                    continue;
 
-                if ((*j)->isa(Note::EventType)) {
-                    // Algorithm for writing chords:
-                    // 1) Close the old chord
-                    //   - if there is one
-                    //   - if the next note is not part of the old chord
-                    // 2) Open the new chord
-                    //   - if the next note is in a chord
-                    //   - and we're not writing one now
-                    bool nextNoteIsInChord = tmpHelper.noteIsInChord(*j);
-                    if (currentlyWritingChord &&
-                        (!nextNoteIsInChord ||
-                         (nextNoteIsInChord && lastChordTime != absoluteTime))) {
-                        str << "> ";
-                        currentlyWritingChord = false;
-                    }
-                    if (curTupletNotesRemaining > 0) {
-                        curTupletNotesRemaining--;
+                } else if ((*j)->isa(Note::EventType) ||
+                            (*j)->isa(Note::EventRestType)) {
+                    // Tuplet code from notationhlayout.cpp
+                    int tcount = 0;
+                    int ucount = 0;
+                    if ((*j)->has(BaseProperties::BEAMED_GROUP_TUPLET_BASE)) {
+                        tcount = (*j)->get<Int>(BaseProperties::BEAMED_GROUP_TUPLED_COUNT);
+                        ucount = (*j)->get<Int>(BaseProperties::BEAMED_GROUP_UNTUPLED_COUNT);
+                        assert(tcount != 0);
+
+                        duration = ((*j)->getNotationDuration() / tcount) * ucount;
                         if (curTupletNotesRemaining == 0) {
-                            str << "} ";
+                            // +1 is a hack so we can close the tuplet bracket
+                            // at the right time
+                            curTupletNotesRemaining = ucount + 1;
                         }
                     }
-                    if (ucount == curTupletNotesRemaining &&
-                        ucount != 0) {
-                        str << "\\times " << tcount << "/" << ucount << " { ";
-                    }
-                    if (nextNoteIsInChord && !currentlyWritingChord) {
-                        currentlyWritingChord = true;
-                        str << "< ";
-                        lastChordTime = absoluteTime;
-                    }
-
-                    // Incomplete: velocity?
-                    long velocity = 127;
-                    (*j)->get<Int>(BaseProperties::VELOCITY, velocity);
-
-                    handleEndingEvents(eventsInProgress, j, str);
-
-                    // Note pitch (need name as well as octave)
-                    // It is also possible to have "relative" pitches,
-                    // but for simplicity we always use absolute pitch
-                    // 60 is middle C, one unit is a half-step
-                    long pitch = 0;
-
-                    // format of Lilypond note is:
-                    // name + (duration) + octave + text markup
-
-                    // calculate note name and write note
-                    Accidental accidental;
-                    std::string lilyNote;
-
-                    (*j)->get<Int>(BaseProperties::PITCH, pitch);
                     
-                    (*j)->get<String>(BaseProperties::ACCIDENTAL, accidental);
+                    Note tmpNote = Note::getNearestNote(duration, MAX_DOTS);
+                    std::string lilyMark = "";
 
-                    lilyNote = convertPitchToLilyNote(pitch, isFlatKeySignature,
-                                                  accidentalCount, accidental);
-
-                    str << lilyNote;
-
-                    // generate and write octave marks
-                    std::string octaveMarks = "";
-                    int octave = (int)(pitch / 12);
-
-                    // tweak the octave break for B# / Cb
-                    if ((lilyNote == "bisis")||(lilyNote == "bis")) {
-                        octave--;
-                    } else if ((lilyNote == "ceses")||(lilyNote == "ces")) {
-                        octave++;
-                    }
-
-                    if (octave < 4) {
-                        for (; octave < 4; octave++) octaveMarks += ",";
-                    } else {
-                        for (; octave > 4; octave--) octaveMarks += "\'";
-                    }
-
-                    str << octaveMarks;
-
-                    // string together Marks, to be written outside this if
-                    // block we're in, after the duration is written
-                    long markCount = 0;
-                    bool stemUp;
-                    std::string eventMark = "",
-                                stem = "";
-                    
-                    (*j)->get<Int>(BaseProperties::MARK_COUNT, markCount);
-                    (*j)->get<Bool>(BaseProperties::STEM_UP, stemUp);
-
-                    if (markCount > 0) {
-                        for (int c = 0; c < markCount; c++) {
-                            (*j)->get<String>(BaseProperties::getMarkPropertyName(c), eventMark);
-                            std::string mark = composeLilyMark(eventMark, stemUp);
-                            lilyMark += mark;
+                    if ((*j)->isa(Note::EventType)) {
+                        // Algorithm for writing chords:
+                        // 1) Close the old chord
+                        //   - if there is one
+                        //   - if the next note is not part of the old chord
+                        // 2) Open the new chord
+                        //   - if the next note is in a chord
+                        //   - and we're not writing one now
+                        bool nextNoteIsInChord = tmpHelper.noteIsInChord(*j);
+                        if (currentlyWritingChord &&
+                            (!nextNoteIsInChord ||
+                             (nextNoteIsInChord && lastChordTime != absoluteTime))) {
+                            str << "> ";
+                            currentlyWritingChord = false;
                         }
+                        if (curTupletNotesRemaining > 0) {
+                            curTupletNotesRemaining--;
+                            if (curTupletNotesRemaining == 0) {
+                                str << "} ";
+                            }
+                        }
+                        if (ucount == curTupletNotesRemaining &&
+                            ucount != 0) {
+                            str << "\\times " << tcount << "/" << ucount << " { ";
+                        }
+                        if (nextNoteIsInChord && !currentlyWritingChord) {
+                            currentlyWritingChord = true;
+                            str << "< ";
+                            lastChordTime = absoluteTime;
+                        }
+
+                        // Incomplete: velocity?
+                        long velocity = 127;
+                        (*j)->get<Int>(BaseProperties::VELOCITY, velocity);
+
+                        handleEndingEvents(eventsInProgress, j, str);
+
+                        // Note pitch (need name as well as octave)
+                        // It is also possible to have "relative" pitches,
+                        // but for simplicity we always use absolute pitch
+                        // 60 is middle C, one unit is a half-step
+                        long pitch = 0;
+
+                        // format of Lilypond note is:
+                        // name + (duration) + octave + text markup
+
+                        // calculate note name and write note
+                        Accidental accidental;
+                        std::string lilyNote;
+
+                        (*j)->get<Int>(BaseProperties::PITCH, pitch);
+                        
+                        (*j)->get<String>(BaseProperties::ACCIDENTAL, accidental);
+
+                        lilyNote = convertPitchToLilyNote(pitch, isFlatKeySignature,
+                                                      accidentalCount, accidental);
+
+                        str << lilyNote;
+
+                        // generate and write octave marks
+                        std::string octaveMarks = "";
+                        int octave = (int)(pitch / 12);
+
+                        // tweak the octave break for B# / Cb
+                        if ((lilyNote == "bisis")||(lilyNote == "bis")) {
+                            octave--;
+                        } else if ((lilyNote == "ceses")||(lilyNote == "ces")) {
+                            octave++;
+                        }
+
+                        if (octave < 4) {
+                            for (; octave < 4; octave++) octaveMarks += ",";
+                        } else {
+                            for (; octave > 4; octave--) octaveMarks += "\'";
+                        }
+
+                        str << octaveMarks;
+
+                        // string together Marks, to be written outside this if
+                        // block we're in, after the duration is written
+                        long markCount = 0;
+                        bool stemUp;
+                        std::string eventMark = "",
+                                    stem = "";
+                        
+                        (*j)->get<Int>(BaseProperties::MARK_COUNT, markCount);
+                        (*j)->get<Bool>(BaseProperties::STEM_UP, stemUp);
+
+                        if (markCount > 0) {
+                            for (int c = 0; c < markCount; c++) {
+                                (*j)->get<String>(BaseProperties::getMarkPropertyName(c),
+                                    eventMark);
+                                std::string mark = composeLilyMark(eventMark, stemUp);
+                                lilyMark += mark;
+                            }
+                        }
+
+                    } else { // it's a rest
+                        if (currentlyWritingChord) {
+                            currentlyWritingChord = false;
+                            handleStartingEvents(eventsToStart, addTie, str);
+                            str << "> ";
+                        }
+                        if (curTupletNotesRemaining > 0) {
+                            curTupletNotesRemaining--;
+                            if (curTupletNotesRemaining == 0) {
+                                str << "} ";
+                            }
+                        }
+                        if (ucount == curTupletNotesRemaining &&
+                            ucount != 0) {
+                            str << "\\times " << tcount << "/" << ucount << " { ";
+                        }
+                        handleEndingEvents(eventsInProgress, j, str);
+                        str << "r";
+                    }
+                    
+                    // Note/rest length (type), including dots
+                    if (tmpNote.getNoteType() != lastType ||
+                        tmpNote.getDots() != lastNumDots) {
+                        switch (tmpNote.getNoteType()) {
+                        case Note::SixtyFourthNote:
+                            str << "64"; break;
+                        case Note::ThirtySecondNote:
+                            str << "32"; break;
+                        case Note::SixteenthNote:
+                            str << "16"; break;
+                        case Note::EighthNote:
+                            str << "8"; break;
+                        case Note::QuarterNote:
+                            str << "4"; break;
+                        case Note::HalfNote:
+                            str << "2"; break;
+                        case Note::WholeNote:
+                            str << "1"; break;
+                       case Note::DoubleWholeNote:
+                           str << "\\breve"; break;
+                        }
+                        lastType = tmpNote.getNoteType();
+                        for (int numDots = 0; numDots < tmpNote.getDots(); numDots++) {
+                            str << ".";
+                        }
+                        lastNumDots = tmpNote.getDots();
+                    } // end isa Note
+
+                    // write string of marks after duration
+                    if (lilyMark != "") {
+                        str << lilyMark;
                     }
 
-                } else { // it's a rest
+                    // write text carried forward from previous iteration of the
+                    // for loop we're in
+                    if (lilyText != "") {
+                        str << lilyText;
+                        lilyText = "";  // purge now that text has been bound to note
+                    }
+
+                    // write slashes after text
+                    // / = 8 // = 16 /// = 32, etc.
+                    long slashes = 0;
+                    (*j)->get<Int>(NotationProperties::SLASHES, slashes);
+                    if (slashes > 0) {
+                        str << ":";
+                        int length = 4;
+                        for (int c = 1; c <= slashes; c++) {
+                            length *= 2;
+                        }
+                        str << length;
+                    }
+                    
+                    // Add a tie if necessary (or postpone it if we're in a chord)
+                    bool tiedForward = false;
+                    (*j)->get<Bool>(BaseProperties::TIED_FORWARD, tiedForward);
+                    if (tiedForward) {
+                        // Lilypond doesn't like ties inside chords, so defer writing
+                        // This should go in eventsToStart, but ties aren't Indications
+                        addTie = true;
+                    }
+                    
+                    // Add a space before the next note/event
+                    str << " ";
+
+                    if (!currentlyWritingChord) {
+                        // And write any deferred start-of-events
+                        handleStartingEvents(eventsToStart, addTie, str);
+                    }
+                } else if ((*j)->isa(Clef::EventType)) {
                     if (currentlyWritingChord) {
+                        // Incomplete: Consolidate
                         currentlyWritingChord = false;
                         handleStartingEvents(eventsToStart, addTie, str);
                         str << "> ";
                     }
-                    if (curTupletNotesRemaining > 0) {
-                        curTupletNotesRemaining--;
-                        if (curTupletNotesRemaining == 0) {
-                            str << "} ";
-                        }
+
+                    // Incomplete: Set which note the clef should center on  (DMM - why?)
+                    str << "\\clef ";
+                    
+                    std::string whichClef((*j)->get<String>(Clef::ClefPropertyName));
+                    if (whichClef == Clef::Treble) {
+                        str << "treble" << std::endl;
+                    } else if (whichClef == Clef::Tenor) {
+                        str << "tenor" << std::endl;
+                    } else if (whichClef == Clef::Alto) {
+                        str << "alto" << std::endl;
+                    } else if (whichClef == Clef::Bass) {
+                        str << "bass" << std::endl;
                     }
-                    if (ucount == curTupletNotesRemaining &&
-                        ucount != 0) {
-                        str << "\\times " << tcount << "/" << ucount << " { ";
+                    
+                    str << indent(col);
+
+                } else if ((*j)->isa(Rosegarden::Key::EventType)) {
+                    if (currentlyWritingChord) {
+                        // Incomplete: Consolidate
+                        currentlyWritingChord = false;
+                        handleStartingEvents(eventsToStart, addTie, str);
+                        str << "> ";
                     }
-                    handleEndingEvents(eventsInProgress, j, str);
-                    str << "r";
-                }
-                
-                // Note/rest length (type), including dots
-                if (tmpNote.getNoteType() != lastType ||
-                    tmpNote.getDots() != lastNumDots) {
-                    switch (tmpNote.getNoteType()) {
-                    case Note::SixtyFourthNote:
-                        str << "64"; break;
-                    case Note::ThirtySecondNote:
-                        str << "32"; break;
-                    case Note::SixteenthNote:
-                        str << "16"; break;
-                    case Note::EighthNote:
-                        str << "8"; break;
-                    case Note::QuarterNote:
-                        str << "4"; break;
-                    case Note::HalfNote:
-                        str << "2"; break;
-                    case Note::WholeNote:
-                        str << "1"; break;
-                   case Note::DoubleWholeNote:
-                       str << "\\breve"; break;
+
+                    str << "\\key ";
+                    Rosegarden::Key whichKey(**j);
+                    isFlatKeySignature = !whichKey.isSharp();
+                    accidentalCount = whichKey.getAccidentalCount();
+                    
+                    str << convertPitchToLilyNote(whichKey.getTonicPitch(), isFlatKeySignature,
+                                                  accidentalCount, "");
+                    
+                    if (whichKey.isMinor()) {
+                        str << " \\minor";
+                    } else {
+                        str << " \\major";
                     }
-                    lastType = tmpNote.getNoteType();
-                    for (int numDots = 0; numDots < tmpNote.getDots(); numDots++) {
-                        str << ".";
-                    }
-                    lastNumDots = tmpNote.getDots();
-                } // end isa Note
-
-                // write string of marks after duration
-                if (lilyMark != "") {
-                    str << lilyMark;
-                }
-
-                // write text carried forward from previous iteration of the
-                // for loop we're in
-                if (lilyText != "") {
-                    str << lilyText;
-                    lilyText = "";  // purge now that text has been bound to note
-                }
-
-                // write slashes after text
-                // / = 8 // = 16 /// = 32, etc.
-                long slashes = 0;
-                (*j)->get<Int>(NotationProperties::SLASHES, slashes);
-                if (slashes > 0) {
-                    str << ":";
-                    int length = 4;
-                    for (int c = 1; c <= slashes; c++) {
-                        length *= 2;
-                    }
-                    str << length;
-                }
-                
-                // Add a tie if necessary (or postpone it if we're in a chord)
-                bool tiedForward = false;
-                (*j)->get<Bool>(BaseProperties::TIED_FORWARD, tiedForward);
-                if (tiedForward) {
-                    // Lilypond doesn't like ties inside chords, so defer writing
-                    // This should go in eventsToStart, but ties aren't Indications
-                    addTie = true;
-                }
-                
-                // Add a space before the next note/event
-                str << " ";
-
-                if (!currentlyWritingChord) {
-                    // And write any deferred start-of-events
-                    handleStartingEvents(eventsToStart, addTie, str);
-                }
-            } else if ((*j)->isa(Clef::EventType)) {
-                if (currentlyWritingChord) {
-                    // Incomplete: Consolidate
-                    currentlyWritingChord = false;
-                    handleStartingEvents(eventsToStart, addTie, str);
-                    str << "> ";
-                }
-
-                // Incomplete: Set which note the clef should center on  (DMM - why?)
-                str << "\\clef ";
-                
-                std::string whichClef((*j)->get<String>(Clef::ClefPropertyName));
-                if (whichClef == Clef::Treble) {
-                    str << "treble" << std::endl;
-                } else if (whichClef == Clef::Tenor) {
-                    str << "tenor" << std::endl;
-                } else if (whichClef == Clef::Alto) {
-                    str << "alto" << std::endl;
-                } else if (whichClef == Clef::Bass) {
-                    str << "bass" << std::endl;
-                }
-                
-                str << indent(col);
-
-            } else if ((*j)->isa(Rosegarden::Key::EventType)) {
-                if (currentlyWritingChord) {
-                    // Incomplete: Consolidate
-                    currentlyWritingChord = false;
-                    handleStartingEvents(eventsToStart, addTie, str);
-                    str << "> ";
-                }
-
-                str << "\\key ";
-                Rosegarden::Key whichKey(**j);
-                isFlatKeySignature = !whichKey.isSharp();
-                accidentalCount = whichKey.getAccidentalCount();
-                
-                str << convertPitchToLilyNote(whichKey.getTonicPitch(), isFlatKeySignature,
-                                              accidentalCount, "");
-                
-                if (whichKey.isMinor()) {
-                    str << " \\minor";
+                    str << std::endl << indent(col);
+                            
+                } else if ((*j)->isa(Indication::EventType)) {
+                    // Handle the end of these events when it's time
+                    eventsToStart.insert(*j);
+                    eventsInProgress.insert(*j);
                 } else {
-                    str << " \\major";
+                    std::cerr << std::endl << "LilypondExporter::write() - unhandled event type: "
+                              << (*j)->getType();
                 }
-                str << std::endl << indent(col);
-                        
-            } else if ((*j)->isa(Indication::EventType)) {
-                // Handle the end of these events when it's time
-                eventsToStart.insert(*j);
-                eventsInProgress.insert(*j);
-            } else {
-                std::cerr << std::endl << "LilypondExporter::write() - unhandled event type: "
-                          << (*j)->getType();
             }
+            if (currentlyWritingChord) {
+                // Incomplete: Consolidate
+                currentlyWritingChord = false;
+                handleStartingEvents(eventsToStart, addTie, str);
+                str << "> ";
+            }
+            
+            // close Voice context
+            str << std::endl << indent(--col) << "} % Voice" << std::endl;  // indent-  
+            
+            // write accumulated lyric events to the Lyric context, if user
+            // desires
+            if (exportLyrics) {
+                str << indent(col) << "\\context Lyrics = \"" << lyricNumber.str()
+                    << "\" \\lyrics  { " << std::endl;
+                str << indent(++col) << lilyLyrics.str() << " " << std::endl;
+                str << std::endl << indent(--col) << "} % Lyrics"; // close Lyric context
+            }
+            // cheap hack...  sometimes things combine so there's no \n after
+            // the Lyric block ends...  this sometimes puts in an extra \n,
+            // but one too many is ugly, while one too few causes Lilypond to
+            // barf, and the user has to correct the file by hand to get it
+            // to render...
+            str << std::endl;
         }
-        if (currentlyWritingChord) {
-            // Incomplete: Consolidate
-            currentlyWritingChord = false;
-            handleStartingEvents(eventsToStart, addTie, str);
-            str << "> ";
-        }
-        
-        // close Voice context
-        str << std::endl << indent(--col) << "} % Voice" << std::endl;  // indent-  
-        
-        // write accumulated lyric events to the Lyric context, if user
-        // desires
-        if (exportLyrics) {
-            str << indent(col) << "\\context Lyrics = \"" << lyricNumber.str()
-                << "\" \\lyrics  { " << std::endl;
-            str << indent(++col) << lilyLyrics.str() << " " << std::endl;
-            str << std::endl << indent(--col) << "} % Lyrics"; // close Lyric context
-        }
-        str << std::endl; // quick fix...  something was out of sync under certain circumstances
     }
     
-
     // close the last track (Staff context)
-    str << std::endl << indent (--col) << "> % Staff (final)";  // indent-
+    if (voiceCounter > 0) {
+        str << std::endl << indent(--col) << "> % Staff (final)";  // indent-
+    } else {
+        str << indent(--col) << "% (All staffs were muted.)" << std::endl;
+/*        KMessageBox::sorry(0, i18n(
+            "All tracks were muted, so there were no notes to export.\n\n"
+            "For better results, either un-mute some tracks or toggle off the "
+            "\"Do not export muted tracks\" option on the Lilypond tab of the "
+            "Notation configuration page, then try again.")); */
+    }
     
     // close \notes section
     str << std::endl << indent(--col) << "> % notes" << std::endl;; // indent-
 
     // write user-specified paper type in \paper block
-    std::string paper = "";
+    std::string paper = "papersize = \"";
     switch (paperSize) {
-        case 0 : paper = "letter"; break;
-        case 1 : paper = "a4";     break;
-        case 2 : paper = "legal";  break;
+        case 0 : paper += "letter\""; break;
+        case 1 : paper += "a4\"";     break;
+        case 2 : paper += "legal\"";  break;
+        case 3 : paper = "";          break; // "do not specify"
     }
-    str << indent(col) << "\\paper { papersize = \"" << paper << "\" }" << std::endl;
+    str << indent(col) << "\\paper { " << paper <<" }" << std::endl;
 
     // write initial tempo in Midi block, if user wishes (added per user request...
-    // makes debugging the .ly file easier...)
+    // makes debugging the .ly file easier because fewer "noisy" errors are
+    // produced during the process of rendering MIDI...)
     if (exportMidi) {
+        double tempo = m_composition->getTempoAt(m_composition->getStartMarker());
+        // Incomplete?  Can I get away without converting tempo relative to the time
+        // signature for this purpose?  we'll see...
         str << indent(col++) << "\\midi {" << std::endl;
-        str << indent(col) << "% not implemented yet...  coming soon..." << std::endl;
+            str << indent(col) << "\\tempo 4 = " << tempo << std::endl;
         str << indent(--col) << "} " << std::endl;
     }    
 
@@ -1104,10 +1113,13 @@ LilypondExporter::write() {
 // moved out of the way for enhanced readability when working out the indent()
 // stuff...
 //
-// this would go in a MIDI section, but I think it's probably not worth
-// handling...  why would anyone want to convert this Lilypond file back into
-// MIDI when it was MIDI in Rosegarden?
-// 
+// Doing something with all of this is pretty non-trivial.  Initial
+// tempo goes into the \midi section, but subsequent tempo changes need to be
+// written along with the notes, and should probably only be written in one
+// staff context.  Dealing with all of that is certainly possible, but it's
+// a lot more trouble than I think it's worth, and I'm not going to do
+// anything with this unless pressed by user request.
+//
 //     int tempoCount = m_composition->getTempoChangeCount();
 
 //     if (tempoCount > 0) {

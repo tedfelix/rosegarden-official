@@ -232,7 +232,7 @@ protected:
     QCheckBox *m_lilyExportLyrics;
     QCheckBox *m_lilyExportMidi;
     QCheckBox *m_lilyExportUnmuted;
-    QComboBox *m_lilyRestType;
+//!!!    QComboBox *m_lilyRestType;
 
     void populateSizeCombo(QComboBox *combo, std::string font, int dfltSize);
 };

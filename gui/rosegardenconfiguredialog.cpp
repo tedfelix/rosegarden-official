@@ -529,40 +529,18 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     layout = new QGridLayout(frame, 7, 2, 10, 5);
 
     layout->addWidget(new QLabel(
-        i18n("Customize the Lilypond export filter..."), frame), 0, 0);
-    
-    m_lilyExportHeaders = new QCheckBox(
-        i18n("Export Document Properties as \\header block"), frame);
-    m_lilyExportHeaders->setChecked(m_cfg->readBoolEntry("lilyexportheaders", true));
-    layout->addWidget(m_lilyExportHeaders, 1, 0);
-    
-    m_lilyExportLyrics = new QCheckBox(
-        i18n("Export \\lyric blocks"), frame);
-    m_lilyExportLyrics->setChecked(m_cfg->readBoolEntry("lilyexportlyrics", true));
-    layout->addWidget(m_lilyExportLyrics, 1, 1);
-
-    m_lilyExportUnmuted = new QCheckBox(
-        i18n("Do not export muted staffs."), frame);
-    m_lilyExportUnmuted->setChecked(m_cfg->readBoolEntry("lilyexportunmuted", true));
-    layout->addWidget(m_lilyExportUnmuted, 2, 0);
-
-    m_lilyExportMidi = new QCheckBox(
-        i18n("Export \\midi block"), frame);
-    m_lilyExportMidi->setChecked(m_cfg->readBoolEntry("lilyexportmidi", false));
-    layout->addWidget(m_lilyExportMidi, 2, 1);
-
-    layout->addWidget(new QLabel(
-        i18n("Paper size to use in \\paper block:"), frame), 3, 0);
+        i18n("Paper size to use in \\paper block"), frame), 0, 0);
     
     m_lilyPaperSize = new RosegardenComboBox(frame);
     m_lilyPaperSize->insertItem(i18n("US Letter"));
     m_lilyPaperSize->insertItem(i18n("A4"));
     m_lilyPaperSize->insertItem(i18n("Legal"));
-    m_lilyPaperSize->setCurrentItem(m_cfg->readUnsignedNumEntry("lilypapersize", 0));
-    layout->addWidget(m_lilyPaperSize, 3, 1);
+    m_lilyPaperSize->insertItem(i18n("do not specify"));
+    m_lilyPaperSize->setCurrentItem(m_cfg->readUnsignedNumEntry("lilypapersize", 1));
+    layout->addWidget(m_lilyPaperSize, 0, 1);
 
     layout->addWidget(new QLabel(
-        i18n("Lilypond font size:"), frame), 4, 0);
+        i18n("Lilypond font size"), frame), 1, 0);
 
     m_lilyFontSize = new RosegardenComboBox(frame);
     m_lilyFontSize->insertItem("11");
@@ -573,16 +551,41 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     m_lilyFontSize->insertItem("23");
     m_lilyFontSize->insertItem("26");
     m_lilyFontSize->setCurrentItem(m_cfg->readUnsignedNumEntry("lilyfontsize", 4));
-    layout->addWidget(m_lilyFontSize, 4, 1);
+    layout->addWidget(m_lilyFontSize, 1, 1);
 
+    m_lilyExportHeaders = new QCheckBox(
+        i18n("Export Document Properties as \\header block"), frame);
+    m_lilyExportHeaders->setChecked(m_cfg->readBoolEntry("lilyexportheaders", true));
+    layout->addWidget(m_lilyExportHeaders, 2, 0);
+    
+    m_lilyExportLyrics = new QCheckBox(
+        i18n("Export \\lyric blocks"), frame);
+    m_lilyExportLyrics->setChecked(m_cfg->readBoolEntry("lilyexportlyrics", true));
+    layout->addWidget(m_lilyExportLyrics, 2, 1);
+
+    m_lilyExportUnmuted = new QCheckBox(
+        i18n("Do not export muted tracks"), frame);
+    m_lilyExportUnmuted->setChecked(m_cfg->readBoolEntry("lilyexportunmuted", false));
+    layout->addWidget(m_lilyExportUnmuted, 3, 0);
+
+    m_lilyExportMidi = new QCheckBox(
+        i18n("Export \\midi block"), frame);
+    m_lilyExportMidi->setChecked(m_cfg->readBoolEntry("lilyexportmidi", false));
+    layout->addWidget(m_lilyExportMidi, 3, 1);
+
+/* This is vastly more complicated to implement than I thought, essentially
+ * like using a nuclear bomb to dig a hole in the ground for the foundation to
+ * a tool shed.  This will likely disappear soon, unless I come up with
+ * something clever.  Some features, while nice, just aren't worth the cost.
+ * 
     layout->addWidget(new QLabel(
         i18n("Fill time gaps with:"), frame), 5, 0);
-            
+
     m_lilyRestType = new RosegardenComboBox(frame);
     m_lilyRestType->insertItem("\\skip");
     m_lilyRestType->insertItem("multi-measure rests");
     m_lilyRestType->setCurrentItem(m_cfg->readUnsignedNumEntry("lilyresttype", 0));
-    layout->addWidget(m_lilyRestType, 5, 1);
+    layout->addWidget(m_lilyRestType, 5, 1); */
     
     addTab(frame, i18n("Lilypond"));  
 }
@@ -665,7 +668,7 @@ NotationConfigurationPage::apply()
     m_cfg->writeEntry("lilyexportheader", m_lilyExportHeaders->isChecked());
     m_cfg->writeEntry("lilyexportmidi", m_lilyExportMidi->isChecked());
     m_cfg->writeEntry("lilyexportunmuted", m_lilyExportUnmuted->isChecked());
-    m_cfg->writeEntry("lilyresttype", m_lilyRestType->currentItem());
+//!!!    m_cfg->writeEntry("lilyresttype", m_lilyRestType->currentItem());
 
     (void)m_quantizeFrame->getQuantizer(); // this also writes to the config
 }
