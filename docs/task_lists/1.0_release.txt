@@ -8,7 +8,7 @@ Features for 1.0 - updated 20040331
 - BUG - matrix resizes itself by default when adding notes
 
 - native printing
-  o it's too slow
+  o it's too slow [BETTER]
   o adding fluff and nicities to printed staves
   o getting mapping working for feta TT [DONE] * needs to be slightly larger
 
@@ -24,6 +24,7 @@ Features for 1.0 - updated 20040331
     Transforms menu is not at all ideal
   o relatedly: make sure translators have time/awareness of changes!
   o add sensible accelerators for the main window menu options (particularly studio menu)
+  o MIDI Mixer icon
 
 - implement "always use default studio"
 
@@ -62,6 +63,11 @@ POST 1.0
 
 - Repeating segment doesn't ghost when moving them.
 
+- In audio:
+  o mp3 support
+  o libsndfile support
+  o libsamplerate support
+
 
 DONE
 ----
@@ -82,8 +88,6 @@ DONE
   o audio VU meter needs to look cool (like ardour)
 
 - audio threading for file r/w access [rwb/cc]
-  o mp3 support
-  o libsndfile support
   o improving ringbuffer and precaching performance for audio
   o memory speedups in the RingBuffer and using MappedStudio in process loop
   o caching waveform previews at PeakFile [rwb]
