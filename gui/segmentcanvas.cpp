@@ -24,6 +24,7 @@
 #include <qwhatsthis.h>
 #include <qfont.h>
 #include <qfontmetrics.h>
+#include <qbitmap.h>
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -107,8 +108,9 @@ SegmentItem::SegmentItem(TrackId track, timeT startTime, timeT duration,
     m_duration(duration),
     m_selected(false),
     m_snapGrid(snapGrid),
+    m_repeatRectangle(0),
     m_showPreview(showPreview),
-    m_repeatRectangle(0)
+    m_previewIsCurrent(false)
 {
     if (!m_font) makeFont();
 
@@ -125,8 +127,9 @@ SegmentItem::SegmentItem(Segment *segment,
     m_doc(doc),
     m_selected(false),
     m_snapGrid(snapGrid),
+    m_repeatRectangle(0),
     m_showPreview(showPreview),
-    m_repeatRectangle(0)
+    m_previewIsCurrent(false)
 {
     if (!m_font) makeFont();
 
@@ -243,40 +246,8 @@ void SegmentItem::drawShape(QPainter& painter)
     else
     {
 	if (m_showPreview && m_segment) {
-
-	    painter.setPen(RosegardenGUIColours::SegmentInternalPreview);
-
-	    Segment::iterator start = m_segment->findNearestTime(startTime);
-	    Segment::iterator end = m_segment->findTime(endTime);
-	    if (start == m_segment->end()) start = m_segment->begin();
-	    else start = m_segment->findTime((*start)->getAbsoluteTime());
-
-	    for (Segment::iterator i = start; i != end; ++i) {
-
-		long pitch = 0;
-		if (!(*i)->isa(Rosegarden::Note::EventType) ||
-		    !(*i)->get<Rosegarden::Int>
-		    (Rosegarden::BaseProperties::PITCH, pitch)) {
-		    continue;
-		}
-
-		double x0 = rulerScale->getXForTime((*i)->getAbsoluteTime());
-		double x1 = rulerScale->getXForTime((*i)->getAbsoluteTime() +
-						    (*i)->getDuration());
-
-		int width = (int)(x1 - x0);
-		if (width > 0) --width;
-		if (width > 0) --width;
-
-		double y0 = rect().y();
-		double y1 = rect().y() + rect().height();
-		double y = y1 + ((y0 - y1) * (pitch-16)) / 96;
-		if (y < y0) y = y0;
-		if (y > y1-1) y = y1-1;
-		
-		painter.drawLine((int)x0, (int)y, (int)x0 + width, (int)y);
-		painter.drawLine((int)x0, (int)y+1, (int)x0 + width, (int)y+1);
-	    }
+            updatePreview();
+            painter.drawPixmap(int(x()), int(y()), m_preview);
 	}
 
         // draw label
@@ -287,7 +258,61 @@ void SegmentItem::drawShape(QPainter& painter)
         painter.drawText(labelRect, Qt::AlignLeft|Qt::AlignVCenter, m_label);
     }
 
-    recalculateRectangle(false);
+    // recalculateRectangle(false);
+}
+
+void SegmentItem::updatePreview()
+{
+    if (isPreviewCurrent()) return;
+
+    kdDebug(KDEBUG_AREA) << "SegmentItem::updatePreview() "
+                         << this << endl;
+
+    QPainter painter(&m_preview);
+
+    //m_preview.fill(black);
+
+    painter.setPen(RosegardenGUIColours::SegmentInternalPreview);
+    painter.setBrush(RosegardenGUIColours::SegmentBlock);
+
+    Segment::iterator start = m_segment->begin();
+    Segment::iterator end = m_segment->end();
+    // if (start == m_segment->end()) start = m_segment->begin();
+    //else start = m_segment->findTime((*start)->getAbsoluteTime());
+
+    Rosegarden::RulerScale *rulerScale = m_snapGrid->getRulerScale();
+
+    for (Segment::iterator i = start; i != end; ++i) {
+
+        long pitch = 0;
+        if (!(*i)->isa(Rosegarden::Note::EventType) ||
+            !(*i)->get<Rosegarden::Int>
+            (Rosegarden::BaseProperties::PITCH, pitch)) {
+            continue;
+        }
+
+        double x0 = rulerScale->getXForTime((*i)->getAbsoluteTime()) - rect().x();
+        double x1 = rulerScale->getXForTime((*i)->getAbsoluteTime() +
+                                            (*i)->getDuration()) - rect().x();
+
+        int width = (int)(x1 - x0);
+        if (width > 0) --width;
+        if (width > 0) --width;
+
+        double y0 = 0; // rect().y();
+        double y1 = /*rect().y() + */ rect().height();
+        double y = y1 + ((y0 - y1) * (pitch-16)) / 96;
+        if (y < y0) y = y0;
+        if (y > y1-1) y = y1-1;
+		
+        painter.drawLine((int)x0, (int)y, (int)x0 + width, (int)y);
+        painter.drawLine((int)x0, (int)y+1, (int)x0 + width, (int)y+1);
+
+    }
+
+    m_preview.setMask(m_preview.createHeuristicMask());
+    
+    setPreviewCurrent(true);
 }
 
 void SegmentItem::recalculateRectangle(bool inheritFromSegment)
@@ -361,6 +386,9 @@ void SegmentItem::recalculateRectangle(bool inheritFromSegment)
 
     if (dots) m_label += "...";
     canvas()->setChanged(rect());
+
+    m_preview.resize(rect().size());
+    setPreviewCurrent(false);
 }
 
 Segment* SegmentItem::getSegment() const
@@ -731,7 +759,7 @@ void SegmentCanvas::contentsMouseMoveEvent(QMouseEvent* e)
     if (!m_tool) return;
 
     if (m_tool->handleMouseMove(e)) {
-	emit scrollTo(e->pos().x());
+        emit scrollTo(e->pos().x());
     }
 }
 

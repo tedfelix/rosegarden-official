@@ -103,7 +103,7 @@ public:
      */
     void normalize();
 
-    bool const isSelected() { return m_selected; }
+    bool isSelected() const { return m_selected; }
 
     /// Select this SegmentItem
     void setSelected(bool select, const QBrush &highlightBrush);
@@ -112,12 +112,30 @@ public:
     void showRepeatRect(bool);
 
     /**
+     * Returns whether the preview shape shown in the segment needs
+     * to be refreshed
+     */
+    bool isPreviewCurrent()        { return m_previewIsCurrent; }
+
+    /**
+     * Sets whether the preview shape shown in the segment needs
+     * to be refreshed
+     */
+    void setPreviewCurrent(bool c) { m_previewIsCurrent = c; }
+
+    /**
      * Paint the label inside the rectangle
      * (Override from QCanvasPolygonalItem)
      */
     virtual void drawShape(QPainter&);
 
+    
 protected:
+
+    virtual void updatePreview();
+
+    //--------------- Data members ---------------------------------
+
     Rosegarden::Segment *m_segment;
     RosegardenGUIDoc    *m_doc;
 
@@ -130,10 +148,13 @@ protected:
 
     bool m_selected;
     Rosegarden::SnapGrid *m_snapGrid;
-    bool m_showPreview;
 
     QCanvasRepeatRectangle*   m_repeatRectangle;
     QString m_label;
+
+    bool m_showPreview;
+    bool m_previewIsCurrent;
+    QPixmap m_preview;
 
     static QFont *m_font;
     static QFontMetrics *m_fontMetrics;
