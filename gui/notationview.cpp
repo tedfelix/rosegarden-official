@@ -264,7 +264,7 @@ StaffRuler::StaffRuler(int xPos, int yPos, QCanvas* c)
       m_subStepLineHeight(5),
       m_mainLine(new QCanvasLine(m_canvas))
 {
-    m_mainLine->setPoints(m_xPos, m_yPos, m_xPos, m_yPos);
+    m_mainLine->setPoints(0, m_yPos, m_canvas->width(), m_yPos);
     
     m_mainLine->show();
 }
@@ -299,9 +299,9 @@ void StaffRuler::update()
          makeStep(i, m_steps[i].first, m_steps[i + 1].first, m_steps[i].second);
     }
 
-    m_mainLine->setPoints
-	(m_xPos, m_yPos,
-	 m_xPos + int(m_steps[m_steps.size() - 1].first) + 10, m_yPos);
+//     m_mainLine->setPoints
+// 	(m_xPos, m_yPos,
+// 	 m_xPos + int(m_steps[m_steps.size() - 1].first) + 10, m_yPos);
 
 }
 
