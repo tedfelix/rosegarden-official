@@ -1144,7 +1144,7 @@ void NotationView::initStatusBar()
     sb->setItemAlignment(KTmpStatusMsg::getDefaultId(), 
                          AlignLeft | AlignVCenter);
 
-    m_progressBar = new RosegardenProgressBar(100, sb);
+    m_progressBar = new RosegardenProgressBar(100, true, sb);
     sb->addWidget(m_progressBar);
 }
 

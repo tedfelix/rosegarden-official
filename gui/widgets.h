@@ -207,6 +207,7 @@ class RosegardenProgressBar : public QProgressBar,
 
 public:
     RosegardenProgressBar(int totalSteps,
+			  bool useDelay,
 			  QWidget *creator = 0,
 			  const char *name = 0,
 			  WFlags f = 0);
@@ -217,6 +218,15 @@ public:
     virtual void setCompleted(int value);
     virtual void processEvents();
     virtual void done();
+
+public slots:
+    void slotTimerElapsed();
+    
+private:
+    clock_t m_timeoutSet;
+    bool m_firstTimeout;
+    bool m_shown;
+    bool m_useDelay;
 };
    
 			      

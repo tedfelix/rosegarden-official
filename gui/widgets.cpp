@@ -21,6 +21,8 @@
 
 #include <iostream>
 
+#include "unistd.h"
+
 #include <qfontdatabase.h>
 #include <qtimer.h>
 #include <qapplication.h>
@@ -197,7 +199,7 @@ RosegardenProgressDialog::RosegardenProgressDialog(
     QTimer::singleShot(700, this, SLOT(slotTimerElapsed()));
 
     // set the cursor
-    QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
+//    QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
     //setCursor(QCursor(Qt::waitCursor));
 }
 
@@ -253,6 +255,7 @@ RosegardenProgressDialog::slotShowMyself()
     show();
     m_shown = true;
 
+    QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
     // re-set the cursor
     //QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
     //setCursor(QCursor(Qt::waitCursor));
@@ -266,11 +269,16 @@ RosegardenProgressDialog::done()
 }
 
 RosegardenProgressBar::RosegardenProgressBar(int totalSteps,
+					     bool useDelay,
 					     QWidget *creator,
 					     const char *name,
 					     WFlags f) :
     QProgressBar(totalSteps, creator, name, f),
-    Rosegarden::Progress(totalSteps)
+    Rosegarden::Progress(totalSteps),
+    m_timeoutSet(0),
+    m_firstTimeout(true),
+    m_shown(true),
+    m_useDelay(useDelay)
 {
 }
 
@@ -281,24 +289,67 @@ RosegardenProgressBar::~RosegardenProgressBar()
 void
 RosegardenProgressBar::setCompleted(int value)
 {
+    if (value == 0 && m_shown && m_useDelay) {
+	m_shown = false;
+	m_firstTimeout = true;
+	QTimer::singleShot(700, this, SLOT(slotTimerElapsed()));
+	m_timeoutSet = clock();
+    }
+
     if (value > m_max)
         m_value = m_max;
     else
 	m_value = value; //???
 
-    setProgress(value);
+    if (m_shown) setProgress(value);
 }    
 
 void
 RosegardenProgressBar::processEvents()
 {
-    update();
-//    kapp->processEvents(50);
+    if (m_timeoutSet != 0) {
+	clock_t now = clock();
+
+	if ((m_timeoutSet - now) * 1000 / CLOCKS_PER_SEC > 1000) {
+	    // one second elapsed without a slotTimerElapsed, presumably
+	    // because nothing else is actually processing events -- but
+	    // we don't really want to call processEvents here because
+	    // it's likely to break stuff (we don't have the option of
+	    // being a modal dialog because we aren't a dialog so we don't
+	    // want to permit editing-type events to happen)
+	    m_firstTimeout = false;
+	    slotTimerElapsed();
+	}
+    }
+
+    if (m_shown) update();
 }
 
 void
 RosegardenProgressBar::done()
 {
     reset();
+    if (m_shown && m_useDelay) QApplication::restoreOverrideCursor();
+    m_shown = true;
 }
 
+void
+RosegardenProgressBar::slotTimerElapsed()
+{
+    m_timeoutSet = 0;
+    if (m_shown) return;
+
+    // the logic is: if our first timeout has elapsed and the
+    // progress is already beyond 75%, set another timeout
+    // because we probably won't have to show at all.  (we
+    // still show if the second timeout has expired though.)
+
+    if (!m_firstTimeout || ((m_value * 4) < (m_max * 3))) {
+	setProgress(m_value);
+	QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
+	m_shown = true;
+    } else {
+	m_firstTimeout = false;
+	QTimer::singleShot(500, this, SLOT(slotTimerElapsed()));
+    }
+}
