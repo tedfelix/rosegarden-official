@@ -693,9 +693,21 @@ TransformsMenuMakeNotesViableCommand::modifySegment()
 
     for (EventSelection::eventcontainer::iterator i =
 	     m_selection->getSegmentEvents().begin();
-	 i != m_selection->getSegmentEvents().end(); ++i) {
+	 i != m_selection->getSegmentEvents().end(); ) {
 
-	i = helper.makeNoteViable(i);
+	// problem here is makeNoteViable erases the event
+	// from the segment & thus from the selection (which
+	// is a segment observer), so we have to use the j-
+	// iterator trick to increment i (which is the one
+	// that will have been erased).
+
+	EventSelection::eventcontainer::iterator j = i;
+	++j;
+
+	Segment::iterator si = segment.findSingle(*i);
+	if (si != segment.end()) helper.makeNoteViable(si);
+
+	i = j;
     }
 }
 
