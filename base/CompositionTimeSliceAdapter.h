@@ -90,6 +90,8 @@ public:
     typedef std::vector<Segment *> segmentlist;
     typedef std::vector<Segment::iterator> segmentitrlist;
 
+    Composition *getComposition() { return m_composition; }
+
     class iterator {
 	friend class CompositionTimeSliceAdapter;
 

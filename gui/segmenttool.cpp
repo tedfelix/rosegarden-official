@@ -129,13 +129,16 @@ void SegmentTool::ready()
 void 
 SegmentTool::handleRightButtonPress(QMouseEvent *e)
 {
+    if (m_currentItem) // mouse button is pressed for some tool
+	return;
+    
     RG_DEBUG << "SegmentTool::handleRightButtonPress()\n";
 
     SegmentItem *item = m_canvas->findSegmentClickedOn(e->pos());
 
     if (item) {
         m_currentItem = item;
-        if (!item->isSelected()) {
+        if (!item->isSelected() && (item->getSegment() != 0)) {
 
             SegmentSelector* selector = dynamic_cast<SegmentSelector*>(getToolBox()->getTool("segmentselector"));
             selector->clearSelected();

@@ -521,11 +521,11 @@ LinedStaff::sizeStaff(Rosegarden::HorizontalLayoutEngine &layout)
 	}
 
 	double timeSigX = 0;
-	Rosegarden::Event *timeSig =
-	    layout.getTimeSignaturePosition(*this, barNo, timeSigX);
+	Rosegarden::TimeSignature timeSig;
+	bool isNew = layout.getTimeSignaturePosition(*this, barNo, timeSig, timeSigX);
 	
-	if (timeSig && barNo < lastBar) {
-	    currentTimeSignature = Rosegarden::TimeSignature(*timeSig);
+	if (isNew && barNo < lastBar) {
+	    currentTimeSignature = timeSig;
 	    insertTimeSignature(timeSigX, currentTimeSignature);
 	}
 

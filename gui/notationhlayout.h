@@ -169,11 +169,13 @@ public:
     virtual bool isBarCorrectOnStaff(Rosegarden::Staff &staff, int barNo);
 
     /**
-     * Returns a pointer to a time signature event if there is one
-     * visible in this bar, and if so also sets timeSigX to its x-coord
+     * Returns true if there is a new time signature in the given bar,
+     * setting timeSignature appropriately and setting timeSigX to its
+     * x-coord
      */
-    virtual Rosegarden::Event *getTimeSignaturePosition
-    (Rosegarden::Staff &staff, int barNo, double &timeSigX);
+    virtual bool getTimeSignaturePosition
+    (Rosegarden::Staff &staff, int barNo,
+     Rosegarden::TimeSignature &timeSig, double &timeSigX);
 
     /// purely optional, used only for progress reporting
     void setStaffCount(int staffCount) {
@@ -209,7 +211,8 @@ protected:
 
 	    NotationElementList::iterator start; // i.e. event following barline
 	    bool correct; // bar preceding barline has correct duration
-	    Rosegarden::Event *timeSignature; // null if no new one in this bar
+	    Rosegarden::TimeSignature timeSignature;
+	    bool newTimeSig;
 
 	} basicData;
 
@@ -232,10 +235,11 @@ protected:
 	} layoutData;
         
         BarData(NotationElementList::iterator i,
-		bool correct, Rosegarden::Event *timeSig) {
+		bool correct, Rosegarden::TimeSignature timeSig, bool newTimeSig) {
             basicData.start = i;
 	    basicData.correct = correct;
 	    basicData.timeSignature = timeSig;
+	    basicData.newTimeSig = newTimeSig;
 	    sizeData.idealWidth = 0;
 	    sizeData.fixedWidth = 0;
 	    sizeData.baseWidth = 0;
@@ -244,8 +248,6 @@ protected:
 	    layoutData.x = -1;
 	    layoutData.timeSigX = -1;
 	}
-
-	~BarData() { delete basicData.timeSignature; }
     };
 
     typedef std::map<int, BarData> BarDataList;
@@ -264,8 +266,8 @@ protected:
      * records and/or fill with empty ones as appropriate.
      */
     void setBarBasicData(Rosegarden::Staff &staff, int barNo,
-			 NotationElementList::iterator start,
-			 bool correct, Rosegarden::Event *timeSig);
+			 NotationElementList::iterator start, bool correct,
+			 Rosegarden::TimeSignature timeSig, bool newTimeSig);
 
     /**
      * Set the size data for the given barNo.  If barNo is

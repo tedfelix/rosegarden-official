@@ -385,8 +385,6 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
 
     Rosegarden::Profiler profiler1("ChordNameRuler::paintEvent (whole)", true);
 
-    if (!m_chordSegment) return;
-
     QPainter paint(this);
     paint.setPen(RosegardenGUIColours::ChordNameRulerForeground);
 
@@ -401,6 +399,8 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
 	(clipRect.x() + clipRect.width() - m_currentXOffset - m_xorigin + 50);
 
     recalculate(from, to);
+
+    if (!m_chordSegment) return;
 
     Rosegarden::Profiler profiler2("ChordNameRuler::paintEvent (paint)", true);
 

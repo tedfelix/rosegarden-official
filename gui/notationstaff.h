@@ -158,10 +158,11 @@ public:
     /**
      * Mark a region of staff as changed, for use by the on-demand
      * rendering mechanism.  If fromBar == toBar == -1, mark the
-     * entire staff as changed.  Pass movedOnly as true to indicate
-     * that elements have not changed but only been repositioned (for
-     * example as a consequence of a modification on another staff
-     * that caused a relayout).
+     * entire staff as changed (and recover the memory used for its
+     * elements).  Pass movedOnly as true to indicate that elements
+     * have not changed but only been repositioned, for example as a
+     * consequence of a modification on another staff that caused a
+     * relayout.
      */
     virtual void markChanged(Rosegarden::timeT from = 0,
 			     Rosegarden::timeT to = 0,

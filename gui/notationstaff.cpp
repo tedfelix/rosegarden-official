@@ -338,7 +338,7 @@ void
 NotationStaff::renderElements(NotationElementList::iterator from,
 			      NotationElementList::iterator to)
 {
-    NOTATION_DEBUG << "NotationStaff " << this << "::renderElements()" << endl;
+//    NOTATION_DEBUG << "NotationStaff " << this << "::renderElements()" << endl;
     Rosegarden::Profiler profiler("NotationStaff::renderElements");
 
     emit setOperationName(i18n("Rendering staff %1...").arg(getId() + 1));
@@ -381,15 +381,15 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 	}
     }
 
-    NOTATION_DEBUG << "NotationStaff::renderElements: "
+    NOTATION_DEBUG << "NotationStaff " << this << "::renderElements: "
 			 << elementCount << " elements rendered" << endl;
 }	
 
 void
 NotationStaff::positionElements(timeT from, timeT to)
 {
-    NOTATION_DEBUG << "NotationStaff " << this << "::positionElements()"
-                         << from << " -> " << to << endl;
+//    NOTATION_DEBUG << "NotationStaff " << this << "::positionElements()"
+//                         << from << " -> " << to << endl;
     Rosegarden::Profiler profiler("NotationStaff::positionElements");
 
     emit setOperationName(i18n("Positioning staff %1...").arg(getId() + 1));
@@ -517,9 +517,10 @@ NotationStaff::positionElements(timeT from, timeT to)
 	}
     }
 
-    NOTATION_DEBUG << "NotationStaff::positionElements: "
+    NOTATION_DEBUG << "NotationStaff " << this << "::positionElements "
+                         << from << " -> " << to << ": "
 			 << elementsPositioned << " elements positioned, "
-			 << elementsRendered << " elements re-rendered"
+			 << elementsRendered << " re-rendered"
 			 << endl;
 
     NotePixmapFactory::dumpStats(std::cerr);

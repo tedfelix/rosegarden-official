@@ -573,14 +573,11 @@ public:
     void setPlayMetronome(bool value);
     void setRecordMetronome(bool value);
 
-    // Expose these
-    //
-    static const std::string TempoEventType; 
-    static const PropertyName TempoProperty; // stored in beats per hour
 
     // Colour stuff
     ColourMap& getSegmentColourMap() { return m_segmentColourMap; }
     void setSegmentColourMap(Rosegarden::ColourMap &newmap);
+
 
     //////
     //
@@ -628,6 +625,9 @@ public:
 
 
 protected:
+
+    static const std::string TempoEventType; 
+    static const PropertyName TempoProperty; // stored in beats per hour
 
     static const PropertyName NoAbsoluteTimeProperty;
     static const PropertyName BarNumberProperty;

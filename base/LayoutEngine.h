@@ -27,6 +27,7 @@
 namespace Rosegarden {
 
 class Staff;
+class TimeSignature;
 
 
 /**
@@ -133,11 +134,12 @@ public:
     }
 
     /**
-     * Returns a pointer to a time signature event if there is one in
-     * this bar, and if so also sets timeSigX to its x-coord
+     * Returns true if there is a new time signature in the given bar,
+     * setting timeSignature appropriately and setting timeSigX to its
+     * x-coord
      */
-    virtual Event *getTimeSignaturePosition
-    (Staff &, int /* barNo */, double &/* timeSigX */) {
+    virtual bool getTimeSignaturePosition
+    (Staff &, int /* barNo */, TimeSignature &, double &/* timeSigX */) {
 	return 0;
     }
 };

@@ -867,12 +867,6 @@ private:
 class TimeSignature
 {
 public:
-    static const std::string EventType;
-    static const int EventSubOrdering;
-    static const PropertyName NumeratorPropertyName;
-    static const PropertyName DenominatorPropertyName;
-    static const PropertyName ShowAsCommonTimePropertyName;
-    static const PropertyName IsHiddenPropertyName;
     static const TimeSignature DefaultTimeSignature;
     typedef Exception BadTimeSignature;
 
@@ -892,9 +886,6 @@ public:
     TimeSignature(int numerator, int denominator,
 		  bool preferCommon = false, bool hidden = false)
         /* throw (BadTimeSignature) */;
-
-    TimeSignature(const Event &e)
-        /* throw (Event::NoData, Event::BadType, BadTimeSignature) */;
     
     TimeSignature(const TimeSignature &ts) :
         m_numerator(ts.m_numerator),
@@ -988,6 +979,19 @@ public:
      * divides most neatly into 2).
      */
     std::vector<int> getDivisions(int depth) const;
+
+private:
+    friend class Composition;
+
+    TimeSignature(const Event &e)
+        /* throw (Event::NoData, Event::BadType, BadTimeSignature) */;
+
+    static const std::string EventType;
+    static const int EventSubOrdering;
+    static const PropertyName NumeratorPropertyName;
+    static const PropertyName DenominatorPropertyName;
+    static const PropertyName ShowAsCommonTimePropertyName;
+    static const PropertyName IsHiddenPropertyName;
 
     /// Returned event is on heap; caller takes responsibility for ownership
     Event *getAsEvent(timeT absoluteTime) const;

@@ -28,12 +28,13 @@
 #include <algorithm>
 #include <cmath> // fabs, pow
 
+#include "NotationTypes.h"
 #include "AnalysisTypes.h"
 #include "Event.h"
 #include "Segment.h"
-#include "NotationTypes.h"
 #include "CompositionTimeSliceAdapter.h"
 #include "BaseProperties.h"
+#include "Composition.h"
 #include "Profiler.h"
 
 #include "Sets.h"
@@ -307,12 +308,10 @@ AnalysisHelper::makeHarmonyGuessList(CompositionTimeSliceAdapter &c,
 
     checkHarmonyTable();
 
-    // (Fetch the slice's time signature from the timesig guesser)
-    TimeSignature timeSig;
-
-    timeT timeSigTime = (*c.begin())->getAbsoluteTime();
-
     PitchProfile p; // defaults to all zeroes
+    TimeSignature timeSig;
+    timeT timeSigTime = 0;
+    timeT nextSigTime = (*c.begin())->getAbsoluteTime();
 
     // Walk through the piece labelChords style
 
@@ -323,6 +322,20 @@ AnalysisHelper::makeHarmonyGuessList(CompositionTimeSliceAdapter &c,
         // 2. Update the pitch profile
 
         timeT time = (*i)->getAbsoluteTime();
+
+	if (time >= nextSigTime) {
+	    Composition *comp = c.getComposition();
+	    int sigNo = comp->getTimeSignatureNumberAt(time);
+	    std::pair<timeT, TimeSignature> sig = comp->getTimeSignatureChange(sigNo);
+	    timeSigTime = sig.first;
+	    timeSig = sig.second;
+	    if (sigNo < comp->getTimeSignatureCount() - 1) {
+		nextSigTime = comp->getTimeSignatureChange(sigNo + 1).first;
+	    } else {
+		nextSigTime = comp->getEndMarker();
+	    }
+	}
+
         double emphasis =
             double(timeSig.getEmphasisForTime(time - timeSigTime));
 
@@ -342,14 +355,7 @@ AnalysisHelper::makeHarmonyGuessList(CompositionTimeSliceAdapter &c,
         // no initialization
         for (  ; i != c.end() && (*i)->getAbsoluteTime() == time; ++i)
         {
-            if ((*i)->isa(TimeSignature::EventType))
-            {
-                timeSig = TimeSignature(**i);
-                timeSigTime = time;
-                emphasis =
-                    double(timeSig.getEmphasisForTime(time - timeSigTime));
-            }
-            else if ((*i)->isa(Note::EventType))
+	    if ((*i)->isa(Note::EventType))
             {
                 int pitch = (*i)->get<Int>(BaseProperties::PITCH);
                 delta[pitch % 12] += 1 << int(emphasis);
@@ -1004,19 +1010,26 @@ AnalysisHelper::guessKey(CompositionTimeSliceAdapter &c)
     vector<int> weightedNoteCount(12, 0);
     TimeSignature timeSig;
     timeT timeSigTime = 0;
+    timeT nextSigTime = (*c.begin())->getAbsoluteTime();
 
     int j = 0;
     for (CompositionTimeSliceAdapter::iterator i = c.begin();
          i != c.end() && j < 100; ++i, ++j)
     {
+        timeT time = (*i)->getAbsoluteTime();
 
-        // Set time signature if this is a time-sig event
-        if ((*i)->isa(TimeSignature::EventType))
-        {
-            timeSig = TimeSignature(**i);
-            timeSigTime = (*i)->getAbsoluteTime();
-            continue;
-        }
+	if (time >= nextSigTime) {
+	    Composition *comp = c.getComposition();
+	    int sigNo = comp->getTimeSignatureNumberAt(time);
+	    std::pair<timeT, TimeSignature> sig = comp->getTimeSignatureChange(sigNo);
+	    timeSigTime = sig.first;
+	    timeSig = sig.second;
+	    if (sigNo < comp->getTimeSignatureCount() - 1) {
+		nextSigTime = comp->getTimeSignatureChange(sigNo + 1).first;
+	    } else {
+		nextSigTime = comp->getEndMarker();
+	    }
+	}
 
         // Skip any other non-notes
         if (!(*i)->isa(Note::EventType)) continue;
@@ -1024,7 +1037,7 @@ AnalysisHelper::guessKey(CompositionTimeSliceAdapter &c)
         // Get pitch, metric strength of this event
         int pitch = (*i)->get<Int>(BaseProperties::PITCH)%12;
         int emphasis =
-            1<<timeSig.getEmphasisForTime((*i)->getAbsoluteTime() - timeSigTime);
+            1 << timeSig.getEmphasisForTime((*i)->getAbsoluteTime() - timeSigTime);
 
         // Count notes
         weightedNoteCount[pitch] += emphasis;

@@ -53,6 +53,9 @@
 #include "spline.h"
 
 
+// #define DUMP_STATS 1
+
+
 #include <iostream>
 using std::endl;
 
@@ -244,7 +247,7 @@ NotePixmapFactory::toQPixmap(QCanvasPixmap* cp)
 void
 NotePixmapFactory::dumpStats(std::ostream &s)
 {
-#ifndef NDEBUG
+#ifdef DUMP_STATS
     s << "NotePixmapFactory: total times since last stats dump:\n"
       << "makeNotePixmap: "
       << (makeNotesTime * 1000 / CLOCKS_PER_SEC) << "ms\n"

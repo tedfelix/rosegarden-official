@@ -87,18 +87,23 @@ public:
 			      Rosegarden::timeT = 0);
 
     /**
-     * Returns a pointer to a time signature event if there is one
-     * visible in this bar, and if so also sets timeSigX to its x-coord
+     * Returns true if there is a new time signature in the given bar,
+     * setting timeSignature appropriately and setting timeSigX to its
+     * x-coord
      */
-    virtual Rosegarden::Event *getTimeSignaturePosition(Rosegarden::Staff &staff,
-                                                        int barNo, double &timeSigX);
+    virtual bool getTimeSignaturePosition(Rosegarden::Staff &staff,
+					  int barNo,
+					  Rosegarden::TimeSignature &timeSig,
+					  double &timeSigX);
 
 protected:
 
     //--------------- Data members ---------------------------------
 
-    // pair of layout-x and time-signature event if there is one
-    typedef std::pair<double, Rosegarden::Event *> BarData;
+    // pair of has-time-sig and time-sig
+    typedef std::pair<bool, Rosegarden::TimeSignature> TimeSigData;
+    // pair of layout-x and time-signature if there is one
+    typedef std::pair<double, TimeSigData> BarData;
     typedef FastVector<BarData> BarDataList;
     BarDataList m_barData;
     double m_totalWidth;

@@ -740,8 +740,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
         setPageMode(LinedStaff::MultiPageMode); // also positions and renders the staffs!
 
 	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-	    m_staffs[i]->checkRendered(m_staffs[i]->getSegment().getStartTime(),
-				       m_staffs[i]->getSegment().getEndMarkerTime());
 	    m_staffs[i]->getSegment().getRefreshStatus
 		(m_segmentsRefreshStatusIds[i]).setNeedsRefresh(false);
 	}
@@ -2565,6 +2563,7 @@ void NotationView::print(bool previewOnly)
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 	int pageCount = m_staffs[i]->getPageCount();
+	NOTATION_DEBUG << "NotationView::print(): staff " << i << " reports " << pageCount << " pages " << endl;
 	if (pageCount > maxPageCount) maxPageCount = pageCount;
     }
 
@@ -2584,24 +2583,60 @@ void NotationView::print(bool previewOnly)
     QValueList<int> pages = printer.pageList();
 
     for (QValueList<int>::Iterator pli = pages.begin();
-	 pli != pages.end(); ++pli) {
+	 pli != pages.end(); ) { // incremented just below
 	
 	int page = *pli - 1;
+	++pli;
 	if (page < 0 || page >= maxPageCount) continue;
 
-	QRect pageRect(20 + pageWidth * page, topMargin, pageWidth, pageHeight);
+	NOTATION_DEBUG << "Printing page " << page << endl;
 
-	// supplying doublebuffer==true to this method appears to
+	QRect pageRect(20 + pageWidth * page, topMargin, pageWidth, pageHeight);
+	
+	for (int i = 0; i < m_staffs.size(); ++i) {
+
+	    NotationStaff *staff = m_staffs[i];
+	    
+	    LinedStaff::LinedStaffCoords cc0 = staff->getLayoutCoordsForCanvasCoords
+		(pageRect.x(), pageRect.y());
+
+	    LinedStaff::LinedStaffCoords cc1 = staff->getLayoutCoordsForCanvasCoords
+		(pageRect.x() + pageRect.width(), pageRect.y() + pageRect.height());
+
+	    timeT t0 = m_hlayout->getTimeForX(cc0.first);
+	    timeT t1 = m_hlayout->getTimeForX(cc1.first);
+
+	    m_staffs[i]->checkRendered(t0, t1);
+	}
+
+	// Supplying doublebuffer==true to this method appears to
         // slow down printing considerably but without it we get
 	// all sorts of horrible artifacts (possibly related to
-	// mishandling of pixmap masks?)
-	//!!! hmm, seems to be working now -- make this an option?
-        getCanvasView()->canvas()->drawArea(pageRect, &printpainter, false);//!!! true);
+	// mishandling of pixmap masks?) in qt-3.0.  Let's permit
+	// it as a "hidden" option.
+
+	m_config->setGroup(NotationView::ConfigGroup);
+
+	if (m_config->readBoolEntry("forcedoublebufferprinting", false)) {
+	    getCanvasView()->canvas()->drawArea(pageRect, &printpainter, true);
+	} else {
+#if QT_VERSION >= 0x030100
+	    getCanvasView()->canvas()->drawArea(pageRect, &printpainter, false);
+#else
+	    getCanvasView()->canvas()->drawArea(pageRect, &printpainter, true);
+#endif
+	}
 
         printpainter.translate(-pageWidth, 0);
 
-	printer.newPage();
+	if (pli != pages.end()) printer.newPage();
+	
+	for (int i = 0; i < m_staffs.size(); ++i) {
+	    m_staffs[i]->markChanged(); // recover any memory used for this page
+	}
     }
+
+    printpainter.end();
 }
 
 void NotationView::refreshSegment(Segment *segment,

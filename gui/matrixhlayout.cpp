@@ -97,9 +97,6 @@ void MatrixHLayout::scanStaff(Staff &staffBase,
 
     if (isFullScan || m_barData.size() == 0) {
     
-	for (BarDataList::iterator i = m_barData.begin();
-	     i != m_barData.end(); ++i) delete i->second;
-
 	m_barData.clear();
 	int barNo = m_firstBar;
 	
@@ -122,18 +119,19 @@ void MatrixHLayout::scanStaff(Staff &staffBase,
 	    if (isNew || barNo == m_firstBar) {
 		m_barData.push_back(BarData((from - startPosition) *
 					    staff.getTimeScaleFactor(),
-					    timeSig.getAsEvent(from)));
+					    TimeSigData(true, timeSig)));
 	    } else {
 		m_barData.push_back(BarData((from - startPosition) *
 					    staff.getTimeScaleFactor(),
-					    0));
+					    TimeSigData(false, timeSig)));
 	    }
 
 	    from = composition->getBarEndForTime(from);
 	    ++barNo;
 	}
 
-	m_barData.push_back(BarData(to * staff.getTimeScaleFactor(), 0));
+	m_barData.push_back(BarData(to * staff.getTimeScaleFactor(),
+				    TimeSigData(false, Rosegarden::TimeSignature())));
     }
 
     // 2. Elements
@@ -189,12 +187,14 @@ double MatrixHLayout::getBarPosition(int barNo)
     return m_barData[barNo - m_firstBar].first;
 }
 
-Rosegarden::Event *MatrixHLayout::getTimeSignaturePosition(Staff &,
-							   int barNo,
-							   double &timeSigX)
+bool MatrixHLayout::getTimeSignaturePosition(Staff &,
+					     int barNo,
+					     Rosegarden::TimeSignature &timeSig,
+					     double &timeSigX)
 {
+    timeSig = m_barData[barNo - m_firstBar].second.second;
     timeSigX = m_barData[barNo - m_firstBar].first;
-    return m_barData[barNo - m_firstBar].second;
+    return m_barData[barNo - m_firstBar].second.first;
 }
 
 void MatrixHLayout::finishLayout(timeT, timeT)

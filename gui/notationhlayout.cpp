@@ -340,18 +340,16 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
         // baseWidth is absolute minimum width of non-fixedWidth elements
         int baseWidth = 0;
 
-	Event *timeSigEvent = 0;
 	bool newTimeSig = false;
 	timeSignature = getComposition()->getTimeSignatureInBar
 	    (barNo, newTimeSig);
 
 	if ((newTimeSig || barNo == startBarNo) && !timeSignature.isHidden()) {
-	    timeSigEvent = timeSignature.getAsEvent(barTimes.first);
 	    fixedWidth += getFixedItemSpacing() * 2 +
 		m_npf->getTimeSigWidth(timeSignature);
 	}
 
-	setBarBasicData(staff, barNo, from, barCorrect, timeSigEvent);
+	setBarBasicData(staff, barNo, from, barCorrect, timeSignature, newTimeSig);
 
 	if (barTimes.second >= startTime) {
 	    // we're confident this isn't end() after setBarBasicData above
@@ -516,7 +514,8 @@ NotationHLayout::setBarBasicData(Staff &staff,
 				 int barNo,
 				 NotationElementList::iterator start,
 				 bool correct,
-				 Rosegarden::Event *timeSig)
+				 Rosegarden::TimeSignature timeSig,
+				 bool newTimeSig)
 {
     NOTATION_DEBUG << "setBarBasicData for " << barNo << endl;
 
@@ -525,17 +524,15 @@ NotationHLayout::setBarBasicData(Staff &staff,
     BarDataList::iterator i(bdl.find(barNo));
     if (i == bdl.end()) {
 	NotationElementList::iterator endi = staff.getViewElementList()->end();
-	bdl.insert(BarDataPair(barNo, BarData(endi, true, 0)));
+	bdl.insert(BarDataPair(barNo, BarData(endi, true,
+					      Rosegarden::TimeSignature(), false)));
 	i = bdl.find(barNo);
-    }
-
-    if (i->second.basicData.timeSignature) {
-	delete i->second.basicData.timeSignature;
     }
 
     i->second.basicData.start = start;
     i->second.basicData.correct = correct;
     i->second.basicData.timeSignature = timeSig;
+    i->second.basicData.newTimeSig = newTimeSig;
 }
 
 void
@@ -553,7 +550,8 @@ NotationHLayout::setBarSizeData(Staff &staff,
     BarDataList::iterator i(bdl.find(barNo));
     if (i == bdl.end()) {
 	NotationElementList::iterator endi = staff.getViewElementList()->end();
-	bdl.insert(BarDataPair(barNo, BarData(endi, true, 0)));
+	bdl.insert(BarDataPair(barNo, BarData(endi, true,
+					      Rosegarden::TimeSignature(), false)));
 	i = bdl.find(barNo);
     }
 
@@ -1218,7 +1216,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
             bdi->second.layoutData.x += simpleOffset;
 	    
-            if (bdi->second.basicData.timeSignature)
+            if (bdi->second.basicData.newTimeSig)
                 bdi->second.layoutData.timeSigX += (int) simpleOffset;
 
             for (NotationElementList::iterator it = from;
@@ -1239,8 +1237,8 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 	x = barX + getPostBarMargin();
 
 	bool timeSigToPlace = false;
-	if (bdi->second.basicData.timeSignature) {
-	    timeSignature = TimeSignature(*(bdi->second.basicData.timeSignature));
+	if (bdi->second.basicData.newTimeSig) {
+	    timeSignature = bdi->second.basicData.timeSignature;
 	    timeSigToPlace = true;
 	}
 
@@ -1897,15 +1895,18 @@ NotationHLayout::isBarCorrectOnStaff(Staff &staff, int i)
     else return true;
 }
 
-Event *NotationHLayout::getTimeSignaturePosition(Staff &staff,
-						 int i, double &timeSigX)
+bool NotationHLayout::getTimeSignaturePosition(Staff &staff,
+					       int i,
+					       TimeSignature &timeSig,
+					       double &timeSigX)
 {
     BarDataList &bdl(getBarData(staff));
 
     BarDataList::iterator bdli(bdl.find(i));
     if (bdli != bdl.end()) {
+	timeSig = bdli->second.basicData.timeSignature;
 	timeSigX = (double)(bdli->second.layoutData.timeSigX);
-	return bdli->second.basicData.timeSignature;
+	return bdli->second.basicData.newTimeSig;
     } else return 0;
 }
 
