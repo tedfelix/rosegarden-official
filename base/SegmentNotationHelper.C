@@ -1206,8 +1206,8 @@ SegmentNotationHelper::normalizeRests(timeT startTime, timeT endTime)
 {
     // First stage: erase all existing rests in this range.
 
-    cerr << "SegmentNotationHelper::normalizeRests " << startTime << " -> "
-	 << endTime << endl;
+//    cerr << "SegmentNotationHelper::normalizeRests " << startTime << " -> "
+//	 << endTime << endl;
 
     iterator ia = segment().findTime(startTime);
     iterator ib = segment().findTime(endTime);
@@ -1222,7 +1222,7 @@ SegmentNotationHelper::normalizeRests(timeT startTime, timeT endTime)
 	    if ((*scooter)->getAbsoluteTime() + (*scooter)->getDuration() !=
 		startTime) {
 		startTime = (*scooter)->getAbsoluteTime();
-		cerr << "Scooting back to " << startTime << endl;
+//		cerr << "Scooting back to " << startTime << endl;
 		ia = scooter;
 	    }
 	    break;
@@ -1283,7 +1283,7 @@ SegmentNotationHelper::normalizeRests(timeT startTime, timeT endTime)
         startTime = gaps[gi].first;
 	duration = gaps[gi].second;
 
-	cerr << "Gap: " << startTime << " , " << duration << endl;
+//	cerr << "Gap: " << startTime << " , " << duration << endl;
 
 	TimeSignature ts;
 	timeT sigTime =
@@ -1298,8 +1298,8 @@ SegmentNotationHelper::normalizeRests(timeT startTime, timeT endTime)
 	    Event *e = new Event(Note::EventRestType);
 	    e->setDuration(*di);
 	    e->setAbsoluteTime(acc);
-	    cerr<<"inserting:\n"<<endl;
-	    e->dump(cerr);
+//	    cerr<<"inserting:\n"<<endl;
+//	    e->dump(cerr);
 	    segment().insert(e);
 	    acc += *di;
 	}
