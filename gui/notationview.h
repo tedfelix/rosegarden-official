@@ -89,20 +89,20 @@ public:
                               NotationElementList::iterator to,
                               QCanvasItem*);
 
-    /// Normally calls applyHorizontalLayout() then applyVerticalLayout()
+    /// Calls all the relevant preparse and layout methods
     virtual bool applyLayout();
 
-    /// Calculate cached values for use in layout
+    /// Calculate cached values for use in horizontal layout
     virtual bool applyHorizontalPreparse(int staff);
 
-    /// Set the 'x'-coord on all doc elements -
-    //  should be called after applyHorizontalPreparse()
-    virtual bool applyHorizontalLayout(int staff);
-
     /// Set the 'y'-coord on all doc elements -
-    //  should be called after applyHorizontalLayout()
+    //  to be called between applyHorizontalPreparse and applyHorizontalLayout
     virtual bool applyVerticalLayout(int staff);
     
+    /// Set the 'x'-coord on all doc elements -
+    //  to be called after applyHorizontalPreparse and applyVerticalLayout
+    virtual bool applyHorizontalLayout();
+
     void setHorizontalLayoutEngine(NotationHLayout* e) { m_hlayout = e; }
     void setVerticalLayoutEngine  (NotationVLayout* e) { m_vlayout = e; }
 

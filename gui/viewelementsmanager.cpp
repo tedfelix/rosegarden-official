@@ -152,9 +152,4 @@ void ViewElementsManager::eventRemoved(Track *t, Event *e)
 
 }
 
-void ViewElementsManager::trackDeleted(Track *t)
-{
-    assert(t == &m_track);
-    kdDebug(KDEBUG_AREA) << "ViewElementsManager::trackDeleted!" << endl;
-}
     

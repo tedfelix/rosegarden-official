@@ -52,6 +52,9 @@ References in round brackets are to 0.1_planned_features.txt.
  better order (e.g. after a quaver note, use quaver + crotchet rather
  than crotchet + quaver) [DONE in general], avoid using dotted rests
  in most cases [DONE avoiding double-dots anyway]
+
+ 9. Work out why clefs, keys and timesigs are all squashed up some of
+ the time
  
  Throughout: Code documentation
 

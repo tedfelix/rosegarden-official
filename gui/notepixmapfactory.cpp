@@ -963,7 +963,7 @@ NotePixmapFactory::drawStalk(Note::Type note,
     lineOrig = m_offsets.getStalkPoints().first;
     lineDest = m_offsets.getStalkPoints().second;
 
-    kdDebug(KDEBUG_AREA) << "NotePixmapFactory::drawStalk: drawing stalk " << lineDest.y() - lineOrig.y() << " pixels long" << endl;
+//    kdDebug(KDEBUG_AREA) << "NotePixmapFactory::drawStalk: drawing stalk " << lineDest.y() - lineOrig.y() << " pixels long" << endl;
 
     m_p.drawLine(lineOrig, lineDest);
     m_pm.drawLine(lineOrig, lineDest);

@@ -216,7 +216,7 @@ Rosegarden::timeT RG21Loader::convertRG21Duration(QStringList::Iterator& i)
 void RG21Loader::closeTrackOrComposition()
 {
     if (m_currentTrack) {
-        m_currentTrack->setInstrument(m_currentTrackNb);
+        m_currentTrack->setInstrument(m_currentTrackNb - 1);
         m_composition->addTrack(m_currentTrack);
         m_currentTrack = 0;
         m_currentTrackTime = 0;

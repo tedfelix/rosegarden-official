@@ -95,7 +95,6 @@ public:
 
     virtual void eventAdded(Track *, Event *);
     virtual void eventRemoved(Track *, Event *);
-    virtual void trackDeleted(Track *);
 
 protected:
     trackcontainer m_tracks;

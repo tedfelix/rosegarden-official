@@ -288,6 +288,8 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
                     fileStream << "</chord>" << endl; //-----
 
                     if (i == (*trks)->end()) break;
+		    --i;
+		    continue;
                 }
             }
         

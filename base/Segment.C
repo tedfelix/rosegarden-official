@@ -43,8 +43,6 @@ Track::Track(timeT duration, timeT startIdx) :
 
 Track::~Track()
 {
-    notifyTrackGone();
-
     // delete content
     for (iterator it = begin(); it != end(); ++it) delete (*it);
 
@@ -435,15 +433,6 @@ void Track::notifyRemove(Event *e)
 	 i != m_observers.end(); ++i) {
 	(*i)->eventRemoved(this, e);
     }
-}
-
-
-void Track::notifyTrackGone()
-{
-    for (ObserverSet::iterator i = m_observers.begin();
-	 i != m_observers.end(); ++i) {
-	(*i)->trackDeleted(this);
-    }    
 }
 
 

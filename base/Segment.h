@@ -262,7 +262,6 @@ private:
 
     void notifyAdd(Event *);
     void notifyRemove(Event *);
-    void notifyTrackGone();
 };
 
 
@@ -275,9 +274,6 @@ public:
     // called after the event has been removed from the track,
     // and just before it is deleted:
     virtual void eventRemoved(Track *, Event *) = 0;
-
-    // called from the start of the track dtor:
-    virtual void trackDeleted(Track *) = 0;
 };
 
 

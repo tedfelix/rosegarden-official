@@ -89,9 +89,6 @@ public:
     // and just before it is deleted:
     virtual void eventRemoved(Rosegarden::Track *, Rosegarden::Event *);
 
-    // called from the start of the track dtor:
-    virtual void trackDeleted(Rosegarden::Track *);
-
 
 protected:
     Rosegarden::Track    &m_track;

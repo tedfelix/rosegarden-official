@@ -215,10 +215,5 @@ void Composition::eventRemoved(Track *t, Event *e)
 }
 
 
-void Composition::trackDeleted(Track *)
-{
-    // now really, who gives a shit?
-}
-
 
 }

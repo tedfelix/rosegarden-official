@@ -38,25 +38,8 @@ public:
     NotationHLayout();
     ~NotationHLayout();
 
-    //!!! hardly ideal interface, as it means the calling code and
-    //this code must both look up the bar position list even though
-    //probably only one of us needs it
-    void preparse(Staff &staff, int firstBar, int lastBar);
-
-    //!!! This one needs to work across more than one staff, and use
-    //data collated from preparses of all those staffs.  (Preparse
-    //should be okay working on one staff at a time.)
-    void layout(Staff &staff);
-
-    /**
-     * Compute bar data and cached properties.
-     */
-    void preparse(const Rosegarden::Track::BarPositionList &barPositions,
-                  int firstBar, int lastBar);
-
-    /**
-     * Performs the final layout of all notation elements
-     */
+    void preparse(Staff &staff, int firstBar = -1, int lastBar = -1);
+    void reconcileBars();
     void layout();
 
     /**
@@ -78,22 +61,27 @@ public:
 
     typedef std::vector<BarData> BarDataList;
 
-    /// Returns the bar positions computed from the last call to preparse()
-    BarDataList& getBarData() { return m_barData; }
-    const BarDataList& getBarData() const { return m_barData; }
+    /**
+     * Returns the bar positions for a given staff, provided that
+     * staff has been preparsed since the last reset
+     */
+    BarDataList& getBarData(Staff &staff);
+    const BarDataList& getBarData(Staff &staff) const;
 
-    /// Resets the internal position counters of the object
+    /**
+     * Resets any internal position counters the object may have
+     */
     void reset();
 
-    //!!! dubious.
     /**
      * Returns the total length of all elements once layout is done
-     *
-     * This is simply the X position of the last element.
+     * This is the x-coord of the end of the last element on the longest staff
      */
     double getTotalWidth() { return m_totalWidth; }
 
 protected:
+    typedef std::map<Staff *, BarDataList> BarDataMap;
+
     class AccidentalTable : public std::vector<Rosegarden::Accidental>
     {
     public:
@@ -105,25 +93,26 @@ protected:
         Rosegarden::Key m_key;
         Rosegarden::Clef m_clef;
     };
-            
-    void addNewBar(int barNo, NotationElementList::iterator start,
+
+    void layout(BarDataMap::iterator);
+
+    void addNewBar(Staff &staff, int barNo, NotationElementList::iterator start,
                    int width, int fwidth);
 
     int getMinWidth(const NotePixmapFactory &, const NotationElement &) const;
 
     int getComfortableGap(const NotePixmapFactory &npf,
                           Rosegarden::Note::Type type) const;
+
     int getIdealBarWidth(Staff &staff, int fixedWidth,
                          NotationElementList::iterator shortest,
                          const NotePixmapFactory &npf, int shortCount,
                          int totalCount,
                          const Rosegarden::TimeSignature &timeSignature) const;
 
-    BarDataList m_barData;
+    BarDataMap m_barData;
 
     double m_totalWidth;
-
-    Staff *m_lastStaffPreparsed; //!!! Because we haven't finished implementing the general case yet
 };
 
 #endif

@@ -1,0 +1,2606 @@
+#!Rosegarden
+#
+#  Musical Notation File
+#
+
+RV21
+
+
+Staves 2
+
+
+Name Right Hand
+Clef
+	Clef Name Treble
+Metronome
+	Crotchet 135
+: Minim 0 1 5 0
+: Crotchet 0 1 7 0
+: Crotchet 0 1 9 0
+: Dotted crotchet 0 1 4 0
+Group
+	Beamed
+	: Semiquaver 0 1 5 0
+	: Semiquaver 0 1 6 0
+	End
+: Dotted quaver 0 1 5 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+: Minim 0 1 10 0
+: Crotchet 0 1 9 0
+: Dotted quaver 0 1 12 0
+Rest
+	Semiquaver rest
+: Crotchet 0 1 9 0
+Group
+	Beamed
+	: Quaver 0 1 8 0
+	: Semiquaver 0 1 7 0
+	: Semiquaver 0 1 8 0
+	End
+: Dotted quaver 0 1 7 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Group
+	Beamed
+	: Quaver 0 1 10 0
+	: Semiquaver 0 1 11 0
+	: Semiquaver 0 1 12 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 13 0
+	: Semiquaver 0 1 14 0
+	: Semiquaver 0 1 15 0
+	: Semiquaver 0 1 16 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 17 0
+	: Semiquaver 0 1 16 0
+	: Semiquaver 0 1 15 0
+	: Semiquaver 0 1 14 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 13 0
+	: Semiquaver 0 1 12 0
+	: Semiquaver 0 1 11 0
+	: Semiquaver 0 1 10 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 9 0
+	: Semiquaver 0 1 10 0
+	: Semiquaver 0 1 11 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 12 0
+	: Semiquaver 0 1 13 0
+	: Semiquaver 0 1 14 0
+	: Semiquaver 0 1 15 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 16 0
+	: Semiquaver 0 1 15 0
+	: Semiquaver 0 1 14 0
+	: Semiquaver 0 1 13 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 12 0
+	: Semiquaver 0 1 11 0
+	: Semiquaver 0 1 10 0
+	: Semiquaver 0 1 9 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 8 0
+	: Semiquaver 0 1 9 0
+	: Semiquaver 0 1 10 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 11 0
+	: Semiquaver 0 1 12 0
+	: Semiquaver 0 1 13 0
+	: Semiquaver 0 1 14 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 15 0
+	: Semiquaver 0 1 14 0
+	: Semiquaver 0 1 13 0
+	: Semiquaver 0 1 12 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 11 0
+	: Semiquaver 0 1 10 0
+	: Semiquaver 0 1 9 0
+	: Semiquaver 0 1 8 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 7 0
+	: Semiquaver 0 1 8 0
+	: Semiquaver 0 1 9 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 10 0
+	: Semiquaver 0 1 11 0
+	: Semiquaver 0 1 12 0
+	: Semiquaver 0 1 13 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 14 0
+	: Semiquaver 0 1 13 0
+	: Semiquaver 0 1 12 0
+	: Semiquaver 0 1 11 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 10 0
+	: Semiquaver 0 1 9 0
+	: Semiquaver 0 1 8 0
+	: Semiquaver 0 1 7 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 6 0
+	: Semiquaver 0 1 7 0
+	: Semiquaver 0 1 8 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 9 0
+	: Semiquaver 0 1 10 0
+	: Semiquaver 0 1 11 0
+	: Semiquaver 0 1 12 1
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 13 0
+	: Semiquaver 0 1 10 0
+	: Semiquaver 0 1 11 0
+	: Semiquaver 0 1 12 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 13 0
+	: Semiquaver 0 1 14 0
+	: Semiquaver 0 1 15 0
+	: Semiquaver 0 1 16 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 17 0
+	: Semiquaver 0 1 18 0
+	: Semiquaver 0 1 19 0
+	: Semiquaver 0 1 18 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 17 0
+	: Semiquaver 0 1 16 0
+	: Semiquaver 0 1 15 0
+	: Semiquaver 0 1 14 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 15 0
+	: Semiquaver 0 1 16 0
+	: Semiquaver 0 1 17 0
+	: Semiquaver 0 1 16 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 15 0
+	: Semiquaver 0 1 14 0
+	: Semiquaver 0 1 13 0
+	: Semiquaver 0 1 12 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 11 0
+	: Quaver 0 1 16 0
+	: Quaver 0 1 14 0
+	: Quaver 0 1 12 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 13 0
+	: Quaver 0 1 16 0
+	: Quaver 0 1 14 0
+	: Quaver 0 1 12 0
+	End
+: Dotted quaver 0 1 13 0
+Rest
+	Semiquaver rest
+: Dotted quaver 0 3 11 0 13 0 16 0
+Rest
+	Semiquaver rest
+: Dotted quaver 0 1 9 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Group
+	Beamed
+	: Semiquaver 0 1 -2 1
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 -2 1
+	: Semiquaver 0 1 -1 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -2 1
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 -2 1
+	: Semiquaver 0 1 -1 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -2 0
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 -2 0
+	: Semiquaver 0 1 -1 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -2 0
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 -2 0
+	: Semiquaver 0 1 -1 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -3 0
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 -3 0
+	: Semiquaver 0 1 -1 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -3 0
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 -3 0
+	: Semiquaver 0 1 -1 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -3 0
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 -3 0
+	: Semiquaver 0 1 -1 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -3 0
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 -3 0
+	: Semiquaver 0 1 -1 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -2 0
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 -3 0
+	: Semiquaver 0 1 -1 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -4 0
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 -3 0
+	: Semiquaver 0 1 -1 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -2 0
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 -3 0
+	: Semiquaver 0 1 -1 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -2 0
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 -4 0
+	: Semiquaver 0 1 -1 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -3 0
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 -3 0
+	: Semiquaver 0 1 -1 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -3 0
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 -3 0
+	: Semiquaver 0 1 -1 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -3 0
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 -3 0
+	: Semiquaver 0 1 -1 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -3 0
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 -3 0
+	: Semiquaver 0 1 -1 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -2 0
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 -3 0
+	: Semiquaver 0 1 -1 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -4 0
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 -3 0
+	: Semiquaver 0 1 -1 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -2 0
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 -3 0
+	: Semiquaver 0 1 -1 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -2 0
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 -4 0
+	: Semiquaver 0 1 -1 0
+	End
+: Dotted quaver 0 1 13 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 13 0
+	: Semiquaver 0 1 11 0
+	: Semiquaver 0 1 9 0
+	End
+: Dotted quaver 0 1 7 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 7 0
+	: Semiquaver 0 1 9 0
+	: Semiquaver 0 1 7 0
+	End
+: Dotted quaver 0 1 12 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 12 0
+	: Semiquaver 0 1 10 0
+	: Semiquaver 0 1 8 1
+	End
+: Dotted quaver 0 1 6 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 6 0
+	: Semiquaver 0 1 8 1
+	: Semiquaver 0 1 6 0
+	End
+: Dotted quaver 0 1 11 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 11 0
+	: Semiquaver 0 1 9 0
+	: Semiquaver 0 1 7 0
+	End
+: Dotted quaver 0 1 5 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 5 0
+	: Semiquaver 0 1 7 0
+	: Semiquaver 0 1 5 0
+	End
+: Dotted quaver 0 1 10 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 10 0
+	: Semiquaver 0 1 8 1
+	: Semiquaver 0 1 6 0
+	End
+: Dotted quaver 0 1 4 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 9 0
+	: Semiquaver 0 1 6 0
+	: Semiquaver 0 1 4 0
+	End
+: Dotted crotchet 0 1 3 0
+Rest
+	Quaver rest
+: Dotted quaver 0 1 5 0
+Rest
+	Semiquaver rest
+: Dotted quaver 0 1 7 0
+Rest
+	Semiquaver rest
+: Crotchet 0 1 10 0
+Group
+	Beamed
+	Rest
+		Quaver rest
+	: Semiquaver 0 1 11 0
+	: Semiquaver 0 2 9 1 10 0
+	End
+: Semiquaver 0 2 10 0 12 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	: Quaver 0 1 10 0
+	: Quaver 0 1 12 0
+	: Quaver 0 1 10 0
+	: Quaver 0 1 11 0
+	End
+: Quaver 0 1 9 0
+: Dotted crotchet 0 1 13 0
+Group
+	Beamed
+	Rest
+		Quaver rest
+	: Semiquaver 0 1 12 0
+	: Semiquaver 0 1 11 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 10 0
+	: Semiquaver 0 1 9 0
+	End
+: Dotted minim 0 1 10 0
+Rest
+	Crotchet rest
+: Dotted quaver 0 1 9 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	: Semiquaver 0 1 9 0
+	: Semiquaver 0 1 6 0
+	: Semiquaver 0 1 9 0
+	: Semiquaver 0 1 11 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 13 0
+	: Semiquaver 0 1 11 0
+	: Semiquaver 0 1 9 0
+	: Semiquaver 0 1 11 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 12 0
+	: Semiquaver 0 1 10 0
+	: Semiquaver 0 1 8 1
+	: Semiquaver 0 1 10 0
+	End
+: Dotted quaver 0 1 9 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 4 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 6 0
+	: Semiquaver 0 1 4 0
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 4 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 5 0
+	: Semiquaver 0 1 3 0
+	: Semiquaver 0 1 1 1
+	: Semiquaver 0 1 3 0
+	End
+: Dotted quaver 0 1 2 0
+Rest
+	Semiquaver rest
+: Dotted quaver 0 2 6 0 11 0
+Rest
+	Semiquaver rest
+: Dotted quaver 0 2 4 0 9 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+: Dotted quaver 0 1 2 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	: Semiquaver 0 1 9 0
+	: Semiquaver 0 1 6 0
+	: Semiquaver 0 1 9 0
+	: Semiquaver 0 1 10 1
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 13 0
+	: Semiquaver 0 1 10 1
+	: Semiquaver 0 1 9 0
+	: Semiquaver 0 1 10 1
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 12 0
+	: Semiquaver 0 1 10 0
+	: Semiquaver 0 1 8 1
+	: Semiquaver 0 1 10 0
+	End
+: Dotted quaver 0 1 9 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 3 1
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 6 0
+	: Semiquaver 0 1 3 1
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 3 1
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 5 0
+	: Semiquaver 0 1 3 0
+	: Semiquaver 0 1 1 1
+	: Semiquaver 0 1 3 0
+	End
+: Dotted quaver 0 1 2 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 9 0
+	: Semiquaver 0 1 10 1
+	: Semiquaver 0 1 10 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 9 0
+	: Semiquaver 0 1 8 0
+	: Semiquaver 0 1 7 0
+	: Semiquaver 0 1 6 0
+	End
+: Dotted quaver 0 1 5 1
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 12 1
+	: Semiquaver 0 1 14 0
+	: Semiquaver 0 1 13 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 12 0
+	: Semiquaver 0 1 11 0
+	: Semiquaver 0 1 10 0
+	: Semiquaver 0 1 9 0
+	End
+: Dotted quaver 0 1 8 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	: Semiquaver 0 1 6 0
+	: Semiquaver 0 1 3 0
+	: Semiquaver 0 1 6 0
+	: Semiquaver 0 1 8 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 10 0
+	: Semiquaver 0 1 8 0
+	: Semiquaver 0 1 6 0
+	: Semiquaver 0 1 8 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 9 0
+	: Semiquaver 0 1 7 0
+	: Semiquaver 0 1 5 1
+	: Semiquaver 0 1 7 0
+	End
+: Dotted quaver 0 1 6 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	: Semiquaver 0 1 1 0
+	: Semiquaver 0 1 -4 0
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 1 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 3 0
+	: Semiquaver 0 1 1 0
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 1 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 -2 1
+	: Semiquaver 0 1 0 0
+	End
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 1 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 3 0
+	: Semiquaver 0 1 4 0
+	: Semiquaver 0 1 5 1
+	End
+: Dotted quaver 0 1 6 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 4 0
+	: Semiquaver 0 1 5 0
+	: Semiquaver 0 1 6 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 7 0
+	: Semiquaver 0 1 8 1
+	: Semiquaver 0 1 9 1
+	: Semiquaver 0 1 10 0
+	End
+: Dotted quaver 0 1 11 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 10 0
+	: Semiquaver 0 1 14 0
+	: Semiquaver 0 1 13 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 12 0
+	: Semiquaver 0 1 11 0
+	: Semiquaver 0 1 10 0
+	: Semiquaver 0 1 9 0
+	End
+: Dotted quaver 0 1 8 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 9 0
+	: Semiquaver 0 1 13 0
+	: Semiquaver 0 1 12 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 11 0
+	: Semiquaver 0 1 10 0
+	: Semiquaver 0 1 9 0
+	: Semiquaver 0 1 8 0
+	End
+: Dotted quaver 0 1 7 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 8 0
+	: Semiquaver 0 1 12 0
+	: Semiquaver 0 1 11 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 10 0
+	: Semiquaver 0 1 9 0
+	: Semiquaver 0 1 8 0
+	: Semiquaver 0 1 7 0
+	End
+: Dotted quaver 0 1 6 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 7 0
+	: Semiquaver 0 1 11 0
+	: Semiquaver 0 1 10 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 9 1
+	: Semiquaver 0 1 8 0
+	: Semiquaver 0 1 7 0
+	: Semiquaver 0 1 6 0
+	End
+: Dotted quaver 0 1 5 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 3 1
+	: Semiquaver 0 1 6 0
+	: Semiquaver 0 1 5 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 3 1
+	: Semiquaver 0 1 3 0
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 1 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 1 0
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 3 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 3 1
+	: Semiquaver 0 1 5 0
+	: Semiquaver 0 1 6 0
+	: Semiquaver 0 1 7 0
+	End
+: Dotted crotchet 0 1 8 0
+Rest
+	Quaver rest
+: Dotted quaver 0 1 10 0
+Rest
+	Semiquaver rest
+: Dotted quaver 0 1 12 0
+Rest
+	Semiquaver rest
+: Crotchet 0 1 7 0
+Group
+	Beamed
+	Rest
+		Quaver rest
+	: Semiquaver 0 1 8 0
+	: Semiquaver 0 1 9 0
+	End
+: Dotted quaver 0 1 8 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+: Dotted crotchet 0 1 13 0
+Rest
+	Quaver rest
+: Dotted quaver 0 1 12 0
+Rest
+	Semiquaver rest
+: Dotted quaver 0 1 15 0
+Rest
+	Semiquaver rest
+: Dotted quaver 0 1 12 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	: Quaver 0 1 10 1
+	: Semiquaver 0 1 10 0
+	: Semiquaver 0 1 10 1
+	End
+: Crotchet 0 1 10 0
+Rest
+	Crotchet rest
+Group
+	Beamed
+	: Quaver 0 1 6 0
+	: Semiquaver 0 1 7 0
+	: Semiquaver 0 1 8 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 9 0
+	: Semiquaver 0 1 10 0
+	: Semiquaver 0 1 10 1
+	: Semiquaver 0 1 12 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 13 0
+	: Semiquaver 0 1 12 0
+	: Semiquaver 0 1 10 1
+	: Semiquaver 0 1 10 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 9 0
+	: Semiquaver 0 1 8 0
+	: Semiquaver 0 1 7 0
+	: Semiquaver 0 1 6 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 5 0
+	: Semiquaver 0 1 6 0
+	: Semiquaver 0 1 7 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 8 0
+	: Semiquaver 0 1 9 0
+	: Semiquaver 0 1 10 0
+	: Semiquaver 0 1 10 1
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 12 0
+	: Semiquaver 0 1 10 1
+	: Semiquaver 0 1 10 0
+	: Semiquaver 0 1 9 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 8 0
+	: Semiquaver 0 1 7 0
+	: Semiquaver 0 1 6 0
+	: Semiquaver 0 1 5 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 3 1
+	: Semiquaver 0 1 5 0
+	: Semiquaver 0 1 6 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 7 0
+	: Semiquaver 0 1 8 0
+	: Semiquaver 0 1 9 0
+	: Semiquaver 0 1 10 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 10 1
+	: Semiquaver 0 1 10 0
+	: Semiquaver 0 1 9 0
+	: Semiquaver 0 1 8 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 7 0
+	: Semiquaver 0 1 6 0
+	: Semiquaver 0 1 5 0
+	: Semiquaver 0 1 3 1
+	End
+Group
+	Beamed
+	: Quaver 0 1 3 0
+	: Semiquaver 0 1 3 1
+	: Semiquaver 0 1 5 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 6 0
+	: Semiquaver 0 1 7 0
+	: Semiquaver 0 1 8 0
+	: Semiquaver 0 1 9 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 10 0
+	: Semiquaver 0 1 9 0
+	: Semiquaver 0 1 8 0
+	: Semiquaver 0 1 7 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 6 0
+	: Semiquaver 0 1 5 0
+	: Semiquaver 0 1 4 0
+	: Semiquaver 0 1 3 0
+	End
+: Dotted quaver 0 1 10 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+: Dotted quaver 0 2 5 0 10 0
+Rest
+	Semiquaver rest
+: Dotted quaver 0 2 5 0 9 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+: Dotted quaver 0 2 5 0 9 0
+Rest
+	Semiquaver rest
+: Dotted quaver 0 2 5 0 8 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+: Dotted quaver 0 2 4 0 8 0
+Rest
+	Semiquaver rest
+: Dotted quaver 0 2 5 0 7 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+: Dotted quaver 0 2 5 0 7 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	: Semiquaver 0 1 7 0
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 1 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 3 0
+	: Semiquaver 0 1 4 0
+	: Semiquaver 0 1 5 1
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 6 0
+	: Semiquaver 0 1 3 0
+	: Semiquaver 0 1 4 0
+	: Semiquaver 0 1 5 1
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 6 0
+	: Semiquaver 0 1 7 0
+	: Semiquaver 0 1 8 0
+	: Semiquaver 0 1 9 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 10 0
+	: Semiquaver 0 1 11 0
+	: Semiquaver 0 1 12 0
+	: Semiquaver 0 1 11 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 10 0
+	: Semiquaver 0 1 9 0
+	: Semiquaver 0 1 8 0
+	: Semiquaver 0 1 7 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 8 0
+	: Semiquaver 0 1 9 0
+	: Semiquaver 0 1 10 0
+	: Semiquaver 0 1 9 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 8 0
+	: Semiquaver 0 1 7 0
+	: Semiquaver 0 1 6 0
+	: Semiquaver 0 1 5 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 4 0
+	: Quaver 0 1 9 0
+	: Quaver 0 1 7 0
+	: Quaver 0 1 5 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 6 0
+	: Quaver 0 1 9 0
+	: Quaver 0 1 7 0
+	: Quaver 0 1 5 0
+	End
+: Dotted quaver 0 1 6 0
+Rest
+	Semiquaver rest
+: Dotted quaver 0 3 4 0 6 0 9 0
+Rest
+	Semiquaver rest
+: Dotted quaver 0 1 2 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+Group
+	Beamed
+	: Quaver 0 1 9 0
+	: Quaver 0 1 7 0
+	End
+: Dotted quaver 0 1 5 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	: Quaver 0 1 5 0
+	: Semiquaver 0 1 6 0
+	: Semiquaver 0 1 7 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 6 0
+	: Quaver 0 1 5 0
+	End
+: Quaver 0 1 5 0
+Rest
+	Semiquaver rest
+: Semiquaver 0 1 4 0
+: Dotted quaver 0 1 4 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+Group
+	Beamed
+	: Quaver 0 1 9 0
+	: Quaver 0 1 7 0
+	End
+: Crotchet 0 1 5 0
+Group
+	Beamed
+	: Quaver 0 1 5 0
+	: Semiquaver 0 1 6 0
+	: Semiquaver 0 1 7 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 6 0
+	: Quaver 0 1 5 0
+	End
+: Quaver 0 1 5 0
+Rest
+	Semiquaver rest
+: Semiquaver 0 1 4 0
+: Dotted quaver 0 1 4 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+: Dotted quaver 0 1 9 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 9 0
+	: Semiquaver 0 1 7 0
+	: Semiquaver 0 1 5 0
+	End
+: Crotchet 0 1 3 0
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 3 0
+	: Semiquaver 0 1 5 0
+	: Semiquaver 0 1 3 0
+	End
+: Dotted quaver 0 1 8 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 8 0
+	: Semiquaver 0 1 6 0
+	: Semiquaver 0 1 4 0
+	End
+: Dotted quaver 0 1 2 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 9 0
+	: Semiquaver 0 1 11 0
+	: Semiquaver 0 1 9 0
+	End
+: Dotted quaver 0 1 14 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 14 0
+	: Semiquaver 0 1 12 0
+	: Semiquaver 0 1 10 0
+	End
+: Dotted quaver 0 1 8 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 8 0
+	: Semiquaver 0 1 10 0
+	: Semiquaver 0 1 8 0
+	End
+: Dotted quaver 0 1 13 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 13 0
+	: Semiquaver 0 1 11 0
+	: Semiquaver 0 1 9 0
+	End
+: Crotchet 0 1 7 0
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 12 0
+	: Semiquaver 0 1 9 0
+	: Semiquaver 0 1 7 0
+	End
+: Dotted crotchet 0 1 6 0
+Rest
+	Quaver rest
+: Dotted quaver 0 1 6 0
+Rest
+	Semiquaver rest
+: Dotted quaver 0 1 6 0
+Rest
+	Semiquaver rest
+: Dotted crotchet 0 1 10 0
+Rest
+	Quaver rest
+: Semiquaver 0 2 9 1 10 0
+Rest
+	Quaver rest
+Rest
+	Semiquaver rest
+: Semiquaver 0 2 9 1 10 0
+Rest
+	Quaver rest
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	: Quaver 0 1 9 0
+	: Semiquaver 0 1 10 0
+	: Semiquaver 0 1 11 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 12 0
+	: Semiquaver 0 1 13 0
+	: Semiquaver 0 1 14 0
+	: Semiquaver 0 1 13 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 12 0
+	: Semiquaver 0 1 11 0
+	: Semiquaver 0 1 10 0
+	: Semiquaver 0 1 9 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 8 0
+	: Semiquaver 0 1 7 0
+	: Semiquaver 0 1 6 0
+	: Semiquaver 0 1 5 0
+	End
+: Dotted minim 0 1 6 0
+Rest
+	Quaver rest
+Rest
+	Semiquaver rest
+: Semiquaver 0 2 5 0 6 0
+: Dotted quaver 0 1 5 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	: Semiquaver 0 1 5 0
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 5 0
+	: Semiquaver 0 1 7 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 9 0
+	: Semiquaver 0 1 7 0
+	: Semiquaver 0 1 5 0
+	: Semiquaver 0 1 7 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 8 0
+	: Semiquaver 0 1 6 0
+	: Semiquaver 0 1 4 0
+	: Semiquaver 0 1 6 0
+	End
+: Dotted quaver 0 1 5 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	: Semiquaver 0 1 -2 0
+	: Semiquaver 0 1 -5 0
+	: Semiquaver 0 1 -2 0
+	: Semiquaver 0 1 0 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 -2 0
+	: Semiquaver 0 1 0 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 1 0
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 -3 0
+	: Semiquaver 0 1 -1 0
+	End
+: Dotted quaver 0 1 -2 0
+Rest
+	Semiquaver rest
+: Dotted quaver 0 3 7 0 9 0 12 0
+Rest
+	Semiquaver rest
+: Dotted quaver 0 1 5 0
+End
+
+Name Left Hand
+Clef
+	Clef Name Treble
+Group
+	Beamed
+	: Quaver 0 1 -2 0
+	: Quaver 0 1 2 0
+	: Quaver 0 1 0 0
+	: Quaver 0 1 2 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 -2 0
+	: Quaver 0 1 2 0
+	: Quaver 0 1 0 0
+	: Quaver 0 1 2 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 -1 0
+	: Quaver 0 1 2 0
+	: Quaver 0 1 1 0
+	: Quaver 0 1 2 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 -2 0
+	: Quaver 0 1 2 0
+	: Quaver 0 1 0 0
+	: Quaver 0 1 2 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 -2 0
+	: Quaver 0 1 3 0
+	: Quaver 0 1 1 0
+	: Quaver 0 1 3 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 -2 0
+	: Quaver 0 1 2 0
+	: Quaver 0 1 0 0
+	: Quaver 0 1 2 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 -3 0
+	: Quaver 0 1 2 0
+	: Quaver 0 1 -1 0
+	: Quaver 0 1 2 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 -2 0
+	: Quaver 0 1 2 0
+	: Quaver 0 1 0 0
+	: Quaver 0 1 2 0
+	End
+: Dotted quaver 0 1 1 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+: Dotted quaver 0 2 1 0 5 0
+Rest
+	Semiquaver rest
+: Dotted quaver 0 2 0 0 5 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+: Dotted quaver 0 2 0 0 5 0
+Rest
+	Semiquaver rest
+: Dotted quaver 0 2 -1 0 5 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+: Dotted quaver 0 2 -1 0 4 0
+Rest
+	Semiquaver rest
+: Dotted quaver 0 2 -2 0 5 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+: Dotted quaver 0 2 -2 0 0 0
+Rest
+	Semiquaver rest
+: Dotted minim 0 2 1 0 3 0
+Rest
+	Crotchet rest
+: Crotchet 0 1 1 0
+Rest
+	Quaver rest
+: Quaver 0 1 2 0
+: Crotchet 0 1 3 0
+Rest
+	Quaver rest
+: Quaver 0 1 1 1
+Group
+	Beamed
+	: Semiquaver 0 1 -5 0
+	: Semiquaver 0 1 -3 0
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 2 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -5 0
+	: Semiquaver 0 1 -2 0
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 2 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -5 0
+	: Semiquaver 0 1 -3 0
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 2 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -5 0
+	: Semiquaver 0 1 -2 0
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 2 0
+	End
+: Dotted quaver 0 1 -5 0
+Rest
+	Semiquaver rest
+: Dotted quaver 0 1 2 0
+Rest
+	Semiquaver rest
+: Dotted quaver 0 1 -5 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+Group
+	Beamed
+	: Quaver 0 1 13 0
+	: Quaver 0 1 11 0
+	End
+: Dotted quaver 0 1 9 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	: Quaver 0 1 9 0
+	: Semiquaver 0 1 10 0
+	: Semiquaver 0 1 11 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 10 0
+	: Quaver 0 1 9 0
+	End
+: Quaver 0 1 9 0
+Rest
+	Semiquaver rest
+: Semiquaver 0 1 8 1
+: Dotted quaver 0 1 8 1
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+Group
+	Beamed
+	: Quaver 0 1 13 0
+	: Quaver 0 1 11 0
+	End
+: Dotted quaver 0 1 9 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	: Quaver 0 1 9 0
+	: Semiquaver 0 1 10 0
+	: Semiquaver 0 1 11 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 10 0
+	: Quaver 0 1 9 0
+	End
+: Quaver 0 1 9 0
+Rest
+	Semiquaver rest
+: Semiquaver 0 1 8 1
+: Dotted quaver 0 1 8 1
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+Group
+	Beamed
+	: Semiquaver 0 1 -3 0
+	: Semiquaver 0 1 -3 0
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 2 0
+	End
+: Dotted quaver 0 1 4 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 -2 0
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 2 0
+	End
+: Dotted quaver 0 1 5 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 -4 0
+	: Semiquaver 0 1 -2 0
+	: Semiquaver 0 1 1 1
+	End
+: Dotted quaver 0 1 3 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 -3 0
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 1 1
+	End
+: Dotted quaver 0 1 4 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 -5 0
+	: Semiquaver 0 1 -3 0
+	: Semiquaver 0 1 0 0
+	End
+: Dotted quaver 0 1 2 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 -4 0
+	: Semiquaver 0 1 -2 0
+	: Semiquaver 0 1 0 0
+	End
+: Dotted quaver 0 1 3 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 -6 1
+	: Semiquaver 0 1 -4 0
+	: Semiquaver 0 1 -1 0
+	End
+: Dotted quaver 0 1 1 1
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 -5 0
+	: Semiquaver 0 1 -3 0
+	: Semiquaver 0 1 -1 0
+	End
+: Dotted quaver 0 1 2 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	: Quaver 0 2 -2 0 0 0
+	: Quaver 0 2 -2 0 0 0
+	: Quaver 0 2 -2 0 0 0
+	: Quaver 0 2 -2 0 0 0
+	End
+Group
+	Beamed
+	: Quaver 0 2 -2 0 0 0
+	: Quaver 0 2 -2 0 0 0
+	: Quaver 0 2 -2 0 0 0
+	: Quaver 0 2 -2 0 0 0
+	End
+Group
+	Beamed
+	: Quaver 0 2 -2 0 0 0
+	: Quaver 0 2 -2 0 0 0
+	: Quaver 0 2 -2 0 0 0
+	: Quaver 0 2 -2 0 0 0
+	End
+Group
+	Beamed
+	: Quaver 0 2 -2 0 0 0
+	: Quaver 0 2 -2 0 0 0
+	: Quaver 0 2 -2 0 0 0
+	: Quaver 0 2 -2 0 0 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 4 0
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 4 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 4 0
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 4 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 4 0
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 4 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 4 0
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 4 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 5 0
+	: Semiquaver 0 1 1 1
+	: Semiquaver 0 1 5 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 5 0
+	: Semiquaver 0 1 1 1
+	: Semiquaver 0 1 5 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 5 0
+	: Semiquaver 0 1 1 1
+	: Semiquaver 0 1 5 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 5 0
+	: Semiquaver 0 1 1 1
+	: Semiquaver 0 1 5 0
+	End
+: Dotted quaver 0 2 2 0 4 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+: Dotted quaver 0 3 -1 0 3 0 5 0
+Rest
+	Semiquaver rest
+: Dotted quaver 0 2 2 0 4 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+: Dotted quaver 0 3 -1 0 3 0 5 0
+Rest
+	Semiquaver rest
+: Dotted quaver 0 2 2 0 4 0
+Rest
+	Semiquaver rest
+: Dotted quaver 0 2 -5 0 4 0
+Rest
+	Semiquaver rest
+: Dotted quaver 0 2 -5 0 4 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+: Dotted quaver 0 2 -5 0 2 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+: Dotted quaver 0 3 -1 0 3 0 5 0
+Rest
+	Semiquaver rest
+: Dotted quaver 0 2 2 0 3 1
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+: Dotted quaver 0 3 -8 0 -4 0 -2 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 -5 0
+	: Semiquaver 0 1 -4 0
+	: Semiquaver 0 1 -3 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -2 0
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 1 1
+	End
+: Crotchet 0 1 2 0
+Rest
+	Crotchet rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 -4 0
+	: Semiquaver 0 1 -3 0
+	: Semiquaver 0 1 -2 1
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 1 1
+	: Semiquaver 0 1 2 1
+	End
+: Crotchet 0 1 3 0
+Rest
+	Crotchet rest
+: Dotted quaver 0 2 -8 0 -1 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+: Dotted quaver 0 3 3 0 7 0 9 0
+Rest
+	Semiquaver rest
+: Dotted quaver 0 2 6 0 8 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+: Dotted quaver 0 3 -4 0 0 0 2 0
+Rest
+	Semiquaver rest
+: Dotted quaver 0 2 -1 0 1 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 1 0
+	: Semiquaver 0 1 0 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 -2 0
+	: Semiquaver 0 1 -3 0
+	: Semiquaver 0 1 -4 0
+	End
+: Dotted quaver 0 1 -5 1
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 -5 0
+	: Semiquaver 0 1 -3 0
+	: Semiquaver 0 1 -4 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -5 0
+	: Semiquaver 0 1 -6 0
+	: Semiquaver 0 1 -7 0
+	: Semiquaver 0 1 -8 0
+	End
+: Dotted quaver 0 1 -9 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 3 0
+	: Semiquaver 0 1 2 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 1 0
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 -2 0
+	End
+: Dotted quaver 0 1 -3 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 5 0
+	: Semiquaver 0 1 9 0
+	: Semiquaver 0 1 8 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 7 0
+	: Semiquaver 0 1 6 0
+	: Semiquaver 0 1 5 0
+	: Semiquaver 0 1 4 0
+	End
+: Dotted quaver 0 1 3 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 4 0
+	: Semiquaver 0 1 8 0
+	: Semiquaver 0 1 7 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 6 0
+	: Semiquaver 0 1 5 0
+	: Semiquaver 0 1 4 0
+	: Semiquaver 0 1 3 0
+	End
+: Dotted quaver 0 1 2 1
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 3 0
+	: Semiquaver 0 1 5 0
+	: Semiquaver 0 1 4 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 3 0
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 1 0
+	: Semiquaver 0 1 0 0
+	End
+: Dotted crotchet 0 1 -1 0
+Rest
+	Quaver rest
+: Dotted crotchet 0 3 -2 0 2 0 3 1
+Rest
+	Quaver rest
+Group
+	Beamed
+	: Quaver 0 1 1 0
+	: Quaver 0 1 5 0
+	: Quaver 0 1 3 0
+	: Quaver 0 1 5 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 1 0
+	: Quaver 0 1 5 0
+	: Quaver 0 1 3 0
+	: Quaver 0 1 5 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 2 0
+	: Quaver 0 1 5 0
+	: Quaver 0 1 3 1
+	: Quaver 0 1 5 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 1 0
+	: Quaver 0 1 5 0
+	: Quaver 0 1 3 0
+	: Quaver 0 1 5 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 1 0
+	: Quaver 0 1 6 0
+	: Quaver 0 1 3 1
+	: Quaver 0 1 6 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 1 0
+	: Quaver 0 1 5 0
+	: Quaver 0 1 3 0
+	: Quaver 0 1 5 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 0 0
+	: Quaver 0 1 5 0
+	: Quaver 0 1 2 0
+	: Quaver 0 1 5 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 1 0
+	: Quaver 0 1 5 0
+	: Quaver 0 1 3 0
+	: Quaver 0 1 5 0
+	End
+: Dotted quaver 0 1 3 1
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+: Dotted quaver 0 2 1 0 3 1
+Rest
+	Semiquaver rest
+: Dotted quaver 0 2 3 0 8 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+: Dotted quaver 0 2 3 0 8 0
+Rest
+	Semiquaver rest
+: Dotted quaver 0 2 2 0 8 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+: Dotted quaver 0 2 2 0 7 0
+Rest
+	Semiquaver rest
+: Dotted quaver 0 2 1 0 8 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+Group
+	Beamed
+	: Quaver 0 1 1 0
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 3 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 4 0
+	: Semiquaver 0 1 5 0
+	: Semiquaver 0 1 6 0
+	: Semiquaver 0 1 7 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 8 0
+	: Semiquaver 0 1 7 0
+	: Semiquaver 0 1 6 0
+	: Semiquaver 0 1 5 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 4 0
+	: Semiquaver 0 1 3 0
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 1 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 0 0
+	: Semiquaver 0 1 1 0
+	: Semiquaver 0 1 2 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 3 0
+	: Semiquaver 0 1 4 0
+	: Semiquaver 0 1 5 0
+	: Semiquaver 0 1 6 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 7 0
+	: Semiquaver 0 1 6 0
+	: Semiquaver 0 1 5 0
+	: Semiquaver 0 1 4 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 3 0
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 1 0
+	: Semiquaver 0 1 0 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 -1 0
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 1 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 3 0
+	: Semiquaver 0 1 4 0
+	: Semiquaver 0 1 5 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 6 0
+	: Semiquaver 0 1 5 0
+	: Semiquaver 0 1 4 0
+	: Semiquaver 0 1 3 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 1 0
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 -1 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 -2 0
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 0 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 1 0
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 3 0
+	: Semiquaver 0 1 4 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 5 0
+	: Semiquaver 0 1 4 0
+	: Semiquaver 0 1 3 0
+	: Semiquaver 0 1 2 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 1 0
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 -2 0
+	End
+: Semibreve 0 2 1 0 3 0
+: Crotchet 0 1 1 0
+Rest
+	Quaver rest
+: Quaver 0 1 2 0
+: Crotchet 0 1 3 0
+Rest
+	Quaver rest
+: Quaver 0 1 1 1
+Group
+	Beamed
+	: Semiquaver 0 1 -5 0
+	: Semiquaver 0 1 -3 0
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 2 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -5 0
+	: Semiquaver 0 1 -2 0
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 2 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -5 0
+	: Semiquaver 0 1 -3 0
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 2 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -5 0
+	: Semiquaver 0 1 -2 0
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 2 0
+	End
+: Dotted quaver 0 1 -5 0
+Rest
+	Semiquaver rest
+: Dotted quaver 0 1 2 0
+Rest
+	Semiquaver rest
+: Dotted quaver 0 1 -5 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Group
+	Beamed
+	: Semiquaver 0 1 1 1
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 1 1
+	: Semiquaver 0 1 2 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 1 1
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 1 1
+	: Semiquaver 0 1 2 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 1 0
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 1 0
+	: Semiquaver 0 1 2 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 1 0
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 1 0
+	: Semiquaver 0 1 2 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 2 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 2 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 2 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 2 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 1 0
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 2 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 2 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 1 0
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 2 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 1 0
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 2 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 2 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 2 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 2 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 2 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 2 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 2 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 1 0
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 0 0
+	: Semiquaver 0 1 2 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 1 0
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 -1 0
+	: Semiquaver 0 1 2 0
+	End
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 -7 0
+	: Semiquaver 0 1 -5 0
+	: Semiquaver 0 1 -2 0
+	End
+: Dotted quaver 0 1 0 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 -6 0
+	: Semiquaver 0 1 -4 0
+	: Semiquaver 0 1 -2 0
+	End
+: Dotted quaver 0 1 1 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 -8 0
+	: Semiquaver 0 1 -6 0
+	: Semiquaver 0 1 -3 0
+	End
+: Dotted quaver 0 1 -1 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 -7 0
+	: Semiquaver 0 1 -5 0
+	: Semiquaver 0 1 -3 0
+	End
+: Dotted quaver 0 1 0 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 5 0
+	: Semiquaver 0 1 7 0
+	: Semiquaver 0 1 10 0
+	End
+: Dotted quaver 0 1 12 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 6 0
+	: Semiquaver 0 1 8 0
+	: Semiquaver 0 1 10 0
+	End
+: Dotted quaver 0 1 13 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 4 0
+	: Semiquaver 0 1 6 0
+	: Semiquaver 0 1 9 0
+	End
+: Dotted quaver 0 1 11 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	Rest
+		Semiquaver rest
+	: Semiquaver 0 1 5 0
+	: Semiquaver 0 1 7 0
+	: Semiquaver 0 1 9 0
+	End
+: Dotted quaver 0 1 14 0
+Rest
+	Semiquaver rest
+Group
+	Beamed
+	Rest
+		Quaver rest
+	: Quaver 0 2 1 0 3 0
+	: Quaver 0 2 1 0 3 0
+	: Quaver 0 2 1 0 3 0
+	End
+Group
+	Beamed
+	: Quaver 0 2 1 0 3 0
+	: Quaver 0 2 1 0 3 0
+	: Quaver 0 2 1 0 3 0
+	: Quaver 0 2 1 0 3 0
+	End
+Group
+	Beamed
+	Rest
+		Quaver rest
+	: Quaver 0 3 1 0 5 0 6 1
+	: Quaver 0 3 1 0 5 0 6 1
+	: Quaver 0 3 1 0 5 0 6 1
+	End
+Group
+	Beamed
+	: Quaver 0 3 1 0 5 0 6 1
+	: Quaver 0 3 1 0 5 0 6 1
+	: Quaver 0 3 1 0 5 0 6 1
+	: Quaver 0 3 1 0 5 0 6 1
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 7 0
+	: Semiquaver 0 1 5 0
+	: Semiquaver 0 1 7 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 7 0
+	: Semiquaver 0 1 5 0
+	: Semiquaver 0 1 7 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 7 0
+	: Semiquaver 0 1 5 0
+	: Semiquaver 0 1 7 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 7 0
+	: Semiquaver 0 1 5 0
+	: Semiquaver 0 1 7 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 8 0
+	: Semiquaver 0 1 4 0
+	: Semiquaver 0 1 8 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 8 0
+	: Semiquaver 0 1 4 0
+	: Semiquaver 0 1 8 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 8 0
+	: Semiquaver 0 1 4 0
+	: Semiquaver 0 1 8 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 2 0
+	: Semiquaver 0 1 8 0
+	: Semiquaver 0 1 4 0
+	: Semiquaver 0 1 8 0
+	End
+: Dotted quaver 0 2 -2 0 0 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+: Dotted quaver 0 3 2 0 6 0 8 0
+Rest
+	Semiquaver rest
+: Dotted quaver 0 2 5 0 7 0
+Rest
+	Semiquaver rest
+Rest
+	Crotchet rest
+Rest
+	Crotchet rest
+: Dotted quaver 0 3 2 0 6 0 8 0
+Rest
+	Semiquaver rest
+: Dotted quaver 0 2 -2 0 0 0
+Rest
+	Semiquaver rest
+: Dotted quaver 0 1 5 0
+Rest
+	Semiquaver rest
+: Dotted quaver 0 2 -9 0 -2 0
+End
+
+Bar 0 0 time 4 4
+Bar 1 0 time 4 4
+Stave 0 tags 1 1 connected 0 program 0
+Stave 1 tags 1 1 connected 0 program 0
+
+End
