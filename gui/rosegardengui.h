@@ -436,11 +436,6 @@ private:
     RosegardenGUIDoc* m_doc;
 
     /**
-     * The default tool selected on startup
-     */
-    KAction* m_selectDefaultTool;
-
-    /**
      * KAction pointers to enable/disable actions
      */
 //     KAction* m_fileNewWindow;

@@ -65,7 +65,6 @@ RosegardenGUIApp::RosegardenGUIApp()
       m_fileRecent(0),
       m_view(0),
       m_doc(0),
-      m_selectDefaultTool(0),
       m_transportStatus(STOPPED),
       m_sequencerProcess(0)
 {
@@ -82,7 +81,7 @@ RosegardenGUIApp::RosegardenGUIApp()
 	
     readOptions();
 
-    m_selectDefaultTool->activate();
+    actionCollection()->action("draw")->activate();
 
 //     ///////////////////////////////////////////////////////////////////
 //     // disable menu and toolbar items at startup
@@ -174,8 +173,6 @@ void RosegardenGUIApp::setupActions()
                               this, SLOT(moveSelected()),
                               actionCollection(), "move");
     action->setExclusiveGroup("tracktools");
-
-    m_selectDefaultTool = action;
 
     action = new KRadioAction(i18n("Resize"), "misc", // TODO : find a better icon
                               0,
@@ -482,6 +479,7 @@ void RosegardenGUIApp::fileNew()
 
         QString caption=kapp->caption();	
         setCaption(caption+": "+m_doc->getTitle());
+        actionCollection()->action("draw")->activate();
     }
 }
 
@@ -517,6 +515,8 @@ void RosegardenGUIApp::openURL(const KURL& url)
     
     setCaption(url.path());
     m_fileRecent->addURL(url);
+
+    actionCollection()->action("move")->activate();
 }
 
 void RosegardenGUIApp::fileOpen()
