@@ -849,6 +849,7 @@ NotationStaff::renderSingleElement(ViewElement *velt,
 			 *m_printPainter, int(coords.first), coords.second);
 		} else {
 		    pixmap = m_notePixmapFactory->makeRestPixmap(restParams);
+		    NOTATION_DEBUG << "made rest pixmap width " << pixmap->width() << " height " << pixmap->height() << endl;
 		}
 	    }
 
@@ -1219,20 +1220,29 @@ NotationStaff::setTuplingParameters(NotationElement *elt,
     bool tupled = (elt->event()->get<Int>(properties.TUPLING_LINE_MY_Y, tuplingLineY));
 
     if (tupled) {
-	int tuplingLineWidth =
-	    elt->event()->get<Int>(properties.TUPLING_LINE_WIDTH);
-	double tuplingLineGradient =
-	    (double)(elt->event()->get<Int>(properties.TUPLING_LINE_GRADIENT)) / 100.0;
+
+	long tuplingLineWidth = 0;
+	if (!elt->event()->get<Int>(properties.TUPLING_LINE_WIDTH, tuplingLineWidth)) {
+	    std::cerr << "WARNING: Tupled event at " << elt->event()->getAbsoluteTime() << " has no tupling line width" << std::endl;
+	}
+
+	long tuplingLineGradient = 0.0;
+	if (!(elt->event()->get<Int>(properties.TUPLING_LINE_GRADIENT),
+	      tuplingLineGradient)) {
+	    std::cerr << "WARNING: Tupled event at " << elt->event()->getAbsoluteTime() << " has no tupling line gradient" << std::endl;
+	}
+
 	bool tuplingLineFollowsBeam = false;
 	elt->event()->get<Bool>(properties.TUPLING_LINE_FOLLOWS_BEAM,
 				tuplingLineFollowsBeam);
 	
 	long tupletCount;
 	if (elt->event()->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT, tupletCount)) {
+
 	    params.setTupletCount(tupletCount);
 	    params.setTuplingLineY(tuplingLineY - (int)elt->getLayoutY());
 	    params.setTuplingLineWidth(tuplingLineWidth);
-	    params.setTuplingLineGradient(tuplingLineGradient);
+	    params.setTuplingLineGradient(double(tuplingLineGradient) / 100.0);
 	    params.setTuplingLineFollowsBeam(tuplingLineFollowsBeam);
 	}
     }

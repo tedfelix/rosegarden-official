@@ -584,6 +584,7 @@ NotationGroup::calculateBeam(NotationStaff &staff)
     Beam beam;
     beam.aboveNotes = !(m_weightAbove > m_weightBelow);
     beam.startY = 0;
+    beam.gradient = 0;
     beam.necessary = false;
     
     NELIterator initialNote(getInitialNote()),
@@ -591,7 +592,7 @@ NotationGroup::calculateBeam(NotationStaff &staff)
 
     if (initialNote == getContainer().end() ||
         initialNote == finalNote) {
-        return beam; // no notes, no case to answer
+        return beam; // no notes, or at most one: no case to answer
     }
 
     if ((*initialNote)->event()->has(NotationProperties::BEAM_ABOVE)) {
@@ -734,7 +735,7 @@ NotationGroup::calculateBeam(NotationStaff &staff)
 	}
         beam.startY = max(max(c0 + sl, c1 + ml), c2 + el);
     }  
-/*	    
+/*
     NOTATION_DEBUG << "NotationGroup::calculateBeam: beam data:" << endl
 		   << "gradient: " << beam.gradient << endl
 		   << "(c0 " << c0 << ", c2 " << c2 << ", extremeDX " << extremeDX << ")" << endl
@@ -742,7 +743,7 @@ NotationGroup::calculateBeam(NotationStaff &staff)
 		   << "aboveNotes: " << beam.aboveNotes << endl
 		   << "shortestNoteType: " << shortestNoteType << endl
 		   << "necessary: " << beam.necessary << endl;
-*/  
+*/
     return beam;
 }
 
@@ -1017,7 +1018,7 @@ NotationGroup::applyTuplingLine(NotationStaff &staff)
     
     if (initialNoteOrRest == staff.getViewElementList()->end()) return;
 
-    NOTATION_DEBUG << "NotationGroup::applyTuplingLine: first element is " << (initialNoteOrRestEl->isNote() ? "Note" : "Non-Note") << ", last is " << (static_cast<NotationElement*>(*finalElement)->isNote() ? "Note" : "Non-Note") << endl;
+//    NOTATION_DEBUG << "NotationGroup::applyTuplingLine: first element is " << (initialNoteOrRestEl->isNote() ? "Note" : "Non-Note") << ", last is " << (static_cast<NotationElement*>(*finalElement)->isNote() ? "Note" : "Non-Note") << endl;
 
     int initialX = (int)(*initialNoteOrRest)->getLayoutX();
     int   finalX = (int)(*finalElement)->getLayoutX();
@@ -1049,8 +1050,11 @@ NotationGroup::applyTuplingLine(NotationStaff &staff)
 
 	int   startY = (followBeam ? beam.startY :
 			initialY - (beam.startY - initialY));
+
 	int     endY = startY + (int)((finalX - initialX) *
 				      ((double)beam.gradient / 100.0));
+
+//	NOTATION_DEBUG << "applyTuplingLine: beam.startY is " << beam.startY << ", initialY is " << initialY << " so my startY is " << startY << ", endY " << endY << ", beam.gradient " << beam.gradient << endl;
 
 	int nh = staff.getNotePixmapFactory(m_type == Grace).getNoteBodyHeight();
 
