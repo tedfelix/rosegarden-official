@@ -3,6 +3,8 @@
 
 namespace RosegardenGUIColours
 {
+    const QColor ActiveRecordTrack = Qt::red;
+
     const QColor SegmentBorder = Qt::black;
     const QColor SegmentBlock = Qt::blue;
     

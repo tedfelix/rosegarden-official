@@ -34,6 +34,8 @@
 
 namespace RosegardenGUIColours
 {
+    extern const QColor ActiveRecordTrack;
+
     extern const QColor SegmentBorder;
     extern const QColor SegmentBlock;
 

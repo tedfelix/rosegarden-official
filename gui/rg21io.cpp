@@ -20,6 +20,7 @@
 */
 
 #include <string>
+#include <cstring>
 
 #include "Event.h"
 #include "Segment.h"
@@ -117,8 +118,8 @@ bool RG21Loader::parseChordItem()
     QStringList::Iterator i = m_tokens.begin();
     timeT duration = convertRG21Duration(i);
 
-    // get chord mod flags and nb of notes
-    int chordMods = (*i).toInt(); ++i;
+    // get chord mod flags and nb of notes.  chord mod is hex
+    int chordMods = (int)strtol((*i).latin1(), 0, 16); ++i;
     int nbNotes   = (*i).toInt(); ++i;
 
     vector<string> marks = convertRG21ChordMods(chordMods);
@@ -128,7 +129,11 @@ bool RG21Loader::parseChordItem()
 
         long pitch = (*i).toInt();
         ++i;
-        int noteMods = (*i).toInt();
+
+	// The noteMods field is nominally a hex integer.  As it
+	// happens its value can never exceed 7, but I guess we
+	// should do the right thing anyway
+	int noteMods = (int)strtol((*i).latin1(), 0, 16);
         pitch = convertRG21Pitch(pitch, noteMods);
 
         Event *noteEvent = new Event(Rosegarden::Note::EventType);
@@ -371,7 +376,8 @@ bool RG21Loader::parseBarType()
 	return true;
     }
 
-    int barNo = m_tokens[2].toInt();
+    // barNo is a hex integer
+    int barNo = (int)strtol(m_tokens[2].latin1(), 0, 16);
 
     int numerator   = m_tokens[4].toInt();
     int denominator = m_tokens[5].toInt();
@@ -454,24 +460,7 @@ vector<string> RG21Loader::convertRG21ChordMods(int chordMods)
     if (chordMods & ModLegato) marks.push_back(Tenuto);
     if (chordMods & ModAccent) marks.push_back(Accent);
     if (chordMods & ModSfz)    marks.push_back(Sforzando);
-    if (chordMods & ModRfz) {
-
-	// I'm quite confused by this.  Some rg21 files appear to have
-	// chords with mod of 80 (rinforzando plus turn), which is
-	// obviously almost always nonsense but appears to be saved in
-	// place of a pause (and reloaded "correctly" by rg2.1).  What
-	// am I missing here?
-
-	//!!! Aargh!  It's a hex number.  Fix this
-
-	if (chordMods & ModTurn) {
-	    chordMods = chordMods ^= ModTurn;
-	    chordMods = chordMods |= ModPause;
-	} else {
-	    marks.push_back(Rinforzando);
-	}
-    }
-
+    if (chordMods & ModRfz)    marks.push_back(Rinforzando);
     if (chordMods & ModTrill)  marks.push_back(Trill);
     if (chordMods & ModTurn)   marks.push_back(Turn);
     if (chordMods & ModPause)  marks.push_back(Pause);

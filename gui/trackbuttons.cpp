@@ -25,6 +25,7 @@
 #include <qlabel.h>
 #include <assert.h>
 #include "Track.h"
+#include "colours.h"
 
 TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
                            QWidget* parent,
@@ -265,7 +266,7 @@ TrackButtons::toggleMutedTrack(int mutedTrack)
 }
 
 
-// Set a newly selected record button to a shocking red palette and
+// Set a newly selected record button to a shocking palette and
 // unset the palette on the record buttons we're jumping from.
 //
 //
@@ -283,7 +284,8 @@ TrackButtons::setRecordTrack(int recordTrack)
     }
 
     m_doc->getComposition().setRecordTrack(recordTrack);
-    m_recordButtonGroup->find(recordTrack)->setPalette(QPalette(red));
+    m_recordButtonGroup->find(recordTrack)->setPalette
+	(QPalette(RosegardenGUIColours::ActiveRecordTrack));
     m_lastID = recordTrack;
 }
 
