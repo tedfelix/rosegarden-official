@@ -780,6 +780,8 @@ EventQuantizeCommand::modifySegment()
 	    }
 	    if (rebeam) {
 		helper.autoBeam(getStartTime(), getEndTime(), GROUP_TYPE_BEAMED);
+//!!!
+		helper.autoSlur(getStartTime(), getEndTime(), true);
 	    }
 	}
     } //!!! need way to decide whether to do these even if no config group (i.e. through args to the command)

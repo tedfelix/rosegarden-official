@@ -438,7 +438,7 @@ protected:
 };
 
 
-class RosegardenPitchDragLabel : public QLabel
+class RosegardenPitchDragLabel : public QWidget
 {
     Q_OBJECT
 public:
@@ -448,6 +448,8 @@ public:
 
     int getPitch() const { return m_pitch; }
 
+    virtual QSize sizeHint() const;
+
 signals:
     void pitchChanged(int);
 
@@ -455,12 +457,15 @@ public slots:
     void slotSetPitch(int);
     
 protected:
+    virtual void paintEvent(QPaintEvent *);
     virtual void mousePressEvent(QMouseEvent *e);
     virtual void mouseReleaseEvent(QMouseEvent *e);
     virtual void mouseMoveEvent(QMouseEvent *e);
     virtual void wheelEvent(QWheelEvent *e);
 
-    void redrawLabel();
+    void calculatePixmap() const;
+
+    mutable QPixmap m_pixmap;
 
     int m_pitch;
     int m_clickedY;
@@ -471,11 +476,12 @@ protected:
 };
 
 
-class RosegardenPitchChooser : public QFrame
+class RosegardenPitchChooser : public QGroupBox
 {
     Q_OBJECT
 public:
-    RosegardenPitchChooser(QWidget *parent,
+    RosegardenPitchChooser(QString title,
+			   QWidget *parent,
 			   int defaultPitch = 60);
     
     int getPitch() const;

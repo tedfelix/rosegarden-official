@@ -111,6 +111,73 @@ namespace Marks
         else return string(mark).substr(5);
     }
 
+    std::vector<Mark> getMarks(const Event &e) {
+
+	std::vector<Mark> marks;
+
+	long markCount = 0;
+	e.get<Int>(BaseProperties::MARK_COUNT, markCount);
+	if (markCount == 0) return marks;
+
+	for (long j = 0; j < markCount; ++j) {
+
+	    Mark mark(Marks::NoMark);
+	    (void)e.get<String>(BaseProperties::getMarkPropertyName(j), mark);
+
+	    marks.push_back(mark);
+	}
+
+	return marks;
+    }
+
+    void addMark(Event &e, const Mark &mark, bool unique) {
+	if (unique && hasMark(e, mark)) return;
+
+	long markCount = 0;
+	e.get<Int>(BaseProperties::MARK_COUNT, markCount);
+	e.set<Int>(BaseProperties::MARK_COUNT, markCount + 1);
+	e.set<String>(BaseProperties::getMarkPropertyName(markCount), mark);
+    }
+
+    bool removeMark(Event &e, const Mark &mark) {
+    
+	long markCount = 0;
+	e.get<Int>(BaseProperties::MARK_COUNT, markCount);
+
+	for (long j = 0; j < markCount; ++j) {
+	    PropertyName pn(BaseProperties::getMarkPropertyName(j));
+	    std::string m;
+	    if (e.get<String>(pn, m) && m == mark) {
+		e.unset(pn);
+		while (j < markCount - 1) {
+		    PropertyName npn(BaseProperties::getMarkPropertyName(j+1));
+		    if (e.get<String>(npn, m)) {
+			e.set<String>( pn, m);
+		    }
+		    pn = npn;
+		    ++j;
+		}
+		return true;
+	    }
+	}
+
+	return false;
+    }
+
+    bool hasMark(const Event &e, const Mark &mark) {
+	long markCount = 0;
+	e.get<Int>(BaseProperties::MARK_COUNT, markCount);
+
+	for (long j = 0; j < markCount; ++j) {
+	    std::string m;
+	    if (e.get<String>(BaseProperties::getMarkPropertyName(j), m) && m == mark) {
+		return true;
+	    }
+	}
+
+	return false;
+    }
+
     std::vector<Mark> getStandardMarks() {
 
         static Mark a[] = {

@@ -1974,6 +1974,68 @@ SegmentNotationHelper::deCounterpoint(timeT startTime, timeT endTime)
 }
 
 
+void
+SegmentNotationHelper::autoSlur(timeT startTime, timeT endTime, bool legatoOnly)
+{
+    iterator from = segment().findTime(startTime);
+    iterator to = segment().findTime(endTime);
+
+    timeT potentialStart = segment().getEndTime();
+    long  groupId = -1;
+    timeT prevTime = startTime;
+    int   count = 0;
+    bool  thisLegato = false, prevLegato = false;
+
+    for (iterator i = from; i != to && segment().isBeforeEndMarker(i); ++i) {
+
+	timeT t = (*i)->getNotationAbsoluteTime();
+
+	long newGroupId = -1;
+	if ((*i)->get<Int>(BEAMED_GROUP_ID, newGroupId)) {
+	    if (groupId == newGroupId) { // group continuing
+		if (t > prevTime) {
+		    ++count;
+		    prevLegato = thisLegato;
+		    thisLegato = Marks::hasMark(**i, Marks::Tenuto);
+		}
+		prevTime = t;
+		continue;
+	    }
+	} else {
+	    if (groupId == -1) continue; // no group
+	}
+
+	// a group has ended (and a new one might have begun)
+
+	if (groupId >= 0 && count > 1 && (!legatoOnly || prevLegato)) {
+	    Indication ind(Indication::Slur, t - potentialStart);
+	    segment().insert(ind.getAsEvent(potentialStart));
+	    if (legatoOnly) {
+		for (iterator j = segment().findTime(potentialStart); j != i; ++j) {
+		    Marks::removeMark(**j, Marks::Tenuto);
+		}
+	    }
+	}
+
+	potentialStart = t;
+	groupId = newGroupId;
+	prevTime = t;
+	count = 0;
+	thisLegato = false;
+	prevLegato = false;
+    }
+
+    if (groupId >= 0 && count > 1 && (!legatoOnly || prevLegato)) {
+	Indication ind(Indication::Slur, endTime - potentialStart);
+	segment().insert(ind.getAsEvent(potentialStart));
+	if (legatoOnly) {
+	    for (iterator j = segment().findTime(potentialStart); j != i; ++j) {
+		Marks::removeMark(**j, Marks::Tenuto);
+	    }
+	}
+    }
+}
+
 
 } // end of namespace
 

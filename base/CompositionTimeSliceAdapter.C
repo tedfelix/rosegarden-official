@@ -125,10 +125,38 @@ CompositionTimeSliceAdapter::fill(iterator &i, bool atEnd) const
 	i.m_segmentItrList.push_back(j);
     }
 
-    i.m_needFill = false;
-
     // fill m_curEvent & m_curTrack
-    ++i;
+    if (!atEnd) ++i;
+}
+
+CompositionTimeSliceAdapter::iterator&
+CompositionTimeSliceAdapter::iterator::operator=(const iterator &i)
+{
+    if (&i == this) return *this;
+    m_segmentItrList.clear();
+
+    for (segmentitrlist::const_iterator j = i.m_segmentItrList.begin(); 
+	 j != i.m_segmentItrList.end(); ++j) {
+	m_segmentItrList.push_back(Segment::iterator(*j));
+    }
+
+    m_a = i.m_a;
+    m_curTrack = i.m_curTrack;
+    m_curEvent = i.m_curEvent;
+    m_needFill = i.m_needFill;
+    return *this;
+}
+
+CompositionTimeSliceAdapter::iterator::iterator(const iterator &i) :
+    m_a(i.m_a),
+    m_curEvent(i.m_curEvent),
+    m_curTrack(i.m_curTrack),
+    m_needFill(i.m_needFill)
+{
+    for (segmentitrlist::const_iterator j = i.m_segmentItrList.begin(); 
+	 j != i.m_segmentItrList.end(); ++j) {
+	m_segmentItrList.push_back(Segment::iterator(*j));
+    }
 }
 
 CompositionTimeSliceAdapter::iterator&
@@ -137,19 +165,25 @@ CompositionTimeSliceAdapter::iterator::operator++()
     assert(m_a != 0);
 
     // needFill is only set true for iterators created at end()
-    if (m_needFill) m_a->fill(*this, true);
+    if (m_needFill) {
+	m_a->fill(*this, true);
+	m_needFill = false;
+    }
 
     Event *e = 0;
     unsigned int pos = 0;
+
+    //std::cerr << "CompositionTimeSliceAdapter::operator++(" << this << ")" << std::endl;
 
     for (unsigned int i = 0; i < m_a->m_segmentList.size(); ++i) {
 
 	if (!m_a->m_segmentList[i]->isBeforeEndMarker(m_segmentItrList[i])) continue;
 
-        if (!e || **m_segmentItrList[i] < *e) {
+        if (!e || strictLessThan(*m_segmentItrList[i], e)) {
             e = *m_segmentItrList[i];
 	    m_curTrack = m_a->m_segmentList[i]->getTrack();
             pos = i;
+	    //std::cerr << "CompositionTimeSliceAdapter::operator++(" << this << "): we like " << e->getAbsoluteTime() << " on " << pos << std::endl;
         }
     }
 
@@ -166,6 +200,7 @@ CompositionTimeSliceAdapter::iterator::operator++()
 
     // m_segmentItrList[pos] is a segment::iterator that points to e
     ++m_segmentItrList[pos];
+    //std::cerr << "CompositionTimeSliceAdapter::operator++(" << this << "): incremented " << pos << " (now points to event " << *m_segmentItrList[pos] << ")" << std::endl;
 
     return *this;
 }
@@ -176,10 +211,20 @@ CompositionTimeSliceAdapter::iterator::operator--()
     assert(m_a != 0);
 
     // needFill is only set true for iterators created at end()
-    if (m_needFill) m_a->fill(*this, true);
+    if (m_needFill) {
+	m_a->fill(*this, true);
+	m_needFill = false;
+    }
 
     Event *e = 0;
-    unsigned int pos = 0;
+    int pos = -1;
+    //std::cerr << "CompositionTimeSliceAdapter::operator--(" << this << ")" << std::endl;
+
+
+    // Decrement is more subtle than increment.  We have to scan the
+    // iterators available, and decrement the one that points to
+    // m_curEvent.  Then to fill m_curEvent we need to find the next
+    // greatest event back that is not itself m_curEvent.
 
     for (unsigned int i = 0; i < m_a->m_segmentList.size(); ++i) {
 
@@ -188,26 +233,21 @@ CompositionTimeSliceAdapter::iterator::operator--()
 	Segment::iterator si(m_segmentItrList[i]);
 	--si;
 
-	if (!e || **si < *e) {
+	if (*si == m_curEvent) {
+	    pos = i;
+	    //std::cerr << "CompositionTimeSliceAdapter::operator--(" << this << "): found m_curEvent on " << pos << std::endl;
+	} else if (!e || !strictLessThan(*si, e)) {
 	    e = *si;
 	    m_curTrack = m_a->m_segmentList[i]->getTrack();
-	    pos = i;
+	    //std::cerr << "CompositionTimeSliceAdapter::operator--(" << this << "): we like " << e->getAbsoluteTime() << " on " << i << std::endl;
 	}
     }
 
-    // Check whether we're past the begin time, if there is one
-    if (!e || e->getAbsoluteTime() < m_a->m_begin) {
-        m_curEvent = 0;
-	m_curTrack = -1;
-        return *this;
+    if (e) m_curEvent = e;
+    if (pos >= 0) {
+	--m_segmentItrList[pos];
+	//std::cerr << "CompositionTimeSliceAdapter::operator--(" << this << "): decremented " << pos << std::endl;
     }
-
-    // e is now an Event* greater than or equal to any that the iterator
-    // hasn't already passed over in this direction
-    m_curEvent = e;
-
-    // m_segmentItrList[pos] is a segment::iterator that points to e
-    --m_segmentItrList[pos];
 
     return *this;
 }
@@ -235,6 +275,18 @@ CompositionTimeSliceAdapter::iterator::operator->() const {
 int
 CompositionTimeSliceAdapter::iterator::getTrack() const {
     return m_curTrack;
+}
+
+bool
+CompositionTimeSliceAdapter::iterator::strictLessThan(Event *e1, Event *e2) {
+    // We need a complete ordering of events -- we can't cope with two events
+    // comparing equal.  i.e. one of e1 < e2 and e2 < e1 must be true.  The
+    // ordering can be arbitrary -- we just compare addresses for events the
+    // event comparator doesn't distinguish between.  We know we're always
+    // dealing with event pointers, not copies of events.
+    if (*e1 < *e2) return true;
+    else if (*e2 < *e1) return false;
+    else return e1 < e2;
 }
 
 }

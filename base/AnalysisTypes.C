@@ -93,11 +93,13 @@ AnalysisHelper::labelChords(CompositionTimeSliceAdapter &c, Segment &s)
     //!!!
     NotationQuantizer *quantizer = new NotationQuantizer();
 
-    Profiler profiler("AnalysisHelper::labelChords", true);
+    Profiler profiler("AnalysisHelper::labelChords");
 
     for (CompositionTimeSliceAdapter::iterator i = c.begin(); i != c.end(); ++i) {
 
 	timeT time = (*i)->getAbsoluteTime();
+
+//	std::cerr << "AnalysisHelper::labelChords: time is " << time << ", type is " << (*i)->getType() << ", event is " << *i << " (itr is " << &i << ")" << std::endl;
 
 	if ((*i)->isa(Key::EventType)) {
 	    key = Key(**i);
@@ -107,7 +109,7 @@ AnalysisHelper::labelChords(CompositionTimeSliceAdapter &c, Segment &s)
 	}
 
 	if ((*i)->isa(Note::EventType)) {
-	
+
 	    int bass = 999;
 	    int mask = 0;
 
@@ -123,8 +125,9 @@ AnalysisHelper::labelChords(CompositionTimeSliceAdapter &c, Segment &s)
 		    }
 		    mask |= 1 << (pitch % 12);
 		}
-		i = *j;
 	    }
+
+	    i = chord.getFinalElement();
 
 	    if (mask == 0) continue;
 

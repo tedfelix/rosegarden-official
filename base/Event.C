@@ -436,13 +436,4 @@ operator<(const Event &a, const Event &b)
     else return a.getSubOrdering() < b.getSubOrdering();
 }
 
-bool
-operator>(const Event &a, const Event &b)
-{
-    timeT at = a.getAbsoluteTime();
-    timeT bt = b.getAbsoluteTime();
-    if (at != bt) return at > bt;
-    else return a.getSubOrdering() > b.getSubOrdering();
-}
- 
 }

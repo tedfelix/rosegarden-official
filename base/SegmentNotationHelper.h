@@ -505,6 +505,16 @@ public:
      */
     void deCounterpoint(timeT startTime, timeT endTime);
 
+    /**
+     * A rather specialised function: Add a slur to every beamed group.
+     * If legatoOnly is true, add a slur only to those beamed groups
+     * in which every note except the last has a tenuto mark already
+     * (and remove that mark).
+     * This is basically intended as a post-notation-quantization-auto-
+     * beam step.
+     */
+    void autoSlur(timeT startTime, timeT endTime, bool legatoOnly);
+
     
 protected:
     const Quantizer &basicQuantizer();

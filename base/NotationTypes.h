@@ -115,7 +115,7 @@ namespace Accidentals
 
 typedef std::string Mark;
   
-namespace Marks
+namespace Marks //!!! This would be better as a class, these days
 {
     extern const Mark NoMark;         // " "
     extern const Mark Accent;         // ">"
@@ -147,6 +147,30 @@ namespace Marks
      * Extract the string from a text mark.
      */
     extern std::string getTextFromMark(Mark mark);
+
+    /**
+     * Extract the marks from an event.
+     */
+    extern std::vector<Mark> getMarks(const Event &e);
+
+    /**
+     * Add a mark to an event.  If unique is true, add the mark only
+     * if the event does not already have it (otherwise permit
+     * multiple identical marks).
+     */
+    extern void addMark(Event &e, const Mark &mark, bool unique);
+
+    /**
+     * Remove a mark from an event.  Returns true if the mark was
+     * there to remove.  If the mark was not unique, removes only
+     * the first instance of it.
+     */
+    extern bool removeMark(Event &e, const Mark &mark);
+
+    /**
+     * Returns true if the event has the given mark.
+     */
+    extern bool hasMark(const Event &e, const Mark &mark);
 
     /**
      * Get the predefined marks (i.e. the ones listed above) in their

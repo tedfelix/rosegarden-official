@@ -1579,7 +1579,7 @@ NotationQuantizer::Impl::quantizeRange(Segment *s,
 	    timeT qt = getProvisional(*i, AbsoluteTimeValue);
 	    timeT qd = getProvisional(*i, DurationValue);
 	    timeT ud = m_q->getFromSource(*i, DurationValue);
-
+/*!!!
 	    if (inSlur) {
 
 		if (qt <= slurTo) { // still within slur
@@ -1631,26 +1631,12 @@ NotationQuantizer::Impl::quantizeRange(Segment *s,
 		    itemsInSlur = 1;
 		}
 	    }
-
+*/
 	    if (ud < (qd * 3 / 4) &&
 		qd <= Note(Note::Crotchet).getDuration()) {
-		// staccato
-		long markCount = 0;
-		(*i)->get<Int>(MARK_COUNT, markCount);
-		if (markCount == 0) {
-		    (*i)->set<String>(getMarkPropertyName(markCount),
-				      Marks::Staccato);
-		    (*i)->set<Int>(MARK_COUNT, markCount + 1);
-		}
+		Marks::addMark(**i, Marks::Staccato, true);
 	    } else if (ud >= qd && !inSlur) {
-		// tenuto
-		long markCount = 0;
-		(*i)->get<Int>(MARK_COUNT, markCount);
-		if (markCount == 0) {
-		    (*i)->set<String>(getMarkPropertyName(markCount),
-				      Marks::Tenuto);
-		    (*i)->set<Int>(MARK_COUNT, markCount + 1);
-		}
+		Marks::addMark(**i, Marks::Tenuto, true);
 	    }	    
 
 	    prevQt = qt;
