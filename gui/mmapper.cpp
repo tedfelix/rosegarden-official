@@ -275,12 +275,16 @@ bool SegmentMmapper::refresh()
 
     SEQMAN_DEBUG << "SegmentMmapper::refresh() - " << getFileName()
                  << " - m_mmappedBuffer = " << (void*)m_mmappedBuffer
-                 << " - size = " << newMmappedSize << endl;
+                 << " - new size = " << newMmappedSize
+                 << " - old size = " << m_mmappedSize
+                 << endl;
 
     // always zero out
     memset(m_mmappedBuffer, 0, m_mmappedSize);
 
     if (newMmappedSize != m_mmappedSize) {
+
+        res = true;
 
         if (newMmappedSize == 0) {
 
@@ -293,12 +297,11 @@ bool SegmentMmapper::refresh()
 
             setFileSize(newMmappedSize);
             remap(newMmappedSize);
-            res = true;
         }
     }
     
     SEQMAN_DEBUG << "SegmentMmapper::refresh : mmap size = " << m_mmappedSize
-                 << endl;
+                 << " size changed : " << res << endl;
 
     dump();
 

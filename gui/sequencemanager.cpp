@@ -1398,8 +1398,10 @@ void SequenceManager::segmentModified(Segment* s)
 
     bool sizeChanged = m_compositionMmapper->segmentModified(s);
 
-    if ((m_transportStatus == PLAYING) && sizeChanged) {
+    SEQMAN_DEBUG << "SequenceManager::segmentModified() : size changed = "
+                 << sizeChanged << endl;
 
+    if ((m_transportStatus == PLAYING) && sizeChanged) {
         QByteArray data;
         QDataStream streamOut(data, IO_WriteOnly);
 
@@ -1407,6 +1409,7 @@ void SequenceManager::segmentModified(Segment* s)
         
         rgapp->sequencerSend("remapSegment(QString)", data);
     }
+    
 }
 
 void SequenceManager::segmentAdded(const Composition*, Segment* s)
