@@ -44,181 +44,177 @@
 
 using namespace Rosegarden;
 using std::cout;
+using std::string;
 
 // Some printing routines
 
-void printRC(RColour const *temp)
+void printRC(Colour const *temp)
 {
-	cout << "red:  " << temp->getRed() << " green: " << temp->getGreen() << " blue:  " << temp->getBlue() << "\n";
+    cout << "red:  " << temp->getRed() << " green: " << temp->getGreen() << " blue:  " << temp->getBlue() << "\n";
 }
 
-void printSRC(const string *s, const RColour *c)
+void printSRC(const string *s, const Colour *c)
 {
-	cout << "name: " << *s << "  ";
-	printRC(c);
+    cout << "name: " << *s << "  ";
+    printRC(c);
 }
 
-void printSIRC(const unsigned int *i, const string *s, const RColour *c)
+void printSIRC(const unsigned int *i, const string *s, const Colour *c)
 {
-	cout << "index:  " << *i << "  ";
-	printSRC(s, c);
+    cout << "index:  " << *i << "  ";
+    printSRC(s, c);
 }
 
-void printIteratorContents (RColourMap *input)
+void printIteratorContents (ColourMap *input)
 {
-	input->iteratorStart();
-	for ( ; !input->iteratorAtEnd() ; ++input->m_map_iterator)
-		printSIRC(&input->m_map_iterator->first, &input->m_map_iterator->second.second, &input->m_map_iterator->second.first);
+    RCMap::const_iterator iter = input->begin();
+    for ( ; !(iter == input->end()) ; ++iter)
+        printSIRC(&(iter->first), &(iter->second.second), &(iter->second.first));
 }
 
 // The main test program
 int main()
 {
-	cout << "TEST: Colour.C\n\n";
-	cout << "Can we create an RColour with the right default values?\n";
-	RColour *red = new RColour;
-	printRC(red);
+    cout << "TEST: Colour.C\n\n";
+    cout << "Can we create an Colour with the right default values?\n";
+    Colour *red = new Colour;
+    printRC(red);
 
-	cout << "Can we set values; green here is invalid - it should be set to 0 instead\n";
-	red->setRed(210);
-	red->setGreen(276);
-	red->setBlue(100);
+    cout << "Can we set values; green here is invalid - it should be set to 0 instead\n";
+    red->setRed(210);
+    red->setGreen(276);
+    red->setBlue(100);
 
-	cout << "Testing the copy constructor\n";
-	RColour *blue = new RColour(*red);
-	printRC(blue);
+    cout << "Testing the copy constructor\n";
+    Colour *blue = new Colour(*red);
+    printRC(blue);
 
-	cout << "Check operator= works\n";
-	RColour green;
-	green = *red;
-	printRC(&green);
+    cout << "Check operator= works\n";
+    Colour green;
+    green = *red;
+    printRC(&green);
 
-	cout << "Check the setColour routine\n";
-	green.setColour(1,2,3);
-	printRC(&green);
+    cout << "Check the setColour routine\n";
+    green.setColour(1,2,3);
+    printRC(&green);
 
-	cout << "Check the getColour routine\n";
-	int *r = new int();
-	int *g = new int();
-	int *b = new int();
-	green.getColour(r, g, b);
-	printRC(&green);
+    cout << "Check the getColour routine\n";
+    unsigned int r, g, b;
+    green.getColour(r, g, b);
+    printRC(&green);
 
-	cout << "\nTEST: ColourMap.C\n\n";
-	cout << "Can we create a RColourMap with the right default Colour + String\n";
-	RColourMap *map = new RColourMap();
+    cout << "\nTEST: ColourMap.C\n\n";
+    cout << "Can we create a ColourMap with the right default Colour + String\n";
+    ColourMap *map = new ColourMap();
 
-	cout << "Can we get the default colour back out of it?\n";
-	string s1 = map->getNameByIndex(0);
-	green = map->getColourByIndex(0);
-	printSRC(&s1, &green);
+    cout << "Can we get the default colour back out of it?\n";
+    string s1 = map->getNameByIndex(0);
+    green = map->getColourByIndex(0);
+    printSRC(&s1, &green);
 
-	cout << "Can we create a RColourMap with a specified default Colour?\n";
-	RColourMap *map2 = new RColourMap(*red);
+    cout << "Can we create a ColourMap with a specified default Colour?\n";
+    ColourMap *map2 = new ColourMap(*red);
 
-	cout << "Can we get the information back out of it?\n";
-	s1 = map2->getNameByIndex(0);
-	green = map2->getColourByIndex(0);
-	printSRC(&s1, &green);
+    cout << "Can we get the information back out of it?\n";
+    s1 = map2->getNameByIndex(0);
+    green = map2->getColourByIndex(0);
+    printSRC(&s1, &green);
 
-	cout << "Can we add a Colour\n";
-	s1 = "TEST1";
-	green.setColour(100, 101, 102);
-	map2->addItem(green, s1);
+    cout << "Can we add a Colour\n";
+    s1 = "TEST1";
+    green.setColour(100, 101, 102);
+    map2->addItem(green, s1);
 
-	cout << "Can we get the info back out?\n";
-	s1 = "";
-	s1 = map2->getNameByIndex(1);
-	green = map2->getColourByIndex(1);
-	printSRC(&s1, &green);
+    cout << "Can we get the info back out?\n";
+    s1 = "";
+    s1 = map2->getNameByIndex(1);
+    green = map2->getColourByIndex(1);
+    printSRC(&s1, &green);
 
-	cout << "Add a couple more colours\n";
-	s1 = "TEST2";
-	green.setColour(101, 102, 103);
-	map2->addItem(green, s1);
-	s1 = "TEST3";
-	green.setColour(102, 103, 104);
-	map2->addItem(green, s1);
-	s1 = "TEST4";
-	green.setColour(103, 104, 105);
-	map2->addItem(green, s1);
+    cout << "Add a couple more colours\n";
+    s1 = "TEST2";
+    green.setColour(101, 102, 103);
+    map2->addItem(green, s1);
+    s1 = "TEST3";
+    green.setColour(102, 103, 104);
+    map2->addItem(green, s1);
+    s1 = "TEST4";
+    green.setColour(103, 104, 105);
+    map2->addItem(green, s1);
 
-	// From an iterator:
-	//        iterator->first         ==> Index
-	//        iterator->second.first  ==> RColour
-	//        iterator->second.second ==> string
-	// This rather unwieldy notation is because we store a pair in the map which is made up of a pair
-	//  to start with
-	printIteratorContents(map2);
+    // From an iterator:
+    //        iterator->first         ==> Index
+    //        iterator->second.first  ==> Colour
+    //        iterator->second.second ==> string
+    // This rather unwieldy notation is because we store a pair in the map which is made up of a pair
+    //  to start with
+    printIteratorContents(map2);
 
-	cout << "Now try deleting the third item\n";
-	map2->deleteItemByIndex(3);
+    cout << "Now try deleting the third item\n";
+    map2->deleteItemByIndex(3);
 
-	// Print the map again
-	printIteratorContents(map2);
+    // Print the map again
+    printIteratorContents(map2);
 
-	cout << "Make sure we get false when we try and modify item number 3\n";
-	s1 = "NO";
-	green.setColour(199,199,199);
-	bool check = map2->modifyColourByIndex(3, green);
-	if (check) cout << "WARNING: Managed to modify colour which doesn't exist\n";
-	check = map2->modifyNameByIndex(3, s1);
-	if (check) cout << "WARNING: Managed to modify name which doesn't exist\n";
+    cout << "Make sure we get false when we try and modify item number 3\n";
+    s1 = "NO";
+    green.setColour(199,199,199);
+    bool check = map2->modifyColourByIndex(3, green);
+    if (check) cout << "WARNING: Managed to modify colour which doesn't exist\n";
+    check = map2->modifyNameByIndex(3, s1);
+    if (check) cout << "WARNING: Managed to modify name which doesn't exist\n";
 
-	cout << "Check we can modify a colour which *is* there\n";
-	s1 = "YES";
-	green.setColour(233,233,233);
+    cout << "Check we can modify a colour which *is* there\n";
+    s1 = "YES";
+    green.setColour(233,233,233);
 
-	check = map2->modifyColourByIndex(4, green);
-	if (!check) cout << "WARNING: Couldn't modify colour which does exist\n";
+    check = map2->modifyColourByIndex(4, green);
+    if (!check) cout << "WARNING: Couldn't modify colour which does exist\n";
 
-	check = map2->modifyNameByIndex(4, s1);
-	if (!check) cout << "WARNING: Couldn't modify name which does exist\n";
+    check = map2->modifyNameByIndex(4, s1);
+    if (!check) cout << "WARNING: Couldn't modify name which does exist\n";
 
-	// Print the map again
-	printIteratorContents(map2);
+    // Print the map again
+    printIteratorContents(map2);
 
-	cout << "Now try adding another item - it should take the place of the one we removed.\n";
-	s1 = "NEW";
-	green.setColour(211, 212, 213);
-	map2->addItem(green, s1);
+    cout << "Now try adding another item - it should take the place of the one we removed.\n";
+    s1 = "NEW";
+    green.setColour(211, 212, 213);
+    map2->addItem(green, s1);
 
-	// Print the map again
-	printIteratorContents(map2);
+    // Print the map again
+    printIteratorContents(map2);
 
-	cout << "Try swapping two items:\n";
-	check = map2->swapItems(3, 4);
-	if (!check) cout << "WARNING: Couldn't swap two items which both exist\n";
-	
-	// Print the map again
-	printIteratorContents(map2);
+    cout << "Try swapping two items:\n";
+    check = map2->swapItems(3, 4);
+    if (!check) cout << "WARNING: Couldn't swap two items which both exist\n";
 
-	cout << "\nTEST: Generic RColour routines\n\n";
+    // Print the map again
+    printIteratorContents(map2);
 
-	cout << "Try getting a contrasting colour:\n";
-	RColour blah = map2->getColourByIndex(0);
-	cout << "Original colour:\n";
-	printRC(&blah);
-	cout << "Contrast colour:\n";
-	blah = getContrastColour(blah);
-	printRC(&blah);
+    cout << "\nTEST: Generic Colour routines\n\n";
 
-	cout << "Try getting a combination colour:\n";
-	RColour blah2 = map2->getColourByIndex(1);
-	cout << "Original colours:\n";
-	printRC(&blah);
-	printRC(&blah2);
-	cout << "Combination colour:\n";
-	blah = getCombColour(blah, blah2);
-	printRC(&blah);
+    cout << "Try getting a contrasting colour:\n";
+    Colour blah = map2->getColourByIndex(0);
+    cout << "Original colour:\n";
+    printRC(&blah);
+    cout << "Contrast colour:\n";
+    blah = getContrastColour(blah);
+    printRC(&blah);
 
-	delete map;
-	delete map2;
-	delete r;
-	delete g;
-	delete b;
-	delete red;
-	delete blue;
+    cout << "Try getting a combination colour:\n";
+    Colour blah2 = map2->getColourByIndex(1);
+    cout << "Original colours:\n";
+    printRC(&blah);
+    printRC(&blah2);
+    cout << "Combination colour:\n";
+    blah = getCombinationColour(blah, blah2);
+    printRC(&blah);
 
-	return 0;
+    delete map;
+    delete map2;
+    delete red;
+    delete blue;
+
+    return 0;
 }

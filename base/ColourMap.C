@@ -29,177 +29,172 @@
 namespace Rosegarden 
 {
 
-RColourMap::RColourMap()
+ColourMap::ColourMap()
 {
-	// Set up the default colour.  The #defines can be found in ColourMap.h
-	RColour tempcolour(COLOUR_DEF_R, COLOUR_DEF_G, COLOUR_DEF_B);
-	m_map[0] = make_pair(tempcolour, std::string(""));
-	m_map_iterator = m_map.begin();
+    // Set up the default colour.  The #defines can be found in ColourMap.h
+    Colour tempcolour(COLOUR_DEF_R, COLOUR_DEF_G, COLOUR_DEF_B);
+    m_map[0] = make_pair(tempcolour, std::string(""));
 }
 
-RColourMap::RColourMap(RColour& input)
+ColourMap::ColourMap(const Colour& input)
 {
-	// Set up the default colour based on the input
-	m_map[0] = make_pair(input, std::string(""));
-	m_map_iterator = m_map.begin();
+    // Set up the default colour based on the input
+    m_map[0] = make_pair(input, std::string(""));
 }
 
-RColourMap::~RColourMap()
+ColourMap::~ColourMap()
 {
-	// Everything should destroy itself automatically
-}
-
-bool
-RColourMap::deleteItemByIndex(unsigned int item_num)
-{
-	// We explicitly refuse to delete the default colour
-	if (item_num == 0) 
-		return false;
-
-	int n_e = m_map.erase(item_num);
-	if (n_e != 0)
-	{
-		// We need to reset the iterator as it may no longer be valid
-		m_map_iterator = m_map.begin();
-		return true;
-	}
-
-	// Otherwise we didn't find the right item
-	return false;
-}
-
-RColour
-RColourMap::getColourByIndex(unsigned int item_num)
-{
-	// Iterate over the m_map and if we find a match, return the RColour
-	// If we don't match, return the default colour
-	RColour ret = m_map[0].first;
-
-	for (RCMap::iterator position = m_map.begin(); position != m_map.end(); ++position)
-		if (position->first == item_num)
-			ret = position->second.first;
-
-	return ret;
-}
-
-string
-RColourMap::getNameByIndex(unsigned int item_num)
-{
-	// Iterate over the m_map and if we find a match, return the name
-	string ret = m_map[0].second;
-
-	for (RCMap::iterator position = m_map.begin(); position != m_map.end(); ++position)
-		if (position->first == item_num)
-			ret = position->second.second;
-
-	return ret;
+    // Everything should destroy itself automatically
 }
 
 bool
-RColourMap::addItem(RColour colour, string name)
+ColourMap::deleteItemByIndex(const unsigned int item_num)
 {
-	// If we want to limit the number of colours, here's the place to do it
-	unsigned int highest=0;
+    // We explicitly refuse to delete the default colour
+    if (item_num == 0) 
+        return false;
 
-	for (RCMap::iterator position = m_map.begin(); position != m_map.end(); ++position)
-	{
-		if (position->first != highest)
-			goto gotnumber; // URGH - A goto; but it's is an easy way of getting out of the if and for loop 
+    unsigned int n_e = m_map.erase(item_num);
+    if (n_e != 0)
+    {
+        return true;
+    }
 
-		++highest;
-	}
+    // Otherwise we didn't find the right item
+    return false;
+}
 
-	gotnumber:
-	m_map[highest] = make_pair(colour, name);
-	// We should reset the iterator as it may no longer be valid
-	m_map_iterator = m_map.begin();
-	return true;
+Colour
+ColourMap::getColourByIndex(const unsigned int item_num)
+{
+    // Iterate over the m_map and if we find a match, return the Colour
+    // If we don't match, return the default colour
+    Colour ret = m_map[0].first;
+
+    for (RCMap::iterator position = m_map.begin(); position != m_map.end(); ++position)
+        if (position->first == item_num)
+            ret = position->second.first;
+
+    return ret;
+}
+
+std::string
+ColourMap::getNameByIndex(const unsigned int item_num)
+{
+    // Iterate over the m_map and if we find a match, return the name
+    std::string ret = m_map[0].second;
+
+    for (RCMap::iterator position = m_map.begin(); position != m_map.end(); ++position)
+        if (position->first == item_num)
+            ret = position->second.second;
+
+    return ret;
 }
 
 bool
-RColourMap::modifyNameByIndex(unsigned int item_num, string name)
+ColourMap::addItem(const Colour colour, const std::string name)
 {
-	// We don't allow a name to be given to the default colour
-	if (item_num == 0)
-		return false;
+    // If we want to limit the number of colours, here's the place to do it
+    unsigned int highest=0;
 
-	for (RCMap::iterator position = m_map.begin(); position != m_map.end(); ++position)
-		if (position->first == item_num)
-		{
-			position->second.second = name;
-			return true;
-		}
+    for (RCMap::iterator position = m_map.begin(); position != m_map.end(); ++position)
+    {
+        if (position->first != highest)
+            break;
 
-	// We didn't find the element
-	return false;
+        ++highest;
+    }
+
+    m_map[highest] = make_pair(colour, name);
+
+    return true;
 }
 
 bool
-RColourMap::modifyColourByIndex(unsigned int item_num, RColour colour)
+ColourMap::modifyNameByIndex(const unsigned int item_num, const std::string name)
 {
-	for (RCMap::iterator position = m_map.begin(); position != m_map.end(); ++position)
-		if (position->first == item_num)
-		{
-			position->second.first = colour;
-			return true;
-		}
+    // We don't allow a name to be given to the default colour
+    if (item_num == 0)
+        return false;
 
-	// We didn't find the element
-	return false;
+    for (RCMap::iterator position = m_map.begin(); position != m_map.end(); ++position)
+        if (position->first == item_num)
+        {
+            position->second.second = name;
+            return true;
+        }
+
+    // We didn't find the element
+    return false;
 }
 
 bool
-RColourMap::swapItems(unsigned int item_1, unsigned int item_2)
+ColourMap::modifyColourByIndex(const unsigned int item_num, const Colour colour)
 {
-	// It would make no difference but we return false because 
-	//  we haven't altered the iterator (see docs in ColourMap.h)
-	if (item_1 == item_2)
-		return false; 
+    for (RCMap::iterator position = m_map.begin(); position != m_map.end(); ++position)
+        if (position->first == item_num)
+        {
+            position->second.first = colour;
+            return true;
+        }
 
-	// We refuse to swap the default colour for something else
-	// Basically because what would we do with the strings?
-	if ((item_1 == 0) || (item_2 == 0))
-		return false; 
-
-	unsigned int one = 0, two = 0;
-
-	// Check that both elements exist
-	// It's not worth bothering about optimising this
-	for (RCMap::iterator position = m_map.begin(); position != m_map.end(); ++position)
-	{
-		if (position->first == item_1) one = position->first;
-		if (position->first == item_2) two = position->first;
-	}
-
-	// If they both exist, do it
-	// There's probably a nicer way to do this
-	if ((one != 0) && (two != 0))
-	{
-		RColour tempC = m_map[one].first;
-		string tempS = m_map[one].second;
-		m_map[one].first = m_map[two].first;
-		m_map[one].second = m_map[two].second;
-		m_map[two].first = tempC;
-		m_map[two].second = tempS;
-		// We now have to reset the iterator as it may no longer be valid
-		m_map_iterator = m_map.begin();
-		return true;
-	}
-
-	// Else they didn't
-	return false;
-}
-
-void
-RColourMap::iteratorStart()
-{
-	m_map_iterator = m_map.begin();
+    // We didn't find the element
+    return false;
 }
 
 bool
-RColourMap::iteratorAtEnd()
+ColourMap::swapItems(const unsigned int item_1, const unsigned int item_2)
 {
-	return m_map_iterator == m_map.end();
+    // It would make no difference but we return false because 
+    //  we haven't altered the iterator (see docs in ColourMap.h)
+    if (item_1 == item_2)
+        return false; 
+
+    // We refuse to swap the default colour for something else
+    // Basically because what would we do with the strings?
+    if ((item_1 == 0) || (item_2 == 0))
+        return false; 
+
+    unsigned int one = 0, two = 0;
+
+    // Check that both elements exist
+    // It's not worth bothering about optimising this
+    for (RCMap::iterator position = m_map.begin(); position != m_map.end(); ++position)
+    {
+        if (position->first == item_1) one = position->first;
+        if (position->first == item_2) two = position->first;
+    }
+
+    // If they both exist, do it
+    // There's probably a nicer way to do this
+    if ((one != 0) && (two != 0))
+    {
+        Colour tempC = m_map[one].first;
+        std::string tempS = m_map[one].second;
+        m_map[one].first = m_map[two].first;
+        m_map[one].second = m_map[two].second;
+        m_map[two].first = tempC;
+        m_map[two].second = tempS;
+
+        return true;
+    }
+
+    // Else they didn't
+    return false;
+}
+
+RCMap::const_iterator
+ColourMap::begin()
+{
+    RCMap::const_iterator ret = m_map.begin();
+    return ret;
+}
+
+RCMap::const_iterator
+ColourMap::end()
+{
+    RCMap::const_iterator ret = m_map.end();
+    return ret;
 }
 
 }

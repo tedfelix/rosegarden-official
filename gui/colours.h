@@ -113,8 +113,8 @@ namespace RosegardenGUIColours
 
     extern const QColor RotaryPlugin;
 
-    Rosegarden::RColour convertColour(QColor input);
-    QColor convertColour(Rosegarden::RColour input);
+    Rosegarden::Colour convertColour(QColor input);
+    QColor convertColour(Rosegarden::Colour input);
 
 }
 

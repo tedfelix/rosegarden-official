@@ -28,107 +28,107 @@
 namespace Rosegarden 
 {
 
-// The RColour Class
+// The Colour Class
 
-RColour::RColour()
+Colour::Colour()
 {
-	m_r = 0;
-	m_g = 0;
-	m_b = 0;
+    m_r = 0;
+    m_g = 0;
+    m_b = 0;
 }
 
-RColour::RColour(const int red, const int green, const int blue)
+Colour::Colour(const unsigned int red, const unsigned int green, const unsigned int blue)
 {
-	this->setColour(red, green, blue);
+    this->setColour(red, green, blue);
 }
 
-RColour::RColour(const RColour& input)
+Colour::Colour(const Colour& input)
 {
-	this->setColour(input.getRed(), input.getGreen(), input.getBlue());
+    this->setColour(input.getRed(), input.getGreen(), input.getBlue());
 }
 
-RColour::~RColour()
+Colour::~Colour()
 {
 
 }
 
-RColour& 
-RColour::operator= (const RColour& input)
+Colour&
+Colour::operator= (const Colour& input)
 {
-	// We don't have to check for assignment to self because it'll have
-	//  no nasty effects (in fact, it'll do what it should - nothing)
-	this->setColour(input.getRed(), input.getGreen(), input.getBlue());
-	return *this;
-}
-
-void
-RColour::setColour(const int red, const int green, const int blue)
-{
-	((red>=0)&&(red<=255)) ? m_r=red : m_r=0;
-	((green>=0)&&(green<=255)) ? m_g=green : m_g=0;
-	((blue>=0)&&(blue<=255)) ? m_b=blue : m_b=0;
+    // We don't have to check for assignment to self because it'll have
+    //  no nasty effects (in fact, it'll do what it should - nothing)
+    this->setColour(input.getRed(), input.getGreen(), input.getBlue());
+    return *this;
 }
 
 void
-RColour::getColour(int *red, int *green, int *blue) const
+Colour::setColour(const unsigned int red, const unsigned int green, const unsigned int blue)
 {
-	*red = m_r;
-	*green = m_g;
-	*blue = m_b;
-}
-
-inline int
-RColour::getRed() const
-{
-	return m_r;
-}
-
-inline int
-RColour::getBlue() const
-{
-	return m_b;
-}
-
-inline int
-RColour::getGreen() const
-{
-	return m_g;
+    ((red>=0)&&(red<=255)) ? m_r=red : m_r=0;
+    ((green>=0)&&(green<=255)) ? m_g=green : m_g=0;
+    ((blue>=0)&&(blue<=255)) ? m_b=blue : m_b=0;
 }
 
 void
-RColour::setRed(const int red)
+Colour::getColour(unsigned int &red, unsigned int &green, unsigned int &blue) const
 {
-	((red>=0)&&(red<=255)) ? m_r=red : m_r=0;
+    red = m_r;
+    green = m_g;
+    blue = m_b;
+}
+
+unsigned int
+Colour::getRed() const
+{
+    return m_r;
+}
+
+unsigned int
+Colour::getBlue() const
+{
+    return m_b;
+}
+
+unsigned int
+Colour::getGreen() const
+{
+    return m_g;
 }
 
 void
-RColour::setBlue(const int blue)
+Colour::setRed(const unsigned int red)
 {
-	((blue>=0)&&(blue<=255)) ? m_b=blue: m_b=0;
+    ((red>=0)&&(red<=255)) ? m_r=red : m_r=0;
 }
 
 void
-RColour::setGreen(const int green)
+Colour::setBlue(const unsigned int blue)
 {
-	((green>=0)&&(green<=255)) ? m_g=green : m_g=0;
+    ((blue>=0)&&(blue<=255)) ? m_b=blue: m_b=0;
+}
+
+void
+Colour::setGreen(const unsigned int green)
+{
+    ((green>=0)&&(green<=255)) ? m_g=green : m_g=0;
+}
+
+Colour
+Colour::getContrastingColour() const
+{
+    Colour ret(255-m_r, 255-m_g, 255-m_b);
+    return ret;
 }
 
 // Generic Colour routines:
 
-RColour
-Rosegarden::getContrastColour(const RColour &input)
+Colour
+Rosegarden::getCombinationColour(const Colour &input1, const Colour &input2)
 {
-	RColour ret(255-input.getRed(),255-input.getGreen(),255-input.getBlue());
-	return ret;
-}
-
-RColour
-Rosegarden::getCombColour(const RColour &input1, const RColour &input2)
-{
-	RColour ret((input1.getRed()+input2.getRed())/2,
+    Colour ret((input1.getRed()+input2.getRed())/2,
                 (input1.getGreen()+input2.getGreen())/2,
                 (input1.getBlue()+input2.getBlue())/2);
-	return ret;
+    return ret;
 
 }
 

@@ -38,105 +38,85 @@
 
 namespace Rosegarden 
 {
-	using std::map;
-	using std::pair;
-	using std::string;
-	using std::less;
-	using std::make_pair;
-	typedef map<unsigned int, pair<RColour, string>, less<unsigned int> > RCMap;
+    typedef std::map<unsigned int, std::pair<Colour, std::string>, std::less<unsigned int> > RCMap;
 
 /**
- * RColourMap is our table which maps the unsigned integer keys stored in
- *  segments to both a RColour and a String containing the 'name'
+ * ColourMap is our table which maps the unsigned integer keys stored in
+ *  segments to both a Colour and a String containing the 'name'
  */
 
-class RColourMap
+class ColourMap
 {
 public:
-	// Functions:
+    // Functions:
 
-	/**
-	 * Initialises an RColourMap with a default element set to
-	 * whatever COLOUR_DEF_X defines the colour to be (see the source file)
-	 * Also sets up m_map_iterator to point to m_map.begin()
-	 */
-	RColourMap();
-	/**
-	 * Initialises an RColourMap with a default element set to
-	 * the value of the RColour passed in.  Also sets up m_map_iterator to
-	 * point to m_map.begin()
-	 */
-	RColourMap(RColour& input);
-	~RColourMap();
+    /**
+     * Initialises an ColourMap with a default element set to
+     * whatever COLOUR_DEF_X defines the colour to be (see the source file)
+     */
+    ColourMap();
+    /**
+     * Initialises an ColourMap with a default element set to
+     * the value of the Colour passed in.
+     */
+    ColourMap(const Colour& input);
+    ~ColourMap();
 
-	/**
-	 * Returns the RColour associated with the item_num passed in.  Note that
-	 * if the item_num doesn't represent a valid item, the routine returns
-	 * the value of the Default colour.  This means that if somehow some of
-	 * the Segments get out of sync with the ColourMap and have invalid
-	 * colour values, they'll be set to the Composition default colour.
-	 */
-	RColour getColourByIndex(unsigned int item_num);
+    /**
+     * Returns the Colour associated with the item_num passed in.  Note that
+     * if the item_num doesn't represent a valid item, the routine returns
+     * the value of the Default colour.  This means that if somehow some of
+     * the Segments get out of sync with the ColourMap and have invalid
+     * colour values, they'll be set to the Composition default colour.
+     */
+    Colour getColourByIndex(unsigned int item_num);
 
-	/**
-	 * Returns the string associated with the item_num passed in.  If the
-	 * item_num doesn't exist, it'll return "" (the same name as the default
-	 * colour has - for internationalization reasons).
-	 */
-	string getNameByIndex(unsigned int item_num);
+    /**
+     * Returns the string associated with the item_num passed in.  If the
+     * item_num doesn't exist, it'll return "" (the same name as the default
+     * colour has - for internationalization reasons).
+     */
+    std::string getNameByIndex(unsigned int item_num);
 
-	/**
-	 * If item_num exists, this routine deletes it from the map.
-	 * WARNING: If true is returned it implies that m_map_iterator has
-	 * been reset to m_map.begin() as otherwise it may no longer be valid
-	 */
-	bool deleteItemByIndex(unsigned int item_num);
+    /**
+     * If item_num exists, this routine deletes it from the map.
+     */
+    bool deleteItemByIndex(unsigned int item_num);
 
-	/**
-	 * This routine adds a Colour using the lowest possible index.
-	 * WARNING: This routine will reset m_map_iterator to m_map.begin()
-	 * as otherwise it may no longer be valid
-	 */
-	bool addItem(RColour colour, string name);
+    /**
+     * This routine adds a Colour using the lowest possible index.
+     */
+    bool addItem(Colour colour, std::string name);
 
-	/**
-	 * If the item with item_num exists and isn't the default, this
-	 * routine modifies the string associated with it
-	 */
-	bool modifyNameByIndex(unsigned int item_num, string name);
+    /**
+     * If the item with item_num exists and isn't the default, this
+     * routine modifies the string associated with it
+     */
+    bool modifyNameByIndex(unsigned int item_num, std::string name);
 
-	/**
-	 * If the item with item_num exists, this routine modifies the 
-	 * RColour associated with it
-	 */
-	bool modifyColourByIndex(unsigned int item_num, RColour colour);
+    /**
+     * If the item with item_num exists, this routine modifies the 
+     * Colour associated with it
+     */
+    bool modifyColourByIndex(unsigned int item_num, Colour colour);
 
-	/**
-	 * If both items exist, swap them.  WARNING: If true is returned,
-	 * the m_map_iterator has been reset to m_map.begin() as otherwise
-	 * it may no longer be valid
-	 */
-	bool swapItems(unsigned int item_1, unsigned int item_2);
+    /**
+     * If both items exist, swap them.  
+     */
+    bool swapItems(unsigned int item_1, unsigned int item_2);
 
-	/**
-	 * This moves m_map_iterator to m_map.begin()
-	 */
-	void iteratorStart();
+    /**
+     * This returns a const iterator pointing to m_map.begin()
+     */
+    RCMap::const_iterator begin();
 
-	/**
-	 * Is the iterator == m_map.end() ?
-	 */
-	bool iteratorAtEnd();
-
-	// Members 
-
-	/**
-	 * This is a method to allow iteration over the m_map in read only mode
-	 */
-	RCMap::const_iterator m_map_iterator;
+    /**
+     * This returns a const iterator pointing to m_map.end()
+     */
+    RCMap::const_iterator end();
 
 private:
-	RCMap m_map;
+    RCMap m_map;
 };
 
 }

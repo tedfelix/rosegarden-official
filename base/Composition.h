@@ -720,7 +720,7 @@ protected:
     TrackId                           m_highestTrackId;
 
 public:
-    RColourMap                        m_segmentColourMap;
+    ColourMap                         m_segmentColourMap;
 };
 
 }
