@@ -2157,11 +2157,11 @@ bool RosegardenGUIApp::launchSequencer()
     KConfig *config = kapp->config();
     config->setGroup("Sequencer Options");
     QString options = config->readEntry("commandlineoptions");
-    (*m_sequencerProcess) << options;
-
-    if (options != "")
+    if (!options.isEmpty()) {
+        (*m_sequencerProcess) << options;
         RG_DEBUG << "sequencer options \"" << options << "\"" << endl;
-
+    }
+    
     connect(m_sequencerProcess, SIGNAL(processExited(KProcess*)),
             this, SLOT(slotSequencerExited(KProcess*)));
 
