@@ -1,0 +1,22 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+
+<kpartgui name="ControlEditor" version="091">
+
+<MenuBar>
+  <Menu name="file">
+   <Action name="file_close_discard"/>
+  </Menu>
+</MenuBar>
+
+<ToolBar name="mainToolBar">
+   <Action name="file_close"/>
+</ToolBar>
+
+<State name="on_control_item">
+     <enable>
+        <Action name="edit_copy"/>
+        <Action name="edit_paste"/>
+     </enable>
+</State>
+
+</kpartgui>

@@ -26,6 +26,8 @@
 #include <kmainwindow.h>
 #include <klistview.h>
 
+#include <qpushbutton.h>
+
 class RosegardenGUIDoc;
 
 namespace Rosegarden { class Studio; }
@@ -55,7 +57,11 @@ protected:
     //--------------- Data members ---------------------------------
     Rosegarden::Studio      *m_studio;
     RosegardenGUIDoc        *m_doc;
-    
+
+    QPushButton             *m_closeButton;
+    QPushButton             *m_resetButton;
+    QPushButton             *m_applyButton;
+
     KListView               *m_listView;
 };
 

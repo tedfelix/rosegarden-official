@@ -223,6 +223,7 @@ DISTCLEANFILES = $(rosegarden_METASOURCES)
 
 rcdir = $(kde_datadir)/rosegarden
 rc_DATA = bankeditor.rc \
+        controleditor.rc \
 	eventlist.rc \
 	matrix.rc \
 	notationeraser.rc \
