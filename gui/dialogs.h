@@ -631,4 +631,23 @@ protected:
 };
 
 
+// ---------------- CompositionLengthDialog -----------
+class CompositionLengthDialog : public KDialogBase
+{
+    Q_OBJECT
+public:
+    CompositionLengthDialog(QWidget *parent,
+                            Rosegarden::Composition *composition);
+
+    Rosegarden::timeT getStartMarker();
+    Rosegarden::timeT getEndMarker();
+
+protected:
+
+    QSpinBox                *m_startMarkerSpinBox;
+    QSpinBox                *m_endMarkerSpinBox;
+    Rosegarden::Composition *m_composition;
+};
+
+
 #endif

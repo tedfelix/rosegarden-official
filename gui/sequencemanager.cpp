@@ -588,7 +588,7 @@ SequenceManager::stopping()
     //
     if (m_transportStatus == STOPPED)
     {
-        m_doc->setPointerPosition(0);
+        m_doc->setPointerPosition(m_doc->getComposition().getStartMarker());
         return;
     }
 
@@ -1132,7 +1132,7 @@ void
 SequenceManager::rewindToBeginning()
 {
     cout << "SequenceManager::rewindToBeginning()" << endl;
-    m_doc->setPointerPosition(0);
+    m_doc->setPointerPosition(m_doc->getComposition().getStartMarker());
 }
 
 

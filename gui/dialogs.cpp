@@ -2226,6 +2226,8 @@ AudioPlayingDialog::AudioPlayingDialog(QWidget *parent,
 
 }
 
+// ----------------  AudioSplitDialog -----------------------
+//
 
 AudioSplitDialog::AudioSplitDialog(QWidget *parent,
                                    Segment *segment,
@@ -2639,6 +2641,11 @@ LyricEditDialog::getLyricData()
     return m_textEdit->text();
 }
 
+
+// ------------------- EventParameterDialog ----------------------------
+//
+//
+
 EventParameterDialog::EventParameterDialog(
         QWidget *parent,
         const QString &name,
@@ -2783,9 +2790,50 @@ EventParameterDialog::getValue2()
     return m_value2Combo->currentItem();
 }
 
+// --------------------- CompositionLengthDialog ---------------------
+//
 
+CompositionLengthDialog::CompositionLengthDialog(
+        QWidget *parent,
+        Rosegarden::Composition *composition):
+        KDialogBase(parent, "", true, i18n("Change Composition Length"),
+                    Ok | Cancel),
+        m_composition(composition)
+{
+    QVBox *vBox = makeVBoxMainWidget();
 
+    new QLabel(i18n("Set the Start and End bar markers for this Composition"),
+               vBox);
 
+    QHBox *startBox = new QHBox(vBox);
+    new QLabel(i18n("Start Bar"), startBox);
+    m_startMarkerSpinBox = new QSpinBox(startBox);
+    m_startMarkerSpinBox->setMinValue(-10);
+    m_startMarkerSpinBox->setMaxValue(1000);
+    m_startMarkerSpinBox->setValue(
+            m_composition->getBarNumber(m_composition->getStartMarker()));
+
+    QHBox *endBox = new QHBox(vBox);
+    new QLabel(i18n("End Bar"), endBox);
+    m_endMarkerSpinBox = new QSpinBox(endBox);
+    m_endMarkerSpinBox->setMinValue(-10);
+    m_endMarkerSpinBox->setMaxValue(1000);
+    m_endMarkerSpinBox->setValue(
+            m_composition->getBarNumber(m_composition->getEndMarker()));
+
+}
+
+Rosegarden::timeT
+CompositionLengthDialog::getStartMarker()
+{
+    return m_composition->getBarStart(m_startMarkerSpinBox->value());
+}
+
+Rosegarden::timeT
+CompositionLengthDialog::getEndMarker()
+{
+    return m_composition->getBarStart(m_endMarkerSpinBox->value());
+}
 
 
 

@@ -453,6 +453,11 @@ void RosegardenGUIApp::setupActions()
 		this, SLOT(slotEditTimeSignature()),
 		actionCollection(), "add_time_signature");
 
+    new KAction(i18n(ChangeCompositionLengthCommand::getGlobalName()),
+                0,
+                this, SLOT(slotChangeCompositionLength()),
+                actionCollection(), "change_composition_length");
+
     new KAction(i18n("Edit Document P&roperties..."), 0, this,
                 SLOT(slotEditDocumentProperties()),
                 actionCollection(), "edit_doc_properties");
@@ -3251,6 +3256,26 @@ void
 RosegardenGUIApp::slotRepeatingSegments()
 {
     m_view->getTrackEditor()->slotTurnRepeatingSegmentToRealCopies();
+}
+
+void
+RosegardenGUIApp::slotChangeCompositionLength()
+{
+    CompositionLengthDialog *dialog =
+        new CompositionLengthDialog(this,
+                                    &m_doc->getComposition());
+
+    if (dialog->exec() == QDialog::Accepted)
+    {
+        ChangeCompositionLengthCommand *command
+            = new ChangeCompositionLengthCommand(
+                    &m_doc->getComposition(),
+                    dialog->getStartMarker(),
+                    dialog->getEndMarker());
+
+        m_doc->getCommandHistory()->addCommand(command);
+        std::cout << "slotChangeCompositionLength" << std::endl;
+    }
 }
 
  

@@ -22,6 +22,7 @@
 	<Separator/>
       	<Action name="add_tempo"/>
       	<Action name="add_time_signature"/>
+        <Action name="change_composition_length"/>
 	<Separator/>
       	<Action name="edit_doc_properties"/>
   </Menu>

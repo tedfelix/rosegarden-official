@@ -541,6 +541,11 @@ public slots:
     void slotEditTimeSignature(QWidget *parent);
 
     /**
+     * Change the length of the composition
+     */
+    void slotChangeCompositionLength();
+
+    /**
      * open a dialog for document properties
      */
     void slotEditDocumentProperties();

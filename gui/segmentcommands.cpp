@@ -215,8 +215,9 @@ SegmentRepeatToCopyCommand::execute()
         Rosegarden::timeT newDuration =
             m_segment->getEndMarkerTime() - m_segment->getStartTime();
         Rosegarden::Segment *newSegment;
+        Rosegarden::timeT repeatEndTime = m_segment->getRepeatEndTime();
 
-        while(newStartTime + newDuration < m_segment->getRepeatEndTime())
+        while(newStartTime + newDuration < repeatEndTime)
         {
             // Create new segment, transpose and turn off repeat
             //
@@ -1391,3 +1392,38 @@ void AddTracksCommand::unexecute()
         m_composition->deleteTrack(m_composition->getNbTracks() - 1);
     }
 }
+
+// ------------------ ChangeCompositionLengthCommand ------------------
+//
+ChangeCompositionLengthCommand::ChangeCompositionLengthCommand(
+        Rosegarden::Composition *composition,
+        Rosegarden::timeT startTime,
+        Rosegarden::timeT endTime):
+            XKCommand(getGlobalName()),
+            m_composition(composition),
+            m_startTime(startTime),
+            m_endTime(endTime),
+            m_oldStartTime(m_composition->getStartMarker()),
+            m_oldEndTime(m_composition->getEndMarker())
+{
+}
+
+ChangeCompositionLengthCommand::~ChangeCompositionLengthCommand()
+{
+}
+
+void
+ChangeCompositionLengthCommand::execute()
+{
+    m_composition->setStartMarker(m_startTime);
+    m_composition->setEndMarker(m_endTime);
+}
+
+void
+ChangeCompositionLengthCommand::unexecute()
+{
+    m_composition->setStartMarker(m_oldStartTime);
+    m_composition->setEndMarker(m_oldEndTime);
+}
+
+

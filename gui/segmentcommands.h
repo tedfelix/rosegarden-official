@@ -534,5 +534,27 @@ private:
     Rosegarden::InstrumentId m_instrumentId;
 };
 
+class ChangeCompositionLengthCommand : public XKCommand
+{
+public:
+    ChangeCompositionLengthCommand(Rosegarden::Composition *composition,
+                                   Rosegarden::timeT startTime,
+                                   Rosegarden::timeT endTime);
+    virtual ~ChangeCompositionLengthCommand();
+
+    static QString getGlobalName()
+        { return i18n("Change &Composition Length..."); }
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    Rosegarden::Composition *m_composition;
+    Rosegarden::timeT        m_startTime;
+    Rosegarden::timeT        m_endTime;
+    Rosegarden::timeT        m_oldStartTime;
+    Rosegarden::timeT        m_oldEndTime;
+
+};
 
 #endif  // _SEGMENTCOMMANDS_H_
