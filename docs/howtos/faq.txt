@@ -8,11 +8,21 @@ this FAQ includes a number of bits of useful information that would
 normally (and will in the future) be found there instead.
 
 
-Compilation or installation problems
-------------------------------------
+General questions
+-----------------
 
-Rosegarden builds for KDE but can I run it under GNOME/WindowMaker etc?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+I don't want to build the thing myself.  Is there an RPM available?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Not quite yet.  The code is still changing a little too quickly and
+releases appear a little too often for us to have found the time to
+turn it into binary packages.  Hopefully we'll have one available soon
+but if you want to go ahead and roll an RPM for us, please do so, and
+let us know where you've put it so that we can test it out.
+
+
+The web page says it's a KDE application.  Can I run it under GNOME/WindowMaker etc?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Yes, completely.  You can run Rosegarden under any window manager you
 like.  We build for KDE because we like developing for KDE as it
@@ -20,14 +30,37 @@ lets us get a job done.  You can run the resulting application
 under any graphical environment you like with no change in
 functionality.
 
-I don't want to build the thing myself.  Is there an RPM available?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Not quite yet.  We don't consider the code stable enough to turn it
-into an RPM yet.  Hopefully we'll have one available soon but if you
-want to go ahead and roll an RPM for us, please do so, and let us
-know where you've put it so that we can test it out.
+What are the hardware requirements like?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Reasonably demanding, because of the mixture of graphical and
+interactive GUI stuff with precisely timed audio stuff.  You can do
+simple editing in piano-roll or score on a 400MHz PIII or Celeron with
+64MB of memory, but to be honest you're unlikely to have got that far
+because you probably need more memory than that just to compile the
+thing in the first place.
+
+An 800MHz machine with 256MB should do very nicely for MIDI and score
+plus a few tracks of audio (my laptop has that spec, and I both use
+and develop Rosegarden-4 on it).  If you want to use soft synths,
+you'll probably want more CPU power; I find the sound on my laptop
+starts showing glitches with more than about four tracks played
+through a high-quality orchestral sample-based soft synth.
+
+
+Does it support my soundcard?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We don't deal with the soundcard directly, so we can't answer that.
+We use the ALSA drivers where possible, so see the ALSA project's card
+matrix (<URL:http://www.alsa-project.org/>).  Also see the notes on
+ALSA and aRts below.
+
+
+
+Compilation or installation problems
+------------------------------------
 
 Can I build for KDE2 instead of KDE3?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -229,10 +262,20 @@ aRts?  ALSA?  Huh?
 ~~~~~~~~~~~~~~~~~~
 
 Right, it's like this.  Rosegarden-4 can be built without any sound
-support ("configure --disable-sound"), with aRts support (the default
-configure option), or with ALSA support ("configure --with-alsa").
+support ("configure --disable-sound"), with ALSA support (the default
+configure option), or with aRts support ("configure --with-arts").
 You have to choose one option when you run configure: you can't
 currently have more than one compiled in.
+
+ALSA (<URL:http://www.alsa-project.org/>) is the standard sound system
+in Linux 2.5+, and is available for installation on earlier versions
+of Linux.  (Some distributions also include it as an optional
+package.)  Rosegarden-4 supports ALSA version 0.9.0 (_not_ 0.5.x),
+with which it can play to outboard MIDI synths, onboard soundcard MIDI
+synths, and ALSA soft-synths, and can record from outboard MIDI
+devices.  Setup is easier than with aRts, at least once ALSA is
+installed.  For audio support with ALSA, you will also need to obtain
+and use JACK (<URL:http://jackit.sourceforge.net/>).
 
 aRts (<URL:http://www.arts-project.org/>) is the standard KDE sound
 server.  In theory, it supports audio, MIDI soft synths and outboard
@@ -245,21 +288,10 @@ yet.  On the plus side, aRts has a potentially sophisticated
 soft-synth architecture if you want to develop your own synths, and it
 may be possible to use it on systems other than Linux.
 
-ALSA (<URL:http://www.alsa-project.org/>) is the standard sound system
-in Linux 2.5+, and is available for installation on earlier versions
-of Linux.  (Some distributions also include it as an optional
-package.)  Rosegarden-4 supports ALSA version 0.9.0 (_not_ 0.5.x),
-with which it can play to outboard MIDI synths, onboard soundcard MIDI
-synths, and ALSA soft-synths, and can record from outboard MIDI
-devices.  Setup is easier than with aRts, at least once ALSA is
-installed.  For audio support with ALSA, you will also need to obtain
-and use JACK (<URL:http://jackit.sourceforge.net/>).
-
 We strongly recommend you use ALSA unless you already know you prefer
 aRts or you simply can't get ALSA for your platform.  Every
 Rosegarden-4 feature that works with aRts also works with ALSA, and
-then some.  The only reason aRts is the default configure option is
-that we wrote the aRts driver before the ALSA driver.
+then some.
 
 
 Can I use an ALSA soft synth, such as iiwusynth or Timidity?
@@ -313,7 +345,7 @@ SBLive! soundcard comes with a set of standard soundfonts (2gmgsmt.sf2,
   $ sfxload 8mbgmsfx.sf2
 
 For more fun with soundfonts including how to create them for yourself
-have a look at the Smurf/Swami project: <URL:http://smurf.sourceforge.net/>.
+have a look at the Smurf/Swami project: <URL:http://swami.sourceforge.net/>.
 
 The other classic problem for new users of ALSA is that the mixer
 settings are either zero or muted.  Run alsamixer and check that your
@@ -362,4 +394,17 @@ Note the ALSA device list shows the external MIDI port and the
 wavetable on-board synth devices.  If you're using a soft synth, you
 should see it here too.  All of these will be available in the
 drop-down Instrument list inside Rosegarden.
+
+
+How do I get audio to work?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you're using ALSA, then you need to obtain and install JACK
+(<URL:http://jackit.sourceforge.net/>) and run jackd before starting
+the Rosegarden sequencer.  If you give jackd the -v option, it will
+report when Rosegarden succeeds in connecting to it.
+
+Unfortunately getting the right combination of magic incantations to
+make JACK work is not always easy and is not something we can help you
+with.  If it's any help, once it's working it usually stays working.
 
