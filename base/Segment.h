@@ -239,8 +239,6 @@ public:
      */
     void clearEndMarker();
     
-#endif
-
 
     //////
     //
