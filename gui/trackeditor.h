@@ -22,7 +22,7 @@
 #ifndef SEGMENTSEDITOR_H
 #define SEGMENTSEDITOR_H
 
-#include <qframe.h>
+#include <qwidget.h>
 
 #include "trackseditoriface.h"
 
@@ -47,7 +47,7 @@ class QCanvasLine;
  *
  * @see SegmentCanvas
  */
-class TrackEditor : public QFrame, virtual public TrackEditorIface
+class TrackEditor : public QWidget, virtual public TrackEditorIface
 {
     Q_OBJECT
 public:
@@ -158,8 +158,6 @@ protected slots:
 					    Rosegarden::timeT);
 
     void slotSplitSegment(Rosegarden::Segment *, Rosegarden::timeT);
-
-    void slotScrollTrackButtons(int y);
 
 signals:
     /**

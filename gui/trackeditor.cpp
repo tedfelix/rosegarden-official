@@ -54,7 +54,7 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
 			 RulerScale *rulerScale,
 			 QWidget* parent, const char* name,
 			 WFlags) :
-    QFrame(parent, name),
+    QWidget(parent, name),
     DCOPObject("TrackEditorIface"),
     m_document(doc),
     m_rulerScale(rulerScale),
@@ -125,6 +125,9 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
     int barButtonsHeight = 25;
     int barButtonsOffset = 0;//!!!2;
 
+    //
+    // Top Bar Buttons
+    //
     m_topBarButtons = new BarButtons(m_rulerScale,
                                      barButtonsHeight,
                                      false,
@@ -133,8 +136,14 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
 
     grid->addWidget(m_topBarButtons, 0, 1);
 
+    // Horizontal scrollbar - we need to create it now even though
+    // it's inserted in the layout later on, because we need to set it's
+    // range according to the segment canvas' one
     m_horizontalScrollBar = new QScrollBar(Horizontal, this);
 
+    //
+    // Segment Canvas
+    //
     m_segmentCanvas = new SegmentCanvas(m_rulerScale,
                                         m_horizontalScrollBar,
                                         getTrackCellHeight(),
@@ -142,6 +151,9 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
 
     grid->addWidget(m_segmentCanvas, 1, 1);
 
+    //
+    // Bottom Bar Buttons
+    //
     m_bottomBarButtons = new BarButtons(m_rulerScale,
                                         barButtonsHeight,
                                         true,
@@ -150,6 +162,9 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
     
     grid->addWidget(m_bottomBarButtons, 2, 1);
 
+    //
+    // Horizontal Scrollbar
+    //
     m_horizontalScrollBar->setRange(m_segmentCanvas->horizontalScrollBar()->minValue(),
                                     m_segmentCanvas->horizontalScrollBar()->maxValue());
 
@@ -157,23 +172,35 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
                                     m_segmentCanvas->horizontalScrollBar()->pageStep());
 
     grid->addWidget(m_horizontalScrollBar, 3, 1);
-    
+
+    //
+    // Track Buttons
+    //
+    // (must be put in a QScrollView)
+    //
+    QScrollView *trackButtonScroll = new QScrollView(this);
+    grid->addWidget(trackButtonScroll, 1, 0);
 
     m_trackButtons = new TrackButtons(m_document,
                                       getTrackCellHeight(),
                                       trackLabelWidth,
-                                      this);
+                                      trackButtonScroll->viewport());
+    trackButtonScroll->addChild(m_trackButtons);
+    trackButtonScroll->setHScrollBarMode(QScrollView::AlwaysOff);
+    trackButtonScroll->setVScrollBarMode(QScrollView::AlwaysOff);
+    trackButtonScroll->setMinimumWidth(trackButtonScroll->contentsWidth());
+    //trackButtonScroll->setMaximumHeight(trackButtonScroll->contentsHeight());
+    
+    //grid->addWidget(m_trackButtons, 1, 0);
 
-    grid->addWidget(m_trackButtons, 1, 0);
-
-    // Synchronize side widgets (bar and track buttons) with scrollbars
+    // Synchronize bar buttons' scrollview with segment canvas' scrollbar
     //
     connect(m_segmentCanvas->verticalScrollBar(), SIGNAL(valueChanged(int)),
-            this, SLOT(slotScrollTrackButtons(int)));
+            trackButtonScroll->verticalScrollBar(), SIGNAL(valueChanged(int)));
     connect(m_segmentCanvas->verticalScrollBar(), SIGNAL(sliderMoved(int)),
-            this, SLOT(slotScrollTrackButtons(int)));
+            trackButtonScroll->verticalScrollBar(), SIGNAL(sliderMoved(int)));
 
-    // Connect horiz. scrollbar
+    // Connect horizontal scrollbar
     //
     connect(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
             m_topBarButtons, SLOT(slotScrollHoriz(int)));
@@ -192,6 +219,9 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
 
     connect(this, SIGNAL(needUpdate()), m_segmentCanvas, SLOT(slotUpdate()));
 
+    //
+    // Other signals
+    //
     connect(m_segmentCanvas, SIGNAL(addSegment(Rosegarden::TrackId,
 					       Rosegarden::timeT,
 					       Rosegarden::timeT)),
@@ -242,29 +272,6 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
     m_pointer->setPoints(0, 0, 0, canvas->height());
     m_pointer->setZ(10);
     m_pointer->show();
-
-
-    grid->addWidget(new QLabel("Label1", this), 0, 0);
-    grid->addWidget(new QLabel("Label2", this), 2, 0);
-    grid->addWidget(new QLabel("Label3", this), 3, 0);
-
-}
-
-void TrackEditor::slotScrollTrackButtons(int newPos)
-{
-    int oldPos = m_trackButtonsScrollPos;
-
-    m_trackButtonsScrollPos = newPos;
-
-//     kdDebug(KDEBUG_AREA) << "TrackEditor::scrollTrackButtons : y = "
-//                          << m_trackButtons->y()
-//                          << " - newPos = "
-//                          << newPos
-//                          << " - currentPos = " << oldPos
-//                          << " - scroll by : " << oldPos - m_trackButtonsScrollPos
-//                          << std::endl;
-
-    m_trackButtons->scroll(0, oldPos - m_trackButtonsScrollPos);
 
 }
 
