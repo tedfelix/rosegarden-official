@@ -75,6 +75,15 @@ TabbedConfigurationPage::TabbedConfigurationPage(KConfig *cfg,
     init();
 }
 
+TabbedConfigurationPage::TabbedConfigurationPage(KConfig *cfg,
+                                                 RosegardenGUIDoc *doc,
+                                                 QWidget *parent,
+                                                 const char *name)
+  : ConfigurationPage(cfg, doc, parent, name)
+{
+    init();
+}
+
 void TabbedConfigurationPage::init()
 {
     QVBoxLayout *vlay = new QVBoxLayout(this, 0, KDialog::spacingHint());
@@ -90,9 +99,9 @@ void TabbedConfigurationPage::addTab(QWidget *tab, const QString &title)
 
 //------------------------------------------------------------
 
-GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg,
+GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg, RosegardenGUIDoc *doc,
                                                    QWidget *parent, const char *name)
-    : TabbedConfigurationPage(cfg, parent, name),
+    : TabbedConfigurationPage(cfg, doc, parent, name),
       m_client(0),
       m_countIn(0),
       m_midiPitchOffset(0),
@@ -596,10 +605,9 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
                                                    KConfig *cfg,
                                                    QWidget *parent,
                                                    const char *name)
-    : TabbedConfigurationPage(cfg, parent, name),
+    : TabbedConfigurationPage(cfg, doc, parent, name),
       m_readAhead(0),
-      m_playback(0),
-      m_doc(doc)
+      m_playback(0)
 {
 //     Rosegarden::Configuration &config = doc->getConfiguration();
     m_cfg->setGroup("Latency Options");
@@ -1018,7 +1026,7 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
                          GeneralConfigurationPage::title(),
                          loadIcon(GeneralConfigurationPage::iconName()));
     vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
-    page = new GeneralConfigurationPage(cfg, pageWidget);
+    page = new GeneralConfigurationPage(cfg, doc, pageWidget);
     vlay->addWidget(page);
     page->setPageIndex(pageIndex(pageWidget));
     m_configurationPages.push_back(page);
