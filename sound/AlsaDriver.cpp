@@ -928,6 +928,13 @@ AlsaDriver::stopPlayback()
     clearAudioPlayQueue();
 #endif
 
+#ifdef HAVE_LADSPA
+    // Reset all plugins dumping any remnant audio
+    //
+    resetAllPlugins();
+
+#endif // HAVE_LADSPA
+
 
 }
 
@@ -1853,23 +1860,23 @@ AlsaDriver::setPluginInstance(InstrumentId id,
         std::cout << "AlsaDriver::setPluginInstance - "
                   << "activate and connect plugin" << std::endl;
 
-        /*
-        std::cout << "POSITION = " << position << endl;
-        std::cout << "INSTRUMENT = " << id << endl;
-        */
-
+        // create a new instance
+        //
         instance->instantiate(getSampleRate());
 
+#ifdef HAVE_LIBJACK
+
+        // connect
         instance->connectPorts(_pluginBufferIn1,
                                _pluginBufferIn2,
                                _pluginBufferOut1,
                                _pluginBufferOut2);
 
-        //instance->deactivate();
+#endif // HAVE_LIBJACK
+
+        // Activate the plugin ready for run()ning
+        //
         instance->activate();
-
-        //instance->run(500);
-
     }
     else
         std::cerr << "AlsaDriver::setPluginInstance - "
@@ -1961,7 +1968,8 @@ LADSPAPluginInstance::LADSPAPluginInstance(Rosegarden::InstrumentId instrument,
         m_ladspaId(ladspaId),
         m_position(position),
         m_instanceHandle(0),
-        m_descriptor(descriptor)
+        m_descriptor(descriptor),
+        m_processed(false)
 {
     // Discover ports numbers and identities
     //
@@ -2090,9 +2098,12 @@ LADSPAPluginInstance::run(unsigned long sampleCount)
 {
     if (m_descriptor && m_descriptor->run)
     {
+        /*
         std::cout << "LADSPAPluginInstance::run - running plugin "
                   << "for " << sampleCount << " frames" << std::endl;
+                  */
         m_descriptor->run(m_instanceHandle, sampleCount);
+        m_processed = true;
     }
 }
 
@@ -2141,7 +2152,39 @@ AlsaDriver::getPlugin(InstrumentId id, int position)
     //return dynamic_cast<m_studio->getPluginInstance(id, position);
 }
 
+PluginInstances
+AlsaDriver::getUnprocessedPlugins()
+{
+    PluginInstances list;
+    PluginIterator it = m_pluginInstances.begin();
+    for (; it != m_pluginInstances.end(); it++)
+    {
+        if (!(*it)->hasBeenProcessed())
+            list.push_back(*it);
+    }
+    return list;
+}
 
+void
+AlsaDriver::setAllPluginsToUnprocessed()
+{
+    PluginIterator it = m_pluginInstances.begin();
+    for (; it != m_pluginInstances.end(); it++)
+        (*it)->setProcessed(false);
+}
+
+// Turn all plugins on and off to reset their internal states
+//
+void
+AlsaDriver::resetAllPlugins()
+{
+    PluginIterator it = m_pluginInstances.begin();
+    for (; it != m_pluginInstances.end(); it++)
+    {
+        (*it)->deactivate();
+        (*it)->activate();
+    }
+}
 
 #endif // HAVE_LADSPA
 
@@ -2238,27 +2281,6 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                inst->appendToAudioFile(buffer);
             }
         }
-
-        /*
-        // Return if we're not playing yet
-        //
-        if (!inst->isPlaying())
-        {
-            // Ensure we start with silence
-            //
-            float silence = 0.0;
-    
-            for (unsigned int i = 0 ; i < nframes; i++)
-            {
-                (*leftBuffer) = silence;
-                leftBuffer++;
-    
-                (*rightBuffer) = silence;
-                rightBuffer++;
-            }
-            return 0;
-        }
-        */
 
         // Ok, we're playing - so clear the temporary buffers ready
         // for writing, get the audio queue, grab the queue vector
@@ -2592,9 +2614,60 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
         }
 
 #ifdef HAVE_LADSPA
+        if (inst->isPlaying())
+        {
 
-        // System plugins go here
-        //
+            PluginInstances list = inst->getUnprocessedPlugins();
+            if (list.size())
+            {
+
+                // Clear plugin input buffers to silence
+                for (unsigned int i = 0; i < nframes; i++)
+                {
+                    _pluginBufferIn1[i] = 0.0f;
+                    _pluginBufferIn2[i] = 0.0f;
+                }
+
+                // Process plugins
+                PluginIterator it = list.begin();
+                for (; it != list.end(); it++)
+                {
+                    float volume = 1.0f;
+    
+                    Rosegarden::MappedAudioFader *fader =
+                        dynamic_cast<Rosegarden::MappedAudioFader*>
+                            (inst->getMappedStudio()->
+                                 getAudioFader((*it)->getInstrument()));
+                
+                    if (fader)
+                    {
+                        MappedObjectPropertyList result =
+                            fader->getPropertyList(MappedAudioFader::FaderLevel);
+                        volume = float(result[0].toFloat())/127.0;
+                    }
+
+                    // Run the plugin
+                    //
+                    (*it)->run(_jackBufferSize);
+
+                    // Now mix the signal in from the plugin output
+                    //
+                    for (unsigned int i = 0; i < nframes; i++)
+                    {
+                        _tempOutBuffer1[i] += _pluginBufferOut1[i] * volume;
+                            
+                        if ((*it)->getAudioChannelsOut() >= 2)
+                        {
+                            _tempOutBuffer2[i] += _pluginBufferOut2[i] * volume;
+                        }
+                        else
+                        {
+                            _tempOutBuffer2[i] += _pluginBufferOut1[i] * volume;
+                        }
+                    }
+                }
+            }
+        }
 
 #endif // HAVE_LADSPA
         
@@ -2651,6 +2724,13 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
             */
 
         _usingAudioQueueVector = false;
+
+#ifdef HAVE_LADSPA
+        // Reset all plugins so they're processed next time
+        //
+        inst->setAllPluginsToUnprocessed();
+#endif // HAVE_LADSPA
+
     }
 
 

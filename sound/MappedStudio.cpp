@@ -285,21 +285,7 @@ MappedStudio::getObjectOfType(MappedObjectType type)
 bool
 MappedStudio::destroyObject(MappedObject *object)
 {
-    std::vector<MappedObject*>::iterator it;
-    for (it = m_objects.begin(); it != m_objects.end(); it++)
-    {
-        if ((*it) == object)
-        {
-            std::cout << "MappedStudio::destroyObject - "
-                      << "destroying object id = " << object->getId()
-                      << std::endl;
-            delete (*it);
-            m_objects.erase(it);
-            return true;
-        }
-    }
-   
-    return false;
+    return destroyObject(object->getId());
 }
 
 bool
@@ -987,10 +973,9 @@ MappedAudioPluginManager::unloadPlugin(unsigned long uniqueId)
             return;
     }
 
-    /*
-    std::cout << "HERE!!! - MappedAudioPluginManager::unloadPlugin - "
-              << "unloading library" << std::endl;
-              */
+    std::cout << "MappedAudioPluginManager::unloadPlugin - "
+              << "unloading library \"" 
+              << plugin->getLibraryName() << "\"" << std::endl;
 
     dlclose(pluginHandle);
     m_pluginHandles.erase(it);
@@ -1000,6 +985,10 @@ MappedAudioPluginManager::unloadPlugin(unsigned long uniqueId)
 void
 MappedAudioPluginManager::unloadAllPluginLibraries()
 {
+    std::cout << "MappedAudioPluginManager::unloadAllPluginLibraries - "
+              << "unloading " << m_pluginHandles.size() << " libraries"
+              << std::endl;
+
     LADSPAIterator it = m_pluginHandles.begin();
     for (; it != m_pluginHandles.end(); it++)
         dlclose(it->second);
@@ -1187,6 +1176,23 @@ MappedAudioPluginManager::getPluginInstance(InstrumentId instrument,
 //
 
 #ifdef HAVE_LADSPA
+
+MappedLADSPAPlugin::~MappedLADSPAPlugin()
+{
+    MappedStudio *studio =
+        dynamic_cast<MappedStudio*>(getParent()->getParent());
+
+    if (studio)
+    {
+        /* not quite working yet 
+        Rosegarden::Sequencer *seq = studio->getSequencer();
+        if (seq)
+            seq->removePluginInstance(m_instrument, m_position);
+        */
+    }
+}
+
+
 void
 MappedLADSPAPlugin::populate(const LADSPA_Descriptor *descriptor)
 {
@@ -1201,6 +1207,8 @@ MappedLADSPAPlugin::populate(const LADSPA_Descriptor *descriptor)
     }
 
 }
+
+
 MappedObjectPropertyList
 MappedLADSPAPlugin::getPropertyList(const MappedObjectProperty &property)
 {

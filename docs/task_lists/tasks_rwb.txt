@@ -13,7 +13,7 @@ o Matrix Hypereditor [STARTED]
 
 o Fix segment audio drag and drop
 
-o Audio volume faders - studio concept on sequencer
+o Plugins - tidying up unused libraries
 
 o Tidy up AudioFiles:
    - hardcoded format segment values
@@ -31,6 +31,10 @@ o MIDI export broken for key sig and SysExs
 
 Post 0.2
 ========
+
+o LADSPA raltime plugin support [DONE]
+
+o Audio volume faders - studio concept on sequencer [DONE]
 
 o Complete and make sure segment edit shortcuts are consistent 
   across segmentcanvas and views (click/copy/multiple segment drag)

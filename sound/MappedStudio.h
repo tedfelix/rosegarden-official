@@ -380,6 +380,8 @@ public:
                      m_instrument(0),
                      m_position(0) {;}
 
+    ~MappedLADSPAPlugin();
+
     virtual MappedObjectPropertyList getPropertyList(
                         const MappedObjectProperty &property);
 

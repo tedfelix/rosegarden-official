@@ -83,6 +83,19 @@ public:
     // Audio channels out to mix
     unsigned int getAudioChannelsOut() const { return m_audioPortsOut.size(); }
 
+    // During operation we need to know which plugins have
+    // already been processed as part of the playable audio
+    // file loop and which should still be run() outside 
+    // this loop.
+    //
+    bool hasBeenProcessed() const { return m_processed; }
+    void setProcessed(bool value) { m_processed = value; }
+
+    // Do we want to bypass this plugin?
+    //
+    bool isBypassed() const { return m_bypassed; }
+    void setBypassed(bool value) { m_bypassed = value; }
+
 protected:
     
     Rosegarden::InstrumentId  m_instrument;
@@ -93,8 +106,11 @@ protected:
 
     std::vector<std::pair<unsigned long, LADSPA_Data*> > m_controlPorts;
 
-    std::vector<int> m_audioPortsIn;
-    std::vector<int> m_audioPortsOut;
+    std::vector<int>          m_audioPortsIn;
+    std::vector<int>          m_audioPortsOut;
+
+    bool                      m_processed;
+    bool                      m_bypassed;
 
 };
 
@@ -220,6 +236,18 @@ public:
 #ifdef HAVE_LADSPA
 
     LADSPAPluginInstance* getPlugin(InstrumentId id, int position);
+
+    // Return a list of plugin instances that haven't been run()
+    //
+    PluginInstances getUnprocessedPlugins();
+
+    // Reset all plugin processed states (start of a new process() loop)
+    //
+    void setAllPluginsToUnprocessed();
+
+    // Reset all plugins audio state (when looping or when playback stops)
+    //
+    void resetAllPlugins();
 
 #endif // HAVE_LADSPA
 
