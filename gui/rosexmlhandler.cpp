@@ -53,8 +53,9 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         int trackNb = -1;
         QString trackNbStr = atts.value("nb");
         if (trackNbStr) {
-            kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement : track nb attr = " << trackNbStr << endl;
             trackNb = trackNbStr.toInt();
+            kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement : track nb attr = "
+                                 << trackNbStr << " (" << trackNb << ")\n";
         }
         
         m_currentTrack = new EventList;
