@@ -412,6 +412,9 @@ Composition::calculateBarPositions() const
 	timeT myTime = (*i)->getAbsoluteTime();
 	int n = (myTime - lastSigTime) / barDuration;
 
+	// should only happen for first time sig, when it's at time < 0:
+	if (myTime < lastSigTime) --n;
+
 	// would there be a new bar here anyway?
 	if (barDuration * n + lastSigTime == myTime) { // yes
 	    n += lastBarNo;
@@ -458,8 +461,16 @@ Composition::getBarNumber(timeT t) const
     
     if (i == m_timeSigSegment.end()) { // precedes any time signatures
 	
-	n = t / TimeSignature().getBarDuration();
-	if (t < 0) --n;
+	timeT bd = TimeSignature().getBarDuration();
+
+	n = t / bd;
+	if (t < 0) {
+	    // negative bars should be rounded down, except where
+	    // the time is on a barline in which case we already
+	    // have the right value (i.e. time -1920 is bar -1,
+	    // but time -3840 is also bar -1, in 4/4)
+	    if (n * bd != t) --n;
+	}
 
     } else {
 	

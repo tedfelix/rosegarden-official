@@ -1286,7 +1286,7 @@ NotePixmapFactory::makeNoteMenuLabel(Rosegarden::timeT duration,
 	} else if ((duration / wholeNote) * wholeNote == duration) {
 	    return QString("%1/1").arg(duration / wholeNote);
 	} else {
-	    return QString("%1 ticks").arg(duration);
+	    return i18n("%1 ticks").arg(duration);
 	    plural = false;
 	}
 

@@ -466,6 +466,8 @@ void SegmentItem::makeFont()
 
 void SegmentItem::drawShape(QPainter& painter)
 {
+//    RG_DEBUG << "SegmentItem::drawShape: my width is " << width() << endl;
+
     QCanvasRectangle::drawShape(painter);
 
     // Can't use collisions() here : it's too slow. Go the simpler way.
@@ -584,6 +586,8 @@ void SegmentItem::recalculateRectangle(bool inheritFromSegment)
     double w = m_snapGrid->getRulerScale()->getWidthForDuration
 	(m_startTime, m_endTime - m_startTime);
 
+//    RG_DEBUG << "SegmentItem::recalculateRectangle: start time " << m_startTime << ", end time " << m_endTime << ", width " << w << endl;
+    
     setSize(int(w) + 1, h);
 
     // Compute label

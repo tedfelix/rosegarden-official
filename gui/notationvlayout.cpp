@@ -30,6 +30,13 @@
 #include "notationproperties.h"
 #include "notationsets.h"
 
+// for debugging purposes:
+#include <kmessagebox.h>
+#include <klocale.h>
+#include <qstring.h>
+#include <qwidget.h>
+
+
 // I woke up on the last day of the year
 // with the sudden realisation
 // that people have brought terrible ills upon themselves by
@@ -130,8 +137,14 @@ NotationVLayout::scanStaff(StaffType &staffBase, timeT, timeT)
 
             std::vector<int> h;
             for (unsigned int j = 0; j < chord.size(); ++j) {
-                h.push_back((*chord[j])->event()->get<Int>
-			    (m_properties.HEIGHT_ON_STAFF));
+		long height = 0;
+		if (!(*chord[j])->event()->get<Int>
+		    (m_properties.HEIGHT_ON_STAFF, height)) {
+		    KMessageBox::sorry
+			((QWidget *)parent(), QString(i18n("Event in chord at %1 has no HEIGHT_ON_STAFF property!\nThis is a bug (the program would previously have crashed by now)").arg((*chord[j])->getAbsoluteTime())));
+		    (*chord[j])->event()->dump(cerr);
+		}
+		h.push_back(height);
             }
 	    bool stemmed = chord.hasStem();
             bool stemUp = chord.hasStemUp();
@@ -289,7 +302,12 @@ NotationVLayout::positionSlur(NotationStaff &staff,
 
 	if ((*scooter)->isNote()) {
 
-	    int h = (*scooter)->event()->get<Int>(m_properties.HEIGHT_ON_STAFF);
+	    long h = 0;
+	    if (!(*scooter)->event()->get<Int>(m_properties.HEIGHT_ON_STAFF, h)) {
+		KMessageBox::sorry
+		    ((QWidget *)parent(), QString(i18n("Spanned note at %1 has no HEIGHT_ON_STAFF property!\nThis is a bug (the program would previously have crashed by now)").arg((*scooter)->getAbsoluteTime())));
+		(*scooter)->event()->dump(cerr);
+	    }
 
 	    bool stemUp = (h <= 4);
 	    (*scooter)->event()->get<Bool>(m_properties.STEM_UP, stemUp);

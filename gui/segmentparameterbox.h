@@ -79,6 +79,7 @@ public slots:
     void slotTransposeTextChanged(const QString &);
 
     void slotDelaySelected(int);
+    void slotDelayTimeChanged(Rosegarden::timeT delayValue);
     void slotDelayTextChanged(const QString &);
 
     virtual void update();
@@ -93,9 +94,9 @@ private:
     RosegardenComboBox         *m_delayValue;
 
     std::vector<Rosegarden::Segment*> m_segments;
-
-    std::vector<Rosegarden::StandardQuantization>
-    m_standardQuantizations;
+    std::vector<Rosegarden::StandardQuantization> m_standardQuantizations;
+    std::vector<Rosegarden::timeT> m_delays;
+    std::vector<int> m_realTimeDelays;
 
     RosegardenGUIView          *m_view;
 

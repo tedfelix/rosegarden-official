@@ -110,20 +110,28 @@ Quantizer::NoteQuantizer::~NoteQuantizer() { }
 Quantizer::LegatoQuantizer::~LegatoQuantizer() { }
 
 timeT
-Quantizer::IdentityQuantizer::quantize(int, int, timeT t, timeT, bool) const
+Quantizer::IdentityQuantizer::quantize(int, int, timeT t,
+				       timeT, timeT, bool) const
 {
     return t;
 }
 
 timeT
-Quantizer::UnitQuantizer::quantize(int unit, int, timeT t, timeT,
+Quantizer::UnitQuantizer::quantize(int unit, int, timeT t, timeT adj, timeT,
 				   bool isAbsoluteTime) const
 {
+    t += adj;
+
     if (t != 0) {
 	timeT low = (t / unit) * unit;
 	timeT high = low + unit;
+
+	// round to the nearer of high and low.  if doing absolute
+	// time, permit quantization to time zero -- for duration,
+	// don't
 	if ((low > 0 || isAbsoluteTime) &&
 	    (high - t > t - low)) t = low;
+
 	else t = high;
     }
 
@@ -132,8 +140,10 @@ Quantizer::UnitQuantizer::quantize(int unit, int, timeT t, timeT,
 
 timeT
 Quantizer::NoteQuantizer::quantize(int unit, int maxDots,
-				   timeT t, timeT, bool) const
+				   timeT t, timeT adj, timeT, bool) const
 {
+    t += adj;
+
 //    cerr << "NoteQuantizer::quantize: unit is " << unit << ", t is " << t << std::endl;
 
     //!!! We probably shouldn't quantize tuplets
@@ -187,30 +197,49 @@ Quantizer::NoteQuantizer::quantize(int unit, int maxDots,
 
 timeT
 Quantizer::LegatoQuantizer::quantize(int unit, int maxDots, timeT t,
+				     timeT priorAdjustment,
 				     timeT followingRestDuration,
 				     bool isAbsoluteTime) const
 {
+    t += priorAdjustment;
+
 //    cerr << "LegatoQuantizer::quantize: followingRestDuration is " << followingRestDuration << std::endl;
 
     if (followingRestDuration > 0) {
 
 	timeT possibleDuration = NoteQuantizer().quantize
-	    (unit, maxDots, t, 0, isAbsoluteTime);
+	    (unit, maxDots, t, 0, 0, isAbsoluteTime);
+
+	if (possibleDuration != t &&
+	    possibleDuration - t < followingRestDuration) {
+
+	    // Our duration was inexact and we haven't expanded to
+	    // fill all the space, so let's see what happens if we
+	    // expand further...
+
+	    Note note(Note::getNearestNote(possibleDuration));
+	    Note longerNote(note.getNoteType() + 1, 0);
+	    if (longerNote.getDuration() <= followingRestDuration &&
+		followingRestDuration - longerNote.getDuration() < unit) {
+		return longerNote.getDuration();
+	    }
+	}
 
 	if (possibleDuration > t) {
 	    if (possibleDuration - t <= followingRestDuration) {
 		return possibleDuration;
+
 	    } else {
 		return NoteQuantizer().quantize
 		    (Note(Note::Shortest).getDuration(),
-		     maxDots, t + followingRestDuration, 0,
+		     maxDots, 0, t + followingRestDuration, 0,
 		     isAbsoluteTime);
 	    }
 	}
     }
 
     return NoteQuantizer().quantize(Note(Note::Shortest).getDuration(),
-				    maxDots, t, 0, isAbsoluteTime);
+				    maxDots, t, 0, 0, isAbsoluteTime);
 }
 
 
@@ -413,7 +442,7 @@ timeT
 Quantizer::quantizeAbsoluteTime(timeT absoluteTime) const
 {
     return getDefaultAbsTimeQuantizer().quantize
-	(m_unit, m_maxDots, absoluteTime, 0, true);
+	(m_unit, m_maxDots, absoluteTime, 0, 0, true);
 }
 
 
@@ -421,7 +450,7 @@ timeT
 Quantizer::quantizeDuration(timeT duration) const
 {
     return getDefaultDurationQuantizer().quantize
-	(m_unit, m_maxDots, duration, 0, false);
+	(m_unit, m_maxDots, duration,0,  0, false);
 }
 
 
@@ -463,7 +492,8 @@ Quantizer::quantize(Segment *s, Segment::iterator from, Segment::iterator to,
 	timeT qDuration	     = 0;
 
 	timeT qAbsoluteTime  =
-	    aq.quantize(absTimeQuantizeUnit, m_maxDots, absoluteTime, 0, true);
+	    aq.quantize(absTimeQuantizeUnit, m_maxDots, absoluteTime,
+			0, 0, true);
 
 	if ((*from)->isa(Note::EventType)) {
 
@@ -473,7 +503,8 @@ Quantizer::quantize(Segment *s, Segment::iterator from, Segment::iterator to,
 	    }
 
 	    qDuration = dq.quantize
-		(m_unit, m_maxDots, duration, followingRestDuration, false);
+		(m_unit, m_maxDots, duration,
+		 qAbsoluteTime - absoluteTime, followingRestDuration, false);
 	    excess = (qAbsoluteTime + qDuration) - (absoluteTime + duration);
 
 	} else if ((*from)->isa(Note::EventRestType)) {
@@ -490,7 +521,9 @@ Quantizer::quantize(Segment *s, Segment::iterator from, Segment::iterator to,
 		    duration	  -= excess;
 		}
 
-		qDuration = dq.quantize(m_unit, m_maxDots, duration, 0, false);
+		qDuration = dq.quantize
+		    (m_unit, m_maxDots, duration,
+		     qAbsoluteTime - absoluteTime, 0, false);
 	    }
 	} else continue;
 

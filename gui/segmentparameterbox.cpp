@@ -157,10 +157,6 @@ SegmentParameterBox::initBox()
 	QString label = npf.makeNoteMenuLabel(time, true, error);
 	QPixmap pmap = npf.makeNoteMenuPixmap(time, error);
 	m_quantizeValue->insertItem(error ? noMap : pmap, label);
-/*!!!
-	if (error == 0) m_quantizeValue->insertItem(pmap, label);
-	else m_quantizeValue->insertItem(noMap, QString("%1").arg(time));
-*/
     }
     m_quantizeValue->insertItem(noMap, i18n("Off"));
 
@@ -175,11 +171,18 @@ SegmentParameterBox::initBox()
     }
     m_transposeValue->setCurrentItem(-1);
 
-    // initial delay values as function of sequencer resolution
-    for(int i = 0; i < 4; i++)
+    m_delays.clear();
+
+    for (int i = 0; i < 8; i++)
     {
-	// this could be anything
-	Rosegarden::timeT time = Note(Note::Crotchet).getDuration() * i;
+	Rosegarden::timeT time = 0;
+	if (i > 0 && i < 5) {
+	    time = Note(Note::Hemidemisemiquaver).getDuration() << (i-1);
+	} else if (i > 4) {
+	    time = Note(Note::Crotchet).getDuration() * (i-3);
+	}
+
+	m_delays.push_back(time);
 	
 	// check if it's a valid note duration (it will be for the
 	// time defn above, but if we were basing it on the sequencer
@@ -189,10 +192,13 @@ SegmentParameterBox::initBox()
 	QString label = npf.makeNoteMenuLabel(time, true, error);
 	QPixmap pmap = npf.makeNoteMenuPixmap(time, error);
 	m_delayValue->insertItem((error ? noMap : pmap), label);
-	/*!!!
-	if (error == 0) m_delayValue->insertItem(pmap, label);
-	else m_delayValue->insertItem(noMap, QString("%1").arg(time));
-	*/
+    }
+
+    for (int i = 0; i < 10; i++)
+    {
+	int rtd = (i < 5 ? ((i + 1) * 10) : ((i - 3) * 50));
+	m_realTimeDelays.push_back(rtd);
+	m_delayValue->insertItem(i18n("%1 ms").arg(rtd));
     }
 
     // set delay blank initially
@@ -241,6 +247,8 @@ SegmentParameterBox::populateBoxFromSegments()
     Tristate delayed = None;
 
     Rosegarden::Quantizer qntzLevel;
+    // At the moment we have no negative delay, so we use negative
+    // values to represent real-time delay in ms
     Rosegarden::timeT delayLevel = 0;
     int transposeLevel = 0;
 
@@ -314,18 +322,24 @@ SegmentParameterBox::populateBoxFromSegments()
 
         // Delay
         //
-        if ((*it)->getDelay() != 0)
+	Rosegarden::timeT myDelay = (*it)->getDelay();
+	if (myDelay == 0) {
+	    myDelay = -((*it)->getRealTimeDelay().sec * 1000 +
+			(*it)->getRealTimeDelay().usec / 1000);
+	}
+
+        if (myDelay != 0) 
         {
             if (it == m_segments.begin())
             {
                 delayed = All;
-                delayLevel = (*it)->getDelay();
+                delayLevel = myDelay;
             }
             else
             {
                 if (delayed == None ||
                         (delayed == All &&
-                             delayLevel != (*it)->getDelay()))
+                             delayLevel != myDelay))
                     delayed = Some;
             }
         }
@@ -413,7 +427,19 @@ SegmentParameterBox::populateBoxFromSegments()
     switch(delayed)
     {
         case All:
-            m_delayValue->setEditText(QString("%1").arg(delayLevel));
+
+	    if (delayLevel > 0) {
+
+		NotePixmapFactory npf;
+		Rosegarden::timeT error = 0;
+		QString label = npf.makeNoteMenuLabel(delayLevel, true, error);
+		m_delayValue->setEditText(label);
+
+	    } else if (delayLevel < 0) {
+
+		m_delayValue->setEditText(i18n("%1 ms").arg(-delayLevel));
+	    }
+
             break;
 
         case Some:
@@ -500,42 +526,63 @@ SegmentParameterBox::slotTransposeSelected(int value)
 
 
 void
+SegmentParameterBox::slotDelayTimeChanged(Rosegarden::timeT delayValue)
+{
+    // by convention and as a nasty hack, we use negative timeT here
+    // to represent positive RealTime in ms
+    
+    if (delayValue > 0) {
+
+	std::vector<Rosegarden::Segment*>::iterator it;
+	for (it = m_segments.begin(); it != m_segments.end(); it++) {
+	    (*it)->setDelay(delayValue);
+	    (*it)->setRealTimeDelay(Rosegarden::RealTime(0, 0));
+	}
+
+    } else if (delayValue < 0) {
+	
+	std::vector<Rosegarden::Segment*>::iterator it;
+	for (it = m_segments.begin(); it != m_segments.end(); it++) {
+	    (*it)->setDelay(0);
+	    int sec = (-delayValue) / 1000;
+	    int usec = ((-delayValue) - 1000*sec) * 1000;
+	    (*it)->setRealTimeDelay(Rosegarden::RealTime(sec, usec));
+	}
+    } else {
+
+	std::vector<Rosegarden::Segment*>::iterator it;
+	for (it = m_segments.begin(); it != m_segments.end(); it++) {
+	    (*it)->setDelay(0);
+	    (*it)->setRealTimeDelay(Rosegarden::RealTime(0, 0));
+	}
+    }
+
+    m_view->getDocument()->setModified(true);
+}
+
+void
 SegmentParameterBox::slotDelayTextChanged(const QString &text)
 {
     if (text.isEmpty())
         return;
 
-    int delayValue = text.toInt();
-
-    NotePixmapFactory npf;
-
-    Rosegarden::timeT error = 0;
-    QPixmap pmap = npf.makeNoteMenuPixmap(delayValue, error);
-    QString label = npf.makeNoteMenuLabel(delayValue, true, error);
-/*!!!
-    if (error == 0) m_delayValue->insertItem(pmap, label);
-    else m_delayValue->insertItem
-	     (npf.makeToolbarPixmap("menu-no-note", QString("%1").arg(time)));
-*/
-    //!!! Now, how to get pmap into the pixmap part of the text field?
-
-    std::vector<Rosegarden::Segment*>::iterator it;
-    for (it = m_segments.begin(); it != m_segments.end(); it++) {
-        (*it)->setDelay(delayValue);
-	m_view->getDocument()->setModified(true);
-    }
-}
+    slotDelayTimeChanged(-(text.toInt()));
+} 
 
 void
 SegmentParameterBox::slotDelaySelected(int value)
 {
-    slotDelayTextChanged(m_delayValue->text(value));
+    if (value < m_delays.size()) {
+	slotDelayTimeChanged(m_delays[value]);
+    } else {
+	slotDelayTimeChanged(-(m_realTimeDelays[value - m_delays.size()]));
+    }
 } 
 
 MultiViewCommandHistory*
 SegmentParameterBox::getCommandHistory()
 {
-        return m_view->getDocument()->getCommandHistory();
+    return m_view->getDocument()->getCommandHistory();
 }
 
 void

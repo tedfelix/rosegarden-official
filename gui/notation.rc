@@ -302,6 +302,7 @@
   <Action name="dotted_16th" />
   <Action name="dotted_32nd" />
 
+  <Action name="chord_mode"/>
   <Action name="triplet_mode" />
 </ToolBar>
 

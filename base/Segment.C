@@ -55,7 +55,8 @@ Segment::Segment(SegmentType segmentType, timeT startTime) :
                               Quantizer::RawEventData)),
     m_quantize(false),
     m_transpose(0),
-    m_delay(0)
+    m_delay(0),
+    m_realTimeDelay(0, 0)
 {
 }
 
@@ -77,7 +78,8 @@ Segment::Segment(const Segment &segment):
     m_quantizer(new Quantizer(segment.getQuantizer())),
     m_quantize(segment.hasQuantization()),
     m_transpose(segment.getTranspose()),
-    m_delay(segment.getDelay())
+    m_delay(segment.getDelay()),
+    m_realTimeDelay(segment.getRealTimeDelay())
 {
     for (iterator it = segment.begin(); segment.isBeforeEndMarker(it); ++it)
         insert(new Event(**it));

@@ -302,10 +302,25 @@ public:
     void unquantize(EventSelection *) const;
 
 protected:
+
+    // Arguments to the SingleQuantizers' quantize() methods:
+    // -- unit: quantization unit
+    // -- maxDots: if rounding to a note duration, max dots to permit on note
+    // -- t: time argument to be quantized
+    // -- priorAdjustment: amount by which the absolute time has already been
+    //    shifted, for duration quantizers.  This should just be added to t
+    //    before action, for any quantizer except the IdentityQuantizer:
+    //    bit icky, that
+    // -- followingRestDuration: duration of continuous series of rests after
+    //    this note, into which it may be seen as safe to expand the note
+    // -- isAbsoluteTime: whether this quantization is of absolute time (rather
+    //    than duration)
+
     class SingleQuantizer {
     public:
 	virtual ~SingleQuantizer();
 	virtual timeT quantize(int unit, int maxDots, timeT t,
+			       timeT priorAdjustment,
 			       timeT followingRestDuration,
 			       bool isAbsoluteTime) const = 0;
     };
@@ -314,6 +329,7 @@ protected:
     public:
 	virtual ~IdentityQuantizer();
 	virtual timeT quantize(int unit, int maxDots, timeT t,
+			       timeT priorAdjustment,
 			       timeT followingRestDuration,
 			       bool isAbsoluteTime) const;
     };
@@ -322,6 +338,7 @@ protected:
     public:
 	virtual ~UnitQuantizer();
 	virtual timeT quantize(int unit, int maxDots, timeT t,
+			       timeT priorAdjustment,
 			       timeT followingRestDuration,
 			       bool isAbsoluteTime) const;
     };
@@ -330,6 +347,7 @@ protected:
     public:
 	virtual ~NoteQuantizer();
 	virtual timeT quantize(int unit, int maxDots, timeT t,
+			       timeT priorAdjustment,
 			       timeT followingRestDuration,
 			       bool isAbsoluteTime) const;
     };
@@ -338,6 +356,7 @@ protected:
     public:
 	virtual ~LegatoQuantizer();
 	virtual timeT quantize(int unit, int maxDots, timeT t,
+			       timeT priorAdjustment,
 			       timeT followingRestDuration,
 			       bool isAbsoluteTime) const;
     };

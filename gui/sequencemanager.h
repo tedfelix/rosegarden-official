@@ -35,6 +35,8 @@
 #include "MappedStudio.h"
 #include "RealTime.h"
 
+#include <ctime>
+
 
 // SequenceManager is a helper class that wraps the sequencing
 // functionality at the GUI level.  The sequencer still communicates
@@ -164,6 +166,7 @@ private:
 
     RealTime                   m_playbackAudioLatency;
 
+    clock_t                    m_lastRewoundAt;
 };
 
 }

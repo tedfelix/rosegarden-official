@@ -42,7 +42,7 @@ static RosegardenSequencerApp *roseSeq = 0;
     
 static KCmdLineOptions options[] =
     {
-        { "+[File]", I18N_NOOP("file to open"), 0 },
+//        { "+[File]", I18N_NOOP("file to open"), 0 },
         { 0, 0, 0 }
         // INSERT YOUR COMMANDLINE OPTIONS HERE
     };
@@ -66,8 +66,12 @@ int main(int argc, char *argv[])
     aboutData.addAuthor("Guillaume Laurent, Chris Cannam, Richard Bown",0, "glaurent@telegraph-road.org, cannam@all-day-breakfast.com, bownie@bownie.com");
     KCmdLineArgs::init( argc, argv, &aboutData );
     KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
-    KApplication app;
 
+    // Parse cmd line args
+    //
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+    KApplication app;
+/*!!!
     if (argc > 1)
     {
         std::cerr
@@ -78,7 +82,7 @@ int main(int argc, char *argv[])
 
         exit(1);
     }
-
+*/
     if (app.isRestored())
     {
         RESTORE(RosegardenSequencerApp);
@@ -90,10 +94,9 @@ int main(int argc, char *argv[])
         // we don't show() the sequencer application as we're just taking
         // advantage of DCOP/KApplication and there's nothing to show().
 
-        KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-        
-        if (args->count())
-        {
+//!!!        KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+	if (args->count())
+	{
             //rosegardensequencer->openDocumentFile(args->arg(0));
         }
         else

@@ -770,11 +770,16 @@ void RosegardenGUIApp::openFile(const QString& filePath)
     QFileInfo info(filePath);
 
     if (!info.exists()) {
+	// can happen with command-line arg, so...
+	KStartupLogo *logo = KStartupLogo::getInstance();
+	if (logo) logo->hide();
         KMessageBox::sorry(this, i18n("The specified file does not exist"));
         return;
     }
 
     if (info.isDir()) {
+	KStartupLogo *logo = KStartupLogo::getInstance();
+	if (logo) logo->hide();
         KMessageBox::sorry(this, i18n("You have specified a directory"));
         return;
     }
@@ -782,6 +787,8 @@ void RosegardenGUIApp::openFile(const QString& filePath)
     QFile file(filePath);
 
     if (!file.open(IO_ReadOnly)) {
+	KStartupLogo *logo = KStartupLogo::getInstance();
+	if (logo) logo->hide();
         KMessageBox::sorry(this, i18n("You do not have read permission to this file."));
         return;
     }
@@ -2052,7 +2059,7 @@ void RosegardenGUIApp::slotSequencerExited(KProcess*)
     RG_DEBUG << "Sequencer exited\n";
 
     KStartupLogo* logo = KStartupLogo::getInstance();
-    if (logo) logo->close();
+    if (logo) logo->hide();
 
     KMessageBox::error(0, i18n("Sequencer exited"));
 

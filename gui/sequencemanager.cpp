@@ -53,7 +53,8 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
     m_transportStatus(STOPPED),
     m_soundDriverStatus(NO_DRIVER),
     m_transport(transport),
-    m_sendStop(false)
+    m_sendStop(false),
+    m_lastRewoundAt(clock())
 {
 }
 
@@ -429,8 +430,10 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 	    // comp.getElapsedRealTime((*it)->getDelay()) would fail to
 	    // take tempo changes into account correctly
 	    // 
-	    eventTime = eventTime + comp.getRealTimeDifference
-		(playTime, playTime + (*it)->getDelay());
+	    eventTime = eventTime +
+		comp.getRealTimeDifference(playTime,
+					   playTime + (*it)->getDelay()) +
+		(*it)->getRealTimeDelay();
 
 	    Rosegarden::MappedEvent *mE;
             try
@@ -705,14 +708,37 @@ SequenceManager::rewind()
     Rosegarden::Composition &composition = m_doc->getComposition();
 
     timeT position = composition.getPosition();
+    std::pair<timeT, timeT> barRange =
+	composition.getBarRangeForTime(position - 1);
+
+    if (m_transportStatus == PLAYING) {
+
+	// if we're playing and we had a rewind request less than 200ms
+	// ago and we're some way into the bar but less than half way
+	// through it, rewind two barlines instead of one
+
+	clock_t now = clock();
+	int elapsed = (now - m_lastRewoundAt) * 1000 / CLOCKS_PER_SEC;
+
+	SEQMAN_DEBUG << "That was " << m_lastRewoundAt << ", this is " << now << ", elapsed is " << elapsed << endl;
+
+	if (elapsed >= 0 && elapsed <= 200) {
+	    if (position > barRange.first &&
+		position < barRange.second &&
+		position <= (barRange.first + (barRange.second -
+					       barRange.first) / 2)) {
+		barRange = composition.getBarRangeForTime(barRange.first - 1);
+	    }
+	}
+
+	m_lastRewoundAt = now;
+    }
     
-    // want to cope with bars beyond the actual end of the piece
-    timeT newPosition = composition.getBarRangeForTime(position - 1).first;
-
-    if (newPosition < composition.getStartMarker())
-        newPosition = composition.getStartMarker();
-
-    m_doc->setPointerPosition(newPosition);
+    if (barRange.first < composition.getStartMarker()) {
+	m_doc->setPointerPosition(composition.getStartMarker());
+    } else {
+	m_doc->setPointerPosition(barRange.first);
+    }
 }
 
 

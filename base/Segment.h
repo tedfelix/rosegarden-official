@@ -40,14 +40,14 @@ class SegmentRefreshStatus : public RefreshStatus
 public:
     SegmentRefreshStatus() : m_from(0), m_to(0) {}
 
-    void push(Rosegarden::timeT from, Rosegarden::timeT to);
+    void push(timeT from, timeT to);
 
-    Rosegarden::timeT from() { return m_from; }
-    Rosegarden::timeT to()   { return m_to; }
+    timeT from() { return m_from; }
+    timeT to()   { return m_to; }
 
 protected:
-    Rosegarden::timeT m_from;
-    Rosegarden::timeT m_to;
+    timeT m_from;
+    timeT m_to;
 };
 
 
@@ -415,8 +415,11 @@ public:
      */
     timeT getRepeatEndTime() const;
 
-    Rosegarden::timeT getDelay() const { return m_delay; }
-    void setDelay(const Rosegarden::timeT &delay) { m_delay = delay; }
+    timeT getDelay() const { return m_delay; }
+    void setDelay(timeT delay) { m_delay = delay; }
+
+    RealTime getRealTimeDelay() const { return m_realTimeDelay; }
+    void setRealTimeDelay(RealTime delay) { m_realTimeDelay = delay; }
 
     int getTranspose() const { return m_transpose; }
     void setTranspose(const int &transpose) { m_transpose = transpose; }
@@ -522,7 +525,8 @@ private:
     bool m_quantize;
 
     int m_transpose;            // all Events tranpose
-    Rosegarden::timeT m_delay;  // all Events delay
+    timeT m_delay;              // all Events delay
+    RealTime m_realTimeDelay;   // all Events delay (the delays are cumulative)
 
     RefreshStatusArray<SegmentRefreshStatus> m_refreshStatusArray;
 

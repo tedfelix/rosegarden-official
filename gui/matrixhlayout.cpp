@@ -127,7 +127,7 @@ void MatrixHLayout::scanStaff(MatrixHLayout::StaffType &staffBase,
 					    staff.getTimeScaleFactor(),
 					    0));
 	    }
-	    
+
 	    from = composition->getBarEndForTime(from);
 	    ++barNo;
 	}

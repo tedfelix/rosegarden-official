@@ -1107,6 +1107,7 @@ void NotationView::slotSwitchFromRestToNote()
     noteInserter->slotSetDots(note.getDots());
 
     setTool(noteInserter);
+    setMenuStates();
 }
 
 void NotationView::slotSwitchFromNoteToRest()
@@ -1126,6 +1127,7 @@ void NotationView::slotSwitchFromNoteToRest()
     restInserter->slotSetDots(note.getDots());
 
     setTool(restInserter);
+    setMenuStates();
 }
 
 void NotationView::slotTranspose()
@@ -1748,10 +1750,7 @@ void NotationView::slotTrebleClef()
     setTool(m_toolBox->getTool(ClefInserter::ToolName));
 
     dynamic_cast<ClefInserter*>(m_tool)->setClef(Rosegarden::Clef::Treble);
-
-#ifdef RGKDE3
-    stateChanged("note_insert_tool_current", KXMLGUIClient::StateReverse);
-#endif
+    setMenuStates();
 }
 
 void NotationView::slotTenorClef()
@@ -1761,10 +1760,7 @@ void NotationView::slotTenorClef()
     setTool(m_toolBox->getTool(ClefInserter::ToolName));
 
     dynamic_cast<ClefInserter*>(m_tool)->setClef(Rosegarden::Clef::Tenor);
-
-#ifdef RGKDE3
-    stateChanged("note_insert_tool_current", KXMLGUIClient::StateReverse);
-#endif
+    setMenuStates();
 }
 
 void NotationView::slotAltoClef()
@@ -1774,10 +1770,7 @@ void NotationView::slotAltoClef()
     setTool(m_toolBox->getTool(ClefInserter::ToolName));
 
     dynamic_cast<ClefInserter*>(m_tool)->setClef(Rosegarden::Clef::Alto);
-
-#ifdef RGKDE3
-    stateChanged("note_insert_tool_current", KXMLGUIClient::StateReverse);
-#endif
+    setMenuStates();
 }
 
 void NotationView::slotBassClef()
@@ -1787,10 +1780,7 @@ void NotationView::slotBassClef()
     setTool(m_toolBox->getTool(ClefInserter::ToolName));
 
     dynamic_cast<ClefInserter*>(m_tool)->setClef(Rosegarden::Clef::Bass);
-
-#ifdef RGKDE3
-    stateChanged("note_insert_tool_current", KXMLGUIClient::StateReverse);
-#endif
+    setMenuStates();
 }
 
 
@@ -1800,10 +1790,7 @@ void NotationView::slotText()
     m_currentNotePixmap->setPixmap
         (m_toolbarNotePixmapFactory.makeToolbarPixmap("text"));
     setTool(m_toolBox->getTool(TextInserter::ToolName));
-
-#ifdef RGKDE3
-    stateChanged("note_insert_tool_current", KXMLGUIClient::StateReverse);
-#endif
+    setMenuStates();
 }
 
 
@@ -1815,20 +1802,14 @@ void NotationView::slotEraseSelected()
 {
     NOTATION_DEBUG << "NotationView::slotEraseSelected()\n";
     setTool(m_toolBox->getTool(NotationEraser::ToolName));
-
-#ifdef RGKDE3
-    stateChanged("note_insert_tool_current", KXMLGUIClient::StateReverse);
-#endif
+    setMenuStates();
 }
 
 void NotationView::slotSelectSelected()
 {
     NOTATION_DEBUG << "NotationView::slotSelectSelected()\n";
     setTool(m_toolBox->getTool(NotationSelector::ToolName));
-
-#ifdef RGKDE3
-    stateChanged("note_insert_tool_current", KXMLGUIClient::StateReverse);
-#endif
+    setMenuStates();
 }
 
 
@@ -1843,17 +1824,7 @@ void NotationView::slotPageMode()
 {
     setPageMode(true);
 }
-/*!!!
-void NotationView::slotInsertChordMode()
-{
-    m_insertChordMode = true;
-}
 
-void NotationView::slotInsertMelodyMode()
-{
-    m_insertChordMode = false;
-}
-*/
 void NotationView::slotLabelChords()
 {
     if (m_hlayout->isPageMode()) return;

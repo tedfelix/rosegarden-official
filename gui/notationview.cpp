@@ -910,11 +910,6 @@ void NotationView::setupActions()
 
     actionCollection()->insert(insertNoteActionMenu);
 
-    (new KToggleAction(i18n("C&hord Insert Mode"), Key_H,
-		       this, SLOT(slotUpdateInsertModeStatus()),
-		      actionCollection(), "chord_mode"))->
-	setChecked(false);
-
 
     // setup Notes menu & toolbar
     QIconSet icon;
@@ -1101,9 +1096,16 @@ void NotationView::setupActions()
     new KAction(i18n(GroupMenuUnTupletCommand::getGlobalName()), 0, this,
                 SLOT(slotGroupUnTuplet()), actionCollection(), "break_tuplets");
 
-    (new KToggleAction(i18n("Tri&plet Insert Mode"), Key_G,
+    icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap("triplet"));
+    (new KToggleAction(i18n("Tri&plet Insert Mode"), icon, Key_G,
 		       this, SLOT(slotUpdateInsertModeStatus()),
                        actionCollection(), "triplet_mode"))->
+	setChecked(false);
+
+    icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap("chord"));
+    (new KToggleAction(i18n("C&hord Insert Mode"), icon, Key_H,
+		       this, SLOT(slotUpdateInsertModeStatus()),
+		      actionCollection(), "chord_mode"))->
 	setChecked(false);
 
     new KAction(i18n(GroupMenuGraceCommand::getGlobalName()), 0, this,
@@ -1849,7 +1851,7 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview)
     }
     m_selectionCounter->update();
 
-    setMenuStatesFromSelection();
+    setMenuStates();
 
     updateView();
 }
@@ -2124,15 +2126,18 @@ void NotationView::refreshSegment(Segment *segment,
 	//!!!??? was that the right thing to do?
     }
 
-    setMenuStatesFromSelection();
+    setMenuStates();
 
     PRINT_ELAPSED("NotationView::refreshSegment (including update/GC)");
 }
 
 
-void NotationView::setMenuStatesFromSelection()
+void NotationView::setMenuStates()
 {
 #ifdef RGKDE3
+
+    // 1. set selection-related states
+
     // Clear states first, then enter only those ones that apply
     // (so as to avoid ever clearing one after entering another, in
     // case the two overlap at all)
@@ -2156,6 +2161,23 @@ void NotationView::setMenuStatesFromSelection()
 			 KXMLGUIClient::StateNoReverse);
 	}
     }
+
+    // 2. set inserter-related states
+
+    if (dynamic_cast<NoteInserter *>(m_tool)) {
+	NOTATION_DEBUG << "Have note inserter " << endl;
+	stateChanged("note_insert_tool_current", StateNoReverse);
+	stateChanged("rest_insert_tool_current", StateReverse);
+    } else if (dynamic_cast<RestInserter *>(m_tool)) {
+	NOTATION_DEBUG << "Have rest inserter " << endl;
+	stateChanged("note_insert_tool_current", StateReverse);
+	stateChanged("rest_insert_tool_current", StateNoReverse);
+    } else {
+	NOTATION_DEBUG << "Have neither inserter " << endl;
+	stateChanged("note_insert_tool_current", StateReverse);
+	stateChanged("rest_insert_tool_current", StateReverse);
+    }
+
 #else
 
     NOTATION_DEBUG << "Not using KDE3, not setting selection-related states"
@@ -2226,15 +2248,7 @@ void NotationView::slotNoteAction()
     
     if (noteAct != m_noteActionDataMap->end()) {
         setCurrentSelectedNote(*noteAct);
-#ifdef RGKDE3
-	if ((*noteAct).rest) {
-	    stateChanged("note_insert_tool_current", StateReverse);
-	    stateChanged("rest_insert_tool_current", StateNoReverse);
-	} else {
-	    stateChanged("note_insert_tool_current", StateNoReverse);
-	    stateChanged("rest_insert_tool_current", StateReverse);
-	}
-#endif
+	setMenuStates();
     } else {
         NOTATION_DEBUG << "NotationView::slotNoteAction() : couldn't find NoteActionData named '"
                              << sigSender->name() << "'\n";

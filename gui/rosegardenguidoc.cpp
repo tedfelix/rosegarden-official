@@ -383,8 +383,22 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
         outStream << "label=\"" <<
 	    strtoqstr(Rosegarden::XmlExportable::encode(segment->getLabel()));
 
-        if (segment->isRepeating())
+        if (segment->isRepeating()) {
             outStream << "\" repeat=\"true";
+	}
+
+	if (segment->getDelay() != 0) {
+	    outStream << "\" transpose=\"" << segment->getTranspose();
+	}
+
+	if (segment->getDelay() != 0) {
+	    outStream << "\" delay=\"" << segment->getDelay();
+	}
+
+	if (segment->getRealTimeDelay() != Rosegarden::RealTime(0, 0)) {
+	    outStream << "\" rtdelaysec=\"" << segment->getRealTimeDelay().sec 
+		      << "\" rtdelayusec=\"" << segment->getRealTimeDelay().usec;
+	}
 
 	const Rosegarden::timeT *endMarker = segment->getRawEndMarkerTime();
 	if (endMarker) {

@@ -601,7 +601,7 @@ protected:
     /**
      * Set KDE3+ menu states based on the current selection
      */
-    virtual void setMenuStatesFromSelection();
+    virtual void setMenuStates();
 
     /**
      * setup status bar
