@@ -1233,7 +1233,7 @@ SegmentCanvas::clearSelected()
 // can add Selections to the one we currently have
 //
 //
-void SegmentCanvas::slotSetSelectAdd(const bool &value)
+void SegmentCanvas::slotSetSelectAdd(bool value)
 {
     SegmentSelector* selTool = getSegmentSelectorTool();
 
@@ -1249,7 +1249,7 @@ void SegmentCanvas::slotSetSelectAdd(const bool &value)
 // the default movement behaviour for selection).
 //
 //
-void SegmentCanvas::slotSetSelectCopy(const bool &value)
+void SegmentCanvas::slotSetSelectCopy(bool value)
 {
     SegmentSelector* selTool = getSegmentSelectorTool();
 

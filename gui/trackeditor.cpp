@@ -725,6 +725,13 @@ void TrackEditor::dropEvent(QDropEvent* event)
 
         if (text.endsWith(".rg")) {
             emit droppedDocument(text);
+            //
+            // WARNING
+            //
+            // DO NOT PERFORM ANY OPERATIONS AFTER THAT
+            // EMITTING THIS SIGNAL TRIGGERS THE LOADING OF A NEW DOCUMENT
+            // AND AS A CONSEQUENCE THE DELETION OF THIS TrackEditor OBJECT
+            //
         } else {
 
             QTextIStream s(&text);
@@ -790,7 +797,9 @@ void TrackEditor::dropEvent(QDropEvent* event)
             }
 
         }
-    }
 
-    if (m_segmentCanvas) m_segmentCanvas->slotSetTool(SegmentSelector::ToolName);
+        // SEE WARNING ABOVE - DON'T DO ANYTHING, THIS OBJECT MAY NOT
+        // EXIST AT THIS POINT.
+
+    }
 }

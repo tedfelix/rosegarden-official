@@ -324,8 +324,8 @@ public slots:
     // depresses relating to selection add (usually SHIFT) and
     // selection copy (usually CONTROL)
     //
-    void slotSetSelectAdd(const bool &value);
-    void slotSetSelectCopy(const bool &value);
+    void slotSetSelectAdd(bool value);
+    void slotSetSelectCopy(bool value);
 
     void slotSetFineGrain(bool value);
 
