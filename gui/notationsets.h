@@ -126,7 +126,7 @@ public:
 
     virtual bool contains(const NELIterator &) const;
 
-    virtual bool sample(const NELIterator &i);
+    virtual bool sample(const NELIterator &i, bool goingForwards);
 
 protected:
     virtual bool test(const NELIterator &i);

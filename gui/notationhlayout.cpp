@@ -1273,7 +1273,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 					  m_notationQuantizer,
 					  m_properties, clef, key);
 		}
-		m_groupsExtant[groupId]->sample(it);
+		m_groupsExtant[groupId]->sample(it, true);
 	    }
 
 	    if (m_timePerProgressIncrement > 0 && (++count == 100)) {
@@ -1364,23 +1364,40 @@ NotationHLayout::positionChord(Staff &staff,
 
     bool barEndsInChord = false;
 
-    unsigned int i;
+    NOTATION_DEBUG << "NotationHLayout::positionChord: x = " << baseX << endl;
 
-    for (i = 0; i < chord.size(); ++i) {
+    // re. #938545 (Broken notation: Duplicated note can float outside
+    // stave) -- We need to iterate over all elements in the chord
+    // range here, not just the ordered set of notes actually in the
+    // chord.  They all have the same x-coord, so there's no
+    // particular complication here.
 
-	if (chord[i] == to) barEndsInChord = true;
+    for (NotationElementList::iterator citr = chord.getInitialElement();
+	 citr != staff.getViewElementList()->end(); ++citr) {
+	
+	if (citr == to) barEndsInChord = true;
 
-	static_cast<NotationElement*>(*chord[i])->setLayoutX(baseX);
-	static_cast<NotationElement*>(*chord[i])->setLayoutAirspace(baseX, delta);
+	NotationElement *elt = static_cast<NotationElement*>(*citr);//!!!
+
+	elt->setLayoutX(baseX);
+	elt->setLayoutAirspace(baseX, delta);
+
+	NOTATION_DEBUG << "NotationHLayout::positionChord: assigned x to elt at " << elt->getViewAbsoluteTime() << endl;
+
+	if (citr == chord.getFinalElement()) break;//!!!
     }
 
-    // Check for any ties going back, and if so work out how long it
+    // Check for any ties going back, and if so work out how long they
     // must have been and assign accordingly.
 
-    for (i = 0; i < chord.size(); ++i) {
-
-	NotationElement *note = static_cast<NotationElement*>(*(chord[i]));
-	if (!note->isNote()) continue;
+    for (NotationElementList::iterator citr = chord.getInitialElement();
+	 citr != staff.getViewElementList()->end(); ++citr) {
+	
+	NotationElement *note = static_cast<NotationElement*>(*citr);//!!!
+	if (!note->isNote()) {
+	    if (citr == chord.getFinalElement()) break; //!!!
+	    continue;
+	}
 
 	bool tiedForwards = false;
 	bool tiedBack = false;
@@ -1416,10 +1433,12 @@ NotationHLayout::positionChord(Staff &staff,
 
 	if (tiedForwards) {
 	    note->event()->setMaybe<Int>(m_properties.TIE_LENGTH, 0);
-	    tieMap[pitch] = chord[i];
+	    tieMap[pitch] = citr;
 	} else {
 	    note->event()->unset(m_properties.TIE_LENGTH);
 	}
+
+	if (citr == chord.getFinalElement()) break;
     }
 
     itr = chord.getFinalElement();
@@ -1662,14 +1681,14 @@ bool NotationHLayout::getTimeSignaturePosition(Staff &staff,
 Rosegarden::timeT
 NotationHLayout::getTimeForX(double x)
 {
-//!!!
+//!!!???
     return RulerScale::getTimeForX(x);
 }
 
 double
 NotationHLayout::getXForTime(Rosegarden::timeT time)
 {
-    NOTATION_DEBUG << "NotationHLayout::getXForTime(" << time << ")" << endl;
+//    NOTATION_DEBUG << "NotationHLayout::getXForTime(" << time << ")" << endl;
 
     for (BarDataMap::iterator i(m_barData.begin()); i != m_barData.end(); ++i) {
 

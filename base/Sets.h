@@ -115,7 +115,7 @@ protected:
     virtual bool test(const Iterator &i) = 0;
 
     /// Return true if this element, known to test() true, is a set member
-    virtual bool sample(const Iterator &i);
+    virtual bool sample(const Iterator &i, bool goingForwards);
 
     const Container &getContainer() const { return m_container; }
     const Quantizer &getQuantizer() const { return *m_quantizer; }
@@ -191,9 +191,18 @@ public:
      */
     virtual Iterator getNextNote();
 
+    /**
+     * It's possible for a chord to surround (in the segment) elements
+     * that are not members of the chord.  This function returns an
+     * iterator pointing to the first of those after the iterator that
+     * was passed to the chord's constructor.  If there are none, it
+     * returns the container's end().
+     */
+    virtual Iterator getFirstElementNotInChord();
+
 protected:
     virtual bool test(const Iterator&);
-    virtual bool sample(const Iterator&);
+    virtual bool sample(const Iterator&, bool goingForwards);
 
     class PitchGreater {
     public:
@@ -207,8 +216,14 @@ protected:
     PropertyName m_stemUpProperty;
     timeT m_time;
     int m_subordering;
+    Iterator m_firstReject;
 };
 
+
+
+///
+/// Implementation only from here on.
+///
 
 // forward declare hack functions -- see Sets.C for an explanation
 
@@ -267,7 +282,7 @@ AbstractSet<Element, Container>::initialise()
 
     m_initial = m_baseIterator;
     m_final = m_baseIterator;
-    sample(m_baseIterator);
+    sample(m_baseIterator, true);
 
     if (getAsEvent(m_baseIterator)->isa(Note::EventType)) {
 	m_initialNote = m_baseIterator;
@@ -280,7 +295,7 @@ AbstractSet<Element, Container>::initialise()
     // sampling everything as far back as the one after it
 
     for (i = j = m_baseIterator; i != getContainer().begin() && test(--j); i = j){
-        if (sample(j)) {
+        if (sample(j, false)) {
 	    m_initial = j;
 	    if (getAsEvent(j)->isa(Note::EventType)) m_initialNote = j;
 	}
@@ -292,7 +307,7 @@ AbstractSet<Element, Container>::initialise()
     // sampling everything as far forward as the one before it
 
     for (i = j = m_baseIterator; ++j != getContainer().end() && test(j); i = j) {
-        if (sample(j)) {
+        if (sample(j, true)) {
 	    m_final = j;
 	    if (getAsEvent(j)->isa(Note::EventType)) m_finalNote = j;
 	}
@@ -301,7 +316,7 @@ AbstractSet<Element, Container>::initialise()
 
 template <class Element, class Container>
 bool
-AbstractSet<Element, Container>::sample(const Iterator &i)
+AbstractSet<Element, Container>::sample(const Iterator &i, bool)
 {
     const Quantizer &q(getQuantizer());
     Event *e = getAsEvent(i);
@@ -349,7 +364,8 @@ GenericChord<Element, Container, singleStaff>::GenericChord(const Container &c,
     AbstractSet<Element, Container>(c, i, q),
     m_stemUpProperty(stemUpProperty),
     m_time(q->getQuantizedAbsoluteTime(getAsEvent(i))),
-    m_subordering(getAsEvent(i)->getSubOrdering())
+    m_subordering(getAsEvent(i)->getSubOrdering()),
+    m_firstReject(c.end())
 {
     initialise();
 
@@ -385,15 +401,20 @@ template <class Element, class Container, bool singleStaff>
 bool
 GenericChord<Element, Container, singleStaff>::test(const Iterator &i)
 {
+    Event *e = getAsEvent(i);
+    if (getQuantizer().getQuantizedAbsoluteTime(e) != m_time) return false;
+
     // We permit note or rest events etc here, because if a chord is a
     // little staggered (for performance reasons) then it's not at all
     // unlikely we could get other events (even rests) in the middle
     // of it.  So long as sample() only permits notes, we should be
     // okay with this.
+    //
+    // (We're really only refusing things like clef and key events
+    // here, though it's slightly quicker [since most things are
+    // notes] and perhaps a bit safer to do it by testing for
+    // inclusion rather than exclusion.)
 
-    Event *e = getAsEvent(i);
-    if (getQuantizer().getQuantizedAbsoluteTime(e) != m_time) return false;
-    
     std::string type(e->getType());
     return (type == Note::EventType ||
 	    type == Note::EventRestType ||
@@ -407,10 +428,14 @@ GenericChord<Element, Container, singleStaff>::test(const Iterator &i)
 
 template <class Element, class Container, bool singleStaff>
 bool
-GenericChord<Element, Container, singleStaff>::sample(const Iterator &i)
+GenericChord<Element, Container, singleStaff>::sample(const Iterator &i,
+						      bool goingForwards)
 {
     Event *e1 = getAsEvent(i);
-    if (!e1->isa(Note::EventType)) return false;
+    if (!e1->isa(Note::EventType)) {
+	if (goingForwards && m_firstReject == getContainer().end()) m_firstReject = i;
+	return false;
+    }
 
     if (singleStaff) {
 
@@ -435,6 +460,8 @@ GenericChord<Element, Container, singleStaff>::sample(const Iterator &i)
 		    get__Bool(e0, m_stemUpProperty) !=
 		    get__Bool(e1, m_stemUpProperty)) {
 
+		    if (goingForwards && m_firstReject == getContainer().end())
+			m_firstReject = i;
 		    return false;
 		}
 	    }
@@ -443,6 +470,8 @@ GenericChord<Element, Container, singleStaff>::sample(const Iterator &i)
 		if (e1->has(BaseProperties::BEAMED_GROUP_ID)) {
 		    if (get__Int(e1, BaseProperties::BEAMED_GROUP_ID) !=
 			get__Int(e0, BaseProperties::BEAMED_GROUP_ID)) {
+			if (goingForwards && m_firstReject == getContainer().end())
+			    m_firstReject = i;
 			return false;
 		    }
 		} else {
@@ -456,7 +485,7 @@ GenericChord<Element, Container, singleStaff>::sample(const Iterator &i)
 	}
     }
 
-    AbstractSet<Element, Container>::sample(i);
+    AbstractSet<Element, Container>::sample(i, goingForwards);
     push_back(i);
     return true;
 }
@@ -487,6 +516,7 @@ GenericChord<Element, Container, singleStaff>::copyGroupProperties(Event *e0,
 		      get__Int(e0, BaseProperties::BEAMED_GROUP_UNTUPLED_COUNT));
     }
 }
+
 
 template <class Element, class Container, bool singleStaff>
 int
@@ -593,6 +623,14 @@ GenericChord<Element, Container, singleStaff>::getNextNote()
 	}
     }
     return getContainer().end();
+}
+
+
+template <class Element, class Container, bool singleStaff>
+typename GenericChord<Element, Container, singleStaff>::Iterator
+GenericChord<Element, Container, singleStaff>::getFirstElementNotInChord()
+{
+    return m_firstReject;
 }
 
 	

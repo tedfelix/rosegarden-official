@@ -396,7 +396,7 @@ bool NotationGroup::test(const NELIterator &i)
 }
 
 bool
-NotationGroup::sample(const NELIterator &i)
+NotationGroup::sample(const NELIterator &i, bool goingForwards)
 {
     if (m_baseIterator == getContainer().end()) {
 	m_baseIterator = i;
@@ -432,7 +432,8 @@ NotationGroup::sample(const NELIterator &i)
 
 //    NOTATION_DEBUG << "NotationGroup::sample: group id is " << m_groupNo << endl;
 
-    Rosegarden::AbstractSet<NotationElement, NotationElementList>::sample(i);
+    Rosegarden::AbstractSet<NotationElement, NotationElementList>::sample
+	(i, goingForwards);
 
     // If the sum of the distances from the middle line to the notes
     // above the middle line exceeds the sum of the distances from the

@@ -220,7 +220,20 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
 		    (m_properties.UNBEAMED_STEM_LENGTH, stemLength);
             }
 
-            i = chord.getFinalElement();
+
+	    // #938545 (Broken notation: Duplicated note can float
+	    // outside stave) -- Need to cope with the case where a
+	    // note that's not a member of a chord (different stem
+	    // direction &c) falls between notes that are members.
+	    // Not optimal, as we can end up scanning the chord
+	    // multiple times (we'll return to it after scanning the
+	    // contained note).  [We can't just iterate over all
+	    // elements within the chord (as we can in hlayout)
+	    // because we need them in height order.]
+
+	    i = chord.getFirstElementNotInChord();
+	    if (i == notes->end()) i = chord.getFinalElement();
+	    else --i;
             
         } else {
 
