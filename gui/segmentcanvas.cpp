@@ -469,6 +469,11 @@ void SegmentItem::drawShape(QPainter& painter)
 {
     QCanvasRectangle::drawShape(painter);
 
+    /*
+       // This code (mainly the collisions() call) is causing an incredible 
+       // performance hit during playback.  Just taken it out for the moment
+       // [rwb]
+       //
     QCanvasItemList overlaps = collisions(true);
 
     painter.save();
@@ -497,6 +502,7 @@ void SegmentItem::drawShape(QPainter& painter)
         painter.drawText(labelRect, Qt::AlignLeft|Qt::AlignVCenter, m_label);
     }
 
+    */
 }
 
 void SegmentItem::recalculateRectangle(bool inheritFromSegment)

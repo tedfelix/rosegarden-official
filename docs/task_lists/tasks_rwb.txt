@@ -2,7 +2,7 @@
 =========
 
 o Performance
-  - MIDI playback
+  - MIDI playback [found a big collisions() problem that's now commented out]
   - fix MIDI recording
   - audio/MIDI looping and start position
 
