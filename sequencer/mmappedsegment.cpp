@@ -342,9 +342,10 @@ bool MmappedSegmentsMetaIterator::acceptEvent(MappedEvent *evt, bool evtIsFromMe
 
 
 bool
-MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil
-        (Rosegarden::MappedComposition* c,
-         const Rosegarden::RealTime& endTime)
+MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool firstFetch,
+                                                            Rosegarden::MappedComposition* c,
+                                                            const Rosegarden::RealTime& startTime,
+                                                            const Rosegarden::RealTime& endTime)
 {
     SEQUENCER_DEBUG << "fillCompositionWithEventsUntil " << endTime << endl;
 
@@ -405,9 +406,12 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil
                     evt->setEventTime(evt->getEventTime() - Rosegarden::RealTime(1, 0));
                     c->insert(evt);
             }
-#endif
+#endif          
 
             if (evt->getEventTime() < endTime) {
+
+                // set event's instrument
+                // 
                 if (evtIsFromMetronome) {
 
                     evt->setInstrument(m_controlBlockMmapper->
@@ -435,6 +439,16 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil
                                 << endl;
 #endif
 
+                // If this is the first slice we cut, that event is
+                // audio and partially overlaps the slice, fix the
+                // audio start marker and stuff it in.
+                //
+                if (firstFetch &&
+                    evt->getType() == MappedEvent::Audio &&
+                    evt->getEventTime() < startTime) {
+
+                    evt->setAudioStartMarker(startTime);
+                }
 
                 if (evt->getType() == MappedEvent::TimeSignature) {
                     // do something

@@ -134,8 +134,10 @@ public:
      * specified time @return true if there are non-metronome events
      * remaining, false if end of composition was reached
      */
-    bool fillCompositionWithEventsUntil(Rosegarden::MappedComposition*,
-                                        const Rosegarden::RealTime&);
+    bool fillCompositionWithEventsUntil(bool firstFetch,
+                                        Rosegarden::MappedComposition*,
+                                        const Rosegarden::RealTime& start,
+                                        const Rosegarden::RealTime& end);
 
     void resetIteratorForSegment(const QString& filename);
 

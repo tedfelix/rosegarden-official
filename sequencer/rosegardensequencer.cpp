@@ -237,7 +237,7 @@ RosegardenSequencerApp::getSlice(const Rosegarden::RealTime &start,
         m_metaIterator->jumpToTime(start);
     }
 
-    (void)m_metaIterator->fillCompositionWithEventsUntil(mC, end);
+    (void)m_metaIterator->fillCompositionWithEventsUntil(firstFetch, mC, start, end);
 
 //     setEndOfCompReached(eventsRemaining); // don't do that, it breaks recording because
 // playing stops right after it starts.
