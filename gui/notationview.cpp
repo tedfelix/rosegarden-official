@@ -537,14 +537,14 @@ bool NotationView::showElements(NotationElementList::iterator from,
 			     (note, dots, accidental, shifted, up, stemLength,
 			      nextTailCount, thisPartialTails, nextPartialTails,
                               width, (double)gradient / 100.0));
-			sprite = new QCanvasSimpleSprite(&notePixmap, canvas());
+			sprite = new QCanvasNotationSprite(*(*it), &notePixmap, canvas());
 
 		    } else {
 
 			QCanvasPixmap notePixmap
 			    (npf.makeNotePixmap
 			     (note, dots, accidental, shifted, tail, up));
-			sprite = new QCanvasSimpleSprite(&notePixmap, canvas());
+			sprite = new QCanvasNotationSprite(*(*it), &notePixmap, canvas());
 		    }
 
 		
@@ -554,7 +554,7 @@ bool NotationView::showElements(NotationElementList::iterator from,
 			(npf.makeNotePixmap(note, dots, accidental,
                                             shifted, tail, up));
 
-		    sprite = new QCanvasSimpleSprite(&notePixmap, canvas());
+		    sprite = new QCanvasNotationSprite(*(*it), &notePixmap, canvas());
 		}
 
             } else if ((*it)->isRest()) {
@@ -563,13 +563,13 @@ bool NotationView::showElements(NotationElementList::iterator from,
                 int dots = (*it)->event()->get<Int>(P_NOTE_DOTS);
 
                 QCanvasPixmap notePixmap(npf.makeRestPixmap(note, dots));
-                sprite = new QCanvasSimpleSprite(&notePixmap, canvas());
+                sprite = new QCanvasNotationSprite(*(*it), &notePixmap, canvas());
 
             } else if ((*it)->event()->isa(Clef::EventType)) {
 
 		currentClef = Clef(*(*it)->event());
                 QCanvasPixmap clefPixmap(npf.makeClefPixmap(currentClef));
-                sprite = new QCanvasSimpleSprite(&clefPixmap, canvas());
+                sprite = new QCanvasNotationSprite(*(*it), &clefPixmap, canvas());
 
             } else if ((*it)->event()->isa(Rosegarden::Key::EventType)) {
 
@@ -578,13 +578,13 @@ bool NotationView::showElements(NotationElementList::iterator from,
                      (Rosegarden::Key((*it)->event()->get<String>
                                       (Rosegarden::Key::KeyPropertyName)),
                       currentClef));
-                sprite = new QCanvasSimpleSprite(&keyPixmap, canvas());
+                sprite = new QCanvasNotationSprite(*(*it), &keyPixmap, canvas());
 
             } else if ((*it)->event()->isa(TimeSignature::EventType)) {
 
                 QCanvasPixmap timeSigPixmap
                     (npf.makeTimeSigPixmap(TimeSignature(*(*it)->event())));
-                sprite = new QCanvasSimpleSprite(&timeSigPixmap, canvas());
+                sprite = new QCanvasNotationSprite(*(*it), &timeSigPixmap, canvas());
 
             } else {
                     
@@ -592,7 +592,7 @@ bool NotationView::showElements(NotationElementList::iterator from,
                                      << (*it)->event()->getType()
                                      << endl;
                 QCanvasPixmap unknownPixmap(npf.makeUnknownPixmap());
-                sprite = new QCanvasSimpleSprite(&unknownPixmap, canvas());
+                sprite = new QCanvasNotationSprite(*(*it), &unknownPixmap, canvas());
             }
 
             //
@@ -1271,7 +1271,7 @@ NotationView::hoveredOverNoteChanged(const QString &noteName)
 void
 NotationView::hoveredOverAbsoluteTimeChange(unsigned int time)
 {
-    m_hoveredOverAbsoluteTime->setText(QString().setNum(time));
+    m_hoveredOverAbsoluteTime->setText(QString("Time : %1").arg(time));
 }
 
 
