@@ -1091,6 +1091,7 @@ private:
 
     Rosegarden::Clipboard *m_clipboard;
 
+    static const char* const MainWindowConfigGroup;
 };
 
 /**

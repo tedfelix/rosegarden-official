@@ -191,11 +191,11 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
         stateChanged("got_midi_devices");
 
     emit startupStatusMessage(i18n("Starting..."));
-    readOptions();
-    // All toolbars should be created before this is called
-    kapp->config()->setGroup(Rosegarden::GeneralOptionsConfigGroup);
-    setAutoSaveSettings("MainView", true);
 
+    // All toolbars should be created before this is called
+    setAutoSaveSettings(RosegardenGUIApp::MainWindowConfigGroup, true);
+
+    readOptions();
 }
 
 RosegardenGUIApp::~RosegardenGUIApp()
@@ -676,7 +676,7 @@ void RosegardenGUIApp::setupActions()
 
     // transport toolbar is hidden by default - TODO : this should be in options
     //
-    toolBar("Transport Toolbar")->hide();
+    //toolBar("Transport Toolbar")->hide();
 }
 
 
@@ -1072,6 +1072,7 @@ void RosegardenGUIApp::slotSaveOptions()
 
     m_fileRecent->saveEntries(kapp->config());
 
+    saveMainWindowSettings(kapp->config(), RosegardenGUIApp::MainWindowConfigGroup);
     kapp->config()->sync();
 }
 
@@ -4296,3 +4297,5 @@ RosegardenGUIApp::slotShowTip()
 }
 
 const void* RosegardenGUIApp::SequencerExternal = (void*)-1;
+const char* const RosegardenGUIApp::MainWindowConfigGroup = "MainView";
+
