@@ -209,6 +209,8 @@ signals:
     void rewindPlaybackToBeginning();
     void jumpPlaybackTo(Rosegarden::timeT);
 
+    void stepByStepTargetRequested(QObject *);
+
 public slots:
 
     /**
@@ -242,6 +244,8 @@ public slots:
     void slotSelectSelected();
     void slotMoveSelected();
     void slotResizeSelected();
+
+    void slotToggleStepByStep();
 
     /// transforms
     void slotTransformsQuantize();
@@ -376,6 +380,18 @@ public slots:
      * Keyboard insert
      */
     void slotInsertNoteFromAction();
+
+    /// Note-on received asynchronously -- consider step-by-step editing
+    void slotInsertableNoteOnReceived(int pitch);
+
+    /// Note-off received asynchronously -- consider step-by-step editing
+    void slotInsertableNoteOffReceived(int pitch);
+
+    /// Note-on or note-off received asynchronously -- as above
+    void slotInsertableNoteEventReceived(int pitch, bool noteOn);
+
+    /// The given QObject has originated a step-by-step-editing request
+    void slotStepByStepTargetRequested(QObject *);
 
 protected:
 

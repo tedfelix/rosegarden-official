@@ -1061,6 +1061,8 @@ NotationStaff::clearPreviewNote()
 bool
 NotationStaff::wrapEvent(Rosegarden::Event *e)
 {
+    bool wrap = true;
+
     if (!m_showUnknowns) {
 	std::string etype = e->getType();
 	if (etype != Rosegarden::Note::EventType &&
@@ -1069,11 +1071,13 @@ NotationStaff::wrapEvent(Rosegarden::Event *e)
 	    etype != Rosegarden::Key::EventType &&
 	    etype != Rosegarden::Indication::EventType &&
 	    etype != Rosegarden::Text::EventType) {
-	    return false;
+	    wrap = false;
 	}
     }
 
-    return Rosegarden::Staff<NotationElement>::wrapEvent(e);
+    if (wrap) wrap = Rosegarden::Staff<NotationElement>::wrapEvent(e);
+
+    return wrap;
 }
 
 

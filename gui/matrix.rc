@@ -93,6 +93,9 @@
 
   <Separator/>
   <Action name="insert_note_actionmenu"/>
+
+  <Separator/>
+  <Action name="toggle_step_by_step"/>
 </Menu>
 
 <Menu  name="settings"><text>&amp;Settings</text>
@@ -112,6 +115,8 @@
   <Action name="draw" />
   <Action name="erase" />
   <Action name="resize" />
+  <Separator/>
+  <Action name="toggle_step_by_step"/>
 </ToolBar>
 
 <ToolBar name="Transport Toolbar">

@@ -696,6 +696,8 @@ int MatrixMover::handleMouseMove(Rosegarden::timeT newTime,
 
     MatrixElement *element = 0;
     int maxY = m_currentStaff->getCanvasYForHeight(0);
+
+    m_currentElement->setLayoutX(m_oldX + diffX);
     
     for (; it != selection->getSegmentEvents().end(); it++)
     {
@@ -703,14 +705,17 @@ int MatrixMover::handleMouseMove(Rosegarden::timeT newTime,
 
         if (element)
         {
-            int newX = m_oldX + diffX;
+            int newX = m_currentElement->getLayoutX() +
+		int(double(element->getViewAbsoluteTime() -
+			   m_currentElement->getViewAbsoluteTime()) *
+		    m_currentStaff->getTimeScaleFactor());
             if (newX < 0) newX = 0;
 
             int newY = element->getLayoutY() + diffY;
             if (newY < 0) newY = 0;
             if (newY > maxY) newY = maxY;
 
-            element->setLayoutX(newX);
+            if (element != m_currentElement) element->setLayoutX(newX);
             element->setLayoutY(newY);
             m_currentStaff->positionElement(element);
         }

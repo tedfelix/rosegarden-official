@@ -45,6 +45,12 @@ public:
     bool write();
 
 protected:
+    Rosegarden::timeT writeBar(std::ofstream &, 
+			       Rosegarden::Composition *,
+			       Rosegarden::Segment *,
+			       Rosegarden::timeT, Rosegarden::timeT,
+			       Rosegarden::TimeSignature &,
+			       Rosegarden::TrackId);
     void writeClefAndKey(std::ofstream &, Rosegarden::TrackId trackNo);
     void writeInventedRests(std::ofstream &,
 			    Rosegarden::TimeSignature &timeSig,

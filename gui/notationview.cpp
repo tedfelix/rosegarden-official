@@ -920,7 +920,7 @@ void NotationView::setupActions()
     noteAction->setExclusiveGroup("notes");
 
     icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap("step_by_step")));
-    new KToggleAction(i18n("Record Pitches from &MIDI In"), icon, 0, this,
+    new KToggleAction(i18n("Ste&p Recording"), icon, 0, this,
                 SLOT(slotToggleStepByStep()), actionCollection(),
                 "toggle_step_by_step");
 
@@ -1024,7 +1024,7 @@ void NotationView::setupActions()
                 SLOT(slotGroupUnTuplet()), actionCollection(), "break_tuplets");
 
     icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap("triplet")));
-    (new KToggleAction(i18n("Tri&plet Insert Mode"), icon, Key_G,
+    (new KToggleAction(i18n("Trip&let Insert Mode"), icon, Key_G,
 		       this, SLOT(slotUpdateInsertModeStatus()),
                        actionCollection(), "triplet_mode"))->
 	setChecked(false);

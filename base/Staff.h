@@ -159,7 +159,10 @@ template <class T>
 bool
 Staff<T>::wrapEvent(Event *e)
 {
-    return e->getAbsoluteTime() < m_segment.getEndMarkerTime();
+    timeT emt = m_segment.getEndMarkerTime();
+    return
+	(e->getAbsoluteTime() <  emt) ||
+	(e->getAbsoluteTime() == emt && e->getDuration() == 0);
 }
 
 template <class T>
@@ -172,17 +175,12 @@ Staff<T>::findEvent(Event *e)
 	      typename ViewElementList<T>::iterator>
         r = m_viewElementList->equal_range(&dummy);
 
-//    std::cerr << "called equal_range for event " << e << " (" << e->getAbsoluteTime() << "," << e->getSubOrdering() << ")" << std::endl;
     for (typename ViewElementList<T>::iterator i = r.first; i != r.second; ++i) {
-////	std::cerr << "looking at " << (*i)->event() << " (" << (*i)->event()->getAbsoluteTime() << "," << (*i)->event()->getSubOrdering() << ")" << std::endl;
         if ((*i)->event() == e) {
-//	    std::cerr << "matches\n";
             return i;
         }
     }
 
-//    std::cerr << "Event at " << e->getAbsoluteTime() << ", type " << e->getType()
-//	      << " not found in Staff" << std::endl;
     return m_viewElementList->end();
 }
 

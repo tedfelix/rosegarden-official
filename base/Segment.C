@@ -836,7 +836,7 @@ SegmentRefreshStatus::push(timeT from, timeT to)
 
     }
 
-    if (m_to < m_from) m_from = m_to;
+    if (m_to < m_from) std::swap(m_from, m_to);
 
     setNeedsRefresh(true);
 }

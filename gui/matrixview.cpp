@@ -437,10 +437,15 @@ void MatrixView::setupActions()
     toolAction->setExclusiveGroup("tools");
 
     icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/resize.xpm"));
-    toolAction = new KRadioAction(i18n("Resize"), icon, 0,
+    toolAction = new KRadioAction(i18n("Resi&ze"), icon, 0,
                                   this, SLOT(slotResizeSelected()),
                                   actionCollection(), "resize");
     toolAction->setExclusiveGroup("tools");
+
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/step_by_step.xpm"));
+    new KToggleAction(i18n("Ste&p Recording"), icon, 0, this,
+                SLOT(slotToggleStepByStep()), actionCollection(),
+                "toggle_step_by_step");
 
     new KAction(EventQuantizeCommand::getGlobalName(), 0, this,
                 SLOT(slotTransformsQuantize()), actionCollection(),
@@ -2103,6 +2108,79 @@ MatrixView::slotToggleTempoRuler()
 {
     toggleWidget(m_tempoRuler, "show_tempo_ruler");
 }
+
+void
+MatrixView::slotInsertableNoteEventReceived(int pitch, bool noteOn)
+{
+    KToggleAction *action = dynamic_cast<KToggleAction *>
+	(actionCollection()->action("toggle_step_by_step"));
+    if (!action) {
+	MATRIX_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
+	return;
+    }
+    if (!action->isChecked()) return;
+
+    Segment &segment = *getCurrentSegment();
+
+    KTmpStatusMsg msg(i18n("Inserting note"), this);
+
+    MATRIX_DEBUG << "Inserting note at pitch " << pitch << endl;
+
+    Rosegarden::Event modelEvent(Rosegarden::Note::EventType, 0, 1);
+    modelEvent.set<Rosegarden::Int>(Rosegarden::BaseProperties::PITCH, pitch);
+    Rosegarden::timeT time(getInsertionTime());
+    Rosegarden::timeT endTime(time + m_snapGrid->getSnapTime(time));
+
+    MatrixInsertionCommand* command = 
+	new MatrixInsertionCommand(segment, time, endTime, &modelEvent);
+
+    addCommandToHistory(command);
+    
+    slotSetInsertCursorPosition(endTime); //!!! + chord mode?
+}
+
+void
+MatrixView::slotInsertableNoteOnReceived(int pitch)
+{
+    MATRIX_DEBUG << "MatrixView::slotInsertableNoteOnReceived: " << pitch << endl;
+    slotInsertableNoteEventReceived(pitch, true);
+}
+
+void
+MatrixView::slotInsertableNoteOffReceived(int pitch)
+{
+    MATRIX_DEBUG << "MatrixView::slotInsertableNoteOffReceived: " << pitch << endl;
+    slotInsertableNoteEventReceived(pitch, false);
+}
+
+void
+MatrixView::slotToggleStepByStep()
+{
+    KToggleAction *action = dynamic_cast<KToggleAction *>
+	(actionCollection()->action("toggle_step_by_step"));
+    if (!action) {
+	MATRIX_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
+	return;
+    }
+    if (action->isChecked()) { // after toggling, that is
+	emit stepByStepTargetRequested(this);
+    } else {
+	emit stepByStepTargetRequested(0);
+    }
+}
+
+void
+MatrixView::slotStepByStepTargetRequested(QObject *obj)
+{
+    KToggleAction *action = dynamic_cast<KToggleAction *>
+	(actionCollection()->action("toggle_step_by_step"));
+    if (!action) {
+	MATRIX_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
+	return;
+    }
+    action->setChecked(obj == this);
+}
+
 
 const char* const MatrixView::ConfigGroup = "Matrix Options";
 

@@ -1579,6 +1579,10 @@ SegmentNotationHelper::removeRests(timeT time, timeT &duration, bool testOnly)
 
     iterator from = segment().lower_bound(&dummy);
 
+    // ignore any number of zero-duration events at the start
+    while (from != segment().end() &&
+	   (*from)->getAbsoluteTime() == time &&
+	   (*from)->getDuration() == 0) ++from;
     if (from == segment().end()) return false;
     
     iterator to = from;
