@@ -1356,7 +1356,7 @@ MidiMixerWindow::setupTabs()
     Rosegarden::MidiDevice *dev = 0;
     Rosegarden::InstrumentList instruments;
     Rosegarden::InstrumentList::const_iterator iIt;
-    int faderCount = 0;
+    int faderCount = 0, deviceCount = 1;
 
     if (m_tabFrame) delete m_tabFrame;
 
@@ -1385,6 +1385,8 @@ MidiMixerWindow::setupTabs()
             if (!instruments.size()) continue;
 
             m_tabFrame = new QFrame(m_tabWidget);
+            m_tabFrame->setFrameStyle(QFrame::TabWidgetPanel);
+            m_tabFrame->setMargin(10);
 
             QGridLayout *mainLayout = new QGridLayout
                 (m_tabFrame, instruments.size() + 4, controls.size() + 4, 5);
@@ -1521,7 +1523,10 @@ MidiMixerWindow::setupTabs()
                 faderCount++;
             }
 
-            addTab(m_tabFrame, strtoqstr(dev->getName()));
+            QString name = QString("%1 (%2)").arg(strtoqstr(dev->getName()))
+                                      .arg(deviceCount++);
+
+            addTab(m_tabFrame, name);
         }
     }
 }
