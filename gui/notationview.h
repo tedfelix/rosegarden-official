@@ -139,6 +139,8 @@ public slots:
 
     // Canvas actions slots
     void insertNote(int pitch, const QPoint&);
+    void currentPitchChanged(int pitch);
+
 
 signals:
     void changeCurrentNote(Note::Type);
@@ -194,8 +196,11 @@ protected:
 
     RosegardenGUIDoc* m_document;
 
-    // Displayed in the status bar, holds the pixmap of the current note
+    /// Displayed in the status bar, holds the pixmap of the current note
     QLabel* m_currentNotePixmap;
+
+    /// Displayed in the status bar, shows the pitch the cursor is at
+    QLabel* m_currentPitch;
 
     NotationCanvasView* m_canvasView;
 

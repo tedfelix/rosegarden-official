@@ -57,12 +57,16 @@ public slots:
 
 signals:
     void noteInserted(int pitch, const QPoint&);
+    void currentPitchChange(int pitch);
     
 protected:
 
     void insertNote(const StaffLine*, const QPoint&);
 
     bool posIsTooFarFromStaff(const QPoint &pos);
+
+    /// returns the pitch the staff line is associated with
+    int getPitchForLine(const StaffLine *line);
 
     /// the staff line over which the mouse cursor is
     StaffLine* m_currentHighlightedLine;

@@ -51,15 +51,13 @@ NotationCanvasView::contentsMouseReleaseEvent(QMouseEvent*)
 void
 NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
 {
-    bool needUpdate = false;
-    
     QCanvasItemList itemList = canvas()->collisions(e->pos());
 
     if(itemList.isEmpty() && posIsTooFarFromStaff(e->pos())) {
 
-        m_currentHighlightedLine = 0;
+        emit currentPitchChange(-1);
 
-        needUpdate = true;
+        m_currentHighlightedLine = 0;
 
     } else {
 
@@ -74,18 +72,17 @@ NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
             if ((staffLine = dynamic_cast<StaffLine*>(item))) {
                 m_currentHighlightedLine = staffLine;
 
-                QPoint point = m_currentHighlightedLine->startPoint();
-
                 m_lastYPosNearStaff = e->y();
 
-                needUpdate = true;
+                int pitch = getPitchForLine(m_currentHighlightedLine);
+                
+                emit currentPitchChange(pitch);
+
                 break;
             }
         }
     }
     
-    if (needUpdate)
-        canvas()->update();
 }
 
 void
@@ -152,15 +149,11 @@ NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 void
 NotationCanvasView::insertNote(const StaffLine *line, const QPoint &pos)
 {
-    int h = line->getHeight();
+    int pitch = getPitchForLine(line);
 
-    //!!! TODO -- take clef & key into account, and then accidental
-    int pitch = NotationDisplayPitch(h, NoAccidental).
-        getPerformancePitch(Clef::DefaultClef, ::Key::DefaultKey);
-
-    kdDebug(KDEBUG_AREA) << "NotationCanvasView::insertNote() : insertNote at height " << h << " ( = pitch "
+    kdDebug(KDEBUG_AREA) << "NotationCanvasView::insertNote() : insertNote at height "
+                         << line->getHeight() << " ( = pitch "
 			 << pitch << " )" << endl;
-
     //!!! TODO -- get the right pitch
     emit noteInserted(pitch, pos);
 }
@@ -175,4 +168,16 @@ NotationCanvasView::posIsTooFarFromStaff(const QPoint &pos)
         (pos.y() - m_lastYPosNearStaff) > 10 :
         (m_lastYPosNearStaff - pos.y()) > 10;
     
+}
+
+int
+NotationCanvasView::getPitchForLine(const StaffLine *line)
+{
+    int h = line->getHeight();
+
+    //!!! TODO -- take clef & key into account, and then accidental
+    int pitch = NotationDisplayPitch(h, NoAccidental).
+        getPerformancePitch(Clef::DefaultClef, ::Key::DefaultKey);
+
+    return pitch;
 }
