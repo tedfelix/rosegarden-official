@@ -102,7 +102,7 @@ Track::toXmlString()
 
     track << " instrument=\"" << m_instrument << "\"";
 
-    track << "/>";
+    track << "/>" << ends;
 
     return track.str();
 
