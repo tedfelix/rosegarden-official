@@ -506,9 +506,7 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
     {
         m_recordSegment = new Segment();
         m_recordSegment->setTrack(m_composition.getRecordTrack());
-        m_recordSegment->setStartIndex(0);
         m_endOfLastRecordedNote = 0;
-        m_composition.addSegment(m_recordSegment);
 
         firstEvent = true; // use this flag to move the start index 
     }
@@ -537,11 +535,12 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
         rEvent->set<Int>(PITCH, (*i)->getPitch());
         rEvent->set<Int>(VELOCITY, (*i)->getVelocity());
 
-        // Set the start index
+        // Set the start index and then insert into the Composition
         //
         if (firstEvent)
         {
             m_recordSegment->setStartIndex(absTime);
+            m_composition.addSegment(m_recordSegment);
             firstEvent = false;
         }
 
@@ -568,9 +567,11 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
         //
         m_endOfLastRecordedNote = absTime + duration;
 
+/*
         cout << "insertRecordedMidi() - RECORD TIME = " 
              << (*i)->getAbsoluteTime() - playLatency
              << endl;
+*/
     }
 
 }
@@ -580,6 +581,13 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
 void
 RosegardenGUIDoc::stopRecordingMidi()
 {
+    // If we've created nothing then do nothing with it
+    //
+    if (m_recordSegment == 0)
+        return;
+
+    // otherwise do something with it
+    //
     RosegardenGUIView *w;
     if(pViewList)
     {
