@@ -2869,7 +2869,10 @@ void RosegardenGUIApp::setPointerPosition(long posSec,
 void
 RosegardenGUIApp::slotUpdatePlaybackPosition()
 {
-    if (!m_seqManager) return;
+    // Either sequencer mappper or the sequence manager could be missing at
+    // this point.
+    //
+    if (!m_seqManager || !m_seqManager->getSequencerMapper()) return;
 
     long* ptr = (long*)m_seqManager->getSequencerMapper()->getBuffer();
     long sec = *(ptr++);

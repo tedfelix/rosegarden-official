@@ -70,7 +70,8 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
     m_countdownTimer(new QTimer(doc)),
     m_recordTime(new QTime()),
     m_compositionRefreshStatusId(m_doc->getComposition().getNewRefreshStatusId()),
-    m_updateRequested(true)
+    m_updateRequested(true),
+    m_sequencerMapper(0)
 {
     m_compositionMmapper->cleanup();
 
@@ -86,8 +87,9 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
 
     m_doc->getComposition().addObserver(this);
 
-    m_sequencerMapper = new SequencerMapper(
-            KGlobal::dirs()->resourceDirs("tmp").first() + "/rosegarden_sequencer_timing_block");
+    // Try to map the sequencer file
+    //
+    mapSequencer();
 }
 
 
@@ -145,6 +147,10 @@ void SequenceManager::setDocument(RosegardenGUIDoc* doc)
     }
 
     resetCompositionMmapper();
+
+    // Try to map the sequencer file
+    //
+    mapSequencer();
 }
 
 RosegardenGUIDoc* SequenceManager::getDocument()
@@ -159,9 +165,27 @@ SequenceManager::setTransportStatus(const TransportStatus &status)
     m_transportStatus = status;
 }
 
+void 
+SequenceManager::mapSequencer()
+{
+    if (m_sequencerMapper) return;
+
+    try
+    {
+        m_sequencerMapper = new SequencerMapper(
+            KGlobal::dirs()->resourceDirs("tmp").first() + "/rosegarden_sequencer_timing_block");
+    }
+    catch(Rosegarden::Exception)
+    {
+        m_sequencerMapper = 0;
+    }
+}
+
 void
 SequenceManager::play()
 {
+    mapSequencer();
+
     Composition &comp = m_doc->getComposition();
 
     QByteArray data;
@@ -457,6 +481,8 @@ SequenceManager::sendSequencerJump(const Rosegarden::RealTime &time)
 void
 SequenceManager::record(bool toggled)
 {
+    mapSequencer();
+
     Rosegarden::Composition &comp = m_doc->getComposition();
     Rosegarden::Studio &studio = m_doc->getStudio();
     KConfig* config = kapp->config();

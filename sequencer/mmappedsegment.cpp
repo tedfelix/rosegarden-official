@@ -600,13 +600,17 @@ MmappedSegmentsMetaIterator::getPlayingAudioFiles(const Rosegarden::RealTime &so
                 songPosition < evt.getEventTime() + evt.getDuration())
             {
 
+#define PLAYING_AUDIO_FILES_DEBUG
 #ifdef PLAYING_AUDIO_FILES_DEBUG
                 std::cout << "MmappedSegmentsMetaIterator::getPlayingAudioFiles - "
                           << "instrument id = " << evt.getInstrument() << std::endl;
+
+                /*
                 std::cout << "MmappedSegmentsMetaIterator::getPlayingAudioFiles - "
                           << "audio event time     = " << evt.getEventTime() << std::endl;
                 std::cout << "MmappedSegmentsMetaIterator::getPlayingAudioFiles - "
                           << "audio event duration = " << evt.getDuration() << std::endl;
+                          */
 
 #endif // PLAYING_AUDIO_FILES_DEBUG
 

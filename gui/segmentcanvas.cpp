@@ -173,12 +173,14 @@ protected:
     //--------------- Data members ---------------------------------
 
     std::vector<float>   m_values;
+    bool                 m_showMinima;
     unsigned int         m_channels;
 };
 
 SegmentAudioPreview::SegmentAudioPreview(SegmentItem& parent,
                                          Rosegarden::RulerScale* scale)
     : SegmentItemPreview(parent, scale),
+    m_showMinima(false),
     m_channels(0)
 {
 }
@@ -215,10 +217,9 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
         return;
     }
 
-    int width = m_values.size() / m_channels;
+    int width = m_values.size() / (m_channels * (m_showMinima ? 2 : 1));
     it = m_values.begin();
-    float h1, h2;
-    //float l1 = 0.0, l2 = 0.0;
+    float h1, h2, l1, l2;
 
     for (int i = 0; i < width; i++)
     {
@@ -227,32 +228,39 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
                 h1 = *(it++);
                 h2 = h1;
 
-                //l1 = *(it++);
-                //l2 = l1;
+                if (m_showMinima)
+                {
+                    l1 = *(it++);
+                    l2 = l1;
+                }
+
             }
             else {
 
                 h1 = *(it++);
+                if (m_showMinima) l1 = *(it++);
+
                 h2 = *(it++);
+                if (m_showMinima) l2 = *(it++);
                 
-                //l1 = *(it++);
-                //l2 = *(it++);
             }
 
             painter.setPen(RosegardenGUIColours::SegmentAudioPreview);
-
             painter.drawLine(i,
                              static_cast<int>(halfRectHeight + h1 * height),
                              i,
                              static_cast<int>(halfRectHeight - h2 * height));
 
-            /*
-            painter.setPen(Qt::white);
+            // For the moment draw it the same colour - the resolution on the
+            // segmentcanvas doens't allow us to tell the difference between
+            // minima and maxima anyway so we might as well ignore it.  Just
+            // don't ask for minima yet.
+            // 
+            //painter.setPen(Qt::white);
             painter.drawLine(i,
-                             halfRectHeight + l1 * height,
+                             static_cast<int>(halfRectHeight + l1 * height),
                              i,
-                             halfRectHeight - l2 * height);
-                             */
+                             static_cast<int>(halfRectHeight - l2 * height));
     }
 
     // perhaps draw an XOR'd label at some point
@@ -295,7 +303,7 @@ void SegmentAudioPreview::updatePreview()
                            audioStartTime,
                            audioEndTime,
                            rect().width(),
-                           false); // get minima
+                           m_showMinima); // do we get and show the minima too?
     }
     catch (std::string e)
     {

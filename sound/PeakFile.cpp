@@ -49,7 +49,11 @@ PeakFile::PeakFile(AudioFile *audioFile):
     m_positionPeakOfPeaks(0),
     m_offsetToPeaks(0),
     m_modificationTime(QDate(1970, 1, 1), QTime(0, 0, 0)),
-    m_chunkStartPosition(0)
+    m_chunkStartPosition(0),
+    m_lastPreviewStartTime(0, 0),
+    m_lastPreviewEndTime(0, 0),
+    m_lastPreviewWidth(-1),
+    m_lastPreviewShowMinima(false)
 {
 }
 
@@ -613,14 +617,27 @@ PeakFile::getPreview(const RealTime &startTime,
                      int width,
                      bool showMinima)
 {
-    std::vector<float> ret;
+    // Check to see if we hit the cache by comparing the last query parameters we used.
+    //
+    if (startTime == m_lastPreviewStartTime && endTime == m_lastPreviewEndTime &&
+        width == m_lastPreviewWidth && showMinima == m_lastPreviewShowMinima)
+    {
+        /*
+        std::cerr << "PeakFile::getPreview - hit preview cache" << std::endl;
+        */
+        return m_lastPreviewCache;
+    }
+
+    // Clear the cache - we need to regenerate it
+    //
+    m_lastPreviewCache.clear();
 
     int startPeak = getPeak(startTime);
     int endPeak = getPeak(endTime);
 
     // Sanity check
     if (startPeak > endPeak)
-        return ret;
+        return m_lastPreviewCache;
 
     // Actual possible sample length in RealTime
     //
@@ -654,7 +671,7 @@ PeakFile::getPreview(const RealTime &startTime,
                       << "unsupported peak length format (" << m_format << ")"
                       << endl;
 #endif
-            return ret;
+            return m_lastPreviewCache;
     }
 
     for (int i = 0; i < width; i++)
@@ -664,7 +681,7 @@ PeakFile::getPreview(const RealTime &startTime,
         // Seek to value
         //
         if (scanToPeak(peakNumber) == false)
-            ret.push_back(0.0f);
+            m_lastPreviewCache.push_back(0.0f);
 
         // Get peak value over channels
         //
@@ -689,7 +706,7 @@ PeakFile::getPreview(const RealTime &startTime,
 #endif
                 resetStream();
 
-                return ret;
+                return m_lastPreviewCache;
             }
 
             if (peakData.length() == (unsigned int)(m_format *
@@ -730,22 +747,29 @@ PeakFile::getPreview(const RealTime &startTime,
 #endif
 
                 resetStream();
-                return ret;
+                return m_lastPreviewCache;
             }
 
             //cout << "VALUE = " << hiValue / divisor << endl;
 
             // Always push back high value
-            ret.push_back(hiValue / divisor);
+            m_lastPreviewCache.push_back(hiValue / divisor);
 
             if (showMinima)
-                ret.push_back(loValue / divisor);
+                m_lastPreviewCache.push_back(loValue / divisor);
         }
     }
 
     resetStream();
 
-    return ret;
+    // We have a good preview in the cache so store our parameters
+    //
+    m_lastPreviewStartTime = startTime;
+    m_lastPreviewEndTime = endTime;
+    m_lastPreviewWidth = width;
+    m_lastPreviewShowMinima = showMinima;
+
+    return m_lastPreviewCache;
 }
 
 int

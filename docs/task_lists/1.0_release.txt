@@ -7,19 +7,19 @@ Features for 1.0 - updated 20030923
 - LADCCA integration
 
 - Change setPositionPointer calls to a mmapped model (gui will need
-  its own timer to inspect mmapped file) [IN PROGESS]
+  its own timer to inspect mmapped file) [DONE]
 
 - punch in record [rwb] [HALF COMPLETE]
 
 - audio threading for file r/w access [rwb]
-  o ringbuffer  [DONE]
   o mp3 support
   o libsndfile support
+  o improving ringbuffer and precaching performance for audio
+  o memory speedups in the RingBuffer and using MappedStudio in process loop
+  o caching waveform previews at PeakFile [rwb]
+  o ringbuffer  [DONE]
   o drag and drop [DONE]
   o dynamic editing [DONE]
-  o memory speedups in the RingBuffer and using MappedStudio in process loop
-
-- caching waveform previews at PeakFile [rwb]
 
 - tidy up audio parameter box [cc/rwb/gl]
   o audio VU meter needs to look cool (like ardour)

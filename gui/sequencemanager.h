@@ -215,6 +215,10 @@ public:
     // Return the current sequencer memory mapped file
     //
     SequencerMapper* getSequencerMapper() { return m_sequencerMapper; }
+
+    // Ensure that the sequencer file is mapped
+    //
+    void mapSequencer();
     
 public slots:
     // Empty the m_clearToSend flag

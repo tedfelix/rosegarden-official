@@ -165,6 +165,15 @@ protected:
     QDateTime m_modificationTime;
 
     std::streampos m_chunkStartPosition;
+
+    // For cacheing of peak information in memory we use the last query parameters
+    // as our key to the cached data.
+    //
+    RealTime           m_lastPreviewStartTime;
+    RealTime           m_lastPreviewEndTime;
+    int                m_lastPreviewWidth;
+    bool               m_lastPreviewShowMinima;
+    std::vector<float> m_lastPreviewCache;
     
 };
 
