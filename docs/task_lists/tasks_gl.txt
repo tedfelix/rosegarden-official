@@ -1,3 +1,13 @@
+Current Task list
+======================================
+
+- Matrix undo
+
+- insertion in the middle of rests
+
+- look for a way to represent overlapping segments
+
+- look if note pixmaps gain from being turned into real QCanvasItems
 
 Task list from 18/19th August meetings
 ======================================
@@ -40,13 +50,13 @@ Older task list
 
 * pause in the middle of the bars - DONE (by Chris)
 
-* link notes
+* link notes - DONE (by Chris)
 
 * "close" menu item on notation window - DONE
 
 * key sig palette
 
-* selection point
+* selection point - DONE
 
-* s/Track/Segment/
+* s/Track/Segment/ - DONE
 
