@@ -315,6 +315,9 @@ BankEditorDialog::slotPopulateDeviceBank(int deviceNo, int bank)
             */
 
             slotPopulateBank(bank);
+
+            m_lastMSB = m_bankList[bank].msb;
+            m_lastLSB = m_bankList[bank].lsb;
         }
         else
         {
@@ -324,8 +327,6 @@ BankEditorDialog::slotPopulateDeviceBank(int deviceNo, int bank)
             m_deleteAllBanks->setDisabled(true);
         }
 
-        m_lastMSB = m_bankList[bank].msb;
-        m_lastLSB = m_bankList[bank].lsb;
     }
 
     _newBank = false;
