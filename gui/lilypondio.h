@@ -44,6 +44,7 @@ class LilypondExporter : public ProgressReporter
 public:
     typedef std::multiset<Rosegarden::Event*, Rosegarden::Event::EventCmp> eventstartlist;
     typedef std::multiset<Rosegarden::Event*, Rosegarden::Event::EventEndCmp> eventendlist;
+
 public:
     LilypondExporter(QObject *parent, Rosegarden::Composition *,
                      std::string fileName);
@@ -91,7 +92,7 @@ protected:
 		   bool useRests,
 		   std::ofstream &);
 
-    void handleText(const Rosegarden::Event *, std::string &lilyText, std::string &lilyLyrics, bool oldStyle);
+    void handleText(const Rosegarden::Event *, std::string &lilyText, std::string &lilyLyrics, int languageLevel);
     void writePitch(const Rosegarden::Event *note, const Rosegarden::Key &key, std::ofstream &);
     void writeStyle(const Rosegarden::Event *note, std::string &prevStyle, int col, std::ofstream &);
     void writeDuration(Rosegarden::timeT duration, std::ofstream &);
