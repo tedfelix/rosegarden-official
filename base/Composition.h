@@ -37,7 +37,7 @@ namespace Rosegarden
  * destruction.
  */
 
-class Composition
+class Composition : public TrackObserver
 {
     
 public:
@@ -47,7 +47,7 @@ public:
     typedef trackcontainer::const_iterator const_iterator;
 
     Composition();
-    ~Composition();
+    virtual ~Composition();
 
     /// swap the contents with other composition
     void swap(Composition&);
@@ -65,19 +65,18 @@ public:
     unsigned int getDuration() const;
     void         clear();
 
-    //!!! dubious
+    //!!! these should go, as the results they return are entirely
+    //arbitrary -- but they're used in transport code, so work out how
+    //the transport *should* do it
     unsigned int getNbTicksPerBar() const { return m_nbTicksPerBar; }
     void setNbTicksPerBar(unsigned int n) { m_nbTicksPerBar = n; }
 
-    // Some vector<> API delegation
+    // Some set<> API delegation
     iterator       begin()       { return m_tracks.begin(); }
     const_iterator begin() const { return m_tracks.begin(); }
     iterator       end()         { return m_tracks.end(); }
     const_iterator end() const   { return m_tracks.end(); }
 
-
-//     Track*       operator[](int i)       { return m_tracks[i]; }
-//     const Track* operator[](int i) const { return m_tracks[i]; }
 
     //!!! This should arguably not be a single per-Composition value.
     // MIDI has a tempo meta-event which can change arbitrarily often,
@@ -91,10 +90,18 @@ public:
     const timeT& getPosition() { return m_position; }
     void setPosition(const timeT& position) { m_position = position; }
 
+
+    // TrackObserver methods:
+
+    virtual void eventAdded(Track *, Event *);
+    virtual void eventRemoved(Track *, Event *);
+    virtual void trackDeleted(Track *);
+
 protected:
     trackcontainer m_tracks;
+    Track m_timeReference; // contains time signature events &c
 
-    unsigned int m_nbTicksPerBar;
+    unsigned int m_nbTicksPerBar; //!!! must lose this
     unsigned int m_tempo;
 
     timeT m_position;

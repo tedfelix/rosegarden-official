@@ -98,6 +98,7 @@ public:
      * account any changes of time signature during the piece. 
      * The results can be retrieved with getBarPositions().
      */
+    //!!! NEW -- called automatically by Composition when a time sig is inserted somewhere (anywhere)
     void calculateBarPositions();
 
     /**
@@ -224,10 +225,20 @@ public:
         }
     };
 
-    /// For use by TrackObserver objects such as ViewElementsManager
+    /**
+     * An alternative compare class that orders by start time first
+     */
+    struct TrackTimeCmp
+    {
+	bool operator()(const Track *a, const Track *b) const {
+	    return a->getStartIndex() < b->getStartIndex();
+	}
+    };
+
+    /// For use by TrackObserver objects like Composition & ViewElementsManager
     void    addObserver(TrackObserver *obs) { m_observers.insert(obs); }
 
-    /// For use by TrackObserver objects such as ViewElementsManager
+    /// For use by TrackObserver objects like Composition & ViewElementsManager
     void removeObserver(TrackObserver *obs) { m_observers.erase (obs); }
 
 private:

@@ -60,6 +60,7 @@ Composition::addTrack(Track *track)
     if (!track) return end();
     
     std::pair<iterator, bool> res = m_tracks.insert(track);
+    track->addObserver(this);
 
     return res.first;
 }
@@ -70,6 +71,8 @@ Composition::deleteTrack(Composition::iterator i)
     if (i == end()) return;
 
     Track *p = (*i);
+    p->removeObserver(this);
+
     delete p;
     m_tracks.erase(i);
 }
@@ -80,6 +83,7 @@ Composition::deleteTrack(Track *p)
     iterator i = find(begin(), end(), p);
     
     if (i != end()) {
+	p->removeObserver(this);
         delete p;
         m_tracks.erase(i);
         return true;
@@ -117,6 +121,89 @@ Composition::clear()
     
 }
 
+
+static Track::iterator findTimeSig(Track *t, timeT time)
+{
+    Track::iterator a, b;
+    t->getTimeSlice(time, a, b);
+    for (Track::iterator i = a; i != b; ++i) {
+	if ((*i)->isa(TimeSignature::EventType)) return i;
+    }
+    return t->end();
+}
+
+
+// If a time signature is added to one track, add it to all other
+// tracks as well.  Suppress observer semantics for each track as we
+// add it, to avoid evil recursion.  We don't have to suppress
+// observer for m_timeReference, as we aren't an observer for it
+// anyway
+
+void Composition::eventAdded(Track *t, Event *e)
+{
+    if (e->isa(TimeSignature::EventType)) {
+
+	timeT sigTime = e->getAbsoluteTime();
+
+	cerr << "Composition: noting addition of time signature at "
+	     << sigTime << endl;
+
+
+	Track::iterator found = findTimeSig(&m_timeReference, sigTime);
+	if (found != m_timeReference.end()) m_timeReference.erase(found);
+	m_timeReference.insert(new Event(*e));
+
+	for (iterator i = begin(); i != end(); ++i) {
+	    cerr << "Composition: comparing with a track" << endl;
+	    if (*i != t) {
+		(*i)->removeObserver(this);
+		found = findTimeSig(*i, sigTime);
+		if (found != (*i)->end()) (*i)->erase(found);
+		(*i)->insert(new Event(*e));
+		(*i)->addObserver(this);
+	    } else cerr << "Composition: skipping" << endl;
+	    (*i)->calculateBarPositions();
+	}
+    }
+}
+
+
+// If a time signature is removed from one track, remove it from all
+// other tracks as well.  Suppress observer semantics for each track
+// as we remove, to avoid evil recursion.  We don't have to suppress
+// observer for m_timeReference, as we aren't an observer for it
+// anyway
+
+void Composition::eventRemoved(Track *t, Event *e)
+{
+    if (e->isa(TimeSignature::EventType)) {
+
+	timeT sigTime = e->getAbsoluteTime();
+
+	cerr << "Composition: noting removal of time signature at "
+	     << sigTime << endl;
+
+	Track::iterator found = findTimeSig(&m_timeReference, sigTime);
+	if (found != m_timeReference.end()) m_timeReference.erase(found);
+
+	for (iterator i = begin(); i != end(); ++i) {
+	    cerr << "Composition: comparing with a track" << endl;
+	    if (*i != t) {
+		(*i)->removeObserver(this);
+		found = findTimeSig(*i, sigTime);
+		if (found != (*i)->end()) (*i)->erase(found);
+		(*i)->addObserver(this);
+	    } else cerr << "Composition: skipping" << endl;
+	    (*i)->calculateBarPositions();
+	}
+    }
+}
+
+
+void Composition::trackDeleted(Track *)
+{
+    // now really, who gives a shit?
+}
 
 
 }

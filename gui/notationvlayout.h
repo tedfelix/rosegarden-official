@@ -32,18 +32,13 @@
 class NotationVLayout : public LayoutEngine /* : public NotationLayout */
 {
 public:
-    NotationVLayout(Staff &staff, NotationElementList &elements);
+    NotationVLayout();
     virtual ~NotationVLayout();
     
-    void layout(NotationElementList::iterator from,
-                NotationElementList::iterator to);
+    void layout(Staff &staff);
 
     /// resets any internal position counters there may happen to be
     void reset();
-
-protected:
-    Staff &m_staff;
-    NotationElementList &m_notationElements;
 };
 
 #endif

@@ -41,6 +41,12 @@ public:
     virtual ~ViewElementsManager();
 
     /**
+     * Create a new NotationElementList wrapping all Events in the
+     * track, or return the previously created one
+     */
+    NotationElementList* getNotationElementList();
+
+    /**
      * Create a new NotationElementList wrapping Events in the
      * [from, to[ interval, or return the previously created one
      * (even if passed new arguments)

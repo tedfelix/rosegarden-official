@@ -28,6 +28,7 @@
 #include "notationhlayout.h"
 #include "notationvlayout.h"
 #include "notationcanvasview.h"
+#include "staff.h"
 #include "NotationTypes.h"
 
 class QCanvasItem;
@@ -37,7 +38,13 @@ class RosegardenGUIDoc;
 class NotationTool;
 
 /**
-  *@author Guillaume Laurent, Chris Cannam, Richard Bown
+  * NotationView is a view for one or more Staff objects, each of
+  * which contains the notation data associated with a Track.
+  * NotationView owns the Staff objects it displays.
+  * 
+  * This class manages the relationship between NotationHLayout/
+  * NotationVLayout and Staff data, as well as using rendering the
+  * actual notes (using NotePixmapFactory to generate the pixmaps).
   */
 
 class NotationView : public KMainWindow
@@ -47,26 +54,38 @@ class NotationView : public KMainWindow
     friend class NotationEraser;
 
     Q_OBJECT
-public:
 
-    NotationView(RosegardenGUIDoc* doc, Rosegarden::Track*, QWidget *parent,
+public:
+    NotationView(RosegardenGUIDoc *doc,
+		 std::vector<Rosegarden::Track *> tracks,
+		 QWidget *parent,
                  int resolution);
+
     ~NotationView();
 
     const RosegardenGUIDoc *getDocument() const { return m_document; }
     RosegardenGUIDoc *getDocument() { return m_document; }
 
+    //!!! The showElements/showBars methods arguably no longer have
+    //the most useful declarations, now we're in multi-staff world
+
     /// draw all elements
-    virtual bool showElements(NotationElementList::iterator from,
+    virtual bool showElements(int staffNo);
+
+    /// draw all elements in range
+    virtual bool showElements(int staffNo,
+			      NotationElementList::iterator from,
                               NotationElementList::iterator to);
 
     /// same, with dx,dy offset
-    virtual bool showElements(NotationElementList::iterator from,
+    virtual bool showElements(int staffNo,
+			      NotationElementList::iterator from,
                               NotationElementList::iterator to,
                               double dxoffset, double dyoffset);
 
     /// same, relative to the specified item
-    virtual bool showElements(NotationElementList::iterator from,
+    virtual bool showElements(int staffNo,
+			      NotationElementList::iterator from,
                               NotationElementList::iterator to,
                               QCanvasItem*);
 
@@ -74,29 +93,28 @@ public:
     virtual bool applyLayout();
 
     /// Calculate cached values for use in layout
-    virtual bool applyHorizontalPreparse();
+    virtual bool applyHorizontalPreparse(int staff);
 
-    /// Set the 'x'-coord on all doc elements - should be called after applyHorizontalPreparse()
-    virtual bool applyHorizontalLayout();
+    /// Set the 'x'-coord on all doc elements -
+    //  should be called after applyHorizontalPreparse()
+    virtual bool applyHorizontalLayout(int staff);
 
-    /// Set the 'y'-coord on all doc elements - should be called after applyHorizontalLayout()
-    virtual bool applyVerticalLayout();
+    /// Set the 'y'-coord on all doc elements -
+    //  should be called after applyHorizontalLayout()
+    virtual bool applyVerticalLayout(int staff);
     
     void setHorizontalLayoutEngine(NotationHLayout* e) { m_hlayout = e; }
-    void setVerticalLayoutEngine(NotationVLayout* e)   { m_vlayout = e; }
+    void setVerticalLayoutEngine  (NotationVLayout* e) { m_vlayout = e; }
+
+    Staff *getStaff(int i) { return m_staffs[i]; }
 
     LayoutEngine* getHorizontalLayoutEngine() { return m_hlayout; }
     LayoutEngine* getVerticalLayoutEngine()   { return m_vlayout; }
 
     QCanvas* canvas() { return m_canvasView->canvas(); }
 
-    Rosegarden::Track& getTrack() { return m_viewElementsManager->getTrack(); }
-
     void setCurrentSelectedNote(bool isRest, Rosegarden::Note::Type,
-                                int dots = 0);
-
-    const NotationElementList* getNotationElements() const { return m_notationElements; }
-    NotationElementList* getNotationElements()  { return m_notationElements; }
+				int dots = 0);
 
 public slots:
 
@@ -133,13 +151,18 @@ public slots:
      */
     void slotToggleStatusBar();
 
-    /** changes the statusbar contents for the standard label permanently, used to indicate current actions.
+    /** 
+     * Changes the statusbar contents for the standard label permanently,
+     * used to indicate current actions.
      * @param text the text that is displayed in the statusbar
      */
     void slotStatusMsg(const QString &text);
 
-    /** changes the status message of the whole statusbar for two seconds, then restores the last status. This is used to display
-     * statusbar messages that give information about actions for toolbar icons and menuentries.
+    /**
+     * Changes the status message of the whole statusbar for two
+     * seconds, then restores the last status. This is used to display
+     * statusbar messages that give information about actions for
+     * toolbar icons and menuentries.
      * @param text the text that is displayed in the statusbar
      */
     void slotStatusHelpMsg(const QString &text);
@@ -204,9 +227,6 @@ public slots:
 
     // Canvas actions slots
     void itemClicked(int height, const QPoint&, NotationElement*);
-//     void insertNote(NotationElementList::iterator closestNote,
-// 		    Rosegarden::Event *timesig, int pitch);
-//     void deleteNote(NotationElement* note);
 
     void hoveredOverNoteChanged(const QString&);
     void hoveredOverAbsoluteTimeChange(unsigned int);
@@ -245,7 +265,7 @@ protected:
     /**
      * redo the layout after insertion
      */
-    void redoLayout(NotationElementList::iterator from);
+    void redoLayout();
 
     /**
      * readjust the width of the canvas after a layout
@@ -255,7 +275,13 @@ protected:
     /**
      * show bar lines
      */
-    bool showBars(NotationElementList::iterator from,
+    bool showBars(int staffNo);
+    
+    /**
+     * show bar lines
+     */
+    bool showBars(int staffNo,
+		  NotationElementList::iterator from,
                   NotationElementList::iterator to);
 
     /**
@@ -264,11 +290,13 @@ protected:
      * If the closest event is further than \a proximityThreshold,
      * (in pixels), end() is returned;
      */
+//!!! This currently always returns on staff 0
     NotationElementList::iterator findClosestNote
       (double x,
        Rosegarden::Event *&timeSignature,
        Rosegarden::Event *&clef,
        Rosegarden::Event *&key,
+       int &staffNo,
        unsigned int proximityThreshold = 10);
 
     QCanvasSimpleSprite *makeNoteSprite(NotationElementList::iterator);
@@ -290,13 +318,12 @@ protected:
 
     NotationCanvasView* m_canvasView;
 
-    Staff* m_mainStaff;
-    Staff* m_currentStaff;
-    NotePixmapFactory &m_notePixmapFactory;
-    NotePixmapFactory m_toolbarNotePixmapFactory;
+    int m_currentStaff;
 
-    ViewElementsManager* m_viewElementsManager;
-    NotationElementList* m_notationElements;
+    std::vector<Staff *> m_staffs;
+
+    NotePixmapFactory m_notePixmapFactory;
+    NotePixmapFactory m_toolbarNotePixmapFactory;
     
     NotationHLayout* m_hlayout;
     NotationVLayout* m_vlayout;

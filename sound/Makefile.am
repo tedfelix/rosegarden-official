@@ -35,5 +35,5 @@ DISTCLEANFILES = $(sound_METASOURCES) MidiArts.h MidiArts.cc
 
 bin_PROGRAMS = sound
 sound_SOURCES = sound.cpp
-sound_LDADD = -lqt libRosegardenSound.la ../core/libcore.la
+sound_LDADD = -lartsmidi -lqt -lsoundserver_idl libRosegardenSound.la ../core/libcore.la
 

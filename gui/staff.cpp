@@ -26,12 +26,16 @@
 
 #include "rosedebug.h"
 
-Staff::Staff(QCanvas *canvas, int resolution) :
+using Rosegarden::Track;
+
+Staff::Staff(QCanvas *canvas, Track *track, int resolution) :
     QCanvasItemGroup(canvas),
     m_barLineHeight(0),
     m_horizLineLength(0),
     m_resolution(resolution),
-    m_npf(resolution)
+    m_npf(resolution),
+    m_manager(*track),
+    m_notes(m_manager.getNotationElementList())
 {
     // horizontal lines
 
@@ -67,7 +71,6 @@ Staff::Staff(QCanvas *canvas, int resolution) :
         }
 
         m_staffLines.push_back(line);
-        
     }
 
     // Add vertical lines
@@ -182,5 +185,5 @@ void Staff::setLinesLength(unsigned int length)
 }
 
 const int Staff::nbLines = 5;
-const int Staff::linesOffset = 8;
+const int Staff::linesOffset = 40;
 

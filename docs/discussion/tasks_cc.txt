@@ -19,6 +19,21 @@ References in round brackets are to 0.1_planned_features.txt.
  for layering work, things will be very difficult if the tracks have
  bar lines that are not at the same absolute time. (B8)
 
+    4a. Basic data-structure stuff for NotationView to have multiple
+    staffs, one track per staff [DONE]
+
+    4b. Fix up Composition's cunning code for keeping time signatures
+    in check between different Tracks by taking into account the
+    starting time of the Track (or is absolute time now counted from
+    the start of the whole piece? it's so hard to remember)
+
+    4c. Modify NotationHLayout so layout() can work on multiple staffs
+    at once -- needs sync track? coping with partial bars at start and
+    end?
+
+    4d. Finish NotationView by making it possible to receive and
+    locate mouse events across all staffs
+
  4.5. Handling events read from MIDI that don't quantize viably --
  using multiple tied notes (makeNoteViable).  Also handling tied
  events on conversion to MIDI [DONEish]
@@ -26,6 +41,7 @@ References in round brackets are to 0.1_planned_features.txt.
  5. Making key, clef and time signature appear in correct order [DONE]
 
  6. Beaming selected area (dependent on Guillaume's doing selection)
+ [Selection has been POSTPONED]
 
  7. Various subtle improvements to notation layout, for example moving
  long notes to the right to be more central in their space (A9) [some DONE]

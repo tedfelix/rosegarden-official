@@ -41,6 +41,12 @@ ViewElementsManager::~ViewElementsManager()
 }
 
 NotationElementList*
+ViewElementsManager::getNotationElementList()
+{
+    return getNotationElementList(m_track.begin(), m_track.end());
+}
+
+NotationElementList*
 ViewElementsManager::getNotationElementList(Track::iterator from,
                                             Track::iterator to)
 {

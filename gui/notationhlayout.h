@@ -29,17 +29,24 @@
 /**
  * Horizontal notation layout
  *
- * computes the X coordinate of notation elements
+ * computes the X coordinates of notation elements
  */
+
 class NotationHLayout : public LayoutEngine
 {
 public:
-    NotationHLayout(Staff &staff, NotationElementList& elements);
+    NotationHLayout();
     ~NotationHLayout();
 
-    void preparse(const Rosegarden::Track::BarPositionList &barPositions,
-		  int firstBar, int lastBar);
-    void layout();
+    //!!! hardly ideal interface, as it means the calling code and
+    //this code must both look up the bar position list even though
+    //probably only one of us needs it
+    void preparse(Staff &staff, int firstBar, int lastBar);
+
+    //!!! This one needs to work across more than one staff, and use
+    //data collated from preparses of all those staffs.  (Preparse
+    //should be okay working on one staff at a time.)
+    void layout(Staff &staff);
 
     struct BarData
     {
@@ -64,6 +71,7 @@ public:
     /// resets the internal position counters of the object
     void reset();
 
+    //!!! dubious.
     double getTotalWidth() { return m_totalWidth; }
 
 protected:
@@ -82,19 +90,10 @@ protected:
     void addNewBar(int barNo, NotationElementList::iterator start,
                    int width, int fwidth);
 
-    /// returns the note immediately before 'pos'
-    NotationElementList::iterator getPreviousNote(NotationElementList::iterator pos);
-
-    Staff &m_staff;
-    NotationElementList& m_notationElements;
-
-    unsigned int m_barMargin;
-    unsigned int m_noteMargin;
-
     int getMinWidth(const NotePixmapFactory &, const NotationElement &) const;
     int getComfortableGap(const NotePixmapFactory &npf,
                           Rosegarden::Note::Type type) const;
-    int getIdealBarWidth(int fixedWidth,
+    int getIdealBarWidth(Staff &staff, int fixedWidth,
                          NotationElementList::iterator shortest,
                          const NotePixmapFactory &npf, int shortCount,
                          int totalCount,
@@ -104,6 +103,7 @@ protected:
 
     double m_totalWidth;
 
+    Staff *m_lastStaffPreparsed; //!!! Because we haven't finished implementing the general case yet
 };
 
 #endif
