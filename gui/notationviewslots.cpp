@@ -567,7 +567,17 @@ void NotationView::slotExtendSelectionForward(bool bar)
 
 void NotationView::slotClearSelection()
 {
-    setCurrentSelection(0);
+    // Actually we don't clear the selection immediately: if we're
+    // using some tool other than the select tool, then the first
+    // press switches us back to the select tool.
+
+    NotationSelector *selector = dynamic_cast<NotationSelector *>(m_tool);
+    
+    if (!selector) {
+	slotSelectSelected();
+    } else {
+	setCurrentSelection(0);
+    }
 }
 
 void NotationView::slotEditSelectFromStart()
@@ -1607,7 +1617,7 @@ NotationView::slotJumpPlaybackToCursor()
 }
 
 //////////////////////////////////////////////////////////////////////
-
+/*!!!
 void NotationView::slotToggleTriplet()
 {
     NOTATION_DEBUG << "NotationView::slotToggleTriplet()\n";
@@ -1615,6 +1625,7 @@ void NotationView::slotToggleTriplet()
     m_tupletMode = !m_tupletMode;
     emit changeTupletMode(m_tupletMode);
 }
+*/
 
 //----------------------------------------
 // Accidentals
@@ -1747,7 +1758,7 @@ void NotationView::slotPageMode()
 {
     setPageMode(true);
 }
-
+/*!!!
 void NotationView::slotInsertChordMode()
 {
     m_insertChordMode = true;
@@ -1757,7 +1768,7 @@ void NotationView::slotInsertMelodyMode()
 {
     m_insertChordMode = false;
 }
-
+*/
 void NotationView::slotLabelChords()
 {
     if (m_hlayout.isPageMode()) return;

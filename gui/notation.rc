@@ -238,8 +238,13 @@
   <Separator/>
   <Action name="insert_note_actionmenu"/>
   <Action name="insert_rest"/>
+
+<!--
   <Action name="insert_melody_mode"/>
   <Action name="insert_chord_mode"/>
+-->
+	<Action name="chord_mode"/>
+	<Action name="triplet_mode"/>
 
 </Menu>
 
@@ -293,7 +298,7 @@
   <Action name="dotted_16th" />
   <Action name="dotted_32nd" />
 
-  <Action name="triplet" />
+  <Action name="triplet_mode" />
 </ToolBar>
 
 <ToolBar name="restsToolBar">
@@ -341,6 +346,7 @@
 </ToolBar>
 
 <ToolBar name="fontToolBar">
+<!-- filled entirely at runtime -->
 </ToolBar>
 
 <State name="note_insert_tool_current">

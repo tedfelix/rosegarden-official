@@ -161,7 +161,7 @@ NoteInserter::NoteInserter(NotationView* view)
       m_noteType(Rosegarden::Note::Quaver),
       m_noteDots(0),
       m_autoBeam(true),
-      m_tupletMode(false),
+//!!!      m_tupletMode(false),
       m_accidental(Accidentals::NoAccidental)
 {
     QIconSet icon;
@@ -230,15 +230,16 @@ NoteInserter::NoteInserter(const QString& menuName, NotationView* view)
       m_noteType(Rosegarden::Note::Quaver),
       m_noteDots(0),
       m_autoBeam(false),
-      m_tupletMode(false),
+//!!!      m_tupletMode(false),
       m_clickHappened(false),
       m_accidental(Accidentals::NoAccidental)
 {
     connect(m_parentView, SIGNAL(changeAccidental(Rosegarden::Accidental)),
             this,         SLOT(slotSetAccidental(Rosegarden::Accidental)));
-
+/*!!!
     connect(m_parentView, SIGNAL(changeTupletMode(bool)),
             this,         SLOT(slotSetTupletMode(bool)));
+*/
 }
 
 NoteInserter::~NoteInserter()
@@ -307,7 +308,7 @@ NoteInserter::handleMouseRelease(Rosegarden::timeT,
 	m_nParentView->setSingleSelectedEvent
 	    (m_clickStaffNo, lastInsertedEvent);
 
-	if (m_nParentView->isInInsertChordMode()) {
+	if (m_nParentView->isInChordMode()) {
 	    m_nParentView->slotSetInsertCursorAndRecentre
 		(lastInsertedEvent->getAbsoluteTime(), e->x(), (int)e->y(),
 		 false);
@@ -342,7 +343,7 @@ NoteInserter::insertNote(Segment &segment, timeT insertionTime,
 
 	m_nParentView->setSingleSelectedEvent(segment, lastInsertedEvent);
 
-	if (m_nParentView->isInInsertChordMode()) {
+	if (m_nParentView->isInChordMode()) {
 	    m_nParentView->slotSetInsertCursorPosition
 		(lastInsertedEvent->getAbsoluteTime(), true, false);
 	} else {
@@ -450,7 +451,8 @@ NoteInserter::getOffsetWithinRest(int staffNo,
     //!!! To make this work correctly in tuplet mode, our divisor would
     // have to be the tupletified duration of the tuplet unit -- we can
     // do that, we just haven't yet
-    if (m_tupletMode) return 0;
+//!!! if (m_tupletMode) return 0;
+    if (m_nParentView->isInTripletMode()) return 0;
 
     NotationStaff *staff = m_nParentView->getStaff(staffNo);
     double offset = canvasX - (*i)->getCanvasX();
@@ -498,13 +500,14 @@ NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
     NoteInsertionCommand *insertionCommand =
 	new NoteInsertionCommand
         (segment, time, endTime, note, pitch, accidental,
-	 m_autoBeam && !m_tupletMode,
+	 m_autoBeam && !m_nParentView->isInTripletMode(),//!!!
 	 m_matrixInsertType,
 	 m_defaultStyle);
 
     KCommand *activeCommand = insertionCommand;
 
-    if (m_tupletMode) {
+//!!!    if (m_tupletMode) {
+    if (m_nParentView->isInTripletMode()) {
 	Segment::iterator i(segment.findTime(time));
 	if (i != segment.end() &&
 	    !(*i)->has(Rosegarden::BaseProperties::BEAMED_GROUP_TUPLET_BASE)) {
@@ -545,12 +548,12 @@ void NoteInserter::slotSetAccidental(Rosegarden::Accidental accidental)
 			 << accidental << endl;
     m_accidental = accidental;
 }
-
+/*!!!
 void NoteInserter::slotSetTupletMode(bool tupletMode)
 {
     m_tupletMode = tupletMode;
 }
-
+*/
 void NoteInserter::slotSetAccidentalSync(Rosegarden::Accidental accidental)
 {
     NOTATION_DEBUG << "NoteInserter::setAccidentalSync: accidental is "

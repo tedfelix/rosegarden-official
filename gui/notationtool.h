@@ -162,7 +162,7 @@ public slots:
     void slotSetAccidental(Rosegarden::Accidental);
 
     /// Set the tuplet mode
-    void slotSetTupletMode(bool);
+//!!!    void slotSetTupletMode(bool);
 
     /**
      * Set the accidental for the notes which will be inserted
@@ -213,7 +213,7 @@ protected:
     bool m_autoBeam;
     bool m_matrixInsertType;
     NoteStyleName m_defaultStyle;
-    bool m_tupletMode;
+//!!!    bool m_tupletMode;
 
     bool m_clickHappened;
     Rosegarden::timeT m_clickTime;

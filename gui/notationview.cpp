@@ -174,7 +174,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	      m_legatoQuantizer, m_properties),
     m_topBarButtons(0),
     m_bottomBarButtons(0),
-    m_tupletMode(false),
+//!!!    m_tupletMode(false),
     m_selectDefaultNote(0),
     m_fontCombo(0),
     m_fontSizeSlider(0),
@@ -813,7 +813,8 @@ void NotationView::setupActions()
 
     actionCollection()->insert(insertNoteActionMenu);
 
-    
+
+/*!!!    
     KRadioAction *insertChordMode = new KRadioAction
 	(i18n("&Chord Insert Mode"), Key_G, this, SLOT(slotInsertChordMode()),
 	 actionCollection(), "insert_chord_mode");
@@ -825,7 +826,11 @@ void NotationView::setupActions()
     insertMelodyMode->setExclusiveGroup("insertMode");
     insertMelodyMode->setChecked(true);
     m_insertChordMode = false;
-    
+*/
+
+    (new KToggleAction(i18n("C&hord Insert Mode"), Key_H, this, 0,
+		      actionCollection(), "chord_mode"))->
+	setChecked(false);
 
 
     // setup Notes menu & toolbar
@@ -1009,6 +1014,10 @@ void NotationView::setupActions()
 
     new KAction(i18n(GroupMenuTupletCommand::getGlobalName(false)), 0, this,
 		SLOT(slotGroupGeneralTuplet()), actionCollection(), "tuplet");
+
+    (new KToggleAction(i18n("Tri&plet Insert Mode"), Key_G, this,
+		      0, /*!!! SLOT(slotToggleTriplet()),*/ actionCollection(), "triplet_mode"))->
+	setChecked(false);
 
     new KAction(i18n(GroupMenuGraceCommand::getGlobalName()), 0, this,
 		SLOT(slotGroupGrace()), actionCollection(), "grace");
@@ -1273,6 +1282,20 @@ void NotationView::setupActions()
 		"clear_selection");
 
     createGUI(getRCFileName());
+}
+
+bool
+NotationView::isInChordMode()
+{
+    return ((KToggleAction *)actionCollection()->action("chord_mode"))->
+	isChecked();
+}
+
+bool
+NotationView::isInTripletMode()
+{
+    return ((KToggleAction *)actionCollection()->action("triplet_mode"))->
+	isChecked();
 }
 
 void

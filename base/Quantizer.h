@@ -305,15 +305,15 @@ protected:
     class SingleQuantizer {
     public:
 	virtual ~SingleQuantizer();
-	virtual timeT quantize(int unit, int maxDots, timeT duration,
+	virtual timeT quantize(int unit, int maxDots, timeT t,
 			       timeT followingRestDuration,
 			       bool isAbsoluteTime) const = 0;
     };
 
-    class PositionQuantizer : public SingleQuantizer {
+    class IdentityQuantizer : public SingleQuantizer { // doesn't quantize
     public:
-	virtual ~PositionQuantizer();
-	virtual timeT quantize(int unit, int maxDots, timeT duration,
+	virtual ~IdentityQuantizer();
+	virtual timeT quantize(int unit, int maxDots, timeT t,
 			       timeT followingRestDuration,
 			       bool isAbsoluteTime) const;
     };
@@ -321,7 +321,7 @@ protected:
     class UnitQuantizer : public SingleQuantizer {
     public:
 	virtual ~UnitQuantizer();
-	virtual timeT quantize(int unit, int maxDots, timeT duration,
+	virtual timeT quantize(int unit, int maxDots, timeT t,
 			       timeT followingRestDuration,
 			       bool isAbsoluteTime) const;
     };
@@ -329,7 +329,7 @@ protected:
     class NoteQuantizer : public SingleQuantizer {
     public:
 	virtual ~NoteQuantizer();
-	virtual timeT quantize(int unit, int maxDots, timeT duration,
+	virtual timeT quantize(int unit, int maxDots, timeT t,
 			       timeT followingRestDuration,
 			       bool isAbsoluteTime) const;
     };
@@ -337,7 +337,7 @@ protected:
     class LegatoQuantizer : public NoteQuantizer {
     public:
 	virtual ~LegatoQuantizer();
-	virtual timeT quantize(int unit, int maxDots, timeT duration,
+	virtual timeT quantize(int unit, int maxDots, timeT t,
 			       timeT followingRestDuration,
 			       bool isAbsoluteTime) const;
     };
@@ -345,6 +345,9 @@ protected:
     void quantize(Segment *s, Segment::iterator from, Segment::iterator to,
 		  const SingleQuantizer &absq, const SingleQuantizer &dq)
 	const;
+
+    SingleQuantizer &getDefaultAbsTimeQuantizer() const;
+    SingleQuantizer &getDefaultDurationQuantizer() const;
 
     timeT findFollowingRestDuration(Segment::iterator from,
 				    Segment::iterator to) const;
@@ -368,8 +371,6 @@ protected:
 
     mutable FastVector<Event *> m_toInsert;
     void insertNewEvents(Segment *) const;
-
-    bool m_manualClear;
 };
 
 struct StandardQuantization {

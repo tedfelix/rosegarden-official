@@ -42,7 +42,7 @@ Quantizer::Quantizer(std::string source,
 		     QuantizationType type,
 		     timeT unit, int maxDots) :
     m_type(type), m_unit(unit), m_maxDots(maxDots),
-    m_source(source), m_target(target), m_manualClear(false)
+    m_source(source), m_target(target)
 {
     if (m_unit < 0) m_unit = Note(Note::Shortest).getDuration();
     makePropertyNames();
@@ -52,7 +52,7 @@ Quantizer::Quantizer(const StandardQuantization &sq,
 		     std::string source,
 		     std::string target) :
     m_type(sq.type), m_unit(sq.unit), m_maxDots(sq.maxDots),
-    m_source(source), m_target(target), m_manualClear(false)
+    m_source(source), m_target(target)
 {
     if (m_unit < 0) m_unit = Note(Note::Shortest).getDuration();
     makePropertyNames();
@@ -62,14 +62,14 @@ Quantizer::Quantizer(const Quantizer &q,
 		     std::string source,
 		     std::string target) :
     m_type(q.m_type), m_unit(q.m_unit), m_maxDots(q.m_maxDots),
-    m_source(source), m_target(target), m_manualClear(false)
+    m_source(source), m_target(target)
 {
     makePropertyNames();
 }
    
 Quantizer::Quantizer(const Quantizer &q) :
     m_type(q.m_type), m_unit(q.m_unit), m_maxDots(q.m_maxDots),
-    m_source(q.m_source), m_target(q.m_target), m_manualClear(false)
+    m_source(q.m_source), m_target(q.m_target)
 {
     makePropertyNames();
 }
@@ -104,61 +104,51 @@ Quantizer::~Quantizer()
 }
 
 Quantizer::SingleQuantizer::~SingleQuantizer() { }
-Quantizer::PositionQuantizer::~PositionQuantizer() { }
+Quantizer::IdentityQuantizer::~IdentityQuantizer() { }
 Quantizer::UnitQuantizer::~UnitQuantizer() { }
 Quantizer::NoteQuantizer::~NoteQuantizer() { }
 Quantizer::LegatoQuantizer::~LegatoQuantizer() { }
 
 timeT
-Quantizer::PositionQuantizer::quantize(int unit, int, timeT duration, timeT,
-				       bool isAbsoluteTime) const
+Quantizer::IdentityQuantizer::quantize(int, int, timeT t, timeT, bool) const
 {
-    if (!isAbsoluteTime) return duration;
-
-    if (duration != 0) {
-	timeT low = (duration / unit) * unit;
-	timeT high = low + unit;
-	if (high - duration > duration - low) duration = low;
-	else duration = high;
-    }
-
-    return duration;
+    return t;
 }
 
 timeT
-Quantizer::UnitQuantizer::quantize(int unit, int, timeT duration, timeT,
+Quantizer::UnitQuantizer::quantize(int unit, int, timeT t, timeT,
 				   bool isAbsoluteTime) const
 {
-    if (duration != 0) {
-	timeT low = (duration / unit) * unit;
+    if (t != 0) {
+	timeT low = (t / unit) * unit;
 	timeT high = low + unit;
 	if ((low > 0 || isAbsoluteTime) &&
-	    (high - duration > duration - low)) duration = low;
-	else duration = high;
+	    (high - t > t - low)) t = low;
+	else t = high;
     }
 
-    return duration;
+    return t;
 }
 
 timeT
 Quantizer::NoteQuantizer::quantize(int unit, int maxDots,
-				   timeT duration, timeT, bool) const
+				   timeT t, timeT, bool) const
 {
-//    cerr << "NoteQuantizer::quantize: unit is " << unit << ", duration is " << duration << std::endl;
+//    cerr << "NoteQuantizer::quantize: unit is " << unit << ", t is " << t << std::endl;
 
     //!!! We probably shouldn't quantize tuplets
 
-    Note shortNote = Note::getNearestNote(duration, maxDots);
+    Note shortNote = Note::getNearestNote(t, maxDots);
 
     timeT shortTime = shortNote.getDuration();
-    if (shortTime == duration) {
+    if (shortTime == t) {
 //	cerr << "returning(1) " << shortTime << std::endl;
 	return shortTime;
     }
 
     Note longNote(shortNote);
 
-    if (shortTime < unit) { // original duration probably quantized to zero
+    if (shortTime < unit) { // original t probably quantized to zero
 
 //	cerr << "shortTime is " << shortTime << std::endl;
 	longNote = Note::getNearestNote(unit, maxDots);
@@ -185,8 +175,8 @@ Quantizer::NoteQuantizer::quantize(int unit, int maxDots,
     // than down to one with more
 
     if (shortTime < unit || 
-	((longNote.getDots() + 1) * (longTime - duration) <
-	 (shortNote.getDots() + 1) * (duration - shortTime))) {
+	((longNote.getDots() + 1) * (longTime - t) <
+	 (shortNote.getDots() + 1) * (t - shortTime))) {
 //	cerr << "returning(3) " << longTime << std::endl;
 	return longTime;
     } else {
@@ -196,7 +186,7 @@ Quantizer::NoteQuantizer::quantize(int unit, int maxDots,
 };
 
 timeT
-Quantizer::LegatoQuantizer::quantize(int unit, int maxDots, timeT duration,
+Quantizer::LegatoQuantizer::quantize(int unit, int maxDots, timeT t,
 				     timeT followingRestDuration,
 				     bool isAbsoluteTime) const
 {
@@ -205,22 +195,60 @@ Quantizer::LegatoQuantizer::quantize(int unit, int maxDots, timeT duration,
     if (followingRestDuration > 0) {
 
 	timeT possibleDuration = NoteQuantizer().quantize
-	    (unit, maxDots, duration, 0, isAbsoluteTime);
+	    (unit, maxDots, t, 0, isAbsoluteTime);
 
-	if (possibleDuration > duration) {
-	    if (possibleDuration - duration <= followingRestDuration) {
+	if (possibleDuration > t) {
+	    if (possibleDuration - t <= followingRestDuration) {
 		return possibleDuration;
 	    } else {
 		return NoteQuantizer().quantize
 		    (Note(Note::Shortest).getDuration(),
-		     maxDots, duration + followingRestDuration, 0,
+		     maxDots, t + followingRestDuration, 0,
 		     isAbsoluteTime);
 	    }
 	}
     }
 
     return NoteQuantizer().quantize(Note(Note::Shortest).getDuration(),
-				    maxDots, duration, 0, isAbsoluteTime);
+				    maxDots, t, 0, isAbsoluteTime);
+}
+
+
+Quantizer::SingleQuantizer &
+Quantizer::getDefaultAbsTimeQuantizer() const
+{
+    static SingleQuantizer *unitQuantizer = new UnitQuantizer();
+    return *unitQuantizer;
+}
+
+Quantizer::SingleQuantizer &
+Quantizer::getDefaultDurationQuantizer() const
+{
+    static SingleQuantizer *identityQuantizer = new IdentityQuantizer();
+    static SingleQuantizer *unitQuantizer = new UnitQuantizer();
+    static SingleQuantizer *noteQuantizer = new NoteQuantizer();
+    static SingleQuantizer *legatoQuantizer = new LegatoQuantizer();
+
+    switch (m_type) {
+
+    case PositionQuantize:
+	return *identityQuantizer;
+
+    case UnitQuantize:
+	return *unitQuantizer;
+
+    case NoteQuantize:
+	return *noteQuantizer;
+	
+    case LegatoQuantize:
+	if (m_unit == Note(Note::Shortest).getDuration()) {
+	    return *noteQuantizer;
+	} else {
+	    return *legatoQuantizer;
+	}
+    }
+
+    return *unitQuantizer; // avoid compiler warnings
 }
 
 
@@ -228,31 +256,11 @@ void
 Quantizer::quantize(Segment *s,
 		    Segment::iterator from, Segment::iterator to) const
 {
-    switch (m_type) {
+    quantize(s, from, to,
+	     getDefaultAbsTimeQuantizer(),
+	     getDefaultDurationQuantizer());
 
-    case PositionQuantize:
-	quantize(s, from, to, PositionQuantizer(), PositionQuantizer());
-	break;
-
-    case UnitQuantize:
-	quantize(s, from, to, UnitQuantizer(), UnitQuantizer());
-	break;
-
-    case NoteQuantize:
-	quantize(s, from, to, UnitQuantizer(), NoteQuantizer());
-	break;
-
-    case LegatoQuantize:
-	// Legato quantization is relatively slow (hence the name?) and
-	// with the minimal unit it's equivalent to note quantization
-
-	if (m_unit == Note(Note::Shortest).getDuration()) {
-	    quantize(s, from, to, UnitQuantizer(), NoteQuantizer());
-	} else {
-	    quantize(s, from, to, UnitQuantizer(), LegatoQuantizer());
-	}
-	break;
-    }
+    insertNewEvents(s);
 }
 
 void
@@ -291,21 +299,37 @@ Quantizer::quantize(EventSelection *selection)
     // the m_toInsert vector from being cleared automatically.  Remember
     // to turn it back on.
     //
-    m_manualClear = true;
 
     RangeList::iterator r = ranges.end();
-    while (r-- != ranges.begin())
-    {
-        quantize(&segment, r->first, r->second);
+    while (r-- != ranges.begin()) {
+
+	std::cerr << "Quantizer: quantizing range ";
+	if (r->first == segment.end()) {
+	    std::cerr << "end";
+	} else {
+	    std::cerr << (*r->first)->getAbsoluteTime();
+	}
+	std::cerr << " to ";
+	if (r->second == segment.end()) {
+	    std::cerr << "end";
+	} else {
+	    std::cerr << (*r->second)->getAbsoluteTime();
+	}
+	std::cerr << std::endl;
+
+        quantize(&segment, r->first, r->second,
+		 getDefaultAbsTimeQuantizer(),
+		 getDefaultDurationQuantizer());
     }
 
     // Push the new events to the selection
     //
     for (int i = 0; i < m_toInsert.size(); ++i)
 	selection->addEvent(m_toInsert[i]);
-    m_toInsert.clear();
+//    m_toInsert.clear();
+//    m_manualClear = false;
 
-    m_manualClear = false;
+    insertNewEvents(&segment);
 }
 
 
@@ -313,24 +337,25 @@ void
 Quantizer::fixQuantizedValues(Segment *s, Segment::iterator from,
 			      Segment::iterator to) const
 {
-    // Twice as slow as it needs to be.
+    // Twice as slow as it needs to be, unless target is RawEventData
 
     quantize(s, from, to);
 
-    for (Segment::iterator nextFrom = from; from != to; from = nextFrom) {
+    if (m_target != RawEventData) {
 
-	++nextFrom;
+	for (Segment::iterator nextFrom = from; from != to; from = nextFrom) {
 
-	if (m_target != RawEventData) {
+	    ++nextFrom;
+
 	    timeT t = getFromTarget(*from, AbsoluteTimeValue);
 	    timeT d = getFromTarget(*from, DurationValue);
 	    Event *e = new Event(**from, t, d);
 	    s->erase(from);
 	    m_toInsert.push_back(e);
 	}
-    }
 
-    insertNewEvents(s);
+	insertNewEvents(s);
+    }
 }
 
 
@@ -368,54 +393,16 @@ Quantizer::getQuantizedAbsoluteTime(Event *e) const
 timeT 
 Quantizer::quantizeAbsoluteTime(timeT absoluteTime) const
 {
-    timeT d = 0;
-
-    switch (m_type) {
-
-    case PositionQuantize:
-	d = PositionQuantizer().quantize(m_unit, m_maxDots, absoluteTime, 0, true);
-	break;
-
-    case UnitQuantize:
-	d = UnitQuantizer().quantize(m_unit, m_maxDots, absoluteTime, 0, true);
-	break;
-
-    case NoteQuantize:
-	d = UnitQuantizer().quantize(m_unit, m_maxDots, absoluteTime, 0, true);
-	break;
-
-    case LegatoQuantize:
-	d = UnitQuantizer().quantize(Note(Note::Shortest).getDuration(),
-					m_maxDots, absoluteTime, 0, true);
-	break;
-    }
-
-    return d;
+    return getDefaultAbsTimeQuantizer().quantize
+	(m_unit, m_maxDots, absoluteTime, 0, true);
 }
 
 
 timeT 
 Quantizer::quantizeDuration(timeT duration) const
 {
-    timeT d = 0;
-
-    switch (m_type) {
-
-    case PositionQuantize:
-	d = PositionQuantizer().quantize(m_unit, m_maxDots, duration, 0, false);
-	break;
-
-    case UnitQuantize:
-	d = UnitQuantizer().quantize(m_unit, m_maxDots, duration, 0, false);
-	break;
-
-    case NoteQuantize:
-    case LegatoQuantize:
-	d = NoteQuantizer().quantize(m_unit, m_maxDots, duration, 0, false);
-	break;
-    }
-
-    return d;
+    return getDefaultDurationQuantizer().quantize
+	(m_unit, m_maxDots, duration, 0, false);
 }
 
 
@@ -428,8 +415,8 @@ Quantizer::quantize(Segment *s, Segment::iterator from, Segment::iterator to,
 
     assert(m_toInsert.size() == 0);
 
-    timeT fromTime = 0, toTime = 0;
-    bool haveFromTime = false;
+//    timeT fromTime = 0, toTime = 0;
+//    bool haveFromTime = false;
 
     timeT absTimeQuantizeUnit = m_unit;
 
@@ -493,19 +480,14 @@ Quantizer::quantize(Segment *s, Segment::iterator from, Segment::iterator to,
 	    }
 	} else continue;
 
-	if (!haveFromTime) {
-	    fromTime = qAbsoluteTime;
-	    haveFromTime = true;
-	}
-	toTime = qAbsoluteTime;
+//	if (!haveFromTime) {
+//	    fromTime = qAbsoluteTime;
+//	    haveFromTime = true;
+//	}
+//	toTime = qAbsoluteTime;
 
 	setToTarget(s, from, qAbsoluteTime, qDuration);
 //	cerr << "After set, from is at " << std::distance(s->begin(), from) << " from start, nextFrom is at " << std::distance(s->begin(), nextFrom) << endl;
-    }
-    
-    insertNewEvents(s);
-    if (haveFromTime && m_target == RawEventData) {
-	s->normalizeRests(fromTime, toTime);
     }
 }
 
@@ -709,12 +691,19 @@ Quantizer::makePropertyNames()
 void
 Quantizer::insertNewEvents(Segment *s) const
 {
-    for (int i = 0; i < m_toInsert.size(); ++i) {
+    unsigned int sz = m_toInsert.size();
+
+    for (unsigned int i = 0; i < sz; ++i) {
 	s->insert(m_toInsert[i]);
     }
 
-    if (m_manualClear == false)
-        m_toInsert.clear();
+    if (sz > 0 && m_target == RawEventData) {
+	s->normalizeRests(m_toInsert[0]->getAbsoluteTime(),
+			  m_toInsert[sz-1]->getAbsoluteTime() +
+			  m_toInsert[sz-1]->getDuration());
+    }
+
+    m_toInsert.clear();
 }
 
 

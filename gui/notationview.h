@@ -129,7 +129,12 @@ public:
      * Discover whether chord-mode insertions are enabled (as opposed
      * to the default melody-mode)
      */
-    bool isInInsertChordMode() { return m_insertChordMode; }
+    bool isInChordMode();
+    
+    /**
+     * Discover whether triplet-mode insertions are enabled
+     */
+    bool isInTripletMode();
 
     /**
      * Discover whether annotations are being displayed or not
@@ -273,7 +278,7 @@ public slots:
     /// note switch slot
     void slotNoteAction();
 
-    void slotToggleTriplet();
+//!!!    void slotToggleTriplet();
 
     /// accidental switch slots
     void slotNoAccidental();
@@ -348,8 +353,8 @@ public slots:
 
     void slotSetStyleFromAction();
     void slotInsertNoteFromAction();
-    void slotInsertChordMode();
-    void slotInsertMelodyMode();
+//!!!    void slotInsertChordMode();
+//    void slotInsertMelodyMode();
     void slotInsertRest();
     void slotSwitchFromRestToNote();
     void slotSwitchFromNoteToRest();
@@ -522,7 +527,7 @@ signals:
     /**
      * Emitted when the tuplet mode has been toggled by the user
      */
-    void changeTupletMode(bool newTupletMode);
+//!!!    void changeTupletMode(bool newTupletMode);
 
     /**
      * Emitted when the selection has been cut or copied
@@ -705,8 +710,7 @@ protected:
     bool m_temposVisible;
     bool m_annotationsVisible;
     
-    bool m_tupletMode;
-    bool m_insertChordMode;
+//!!!    bool m_tupletMode;
     
     std::vector<int> m_legatoDurations;
 
