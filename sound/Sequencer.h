@@ -62,6 +62,7 @@ namespace Rosegarden
 
 class MappedInstrument;
 class AudioFilePlayer;
+class SoundDriver;
 
 // NOTE OFF queue. This holds a time ordered set of
 // pending NOTE OFF events.
@@ -379,6 +380,7 @@ private:
 
     std::vector<Rosegarden::MappedInstrument*> m_instruments;
 
+    SoundDriver            *m_soundDriver;
 
 };
 

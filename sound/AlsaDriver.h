@@ -24,8 +24,9 @@
 
 
 #include <vector>
-
 #include <alsa/asoundlib.h> // ALSA
+
+#include "Sequencer.h" // temporary - for NoteOffQueue
 
 #include "SoundDriver.h"
 #include "Instrument.h"
@@ -62,7 +63,6 @@ public:
 
     ~AlsaInstrument() {;}
 
-private:
     InstrumentId m_id;
     std::string  m_name;
     int          m_client;
@@ -106,6 +106,13 @@ public:
                        int client,
                        int port,
                        int channel);
+
+
+    // Some stuff to help us debug this
+    //
+    void getSystemInfo();
+    void showQueueStatus(int queue);
+
 private:
     std::vector<AlsaInstrument*> m_alsaInstruments;
     InstrumentId                 m_runningId;
@@ -116,6 +123,13 @@ private:
     int                          m_client;
     int                          m_port;
     int                          m_queue;
+    int                          m_maxClients;
+    int                          m_maxPorts;
+    int                          m_maxQueues;
+
+
+    NoteOffQueue                 m_noteOffQueue;
+
 
 };
 

@@ -22,9 +22,14 @@
 // bits and bobs of the sound system from time to time.
 //
 
+#include <alsa/asoundlib.h>
+#include <alsa/seq_event.h>
+
 #include <iostream>
 #include "AlsaDriver.h"
 #include "ArtsDriver.h"
+
+#include <unistd.h>
 
 using std::vector;
 using std::endl;
@@ -35,61 +40,88 @@ using Rosegarden::ArtsDriver;
 int
 main(int /*argc*/, char ** /*argv*/)
 {
-    AlsaDriver *alsaDriver = new AlsaDriver();
-    ArtsDriver *artsDriver = new ArtsDriver();
+    int destclient = 65;
+    int destport = 1;
 
-    /*
-    snd_seq_client_info_t *cinfo;
-    snd_seq_port_info_t *pinfo;
-    snd_seq_system_info_t *sysinfo;
-    int  client;
-    int  port;
-    int  err;
-    unsigned int cap;
-    snd_seq_t *handle;
+    //AlsaDriver *alsaDriver = new AlsaDriver();
+    //ArtsDriver *artsDriver = new ArtsDriver();
+    snd_seq_t *seq;
 
-    err = snd_seq_open(&handle,
-                       "hw",   // why hw always?
-                       SND_SEQ_OPEN_INPUT,
-                       SND_SEQ_NONBLOCK);
+    snd_seq_open(&seq,"hw",SND_SEQ_OPEN_DUPLEX,0);
+    snd_seq_nonblock(seq,0);
+    int client=snd_seq_client_id(seq);
+    int port = snd_seq_create_simple_port(seq, "RG test port",
+                                          SND_SEQ_PORT_CAP_READ |
+                 SND_SEQ_PORT_CAP_WRITE,SND_SEQ_PORT_TYPE_MIDI_GENERIC);
 
-    if (err < 0)
+    int queue=snd_seq_alloc_queue(seq);
+    //snd_seq_connect_to() and snd_seq_connect_from();
+    if(snd_seq_connect_to(seq, port, destclient, destport) < 0)
     {
-        std::cout << "Could not open sequencer - " << snd_strerror(errno)
-                  << std::endl;
+        std::cerr << "Can't connect to output port" << std::endl;
+        exit(1);
     }
 
-    //snd_seq_drop_output(handle);
+    snd_seq_set_client_pool_output(seq, 2);
+    snd_seq_set_client_pool_input(seq, 20);
+    snd_seq_set_client_pool_output_room(seq, 20);
 
-    snd_seq_client_info_alloca(&cinfo);
-    snd_seq_client_info_set_client(cinfo, -1);
-
-    while (snd_seq_query_next_client(handle, cinfo) >= 0)
-    {
-        client = snd_seq_client_info_get_client(cinfo);
-        snd_seq_port_info_alloca(&pinfo);
-        snd_seq_port_info_set_client(pinfo, client);
-
-        snd_seq_port_info_set_port(pinfo, -1);
-        while (snd_seq_query_next_port(handle, pinfo) >= 0)
-        {
-            int cap;
-            cap = (SND_SEQ_PORT_CAP_SUBS_WRITE|SND_SEQ_PORT_CAP_WRITE);
-
-            if ((snd_seq_port_info_get_capability(pinfo) & cap) == cap)
-            {
-                std::cout << snd_seq_port_info_get_client(pinfo) << " : "
-                          << snd_seq_port_info_get_port(pinfo) << " : "
-                          << snd_seq_client_info_get_name(cinfo) << " : "
-                          << snd_seq_port_info_get_name(pinfo) 
-                          << std::endl;
-            }
-        }
-    }
-
-
-    // close the handle
+    // tempo
     //
-    snd_seq_close(handle);
-    */
+    snd_seq_queue_tempo_t *tempo;
+    snd_seq_queue_tempo_alloca(&tempo);
+    memset(tempo, 0, snd_seq_queue_tempo_sizeof());
+    snd_seq_queue_tempo_set_ppq(tempo, 960);
+    snd_seq_queue_tempo_set_tempo(tempo, 60*1000000 / 120);
+    if (snd_seq_set_queue_tempo(seq, queue, tempo) < 0)
+    {
+        std::cerr << "Can't set tempo" << std::endl;
+        exit(1);
+    }
+
+
+    // start the queue
+    //
+    if (snd_seq_start_queue(seq,queue,NULL) < 0)
+    {
+        std::cerr << "Can't start queue" << endl;
+        exit(1);
+    }
+
+    snd_seq_drain_output(seq);
+
+    int i = 1;
+
+    while (true)
+    {
+        snd_seq_event_t *event= new snd_seq_event_t();
+        snd_seq_ev_clear(event);
+        snd_seq_real_time_t time = {0, 0};
+
+        // dest, src and time
+        //
+        snd_seq_ev_set_source(event, port);
+        snd_seq_ev_set_dest(event,
+                            destclient,
+                            destport);
+        snd_seq_ev_schedule_real(event, queue, 0, &time);
+
+        // send program change
+        snd_seq_ev_set_pgmchange(event, 0, 3);
+        snd_seq_event_output(seq, event);
+
+        // send note on
+        snd_seq_ev_set_noteon(event, 0, 70, 120);
+        snd_seq_event_output(seq, event);
+        
+        snd_seq_drain_output(seq);
+
+        cout << "PENDING EVENTS = " << snd_seq_event_output_pending(seq)
+             << endl;
+
+        sleep(1);
+        i++;
+
+        // drain
+    }
 }
