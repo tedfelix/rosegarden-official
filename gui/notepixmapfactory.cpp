@@ -2086,7 +2086,9 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
     int lw = getLineSpacing();
     int width = getClefWidth(Rosegarden::Clef::Bass) + 10 * getNoteBodyWidth();
 
-    int h = pitch.getHeightOnStaff(clef, Rosegarden::Key());
+    int h = pitch.getHeightOnStaff
+	(clef,
+	 useSharps ? Rosegarden::Key("C major") : Rosegarden::Key("A minor"));
     params.setStemGoesUp(h <= 4);
 
     if (h < -1) params.setStemLength(lw * (4 - h) / 2);
