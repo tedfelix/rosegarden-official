@@ -137,7 +137,8 @@ SegmentCanvas::SegmentCanvas(int gridH, int gridV,
     m_brush(RosegardenGUIColours::SegmentBlock),
     m_highlightBrush(RosegardenGUIColours::SegmentHighlightBlock),
     m_pen(RosegardenGUIColours::SegmentBorder),
-    m_editMenu(new QPopupMenu(this))
+    m_editMenu(new QPopupMenu(this)),
+    m_recordingSegment(0)
 {
     QWhatsThis::add(this, i18n("Segments Canvas - Create and manipulate your segments here"));
 
@@ -312,10 +313,38 @@ SegmentCanvas::addPartItem(int x, int y, unsigned int nbBars)
 }
 
 void
-SegmentCanvas::showRecordingSegmentItem(int x, int y,
-                                        Rosegarden::Segment *segment)
+SegmentCanvas::showRecordingSegmentItem(int x, int y, int width)
 {
+    if(m_recordingSegment)
+    {
+        m_recordingSegment->setSize(width, m_grid.vstep());
+    }
+    else
+    {
+        m_recordingSegment = new QCanvasRectangle(x, y, width,
+                                                  m_grid.vstep(),
+                                                  canvas());
+
+        m_recordingSegment->
+            setPen(RosegardenGUIColours::RecordingSegmentBorder);
+        m_recordingSegment->
+            setBrush(RosegardenGUIColours::RecordingSegmentCanvas);
+
+        m_recordingSegment->setVisible(true);     
+        m_recordingSegment->setZ(1);           // Segment at Z=1,
+    }
 }
+
+void
+SegmentCanvas::destroyRecordingSegmentItem()
+{
+    if(m_recordingSegment)
+    {
+         delete m_recordingSegment;
+         m_recordingSegment = 0;
+    }
+}
+
 
 
 void SegmentCanvas::onEditNotation()

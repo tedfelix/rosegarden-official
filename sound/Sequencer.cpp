@@ -308,12 +308,16 @@ Sequencer::aggregateTime(const Arts::TimeStamp &ts1, const Arts::TimeStamp &ts2)
 
 void
 Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
-                         const Arts::TimeStamp &timeStamp)
+                         const Arts::TimeStamp &timeStamp,
+                         const Rosegarden::RealTime &playLatency)
 {
 
     Rosegarden::MidiByte channel;
     Rosegarden::MidiByte message;
     Rosegarden::RealTime guiTimeStamp(timeStamp.sec, timeStamp.usec);
+  
+    // remove the plyback latency from the timing
+    guiTimeStamp = guiTimeStamp - playLatency;
 
     channel = midiCommand.status & MIDI_CHANNEL_NUM_MASK;
     message = midiCommand.status & MIDI_MESSAGE_TYPE_MASK;
@@ -742,7 +746,7 @@ Sequencer::getSequencerTime()
 //
 //
 MappedComposition
-Sequencer::getMappedComposition()
+Sequencer::getMappedComposition(const Rosegarden::RealTime &playLatency)
 {
     // clear out our global segment
     //
@@ -769,7 +773,8 @@ Sequencer::getMappedComposition()
          midiQueueIt++)
     {
         processMidiIn(midiQueueIt->command,
-                      recordTime(midiQueueIt->time));
+                      recordTime(midiQueueIt->time),
+                      playLatency);
     }
 
     // Free the returned std::vector from here as the aRTS stub

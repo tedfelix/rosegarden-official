@@ -223,7 +223,7 @@ public:
     // Wrap any recorded MIDI into a MappedComposition and return it
     //
     //
-    MappedComposition getMappedComposition();
+    MappedComposition getMappedComposition(const Rosegarden::RealTime &pL);
 
     // Process MappedComposition into MIDI and Audio events and send
     // to aRTS
@@ -316,7 +316,8 @@ private:
     // (only for internal use)
     //
     void processMidiIn(const Arts::MidiCommand &midiCommand,
-                       const Arts::TimeStamp &timeStamp);
+                       const Arts::TimeStamp &timeStamp,
+                       const Rosegarden::RealTime &playLatency);
 
     // aRTS sound server reference
     //

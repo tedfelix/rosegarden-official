@@ -210,7 +210,8 @@ public:
     /*
      * Show a preview of the Segment we're recording
      */
-    void showRecordingSegmentItem(int x, int y, Rosegarden::Segment *segment);
+    void showRecordingSegmentItem(int x, int y, int width);
+    void destroyRecordingSegmentItem();
 
 public slots:
     /// Set the current segment edition tool
@@ -304,6 +305,8 @@ private:
     QPen m_pen;
 
     QPopupMenu *m_editMenu;
+
+    QCanvasRectangle *m_recordingSegment;
     
 };
 

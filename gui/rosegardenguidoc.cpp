@@ -608,6 +608,7 @@ RosegardenGUIDoc::stopRecordingMidi()
     {
         for(w=pViewList->first(); w!=0; w=pViewList->next())
         {
+            w->destroyRecordingSegmentItem();
             w->createSegmentItem(m_recordSegment);
         }
     }

@@ -380,7 +380,7 @@ RosegardenSequencerApp::processRecordedMidi()
     QCString replyType;
     QDataStream arg(data, IO_WriteOnly);
 
-    arg << m_sequencer->getMappedComposition();
+    arg << m_sequencer->getMappedComposition(m_playLatency);
 
     if (!kapp->dcopClient()->call(ROSEGARDEN_GUI_APP_NAME,
                                   ROSEGARDEN_GUI_IFACE_NAME,
@@ -414,7 +414,7 @@ RosegardenSequencerApp::processAsynchronousEvents()
     QByteArray data;
     QDataStream arg(data, IO_WriteOnly);
 
-    arg << m_sequencer->getMappedComposition();
+    arg << m_sequencer->getMappedComposition(m_playLatency);
 
     if (!kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
                                  ROSEGARDEN_GUI_IFACE_NAME,

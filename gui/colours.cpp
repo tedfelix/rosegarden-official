@@ -58,6 +58,8 @@ namespace RosegardenGUIColours
     const QColor SegmentBorder = Qt::black;
     const QColor SegmentBlock = QColor(197, 211, 125);
     const QColor SegmentHighlightBlock = QColor(98, 102, 78);
+    const QColor RecordingSegmentCanvas = Qt::red;
+    const QColor RecordingSegmentBorder = Qt::black;
 
     const QColor MatrixElementBorder = Qt::black;
     const QColor MatrixElementBlock = QColor(98, 128, 232);

@@ -219,8 +219,11 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     connect(this,         SIGNAL(addSegmentItem(Rosegarden::Segment*)),
             trackEditor, SLOT(addSegmentItem(Rosegarden::Segment*)));
 
-    connect(this,         SIGNAL(updateRecordingSegmentItem(Rosegarden::Segment*)),
+    connect(this,         SIGNAL(signalShowRecordingSegmentItem(Rosegarden::Segment*)),
             trackEditor, SLOT(updateRecordingSegmentItem(Rosegarden::Segment*)));
+
+    connect(this, SIGNAL(signalDestroyRecordingSegmentItem()),
+            trackEditor, SLOT(destroyRecordingSegmentItem()));
 
     // Connections upwards from LoopRuler - re-emission of signals
     //
@@ -420,7 +423,12 @@ void RosegardenGUIView::createSegmentItem(Rosegarden::Segment* segment)
 //
 void RosegardenGUIView::showRecordingSegmentItem(Rosegarden::Segment* segment)
 {
-    emit updateRecordingSegmentItem(segment);
+    emit signalShowRecordingSegmentItem(segment);
+}
+
+void RosegardenGUIView::destroyRecordingSegmentItem()
+{
+    emit signalDestroyRecordingSegmentItem();
 }
 
 

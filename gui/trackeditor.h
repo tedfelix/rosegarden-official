@@ -106,6 +106,11 @@ public slots:
      */
     void updateRecordingSegmentItem(Rosegarden::Segment *segment);
 
+    /*
+     * Destroys same
+     */
+    void destroyRecordingSegmentItem();
+
     /**
      * c.f. what we have in rosegardenguiview.h
      * These are instrumental in passing through

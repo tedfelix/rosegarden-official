@@ -143,9 +143,11 @@ public:
     void createSegmentItem(Rosegarden::Segment* segment);
 
     /**
-     * Show a Segment as it records
+     * Show a Segment as it records - remove the SegmentItem
+     * when no longer needed
      */
     void showRecordingSegmentItem(Rosegarden::Segment* segment);
+    void destroyRecordingSegmentItem();
 
     /**
      * set the viewable loop on the clients and SegmentCanvas
@@ -203,7 +205,8 @@ signals:
     void signalSetLoop(bool);
 
     void addSegmentItem(Rosegarden::Segment*);
-    void updateRecordingSegmentItem(Rosegarden::Segment*);
+    void signalShowRecordingSegmentItem(Rosegarden::Segment*);
+    void signalDestroyRecordingSegmentItem();
 
     void signalSetLoopMarker(Rosegarden::timeT, Rosegarden::timeT);
 

@@ -407,17 +407,35 @@ TrackEditor::updateRecordingSegmentItem(Rosegarden::Segment *segment)
 {
     Composition &comp = m_document->getComposition();
 
-/*
-    cout << "START = " << segment->getStartIndex() << " : " <<
-            "END = " << comp.getPosition() << endl;
-*/
     int y = m_vHeader->sectionPos(segment->getTrack());
-    //int x = m_hHeader->sectionPos(startBar);
 
-    m_segmentCanvas->showRecordingSegmentItem(comp.getPosition(), y, segment);
-    //QCanvasRectangle(segment->getStartIndex(), y, comp.getPosition() - segment->getStartIndex(), 10);
+    int startBar = comp.getBarNumber(segment->getStartIndex(), false);
+    std::pair<timeT, timeT> bar = comp.getBarRange(startBar, false);
+     
+    int xAdj = (segment->getStartIndex() - bar.first) *
+                m_hHeader->sectionSize(startBar)/
+                (bar.second - bar.first);
+
+    int x = m_hHeader->sectionPos(startBar) + xAdj;
+
+    int endBar = comp.getBarNumber(comp.getPosition(), false);
+    bar = comp.getBarRange(endBar, false);
+
+    int wAdj = (comp.getPosition() - bar.first) *
+                m_hHeader->sectionSize(endBar)/
+                (bar.second - bar.first);
+
+    int width = m_hHeader->sectionPos(endBar) + wAdj - x;
+
+    m_segmentCanvas->showRecordingSegmentItem(x, y, width);
+    emit needUpdate();
 }
 
+void
+TrackEditor::destroyRecordingSegmentItem()
+{
+    m_segmentCanvas->destroyRecordingSegmentItem();
+}
 
 
 

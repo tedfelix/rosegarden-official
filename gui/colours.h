@@ -40,6 +40,8 @@ namespace RosegardenGUIColours
     extern const QColor SegmentBorder;
     extern const QColor SegmentBlock;
     extern const QColor SegmentHighlightBlock;
+    extern const QColor RecordingSegmentCanvas;
+    extern const QColor RecordingSegmentBorder;
 
     extern const QColor MatrixElementBorder;
     extern const QColor MatrixElementBlock;
