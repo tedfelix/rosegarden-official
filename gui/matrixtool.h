@@ -118,6 +118,13 @@ public:
      */
     virtual void handleEventRemoved(Rosegarden::Event *event);
 
+    virtual void ready();
+    virtual void stow();
+
+protected slots:
+
+    void slotMatrixScrolled(int x, int y);
+
 protected:
     MatrixPainter(MatrixView*);
     MatrixPainter(QString name, MatrixView*);
@@ -242,6 +249,8 @@ public slots:
 
     void slotClickTimeout();
 
+protected slots:
+
     void slotMatrixScrolled(int x, int y);
 
 signals:
@@ -274,6 +283,8 @@ protected:
 
 class MatrixMover : public MatrixTool
 {
+    Q_OBJECT
+
     friend class MatrixToolBox;
 
 public:
@@ -304,6 +315,13 @@ public:
      * is remembering as the current event.
      */
     virtual void handleEventRemoved(Rosegarden::Event *event);
+
+    virtual void ready();
+    virtual void stow();
+
+protected slots:
+
+    void slotMatrixScrolled(int x, int y);
 
 protected:
     MatrixMover(MatrixView*);
@@ -320,6 +338,8 @@ protected:
 
 class MatrixResizer : public MatrixTool
 {
+    Q_OBJECT
+
     friend class MatrixToolBox;
 
 public:
@@ -350,6 +370,13 @@ public:
      * is remembering as the current event.
      */
     virtual void handleEventRemoved(Rosegarden::Event *event);
+
+    virtual void ready();
+    virtual void stow();
+
+protected slots:
+
+    void slotMatrixScrolled(int x, int y);
 
 protected:
     MatrixResizer(MatrixView*);

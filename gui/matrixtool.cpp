@@ -295,7 +295,7 @@ int MatrixPainter::handleMouseMove(Rosegarden::timeT time,
     }
     m_mParentView->update();
 
-    return RosegardenCanvasView::FollowHorizontal;
+    return RosegardenCanvasView::FollowHorizontal | RosegardenCanvasView::FollowVertical;
 }
 
 void MatrixPainter::handleMouseRelease(Rosegarden::timeT endTime,
@@ -337,6 +337,38 @@ void MatrixPainter::handleMouseRelease(Rosegarden::timeT endTime,
 
     m_mParentView->update();
     m_currentElement = 0;
+}
+
+void MatrixPainter::ready()
+{
+    connect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
+            this, SLOT(slotMatrixScrolled(int, int)));
+}
+
+void MatrixPainter::stow()
+{
+    disconnect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
+               this, SLOT(slotMatrixScrolled(int, int)));
+}
+
+void MatrixPainter::slotMatrixScrolled(int newX, int newY) 
+{
+    if (!m_currentElement) return;
+
+    QPoint newP1(newX, newY), oldP1(m_parentView->getCanvasView()->contentsX(),
+                                    m_parentView->getCanvasView()->contentsY());
+
+    QPoint offset = newP1 - oldP1;
+
+    offset = m_mParentView->inverseMapPoint(offset);
+
+    QPoint p(m_currentElement->getCanvasX() + m_currentElement->getWidth(), m_currentElement->getCanvasY());
+    p += offset;
+    
+    timeT newTime = m_mParentView->getSnapGrid().snapX(p.x());
+    int newPitch = m_currentStaff->getHeightAtCanvasCoords(p.x(), p.y());
+
+    handleMouseMove(newTime, newPitch, 0);
 }
 
 //------------------------------
@@ -413,9 +445,6 @@ MatrixSelector::MatrixSelector(MatrixView* view)
 {
     connect(m_parentView, SIGNAL(usedSelection()),
             this,         SLOT(slotHideSelection()));
-
-    connect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
-            this, SLOT(slotMatrixScrolled(int, int)));
 
     new KAction(i18n("Switch to Draw Tool"), "pencil", 0, this,
                 SLOT(slotDrawSelected()), actionCollection(),
@@ -747,6 +776,10 @@ void MatrixSelector::ready()
         m_mParentView->setCanvasCursor(Qt::arrowCursor);
         //m_mParentView->setPositionTracking(false);
     }
+
+    connect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
+            this, SLOT(slotMatrixScrolled(int, int)));
+
 }
 
 void MatrixSelector::stow()
@@ -757,6 +790,10 @@ void MatrixSelector::stow()
         m_selectionRect = 0;
         m_mParentView->canvas()->update();
     }
+
+    disconnect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
+               this, SLOT(slotMatrixScrolled(int, int)));
+
 }
 
 
@@ -1150,6 +1187,39 @@ void MatrixMover::handleMouseRelease(Rosegarden::timeT newTime,
     m_currentElement = 0;
 }
 
+void MatrixMover::ready()
+{
+    connect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
+            this, SLOT(slotMatrixScrolled(int, int)));
+}
+
+void MatrixMover::stow()
+{
+    disconnect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
+               this, SLOT(slotMatrixScrolled(int, int)));
+}
+
+void MatrixMover::slotMatrixScrolled(int newX, int newY) 
+{
+    if (!m_currentElement) return;
+
+    QPoint newP1(newX, newY), oldP1(m_parentView->getCanvasView()->contentsX(),
+                                    m_parentView->getCanvasView()->contentsY());
+
+    QPoint offset = newP1 - oldP1;
+
+    offset = m_mParentView->inverseMapPoint(offset);
+
+    QPoint p(m_currentElement->getCanvasX(), m_currentElement->getCanvasY());
+    p += offset;
+    
+    timeT newTime = m_mParentView->getSnapGrid().snapX(p.x());
+    int newPitch = m_currentStaff->getHeightAtCanvasCoords(p.x(), p.y());
+
+    handleMouseMove(newTime, newPitch, 0);
+}
+
+
 //------------------------------
 MatrixResizer::MatrixResizer(MatrixView* parent)
     : MatrixTool("MatrixResizer", parent),
@@ -1356,6 +1426,34 @@ void MatrixResizer::handleMouseRelease(Rosegarden::timeT newTime,
 
     m_mParentView->update();
     m_currentElement = 0;
+}
+
+void MatrixResizer::ready()
+{
+    connect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
+            this, SLOT(slotMatrixScrolled(int, int)));
+}
+
+void MatrixResizer::stow()
+{
+    disconnect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
+               this, SLOT(slotMatrixScrolled(int, int)));
+}
+
+void MatrixResizer::slotMatrixScrolled(int newX, int newY) 
+{
+    QPoint newP1(newX, newY), oldP1(m_parentView->getCanvasView()->contentsX(),
+                                    m_parentView->getCanvasView()->contentsY());
+
+    QPoint p(newX, newY);
+    
+    if (newP1.x() > oldP1.x()) {
+        p.setX(newX + m_parentView->getCanvasView()->visibleWidth());
+    }
+
+    p = m_mParentView->inverseMapPoint(p);
+    int newTime = m_mParentView->getSnapGrid().snapX(p.x());
+    handleMouseMove(newTime, 0, 0);
 }
 
 //------------------------------
