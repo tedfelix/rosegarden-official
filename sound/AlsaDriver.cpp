@@ -2035,40 +2035,32 @@ LADSPAPluginInstance::connectPorts(LADSPA_Data *dataIn1,
 {
     if (m_descriptor == 0) return;
 
-    if (m_audioPortsIn.size() == 1)
+    // Ensure we connect _all_ audio ports to our two
+    // choices.
+    //
+    LADSPA_Data *dataIn = dataIn1;
+    for (unsigned int i = 0; i < m_audioPortsIn.size(); i++)
     {
         m_descriptor->connect_port(m_instanceHandle,
-                                   m_audioPortsIn[0],
-                                   dataIn1);
+                                   m_audioPortsIn[i],
+                                   dataIn);
+        if (dataIn == dataIn1) dataIn = dataIn2;
+        else dataIn = dataIn1;
     }
-    else // assume 2
+
+    LADSPA_Data *dataOut = dataOut1;
+    for (unsigned int i = 0; i < m_audioPortsOut.size(); i++)
     {
         m_descriptor->connect_port(m_instanceHandle,
-                                   m_audioPortsIn[0],
-                                   dataIn1);
+                                   m_audioPortsOut[i],
+                                   dataOut);
 
-        m_descriptor->connect_port(m_instanceHandle,
-                                   m_audioPortsIn[1],
-                                   dataIn2);
+        if (dataOut == dataOut1) dataOut = dataOut2;
+        else dataOut = dataOut1;
     }
 
-    if (m_audioPortsOut.size() == 1)
-    {
-        m_descriptor->connect_port(m_instanceHandle,
-                                   m_audioPortsOut[0],
-                                   dataOut1);
-    }
-    else
-    {
-        m_descriptor->connect_port(m_instanceHandle,
-                                   m_audioPortsOut[0],
-                                   dataOut1);
-
-        m_descriptor->connect_port(m_instanceHandle,
-                                   m_audioPortsOut[1],
-                                   dataOut2);
-    }
-
+    // Connect all control ports
+    //
     for (unsigned int i = 0; i < m_controlPorts.size(); i++)
     {
         m_descriptor->connect_port(m_instanceHandle,
@@ -2576,7 +2568,16 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                     for (unsigned int i = 0; i < nframes; i++)
                     {
                         _tempOutBuffer1[i] += _pluginBufferOut1[i] * volume;
-                        _tempOutBuffer2[i] += _pluginBufferOut2[i] * volume;
+                            
+                        if (plugin->getAudioChannelsOut() >= 2)
+                        {
+                            _tempOutBuffer2[i] += _pluginBufferOut2[i] * volume;
+                        }
+                        else
+                        {
+                            _tempOutBuffer2[i] += _pluginBufferOut1[i] * volume;
+                        }
+
                     }
                 }
                 else
@@ -2588,9 +2589,6 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                     }
                 }
             }
-
-
-
         }
 
 #ifdef HAVE_LADSPA

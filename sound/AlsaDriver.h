@@ -61,13 +61,6 @@ public:
     unsigned long getLADSPAId() const { return m_ladspaId; }
     int getPosition() const { return m_position; }
 
-    //const LADSPA_Descriptor* getDescriptor() { return m_descriptor; }
-
-    //LADSPA_Handle getHandle() { return m_handle; }
-
-    // plugin functions
-    //
-
     // Connection of data (and behind the scenes control) ports
     //
     void connectPorts(LADSPA_Data *dataIn1,
@@ -79,11 +72,16 @@ public:
     //
     void setPortValue(unsigned long portNumber, LADSPA_Data value);
 
+    // Plugin control
+    //
     void instantiate(unsigned long sampleRate);
     void activate();
     void run(unsigned long sampleCount);
     void deactivate();
     void cleanup();
+
+    // Audio channels out to mix
+    unsigned int getAudioChannelsOut() const { return m_audioPortsOut.size(); }
 
 protected:
     

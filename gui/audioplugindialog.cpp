@@ -226,17 +226,6 @@ AudioPluginDialog::slotPluginSelected(int number)
 
                 height += control->height();
 
-                /*
-                cout << "NAME = " << (*it)->getName() <<
-                        ", TYPE = " << (*it)->getType() << endl;
-                        */
-                /*
-                cout << "CONTROL PORT = \"" << (*it)->getName() << endl;
-                cout << "UPPER BOUND  = " << (*it)->getUpperBound() << endl;
-                cout << "LOWER BOUND  = " << (*it)->getLowerBound() << endl;
-                cout << endl;
-                */
-
                 m_pluginWidgets.push_back(control);
 
 
