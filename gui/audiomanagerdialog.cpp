@@ -159,8 +159,6 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     // accept dnd
     setAcceptDrops(true);
 
-    QToolTip::add(this, i18n("Drag'n Drop .wav files here"));
-
     QHBox *h = makeHBoxMainWidget();
     QVButtonGroup *v = new QVButtonGroup(i18n("Audio File actions"), h);
 
@@ -179,6 +177,8 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     m_insertButton    = new QPushButton(i18n("Insert into Composition"), v);
     m_deleteAllButton = new QPushButton(i18n("Delete All Audio Files"), v);
     m_fileList        = new AudioListView(h);
+
+    QToolTip::add(m_fileList, i18n("Drag'n Drop .wav files here"));
 
     // Set the column names
     //
