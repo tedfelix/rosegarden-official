@@ -538,7 +538,7 @@ TrackButtons::slotInstrumentSelection(int position)
     int i = 0;
 
     // Get the list
-    Rosegarden::InstrumentList list = studio.getInstruments();
+    Rosegarden::InstrumentList list = studio.getPresentationInstruments();
     Rosegarden::InstrumentList::iterator it;
 
     for (it = list.begin(); it != list.end(); it++)

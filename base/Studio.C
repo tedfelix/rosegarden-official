@@ -26,6 +26,14 @@
 #include "AudioDevice.h"
 #include "Instrument.h"
 
+#if (__GNUC__ < 3)
+#include <strstream>
+#define stringstream strstream
+#else
+#include <sstream>
+#endif
+
+
 namespace Rosegarden
 {
 
@@ -65,7 +73,7 @@ Studio::addDevice(Device *device)
 }
 
 InstrumentList
-Studio::getInstruments()
+Studio::getAllInstruments()
 {
     InstrumentList list, subList;
 
@@ -76,7 +84,29 @@ Studio::getInstruments()
     for (it = m_devices.begin(); it != m_devices.end(); it++)
     {
         // get sub list
-        subList = (*it)->getInstruments();
+        subList = (*it)->getAllInstruments();
+
+        // concetenate
+        list.insert(list.end(), subList.begin(), subList.end());
+    }
+
+    return list;
+
+}
+
+InstrumentList
+Studio::getPresentationInstruments()
+{
+    InstrumentList list, subList;
+
+    std::vector<Device*>::iterator it;
+
+    // Append lists
+    //
+    for (it = m_devices.begin(); it != m_devices.end(); it++)
+    {
+        // get sub list
+        subList = (*it)->getPresentationInstruments();
 
         // concetenate
         list.insert(list.end(), subList.begin(), subList.end());
@@ -95,7 +125,7 @@ Studio::getInstrumentById(InstrumentId id)
 
     for (it = m_devices.begin(); it != m_devices.end(); it++)
     {
-        list = (*it)->getInstruments();
+        list = (*it)->getAllInstruments();
 
         for (iit = list.begin(); iit != list.end(); iit++)
             if ((*iit)->getID() == id)
@@ -106,6 +136,9 @@ Studio::getInstrumentById(InstrumentId id)
 
 }
 
+// From a user selection (from a "Presentation" list) return
+// the matching Instrument
+//
 Instrument*
 Studio::getInstrumentFromList(int index)
 {
@@ -116,7 +149,7 @@ Studio::getInstrumentFromList(int index)
 
     for (it = m_devices.begin(); it != m_devices.end(); it++)
     {
-        list = (*it)->getInstruments();
+        list = (*it)->getPresentationInstruments();
 
         for (iit = list.begin(); iit != list.end(); iit++)
         {
@@ -147,7 +180,7 @@ Studio::clear()
     for (it = m_devices.begin(); it != m_devices.end(); it++)
     {
         // get sub list
-        list = (*it)->getInstruments();
+        list = (*it)->getAllInstruments();
 
         for (iit = list.begin(); iit != list.end(); iit++)
             delete(*iit);
@@ -163,8 +196,25 @@ Studio::clear()
 std::string
 Studio::toXmlString()
 {
-    std::string xml;
-    return xml;
+    std::stringstream studio;
+
+    studio << "<studio>" << std::endl << std::endl;
+
+    std::vector<Device*>::iterator it;
+
+    InstrumentList list;
+    InstrumentList::iterator iit;
+
+    // Get XML version of devices
+    //
+    for (it = m_devices.begin(); it != m_devices.end(); it++)
+    {
+        studio << (*it)->toXmlString() << std::endl << std::endl;
+    }
+
+    studio << "</studio>" << std::endl << std::ends;
+
+    return studio.str();
 }
 
 // Run through the Devices checking for MidiDevices and
@@ -220,7 +270,7 @@ Studio::assignMidiProgramToInstrument(MidiByte program, bool percussion)
 
         if (midiDevice)
         {
-            instList = (*it)->getInstruments();
+            instList = (*it)->getPresentationInstruments();
 
             for (iit = instList.begin(); iit != instList.end(); iit++)
             {
@@ -296,7 +346,7 @@ Studio::unassignAllInstruments()
 
         if (midiDevice)
         {
-            instList = (*it)->getInstruments();
+            instList = (*it)->getPresentationInstruments();
 
             for (iit = instList.begin(); iit != instList.end(); iit++)
             {

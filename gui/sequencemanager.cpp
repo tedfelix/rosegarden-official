@@ -959,7 +959,7 @@ void
 SequenceManager::preparePlayback()
 {
     Rosegarden::Studio &studio = m_doc->getStudio();
-    Rosegarden::InstrumentList list = studio.getInstruments();
+    Rosegarden::InstrumentList list = studio.getAllInstruments();
     Rosegarden::MappedComposition mC;
     Rosegarden::MappedEvent *mE;
 

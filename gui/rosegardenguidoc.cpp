@@ -379,6 +379,14 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
         outStream << "</segment>" << endl; //-------------------------
 
     }
+
+    // Put a break in the file
+    //
+    outStream << endl << endl;
+
+    // Send out the studio - a self contained command
+    //
+    outStream << QString(m_studio.toXmlString().c_str()) << endl << endl;
     
     // close the top-level XML tag
     //

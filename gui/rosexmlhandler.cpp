@@ -28,6 +28,7 @@
 
 #include "MidiDevice.h"
 #include "AudioDevice.h"
+#include "Instrument.h"
 
 #include <klocale.h>
 #include <qtextstream.h>
@@ -582,11 +583,11 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         int lsb = atts.value("lsb").toInt();
         int program = atts.value("program").toInt();
         int pitch = atts.value("pitch").toInt();
-        int channel = atts.value("channel").toInt();
+        Rosegarden::InstrumentId instrument = atts.value("instrument").toInt();
 
         dynamic_cast<Rosegarden::MidiDevice*>(m_device)->
-          setMetronome(msb, lsb, program, pitch,
-                       channel, std::string("MIDI Metronome"));
+          setMetronome(instrument, msb, lsb, program, pitch,
+                       std::string("MIDI Metronome"));
 
     } else {
         kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement : Don't know how to parse this : " << qName << endl;

@@ -52,8 +52,11 @@ public:
     void addDevice(Device *device);
 
     // Return the combined instrument list from all devices
+    // for all and presentation Instrument (Presentation is
+    // just a subset of All).
     //
-    InstrumentList getInstruments();
+    InstrumentList getAllInstruments();
+    InstrumentList getPresentationInstruments();
 
     // Return an Instrument
     Instrument* getInstrumentById(InstrumentId id);

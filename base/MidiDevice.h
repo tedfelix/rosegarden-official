@@ -46,8 +46,9 @@ public:
 
     virtual void createInstruments();
 
-    void setMetronome(MidiByte msb, MidiByte lsb, MidiByte program,
-                      MidiByte pitch, MidiByte channel,
+    void setMetronome(InstrumentId instrument,
+                      MidiByte msb, MidiByte lsb, MidiByte program,
+                      MidiByte pitch,
                       const std::string &name);
     MidiMetronome* getMetronome() const { return m_metronome; }
 
@@ -69,7 +70,8 @@ public:
 
     virtual std::string toXmlString();
 
-    virtual InstrumentList& getInstruments();
+    virtual InstrumentList& getAllInstruments();
+    virtual InstrumentList& getPresentationInstruments();
 
 private:
     void clearProgramList();

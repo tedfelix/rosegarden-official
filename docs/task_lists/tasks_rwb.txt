@@ -4,14 +4,24 @@ updated 21.03.2001
 
 Currently looking at:
 
+
+o Saving Studio
+
 o Looping marker set from file load/top level - Looping
   set from Clients - Looping BUG crashing sequencer
+  Looping memory
+
+o Metronome Channel
+
+o Solo
 
 o Sharing keyboard accelerators cleanly across all child windows
 
 o Playing Audio files broken - get seeking working
 
-o Split/Join - segment start and end markers
+o Split/Join
+
+o Segment start and end markers
 
 o smooth position pointer
 

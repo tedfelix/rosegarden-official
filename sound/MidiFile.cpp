@@ -497,7 +497,7 @@ MidiFile::convertToRosegarden()
     bool isSharp;
 
     Rosegarden::Composition *composition = new Composition;
-    Rosegarden::Track *track;
+    Rosegarden::Track *track = 0;
 
     // preset default tempo
     composition->setDefaultTempo(120.0);
@@ -747,14 +747,14 @@ MidiFile::convertToRosegarden()
             case MIDI_PROG_CHANGE:
                 {
                     // Attempt to turn the prog change we've found into an
-                    // Instrument.  Send the program number and if we're on
-                    // the percussion channel.
+                    // Instrument.  Send the program number and whether or
+                    // not we're on the percussion channel.
                     //
                     Rosegarden::Instrument *instr = 
                         m_studio->assignMidiProgramToInstrument(
                                 (*midiEvent)->getData1(), 
-                                false);
-                                //(*midiEvent)->getChannelNumber() && 9);
+                                (*midiEvent)->getChannelNumber() == 
+                                    MIDI_PERCUSSION_CHANNEL);
 
                     // assign it here
                     if (instr != 0)

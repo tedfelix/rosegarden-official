@@ -57,7 +57,13 @@ public:
     // show the world what they want it to see
     //
     virtual void createInstruments() = 0;
-    virtual InstrumentList& getInstruments() = 0;
+
+    // Two functions - one to return all Instruments on a
+    // Device - one to return all Instruments that a user
+    // is allowed to select (Presentation Instruments).
+    //
+    virtual InstrumentList& getAllInstruments() = 0;
+    virtual InstrumentList& getPresentationInstruments() = 0;
 
 protected:
     InstrumentList     m_instruments;

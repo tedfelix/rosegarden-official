@@ -48,7 +48,9 @@ public:
     //
     virtual std::string toXmlString(); 
 
-    virtual InstrumentList& getInstruments() { return m_instruments; }
+    virtual InstrumentList& getAllInstruments() { return m_instruments; }
+    virtual InstrumentList& getPresentationInstruments()
+        { return m_instruments; }
 
 private:
 

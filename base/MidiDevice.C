@@ -24,6 +24,14 @@
 
 #include <cstdio>
 
+#if (__GNUC__ < 3)
+#include <strstream>
+#define stringstream strstream
+#else
+#include <sstream>
+#endif
+
+
 namespace Rosegarden
 {
 
@@ -74,7 +82,7 @@ MidiDevice::createInstruments()
     m_instruments.push_back(
         new Instrument(SystemInstrumentBase + 1,      // Metronome ID
                        Instrument::Midi,              // type
-                       std::string("Metronome"),           // name
+                       std::string("Metronome"),      // name
                        (MidiByte)9,                   // channel
                        dynamic_cast<Device*>(this))); // parent device 
 
@@ -118,8 +126,9 @@ MidiDevice::addBank(MidiBank *bank)
 }
 
 void
-MidiDevice::setMetronome(MidiByte msb, MidiByte lsb, MidiByte program,
-                         MidiByte pitch, MidiByte channel,
+MidiDevice::setMetronome(InstrumentId instrument,
+                         MidiByte msb, MidiByte lsb, MidiByte program,
+                         MidiByte pitch,
                          const std::string &name)
 {
 
@@ -128,7 +137,7 @@ MidiDevice::setMetronome(MidiByte msb, MidiByte lsb, MidiByte program,
     m_metronome->msb = msb;
     m_metronome->lsb = lsb;
     m_metronome->name = name;
-    m_metronome->instrument = SystemInstrumentBase + 1; // hardcode for the mo
+    m_metronome->instrument = instrument;
 }
 
 
@@ -181,15 +190,70 @@ MidiDevice::getProgramByIndex(int index)
 std::string
 MidiDevice::toXmlString()
 {
-    std::string xml;
+    std::stringstream midiDevice;
 
-    return xml;
+    midiDevice << "    <device name=\""  << m_name 
+               << "\" type=\"midi\">" << std::endl << std::endl;
+
+    // Write out the metronome - watch the MidiBytes
+    // when using the stringstream
+    //
+    midiDevice << "        <metronome "
+               << "instrument=\"" << m_metronome->instrument << "\" "
+               << "msb=\"" << (int)m_metronome->msb << "\" "
+               << "lsb=\"" << (int)m_metronome->lsb << "\" " 
+               << "program=\"" << (int)m_metronome->program << "\" "
+               << "pitch=\"" << (int)m_metronome->pitch << "\"/>"
+               << std::endl << std::endl;
+
+    // and now bank information
+    //
+    std::vector<MidiBank*>::iterator it;
+    ProgramList::iterator pt;
+
+    for (it = m_bankList->begin(); it != m_bankList->end(); it++)
+    {
+        midiDevice << "        <bank "
+                   << "name=\"" << (*it)->name << "\" "
+                   << "msb=\"" << (int)(*it)->msb << "\" "
+                   << "lsb=\"" << (int)(*it)->lsb << "\">"
+                   << std::endl;
+
+        // Slightly inefficient way of doing this until
+        // we've sorted out these program changes and
+        // bank relationships
+        //
+        for (pt = m_programList->begin(); pt != m_programList->end(); pt++)
+        {
+            // if bank on program matches current
+            if ((*it)->msb == (*pt)->msb && (*it)->lsb == (*pt)->lsb)
+            {
+                midiDevice << "            <program "
+                           << "id=\"" << (int)(*pt)->program << "\" "
+                           << "name=\"" << (*pt)->name << "\"/>" << std::endl;
+            }
+        }
+
+        midiDevice << "        </bank>" << std::endl << std::endl;
+    }
+
+    midiDevice << "    </device>" << std::endl << std::ends;
+
+    return midiDevice.str();
 }
 
 // Only copy across non System instruments
 //
 InstrumentList&
-MidiDevice::getInstruments()
+MidiDevice::getAllInstruments()
+{
+    return m_instruments;
+}
+
+// Omitting special system Instruments
+//
+InstrumentList&
+MidiDevice::getPresentationInstruments()
 {
     return m_presentationInstrumentList;
 }

@@ -1203,6 +1203,10 @@ void RosegardenGUIApp::importMIDIFile(const QString &file)
     //
     m_doc->setModified();
 
+    // Set the caption
+    //
+    m_doc->setTitle(file);
+
     initView();
 }
 

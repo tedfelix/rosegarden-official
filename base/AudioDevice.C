@@ -25,6 +25,14 @@
 #include <cstdio>
 
 
+#if (__GNUC__ < 3)
+#include <strstream>
+#define stringstream strstream
+#else
+#include <sstream>
+#endif
+
+
 namespace Rosegarden
 {
 
@@ -68,8 +76,14 @@ AudioDevice::createInstruments()
 std::string
 AudioDevice::toXmlString()
 {
-    std::string xml;
-    return xml;
+    std::stringstream audioDevice;
+
+    audioDevice << "    <device name=\""  << m_name
+                << "\" type=\"audio\">" << std::endl;
+
+    audioDevice << "    </device>" << std::endl << std::ends;
+
+   return audioDevice.str();
 }
 
 
