@@ -1,0 +1,14 @@
+
+FAQ for Rosegarden-4
+====================
+
+
+Compilation or installation errors
+----------------------------------
+
+arts/artsmidi.idl not found
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You're missing the kdemultimedia package (and associated -devel
+package, if appropriate to your distribution).
+

@@ -10,7 +10,7 @@
 
 use strict;
 
-my $hbase = 3; # main heading is h$hbase, next is h($hbase+1) etc
+my $hbase = 2; # main heading is h$hbase, next is h($hbase+1) etc
 
 my @p;
 my $laststyle = "none";
