@@ -117,6 +117,7 @@ protected:
 
     timeT m_beginTime;
     timeT m_endTime;
+    bool m_haveRealBeginTime;
 };
 
 

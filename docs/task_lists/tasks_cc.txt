@@ -75,6 +75,7 @@
     preserve unquantized values (and now new requirement for beamed
     group id/type)
 
+20. Investigate fucked-up rests after MIDI import (e.g. davy.mid)
 
 Post-0.1.3 task list (superseding older ones)
 ====================

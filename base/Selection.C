@@ -27,7 +27,8 @@ namespace Rosegarden {
 EventSelection::EventSelection(Segment& t)
     : m_originalSegment(t),
       m_beginTime(0),
-      m_endTime(0)
+      m_endTime(0),
+      m_haveRealBeginTime(false)
 {
 }
 
@@ -37,8 +38,9 @@ EventSelection::~EventSelection()
 
 void EventSelection::addEvent(Event *e)
 { 
-    if (e->getAbsoluteTime() < m_beginTime) {
+    if (e->getAbsoluteTime() < m_beginTime || !m_haveRealBeginTime) {
 	m_beginTime = e->getAbsoluteTime();
+	m_haveRealBeginTime = true;
     }
     if (e->getAbsoluteTime() + e->getDuration() > m_endTime) {
 	m_endTime = e->getAbsoluteTime() + e->getDuration();

@@ -386,7 +386,10 @@ Quantizer::quantize(Segment *s, Segment::iterator from, Segment::iterator to,
 	    }
 	} else continue;
 
-	if (!haveFromTime) fromTime = qAbsoluteTime;
+	if (!haveFromTime) {
+	    fromTime = qAbsoluteTime;
+	    haveFromTime = true;
+	}
 	toTime = qAbsoluteTime;
 
 	setToTarget(s, from, qAbsoluteTime, qDuration);

@@ -287,7 +287,7 @@ void
 NotationStaff::renderElements(NotationElementList::iterator from,
 			      NotationElementList::iterator to)
 {
-//    kdDebug(KDEBUG_AREA) << "NotationStaff " << this << "::renderElements()" << endl;
+    kdDebug(KDEBUG_AREA) << "NotationStaff " << this << "::renderElements()" << endl;
     START_TIMING;
 
     Clef currentClef; // default is okay to start with
@@ -524,13 +524,13 @@ NotationStaff::elementNotMovedInY(NotationElement *elt)
 
     bool ok = (int)(elt->getCanvasY()) == (int)(coords.second);
 
-//     if (!ok) {
-// 	kdDebug(KDEBUG_AREA)
-// 	    << "elementNotMovedInY: elt at " << elt->getAbsoluteTime() <<
-// 	    ", ok is " << ok << endl;
-// 	std::cerr << "(cf " << (int)(elt->getCanvasY()) << " vs "
-// 		  << (int)(coords.second) << ")" << std::endl;
-//     }
+    if (!ok) {
+	kdDebug(KDEBUG_AREA)
+	    << "elementNotMovedInY: elt at " << elt->getAbsoluteTime() <<
+	    ", ok is " << ok << endl;
+	std::cerr << "(cf " << (int)(elt->getCanvasY()) << " vs "
+		  << (int)(coords.second) << ")" << std::endl;
+    }
     return ok;
 }
 
@@ -561,6 +561,12 @@ NotationStaff::elementShiftedOnly(NotationElementList::iterator i)
 	    ok = true;
 	    break;
 	}
+    }
+
+    if (!ok) {
+	kdDebug(KDEBUG_AREA) 
+	    << "elementShiftedOnly: elt at " << (*i)->getAbsoluteTime()
+	    << ", ok is " << ok << endl;
     }
 
     return ok;
