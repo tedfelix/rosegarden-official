@@ -1057,6 +1057,9 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
     bool shifted = false;
     (void)(elt->event()->get<Bool>(properties.NOTE_HEAD_SHIFTED, shifted));
 
+    bool dotShifted = false;
+    (void)(elt->event()->get<Bool>(properties.NOTE_DOT_SHIFTED, dotShifted));
+
     long stemLength = m_notePixmapFactory->getNoteBodyHeight();
     (void)(elt->event()->get<Int>(properties.UNBEAMED_STEM_LENGTH, stemLength));
     
@@ -1086,6 +1089,7 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
     params.setAccidental(accidental);
     params.setAccidentalCautionary(cautionary);
     params.setNoteHeadShifted(shifted);
+    params.setNoteDotShifted(dotShifted);
     params.setDrawFlag(flag);
     params.setDrawStem(true);
     params.setStemGoesUp(up);

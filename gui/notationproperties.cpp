@@ -43,6 +43,7 @@ NotationProperties::NotationProperties(const std::string &prefix) :
     DRAW_FLAG			(prefix + "NoteDrawFlag"),
     NOTE_HEAD_SHIFTED		(prefix + "NoteHeadShifted"),
     NEEDS_EXTRA_SHIFT_SPACE	(prefix + "NeedsExtraShiftSpace"),
+    NOTE_DOT_SHIFTED		(prefix + "NoteDotShifted"),
     CHORD_PRIMARY_NOTE		(prefix + "ChordPrimaryNote"),
     TIE_LENGTH			(prefix + "TieLength"),
     SLUR_ABOVE			(prefix + "SlurAbove"),

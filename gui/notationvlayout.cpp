@@ -152,7 +152,10 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
 
             unsigned int flaggedNote = (stemUp ? chord.size() - 1 : 0);
 
+	    bool hasShifted = chord.hasNoteHeadShifted();
+
 	    for (unsigned int j = 0; j < chord.size(); ++j) {
+
 		el = static_cast<NotationElement*>(*chord[j]);
 		el->setLayoutY(staff.getLayoutYForHeight(h[j]));
 
@@ -171,9 +174,20 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
                 el->event()->setMaybe<Bool>
 		    (m_properties.CHORD_PRIMARY_NOTE, primary);
 
+		bool shifted = chord.isNoteHeadShifted(chord[j]);
                 el->event()->setMaybe<Bool>
-		    (m_properties.NOTE_HEAD_SHIFTED,
-		     chord.isNoteHeadShifted(chord[j]));
+		    (m_properties.NOTE_HEAD_SHIFTED, shifted);
+
+		el->event()->setMaybe<Bool>
+		    (m_properties.NOTE_DOT_SHIFTED, false);
+		if (hasShifted && stemUp) {
+		    long dots = 0;
+		    (void)el->event()->get<Int>(NOTE_DOTS, dots);
+		    if (dots > 0) {
+			el->event()->setMaybe<Bool>
+			    (m_properties.NOTE_DOT_SHIFTED, true);
+		    }
+		}
 
                 el->event()->setMaybe<Bool>
 		    (m_properties.NEEDS_EXTRA_SHIFT_SPACE,

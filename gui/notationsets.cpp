@@ -830,6 +830,8 @@ NotationGroup::applyBeam(NotationStaff &staff)
 
 //            NOTATION_DEBUG << "NotationGroup::applyBeam: Found chord" << endl;
 
+	    bool hasShifted = chord.hasNoteHeadShifted();
+
 	    for (j = 0; j < chord.size(); ++j) {
 		NotationElement *el = static_cast<NotationElement*>(*chord[j]);
 
@@ -848,9 +850,23 @@ NotationGroup::applyBeam(NotationStaff &staff)
 		el->event()->setMaybe<Bool>
 		    (m_properties.VIEW_LOCAL_STEM_UP, beam.aboveNotes);
 
+		bool shifted = chord.isNoteHeadShifted(chord[j]);
 		el->event()->setMaybe<Bool>
-		    (m_properties.NOTE_HEAD_SHIFTED,
-		     chord.isNoteHeadShifted(chord[j]));
+		    (m_properties.NOTE_HEAD_SHIFTED, shifted);
+
+		long dots = 0;
+		(void)el->event()->get<Int>(NOTE_DOTS, dots);
+
+		el->event()->setMaybe<Bool>
+		    (m_properties.NOTE_DOT_SHIFTED, false);
+		if (hasShifted && beam.aboveNotes) {
+		    long dots = 0;
+		    (void)el->event()->get<Int>(NOTE_DOTS, dots);
+		    if (dots > 0) {
+			el->event()->setMaybe<Bool>
+			    (m_properties.NOTE_DOT_SHIFTED, true);
+		    }
+		}
 
                 el->event()->setMaybe<Bool>
 		    (m_properties.NEEDS_EXTRA_SHIFT_SPACE,

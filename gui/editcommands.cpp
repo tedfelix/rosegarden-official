@@ -179,6 +179,8 @@ CopyCommand::~CopyCommand()
 void
 CopyCommand::execute()
 {
+    RG_DEBUG << "CopyCommand::execute" << endl;
+
     Rosegarden::Clipboard temp(*m_targetClipboard);
     m_targetClipboard->copyFrom(m_sourceClipboard);
     m_sourceClipboard->copyFrom(&temp);
@@ -187,6 +189,8 @@ CopyCommand::execute()
 void
 CopyCommand::unexecute()
 {
+    RG_DEBUG << "CopyCommand::unexecute" << endl;
+
     Rosegarden::Clipboard temp(*m_sourceClipboard);
     m_sourceClipboard->copyFrom(m_targetClipboard);
     m_targetClipboard->copyFrom(&temp);
@@ -383,6 +387,8 @@ PasteEventsCommand::isPossible()
 void
 PasteEventsCommand::modifySegment()
 {
+    RG_DEBUG << "PasteEventsCommand::modifySegment" << endl;
+
     if (!m_clipboard->isSingleSegment()) return;
 
     Segment *source = m_clipboard->getSingleSegment();
@@ -502,6 +508,8 @@ EraseCommand::EraseCommand(EventSelection &selection) :
 void
 EraseCommand::modifySegment()
 {
+    RG_DEBUG << "EraseCommand::modifySegment" << endl;
+
     std::vector<Event *> toErase;
     EventSelection::eventcontainer::iterator i;
 
@@ -1228,7 +1236,10 @@ MoveCommand::modifySegment()
 	timeT newTime =
 	    (m_useNotationTimings ?
 	     (*i)->getNotationAbsoluteTime() : (*i)->getAbsoluteTime()) + m_delta;
-	toInsert.push_back(new Event(**i, newTime));
+	Event *e = new Event(**i, newTime);
+	if (m_useNotationTimings)
+	    e->setNotationDuration((*i)->getNotationDuration());
+	toInsert.push_back(e);
     }
 
     Segment &segment(m_selection->getSegment());
@@ -1275,6 +1286,35 @@ MoveCommand::modifySegment()
     segment.normalizeRests(b0, b1);
 }
    
+
+MoveAcrossSegmentsCommand::MoveAcrossSegmentsCommand(Rosegarden::Segment &firstSegment,
+						     Rosegarden::Segment &secondSegment,
+						     Rosegarden::timeT newStartTime,
+						     bool notation,
+						     Rosegarden::EventSelection &selection) :
+    KMacroCommand(getGlobalName()),
+    m_clipboard(new Rosegarden::Clipboard())
+{
+    addCommand(new CutCommand(selection, m_clipboard));
+    addCommand(new PasteEventsCommand(secondSegment, m_clipboard, newStartTime,
+				      notation ?
+				      PasteEventsCommand::NoteOverlay :
+				      PasteEventsCommand::MatrixOverlay));
+}
+
+MoveAcrossSegmentsCommand::~MoveAcrossSegmentsCommand()
+{
+    delete m_clipboard;
+}
+
+QString
+MoveAcrossSegmentsCommand::getGlobalName()
+{
+    return i18n("&Move Events to Other Segment");
+}
+
+
+
 void
 ChangeVelocityCommand::modifySegment()
 {

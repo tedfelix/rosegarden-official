@@ -201,6 +201,7 @@ NotePixmapParameters::NotePixmapParameters(Note::Type noteType,
     m_accidental(accidental),
     m_cautionary(false),
     m_shifted(false),
+    m_dotShifted(false),
     m_accidentalShift(0),
     m_drawFlag(true),
     m_drawStem(true),
@@ -233,7 +234,55 @@ NotePixmapParameters::~NotePixmapParameters()
     // nothing to see here
 }
 
+void
+NotePixmapParameters::setMarks(const std::vector<Rosegarden::Mark> &marks)
+{
+    m_marks.clear();
+    for (unsigned int i = 0; i < marks.size(); ++i)
+	m_marks.push_back(marks[i]);
+}
 
+void
+NotePixmapParameters::removeMarks()
+{
+    m_marks.clear();
+}
+
+std::vector<Rosegarden::Mark>
+NotePixmapParameters::getNormalMarks() const
+{ 
+    std::vector<Rosegarden::Mark> marks;
+
+    for (std::vector<Rosegarden::Mark>::iterator mi = m_marks.begin();
+	 mi != m_marks.end(); ++mi) {
+
+	if (*mi == Rosegarden::Marks::Pause ||
+	    *mi == Rosegarden::Marks::UpBow ||
+	    *mi == Rosegarden::Marks::DownBow) continue;
+	
+	marks.push_back(*mi);
+    }
+
+    return marks;
+}
+
+std::vector<Rosegarden::Mark>
+NotePixmapParameters::getAboveMarks() const
+{ 
+    std::vector<Rosegarden::Mark> marks;
+
+    for (std::vector<Rosegarden::Mark>::iterator mi = m_marks.begin();
+	 mi != m_marks.end(); ++mi) {
+
+	if (*mi == Rosegarden::Marks::Pause ||
+	    *mi == Rosegarden::Marks::UpBow ||
+	    *mi == Rosegarden::Marks::DownBow) {
+	    marks.push_back(*mi);
+	}
+    }
+
+    return marks;
+}
 
 NotePixmapFactory::NotePixmapFactory(std::string fontName, int size) :
     m_selected(false),
@@ -511,6 +560,9 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
     }
 
     m_right = std::max(m_right, params.m_dots * dotWidth + dotWidth/2);
+    if (params.m_dotShifted) {
+	m_right += m_noteBodyWidth;
+    }
     if (params.m_onLine) {
         m_above = std::max(m_above, dot.getHeight()/2);
     }
@@ -621,8 +673,10 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
         int x = m_left + m_noteBodyWidth + dotWidth/2;
         int y = m_above + m_noteBodyHeight/2 - dot.getHeight()/2;
 
-        if (params.m_shifted) x += m_noteBodyWidth;
         if (params.m_onLine)  y -= m_noteBodyHeight/2;
+
+        if (params.m_shifted) x += m_noteBodyWidth;
+	else if (params.m_dotShifted) x += m_noteBodyWidth;
 
         for (int i = 0; i < params.m_dots; ++i) {
 	    m_p->drawNoteCharacter(x, y, dot);
@@ -833,14 +887,11 @@ NotePixmapFactory::drawMarks(bool isStemmed,
 
 	if (!Rosegarden::Marks::isTextMark(params.m_marks[i])) {
 
-	    // get character, inverting if it's a pause
-
 	    NoteCharacter character
 		(m_font->getCharacter
 		 (m_style->getMarkCharName(params.m_marks[i]),
 		  m_inPrinterMethod ? NoteFont::Printer : NoteFont::Screen,
-		  ((params.m_marks[i] == Rosegarden::Marks::Pause) &&
-		   !markAbove)));
+		  !markAbove));
 
 	    int x = m_left + m_noteBodyWidth/2 - character.getWidth()/2;
 	    int y = (markAbove ? (m_above - dy - character.getHeight() - 1) :

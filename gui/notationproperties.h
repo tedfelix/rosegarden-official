@@ -63,6 +63,7 @@ public:
     const Rosegarden::PropertyName DRAW_FLAG;
     const Rosegarden::PropertyName NOTE_HEAD_SHIFTED;
     const Rosegarden::PropertyName NEEDS_EXTRA_SHIFT_SPACE;
+    const Rosegarden::PropertyName NOTE_DOT_SHIFTED;
     const Rosegarden::PropertyName CHORD_PRIMARY_NOTE;
     const Rosegarden::PropertyName TIE_LENGTH;
     const Rosegarden::PropertyName SLUR_ABOVE;

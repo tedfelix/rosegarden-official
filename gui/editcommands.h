@@ -418,6 +418,22 @@ private:
     Rosegarden::Event *m_lastInsertedEvent;
 };
 
+class MoveAcrossSegmentsCommand : public KMacroCommand
+{
+public:
+    MoveAcrossSegmentsCommand(Rosegarden::Segment &firstSegment,
+			      Rosegarden::Segment &secondSegment,
+			      Rosegarden::timeT newStartTime,
+			      bool notation,
+			      Rosegarden::EventSelection &selection);
+    virtual ~MoveAcrossSegmentsCommand();
+
+    static QString getGlobalName();
+
+private:
+    Rosegarden::Clipboard *m_clipboard;
+};
+    
 
 /** Add or subtract a constant from all event velocities.
     Use SelectionPropertyCommand if you want to do something more

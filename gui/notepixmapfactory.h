@@ -49,6 +49,7 @@ public:
 
     void setAccidentalCautionary(bool cautionary) { m_cautionary = cautionary; }
     void setNoteHeadShifted(bool shifted) { m_shifted          = shifted;   }
+    void setNoteDotShifted(bool shifted)  { m_dotShifted       = shifted;   }
     void setAccidentalShift(int shift)    { m_accidentalShift  = shift;     }
     void setAccExtraShift(bool extra)     { m_accidentalExtra  = extra;     }
     void setDrawFlag(bool df)             { m_drawFlag         = df;        }
@@ -78,12 +79,12 @@ public:
     void setTied(bool tied)               { m_tied             = tied;      }
     void setTieLength(int tieLength)      { m_tieLength        = tieLength; }
 
-    void setMarks(const std::vector<Rosegarden::Mark> &marks) {
-	m_marks.clear();
-	for (unsigned int i = 0; i < marks.size(); ++i)
-	    m_marks.push_back(marks[i]);
-    }
-    void removeMarks() { m_marks.clear(); }
+    void setMarks(const std::vector<Rosegarden::Mark> &marks);
+    void removeMarks();
+    
+    std::vector<Rosegarden::Mark> getNormalMarks() const;
+    std::vector<Rosegarden::Mark> getAboveMarks() const; // bowings, pause etc
+    
 
 private:
     friend class NotePixmapFactory;
@@ -96,6 +97,7 @@ private:
 
     bool    m_cautionary;
     bool    m_shifted;
+    bool    m_dotShifted;
     int     m_accidentalShift;
     bool    m_accidentalExtra;
     bool    m_drawFlag;
