@@ -318,7 +318,7 @@ MixerWindow::populate()
                     this, SLOT(slotSelectPlugin()));
         }
 	
-	QLabel *idLabel = new QLabel(QString("%1").arg(count), m_mainBox, "idLabel");
+	QLabel *idLabel = new QLabel(QString("%1").arg((*i)->getId() - Rosegarden::AudioInstrumentBase + 1), m_mainBox, "idLabel");
 	idLabel->setFont(boldFont);
 
 	mainLayout->addMultiCellWidget(rec.m_input->getWidget(), 1, 1, col, col+1);
