@@ -984,8 +984,6 @@ PluginControl::PluginControl(QWidget *parent,
 	} else {
 	    upp->hide();
 	}
-
-        RG_DEBUG << "setting port value = " << initialValue << endl;
     }
 }
 

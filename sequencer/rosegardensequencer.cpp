@@ -1520,8 +1520,6 @@ RosegardenSequencerApp::setMappedPort(int pluginId,
     Rosegarden::MappedPluginSlot *slot = 
         dynamic_cast<Rosegarden::MappedPluginSlot *>(object);
 
-    SEQUENCER_DEBUG << "setMappedPort(" << pluginId << ", " << portId << ") to " << value << endl;
-
     if (slot) {
         slot->setPort(portId, value);
     } else {

@@ -60,6 +60,9 @@ PluginIdentifier::areIdentifiersSimilar(QString id1, QString id2)
     return similar;
 }
 
+// The prefix of this key is also used as a literal in base/AudioPluginInstance.C.
+// If you change one, change the other.
+// Better still, don't change one.
 QString
 PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY = "__ROSEGARDEN__:__RESERVED__:ProjectDirectoryKey";
 

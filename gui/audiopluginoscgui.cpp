@@ -632,9 +632,12 @@ AudioPluginOSCGUIManager::dispatch()
 	    int program = rv - (bank << 16);
 	    gui->sendProgram(bank, program);
 
+	    int controlCount = 0;
 	    for (Rosegarden::PortInstanceIterator i = pluginInstance->begin();
 		 i != pluginInstance->end(); ++i) {
 		gui->sendPortValue((*i)->number, (*i)->value);
+		/* Avoid overloading the GUI if there are lots and lots of ports */
+		if (++controlCount % 50 == 0) usleep(300000);
 	    }
 	    
 	    gui->show();

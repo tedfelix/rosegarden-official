@@ -212,6 +212,11 @@ AudioPluginInstance::getDistinctiveConfigurationText() const
     if (base == "") {
 	for (ConfigMap::const_iterator i = m_config.begin();
 	     i != m_config.end(); ++i) {
+
+	    if (!strncmp(i->first.c_str(),
+			 "__ROSEGARDEN__",
+			 strlen("__ROSEGARDEN__"))) continue;
+
 	    if (i->second != "" && i->second[0] == '/') {
 		base = i->second;
 		break;
