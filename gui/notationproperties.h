@@ -31,5 +31,8 @@
 #define P_ACCIDENTAL "Cache::Notation::Accidental"
 #define P_HEIGHT_ON_STAFF "Cache::Notation::HeightOnStaff"
 #define P_STALK_UP "Cache::Notation::StalkUp"
+#define P_DRAW_TAIL "Cache::Notation::DrawTail"
+#define P_MIN_WIDTH "Cache::Notation::MinWidth"
+#define P_NOTE_NAME "Cache::Notation::NoteName"
 
 #endif
