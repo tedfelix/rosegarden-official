@@ -114,6 +114,7 @@ const MappedObjectProperty MappedAudioFader::FaderRecordLevel = "faderRecordLeve
 const MappedObjectProperty MappedAudioFader::Pan = "pan";
 
 const MappedObjectProperty MappedAudioBuss::Level = "level";
+const MappedObjectProperty MappedAudioBuss::Pan = "pan";
 
 const MappedObjectProperty MappedAudioPluginManager::Plugins = "plugins";
 const MappedObjectProperty MappedAudioPluginManager::PluginIds = "pluginids";
@@ -916,7 +917,6 @@ MappedAudioFader::MappedAudioFader(MappedObject *parent,
     m_level(0.0), // dB
     m_recordLevel(0.0),
     m_instrumentId(0),
-    m_bypassed(false),
     m_pan(0),
     m_channels(channels)
 {
@@ -1097,6 +1097,7 @@ MappedAudioBuss::getPropertyList(const MappedObjectProperty &property)
     if (property == "")
     {
         list.push_back(MappedAudioBuss::Level);
+        list.push_back(MappedAudioBuss::Pan);
         list.push_back(MappedConnectableObject::ConnectionsIn);
         list.push_back(MappedConnectableObject::ConnectionsOut);
     }
@@ -1134,6 +1135,8 @@ MappedAudioBuss::getProperty(const MappedObjectProperty &property,
 {
     if (property == Level) {
 	value = m_level;
+    } else if (property == Pan) {
+	value = m_pan;
     } else {
 #ifdef DEBUG_MAPPEDSTUDIO
         std::cerr << "MappedAudioBuss::getProperty - "
@@ -1151,6 +1154,10 @@ MappedAudioBuss::setProperty(const MappedObjectProperty &property,
     if (property == MappedAudioBuss::Level)
     {
         m_level = value;
+    }
+    else if (property == MappedAudioBuss::Pan)
+    {
+        m_pan = value;
     }
     else if (property == MappedConnectableObject::ConnectionsIn)
     {

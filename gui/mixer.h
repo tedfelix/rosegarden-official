@@ -45,8 +45,11 @@ signals:
     void selectPlugin(QWidget *, Rosegarden::InstrumentId id, int index);
 
 protected slots:
+    void slotRoutingButtonPressed();
+    void slotRouteChanged(int);
     void slotFaderLevelChanged(float level);
-    void slotSelectPlugin(int index);
+    void slotPanChanged(float value);
+    void slotSelectPlugin();
     
 protected:
     virtual void closeEvent(QCloseEvent *);
@@ -78,6 +81,7 @@ private:
 	QPushButton *m_soloButton;
 	QPushButton *m_recordButton;
 	QPushButton *m_stereoButton;
+	bool m_stereoness;
 
 	QVBox *m_pluginBox;
 	std::vector<QPushButton *> m_plugins;
@@ -92,9 +96,12 @@ private:
     FaderRec m_master;
 
     void updateFader(int id); // instrument id if large enough, master/sub otherwise
+    void updateRouteButtons(int id);
 
     QPixmap m_monoPixmap;
     QPixmap m_stereoPixmap;
+
+    Rosegarden::InstrumentId m_currentId;
 };
 
 #endif

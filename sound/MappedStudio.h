@@ -414,12 +414,6 @@ protected:
     MappedObjectValue             m_recordLevel;
     Rosegarden::InstrumentId      m_instrumentId;
 
-    // Are the plugins for this instrument to be bypassed?
-    // (while the plugins don't reside here we use this as
-    // the central point of contact)
-    //
-    bool                          m_bypassed; // we surely don't need this?
-
     // Stereo pan (-1.0 to +1.0)
     //
     MappedObjectValue             m_pan;
@@ -433,12 +427,13 @@ class MappedAudioBuss : public MappedConnectableObject
 {
 public:
     // A buss is much simpler than an instrument fader.  It's always
-    // stereo, and just has a level associated with it.  The level may
-    // be a submaster fader level or a send mix level, it depends on
-    // what the purpose of the buss is.  At the moment we just have a
-    // 1-1 relationship between busses and submasters, and no send
-    // channels.
-    //!!! this should have pan too
+    // stereo, and just has a level and pan associated with it.  The
+    // level may be a submaster fader level or a send mix level, it
+    // depends on what the purpose of the buss is.  At the moment we
+    // just have a 1-1 relationship between busses and submasters, and
+    // no send channels.
+
+    static const MappedObjectProperty Pan;
 
     // properties
     //
@@ -459,7 +454,8 @@ public:
                              MappedObjectValue value);
 
 protected:
-    MappedObjectValue             m_level;
+    MappedObjectValue m_level;
+    MappedObjectValue m_pan;
 };
 
 #ifdef HAVE_LADSPA
