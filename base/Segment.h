@@ -23,12 +23,12 @@
 
 #include <set>
 #include <string>
+
 #include "Event.h"
+#include "NotationTypes.h" // for TimeSignature
 
 namespace Rosegarden 
 {
-
-class TimeSignature;
 
 /**
  * This class owns the Events its items are pointing at
@@ -46,9 +46,16 @@ public:
         timeT start;          // absolute time of event following barline
         bool fixed;           // user-supplied new-bar or timesig event?
         bool correct;         // false if preceding bar has incorrect duration
+        TimeSignature timeSignature;  // time sig of following bar
         
-        BarPosition(timeT istart, bool ifixed, bool icorrect) :
-            start(istart), fixed(ifixed), correct(icorrect) { }
+        BarPosition(timeT istart, bool ifixed, bool icorrect,
+                    const TimeSignature &itimesig) :
+            start(istart), fixed(ifixed), correct(icorrect),
+            timeSignature(itimesig) { }
+
+        bool operator<(const BarPosition &bp) const {
+            return start < bp.start;
+        }
     };
 
     typedef std::vector<BarPosition> BarPositionList;
@@ -62,51 +69,78 @@ public:
     static const std::string BeamedGroupIdPropertyName;
     static const std::string BeamedGroupTypePropertyName;
 
+
     timeT getStartIndex() const         { return m_startIdx; }
     void  setStartIndex(timeT i);
 
     unsigned int getInstrument() const         { return m_instrument; }
     void         setInstrument(unsigned int i) { m_instrument = i; }
 
+    /**
+     * Equivalent to getBarPositions()[getBarNumber(end())].timeSignature,
+     * but slower and capable of working even if calculateBarPositions has
+     * not been called lately.
+     */
+    //!!! This may be obsolete, but we'll think about that more later
     TimeSignature getTimeSigAtEnd(timeT &absTimeOfSig) const;
 
     unsigned int getNbTimeSteps() const;
     void         setNbTimeSteps(unsigned int);
 
     /**
-     * calculate suitable positions for the bar lines, taking into
+     * Calculates suitable positions for the bar lines, taking into
      * account any changes of time signature during the piece. 
-     * the results can be retrieved with getBarPositions()
+     * The results can be retrieved with getBarPositions().
      */
     void calculateBarPositions();
 
     /**
-     * returns the set of bar positions calculated by the last call to
+     * Returns the set of bar positions calculated by the last call to
      * calculateBarPositions().  No guarantee these are still valid.
      */
     const BarPositionList &getBarPositions() const { return m_barPositions; }
 
     /**
-     * deletes the Event
+     * Returns the set of bar positions calculated by the last call to
+     * calculateBarPositions().  No guarantee these are still valid.
+     */
+    BarPositionList &getBarPositions() { return m_barPositions; }
+
+    /** 
+     * Returns the number of the bar (as an index into the
+     * BarPositionList) that contains the given iterator.  You may
+     * pass end() to get the number of the final bar, although looking
+     * up the last item in the BarPositionList might be simpler.
+     * Returned value will only be correct if calculateBarPositions
+     * has been called since the track was last modified.
+     */
+    //!!! Untested.
+    int getBarNumber(const iterator &i) const;
+
+    /**
+     * Erases a single Event
      */
     void erase(iterator pos);
+
+    /**
+     * Erases a set of Events
+     */
     void erase(iterator from, iterator to);
 
     /**
-     * Erase the Event and only this one
-     * Returns true if the event was found and erased,
-     * false otherwise.
+     * Looks up an Event and if it finds it, erases it.
+     * @return true if the event was found and erased, false otherwise.
      */
     bool eraseSingle(Event*);
 
     /**
-     * If possible, collapse the event with the following or previous
+     * If possible, collapses the event with the following or previous
      * one.
      *
      * @return true if collapse was done
      *
-     * collapseForward is set to true if * the collapse was with the
-     * following element, false if it was * with the previous one
+     * collapseForward is set to true if the collapse was with the
+     * following element, false if it was with the previous one
      *
      * collapsedEvent will point to the deleted Event (so we can
      * easily find the corresponding ViewElements to delete), or null
@@ -221,8 +255,9 @@ protected:
 
     static bool checkExpansionValid(timeT maxDuration, timeT minDuration);
 
-    void addNewBar(timeT start, bool fixed, bool correct) {
-        m_barPositions.push_back(BarPosition(start, fixed, correct));
+    void addNewBar(timeT start, bool fixed, bool correct, 
+                   const TimeSignature &timesig) {
+        m_barPositions.push_back(BarPosition(start, fixed, correct, timesig));
     }
 
     timeT m_startIdx;

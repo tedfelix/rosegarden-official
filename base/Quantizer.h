@@ -73,22 +73,26 @@ public:
      * (non-note) events, but the others only on notes and rests.
      */
     void quantizeByNote(Track::iterator from,
-                        Track::iterator to,
-                        int maxDots = 2);
+                         Track::iterator to,
+                         int maxDots = 2);
 
     /**
      * Quantizes one event.  Sets the DurationProperty; does not
      * change the event duration
+     *
+     * @return Quantized duration (same as DurationProperty)
      */
-    void quantizeByUnit(Rosegarden::Event *el, int unit = Note::Shortest);
+    timeT quantizeByUnit(Rosegarden::Event *el, int unit = Note::Shortest);
 
     /**
      * Quantizes one event.  Sets the DurationProperty,
      * NoteDurationProperty, Note::NoteType and Note::NoteDots
      * properties; does not change the event duration.  If the event
      * is not a note or rest, only sets the first of those properties.
+     *
+     * @return Quantized note duration (same as NoteDurationProperty)
      */
-    void quantizeByNote(Rosegarden::Event *el, int maxDots = 2);
+    timeT quantizeByNote(Rosegarden::Event *el, int maxDots = 2);
 
 protected:
 

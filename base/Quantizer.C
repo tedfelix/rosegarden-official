@@ -34,7 +34,7 @@ Quantizer::quantizeByUnit(Track::iterator from,
 }
 
 
-void
+timeT
 Quantizer::quantizeByUnit(Event *e, int unit)
 {
     timeT duration = e->getDuration();
@@ -47,6 +47,7 @@ Quantizer::quantizeByUnit(Event *e, int unit)
     }
 
     e->setMaybe<Int>(DurationProperty, duration);
+    return duration;
 }
 
 
@@ -59,13 +60,11 @@ Quantizer::quantizeByNote(Track::iterator from,
 }
 
 
-void
+timeT
 Quantizer::quantizeByNote(Event *e, int maxDots)
 {
-    quantizeByUnit(e, Note(Note::Shortest).getDuration());
-
-    timeT duration = e->getDuration();
-    if (duration == 0) return;
+    timeT duration = quantizeByUnit(e, Note(Note::Shortest).getDuration());
+    if (duration == 0 && e->getDuration() == 0) return 0;
 
     timeT low, high;
     Note lowNote(Note::Shortest, false), highNote(lowNote);
@@ -84,6 +83,8 @@ Quantizer::quantizeByNote(Event *e, int maxDots)
     e->setMaybe<Int>(NoteDurationProperty, duration);
     e->setMaybe<Int>(Note::NoteType, note.getNoteType());
     e->setMaybe<Int>(Note::NoteDots, note.getDots());
+
+    return duration;
 }
 
 

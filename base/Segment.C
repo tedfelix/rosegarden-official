@@ -22,6 +22,8 @@
 #include "Quantizer.h"
 
 #include <iostream>
+#include <algorithm>
+#include <iterator>
 
 namespace Rosegarden 
 {
@@ -185,6 +187,7 @@ void Track::calculateBarPositions()
 
     timeT absoluteTime = 0;
     timeT thisBarTime = 0;
+    timeT barDuration = timeSignature.getBarDuration();
 
     iterator i(begin());
 
@@ -193,66 +196,41 @@ void Track::calculateBarPositions()
         Event *e = *i;
         absoluteTime = e->getAbsoluteTime();
 
-        if (startNewBar) addNewBar(absoluteTime, true, barCorrect);
-        startNewBar = false;
+        if (startNewBar) {
+            addNewBar(absoluteTime, true, barCorrect, timeSignature);
+            startNewBar = false;
+        }
 
         if (e->isa(TimeSignature::EventType)) {
 
-            if (thisBarTime > 0) {
-
-                thisBarTime = 0;
-
-                // insert the bar line before this event, and also
-                // before any preceding clef or key events
-
-                /*!!! No, this is meaningless when we're setting bars by
-                   time rather than iterator
-
-                iterator i0(i), i1(i);
-                while (i0 == i ||
-                       (*i0)->isa(Clef::EventType) ||
-                       (*i1)->isa( Key::EventType)) {
-                    i1 = i0;
-                    if (i0 == begin()) break; // shouldn't happen anyway
-                    --i0;
-                }
-
-                addNewBar(i1, true, true);
-                */
-
-                addNewBar(absoluteTime, true, true);
-            }
-
             timeSignature = TimeSignature(*e);
+            barDuration = timeSignature.getBarDuration();
+
+            if (thisBarTime > 0) {
+                addNewBar(absoluteTime, true, true, timeSignature);
+                thisBarTime = 0;
+            }
 
         } else if (e->isa(Note::EventType) || e->isa(Note::EventRestType)) {
 
             bool hasDuration = true;
-
-            quantizer.quantizeByNote(e);
+            timeT d = quantizer.quantizeByNote(e);
 
             if (e->isa(Note::EventType)) {
                 iterator i0(i);
                 if (++i0 != end() &&
                     (*i0)->getAbsoluteTime() == e->getAbsoluteTime()) {
+                    // we're in a chord or something
                     hasDuration = false;
                 }
             }
 
             if (hasDuration) {
-
-                // either we're not in a chord or the chord is about
-                // to end: update the time accordingly
-
-                long d = e->get<Int>(Quantizer::NoteDurationProperty);
                 thisBarTime += d;
-
                 cerr << "Track: Quantized duration is " << d
-                     << ", current bar now "
-                     << thisBarTime << endl;
+                     << ", current bar now " << thisBarTime << endl;
             }
 
-            timeT barDuration = timeSignature.getBarDuration();
             if (thisBarTime >= barDuration) {
                 barCorrect = (thisBarTime == barDuration);
                 thisBarTime = 0;
@@ -265,9 +243,22 @@ void Track::calculateBarPositions()
     }
 
     if (startNewBar || thisBarTime > 0) {
-        addNewBar(absoluteTime, false,
-                  thisBarTime == timeSignature.getBarDuration());
+        addNewBar
+            (absoluteTime, false, thisBarTime == barDuration, timeSignature);
     }
+}
+
+
+int Track::getBarNumber(const iterator &i) const
+{
+    if (i == end()) return m_barPositions.size() - 1;
+
+    BarPosition pos((*i)->getAbsoluteTime(), true, true, TimeSignature());
+
+    BarPositionList::const_iterator bpi
+        (std::lower_bound(m_barPositions.begin(), m_barPositions.end(), pos));
+
+    return std::distance(m_barPositions.begin(), bpi);
 }
 
 
