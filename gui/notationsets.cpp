@@ -583,7 +583,6 @@ NotationGroup::calculateBeam(NotationStaff &staff)
 {
     Beam beam;
     beam.aboveNotes = !(m_weightAbove > m_weightBelow);
-    beam.gradient = 0;
     beam.startY = 0;
     beam.necessary = false;
     
@@ -652,14 +651,6 @@ NotationGroup::calculateBeam(NotationStaff &staff)
         else diff = 0;
     }
 
-    // some magic numbers
-/*!!! see below
-    if (diff > 3) beam.gradient = 18;
-    else if (diff > 1) beam.gradient = 10;
-    else beam.gradient = 0;
-
-    if (initialHeight < finalHeight) beam.gradient = -beam.gradient;
-*/
     // Now, we need to judge the height of the beam such that the
     // nearest note of the whole group, the nearest note of the first
     // chord and the nearest note of the final chord are all at least
@@ -679,10 +670,14 @@ NotationGroup::calculateBeam(NotationStaff &staff)
 
     int spacing = staff.getNotePixmapFactory(m_type == Grace).getLineSpacing();
 
+    beam.gradient = 0;
     if (finalDX > 0) {
-	if (diff > 3) diff = 3;
-	else if (diff > 0) --diff;
-	beam.gradient = (diff * spacing * 100) / (finalDX * 2);
+	do {
+	    if (diff == 0) break;
+	    else if (diff > 3) diff = 3;
+	    else --diff;
+	    beam.gradient = (diff * spacing * 100) / (finalDX * 2);
+	} while (beam.gradient > 18);
     } else {
 	beam.gradient = 0;
     }

@@ -449,6 +449,7 @@ private:
 };
     
 
+/// MakeNotesViable works on a selection or entire segment
 class TransformsMenuMakeNotesViableCommand : public BasicSelectionCommand
 {
 public:
@@ -468,7 +469,22 @@ protected:
 private:
     Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
 };
-     
+ 
+/// MakeRegionViable works on part of a segment
+class TransformsMenuMakeRegionViableCommand : public BasicCommand
+{
+public:
+    TransformsMenuMakeRegionViableCommand(Rosegarden::Segment &segment,
+					  Rosegarden::timeT startTime,
+					  Rosegarden::timeT endTime) :
+	BasicCommand(getGlobalName(), segment, startTime, endTime) { }
+
+    static QString getGlobalName() { return i18n("Tie Notes at &Barlines"); }
+
+protected:
+    virtual void modifySegment();
+};
+    
 
 class TransformsMenuDeCounterpointCommand : public BasicSelectionCommand
 {

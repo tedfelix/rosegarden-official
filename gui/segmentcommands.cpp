@@ -1447,7 +1447,11 @@ AddTimeSignatureAndNormalizeCommand::AddTimeSignatureAndNormalizeCommand
 
 	if (startTime >= nextTimeSigTime || endTime <= time) continue;
 
-	addCommand(new TransformsMenuNormalizeRestsCommand
+	// "Make Notes Viable" splits and ties notes at barlines, and
+	// also does a rest normalize.  It's what we normally want
+	// when adding a time signature.
+
+	addCommand(new TransformsMenuMakeRegionViableCommand
 		   (**i,
 		    std::max(startTime, time),
 		    std::min(endTime, nextTimeSigTime)));

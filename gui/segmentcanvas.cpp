@@ -369,8 +369,6 @@ SegmentNotationPreview::SegmentNotationPreview(SegmentItem& parent,
 
 void SegmentNotationPreview::drawShape(QPainter& painter)
 {
-    RG_DEBUG << "SegmentNotationPreview::drawShape" << endl;
-
     updatePreview();
     painter.save();
 
@@ -652,8 +650,6 @@ void SegmentItem::drawShape(QPainter& painter)
 
         painter.drawRect(intersection);
     }
-
-    RG_DEBUG << "SegmentItem::drawShape: preview is " << m_preview << " and m_showPreview " << m_showPreview << endl;
 
     if (m_preview && m_showPreview) {
 /*!!!

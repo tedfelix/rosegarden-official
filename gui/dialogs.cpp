@@ -236,7 +236,7 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
 	(config->readBoolEntry("timesigdialogshowcommon", true));
 
     m_normalizeRestsButton = new QCheckBox
-	(i18n("Normalize subsequent rests"), groupBox);
+	(i18n("Correct the durations of following bars"), groupBox);
     m_normalizeRestsButton->setChecked
 	(config->readBoolEntry("timesigdialognormalize", true));
 

@@ -848,6 +848,16 @@ TransformsMenuMakeNotesViableCommand::modifySegment()
 }
 
 void
+TransformsMenuMakeRegionViableCommand::modifySegment()
+{
+    Segment &segment(getSegment());
+    SegmentNotationHelper helper(segment);
+
+    helper.makeNotesViable(getStartTime(), getEndTime(), true);
+    segment.normalizeRests(getStartTime(), getEndTime());
+}
+
+void
 TransformsMenuDeCounterpointCommand::modifySegment()
 {
     Segment &segment(getSegment());

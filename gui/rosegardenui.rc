@@ -178,6 +178,7 @@
   <Action name="fastforwardtoend" />
   <Action name="stop" />
   <Action name="record" />
+  <Action name="toggle_tracking"/>
 </ToolBar>
 
 <ToolBar name="Zoom Toolbar">
@@ -324,7 +325,6 @@
        <Action name="stop" />
        <Action name="record" />
        <Action name="recordtoggle" />
-       <Action name="toggle_tracking"/>
      </enable>
 </State>
 
