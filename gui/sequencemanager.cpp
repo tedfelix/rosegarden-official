@@ -53,7 +53,6 @@
 namespace Rosegarden
 {
 
-
 //----------------------------------------
 
 SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
@@ -123,7 +122,7 @@ SequenceManager::~SequenceManager()
 
 void SequenceManager::setDocument(RosegardenGUIDoc* doc)
 {
-    SEQMAN_DEBUG << "SequenceManager::setDocument()\n";
+    SEQMAN_DEBUG << "SequenceManager::setDocument(" << doc << ")\n";
 
     DataBlockRepository::clear();
 
@@ -131,7 +130,10 @@ void SequenceManager::setDocument(RosegardenGUIDoc* doc)
     disconnect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()));
     
     m_segments.clear();
+    m_triggerSegments.clear();
+
     m_doc = doc;
+    Composition &comp = m_doc->getComposition();
 
     // Must recreate and reconnect the countdown timer and dialog
     // (bug 729039)
@@ -150,17 +152,26 @@ void SequenceManager::setDocument(RosegardenGUIDoc* doc)
             this, SLOT(slotCountdownTimerTimeout()));
 
     if (m_doc) {
-	m_compositionRefreshStatusId =
-	    m_doc->getComposition().getNewRefreshStatusId();
-        m_doc->getComposition().addObserver(this);
+	m_compositionRefreshStatusId = comp.getNewRefreshStatusId();
+        comp.addObserver(this);
 
         connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),
                 this, SLOT(update()));
 
-	for (Rosegarden::Composition::iterator i = m_doc->getComposition().begin();
-	     i != m_doc->getComposition().end(); ++i) {
+	for (Composition::iterator i = comp.begin(); i != comp.end(); ++i) {
+
+	    SEQMAN_DEBUG << "Adding segment with rid " << (*i)->getRuntimeId() << endl;
+
 	    m_segments.insert(SegmentRefreshMap::value_type
 			      (*i, (*i)->getNewRefreshStatusId()));
+	}
+
+	for (Composition::triggersegmentcontaineriterator i =
+		 comp.getTriggerSegments().begin();
+	     i != comp.getTriggerSegments().end(); ++i) {
+	    m_triggerSegments.insert(SegmentRefreshMap::value_type
+				     ((*i)->getSegment(),
+				      (*i)->getSegment()->getNewRefreshStatusId()));
 	}
     }
 
@@ -193,7 +204,7 @@ SequenceManager::mapSequencer()
         m_sequencerMapper = new SequencerMapper(
             KGlobal::dirs()->resourceDirs("tmp").last() + "/rosegarden_sequencer_timing_block");
     }
-    catch(Rosegarden::Exception)
+    catch(Exception)
     {
         m_sequencerMapper = 0;
     }
@@ -256,8 +267,8 @@ SequenceManager::play()
     // Send initial tempo
     //
     double qnD = 60.0/comp.getTempo();
-    Rosegarden::RealTime qnTime =
-        Rosegarden::RealTime(long(qnD), 
+    RealTime qnTime =
+        RealTime(long(qnD), 
                 long((qnD - double(long(qnD))) * 1000000000.0));
     StudioControl::sendQuarterNoteLength(qnTime);
 
@@ -272,7 +283,7 @@ SequenceManager::play()
         startPos = comp.getElapsedRealTime(comp.getLoopStart());
 
     KConfig* config = kapp->config();
-    config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
+    config->setGroup(SequencerOptionsConfigGroup);
 
     // playback start position
     streamOut << startPos.sec;
@@ -314,7 +325,7 @@ SequenceManager::play()
         m_transportStatus = STARTING_TO_PLAY;
     } else {
         m_transportStatus = STOPPED;
-        throw(Rosegarden::Exception("Failed to start playback"));
+        throw(Exception("Failed to start playback"));
     }
 
     return false;
@@ -389,7 +400,7 @@ SequenceManager::stop()
     QByteArray replyData;
 
     if (!rgapp->sequencerCall("stop()", replyType, replyData)) {
-        throw(Rosegarden::Exception("Failed to contact Rosegarden sequencer with stop command.   Please save your composition and restart Rosegarden to continue."));
+        throw(Exception("Failed to contact Rosegarden sequencer with stop command.   Please save your composition and restart Rosegarden to continue."));
     }
 
     // restore
@@ -431,7 +442,7 @@ SequenceManager::stop()
 void
 SequenceManager::rewind()
 {
-    Rosegarden::Composition &composition = m_doc->getComposition();
+    Composition &composition = m_doc->getComposition();
 
     timeT position = composition.getPosition();
     std::pair<timeT, timeT> barRange =
@@ -473,7 +484,7 @@ SequenceManager::rewind()
 void
 SequenceManager::fastforward()
 {
-    Rosegarden::Composition &composition = m_doc->getComposition();
+    Composition &composition = m_doc->getComposition();
 
     timeT position = composition.getPosition() + 1;
     timeT newPosition = composition.getBarRangeForTime(position).second;
@@ -506,7 +517,7 @@ SequenceManager::notifySequencerStatus(TransportStatus status)
 
 
 void
-SequenceManager::sendSequencerJump(const Rosegarden::RealTime &time)
+SequenceManager::sendSequencerJump(const RealTime &time)
 {
     QByteArray data;
     QDataStream streamOut(data, IO_WriteOnly);
@@ -531,10 +542,10 @@ SequenceManager::record(bool toggled)
 {
     mapSequencer();
 
-    Rosegarden::Composition &comp = m_doc->getComposition();
-    Rosegarden::Studio &studio = m_doc->getStudio();
+    Composition &comp = m_doc->getComposition();
+    Studio &studio = m_doc->getStudio();
     KConfig* config = kapp->config();
-    config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
+    config->setGroup(GeneralOptionsConfigGroup);
 
     bool punchIn = false; // are we punching in?
 
@@ -544,13 +555,13 @@ SequenceManager::record(bool toggled)
     //
     if (!(m_soundDriverStatus & AUDIO_OK)) {
         int rID = comp.getRecordTrack();
-        Rosegarden::InstrumentId instrId =
+        InstrumentId instrId =
             comp.getTrackById(rID)->getInstrument();
-        Rosegarden::Instrument *instr = studio.getInstrumentById(instrId);
+        Instrument *instr = studio.getInstrumentById(instrId);
 
-        if (!instr || instr->getType() == Rosegarden::Instrument::Audio) {
+        if (!instr || instr->getType() == Instrument::Audio) {
             m_transport->RecordButton()->setOn(false);
-            throw(Rosegarden::Exception("Audio subsystem is not available - can't record audio"));
+            throw(Exception("Audio subsystem is not available - can't record audio"));
         }
     }
 
@@ -612,14 +623,14 @@ punchin:
 
         // Get the record track and check the Instrument type
         int rID = comp.getRecordTrack();
-        Rosegarden::InstrumentId inst =
+        InstrumentId inst =
             comp.getTrackById(rID)->getInstrument();
 
         // If no matching record instrument
         //
         if (studio.getInstrumentById(inst) == 0) {
             m_transport->RecordButton()->setDown(false);
-            throw(Rosegarden::Exception("No Record instrument selected"));
+            throw(Exception("No Record instrument selected"));
         }
 
 
@@ -658,21 +669,21 @@ punchin:
 
         switch (studio.getInstrumentById(inst)->getType()) {
 
-        case Rosegarden::Instrument::Midi:
+        case Instrument::Midi:
             recordType = STARTING_TO_RECORD_MIDI;
             SEQMAN_DEBUG << "SequenceManager::record() - starting to record MIDI\n";
             break;
 
-        case Rosegarden::Instrument::Audio: {
+        case Instrument::Audio: {
 
             // check for disk space available
-            Rosegarden::DiskSpace *space;
-            Rosegarden::AudioFileManager &afm = 
+            DiskSpace *space;
+            AudioFileManager &afm = 
                 m_doc->getAudioFileManager();
             QString audioPath = strtoqstr(afm.getAudioPath());
 
             try {
-                space = new Rosegarden::DiskSpace(audioPath);
+                space = new DiskSpace(audioPath);
             }
             catch(QString e)
                 {
@@ -687,7 +698,7 @@ punchin:
             // Check the disk space available is within current
             // audio recording limit
             //
-            config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
+            config->setGroup(SequencerOptionsConfigGroup);
 
 	    // Ask the document to update its record latencies so as to
 	    // do latency compensation when we stop
@@ -727,7 +738,7 @@ punchin:
         // The arguments for the Sequencer  - record is similar to playback,
         // we must being playing to record.
         //
-        Rosegarden::RealTime startPos =
+        RealTime startPos =
             comp.getElapsedRealTime(comp.getPosition());
 
         // playback start position
@@ -735,7 +746,7 @@ punchin:
         streamOut << startPos.nsec;
     
         // set group
-        config->setGroup(Rosegarden::LatencyOptionsConfigGroup);
+        config->setGroup(LatencyOptionsConfigGroup);
 
         // read ahead slice
         streamOut << config->readLongNumEntry("readaheadsec", 0);
@@ -781,7 +792,7 @@ punchin:
                 // audio recording time.
                 //
                 KConfig* config = kapp->config();
-                config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
+                config->setGroup(SequencerOptionsConfigGroup);
 
                 int seconds = 60 * 
                     (config->readNumEntry("audiorecordminutes", 5));
@@ -815,9 +826,9 @@ punchin:
             m_transportStatus = STOPPED;
 
             if (recordType == STARTING_TO_RECORD_AUDIO) {
-                throw(Rosegarden::Exception("Couldn't start recording audio.  Ensure your audio record path is valid\nin Document Properties (Edit->Edit Document Properties->Audio)"));
+                throw(Exception("Couldn't start recording audio.  Ensure your audio record path is valid\nin Document Properties (Edit->Edit Document Properties->Audio)"));
             } else {
-                throw(Rosegarden::Exception("Couldn't start recording MIDI"));
+                throw(Exception("Couldn't start recording MIDI"));
             }
 
         }
@@ -831,7 +842,7 @@ punchin:
 //
 void
 SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
-                                         Rosegarden::AudioManagerDialog
+                                         AudioManagerDialog
                                              *audioManagerDialog)
 {
     static bool boolShowingWarning = false;
@@ -839,15 +850,15 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
     if (m_doc == 0 || mC.size() == 0) return;
 
-    Rosegarden::MappedComposition::iterator i;
+    MappedComposition::iterator i;
 
     // Thru filtering is done at the sequencer for the actual sound
     // output, but here we need both filtered (for OUT display) and
     // unfiltered (for insertable note callbacks) compositions, so
     // we've received the unfiltered copy and will filter here
-    Rosegarden::MappedComposition tempMC =
+    MappedComposition tempMC =
 	applyFiltering(mC,
-		       Rosegarden::MappedEvent::MappedEventType(
+		       MappedEvent::MappedEventType(
 			   m_doc->getStudio().getMIDIThruFilter()));
     
     // send to the MIDI labels (which can only hold one event at a time)
@@ -863,9 +874,9 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
     for (i = mC.begin(); i != mC.end(); ++i )
     {
-	if ((*i)->getType() >= Rosegarden::MappedEvent::Audio)
+	if ((*i)->getType() >= MappedEvent::Audio)
 	{
-	    if ((*i)->getType() == Rosegarden::MappedEvent::AudioStopped)
+	    if ((*i)->getType() == MappedEvent::AudioStopped)
 	    {
 		/*
 		  SEQMAN_DEBUG << "AUDIO FILE ID = "
@@ -881,22 +892,22 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 		{
 		    audioManagerDialog->
 			closePlayingDialog(
-			    Rosegarden::AudioFileId((*i)->getData1()));
+			    AudioFileId((*i)->getData1()));
 		}
 	    }
 	    
-	    if ((*i)->getType() == Rosegarden::MappedEvent::AudioLevel)
+	    if ((*i)->getType() == MappedEvent::AudioLevel)
 		sendAudioLevel(*i);
 	    
 	    if ((*i)->getType() == 
-		Rosegarden::MappedEvent::AudioGeneratePreview)
+		MappedEvent::AudioGeneratePreview)
 	    {
 		m_doc->finalizeAudioFile(
-		    Rosegarden::AudioFileId((*i)->getData1()));
+		    AudioFileId((*i)->getData1()));
 	    }
 	    
 	    if ((*i)->getType() ==
-		Rosegarden::MappedEvent::SystemUpdateInstruments)
+		MappedEvent::SystemUpdateInstruments)
 	    {
 		// resync Devices and Instruments
 		//
@@ -907,7 +918,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                 m_transportStatus == RECORDING_MIDI ||
                 m_transportStatus == RECORDING_AUDIO)
             {
-		if ((*i)->getType() == Rosegarden::MappedEvent::SystemFailure) {
+		if ((*i)->getType() == MappedEvent::SystemFailure) {
 
 		    SEQMAN_DEBUG << "Failure of some sort..." << endl;
 
@@ -935,7 +946,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                     */
 
 
-		    if ((*i)->getData1() == Rosegarden::MappedEvent::FailureJackDied) {
+		    if ((*i)->getData1() == MappedEvent::FailureJackDied) {
                     // Something horrible has happened to JACK or we got
                     // bumped out of the graph.  Either way stop playback.
                     //
@@ -945,7 +956,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                         dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(),
                         i18n("JACK Audio subsystem has died or it has stopped Rosegarden from processing audio.\nPlease restart Rosegarden to continue working with audio.\nQuitting other running applications may improve Rosegarden's performance."));
 
-		    } else if ((*i)->getData1() == Rosegarden::MappedEvent::FailureXRuns) {
+		    } else if ((*i)->getData1() == MappedEvent::FailureXRuns) {
 			struct timeval tv;
 			(void)gettimeofday(&tv, 0);
 
@@ -968,16 +979,16 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 			    
 			switch ((*i)->getData1()) {
 			    
-			case Rosegarden::MappedEvent::FailureDiscUnderrun:
+			case MappedEvent::FailureDiscUnderrun:
 			    message = i18n("Cannot read from disc fast enough to service the audio subsystem.\nConsider increasing the disc read buffer size in the sequencer configuration.");
 			    break;
 
-			case Rosegarden::MappedEvent::FailureDiscOverrun:
+			case MappedEvent::FailureDiscOverrun:
 			    message = i18n("Cannot write to disc fast enough to service the audio subsystem.\nConsider increasing the disc write buffer size in the sequencer configuration.");
 			    break;
 
-			case Rosegarden::MappedEvent::FailureBussMixUnderrun:
-			case Rosegarden::MappedEvent::FailureMixUnderrun:
+			case MappedEvent::FailureBussMixUnderrun:
+			case MappedEvent::FailureMixUnderrun:
 			    message = i18n("The audio subsystem is failing to keep up.");
 			    break;
 
@@ -1011,7 +1022,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
 	for (i = mC.begin(); i != mC.end(); ++i )
 	{
-	    if ((*i)->getType() == Rosegarden::MappedEvent::MidiNote) {
+	    if ((*i)->getType() == MappedEvent::MidiNote) {
 		if ((*i)->getVelocity() == 0) {
 		    emit insertableNoteOffReceived((*i)->getPitch(), (*i)->getVelocity());
 		} else {
@@ -1073,9 +1084,9 @@ SequenceManager::setLoop(const timeT &lhs, const timeT &rhs)
     QByteArray data;
     QDataStream streamOut(data, IO_WriteOnly);
 
-    Rosegarden::RealTime loopStart =
+    RealTime loopStart =
             m_doc->getComposition().getElapsedRealTime(lhs);
-    Rosegarden::RealTime loopEnd =
+    RealTime loopEnd =
             m_doc->getComposition().getElapsedRealTime(rhs);
 
     streamOut << loopStart.sec;
@@ -1103,14 +1114,14 @@ SequenceManager::checkSoundDriverStatus()
     m_soundDriverStatus = result;
 
     if (m_soundDriverStatus == NO_DRIVER)
-        throw(Rosegarden::Exception("MIDI and Audio subsystems have failed to initialise"));
+        throw(Exception("MIDI and Audio subsystems have failed to initialise"));
 
     if (!(m_soundDriverStatus & MIDI_OK))
-        throw(Rosegarden::Exception("MIDI subsystem has failed to initialise"));
+        throw(Exception("MIDI subsystem has failed to initialise"));
 
     /*
       if (!(m_soundDriverStatus & AUDIO_OK))
-      throw(Rosegarden::Exception("Audio subsystem has failed to initialise"));
+      throw(Exception("Audio subsystem has failed to initialise"));
     */
 }
 
@@ -1122,10 +1133,10 @@ SequenceManager::checkSoundDriverStatus()
 void
 SequenceManager::preparePlayback(bool forceProgramChanges)
 {
-    Rosegarden::Studio &studio = m_doc->getStudio();
-    Rosegarden::InstrumentList list = studio.getAllInstruments();
-    Rosegarden::MappedComposition mC;
-    Rosegarden::MappedEvent *mE;
+    Studio &studio = m_doc->getStudio();
+    InstrumentList list = studio.getAllInstruments();
+    MappedComposition mC;
+    MappedEvent *mE;
 
     // Send the MappedInstruments (minimal Instrument information
     // required for Performance) to the Sequencer
@@ -1133,7 +1144,7 @@ SequenceManager::preparePlayback(bool forceProgramChanges)
     InstrumentList::iterator it = list.begin();
     for (; it != list.end(); it++)
     {
-        Rosegarden::StudioControl::sendMappedInstrument(MappedInstrument(*it));
+        StudioControl::sendMappedInstrument(MappedInstrument(*it));
 
         // Send program changes for MIDI Instruments
         //
@@ -1144,14 +1155,14 @@ SequenceManager::preparePlayback(bool forceProgramChanges)
             if ((*it)->sendsBankSelect())
             {
                 mE = new MappedEvent((*it)->getId(),
-                                     Rosegarden::MappedEvent::MidiController,
-                                     Rosegarden::MIDI_CONTROLLER_BANK_MSB,
+                                     MappedEvent::MidiController,
+                                     MIDI_CONTROLLER_BANK_MSB,
                                      (*it)->getMSB());
                 mC.insert(mE);
 
                 mE = new MappedEvent((*it)->getId(),
-                                     Rosegarden::MappedEvent::MidiController,
-                                     Rosegarden::MIDI_CONTROLLER_BANK_LSB,
+                                     MappedEvent::MidiController,
+                                     MIDI_CONTROLLER_BANK_LSB,
                                      (*it)->getLSB());
                 mC.insert(mE);
             }
@@ -1164,7 +1175,7 @@ SequenceManager::preparePlayback(bool forceProgramChanges)
                          << (*it)->getPresentationName().c_str() << endl;
 
                 mE = new MappedEvent((*it)->getId(),
-                                     Rosegarden::MappedEvent::MidiProgramChange,
+                                     MappedEvent::MidiProgramChange,
                                      (*it)->getProgramChange());
                 mC.insert(mE);
             }
@@ -1184,21 +1195,21 @@ SequenceManager::preparePlayback(bool forceProgramChanges)
 
     // Send the MappedComposition if it's got anything in it
     showVisuals(mC);
-    Rosegarden::StudioControl::sendMappedComposition(mC);
+    StudioControl::sendMappedComposition(mC);
 
     // Set up the audio playback latency
     //
     KConfig* config = kapp->config();
-    config->setGroup(Rosegarden::LatencyOptionsConfigGroup);
+    config->setGroup(LatencyOptionsConfigGroup);
 
     int jackSec = config->readLongNumEntry("jackplaybacklatencysec", 0);
     int jackUSec = config->readLongNumEntry("jackplaybacklatencyusec", 0);
-    m_playbackAudioLatency = Rosegarden::RealTime(jackSec, jackUSec * 1000);
+    m_playbackAudioLatency = RealTime(jackSec, jackUSec * 1000);
 
 }
 
 void
-SequenceManager::sendAudioLevel(Rosegarden::MappedEvent *mE)
+SequenceManager::sendAudioLevel(MappedEvent *mE)
 {
     RosegardenGUIView *v;
     QList<RosegardenGUIView>& viewList = m_doc->getViewList();
@@ -1225,12 +1236,12 @@ SequenceManager::resetControllers()
     {
         if ((*it)->getType() == Instrument::Midi)
         {
-            Rosegarden::MappedEvent 
+            MappedEvent 
                 mE((*it)->getId(),
-                   Rosegarden::MappedEvent::MidiController,
+                   MappedEvent::MidiController,
                    MIDI_CONTROLLER_RESET,
                    0);
-            Rosegarden::StudioControl::sendMappedEvent(mE);
+            StudioControl::sendMappedEvent(mE);
         }
     }
 
@@ -1241,54 +1252,54 @@ void
 SequenceManager::resetMidiNetwork()
 {
     SEQMAN_DEBUG << "SequenceManager::resetMidiNetwork - resetting\n";
-    Rosegarden::MappedComposition mC;
+    MappedComposition mC;
 
     // Should do all Midi Instrument - not just guess like this is doing
     // currently.
 
     for (unsigned int i = 0; i < 16; i++)
     {
-        Rosegarden::MappedEvent *mE =
-            new Rosegarden::MappedEvent(Rosegarden::MidiInstrumentBase + i,
-                                        Rosegarden::MappedEvent::MidiController,
+        MappedEvent *mE =
+            new MappedEvent(MidiInstrumentBase + i,
+                                        MappedEvent::MidiController,
                                         MIDI_SYSTEM_RESET,
                                         0);
 
         mC.insert(mE);
     }
     showVisuals(mC);
-    Rosegarden::StudioControl::sendMappedComposition(mC);
+    StudioControl::sendMappedComposition(mC);
 }
 
 void
-SequenceManager::getSequencerPlugins(Rosegarden::AudioPluginManager *aPM)
+SequenceManager::getSequencerPlugins(AudioPluginManager *aPM)
 {
-    Rosegarden::MappedObjectId id =
-        Rosegarden::StudioControl::getStudioObjectByType(
-                Rosegarden::MappedObject::AudioPluginManager);
+    MappedObjectId id =
+        StudioControl::getStudioObjectByType(
+                MappedObject::AudioPluginManager);
 
     SEQMAN_DEBUG << "getSequencerPlugins - getting plugin information" << endl;
     
-    Rosegarden::MappedObjectPropertyList seqPlugins
-        = Rosegarden::StudioControl::getStudioObjectProperty(
-                id, Rosegarden::MappedAudioPluginManager::Plugins);
+    MappedObjectPropertyList seqPlugins
+        = StudioControl::getStudioObjectProperty(
+                id, MappedAudioPluginManager::Plugins);
 
     SEQMAN_DEBUG << "getSequencerPlugins - got "
                  << seqPlugins.size() << " items" << endl;
 
     /*
-    Rosegarden::MappedObjectPropertyList seqPluginIds
+    MappedObjectPropertyList seqPluginIds
         = getSequencerPropertyList(id,
-                               Rosegarden::MappedAudioPluginManager::PluginIds);
+                               MappedAudioPluginManager::PluginIds);
                                */
 
-    //Rosegarden::MappedObjectPropertyList::iterator it;
+    //MappedObjectPropertyList::iterator it;
 
     unsigned int i = 0;
 
     while (i < seqPlugins.size())
     {
-        Rosegarden::MappedObjectId id = seqPlugins[i++].toInt();
+        MappedObjectId id = seqPlugins[i++].toInt();
         QString name = seqPlugins[i++];
         unsigned long uniqueId = seqPlugins[i++].toLong();
         QString label = seqPlugins[i++];
@@ -1311,13 +1322,13 @@ SequenceManager::getSequencerPlugins(Rosegarden::AudioPluginManager *aPM)
         {
             id = seqPlugins[i++].toInt();
             name = seqPlugins[i++];
-            Rosegarden::PluginPort::PortType type =
-                Rosegarden::PluginPort::PortType(seqPlugins[i++].toInt());
-            Rosegarden::PluginPort::PortDisplayHint hint =
-                Rosegarden::PluginPort::PortDisplayHint(seqPlugins[i++].toInt());
-            Rosegarden::PortData lowerBound = seqPlugins[i++].toFloat();
-            Rosegarden::PortData upperBound = seqPlugins[i++].toFloat();
-	    Rosegarden::PortData defaultValue = seqPlugins[i++].toFloat();
+            PluginPort::PortType type =
+                PluginPort::PortType(seqPlugins[i++].toInt());
+            PluginPort::PortDisplayHint hint =
+                PluginPort::PortDisplayHint(seqPlugins[i++].toInt());
+            PortData lowerBound = seqPlugins[i++].toFloat();
+            PortData upperBound = seqPlugins[i++].toFloat();
+	    PortData defaultValue = seqPlugins[i++].toFloat();
 
 //	     SEQMAN_DEBUG << "DEFAULT =  " << defaultValue << endl;
 //             SEQMAN_DEBUG << "ADDED PORT = \"" << name << "\" id " << id << endl;
@@ -1334,7 +1345,7 @@ SequenceManager::getSequencerPlugins(Rosegarden::AudioPluginManager *aPM)
         // SEQMAN_DEBUG << " = " << seqPlugins[i] << endl;
 
         /*
-        Rosegarden::MappedObjectPropertyList author =
+        MappedObjectPropertyList author =
             getSequencerPropertyList(seqPluginIds[i].toInt(), "author");
 
         if (author.size() == 1)
@@ -1352,7 +1363,7 @@ SequenceManager::reinitialiseSequencerStudio()
     // Send the MIDI recording device to the sequencer
     //
     KConfig* config = kapp->config();
-    config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
+    config->setGroup(SequencerOptionsConfigGroup);
 
     QString recordDeviceStr = config->readEntry("midirecorddevice");
 
@@ -1362,11 +1373,11 @@ SequenceManager::reinitialiseSequencerStudio()
 
         if (recordDevice >= 0)
         {
-            Rosegarden::MappedEvent mE(Rosegarden::MidiInstrumentBase, // InstrumentId
-                                       Rosegarden::MappedEvent::SystemRecordDevice,
-                                       Rosegarden::MidiByte(recordDevice));
+            MappedEvent mE(MidiInstrumentBase, // InstrumentId
+                                       MappedEvent::SystemRecordDevice,
+                                       MidiByte(recordDevice));
 
-            Rosegarden::StudioControl::sendMappedEvent(mE);
+            StudioControl::sendMappedEvent(mE);
             SEQMAN_DEBUG << "set MIDI record device to "
                          << recordDevice << endl;
         }
@@ -1377,19 +1388,19 @@ SequenceManager::reinitialiseSequencerStudio()
     bool submasterOuts = config->readBoolEntry("audiosubmasterouts", false);
     bool faderOuts = config->readBoolEntry("audiofaderouts", false);
 
-    Rosegarden::MidiByte ports = 0;
+    MidiByte ports = 0;
     if (faderOuts) {
-	ports |= Rosegarden::MappedEvent::FaderOuts;
+	ports |= MappedEvent::FaderOuts;
     }
     if (submasterOuts) {
-	ports |= Rosegarden::MappedEvent::SubmasterOuts;
+	ports |= MappedEvent::SubmasterOuts;
     }
-    Rosegarden::MappedEvent mEports
-	(Rosegarden::MidiInstrumentBase,
-	 Rosegarden::MappedEvent::SystemAudioPorts,
+    MappedEvent mEports
+	(MidiInstrumentBase,
+	 MappedEvent::SystemAudioPorts,
 	 ports);
 
-    Rosegarden::StudioControl::sendMappedEvent(mEports);
+    StudioControl::sendMappedEvent(mEports);
 
 
     // Set the studio from the current document
@@ -1422,11 +1433,11 @@ SequenceManager::panic()
             {
                 MappedEvent 
                     mE((*it)->getId(),
-                                Rosegarden::MappedEvent::MidiNote,
+                                MappedEvent::MidiNote,
                                 i,
                                 0);
 
-                Rosegarden::StudioControl::sendMappedEvent(mE);
+                StudioControl::sendMappedEvent(mE);
             }
 
             device++;
@@ -1441,7 +1452,7 @@ SequenceManager::panic()
 // In this case we only route MIDI events to the transport ticker
 //
 void
-SequenceManager::showVisuals(const Rosegarden::MappedComposition &mC)
+SequenceManager::showVisuals(const MappedComposition &mC)
 {
     MappedComposition::iterator it = mC.begin();
     if (it != mC.end()) m_transport->setMidiOutLabel(*it);
@@ -1450,12 +1461,12 @@ SequenceManager::showVisuals(const Rosegarden::MappedComposition &mC)
 
 // Filter a MappedComposition by Type.
 //
-Rosegarden::MappedComposition
-SequenceManager::applyFiltering(const Rosegarden::MappedComposition &mC,
-                                Rosegarden::MappedEvent::MappedEventType filter)
+MappedComposition
+SequenceManager::applyFiltering(const MappedComposition &mC,
+                                MappedEvent::MappedEventType filter)
 {
-    Rosegarden::MappedComposition retMc;
-    Rosegarden::MappedComposition::iterator it = mC.begin();
+    MappedComposition retMc;
+    MappedComposition::iterator it = mC.begin();
 
     for (; it != mC.end(); it++)
     {
@@ -1540,6 +1551,42 @@ void SequenceManager::checkRefreshStatus()
 {
     SEQMAN_DEBUG << "SequenceManager::checkRefreshStatus()\n";
 
+    // Look at trigger segments first: if one of those has changed, we'll
+    // need to be aware of it when scanning segments subsequently
+
+    TriggerSegmentRec::SegmentRuntimeIdSet ridset;
+    Composition &comp = m_doc->getComposition();
+    SegmentRefreshMap newTriggerMap;
+
+    for (Composition::triggersegmentcontaineriterator i =
+	     comp.getTriggerSegments().begin();
+	 i != comp.getTriggerSegments().end(); ++i) {
+
+	Segment *s = (*i)->getSegment();
+
+	if (m_triggerSegments.find(s) == m_triggerSegments.end()) {
+	    newTriggerMap[s] = s->getNewRefreshStatusId();
+	} else {
+	    newTriggerMap[s] = m_triggerSegments[s];
+	}
+
+	if (s->getRefreshStatus(newTriggerMap[s]).needsRefresh()) {
+	    TriggerSegmentRec::SegmentRuntimeIdSet &thisSet = (*i)->getReferences();
+	    ridset.insert(thisSet.begin(), thisSet.end());
+	    s->getRefreshStatus(newTriggerMap[s]).setNeedsRefresh(false);
+	}
+    }
+
+    m_triggerSegments = newTriggerMap;
+
+    SEQMAN_DEBUG << "SequenceManager::checkRefreshStatus: segments modified by changes to trigger segments are:" << endl;
+    int x = 0;
+    for (TriggerSegmentRec::SegmentRuntimeIdSet::iterator i = ridset.begin();
+	 i != ridset.end(); ++i) {
+	SEQMAN_DEBUG << x << ": " << *i << endl;
+	++x;
+    }
+
     std::vector<Segment*>::iterator i;
 
     // Check removed segments first
@@ -1554,7 +1601,8 @@ void SequenceManager::checkRefreshStatus()
     // then the ones which are still there
     for (SegmentRefreshMap::iterator i = m_segments.begin();
 	 i != m_segments.end(); ++i) {
-	if (i->first->getRefreshStatus(i->second).needsRefresh()) {
+	if (i->first->getRefreshStatus(i->second).needsRefresh() ||
+	    ridset.find(i->first->getRuntimeId()) != ridset.end()) {
 	    segmentModified(i->first);
 	    i->first->getRefreshStatus(i->second).setNeedsRefresh(false);
 	}
@@ -1707,7 +1755,7 @@ void SequenceManager::trackChanged(const Composition *, Track* t)
     }
 }
 
-void SequenceManager::metronomeChanged(Rosegarden::InstrumentId id,
+void SequenceManager::metronomeChanged(InstrumentId id,
 				       bool regenerateTicks)
 {
     // This method is called when the user has changed the
@@ -1752,8 +1800,8 @@ void SequenceManager::metronomeChanged(const Composition *)
     }
 }
 
-void SequenceManager::filtersChanged(Rosegarden::MidiFilter thruFilter,
-				     Rosegarden::MidiFilter recordFilter)
+void SequenceManager::filtersChanged(MidiFilter thruFilter,
+				     MidiFilter recordFilter)
 {
     m_controlBlockMmapper->updateMidiFilters(thruFilter, recordFilter);
 }
@@ -1787,7 +1835,7 @@ void
 SequenceManager::sendTransportControlStatuses()
 {
     KConfig* config = kapp->config();
-    config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
+    config->setGroup(SequencerOptionsConfigGroup);
 
     // Get the config values
     //
@@ -1812,10 +1860,10 @@ SequenceManager::sendTransportControlStatuses()
             jackValue = 0;
     }
 
-    Rosegarden::MappedEvent mEjackValue(Rosegarden::MidiInstrumentBase, // InstrumentId
-                                        Rosegarden::MappedEvent::SystemJackTransport,
-                                        Rosegarden::MidiByte(jackValue));
-    Rosegarden::StudioControl::sendMappedEvent(mEjackValue);
+    MappedEvent mEjackValue(MidiInstrumentBase, // InstrumentId
+                                        MappedEvent::SystemJackTransport,
+                                        MidiByte(jackValue));
+    StudioControl::sendMappedEvent(mEjackValue);
 
 
     // Send MMC transport
@@ -1831,20 +1879,20 @@ SequenceManager::sendTransportControlStatuses()
             mmcValue = 0;
     }
 
-    Rosegarden::MappedEvent mEmccValue(Rosegarden::MidiInstrumentBase, // InstrumentId
-                                       Rosegarden::MappedEvent::SystemMMCTransport,
-                                       Rosegarden::MidiByte(mmcValue));
+    MappedEvent mEmccValue(MidiInstrumentBase, // InstrumentId
+                                       MappedEvent::SystemMMCTransport,
+                                       MidiByte(mmcValue));
 
-    Rosegarden::StudioControl::sendMappedEvent(mEmccValue);
+    StudioControl::sendMappedEvent(mEmccValue);
 
 
     // Send MIDI Clock
     //
-    Rosegarden::MappedEvent mEmidiClock(Rosegarden::MidiInstrumentBase, // InstrumentId
-                                        Rosegarden::MappedEvent::SystemMIDIClock,
-                                        Rosegarden::MidiByte(midiClock));
+    MappedEvent mEmidiClock(MidiInstrumentBase, // InstrumentId
+                                        MappedEvent::SystemMIDIClock,
+                                        MidiByte(midiClock));
 
-    Rosegarden::StudioControl::sendMappedEvent(mEmidiClock);
+    StudioControl::sendMappedEvent(mEmidiClock);
 
 }
 

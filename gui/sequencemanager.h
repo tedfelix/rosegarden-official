@@ -279,6 +279,7 @@ protected:
 
     typedef std::map<Rosegarden::Segment *, int> SegmentRefreshMap;
     SegmentRefreshMap m_segments; // map to refresh status id
+    SegmentRefreshMap m_triggerSegments;
     unsigned int m_compositionRefreshStatusId;
     bool m_updateRequested;
 
