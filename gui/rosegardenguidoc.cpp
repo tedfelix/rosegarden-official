@@ -540,6 +540,8 @@ void RosegardenGUIDoc::initialiseStudio()
 
             count++;
 
+#ifdef HAVE_LADSPA
+
             // Initialise all the plugins for this Instrument
             //
             Rosegarden::AudioPluginInstance *plugin;
@@ -608,6 +610,8 @@ void RosegardenGUIDoc::initialiseStudio()
                     }
                 }
             }
+#endif // HAVE_LADSPA
+
         }
     }
 
