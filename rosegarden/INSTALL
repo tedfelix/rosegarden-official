@@ -18,9 +18,9 @@ and now you can configure and make as usual:
   % ./configure --with-qt-dir=/usr/lib/qt3 --prefix=/opt/kde3 --with-alsa=yes
   % make
 
-Note that  Rosegarden-4 v0.1.5 is the first release to support KDE3
-so there are still a few inconsistencies and bugs over and above the
-KDE2 version.
+Note that Rosegarden-4 v0.1.5 is the first release to support KDE3
+so there still might be a few inconsistencies and bugs over and above
+the KDE2 version.
 
 
 ALSA 0.9.0beta12 and above support
