@@ -27,7 +27,7 @@
 #include <iostream>
 
 #include "rosegardensequencer.h"
-#include <MappedEvent.h>
+#include <MappedComposition.h>
 
 // the name of our rosegarden gui application
 //
@@ -137,26 +137,16 @@ int main(int argc, char *argv[])
     }
     else if (replyType = "Rosegarden::MappedComposition")
     {
-      cerr << "YOWZER" << endl;
-
-      Rosegarden::MappedComposition::iterator i;
+      Rosegarden::MappedComposition::iterator it;
       Rosegarden::MappedComposition mappedComp;
        
       reply >> mappedComp;
 
-/*
-      strstream thing;
-      thing << (void *)mappedComp.begin() << " : " << (void *)mappedComp.end() << ends;
-      cout << thing << endl;
- 
-
-      for (i = mappedComp.begin(); i != mappedComp.end(); ++i )
+      for (it = mappedComp.begin(); it != mappedComp.end(); ++it )
       {
-        cout << "MappedComposition instrument = " << (*i)->instrument() << endl;
+        cout << "MappedComposition instrument = " << (*it)->getInstrument() << endl;
       }
-*/
 
-      
     }
     else
     {
