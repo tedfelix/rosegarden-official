@@ -729,12 +729,21 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 	     << ", lastNoteEnds " << lastNoteEnds << endl;
 #endif
 
+	/* BR #988185: "Notation: Rest can be simultaneous with note but follow it"
+
+	   This conditional tested whether a note started before the
+	   preceding note ended, and if so inserted rests simultaneous
+	   with the preceding note to make up the gap.  Without the
+	   ability to lay out those rests partwise, this is never any
+	   better than plain confusing.  Revert the change.
+
 	if (thisNoteStarts < lastNoteEnds &&
-	    thisNoteStarts > lastNoteStarts) { //!!! experimental
+	    thisNoteStarts > lastNoteStarts) {
 	    gaps.push_back(std::pair<timeT, timeT>
 			   (lastNoteStarts,
 			    thisNoteStarts - lastNoteStarts));
 	}
+	*/
 
 	if (thisNoteStarts > lastNoteEnds) {
 	    gaps.push_back(std::pair<timeT, timeT>
