@@ -670,8 +670,9 @@ DSSIPluginInstance::configure(QString key,
 
 void
 DSSIPluginInstance::sendEvent(const RealTime &eventTime,
-			      const snd_seq_event_t *event)
+			      const void *e)
 {
+    snd_seq_event_t *event = (snd_seq_event_t *)e;
 #ifdef DEBUG_DSSI_PROCESS
     std::cerr << "DSSIPluginInstance::sendEvent at " << eventTime << std::endl;
 #endif

@@ -56,7 +56,7 @@ public:
     virtual float getPortValue(unsigned int portNumber);
     virtual QString configure(QString key, QString value);
     virtual void sendEvent(const RealTime &eventTime,
-			   const snd_seq_event_t *event);
+			   const void *event);
 
     virtual size_t getBufferSize() { return m_blockSize; }
     virtual size_t getAudioInputCount() { return m_audioPortsIn.size(); }

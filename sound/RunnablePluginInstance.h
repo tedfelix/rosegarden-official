@@ -28,7 +28,6 @@
 #include <vector>
 
 #include "RealTime.h"
-#include <alsa/seq_event.h>
 
 namespace Rosegarden
 {
@@ -85,7 +84,7 @@ public:
     virtual QString configure(QString /* key */, QString /* value */) { return QString(); }
 
     virtual void sendEvent(const RealTime & /* eventTime */,
-			   const snd_seq_event_t * /* event */) { }
+			   const void * /* event */) { }
 
     virtual bool isBypassed() const = 0;
     virtual void setBypassed(bool value) = 0;
