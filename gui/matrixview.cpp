@@ -904,7 +904,9 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview,
     }
 
     updateQuantizeCombo();
-    updateView();
+
+    if (redrawNow) updateView();
+    else update();
 }
 
 

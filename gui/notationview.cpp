@@ -1860,8 +1860,8 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview,
 
     setMenuStates();
 
-//!!!    updateView();
-    update();
+    if (redrawNow) updateView();
+    else update();
 
     NOTATION_DEBUG << "XXX " << endl;
 }

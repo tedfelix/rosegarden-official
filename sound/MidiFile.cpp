@@ -778,18 +778,11 @@ MidiFile::convertToRosegarden(Composition *composition,
                         MidiByte m1 = (*midiEvent)->getMetaMessage()[1];
                         MidiByte m2 = (*midiEvent)->getMetaMessage()[2];
 
-			std::cerr << "MIDI_SET_TEMPO: m0 is " << (int)m0 <<
-			    ", m1 is " << (int)m1 << ", m2 is " << (int)m2 << std::endl;
-
                         long tempo = (((m0 << 8) + m1) << 8) + m2;
-//                        long tempo = (m0 << 16) + (m1 << 8) + m2;
 
-			std::cerr << "MIDI_SET_TEMPO: tempo value is " << tempo << endl;
-                        
                         if (tempo != 0)
                         {
                             tempo = 60000000 / tempo;
-			    std::cerr << "MIDI_SET_TEMPO: so bpm value is " << tempo << endl;
 			    //!!! if preexisting, need to ask user about this
                             composition->addTempo(rosegardenTime, tempo);
                         }

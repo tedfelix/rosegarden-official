@@ -536,8 +536,8 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 
     // First stage: erase all existing non-tupleted rests in this range.
 
-//    cerr << "Segment::normalizeRests " << startTime << " -> "
-//	 << endTime << endl;
+    cerr << "Segment::normalizeRests " << startTime << " -> "
+	 << endTime << endl;
 
     timeT segmentEndTime = m_endTime;
 
@@ -668,6 +668,8 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
     timeT duration;
 
     for (unsigned int gi = 0; gi < gaps.size(); ++gi) {
+
+	cerr << "gap " << gi << ": " << gaps[gi].first << " -> " << gaps[gi].second << endl;
 
         startTime = gaps[gi].first;
 	duration = gaps[gi].second;
