@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "POT-Creation-Date: 2003-01-18 19:47+0100\n"
-"PO-Revision-Date: 2003-01-18 17:24+0100\n"
+"PO-Revision-Date: 2003-01-19 11:57+0100\n"
 "Last-Translator: Guillaume Laurent <glaurent@telegraph-road.org>\n"
 "Language-Team: Français <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -53,10 +53,20 @@ msgid ""
 "     you will need to add the correct directory to your KDEDIRS\n"
 "     environment variable before you can run it."
 msgstr ""
+"Des versions incorrectes des fichiers auxiliaires de Rosegarden"
+"ont été trouvés dans l'installation de KDE. "
+"(Ce programme est la version %1, mais les fichiers installés sont pour la version %2.) "
+"Ceci peut avoir l'une des causes suivantes : "
+"-1 Ceci est une nouvelle mise à jour de Rosegarden, et elle n'a pas encore été installée. "
+"Si vous l'avez compilé vous-même, vérifiez que vous avec bien fait 'make install' et que la procédure "
+"c'est finie correctement. "
+"- 2 La mise à jour a été installée dans un dossier non-standard, et une ancienne version a été "
+"trouvée dans le dossier standard. Si c'est le cas, ajoutez le chemin vers le dossier non-standard "
+"dans la variable d'environnement KDEDIRS et relancez Rosegarden."
 
 #: main.cpp:352 main.cpp:370
 msgid "Installation problem"
-msgstr "Probl�e d'installation"
+msgstr "Problême d'installation"
 
 #: main.cpp:358
 msgid "Rosegarden does not appear to have been installed."
@@ -79,6 +89,15 @@ msgid ""
 "     installed into $HOME or a local third-party package directory\n"
 "     like /usr/local or /opt."
 msgstr ""
+"Un ou plusieurs fichiers auxiliaires de Rosegarden n'ont pas été trouvés dans l'installation de KDE. "
+"Cela peut avoir les causes suivantes : "
+"-1 Rosegarden n'a pas été correctement installé. Si vous l'avez compilé vous-même, "
+"vérifiéz que vous avec bien lancé  la commande 'make install' que cette commande s'est "
+"terminée correctement. "
+"- 2 Rosegarden a été installé dans un dossier non standard, et vous devez alors ajouter "
+"ce dossier dans votre variable d'environnement KDEDIRS. C'est peut-être le cas si vous "
+"l'avez installé dans $HOME ou dans un dossier local pour application tierces, comme "
+"/usr/local ou /opt."
 
 #: main.cpp:378
 msgid "Rosegarden"
@@ -89,68 +108,72 @@ msgid ""
 "Event in chord at %1 has no HEIGHT_ON_STAFF property!\n"
 "This is a bug (the program would previously have crashed by now)"
 msgstr ""
+"L'event dans l'accord à %1 n'a pas de propriété HEIGHT_ON_STAFF! "
+"Ceci est un bug (le programme aurait du planter depuis)"
 
 #: notationvlayout.cpp:307
 msgid ""
 "Spanned note at %1 has no HEIGHT_ON_STAFF property!\n"
 "This is a bug (the program would previously have crashed by now)"
 msgstr ""
+"La note à %1 n'a pas de propriété HEIGHT_ON_STAFF! "
+"Ceci est un bug (le programme aurait du planter depuis)"
 
 #: notepixmapfactory.cpp:214
 msgid "No note font names available, aborting"
-msgstr ""
+msgstr "Aucun nom de fonte pour les notes disponible. Arrêt prématuré."
 
 #: notepixmapfactory.cpp:1303
 msgid "%1 ticks"
-msgstr ""
+msgstr "%1 ticks"
 
 #: controlruler.cpp:68
 msgid "%1 controller"
-msgstr ""
+msgstr "%1 contrôleur"
 
 #: editview.cpp:463
 msgid "&Insert Note"
-msgstr ""
+msgstr "Insérer une &Note"
 
 #: editview.cpp:469
 msgid "&Upper Octave"
-msgstr ""
+msgstr "Octave &Supérieur"
 
 #: editview.cpp:474
 msgid "&Lower Octave"
-msgstr ""
+msgstr "Octave &Inférieur"
 
 #: editview.cpp:493
 msgid " flat"
-msgstr ""
+msgstr " bemol"
 
 #: editview.cpp:516
 msgid " sharp"
-msgstr ""
+msgstr " dièse"
 
 #: rosegardenguiview.cpp:195
 msgid "No non-audio segments in composition"
-msgstr ""
+msgstr "Aucun segment non-audio dans la composition"
 
 #: rosegardenguiview.cpp:254
 msgid "Selection must contain only audio or non-audio segments"
-msgstr ""
+msgstr "La selection ne doit contenir que des segments audio ou que des segments non audio."
 
 #: rosegardenguiview.cpp:325
 msgid "No non-audio segments selected"
-msgstr ""
+msgstr "Aucun segment non-audio selectionné"
 
 #: rosexmlhandler.cpp:303
 msgid "Got grouped event outside of a segment"
-msgstr ""
+msgstr "Trouvé un groupe d'events hors d'un segment"
 
 #: rosexmlhandler.cpp:362
 msgid "Got group outside of a segment"
-msgstr ""
+msgstr "Trouvé un groupe hors d'un segment"
 
 #: rosexmlhandler.cpp:387
 msgid "Found Studio in another section"
-msgstr ""
+msgstr "Trouvé Studio dans une autre section"
 
 #: rosexmlhandler.cpp:416
 msgid "TimeSignature object found outside Composition"
@@ -435,8 +458,7 @@ msgid "Export Device"
 msgstr ""
 
 #: bankeditor.cpp:575
-msgid ""
-"Import Bank and Program data from a Rosegarden file to the current Device"
+msgid "Import Bank and Program data from a Rosegarden file to the current Device"
 msgstr ""
 
 #: bankeditor.cpp:577
@@ -3498,8 +3520,7 @@ msgid "global element must precede note elements"
 msgstr ""
 
 #: notestyle.cpp:594
-msgid ""
-"global and note elements may have shape or charname attribute, but not both"
+msgid "global and note elements may have shape or charname attribute, but not both"
 msgstr ""
 
 #: rosegardentransportdialog.cpp:72
@@ -3597,3 +3618,4 @@ msgstr ""
 #: matrixcommands.cpp:94
 msgid "Modify Note"
 msgstr ""
+
