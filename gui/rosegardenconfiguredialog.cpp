@@ -1186,10 +1186,13 @@ void
 SequencerConfigurationPage::slotJackToggled()
 {
 #ifdef HAVE_LIBJACK
+    /*
     if (m_startJack->isChecked())
         m_jackPath->setDisabled(false);
     else
         m_jackPath->setDisabled(true);
+
+        */
 #endif // HAVE_LIBJACK
 }
 
@@ -1254,10 +1257,12 @@ SequencerConfigurationPage::apply()
 
 #ifdef HAVE_LIBJACK
 
+    /*
     // Jack control
     //
     m_cfg->writeEntry("jackstart", m_startJack->isChecked());
     m_cfg->writeEntry("jackcommand", m_jackPath->text());
+    */
 
     // Jack audio inputs
     //
