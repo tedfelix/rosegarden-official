@@ -104,6 +104,8 @@ protected:
 
     void setSubHandler(XmlSubHandler* sh);
     XmlSubHandler* getSubHandler() { return m_subHandler; }
+
+    void addMIDIDevice(QString name);
                                          
     //--------------- Data members ---------------------------------
 

@@ -211,6 +211,8 @@ public slots:
     void slotPaste();
 
 protected:
+    void importFromSF2(QString filename);
+
     MidiDeviceListViewItem* getParentDeviceItem(QListViewItem*);
     void keepBankListForNextPopulate() { m_keepBankList = true; }
 

@@ -1122,10 +1122,6 @@ RosegardenGUIDoc::syncDevices()
         return;
     }
 
-    // Clear the Studio before population
-    //
-//!!! no    m_studio.clear();
-
     SEQMAN_DEBUG << "RosegardenGUIDoc::getMappedDevice - devices = "
                  << devices << endl;
 
@@ -1222,6 +1218,15 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
                           << mD->getType() << ")\n";
             return;
         }
+    }
+
+    if (hadDeviceAlready) {
+	// direction might have changed
+	if (mD->getType() == Rosegarden::Device::Midi) {
+	    Rosegarden::MidiDevice *midid =
+		dynamic_cast<Rosegarden::MidiDevice *>(device);
+	    if (midid) midid->setDirection(mD->getDirection());
+	}
     }
 
     std::string connection(mD->getConnection());

@@ -1,3 +1,4 @@
+// -*- c-basic-offset: 4 -*-
 
 /*
     Rosegarden-4
@@ -54,6 +55,11 @@
 
 #include "Studio.h"
 #include "MidiDevice.h"
+
+#include "SF2PatchExtractor.h"
+
+using Rosegarden::SF2PatchExtractor;
+
 
 MidiDeviceListViewItem::MidiDeviceListViewItem(int deviceNb,
                                                QListView* parent, QString name)
@@ -1260,7 +1266,7 @@ BankEditorDialog::slotImport()
 
     KURL url = KFileDialog::getOpenURL
 	(deviceDir,
-	 "*.rgd|Rosegarden device file\n*.rg|Rosegarden file",
+	 "*.rgd|Rosegarden device file\n*.rg|Rosegarden file\n*.sf2|SoundFont file",
 	 this, i18n("Import Banks from Device in File"));
 
     if (url.isEmpty()) return;
@@ -1270,6 +1276,11 @@ BankEditorDialog::slotImport()
         KMessageBox::error(this, QString(i18n("Cannot download file %1"))
                            .arg(url.prettyURL()));
         return;
+    }
+
+    if (SF2PatchExtractor::isSF2File(target.data())) {
+	importFromSF2(target);
+	return;
     }
 
     RosegardenGUIDoc *doc = new RosegardenGUIDoc(this, 0);
@@ -1411,6 +1422,78 @@ BankEditorDialog::slotImport()
 
     delete doc;
 }
+
+void
+BankEditorDialog::importFromSF2(QString filename)
+{
+    SF2PatchExtractor::Device sf2device;
+    try {
+	sf2device = SF2PatchExtractor::read(filename.data());
+
+    // These exceptions shouldn't happen -- the isSF2File call before this
+    // one should have weeded them out
+    } catch (SF2PatchExtractor::FileNotFoundException e) {
+	return;
+    } catch (SF2PatchExtractor::WrongFileFormatException e) {
+	return;
+    }
+
+    std::vector<Rosegarden::MidiBank> banks;
+    std::vector<Rosegarden::MidiProgram> programs;
+
+    for (SF2PatchExtractor::Device::const_iterator i = sf2device.begin();
+	 i != sf2device.end(); ++i) {
+
+	int bankNumber = i->first;
+	const SF2PatchExtractor::Bank &sf2bank = i->second;
+
+	Rosegarden::MidiBank bank;
+	bank.msb = bankNumber / 127;
+	bank.lsb = bankNumber % 127;
+	bank.name = qstrtostr(QString("Bank %1:%1").arg(bank.msb).arg(bank.lsb));
+	banks.push_back(bank);
+
+	for (SF2PatchExtractor::Bank::const_iterator j = sf2bank.begin();
+	     j != sf2bank.end(); ++j) {
+
+	    int programNumber = j->first;
+	    Rosegarden::MidiProgram program;
+	    program.msb = bank.msb;
+	    program.lsb = bank.lsb;
+	    program.name = j->second;
+	    program.program = programNumber;
+	    programs.push_back(program);
+	}
+    }
+
+    MidiDeviceListViewItem* deviceItem =
+	dynamic_cast<MidiDeviceListViewItem*>
+	(m_listView->selectedItem());
+    
+    if (deviceItem)
+    {
+	Rosegarden::DeviceId deviceId = deviceItem->getDevice();
+	Rosegarden::Device *device = m_studio->getDevice(deviceId);
+
+	if (device) {
+	    ModifyDeviceCommand *command =
+		new ModifyDeviceCommand(
+		    m_studio,
+		    deviceId,
+		    device->getName(),
+		    "",
+		    "",
+		    banks,
+		    programs,
+		    true); //!!! overwrite flag -- offer usual dialog with choice
+	    addCommandToHistory(command);
+	
+	    // Redraw the dialog
+	    initDialog();
+	}
+    }
+}
+
 
 // Store the current bank for copy
 //

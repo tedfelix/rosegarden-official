@@ -1005,9 +1005,8 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     {
         /*
         m_recordDevice->insertItem(i18n("<all of the above>"));
-        m_devPorts.push_back(
-            std::pair<Rosegarden::DeviceId, int>(255, 255));
-            */
+        m_devices.push_back(Device::ALL_DEVICES);
+	*/
     }
     else if (m_devices.size() == 0)
     {

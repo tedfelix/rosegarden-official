@@ -315,7 +315,7 @@ public:
 
     virtual DeviceId addDevice(Device::DeviceType,
 			       MidiDevice::DeviceDirection) {
-	return 0; //!!! really need known No-Device id
+	return Device::NO_DEVICE;
     }
     virtual void removeDevice(DeviceId) { }
 

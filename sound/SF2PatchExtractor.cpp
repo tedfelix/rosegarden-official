@@ -62,6 +62,28 @@ Chunk::isa(string s)
     return string(id, 4) == s;
 }
 
+bool
+SF2PatchExtractor::isSF2File(string fileName)
+{
+    ifstream *file = new ifstream(fileName.c_str(), ios::in | ios::binary);
+    if (!file) throw FileNotFoundException();
+
+    Chunk riffchunk(file);
+    if (!riffchunk.isa("RIFF")) {
+	file->close();
+	return false;
+    }
+
+    Chunk sfbkchunk(file, true);
+    if (!sfbkchunk.isa("sfbk")) {
+	file->close();
+	return false;
+    }
+
+    file->close();
+    return true;
+}
+
 SF2PatchExtractor::Device
 SF2PatchExtractor::read(string fileName)
 {

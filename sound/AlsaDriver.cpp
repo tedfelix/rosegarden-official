@@ -637,7 +637,8 @@ AlsaDriver::addDevice(Device::DeviceType type,
 	    return device->getId();
 	}
     }
-    return 0; //!!! would really like a known "no device" number
+
+    return Device::NO_DEVICE;
 }
 
 void
@@ -2158,7 +2159,7 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
 
             // Special case to set for all record ports
             //
-            if (recordDevice == 255)
+            if (recordDevice == Device::ALL_DEVICES)
             {
                 /* set all record devices */
                 std::cout << "AlsaDriver::processEventsOut - "

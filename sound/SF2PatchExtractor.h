@@ -48,6 +48,7 @@ public:
     struct FileNotFoundException { };
     struct WrongFileFormatException { };
 
+    static bool isSF2File(std::string fileName);
     static Device read(std::string fileName);
 };
 

@@ -40,6 +40,8 @@
 
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <dcopclient.h>
+#include <kapp.h>
 
 #include <qtextstream.h>
 
@@ -411,7 +413,6 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         // Instruments before we reload.  Instruments are derived from
         // the Sequencer, the bank/program information is loaded from
         // the file we're currently examining.
-        //
         //
         getStudio().clearMidiBanksAndPrograms();
         m_section = InStudio; // set top level section
@@ -907,7 +908,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 		    m_device->setName(qstrtostr(nameStr));
 		}
 	    } else if (nameStr && nameStr != "") {
-		//!!! add device
+		addMIDIDevice(nameStr); // also sets m_device
 	    }
         }
         else if (type == "audio")
@@ -1483,3 +1484,48 @@ RoseXmlHandler::setSubHandler(XmlSubHandler* sh)
     delete m_subHandler;
     m_subHandler = sh;
 }
+
+
+void
+RoseXmlHandler::addMIDIDevice(QString name)
+{
+    QByteArray data;
+    QByteArray replyData;
+    QCString replyType;
+    QDataStream arg(data, IO_WriteOnly);
+
+    arg << (int)Device::Midi;
+    arg << (unsigned int)Rosegarden::MidiDevice::Play;
+
+    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
+                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                                  "addDevice(int, unsigned int)",
+                                  data, replyType, replyData, false)) {
+        SEQMAN_DEBUG << "RoseXmlHandler::addMIDIDevice - "
+                     << "can't call sequencer addDevice" << endl;
+        return;
+    }
+
+    unsigned int deviceId = 0;
+
+    if (replyType == "unsigned int") {
+        QDataStream reply(replyData, IO_ReadOnly);
+        reply >> deviceId;
+    } else {
+        SEQMAN_DEBUG << "RoseXmlHandler::addMIDIDevice - "
+                     << "got unknown returntype from addDevice()" << endl;
+        return;
+    }
+
+    if (deviceId == Device::NO_DEVICE) {
+	SEQMAN_DEBUG << "RoseXmlHandler::addMIDIDevice - "
+		     << "sequencer addDevice failed" << endl;
+	return;
+    }
+
+    // add the device, so we can set our pointer to it -- instruments
+    // will be sync'd later in the natural course of things
+    getStudio().addDevice(qstrtostr(name), deviceId, Device::Midi);
+    m_device = getStudio().getDevice(deviceId);
+}
+
