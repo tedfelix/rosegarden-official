@@ -231,7 +231,7 @@ void TracksEditor::deleteTrack(Rosegarden::Track *p)
 void TracksEditor::updateTrackInstrumentAndStartIndex(TrackItem *i)
 {
     int instrument = m_vHeader->sectionAt(int(i->y()));
-    int startIndex = m_hHeader->sectionAt(int(i->x()));
+    int startIndex = m_hHeader->sectionAt(int(i->x())) * getTimeStepsResolution();
 
     kdDebug(KDEBUG_AREA) << "TracksEditor::updateTrackInstrumentAndStartIndex() : set instrument to "
                          << instrument
