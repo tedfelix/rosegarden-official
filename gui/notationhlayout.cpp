@@ -286,7 +286,7 @@ NotationHLayout::AccidentalTable::getDisplayAccidental(Accidental accidental,
 	accidental = m_key.getAccidentalAtHeight(height, m_clef);
     }
 
-    kdDebug(KDEBUG_AREA) << "accidental = " << accidental << ", stored accidental at height " << height << " is " << (*this)[height] << endl;
+//    kdDebug(KDEBUG_AREA) << "accidental = " << accidental << ", stored accidental at height " << height << " is " << (*this)[height] << endl;
 
     if ((*this)[height] != NoAccidental) {
 
@@ -315,7 +315,7 @@ NotationHLayout::AccidentalTable::update(Accidental accidental, int height)
 	accidental = m_key.getAccidentalAtHeight(height, m_clef);
     }
 
-    kdDebug(KDEBUG_AREA) << "updating height" << height << " from " << (*this)[height] << " to " << accidental << endl;
+//    kdDebug(KDEBUG_AREA) << "updating height" << height << " from " << (*this)[height] << " to " << accidental << endl;
 
 
     //!!! again, we can't properly deal with the difficult case where
@@ -452,12 +452,12 @@ NotationHLayout::layout()
 		Accidental acc((Accidental)el->event()->get<Int>(P_ACCIDENTAL));
 		int height(el->event()->get<Int>(P_HEIGHT_ON_STAFF));
 		
-		kdDebug(KDEBUG_AREA) << "accidental = " << acc <<
-		    ", height = " << height << endl;
+//		kdDebug(KDEBUG_AREA) << "accidental = " << acc <<
+//		    ", height = " << height << endl;
 
 		Accidental dacc = accTable.getDisplayAccidental(acc, height);
 
-		kdDebug(KDEBUG_AREA) << "display accidental = " << dacc << endl;
+//		kdDebug(KDEBUG_AREA) << "display accidental = " << dacc << endl;
 
 		el->event()->setMaybe<Int>(P_DISPLAY_ACCIDENTAL, dacc);
 		newAccTable.update(acc, height);

@@ -245,14 +245,17 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
             Track::iterator nextEl = i;
             ++nextEl;
 
+	    //!!! need to deal with groups around here (i.e. don't
+	    //just want to write literal GroupNo stuff, but write
+	    //<group>..</group>)
+
             if (nextEl != (*trks)->end()) {
 
                 Event::timeT absTime = (*i)->getAbsoluteTime();
             
                 if ((*nextEl)->getAbsoluteTime() == absTime) {
-                    // group elements
-                    //
-                    fileStream << "<Group>" << endl; //------
+
+                    fileStream << "<chord>" << endl; //------
 
                     while ((*i)->getAbsoluteTime() == absTime) {
                         fileStream << '\t'
@@ -261,7 +264,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
                         ++i;
                     }
 
-                    fileStream << "</Group>" << endl; //-----
+                    fileStream << "</chord>" << endl; //-----
 
                     if (i == (*trks)->end()) break;
                 }

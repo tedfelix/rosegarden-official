@@ -41,7 +41,7 @@
         <event type="note" duration="semiquaver" pitch="66"/>
         </group>
         <group type="beamed">
-        <event type="note" duration="semiquaver" pitch="76"/>
+        <event type="rest" duration="semiquaver" pitch="76"/>
         <event type="note" duration="semiquaver" pitch="80"/>
         <event type="note" duration="demisemiquaver" pitch="66"/>
         <event type="note" duration="demisemiquaver" pitch="64"/>

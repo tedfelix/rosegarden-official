@@ -7,7 +7,7 @@ D * Handle the principle of hiding an accidental if it's already
   * Make it possible to insert dotted notes and notes with
     accidentals. (May need help from Guillaume on the Qt side.)
 
-  * Tidy up the way notes and chords are drawn -- for example,
+D? * Tidy up the way notes and chords are drawn -- for example,
     notes with accidentals currently "eat" some of the space
     before them; chords with second intervals should have one
     notehead shifted (RG2.1 does this imperfectly but well

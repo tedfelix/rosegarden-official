@@ -1047,7 +1047,13 @@ NotationView::insertNote(int height, const QPoint &eventPos)
     // TODO : m_currentStaff should be updated by the mouse click 
 
     if (redoLayoutStart != m_notationElements->begin())
-        showElements(--redoLayoutStart,
+        showElements(
+	    //!!! sadly we can't just redo from where we are, because
+	    //things like beamed notes earlier in the same group may
+	    //need to be redrawn with different beam angles.  We may
+	    //be able to get away with redrawing from the start of the
+	    //group or bar, but for now let's just do this:
+                     m_notationElements->begin()  /*--redoLayoutStart */,
                      m_notationElements->end(),
                      m_currentStaff);
     else

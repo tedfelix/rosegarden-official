@@ -24,7 +24,8 @@ A.  Features without which nobody will even believe we're serious:
 8.  proper handling of time sigs. Tracks should be positioned at
     absolute steps, not bars.
 
-9.  all the notation elegances (more precise description needed here)
+9.  all the notation elegances (more precise description needed here) : DONEish
+9a. make it possible to insert dotted notes and notes with accidentals
 
 10. be able to both read and write MIDI files, even if we only handle
     the most basic events
