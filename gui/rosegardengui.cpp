@@ -963,7 +963,8 @@ void RosegardenGUIApp::openURL(const KURL& url)
     QString target;
 
     if (KIO::NetAccess::download(url, target) == false) {
-        KMessageBox::error(this, i18n("Cannot download file!"));
+        KMessageBox::error(this, QString(i18n("Cannot download file %1"))
+                           .arg(url.prettyURL()));
         return;
     }
 
