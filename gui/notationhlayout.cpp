@@ -208,6 +208,12 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 	segment.getComposition()->getTimeSignatureAt(startTime);
     bool barCorrect = true;
 
+    //!!! problematic: if we're scanning from the middle, we won't
+    //have recorded any accidentals in the previous bar for the
+    //desirable BarResetCautionary/BarResetNaturals accidental table
+    //modes
+    Rosegarden::AccidentalTable accTable(key, clef);
+
     for (int barNo = startBarNo; barNo <= endBarNo; ++barNo) {
 
 	std::pair<timeT, timeT> barTimes =
@@ -264,7 +270,7 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 
 	timeT actualBarEnd = barTimes.first;
 
-	Rosegarden::AccidentalTable accTable(key, clef);
+	accTable.newBar();
 
         for (NotationElementList::iterator itr = from; itr != to; ++itr) {
         
@@ -297,7 +303,8 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 
                 // Probably not strictly the right thing to do
                 // here, but I hope it'll do well enough in practice
-                accTable = Rosegarden::AccidentalTable(key, clef);
+//                accTable = Rosegarden::AccidentalTable(key, clef);
+		accTable.newClef(clef);
 
             } else if (el->event()->isa(Rosegarden::Key::EventType)) {
 

@@ -1767,9 +1767,13 @@ const timeT TimeSignature::m_dottedCrotchetTime = basePPQ + basePPQ/2;
 // AccidentalTable
 //////////////////////////////////////////////////////////////////////
 
-AccidentalTable::AccidentalTable(const Key &key, const Clef &clef) :
-    m_key(key), m_clef(clef)
+AccidentalTable::AccidentalTable(const Key &key, const Clef &clef,
+				 OctaveType octaves, BarResetType barReset) :
+    m_key(key), m_clef(clef),
+    m_octaves(octaves), m_barReset(barReset)
 {
+    // nothing else
+/*
     std::vector<int> heights(key.getAccidentalHeights(clef));
     unsigned int i;
 
@@ -1784,12 +1788,16 @@ AccidentalTable::AccidentalTable(const Key &key, const Clef &clef) :
         m_accidentals[height] = acc;
 	m_newAccidentals[height] = acc;
     }
+*/
 }
 
 AccidentalTable::AccidentalTable(const AccidentalTable &t) :
     m_key(t.m_key), m_clef(t.m_clef),
+    m_octaves(t.m_octaves), m_barReset(t.m_barReset),
     m_accidentals(t.m_accidentals),
-    m_newAccidentals(t.m_newAccidentals)
+    m_canonicalAccidentals(t.m_canonicalAccidentals),
+    m_newAccidentals(t.m_newAccidentals),
+    m_newCanonicalAccidentals(t.m_newCanonicalAccidentals)
 {
     // nothing else
 }
@@ -1800,8 +1808,12 @@ AccidentalTable::operator=(const AccidentalTable &t)
     if (&t != this) {
 	m_key = t.m_key;
 	m_clef = t.m_clef;
+	m_octaves = t.m_octaves;
+	m_barReset = t.m_barReset;
 	m_accidentals = t.m_accidentals;
+	m_canonicalAccidentals = t.m_canonicalAccidentals;
 	m_newAccidentals = t.m_newAccidentals;
+	m_newCanonicalAccidentals = t.m_newCanonicalAccidentals;
     }
     return *this;
 }
@@ -1809,37 +1821,99 @@ AccidentalTable::operator=(const AccidentalTable &t)
 Accidental
 AccidentalTable::processDisplayAccidental(const Accidental &acc0, int height)
 {
-    height = Key::canonicalHeight(height);
+    Accidental acc = acc0;
 
-    Accidental acc(acc0);
-    if (acc == NoAccidental) {
-        acc = m_key.getAccidentalAtHeight(height, m_clef);
+    int canonicalHeight = Key::canonicalHeight(height);
+    Accidental keyAcc = m_key.getAccidentalAtHeight(canonicalHeight, m_clef);
+
+    Accidental normalAcc = NoAccidental;
+    Accidental canonicalAcc = NoAccidental;
+
+    if (m_octaves == OctavesEquivalent ||
+	m_octaves == OctavesCautionary) {
+
+	AccidentalMap::iterator i = m_canonicalAccidentals.find(canonicalHeight);
+	if (i != m_canonicalAccidentals.end() && !i->second.previousBar) {
+	    canonicalAcc = i->second.accidental;
+	}
     }
 
-    m_newAccidentals[height] = acc;
-
-    if (m_accidentals[height] != NoAccidental) {
-
-        if (acc == m_accidentals[height]) {
-            return NoAccidental;
-        } else if (acc == NoAccidental || acc == Natural) {
-            return Natural;
-        } else {
-            //!!! aargh.  What we really want to do now is have two
-            //accidentals shown: first a natural, then the one
-            //required for the note.  But there's no scope for that in
-            //our accidental structure (RG2.1 is superior here)
-            return acc;
-        }
+    if (m_octaves == OctavesEquivalent) {
+	normalAcc = canonicalAcc;
     } else {
-        return acc;
+	AccidentalMap::iterator i = m_accidentals.find(height);
+	if (i != m_accidentals.end() && !i->second.previousBar) {
+	    normalAcc = i->second.accidental;
+	}
     }
+
+    if (acc == NoAccidental) acc = keyAcc;
+
+    if (m_octaves == OctavesIndependent ||
+	m_octaves == OctavesEquivalent) {
+
+	if (normalAcc == NoAccidental) {
+	    normalAcc = keyAcc;
+	}
+	
+	if (acc == normalAcc) {
+	    acc = NoAccidental;
+	} else if (acc == NoAccidental) {
+	    acc = Natural;
+	}
+
+    } else {
+
+	//!!!
+
+    }
+
+    // only remember this if not NoAccidental
+    
+    if (acc != NoAccidental) {
+	m_newAccidentals[height] = AccidentalRec(acc, false);
+	m_newCanonicalAccidentals[canonicalHeight] = AccidentalRec(acc, false);
+    }
+    
+    return acc;
 }
 
 void
 AccidentalTable::update()
 {
     m_accidentals = m_newAccidentals;
+    m_canonicalAccidentals = m_newCanonicalAccidentals;
+}
+
+void
+AccidentalTable::newBar()
+{
+    for (AccidentalMap::iterator i = m_accidentals.begin();
+	 i != m_accidentals.end(); ) {
+
+	if (i->second.previousBar) {
+	    AccidentalMap::iterator j = i;
+	    ++j;
+	    m_accidentals.erase(i);
+	    i = j;
+	} else {
+	    i->second.previousBar = true;
+	    ++i;
+	}
+    }
+
+    m_canonicalAccidentals.clear();
+
+    m_newAccidentals = m_accidentals;
+    m_newCanonicalAccidentals.clear();
+}
+
+void
+AccidentalTable::newClef(const Clef &clef)
+{
+    m_clef = clef;
+    //!!! so, what's the proper thing to do here??
+    newBar();
 }
 
 

@@ -1070,13 +1070,29 @@ private:
  * so that that chord's accidentals are taken into account for the
  * next one.
  *
- * Create a new AccidentalTable at the start of each bar and when
- * a new clef or key is encountered.
+ * Create a new AccidentalTable whenever a new key is encountered,
+ * and call newBar() or newClef() when a new bar happens or a new
+ * clef is encountered.
  */
 class AccidentalTable
 {
 public:
-    AccidentalTable(const Key &, const Clef &);
+    enum OctaveType {
+	OctavesIndependent, // if c' and c'' sharp, mark them both sharp
+	OctavesCautionary,  // if c' and c'' sharp, put the second one in brackets
+	OctavesEquivalent   // if c' and c'' sharp, only mark the first one
+    };
+
+    enum BarResetType {
+	BarResetTotal,      // c# | c -> omit natural
+	BarResetCautionary, // c# | c -> add natural to c in brackets
+	BarResetNaturals    // c# | c -> add natural to c
+    };
+
+    AccidentalTable(const Key &, const Clef &,
+		    OctaveType = OctavesIndependent,
+		    BarResetType = BarResetCautionary);
+
     AccidentalTable(const AccidentalTable &);
     AccidentalTable &operator=(const AccidentalTable &);
 
@@ -1084,12 +1100,30 @@ public:
 					int heightOnStaff);
 
     void update();
+
+    void newBar();
+    void newClef(const Clef &);
     
 private:
     Key m_key;
     Clef m_clef;
-    std::vector<Accidental> m_accidentals;
-    std::vector<Accidental> m_newAccidentals;
+    OctaveType m_octaves;
+    BarResetType m_barReset;
+
+    struct AccidentalRec {
+	AccidentalRec() : accidental(Accidentals::NoAccidental), previousBar(false) { }
+	AccidentalRec(Accidental a, bool p) : accidental(a), previousBar(p) { }
+	Accidental accidental;
+	bool previousBar;
+    };
+
+    typedef std::map<int, AccidentalRec> AccidentalMap;
+
+    AccidentalMap m_accidentals;
+    AccidentalMap m_canonicalAccidentals;
+
+    AccidentalMap m_newAccidentals;
+    AccidentalMap m_newCanonicalAccidentals;
 };
 
  
