@@ -1,4 +1,5 @@
 // -*- c-basic-offset: 4 -*-
+
 /*
     Rosegarden-4 v0.1
     A sequencer and musical notation editor.
