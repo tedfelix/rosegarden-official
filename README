@@ -95,8 +95,10 @@ Documentation
 All the documentation we have is in the docs/ subdirectory.  Good
 starting-points include:
 
-  docs/howtos/alsa-notes -- brief notes about getting and installing ALSA
+  docs/howtos/alsa-notes -- brief notes about getting and installing the
+	ALSA sound drivers (we recommend ALSA for use with Rosegarden)
   docs/howtos/artsd-mcop-notes.txt -- notes on how to get sound with aRts
+	(not recommended!)
 
   docs/code/global_design.txt -- which classes do what, more or less
   docs/data_struct/units.txt -- how we store pitch and time
