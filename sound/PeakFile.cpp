@@ -58,10 +58,8 @@ PeakFile::~PeakFile()
 }
 
 PeakFile::PeakFile(const PeakFile &peak):
-    QObject(peak.parent(), peak.name()),
     SoundFile(peak.getFilename()),
-//     m_audioFile(peak.getAudioFile()),  // apparently gcc 2.96 goofs up on this one, and fails to use the proper version of getAudioFile()
-    m_audioFile(m_audioFile), // so use the data member instead
+    m_audioFile(peak.m_audioFile->clone()),
     m_version(peak.getVersion()),
     m_format(peak.getFormat()),
     m_pointsPerValue(peak.getPointsPerValue()),

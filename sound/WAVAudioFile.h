@@ -49,7 +49,9 @@ public:
                   unsigned int bitsPerSample);
 
     // copyish constructor
-    WAVAudioFile(const AudioFile &);
+//     WAVAudioFile(const AudioFile &);
+
+    virtual AudioFile* clone();
 
     ~WAVAudioFile();
 

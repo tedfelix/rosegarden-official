@@ -68,15 +68,27 @@ BWFAudioFile::~BWFAudioFile()
 {
 }
 
-BWFAudioFile::BWFAudioFile(const AudioFile &bwf):
-    RIFFAudioFile(bwf.getId(), bwf.getName(), bwf.getFilename())
+// BWFAudioFile::BWFAudioFile(const AudioFile &bwf):
+//     RIFFAudioFile(bwf.getId(), bwf.getName(), bwf.getFilename())
+// {
+//     m_type = bwf.getType();
+//     m_bitsPerSample = bwf.getBitsPerSample();
+//     m_sampleRate = bwf.getSampleRate();
+//     m_channels = bwf.getChannels();
+//     m_dataChunkIndex = -1;
+//     m_fileInfo = new QFileInfo(QString(bwf.getFilename().c_str()));
+// }
+
+AudioFile* BWFAudioFile::clone()
 {
-    m_type = bwf.getType();
-    m_bitsPerSample = bwf.getBitsPerSample();
-    m_sampleRate = bwf.getSampleRate();
-    m_channels = bwf.getChannels();
-    m_dataChunkIndex = -1;
-    m_fileInfo = new QFileInfo(QString(bwf.getFilename().c_str()));
+    BWFAudioFile* cloneFile = new BWFAudioFile(getName(),
+                                               getChannels(),
+                                               getSampleRate(),
+                                               getBytesPerSecond(),
+                                               getBytesPerFrame(),
+                                               getBitsPerSample());
+
+    return cloneFile;
 }
 
 bool

@@ -61,21 +61,23 @@ AudioFileManager::AudioFileManager(const AudioFileManager &aFM):
     std::vector<AudioFile*>::const_iterator it;
     for (it = aFM.begin(); it != aFM.end(); it++)
     {
-        switch ((*it)->getType())
-        {
-            case Rosegarden::WAV:
-                m_audioFiles.push_back(new WAVAudioFile(**it));
-                break;
+        m_audioFiles.push_back((*it)->clone());
+        
+//         switch ((*it)->getType())
+//         {
+//             case Rosegarden::WAV:
+//                 m_audioFiles.push_back(new WAVAudioFile(**it));
+//                 break;
 
-            case Rosegarden::BWF:
-                m_audioFiles.push_back(new BWFAudioFile(**it));
-                break;
+//             case Rosegarden::BWF:
+//                 m_audioFiles.push_back(new BWFAudioFile(**it));
+//                 break;
 
-            case Rosegarden::AIFF:
-            default:
-                // do nothing
-                break;
-        }
+//             case Rosegarden::AIFF:
+//             default:
+//                 // do nothing
+//                 break;
+//         }
     }
 
     m_audioPath = aFM.getAudioPath();
@@ -96,21 +98,23 @@ AudioFileManager::operator=(const AudioFileManager &aFM)
     std::vector<AudioFile*>::const_iterator it;
     for (it = aFM.begin(); it != aFM.end(); it++)
     {
-        switch ((*it)->getType())
-        {
-            case Rosegarden::WAV:
-                m_audioFiles.push_back(new WAVAudioFile(**it));
-                break;
+        m_audioFiles.push_back((*it)->clone());
 
-            case Rosegarden::BWF:
-                m_audioFiles.push_back(new BWFAudioFile(**it));
-                break;
+//         switch ((*it)->getType())
+//         {
+//             case Rosegarden::WAV:
+//                 m_audioFiles.push_back(new WAVAudioFile(**it));
+//                 break;
 
-            case Rosegarden::AIFF:
-            default:
-                // do nothing
-                break;
-        }
+//             case Rosegarden::BWF:
+//                 m_audioFiles.push_back(new BWFAudioFile(**it));
+//                 break;
+
+//             case Rosegarden::AIFF:
+//             default:
+//                 // do nothing
+//                 break;
+//         }
     }
 
     m_audioPath = aFM.getAudioPath();

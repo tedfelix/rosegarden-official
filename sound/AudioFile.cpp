@@ -58,6 +58,7 @@ AudioFile::AudioFile(const std::string &fileName,
 
 AudioFile::~AudioFile()
 {
+    delete m_fileInfo;
 }
 
 QDateTime

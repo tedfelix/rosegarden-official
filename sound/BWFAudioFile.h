@@ -49,7 +49,9 @@ public:
                   unsigned int bitsPerSample);
 
     // Copyish constructor
-    BWFAudioFile(const AudioFile &);
+//     BWFAudioFile(const AudioFile &);
+
+    virtual AudioFile* clone();
 
     ~BWFAudioFile();
 

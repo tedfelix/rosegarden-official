@@ -74,6 +74,8 @@ public:
               unsigned int sampleRate,
               unsigned int bitsPerSample);
 
+    virtual AudioFile* clone() = 0;
+
     ~AudioFile();
 
     // Id of this audio file (used by AudioFileManager)
