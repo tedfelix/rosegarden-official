@@ -57,24 +57,6 @@ PeakFile::~PeakFile()
 {
 }
 
-PeakFile::PeakFile(const PeakFile &peak):
-    SoundFile(peak.getFilename()),
-    m_audioFile(peak.m_audioFile->clone()),
-    m_version(peak.getVersion()),
-    m_format(peak.getFormat()),
-    m_pointsPerValue(peak.getPointsPerValue()),
-    m_blockSize(peak.getBlockSize()),
-    m_channels(peak.getChannels()),
-    m_numberOfPeaks(peak.getNumberOfPeaks()),
-    m_positionPeakOfPeaks(peak.getPositionPeakOfPeaks()),
-    m_offsetToPeaks(peak.getOffsetToPeaks()),
-    m_modificationTime(peak.getModificationTime()),
-    m_chunkStartPosition(peak.getChunkStartPosition())
-{
-}
-
-
-
 bool
 PeakFile::open()
 {

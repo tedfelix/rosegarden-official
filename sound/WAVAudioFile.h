@@ -48,11 +48,6 @@ public:
                   unsigned int bytesPerSample,
                   unsigned int bitsPerSample);
 
-    // copyish constructor
-//     WAVAudioFile(const AudioFile &);
-
-    virtual AudioFile* clone();
-
     ~WAVAudioFile();
 
     // Override these methods for the WAV

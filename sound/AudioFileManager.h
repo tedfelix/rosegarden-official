@@ -58,12 +58,13 @@ class AudioFileManager : public XmlExportable
 {
 public:
     AudioFileManager();
-    AudioFileManager(const AudioFileManager &aFM);
     ~AudioFileManager();
 
-    // Assignment operator
-    //
+private:
+    AudioFileManager(const AudioFileManager &aFM);
     AudioFileManager& operator=(const AudioFileManager &);
+
+public:
 
     // Create an audio file from an absolute path - we use this interface
     // to add an actual file.

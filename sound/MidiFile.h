@@ -81,15 +81,6 @@ public:
     MidiFile (const std::string &fn, Studio *studio);
     ~MidiFile();
 
-    MidiFile& operator=(const MidiFile& mF)
-    {
-	m_fileName = mF.m_fileName;
-	m_timingDivision = mF.m_timingDivision;
-	m_numberOfTracks = mF.m_numberOfTracks;
-	m_format = mF.m_format;
-	return *this;
-    }
-
     // Declare our virtuals
     //
     virtual bool open();

@@ -54,46 +54,6 @@ AudioFileManager::AudioFileManager()
     setAudioPath("~/rosegarden");
 }
 
-AudioFileManager::AudioFileManager(const AudioFileManager &aFM):
-    XmlExportable(),
-    m_audioPath(aFM.getAudioPath()),
-    m_peakManager(aFM.getPeakFileManager())
-{
-    std::vector<AudioFile*>::const_iterator it;
-    for (it = aFM.begin(); it != aFM.end(); it++)
-    {
-        m_audioFiles.push_back((*it)->clone());
-    }
-
-    m_audioPath = aFM.getAudioPath();
-
-}
-
-AudioFileManager&
-AudioFileManager::operator=(const AudioFileManager &aFM)
-{
-    if (&aFM == this) return *this;
-
-    m_audioFiles.clear();
-
-    // Copy all the audio file details
-    //
-    std::vector<AudioFile*>::const_iterator it;
-    for (it = aFM.begin(); it != aFM.end(); it++)
-    {
-        m_audioFiles.push_back((*it)->clone());
-    }
-
-    m_audioPath = aFM.getAudioPath();
-
-    // Get a copy of the peak file manager
-    //
-    m_peakManager = aFM.getPeakFileManager();
-
-    return *this;
-}
-
-
 AudioFileManager::~AudioFileManager()
 {
     clear();

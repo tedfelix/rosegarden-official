@@ -64,21 +64,6 @@ WAVAudioFile::WAVAudioFile(const std::string &fileName,
     m_channels = channels;
 }
 
-AudioFile* WAVAudioFile::clone()
-{
-    WAVAudioFile* cloneFile = new WAVAudioFile(getFilename(),
-                                               getChannels(),
-                                               getSampleRate(),
-                                               getBytesPerSecond(),
-                                               getBytesPerFrame(),
-                                               getBitsPerSample());
-
-    cloneFile->setName(getName());
-    cloneFile->setId(getId());
-
-    return cloneFile;
-}
-
 WAVAudioFile::~WAVAudioFile()
 {
 }

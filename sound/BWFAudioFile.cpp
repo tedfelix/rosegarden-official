@@ -68,21 +68,6 @@ BWFAudioFile::~BWFAudioFile()
 {
 }
 
-AudioFile* BWFAudioFile::clone()
-{
-    BWFAudioFile* cloneFile = new BWFAudioFile(getName(),
-                                               getChannels(),
-                                               getSampleRate(),
-                                               getBytesPerSecond(),
-                                               getBytesPerFrame(),
-                                               getBitsPerSample());
-
-    cloneFile->setId(getId());
-    cloneFile->setName(getName());
-
-    return cloneFile;
-}
-
 bool
 BWFAudioFile::open()
 {

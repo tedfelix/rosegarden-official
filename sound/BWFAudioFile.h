@@ -48,11 +48,6 @@ public:
                   unsigned int bytesPerSample,
                   unsigned int bitsPerSample);
 
-    // Copyish constructor
-//     BWFAudioFile(const AudioFile &);
-
-    virtual AudioFile* clone();
-
     ~BWFAudioFile();
 
     // Override these methods for the WAV

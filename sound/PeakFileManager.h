@@ -58,14 +58,11 @@ public:
     PeakFileManager();
     ~PeakFileManager();
 
-    // Copy constructor
-    //
+private:
     PeakFileManager(const PeakFileManager &pFM);
-
-    // Equality operator
-    //
     PeakFileManager& operator=(const PeakFileManager &);
 
+public:
     // Check that a given audio file has a valid and up to date
     // peak file or peak chunk.
     //
