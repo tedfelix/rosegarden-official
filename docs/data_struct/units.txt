@@ -129,3 +129,17 @@ same range to store velocity values.
 (But note that some components such as the VU meters refer to levels
 in a floating-point 0.0 -> 1.0 range.)
 
+
+Bar numbers
+-----------
+
+Bar numbers are counted from 1 on the GUI (i.e. the first non-count-in
+bar is by default bar 1), but are counted from 0 internally (because
+we're sad geeks).  That means we have to add 1 every time we display a
+bar number, and subtract 1 from any the user supplies.
+
+Absolute times and bar numbers can both legitimately be negative, so
+we need to use signed types, to avoid treating values like -1 as
+special no-value cases, and to avoid making assumptions such as that
+we can enumerate all bars by counting from zero.
+

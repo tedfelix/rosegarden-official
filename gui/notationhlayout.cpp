@@ -643,6 +643,9 @@ NotationHLayout::reconcileBarsLinear()
 	    maxWidth = m_pageWidth;
 	}
 
+	kdDebug(KDEBUG_AREA) << "Setting bar position for bar " << barNo
+			     << " to " << m_totalWidth << endl;
+
 	m_barPositions[barNo] = m_totalWidth;
 	m_totalWidth += getPostBarMargin() + maxWidth + getPreBarMargin();
 
@@ -781,7 +784,7 @@ NotationHLayout::reconcileBarsPage()
     for (unsigned int row = 0; row < rowData.size(); ++row) {
 
 	barNoThisRow = barNo;
-	unsigned int finalBarThisRow = barNo + rowData[row].first - 1;
+	int finalBarThisRow = barNo + rowData[row].first - 1;
 
 	pageWidthSoFar = 0;
 	stretchFactor = m_pageWidth / rowData[row].second;
@@ -970,11 +973,13 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
     double x = 0, barX = 0;
     TieMap tieMap;
 
-    int barNo = 0; // local to this system, used for debug printout only
-
     for (BarPositionList::iterator bpi = m_barPositions.begin();
 	 bpi != m_barPositions.end(); ++bpi) {
-	
+
+	kdDebug(KDEBUG_AREA) << "NotationHLayout::looking for bar "
+			     << bpi->first << endl;
+	int barNo = bpi->first;
+
 	BarDataList::iterator bdi = barList.find(bpi->first);
 	if (bdi == barList.end()) continue;
 	barX = bpi->second;
@@ -982,7 +987,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
         NotationElementList::iterator from = bdi->second.basicData.start;
         NotationElementList::iterator to;
 
-        kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): starting bar " << barNo++ << ", x = " << barX << ", width = " << bdi->second.sizeData.idealWidth << ", time = " << (from == notes->end() ? -1 : (*from)->getAbsoluteTime()) << endl;
+        kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): starting bar " << barNo << ", x = " << barX << ", width = " << bdi->second.sizeData.idealWidth << ", time = " << (from == notes->end() ? -1 : (*from)->getAbsoluteTime()) << endl;
 
         BarDataList::iterator nbdi(bdi);
         if (++nbdi == barList.end()) {
@@ -1443,11 +1448,14 @@ NotationHLayout::resetStaff(StaffType &staff, timeT startTime, timeT endTime)
 int
 NotationHLayout::getFirstVisibleBar()
 {
-    int bar = -1;
+    int bar = 0;
+    bool haveBar = false;
     for (BarDataMap::iterator i(m_barData.begin()); i != m_barData.end(); ++i) {
-	int barHere = getFirstVisibleBarOnStaff(*i->first);
-	if (barHere >= 0) {
-	    if (barHere < bar || bar < 0) bar = barHere;
+	if (i->second.begin() == i->second.end()) continue;
+	int barHere = i->second.begin()->first;
+	if (barHere < bar || !haveBar) {
+	    bar = barHere;
+	    haveBar = true;
 	}
     }
     return bar;
@@ -1464,11 +1472,16 @@ NotationHLayout::getFirstVisibleBarOnStaff(StaffType &staff)
 int
 NotationHLayout::getLastVisibleBar()
 {
-    int bar = -1;
+    int bar = 0;
+    bool haveBar = false;
     for (BarDataMap::iterator i = m_barData.begin();
 	 i != m_barData.end(); ++i) {
+	if (i->second.begin() == i->second.end()) continue;
 	int barHere = getLastVisibleBarOnStaff(*i->first);
-	if (barHere > bar) bar = barHere;
+	if (barHere > bar || !haveBar) {
+	    bar = barHere;
+	    haveBar = true;
+	}
     }
     return bar;
 }
