@@ -183,6 +183,8 @@ protected:
     // In case we get a cancel.
     //
     bool               m_keepProcessing;
+
+    std::string        m_peakCache;
     
 };
 

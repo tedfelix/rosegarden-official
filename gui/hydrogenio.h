@@ -122,6 +122,7 @@ protected:
     //
     int                      m_id;
     bool                     m_muted;
+    std::vector<double>      m_instrumentVolumes;
     std::string              m_fileName;
 
     // Global attributes

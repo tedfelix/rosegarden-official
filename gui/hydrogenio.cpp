@@ -146,6 +146,7 @@ HydrogenXMLHandler::startDocument()
     //
     m_id = 0;
     m_muted = false;
+    m_instrumentVolumes.clear();
     m_fileName = "";
 
     // Global attributes
@@ -246,8 +247,11 @@ HydrogenXMLHandler::endElement(const QString& /*namespaceURI*/,
             pos, Note(Note::Semiquaver).getDuration());
 
         // get drum mapping from instrument and calculate velocity
-        noteEvent->set<Int>(Rosegarden::BaseProperties::PITCH, 36 + m_instrument); 
-        noteEvent->set<Int>(Rosegarden::BaseProperties::VELOCITY, int(127.0 * m_velocity)); 
+        noteEvent->set<Int>(
+                Rosegarden::BaseProperties::PITCH, 36 + m_instrument); 
+        noteEvent->set<Int>(Rosegarden::BaseProperties::VELOCITY, 
+                int(127.0 * m_velocity * m_volume * 
+                    m_instrumentVolumes[m_instrument])); 
         m_segment->insert(noteEvent);
 
         m_inNote = false;
@@ -256,6 +260,7 @@ HydrogenXMLHandler::endElement(const QString& /*namespaceURI*/,
 
         RG_DEBUG << "HydrogenXMLHandler::endElement - Hydrogen Instrument : id = " << m_id
                  << ", muted = " << m_muted
+                 << ", volume = " << m_instrumentVolumes[m_instrument]
                  << ", filename = \"" << m_fileName << "\""
                  << endl;
 
@@ -374,7 +379,11 @@ HydrogenXMLHandler::characters(const QString& chars)
             else m_muted = false;
         } else if (m_currentProperty == "filename") {
             m_fileName = qstrtostr(chars); // don't strip whitespace from the filename
+        } else if (m_currentProperty == "volume") {
+            m_instrumentVolumes.push_back(ch.toDouble());
         }
+
+
     } else if (m_inPattern) {
 
         // Pattern attributes

@@ -64,6 +64,11 @@ PeakFile::~PeakFile()
 bool
 PeakFile::open()
 {
+    // Set the file size
+    //
+    QFileInfo info(QString(m_fileName.c_str()));
+    m_fileSize = info.size();
+
     // If we're already open then don't open again
     //
     if (m_inFile && m_inFile->is_open())
@@ -618,14 +623,58 @@ PeakFile::getPreview(const RealTime &startTime,
                      int width,
                      bool showMinima)
 {
-    // Check to see if we hit the cache by comparing the last query parameters we used.
-    //
-    if (startTime == m_lastPreviewStartTime && endTime == m_lastPreviewEndTime &&
-        width == m_lastPreviewWidth && showMinima == m_lastPreviewShowMinima)
+#define DEBUG_PREVIEW_SIZE
+#ifdef DEBUG_PREVIEW_SIZE
+    std::cout << "PeakFile::getPreview - "
+              << "startTime = " << startTime
+              << ", endTime = " << endTime
+              << ", width = " << width
+              << ", showMinima = " << showMinima << std::endl;
+#endif
+
+    if (getSize() == 0)
     {
-        /*
-        std::cerr << "PeakFile::getPreview - hit preview cache" << std::endl;
-        */
+        std::cout << "PeakFile::getPreview - PeakFile size == 0" << std::endl;
+        return std::vector<float>();
+    }
+
+    // Regenerate cache on these conditions
+    //
+    if (!m_peakCache.length())
+    {
+        if (getSize() < (256 *1024)) // if less than 256K PeakFile
+        {
+            // Scan to start of peak data
+            scanToPeak(0);
+            try
+            {
+                m_peakCache = getBytes(m_inFile, getSize() - 128);
+            }
+            catch(std::string e)
+            {
+#define DEBUG_PEAKFILE_CACHE
+#ifdef DEBUG_PEAKFILE_CACHE
+                std::cerr << "PeakFile::getPreview - generating peak cache - "
+                          << e << std::endl;
+#endif
+            }
+
+#ifdef DEBUG_PEAKFILE_CACHE
+        std::cout << "PeakFile::getPreview - generating peak cache - " 
+                  << "size = " << m_peakCache.length() << std::endl;
+#endif
+        }
+    }
+
+    // Check to see if we hit the "lastPreview" cache by comparing the last 
+    // query parameters we used.
+    //
+    if (startTime == m_lastPreviewStartTime && endTime == m_lastPreviewEndTime 
+        && width == m_lastPreviewWidth && showMinima == m_lastPreviewShowMinima)
+    {
+#ifdef DEBUG_PEAKFILE_CACHE
+        std::cout << "PeakFile::getPreview - hit preview cache" << std::endl;
+#endif
         return m_lastPreviewCache;
     }
 
@@ -649,7 +698,7 @@ PeakFile::getPreview(const RealTime &startTime,
     float loValue = 0.0f;
 
 #ifdef DEBUG_PEAKFILE
-    cout << "PeakFile::getPreview - getting preview for \""
+    std::cout << "PeakFile::getPreview - getting preview for \""
               << m_audioFile->getFilename() << "\"" << endl;
 #endif
 
@@ -668,7 +717,7 @@ PeakFile::getPreview(const RealTime &startTime,
 
         default:
 #ifdef DEBUG_PEAKFILE
-            cerr << "PeakFile::getPreview - "
+            std::cout << "PeakFile::getPreview - "
                       << "unsupported peak length format (" << m_format << ")"
                       << endl;
 #endif
@@ -681,8 +730,11 @@ PeakFile::getPreview(const RealTime &startTime,
 
         // Seek to value
         //
-        if (scanToPeak(peakNumber) == false)
-            m_lastPreviewCache.push_back(0.0f);
+        if (!m_peakCache.length())
+        {
+            if (scanToPeak(peakNumber) == false)
+                m_lastPreviewCache.push_back(0.0f);
+        }
 
         // Get peak value over channels
         //
@@ -692,23 +744,44 @@ PeakFile::getPreview(const RealTime &startTime,
             hiValue = 0.0f;
             loValue = 0.0f;
 
-            try
+            if (!m_peakCache.length())
             {
-                peakData = getBytes(m_inFile, m_format * m_pointsPerValue);
-            }
-            catch (std::string e)
-            {
-                // Problem with the get - probably an EOF
-                // return the results so far.
-                //
+                try
+                {
+                    peakData = getBytes(m_inFile, m_format * m_pointsPerValue);
+                }
+                catch (std::string e)
+                {
+                    // Problem with the get - probably an EOF
+                    // return the results so far.
+                    //
 #ifdef DEBUG_PEAKFILE
-                cout << "PeakFile::getPreview - \"" << e << "\"\n"
-                          << endl;
+                    std::cout << "PeakFile::getPreview - \"" << e << "\"\n"
+                              << endl;
 #endif
-                resetStream();
+                    resetStream();
 
-                return m_lastPreviewCache;
+                    return m_lastPreviewCache;
+                }
+#ifdef DEBUG_PEAKFILE_CACHE
+                std::cout << "PeakFile::getPreview - "
+                          << "read from file" << std::endl;
+#endif
             }
+            else
+            {
+                // Get peak value from the cached string
+                //
+                peakData = m_peakCache.substr(peakNumber * m_format *
+                                              m_channels * m_pointsPerValue,
+                                              m_format * m_pointsPerValue);
+
+#ifdef DEBUG_PEAKFILE_CACHE
+                std::cout << "PeakFile::getPreview - "
+                          << "hit peakCache" << std::endl;
+#endif
+            }
+
 
             if (peakData.length() == (unsigned int)(m_format *
                                                     m_pointsPerValue))
@@ -742,7 +815,7 @@ PeakFile::getPreview(const RealTime &startTime,
                 // we've got so far
                 //
 #ifdef DEBUG_PEAKFILE
-                cerr << "PeakFile::getPreview - "
+                std::cout << "PeakFile::getPreview - "
                           << "failed to get complete peak block"
                           << endl;
 #endif
