@@ -67,6 +67,10 @@ RosegardenSequencerApp::RosegardenSequencerApp():
 
     if (mappedComp == 0)
         mappedComp = new Rosegarden::MappedComposition();
+
+    // set this here and now so we can accept async midi events
+    //
+    m_sequencer->record(Rosegarden::Sequencer::RECORD_MIDI);
 }
 
 RosegardenSequencerApp::~RosegardenSequencerApp()
@@ -425,5 +429,36 @@ RosegardenSequencerApp::processRecordedAudio()
 {
 }
 
+
+// This method is called during STOPPED or PLAYING operations
+// to mop up any async (unexpected) incoming MIDI or Audio events
+// and forward them to the GUI for display
+//
+//
+void
+RosegardenSequencerApp::processAsynchronousEvents()
+{
+    QByteArray data, replyData;
+    QCString replyType;
+    QDataStream arg(data, IO_WriteOnly);
+
+    if(m_sequencer->getMappedComposition().size() == 0)
+        return;
+
+    arg << m_sequencer->getMappedComposition();
+
+   if (!kapp->dcopClient()->call(ROSEGARDEN_GUI_APP_NAME,
+                                 ROSEGARDEN_GUI_IFACE_NAME,
+                                 "processAsynchronousMIDI(Rosegarden::MappedComposition)",
+                                  data, replyType, replyData, true))
+    {
+        cerr << "RosegardenSequencer::processAsynchronousEvents() - " <<
+                "can't call RosegardenGUI client" << endl;
+
+        // Stop the sequencer so we can see if we can try again later
+        //
+        m_transportStatus = STOPPING;
+    }
+}
 
 

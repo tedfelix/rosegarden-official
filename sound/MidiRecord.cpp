@@ -66,6 +66,7 @@ vector<Arts::MidiEvent> *
 RosegardenMidiRecord_impl::getQueue()
 {
     vector<Arts::MidiEvent> *returnQueue = m_midiEventQueue;
+    
     m_midiEventQueue = new vector<Arts::MidiEvent>();
     return returnQueue;
 }

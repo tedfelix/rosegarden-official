@@ -70,6 +70,11 @@ k_dcop:
     //
     virtual void processRecordedMidi(const Rosegarden::MappedComposition &mC)=0;
 
+    // Used to map unexpected (async) MIDI events to the user interface.
+    // We can show these on the Transport or on a MIDI Mixer.
+    //
+    virtual void processAsynchronousMidi(const Rosegarden::MappedComposition &mC)=0;
+
     // Sequencer updates GUI pointer position
     //
     virtual void setPointerPosition(const int &position) = 0;

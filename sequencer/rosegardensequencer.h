@@ -94,7 +94,8 @@ public slots:
     // Any sudden moves
     virtual void jumpTo(const Rosegarden::timeT &position);
 
-    void setStatus(const TransportStatus &status) { m_transportStatus = status; }
+    void setStatus(const TransportStatus &status)
+            { m_transportStatus = status; }
     TransportStatus getStatus() { return m_transportStatus; }
    
     // Process the first chunk of Sequencer events
@@ -114,6 +115,12 @@ public slots:
     //
     void processRecordedMidi();
     void processRecordedAudio();
+
+    // Called during stopped or playing operation to process
+    // any pending incoming MIDI events that aren't being
+    // recorded (i.e. for display in Transport or on Mixer)
+    //
+    void processAsynchronousEvents();
 
 
 private:

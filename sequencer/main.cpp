@@ -201,6 +201,7 @@ int main(int argc, char *argv[])
 
                     case STOPPED:
                     default:
+                        roseSeq->processAsynchronousEvents();
                         break;
                 }
             }

@@ -53,15 +53,17 @@ mean.
   points made here - see the end for some of the gotchas that
   got me, again.
 
+  Update 2.1.2002 [rwb]
+ 
+  And again here.  arts and alsa/oss relationships are tricky sometimess.
+
 
 
 Building aRts
 -------------
 
-Rosegarden MIDI recording only works with arts-0.5.4
-(including arts-extras-0.5.4) or later.
-
-To install a new version of aRTs on your system:
+Always use the latest version of aRTS.  To install a new version of
+aRTs on your system:
 
 o download from http://www.arts-project.org
 o build and install to a good place (say /opt/arts-0.n.m)
@@ -207,7 +209,16 @@ Things to look out for:
   you library paths (especially in ~/.mcoprc) are correct.
 
 - if you "play" the sequencer but the song pointer doesn't start
-  moving across the screen then see the point above.  The sequencer
+  moving across the screen then see the above point.  The sequencer
   should play (i.e. the pointer should move across the screen)
   whether or not an arts output device is connected.
 
+- if you're having problems getting the record midi port to work
+  (i.e. Rosegarden is connecting to aRTS but you can't get any
+   MIDI events) then try a different sound system.  i.e. if you're
+   currently starting aRTS with oss (-a oss) then try to start it
+   with ALSA (-a alsa).  If you don't have ALSA installed then
+   download it (www.alsa-project.org), build and install and try
+   again.  ALSA and aRST are evolving systems - ALSA provides 
+   low level support for many soundcards (more than OSS does) so
+   it's always worth a try if you're having problems.

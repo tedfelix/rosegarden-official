@@ -136,6 +136,13 @@ public:
      */
     void processRecordedMidi(const Rosegarden::MappedComposition &mC);
 
+
+    /**
+     * Process unexpected MIDI events for the benefit of the GUI
+     *
+     */
+    void processAsynchronousMidi(const Rosegarden::MappedComposition &mC);
+
 protected:
 
     /**

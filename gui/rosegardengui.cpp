@@ -1551,4 +1551,16 @@ RosegardenGUIApp::processRecordedMidi(const Rosegarden::MappedComposition &mC)
 
 
 
+// Process unexpected MIDI events at the GUI - send them to the
+// Transport or to a MIDI mixer for display purposes only.
+//
+void
+RosegardenGUIApp::processAsynchronousMidi(const Rosegarden::MappedComposition &mC)
+{
+    cout << "GOT UNEXEPCTED EVENTS (" << mC.size() << ")" << endl;
+}
+
+
+
+
 
