@@ -265,7 +265,7 @@ NotePixmapFactory::makeNotePixmapAux(Rosegarden::Note::Type noteType,
             } else if (isBeamed) {
 
                 drawBeams(s1, stemGoesUp, tailCount, nextTailCount,
-                          thisPartialTails, nextTailCount,
+                          thisPartialTails, nextPartialTails,
                           width, gradient);
 
             }
