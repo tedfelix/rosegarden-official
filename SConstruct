@@ -109,7 +109,7 @@ if haveLiblrdf:
 Export( "env" )
 
 # Cache directory
-env.CacheDir('cache')
+#env.CacheDir('cache')
 
 # Avoid spreading .sconsign files everywhere
 env.SConsignFile('scons_signatures')

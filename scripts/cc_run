@@ -1,0 +1,3 @@
+#!/bin/sh
+tag="$1"; shift
+PATH="/opt/rosegarden-installs/$tag/bin" KDEDIRS="/opt/rosegarden-installs/$tag" rosegarden "$@"
