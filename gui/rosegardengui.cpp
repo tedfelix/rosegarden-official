@@ -1042,7 +1042,7 @@ void RosegardenGUIApp::readOptions()
     //
     m_viewStatusBar       ->setChecked(!statusBar()                ->isHidden());
     m_viewToolBar         ->setChecked(!toolBar()                  ->isHidden());
-    m_viewTracksToolBar   ->setChecked(!toolBar("Tracks Toolbar")   ->isHidden());
+    m_viewTracksToolBar   ->setChecked(!toolBar("Tools Toolbar")   ->isHidden());
     m_viewEditorsToolBar  ->setChecked(!toolBar("Editors Toolbar")  ->isHidden());
     m_viewTransportToolBar->setChecked(!toolBar("Transport Toolbar")->isHidden());
     m_viewZoomToolBar     ->setChecked(!toolBar("Zoom Toolbar")     ->isHidden());
