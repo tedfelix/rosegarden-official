@@ -1007,7 +1007,7 @@ RosegardenGUIDoc::convertToSinglePoint(Rosegarden::Segment *segment)
 
     // Always fill with rests
     //
-    segment->fillWithRests(segment->getStartTime(), segment->getEndTime());
+    segment->normalizeRests(segment->getStartTime(), segment->getEndTime());
 
 }
 
