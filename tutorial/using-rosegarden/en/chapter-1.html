@@ -21,9 +21,9 @@ A { text-decoration: none }
 <A HREF="chapter-2.html">Next</A>
 <HR>
 <H1 STYLE="border: none; padding: 0in; page-break-before: always">1 <A NAME="1">
-</A> Introduction</H1>
-<H2 STYLE="border: none; padding: 0in">1.1 <A NAME="1_1"></A>What is
- Rosegarden?</H2>
+</A> Introduction (final)</H1>
+<H2 CLASS="western" STYLE="border: none; padding: 0in">1.1 <A NAME="1_1">
+</A> What is Rosegarden?</H2>
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
  Rosegarden-4, hereafter referred to as simply Rosegarden, is a
  versatile, open source music creation tool. It combines aspects of a
@@ -66,8 +66,8 @@ A { text-decoration: none }
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  All of this flexibility means you can use Rosegarden as the center of a
  very powerful home studio and music composition solution for Linux.</P>
-<H2 STYLE="border: none; padding: 0in"><A NAME="1_2">1.2 About This
- Guide</A></H2>
+<H2 CLASS="western" STYLE="border: none; padding: 0in"><A NAME="1_2">
+1.2 About This Guide</A></H2>
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
  This guide is part manual, part tutorial. I attempt to showcase
  Rosegarden's most significant features, and give you suggestions for
@@ -92,8 +92,8 @@ A { text-decoration: none }
 <P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic1" SRC="../pixmaps/menu-file.png"
 ></P>
-<H2 STYLE="border: none; padding: 0in">1.3 <A NAME="1_3"></A>Version and
- System Requirements</H2>
+<H2 CLASS="western" STYLE="border: none; padding: 0in">1.3 <A NAME="1_3">
+</A> Version and System Requirements</H2>
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  This document describes Rosegarden-4, the latest in this venerable line
  of applications. Some distributions still carry the older Rosegarden 2,
@@ -107,7 +107,15 @@ A { text-decoration: none }
  only found in Linux. A few brave individuals are interested in porting
  it to FreeBSD and OS-X, but at this time no one has been successful,
  and Rosegarden remains, effectively, an application only for Linux.</P>
-<H3><A NAME="1_3_1">1.3.1 Linux Version</A></H3>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ Rosegarden requires several fairly new libraries in order for all of
+ its features to work correctly. Synth plugins, especially, require a
+ library that not many distros were carrying at this writing. If
+ anything documented in this book seems not to exist, please ask your
+ distro package maintainers to pick up the requisite libraries and
+ compile Rosegarden against them. Unfortunately, building Rosegarden
+ from source is well beyond the scope of this book.</P>
+<H3 CLASS="western"><A NAME="1_3_1">1.3.1 Linux Version</A></H3>
 <P>The more recent your distribution, the better. Rosegarden and many
  related, interdependent applications are all very new. We at Rosegarden
  suggest that you run the very latest release version of the
@@ -122,7 +130,8 @@ A { text-decoration: none }
  fast computer, but this is more due to my stubbornness than any matter
  of practicality. I heartily recommend that you make use of the Planet
  or AGNULA.</P>
-<H3><A NAME="1_3_2">1.3.2 Equipment and Software Required</A></H3>
+<H3 CLASS="western"><A NAME="1_3_2">1.3.2 Equipment and Software
+ Required</A></H3>
 <P>Many people are running Rosegarden successfully on older, slower
  hardware. However, your CPU can't be too fast, and you can't have too
  much RAM or hard disk space. The more resources your computer can bring
@@ -156,6 +165,7 @@ A { text-decoration: none }
 <LI>
 <P>or a virtual keyboard such as<A HREF="http://packages.debian.org/stable/sound/vkeybd">
  vkeybd</A></P>
+<P></P>
 </LI>
 </UL>
 <P>For MIDI playback:</P>
@@ -181,6 +191,7 @@ A { text-decoration: none }
  appropriate soundfont loaded into it, and/or the Xsynth-DSSI (analog
  synthno soundfont required) plugin, both of which require a working
  JACK server for audio output</P>
+<P></P>
 </LI>
 </UL>
 <P>For audio recording:</P>
@@ -197,6 +208,7 @@ A { text-decoration: none }
 </LI>
 <LI>
 <P>plenty of available hard disk space</P>
+<P></P>
 </LI>
 </UL>
 <P>For audio playback:</P>
@@ -209,8 +221,8 @@ A { text-decoration: none }
 </LI>
 </UL>
 </UL>
-<H2 STYLE="border: none; padding: 0in">1.4 <A NAME="1_6"></A>Getting
- This Document</H2>
+<H2 CLASS="western" STYLE="border: none; padding: 0in">1.4 <A NAME="1_6">
+</A> Getting This Document</H2>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">The HTML
  version of<I> Using Rosegarden</I> is always available at:</P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><A HREF="http://rosegarden.sourceforge.net/tutorial/using-rosegarden/using-rosegarden.html">
@@ -228,8 +240,8 @@ http://users.adelphia.net/~silvan/arbeiten-mit-rosegarden.pdf</A></P>
  When I try these links with Konqueror, I'm always unable to download
  the files. If you run into the same problem, I suggest you try</I> wget<I>
  or</I> Mozilla.<I> The</I><I> files are definitely there.</I></P>
-<H2 STYLE="border: none; padding: 0in">1.5 <A NAME="1_8"></A>
-Translations</H2>
+<H2 CLASS="western" STYLE="border: none; padding: 0in">1.5 <A NAME="1_8">
+</A> Translations</H2>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">A German
  translation is under way, but is out of date owing to the evolving
  nature of this document. Other languages will probably follow after all
@@ -266,13 +278,13 @@ weber.freiburg@freenet.de</A>&gt;</P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
 <BR>
 <BR></P>
-<H2><A NAME="1_6">1.6 Special Thanks</A></H2>
+<H2 CLASS="western"><A NAME="1_6">1.6 Special Thanks</A></H2>
 <P>Thanks to the following...</P>
 <P>Chris Cannam, Rich Bown, Guillaume Laurent  for giving me something
  to write about, and helping me at various points along the way</P>
 <P>Shelagh, Daniel Krippner  for helping me ensure that this whole thing
  was actually useful to people</P>
-<P>Pedro Lopez-Cabanillas  for info about USB MIDI</P>
+<P>Pedro Lopez-Cabanillas  for info about USB MIDI and sysex</P>
 <P>Brendon Oliver  for some Perl magic to fix up my document build
  system</P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">

@@ -3,12 +3,18 @@
 <HEAD>
 	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
 	<TITLE></TITLE>
-	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.1  (Linux)">
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.2  (Linux)">
 	<META NAME="CREATED" CONTENT="20040613;311000">
-	<META NAME="CHANGED" CONTENT="20040807;20524400">
+	<META NAME="CHANGED" CONTENT="20040815;1304600">
 	<STYLE>
 	<!--
 		@page { size: 8.5in 11in }
+		H2.western { font-family: "Albany", sans-serif; font-size: 14pt; font-style: italic }
+		H2.cjk { font-family: "HG Mincho Light J"; font-size: 14pt; font-style: italic }
+		H2.ctl { font-family: "Arial Unicode MS"; font-size: 14pt; font-style: italic }
+		H3.western { font-family: "Albany", sans-serif }
+		H3.cjk { font-family: "HG Mincho Light J" }
+		H3.ctl { font-family: "Arial Unicode MS" }
 		A:link { color: #ba2c2c }
 		A:visited { color: #ba2c2c }
 	-->
@@ -16,9 +22,9 @@
 </HEAD>
 <BODY LANG="en-US" LINK="#ba2c2c" VLINK="#ba2c2c" BGCOLOR="#ffffff" DIR="LTR">
 <H1 STYLE="border: none; padding: 0in; page-break-before: always"><A NAME="1"></A>
-Introduction</H1>
-<H2 STYLE="border: none; padding: 0in"><A NAME="1_1"></A>What is
-Rosegarden?</H2>
+Introduction (final)</H1>
+<H2 CLASS="western" STYLE="border: none; padding: 0in"><A NAME="1_1"></A>
+What is Rosegarden?</H2>
 <P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
 Rosegarden-4, hereafter referred to as simply Rosegarden, is a
 versatile, open source music creation tool. It combines aspects of a
@@ -61,7 +67,8 @@ layer-based image editing program to the realm of music.</P>
 <P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
 All of this flexibility means you can use Rosegarden as the center of
 a very powerful home studio and music composition solution for Linux.</P>
-<H2 STYLE="border: none; padding: 0in">About This Guide</H2>
+<H2 CLASS="western" STYLE="border: none; padding: 0in">About This
+Guide</H2>
 <P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
 This guide is part manual, part tutorial. I attempt to showcase
 Rosegarden's most significant features, and give you suggestions for
@@ -87,8 +94,8 @@ menu, find &quot;Import&quot; on this menu and hover on it until the
 submenu opens out, then click on &quot;Import MIDI File.&quot;</P>
 <P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
 <IMG SRC="../pixmaps/menu-file.png" NAME="Graphic1" ALIGN=BOTTOM WIDTH=402 HEIGHT=185 BORDER=0></P>
-<H2 STYLE="border: none; padding: 0in"><A NAME="1_3"></A>Version and
-System Requirements</H2>
+<H2 CLASS="western" STYLE="border: none; padding: 0in"><A NAME="1_3"></A>
+Version and System Requirements</H2>
 <P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
 This document describes Rosegarden-4, the latest in this venerable
 line of applications. Some distributions still carry the older
@@ -103,7 +110,15 @@ currently only found in Linux. A few brave individuals are interested
 in porting it to FreeBSD and OS-X, but at this time no one has been
 successful, and Rosegarden remains, effectively, an application only
 for Linux.</P>
-<H3>Linux Version</H3>
+<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+Rosegarden requires several fairly new libraries in order for all of
+its features to work correctly.  Synth plugins, especially, require a
+library that not many distros were carrying at this writing.  If
+anything documented in this book seems not to exist, please ask your
+distro package maintainers to pick up the requisite libraries and
+compile Rosegarden against them.  Unfortunately, building Rosegarden
+from source is well beyond the scope of this book.</P>
+<H3 CLASS="western">Linux Version</H3>
 <P>The more recent your distribution, the better. Rosegarden and many
 related, interdependent applications are all very new. We at
 Rosegarden suggest that you run the very latest release version of
@@ -118,7 +133,7 @@ acceptable, if not ideal results using off the shelf Debian Sarge on
 a fast computer, but this is more due to my stubbornness than any
 matter of practicality. I heartily recommend that you make use of the
 Planet or AGNULA.</P>
-<H3>Equipment and Software Required</H3>
+<H3 CLASS="western">Equipment and Software Required</H3>
 <P>Many people are running Rosegarden successfully on older, slower
 hardware. However, your CPU can't be too fast, and you can't have too
 much RAM or hard disk space. The more resources your computer can
@@ -141,6 +156,7 @@ work with Rosegarden.</P>
 			</UL>
 		</UL>
 		<LI><P>or a virtual keyboard such as <A HREF="http://packages.debian.org/stable/sound/vkeybd">vkeybd</A></P>
+		<P></P>
 	</UL>
 	<P>For MIDI playback:</P>
 	<UL>
@@ -158,6 +174,7 @@ work with Rosegarden.</P>
 		an appropriate soundfont loaded into it, and/or the Xsynth-DSSI
 		(analog synth&mdash;no soundfont required) plugin, both of which
 		require a working JACK server for audio output</P>
+		<P></P>
 	</UL>
 	<P>For audio recording:</P>
 	<UL>
@@ -166,6 +183,7 @@ work with Rosegarden.</P>
 		<LI><P>a microphone, or one or more devices capable of producing
 		sound and piping it into an appropriate jack on the soundcard, and</P>
 		<LI><P>plenty of available hard disk space</P>
+		<P></P>
 	</UL>
 	<P>For audio playback:</P>
 	<UL>
@@ -173,8 +191,8 @@ work with Rosegarden.</P>
 		<LI><P>a JACK-compatible soundcard</P>
 	</UL>
 </UL>
-<H2 STYLE="border: none; padding: 0in"><A NAME="1_6"></A>Getting This
-Document</H2>
+<H2 CLASS="western" STYLE="border: none; padding: 0in"><A NAME="1_6"></A>
+Getting This Document</H2>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">The HTML
 version of <I>Using Rosegarden</I> is always available at:</P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><A HREF="http://rosegarden.sourceforge.net/tutorial/using-rosegarden/using-rosegarden.html">http://rosegarden.sourceforge.net/tutorial/using-rosegarden/
@@ -192,7 +210,8 @@ at:</P>
 When I try these links with Konqueror, I'm always unable to download
 the files. If you run into the same problem, I suggest you try </I>wget
 <I>or </I>Mozilla. <I>The</I> <I>files are definitely there.</I></P>
-<H2 STYLE="border: none; padding: 0in"><A NAME="1_8"></A>Translations</H2>
+<H2 CLASS="western" STYLE="border: none; padding: 0in"><A NAME="1_8"></A>
+Translations</H2>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">A German
 translation is under way, but is out of date owing to the evolving
 nature of this document. Other languages will probably follow after
@@ -244,14 +263,14 @@ all the dust has settled.</P>
 </TABLE>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><BR><BR>
 </P>
-<H2>Special Thanks</H2>
+<H2 CLASS="western">Special Thanks</H2>
 <P>Thanks to the following...</P>
 <P>Chris Cannam, Rich Bown, Guillaume Laurent &ndash; for giving me
 something to write about, and helping me at various points along the
 way</P>
 <P>Shelagh, Daniel Krippner &ndash; for helping me ensure that this
 whole thing was actually useful to people</P>
-<P>Pedro Lopez-Cabanillas &ndash; for info about USB MIDI</P>
+<P>Pedro Lopez-Cabanillas &ndash; for info about USB MIDI and sysex</P>
 <P>Brendon Oliver &ndash; for some Perl magic to fix up my document
 build system</P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><BR><BR>

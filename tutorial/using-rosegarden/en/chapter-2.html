@@ -21,7 +21,7 @@ A { text-decoration: none }
 <A HREF="chapter-1.html">Previous</A>
 <A HREF="chapter-3.html">Next</A>
 <HR>
-<H1><A NAME="2">2 Producing Sound</A></H1>
+<H1><A NAME="2">2 Producing Sound (final)</A></H1>
 <P>Many users have written to ask why they are unable to get Rosegarden
  to make any noise. It is the most common question asked on the
  rosegarden-user mailing list by far, and is especially troublesome for
@@ -96,20 +96,21 @@ SRC="../pixmaps/sound-kinfocenter.png" ></P>
 <P>The simplest, least expensive route is the joystick port MIDI
  adapter. These are found on many common, low-end soundcards, such as
  the Sound Blaster PCI 128 (snd-ens1371). It can be somewhat difficult
- to obtain a suitable Y-cable or MIDI box to connect to these things,
- but after having obtained one, all that remains is to connect your
- equipment using standard 5-pin DIN MIDI cables. With the snd-ens1371
- driver, and those for many similar cards, it's only a matter of making
- sure the<B> snd-seq-midi</B> and<B> snd-rawmidi</B> drivers are loaded
- (using whatever mechanism your particular distribution provides for
- that function.)</P>
+ to obtain a suitable Y-cable or MIDI box to connect to these, and you
+ will probably have to procure one online. With the right adapter in
+ hand, all that remains is to connect your equipment to the box or cable
+ using standard 5-pin DIN MIDI cables. With the snd-ens1371 driver, and
+ those for many similar cards, it's only a matter of making sure the <FONT
+FACE="courier 10 pitch">snd-seq-midi</FONT> and <FONT FACE="courier 10 pitch">
+snd-rawmidi</FONT> modules are loaded (using whatever mechanism your
+ particular distribution provides for that function.)</P>
 <H4 CLASS="western"><A NAME="2_1_2_2">2.1.2.2 USB MIDI</A></H4>
 <P>USB is supplanting traditional MIDI cabling, and several
  manufacturers are producing keyboards that plug directly into your
  computer using standard USB cables. There are also devices available
- which provide multi-port MIDI hubs. These hubs attach to your computer
- using a USB cable, and the hubs provide several traditional 5-pin MIDI
- sockets.</P>
+ which provide multi-port MIDI interfaces. These interfaces attach to
+ your computer using a USB cable, and they provide several traditional
+ 5-pin MIDI sockets.</P>
 <H5 CLASS="western"><A NAME="2_1_2_2_1">2.1.2.2.1 USB Keyboards</A></H5>
 <P><A HREF="http://www.evolution.co.uk/">Evolution</A> manufactures
  several models that are known to conform to the standard USB MIDI
@@ -168,7 +169,7 @@ SRC="../pixmaps/usbmidi-PLC.jpg" ></P>
  command line to issue a command like:</P>
 <P STYLE="margin-left: 0.49in"><FONT FACE="courier 10 pitch">lspci |
  grep snd</FONT></P>
-<P> I have the following modules loaded for my own SB Live!:</P>
+<P>I have the following modules loaded for my own SB Live!:</P>
 <P STYLE="margin-left: 0.79in"><FONT FACE="courier 10 pitch">snd-seq-oss
  snd-seq-midi snd-emu10k1-synth snd-emux-synth</FONT></P>
 <P STYLE="margin-left: 0.79in"><FONT FACE="courier 10 pitch">
@@ -193,7 +194,8 @@ snd-seq-midi-emul snd-seq-virmidi snd-seq-midi-event snd-seq</FONT></P>
  of audio recording. For the moment, it should be sufficient to ensure
  the &quot;Music&quot; channel volume is turned up. My mixer of preference is<A HREF="http://www.suse.de/~mana/kalsatools.html">
  KAmix</A>. Unfortunately, it is not widely available outside of SuSE,
- and you may have to compile it yourself. It isn't the prettiest mixer,
+ and you may have to compile it yourself. (I had to go to quite a lot of
+ trouble to compile it myself for Debian.) It isn't the prettiest mixer,
  but it's the only one I've found that lets me control my SB Live!
  consistently and efficiently to get the results I want.</P>
 <H5 CLASS="western"><A NAME="2_1_3_1_3">2.1.3.1.3 Load a SoundFont</A></H5>
@@ -209,10 +211,10 @@ snd-seq-midi-emul snd-seq-virmidi snd-seq-midi-event snd-seq</FONT></P>
 <P>Once you have obtained a soundfont, you need to load it into the
  card. There isn't currently any user-friendly way of managing this. I'm
  developing a utility for this very purpose, but I did not have time to
- finish it before releasing this book, and so I will make no reference
- to it. In the meantime, your two choices are to run the command line
- utility<B> <FONT FACE="courier 10 pitch">asfxload</FONT></B>, or to
- configure Rosegarden to load a soundfont for you at startup, via<B>
+ finish it before releasing this book, and so I will make no further
+ reference to it. In the meantime, your two choices are to run the
+ command line utility<B> <FONT FACE="courier 10 pitch">asfxload</FONT></B>
+, or to configure Rosegarden to load a soundfont for you at startup, via<B>
  Settings -&gt; Configure Rosegarden -&gt; Sequencer -&gt; General</B></P>
 <P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic17"
 SRC="../pixmaps/configure-soundfont.png" ></P>
@@ -284,6 +286,7 @@ SRC="../pixmaps/qsynth-soundfonts.png" ></P>
  that it requires a working JACK server in order to function.</P>
 <H2 CLASS="western"><A NAME="2_2">2.2 Playing Audio</A></H2>
 <P>In order to play audio you will need to run JACK.</P>
+<H3 CLASS="western"><A NAME="2_2_1">2.2.1 What is JACK?</A></H3>
 <P>JACK is short for the Jack Audio Connection Kit. JACK is a flexible
  audio server that allows its client applications to share the audio
  hardware seamlessly, and to share a common transport. It provides
@@ -293,16 +296,33 @@ SRC="../pixmaps/qsynth-soundfonts.png" ></P>
  best possible performance out of his or her hardware, but professional
  or not, it's something you need to come to terms with JACK if you want
  to play audio with Rosegarden.</P>
-<P>Some of you may have heard of patching kernels, running with
- &quot;capabilities,&quot; and other arcane magic associated with Linux audio. All
- of that really<B> is</B> necessary to get the best performance out of
- JACK, I'm afraid. It's a very complicated business that I don't
- understand very well myself. I fear I must leave you in the hands of<A HREF="http://www.agnula.org/">
- AGNULA</A> and perhaps the<A HREF="http://www.linuxdj.com/audio/lad/subscribeall.php3">
- Linux Audio Users</A> list for more information if you require more
- performance than you can by following these simple instructions to get
- JACK running as an ordinary user on an ordinary kernel.</P>
-<H3 CLASS="western"><A NAME="2_2_1">2.2.1 Starting and Tweaking JACK</A></H3>
+<H3 CLASS="western"><A NAME="2_2_2">2.2.2 Obtaining a Suitable Kernel</A>
+</H3>
+<P>It is theoretically possible to run JACK and Rosegarden with an
+ ordinary kernel, but I have never obtained acceptable results, even on
+ machine with fairly high specs. CPU power and abundant RAM are
+ insufficient to guarantee reliable performance, and you will,
+ unfortunately, need to run a specialized kernel. Fortunately, the likes
+ of<A HREF="http://www.agnula.org/"> AGNULA</A> make it much easier than
+ it used to be. It is now possible to do quality audio work in Linux
+ without having to become an expert kernel hacker. I have to admit that
+ I was impressed with this when I finally came around to trying it for
+ myself. If you read any of the pre-release versions of this book, you
+ may remember various rants I wrote about Linux audio along the way. I
+ can now report that a happy JACK can be as simple as downloading one of
+ AGNULA's (or CCRMA's presumably) kernels, installing it, and rebooting.
+ The particular vagaries of installing the kernel are beyond the scope
+ of this book, but I am running with these packages on my Debian box
+ (laptop users might need to snag the PCMCIA modules as well):</P>
+<P STYLE="margin-left: 0.49in"><FONT FACE="courier 10 pitch">
+alsa-modules-2.4.25-1-multimedia-686</FONT></P>
+<P STYLE="margin-left: 0.49in"><FONT FACE="courier 10 pitch">
+kernel-image-2.4.25-1-multimedia-686</FONT></P>
+<P><FONT FACE="times new roman"><I>NOTE: Your mileage may vary if you
+ want to use a newer 2.6-series kernel. As of this writing, they are
+ still rather immature and experimental, and I am not using one, so I
+ can't very well write about it.</I></FONT></P>
+<H3 CLASS="western"><A NAME="2_2_3">2.2.3 Starting and Tweaking JACK</A></H3>
 <P>The simplest way to control your JACK server is to use<A HREF="http://qjackctl.sourceforge.net/">
  <FONT FACE="courier 10 pitch">qjackctl</FONT></A>. It is a very useful
  utility that provides a convenient way to start and stop your JACK
@@ -311,26 +331,40 @@ SRC="../pixmaps/qsynth-soundfonts.png" ></P>
  applications.</P>
 <P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic21"
 SRC="../pixmaps/qjackctl-overview.png" ></P>
-<H3 CLASS="western"><A NAME="2_2_2">2.2.2 Configuring the JACK Server</A>
+<H3 CLASS="western"><A NAME="2_2_4">2.2.4 Configuring the JACK Server</A>
 </H3>
 <P ALIGN="LEFT" STYLE="font-weight: medium">To change how your JACK
  server is configured, use the<B> Setup</B> button. The process that
  follows will probably be tedious and time-consuming, but once you have
  discovered the &quot;magic numbers&quot; for your hardware, everything should
- continue to work thereafter. Discovering the best combination is a
- process of playing with the &quot;Frames/Period&quot;, &quot;Sample Rate&quot; and
+ continue to work thereafter. The patched kernel you installed allows
+ JACK to have higher than normal priority, and this requires root
+ privileges. You should configure JACK to start using &quot;jackstart&quot; so
+ that you can run Rosegarden and JACK as an ordinary user.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic25"
+SRC="../pixmaps/qjackctl-silvan.png" ></P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">The settings displayed are
+ those that work best for me on my Sound Blaster Live!, and you may well
+ have some fiddling to do from here. Discovering the best combination is
+ a process of playing with the &quot;Frames/Period&quot;, &quot;Sample Rate&quot; and
  &quot;Periods/Buffer&quot; settings. Your objective here is to find the lowest
  possible latency, as reported in the lower right-hand corner of the
  dialog. As you change settings, this number will show the results
  yielded by that combination. You want the sample rate high, and the
- frames/periods and periods/buffer low. I suggest you dial up the lowest
- possible latency, click on<B> OK</B>, then try to start the JACK server
- with the<B> Start</B> button on the main dialog. If the server fails to
- start, come back to this dialog and keep working up until you find a
- combination that works.</P>
-<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic25"
-SRC="../pixmaps/qjackctl-silvan.png" ></P>
-<H4 CLASS="western"><A NAME="2_2_2_1">2.2.2.1 The Evil XRUN</A></H4>
+ frames/periods and periods/buffer low.</P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">I suggest you dial up the
+ lowest possible latency, click on<B> OK</B>, then try to start the JACK
+ server with the<B> Start</B> button on the main dialog. If the server
+ fails to start, come back to this dialog and keep working up, one
+ setting at a time, until you find a combination that works. Many
+ combinations of settings will probably cause JACK to fail immediately.
+ You should quickly begin to get an idea of the range of possible values
+ you can use that will actually work, and then you can home in on the
+ ideal settings from there. (For example, it isn't possible to start
+ JACK on my hardware with a periods/buffer other than two, so there is
+ nothing for it but to use that setting and move on to a different
+ parameter.)</P>
+<H4 CLASS="western"><A NAME="2_2_4_1">2.2.4.1 The Evil XRUN</A></H4>
 <P ALIGN="LEFT" STYLE="font-weight: medium">It's very important to avoid
  xruns. If you find a combination of low-latency settings that allow the
  JACK server to start, but which produce a flood of xruns, you're aiming
@@ -343,16 +377,13 @@ SRC="../pixmaps/JACK-no-xruns.png" ></P>
 <P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic23"
 SRC="../pixmaps/JACK-know-xruns.png" ></P>
 <P ALIGN="LEFT" STYLE="font-weight: medium">You never want to see this
- much red. Seeing any red at all is really unacceptable. Xruns cause
- audio dropouts. Clicks, pops, distortions, flanger-like effects. They
- are to be avoided at all costs. If you cannot produce a set of
- parameters that gets JACK running without xruns, you probably have no
- choice but to explore the world of Linux audio performance tweaking.
- Even eliminating the xruns is no guarantee that you will be able to
- obtain acceptable performance running these things as an ordinary user.
- My own performance is just barely good enough that I can't quite force
- myself to dive into the arcane world of Linux audio headlong.</P>
-<H3 CLASS="western"><A NAME="2_2_3">2.2.3 Managing JACK Connections</A></H3>
+ much red. Seeing any red at all is really unacceptable, but you can
+ probably get by so long as your xruns are few and far between. Xruns
+ cause audio dropouts; clicks, pops, distortions, flanger-like effects.
+ If you get more than two or three in the course of a day, you probably
+ need to de-tune JACK a notch and trade some performance for
+ reliability.</P>
+<H3 CLASS="western"><A NAME="2_2_5">2.2.5 Managing JACK Connections</A></H3>
 <P>Rosegarden will establish sane default connections automatically. So
  will QSynth and Hydrogen, if you've configured them to do so.
  ZynAddSubFX and perhaps other JACK-aware applications do not do this.

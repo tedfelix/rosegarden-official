@@ -21,7 +21,7 @@ A { text-decoration: none }
 <A HREF="chapter-3.html">Previous</A>
 <A HREF="chapter-5.html">Next</A>
 <HR>
-<H1><A NAME="4">4 The Studio</A></H1>
+<H1><A NAME="4">4 The Studio (final)</A></H1>
 <P>Now that you have a general idea how Rosegarden works, now is a good
  time to think about telling Rosegarden something about the MIDI
  equipment you wish to use. People who intend to use Rosegarden purely
@@ -31,7 +31,7 @@ A { text-decoration: none }
  the concepts I am about to explain. If you are new to MIDI, or if
  anything in this chapter leaves you scratching your head, you might
  want to read through my MIDI Primer in Appendix A.</P>
-<H2><A NAME="4_1">4.1 What is a Studio?</A></H2>
+<H2 CLASS="western"><A NAME="4_1">4.1 What is a Studio?</A></H2>
 <P>Every native Rosegarden composition (<B>.rg</B>) file contains a
  studio definition in addition to all the nuts and bolts stuff of music.
  The studio is a definition of every MIDI device Rosegarden can detect
@@ -41,7 +41,7 @@ A { text-decoration: none }
  the middle of working on a composition, for example.) It comprises
  information about the device itself, and about how data is routed into
  or out of it.</P>
-<H3><A NAME="4_1_1">4.1.1 What is a Connection?</A></H3>
+<H3 CLASS="western"><A NAME="4_1_1">4.1.1 What is a Connection?</A></H3>
 <P>Rosegarden has an integrated MIDI router to manage the flow of raw
  MIDI events into and out of ports provided by the underlying ALSA
  infrastructure. You can think of this as something like the sort of
@@ -56,7 +56,7 @@ A { text-decoration: none }
  what is connected where.</P>
 <P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic14"
 SRC="../pixmaps/studio-diagram-midi-router.jpg" ></P>
-<H3><A NAME="4_1_2">4.1.2 What is a Device?</A></H3>
+<H3 CLASS="western"><A NAME="4_1_2">4.1.2 What is a Device?</A></H3>
 <P>A device is a sort of virtual model of an individual piece of MIDI
  equipment. Equipment, in this sense, can be full-fledged external MIDI
  hardware, internal hardware like the Sound Blaster Live!, or virtual
@@ -83,14 +83,16 @@ SRC="../pixmaps/studio-diagram-midi-router.jpg" ></P>
  1 0.</P>
 <P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic15"
 SRC="../pixmaps/studio-diagram-play-device.jpg" ></P>
-<H3><A NAME="4_1_3">4.1.3 Putting Connections and Devices Together</A></H3>
+<H3 CLASS="western"><A NAME="4_1_3">4.1.3 Putting Connections and
+ Devices Together</A></H3>
 <P>A studio can consist of just one device, and perhaps for many of you
  that is all the complexity you will ever need. The real power, however,
  lies with Rosegarden's ability to manage numerous devices
  simultaneously. A studio is, in effect, a collection of device
  descriptions and a routing table ensuring that the right devices are
  connected to the right MIDI equipment on the other end.</P>
-<H4><A NAME="4_1_3_1">4.1.3.1 A Simple Sound Blaster Live! Studio</A></H4>
+<H4 CLASS="western"><A NAME="4_1_3_1">4.1.3.1 A Simple Sound Blaster
+ Live! Studio</A></H4>
 <P>Even on the comparatively simple and very inexpensive end of the
  hardware spectrum, it is quite possible to have more than one device to
  manage. The Sound Blaster Live! falls into this category, with four
@@ -103,23 +105,22 @@ SRC="../pixmaps/studio-diagram-play-device.jpg" ></P>
  in a moment.)</P>
 <P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic13"
 SRC="../pixmaps/studio-diagram-sb-live.jpg" ></P>
-<H4><A NAME="4_1_3_2">4.1.3.2 A Typical QSynth Studio</A></H4>
+<H4 CLASS="western"><A NAME="4_1_3_2">4.1.3.2 A Typical QSynth Studio</A>
+</H4>
 <P>Another typical, simple setup involves using QSynth for MIDI playback
  and VKeybd for input. You can start either of these after starting
  Rosegarden, and Rosegarden will detect them and make a play connection
  and a record connection available, along with an empty play device.</P>
 <P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic12"
 SRC="../pixmaps/studio-diagram-simple.jpg" ></P>
-<H4><A NAME="4_1_3_3">4.1.3.3 A More Complex Studio</A></H4>
+<H4 CLASS="western"><A NAME="4_1_3_3">4.1.3.3 A More Complex Studio</A></H4>
 <P>This is what my own studio looks like when I have QSynth, Hydrogen,
  and ZynAddSubFX running, along with my Roland Sound Canvas and my Sound
  Blaster Live!. It looks horribly complex on paper, and it would look
  even worse if I drew out every single bank of GS variations, and did a
  better job of representing the fact that, while the same soundfont
  happens to be loaded into both the Sound Blaster and QSynth, that
- doesn't<I> have</I>
-<!--SPAN STYLE="font-style: normal"-->
- to be the case. No matter how it looks, this is
+ doesn't<I> have</I> to be the case. No matter how it looks, this is
  actually quite simple to use day to day, believe it or not. Rosegarden
  makes this easy.</P>
 <P STYLE="font-style: normal">Notice that I have controllers for the
@@ -131,13 +132,11 @@ SRC="../pixmaps/studio-diagram-simple.jpg" ></P>
  sort of thing can't be automated from within Rosegarden.</P>
 <P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic11"
 SRC="../pixmaps/studio-diagram-complex.jpg" ></P>
-<H2><A NAME="4_2">4.2 Enough Theory Already! How Do I Configure<I> MY</I>
+<H2 CLASS="western"><A NAME="4_2">4.2 Enough Theory Already! How Do I
+ Configure MY
 <!--SPAN STYLE="font-style: normal"-->
-
  Studio?</A></H2>
-<P>
-<!--SPAN STYLE="font-style: normal"-->
-I'm glad you asked. The first step in this process is to open the
+<P>I'm glad you asked. The first step in this process is to open the
  main Studio dialog.<B> Composition -&gt; Studio -&gt; Manage MIDI Devices...</B>
 </P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
@@ -156,13 +155,11 @@ SRC="../pixmaps/studio-icon.png" > icon.</P>
  synths, named &quot;Soft Synth 1&quot; through &quot;Soft Synth 3&quot;, one of which is
  currently connected to KAMix, an ALSA mixer client that can be
  controlled via MIDI. These are empty devices that I created with the<B>
- New</B>
-<!--SPAN STYLE="font-weight: medium"-->
- button.</P>
+ New</B> button.</P>
 <P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic1" SRC="../pixmaps/manage-devices-dialog.png"
 ></P>
-<H3><A NAME="4_2_1">4.2.1 Connections</A></H3>
+<H3 CLASS="western"><A NAME="4_2_1">4.2.1 Connections</A></H3>
 <P>The reality of Rosegarden's MIDI router is a bit less intuitive than
  the diagram I presented earlier. Here is that same diagram with the
  ALSA port numbers included.</P>
@@ -186,7 +183,7 @@ SRC="../pixmaps/studio-diagram-midi-router-with-ports.jpg" ></P>
  names are provided by the underlying kernel driver, and don't always
  make a lot of sense. That's why Rosegarden allows you give your devices
  a proper name.</P>
-<H3><A NAME="4_2_2">4.2.2 Record Devices</A></H3>
+<H3 CLASS="western"><A NAME="4_2_2">4.2.2 Record Devices</A></H3>
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
  Record devices are MIDI keyboards, virtual keyboards, MIDI guitars and
  the like. As record devices are rather less complicated, I will cover
@@ -208,7 +205,7 @@ SRC="../pixmaps/studio-diagram-midi-router-with-ports.jpg" ></P>
  detected the associated duplex read and virtual read connections. I
  have marked both of them &quot;Current&quot; and I can record events from either
  one of them, or both of them at the same time.</P>
-<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic17" SRC="../pixmaps/studio-record-devices.png"
 ></P>
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
@@ -216,10 +213,8 @@ SRC="../pixmaps/studio-diagram-midi-router-with-ports.jpg" ></P>
  as &quot;Current.&quot; If you have a keyboard or similar device, and Rosegarden
  isn't recording anything, this dialog is the first place to look for
  troubleshooting the problem.</I></P>
-<H3><A NAME="4_2_3">4.2.3 <B>Play Devices</B></A></H3>
-<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-
-<!--SPAN STYLE="font-weight: medium"-->
+<H3 CLASS="western"><A NAME="4_2_3">4.2.3 <B>Play Devices</B></A></H3>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
  Play devices are where all the fun, and all the complexity is. As I
  have mentioned elsewhere, they can be MIDI keyboards, sound modules,
  software synths, samplers, and pretty well anything else that can take
@@ -227,7 +222,8 @@ SRC="../pixmaps/studio-diagram-midi-router-with-ports.jpg" ></P>
  is a single synth plugin device into which any and all plugins are
  plugged, and it is not a MIDI play device. I will cover synth plugins
  in the next chapter.)</P>
-<H4><A NAME="4_2_3_1">4.2.3.1 The Easy Road (General MIDI Only)</A></H4>
+<H4 CLASS="western"><A NAME="4_2_3_1">4.2.3.1 The Easy Road (General
+ MIDI Only)</A></H4>
 <P>If you have only one play device, and it only uses straight General
  MIDI programs, then you are probably ready to go out of the box. If you
  start Rosegarden with no file to open, it opens a default blank
@@ -243,14 +239,12 @@ SRC="../pixmaps/studio-diagram-midi-router-with-ports.jpg" ></P>
  your output to &quot;64:0 (duplex)&quot; and you do not have any external
  equipment attached to your computer, you probably want to change this
  to point to either 65:0 or something like 128:0 as appropriate.</P>
-<H4><A NAME="4_2_3_2">4.2.3.2 The Harder Road (Loading Device
- Definitions from the Library)</A></H4>
+<H4 CLASS="western"><A NAME="4_2_3_2">4.2.3.2 The Harder Road (Loading
+ Device Definitions from the Library)</A></H4>
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  If you have some need beyond the simplest one-device, only-General MIDI
  scenario, you will have to use the bank editor; even if you do not
- intend to edit any banks directly.
-<!--SPAN STYLE="font-weight: medium"-->
- To load or create a device click on
+ intend to edit any banks directly. To load or create a device click on
  the<B> Banks...</B> button to pop up the bank editor dialog.</P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
  In this example, you can see that I have already imported some programs
@@ -274,7 +268,8 @@ SRC="../pixmaps/studio-diagram-midi-router-with-ports.jpg" ></P>
 <P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic4" SRC="../pixmaps/studio-bank-editor.png"
 ></P>
-<H4><A NAME="4_2_3_3">4.2.3.3 Loading a Device from the Library</A></H4>
+<H4 CLASS="western"><A NAME="4_2_3_3">4.2.3.3 Loading a Device from the
+ Library</A></H4>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">If you're
  lucky, the growing Rosegarden Library already contains a set of bank
  and program definitions to suit your hardware. To try your luck, click
@@ -285,29 +280,30 @@ SRC="../pixmaps/studio-diagram-midi-router-with-ports.jpg" ></P>
  Composition (<B>.rg)</B> files, and from Rosegarden Device (<B>.rgd)</B>
  files. If you don't find anything suitable, you will probably have to
  start from scratch, as I will explain later on.</P>
-<H4><A NAME="4_2_3_4">4.2.3.4 Turning a SoundFont into a Device</A></H4>
+<H4 CLASS="western"><A NAME="4_2_3_4">4.2.3.4 Turning a SoundFont into a
+ Device</A></H4>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">&quot;Soft Synth
  2&quot; in the above example is a soundfont based card or soft synth. The
- simplest, most accurate way to create a device model for a synth of
- this type is to load the programs directly out of the soundfont's<B>
- .sf2</B> file itself. Simply set the &quot;Filter:&quot; to &quot;Soundfont&quot; and
- browse to the location of the soundfont you've loaded into your synth.</P>
+ simplest, most accurate way to define a device model for a synth of
+ this type is to load the banks of program names directly out of the
+ soundfont's<B> .sf2</B> file itself. Simply set the &quot;Filter:&quot; to
+ &quot;Soundfont&quot; and browse to the location of the soundfont you've loaded
+ into your synth.</P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><I>NOTE:
- Creating a device by loading programs out of a soundfont is in no way
+ Defining a device by loading programs out of a soundfont is in no way
  related to actually loading that soundfont into either a Sound Blaster
- Live! or into QSynth. You are merely reading the directory inside the
- file that describes how the various samples are arranged into banks,
- and importing that textual information into Rosegarden. It saves a
- great deal of typing, and delivers fast, accurate results.</I></P>
+ Live! or into QSynth. You are merely reading the directory inside the<B>
+ .sf2</B> file that describes how the various samples are arranged into
+ banks, and importing that textual information into Rosegarden. It saves
+ a great deal of typing, and delivers fast, accurate results.</I></P>
 <P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic9" SRC="../pixmaps/studio-import-soundfont.png"
 ></P>
-<H4><A NAME="4_2_3_5">4.2.3.5 Once You've Made Your Choice</A></H4>
+<H4 CLASS="western"><A NAME="4_2_3_5">4.2.3.5 Once You've Made Your
+ Choice</A></H4>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Regardless
  of whether you elected to load a stock device from the Library, or
- loaded the programs out of a<B> .sf2</B>
-<!--SPAN STYLE="font-weight: medium"-->
- file, you will need to make a
+ loaded the programs out of a<B> .sf2</B> file, you will need to make a
  few decisions how to procede.</P>
 <P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic8" SRC="../pixmaps/studio-import-options.png"
@@ -318,8 +314,8 @@ SRC="../pixmaps/studio-diagram-midi-router-with-ports.jpg" ></P>
  whether to merge new banks into existing ones or replace them
  completely. Everything should be self-evident after a little
  experimentation.</P>
-<H4>4.2.3.6 <A NAME="2_5_4"></A>The Hardest Road: Creating a List of
- Programs from Scratch</H4>
+<H4 CLASS="western">4.2.3.6 <A NAME="2_5_4"></A>The Hardest Road:
+ Creating a List of Programs from Scratch</H4>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
  If none of the device models in the library are suitable, and you can't
  turn the program names from a soundfont into a device, then you will
@@ -330,7 +326,7 @@ SRC="../pixmaps/studio-diagram-midi-router-with-ports.jpg" ></P>
  Even if you have no real need to start from scratch, you may wish to
  read through this material anyway, in order to better understand how
  some of the devices in the Library are put together.</P>
-<H5><A NAME="4_2_3_6_1">4.2.3.6.1 Naming the Device</A></H5>
+<H5 CLASS="western"><A NAME="4_2_3_6_1">4.2.3.6.1 Naming the Device</A></H5>
 <P>So that you can avoid confusion, you probably want to replace
  Rosegarden's default &quot;Anonymous MIDI Device 3&quot; type name with something
  more meaningful. Simply double click on the existing name and give your
@@ -338,7 +334,8 @@ SRC="../pixmaps/studio-diagram-midi-router-with-ports.jpg" ></P>
 <P>Now that your &quot;Anonymous External Device&quot; has become a &quot;Roland SC-33&quot;
  or what have you, you probably want add a description of its available
  programs and controllers to Rosegarden's model.</P>
-<H5><A NAME="4_2_3_6_2">4.2.3.6.2 Why Name Programs and Controllers?</A></H5>
+<H5 CLASS="western"><A NAME="4_2_3_6_2">4.2.3.6.2 Why Name Programs and
+ Controllers?</A></H5>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
  Depending on the capabilities of this device, it might not matter
  whether you define named program changes or not. However, if you do
@@ -349,7 +346,8 @@ SRC="../pixmaps/studio-diagram-midi-router-with-ports.jpg" ></P>
  available for your use. If you don't let Rosegarden know that program
  number 97 can play something, it will never allow you set a track to
  use that program number.</P>
-<H5><A NAME="4_2_3_6_3">4.2.3.6.3 Gathering Information</A></H5>
+<H5 CLASS="western"><A NAME="4_2_3_6_3">4.2.3.6.3 Gathering Information</A>
+</H5>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
  The key to success here is having as much information about the
  equipment as possible. You need to know what programs it can use, and
@@ -359,7 +357,7 @@ SRC="../pixmaps/studio-diagram-midi-router-with-ports.jpg" ></P>
  the slots and allow program changes to be transmitted. Beyond the
  essential fact that you must understand your equipment to describe it,
  there are really only two special cases worth mentioning here.</P>
-<H5><A NAME="4_2_3_6_4">4.2.3.6.4 Variations</A></H5>
+<H5 CLASS="western"><A NAME="4_2_3_6_4">4.2.3.6.4 Variations</A></H5>
 <P>Some equipment uses a method of sorting programs into banks in such a
  way that the programs in bank 0 0 are the standard General MIDI
  instruments, and the programs in the remaining banks are variations on
@@ -371,7 +369,8 @@ SRC="../pixmaps/studio-diagram-midi-router-with-ports.jpg" ></P>
  list based on either the LSB or MSB value.</P>
 <P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic6"
 SRC="../pixmaps/studio-variations.png" ></P>
-<H5><A NAME="4_2_3_6_5">4.2.3.6.5 The Percussion Checkbox</A></H5>
+<H5 CLASS="western"><A NAME="4_2_3_6_5">4.2.3.6.5 The Percussion
+ Checkbox</A></H5>
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
  Finally, you may have noticed that Rosegarden only allows you one set
  of program changes per bank address. The exception to this rule is that
@@ -389,7 +388,8 @@ SRC="../pixmaps/studio-variations.png" ></P>
 <P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic7" SRC="../pixmaps/studio-percussion-box.png"
 ></P>
-<H5><A NAME="4_2_3_6_6">4.2.3.6.6 Send in Your Device Descriptions</A></H5>
+<H5 CLASS="western"><A NAME="4_2_3_6_6">4.2.3.6.6 Send in Your Device
+ Descriptions</A></H5>
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  Once you've defined the names for your program changes, you can save
  the device definition to disk with the<B> Export...</B> button.</P>
@@ -404,7 +404,7 @@ SRC="../pixmaps/studio-variations.png" ></P>
  SC-33 device from scratch too, and it was very tedious and
  time-consuming. Especially since this stuff was a lot more buggy and
  incomprehensible back then. ;)</P>
-<H2><A NAME="4_3">4.3 Custom Controllers</A></H2>
+<H2 CLASS="western"><A NAME="4_3">4.3 Custom Controllers</A></H2>
 <P>Rosegarden should create a few basic default controllers for you. If
  you have special requirements, or if some of these controllers don't
  function on the piece of equipment for which you're defining the
@@ -423,10 +423,10 @@ SRC="../pixmaps/studio-controller-editor.png" ></P>
  should be obvious to you based on the particular needs of the equipment
  you're describing, but the last two bear special mention. The<B> Color:</B>
  parameter is the color this controller's knob will have on the<B>
- Instrument Parameters Box</B> in the main window, and the<B> position:</B>
+ Instrument Parameters</B> box in the main window, and the<B> position:</B>
  determines whether this controller will show up, and how it will be
  arranged relative to the other controllers.</P>
-<H2><A NAME="4_4">4.4 Default Document Properties</A></H2>
+<H2 CLASS="western"><A NAME="4_4">4.4 Default Document Properties</A></H2>
 <P>Before you make this document your default, you might want to have a
  look at some other document-specific settings. These aren't a part of
  the Studio, but they're saved in<B> autoload.rg</B>, and any new
@@ -434,7 +434,7 @@ SRC="../pixmaps/studio-controller-editor.png" ></P>
  use<B> Composition -&gt; Edit -&gt; Document Properties</B>.</P>
 <P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic3"
 SRC="../pixmaps/document-properties.png" ></P>
-<H3><A NAME="4_4_1">4.4.1 Lilypond Headers</A></H3>
+<H3 CLASS="western"><A NAME="4_4_1">4.4.1 Lilypond Headers</A></H3>
 <P ALIGN="LEFT" STYLE="font-weight: medium">The About tab starts off
  with some default properties. You can modify or delete these, and you
  can add new properties. The four defaults will be translated into
@@ -442,7 +442,7 @@ SRC="../pixmaps/document-properties.png" ></P>
  Lilypond headers, you can add them here by creating properties of that
  name, then binding your custom strings with them.. For example,
  &quot;instrument,&quot; &quot;dedication,&quot; or &quot;poet.&quot;</P>
-<H3><A NAME="4_4_2">4.4.2 Audio Directory</A></H3>
+<H3 CLASS="western"><A NAME="4_4_2">4.4.2 Audio Directory</A></H3>
 <P>From the Audio tab, you can configure a new directory for audio
  files. Rosegarden will use this path for recording new files, and it's
  the first place it will look when you import audio segments. By
@@ -452,10 +452,11 @@ SRC="../pixmaps/document-properties.png" ></P>
 <P>You should get in the habit of creating a new audio directory for
  each document you create in which you intend to use audio segments, as
  I will detail in another chapter.</P>
-<H3><A NAME="4_4_3">4.4.3 Custom Colors</A></H3>
+<H3 CLASS="western"><A NAME="4_4_3">4.4.3 Custom Colors</A></H3>
 <P>Rosegarden can colorize segments and controllers. Custom colors are
  defined here.</P>
-<H2>4.5 <A NAME="2_5_5"></A>Saving Your Studio as the Default</H2>
+<H2 CLASS="western">4.5 <A NAME="2_5_5"></A>Saving Your Studio as the
+ Default</H2>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Now that
  you've gotten your studio configured, you'll want to make it your
  default, so that you can avoid having to go through this entire ordeal
@@ -467,13 +468,11 @@ Composition -&gt; Studio -&gt; Save Current Document as Default Studio</B>
  have no effect on documents that you've already created, or documents
  you load from other sources. The studio belongs to each individual
  composition.</P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-<!--SPAN STYLE="font-weight: medium"-->
-This default
- studio is just like any ordinary<B> .rg</B> file, and that means any
- segments, track labels, instrument assignments, etc. that you have in
- the current document will be saved, and will subsequently be loaded
- each time you create a new document.</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+ This default studio is just like any ordinary<B> .rg</B> file, and that
+ means any segments, track labels, instrument assignments, etc. that you
+ have in the current document will be saved, and will subsequently be
+ loaded each time you create a new document.</P>
 <HR>
 <A HREF="chapter-0.html">Contents</A>
 <A HREF="chapter-3.html">Previous</A>

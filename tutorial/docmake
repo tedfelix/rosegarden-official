@@ -68,7 +68,7 @@ Sed() {
 }
 
 Put() {
-#    echo "disabled for testing purposed, remember?"
+#    echo "disabled for testing purposes, remember?"
 #    exit 1
 
     if [ `whoami` == "silvan" ]; then

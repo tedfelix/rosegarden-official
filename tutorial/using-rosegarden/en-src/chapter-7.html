@@ -5,7 +5,7 @@
 	<TITLE></TITLE>
 	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.2  (Linux)">
 	<META NAME="CREATED" CONTENT="20040613;312100">
-	<META NAME="CHANGED" CONTENT="20040813;21093500">
+	<META NAME="CHANGED" CONTENT="20040815;1501100">
 	<STYLE>
 	<!--
 		@page { size: 8.5in 11in }
@@ -25,7 +25,8 @@
 	</STYLE>
 </HEAD>
 <BODY LANG="en-US" DIR="LTR">
-<H1 STYLE="font-style: normal"><FONT FACE="Arial">A Different View</FONT></H1>
+<H1 STYLE="font-style: normal"><FONT FACE="Arial">A Different View
+(needs final edit)</FONT></H1>
 <P STYLE="border: none; padding: 0in">So far, we've only looked at
 the main window, and have not really edited anything. Rosegarden
 provides three different editors, each with its own unique view of
@@ -253,13 +254,13 @@ context menu. You'll see something like this:</P>
 <P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-overview.png" NAME="Graphic4" ALIGN=BOTTOM WIDTH=477 HEIGHT=371 BORDER=0></P>
 <H2 CLASS="western">The Local Cursor</H2>
 <P>I will go into more detail about the local cursor in the notation
-chapter, but it does have its uses here in the matrix as well.  If
-you take a second look at the rulers, you should see that the one
-toward the top of the screen has a magenta cast.  This ruler is for
+chapter, but it does have its uses here in the matrix as well. If you
+take a second look at the rulers, you should see that the one toward
+the top of the screen has a magenta cast. This ruler is for
 controlling the local cursor, which is a magenta version of the
-playback pointer.  You can set it in the same fashion you set the
+playback pointer. You can set it in the same fashion you set the
 playback pointer, and the two cursors function independently of each
-other.  The local cursor's main function here in the matrix seems to
+other. The local cursor's main function here in the matrix seems to
 be to set the destination location for paste operations.</P>
 <P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-two-cursors.png" NAME="Graphic51" ALIGN=BOTTOM WIDTH=135 HEIGHT=272 BORDER=0></P>
 <H3 CLASS="western">Entering New Notes</H3>
@@ -392,82 +393,80 @@ It's rather less obvious than selections elsewhere, but if you look
 closely, you can see that selected controller bars are each outlined
 in red.</P>
 <P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-selected-controllers.png" NAME="Graphic24" ALIGN=BOTTOM WIDTH=139 HEIGHT=75 BORDER=0></P>
-<P ALIGN=LEFT><SPAN STYLE="font-weight: medium">If you hold down
-shift and drag these up and down as a group, they all move at once.</SPAN></P>
+<P ALIGN=LEFT STYLE="font-weight: medium">If you hold down shift and
+drag these up and down as a group, they all move at once.</P>
 <H2 CLASS="western">Example Uses</H2>
 <H3 CLASS="western" STYLE="font-style: normal"><FONT FACE="Arial">Sequencing
 a Drum Pattern</FONT></H3>
 <P STYLE="font-style: normal"><FONT FACE="Arial">If you need to do a
 lot of complicated drum patterns, you might be better off to use
-Hydrogen.  Rosegarden can import Hydrogen patterns</FONT></P>
+Hydrogen. Rosegarden can import Hydrogen patterns</FONT></P>
 <H4 CLASS="western">Create a New Segment</H4>
 <P>In order to have some place to put the drums, create a new segment
 four bars long.</P>
-<P ALIGN=CENTER STYLE="font-style: normal"><IMG SRC="../pixmaps/matrix-new-segment.png" NAME="Graphic44" ALIGN=BOTTOM WIDTH=360 HEIGHT=118 BORDER=0></P>
-<P ALIGN=LEFT><FONT FACE="Arial"><I>NOTE:  I'm leaving this mistake
-in for the amusement value.  I was about to submit a bug report
+<P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-new-segment.png" NAME="Graphic44" ALIGN=BOTTOM WIDTH=360 HEIGHT=118 BORDER=0></P>
+<P ALIGN=LEFT><FONT FACE="Arial"><I>NOTE: I'm leaving this mistake in
+for the amusement value. I was about to submit a bug report
 documenting how I created a segment four bars long, opened it in the
-matrix, and could only edit three bars.  Can you spot the reason why
-that happened?  Hint:  that ain't four bars long.  :)</I></FONT></P>
+matrix, and could only edit three bars. Can you spot the reason why
+that happened? Hint: that ain't four bars long. :)</I></FONT></P>
 <H4 CLASS="western">Route the Track to a Percussion Instrument</H4>
 <P>In order to hear drums, you need to route this track to a
-percussion instrument from the main window.  If you have General
+percussion instrument from the main window. If you have General
 MIDI-compliant equipment, all that should be necessary is to route
 this track to the instrument #10 belonging to a suitable device.</P>
 <P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-route-sb-live.png" NAME="Graphic45" ALIGN=BOTTOM WIDTH=81 HEIGHT=152 BORDER=0></P>
 <P>In this particular example, I want to use the TR-808 drum kit
 that's part of the soundfont I'm using on my Sound Blaster Live!, so
 I need to dial up bank 1 0 (where the extra drums are) and set the
-program to &quot;TR 808.&quot;  (Notice that I do not have the <B>[x]
-Percussion</B><SPAN STYLE="font-weight: medium"> box checked.  That's
-because I'm not using a  GS device that has drum kits in the same 0 0
-bank as the General MIDI programs.  Instead, this device has the
-alternate drum kits in bank 1 0.)</SPAN></P>
+program to &quot;TR 808.&quot; (Notice that I do not have the <B>[x]
+Percussion</B> box checked. That's because I'm not using a GS device
+that has drum kits in the same 0 0 bank as the General MIDI programs.
+Instead, this device has the alternate drum kits in bank 1 0.)</P>
 <P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-pick-tr-808.png" NAME="Graphic46" ALIGN=BOTTOM WIDTH=190 HEIGHT=112 BORDER=0></P>
 <H4 CLASS="western">Set the Grid and Loop Points</H4>
 <P>Now that the track is routed to play using suitable sounds, head
-back to the matrix window.  It's probably a good idea to pick a finer
-resolution than the standard quarter note for the matrix grid.  For
+back to the matrix window. It's probably a good idea to pick a finer
+resolution than the standard quarter note for the matrix grid. For
 this part, 16<SUP>th</SUP> notes were convenient, so I dialed 1/16<SUP>th</SUP>
-into the <B>Grid</B><SPAN STYLE="font-weight: medium"> combo box.</SPAN></P>
-<P ALIGN=CENTER STYLE="font-weight: medium"><IMG SRC="../pixmaps/matrix-grid-16th.png" NAME="Graphic48" ALIGN=BOTTOM WIDTH=175 HEIGHT=35 BORDER=0></P>
+into the <B>Grid</B> combo box.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-grid-16th.png" NAME="Graphic48" ALIGN=BOTTOM WIDTH=175 HEIGHT=35 BORDER=0></P>
 <P>To make it easier to get the pattern right, set the first bar to
-loop using the ruler on the bottom.  (Notice that the ruler on top
-has a purplish cast.  It's for controlling the local cursor, which I
-will discuss in the notation chapter.  The ruler at the bottom is for
+loop using the ruler on the bottom. (Notice that the ruler on top has
+a purplish cast. It's for controlling the local cursor, which I will
+discuss in the notation chapter. The ruler at the bottom is for
 setting loops, and moving the blue playback pointer.)</P>
 <P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-set-loop.png" NAME="Graphic47" ALIGN=BOTTOM WIDTH=251 HEIGHT=140 BORDER=0></P>
 <H4 CLASS="western">Sequence the Pattern</H4>
-<P>The rest is trial and error.  Set the main transport window to
-loop mode 
+<P>The rest is trial and error. Set the main transport window to loop
+mode 
 <IMG SRC="../pixmaps/transport-loop.png" NAME="Graphic49" ALIGN=BOTTOM WIDTH=46 HEIGHT=36 BORDER=0>
-and hit play.  Use the edit tools to insert, remove, and move notes
-until you get a pattern you like.  Rosegarden provides no facility
-for labeling which keys play which drums, so you may need to putter
-around a bit before you figure out where they are.  This example uses
+and hit play. Use the edit tools to insert, remove, and move notes
+until you get a pattern you like. Rosegarden provides no facility for
+labeling which keys play which drums, so you may need to putter
+around a bit before you figure out where they are. This example uses
 a bass, a snare, and a couple of hi-hats, and I have completed my
 pattern in this snapshot.</P>
 <P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-first-bar.png" NAME="Graphic50" ALIGN=BOTTOM WIDTH=209 HEIGHT=278 BORDER=0></P>
 <H4 CLASS="western">Copy the Pattern</H4>
-<P>Select all the event and paste them three times.  Use the top
-ruler to set the local cursor to the destination for each paste
-operation.  You should wind up with something like this:</P>
+<P>Select all the event and paste them three times. Use the top ruler
+to set the local cursor to the destination for each paste operation.
+You should wind up with something like this:</P>
 <P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-after-copies.png" NAME="Graphic52" ALIGN=BOTTOM WIDTH=418 HEIGHT=157 BORDER=0></P>
 <H4 CLASS="western">Finish with a Fill</H4>
 <P>Now set only the last bar to loop, then adjust the pattern to make
 a little fill.</P>
 <P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-fill.png" NAME="Graphic53" ALIGN=BOTTOM WIDTH=109 HEIGHT=196 BORDER=0></P>
-<P><I>TIP:  I found it a trifle fiddly using copy and paste to make
-these copies.  I didn't get the placement of the local cursor quite
-right, and I had to quantize the results.  The next time I had to do
+<P><I>TIP: I found it a trifle fiddly using copy and paste to make
+these copies. I didn't get the placement of the local cursor quite
+right, and I had to quantize the results. The next time I had to do
 this, I started with a segment one bar long, looped it, then when the
 time came to copy it three times, I marked it as repeating in the
-<B>Segment Parameters</B><SPAN STYLE="font-weight: medium"> box, then
-double clicked on three of the copies, selected all four segments,
-and used </SPAN><B>Segments -&gt; Splint and Join -&gt; Join</B><SPAN STYLE="font-weight: medium">
-to join them back into one; then I finished by un-checking repeat for
-the segment.</SPAN>  It's a toss-up whether method B is faster, but
-it's definitely more precise.</I></P>
+<B>Segment Parameters</B> box, then double clicked on three of the
+copies, selected all four segments, and used <B>Segments -&gt; Splint
+and Join -&gt; Join</B> to join them back into one; then I finished
+by un-checking repeat for the segment. It's a toss-up whether method
+B is faster, but it's definitely more precise.</I></P>
 <P><BR><BR>
 </P>
 </BODY>
