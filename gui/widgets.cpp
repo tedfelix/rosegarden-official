@@ -308,6 +308,8 @@ RosegardenProgressBar::processEvents()
     }
 
     if (m_shown) update();
+
+    // kapp->processEvents(50); - enabled this if installing as event filter
 }
 
 void
@@ -322,3 +324,23 @@ RosegardenProgressBar::done()
     m_value = 0;
 }
 
+bool
+RosegardenProgressBar::eventFilter(QObject *watched, QEvent *e)
+{
+    if (e->type() == QEvent::MouseButtonPress    ||
+        e->type() == QEvent::MouseButtonRelease  ||
+        e->type() == QEvent::MouseButtonDblClick ||
+        e->type() == QEvent::KeyPress            ||
+        e->type() == QEvent::KeyRelease          ||
+        e->type() == QEvent::DragEnter           ||
+        e->type() == QEvent::DragMove            ||
+        e->type() == QEvent::DragLeave           ||
+        e->type() == QEvent::Drop                ||
+        e->type() == QEvent::DragResponse)
+
+        return true;
+
+    else
+
+        return QProgressBar::eventFilter(watched, e);
+}

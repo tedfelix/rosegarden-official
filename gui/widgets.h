@@ -216,6 +216,8 @@ public:
     virtual void processEvents();
     virtual void done();
 
+    virtual bool eventFilter(QObject *watched, QEvent *e);
+    
 private:
     clock_t m_timeoutSet;
     bool m_firstTimeout;
