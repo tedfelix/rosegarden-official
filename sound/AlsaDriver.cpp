@@ -1474,11 +1474,21 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
                 }
                 else
                 {
-                    snd_seq_ev_set_note(event,
-                                        channel,
-                                        (*i)->getPitch(),
-                                        (*i)->getVelocity(),
-                                        eventDuration);
+                    if ((*i)->getVelocity() == 0)
+                    {
+                        snd_seq_ev_set_noteoff(event,
+                                               channel,
+                                               (*i)->getPitch(),
+                                               (*i)->getVelocity());
+                    }
+                    else
+                    {
+                        snd_seq_ev_set_note(event,
+                                            channel,
+                                            (*i)->getPitch(),
+                                            (*i)->getVelocity(),
+                                            eventDuration);
+                    }
                 }
                 break;
 
