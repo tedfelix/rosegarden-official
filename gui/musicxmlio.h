@@ -68,6 +68,9 @@ protected:
     void writeTime(TimeSignature timeSignature, std::ofstream &str);
     void writeNote(Event *e, bool isFlatKeySignature, std::ofstream &str);
 
+    char convertPitchToName(int pitch, bool isFlatKeySignature);
+    bool needsAccidental(int pitch);
+
  private:
     static const int MAX_DOTS = 4;
 };

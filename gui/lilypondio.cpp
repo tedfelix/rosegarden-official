@@ -128,7 +128,7 @@ LilypondExporter::handleEndingEvents(eventendlist &eventsInProgress, Segment::it
 // (currently needed by musicxmlio, which is why it isn't incorporated into
 // the body of convertPitchToLilyNote)
 char
-convertPitchToName(int pitch, bool isFlatKeySignature)
+LilypondExporter::convertPitchToName(int pitch, bool isFlatKeySignature)
 {
     // shift to a->g, rather than c->b
     pitch += 3;
@@ -154,7 +154,7 @@ convertPitchToName(int pitch, bool isFlatKeySignature)
 }
 
 bool
-needsAccidental(int pitch) {
+LilypondExporter::needsAccidental(int pitch) {
     if (pitch > 4) {
         pitch++;
     }
@@ -172,7 +172,7 @@ needsAccidental(int pitch) {
 // (might be able to leave it alone and make musicxml convert from Lily
 // format)
 std::string
-convertPitchToLilyNote (long pitch, bool isFlatKeySignature,
+LilypondExporter::convertPitchToLilyNote (long pitch, bool isFlatKeySignature,
                         int accidentalCount, Accidental accidental)
 {
     std::string lilyNote = "";

@@ -107,7 +107,7 @@ convertKeyToFifths(Key whichKey) {
 // Incomplete??  probably just as limited here as it was in its original home: can't
 // handle B/C E/F or user-specified accidentals
 char
-convertPitchToName(int pitch, bool isFlatKeySignature)
+MusicXmlExporter::convertPitchToName(int pitch, bool isFlatKeySignature)
 {
     // shift to a->g, rather than c->b
     pitch += 3;
@@ -133,7 +133,7 @@ convertPitchToName(int pitch, bool isFlatKeySignature)
 }
 
 bool
-needsAccidental(int pitch) {
+MusicXmlExporter::needsAccidental(int pitch) {
     if (pitch > 4) {
         pitch++;
     }
