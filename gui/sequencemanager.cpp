@@ -1733,57 +1733,6 @@ SequenceManager::getSequencerPlugins(Rosegarden::AudioPluginManager *aPM)
 void
 SequenceManager::reinitialiseSequencerStudio()
 {
-    /*
-    m_doc->clearStudio();
-
-    // Now set up the audio faders for each audio instrument
-    //
-    Studio &studio = m_doc->getStudio();
-
-    Rosegarden::InstrumentList list = studio.getAllInstruments();
-    Rosegarden::InstrumentList::iterator it = list.begin();
-    int count = 0;
-
-    for (; it != list.end(); it++)
-    {
-        if ((*it)->getType() == Rosegarden::Instrument::Audio)
-        {
-            // Create a sequencer-studio fader and assign the
-            // mapped object id.
-            //
-            Rosegarden::MappedObjectId mappedId =
-                Rosegarden::StudioControl::createStudioObject(
-                        Rosegarden::MappedObject::AudioFader);
-
-            // Set the instrument id against this object
-            //
-            Rosegarden::StudioControl::setStudioObjectProperty(mappedId,
-                Rosegarden::MappedObject::Instrument,
-                Rosegarden::MappedObjectValue((*it)->getId()));
-
-            // Set the number of channels
-            //
-            Rosegarden::StudioControl::setStudioObjectProperty(mappedId,
-                Rosegarden::MappedAudioObject::Channels,
-                Rosegarden::MappedObjectValue((*it)->getAudioChannels()));
-
-            // Set the pan - 0 based
-            //
-            Rosegarden::StudioControl::setStudioObjectProperty(mappedId,
-                Rosegarden::MappedAudioFader::Pan,
-                Rosegarden::MappedObjectValue(float((*it)->getPan())) - 100.0);
-
-            // Set the object id against the instrument
-            //
-            (*it)->setMappedId(mappedId);
-
-            count++;
-        }
-    }
-
-    SEQMAN_DEBUG << "initialised " << count << " audio faders" << endl;
-    */
-
     // Send the MIDI recording device to the sequencer
     //
     KConfig* config = kapp->config();
@@ -1825,8 +1774,6 @@ SequenceManager::reinitialiseSequencerStudio()
     // Set the studio from the current document
     //
     m_doc->initialiseStudio();
-
-
 }
 
 // Clear down all playing notes and reset controllers

@@ -1160,31 +1160,35 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             return false;
         }
 
-        // get details
-        int position = atts.value("position").toInt();
-        unsigned long id = atts.value("id").toULong();
-        QString bpStr = atts.value("bypassed");
-        bool bypassed = false;
-
-        if (bpStr.lower() == "true")
-            bypassed = true;
-
-        // Check that ID exists
+        // Despite being InInstrument we might not actually have a valid
+        // one.
         //
-        Rosegarden::AudioPlugin *plugin = 0;
-        if (getAudioPluginManager())
-            plugin = getAudioPluginManager()->getPluginByUniqueId(id);
-
-        // If we find the plugin all is well and good but if
-        // we don't we just skip it.
-        //
-#ifdef HAVE_LADSPA
-	
-        if (plugin)
+        if (m_instrument)
         {
-            m_plugin = m_instrument->getPlugin(position);
-            m_plugin->setAssigned(true);
-            m_plugin->setBypass(bypassed);
+            // Get the details
+            int position = atts.value("position").toInt();
+            unsigned long id = atts.value("id").toULong();
+            QString bpStr = atts.value("bypassed");
+            bool bypassed = false;
+
+            if (bpStr.lower() == "true")
+                bypassed = true;
+
+            // Check that ID exists
+            //
+            Rosegarden::AudioPlugin *plugin = 0;
+            if (getAudioPluginManager())
+                plugin = getAudioPluginManager()->getPluginByUniqueId(id);
+
+            // If we find the plugin all is well and good but if
+            // we don't we just skip it.
+            //
+	
+            if (plugin)
+            {
+                m_plugin = m_instrument->getPlugin(position);
+                m_plugin->setAssigned(true);
+                m_plugin->setBypass(bypassed);
 
             /*
             // Creating the Plugin creates the ports too
@@ -1195,7 +1199,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             m_plugin->setMappedId(mappedId);
             */
 
-            m_plugin->setId(id);
+                m_plugin->setId(id);
 
 
             /*
@@ -1218,15 +1222,15 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                  Rosegarden::MappedObjectValue(id));
                  */
 
-            m_section = InPlugin;
-        }
-        else
-        {
-            m_errorString = i18n("Can't find Plugin");
-            return false;
+            }
+            else
+            {
+                m_errorString = i18n("Can't find Plugin");
+                return false;
+            }
         }
 
-#endif
+        m_section = InPlugin;
 
     } else if (lcName == "port") {
 
@@ -1250,11 +1254,6 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                  */
 
             m_plugin->addPort(portId, value);
-        }
-        else
-        {
-            m_errorString = i18n("No Plugin object found for Port");
-            return false;
         }
 
 #endif // HAVE_LADSPA
@@ -1367,7 +1366,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         int value = atts.value("value").toInt();
 
-        m_instrument->setRecordLevel(value);
+        if (m_instrument) m_instrument->setRecordLevel(value);
 
 
     } else if (lcName == "audioinput") {
@@ -1379,7 +1378,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         }
         int value = atts.value("value").toInt();
 
-        m_instrument->setMappedAudioInput(value);
+        if (m_instrument) m_instrument->setMappedAudioInput(value);
 
     } else {
         RG_DEBUG << "RoseXmlHandler::startElement : Don't know how to parse this : " << qName << endl;

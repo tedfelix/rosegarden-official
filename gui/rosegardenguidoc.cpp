@@ -484,6 +484,9 @@ void RosegardenGUIDoc::clearStudio()
 
 void RosegardenGUIDoc::initialiseStudio()
 {
+    RG_DEBUG << "RosegardenGUIDoc::initialiseStudio - "
+             << "clearing down and initialising" << endl;
+
     clearStudio();
 
     Rosegarden::InstrumentList list = m_studio.getAllInstruments();
@@ -596,7 +599,9 @@ void RosegardenGUIDoc::initialiseStudio()
         }
     }
 
-    RG_DEBUG << "initialised " << count << " audio faders" << endl;
+    RG_DEBUG << "RosegardenGUIDoc::initialiseStudio - "
+             << "initialised studio including" << count
+             << " audio faders" << endl;
 
 }
 

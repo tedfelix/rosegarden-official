@@ -1016,7 +1016,7 @@ RosegardenGUIView::slotDroppedAudio(QString audioDesc)
     s >> endTime.usec;
 
     RG_DEBUG << "RosegardenGUIView::slotDroppedAudio("
-                         << audioDesc
+                         //<< audioDesc
                          << ") : audioFileId = " << audioFileId
                          << " - instrumentId = " << instrumentId
                          << " - startTime.sec = " << startTime.sec

@@ -31,7 +31,8 @@ o Audio
    - improve Audio VU meter
    - get record fader level working at sequencer
 
-   - get Studio reapplying working
+   - get Studio reapplying working / fix bugs
+   - fix audio drag and drop
 
    - make outofspace.rg sound like something reasonable
 

@@ -673,8 +673,8 @@ void TrackEditor::dropEvent(QDropEvent* event)
             emit droppedURI(uri.first());
             
         } else if (QTextDrag::decode(event, audioInfo)) {
-            RG_DEBUG << "TrackEditor::dropEvent() : got audio info "
-                                 << audioInfo << endl;
+            RG_DEBUG << "TrackEditor::dropEvent() : got audio info " << endl;
+                                 //<< audioInfo << endl;
             emit droppedAudio(audioInfo);
         }
     
