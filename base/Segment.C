@@ -169,23 +169,31 @@ int Track::getNextGroupId() const
 
 
 bool Track::expandIntoGroup(iterator i,
-                            timeT baseDuration)
+                            timeT baseDuration,
+                            iterator& lastInsertedEvent)
 {
     if (i == end()) return false;
 
     iterator i2 = i;
     ++i2;
     
-    return expandIntoGroup(i, i2, baseDuration);
+    return expandIntoGroup(i, i2, baseDuration, lastInsertedEvent);
 }
 
 bool Track::expandIntoGroup(iterator from, iterator to,
-                            timeT baseDuration)
+                            timeT baseDuration,
+                            iterator& lastInsertedEvent)
 {
+    cerr << "Track::expandIntoGroup(" << baseDuration << ")\n";
+
     timeT eventDuration = (*from)->getDuration();
+    timeT baseTime = (*from)->getAbsoluteTime();
 
-    if (baseDuration == eventDuration) return true;
-
+    if (baseDuration == eventDuration) {
+        cerr << "Track::expandIntoGroup() : baseDuration == eventDuration\n";
+        return true;
+    }
+    
     timeT maxDuration = 0,
         minDuration = 0;
     
@@ -201,31 +209,53 @@ bool Track::expandIntoGroup(iterator from, iterator to,
     //
     if (checkExpansionValid(maxDuration, minDuration)) {
 
-        long gid = 0;
+//         long gid = 0;
+//         std::string groupType;
 
         // if the initial event has a group id, set the new event to it,
         // otherwise fetch the track's next group id
         //
-        if (!(*from)->get<Int>("GroupNo", gid))
-            gid = getNextGroupId();
-
+//         if (!(*from)->get<Int>("GroupNo", gid))
+//             gid = getNextGroupId();
+//         else
+//             groupType = (*from)->get<String>("GroupType");
+            
+        // Expand all the events in range [from, to[
+        //
         for(iterator i = from; i != to; ++i) {
+
+            if ((*i)->getAbsoluteTime() != baseTime) {
+                // there's no way to really report an error,
+                // because at this point we may already have
+                // expanded some events. So since returning false
+                // means "no change was made at all", it's better
+                // to silently skip this event
+                continue;
+            }
+
             // set the initial event's duration to base
             (*i)->setDuration(minDuration);
 
             // Add 2nd event
-            Event* ev = new Event((*i)->getType());
+            Event* ev = new Event(*(*i));
             ev->setDuration(maxDuration - minDuration);
             ev->setAbsoluteTime((*i)->getAbsoluteTime() + minDuration);       
-            ev->set<Int>("GroupNo", gid);
-            
-            insert(ev);
+//             ev->set<Int>("GroupNo", gid);
+//             ev->set<String>("GroupType", groupType);
+
+//             long pitch = 0;
+//             if ((*i)->get<Int>("pitch", pitch))
+//                 ev->set<Int>("pitch", pitch);
+
+            lastInsertedEvent = insert(ev);
         }
     
+        cerr << "Track::expandIntoGroup() returning true\n";
         return true;
 
     } else { // expansion is not possible
         
+        cerr << "Track::expandIntoGroup() returning false\n";
         return false;
     }
 
@@ -238,7 +268,7 @@ void Track::getTimeSlice(timeT absoluteTime, iterator &start, iterator &end)
     
     dummy.setAbsoluteTime(absoluteTime);
     
-    pair<iterator, iterator> res = equal_range(&dummy);
+    std::pair<iterator, iterator> res = equal_range(&dummy);
 
     start = res.first;
     end = res.second;

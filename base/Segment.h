@@ -61,10 +61,13 @@ public:
      * events of duration baseDuration + events of duration R,
      * with R being equal to the events' initial duration minus baseDuration
      *
+     * lastInsertedEvent will point to the last inserted event
+     *
      * The events in [from, to[ must all be at the same absolute time
+     *
      */
     bool expandIntoGroup(iterator from, iterator to,
-                         timeT baseDuration);
+                         timeT baseDuration, iterator& lastInsertedEvent);
 
     /**
      * Expands the event pointed by i into an event of duration
@@ -78,7 +81,8 @@ public:
      * D = 4*d
      * D = 4*d/3
      */
-    bool expandIntoGroup(iterator i, timeT baseDuration);
+    bool expandIntoGroup(iterator i, timeT baseDuration,
+                         iterator& lastInsertedEvent);
 
     /**
      * Returns the range [start, end[ of events which are at absoluteTime
