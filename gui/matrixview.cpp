@@ -724,7 +724,6 @@ void MatrixView::refreshSegment(Segment *segment,
     }
 
     m_staffs[0]->positionElements(startTime, endTime);
-    m_controlRuler->update();
     repaintRulers();
 }
 
