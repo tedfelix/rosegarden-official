@@ -29,9 +29,7 @@ namespace Rosegarden { class Track; }
 class TrackItem : public QCanvasRectangle
 {
 public:
-    TrackItem(QCanvas* canvas);
-    TrackItem(const QRect &, QCanvas* canvas);
-    TrackItem(int x, int y, int width, int height, QCanvas* canvas);
+    TrackItem(int x, int y, int nbSteps, QCanvas* canvas);
 
     unsigned int getItemNbTimeSteps() const;
     unsigned int getStartIndex() const;
@@ -42,16 +40,22 @@ public:
     void setTrack(Rosegarden::Track *p)  { m_track = p; }
     Rosegarden::Track* getTrack() const  { return m_track; }
 
-    static void setWidthToLengthRatio(unsigned int);
+    static void setWidthToDurationRatio(unsigned int);
     static void setTimeStepsResolution(unsigned int);
+    static unsigned int getTimeStepsResolution();
+    static void setItemHeight(unsigned int);
 
+    static unsigned int nbStepsToWidth(unsigned int);
+    static unsigned int widthToNbSteps(unsigned int);
+    
 protected:
     int m_instrument;
 
     Rosegarden::Track* m_track;
 
-    static unsigned int m_widthToLengthRatio;
+    static unsigned int m_widthToDurationRatio;
     static unsigned int m_timeStepsResolution;
+    static unsigned int m_itemHeight;
 
 };
 

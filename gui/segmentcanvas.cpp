@@ -34,22 +34,12 @@ using Rosegarden::Track;
 //                TrackItem
 //////////////////////////////////////////////////////////////////////
 
-TrackItem::TrackItem(QCanvas* canvas)
-    : QCanvasRectangle(canvas),
-      m_track(0)
-{
-}
-
-TrackItem::TrackItem(const QRect &r, QCanvas* canvas)
-    : QCanvasRectangle(r, canvas),
-      m_track(0)
-{
-}
-
 TrackItem::TrackItem(int x, int y,
-                             int width, int height,
-                             QCanvas* canvas)
-    : QCanvasRectangle(x, y, width, height, canvas),
+                     int nbSteps,
+                     QCanvas* canvas)
+    : QCanvasRectangle(x, y,
+                       nbStepsToWidth(nbSteps), m_itemHeight,
+                       canvas),
       m_track(0)
 {
 }
@@ -57,25 +47,15 @@ TrackItem::TrackItem(int x, int y,
 unsigned int TrackItem::getItemNbTimeSteps() const
 {
     kdDebug(KDEBUG_AREA) << "TrackItem::getItemNbTimeSteps() : "
-                         << rect().width() / m_widthToLengthRatio
+                         << rect().width() / m_widthToDurationRatio
                          << endl;
 
-    return rect().width() / m_widthToLengthRatio * m_timeStepsResolution;
+    return widthToNbSteps(width());
 }
 
 unsigned int TrackItem::getStartIndex() const
 {
-    return rect().x() / m_widthToLengthRatio * m_timeStepsResolution;
-}
-
-void TrackItem::setWidthToLengthRatio(unsigned int r)
-{
-    m_widthToLengthRatio = r;
-}
-
-void TrackItem::setTimeStepsResolution(unsigned int r)
-{
-    m_timeStepsResolution = r;
+    return x() / m_widthToDurationRatio * m_timeStepsResolution;
 }
 
 int TrackItem::getInstrument() const
@@ -88,10 +68,40 @@ void TrackItem::setInstrument(int i)
     m_track->setInstrument(i);
 }
 
+void TrackItem::setWidthToDurationRatio(unsigned int r)
+{
+    m_widthToDurationRatio = r;
+}
 
-unsigned int TrackItem::m_widthToLengthRatio = 1;
+void TrackItem::setTimeStepsResolution(unsigned int r)
+{
+    m_timeStepsResolution = r;
+}
+
+unsigned int TrackItem::getTimeStepsResolution()
+{
+    return m_timeStepsResolution;
+}
+
+void TrackItem::setItemHeight(unsigned int h)
+{
+    m_itemHeight = h;
+}
+
+unsigned int TrackItem::nbStepsToWidth(unsigned int nbSteps)
+{
+    return nbSteps * m_widthToDurationRatio / m_timeStepsResolution;
+}
+
+unsigned int TrackItem::widthToNbSteps(unsigned int width)
+{
+    return width * m_timeStepsResolution / m_widthToDurationRatio;
+}
+
+
+unsigned int TrackItem::m_widthToDurationRatio = 1;
 unsigned int TrackItem::m_timeStepsResolution = 384;
-
+unsigned int TrackItem::m_itemHeight = 10;
 
 //////////////////////////////////////////////////////////////////////
 //                TracksCanvas
@@ -109,7 +119,8 @@ TracksCanvas::TracksCanvas(int gridH, int gridV,
     m_pen(Qt::black),
     m_editMenu(new QPopupMenu(this))
 {
-    TrackItem::setWidthToLengthRatio(m_grid.hstep());
+    TrackItem::setWidthToDurationRatio(m_grid.hstep());
+    TrackItem::setItemHeight(m_grid.vstep());
 
     m_editMenu->insertItem(I18N_NOOP("Edit"),
                            this, SLOT(onEdit()));
@@ -184,8 +195,8 @@ TracksCanvas::contentsMousePressEvent(QMouseEvent* e)
 
         if (item) {
             m_currentItem = item;
-//             kdDebug(KDEBUG_AREA) << "TracksCanvas::contentsMousePressEvent() : edit m_currentItem = "
-//                                  << m_currentItem << endl;
+            //             kdDebug(KDEBUG_AREA) << "TracksCanvas::contentsMousePressEvent() : edit m_currentItem = "
+            //                                  << m_currentItem << endl;
 
             m_editMenu->exec(QCursor::pos());
         }
@@ -221,12 +232,10 @@ void TracksCanvas::clear()
 
 /// called when reading a music file
 TrackItem*
-TracksCanvas::addPartItem(int x, int y, unsigned int nbBars)
+TracksCanvas::addPartItem(int x, int y, unsigned int nbSteps)
 {
-    TrackItem* newPartItem = new TrackItem(x, y,
-                                                   gridHStep() * nbBars,
-                                                   grid().vstep(),
-                                                   canvas());
+    TrackItem* newPartItem = new TrackItem(x, y, nbSteps, canvas());
+
     newPartItem->setPen(m_pen);
     newPartItem->setBrush(m_brush);
     newPartItem->setVisible(true);     
@@ -298,8 +307,7 @@ void TrackPencil::handleMouseButtonPress(QMouseEvent *e)
             gy = m_canvas->grid().snapY(e->pos().y());
 
         m_currentItem = new TrackItem(gx, gy,
-                                      m_canvas->grid().hstep(),
-                                      m_canvas->grid().vstep(),
+                                      TrackItem::getTimeStepsResolution(),
                                       m_canvas->canvas());
         
         m_currentItem->setPen(m_canvas->pen());
