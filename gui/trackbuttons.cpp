@@ -997,6 +997,11 @@ TrackButtons::slotInstrumentPopupActivated(int item)
                 m_instrumentLabels[m_popupItem]->slotSetAlternativeLabel(
                              QString(strtoqstr(inst->getProgramName())));
 
+            // Ensure that we set a record track properly
+            //
+            if (track->getId() == comp.getRecordTrack())
+                slotSetRecordTrack(track->getId());
+
         }
         else
             cerr << "slotInstrumentPopupActivated() - can't find item!" << endl;

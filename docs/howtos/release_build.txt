@@ -1,23 +1,26 @@
 How to Make a New Release
 =========================
-Updated: 3rd October 2002
+Updated: 6th May 2003
 
 Main steps
 ==========
 
 0. Set the new version number in all the .rc files
 
-1. Get a fresh set of source from CVS
+1.  Get a fresh set of source from CVS
 
-2. Build the Tarball
+2.  Build the Tarball
 
-3. Verify the Tarball and get release notes from developers
+2a. Ensure "make dist" worked
 
-4. Make the tarball available on SourceForge
+3.  Verify the Tarball and get release notes from developers
 
-5. Tag the CVS tree
+4.  Make the tarball available on SourceForge
 
-6. Announce the release once the Tarball has become available
+5.  Tag the CVS tree 
+6.  Announce the release once the Tarball has become available
+
+7.  Update the Website
 
 
 
@@ -164,4 +167,13 @@ o Linux Audio Developers, Linux Audio Announce, Linux Audio Users
 o Alsa Developers
 o Freshmeat
 o apps.kde.com
+
+
+7. Update the website
+---------------------
+
+Modify the web pages from rosegarden/docs/web/site.  Regenerate
+the FAQ and upload to:
+
+uk-upload.demon.co.uk
 

@@ -1023,8 +1023,20 @@ RosegardenGUIView::slotAddAudioSegmentAndTrack(
                                                     endTime));
     slotAddCommandToHistory(macro);
 
-    // fix the canvas size
+    // Fix the canvas size
+    //
     m_trackEditor->slotReadjustCanvasSize();
+ 
+    // Select the new track (will scroll to it automatically)
+    //
+    Rosegarden::TrackId newTrackId = 
+        comp.getTrackByPosition(comp.getNbTracks() - 1)->getId();
+
+    comp.setSelectedTrack(newTrackId);
+
+    m_trackEditor->getTrackButtons()->selectLabel(comp.getNbTracks() - 1);
+
+    slotSelectTrackSegments(newTrackId);
 }
 
 void
