@@ -258,9 +258,11 @@ Event::set(const std::string &name, PropertyDefn<P>::basic_type value,
             ((PropertyStore<P> *)sb)->setData(value);
             sb->setPersistence(persistent);
         } else {
+#ifndef NDEBUG
             std::cerr << "Error: Element: Attempt to set property \"" << name
                  << "\" as " << PropertyDefn<P>::name() <<", actual type is "
                  << sb->getTypeName() << std::endl;
+#endif
             throw BadType();
         }
 	    

@@ -29,11 +29,23 @@ namespace Rosegarden { class Event; }
 
 #define KDEBUG_AREA 1010
 
+#ifndef NDEBUG
+
 kdbgstream&
 operator<<(kdbgstream&, const std::string&);
 
 kdbgstream&
 operator<<(kdbgstream&, const Rosegarden::Event&);
+
+#else
+
+inline kndbgstream&
+operator<<(kndbgstream &s, const std::string&) { return s; }
+
+inline kndbgstream&
+operator<<(kndbgstream &s, const Rosegarden::Event&) { return s; }
+
+#endif
 
 // This doesn't work - keeping it just in case I somehow get it
 // working someday

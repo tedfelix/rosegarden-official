@@ -87,12 +87,13 @@ protected:
     QCanvasItem *m_canvasItem;
 };
 
-class kdbgstream;
+
 #ifndef NDEBUG
+class kdbgstream;
 kdbgstream& operator<<(kdbgstream&, NotationElement&);
 #else
-inline kndgstream& operator<<(kdbgstream &e, NotationElement&)
-{ return e; }
+class kndbgstream;
+inline kndbgstream& operator<<(kndbgstream &e, NotationElement&) { return e; }
 #endif
 
 class NotationElementCmp
@@ -133,8 +134,7 @@ private:
 #ifndef NDEBUG
 kdbgstream& operator<<(kdbgstream&, NotationElementList&);
 #else
-inline kndgstream& operator<<(kdbgstream &e, NotationElementList&)
-{ return e; }
+inline kndbgstream& operator<<(kndbgstream &e, NotationElementList&) { return e; }
 #endif
 
 #ifdef NOT_DEFINED
