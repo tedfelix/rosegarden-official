@@ -7,7 +7,7 @@ CPPFLAGS	:= -g
 test:	test.o Element.o Element2.o
 
 libcore.a:	Element2.o NotationTypes.o
-	ar rc libcore.a $<
+	ar rc libcore.a Element2.o NotationTypes.o
 
 NotationTypes.o:	NotationTypes.h
 

@@ -8,8 +8,58 @@ enum Accidental {
     NoAccidental, Sharp, Flat, Natural, DoubleSharp, DoubleFlat
 };
 
-enum Clef {
-    TrebleClef, TenorClef, AltoClef, BassClef
+
+// somewhat mechanical:
+
+class Clef {
+public:
+    static const string EventPackage;
+    static const string EventType;
+    static const string ClefPropertyName;
+    static const Clef DefaultClef;
+    struct BadClefName { };
+
+    static const string Treble;
+    static const string Tenor;
+    static const string Alto;
+    static const string Bass;
+
+    Clef() : m_clef(DefaultClef.m_clef) { }
+
+    Clef(const Event &e) throw (Event::NoData, Event::BadType, BadClefName) {
+        if (e.package() != EventPackage || e.type() != EventType) {
+            throw Event::BadType();
+        }
+        string s = e.get<String>(ClefPropertyName);
+        if (s != Treble && s != Tenor && s != Alto && s != Bass) {
+            throw BadClefName();
+        }
+        m_clef = s;
+    }        
+
+    Clef(const string &s) throw (BadClefName) {
+        if (s != Treble && s != Tenor && s != Alto && s != Bass) {
+            throw BadClefName();
+        }
+        m_clef = s;
+    }
+
+    Clef(const Clef &c) : m_clef(c.m_clef) { }
+    Clef &operator=(const Clef &c) {
+        if (this != &c) m_clef = c.m_clef;
+        return *this;
+    }
+    virtual ~Clef() { }
+
+    string getName() const { return m_clef; }
+    int getOctave() const {
+        if (m_clef == Treble) return 0;
+        else if (m_clef == Bass) return -2;
+        else return -1;
+    }
+
+private:
+    string m_clef;
 };
 
 
@@ -23,17 +73,19 @@ enum Clef {
 
 class Key {
 public:
-    static const string ElementPackage;
-    static const string ElementType;
+    static const string EventPackage;
+    static const string EventType;
     static const string KeyPropertyName;
     static const Key DefaultKey;
     struct BadKeyName { };
+
+    Key() : m_name(DefaultKey.m_name), m_accidentalHeights(0) { checkMap(); }
   
     Key(const Event &e)
         throw (Event::NoData, Event::BadType, BadKeyName) :
         m_accidentalHeights(0) {
         checkMap();
-        if (e.package() != ElementPackage || e.type() != ElementType) {
+        if (e.package() != EventPackage || e.type() != EventType) {
             throw Event::BadType();
         }
         m_name = e.get<String>(KeyPropertyName);
@@ -42,7 +94,7 @@ public:
         }
     }
 
-    Key(string name)
+    Key(const string &name)
         throw (BadKeyName)
         : m_name(name), m_accidentalHeights(0) {
         checkMap();
@@ -91,7 +143,7 @@ public:
     }
 
     Event getAsEvent() const {
-        Event e(ElementPackage, ElementType);
+        Event e(EventPackage, EventType);
         e.set<String>(KeyPropertyName, m_name);
         return e;
     }
@@ -148,11 +200,6 @@ private:
     void checkAccidentalHeights() const;
 };
 
-const string Key::ElementPackage = "core";
-const string Key::ElementType = "keychange";
-const string Key::KeyPropertyName = "key";
-const Key Key::DefaultKey = Key("C major");
-
 /*
   -- Pitch
 
@@ -193,7 +240,7 @@ const Key Key::DefaultKey = Key("C major");
 class NotationDisplayPitch
 {
 public:
-    NotationDisplayPitch(int pitch, Clef clef, Key key) {
+    NotationDisplayPitch(int pitch, const Clef &clef, const Key &key) {
         //!!! explicit accidentals in the note event properties?
         rawPitchToDisplayPitch(pitch, clef, key, m_heightOnStaff, m_accidental);
     }
@@ -204,7 +251,7 @@ public:
     int getHeightOnStaff() const { return m_heightOnStaff; }
     Accidental getAccidental() const { return m_accidental; }
 
-    int getPerformancePitch(Clef clef, Key key) const {
+    int getPerformancePitch(const Clef &clef, const Key &key) const {
         int p = 0;
         displayPitchToRawPitch(m_heightOnStaff, m_accidental, clef, key, p);
         return p;
@@ -214,8 +261,10 @@ private:
     int m_heightOnStaff;
     Accidental m_accidental;
 
-    void rawPitchToDisplayPitch(int, Clef, Key, int &, Accidental &) const;
-    void displayPitchToRawPitch(int, Accidental, Clef, Key, int &) const;
+    void rawPitchToDisplayPitch(int, const Clef &, const Key &,
+                                int &, Accidental &) const;
+    void displayPitchToRawPitch(int, Accidental, const Clef &, const Key &,
+                                int &) const;
 };
 
 
@@ -232,19 +281,39 @@ class TimeSignature;
 class Note
 {
 public:
+    static const string EventPackage;
+    static const string EventType;
+    static const string NotePropertyName;
+    
     typedef int Type; // not an enum, too much arithmetic at stake
     struct BadType { };
+
 
     // define both sorts of names; some people prefer the American
     // names, but I just can't remember which of them is which
 
-    static const Type SixtyFourthNote, ThirtySecondNote, SixteenthNote,
-        EighthNote, QuarterNote, HalfNote, WholeNote;
+    static const Type
 
-    static const Type Hemidemisemiquaver, Demisemiquaver, Semiquaver,
-        Quaver, Crotchet, Minim, Semibreve, Breve;
+        SixtyFourthNote     = 0,
+        ThirtySecondNote    = 1,
+        SixteenthNote       = 2,
+        EighthNote          = 3,
+        QuarterNote         = 4,
+        HalfNote            = 5,
+        WholeNote           = 6,
 
-    static const Type Shortest, Longest;
+        Hemidemisemiquaver  = 0,
+        Demisemiquaver      = 1,
+        Semiquaver          = 2,
+        Quaver              = 3,
+        Crotchet            = 4,
+        Minim               = 5,
+        Semibreve           = 6,
+        Breve               = 7,
+
+        Shortest            = 0,
+        Longest             = 7;
+
 
     Note(Type type, bool dotted = false) throw (BadType) :
         m_type(type), m_dotted(dotted) {
@@ -264,6 +333,8 @@ public:
         m_dotted = n.m_dotted;
         return *this;
     }
+
+    Type getType()      const { return m_type; }
 
     bool isFilled()     const { return m_type <= Crotchet; }
     bool isDotted()     const { return m_dotted; }
@@ -298,40 +369,31 @@ private:
     static const int m_dottedCrotchetTime;
 };
 
-const Note::Type Note::SixtyFourthNote     = 0;
-const Note::Type Note::ThirtySecondNote    = 1;
-const Note::Type Note::SixteenthNote       = 2;
-const Note::Type Note::EighthNote          = 3;
-const Note::Type Note::QuarterNote         = 4;
-const Note::Type Note::HalfNote            = 5;
-const Note::Type Note::WholeNote           = 6;
-
-const Note::Type Note::Hemidemisemiquaver  = 0;
-const Note::Type Note::Demisemiquaver      = 1;
-const Note::Type Note::Semiquaver          = 2;
-const Note::Type Note::Quaver              = 3;
-const Note::Type Note::Crotchet            = 4;
-const Note::Type Note::Minim               = 5;
-const Note::Type Note::Semibreve           = 6;
-const Note::Type Note::Breve               = 7;
-
-const Note::Type Note::Shortest = 0;
-const Note::Type Note::Longest  = 7;
-
+/*
+*/
 
 class TimeSignature
 {
 public:
-    static const string ElementPackage;
-    static const string ElementType;
+    static const string EventPackage;
+    static const string EventType;
     static const string NumeratorPropertyName;
     static const string DenominatorPropertyName;
     static const TimeSignature DefaultTimeSignature;
     struct BadTimeSignature { };
 
+    TimeSignature() : m_numerator(DefaultTimeSignature.m_numerator) ,
+                      m_denominator(DefaultTimeSignature.m_denominator) { }
+
+    TimeSignature(int numerator, int denominator)
+        throw (BadTimeSignature) :
+        m_numerator(numerator), m_denominator(denominator) {
+        //!!! check, and throw BadTimeSignature if appropriate
+    }
+
     TimeSignature(const Event &e)
         throw (Event::NoData, Event::BadType, BadTimeSignature) {
-        if (e.package() != ElementPackage || e.type() != ElementType) {
+        if (e.package() != EventPackage || e.type() != EventType) {
             throw Event::BadType();
         }
         m_numerator = e.get<Int>(NumeratorPropertyName);
@@ -392,6 +454,5 @@ private:
     int m_numerator;
     int m_denominator;
 };
-
 
 #endif

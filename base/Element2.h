@@ -24,8 +24,7 @@
 
 struct eqstring
 {
-    bool operator()(const string &s1, const string &s2) const
-    {
+    bool operator()(const string &s1, const string &s2) const {
         return s1 == s2;
     }
 };
@@ -33,9 +32,7 @@ struct eqstring
 struct hashstring
 {
     static hash<const char*> _H;
-    
-    size_t operator()(const string &s) const
-    {
+    size_t operator()(const string &s) const {
         return _H(s.c_str());
     }
 };
@@ -242,6 +239,10 @@ public:
     const string &type() const    { return m_type; }
     void setPackage(const string &p) { m_package = p; }
     void setType(const string &t)    { m_type = t; }
+
+    bool isa(const string &p, const string &t) const {
+        return (m_package == p && m_type == t);
+    }
 
     timeT absoluteTime() const         { return m_absoluteTime; }
     timeT duration()     const         { return m_duration; }

@@ -1,6 +1,23 @@
 
 #include "NotationTypes.h"
 
+const string Clef::EventPackage = "core";
+const string Clef::EventType = "clefchange";
+const string Clef::ClefPropertyName = "clef";
+const string Clef::Treble = "treble";
+const string Clef::Tenor = "tenor";
+const string Clef::Alto = "alto";
+const string Clef::Bass = "bass";
+
+const Clef Clef::DefaultClef = Clef("treble");
+
+const string Key::EventPackage = "core";
+const string Key::EventType = "keychange";
+const string Key::KeyPropertyName = "key";
+const Key Key::DefaultKey = Key("C major");
+
+Key::KeyDetailMap Key::m_keyDetailMap = Key::KeyDetailMap();
+
 void Key::checkAccidentalHeights() const {
 
     if (m_accidentalHeights) return;
@@ -58,7 +75,8 @@ void Key::checkMap() {
 // accidentals for current key.
 
 void NotationDisplayPitch::rawPitchToDisplayPitch
-(int pitch, Clef clef, Key key, int &height, Accidental &accidental) const
+(int pitch, const Clef &clef, const Key &key,
+ int &height, Accidental &accidental) const
 {
     int octave;
     bool modified = false;
@@ -107,18 +125,13 @@ void NotationDisplayPitch::rawPitchToDisplayPitch
     }
 
     // 3. Transpose up or down for the clef
-  
-    switch (clef) {
-    case  TrebleClef: break;
-    case   TenorClef: height += 7;  break;
-    case    AltoClef: height += 7;  break; //???
-    case    BassClef: height += 14; break;
-    }
+    height -= 7 * clef.getOctave();
 }
 
 
 void NotationDisplayPitch::displayPitchToRawPitch
-(int height, Accidental accidental, Clef clef, Key key, int &pitch) const
+(int height, Accidental accidental, const Clef &clef, const Key &key,
+ int &pitch) const
 {
     int octave = 5;
 
@@ -163,17 +176,16 @@ void NotationDisplayPitch::displayPitchToRawPitch
     }
 
     // 3. Adjust for clef
-
-    switch (clef) {
-    case  TrebleClef: break;
-    case   TenorClef: octave -= 1; break;
-    case    AltoClef: octave -= 1; break;
-    case    BassClef: octave -= 2; break;
-    }
+    octave += clef.getOctave();
 
     pitch += 12 * octave;
 }
 
+
+const string Note::EventPackage = "core";
+const string Note::EventType = "note";
+//!!! worry about this later -- simple solution currently in place ain't bad
+const string Note::NotePropertyName = "duration";
 
 const int Note::m_shortestTime       = 6;
 const int Note::m_dottedShortestTime = 9;
@@ -318,3 +330,10 @@ void Note::makeTimeListSub(int t, bool dotted, vector<int> &v)
     v.push_back(current);
     makeTimeListSub(t - current, dotted, v);
 }
+
+const string TimeSignature::EventPackage = "core";
+const string TimeSignature::EventType = "timesignature";
+const string TimeSignature::NumeratorPropertyName = "numerator";
+const string TimeSignature::DenominatorPropertyName = "denominator";
+const TimeSignature TimeSignature::DefaultTimeSignature = TimeSignature(4, 4);
+
