@@ -54,7 +54,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     boldFont.setPointSize(int(boldFont.pointSize() * 9.5 / 10.0 + 0.5));
     boldFont.setBold(true);
 
-    setFont(boldFont);
+// uh?    setFont(boldFont);
 
     QHBox *h = new QHBox(v);
 
