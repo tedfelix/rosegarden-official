@@ -19,6 +19,7 @@
     COPYING included with this distribution for more information.
 */
 
+#include <cmath>
 #include <qpainter.h>
 
 #include <kmessagebox.h>
@@ -67,7 +68,7 @@ void CompositionItemHelper::setStartTime(CompositionItem& item, timeT time,
                                          const Rosegarden::SnapGrid& grid)
 {
     if (item) {
-        int x = int(grid.getRulerScale()->getXForTime(time));
+        int x = int(nearbyint(grid.getRulerScale()->getXForTime(time)));
         item->setX(x);
     }
     
@@ -77,7 +78,7 @@ void CompositionItemHelper::setEndTime(CompositionItem& item, timeT time,
                                        const Rosegarden::SnapGrid& grid)
 {
     if (item) {
-        int x = int(grid.getRulerScale()->getXForTime(time));
+        int x = int(nearbyint(grid.getRulerScale()->getXForTime(time)));
         QRect r = item->rect();
         QPoint topRight = r.topRight();
         topRight.setX(x);
@@ -199,13 +200,13 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
                 timeT repeatInterval = endTime - startTime;
                 timeT repeatStart = endTime;
                 timeT repeatEnd = s->getRepeatEndTime();
-                sr.setWidth((int)m_grid.getRulerScale()->getWidthForDuration(repeatStart,
-                                                                             repeatEnd - repeatStart) + 1);
+                sr.setWidth(int(nearbyint(m_grid.getRulerScale()->getWidthForDuration(repeatStart,
+                                                                             repeatEnd - repeatStart))));
 
                 CompositionRect::repeatmarks repeatMarks;
                 
                 for(timeT repeatMark = repeatStart; repeatMark < repeatEnd; repeatMark += repeatInterval) {
-                    repeatMarks.push_back((int)m_grid.getRulerScale()->getXForTime(repeatMark));
+                    repeatMarks.push_back(int(nearbyint(m_grid.getRulerScale()->getXForTime(repeatMark))));
                 }
                 sr.setRepeatMarks(repeatMarks);
 
@@ -449,7 +450,7 @@ void CompositionModelImpl::setLength(int width)
 int CompositionModelImpl::getLength()
 {
     Rosegarden::timeT endMarker = m_composition.getEndMarker();
-    int w = m_grid.getRulerScale()->getWidthForDuration(0, endMarker);
+    int w = int(nearbyint(m_grid.getRulerScale()->getWidthForDuration(0, endMarker)));
     return w;
 }
 
@@ -465,7 +466,7 @@ Rosegarden::timeT CompositionModelImpl::getRepeatTimeAt(const QPoint& p, const C
     timeT endTime = s->getEndMarkerTime();
     timeT repeatInterval = endTime - startTime;
 
-    int rWidth = int(m_grid.getRulerScale()->getXForTime(repeatInterval));
+    int rWidth = int(nearbyint(m_grid.getRulerScale()->getXForTime(repeatInterval)));
 
     int count = (p.x() - int(itemImpl->rect().x())) / rWidth;
     
@@ -482,26 +483,25 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s,
     Rosegarden::timeT startTime = s.getStartTime();
     Rosegarden::timeT endTime   = s.getEndMarkerTime();
 
-    int x = int(grid.getRulerScale()->getXForTime(startTime));
+    int x = int(nearbyint(grid.getRulerScale()->getXForTime(startTime)));
     int y = grid.getYBinCoordinate(trackPosition);
     int h = grid.getYSnap();
-    double w = 0.0;
+    int w;
     if (s.isRepeating()) {
         timeT repeatStart = endTime;
         timeT repeatEnd   = s.getRepeatEndTime();
-        w = grid.getRulerScale()->getWidthForDuration(repeatStart,
-                                                      repeatEnd - repeatStart) + 1;
+        w = int(nearbyint(grid.getRulerScale()->getWidthForDuration(repeatStart,
+                                                      repeatEnd - repeatStart)));
         RG_DEBUG << "CompositionModelImpl::computeSegmentRect : s is repeating - repeatStart = "
                  << repeatStart << " - repeatEnd : " << repeatEnd
                  << " w = " << w << endl;
-        
     } else {
-        RG_DEBUG << "CompositionModelImpl::computeSegmentRect : s is NOT repeating\n";
-        w = grid.getRulerScale()->getWidthForDuration(startTime, endTime - startTime);
+        w = int(nearbyint(grid.getRulerScale()->getWidthForDuration(startTime, endTime - startTime)));
+        RG_DEBUG << "CompositionModelImpl::computeSegmentRect : s is NOT repeating";
+                 << " w = " << w << endl;
     }
-    
 
-    return CompositionRect(x, y, int(w) + 1, h);
+    return CompositionRect(x, y, w, h);
 }
 
 CompositionItemImpl::CompositionItemImpl(Segment& s, const QRect& rect)
@@ -528,6 +528,7 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
       m_pointerColor(GUIPalette::getColour(GUIPalette::Pointer)),
       m_pointerWidth(4),
       m_pointerPen(QPen(m_pointerColor, m_pointerWidth)),
+      m_tmpRect(QRect(QPoint(0,0),QPoint(-1,-1))),
       m_drawGuides(false),
       m_guideColor(GUIPalette::getColour(GUIPalette::MovementGuide)),
       m_topGuidePos(0),
@@ -570,7 +571,7 @@ void CompositionView::updateSize(bool shrinkWidth)
     Rosegarden::Composition &comp = dynamic_cast<CompositionModelImpl*>(getModel())->getComposition();
     
     Rosegarden::RulerScale *ruler = grid().getRulerScale();
-    int width = int(ruler->getTotalWidth());
+    int width = int(nearbyint(ruler->getTotalWidth()));
 
     if (!shrinkWidth && width < contentsWidth())
         width = contentsWidth();
@@ -829,7 +830,7 @@ void CompositionView::drawContents(QPainter *p, int clipx, int clipy, int clipw,
     if (m_drawTextFloat)
         drawTextFloat(p, clipRect);
 
-    if (m_splitLinePos.x() >= 0 && clipRect.contains(m_splitLinePos)) {
+    if (m_splitLinePos.x() > 0 && clipRect.contains(m_splitLinePos)) {
         p->save();
         p->setPen(m_guideColor);
         p->drawLine(m_splitLinePos.x(), m_splitLinePos.y(),
@@ -854,9 +855,6 @@ void CompositionView::drawGuides(QPainter * p, const QRect& /*clipRect*/)
 void CompositionView::drawCompRect(const CompositionRect& r, QPainter *p, const QRect& clipRect,
                                    int intersectLvl, bool fill)
 {
-//     RG_DEBUG << "CompositionView::drawCompRect() " << r
-//              << " - r repeating : " << r.isRepeating() << endl;
-
     p->save();
 
     QBrush brush = r.getBrush();
@@ -888,7 +886,7 @@ void CompositionView::drawCompRect(const CompositionRect& r, QPainter *p, const 
         p->setPen(GUIPalette::getColour(GUIPalette::RepeatSegmentBorder));
         int penWidth = std::max(r.getPen().width(), 1u);
 
-        for (int i = 0; i < repeatMarks.size(); ++i) {
+        for (unsigned int i = 0; i < repeatMarks.size(); ++i) {
             int pos = repeatMarks[i];
             if (pos > clipRect.right())
                 break;
