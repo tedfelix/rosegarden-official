@@ -47,7 +47,9 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char *name)
                   parent, name),
     m_movingItem(0),
     m_draggingItem(false),
-    m_hlayout(new NotationHLayout(20)),
+    m_hlayout(new NotationHLayout((Staff::noteWidth + 2) * 4, // this shouldn't be constant
+                                  4, // 4 beats per bar
+                                  10)),
     m_vlayout(new NotationVLayout())
 {
 
