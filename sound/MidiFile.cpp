@@ -409,6 +409,15 @@ MidiFile::convertToRosegarden()
   bool noteOffFound;
   bool notesOnTrack;
 
+  // Time conversions
+  //
+  int rosegardenTime;
+  int rosegardenDuration;
+
+  // To create rests
+  //
+  int endOfLastNote = 0;
+
   Rosegarden::Composition *composition = new Composition;
 
   // preset tempo to zero
@@ -562,15 +571,45 @@ MidiFile::convertToRosegarden()
 
         }
 
+        if (_timingDivision)
+        {
+          rosegardenTime = midiEvent->time() * 96 / _timingDivision;
+          rosegardenDuration = midiEvent->duration() * 96 / _timingDivision;
+        }
+
+        if ( midiEvent->messageType() == MIDI_NOTE_ON ||
+             midiEvent->messageType() == MIDI_NOTE_OFF )
+        {
+          // insert rests if we need them
+          //
+          if (endOfLastNote < rosegardenTime )
+          {
+            rosegardenEvent = new Event;
+            rosegardenEvent->setType("rest");
+            rosegardenEvent->setDuration(rosegardenTime - endOfLastNote);
+            rosegardenEvent->setAbsoluteTime(endOfLastNote);
+
+#ifdef MIDI_DEBUG
+            cerr << "INSERTED REST " << endl;
+            cerr << "DURATION = " << rosegardenTime - endOfLastNote << endl;
+            cerr << "ABS TIME = " << endOfLastNote << endl;
+#endif
+
+            rosegardenTrack->insert(rosegardenEvent);
+          }
+          endOfLastNote = rosegardenTime + rosegardenDuration;
+        }
+
+
         switch(midiEvent->messageType())
         {
           case MIDI_NOTE_ON:
             // create and populate event
             rosegardenEvent = new Event;
-            rosegardenEvent->setAbsoluteTime(midiEvent->time()/4);
+            rosegardenEvent->setAbsoluteTime(rosegardenTime);
             rosegardenEvent->setType(Note::EventType);
             rosegardenEvent->set<Int>("pitch", midiEvent->note());
-            rosegardenEvent->setDuration(midiEvent->duration()/4);
+            rosegardenEvent->setDuration(rosegardenDuration);
 
             // insert into Track
             rosegardenTrack->insert(rosegardenEvent);
@@ -604,10 +643,14 @@ MidiFile::convertToRosegarden()
     }
   }
 
-  // set a default tempo
+  // set a tempo based on _timingDivision or default
+  //
   if (composition->getTempo() == 0)
   {
-    composition->setTempo(120);
+    if (_timingDivision)
+      composition->setTempo(96/_timingDivision * 120);
+    else
+      composition->setTempo(120);
   }
 
   return composition;
