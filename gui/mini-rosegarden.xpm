@@ -3,7 +3,7 @@ static char *rose-icon-tiny[] = {
 /* width height num_colors chars_per_pixel */
 "    16    16       16            1",
 /* colors */
-". c #b2c0dc",
+". c None",
 "# c #f9ca30",
 "a c #ebb400",
 "b c #b78c00",
