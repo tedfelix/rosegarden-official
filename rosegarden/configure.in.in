@@ -38,7 +38,29 @@ fi
 AC_SUBST(LIBASOUND)
 
 if test "$with_alsa" = "yes"; then
-  AC_DEFINE(HAVE_ALSA, 1, [Define if you have Alsa support])
+  AC_DEFINE(HAVE_ALSA, 1, [Define if you have ALSA support])
+fi
+
+dnl check whether user wants to use JACK
+AC_ARG_WITH(jack, [  --with-jack             enable JACK support (must have ALSA support as well)],
+[
+   if test $withval = "yes"; then
+     with_jack=yes
+   else
+     with_jack=no
+  fi
+], with_jack=no)
+
+dnl only use JACK when jack/jack.h is found
+if test "$ac_header_jack_jack_h" = "no"; then
+  with_jack=no
+fi
+
+if test "$with_jack" = "yes"; then
+  AC_DEFINE(HAVE_JACK, 1, [Define if you have JACK support])
+  AC_SUBST(JACKLIB)
+  AC_CHECK_FUNCS(libRosegardenSequencer.la, [],
+                 [JACKLIB="-ljack"])
 fi
 
 

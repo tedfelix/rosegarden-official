@@ -29,6 +29,13 @@
 #include "Instrument.h"
 #include "Device.h"
 
+// jack includes
+//
+#ifdef HAVE_JACK
+
+#include <jack/jack.h>
+
+#endif
 
 // Specialisation of SoundDriver to support ALSA (http://www.alsa-project.org)
 // Currently supports version 0.9beta12
@@ -176,6 +183,11 @@ private:
 
     // added metronome yet?
     bool                         m_addedMetronome;
+
+#ifdef HAVE_JACK
+    jack_client_t               *m_audioClient;
+#endif
+
 };
 
 }

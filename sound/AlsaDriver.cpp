@@ -492,6 +492,9 @@ AlsaDriver::initialiseMidi()
 void
 AlsaDriver::initialiseAudio()
 {
+    // abandoned ALSA audio
+    //
+    /*
     m_audioStream = SND_PCM_STREAM_PLAYBACK;
 
     // Contains information about hardware
@@ -529,19 +532,40 @@ AlsaDriver::initialiseAudio()
         return;
     }
 
-    int rate = 44100; /* Sample rate */
-    int periods = 2;     /* Number of periods */
-    int periodsize = 8192; /* Periodsize (bytes) */
+    int rate = 44100; // Sample rate
+    int periods = 2;     // Number of periods
+    int periodsize = 8192; // Periodsize (bytes)
 
 
     // Adjust driver status according to our success here
     //
-    if (m_driverStatus == MIDI_OK)
-        m_driverStatus = MIDI_AND_AUDIO_OK;
-    else if (m_driverStatus == NO_DRIVER)
-        m_driverStatus = AUDIO_OK;
-
     std::cout << "AlsaDriver - initialised Audio (PCM) subsystem" << std::endl;
+    */
+
+    // Using JACK instead
+    //
+ 
+#ifdef HAVE_JACK
+
+    std::string jackServer = "jack";
+
+    // attempt connection to JACK server
+    //
+    if ((m_audioClient = jack_client_new(jackServer.c_str())) == 0)
+    {
+        std::cerr << "AlsaDriver::initialiseAudio() - "
+                  << "JACK server not running"
+                  << std::endl;
+
+        if (m_driverStatus == MIDI_AND_AUDIO_OK)
+            m_driverStatus = MIDI_OK;
+        else if (m_driverStatus == AUDIO_OK)
+            m_driverStatus = NO_DRIVER;
+
+        return;
+    }
+
+#endif
 }
 
 void
