@@ -5,6 +5,8 @@ Makefile.in
 *.lo
 *.la
 sound
+audiotest
+miditest
 *.closure
 *.moc.cpp
 *_skel.cpp
