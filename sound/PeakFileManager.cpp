@@ -42,10 +42,12 @@ namespace Rosegarden
 
    
 PeakFileManager::PeakFileManager():
+    /*
     m_riffFileName(""),
     m_dataChunk(0),
     m_bitsPerSample(0),
     m_channels(0),
+    */
     m_updatePercentage(0)
 {
 }
@@ -53,6 +55,69 @@ PeakFileManager::PeakFileManager():
 PeakFileManager::~PeakFileManager()
 {
 }
+
+// Inserts PeakFile based on AudioFile if it doesn't already exist
+void
+PeakFileManager::insertAudioFile(AudioFile *audioFile)
+{
+    std::vector<PeakFile*>::iterator it;
+
+    for (it = m_peakFiles.begin(); it != m_peakFiles.end(); it++)
+    {
+        if ((*it)->getAudioFile()->getId() == audioFile->getId())
+            return;
+    }
+
+    // insert
+    m_peakFiles.push_back(new PeakFile(audioFile));
+}
+
+// Removes peak file from PeakFileManager - doesn't affect audioFile
+//
+void
+PeakFileManager::removeAudioFile(AudioFile *audioFile)
+{
+    std::vector<PeakFile*>::iterator it;
+
+    for (it = m_peakFiles.begin(); it != m_peakFiles.end(); it++)
+    {
+        if ((*it)->getAudioFile()->getId() == audioFile->getId())
+        {
+            m_peakFiles.erase(it);
+            return;
+        }
+    }
+}
+
+// Auto-insert PeakFile into manager if it doesn't already exist
+//
+PeakFile*
+PeakFileManager::getPeakFile(AudioFile *audioFile)
+{
+    std::vector<PeakFile*>::iterator it;
+    PeakFile *ptr = 0;
+
+    while (ptr == 0)
+    {
+        for (it = m_peakFiles.begin(); it != m_peakFiles.end(); it++)
+            if ((*it)->getAudioFile()->getId() == audioFile->getId())
+                ptr = *it;
+
+        // If nothing is found then insert and retry
+        //
+        if (ptr == 0)
+        {
+            insertAudioFile(audioFile);
+            for (it = m_peakFiles.begin(); it != m_peakFiles.end(); it++)
+                if ((*it)->getAudioFile()->getId() == audioFile->getId())
+                    ptr = *it;
+
+        }
+    }
+
+    return ptr;
+}
+
 
 // Does a given AudioFile have a valid peak file or peak chunk?
 //
@@ -64,7 +129,7 @@ PeakFileManager::hasValidPeaks(AudioFile *audioFile)
     if (audioFile->getType() == WAV)
     {
         // Check external peak file
-        PeakFile *peakFile = new PeakFile(audioFile);
+        PeakFile *peakFile = getPeakFile(audioFile);
 
         // If it doesn't open and parse correctly
         if (peakFile->open() == false)
@@ -74,7 +139,6 @@ PeakFileManager::hasValidPeaks(AudioFile *audioFile)
         if (peakFile->isValid() == false)
             rV = false;
 
-        delete peakFile;
     }
     else if (audioFile->getType() == BWF)
     {
@@ -104,14 +168,13 @@ PeakFileManager::generatePeaks(AudioFile *audioFile,
 
     if (audioFile->getType() == WAV)
     {
-        PeakFile *peakFile = new PeakFile(audioFile);
+        PeakFile *peakFile = getPeakFile(audioFile);
 
         // just write out a peak file
         peakFile->write(updatePercentage);
 
-        // close and free
+        // close writes out important things
         peakFile->close();
-        delete peakFile;
     }
     else if (audioFile->getType() == BWF)
     {
@@ -171,6 +234,7 @@ PeakFileManager::generatePeaks(AudioFile *audioFile,
     */
 }
 
+/*
 void
 PeakFileManager::writeHeader()
 {
@@ -186,6 +250,7 @@ PeakFileManager::calculatePeaks(std::ifstream *inFile, std::ofstream *outFile)
 {
     throw(std::string("PeakFileManager::calculatePeaks - not enough sample data to create a peak file"));
 }
+*/
 
 // Generate a QPixmap to a given resolution - this function
 // makes full use of the peak files of course to render
@@ -209,6 +274,24 @@ PeakFileManager::getPreview(AudioFile *audioFile,
                             int resolution)
 {
     std::vector<float> returnVector;
+
+    if (audioFile->getType() == WAV)
+    {
+        PeakFile *peakFile = getPeakFile(audioFile);
+        peakFile->open();
+
+        // just write out a peak file
+        peakFile->getPreview(startIndex, endIndex, resolution);
+    }
+    else if (audioFile->getType() == BWF)
+    {
+        // write the file out and incorporate the peak chunk
+    }
+    else
+    {
+        std::cerr << "PeakFileManager::getPreview - unsupported file type"
+                  << std::endl;
+    }
 
     return returnVector;
 }

@@ -43,6 +43,7 @@ namespace Rosegarden
 
 class AudioFile;
 class RealTime;
+class PeakFile;
 
 
 class PeakFileManager
@@ -90,18 +91,13 @@ public:
                     
 protected:
 
-    // Calculate actual peaks from in file handle and write out -
-    // based on interal file specs (channels, bits per sample).
+    // Add and remove from our PeakFile cache
     //
-    void calculatePeaks(std::ifstream *in, std::ofstream *out);
+    void insertAudioFile(AudioFile *audioFile);
+    void removeAudioFile(AudioFile *audioFile);
+    PeakFile* getPeakFile(AudioFile *audioFile);
 
-    void readHeader();
-    void writeHeader();
-
-    std::string    m_riffFileName;
-    std::streampos      m_dataChunk;
-    unsigned int   m_bitsPerSample;
-    unsigned int   m_channels;
+    std::vector<PeakFile*> m_peakFiles;
     unsigned short m_updatePercentage;  // how often we send updates 
 
 

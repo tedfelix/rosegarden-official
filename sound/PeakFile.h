@@ -18,7 +18,12 @@
   COPYING included with this distribution for more information.
 */
 
+#include <vector>
+
 #include <qdatetime.h>
+
+#include "SoundFile.h"
+#include "RealTime.h"
 
 #ifndef _PEAKFILE_H_
 #define _PEAKFILE_H_
@@ -36,8 +41,6 @@
 //
 
 
-
-#include "SoundFile.h"
 
 namespace Rosegarden
 {
@@ -72,6 +75,14 @@ public:
     //
     void printStats();
 
+    // Get a preview of a section of the audio file at a given resolution
+    //
+    std::vector<float> getPreview(const RealTime &startIndex,
+                                  const RealTime &endIndex,
+                                  int resolution);
+
+    AudioFile* getAudioFile() { return m_audioFile; }
+
 protected:
     // Write the peak header and the peaks themselves
     //
@@ -94,6 +105,7 @@ protected:
     int m_numberOfPeaks;
     int m_positionPeakOfPeaks;
     int m_offsetToPeaks;
+    int m_bodyBytes;
 
     // Peak timestamp
     //

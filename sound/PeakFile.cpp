@@ -50,8 +50,17 @@ PeakFile::~PeakFile()
 bool
 PeakFile::open()
 {
+    // If we're already open then don't open again
+    //
+    if (m_inFile && m_inFile->is_open())
+        return true;
+
+    // Open
+    //
     m_inFile = new std::ifstream(m_fileName.c_str(),
                                  std::ios::in | std::ios::binary);
+    // Check we're open
+    //
     if (!(*m_inFile))
         return false;
 
@@ -201,9 +210,14 @@ PeakFile::close()
     //
     m_outFile->seekp(m_chunkStartPosition, std::ios::beg); 
 
+    // Seek to size field at set it
+    //
+    m_outFile->seekp(4, std::ios::cur);
+    putBytes(m_outFile, getLittleEndianFromInteger(m_bodyBytes + 120, 4));
+
     // Seek to number of peak frames and write value
     //
-    m_outFile->seekp(28, std::ios::cur);
+    m_outFile->seekp(20, std::ios::cur);
     putBytes(m_outFile,
              getLittleEndianFromInteger(m_numberOfPeaks, 4));
 
@@ -375,9 +389,10 @@ PeakFile::writePeaks(std::ofstream *file)
     int sampleMaxPosition = 0;
     int sampleFrameCount = 0;
 
-    // Set total number of written peaks to zero
+    // Clear some totals
     //
     m_numberOfPeaks = 0;
+    m_bodyBytes = 0;
 
     // Always loop until we hit EOF
     //
@@ -489,6 +504,9 @@ PeakFile::writePeaks(std::ofstream *file)
 
             putBytes(file, getLittleEndianFromInteger(channelPeaks[i].second,
                                                       bytes));
+            // count up total body bytes
+            //
+            m_bodyBytes += bytes * 2;
         }
 
         // increment number of peak frames
@@ -501,6 +519,19 @@ PeakFile::writePeaks(std::ofstream *file)
     std::cout << "PeakFile::writePeaks - "
               << "completed peaks" << std::endl;
 
+}
+
+// Get a normalised vector for the preview at a given horizontal
+// resolution
+//
+std::vector<float>
+PeakFile::getPreview(const RealTime &startIndex,
+                     const RealTime &endIndex,
+                     int resolution)
+{
+    std::vector<float> ret;
+
+    return ret;
 }
 
 
