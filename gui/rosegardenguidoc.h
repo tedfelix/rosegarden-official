@@ -33,6 +33,7 @@
 
 // forward declaration of the RosegardenGUI classes
 class RosegardenGUIView;
+class ViewElementsManager;
 
 /**	RosegardenGUIDoc provides a document object for a document-view model.
   *
@@ -102,6 +103,9 @@ public:
     EventList&       getEvents()       { return m_events; }
     const EventList& getEvents() const { return m_events; }
 
+    ViewElementsManager*       getViewElementsManager()       { return m_viewElementsManager; }
+    const ViewElementsManager* getViewElementsManager() const { return m_viewElementsManager; }
+
 public slots:
 
     /** calls repaint() on all views connected to the document object
@@ -131,8 +135,10 @@ private:
 
     /** the document's data : the events (or elements) constituting
      * the document
-    */
+     */
     EventList m_events;
+
+    ViewElementsManager *m_viewElementsManager;
 
 };
 

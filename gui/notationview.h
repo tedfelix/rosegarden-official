@@ -178,6 +178,8 @@ protected:
     Staff* m_mainStaff;
     Staff* m_currentStaff;
 
+    ViewElementsManager* m_viewElementsManager;
+
     NotationElementList* m_notationElements;
     
     NotationHLayout* m_hlayout;

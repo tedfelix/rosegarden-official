@@ -21,8 +21,6 @@
 #include "Element2.h"
 #include "notationelement.h"
 
-class NotationElement;
-
 /**
   *@author Guillaume Laurent, Chris Cannam, Rich Bown
   */
@@ -30,11 +28,20 @@ class NotationElement;
 class ViewElementsManager
 {
 public: 
-    ViewElementsManager();
+    ViewElementsManager(EventList&);
     ~ViewElementsManager();
 
-    static NotationElementList* notationElementList(EventList::iterator from,
-                                                    EventList::iterator to);
+    NotationElementList* notationElementList(EventList::iterator from,
+                                             EventList::iterator to);
+
+    // overload these for each ViewElement type
+    void insert(NotationElement*);
+    void erase(NotationElementList::iterator);
+
+protected:
+
+    EventList           &m_eventList;
+    NotationElementList *m_notationElements;
     
 };
 

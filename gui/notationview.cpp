@@ -113,6 +113,8 @@ NotationView::NotationView(RosegardenGUIDoc* doc, QWidget *parent)
                                           this)),
       m_mainStaff(new Staff(canvas())),
       m_currentStaff(m_mainStaff),
+      m_viewElementsManager(0),
+      m_notationElements(0),
       m_hlayout(0),
       m_vlayout(0),
       m_currentSelectedNote(Quarter)
@@ -137,8 +139,10 @@ NotationView::NotationView(RosegardenGUIDoc* doc, QWidget *parent)
 
         EventList &allEvents(doc->getEvents());
 
-        m_notationElements = ViewElementsManager::notationElementList(allEvents.begin(),
-                                                                      allEvents.end());
+        m_viewElementsManager = doc->getViewElementsManager();
+
+        m_notationElements = m_viewElementsManager->notationElementList(allEvents.begin(),
+                                                                        allEvents.end());
 
         m_mainStaff->move(20, 15);
         m_mainStaff->show();
@@ -603,7 +607,8 @@ NotationView::insertNote(int pitch, const QPoint &eventPos)
                                  << endl;
 
             newNotationElement->setAbsoluteTime((*closestNote)->absoluteTime());
-            m_notationElements->insert(newNotationElement);
+            // m_notationElements->insert(newNotationElement);
+            m_viewElementsManager->insert(newNotationElement);
             
         }
         
@@ -721,12 +726,16 @@ NotationView::replaceRestWithNote(NotationElementList::iterator rest,
             newRest->set<String>("Name", "INSERTED_REST");
             NotationElement *newNotationRest = new NotationElement(newRest);
             restAbsoluteTime += bit;
-            m_notationElements->insert(newNotationRest);
+            // m_notationElements->insert(newNotationRest);
+            m_viewElementsManager->insert(newNotationRest);
         }
     }
     
-    m_notationElements->insert(newNote);
-    m_notationElements->erase(rest);
+//     m_notationElements->insert(newNote);
+//     m_notationElements->erase(rest);
+
+    m_viewElementsManager->insert(newNote);
+    m_viewElementsManager->erase(rest);
 
     return true;
 }

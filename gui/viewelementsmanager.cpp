@@ -15,10 +15,16 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <kmessagebox.h>
+
+#include "rosedebug.h"
+
 #include "viewelementsmanager.h"
 #include "notationelement.h"
 
-ViewElementsManager::ViewElementsManager()
+ViewElementsManager::ViewElementsManager(EventList &l)
+    : m_eventList(l),
+      m_notationElements(0)
 {
 }
 
@@ -30,12 +36,56 @@ NotationElementList*
 ViewElementsManager::notationElementList(EventList::iterator from,
                                          EventList::iterator to)
 {
-    NotationElementList *res = new NotationElementList;
+    if (m_notationElements) return m_notationElements;
+    
+    m_notationElements = new NotationElementList;
 
     for (EventList::iterator i = from; i != to; ++i) {
         NotationElement *el = new NotationElement(*i);
-        res->insert(el);
+        m_notationElements->insert(el);
     }
 
-    return res;
+    return m_notationElements;
 }
+
+void
+ViewElementsManager::insert(NotationElement *e)
+{
+    m_notationElements->insert(e);
+    m_eventList.insert(e->event());
+}
+
+void
+ViewElementsManager::erase(NotationElementList::iterator it)
+{
+    pair<EventList::iterator, EventList::iterator> interval
+        = m_eventList.equal_range((*it)->event());
+
+    bool foundEvent = false;
+
+    for (EventList::iterator eIter = interval.first;
+         eIter != interval.second;
+         ++eIter) {
+
+        if ((*eIter) == ((*it)->event())) {
+            kdDebug(KDEBUG_AREA) << "ViewElementsManager::erase() : Found Event : "
+                                 << *(*it) << endl;
+
+            delete *eIter;
+            m_eventList.erase(eIter);
+            foundEvent = true;
+            break;
+        }
+
+    }
+    
+    if (foundEvent) {
+        m_notationElements->erase(it);
+    } else {
+        kdDebug(KDEBUG_AREA) << "ViewElementsManager::erase() : couldn't find event for notation element "
+                             << *(*it) << endl;
+        KMessageBox::error(0, "ViewElementsManager::erase() : could't find event");
+    }
+
+}
+

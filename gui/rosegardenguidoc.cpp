@@ -25,23 +25,29 @@
 // include files for KDE
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kdebug.h>
 
 // application specific includes
+#include "rosedebug.h"
 #include "rosegardenguidoc.h"
 #include "rosegardengui.h"
 #include "rosegardenguiview.h"
 #include "rosexmlhandler.h"
+#include "viewelementsmanager.h"
+#include "Element2.h"
 
 QList<RosegardenGUIView> *RosegardenGUIDoc::pViewList = 0L;
 
-RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent, const char *name) : QObject(parent, name)
+RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent, const char *name)
+    : QObject(parent, name),
+      m_viewElementsManager(0)
 {
     if(!pViewList) {
         pViewList = new QList<RosegardenGUIView>();
     }
 
     pViewList->setAutoDelete(true);
+
+    m_viewElementsManager = new ViewElementsManager(m_events);
 }
 
 RosegardenGUIDoc::~RosegardenGUIDoc()
@@ -150,7 +156,8 @@ bool RosegardenGUIDoc::newDocument()
     return true;
 }
 
-bool RosegardenGUIDoc::openDocument(const QString &filename, const char *format /*=0*/)
+bool RosegardenGUIDoc::openDocument(const QString &filename,
+                                    const char *format /*=0*/)
 {
     kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::openDocument("
                          << filename << ")" << endl;
@@ -188,15 +195,28 @@ bool RosegardenGUIDoc::openDocument(const QString &filename, const char *format 
         return false;
     }
 
+    m_viewElementsManager = new ViewElementsManager(m_events);
+
     return true;
 }
 
-bool RosegardenGUIDoc::saveDocument(const QString &filename, const char *format /*=0*/)
+bool RosegardenGUIDoc::saveDocument(const QString &filename,
+                                    const char *format /*=0*/)
 {
     /////////////////////////////////////////////////
     // TODO: Add your document saving code here
     /////////////////////////////////////////////////
-    KMessageBox::sorry(0, "Not implemented yet");
+
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::saveDocument("
+                         << filename << ")" << endl;
+
+    for(EventList::iterator i = m_events.begin();
+        i != m_events.end(); ++i) {
+        kdDebug(KDEBUG_AREA) << "Element : " << *(*i) << endl;
+    }
+
+    kdDebug(KDEBUG_AREA) << endl << "RosegardenGUIDoc::saveDocument() finished"
+                         << endl;
 
     m_modified=false;
     return true;
@@ -204,6 +224,8 @@ bool RosegardenGUIDoc::saveDocument(const QString &filename, const char *format 
 
 void RosegardenGUIDoc::deleteContents()
 {
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::deleteContents()" << endl;
+
     deleteViews();
 
     for(EventList::iterator i = m_events.begin();
@@ -212,6 +234,8 @@ void RosegardenGUIDoc::deleteContents()
     }
 
     m_events.clear();
+    delete m_viewElementsManager;
+    m_viewElementsManager = 0;
 }
 
 void RosegardenGUIDoc::deleteViews()
