@@ -50,6 +50,8 @@ else
 
 if HAVE_ALSA
 libRosegardenSequencer_la_SOURCES = AlsaDriver.cpp \
+                                    AlsaPort.cpp \
+                                    LADSPAPluginInstance.cpp \
                                     Sequencer.cpp \
                                     SoundDriver.cpp
 

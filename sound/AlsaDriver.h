@@ -30,164 +30,28 @@
 #include "SoundDriver.h"
 #include "Instrument.h"
 #include "Device.h"
+#include "LADSPAPluginInstance.h"
+#include "AlsaPort.h"
 
 // jack includes
 //
 #ifdef HAVE_LIBJACK
 #include <jack/jack.h>
 
-// convenience typedef
-//
+// convenience
 typedef jack_default_audio_sample_t sample_t;
 
 #endif
 
 
-#ifdef HAVE_LADSPA
-
-#include <ladspa.h>
-
-// LADSPA plugin instance
-//
-class LADSPAPluginInstance
-{
-public:
-    LADSPAPluginInstance(Rosegarden::InstrumentId instrument,
-                         unsigned long ladspaId,
-                         int position,
-                         const LADSPA_Descriptor* descriptor);
-
-    ~LADSPAPluginInstance();
-
-    Rosegarden::InstrumentId getInstrument() const { return m_instrument; }
-    unsigned long getLADSPAId() const { return m_ladspaId; }
-    int getPosition() const { return m_position; }
-
-    // Connection of data (and behind the scenes control) ports
-    //
-    void connectPorts(LADSPA_Data *dataIn1,
-                      LADSPA_Data *dataIn2,
-                      LADSPA_Data *dataOut1,
-                      LADSPA_Data *dataOut2);
-
-    // Set control ports
-    //
-    void setPortValue(unsigned long portNumber, LADSPA_Data value);
-
-    // Plugin control
-    //
-    void instantiate(unsigned long sampleRate);
-    void activate();
-    void run(unsigned long sampleCount);
-    void deactivate();
-    void cleanup();
-
-    // Audio channels out to mix
-    unsigned int getAudioChannelsOut() const { return m_audioPortsOut.size(); }
-
-    // During operation we need to know which plugins have
-    // already been processed as part of the playable audio
-    // file loop and which should still be run() outside 
-    // this loop.
-    //
-    bool hasBeenProcessed() const { return m_processed; }
-    void setProcessed(bool value) { m_processed = value; }
-
-    // Do we want to bypass this plugin?
-    //
-    bool isBypassed() const { return m_bypassed; }
-    void setBypassed(bool value) { m_bypassed = value; }
-
-    // Order by instrument and then position
-    //
-    struct PluginCmp
-    {
-        bool operator()(const LADSPAPluginInstance *p1,
-                        const LADSPAPluginInstance *p2)
-        {
-            if (p1->getInstrument() != p2->getInstrument())
-                return p1->getInstrument() < p2->getInstrument();
-            else
-                return p1->getPosition() < p2->getPosition();
-        }
-    };
-
-protected:
-    
-    Rosegarden::InstrumentId  m_instrument;
-    unsigned long             m_ladspaId;
-    int                       m_position;
-    LADSPA_Handle             m_instanceHandle;
-    const LADSPA_Descriptor  *m_descriptor;
-
-    std::vector<std::pair<unsigned long, LADSPA_Data*> > m_controlPorts;
-
-    std::vector<int>          m_audioPortsIn;
-    std::vector<int>          m_audioPortsOut;
-
-    bool                      m_processed;
-    bool                      m_bypassed;
-
-};
-
-typedef std::vector<LADSPAPluginInstance*> PluginInstances;
-typedef std::vector<LADSPAPluginInstance*>::iterator PluginIterator;
-typedef std::multiset<LADSPAPluginInstance*,
-                      LADSPAPluginInstance::PluginCmp> OrderedPluginList;
-typedef std::multiset<LADSPAPluginInstance*,
-                      LADSPAPluginInstance::PluginCmp>::iterator OrderedPluginIterator;
-
-#endif // HAVE_LADSPA
-
-
-
 // Specialisation of SoundDriver to support ALSA (http://www.alsa-project.org)
-// Currently supports version 0.9beta12
 //
 //
-
-
 #ifndef _ALSADRIVER_H_
 #define _ALSADRIVER_H_
 
 namespace Rosegarden
 {
-
-
-// An AlsaPort represents one or more (usually 16) MappedInstruments.
-//
-//
-
-class AlsaPort
-{
-public:
-    AlsaPort(InstrumentId startId,
-             InstrumentId endId,
-             const std::string &name,
-             int client,
-             int port,
-             bool duplex):
-        m_startId(startId),
-        m_endId(endId),
-        m_name(name),
-        m_client(client),
-        m_port(port),
-        m_duplex(duplex),
-        m_type(0) {;}
-
-    ~AlsaPort() {;}
-
-    InstrumentId m_startId;
-    InstrumentId m_endId;
-    std::string  m_name;
-    int          m_client;
-    int          m_port;
-    bool         m_duplex;   // is an input port as well?
-    unsigned int m_type;     // MIDI, synth or what?
-};
-
-
-typedef std::pair<int, int> ClientPortPair;
 
 class AlsaDriver : public SoundDriver
 {
@@ -433,7 +297,6 @@ private:
 };
 
 }
-
-#endif // _SOUNDDRIVER_H_
+#endif // _ALSADRIVER_H_
 
 #endif // HAVE_ALSA
