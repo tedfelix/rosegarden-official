@@ -763,7 +763,6 @@ bool MatrixMover::handleMouseMove(Rosegarden::timeT newTime,
     int oldPitch = m_currentElement->event()->get<Rosegarden::Int>(PITCH);
 
     timeT diffTime = newTime - oldTime;
-    int diffPitch = newPitch - oldPitch;
 
     int diffX = int(double(diffTime) * m_currentStaff->getTimeScaleFactor());
     int newY = m_currentStaff->getLayoutYForHeight(newPitch) 
@@ -785,6 +784,14 @@ bool MatrixMover::handleMouseMove(Rosegarden::timeT newTime,
     int oldX = int(m_currentElement->getLayoutX());
     int oldY = int(m_currentElement->getLayoutY());
 
+    using Rosegarden::BaseProperties::PITCH;
+    int diffPitch = 0;
+    if (m_currentElement->event()->has(PITCH))
+    {
+        diffPitch = newPitch -
+            m_currentElement->event()->get<Rosegarden::Int>(PITCH);
+    }
+
     int newX = int(double(newTime) * m_currentStaff->getTimeScaleFactor());
     int newY = m_currentStaff->getLayoutYForHeight(newPitch) -
             m_currentStaff->getElementHeight() / 2;
@@ -797,6 +804,7 @@ bool MatrixMover::handleMouseMove(Rosegarden::timeT newTime,
         selection->getSegmentEvents().begin();
 
     MatrixElement *element = 0;
+
     for (; it != selection->getSegmentEvents().end(); it++)
     {
         element = m_currentStaff->getElement(*it);
@@ -806,6 +814,14 @@ bool MatrixMover::handleMouseMove(Rosegarden::timeT newTime,
             element->setLayoutX(element->getLayoutX() + diffX);
             element->setLayoutY(element->getLayoutY() + diffY);
             m_currentStaff->positionElement(element);
+        }
+
+        if (diffY && element->event()->has(PITCH))
+        {
+            Rosegarden::Event *e = new Event(*(element->event()));
+            int newPitch = e->get<Rosegarden::Int>(PITCH) + diffPitch;
+
+            m_mParentView->playNote(selection->getSegment(), newPitch);
         }
     }
 

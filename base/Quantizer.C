@@ -42,7 +42,7 @@ Quantizer::Quantizer(std::string source,
 		     QuantizationType type,
 		     timeT unit, int maxDots) :
     m_type(type), m_unit(unit), m_maxDots(maxDots),
-    m_source(source), m_target(target)
+    m_source(source), m_target(target), m_manualClear(false)
 {
     if (m_unit < 0) m_unit = Note(Note::Shortest).getDuration();
     makePropertyNames();
@@ -52,7 +52,7 @@ Quantizer::Quantizer(const StandardQuantization &sq,
 		     std::string source,
 		     std::string target) :
     m_type(sq.type), m_unit(sq.unit), m_maxDots(sq.maxDots),
-    m_source(source), m_target(target)
+    m_source(source), m_target(target), m_manualClear(false)
 {
     if (m_unit < 0) m_unit = Note(Note::Shortest).getDuration();
     makePropertyNames();
@@ -62,14 +62,14 @@ Quantizer::Quantizer(const Quantizer &q,
 		     std::string source,
 		     std::string target) :
     m_type(q.m_type), m_unit(q.m_unit), m_maxDots(q.m_maxDots),
-    m_source(source), m_target(target)
+    m_source(source), m_target(target), m_manualClear(false)
 {
     makePropertyNames();
 }
    
 Quantizer::Quantizer(const Quantizer &q) :
     m_type(q.m_type), m_unit(q.m_unit), m_maxDots(q.m_maxDots),
-    m_source(q.m_source), m_target(q.m_target)
+    m_source(q.m_source), m_target(q.m_target), m_manualClear(false)
 {
     makePropertyNames();
 }
@@ -254,6 +254,59 @@ Quantizer::quantize(Segment *s,
 	break;
     }
 }
+
+void
+Quantizer::quantize(EventSelection *selection)
+{
+    Segment &segment = selection->getSegment();
+
+    // Attempt to handle non-contiguous selections.
+
+    // We have to be a bit careful here, because the rest-
+    // normalisation that's carried out as part of a quantize
+    // process is liable to replace the event that follows
+    // the quantized range.  (moved here from editcommands.cpp)
+
+    typedef std::vector<std::pair<Segment::iterator,
+                                  Segment::iterator> > RangeList;
+    RangeList ranges;
+
+    Segment::iterator i = segment.findTime(selection->getStartTime());
+    Segment::iterator j;
+    Segment::iterator k = segment.findTime(selection->getEndTime());
+
+    while (j != k) {
+
+        for (j = i; j != k && selection->contains(*j); ++j);
+
+        if (j != i) {
+            ranges.push_back(RangeList::value_type(i, j));
+
+            for (i = j; i != k && !selection->contains(*i); ++i);
+            j = i;
+        }
+    }
+
+    // So that we can retrieve a list of new events we cheat and stop
+    // the m_toInsert vector from being cleared automatically.  Remember
+    // to turn it back on.
+    //
+    m_manualClear = true;
+
+    for (RangeList::iterator r = ranges.begin(); r != ranges.end(); ++r)
+    {
+        m_toInsert.clear();
+        quantize(&segment, r->first, r->second);
+
+        // Push the new events to the selection
+        //
+        for (int i = 0; i < m_toInsert.size(); ++i)
+            selection->addEvent(m_toInsert[i]);
+    }
+    m_manualClear = false;
+
+}
+
 
 void
 Quantizer::fixQuantizedValues(Segment *s, Segment::iterator from,
@@ -658,7 +711,9 @@ Quantizer::insertNewEvents(Segment *s) const
     for (int i = 0; i < m_toInsert.size(); ++i) {
 	s->insert(m_toInsert[i]);
     }
-    m_toInsert.clear();
+
+    if (m_manualClear == false)
+        m_toInsert.clear();
 }
 
 

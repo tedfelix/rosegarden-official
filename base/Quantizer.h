@@ -217,6 +217,12 @@ public:
 		  Segment::iterator from, Segment::iterator to) const;
 
     /**
+     * Quantize an EventSelection
+     *
+     */
+    void quantize(EventSelection *);
+
+    /**
      * Quantize a section of a Segment, and force the quantized
      * results into the formal absolute time and duration of
      * the events.  This is a destructive operation that should
@@ -362,6 +368,8 @@ protected:
 
     mutable FastVector<Event *> m_toInsert;
     void insertNewEvents(Segment *) const;
+
+    bool m_manualClear;
 };
 
 struct StandardQuantization {

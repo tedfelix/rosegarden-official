@@ -574,36 +574,7 @@ EventQuantizeCommand::modifySegment()
 
     if (m_selection) {
 
-	// Attempt to handle non-contiguous selections.
-
-	// We have to be a bit careful here, because the rest-
-	// normalisation that's carried out as part of a quantize
-	// process is liable to replace the event that follows
-	// the quantized range.
-
-	typedef std::vector<std::pair<Segment::iterator,
-				      Segment::iterator> > RangeList;
-	RangeList ranges;
-
-	Segment::iterator i = segment.findTime(getStartTime());
-	Segment::iterator j;
-	Segment::iterator k = segment.findTime(getEndTime());
-
-	while (j != k) {
-	
-	    for (j = i; j != k && m_selection->contains(*j); ++j);
-
-	    if (j != i) {
-		ranges.push_back(RangeList::value_type(i, j));
-		
-		for (i = j; i != k && !m_selection->contains(*i); ++i);
-		j = i;
-	    }
-	}
-
-	for (RangeList::iterator r = ranges.begin(); r != ranges.end(); ++r) {
-	    m_quantizer.quantize(&segment, r->first, r->second);
-	}
+        m_quantizer.quantize(m_selection);
 
     } else {
 	m_quantizer.quantize(&segment,
@@ -629,7 +600,7 @@ EventUnquantizeCommand::EventUnquantizeCommand(Rosegarden::Segment &segment,
 EventUnquantizeCommand::EventUnquantizeCommand(
         Rosegarden::EventSelection &selection,
         Rosegarden::Quantizer quantizer) :
-    BasicCommand(getGlobalName(&quantizer),
+    BasicCommand(i18n("Unquantize Events"),
 		 selection.getSegment(),
 		 selection.getStartTime(),
 		 selection.getEndTime(),
