@@ -128,9 +128,9 @@ NotationTool::~NotationTool()
 {
     kdDebug(KDEBUG_AREA) << "NotationTool::~NotationTool()\n";
 
-//     delete m_menu;
-//     m_parentView->factory()->removeClient(this);
-//     m_instance = 0;
+    //     delete m_menu;
+    //     m_parentView->factory()->removeClient(this);
+    //     m_instance = 0;
 }
 
 void NotationTool::ready()
@@ -208,7 +208,9 @@ void NoteInserter::ready()
 
 
 void    
-NoteInserter::handleLeftButtonPress(int height, int staffNo,
+NoteInserter::handleLeftButtonPress(int height,
+                                    Rosegarden::timeT,
+                                    int staffNo,
 				    QMouseEvent* e,
 				    ViewElement*)
 {
@@ -260,7 +262,7 @@ NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
 {
     NoteInsertionCommand *command = 
 	new NoteInsertionCommand
-	 (segment, time, endTime, note, pitch, accidental);
+        (segment, time, endTime, note, pitch, accidental);
     m_nParentView->getCommandHistory()->addCommand(command);
     return command->getLastInsertedEvent();
 } 
@@ -350,17 +352,17 @@ void NoteInserter::slotSelectSelected()
 const char* NoteInserter::m_actionsAccidental[][5] = 
     {
         { "No accidental",  "1slotNoAccidental()",  "no_accidental",
-	      "accidental-none", Accidentals::NoAccidental.c_str() },
+          "accidental-none", Accidentals::NoAccidental.c_str() },
         { "Sharp",          "1slotSharp()",         "sharp_accidental",
-	      "accidental-sharp", Accidentals::Sharp.c_str() },
+          "accidental-sharp", Accidentals::Sharp.c_str() },
         { "Flat",           "1slotFlat()",          "flat_accidental",
-	      "accidental-flat", Accidentals::Flat.c_str() },
+          "accidental-flat", Accidentals::Flat.c_str() },
         { "Natural",        "1slotNatural()",       "natural_accidental",
-	      "accidental-natural", Accidentals::Natural.c_str() },
+          "accidental-natural", Accidentals::Natural.c_str() },
         { "Double sharp",   "1slotDoubleSharp()",   "double_sharp_accidental",
-	      "accidental-doublesharp", Accidentals::DoubleSharp.c_str() },
+          "accidental-doublesharp", Accidentals::DoubleSharp.c_str() },
         { "Double flat",    "1slotDoubleFlat()",    "double_flat_accidental",
-	      "accidental-doubleflat", Accidentals::DoubleFlat.c_str() }
+          "accidental-doubleflat", Accidentals::DoubleFlat.c_str() }
     };
 
 //------------------------------
@@ -400,7 +402,9 @@ void ClefInserter::setClef(std::string clefType)
     m_clef = clefType;
 }
 
-void ClefInserter::handleLeftButtonPress(int, int staffNo,
+void ClefInserter::handleLeftButtonPress(int,
+                                         Rosegarden::timeT,
+                                         int staffNo,
 					 QMouseEvent* e,
 					 ViewElement*)
 {
@@ -449,9 +453,11 @@ void NotationEraser::ready()
     m_nParentView->setPositionTracking(false);
 }
 
-void NotationEraser::handleLeftButtonPress(int, int staffNo,
-                                          QMouseEvent*,
-                                          ViewElement* element)
+void NotationEraser::handleLeftButtonPress(int,
+                                           Rosegarden::timeT,
+                                           int staffNo,
+                                           QMouseEvent*,
+                                           ViewElement* element)
 {
     if (!element || staffNo < 0) return;
 
@@ -482,9 +488,11 @@ NotationSelector::NotationSelector(NotationView* view)
             this,         SLOT(hideSelection()));
 }
 
-void NotationSelector::handleLeftButtonPress(int, int staffNo,
-                                            QMouseEvent* e,
-                                            ViewElement *element)
+void NotationSelector::handleLeftButtonPress(int,
+                                             Rosegarden::timeT,
+                                             int staffNo,
+                                             QMouseEvent* e,
+                                             ViewElement *element)
 {
     kdDebug(KDEBUG_AREA) << "NotationSelector::handleMousePress" << endl;
     m_clickedStaff = staffNo;
@@ -500,7 +508,9 @@ void NotationSelector::handleLeftButtonPress(int, int staffNo,
     //m_parentView->setCursorPosition(p.x());
 }
 
-void NotationSelector::handleMouseDblClick(int, int staffNo,
+void NotationSelector::handleMouseDblClick(int,
+                                           Rosegarden::timeT,
+                                           int staffNo,
                                            QMouseEvent* e,
                                            ViewElement *element)
 {
@@ -686,9 +696,11 @@ NotationSelectionPaster::~NotationSelectionPaster()
 {
 }
 
-void NotationSelectionPaster::handleLeftButtonPress(int, int staffNo,
-                                                   QMouseEvent* e,
-                                                   ViewElement*)
+void NotationSelectionPaster::handleLeftButtonPress(int,
+                                                    Rosegarden::timeT,
+                                                    int staffNo,
+                                                    QMouseEvent* e,
+                                                    ViewElement*)
 {
     QPoint eventPos = e->pos();
     

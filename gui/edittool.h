@@ -27,6 +27,8 @@
 
 #include <kxmlguiclient.h>
 
+#include "Event.h"
+
 class EditTool;
 class EditView;
 class QPopupMenu;
@@ -100,35 +102,45 @@ public:
     /**
      * Dispatch the event to Left/Middle/Right MousePress
      */
-    virtual void handleMousePress(int height, int staffNo,
+    virtual void handleMousePress(int height,
+                                  Rosegarden::timeT time,
+                                  int staffNo,
                                   QMouseEvent *event,
                                   Rosegarden::ViewElement*);
 
     /**
      * Main operation of the tool
      */
-    virtual void handleLeftButtonPress(int height, int staffNo,
+    virtual void handleLeftButtonPress(int height,
+                                       Rosegarden::timeT time,
+                                       int staffNo,
                                        QMouseEvent *event,
                                        Rosegarden::ViewElement*) = 0;
 
     /**
      * Do nothing
      */
-    virtual void handleMidButtonPress(int height, int staffNo,
+    virtual void handleMidButtonPress(int height,
+                                      Rosegarden::timeT time,
+                                      int staffNo,
                                       QMouseEvent*,
                                       Rosegarden::ViewElement*);
 
     /**
      * Show option menu
      */
-    virtual void handleRightButtonPress(int height, int staffNo,
+    virtual void handleRightButtonPress(int height,
+                                        Rosegarden::timeT time,
+                                        int staffNo,
                                         QMouseEvent*,
                                         Rosegarden::ViewElement*);
 
     /**
      * Do nothing
      */
-    virtual void handleMouseDblClick(int height, int staffNo,
+    virtual void handleMouseDblClick(int height,
+                                     Rosegarden::timeT time,
+                                     int staffNo,
                                      QMouseEvent*,
                                      Rosegarden::ViewElement*);
 

@@ -1807,13 +1807,16 @@ void NotationView::itemPressed(int height, int staffNo,
 
         setActiveItem(0);
 
+        timeT unknownTime = 0;
+
         // This won't work because a double click event is always
         // preceded by a single click event
-
         if (e->type() == QEvent::MouseButtonDblClick)
-            m_tool->handleMouseDblClick(height, staffNo, e, el);
+            m_tool->handleMouseDblClick(height, unknownTime,
+                                        staffNo, e, el);
         else
-            m_tool->handleMousePress(height, staffNo, e, el);
+            m_tool->handleMousePress(height, unknownTime,
+                                     staffNo, e, el);
     }
     
 }

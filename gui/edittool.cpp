@@ -59,9 +59,9 @@ EditTool::~EditTool()
 {
     kdDebug(KDEBUG_AREA) << "EditTool::~EditTool()\n";
 
-//     delete m_menu;
-//     m_parentView->factory()->removeClient(this);
-//    m_instance = 0;
+    //     delete m_menu;
+    //     m_parentView->factory()->removeClient(this);
+    //    m_instance = 0;
 }
 
 void EditTool::ready()
@@ -82,9 +82,11 @@ void EditTool::createMenu(const QString& rcFileName)
     m_menu = dynamic_cast<QPopupMenu*>(tmp);
 }
 
-void EditTool::handleMousePress(int height, int staffNo,
-                                   QMouseEvent* e,
-                                   Rosegarden::ViewElement* el)
+void EditTool::handleMousePress(int height,
+                                Rosegarden::timeT time,
+                                int staffNo,
+                                QMouseEvent* e,
+                                Rosegarden::ViewElement* el)
 {
     kdDebug(KDEBUG_AREA) << "EditTool::handleMousePress : mouse button = "
                          << e->button() << endl;
@@ -92,15 +94,15 @@ void EditTool::handleMousePress(int height, int staffNo,
     switch (e->button()) {
 
     case Qt::LeftButton:
-        handleLeftButtonPress(height, staffNo, e, el);
+        handleLeftButtonPress(height, time, staffNo, e, el);
         break;
 
     case Qt::RightButton:
-        handleRightButtonPress(height, staffNo, e, el);
+        handleRightButtonPress(height, time, staffNo, e, el);
         break;
 
     case Qt::MidButton:
-        handleMidButtonPress(height, staffNo, e, el);
+        handleMidButtonPress(height, time, staffNo, e, el);
         break;
 
     default:
@@ -110,21 +112,24 @@ void EditTool::handleMousePress(int height, int staffNo,
 }
 
 void EditTool::handleMidButtonPress(int, int,
-                                       QMouseEvent*,
-                                       Rosegarden::ViewElement*)
+                                    Rosegarden::timeT,
+                                    QMouseEvent*,
+                                    Rosegarden::ViewElement*)
 {
 }
 
 void EditTool::handleRightButtonPress(int, int,
-                                         QMouseEvent*,
-                                         Rosegarden::ViewElement*)
+                                      Rosegarden::timeT,
+                                      QMouseEvent*,
+                                      Rosegarden::ViewElement*)
 {
     showMenu();
 }
 
 void EditTool::handleMouseDblClick(int, int,
-                                      QMouseEvent*,
-                                      Rosegarden::ViewElement*)
+                                   Rosegarden::timeT,
+                                   QMouseEvent*,
+                                   Rosegarden::ViewElement*)
 {
     // nothing
 }
