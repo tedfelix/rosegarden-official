@@ -115,15 +115,17 @@ CompositionTimeSliceAdapter::begin() {
     }
 
     // Fill m_curEvent and m_end.
-    ++i;
     i.m_end = m_end;
+    ++i;
 
     return i;
 }
 
 CompositionTimeSliceAdapter::iterator
 CompositionTimeSliceAdapter::end() {
-    return iterator();
+    iterator i;
+    i.m_end = m_end;
+    return i;
 }
 
 CompositionTimeSliceAdapter::iterator&

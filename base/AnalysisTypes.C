@@ -51,9 +51,9 @@ using std::partial_sort_copy;
 Key
 AnalysisHelper::getKeyForEvent(Event *e, Segment &s)
 {
-
-//    Segment::iterator i = s.find(e);
-    Segment::iterator i = s.findNearestTime(e->getAbsoluteTime()); //cc
+    Segment::iterator i =
+	e ? s.findNearestTime(e->getAbsoluteTime()) //cc
+   	  : s.begin();
 
     if (i==s.end()) return Key();
 
@@ -102,7 +102,9 @@ void
 AnalysisHelper::labelChords(CompositionTimeSliceAdapter &c, Segment &s)
 {
 
-    Key key = getKeyForEvent(*c.begin(), s);
+    Key key;
+    if (c.begin() != c.end()) key = getKeyForEvent(*c.begin(), s);
+    else key = getKeyForEvent(0, s);
 
     // no increment (the inner loop does the incrementing)
     for (CompositionTimeSliceAdapter::iterator i = c.begin(); i != c.end();  )
