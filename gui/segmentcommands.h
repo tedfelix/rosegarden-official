@@ -588,5 +588,23 @@ private:
 };
 
 
+class SegmentLabelCommand : public KNamedCommand
+{
+public:
+    SegmentLabelCommand(const Rosegarden::SegmentSelection &segments,
+                        const QString &label);
+    virtual ~SegmentLabelCommand();
+
+    static QString getGlobalName()
+        { return i18n("&Rename Segments..."); }
+
+    virtual void execute();
+    virtual void unexecute();
+protected:
+
+    std::vector<Rosegarden::Segment*>  m_segments;
+    std::vector<QString>               m_labels;
+    QString                            m_newLabel;
+};
 
 #endif  // _SEGMENTCOMMANDS_H_

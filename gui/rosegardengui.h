@@ -928,6 +928,7 @@ public slots:
     void slotSegmentsSelected(const Rosegarden::SegmentSelection &);
 
     void slotRepeatingSegments();
+    void slotRelabelSegments();
 
     // Panic button pressed
     //

@@ -24,6 +24,7 @@
 #include <qpushbutton.h>
 #include <qregexp.h>
 #include <qlabel.h>
+#include <qinputdialog.h>
 
 //#include <qmetaobject.h> // remove this
 
@@ -432,6 +433,11 @@ void RosegardenGUIApp::setupActions()
                 0,
                 this, SLOT(slotRepeatingSegments()),
                 actionCollection(), "repeats_to_real_copies");
+
+    new KAction(i18n("&Relabel Segments"),
+                0,
+                this, SLOT(slotRelabelSegments()),
+                actionCollection(), "relabel_segment");
 
     new KAction(i18n("Manage A&udio Segments"),
                 0, 
@@ -3809,6 +3815,46 @@ void
 RosegardenGUIApp::slotRepeatingSegments()
 {
     m_view->getTrackEditor()->slotTurnRepeatingSegmentToRealCopies();
+}
+
+void
+RosegardenGUIApp::slotRelabelSegments()
+{
+    if (!m_view->haveSelection()) return;
+
+    Rosegarden::SegmentSelection selection(m_view->getSelection());
+    QString editLabel;
+
+    if (selection.size() == 0) return;
+    else if (selection.size() == 1) editLabel = i18n("Modify Segment label");
+    else editLabel = i18n("Modify Segments label");
+
+    KTmpStatusMsg msg(i18n("Relabelling selection..."), this);
+
+    // Generate label
+    QString label = strtoqstr((*selection.begin())->getLabel());
+
+    for (Rosegarden::SegmentSelection::iterator i = selection.begin();
+	 i != selection.end(); ++i)
+    {
+        if (strtoqstr((*i)->getLabel()) != label) label = "";
+    }
+
+    bool ok = false;
+
+    QString newLabel = QInputDialog::getText(
+            editLabel,
+            i18n("Enter new label"),
+            QLineEdit::Normal,
+            label,
+            &ok,
+            this);
+
+    if (ok)
+    {
+        m_doc->getCommandHistory()->addCommand
+	    (new SegmentLabelCommand(selection, newLabel));
+    }
 }
 
 void

@@ -1667,3 +1667,40 @@ SegmentSplitByPitchCommand::getSplitPitchAt(Segment::iterator i,
     return lastSplitPitch;
 }
 
+
+SegmentLabelCommand::SegmentLabelCommand(
+        const Rosegarden::SegmentSelection &segments,
+        const QString &label):
+    KNamedCommand("Label Segments"),
+    m_newLabel(label)
+{
+    for (Rosegarden::SegmentSelection::iterator i = segments.begin();
+	 i != segments.end(); ++i) m_segments.push_back(*i);
+}
+
+SegmentLabelCommand::~SegmentLabelCommand()
+{
+}
+
+void
+SegmentLabelCommand::execute()
+{
+    bool addLabels = false;
+    if (m_labels.size() == 0) addLabels = true;
+
+    for (unsigned int i = 0; i < m_segments.size(); ++i)
+    {
+        if (addLabels) m_labels.push_back(strtoqstr(m_segments[i]->getLabel()));
+
+        m_segments[i]->setLabel(qstrtostr(m_newLabel));
+    }
+}
+
+void
+SegmentLabelCommand::unexecute()
+{
+    for (unsigned int i = 0; i < m_segments.size(); ++i)
+        m_segments[i]->setLabel(qstrtostr(m_labels[i]));
+}
+
+

@@ -709,8 +709,8 @@ AudioManagerDialog::slotRename()
     bool ok = false;
 
     QString newText = QInputDialog::getText(
-                                 QString("Change Audio File label"),
-                                 QString("Enter new label"),
+                                 i18n("Change Audio File label"),
+                                 i18n("Enter new label"),
                                  QLineEdit::Normal,
                                  QString(audioFile->getName().c_str()),
                                  &ok,

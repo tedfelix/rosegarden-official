@@ -19,12 +19,12 @@
     COPYING included with this distribution for more information.
 */
 
-#include "segmentparameterbox.h"
-#include <qhbox.h>
-#include <qlayout.h>
-
 #include <klocale.h>
 #include <kcommand.h>
+
+#include <qhbox.h>
+#include <qlayout.h>
+#include <qinputdialog.h>
 
 #include "Segment.h"
 #include "Quantizer.h"
@@ -33,6 +33,7 @@
 #include "notepixmapfactory.h"
 #include "segmentcommands.h"
 #include "rosestrings.h"
+#include "segmentparameterbox.h"
 #include "notationstrings.h"
 #include "rosegardenguiview.h"
 
@@ -44,7 +45,6 @@ SegmentParameterBox::SegmentParameterBox(RosegardenGUIView *view,
       m_standardQuantizations(Rosegarden::BasicQuantizer::getStandardQuantizations()),
       m_view(view),
       m_tranposeRange(24)
-
 {
     initBox();
 
@@ -72,10 +72,28 @@ SegmentParameterBox::initBox()
 
     QGridLayout *gridLayout = new QGridLayout(this, 5, 2, 8, 1);
 
+    QLabel *label = new QLabel(i18n("Label"), this);
     QLabel *repeatLabel    = new QLabel(i18n("Repeat"), this);
     QLabel *quantizeLabel  = new QLabel(i18n("Quantize"), this);
     QLabel *transposeLabel = new QLabel(i18n("Transpose"), this);
     QLabel *delayLabel     = new QLabel(i18n("Delay"), this);
+
+    // HBox for label
+    //
+    QHBox *hbox = new QHBox(this);
+
+    // Label ..
+    m_label = new QLabel(hbox);
+    m_label->setFont(font);
+    m_label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    m_label->setFixedWidth(100);
+
+    // .. and edit button
+    m_labelButton = new QPushButton("...", hbox);
+    m_labelButton->setFont(font);
+
+    connect(m_labelButton, SIGNAL(released()),
+            SLOT(slotEditSegmentLabel()));
 
     m_repeatValue = new RosegardenTristateCheckBox(this);
     m_repeatValue->setFont(font);
@@ -131,6 +149,7 @@ SegmentParameterBox::initBox()
     connect(m_delayValue, SIGNAL(textChanged(const QString&)),
             SLOT(slotDelayTextChanged(const QString &)));
 
+    label->setFont(font);
     repeatLabel->setFont(font);
     quantizeLabel->setFont(font);
     transposeLabel->setFont(font);
@@ -138,17 +157,20 @@ SegmentParameterBox::initBox()
 
     gridLayout->addRowSpacing(0, 8);
 
-    gridLayout->addWidget(repeatLabel,   1, 0, AlignLeft);
-    gridLayout->addWidget(m_repeatValue, 1, 1, AlignLeft);
+    gridLayout->addWidget(label,         1, 0, AlignLeft);
+    gridLayout->addWidget(hbox,       1, 1, AlignLeft);
 
-    gridLayout->addWidget(quantizeLabel,   2, 0, AlignLeft);
-    gridLayout->addWidget(m_quantizeValue, 2, 1);
+    gridLayout->addWidget(repeatLabel,   2, 0, AlignLeft);
+    gridLayout->addWidget(m_repeatValue, 2, 1, AlignLeft);
 
-    gridLayout->addWidget(transposeLabel,   3, 0, AlignLeft);
-    gridLayout->addWidget(m_transposeValue, 3, 1);
+    gridLayout->addWidget(quantizeLabel,   3, 0, AlignLeft);
+    gridLayout->addWidget(m_quantizeValue, 3, 1);
 
-    gridLayout->addWidget(delayLabel,   4, 0, AlignLeft);
-    gridLayout->addWidget(m_delayValue, 4, 1);
+    gridLayout->addWidget(transposeLabel,   4, 0, AlignLeft);
+    gridLayout->addWidget(m_transposeValue, 4, 1);
+
+    gridLayout->addWidget(delayLabel,   5, 0, AlignLeft);
+    gridLayout->addWidget(m_delayValue, 5, 1);
 
     // populate the quantize combo
     //
@@ -257,8 +279,18 @@ SegmentParameterBox::populateBoxFromSegments()
     Rosegarden::timeT delayLevel = 0;
     int transposeLevel = 0;
 
+    if (m_segments.size() == 0)
+        m_label->setText("");
+    else
+        m_label->setText(strtoqstr(m_segments[0]->getLabel()));
+
     for (it = m_segments.begin(); it != m_segments.end(); it++)
     {
+        // Set label to "*" when multiple labels don't match
+        //
+        if (strtoqstr((*it)->getLabel()) != m_label->text())
+            m_label->setText("*");
+
         // Are all, some or none of the Segments repeating?
         if ((*it)->isRepeating())
         {
@@ -577,7 +609,7 @@ SegmentParameterBox::slotDelayTextChanged(const QString &text)
 void
 SegmentParameterBox::slotDelaySelected(int value)
 {
-    if (value < m_delays.size()) {
+    if (value < int(m_delays.size())) {
 	slotDelayTimeChanged(m_delays[value]);
     } else {
 	slotDelayTimeChanged(-(m_realTimeDelays[value - m_delays.size()]));
@@ -595,3 +627,42 @@ SegmentParameterBox::addCommandToHistory(KCommand *command)
 {
         m_view->getCommandHistory()->addCommand(command);
 }
+
+void
+SegmentParameterBox::slotEditSegmentLabel()
+{
+    QString editLabel;
+
+    if (m_segments.size() == 0) return;
+    else if (m_segments.size() == 1) editLabel = i18n("Modify Segment label");
+    else editLabel = i18n("Modify Segments label");
+
+    bool ok = false;
+
+    // Remove the asterisk if we're using it
+    //
+    QString label = m_label->text();
+    if (label == "*") label = "";
+
+    QString newLabel = QInputDialog::getText(
+            editLabel,
+            i18n("Enter new label"),
+            QLineEdit::Normal,
+            m_label->text(),
+            &ok,
+            this);
+
+    if (ok)
+    {
+        Rosegarden::SegmentSelection segments;
+        std::vector<Rosegarden::Segment*>::iterator it;
+        for (it = m_segments.begin(); it != m_segments.end(); ++it)
+            segments.insert(*it);
+
+        SegmentLabelCommand *command = new
+            SegmentLabelCommand(segments, newLabel);
+
+        addCommandToHistory(command);
+    }
+}
+

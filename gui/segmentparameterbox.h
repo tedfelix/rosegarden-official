@@ -24,8 +24,10 @@
 
 #include <qgroupbox.h>
 #include <qlabel.h>
+#include <qlineedit.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
+#include <qpushbutton.h>
 
 #include "Quantizer.h"
 #include "Selection.h"
@@ -82,12 +84,16 @@ public slots:
     void slotDelayTimeChanged(Rosegarden::timeT delayValue);
     void slotDelayTextChanged(const QString &);
 
+    void slotEditSegmentLabel();
+
     virtual void update();
 
-private:
+protected:
     void initBox();
     void populateBoxFromSegments();
 
+    QLabel                     *m_label;
+    QPushButton                *m_labelButton;
     RosegardenTristateCheckBox *m_repeatValue;
     RosegardenComboBox         *m_quantizeValue;
     RosegardenComboBox         *m_transposeValue;
