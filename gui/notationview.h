@@ -250,6 +250,11 @@ public slots:
     void slotEraseSelected();
     void slotSelectSelected();
 
+    /// edit menu
+    void slotEditSelectFromStart();
+    void slotEditSelectToEnd();
+    void slotEditSelectWholeStaff();
+
     /// view menu
     void slotLinearMode();
     void slotPageMode();
@@ -262,13 +267,14 @@ public slots:
     void slotGroupCrescendo();
     void slotGroupDecrescendo();
 
-    // transforms slots
+    /// transforms slots
     void slotTransformsLabelChords();
     void slotTransformsNormalizeRests();
     void slotTransformsCollapseRests();
     void slotTransformsStemsUp();
     void slotTransformsStemsDown();
     void slotTransformsRestoreStems();
+    void slotTransformsTranspose();
     void slotTransformsTransposeUp();
     void slotTransformsTransposeDown();
 

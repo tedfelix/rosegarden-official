@@ -265,6 +265,27 @@ private:
 };
 
 
+class TransformsMenuTransposeCommand : public BasicSelectionCommand
+{
+public:
+    TransformsMenuTransposeCommand(int semitones, EventSelection &selection) :
+	BasicSelectionCommand(name(), selection, true),
+	m_selection(&selection), m_semitones(semitones) { }
+    virtual ~TransformsMenuTransposeCommand() { }
+
+    static QString name() {
+	return "&Transpose...";
+    }
+
+protected:
+    virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper);
+
+private:
+    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    int m_semitones;
+};
+
+
 class TransformsMenuTransposeOneStepCommand : public BasicSelectionCommand
 {
 public:

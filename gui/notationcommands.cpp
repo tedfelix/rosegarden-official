@@ -257,6 +257,25 @@ TransformsMenuRestoreStemsCommand::modifySegment(SegmentNotationHelper &)
 
 
 void
+TransformsMenuTransposeCommand::modifySegment(SegmentNotationHelper &)
+{
+    EventSelection::eventcontainer::iterator i;
+
+    for (i  = m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
+
+	if ((*i)->isa(Note::EventType)) {
+	    long pitch = (*i)->get<Int>(Rosegarden::BaseProperties::PITCH);
+	    pitch += m_semitones;
+	    if (pitch < 0) pitch = 0;
+	    if (pitch > 127) pitch = 127;
+	    (*i)->set<Int>(Rosegarden::BaseProperties::PITCH, pitch); 
+	    (*i)->unset(Rosegarden::BaseProperties::ACCIDENTAL);
+	}
+    }
+}
+
+void
 TransformsMenuTransposeOneStepCommand::modifySegment(SegmentNotationHelper &)
 {
     EventSelection::eventcontainer::iterator i;
@@ -267,9 +286,11 @@ TransformsMenuTransposeOneStepCommand::modifySegment(SegmentNotationHelper &)
 	 i != m_selection->getSegmentEvents().end(); ++i) {
 
 	if ((*i)->isa(Note::EventType)) {
-	    (*i)->set<Int>(Rosegarden::BaseProperties::PITCH,
-			   (*i)->get<Int>(Rosegarden::BaseProperties::PITCH) +
-			   offset);
+	    long pitch = (*i)->get<Int>(Rosegarden::BaseProperties::PITCH);
+	    pitch += offset;
+	    if (pitch < 0) pitch = 0;
+	    if (pitch > 127) pitch = 127;
+	    (*i)->set<Int>(Rosegarden::BaseProperties::PITCH, pitch); 
 	    (*i)->unset(Rosegarden::BaseProperties::ACCIDENTAL);
 	}
     }

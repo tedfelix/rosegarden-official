@@ -24,6 +24,7 @@
 #include <qcanvas.h>
 #include <qslider.h>
 #include <qcombobox.h>
+#include <qinputdialog.h>
 #include <qhbox.h>
 
 #include <kmessagebox.h>
@@ -470,6 +471,19 @@ void NotationView::setupActions()
     // File menu
     KStdAction::close (this, SLOT(closeWindow()),          actionCollection());
 
+    // Edit menu
+    new KAction(i18n("Select from Start"), 0, this,
+		SLOT(slotEditSelectFromStart()), actionCollection(),
+		"select_from_start");
+
+    new KAction(i18n("Select to End"), 0, this,
+		SLOT(slotEditSelectToEnd()), actionCollection(),
+		"select_to_end");
+
+    new KAction(i18n("Select Whole Staff"), 0, this,
+		SLOT(slotEditSelectWholeStaff()), actionCollection(),
+		"select_whole_staff");
+
     // View menu
     KRadioAction *linearModeAction = new KRadioAction
         (i18n("&Linear Layout"), 0, this, SLOT(slotLinearMode()),
@@ -540,6 +554,10 @@ void NotationView::setupActions()
     new KAction(TransformsMenuTransposeOneStepCommand::name(false), 0, this,
                 SLOT(slotTransformsTransposeDown()), actionCollection(),
                 "transpose_down");
+
+    new KAction(TransformsMenuTransposeCommand::name(), 0, this,
+                SLOT(slotTransformsTranspose()), actionCollection(),
+                "general_transpose");
 
     new KAction("Dump selected events to stderr", 0, this,
 		SLOT(slotDebugDump()), actionCollection(), "debug_dump");
@@ -1093,6 +1111,60 @@ void NotationView::slotEditPaste()
     }
 }
 
+void NotationView::slotEditSelectFromStart()
+{
+    NotationStaff *staff = m_staffs[m_currentStaff];
+    double layoutX = staff->getLayoutXOfCursor();
+
+    NotationElementList *notes = staff->getViewElementList();
+    EventSelection *selection = new EventSelection(staff->getSegment());
+
+    for (NotationElementList::iterator i = notes->begin();
+	 i != notes->end(); ++i) {
+	if ((*i)->getLayoutX() < layoutX) selection->addEvent((*i)->event());
+    }
+
+    setCurrentSelection(selection);
+}
+
+void NotationView::slotEditSelectToEnd()
+{
+    NotationStaff *staff = m_staffs[m_currentStaff];
+    double layoutX = staff->getLayoutXOfCursor();
+
+    NotationElementList *notes = staff->getViewElementList();
+    EventSelection *selection = new EventSelection(staff->getSegment());
+
+    for (NotationElementList::iterator i = notes->begin();
+	 i != notes->end(); ++i) {
+	if ((*i)->getLayoutX() > layoutX) selection->addEvent((*i)->event());
+    }
+
+    setCurrentSelection(selection);
+}
+
+void NotationView::slotEditSelectWholeStaff()
+{
+    //!!! The problem with this is it only selects those events that are
+    // visible in this notation view.  We should really select every
+    // event in the segment, not every event that has an element in the
+    // notation element list.  Unfortunately while that would be fine
+    // for this method, it can't be done efficiently in the select-from-
+    // start and select-to-end methods, where it's also the right thing
+    // to do.  Needs thought.
+
+    NotationStaff *staff = m_staffs[m_currentStaff];
+    NotationElementList *notes = staff->getViewElementList();
+    EventSelection *selection = new EventSelection(staff->getSegment());
+
+    for (NotationElementList::iterator i = notes->begin();
+	 i != notes->end(); ++i) {
+	selection->addEvent((*i)->event());
+    }
+
+    setCurrentSelection(selection);
+}
+
 void NotationView::slotToggleNotesToolBar()
 {
     toggleNamedToolBar("notesToolBar");
@@ -1272,6 +1344,22 @@ void NotationView::slotTransformsRestoreStems()
 
     addCommandToHistory(new TransformsMenuRestoreStemsCommand
                         (*m_currentEventSelection));
+}
+
+void NotationView::slotTransformsTranspose()
+{
+    if (!m_currentEventSelection) return;
+
+    bool ok = false;
+    int semitones = QInputDialog::getInteger
+	(i18n("Transpose"),
+	 i18n("Enter the number of semitones to transpose up by:"),
+	 0, -127, 127, 1, &ok, this);
+    if (!ok || semitones == 0) return;
+
+    KTmpStatusMsg msg(i18n("Transposing..."), statusBar());
+    addCommandToHistory(new TransformsMenuTransposeCommand
+                        (semitones, *m_currentEventSelection));
 }
 
 void NotationView::slotTransformsTransposeUp()
