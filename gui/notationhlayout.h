@@ -239,7 +239,7 @@ protected:
 
     typedef FastVector<BarData> BarDataList;
     typedef std::map<StaffType *, BarDataList> BarDataMap;
-    typedef std::map<StaffType *, int> FakeBarCountMap;
+    typedef std::map<StaffType *, int> FirstBarMap;
 
     void clearBarList(StaffType &);
 
@@ -261,6 +261,11 @@ protected:
     void setBarSizeData(StaffType &staff, int barNo,
 			double width, int fixedWidth, int baseWidth,
 			Rosegarden::timeT actualDuration);
+
+    void expandBarDataListFor(StaffType &staff, int barNo);
+
+    int barNoToIndex(StaffType &staff, int barNo);
+    int indexToBarNo(StaffType &staff, int index);
 
     /**
      * Returns the bar positions for a given staff, provided that
@@ -339,7 +344,7 @@ protected:
     //--------------- Data members ---------------------------------
 
     BarDataMap m_barData;
-    FakeBarCountMap m_fakeBarCountMap;
+    FirstBarMap m_firstBarMap;
 
     double m_totalWidth;
     bool m_pageMode;
