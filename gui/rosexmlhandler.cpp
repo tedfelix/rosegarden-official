@@ -636,6 +636,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         m_section = InSegment;
 
         int track = -1, startTime = 0;
+        unsigned int colourindex = 0;
         QString trackNbStr = atts.value("track");
         if (trackNbStr) {
             track = trackNbStr.toInt();
@@ -710,6 +711,13 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         
         m_currentSegment->setTrack(track);
         //m_currentSegment->setStartTime(startTime);
+
+        QString colourIndStr = atts.value("colourindex");
+        if (colourIndStr) {
+            colourindex = colourIndStr.toInt();
+        }
+
+        m_currentSegment->setColourIndex(colourindex);
 
 	m_currentTime = startTime;
         getComposition().addSegment(m_currentSegment);
@@ -1429,6 +1437,47 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (m_instrument) m_instrument->setMappedAudioInput(value);
 
+    } else if (lcName == "appearance") {
+
+        m_section = InAppearance;
+
+    } else if (lcName == "colourmap") {
+
+        if (m_section == InAppearance) {
+            QString mapName = atts.value("name");
+            m_inColourMap = true;
+            if (mapName == "segmentmap")
+            {
+                m_colourMap = &m_doc->getComposition().getSegmentColourMap();
+            }
+            else
+            { // This will change later once we get more of the Appearance code sorted out
+                RG_DEBUG << i18n("RoseXmlHandler::startElement : Found colourmap with unknown name") << endl;
+            }
+        }
+        else {
+            m_errorString = i18n("Found colourmap outside Appearance");
+            return false;
+        }
+
+    } else if (lcName == "colourpair") {
+
+        if (m_inColourMap && m_colourMap)
+        {
+            unsigned int id = atts.value("id").toInt();
+            QString name = atts.value("name");
+            unsigned int red = atts.value("red").toInt();
+            unsigned int blue = atts.value("blue").toInt();
+            unsigned int green = atts.value("green").toInt();
+            Rosegarden::Colour colour(red, green, blue);
+            m_colourMap->addItem(colour, qstrtostr(name), id);
+        }
+        else
+        {
+            m_errorString = i18n("Found colourpair outside ColourMap");
+            return false;
+        }
+
     } else {
         RG_DEBUG << "RoseXmlHandler::startElement : Don't know how to parse this : " << qName << endl;
     }
@@ -1519,8 +1568,14 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
 
         m_section = NoSection;
 
-    }
+    } else if (lcName == "appearance") {
 
+        m_section = NoSection;
+
+    } else if (lcName == "colourmap") {
+        m_inColourMap = false;
+        m_colourMap = 0;
+    }
 
     return true;
 }

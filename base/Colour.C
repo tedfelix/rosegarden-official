@@ -25,6 +25,13 @@
 
 #include "Colour.h"
 
+#if (__GNUC__ < 3)
+#include <strstream>
+#define stringstream strstream
+#else
+#include <sstream>
+#endif
+
 namespace Rosegarden 
 {
 
@@ -118,6 +125,31 @@ Colour::getContrastingColour() const
 {
     Colour ret(255-m_r, 255-m_g, 255-m_b);
     return ret;
+}
+
+std::string
+Colour::toXmlString() const
+{
+    std::stringstream output;
+
+    output << "<colour red=\"" << m_r
+           << "\" green=\"" << m_g
+           << "\" blue=\"" << m_b
+           << "\"/>" << std::endl;
+
+    return output.str();
+}
+
+std::string
+Colour::dataToXmlString() const
+{
+    std::stringstream output;
+    output << "red=\"" << m_r
+           << "\" green=\"" << m_g
+           << "\" blue=\"" << m_b
+           << "\"";
+
+    return output.str();
 }
 
 // Generic Colour routines:

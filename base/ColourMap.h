@@ -89,6 +89,12 @@ public:
     bool addItem(Colour colour, std::string name);
 
     /**
+     * This routine adds a Colour using the given id.  ONLY FOR USE IN
+     * rosexmlhandler.cpp
+     */
+    bool addItem(Colour colour, std::string name, unsigned int id);
+
+    /**
      * If the item with item_num exists and isn't the default, this
      * routine modifies the string associated with it
      */
@@ -116,6 +122,8 @@ public:
      * This returns a const iterator pointing to m_map.end()
      */
     RCMap::const_iterator end();
+
+    std::string toXmlString(std::string name) const;
 
     ColourMap& operator=(const ColourMap& input);
 

@@ -204,6 +204,15 @@ int main()
     blah = getCombinationColour(blah, blah2);
     printRC(&blah);
 
+    // Test the XML output
+    cout << "\nTEST: XML Output\n\n";
+    cout << "For a single colour:\n";
+    cout << blah.toXmlString();
+
+    cout << "For a colourmap:\n";
+    cout << map2->toXmlString(std::string("segmentmap"));
+
+
     delete map;
     delete map2;
     delete red;

@@ -49,7 +49,8 @@ public:
         InStudio,
         InInstrument,
         InAudioFiles,
-        InPlugin
+        InPlugin,
+        InAppearance
     } RosegardenFileSection;
 
     /**
@@ -122,6 +123,7 @@ protected:
     bool m_inChord;
     bool m_inGroup;
     bool m_inComposition;
+    bool m_inColourMap;
     std::string m_groupType;
     int m_groupId;
     int m_groupTupletBase;
@@ -140,6 +142,7 @@ protected:
     Rosegarden::MidiByte              m_lsb;
     Rosegarden::Instrument           *m_instrument;
     Rosegarden::AudioPluginInstance  *m_plugin;
+    Rosegarden::ColourMap            *m_colourMap;
     unsigned int                      m_pluginId;
     unsigned int                      m_totalElements;
     unsigned int                      m_elementsSoFar;

@@ -26,6 +26,8 @@
 #ifndef _BASE_COLOUR_H_
 #define _BASE_COLOUR_H_
 
+#include <string>
+
 namespace Rosegarden 
 {
 
@@ -103,6 +105,10 @@ public:
      * any background colour
      */
     Colour getContrastingColour() const;
+
+    std::string toXmlString() const;
+
+    std::string dataToXmlString() const;
 
 private:
     unsigned int m_r, m_g, m_b;

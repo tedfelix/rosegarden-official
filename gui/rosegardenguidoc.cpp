@@ -796,6 +796,11 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 		      << "\" rtdelayusec=\"" << segment->getRealTimeDelay().usec;
 	}
 
+    if (segment->getColourIndex() != 0)
+    {
+        outStream << "\" colourindex=\"" << segment->getColourIndex();
+    }
+
 	const Rosegarden::timeT *endMarker = segment->getRawEndMarkerTime();
 	if (endMarker) {
 	    outStream << "\" endmarker=\"" << *endMarker;
@@ -891,6 +896,12 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
     //
     outStream << QString(strtoqstr(m_studio.toXmlString())) << endl << endl;
     
+
+    // Send out the appearance data
+    outStream << "<appearance>" << endl;
+    outStream << getComposition().getSegmentColourMap().toXmlString("segmentmap");
+    outStream << "</appearance>" << endl << endl << endl;
+
     // close the top-level XML tag
     //
     outStream << "</rosegarden-data>\n";

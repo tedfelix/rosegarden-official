@@ -24,7 +24,16 @@
 */
 
 #include <string>
+
+#if (__GNUC__ < 3)
+#include <strstream>
+#define stringstream strstream
+#else
+#include <sstream>
+#endif
+
 #include "ColourMap.h"
+#include "XmlExportable.h"
 
 namespace Rosegarden 
 {
@@ -106,6 +115,15 @@ ColourMap::addItem(const Colour colour, const std::string name)
     }
 
     m_map[highest] = make_pair(colour, name);
+
+    return true;
+}
+
+// WARNING: This version of addItem is only for use by rosexmlhandler.cpp
+bool
+ColourMap::addItem(const Colour colour, const std::string name, const unsigned int id)
+{
+    m_map[id] = make_pair(colour, name);
 
     return true;
 }
@@ -210,6 +228,27 @@ int
 ColourMap::size() const
 {
     return m_map.size();
+}
+
+std::string
+ColourMap::toXmlString(std::string name) const
+{
+    std::stringstream output;
+
+    output << "        <colourmap name=\"" << XmlExportable::encode(name)
+           << "\">" << std::endl;
+
+    for (RCMap::const_iterator pos = m_map.begin(); pos != m_map.end(); ++pos)
+    {
+        output << "  " << "            <colourpair id=\"" << pos->first
+               << "\" name=\"" << XmlExportable::encode(pos->second.second)
+               << "\" " << pos->second.first.dataToXmlString() << "/>" << std::endl;
+    }
+
+    output << "        </colourmap>" << std::endl;
+
+    return output.str();
+
 }
 
 }

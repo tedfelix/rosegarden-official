@@ -61,3 +61,16 @@ red:  210 green: 0 blue:  100
 red:  100 green: 101 blue:  102
 Combination colour:
 red:  155 green: 50 blue:  101
+
+TEST: XML Output
+
+For a single colour:
+<colour red="155" green="50" blue="101"/>
+For a colourmap:
+        <colourmap name="segmentmap">
+              <colourpair id="0" name="" red="210" green="0" blue="100"/>
+              <colourpair id="1" name="TEST1" red="100" green="101" blue="102"/>
+              <colourpair id="2" name="TEST2" red="101" green="102" blue="103"/>
+              <colourpair id="3" name="YES" red="233" green="233" blue="233"/>
+              <colourpair id="4" name="NEW" red="211" green="212" blue="213"/>
+        </colourmap>
