@@ -302,7 +302,7 @@ void MatrixPainter::handleLeftButtonPress(Rosegarden::timeT time,
     // Don't create an overlapping event on the same note on the same channel
     if (dynamic_cast<MatrixElement*>(element))
     {
-//        cout << "OVERLAP" << endl;
+        MATRIX_DEBUG << "MatrixPainter::handleLeftButtonPress : overlap with an other matrix element\n";
         return;
     }
 
