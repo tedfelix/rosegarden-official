@@ -945,6 +945,10 @@ NotationView::insertNote(int height, const QPoint &eventPos)
         return;
     }
 
+    // We are going to modify the document so mark it as such
+    //
+    getDocument()->setModified();
+
     // create new event
     //
     Event *insertedEvent = new Event;

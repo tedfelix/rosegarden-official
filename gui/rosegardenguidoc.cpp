@@ -152,11 +152,8 @@ void RosegardenGUIDoc::closeDocument()
 
 bool RosegardenGUIDoc::newDocument()
 {
-    /////////////////////////////////////////////////
-    // TODO: Add your document initialization code here
-    /////////////////////////////////////////////////
     m_modified=false;
-    m_absFilePath=QDir::homeDirPath();
+    m_absFilePath=QString::null;
     m_title=i18n("Untitled");
 
     return true;
@@ -349,5 +346,7 @@ RosegardenGUIDoc::createNewTrack(TrackItem *p)
     p->setTrack(newTrack);
     
     m_composition.addTrack(newTrack);
+
+    setModified();
 }
 

@@ -472,15 +472,21 @@ void RosegardenGUIApp::slotFileOpenRecent(const KURL &url)
 
 void RosegardenGUIApp::slotFileSave()
 {
+    if (!m_doc->isModified()) return;
+
     slotStatusMsg(i18n("Saving file..."));
-	
-    m_doc->saveDocument(m_doc->getAbsFilePath());
+    if (!m_doc->getAbsFilePath())
+        slotFileSaveAs();
+    else
+        m_doc->saveDocument(m_doc->getAbsFilePath());
 
     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
 void RosegardenGUIApp::slotFileSaveAs()
 {
+    if (!m_doc->isModified()) return;
+
     slotStatusMsg(i18n("Saving file with a new filename..."));
 
     QString newName=KFileDialog::getSaveFileName(QDir::currentDirPath(),
