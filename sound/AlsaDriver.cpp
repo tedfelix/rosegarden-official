@@ -4341,9 +4341,9 @@ AlsaDriver::sendMMC(MidiByte deviceArg,
     AlsaPortList::iterator it = m_alsaPorts.begin();
     for (; it != m_alsaPorts.end(); ++it)
     {
-        // One message per duplex device
+        // One message per writeable port
         //
-        if ((*it)->m_port == 0 && (*it)->m_direction == Duplex)
+        if ((*it)->m_port == 0 && (*it)->isWriteable())
         {
             try
             {
@@ -4397,9 +4397,9 @@ AlsaDriver::sendSystemDirect(MidiByte command, const std::string &args)
     AlsaPortList::iterator it = m_alsaPorts.begin();
     for (; it != m_alsaPorts.end(); ++it)
     {
-        // One message per duplex device
+        // One message per writeable port
         //
-        if ((*it)->m_port == 0 && (*it)->m_direction == Duplex)
+        if ((*it)->m_port == 0 && (*it)->isWriteable())
         {
             snd_seq_event_t event;
             memset(&event, 0, sizeof(&event));
@@ -4461,9 +4461,9 @@ AlsaDriver::sendSystemQueued(MidiByte command,
     AlsaPortList::iterator it = m_alsaPorts.begin();
     for (; it != m_alsaPorts.end(); ++it)
     {
-        // One message per duplex device
+        // One message per writeable port
         //
-        if ((*it)->m_port == 0 && (*it)->m_direction == Duplex)
+        if ((*it)->m_port == 0 && (*it)->isWriteable())
         {
             snd_seq_event_t event;
             memset(&event, 0, sizeof(&event));
