@@ -559,6 +559,32 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview)
                  s->getSegmentEvents().begin();
              i != s->getSegmentEvents().end(); ++i) {
 
+	    //!!! Consider moving this out into a static method
+	    // of StandardQuantization (from here to
+
+	    if ((*i)->isa(Rosegarden::Note::EventType)) {
+
+		timeT absTime = (*i)->getAbsoluteTime();
+		timeT myQuantizeUnit = 0;
+
+		// m_quantizations is in descending order of duration;
+		// stop when we reach one that divides into the note's time
+
+		for (unsigned int i = 0; i < m_quantizations.size(); ++i) {
+		    if (absTime % m_quantizations[i].unit == 0) {
+			myQuantizeUnit = m_quantizations[i].unit;
+			break;
+		    }
+		}
+
+		if (quantizeUnit < 0 || myQuantizeUnit < quantizeUnit) {
+		    quantizeUnit = myQuantizeUnit;
+		}
+	    }
+
+	    // here, in a loop, returning a quantize unit that
+	    // corresponds to one of the standard quantizations)
+
             if (oldSelection && oldSelection->getSegment() == s->getSegment()
                 && oldSelection->contains(*i)) continue;
 
@@ -571,29 +597,6 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview)
 		    playNote(s->getSegment(), pitch);
 		}
 	    }
-
-	    if ((*i)->isa(Rosegarden::Note::EventType)) {
-
-		timeT absTime = (*i)->getAbsoluteTime();
-		timeT myQuantizeUnit = 0;
-
-		// m_quantizations is in descending order of duration;
-		// stop when we reach one that divides into the note's time
-
-		for (unsigned int i = 0; i < m_quantizations.size(); ++i) {
-		    if (absTime % m_quantizations[i].unit == 0) {
-
-			myQuantizeUnit = m_quantizations[i].unit;
-			MATRIX_DEBUG << "Found note at " << absTime
-				     << " with quantize unit of " << myQuantizeUnit << endl;
-			break;
-		    }
-		}
-		
-		if (myQuantizeUnit > 0 && myQuantizeUnit > quantizeUnit) {
-		    quantizeUnit = myQuantizeUnit;
-		}
-	    }
 	}
 	
         if (!foundNewEvent) {
@@ -603,8 +606,6 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview)
                 s->getSegmentEvents().size()) updateRequired = false;
         }
     }
-
-    MATRIX_DEBUG << "quantize unit is " << quantizeUnit << endl;
 
     if (quantizeUnit >= 0) {
 	for (unsigned int i = 0; i < m_quantizations.size(); ++i) {
