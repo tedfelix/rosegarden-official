@@ -28,6 +28,8 @@
 //
 
 #include "Event.h"
+#include <multiset.h>
+#include <qdatastream.h>
 
 namespace Rosegarden
 {
@@ -59,6 +61,7 @@ class MappedComposition : public std::multiset<MappedEvent *,
                                       MappedEvent::MappedEventCmp>
 {
 public:
+  MappedComposition():_startTime(0), _endTime(0) {;}
   MappedComposition(const unsigned int &sT, const unsigned int &eT):
              _startTime(sT), _endTime(eT) {;}
   ~MappedComposition() {;}
@@ -66,9 +69,20 @@ public:
   const unsigned int beginTime() const { return _startTime; }
   const unsigned int endTime() const { return _endTime; }
 
+  // This section is used for serialising this class over DCOP
+  //
+  //
+  friend QDataStream& operator<<(QDataStream &dS, const MappedComposition &mC);
+
+  friend QDataStream& operator>>(QDataStream &dS, MappedComposition &mC);
+
 private:
   unsigned int _startTime;
   unsigned int _endTime;
+
+  QDataStream _conversion;
+
+
 };
 
 }
