@@ -28,6 +28,8 @@
 #include "Device.h"
 #include "Plugins.h"
 
+#include "AudioPluginInstance.h" // for PluginPort::PortDisplayHint
+
 #ifndef _MAPPEDSTUDIO_H_
 #define _MAPPEDSTUDIO_H_
 
@@ -590,14 +592,30 @@ public:
         { m_portDescriptor = pD; }
     LADSPA_PortDescriptor getDescriptor() const { return m_portDescriptor; }
  
+    // Convenience functions that interpret the range hint.  LADPSA
+    // plugins are not required to provide bounds, but all our
+    // controls for them are bounded, so a plugin that doesn't provide
+    // any will just get some unsuitable ones invented for it.
+    MappedObjectValue getMinimum() const;
+    MappedObjectValue getMaximum() const;
+
+    // Another convenience function.
+    // PortDisplayHint (base/AudioPluginInstance.h) encapsulates the
+    // parts of the LADSPA hint descriptor that are relevant to us and
+    // are not about range.
+    PluginPort::PortDisplayHint getDisplayHint() const;
+
     void setPortNumber(unsigned long portNumber) { m_portNumber = portNumber; }
     unsigned long getPortNumber() const { return m_portNumber; }
 
     void setValue(MappedObjectValue value) { m_value = value; }
     MappedObjectValue getValue() const { return m_value; }
 
-    void setDefault(MappedObjectValue value) { m_default = value; }
-    MappedObjectValue getDefault() const { return m_default; }
+    void setDefault(MappedObjectValue value) {
+	m_default = value; 
+	m_haveDefault = true;
+    }
+    MappedObjectValue getDefault() const; // return set value or calculate
 
     // redefine clone() here to copy across value only
     //
@@ -610,6 +628,7 @@ protected:
 
     MappedObjectValue     m_value;
     MappedObjectValue     m_default;  // default value
+    bool                  m_haveDefault;
     unsigned long         m_portNumber;
 
 };

@@ -1,3 +1,4 @@
+// -*- c-basic-offset: 4 -*-
 /*
     Rosegarden-4
     A sequencer and musical notation editor.
@@ -49,60 +50,6 @@
 namespace Rosegarden
 {
 
-// Redefine and augment a lot of the LADSPA properties in an
-// effort to understand them.  See /usr/include/ladspa.h for
-// more information and descriptions of the properties.
-//
-class PluginPort
-{
-public:
-    typedef enum
-    {
-        Input    = 0x01,
-        Output   = 0x02,
-        Control  = 0x04,
-        Audio    = 0x08
-    } PortType;
-
-
-    typedef enum
-    {
-        Below      = 0x01,
-        Above      = 0x02,
-        Toggled    = 0x04,
-        SampleRate = 0x08,
-        Log        = 0x10,
-        Integer    = 0x20
-
-    } PortRange;
-
-    PluginPort(MappedObjectId id,
-               const QString &m_name,
-               PortType type,
-               PortRange range,
-               PortData lowerBound,
-               PortData upperBound,
-	       PortData defaultValue);
-
-    MappedObjectId getId() const { return m_id; }
-    QString getName() const { return m_name; }
-    PortType getType() const { return m_type; }
-    PortRange getRange() const { return m_range; }
-    PortData getLowerBound() const { return m_lowerBound; }
-    PortData getUpperBound() const { return m_upperBound; }
-    PortData getDefaultValue() const { return m_default; }
-
-protected:
-
-    MappedObjectId m_id;
-    QString        m_name;
-    PortType       m_type;
-    PortRange      m_range;
-    PortData       m_lowerBound;
-    PortData       m_upperBound;
-    PortData       m_default;
-};
-
 typedef std::vector<PluginPort*>::iterator PortIterator;
 
 class AudioPlugin
@@ -127,7 +74,7 @@ public:
     void addPort(MappedObjectId id,
                  const QString &name,
                  PluginPort::PortType type,
-                 PluginPort::PortRange range,
+                 PluginPort::PortDisplayHint hint,
                  PortData lowerBound,
                  PortData upperBound,
 		 PortData defaultVale);

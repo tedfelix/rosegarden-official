@@ -37,6 +37,7 @@
 
 #include <cmath>
 
+#define DEBUG_THREAD_EXIT 1
 //#define DEBUG_BUSS_MIXER 1
 //#define DEBUG_MIXER 1
 //#define DEBUG_MIXER_LIGHTWEIGHT 1
@@ -64,11 +65,17 @@ AudioThread::AudioThread(std::string name,
 
 AudioThread::~AudioThread()
 {
+#ifdef DEBUG_THREAD_EXIT
+    std::cerr << m_name << "::~" << m_name << "()" << std::endl;
+#endif
+
     if (m_thread) {
+#ifdef DEBUG_THREAD_EXIT
+    std::cerr << m_name << "::~" << m_name << "(): cancelling" << std::endl;
+#endif
 	pthread_cancel(m_thread);
 	m_thread = 0;
     }
-    pthread_mutex_destroy(&m_lock);
 }
 
 void
@@ -78,15 +85,39 @@ AudioThread::run()
     pthread_detach(m_thread);
 }
 
+void 
+AudioThread::staticThreadCleanup(void *arg)
+{
+    AudioThread *inst = static_cast<AudioThread *>(arg);
+    if (!inst) return;
+
+#ifdef DEBUG_THREAD_EXIT
+    std::cerr << inst->m_name << "::staticThreadCleanup()" << std::endl;
+#endif
+
+    inst->releaseLock();
+
+    pthread_mutex_destroy(&inst->m_lock);
+
+#ifdef DEBUG_THREAD_EXIT
+    std::cerr << inst->m_name << "::staticThreadCleanup() done" << std::endl;
+#endif
+}
+
 void *
 AudioThread::staticThreadRun(void *arg)
 {
     AudioThread *inst = static_cast<AudioThread *>(arg);
     if (!inst) return 0;
 
-    pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
-
+//    pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
+    pthread_cleanup_push(staticThreadCleanup, arg);
+    
+    inst->getLock(); // released in staticThreadCleanup after cancel
     inst->threadRun();
+
+    pthread_cleanup_pop(0);
+
     return 0;
 }
 
@@ -231,7 +262,7 @@ AudioBussMixer::emptyBuffers()
 	m_bufferMap[i].dormant = true;
 //	m_bufferMap[i].dormant = false;
 	for (int ch = 0; ch < 2; ++ch) {
-	    if (m_bufferMap[i].buffers.size() > ch) {
+	    if (int(m_bufferMap[i].buffers.size()) > ch) {
 		m_bufferMap[i].buffers[ch]->reset();
 	    }
 	}
@@ -397,8 +428,6 @@ AudioBussMixer::processBlocks()
 void
 AudioBussMixer::threadRun()
 {
-    getLock();
-
     while (1) {
 	if (m_driver->areClocksRunning()) {
 	    kick(false);
@@ -416,8 +445,6 @@ AudioBussMixer::threadRun()
 	timeout.tv_nsec = t.nsec;
 	pthread_cond_timedwait(&m_condition, &m_lock, &timeout);
     }
-
-    releaseLock();
 }
 
 
@@ -1198,8 +1225,6 @@ AudioInstrumentMixer::kick(bool wantLock)
 void
 AudioInstrumentMixer::threadRun()
 {
-    getLock();
-
     while (1) {
 	if (m_driver->areClocksRunning()) {
 	    kick(false);
@@ -1216,10 +1241,7 @@ AudioInstrumentMixer::threadRun()
 	timeout.tv_sec = t.sec;
 	timeout.tv_nsec = t.nsec;
 	pthread_cond_timedwait(&m_condition, &m_lock, &timeout);
-
     }
-
-    releaseLock();
 }
 
 
@@ -1340,8 +1362,6 @@ AudioFileReader::kick(bool wantLock)
 void
 AudioFileReader::threadRun()
 {
-    getLock();
-
     while (1) {
 
 	if (!kick(false)) {
@@ -1359,8 +1379,6 @@ AudioFileReader::threadRun()
 	    pthread_cond_timedwait(&m_condition, &m_lock, &timeout);
 	}
     }
-
-    releaseLock();
 }
 
 
@@ -1515,8 +1533,6 @@ AudioFileWriter::kick(bool wantLock)
 void
 AudioFileWriter::threadRun()
 {
-    getLock();
-
     while (1) {
 
 	kick(false);
@@ -1533,8 +1549,6 @@ AudioFileWriter::threadRun()
 	timeout.tv_nsec = t.nsec;
 	pthread_cond_timedwait(&m_condition, &m_lock, &timeout);
     }
-
-    releaseLock();
 }
 
 

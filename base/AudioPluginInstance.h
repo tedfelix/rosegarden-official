@@ -1,3 +1,4 @@
+// -*- c-indentation-style:"stroustrup" c-basic-offset: 4 -*-
 /*
     Rosegarden-4
     A sequencer and musical notation editor.
@@ -33,6 +34,55 @@ namespace Rosegarden
 {
 
 typedef float PortData;
+
+class PluginPort
+{
+public:
+    typedef enum
+    {
+    // Currently things will go wrong if these values differ
+    // from the same constants in LADSPA.  That's bad.
+        Input    = 0x01,
+        Output   = 0x02,
+        Control  = 0x04,
+        Audio    = 0x08
+    } PortType;
+
+    typedef enum
+    {
+    // These are our own, though.
+        NoHint      = 0x00,
+	Toggled     = 0x01,
+	Integer     = 0x02,
+	Logarithmic = 0x04
+    } PortDisplayHint;
+
+    PluginPort(int id,
+               std::string m_name,
+               PortType type,
+               PortDisplayHint displayHint,
+               PortData lowerBound,
+               PortData upperBound,
+	       PortData defaultValue);
+
+    int getId() const { return m_id; }
+    std::string getName() const { return m_name; }
+    PortType getType() const { return m_type; }
+    PortDisplayHint getDisplayHint() const { return m_displayHint; }
+    PortData getLowerBound() const { return m_lowerBound; }
+    PortData getUpperBound() const { return m_upperBound; }
+    PortData getDefaultValue() const { return m_default; }
+
+protected:
+
+    int             m_id;
+    std::string     m_name;
+    PortType        m_type;
+    PortDisplayHint m_displayHint;
+    PortData        m_lowerBound;
+    PortData        m_upperBound;
+    PortData        m_default;
+};
 
 class PluginPortInstance
 {

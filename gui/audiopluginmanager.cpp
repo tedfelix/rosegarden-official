@@ -1,3 +1,4 @@
+// -*- c-basic-offset: 4 -*-
 /*
     Rosegarden-4
     A sequencer and musical notation editor.
@@ -22,6 +23,7 @@
 #include "rgapplication.h"
 #include "audiopluginmanager.h"
 #include "rosegardendcop.h"
+#include "rosestrings.h"
 
 namespace Rosegarden
 {
@@ -45,7 +47,7 @@ AudioPluginManager::addPlugin(MappedObjectId id,
 			      const QString &category)
 {
     AudioPlugin *newPlugin = new AudioPlugin(id, 
-                                             name, 
+                                             name,
                                              uniqueId,
                                              label,
                                              author,
@@ -82,7 +84,7 @@ AudioPluginManager::getPluginNames()
     PluginIterator it = m_plugins.begin();
 
     for (; it != m_plugins.end(); ++it)
-        names.push_back((*it)->getName());
+	names.push_back((*it)->getName());
 
     return names;
 }
@@ -168,40 +170,20 @@ void
 AudioPlugin::addPort(MappedObjectId id,
                      const QString &name,
                      PluginPort::PortType type,
-                     PluginPort::PortRange range,
+                     PluginPort::PortDisplayHint hint,
                      PortData lowerBound,
                      PortData upperBound,
 		     PortData defaultValue)
 {
     PluginPort *port = new PluginPort(id,
-                                      name,
+                                      qstrtostr(name),
                                       type,
-                                      range,
+                                      hint,
                                       lowerBound,
                                       upperBound,
 				      defaultValue);
     m_ports.push_back(port);
 
-}
-
-// ------------------ PluginPort ---------------------
-//
-
-PluginPort::PluginPort(MappedObjectId id,
-                       const QString &name,
-                       PluginPort::PortType type,
-                       PluginPort::PortRange range,
-                       PortData lowerBound,
-                       PortData upperBound,
-		       PortData defaultValue):
-    m_id(id),
-    m_name(name),
-    m_type(type),
-    m_range(range),
-    m_lowerBound(lowerBound),
-    m_upperBound(upperBound),
-    m_default(defaultValue)
-{
 }
 
 

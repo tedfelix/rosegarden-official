@@ -65,6 +65,7 @@ protected:
 
 private:
     static void *staticThreadRun(void *arg);
+    static void  staticThreadCleanup(void *arg);
 };
     
 

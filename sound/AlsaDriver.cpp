@@ -126,6 +126,10 @@ AlsaDriver::shutdown()
     AUDIT_START;
     AUDIT_STREAM << "AlsaDriver::~AlsaDriver - shutting down" << std::endl;
 
+#ifdef HAVE_LIBJACK
+    delete m_jackDriver;
+#endif
+
     if (m_midiHandle)
     {
 #ifdef DEBUG_ALSA
@@ -152,10 +156,6 @@ AlsaDriver::shutdown()
     std::cout << "AlsaDriver::shutdown - unloading LADSPA done" << std::endl;
 #endif
 #endif // HAVE_LADSPA
-
-#ifdef HAVE_LIBJACK
-    delete m_jackDriver;
-#endif
 
    AUDIT_UPDATE;
 }
@@ -1898,7 +1898,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
                            m_alsaPlayStartTime;
 
 	RealTime alsaTimeNow = getAlsaTime();
-	std::cerr << "processMidiOut: event is at " << midiRelativeTime << " (" << midiRelativeTime - alsaTimeNow << " ahead of queue time)" << std::endl;
+	std::cerr << "processMidiOut[" << now << "]: event is at " << midiRelativeTime << " (" << midiRelativeTime - alsaTimeNow << " ahead of queue time)" << std::endl;
 
         // Second and nanoseconds for ALSA
         //
@@ -1915,7 +1915,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
         outputDevice = getPairForMappedInstrument((*i)->getInstrument());
 	if (outputDevice.first < 0 && outputDevice.second < 0) continue;
 
-	std::cout << "processMidiOut: instrument " << (*i)->getInstrument() << " -> output device " << outputDevice.first << ":" << outputDevice.second << std::endl;
+	std::cout << "processMidiOut[" << now << "]: instrument " << (*i)->getInstrument() << " -> output device " << outputDevice.first << ":" << outputDevice.second << std::endl;
 
         snd_seq_ev_set_dest(&event,
                             outputDevice.first,
@@ -2092,6 +2092,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
             RealTime nowTime = getAlsaTime();
             snd_seq_real_time_t outTime = { nowTime.sec,
                                             nowTime.nsec };
+	std::cerr << "processMidiOut[" << now << "]: rescheduled event to " << nowTime << std::endl;
             snd_seq_ev_schedule_real(&event, m_queue, 0, &outTime);
             error = snd_seq_event_output_direct(m_midiHandle, &event);
         }
@@ -2137,7 +2138,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
         }
     }
 
-    if (m_queueRunning) {
+    if (m_queueRunning || now) {
 	snd_seq_drain_output(m_midiHandle);
     }
 }

@@ -1194,8 +1194,8 @@ SequenceManager::getSequencerPlugins(Rosegarden::AudioPluginManager *aPM)
             name = seqPlugins[i++];
             Rosegarden::PluginPort::PortType type =
                 Rosegarden::PluginPort::PortType(seqPlugins[i++].toInt());
-            Rosegarden::PluginPort::PortRange range =
-                Rosegarden::PluginPort::PortRange(seqPlugins[i++].toInt());
+            Rosegarden::PluginPort::PortDisplayHint hint =
+                Rosegarden::PluginPort::PortDisplayHint(seqPlugins[i++].toInt());
             Rosegarden::PortData lowerBound = seqPlugins[i++].toFloat();
             Rosegarden::PortData upperBound = seqPlugins[i++].toFloat();
 	    Rosegarden::PortData defaultValue = seqPlugins[i++].toFloat();
@@ -1205,7 +1205,7 @@ SequenceManager::getSequencerPlugins(Rosegarden::AudioPluginManager *aPM)
             aP->addPort(id,
                         name,
                         type,
-                        range,
+                        hint,
                         lowerBound,
                         upperBound,
 			defaultValue);

@@ -29,6 +29,26 @@
 namespace Rosegarden
 {
 
+// ------------------ PluginPort ---------------------
+//
+
+PluginPort::PluginPort(int id,
+                       std::string name,
+                       PluginPort::PortType type,
+                       PluginPort::PortDisplayHint hint,
+                       PortData lowerBound,
+                       PortData upperBound,
+		       PortData defaultValue):
+    m_id(id),
+    m_name(name),
+    m_type(type),
+    m_displayHint(hint),
+    m_lowerBound(lowerBound),
+    m_upperBound(upperBound),
+    m_default(defaultValue)
+{
+}
+
 AudioPluginInstance::AudioPluginInstance(unsigned int position):
     m_mappedId(-1),
     m_id(0),

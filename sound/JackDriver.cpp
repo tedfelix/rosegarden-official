@@ -30,6 +30,8 @@
 #ifdef HAVE_ALSA
 #ifdef HAVE_LIBJACK
 
+#define DEBUG_ALSA 1
+
 //!!! need to get this merged with alsa driver's audit trail
 
 static std::string _audit;
@@ -92,7 +94,9 @@ JackDriver::JackDriver(AlsaDriver *alsaDriver) :
 
 JackDriver::~JackDriver()
 {
-    std::cout << "JackDriver::~JackDriver" << std::endl;
+    std::cerr << "JackDriver::~JackDriver" << std::endl;
+
+    m_ok = false; // prevent any more work in process()
 
     if (m_client)
     {
@@ -100,17 +104,18 @@ JackDriver::~JackDriver()
         std::cerr << "JackDriver::shutdown - closing JACK client"
                   << std::endl;
 #endif
-
+	std::cerr << "deactivating" << std::endl;
         if (jack_deactivate(m_client))
-        {
+	{
 #ifdef DEBUG_ALSA
-            std::cerr << "JackDriver::shutdown - deactivation failed"
-                      << std::endl;
+	    std::cerr << "JackDriver::shutdown - deactivation failed"
+		      << std::endl;
 #endif
-        }
+	}
 
         for (unsigned int i = 0; i < m_inputPorts.size(); ++i)
         {
+	    std::cerr << "unregistering input " << i << std::endl;
             if (jack_port_unregister(m_client, m_inputPorts[i]))
             {
 #ifdef DEBUG_ALSA
@@ -123,6 +128,7 @@ JackDriver::~JackDriver()
 
 	for (unsigned int i = 0; i < m_outputSubmasters.size(); ++i)
 	{
+	    std::cerr << "unregistering output sub " << i << std::endl;
 	    if (jack_port_unregister(m_client, m_outputSubmasters[i]))
 	    {
 #ifdef DEBUG_ALSA
@@ -134,6 +140,7 @@ JackDriver::~JackDriver()
 
 	for (unsigned int i = 0; i < m_outputMonitors.size(); ++i)
 	{
+	    std::cerr << "unregistering output mon " << i << std::endl;
 	    if (jack_port_unregister(m_client, m_outputMonitors[i]))
 	    {
 #ifdef DEBUG_ALSA
@@ -145,6 +152,7 @@ JackDriver::~JackDriver()
 	
 	for (unsigned int i = 0; i < m_outputMasters.size(); ++i)
 	{
+	    std::cerr << "unregistering output master " << i << std::endl;
 	    if (jack_port_unregister(m_client, m_outputMasters[i]))
 	    {
 #ifdef DEBUG_ALSA
@@ -154,17 +162,18 @@ JackDriver::~JackDriver()
 	    }
 	}
                 
+	std::cerr << "closing client" << std::endl;
         jack_client_close(m_client);
         m_client = 0;
     }
 
-    std::cout << "JackDriver::~JackDriver: deleting disk and mix managers" << std::endl;
+    std::cerr << "JackDriver::~JackDriver: deleting disk and mix managers" << std::endl;
     delete m_fileReader;
     delete m_fileWriter;
     delete m_instrumentMixer;
     delete m_bussMixer;
 
-    std::cout << "JackDriver::~JackDriver exiting" << std::endl;
+    std::cerr << "JackDriver::~JackDriver exiting" << std::endl;
 }
 
 void
@@ -736,6 +745,8 @@ JackDriver::jackProcessStatic(jack_nframes_t nframes, void *arg)
 int
 JackDriver::jackProcess(jack_nframes_t nframes)
 {
+    if (!m_ok) return;
+
     if (!m_bussMixer) {
 	return jackProcessEmpty(nframes);
     }

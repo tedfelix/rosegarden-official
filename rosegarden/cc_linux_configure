@@ -23,6 +23,10 @@ make -f Makefile.cvs
 
 #CXXFLAGS="-gstabs+3 -Wall -O0" ./configure --enable-debug=full --with-qt-dir=/home/cannam/qt-x11-free-3.2.1
 
-CXXFLAGS="-gstabs+3 -Wall -O0" ./configure --enable-debug=full
-#CXXFLAGS="-gstabs+3 -Wall -O2 -fno-gcse" ./configure --enable-debug=full
+#CXXFLAGS="-gstabs+3 -Wall -O0" ./configure --enable-debug=full
+CXXFLAGS="-gstabs+3 -Wall -O2 -fno-gcse" ./configure --enable-debug=full
+
+# optimisation on athlon:
+#CXXFLAGS="-Wall -O3 -falign-functions=4 -fomit-frame-pointer -mfancy-math-387 -mcpu=athlon-xp" ./configure --disable-debug
+
 

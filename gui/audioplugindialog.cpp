@@ -258,8 +258,8 @@ AudioPluginDialog::slotPluginSelected(int i)
         PortIterator it = plugin->begin();
         int count = 0;
 
-        // if we've got more than 10 control ports then opt for a slider
-        // model so they fit on the screen
+        //!!! if we've got more than 10 control ports then opt for a slider
+        // model so they fit on the screen?
 
         for (; it != plugin->end(); ++it)
         {
@@ -275,6 +275,7 @@ AudioPluginDialog::slotPluginSelected(int i)
                 if (inst->getPort(count) == 0) {
 //                    inst->addPort(count, 0.0);
                     inst->addPort(count, (float)(*it)->getDefaultValue());
+		    std::cerr << "Plugin port default: " << (*it)->getDefaultValue() << std::endl;
 		}
 
                 PluginControl *control =
@@ -376,7 +377,7 @@ PluginControl::PluginControl(QWidget *parent,
     plainFont.setPointSize((plainFont.pointSize() * 9 )/ 10);
     
 
-    QLabel *controlTitle = new QLabel(port->getName(), parent);
+    QLabel *controlTitle = new QLabel(strtoqstr(port->getName()), parent);
     controlTitle->setFont(plainFont);
 
     QLabel *controlValue = new QLabel(parent);
@@ -384,6 +385,7 @@ PluginControl::PluginControl(QWidget *parent,
 
     if (type == Rotary)
     {
+/*!!!
         // defaults
         float lowerBound = 0.0;
         float upperBound = 1.0;
@@ -405,6 +407,10 @@ PluginControl::PluginControl(QWidget *parent,
             lowerBound *= m_pluginManager->getSampleRate();
             upperBound *= m_pluginManager->getSampleRate();
         }
+*/
+	float lowerBound = port->getLowerBound();
+	float upperBound = port->getUpperBound();
+	// Default value was already handled when calling this constructor
 
         if (lowerBound > upperBound)
         {

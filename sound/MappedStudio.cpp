@@ -1248,13 +1248,13 @@ MappedAudioPluginManager::getPropertyList(const MappedObjectProperty &property)
                             ("%1").arg(port->getDescriptor()));
 
                     list.push_back(MappedObjectProperty
-                            ("%1").arg(port->getRangeHint().HintDescriptor));
+                            ("%1").arg(port->getDisplayHint()));
 
                     list.push_back(MappedObjectProperty
-                            ("%1").arg(port->getRangeHint().LowerBound));
+                            ("%1").arg(port->getMinimum()));
 
                     list.push_back(MappedObjectProperty
-                            ("%1").arg(port->getRangeHint().UpperBound));
+                            ("%1").arg(port->getMaximum()));
 
                     list.push_back(MappedObjectProperty
                             ("%1").arg(port->getDefault()));
@@ -1542,6 +1542,8 @@ MappedAudioPluginManager::unloadPlugin(unsigned long uniqueId)
     std::vector<unsigned long> list = getPluginsInLibrary(pluginHandle);
     std::vector<unsigned long>::iterator pIt = list.begin();
 
+//!!! locks here?
+
     //std::cout << list.size() << " plugins in library" << std::endl;
 
     for (; pIt != list.end(); pIt++)
@@ -1712,9 +1714,7 @@ MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
 			    if (defs->items[j].pid == ((int)i))
 			    {
 				std::cout << "Default for this port (" << defs->items[j].pid << ", " << defs->items[j].label << ") is " << defs->items[j].value << std::endl;
-				port->setProperty(
-				    MappedLADSPAPort::Default,
-				    defs->items[j].value);
+				port->setDefault(defs->items[j].value);
 			    }
 			}
 		    }
@@ -1778,15 +1778,11 @@ MappedAudioPluginManager::getPluginInstance(unsigned long uniqueId,
 
     for(; it != m_children.end(); it++)
     {
-	std::cerr << "found ro " << (*it)->isReadOnly() << std::endl;
-
         if ((*it)->getType() == LADSPAPlugin &&
             (*it)->isReadOnly() == readOnly)
         {
             MappedLADSPAPlugin *plugin =
                 dynamic_cast<MappedLADSPAPlugin*>(*it);
-
-	    std::cerr << "found id " << plugin->getUniqueId() << std::endl;
 
             if (plugin->getUniqueId() == uniqueId)
                 return *it;
@@ -2212,6 +2208,115 @@ MappedLADSPAPort::clone(MappedObject *object)
     object->setProperty(MappedLADSPAPort::Value, m_value);
 }
 
+MappedObjectValue
+MappedLADSPAPort::getMinimum() const
+{
+    LADSPA_PortRangeHintDescriptor d = m_portRangeHint.HintDescriptor;
+    
+    if (LADSPA_IS_HINT_BOUNDED_BELOW(d)) {
+	return m_portRangeHint.LowerBound;
+    } else if (LADSPA_IS_HINT_BOUNDED_ABOVE(d)) {
+	if (m_haveDefault) {
+	    return std::min(0.0, std::min(m_portRangeHint.UpperBound,
+					  m_default) - 1.0);
+	} else {
+	    return std::min(0.0, m_portRangeHint.UpperBound - 1.0);
+	}
+    } else {
+	return 0.0;
+    }
+}
+
+MappedObjectValue
+MappedLADSPAPort::getMaximum() const
+{
+    LADSPA_PortRangeHintDescriptor d = m_portRangeHint.HintDescriptor;
+    
+    if (LADSPA_IS_HINT_BOUNDED_ABOVE(d)) {
+	return m_portRangeHint.UpperBound;
+    } else {
+	return getMinimum() + 1.0;
+    }
+}
+
+MappedObjectValue
+MappedLADSPAPort::getDefault() const
+{
+    if (m_haveDefault) {
+	return m_default;
+    }
+
+    LADSPA_PortRangeHintDescriptor d = m_portRangeHint.HintDescriptor;
+    LADSPA_Data min = getMinimum(), max = getMaximum();
+
+    bool logarithmic = LADSPA_IS_HINT_LOGARITHMIC(d);
+    
+    if (!LADSPA_IS_HINT_HAS_DEFAULT(d)) return min;
+
+    if (LADSPA_IS_HINT_DEFAULT_MINIMUM(d)) {
+	return min;
+    }
+
+    if (LADSPA_IS_HINT_DEFAULT_LOW(d)) {
+	if (logarithmic) {
+	    return powf(10, log10(min) * 0.75 + log10(max) * 0.25);
+	} else {
+	    return min * 0.75 + max * 0.25;
+	}
+    }
+
+    if (LADSPA_IS_HINT_DEFAULT_MIDDLE(d)) {
+	if (logarithmic) {
+	    return powf(10, log10(min) * 0.5 + log10(max) * 0.5);
+	} else {
+	    return min * 0.5 + max * 0.5;
+	}
+    }
+
+    if (LADSPA_IS_HINT_DEFAULT_HIGH(d)) {
+	if (logarithmic) {
+	    return powf(10, log10(min) * 0.25 + log10(max) * 0.75);
+	} else {
+	    return min * 0.25 + max * 0.75;
+	}
+    }
+
+    if (LADSPA_IS_HINT_DEFAULT_MAXIMUM(d)) {
+	return max;
+    }
+
+    if (LADSPA_IS_HINT_DEFAULT_0(d)) {
+	return 0.0;
+    }
+
+    if (LADSPA_IS_HINT_DEFAULT_1(d)) {
+	return 1.0;
+    }
+
+    if (LADSPA_IS_HINT_DEFAULT_100(d)) {
+	return 100.0;
+    }
+
+    if (LADSPA_IS_HINT_DEFAULT_440(d)) {
+	return 440.0;
+    }
+
+    return min;
+}
+
+PluginPort::PortDisplayHint
+MappedLADSPAPort::getDisplayHint() const
+{
+    LADSPA_PortRangeHintDescriptor d = m_portRangeHint.HintDescriptor;
+    int hint = PluginPort::NoHint;
+
+    if (LADSPA_IS_HINT_TOGGLED(d)) hint |= PluginPort::Toggled;
+    if (LADSPA_IS_HINT_INTEGER(d)) hint |= PluginPort::Integer;
+    if (LADSPA_IS_HINT_LOGARITHMIC(d)) hint |= PluginPort::Logarithmic;
+
+    return (PluginPort::PortDisplayHint)hint;
+}
+    
 
 #endif // HAVE_LADSPA
 
