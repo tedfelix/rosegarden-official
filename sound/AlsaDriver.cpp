@@ -31,6 +31,7 @@
 #include "MappedInstrument.h"
 #include "Midi.h"
 #include "WAVAudioFile.h"
+#include "MappedStudio.h"
 
 #ifdef HAVE_LIBJACK
 #include <jack/types.h>
@@ -390,10 +391,22 @@ AlsaDriver::generateInstruments()
         audioName = "Audio" + std::string(number);
         instr = new MappedInstrument(Instrument::Audio,
                                      channel,
-                                     m_audioRunningId++,
+                                     m_audioRunningId,
                                      audioName,
                                      m_deviceRunningId);
         m_instruments.push_back(instr);
+
+        // Create a fader with a matching id - this is the starting
+        // point for all audio faders.
+        //
+        m_studio->createObject(Rosegarden::MappedObject::AudioFader,
+                               m_audioRunningId);
+
+        std::cout  << "AlsaDriver::generateInstruments - "
+                   << "added audio fader (id=" << m_audioRunningId
+                   << ")" << std::endl;
+
+        m_audioRunningId++;
     }
 
 #endif

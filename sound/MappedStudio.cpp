@@ -46,13 +46,16 @@ MappedStudio::createObject(MappedObjectType type)
 {
     MappedObject *mO = 0;
 
+    // Ensure we've got an empty slot
+    //
+    while(getObject(m_runningObjectId))
+        m_runningObjectId++;
+
     if (type == MappedObject::AudioPluginManager)
     {
-        // Check for existence and if it does exists already
-        // we can't create a new one.
-        // 
+        // Check and return if exists
         if ((mO = getObjectOfType(type)))
-            return 0;
+            return mO;
 
         mO = new MappedAudioPluginManager(m_runningObjectId);
     }
@@ -62,9 +65,42 @@ MappedStudio::createObject(MappedObjectType type)
                                   2); // channels
     }
 
+    // Insert
+    if (mO)
+    {
+        m_objects.push_back(mO);
+    }
+
     // If we've got a new object increase the running id
     //
     if (mO) m_runningObjectId++;
+
+    return mO;
+}
+
+MappedObject*
+MappedStudio::createObject(MappedObjectType type, MappedObjectId id)
+{
+    // fail if the object already exists
+    if (getObject(id)) return 0;
+
+    MappedObject *mO = 0;
+
+    if (type == MappedObject::AudioPluginManager)
+    {
+        mO = new MappedAudioPluginManager(m_runningObjectId);
+    }
+    else if (type == MappedObject::AudioFader)
+    {
+        mO = new MappedAudioFader(m_runningObjectId,
+                                  2); // channels
+    }
+
+    // Insert
+    if (mO)
+    {
+        m_objects.push_back(mO);
+    }
 
     return mO;
 }

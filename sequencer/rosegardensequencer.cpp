@@ -65,9 +65,13 @@ RosegardenSequencerApp::RosegardenSequencerApp():
         close();
     }
 
+    // Initialise the MappedStudio
+    //
+    initialiseStudio();
+
     // Creating this object also initialises the Rosegarden aRts or
-    // ALSA(JACK) interface for both playback and recording.  This
-    // has got to work.
+    // ALSA/JACK interface for both playback and recording. MappedStudio
+    // aduio faders are also created.
     //
     m_sequencer = new Rosegarden::Sequencer(&m_studio);
 
@@ -81,9 +85,6 @@ RosegardenSequencerApp::RosegardenSequencerApp():
     // set this here and now so we can accept async midi events
     //
     m_sequencer->record(Rosegarden::ASYNCHRONOUS_MIDI);
-
-    // initialise the MappedStudio
-    initialiseStudio();
 
 }
 
@@ -969,29 +970,7 @@ RosegardenSequencerApp::initialiseStudio()
         m_studio.createObject(Rosegarden::MappedObject::AudioPluginManager));
 
     if (pM)
-    {
-        SEQUENCER_DEBUG << "RosegardenSequencer - "
-                        << "got plugin manager" << endl;
-    }
-
-    // Create a random number of audio faders
-    //
-    std::vector<Rosegarden::MappedObjectId> audioFaders;
-    for (unsigned int i = 0; i < 8; i++)
-    {
-        Rosegarden::MappedAudioFader *aF =
-          dynamic_cast<Rosegarden::MappedAudioFader*>(
-              m_studio.createObject(Rosegarden::MappedObject::AudioFader));
-
-        if (aF)
-        {
-            SEQUENCER_DEBUG << "RosegardenSequencer - "
-                            << "adding Audio Fader (object id = "
-                            << aF->getId() << ")" << endl;
-
-            audioFaders.push_back(aF->getId());
-        }
-    }
+        SEQUENCER_DEBUG << "created plugin manager" << endl;
 
 #ifdef HAVE_LADSPA 
     pM->getenvLADSPAPath();
@@ -1003,11 +982,14 @@ RosegardenSequencerApp::initialiseStudio()
 
 
 void
-RosegardenSequencerApp::setMappedObject(Rosegarden::MappedObjectId id,
-                                        Rosegarden::MappedObjectParameter param,
-                                        Rosegarden::MappedObjectValue value)
+RosegardenSequencerApp::setProperty(
+        Rosegarden::MappedObjectId id,
+        const Rosegarden::MappedObjectProperty &property,
+        Rosegarden::MappedObjectValue value)
 {
-    SEQUENCER_DEBUG << "setMappedObject" << endl;
+    SEQUENCER_DEBUG << "setProperty" << endl;
+
+    Rosegarden::MappedObject *object = m_studio.getObject(id);
 }
 
 

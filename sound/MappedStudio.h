@@ -43,7 +43,7 @@ namespace Rosegarden
 
 
 typedef unsigned int MappedObjectId;
-typedef QString      MappedObjectParameter;
+typedef QString      MappedObjectProperty;
 typedef int          MappedObjectValue;
 
 // Every MappedStudio object derives from this class - if an
@@ -107,6 +107,10 @@ public:
     // type of device.
     //
     MappedObject* createObject(MappedObjectType type);
+
+    // And create an object with a specified id
+    //
+    MappedObject* createObject(MappedObjectType type, MappedObjectId id);
 
     // Connect an Instrument to a MappedStudioObject
     //
