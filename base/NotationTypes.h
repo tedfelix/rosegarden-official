@@ -40,7 +40,7 @@
  *   Clef
  *   Key
  *   Indication
- *   NotationDisplayPitch
+ *   Pitch
  *   Note
  *   TimeSignature
  *
@@ -57,7 +57,7 @@
  * that are independent of any particular instance of an event (such
  * as the Note methods that calculate duration-related values without
  * reference to any specific pitch or other note-event properties; or
- * everything in NotationDisplayPitch).
+ * everything in Pitch).
  * 
  * This file also defines the event types and standard property names
  * for the basic events.
@@ -220,7 +220,7 @@ public:
     int getPitchOffset() const;
 
     /**
-     * Return the height-on-staff (in NotationDisplayPitch terminology)
+     * Return the height-on-staff (in Pitch terminology)
      * of the clef's axis -- the line around which the clef is drawn.
      */
     int getAxisHeight() const;
@@ -348,12 +348,12 @@ public:
 
     /**
      * Return the accidental at the given height-on-staff
-     * (in NotationDisplayPitch terminology) in the given clef.
+     * (in Pitch terminology) in the given clef.
      */
     Accidental getAccidentalAtHeight(int height, const Clef &clef) const;
 
     /**
-     * Return the heights-on-staff (in NotationDisplayPitch
+     * Return the heights-on-staff (in Pitch
      * terminology) of all accidentals in the key's signature,
      * in the given clef.
      */
@@ -623,6 +623,15 @@ private:
 				       int &, bool ignoreOffset = false);
 };
 
+
+
+/**
+ * Pitch stores a note's pitch and provides information about it in
+ * various different ways, notably in terms of the position of the
+ * note on the staff and its associated accidental.
+ *
+ * (See docs/discussion/units.txt for explanation of pitch units.)
+ */
 
 class Pitch
 {
