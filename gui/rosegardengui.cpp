@@ -964,11 +964,6 @@ void RosegardenGUIApp::initView()
 
     stateChanged("new_file");
 
-    // Refresh the audioManagerDialog if it's hanging around
-    //
-    if (m_audioManagerDialog)
-        m_audioManagerDialog->slotPopulateFileList();
-
     kapp->processEvents();
     
     if (m_viewChordNameRuler->isChecked()) {
@@ -1035,8 +1030,8 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
     //delete m_view;
     initView();
 
-    newDocument->syncDevices();
-    newDocument->clearModifiedStatus();
+    m_doc->syncDevices();
+    m_doc->clearModifiedStatus();
 
     if (newDocument->getStudio().haveMidiDevices()) {
 	stateChanged("got_midi_devices");
@@ -1064,7 +1059,11 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
     //
     if (m_seqManager) m_doc->setLoop(comp.getLoopStart(), comp.getLoopEnd());
 
-    emit documentChanged(newDocument);
+    emit documentChanged(m_doc);
+
+    m_doc->clearModifiedStatus(); // because it's set as modified by the various
+    // init operations
+    // TODO: this sucks, have to sort it out somehow.
 }
 
 
