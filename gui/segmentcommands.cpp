@@ -62,6 +62,7 @@ SegmentInsertCommand::SegmentInsertCommand(RosegardenGUIDoc *doc,
                                            Rosegarden::timeT duration):
     KCommand("Insert Segment"),
     m_document(doc),
+    m_segment(0),
     m_track(track),
     m_startTime(startTime),
     m_duration(duration)
@@ -70,38 +71,42 @@ SegmentInsertCommand::SegmentInsertCommand(RosegardenGUIDoc *doc,
 
 SegmentInsertCommand::~SegmentInsertCommand()
 {
-    /*
     if (!m_segment->getComposition()) {
 	delete m_segment;
     }
-    */
 }
 
 void
 SegmentInsertCommand::execute()
 {
-    // Create and insert Segment
-    //
-    m_segment = new Rosegarden::Segment();
-    m_segment->setTrack(m_track);
-    m_segment->setStartTime(m_startTime);
-    m_document->getComposition().addSegment(m_segment);
-    m_segment->setDuration(m_duration);
+    if (!m_segment)
+    {
+        // Create and insert Segment
+        //
+        m_segment = new Rosegarden::Segment();
+        m_segment->setTrack(m_track);
+        m_segment->setStartTime(m_startTime);
+        m_document->getComposition().addSegment(m_segment);
+        m_segment->setDuration(m_duration);
 
-    // Add the SegmentItem to the canvas (does nothing
-    // if the SegmentItem already exists)
-    //
-    m_document->addSegmentItem(m_segment);
+        // Add the SegmentItem to the canvas (does nothing
+        // if the SegmentItem already exists)
+        //
+        m_document->addSegmentItem(m_segment);
+    }
+    else
+    {
+        m_document->getComposition().addSegment(m_segment);
+        m_document->addSegmentItem(m_segment);
+    }
+    
 }
 
 void
 SegmentInsertCommand::unexecute()
 {
-    // delete the Segment item
     m_document->deleteSegmentItem(m_segment);
-
-    // and now the Segment
-    m_document->getComposition().deleteSegment(m_segment);
+    m_document->getComposition().detachSegment(m_segment);
 }
 
 // --------- Move Segment --------
