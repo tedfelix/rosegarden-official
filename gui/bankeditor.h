@@ -166,6 +166,14 @@ public:
     RemapInstrumentDialog(QWidget *parent,
                           RosegardenGUIDoc *doc);
 
+    void populateCombo(int id);
+
+public slots:
+    void slotRemapReleased(int id);
+
+    void slotOk();
+    void slotApply();
+
 protected:
 
     RosegardenGUIDoc    *m_doc;

@@ -918,15 +918,87 @@ RemapInstrumentDialog::RemapInstrumentDialog(QWidget *parent,
 {
     QVBox *vBox = makeVBoxMainWidget();
 
+    QButtonGroup *buttonGroup =
+        new QButtonGroup(1, Qt::Horizontal, i18n("Remap"), vBox);
+
+    m_deviceButton = new QRadioButton(i18n("Devices"), buttonGroup);
+    m_instrumentButton = new QRadioButton(i18n("Instruments"), buttonGroup);
+
+    connect(buttonGroup, SIGNAL(released(int)),
+            this, SLOT(slotRemapReleased(int)));
+
     QFrame *frame = new QFrame(vBox);
-    //QButtonGroup *buttonGroup = new QButtonGroup(i18n("Remap"), vBox);
+    QGridLayout *gridLayout = new QGridLayout(frame,
+                                              2,  // rows
+                                              2,  // cols
+                                              2); // margin
+    m_fromCombo = new RosegardenComboBox(true, frame);
+    m_toCombo = new RosegardenComboBox(true, frame);
 
-    m_deviceButton = new QRadioButton(i18n("Devices"), frame);
-    m_instrumentButton = new QRadioButton(i18n("Instruments"), frame);
+    gridLayout->addWidget(new QLabel(i18n("From:"), frame), 0, 0, AlignLeft);
+    gridLayout->addWidget(new QLabel(i18n("To:"), frame), 0, 1, AlignLeft);
+    gridLayout->addWidget(m_fromCombo, 1, 0, AlignLeft);
+    gridLayout->addWidget(m_toCombo, 1, 1, AlignLeft);
 
-    //buttonGroup->insert(m_deviceButton);
-    //buttonGroup->insert(m_instrumentButton);
+    buttonGroup->setButton(0);
+    populateCombo(0);
+}
 
+void
+RemapInstrumentDialog::populateCombo(int id)
+{
+    m_fromCombo->clear();
+    m_toCombo->clear();
+    Rosegarden::Studio *studio = &m_doc->getStudio();
+
+    if (id == 0)
+    {
+        Rosegarden::DeviceList *devices = studio->getDevices();
+        Rosegarden::DeviceListIterator it;
+
+        for (it = devices->begin(); it != devices->end(); it++)
+        {
+            m_fromCombo->insertItem(strtoqstr((*it)->getName()));
+            m_toCombo->insertItem(strtoqstr((*it)->getName()));
+        }
+
+        if (devices->size() == 0)
+        {
+            m_fromCombo->insertItem(i18n("<no devices>"));
+            m_toCombo->insertItem(i18n("<no devices>"));
+        }
+    }
+    else 
+    {
+        Rosegarden::DeviceList *devices = studio->getDevices();
+        Rosegarden::InstrumentList list = studio->getPresentationInstruments();
+        Rosegarden::InstrumentList::iterator it = list.begin();
+
+        for (; it != list.end(); it++)
+        {
+            m_fromCombo->insertItem(strtoqstr((*it)->getName()));
+            m_toCombo->insertItem(strtoqstr((*it)->getName()));
+        }
+
+    }
+}
+
+
+void
+RemapInstrumentDialog::slotRemapReleased(int id)
+{
+    populateCombo(id);
+}
+
+void
+RemapInstrumentDialog::slotOk()
+{
+    accept();
+}
+
+void
+RemapInstrumentDialog::slotApply()
+{
 }
 
 
