@@ -45,6 +45,7 @@ int
 main(int argc, char **argv)
 {
     Rosegarden::Sequencer sequencer;
+    //Rosegarden::Sequencer sequencer2;
 
     // turn MIDI recording on
     //
@@ -52,6 +53,8 @@ main(int argc, char **argv)
 
     int i;
     int count;
+
+    Arts::MidiEvent event;
 
     while(true)
     {
@@ -63,7 +66,7 @@ main(int argc, char **argv)
         {
             case Rosegarden::Sequencer::RECORD_MIDI:
                 count = sequencer.getMappedComposition().size();
-                if (count)
+                if (count > 0)
                     std::cout << "Got " << count << " MIDI events" << endl;
                 break;
 
@@ -74,6 +77,15 @@ main(int argc, char **argv)
             default:
                 break;
         }
+
+        event.time.sec = 0;
+        event.time.usec = 0;
+
+        event.command.status = Arts::mcsNoteOn; // channel 0
+        event.command.data1 = 70;
+        event.command.data2 = 127;
+
+        sequencer.playMidiPort()->processEvent(event);
     }
 
 }

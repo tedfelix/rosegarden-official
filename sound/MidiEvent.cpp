@@ -104,8 +104,8 @@ MidiEvent::print()
 	case MIDI_COPYRIGHT_NOTICE:
 	    cout << "COPYRIGHT:\t\"" << m_metaMessage << "\"" << endl;
 
-	case MIDI_SEGMENT_NAME:
-	    cout << "SEGMENT NAME:\t\"" << m_metaMessage << "\"" << endl;
+	case MIDI_TRACK_NAME:
+	    cout << "TRACK NAME:\t\"" << m_metaMessage << "\"" << endl;
 	    break;	
 
 	case MIDI_INSTRUMENT_NAME:
@@ -124,7 +124,7 @@ MidiEvent::print()
 	    cout << "CUE POINT:\t\"" << m_metaMessage << "\"" << endl;
 	    break;
 
-	    // Sets a Channel number for a SEGMENT before it starts
+	    // Sets a Channel number for a TRACK before it starts
 	case MIDI_CHANNEL_PREFIX:
 	    cout << "CHANNEL PREFIX:\t" << (unsigned int)m_metaMessage[0] << endl;
 	    break;

@@ -195,6 +195,11 @@ public:
 
     Rosegarden::timeT getStartPosition() { return m_playStartPosition; }
 
+    // Temporary cheat to enable quick sending of midi events from a 
+    // thin aRTS client - not to be used in anger!
+    //
+    Arts::MidiPort* playMidiPort() { return &m_midiPlayPort; }
+
 private:
 
     // set-up

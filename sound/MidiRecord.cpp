@@ -49,7 +49,6 @@ RosegardenMidiRecord_impl::processCommand(const Arts::MidiCommand &midiCommand)
 void
 RosegardenMidiRecord_impl::processEvent(const Arts::MidiEvent &midiEvent)
 {
-  
     m_midiThru.processEvent(midiEvent);
     addToList(midiEvent);
 }

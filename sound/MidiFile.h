@@ -51,7 +51,7 @@ namespace Rosegarden
 // MIDI delta times).
 //
 typedef std::map<unsigned int, std::list<MidiEvent> > MidiComposition;
-typedef std::list<MidiEvent>::iterator MidiSegmentIterator;
+typedef std::list<MidiEvent>::iterator MidiTrackIterator;
 
 class MidiFile
 {
@@ -59,9 +59,9 @@ public:
 
     typedef enum
     {
-	MIDI_SINGLE_SEGMENT_FILE          = 0x00,
-	MIDI_SIMULTANEOUS_SEGMENT_FILE    = 0x01,
-	MIDI_SEQUENTIAL_SEGMENT_FILE      = 0x02,
+	MIDI_SINGLE_TRACK_FILE          = 0x00,
+	MIDI_SIMULTANEOUS_TRACK_FILE    = 0x01,
+	MIDI_SEQUENTIAL_TRACK_FILE      = 0x02,
 	MIDI_CONVERTED_TO_APPLICATION   = 0xFE,
 	MIDI_FILE_NOT_LOADED            = 0xFF
     } MIDIFileFormatType;
@@ -74,7 +74,7 @@ public:
     {
 	m_filename = mF.m_filename;
 	m_timingDivision = mF.m_timingDivision;
-	m_numberOfSegments = mF.m_numberOfSegments;
+	m_numberOfTracks = mF.m_numberOfTracks;
 	m_format = mF.m_format;
 	return *this;
     }
@@ -88,7 +88,7 @@ public:
     const std::string& filename() { return m_filename; }
     const int& timingDivision() { return m_timingDivision; }
     const MIDIFileFormatType& format() { return m_format; }
-    const unsigned int& numberOfSegments() { return m_numberOfSegments; }
+    const unsigned int& numberOfTracks() { return m_numberOfTracks; }
 
     // Conversion in and out of Rosegarden
     //
@@ -99,11 +99,11 @@ private:
     std::string            m_filename;
     int                    m_timingDivision;   // pulses per quarter note
     MIDIFileFormatType     m_format;
-    unsigned int           m_numberOfSegments;
+    unsigned int           m_numberOfTracks;
 
     // Internal counters
     //
-    unsigned long         m_segmentByteCount;
+    unsigned long         m_trackByteCount;
     bool                  m_decrementCount;
 
     // Internal representation
@@ -113,9 +113,9 @@ private:
     // Split the tasks up with these top level private methods
     //
     bool parseHeader(const std::string& midiHeader);
-    bool parseSegment(std::ifstream* midiFile, const unsigned int &segmentNum);
+    bool parseTrack(std::ifstream* midiFile, const unsigned int &trackNum);
     bool writeHeader(std::ofstream* midiFile);
-    bool writeSegment(std::ofstream* midiFile, const unsigned int &segmentNumber);
+    bool writeTrack(std::ofstream* midiFile, const unsigned int &trackNum);
 
     // Internal convenience functions
     //
@@ -123,7 +123,7 @@ private:
     const unsigned long midiBytesToLong(const std::string& bytes);
     const unsigned int getNumberFromMidiBytes(std::ifstream* midiFile);
     const std::string getMidiBytes(std::ifstream* midiFile, const unsigned int &bytes);
-    bool skipToNextSegment(std::ifstream *midiFile);
+    bool skipToNextTrack(std::ifstream *midiFile);
     void intToMidiBytes(std::ofstream* midiFile, int number);
     void longToMidiBytes(std::ofstream* midiFile, const unsigned long &number);
     void longToVarBuffer(std::string &buffer, const unsigned long &number);
