@@ -267,12 +267,16 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     //
     connect(getCommandHistory(), SIGNAL(commandExecuted(KCommand *)),
                         this, SLOT(slotCommandExecuted(KCommand *)));
+
+    setInitialSize(configDialogSize(AudioManagerDialogConfigGroup));
+
 }
 
 AudioManagerDialog::~AudioManagerDialog()
 {
     RG_DEBUG << "\n*** AudioManagerDialog::~AudioManagerDialog\n" << endl;
     m_fileList->saveLayout(kapp->config(), m_listViewLayoutName);
+    saveDialogSize(AudioManagerDialogConfigGroup);
 }
 
 // Scan the AudioFileManager and populate the m_fileList
@@ -1108,6 +1112,8 @@ AudioManagerDialog::isSelectedTrackAudio()
     return false;
     
 }
+
+const char* const AudioManagerDialog::AudioManagerDialogConfigGroup = "AudioManagerDialog";
  
 }
 

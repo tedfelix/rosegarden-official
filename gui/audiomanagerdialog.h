@@ -190,6 +190,8 @@ protected:
     static const int         m_previewHeight;
 
     bool                     m_audiblePreview;
+
+    static const char* const AudioManagerDialogConfigGroup;
 };
 
 }
