@@ -19,36 +19,57 @@
 
 #include <iostream>
 #include "rosegardensequencer.h"
+#include "Sequencer.h"
 
-using std::cout;
+
 using std::cerr;
 using std::endl;
+using std::cout;
 
 RosegardenSequencerApp::RosegardenSequencerApp():
-    DCOPObject("RosegardenSequencerIface")
+    DCOPObject("RosegardenSequencerIface"),
+    m_sequencer(0)
 {
+  m_sequencer = new Rosegarden::Sequencer();
+
+  if (!m_sequencer)
+  {
+    cerr << "Rosegarden::Sequencer object could not be allocated";
+    close();
+  }
 }
 
 RosegardenSequencerApp::~RosegardenSequencerApp()
 {
+  delete m_sequencer;
 }
 
 void
 RosegardenSequencerApp::quit()
 {
-  cerr << "Rosegarden Sequencer closing" << endl;
   close();
 }
 
 
-bool
+// We receive a starting time from the GUI which we use as the
+// basis of our first fetch of events from the GUI core.  Assuming
+// this works we set our internal state to PLAYING and go ahead
+// and play the piece until we get a signal to stop.
+// 
+// DCOP wants us to use an int as a return type instead of a bool.
+//
+int
 RosegardenSequencerApp::play(const Rosegarden::timeT &position)
 {
-  cout << "CALLED PLAY = " << position << endl;
+
+
+
   return true;
 }
 
-bool
+// DCOP wants us to use an int as a return type instead of a bool
+//
+int
 RosegardenSequencerApp::stop()
 {
   cout << "CALLED STOP" << endl;

@@ -1,20 +1,22 @@
 # ensure our path is correct
 INCLUDES= $(all_includes) -I$(kde_includes)/arts -I../core
 
+COMPILE_FIRST = libRosegardenSound.la
+
 ####### This part is very Rosegarden specific
 # you can add here more. This one gets installed 
-lib_LTLIBRARIES = libRosegardenSequencer.la
 noinst_LTLIBRARIES = libRosegardenSound.la
-
-libRosegardenSequencer_la_SOURCES = MidiRecord.cpp MidiArts.cc
 libRosegardenSound_la_SOURCES = MidiFile.cpp MidiEvent.cpp MappedEvent.cpp MappedComposition.cpp
 
+lib_LTLIBRARIES = libRosegardenSequencer.la
+libRosegardenSequencer_la_SOURCES = MidiRecord.cpp MidiArts.cc Sequencer.cpp
+
 # the library search path. 
-libRosegardenSequencer_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -module -no-undefined
+libRosegardenSequencer_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -module -no-undefined -L../core
 
 # the libraries to link against. Be aware of the order. First the libraries,
 # that depend on the following ones.
-libRosegardenSequencer_la_LIBADD   = -lartsmidi
+libRosegardenSequencer_la_LIBADD   = -lartsmidi -lqt -lsoundserver_idl -lRosegardenSound -lcore
 
 # make messages.po. Move this one to ../po/ and "make merge" in po
 # the -x is for skipping messages already translated in kdelibs
@@ -25,22 +27,8 @@ MidiArts.h: $(srcdir)/MidiArts.idl
 	$(MCOPIDL) -I$(kde_includes) -t $(srcdir)/MidiArts.idl
 
 MidiArts.cc: MidiArts.h
-
 MidiArts.mcopclass: MidiArts.h
-
 MidiArts.mcoptype: MidiArts.h
-
 MidiRecord.cpp: MidiArts.h
-
-#mcoptypedir = $(libdir)/mcop
-#mcoptype_DATA = MidiArts.mcoptype MidiArts.mcopclass MidiRecord.mcopclass
-
-# our executable
-
-bin_PROGRAMS = sound
-sound_METASOURCES = AUTO
-sound_SOURCES = Sequencer.cpp sound.cpp
-sound_LDFLAGS = $(all_libraries) -L../core
-sound_LDADD = -lRosegardenSequencer -lRosegardenSound -lsoundserver_idl -lcore -lqt
 
 DISTCLEANFILES = $(sound_METASOURCES) MidiArts.h MidiArts.cc

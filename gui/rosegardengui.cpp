@@ -48,9 +48,9 @@
 #include "rg21io.h"
 #include "rosegardendcop.h"
 
-using std::cout;
 using std::cerr;
 using std::endl;
+using std::cout;
 
 RosegardenGUIApp::RosegardenGUIApp()
     : KMainWindow(0), DCOPObject("RosegardenGUIIface"),
@@ -883,32 +883,43 @@ RosegardenGUIApp::play()
   QByteArray data;
   QCString replyType;
   QByteArray replyData;
-  bool returnValue = false;
+
+  if (m_transportStatus == PLAYING)
+    return;
 
   // write the start position argument to the outgoing stream
   //
   QDataStream streamOut(data, IO_WriteOnly);
   streamOut << m_doc->getComposition().getPosition();
 
-  // Send a Stop to the Sequencer
+  // Send Play to the Sequencer
   if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
                                 ROSEGARDEN_SEQUENCER_IFACE_NAME,
                                 "play(Rosegarden::timeT)", data,
                                 replyType, replyData))
   {
     // failed - pop up and disable sequencer options
+    m_transportStatus = STOPPED;
+    KMessageBox::error(this,
+      i18n("Failed to contact RosegardenSequencer. Cannot start playback."));
   }
   else
   {
     // ensure the return type is ok
     QDataStream streamIn(replyData, IO_ReadOnly);
-    QString result;
-
+    int result;
     streamIn >> result;
-  
-    cout << result << endl;
-    if (result=="0")
-      cout << "PLAY COMPLETED OK" << endl;
+
+    if (result)
+    {
+      // completed successfully 
+      m_transportStatus = PLAYING;
+    }
+    else
+    {
+      m_transportStatus = STOPPED;
+      KMessageBox::error(this, i18n("Failed to start playback"));
+    }
   }
 
 }
@@ -930,17 +941,32 @@ RosegardenGUIApp::stop()
 
   // Send a Stop to the Sequencer
   if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-                          ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                          "stop()", data,
-                          replyType, replyData))
+                                ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                                "stop()", data,
+                                replyType, replyData))
   {
     // failed - pop up and disable sequencer options
+    m_transportStatus = STOPPED;
+    KMessageBox::error(this,
+      i18n("Failed to contact RosegardenSequencer. Cannot stop playback!"));
   }
   else
   {
     // ensure the return type is ok
+    QDataStream streamIn(replyData, IO_ReadOnly);
+    int result;
+    streamIn >> result;
+
+    if (result)
+    {
+      // completed successfully 
+      m_transportStatus = STOPPED;
+    }
+    else
+    {
+      KMessageBox::error(this, i18n("Failed to stop playback"));
+    }
   }
-                          
 }
 
 // Jump to previous bar

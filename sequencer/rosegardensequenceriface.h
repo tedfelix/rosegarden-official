@@ -30,8 +30,8 @@ public:
 k_dcop:
 
   virtual void quit() = 0;
-  virtual bool play(const Rosegarden::timeT &position) = 0;
-  virtual bool stop() = 0;
+  virtual int play(const Rosegarden::timeT &position) = 0;
+  virtual int stop() = 0;
 };
 
 #endif // _ROSEGARDENSEQUENCERIFACE_H_
