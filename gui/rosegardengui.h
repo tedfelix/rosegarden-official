@@ -851,6 +851,11 @@ public slots:
     void slotSplitSelected();
 
     /**
+     * Add one new track
+     */
+    void slotAddTrack();
+
+    /**
      * Add new tracks
      */
     void slotAddTracks();

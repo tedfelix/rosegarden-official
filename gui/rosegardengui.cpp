@@ -681,7 +681,11 @@ void RosegardenGUIApp::setupActions()
     // Tracks menu
     //
     icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/add_tracks.xpm"));
-    new KAction(i18n("&Add Tracks..."), icon, CTRL + Key_T,
+    new KAction(i18n("Add &Track"), icon, CTRL + Key_T,
+                this, SLOT(slotAddTrack()),
+                actionCollection(), "add_track");
+
+    new KAction(i18n("&Add Tracks..."), 0,
                 this, SLOT(slotAddTracks()),
                 actionCollection(), "add_tracks");
 
@@ -2542,41 +2546,68 @@ void GetTimeResDialog::setInitialTimeRes(unsigned int v)
 }
 
 
-void RosegardenGUIApp::slotAddTracks()
+void RosegardenGUIApp::slotAddTrack()
 {
     if (!m_view) return;
-
-    // Get the first Internal/MIDI instrument
-    //
-
-    Rosegarden::DeviceList *devices = m_doc->getStudio().getDevices();
-    Rosegarden::DeviceListIterator it;
-    Rosegarden::InstrumentList instruments;
-    Rosegarden::InstrumentList::iterator iit;
-    Rosegarden::Instrument *instr = 0;
-
-    for (it = devices->begin(); it != devices->end(); it++)
-    {
-        if ((*it)->getType() == Rosegarden::Device::Midi)
-        {
-            instruments = (*it)->getAllInstruments();
-
-            for (iit = instruments.begin(); iit != instruments.end(); iit++)
-            {
-            if ((*iit)->getId() >= Rosegarden::MidiInstrumentBase)
-                    {
-                    instr = (*iit);
-                    break;
-                }
-            }
-        }
-    }
 
     // default to the base number - might not actually exist though
     //
     Rosegarden::InstrumentId id = Rosegarden::MidiInstrumentBase;
 
-    if (instr) id = instr->getId();
+    // Get the first Internal/MIDI instrument
+    //
+    Rosegarden::DeviceList *devices = m_doc->getStudio().getDevices();
+    bool have = false;
+
+    for (Rosegarden::DeviceList::iterator it = devices->begin();
+	 it != devices->end() && !have; it++) {
+
+        if ((*it)->getType() != Rosegarden::Device::Midi) continue;
+
+	Rosegarden::InstrumentList instruments = (*it)->getAllInstruments();
+	for (Rosegarden::InstrumentList::iterator iit = instruments.begin();
+	     iit != instruments.end(); iit++) {
+
+	    if ((*iit)->getId() >= Rosegarden::MidiInstrumentBase) {
+		id = (*iit)->getId();
+		have = true;
+		break;
+	    }
+        }
+    }
+
+    m_view->slotAddTracks(1, id);
+}
+
+void RosegardenGUIApp::slotAddTracks()
+{
+    if (!m_view) return;
+
+    // default to the base number - might not actually exist though
+    //
+    Rosegarden::InstrumentId id = Rosegarden::MidiInstrumentBase;
+
+    // Get the first Internal/MIDI instrument
+    //
+    Rosegarden::DeviceList *devices = m_doc->getStudio().getDevices();
+    bool have = false;
+
+    for (Rosegarden::DeviceList::iterator it = devices->begin();
+	 it != devices->end() && !have; it++) {
+
+        if ((*it)->getType() != Rosegarden::Device::Midi) continue;
+
+	Rosegarden::InstrumentList instruments = (*it)->getAllInstruments();
+	for (Rosegarden::InstrumentList::iterator iit = instruments.begin();
+	     iit != instruments.end(); iit++) {
+
+	    if ((*iit)->getId() >= Rosegarden::MidiInstrumentBase) {
+		id = (*iit)->getId();
+		have = true;
+		break;
+	    }
+        }
+    }
 
     bool ok = false;
 

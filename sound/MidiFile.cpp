@@ -59,7 +59,6 @@ using std::string;
 using std::ifstream;
 using std::stringstream;
 using std::cerr;
-using std::cerr;
 using std::endl;
 using std::ends;
 using std::ios;
@@ -784,6 +783,16 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
             rosegardenDuration =
                 timeT(((*midiEvent)->getDuration() * crotchetTime) / divisor);
 	    if (rosegardenTime + rosegardenDuration > maxTime) {
+
+#ifdef MIDI_DEBUG
+		std::cerr << "MIDI file import: origin " << origin
+			  << ", event time " << rosegardenTime
+			  << ", duration " << rosegardenDuration
+			  << ", event type " << (int)(*midiEvent)->getMessageType()
+			  << ", previous max time " << maxTime
+			  << ", new max time " << (rosegardenTime + rosegardenDuration) << std::endl;
+#endif
+
 		maxTime = rosegardenTime + rosegardenDuration;
 	    }
 

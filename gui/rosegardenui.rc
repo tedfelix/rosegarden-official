@@ -69,6 +69,7 @@
   </Menu>
   <Menu name="Tracks">
         <text>Trac&amp;ks</text>
+        <Action name="add_track"/>
         <Action name="add_tracks"/>
         <Action name="delete_track"/>
         <Action name="move_track_down"/>
@@ -146,7 +147,7 @@
 
 <ToolBar name="Tracks Toolbar">
     <text>Tracks Toolbar</text>
-        <Action name="add_tracks"/>
+        <Action name="add_track"/>
         <Action name="delete_track"/>
         <Action name="move_track_up"/>
         <Action name="move_track_down"/>
