@@ -787,6 +787,7 @@ AudioPluginOSCGUI::show()
 {
     RG_DEBUG << "AudioPluginOSCGUI::show" << endl;
 
+    if (!m_address) return;
     QString path = m_basePath + "/show";
     lo_send(m_address, path, "");
 }
@@ -794,6 +795,7 @@ AudioPluginOSCGUI::show()
 void
 AudioPluginOSCGUI::hide()
 {
+    if (!m_address) return;
     QString path = m_basePath + "/hide";
     lo_send(m_address, path, "");
 }
@@ -801,6 +803,7 @@ AudioPluginOSCGUI::hide()
 void
 AudioPluginOSCGUI::quit()
 {
+    if (!m_address) return;
     QString path = m_basePath + "/quit";
     lo_send(m_address, path, "");
 }
@@ -808,6 +811,7 @@ AudioPluginOSCGUI::quit()
 void
 AudioPluginOSCGUI::sendProgram(int bank, int program)
 {
+    if (!m_address) return;
     QString path = m_basePath + "/program";
     lo_send(m_address, path, "ii", bank, program);
 }
@@ -815,6 +819,7 @@ AudioPluginOSCGUI::sendProgram(int bank, int program)
 void
 AudioPluginOSCGUI::sendPortValue(int port, float value)
 {
+    if (!m_address) return;
     QString path = m_basePath + "/control";
     lo_send(m_address, path, "if", port, value);
 }
@@ -822,6 +827,7 @@ AudioPluginOSCGUI::sendPortValue(int port, float value)
 void
 AudioPluginOSCGUI::sendConfiguration(QString key, QString value)
 {
+    if (!m_address) return;
     QString path = m_basePath + "/configure";
     lo_send(m_address, path, "ss", key.data(), value.data());
 }
