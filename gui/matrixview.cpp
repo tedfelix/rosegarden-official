@@ -259,7 +259,7 @@ void MatrixView::refreshSegment(Segment *segment,
 				timeT startTime, timeT endTime)
 {
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-	if (&m_staffs[i]->getSegment() == segment) {
+	if (!segment || &m_staffs[i]->getSegment() == segment) {
 	    applyLayout();
 	    m_staffs[i]->positionElements(startTime, endTime);
 	    update();

@@ -795,10 +795,11 @@ SegmentNotationHelper::autoBeam(iterator from, iterator to, string type)
 
 	timeT t = (*from)->getAbsoluteTime();
 
-	iterator barStart =
-	    segment().findTime(segment().getBarStartForTime(t));
-	iterator barEnd = 
-	    segment().findTime(segment().getBarEndForTime(t));
+	timeT barStartTime = segment().getBarStartForTime(t);
+	timeT barEndTime   = segment().getBarEndForTime(t);
+
+	iterator barStart  = segment().findTime(barStartTime);
+	iterator barEnd    = segment().findTime(barEndTime);
 
 	TimeSignature timeSig =
 	    segment().getComposition()->getTimeSignatureAt(t);
@@ -829,7 +830,7 @@ SegmentNotationHelper::autoBeam(iterator from, iterator to, string type)
 
 void
 SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
-                                      TimeSignature tsig, string type)
+				   TimeSignature tsig, string type)
 {
     int num = tsig.getNumerator();
     int denom = tsig.getDenominator();

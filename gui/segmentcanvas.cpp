@@ -677,7 +677,6 @@ void SegmentEraser::handleMouseButtonPress(QMouseEvent *e)
 void SegmentEraser::handleMouseButtonRelease(QMouseEvent*)
 {
     if (m_currentItem) emit deleteSegment(m_currentItem->getSegment());
-    delete m_currentItem;
     m_canvas->canvas()->update();
     
     m_currentItem = 0;

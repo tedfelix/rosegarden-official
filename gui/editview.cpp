@@ -42,11 +42,12 @@
 const unsigned int EditView::ID_STATUS_MSG = 1;
 
 EditView::EditView(RosegardenGUIDoc *doc,
-                   std::vector<Rosegarden::Segment *>,
+                   std::vector<Rosegarden::Segment *> segments,
                    QWidget *parent)
     : KMainWindow(parent),
       m_config(kapp->config()),
       m_document(doc),
+      m_segments(segments),
       m_tool(0),
       m_toolBox(0),
       m_activeItem(0),
@@ -215,6 +216,8 @@ void EditView::slotCommandExecuted(KCommand *command)
 
         BasicCommand *basicCommand = 0;
 
+	//!!! check that the affected segment is one of ours
+
         if ((basicCommand = dynamic_cast<BasicCommand *>(command)) != 0) {
             refreshSegment(&basicCommand->getSegment(),
                            basicCommand->getBeginTime(),
@@ -236,15 +239,26 @@ void EditView::slotCommandExecuted(KCommand *command)
         SegmentCommand::SegmentSet segments;
         segmentCommand->getSegments(segments);
 
-        for (SegmentCommand::SegmentSet::iterator i = segments.begin();
-             i != segments.end(); ++i) {
+	// For the moment we'll have to close the view if any of the
+	// segments we handle has been deleted.  Any other changes,
+	// and we should probably redraw everything.  How tedious.
 
-            //!!!
-            // segment-commands -> redraw ruler if only segment, redraw all
-            // otherwise I fear -- but what if the segment's been deleted?
+	bool foundOne = false;
 
-        }
+	for (int i = 0; i < m_segments.size(); ++i) {
 
+	    if (!m_segments[i]->getComposition()) {
+		// oops, I think we've been deleted
+		close();
+		return;
+	    } else if (segments.find(m_segments[i]) != segments.end()) {
+		foundOne = true;
+		break;
+	    }
+	}
+
+	if (foundOne) refreshSegment
+			  (0, 0, m_document->getComposition().getDuration());
         return;
     }
 
@@ -254,6 +268,8 @@ void EditView::slotCommandExecuted(KCommand *command)
 
         //!!!
         // time-and-tempo-commands -> redraw all? hmm
+
+	refreshSegment(0, 0, m_document->getComposition().getDuration());
 
         return;
     }

@@ -103,7 +103,7 @@ AnalysisHelper::labelChords(CompositionTimeSliceAdapter &c, Segment &s) {
 
         if (ch.isValid()) {
 
-            std::cerr << ch.getName(key) << " at time " << time << std::endl;
+//            std::cerr << ch.getName(key) << " at time " << time << std::endl;
 
 	    Text text(ch.getName(key), Text::ChordName);
 	    s.insert(text.getAsEvent(time));

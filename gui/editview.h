@@ -66,6 +66,8 @@ public:
      * modification to any Segment; no attempt has been made to check
      * that the given Segment is actually shown in this view, so take
      * care.
+     *
+     * If segment is null, refresh all segments.
      */
     virtual void refreshSegment(Rosegarden::Segment *segment,
 				Rosegarden::timeT startTime,
@@ -238,6 +240,7 @@ protected:
     KConfig* m_config;
 
     RosegardenGUIDoc* m_document;
+    std::vector<Rosegarden::Segment *> m_segments;
 
     EditTool*    m_tool;
     EditToolBox* m_toolBox;

@@ -142,14 +142,17 @@ void LoopRuler::drawBarSections(QPainter* paint)
 void
 LoopRuler::drawLoopMarker(QPainter* paint)
 {
-    int x1 = (int)m_rulerScale->getXForTime(m_startLoop);
-    int x2 = (int)m_rulerScale->getXForTime(m_endLoop);
+    double x1 = (int)m_rulerScale->getXForTime(m_startLoop);
+    double x2 = (int)m_rulerScale->getXForTime(m_endLoop);
 
     if (x1 > x2) 
     {
         x2 = x1;
         x1 = (int)m_rulerScale->getXForTime(m_endLoop);
     }
+
+    x1 += m_currentXOffset;
+    x2 += m_currentXOffset;
 
     paint->save();
     paint->setBrush(RosegardenGUIColours::LoopHighlight);
@@ -164,19 +167,18 @@ LoopRuler::mousePressEvent(QMouseEvent *mE)
 {
     if (mE->button() == LeftButton)
     {
+	double x = mE->pos().x() - m_currentXOffset;
+
         if (m_loop)
-            m_endLoop = m_startLoop = m_grid.snapX(mE->pos().x());
+            m_endLoop = m_startLoop = m_grid.snapX(x);
         else
-	    emit setPointerPosition(m_rulerScale->getTimeForX(mE->pos().x()));
+	    emit setPointerPosition(m_rulerScale->getTimeForX(x));
     }
 }
 
 void
 LoopRuler::mouseReleaseEvent(QMouseEvent *mE)
 {
-    int position = mE->pos().x();
-    if (position < 0) position = 0;
-    
     if (mE->button() == LeftButton)
     {
         if (m_loop)
@@ -202,27 +204,27 @@ LoopRuler::mouseReleaseEvent(QMouseEvent *mE)
 void
 LoopRuler::mouseDoubleClickEvent(QMouseEvent *mE)
 {
-    int position = mE->pos().x();
-    if (position < 0) position = 0;
+    double x = mE->pos().x() - m_currentXOffset;
+    if (x < 0) x = 0;
     
     if (mE->button() == LeftButton && !m_loop)
-        emit setPlayPosition(m_rulerScale->getTimeForX(position));
+        emit setPlayPosition(m_rulerScale->getTimeForX(x));
 }
 
 void
 LoopRuler::mouseMoveEvent(QMouseEvent *mE)
 {
-    int position = mE->pos().x();
-    if (position < 0) position = 0;
+    double x = mE->pos().x() - m_currentXOffset;
+    if (x < 0) x = 0;
     
     if (m_loop)
     {
-        m_endLoop = m_grid.snapX(mE->pos().x());
+        m_endLoop = m_grid.snapX(x);
         update();
 
     }
     else
-        emit setPointerPosition(m_rulerScale->getTimeForX(position));
+        emit setPointerPosition(m_rulerScale->getTimeForX(x));
 }
 
 void LoopRuler::slotSetLoopingMode(bool value)
@@ -231,7 +233,7 @@ void LoopRuler::slotSetLoopingMode(bool value)
 }
 
 void LoopRuler::slotSetLoopMarker(Rosegarden::timeT startLoop,
-                              Rosegarden::timeT endLoop)
+				  Rosegarden::timeT endLoop)
 {
     if (startLoop == endLoop) 
         return;

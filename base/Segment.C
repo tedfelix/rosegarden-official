@@ -305,7 +305,7 @@ timeT
 Segment::getBarEndForTime(timeT t) const
 {
     if (t > getEndTime()) t = getEndTime();
-    return getComposition()->getBarEndForTime(t - 1);
+    return getComposition()->getBarEndForTime(t);
 }
 
 
