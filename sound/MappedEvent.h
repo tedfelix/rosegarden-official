@@ -19,9 +19,6 @@
   COPYING included with this distribution for more information.
 */
 
-#include <set>
-#include <string>
-
 #include <qdatastream.h>
 
 #include "Composition.h" // for Rosegarden::RealTime
@@ -57,6 +54,42 @@
 
 namespace Rosegarden
 {
+class MappedEvent;
+
+class DataBlockRepository
+{
+public:
+    friend class MappedEvent;
+    typedef unsigned long blockid;
+
+    static DataBlockRepository* getInstance();
+    static std::string getDataBlockForEvent(MappedEvent*);
+    static void setDataBlockForEvent(MappedEvent*, const std::string&);
+    bool hasDataBlock(blockid);
+
+protected:
+    DataBlockRepository();
+
+    std::string getDataBlock(blockid);
+
+    void addDataByteForEvent(MidiByte byte, MappedEvent*);
+    void addDataStringForEvent(const std::string&, MappedEvent*);
+
+
+    blockid registerDataBlock(const std::string&);
+    void unregisterDataBlock(blockid);
+
+    void registerDataBlockForEvent(const std::string&, MappedEvent*);
+    void unregisterDataBlockForEvent(MappedEvent*);
+
+
+    //--------------- Data members ---------------------------------
+
+    static DataBlockRepository* m_instance;
+
+    blockid m_lastId;
+};
+
 
 class MappedEvent
 {
@@ -114,7 +147,7 @@ public:
                    m_eventTime(0, 0),
                    m_duration(0, 0),
                    m_audioStartMarker(0, 0),
-//                    m_dataBlock(""),
+                   m_dataBlockId(0),
                    m_isPersistent(false) {}
 
     // Construct from Events to Internal (MIDI) type MappedEvent
@@ -143,7 +176,7 @@ public:
         m_eventTime(absTime),
         m_duration(duration),
         m_audioStartMarker(RealTime(0,0)),
-//         m_dataBlock(""),
+        m_dataBlockId(0),
         m_isPersistent(false) {}
 
     // A general MappedEvent constructor for any MappedEvent type
@@ -163,7 +196,7 @@ public:
         m_eventTime(absTime),
         m_duration(duration),
         m_audioStartMarker(audioStartMarker),
-//         m_dataBlock(""),
+        m_dataBlockId(0),
         m_isPersistent(false) {}
 
     // Audio MappedEvent shortcut constructor
@@ -181,7 +214,7 @@ public:
          m_eventTime(eventTime),
          m_duration(duration),
          m_audioStartMarker(audioStartMarker),
-//          m_dataBlock(""),
+         m_dataBlockId(0),
          m_isPersistent(false) {}
 
     // More generalised MIDI event containers for
@@ -199,7 +232,7 @@ public:
          m_eventTime(RealTime(0, 0)),
          m_duration(RealTime(0, 0)),
          m_audioStartMarker(RealTime(0, 0)),
-//          m_dataBlock(""),
+         m_dataBlockId(0),
          m_isPersistent(false) {}
 
     MappedEvent(InstrumentId id,
@@ -213,7 +246,7 @@ public:
         m_eventTime(RealTime(0, 0)),
         m_duration(RealTime(0, 0)),
         m_audioStartMarker(RealTime(0, 0)),
-//         m_dataBlock(""),
+        m_dataBlockId(0),
         m_isPersistent(false) {}
 
 
@@ -229,7 +262,7 @@ public:
         m_eventTime(RealTime(0, 0)),
         m_duration(RealTime(0, 0)),
         m_audioStartMarker(RealTime(0, 0)),
-//         m_dataBlock(""),
+        m_dataBlockId(0),
         m_isPersistent(false) {}
 
     // Copy constructor
@@ -244,7 +277,7 @@ public:
         m_eventTime(mE.getEventTime()),
         m_duration(mE.getDuration()),
         m_audioStartMarker(mE.getAudioStartMarker()),
-//         m_dataBlock(mE.getDataBlock()),
+        m_dataBlockId(mE.getDataBlockId()),
         m_isPersistent(false){}
 
     // Copy from pointer
@@ -258,7 +291,7 @@ public:
         m_eventTime(mE->getEventTime()),
         m_duration(mE->getDuration()),
         m_audioStartMarker(mE->getAudioStartMarker()),
-//         m_dataBlock(mE->getDataBlock()),
+        m_dataBlockId(mE->getDataBlockId()),
         m_isPersistent(false) {}
 
     ~MappedEvent() {;}
@@ -320,10 +353,10 @@ public:
     MappedEventType getType() const { return m_type; }
     void setType(const MappedEventType &value) { m_type = value; }
 
-    // Data block
+    // Data block id
     //
-//     std::string getDataBlock() const { return m_dataBlock; }
-//     void setDataBlock(const std::string &dataBlock) { m_dataBlock = dataBlock; }
+    DataBlockRepository::blockid getDataBlockId() const { return m_dataBlockId; }
+    void setDataBlockId(DataBlockRepository::blockid dataBlockId) { m_dataBlockId = dataBlockId; }
     
     // How MappedEvents are ordered in the MappedComposition
     //
@@ -344,10 +377,10 @@ public:
     friend QDataStream& operator>>(QDataStream &dS, MappedEvent &mE);
     friend QDataStream& operator<<(QDataStream &dS, const MappedEvent &mE);
 
-    // Add a single byte to the datablock (for SysExs)
-    //
+    /// Add a single byte to the event's datablock (for SysExs)
     void addDataByte(MidiByte byte);
-    void addDataString(const std::string &data);
+    /// Add several bytes to the event's datablock
+    void addDataString(const std::string& data);
 
     void setPersistent(bool value) { m_isPersistent = value; }
     bool isPersistent() const { return m_isPersistent; }
@@ -368,7 +401,7 @@ private:
     // Use this when we want to store something in addition to the
     // other bytes in this type, e.g. System Exclusive.
     //
-//     std::string      m_dataBlock;
+    DataBlockRepository::blockid m_dataBlockId;
 
     // Should a MappedComposition try and delete this MappedEvent or
     // if it persistent?
@@ -376,6 +409,7 @@ private:
     bool             m_isPersistent;
 
 };
+
 
 }
 

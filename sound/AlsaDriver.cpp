@@ -2097,7 +2097,7 @@ AlsaDriver::getMappedComposition(const RealTime &playLatency)
                    mE->setType(MappedEvent::MidiSystemExclusive);
                    // chop off SYX and EOX bytes from data block
                    // Fix for 674731 by Pedro Lopez-Cabanillas (20030601)
-//                    mE->setDataBlock(data.substr(1, data.length() - 2));
+                   DataBlockRepository::setDataBlockForEvent(mE, data.substr(1, data.length() - 2));
                    mE->setEventTime(eventTime);
                    m_recordComposition.insert(mE);
                }
@@ -2334,7 +2334,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
                     sprintf(out, "%c", MIDI_SYSTEM_EXCLUSIVE);
                     std::string data = out;
 
-//                     data += (*i)->getDataBlock();
+                    data += DataBlockRepository::getDataBlockForEvent((*i));
 
                     sprintf(out, "%c", MIDI_END_OF_EXCLUSIVE);
                     data += out;

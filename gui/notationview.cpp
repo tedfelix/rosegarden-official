@@ -67,7 +67,6 @@
 #include "studiocontrol.h"
 #include "notationhlayout.h"
 #include "notationvlayout.h"
-#include "sequencemanager.h"
 #include "ktmpstatusmsg.h"
 
 
@@ -739,13 +738,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 NotationView::~NotationView()
 {
     NOTATION_DEBUG << "-> ~NotationView()\n";
-
-    // Give the sequencer something to suck on while we close
-    //
-    if (!getDocument()->isBeingDestroyed()) {
-	getDocument()->getSequenceManager()->
-	    setTemporarySequencerSliceSize(Rosegarden::RealTime(2, 0));
-    }
 
     if (!m_printMode) slotSaveOptions();
 
@@ -2500,9 +2492,6 @@ void NotationView::refreshSegment(Segment *segment,
     Rosegarden::Profiler foo("NotationView::refreshSegment()");
 
     if (m_inhibitRefresh) return;
-
-    getDocument()->getSequenceManager()->
-	setTemporarySequencerSliceSize(Rosegarden::RealTime(3, 0));
 
     installProgressEventFilter();
 

@@ -51,7 +51,6 @@
 #include "dialogs.h"
 #include "editcommands.h"
 #include "matrixtool.h"
-#include "sequencemanager.h"
 #include "rosedebug.h"
 #include "eventcommands.h"
 
@@ -239,11 +238,7 @@ EventView::EventView(RosegardenGUIDoc *doc,
 
 EventView::~EventView()
 {
-    // Give the sequencer something to suck on while we close
-    //
     if (!getDocument()->isBeingDestroyed()) {
-        getDocument()->getSequenceManager()->
-            setTemporarySequencerSliceSize(Rosegarden::RealTime(2, 0));
 	for (unsigned int i = 0; i < m_segments.size(); ++i)
 	    m_segments[i]->removeObserver(this);
     }

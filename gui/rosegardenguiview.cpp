@@ -362,20 +362,15 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
 	return;
     }
 
-    // Tell the sequencer to take a big suck of events
-    //
-    Rosegarden::SequenceManager *sM = getDocument()->getSequenceManager();
-    sM->setSequencerSliceSize(Rosegarden::RealTime(5, 0));
-
     NotationView *notationView =
 	new NotationView(getDocument(), segmentsToEdit, this);
 
     if (!notationView->isOK()) {
 	RG_DEBUG << "slotEditSegmentNotation : operation cancelled\n";
-        sM->setSequencerSliceSize(Rosegarden::RealTime(0, 0));
 	delete notationView;
 	return;
     }
+
 
     // For tempo changes (ugh -- it'd be nicer to make a tempo change
     // command that could interpret all this stuff from the dialog)
@@ -403,6 +398,8 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
     connect(notationView, SIGNAL(jumpPlaybackTo(Rosegarden::timeT)),
 	    getDocument(), SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
+    Rosegarden::SequenceManager *sM = getDocument()->getSequenceManager();
+
     connect(sM, SIGNAL(insertableNoteOnReceived(int)),
 	    notationView, SLOT(slotInsertableNoteOnReceived(int)));
     connect(sM, SIGNAL(insertableNoteOffReceived(int)),
@@ -425,10 +422,6 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
         notationView->updateView();
     }
     notationView->show();
-
-    // reset the slice size
-    //
-    sM->setSequencerSliceSize(Rosegarden::RealTime(0, 0));
 }
 
 void RosegardenGUIView::slotEditSegmentMatrix(Rosegarden::Segment* p)
@@ -453,11 +446,6 @@ void RosegardenGUIView::slotEditSegmentMatrix(Rosegarden::Segment* p)
 	}
 	return;
     }
-
-    // Tell the sequencer to take a big suck of events
-    //
-    Rosegarden::SequenceManager *sM = getDocument()->getSequenceManager();
-    sM->setSequencerSliceSize(Rosegarden::RealTime(4, 0));
 
     MatrixView *matrixView = new MatrixView(getDocument(),
                                             segmentsToEdit,
@@ -489,6 +477,8 @@ void RosegardenGUIView::slotEditSegmentMatrix(Rosegarden::Segment* p)
     connect(matrixView, SIGNAL(jumpPlaybackTo(Rosegarden::timeT)),
 	    getDocument(), SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
+    Rosegarden::SequenceManager *sM = getDocument()->getSequenceManager();
+
     connect(sM, SIGNAL(insertableNoteOnReceived(int)),
 	    matrixView, SLOT(slotInsertableNoteOnReceived(int)));
     connect(sM, SIGNAL(insertableNoteOffReceived(int)),
@@ -512,10 +502,6 @@ void RosegardenGUIView::slotEditSegmentMatrix(Rosegarden::Segment* p)
         matrixView->updateView();
     }
     matrixView->show();
-
-    // Revert slice size
-    //
-    sM->setSequencerSliceSize(Rosegarden::RealTime(0, 0));
 }
 
 void RosegardenGUIView::slotEditSegmentEventList(Rosegarden::Segment *p)
@@ -541,11 +527,6 @@ void RosegardenGUIView::slotEditSegmentEventList(Rosegarden::Segment *p)
 	return;
     }
 
-    // Tell the sequencer to take a big suck of events
-    //
-    Rosegarden::SequenceManager *sM = getDocument()->getSequenceManager();
-    sM->setSequencerSliceSize(Rosegarden::RealTime(1, 0));
-
     EventView *eventView = new EventView(getDocument(),
                                          segmentsToEdit,
                                          this);
@@ -561,10 +542,6 @@ void RosegardenGUIView::slotEditSegmentEventList(Rosegarden::Segment *p)
         par->plugAccelerators(eventView, eventView->getAccelerators());
 
     eventView->show();
-
-    // Revert slice size
-    //
-    sM->setSequencerSliceSize(Rosegarden::RealTime(0, 0));
 }
 
 void RosegardenGUIView::slotSegmentAutoSplit(Rosegarden::Segment *segment)

@@ -132,19 +132,6 @@ public:
     //
     void suspendSequencer(bool value);
 
-    // Modify the sequencer slice size.  Useful when the GUI has to do
-    // something that will take a long time.
-    //
-    // The sequencer can take in a big draught of events to keep itself
-    // busy while the GUI is away and hence unable to service the
-    // getSequencerSlice requests.
-    //
-    // Don't forget to reset the slice size after the long operation has
-    // completed.
-    //
-    void setSequencerSliceSize(const RealTime &time);
-    void setTemporarySequencerSliceSize(const RealTime &time);
-
     // Slice fetched
     //
     bool getSliceFetched() const { return m_sliceFetched; }

@@ -19,6 +19,11 @@
   COPYING included with this distribution for more information.
 */
 
+#include <qfile.h>
+#include <qfileinfo.h>
+
+#include <kstddirs.h>
+
 #include "MappedEvent.h"
 #include "BaseProperties.h"
 #include "MidiTypes.h"
@@ -30,16 +35,16 @@ MappedEvent::MappedEvent(InstrumentId id,
                          const Event &e,
                          const RealTime &eventTime,
                          const RealTime &duration):
-       m_trackId(0),
-       m_instrument(id),
-       m_type(MidiNote),
-       m_data1(0),
-       m_data2(0),
-       m_eventTime(eventTime),
-       m_duration(duration),
-       m_audioStartMarker(0, 0),
-//        m_dataBlock(""),
-       m_isPersistent(false)
+    m_trackId(0),
+    m_instrument(id),
+    m_type(MidiNote),
+    m_data1(0),
+    m_data2(0),
+    m_eventTime(eventTime),
+    m_duration(duration),
+    m_audioStartMarker(0, 0),
+    m_dataBlockId(0),
+    m_isPersistent(false)
 {
     try {
 
@@ -50,56 +55,57 @@ MappedEvent::MappedEvent(InstrumentId id,
 	// defaults set.
 
 	if (e.isa(Note::EventType))
-	{
-	    m_type = MidiNote;
-	    long v = MidiMaxValue;
-	    e.get<Int>(BaseProperties::VELOCITY, v);
-	    m_data2 = v;
-            m_data1 = e.get<Int>(BaseProperties::PITCH);
-	}
+            {
+                m_type = MidiNote;
+                long v = MidiMaxValue;
+                e.get<Int>(BaseProperties::VELOCITY, v);
+                m_data2 = v;
+                m_data1 = e.get<Int>(BaseProperties::PITCH);
+            }
 	else if (e.isa(PitchBend::EventType))
-	{
-	    m_type = MidiPitchBend;
-	    PitchBend pb(e);
-	    m_data1 = pb.getMSB();
-	    m_data2 = pb.getLSB();
-	}
+            {
+                m_type = MidiPitchBend;
+                PitchBend pb(e);
+                m_data1 = pb.getMSB();
+                m_data2 = pb.getLSB();
+            }
 	else if (e.isa(Controller::EventType))
-	{
-	    m_type = MidiController;
-	    Controller c(e);
-	    m_data1 = c.getNumber();
-	    m_data2 = c.getValue();
-	}
+            {
+                m_type = MidiController;
+                Controller c(e);
+                m_data1 = c.getNumber();
+                m_data2 = c.getValue();
+            }
 	else if (e.isa(ProgramChange::EventType))
-	{
-	    m_type = MidiProgramChange;
-	    ProgramChange pc(e);
-	    m_data1 = pc.getProgram();
-	}
+            {
+                m_type = MidiProgramChange;
+                ProgramChange pc(e);
+                m_data1 = pc.getProgram();
+            }
 	else if (e.isa(KeyPressure::EventType))
-	{
-	    m_type = MidiKeyPressure;
-	    KeyPressure kp(e);
-	    m_data1 = kp.getPitch();
-	    m_data2 = kp.getPressure();
-	}
+            {
+                m_type = MidiKeyPressure;
+                KeyPressure kp(e);
+                m_data1 = kp.getPitch();
+                m_data2 = kp.getPressure();
+            }
 	else if (e.isa(ChannelPressure::EventType))
-	{
-	    m_type = MidiChannelPressure;
-	    ChannelPressure cp(e);
-	    m_data1 = cp.getPressure();
-	}
+            {
+                m_type = MidiChannelPressure;
+                ChannelPressure cp(e);
+                m_data1 = cp.getPressure();
+            }
 	else if (e.isa(SystemExclusive::EventType))
-	{
-	    m_type = MidiSystemExclusive;
-	    SystemExclusive s(e);
-// 	    m_dataBlock = s.getRawData();
-	}
+            {
+                m_type = MidiSystemExclusive;
+                SystemExclusive s(e);
+                std::string dataBlock = s.getRawData();
+                DataBlockRepository::getInstance()->registerDataBlockForEvent(dataBlock, this);
+            }
 	else 
-	{
-	    m_type = InvalidMappedEvent;
-	}
+            {
+                m_type = InvalidMappedEvent;
+            }
     } catch (MIDIValueOutOfRange r) {
 	std::cerr << "MIDI value out of range in MappedEvent ctor"
 		  << std::endl;
@@ -134,7 +140,7 @@ MappedEvent::operator=(const MappedEvent &mE)
     m_eventTime = mE.getEventTime();
     m_duration = mE.getDuration();
     m_audioStartMarker = mE.getAudioStartMarker();
-//     m_dataBlock = mE.getDataBlock();
+    m_dataBlockId = mE.getDataBlockId();
 
     return *this;
 }
@@ -155,10 +161,7 @@ operator<<(QDataStream &dS, MappedEvent *mE)
     dS << (unsigned int)mE->getDuration().usec;
     dS << (unsigned int)mE->getAudioStartMarker().sec;
     dS << (unsigned int)mE->getAudioStartMarker().usec;
-//     dS << (unsigned int)mE->getDataBlock().length();
-
-//     for (unsigned int i = 0; i < mE->getDataBlock().length(); i++)
-//         dS << (unsigned int)(mE->getDataBlock()[i]);
+    dS << (unsigned long)mE->getDataBlockId();
 
     return dS;
 }
@@ -177,10 +180,7 @@ operator<<(QDataStream &dS, const MappedEvent &mE)
     dS << (unsigned int)mE.getDuration().usec;
     dS << (unsigned int)mE.getAudioStartMarker().sec;
     dS << (unsigned int)mE.getAudioStartMarker().usec;
-//     dS << (unsigned int)mE.getDataBlock().length();
-
-//     for (unsigned int i = 0; i < mE.getDataBlock().length(); i++)
-//         dS << (unsigned int)(mE.getDataBlock()[i]);
+    dS << (unsigned long)mE.getDataBlockId();
 
     return dS;
 }
@@ -190,9 +190,9 @@ operator>>(QDataStream &dS, MappedEvent *mE)
 {
     unsigned int trackId = 0, instrument = 0, type = 0, data1 = 0, data2 = 0;
     long eventTimeSec = 0, eventTimeUsec = 0, durationSec = 0, durationUsec = 0,
-         audioSec = 0, audioUsec = 0;
+        audioSec = 0, audioUsec = 0;
     std::string dataBlock;
-    unsigned int dataLength = 0, dataElement = 0;
+    unsigned long dataBlockId = 0;
 
     dS >> trackId;
     dS >> instrument;
@@ -205,13 +205,7 @@ operator>>(QDataStream &dS, MappedEvent *mE)
     dS >> durationUsec;
     dS >> audioSec;
     dS >> audioUsec;
-//     dS >> dataLength;
-
-//     for (unsigned int i = 0; i < dataLength; i++)
-//     {
-//         dS >> dataElement;
-//         dataBlock += (char)dataElement;
-//     }
+    dS >> dataBlockId;
 
     mE->setTrackId((TrackId)trackId);
     mE->setInstrument((InstrumentId)instrument);
@@ -221,7 +215,7 @@ operator>>(QDataStream &dS, MappedEvent *mE)
     mE->setEventTime(RealTime(eventTimeSec, eventTimeUsec));
     mE->setDuration(RealTime(durationSec, durationUsec));
     mE->setAudioStartMarker(RealTime(audioSec, audioUsec));
-//     mE->setDataBlock(dataBlock);
+    mE->setDataBlockId(dataBlockId);
 
     return dS;
 }
@@ -231,9 +225,9 @@ operator>>(QDataStream &dS, MappedEvent &mE)
 {
     unsigned int trackId = 0, instrument = 0, type = 0, data1 = 0, data2 = 0;
     long eventTimeSec = 0, eventTimeUsec = 0, durationSec = 0, durationUsec = 0,
-         audioSec = 0, audioUsec = 0;
+        audioSec = 0, audioUsec = 0;
     std::string dataBlock;
-    unsigned int dataLength = 0, dataElement = 0;
+    unsigned long dataBlockId = 0;
          
     dS >> trackId;
     dS >> instrument;
@@ -246,13 +240,7 @@ operator>>(QDataStream &dS, MappedEvent &mE)
     dS >> durationUsec;
     dS >> audioSec;
     dS >> audioUsec;
-//     dS >> dataLength;
-
-//     for (unsigned int i = 0; i < dataLength; i++)
-//     {
-//         dS >> dataElement;
-//         dataBlock += dataElement;
-//     }
+    dS >> dataBlockId;
 
     mE.setTrackId((TrackId)trackId);
     mE.setInstrument((InstrumentId)instrument);
@@ -262,26 +250,205 @@ operator>>(QDataStream &dS, MappedEvent &mE)
     mE.setEventTime(RealTime(eventTimeSec, eventTimeUsec));
     mE.setDuration(RealTime(durationSec, durationUsec));
     mE.setAudioStartMarker(RealTime(audioSec, audioUsec));
-//     mE.setDataBlock(dataBlock);
+    mE.setDataBlockId(dataBlockId);
 
     return dS;
 }
 
-// Add a single byte to the DataBlock
-//
 void
 MappedEvent::addDataByte(MidiByte byte)
 {
-//     m_dataBlock += byte;
+    DataBlockRepository::getInstance()->addDataByteForEvent(byte, this);
 }
 
 void 
-MappedEvent::addDataString(const std::string &data)
+MappedEvent::addDataString(const std::string& data)
 {
-//     m_dataBlock += data;
+    DataBlockRepository::getInstance()->addDataStringForEvent(data, this);
 }
 
 
+
+//--------------------------------------------------
+
+class DataBlockFile
+{
+public:
+    DataBlockFile(DataBlockRepository::blockid id);
+    ~DataBlockFile();
+    
+    QString getFileName() { return m_fileName; }
+
+    void addDataByte(MidiByte);
+    void addDataString(const std::string&);
+    
+    void clear() { m_cleared = true; }
+    bool exists();
+    void setData(const std::string&);
+    std::string getData();
+    
+protected:
+    void prepareToWrite();
+    void prepareToRead();
+
+    //--------------- Data members ---------------------------------
+    QString m_fileName;
+    QFile m_file;
+    bool m_cleared;
+};
+
+DataBlockFile::DataBlockFile(DataBlockRepository::blockid id)
+    : m_fileName(KGlobal::dirs()->resourceDirs("tmp").first() + QString("/datablock_%1").arg(id)),
+      m_file(m_fileName),
+      m_cleared(false)
+{
+}
+
+DataBlockFile::~DataBlockFile()
+{
+    if (m_cleared) QFile::remove(m_fileName);
+}
+
+bool DataBlockFile::exists()
+{
+    return QFile::exists(m_fileName);
+}
+
+void DataBlockFile::setData(const std::string& s)
+{
+    prepareToWrite();
+
+    QDataStream stream(&m_file);
+    stream.writeRawBytes(s.data(), s.length());
+}
+
+std::string DataBlockFile::getData()
+{
+    if (!exists()) return std::string();
+
+    prepareToRead();
+
+    QDataStream stream(&m_file);
+    char* tmp = new char[m_file.size()];
+    stream.readRawBytes(tmp, m_file.size());
+    std::string res(tmp);
+
+    delete[] tmp;
+
+    return res;
+}
+
+void DataBlockFile::addDataByte(MidiByte byte)
+{
+    prepareToWrite();
+    m_file.putch(byte);
+}
+
+void DataBlockFile::addDataString(const std::string& s)
+{
+    prepareToWrite();
+    QDataStream stream(&m_file);
+    stream.writeRawBytes(s.data(), s.length());
+}
+
+void DataBlockFile::prepareToWrite()
+{    
+    if (!m_file.isWritable()) {
+        m_file.close();
+        m_file.open(IO_WriteOnly | IO_Append);
+    }
+}
+
+void DataBlockFile::prepareToRead()
+{
+    if (!m_file.isReadable()) {
+        m_file.close();
+        m_file.open(IO_ReadOnly);
+    }
 }
 
 
+
+//--------------------------------------------------
+
+DataBlockRepository* DataBlockRepository::getInstance()
+{
+    if (!m_instance) m_instance = new DataBlockRepository;
+    return m_instance;
+}
+
+std::string DataBlockRepository::getDataBlock(DataBlockRepository::blockid id)
+{
+    DataBlockFile dataBlockFile(id);
+    
+    if (dataBlockFile.exists()) return dataBlockFile.getData();
+
+    return std::string();
+}
+
+
+std::string DataBlockRepository::getDataBlockForEvent(MappedEvent* e)
+{
+    return getInstance()->getDataBlock(e->getDataBlockId());
+}
+
+void DataBlockRepository::setDataBlockForEvent(MappedEvent* e, const std::string& s)
+{
+    DataBlockFile dataBlockFile(e->getDataBlockId());
+    dataBlockFile.setData(s);
+}
+
+bool DataBlockRepository::hasDataBlock(DataBlockRepository::blockid id)
+{
+    return DataBlockFile(id).exists();
+}
+
+DataBlockRepository::blockid DataBlockRepository::registerDataBlock(const std::string& s)
+{
+    blockid id = m_lastId++;
+
+    DataBlockFile dataBlockFile(id);
+    dataBlockFile.setData(s);
+
+    return id;
+}
+
+void DataBlockRepository::unregisterDataBlock(DataBlockRepository::blockid id)
+{
+    DataBlockFile dataBlockFile(id);
+    
+    dataBlockFile.clear();
+}
+
+void DataBlockRepository::registerDataBlockForEvent(const std::string& s, MappedEvent* e)
+{
+    e->setDataBlockId(registerDataBlock(s));
+}
+
+void DataBlockRepository::unregisterDataBlockForEvent(MappedEvent* e)
+{
+    unregisterDataBlock(e->getDataBlockId());
+}
+
+    
+DataBlockRepository::DataBlockRepository()
+    : m_lastId(1)
+{
+}
+
+void DataBlockRepository::addDataByteForEvent(MidiByte byte, MappedEvent* e)
+{
+    DataBlockFile dataBlockFile(e->getDataBlockId());
+    dataBlockFile.addDataByte(byte);
+    
+}
+
+void DataBlockRepository::addDataStringForEvent(const std::string& s, MappedEvent* e)
+{
+    DataBlockFile dataBlockFile(e->getDataBlockId());
+    dataBlockFile.addDataString(s);
+}
+
+DataBlockRepository* DataBlockRepository::m_instance = 0;
+
+}

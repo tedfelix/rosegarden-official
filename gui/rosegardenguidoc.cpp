@@ -1140,10 +1140,10 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
                                 ((*i)->getData1()).getAsEvent(absTime);
                             break;
 
-//                         case Rosegarden::MappedEvent::MidiSystemExclusive:
-//                             rEvent = Rosegarden::SystemExclusive
-//                                 ((*i)->getDataBlock()).getAsEvent(absTime);
-//                             break;
+                        case Rosegarden::MappedEvent::MidiSystemExclusive:
+                            rEvent = Rosegarden::SystemExclusive
+                                (Rosegarden::DataBlockRepository::getDataBlockForEvent((*i))).getAsEvent(absTime);
+                            break;
 		    
                         case Rosegarden::MappedEvent::MidiNoteOneShot:
                             RG_DEBUG << "RosegardenGUIDoc::insertRecordedMidi() - "

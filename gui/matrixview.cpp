@@ -77,7 +77,6 @@
 #include "notepixmapfactory.h"
 #include "controlruler.h"
 #include "studiocontrol.h"
-#include "sequencemanager.h"
 #include "Clipboard.h"
 #include "eventfilter.h"
 #include "MidiTypes.h"
@@ -344,16 +343,6 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
 MatrixView::~MatrixView()
 {
-    // Give the sequencer something to suck on while we close
-    //
-    if (!getDocument()->isBeingDestroyed()) {
-	//!!! The intention here is to avoid sending the slice when the
-	// program is closed -- unfortunately we also need to do it when
-	// closing the window because we're loading a new file
-	getDocument()->getSequenceManager()->
-	    setTemporarySequencerSliceSize(Rosegarden::RealTime(2, 0));
-    }
-
     slotSaveOptions();
 
     delete m_chordNameRuler;
@@ -716,9 +705,6 @@ void MatrixView::refreshSegment(Segment *segment,
 
     MATRIX_DEBUG << "MatrixView::refreshSegment(" << startTime
                          << ", " << endTime << ")\n";
-
-    getDocument()->getSequenceManager()->
-	setTemporarySequencerSliceSize(Rosegarden::RealTime(3, 0));
 
     applyLayout(-1, startTime, endTime);
 
