@@ -75,7 +75,7 @@
   <Action name="playback_pointer_start"/>
   <Action name="playback_pointer_end"/>
 <Separator />
-  <Action name="solo"/>
+  <Action name="toggle_solo"/>
 </Menu>
 
 <Menu name="Tools">
