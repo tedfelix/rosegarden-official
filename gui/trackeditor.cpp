@@ -308,9 +308,22 @@ void TrackEditor::slotTrackButtonsWidthChanged()
 
 int TrackEditor::getTrackCellHeight() const
 {
+    int size;
     static QFont defaultFont;
-    
-    return defaultFont.pixelSize() + 12; // For the moment
+
+    // do some scrabbling around for a reasonable size
+    //
+    size = defaultFont.pixelSize();
+
+    if (size < 8)
+    {
+        if (QApplication::font(this).pixelSize() < 8)
+            size = 12;
+        else
+            size = QApplication::font(this).pixelSize();
+    }
+
+    return size + 12;
 }
 
 void
