@@ -11,31 +11,23 @@ normally (and will in the future) be found there instead.
 Compilation or installation problems
 ------------------------------------
 
-KDE2 or KDE3?
-~~~~~~~~~~~~~
+Can I build for KDE2 or KDE3?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We've managed to end up in a bit of a mess with our attempts to
-support both KDE2 and KDE3.  The code builds for both, but you have to
-ensure the correct "admin" directory is present in the top-level
-directory, and if you change the admin directory you then have to run
-"make -f Makefile.cvs" before starting to configure and build.
+The short answer is Yes but you have to ensure the correct "admin"
+directory is present in the top-level directory.   In CVS and in
+the more recent tar balls there are three admin directories:
 
-For the 0.1.6 release, the default admin directory is for KDE3, and
-there's an admin_kde2 for KDE2 builds.  For this release, just follow
-the instructions in the INSTALL about changing over the directories if
-you're using KDE2.
+  rosegarden/admin
+  rosegarden/admin_kde2
+  rosegarden/admin_kde3
 
-For earlier releases, the reverse was true -- the default admin
-directory was for KDE2 and there was an admin_kde3 for KDE3 builds.
-Again, this is as described in the INSTALL files for those releases.
-
-However, for current CVS builds, *the INSTALL file is wrong*.  The
-INSTALL contains the 0.1.6 instructions, but in fact the default admin
-directory is for KDE2 and there's an admin_kde3 for KDE3 builds.  To
-build these for KDE3, you'll need to move admin out of the way and
-rename admin_kde3 to admin before running "make -f Makefile.cvs" --
-just as in the KDE2 instructions in the INSTALL only in reverse.
-
+The admin and admin_kde3 directories should be identical and hence we
+build Rosegarden for KDE3 by default.  If you want to build for KDE2
+then follow the instructions in the INSTALL file - basically you've
+got to remove the existing admin/ directory, copy the admin_kde2/to
+admin/ and then run "make -f Makefile.cvs" in the top level before
+configuring and then building.
 
 macro `AM_PATH_ALSA' not found in library
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -95,6 +87,16 @@ And try again and send the output to the authors or the Rosegarden
 development mailing list.  Also check back to this FAQ regularly as
 we start to add more helpful hints and information.
 
+
+I'm having trouble building with Mandrake 8.2
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Aren't we all?  Mandrake 8.2 appears to have a badly broken default
+development environment.  The necessary tweaks to make your system
+build Rosegarden correctly are involved and lengthy and probably
+best left to Mandrake themselves to explain.  All in all if it doesn't
+work out of the box for you then it's probably best if you just forgot
+about Mandrake 8.2 altogether and tried either 8.1 or a later version.
 
 The Composition View
 --------------------
