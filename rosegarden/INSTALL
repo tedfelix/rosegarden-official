@@ -1,3 +1,25 @@
+This source tree builds for KDE2 as default.  To build for KDE3
+then move away then from the freshly unpacked tar file rename:
+
+  rosegarden/admin/acinclude.m4.in_kde3
+
+to
+
+  rosegarden/admin/acinclude.m4.in
+
+and rename:
+
+  rosegarden/admin/am_edit_kde3
+
+to
+
+  rosegarden/admin/am_edit
+
+Then configure and make as per usual.
+
+[rwb 01.05.2001]
+
+
 Basic Installation
 ==================
 

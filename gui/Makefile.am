@@ -1,4 +1,4 @@
-KDE_CXXFLAGS = $(USE_EXCEPTIONS)
+KDE_CXXFLAGS = $(USE_EXCEPTIONS) @KDE_CXXFLAGS@
 
 bin_PROGRAMS = rosegarden
 
@@ -155,7 +155,7 @@ uninstall-local:
 # kde_wallpaperdir  Where general wallpapers should go to.
 
 # set the include path for X, qt and KDE
-INCLUDES= $(all_includes) -I../base -I../sound
+INCLUDES= $(all_includes) -I../base -I../sound $(KDE_CXXFLAGS)
 # claim, which subdirectories you want to install
 # you can add here more. This one gets installed 
 
