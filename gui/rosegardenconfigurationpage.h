@@ -381,11 +381,10 @@ protected:
     QLineEdit *m_sequencerArguments;
     QCheckBox *m_sendControllersAtPlay;
 
-    QCheckBox *m_jackTransportEnabled;
-    QCheckBox *m_jackTransportMaster;
+    QCheckBox *m_midiClockEnabled;
 
-    QCheckBox *m_mmcTransportEnabled;
-    QCheckBox *m_mmcTransportMaster;
+    QComboBox *m_jackTransport;
+    QComboBox *m_mmcTransport;
 
 };
  

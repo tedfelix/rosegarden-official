@@ -488,6 +488,7 @@ protected:
 
     // MIDI clock interval - microseconds
     //
+    bool                         m_midiClockEnabled;
     long                         m_midiClockInterval;
     Rosegarden::RealTime         m_midiClockSendTime;
 

@@ -87,10 +87,12 @@ public:
         SystemJackTransport     = 0x004000,
         // Set RG as MMC master/slave
         SystemMMCTransport      = 0x008000,
+        // Set System Messages and MIDI Clock
+        SystemMIDIClock         = 0x010000,
         // Set Record device
-        SystemRecordDevice      = 0x010000,
+        SystemRecordDevice      = 0x020000,
         // Set Metronome device
-        SystemMetronomeDevice   = 0x020000
+        SystemMetronomeDevice   = 0x040000
 
     } MappedEventType;
 

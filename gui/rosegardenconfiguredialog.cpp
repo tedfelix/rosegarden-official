@@ -663,7 +663,7 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
             SIGNAL(valueChanged(int)),
             SLOT(slotPlaybackChanged(int)));
 
-    addTab(frame, i18n("Latency"));
+    addTab(frame, i18n("MIDI Latency"));
 
 #ifdef HAVE_LIBJACK
     frame = new QFrame(m_tabWidget, i18n("JACK latency"));
@@ -816,14 +816,13 @@ SequencerConfigurationPage::SequencerConfigurationPage(
 {
     m_cfg->setGroup("Sequencer Options");
     QFrame *frame = new QFrame(m_tabWidget);
-
     QGridLayout *layout = new QGridLayout(frame, 4, 2, 10, 5);
 
     // ---------------  Send Controllers ----------------
     //
-    QLabel *label = new QLabel("Send all MIDI Controllers at start of playback\n(will usually incur noticeable delay)", frame);
+    QLabel *label = new QLabel("Send MIDI Controllers at start of playback\n(will incur noticeable initial delay)", frame);
 
-    QString controllerTip = i18n("Rosegarden can send all MIDI Controllers (Pan, Reverb etc) to all\ndevices at the start of playback if you so wish.  This will usually\n take some time to perform however so be aware that this might make\nRosegarden appear less responsive when playback starts.");
+    QString controllerTip = i18n("Rosegarden can send all MIDI Controllers (Pan, Reverb etc) to all MIDI devices every\ntime you hit play if you so wish.  Please note that this option will usually incur a\ndelay at the start of playback due to the amount of data being transmitted.");
     QToolTip::add(label, controllerTip);
     layout->addWidget(label, 0, 0);
 
@@ -834,79 +833,90 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     bool sendControllers = m_cfg->readBoolEntry("alwayssendcontrollers", false);
     m_sendControllersAtPlay->setChecked(sendControllers);
 
-    // --------------- JACK Transport ---------------
-    //
-    label = new QLabel("Enable JACK transport", frame);
-    layout->addWidget(label, 2, 0);
-
-    m_jackTransportEnabled = new QCheckBox(frame);
-    layout->addWidget(m_jackTransportEnabled, 2, 1, Qt::AlignHCenter);
-
-    label = new QLabel("make Rosegarden master for JACK transport", frame);
-    layout->addWidget(label, 3, 0);
-    label->setIndent(10);
-
-    m_jackTransportMaster = new QCheckBox(frame);
-    layout->addWidget(m_jackTransportMaster, 3, 1, Qt::AlignHCenter);
-
-    bool jackMaster = m_cfg->readBoolEntry("jackmaster", false);
-    m_jackTransportMaster->setChecked(jackMaster);
-
-    // Connect the enabling signal
-    //
-    connect(m_jackTransportEnabled, SIGNAL(toggled(bool)),
-            m_jackTransportMaster, SLOT(setEnabled(bool)));
-
-    // Initial status
-    //
-    bool jackTransport = m_cfg->readBoolEntry("jacktransport", false);
-    m_jackTransportEnabled->setChecked(jackTransport);
-    m_jackTransportMaster->setEnabled(jackTransport);
-
-    // ---------------  MMC Transport -----------------
-    //
-    label = new QLabel("Enable MMC", frame);
-    layout->addWidget(label, 5, 0);
-    
-    m_mmcTransportEnabled = new QCheckBox(frame);
-    layout->addWidget(m_mmcTransportEnabled, 5, 1, Qt::AlignHCenter);
-
-    label = new QLabel("make Rosegarden master for MMC", frame);
-    layout->addWidget(label, 6, 0);
-    label->setIndent(10);
-
-    m_mmcTransportMaster = new QCheckBox(frame);
-    layout->addWidget(m_mmcTransportMaster, 6, 1, Qt::AlignHCenter);
-
-    bool mmcMaster = m_cfg->readBoolEntry("mmcmaster", false);
-    m_mmcTransportMaster->setChecked(mmcMaster);
-
-    bool mmcTransport = m_cfg->readBoolEntry("mmctransport", false);
-    m_mmcTransportEnabled->setChecked(mmcTransport);
-    m_mmcTransportMaster->setEnabled(mmcTransport);
-
-    // Connect the enabling signal
-    //
-    connect(m_mmcTransportEnabled, SIGNAL(toggled(bool)),
-            m_mmcTransportMaster, SLOT(setEnabled(bool)));
-
 
     // ---------------- Command-line --------------------
     //
     layout->addMultiCellWidget(new QLabel(i18n("Sequencer command line options\n(any change made here will come into effect the next time you start Rosegarden)"), frame),
-                               8, 8,
+                               1, 1,
                                0, 1);
 
-    layout->addWidget(new QLabel(i18n("Options:"), frame), 9, 0);
+    layout->addWidget(new QLabel(i18n("Options:"), frame), 2, 0, Qt::AlignHCenter);
     m_sequencerArguments = new QLineEdit("", frame);
-    layout->addWidget(m_sequencerArguments, 9, 1);
+    layout->addWidget(m_sequencerArguments, 2, 1);
 
     // Get the options
     //
     QString commandLine = m_cfg->readEntry("commandlineoptions", "");
     m_sequencerArguments->setText(commandLine);
 
-    addTab(frame, i18n("Sequencer Options"));
+    addTab(frame, i18n("General"));
+
+    //  -------------- Synchronisation tab -----------------
+    //
+    frame = new QFrame(m_tabWidget);
+    layout = new QGridLayout(frame, 4, 2, 10, 5);
+
+    // --------------- MIDI Clock --------------------
+    label = new QLabel("Send MIDI Clock and System messages", frame);
+    layout->addWidget(label, 0, 0);
+    m_midiClockEnabled = new QCheckBox(frame);
+    layout->addWidget(m_midiClockEnabled, 0, 1);
+
+    bool midiClock = m_cfg->readBoolEntry("midiclock", false);
+    m_midiClockEnabled->setChecked(midiClock);
+
+    // --------------- JACK Transport ---------------
+    //
+    label = new QLabel("JACK transport mode", frame);
+    layout->addWidget(label, 1, 0);
+
+    m_jackTransport = new QComboBox(frame);
+    layout->addWidget(m_jackTransport, 1, 1); //, Qt::AlignHCenter);
+
+    m_jackTransport->insertItem(i18n("off"));
+    m_jackTransport->insertItem(i18n("JACK Slave"));
+    m_jackTransport->insertItem(i18n("JACK Master"));
+
+    bool jackMaster = m_cfg->readBoolEntry("jackmaster", false);
+    bool jackTransport = m_cfg->readBoolEntry("jacktransport", false);
+
+    if (jackMaster && jackTransport)
+        m_jackTransport->setCurrentItem(2);
+    else 
+    {
+        if (jackTransport)
+            m_jackTransport->setCurrentItem(1);
+        else
+            m_jackTransport->setCurrentItem(0);
+    }
+
+    // ---------------  MMC Transport -----------------
+    //
+    label = new QLabel("MMC transport mode", frame);
+    layout->addWidget(label, 2, 0);
+    
+    m_mmcTransport = new QComboBox(frame);
+    layout->addWidget(m_mmcTransport, 2, 1); //, Qt::AlignHCenter);
+
+    m_mmcTransport->insertItem(i18n("off"));
+    m_mmcTransport->insertItem(i18n("MMC Slave"));
+    m_mmcTransport->insertItem(i18n("MMC Master"));
+
+    bool mmcMaster = m_cfg->readBoolEntry("mmcmaster", false);
+    bool mmcTransport = m_cfg->readBoolEntry("mmctransport", false);
+
+    if (mmcMaster && mmcTransport)
+        m_mmcTransport->setCurrentItem(2);
+    else
+    {
+        if (mmcTransport)
+            m_mmcTransport->setCurrentItem(1);
+        else
+            m_mmcTransport->setCurrentItem(0);
+    }
+
+
+    addTab(frame, i18n("Synchronisation"));
 }
 
 void
@@ -919,26 +929,34 @@ SequencerConfigurationPage::apply()
 
     // Write the JACK entry
     //
-    bool jackTransport =  m_jackTransportEnabled->isChecked();
-    bool jackMaster = m_jackTransportMaster->isChecked();
+    int jackValue = m_jackTransport->currentItem();
+    bool jackTransport, jackMaster;
 
+    switch (jackValue)
+    {
+        case 2:
+            jackTransport = true;
+            jackMaster = true;
+            break;
+
+        case 1:
+            jackTransport = true;
+            jackMaster = false;
+            break;
+
+        default:
+            jackValue = 0;
+
+        case 0:
+            jackTransport = false;
+            jackMaster = false;
+            break;
+    }
+
+    // Write the items
+    //
     m_cfg->writeEntry("jacktransport", jackTransport);
     m_cfg->writeEntry("jackmaster", jackMaster);
-
-
-    int jackValue = 0;
-
-    // Code the value as follows
-    //
-    if (jackTransport && jackMaster)
-        jackValue = 2;
-    else
-    {
-        if (jackTransport)
-            jackValue = 1;
-        else
-            jackValue = 0;
-    }
 
     // Now send it
     //
@@ -957,23 +975,35 @@ SequencerConfigurationPage::apply()
 
     // Now write the MMC entry
     //
-    bool mmcTransport = m_mmcTransportEnabled->isChecked();
-    bool mmcMaster = m_mmcTransportMaster->isChecked();
+    bool mmcTransport, mmcMaster;
+    int mmcValue = m_mmcTransport->currentItem();
 
+    switch(mmcValue)
+    {
+        case 2:
+            mmcTransport = true;
+            mmcMaster = true;
+            break;
+
+        case 1:
+            mmcTransport = true;
+            mmcMaster = false;
+            break;
+
+        default:
+            mmcValue = 0;
+
+        case 0:
+            mmcTransport = false;
+            mmcMaster = false;
+            break;
+
+    }
+
+    // Write the entries
+    //
     m_cfg->writeEntry("mmctransport", mmcTransport);
     m_cfg->writeEntry("mmcmaster", mmcMaster);
-
-    int mmcValue = 0;
-
-    if (mmcTransport && mmcMaster)
-        mmcValue = 2;
-    else
-    {
-        if (mmcTransport)
-            mmcValue = 1;
-        else
-            mmcValue = 0;
-    }
 
     // Now send it
     //
@@ -984,6 +1014,26 @@ SequencerConfigurationPage::apply()
                 Rosegarden::MidiInstrumentBase, // InstrumentId
                 Rosegarden::MappedEvent::SystemMMCTransport,
                 Rosegarden::MidiByte(mmcValue));
+
+        Rosegarden::StudioControl::sendMappedEvent(mE);
+    }
+    catch(...) {;}
+
+
+    // ------------- MIDI Clock and System messages ------------
+    //
+    bool midiClock = m_midiClockEnabled->isChecked();
+    m_cfg->writeEntry("midiclock", midiClock);
+
+    // Now send it
+    //
+    try
+    {
+        Rosegarden::MappedEvent *mE =
+            new Rosegarden::MappedEvent(
+                Rosegarden::MidiInstrumentBase, // InstrumentId
+                Rosegarden::MappedEvent::SystemMIDIClock,
+                Rosegarden::MidiByte(midiClock));
 
         Rosegarden::StudioControl::sendMappedEvent(mE);
     }
@@ -1196,17 +1246,6 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
     page->setPageIndex(pageIndex(pageWidget));
     m_configurationPages.push_back(page);
 
-    // Playback Page
-    //
-    pageWidget = addPage(LatencyConfigurationPage::iconLabel(),
-                         LatencyConfigurationPage::title(),
-                         loadIcon(LatencyConfigurationPage::iconName()));
-    vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
-    page = new LatencyConfigurationPage(doc, cfg, pageWidget);
-    vlay->addWidget(page);
-    page->setPageIndex(pageIndex(pageWidget));
-    m_configurationPages.push_back(page);
-
     // Sequencer Page
     //
     pageWidget = addPage(SequencerConfigurationPage::iconLabel(),
@@ -1214,6 +1253,17 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
                          loadIcon(SequencerConfigurationPage::iconName()));
     vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
     page = new SequencerConfigurationPage(doc, cfg, pageWidget);
+    vlay->addWidget(page);
+    page->setPageIndex(pageIndex(pageWidget));
+    m_configurationPages.push_back(page);
+
+    // Latency Page
+    //
+    pageWidget = addPage(LatencyConfigurationPage::iconLabel(),
+                         LatencyConfigurationPage::title(),
+                         loadIcon(LatencyConfigurationPage::iconName()));
+    vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
+    page = new LatencyConfigurationPage(doc, cfg, pageWidget);
     vlay->addWidget(page);
     page->setPageIndex(pageIndex(pageWidget));
     m_configurationPages.push_back(page);

@@ -916,7 +916,7 @@ AlsaDriver::initialisePlayback(const RealTime &position)
 
     // Send sequencer start on to duplex MIDI devices
     //
-    sendSystemDirect(SND_SEQ_EVENT_START);
+    if (m_midiClockEnabled) sendSystemDirect(SND_SEQ_EVENT_START);
 
     if (isMMCMaster())
     {
@@ -942,7 +942,7 @@ AlsaDriver::stopPlayback()
 
     // Send system stop to duplex MIDI devices
     //
-    sendSystemDirect(SND_SEQ_EVENT_STOP);
+    if (m_midiClockEnabled) sendSystemDirect(SND_SEQ_EVENT_STOP);
 
     // send sounds-off to all client port pairs
     //
@@ -1660,6 +1660,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
             case MappedEvent::AudioStopped:
             case MappedEvent::SystemJackTransport:
             case MappedEvent::SystemMMCTransport:
+            case MappedEvent::SystemMIDIClock:
                 break;
 
             default:
@@ -1825,6 +1826,24 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
                              Rosegarden::AudioFileId((*i)->getData1()));
         }
 
+        if ((*i)->getType() == MappedEvent::SystemMIDIClock)
+        {
+            if ((*i)->getData1())
+            {
+                m_midiClockEnabled = true;
+                std::cout << "AlsaDriver::processEventsOut - "
+                          << "Rosegarden MIDI CLOCK ENABLED"
+                          << std::endl;
+            }
+            else
+            {
+                m_midiClockEnabled = false;
+                std::cout << "AlsaDriver::processEventsOut - "
+                          << "Rosegarden MIDI CLOCK DISABLED"
+                          << std::endl;
+            }
+        }
+
 #ifdef HAVE_LIBJACK
 
         // Set the JACK transport 
@@ -1858,6 +1877,8 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
                     break;
             }
         }
+#endif // HAVE_LIBJACK
+
 
         if ((*i)->getType() == MappedEvent::SystemMMCTransport)
         {
@@ -1889,7 +1910,6 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
                     break;
             }
         }
-#endif // HAVE_LIBJACK
 
     }
 
@@ -3366,14 +3386,15 @@ AlsaDriver::sendSystemQueued(Rosegarden::MidiByte command,
     }
 }
 
-
-
-
-// Send the MIDI clock signal now
+// Send the MIDI clock signal
 //
 void
 AlsaDriver::sendMidiClock()
 {
+    // Don't send the clock if it's disabled
+    //
+    if (!m_midiClockEnabled) return;
+
     // Get the number of ticks in (say) two seconds
     //
     unsigned int numTicks =

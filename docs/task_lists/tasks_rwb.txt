@@ -1,15 +1,15 @@
 0.9(?) tasks
 ============
 
-o Make RG a jack mixer (transport, control client)
-
 o MTC/MMC - transport awareness
   - we're now sending Midi RealTime sequencer control messages
     and adding infrastructure for real time clock messages
   - MTC will be in addition to basic real-time clock
   - MMC control can't yet be tested at my end
 
-o JACK connection management - stereo, panning, bypass
+o Audio - multi-threaded
+
+o Audio - stereo, panning, bypass
 
 o Tidy up AudioFiles:
    - hardcoded format segment values
@@ -17,8 +17,6 @@ o Tidy up AudioFiles:
    - exceptions and return values
    - multithreading
    - autosplitting
-
-o multi-threaded base/
 
 o selection of ALSA recording device [HALF COMPLETE]
 
