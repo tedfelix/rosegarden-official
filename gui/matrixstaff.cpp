@@ -37,7 +37,9 @@ MatrixStaff::MatrixStaff(QCanvas *canvas, Segment *segment,
 			 int id, int vResolution) :
     LinedStaff<MatrixElement>(canvas, segment, id, vResolution, 1),
     m_scaleFactor
-        (1.5 / Rosegarden::Note(Rosegarden::Note::Shortest).getDuration())
+        (1.5 / Rosegarden::Note(Rosegarden::Note::Shortest).getDuration()),
+    m_wrapAddedEvents(true),
+    m_elementColour(0)
 {
 
     // Create a velocity colouring object
