@@ -1615,6 +1615,7 @@ NotationHLayout::positionChord(Staff &staff,
 	note->event()->get<Bool>(TIED_FORWARD,  tiedForwards);
 	note->event()->get<Bool>(TIED_BACKWARD, tiedBack);
 
+	if (!note->event()->has(PITCH)) continue;
 	int pitch = note->event()->get<Int>(PITCH);
 
 	if (tiedBack) {
@@ -1662,7 +1663,7 @@ NotationHLayout::getLayoutWidth(Rosegarden::ViewElement &ve,
 {
     NotationElement& e = static_cast<NotationElement&>(ve);
 
-    if (e.isNote() || e.isRest()) {
+    if ((e.isNote() || e.isRest()) && e.event()->has(NOTE_TYPE)) {
 
         long noteType = e.event()->get<Int>(NOTE_TYPE);
 	long dots = 0;
