@@ -912,6 +912,19 @@ void NotationView::noteClicked(int height, const QPoint &eventPos,
 {
     if (deleteMode() && el) {
 
+        Rosegarden::Key key;
+        Clef clef;
+
+        int clickPitch = Rosegarden::NotationDisplayPitch(height, NoAccidental).
+            getPerformancePitch(clef, key);
+
+        long eventPitch = 0;
+        el->event()->get<Int>("pitch", eventPitch);
+        
+        kdDebug(KDEBUG_AREA) << "NotationView::noteClicked() : clickPitch = "
+                             << clickPitch << ", eventPitch = "
+                             << eventPitch << endl;
+
         deleteNote(el);
 
     } else {
@@ -934,25 +947,44 @@ void NotationView::noteClicked(int height, const QPoint &eventPos,
     }
 }
 
-void NotationView::deleteNote(NotationElement* note)
+void NotationView::deleteNote(NotationElement* element)
 {
     bool needLayout = false;
+
+    if (element->isNote()) {
+        
+        // is note in a chord ?
+        Rosegarden::Track &track = getTrack();
+
+        if (track.noteIsInChord(element->event())) {
+
+            // Simply delete the event
+            m_viewElementsManager->eraseSingle(element);
+            needLayout = true;
+
+        } else {
+            // replace with a rest
+            Event *newRest = new Event;
+            newRest->setType("rest");
+            newRest->setDuration(element->getDuration());
+            newRest->setAbsoluteTime(element->getAbsoluteTime());
+
+            m_viewElementsManager->eraseSingle(element);
+            m_viewElementsManager->wrapAndInsert(newRest, true);
+        
+            needLayout = true;
+        }
     
-    // is note in a chord ?
-    Rosegarden::Track &track = getTrack();
+    } else if (element->isRest()) {
 
-    if (track.noteIsInChord(note->event())) {
-
-        // Simply delete the event
-        m_viewElementsManager->erase(note);
-        needLayout = true;
+        KMessageBox::sorry(0, "Rest deletion not Implemented Yet");
 
     } else {
-
+        // we don't know what it is
         KMessageBox::sorry(0, "Not Implemented Yet");
 
     }
-
+    
     if (needLayout)
         redoLayout(m_notationElements->begin());
 }
@@ -1020,7 +1052,7 @@ void NotationView::insertNote(NotationElementList::iterator closestNote, int pit
 
         kdDebug(KDEBUG_AREA) << "new event is: " << (*newNotationElement) << endl;
 
-        m_viewElementsManager->insert(newNotationElement);
+        m_viewElementsManager->insert(newNotationElement, true);
             
     }
 
@@ -1251,14 +1283,15 @@ bool NotationView::replaceRestWithNote(NotationElementList::iterator rest,
             newRest->setDuration(bit);
             newRest->setAbsoluteTime(restAbsoluteTime);
             newRest->setMaybe<String>("Name", "INSERTED_REST");
-            NotationElement *newNotationRest = new NotationElement(newRest);
+//             NotationElement *newNotationRest = new NotationElement(newRest);
             restAbsoluteTime += bit;
 
-            m_viewElementsManager->insert(newNotationRest);
+//             m_viewElementsManager->insert(newNotationRest, true);
+            m_viewElementsManager->wrapAndInsert(newRest, true);
         }
     }
     
-    m_viewElementsManager->insert(newNote);
+    m_viewElementsManager->insert(newNote, true);
     m_viewElementsManager->erase(rest);
 
     return true;
