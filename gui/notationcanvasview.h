@@ -74,7 +74,7 @@ signals:
     /**
      * Emitted when the user clicks on a QCanvasItem which is active
      *
-     * @see QCanvas#setActive
+     * @see QCanvasItem#setActive
      */
     void activeItemPressed(QMouseEvent*,
                            QCanvasItem* item);
