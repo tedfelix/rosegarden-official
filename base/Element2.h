@@ -118,7 +118,7 @@ class PropertyStore : public PropertyStoreBase
 {
 public:
     PropertyStore(PropertyDefn<P>::basic_type d) : m_data(d) { }
-    PropertyStore(const PropertyStore<P> &p) : m_data(p.m_data) { }
+    PropertyStore(const PropertyStore<P> &p) : PropertyStoreBase(p), m_data(p.m_data) { }
     PropertyStore &operator=(const PropertyStore<P> &p);
 
     virtual PropertyType getType();
