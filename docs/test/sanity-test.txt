@@ -249,9 +249,9 @@ Test:
 Start RG.  Load any .rg file from gui/testfiles/
 Choose File->Export->Export Lilypond...
 
-You may wish to use the ly2ps script from the rosegarden/admin directory to
-test these files.  Copy it onto your path, or else run it from the admin
-directory.  ly2ps filename.ly (or ./ly2ps or path/to/rosegarden/admin/ly2ps)
+You may wish to use the ly2ps script from the rosegarden/scripts directory to
+test these files.  Copy it onto your path, or else run it from the scripts
+directory.  ly2ps filename.ly (or ./ly2ps or path/to/rosegarden/scripts/ly2ps)
 
 It will clean up the mess that Lilypond leaves behind, and
 will report success in the case of non-fatal errors.  If there are fatal
