@@ -1,4 +1,4 @@
-Rosegarden 0.8.0 release notes
+Rosegarden 0.8 release notes
 ==============================
 The source tree builds for KDE 3.x. KDE 2.x support has been removed, as of
 Dec. 3rd 2002. To build it, you first need to regenerate the "configure"
