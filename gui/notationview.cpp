@@ -320,9 +320,10 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_hlayout->setPageMode(layoutMode == 1);
     m_hlayout->setPageWidth(getPageWidth());
 */
-    setPageMode(layoutMode == 1);
-
     try {
+
+        setPageMode(layoutMode == 1);
+
         bool layoutApplied = applyLayout();
         if (!layoutApplied) {
             KMessageBox::sorry(0, i18n("Couldn't apply score layout"));
@@ -539,9 +540,10 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_currentStaff = 0;
     m_staffs[0]->setCurrent(true);
 
-    setPageMode(true);
-
     try {
+
+        setPageMode(true);
+
 	bool layoutApplied = applyLayout();
 	if (!layoutApplied) {
 	    KMessageBox::sorry(0, i18n("Couldn't apply score layout"));
