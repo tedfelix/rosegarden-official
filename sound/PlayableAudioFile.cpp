@@ -479,16 +479,22 @@ PlayableAudioFile::updateBuffers()
     if (nextDuration > m_startIndex + m_duration)
     {
         RealTime diffTime = 
-            m_duration - Rosegarden::RealTime::frame2RealTime
+            (m_startIndex + m_duration) - Rosegarden::RealTime::frame2RealTime
                 (m_totalFrames, sourceSampleRate);
 
 #ifdef DEBUG_PLAYABLE
         std::cerr << "PlayableAudioFile::updateBuffers: got end file marker."
             << std::endl;
 #endif
+
         // Reset frames
         frames = Rosegarden::RealTime::realTime2Frame
-            (diffTime, sourceSampleRate);
+            (diffTime, m_targetSampleRate);
+
+#ifdef DEBUG_PLAYABLE
+        std::cerr << "PlayableAudioFile::updateBuffers: reset frames to " << frames
+		  << " (duration " << m_duration << " - total frames " << m_totalFrames << " = " << diffTime << "; nextDuration " << nextDuration << ", m_startIndex " << m_startIndex << ")" << std::endl;
+#endif
 
         // After this fetch we're at the end of the file
         //
@@ -569,6 +575,9 @@ PlayableAudioFile::updateBuffers()
     if (std::max(frames, fileFrames) > m_workBufferSize) {
 	delete[] m_workBuffer;
 	m_workBufferSize = std::max(frames, fileFrames);
+#ifdef DEBUG_PLAYABLE
+	std::cerr << "Expanding work buffer to " << m_workBufferSize << " frames " << " (max of " << frames << " and " << fileFrames << ")" << std::endl;
+#endif
 	m_workBuffer = new sample_t[m_workBufferSize];
     }
     sample_t *buffer = m_workBuffer;
