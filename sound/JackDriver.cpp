@@ -1764,6 +1764,13 @@ JackDriver::setPluginInstanceBypass(InstrumentId id, int position, bool value)
     if (m_instrumentMixer) m_instrumentMixer->setPluginBypass(id, position, value);
 }
 
+RunnablePluginInstance *
+JackDriver::getSynthPlugin(InstrumentId id)
+{
+    if (m_instrumentMixer) return m_instrumentMixer->getSynthPlugin(id);
+    else return 0;
+}
+
 //!!! and these
 bool
 JackDriver::createRecordFile(const std::string &filename)

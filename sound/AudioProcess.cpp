@@ -595,6 +595,8 @@ AudioInstrumentMixer::~AudioInstrumentMixer()
     std::cerr << "AudioInstrumentMixer::~AudioInstrumentMixer" << std::endl;
     // BufferRec dtor will handle the BufferMap
 
+    removeAllPlugins();
+    
     for (std::vector<sample_t *>::iterator i = m_processBuffers.begin();
 	 i != m_processBuffers.end(); ++i) {
 	delete *i;
@@ -614,33 +616,44 @@ AudioInstrumentMixer::setPlugin(InstrumentId id, int position, QString identifie
 {
     getLock();
 
+    std::cerr << "AudioInstrumentMixer::setPlugin(" << id << ", " << position << ", " << identifier << ")" << std::endl;
+
     int channels = 2;
     if (m_bufferMap.find(id) != m_bufferMap.end()) {
 	channels = m_bufferMap[id].channels;
     }
 
-    RunnablePluginInstance *oldInstance = 0;
-
-    PluginList::iterator i = m_plugins[id].find(position);
-    if (i != m_plugins[id].end()) {
-	oldInstance = i->second;
-    }
+    RunnablePluginInstance *instance = 0;
 
     PluginFactory *factory = PluginFactory::instanceFor(identifier);
     if (factory) {
+	instance = factory->instantiatePlugin(identifier,
+					      id,
+					      position,
+					      m_sampleRate,
+					      m_blockSize,
+					      channels);
+    }
 
-	RunnablePluginInstance *instance =
-	    factory->instantiatePlugin(identifier,
-				       id,
-				       position,
-				       m_sampleRate,
-				       m_blockSize,
-				       channels);
+    RunnablePluginInstance *oldInstance = 0;
 
-	if (instance && instance->isOK()) {
-	    m_plugins[id][position] = instance;
-	    instance->activate();
+    if (position == Instrument::SYNTH_PLUGIN_POSITION) {
+
+	oldInstance = m_synths[id];
+	m_synths[id] = instance;
+
+    } else {
+
+	PluginList::iterator i = m_plugins[id].find(position);
+	if (i != m_plugins[id].end()) {
+	    oldInstance = i->second;
 	}
+
+	m_plugins[id][position] = instance;
+    }
+
+    if (instance && instance->isOK()) {
+	instance->activate();
     }
 
     if (oldInstance) {
@@ -656,19 +669,30 @@ AudioInstrumentMixer::removePlugin(InstrumentId id, int position)
 {
     getLock();
 
-    PluginList::iterator i = m_plugins[id].find(position);
-    if (i != m_plugins[id].end()) {
+    if (position == Instrument::SYNTH_PLUGIN_POSITION) {
 
-	RunnablePluginInstance *instance = i->second;
-
-	if (instance) {
-	    instance->deactivate();
-	    delete instance;
+	if (m_synths[id]) {
+	    m_synths[id]->deactivate();
+	    delete m_synths[id];
+	    m_synths[id] = 0;
 	}
 
-	m_plugins[id].erase(i);
-	releaseLock();
-	return;
+    } else {
+
+	PluginList::iterator i = m_plugins[id].find(position);
+	if (i != m_plugins[id].end()) {
+
+	    RunnablePluginInstance *instance = i->second;
+
+	    if (instance) {
+		instance->deactivate();
+		delete instance;
+	    }
+
+	    m_plugins[id].erase(i);
+	    releaseLock();
+	    return;
+	}
     }
 
     releaseLock();
@@ -678,6 +702,15 @@ void
 AudioInstrumentMixer::removeAllPlugins()
 {
     getLock();
+
+    for (SynthPluginMap::iterator i = m_synths.begin();
+	 i != m_synths.end(); ++i) {
+	if (i->second) {
+	    i->second->deactivate();
+	    delete i->second;
+	}
+    }
+    m_synths.clear();
 
     for (PluginMap::iterator j = m_plugins.begin();
 	 j != m_plugins.end(); ++j) {
@@ -715,7 +748,8 @@ AudioInstrumentMixer::setPluginPortValue(InstrumentId id, int position,
     PluginList::iterator i = m_plugins[id].find(position);
     if (i != m_plugins[id].end()) {
 	std::cerr << "Setting plugin port " << port << " to value " << value << std::endl;
-	i->second->setPortValue(port, value);
+	RunnablePluginInstance *instance = i->second;
+	if (instance) instance->setPortValue(port, value);
     }
     
     releaseLock();
@@ -728,7 +762,8 @@ AudioInstrumentMixer::setPluginBypass(InstrumentId id, int position, bool bypass
     
     PluginList::iterator i = m_plugins[id].find(position);
     if (i != m_plugins[id].end()) {
-	i->second->setBypassed(bypass);
+	RunnablePluginInstance *instance = i->second;
+	if (instance) instance->setBypassed(bypass);
     }
     
     releaseLock();
@@ -740,6 +775,25 @@ AudioInstrumentMixer::resetAllPlugins()
     getLock();
 
     std::cerr << "AudioInstrumentMixer::resetAllPlugins!" << std::endl;
+
+    for (SynthPluginMap::iterator j = m_synths.begin();
+	 j != m_synths.end(); ++j) {
+	
+	InstrumentId id = j->first;
+
+	int channels = 2;
+	if (m_bufferMap.find(id) != m_bufferMap.end()) {
+	    channels = m_bufferMap[id].channels;
+	}
+
+	RunnablePluginInstance *instance = j->second;
+
+	if (instance) {
+	    instance->deactivate();
+	    instance->setIdealChannelCount(channels);
+	    instance->activate();
+	}
+    }	
 
     for (PluginMap::iterator j = m_plugins.begin();
 	 j != m_plugins.end(); ++j) {
@@ -1200,7 +1254,7 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
 	 pli != plugins.end(); ++pli) {
 
 	RunnablePluginInstance *plugin = pli->second;
-	if (plugin->isBypassed()) continue;
+	if (!plugin || plugin->isBypassed()) continue;
 
 	unsigned int ch = 0;
 

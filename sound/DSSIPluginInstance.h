@@ -51,7 +51,8 @@ public:
     virtual void run(const RealTime &);
 
     virtual void setPortValue(unsigned int portNumber, float value);
-    virtual void sendEvent(const RealTime &eventTime, snd_seq_event_t *event);
+    virtual void sendEvent(const RealTime &eventTime,
+			   const snd_seq_event_t *event);
 
     virtual size_t getBufferSize() { return m_blockSize; }
     virtual size_t getAudioInputCount() { return m_audioPortsIn.size(); }

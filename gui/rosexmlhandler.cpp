@@ -1537,7 +1537,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (m_instrument)
         {
-	    if (m_instrument->getType() == Rosegarden::Instrument::Audio) {
+	    if (m_instrument->getType() == Rosegarden::Instrument::Audio ||
+		m_instrument->getType() == Rosegarden::Instrument::SoftSynth) {
 		// Backward compatibility: "volume" was in a 0-127
 		// range and we now store "level" (float dB) instead.
 		// Note that we have no such compatibility for
@@ -1557,7 +1558,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         if (m_section != InBuss &&
 	    (m_section != InInstrument ||
 	     (m_instrument &&
-	      m_instrument->getType() != Rosegarden::Instrument::Audio))) {
+	      m_instrument->getType() != Rosegarden::Instrument::Audio &&
+	      m_instrument->getType() != Rosegarden::Instrument::SoftSynth))) {
             m_errorString = "Found Level outside (audio) Instrument or Buss";
             return false;
         }
@@ -1586,9 +1588,11 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             m_instrument->setControllerValue(type, value);
         }
 
+//!!! This shouldn't really depend on LADSPA, we could have other plugin
+// types as well.
 #ifdef HAVE_LADSPA
 
-    } else if (lcName == "plugin") {
+    } else if (lcName == "plugin" || lcName == "synth") {
 
         if (m_section != InInstrument)
         {
@@ -1602,12 +1606,16 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         if (m_instrument)
         {
             // Get the details
-            int position = atts.value("position").toInt();
-            QString bpStr = atts.value("bypassed");
-            bool bypassed = false;
-
-            if (bpStr.lower() == "true")
-                bypassed = true;
+	    int position;
+	    bool bypassed = false;
+	    if (lcName == "synth") {
+		position = Rosegarden::Instrument::SYNTH_PLUGIN_POSITION;
+	    } else {
+		position = atts.value("position").toInt();
+		QString bpStr = atts.value("bypassed");
+		if (bpStr.lower() == "true")
+		    bypassed = true;
+	    }
 
 	    // Plugins are identified by a structured identifier
 	    // string, but we will accept a LADSPA UniqueId if there's
@@ -1632,23 +1640,28 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             if (plugin)
             {
                 m_plugin = m_instrument->getPlugin(position);
-                m_plugin->setAssigned(true);
-                m_plugin->setBypass(bypassed);
-                //RG_DEBUG << "SETTING PLUGIN ASSIGNED AT " << position 
-                     //<< " ON INS " << m_instrument->getId() << endl;
-
-                m_plugin->setIdentifier(plugin->getIdentifier().data());
+		if (!m_plugin) {
+		    RG_DEBUG << "WARNING: RoseXmlHandler: instrument "
+			     << m_instrument->getId() << " has no plugin position "
+			     << position << endl;
+		} else {
+		    m_plugin->setAssigned(true);
+		    m_plugin->setBypass(bypassed);
+		    m_plugin->setIdentifier(plugin->getIdentifier().data());
+		}
+            } else {
+		// we shouldn't be halting import of the RG file just because
+		// we can't match a plugin
+		//
+		if (identifier) {
+		    RG_DEBUG << "WARNING: RoseXmlHandler: plugin " << identifier << " not found" << endl;
+		} else if (atts.value("id")) {
+		    RG_DEBUG << "WARNING: RoseXmlHandler: plugin uid " << atts.value("id") << " not found" << endl;
+		} else {
+		    m_errorString = "No plugin identifier or uid specified";
+		    return false;
+		}
             }
-            /*
-               // we shouldn't be halting import of the RG file just because
-               // we can't match a plugin
-               //
-            else
-            {
-                m_errorString = "Can't find Plugin";
-                return false;
-            }
-            */
         }
 
         m_section = InPlugin;
@@ -1666,7 +1679,6 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         if (m_plugin)
         {
             m_plugin->addPort(portId, value);
-            //RG_DEBUG << "ADDING PORT " << portId << " VALUE = " << value << endl;
         }
 
 #else
@@ -1733,6 +1745,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             type = Rosegarden::Instrument::Midi;
         else if (stringType == "audio")
             type = Rosegarden::Instrument::Audio;
+        else if (stringType == "softsynth")
+            type = Rosegarden::Instrument::SoftSynth;
         else
         {
             m_errorString = "Found unknown Instrument type";

@@ -35,7 +35,11 @@
 namespace Rosegarden
 {
 
-Instrument::Instrument(InstrumentId id, InstrumentType it,
+const unsigned int Instrument::SYNTH_PLUGIN_POSITION = 999;
+
+
+Instrument::Instrument(InstrumentId id,
+		       InstrumentType it,
                        const std::string &name,
                        Device *device):
     m_id(id),
@@ -57,7 +61,7 @@ Instrument::Instrument(InstrumentId id, InstrumentType it,
     m_audioInputChannel(0),
     m_audioOutput(0)
 {
-    if (it == Audio)
+    if (it == Audio || it == SoftSynth)
     {
         // Add a number of plugin place holders (unassigned)
         //
@@ -76,6 +80,9 @@ Instrument::Instrument(InstrumentId id, InstrumentType it,
                      // 0 to 200. 
     }
 
+    if (it == SoftSynth) {
+	addPlugin(new AudioPluginInstance(SYNTH_PLUGIN_POSITION));
+    }
 }
 
 Instrument::Instrument(InstrumentId id,
@@ -104,7 +111,7 @@ Instrument::Instrument(InstrumentId id,
 {
     // Add a number of plugin place holders (unassigned)
     //
-    if (it == Audio)
+    if (it == Audio || it == SoftSynth)
     {
         // Add a number of plugin place holders (unassigned)
         //
@@ -134,6 +141,10 @@ Instrument::Instrument(InstrumentId id,
 	    setPercussion(true);
 	}
     }
+
+    if (it == SoftSynth) {
+	addPlugin(new AudioPluginInstance(SYNTH_PLUGIN_POSITION));
+    }
 }
 
 Instrument::Instrument(const Instrument &ins):
@@ -160,7 +171,7 @@ Instrument::Instrument(const Instrument &ins):
 {
     // Add a number of plugin place holders (unassigned)
     //
-    if (ins.getType() == Audio)
+    if (ins.getType() == Audio || ins.getType() == SoftSynth)
     {
         // Add a number of plugin place holders (unassigned)
         //
@@ -173,6 +184,10 @@ Instrument::Instrument(const Instrument &ins):
         // not the MIDI channel number.  Default is 2 (stereo).
         //
         m_channel = 2;
+    }
+
+    if (ins.getType() == SoftSynth) {
+	addPlugin(new AudioPluginInstance(SYNTH_PLUGIN_POSITION));
     }
 }
 
@@ -364,9 +379,14 @@ Instrument::toXmlString()
         }
 
     }
-    else // Audio
+    else // Audio or SoftSynth
     {
-        instrument << "audio\">" << std::endl;
+
+	if (m_type == Audio) {
+	    instrument << "audio\">" << std::endl;
+	} else {
+	    instrument << "softsynth\">" << std::endl;
+	}
 
         instrument << "            <pan value=\""
                    << (int)m_pan << "\"/>" << std::endl;
@@ -477,12 +497,12 @@ Instrument::emptyPlugins()
 // Get an instance for an index
 //
 AudioPluginInstance*
-Instrument::getPlugin(int index)
+Instrument::getPlugin(unsigned int position)
 {
     PluginInstanceIterator it = m_audioPlugins.begin();
     for (; it != m_audioPlugins.end(); it++)
     {
-        if ((*it)->getPosition() == ((unsigned int)index))
+        if ((*it)->getPosition() == position)
             return *it;
     }
 

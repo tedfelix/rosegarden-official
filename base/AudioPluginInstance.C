@@ -19,6 +19,7 @@
 */
 
 #include "AudioPluginInstance.h"
+#include "Instrument.h"
 
 #include <iostream>
 
@@ -52,8 +53,6 @@ PluginPort::PluginPort(int number,
 {
 }
 
-const unsigned int AudioPluginInstance::SYNTH_POSITION = 999;
-
 AudioPluginInstance::AudioPluginInstance(unsigned int position):
     m_mappedId(-1),
     m_identifier(""),
@@ -86,10 +85,16 @@ AudioPluginInstance::toXmlString()
         return plugin.str();
     }
     
+    if (m_position == Instrument::SYNTH_PLUGIN_POSITION) {
+	plugin << "            <synth ";
+    } else {
+	plugin << "            <plugin"
+	       << " position=\""
+	       << m_position
+	       << "\" ";
+    }
 
-    plugin << "            <plugin position=\""
-           << m_position
-	   << "\" identifier=\""
+    plugin << "identifier=\""
 	   << encode(m_identifier)
            << "\" bypassed=\"";
 
@@ -109,12 +114,16 @@ AudioPluginInstance::toXmlString()
                << "\"/>" << std::endl;
     }
 
-    plugin << "            </plugin>"
+    if (m_position == Instrument::SYNTH_PLUGIN_POSITION) {
+	plugin << "            </synth>";
+    } else {
+	plugin << "            </plugin>";
+    }
 
 #if (__GNUC__ < 3)
-                   << std::endl << std::ends;
+    plugin << std::endl << std::ends;
 #else
-                   << std::endl;
+    plugin << std::endl;
 #endif
 
     return plugin.str();

@@ -191,6 +191,7 @@ public:
 
     // Plugin management
     //
+    static const unsigned int SYNTH_PLUGIN_POSITION;
     void addPlugin(AudioPluginInstance *instance);
     bool removePlugin(unsigned int position);
     void clearPlugins();
@@ -198,7 +199,7 @@ public:
 
     // Get a plugin for this instrument
     //
-    AudioPluginInstance* getPlugin(int index);
+    AudioPluginInstance* getPlugin(unsigned int position);
 
     // MappedId management - should typedef this type once
     // we have the energy to shake this all out.

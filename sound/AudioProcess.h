@@ -182,6 +182,8 @@ public:
     void setPluginBypass(InstrumentId, int position, bool bypass);
     void resetAllPlugins();
 
+    RunnablePluginInstance *getSynthPlugin(InstrumentId id) { return m_synths[id]; }
+
     /**
      * Prebuffer.  This should be called only when the transport is
      * not running. 
@@ -222,9 +224,7 @@ protected:
 
     void processBlocks(bool forceFill, bool &readSomething);
     void processEmptyBlocks(InstrumentId id);
-//!!!    bool processBlock(InstrumentId id, PlayableAudioFileList&, bool forceFill,
     bool processBlock(InstrumentId id, AudioPlayQueue::FileSet&, bool forceFill,
-
 		      bool &readSomething);
     void generateBuffers();
 
@@ -234,7 +234,9 @@ protected:
 
     typedef std::map<int, RunnablePluginInstance *> PluginList;
     typedef std::map<InstrumentId, PluginList> PluginMap;
+    typedef std::map<InstrumentId, RunnablePluginInstance *> SynthPluginMap;
     PluginMap m_plugins;
+    SynthPluginMap m_synths;
 
     // maintain the same number of these as the maximum number of
     // channels on any audio instrument

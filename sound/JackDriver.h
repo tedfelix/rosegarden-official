@@ -92,6 +92,8 @@ public:
                                          int position,
                                          bool value);
 
+    virtual RunnablePluginInstance *getSynthPlugin(InstrumentId id);
+
     virtual unsigned int getSampleRate() const { return m_sampleRate; }
     virtual unsigned int getBufferSize() const { return m_bufferSize; }
 

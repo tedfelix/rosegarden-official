@@ -77,7 +77,8 @@ public:
 
     virtual void setPortValue(unsigned int port, float value) = 0;
 
-    virtual void sendEvent(const RealTime &eventTime, snd_seq_event_t *event) { }
+    virtual void sendEvent(const RealTime &eventTime,
+			   const snd_seq_event_t *event) { }
 
     virtual bool isBypassed() const = 0;
     virtual void setBypassed(bool value) = 0;

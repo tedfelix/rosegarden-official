@@ -639,7 +639,8 @@ void RosegardenGUIDoc::initialiseStudio()
 
     for (; it != list.end(); it++)
     {
-        if ((*it)->getType() == Rosegarden::Instrument::Audio)
+        if ((*it)->getType() == Rosegarden::Instrument::Audio ||
+	    (*it)->getType() == Rosegarden::Instrument::SoftSynth) 
         {
             Rosegarden::MappedObjectId mappedId =
                 Rosegarden::StudioControl::createStudioObject(
@@ -734,16 +735,14 @@ void RosegardenGUIDoc::initialiseStudio()
             // Initialise all the plugins for this Instrument
             //
             Rosegarden::AudioPluginInstance *plugin;
-            int pluginNo = 0;
 
-            while ((plugin = (*it)->getPlugin(pluginNo++)))
-            {
+	    for (Rosegarden::PluginInstanceIterator pli = (*it)->beginPlugins();
+		 pli != (*it)->endPlugins(); ++pli) {
+
+		Rosegarden::AudioPluginInstance *plugin = *pli;
+
                 if (plugin->isAssigned())
                 {
-                    //RG_DEBUG << "PLUGIN " << pluginNo - 1
-                             //<< " ASSIGNED on INS "
-                             //<< (*it)->getId() << endl;
-
                     // Create the plugin slot at the sequencer Studio
                     //
                     Rosegarden::MappedObjectId pluginMappedId =

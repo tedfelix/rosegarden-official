@@ -273,7 +273,8 @@ DSSIPluginInstance::setPortValue(unsigned int portNumber, float value)
 }
 
 void
-DSSIPluginInstance::sendEvent(const RealTime &eventTime, snd_seq_event_t *event)
+DSSIPluginInstance::sendEvent(const RealTime &eventTime,
+			      const snd_seq_event_t *event)
 {
     snd_seq_event_t ev(*event);
     ev.time.time.tv_sec = eventTime.sec;

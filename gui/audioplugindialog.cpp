@@ -435,7 +435,7 @@ AudioPluginDialog::slotPaste()
         for (std::vector<int>::iterator it = m_pluginsInList.begin();
                 it != m_pluginsInList.end(); ++it)
         {
-            if ((*it) = clipboard->m_pluginNumber)
+            if ((*it) == clipboard->m_pluginNumber)
                 break;
             count++;
         }

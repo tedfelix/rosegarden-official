@@ -243,6 +243,10 @@ protected:
     virtual void processMidiOut(const MappedComposition &mC,
                                 bool now);
 
+    virtual void processSoftSynthEventOut(InstrumentId id,
+					  const snd_seq_event_t *event,
+					  bool now);
+
     virtual void processAudioQueue(bool /* now */) { }
 
 private:
