@@ -68,6 +68,10 @@ public:
     //
     void addSearchPath(const std::string &path);
 
+    // does a specific file id exist?
+    //
+    bool fileExists(const unsigned int &id);
+
 private:
     std::string getFileInPath(const std::string &file);
 

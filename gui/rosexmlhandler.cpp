@@ -344,23 +344,40 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             startIndex = startIdxStr.toInt();
         }
         
-        Rosegarden::Segment::SegmentType sT;
-
         QString segmentType = (atts.value("type")).lower();
         if (segmentType) {
             if (segmentType == "audio")
-                sT = Rosegarden::Segment::Audio;
+            {
+                int audioFileID = atts.value("file").toInt();
+
+                // check this file id exists on the AudioFileManager
+
+                if(m_audioFileManager.fileExists(audioFileID) == false)
+                {
+                    m_errorString = i18n("Cannot find audio file reference");
+                    return false;
+                }
+
+                // Create an Audio segment and add its reference
+                //
+                m_currentSegment = new Segment(Rosegarden::Segment::Audio);
+                m_currentSegment->setAudioFileID(audioFileID);
+            }
             else
-                sT = Rosegarden::Segment::Internal;
+            {
+                // Create a (normal) internal Segment
+                m_currentSegment = new Segment(Rosegarden::Segment::Internal);
+            }
+
         }
+        else // for the moment we default
+            m_currentSegment = new Segment(Rosegarden::Segment::Internal);
     
-        m_currentSegment = new Segment(sT);
         m_currentSegment->setTrack(track);
         m_currentSegment->setStartIndex(startIndex);
 	m_currentTime = startIndex;
-
         m_composition.addSegment(m_currentSegment);
-    
+
     } else if (lcName == "resync") {
 	
 	QString time(atts.value("time"));

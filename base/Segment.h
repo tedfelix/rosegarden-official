@@ -291,8 +291,8 @@ public:
 
     // Get and set Audio file ID (see the AudioFileManager)
     //
-    unsigned int getAudioFile() const { return m_audioFileID; }
-    void setAudioFile(const unsigned int &id) { m_audioFileID = id; }
+    unsigned int getAudioFileID() const { return m_audioFileID; }
+    void setAudioFileID(const unsigned int &id) { m_audioFileID = id; }
 
     // Get the Segment type (Internal or Audio)
     //

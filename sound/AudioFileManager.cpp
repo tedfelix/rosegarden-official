@@ -195,6 +195,26 @@ AudioFileManager::getFileInPath(const std::string &file)
 }
 
 
+// Does a specific file id exist on the manager?
+//
+bool
+AudioFileManager::fileExists(const unsigned int &id)
+{
+    vector<AudioFile*>::iterator it;
+
+    for (it = m_audioFiles.begin();
+         it != m_audioFiles.end();
+         it++)
+    {
+        if ((*it)->getID() == id)
+            return true;
+    }
+
+    return false;
+
+}
+
+
 
 
 }
