@@ -152,9 +152,7 @@
 
     * Event list
 
-    * Audio mixer and routing (inc making audio connections with JACK)
-
-    * MIDI mixer
+    * Event editor dialogs
 
     * Plugins
 
@@ -277,6 +275,8 @@
   <chapter id="introduction">
     <title>Introduction</title>
 
+    <sect1>
+      <title>About Rosegarden</title>
     <para>
       <application>Rosegarden</application> is a &MIDI; and audio
       sequencer and musical notation editor.  Rosegarden allows you to
@@ -297,7 +297,7 @@
       to users new to music software generally.
     </para>
 
-    <sect1 id="intro-handbook">
+    <sect2 id="intro-handbook">
       <title>About this Handbook</title>
     <para>
     This handbook summarises the capabilities of &rosegarden; and
@@ -314,9 +314,9 @@
     Rosegarden website</ulink> for Frequently Asked Questions and
     mailing list instructions.
     </para>
-    </sect1>
+    </sect2>
 
-    <sect1 id="intro-menufunctions">
+    <sect2 id="intro-menufunctions">
       <title>About Menus and Shortcuts</title> <para>This handbook
       usually refers to the functions you can use in Rosegarden by
       describing where they live on the menus.  For example, the
@@ -338,6 +338,24 @@
       way to use a function, and you should keep an eye on the
       keyboard shortcuts or toolbar icons as well.
       </para>
+    </sect2>
+
+    <sect2 id="intro-optional">
+      <title>Optional Features</title> <para>This Handbook assumes
+      that your Rosegarden installation supports all the features of
+      which it is capable.  Some of Rosegarden's features, including
+      some very major ones, are actually optional when building a
+      Rosegarden installation, depending on which other libraries and
+      supporting code is available.  For example, the whole audio
+      subsystem is only compiled in if JACK libraries are available;
+      synth plugin support depends on a number of other modules;
+      etc.</para> <para>These dependencies are documented in the
+      Rosegarden README and configuration documentation. If you find
+      that this Handbook refers to features not visible in the version
+      of Rosegarden you're using, consult your configuration
+      documentation or distributor.
+      </para>
+    </sect2>
     </sect1>
   </chapter>
 
@@ -1286,7 +1304,7 @@
       linkend="studio-audio-mixer">audio mixer</link>, <link
       linkend="segment-view-instrumentparameterbox">instrument
       parameter box</link> and <link
-      linkend="studio-plugins">plugins</link> sections.</para>
+      linkend="studio-plugins">audio plugins</link> sections.</para>
     </sect1>
 
     <sect1 id="studio-audio-mixer">
@@ -1385,7 +1403,7 @@
     </sect1>
 
     <sect1 id="studio-plugins">
-      <title>Plugins</title>
+      <title>Audio Plugins</title>
       <para>
 	<screenshot>
 	  <mediaobject>
@@ -2675,7 +2693,7 @@
     <!-- Keys, Clefs and Time Signatures -->
 
     <sect1 id="nv-signatures">
-      <title>Clefs, keys, tempo and time signatures</title>
+      <title>Clef and key</title>
 
 <!-- !!! rework -->      
       <para>The first thing to know about the way &rosegarden; handles
