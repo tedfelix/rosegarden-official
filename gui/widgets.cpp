@@ -164,6 +164,8 @@ RosegardenProgressDialog::RosegardenProgressDialog(QWidget *creator,
     m_firstTimeout(true),
     m_shown(false)
 {
+    if (creator) creator->setEnabled(false);
+
     setCaption(i18n("Processing..."));
     QTimer::singleShot(700, this, SLOT(slotTimerElapsed()));
 
@@ -192,6 +194,8 @@ RosegardenProgressDialog::RosegardenProgressDialog(
         m_firstTimeout(true),
 	m_shown(false)
 {
+    if (creator) creator->setEnabled(false);
+
     setCaption(i18n("Processing..."));
     QTimer::singleShot(700, this, SLOT(slotTimerElapsed()));
 
@@ -202,6 +206,11 @@ RosegardenProgressDialog::RosegardenProgressDialog(
 
 RosegardenProgressDialog::~RosegardenProgressDialog()
 {
+    QWidget* creator = 0;
+    
+    if (parent() && (creator = dynamic_cast<QWidget*>(parent())))
+        creator->setEnabled(true);
+
     QApplication::restoreOverrideCursor();
 }
 
