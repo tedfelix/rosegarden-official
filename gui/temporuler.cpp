@@ -28,6 +28,8 @@
 #include "Composition.h"
 #include "RulerScale.h"
 
+#include "tempocolour.h"
+
 using Rosegarden::RulerScale;
 using Rosegarden::Composition;
 using Rosegarden::timeT;
@@ -139,12 +141,29 @@ TempoRuler::paintEvent(QPaintEvent* e)
 	}
     }
 
+    // last position - where to draw from
+    double nextX = 0.0;
+    QColor nextColour;
+
     for (TimePoints::iterator i = timePoints.begin();
 	 i != timePoints.end(); ++i) {
 
 	timeT time = i->first;
-	double x = m_rulerScale->getXForTime(time) + m_currentXOffset + m_xorigin;
-	paint.drawLine(x, height() - 4, x, height());
+	double x = m_rulerScale->getXForTime(time) + m_currentXOffset
+                   + m_xorigin;
+
+        TimePoints::iterator l = i;
+        if (++l == timePoints.end()) nextX = width();
+        else
+            nextX = m_rulerScale->getXForTime(l->first) + m_currentXOffset
+                                   + m_xorigin;
+
+        nextColour = TempoColour::getColour(m_composition->getTempoAt(time));
+        paint.setPen(nextColour);
+        paint.setBrush(nextColour);
+	//paint.drawLine(x, height() - 4, x, height());
+        paint.drawRect(x, 0, nextX - x, height());
+
 	
 	if (i->second & timeSigChangeHere) {
 
@@ -186,11 +205,22 @@ TempoRuler::paintEvent(QPaintEvent* e)
 
 	    QRect bounds = m_fontMetrics.boundingRect(tempoString);
 
+            paint.save();
+
+            // Set a brighter pen of same shade
+            //
+            int h, s, v;
+            TempoColour::getColour(m_composition->getTempoAt(time)).
+                hsv(&h, &s, &v);
+            paint.setPen(QColor(h, s, 90, QColor::Hsv));
+
 	    paint.setFont(m_font);
 	    if (x > bounds.width() / 2) x -= bounds.width() / 2;
 	    if (prevEndX >= x - 3) x = prevEndX + 3;
 	    paint.drawText(x, textY, tempoString);
 	    prevEndX = x + bounds.width();
+
+            paint.restore();
 	}
     }
 }
