@@ -94,7 +94,7 @@ void QCanvasRepeatRectangle::drawShape(QPainter& painter)
     painter.setBrush(RosegardenGUIColours::RepeatSegmentBlock);
     painter.setPen(RosegardenGUIColours::RepeatSegmentBorder);
 
-    while (pos < width + rWidth + int(x()))
+    while (pos < width + rWidth)
     {
         painter.drawRect(pos, int(y()), rWidth, height);
         pos += rWidth;
