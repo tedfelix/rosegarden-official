@@ -40,6 +40,7 @@
 #include <cassert>
 
 using Rosegarden::Segment;
+using Rosegarden::SegmentSelection;
 using Rosegarden::Note;
 using Rosegarden::RulerScale;
 using Rosegarden::SnapGrid;
@@ -616,13 +617,12 @@ void SegmentCanvas::slotOnEditAudio()
 // passed Segment pointer
 //
 //
-void SegmentCanvas::slotSelectSegments(std::vector<Rosegarden::Segment*> segments)
+void SegmentCanvas::slotSelectSegments(const SegmentSelection &segments)
 {
     SegmentSelector* selTool = dynamic_cast<SegmentSelector*>(m_tool);
 
     if (!selTool) return;
 
-    std::vector<Rosegarden::Segment*>::iterator segIt;
     QCanvasItemList itemList = canvas()->allItems();
     QCanvasItemList::Iterator it;
 
@@ -635,7 +635,8 @@ void SegmentCanvas::slotSelectSegments(std::vector<Rosegarden::Segment*> segment
         
         if (segItem) { 
 
-            for (segIt = segments.begin(); segIt != segments.end(); segIt++) {
+            for (SegmentSelection::const_iterator segIt = segments.begin();
+		 segIt != segments.end(); ++segIt) {
 
                 if (segItem->getSegment() == (*segIt)) {
 
@@ -646,9 +647,9 @@ void SegmentCanvas::slotSelectSegments(std::vector<Rosegarden::Segment*> segment
     }
 }
 
-// Get a vector of selected Segments if we're using a Selector tool
+// Get a selected Segments if we're using a Selector tool
 //
-std::vector<Rosegarden::Segment*>
+SegmentSelection
 SegmentCanvas::getSelectedSegments()
 {
     SegmentSelector* selTool = dynamic_cast<SegmentSelector*>(m_tool);
@@ -656,7 +657,7 @@ SegmentCanvas::getSelectedSegments()
     if (selTool)
         return selTool->getSelectedSegments();
 
-    return *(new std::vector<Rosegarden::Segment*>);
+    return SegmentSelection();
 }
 
 bool
@@ -1004,8 +1005,8 @@ SegmentSelector::SegmentSelector(SegmentCanvas *c, RosegardenGUIDoc *d)
 {
     kdDebug(KDEBUG_AREA) << "SegmentSelector()\n";
 
-    connect(this, SIGNAL(selectedSegments(std::vector<Rosegarden::Segment*>)),
-            c,     SIGNAL(selectedSegments(std::vector<Rosegarden::Segment*>)));
+    connect(this, SIGNAL(selectedSegments(const Rosegarden::SegmentSelection &)),
+            c,     SIGNAL(selectedSegments(const Rosegarden::SegmentSelection &)));
 }
 
 SegmentSelector::~SegmentSelector()
@@ -1016,7 +1017,7 @@ SegmentSelector::~SegmentSelector()
 void
 SegmentSelector::clearSelected()
 {
-    // For the moment only clear all selected from the vector
+    // For the moment only clear all selected
     //
     SegmentItemList::iterator it;
     for (it = m_selectedItems.begin();
@@ -1026,7 +1027,7 @@ SegmentSelector::clearSelected()
         it->second->setSelected(false, m_canvas->getSegmentBrush());
     }
 
-    // now clear the vector
+    // now clear the selection
     //
     m_selectedItems.clear();
 
@@ -1064,17 +1065,17 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 
 }
 
-std::vector<Rosegarden::Segment*>
+SegmentSelection
 SegmentSelector::getSelectedSegments()
 {
-    std::vector<Rosegarden::Segment*> segments;
+    SegmentSelection segments;
     SegmentItemList::iterator it;
 
     for (it = m_selectedItems.begin();
          it != m_selectedItems.end();
-         it++)
+         ++it)
     {
-        segments.push_back(it->second->getSegment());
+        segments.insert(it->second->getSegment());
     }
 
     return segments;

@@ -249,9 +249,9 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
     connect(this, SIGNAL(needUpdate()), m_segmentCanvas, SLOT(slotUpdate()));
 
     connect(m_segmentCanvas, 
-            SIGNAL(selectedSegments(std::vector<Rosegarden::Segment*>)),
+            SIGNAL(selectedSegments(const Rosegarden::SegmentSelection &)),
             this,
-            SLOT(slotSelectedSegments(std::vector<Rosegarden::Segment*>)));
+            SLOT(slotSelectedSegments(const Rosegarden::SegmentSelection &)));
 
     connect(getCommandHistory(), SIGNAL(commandExecuted()),
 	    this, SLOT(update()));
@@ -515,7 +515,7 @@ TrackEditor::addCommandToHistory(KCommand *command)
 
 
 void
-TrackEditor::slotSelectedSegments(std::vector<Rosegarden::Segment*> segments)
+TrackEditor::slotSelectedSegments(const Rosegarden::SegmentSelection &segments)
 {
     emit selectedSegments(segments);
 }
@@ -525,13 +525,13 @@ TrackEditor::slotDeleteSelectedSegments()
 {
     KMacroCommand *macro = new KMacroCommand("Delete Segments");
 
-    std::vector<Rosegarden::Segment*> segments =
+    Rosegarden::SegmentSelection segments =
             m_segmentCanvas->getSelectedSegments();
 
     if (segments.size() == 0)
         return;
 
-    std::vector<Rosegarden::Segment*>::iterator it;
+    Rosegarden::SegmentSelection::iterator it;
 
     // Clear the selection before erasing the Segments
     // the selection points to

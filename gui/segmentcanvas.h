@@ -27,15 +27,12 @@
 #include "Event.h"
 #include "Track.h"
 #include "RulerScale.h"
+#include "Selection.h"
 
 #include <qwidget.h>
 
 #include "rosegardencanvasview.h"
 #include "segmentcommands.h" // for SegmentRecSet
-
-namespace Rosegarden {
-    class Segment;
-}
 
 class RosegardenGUIDoc;
 class QFont;
@@ -262,10 +259,8 @@ public:
 				  Rosegarden::timeT duration);
     void deleteRecordingSegmentItem();
 
-    // Return a vector of selected Segments if we're
-    // currently using a "Selector"
-    //
-    std::vector<Rosegarden::Segment*> getSelectedSegments();
+    /// Return the selected Segments if we're currently using a "Selector"
+    Rosegarden::SegmentSelection getSelectedSegments();
     bool haveSelection(); // i.e. would getSelectedSegments return anything
     void clearSelected();
 
@@ -286,7 +281,7 @@ public slots:
     // to automatically set the selection of Segments (say
     // by Track).
     //
-    void slotSelectSegments(std::vector<Rosegarden::Segment*> segment);
+    void slotSelectSegments(const Rosegarden::SegmentSelection &segment);
 
     // These are sent from the top level app when it gets key
     // depresses relating to selection add (usually SHIFT) and
@@ -334,7 +329,7 @@ signals:
     void editSegmentMatrix(Rosegarden::Segment*);
     void editSegmentAudio(Rosegarden::Segment*);
 
-    void selectedSegments(std::vector<Rosegarden::Segment*>);
+    void selectedSegments(const Rosegarden::SegmentSelection &);
 
 private:
 
@@ -483,13 +478,13 @@ public:
 
     // Return a vector of selected Segments
     //
-    std::vector<Rosegarden::Segment*> getSelectedSegments();
+    Rosegarden::SegmentSelection getSelectedSegments();
 
 public slots:
     void slotSelectSegmentItem(SegmentItem *selectedItem);
 
 signals:
-    void selectedSegments(std::vector<Rosegarden::Segment*>);
+    void selectedSegments(const Rosegarden::SegmentSelection &);
 
 private:
     typedef std::pair<QPoint, SegmentItem *> SegmentItemPair;

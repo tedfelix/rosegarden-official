@@ -220,10 +220,13 @@ SegmentParameterBox::useSegment(Rosegarden::Segment *segment)
 }
 
 void 
-SegmentParameterBox::useSegments(std::vector<Rosegarden::Segment*> segments)
+SegmentParameterBox::useSegments(const Rosegarden::SegmentSelection &segments)
 {
     m_segments.clear();
-    m_segments = segments;
+    for (Rosegarden::SegmentSelection::const_iterator i = segments.begin();
+	 i != segments.end(); ++i) {
+	m_segments.push_back(*i);
+    }
     populateBoxFromSegments();
 }
 

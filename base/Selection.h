@@ -121,6 +121,14 @@ protected:
 };
 
 
+/**
+ * SegmentSelection is much simpler than EventSelection, we don't
+ * need to do much with this really
+ */
+
+typedef std::set<Segment *> SegmentSelection;
+
+
 }
 
 #endif

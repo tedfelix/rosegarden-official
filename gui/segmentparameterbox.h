@@ -28,6 +28,7 @@
 #include <qcombobox.h>
 
 #include "Quantizer.h"
+#include "Selection.h"
 #include "widgets.h"
 
 
@@ -66,7 +67,7 @@ public:
     // Use Segments to update GUI parameters
     //
     void useSegment(Rosegarden::Segment *segment);
-    void useSegments(std::vector<Rosegarden::Segment*> segments);
+    void useSegments(const Rosegarden::SegmentSelection &segments);
 
     // Command history stuff
     MultiViewCommandHistory* getCommandHistory();
@@ -82,9 +83,6 @@ public slots:
 
     void slotDelaySelected(int);
     void slotDelayTextChanged(const QString &);
-
-    // catching commands
-//!!!    void slotCommandExecuted(Command *command);
 
 private:
     void initBox();

@@ -34,6 +34,8 @@
 
 #include "rosedebug.h"
 
+#include "Selection.h"
+
 namespace Rosegarden { 
     class Composition; 
     class MappedEvent;
@@ -168,7 +170,7 @@ public slots:
 
     void slotUpdateInstrumentParameterBox(int id);
 
-    void slotSelectedSegments(std::vector<Rosegarden::Segment*> segments);
+    void slotSelectedSegments(const Rosegarden::SegmentSelection &segments);
 
     void slotShowSegmentParameters(bool);
 

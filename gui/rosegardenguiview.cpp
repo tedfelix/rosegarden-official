@@ -44,6 +44,7 @@
 #include "barbuttons.h"
 #include "loopruler.h"
 #include "RulerScale.h"
+#include "Selection.h"
 #include "segmentparameterbox.h"
 #include "instrumentparameterbox.h"
 
@@ -108,9 +109,9 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
             SLOT(slotUpdateInstrumentParameterBox(int)));
 
     connect(m_trackEditor,
-           SIGNAL(selectedSegments(std::vector<Rosegarden::Segment*>)),
+           SIGNAL(selectedSegments(const Rosegarden::SegmentSelection &)),
            this,
-           SLOT(slotSelectedSegments(std::vector<Rosegarden::Segment*>)));
+           SLOT(slotSelectedSegments(const Rosegarden::SegmentSelection &)));
 
     // Re-emit the sendMidiController
     //
@@ -270,14 +271,14 @@ void RosegardenGUIView::selectTrack(int trackId)
 
 void RosegardenGUIView::slotSelectTrackSegments(int trackId)
 {
-    std::vector<Rosegarden::Segment*> segments;
+    Rosegarden::SegmentSelection segments;
 
     for (Rosegarden::Composition::iterator i =
               getDocument()->getComposition().begin();
          i != getDocument()->getComposition().end(); i++)
     {
         if (((int)(*i)->getTrack()) == trackId)
-            segments.push_back(*i);
+            segments.insert(*i);
     }
 
     // Send this signal to the GUI to activate the correct tool
@@ -355,7 +356,7 @@ RosegardenGUIView::setShift(const bool &value)
 } 
 
 void
-RosegardenGUIView::slotSelectedSegments(std::vector<Rosegarden::Segment*> segments)
+RosegardenGUIView::slotSelectedSegments(const Rosegarden::SegmentSelection &segments)
 {
     // update the segment parameter box
     m_segmentParameterBox->useSegments(segments);

@@ -28,6 +28,7 @@
 
 #include "Event.h" // for timeT
 #include "Track.h"
+#include "Selection.h"
 
 #include "segmentcommands.h" // for SegmentReconfigureCommand::SegmentRec
 
@@ -145,7 +146,7 @@ protected slots:
 
     void slotTrackButtonsWidthChanged();
 
-    void slotSelectedSegments(std::vector<Rosegarden::Segment*> segments);
+    void slotSelectedSegments(const Rosegarden::SegmentSelection &segments);
 
     void slotDeleteSelectedSegments();
 
@@ -185,7 +186,7 @@ signals:
      * Send up to RosegardenGUIView
      *
      */
-    void selectedSegments(std::vector<Rosegarden::Segment*> segments);
+    void selectedSegments(const Rosegarden::SegmentSelection &segments);
 
 protected:
     
