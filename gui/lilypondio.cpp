@@ -936,6 +936,8 @@ good idea, but why are measures in 4/4 coming out with 5-6 beats?  this is no go
 
                     } else { // it's a rest
 
+                        closeChordWriteTie(addTie, currentlyWritingChord, str);
+
                         if (curTupletNotesRemaining > 0) {
                             curTupletNotesRemaining--;
                             if (curTupletNotesRemaining == 0) {
