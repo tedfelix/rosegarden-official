@@ -846,9 +846,6 @@ JackDriver::jackProcessRecord(jack_nframes_t nframes,
     SequencerDataBlock *sdb = m_alsaDriver->getSequencerDataBlock();
     bool wroteSomething = false;
 
-    std::cerr << "JackDriver::jackProcessRecord: record input is "
-	      << m_recordInput << std::endl;
-
     if (!havePeaks) {
 	peakLeft = 0.0;
 	peakRight = 0.0;

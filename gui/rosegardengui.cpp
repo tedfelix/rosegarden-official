@@ -4699,6 +4699,8 @@ RosegardenGUIApp::slotOpenMixer()
 	    this, SLOT(slotRewindToBeginning()));
     connect(m_mixer, SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)),
 	    m_instrumentParameterBox, SLOT(slotInstrumentParametersChanged(Rosegarden::InstrumentId)));
+    connect(m_instrumentParameterBox, SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)),
+	    m_mixer, SLOT(slotUpdateInstrument(Rosegarden::InstrumentId)));
 
     m_mixer->show();
 }
@@ -4864,6 +4866,19 @@ RosegardenGUIApp::slotShowPluginDialog(QWidget *parent,
 	    m_instrumentParameterBox,
 	    SLOT(slotPluginBypassed(Rosegarden::InstrumentId, int, bool)));
 
+    // and to the mixer, if we have it
+    if (m_mixer) {
+	connect(dialog,
+		SIGNAL(pluginSelected(Rosegarden::InstrumentId, int, int)),
+		m_mixer,
+		SLOT(slotPluginSelected(Rosegarden::InstrumentId, int, int)));
+
+	connect(dialog,
+		SIGNAL(bypassed(Rosegarden::InstrumentId, int, bool)),
+		m_mixer,
+		SLOT(slotPluginBypassed(Rosegarden::InstrumentId, int, bool)));
+    }
+    
     // and to us so we can keep the sequencer informed
     connect(dialog,
 	    SIGNAL(pluginSelected(Rosegarden::InstrumentId, int, int)),

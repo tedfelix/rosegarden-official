@@ -25,6 +25,7 @@
 #include "rosedebug.h"
 #include "studiocontrol.h"
 #include "constants.h"
+#include "audiopluginmanager.h"
 
 #include "Studio.h"
 #include "AudioLevel.h"
@@ -162,6 +163,13 @@ MixerWindow::MixerWindow(QWidget *parent,
 	updateFader((*i)->getId());
 	updateRouteButtons((*i)->getId());
 	updateStereoButton((*i)->getId());
+	updatePluginButtons((*i)->getId());
+
+	connect(rec.m_input, SIGNAL(changed()),
+		this, SLOT(slotInputChanged()));
+
+	connect(rec.m_output, SIGNAL(changed()),
+		this, SLOT(slotOutputChanged()));
 
 	connect(rec.m_fader, SIGNAL(faderChanged(float)),
 		this, SLOT(slotFaderLevelChanged(float)));
@@ -364,7 +372,37 @@ MixerWindow::slotUpdateInstrument(Rosegarden::InstrumentId id)
     updateFader(id);
     updateStereoButton(id);
     updateRouteButtons(id);
-    //!!! update plugin buttons
+}
+
+void
+MixerWindow::slotPluginSelected(Rosegarden::InstrumentId id,
+				int index, int plugin)
+{
+    if (id >= (int)Rosegarden::AudioInstrumentBase) {
+
+	FaderRec &rec = m_faders[id];
+
+	if (plugin == -1) {
+
+	    rec.m_plugins[index]->setText(i18n("<none>"));
+
+	} else {
+
+	    Rosegarden::AudioPlugin *pluginClass 
+		= m_document->getPluginManager()->getPlugin(plugin);
+
+	    if (pluginClass)
+		rec.m_plugins[index]->
+		    setText(pluginClass->getLabel());
+	}
+    }
+}
+
+void
+MixerWindow::slotPluginBypassed(Rosegarden::InstrumentId instrumentId,
+				int , bool )
+{
+    updatePluginButtons(instrumentId);
 }
 
 void
@@ -413,7 +451,67 @@ MixerWindow::updateStereoButton(int id)
 	else rec.m_stereoButton->setPixmap(m_monoPixmap);
     }
 }
-	
+
+
+void
+MixerWindow::updatePluginButtons(int id)
+{
+    if (id >= (int)Rosegarden::AudioInstrumentBase) {
+
+	FaderRec &rec = m_faders[id];
+	Rosegarden::Instrument *instrument = m_studio->getInstrumentById(id);
+
+	for (unsigned int i = 0; i < rec.m_plugins.size(); i++) {
+
+	    bool bypass = false;
+
+	    rec.m_plugins[i]->show();
+
+	    Rosegarden::AudioPluginInstance *inst = instrument->getPlugin(i);
+
+	    if (inst && inst->isAssigned()) {
+
+		Rosegarden::AudioPlugin *pluginClass 
+		    = m_document->getPluginManager()->getPlugin(
+                        m_document->getPluginManager()->
+			    getPositionByUniqueId(inst->getId()));
+
+		if (pluginClass)
+		    rec.m_plugins[i]->
+			setText(pluginClass->getLabel());
+		
+		bypass = inst->isBypassed();
+
+	    } else {
+
+		rec.m_plugins[i]->setText(i18n("<none>"));
+
+		if (inst) bypass = inst->isBypassed();
+	    }
+
+	    if (bypass) {
+		
+		rec.m_plugins[i]->setPaletteForegroundColor
+		    (kapp->palette().
+		     color(QPalette::Active, QColorGroup::Button));
+
+		rec.m_plugins[i]->setPaletteBackgroundColor
+		    (kapp->palette().
+		     color(QPalette::Active, QColorGroup::ButtonText));
+
+	    } else {
+
+		rec.m_plugins[i]->setPaletteForegroundColor
+		    (kapp->palette().
+		     color(QPalette::Active, QColorGroup::ButtonText));
+
+		rec.m_plugins[i]->setPaletteBackgroundColor
+		    (kapp->palette().
+		     color(QPalette::Active, QColorGroup::Button));
+	    }
+	}
+    }	
+}
 
 void
 MixerWindow::slotSelectPlugin()
@@ -439,6 +537,34 @@ MixerWindow::slotSelectPlugin()
 	    ++index;
 	}
     }	    
+}
+
+void
+MixerWindow::slotInputChanged()
+{
+    const QObject *s = sender();
+
+    //!!! need to do equiv thing in instrument param box
+
+    for (FaderMap::iterator i = m_faders.begin();
+	 i != m_faders.end(); ++i) {
+
+	if (i->second.m_input == s) emit instrumentParametersChanged(i->first);
+    }
+}
+
+void
+MixerWindow::slotOutputChanged()
+{
+    const QObject *s = sender();
+
+    //!!! need to do equiv thing in instrument param box
+
+    for (FaderMap::iterator i = m_faders.begin();
+	 i != m_faders.end(); ++i) {
+
+	if (i->second.m_output == s) emit instrumentParametersChanged(i->first);
+    }
 }
 
 void
@@ -556,6 +682,9 @@ MixerWindow::slotChannelsChanged()
     const QObject *s = sender();
 
     // channels are only switchable on instruments
+
+    //!!! need to reconnect input, or change input channel number anyway
+
 
     for (FaderMap::iterator i = m_faders.begin();
 	 i != m_faders.end(); ++i) {

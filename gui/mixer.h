@@ -57,6 +57,8 @@ signals:
 protected slots:
     void slotFaderLevelChanged(float level);
     void slotPanChanged(float value);
+    void slotInputChanged();
+    void slotOutputChanged();
     void slotChannelsChanged();
     void slotSoloChanged();
     void slotMuteChanged();
@@ -66,6 +68,10 @@ protected slots:
     
     // to be called if something changes in an instrument parameter box
     void slotUpdateInstrument(Rosegarden::InstrumentId);
+
+    // from Plugin dialog
+    void slotPluginSelected(Rosegarden::InstrumentId id, int index, int plugin);
+    void slotPluginBypassed(Rosegarden::InstrumentId id, int pluginIndex, bool bp);
 
 protected:
     virtual void closeEvent(QCloseEvent *);
@@ -114,6 +120,7 @@ private:
     void updateFader(int id); // instrument id if large enough, master/sub otherwise
     void updateRouteButtons(int id);
     void updateStereoButton(int id);
+    void updatePluginButtons(int id);
 
     QPixmap m_monoPixmap;
     QPixmap m_stereoPixmap;

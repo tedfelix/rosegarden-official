@@ -110,6 +110,8 @@ signals:
     void setSolo(Rosegarden::InstrumentId, bool value);
     void setRecord(Rosegarden::InstrumentId, bool value);
 
+    void instrumentParametersChanged(Rosegarden::InstrumentId);
+
 protected:
 
     //--------------- Data members ---------------------------------
