@@ -341,13 +341,22 @@ void TrackEditor::slotReadjustCanvasSize()
     m_canvasWidth = (int)(m_rulerScale->getBarPosition(lastBar) +
                           m_rulerScale->getBarWidth(lastBar));
 
-    int canvasHeight = getTrackCellHeight() * comp.getNbTracks();
-    
+    // Not very satisfactory
+    //
+//     int canvasHeight = std::max(getTrackCellHeight() * comp.getNbTracks(),
+//                                 m_segmentCanvas->viewport()->height()
+//                                 //QApplication::desktop()->height()
+//                                 );
+
+    RG_DEBUG << "TrackEditor::slotReadjustCanvasSize() : nbTracks = "
+             << comp.getNbTracks() << endl;
+
+    int canvasHeight = getTrackCellHeight() * std::max(40, comp.getNbTracks());
+
     m_segmentCanvas->canvas()->resize(m_canvasWidth, canvasHeight);
 
     m_pointer->setSize(3, canvasHeight);
 }
-
 
 void TrackEditor::slotTrackButtonsWidthChanged()
 {
