@@ -1492,15 +1492,6 @@ SequencerConfigurationPage::apply()
     //
     m_cfg->writeEntry("audiorecordminutes", m_audioRecordMinutes->value());
 
-    // What to do here ??
-//     Rosegarden::MappedEvent mEportCounts
-// 	(Rosegarden::MidiInstrumentBase, // InstrumentId
-// 	 Rosegarden::MappedEvent::SystemAudioPortCounts,
-// 	 Rosegarden::MidiByte(m_jackInputs->value()),
-// 	 Rosegarden::MidiByte(m_submasters->value()));
-
-//     Rosegarden::StudioControl::sendMappedEvent(mEportCounts);
-
     Rosegarden::MidiByte ports = 0;
     if (m_createFaderOuts->isChecked()) {
 	ports |= Rosegarden::MappedEvent::FaderOuts;
