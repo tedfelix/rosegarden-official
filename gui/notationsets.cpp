@@ -260,10 +260,16 @@ bool Chord::isNoteHeadShifted(const NELIterator &itr) const
     int h = height((*this)[i]);
 
     if (hasStalkUp()) {
-        return ((i > 0) && (h == height((*this)[i-1]) + 1));
+        if ((i > 0) && (h == height((*this)[i-1]) + 1)) {
+            return (!isNoteHeadShifted((*this)[i-1]));
+        }
     } else {
-        return ((i < size()-1) && (h == height((*this)[i+1]) + 1));
+        if ((i < size()-1) && (h == height((*this)[i+1]) + 1)) {
+            return (!isNoteHeadShifted((*this)[i+1]));
+        }
     }
+
+    return false;
 }
 
 
