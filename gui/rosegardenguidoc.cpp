@@ -51,6 +51,7 @@
 
 #include "MappedDevice.h"
 #include "MappedInstrument.h"
+#include "MappedRealTime.h"
 #include "MidiDevice.h"
 #include "AudioDevice.h"
 
@@ -90,9 +91,7 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
       m_clipboard(new Rosegarden::Clipboard),
       m_startUpSync(true),
       m_useSequencer(useSequencer),
-      m_progressDialogDead(false),
-      m_audioPlayLatency(0, 0),
-      m_audioRecordLatency(0, 0)
+      m_progressDialogDead(false)
 {
     // Try to tell the sequencer that we're alive only if the
     // sequencer hasn't already forced us to sync
@@ -1325,4 +1324,62 @@ RosegardenGUIDoc::slotNewRecordButton()
     // Document modified
     setModified(true);
 }
+
+Rosegarden::RealTime
+RosegardenGUIDoc::getAudioPlayLatency()
+{
+    QByteArray data;
+    QCString replyType;
+    QByteArray replyData;
+
+    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
+                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                                  "getAudioPlayLatency()",
+                                  data, replyType, replyData))
+    {
+        std::cerr << "RosegardenGUIDoc::getAudioPlayLatency - "
+                  << "Playback failed to contact Rosegarden sequencer"
+                  << std::endl;
+        return Rosegarden::RealTime(0, 0);
+    }
+    else
+    {
+        // ensure the return type is ok
+        QDataStream streamIn(replyData, IO_ReadOnly);
+        Rosegarden::MappedRealTime result;
+        streamIn >> result;
+
+        return (result.getRealTime());
+    }
+}
+
+Rosegarden::RealTime
+RosegardenGUIDoc::getAudioRecordLatency()
+{
+
+    QByteArray data;
+    QCString replyType;
+    QByteArray replyData;
+
+    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
+                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                                  "getAudioRecordLatency()",
+                                  data, replyType, replyData))
+    {
+        std::cerr << "RosegardenGUIDoc::getAudioRecordLatency - "
+                  << "Playback failed to contact Rosegarden sequencer"
+                  << std::endl;
+        return Rosegarden::RealTime(0, 0);
+    }
+    else
+    {
+        // ensure the return type is ok
+        QDataStream streamIn(replyData, IO_ReadOnly);
+        Rosegarden::MappedRealTime result;
+        streamIn >> result;
+
+        return (result.getRealTime());
+    }
+}
+
 

@@ -124,10 +124,6 @@ public:
     //
     void sendAudioLevel(Rosegarden::MappedEvent *mE);
 
-    // Fetch audio latencies from the sequencer
-    //
-    void getAudioLatencies();
-
 public slots:
     // Empty the m_clearToSend flag
     //

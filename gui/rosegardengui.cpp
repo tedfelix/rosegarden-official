@@ -138,10 +138,6 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer)
 
     readOptions();
 
-    // Now fetch the audio latencies from the sequencer
-    //
-    m_seqManager->getAudioLatencies();
-
 //     ///////////////////////////////////////////////////////////////////
 //     // disable menu and toolbar items at startup
 //     disableCommand(ID_FILE_SAVE);

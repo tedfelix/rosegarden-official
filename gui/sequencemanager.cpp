@@ -1363,49 +1363,6 @@ SequenceManager::sendAudioLevel(Rosegarden::MappedEvent *mE)
 
 }
 
-void
-SequenceManager::getAudioLatencies()
-{
-    QByteArray data;
-    QCString replyType;
-    QByteArray replyData;
-
-    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "getAudioPlayLatency()",
-                                  data, replyType, replyData))
-    {
-        throw(i18n("Playback failed to contact Rosegarden sequencer"));
-    }
-    else
-    {
-        // ensure the return type is ok
-        QDataStream streamIn(replyData, IO_ReadOnly);
-        Rosegarden::MappedRealTime result;
-        streamIn >> result;
-  
-        m_doc->setAudioPlayLatency(result.getRealTime());
-    }
-
-    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "getAudioRecordLatency()",
-                                  data, replyType, replyData))
-    {
-        throw(i18n("Playback failed to contact Rosegarden sequencer"));
-    }
-    else
-    {
-        // ensure the return type is ok
-        QDataStream streamIn(replyData, IO_ReadOnly);
-        MappedRealTime result;
-        streamIn >> result;
-  
-        m_doc->setAudioRecordLatency(result.getRealTime());
-    }
-
-}
-
 }
 
 

@@ -366,7 +366,7 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
     m_cfg->setGroup("Latency Options");
 
     QFrame *frame = new QFrame(m_tabWidget, "general latency");
-    QGridLayout *layout = new QGridLayout(frame, 5, 3,
+    QGridLayout *layout = new QGridLayout(frame, 6, 3,
                                           10, 5);
 
     layout->addMultiCellWidget(new QLabel(i18n("Higher latency improves playback quality on slower systems but reduces\noverall sequencer response.  Modifications to these values take effect\nfrom the next time playback or recording begins."), frame),
@@ -420,67 +420,67 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
 
 
 #ifdef HAVE_JACK
-    frame = new QFrame(m_tabWidget, "JACK latency");
-    layout = new QGridLayout(frame, 5, 3, 10, 5);
+    frame = new QFrame(m_tabWidget, i18n("JACK latency"));
+    layout = new QGridLayout(frame, 6, 5, 10, 10);
 
-    layout->addMultiCellWidget(new QLabel(i18n("Adjust these values so that JACK audio playback is in sync with MIDI playback\nand recording audio through JACK is in sync with JACK audio output and MIDI.\nModifications to these values take effect from the next time playback/recording\nbegins."), frame),
+    layout->addMultiCellWidget(new QLabel(i18n("Use the \"Fetch JACK latencies\" button to discover the latency values set at\nthe sequencer.  It's recommended that you use the returned values but it's also\npossible to override them manually using the sliders.  Note that if you change\nyour JACK server parameters you should always fetch the latency values again.\nThe latency values will be stored by Rosegarden for use next time."), frame),
                                0, 0,
                                0, 3);
 
     layout->addWidget(new QLabel(i18n("JACK playback latency (in ms)"), frame), 1, 0);
     layout->addWidget(new QLabel(i18n("JACK record latency (in ms)"), frame), 3, 0);
 
-    /*
+    m_fetchLatencyValues = new QPushButton(i18n("Fetch JACK latencies"),
+                                                frame);
+
+    layout->addWidget(m_fetchLatencyValues, 1, 3);
+
+    connect(m_fetchLatencyValues, SIGNAL(released()),
+            SLOT(slotFetchLatencyValues()));
+
     int jackPlaybackValue = (m_cfg->readLongNumEntry(
                                  "jackplaybacklatencyusec", 0)/1000) +
                             (m_cfg->readLongNumEntry(
                                  "jackplaybacklatencysec", 0) * 1000);
-                                 */
-    int jackPlaybackValue = m_doc->getAudioPlayLatency().usec / 1000 +
-                            m_doc->getAudioPlayLatency().sec * 1000;
 
     m_jackPlayback = new QSlider(Horizontal, frame);
     m_jackPlayback->setValue(jackPlaybackValue);
     m_jackPlayback->setTickmarks(QSlider::Below);
-    layout->addWidget(m_jackPlayback, 2, 2);
+    layout->addMultiCellWidget(m_jackPlayback, 3, 3, 2, 3);
 
     QLabel *jackPlaybackLabel = new QLabel(QString("%1").arg(jackPlaybackValue),
                                            frame);
-    layout->addWidget(jackPlaybackLabel, 1, 2, Qt::AlignHCenter);
+    layout->addWidget(jackPlaybackLabel, 2, 2, Qt::AlignHCenter);
     connect(m_jackPlayback, SIGNAL(valueChanged(int)),
             jackPlaybackLabel, SLOT(setNum(int)));
 
     m_jackPlayback->setMinValue(0);
-    layout->addWidget(new QLabel("0", frame), 2, 1);
+    layout->addWidget(new QLabel("0", frame), 3, 1, Qt::AlignRight);
 
-    m_jackPlayback->setMaxValue(1000);
-    layout->addWidget(new QLabel("1000", frame), 2, 3);
+    m_jackPlayback->setMaxValue(500);
+    layout->addWidget(new QLabel("500", frame), 3, 4, Qt::AlignLeft);
 
-    /*
     int jackRecordValue = (m_cfg->readLongNumEntry(
                               "jackrecordlatencyusec", 0)/1000) +
                           (m_cfg->readLongNumEntry(
                               "jackrecordlatencysec", 0) * 1000);
-                              */
-    int jackRecordValue = m_doc->getAudioRecordLatency().usec / 1000 +
-                          m_doc->getAudioRecordLatency().sec * 1000;
 
     m_jackRecord = new QSlider(Horizontal, frame);
     m_jackRecord->setValue(jackRecordValue);
     m_jackRecord->setTickmarks(QSlider::Below);
-    layout->addWidget(m_jackRecord, 4 ,2);
+    layout->addMultiCellWidget(m_jackRecord, 5, 5, 2, 3);
 
     QLabel *jackRecordLabel = new QLabel(QString("%1").arg(jackRecordValue),
                                            frame);
-    layout->addWidget(jackRecordLabel, 3, 2, Qt::AlignHCenter);
+    layout->addWidget(jackRecordLabel, 4, 2, Qt::AlignHCenter);
     connect(m_jackRecord, SIGNAL(valueChanged(int)),
             jackRecordLabel, SLOT(setNum(int)));
 
     m_jackRecord->setMinValue(0);
-    layout->addWidget(new QLabel("0", frame), 4, 1);
+    layout->addWidget(new QLabel("0", frame), 5, 1, Qt::AlignRight);
 
-    m_jackRecord->setMaxValue(1000);
-    layout->addWidget(new QLabel("2000", frame), 4, 3);
+    m_jackRecord->setMaxValue(500);
+    layout->addWidget(new QLabel("500", frame), 5, 4, Qt::AlignLeft);
 
     addTab(frame, i18n("JACK Latency"));
 #endif  // HAVE_JACK
@@ -517,8 +517,18 @@ void LatencyConfigurationPage::apply()
 
 }
 
+// Fetch values from sequencer and apply them
+//
 void LatencyConfigurationPage::slotFetchLatencyValues()
 {
+    int jackPlaybackValue = m_doc->getAudioPlayLatency().usec / 1000 +
+                            m_doc->getAudioPlayLatency().sec * 1000;
+
+    m_jackPlayback->setValue(jackPlaybackValue);
+
+    int jackRecordValue = m_doc->getAudioRecordLatency().usec / 1000 +
+                          m_doc->getAudioRecordLatency().sec * 1000;
+    m_jackRecord->setValue(jackRecordValue);
 }
 
 
