@@ -235,22 +235,27 @@ class RosegardenGUIApp : public KMainWindow
     /**
      * track eraser tool is selected
      */
-    void eraseSelected();
+    void slotEraseSelected();
     
     /**
      * track draw tool is selected
      */
-    void drawSelected();
+    void slotDrawSelected();
     
     /**
      * track move tool is selected
      */
-    void moveSelected();
+    void slotMoveSelected();
 
     /**
      * track resize tool is selected
      */
-    void resizeSelected();
+    void slotResizeSelected();
+
+    /**
+     * track resize tool is selected
+     */
+    void slotChangeTimeResolution();
 
 private:
 

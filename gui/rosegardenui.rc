@@ -8,6 +8,8 @@
 	<Action name="draw"/>
 	<Action name="erase"/>
 	<Action name="move"/>
+	<Action name="resize"/>
+	<Action name="change_time_res"/>
   </Menu>
 </MenuBar>
 

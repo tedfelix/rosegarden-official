@@ -115,34 +115,34 @@ void RosegardenGUIApp::setupActions()
     // TODO : add some shortcuts here
     action = new KRadioAction(i18n("Erase"), "eraser",
                               0,
-                              this, SLOT(eraseSelected()),
+                              this, SLOT(slotEraseSelected()),
                               actionCollection(), "erase");
     action->setExclusiveGroup("tracktools");
 
     action = new KRadioAction(i18n("Draw"), "pencil",
                               0,
-                              this, SLOT(drawSelected()),
+                              this, SLOT(slotDrawSelected()),
                               actionCollection(), "draw");
     action->setExclusiveGroup("tracktools");
 
     action = new KRadioAction(i18n("Move"), "move",
                               0,
-                              this, SLOT(moveSelected()),
+                              this, SLOT(slotMoveSelected()),
                               actionCollection(), "move");
     action->setExclusiveGroup("tracktools");
 
     action = new KRadioAction(i18n("Resize"), "misc", // TODO : find a better icon
                               0,
-                              this, SLOT(resizeSelected()),
+                              this, SLOT(slotResizeSelected()),
                               actionCollection(), "resize");
     action->setExclusiveGroup("tracktools");
 
+    new KAction(i18n("Change Time Resolution..."), 
+                0,
+                this, SLOT(slotChangeTimeResolution()),
+                actionCollection(), "change_time_res");
 
     createGUI("rosegardenui.rc");
-    // createGUI(); // we don't have non-standard actions for the moment
-
-    // actions/eraser.png, pencil.png, move.png
-    
 }
 
 
@@ -622,23 +622,81 @@ void RosegardenGUIApp::slotStatusHelpMsg(const QString &text)
     statusBar()->message(text, 2000);
 }
 
-void RosegardenGUIApp::eraseSelected()
+void RosegardenGUIApp::slotEraseSelected()
 {
     m_view->eraseSelected();
 }
 
-void RosegardenGUIApp::drawSelected()
+void RosegardenGUIApp::slotDrawSelected()
 {
     m_view->drawSelected();
 }
 
-void RosegardenGUIApp::moveSelected()
+void RosegardenGUIApp::slotMoveSelected()
 {
     m_view->moveSelected();
 }
 
-void RosegardenGUIApp::resizeSelected()
+void RosegardenGUIApp::slotResizeSelected()
 {
     m_view->resizeSelected();
 }
 
+#include <qlayout.h>
+#include <qspinbox.h>
+#include <kdialog.h>
+
+class GetTimeResDialog : public KDialog
+{
+public:
+    GetTimeResDialog(QWidget *parent = 0,
+                     const char *name = 0,
+                     bool modal = false, WFlags f = 0);
+
+    void setInitialTimeRes(unsigned int);
+    
+    unsigned int getTimeRes() const;
+    
+protected:
+    QSpinBox *m_spinbox;
+};
+
+GetTimeResDialog::GetTimeResDialog(QWidget *parent,
+                                   const char *name,
+                                   bool modal, WFlags f)
+    : KDialog(parent, name, modal, f),
+      m_spinbox(0)
+{
+    QVBoxLayout *box = new QVBoxLayout(this);
+    box->setAutoAdd(true);
+    
+    new QLabel("Enter new time resolution", this);
+    m_spinbox = new QSpinBox(this);
+}
+
+
+unsigned int GetTimeResDialog::getTimeRes() const
+{
+    return m_spinbox->value();
+}
+
+void GetTimeResDialog::setInitialTimeRes(unsigned int v)
+{
+    m_spinbox->setValue(v);
+}
+
+
+
+void RosegardenGUIApp::slotChangeTimeResolution()
+{
+    GetTimeResDialog *dialog = new GetTimeResDialog(this);
+    
+    dialog->setInitialTimeRes(0);
+    dialog->show();
+
+    if (dialog->result()) {
+        
+        unsigned int timeResolution = dialog->getTimeRes();
+    }
+    
+}
