@@ -682,6 +682,16 @@ NotePixmapFactory::drawLegerLines(const NotePixmapParameters &params)
     x0 = m_left - m_noteBodyWidth / 5 - 1;
     x1 = m_left + m_noteBodyWidth + m_noteBodyWidth / 5 + 1;
 
+    if (params.m_shifted) {
+        if (params.m_stemGoesUp) {
+	    x0 += m_noteBodyWidth;
+	    x1 += m_noteBodyWidth;
+	} else {
+	    x0 -= m_noteBodyWidth;
+	    x1 -= m_noteBodyWidth;
+	}
+    }
+
     int offset = m_noteBodyHeight + getLegerLineThickness();
     int legerLines = params.m_legerLines;
     bool below = (legerLines < 0);
@@ -697,7 +707,7 @@ NotePixmapFactory::drawLegerLines(const NotePixmapParameters &params)
 	    y = m_above - getLegerLineThickness();
 	} else {
 	    // note above staff
-	    y = m_above + m_noteBodyHeight;
+	    y = m_above + m_noteBodyHeight - getLegerLineThickness();
 	}
     } else {
 	y = m_above + m_noteBodyHeight / 2;
@@ -1679,6 +1689,12 @@ NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
 
     if (length < nbw * 2) length = nbw * 2;
 
+    // For the purpose of our calculations, we assume the slur is
+    // above the notes.  If this is not the case, we flip the sign of
+    // the y-axis both before and after the calculation.
+
+    if (!above) dy = -dy;
+
     Equation::Point a(0, 0);
     Equation::Point b(length, dy);
 
@@ -1690,52 +1706,43 @@ NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
     Equation::solveForYByEndPoints(a, b, mx2, my2);
 
     int y1 = 0, y2 = dy;
-    
-    if (above) {
 
-	if (length < nbw * 10) {
-	    my1 -= (nbh * length) / (nbw * 5);
-	    my2 -= (nbh * length) / (nbw * 5);
-	} else {
-	    my1 -= (nbh * 3) / 2;
-	    my2 -= (nbh * 3) / 2;
-	}
+    // As remarked above, we can assume here that the slur is above
+    // the notes.
 
-	if      (dy >  nbh * 4) my2 -= nbh;
-	else if (dy < -nbh * 4) my1 -= nbh;
-
-	if      (my1 > my2 + nbh) my1 = my2 + nbh;
-	else if (my2 > my1 + nbh) my2 = my1 + nbh;
-	
-	if      (y1 > my1 + nbh*2) y1 = (int)my1 + nbh*2;
-	else if (y1 < my1 - nbh/2) my1 = y1 + nbh/2;
-
-	if      (y2 > my2 + nbh*2) y2 = (int)my2 + nbh*2;
-	else if (y2 < my2 - nbh/2) my2 = y2 + nbh/2;
-
+    if (length < nbw * 10) {
+	my1 -= nbh;
+	my2 -= nbh;
+//	my1 -= (nbh * length) / (nbw * 5);
+//	my2 -= (nbh * length) / (nbw * 5);
     } else {
-
-	if (length < nbw * 10) {
-	    my1 += (nbh * length) / (nbw * 5);
-	    my2 += (nbh * length) / (nbw * 5);
-	} else {
-	    my1 += (nbh * 3) / 2;
-	    my2 += (nbh * 3) / 2;
-	}
-
-	if      (dy >  nbh * 4) my1 += nbh;
-	else if (dy < -nbh * 4) my2 += nbh;
-
-	if      (my1 < my2 - nbh) my1 = my2 - nbh;
-	else if (my2 < my1 - nbh) my2 = my1 - nbh;
-	
-	if      (y1 < my1 - nbh*2) y1 = (int)my1 - nbh*2;
-	else if (y1 > my1 + nbh/2) my1 = y1 - nbh/2;
-
-	if      (y2 < my2 - nbh*2) y2 = (int)my2 - nbh*2;
-	else if (y2 > my2 + nbh/2) my2 = y2 - nbh/2;
+	my1 -= (nbh * 3) / 2;
+	my2 -= (nbh * 3) / 2;
     }
     
+    if      (dy >  nbh * 4) my2 -= nbh;
+    else if (dy < -nbh * 4) my1 -= nbh;
+
+    if      (dy >  length / 2) my1 += nbh / 2;
+    else if (dy < -length / 2) my2 += nbh / 2;
+    
+    if      (my1 > my2 + nbh) my1 = my2 + nbh;
+    else if (my2 > my1 + nbh) my2 = my1 + nbh;
+    
+    if      (y1 > my1 + nbh*2) y1 = (int)my1 + nbh*2;
+    else if (y1 < my1 - nbh/2) my1 = y1 + nbh/2;
+    
+    if      (y2 > my2 + nbh*2) y2 = (int)my2 + nbh*2;
+    else if (y2 < my2 - nbh/2) my2 = y2 + nbh/2;
+    
+    if (!above) {
+	y1  = -y1;
+	y2  = -y2;
+	my1 = -my1;
+	my2 = -my2;
+    }
+
+
 //    RG_DEBUG << "Pixmap dimensions: " << length << "x" << height << endl;
 
     bool havePixmap = false;
@@ -1761,7 +1768,7 @@ NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
 	    int width  = bottomRight.x() - topLeft.x();
 	    int height = bottomRight.y() - topLeft.y() + thickness - 1;
 	    createPixmapAndMask(smooth ? width*2+1  : width,
-				smooth ? height*2+1 : height,
+				smooth ? height*2+thickness*2 : height + thickness,
 				width, height);
 				
 	    hotspot = QPoint(-topLeft.x(), -topLeft.y());

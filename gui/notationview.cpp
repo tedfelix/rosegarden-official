@@ -815,8 +815,7 @@ void NotationView::positionStaffs()
     int accumulatedHeight;
     int rowsPerPage;
     int legerLines = 8;
-//    int origPrintSize = m_printSize;
-    bool haveRowGap = true;
+    int rowGapPercent = (m_staffs.size() > 1 ? 40 : 10);
 
     bool done = false;
 
@@ -865,7 +864,7 @@ void NotationView::positionStaffs()
 	    }
 	}
 
-	if (haveRowGap) accumulatedHeight += maxTrackHeight/7;
+	accumulatedHeight += maxTrackHeight * rowGapPercent / 100;
 
 	if (done) break;
 
@@ -889,9 +888,11 @@ void NotationView::positionStaffs()
 
 	    if (rowsPerPage < 1) {
 
-		if (legerLines > 6) --legerLines;
-		else if (haveRowGap) haveRowGap = false;
+		if (legerLines > 5) --legerLines;
+		else if (rowGapPercent > 20) rowGapPercent -= 10;
 		else if (legerLines > 4) --legerLines;
+		else if (rowGapPercent > 0) rowGapPercent -= 10;
+		else if (legerLines > 3) --legerLines;
 		else if (m_printSize > 3) --m_printSize;
 		else { // just accept that we'll have to overflow
 		    rowsPerPage = 1;
@@ -902,11 +903,12 @@ void NotationView::positionStaffs()
 		       accumulatedHeight * 2 / 3) {
 
 		// we can perhaps accommodate another row, with care
-		if (legerLines > 6) --legerLines;
-		else if (haveRowGap) haveRowGap = false;
-		else if (legerLines > 4) --legerLines;
+		if (legerLines > 5) --legerLines;
+		else if (rowGapPercent > 20) rowGapPercent -= 10;
+		else if (legerLines > 3) --legerLines;
+		else if (rowGapPercent > 0) rowGapPercent -= 10;
 		else { // no, we can't
-		    haveRowGap = true;
+		    rowGapPercent = 0;
 		    legerLines = 8;
 		    done = true;
 		}

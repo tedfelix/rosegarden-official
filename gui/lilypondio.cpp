@@ -621,7 +621,11 @@ LilypondExporter::write() {
     str << indent(col) << "\\time "
         << timeSignature.getNumerator() << "/"
         << timeSignature.getDenominator() << "" << std::endl;
-
+/*
+    if (exportLyrics) {
+	str << indent(col) << "\\addlyrics" << std::endl;
+    }
+*/
     bool isFlatKeySignature = false;
     int lastTrackIndex = -1;
     int voiceCounter = 0;
@@ -670,10 +674,8 @@ LilypondExporter::write() {
                     << " " << (voiceCounter +1) << "\" < " << std::endl;
 
                 str << indent(++col)<< "\\property Staff.instrument = \""  // indent+
-                    << staffName.str() <<"\"" << std::endl;;
-            
+                    << staffName.str() <<"\"" << std::endl;
             }
-//            SegmentNotationHelper tmpHelper(**i);
 
             // Temporary storage for non-atomic events (!BOOM)
             // ex. Lilypond expects signals when a decrescendo starts 
@@ -1092,7 +1094,7 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
     if (groupId != -1) {
 	if (groupType == GROUP_TYPE_TUPLED ||
 	    groupType == GROUP_TYPE_GRACE) {
-	    str << " } ";
+	    str << "} ";
 	} else if (groupType == GROUP_TYPE_BEAMED) {
 	    if (exportBeams) str << "] ";
 	}
@@ -1277,9 +1279,9 @@ LilypondExporter::writeStyle(Rosegarden::Event *note, std::string &prevStyle,
     std::string style = "";
     note->get<String>(NotationProperties::NOTE_STYLE, style);
 
-    if (prevStyle == "") prevStyle = styleClassical;
-    
-    if (style != "" && style != prevStyle) {
+    if (style != prevStyle) {
+
+	if (style == styleClassical && prevStyle == "") return;
 
 	prevStyle = style;
 

@@ -365,6 +365,55 @@ NotationGroup::height(const NELIterator &i) const
     return h;
 }
 
+void
+NotationGroup::applyStemProperties()
+{
+    bool aboveNotes = !(m_weightAbove > m_weightBelow);
+
+    NELIterator initialNote(getInitialNote()),
+                  finalNote(  getFinalNote());
+
+    if (initialNote == getContainer().end() ||
+        initialNote == finalNote) {
+        return; // no notes, no case to answer
+    }
+
+    if ((*initialNote)->event()->has(STEM_UP) &&
+	(*initialNote)->event()->isPersistent<Bool>(STEM_UP)) {
+	aboveNotes = (*initialNote)->event()->get<Bool>(STEM_UP);
+    }
+
+    if ((*initialNote)->event()->has(NotationProperties::BEAM_ABOVE) &&
+	(*initialNote)->event()->isPersistent<Bool>(NotationProperties::BEAM_ABOVE)) {
+	aboveNotes = (*initialNote)->event()->get<Bool>
+	    (NotationProperties::BEAM_ABOVE);
+    }
+
+    for (NELIterator i = initialNote; i != getContainer().end(); ++i) {
+        NotationElement* el = static_cast<NotationElement*>(*i);
+        
+        if (el->isNote() &&
+	    el->event()->get<Int>(NOTE_TYPE) < Note::Crotchet &&
+	    el->event()->has(BEAMED_GROUP_ID) &&
+	    el->event()->get<Int>(BEAMED_GROUP_ID) == m_groupNo) {
+
+	    el->event()->setMaybe<Bool>(NotationProperties::BEAMED, true);
+	    el->event()->setMaybe<Bool>(NotationProperties::BEAM_ABOVE, aboveNotes);
+	    el->event()->setMaybe<Bool>(STEM_UP, aboveNotes);
+
+        } else if (el->isNote()) {
+	    
+	    if (i == initialNote || i == finalNote) {
+		(*i)->event()->setMaybe<Bool>(STEM_UP,  aboveNotes);
+	    } else {
+		(*i)->event()->setMaybe<Bool>(STEM_UP, !aboveNotes);
+	    }
+	}
+
+        if (i == finalNote) break;
+    }
+}
+
 NotationGroup::Beam
 NotationGroup::calculateBeam(NotationStaff &staff)
 {

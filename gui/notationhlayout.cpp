@@ -38,6 +38,22 @@
 
 #include <cmath> // for fabs()
 
+#if (__GNUC__ < 3)
+
+#include <hash_set>
+#define __HASH_NS std
+
+#else
+
+#include <ext/hash_set>
+#if (__GNUC_MINOR__ >= 1)
+#define __HASH_NS __gnu_cxx
+#else
+#define __HASH_NS std
+#endif
+
+#endif
+
 using Rosegarden::Note;
 using Rosegarden::Int;
 using Rosegarden::Bool;
@@ -350,6 +366,9 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 	    continue;
 	}
 
+	typedef __HASH_NS::hash_set<long> GroupIdSet;
+	GroupIdSet groupIds;
+
 	NOTATION_DEBUG << "NotationHLayout::scanStaff: bar " << barNo << ", from " << barTimes.first << ", to " << barTimes.second << " (end " << segment.getEndMarkerTime() << "); from is at " << (from == notes->end() ? -1 : (*from)->getViewAbsoluteTime()) << ", to is at " << (to == notes->end() ? -1 : (*to)->getViewAbsoluteTime()) << endl;
 
         NotationElementList::iterator shortest = notes->end();
@@ -367,6 +386,17 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
         
             NotationElement *el = static_cast<NotationElement*>((*itr));
             int mw = getMinWidth(*el);
+
+	    if (el->event()->has(BEAMED_GROUP_ID)) {
+		long groupId = el->event()->get<Int>(BEAMED_GROUP_ID);
+		if (groupIds.find(groupId) == groupIds.end()) {
+		    NotationGroup group(*staff.getViewElementList(),
+					m_notationQuantizer,
+					m_properties, clef, key);
+		    group.applyStemProperties();
+		    groupIds.insert(groupId);
+		}
+	    }
 
             if (el->event()->isa(Clef::EventType)) {
 
@@ -1242,7 +1272,9 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
             NOTATION_DEBUG << "NotationHLayout::layout(): setting element's x to " << x << endl;
 	    long delta = 0;
 
-	    if (timeSigToPlace && !el->event()->isa(Clef::EventType)) {
+	    if (timeSigToPlace &&
+		!el->event()->isa(Rosegarden::Clef::EventType) &&
+		!el->event()->isa(Rosegarden::Key::EventType)) {
 		NOTATION_DEBUG << "Placing timesig at " << x << endl;
 		bdi->second.layoutData.timeSigX = (int)x;
 		x += getFixedItemSpacing()*2 +
@@ -1584,7 +1616,18 @@ NotationHLayout::positionChord(Staff &staff,
     bool shifted = chord.hasNoteHeadShifted();
 
     if (shifted) {
-	if (delta < noteWidth * 2) delta = noteWidth * 2;
+
+//	if (delta < noteWidth * 2) delta = noteWidth * 2;
+	delta += noteWidth;
+
+	//!!! This is problematic.  We don't actually know whether the stem is
+	// definitively going to be up or down until later on when any group
+	// that contains this chord has had its applyBeam method invoked.  And
+	// applyBeam can't work until we've established the x-coordinate.  I
+	// think I need to split out the group's beam-calculations so that we
+	// can calculate whether the beam is above or below early in the scan
+	// phase, before we start to work out its height and gradient.  Should
+	// be straightforward to do, actually.
 	if (!chord.hasStemUp()) baseX += noteWidth;
     }
 

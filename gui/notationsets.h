@@ -93,15 +93,23 @@ public:
     Type getGroupType() const { return m_type; }
 
     /**
-     * Writes beam data into each note in the group.  Notes'
-     * layout x coordinates must already have been set.
+     * Writes the BEAMED, BEAM_ABOVE, and STEM_UP properties into the
+     * notes in the group, as appropriate.  Does not require layout x
+     * coordinates to have been set.
+     */
+    void applyStemProperties();
+
+    /**
+     * Writes beam data into each note in the group.  Notes' layout x
+     * coordinates must already have been set.  Does not require
+     * applyStemProperties to have already been called.
      */
     void applyBeam(NotationStaff &);
 
     /**
-     * Writes tupling line data into each note in the group. 
-     * Notes' layout x coordinates must already have been set.
-     * Does nothing if this is not a tupled group.
+     * Writes tupling line data into each note in the group.  Notes'
+     * layout x coordinates must already have been set.  Does nothing
+     * if this is not a tupled group.
      */
     void applyTuplingLine(NotationStaff &);
 
