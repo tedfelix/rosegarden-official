@@ -73,9 +73,12 @@ const MappedObjectProperty MappedObject::Name = "name";
 const MappedObjectProperty MappedObject::Instrument = "instrument";
 const MappedObjectProperty MappedObject::Position = "position";
 
+const MappedObjectProperty MappedAudioObject::ConnectionsIn = "connectonsIn";
+const MappedObjectProperty MappedAudioObject::ConnectionsOut = "connectionsOut";
+const MappedObjectProperty MappedAudioObject::Channels = "channels";
+
 const MappedObjectProperty MappedAudioFader::FaderLevel = "faderLevel";
 const MappedObjectProperty MappedAudioFader::FaderRecordLevel = "faderRecordLevel";
-const MappedObjectProperty MappedAudioFader::Channels = "channels";
 const MappedObjectProperty MappedAudioFader::Pan = "pan";
 
 const MappedObjectProperty MappedAudioPluginManager::Plugins = "plugins";
@@ -292,8 +295,8 @@ MappedStudio::createObject(MappedObjectType type,
     {
         mO = new MappedAudioFader(this,
                                   id,
-                                  readOnly,
-                                  2); // channels
+                                  2, // channels
+                                  readOnly);
 
         // push to the studio's child stack
         addChild(mO);
@@ -610,22 +613,58 @@ MappedStudio::setPluginInstancePort(InstrumentId id,
 
 #endif // HAVE_LADSPA
 
+// -------------- MappedAudioObject -----------------
+//
+//
+MappedAudioObject::MappedAudioObject(MappedObject *parent,
+                                     const std::string &name,
+                                     MappedObjectType type,
+                                     MappedObjectId id,
+                                     MappedObjectValue channels,
+                                     bool readOnly):
+                       MappedObject(parent,
+                                    name,
+                                    type,
+                                    id,
+                                    readOnly),
+                                    m_channels(channels)
+{
+}
+
+MappedAudioObject::~MappedAudioObject()
+{
+}
+
+void
+MappedAudioObject::setConnections(AudioConnection dir,
+                                  MappedObjectPropertyList conns)
+{
+}
+
+MappedObjectPropertyList
+MappedAudioObject::getConnections(AudioConnection dir)
+{
+    MappedObjectPropertyList list;
+    return list;
+}
+
 
 // ------------ MappedAudioFader ----------------
 //
 MappedAudioFader::MappedAudioFader(MappedObject *parent,
                                    MappedObjectId id,
-                                   bool readOnly,
-                                   MappedObjectValue channels):
-    MappedObject(parent, "MappedAudioFader",
-                 AudioFader,
-                 id,
-                 readOnly),
-                 m_level(80), // assume 100 is max for the moment
-                 m_channels(channels),
-                 m_instrumentId(0),
-                 m_bypassed(false),
-                 m_pan(Rosegarden::MidiMidValue)
+                                   MappedObjectValue channels,
+                                   bool readOnly):
+    MappedAudioObject(parent,
+                      "MappedAudioFader",
+                      AudioFader,
+                      id,
+                      channels,
+                      readOnly),
+                      m_level(80), // assume 100 is max for the moment
+                      m_instrumentId(0),
+                      m_bypassed(false),
+                      m_pan(Rosegarden::MidiMidValue)
 {
 }
 
@@ -644,8 +683,10 @@ MappedAudioFader::getPropertyList(const MappedObjectProperty &property)
         list.push_back(MappedAudioFader::FaderLevel);
         list.push_back(MappedAudioFader::FaderRecordLevel);
         list.push_back(MappedObject::Instrument);
-        list.push_back(MappedAudioFader::Channels);
         list.push_back(MappedAudioFader::Pan);
+        list.push_back(MappedAudioObject::Channels);
+        list.push_back(MappedAudioObject::ConnectionsIn);
+        list.push_back(MappedAudioObject::ConnectionsOut);
     }
     else if (property == MappedObject::Instrument)
     {
@@ -659,13 +700,33 @@ MappedAudioFader::getPropertyList(const MappedObjectProperty &property)
     {
         list.push_back(MappedObjectProperty("%1").arg(m_recordLevel));
     }
-    else if (property == MappedAudioFader::Channels)
+    else if (property == MappedAudioObject::Channels)
     {
         list.push_back(MappedObjectProperty("%1").arg(m_channels));
     }
     else if (property == MappedAudioFader::Pan)
     {
         list.push_back(MappedObjectProperty("%1").arg(m_pan));
+    }
+    else if (property == MappedAudioObject::ConnectionsIn)
+    {
+        Rosegarden::MappedObjectPropertyList::const_iterator 
+            it = m_connectionsIn.begin();
+
+        for( ; it != m_connectionsIn.end(); ++it)
+        {
+            list.push_back(*it);
+        }
+    }
+    else if (property == MappedAudioObject::ConnectionsOut)
+    {
+        Rosegarden::MappedObjectPropertyList::const_iterator 
+            it = m_connectionsOut.begin();
+
+        for( ; it != m_connectionsOut.end(); ++it)
+        {
+            list.push_back(*it);
+        }
     }
 
     return list;
@@ -691,7 +752,7 @@ MappedAudioFader::setProperty(const MappedObjectProperty &property,
                   << "record fader = " << value << std::endl;
         m_recordLevel = value;
     }
-    else if (property ==  MappedAudioFader::Channels)
+    else if (property ==  MappedAudioObject::Channels)
     {
         std::cout << "MappedAudioFader::setProperty - "
                   << "channels = " << value << std::endl;
@@ -712,59 +773,27 @@ MappedAudioFader::setProperty(const MappedObjectProperty &property,
 
 }
 
-/*
-QDataStream&
-operator>>(QDataStream &dS, MappedStudio *mS)
+// ---------------- MappedAudioBuss -------------------
+//
+//
+MappedAudioBuss::MappedAudioBuss(MappedObject *parent,
+                                 MappedObjectId id,
+                                 MappedObjectValue channels,
+                                 bool readOnly):
+    MappedAudioObject(parent,
+                      "MappedAudioBuss",
+                      AudioBuss,
+                      id,
+                      channels,
+                      readOnly)
 {
-    // not implemented
-    mS->clear();
+}
 
-    return dS;
+MappedAudioBuss::~MappedAudioBuss()
+{
 }
 
 
-QDataStream&
-operator<<(QDataStream &dS, MappedStudio *mS)
-{
-    dS << mS->getObjects()->size();
-
-    for (unsigned int i = 0; i < mS->getObjects()->size(); i++)
-    {
-        //dS << m_objects[i]->getId();
-        //dS << m_objects[i]->getType();
-    }
-
-    return dS;
-}
-
-QDataStream&
-operator>>(QDataStream &dS, MappedStudio &mS)
-{
-    mS.clear();
-
-    unsigned int size = 0;
-    dS >> size;
-    
-    //for (unsigned int i = 0; i < size; i++)
-
-    return dS;
-}
-
-
-QDataStream&
-operator<<(QDataStream &dS, const MappedStudio &mS)
-{
-    dS << mS.getObjects()->size();
-
-    for (unsigned int i = 0; i < mS.getObjects()->size(); i++)
-    {
-        //dS << m_objects[i].getId();
-        //dS << m_objects[i].getType();
-    }
-
-    return dS;
-}
-*/
 
 // ----------------- MappedAudioPluginManager -----------------
 //

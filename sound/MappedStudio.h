@@ -67,7 +67,8 @@ public:
     typedef enum
     {
         Studio,
-        AudioFader,
+        AudioFader,          // connectable fader - interfaces with devices
+        AudioBuss,           // connectable buss - inferfaces with faders
         AudioPluginManager,
         LADSPAPlugin,
         LADSPAPort
@@ -306,10 +307,60 @@ private:
 };
 
 
+// A connectable AudioObject that provides a connection framework
+// for MappedAudioFader and MappedAudioBuss (for example).  An
+// asbtract base class.
+//
+// n input connections and m output connections - subclasses
+// can do the cleverness if n != m
+//
+//
+
+class MappedAudioObject : public MappedObject
+{
+public:
+    static const MappedObjectProperty ConnectionsIn;
+    static const MappedObjectProperty ConnectionsOut;
+    static const MappedObjectProperty Channels;
+
+    typedef enum
+    {
+        In,
+        Out
+    } AudioConnection;
+
+    MappedAudioObject(MappedObject *parent,
+                      const std::string &name,
+                      MappedObjectType type,
+                      MappedObjectId id,
+                      MappedObjectValue channels,
+                      bool readOnly);
+
+    ~MappedAudioObject();
+
+    // Get and set connections - these operate on normal MappedObject
+    // properties but we provide these methods for convenience.
+    //
+    void setConnections(AudioConnection dir,
+                        MappedObjectPropertyList conns);
+
+    MappedObjectPropertyList getConnections (AudioConnection dir);
+
+protected:
+
+    // Which audio connections we have
+    //
+    MappedObjectPropertyList      m_connectionsIn;
+    MappedObjectPropertyList      m_connectionsOut;
+
+    // How many channels we carry
+    //
+    MappedObjectValue             m_channels;
+};
 
 // Audio fader
 //
-class MappedAudioFader : public MappedObject
+class MappedAudioFader : public MappedAudioObject
 {
 public:
 
@@ -317,13 +368,12 @@ public:
     //
     static const MappedObjectProperty FaderLevel;
     static const MappedObjectProperty FaderRecordLevel;
-    static const MappedObjectProperty Channels;
     static const MappedObjectProperty Pan;
 
     MappedAudioFader(MappedObject *parent,
                      MappedObjectId id,
-                     bool readOnly,
-                     MappedObjectValue channels);
+                     MappedObjectValue channels = 2, // sterep default
+                     bool readOnly = false);
     ~MappedAudioFader();
 
     virtual MappedObjectPropertyList getPropertyList(
@@ -336,7 +386,6 @@ protected:
 
     MappedObjectValue             m_level;
     MappedObjectValue             m_recordLevel;
-    MappedObjectValue             m_channels;
     Rosegarden::InstrumentId      m_instrumentId;
 
     // Are the plugins for this instrument to be bypassed?
@@ -348,6 +397,18 @@ protected:
     // Stereo pan (-1.0 to +1.0)
     //
     MappedObjectValue             m_pan;
+
+};
+
+class MappedAudioBuss : public MappedAudioObject
+{
+public:
+
+    MappedAudioBuss(MappedObject *parent,
+                    MappedObjectId id,
+                    MappedObjectValue channels = 2,  // stereo default
+                    bool readOnly = false);
+    ~MappedAudioBuss();
 
 };
 

@@ -1079,7 +1079,7 @@ AudioInstrumentParameterPanel::slotAudioChannels(int channels)
 
     Rosegarden::StudioControl::setStudioObjectProperty
         (Rosegarden::MappedObjectId(m_selectedInstrument->getMappedId()),
-         Rosegarden::MappedAudioFader::Channels,
+         Rosegarden::MappedAudioObject::Channels,
          Rosegarden::MappedObjectValue(channels));
 
 }
