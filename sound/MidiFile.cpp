@@ -762,7 +762,7 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
   int trackNumber = 0;
 
   int trackStartTime;
-  int lastEventDeltaTime = 0;
+  int lastEventDeltaTime;
   int midiEventDeltaTime;
   int midiChannel = 0;
 
@@ -789,6 +789,11 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
   float timingFactor = (float) _timingDivision/
                        (float) Note(Note::Crotchet).getDuration();
 
+#ifdef MIDI_DEBUG
+  cout << "TIMING DIVISION = " << _timingDivision << endl;
+  cout << "TIMING FACTOR   = " << timingFactor << endl;
+#endif 
+
   for (Rosegarden::Composition::const_iterator trk = comp.begin();
                                                trk != comp.end(); ++trk)
   {
@@ -797,6 +802,10 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
     TrackPerformanceHelper helper(**trk);
 
     trackStartTime = (int)(timingFactor * (float)(*trk)->getStartIndex());
+
+    // Reset this for ever track
+    //
+    lastEventDeltaTime = 0;
 
     for (Rosegarden::Track::iterator el = (*trk)->begin();
                                      el != (*trk)->end(); ++el)
@@ -816,8 +825,8 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
 
         // insert the NOTE_ON at the appropriate channel
         //
-        midiEvent = new MidiEvent(midiEventDeltaTime * 6,       // hack in the conversion
-                                  MIDI_NOTE_ON + midiChannel, 
+        midiEvent = new MidiEvent(midiEventDeltaTime,           // time
+                                  MIDI_NOTE_ON + midiChannel,   // eventcode
                                   (*el)->get<Int>("pitch"),     // pitch
                                   127);                         // velocity
 
@@ -833,7 +842,7 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
 
         // insert the matching NOTE OFF
         //
-        midiEvent = new MidiEvent(midiEventDeltaTime * 6,       // hack in the conversion
+        midiEvent = new MidiEvent(midiEventDeltaTime,
                                   MIDI_NOTE_OFF + midiChannel,
                                   (*el)->get<Int>("pitch"),
                                   127);
@@ -907,23 +916,45 @@ MidiFile::longToMidiBytes(std::ofstream* midiFile, const unsigned long &number)
 
 }
 
+// Turn a delta time into a MIDI time - overlapping into
+// a maximum of four bytes using the MSB as the carry on
+// flag
+//
 void
-MidiFile::longToBuffer(std::string &buffer, const unsigned long &number)
+MidiFile::longToVarBuffer(std::string &buffer, const unsigned long &number)
 {
-  MidiByte upper1;
-  MidiByte lower1;
-  MidiByte upper2;
-  MidiByte lower2;
+  long inNumber = number;
+  long outNumber;
 
-  upper1 = (number & 0xff000000) >> 24;
-  lower1 = (number & 0x00ff0000) >> 16;
-  upper2 = (number & 0x0000ff00) >> 8;
-  lower2 = (number & 0x000000ff);
+#ifdef MIDI_DEBUG
+  cout << "WRITING TIME = " << number << endl;
+#endif
 
-  buffer += upper1;
-  buffer += lower1;
-  buffer += upper2;
-  buffer += lower2;
+  // get the lowest 7 bits of the number
+  outNumber = number & 0x7f;
+
+  // Shift and test and move the numbers
+  // on if we need them - setting the MSB
+  // as we go.
+  //
+  while  ((inNumber >>= 7 ) > 0)
+  {
+    outNumber <<= 8;
+    outNumber |= 0x80;
+    outNumber += (inNumber & 0x7f);
+  }
+
+  // Now move the converted number out onto the buffer
+  //
+  while(1)
+  {
+    buffer += (MidiByte) ( outNumber & 0xff );
+    if (outNumber & 0x80)
+      outNumber >>= 8;
+    else
+      break;
+  }
+
 }
 
 
@@ -989,9 +1020,10 @@ MidiFile::writeTrack(std::ofstream* midiFile, const unsigned int &trackNumber)
   for ( midiEvent = (_midiComposition[trackNumber].begin());
         midiEvent != (_midiComposition[trackNumber].end()); ++midiEvent )
   {
-    // Write the time to the buffer
+    // Write the time to the buffer in MIDI format
     //
-    longToBuffer(trackBuffer, midiEvent->time());
+    //
+    longToVarBuffer(trackBuffer, midiEvent->time());
 
     if (midiEvent->isMeta())
     {
@@ -1042,7 +1074,10 @@ MidiFile::writeTrack(std::ofstream* midiFile, const unsigned int &trackNumber)
   // ..length of buffer..
   //
   longToMidiBytes(midiFile, (long)trackBuffer.length());
+
+#ifdef MIDI_DEBUG
   cout << "LENGTH of BUFFER = " << trackBuffer.length() << endl;
+#endif
 
   // ..then the buffer itself..
   //
