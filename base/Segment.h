@@ -321,7 +321,7 @@ public:
     iterator findSingle(Event*);
 
     const_iterator findSingle(Event *e) const {
-	return const_iterator(((const Segment *)this)->findSingle(e));
+	return const_iterator(((Segment *)this)->findSingle(e));
     }
 
     /**
@@ -331,7 +331,7 @@ public:
     iterator findTime(timeT time);
 
     const_iterator findTime(timeT time) const {
-	return const_iterator(((const Segment *)this)->findTime(time));
+	return const_iterator(((Segment *)this)->findTime(time));
     }
 
     /**
@@ -342,7 +342,7 @@ public:
     iterator findNearestTime(timeT time);
 
     const_iterator findNearestTime(timeT time) const {
-	return const_iterator(((const Segment *)this)->findNearestTime(time));
+	return const_iterator(((Segment *)this)->findNearestTime(time));
     }
 
 
