@@ -54,9 +54,6 @@ RosegardenTempoDialog::RosegardenTempoDialog(RosegardenGUIDoc *doc,
     connect((QObject*)CancelButton, SIGNAL(released()),
             this, SLOT(slotCancel()));
 
-    connect(getCommandHistory(), SIGNAL(commandExecuted(Command *)),
-            this, SLOT(slotCommandExecuted(Command *)));
-
     // bind Return key to OK button
     //
     QAccel *a = new QAccel(this);
@@ -158,18 +155,6 @@ MultiViewCommandHistory*
 RosegardenTempoDialog::getCommandHistory()
 {
     return m_doc->getCommandHistory();
-}
-
-void
-RosegardenTempoDialog::slotCommandExecuted(Command *command)
-{
-     AddTempoChangeCommand *tempoCommand =
-         dynamic_cast<AddTempoChangeCommand *>(command);
-
-     if (tempoCommand)
-     {
-         cout << "RosegardenTempoDialog::slotCommandExecuted - SHOULD UPDATE" << endl;;
-     }
 }
 
 }

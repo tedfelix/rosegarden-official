@@ -57,9 +57,6 @@ public slots:
     void slotOK();
     void slotCancel();
 
-    void slotCommandExecuted(Command *command);
-
-
 private:
     RosegardenGUIDoc   *m_doc;
 

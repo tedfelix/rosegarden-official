@@ -53,6 +53,7 @@ class KProcess;
 // forward declaration of the RosegardenGUI classes
 class RosegardenGUIDoc;
 class RosegardenGUIView;
+class Command;
 
 namespace Rosegarden { class SequenceManager; }
 
@@ -600,6 +601,11 @@ public slots:
      */
     void slotEditTempo();
     void slotEditTempo(QWidget *parent);
+
+    /*
+     * Command Executed
+     */
+    void slotCommandExecuted(Command *);
 
 private:
 

@@ -56,6 +56,8 @@
 #include "sequencemanager.h"
 #include "trackbuttons.h"
 #include "trackeditor.h"
+#include "multiviewcommandhistory.h"
+#include "segmentcommands.h"
 
 #define ID_STATUS_MSG 1
 
@@ -460,6 +462,9 @@ void RosegardenGUIApp::initDocument()
     m_doc->newDocument();
 
     m_doc->getCommandHistory()->attachView(actionCollection());
+
+    connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted(Command *)),
+            SLOT(slotCommandExecuted(Command *)));
 }
 
 void RosegardenGUIApp::initView()
@@ -2004,13 +2009,23 @@ void RosegardenGUIApp::slotEditTempo(QWidget *parent)
     Rosegarden::RosegardenTempoDialog *tempoDlg = 
         new Rosegarden::RosegardenTempoDialog(m_doc, parent);
 
-    // Update display when the dialog closes
-    //
-    connect(tempoDlg, SIGNAL(destroyed()), SLOT(slotRefreshTimeDisplay()));
-
     tempoDlg->show();
 
 }
+
+void RosegardenGUIApp::slotCommandExecuted(Command *command)
+{
+    AddTempoChangeCommand *tempoCommand =
+        dynamic_cast<AddTempoChangeCommand *>(command);
+
+    // Update the transport if the tempo has been done/undone
+    //
+    if (tempoCommand)
+    {
+        slotRefreshTimeDisplay();
+    }
+}
+
 
 
 
