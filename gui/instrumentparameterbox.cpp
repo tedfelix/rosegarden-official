@@ -153,14 +153,13 @@ InstrumentParameterBox::useInstrument(Instrument *instrument)
 {
     RG_DEBUG << "useInstrument() - populate Instrument\n";
 
-    m_noInstrumentParameters->hide();
-    m_midiInstrumentParameters->hide();
-    m_audioInstrumentParameters->hide();
-
     if (instrument == 0)
     {
 //!!!        m_widgetStack->raiseWidget(m_noInstrumentParameters);
-	m_noInstrumentParameters->show();
+	m_audioInstrumentParameters->hide();
+	m_midiInstrumentParameters->hide();
+	if (m_noInstrumentParameters->isHidden()) 
+	    m_noInstrumentParameters->show();
         return;
     } 
 
@@ -171,15 +170,23 @@ InstrumentParameterBox::useInstrument(Instrument *instrument)
     //
     if (instrument->getType() == Instrument::Audio)
     {
+	m_noInstrumentParameters->hide();
+	m_midiInstrumentParameters->hide();
         m_audioInstrumentParameters->setupForInstrument(m_selectedInstrument);
+	if (m_audioInstrumentParameters->isHidden())
+	    m_audioInstrumentParameters->show();
+
 //!!!        m_widgetStack->raiseWidget(m_audioInstrumentParameters);
-	m_audioInstrumentParameters->show();
 
     } else { // Midi
 
+	m_noInstrumentParameters->hide();
+	m_audioInstrumentParameters->hide();
         m_midiInstrumentParameters->setupForInstrument(m_selectedInstrument);
+	if (m_midiInstrumentParameters->isHidden())
+	    m_midiInstrumentParameters->show();
+
 //!!!        m_widgetStack->raiseWidget(m_midiInstrumentParameters);
-	m_midiInstrumentParameters->show();
     }
     
 }
@@ -1232,9 +1239,11 @@ MIDIInstrumentParameterPanel::populateBankList()
 
     if (md->getVariationType() == MidiDevice::NoVariations) {
 
-	m_bankLabel->show();
-	m_bankCheckBox->show();
-	m_bankValue->show();
+	if (m_bankLabel->isHidden()) {
+	    m_bankLabel->show();
+	    m_bankCheckBox->show();
+	    m_bankValue->show();
+	}
 	banks = md->getBanks(m_selectedInstrument->isPercussion());
 
 	for (unsigned int i = 0; i < banks.size(); ++i) {
@@ -1255,14 +1264,17 @@ MIDIInstrumentParameterPanel::populateBankList()
 	}
 	
 	if (bytes.size() < 2) {
-	    m_bankLabel->hide();
-	    m_bankCheckBox->hide();
-	    m_bankValue->hide();
-
+	    if (!m_bankLabel->isHidden()) {
+		m_bankLabel->hide();
+		m_bankCheckBox->hide();
+		m_bankValue->hide();
+	    }
 	} else {
-	    m_bankLabel->show();
-	    m_bankCheckBox->show();
-	    m_bankValue->show();
+	    if (m_bankLabel->isHidden()) {
+		m_bankLabel->show();
+		m_bankCheckBox->show();
+		m_bankValue->show();
+	    }
 	}
 
 	if (useMSB) {
@@ -1363,9 +1375,11 @@ MIDIInstrumentParameterPanel::populateVariationList()
     RG_DEBUG << "MIDIInstrumentParameterPanel::populateVariationList: variation type is " << md->getVariationType() << endl;
 
     if (md->getVariationType() == MidiDevice::NoVariations) {
-	m_variationLabel->hide();
-	m_variationCheckBox->hide();
-	m_variationValue->hide();
+	if (!m_variationLabel->isHidden()) {
+	    m_variationLabel->hide();
+	    m_variationCheckBox->hide();
+	    m_variationValue->hide();
+	}
 	return;
     } 
 
@@ -1436,9 +1450,11 @@ MIDIInstrumentParameterPanel::populateVariationList()
     }
 
     if (m_variations.size() < 2) {
-	m_variationLabel->hide();
-	m_variationCheckBox->hide();
-	m_variationValue->hide();
+	if (!m_variationLabel->isHidden()) {
+	    m_variationLabel->hide();
+	    m_variationCheckBox->hide();
+	    m_variationValue->hide();
+	}
 	
     } else {
 	//!!! seem to have problems here -- the grid layout doesn't
@@ -1446,9 +1462,11 @@ MIDIInstrumentParameterPanel::populateVariationList()
 	//visible row (say program) to 2 (program + variation) the
 	//second one overlaps the control knobs
 
-	m_variationLabel->show();
-	m_variationCheckBox->show();
-	m_variationValue->show();
+	if (m_variationLabel->isHidden()) {
+	    m_variationLabel->show();
+	    m_variationCheckBox->show();
+	    m_variationValue->show();
+	}
 
 	if (m_programValue->width() > m_variationValue->width()) {
 	    m_variationValue->setMinimumWidth(m_programValue->width());
