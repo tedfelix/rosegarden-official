@@ -24,6 +24,21 @@
 
 #include <qscrollview.h>
 
+/**
+ * A QScrollView which defers vertical scrolling (through mouse wheel)
+ * elsewhere, typically another QScrollView, so that both can be kept
+ * in sync. The master scrollview will connect its vertical scrollbar
+ * to the slave view so the scrollbar will act on both views.
+ *
+ * The slave scrollview will defer its scrolling to the master by
+ * having the gotWheelEvent() signal connected to a slot in the master
+ * scrollview, which will simply process the wheel event as if it had
+ * received it itself.
+ *
+ * @see TrackEditor
+ * @see SegmentCanvas
+ * @see TrackEditor::m_trackButtonScroll
+ */
 class QDeferScrollView : public QScrollView
 {
     Q_OBJECT
