@@ -132,7 +132,9 @@ public:
     //static nframes_t             m_bufferSize;
 
     jack_port_t* getJackInputPort() { return m_audioInputPort; }
-    jack_port_t* getJackOutputPort() { return m_audioOutputPort; }
+
+    jack_port_t* getJackOutputPortLeft() { return m_audioOutputPortLeft; }
+    jack_port_t* getJackOutputPortRight() { return m_audioOutputPortRight; }
 
     // clear down audio connections if we're restarting
     //
@@ -209,7 +211,8 @@ private:
 
     jack_client_t               *m_audioClient;
     jack_port_t                 *m_audioInputPort;
-    jack_port_t                 *m_audioOutputPort;
+    jack_port_t                 *m_audioOutputPortLeft;
+    jack_port_t                 *m_audioOutputPortRight;
 
 #endif
 

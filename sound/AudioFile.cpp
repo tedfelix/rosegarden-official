@@ -117,7 +117,7 @@ AudioFile::parseHeader(const std::string &hS)
     //
     unsigned int alwaysOne = getLittleEndian(hS.substr(20, 2));
     if (alwaysOne != 0x01)
-        throw(std::string("AudioFile::parseHeader - always one byte isn't"));
+        throw(std::string("AudioFile::parseHeader - \"always one\" byte isn't"));
 
 
     // We seem to have a good looking .WAV file - extract the
@@ -256,19 +256,27 @@ AudioFile::scanTo(const RealTime &time)
     return true;
 }
 
-// Return a number of samples
+// Get a certain number of sample frames - a frame is a set
+// of samples (all channels) for a given sample quanta.
+//
+// For example, getting one frame of 16-bit stereo will return
+// four bytes of data (two per channel).
+//
 //
 std::string
-AudioFile::getSamples(unsigned int samples)
+AudioFile::getSampleFrames(unsigned int frames)
 {
-    long totalBytes = samples * m_channels * m_bytesPerSample;
+    // Bytes per sample already takes into account the number
+    // of channels we're using
+    //
+    long totalBytes = frames * m_bytesPerSample;
     return getBytes(m_file, totalBytes);
 }
 
-// Return samples over a time period
+// Return a slice of frames over a time period
 //
 std::string
-AudioFile::getSampleSlice(const RealTime &time)
+AudioFile::getSampleFrameSlice(const RealTime &time)
 {
     long totalSamples = m_sampleRate * time.sec +
                         ( ( m_sampleRate * time.usec ) / 1000000 );

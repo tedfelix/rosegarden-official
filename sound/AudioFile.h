@@ -63,10 +63,10 @@ public:
     ~AudioFile();
 
     std::string getName() const { return m_name; }
-    unsigned int getID() const { return m_id; }
+    unsigned int getId() const { return m_id; }
     unsigned int getBitsPerSample() const { return m_bitsPerSample; }
     unsigned int getSampleRate() const { return m_sampleRate; }
-    bool getChannels() const { return m_channels; }
+    unsigned int getChannels() const { return m_channels; }
     
     AudioFileType getType() { return m_type; }
 
@@ -88,12 +88,12 @@ public:
     // Return a number of samples - caller will have to
     // de-interleave n-channel samples themselves.
     //
-    std::string getSamples(unsigned int samples);
+    std::string getSampleFrames(unsigned int frames);
 
     // Return a number of (possibly) interleaved samples
     // over a time slice from current position.
     //
-    std::string getSampleSlice(const RealTime &time);
+    std::string getSampleFrameSlice(const RealTime &time);
 
 private:
 

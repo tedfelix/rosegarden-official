@@ -77,7 +77,7 @@ AudioFileManager::removeFile(const unsigned int &id)
          it != m_audioFiles.end();
          it++)
     {
-        if ((*it)->getID() == id)
+        if ((*it)->getId() == id)
         {
             delete(*it);
             m_audioFiles.erase(it);
@@ -101,8 +101,8 @@ AudioFileManager::getFirstUnusedID()
          it != m_audioFiles.end();
          it++)
     {
-        if (rI < (*it)->getID())
-            rI = (*it)->getID();
+        if (rI < (*it)->getId())
+            rI = (*it)->getId();
     }
 
     rI++;
@@ -214,7 +214,7 @@ AudioFileManager::fileExists(const unsigned int &id)
          it != m_audioFiles.end();
          it++)
     {
-        if ((*it)->getID() == id)
+        if ((*it)->getId() == id)
             return true;
     }
 

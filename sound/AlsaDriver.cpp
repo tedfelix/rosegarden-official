@@ -75,7 +75,8 @@ namespace Rosegarden
 {
 
 #ifdef HAVE_JACK
-static nframes_t _jackBufferSize;
+static nframes_t    _jackBufferSize;
+static unsigned int _jackSampleRate;
 #endif
 
 AlsaDriver::AlsaDriver():
@@ -95,6 +96,7 @@ AlsaDriver::AlsaDriver():
     std::cout << "Rosegarden AlsaDriver - " << m_name << std::endl;
 #ifdef HAVE_JACK
     _jackBufferSize = 0;
+    _jackSampleRate = 0;
 #endif
 }
 
@@ -624,9 +626,12 @@ AlsaDriver::initialiseAudio()
     jack_set_sample_rate_callback(m_audioClient, jackSampleRate, this);
     jack_on_shutdown(m_audioClient, jackShutdown, this);
 
+    // get and report the sample rate
+    //
+    _jackSampleRate = jack_get_sample_rate(m_audioClient);
+
     std::cout << "AlsaDriver::initialiseAudio - JACK sample rate = "
-              << jack_get_sample_rate(m_audioClient)
-              << endl;
+              << _jackSampleRate << std::endl;
 
     m_audioInputPort = jack_port_register(m_audioClient,
                                           "input",
@@ -634,11 +639,17 @@ AlsaDriver::initialiseAudio()
                                           JackPortIsInput,
                                           0);
 
-    m_audioOutputPort = jack_port_register(m_audioClient,
-                                           "output",
-                                           JACK_DEFAULT_AUDIO_TYPE,
-                                           JackPortIsOutput,
-                                           0);
+    m_audioOutputPortLeft = jack_port_register(m_audioClient,
+                                               "output",
+                                               JACK_DEFAULT_AUDIO_TYPE,
+                                               JackPortIsOutput,
+                                               0);
+
+    m_audioOutputPortRight = jack_port_register(m_audioClient,
+                                                "output",
+                                                JACK_DEFAULT_AUDIO_TYPE,
+                                                JackPortIsOutput,
+                                                0);
 
 
     // Get the initial buffer size before we activate the client
@@ -685,10 +696,24 @@ AlsaDriver::initialiseAudio()
     free(ports);
     */
 
-    // connect our client up to the ALSA ports - first output
+    // connect our client up to the ALSA ports - first left output
     //
-    if (jack_connect(m_audioClient, jack_port_name(m_audioOutputPort),
+    if (jack_connect(m_audioClient, jack_port_name(m_audioOutputPortLeft),
                      "alsa_pcm:out_1"))
+    {
+        std::cerr << "AlsaDriver::initialiseAudio - "
+                  << "cannot connect to JACK output port" << std::endl;
+
+        if (m_driverStatus == MIDI_AND_AUDIO_OK)
+            m_driverStatus = MIDI_OK;
+        else if (m_driverStatus == AUDIO_OK)
+            m_driverStatus = NO_DRIVER;
+
+        return;
+    }
+
+    if (jack_connect(m_audioClient, jack_port_name(m_audioOutputPortRight),
+                     "alsa_pcm:out_2"))
     {
         std::cerr << "AlsaDriver::initialiseAudio - "
                   << "cannot connect to JACK output port" << std::endl;
@@ -1479,8 +1504,11 @@ AlsaDriver::jackProcess(nframes_t nframes, void *arg)
     
         // Get output buffer
         //
-        sample_t *outputBuffer = static_cast<sample_t*>
-            (jack_port_get_buffer(inst->getJackOutputPort(),
+        sample_t *leftBuffer = static_cast<sample_t*>
+            (jack_port_get_buffer(inst->getJackOutputPortLeft(),
+                                  nframes));
+        sample_t *rightBuffer = static_cast<sample_t*>
+            (jack_port_get_buffer(inst->getJackOutputPortRight(),
                                   nframes));
 
         for (it = audioQueue.begin(); it != audioQueue.end(); ++it)
@@ -1491,16 +1519,31 @@ AlsaDriver::jackProcess(nframes_t nframes, void *arg)
                 //
                 audioFile = inst->getAudioFile((*it)->getId());
 
+                //cout << "AUDIO FILE ID = " << audioFile->getId() << endl;
+                //cout << "AUDIO FILE NAME = " << audioFile->getFilename() << endl;
+
                 if (audioFile)
                 {
-                    std::cout << "GET " << nframes << " FRAMES" << std::endl;
+                    //std::cout << "GET " << nframes << " FRAMES" << std::endl;
 
+                    // store the samples in a string
                     std::string samples;
 
+                    int channels = audioFile->getChannels();
+                    int bytes = audioFile->getBitsPerSample() / 8;
+
+
+                    /*
+                    cout << "BITS PER SAMPLE = "
+                         << audioFile->getBitsPerSample()
+                                                 << std::endl;
+                                                 */
+                    // Get the number of frames according to the number of
+                    // channels.
+                    //
                     try
                     {
-                        samples =
-                            audioFile->getSamples(nframes);
+                        samples = audioFile->getSampleFrames(nframes);
                     }
                     catch(std::string es)
                     {
@@ -1509,70 +1552,65 @@ AlsaDriver::jackProcess(nframes_t nframes, void *arg)
                         continue;
                     }
 
-
+                    // Now point to the string
                     char *samplePtr = samples.c_str();
-
-                    int channels = audioFile->getChannels();
-                    int bytes = audioFile->getBitsPerSample() / 8;
-                    int i = 0;
-                    int j = 0;
-                    unsigned short twobytes;
-                    unsigned long  fourbytes;
-
+                    char *endOfSamples = samplePtr + samples.length();
                     float outBytes;
 
-                    cout << "BYTES = " << bytes << endl;
-                    cout << "SIZE = " << sizeof(*outputBuffer) << endl;
-                    cout << "CHANNELS = " << channels << endl;
-
+                    //cout << "BYTES = " << bytes << endl;
+                    //cout << "SIZE = " << sizeof(*leftBuffer) << endl;
+                    //cout << "CHANNELS = " << channels << endl;
 
                     /*
                     memcpy(outputBuffer,
                            samplePtr,
                            nframes * sizeof(sample_t));
                            */
-                    while (i < samples.length())
+
+                    //cout << "SAMPLED = " << nframes * channels << endl;
+                    //cout << "FRAMES = " << endOfSamples - samplePtr << endl;
+
+                    while (samplePtr < endOfSamples)
                     {
-                        for (int j = 0; j < channels; j++)
+                        switch(bytes)
                         {
-                            // write based on sample resolution
-                            if (j == 0)
-                            {
-                            switch(bytes)
-                            {
-                                case 1:
-                                    *outputBuffer = *samplePtr;
-                                    outputBuffer += 1;
-                                    i += 1;
-                                    break;
+                            case 1: // for 8-bit samples
+                                /*
+                                *outputBuffer = *samplePtr;
+                                outputBuffer += 1;
+                                i += 1;
+                                */
+                                break;
 
-                                case 2:
-                                    outBytes = (*((short*)(samplePtr))) / 32767.0f;
-                                    // check the bounds of our float
-                                    //
-                                    assert(outBytes >= -1 && outBytes <= 1);
-                                    /*
-                                       outBytes = (*samplePtr +
-                                               ((*(samplePtr + 1))))
+                            case 2: // for 16-bit samples
+                                outBytes = (*((short*)(samplePtr))) / 32767.0f;
+                                //outBytes = (*samplePtr))) / 32767.0f;
+                                assert(outBytes >= -1 && outBytes <= 1);
+                                samplePtr += 2;
+
+                                (*leftBuffer) = outBytes;
+                                leftBuffer++;
+
+                                // Get other sample if we have one
+                                //
+                                if (channels == 2)
+                                {
+                                    outBytes = (*((short*)(samplePtr)))
                                                / 32767.0f;
-                                               */
-                                    //cout << "f = " << outBytes << endl;
-                                    (*outputBuffer) = outBytes;
-                                    outputBuffer++;
+                                    assert(outBytes >= -1 && outBytes <= 1);
                                     samplePtr += 2;
-                                    i += 2;
-                                    break;
+                                    //cout << "OTHER" << endl;
+                                }
 
-                                default:
-                                    std::cerr << "jackProcess() - sample size "
-                                              << "not supported" << std::endl;
-                                    break;
-                            }
-                            }
-                            else
-                            {
-                                i += bytes;
-                            }
+                                (*rightBuffer) = outBytes;
+                                rightBuffer++;
+
+                                break;
+
+                            default:
+                                std::cerr << "jackProcess() - sample size "
+                                          << "not supported" << std::endl;
+                                break;
                         }
                     }
                 }
@@ -1586,9 +1624,10 @@ AlsaDriver::jackProcess(nframes_t nframes, void *arg)
 // Pick up any change of buffer size
 //
 int
-AlsaDriver::jackBufferSize(nframes_t nframes, void * /*arg*/)
+AlsaDriver::jackBufferSize(nframes_t nframes, void *)
 {
-    //AlsaDriver::setBufferSize(nframes);
+    std::cout << "AlsaDriver::jackBufferSize - buffer size changed to "
+              << nframes << std::endl;
     _jackBufferSize = nframes;
 
     return 0;
@@ -1597,8 +1636,12 @@ AlsaDriver::jackBufferSize(nframes_t nframes, void * /*arg*/)
 // Sample rate change
 //
 int
-AlsaDriver::jackSampleRate(nframes_t /*nframes*/, void * /*arg*/)
+AlsaDriver::jackSampleRate(nframes_t nframes, void *)
 {
+    std::cout << "AlsaDriver::jackSampleRate - sample rate changed to "
+               << nframes << std::endl;
+    _jackSampleRate = nframes;
+
     return 0;
 }
 

@@ -68,7 +68,7 @@ public:
                       const RealTime &startTime,
                       const RealTime &startIndex,
                       const RealTime &duration):
-        m_id(audioFile->getID()),
+        m_id(audioFile->getId()),
         m_startTime(startTime),
         m_startIndex(startIndex),
         m_duration(duration),

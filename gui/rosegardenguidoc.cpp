@@ -728,7 +728,7 @@ RosegardenGUIDoc::prepareAudio()
         // We have to pass the filename as a QString
         //
         streamOut << QString((*it)->getFilename().c_str());
-        streamOut << (*it)->getID();
+        streamOut << (*it)->getId();
 
         if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
                                       ROSEGARDEN_SEQUENCER_IFACE_NAME,

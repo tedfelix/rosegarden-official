@@ -153,7 +153,7 @@ SoundDriver::removeAudioFile(unsigned int id)
     std::vector<AudioFile*>::iterator it;
     for (it = m_audioFiles.begin(); it != m_audioFiles.end(); it++)
     {
-        if ((*it)->getID() == id)
+        if ((*it)->getId() == id)
         {
             delete (*it);
             m_audioFiles.erase(it);
@@ -170,7 +170,7 @@ SoundDriver::getAudioFile(unsigned int id)
     std::vector<AudioFile*>::iterator it;
     for (it = m_audioFiles.begin(); it != m_audioFiles.end(); it++)
     {
-        if ((*it)->getID() == id)
+        if ((*it)->getId() == id)
             return *it;
     }
 
