@@ -5997,16 +5997,16 @@ msgstr "Sequencer wird gestartet..."
 
 #: rosegardengui.cpp:315
 #, fuzzy
-msgid "Initialising plugin manager..."
+msgid "Initializing plugin manager..."
 msgstr "Plugin Manager wird initialisiert..."
 
 #: rosegardengui.cpp:318
 msgid "Enumerating plugins..."
 msgstr "Plugins werden ermittelt..."
 
-#: rosegardengui.cpp:323
+#: rosegardengui.cpp:328
 #, fuzzy
-msgid "Initialising view..."
+msgid "Initializing view..."
 msgstr "Ansicht wird initialisiert..."
 
 #: rosegardengui.cpp:339
