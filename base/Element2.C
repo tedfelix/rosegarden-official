@@ -241,11 +241,17 @@ Composition::addTrack(EventList *track = 0, int idx = -1)
     
     if (!track) track = new EventList;
     
-    if (idx < 0)
+    if (idx < 0) {
+
         m_tracks.push_back(track);
-    else {
-        
-        if (m_tracks[idx]) return false; // there's already a track at
+
+    } else {
+
+        if (idx >= m_tracks.size()) { // resize if needed
+
+            m_tracks.resize(idx + 2);
+
+        } else if (m_tracks[idx]) return false; // there's already a track at
         // that index
         
         m_tracks[idx] = track;
@@ -259,5 +265,19 @@ Composition::deleteTrack(int idx)
         delete m_tracks[idx];
         m_tracks[idx] = 0;
     }
+}
+
+unsigned int
+Composition::getNbBars() const
+{
+    unsigned int maxSize = 0;
+
+    for (trackcontainer::const_iterator i = m_tracks.begin();
+         i != m_tracks.end(); ++i) {
+
+        if ((*i) && (*i)->size() > maxSize) maxSize = (*i)->size();
+    }
+
+    return maxSize;
 }
 

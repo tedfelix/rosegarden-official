@@ -415,6 +415,9 @@ public:
     bool addTrack(EventList *track = 0, int idx = -1);
     void deleteTrack(int idx);
 
+    unsigned int getNbTracks() const { return m_tracks.size(); }
+    unsigned int getNbBars() const;
+
     // Some vector<> API delegation
     iterator       begin()       { return m_tracks.begin(); }
     const_iterator begin() const { return m_tracks.begin(); }
