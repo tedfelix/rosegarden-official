@@ -119,7 +119,8 @@ public:
 };
 
 NoteActionData::NoteActionData()
-    : actionName(0),
+    : title(0),
+      actionName(0),
       pixmapName(0),
       keycode(0),
       rest(false),
@@ -127,7 +128,6 @@ NoteActionData::NoteActionData()
       dots(0)
 {
 }
-
 
 NoteActionData::NoteActionData(const QString& _title,
 			       QString _actionName,
@@ -145,6 +145,36 @@ NoteActionData::NoteActionData(const QString& _title,
       dots(_dots)
 {
 }
+
+
+class MarkActionData
+{
+public:
+    MarkActionData() :
+	title(0),
+	actionName(0),
+	pixmapName(0),
+	keycode(0) { }
+
+    MarkActionData(const QString &_title,
+		   QString _actionName,
+		   QString _pixmapName,
+		   int _keycode,
+		   Mark _mark) :
+	title(_title),
+	actionName(_actionName),
+	pixmapName(_pixmapName),
+	keycode(_keycode),
+	mark(_mark) { }
+
+    QString title;
+    QString actionName;
+    QString pixmapName;
+    int keycode;
+    Mark mark;
+};
+
+
 
 
 //////////////////////////////////////////////////////////////////////
@@ -177,7 +207,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_fontSizeSlider(0),
     m_selectDefaultNote(0)
 {
-    initNoteActionDataMap(); // does something only the 1st time it's called
+    initActionDataMaps(); // does something only the 1st time it's called
     
     m_toolBox = new NotationToolBox(this);
 
@@ -343,7 +373,6 @@ NotationView::~NotationView()
 void
 NotationView::removeViewLocalProperties(Rosegarden::Event *e)
 {
-    //!!! Terribly inefficient
     Event::PropertyNames names(e->getPropertyNames());
     std::string prefix(getViewLocalPropertyPrefix());
 
@@ -733,25 +762,22 @@ void NotationView::setupActions()
     new KAction(i18n("&Dump selected events to stderr"), 0, this,
 		SLOT(slotDebugDump()), actionCollection(), "debug_dump");
 
-    static const Mark marks[] = 
-    { Accent, Tenuto, Staccato, Staccatissimo, Marcato, Sforzando, Rinforzando,
-      Trill, Turn, Pause, UpBow, DownBow };
-    //!!! could do with using sender() for these just as for notes & rests
-    static const char *markSlots[] = 
-    { "1slotMarksAddAccent()",      "1slotMarksAddTenuto()",
-      "1slotMarksAddStaccato()",    "1slotMarksAddStaccatissimo()",
-      "1slotMarksAddMarcato()",     "1slotMarksAddSforzando()",
-      "1slotMarksAddRinforzando()", "1slotMarksAddTrill()",
-      "1slotMarksAddTurn()",        "1slotMarksAddPause()",
-      "1slotMarksAddUpBow()",       "1slotMarksAddDownBow()" };
+    for (MarkActionDataMap::Iterator i = m_markActionDataMap->begin();
+	 i != m_markActionDataMap->end(); ++i) {
 
-    for (unsigned int i = 0; i < sizeof(marks)/sizeof(marks[0]); ++i) {
-        new KAction
-	    (MarksMenuAddMarkCommand::getGlobalName(marks[i]),
-	     m_toolbarNotePixmapFactory.makeToolbarPixmap
-	     (string(marks[i]).c_str()),
-	     0, this, markSlots[i], actionCollection(),
-	     QString("add_%1").arg(strtoqstr(marks[i])));
+        const MarkActionData &markActionData = *i;
+        
+        icon = QIconSet
+	    (m_toolbarNotePixmapFactory.makeToolbarPixmap
+	     (markActionData.pixmapName));
+
+	new KAction(markActionData.title,
+		    icon,
+		    markActionData.keycode,
+		    this,
+		    SLOT(slotAddMark()),
+		    actionCollection(),
+		    markActionData.actionName);
     }
 
     new KAction(MarksMenuAddTextMarkCommand::getGlobalName(), 0, this,
@@ -1867,89 +1893,19 @@ void NotationView::slotTransformsQuantize()
     }
 }
 
-void NotationView::slotMarksAddAccent()
+void NotationView::slotAddMark()
 {
-    if (m_currentEventSelection)
-        addCommandToHistory(new MarksMenuAddMarkCommand
-                            (Accent, *m_currentEventSelection));
+    const QObject *s = sender();
+    if (!m_currentEventSelection) return;
+
+    MarkActionDataMap::Iterator i = m_markActionDataMap->find(s->name());
+
+    if (i != m_markActionDataMap->end()) {
+	addCommandToHistory(new MarksMenuAddMarkCommand
+			    ((*i).mark, *m_currentEventSelection));
+    }
 }
 
-void NotationView::slotMarksAddTenuto()
-{
-    if (m_currentEventSelection)
-        addCommandToHistory(new MarksMenuAddMarkCommand
-                            (Tenuto, *m_currentEventSelection));
-}
-
-void NotationView::slotMarksAddStaccato()
-{
-    if (m_currentEventSelection)
-        addCommandToHistory(new MarksMenuAddMarkCommand
-                            (Staccato, *m_currentEventSelection));
-}
-
-void NotationView::slotMarksAddStaccatissimo()
-{
-    if (m_currentEventSelection)
-        addCommandToHistory(new MarksMenuAddMarkCommand
-                            (Staccatissimo, *m_currentEventSelection));
-}
-
-void NotationView::slotMarksAddMarcato()
-{
-    if (m_currentEventSelection)
-        addCommandToHistory(new MarksMenuAddMarkCommand
-                            (Marcato, *m_currentEventSelection));
-}
-
-void NotationView::slotMarksAddSforzando()
-{
-    if (m_currentEventSelection)
-        addCommandToHistory(new MarksMenuAddMarkCommand
-                            (Sforzando, *m_currentEventSelection));
-}
-
-void NotationView::slotMarksAddRinforzando()
-{
-    if (m_currentEventSelection)
-        addCommandToHistory(new MarksMenuAddMarkCommand
-                            (Rinforzando, *m_currentEventSelection));
-}
-
-void NotationView::slotMarksAddTrill()
-{
-    if (m_currentEventSelection)
-        addCommandToHistory(new MarksMenuAddMarkCommand
-                            (Trill, *m_currentEventSelection));
-}
-
-void NotationView::slotMarksAddTurn()
-{
-    if (m_currentEventSelection)
-        addCommandToHistory(new MarksMenuAddMarkCommand
-                            (Turn, *m_currentEventSelection));
-}
-
-void NotationView::slotMarksAddPause()
-{
-    if (m_currentEventSelection)
-        addCommandToHistory(new MarksMenuAddMarkCommand
-                            (Pause, *m_currentEventSelection));
-}
-
-void NotationView::slotMarksAddUpBow()
-{
-    if (m_currentEventSelection)
-        addCommandToHistory(new MarksMenuAddMarkCommand
-                            (UpBow, *m_currentEventSelection));
-}
-
-void NotationView::slotMarksAddDownBow()
-{
-    if (m_currentEventSelection)
-        addCommandToHistory(new MarksMenuAddMarkCommand
-                            (DownBow, *m_currentEventSelection));
-}
 
 void NotationView::slotMarksAddTextMark()
 {
@@ -2727,14 +2683,13 @@ NotationView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
     m_hoveredOverAbsoluteTime->setText(message);
 }
 
-void NotationView::initNoteActionDataMap()
+void NotationView::initActionDataMaps()
 {
     static bool called = false;
     static int keys[] =
     { Key_0, Key_3, Key_6, Key_8, Key_4, Key_2, Key_1, Key_5 };
     
     if (called) return;
-
     called = true;
 
     m_noteActionDataMap = new NoteActionDataMap;
@@ -2770,7 +2725,25 @@ void NotationView::initNoteActionDataMap()
 	    }
 	}
     }
+
+    m_markActionDataMap = new MarkActionDataMap;
+
+    std::vector<Mark> marks = Rosegarden::Marks::getStandardMarks();
+    for (unsigned int i = 0; i < marks.size(); ++i) {
+
+	Mark mark = marks[i];
+	QString markName(strtoqstr(mark));
+	QString actionName = QString("add_%1").arg(markName);
+
+	m_markActionDataMap->insert
+	    (actionName, MarkActionData
+	     (MarksMenuAddMarkCommand::getGlobalName(mark),
+	      actionName, markName, 0, mark));
+    }
+	     
 }
 
     
 NotationView::NoteActionDataMap* NotationView::m_noteActionDataMap = 0;
+NotationView::MarkActionDataMap* NotationView::m_markActionDataMap = 0;
+

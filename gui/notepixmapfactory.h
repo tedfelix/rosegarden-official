@@ -155,12 +155,17 @@ public:
     QCanvasPixmap makeTextPixmap(const Rosegarden::Text &text);
 
     int getNoteBodyWidth (Rosegarden::Note::Type =
-                          Rosegarden::Note::Crotchet) const;
-    int getNoteBodyHeight(Rosegarden::Note::Type =
-                          Rosegarden::Note::Crotchet) const;
+                          Rosegarden::Note::Crotchet,
+			  const Rosegarden::NoteHeadStyle & =
+			  Rosegarden::NoteHeadStyles::Classical) const;
 
-    int getAccidentalWidth (Rosegarden::Accidental) const;
-    int getAccidentalHeight(Rosegarden::Accidental) const;
+    int getNoteBodyHeight(Rosegarden::Note::Type =
+                          Rosegarden::Note::Crotchet,
+			  const Rosegarden::NoteHeadStyle & =
+			  Rosegarden::NoteHeadStyles::Classical) const;
+
+    int getAccidentalWidth (const Rosegarden::Accidental &) const;
+    int getAccidentalHeight(const Rosegarden::Accidental &) const;
 
     int getLineSpacing()        const;
     int getStemLength()         const;

@@ -164,6 +164,22 @@ a {
     font-weight: bold;
 }
 
+.toc3>a,.toc4>a {
+    font-weight: normal;
+}
+
+.toc1,.toc2,.toc3,.toc4 {
+    font-family: trebuchet, verdana, sans-serif;
+}
+
+.toc4 {
+    font-size: smaller;
+}
+
+.oddcontent,.evencontent {
+    margin-top: 14pt;
+}
+
 a:active {
     color: #00aa00;
     text-decoration: none;

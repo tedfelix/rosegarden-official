@@ -282,8 +282,8 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
     m_left = m_right = m_origin.x();
     m_above = m_below = m_origin.y();
 
-    m_noteBodyWidth  = getNoteBodyWidth(params.m_noteType);
-    m_noteBodyHeight = getNoteBodyHeight(params.m_noteType);
+    m_noteBodyWidth  = getNoteBodyWidth(params.m_noteType, params.m_style);
+    m_noteBodyHeight = getNoteBodyHeight(params.m_noteType, params.m_style);
 
     bool isStemmed = note.hasStem();
     int flagCount = note.getFlagCount();
@@ -406,6 +406,13 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
             s0.setX(m_left);
             s1.setY(s0.y() + stemLength);
         }
+
+	if (params.m_style == Rosegarden::NoteHeadStyles::Triangle) {
+	    s0.setY(m_above + m_noteBodyHeight);
+	} else if (params.m_style == Rosegarden::NoteHeadStyles::Cross) {
+	    if (params.m_stemGoesUp) s0.setY(m_above);
+	    else s0.setY(m_above + m_noteBodyHeight);
+	}
 
         s1.setX(s0.x());
 
@@ -1572,23 +1579,27 @@ QPoint
 NotePixmapFactory::m_pointZero;
 
 
-int NotePixmapFactory::getNoteBodyWidth(Note::Type type) const {
-    return m_font->getWidth(getNoteHeadCharName(type)) - 2*m_origin.x();
+int NotePixmapFactory::getNoteBodyWidth(Note::Type type,
+					const Rosegarden::NoteHeadStyle &style)
+    const {
+    return m_font->getWidth(getNoteHeadCharName(type, style)) -2*m_origin.x();
 }
 
-int NotePixmapFactory::getNoteBodyHeight(Note::Type type) const {
-    return m_font->getHeight(getNoteHeadCharName(type)) - 2*m_origin.y();
+int NotePixmapFactory::getNoteBodyHeight(Note::Type type,
+					const Rosegarden::NoteHeadStyle &style)
+    const {
+    return m_font->getHeight(getNoteHeadCharName(type, style)) -2*m_origin.y();
 }
 
 int NotePixmapFactory::getLineSpacing() const {
     return m_font->getCurrentSize() + 1;
 }
 
-int NotePixmapFactory::getAccidentalWidth(Accidental a) const {
+int NotePixmapFactory::getAccidentalWidth(const Accidental &a) const {
     return m_font->getWidth(getAccidentalCharName(a));
 }
 
-int NotePixmapFactory::getAccidentalHeight(Accidental a) const {
+int NotePixmapFactory::getAccidentalHeight(const Accidental &a) const {
     return m_font->getHeight(getAccidentalCharName(a));
 }
 

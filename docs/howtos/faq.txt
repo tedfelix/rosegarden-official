@@ -3,12 +3,36 @@ FAQ for Rosegarden-4
 ====================
 
 
+
 Compilation or installation errors
 ----------------------------------
+
 
 arts/artsmidi.idl not found
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You're missing the kdemultimedia package (and associated -devel
 package, if appropriate to your distribution).
+
+
+
+Notation and matrix editing
+---------------------------
+
+
+Can I edit all the segments at once in the notation editor?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The _Open in Notation Editor_ option on the main view's _Segments_
+menu will open all the currently-selected segments together in a
+single editor.  So to open them all, first use the _Edit_ menu's
+_Select All Segments_ option, then this one.  (You can also edit a
+subset of segments by selecting them with shift-click on the main
+view, then using _Open in Notation Editor_.)
+
+
+Can I edit all the segments at once in the matrix editor?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+No.  A matrix editor shows a single segment only.
 

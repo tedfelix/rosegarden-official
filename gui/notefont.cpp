@@ -818,7 +818,7 @@ using Rosegarden::Marks;
 using Rosegarden::Clef;
 using Rosegarden::Note;
 
-CharName NoteCharacterNameLookup::getAccidentalCharName(Accidental a)
+CharName NoteCharacterNameLookup::getAccidentalCharName(const Accidental &a)
 {
     if      (a == Accidentals::Sharp)        return NoteCharacterNames::SHARP;
     else if (a == Accidentals::Flat)         return NoteCharacterNames::FLAT;
@@ -828,7 +828,7 @@ CharName NoteCharacterNameLookup::getAccidentalCharName(Accidental a)
     return NoteCharacterNames::UNKNOWN;
 }
 
-CharName NoteCharacterNameLookup::getMarkCharName(Mark mark)
+CharName NoteCharacterNameLookup::getMarkCharName(const Mark &mark)
 {
     if      (mark == Marks::Accent)    return NoteCharacterNames::ACCENT;
     else if (mark == Marks::Tenuto)    return NoteCharacterNames::TENUTO;
@@ -884,7 +884,7 @@ CharName NoteCharacterNameLookup::getFlagCharName(int flagCount)
     }
 }
 
-CharName NoteCharacterNameLookup::getNoteHeadCharName(const Note::Type &type,
+CharName NoteCharacterNameLookup::getNoteHeadCharName(Note::Type type,
 						      const Rosegarden::NoteHeadStyle &head)
 {
     if (head != Rosegarden::NoteHeadStyles::Classical) {

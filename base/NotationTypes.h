@@ -87,6 +87,12 @@ namespace Accidentals
     extern const Accidental Natural;
     extern const Accidental DoubleSharp;
     extern const Accidental DoubleFlat;
+
+    /**
+     * Get the predefined accidentals (i.e. the ones listed above)
+     * in their defined order.
+     */
+    extern std::vector<Accidental> getStandardAccidentals();
 }
 
 
@@ -128,6 +134,12 @@ namespace Marks
      * Extract the string from a text mark.
      */
     extern std::string getTextFromMark(Mark mark);
+
+    /**
+     * Get the predefined marks (i.e. the ones listed above) in their
+     * defined order.
+     */
+    extern std::vector<Mark> getStandardMarks();
 }
 
 
@@ -795,6 +807,12 @@ namespace NoteHeadStyles
     extern const NoteHeadStyle Cross;
     extern const NoteHeadStyle Triangle;
     extern const NoteHeadStyle Mensural;
+
+    /**
+     * Get the predefined note head styles (i.e. the ones listed
+     * above) in their defined order.
+     */
+    extern std::vector<NoteHeadStyle> getStandardStyles();
 }
 
 

@@ -54,6 +54,20 @@ namespace Accidentals
     const Accidental Natural = "natural";
     const Accidental DoubleSharp = "double-sharp";
     const Accidental DoubleFlat = "double-flat";
+
+    std::vector<Accidental> getStandardAccidentals() {
+
+	static Accidental a[] = {
+	    NoAccidental, Sharp, Flat, Natural, DoubleSharp, DoubleFlat
+	};
+
+	static std::vector<Accidental> v;
+	if (v.size() == 0) {
+	    for (unsigned int i = 0; i < sizeof(a)/sizeof(a[0]); ++i)
+		v.push_back(a[i]);
+	}
+	return v;
+    }
 }
 
 using namespace Accidentals;
@@ -86,6 +100,21 @@ namespace Marks
     string getTextFromMark(Mark mark) {
 	if (!isTextMark(mark)) return string();
 	else return string(mark).substr(5);
+    }
+
+    std::vector<Mark> getStandardMarks() {
+
+	static Mark a[] = {
+	    NoMark, Accent, Tenuto, Staccato, Staccatissimo, Marcato,
+	    Sforzando, Rinforzando, Trill, Turn, Pause, UpBow, DownBow
+	};
+
+	static std::vector<Mark> v;
+	if (v.size() == 0) {
+	    for (unsigned int i = 0; i < sizeof(a)/sizeof(a[0]); ++i)
+		v.push_back(a[i]);
+	}
+	return v;
     }
 }
 
@@ -1035,6 +1064,20 @@ namespace NoteHeadStyles
     const NoteHeadStyle Cross     = "x";
     const NoteHeadStyle Triangle  = "triangle";
     const NoteHeadStyle Mensural  = "mensural";
+
+    std::vector<NoteHeadStyle> getStandardStyles() {
+
+	static NoteHeadStyle a[] = {
+	    Classical, Cross, Triangle, Mensural
+	};
+
+	static std::vector<NoteHeadStyle> v;
+	if (v.size() == 0) {
+	    for (unsigned int i = 0; i < sizeof(a)/sizeof(a[0]); ++i)
+		v.push_back(a[i]);
+	}
+	return v;
+    }
 }
 
 

@@ -392,12 +392,12 @@ extern const CharName UNKNOWN;
 class NoteCharacterNameLookup
 {
 public:
-    static CharName getAccidentalCharName(Rosegarden::Accidental);
-    static CharName getMarkCharName(Rosegarden::Mark);
+    static CharName getAccidentalCharName(const Rosegarden::Accidental &);
+    static CharName getMarkCharName(const Rosegarden::Mark &);
     static CharName getClefCharName(const Rosegarden::Clef &);
     static CharName getRestCharName(const Rosegarden::Note::Type &);
     static CharName getFlagCharName(int flagCount);
-    static CharName getNoteHeadCharName(const Rosegarden::Note::Type &,
+    static CharName getNoteHeadCharName(Rosegarden::Note::Type,
 					const Rosegarden::NoteHeadStyle & =
 					Rosegarden::NoteHeadStyles::Classical);
 };

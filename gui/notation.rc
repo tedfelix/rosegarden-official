@@ -45,6 +45,14 @@ etc
   <Action name="simple_tuplet"/>
   <Action name="break_tuplets"/>
   <Separator/>
+  <Action name="slur"/>
+  <Action name="crescendo"/>
+  <Action name="decrescendo"/>
+  <Action name="remove_indications"/>
+</Menu>
+
+<Menu name="Notes">
+<text>&amp;Notes</text>
   <Menu name="Stems">
     <text>S&amp;tem Direction</text>
     <Action name="stems_up"/>
@@ -62,12 +70,6 @@ etc
     <Action name="noteheads_black"/>
     <Action name="noteheads_white"/>
   </Menu>
-  <Separator/>
-<!--  <Action name="tie"/> -->
-  <Action name="slur"/>
-  <Action name="crescendo"/>
-  <Action name="decrescendo"/>
-  <Action name="remove_indications"/>
 </Menu>
 
   <Menu name="Marks">

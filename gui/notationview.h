@@ -45,6 +45,7 @@ class NotationToolBox;
 class PositionCursor;
 class ActiveItem;
 class NoteActionData;
+class MarkActionData;
 class ChordNameRuler;
 
 /**
@@ -308,18 +309,7 @@ public slots:
     void slotTransformsTransposeDownOctave();
     void slotTransformsQuantize();
 
-    void slotMarksAddAccent();
-    void slotMarksAddTenuto();
-    void slotMarksAddStaccato();
-    void slotMarksAddStaccatissimo();
-    void slotMarksAddMarcato();
-    void slotMarksAddSforzando();
-    void slotMarksAddRinforzando();
-    void slotMarksAddTrill();
-    void slotMarksAddTurn();
-    void slotMarksAddPause();
-    void slotMarksAddUpBow();
-    void slotMarksAddDownBow();
+    void slotAddMark();
     void slotMarksAddTextMark();
     void slotMarksRemoveMarks();
 
@@ -475,9 +465,9 @@ signals:
 
 protected:
     /**
-     * init the note action map
+     * init the action maps for notes, marks etc
      */
-    void initNoteActionDataMap();
+    void initActionDataMaps();
 
     /**
      * save general Options like all bar positions and status as well
@@ -627,8 +617,10 @@ protected:
     KAction* m_selectDefaultNote;
 
     typedef QMap<QString, NoteActionData> NoteActionDataMap;
-    
     static NoteActionDataMap* m_noteActionDataMap;
+
+    typedef QMap<QString, MarkActionData> MarkActionDataMap;
+    static MarkActionDataMap *m_markActionDataMap;
 };
 
 #endif
