@@ -351,7 +351,12 @@ AudioBussMixer::processBlocks()
 
 	MappedAudioBuss *mbuss =
 	    m_driver->getMappedStudio()->getAudioBuss(buss + 1); // master is 0
-	if (!mbuss) continue;
+	if (!mbuss) {
+#ifdef DEBUG_BUSS_MIXER
+	    std::cerr << "AudioBussMixer::processBlocks: buss " << buss << " not found" << std::endl;
+#endif
+	    continue;
+	}
 	
 	float gain[2];
 	    	    
@@ -370,6 +375,10 @@ AudioBussMixer::processBlocks()
 
 	std::vector<InstrumentId> instruments = mbuss->getInstruments();
 
+#ifdef DEBUG_BUSS_MIXER
+	std::cerr << "AudioBussMixer::processBlocks: buss " << buss << ": " << instruments.size() << " instruments" << std::endl;
+#endif
+
 	// The dormant calculation here depends on the buffer length
 	// for this mixer being the same as that for the instrument mixer
 
@@ -379,6 +388,10 @@ AudioBussMixer::processBlocks()
 
 	    size_t w = rec.buffers[ch]->getWriteSpace();
 	    if (ch == 0 || w < minSpace) minSpace = w;
+
+#ifdef DEBUG_BUSS_MIXER
+	    std::cerr << "AudioBussMixer::processBlocks: buss " << buss << ": write space " << w << " on channel " << ch << std::endl;
+#endif
 
 	    if (minSpace == 0) break;
 	    
@@ -390,6 +403,13 @@ AudioBussMixer::processBlocks()
 		if (rb) {
 		    size_t r = rb->getReadSpace(1);
 		    if (r < minSpace) minSpace = r;
+
+#ifdef DEBUG_BUSS_MIXER
+		    if (*ii == 1000) {
+			std::cerr << "AudioBussMixer::processBlocks: buss " << buss << ": read space " << r << " on instrument " << *ii << ", channel " << ch << std::endl;
+		    }
+#endif
+
 		    if (minSpace == 0) break;
 		}
 	    }
@@ -405,7 +425,7 @@ AudioBussMixer::processBlocks()
 	
 #ifdef DEBUG_BUSS_MIXER
 	if (m_driver->isPlaying())
-	    std::cerr << "AudioBussMixer::processBlocks: doing " << blocks << " blocks" << std::endl;
+	    std::cerr << "AudioBussMixer::processBlocks: doing " << blocks << " blocks at block size " << m_blockSize << std::endl;
 #endif
 
 	for (int block = 0; block < blocks; ++block) {
@@ -951,7 +971,7 @@ AudioInstrumentMixer::processEmptyBlocks(InstrumentId id)
 {
 #ifdef DEBUG_MIXER
     if (m_driver->isPlaying()) {
-	if (id == 1000) std::cerr << "AudioInstrumentMixer::processEmptyBlock(" << id << ")" << std::endl;
+	if (id == 1000) std::cerr << "AudioInstrumentMixer::processEmptyBlocks(" << id << ")" << std::endl;
     }
 #endif
   
@@ -968,7 +988,12 @@ AudioInstrumentMixer::processEmptyBlocks(InstrumentId id)
 	size_t thisWriteSpace = rec.buffers[ch]->getWriteSpace();
 	if (ch == 0 || thisWriteSpace < minWriteSpace) {
 	    minWriteSpace = thisWriteSpace;
-	    if (minWriteSpace < m_blockSize) return;
+	    if (minWriteSpace < m_blockSize) {
+#ifdef DEBUG_MIXER
+		if (id == 1000) std::cerr << "AudioInstrumentMixer::processEmptyBlocks(" << id << "): only " << minWriteSpace << " write space on channel " << ch << " for block size " << m_blockSize << std::endl;
+#endif
+		return;
+	    }
 	}
     }
 
@@ -1027,7 +1052,12 @@ AudioInstrumentMixer::processBlock(InstrumentId id, PlayableAudioFileList &audio
     unsigned int channels = rec.channels;
     if (channels > rec.buffers.size()) channels = rec.buffers.size();
     if (channels > m_processBuffers.size()) channels = m_processBuffers.size();
-    if (channels == 0) return false; // buffers just haven't been set up yet
+    if (channels == 0) {
+#ifdef DEBUG_MIXER
+	if (id == 1000) std::cerr << "AudioInstrumentMixer::processBlock(" << id << "): nominal channels " << rec.channels << ", ring buffers " << rec.buffers.size() << ", process buffers " << m_processBuffers.size() << std::endl;
+#endif
+	return false; // buffers just haven't been set up yet
+    }
 
     unsigned int targetChannels = channels;
     if (targetChannels < 2) targetChannels = 2; // fill at least two buffers
@@ -1037,13 +1067,18 @@ AudioInstrumentMixer::processBlock(InstrumentId id, PlayableAudioFileList &audio
 	size_t thisWriteSpace = rec.buffers[ch]->getWriteSpace();
 	if (ch == 0 || thisWriteSpace < minWriteSpace) {
 	    minWriteSpace = thisWriteSpace;
-	    if (minWriteSpace < m_blockSize) return false;
+	    if (minWriteSpace < m_blockSize) {
+#ifdef DEBUG_MIXER
+		if (id == 1000) std::cerr << "AudioInstrumentMixer::processBlock(" << id << "): only " << minWriteSpace << " write space on channel " << ch << " for block size " << m_blockSize << std::endl;
+#endif
+		return false;
+	    }  
 	}
     }
 
     PluginList &plugins = m_plugins[id];
 #ifdef DEBUG_MIXER
-    if (id == 1000 && !plugins.empty()) std::cerr << "AudioInstrumentMixer::processBlock(" << id << "): have " << plugins.size() << " plugin(s)" << std::endl;
+    if (id == 1000) std::cerr << "AudioInstrumentMixer::processBlock(" << id << "): have " << plugins.size() << " plugin(s)" << std::endl;
 #endif
 
     for (PlayableAudioFileList::iterator it = audioQueue.begin();
@@ -1289,6 +1324,11 @@ AudioInstrumentMixer::processBlock(InstrumentId id, PlayableAudioFileList &audio
 						       m_sampleRate);
 
     rec.filledTo = bufferTime;
+
+#ifdef DEBUG_MIXER
+    if (id == 1000) std::cerr << "AudioInstrumentMixer::processBlock(" << id <<"): done, returning " << haveMore << std::endl;
+#endif
+
     return haveMore;
 }
 

@@ -781,6 +781,10 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	}
     }
 
+#ifdef DEBUG_JACK_PROCESS
+    std::cerr << "JackDriver::jackProcess: have " << instruments << " instruments" << std::endl;
+#endif
+
     for (InstrumentId id = instrumentBase;
 	 id < instrumentBase + instruments; ++id) {
 	
@@ -809,15 +813,37 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	    bool directToMaster =
 		(m_directMasterInstruments & (1 << (id - instrumentBase)));
 
+#ifdef DEBUG_JACK_PROCESS
+	    if (id == 1000) {
+		std::cerr << "JackDriver::jackProcess: instrument id " << id << ", base " << instrumentBase << ", direct masters " << m_directMasterInstruments << ": " << directToMaster << std::endl;
+	    }
+#endif
+
 	    RingBuffer<AudioInstrumentMixer::sample_t, 2> *rb =
 		m_instrumentMixer->getRingBuffer(id, ch);
 
 	    if (!rb || m_instrumentMixer->isInstrumentDormant(id)) {
+#ifdef DEBUG_JACK_PROCESS
+		if (id == 1000) {
+		    if (rb) {
+			std::cerr << "JackDriver::jackProcess: instrument " << id << " dormant" << std::endl;
+		    } else {
+			std::cerr << "JackDriver::jackProcess: instrument " << id << " has no ring buffer for channel " << ch << std::endl;
+		    }
+		}
+#endif
 		if (rb) rb->skip(nframes);
 		if (instrument[ch])
 		    memset(instrument[ch], 0, nframes * sizeof(sample_t));
 	    } else {
 		size_t actual = rb->read(instrument[ch], nframes);
+
+#ifdef DEBUG_JACK_PROCESS
+		if (id == 1000) {
+		    std::cerr << "JackDriver::jackProcess: read " << actual << " of " << nframes << " frames for instrument " << id << " channel " << ch << std::endl;
+		}
+#endif
+
 		if (actual < nframes) {
 		    std::cerr << "WARNING: buffer underrun in instrument ringbuffer " << id << ":" << ch << std::endl;
 		    reportFailure(Rosegarden::MappedEvent::FailureMixUnderrun);
