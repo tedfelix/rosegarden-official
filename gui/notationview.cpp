@@ -24,6 +24,7 @@
 #include <qcanvas.h>
 #include <qslider.h>
 #include <qcombobox.h>
+#include <qhbox.h>
 
 #include <kmessagebox.h>
 #include <kmenubar.h>
@@ -612,22 +613,24 @@ void NotationView::initFontToolbar(int legatoUnit)
 void NotationView::initStatusBar()
 {
     KStatusBar* sb = statusBar();
-
-    m_currentNotePixmap       = new QLabel(sb);
-    m_hoveredOverNoteName     = new QLabel(sb);
-    m_hoveredOverAbsoluteTime = new QLabel(sb);
+    QHBox *box = new QHBox(sb);
+    
+    m_currentNotePixmap       = new QLabel(box);
+    m_hoveredOverNoteName     = new QLabel(box);
+    m_hoveredOverAbsoluteTime = new QLabel(box);
 
     m_currentNotePixmap->setMinimumWidth(20);
     m_hoveredOverNoteName->setMinimumWidth(32);
     m_hoveredOverAbsoluteTime->setMinimumWidth(80);
 
-    m_currentNotePixmap->setFrameStyle(QFrame::NoFrame);
-    m_hoveredOverNoteName->setFrameStyle(QFrame::NoFrame);
-    m_hoveredOverAbsoluteTime->setFrameStyle(QFrame::NoFrame);
+    //m_currentNotePixmap->setFrameStyle(QFrame::NoFrame);
+    //m_hoveredOverNoteName->setFrameStyle(QFrame::NoFrame);
+    //m_hoveredOverAbsoluteTime->setFrameStyle(QFrame::NoFrame);
 
-    sb->addWidget(m_hoveredOverAbsoluteTime);
-    sb->addWidget(m_hoveredOverNoteName);
-    sb->addWidget(m_currentNotePixmap);
+    //sb->addWidget(m_hoveredOverAbsoluteTime);
+    //sb->addWidget(m_hoveredOverNoteName);
+    //sb->addWidget(m_currentNotePixmap);
+    sb->addWidget(box);
 
     sb->insertItem(KTmpStatusMsg::getDefaultMsg(),
                    KTmpStatusMsg::getDefaultId());
