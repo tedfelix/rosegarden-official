@@ -87,6 +87,8 @@ public slots:
     void slotSetTrackMeter(double value, int position);
 
     void slotInstrumentSelection(int);
+    void slotInstrumentPopupActivated(int);
+    void slotInstrumentPopupHiding();
 
 private:
 
@@ -119,6 +121,7 @@ private:
     int m_cellSize;
     int m_lastID;
     int m_trackLabelWidth;
+    int m_popupItem;
 
 };
 

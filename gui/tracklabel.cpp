@@ -22,7 +22,7 @@
 
 TrackLabel::TrackLabel(const int &position, QWidget *parent,
                        const char *name, WFlags f):
-    QLabel(parent, name, f), m_position(position)
+    QLabel(parent, name, f), m_position(position), m_pressPosition(0, 0)
 {
     m_pressTimer = new QTimer();
 
@@ -55,6 +55,9 @@ TrackLabel::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() != LeftButton)
         return;
+
+    // store the press coords for positioning the popup
+    m_pressPosition = e->globalPos();
 
     // start a timer on this hold
     m_pressTimer->start(700, true); // 700ms, single shot

@@ -47,15 +47,23 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
       m_recordButtonGroup(new QButtonGroup(this)),
       m_muteButtonGroup(new QButtonGroup(this)),
       m_layout(new QVBoxLayout(this)),
+      m_instrumentPopup(new QPopupMenu(this)),
       m_tracks(doc->getComposition().getNbTracks()),
       m_offset(4),
       m_cellSize(trackCellHeight),
       m_lastID(-1),
-      m_trackLabelWidth(trackLabelWidth)
+      m_trackLabelWidth(trackLabelWidth),
+      m_popupItem(0)
 {
     setFrameStyle(Plain);
 
-    m_instrumentPopup = new QPopupMenu(this);
+    // connect the popup menu
+    connect(m_instrumentPopup, SIGNAL(activated(int)),
+            SLOT(slotInstrumentPopupActivated(int)));
+
+    connect(m_instrumentPopup, SIGNAL(aboutToHide()),
+            SLOT(slotInstrumentPopupHiding()));
+
 
     // Now draw the buttons and labels and meters
     //
@@ -185,15 +193,6 @@ TrackButtons::drawButtons()
         trackLabel = new TrackLabel(i, trackHBox);
         hblayout->addWidget(trackLabel);
 
-        // instrument label
-        instrumentLabel = new InstrumentLabel((Rosegarden::InstrumentId)i,
-                                               trackHBox);
-        hblayout->addWidget(instrumentLabel);
-        instrumentLabel->hide();
-
-        // insert label
-        m_instrumentLabels.push_back(instrumentLabel);
-
         connect(trackLabel, SIGNAL(changeToInstrumentList(int)),
                 this, SLOT(slotInstrumentSelection(int)));
 
@@ -217,6 +216,18 @@ TrackButtons::drawButtons()
 
         connect(trackLabel, SIGNAL(released(int)),
                 SLOT(slotLabelSelected(int)));
+
+        // instrument label
+        instrumentLabel = new InstrumentLabel((Rosegarden::InstrumentId)i,
+                                               trackHBox);
+        instrumentLabel->setFixedWidth(trackLabel->width());
+        instrumentLabel->setFixedHeight(trackLabel->height());
+        instrumentLabel->setMargin(3);
+        hblayout->addWidget(instrumentLabel);
+        instrumentLabel->hide();
+
+        // insert label
+        m_instrumentLabels.push_back(instrumentLabel);
 
         // Insert the buttons into groups
         //
@@ -423,20 +434,54 @@ TrackButtons::slotInstrumentSelection(int position)
     // populate this instrument widget
     m_instrumentLabels[position]->setText(QString("Instrument"));
 
+    // clear the popup
+    m_instrumentPopup->clear();
+
     Rosegarden::Composition::instrumentiterator it;
+
+    // position index
+    int i = 0;
+
     for (it = comp.getInstruments()->begin();
          it != comp.getInstruments()->end(); it++)
     {
         m_instrumentPopup->
-            insertItem(QString((*it).second->getName().c_str()));
+            insertItem(QString((*it).second->getName().c_str()), i++);
     }
 
     // Hide the track label
     m_trackLabels[position]->hide();
 
     // Show the instrument label
-    m_instrumentPopup->show();
+    m_instrumentLabels[position]->show();
 
+    // Show the popup at the mouse click positon stored in
+    // the track label
+    //
+    m_instrumentPopup->popup(m_trackLabels[position]->getPressPosition() +
+                             QPoint(0, m_trackLabels[position]->height()));
+
+    // Store the popup item position
+    //
+    m_popupItem = position;
+
+}
+
+// Set the relevant Instrument for the Track
+// according to popup position.
+//
+void
+TrackButtons::slotInstrumentPopupActivated(int item)
+{
+    cout << "ACTIVATED = " << item << endl;
+}
+
+// Swap back the labels
+void
+TrackButtons::slotInstrumentPopupHiding()
+{
+    m_instrumentLabels[m_popupItem]->hide();
+    m_trackLabels[m_popupItem]->show();
 }
 
 

@@ -52,6 +52,8 @@ public:
     bool isSelected() { return m_selected; }
     int getPosition() { return m_position; }
 
+    QPoint getPressPosition() const { return m_pressPosition; }
+
 protected:
     virtual void mousePressEvent(QMouseEvent *e);
     virtual void mouseReleaseEvent(QMouseEvent *e);
@@ -77,6 +79,7 @@ private:
     bool m_selected;
 
     QTimer *m_pressTimer;
+    QPoint m_pressPosition;
 
 };
 
