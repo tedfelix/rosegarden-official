@@ -44,6 +44,8 @@ Quantizer::quantize(Event *el)
 {
     Event::timeT drt = el->duration();
 
+    kdDebug(KDEBUG_AREA) << "Quantizer applying to event of duration " << drt << endl;
+
     int high, low;
     quantize(drt, high, low);
 
@@ -73,18 +75,20 @@ Quantizer::quantize(Event::timeT drt, int &high, int &low)
 
     int d, ld = Note(Note::Shortest).getDuration();
 
-    for (Note::Type t = Note::Shortest; t < Note::Longest; ++t) {
-        d = Note(t+1).getDuration();
-        if (d > drt) {
-            low = ld;
-            high = d;
-            return;
-        }
-        ld = d;
+    Note lowNote(Note::getNearestNote(drt));
+    low = lowNote.getDuration();
+    high = 1000000; //!!!
+
+    try {
+        Note highNote(lowNote.isDotted() ?
+                      lowNote.getType()+1 : 
+                      lowNote.getType(),     !lowNote.isDotted());
+        if (highNote.getDuration() > drt) high = highNote.getDuration();
+
+    } catch (Note::BadType) {
+        // lowNote is already the longest there is
     }
 
-    low = Note(Note::Longest).getDuration();
-    high = 1000000; //!!!
     return;
 }
 

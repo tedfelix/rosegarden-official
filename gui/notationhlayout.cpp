@@ -25,45 +25,42 @@
 NotationHLayout::NotationHLayout(Staff &staff, //!!! maybe not needed, just trying to build up consistent interfaces for h & v layout
                                  NotationElementList& elements,
                                  unsigned int barWidth,
-                                 unsigned int beatsPerBar,
                                  unsigned int barMargin,
                                  unsigned int noteMargin)
     : m_notationElements(elements),
       m_barWidth(barWidth),
-      m_timeUnitsPerBar(0),
-      m_beatsPerBar(beatsPerBar),
       m_barMargin(barMargin),
       m_noteMargin(noteMargin),
       m_nbTimeUnitsInCurrentBar(0),
-      m_previousNbTimeUnitsInCurrentBar(0),
       m_previousAbsoluteTime(0),
-      m_previousPos(barMargin),
-      m_currentPos(barMargin),
-//      m_noteWidthTable(LastNote),
-      m_currentScale(new Scale(Scale::C))
+      m_timeSignature(TimeSignature::DefaultTimeSignature)
 {
-//    initNoteWidthTable();
+
     //!!! ask the time signature...
-    m_timeUnitsPerBar = Note(Note::WholeNote).getDuration();
+//    m_timeUnitsPerBar = Note(Note::WholeNote).getDuration();
     kdDebug(KDEBUG_AREA) << "NotationHLayout::NotationHLayout()" << endl;
 }
 
 NotationHLayout::~NotationHLayout()
 {
-    delete m_currentScale;
+    // empty
 }
 
 
 unsigned int
 NotationHLayout::barTimeAtPos(NotationElementList::iterator pos)
 {
+    //!!!
+
     unsigned int res = 0;
 
     for (NotationElementList::iterator it = m_notationElements.begin();
          it != pos; ++it)
         res += (*it)->event()->get<Int>("QuantizedDuration");
 
-    return res % m_timeUnitsPerBar;
+    //!!! no -- wholly wrong when the time signature changes during the piece
+    // really we should not be having to call a method like this at all
+    return res % m_timeSignature.getBarDuration();
 }
 
 NotationElementList::iterator
@@ -73,86 +70,67 @@ NotationHLayout::getPreviousNote(NotationElementList::iterator pos)
         (Note::EventPackage, Note::EventType, pos);
 }
 
-/*!
-Scale::KeySignature
-NotationHLayout::getKeyAtPos(NotationElementList::iterator pos)
-{
-    //!!! dubious purposes anyway
-
-    while ((*pos)->event()->type() != "keychange" &&
-           pos != m_notationElements.begin()) {
-        --pos;
-    }
-
-    if (pos == m_notationElements.begin()) return Scale::C;
-
-    long sig;
-    
-    Scale::KeySignature res = Scale::C;
-    if ((*pos)->event()->get<Int>("key", sig)) {
-        res = Scale::KeySignature(sig);
-    }
-
-    return res;
-}
-*/
 void
 NotationHLayout::layout(NotationElementList::iterator from,
                         NotationElementList::iterator to)
 {
-    // Adjust current pos according to where we are in the NotationElementList
-    //
-    if (from == m_notationElements.begin()) {
+    double x = m_barMargin;
+    m_timeSignature = TimeSignature::DefaultTimeSignature;
+    m_nbTimeUnitsInCurrentBar = 0;
 
-        //!!! make broadly as in notationvlayout
-/*!        setCurrentKey(Scale::C); // TODO add document-wide scale */
-        
-        m_currentPos = m_barMargin; // we are at the beginning of the elements
-        m_nbTimeUnitsInCurrentBar = 0;
+    if (from != m_notationElements.begin()) {
 
-    } else {
+        // Adjust according to where we are in the NotationElementList
+
+        NotationElementList::iterator prevTS = m_notationElements.findPrevious
+            (TimeSignature::EventPackage, TimeSignature::EventType, from);
+        if (prevTS != m_notationElements.end()) {
+            m_timeSignature = TimeSignature(*(*prevTS)->event());
+        }
 
         // we're somewhere further - compute our position by looking
         // for the previous note
 
         NotationElementList::iterator oneBeforeFrom = getPreviousNote(from);
-
         NotationElement *elementBeforeFrom = (*oneBeforeFrom);
 
         m_quantizer.quantize(elementBeforeFrom->event());
         //!!! dottedness
         Note::Type previousNote = elementBeforeFrom->event()->get<Int>("Notation::NoteType");
-        m_currentPos = elementBeforeFrom->x();
-        m_currentPos += getNoteWidth(previousNote) + Staff::noteWidth + m_noteMargin;
+        x = elementBeforeFrom->x();
+        x += getNoteWidth(previousNote) + Staff::noteWidth + m_noteMargin;
 
-        if (m_currentScale->noteIsDecorated(*elementBeforeFrom)) {
+//!!! do this right
+/*!        if (m_currentScale->noteIsDecorated(*elementBeforeFrom)) {
             m_currentPos += Staff::accidentWidth;
         }
-
+*/
+        //!!! no, shouldn't be doing this
         m_nbTimeUnitsInCurrentBar = barTimeAtPos(oneBeforeFrom);
 
 /*!        setCurrentKey(getKeyAtPos(from)); */
     }
-    
+
+    //!!! ugh, this sort of thing sounds like it'll interact badly
+    //with attempts to layout only parts of a staff
     m_barPositions.clear();
+
+    kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): starting, initial x is " << x << endl;
 
     // Now layout notes of the given interval
     //
     for (NotationElementList::iterator it = from; it != to; ++it) {
         
         NotationElement *nel = (*it);
-    
-        // Key Change
-        //
+        nel->setX(x);
 
-        if (nel->event()->type() == "keychange") {
+        kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): setting element's x to " << x << endl;
+
+        if (nel->event()->isa(Key::EventPackage, Key::EventType)) {
+
             try {
                 Key key(nel->event()->get<String>("key"));
-/*!                setCurrentKey(key); */
-                nel->setX(m_currentPos);
-
-                m_currentPos += 24 + m_noteMargin; // TODO
-                m_previousPos = m_currentPos; // yes, this is correct
+                x += 24 + m_noteMargin; //!!! TODO
 
                 kdDebug(KDEBUG_AREA) << "NotationHLayout::layout() : got a keychange event - moving + 24"
                                      << endl;
@@ -161,106 +139,84 @@ NotationHLayout::layout(NotationElementList::iterator from,
                 kdDebug(KDEBUG_AREA) << "NotationHLayout::layout() : got a keychange event with no key property"
                                      << endl;
             }
-            continue;
-        }
 
-        // if (nel) is time sig change, reflect that
+        } else if ((*it)->event()->isa(Clef::EventPackage, Clef::EventType)) {
 
-        // kdDebug(KDEBUG_AREA) << "Layout" << endl;
+            x += 24 + m_noteMargin; //!!! fix
 
-        //
-        // layout event
-        //
-        m_quantizer.quantize(nel->event());
-        
-        // kdDebug(KDEBUG_AREA) << "Quantized" << endl;
-
-        // Add note to current bar
-        m_previousNbTimeUnitsInCurrentBar = m_nbTimeUnitsInCurrentBar;
-        m_nbTimeUnitsInCurrentBar += nel->event()->get<Int>("QuantizedDuration");
-
-        if (nel->absoluteTime() > m_previousAbsoluteTime ||
-            it == from) {
-
-            kdDebug(KDEBUG_AREA) << "NotationHLayout::layout() : moving from "
-                                 << m_previousAbsoluteTime
-                                 << " to " << nel->absoluteTime()
+            kdDebug(KDEBUG_AREA) << "NotationHLayout::layout() : got a clef event - moving + 24"
                                  << endl;
 
-            nel->setX(m_currentPos);
+        } else if (nel->event()->isa(TimeSignature::EventPackage,
+                                     TimeSignature::EventType)) {
 
-            // check the property is here ?
-            Note::Type note = nel->event()->get<Int>("Notation::NoteType");
+            x += 24 + m_noteMargin; //!!! fix
 
-            // Move current pos to next note
-            m_previousPos = m_currentPos;
-            m_currentPos += getNoteWidth(note) + Staff::noteWidth + m_noteMargin;
+            kdDebug(KDEBUG_AREA) << "NotationHLayout::layout() : got a timesig event - moving + 24"
+                                 << endl;
 
-            if (m_currentScale->noteIsDecorated(*nel)) {
-                //!!! now in notationvlayout -- look for computed-accidental
-                nel->event()->set<Int>("Notation::Accident",
-                                       m_currentScale->useSharps() ? Sharp : Flat);
-                m_currentPos += Staff::accidentWidth;
-            } else {
-                nel->event()->set<Int>("Notation::Accident", NoAccidental);
+            m_timeSignature = TimeSignature(*nel->event());
+            //... and put in a new barline &c
+
+        } else if (nel->isNote() || nel->isRest()) {
+
+            // layout event
+            //
+            m_quantizer.quantize(nel->event());
+        
+            // find out if we have a chord; if not, move on
+            NotationElementList::iterator ni(it);
+            if (it == to || !nel->isNote() || (++ni) == to || !(*ni)->isNote() ||
+                (*ni)->absoluteTime() != nel->absoluteTime()) {
+                // okay, we aren't a note being followed by a note with the
+                // same absolute time... so don't hang back
+
+                // Add note to current bar
+                //!!! may be wrong for chords whose notes differ in duration
+                m_nbTimeUnitsInCurrentBar += nel->event()->get<Int>("QuantizedDuration");
+
+                // check the property is here ?
+                Note::Type note = nel->event()->get<Int>("Notation::NoteType");
+
+                kdDebug(KDEBUG_AREA) << "NotationHLayout::layout() : moving from "
+                                     << x << "..." << endl;
+
+                x += getNoteWidth(note) + Staff::noteWidth + m_noteMargin;
+
+                kdDebug(KDEBUG_AREA) << " to " << x << endl;
+
+/*!
+  if (m_currentScale->noteIsDecorated(*nel)) {
+  //!!! now in notationvlayout -- look for computed-accidental
+  nel->event()->set<Int>("Notation::Accident",
+  m_currentScale->useSharps() ? Sharp : Flat);
+  m_currentPos += Staff::accidentWidth;
+  } else {
+  nel->event()->set<Int>("Notation::Accident", NoAccidental);
+  }
+*/         
             }
-            
-
 
             // See if we've completed a bar
             //
-            if (m_nbTimeUnitsInCurrentBar > m_timeUnitsPerBar) {
+            int barDuration = m_timeSignature.getBarDuration();
+            if (m_nbTimeUnitsInCurrentBar > barDuration) {
                 kdDebug(KDEBUG_AREA) << "NotationHLayout::layout() : Bar has wrong length" << endl;
-                // TODO
-            } else if (m_nbTimeUnitsInCurrentBar == m_timeUnitsPerBar) {
+                //!!! TODO
+            } else if (m_nbTimeUnitsInCurrentBar == barDuration) {
                 m_nbTimeUnitsInCurrentBar = 0;
-                addNewBar(m_currentPos + m_noteMargin);
-                m_currentPos += 2 * m_noteMargin + Staff::noteWidth;
+                addNewBar(x + m_noteMargin);
+                x += 2 * m_noteMargin + Staff::noteWidth;
             }
-
-
-        } else {
-            
-            kdDebug(KDEBUG_AREA) << "NotationHLayout::layout() : staying at "
-                                 << m_previousAbsoluteTime
-                                 << endl;
-
-            nel->setX(m_previousPos);
 
             if (nel->absoluteTime() < m_previousAbsoluteTime) {
                 kdDebug(KDEBUG_AREA) << "NotationHLayout::layout() : sanity problem - event absolute time is before previous event's time" << endl;
             }
-            
+
+            m_previousAbsoluteTime = nel->absoluteTime();
         }
-        
-
-        m_previousAbsoluteTime = nel->absoluteTime();
-
     }
 }
-
-/*!
-void
-NotationHLayout::initNoteWidthTable()
-{
-    m_noteWidthTable[Whole]        = m_barWidth;
-    m_noteWidthTable[Half]         = m_barWidth / 2;
-    m_noteWidthTable[Quarter]      = m_barWidth / 4;
-    m_noteWidthTable[Eighth]       = m_barWidth / 8;
-    m_noteWidthTable[Sixteenth]    = m_barWidth / 16;
-    m_noteWidthTable[ThirtySecond] = m_barWidth / 32;
-    m_noteWidthTable[SixtyFourth]  = m_barWidth / 64;
-
-    m_noteWidthTable[WholeDotted]        = m_noteWidthTable[Whole]        + m_noteWidthTable[Half];
-    m_noteWidthTable[HalfDotted]         = m_noteWidthTable[Half]         + m_noteWidthTable[Quarter];
-    m_noteWidthTable[QuarterDotted]      = m_noteWidthTable[Quarter]      + m_noteWidthTable[Eighth];
-    m_noteWidthTable[EighthDotted]       = m_noteWidthTable[Eighth]       + m_noteWidthTable[Sixteenth];
-    m_noteWidthTable[SixteenthDotted]    = m_noteWidthTable[Sixteenth]    + m_noteWidthTable[ThirtySecond];
-    m_noteWidthTable[ThirtySecondDotted] = m_noteWidthTable[ThirtySecond] + m_noteWidthTable[SixtyFourth];
-    m_noteWidthTable[SixtyFourthDotted]  = m_noteWidthTable[SixtyFourth]  + m_noteWidthTable[SixtyFourth] / 2;
-
-}
-*/
 
 void
 NotationHLayout::addNewBar(unsigned int barPos)
@@ -268,7 +224,6 @@ NotationHLayout::addNewBar(unsigned int barPos)
     m_barPositions.push_back(barPos);
     kdDebug(KDEBUG_AREA) << "NotationHLayout::addNewBar(" << barPos << ") - size : "
                          << m_barPositions.size() << "\n";
-
 }
 
 NotationHLayout::barpositions&
@@ -286,51 +241,10 @@ NotationHLayout::barPositions() const
 void
 NotationHLayout::reset()
 {
-    m_currentPos = m_barMargin;
     m_nbTimeUnitsInCurrentBar = 0;
-    m_previousNbTimeUnitsInCurrentBar = 0;
     m_barPositions.clear();
-/*!    setCurrentKey(Scale::C); */
 }
 
-/*!
-void
-NotationHLayout::setCurrentKey(Scale::KeySignature key)
-{
-    delete m_currentScale;
-    m_currentScale = new Scale(key);
-}
-*/
-
-
-// const vector<unsigned int>&
-// NotationHLayout::splitNote(unsigned int noteLen)
-// {
-//     static vector<unsigned int> notes;
-
-//     notes.clear();
-
-//     unsigned int timeUnitsLeftInThisBar = m_timeUnitsPerBar - m_previousNbTimeUnitsInCurrentBar,
-//         timeUnitsLeftInNote = m_nbTimeUnitsInCurrentBar - m_timeUnitsPerBar;
-
-//     unsigned int nbWholeNotes = timeUnitsLeftInNote / m_quantizer.wholeNoteDuration();
-    
-//     // beginning of the note - what fills up the bar
-//     notes.push_back(timeUnitsLeftInThisBar);
-
-//     // the whole notes (if any)
-//     for (unsigned int i = 0; i < nbWholeNotes; ++i) {
-//         notes.push_back(Whole);
-//         timeUnitsLeftInNote -= m_timeUnitsPerBar;
-//     }
-    
-//     notes.push_back(timeUnitsLeftInNote);
-
-//     m_nbTimeUnitsInCurrentBar = timeUnitsLeftInNote;
-
-//     return notes;
-    
-// }
 
 // bool compareNoteElement(NotationElement *el1, NotationElement *el2)
 // {

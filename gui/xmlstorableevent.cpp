@@ -46,8 +46,8 @@ XMLStorableEvent::XMLStorableEvent(const QXmlAttributes &attributes)
 		try {
 		    Note n(attrVal.latin1());
 		    setTimeDuration(n.getDuration());
-		} catch (Note::BadType) {
-                    kdDebug(KDEBUG_AREA) << "Bad duration: " << attrVal << endl;
+		} catch (Note::BadType b) {
+                    kdDebug(KDEBUG_AREA) << "XMLStorableEvent::XMLStorableEvent: Bad duration: " << attrVal << " (Note choked on \"" << b.type << "\")" << endl;
 		}
             } else {
 		setTimeDuration(d);

@@ -175,7 +175,6 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     m_vlayout = new NotationVLayout(*m_mainStaff, *m_notationElements);
     m_hlayout = new NotationHLayout(*m_mainStaff, *m_notationElements,
                                     (Staff::noteWidth + 2) * 4, // this shouldn't be constant
-                                    4, // 4 beats per bar
                                     40);
 
     if (applyLayout()) {
@@ -363,13 +362,13 @@ NotationView::showElements(NotationElementList::iterator from,
                 noteSprite = new QCanvasSimpleSprite(&notePixmap, canvas());
 
 /*! key & clef conflated
-            } else if ((*it)->event()->type() == "keychange") {
+            } else if ((*it)->event()->isa(Key::EventPackage, Key::EventType)) {
 
                 QCanvasPixmap clefPixmap("pixmaps/clef-treble.xpm");
                 noteSprite = new QCanvasSimpleSprite(&clefPixmap, canvas());
 */
 
-            } else if ((*it)->event()->type() == "clefchange") {
+            } else if ((*it)->event()->isa(Clef::EventPackage, Clef::EventType)) {
 
                 QCanvasPixmap clefPixmap(cpf.makeClefPixmap((*it)->event()->get<String>(Clef::ClefPropertyName)));
                 noteSprite = new QCanvasSimpleSprite(&clefPixmap, canvas());
@@ -421,7 +420,7 @@ NotationView::showBars(NotationElementList::iterator from,
     m_currentStaff->deleteBars((*from)->x());
         
     
-    for(NotationHLayout::barpositions::const_iterator it = barPositions.begin();
+    for (NotationHLayout::barpositions::const_iterator it = barPositions.begin();
         it != barPositions.end(); ++it) {
 
         unsigned int barPos = *it;
@@ -661,7 +660,6 @@ NotationView::insertNote(int pitch, const QPoint &eventPos)
     //
     NotationElement *newNotationElement = new NotationElement(insertedEvent);
 
-    //!!! eh? we don't set the duration???
     newNotationElement->event()->set<Int>("Notation::NoteType", m_currentSelectedNote);
     newNotationElement->event()->set<String>("Name", "INSERTED_NOTE");
 
