@@ -407,13 +407,6 @@ RosegardenSequencerApp::notifySequencerStatus()
 }
 
 void
-RosegardenSequencerApp::processGUIEvents()
-{
-    Rosegarden::Profiler profiler("processGUIEvents");
-    kapp->processEvents();
-}
-
-void
 RosegardenSequencerApp::sleep(const Rosegarden::RealTime &rt)
 {
     m_sequencer->sleep(rt);

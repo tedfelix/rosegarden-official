@@ -282,9 +282,6 @@ public:
     /**
      * Show a preview of the Segment we're recording
      */
-//!!!    void showRecordingSegmentItem(Rosegarden::TrackId track,
-//				  Rosegarden::timeT startTime,
-//				  Rosegarden::timeT endTime);
     void showRecordingSegmentItem(Rosegarden::Segment *segment,
 				  Rosegarden::timeT endTime);
     void deleteRecordingSegmentItem();

@@ -138,6 +138,7 @@ void SegmentRepeatRectangle::drawShape(QPainter& painter)
 
 //////////////////////////////////////////////////////////////////////
 //                SegmentItemPreview
+// (declared in segmenttool.h because tools need to set preview currency)
 //////////////////////////////////////////////////////////////////////
 
 SegmentItemPreview::SegmentItemPreview(SegmentItem& parent,
@@ -335,24 +336,34 @@ void SegmentAudioPreview::updatePreview()
 class SegmentNotationPreview : public SegmentItemPreview
 {
 public:
-    /**
-     * Create a new segment item without an associated segment (yet)
-     */
-    SegmentNotationPreview(SegmentItem& parent, Rosegarden::RulerScale* scale);
+    SegmentNotationPreview(SegmentItem& parent,
+			   Rosegarden::RulerScale* scale);
 
     virtual void drawShape(QPainter&);
 
 protected:
-
     virtual void updatePreview();
 
+    struct RectCompare {
+	bool operator()(const QRect &r1, const QRect &r2) const {
+	    return r1.x() < r2.x();
+	}
+//	bool operator()(const QRect *r1, const QRect *r2) const {
+//	    return r1->x() < r2->x();
+//	}
+    };
+
     //--------------- Data members ---------------------------------
-    std::vector<QRect> m_previewInfo;
+    bool m_haveSegmentRefreshStatus;
+    unsigned int m_segmentRefreshStatus;
+    typedef std::multiset<QRect, RectCompare> RectList;
+    RectList m_previewInfo;
 };
 
 SegmentNotationPreview::SegmentNotationPreview(SegmentItem& parent,
                                                Rosegarden::RulerScale* scale)
-    : SegmentItemPreview(parent, scale)
+    : SegmentItemPreview(parent, scale),
+      m_haveSegmentRefreshStatus(false)
 {
 }
 
@@ -364,12 +375,13 @@ void SegmentNotationPreview::drawShape(QPainter& painter)
     painter.translate(rect().x(), rect().y());
     painter.setPen(RosegardenGUIColours::SegmentInternalPreview);
     QRect viewportRect = painter.xFormDev(painter.viewport());
-            
-    for(unsigned int i = 0; i < m_previewInfo.size(); ++i) {
-        //
+
+    for (RectList::iterator i = m_previewInfo.begin();
+	 i != m_previewInfo.end(); ++i) {
+
         // draw rectangles, discarding those which are clipped
         //
-        QRect p = m_previewInfo[i];
+        QRect p = *i;
 	if (p.x() > (viewportRect.x() + viewportRect.width())) break;
         if ((p.x() + p.width()) >= viewportRect.x()) {
             painter.drawRect(p);
@@ -386,11 +398,32 @@ void SegmentNotationPreview::updatePreview()
     //RG_DEBUG << "SegmentNotationItem::updatePreview() "
                          //<< this << endl;
 
-    m_previewInfo.clear();
+    if (!m_haveSegmentRefreshStatus) {
+	m_segmentRefreshStatus = m_segment->getNewRefreshStatusId();
+	m_haveSegmentRefreshStatus = true;
+    }
 
-    Segment::iterator start = m_segment->begin();
+    Rosegarden::SegmentRefreshStatus &status =
+	m_segment->getRefreshStatus(m_segmentRefreshStatus);
+    if (!status.needsRefresh()) return;
 
-    for (Segment::iterator i = start; m_segment->isBeforeEndMarker(i); ++i) {
+    Rosegarden::timeT fromTime = status.from(), toTime = status.to();
+    if (fromTime == toTime) {
+	fromTime = m_segment->getStartTime();
+	  toTime = m_segment->getEndMarkerTime();
+    }
+
+    int fromX = (int)m_rulerScale->getXForTime(fromTime) - rect().x();
+    int   toX = (int)m_rulerScale->getXForTime(  toTime) - rect().x();
+
+    QRect fromRect(fromX, 0, 10, 10), toRect(toX, 0, 10, 10);
+    RectList::iterator fromi = m_previewInfo.lower_bound(fromRect);
+    RectList::iterator   toi = m_previewInfo.lower_bound(  toRect);
+    m_previewInfo.erase(fromi, toi);
+
+    for (Segment::iterator i = m_segment->findTime(fromTime);
+	 m_segment->isBeforeEndMarker(i) && i != m_segment->findTime(toTime);
+	 ++i) {
 
         long pitch = 0;
         if (!(*i)->isa(Rosegarden::Note::EventType) ||
@@ -410,16 +443,17 @@ void SegmentNotationPreview::updatePreview()
         int width = (int)(x1 - x0) - 2;
 	if (width < 1) width = 1;
 
-        double y0 = 0; // rect().y();
-        double y1 = /*rect().y() + */ rect().height();
+        double y0 = 0;
+        double y1 = rect().height();
         double y = y1 + ((y0 - y1) * (pitch-16)) / 96;
         if (y < y0) y = y0;
         if (y > y1-1) y = y1-1;
 
         QRect r((int)x0, (int)y, width, 2);
-        m_previewInfo.push_back(r);
+        m_previewInfo.insert(r);
     }
 
+    status.setNeedsRefresh(false);
     setPreviewCurrent(true);
 }
 
@@ -1161,17 +1195,11 @@ SegmentCanvas::addSegmentItem(Segment *segment)
 }
 
 void SegmentCanvas::showRecordingSegmentItem(Segment *segment, timeT endTime)
-//!!!TrackId track,
-    //                                        timeT startTime, timeT endTime)
 {
 //    RG_DEBUG << "SegmentCanvas::showRecordingSegmentItem(" << track << ", "
 //	     << startTime << ", " << endTime << ") (seg now is " << m_recordingSegment << ")" << endl;
 
     if (m_recordingSegment) {
-
-//	m_recordingSegment->setStartTime(startTime);
-//	m_recordingSegment->setEndTime(endTime);
-//	m_recordingSegment->setTrackPosition(track);
 
 	m_recordingSegment->setStartTime(segment->getStartTime());
 	m_recordingSegment->setEndTime(endTime);
@@ -1183,7 +1211,6 @@ void SegmentCanvas::showRecordingSegmentItem(Segment *segment, timeT endTime)
 
     } else {
 	
-//!!!	m_recordingSegment = addSegmentItem(track, startTime, endTime);
 	m_recordingSegment = addSegmentItem(segment);
 	m_recordingSegment->setEndTime(endTime);
 	m_recordingSegment->setPen(RosegardenGUIColours::RecordingSegmentBorder);
