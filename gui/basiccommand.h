@@ -55,11 +55,11 @@ public:
     virtual void execute();
     virtual void unexecute();
 
-    virtual Rosegarden::Segment &getSegment() { return m_segment; }
+    virtual Rosegarden::Segment &getSegment();
 
     Rosegarden::timeT getBeginTime() { return m_savedEvents.getStartTime(); }
     Rosegarden::timeT getEndTime() { return m_endTime; }
-    virtual Rosegarden::timeT getRelayoutEndTime() { return getEndTime(); }
+    virtual Rosegarden::timeT getRelayoutEndTime();
 
 protected:
     /**

@@ -51,6 +51,16 @@ BasicCommand::~BasicCommand()
     delete m_redoEvents;
 }
 
+Rosegarden::Segment& BasicCommand::getSegment()
+{
+    return m_segment;
+}
+
+Rosegarden::timeT BasicCommand::getRelayoutEndTime()
+{
+    return getEndTime();
+}
+
 void
 BasicCommand::beginExecute()
 {
