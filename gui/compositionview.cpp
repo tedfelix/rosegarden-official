@@ -765,7 +765,7 @@ void CompositionView::scrollRight()
 
         resizeContents(contentsWidth() + m_stepSize, contentsHeight());
         setContentsPos(contentsX() + m_stepSize, contentsY());
-        m_model->setLength(contentsWidth());
+        getModel()->setLength(contentsWidth());
     }
     
 }
@@ -778,7 +778,7 @@ void CompositionView::scrollLeft()
     
     if (horizontalScrollBar()->value() < cWidth && cWidth > m_minWidth) {
         resizeContents(cWidth - m_stepSize, contentsHeight());
-        m_model->setLength(contentsWidth());
+        getModel()->setLength(contentsWidth());
     }
     
 }
@@ -786,13 +786,18 @@ void CompositionView::scrollLeft()
 void CompositionView::setSelectionRectPos(const QPoint& pos)
 {
     m_selectionRect.setTopLeft(pos);
-    m_model->setSelectionRect(m_selectionRect);
+    getModel()->setSelectionRect(m_selectionRect);
 }
 
 void CompositionView::setSelectionRectSize(int w, int h)
 {
     m_selectionRect.setSize(QSize(w, h));
-    m_model->setSelectionRect(m_selectionRect);
+    getModel()->setSelectionRect(m_selectionRect);
+}
+
+void CompositionView::refreshPreviews()
+{
+    dynamic_cast<CompositionModelImpl*>(getModel())->refreshPreviewCache();
 }
 
 Rosegarden::SegmentSelection
@@ -806,7 +811,7 @@ void CompositionView::updateSelectionContents()
     if (!haveSelection()) return;
 
     
-    QRect selectionRect = m_model->getSelectionContentsRect();
+    QRect selectionRect = getModel()->getSelectionContentsRect();
     updateContents(selectionRect);
 }
 
@@ -837,7 +842,7 @@ void CompositionView::slotSelectSegments(const SegmentSelection &segments)
     static QRect dummy;
 
     for(SegmentSelection::iterator i = segments.begin(); i != segments.end(); ++i) {
-        m_model->setSelected(CompositionItem(new CompositionItemImpl(**i, dummy)));
+        getModel()->setSelected(CompositionItem(new CompositionItemImpl(**i, dummy)));
     }
     updateContents();
 }
@@ -951,7 +956,7 @@ void CompositionView::drawContents(QPainter *p, int clipx, int clipy, int clipw,
         m_audioPreviewData.clear();
     }
 
-    const CompositionModel::rectcontainer& rects = m_model->getRectanglesIn(clipRect,
+    const CompositionModel::rectcontainer& rects = getModel()->getRectanglesIn(clipRect,
                                                                             notationPreviewData, audioPreviewData);
     CompositionModel::rectcontainer::const_iterator i = rects.begin();
     CompositionModel::rectcontainer::const_iterator end = rects.end();
@@ -1324,7 +1329,7 @@ void CompositionView::contentsMouseDoubleClickEvent(QMouseEvent* e)
     CompositionItemImpl* itemImpl = dynamic_cast<CompositionItemImpl*>((_CompositionItem*)m_currentItem);
         
     if (m_currentItem->isRepeating()) {
-        Rosegarden::timeT time = m_model->getRepeatTimeAt(e->pos(), m_currentItem);
+        Rosegarden::timeT time = getModel()->getRepeatTimeAt(e->pos(), m_currentItem);
 
         RG_DEBUG << "editRepeat at time " << time << endl;
 
