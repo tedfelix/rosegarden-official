@@ -14,8 +14,6 @@ o Matrix Hypereditor [HALF COMPLETED]
 
 o FEATURE - double/half speed event selection in Matrix
 
-o FEATURE - turn repeats to real segments
-
 o BUG - Matrix width bug [HALF COMPLETED]
 
 o BUG - Matrix pointer width
@@ -91,6 +89,10 @@ o selection of ALSA recording device
 
 Completed for 0.3(?)
 ====================
+
+o FEATURE - segment guides for placement [DONE]
+
+o FEATURE - turn repeats to real segments [DONE]
 
 o FEATURE - set EventSelection velocities [DONE]
 

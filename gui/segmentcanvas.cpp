@@ -1452,9 +1452,19 @@ bool SegmentEraser::handleMouseMove(QMouseEvent*)
 //////////////////////////////
 
 SegmentMover::SegmentMover(SegmentCanvas *c, RosegardenGUIDoc *d)
-    : SegmentTool(c, d)
+    : SegmentTool(c, d),
+    m_foreGuide(new QCanvasRectangle(m_canvas->canvas())),
+    m_topGuide(new QCanvasRectangle(m_canvas->canvas()))
 {
     m_canvas->setCursor(Qt::sizeAllCursor);
+
+    m_foreGuide->setPen(RosegardenGUIColours::MovementGuide);
+    m_foreGuide->setBrush(RosegardenGUIColours::MovementGuide);
+    m_foreGuide->hide();
+
+    m_topGuide->setPen(RosegardenGUIColours::MovementGuide);
+    m_topGuide->setBrush(RosegardenGUIColours::MovementGuide);
+    m_topGuide->hide();
 
     RG_DEBUG << "SegmentMover()\n";
 }
@@ -1468,6 +1478,25 @@ void SegmentMover::handleMouseButtonPress(QMouseEvent *e)
 	m_currentItemStartX = item->x();
 	m_clickPoint = e->pos();
         m_currentItem->showRepeatRect(false);
+
+        m_foreGuide->setX(int(m_canvas->grid().getRulerScale()->
+                          getXForTime(item->getSegment()->getStartTime())) - 2);
+        m_foreGuide->setY(0);
+        m_foreGuide->setZ(10);
+        m_foreGuide->setSize(2, m_canvas->canvas()->height());
+
+        m_topGuide->setSize(m_canvas->canvas()->width(), 2);
+        m_topGuide->setX(0);
+        m_topGuide->setY(int(m_canvas->grid().getYBinCoordinate(
+                              item->getSegment()->getTrack())));
+        m_topGuide->setZ(10);
+
+        m_foreGuide->show();
+        m_topGuide->show();
+
+        // Don't update until the move
+        //
+        //m_canvas->canvas()->update();
     }
 }
 
@@ -1484,6 +1513,9 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
                             m_currentItem->getTrack());
         addCommandToHistory(command);
         m_currentItem->showRepeatRect(true);
+
+        m_foreGuide->hide();
+        m_topGuide->hide();
     }
 
     m_currentItem = 0;
@@ -1503,6 +1535,12 @@ bool SegmentMover::handleMouseMove(QMouseEvent *e)
 
 	TrackId track = m_canvas->grid().getYBin(e->pos().y());
         m_currentItem->setTrack(track);
+
+        m_foreGuide->setX(int(m_canvas->grid().getRulerScale()->
+                            getXForTime(newStartTime)) - 2);
+
+        m_topGuide->setY(m_canvas->grid().getYBinCoordinate(track));
+
         m_canvas->canvas()->update();
 
 	return true;
@@ -1599,9 +1637,19 @@ SegmentSelector::SegmentSelector(SegmentCanvas *c, RosegardenGUIDoc *d)
       m_segmentAddMode(false),
       m_segmentCopyMode(false),
       m_segmentQuickCopyDone(false),
-      m_dispatchTool(0)
+      m_dispatchTool(0),
+      m_foreGuide(new QCanvasRectangle(m_canvas->canvas())),
+      m_topGuide(new QCanvasRectangle(m_canvas->canvas()))
 {
     RG_DEBUG << "SegmentSelector()\n";
+
+    m_foreGuide->setPen(RosegardenGUIColours::MovementGuide);
+    m_foreGuide->setBrush(RosegardenGUIColours::MovementGuide);
+    m_foreGuide->hide();
+
+    m_topGuide->setPen(RosegardenGUIColours::MovementGuide);
+    m_topGuide->setBrush(RosegardenGUIColours::MovementGuide);
+    m_topGuide->hide();
 
     connect(this, SIGNAL(selectedSegments(const Rosegarden::SegmentSelection &)),
             c,     SIGNAL(selectedSegments(const Rosegarden::SegmentSelection &)));
@@ -1691,9 +1739,32 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 	    return;
 	}
 
+
+        // Moving
+        //
         m_currentItem = item;
         m_clickPoint = e->pos();
         slotSelectSegmentItem(m_currentItem);
+
+        m_foreGuide->setX(int(m_canvas->grid().getRulerScale()->
+                           getXForTime(item->getSegment()->getStartTime())) -2);
+        m_foreGuide->setY(0);
+        m_foreGuide->setZ(10);
+        m_foreGuide->setSize(2, m_canvas->canvas()->height());
+
+        m_topGuide->setX(0);
+        m_topGuide->setY(int(m_canvas->grid().getYBinCoordinate(
+                              item->getSegment()->getTrack())));
+        m_topGuide->setZ(10);
+        m_topGuide->setSize(m_canvas->canvas()->width(), 2);
+
+        m_foreGuide->show();
+        m_topGuide->show();
+
+        // Don't update until the move - lazy way of making sure the
+        // guides don't flash on while we're double clicking
+        //
+        //m_canvas->canvas()->update();
 
     } else {
 
@@ -1809,6 +1880,12 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 	}
 
 	if (haveChange) addCommandToHistory(command);
+
+        // Hide guides
+        //
+        m_foreGuide->hide();
+        m_topGuide->hide();
+
 	m_canvas->canvas()->update();
     }
     
@@ -1940,6 +2017,8 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
     if (m_currentItem->isSelected())
     {
 	SegmentItemList::iterator it;
+        int guideX = 0;
+        int guideY = 0;
 	
 	for (it = m_selectedItems.begin();
 	     it != m_selectedItems.end();
@@ -1957,12 +2036,29 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 		m_passedInertiaEdge = true;
 	    }
 
+
 	    timeT newStartTime = m_canvas->grid().snapX(it->first.x() + x);
 	    it->second->setEndTime(it->second->getEndTime() + newStartTime -
 				   it->second->getStartTime());
 	    it->second->setStartTime(newStartTime);
-
 	    TrackId track = m_canvas->grid().getYBin(it->first.y() + y);
+
+            if (it == m_selectedItems.begin())
+            {
+                guideX = int(m_canvas->grid().getRulerScale()->
+                    getXForTime(newStartTime));
+
+                guideY = m_canvas->grid().getYBinCoordinate(track);
+            }
+            else
+            {
+                if (x < guideX)
+                    guideX = int(m_canvas->grid().getRulerScale()->
+                        getXForTime(newStartTime));
+
+                if (y < guideY)
+                    guideY = m_canvas->grid().getYBinCoordinate(track);
+            }
 
             // Make sure we don't set a non-existing track
             // TODO: make this suck less. Either the tool should
@@ -1974,6 +2070,9 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 
 	    it->second->setTrack(track);
 	}
+
+        m_foreGuide->setX(guideX - 2);
+        m_topGuide->setY(guideY - 2);
 
 	m_canvas->canvas()->update();
     }

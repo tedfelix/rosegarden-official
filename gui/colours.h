@@ -83,6 +83,7 @@ namespace RosegardenGUIColours
     extern const QColor InsertCursor;
     extern const QColor InsertCursorRuler;
 
+    extern const QColor MovementGuide;
     extern const QColor SelectionRectangle;
     extern const QColor SelectedElement;
     extern const int SelectedElementHue;

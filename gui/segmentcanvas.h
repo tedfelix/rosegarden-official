@@ -508,8 +508,12 @@ private:
 
     //--------------- Data members ---------------------------------
 
-    QPoint m_clickPoint;
-    double m_currentItemStartX;
+    QPoint            m_clickPoint;
+    double            m_currentItemStartX;
+
+    QCanvasRectangle *m_foreGuide;
+    QCanvasRectangle *m_topGuide;
+
 };
 
 /**
@@ -612,6 +616,9 @@ private:
     SegmentTool *m_dispatchTool;
 
     static bool m_greedy;
+
+    QCanvasRectangle *m_foreGuide;
+    QCanvasRectangle *m_topGuide;
 
 };
 

@@ -75,6 +75,9 @@ namespace RosegardenGUIColours
     const QColor InsertCursor = QColor(160, 104, 186);
     const QColor InsertCursorRuler = QColor(160, 136, 170);
 
+    const QColor MovementGuide = QColor(62, 161, 194);
+    //const QColor MovementGuide = QColor(255, 255, 255);
+    //const QColor MovementGuide = QColor(255, 189, 89);
     const QColor SelectionRectangle = QColor(103, 128, 211);
     const QColor SelectedElement = QColor(0, 54, 232);
 

@@ -369,7 +369,7 @@ void RosegardenGUIApp::setupActions()
                               actionCollection(), "join");
     action->setExclusiveGroup("segmenttools");
 
-    new KAction(i18n("Turn Re&peating Segments into Real Copies"),
+    new KAction(i18n("Turn Re&peats into Copies"),
                 0,
                 this, SLOT(slotRepeatingSegments()),
                 actionCollection(), "repeats_to_real_copies");
