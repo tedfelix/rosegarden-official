@@ -104,6 +104,16 @@ PlayableAudioFile::getChannels()
 }
 
 unsigned int
+PlayableAudioFile::getBytesPerSample()
+{
+    if (m_audioFile)
+    {
+        return m_audioFile->getBytesPerFrame();
+    }
+    return 0;
+}
+
+unsigned int
 PlayableAudioFile::getSampleRate()
 {
     if (m_audioFile)

@@ -1714,11 +1714,6 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
         double dInSamplesInc = 0.0;
         jack_nframes_t samplesOut = 0;
 
-        // If we're on the final slice we process as many samples as
-        // we can up to the end of the file.
-        //
-        bool finalFrame = false;
-
         for (it = audioQueue.begin(); it != audioQueue.end(); it++)
         {
             // Another thread could've cleared down all the
@@ -1779,8 +1774,17 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                     // We've run out of samples in the PlayableAudioFile
                     // - throw it away
                     //
+                    std::cerr << "jackProcess - EXCEPTION \"" << es << "\""
+                              << std::endl;
+                }
+
+                // If we can't fetch everything then we must be at
+                // the end of the AudioFile.
+                //
+                if (samples.length() !=
+                    (fetchFrames * (*it)->getBytesPerSample()))
+                {
                     (*it)->setStatus(PlayableAudioFile::DEFUNCT);
-                    finalFrame = true;
                 }
 
 
@@ -1819,6 +1823,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 
                 // Now point to the string
                 char *samplePtr = (char *)(samples.c_str());
+                char *origSamplePtr = samplePtr;
                 float outBytes;
 
                 while (samplesOut < nframes)
@@ -1886,16 +1891,25 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                     // Point to next output sample
                     samplesOut++;
 
-                    // Ensure we don't overrun the end byte on the
-                    // the final frame.  Hmm, still not working.
-                    //
-                    if (finalFrame &&
-                        (samplesOut * bytes * channels
-                             > samples.length()))
+                    if ((*it)->getStatus() == PlayableAudioFile::DEFUNCT)
                     {
-                        break;
+                        if (samplePtr - origSamplePtr > samples.length())
+                        {
+                            /*
+                            cout << "FINAL FRAME BREAKING - "
+                                 << "calc = " << samplesOut * bytes * channels
+                                 << " : samples = " << samples.length()
+                                 << endl;
+                                 */
+                            break;
+                        }
+                        /*
+                        else
+                        {
+                            cout << "FINAL FRAME OUT" << endl;
+                        }
+                        */
                     }
-
                 }
             }
             layerCount++;

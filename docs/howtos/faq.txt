@@ -213,3 +213,43 @@ SBLive! soundcard comes with a set of standard soundfonts (2gmgsmt.sf2,
 For more fun with soundfonts including how to create them for yourself
 have a look at the Smurf/Swami project: <URL:http://smurf.sourceforge.net/>.
 
+I've followed all your instructions but I still don't hear any sound
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you've done everything we've suggested above then you can check
+what devices the sequencer is seeing by running the Rosegarden 
+sequencer up by itself.  Try:
+
+$ rosegardensequencer
+
+and examine the output of the screen.  The output for JACK and ALSA
+for an SBLive! should look something like this:
+
+Rosegarden AlsaDriver - alsa-lib version 0.9.0beta12
+
+  ALSA Client information:
+
+      64,0 - (External MIDI 0, MIDI 0-0)          (DUPLEX)
+        65,0 - (Emu10k1 WaveTable, Emu10k1 Port 0)          (WRITE ONLY)
+        65,1 - (Emu10k1 WaveTable, Emu10k1 Port 1)          (WRITE ONLY)
+        65,2 - (Emu10k1 WaveTable, Emu10k1 Port 2)          (WRITE ONLY)
+        65,3 - (Emu10k1 WaveTable, Emu10k1 Port 3)          (WRITE ONLY)
+
+        Record client set to (64, 0)
+
+    AlsaDriver::initialiseMidi - can't subscribe output client/port
+    AlsaDriver::initialiseMidi -  initialised MIDI subsystem
+    AlsaDriver::jackBufferSize - buffer size changed to 1024
+    AlsaDriver::jackSampleRate - sample rate changed to 48000
+    AlsaDriver::initialiseAudio - JACK sample rate = 48000
+    AlsaDriver::jackGraphOrder
+    AlsaDriver::initialiseAudio - initialised JACK audio subsystem
+    AlsaDriver::jackGraphOrder
+    AlsaDriver::jackGraphOrder
+    AlsaDriver::jackGraphOrder
+    RosegardenSequencer - started OK
+
+
+Note the ALSA device list shows the external MIDI port and the
+wavetable on-board synth devices.  All of these will be available
+in the drop-down Instrument list inside Rosegarden.

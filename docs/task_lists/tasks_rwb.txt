@@ -1,6 +1,10 @@
 0.2 tasks
 =========
 
+o call() stop()
+
+o closing audio clicks
+
 o First time run up go to settings and walk user through the
   MIDI and Audio setup to help them understand what they're
   doing.

@@ -100,6 +100,7 @@ public:
     unsigned int getChannels();
     unsigned int getBitsPerSample();
     unsigned int getSampleRate();
+    unsigned int getBytesPerSample();
 
 
 private:
