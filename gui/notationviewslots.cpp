@@ -178,6 +178,8 @@ NotationView::slotChangeFontSizeFromAction()
     const QObject *s = sender();
     QString name = s->name();
 
+	    KMessageBox::sorry
+		(this, QString(i18n("Font name %1").arg(name)));
     if (name.left(15) == "note_font_size_") {
 	name = name.right(name.length() - 15);
 	bool ok = false;
@@ -238,8 +240,6 @@ NotationView::slotChangeFont(std::string newName, int newSize)
         return;
     }
 
-    bool changedFont = (newName != m_fontName);
-
     std::string oldName = m_fontName;
     m_fontName = newName;
     m_fontSize = newSize;
@@ -273,8 +273,6 @@ NotationView::slotChangeFont(std::string newName, int newSize)
     setupFontSizeMenu(oldName);
 
     m_hlayout->setNotePixmapFactory(m_notePixmapFactory);
-
-    if (!changedFont) return; // might have been called to initialise menus etc
 
     NOTATION_DEBUG << "about to change font" << endl;
 
