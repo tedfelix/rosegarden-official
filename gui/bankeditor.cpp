@@ -62,10 +62,13 @@
 
 #include "Studio.h"
 #include "MidiDevice.h"
+#include "MidiProgram.h"
 
 #include "SF2PatchExtractor.h"
 
 using Rosegarden::SF2PatchExtractor;
+using Rosegarden::MidiBank;
+using Rosegarden::MidiProgram;
 
 
 MidiDeviceListViewItem::MidiDeviceListViewItem(Rosegarden::DeviceId deviceId,
@@ -77,8 +80,11 @@ MidiDeviceListViewItem::MidiDeviceListViewItem(Rosegarden::DeviceId deviceId,
 
 MidiDeviceListViewItem::MidiDeviceListViewItem(Rosegarden::DeviceId deviceId,
                                                QListViewItem* parent, QString name,
+					       bool percussion,
                                                int msb, int lsb)
-    : QListViewItem(parent, name, QString().setNum(msb), QString().setNum(lsb)),
+    : QListViewItem(parent, name,
+		    QString(percussion ? i18n("Yes") : i18n("No")),
+		    QString().setNum(msb), QString().setNum(lsb)),
       m_deviceId(deviceId)
 {
 }
@@ -96,15 +102,18 @@ int MidiDeviceListViewItem::compare(QListViewItem *i, int col, bool ascending) c
         otherVal = item->text(col).toInt();
 
     if (thisVal == otherVal) {
-        if (col == 1) // if sorting on MSB, suborder with LSB
-            return compare(i, 2, ascending);
-        else
+        if (col == 2) { // if sorting on MSB, suborder with LSB
+            return compare(i, 3, ascending);
+	} else {
             return 0;
+	}
     }
 
     // 'ascending' should be ignored according to Qt docs
     //
     return (thisVal > otherVal) ? 1 : -1;
+
+    //!!! how to use percussion here?
 }
 
 //--------------------------------------------------
@@ -112,35 +121,44 @@ int MidiDeviceListViewItem::compare(QListViewItem *i, int col, bool ascending) c
 MidiBankListViewItem::MidiBankListViewItem(Rosegarden::DeviceId deviceId,
                                            int bankNb,
                                            QListViewItem* parent,
-                                           QString name, int msb, int lsb)
-    : MidiDeviceListViewItem(deviceId, parent, name, msb, lsb),
+                                           QString name,
+					   bool percussion, int msb, int lsb)
+    : MidiDeviceListViewItem(deviceId, parent, name, percussion, msb, lsb),
       m_bankNb(bankNb)
 {
 }
 
+void MidiBankListViewItem::setPercussion(bool percussion)
+{
+    setText(1, QString(percussion ? i18n("Yes") : i18n("No")));
+}
+
 void MidiBankListViewItem::setMSB(int msb)
 {
-    setText(1, QString().setNum(msb));
+    setText(2, QString().setNum(msb));
 }
 
 void MidiBankListViewItem::setLSB(int lsb)
 {
-    setText(2, QString().setNum(lsb));
+    setText(3, QString().setNum(lsb));
 }
 
 int MidiBankListViewItem::compare(QListViewItem *i, int col, bool ascending) const
 {
     MidiBankListViewItem* bankItem = dynamic_cast<MidiBankListViewItem*>(i);
-    if (!bankItem || (col != 1 && col != 2)) return MidiDeviceListViewItem::compare(i, col, ascending);
+    if (!bankItem || (col != 2 && col != 3)) {
+	return MidiDeviceListViewItem::compare(i, col, ascending);
+    }
 
     int thisVal = text(col).toInt(),
         otherVal = bankItem->text(col).toInt();
 
     if (thisVal == otherVal) {
-        if (col == 1) // if sorting on MSB, suborder with LSB
-            return compare(i, 2, ascending);
-        else
+        if (col == 2) { // if sorting on MSB, suborder with LSB
+            return compare(i, 3, ascending);
+	} else {
             return 0;
+	}
     }
 
     // 'ascending' should be ignored according to Qt docs
@@ -162,16 +180,16 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
       m_bankEditor(bankEditor),
       m_mainFrame(new QFrame(this)),
       m_bankName(new QLabel(m_mainFrame)),
+      m_percussion(new QCheckBox(m_mainFrame)),
       m_msb(new QSpinBox(m_mainFrame)),
       m_lsb(new QSpinBox(m_mainFrame)),
       m_bankList(bankEditor->getBankList()),
       m_programList(bankEditor->getProgramList()),
-      m_oldMSB(0),
-      m_oldLSB(0)
+      m_oldBank(false, 0, 0)
 {
 
     QGridLayout *gridLayout = new QGridLayout(m_mainFrame,
-                                              1,  // rows
+                                              4,  // rows
                                               6,  // cols
                                               2); // margin
  
@@ -187,11 +205,15 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
 
     gridLayout->addMultiCellWidget(m_bankName, 0, 0, 0, 1, AlignLeft);
 
-    gridLayout->addWidget(new QLabel(i18n("MSB Value"), m_mainFrame),
+    gridLayout->addWidget(new QLabel(i18n("Percussion"), m_mainFrame),
                           1, 0, AlignLeft);
+    gridLayout->addWidget(m_percussion, 1, 1, AlignLeft);
+
+    gridLayout->addWidget(new QLabel(i18n("MSB Value"), m_mainFrame),
+                          2, 0, AlignLeft);
     m_msb->setMinValue(0);
     m_msb->setMaxValue(127);
-    gridLayout->addWidget(m_msb, 1, 1, AlignLeft);
+    gridLayout->addWidget(m_msb, 2, 1, AlignLeft);
 
     QToolTip::add(m_msb,
             i18n("Selects a MSB controller Bank number (MSB/LSB pairs are always unique for any Device)"));
@@ -203,10 +225,10 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
             this, SLOT(slotNewMSB(int)));
 
     gridLayout->addWidget(new QLabel(i18n("LSB Value"), m_mainFrame),
-                          2, 0, AlignLeft);
+                          3, 0, AlignLeft);
     m_lsb->setMinValue(0);
     m_lsb->setMaxValue(127);
-    gridLayout->addWidget(m_lsb, 2, 1, AlignLeft);
+    gridLayout->addWidget(m_lsb, 3, 1, AlignLeft);
 
     connect(m_lsb, SIGNAL(valueChanged(int)),
             this, SLOT(slotNewLSB(int)));
@@ -217,7 +239,7 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
                                         Qt::Horizontal,
                                         i18n("Librarian"),
                                         m_mainFrame);
-    gridLayout->addMultiCellWidget(groupBox, 0, 2, 3, 5);
+    gridLayout->addMultiCellWidget(groupBox, 0, 3, 3, 5);
 
 
     new QLabel(i18n("Name"), groupBox);
@@ -280,15 +302,14 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
 }
 
 MidiProgramsEditor::MidiProgramContainer
-MidiProgramsEditor::getBankSubset(Rosegarden::MidiByte msb,
-                                  Rosegarden::MidiByte lsb)
+MidiProgramsEditor::getBankSubset(const MidiBank &bank)
 {
     MidiProgramContainer program;
     MidiProgramContainer::iterator it;
 
     for (it = m_programList.begin(); it != m_programList.end(); it++)
     {
-        if (it->msb == msb && it->lsb == lsb)
+        if (it->getBank() == bank)
             program.push_back(*it);
     }
 
@@ -302,17 +323,16 @@ MidiProgramsEditor::getCurrentBank()
 }
 
 void
-MidiProgramsEditor::modifyCurrentPrograms(int oldMSB, int oldLSB,
-                                        int msb, int lsb)
+MidiProgramsEditor::modifyCurrentPrograms(const MidiBank &oldBank,
+					  const MidiBank &newBank)
 {
     MidiProgramContainer::iterator it;
 
     for (it = m_programList.begin(); it != m_programList.end(); it++)
     {
-        if (it->msb == oldMSB && it->lsb == oldLSB)
+        if (it->getBank() == oldBank)
         {
-            it->msb = msb;
-            it->lsb = lsb;
+	    *it = MidiProgram(newBank, it->getProgram(), it->getName());
         }
     }
 }
@@ -326,6 +346,7 @@ MidiProgramsEditor::clearAll()
         m_programNames[i]->clear();
     
     m_bankName->clear();
+    m_percussion->setChecked(false);
     m_msb->setValue(0);
     m_lsb->setValue(0);
     m_librarian->clear();
@@ -363,27 +384,26 @@ MidiProgramsEditor::populateBank(QListViewItem* item)
     blockAllSignals(true);
 
     // set the bank values
-    m_msb->setValue(m_currentBank->msb);
-    m_lsb->setValue(m_currentBank->lsb);
+    m_percussion->setChecked(m_currentBank->isPercussion());
+    m_msb->setValue(m_currentBank->getMSB());
+    m_lsb->setValue(m_currentBank->getLSB());
 
-    m_oldMSB = m_currentBank->msb;
-    m_oldLSB = m_currentBank->lsb;
+    m_oldBank = *m_currentBank;
 
     // Librarian details
     //
     m_librarian->setText(strtoqstr(device->getLibrarianName()));
     m_librarianEmail->setText(strtoqstr(device->getLibrarianEmail()));
 
-    MidiProgramContainer programSubset = getBankSubset(m_currentBank->msb,
-                                                       m_currentBank->lsb);
+    MidiProgramContainer programSubset = getBankSubset(*m_currentBank);
     MidiProgramContainer::iterator it;
 
     for (unsigned int i = 0; i < m_programNames.size(); i++) {
         m_programNames[i]->clear();
 
         for (it = programSubset.begin(); it != programSubset.end(); it++) {
-            if (it->program == i) {
-                QString programName = strtoqstr(it->name);
+            if (it->getProgram() == i) {
+                QString programName = strtoqstr(it->getName());
                 m_completion.addItem(programName);
                 m_programNames[i]->setText(programName);
                 break;
@@ -400,23 +420,21 @@ MidiProgramsEditor::populateBank(QListViewItem* item)
 void
 MidiProgramsEditor::resetMSBLSB()
 {
+    m_percussion->blockSignals(true);
     m_msb->blockSignals(true);
     m_lsb->blockSignals(true);
 
-    m_msb->setValue(m_oldMSB);
-    m_lsb->setValue(m_oldLSB);
+    m_percussion->setChecked(m_oldBank.isPercussion());
+    m_msb->setValue(m_oldBank.getMSB());
+    m_lsb->setValue(m_oldBank.getLSB());
 
     if (m_currentBank)
     {
-        modifyCurrentPrograms(m_currentBank->msb,
-                              m_currentBank->lsb,
-                              m_oldMSB,
-                              m_oldLSB);
-
-        m_currentBank->msb = m_oldMSB;
-        m_currentBank->lsb = m_oldLSB;
+        modifyCurrentPrograms(*m_currentBank, m_oldBank);
+	*m_currentBank = m_oldBank;
     }
 
+    m_percussion->blockSignals(false);
     m_msb->blockSignals(false);
     m_lsb->blockSignals(false);
 }
@@ -433,20 +451,22 @@ MidiProgramsEditor::slotNewMSB(int value)
 
     try
         {
-            msb = ensureUniqueMSB(value, value > getCurrentBank()->msb);
+            msb = ensureUniqueMSB(getCurrentBank()->isPercussion(),
+				  value, value > getCurrentBank()->getMSB());
         }
     catch(bool)
         {
-            msb = getCurrentBank()->msb;
+            msb = getCurrentBank()->getMSB();
         }
 
-    modifyCurrentPrograms(getCurrentBank()->msb,
-                          getCurrentBank()->lsb,
-                          msb,
-                          getCurrentBank()->lsb);
+    MidiBank newBank(getCurrentBank()->isPercussion(),
+		     msb,
+		     getCurrentBank()->getLSB());
+
+    modifyCurrentPrograms(*getCurrentBank(), newBank);
 
     m_msb->setValue(msb);
-    getCurrentBank()->msb = msb;
+    *getCurrentBank() = newBank;
 
     m_msb->blockSignals(false);
 
@@ -464,20 +484,22 @@ MidiProgramsEditor::slotNewLSB(int value)
 
     try
         {
-            lsb = ensureUniqueLSB(value, value > getCurrentBank()->lsb);
+            lsb = ensureUniqueLSB(getCurrentBank()->isPercussion(),
+				  value, value > getCurrentBank()->getLSB());
         }
     catch(bool)
         {
-            lsb = getCurrentBank()->lsb;
+            lsb = getCurrentBank()->getLSB();
         }
 
-    modifyCurrentPrograms(getCurrentBank()->msb,
-                          getCurrentBank()->lsb,
-                          getCurrentBank()->msb,
-                          lsb);
+    MidiBank newBank(getCurrentBank()->isPercussion(),
+		     getCurrentBank()->getMSB(),
+		     lsb);
+
+    modifyCurrentPrograms(*getCurrentBank(), newBank);
 
     m_lsb->setValue(lsb);
-    getCurrentBank()->lsb = lsb;
+    *getCurrentBank() = newBank;
 
     m_lsb->blockSignals(false);
 
@@ -489,15 +511,15 @@ struct ProgramCmp
     bool operator()(const Rosegarden::MidiProgram &p1,
                     const Rosegarden::MidiProgram &p2)
     {
-        if (p1.program == p2.program)
-        {
-            if (p1.msb == p2.msb)
-                return (p1.lsb < p2.lsb);
-            else
-                return (p1.msb < p2.msb);
-        }
-        else
-            return (p1.program < p2.program);
+        if (p1.getProgram() == p2.getProgram()) {
+	    const Rosegarden::MidiBank &b1(p1.getBank());
+	    const Rosegarden::MidiBank &b2(p2.getBank());
+            if (b1.getMSB() == b2.getMSB())
+		if (b1.getLSB() == b2.getLSB()) 
+		    return ((b1.isPercussion() ? 1 : 0) < (b2.isPercussion() ? 1 : 0));
+		else return (b1.getLSB() < b2.getLSB());
+            else return (b1.getMSB() < b2.getMSB());
+	} else return (p1.getProgram() < p2.getProgram());
     }
 };
 
@@ -519,20 +541,14 @@ MidiProgramsEditor::slotProgramChanged(const QString& programName)
     RG_DEBUG << "BankEditorDialog::slotProgramChanged("
              << programName << ") : id = " << id << endl;
 
-    Rosegarden::MidiProgram *program =
-        getProgram(getCurrentBank()->msb,
-                   getCurrentBank()->lsb,
-                   id);
+    Rosegarden::MidiProgram *program = getProgram(*getCurrentBank(), id);
 
     if (program == 0)
     {
         // Do nothing if program name is empty
         if (programName.isEmpty()) return;
 
-        program = new Rosegarden::MidiProgram;
-        program->msb = getCurrentBank()->msb;
-        program->lsb = getCurrentBank()->lsb;
-        program->program = id;
+        program = new Rosegarden::MidiProgram(*getCurrentBank(), id);
         m_programList.push_back(*program);
 
         // Sort the program list by id
@@ -540,10 +556,7 @@ MidiProgramsEditor::slotProgramChanged(const QString& programName)
 
         // Now, get with the program
         //
-        program =
-            getProgram(getCurrentBank()->msb,
-                       getCurrentBank()->lsb,
-                       id);
+        program = getProgram(*getCurrentBank(), id);
     }
     else
     {
@@ -557,7 +570,7 @@ MidiProgramsEditor::slotProgramChanged(const QString& programName)
 
             for (; it != m_programList.end(); it++)
             {
-                if (((unsigned int)it->program) == id)
+                if (((unsigned int)it->getProgram()) == id)
                 {
                     m_programList.erase(it);
                     m_bankEditor->setModified(true);
@@ -568,18 +581,18 @@ MidiProgramsEditor::slotProgramChanged(const QString& programName)
         }
     }
 
-    if (qstrtostr(programName) != program->name)
+    if (qstrtostr(programName) != program->getName())
     {
-        program->name = qstrtostr(programName);
+        program->setName(qstrtostr(programName));
         m_bankEditor->setModified(true);
     }
 }
 
 int
-MidiProgramsEditor::ensureUniqueMSB(int msb, bool ascending)
+MidiProgramsEditor::ensureUniqueMSB(bool percussion, int msb, bool ascending)
 {
     int newMSB = msb;
-    while (banklistContains(newMSB, m_lsb->value())
+    while (banklistContains(MidiBank(percussion, newMSB, m_lsb->value()))
            && newMSB < 128
            && newMSB > -1)
         if (ascending) newMSB++;
@@ -592,10 +605,10 @@ MidiProgramsEditor::ensureUniqueMSB(int msb, bool ascending)
 }
 
 int
-MidiProgramsEditor::ensureUniqueLSB(int lsb, bool ascending)
+MidiProgramsEditor::ensureUniqueLSB(bool percussion, int lsb, bool ascending)
 {
     int newLSB = lsb;
-    while (banklistContains(m_msb->value(), newLSB)
+    while (banklistContains(MidiBank(percussion, m_msb->value(), newLSB))
            && newLSB < 128
            && newLSB > -1)
         if (ascending) newLSB++;
@@ -608,25 +621,25 @@ MidiProgramsEditor::ensureUniqueLSB(int lsb, bool ascending)
 }
 
 bool
-MidiProgramsEditor::banklistContains(int msb, int lsb)
+MidiProgramsEditor::banklistContains(const MidiBank &bank)
 {
     MidiBankContainer::iterator it;
 
     for (it = m_bankList.begin(); it != m_bankList.end(); it++)
-        if (it->msb == msb && it->lsb == lsb)
+        if (*it == bank)
             return true;
 
     return false;
 }
 
 Rosegarden::MidiProgram*
-MidiProgramsEditor::getProgram(int msb, int lsb, int program)
+MidiProgramsEditor::getProgram(const MidiBank &bank, int programNo)
 {
     MidiProgramsEditor::MidiProgramContainer::iterator it = m_programList.begin();
 
     for (; it != m_programList.end(); it++)
     {
-        if (it->msb == msb && it->lsb == lsb && it->program == program)
+        if (it->getBank() == bank && it->getProgram() == programNo)
             return &(*it);
     }
 
@@ -669,8 +682,6 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_keepBankList(false),
     m_deleteAll(false),
     m_lastDevice(Rosegarden::Device::NO_DEVICE),
-    m_lastMSB(0),
-    m_lastLSB(0),
     m_updateDeviceList(false)
 {
     QVBox* mainFrame = new QVBox(this);
@@ -708,6 +719,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     QVBox* leftPart = new QVBox(splitter);
     m_listView = new KListView(leftPart);
     m_listView->addColumn(i18n("MIDI Device"));
+    m_listView->addColumn(i18n("Percussion"));
     m_listView->addColumn(i18n("MSB"));
     m_listView->addColumn(i18n("LSB"));
     m_listView->setRootIsDecorated(true);
@@ -980,13 +992,14 @@ BankEditorDialog::updateDialog()
 			    dynamic_cast<MidiBankListViewItem *>(child);
 
 			if (bankItem) {
-			    int msb = bankItem->text(1).toInt();
-			    int lsb = bankItem->text(2).toInt();
-			    Rosegarden::MidiBank *bank =
-				midiDevice->getBankByMsbLsb(msb, lsb);
+			    bool percussion = (bankItem->text(1).lower() == "yes");
+			    int msb = bankItem->text(2).toInt();
+			    int lsb = bankItem->text(3).toInt();
+			    const Rosegarden::MidiBank *bank =
+				midiDevice->getBankByMsbLsb(percussion, msb, lsb);
 			    if (bank &&
-				bankItem->text(0) != strtoqstr(bank->name)) {
-				bankItem->setText(0, strtoqstr(bank->name));
+				bankItem->text(0) != strtoqstr(bank->getName())) {
+				bankItem->setText(0, strtoqstr(bank->getName()));
 			    }
 			}
 
@@ -1048,11 +1061,12 @@ BankEditorDialog::populateDeviceItem(QListViewItem* deviceItem, Rosegarden::Midi
     // add banks for this device
     for (unsigned int i = 0; i < banks.size(); ++i) {
         RG_DEBUG << "BankEditorDialog::populateDeviceItem - adding "
-                 << itemName << " - " << strtoqstr(banks[i].name)
+                 << itemName << " - " << strtoqstr(banks[i].getName())
                  << endl;
         new MidiBankListViewItem(midiDevice->getId(), i, deviceItem,
-                                 strtoqstr(banks[i].name),
-                                 banks[i].msb, banks[i].lsb);
+                                 strtoqstr(banks[i].getName()),
+				 banks[i].isPercussion(),
+                                 banks[i].getMSB(), banks[i].getLSB());
     }
             
     
@@ -1076,11 +1090,12 @@ BankEditorDialog::updateDeviceItem(MidiDeviceListViewItem* deviceItem)
         if (deviceItemHasBank(deviceItem, i)) continue;
         
         RG_DEBUG << "BankEditorDialog::updateDeviceItem - adding "
-                 << itemName << " - " << strtoqstr(banks[i].name)
+                 << itemName << " - " << strtoqstr(banks[i].getName())
                  << endl;
         new MidiBankListViewItem(midiDevice->getId(), i, deviceItem,
-                                 strtoqstr(banks[i].name),
-                                 banks[i].msb, banks[i].lsb);
+                                 strtoqstr(banks[i].getName()),
+				 banks[i].isPercussion(),
+                                 banks[i].getMSB(), banks[i].getLSB());
     }
             
 
@@ -1094,8 +1109,9 @@ BankEditorDialog::updateDeviceItem(MidiDeviceListViewItem* deviceItem)
         if (child->getBank() >= int(banks.size()))
             childrenToDelete.push_back(child);
         else { // update the banks MSB/LSB which might have changed
-            child->setMSB(banks[child->getBank()].msb);
-            child->setLSB(banks[child->getBank()].lsb);
+	    child->setPercussion(banks[child->getBank()].isPercussion());
+            child->setMSB(banks[child->getBank()].getMSB());
+            child->setLSB(banks[child->getBank()].getLSB());
         }
         
         child = dynamic_cast<MidiBankListViewItem*>(child->nextSibling());
@@ -1260,8 +1276,7 @@ BankEditorDialog::populateDevice(QListViewItem* item)
 
     setProgramList(device);
 
-    m_lastMSB = m_bankList[bankItem->getBank()].msb;
-    m_lastLSB = m_bankList[bankItem->getBank()].lsb;
+    m_lastBank = m_bankList[bankItem->getBank()];
 
     m_programEditor->populateBank(item);
 
@@ -1402,18 +1417,18 @@ BankEditorDialog::slotAddBank()
 
         std::pair<int, int> bank = getFirstFreeBank(m_listView->currentItem());
 
-        Rosegarden::MidiBank newBank;
-        newBank.msb = bank.first;
-        newBank.lsb = bank.second;
-        newBank.name = "<new bank>";
+        Rosegarden::MidiBank newBank(false, //!!!
+				     bank.first, bank.second,
+				     qstrtostr(i18n("<new bank>")));
         m_bankList.push_back(newBank);
 
         QListViewItem* newBankItem =
             new MidiBankListViewItem(deviceItem->getDeviceId(),
                                      m_bankList.size() - 1,
                                      deviceItem,
-                                     strtoqstr(newBank.name),
-                                     newBank.msb, newBank.lsb);
+                                     strtoqstr(newBank.getName()),
+				     newBank.isPercussion(),
+                                     newBank.getMSB(), newBank.getLSB());
         keepBankListForNextPopulate();
         m_listView->setCurrentItem(newBankItem);
 
@@ -1446,15 +1461,14 @@ BankEditorDialog::slotDeleteBank()
         
             if (newBank < 0) newBank = 0;
 
-            int msb = m_bankList[currentBank].msb;
-            int lsb = m_bankList[currentBank].lsb;
+	    MidiBank bank = m_bankList[currentBank];
 
             // Copy across all programs that aren't in the doomed bank
             //
             MidiProgramsEditor::MidiProgramContainer::iterator it;
             MidiProgramsEditor::MidiProgramContainer tempList;
             for (it = m_programList.begin(); it != m_programList.end(); it++)
-                if (it->msb != msb || it->lsb != lsb)
+                if (!(it->getBank() == bank))
                     tempList.push_back(*it);
 
             // Erase the bank and repopulate
@@ -1571,12 +1585,14 @@ BankEditorDialog::getFirstFreeBank(QListViewItem* item)
 
     Rosegarden::MidiDevice *device = getMidiDevice(item);
 
+    //!!! percussion?
+
     if (device)
     {
         do
         {
             lsb = 0;
-            while(m_programEditor->banklistContains(msb, lsb) && lsb < 128)
+            while(m_programEditor->banklistContains(MidiBank(false, msb, lsb)) && lsb < 128)
                 lsb++;
         }
         while (lsb == 128 && msb++);
@@ -1601,8 +1617,8 @@ BankEditorDialog::slotModifyDeviceOrBankName(QListViewItem* item, const QString 
         RG_DEBUG << "BankEditorDialog::slotModifyDeviceOrBankName - "
                  << "modify bank name to " << label << endl;
 
-        if (m_bankList[bankItem->getBank()].name != qstrtostr(label)) {
-            m_bankList[bankItem->getBank()].name = qstrtostr(label);
+        if (m_bankList[bankItem->getBank()].getName() != qstrtostr(label)) {
+            m_bankList[bankItem->getBank()].getName() = qstrtostr(label);
             setModified(true);
         }
         
@@ -1928,21 +1944,18 @@ BankEditorDialog::importFromSF2(QString filename)
         int bankNumber = i->first;
         const SF2PatchExtractor::Bank &sf2bank = i->second;
 
-        Rosegarden::MidiBank bank;
-        bank.msb = bankNumber / 128;
-        bank.lsb = bankNumber % 128;
-        bank.name = qstrtostr(QString("Bank %1:%1").arg(bank.msb).arg(bank.lsb));
+	int msb = bankNumber / 128;
+	int lsb = bankNumber % 128;
+
+        Rosegarden::MidiBank bank
+	    (false, msb, lsb, qstrtostr(i18n("Bank %1:%1").arg(msb).arg(lsb)));
+
         banks.push_back(bank);
 
         for (SF2PatchExtractor::Bank::const_iterator j = sf2bank.begin();
              j != sf2bank.end(); ++j) {
 
-            int programNumber = j->first;
-            Rosegarden::MidiProgram program;
-            program.msb = bank.msb;
-            program.lsb = bank.lsb;
-            program.name = j->second;
-            program.program = programNumber;
+            Rosegarden::MidiProgram program(bank, j->first, j->second);
             programs.push_back(program);
         }
     }
@@ -2022,7 +2035,7 @@ BankEditorDialog::slotEditPaste()
         //
         for (it = m_programList.begin(); it != m_programList.end(); it++)
         {
-            if (it->msb != m_lastMSB || it->lsb != m_lastLSB)
+	    if (!(it->getBank() == m_lastBank))
                 tempProg.push_back(*it);
         }
         m_programList = tempProg;
@@ -2030,22 +2043,19 @@ BankEditorDialog::slotEditPaste()
         // Now get source list and msb/lsb
         //
         tempProg = device->getPrograms();
-        int sourceMSB = tempBank[m_copyBank.second].msb;
-        int sourceLSB = tempBank[m_copyBank.second].lsb;
+	MidiBank sourceBank = tempBank[m_copyBank.second];
 
         // Add the new programs
         //
         for (it = tempProg.begin(); it != tempProg.end(); it++)
         {
-            if (it->msb == sourceMSB && it->lsb == sourceLSB)
+            if (it->getBank() == sourceBank)
             {
                 // Insert with new MSB and LSB
                 //
-                Rosegarden::MidiProgram copyProgram;
-                copyProgram.name = it->name;
-                copyProgram.program = it->program;
-                copyProgram.msb = m_lastMSB;
-                copyProgram.lsb = m_lastLSB;
+                Rosegarden::MidiProgram copyProgram(m_lastBank,
+						    it->getProgram(),
+						    it->getName());
 
                 m_programList.push_back(copyProgram);
             }

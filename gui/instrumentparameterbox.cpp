@@ -255,8 +255,29 @@ MIDIInstrumentParameterPanel::slotActivateBank(bool value)
         return;
     }
 
-    m_selectedInstrument->setSendBankSelect(value);
     m_bankValue->setDisabled(!value);
+    value |= m_variationCheckBox->isChecked();
+    m_selectedInstrument->setSendBankSelect(value);
+
+    emit changeInstrumentLabel(m_selectedInstrument->getId(),
+			       strtoqstr(m_selectedInstrument->
+					 getProgramName()));
+    emit updateAllBoxes();
+}
+
+void
+MIDIInstrumentParameterPanel::slotActivateVariation(bool value)
+{
+    if (m_selectedInstrument == 0)
+    {
+        m_variationCheckBox->setChecked(false);
+        emit updateAllBoxes();
+        return;
+    }
+
+    m_variationValue->setDisabled(!value);
+    value |= m_bankCheckBox->isChecked();
+    m_selectedInstrument->setSendBankSelect(value);
 
     emit changeInstrumentLabel(m_selectedInstrument->getId(),
 			       strtoqstr(m_selectedInstrument->
@@ -266,6 +287,42 @@ MIDIInstrumentParameterPanel::slotActivateBank(bool value)
 
 
 void
+MIDIInstrumentParameterPanel::slotSelectBank(int index)
+{
+    if (m_selectedInstrument == 0)
+        return;
+
+    Rosegarden::MidiBank *bank = 
+        dynamic_cast<Rosegarden::MidiDevice*>
+            (m_selectedInstrument->getDevice())->getBankByIndex(index);
+
+    m_selectedInstrument->setMSB(bank->getMSB());
+    m_selectedInstrument->setLSB(bank->getLSB());
+
+    // repopulate program list
+    populateProgramList();
+
+    Rosegarden::MappedEvent *mE = 
+        new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
+                                    Rosegarden::MappedEvent::MidiController,
+                                    Rosegarden::MIDI_CONTROLLER_BANK_MSB,
+                                    bank->getMSB());
+    Rosegarden::StudioControl::sendMappedEvent(mE);
+
+    mE = new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
+                                    Rosegarden::MappedEvent::MidiController,
+                                    Rosegarden::MIDI_CONTROLLER_BANK_LSB,
+                                    bank->getLSB());
+    // Send the lsb
+    //
+    Rosegarden::StudioControl::sendMappedEvent(mE);
+
+    // also need to resend Program change to activate new program
+    slotSelectProgram(m_selectedInstrument->getProgramChange());
+    emit updateAllBoxes();
+}
+
+void
 MIDIInstrumentParameterPanel::slotSelectProgram(int index)
 {
     if (m_selectedInstrument == 0)
@@ -273,16 +330,12 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
 
     Rosegarden::MidiProgram *prg;
 
-    Rosegarden::MidiByte msb = 0;
-    Rosegarden::MidiByte lsb = 0;
-
     if (m_selectedInstrument->sendsBankSelect())
     {
-        msb = m_selectedInstrument->getMSB();
-        lsb = m_selectedInstrument->getLSB();
+	Rosegarden::MidiBank bank(m_selectedInstrument->getProgram().getBank());
         prg =
             dynamic_cast<Rosegarden::MidiDevice*>
-            (m_selectedInstrument->getDevice())->getProgram(msb, lsb, index);
+            (m_selectedInstrument->getDevice())->getProgram(bank, index);
 
         // Send the bank select message before any PC message
         //
@@ -290,18 +343,18 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
             new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
                                     Rosegarden::MappedEvent::MidiController,
                                     Rosegarden::MIDI_CONTROLLER_BANK_MSB,
-                                    msb);
+                                    bank.getMSB());
         Rosegarden::StudioControl::sendMappedEvent(mE);
 
         mE = new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
                                     Rosegarden::MappedEvent::MidiController,
                                     Rosegarden::MIDI_CONTROLLER_BANK_LSB,
-                                    lsb);
-        // Send the lsb
-        //
+                                    bank.getLSB());
         Rosegarden::StudioControl::sendMappedEvent(mE);
 
-        RG_DEBUG << "sending bank select " << msb << " : " << lsb << endl;
+        RG_DEBUG << "sending bank select "
+		 << bank.getMSB() << " : "
+		 << bank.getLSB() << endl;
     }
     else
     {
@@ -315,14 +368,14 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
         return;
     }
 
-    m_selectedInstrument->setProgramChange(prg->program);
+    m_selectedInstrument->setProgramChange(prg->getProgram());
 
-    RG_DEBUG << "sending program change " << prg->program << endl;
+    RG_DEBUG << "sending program change " << prg->getProgram() << endl;
 
     Rosegarden::MappedEvent *mE = 
      new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
                                  Rosegarden::MappedEvent::MidiProgramChange,
-                                 prg->program,
+                                 prg->getProgram(),
                                  (Rosegarden::MidiByte)0);
     // Send the controller change
     //
@@ -334,6 +387,11 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
     emit updateAllBoxes();
 }
 
+void
+MIDIInstrumentParameterPanel::slotSelectVariation(int index)
+{
+//!!! implement
+}
 
 void
 MIDIInstrumentParameterPanel::slotSelectPan(float value)
@@ -496,42 +554,6 @@ AudioInstrumentParameterPanel::slotSetRecord(bool value)
 
 
 void
-MIDIInstrumentParameterPanel::slotSelectBank(int index)
-{
-    if (m_selectedInstrument == 0)
-        return;
-
-    Rosegarden::MidiBank *bank = 
-        dynamic_cast<Rosegarden::MidiDevice*>
-            (m_selectedInstrument->getDevice())->getBankByIndex(index);
-
-    m_selectedInstrument->setMSB(bank->msb);
-    m_selectedInstrument->setLSB(bank->lsb);
-
-    // repopulate program list
-    populateProgramList();
-
-    Rosegarden::MappedEvent *mE = 
-        new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
-                                    Rosegarden::MappedEvent::MidiController,
-                                    Rosegarden::MIDI_CONTROLLER_BANK_MSB,
-                                    bank->msb);
-    Rosegarden::StudioControl::sendMappedEvent(mE);
-
-    mE = new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
-                                    Rosegarden::MappedEvent::MidiController,
-                                    Rosegarden::MIDI_CONTROLLER_BANK_LSB,
-                                    bank->lsb);
-    // Send the lsb
-    //
-    Rosegarden::StudioControl::sendMappedEvent(mE);
-
-    // also need to resend Program change to activate new program
-    slotSelectProgram(m_selectedInstrument->getProgramChange());
-    emit updateAllBoxes();
-}
-
-void
 MIDIInstrumentParameterPanel::slotSelectChannel(int index)
 {
     if (m_selectedInstrument == 0)
@@ -572,7 +594,8 @@ MIDIInstrumentParameterPanel::populateProgramList()
 
     Rosegarden::StringList list = 
         dynamic_cast<Rosegarden::MidiDevice*>
-            (m_selectedInstrument->getDevice())->getProgramList(msb, lsb);
+            (m_selectedInstrument->getDevice())->getProgramList
+	(Rosegarden::MidiBank(m_selectedInstrument->isPercussion(), msb, lsb));
 
     Rosegarden::StringList::iterator it;
 
@@ -580,12 +603,12 @@ MIDIInstrumentParameterPanel::populateProgramList()
 
         m_programValue->insertItem(strtoqstr(*it));
 
-	Rosegarden::MidiProgram *program = 
+	const Rosegarden::MidiProgram *program = 
 	    dynamic_cast<Rosegarden::MidiDevice*>
 	    (m_selectedInstrument->getDevice())->
 	    getProgramByIndex(m_programValue->count() - 1);
 
-	if (m_selectedInstrument->getProgramChange() == program->program) {
+	if (m_selectedInstrument->getProgramChange() == program->getProgram()) {
 	    m_programValue->setCurrentItem(m_programValue->count() - 1);
 	}
     }
@@ -1262,7 +1285,7 @@ AudioInstrumentParameterPanel::slotSelectAudioInput(int value)
 MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc, QWidget* parent)
     : InstrumentParameterPanel(doc, parent)
 {
-    QGridLayout *gridLayout = new QGridLayout(this, 9, 6, 8, 1);
+    QGridLayout *gridLayout = new QGridLayout(this, 11, 6, 8, 1);
 
 //    QFrame *rotaryFrame = new QFrame(this);
 //    rotaryFrame->setFrameStyle(QFrame::NoFrame);
@@ -1273,12 +1296,17 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     m_bankValue = new KComboBox(false, this);
     m_channelValue = new RosegardenComboBox(true, false, this);
     m_programValue = new KComboBox(this);
+    m_variationValue = new KComboBox(false, this);
     m_bankCheckBox = new QCheckBox(this);
     m_programCheckBox = new QCheckBox(this);
+    m_variationCheckBox = new QCheckBox(this);
+    m_percussionCheckBox = new QCheckBox(this);
 
-    QLabel* bankLabel = new QLabel(i18n("Bank"), this);
+    m_bankLabel = new QLabel(i18n("Bank"), this);
+    m_variationLabel = new QLabel(i18n("Variation"), this);
     QLabel* programLabel = new QLabel(i18n("Program"), this);
     QLabel* channelLabel = new QLabel(i18n("Channel"), this);
+    QLabel *percussionLabel = new QLabel(i18n("Percussion"), this);
 
     // Ensure a reasonable amount of space in the program dropdowns even
     // if no instrument initially selected
@@ -1297,78 +1325,90 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     gridLayout->addMultiCellWidget
 	(m_connectionLabel, 1, 1, allMinCol, allMaxCol, AlignCenter);
 
-    gridLayout->addWidget(bankLabel,      2, 0, AlignLeft);
-    gridLayout->addWidget(m_bankCheckBox, 2, 1);
     gridLayout->addMultiCellWidget
-	(m_bankValue, 2, 2, comboMinCol, comboMaxCol, AlignRight);
+	(channelLabel, 2, 2, 0, 1, AlignLeft);
+    gridLayout->addMultiCellWidget
+	(m_channelValue, 2, 2, comboMinCol, comboMaxCol, AlignRight);
 
-    gridLayout->addWidget(programLabel,      3, 0);
-    gridLayout->addWidget(m_programCheckBox, 3, 1);
-    gridLayout->addMultiCellWidget
-	(m_programValue, 3, 3, comboMinCol, comboMaxCol, AlignRight);
+    gridLayout->addWidget(percussionLabel, 3, 0, AlignLeft);
+    gridLayout->addWidget(m_percussionCheckBox, 3, 5, AlignRight);
 
+    gridLayout->addWidget(m_bankLabel,      4, 0, AlignLeft);
+    gridLayout->addWidget(m_bankCheckBox, 4, 1);
     gridLayout->addMultiCellWidget
-	(channelLabel, 4, 4, 0, 1, AlignLeft);
+	(m_bankValue, 4, 4, comboMinCol, comboMaxCol, AlignRight);
+
+    gridLayout->addWidget(programLabel,      5, 0);
+    gridLayout->addWidget(m_programCheckBox, 5, 1);
     gridLayout->addMultiCellWidget
-	(m_channelValue, 4, 4, comboMinCol, comboMaxCol, AlignRight);
+	(m_programValue, 5, 5, comboMinCol, comboMaxCol, AlignRight);
+
+    gridLayout->addWidget(m_variationLabel, 6, 0);
+    gridLayout->addWidget(m_variationCheckBox, 6, 1);
+    gridLayout->addMultiCellWidget
+	(m_variationValue, 6, 6, comboMinCol, comboMaxCol, AlignRight);
 
     QHBox *hbox;
 
+    int row = 7;
     hbox = new QHBox(this);
     hbox->setSpacing(8);
     m_panRotary = new RosegardenRotary(hbox, 0.0, 127.0, 1.0, 5.0, 64.0, 20);
     QLabel* panLabel = new QLabel(i18n("Pan"), hbox);
     gridLayout->addMultiCellWidget
-	(hbox, 5, 5, leftMinCol, leftMaxCol, AlignLeft);
-
-    hbox = new QHBox(this);
-    hbox->setSpacing(8);
-    m_volumeRotary = new RosegardenRotary(hbox, 0.0, 127.0, 1.0, 5.0, 64.0, 20);
-    QLabel* volumeLabel= new QLabel(i18n("Volume"), hbox);
-    gridLayout->addMultiCellWidget
-	(hbox, 6, 6, leftMinCol, leftMaxCol, AlignLeft);
-
-    hbox = new QHBox(this);
-    hbox->setSpacing(8);
-    m_attackRotary = new RosegardenRotary(hbox, 0.0, 127.0, 1.0, 5.0, 0.0, 20);
-    QLabel* attackLabel = new QLabel(i18n("Attack"), hbox);
-    gridLayout->addMultiCellWidget
-	(hbox, 7, 7, leftMinCol, leftMaxCol, AlignLeft);
-
-    hbox = new QHBox(this);
-    hbox->setSpacing(8);
-    m_releaseRotary = new RosegardenRotary(hbox, 0.0, 127.0, 1.0, 5.0, 0.0, 20);
-    QLabel* releaseLabel = new QLabel(i18n("Release"), hbox);
-    gridLayout->addMultiCellWidget
-	(hbox, 8, 8, leftMinCol, leftMaxCol, AlignLeft);
+	(hbox, row, row, leftMinCol, leftMaxCol, AlignLeft);
 
     hbox = new QHBox(this);
     hbox->setSpacing(8);
     m_chorusRotary = new RosegardenRotary(hbox, 0.0, 127.0, 1.0, 5.0, 0.0, 20);
     QLabel* chorusLabel = new QLabel(i18n("Chorus"), hbox);
     gridLayout->addMultiCellWidget
-	(hbox, 5, 5, rightMinCol, rightMaxCol, AlignLeft);
+	(hbox, row, row, rightMinCol, rightMaxCol, AlignLeft);
+
+    ++row;
+    hbox = new QHBox(this);
+    hbox->setSpacing(8);
+    m_volumeRotary = new RosegardenRotary(hbox, 0.0, 127.0, 1.0, 5.0, 64.0, 20);
+    QLabel* volumeLabel= new QLabel(i18n("Volume"), hbox);
+    gridLayout->addMultiCellWidget
+	(hbox, row, row, leftMinCol, leftMaxCol, AlignLeft);
 
     hbox = new QHBox(this);
     hbox->setSpacing(8);
     m_reverbRotary = new RosegardenRotary(hbox, 0.0, 127.0, 1.0, 5.0, 0.0, 20);
     QLabel* reverbLabel = new QLabel(i18n("Reverb"), hbox);
     gridLayout->addMultiCellWidget
-	(hbox, 6, 6, rightMinCol, rightMaxCol, AlignLeft);
+	(hbox, row, row, rightMinCol, rightMaxCol, AlignLeft);
+
+    ++row;
+    hbox = new QHBox(this);
+    hbox->setSpacing(8);
+    m_attackRotary = new RosegardenRotary(hbox, 0.0, 127.0, 1.0, 5.0, 0.0, 20);
+    QLabel* attackLabel = new QLabel(i18n("Attack"), hbox);
+    gridLayout->addMultiCellWidget
+	(hbox, row, row, leftMinCol, leftMaxCol, AlignLeft);
 
     hbox = new QHBox(this);
     hbox->setSpacing(8);
     m_highPassRotary = new RosegardenRotary(hbox, 0.0, 127.0, 1.0, 5.0, 0.0, 20);
     QLabel* highPassLabel = new QLabel(i18n("Filter"), hbox);
     gridLayout->addMultiCellWidget
-	(hbox, 7, 7, rightMinCol, rightMaxCol, AlignLeft);
+	(hbox, row, row, rightMinCol, rightMaxCol, AlignLeft);
+
+    ++row;
+    hbox = new QHBox(this);
+    hbox->setSpacing(8);
+    m_releaseRotary = new RosegardenRotary(hbox, 0.0, 127.0, 1.0, 5.0, 0.0, 20);
+    QLabel* releaseLabel = new QLabel(i18n("Release"), hbox);
+    gridLayout->addMultiCellWidget
+	(hbox, row, row, leftMinCol, leftMaxCol, AlignLeft);
 
     hbox = new QHBox(this);
     hbox->setSpacing(8);
     m_resonanceRotary = new RosegardenRotary(hbox, 0.0, 127.0, 1.0, 5.0, 0.0, 20);
     QLabel* resonanceLabel = new QLabel(i18n("Resonance"), hbox);
     gridLayout->addMultiCellWidget
-	(hbox, 8, 8, rightMinCol, rightMaxCol, AlignLeft);
+	(hbox, row, row, rightMinCol, rightMaxCol, AlignLeft);
 
     // Some top space
     gridLayout->addRowSpacing(0, 8);
@@ -1395,46 +1435,22 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     m_attackRotary->setKnobColour(RosegardenGUIColours::RotaryPastelYellow);
     m_releaseRotary->setKnobColour(RosegardenGUIColours::RotaryPastelYellow);
 
-/*!!!
-    gridLayout->addWidget(volumeLabel,      0, 1, AlignLeft);
-    gridLayout->addWidget(m_volumeRotary,   0, 0, AlignRight);
-
-    gridLayout->addWidget(panLabel,      1, 1, AlignLeft);
-    gridLayout->addWidget(m_panRotary,   1, 0, AlignRight);
-
-    gridLayout->addWidget(chorusLabel,    2, 1, AlignLeft);
-    gridLayout->addWidget(m_chorusRotary, 2, 0, AlignRight);
-
-    gridLayout->addWidget(reverbLabel,    3, 1, AlignLeft);
-    gridLayout->addWidget(m_reverbRotary, 3, 0, AlignRight);
-
-    gridLayout->addWidget(highPassLabel,    0, 3, AlignLeft);
-    gridLayout->addWidget(m_highPassRotary, 0, 2, AlignRight);
-
-    gridLayout->addWidget(resonanceLabel,    1, 3, AlignLeft);
-    gridLayout->addWidget(m_resonanceRotary, 1, 2, AlignRight);
-
-    gridLayout->addWidget(attackLabel,    2, 3, AlignLeft);
-    gridLayout->addWidget(m_attackRotary, 2, 2, AlignRight);
-
-    gridLayout->addWidget(releaseLabel,    3, 3, AlignLeft);
-    gridLayout->addWidget(m_releaseRotary, 3, 2, AlignRight);
-*/
-
     // Populate channel list
     for (int i = 0; i < 16; i++)
         m_channelValue->insertItem(QString("%1").arg(i+1));
 
-    // Disable these three by default - they are activate by their
+    // Disable these by default - they are activate by their
     // checkboxes
     //
     m_programValue->setDisabled(true);
     m_bankValue->setDisabled(true);
+    m_variationValue->setDisabled(true);
 
     // Only active if we have an Instrument selected
     //
     m_programCheckBox->setDisabled(true);
     m_bankCheckBox->setDisabled(true);
+    m_variationCheckBox->setDisabled(true);
 
     // Connect up the toggle boxes
     //
@@ -1444,11 +1460,17 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     connect(m_bankCheckBox, SIGNAL(toggled(bool)),
             this, SLOT(slotActivateBank(bool)));
 
+    connect(m_variationCheckBox, SIGNAL(toggled(bool)),
+            this, SLOT(slotActivateVariation(bool)));
+
 
     // Connect activations
     //
     connect(m_bankValue, SIGNAL(activated(int)),
             this, SLOT(slotSelectBank(int)));
+
+    connect(m_variationValue, SIGNAL(activated(int)),
+            this, SLOT(slotSelectVariation(int)));
 
     connect(m_panRotary, SIGNAL(valueChanged(float)),
             this, SLOT(slotSelectPan(float)));
@@ -1486,6 +1508,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     m_programValue->setCurrentItem(-1);
     m_bankValue->setCurrentItem(-1);
     m_channelValue->setCurrentItem(-1);
+    m_variationValue->setCurrentItem(-1);
 }
 
 //!!! dup with trackbuttons.cpp
@@ -1590,12 +1613,11 @@ MIDIInstrumentParameterPanel::setupForInstrument(Rosegarden::Instrument *instrum
 	// Select 
 	if (instrument->sendsBankSelect())
 	{
-	    Rosegarden::MidiBank *bank = 
+	    const Rosegarden::MidiBank *bank = 
 		dynamic_cast<Rosegarden::MidiDevice*>(instrument->getDevice())
 		->getBankByIndex(m_bankValue->count() - 1);
 
-	    if (instrument->getMSB() == bank->msb &&
-		instrument->getLSB() == bank->lsb) {
+	    if (instrument->getProgram().getBank() == *bank) {
 		m_bankValue->setCurrentItem(m_bankValue->count() - 1);
 	    }
 	}

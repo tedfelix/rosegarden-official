@@ -255,7 +255,7 @@ Studio::toXmlString()
 // Run through the Devices checking for MidiDevices and
 // returning the first Metronome we come across
 //
-MidiMetronome*
+const MidiMetronome*
 Studio::getMetronome()
 {
     std::vector<Device*>::iterator it;
@@ -276,16 +276,12 @@ Studio::getMetronome()
 
 // Scan all MIDI devices for available channels and map
 // them to a current program
+
 Instrument*
 Studio::assignMidiProgramToInstrument(MidiByte program,
 				      int msb, int lsb,
 				      bool percussion)
 {
-    // Also defined in Midi.h but we don't use that - not here
-    // in the clean inner sanctum.
-    //
-    const MidiByte MIDI_PERCUSSION_CHANNEL = 9;
-
     MidiDevice *midiDevice;
     std::vector<Device*>::iterator it;
     Rosegarden::InstrumentList::iterator iit;
@@ -325,13 +321,14 @@ Studio::assignMidiProgramToInstrument(MidiByte program,
                     (*iit)->getProgramChange() == program &&
 		    (!needBank || ((*iit)->sendsBankSelect() &&
 				   (*iit)->getMSB() == msb &&
-				   (*iit)->getLSB() == lsb)) &&
-                    percussion == false)
+				   (*iit)->getLSB() == lsb &&
+				   (*iit)->isPercussion() == percussion)))
                 {
                     return (*iit);
                 }
                 else
                 {
+/*!!!
                     // Ignore the program change and use the percussion
                     // flag.
                     //
@@ -340,14 +337,14 @@ Studio::assignMidiProgramToInstrument(MidiByte program,
                     {
                         return (*iit);
                     }
-
+*/
                     // Otherwise store the first Instrument for
                     // possible use later.
                     //
                     if (newInstrument == 0 &&
                         (*iit)->sendsProgramChange() == false &&
 			(*iit)->sendsBankSelect() == false &&
-                        (*iit)->getMidiChannel() != MIDI_PERCUSSION_CHANNEL)
+			(*iit)->isPercussion() == percussion)
                         newInstrument = *iit;
                 }
             }
@@ -365,6 +362,7 @@ Studio::assignMidiProgramToInstrument(MidiByte program,
 
 	if (needBank) {
 	    newInstrument->setSendBankSelect(true);
+	    newInstrument->setPercussion(percussion);
 	    newInstrument->setMSB(msb);
 	    newInstrument->setLSB(lsb);
 	}
@@ -499,10 +497,12 @@ Studio::getSegmentName(InstrumentId id)
                 {
                     if ((*iit)->sendsProgramChange())
                     {
-                        return midiDevice->
-                            getProgramName((*iit)->getMSB(),
-                                           (*iit)->getLSB(),
-                                           (*iit)->getProgramChange());
+			return (*iit)->getProgramName();
+//!!!                        return midiDevice->
+//                            getProgramName((*iit)->getPercussion(),
+//					   (*iit)->getMSB(),
+//                                           (*iit)->getLSB(),
+//                                           (*iit)->getProgramChange());
                     }
                     else
                     {

@@ -813,6 +813,7 @@ QListBoxRGProperty::QListBoxRGProperty(QListBox* parent, PropertyName propertyNa
 
 void EditView::slotShowPropertyControlRuler()
 {
+/*
     KDialogBase propChooserDialog(this, "propertychooserdialog", true, i18n("Select event property"),
                                   KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok);
     
@@ -831,4 +832,5 @@ void EditView::slotShowPropertyControlRuler()
             showPropertyControlRuler(property);
         }
     }
+*/
 }

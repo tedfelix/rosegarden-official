@@ -135,6 +135,7 @@ protected:
 
     RosegardenFileSection             m_section;
     Rosegarden::Device               *m_device;
+    bool                              m_percussion;
     Rosegarden::MidiByte              m_msb;
     Rosegarden::MidiByte              m_lsb;
     Rosegarden::Instrument           *m_instrument;

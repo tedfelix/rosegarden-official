@@ -2029,7 +2029,8 @@ SegmentNotationHelper::autoSlur(timeT startTime, timeT endTime, bool legatoOnly)
 	Indication ind(Indication::Slur, endTime - potentialStart);
 	segment().insert(ind.getAsEvent(potentialStart));
 	if (legatoOnly) {
-	    for (iterator j = segment().findTime(potentialStart); j != i; ++j) {
+	    for (iterator j = segment().findTime(potentialStart);
+		 segment().isBeforeEndMarker(j) && j != to; ++j) {
 		Marks::removeMark(**j, Marks::Tenuto);
 	    }
 	}

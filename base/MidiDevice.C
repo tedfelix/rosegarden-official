@@ -24,6 +24,7 @@
 
 #include <cstdio>
 #include <iostream>
+#include <set>
 
 #if (__GNUC__ < 3)
 #include <strstream>
@@ -80,12 +81,7 @@ MidiDevice::MidiDevice(const MidiDevice &dev):
     //
     if (dev.getMetronome())
     {
-        m_metronome = new MidiMetronome();
-        m_metronome->pitch = dev.getMetronome()->pitch;
-        m_metronome->instrument = dev.getMetronome()->instrument;
-        m_metronome->msb = dev.getMetronome()->msb;
-        m_metronome->lsb = dev.getMetronome()->lsb;
-        m_metronome->program = dev.getMetronome()->program;
+        m_metronome = new MidiMetronome(*dev.getMetronome());
     }
 
     std::vector<MidiProgram> programs = dev.getPrograms();
@@ -96,12 +92,7 @@ MidiDevice::MidiDevice(const MidiDevice &dev):
     std::vector<MidiProgram>::iterator it = programs.begin();
     for (; it != programs.end(); it++)
     {
-        MidiProgram *prog = new MidiProgram();
-        prog->name = it->name;
-        prog->msb = it->msb;
-        prog->lsb = it->lsb;
-        prog->program = it->program;
-
+        MidiProgram *prog = new MidiProgram(*it);
         m_programList->push_back(prog);
     }
 
@@ -111,11 +102,7 @@ MidiDevice::MidiDevice(const MidiDevice &dev):
     std::vector<MidiBank>::iterator bIt = banks.begin();
     for (; bIt != banks.end(); bIt++)
     {
-        MidiBank *bank = new MidiBank();
-        bank->name = bIt->name;
-        bank->msb = bIt->msb;
-        bank->lsb = bIt->lsb;
-
+        MidiBank *bank = new MidiBank(*bIt);
         m_bankList->push_back(bank);
     }
 
@@ -159,20 +146,14 @@ MidiDevice::operator=(const MidiDevice &dev)
     //
     if (dev.getMetronome())
     {
-        if (dev.getMetronome() == 0)
-            m_metronome = new MidiMetronome();
-
-        m_metronome->pitch = dev.getMetronome()->pitch;
-        m_metronome->instrument = dev.getMetronome()->instrument;
-        m_metronome->msb = dev.getMetronome()->msb;
-        m_metronome->lsb = dev.getMetronome()->lsb;
-        m_metronome->program = dev.getMetronome()->program;
+	if (m_metronome) delete m_metronome;
+	m_metronome = new MidiMetronome(*dev.getMetronome());
     }
     else
     {
-        if (m_metronome) delete m_metronome;
+	delete m_metronome;
+	m_metronome = 0;
     }
-
 
     std::vector<MidiProgram> programs = dev.getPrograms();
     std::vector<MidiBank> banks = dev.getBanks();
@@ -182,11 +163,12 @@ MidiDevice::operator=(const MidiDevice &dev)
     std::vector<MidiProgram>::iterator it = programs.begin();
     for (; it != programs.end(); it++)
     {
-        MidiProgram *prog = new MidiProgram();
-        prog->name = it->name;
-        prog->msb = it->msb;
-        prog->lsb = it->lsb;
-        prog->program = it->program;
+        MidiProgram *prog = new MidiProgram(*it);
+//!!!	prog->percussion = it->percussion;
+//        prog->name = it->name;
+//        prog->msb = it->msb;
+//        prog->lsb = it->lsb;
+//        prog->program = it->program;
 
         m_programList->push_back(prog);
     }
@@ -197,10 +179,11 @@ MidiDevice::operator=(const MidiDevice &dev)
     std::vector<MidiBank>::iterator bIt = banks.begin();
     for (; bIt != banks.end(); bIt++)
     {
-        MidiBank *bank = new MidiBank();
-        bank->name = bIt->name;
-        bank->msb = bIt->msb;
-        bank->lsb = bIt->lsb;
+        MidiBank *bank = new MidiBank(*bIt);
+//!!!	bank->percussion = bIt->percussion;
+//        bank->name = bIt->name;
+//        bank->msb = bIt->msb;
+//        bank->lsb = bIt->lsb;
 
         m_bankList->push_back(bank);
     }
@@ -287,29 +270,20 @@ MidiDevice::removeMetronome()
 
 void
 MidiDevice::setMetronome(InstrumentId instrument,
-                         MidiByte msb, MidiByte lsb, MidiByte program,
-                         MidiByte pitch,
-                         const std::string &name)
+			 const MidiMetronome &metronome)
 {
-
-    if (m_metronome == 0)
-    {
-        m_metronome = new MidiMetronome();
+    if (!m_metronome) {
+	m_metronome = new MidiMetronome(metronome);
+    } else {
+	*m_metronome = metronome;
     }
-
-    m_metronome->pitch = pitch;
-    m_metronome->program = program;
-    m_metronome->msb = msb;
-    m_metronome->lsb = lsb;
-    m_metronome->name = name;
-    m_metronome->instrument = instrument;
 }
 
 
 // Create a Program list
 //
 StringList
-MidiDevice::getProgramList(MidiByte msb, MidiByte lsb)
+MidiDevice::getProgramList(const MidiBank &bank)
 {
     StringList list;
     ProgramList::iterator it;
@@ -317,59 +291,150 @@ MidiDevice::getProgramList(MidiByte msb, MidiByte lsb)
     for (it = m_programList->begin(); it != m_programList->end(); it++)
     {
         // If the bank matches
-        if (msb == (*it)->msb && lsb == (*it)->lsb)
-            list.push_back((*it)->name);
+        if ((*it)->getBank() == bank)
+            list.push_back((*it)->getName());
     }
 
     return list;
 }
 
-// We handle banks by name, not by number
+// We display banks by name, not by number
 //
 StringList
 MidiDevice::getBankList()
 {
     StringList list;
-    std::vector<MidiBank*>::iterator it;
+    BankList::iterator it;
 
     for (it = m_bankList->begin(); it != m_bankList->end(); it++)
-        list.push_back((*it)->name);
+        list.push_back((*it)->getName());
 
     return list;
 }
 
-MidiBank*
-MidiDevice::getBankByIndex(int index)
+const MidiBank*
+MidiDevice::getBankByIndex(int index) const
 {
     return (*m_bankList)[index];
 }
 
-MidiBank*
-MidiDevice::getBankByMsbLsb(MidiByte msb, MidiByte lsb)
+const MidiBank*
+MidiDevice::getBankByMsbLsb(bool percussion, MidiByte msb, MidiByte lsb) const
 {
-    std::vector<MidiBank*>::iterator it;
+    BankList::iterator it;
+
+    // Bank comparator ignores names
 
     for (it = m_bankList->begin(); it != m_bankList->end(); it++) 
-	if ((*it)->msb == msb && (*it)->lsb == lsb) return *it;
+	if (**it == MidiBank(percussion, msb, lsb)) return *it;
 
     return 0;
 }
 
-MidiProgram*
-MidiDevice::getProgramByIndex(int index)
+std::vector<const MidiBank *>
+MidiDevice::getBanks(bool percussion) const
+{
+    std::vector<const MidiBank *> banks;
+
+    for (BankList::const_iterator it = m_bankList->begin();
+	 it != m_bankList->end(); ++it) {
+	if ((*it)->isPercussion() == percussion) banks.push_back(*it);
+    }
+
+    return banks;
+}
+
+std::vector<const MidiBank *>
+MidiDevice::getBanksByMSB(bool percussion, MidiByte msb) const
+{
+    std::vector<const MidiBank *> banks;
+
+    for (BankList::const_iterator it = m_bankList->begin();
+	 it != m_bankList->end(); ++it) {
+	if ((*it)->isPercussion() == percussion && (*it)->getMSB() == msb)
+	    banks.push_back(*it);
+    }
+
+    return banks;
+}
+
+std::vector<const MidiBank *>
+MidiDevice::getBanksByLSB(bool percussion, MidiByte lsb) const
+{
+    std::vector<const MidiBank *> banks;
+
+    for (BankList::const_iterator it = m_bankList->begin();
+	 it != m_bankList->end(); ++it) {
+	if ((*it)->isPercussion() == percussion && (*it)->getLSB() == lsb)
+	    banks.push_back(*it);
+    }
+
+    return banks;
+}
+
+std::vector<MidiByte>
+MidiDevice::getDistinctMSBs(bool percussion, int lsb) const
+{
+    std::set<MidiByte> msbs;
+
+    for (BankList::const_iterator it = m_bankList->begin();
+	 it != m_bankList->end(); ++it) {
+	if ((*it)->isPercussion() == percussion &&
+	    (lsb == -1 || (*it)->getLSB() == lsb)) msbs.insert((*it)->getMSB());
+    }
+
+    std::vector<MidiByte> v;
+    for (std::set<MidiByte>::iterator i = msbs.begin(); i != msbs.end(); ++i) {
+	v.push_back(*i);
+    }
+
+    return v;
+}
+
+std::vector<MidiByte>
+MidiDevice::getDistinctLSBs(bool percussion, int msb) const
+{
+    std::set<MidiByte> lsbs;
+
+    for (BankList::const_iterator it = m_bankList->begin();
+	 it != m_bankList->end(); ++it) {
+	if ((*it)->isPercussion() == percussion &&
+	    (msb == -1 || (*it)->getMSB() == msb)) lsbs.insert((*it)->getLSB());
+    }
+
+    std::vector<MidiByte> v;
+    for (std::set<MidiByte>::iterator i = lsbs.begin(); i != lsbs.end(); ++i) {
+	v.push_back(*i);
+    }
+
+    return v;
+}
+
+std::string
+MidiDevice::getBankName(const MidiBank &bank) const
+{
+    for (BankList::const_iterator it = m_bankList->begin();
+	 it != m_bankList->end(); ++it) {
+	if (**it == bank) return (*it)->getName();
+    }
+    return "";
+}
+
+const MidiProgram*
+MidiDevice::getProgramByIndex(int index) const
 {
     return (*m_programList)[index];
 }
 
-MidiProgram*
-MidiDevice::getProgram(MidiByte msb, MidiByte lsb, int index)
+const MidiProgram*
+MidiDevice::getProgram(const MidiBank &bank, int index) const
 {
     ProgramList::iterator it;
     int count = 0;
 
     for (it = m_programList->begin(); it != m_programList->end(); it++)
     {
-        if ((*it)->msb == msb && (*it)->lsb == lsb)
+        if ((*it)->getBank() == bank)
         {
             if (count == index)
                 return (*it);
@@ -406,11 +471,11 @@ MidiDevice::toXmlString()
         // when using the stringstream
         //
         midiDevice << "        <metronome "
-                   << "instrument=\"" << m_metronome->instrument << "\" "
-                   << "msb=\"" << (int)m_metronome->msb << "\" "
-                   << "lsb=\"" << (int)m_metronome->lsb << "\" " 
-                   << "program=\"" << (int)m_metronome->program << "\" "
-                   << "pitch=\"" << (int)m_metronome->pitch << "\"/>"
+                   << "instrument=\"" << m_metronome->getInstrument() << "\" "
+                   << "msb=\"" << (int)m_metronome->getProgram().getBank().getMSB() << "\" "
+                   << "lsb=\"" << (int)m_metronome->getProgram().getBank().getLSB() << "\" " 
+                   << "program=\"" << (int)m_metronome->getProgram().getProgram() << "\" "
+                   << "pitch=\"" << (int)m_metronome->getPitch() << "\"/>"
                    << std::endl << std::endl;
     }
 
@@ -423,9 +488,10 @@ MidiDevice::toXmlString()
     for (it = m_bankList->begin(); it != m_bankList->end(); it++)
     {
         midiDevice << "        <bank "
-                   << "name=\"" << encode((*it)->name) << "\" "
-                   << "msb=\"" << (int)(*it)->msb << "\" "
-                   << "lsb=\"" << (int)(*it)->lsb << "\">"
+                   << "name=\"" << encode((*it)->getName()) << "\" "
+	           << "percussion=\"" << ((*it)->isPercussion() ? "true" : "false") << "\" "
+                   << "msb=\"" << (int)(*it)->getMSB() << "\" "
+                   << "lsb=\"" << (int)(*it)->getLSB() << "\">"
                    << std::endl;
 
         // Slightly inefficient way of doing this until
@@ -434,12 +500,11 @@ MidiDevice::toXmlString()
         //
         for (pt = m_programList->begin(); pt != m_programList->end(); pt++)
         {
-            // if bank on program matches current
-            if ((*it)->msb == (*pt)->msb && (*it)->lsb == (*pt)->lsb)
+	    if ((*pt)->getBank() == **it)
             {
                 midiDevice << "            <program "
-                           << "id=\"" << (int)(*pt)->program << "\" "
-                           << "name=\"" << encode((*pt)->name) << "\"/>" << std::endl;
+                           << "id=\"" << (int)(*pt)->getProgram() << "\" "
+                           << "name=\"" << encode((*pt)->getName()) << "\"/>" << std::endl;
             }
         }
 
@@ -484,16 +549,13 @@ MidiDevice::addInstrument(Instrument *instrument)
 }
 
 std::string
-MidiDevice::getProgramName(MidiByte msb, MidiByte lsb, MidiByte program)
+MidiDevice::getProgramName(const MidiProgram &program)
 {
     ProgramList::iterator it;
 
     for (it = m_programList->begin(); it != m_programList->end(); it++)
     {
-        // If the bank matches
-        if (msb == (*it)->msb && lsb == (*it)->lsb &&
-            program == (*it)->program)
-            return (*it)->name;
+	if (**it == program) return (*it)->getName();
     }
 
     return std::string("");
@@ -576,7 +638,7 @@ MidiDevice::mergeBankList(const std::vector<Rosegarden::MidiBank> &bank)
     {
         for (oIt = m_bankList->begin(); oIt != m_bankList->end(); oIt++)
         {
-            if (it->msb == (*oIt)->msb && it->lsb == (*oIt)->lsb)
+	    if (*it == **oIt)
             {
                 clash = true;
                 break;
@@ -602,8 +664,7 @@ MidiDevice::mergeProgramList(const std::vector<Rosegarden::MidiProgram> &program
     {
         for (oIt = m_programList->begin(); oIt != m_programList->end(); oIt++)
         {
-            if (it->msb == (*oIt)->msb && it->lsb == (*oIt)->lsb &&
-                it->program == (*oIt)->program)
+	    if (*it == **oIt)
             {
                 clash = true;
                 break;

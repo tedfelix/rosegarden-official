@@ -35,6 +35,7 @@
 
 #include "Device.h"
 #include "Instrument.h"
+#include "MidiProgram.h"
 
 class KComboBox;
 class QButtonGroup;
@@ -60,6 +61,7 @@ public:
 
     MidiDeviceListViewItem(Rosegarden::DeviceId id,
                            QListViewItem* parent, QString name,
+			   bool percussion,
                            int msb, int lsb);
 
     Rosegarden::DeviceId getDeviceId() const { return m_deviceId; }
@@ -78,10 +80,12 @@ public:
     MidiBankListViewItem(Rosegarden::DeviceId deviceId,
                          int bankNb,
                          QListViewItem* parent, QString name,
+			 bool percussion,
                          int msb, int lsb);
 
     int getBank()     { return m_bankNb; }
 
+    void setPercussion(bool percussion);
     void setMSB(int msb);
     void setLSB(int msb);
 
@@ -104,25 +108,24 @@ public:
     typedef std::vector<Rosegarden::MidiProgram> MidiProgramContainer;
     typedef std::vector<Rosegarden::MidiBank>    MidiBankContainer;
     
-    int ensureUniqueMSB(int msb, bool ascending);
-    int ensureUniqueLSB(int lsb, bool ascending);
+    int ensureUniqueMSB(bool percussion, int msb, bool ascending);
+    int ensureUniqueLSB(bool percussion, int lsb, bool ascending);
 
     // Does the banklist contain this combination already?
     //
-    bool banklistContains(int msb, int lsb);
+    bool banklistContains(const Rosegarden::MidiBank &);
 
-    MidiProgramContainer
-        getBankSubset(Rosegarden::MidiByte msb, Rosegarden::MidiByte lsb);
+    MidiProgramContainer getBankSubset(const Rosegarden::MidiBank &);
 
     Rosegarden::MidiBank* getCurrentBank();
 
     /// Set the currently loaded programs to new MSB and LSB
-    void modifyCurrentPrograms(int oldMSB, int oldLSB,
-                               int msb, int lsb);
-
-    // Get a program
+    void modifyCurrentPrograms(const Rosegarden::MidiBank &oldBank,
+			       const Rosegarden::MidiBank &newBank);
+    
+    // Get a program (pointer into program list) for modification
     //
-    Rosegarden::MidiProgram* getProgram(int msb, int lsb, int program);
+    Rosegarden::MidiProgram* getProgram(const Rosegarden::MidiBank &bank, int program);
 
     void setBankName(const QString& s);
 
@@ -136,6 +139,7 @@ public slots:
 
     // Check that any new MSB/LSB combination is unique for this device
     //
+//!!!    void slotNewPercussion(bool percussion);
     void slotNewMSB(int value);
     void slotNewLSB(int value);
 
@@ -154,6 +158,7 @@ protected:
     QFrame                   *m_mainFrame;
 
     QLabel                   *m_bankName;
+    QCheckBox                *m_percussion;
     QSpinBox                 *m_msb;
     QSpinBox                 *m_lsb;
 
@@ -164,8 +169,7 @@ protected:
     MidiBankContainer        &m_bankList;
     MidiProgramContainer     &m_programList;
 
-    int                      m_oldMSB;
-    int                      m_oldLSB;
+    Rosegarden::MidiBank      m_oldBank;
 };
 
 class BankEditorDialog : public KMainWindow
@@ -295,8 +299,7 @@ protected:
     bool                     m_deleteAll;
 
     Rosegarden::DeviceId     m_lastDevice;
-    int                      m_lastMSB;
-    int                      m_lastLSB;
+    Rosegarden::MidiBank     m_lastBank;
 
     static const char* const BankEditorConfigGroup;
 

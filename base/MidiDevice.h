@@ -24,6 +24,7 @@
 
 #include "Device.h"
 #include "Instrument.h"
+#include "MidiProgram.h"
 
 
 #ifndef _MIDIDEVICE_H_
@@ -72,18 +73,17 @@ public:
 
     void removeMetronome();
     void setMetronome(InstrumentId instrument,
-                      MidiByte msb, MidiByte lsb, MidiByte program,
-                      MidiByte pitch,
-                      const std::string &name);
-    MidiMetronome* getMetronome() const { return m_metronome; }
+		      const MidiMetronome &metronome);
+    const MidiMetronome* getMetronome() const { return m_metronome; }
 
-    // Get a program list for a certain bank
+    // Get a program list for a certain bank (disregarding bank name)
     //
-    StringList getProgramList(MidiByte msb, MidiByte lsb);
-    std::string getProgramName(MidiByte msb, MidiByte lsb, MidiByte program);
+    StringList getProgramList(const MidiBank &bank);
+    std::string getProgramName(const MidiProgram &program);
 
     // Get a list of all banks
     //
+    //!!! lose in favour of returning bank object ptrs
     StringList getBankList();
 
     // Add either
@@ -98,10 +98,21 @@ public:
 
     // Retrieve by different criteria
     //
-    MidiBank* getBankByIndex(int index);
-    MidiBank* getBankByMsbLsb(MidiByte msb, MidiByte lsb);
-    MidiProgram* getProgramByIndex(int index);
-    MidiProgram* getProgram(MidiByte msb, MidiByte lsb, int index);
+    //!!! lose
+    const MidiBank* getBankByIndex(int index) const;
+
+    //!!! lose -- what we really need is getBankName or something
+    const MidiBank* getBankByMsbLsb(bool percussion, MidiByte msb, MidiByte lsb) const;
+
+    std::vector<const MidiBank *> getBanks(bool percussion) const;
+    std::vector<const MidiBank *> getBanksByMSB(bool percussion, MidiByte msb) const;
+    std::vector<const MidiBank *> getBanksByLSB(bool percussion, MidiByte lsb) const;
+    std::vector<MidiByte> getDistinctMSBs(bool percussion, int lsb = -1) const;
+    std::vector<MidiByte> getDistinctLSBs(bool percussion, int msb = -1) const;
+    std::string getBankName(const MidiBank &bank) const;
+
+    const MidiProgram* getProgramByIndex(int index) const;
+    const MidiProgram* getProgram(const MidiBank &bank, int index) const;
 
     virtual std::string toXmlString();
 
@@ -140,27 +151,6 @@ public:
 protected:
     void generatePresentationList();
 
-    // Brief (probably incorrect) synopsis of bank select 
-    // messages for XG:
-    //
-    // MSB = 0 for Normal Voices
-    // MSB = 64 for SFX
-    // MSG = 126 for SFX Drum
-    // MSG = 127 for Drum kits
-    //
-    // and then fiddle with LSB for individual banks
-    //
-    // For Soundblaster use MSG = 0 and then LSB to
-    // required bank.
-    //
-    // We set all bank select messages in the Studio section
-    // of the rosegarden file and at the gui map names only.
-    //
-    //
-
-    // We store voice names that depend on bank select state
-    // - we can create our own and save them out
-    //
     ProgramList   *m_programList;
     BankList      *m_bankList;
     MidiMetronome *m_metronome;
@@ -168,7 +158,7 @@ protected:
     // used when we're presenting the instruments
     InstrumentList  m_presentationInstrumentList;
 
-    // Is this device Read-Only, Write-Only or Duplex
+    // Is this device Play or Record?
     //
     DeviceDirection m_direction; 
 

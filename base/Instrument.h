@@ -26,6 +26,7 @@
 #include <vector>
 
 #include "XmlExportable.h"
+#include "MidiProgram.h"
 
 // An Instrument connects a Track (which itself contains
 // a list of Segments) to a device that can play that
@@ -39,32 +40,9 @@
 namespace Rosegarden
 {
 
-typedef unsigned int InstrumentId;
-typedef unsigned char MidiByte;
-
 // plugins
 class AudioPluginInstance;
 typedef std::vector<AudioPluginInstance*>::iterator PluginInstanceIterator;
-
-struct MidiBank
-{
-    MidiByte msb;
-    MidiByte lsb;
-    std::string name;
-};
-
-struct MidiProgram : public MidiBank
-{
-    MidiByte program;
-};
-
-// A mapped MIDI instrument - a drum track click for example
-//
-struct MidiMetronome : public MidiProgram
-{
-    MidiByte pitch;
-    InstrumentId instrument;
-};
 
 
 // Instrument number groups
@@ -131,8 +109,14 @@ public:
     void setVolume(MidiByte volume) { m_volume = volume; }
     MidiByte getVolume() const { return m_volume; }
 
-    void setProgramChange(MidiByte program) { m_programChange = program; }
-    MidiByte getProgramChange() const { return m_programChange; }
+    //!!! hmm, not sure about this -- previously we stored lsb, msb,
+    //program literally as ints (or MidiBytes) and that may have been
+    //preferable, as we generally need to refer to them individually
+    //(for example, we use the program number but not the lsb/msb if
+    //the sendBankSelect switch is off).
+
+    void setProgram(const MidiProgram &program) { m_program = program; }
+    const MidiProgram &getProgram() const { return m_program; }
 
     void setSendBankSelect(bool value) { m_sendBankSelect = value; }
     bool sendsBankSelect() const { return m_sendBankSelect; }
@@ -145,12 +129,6 @@ public:
 
     void setSendVolume(bool value) { m_sendVolume = value; }
     bool sendsVolume() const { return m_sendVolume; } 
-
-    void setMSB(MidiByte msb) { m_msb = msb; }
-    MidiByte getMSB() const { return m_msb; }
-
-    void setLSB(MidiByte lsb) { m_lsb = lsb; }
-    MidiByte getLSB() const { return m_lsb; }
 
     void setAttack(MidiByte attack) { m_attack = attack; }
     MidiByte getAttack() const { return m_attack; }
@@ -169,6 +147,20 @@ public:
 
     void setReverb(MidiByte reverb) { m_reverb = reverb; }
     MidiByte getReverb() const { return m_reverb; }
+
+    // Convenience functions (strictly redundant with get/setProgram):
+    // 
+    void setProgramChange(MidiByte program);
+    MidiByte getProgramChange() const;
+
+    void setMSB(MidiByte msb);
+    MidiByte getMSB() const;
+
+    void setLSB(MidiByte msb);
+    MidiByte getLSB() const;
+
+    void setPercussion(bool percussion);
+    bool isPercussion() const;
 
     // --------------- Audio Controllers -----------------
     //
@@ -228,12 +220,9 @@ private:
     // Standard MIDI controllers and parameters
     //
     MidiByte        m_channel;
-    MidiByte        m_programChange;
-    MidiByte        m_msb;
-    MidiByte        m_lsb;
+    MidiProgram     m_program;
     MidiByte        m_transpose;
     MidiByte        m_pan;
-
 
     // Used for MIDI volume and Audio volume (0dB == 100)
     //

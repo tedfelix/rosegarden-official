@@ -223,6 +223,7 @@ signals:
 public slots:
     void slotSelectProgram(int index);
     void slotSelectBank(int index);
+    void slotSelectVariation(int index);
     void slotSelectChannel(int index);
     void slotSelectPan(float index);
     void slotSelectVolume(float index);
@@ -236,6 +237,7 @@ public slots:
 
     void slotActivateProgramChange(bool value);
     void slotActivateBank(bool value);
+    void slotActivateVariation(bool value);
 
 protected:
 
@@ -246,13 +248,19 @@ protected:
     QLabel             *m_connectionLabel;
 
     KComboBox          *m_bankValue;
-    RosegardenComboBox *m_channelValue; 
+    KComboBox          *m_variationValue;
+    RosegardenComboBox *m_channelValue;
     KComboBox          *m_programValue;
     RosegardenRotary   *m_panRotary;
     RosegardenRotary   *m_volumeRotary;
 
+    QCheckBox          *m_percussionCheckBox;
     QCheckBox          *m_bankCheckBox;
+    QCheckBox          *m_variationCheckBox;
     QCheckBox          *m_programCheckBox;
+
+    QLabel             *m_bankLabel;
+    QLabel             *m_variationLabel;
 
     RosegardenRotary   *m_chorusRotary;
     RosegardenRotary   *m_reverbRotary;

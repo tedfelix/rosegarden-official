@@ -990,6 +990,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             }
 
             QString nameStr = atts.value("name");
+	    m_percussion = (atts.value("percussion").lower() == "true");
             m_msb = (atts.value("msb")).toInt();
             m_lsb = (atts.value("lsb")).toInt();
 
@@ -998,10 +999,11 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             if (m_section == InStudio)
             {
                 // Create a new bank
-                Rosegarden::MidiBank *bank = new Rosegarden::MidiBank();
-                bank->msb = m_msb;
-                bank->lsb = m_lsb;
-                bank->name = qstrtostr(nameStr);
+                Rosegarden::MidiBank *bank =
+		    new Rosegarden::MidiBank(m_percussion,
+					     m_msb,
+					     m_lsb,
+					     qstrtostr(nameStr));
     
                 if (m_device->getType() == Rosegarden::Device::Midi)
                 {
@@ -1015,6 +1017,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             {
                 if (m_instrument)
                 {
+		    m_instrument->setPercussion(m_percussion);
                     m_instrument->setMSB(m_msb);
                     m_instrument->setLSB(m_lsb);
                     m_instrument->setSendBankSelect(true);
@@ -1032,11 +1035,12 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 Rosegarden::MidiByte pc = atts.value("id").toInt();
 
                 // Create a new program
-                Rosegarden::MidiProgram *program = new Rosegarden::MidiProgram();
-                program->name = qstrtostr(nameStr);
-                program->program = pc;
-                program->msb = m_msb;
-                program->lsb = m_lsb;
+                Rosegarden::MidiProgram *program =
+		    new Rosegarden::MidiProgram(Rosegarden::MidiBank(m_percussion,
+								     m_msb,
+								     m_lsb),
+						pc,
+						qstrtostr(nameStr));
 
                 if (m_device->getType() == Rosegarden::Device::Midi)
                 {
@@ -1274,6 +1278,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         //
         if (m_device && getStudio().getMetronome() == 0)
         {
+	    // default to percussion
+	    QString percString = atts.value("percussion");
+	    bool percussion = (!percString || percString.lower() == "true");
             int msb = atts.value("msb").toInt();
             int lsb = atts.value("lsb").toInt();
             int program = atts.value("program").toInt();
@@ -1283,10 +1290,19 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
             if (m_device->getType() == Rosegarden::Device::Midi)
             {
+		//!!! This is pretty screwed.  The msb/lsb/program are
+		//not actually used at all in sequencemanager.cpp when
+		//playing the metronome; all that's used is the
+		//instrument id.
+
                 // Modify metronome
                 dynamic_cast<Rosegarden::MidiDevice*>(m_device)->
-                        setMetronome(instrument, msb, lsb, program, pitch,
-                           std::string("MIDI Metronome"));
+                        setMetronome(instrument,
+				     Rosegarden::MidiMetronome
+				     (Rosegarden::MidiProgram
+				      (Rosegarden::MidiBank(percussion, msb, lsb),
+				       program, std::string("MIDI Metronome")),
+				      pitch, instrument));
             }
         }
 

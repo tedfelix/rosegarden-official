@@ -24,6 +24,7 @@
 #include "XmlExportable.h"
 #include "Instrument.h"
 #include "Device.h"
+#include "MidiProgram.h"
 
 // The Studio is where Midi and Audio devices live.  We can query
 // them for a list of Instruments, connect them together or to
@@ -125,7 +126,7 @@ public:
     // Get the first metronome defined in the first device -
     // we only want one Metronome per Studio
     //
-    MidiMetronome* getMetronome();
+    const MidiMetronome* getMetronome();
 
     // Return the device list
     //

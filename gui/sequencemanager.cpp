@@ -1447,18 +1447,20 @@ SequenceManager::insertMetronomeClicks(const timeT &sliceStart,
     Studio &studio = m_doc->getStudio();
     Configuration &config = m_doc->getConfiguration();
 
-    MidiMetronome *metronome = studio.getMetronome();
+    const MidiMetronome *metronome = studio.getMetronome();
 
     // Create a default metronome if we haven't loaded one
     //
     if(metronome == 0)
     {
-        metronome = new MidiMetronome();
-        metronome->pitch = config.get<Int>("metronomepitch");
+	long pitch = 60;
+	config.get<Int>("metronomepitch", pitch);
 
         // Default instrument is the first possible instrument
         //
-        metronome->instrument = Rosegarden::SystemInstrumentBase;
+        metronome = new MidiMetronome(Rosegarden::MidiProgram(),
+				      pitch,
+				      Rosegarden::SystemInstrumentBase);
     }
 
     Rosegarden::RealTime mDuration = config.get<RealTimeT>("metronomeduration");
@@ -1496,8 +1498,8 @@ SequenceManager::insertMetronomeClicks(const timeT &sliceStart,
     if (barStart.first >= sliceStart && barStart.first <= sliceEnd)
     {
         MappedEvent *me =
-                new MappedEvent(metronome->instrument,
-                                metronome->pitch,
+                new MappedEvent(metronome->getInstrument(),
+                                metronome->getPitch(),
                                 mBarVelocity,
                                 comp.getElapsedRealTime(barStart.first),
                                 mDuration);
@@ -1506,8 +1508,8 @@ SequenceManager::insertMetronomeClicks(const timeT &sliceStart,
     else if (barEnd.first >= sliceStart && barEnd.first <= sliceEnd)
     {
         MappedEvent *me =
-                new MappedEvent(metronome->instrument,
-                                metronome->pitch,
+                new MappedEvent(metronome->getInstrument(),
+                                metronome->getPitch(),
                                 mBarVelocity,
                                 comp.getElapsedRealTime(barEnd.first),
                                 mDuration);
@@ -1526,8 +1528,8 @@ SequenceManager::insertMetronomeClicks(const timeT &sliceStart,
     {
         if (i >= sliceStart && i <= sliceEnd)
         {
-            MappedEvent *me = new MappedEvent(metronome->instrument,
-                                              metronome->pitch,
+            MappedEvent *me = new MappedEvent(metronome->getInstrument(),
+                                              metronome->getPitch(),
                                               mBeatVelocity,
                                               comp.getElapsedRealTime(i),
                                               mDuration);

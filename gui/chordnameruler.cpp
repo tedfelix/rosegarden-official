@@ -65,7 +65,7 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
     m_currentXOffset(0),
     m_width(-1),
     m_rulerScale(rulerScale),
-    m_composition(composition),
+    m_composition(0),
     m_needsRecalculate(true),
     m_currentSegment(0),
     m_studio(0),
@@ -81,6 +81,7 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
     m_boldFont.setBold(true);
     m_fontMetrics = QFontMetrics(m_boldFont);
     setBackgroundColor(RosegardenGUIColours::ChordNameRulerBackground);
+    if (composition) setComposition(composition);
 }
 
 ChordNameRuler::~ChordNameRuler()

@@ -62,7 +62,7 @@ Post-0.9 task list
 25. Chord computations: don't include percussion tracks
 
 26. Chord-name ruler, raw-note ruler, etc: cache calculations in a
-    segment or something [DONE -- more general optimisation found]
+    segment or something [DONE -- more general optimisation found too]
 
 27. Notation needs a plain "collapse ties" that reverts tied notes to
     their performance durations
@@ -77,6 +77,12 @@ Post-0.9 task list
 
 32. Can't ctrl-click to place cursor anywhere beyond start in
 harpsichord upper in dido.rg -- why?
+
+33. Speed up "sync devices" by storing MappedDevice lists in shared
+memory?
+
+34. Get experimental branch working correctly again
+
 
 Priorities for 0.9
 ==================

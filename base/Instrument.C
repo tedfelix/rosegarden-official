@@ -41,9 +41,6 @@ Instrument::Instrument(InstrumentId id, InstrumentType it,
     m_name(name),
     m_type(it),
     m_channel(0),
-    m_programChange(0),
-    m_msb(0),
-    m_lsb(0),
     m_transpose(MidiMidValue),
     m_pan(MidiMidValue),
     m_volume(100),
@@ -93,9 +90,6 @@ Instrument::Instrument(InstrumentId id,
     m_name(name),
     m_type(it),
     m_channel(channel),
-    m_programChange(0),
-    m_msb(0),
-    m_lsb(0),
     m_transpose(MidiMidValue),
     m_pan(MidiMidValue),
     m_volume(100),
@@ -133,6 +127,19 @@ Instrument::Instrument(InstrumentId id,
 
         m_pan = 100; // audio pan ranges from -100 to 100 but
                      // we store within an unsigned char as 
+
+    } else {
+
+	// Also defined in Midi.h but we don't use that - not here
+	// in the clean inner sanctum.
+	//
+	const MidiByte MIDI_PERCUSSION_CHANNEL = 9;
+	const MidiByte MIDI_EXTENDED_PERCUSSION_CHANNEL = 10;
+
+	if (m_channel == MIDI_PERCUSSION_CHANNEL ||
+	    m_channel == MIDI_EXTENDED_PERCUSSION_CHANNEL) {
+	    setPercussion(true);
+	}
     }
 }
 
@@ -142,9 +149,7 @@ Instrument::Instrument(const Instrument &ins):
     m_name(ins.getName()),
     m_type(ins.getType()),
     m_channel(ins.getMidiChannel()),
-    m_programChange(ins.getProgramChange()),
-    m_msb(ins.getMSB()),
-    m_lsb(ins.getLSB()),
+    m_program(ins.getProgram()),
     m_transpose(ins.getMidiTranspose()),
     m_pan(ins.getPan()),
     m_volume(ins.getVolume()),
@@ -185,13 +190,13 @@ Instrument::Instrument(const Instrument &ins):
 Instrument
 Instrument::operator=(const Instrument &ins)
 {
+    if (&ins == this) return *this;
+
     m_id = ins.getId();
     m_name = ins.getName();
     m_type = ins.getType();
     m_channel = ins.getMidiChannel();
-    m_programChange = ins.getProgramChange();
-    m_msb = ins.getMSB();
-    m_lsb = ins.getLSB();
+    m_program = ins.getProgram();
     m_transpose = ins.getMidiTranspose();
     m_pan = ins.getPan();
     m_volume = ins.getVolume();
@@ -218,6 +223,64 @@ Instrument::operator=(const Instrument &ins)
 Instrument::~Instrument()
 {
 }
+
+void
+Instrument::setProgramChange(MidiByte program)
+{
+    m_program = MidiProgram(m_program.getBank(), program);
+}
+
+MidiByte
+Instrument::getProgramChange() const
+{
+    return m_program.getProgram();
+}
+
+void
+Instrument::setMSB(MidiByte msb)
+{
+    m_program = MidiProgram(MidiBank(m_program.getBank().isPercussion(),
+				     msb,
+				     m_program.getBank().getLSB()),
+			    m_program.getProgram());
+}
+
+MidiByte
+Instrument::getMSB() const
+{
+    return m_program.getBank().getMSB();
+}
+
+void
+Instrument::setLSB(MidiByte lsb)
+{
+    m_program = MidiProgram(MidiBank(m_program.getBank().isPercussion(),
+				     m_program.getBank().getMSB(),
+				     lsb),
+			    m_program.getProgram());
+}
+
+MidiByte
+Instrument::getLSB() const
+{
+    return m_program.getBank().getLSB();
+}
+
+void
+Instrument::setPercussion(bool percussion)
+{
+    m_program = MidiProgram(MidiBank(percussion,
+				     m_program.getBank().getMSB(),
+				     m_program.getBank().getLSB()),
+			    m_program.getProgram());
+}
+
+bool
+Instrument::isPercussion() const
+{
+    return m_program.getBank().isPercussion();
+}
+
 
 // Implementation of the virtual method to output this class
 // as XML.  We don't send out the name as it's redundant in
@@ -265,14 +328,16 @@ Instrument::toXmlString()
 
         if (m_sendBankSelect)
         {
-            instrument << "            <bank msb=\"" << (int)m_msb;
-            instrument << "\" lsb=\"" << (int)m_lsb << "\"/>" << std::endl;
+            instrument << "            <bank percussion=\""
+		       << (isPercussion() ? "true" : "false") << "\" msb=\""
+		       << (int)getMSB();
+            instrument << "\" lsb=\"" << (int)getLSB() << "\"/>" << std::endl;
         }
 
         if (m_sendProgramChange)
         {
             instrument << "            <program id=\""
-                       << (int)m_programChange << "\"/>"
+                       << (int)getProgramChange() << "\"/>"
                        << std::endl;
         }
     
@@ -344,23 +409,15 @@ Instrument::toXmlString()
 std::string
 Instrument::getProgramName() const
 {
-    std::string programName;
-
-    MidiByte msb = 0;
-    MidiByte lsb = 0;
-    //MidiByte program;
-
-    if (m_sendBankSelect)
-    {
-        msb = m_msb;
-        lsb = m_lsb;
-    }
-
     if (m_sendProgramChange == false)
         return std::string("");
 
-    return ((dynamic_cast<MidiDevice*>(m_device))
-              ->getProgramName(m_msb, m_lsb, m_programChange));
+    MidiProgram program(m_program);
+
+    if (!m_sendBankSelect)
+	program = MidiProgram(MidiBank(isPercussion(), 0, 0), program.getProgram());
+
+    return ((dynamic_cast<MidiDevice*>(m_device))->getProgramName(program));
 }
 
 void
