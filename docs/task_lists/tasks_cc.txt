@@ -1,4 +1,20 @@
 
+Priorities for 0.9
+==================
+
+1. "Set connections" & basic testing of device dialog (fix to delete
+   device in AlsaDriver)
+
+2. Problems producing new devices on file load &c
+
+3. notation bugs as reported, + getting make viable to work &c
+
+4. (for 0.9.5) whole instrument-id problem -- if we create instruments
+   at sequencer but assign their properties at gui on file load there's
+   no guarantee they're even on the same devices as we think they are:
+   investigate and describe problem before thinking up solution
+
+
 20030129 task list for new_notation_quantization branch
 =======================================================
 
