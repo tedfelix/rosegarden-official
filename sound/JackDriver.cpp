@@ -1468,10 +1468,12 @@ JackDriver::setPluginInstanceBypass(InstrumentId id, int position, bool value)
 bool
 JackDriver::createRecordFile(const std::string &filename)
 {
-    //!!! want an actual instrument
     if (m_fileWriter) {
 	return m_fileWriter->createRecordFile(m_alsaDriver->getAudioMonitoringInstrument(), filename);
-    } else return false;
+    } else {
+	std::cerr << "JackDriver::createRecordFile: No file writer available!" << std::endl;
+	return false;
+    }
 }
 
 bool

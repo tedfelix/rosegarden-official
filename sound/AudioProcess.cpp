@@ -1499,6 +1499,7 @@ AudioFileWriter::createRecordFile(InstrumentId id,
 
     if (m_files[id].first) {
 	releaseLock();
+	std::cerr << "AudioFileWriter::createRecordFile: already have record file!" << std::endl;
 	return false; // already have one
     }
     
@@ -1530,6 +1531,7 @@ AudioFileWriter::createRecordFile(InstrumentId id,
         // open the file for writing
         //
 	if (!recordFile->write()) {
+	    std::cerr << "AudioFileWriter::createRecordFile: failed to open " << fileName << " for writing" << std::endl;
 	    delete recordFile;
 	    releaseLock();
 	    return false;

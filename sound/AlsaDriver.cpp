@@ -2620,6 +2620,9 @@ AlsaDriver::record(RecordStatus recordStatus)
         else
         {
             m_recordStatus = ASYNCHRONOUS_MIDI;
+	    if (m_jackDriver) {
+		std::cerr << "AlsaDriver::record: JACK driver failed to prepare for recording" << std::endl;
+	    }
 	    return false;
         }
 #else
