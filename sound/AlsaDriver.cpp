@@ -321,8 +321,10 @@ AlsaDriver::generatePortList(AlsaPortList *newPorts)
 	    unsigned int portType = snd_seq_port_info_get_type(pinfo);
 	    unsigned int capability = snd_seq_port_info_get_capability(pinfo);
 
-            if (((capability & writeCap) == writeCap) ||
-                ((capability &  readCap) ==  readCap))
+
+            if ((((capability & writeCap) == writeCap) ||
+                 ((capability & readCap)  == readCap)) &&
+                ((capability & SND_SEQ_PORT_CAP_NO_EXPORT) == 0))
             {
                 audit << "    "
 			     << client << ","
@@ -2791,10 +2793,11 @@ AlsaDriver::checkForNewClients()
 
         while (snd_seq_query_next_port(m_midiHandle, pinfo) >= 0)
         {
-            if (((snd_seq_port_info_get_capability(pinfo) & writeCap)
-                        == writeCap) ||
-                ((snd_seq_port_info_get_capability(pinfo) & readCap)
-                        == readCap))
+            int cap = snd_seq_port_info_get_capability(pinfo);
+
+            if ((((cap & writeCap) == writeCap) ||
+                 ((cap & readCap)  == readCap)) &&
+                ((cap & SND_SEQ_PORT_CAP_NO_EXPORT) == 0))
                 currentPortCount++;
         }
     }
