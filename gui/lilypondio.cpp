@@ -380,6 +380,7 @@ LilypondExporter::composeLilyMark(std::string eventMark, bool stemUp) {
         } else if (inStr == "rf") {
             inStr = "\\rfz";
         } else {        
+	    // FIX 1.X / 2.X VERSION DIFFERENCE HERE
             inStr = "#'(italic \"" + inStr + "\")";
         }
 
