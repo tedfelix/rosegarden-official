@@ -44,7 +44,7 @@
 
 #include "Composition.h"
 #include "BaseProperties.h"
-#include "SegmentNotationHelper.h"
+//#include "SegmentNotationHelper.h"
 
 #include <iostream>
 #include <fstream>
@@ -60,7 +60,7 @@ using Rosegarden::Int;
 using Rosegarden::Key;
 using Rosegarden::Note;
 using Rosegarden::Segment;
-using Rosegarden::SegmentNotationHelper;
+//using Rosegarden::SegmentNotationHelper;
 using Rosegarden::String;
 using Rosegarden::timeT;
 using Rosegarden::TimeSignature;
@@ -672,7 +672,7 @@ LilypondExporter::write() {
                     << staffName.str() <<"\"" << std::endl;;
             
             }
-            SegmentNotationHelper tmpHelper(**i);
+//            SegmentNotationHelper tmpHelper(**i);
 
             // Temporary storage for non-atomic events (!BOOM)
             // ex. Lilypond expects signals when a decrescendo starts 
@@ -713,7 +713,7 @@ LilypondExporter::write() {
             }
 
             // declare these outside the scope of the coming for loop
-            timeT prevTime = 0;
+            timeT prevTime = -1;
             int accidentalCount = 0; 
             bool thisNoteIsTupled = false;
             bool previouslyWritingTuplet = false;
@@ -732,12 +732,14 @@ LilypondExporter::write() {
                 timeT absoluteTime = (*j)->getNotationAbsoluteTime();
 
                 // new bar
-                if (j == (*i)->begin() ||
-                    (prevTime < m_composition->getBarStartForTime(absoluteTime))) {
+                bool nowIsABarline = (prevTime < m_composition->getBarStartForTime(absoluteTime));
+                
+                if (j == (*i)->begin() || nowIsABarline){
+                    // close out any pending chords before the bar check
+                    closeChordWriteTie(addTie, currentlyWritingChord, str);
 
-                    // bar check, for debugging measures that don't count out
-                    if ((!isFirstBar) && (exportBarChecks) &&
-                       (prevTime < m_composition->getBarStartForTime(absoluteTime))) {
+                    // bar check
+                    if (!isFirstBar && exportBarChecks && nowIsABarline) {
                             str << " | ";
                     }
                     isFirstBar = false;
@@ -763,8 +765,6 @@ LilypondExporter::write() {
                     
                 }
                 
-                prevTime = absoluteTime;
-
                 timeT duration = (*j)->getNotationDuration();
 
                 // handle text events...  unhandled text types:
@@ -882,11 +882,30 @@ LilypondExporter::write() {
                         // 2) Open the new chord
                         //   - if the next note is in a chord
                         //   - and we're not writing one now
-                        bool nextNoteIsInChord = tmpHelper.noteIsInChord(*j);
+                        bool thisNoteIsInChord = false;
+
+                        // In order to determine whether this note is in a
+                        // chord, we look back at the previous note, and look
+                        // ahead at the next note.  If this note hits at the
+                        // same time as the one on either side of it, then
+                        // it's part of a chord, we hope...
+                        timeT nextTime = -1;
+
+                        if (++j != (*i)->end()) {
+                            nextTime = (*j)->getNotationAbsoluteTime();
+                        }
+                        j--;
+
+                        if ((prevTime == absoluteTime) || (absoluteTime == nextTime)) {
+                            thisNoteIsInChord = true;
+                        }
+                        prevTime = absoluteTime;
+//std::cout << "prevtime: " << prevTime << "  curtime: " << absoluteTime
+//          << "  nexttime: " << nextTime << std::endl;
                         
                         if (currentlyWritingChord &&
-                            (!nextNoteIsInChord ||
-                             (nextNoteIsInChord && lastChordTime != absoluteTime))) {
+                            (!thisNoteIsInChord ||
+                             (thisNoteIsInChord && lastChordTime != absoluteTime))) {
                             closeChordWriteTie(addTie, currentlyWritingChord, str);
                         }
                        
@@ -894,7 +913,7 @@ LilypondExporter::write() {
                         startStopTuplet (thisNoteIsTupled, previouslyWritingTuplet,
                                          tcount, ucount, str);
                         
-                        if (nextNoteIsInChord && !currentlyWritingChord) {
+                        if (thisNoteIsInChord && !currentlyWritingChord) {
                             currentlyWritingChord = true;
                             str << "< ";
                             lastChordTime = absoluteTime;
