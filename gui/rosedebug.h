@@ -21,10 +21,16 @@
 #include <string>
 #include <iostream>
 #include <kdebug.h>
+
 #define KDEBUG_AREA 1010
 
+typedef class Element2 Event;
+
 kdbgstream&
-operator<<(kdbgstream&, string);
+operator<<(kdbgstream&, const string&);
+
+kdbgstream&
+operator<<(kdbgstream&, const Event&);
 
 // This doesn't work - keeping it just in case I somehow get it
 // working someday

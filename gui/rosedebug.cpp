@@ -17,13 +17,37 @@
 
 #include "rosedebug.h"
 
+#include "Element2.h"
+
 kdbgstream&
-operator<<(kdbgstream &dbg, string s)
+operator<<(kdbgstream &dbg, const string &s)
 {
     dbg << s.c_str();
     return dbg;
 }
 
+kdbgstream&
+operator<<(kdbgstream &dbg, const Event &e)
+{
+    if (e.package().length()) {
+        dbg << "Event type : " << e.type() << " - package : "
+            << e.package() << endl;
+    } else {    
+        dbg << "Event type : " << e.type() << endl;
+    }
+
+    dbg << "\tDuration : " << e.duration()
+        << "\n\tAbsolute Time : " << e.absoluteTime()
+        << endl;
+
+//     for (PropertyMap::const_iterator i = e.m_properties.begin();
+//          i != m_properties.end(); ++i) {
+//         dbg << "\t\t" << (*i).first << '\t'
+//             << *((*i).second) << '\n';
+//     }
+
+    return dbg;
+}
 
 
 ostream&
