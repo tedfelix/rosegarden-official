@@ -817,6 +817,12 @@ void NotationSelector::slotEraseSelected()
 }
 
 
+bool NotationSelector::isRectangleVisible()
+{
+    return m_selectionRect->visible();
+}
+
+
 EventSelection* NotationSelector::getSelection()
 {
     // If selection rect is not visible or too small,

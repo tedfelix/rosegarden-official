@@ -130,6 +130,10 @@ public:
 
     virtual void ready();
 
+    Rosegarden::Note getCurrentNote() {
+	return Rosegarden::Note(m_noteType, m_noteDots);
+    }
+
     static const QString ToolName;
 
 public slots:
@@ -328,6 +332,11 @@ public:
      * Delete the selection rect.
      */
     virtual void stow();
+
+    /**
+     * Returns whether the selection rectangle is visible or not
+     */
+    bool isRectangleVisible();
 
     /**
      * Returns the currently selected events

@@ -81,6 +81,10 @@ Post-0.1.4 task list
     not especially cool -- say, just generate a new segment with
     a guess at the harmony in it)
 
+20. Take some of the add-time-sig stuff in NotationView out into
+    the command object so we can use the same command object and
+    dialog when editing the transport's time sig
+
 
 20020301 task list (based on outstanding items from post-0.1.3 list below)
 ==================

@@ -1097,6 +1097,38 @@ NotationCanvasView* NotationView::getCanvasView()
     return static_cast<NotationCanvasView *>(m_canvasView);
 }
 
+
+timeT
+NotationView::getInsertionTime()
+{
+    Rosegarden::Event *timeSig, *clef, *key;
+    return getInsertionTime(timeSig, clef, key);
+}
+
+
+timeT
+NotationView::getInsertionTime(Event *&timeSigEvt,
+			       Event *&clefEvt,
+			       Event *&keyEvt)
+{
+    NotationStaff *staff = m_staffs[m_currentStaff];
+    Segment &segment = staff->getSegment();
+    
+    double layoutX = staff->getLayoutXOfInsertCursor();
+    if (layoutX < 0) layoutX = 0;
+
+    NotationElementList::iterator i = staff->getClosestElementToLayoutX
+	(layoutX, timeSigEvt, clefEvt, keyEvt, false, -1);
+
+    timeT insertionTime = segment.getEndTime();
+    if (i != staff->getViewElementList()->end()) {
+	insertionTime = (*i)->getAbsoluteTime();
+    }
+
+    return insertionTime;
+}
+
+
 //////////////////////////////////////////////////////////////////////
 //                    Slots
 //////////////////////////////////////////////////////////////////////
@@ -1134,30 +1166,13 @@ void NotationView::slotEditPaste()
 
     slotStatusHelpMsg(i18n("Inserting clipboard contents..."));
 
-    // Paste at cursor position
-    //
-
     NotationStaff *staff = m_staffs[m_currentStaff];
     Segment &segment = staff->getSegment();
     
-    double layoutX = staff->getLayoutXOfInsertCursor();
-    if (layoutX < 0) {
-	slotStatusHelpMsg(i18n("Couldn't paste at this point"));
-	return;
-    }
-
-    Rosegarden::Event *timeSig, *clef, *key;
-
-    NotationElementList::iterator i = staff->getClosestElementToLayoutX
-	(layoutX, timeSig, clef, key, false, -1);
-
-    timeT insertionTime = segment.getEndTime();
-    if (i != staff->getViewElementList()->end()) {
-	insertionTime = (*i)->getAbsoluteTime();
-    }
-
+    // Paste at cursor position
+    //
     PasteCommand *command = new PasteCommand
-	(segment, m_document->getClipboard(), insertionTime);
+	(segment, m_document->getClipboard(), getInsertionTime());
 
     if (!command->isPossible()) {
 	slotStatusHelpMsg(i18n("Couldn't paste at this point"));
@@ -1176,30 +1191,12 @@ void NotationView::slotEditGeneralPaste()
 
     slotStatusHelpMsg(i18n("Inserting clipboard contents..."));
 
-    // Paste at cursor position
-    //
-
     NotationStaff *staff = m_staffs[m_currentStaff];
     Segment &segment = staff->getSegment();
     
-    double layoutX = staff->getLayoutXOfInsertCursor();
-    if (layoutX < 0) {
-	slotStatusHelpMsg(i18n("Couldn't paste at this point"));
-	return;
-    }
-
-    Rosegarden::Event *timeSig, *clef, *key;
-
-    NotationElementList::iterator i = staff->getClosestElementToLayoutX
-	(layoutX, timeSig, clef, key, false, -1);
-
-    timeT insertionTime = segment.getEndTime();
-    if (i != staff->getViewElementList()->end()) {
-	insertionTime = (*i)->getAbsoluteTime();
-    }
-
     PasteNotationDialog *dialog = new PasteNotationDialog
 	(this, PasteCommand::getDefaultPasteType());
+
     if (dialog->exec() == QDialog::Accepted) {
 
 	PasteCommand::PasteType type = dialog->getPasteType();
@@ -1208,7 +1205,7 @@ void NotationView::slotEditGeneralPaste()
 	}
 
 	PasteCommand *command = new PasteCommand
-	    (segment, m_document->getClipboard(), insertionTime, type);
+	    (segment, m_document->getClipboard(), getInsertionTime(), type);
 
 	if (!command->isPossible()) {
 	    slotStatusHelpMsg(i18n("Couldn't paste at this point"));
@@ -1343,40 +1340,39 @@ void NotationView::slotGroupSimpleTuplet()
     int untupled = 3;
     Segment *segment = 0;
 
-    if (m_currentEventSelection) {
+    NotationSelector *selector = dynamic_cast<NotationSelector *>
+	(m_toolBox->getTool(NotationSelector::ToolName));
+
+    if (m_currentEventSelection && selector && selector->isRectangleVisible()) {
 
 	t = m_currentEventSelection->getBeginTime();
 
 	timeT duration = m_currentEventSelection->getTotalDuration();
 	unit = Note::getNearestNote(duration / 3).getDuration();
 
+	kdDebug(KDEBUG_AREA) << "Got time and unit from selection; they're " << t << " and " << unit << " respectively"<< endl;
+
 	segment = &m_currentEventSelection->getSegment();
 
     } else {
 
-	//!!! Should take this stuff out into a separate method: we do
-	//this in a few places now
+	t = getInsertionTime();
+	kdDebug(KDEBUG_AREA) << "Got insertion time; it's " << t << endl;
 
-	NotationStaff *staff = m_staffs[m_currentStaff];
-	segment = &staff->getSegment();
-        
-	double layoutX = staff->getLayoutXOfInsertCursor();
-	if (layoutX < 0) {
-	    slotStatusHelpMsg(i18n("Couldn't make tuplet at this point"));
-	    return;
+	NoteInserter *currentInserter = dynamic_cast<NoteInserter *>
+	    (m_toolBox->getTool(NoteInserter::ToolName));
+
+	if (currentInserter) {
+	    unit = currentInserter->getCurrentNote().getDuration();
+	    kdDebug(KDEBUG_AREA) << "Got unit from inserter; it's " << unit
+				 << endl;
+	} else {
+	    unit = Note(Note::Quaver).getDuration();
+	    kdDebug(KDEBUG_AREA) << "Got default unit; it's " << unit
+				 << endl;
 	}
 
-	Rosegarden::Event *timeSig, *clef, *key;
-	NotationElementList::iterator i = staff->getClosestElementToLayoutX
-	    (layoutX, timeSig, clef, key, false, -1);
-
-	t = segment->getEndTime();
-	if (i != staff->getViewElementList()->end()) {
-	    t = (*i)->getAbsoluteTime();
-	}
-
-	//!!! use currently-selected note for unit
-	unit = Note(Note::Quaver).getDuration();
+	segment = &m_staffs[m_currentStaff]->getSegment();
     }
 
     addCommandToHistory(new GroupMenuTupletCommand
@@ -1652,20 +1648,13 @@ void NotationView::slotTransformsAddTimeSignature()
 	Rosegarden::Event *timeSigEvt = 0, *clefEvt = 0, *keyEvt = 0;
 	Segment &segment = staff->getSegment();
 	Rosegarden::Composition &composition = *segment.getComposition();
-
-	NotationElementList::iterator i = staff->getClosestElementToLayoutX
-	    (layoutX, timeSigEvt, clefEvt, keyEvt, false, -1);
-
-	timeT insertionTime = segment.getEndTime();
-	if (i != staff->getViewElementList()->end()) {
-	    insertionTime = (*i)->getAbsoluteTime();
-	}
-
-	TimeSignature timeSig;
-	if (timeSigEvt) timeSig = TimeSignature(*timeSigEvt);
+	timeT insertionTime = getInsertionTime(timeSigEvt, clefEvt, keyEvt);
 
 	int barNo = composition.getBarNumber(insertionTime);
 	bool atStartOfBar = (insertionTime == composition.getBarStart(barNo));
+
+	TimeSignature timeSig;
+	if (timeSigEvt) timeSig = TimeSignature(*timeSigEvt);
 
 	TimeSignatureDialog *dialog = new TimeSignatureDialog
 	    (this, timeSig, barNo, atStartOfBar);
@@ -1729,19 +1718,12 @@ void NotationView::slotTransformsAddKeySignature()
 
 	Rosegarden::Event *timeSigEvt = 0, *clefEvt = 0, *keyEvt = 0;
 	Segment &segment = staff->getSegment();
+	timeT insertionTime = getInsertionTime(timeSigEvt, clefEvt, keyEvt);
 
-	NotationElementList::iterator i = staff->getClosestElementToLayoutX
-	    (layoutX, timeSigEvt, clefEvt, keyEvt, false, -1);
-
-	timeT insertionTime = segment.getEndTime();
-	if (i != staff->getViewElementList()->end()) {
-	    insertionTime = (*i)->getAbsoluteTime();
-	}
 /*!!!
 	Rosegarden::Key key;
 	if (keyEvt) key = Rosegarden::Key(*keyEvt);
 */
-
 	//!!! experimental:
 	Rosegarden::CompositionTimeSliceAdapter adapter
 	    (&m_document->getComposition(), insertionTime,
@@ -1773,7 +1755,7 @@ void NotationView::slotTransformsAddKeySignature()
 	    } else {
 		addCommandToHistory
 		    (new KeyInsertionCommand
-		     (m_staffs[m_currentStaff]->getSegment(),
+		     (segment,
 		      insertionTime, dialog->getKey(),
 		      conversion == KeySignatureDialog::Convert,
 		      conversion == KeySignatureDialog::Transpose));
