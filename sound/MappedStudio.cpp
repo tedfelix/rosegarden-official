@@ -977,7 +977,10 @@ MappedConnectableObject::addConnection(ConnectionDirection dir,
     std::cerr << getId() << ": adding connection dir " << dir << ", id " << id << std::endl;
 
     for (MappedObjectValueList::iterator i = list.begin(); i != list.end(); ++i) {
-	if (*i == id) return;
+	if (*i == id) {
+	    std::cerr << "(already have it)" << std::endl;
+	    return;
+	}
     }
     
     list.push_back(MappedObjectValue(id));

@@ -618,7 +618,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
     int instruments;
     m_alsaDriver->getAudioInstrumentNumbers(instrumentBase, instruments);
 
-    jackProcessRecord(nframes);
+    bool doneRecord = false;
 
     // We always have the master out
 
@@ -683,6 +683,13 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 		(peak[1], 127, AudioLevel::LongFader);
 
 	    sdb->setSubmasterLevel(buss, info);
+	}
+
+	if (buss + 1 == m_recordInput) {
+	    jackProcessRecord(nframes,
+			      submaster[0], submaster[1],
+			      true, peak[0], peak[1]);
+	    doneRecord = true;
 	}
     }
 
@@ -776,6 +783,14 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	sdb->setMasterLevel(info);
     }
 
+    if (m_recordInput == 0) {
+	jackProcessRecord(nframes,
+			  master[0], master[1],
+			  true, masterPeak[0], masterPeak[1]);
+    } else if (!doneRecord) {
+	jackProcessRecord(nframes, 0, 0, false, 0, 0);
+    }
+
     if (m_alsaDriver->isPlaying()) {
 	m_bussMixer->signal();
     }
@@ -824,7 +839,9 @@ JackDriver::jackProcessEmpty(jack_nframes_t nframes)
 }
     
 int
-JackDriver::jackProcessRecord(jack_nframes_t nframes)
+JackDriver::jackProcessRecord(jack_nframes_t nframes,
+			      sample_t *sourceBufferLeft, sample_t *sourceBufferRight,
+			      bool havePeaks, sample_t peakLeft, sample_t peakRight)
 {
     SequencerDataBlock *sdb = m_alsaDriver->getSequencerDataBlock();
     bool wroteSomething = false;
@@ -832,22 +849,31 @@ JackDriver::jackProcessRecord(jack_nframes_t nframes)
     std::cerr << "JackDriver::jackProcessRecord: record input is "
 	      << m_recordInput << std::endl;
 
-    sample_t peakLeft = 0.0, peakRight = 0.0;
+    if (!havePeaks) {
+	peakLeft = 0.0;
+	peakRight = 0.0;
+    }
 
-    if (m_recordInput < 1000) { // it's a buss
+    // Get input buffers
+    //
+    sample_t *inputBufferLeft = 0, *inputBufferRight = 0;
 
+    int channel = m_recordInputChannel;
+    int channels = (channel == -1 ? 2 : 1);
+    if (channels == 2) channel = 0;
 
+    if (sourceBufferLeft) {
+
+	inputBufferLeft = sourceBufferLeft;
+	if (sourceBufferRight) inputBufferRight = sourceBufferRight;
+
+    } else if (m_recordInput < 1000) {
+
+	return 0;
 
     } else {
 
 	int input = m_recordInput - 1000;
-	int channel = m_recordInputChannel;
-	int channels = (channel == -1 ? 2 : 1);
-	if (channels == 2) channel = 0;
-
-	// Get input buffer
-	//
-	sample_t *inputBufferLeft = 0, *inputBufferRight = 0;
     
 	inputBufferLeft = static_cast<sample_t*>
 	    (jack_port_get_buffer(m_inputPorts[input * channels + channel], nframes));
@@ -856,45 +882,47 @@ JackDriver::jackProcessRecord(jack_nframes_t nframes)
 	    inputBufferRight = static_cast<sample_t*>
 		(jack_port_get_buffer(m_inputPorts[input * channels + 1], nframes));
 	}
+    }
     
-	if (m_alsaDriver->getRecordStatus() == RECORD_AUDIO &&
-	    m_alsaDriver->areClocksRunning()) {
+    if (m_alsaDriver->getRecordStatus() == RECORD_AUDIO &&
+	m_alsaDriver->areClocksRunning()) {
 
+	if (inputBufferLeft) {
+	    m_fileWriter->write(m_alsaDriver->getAudioMonitoringInstrument(),
+				inputBufferLeft, 0, nframes);
+	}
+    
+	if (channels == 2) {
+	    if (inputBufferRight) {
+		m_fileWriter->write(m_alsaDriver->getAudioMonitoringInstrument(),
+				    inputBufferRight, 1, nframes);
+	    }
+	} else {
 	    if (inputBufferLeft) {
 		m_fileWriter->write(m_alsaDriver->getAudioMonitoringInstrument(),
-				    inputBufferLeft, 0, nframes);
+				    inputBufferLeft, 1, nframes);
 	    }
-    
-	    if (channels == 2) {
-		if (inputBufferRight) {
-		    m_fileWriter->write(m_alsaDriver->getAudioMonitoringInstrument(),
-					inputBufferRight, 1, nframes);
-		}
-	    } else {
-		if (inputBufferLeft) {
-		    m_fileWriter->write(m_alsaDriver->getAudioMonitoringInstrument(),
-					inputBufferLeft, 1, nframes);
-		}
-	    }
-    
-	    wroteSomething = true;
 	}
+	
+	wroteSomething = true;
+    }
 
-	if (m_outputMonitors.size() > 0) {
-
-	    sample_t *buf = 
+    if (m_outputMonitors.size() > 0) {
+	
+	sample_t *buf = 
+	    static_cast<sample_t *>
+	    (jack_port_get_buffer(m_outputMonitors[0], nframes));
+	memcpy(buf, inputBufferLeft, nframes * sizeof(sample_t));
+	
+	if (channels == 2 && m_outputMonitors.size() > 1) {
+	    buf =
 		static_cast<sample_t *>
-		(jack_port_get_buffer(m_outputMonitors[0], nframes));
-	    memcpy(buf, inputBufferLeft, nframes * sizeof(sample_t));
-
-	    if (channels == 2 && m_outputMonitors.size() > 1) {
-		buf =
-		    static_cast<sample_t *>
-		    (jack_port_get_buffer(m_outputMonitors[1], nframes));
-		memcpy(buf, inputBufferRight, nframes * sizeof(sample_t));
-	    }
+		(jack_port_get_buffer(m_outputMonitors[1], nframes));
+	    memcpy(buf, inputBufferRight, nframes * sizeof(sample_t));
 	}
-  
+    }
+
+    if (!havePeaks) {
 	for (size_t i = 0; i < nframes; ++i) {
 	    if (inputBufferLeft[i] > peakLeft) peakLeft = inputBufferLeft[i];
 	}
@@ -902,11 +930,10 @@ JackDriver::jackProcessRecord(jack_nframes_t nframes)
 	    for (size_t i = 0; i < nframes; ++i) {
 		if (inputBufferRight[i] > peakRight) peakRight = inputBufferRight[i];
 	    }
-	} else {
-	    peakRight = peakLeft;
 	}
     }
 
+    if (channels < 2) peakRight = peakLeft;
 
     if (sdb) {
 	Rosegarden::LevelInfo info;
@@ -1231,7 +1258,7 @@ JackDriver::updateAudioLevels()
 	    if (channels == 1) {
 		float f = 0;
 		(void)fader->getProperty(MappedAudioFader::InputChannel, f);
-		int inputChannel = (int)f;
+		inputChannel = (int)f;
 	    }
 	    m_recordInputChannel = inputChannel;
 	    
@@ -1252,7 +1279,7 @@ JackDriver::updateAudioLevels()
 	    if (connections.empty()) {
 		
 		std::cerr << "No connections in for record instrument "
-			  << (instrumentBase + i) << std::endl;
+			  << (instrumentBase + i) << " (mapped id " << fader->getId() << ")" << std::endl;
 
 		// oh dear.
 		m_recordInput = 1000;

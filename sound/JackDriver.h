@@ -159,7 +159,9 @@ protected:
 
     // jackProcessStatic delegates to this
     int          jackProcess(jack_nframes_t nframes);
-    int          jackProcessRecord(jack_nframes_t nframes);
+    int          jackProcessRecord(jack_nframes_t nframes,
+				   sample_t *, sample_t *,
+				   bool, sample_t, sample_t);
     int          jackProcessEmpty(jack_nframes_t nframes);
 
     // other helper methods:

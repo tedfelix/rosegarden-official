@@ -666,6 +666,7 @@ void RosegardenGUIDoc::initialiseStudio()
 	    Rosegarden::BussId outputBuss = (*it)->getAudioOutput();
 	    if (outputBuss < busses.size()) {
 		Rosegarden::MappedObjectId bmi = busses[outputBuss]->getMappedId();
+
 		if (bmi > 0) {
 		    Rosegarden::StudioControl::connectStudioObjects(mappedId, bmi);
 		}
@@ -679,11 +680,11 @@ void RosegardenGUIDoc::initialiseStudio()
 	    Rosegarden::MappedObjectId rmi = 0;
 
 	    if (isBuss) {
-		if (input < busses.size()) {
+		if (input < int(busses.size())) {
 		    rmi = busses[input]->getMappedId();
 		}
 	    } else {
-		if (input < recordIns.size()) {
+		if (input < int(recordIns.size())) {
 		    rmi = recordIns[input]->getMappedId();
 		}
 	    }

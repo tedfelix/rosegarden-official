@@ -683,7 +683,7 @@ punchin:
         }
             
         default:
-            SEQMAN_DEBUG << "SequenceManager::record() - unrecognised instrument type " << studio.getInstrumentById(inst)->getType() << " for instrument " << inst << "\n";
+            SEQMAN_DEBUG << "SequenceManager::record() - unrecognised instrument type " << int(studio.getInstrumentById(inst)->getType()) << " for instrument " << inst << "\n";
             return;
             break;
         }
@@ -1003,7 +1003,6 @@ SequenceManager::checkSoundDriverStatus()
 // channels available on the Sequencer and then the program changes
 // are sent to those specific channel (referenced by Instrument ID)
 //
-// 
 void
 SequenceManager::preparePlayback(bool forceProgramChanges)
 {
@@ -1055,7 +1054,7 @@ SequenceManager::preparePlayback(bool forceProgramChanges)
             }
 
         }
-/*!!!
+/*!!! ??? send fader & buss levels? or do we send them routinely anyway?
         else if ((*it)->getType() == Instrument::Audio)
         {
             Rosegarden::StudioControl::setStudioObjectProperty(

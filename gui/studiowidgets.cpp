@@ -298,6 +298,11 @@ RosegardenFader::mousePressEvent(QMouseEvent *e)
 
     if (e->button() == LeftButton) {
 	
+	if (e->type() == QEvent::MouseButtonDblClick) {
+	    setFader(0);
+	    return;
+	}
+
 	if (m_vertical) {
 	    int buttonPosition = value_to_position(m_value);
 	    int clickPosition = height() - e->y() - m_sliderMin;
@@ -886,7 +891,7 @@ AudioRouteMenu::slotEntrySelected(int i)
 
 	if (newMappedId != 0) {
 	    Rosegarden::StudioControl::connectStudioObjects
-		(m_instrument->getMappedId(), newMappedId);
+		(newMappedId, m_instrument->getMappedId());
 	}
 	
 	if (newIsBuss) {
@@ -1004,7 +1009,7 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
 
     m_pan = new RosegardenRotary(this, -100.0, 100.0, 1.0, 5.0, 0.0, 22);
 
-    QLabel *panLabel = 0;
+//    QLabel *panLabel = 0;
 
     if (type == FaderBox) {
 //	panLabel = new QLabel(i18n("Pan"), this);
@@ -1238,6 +1243,8 @@ AudioFaderWidget::setAudioChannels(int channels)
 void
 AudioFaderWidget::slotChannelStateChanged()
 {
+    //!!! need to reconnect input, or change input channel number anyway
+
     if (m_isStereo)
     {
         setAudioChannels(1);
