@@ -293,56 +293,6 @@
                         <class>QLabel</class>
                         <property stdset="1">
                             <name>name</name>
-                            <cstring>TextLabel2_2</cstring>
-                        </property>
-                        <property stdset="1">
-                            <name>geometry</name>
-                            <rect>
-                                <x>227</x>
-                                <y>105</y>
-                                <width>155</width>
-                                <height>35</height>
-                            </rect>
-                        </property>
-                        <property stdset="1">
-                            <name>text</name>
-                            <string>Playback Latency (ms)</string>
-                        </property>
-                    </widget>
-                    <widget>
-                        <class>QLabel</class>
-                        <property stdset="1">
-                            <name>name</name>
-                            <cstring>TextLabel3</cstring>
-                        </property>
-                        <property stdset="1">
-                            <name>geometry</name>
-                            <rect>
-                                <x>25</x>
-                                <y>5</y>
-                                <width>335</width>
-                                <height>50</height>
-                            </rect>
-                        </property>
-                        <property stdset="1">
-                            <name>text</name>
-                            <string>Higher latency improves playback quality on slower systems but reduces overall sequencer response.</string>
-                        </property>
-                        <property stdset="1">
-                            <name>alignment</name>
-                            <set>WordBreak|AlignCenter</set>
-                        </property>
-                        <property>
-                            <name>hAlign</name>
-                        </property>
-                        <property>
-                            <name>wordwrap</name>
-                        </property>
-                    </widget>
-                    <widget>
-                        <class>QLabel</class>
-                        <property stdset="1">
-                            <name>name</name>
                             <cstring>PlaybackValue</cstring>
                         </property>
                         <property stdset="1">
@@ -402,7 +352,7 @@
                         <property stdset="1">
                             <name>geometry</name>
                             <rect>
-                                <x>240</x>
+                                <x>245</x>
                                 <y>65</y>
                                 <width>135</width>
                                 <height>35</height>
@@ -411,6 +361,34 @@
                         <property stdset="1">
                             <name>text</name>
                             <string>Read-ahead (ms)</string>
+                        </property>
+                        <property>
+                            <name>toolTip</name>
+                            <string>How many milliseconds ahead the sequencer should read</string>
+                        </property>
+                    </widget>
+                    <widget>
+                        <class>QLabel</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>TextLabel2_2</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>geometry</name>
+                            <rect>
+                                <x>235</x>
+                                <y>105</y>
+                                <width>160</width>
+                                <height>35</height>
+                            </rect>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>Playback Latency (ms)</string>
+                        </property>
+                        <property>
+                            <name>toolTip</name>
+                            <string></string>
                         </property>
                     </widget>
                     <widget>
@@ -431,6 +409,36 @@
                         <property stdset="1">
                             <name>orientation</name>
                             <enum>Horizontal</enum>
+                        </property>
+                    </widget>
+                    <widget>
+                        <class>QLabel</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>TextLabel3</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>geometry</name>
+                            <rect>
+                                <x>25</x>
+                                <y>5</y>
+                                <width>335</width>
+                                <height>50</height>
+                            </rect>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>Higher latency improves playback quality on slower systems but reduces overall sequencer response.</string>
+                        </property>
+                        <property stdset="1">
+                            <name>alignment</name>
+                            <set>WordBreak|AlignCenter</set>
+                        </property>
+                        <property>
+                            <name>hAlign</name>
+                        </property>
+                        <property>
+                            <name>wordwrap</name>
                         </property>
                     </widget>
                 </widget>

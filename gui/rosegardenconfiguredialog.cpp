@@ -24,6 +24,7 @@
 #include <qpushbutton.h>
 #include <qslider.h>
 #include <qlabel.h>
+#include <qcombobox.h>
 
 #include "rosegardenconfiguredialog.h"
 #include "rosegardenguidoc.h"
@@ -79,13 +80,20 @@ RosegardenConfigureDialog::RosegardenConfigureDialog(RosegardenGUIDoc *doc,
     connect((QObject *)ReadAheadSlider, SIGNAL(valueChanged(int)),
             this, SLOT(slotActivateApply()));
 
-    ReadAheadSlider->setMinValue(0);
-    ReadAheadSlider->setMaxValue(500);
+    ReadAheadSlider->setMinValue(20);
+    ReadAheadSlider->setMaxValue(80);
     ReadAheadSlider->setValue(config.getReadAhead().usec / 1000);
 
-    PlaybackSlider->setMinValue(0);
+    PlaybackSlider->setMinValue(20);
     PlaybackSlider->setMaxValue(500);
     PlaybackSlider->setValue(config.getPlaybackLatency().usec / 1000);
+
+    // set client combo
+    //
+    ClientCombo->setCurrentItem(config.getDoubleClickClient());
+
+    connect((QObject*)ClientCombo, SIGNAL(activated(int)),
+            this, SLOT(slotActivateApply()));
 
     // Disable apply until something changes
     //
@@ -117,6 +125,10 @@ RosegardenConfigureDialog::slotApply()
 
     int playback = PlaybackValue->text().toInt();
     config.setPlaybackLatency((RealTime(0, (playback * 1000))));
+
+    int client = ClientCombo->currentItem();
+    config.setDoubleClickClient(
+            (Rosegarden::Configuration::DoubleClickClient)client);
 
     ApplyButton->setDisabled(true);
 }

@@ -151,7 +151,8 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
     //
     // Segment Canvas
     //
-    m_segmentCanvas = new SegmentCanvas(m_rulerScale,
+    m_segmentCanvas = new SegmentCanvas(m_document,
+                                        m_rulerScale,
                                         m_horizontalScrollBar,
                                         getTrackCellHeight(),
                                         canvas, this);

@@ -25,6 +25,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
+#include "rosegardenguidoc.h"
 #include "segmentcanvas.h"
 #include "Segment.h"
 #include "Composition.h"
@@ -184,7 +185,8 @@ SegmentSplitLine::hideLine()
 //////////////////////////////////////////////////////////////////////
 
 
-SegmentCanvas::SegmentCanvas(RulerScale *rulerScale, QScrollBar* hsb,
+SegmentCanvas::SegmentCanvas(RosegardenGUIDoc *doc,
+                             RulerScale *rulerScale, QScrollBar* hsb,
                              int vStep,
 			     QCanvas* c, QWidget* parent,
 			     const char* name, WFlags f) :
@@ -198,7 +200,8 @@ SegmentCanvas::SegmentCanvas(RulerScale *rulerScale, QScrollBar* hsb,
     m_highlightBrush(RosegardenGUIColours::SegmentHighlightBlock),
     m_pen(RosegardenGUIColours::SegmentBorder),
     m_editMenu(new QPopupMenu(this)),
-    m_fineGrain(false)
+    m_fineGrain(false),
+    m_doc(doc)
 {
     QWhatsThis::add(this, i18n("Segments Canvas - Create and manipulate your segments here"));
 
@@ -345,7 +348,13 @@ void SegmentCanvas::contentsMouseDoubleClickEvent(QMouseEvent* e)
         if (m_currentItem->getSegment()->getType() == Rosegarden::Segment::Audio)
             emit editSegmentAudio(m_currentItem->getSegment());
         else
-            emit editSegmentNotation(m_currentItem->getSegment());
+        {
+            if (m_doc->getConfiguration().getDoubleClickClient() == 
+                    Rosegarden::Configuration::NotationView)
+                emit editSegmentNotation(m_currentItem->getSegment());
+            else
+                emit editSegmentMatrix(m_currentItem->getSegment());
+        }
     }
 }
 

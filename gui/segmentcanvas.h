@@ -36,6 +36,8 @@ namespace Rosegarden {
     class Segment;
 }
 
+class RosegardenGUIDoc;
+
 
 /**
  * The graphical item (rectangle) which represents a Segment
@@ -171,7 +173,8 @@ public:
                     Joiner,
                     Splitter };
 
-    SegmentCanvas(Rosegarden::RulerScale *,QScrollBar*,  int vStep,
+    SegmentCanvas(RosegardenGUIDoc *doc,
+                  Rosegarden::RulerScale *,QScrollBar*,  int vStep,
                   QCanvas*,
 		  QWidget* parent=0, const char* name=0, WFlags f=0);
 
@@ -373,6 +376,7 @@ private:
     QPopupMenu *m_editMenu;
 
     bool m_fineGrain;
+    RosegardenGUIDoc *m_doc;
 };
 
 //////////////////////////////////////////////////////////////////////

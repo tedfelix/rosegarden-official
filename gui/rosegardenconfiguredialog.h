@@ -46,9 +46,11 @@ public slots:
     void slotClose();
 
     void slotActivateApply();
+
 private:
 
     RosegardenGUIDoc *m_doc;
+
 };
 
 }
