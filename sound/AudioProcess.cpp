@@ -1249,19 +1249,39 @@ AudioInstrumentMixer::processBlocks(bool &readSomething)
 
 	InstrumentId id = i->first;
 	BufferRec &rec = i->second;
+	bool empty;
 
-	if (id >= SoftSynthInstrumentBase) rec.empty = (m_synths[id] == 0);
-	else rec.empty = !queue->haveFilesForInstrument(id);
+	if (id >= SoftSynthInstrumentBase) empty = (m_synths[id] == 0);
+	else empty = !queue->haveFilesForInstrument(id);
 
-	if (rec.empty) {
+	if (empty) {
 	    for (PluginList::iterator j = m_plugins[id].begin();
 		 j != m_plugins[id].end(); ++j) {
 		if (*j != 0) {
-		    rec.empty = false;
+		    empty = false;
 		    break;
 		}
 	    }
 	}
+
+	if (!empty && rec.empty) {
+
+	    // This instrument is becoming freshly non-empty.  We need
+	    // to set its filledTo field to match that of an existing
+	    // non-empty instrument, if we can find one.
+	    
+	    for (BufferMap::iterator j = m_bufferMap.begin();
+		 j != m_bufferMap.end(); ++j) {
+
+		if (j->first == i->first) continue;
+		if (j->second.empty) continue;
+
+		rec.filledTo = j->second.filledTo;
+		break;
+	    }
+	}
+
+	rec.empty = empty;
 
 	// For a while we were setting empty to true if the volume on
 	// the track was zero, but that breaks continuity if there is
