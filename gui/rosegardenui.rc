@@ -255,7 +255,6 @@
 <State name="new_file">
         <disable>
                 <Action name="file_revert"/>
-                <Action name="file_save"/>
         </disable>
         <enable>
                 <Action name="file_close"/>
@@ -266,14 +265,12 @@
 
 <State name="new_file_modified">
         <enable>
-                <Action name="file_save"/>
         </enable>
 </State>
 
 <State name="saved_file_modified">
         <enable>
                 <Action name="file_revert"/>
-                <Action name="file_save"/>
         </enable>
 </State>
 

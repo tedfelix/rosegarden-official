@@ -264,7 +264,10 @@ void RosegardenGUIDoc::slotAutoSave()
              << getAbsFilePath() << "' as "
              << autoSaveFileName << endl;
 
-    saveDocument(autoSaveFileName, 0, true);
+    QString errMsg;
+    
+    saveDocument(autoSaveFileName, errMsg, true);
+    
 }
 
 bool RosegardenGUIDoc::isRegularDotRGFile()
@@ -293,15 +296,26 @@ bool RosegardenGUIDoc::saveIfModified()
 
                 RG_DEBUG << "RosegardenGUIDoc::saveIfModified() : new or imported file\n";
                 win->fileSaveAs();
+                completed=true;
 
             } else {
 
                 RG_DEBUG << "RosegardenGUIDoc::saveIfModified() : regular file\n";
-                saveDocument(getAbsFilePath());
+                QString errMsg;
+                completed = saveDocument(getAbsFilePath(), errMsg);
 
+                if (!completed) {
+                    if (errMsg)
+                        KMessageBox::error(0, i18n(QString("Could not save document at %1\nError was : %2")
+                                                   .arg(getAbsFilePath()).arg(errMsg)));
+                    else
+                        KMessageBox::error(0, i18n(QString("Could not save document at %1")
+                                                   .arg(getAbsFilePath())));
+                }
+
+                
             }
 
-            completed=true;
             break;
 
         case KMessageBox::No:
@@ -859,17 +873,26 @@ int RosegardenGUIDoc::FILE_FORMAT_VERSION_POINT = 0;
 
 
 bool RosegardenGUIDoc::saveDocument(const QString& filename,
-                                    const char* /* format */,
+                                    QString& errMsg,
 				    bool autosave)
 {
     Rosegarden::Profiler profiler("RosegardenGUIDoc::saveDocument");
     RG_DEBUG << "RosegardenGUIDoc::saveDocument("
-                         << filename << ")\n";
+             << filename << ")\n";
 
     KFilterDev* fileCompressedDevice = static_cast<KFilterDev*>(KFilterDev::deviceForFile(QFile::encodeName(filename),
                                                                                           "application/x-gzip"));
     fileCompressedDevice->setOrigFileName("audio/x-rosegarden");
-    fileCompressedDevice->open(IO_WriteOnly);
+    bool rc = fileCompressedDevice->open(IO_WriteOnly);
+
+    if (!rc) {
+        // do some error report
+        errMsg = i18n(QString("Could not open file '%1' for writing").arg(filename));
+        delete fileCompressedDevice;
+        return false; // couldn't open file
+    }
+    
+
     QTextStream outStream(fileCompressedDevice);
     outStream.setEncoding(QTextStream::UnicodeUTF8);
 
@@ -976,6 +999,15 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
     // close the top-level XML tag
     //
     outStream << "</rosegarden-data>\n";
+
+    // check that all went ok
+    //
+    if (fileCompressedDevice->status() != IO_Ok) {
+        errMsg = i18n(QString("Error while writing on '%1'").arg(filename));
+        delete fileCompressedDevice;
+        return false;
+    }
+
 
     delete fileCompressedDevice; // DO NOT USE outStream AFTER THIS POINT
     

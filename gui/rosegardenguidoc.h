@@ -161,7 +161,7 @@ public:
      * "save modified" - asks the user for saving if the document is
      * modified
      */
-    bool saveIfModified();	
+    bool saveIfModified();
 
     /**
      * get the autosave interval in seconds
@@ -186,8 +186,10 @@ public:
 
     /**
      * saves the document under filename and format.
+     *
+     * errMsg will be set to a user-readable error message if save fails
      */	
-    bool saveDocument(const QString &filename, const char *format=0,
+    bool saveDocument(const QString &filename, QString& errMsg,
 		      bool autosave = false);
 
     /**

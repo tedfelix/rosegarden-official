@@ -1676,7 +1676,16 @@ void RosegardenGUIApp::saveGlobalProperties(KConfig *cfg)
         cfg->writeEntry("modified", m_doc->isModified());
                 
         QString tempname = kapp->tempSaveName(filename);
-        m_doc->saveDocument(tempname);
+        QString errMsg;
+        bool res = m_doc->saveDocument(tempname, errMsg);
+        if (!res) {
+            if (errMsg)
+                KMessageBox::error(this, i18n(QString("Could not save document at %1\nError was : %2")
+                                              .arg(tempname).arg(errMsg)));
+            else
+                KMessageBox::error(this, i18n(QString("Could not save document at %1")
+                                              .arg(tempname)));
+        }
     }
 }
 
@@ -1726,9 +1735,10 @@ bool RosegardenGUIApp::queryClose()
     _settingLog(QString("SETTING 1 : transport flap extended = %1").arg(m_transport->isExpanded()));
     _settingLog(QString("SETTING 1 : show track labels = %1").arg(m_viewTrackLabels->isChecked()));
 #endif
-
+    QString errMsg;
+    
     bool canClose = m_doc->saveIfModified();
-
+    
     /*
     if (canClose && m_transport) {
 
@@ -1932,8 +1942,17 @@ void RosegardenGUIApp::slotFileSave()
     } else {
 
         SetWaitCursor waitCursor;
-        m_doc->saveDocument(m_doc->getAbsFilePath());
+        QString errMsg, docFilePath = m_doc->getAbsFilePath();
 
+        bool res = m_doc->saveDocument(docFilePath, errMsg);
+        if (!res) {
+            if (errMsg)
+                KMessageBox::error(this, i18n(QString("Could not save document at %1\nError was : %2")
+                                              .arg(docFilePath).arg(errMsg)));
+            else
+                KMessageBox::error(this, i18n(QString("Could not save document at %1")
+                                              .arg(docFilePath)));        
+        }
     }
 }
 
@@ -2023,11 +2042,24 @@ void RosegardenGUIApp::slotFileSaveAs()
     QFileInfo saveAsInfo(newName);
     m_doc->setTitle(saveAsInfo.fileName());
     m_doc->setAbsFilePath(saveAsInfo.absFilePath());
-    m_doc->saveDocument(newName);
-    m_fileRecent->addURL(newName);
+    QString errMsg;
+    bool res = m_doc->saveDocument(newName, errMsg);
+    if (!res) {
+        if (errMsg)
+            KMessageBox::error(this, i18n(QString("Could not save document at %1\nError was : %2")
+                                          .arg(newName).arg(errMsg)));
+        else
+            KMessageBox::error(this, i18n(QString("Could not save document at %1")
+                                          .arg(newName)));
+        
+    } else {
     
-    QString caption = kapp->caption();  
-    setCaption(caption + ": " + m_doc->getTitle());
+        m_fileRecent->addURL(newName);
+    
+        QString caption = kapp->caption();  
+        setCaption(caption + ": " + m_doc->getTitle());
+    }
+    
 }
 
 void RosegardenGUIApp::slotFileClose()
@@ -6129,7 +6161,17 @@ RosegardenGUIApp::slotSaveDefaultStudio()
              << autoloadFile << endl;
     
     SetWaitCursor waitCursor;
-    m_doc->saveDocument(autoloadFile);
+    QString errMsg;
+    bool res = m_doc->saveDocument(autoloadFile, errMsg);
+    if (!res) {
+        if (errMsg)
+            KMessageBox::error(this, i18n(QString("Could not auto-save document at %1\nError was : %2")
+                                          .arg(autoloadFile).arg(errMsg)));
+        else
+            KMessageBox::error(this, i18n(QString("Could not auto-save document at %1")
+                                          .arg(autoloadFile)));
+        
+    }
 }
 
 void
