@@ -1,0 +1,120 @@
+
+/*
+    Rosegarden-4 v0.1
+    A sequencer and musical notation editor.
+
+    This program is Copyright 2000-2002
+        Guillaume Laurent   <glaurent@telegraph-road.org>,
+        Chris Cannam        <cannam@all-day-breakfast.com>,
+        Richard Bown        <bownie@bownie.com>
+
+    The moral right of the authors to claim authorship of this work
+    has been asserted.
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as
+    published by the Free Software Foundation; either version 2 of the
+    License, or (at your option) any later version.  See the file
+    COPYING included with this distribution for more information.
+*/
+
+#ifndef _RULER_SCALE_H_
+#define _RULER_SCALE_H_
+
+#include "Event.h"
+namespace Rosegarden { class Composition; }
+
+/**
+ * RulerScale is a base for classes that may be queried by LoopRuler
+ * and friends in order to discover the correct x-coordinates for bar
+ * lines and bar subdivisions.
+ *
+ * RulerScale does not contain any methods that relate bar numbers
+ * to times, time signature or duration -- those are in Composition.
+ *
+ * The methods in RulerScale should return extrapolated (but valid)
+ * results even when passed a bar number outside the theoretically
+ * visible or existant bar range.
+ */
+
+class RulerScale
+{
+public:
+    /**
+     * Return the number of the first visible bar.
+     */
+//    int getFirstVisibleBar() = 0;
+    
+    /**
+     * Return the number of the last visible bar.
+     */
+//    int getLastVisibleBar() = 0;
+
+    /**
+     * Return the x-coordinate at which bar number n starts.
+     */
+    virtual double getBarPosition(int n) = 0;
+
+    /**
+     * Return the width of bar number n.
+     */
+    virtual double getBarWidth(int n) = 0;
+
+    /**
+     * Return the width of each beat subdivision in bar n.
+     */
+    virtual double getBeatWidth(int n) = 0;
+
+    /**
+     * Return the number of the bar containing the given x-coord.
+     */
+    virtual int getBarForX(double x) = 0;
+
+    /**
+     * Return the nearest time value to the given x-coord.
+     */
+    virtual Rosegarden::timeT getTimeForX(double x) = 0;
+
+    /**
+     * Return the x-coord corresponding to the given time value.
+     */
+    virtual double getXForTime(Rosegarden::timeT time) = 0;
+
+protected:
+    RulerScale() { }
+    virtual ~RulerScale() { }
+};
+
+
+/**
+ * SimpleRulerScale is an implementation of RulerScale that maintains
+ * a strict proportional correspondence between x-coordinate and time.
+ */
+
+class SimpleRulerScale
+{
+public:
+    /**
+     * Construct a SimpleRulerScale for the given Composition, with a
+     * given origin and x-coord/time ratio.  (For example, a ratio of
+     * 10 means that one pixel equals 10 time units.)
+     */
+    SimpleRulerScale(Rosegarden::Composition *composition,
+		     double origin, double ratio);
+    virtual ~SimpleRulerScale();
+
+    virtual double getBarPosition(int n);
+    virtual double getBarWidth(int n);
+    virtual double getBeatWidth(int n);
+    virtual int getBarForX(double x);
+    virtual Rosegarden::timeT getTimeForX(double x);
+    virtual double getXForTime(Rosegarden::timeT time);
+
+protected:
+    Rosegarden::Composition *m_composition;
+    double m_origin;
+    double m_ratio;
+};
+
+
+#endif
