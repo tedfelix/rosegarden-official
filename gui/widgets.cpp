@@ -186,15 +186,13 @@ RosegardenProgressDialog::RosegardenProgressDialog(
                         creator,
                         name,
                         modal,
-                        f),
+                        f | WDestructiveClose),
         Rosegarden::Progress(100), // default to percent
         m_app(app)
 {
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(slotShowMyself()));
     timer->start(500, TRUE); // half a second
-
-    QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
 }
 
 RosegardenProgressDialog::~RosegardenProgressDialog()
