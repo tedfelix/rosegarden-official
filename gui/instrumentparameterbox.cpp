@@ -550,9 +550,9 @@ AudioInstrumentParameterPanel::slotPluginSelected(int index, int plugin)
 }
 
 void
-InstrumentParameterBox::slotPluginPortChanged(int pluginIndex,
-                                              int portIndex,
-                                              float value)
+AudioInstrumentParameterPanel::slotPluginPortChanged(int pluginIndex,
+                                                     int portIndex,
+                                                     float value)
 {
     Rosegarden::AudioPluginInstance *inst = 
         m_selectedInstrument->getPlugin(pluginIndex);
@@ -567,17 +567,15 @@ InstrumentParameterBox::slotPluginPortChanged(int pluginIndex,
                                 portIndex,
                                 value);
                                 
-        /*
         std::cout << "InstrumentParameterBox::slotPluginPortChanged - "
                   << "setting plugin port to " << value << std::endl;
-                  */
 #endif // HAVE_LADSPA
     }
 
 }
 
 void
-InstrumentParameterBox::slotBypassed(int pluginIndex, bool bp)
+AudioInstrumentParameterPanel::slotBypassed(int pluginIndex, bool bp)
 {
     Rosegarden::AudioPluginInstance *inst = 
         m_selectedInstrument->getPlugin(pluginIndex);

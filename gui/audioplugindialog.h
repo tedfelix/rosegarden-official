@@ -75,6 +75,9 @@ public:
 
     int getIndex() const { return m_index; }
 
+public slots:
+    void slotValueChanged(float value);
+
 signals:
     void valueChanged(float value);
 

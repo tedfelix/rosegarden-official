@@ -335,15 +335,11 @@ PluginControl::PluginControl(QWidget *parent,
         low->setAlignment(AlignRight|AlignBottom);
         //setStretchFactor(low, 1);
 
-            
-
         m_multiplier = 200.0 / (upperBound - lowerBound);
         float step = 1.0;
 
-        /*
-        cout << "MULT = " << m_multiplier << endl;
-        cout << "STEP = " << step << endl;
-        */
+        //cout << "MULT = " << m_multiplier << endl;
+        //cout << "STEP = " << step << endl;
 
         m_dial = new RosegardenRotary(parent,
                                       lowerBound * m_multiplier, // min
@@ -374,12 +370,12 @@ PluginControl::PluginControl(QWidget *parent,
             value = upperBound * m_multiplier;
 
         m_dial->setPosition(value);
-        emit valueChanged(value);
+        emit valueChanged(value/m_multiplier);
 
         //cout << "INITIAL VALUE = " << value << endl;
 
         connect(m_dial, SIGNAL(valueChanged(float)),
-                this, SIGNAL(valueChanged(float)));
+                this, SLOT(slotValueChanged(float)));
 
         QLabel *upp = new QLabel(QString("%1").arg(upperBound), parent);
         upp->setIndent(10);
@@ -407,6 +403,13 @@ PluginControl::setValue(float value)
     m_dial->setPosition(int(value * m_multiplier));
     // set the label too..
 }
+
+void
+PluginControl::slotValueChanged(float value)
+{
+    emit valueChanged(value/m_multiplier);
+}
+
 
 
 

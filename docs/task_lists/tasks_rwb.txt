@@ -32,8 +32,6 @@ o Tidy up AudioFiles:
 o "Revert file" option [HALF COMPLETED]
 
 o Matrix tools - cut and join 
-               - multiple resize [DONE]
-               - wire up quantize [DONE]
 
 o MIDI export broken for key sig and SysExs
 
@@ -88,6 +86,9 @@ o ALSA seq bug on incoming events (infinite length) [FIXED]
 
 Completed for 0.8
 =================
+
+o Matrix tools - multiple resize [DONE]
+               - wire up quantize [DONE]
 
 o Performance
   - MIDI playback [found a big collisions() problem that's now commented out]

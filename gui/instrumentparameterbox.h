@@ -61,10 +61,6 @@ public:
         { return m_selectedInstrument; }
 
 public slots:
-    // and for the signals that come back
-    //
-    void slotPluginPortChanged(int pluginIndex, int portIndex, float value);
-    void slotBypassed(int pluginIndex, bool bp);
 
     // To update all InstrumentParamterBoxen for an Instrument.
     //
@@ -135,6 +131,11 @@ public slots:
     void slotSelectPlugin(int index);
     void slotSelectAudioLevel(int index);
     void slotPluginSelected(int index, int plugin);
+
+    // and for the signals that come back
+    //
+    void slotPluginPortChanged(int pluginIndex, int portIndex, float value);
+    void slotBypassed(int pluginIndex, bool bp);
 
 protected:
     //--------------- Data members ---------------------------------
