@@ -419,7 +419,7 @@ void MatrixSelector::handleLeftButtonPress(Rosegarden::timeT,
     m_selectionRect->show();
     m_updateRect = true;
 
-    // Play the Note if we hae one
+    // Play the Note if we have one
     if (m_clickedElement && m_clickedElement->event()->
                                            isa(Rosegarden::Note::EventType))
         m_mParentView->playNote(m_clickedElement->event());

@@ -74,10 +74,14 @@ void MatrixHLayout::scanStaff(MatrixHLayout::StaffType &staffBase, timeT, timeT)
     timeT from = composition->getBarStart(m_firstBar),
 	    to = composition->getBarEndForTime(segment.getEndTime());
 
+    double startPosition = from;
+
     //!!! Deal with time signatures...
 
     while (from < to) {
-	m_barData.push_back(BarData(from * staff.getTimeScaleFactor(), 0));
+	m_barData.push_back(BarData((from - startPosition) *
+                                     staff.getTimeScaleFactor()
+                                    , 0));
 	from = composition->getBarEndForTime(from);
     }
     m_barData.push_back(BarData(to * staff.getTimeScaleFactor(), 0));
@@ -91,7 +95,8 @@ void MatrixHLayout::scanStaff(MatrixHLayout::StaffType &staffBase, timeT, timeT)
 
     while (i != notes->end()) {
 
-	(*i)->setLayoutX((*i)->getAbsoluteTime() * staff.getTimeScaleFactor());
+	(*i)->setLayoutX(((*i)->getAbsoluteTime() - startPosition)
+                          * staff.getTimeScaleFactor());
 
 	double width = (*i)->getDuration() * staff.getTimeScaleFactor();
 	(*i)->setWidth((int)width);

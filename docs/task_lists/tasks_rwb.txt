@@ -1,14 +1,18 @@
 0.2 TO-DO for rwb
 -----------------
-updated 18.04.2002
+updated 23.04.2002
 
-Immediate usability work:
+Immediate work:
 
 o sweep selection on Matrix
 
 o Event playback on selection movement
 
-Other pending tasks:
+o Changing Composition length
+
+o Finding next/previous tempo changes
+
+o Set a default tempo and erase all other tempo changes
 
 o ALSA/JACK audio 
 
