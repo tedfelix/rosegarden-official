@@ -43,7 +43,7 @@ Composition::addTrack(Track *track)
 {
     if (!track) return end();
     
-    pair<iterator, bool> res = m_tracks.insert(track);
+    std::pair<iterator, bool> res = m_tracks.insert(track);
 
     return res.first;
 }
