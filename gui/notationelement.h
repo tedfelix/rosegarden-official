@@ -114,6 +114,14 @@ public:
      */
     void reposition(double dxoffset, double dyoffset);
 
+    /**
+     * Return true if setCanvasItem has been called more recently
+     * than reposition.  If true, any code that positions this
+     * element will probably not need to regenerate its sprite as
+     * well, even if other indications suggest otherwise.
+     */
+    bool isRecentlyRegenerated() { return m_recentlyRegenerated; }
+
     bool isSelected();
     void setSelected(bool selected);
 
@@ -125,6 +133,7 @@ protected:
 
     double m_x;
     double m_y;
+    bool m_recentlyRegenerated;
 
     QCanvasItem *m_canvasItem;
 };

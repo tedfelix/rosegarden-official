@@ -916,7 +916,7 @@ NotationHLayout::layout(BarDataMap::iterator i)
         NotationElementList::iterator from = bdi->start;
         NotationElementList::iterator to;
 
-        kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): starting barNo " << bdi->barNo << ", x = " << barX << ", width = " << bdi->idealWidth << ", time = " << (from == notes->end() ? -1 : (*from)->getAbsoluteTime()) << endl;
+//        kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): starting barNo " << bdi->barNo << ", x = " << barX << ", width = " << bdi->idealWidth << ", time = " << (from == notes->end() ? -1 : (*from)->getAbsoluteTime()) << endl;
 
         BarDataList::iterator nbdi(bdi);
         if (++nbdi == barList.end()) {
@@ -926,10 +926,10 @@ NotationHLayout::layout(BarDataMap::iterator i)
         }
 
         if (from == notes->end()) {
-            kdDebug(KDEBUG_AREA) << "Start is end" << endl;
+//            kdDebug(KDEBUG_AREA) << "Start is end" << endl;
         }
         if (from == to) {
-            kdDebug(KDEBUG_AREA) << "Start is to" << endl;
+//            kdDebug(KDEBUG_AREA) << "Start is to" << endl;
         }
 
 	x = barX;
@@ -945,16 +945,16 @@ NotationHLayout::layout(BarDataMap::iterator i)
 	}
 
         if (bdi->barNo < 0) { // fake bar
-            kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): fake bar " << bdi->barNo << endl;
+//            kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): fake bar " << bdi->barNo << endl;
             continue;
         }
         if (!bdi->needsLayout) {
-            kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): bar " << bdi->barNo << " has needsLayout false" << endl;
+//            kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): bar " << bdi->barNo << " has needsLayout false" << endl;
             continue;
         }
 
         if (timeSigToPlace) {
-	    kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): there's a time sig in this bar" << endl;
+//	    kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): there's a time sig in this bar" << endl;
 	}
 
 

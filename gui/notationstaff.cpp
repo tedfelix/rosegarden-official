@@ -290,49 +290,21 @@ NotationStaff::positionElements(timeT from, timeT to)
     
     std::cerr << "positionElements: " << from << " -> " << to << std::endl;
 
+//!!!
+//    Clef currentClef; // default is okay to start with
+//    m_clefChanges.empty();
+
+//    Rosegarden::Key currentKey; // likewise
+//    m_keyChanges.empty();
+
+    timeT nextBarTime;
+    NotationElementList::iterator beginAt = findUnchangedBarStart(from);
+    NotationElementList::iterator endAt = findUnchangedBarEnd(to, nextBarTime);
+    if (beginAt == getViewElementList()->end()) return;
+
+    truncateClefsAndKeysAt((*beginAt)->getLayoutX());
     Clef currentClef; // default is okay to start with
-    m_clefChanges.empty();
-
     Rosegarden::Key currentKey; // likewise
-    m_keyChanges.empty();
-
-    NotationElementList *nel = getViewElementList();
-
-    // Track back bar-by-bar until we find one whose start position
-    // hasn't changed, and begin the reposition from there
-
-    NotationElementList::iterator beginAt = nel->begin();
-    do {
-	from = getSegment().getBarStartForTime(from - 1);
-	beginAt = nel->findTime(from);
-    } while (beginAt != nel->begin() &&
-	     (beginAt == nel->end() || !elementNotMoved(*beginAt)));
-
-    // Track forward to the end, similarly.  Here however it's very
-    // common for all the positions to have changed right up to the
-    // end of the piece; so we save time by assuming that to be the
-    // case if we get more than (arbitrary) 3 changed bars.
-
-    // We also record the start of the bar following the changed
-    // section, for later use.
-
-    NotationElementList::iterator endAt = nel->end();
-    timeT nextBarTime = -1;
-
-    int changedBarCount = 0;
-    NotationElementList::iterator candidate = nel->end();
-    do {
-	candidate = nel->findTime(getSegment().getBarEndForTime(to));
-	if (candidate != nel->end()) {
-	    to = (*candidate)->getAbsoluteTime();
-	    if (nextBarTime < 0) nextBarTime = to;
-	} else {
-	    nextBarTime = getSegment().getEndTime();
-	}
-	++changedBarCount;
-    } while (changedBarCount < 4 &&
-	     candidate != nel->end() && !elementNotMoved(*candidate));
-    if (changedBarCount < 4) endAt = candidate;
 
     for (NotationElementList::iterator it = beginAt; it != endAt; ++it) {
 
@@ -358,7 +330,7 @@ NotationStaff::positionElements(timeT from, timeT to)
 
 	    needNewSprite = true;
 
-	} else if ((*it)->isNote()) {
+	} else if ((*it)->isNote() && !(*it)->isRecentlyRegenerated()) {
 
 	    // If the note's y-coordinate has changed, we should
 	    // redraw it -- its stem direction may have changed, or it
@@ -387,25 +359,21 @@ NotationStaff::positionElements(timeT from, timeT to)
 		}
 	    }
 
-	} else if ((*it)->event()->isa(Indication::EventType)) {
+	} else if ((*it)->event()->isa(Indication::EventType) &&
+		   !(*it)->isRecentlyRegenerated()) {
 	    needNewSprite = true;
 	}
 
 	if (needNewSprite) {
-	    //kdDebug(KDEBUG_AREA) << "Rendering at " << (*it)->getAbsoluteTime()
-//			     << " (selected = " << selected << ", canvas item selected = " << (*it)->isSelected() << ")" << endl;
-
 	    renderSingleElement(*it, currentClef, selected);
 	    ++elementsRendered;
-	} else {
-	    //kdDebug(KDEBUG_AREA) << "Positioning at " << (*it)->getAbsoluteTime()
-	    //<< " (selected = " << selected << ", canvas item selected = " << (*it)->isSelected() << ")" << endl;
-
-	    LinedStaffCoords coords = getCanvasOffsetsForLayoutCoords
-		((*it)->getLayoutX(), (int)(*it)->getLayoutY());
-	    (*it)->reposition(coords.first, (double)coords.second);
-	    ++elementsPositioned;
 	}
+
+	LinedStaffCoords coords = getCanvasOffsetsForLayoutCoords
+	    ((*it)->getLayoutX(), (int)(*it)->getLayoutY());
+	(*it)->reposition(coords.first, (double)coords.second);
+	(*it)->setSelected(selected);
+	++elementsPositioned;
     }
 
     kdDebug(KDEBUG_AREA) << "NotationStaff::positionElements: "
@@ -414,6 +382,79 @@ NotationStaff::positionElements(timeT from, timeT to)
 			 << endl;
 
     PRINT_ELAPSED("NotationStaff::positionElements");
+    NotePixmapFactory::dumpStats(cerr);
+}
+
+void
+NotationStaff::truncateClefsAndKeysAt(int x)
+{
+    for (FastVector<ClefChange>::iterator i = m_clefChanges.begin();
+	 i != m_clefChanges.end(); ++i) {
+	if (i->first >= x) {
+	    m_clefChanges.erase(i, m_clefChanges.end());
+	    break;
+	}
+    }
+    
+    for (FastVector<KeyChange>::iterator i = m_keyChanges.begin();
+	 i != m_keyChanges.end(); ++i) {
+	if (i->first >= x) {
+	    m_keyChanges.erase(i, m_keyChanges.end());
+	    break;
+	}
+    }
+}
+
+NotationElementList::iterator
+NotationStaff::findUnchangedBarStart(timeT from)
+{
+    NotationElementList *nel = (NotationElementList *)getViewElementList();
+
+    // Track back bar-by-bar until we find one whose start position
+    // hasn't changed
+
+    NotationElementList::iterator beginAt = nel->begin();
+    do {
+	from = getSegment().getBarStartForTime(from - 1);
+	beginAt = nel->findTime(from);
+    } while (beginAt != nel->begin() &&
+	     (beginAt == nel->end() || !elementNotMoved(*beginAt)));
+
+    return beginAt;
+}
+
+NotationElementList::iterator
+NotationStaff::findUnchangedBarEnd(timeT to, timeT &nextBarTime)
+{
+    NotationElementList *nel = (NotationElementList *)getViewElementList();
+
+    // Track forward to the end, similarly.  Here however it's very
+    // common for all the positions to have changed right up to the
+    // end of the piece; so we save time by assuming that to be the
+    // case if we get more than (arbitrary) 3 changed bars.
+
+    // We also record the start of the bar following the changed
+    // section, for later use.
+
+    NotationElementList::iterator endAt = nel->end();
+    nextBarTime = -1;
+
+    int changedBarCount = 0;
+    NotationElementList::iterator candidate = nel->end();
+    do {
+	candidate = nel->findTime(getSegment().getBarEndForTime(to));
+	if (candidate != nel->end()) {
+	    to = (*candidate)->getAbsoluteTime();
+	    if (nextBarTime < 0) nextBarTime = to;
+	} else {
+	    nextBarTime = getSegment().getEndTime();
+	}
+	++changedBarCount;
+    } while (changedBarCount < 4 &&
+	     candidate != nel->end() && !elementNotMoved(*candidate));
+
+    if (changedBarCount < 4) return candidate;
+    else return endAt;
 }
 
 
@@ -625,17 +666,12 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 	}
 	
 //	kdDebug(KDEBUG_AREA) << "NotationStaff::renderSingleElement: Setting selected at " << elt->getAbsoluteTime() << " to " << selected << endl;
-	elt->setSelected(selected);
             
     } catch (...) {
 	kdDebug(KDEBUG_AREA) << "Event lacks the proper properties: "
 			     << (*elt->event())
 			     << endl;
     }
-
-    LinedStaffCoords coords = getCanvasOffsetsForLayoutCoords
-	(elt->getLayoutX(), (int)elt->getLayoutY());
-    elt->reposition(coords.first, (double)coords.second);
 }
 
 QCanvasSimpleSprite *

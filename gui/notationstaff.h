@@ -79,10 +79,9 @@ public:
 
     /**
      * Generate or re-generate sprites for all the elements between
-     * from and to.  Call this when you've just created a staff and
-     * done the layout on it, and now you want to draw it; or when
-     * you've just made a change, in which case you can specify the
-     * extents of the change in the from and to parameters.
+     * from and to.  Call this when you've just made a change,
+     * specifying the extents of the change in the from and to
+     * parameters.
      * 
      * This method does not reposition any elements outside the given
      * range -- so after any edit that may change the visible extents
@@ -110,8 +109,11 @@ public:
      *
      * This method also updates the selected-ness of any elements it
      * sees (i.e. it turns the selected ones blue and the unselected
-     * ones black).  As a result -- and for other implementation
-     * reasons -- it may actually re-generate some sprites.
+     * ones black), and re-generates sprites for any elements for
+     * which it seems necessary.  In general it will only notice a
+     * element needs regenerating if its position has changed, not if
+     * the nature of the element has changed, so this is no substitute
+     * for calling renderElements.
      *
      * The from and to arguments are used to indicate the extents of a
      * changed area within the staff.  The actual area within which the
@@ -230,6 +232,21 @@ protected:
     virtual QCanvasSimpleSprite *makeNoteSprite(NotationElement *);
 
     /**
+     * Return a NotationElementList::iterator pointing to the
+     * start of a bar prior to the given time that doesn't appear
+     * to have been affected by any changes around that time
+     */
+    NotationElementList::iterator findUnchangedBarStart(Rosegarden::timeT);
+
+    /**
+     * Return a NotationElementList::iterator pointing to the
+     * end of a bar subsequent to the given time that doesn't appear
+     * to have been affected by any changes around that time
+     */
+    NotationElementList::iterator findUnchangedBarEnd(Rosegarden::timeT,
+						      Rosegarden::timeT &);
+
+    /**
      * Return true if the element has a canvas item that is already
      * at the correct coordinates
      */
@@ -261,6 +278,8 @@ protected:
 
     typedef std::pair<int, Rosegarden::Key> KeyChange;
     FastVector<KeyChange> m_keyChanges;
+
+    void truncateClefsAndKeysAt(int);
 
     NotePixmapFactory *m_npf;
 };

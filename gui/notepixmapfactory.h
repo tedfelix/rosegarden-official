@@ -165,6 +165,8 @@ public:
     int getRestWidth(const Rosegarden::Note &restType) const;
     int getKeyWidth(const Rosegarden::Key &key) const;
 
+    static void dumpStats(std::ostream &);
+
 protected:
     void makeRoomForAccidental(Rosegarden::Accidental);
     void drawAccidental(Rosegarden::Accidental);

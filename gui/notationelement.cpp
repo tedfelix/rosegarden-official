@@ -43,6 +43,7 @@ NotationElement::NotationElement(Event *event)
     : ViewElement(event),
       m_x(0),
       m_y(0),
+      m_recentlyRegenerated(false),
       m_canvasItem(0)
 {
 //     kdDebug(KDEBUG_AREA) << "new NotationElement "
@@ -106,6 +107,7 @@ NotationElement::getQuantizedAbsoluteTime() const
 void
 NotationElement::setCanvasItem(QCanvasItem *e, double dxoffset, double dyoffset)
 {
+    m_recentlyRegenerated = true;
     delete m_canvasItem;
     m_canvasItem = e;
     e->move(m_x + dxoffset, m_y + dyoffset);
@@ -114,6 +116,7 @@ NotationElement::setCanvasItem(QCanvasItem *e, double dxoffset, double dyoffset)
 void
 NotationElement::removeCanvasItem()
 {
+    m_recentlyRegenerated = false;
     delete m_canvasItem;
     m_canvasItem = 0;
 }
@@ -121,6 +124,7 @@ NotationElement::removeCanvasItem()
 void
 NotationElement::reposition(double dxoffset, double dyoffset)
 {
+    m_recentlyRegenerated = false;
     if (!m_canvasItem) return;
     m_canvasItem->move(m_x + dxoffset, m_y + dyoffset);
 }
@@ -134,6 +138,7 @@ NotationElement::isSelected()
 void
 NotationElement::setSelected(bool selected)
 {
+    m_recentlyRegenerated = false;
     if (m_canvasItem) m_canvasItem->setSelected(selected);
 }
 

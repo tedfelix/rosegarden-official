@@ -61,6 +61,9 @@ using std::set;
 using std::string;
 using std::vector;
 
+static clock_t drawBeamsTime = 0;
+static clock_t makeNotesTime = 0;
+
 
 NotePixmapParameters::NotePixmapParameters(Note::Type noteType,
                                            int dots,
@@ -190,9 +193,27 @@ NotePixmapFactory::getSize() const
     return m_font->getCurrentSize();
 }
 
+void
+NotePixmapFactory::dumpStats(std::ostream &s)
+{
+#ifndef NDEBUG
+    s << "NotePixmapFactory: total times since last stats dump:\n"
+      << "makeNotePixmap: "
+      << (makeNotesTime * 1000 / CLOCKS_PER_SEC) << "ms\n"
+      << "drawBeams: "
+      << (drawBeamsTime * 1000 / CLOCKS_PER_SEC) << "ms"
+      << endl;
+    makeNotesTime = 0;
+    drawBeamsTime = 0;
+#endif
+}
+
+
 QCanvasPixmap
 NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
 {
+    clock_t startTime = clock();
+
     //!!! This function is far too long, and it'd be fairly
     // straightforward to take many of the conditional blocks out
     // into other functions.  Might possibly improve performance too
@@ -513,6 +534,9 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
     }
 #endif
 
+    clock_t endTime = clock();
+    makeNotesTime += (endTime - startTime);
+
     return makeCanvasPixmap(hotspot);
 }
 
@@ -717,6 +741,8 @@ NotePixmapFactory::drawBeams(const QPoint &s1,
                              const NotePixmapParameters &params,
                              int beamCount)
 {
+    clock_t startTime = clock();
+
     // draw beams: first we draw all the beams common to both ends of
     // the section, then we draw beams for those that appear at the
     // end only
@@ -773,6 +799,9 @@ NotePixmapFactory::drawBeams(const QPoint &s1,
                             thickness, smooth);
         }
     }
+
+    clock_t endTime = clock();
+    drawBeamsTime += (endTime - startTime);
 }
 
 void

@@ -342,7 +342,7 @@ LinedStaff<T>::sizeStaff(Rosegarden::HorizontalLayoutEngine<T> &layout)
     deleteBars();
     deleteTimeSignatures();
 
-    kdDebug(KDEBUG_AREA) << "LinedStaff::sizeStaff" << endl;
+//    kdDebug(KDEBUG_AREA) << "LinedStaff::sizeStaff" << endl;
 
     int lastBar = layout.getLastVisibleBarOnStaff(*this);
 
@@ -373,7 +373,7 @@ LinedStaff<T>::sizeStaff(Rosegarden::HorizontalLayoutEngine<T> &layout)
 	    insertTimeSignature(timeSigX, currentTimeSignature);
 	}
 
-	kdDebug(KDEBUG_AREA) << "LinedStaff::sizeStaff: inserting bar at " << x << " on staff " << this << endl;
+//	kdDebug(KDEBUG_AREA) << "LinedStaff::sizeStaff: inserting bar at " << x << " on staff " << this << endl;
 	
 	insertBar(x,
 		  ((barNo == lastBar) ? 0 :

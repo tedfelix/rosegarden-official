@@ -743,8 +743,8 @@ MidiFile::convertToRosegarden()
             default:
                 // Check for META events
                 //
-                cerr << "Can't create Rosegarden event for unknown MIDI event"
-                     << endl;
+                cerr << "Can't create Rosegarden event for unknown MIDI event "
+                     << (int)(*midiEvent)->getMessageType() << endl;
                 break;
             }
         }
