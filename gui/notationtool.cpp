@@ -58,6 +58,7 @@ NotationTool::NotationTool(const QString& menuName, NotationView* view)
       m_menu(0)
 {
     m_parentView->setCanvasCursor(Qt::arrowCursor);
+    m_parentView->setPositionTracking(false);
 }
 
 NotationTool::~NotationTool()
@@ -141,6 +142,7 @@ NoteInserter::NoteInserter(Rosegarden::Note::Type type,
       m_accidental(Rosegarden::NoAccidental)
 {
     m_parentView->setCanvasCursor(Qt::crossCursor);
+    m_parentView->setPositionTracking(true);
 
     for (unsigned int i = 0, accidental = NoAccidental;
          i < 6; ++i, ++accidental) {
@@ -505,15 +507,19 @@ void NotationSelector::handleMouseRelease(QMouseEvent*)
     // If we didn't drag out a meaningful area, but _did_ click on
     // an individual event, then select just that event
     
-    if (m_selectionRect->width()  > -2 &&
-        m_selectionRect->width()  <  2 &&
-        m_selectionRect->height() > -2 &&
-        m_selectionRect->height() <  2 &&
-        m_clickedElement != 0               &&
-        m_clickedStaff >= 0) {
+    if (m_selectionRect->width()  > -3 &&
+        m_selectionRect->width()  <  3 &&
+        m_selectionRect->height() > -3 &&
+        m_selectionRect->height() <  3) {
 
-        m_parentView->setSingleSelectedEvent
-            (m_clickedStaff, m_clickedElement->event());
+	m_selectionRect->hide();
+
+	if (m_clickedElement != 0 &&
+	    m_clickedStaff   >= 0) {
+
+	    m_parentView->setSingleSelectedEvent
+		(m_clickedStaff, m_clickedElement->event());
+	}
     }
 }
 
@@ -535,10 +541,10 @@ EventSelection* NotationSelector::getSelection()
     //    kdDebug(KDEBUG_AREA) << "Selection x,y: " << m_selectionRect->x() << ","
     //                         << m_selectionRect->y() << "; w,h: " << m_selectionRect->width() << "," << m_selectionRect->height() << endl;
 
-    if (m_selectionRect->width()  > -2 &&
-        m_selectionRect->width()  <  2 &&
-        m_selectionRect->height() > -2 &&
-        m_selectionRect->height() <  2) return 0;
+    if (m_selectionRect->width()  > -3 &&
+        m_selectionRect->width()  <  3 &&
+        m_selectionRect->height() > -3 &&
+        m_selectionRect->height() <  3) return 0;
 
     double middleY = m_selectionRect->y() + m_selectionRect->height()/2;
     int staffNo = m_parentView->findClosestStaff(middleY);

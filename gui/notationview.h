@@ -89,6 +89,10 @@ public:
 	m_canvasView->viewport()->setCursor(cursor);
     }
 
+    void setPositionTracking(bool t) {
+	m_canvasView->setPositionTracking(t);
+    }
+
     /**
      * Set the note or rest selected by the user from the toolbars
      */

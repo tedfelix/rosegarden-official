@@ -28,6 +28,7 @@
 
 class StaffLine;
 class NotationElement;
+class QCanvasItemGroup;
 
 /**
  * Central widget for the NotationView window
@@ -50,13 +51,9 @@ public:
 
     ~NotationCanvasView();
 
-// Used for a note-shaped cursor - leaving around just in case
-//     void setCurrentNotePixmap(QCanvasPixmap note);
+    void setPositionTracking(bool t);
 
 public slots:
-
-// Used for a note-shaped cursor - leaving around just in case
-//     void currentNoteChanged(Note::Type);
 
 signals:
 
@@ -146,13 +143,14 @@ protected:
     /// the staff line over which the mouse cursor is
     StaffLine* m_currentHighlightedLine;
 
-    // Used for a note-shaped cursor - leaving around just in case
-//     QCanvasSprite *m_currentNotePixmap;
-//     NotePixmapFactory m_notePixmapFactory;
-
     int m_lastYPosNearStaff;
 
     unsigned int m_staffLineThreshold;
+
+    QCanvasItemGroup *m_positionMarker;
+    QCanvasItemGroup *m_legerLinePositionMarker;
+
+    bool m_positionTracking;
 };
 
 

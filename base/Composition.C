@@ -206,7 +206,7 @@ Composition::calculateBarPositions()
 
 	for (time = start; time < finish; time += segmentTimes[s]) {
 	    addNewBar(time);
-            std::cerr << "added bar at " << time << std::endl;
+//            std::cerr << "added bar at " << time << std::endl;
 	}
 
 	if (s == segments.size() - 1 && time != duration) {
@@ -218,10 +218,10 @@ Composition::calculateBarPositions()
     m_barPositionsNeedCalculating = false;
     std::cerr << "Composition::calculateBarPositions ending" << std::endl;
 
-    std::cerr << "Reference segment contains:" << std::endl;
-    for (i = t.begin(); i != t.end(); ++i) {
-	(*i)->dump(std::cerr);
-    }
+//    std::cerr << "Reference segment contains:" << std::endl;
+//    for (i = t.begin(); i != t.end(); ++i) {
+//	(*i)->dump(std::cerr);
+//    }
 }
 
 int

@@ -28,6 +28,8 @@ Post-0.1.1 task list
 
  8. Ponder help
 
+ 9. Speed up MIDI import, particularly for files with lots of short rests
+
 
 
 Task list from 18/19th August meetings

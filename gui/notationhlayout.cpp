@@ -153,7 +153,14 @@ int NotationHLayout::getIdealBarWidth(StaffType &staff,
         return fixedWidth;
     }
 
-    int d = (*shortest)->event()->get<Int>(Quantizer::LegatoDurationProperty);
+    int d = 0;
+
+    try {
+	d = (*shortest)->event()->get<Int>(Quantizer::LegatoDurationProperty);
+    } catch (Event::NoData e) {
+	kdDebug(KDEBUG_AREA) << "getIdealBarWidth: No quantized duration in shortest! event is " << *((*shortest)->event()) << endl;
+    }
+
     if (d == 0) {
         kdDebug(KDEBUG_AREA) << "Second trivial return" << endl;
         return fixedWidth;

@@ -610,16 +610,24 @@ void NotationView::initStatusBar()
 {
     KStatusBar* sb = statusBar();
 
-    sb->insertItem(KTmpStatusMsg::getDefaultMsg(),
-                   KTmpStatusMsg::getDefaultId());
-
     m_currentNotePixmap       = new QLabel(sb);
     m_hoveredOverNoteName     = new QLabel(sb);
     m_hoveredOverAbsoluteTime = new QLabel(sb);
-    
-    sb->addWidget(m_currentNotePixmap);
-    sb->addWidget(m_hoveredOverNoteName);
+
+    m_currentNotePixmap->setMinimumWidth(20);
+    m_hoveredOverNoteName->setMinimumWidth(25);
+    m_hoveredOverAbsoluteTime->setMinimumWidth(80);
+
+    m_currentNotePixmap->setFrameStyle(QFrame::NoFrame);
+    m_hoveredOverNoteName->setFrameStyle(QFrame::NoFrame);
+    m_hoveredOverAbsoluteTime->setFrameStyle(QFrame::NoFrame);
+
     sb->addWidget(m_hoveredOverAbsoluteTime);
+    sb->addWidget(m_hoveredOverNoteName);
+    sb->addWidget(m_currentNotePixmap);
+
+    sb->insertItem(KTmpStatusMsg::getDefaultMsg(),
+                   KTmpStatusMsg::getDefaultId());
 }
 
 
@@ -1740,12 +1748,12 @@ void NotationView::readjustCanvasSize()
 void
 NotationView::hoveredOverNoteChanged(const QString &noteName)
 {
-    m_hoveredOverNoteName->setText(noteName);
+    m_hoveredOverNoteName->setText(QString(" ") + noteName);
 }
 
 void
 NotationView::hoveredOverAbsoluteTimeChange(unsigned int time)
 {
-    m_hoveredOverAbsoluteTime->setText(QString("Time : %1").arg(time));
+    m_hoveredOverAbsoluteTime->setText(QString(" Time: %1").arg(time));
 }
 

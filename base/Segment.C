@@ -43,7 +43,7 @@ Segment::Segment(timeT startIdx) :
     m_id(0),
     m_quantizer(0)
 {
-    invalidateTimeSigAtEnd();
+    // nothing
 }
 
 Segment::~Segment()
@@ -64,12 +64,6 @@ void Segment::setStartIndex(timeT idx)
     m_startIdx = idx;
 }
 
-static bool isTimeSig(const Event* e)
-{
-    return e->isa(TimeSignature::EventType);
-}
-
-
 //!!! No longer correct -- time sigs no longer in segment -- check usage
 /*!!!
 TimeSignature Segment::getTimeSigAtEnd(timeT &absTimeOfSig)
@@ -81,7 +75,6 @@ TimeSignature Segment::getTimeSigAtEnd(timeT &absTimeOfSig)
     absTimeOfSig = m_timeSigTime;
     return m_timeSigAtEnd;
 }
-*/
 
 void Segment::findTimeSigAtEnd() 
 {
@@ -96,7 +89,7 @@ void Segment::findTimeSigAtEnd()
         m_timeSigTime = (*sig)->getAbsoluteTime();
     }
 }
-
+*/
 
 timeT Segment::getDuration() const
 {
@@ -149,7 +142,6 @@ void Segment::setDuration(timeT d)
 void Segment::erase(iterator pos)
 {
     Event *e = *pos;
-    if (e->isa(TimeSignature::EventType)) invalidateTimeSigAtEnd();
     std::multiset<Event*, Event::EventCmp>::erase(pos);
     notifyRemove(e);
     delete e;
@@ -158,7 +150,6 @@ void Segment::erase(iterator pos)
 
 Segment::iterator Segment::insert(Event *e)
 {
-    if (e->isa(TimeSignature::EventType)) invalidateTimeSigAtEnd();
     iterator i = std::multiset<Event*, Event::EventCmp>::insert(e);
     notifyAdd(e);
     return i;
@@ -182,7 +173,6 @@ void Segment::erase(iterator from, iterator to)
 
     for (Segment::iterator i = from; i != to; ++i) {
         Event *e = *i;
-        if (e->isa(TimeSignature::EventType)) invalidateTimeSigAtEnd();
         notifyRemove(e);
         delete e;
     }
@@ -329,13 +319,24 @@ Segment::iterator Segment::findBarAfter(timeT t) const
 }
 
 
+static bool isTimeSig(const Event* e)
+{
+    return e->isa(TimeSignature::EventType);
+}
+
 Segment::iterator Segment::findTimeSignatureAt(timeT t) const
 {
-    iterator i = findBarAt(t);
-    const Segment *ref = m_referenceSegment;
+    // We explicitly want to avoid calling getReferenceSegment here,
+    // because we don't need the bars to be recalculated -- we only
+    // want to look at the time signatures
 
+    const Segment *ref = m_referenceSegment;
+    iterator i = ref->findTime(t);
+    
     while (i != ref->begin() &&
-	   (i == ref->end() || !isTimeSig(*i))) {
+	   (i == ref->end() ||
+	    ((*i)->getAbsoluteTime() > t) ||
+	    !isTimeSig(*i))) {
 	--i;
     }
 
@@ -348,12 +349,11 @@ Segment::iterator Segment::findTimeSignatureAt(timeT t) const
 
 timeT Segment::findTimeSignatureAt(timeT t, TimeSignature &timeSig) const
 {
-    iterator i = findTimeSignatureAt(t);
+    timeSig = TimeSignature();
+    if (!m_referenceSegment) return 0;
 
-    if (i == m_referenceSegment->end()) {
-	timeSig = TimeSignature();
-	return 0;
-    }
+    iterator i = findTimeSignatureAt(t);
+    if (i == m_referenceSegment->end()) return 0;
 
     timeSig = TimeSignature(**i);
     return (*i)->getAbsoluteTime();
@@ -396,17 +396,9 @@ int Segment::getNextId() const
 
 void Segment::fillWithRests(timeT endTime)
 {
-    timeT sigTime = 0;
     timeT duration = getDuration();
     TimeSignature ts;
-
-    if (getReferenceSegment()) {
-	iterator tsi = findTimeSignatureAt(duration);
-	if (tsi != getReferenceSegment()->end()) {
-	    ts = TimeSignature(**tsi);
-	    sigTime = (*tsi)->getAbsoluteTime();
-	}
-    }
+    timeT sigTime = findTimeSignatureAt(duration, ts);
     
     DurationList dl;
     ts.getDurationListForInterval(dl, endTime - duration, sigTime);

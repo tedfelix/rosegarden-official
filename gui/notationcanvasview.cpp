@@ -34,9 +34,25 @@ NotationCanvasView::NotationCanvasView(QCanvas *viewing, QWidget *parent,
     : QCanvasView(viewing, parent, name, f),
       m_currentHighlightedLine(0),
       m_lastYPosNearStaff(0),
-      m_staffLineThreshold(10)
+      m_staffLineThreshold(10), //!!!
+      m_positionTracking(false)
 {
     viewport()->setMouseTracking(true);
+
+    m_positionMarker = new QCanvasItemGroup(viewing);
+
+    QCanvasLineGroupable *line =
+	new QCanvasLineGroupable(viewing, m_positionMarker);
+    line->setPoints(0, 0, 0, 8); //!!!
+    line->setPen(QPen(QColor(64, 64, 64), 1));
+
+    line = new QCanvasLineGroupable(viewing, m_positionMarker);
+    line->setPoints(16, 0, 16, 8); //!!!
+    line->setPen(QPen(QColor(64, 64, 64), 1));
+
+    m_positionMarker->hide();
+
+    m_legerLinePositionMarker = 0; // for now
 }
 
 NotationCanvasView::~NotationCanvasView()
@@ -44,6 +60,16 @@ NotationCanvasView::~NotationCanvasView()
     // All canvas items are deleted in ~NotationView()
 }
 
+void
+NotationCanvasView::setPositionTracking(bool t)
+{
+    m_positionTracking = t;
+    if (!t) {
+	m_positionMarker->hide();
+	canvas()->update();
+    }
+}
+ 
 
 void
 NotationCanvasView::contentsMouseReleaseEvent(QMouseEvent *e)
@@ -54,13 +80,61 @@ NotationCanvasView::contentsMouseReleaseEvent(QMouseEvent *e)
 void
 NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
 {
+    StaffLine *prevLine = m_currentHighlightedLine;
+    m_currentHighlightedLine = findClosestLineWithinThreshold(e);
+
+    if (!m_currentHighlightedLine) {
+
+	emit hoveredOverNoteChange(QString::null);
+	if (prevLine) {
+	    m_positionMarker->hide();
+	    canvas()->update();
+	}
+
+    } else {
+
+	/* And the notation sprite collision is only used to update
+	   the tracked time, which ain't much use if we move left or
+	   right without colliding with a note because we're at a
+	   different pitch from it (the time should be updated anyway)
+	   so let's leave it out for now */
+
+	int x = e->x() - 8; //!!!
+	bool needUpdate = (m_positionTracking && (m_positionMarker->x() != x));
+	m_positionMarker->setX(x);
+
+	if (prevLine != m_currentHighlightedLine) {
+
+	    if (m_positionTracking) {
+		m_positionMarker->setY
+		    (m_currentHighlightedLine->y() +
+		     m_currentHighlightedLine->startPoint().y() - 4);//!!!
+		m_positionMarker->show();
+		needUpdate = true;
+	    }
+
+	    QString noteName = getNoteNameForLine(m_currentHighlightedLine,
+						  e->x());
+
+	    emit hoveredOverNoteChange(noteName);
+	}
+
+	if (needUpdate) canvas()->update();
+    }
+    
+    /*!!! I don't think we should be using collisions() to calculate
+      the current pitch like this; it means it's only updated when we
+      roll over a new line, which is not correct.  Better to use the
+      collision-in-a-box technique of findClosestLineWithinThreshold 
+
     QCanvasItemList itemList = canvas()->collisions(e->pos());
 
-    if(itemList.isEmpty() && posIsTooFarFromStaff(e->pos())) {
+    if (itemList.isEmpty() && posIsTooFarFromStaff(e->pos())) {
 
         emit hoveredOverNoteChange(QString::null);
 
         m_currentHighlightedLine = 0;
+	m_positionMarker->hide();
 
     } else {
 
@@ -78,7 +152,15 @@ NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
 
                 m_lastYPosNearStaff = e->y();
 
-                //int pitch = getPitchForLine(m_currentHighlightedLine);
+		QPoint p
+		    (e->x() - 6,  //!!!
+		     staffLine->y() + staffLine->startPoint().y() - 4);//!!!
+//		kdDebug(KDEBUG_AREA) << "NotationCanvasView::contentsMouseMoveEvent: Position marker to (" << p.x() << "," << p.y() << ")" << endl;
+		m_positionMarker->setX(p.x());
+		m_positionMarker->setY(p.y());
+		m_positionMarker->show();
+		canvas()->update();
+
                 QString noteName = getNoteNameForLine(m_currentHighlightedLine,
 						      e->x());
 //                 kdDebug(KDEBUG_AREA) << "NotationCanvasView::contentsMouseMoveEvent() : "
@@ -93,8 +175,9 @@ NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
 
         }
     }
+    */
 
-    // if(segmenting) ??
+    // if(tracking) ??
     emit mouseMove(e);
 }
 
@@ -106,7 +189,12 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 
     QCanvasItemList itemList = canvas()->collisions(e->pos());
 
-    if (!m_currentHighlightedLine &&
+    // We don't want to use m_currentHighlightedLine, because we want
+    // to make sure the event happens at the point we clicked at
+    // rather than the last point for which contentsMouseMoveEvent
+    // happened to be called
+
+    if (/* !m_currentHighlightedLine && */
         !(m_currentHighlightedLine = findClosestLineWithinThreshold(e))) {
 
         if (itemList.count() != 0) // the mouse press occurred on at least one
@@ -123,12 +211,13 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
     QCanvasNotationSprite* sprite = 0;
     QCanvasItem* activeItem = 0;
 
-    // Get the actual pitch were the click occurred
+    // Get the actual pitch where the click occurred
     //
     Rosegarden::Key key;
     Rosegarden::Clef clef;
 
-    int clickPitch = Rosegarden::NotationDisplayPitch(m_currentHighlightedLine->getHeight(), Rosegarden::NoAccidental).
+    int clickPitch = Rosegarden::NotationDisplayPitch
+	(m_currentHighlightedLine->getHeight(), Rosegarden::NoAccidental).
         getPerformancePitch(clef, key);
 
     for (it = itemList.begin(); it != itemList.end(); ++it) {
@@ -152,11 +241,8 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
             } else { // it's not a note, so we don't care about checking the pitch
 
                 break;
-
             }
-            
         }
-        
     }
 
     if (activeItem) { // active item takes precedence over notation elements
@@ -190,21 +276,6 @@ void NotationCanvasView::contentsMouseDoubleClickEvent(QMouseEvent* e)
     contentsMousePressEvent(e);
 }
 
-
-// Used for a note-shaped cursor - leaving around just in case
-// void
-// NotationCanvasView::currentNoteChanged(Note::Type note)
-// {
-//     QCanvasPixmap notePixmap = m_notePixmapFactory.makeNotePixmap(note);
-//     setCurrentNotePixmap(notePixmap);
-// }
-
-// void
-// NotationCanvasView::setCurrentNotePixmap(QCanvasPixmap note)
-// {
-//     delete m_currentNotePixmap;
-//     m_currentNotePixmap = new QCanvasSimpleSprite(&note, canvas());
-// }
 
 void
 NotationCanvasView::processActiveItems(QMouseEvent* e,
@@ -275,7 +346,7 @@ QString NotationCanvasView::getNoteNameForLine(const StaffLine *line,
 
 StaffLine* NotationCanvasView::findClosestLineWithinThreshold(QMouseEvent* e)
 {
-    kdDebug(KDEBUG_AREA) << "NotationCanvasView::findClosestLineWithinThreshold()\n";
+//    kdDebug(KDEBUG_AREA) << "NotationCanvasView::findClosestLineWithinThreshold()\n";
     
     // Compute a threshold rectangle around the event's position
     //
@@ -300,19 +371,17 @@ StaffLine* NotationCanvasView::findClosestLineWithinThreshold(QMouseEvent* e)
         if ((line = dynamic_cast<StaffLine*>(item))) {
 
             unsigned int dist = 0;
+	    int y = (int)(line->y() + line->startPoint().y());
 
-            if (line->y() == e->y()) { // unlikely - this method is
-                                       // called only when no
-                                       // collisions with the mouse
-                                       // event are found, and there
-                                       // would have been one if this
-                                       // condition was true
+            if (y == e->y()) {
                 minDist = 0;
                 closestLine = line;
                 break;
             }
 
-            dist = abs(int(line->y() - e->y()));
+            dist = abs(int(y - e->y()));
+
+//	    kdDebug(KDEBUG_AREA) << "NotationCanvasView::findClosestLineWithinThreshold() : looking at line " << line << " with y : " << y << " (e->y() is " << e->y() << " so dist = " << dist << ")" << endl;
 
             if (dist < minDist) {
                 minDist = dist;
@@ -321,8 +390,7 @@ StaffLine* NotationCanvasView::findClosestLineWithinThreshold(QMouseEvent* e)
         }
     }
 
-    kdDebug(KDEBUG_AREA) << "NotationCanvasView::findClosestLineWithinThreshold() : closestLine = "
-                         << closestLine << " - minDist : " << minDist << endl;
+//    kdDebug(KDEBUG_AREA) << "NotationCanvasView::findClosestLineWithinThreshold() : closestLine = " << closestLine << " - minDist : " << minDist << endl;
 
     if (closestLine && minDist <= m_staffLineThreshold) return closestLine;
 

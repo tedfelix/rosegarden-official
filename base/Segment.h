@@ -132,7 +132,9 @@ public:
      * this case and a real default time signature at time 0; use the
      * previous method if this matters to you.)
      * 
-     * Do not call this unless the segment is in a Composition.
+     * It is safe to call this if the segment is not in a Composition;
+     * in this case there can be no time signatures and the method
+     * will return 0 and the default.
      */
     timeT findTimeSignatureAt(timeT, TimeSignature &) const;
 
@@ -319,10 +321,10 @@ private:
     // cache to optimise otherwise-disgusting-inefficiency in fillWithRests
     // that seriously affects MIDI file loading for files in which notes
     // are generally truncated somewhat (hence lots of rests)
-    TimeSignature m_timeSigAtEnd;
-    timeT m_timeSigTime;
-    void invalidateTimeSigAtEnd() { m_timeSigTime = -1; }
-    void findTimeSigAtEnd();
+//!!!    TimeSignature m_timeSigAtEnd;
+//!!!    timeT m_timeSigTime;
+//!!!    void invalidateTimeSigAtEnd() { m_timeSigTime = -1; }
+//!!!    void findTimeSigAtEnd();
 
 private:
     Segment(const Segment &);
