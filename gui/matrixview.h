@@ -146,6 +146,7 @@ public:
     unsigned int getStaffIdScaleFactor()       { return m_staffIdScaleFactor; }
 
     static const unsigned int defaultPitchScaleFactor;
+    static const unsigned int maxMIDIPitch;
 
 protected:
     unsigned int m_pitchScaleFactor;

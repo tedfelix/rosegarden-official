@@ -34,6 +34,8 @@
 #include "rosegardenguidoc.h"
 #include "ktmpstatusmsg.h"
 
+#include "rosedebug.h"
+
 using Rosegarden::Segment;
 
 MatrixCanvasView::MatrixCanvasView(QCanvas *viewing, QWidget *parent,
@@ -79,6 +81,10 @@ void MatrixVLayout::scanStaff(MatrixVLayout::StaffType& staffBase)
     MatrixElementList::iterator to = notes->end();
     MatrixElementList::iterator i;
 
+    kdDebug(KDEBUG_AREA) << "MatrixVLayout::scanStaff : id = "
+                         << staff.getId() << endl;
+
+
     for (i = from; i != to; ++i) {
 
         MatrixElement *el = (*i);
@@ -87,8 +93,13 @@ void MatrixVLayout::scanStaff(MatrixVLayout::StaffType& staffBase)
         
         int pitch = el->event()->get<Rosegarden::Int>(PITCH);
 
-        el->setLayoutY(pitch * m_pitchScaleFactor +
-                       staff.getId() * m_staffIdScaleFactor);
+        double y = (maxMIDIPitch - pitch) * m_pitchScaleFactor +
+            staff.getId() * m_staffIdScaleFactor;
+        
+        kdDebug(KDEBUG_AREA) << "MatrixVLayout::scanStaff : y = "
+                             << y << " for pitch " << pitch << endl;
+
+        el->setLayoutY(y);
         el->setHeight(m_pitchScaleFactor);
     }
 
@@ -98,7 +109,8 @@ void MatrixVLayout::finishLayout()
 {
 }
 
-const unsigned int MatrixVLayout::defaultPitchScaleFactor = 5;
+const unsigned int MatrixVLayout::defaultPitchScaleFactor = 10;
+const unsigned int MatrixVLayout::maxMIDIPitch = 127;
 
 //-----------------------------------
 
@@ -188,6 +200,7 @@ void MatrixElement::setCanvas(QCanvas* c)
         
         m_canvasRect->setCanvas(c);
         m_canvasRect->setBrush(Qt::blue);
+        m_canvasRect->setPen(Qt::blue);
         m_canvasRect->show();
 
     }
@@ -254,7 +267,7 @@ bool MatrixStaff::wrapEvent(Rosegarden::Event* e)
 
 void MatrixStaff::createLines()
 {
-    for(unsigned int i = 0; i < nbLines; ++i) {
+    for(unsigned int i = 0; i <= nbLines; ++i) {
         QCanvasLine* line = new QCanvasLine(m_canvas);
         int y = i * m_pitchScaleFactor;
         line->setPoints(0, y, m_canvas->size().width(), y);
@@ -276,6 +289,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
       m_hLayout(new MatrixHLayout),
       m_vLayout(new MatrixVLayout)
 {
+    setupActions();
+
     QCanvas *tCanvas = new QCanvas(width() * 2,
                                   // Try to guess approximate height
                                   segments.size() *
