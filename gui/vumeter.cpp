@@ -4,7 +4,7 @@
     Rosegarden-4
     A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2002
+    This program is Copyright 2000-2003
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
@@ -31,6 +31,7 @@ using std::endl;
 
 VUMeter::VUMeter(QWidget *parent,
                  VUMeterType type,
+                 bool stereo,
                  int width,
                  int height,
                  VUAlignment alignment,
@@ -39,33 +40,77 @@ VUMeter::VUMeter(QWidget *parent,
     m_originalHeight(height),
     m_type(type),
     m_alignment(alignment),
-    m_level(0),
-    m_peakLevel(0),
+    m_levelLeft(0),
+    m_peakLevelLeft(0),
+    m_levelStepLeft(m_baseLevelStep),
+    m_fallTimerLeft(0),
+    m_peakTimerLeft(0),
+    m_levelRight(0),
+    m_peakLevelRight(0),
+    m_levelStepRight(0),
+    m_fallTimerRight(0),
+    m_peakTimerRight(0),
+    m_showPeakLevel(true),
     m_baseLevelStep(3),
-    m_levelStep(m_baseLevelStep),
-    m_showPeakLevel(true)
+    m_stereo(stereo)
 {
+    // Work out if we need peak hold first
+    //
+    switch (m_type)
+    {
+        case PeakHold:
+        case AudioPeakHold:
+            m_showPeakLevel = true;
+            break;
+
+        default:
+        case Plain:
+            m_showPeakLevel = false;
+            break;
+    }
+
+    // Always init the left fall timer
+    //
+    m_fallTimerLeft = new QTimer();
+
+    connect(m_fallTimerLeft, SIGNAL(timeout()),
+            this,            SLOT(slotReduceLevelLeft()));
+
+    if (m_showPeakLevel)
+    {
+        m_peakTimerLeft = new QTimer();
+
+        connect(m_peakTimerLeft, SIGNAL(timeout()),
+                this,            SLOT(slotStopShowingPeakLeft()));
+    }
+
+    if (stereo)
+    {
+        m_fallTimerRight = new QTimer();
+
+        connect(m_fallTimerRight, SIGNAL(timeout()),
+                this,             SLOT(slotReduceLevelRight()));
+
+        if (m_showPeakLevel)
+        {
+            m_peakTimerRight = new QTimer();
+            connect(m_peakTimerRight, SIGNAL(timeout()),
+                    this,             SLOT(slotStopShowingPeakRight()));
+        }
+
+    }
+
     setMinimumSize(width, m_originalHeight);
     setMaximumSize(width, m_originalHeight);
 
-    connect(&m_fallTimer, SIGNAL(timeout()),
-            this,         SLOT(slotReduceLevel()));
-
-    connect(&m_peakTimer, SIGNAL(timeout()),
-            this,         SLOT(slotStopShowingPeak()));
-
-
-    if (m_type == Plain)
-        m_showPeakLevel == false;
-
-    m_velocityColour = new VelocityColour(RosegardenGUIColours::LevelMeterRed,
-                                          RosegardenGUIColours::LevelMeterOrange,
-                                          RosegardenGUIColours::LevelMeterGreen,
-                                          100, // max
-                                          92,  // red knee
-                                          60,  // orange knee
-                                          10); // green knee
-
+    m_velocityColour =
+        new VelocityColour(RosegardenGUIColours::LevelMeterRed,
+                           RosegardenGUIColours::LevelMeterOrange,
+                           RosegardenGUIColours::LevelMeterGreen,
+                           100, // max
+                           92,  // red knee
+                           60,  // orange knee
+                           10); // green knee
 }
 
 VUMeter::~VUMeter()
@@ -73,33 +118,62 @@ VUMeter::~VUMeter()
 }
 
 void
-VUMeter::setLevel(const double &level)
+VUMeter::setLevel(double level)
 {
-    m_level = (int)(100.0 * level);
+    setLevel(level, level);
+}
 
-    if (m_level < 0) m_level = 0;
-    if (m_level > 100) m_level = 100;
-    m_levelStep = m_baseLevelStep;
+void
+VUMeter::setLevel(double leftLevel, double rightLevel)
+{
+    m_levelLeft = (int)(100.0 * leftLevel);
+    m_levelRight = (int)(100.0 * rightLevel);
+
+    if (m_levelLeft < 0) m_levelLeft = 0;
+    if (m_levelLeft > 100) m_levelLeft = 100;
+    if (m_levelRight < 0) m_levelRight = 0;
+    if (m_levelRight > 100) m_levelRight = 100;
+
+    m_levelStepLeft = m_baseLevelStep;
+    m_levelStepRight = m_baseLevelStep;
 
     // Only start the timer when we need it
-    if(m_fallTimer.isActive() == false)
+    if(m_fallTimerLeft->isActive() == false)
     {
-        m_fallTimer.start(40); // 40 ms per level fall iteration
+        m_fallTimerLeft->start(40); // 40 ms per level fall iteration
+        meterStart();
+    }
+
+    if (m_fallTimerRight && m_fallTimerRight->isActive() == false)
+    {
+        m_fallTimerRight->start(40); // 40 ms per level fall iteration
         meterStart();
     }
 
     // Reset level and reset timer if we're exceeding the
     // current peak
     //
-    if (m_level >= m_peakLevel)
+    if (m_levelLeft >= m_peakLevelLeft && m_showPeakLevel)
     {
-        m_peakLevel = m_level;
-        m_showPeakLevel = true;
+        m_peakLevelLeft = m_levelLeft;
 
-        if (m_peakTimer.isActive())
-            m_peakTimer.stop();
+        if (m_peakTimerLeft->isActive())
+            m_peakTimerLeft->stop();
 
-        m_peakTimer.start(1000); // milliseconds of peak hold
+        m_peakTimerLeft->start(1000); // milliseconds of peak hold
+    }
+
+    if (m_levelRight >= m_peakLevelRight && m_showPeakLevel)
+    {
+        m_peakLevelRight = m_levelRight;
+
+        if (m_peakTimerRight)
+        {
+            if (m_peakTimerRight->isActive())
+                m_peakTimerRight->stop();
+
+            m_peakTimerRight->start(1000); // milliseconds of peak hold
+        }
     }
 
     QPainter paint(this);
@@ -117,7 +191,7 @@ VUMeter::paintEvent(QPaintEvent*)
     }
     else
     {
-        if (m_fallTimer.isActive())
+        if (m_fallTimerLeft->isActive())
         {
             drawMeterLevel(&paint);
         }
@@ -133,66 +207,181 @@ VUMeter::paintEvent(QPaintEvent*)
 void
 VUMeter::drawMeterLevel(QPainter* paint)
 {
+    // Clear the rectangle.
+    //
     paint->setPen(Qt::black);
     paint->setBrush(Qt::black);
     paint->drawRect(0, 0, width(), height());
 
-    paint->setPen(colorGroup().background());
-    paint->setBrush(colorGroup().background());
 
-    if (m_type == PeakHold && m_showPeakLevel)
+    // Get the colour from the VelocityColour helper.
+    //
+    QColor mixedColour = m_velocityColour->getColour(m_levelLeft);
+
+    if (m_stereo)
     {
-        paint->setPen(Qt::white);
-        paint->setBrush(Qt::white);
 
-        // show peak level
-        int x = m_peakLevel * width() / 100;
-        if (x < (width() - 1))
-            x++;
-        else
-            x = width() - 1;
+        paint->setPen(mixedColour);
+        paint->setBrush(mixedColour);
 
-        paint->drawLine(x, 0, x, height());
+        if (m_alignment == VUMeter::Vertical)
+        {
+            int hW = width() / 2;
+
+            // Draw the left bar
+            //
+            int y = height() - (m_levelLeft * height()) / 100;
+            paint->drawRect(0, y, hW - 1, height() - y);
+
+            if (m_showPeakLevel)
+            {
+                paint->setPen(Qt::white);
+                paint->setBrush(Qt::white);
+
+                y = height() - (m_peakLevelLeft * height()) / 100;
+
+                paint->drawLine(0, y, hW - 1, y);
+            }
+
+            // Select new colour for right bar
+            mixedColour = m_velocityColour->getColour(m_levelRight);
+            paint->setPen(mixedColour);
+            paint->setBrush(mixedColour);
+
+            // Draw the right bar
+            //
+            y = height() - (m_levelRight * height()) / 100;
+            paint->drawRect(hW + 1, y, width(), height() - y);
+
+            if (m_showPeakLevel)
+            {
+                paint->setPen(Qt::white);
+                paint->setBrush(Qt::white);
+
+                y = height() - (m_peakLevelRight * height()) / 100;
+
+                paint->drawLine(hW + 1, y, width(), y);
+            }
+
+
+        }
+        else // horizontal
+        {
+            cout << "HERE HORIZ STERE" << endl;
+            int x = (m_levelLeft * width()) / 100;
+            paint->drawRect(0, 0, x, height());
+
+            if (m_showPeakLevel)
+            {
+                paint->setPen(Qt::white);
+                paint->setBrush(Qt::white);
+
+                // show peak level
+                x = m_peakLevelLeft * width() / 100;
+                if (x < (width() - 1))
+                    x++;
+                else
+                    x = width() - 1;
+
+                paint->drawLine(x, 0, x, height());
+            }
+        }
     }
+    else
+    {
+        paint->setPen(mixedColour);
+        paint->setBrush(mixedColour);
 
-    // Get the colour from the VelocityColour helper
-    //
-    QColor mixedColour = m_velocityColour->getColour(m_level);
-    paint->setPen(mixedColour);
-    paint->setBrush(mixedColour);
+        // Paint a vertical meter according to type
+        //
+        if (m_alignment == VUMeter::Vertical)
+        {
+            int y = height() - (m_levelLeft * height()) / 100;
+            paint->drawRect(0, height(), width(), y);
 
-    // Proper width
-    //
-    int x = m_level * width() / 100;
+            if (m_showPeakLevel)
+            {
+                paint->setPen(Qt::white);
+                paint->setBrush(Qt::white);
 
-    // Make room for a peak hold marker
-    //
-    if (m_type == PeakHold && x >= width() - 1) x--;
+                y = height() - (m_peakLevelLeft * height()) / 100;
 
-    // Paint the meter
-    //
-    paint->drawRect(0, 0, x, height());
+                /*
+                if (y < (height() - 1))
+                    x++;
+                else
+                    x = width() - 1;
+                    */
+
+                paint->drawLine(0, y, width(), y);
+            }
+        }
+        else
+        {
+            int x = (m_levelLeft * width()) / 100;
+            paint->drawRect(0, 0, x, height());
+
+            if (m_showPeakLevel)
+            {
+                paint->setPen(Qt::white);
+                paint->setBrush(Qt::white);
+
+                // show peak level
+                x = (m_peakLevelLeft * width()) / 100;
+                if (x < (width() - 1))
+                    x++;
+                else
+                    x = width() - 1;
+
+                paint->drawLine(x, 0, x, height());
+            }
+        }
+    }
 }
 
 // Level range 0 - 100
 //
 void
-VUMeter::slotReduceLevel()
+VUMeter::slotReduceLevelRight()
 {
-    m_levelStep = m_level * m_baseLevelStep / 100 + 1;
-    if (m_levelStep < 1)
-	m_levelStep = 1;
+    m_levelStepRight = m_levelRight * m_baseLevelStep / 100 + 1;
+    if (m_levelStepRight < 1)
+	m_levelStepRight = 1;
 
-    if (m_level > 0)
-        m_level -= m_levelStep;
+    if (m_levelRight > 0)
+        m_levelRight -= m_levelStepRight;
 
-    if (m_level <= 0)
+    if (m_levelRight <= 0)
     {
-        m_level = 0;
-        m_peakLevel = 0;
+        m_levelRight = 0;
+        m_peakLevelRight = 0;
 
         // Always stop the timer when we don't need it
-        m_fallTimer.stop();
+        if (m_fallTimerRight) m_fallTimerRight->stop();
+        meterStop();
+    }
+
+    QPainter paint(this);
+    drawMeterLevel(&paint);
+}
+
+void
+VUMeter::slotReduceLevelLeft()
+{
+    m_levelStepLeft = m_levelLeft * m_baseLevelStep / 100 + 1;
+    if (m_levelStepLeft < 1)
+	m_levelStepLeft = 1;
+
+    if (m_levelLeft > 0)
+        m_levelLeft -= m_levelStepLeft;
+
+    if (m_levelLeft <= 0)
+    {
+        m_levelLeft = 0;
+        m_peakLevelLeft = 0;
+
+        // Always stop the timer when we don't need it
+        m_fallTimerLeft->stop();
         meterStop();
     }
 
@@ -202,10 +391,15 @@ VUMeter::slotReduceLevel()
 
 
 void
-VUMeter::slotStopShowingPeak()
+VUMeter::slotStopShowingPeakRight()
 {
-    m_showPeakLevel = false;
-    m_peakLevel = 0;
+    m_peakLevelRight = 0;
+}
+
+void
+VUMeter::slotStopShowingPeakLeft()
+{
+    m_peakLevelLeft = 0;
 }
 
 

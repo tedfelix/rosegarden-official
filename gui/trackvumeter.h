@@ -50,14 +50,14 @@ private:
 
 };
 
-// AudioVUMeter - a vertical audio meter
+// AudioVUMeter - a vertical audio meter.  Default is stereo.
 //
 class AudioVUMeter : public VUMeter
 {
 public:
     AudioVUMeter(QWidget *parent = 0,
-                 bool stereo = false,
                  VUMeterType type = VUMeter::AudioPeakHold,
+                 bool stereo = true,
                  int width = 12,
                  int height = 140,
                  const char *name = 0);

@@ -100,6 +100,7 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
             this, SIGNAL(changeInstrumentLabel(Rosegarden::InstrumentId, QString)));
 }
 
+
 InstrumentParameterBox::~InstrumentParameterBox()
 {
     // deregister this paramter box
@@ -114,6 +115,12 @@ InstrumentParameterBox::~InstrumentParameterBox()
             break;
         }
     }
+}
+
+void
+InstrumentParameterBox::setAudioMeter(double ch1, double ch2)
+{
+    m_audioInstrumentParameters->setAudioMeter(ch1, ch2);
 }
 
 void
@@ -865,6 +872,12 @@ AudioInstrumentParameterPanel::slotSolo()
 void
 AudioInstrumentParameterPanel::slotSetPan(float /*pan*/)
 {
+}
+
+void
+AudioInstrumentParameterPanel::setAudioMeter(double ch1, double ch2)
+{
+    m_audioFader->m_vuMeter->setLevel(ch1, ch2);
 }
 
 

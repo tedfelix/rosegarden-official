@@ -32,7 +32,7 @@ TrackVUMeter::TrackVUMeter(QWidget *parent,
                            int height,
                            int position,
                            const char *name):
-    VUMeter(parent, type, width, height, VUMeter::Horizontal, name),
+    VUMeter(parent, type, false, width, height, VUMeter::Horizontal, name),
     m_position(position), m_textHeight(12)
 {
     setAlignment(AlignCenter);
@@ -59,12 +59,12 @@ TrackVUMeter::meterStop()
 //  ------------------  AudioVUMeter ---------------------
 //
 AudioVUMeter::AudioVUMeter(QWidget *parent,
-                           bool stereo,
                            VUMeterType type,
+                           bool stereo,
                            int width,
                            int height,
                            const char *name):
-    VUMeter(parent, type, width, height, VUMeter::Vertical, name),
+    VUMeter(parent, type, stereo, width, height, VUMeter::Vertical, name),
     m_stereo(stereo)
 {
 }
@@ -72,12 +72,14 @@ AudioVUMeter::AudioVUMeter(QWidget *parent,
 void
 AudioVUMeter::meterStart()
 {
+    // do nothing - always visible
 }
 
 
 void
 AudioVUMeter::meterStop()
 {
+   // do nothing - always visible
 }
 
 

@@ -4,7 +4,7 @@
     Rosegarden-4
     A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2002
+    This program is Copyright 2000-2003
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
@@ -47,28 +47,37 @@ public:
         Vertical
     } VUAlignment;
 
+    // Mono and stereo level setting
+    //
+    void setLevel(double level);
+    void setLevel(double leftLevel, double rightLevel);
+
+    virtual void paintEvent(QPaintEvent*);
+
+protected:
+    // Constructor is protected - we can only create an object
+    // from a sub-class of this type from a sub-class.
+    //
     VUMeter(QWidget *parent = 0,
             VUMeterType type = Plain,
+            bool stereo = false,
             int width = 0,
             int height = 0,
             VUAlignment alignment = Horizontal,
             const char *name = 0);
     ~VUMeter();
 
-    void setLevel(const double &level);
-
-    virtual void paintEvent(QPaintEvent*);
-
-protected:
     virtual void meterStart() = 0;
     virtual void meterStop() = 0;
 
-private slots:
-    void slotReduceLevel();
-    void slotStopShowingPeak();
-
-protected:
     int         m_originalHeight;
+
+private slots:
+    void slotReduceLevelLeft();
+    void slotStopShowingPeakLeft();
+
+    void slotReduceLevelRight();
+    void slotStopShowingPeakRight();
 
 private:
 
@@ -77,13 +86,22 @@ private:
     VUMeterType m_type;
     VUAlignment m_alignment;
 
-    int         m_level;          // percentage
-    int         m_peakLevel;      // percentage
-    int         m_baseLevelStep;
-    int         m_levelStep;
-    QTimer      m_fallTimer;
-    QTimer      m_peakTimer;
+    int         m_levelLeft;          // percentage
+    int         m_peakLevelLeft;      // percentage
+    int         m_levelStepLeft;
+    QTimer     *m_fallTimerLeft;
+    QTimer     *m_peakTimerLeft;
+
+    int         m_levelRight;          // percentage
+    int         m_peakLevelRight;      // percentage
+    int         m_levelStepRight;
+    QTimer     *m_fallTimerRight;
+    QTimer     *m_peakTimerRight;
+
     bool        m_showPeakLevel;
+    int         m_baseLevelStep;
+
+    bool        m_stereo;
 
     // We use this to work out our colours
     //

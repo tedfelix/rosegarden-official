@@ -783,8 +783,17 @@ void RosegardenGUIView::showVisuals(const Rosegarden::MappedEvent *mE)
 
     if (mE->getType() == Rosegarden::MappedEvent::AudioLevel)
     {
+
+        // Send to the high sensitivity instrument parameter box 
+        //
+        if (mE->getInstrument() ==
+                m_instrumentParameterBox->getSelectedInstrument()->getId())
+        {
+            m_instrumentParameterBox->setAudioMeter(value, value);
+        }
+
         // Don't always send all audio levels so we don't
-        // get vu meter flickering
+        // get vu meter flickering on track meters
         //
         if (value < 0.05) return;
 
@@ -794,6 +803,7 @@ void RosegardenGUIView::showVisuals(const Rosegarden::MappedEvent *mE)
 
     m_trackEditor->getTrackButtons()->
         slotSetMetersByInstrument(value, mE->getInstrument());
+
 }
 
 

@@ -81,7 +81,7 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent, const char *name):
     m_pan = new RosegardenRotary(this);
     m_stereoButton = new QPushButton(this);
     m_stereoButton->setPixmap(m_monoPixmap);
-    m_stereoButton->setFixedSize(22, 22);
+    //m_stereoButton->setFixedSize(22, 22);
 
     grid->addMultiCellWidget(m_stereoButton,  2, 2, 0, 0, AlignCenter);
     grid->addMultiCellWidget(m_pan,           2, 2, 1, 1, AlignCenter);

@@ -66,6 +66,8 @@ public:
     Rosegarden::Instrument* getSelectedInstrument()
         { return m_selectedInstrument; }
 
+    void setAudioMeter(double ch1, double ch2);
+
 public slots:
 
     // To update all InstrumentParamterBoxen for an Instrument.
@@ -130,6 +132,11 @@ public:
     AudioInstrumentParameterPanel(RosegardenGUIDoc* doc, QWidget* parent);
 
     virtual void setupForInstrument(Rosegarden::Instrument*);
+
+    // Set the audio meter to a given level for a maximum of
+    // two channels.
+    //
+    void setAudioMeter(double ch1, double ch2);
 
 public slots:
     // From AudioFaderWidget
