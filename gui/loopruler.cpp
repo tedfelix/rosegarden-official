@@ -51,10 +51,10 @@ LoopRuler::~LoopRuler()
 {
 }
 
-void LoopRuler::paintEvent(QPaintEvent* e)
+void LoopRuler::paintEvent(QPaintEvent* /*e*/)
 {
     QPainter paint(this);
-    paint.setClipRegion(e->region());
+    //paint.setClipRegion(e->region());
     //paint.setClipRect(e->rect().normalize());
 
     paint.setBrush(colorGroup().foreground());
@@ -64,6 +64,8 @@ void LoopRuler::paintEvent(QPaintEvent* e)
 
 void LoopRuler::drawBarSections(QPainter* paint)
 {
+//     kdDebug(KDEBUG_AREA) << "LoopRuler::drawBarSections BEGIN\n";
+
     if (!m_doc) return;
 
     int firstBar = m_rulerScale->getFirstVisibleBar(),
@@ -72,13 +74,17 @@ void LoopRuler::drawBarSections(QPainter* paint)
 
     paint->setPen(RosegardenGUIColours::LoopRulerForeground);
 
-    QRect clipRect = paint->clipRegion().boundingRect();
+    QRect clipRect = visibleRect(); //paint->clipRegion().boundingRect();
     
     for (int i = firstBar; i <= lastBar; ++i)
     {
         double width = m_rulerScale->getBarWidth(i);
 
-        if (x >= clipRect.x() && x <= (clipRect.x() + clipRect.width())) {
+        if (x >= clipRect.x() &&
+            x <= (clipRect.x() + width + clipRect.width())) {
+
+//             kdDebug(KDEBUG_AREA) << "LoopRuler::drawBarSections Drawing x = "
+//                                  << x << std::endl;
 
             if (m_invert) {
                 paint->drawLine((int)x, 0, (int)x, 5 * m_height / 7);
@@ -100,11 +106,17 @@ void LoopRuler::drawBarSections(QPainter* paint)
                                     (int)(x + beatAccumulator), m_height);
                 }
             }
+        } else {
+//             kdDebug(KDEBUG_AREA) << "LoopRuler::drawBarSections : Skipping x = "
+//                                  << x << std::endl;
         }
+
         
         x += width;
         
     }
+
+//     kdDebug(KDEBUG_AREA) << "LoopRuler::drawBarSections END\n";
 }
 
 void
