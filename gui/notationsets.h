@@ -23,6 +23,7 @@
 #define _NOTATION_SETS_H_
 
 #include "NotationTypes.h"
+#include "Quantizer.h"
 #include "notationelement.h"
 #include "notationproperties.h"
 #include "notepixmapfactory.h"
@@ -92,7 +93,7 @@ public:
 
 protected:
     NotationSet(const NotationElementList &nel, NELIterator elementInSet,
-                bool quantize);
+                const Rosegarden::Quantizer *quantizer);
     void initialise();
 
     virtual bool test(const NELIterator &i) = 0;
@@ -100,12 +101,12 @@ protected:
 
     const NotationElementList &getList() const { return m_nel; }
 
-    Rosegarden::timeT durationOf(const NELIterator &i, bool quantized);
+    Rosegarden::timeT durationOf(const NELIterator &i);
 
 private:
     const NotationElementList &m_nel;
     NELIterator m_initial, m_final, m_shortest, m_longest, m_highest, m_lowest;
-    bool m_quantized;
+    const Rosegarden::Quantizer *m_quantizer;
     NELIterator m_baseIterator;
 };
 
@@ -124,9 +125,9 @@ class Chord : public NotationSet,
 {
 public:
     Chord(const NotationElementList &nel, NELIterator elementInChord,
+          const Rosegarden::Quantizer *, // 0 -> no quantization
           const Rosegarden::Clef &clef = Rosegarden::Clef::DefaultClef,
-          const Rosegarden::Key &key = Rosegarden::Key::DefaultKey,
-          bool quantized = true);
+          const Rosegarden::Key &key = Rosegarden::Key::DefaultKey);
 
     virtual ~Chord();
 

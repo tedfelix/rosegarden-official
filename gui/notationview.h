@@ -324,6 +324,9 @@ public slots:
     /// Changes the hlayout stretch of the staffs on the view
     void changeStretch(int newStretch);
 
+    /// Changes the display quantization of the staffs on the view
+    void changeQuantization(int newQuantIndex);
+
 signals:
     void changeCurrentNote(bool isRest, Rosegarden::Note::Type);
 
@@ -472,7 +475,9 @@ protected:
     };
     
     ZoomSlider<int> *m_fontSizeSlider;
-    
+
+    std::vector<int> m_quantizationDurations;
+
     KAction* m_selectDefaultNote;
 
     QCanvasLine *m_pointer;

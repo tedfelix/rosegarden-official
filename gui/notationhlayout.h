@@ -194,10 +194,11 @@ protected:
         Rosegarden::Clef m_clef;
     };
 
-    int getMinWidth(NotationElement &,
-                    const Rosegarden::Quantizer * = 0) const;
+    int getMinWidth(NotationElement &) const;
     int getComfortableGap(Rosegarden::Note::Type type) const;
     int getBarMargin() const;
+
+    const Rosegarden::Quantizer &getQuantizer(const StaffType &staff) const;
 
     double m_totalWidth;
     double m_spacing;

@@ -68,8 +68,13 @@ public:
      * shortest note duration), and note quantization with up to
      * "maxDots" dots per note.
      */
-    Quantizer(int unit = -1, int maxDots = 2) :
-	m_unit(unit), m_maxDots(maxDots) {
+    Quantizer(int unit = -1, int maxDots = 2,
+              PropertyName durationProperty = DurationProperty,
+              PropertyName noteDurationProperty = NoteDurationProperty) :
+	m_unit(unit), m_maxDots(maxDots),
+        m_durationProperty(durationProperty),
+        m_noteDurationProperty(noteDurationProperty)
+    {
 	if (unit < 0) setUnit(Note(Note::Shortest));
     }
 
@@ -78,9 +83,19 @@ public:
     static const PropertyName DurationProperty;
     static const PropertyName NoteDurationProperty;
 
+    PropertyName getDurationProperty() const {
+        return m_durationProperty;
+    }
+    PropertyName getNoteDurationProperty() const {
+        return m_noteDurationProperty;
+    }
+
     void setUnit(int unit)        { m_unit = unit; }
     void setUnit(Note note)	  { m_unit = note.getDuration(); }
     void setMaxDots(int maxDots)  { m_maxDots = maxDots; }
+
+    int getUnit() const           { return m_unit; }
+    int getMaxDots() const        { return m_maxDots; }
 
     /**
      * Quantizes a section of a track.  Sets the DurationProperty on
@@ -160,6 +175,8 @@ protected:
 
     int m_unit;
     int m_maxDots;
+    PropertyName m_durationProperty;
+    PropertyName m_noteDurationProperty;
 };
 
 }

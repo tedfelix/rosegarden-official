@@ -151,7 +151,8 @@ int NotationHLayout::getIdealBarWidth(StaffType &staff,
         return fixedWidth;
     }
 
-    int d = (*shortest)->event()->get<Int>(Quantizer::NoteDurationProperty);
+    int d = (*shortest)->event()->get<Int>
+        (getQuantizer(staff).getNoteDurationProperty());
     if (d == 0) {
         kdDebug(KDEBUG_AREA) << "Second trivial return" << endl;
         return fixedWidth;
@@ -213,6 +214,10 @@ NotationHLayout::scanStaff(StaffType &staff)
     addNewBar(staff, barNo, notes->begin(), 0, 0, true); 
     ++barNo;
 
+    kdDebug(KDEBUG_AREA) << "Quantizer: unit is " << getQuantizer(staff).getUnit() << endl;
+
+    getQuantizer(staff).quantizeByNote(refStart, refEnd);
+
     for (Track::iterator refi = refStart; refi != refEnd; ++refi) {
 
 	timeT barStartTime = (*refi)->getAbsoluteTime();
@@ -245,7 +250,7 @@ NotationHLayout::scanStaff(StaffType &staff)
         for (NotationElementList::iterator it = from; it != to; ++it) {
         
             NotationElement *el = (*it);
-            int mw = getMinWidth(*el, &t.getQuantizer());
+            int mw = getMinWidth(*el);
 
             if (el->event()->isa(Clef::EventType)) {
 
@@ -329,13 +334,13 @@ NotationHLayout::scanStaff(StaffType &staff)
                         fixedWidth += m_npf.getAccidentalWidth(dacc);
                     }
 
-                    Chord chord(*notes, it);
+                    Chord chord(*notes, it, &getQuantizer(staff));
                     if (chord.size() >= 2 && it != chord.getFinalElement()) {
                         // we're in a chord, but not at the end of it yet
                         hasDuration = false;
                     } else {
                         accTable = newAccTable;
-                        if (chord.hasNoteHeadShifted() && !chord.hasStemUp()) {
+                        if (chord.hasNoteHeadShifted()) {
                             fixedWidth += m_npf.getNoteBodyWidth();
                         }
                     }
@@ -349,7 +354,7 @@ NotationHLayout::scanStaff(StaffType &staff)
                     int d = 0;
                     try {
                         d = el->event()->get<Int>
-                            (Quantizer::NoteDurationProperty);
+                            (getQuantizer(staff).getNoteDurationProperty());
                     } catch (Event::NoData e) {
                         kdDebug(KDEBUG_AREA) << "No quantized duration in note/rest! event is " << *(el->event()) << endl;
                     }
@@ -361,7 +366,8 @@ NotationHLayout::scanStaff(StaffType &staff)
                     try {
 			if (shortest == notes->end() ||
 			    d <= (sd = (*shortest)->event()->get<Int>
-				  (Quantizer::NoteDurationProperty))) {
+				  (getQuantizer(staff).
+                                   getNoteDurationProperty()))) {
 			    if (d == sd) {
 
                                 // assumption: rests are wider than notes
@@ -743,15 +749,6 @@ NotationHLayout::positionNote(StaffType &staff,
 
     int noteWidth = m_npf.getNoteBodyWidth();
 
-    bool shiftSpace = false;
-    if (note->event()->get<Bool>(NEEDS_EXTRA_SHIFT_SPACE, shiftSpace) &&
-        shiftSpace) {
-
-        note->setLayoutX(note->getLayoutX() + noteWidth);
-        noteWidth *= 2;
-        if (delta < noteWidth) delta = noteWidth;
-    }
-
     // If the note's allowed a lot of space, situate it somewhat
     // further into its allotted space.  Not convinced this is always
     // the right thing to do.
@@ -808,7 +805,7 @@ NotationHLayout::positionNote(StaffType &staff,
         acc = (Accidental)acc0;
     }
 
-    Chord chord(*staff.getViewElementList(), itr);
+    Chord chord(*staff.getViewElementList(), itr, &getQuantizer(staff));
     if (acc != NoAccidental || itr == chord.getInitialElement()) {
         accidentalInThisChord = acc;
     }
@@ -819,11 +816,22 @@ NotationHLayout::positionNote(StaffType &staff,
         // update the delta now, and add any additional accidental
         // spacing
 
+        bool shifted = chord.hasNoteHeadShifted();
+        bool stemUp = true;
+        if (shifted) {
+            note->event()->get<Bool>(STEM_UP, stemUp);
+            if (delta < noteWidth * 2) delta = noteWidth * 2;
+        }
+
         if (accidentalInThisChord != NoAccidental) {
             int accWidth = m_npf.getAccidentalWidth(accidentalInThisChord);
             delta += accWidth;
             for (int i = 0; i < (int)chord.size(); ++i) {
                 (*chord[i])->setLayoutX((*chord[i])->getLayoutX() + accWidth);
+                if (shifted && !stemUp) {
+                    (*chord[i])->setLayoutX
+                        ((*chord[i])->getLayoutX() + noteWidth);
+                }
             }
         }
 
@@ -864,23 +872,13 @@ NotationHLayout::positionNote(StaffType &staff,
 }
 
 
-int NotationHLayout::getMinWidth(NotationElement &e,
-                                 const Quantizer *quantizer) const
+int NotationHLayout::getMinWidth(NotationElement &e) const
 {
     int w = 0;
 
     if (e.isNote()) {
 
-        long noteType;
-        if (!e.event()->get<Int>(Note::NoteType, noteType)) {
-            if (quantizer) {
-                quantizer->quantizeByNote(e.event());
-                noteType = e.event()->get<Int>(Note::NoteType);
-            } else {
-                throw 0;
-            }
-        }
-
+        long noteType = e.event()->get<Int>(Note::NoteType, noteType);
         w += m_npf.getNoteBodyWidth(noteType);
 
         long dots;
@@ -976,4 +974,11 @@ NotationHLayout::isBarLineCorrect(StaffType &staff, unsigned int i)
     return getBarData(staff)[i].correct;
 }
 
+const Rosegarden::Quantizer &
+NotationHLayout::getQuantizer(const StaffType &staff) const
+{
+    const NotationStaff &notationStaff = 
+        dynamic_cast<const NotationStaff &>(staff);
+    return notationStaff.getQuantizer();
+}
 

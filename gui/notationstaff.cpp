@@ -45,6 +45,7 @@ using Rosegarden::Clef;
 using Rosegarden::Key;
 using Rosegarden::Accidental;
 using Rosegarden::TimeSignature;
+using Rosegarden::PropertyName;
 
 using namespace NotationProperties;
 
@@ -64,6 +65,7 @@ NotationStaff::NotationStaff(QCanvas *canvas, Track *track,
     m_initialBarB(0),
     m_npf(0)
 {
+    setQuantizationDuration(Note(Note::Shortest).getDuration());
     int w = canvas->width();
     m_horizLineLength = w - 20;
     changeFont(fontName, resolution);
@@ -160,6 +162,12 @@ NotationStaff::changeFont(string fontName, int resolution)
     m_initialBarB->setPoints(4, linesOffset,
                              4, m_barLineHeight + linesOffset);
 }    
+
+void
+NotationStaff::setQuantizationDuration(Rosegarden::timeT duration)
+{
+    m_quantizer = Rosegarden::Quantizer(duration, 2);
+}
 
 int NotationStaff::yCoordOfHeight(int h) const
 {
@@ -400,7 +408,7 @@ QCanvasSimpleSprite *NotationStaff::makeNoteSprite(NotationElementList::iterator
 
     long stemLength = m_npf->getNoteBodyHeight();
     (void)((*it)->event()->get<Int>(UNBEAMED_STEM_LENGTH, stemLength));
-
+    
     long heightOnStaff = 0;
     int legerLines = 0;
 
@@ -462,7 +470,7 @@ QCanvasSimpleSprite *NotationStaff::makeNoteSprite(NotationElementList::iterator
             params.setBeamed(false);
         }
     }
-
+    
     params.setStemLength(stemLength);
     QCanvasPixmap notePixmap(m_npf->makeNotePixmap(params));
     return new QCanvasNotationSprite(*(*it),

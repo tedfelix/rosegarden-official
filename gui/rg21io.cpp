@@ -124,7 +124,7 @@ bool RG21Loader::parseChordItem()
 //                              << " at time " << m_currentTrackTime << endl;
 
         if (m_inGroup) {
-            noteEvent->set<Int>
+            noteEvent->setMaybe<Int>
                 (TrackNotationHelper::BeamedGroupIdPropertyName, m_groupId);
             noteEvent->set<String>
                 (TrackNotationHelper::BeamedGroupTypePropertyName, m_groupType);

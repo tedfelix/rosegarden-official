@@ -35,28 +35,30 @@
 
 namespace NotationProperties
 {
-    extern const Rosegarden::PropertyName HEIGHT_ON_STAFF;
-    extern const Rosegarden::PropertyName MIN_WIDTH;
-    extern const Rosegarden::PropertyName CALCULATED_ACCIDENTAL;
-    extern const Rosegarden::PropertyName DISPLAY_ACCIDENTAL;
-    extern const Rosegarden::PropertyName STEM_UP;
-    extern const Rosegarden::PropertyName UNBEAMED_STEM_LENGTH;
-    extern const Rosegarden::PropertyName DRAW_FLAG;
-    extern const Rosegarden::PropertyName NOTE_HEAD_SHIFTED;
-    extern const Rosegarden::PropertyName NEEDS_EXTRA_SHIFT_SPACE;
-    extern const Rosegarden::PropertyName NOTE_NAME;
-    extern const Rosegarden::PropertyName TIE_LENGTH;
 
-    // Set in applyBeam in notationsets.cpp:
+extern const Rosegarden::PropertyName HEIGHT_ON_STAFF;
+extern const Rosegarden::PropertyName MIN_WIDTH;
+extern const Rosegarden::PropertyName CALCULATED_ACCIDENTAL;
+extern const Rosegarden::PropertyName DISPLAY_ACCIDENTAL;
+extern const Rosegarden::PropertyName STEM_UP;
+extern const Rosegarden::PropertyName UNBEAMED_STEM_LENGTH;
+extern const Rosegarden::PropertyName DRAW_FLAG;
+extern const Rosegarden::PropertyName NOTE_HEAD_SHIFTED;
+extern const Rosegarden::PropertyName NEEDS_EXTRA_SHIFT_SPACE;
+extern const Rosegarden::PropertyName NOTE_NAME;
+extern const Rosegarden::PropertyName TIE_LENGTH;
 
-    extern const Rosegarden::PropertyName BEAMED;
-    extern const Rosegarden::PropertyName BEAM_PRIMARY_NOTE;
-    extern const Rosegarden::PropertyName BEAM_GRADIENT;
-    extern const Rosegarden::PropertyName BEAM_SECTION_WIDTH;
-    extern const Rosegarden::PropertyName BEAM_NEXT_BEAM_COUNT;
-    extern const Rosegarden::PropertyName BEAM_NEXT_PART_BEAMS;
-    extern const Rosegarden::PropertyName BEAM_THIS_PART_BEAMS;
-    extern const Rosegarden::PropertyName BEAM_MY_Y;
+// Set in applyBeam in notationsets.cpp:
+
+extern const Rosegarden::PropertyName BEAMED;
+extern const Rosegarden::PropertyName BEAM_PRIMARY_NOTE;
+extern const Rosegarden::PropertyName BEAM_GRADIENT;
+extern const Rosegarden::PropertyName BEAM_SECTION_WIDTH;
+extern const Rosegarden::PropertyName BEAM_NEXT_BEAM_COUNT;
+extern const Rosegarden::PropertyName BEAM_NEXT_PART_BEAMS;
+extern const Rosegarden::PropertyName BEAM_THIS_PART_BEAMS;
+extern const Rosegarden::PropertyName BEAM_MY_Y;
+
 }
 
 #endif

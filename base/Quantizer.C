@@ -38,7 +38,7 @@ timeT
 Quantizer::quantizeByUnit(Event *e) const
 {
     timeT duration = quantizeByUnit(e->getDuration());
-    e->setMaybe<Int>(DurationProperty, duration);
+    e->setMaybe<Int>(m_durationProperty, duration);
     return duration;
 }
 
@@ -60,7 +60,7 @@ timeT
 Quantizer::getUnitQuantizedDuration(Event *e) const
 {
     long d;
-    if (e->get<Int>(DurationProperty, d)) return (timeT)d;
+    if (e->get<Int>(m_durationProperty, d)) return (timeT)d;
     else return quantizeByUnit(e);
 }
 
@@ -76,11 +76,11 @@ timeT
 Quantizer::quantizeByNote(Event *e) const
 {
     timeT duration = quantizeByUnit(e);
-    if (duration == 0 && e->getDuration() == 0) return 0;
+//    if (duration == 0 && e->getDuration() == 0) return 0;
 
     Note note(requantizeByNote(duration));
 
-    e->setMaybe<Int>(NoteDurationProperty, duration);
+    e->setMaybe<Int>(m_noteDurationProperty, duration);
     e->setMaybe<Int>(Note::NoteType, note.getNoteType());
     e->setMaybe<Int>(Note::NoteDots, note.getDots());
 
@@ -135,15 +135,15 @@ timeT
 Quantizer::getNoteQuantizedDuration(Event *e) const
 {
     long d;
-    if (e->get<Int>(NoteDurationProperty, d)) return (timeT)d;
+    if (e->get<Int>(m_noteDurationProperty, d)) return (timeT)d;
     else return quantizeByNote(e);
 }
 
 
 void Quantizer::unquantize(Event *e) const
 {
-    e->unset(DurationProperty);
-    e->unset(NoteDurationProperty);
+    e->unset(m_durationProperty);
+    e->unset(m_noteDurationProperty);
 
     // should we do this?  not entirely sure, but probably
     e->unset(Note::NoteType);

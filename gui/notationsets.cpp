@@ -46,7 +46,7 @@ using Rosegarden::timeT;
 using namespace NotationProperties;
 
 NotationSet::NotationSet(const NotationElementList &nel,
-                         NELIterator i, bool quantized) :
+                         NELIterator i, const Quantizer *quantizer) :
     m_nel(nel),
     m_initial(nel.end()),
     m_final(nel.end()),
@@ -54,7 +54,7 @@ NotationSet::NotationSet(const NotationElementList &nel,
     m_longest(nel.end()),
     m_highest(nel.end()),
     m_lowest(nel.end()),
-    m_quantized(quantized),
+    m_quantizer(quantizer),
     m_baseIterator(i)
 {
     // ...
@@ -90,15 +90,15 @@ NotationSet::initialise()
 void
 NotationSet::sample(const NELIterator &i)
 {
-    timeT d(durationOf(i, m_quantized));
+    timeT d(durationOf(i));
 
     if (d > 0) {
         if (m_longest == m_nel.end() ||
-            d > durationOf(m_longest, m_quantized)) {
+            d > durationOf(m_longest)) {
             m_longest = i;
         }
         if (m_shortest == m_nel.end() ||
-            d < durationOf(m_shortest, m_quantized)) {
+            d < durationOf(m_shortest)) {
             m_shortest = i;
         }
     }
@@ -118,16 +118,18 @@ NotationSet::sample(const NELIterator &i)
 }
 
 timeT
-NotationSet::durationOf(const NELIterator &i, bool quantized)
+NotationSet::durationOf(const NELIterator &i)
 {
-    if (quantized) {
+    if (m_quantizer) {
         long d;
-        bool done = (*i)->event()->get<Int>(Quantizer::NoteDurationProperty, d);
+        bool done = (*i)->event()->get<Int>
+            (m_quantizer->getNoteDurationProperty(), d);
         if (done) {
             return d;
         } else {
-            Quantizer().quantizeByNote((*i)->event());
-            return (*i)->event()->get<Int>(Quantizer::NoteDurationProperty);
+            m_quantizer->quantizeByNote((*i)->event());
+            return (*i)->event()->get<Int>
+                (m_quantizer->getNoteDurationProperty());
         }
     } else {
         return (*i)->event()->getDuration();
@@ -184,8 +186,8 @@ public:
 //////////////////////////////////////////////////////////////////////
 
 Chord::Chord(const NotationElementList &nel, NELIterator i,
-             const Clef &clef, const Key &key, bool quantized) :
-    NotationSet(nel, i, quantized),
+             const Quantizer *quantizer, const Clef &clef, const Key &key) :
+    NotationSet(nel, i, quantizer),
     m_clef(clef),
     m_key(key),
     m_time((*i)->getAbsoluteTime())
@@ -340,6 +342,17 @@ NotationGroup::NotationGroup(const NotationElementList &nel,
             kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: Warning: No GroupType in grouped element, defaulting to Beamed" << endl;
         }
     }
+
+    kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: id is " << m_groupNo << endl;
+    i = getInitialElement(); 
+    while (i != getList().end()) {
+        long gid = -1;
+        (*i)->event()->get<Int>(TrackNotationHelper::BeamedGroupIdPropertyName, gid);
+        kdDebug(KDEBUG_AREA) << "Found element with group id "
+                             << gid << endl;
+        if (i == getFinalElement()) break;
+        ++i;
+    }
 }
 
 NotationGroup::~NotationGroup()
@@ -421,8 +434,17 @@ NotationGroup::calculateBeam(NotationStaff &staff)
         return beam; // no notes, no case to answer
     }
 
-    Chord initialChord(getList(), initialNote, m_clef, m_key),
-            finalChord(getList(),   finalNote, m_clef, m_key);
+    timeT crotchet = Note(Note::Crotchet).getDuration();
+    beam.necessary =
+         (*initialNote)->event()->getDuration() < crotchet
+        && (*finalNote)->event()->getDuration() < crotchet
+        && (*finalNote)->getAbsoluteTime() > (*initialNote)->getAbsoluteTime();
+    if (!beam.necessary) return beam;
+
+    Chord initialChord(getList(), initialNote,
+                       &staff.getQuantizer(), m_clef, m_key),
+            finalChord(getList(),   finalNote,
+                       &staff.getQuantizer(), m_clef, m_key);
 
     if (initialChord.getInitialElement() == finalChord.getInitialElement()) {
         return beam;
@@ -511,10 +533,6 @@ NotationGroup::calculateBeam(NotationStaff &staff)
 	    beam.startY += nh * (Note::Quaver - shortestNoteType) / 2;
     }  
 
-    timeT crotchet = Note(Note::Crotchet).getDuration();
-    beam.necessary =
-         (*initialNote)->event()->getDuration() < crotchet
-        && (*finalNote)->event()->getDuration() < crotchet;
 /*
     kdDebug(KDEBUG_AREA) << "NotationGroup::calculateBeam: beam data:" << endl
                          << "gradient: " << beam.gradient << endl
@@ -529,8 +547,12 @@ NotationGroup::calculateBeam(NotationStaff &staff)
 void
 NotationGroup::applyBeam(NotationStaff &staff)
 {
+    kdDebug(KDEBUG_AREA) << "NotationGroup::applyBeam, group no is " << m_groupNo << endl;
+
     Beam beam(calculateBeam(staff));
     if (!beam.necessary) return;
+
+    kdDebug(KDEBUG_AREA) << "NotationGroup::applyBeam: Beam is necessary" << endl;
 
     NELIterator initialNote(getInitialNote()),
 	          finalNote(  getFinalNote());
@@ -564,8 +586,10 @@ NotationGroup::applyBeam(NotationStaff &staff)
 
         if ((*i)->isNote()) {
 
-	    Chord chord(getList(), i, m_clef, m_key);
+	    Chord chord(getList(), i, &staff.getQuantizer(), m_clef, m_key);
 	    unsigned int j;
+
+            kdDebug(KDEBUG_AREA) << "NotationGroup::applyBeam: Found chord" << endl;
 
 	    for (j = 0; j < chord.size(); ++j) {
 		NotationElement *el = (*chord[j]);
@@ -656,6 +680,14 @@ NotationGroup::applyBeam(NotationStaff &staff)
         }
 
         if (i == finalNote) break;
+
+        // We could miss the final note, if it was actually in the
+        // middle of a chord (slightly pathological, but it happens
+        // easily enough).  So let's check the group id too:
+        long gid = -1;
+        if (!(*i)->event()->get<Int>
+            (TrackNotationHelper::BeamedGroupIdPropertyName, gid)
+            || gid != m_groupNo) break;
     }
 }
 

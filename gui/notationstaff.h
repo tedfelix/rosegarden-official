@@ -30,6 +30,7 @@
 #include "notationelement.h"
 
 #include "Staff.h"
+#include "Quantizer.h"
 
 class QCanvasLineGroupable;
 class QCanvasSimpleSprite;
@@ -60,6 +61,9 @@ public:
      * or pixmaps on the staff, the notation view should do that
      */
     void changeFont(std::string fontName, int resolution);
+
+    void setQuantizationDuration(Rosegarden::timeT duration);
+    const Rosegarden::Quantizer &getQuantizer() const { return m_quantizer; }
 
     /**
      * Gets a read-only reference to the pixmap factory used by the
@@ -150,6 +154,7 @@ protected:
 
     QCanvasLineGroupable *m_initialBarA, *m_initialBarB;
     NotePixmapFactory *m_npf;
+    Rosegarden::Quantizer m_quantizer;
 };
 
 #endif

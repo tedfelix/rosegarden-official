@@ -529,8 +529,8 @@ TrackNotationHelper::setInsertedNoteGroup(Event *e, iterator i)
         (*i)->get<Int>(BeamedGroupIdPropertyName) ==
         (*j)->get<Int>(BeamedGroupIdPropertyName)) {
 
-        e->set<Int>(BeamedGroupIdPropertyName,
-                    (*i)->get<Int>(BeamedGroupIdPropertyName));
+        e->setMaybe<Int>(BeamedGroupIdPropertyName,
+                         (*i)->get<Int>(BeamedGroupIdPropertyName));
         e->set<String>(BeamedGroupTypePropertyName,
                        (*i)->get<String>(BeamedGroupTypePropertyName));
     }
@@ -612,7 +612,7 @@ TrackNotationHelper::makeBeamedGroup(iterator from, iterator to, string type)
     if (to != end()) to = track().findTime((*to)->getAbsoluteTime());
 
     for (iterator i = from; i != to; ++i) {
-        (*i)->set<Int>(BeamedGroupIdPropertyName, groupId);
+        (*i)->setMaybe<Int>(BeamedGroupIdPropertyName, groupId);
         (*i)->set<String>(BeamedGroupTypePropertyName, type);
     }
 }

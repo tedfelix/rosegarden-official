@@ -85,7 +85,7 @@ NotationVLayout::scanStaff(StaffType &staffBase)
 
         } else if (el->isNote()) {
 
-            Chord chord(*notes, i);
+            Chord chord(*notes, i, &staff.getQuantizer());
             if (chord.size() == 0) continue;
 
             std::vector<int> h;

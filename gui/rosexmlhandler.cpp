@@ -115,7 +115,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         if (m_inGroup) {
             m_currentEvent->setMaybe<Int>
                 (TrackNotationHelper::BeamedGroupIdPropertyName, m_groupId);
-            m_currentEvent->setMaybe<String>
+            m_currentEvent->set<String>
                 (TrackNotationHelper::BeamedGroupTypePropertyName, m_groupType);
         }
         

@@ -593,6 +593,20 @@ void NotationView::initFontToolbar()
         (spacings, 1.0, QSlider::Horizontal, fontToolbar);
     connect(stretchSlider, SIGNAL(valueChanged(int)),
             this, SLOT(changeStretch(int)));
+
+    new QLabel("  Quantization:  ", fontToolbar);
+
+    if (m_quantizationDurations.size() == 0) {
+        for (int type = Note::Shortest; type <= Note::Longest; ++type) {
+            m_quantizationDurations.push_back
+                ((int)(Note(type).getDuration()));
+        }
+    }
+    QSlider *quantizeSlider = new ZoomSlider<int>
+        (m_quantizationDurations, Note(Note::Shortest).getDuration(),
+         QSlider::Horizontal, fontToolbar);
+    connect(quantizeSlider, SIGNAL(valueChanged(int)),
+            this, SLOT(changeQuantization(int)));
 }
 
 void NotationView::initStatusBar()
@@ -637,6 +651,29 @@ NotationView::changeStretch(int n)
     vector<double> spacings = m_hlayout->getAvailableSpacings();
     if (n >= (int)spacings.size()) n = spacings.size() - 1;
     m_hlayout->setSpacing(spacings[n]);
+
+    applyLayout();
+
+    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+        NotationElementList *notes = m_staffs[i]->getViewElementList();
+        NotationElementList::iterator starti = notes->begin();
+        NotationElementList::iterator endi = notes->end();
+        m_staffs[i]->showElements(starti, endi, true);
+        showBars(i);
+    }
+
+    canvas()->update();
+}
+
+void
+NotationView::changeQuantization(int n)
+{
+    if (n >= (int)m_quantizationDurations.size())
+        n = m_quantizationDurations.size() - 1;
+
+    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+        m_staffs[i]->setQuantizationDuration(m_quantizationDurations[n]);
+    }
 
     applyLayout();
 
