@@ -1074,8 +1074,6 @@ void Composition::checkSelectedAndRecordTracks()
 TrackId
 Composition::getClosestValidTrackId(TrackId id) const
 {
-//     std::cerr << "Composition::getClosestValidTrackId(" << id << ")\n";
-
     long diff = LONG_MAX;
     TrackId closestValidTrackId = 0;
 
@@ -1084,20 +1082,13 @@ Composition::getClosestValidTrackId(TrackId id) const
 
         long cdiff = labs(i->second->getId() - id);
 
-//         std::cerr << "Composition::getClosestValidTrackId(" << id << ") - trying "
-//                   << i->second->getId() << " - diff = " << cdiff << std::endl;
-        
 	if (cdiff < diff) {
             diff = cdiff;
 	    closestValidTrackId = i->second->getId();
-//             std::cerr << "Composition::getClosestValidTrackId(" << id << ") - new closestValidTrackId = "
-//                       << closestValidTrackId << endl;
-	}
+
+	} else break; // std::map is sorted, so if the diff increases, we're passed closest valid id
 
     }
-
-//     std::cerr << "Composition::getClosestValidTrackId(" << id << ") - return "
-//               << closestValidTrackId << std::endl;
 
     return closestValidTrackId;
 }
@@ -1105,33 +1096,21 @@ Composition::getClosestValidTrackId(TrackId id) const
 TrackId
 Composition::getMinTrackId() const
 {
-    long m = -1;
-
-    for (trackcontainer::const_iterator i = getTracks().begin();
-	 i != getTracks().end(); ++i) {
-	if (long(i->second->getId()) < m || m == -1) {
-	    m = i->second->getId();
-	}
-    }
-
-    if (m == -1) return 0;
-    else return TrackId(m);
+    if (getTracks().size() == 0) return 0;
+        
+    trackcontainer::const_iterator i = getTracks().begin();
+    return i->first;
 }
 
 TrackId
 Composition::getMaxTrackId() const
 {
-    long m = -1;
+    if (getTracks().size() == 0) return 0;
 
-    for (trackcontainer::const_iterator i = getTracks().begin();
-	 i != getTracks().end(); ++i) {
-	if (long(i->second->getId()) > m) {
-	    m = i->second->getId();
-	}
-    }
-
-    if (m == -1) return 0;
-    else return TrackId(m);
+    trackcontainer::const_iterator i = getTracks().end();
+    --i;
+    
+    return i->first;
 }
 
 
