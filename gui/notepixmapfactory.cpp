@@ -25,13 +25,12 @@
 #include "notepixmapfactory.h"
 #include "staff.h"
 
-NotePixmapFactory::NotePixmapFactory(const Staff &s)
+NotePixmapFactory::NotePixmapFactory()
     : m_generatedPixmapHeight(0),
       m_noteBodyHeight(0),
       m_tailWidth(0),
       m_noteBodyFilled("pixmaps/note-bodyfilled.xpm"),
-      m_noteBodyEmpty("pixmaps/note-bodyempty.xpm"),
-      m_referenceStaff(s)
+      m_noteBodyEmpty("pixmaps/note-bodyempty.xpm")
 {
     // Yes, this is not a mistake. Don't ask me why - Chris named those
     QString pixmapTailUpFileName("pixmaps/tail-up-%1.xpm"),
@@ -64,7 +63,7 @@ QCanvasPixmap
 NotePixmapFactory::makeNotePixmap(Note note, bool drawTail,
                                   bool stalkGoesUp)
 {
-    if(note > LastNote) {
+    if (note > LastNote) {
         kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeNotePixmap : note > LastNote ("
                              << note << ")\n";
         throw -1;
@@ -181,83 +180,6 @@ NotePixmapFactory::createPixmapAndMask(unsigned int tailOffset)
     m_p.setPen(Qt::black); m_p.setBrush(Qt::black);
     m_pm.setPen(Qt::white); m_pm.setBrush(Qt::white);
 }
-
-
-QCanvasPixmap
-NotePixmapFactory::makeChordPixmap(const chordpitches &pitches,
-                                   Note note, bool drawTail,
-                                   bool stalkGoesUp)
-{
-//     PitchToHeight& pitchToHeight(PitchToHeight::instance());
-
-//     int highestNote = pitchToHeight[pitches[pitches.size() - 1]],
-//         lowestNote = pitchToHeight[pitches[0]];
-
-    int highestNote = m_referenceStaff.pitchYOffset(pitches[pitches.size() - 1]),
-        lowestNote = m_referenceStaff.pitchYOffset(pitches[0]);
-
-
-    bool noteHasStalk = note < Whole;
-
-    m_generatedPixmapHeight = highestNote - lowestNote + m_noteBodyHeight;
-
-    if (noteHasStalk)
-        m_generatedPixmapHeight += Staff::stalkLen;
-
-    kdDebug(KDEBUG_AREA) << "m_generatedPixmapHeight : " << m_generatedPixmapHeight << endl
-                         << "highestNote : " << highestNote << " - lowestNote : " << lowestNote << endl;
-    
-
-    readjustGeneratedPixmapHeight(note);
-
-    // X-offset at which the tail should be drawn
-    unsigned int tailOffset = (note < Quarter && stalkGoesUp) ? m_tailWidth : 0;
-
-    createPixmapAndMask(tailOffset);
-
-    // paint note bodies
-
-    // set mask painter RasterOp to Or
-    m_pm.setRasterOp(Qt::OrROP);
-
-    QPixmap *body = (note > QuarterDotted) ? &m_noteBodyEmpty : &m_noteBodyFilled;
-
-    if(stalkGoesUp) {
-        int offset = m_generatedPixmap->height() - body->height() - highestNote;
-        
-        for(int i = pitches.size() - 1; i >= 0; --i) {
-            m_p.drawPixmap (0, m_referenceStaff.pitchYOffset(pitches[i]) + offset, *body);
-            m_pm.drawPixmap(0, m_referenceStaff.pitchYOffset(pitches[i]) + offset, *(body->mask()));
-        }
-        
-    } else {
-        int offset = lowestNote;
-        for(unsigned int i = 0; i < pitches.size(); ++i) {
-            m_p.drawPixmap (0, m_referenceStaff.pitchYOffset(pitches[i]) - offset, *body);
-            m_pm.drawPixmap(0, m_referenceStaff.pitchYOffset(pitches[i]) - offset, *(body->mask()));
-        }
-    }
-
-    // restore mask painter RasterOp to Copy
-    m_pm.setRasterOp(Qt::CopyROP);
-
-    if(noteHasStalk)
-        drawStalk(note, drawTail, stalkGoesUp);
-
-    m_p.end();
-    m_pm.end();
-
-    QCanvasPixmap notePixmap(*m_generatedPixmap, QPoint(0,0));
-    QBitmap mask(*m_generatedMask);
-    notePixmap.setMask(mask);
-
-    delete m_generatedPixmap;
-    delete m_generatedMask;
-
-    return notePixmap;
-
-}
-
 
 const QPixmap*
 NotePixmapFactory::tailUp(Note note) const
@@ -387,3 +309,82 @@ NotePixmapFactory::duration2note(unsigned int duration)
 
     return rc;
 }
+
+
+
+ChordPixmapFactory::ChordPixmapFactory(const Staff &s)
+    : m_referenceStaff(s)
+{
+}
+
+
+QCanvasPixmap
+ChordPixmapFactory::makeChordPixmap(const chordpitches &pitches,
+                                    Note note, bool drawTail,
+                                    bool stalkGoesUp)
+{
+    int highestNote = m_referenceStaff.pitchYOffset(pitches[pitches.size() - 1]),
+        lowestNote = m_referenceStaff.pitchYOffset(pitches[0]);
+
+
+    bool noteHasStalk = note < Whole;
+
+    m_generatedPixmapHeight = highestNote - lowestNote + m_noteBodyHeight;
+
+    if (noteHasStalk)
+        m_generatedPixmapHeight += Staff::stalkLen;
+
+    kdDebug(KDEBUG_AREA) << "m_generatedPixmapHeight : " << m_generatedPixmapHeight << endl
+                         << "highestNote : " << highestNote << " - lowestNote : " << lowestNote << endl;
+    
+
+    readjustGeneratedPixmapHeight(note);
+
+    // X-offset at which the tail should be drawn
+    unsigned int tailOffset = (note < Quarter && stalkGoesUp) ? m_tailWidth : 0;
+
+    createPixmapAndMask(tailOffset);
+
+    // paint note bodies
+
+    // set mask painter RasterOp to Or
+    m_pm.setRasterOp(Qt::OrROP);
+
+    QPixmap *body = (note > QuarterDotted) ? &m_noteBodyEmpty : &m_noteBodyFilled;
+
+    if(stalkGoesUp) {
+        int offset = m_generatedPixmap->height() - body->height() - highestNote;
+        
+        for(int i = pitches.size() - 1; i >= 0; --i) {
+            m_p.drawPixmap (0, m_referenceStaff.pitchYOffset(pitches[i]) + offset, *body);
+            m_pm.drawPixmap(0, m_referenceStaff.pitchYOffset(pitches[i]) + offset, *(body->mask()));
+        }
+        
+    } else {
+        int offset = lowestNote;
+        for(unsigned int i = 0; i < pitches.size(); ++i) {
+            m_p.drawPixmap (0, m_referenceStaff.pitchYOffset(pitches[i]) - offset, *body);
+            m_pm.drawPixmap(0, m_referenceStaff.pitchYOffset(pitches[i]) - offset, *(body->mask()));
+        }
+    }
+
+    // restore mask painter RasterOp to Copy
+    m_pm.setRasterOp(Qt::CopyROP);
+
+    if(noteHasStalk)
+        drawStalk(note, drawTail, stalkGoesUp);
+
+    m_p.end();
+    m_pm.end();
+
+    QCanvasPixmap notePixmap(*m_generatedPixmap, QPoint(0,0));
+    QBitmap mask(*m_generatedMask);
+    notePixmap.setMask(mask);
+
+    delete m_generatedPixmap;
+    delete m_generatedMask;
+
+    return notePixmap;
+
+}
+

@@ -224,7 +224,7 @@ RosegardenGUIView::test()
         note->moveBy(40 + i * 20, staff->pitchYOffset(i));
     }
 
-    NotePixmapFactory npf(*staff);
+    ChordPixmapFactory npf(*staff);
 
     for(unsigned int j = 0; j < 100; ++j) {
 
@@ -289,7 +289,7 @@ RosegardenGUIView::showElements(NotationElementList::iterator from,
                                 NotationElementList::iterator to,
                                 double dxoffset, double dyoffset)
 {
-    static NotePixmapFactory npf(*m_mainStaff);
+    static ChordPixmapFactory npf(*m_mainStaff);
 
     for(NotationElementList::iterator it = from; it != to; ++it) {
         

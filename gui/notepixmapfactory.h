@@ -54,7 +54,7 @@ class NotePixmapFactory
 public:
 
     /// The Staff is used for pitch->height conversion with chord pixmap
-    NotePixmapFactory(const Staff&);
+    NotePixmapFactory();
     ~NotePixmapFactory();
 
     /**
@@ -69,18 +69,6 @@ public:
                                  bool drawTail,
                                  bool stalkGoesUp = true);
 
-    /**
-     * Generate a pixmap for a chord
-     *
-     * @param pitches : a \b sorted vector of relative pitches
-     * @param duration : chord duration
-     * @param drawTail : if the pixmap should have a tail or not
-     *   (useful when the tail should be collapsed with the one of a neighboring chord)
-     * @param stalkGoesUp : if the note's stalk should go up or down
-     */
-    QCanvasPixmap makeChordPixmap(const chordpitches &pitches,
-                                  Note note, bool drawTail,
-                                  bool stalkGoesUp = true);
 
 protected:
     /**
@@ -112,6 +100,28 @@ protected:
     vector<QPixmap*> m_tailsUp;
     vector<QPixmap*> m_tailsDown;
 
+};
+
+class ChordPixmapFactory : public NotePixmapFactory
+{
+public:
+
+    ChordPixmapFactory(const Staff&);
+
+    /**
+     * Generate a pixmap for a chord
+     *
+     * @param pitches : a \b sorted vector of relative pitches
+     * @param duration : chord duration
+     * @param drawTail : if the pixmap should have a tail or not
+     *   (useful when the tail should be collapsed with the one of a neighboring chord)
+     * @param stalkGoesUp : if the note's stalk should go up or down
+     */
+    QCanvasPixmap makeChordPixmap(const chordpitches &pitches,
+                                  Note note, bool drawTail,
+                                  bool stalkGoesUp = true);
+
+protected:
     const Staff &m_referenceStaff;
 };
 
