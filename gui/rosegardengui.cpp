@@ -2422,7 +2422,7 @@ bool RosegardenGUIApp::performAutoload()
 
     // So we don't get the "autoload" title
     //
-    m_doc->setTitle(i18n("Untitled"));
+    m_doc->newDocument();
     setCaption(m_doc->getTitle());
 
     return true;
