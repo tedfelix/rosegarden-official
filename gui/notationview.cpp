@@ -1602,7 +1602,7 @@ NotationView::scrollToTime(timeT t) {
     // HK: I could have sworn I saw a hard-coded scroll happen somewhere
     // (i.e. a default extra scroll to make up for the staff not beginning on
     // the left edge) but now I can't find it.
-    slotScrollHoriz(int(notationViewCanvasCoord));// + DEFAULT_STAFF_OFFSET);
+    getCanvasView()->slotScrollHoriz(int(notationViewCanvasCoord));// + DEFAULT_STAFF_OFFSET);
 }
 
 void
