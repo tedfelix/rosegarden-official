@@ -48,6 +48,8 @@ namespace Rosegarden { class Progress; }
 class NotationHLayout : public QObject,
                         public Rosegarden::HorizontalLayoutEngine<NotationElement>
 {
+    Q_OBJECT
+
 public:
     NotationHLayout(Rosegarden::Composition *c, NotePixmapFactory *npf,
 		    Rosegarden::Quantizer *legatoQuantizer,
@@ -186,6 +188,10 @@ public:
     void setStaffCount(int staffCount) {
 	m_staffCount = staffCount;
     }
+
+signals:
+    /// Report progress
+    void progress(int);
 
 protected:
     class AccidentalTable
