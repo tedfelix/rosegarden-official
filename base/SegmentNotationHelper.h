@@ -44,7 +44,6 @@ public:
      */
     timeT getNotationAbsoluteTime(Event *e);
 
-
     /**
      * Return the duration of an event "as displayed".  This is
      * the legato-quantized duration, with optional compensation for
@@ -53,12 +52,31 @@ public:
      * quaver).
      */
     timeT getNotationDuration(Event *e, bool tupletCompensation = true);
-
     
     /**
      * Return the notation absolute time plus the notation duration.
      */
     timeT getNotationEndTime(Event *e);
+
+    /**
+     * Return an iterator pointing at the first event in the segment
+     * to have an absolute time of t or later.  (Most of the time, the
+     * non-notation absolute times should be used as reference
+     * timings; this and the next function are provided for
+     * completeness, but in most cases if you're about to call them
+     * you should ask yourself why.)
+     */
+    iterator findNotationAbsoluteTime(timeT t);
+
+    /**
+     * Return an iterator pointing at the last event in the segment
+     * to have an absolute time of t or earlier.  (Most of the time,
+     * the non-notation absolute times should be used as reference
+     * timings; this and the previous function are provided for
+     * completeness, but in most cases if you're about to call them
+     * you should ask yourself why.)
+     */
+    iterator findNearestNotationAbsoluteTime(timeT t);
 
     
     /**

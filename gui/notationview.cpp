@@ -1604,14 +1604,20 @@ NotationView::getPageWidth()
 /// Scrolls the view such that the given time is centered
 void
 NotationView::scrollToTime(timeT t) {
+
     double notationViewLayoutCoord = m_hlayout->getXForTime(t);
+
     // Doesn't appear to matter which staff we use
     //!!! actually it probably does matter, if they don't have the same extents
-    double notationViewCanvasCoord = getStaff(0)->getCanvasCoordsForLayoutCoords(notationViewLayoutCoord, 0).first;
+    double notationViewCanvasCoord =
+	getStaff(0)->getCanvasCoordsForLayoutCoords
+	(notationViewLayoutCoord, 0).first;
+
     // HK: I could have sworn I saw a hard-coded scroll happen somewhere
     // (i.e. a default extra scroll to make up for the staff not beginning on
     // the left edge) but now I can't find it.
-    getCanvasView()->slotScrollHoriz(int(notationViewCanvasCoord));// + DEFAULT_STAFF_OFFSET);
+    getCanvasView()->slotScrollHorizSmallSteps
+	(int(notationViewCanvasCoord));// + DEFAULT_STAFF_OFFSET);
 }
 
 void
@@ -1729,6 +1735,7 @@ void NotationView::setCurrentSelectedNote(NoteActionData noteAction)
 void NotationView::setCurrentSelection(EventSelection* s, bool preview)
 {
     if (!m_currentEventSelection && !s) return;
+    setPainting(true);
 
     installProgressEventFilter();
 
@@ -1797,7 +1804,7 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview)
 						std::max(endA, endB));
 	    
 	} else {
-	    // do two repositions, one for each -- here we know neither is null
+	    // do two refreshes, one for each -- here we know neither is null
 	    getStaff(oldSelection->getSegment())->positionElements(startA,
 								   endA);
 	    getStaff(s->getSegment())->positionElements(startB, endB);
@@ -1821,6 +1828,12 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview)
     setMenuStates();
 
     updateView();
+    setPainting(false);
+
+    if (m_paintEventPending) {
+	m_paintEventPending = false;
+	paintEvent(0);
+    }
 }
 
 void NotationView::setSingleSelectedEvent(int staffNo, Event *event)
@@ -2083,6 +2096,8 @@ void NotationView::refreshSegment(Segment *segment,
 
     if (m_inhibitRefresh || m_documentDestroyed) return;
 
+    setPainting(true);
+
     m_document->getSequenceManager()->
 	setTemporarySequencerSliceSize(Rosegarden::RealTime(3, 0));
 
@@ -2143,8 +2158,14 @@ void NotationView::refreshSegment(Segment *segment,
     }
 
     setMenuStates();
+    setPainting(false);
 
     PRINT_ELAPSED("NotationView::refreshSegment (including update/GC)");
+
+    if (m_paintEventPending) {
+	m_paintEventPending = false;
+	paintEvent(0);
+    }
 }
 
 

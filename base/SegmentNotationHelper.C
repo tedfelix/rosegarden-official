@@ -85,6 +85,48 @@ SegmentNotationHelper::getNotationAbsoluteTime(Event *e)
 }	
 
 
+Segment::iterator
+SegmentNotationHelper::findNotationAbsoluteTime(timeT t)
+{
+    iterator i(segment().findTime(t));
+
+    // We don't know whether the notation absolute time t will appear
+    // before or after the real absolute time t.  First scan backwards
+    // until we find a notation absolute time prior to (or equal to)
+    // t, and then scan forwards until we find the first one that
+    // isn't prior to t
+
+    while (i != begin() &&
+	   ((i == end() ? t + 1 : (*i)->getNotationAbsoluteTime()) > t))
+	--i;
+
+    while (i != end() &&
+	   ((*i)->getNotationAbsoluteTime() < t))
+	++i;
+
+    return i;
+}
+
+Segment::iterator
+SegmentNotationHelper::findNearestNotationAbsoluteTime(timeT t)
+{
+    iterator i(segment().findTime(t));
+
+    // Exactly findNotationAbsoluteTime, only with the two scan loops
+    // in the other order
+
+    while (i != end() &&
+	   ((*i)->getNotationAbsoluteTime() < t))
+	++i;
+
+    while (i != begin() &&
+	   ((i == end() ? t + 1 : (*i)->getNotationAbsoluteTime()) > t))
+	--i;
+
+    return i;
+}
+
+
 timeT
 SegmentNotationHelper::getNotationDuration(Event *e, bool tupletCompensation)
 {
@@ -567,7 +609,10 @@ SegmentNotationHelper::isViable(timeT duration, int dots)
 */
     
     //!!! what to do about this?
-    timeT nearestDuration = Note::getNearestNote(duration, dots).getDuration();
+
+    timeT nearestDuration =
+	Note::getNearestNote(duration, dots >= 0 ? dots : 2).getDuration();
+
     std::cerr << "SegmentNotationHelper::isViable: nearestDuration is " << nearestDuration << ", duration is " << duration << std::endl;
     viable = (nearestDuration == duration);
 
@@ -1168,20 +1213,27 @@ SegmentNotationHelper::makeTupletGroup(timeT t, int untupled, int tupled,
 
     list<Event *> toInsert;
     list<iterator> toErase;
-    timeT fillWithRestsTo = t + (untupled * unit);
-
-    //!!! use isBeforeEndMarker?
+    timeT notationTime = t;
+    timeT fillWithRestsTo = t;
+    bool haveStartNotationTime = false;
 
     for (iterator i = segment().findTime(t); i != end(); ++i) {
 
-	if ((*i)->getAbsoluteTime() >= t + (untupled * unit)) break;
+	if (!haveStartNotationTime) {
+	    notationTime = (*i)->getNotationAbsoluteTime();
+	    fillWithRestsTo = notationTime + (untupled * unit);
+	}
 
-	timeT offset = (*i)->getAbsoluteTime() - t;
-	timeT duration = (*i)->getDuration();
+	if ((*i)->getNotationAbsoluteTime() >=
+	    notationTime + (untupled * unit)) break;
+
+	timeT offset = (*i)->getNotationAbsoluteTime() - notationTime;
+	timeT duration = (*i)->getNotationDuration();
 
 	if ((*i)->isa(Note::EventRestType) &&
 	    ((offset + duration) > (untupled * unit))) {
-	    fillWithRestsTo = std::max(fillWithRestsTo, t + offset + duration);
+	    fillWithRestsTo = std::max(fillWithRestsTo,
+				       notationTime + offset + duration);
 	    duration = (untupled * unit) - offset;
 	    if (duration <= 0) {
 		toErase.push_back(i);
@@ -1190,7 +1242,7 @@ SegmentNotationHelper::makeTupletGroup(timeT t, int untupled, int tupled,
 	}
 
 	Event *e = new Event(**i,
-			     t + (offset * tupled / untupled),
+			     notationTime + (offset * tupled / untupled),
 			     duration * tupled / untupled);
 
 	e->set<Int>(BEAMED_GROUP_ID, groupId);
@@ -1215,7 +1267,10 @@ SegmentNotationHelper::makeTupletGroup(timeT t, int untupled, int tupled,
 	segment().insert(*i);
     }
 
-    segment().fillWithRests(t + (tupled * unit), fillWithRestsTo);
+    if (haveStartNotationTime) {
+	segment().fillWithRests(notationTime + (tupled * unit),
+				fillWithRestsTo);
+    }
 }
 
     

@@ -711,7 +711,7 @@
 	</para>
 
 	<para>Applying
-          quantization strictly for notation is (rather obviously)
+          quantization strictly for notation is rather unimaginatively
           referred to as <quote>notation quantization</quote>: it only
           applies to the notes you see and edit in notation, and
           doesn't affect the notes that play, or that you edit in
@@ -722,19 +722,47 @@
 	</para>
 
 	<para>
-	  <!-- continue editing from here (not currently correct hereon) -->
-	  You can see which notes have required smoothing (either of
-	  start time or duration) because they are shown in green on
-	  the score, unless you have switched this behaviour off in
-	  the &rosegarden; configuration dialog.
+	  There are two ways to see which notes have been quantized
+	  for notation.  By default, each notation view contains a Raw
+	  Note Ruler (in the group of rulers above the score) showing
+	  a rectangular block for each note.  This block is positioned
+	  so as to represent the time and duration of the note as
+	  performed, but with the top and bottom edges of the
+	  rectangle extended or shortened to represent the time after
+	  notation quantization.  If this is too much information for
+	  you, you can alternatively choose (in the configuration
+	  dialog) to show in a green colour all note heads in the
+	  score that have had their timings altered by notation
+	  quantization.
 	</para>
 
+	<para>
+	  If the quantization Rosegarden has used is not suitable,
+	  either for the entire score or for a selection of notes, you
+	  can choose to use a different level of quantization or none
+	  at all.  To apply a different quantization to some notes,
+	  select the notes and use the <link
+	  linkend="commands-nv-menu-transforms-quantize">Quantize</link>
+	  menu function (tick the box labelled <quote>Quantize for
+	  notation only</quote>).  The quantization level or type used
+	  by default can be changed in the configuration dialog.
+	</para>
+
+	<sect3 id="nv-quantization-parameters">
+	  <title>Configurable parameters for the heuristic notation quantizer</title>
+
+	  <para>
+	    to be supplied
+	  </para>
+	</sect3>
+
+  <!--
 	<para>
 	  The default smoothing level is fairly timid, and you may
 	  find that it still leaves the music in a fairly
 	  unintelligible state, with notes that should be chords
 	  displayed as overlapping individual notes, with notes
-	  truncated and followed by tiny rests, and so on --
+	  truncated and followed by tiny rests, and so on &mdash;
 	  particularly if you're editing music that was recorded live.
 	  If so, you have two options:
         </para>
@@ -776,6 +804,7 @@
 	  </varlistentry>
 
 	</variablelist>
+-->
 
       </sect2>
 
@@ -1436,7 +1465,17 @@
 
     <sect1 id="event-view">
       <title>The Event List editor</title>
-      <para></para>
+      <sect2 id="ev-introduction">
+	<title>Introduction</title>
+
+	<para>
+
+	  The &rosegarden; Event List editor shows the events in a
+	  single segment in a raw form, and enables you to edit the
+	  precise properties of those events individually.
+
+	</para>
+      </sect2>
     </sect1>
 
   </chapter>

@@ -384,7 +384,7 @@ NoteInserter::computeLocationAndPreview(QMouseEvent *e)
 	return false;
     }
 
-    timeT time = (*itr)->getViewAbsoluteTime();
+    timeT time = (*itr)->event()->getAbsoluteTime(); // not getViewAbsoluteTime()
     m_clickInsertX = (*itr)->getLayoutX();
     if (clefEvt) clef = Rosegarden::Clef(*clefEvt);
     if (keyEvt) key = Rosegarden::Key(*keyEvt);
@@ -766,7 +766,8 @@ void ClefInserter::handleLeftButtonPress(Rosegarden::timeT,
 
     if (closestElement == staff->getViewElementList()->end()) return;
 
-    timeT time = (*closestElement)->getViewAbsoluteTime();
+    timeT time = (*closestElement)->event()->getAbsoluteTime(); // not getViewAbsoluteTime()
+
 
     ClefInsertionCommand *command = 
 	new ClefInsertionCommand(staff->getSegment(), time, m_clef);
@@ -810,7 +811,8 @@ void TextInserter::handleLeftButtonPress(Rosegarden::timeT,
 	// edit an existing text, if that's what we clicked on
 
 	defaultText = Rosegarden::Text(*element->event());
-	insertionTime = element->getViewAbsoluteTime();
+	insertionTime = element->event()->getAbsoluteTime(); // not getViewAbsoluteTime()
+
 	eraseEvent = element->event();
 
     } else {
@@ -823,7 +825,8 @@ void TextInserter::handleLeftButtonPress(Rosegarden::timeT,
 
 	if (closestElement == staff->getViewElementList()->end()) return;
 	
-	insertionTime = (*closestElement)->getViewAbsoluteTime();
+	insertionTime = (*closestElement)->event()->getAbsoluteTime(); // not getViewAbsoluteTime()
+
     }
 
     TextEventDialog *dialog = new TextEventDialog

@@ -87,7 +87,7 @@ NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment,
 {
     KConfig *config = kapp->config();
     config->setGroup("Notation Options");
-    m_colourQuantize = config->readBoolEntry("colourquantize", true);
+    m_colourQuantize = config->readBoolEntry("colourquantize", false);
     // Shouldn't change this one during the lifetime of the staff, really:
     m_showUnknowns = config->readBoolEntry("showunknowns", true);
     changeFont(fontName, resolution);

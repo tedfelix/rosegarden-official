@@ -1599,6 +1599,7 @@ void NotationView::slotToggleAnnotations()
 {
     m_annotationsVisible = !m_annotationsVisible;
     slotUpdateAnnotationsStatus();
+//!!! use refresh mechanism
     refreshSegment(0, 0, 0);
 }
 

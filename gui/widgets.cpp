@@ -379,8 +379,8 @@ RosegardenProgressBar::eventFilter(QObject *watched, QEvent *e)
         e->type() == QEvent::DragMove            ||
         e->type() == QEvent::DragLeave           ||
         e->type() == QEvent::Drop                ||
-        e->type() == QEvent::DragResponse        ||
-	e->type() == QEvent::Paint //!!! prevent nested paints in the active window?
+        e->type() == QEvent::DragResponse       // ||
+//	e->type() == QEvent::Paint //!!! prevent nested paints in the active window?
 	)
 
         return true;
