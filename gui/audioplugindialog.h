@@ -111,8 +111,8 @@ signals:
     void pluginSelected(int pluginIndex, int plugin);
     void pluginPortChanged(int pluginIndex, int portIndex, float value);
 
-    // is this plugin being bypassed?
-    void bypassed(bool);
+    // is the plugin being bypassed
+    void bypassed(int pluginIndex, bool bp);
 
 protected:
 

@@ -1091,14 +1091,7 @@ RosegardenSequencerApp::destroyMappedObject(int id)
     }
 #endif
 
-    bool ret = m_studio->destroyObject(Rosegarden::MappedObjectId(id));
-
-    if (ret)
-        cout << "RosegardenSequencerApp::destroyMappedObject = TRUE" << endl;
-    else
-        cout << "RosegardenSequencerApp::destroyMappedObject = FALSE" << endl;
-
-    return int(ret);
+    return(int(m_studio->destroyObject(Rosegarden::MappedObjectId(id))));
 }
 
 

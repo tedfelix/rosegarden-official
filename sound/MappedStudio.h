@@ -371,7 +371,7 @@ public:
     static const MappedObjectProperty Copyright;
     static const MappedObjectProperty PortCount;
     static const MappedObjectProperty Ports;
-
+    static const MappedObjectProperty Bypassed;
 
     MappedLADSPAPlugin(MappedObject *parent,
                        MappedObjectId id,
@@ -382,7 +382,8 @@ public:
                      id,
                      readOnly),
                      m_instrument(0),
-                     m_position(0) {;}
+                     m_position(0),
+                     m_bypassed(false) {;}
 
     MappedLADSPAPlugin(MappedObject *parent,
                        MappedObjectId id):
@@ -392,7 +393,8 @@ public:
                      id,
                      false),
                      m_instrument(0),
-                     m_position(0) {;}
+                     m_position(0),
+                     m_bypassed(false) {;}
 
     ~MappedLADSPAPlugin();
 
@@ -422,6 +424,8 @@ public:
     //
     void setPort(unsigned long portNumber, float value);
 
+    bool isBypassed() const { return m_bypassed; }
+
 protected:
 
     unsigned long             m_uniqueId;
@@ -432,6 +436,7 @@ protected:
 
     Rosegarden::InstrumentId  m_instrument;
     int                       m_position;
+    bool                      m_bypassed;
 
 };
 

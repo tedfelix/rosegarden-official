@@ -87,6 +87,7 @@ public slots:
     //
     void slotPluginSelected(int index, int plugin);
     void slotPluginPortChanged(int pluginIndex, int portIndex, float value);
+    void slotBypassed(int pluginIndex, bool bp);
 
 signals:
 

@@ -81,6 +81,7 @@ const MappedObjectProperty MappedLADSPAPlugin::Author = "author";
 const MappedObjectProperty MappedLADSPAPlugin::Copyright = "copyright";
 const MappedObjectProperty MappedLADSPAPlugin::PortCount = "portcount";
 const MappedObjectProperty MappedLADSPAPlugin::Ports = "ports";
+const MappedObjectProperty MappedLADSPAPlugin::Bypassed = "bypassed";
 
 const MappedObjectProperty MappedLADSPAPort::Descriptor = "descriptor";
 const MappedObjectProperty MappedLADSPAPort::RangeHint = "rangehint";
@@ -183,8 +184,6 @@ MappedObject::destroy()
         (*it)->destroy();
     }
 
-    //std::cout << "DESTROYING ID = " << m_id << endl;
-
     (void)studio->clearObject(m_id);
     delete this;
 }
@@ -210,12 +209,12 @@ MappedObject::clone(MappedObject *object)
                 dynamic_cast<MappedStudio*>(studio)
                     ->createObject((*it)->getType(), false);
             object->addChild(child);
-            std::cout << "ADD CHILD" << std::endl;
+            std::cout << "MappedObject::clone - add child" << std::endl;
             (*it)->clone(child);
         }
     }
     else
-        std::cerr << "NO CHILDREN TO CLONE" << std::endl;
+        std::cerr << "MappedObject::clone - no children to clone" << std::endl;
 }
 
 
@@ -1270,6 +1269,7 @@ MappedLADSPAPlugin::getPropertyList(const MappedObjectProperty &property)
         list.push_back(Author);
         list.push_back(Copyright);
         list.push_back(PortCount);
+        list.push_back(Bypassed);
     }
     else
     {
@@ -1289,6 +1289,8 @@ MappedLADSPAPlugin::getPropertyList(const MappedObjectProperty &property)
             list.push_back(MappedObjectProperty("%1").arg(m_instrument));
         else if (property == MappedObject::Position)
             list.push_back(MappedObjectProperty("%1").arg(m_position));
+        else if (property == MappedLADSPAPlugin::Bypassed)
+            list.push_back(MappedObjectProperty("%1").arg(m_bypassed));
         else if (property == MappedLADSPAPlugin::Ports)
         {
             // list the port object ids
@@ -1369,9 +1371,12 @@ MappedLADSPAPlugin::setProperty(const MappedObjectProperty &property,
                   << "setting position to " << m_position << std::endl;
 
     }
-
-
-
+    else if (property == Rosegarden::MappedLADSPAPlugin::Bypassed)
+    {
+        m_bypassed = bool(value);
+        std::cout << "MappedLADSPAPlugin::setProperty - "
+                  << "setting bypassed to " << m_bypassed << std::endl;
+    }
 }
 
 void
@@ -1459,7 +1464,9 @@ MappedLADSPAPort::getPropertyList(const MappedObjectProperty &property)
     {
         if (property == MappedLADSPAPort::Value)
         {
-            cout << "GETTING PORT VALUE" << endl;
+            std::cout << "MappedLADSPAPort::MappedLADSPAPort - "
+                      << "value = " << m_value << endl;
+            list.push_back(MappedObjectProperty("%1").arg(m_value));
         }
 
     }

@@ -82,7 +82,10 @@ StudioControl::destroyStudioObject(MappedObjectId id)
         streamIn >> value;
     }
 
-    return bool(value);
+    if (value == 1)
+        return true;
+    else
+        return false;
 }
 
 MappedObjectPropertyList

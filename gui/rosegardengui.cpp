@@ -1170,11 +1170,13 @@ void RosegardenGUIApp::slotFilePrint()
 
     KTmpStatusMsg msg(i18n("Printing..."), this);
 
+#ifdef RGKDE3
     KPrinter printer(true, QPrinter::HighResolution);
 
     if (printer.setup(this)) {
         m_view->print(&printer, &m_doc->getComposition());
     }
+#endif
 }
 
 void RosegardenGUIApp::slotQuit()

@@ -908,6 +908,9 @@ InstrumentParameterBox::slotSelectPlugin(int index)
         connect(aPD, SIGNAL(pluginPortChanged(int, int, float)),
                 this, SLOT(slotPluginPortChanged(int, int, float)));
 
+        connect(aPD, SIGNAL(bypassed(int, bool)),
+                this, SLOT(slotBypassed(int, bool)));
+
         aPD->show();
     }
     else
@@ -1041,10 +1044,28 @@ InstrumentParameterBox::slotPluginPortChanged(int pluginIndex,
         std::cout << "InstrumentParameterBox::slotPluginPortChanged - "
                   << "setting plugin port to " << value << std::endl;
                   */
-#endif
+#endif // HAVE_LADSPA
     }
 
 }
+
+void
+InstrumentParameterBox::slotBypassed(int pluginIndex, bool bp)
+{
+    Rosegarden::AudioPluginInstance *inst = 
+        m_selectedInstrument->getPlugin(pluginIndex);
+
+    if (inst)
+    {
+#ifdef HAVE_LADSPA
+        Rosegarden::StudioControl::setStudioObjectProperty
+            (inst->getMappedId(),
+             Rosegarden::MappedLADSPAPlugin::Bypassed,
+             Rosegarden::MappedObjectValue(bp));
+#endif // HAVE_LADSPA
+    }
+}
+
 
 void
 InstrumentParameterBox::slotSelectChorus(float index)

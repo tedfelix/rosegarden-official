@@ -120,7 +120,6 @@ protected:
     virtual QString mapValueToText (int value);
     virtual int mapTextToValue(bool *ok);
 
-signals:
     double m_doubleValue;
 };
 

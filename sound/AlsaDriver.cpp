@@ -2615,7 +2615,13 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                     PluginIterator pIt = list.begin();
                     for (; pIt != list.end(); pIt++)
                     {
-    
+                        // bypass
+                        if ((*pIt)->isBypassed())
+                        {
+                            cout << "BYPASSING" << endl;
+                            continue;
+                        }
+
                         /*
                         cout << "PROCESSING PLUGIN INST = "
                              << (*pIt)->getInstrument()
@@ -2688,6 +2694,13 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                 PluginIterator it = list.begin();
                 for (; it != list.end(); it++)
                 {
+                    // bypass
+                    if ((*it)->isBypassed())
+                    {
+                        cout << "UNRUN BYPASS" << endl;
+                        continue;
+                    }
+
                     float volume = 1.0f;
     
                     Rosegarden::MappedAudioFader *fader =

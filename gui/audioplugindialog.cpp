@@ -250,12 +250,14 @@ AudioPluginDialog::slotPluginPortChanged(int portIndex, float value)
 }
 
 void
-AudioPluginDialog::slotBypassed(bool bypassed)
+AudioPluginDialog::slotBypassed(bool bp)
 {
     AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
 
     if (inst)
-        inst->setBypass(bypassed);
+        inst->setBypass(bp);
+
+    emit bypassed(m_index, bp);
 }
 
 
