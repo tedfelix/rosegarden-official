@@ -576,6 +576,14 @@ Text::~Text()
     // nothing
 }
 
+bool
+Text::isTextOfType(Event *e, std::string type)
+{
+    return (e->isa(EventType) &&
+	    e->has(TextTypePropertyName) &&
+	    e->get<String>(TextTypePropertyName) == type);
+}
+
 std::vector<std::string>
 Text::getUserStyles()
 {

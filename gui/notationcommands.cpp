@@ -1140,30 +1140,11 @@ TransformsMenuInterpretCommand::applyTextDynamics()
 
 	if (t > endTime) break;
 
-	if ((*i)->isa(Text::EventType)) {
+	if (Text::isTextOfType(*i, Text::Dynamic)) {
 
-	    std::string type;
-	    if ((*i)->get<String>(Text::TextTypePropertyName, type) &&
-		type == Text::Dynamic) {
-
-		std::string text;
-		if ((*i)->get<String>(Text::TextPropertyName, text)) {
-		    
-		    // should do case-insensitive matching with whitespace
-		    // removed.  can surely be cleverer about this too!
-
-		    if      (text == "ppppp") velocity = 10;
-		    else if (text == "pppp")  velocity = 20;
-		    else if (text == "ppp")   velocity = 30;
-		    else if (text == "pp")    velocity = 40;
-		    else if (text == "p")     velocity = 60;
-		    else if (text == "mp")    velocity = 80;
-		    else if (text == "mf")    velocity = 90;
-		    else if (text == "f")     velocity = 105;
-		    else if (text == "fff")   velocity = 113;
-		    else if (text == "ffff")  velocity = 120;
-		    else if (text == "fffff") velocity = 127;
-		}
+	    std::string text;
+	    if ((*i)->get<String>(Text::TextPropertyName, text)) {
+		velocity = getVelocityForDynamic(text);
 	    }
 	}
 
@@ -1174,10 +1155,121 @@ TransformsMenuInterpretCommand::applyTextDynamics()
     }
 }
 
+int
+TransformsMenuInterpretCommand::getVelocityForDynamic(std::string text)
+{
+    int velocity = 100;
+		    
+    // should do case-insensitive matching with whitespace
+    // removed.  can surely be cleverer about this too!
+    
+    if      (text == "ppppp") velocity = 10;
+    else if (text == "pppp")  velocity = 20;
+    else if (text == "ppp")   velocity = 30;
+    else if (text == "pp")    velocity = 40;
+    else if (text == "p")     velocity = 60;
+    else if (text == "mp")    velocity = 80;
+    else if (text == "mf")    velocity = 90;
+    else if (text == "f")     velocity = 105;
+    else if (text == "fff")   velocity = 113;
+    else if (text == "ffff")  velocity = 120;
+    else if (text == "fffff") velocity = 127;
+
+    NOTATION_DEBUG << "TransformsMenuInterpretCommand::getVelocityForDynamic: unrecognised dynamic " << text << endl;
+
+    return velocity;
+}
+
 void
 TransformsMenuInterpretCommand::applyHairpins()
 {
-    //...
+    Segment &segment(getSegment());
+
+    for (EventSelection::eventcontainer::iterator ecitr =
+	     m_selection->getSegmentEvents().begin();
+	 ecitr != m_selection->getSegmentEvents().end(); ++ecitr) {
+
+	Event *e = *ecitr;
+	if (!e->isa(Note::EventType)) continue;
+	bool crescendo = true;
+
+	IndicationMap::iterator inditr =
+	    findEnclosingIndication(e, Indication::Crescendo);
+
+	// we can't be in both crescendo and decrescendo -- at least,
+	// not meaningfully
+	
+	if (inditr == m_indications.end()) {
+	    inditr = findEnclosingIndication(e, Indication::Decrescendo);
+	    if (inditr == m_indications.end()) continue;
+	    crescendo = false;
+	}
+	 
+	// The starting velocity for the indication is easy -- it's
+	// just the velocity of the last note before the indication
+	// begins that has a velocity
+
+	timeT hairpinStartTime = inditr->first;
+	Segment::iterator itr(segment.findTime(hairpinStartTime));
+	while (itr == segment.end() ||
+	       (*itr)->getAbsoluteTime() >= inditr->first ||
+	       !(*itr)->isa(Note::EventType) ||
+	       !(*itr)->has(VELOCITY)) {
+	    if (itr == segment.begin()) {
+		itr = segment.end();
+		break;
+	    }
+	    --itr;
+	}
+
+	int startingVelocity = 100;
+	if (itr != segment.end()) {
+	    startingVelocity = (*itr)->get<Int>(VELOCITY);
+	}
+	
+	// The ending velocity is harder.  If there's a dynamic change
+	// directly after the hairpin, then we want to use that
+	// dynamic's velocity unless it opposes the hairpin's
+	// direction.  If there isn't, or it does oppose the hairpin,
+	// we should probably make the degree of change caused by the
+	// hairpin depend on its total duration.
+
+	int endingVelocity = startingVelocity;
+	timeT hairpinEndTime = inditr->first +
+                               inditr->second->getIndicationDuration();
+	itr = segment.findTime(hairpinEndTime);
+	while (itr != segment.end()) {
+	    if (Text::isTextOfType(*itr, Text::Dynamic)) {
+		std::string text;
+		if ((*itr)->get<String>(Text::TextPropertyName, text)) {
+		    endingVelocity = getVelocityForDynamic(text);
+		    break;
+		}
+	    }
+	    if ((*itr)->getAbsoluteTime() >
+		(hairpinEndTime + Note(Note::Crotchet).getDuration())) break;
+	    ++itr;
+	}
+
+	if (endingVelocity == startingVelocity) {
+	    // calculate an ending velocity based on starting velocity
+	    // and hairpin duration (okay, we'll leave that bit for later)
+	    endingVelocity = startingVelocity * (crescendo ? 120 : 80) / 100;
+	}
+	
+	double proportion = ((e->getAbsoluteTime() - hairpinStartTime) /
+			     (hairpinEndTime - hairpinStartTime));
+	long velocity = startingVelocity;
+	if (proportion < -0.01 || proportion > 0.01) {
+	    velocity = int((endingVelocity - startingVelocity) * proportion +
+			   startingVelocity);
+	}
+
+	NOTATION_DEBUG << "TransformsMenuInterpretCommand::applyHairpins: velocity of note at " << e->getAbsoluteTime() << " is " << velocity << " (" << proportion << " through hairpin from " << startingVelocity << " to " << endingVelocity <<")" << endl;
+	if (velocity < 0) velocity = 0;
+	if (velocity > 127) velocity = 127;
+	e->set<Int>(VELOCITY, velocity);
+    }
 }
 
 void
@@ -1329,6 +1421,8 @@ TransformsMenuInterpretCommand::articulate()
 	    else durationChange = -10;
 	}
 
+	NOTATION_DEBUG << "TransformsMenuInterpretCommand::modifySegment: chord has " << chord.size() << " notes in it" << endl;
+
 	for (Rosegarden::Chord::iterator ci = chord.begin();
 	     ci != chord.end(); ++ci) {
 
@@ -1372,7 +1466,7 @@ TransformsMenuInterpretCommand::articulate()
 
     for (unsigned int j = 0; j < toErase.size(); ++j) {
 	Segment::iterator jtr(segment.findSingle(toErase[j]));
-	segment.erase(jtr);
+	if (jtr != segment.end()) segment.erase(jtr);
     }
 	       
     for (unsigned int j = 0; j < toInsert.size(); ++j) {

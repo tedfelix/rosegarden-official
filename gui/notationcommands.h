@@ -650,6 +650,7 @@ private:
     // an iterator pointing to that indication if so
     IndicationMap::iterator findEnclosingIndication(Rosegarden::Event *,
 						    std::string type);
+    int getVelocityForDynamic(std::string dynamic);
 };
 
 

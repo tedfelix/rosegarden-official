@@ -495,6 +495,8 @@ public:
     std::string getText() const { return m_text; }
     std::string getTextType() const { return m_type; }
 
+    static bool isTextOfType(Event *, std::string type);
+
     /**
      * Return those text types that the user should be allowed to
      * specify directly and visually
