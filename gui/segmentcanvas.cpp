@@ -151,6 +151,8 @@ protected:
     virtual void updatePreview();
 
     //--------------- Data members ---------------------------------
+
+    std::vector<float> m_values;
 };
 
 SegmentAudioPreview::SegmentAudioPreview(SegmentItem& parent,
@@ -161,72 +163,33 @@ SegmentAudioPreview::SegmentAudioPreview(SegmentItem& parent,
 
 void SegmentAudioPreview::drawShape(QPainter& painter)
 {
-    // TODO : remove this...
-    QRect previewRect =
-	painter.xFormDev(painter.hasClipping() ?
-                         painter.clipRegion().boundingRect() :
-                         painter.viewport());
+    updatePreview();
+    painter.save();
 
-    previewRect = previewRect.intersect(rect());
+    painter.translate(rect().x(), rect().y());
 
-    if (previewRect.width() <= 0 || previewRect.height() <= 0) return;
-    // ... up to here
-
-    //     timeT startTime = rulerScale->getTimeForX(previewRect.x());
-    //     timeT   endTime = rulerScale->getTimeForX(previewRect.x() +
-    // 					      previewRect.width());
-
-    // Draw waveform preview - fetch the audio waveform data as
-    // a vector of floats (normalised between -1.0 and +1.0)
-    // and then draw over the period we're viewing.
-    //
-    /*
-      if (!painter.hasClipping())
-      kdDebug(KDEBUG_AREA) << "SegmentCanvas::drawShape: clipping is off " << endl;
-      kdDebug(KDEBUG_AREA) << "SegmentCanvas::drawShape: rect is "
-      << previewRect.width() << "x"
-      << previewRect.height() << " at "
-      << previewRect.x() << ","
-      << previewRect.y() << endl;
-    */
     // Set up pen and get rectangle
     painter.setPen(RosegardenGUIColours::SegmentAudioPreview);
         
-    // Fetch vector of floats adjusted to our resolution
-    //
-    Rosegarden::AudioFileManager &aFM = m_parent.getDocument()->getAudioFileManager();
-    Rosegarden::Composition &comp = m_parent.getDocument()->getComposition();
-
-
-    /*
-      timeT audioStart = startTime - m_segment->getStartTime();
-      timeT audioEnd = endTime - m_segment->getStartTime();
-
-      if (audioEnd > m_segment->getAudioEndTime()) {
-      audioEnd = m_segment->getAudioEndTime();
-      }
-    */
-
-    std::vector<float> values =
-        aFM.getPreview(m_segment->getAudioFileID(),
-                       m_segment->getAudioStartTime(),
-                       m_segment->getAudioEndTime(),
-                       previewRect.width());
-
     std::vector<float>::iterator it;
 
     // perhaps antialias this somehow at some point
-    int i = 0;
-    int height = rect().height()/2 - 3;
-    for (it = values.begin(); it != values.end(); it++)
+    int x = 0;
+    int height = rect().height()/2 - 3,
+        halfRectHeight = rect().height()/2;
+
+    QRect viewportRect = painter.xFormDev(painter.viewport());
+
+    for (it = m_values.begin(); it != m_values.end(); it++)
         {
-            painter.drawLine(previewRect.x() + i,
-                             previewRect.y() + rect().height()/2
-                             + (*it) * height,
-                             previewRect.x() + i,
-                             previewRect.y() + rect().height()/2
-                             - (*it) * height);
-            i++;
+            if (x > (viewportRect.x() + viewportRect.width())) break; 
+            if (x >= viewportRect.x()) {
+                painter.drawLine(x,
+                                 halfRectHeight + (*it) * height,
+                                 x,
+                                 halfRectHeight - (*it) * height);
+                ++x;
+            }
         }
 
     // perhaps draw an XOR'd label at some point
@@ -237,11 +200,26 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
       labelRect.setX(labelRect.x() + 3);
       painter.drawText(labelRect, Qt::AlignLeft|Qt::AlignVCenter, m_label);
     */
-    
+
+    painter.restore();
 }
 
 void SegmentAudioPreview::updatePreview()
 {
+    if (isPreviewCurrent()) return;
+
+    // Fetch vector of floats adjusted to our resolution
+    //
+
+    Rosegarden::AudioFileManager &aFM = m_parent.getDocument()->getAudioFileManager();
+
+    m_values =
+        aFM.getPreview(m_segment->getAudioFileID(),
+                       m_segment->getAudioStartTime(),
+                       m_segment->getAudioEndTime(),
+                       rect().width());
+
+    setPreviewCurrent(true);
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -437,7 +415,11 @@ void SegmentItem::drawShape(QPainter& painter)
 
     if (m_preview && m_showPreview) m_preview->drawShape(painter);
 
-#if 0    
+#if 0
+    //
+    // Keeping around for reference
+    // Will throw away soon.
+    //
     Rosegarden::RulerScale *rulerScale = m_snapGrid->getRulerScale();
 
     // TODO : remove this...
