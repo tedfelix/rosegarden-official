@@ -122,7 +122,6 @@ protected slots:
 signals:
     void addTrack(TrackItem*);
     void deleteTrack(Rosegarden::Track*);
-    void resizeTrack(Rosegarden::Track*);
     void updateTrackInstrumentAndStartIndex(TrackItem*);
     void editTrack(Rosegarden::Track*);
     void editTrackSmall(Rosegarden::Track*);
@@ -179,7 +178,6 @@ public:
 
 signals:
     void addTrack(TrackItem*);
-    void resizeTrack(Rosegarden::Track*);
     void deleteTrack(Rosegarden::Track*);
 
 protected:
@@ -229,7 +227,6 @@ public:
 
 signals:
     void deleteTrack(Rosegarden::Track*);
-    void resizeTrack(Rosegarden::Track*);
 
 protected:
     bool cursorIsCloseEnoughToEdge(TrackItem*, QMouseEvent*);

@@ -202,13 +202,6 @@ TracksEditor::deleteTrack(Rosegarden::Track *p)
     }
 }
 
-// TODO : get rid of this
-void
-TracksEditor::resizeTrack(Rosegarden::Track *p)
-{
-    kdDebug(KDEBUG_AREA) << "TracksEditor::resizeTrack() : not implemented\n";
-}
-
 void
 TracksEditor::updateTrackInstrumentAndStartIndex(TrackItem *i)
 {

@@ -67,7 +67,6 @@ protected slots:
     void trackOrderChanged(int section, int fromIdx, int toIdx);
     void addTrack(TrackItem*);
     void deleteTrack(Rosegarden::Track*);
-    void resizeTrack(Rosegarden::Track*); // TODO : get rid of this
     void updateTrackInstrumentAndStartIndex(TrackItem*);
 
 signals:

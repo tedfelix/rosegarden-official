@@ -264,8 +264,6 @@ TrackPencil::TrackPencil(TracksCanvas *c)
             c,    SIGNAL(addTrack(TrackItem*)));
     connect(this, SIGNAL(deleteTrack(Rosegarden::Track*)),
             c,    SIGNAL(deleteTrack(Rosegarden::Track*)));
-    connect(this, SIGNAL(resizeTrack(Rosegarden::Track*)),
-            c,    SIGNAL(resizeTrack(Rosegarden::Track*)));
 
     kdDebug(KDEBUG_AREA) << "TrackPencil()\n";
 }
@@ -290,9 +288,9 @@ void TrackPencil::handleMouseButtonPress(QMouseEvent *e)
             gy = m_canvas->grid().snapY(e->pos().y());
 
         m_currentItem = new TrackItem(gx, gy,
-                                          m_canvas->grid().hstep(),
-                                          m_canvas->grid().vstep(),
-                                          m_canvas->canvas());
+                                      m_canvas->grid().hstep(),
+                                      m_canvas->grid().vstep(),
+                                      m_canvas->canvas());
         
         m_currentItem->setPen(m_canvas->pen());
         m_currentItem->setBrush(m_canvas->brush());
@@ -309,27 +307,28 @@ void TrackPencil::handleMouseButtonRelase(QMouseEvent*)
 {
     if (!m_currentItem) return;
 
-    // TODO : this belongs to a resizer tool
-    if (m_currentItem->width() == 0) {
-        kdDebug(KDEBUG_AREA) << "TracksCanvas::contentsMouseReleaseEvent() : rect deleted"
+    if (m_currentItem->width() == 0 && ! m_newRect) {
+
+        kdDebug(KDEBUG_AREA) << "TracksCanvas::contentsMouseReleaseEvent() : track deleted"
                              << endl;
         emit deleteTrack(m_currentItem->getTrack());
+        delete m_currentItem;
         m_canvas->canvas()->update();
-        m_currentItem = 0;
-    }
 
-    if (m_newRect) {
+    } else if (m_newRect && m_currentItem->width() > 0) {
 
         emit addTrack(m_currentItem);
 
-    } else {
+    } else if (m_currentItem->width() > 0) {
+
         kdDebug(KDEBUG_AREA) << "TracksCanvas::contentsMouseReleaseEvent() : shorten m_currentItem = "
                              << m_currentItem << endl;
         // readjust size of corresponding track
-        emit resizeTrack(m_currentItem->getTrack());
+        m_currentItem->getTrack()->setNbBars(m_currentItem->getItemNbBars());
     }
 
     m_currentItem = 0;
+    m_newRect = false;
 }
 
 void TrackPencil::handleMouseMove(QMouseEvent *e)
@@ -429,8 +428,6 @@ TrackResizer::TrackResizer(TracksCanvas *c)
 
     connect(this, SIGNAL(deleteTrack(Rosegarden::Track*)),
             c,    SIGNAL(deleteTrack(Rosegarden::Track*)));
-    connect(this, SIGNAL(resizeTrack(Rosegarden::Track*)),
-            c,    SIGNAL(resizeTrack(Rosegarden::Track*)));
 
     kdDebug(KDEBUG_AREA) << "TrackResizer()\n";
 }
