@@ -55,31 +55,9 @@ Track::Track(TrackId id,
 {
 }
 
-Track::Track(const Track &track):
-   XmlExportable(),
-   m_id(track.getId()),
-   m_muted(track.isMuted()),
-   m_label(track.getLabel()),
-   m_position(track.getPosition()),
-   m_instrument(track.getInstrument())
-{
-}
-
 Track::~Track()
 {
 }
-
-Track
-Track::operator=(const Track &track)
-{
-    m_id = track.getId();
-    m_muted = track.isMuted();
-    m_label = track.getLabel();
-    m_position = track.getPosition();
-    m_instrument = track.getInstrument();
-    return (*this);
-}
-
 
 // Our virtual method for exporting Xml.
 //

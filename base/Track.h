@@ -58,11 +58,11 @@ public:
           const std::string &label,
           bool muted);
 
-    // Copy constructor
+private:
     Track(const Track &);
-
-    // Assignment
     Track operator=(const Track &);
+
+public:
 
     ~Track();
 

@@ -89,10 +89,10 @@ public:
      */
     Segment(SegmentType segmentType = Internal,
             timeT startTime = 0);
-    /*
+    /**
      * Copy constructor
      */
-    Segment(const Segment &);
+    Segment(const Segment&);
 
     virtual ~Segment();
 

@@ -57,12 +57,12 @@ class Studio : public XmlExportable
 
 public:
     Studio();
-    Studio(const Studio &);
     ~Studio();
 
-    // Assignment
-    //
+private:
+    Studio(const Studio &);
     Studio& operator=(const Studio &);
+public:
 
     void addDevice(const std::string &name,
                    DeviceId id,

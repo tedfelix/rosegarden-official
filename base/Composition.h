@@ -64,10 +64,10 @@ public:
     Composition();
     virtual ~Composition();
 
-    // Copy Constructor and equality operator
-    //
+private:
     Composition(const Composition &);
     Composition &operator=(const Composition &);
+public:
 
     /// swap the contents with another composition
     void swap(Composition &);
