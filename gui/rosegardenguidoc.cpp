@@ -202,11 +202,18 @@ void RosegardenGUIDoc::setModified(bool m)
 {
     m_modified = m;
     RG_DEBUG << "RosegardenGUIDoc::setModified(" << m << ")\n";
-};
+}
+
+void RosegardenGUIDoc::clearModifiedStatus()
+{
+    setModified(false);
+    setAutoSaved(true);
+    emit documentModified(false);
+}
 
 void RosegardenGUIDoc::slotDocumentModified()
 {
-//    RG_DEBUG << "RosegardenGUIDoc::slotDocumentModified()" << endl;
+    RG_DEBUG << "RosegardenGUIDoc::slotDocumentModified()" << endl;
     setModified(true);
     setAutoSaved(false);
     emit documentModified(true);
@@ -1552,7 +1559,7 @@ RosegardenGUIDoc::slotNewRecordButton()
     SEQMAN_DEBUG << "RosegardenGUIDoc::slotNewRecordButton()" << endl;
 
     // Document modified
-    setModified(true);
+    slotDocumentModified();
 
     // If we're got an audio track then tell someone goddamn
     //

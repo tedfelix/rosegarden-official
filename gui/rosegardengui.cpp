@@ -178,15 +178,6 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     emit startupStatusMessage(i18n("Enumerating plugins..."));
     m_seqManager->getSequencerPlugins(m_pluginManager);
 
-    connect(m_doc, SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
-            this,   SLOT(slotSetPointerPosition(Rosegarden::timeT)));
-
-    connect(m_doc, SIGNAL(documentModified(bool)),
-            this,   SLOT(slotDocumentModified(bool)));
-
-    connect(m_doc, SIGNAL(loopChanged(Rosegarden::timeT, Rosegarden::timeT)),
-            this,  SLOT(slotSetLoop(Rosegarden::timeT, Rosegarden::timeT)));
-
     // Now autoload
     //
     stateChanged("new_file");
@@ -869,10 +860,19 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
     //
     if (oldDoc != 0) delete oldDoc;
     
-    // copied from initDocument();
     // connect needed signals
     //
+    connect(m_doc, SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
+            this,   SLOT(slotSetPointerPosition(Rosegarden::timeT)));
+
+    connect(m_doc, SIGNAL(documentModified(bool)),
+            this,   SLOT(slotDocumentModified(bool)));
+
+    connect(m_doc, SIGNAL(loopChanged(Rosegarden::timeT, Rosegarden::timeT)),
+            this,  SLOT(slotSetLoop(Rosegarden::timeT, Rosegarden::timeT)));
+
     m_doc->getCommandHistory()->attachView(actionCollection());
+
     connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),
             SLOT(update()));
     connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),
@@ -1005,7 +1005,7 @@ void RosegardenGUIApp::openFile(const QString& filePath)
             m_doc->setAbsFilePath(info.absFilePath());
             m_doc->setTitle(info.fileName());
         } else
-            m_doc->setModified(false);
+            m_doc->clearModifiedStatus();
 
     } else {
         // Create a new document
@@ -1138,7 +1138,7 @@ void RosegardenGUIApp::readProperties(KConfig* _cfg)
                 slotEnableTransport(false);
                 m_doc->openDocument(tempname);
                 slotEnableTransport(true);
-                m_doc->setModified();
+                m_doc->slotDocumentModified();
                 QFileInfo info(filename);
                 m_doc->setAbsFilePath(info.absFilePath());
                 m_doc->setTitle(info.fileName());
@@ -2259,7 +2259,7 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
 
     // Set modification flag
     //
-    m_doc->setModified();
+    m_doc->slotDocumentModified();
 
     // Set the caption
     //
@@ -2423,7 +2423,7 @@ void RosegardenGUIApp::importRG21File(const QString &file)
 
     // Set modification flag
     //
-    m_doc->setModified();
+    m_doc->slotDocumentModified();
 
     // Set the caption and add recent
     //
@@ -2470,6 +2470,8 @@ RosegardenGUIApp::slotSetPointerPosition(Rosegarden::RealTime time)
 
 void RosegardenGUIApp::slotSetPointerPosition(timeT t)
 {
+    if (!m_seqManager) return;
+
     Rosegarden::Composition &comp = m_doc->getComposition();
 
     if ( m_seqManager->getTransportStatus() == PLAYING ||
@@ -3135,7 +3137,7 @@ RosegardenGUIApp::slotSetLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs)
 {
     try
     {
-        m_doc->setModified();
+        m_doc->slotDocumentModified();
 
         m_seqManager->setLoop(lhs, rhs);
 
@@ -3282,7 +3284,7 @@ void RosegardenGUIApp::slotToggleSolo()
     RG_DEBUG << "RosegardenGUIApp::slotToggleSolo\n";
 
     m_doc->getComposition().setSolo(m_transport->SoloButton()->isOn());
-    m_doc->setModified();
+    m_doc->slotDocumentModified();
 }
 
 void RosegardenGUIApp::slotTrackUp()

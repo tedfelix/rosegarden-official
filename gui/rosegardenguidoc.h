@@ -120,17 +120,29 @@ public:
      */
     void deleteEditViews();
 
+protected:
     /**
      * sets the modified flag for the document after a modifying
      * action on the view connected to the document.
+     *
+     * this is just an accessor, other components should call
+     * slotDocumentModified() and clearModifiedStatus() instead of
+     * this method, which perform all the related housework.
+     * 
      */
     void setModified(bool m=true);
-
+public:
     /**
      * returns if the document is modified or not. Use this to
      * determine if your document needs saving by the user on closing.
      */
     bool isModified() const { return m_modified; };
+
+    /**
+     * clears the 'modified' status of the document (sets it back to false).
+     * 
+     */
+    void clearModifiedStatus();
 
     /**
      * "save modified" - asks the user for saving if the document is
@@ -353,6 +365,12 @@ public slots:
      */
     void slotUpdateAllViews(RosegardenGUIView *sender);
 
+    /**
+     * set the 'modified' flag of the document to true,
+     * clears the 'autosaved' flag, emits the 'documentModified' signal.
+     *
+     * always call this when changes have occurred on the document.
+     */
     void slotDocumentModified();
     void slotDocumentRestored();
 

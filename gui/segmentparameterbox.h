@@ -88,6 +88,9 @@ public slots:
 
     virtual void update();
 
+signals:
+    void documentModified();
+
 protected:
     void initBox();
     void populateBoxFromSegments();

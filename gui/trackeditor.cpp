@@ -356,7 +356,7 @@ void TrackEditor::slotTrackButtonsWidthChanged()
     kapp->processEvents();
 
     m_trackButtonScroll->setMinimumWidth(m_trackButtons->width());
-    m_doc->setModified(true);
+    m_doc->slotDocumentModified();
 }
 
 
