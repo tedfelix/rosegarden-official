@@ -311,7 +311,7 @@ NotationHLayout::setNotationData(Segment &segment)
 
 	    Note n(Note::getNearestNote(duration));
 
-	    NOTATION_DEBUG << "NotationHLayout::setNotationData: nominalDuration " << duration << ", note type " << n.getNoteType() << ", dots " << n.getDots() << endl;
+//	    NOTATION_DEBUG << "NotationHLayout::setNotationData: nominalDuration " << duration << ", note type " << n.getNoteType() << ", dots " << n.getDots() << endl;
 
 	    (*i)->setMaybe<Int>(m_properties.NOTE_TYPE, n.getNoteType());
 	    (*i)->setMaybe<Int>(m_properties.NOTE_DOTS, n.getDots());

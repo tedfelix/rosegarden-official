@@ -174,13 +174,13 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     //
     frame = new QFrame(m_tabWidget);
     layout = new QGridLayout(frame,
-                             4, 2, // nbrow, nbcol
+                             3, 2, // nbrow, nbcol
                              10, 5);
 
     layout->addWidget(new QLabel(i18n("Default editor (for double-click on segment)"),
                                  frame), 0, 0);
     layout->addWidget(new QLabel(i18n("Number of count-in bars when recording"),
-                                 frame), 2, 0);
+                                 frame), 1, 0);
 
     m_client = new KComboBox(frame);
     m_client->insertItem(i18n("Notation"));
@@ -194,7 +194,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     m_countIn->setValue(m_cfg->readUnsignedNumEntry("countinbars", 2));
     m_countIn->setMaxValue(10);
     m_countIn->setMinValue(0);
-    layout->addWidget(m_countIn, 2, 1);
+    layout->addWidget(m_countIn, 1, 1);
 
 
     addTab(frame, i18n("Behaviour"));
@@ -1082,7 +1082,10 @@ SequencerConfigurationPage::SequencerConfigurationPage(
         m_recordDevice->setEnabled(false);
     }
 
+    int increment = 0;
+
 #ifdef HAVE_LIBJACK
+    increment = 1;
     label = new QLabel(i18n("Number of JACK audio inputs"), frame);
     m_jackInputs = new QSpinBox(frame);
 
@@ -1100,8 +1103,8 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     label = new QLabel(i18n("Minutes of audio recording"), frame);
     m_audioRecordMinutes = new QSpinBox(frame);
 
-    layout->addWidget(label,                2, 0);
-    layout->addWidget(m_audioRecordMinutes, 2, 1);
+    layout->addWidget(label,                1 + increment, 0);
+    layout->addWidget(m_audioRecordMinutes, 1 + increment, 1);
 
     int audioRecordMinutes = m_cfg->readNumEntry("audiorecordminutes", 5);
 
@@ -1510,7 +1513,7 @@ MetronomeConfigurationPage::MetronomeConfigurationPage(RosegardenGUIDoc *doc,
     : TabbedConfigurationPage(doc, parent, name)
 {
     QFrame *frame = new QFrame(m_tabWidget);
-    QGridLayout *layout = new QGridLayout(frame, 2, 2,
+    QGridLayout *layout = new QGridLayout(frame, 3, 2,
                                           10, 5);
 
     Configuration &config = m_doc->getConfiguration();
