@@ -508,3 +508,29 @@ AddTempoChangeCommand::unexecute()
     int num = m_composition->getTempoChangeNumberAt(m_time);
     m_composition->removeTempoChange(num);
 }
+
+
+// --------- Add Tracks --------
+//
+void AddTracksCommand::execute()
+{
+    using Rosegarden::Track;
+
+    unsigned int currentNbTracks = m_composition->getNbTracks();
+
+    for (unsigned int i = 0; i < m_nbNewTracks; ++i) {
+        Track* track = new Rosegarden::Track;
+        track->setID(i + currentNbTracks);
+        track->setPosition(i + currentNbTracks);
+
+        m_composition->addTrack(track);
+    }
+}
+
+void AddTracksCommand::unexecute()
+{
+    for (unsigned int i = 0; i < m_nbNewTracks; ++i) {
+
+        m_composition->deleteTrack(m_composition->getNbTracks() - 1);
+    }
+}

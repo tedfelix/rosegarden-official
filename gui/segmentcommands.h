@@ -21,6 +21,8 @@
 #ifndef _SEGMENTCOMMANDS_H_
 #define _SEGMENTCOMMANDS_H_
 
+#include "klocale.h"
+
 #include "command.h"
 #include "Segment.h"
 #include "Composition.h"
@@ -103,9 +105,9 @@ public:
     virtual ~SegmentReconfigureCommand();
 
     void addSegment(Rosegarden::Segment *segment,
-		    Rosegarden::timeT startTime,
-		    Rosegarden::timeT duration,
-		    Rosegarden::TrackId track);
+                    Rosegarden::timeT startTime,
+                    Rosegarden::timeT duration,
+                    Rosegarden::TrackId track);
 
     void execute();
     void unexecute();
@@ -114,10 +116,10 @@ public:
 
 private:
     struct SegmentRec {
-	Rosegarden::Segment *segment;
-	Rosegarden::timeT startTime;
-	Rosegarden::timeT duration;
-	Rosegarden::TrackId track;
+        Rosegarden::Segment *segment;
+        Rosegarden::timeT startTime;
+        Rosegarden::timeT duration;
+        Rosegarden::TrackId track;
     };
     typedef std::vector<SegmentRec> SegmentRecSet;
     SegmentRecSet m_records;
@@ -129,7 +131,7 @@ class SegmentSplitCommand : public SegmentCommand
 {
 public:
     SegmentSplitCommand(Rosegarden::Segment *segment,
-			Rosegarden::timeT splitTime);
+                        Rosegarden::timeT splitTime);
     virtual ~SegmentSplitCommand();
 
     virtual void execute();
@@ -162,9 +164,9 @@ public:
 
 private:
     struct SegmentRec {
-	Rosegarden::Segment *segment;
-	Rosegarden::Quantizer *oldQuantizer;
-	bool wasQuantized;
+        Rosegarden::Segment *segment;
+        Rosegarden::Quantizer *oldQuantizer;
+        bool wasQuantized;
     };
     typedef std::vector<SegmentRec> SegmentRecSet;
     SegmentRecSet m_records;
@@ -179,15 +181,15 @@ public:
     AddTimeSignatureCommand(Rosegarden::Composition *composition,
                             Rosegarden::timeT time,
                             Rosegarden::TimeSignature timeSig) :
-	TimeAndTempoChangeCommand(name()),
-	m_composition(composition),
-	m_time(time),
-	m_timeSignature(timeSig),
-	m_oldTimeSignature(0) { }
+        TimeAndTempoChangeCommand(name()),
+        m_composition(composition),
+        m_time(time),
+        m_timeSignature(timeSig),
+        m_oldTimeSignature(0) { }
     virtual ~AddTimeSignatureCommand();
 
     static QString name() {
-	return "Add &Time Signature Change...";
+        return i18n("Add &Time Signature Change...");
     }
 
     virtual void execute();
@@ -211,11 +213,10 @@ public:
         m_composition(composition),
         m_time(time),
         m_tempo(tempo) {}
-    virtual ~AddTempoChangeCommand() { }
 
     static QString name()
     {
-        return "Add Tempo Change...";
+        return i18n("Add Tempo Change...");
     }
     virtual void execute();
     virtual void unexecute();
@@ -226,6 +227,27 @@ private:
     double m_tempo;
 };
 
+
+class AddTracksCommand : public Command
+{
+public:
+    AddTracksCommand(Rosegarden::Composition *composition,
+                     unsigned int nbTracks): 
+        Command(name()),
+        m_composition(composition),
+        m_nbNewTracks(nbTracks) {}
+
+    static QString name()
+    {
+        return i18n("Add Tracks...");
+    }
+    virtual void execute();
+    virtual void unexecute();
+
+private:
+    Rosegarden::Composition *m_composition;
+    unsigned int m_nbNewTracks;
+};
 
 
 
