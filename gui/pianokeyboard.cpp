@@ -26,12 +26,10 @@
 
 #include <klocale.h>
 
-#include "rosedebug.h"
-
-PianoKeyboard::PianoKeyboard(QSize keySize, QWidget *parent,
+PianoKeyboard::PianoKeyboard(QWidget *parent,
                              const char* name, WFlags f)
     : QWidget(parent, name, f),
-      m_keySize(48, 18), // keySize),
+      m_keySize(48, 18),
       m_blackKeySize(24, 8),
       m_nbKeys(88)
 {
@@ -99,12 +97,6 @@ void PianoKeyboard::computeKeyPos()
     
 }
 
-void PianoKeyboard::mouseMoveEvent(QMouseEvent* e)
-{
-    emit hoveredOverKeyChanged(e->y());
-}
-
-
 void PianoKeyboard::paintEvent(QPaintEvent*)
 {
     static QFont pFont("helvetica", 8);
@@ -128,3 +120,7 @@ void PianoKeyboard::paintEvent(QPaintEvent*)
                        m_blackKeySize.width(), m_blackKeySize.height());
 }
 
+void PianoKeyboard::mouseMoveEvent(QMouseEvent* e)
+{
+    emit hoveredOverKeyChanged(e->y());
+}

@@ -130,9 +130,17 @@ public slots:
      * Called when the mouse cursor moves over a different height on
      * the staff
      *
-     * @see MatrixCanvasView#hoveredOverNoteChange()
+     * @see MatrixCanvasView#hoveredOverNoteChanged()
      */
     void slotHoveredOverNoteChanged(const QString&);
+
+    /**
+     * Called when the mouse cursor moves over a different key on
+     * the piano keyboard
+     *
+     * @see PianoKeyboard#hoveredOverKeyChanged()
+     */
+    void slotHoveredOverKeyChanged(unsigned int);
 
     /**
      * Called when the mouse cursor moves over a note which is at a
@@ -191,14 +199,18 @@ protected:
 
     std::vector<MatrixStaff*> m_staffs;
 
-    PianoKeyboard* m_pianoKeyboard;
-    
     MatrixHLayout* m_hlayout;
     MatrixVLayout* m_vlayout;
 
     // Status bar elements
     QLabel* m_hoveredOverAbsoluteTime;
     QLabel* m_hoveredOverNoteName;
+
+    /**
+     * used in slotHoveredOverKeyChanged to track moves over the piano
+     * keyboard
+     */
+    int m_previousEvPitch;
 
 };
 

@@ -29,9 +29,8 @@
 class PianoKeyboard : public QWidget
 {
     Q_OBJECT
-
 public:
-    PianoKeyboard(QSize keySize, QWidget *parent,
+    PianoKeyboard(QWidget *parent,
                   const char* name = 0, WFlags f = 0);
 
     virtual QSize sizeHint() const;
@@ -49,13 +48,12 @@ signals:
 
 protected:
 
-//     virtual void mousePressEvent       (QMouseEvent*);
-//     virtual void mouseReleaseEvent     (QMouseEvent*);
-//     virtual void mouseDoubleClickEvent (QMouseEvent*);
-    virtual void mouseMoveEvent        (QMouseEvent*);
-
     virtual void paintEvent(QPaintEvent*);
 
+    virtual void mouseMoveEvent(QMouseEvent*);
+
+    // compute all key positions and store them
+    //
     void computeKeyPos();
 
     //--------------- Data members ---------------------------------
@@ -67,6 +65,5 @@ protected:
     std::vector<unsigned int> m_blackKeyPos;
     std::vector<unsigned int> m_labelKeyPos;
 };
-
 
 #endif

@@ -60,11 +60,11 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
                        QWidget *parent)
     : EditView(doc, segments, true, parent),
       m_currentEventSelection(0),
-      m_pianoKeyboard(0),
       m_hlayout(new MatrixHLayout(&doc->getComposition())),
       m_vlayout(new MatrixVLayout),
       m_hoveredOverAbsoluteTime(0),
-      m_hoveredOverNoteName(0)
+      m_hoveredOverNoteName(0),
+      m_previousEvPitch(0)
 {
     kdDebug(KDEBUG_AREA) << "MatrixView ctor\n";
 
@@ -88,12 +88,13 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     kdDebug(KDEBUG_AREA) << "MatrixView : creating canvas view\n";
 
     QScrollView *pianoView = new QScrollView(getCentralFrame());
+    PianoKeyboard *pianoKeyboard = new PianoKeyboard(pianoView->viewport());
+    
     pianoView->setVScrollBarMode(QScrollView::AlwaysOff);
     pianoView->setHScrollBarMode(QScrollView::AlwaysOff);
-
-    m_pianoKeyboard = new PianoKeyboard(QSize(60, 30), pianoView);
-    pianoView->addChild(m_pianoKeyboard);
+    pianoView->addChild(pianoKeyboard);
     pianoView->setFixedWidth(pianoView->contentsWidth());
+
     m_grid->addWidget(pianoView, 2, 0);
 
     MatrixCanvasView *canvasView =
@@ -128,6 +129,10 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     QObject::connect
         (getCanvasView(), SIGNAL(hoveredOverNoteChanged(const QString&)),
          this,         SLOT  (slotHoveredOverNoteChanged(const QString&)));
+
+    QObject::connect
+        (pianoKeyboard, SIGNAL(hoveredOverKeyChanged(unsigned int)),
+         this,      SLOT  (slotHoveredOverKeyChanged(unsigned int)));
 
     QObject::connect
         (getCanvasView(), SIGNAL(hoveredOverAbsoluteTimeChanged(unsigned int)),
@@ -397,7 +402,20 @@ void MatrixView::slotMouseReleased(Rosegarden::timeT time, QMouseEvent* e)
 void
 MatrixView::slotHoveredOverNoteChanged(const QString &noteName)
 {
-    m_hoveredOverNoteName->setText(QString(" ") + noteName);
+    m_hoveredOverNoteName->setText(noteName);
+}
+
+void
+MatrixView::slotHoveredOverKeyChanged(unsigned int y)
+{
+    MatrixStaff& staff = *(m_staffs[0]);
+
+    int evPitch = staff.getHeightAtCanvasY(y);
+
+    if (evPitch != m_previousEvPitch) {
+        m_hoveredOverNoteName->setText(staff.getNoteNameForPitch(evPitch));
+        m_previousEvPitch = evPitch;
+    }
 }
 
 void
