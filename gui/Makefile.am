@@ -168,7 +168,7 @@ install-data-local:
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/fonts/mappings
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/library
 	$(INSTALL_DATA) $(srcdir)/styles/*.xml $(kde_datadir)/$(data_dirname)/styles
-	$(INSTALL_DATA) $(srcdir)/fonts/*.ttf $(kde_datadir)/$(data_dirname)/fonts
+	$(INSTALL_DATA) $(srcdir)/fonts/*.pfa $(kde_datadir)/$(data_dirname)/fonts
 	$(INSTALL_DATA) $(srcdir)/fonts/mappings/*.xml $(kde_datadir)/$(data_dirname)/fonts/mappings
 	$(INSTALL_DATA) $(srcdir)/pixmaps/misc/*.xpm $(kde_datadir)/$(data_dirname)/pixmaps/misc
 	$(INSTALL_DATA) $(srcdir)/pixmaps/rg21/4/*.xpm     $(kde_datadir)/$(data_dirname)/fonts/rg21/4
