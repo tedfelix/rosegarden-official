@@ -541,7 +541,7 @@ bool NotationStaff::clearSelection()
 bool NotationStaff::showSelection(const EventSelection *selection)
 {
     const Track *track = &(selection->getTrack());
-    if (track != &getTrack()) return;
+    if (track != &getTrack()) return false;
 
     NotationElementList *notes = getViewElementList();
     bool shown = showElements(notes->begin(), notes->end(), SelectionRefresh,
