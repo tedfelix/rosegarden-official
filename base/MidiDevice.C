@@ -29,6 +29,8 @@ namespace Rosegarden
 
 MidiDevice::MidiDevice():
     Device("Default Midi Device", Device::Midi),
+    m_programList(new ProgramList()),
+    m_bankList(new BankList()),
     m_metronome(new MidiMetronome())
 {
     createInstruments();
@@ -36,6 +38,8 @@ MidiDevice::MidiDevice():
 
 MidiDevice::MidiDevice(const std::string &name):
     Device(name, Device::Midi),
+    m_programList(new ProgramList()),
+    m_bankList(new BankList()),
     m_metronome(new MidiMetronome())
 {
     createInstruments();
@@ -43,6 +47,9 @@ MidiDevice::MidiDevice(const std::string &name):
 
 MidiDevice::~MidiDevice()
 {
+    delete m_programList;
+    delete m_bankList;
+    delete m_metronome;
 }
 
 void
@@ -78,10 +85,10 @@ MidiDevice::clearProgramList()
 {
     std::vector<MidiProgram*>::iterator it;
 
-    for (it = m_programList.begin(); it != m_programList.end(); it++)
+    for (it = m_programList->begin(); it != m_programList->end(); it++)
         delete (*it);
 
-    m_programList.erase(m_programList.begin(), m_programList.end());
+    m_programList->erase(m_programList->begin(), m_programList->end());
 
 
 }
@@ -89,13 +96,13 @@ MidiDevice::clearProgramList()
 void
 MidiDevice::addProgram(MidiProgram *prog)
 {
-    m_programList.push_back(prog);
+    m_programList->push_back(prog);
 }
 
 void 
 MidiDevice::addBank(MidiBank *bank)
 {
-    m_bankList.push_back(bank);
+    m_bankList->push_back(bank);
 }
 
 void
@@ -115,34 +122,31 @@ MidiDevice::setMetronome(MidiByte msb, MidiByte lsb, MidiByte program,
 
 // Create a Program list
 //
-ProgramList
+StringList
 MidiDevice::getProgramList(MidiByte msb, MidiByte lsb)
 {
-    ProgramList list;
-    std::vector<MidiProgram*>::iterator it;
+    StringList list;
+    ProgramList::iterator it;
 
-    for (it = m_programList.begin(); it != m_programList.end(); it++)
+    for (it = m_programList->begin(); it != m_programList->end(); it++)
     {
         // If the bank matches
         if (msb == (*it)->msb && lsb == (*it)->lsb)
-        {
             list.push_back((*it)->name);
-        }
     }
 
     return list;
-
 }
 
 // We handle banks by name, not by number
 //
-BankList
+StringList
 MidiDevice::getBankList()
 {
-    BankList list;
+    StringList list;
     std::vector<MidiBank*>::iterator it;
 
-    for (it = m_bankList.begin(); it != m_bankList.end(); it++)
+    for (it = m_bankList->begin(); it != m_bankList->end(); it++)
         list.push_back((*it)->name);
 
     return list;
@@ -151,14 +155,14 @@ MidiDevice::getBankList()
 MidiBank*
 MidiDevice::getBankByIndex(int index)
 {
-    return m_bankList[index];
+    return (*m_bankList)[index];
 }
 
 
 MidiProgram*
 MidiDevice::getProgramByIndex(int index)
 {
-    return m_programList[index];
+    return (*m_programList)[index];
 }
 
 

@@ -273,14 +273,14 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
     m_bankValue->clear();
 
     // create bank list
-    Rosegarden::BankList list = 
+    Rosegarden::StringList list = 
         dynamic_cast<Rosegarden::MidiDevice*>
             (instrument->getDevice())->getBankList();
 
-    Rosegarden::BankList::iterator it;
+    Rosegarden::StringList::iterator it;
 
     for (it = list.begin(); it != list.end(); it++)
-        m_bankValue->insertItem(QString((*it).data()));
+        m_bankValue->insertItem(QString((*it).c_str()));
 
     // Select 
     if (instrument->sendsBankSelect())
@@ -456,17 +456,18 @@ InstrumentParameterBox::populateProgramList()
         lsb = m_selectedInstrument->getLSB();
     }
 
-    Rosegarden::ProgramList list = 
+    Rosegarden::StringList list = 
         dynamic_cast<Rosegarden::MidiDevice*>
             (m_selectedInstrument->getDevice())->getProgramList(msb, lsb);
 
-    Rosegarden::ProgramList::iterator it;
+    Rosegarden::StringList::iterator it;
 
     for (it = list.begin(); it != list.end(); it++)
-        m_programValue->insertItem(QString((*it).data()));
+        m_programValue->insertItem(QString((*it).c_str()));
 
     m_programValue->setCurrentItem(
             (int)m_selectedInstrument->getProgramChange());
+
 }
 
 

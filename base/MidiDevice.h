@@ -32,8 +32,9 @@
 namespace Rosegarden
 {
 
-typedef std::vector<std::string> ProgramList;
-typedef std::vector<std::string> BankList;
+typedef std::vector<std::string> StringList;
+typedef std::vector<MidiProgram*> ProgramList;
+typedef std::vector<MidiBank*> BankList;
 
 class MidiDevice : public Device
 {
@@ -52,11 +53,11 @@ public:
 
     // Get a program list for a certain bank
     //
-    ProgramList getProgramList(MidiByte msb, MidiByte lsb);
+    StringList getProgramList(MidiByte msb, MidiByte lsb);
 
     // Get a list of all banks
     //
-    BankList getBankList();
+    StringList getBankList();
 
     void addProgram(MidiProgram *program);
     void addBank(MidiBank *bank);
@@ -92,8 +93,8 @@ private:
     // We store voice names that depend on bank select state
     // - we can create our own and save them out
     //
-    std::vector<MidiProgram*> m_programList;
-    std::vector<MidiBank*> m_bankList;
+    ProgramList *m_programList;
+    BankList *m_bankList;
 
     MidiMetronome *m_metronome;
 

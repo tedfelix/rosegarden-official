@@ -1074,8 +1074,6 @@ SequenceManager::sendMappedEvent(Rosegarden::MappedEvent *mE)
     mC.insert(mE);
     sendMappedComposition(mC);
 
-    delete mE;
-
 }
 
 
