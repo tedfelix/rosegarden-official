@@ -82,6 +82,28 @@ PropertyDefn<Bool>::unparse(PropertyDefn<Bool>::basic_type i)
     return (i ? "true" : "false");
 }
 
+string
+PropertyDefn<RealTimeT>::typeName()
+{
+    return "RealTimeT";
+}    
+
+PropertyDefn<RealTimeT>::basic_type
+PropertyDefn<RealTimeT>::parse(string s)
+{
+    string sec = s.substr(0, s.find('/')),
+        usec =  s.substr(s.find('/') + 1);
+
+    return RealTime(atoi(sec.c_str()), atoi(usec.c_str()));
+}
+
+string
+PropertyDefn<RealTimeT>::unparse(PropertyDefn<RealTimeT>::basic_type i)
+{
+    static char buffer[256]; sprintf(buffer, "%ld/%ld", i.sec, i.usec);
+    return buffer;
+}
+
 PropertyStoreBase::~PropertyStoreBase()
 {
 }

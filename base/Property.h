@@ -25,10 +25,12 @@
 
 #include <string>
 
+#include "RealTime.h"
+
 namespace Rosegarden 
 {
 
-enum PropertyType { Int, String, Bool };
+enum PropertyType { Int, String, Bool, RealTimeT };
 
 template <PropertyType P>
 class PropertyDefn
@@ -93,6 +95,16 @@ public:
     static std::string unparse(basic_type i);
 };
 
+template <>
+class PropertyDefn<RealTimeT>
+{
+public:
+    typedef RealTime basic_type;
+
+    static std::string typeName();
+    static basic_type parse(std::string s);
+    static std::string unparse(basic_type i);
+};
 
 class PropertyStoreBase {
 public:
