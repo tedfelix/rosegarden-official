@@ -415,41 +415,44 @@ AlsaDriver::generateInstruments()
     char number[100];
     std::string audioName;
 
-    for (int channel = 0; channel < 16; ++channel)
+    if (m_driverStatus & AUDIO_OK)
     {
-        sprintf(number, " #%d", channel);
-        audioName = "JACK Audio" + std::string(number);
-        instr = new MappedInstrument(Instrument::Audio,
-                                     channel,
-                                     m_audioRunningId,
-                                     0, // sub ordering is 0
-                                     audioName,
-                                     m_deviceRunningId);
-        m_instruments.push_back(instr);
+        for (int channel = 0; channel < 16; ++channel)
+        {
+            sprintf(number, " #%d", channel);
+            audioName = "JACK Audio" + std::string(number);
+            instr = new MappedInstrument(Instrument::Audio,
+                                         channel,
+                                         m_audioRunningId,
+                                         0, // sub ordering is 0
+                                         audioName,
+                                         m_deviceRunningId);
+            m_instruments.push_back(instr);
 
-        // Create a fader with a matching id - this is the starting
-        // point for all audio faders.
+            // Create a fader with a matching id - this is the starting
+            // point for all audio faders.
+            //
+            m_studio->createObject(Rosegarden::MappedObject::AudioFader,
+                                   m_audioRunningId);
+
+            /*
+            std::cout  << "AlsaDriver::generateInstruments - "
+                       << "added audio fader (id=" << m_audioRunningId
+                       << ")" << std::endl;
+                       */
+    
+            m_audioRunningId++;
+        }
+
+        // Create audio device
         //
-        m_studio->createObject(Rosegarden::MappedObject::AudioFader,
-                               m_audioRunningId);
-
-        /*
-        std::cout  << "AlsaDriver::generateInstruments - "
-                   << "added audio fader (id=" << m_audioRunningId
-                   << ")" << std::endl;
-                   */
-
-        m_audioRunningId++;
+        MappedDevice *device =
+                        new MappedDevice(m_deviceRunningId,
+                                         Rosegarden::Device::Audio,
+                                         "JACK Audio",
+                                         true);
+        m_devices.push_back(device);
     }
-
-    // Create audio device
-    //
-    MappedDevice *device =
-                    new MappedDevice(m_deviceRunningId,
-                                     Rosegarden::Device::Audio,
-                                     "JACK Audio",
-                                     true);
-    m_devices.push_back(device);
 
 #endif
 
@@ -553,6 +556,15 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
 }
 
 
+void
+AlsaDriver::initialise()
+{
+    initialiseAudio();
+    initialiseMidi();
+}
+
+
+
 // Set up queue, client and port
 //
 void
@@ -568,17 +580,13 @@ AlsaDriver::initialiseMidi()
                      SND_SEQ_OPEN_DUPLEX,
                      SND_SEQ_NONBLOCK) < 0)
     {
-        std::cout << "AlsaDriver::generateInstruments() - "
+        std::cout << "AlsaDriver::initialiseMidi - "
                   << "couldn't open sequencer - " << snd_strerror(errno)
                   << std::endl;
         return;
     }
 
-    // Now we have a handle generate some possible destinations
-    // through the Instrument metaphor
-    //
     generateInstruments();
-
 
     // Create a queue
     //

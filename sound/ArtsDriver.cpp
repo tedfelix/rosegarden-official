@@ -120,6 +120,13 @@ ArtsDriver::generateInstruments()
 }
 
 void
+ArtsDriver::initialise()
+{
+    initialiseMidi();
+    initialiseAudio();
+}
+
+void
 ArtsDriver::initialiseMidi()
 {
     // Don't come in here if there's no SoundServer

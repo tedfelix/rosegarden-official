@@ -218,8 +218,8 @@ public:
     SoundDriver(MappedStudio *studio, const std::string &name);
     virtual ~SoundDriver();
 
-    virtual void initialiseMidi() = 0;
-    virtual void initialiseAudio() = 0;
+    virtual void initialise() = 0;
+
     virtual void initialisePlayback(const RealTime &position,
                                     const RealTime &playLatency) = 0;
     virtual void stopPlayback() = 0;

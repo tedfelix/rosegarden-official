@@ -1230,7 +1230,8 @@ BankEditorDialog::slotImport()
     //
     for (unsigned int i = 0; i < 8; i++)
     {
-        doc->getStudio().addDevice(std::string("Dummy MIDI Device"),
+        QString label = QString("MIDI Device %1").arg(i + 1);
+        doc->getStudio().addDevice(qstrtostr(label),
                                    i,
                                    Rosegarden::Device::Midi);
 

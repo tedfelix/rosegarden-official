@@ -103,6 +103,18 @@ public:
 
     bool isDuplex() const { return m_duplex; }
 
+    // Retrieve Librarian details
+    //
+    const std::string getLibrarianName() const { return m_librarian.first; }
+    const std::string getLibrarianEmail() const { return m_librarian.second; }
+    std::pair<std::string, std::string> getLibrarian() const
+        { return m_librarian; }
+
+    // Set Librarian details
+    //
+    void setLibrarian(const std::string &name, const std::string &email)
+        { m_librarian = std::pair<std::string, std::string>(name, email); }
+
 protected:
     void generatePresentationList();
 
@@ -135,6 +147,10 @@ protected:
     InstrumentList m_presentationInstrumentList;
 
     bool m_duplex;  // is this a duplex device (i.e. a MIDI out/in port) ?
+
+    // Librarian contact details
+    //
+    std::pair<std::string, std::string> m_librarian; // name. email
 };
 
 }

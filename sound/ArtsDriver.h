@@ -49,8 +49,7 @@ public:
     ArtsDriver(MappedStudio *studio);
     virtual ~ArtsDriver();
 
-    virtual void initialiseMidi();
-    virtual void initialiseAudio();
+    virtual void initialise();
     virtual void initialisePlayback(const RealTime &position,
                                     const RealTime &playLatency);
     virtual void stopPlayback();
@@ -75,6 +74,10 @@ public:
     // Not supported
     //
     virtual unsigned int getSampleRate() const { return 0; }
+
+    // initialise
+    void initialiseMidi();
+    void initialiseAudio();
 
     void processMidiIn(const Arts::MidiCommand &midiCommand,
                        const Arts::TimeStamp &timeStamp,

@@ -40,7 +40,8 @@ MidiDevice::MidiDevice():
     m_programList(new ProgramList()),
     m_bankList(new BankList()),
     m_metronome(0),
-    m_duplex(false)
+    m_duplex(false),
+    m_librarian(std::pair<std::string, std::string>("none", "none"))
 {
     createInstruments();
 }
@@ -50,7 +51,8 @@ MidiDevice::MidiDevice(DeviceId id, const std::string &name, bool duplex):
     m_programList(new ProgramList()),
     m_bankList(new BankList()),
     m_metronome(0),
-    m_duplex(duplex)
+    m_duplex(duplex),
+    m_librarian(std::pair<std::string, std::string>("none", "none"))
 {
     createInstruments();
 }
@@ -60,7 +62,8 @@ MidiDevice::MidiDevice(const MidiDevice &dev):
     m_programList(new ProgramList()),
     m_bankList(new BankList()),
     m_metronome(0),
-    m_duplex(dev.isDuplex())
+    m_duplex(dev.isDuplex()),
+    m_librarian(dev.getLibrarian())
 {
     // Device
     m_label = dev.getUserLabel();
@@ -129,6 +132,7 @@ MidiDevice::operator=(const MidiDevice &dev)
     m_id = dev.getId();
     m_name = dev.getName();
     m_type = dev.getType();
+    m_librarian = dev.getLibrarian();
 
     m_programList->clear();
     m_bankList->clear();

@@ -39,8 +39,7 @@ public:
         SoundDriver(studio, std::string("DummyDriver: " + name)) {;}
     virtual ~DummyDriver() {;}
 
-    virtual void initialiseMidi()  { m_recordComposition.clear();}
-    virtual void initialiseAudio()  {;}
+    virtual void initialise()  { m_recordComposition.clear();}
     virtual void initialisePlayback(const RealTime & /*position*/,
                                     const RealTime & /*playLatency*/) {;}
     virtual void stopPlayback() {;}

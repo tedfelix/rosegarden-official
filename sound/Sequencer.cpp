@@ -71,8 +71,7 @@ Sequencer::Sequencer(MappedStudio *studio,
     if (args.size())
         m_soundDriver->setArgs(args);
 
-    m_soundDriver->initialiseMidi();
-    m_soundDriver->initialiseAudio();
+    m_soundDriver->initialise();
 }
 
 

@@ -907,6 +907,20 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             return false;
         }
 
+    } else if (lcName == "librarian") {
+
+        // The contact details for the maintainer of the banks/programs
+        // information.
+        //
+        if (m_device->getType() == Rosegarden::Device::Midi)
+        {
+            QString name = atts.value("name");
+            QString email = atts.value("email");
+
+            dynamic_cast<Rosegarden::MidiDevice*>(m_device)->
+                setLibrarian(qstrtostr(name), qstrtostr(email));
+        }
+
     } else if (lcName == "bank") {
 
         if (m_device) // only if we have a device

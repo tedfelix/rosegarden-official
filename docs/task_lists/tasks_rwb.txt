@@ -5,12 +5,12 @@ o MTC/MMC - transport awareness
   - we're now sending Midi RealTime sequencer control messages
     and adding infrastructure for real time clock messages
   - MTC will be in addition to basic real-time clock
-  - MMC control can't yet be tested at my end
+  - MMC control can't yet be tested at my end [CAN WAIT - LOW PRIORITY]
 
 o Audio
+   - recording stereo WAVs (new fader widget)
    - hardcoded format segment values
    - panning
-   - recording stereo WAVs
    - plugin bypass
    - busses and routing
    - BWF format writing/reading

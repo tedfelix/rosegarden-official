@@ -59,8 +59,7 @@ public:
     AlsaDriver(MappedStudio *studio);
     virtual ~AlsaDriver();
 
-    virtual void initialiseMidi();
-    virtual void initialiseAudio();
+    virtual void initialise();
     virtual void initialisePlayback(const RealTime &position,
                                     const RealTime &playLatency);
     virtual void stopPlayback();
@@ -89,6 +88,11 @@ public:
     // Return the sample rate
     //
     virtual unsigned int getSampleRate() const;
+
+    // initialise subsystems
+    //
+    void initialiseMidi();
+    void initialiseAudio();
 
     // Some stuff to help us debug this
     //
