@@ -349,8 +349,6 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
 	    parent(), SLOT(slotChangeTempo(Rosegarden::timeT, double,
 				      TempoDialog::TempoDialogAction)));
 
-    connect(notationView, SIGNAL(windowRaised()),
-	    parent(), SLOT(slotRaiseTransport()));
     connect(notationView, SIGNAL(play()),
 	    parent(), SLOT(slotPlay()));
     connect(notationView, SIGNAL(stop()),
@@ -416,8 +414,6 @@ void RosegardenGUIView::slotEditSegmentMatrix(Rosegarden::Segment* p)
                                             segmentsToEdit,
                                             this);
 
-    connect(matrixView, SIGNAL(windowRaised()),
-	    parent(), SLOT(slotRaiseTransport()));
     connect(matrixView, SIGNAL(play()),
 	    parent(), SLOT(slotPlay()));
     connect(matrixView, SIGNAL(stop()),
@@ -483,9 +479,6 @@ void RosegardenGUIView::slotEditSegmentEventList(Rosegarden::Segment *p)
     EventView *eventView = new EventView(getDocument(),
                                          segmentsToEdit,
                                          this);
-
-    connect(eventView, SIGNAL(windowRaised()),
-	    parent(), SLOT(slotRaiseTransport()));
 
     // create keyboard accelerators on view
     //
