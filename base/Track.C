@@ -20,7 +20,15 @@
 */
 
 #include "Track.h"
+
+
+#if (__GNUC__ < 3)
 #include <strstream>
+#define stringstream strstream
+#else
+#include <sstream>
+#endif
+
 
 namespace Rosegarden
 {
@@ -61,7 +69,7 @@ Track::~Track()
 string
 Track::toXmlString()
 {
-    strstream track;
+    stringstream track;
 
     track << "<track id=\"";
     track << m_id << "\" type=\"";

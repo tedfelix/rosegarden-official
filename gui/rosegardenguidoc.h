@@ -111,7 +111,7 @@ public:
     bool newDocument();
 
     /**
-     * closes the acutal document
+     * closes the actual document
      */
     void closeDocument();
 

@@ -19,7 +19,13 @@
 
 #include "BaseProperties.h"
 #include <vector>
+
+#if (__GNUC__ < 3)
 #include <strstream>
+#define stringstream strstream
+#else
+#include <sstream>
+#endif
 
 namespace Rosegarden
 {
@@ -58,7 +64,7 @@ PropertyName getMarkPropertyName(int markNo)
     // the PropertyName interning process for each string -- hence the
     // firstFive cache
 
-    strstream markPropertyName;
+    stringstream markPropertyName;
     markPropertyName << "mark" << (markNo + 1) << ends;
     return markPropertyName.str();
 }

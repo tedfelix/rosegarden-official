@@ -20,7 +20,14 @@
 */
 
 #include "Instrument.h"
+
+#if (__GNUC__ < 3)
 #include <strstream>
+#define stringstream strstream
+#else
+#include <sstream>
+#endif
+
 
 namespace Rosegarden
 {
@@ -52,7 +59,7 @@ Instrument::~Instrument()
 string
 Instrument::toXmlString()
 {
-    strstream instrument;
+    stringstream instrument;
 
     instrument << "<instrument id=\"";
     instrument << m_id << "\" type=\"";

@@ -61,6 +61,7 @@ public:
 
     static const std::string TempoEventType; 
     static const PropertyName TempoProperty; // stored in beats per hour
+    static const PropertyName TempoTimestampProperty;
 
     typedef std::set<Segment*, Segment::SegmentCmp> segmentcontainer;
 
@@ -247,13 +248,36 @@ public:
     void addTempo(timeT time, double tempo);
 
     /**
-     * Get the current playback position
+     * Return the number of microseconds elapsed between
+     * the beginning of the composition and the given timeT time.
+     * (timeT units are independent of tempo; this takes into
+     * account any tempo changes in the first t units of time.)
+     *
+     * This is a fairly efficient operation, not dependent on the
+     * magnitude of t or the number of tempo changes in the piece.
+     */
+    unsigned long long getElapsedRealTime(timeT t) const;
+
+    /**
+     * Return the number of microseconds elapsed between
+     * the two given timeT indices into the composition, taking
+     * into account any tempo changes between the two times.
+     */
+    unsigned long long getRealTimeDifference(timeT t0, timeT t1) const {
+	if (t1 > t0) {
+	    return getElapsedRealTime(t1) - getElapsedRealTime(t0);
+	} else {
+	    return getElapsedRealTime(t0) - getElapsedRealTime(t1);
+	}
+    }
+
+    /**
+     * Get the current playback position.
      */
     timeT getPosition() const { return m_position; }
 
     /**
-     * Set the current playback position (causing the current tempo
-     * to be updated also)
+     * Set the current playback position.
      */
     void setPosition(timeT position);
 
@@ -284,7 +308,7 @@ protected:
     mutable Segment m_barSegment;
 
     /// Contains tempo events.
-    Segment m_tempoSegment;
+    mutable Segment m_tempoSegment;
 
     // called from calculateBarPositions
     Segment::iterator addNewBar(timeT time, int barNo) const;
@@ -298,6 +322,11 @@ protected:
     /// affects m_barSegment
     void calculateBarPositions() const;
     mutable bool m_barPositionsNeedCalculating;
+
+    /// affects m_tempoSegment
+    void calculateTempoTimestamps() const;
+    mutable bool m_tempoTimestampsNeedCalculating;
+    unsigned long long calculateMicroseconds(timeT time, double tempo) const;
 
 private:
     Composition(const Composition &);

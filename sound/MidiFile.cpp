@@ -23,7 +23,6 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <strstream>
 #include "Midi.h"
 #include "MidiFile.h"
 #include "Segment.h"
@@ -32,13 +31,20 @@
 #include "SegmentNotationHelper.h"
 #include "SegmentPerformanceHelper.h"
 
+#if (__GNUC__ < 3)
+#include <strstream>
+#define stringstream strstream
+#else
+#include <sstream>
+#endif
+
 
 namespace Rosegarden
 {
 
 using std::string;
 using std::ifstream;
-using std::strstream;
+using std::stringstream;
 using std::cerr;
 using std::cout;
 using std::endl;
@@ -846,7 +852,7 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
 	SegmentPerformanceHelper helper(**trk);
 
 	{
-	    strstream segmentName;
+	    stringstream segmentName;
 	    // insert a segment name
 	    segmentName << "Segment " << segmentNumber << ends;
 

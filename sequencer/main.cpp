@@ -24,8 +24,8 @@
 #include <kaboutdata.h>
 #include <klocale.h>
 #include <dcopclient.h>
-#include <strstream>
 #include <iostream>
+
 
 #include "rosegardensequencer.h"
 #include <MappedComposition.h>

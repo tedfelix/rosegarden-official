@@ -37,7 +37,7 @@ public:
                             const double &ppq = 384.0);
   ~RosegardenTransportDialog();
 
-  void displayTime(const int &position);
+  void displayTime(unsigned long long microSeconds);
 
   void setTempo(const double &tempo);
 

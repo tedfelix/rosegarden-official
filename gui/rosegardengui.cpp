@@ -1088,13 +1088,13 @@ void RosegardenGUIApp::setPointerPosition(const int &position)
     // set the composition time
     m_doc->getComposition().setPosition((timeT) position);
 
-
     // and the gui time
     m_view->setPointerPosition(position);
 
-    // and the time (well, position for the moment)
+    // and the time
     //
-    m_transport->displayTime(position);
+    m_transport->displayTime
+	(m_doc->getComposition().getElapsedRealTime(position));
 }
 
 void RosegardenGUIApp::play()

@@ -24,8 +24,14 @@
 #include "FastVector.h"
 
 #include <iostream>
-#include <strstream>
 #include <iomanip>
+
+#if (__GNUC__ < 3)
+#include <strstream>
+#define stringstream strstream
+#else
+#include <sstream>
+#endif
 
 
 namespace Rosegarden 
@@ -36,6 +42,7 @@ const PropertyName Composition::BarNumberProperty = "BarNumber";
 
 const std::string Composition::TempoEventType = "tempo";
 const PropertyName Composition::TempoProperty = "BeatsPerHour";
+const PropertyName Composition::TempoTimestampProperty = "Timestamp";
 
 
 Composition::Composition() :
@@ -43,13 +50,17 @@ Composition::Composition() :
     m_barCount(0),
     m_position(0),
     m_defaultTempo(120.0),
-    m_barPositionsNeedCalculating(true)
+    m_barPositionsNeedCalculating(true),
+    m_tempoTimestampsNeedCalculating(true)
 {
-    // nothing
+    m_barSegment.addObserver(this);
+    m_tempoSegment.addObserver(this);
 }
 
 Composition::~Composition()
 {
+    m_barSegment.removeObserver(this);
+    m_tempoSegment.removeObserver(this);
     clear();
 }
 
@@ -64,15 +75,16 @@ void Composition::swap(Composition& c)
     that->m_defaultTempo = tp;
 
     m_barSegment.swap(c.m_barSegment);
-
     m_tempoSegment.swap(c.m_tempoSegment);
-
-    m_segments.swap(c.m_segments);
 
     // swap tracks and instruments
     //
     m_tracks.swap(c.m_tracks);
     m_instruments.swap(c.m_instruments);
+
+    // swap all the segments
+    //
+    m_segments.swap(c.m_segments);
 
     for (segmentcontainer::iterator i = that->m_segments.begin();
 	 i != that->m_segments.end(); ++i) {
@@ -91,6 +103,8 @@ void Composition::swap(Composition& c)
     this->m_barPositionsNeedCalculating = true;
     that->m_barPositionsNeedCalculating = true;
     
+    this->m_tempoTimestampsNeedCalculating = true;
+    that->m_tempoTimestampsNeedCalculating = true;
 }
 
 Composition::iterator
@@ -501,10 +515,8 @@ Composition::getTempoAt(timeT t) const
 {
     Segment::iterator i = m_tempoSegment.findTime(t);
 
-    if (i != m_tempoSegment.begin() &&
-	(i == m_tempoSegment.end() || (*i)->getAbsoluteTime() > t)) --i;
-
-    if (i == m_tempoSegment.end()) return m_defaultTempo;
+    if (i == m_tempoSegment.begin()) return m_defaultTempo;
+    if (i == m_tempoSegment.end() || (*i)->getAbsoluteTime() > t) --i;
 
     double tempo = (double)((*i)->get<Int>(TempoProperty)) / 60.0;
 
@@ -527,6 +539,60 @@ Composition::addTempo(timeT time, double tempo)
     std::cerr << "Composition: Added tempo " << tempo << " at " << time << endl;
 }
 
+unsigned long long
+Composition::getElapsedRealTime(timeT t) const
+{
+    if (m_tempoTimestampsNeedCalculating) {
+	calculateTempoTimestamps();
+    }
+
+    Segment::iterator i = m_tempoSegment.findTime(t);
+    if (i == m_tempoSegment.begin()) {
+	return calculateMicroseconds(t, m_defaultTempo);
+    }
+
+    if (i == m_tempoSegment.end() || (*i)->getAbsoluteTime() > t) --i;
+
+    return (unsigned long long)((*i)->get<Int>(TempoTimestampProperty)) +
+	calculateMicroseconds(t - (*i)->getAbsoluteTime(),
+			      (double)((*i)->get<Int>(TempoProperty)) / 60.0);
+}
+
+void
+Composition::calculateTempoTimestamps() const
+{
+    if (!m_tempoTimestampsNeedCalculating) return;
+
+    timeT base = 0;
+    double tempo = m_defaultTempo;
+
+    for (Segment::iterator i = m_tempoSegment.begin();
+	 i != m_tempoSegment.end(); ++i) {
+
+	//!!! Potential rounding problems, coercing an unsigned long long
+	// into a signed long.  We probably need all the space we can get,
+	// if we're storing microseconds -- in particular, 32 bits is not
+	// really quite enough
+
+	(*i)->set<Int>
+	    (TempoTimestampProperty,
+	     (long)calculateMicroseconds((*i)->getAbsoluteTime(), tempo));
+	
+	tempo = (double)((*i)->get<Int>(TempoProperty)) / 60.0;
+	base = (*i)->getAbsoluteTime();
+    }
+
+    m_tempoTimestampsNeedCalculating = false;
+}	
+
+unsigned long long
+Composition::calculateMicroseconds(timeT t, double tempo) const
+{
+    return (unsigned long long)
+	((6e7L * (double)t) /
+	 ((double)Note(Note::Crotchet).getDuration() * tempo));
+}
+
 void
 Composition::setPosition(timeT position)
 {
@@ -535,30 +601,53 @@ Composition::setPosition(timeT position)
 
 void Composition::eventAdded(const Segment *s, Event *e)
 {
-    // we only need to recalculate if we insert something after the
-    // former end of the composition, or add a time sig to the
-    // reference segment
+    // we only need to recalculate bars if we insert something after
+    // the former end of the composition, or add a time sig to the bar
+    // segment
 
-    if (s == &m_barSegment ||
-	(e->getAbsoluteTime() + e->getDuration() >
-	 m_barSegment.getDuration())) {
+    if (s == &m_barSegment) {
 
-	m_barPositionsNeedCalculating = true;
+	if (e->isa(TimeSignature::EventType)) {
+	    m_barPositionsNeedCalculating = true;
+	}
+
+    } else if (s == &m_tempoSegment) {
+
+	m_tempoTimestampsNeedCalculating = true;
+
+    } else { // ordinary segment
+
+	if (e->getAbsoluteTime() + e->getDuration() >
+	    m_barSegment.getDuration()) {
+	    m_barPositionsNeedCalculating = true;
+	}
     }
 }
 
 
 void Composition::eventRemoved(const Segment *s, Event *e)
 {
-    // we only need to recalculate if we insert something after the
-    // former end of the composition, or add a time sig to the
-    // reference segment
+    // we only need to recalculate bars if we remove something at the
+    // former end of the composition, or remove a time sig from the
+    // bar segment
 
-    if (s == &m_barSegment ||
-	(e->getAbsoluteTime() + e->getDuration() >=
-	 m_barSegment.getDuration())) {
+    if (s == &m_barSegment) {
 
-	m_barPositionsNeedCalculating = true;
+	if (e->isa(TimeSignature::EventType)) {
+	    m_barPositionsNeedCalculating = true;
+	}
+
+    } else if (s == &m_tempoSegment) {
+
+	m_tempoTimestampsNeedCalculating = true;
+
+    } else { // ordinary segment
+
+	if (e->getAbsoluteTime() + e->getDuration() >=
+	    m_barSegment.getDuration()) {
+
+	    m_barPositionsNeedCalculating = true;
+	}
     }
 }
 
@@ -603,7 +692,7 @@ void Composition::deleteInstrument(const int &instrument)
 //
 string Composition::toXmlString()
 {
-    strstream composition;
+    stringstream composition;
 
     composition << "<composition recordtrack=\"";
     composition << m_recordTrack;

@@ -113,12 +113,9 @@ RosegardenTransportDialog::loadPixmaps()
 //
 //
 void
-RosegardenTransportDialog::displayTime(const int &position)
+RosegardenTransportDialog::displayTime(unsigned long long microSeconds)
 {
-    // work out the current time in seconds
-    //
-    m_microSeconds = (unsigned long long)(((double)60000000.0*(double)position)/
-                                       ((double)m_ppq * (double)m_tempo));
+    m_microSeconds = microSeconds;
 
     m_tenThousandths = ( m_microSeconds / 100 ) % 10;
     m_thousandths = ( m_microSeconds / 1000 ) % 10;

@@ -44,14 +44,13 @@
  * staff lines be a precise integral distance apart.
  */
 
-//!!! This is a rather unsatisfactory arrangement.  Using Staff as a
-// base-class for LinedStaff is obvious and vaguely helpful, but it
-// means LinedStaff must be a template class, which means we end up
-// with this very heavy header class, long compile times, serious
-// dependencies, and an excess of generated code.  Almost nothing in
-// LinedStaff actually depends on the type of T, so we should probably
-// reorganise in some way (for example, we could require that the
-// subclass of LinedStaff also inherit separately from Staff).
+/*!!!  not true, but should it be?
+ *
+ * Subclasses of LinedStaff will normally wish to be subclasses
+ * of Staff as well.  LinedStaff is not itself a subclass of Staff
+ * because that would mean it would need to be a template class,
+ * something we'd rather avoid here for reasons of code organisation.
+ */
 
 template <class T>
 class LinedStaff : public Rosegarden::Staff<T>
@@ -129,7 +128,22 @@ protected:
      */
     virtual int getHeightPerLine() const = 0;
 
+    /**
+     * Returns the height-on-staff value for the top visible
+     * staff line.  This is deliberately not virtual.
+     */
+    int getTopLineHeight() const {
+	return getBottomLineHeight() +
+	    (getLineCount() - 1) * getHeightPerLine();
+    }
+
 protected:
+    /// Subclass may wish to expose this
+    virtual void setResolution(int resolution);
+
+    /// Subclass may wish to expose this
+    virtual void setLineThickness(int lineThickness);
+
     /// Subclass may wish to expose this
     virtual void setPageMode(bool pageMode);
 
@@ -191,18 +205,17 @@ public:
     virtual bool containsY(int canvasY) const; 
 
     /**
-     * Returns the y coordinate of the specified line on the staff,
-     * relative to the top of the staff.  baseY is a canvas y
-     * coordinate somewhere on the correct row, or -1 for the default
-     * row.
+     * Returns the canvas y coordinate of the specified line on the
+     * staff.  baseY is a canvas y coordinate somewhere on the
+     * correct row, or -1 for the default row.
      */
-    virtual int getYOfHeight(int height, int baseY = -1) const;
+    virtual int getCanvasYForHeight(int height, int baseY = -1) const;
 
     /**
      * Returns the height-on-staff value nearest to the given
-     * y coordinate.
+     * canvas y coordinate.
      */
-    virtual int getHeightAtY(int y) const;
+    virtual int getHeightAtCanvasY(int y) const;
 
     /**
      * Return the full width, height and origin of the bar containing
@@ -341,6 +354,9 @@ protected:
     double   m_pageWidth;
     int	     m_rowSpacing;
 
+    double   m_startLayoutX;
+    double   m_endLayoutX;
+
     typedef FastVector<QCanvasLine *> LineList;
     typedef std::vector<LineList> LineMatrix;
     LineMatrix m_staffLines;
@@ -353,270 +369,6 @@ protected:
     BarLineList m_barLines;
 };
 
-
-
-template <class T>
-LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
-			  int id, int resolution, int lineThickness) :
-    Rosegarden::Staff<T>(segment),
-    m_canvas(canvas),
-    m_id(id),
-    m_x(0.0),
-    m_y(0),
-    m_resolution(resolution),
-    m_lineThickness(lineThickness),
-    m_pageMode(false),
-    m_pageWidth(0.0),
-    m_rowSpacing(0.0)
-{
-    // nothing
-}
-
-template <class T>
-LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
-			  int id, int resolution, int lineThickness,
-			  double pageWidth, int rowSpacing) :
-    Rosegarden::Staff<T>(segment),
-    m_canvas(canvas),
-    m_id(id),
-    m_x(0.0),
-    m_y(0),
-    m_resolution(resolution),
-    m_lineThickness(lineThickness),
-    m_pageMode(true),
-    m_pageWidth(pageWidth),
-    m_rowSpacing(rowSpacing)
-{
-    // nothing
-}
-
-template <class T>
-LinedStaff<T>::~LinedStaff()
-{
-    // nothing yet
-}
-
-template <class T>
-void
-LinedStaff<T>::setPageMode(bool pageMode)
-{
-    m_pageMode = pageMode;
-}
-
-template <class T>
-void
-LinedStaff<T>::setPageWidth(double pageWidth)
-{
-    m_pageWidth = pageWidth;
-}
-
-template <class T>
-void
-LinedStaff<T>::setRowSpacing(int rowSpacing)
-{
-    m_rowSpacing = rowSpacing;
-}
-
-template <class T>
-int
-LinedStaff<T>::getId() const
-{
-    return m_id;
-}
-
-template <class T>
-void
-LinedStaff<T>::setX(double x)
-{
-    m_x = x;
-}
-
-template <class T>
-void
-LinedStaff<T>::setY(int y)
-{
-    m_y = y;
-}
-
-//!!! getTotalWidth
-
-//!!! getTotalHeight
-
-template <class T>
-int 
-LinedStaff<T>::getHeightOfRow() const
-{
-    return getTopLineOffset() * 2 + getBarLineHeight() + m_lineThickness;
-}
-
-//template <class T>
-//bool
-//LinedStaff<T>::containsY(int y) const
-
-
-template <class T>
-void
-LinedStaff<T>::resizeStaffLines(double startLayoutX, double endLayoutX)
-{
-    int firstRow = getRowForLayoutX(startLayoutX);
-    int  lastRow = getRowForLayoutX(endLayoutX);
-    
-    int i;
-
-    while ((int)m_staffLines.size() <= lastRow) {
-	m_staffLines.push_back(LineList());
-	m_staffConnectingLines.push_back(0);
-    }
-
-    // Remove all the staff lines that precede the start of the staff
-
-    for (i = 0; i < firstRow; ++i) clearStaffLineRow(i);
-
-    // now i == firstRow
-
-    while (i <= lastRow) {
-
-	double x0 = 0;
-	double x1 = m_pageWidth;
-
-	if (i == firstRow) {
-	    x0 = getXForLayoutX(startLayoutX);
-	}
-
-	if (i == lastRow) {
-	    x1 = getXForLayoutX(endLayoutX);
-	}
-
-	resizeStaffLineRow(i, x0, x1 - x0);
-
-	++i;
-    }
-
-    // now i == lastRow + 1
-
-    while (i < (int)m_staffLines.size()) clearStaffLineRow(i++);
-}
-
-
-// m_staffLines[row] must already exist (although it may be empty)
-
-template <class T>
-void
-LinedStaff<T>::clearStaffLineRow(int row)
-{
-    for (int h = 0; h < (int)m_staffLines[row].size(); ++h) {
-	delete m_staffLines[row][h];
-    }
-    m_staffLines[row].clear();
-
-    delete m_staffConnectingLines[row];
-    m_staffConnectingLines[row] = 0;
-}
-
-
-// m_staffLines[row] must already exist (although it may be empty)
-
-template <class T>
-void
-LinedStaff<T>::resizeStaffLineRow(int row, double offset, double length)
-{
-//    kdDebug(KDEBUG_AREA) << "LinedStaff::resizeStaffLineRow: row "
-//			 << row << ", offset " << offset << ", length " 
-//			 << length << ", pagewidth " << getPageWidth() << endl;
-
-
-    // If the resolution is 8 or less, we want to reduce the blackness
-    // of the staff lines somewhat to make them less intrusive
-
-    int level = 0;
-    int z = 1;
-    if (m_resolution < 6) {
-        z = -1;
-        level = (9 - m_resolution) * 32;
-        if (level > 200) level = 200;
-    }
-
-    QColor lineColour(level, level, level);
-
-    int h, j;
-/*
-    if (m_pageMode && row > 0 && offset == 0.0) {
-	offset = (double)m_npf->getBarMargin() / 2;
-	length -= offset;
-    }
-*/
-    QCanvasLine *line;
-    double lx;
-    int ly;
-
-    delete m_staffConnectingLines[row];
-    line = 0;
-/*
-    if (m_pageMode && m_connectingLineHeight > 0.1) {
-	line = new QCanvasLine(m_canvas);
-	lx = (int)x() + getRowLeftX(row) + offset + length - 1;
-	ly = (int)y() + getTopLineOffsetForRow(row);
-	line->setPoints(lx, ly, lx,
-			ly + getBarLineHeight() + m_connectingLineHeight);
-	line->setPen
-	    (QPen(RosegardenGUIColours::StaffConnectingTerminatingLine, 1));
-	line->setZ(-2);
-	line->show();
-    }
-*/
-    m_staffConnectingLines[row] = line;
-
-    while ((int)m_staffLines[row].size() <= getLineCount() * m_lineThickness) {
-	m_staffLines[row].push_back(0);
-    }
-
-    int lineIndex = 0;
-
-    for (h = 0; h < getLineCount(); ++h) {
-
-	for (j = 0; j < m_lineThickness; ++j) {
-
-	    if (m_staffLines[row][lineIndex] != 0) {
-		line = m_staffLines[row][lineIndex];
-	    } else {
-		line = new QCanvasLine(m_canvas);
-	    }
-
-	    lx = getCanvasXForLeftOfRow(row) + offset;
-	    ly = getTopOfStaffForRow(row) + getYOfHeight(2 * h) + j; //!!!
-/*
-	    lx = (int)x() + getRowLeftX(row) + offset;
-	    ly = (int)y() + getTopOfStaffForRow(row) +
-		getYOfHeight(2 * h) + j; //!!!
-*/
-//	    kdDebug(KDEBUG_AREA) << "My coords: " << x() << "," << y()
-//				 << "; setting line points to ("
-//				 << lx << "," << ly << ") -> ("
-//				 << (lx+length-1) << "," << ly << ")" << endl;
-
-	    line->setPoints(lx, ly, lx + length - 1, ly);
-
-//	    if (j > 0) line->setSignificant(false);
-
-	    line->setPen(QPen(lineColour, 1));
-	    line->setZ(z);
-
-	    if (m_staffLines[row][lineIndex] == 0) {
-		m_staffLines[row][lineIndex] = line;
-	    }
-
-	    line->show();
-
-	    ++lineIndex;
-	}
-    }
-
-    while (lineIndex < (int)m_staffLines[row].size()) {
-	delete m_staffLines[row][lineIndex];
-	m_staffLines[row][lineIndex] = 0;
-	++lineIndex;
-    }
-}    
-
+#include "linedstaff.cpp"
 
 #endif
