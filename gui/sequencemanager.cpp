@@ -578,7 +578,7 @@ SequenceManager::play()
     {
         // failed - pop up and disable sequencer options
         m_transportStatus = STOPPED;
-        throw(i18n("Playback failed to contact Rosegarden sequencer"));
+        throw(Rosegarden::Exception("Playback failed to contact Rosegarden sequencer"));
     }
     else
     {
@@ -595,7 +595,7 @@ SequenceManager::play()
         else
         {
             m_transportStatus = STOPPED;
-            throw(i18n("Failed to start playback"));
+            throw(Rosegarden::Exception("Failed to start playback"));
         }
     }
 }
@@ -683,7 +683,7 @@ SequenceManager::stop()
                                   "stop()", data))
     {
         // failed - pop up and disable sequencer options
-        throw(i18n("Failed to contact Rosegarden sequencer"));
+        throw(Rosegarden::Exception("Failed to contact Rosegarden sequencer"));
     }
 
     // restore
@@ -811,7 +811,7 @@ SequenceManager::sendSequencerJump(const Rosegarden::RealTime &time)
     {
       // failed - pop up and disable sequencer options
       m_transportStatus = STOPPED;
-      throw(i18n("Failed to contact Rosegarden sequencer"));
+      throw(Rosegarden::Exception("Failed to contact Rosegarden sequencer"));
     }
 
     return;
@@ -849,7 +849,7 @@ SequenceManager::record(bool toggled)
         if (!instr || instr->getType() == Rosegarden::Instrument::Audio)
         {
             m_transport->RecordButton->setOn(false);
-            throw(i18n("Audio subsystem is not available - can't record audio"));
+            throw(Rosegarden::Exception("Audio subsystem is not available - can't record audio"));
         }
     }
 
@@ -918,7 +918,7 @@ SequenceManager::record(bool toggled)
         if (studio.getInstrumentById(inst) == 0)
         {
             m_transport->RecordButton->setDown(false);
-            throw(i18n("No Record instrument selected"));
+            throw(Rosegarden::Exception("No Record instrument selected"));
         }
 
 
@@ -1032,7 +1032,7 @@ SequenceManager::record(bool toggled)
         {
             // failed - pop up and disable sequencer options
             m_transportStatus = STOPPED;
-            throw(i18n("Failed to contact Rosegarden sequencer"));
+            throw(Rosegarden::Exception("Failed to contact Rosegarden sequencer"));
         }
         else
         {
@@ -1049,7 +1049,7 @@ SequenceManager::record(bool toggled)
             else
             {
                 m_transportStatus = STOPPED;
-                throw(i18n("Failed to start recording"));
+                throw(Rosegarden::Exception("Failed to start recording"));
             }
         }
     }
@@ -1284,7 +1284,7 @@ SequenceManager::setLoop(const timeT &lhs, const timeT &rhs)
                  "setLoop(long int, long int, long int, long int)", data))
     {
         // failed - pop up and disable sequencer options
-        throw(i18n("Failed to contact Rosegarden sequencer"));
+        throw(Rosegarden::Exception("Failed to contact Rosegarden sequencer"));
     }
 }
 
@@ -1301,7 +1301,7 @@ SequenceManager::checkSoundDriverStatus()
                                   data, replyType, replyData))
     {
         // failed - pop up and disable sequencer options
-        throw(i18n("Failed to contact Rosegarden sequencer"));
+        throw(Rosegarden::Exception("Failed to contact Rosegarden sequencer"));
     }
     else
     {
@@ -1311,14 +1311,14 @@ SequenceManager::checkSoundDriverStatus()
         m_soundDriverStatus = result;
 
         if (m_soundDriverStatus == NO_DRIVER)
-            throw(i18n("MIDI and Audio subsystems have failed to initialise"));
+            throw(Rosegarden::Exception("MIDI and Audio subsystems have failed to initialise"));
 
         if (!(m_soundDriverStatus & MIDI_OK))
-            throw(i18n("MIDI subsystem has failed to initialise"));
+            throw(Rosegarden::Exception("MIDI subsystem has failed to initialise"));
 
         /*
         if (!(m_soundDriverStatus & AUDIO_OK))
-            throw(i18n("Audio subsystem has failed to initialise"));
+            throw(Rosegarden::Exception("Audio subsystem has failed to initialise"));
         */
     }
 }
