@@ -59,8 +59,9 @@ endif
 libRosegardenSequencer_la_SOURCES = $(dummy_sound_libraries) $(alsa_sound_libraries) $(arts_sound_libraries)
 
 libRosegardenSequencer_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -module -no-undefined
-libRosegardenSequencer_la_LIBADD   = -lartsmidi $(LIB_QT) -lsoundserver_idl libRosegardenSound.la ../base/libbase.la -lartsflow -lartsmodules @LIBASOUND@ @JACKLIB@
+libRosegardenSequencer_la_LIBADD   = -lartsmidi $(LIB_QT) -lsoundserver_idl libRosegardenSound.la ../base/libbase.la -lartsflow -lartsmodules @ALSA_LIBS@ @JACKLIB@
 
+libRosegardenSequencer_la_CFLAGS = @ALSA_CFLAGS@
 
 # aRts stubs generated from idl
 #
