@@ -12,14 +12,14 @@
        The white mensural note names are in comments.
   -->
 
-  <note type="64th" flags="3"/>
-  <note type="32nd" flags="2"/>
-  <note type="16th" flags="1"/> <!-- fusa (flag shouldn't be curved) -->
-  <note type="8th" filled="true"/> <!-- semiminim -->
-  <note type="quarter"/> <!-- minim -->
-  <note type="half" stem="false"/> <!-- semibreve -->
-  <note type="whole" charname="MUSICAL SYMBOL BREVIS" stem="false"/> <!-- breve -->
-  <note type="double whole" charname="MUSICAL SYMBOL BREVIS" stem="true" hfixpoint="reversed"/> <!-- long -->
+  <note type="hemidemisemiquaver" flags="3"/>
+  <note type="demisemiquaver" flags="2"/>
+  <note type="semiquaver" flags="1"/> <!-- fusa (flag shouldn't be curved) -->
+  <note type="quaver" filled="true"/> <!-- semiminim -->
+  <note type="crotchet"/> <!-- minim -->
+  <note type="minim" stem="false"/> <!-- semibreve -->
+  <note type="semibreve" charname="MUSICAL SYMBOL BREVIS" stem="false"/> <!-- breve -->
+  <note type="breve" charname="MUSICAL SYMBOL BREVIS" stem="true" hfixpoint="reversed"/> <!-- long -->
 
   <!-- and we can't deal with the maxima... perhaps we should have
        mapped semibreve to quarter -->
