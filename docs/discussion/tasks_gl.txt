@@ -6,7 +6,7 @@ Aim: "to make a good base for other developers".
 
 References in round brackets are to 0.1_planned_features.txt.
 
- 1. Basic Rosegarden 2.1 import (A12)
+ 1. Basic Rosegarden 2.1 import (A12) - DONE (almost - missing time sigs)
 
  2. Finish insertion -- keys, dots, accidentals etc.  (May need
  input from Chris on accidentals) (A9a)
@@ -35,3 +35,9 @@ Older task list
 * status message and beep on input rejection in NotationView.
 
 * backport Qt3 QCanvasSpline - DONE
+
+* tracks toolbox on right click
+
+* pause in the middle of the bars
+
+* link notes
