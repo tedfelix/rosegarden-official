@@ -837,7 +837,7 @@ void RosegardenGUIApp::initView()
 
     connect(m_swapView,
             SIGNAL(segmentsSelected(const Rosegarden::SegmentSelection &)),
-            SLOT(slotSegmentsSelected(const Rosegarden::SegmentSelection &)));
+            SIGNAL(segmentsSelected(const Rosegarden::SegmentSelection &)));
 
     connect(m_swapView,
             SIGNAL(addAudioFile(Rosegarden::AudioFileId)),
@@ -4149,13 +4149,25 @@ RosegardenGUIApp::slotAudioManager()
                 SIGNAL(deleteAudioFile(Rosegarden::AudioFileId)),
                 SLOT(slotDeleteAudioFile(Rosegarden::AudioFileId)));
 
+        //
+        // Sync segment selection between audio man. dialog and main window
+        //
+
+        // from dialog to us...
         connect(m_audioManagerDialog,
-                SIGNAL(segmentsSelected(Rosegarden::SegmentSelection&)),
-                SLOT(slotSelectSegments(Rosegarden::SegmentSelection&)));
+                SIGNAL(segmentsSelected(const Rosegarden::SegmentSelection&)),
+                m_view,
+                SLOT(slotSetSelectedSegments(const Rosegarden::SegmentSelection&)));
+
+        // and from us to dialog
+        connect(this, SIGNAL(segmentsSelected(const Rosegarden::SegmentSelection&)),
+                m_audioManagerDialog,
+                SLOT(slotSegmentSelection(const Rosegarden::SegmentSelection&)));
+
 
         connect(m_audioManagerDialog,
-                SIGNAL(deleteSegments(Rosegarden::SegmentSelection&)),
-                SLOT(slotDeleteSegments(Rosegarden::SegmentSelection&)));
+                SIGNAL(deleteSegments(const Rosegarden::SegmentSelection&)),
+                SLOT(slotDeleteSegments(const Rosegarden::SegmentSelection&)));
 
         connect(m_audioManagerDialog,
                 SIGNAL(insertAudioSegment(Rosegarden::AudioFileId,
@@ -4277,28 +4289,11 @@ RosegardenGUIApp::slotDeleteAudioFile(unsigned int id)
 }
 
 void
-RosegardenGUIApp::slotSelectSegments(Rosegarden::SegmentSelection &selection)
+RosegardenGUIApp::slotDeleteSegments(const Rosegarden::SegmentSelection &selection)
 {
     m_view->slotSetSelectedSegments(selection);
-}
-
-void
-RosegardenGUIApp::slotDeleteSegments(Rosegarden::SegmentSelection &selection)
-{
-    slotSelectSegments(selection);
     slotDeleteSelectedSegments();
 }
-
-// Tell whoever is interested that a SegmentSelection has changed
-//
-void
-RosegardenGUIApp::slotSegmentsSelected(
-        const Rosegarden::SegmentSelection &segments)
-{
-    if (m_audioManagerDialog)
-        m_audioManagerDialog->slotSegmentSelection(segments);
-}
-
 
 void
 RosegardenGUIApp::slotCancelAudioPlayingFile(Rosegarden::AudioFileId id)

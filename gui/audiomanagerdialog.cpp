@@ -291,6 +291,9 @@ AudioManagerDialog::slotPopulateFileList()
         findSelection = true;
     }
 
+    // We don't want the selection changes to be propagated
+    // to the main view
+    //
     m_fileList->blockSignals(true);
 
     // clear file list and disable associated action buttons
@@ -824,10 +827,7 @@ AudioManagerDialog::setSelected(Rosegarden::AudioFileId id,
 
             if (aItem->getId() == id)
             {
-		m_fileList->blockSignals(true);
-                m_fileList->ensureItemVisible(it);
-                m_fileList->setSelected(it, true);
-		m_fileList->blockSignals(false);
+                selectFileListItemNoSignal(it);
                 return;
             }
         }
@@ -844,10 +844,7 @@ AudioManagerDialog::setSelected(Rosegarden::AudioFileId id,
                 {
                     if (aItem->getId() == id && aItem->getSegment() == segment)
                     {
-			m_fileList->blockSignals(true);
-                        m_fileList->ensureItemVisible(chIt);
-                        m_fileList->setSelected(chIt, true);
-			m_fileList->blockSignals(false);
+                        selectFileListItemNoSignal(chIt);
                         
                         // Only propagate to segmentcanvas if asked to
                         if (propagate)
@@ -867,6 +864,21 @@ AudioManagerDialog::setSelected(Rosegarden::AudioFileId id,
         it = it->nextSibling();
     }
 
+}
+
+void
+AudioManagerDialog::selectFileListItemNoSignal(QListViewItem* it)
+{
+    m_fileList->blockSignals(true);
+
+    if (it) {
+        m_fileList->ensureItemVisible(it);
+        m_fileList->setSelected(it, true);
+    } else {
+        m_fileList->clearSelection();
+    }
+    
+    m_fileList->blockSignals(false);
 }
 
 MultiViewCommandHistory*
@@ -933,9 +945,7 @@ AudioManagerDialog::slotSegmentSelection(
     }
     else
     {
-	m_fileList->blockSignals(true);
-        m_fileList->clearSelection();
-	m_fileList->blockSignals(false);
+        selectFileListItemNoSignal(0);
     }
 
 }

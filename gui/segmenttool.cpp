@@ -674,7 +674,7 @@ SegmentSelector::clearSelected()
     //
     m_selectedItems.clear();
 
-    RG_DEBUG << "Pfffffft!!!!!!!!!" << endl;
+    RG_DEBUG << "SegmentSelector::clearSelected()" << endl;
 
     // clear the current item
     //

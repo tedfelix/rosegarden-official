@@ -141,8 +141,8 @@ signals:
 
     // We've selected a segment here, make the canvas select it too
     //
-    void segmentsSelected(Rosegarden::SegmentSelection&);
-    void deleteSegments(Rosegarden::SegmentSelection&);
+    void segmentsSelected(const Rosegarden::SegmentSelection&);
+    void deleteSegments(const Rosegarden::SegmentSelection&);
     void insertAudioSegment(Rosegarden::AudioFileId,
                             const Rosegarden::RealTime &,
                             const Rosegarden::RealTime &);
@@ -151,6 +151,7 @@ signals:
 
 protected:
     bool addFile(const KURL& kurl);
+    void selectFileListItemNoSignal(QListViewItem*);
 
     virtual void dragEnterEvent(QDragEnterEvent *event);
     virtual void dropEvent(QDropEvent*);

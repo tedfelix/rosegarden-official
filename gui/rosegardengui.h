@@ -432,6 +432,9 @@ signals:
     /// emitted when the current document changes
     void documentChanged(RosegardenGUIDoc*);
 
+    /// emitted when the set of selected segments changes (relayed from RosegardenGUIView)
+    void segmentsSelected(const Rosegarden::SegmentSelection &);
+
 public slots:
 
     /**
@@ -1048,9 +1051,10 @@ public slots:
     void slotCancelAudioPlayingFile(Rosegarden::AudioFileId);
     void slotDeleteAllAudioFiles();
 
-    void slotSelectSegments(Rosegarden::SegmentSelection&);
-    void slotDeleteSegments(Rosegarden::SegmentSelection&);
-    void slotSegmentsSelected(const Rosegarden::SegmentSelection &);
+    /**
+     * Reflect segment deletion from the audio manager
+     */
+    void slotDeleteSegments(const Rosegarden::SegmentSelection&);
 
     void slotRepeatingSegments();
     void slotRelabelSegments();
