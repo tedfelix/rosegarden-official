@@ -23,7 +23,7 @@ EXTRA_DIST = rosegardensequenceriface.kidl
 # kde_wallpaperdir  Where general wallpapers should go to.
 
 # set the include path for X, qt and KDE
-INCLUDES= $(all_includes) -I$(kde_includes)/arts -I../base -I../sound -I../gui
+INCLUDES= $(all_includes) -I$(kde_includes)/arts -I$(top_srcdir)/base -I$(top_srcdir)/sound -I$(top_srcdir)/gui -I$(top_builddir)/sound
 # claim, which subdirectories you want to install
 # you can add here more. This one gets installed 
 
