@@ -282,7 +282,7 @@ ControllerEventsRuler* EditView::makeControllerEventRuler(ControlParameter *cont
 void EditView::addControlRuler(ControlRuler* ruler)
 {
     ruler->setWorldMatrix(m_currentRulerZoomMatrix);
-    m_controlRulers->addTab(ruler, KGlobal::iconLoader()->loadIconSet("fileclose", KIcon::Small),
+    m_controlRulers->addTab(ruler, KGlobal::iconLoader()->loadIconSet("viewmag", KIcon::Small),
                             ruler->getName());
     m_controlRulers->showPage(ruler);
     
