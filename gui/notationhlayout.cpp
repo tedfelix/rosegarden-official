@@ -470,7 +470,7 @@ NotationHLayout::reconcileBars()
     kdDebug(KDEBUG_AREA)
         << "NotationHLayout::reconcileBars: Reference track has "
         << refTrack.size() << " items";
-
+/*
     int in = 1;
     for (Track::iterator it = refTrack.begin(); it != refTrack.end(); ++it) {
         const Event &e(**it);
@@ -478,7 +478,7 @@ NotationHLayout::reconcileBars()
 //        kdDebug(KDEBUG_AREA) << e << endl;
 //        kdDebug(KDEBUG_AREA).operator<<(e).operator<<(endl);
     }
-
+*/
     int sn = 1;
 
     for (i = m_barData.begin(); i != m_barData.end(); ++i) {
