@@ -462,7 +462,20 @@ int main(int argc, char *argv[])
 
     // Check for sequencer and launch if needed
     //
-    rosegardengui->launchSequencer();
+    try
+    {
+        rosegardengui->launchSequencer();
+    }
+    catch(std::string e)
+    {
+        std::cout << "RosegardenGUI - " << e << endl;
+    }
+    catch(QString e)
+    {
+        std::cout << "RosegardenGUI - " << e << endl;
+    }
+
+
 
     if (startLogo) {
 	

@@ -207,7 +207,9 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     m_fileList->setAllColumnsShowFocus(true);
 
     // show tooltips when columns are partially hidden
+#ifdef RGKDE3
     m_fileList->setShowToolTips(true);
+#endif
 
     // connect buttons
     connect(m_deleteButton, SIGNAL(released()), SLOT(slotDelete()));

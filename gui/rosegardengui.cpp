@@ -2290,8 +2290,21 @@ RosegardenGUIApp::slotSetLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs)
 
 void RosegardenGUIApp::slotPlay()
 {
-    if (!m_sequencerProcess && !launchSequencer())
-                return;
+    try
+    {
+        if (!m_sequencerProcess && !launchSequencer())
+                    return;
+    }
+    catch(std::string e)
+    {
+        std::cerr << "RosegardenGUIApp::slotPlay - " << e << std::endl;
+    }
+    catch(QString e)
+    {
+        std::cerr << "RosegardenGUIApp::slotPlay - " << e << std::endl;
+    }
+
+
 
     // If we're armed and ready to record then do this instead (calling
     // slotRecord ensures we don't toggle the recording state in
