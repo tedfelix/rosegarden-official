@@ -104,7 +104,6 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     initStatusBar();
 
     QCanvas *tCanvas = new QCanvas(this);
-    //tCanvas->resize(width() * 2, height() * 2);
 
     MATRIX_DEBUG << "MatrixView : creating staff\n";
 
@@ -497,6 +496,10 @@ QSize MatrixView::getViewSize()
 
 void MatrixView::setViewSize(QSize s)
 {
+    MATRIX_DEBUG << "MatrixView::setViewSize(w = "
+                 << s.width() << ", h = "
+                 << s.height() << endl;
+
     canvas()->resize(s.width(), s.height());
 
 }
@@ -1393,9 +1396,9 @@ MatrixView::slotChangeHorizontalZoom(int)
     Rosegarden::timeT length = m_segments[0]->getEndTime() -
                                m_segments[0]->getStartTime();
 
-    int newWidth = getXbyInverseWorldMatrix(m_hlayout.getXForTime(length));
-    setViewSize(QSize(newWidth, getViewSize().height()));
-    applyLayout();
+    int newWidth = getXbyWorldMatrix(m_hlayout.getXForTime(length));
+    readjustViewSize(QSize(newWidth, getViewSize().height()), true);
+//     applyLayout();
 #endif
 }
 
@@ -1473,7 +1476,6 @@ MatrixView::slotSelectAll()
 void
 MatrixView::readjustCanvasSize()
 {
-    double maxWidth = 0.0;
     int maxHeight = 0;
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
@@ -1482,9 +1484,9 @@ MatrixView::readjustCanvasSize()
 
         staff.sizeStaff(m_hlayout);
 
-        if (staff.getTotalWidth() + staff.getX() > maxWidth) {
-            maxWidth = staff.getTotalWidth() + staff.getX() + 1;
-        }
+//         if (staff.getTotalWidth() + staff.getX() > maxWidth) {
+//             maxWidth = staff.getTotalWidth() + staff.getX() + 1;
+//         }
 
         if (staff.getTotalHeight() + staff.getY() > maxHeight) {
             maxHeight = staff.getTotalHeight() + staff.getY() + 1;
@@ -1492,10 +1494,16 @@ MatrixView::readjustCanvasSize()
 
     }
 
+    Rosegarden::timeT length = m_segments[0]->getEndTime() -
+                               m_segments[0]->getStartTime();
+
+#ifdef RGKDE3
+    int newWidth = getXbyWorldMatrix(m_hlayout.getXForTime(length));
+#else
+    int newWidth = m_hlayout.getXForTime(length);
+#endif
+
     // now get the EditView to do the biz
-    readjustViewSize(QSize(int(maxWidth), maxHeight));
+    readjustViewSize(QSize(newWidth, maxHeight), true);
     repaintRulers();
 }
-
-
-
