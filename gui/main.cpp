@@ -353,7 +353,8 @@ int RosegardenApplication::newInstance()
             // Check for modifications and save if necessary - if cancelled
             // then don't load the new file.
             //
-            if(RosegardenGUIApp::self()->getDocument()->saveIfModified())
+            if(RosegardenGUIApp::self()->getDocument() &&
+               RosegardenGUIApp::self()->getDocument()->saveIfModified())
                 RosegardenGUIApp::self()->openFile(args->arg(0));
         }
         else
