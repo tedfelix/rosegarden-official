@@ -633,4 +633,12 @@ RosegardenGUIView::slotChangeInstrumentLabel(Rosegarden::InstrumentId id,
     m_trackEditor->getTrackButtons()->changeInstrumentLabel(id, label);
 }
 
+void
+RosegardenGUIView::slotAddAudioSegment(Rosegarden::AudioFileId audioFileId,
+                                       Rosegarden::TrackId trackId,
+                                       const Rosegarden::RealTime &startTime,
+                                       const Rosegarden::RealTime &endTime)
+{
+}
+
 

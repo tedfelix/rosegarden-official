@@ -2697,12 +2697,10 @@ RosegardenGUIApp::slotAudioManager()
 
         connect(m_audioManagerDialog,
                 SIGNAL(insertAudioSegment(Rosegarden::AudioFileId,
-                                          Rosegarden::TrackId,
                                           Rosegarden::InstrumentId,
                                           const Rosegarden::RealTime&,
                                           const Rosegarden::RealTime&)),
                 SLOT(slotInsertAudioSegment(Rosegarden::AudioFileId,
-                                            Rosegarden::TrackId,
                                             Rosegarden::InstrumentId,
                                             const Rosegarden::RealTime&,
                                             const Rosegarden::RealTime&)));
@@ -2855,13 +2853,21 @@ RosegardenGUIApp::slotDeleteSegment(Rosegarden::Segment *segment)
 }
 
 void
-RosegardenGUIApp::slotInsertAudioSegment(Rosegarden::AudioFileId id,
-                                         Rosegarden::TrackId trackId,
+RosegardenGUIApp::slotInsertAudioSegment(Rosegarden::AudioFileId audioFileId,
                                          Rosegarden::InstrumentId instrumentId,
                                          const Rosegarden::RealTime &startTime,
                                          const Rosegarden::RealTime &endTime)
 {
-    //cout << "ID = " << id << endl;
+    // Create a new track
+    //
+    m_view->slotAddTracks(1, instrumentId);
+
+    // Get that Track and insert a Segment
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    m_view->slotAddAudioSegment(audioFileId,
+                                comp.getNbTracks(),
+                                startTime,
+                                endTime);
 }
 
 // Tell whoever is interested that a SegmentSelection has changed

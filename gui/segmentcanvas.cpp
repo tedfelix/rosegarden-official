@@ -1868,11 +1868,21 @@ SegmentSplitter::handleMouseButtonRelease(QMouseEvent *e)
     {
 	m_canvas->setSnapGrain(true);
 
-        SegmentSplitCommand *command =
-            new SegmentSplitCommand(item->getSegment(),
+        if (item->getSegment()->getType() == Rosegarden::Segment::Audio)
+        {
+            AudioSegmentSplitCommand *command =
+                new AudioSegmentSplitCommand( item->getSegment(),
                                     m_canvas->grid().snapX(e->pos().x()));
+            addCommandToHistory(command);
+        }
+        else
+        {
+            SegmentSplitCommand *command =
+                new SegmentSplitCommand(item->getSegment(),
+                                    m_canvas->grid().snapX(e->pos().x()));
+            addCommandToHistory(command);
+        }
 
-        addCommandToHistory(command);
     }
  
     // Reinstate the cursor

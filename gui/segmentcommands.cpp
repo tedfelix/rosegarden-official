@@ -364,6 +364,111 @@ SegmentReconfigureCommand::swap()
 }
 
 
+// --------- Audio Split Segment -----------
+//
+//
+
+AudioSegmentSplitCommand::AudioSegmentSplitCommand(Segment *segment,
+					           timeT splitTime) :
+    XKCommand("Split Audio Segment"),
+    m_segment(segment),
+    m_newSegment(0),
+    m_splitTime(splitTime),
+    m_previousEndMarkerTime(0),
+    m_detached(false)
+{
+}
+
+AudioSegmentSplitCommand::~AudioSegmentSplitCommand()
+{
+    if (m_detached) {
+	delete m_newSegment;
+    }
+    delete m_previousEndMarkerTime;
+}
+
+void
+AudioSegmentSplitCommand::execute()
+{
+    if (!m_newSegment) {
+
+        m_newSegment = new Segment(Rosegarden::Segment::Audio);
+
+        // Basics
+        //
+        m_newSegment->setAudioFileId(m_segment->getAudioFileId());
+        m_newSegment->setTrack(m_segment->getTrack());
+
+        // Get the RealTime split time
+        //
+        Rosegarden::RealTime splitDiff =
+            m_segment->getComposition()->getRealTimeDifference(
+                        m_segment->getStartTime(), m_splitTime);
+
+        // Set audio start and end
+        //
+        m_newSegment->setAudioStartTime
+                (m_segment->getAudioStartTime() + splitDiff);
+        m_newSegment->setAudioEndTime(m_segment->getAudioEndTime());
+
+        // Insert into composition before setting end time
+        //
+        m_segment->getComposition()->addSegment(m_newSegment);
+
+        // Set start and end times
+        //
+        m_newSegment->setStartTime(m_splitTime);
+        m_newSegment->setEndTime(m_segment->getEndTime());
+
+        // Set original end time
+        //
+        m_previousEndAudioTime = m_segment->getAudioEndTime();
+        m_segment->setAudioEndTime(m_segment->getAudioStartTime() + splitDiff);
+
+        // Set labels
+        //
+        m_segmentLabel = m_segment->getLabel();
+        m_segment->setLabel(m_segmentLabel + std::string(" (split)"));
+        m_newSegment->setLabel(m_segment->getLabel());
+    }
+
+    // Resize left hand Segment
+    //
+    const timeT *emt = m_segment->getRawEndMarkerTime();
+    if (emt) {
+	m_previousEndMarkerTime = new timeT(*emt);
+    } else {
+	m_previousEndMarkerTime = 0;
+    }
+
+    m_segment->setEndMarkerTime(m_splitTime);
+
+    if (!m_newSegment->getComposition()) {
+	m_segment->getComposition()->addSegment(m_newSegment);
+    }
+
+    m_detached = false;
+
+}
+
+void
+AudioSegmentSplitCommand::unexecute()
+{
+    if (m_previousEndMarkerTime) {
+	m_segment->setEndMarkerTime(*m_previousEndMarkerTime);
+	delete m_previousEndMarkerTime;
+	m_previousEndMarkerTime = 0;
+    } else {
+	m_segment->clearEndMarker();
+    }
+
+    m_segment->setLabel(m_segmentLabel);
+    m_segment->setAudioEndTime(m_previousEndAudioTime);
+    m_segment->getComposition()->detachSegment(m_newSegment);
+    m_detached = true;
+}
+
+
 // --------- Split Segment --------
 //
 
@@ -391,24 +496,7 @@ SegmentSplitCommand::execute()
 {
     if (!m_newSegment) {
 
-        if (m_segment->getType() == Rosegarden::Segment::Audio)
-        {
-	    m_newSegment = new Segment(Rosegarden::Segment::Audio);
-            m_newSegment->setAudioFileId(m_segment->getAudioFileId());
-
-            // get the RealTime split time
-            Rosegarden::RealTime splitDiff =
-                m_segment->getComposition()->getRealTimeDifference(
-                        m_segment->getStartTime(), m_splitTime);
-
-            m_newSegment->setAudioStartTime
-                (m_segment->getAudioStartTime() + splitDiff);
-            m_newSegment->setAudioEndTime(m_segment->getAudioEndTime());
-
-            m_segment->setAudioEndTime(m_segment->getAudioStartTime() + splitDiff);
-        }
-        else
-	    m_newSegment = new Segment;
+	m_newSegment = new Segment;
 
 	m_newSegment->setTrack(m_segment->getTrack());
 	m_newSegment->setStartTime(m_splitTime);
@@ -515,6 +603,152 @@ SegmentSplitCommand::unexecute()
     m_detached = true;
 }
 
+
+// ----------- Audio Segment Auto-Split ------
+//
+AudioSegmentAutoSplitCommand::AudioSegmentAutoSplitCommand(
+        Segment *segment) :
+    XKCommand(getGlobalName()),
+    m_segment(segment),
+    m_composition(segment->getComposition()),
+    m_detached(false)
+{
+}
+
+AudioSegmentAutoSplitCommand::~AudioSegmentAutoSplitCommand()
+{
+    if (m_detached) {
+	delete m_segment;
+    } else {
+	for (unsigned int i = 0; i < m_newSegments.size(); ++i) {
+	    delete m_newSegments[i];
+	}
+    }
+}
+
+void
+AudioSegmentAutoSplitCommand::execute()
+{
+    /*
+    std::vector<AutoSplitPoint> splitPoints;
+
+    Rosegarden::Clef clef;
+    Rosegarden::Key key;
+    timeT segmentStart = m_segment->getStartTime();
+    timeT lastSoundTime = segmentStart;
+    timeT lastSplitTime = segmentStart - 1;
+
+    for (Segment::iterator i = m_segment->begin();
+	 m_segment->isBeforeEndMarker(i); ++i) {
+	
+	timeT myTime = (*i)->getAbsoluteTime();
+	int barNo = m_composition->getBarNumber(myTime);
+
+	if ((*i)->isa(Rosegarden::Clef::EventType)) {
+	    clef = Rosegarden::Clef(**i);
+	} else if ((*i)->isa(Rosegarden::Key::EventType)) {
+	    key = Rosegarden::Key(**i);
+	}
+
+	if (myTime <= lastSplitTime) continue;
+
+	bool newTimeSig = false;
+	Rosegarden::TimeSignature tsig =
+	    m_composition->getTimeSignatureInBar(barNo, newTimeSig);
+	
+	if (newTimeSig) {
+
+	    // If there's a new time sig in this bar and we haven't
+	    // already made a split in this bar, make one
+
+	    if (splitPoints.size() == 0 ||
+		m_composition->getBarNumber
+		(splitPoints[splitPoints.size()-1].time) < barNo) {
+
+		splitPoints.push_back(AutoSplitPoint(myTime, lastSoundTime,
+						     clef, key));
+		lastSoundTime = lastSplitTime = myTime;
+	    }
+
+	} else if ((*i)->isa(Rosegarden::Note::EventRestType)) {
+
+	    // Otherwise never start a subsegment on a rest
+	    
+	    continue;
+
+	} else {
+
+	    // When we meet a non-rest event, start a new split
+	    // if an entire bar has passed since the last one
+
+	    int lastSoundBarNo = m_composition->getBarNumber(lastSoundTime);
+
+	    if (lastSoundBarNo < barNo - 1 ||
+		(lastSoundBarNo == barNo - 1 &&
+		 m_composition->getBarStartForTime(lastSoundTime) ==
+		 lastSoundTime &&
+		 lastSoundTime > segmentStart)) {
+
+		splitPoints.push_back
+		    (AutoSplitPoint
+		     (m_composition->getBarStartForTime(myTime), lastSoundTime,
+		      clef, key));
+		lastSplitTime = myTime;
+	    }
+	}
+
+	lastSoundTime = std::max(lastSoundTime, myTime + (*i)->getDuration());
+    }
+	
+    for (unsigned int split = 0; split <= splitPoints.size(); ++split) {
+
+	Segment *newSegment = new Segment();
+	newSegment->setTrack(m_segment->getTrack());
+	newSegment->setLabel(m_segment->getLabel() + " " +
+			     qstrtostr(i18n("(part)")));
+
+	timeT startTime = segmentStart;
+	if (split > 0) {
+	    startTime = splitPoints[split-1].time;
+	    newSegment->insert(splitPoints[split-1].clef.getAsEvent(startTime));
+	    newSegment->insert(splitPoints[split-1].key.getAsEvent(startTime));
+	}
+
+	Segment::iterator i = m_segment->findTime(startTime);
+
+	while (m_segment->isBeforeEndMarker(i)) {
+	    timeT t = (*i)->getAbsoluteTime();
+	    if (split < splitPoints.size() &&
+		t >= splitPoints[split].lastSoundTime) break;
+	    newSegment->insert(new Event(**i));
+	    ++i;
+	}
+
+	m_newSegments.push_back(newSegment);
+    }
+	    
+    m_composition->detachSegment(m_segment);
+    for (unsigned int i = 0; i < m_newSegments.size(); ++i) {
+	m_composition->addSegment(m_newSegments[i]);
+    }
+    m_detached = true;
+    */
+}
+
+void
+AudioSegmentAutoSplitCommand::unexecute()
+{
+    /*
+    for (unsigned int i = 0; i < m_newSegments.size(); ++i) {
+	m_composition->detachSegment(m_newSegments[i]);
+    }
+    m_composition->addSegment(m_segment);
+    m_detached = false;
+    */
+}
+
+// ----------- Segment Auto-Split ------------
+//
 
 SegmentAutoSplitCommand::SegmentAutoSplitCommand(Segment *segment) :
     XKCommand(getGlobalName()),

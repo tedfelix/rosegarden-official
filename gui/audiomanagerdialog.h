@@ -129,7 +129,9 @@ public:
 
     // Scroll and expand to show this selected item
     //
-    void setSelected(Rosegarden::AudioFileId id, Rosegarden::Segment *segment);
+    void setSelected(Rosegarden::AudioFileId id,
+                     Rosegarden::Segment *segment,
+                     bool propagate); // if true then we tell the segmentcanvas
 
     MultiViewCommandHistory *getCommandHistory();
 
@@ -173,7 +175,6 @@ signals:
     void segmentSelected(Rosegarden::Segment *);
     void deleteSegment(Rosegarden::Segment *);
     void insertAudioSegment(Rosegarden::AudioFileId,
-                            Rosegarden::TrackId,
                             Rosegarden::InstrumentId,
                             const Rosegarden::RealTime &,
                             const Rosegarden::RealTime &);

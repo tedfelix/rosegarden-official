@@ -186,6 +186,11 @@ public slots:
 
     void slotAddTracks(unsigned int, Rosegarden::InstrumentId);
 
+    void slotAddAudioSegment(Rosegarden::AudioFileId,
+                             Rosegarden::TrackId,
+                             const Rosegarden::RealTime &,
+                             const Rosegarden::RealTime &);
+
     /*
      * Commands
      *

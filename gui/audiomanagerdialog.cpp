@@ -342,7 +342,7 @@ AudioManagerDialog::slotDelete()
         // Jump to new selection
         //
         if (newItem)
-            setSelected(id, segment);
+            setSelected(id, segment, true); // propagate
 
         // Do it - will force update
         //
@@ -513,7 +513,6 @@ AudioManagerDialog::slotInsert()
 
     // find selected audio file and guess a track
     emit insertAudioSegment(audioFile->getId(),
-                            0,
                             instr->getId(),
                             Rosegarden::RealTime(0, 0),
                             Rosegarden::RealTime(0, 0));
@@ -561,6 +560,7 @@ void
 AudioManagerDialog::closeEvent(QCloseEvent *e)
 {
     e->accept();
+    emit closeClicked();
 }
 
 void
@@ -586,7 +586,8 @@ AudioManagerDialog::slotSelectionChanged(QListViewItem *item)
 //
 void
 AudioManagerDialog::setSelected(Rosegarden::AudioFileId id,
-                                Rosegarden::Segment *segment)
+                                Rosegarden::Segment *segment,
+                                bool propagate)
 {
     QListViewItem *it = m_fileList->firstChild();
     QListViewItem *chIt = 0;
@@ -621,7 +622,11 @@ AudioManagerDialog::setSelected(Rosegarden::AudioFileId id,
                     {
                         m_fileList->ensureItemVisible(chIt);
                         m_fileList->setSelected(chIt, true);
-                        emit segmentSelected(segment);
+                        
+                        // Only propagate to segmentcanvas if asked to
+                        if (propagate)
+                            emit segmentSelected(segment);
+
                         return;
                     }
                 }
@@ -658,7 +663,7 @@ AudioManagerDialog::slotCommandExecuted(KCommand * /*command */)
         Rosegarden::Segment *segment = item->getSegment();
 
         // set selected
-        setSelected(id, segment);
+        setSelected(id, segment, true); // propagate
     }
 
 }
@@ -690,7 +695,10 @@ AudioManagerDialog::slotSegmentSelection(
 
     if (segment)
     {
-        setSelected(segment->getAudioFileId(), segment);
+        // We don't propagate this segment setting to the canvas 
+        // as we probably got called from there.
+        //
+        setSelected(segment->getAudioFileId(), segment, false);
     }
     else
     {
