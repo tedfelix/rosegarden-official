@@ -43,14 +43,11 @@
       <p><b>Rosegarden-4</b> is an attractive, user-friendly <b>audio
       and MIDI sequencer</b>, <b>score editor</b>, and general-purpose
       <b>music composition and editing application</b> for <b>Unix</b>
-      and <b>Linux</b>.  It is currently approaching 1.0 feature
-      completion and beta testing following three years of sustained
-      active development.</p>
+      and <b>Linux</b>.
 
-      <p><b><i>Latest news:</i></b> Rosegarden had a stand in the <a
-      href="http://www.linuxexpo.org.uk/">LinuxExpo 2003 .ORG
-      Village</a>, at Olympia 2, London, UK on the 8th and 9th October
-      2003.  <a href="expo-2003-pics.html">See pictures here!</a></p>
+      <p><b><i>Latest news:</i></b> Rosegarden-4-0.9.5 is now
+      available for <a href="download.html">immediate
+      download!</a>  This version is almost feature-complete for 1.0.</p>
 
       <div align="center" style="margin:1em" valign="center">
       <a href="pictures.html">
@@ -61,8 +58,10 @@
       <p><i><b>Other news:</b></i></p>
       <ul>
 
-      <li>Rosegarden-4-0.9.1 is now available for <a
-      href="download.html">immediate download</a>!</li>
+      <li>Rosegarden had a stand in the <a
+      href="http://www.linuxexpo.org.uk/">LinuxExpo 2003 .ORG
+      Village</a>, at Olympia 2, London, UK on the 8th and 9th October
+      2003.  <a href="expo-2003-pics.html">See pictures here!</a></p>
 
       <li>Richard Bown gave a talk on Rosegarden to the 
       <a href="http://www.affs.org.uk/affsac.html">Association For Free Software</a> at Aston University, Birmingham, UK on Saturday 17th May 2003.  The talk is available in PDF form from <a href="http://www.bownie.com/rosegarden/rg-affs-presentation-200305.pdf">here</a>.
@@ -79,16 +78,8 @@
 
       <h3 style="clear:all">Current Release</h3>
 
-      <!--
-      <div align="center" style="margin:1em" valign="center">
-      <a href="pictures.html">
-      <img src="rg4-0.8-thumb.png" border="0" vspace="20" alt="Rosegarden-4 0.9"/>
-      </a>
-      </div>
-      -->
-
-      <p>The latest release of Rosegarden is Version 4, Release 0.9.1
-      released on 31st May 2003.  Have a look at some <a
+      <p>The latest release of Rosegarden is Version 4, Release 0.9.5
+      released on 27th November 2003.  Have a look at some <a
       href="pictures.html">pictures</a> of it in use, <a
       href="download.html">download it</a>, or <a
       href="faq.html">read the Frequently Asked Questions</a> page.
@@ -98,58 +89,43 @@
       support for:
 
       <ul>
-      <li class="close">Score, piano-roll and track overview editors</li>
-      <li class="close">Score interpretation of performance MIDI data</li>
+      <li class="close">Score, piano-roll, event list and track overview editors</li>
       <li class="close">MIDI and audio playback and recording using <a href="http://www.alsa-project.org/">ALSA</a> and <a href="http://jackit.sourceforge.net/">JACK</a></li>
-      <li class="close">Audio plugin support using <a href="http://www.ladspa.org"/>LADSPA</a></li>
+      <li class="close">Audio plugin support using <a href="http://www.ladspa.org">LADSPA</a></li>
+      <li class="close">Score interpretation of performance MIDI data</li>
       <li class="close">MIDI file I/O and <a href="http://www.csounds.com/">Csound</a> export</li>
       <li class="close">High-quality score printing by exporting <a href="http://www.lilypond.org/">Lilypond</a> files</li>
-      <li class="close">Translations for Russian, Spanish and German</a>
-      <li class="close">Shareable Device (.rgd) files to ease MIDI portability</a>
+      <li class="close">Shareable device (.rgd) files to ease MIDI portability</a>
+      <li class="close">Translations into Russian, Spanish, German, French and Welsh</a>
       </ul>
     
-      <p>This is mainly a bugfix release.  It is recommended that anyone
-      using Rosegarden-4-0.9 upgrade to this latest release immediately
-      to take advantage of improved quality and stability.</p>
+      <p>The 0.9.5 release is a major feature release with significant
+      work in all areas over the previous 0.9.1.  New features include:</p>
 
-      <p>New features:</p>
+      <p>New features since 0.9.1 include:</p>
       <ul>
-        <li class="close">Mup export</li>
-        <li class="close">Step recording in Notation and Matrix views</li>
-        <li class="close">Convert single repeat to real segments</li>
-        <li class="close">Only one Rosegarden instance can run at a time</li>
-      </ul>
-
-      <p>Bugs fixed (including Sourceforge tracker IDs where appropriate):</p>
-      <ul>
-        <li class="close"><code><a href="http://sourceforge.net/tracker/index.php?func=detail&aid=739544&group_id=4932&atid=104932">739544</a></code> crash when clicking Mute</li>
-        <li class="close"><code><a href="http://sourceforge.net/tracker/index.php?func=detail&aid=740848&group_id=4932&atid=104932">740848</a></code> Bank import file dlg : set default filter to all supp. files</li>
-        <li class="close"><code><a href="http://sourceforge.net/tracker/index.php?func=detail&aid=742303&group_id=4932&atid=104932">742303</a></code> can't paste at a clef</li>
-        <li class="close"><code><a href="http://sourceforge.net/tracker/index.php?func=detail&aid=706335&group_id=4932&atid=104932">706335</a></code> Crash when loading .rg file that has audio tracks</li>
-        <li class="close"><code><a href="http://sourceforge.net/tracker/index.php?func=detail&aid=678428&group_id=4932&atid=104932">678428</a></code> MIDI file export ignores instrument parameter settings</li>
-        <li class="close"><code><a href="http://sourceforge.net/tracker/index.php?func=detail&aid=674731&group_id=4932&atid=104932">674731</a></code> MIDI sysex events badly encoded (partially fixed)</li>
-        <li class="close"><code><a href="http://sourceforge.net/tracker/index.php?func=detail&aid=632964&group_id=4932&atid=104932">632964</a></code> No recording of MIDI Aftertouch data</li>
-        <li class="close"><code><a href="http://sourceforge.net/tracker/index.php?func=detail&aid=711889&group_id=4932&atid=104932">711889</a></code> Import of Pitch Bend</li>
-        <li class="close"><code><a href="http://sourceforge.net/tracker/index.php?func=detail&aid=729376&group_id=4932&atid=104932">729376</a></code> rests hanging around at start of notation view</li>
-        <li class="close"><code><a href="http://sourceforge.net/tracker/index.php?func=detail&aid=740273&group_id=4932&atid=104932">740273</a></code> Juan's big list -- two crashes and one other bug fixed</li>
-        <li class="close"><code><a href="http://sourceforge.net/tracker/index.php?func=detail&aid=743147&group_id=4932&atid=104932">743147</a></code> connections not saved</li>
-        <li class="close"><code><a href="http://sourceforge.net/tracker/index.php?func=detail&aid=743205&group_id=4932&atid=104932">743205</a></code> bank editor device mismanagement</li>
-        <li class="close"><code><a href="http://sourceforge.net/tracker/index.php?func=detail&aid=743206&group_id=4932&atid=104932">743206</a></code> getClefAndKey too slow</li>
-        <li class="close"><code><a href="http://sourceforge.net/tracker/index.php?func=detail&aid=745162&group_id=4932&atid=104932">745162</a></code> loading banks doesn't set names correctly</li>
-        <li class="close"><code><a href="http://sourceforge.net/tracker/index.php?func=detail&aid=730011&group_id=4932&atid=104932">730011</a></code> memory leak after recording?</li>
-        <li class="close"><code><a href="http://sourceforge.net/tracker/index.php?func=detail&aid=727809&group_id=4932&atid=104932">727809</a></code> can't create segments after deleting tracks</li>
-        <li class="close"><code><a href="http://sourceforge.net/tracker/index.php?func=detail&aid=729989&group_id=4932&atid=104932">729989</a></code> trickery necessary to record audio</li>
-        <li class="close"><code><a href="http://sourceforge.net/tracker/index.php?func=detail&aid=742439&group_id=4932&atid=104932">742439</a></code> Moving notes in matrix gives wrong visual feedback</li>
-        <li class="close"><code><a href="http://sourceforge.net/tracker/index.php?func=detail&aid=742301&group_id=4932&atid=104932">742301</a></code> undo "insert note" undoes "insert clef" too</li>
-        <li class="close"><code><a href="http://sourceforge.net/tracker/index.php?func=detail&aid=739059&group_id=4932&atid=104932">739059</a></code> track ID mismanagement when performing deletion</li>
-        <li class="close"><code><a href="http://sourceforge.net/tracker/index.php?func=detail&aid=729455&group_id=4932&atid=104932">729455</a></code> selecting record button on added track</li>
-        <li class="close"><code><a href="http://sourceforge.net/tracker/index.php?func=detail&aid=661575&group_id=4932&atid=104932">661575</a></code> Drag event image offset in matrix editor</li>
-        <li class="close"><code><a href="http://sourceforge.net/tracker/index.php?func=detail&aid=727806&group_id=4932&atid=104932">727806</a></code> delete tracks, add tracks, numbers are incorrect</li>
-        <li class="close"><code><a href="http://sourceforge.net/tracker/index.php?func=detail&aid=728508&group_id=4932&atid=104932">728508</a></code> Save Settings does not save zoom/transport toolbars status</li>
-        <li class="close"><code><a href="http://sourceforge.net/tracker/index.php?func=detail&aid=709485&group_id=4932&atid=104932">709485</a></code> settings amnesia déjà vu</li>
-        <li class="close"><code><a href="http://sourceforge.net/tracker/index.php?func=detail&aid=729039&group_id=4932&atid=104932">729039</a></code> audio recording bug</li>
-        <li class="close"><code><a href="http://sourceforge.net/tracker/index.php?func=detail&aid=728466&group_id=4932&atid=104932">728466</a></code> crash on tracks -> remap instruments</li>
-        <li class="close">(not filed) non-iso-8859-1 characters now saved correctly</li>
+	<li class="close">Shared-memory-based sequencer comms level for much more robust MIDI sequencing</li>
+	<li class="close">Control rulers for editing velocity and control events</li>
+	<li class="close">Controller management for MIDI devices</li>
+	<li class="close">Event list editor with some actual editing capabilities</li>
+	<li class="close">Event filter on current selection</li>
+	<li class="close">Classification of audio plugins using liblrdf</li>
+	<li class="close">Percussion and variations support in bank management</li>
+	<li class="close">Import Studio from File</li>
+	<li class="close">Markers</li>
+	<li class="close">File merging for all file types</li>
+	<li class="close">Notation rendering using real scalable fonts (one supplied)</li>
+	<li class="close">Multi-page notation rendering with panner</li>
+	<li class="close">Much better score printing</li>
+	<li class="close">Print Preview</li>
+	<li class="close">Segment colouring</li>
+	<li class="close">Configurable metronome</li>
+	<li class="close">Better Lilypond export</li>
+	<li class="close">MusicXML export that more-or-less works</li>
+	<li class="close">Can now drag notes around in notation view</li>
+	<li class="close">Several new .rgd device files</li>
+	<li class="close">Better handling of MIDI devices that come and go</li>
+	<li class="close">Many optimisations throughout</li>
       </ul>
 
       <p>Rosegarden-4 is Free Software under the GNU GPL.  It is a KDE

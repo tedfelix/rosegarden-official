@@ -1,22 +1,10 @@
-Rosegarden 0.9 release notes
+
+Rosegarden 0.9.5 release notes
 ==============================
-The source tree builds for KDE 3.x. To build it, you first need to
-regenerate the "configure" script like so:
 
-  % make -f Makefile.cvs
-
-and now you can configure and make as usual:
-
-  % ./configure --with-qt-dir=/usr/lib/qt3 --prefix=/opt/kde3 --with-alsa=yes
-  % make
-
-NOTE: due to some build configuration issues you might also need to add
-the additional option "--with-exceptions=yes" to your configure line if
-you have problems building the gui/ directory.
-
-
-ALSA 0.9.0 support, JACK and LADSPA
+ALSA 0.9.x support, JACK and LADSPA
 ===================================
+
 Rosegarden-4 supports ALSA (www.alsa-project.org) sound drivers as
 default.  Any version above ALSA 0.9.0beta12 will do.
 
@@ -24,18 +12,12 @@ Full duplex audio is provided through the JACK library and server:
 
    http://jackit.sourceforge.net
 
+Version 0.77 or newer is needed, but only if you want audio -- you
+don't need JACK for MIDI.
+
 Audio plugin support is provided courtesy of LADSPA:
 
   http://www.ladspa.org
-
-If you want to use an ALSA soft synth as a Rosegarden Instrument you
-must start the synth (such as iiwusynth) _before_ you start Rosegarden.
-You should then see the ports of the soft synth available in the
-Rosegarden Instrument list (click and hold on the Track name to pop up
-the Instrument selection list).
-
-This release has been tested with the following JACK versions and will
-probably work with those in-between and before:  0.50.0, 0.61.0, 0.69.1
 
 
 Compiling from CVS
