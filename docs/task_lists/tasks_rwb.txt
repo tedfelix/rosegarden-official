@@ -1,17 +1,19 @@
 0.2 tasks
 =========
 
-o call() stop()
+o Fix Audio Segment splitting
 
-o closing audio clicks
+o Get Segment joining working
+
+o Segment previews still buggy
+
+o Realtime downsampling buggy
+
+o Prove and improve simultaneous audio and MIDI track performance
 
 o First time run up go to settings and walk user through the
   MIDI and Audio setup to help them understand what they're
   doing.
-
-o Audio file indexes to RealTime incl. saving and loading
-
-o Audio Segment splitting and joining
 
 o "Split silence" function to automatically split up an audio segment
    into a number of segments when the amplitude falls below a given
@@ -21,50 +23,19 @@ o Set tempo event to length of audio sample
 
 o Audio VU meters
 
-o Fix latency dialog with audio allowances
-
 o Some state we're getting into with mute buttons and file saving
 
 o Jumping vertical scroll thumb on playback [RosegardenCanvasView::slotUpdate]
 
 o "Revert file" option
 
-o Get recent file list working [it is - just not for me?]
-
-o Fix configure to omit aRts when building for ALSA and
-  vice versa (proper substiutions in Makefile.am not with
-  ifdefs)
-
 o Instrument name when pop down instrument list
-
-o selection of ALSA recording device
 
 o sweep selection on Matrix
 
-o bar buttons and loop ruler repaint
-
-o Event playback on selection movement
-
-o Changing Composition length
-
-o stop crashing on Segment movement to blank tracks
-
 o Matrix view auto scrolling
 
-o Looping marker set from file load/top level - Looping
-  set from Clients - Looping BUG crashing sequencer
-  Looping memory
-
-o Split/Join
-
-o Segment start and end markers
-
-o Segment paramters and modifiers - looping of Segments, quantisation
-  [GETTING THERE]
-
 o Complete segment edit shortcuts (click/copy/multiple segment drag)
-
-o Segment colouring
 
 o Track addition/deletion and moving on TrackButtons canvas
   [gl PARTIALLY DONE]
@@ -72,12 +43,16 @@ o Track addition/deletion and moving on TrackButtons canvas
 o More MIDI events at Composition level. Sys Exs, Program Changes,
   Controller changes etc. etc.
 
-o Segment Zooming - (midi and audio previews of Segments)
 
-For later releases
+Ideas for later on
 ------------------
 
 o Audio noise eliminator - recording
+
+o Segment colouring
+
+o selection of ALSA recording device
+
 
 Completed for 0.1.7
 ===================
@@ -92,6 +67,35 @@ o Audio preview on Segments [DONE]
 
 o Create WAV files [DONE]
 
+o call() stop() [DONE]
+
+o Fix configure to omit aRts when building for ALSA and
+  vice versa (proper substiutions in Makefile.am not with
+  ifdefs) [DONE]
+
+o Segment Zooming - (midi and audio previews of Segments) [DONE]
+
+o closing audio clicks [DONE 16bit - 8bit still dodgy]
+
+o Audio file indexes to RealTime incl. saving and loading [DONE]
+
+o Fix latency dialog with audio allowances [DONE]
+
+o Get recent file list working [it is - just not for me?] [NAI]
+
+o Segment paramters and modifiers - looping of Segments, quantisation
+  [DONE]
+
+o Looping marker set from file load/top level - Looping
+  set from Clients - Looping BUG crashing sequencer
+  Looping memory [DONE]
+
+o stop crashing on Segment movement to blank tracks [DONE]
+
+o Event playback on selection movement [DONE notation]
+
+o Changing Composition length [DONE]
+
 
 
 Completed for 0.1.6
@@ -104,6 +108,10 @@ o JACK experimental driver
   - partial/overlapping audio files playback/start index movement [DONE]
 
 o Playing Audio files broken - get seeking working [DONE]
+
+o Segment start and end markers [cc - end markers done]
+
+o bar buttons and loop ruler repaint [DONE]
 
 
 
