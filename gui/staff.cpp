@@ -303,8 +303,9 @@ Staff::deleteBars(unsigned int fromPos, unsigned int toPos)
         return;
 
     if (fromPos > toPos) {
-        kdDebug(KDEBUG_AREA) << "%% Staff::deleteBars : fromPos (" << fromPos
-                             << ")> toPos (" << toPos << ")\n";
+        kdDebug(KDEBUG_AREA) << "%% Staff::deleteBars inconsistent parameters : fromPos ("
+                             << fromPos
+                             << ") > toPos (" << toPos << ")\n";
         throw -1;
     }
     

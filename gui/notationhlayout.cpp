@@ -93,8 +93,7 @@ NotationHLayout::layout(NotationElementList::iterator from, NotationElementList:
             // layout group
             //
             kdDebug(KDEBUG_AREA) << "NotationHLayout::layout() : layout group" << endl;
-            NotationElementList *group = nel->group(); // TODO - how do I make this ?
-            layoutGroup(group->begin(), group->end());
+            layoutGroup(nel);
 
         } else {
             //
@@ -131,12 +130,17 @@ NotationHLayout::layout(NotationElementList::iterator from, NotationElementList:
 }
 
 void
-NotationHLayout::layoutGroup(NotationElementList::iterator from, NotationElementList::iterator to)
+NotationHLayout::layoutGroup(NotationElement *groupElement)
 {
+    groupElement->setX(m_currentPos);
+
     kdDebug(KDEBUG_AREA) << "NotationHLayout::layout() : layout group to pos "
                          << m_currentPos << endl;
 
-    for (NotationElementList::iterator it = from; it != to; ++it) {
+    NotationElementList *group = groupElement->group();
+
+    for (NotationElementList::iterator it = group->begin();
+         it != group->end(); ++it) {
         
         NotationElement *el = (*it);
 
@@ -144,7 +148,7 @@ NotationHLayout::layoutGroup(NotationElementList::iterator from, NotationElement
         el->setX(m_currentPos);
     }
 
-    NotationElement *firstNoteOfGroup = (*from);
+    NotationElement *firstNoteOfGroup = (*group->begin());
 
     Note note = Note(firstNoteOfGroup->event()->get<Int>("Notation::NoteType"));
     m_currentPos += m_noteWidthTable[note] + Staff::noteWidth + m_noteMargin;

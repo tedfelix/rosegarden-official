@@ -57,7 +57,7 @@ public:
 
 protected:
 
-    void layoutGroup(NotationElementList::iterator from, NotationElementList::iterator to);
+    void layoutGroup(NotationElement *groupElement);
     /*
      * Breaks down a note which doesn't fit in a bar into shorter notes - disabled for now
      */
