@@ -96,8 +96,11 @@ public:
     bool shouldTranspose() const;
 
 protected:
+    NotePixmapFactory *m_notePixmapFactory;
+
     Rosegarden::Key m_key;
     Rosegarden::Clef m_clef;
+
     QLabel *m_keyLabel;
     QComboBox *m_keyCombo;
     QComboBox *m_majorMinorCombo;

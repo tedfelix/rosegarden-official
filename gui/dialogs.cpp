@@ -151,15 +151,16 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
 				       Rosegarden::Clef clef,
 				       Rosegarden::Key defaultKey) :
     KDialogBase(parent, 0, true, i18n("Key Signature"), Ok | Cancel),
+    m_notePixmapFactory(npf),
     m_key(defaultKey),
     m_clef(clef)
 {
     QVBox *vbox = makeVBoxMainWidget();
     QHBox *keyBox = new QHBox(vbox);
     
-    BigArrowButton *keyUp = new BigArrowButton(keyBox, Qt::LeftArrow);
+    BigArrowButton *keyDown = new BigArrowButton(keyBox, Qt::LeftArrow);
     m_keyLabel = new QLabel(i18n("Key"), keyBox);
-    BigArrowButton *keyDown = new BigArrowButton(keyBox, Qt::RightArrow);
+    BigArrowButton *keyUp = new BigArrowButton(keyBox, Qt::RightArrow);
 
     QHBox *nameBox = new QHBox(vbox);
 
@@ -168,6 +169,7 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
     m_majorMinorCombo->insertItem("Major");
     m_majorMinorCombo->insertItem("Minor");
     regenerateKeyCombo();
+    redrawKeyPixmap();
 
     m_transposeButton = new QCheckBox(i18n("Transpose rest of staff"), vbox);
     
@@ -184,11 +186,37 @@ KeySignatureDialog::shouldTranspose() const
 void
 KeySignatureDialog::slotKeyUp()
 {
+    bool sharp = m_key.isSharp();
+    int ac = m_key.getAccidentalCount();
+    if (sharp) {
+	if (++ac > 7) ac = 7;
+    } else {
+	if (--ac < 1) {
+	    ac = 0;
+	    sharp = true;
+	}
+    }
+    m_key = Rosegarden::Key(ac, sharp, m_key.isMinor());
+    regenerateKeyCombo();
+    redrawKeyPixmap();
 }
 
 void
 KeySignatureDialog::slotKeyDown()
 {
+    bool sharp = m_key.isSharp();
+    int ac = m_key.getAccidentalCount();
+    if (sharp) {
+	if (--ac < 0) {
+	    ac = 1;
+	    sharp = false;
+	}
+    } else {
+	if (++ac > 7) ac = 7;
+    }
+    m_key = Rosegarden::Key(ac, sharp, m_key.isMinor());
+    regenerateKeyCombo();
+    redrawKeyPixmap();
 }
 
 bool
@@ -197,15 +225,30 @@ KeySignatureDialog::isMinor() const
     return m_majorMinorCombo->currentItem() != 0;
 }
 
+struct KeyNameComparator
+{
+    bool operator()(const Rosegarden::Key &k1, const Rosegarden::Key &k2) {
+	return (k1.getName() < k2.getName());
+    }
+};
+
 void
 KeySignatureDialog::regenerateKeyCombo()
 {
     Rosegarden::Key::KeySet keys(Rosegarden::Key::getKeys(isMinor()));
     m_keyCombo->clear();
 
+    std::sort(keys.begin(), keys.end(), KeyNameComparator());
+
     for (Rosegarden::Key::KeySet::iterator i = keys.begin();
 	 i != keys.end(); ++i) {
-	m_keyCombo->insertItem(i->getName().c_str());
+
+	QString name(i->getName().c_str());
+	int space = name.find(' ');
+	if (space > 0) name = name.left(space);
+
+	m_keyCombo->insertItem(name);
+
 	if (*i == m_key) {
 	    m_keyCombo->setCurrentItem(m_keyCombo->count() - 1);
 	}
@@ -221,23 +264,25 @@ KeySignatureDialog::getKey() const
 void
 KeySignatureDialog::redrawKeyPixmap()
 {
-
+    QCanvasPixmap pmap = m_notePixmapFactory->makeKeyPixmap(m_key, m_clef);
+    m_keyLabel->setPixmap(pmap);
 }
 
 void
 KeySignatureDialog::slotKeyComboActivated(const QString &s)
 {
     std::string name(s.latin1());
+    name = name + " " + (isMinor() ? "minor" : "major");
     m_key = Rosegarden::Key(name);
 }
 
 void
 KeySignatureDialog::slotMajorMinorChanged(const QString &)
 {
-    regenerateKeyCombo();
     m_key = Rosegarden::Key(m_key.getAccidentalCount(),
 			    m_key.isSharp(),
 			    isMinor());
+    regenerateKeyCombo();
     redrawKeyPixmap();
 }
 
