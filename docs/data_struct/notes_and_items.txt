@@ -6,12 +6,11 @@ A: Elements are stored in XMLStorableEvent objects
 element and dumping that event into an XML element
 (XMLStorableEvent::toXMLString()).
 
-These events are stored into an EventList (defined in
-core/Element2.h). Right now this structure is a multiset<>, rather
-than a list or a vector. The reason for this is simply that a
-multiset<> is ordered by definition (in our case, ordered by time
-stamp), so we don't have to worry about keeping our elements in the
-right order.
+These events are stored into a Track (defined in core/Track.h). Right
+now this structure is a multiset<>, rather than a list or a
+vector. The reason for this is simply that a multiset<> is ordered by
+definition (in our case, ordered by time stamp), so we don't have to
+worry about keeping our elements in the right order.
 
 
 Q: Is the structure of Qt canvas objects physically the same data
@@ -22,14 +21,16 @@ in small parts on demand?)
 
 A: No, the canvas elements are seperate from the actual events. The
 class doing the conversion (transforming an EventList into a
-NotationElementList is the ViewElementsManager, defined in
-viewelementsmanager.h). ViewElementsManager::notationElementList() is
-the method doing the conversion. It is called once after the
-loading. Newly inserted notes are processed in NotationView::insertNote().
+NotationElementList) is the ViewElementsManager, defined in
+viewelementsmanager.h. ViewElementsManager::getNotationElementList()
+is the method doing the conversion. It is called once after the
+loading. Newly inserted notes are processed in NotationView's tool
+classes and in TrackNotationHelper::insertNote
+(core/TrackNotationHelper.h) and related methods.
 
 The ViewElement class, which associates an Event to a view element is
-defined in Element2.h. This class should be derived for each kind of
-"visual" element : a canvas item for the notation layout, a
+defined in core/ViewElement.h. This class should be derived for each
+kind of "visual" element: a canvas item for the notation layout, a
 whatever-that-will-be in the sequencer (I'm not quite sure there will
 be such a thing though).
 
@@ -39,17 +40,15 @@ canvas item doesn't always necessarily exist), but they are maintained
 as to be identical to those of the canvas item.
 
 
-
-
 Q: When you click on the canvas to insert an item, what series of
 events takes place?  (Which object gets the initial event, what
 structure does it examine to locate the position where the click took
 place, what is then modified to insert the new object, and how does
 notice of the new insertion get propagated back to the display?)
 
-A: The object which gets the initial event is the NotationCanvasView
-(in notationcanvasview.h). This class derives from QCanvasView, which
-is a QCanvas in a ScrollView window.
+A: [This answer is out of date] The object which gets the initial
+event is the NotationCanvasView (in notationcanvasview.h). This class
+derives from QCanvasView, which is a QCanvas in a ScrollView window.
 
 The NotationCanvasView checks if the mouse press was on a staff line
 (see NotationCanvasView::contentsMousePressEvent()). Staff lines are

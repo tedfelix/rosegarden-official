@@ -203,6 +203,7 @@ NotationElementList::findTime(timeT time) const
 {
     Event e;
     e.setAbsoluteTime(time);
+    e.setSubOrdering(-100000);
     NotationElement dummy(&e);
     return lower_bound(&dummy);
 }
