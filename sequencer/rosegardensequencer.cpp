@@ -419,20 +419,22 @@ RosegardenSequencerApp::jumpTo(long posSec, long posUsec)
     return;
 }
 
+// Send the last recorded MIDI block
+//
 void
 RosegardenSequencerApp::processRecordedMidi()
 {
-    QByteArray data, replyData;
-    QCString replyType;
+    QByteArray data; //, replyData;
+    //QCString replyType;
     QDataStream arg(data, IO_WriteOnly);
 
     arg << m_sequencer->getMappedComposition(m_playLatency);
 
 
-    if (!kapp->dcopClient()->call(ROSEGARDEN_GUI_APP_NAME,
+    if (!kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
                                   ROSEGARDEN_GUI_IFACE_NAME,
                                  "processRecordedMidi(Rosegarden::MappedComposition)",
-                                  data, replyType, replyData, true))
+                                  data/*, replyType, replyData, true*/))
     {
         cerr << "RosegardenSequencer::processRecordedMidi() - " 
              <<   "can't call RosegardenGUI client" << endl;
@@ -444,12 +446,13 @@ RosegardenSequencerApp::processRecordedMidi()
 }
 
 
-// Send an update 
+// Send an update
+//
 void
 RosegardenSequencerApp::processRecordedAudio()
 {
-    QByteArray data, replyData;
-    QCString replyType;
+    QByteArray data; //, replyData;
+    //QCString replyType;
     QDataStream arg(data, IO_WriteOnly);
 
     Rosegarden::RealTime time = m_sequencer->getSequencerTime();
@@ -460,10 +463,10 @@ RosegardenSequencerApp::processRecordedAudio()
     arg << time.usec;
     arg << m_sequencer->getLastRecordedAudioLevel();
 
-    if (!kapp->dcopClient()->call(ROSEGARDEN_GUI_APP_NAME,
+    if (!kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
                                   ROSEGARDEN_GUI_IFACE_NAME,
                                  "processRecordedAudio(long int, long int, float)",
-                                  data, replyType, replyData, true))
+                                  data/*, replyType, replyData, true*/))
     {
         cerr << "RosegardenSequencer::processRecordedMidi() - " 
              <<   "can't call RosegardenGUI client" << endl;

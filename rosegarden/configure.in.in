@@ -16,14 +16,14 @@ AC_CHECK_FILE($kde_includes/arts/reference.h,, AC_MSG_ERROR("aRTS headers are mi
 AC_CHECK_FUNCS(usleep)
 
 dnl check whether user wants to use ALSA
-AC_ARG_WITH(alsa, [  --with-alsa             enable ALSA support (at cost of aRts support)],
+AC_ARG_WITH(arts, [  --with-arts             enable aRts support (at cost of ALSA support)],
 [
    if test $withval = "yes"; then
-     with_alsa=yes
-   else
      with_alsa=no
+   else
+     with_alsa=yes
   fi
-], with_alsa=no)
+], with_alsa=yes)
 
 dnl only use ALSA when sys/soundlib.h is found
 if test "$ac_header_sys_soundlib_h" = "no"; then

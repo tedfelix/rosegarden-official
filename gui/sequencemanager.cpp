@@ -22,6 +22,7 @@
 #include <qbutton.h>
 #include <dcopclient.h>
 #include <qpushbutton.h>
+#include <qcursor.h>
 
 #include <klocale.h>
 #include <kconfig.h>
@@ -483,17 +484,27 @@ SequenceManager::stop()
 
     // "call" the sequencer with a stop so we get a synchronous
     // response - then we can fiddle about with the audio file
-    // without worrying about extraenous threads causing problems
+    // without worrying about the sequencer causing problems
+    // with access to the same audio files.
     //
+    TransportStatus recordType;
     QByteArray data;
+    QCString replyType;
+    QByteArray replyData;
 
-    if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
+    // wait cursor
+    //
+    QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
+
+    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
                                   ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "stop()", data))
+                                  "stop()",
+                                  data, replyType, replyData, true))
     {
         // failed - pop up and disable sequencer options
         throw(i18n("Failed to contact Rosegarden sequencer"));
     }
+    QApplication::restoreOverrideCursor();
 
     // if we're recording MIDI or Audio then tidy up the recording Segment
     if (m_transportStatus == RECORDING_MIDI)

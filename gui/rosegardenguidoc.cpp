@@ -1166,7 +1166,8 @@ RosegardenGUIDoc::insertRecordedAudio(const Rosegarden::RealTime &time,
         }
         else
         {
-            std::cerr << "NO AUDIO FILE" << endl;
+            std::cerr << "RosegardenGUIDoc::insertRecordedAudio - "
+                      << "no audio file" << std::endl;
         }
 
         // always insert straight away for audio

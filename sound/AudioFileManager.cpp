@@ -410,7 +410,7 @@ AudioFileManager::createRecordingAudioFile()
     file = prefix + number + ".wav";
 
     // insert file into vector
-    WAVAudioFile *aF = new WAVAudioFile(newId, file, file);
+    WAVAudioFile *aF = new WAVAudioFile(newId, file, m_audioPath + file);
     m_audioFiles.push_back(aF);
 
     // what we return is the full path to the file

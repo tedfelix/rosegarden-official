@@ -243,7 +243,6 @@ PeakFile::close()
     //
     m_outFile->seekp(4, std::ios::cur);
     putBytes(m_outFile, getLittleEndianFromInteger(m_format, 4));
-    cout << "WRITING FORMAT = " << m_format << endl;
 
     // Seek to number of peak frames and write value
     //

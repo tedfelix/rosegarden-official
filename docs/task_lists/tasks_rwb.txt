@@ -5,15 +5,7 @@ o First time run up go to settings and walk user through the
   MIDI and Audio setup to help them understand what they're
   doing.
 
-o Saving RG files with audio [DONE]
-
 o Audio file indexes to RealTime incl. saving and loading
-
-o Saving RG files should always append .rg extension [DONE]
-
-o Audio file selection dialog [DONE]
-
-o Audio preview on Segments [HALF COMPLETE]
 
 o Audio Segment splitting and joining
 
@@ -26,8 +18,6 @@ o Set tempo event to length of audio sample
 o Audio VU meters
 
 o Fix latency dialog with audio allowances
-
-o Create WAV files [DONE]
 
 o Some state we're getting into with mute buttons and file saving
 
@@ -84,6 +74,21 @@ For later releases
 ------------------
 
 o Audio noise eliminator - recording
+
+Completed for 0.1.7
+===================
+
+o Saving RG files with audio [DONE]
+
+o Saving RG files should always append .rg extension [DONE]
+
+o Audio file selection dialog [DONE]
+
+o Audio preview on Segments [DONE]
+
+o Create WAV files [DONE]
+
+
 
 Completed for 0.1.6
 ===================
