@@ -4874,6 +4874,14 @@ RosegardenGUIApp::slotManageMIDIDevices()
 
     connect(m_deviceManager, SIGNAL(editControllers(Rosegarden::DeviceId)),
 	    this, SLOT(slotEditControlParameters(Rosegarden::DeviceId)));
+
+    if (m_midiMixer)
+    {
+        connect(m_deviceManager, SIGNAL(deviceNamesChanged()),
+                m_midiMixer, SLOT(slotSynchronise()));
+
+    }
+
  
     m_deviceManager->show();
 }

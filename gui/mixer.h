@@ -208,6 +208,9 @@ public:
      */
     void updateMeters(SequencerMapper *mapper);
 
+public slots:
+    void slotSynchronise(); // synchronise with updated studio
+
 signals:
     void play();
     void stop();
@@ -244,6 +247,8 @@ protected:
 
     typedef std::vector<FaderStruct*>  FaderVector;
     FaderVector                        m_faders;
+
+    QFrame                            *m_tabFrame;
 
 };
 

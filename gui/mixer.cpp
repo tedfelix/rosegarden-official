@@ -1300,17 +1300,9 @@ AudioMixerWindow::toggleNamedWidgets(bool show, const char* const name)
 //
 MidiMixerWindow::MidiMixerWindow(QWidget *parent,
 			 RosegardenGUIDoc *document):
-        MixerWindow(parent, document)
+        MixerWindow(parent, document),
+        m_tabFrame(0)
 {
-    QHBox *hbox = new QHBox(this);
-    setCentralWidget(hbox);
-
-    QVBoxLayout *vlay = new QVBoxLayout(hbox, 0, KDialog::spacingHint());
-    m_tabWidget = new QTabWidget(hbox);
-    vlay->addWidget(m_tabWidget);
-    m_tabWidget->setTabPosition(QTabWidget::Bottom);
-    setCaption(i18n("MIDI Mixer"));
-
     // Initial setup
     //
     setupTabs();
@@ -1366,6 +1358,15 @@ MidiMixerWindow::setupTabs()
     Rosegarden::InstrumentList::const_iterator iIt;
     int faderCount = 0;
 
+    if (m_tabFrame) delete m_tabFrame;
+
+    // Setup m_tabFrame
+    //
+    m_tabWidget = new QTabWidget(this);
+    setCentralWidget(m_tabWidget);
+    m_tabWidget->setTabPosition(QTabWidget::Bottom);
+    setCaption(i18n("MIDI Mixer"));
+
     for (it = m_studio->begin(); it != m_studio->end(); ++it)
     {
         dev = dynamic_cast<Rosegarden::MidiDevice*>(*it);
@@ -1379,40 +1380,44 @@ MidiMixerWindow::setupTabs()
 
             instruments = dev->getPresentationInstruments();
 
-            QFrame *frame = new QFrame(m_tabWidget);
+            // Don't add a frame for empty devices
+            //
+            if (!instruments.size()) continue;
+
+            m_tabFrame = new QFrame(m_tabWidget);
 
             QGridLayout *mainLayout = new QGridLayout
-                (frame, instruments.size() + 4, controls.size() + 4, 5);
+                (m_tabFrame, instruments.size() + 4, controls.size() + 4, 5);
 
             // MIDI Mixer label
             //
             /*
             QLabel *label = new QLabel(QString("%1 %2").arg(strtoqstr(dev->getName()))
-                        .arg(i18n("MIDI Mixer")), frame);
+                        .arg(i18n("MIDI Mixer")), m_tabFrame);
                         */
-            QLabel *label = new QLabel("", frame);
+            QLabel *label = new QLabel("", m_tabFrame);
             mainLayout->addMultiCellWidget(label, 0, 0, 0, 16, Qt::AlignCenter);
 
             // control labels
             for (unsigned int i = 0; i < controls.size(); ++i)
             {
-                label = new QLabel(strtoqstr(controls[i].getName()), frame);
+                label = new QLabel(strtoqstr(controls[i].getName()), m_tabFrame);
                 mainLayout->addWidget(label, i + 1, 0, Qt::AlignCenter);
             }
 
             // meter label
             //
             /*
-            label = new QLabel(i18n("Meter"), frame);
+            label = new QLabel(i18n("Meter"), m_tabFrame);
             mainLayout->addWidget(label, controls.size() + 1, 0, Qt::AlignCenter);
             */
 
             // volume label
-            label = new QLabel(i18n("Volume"), frame);
+            label = new QLabel(i18n("Volume"), m_tabFrame);
             mainLayout->addWidget(label, controls.size() + 2, 0, Qt::AlignCenter);
 
             // instrument label
-            label = new QLabel(i18n("Instrument"), frame);
+            label = new QLabel(i18n("Instrument"), m_tabFrame);
             mainLayout->addWidget(label, controls.size() + 3, 0, Qt::AlignCenter);
 
             int posCount = 1;
@@ -1443,7 +1448,7 @@ MidiMixerWindow::setupTabs()
                         knobColour = QColor(c.getRed(), c.getGreen(), c.getBlue());
                     }
 
-                    RosegardenRotary *controller = new RosegardenRotary(frame,
+                    RosegardenRotary *controller = new RosegardenRotary(m_tabFrame,
                             controls[i].getMin(),
                             controls[i].getMax(),
                             1.0,
@@ -1467,13 +1472,13 @@ MidiMixerWindow::setupTabs()
                 // Pan rotary
                 //
                 MidiMixerVUMeter *meter = 
-                    new MidiMixerVUMeter(frame, VUMeter::FixedHeightVisiblePeakHold, 6, 30);
+                    new MidiMixerVUMeter(m_tabFrame, VUMeter::FixedHeightVisiblePeakHold, 6, 30);
                 mainLayout->addWidget(meter, controls.size() + 1, posCount, Qt::AlignCenter);
                 m_faders[faderCount]->m_vuMeter = meter;
 
                 // Volume fader
                 //
-                RosegardenFader *fader = new RosegardenFader(0, 127, 100, 20, 80, frame);
+                RosegardenFader *fader = new RosegardenFader(0, 127, 100, 20, 80, m_tabFrame);
                 mainLayout->addWidget(fader, controls.size() + 2, posCount, Qt::AlignCenter);
                 //fader->setFader(float((*iIt)->getVolume()));
                 m_faders[faderCount]->m_volumeFader = fader;
@@ -1481,7 +1486,7 @@ MidiMixerWindow::setupTabs()
                 // Label
                 //
 	        QLabel *idLabel = new QLabel(QString("%1").
-                        arg((*iIt)->getId() - firstInstrument + 1), frame, "idLabel");
+                        arg((*iIt)->getId() - firstInstrument + 1), m_tabFrame, "idLabel");
                 mainLayout->addWidget(idLabel, controls.size() + 3, posCount, Qt::AlignCenter);
                 m_faders[faderCount]->m_id = (*iIt)->getId(); // store id in struct
 
@@ -1505,7 +1510,7 @@ MidiMixerWindow::setupTabs()
                 faderCount++;
             }
 
-            addTab(frame, strtoqstr(dev->getName()));
+            addTab(m_tabFrame, strtoqstr(dev->getName()));
         }
     }
 }
@@ -1720,6 +1725,14 @@ MidiMixerWindow::updateMeters(SequencerMapper *mapper)
         //RG_DEBUG << "MidiMixerWindow::updateMeters - level  " << info.level << endl;
     }
 }
+
+void 
+MidiMixerWindow::slotSynchronise()
+{
+    RG_DEBUG << "MidiMixer::slotSynchronise" << endl;
+    //setupTabs();
+}
+
 
 // ---- MidiMixerVUMeter ----
 //
