@@ -455,9 +455,13 @@ TempoView::slotEditDelete()
     int itemIndex = -1;
 
     m_ignoreUpdates = true;
-    KMacroCommand *command = new KMacroCommand
-	(i18n("Delete Tempo or Time Signature"));
     bool haveSomething = false;
+
+    // We want the Remove commands to be in reverse order, because
+    // removing one item by index will affect the indices of
+    // subsequent items.  So we'll stack them onto here and then pull
+    // them off again.
+    std::vector<KCommand *> commands;
 
     while ((listItem = it.current()) != 0)
     {
@@ -468,21 +472,29 @@ TempoView::slotEditDelete()
         if (item)
         {
 	    if (item->getType() == TempoListItem::TimeSignature) {
-		command->addCommand(new RemoveTimeSignatureCommand
-				    (item->getComposition(),
-				     item->getIndex()));
+		commands.push_back(new RemoveTimeSignatureCommand
+				   (item->getComposition(),
+				    item->getIndex()));
 		haveSomething = true;
 	    } else {
-		command->addCommand(new RemoveTempoChangeCommand
-				    (item->getComposition(),
-				     item->getIndex()));
+		commands.push_back(new RemoveTempoChangeCommand
+				   (item->getComposition(),
+				    item->getIndex()));
 		haveSomething = true;
 	    }		
         }
         ++it;
     }
 
-    if (haveSomething) addCommandToHistory(command);
+    if (haveSomething) {
+	KMacroCommand *command = new KMacroCommand
+	    (i18n("Delete Tempo or Time Signature"));
+	for (std::vector<KCommand *>::iterator i = commands.end();
+	     i != commands.begin();) {
+	    command->addCommand(*--i);
+	}
+	addCommandToHistory(command);
+    }
 
     applyLayout();
     m_ignoreUpdates = false;
