@@ -302,9 +302,9 @@ LilypondExporter::composeLilyMark(std::string eventMark, bool stemUp) {
         inStr = Marks::getTextFromMark(eventMark);
         
         if (inStr == "sf") {
-            inStr = "#\'((bold italic) \"sf\")"; // sf in bold/italic
+            inStr = "\\sf";  // try this
         } else if (inStr == "rf") {
-            inStr = "#\'((bold italic) \"rf\")"; // rf in bold/italic
+            inStr = "\\rfz";
         } else {        
             inStr = "\"" + inStr + "\"";
         }
@@ -312,12 +312,16 @@ LilypondExporter::composeLilyMark(std::string eventMark, bool stemUp) {
         outStr = prefix + inStr;
         
     } else {
-//        outStr = prefix;
-        outStr = "-";  // let Lilypond decide, since stemUp is unpredictable
+        
+        // property calculated by the notation editor at view time.  property
+        // can be made persistent for all notes by changing a single stem
+        // manually, but that leaves much to be desired.  Consequently, we'll
+        // let Lilypond make as many decisions as possible, and will only use
+        // stemUp to make direction decisions when it's unavoidable
+        outStr = "-";
 
-        // use full \accent format for maximal clarity to those unfamiliar
-        // with Lilypond, using this feature primarily as a way to print, and for greater
-        // legibility here
+        // use full \accent format for everything, even though some shortcuts
+        // exist, for the sake of consistency
         if (eventMark == Marks::Accent) {
             outStr += "\\accent";
         } else if (eventMark == Marks::Tenuto) {
@@ -348,7 +352,6 @@ LilypondExporter::composeLilyMark(std::string eventMark, bool stemUp) {
     return outStr;
 }
 
-
 bool
 LilypondExporter::write() {
     std::ofstream str(m_fileName.c_str(), std::ios::out);
@@ -359,20 +362,26 @@ LilypondExporter::write() {
 
     // Lilypond header information
     str << "\\version \"1.4.10\"\n";
-    //user-specified headers coming in from new metadata eventually ???
+    // user-specified headers coming in from new metadata eventually ???
     str << "\\header {\n";
     str << "\ttitle = \"" << m_fileName << "\"\n";
     str << "\tsubtitle = \"subtitle\"\n";
     str << "\tfooter = \"Rosegarden " << VERSION << "\"\n";
     str << "\ttagline = \"Exported from " << m_fileName << " by Rosegarden " << VERSION << "\"\n";
 
-//maybe still broken--leave out just in case
+    try {
+       if (m_composition->getCopyrightNote() != "") {
+           str << "\tcopyright = \""
+               //??? Incomplete: need to remove newlines from copyright note?
+                << m_composition->getCopyrightNote() << "\"\n";
+       }
+    }
 
-/*    if (m_composition->getCopyrightNote() != "") {
-        str << "\tcopyright = \""
-            //??? Incomplete: need to remove newlines from copyright note?
-            << m_composition->getCopyrightNote() << "\"\n";
-    } */
+    catch (...) {
+        // nothing to do?
+        ;
+    }
+    
     str << "}\n";
 
     // Lilypond music data!   Mapping:
@@ -451,7 +460,8 @@ LilypondExporter::write() {
             while (curNote >= MIN_NOTE_SKIP_DURATION) {
                 int numCurNotes = ((int)(segmentStart / curNote));
                 if (numCurNotes > 0) {
-                    str << "\\skip " << (wholeNoteDuration / curNote) << "*" << numCurNotes << "\n";
+                    str << "\\skip " << (wholeNoteDuration / curNote)
+                        << "*" << numCurNotes << "\n";
                     segmentStart = segmentStart - numCurNotes*curNote;
                 }
                 curNote /= 2;
@@ -460,8 +470,10 @@ LilypondExporter::write() {
 
         timeT prevTime = 0;
         int curTupletNotesRemaining = 0;
-        int accidentalCount = 0; // DMM
-//        int timeSignatureIterator = 0;
+        int accidentalCount = 0; 
+// WIP       int timeSignatureIterator = 0;
+
+        std::string lilyText = "";  // must be declared outside the scope of the next for loop
         
         // Write out all events for this Segment
         for (Segment::iterator j = (*i)->begin(); j != (*i)->end(); ++j) {
@@ -498,6 +510,8 @@ LilypondExporter::write() {
                 // just basically that the current method wastes a lot of CPU
                 // cycles checking stuff that doesn't really have to be
                 // checked because the times are known in advance if you look.
+                //
+                // (WIP)
                 TimeSignature prevTimeSignature = timeSignature;
                 if (multipleTimeSignatures) {
                     timeSignature = m_composition->getTimeSignatureAt(absoluteTime);
@@ -519,11 +533,71 @@ LilypondExporter::write() {
 
             timeT duration = (*j)->getNotationDuration();
 
+            // handle text events...  unhandled text types:
+            // UnspecifiedType, StaffName, ChordName, KeyName, Annotation
+            //
+            // text must be bound to a note, and it needs to be bound to the
+            // note immediately after receiving the text event, so we'll
+            // process it, then continue out of the loop, and then
+            // write it out the next time we have a Note event.
+            //
+            // Incomplete?  There may be cases where binding it to the next
+            // note arbitrarily is the wrong thing to do...
             if ((*j)->isa(Text::EventType)) {
-                std::cout << "TEXT: coming soon... " << std::endl;
-                // compare to Indication events...  NotationTypes
-                //
-                // 
+                
+                std::string text = "";
+                (*j)->get<String>(Text::TextPropertyName, text);
+
+                // Incomplete - these interpretations probably aren't very
+                // good...  I need to do more research to see how these
+                // type things are typically done in Lilypond.  The manual is
+                // sparse in this area, and I don't have any examples.  This
+                // will do for the time being anyway.
+
+                if (Text::isTextOfType(*j, Text::Tempo)) {
+                    // print above staff
+                    lilyText = "^#'((bold Large)\"" + text + "\")";
+                } else if (Text::isTextOfType(*j, Text::LocalTempo)) {
+                    // print above staff
+                    lilyText = "^#'(bold \"" + text + "\")";
+                } else if (Text::isTextOfType(*j, Text::Lyric)) {
+                    // print below staff
+                    //
+                    // Lilypond has a mechanism dedicated to handling lyrics,
+                    // but making use of it seems like it would be very ugly.
+                    // It would be necessary to assemble all the Text::Lyric
+                    // events and then write them in a separate section, so
+                    // let's see how _this_ approach is received...
+                    lilyText = "_#\"" + text + "\"";
+                } else if (Text::isTextOfType(*j, Text::Dynamic)) {
+                    // pass through only supported types
+                    if (text == "ppp" || text == "pp"  || text == "p"  ||
+                        text == "mp"  || text == "mf"  || text == "f"  ||
+                        text == "ff"  || text == "fff" || text == "rfz" ||
+                        text == "sf") {
+                        
+                        lilyText = "-\\" + text;
+                    } else {
+                        std::cerr << "LilypondExporter::write() - illegal Lilypond dynamic: "
+                                  << text << std::endl;
+                    }                         
+                } else if (Text::isTextOfType(*j, Text::Direction)) {
+                    // print above staff
+                    lilyText = "^#'((bold Large)\"" + text + "\")";
+                } else if (Text::isTextOfType(*j, Text::LocalDirection)) {
+                    // print above staff
+                    lilyText = "^#'(bold \"" + text + "\")";
+                } else {
+                    (*j)->get<String>(Text::TextTypePropertyName, text);
+                    std::cerr << "LilypondExporter::write() - unhandled text type: "
+                              << text << std::endl;
+                }
+                
+                // jump out of this for loop so that lilyText can be attached
+                // to the next note we come to...  this might actually be
+                // redundant, but it shouldn't hurt anything just in case
+                continue;
+
             } else if ((*j)->isa(Note::EventType) ||
                         (*j)->isa(Note::EventRestType)) {
                 // Tuplet code from notationhlayout.cpp
@@ -591,7 +665,7 @@ LilypondExporter::write() {
                     // format of Lilypond note is:
                     // name + (duration) + octave + text markup
 
-                    // calculate note name
+                    // calculate note name and write note
                     Accidental accidental;
                     std::string lilyNote;
 
@@ -604,7 +678,7 @@ LilypondExporter::write() {
 
                     str << lilyNote;
 
-                    // octave marks
+                    // generate and write octave marks
                     std::string octaveMarks = "";
                     int octave = (int)(pitch / 12);
 
@@ -623,7 +697,8 @@ LilypondExporter::write() {
 
                     str << octaveMarks;
 
-                    // marks
+                    // string together Marks, to be written outside this if
+                    // block we're in, after the duration is written
                     long markCount = 0;
                     bool stemUp;
                     std::string eventMark = "",
@@ -633,17 +708,13 @@ LilypondExporter::write() {
                     (*j)->get<Bool>(BaseProperties::STEM_UP, stemUp);
 
                     if (markCount > 0) {
-                            (*j)->get<String>(BaseProperties::getMarkPropertyName(0), eventMark);
-                            lilyMark = composeLilyMark(eventMark, stemUp);
-                            lilyNote += lilyMark;
+                        for (int c = 0; c < markCount; c++) {
+                            (*j)->get<String>(BaseProperties::getMarkPropertyName(c), eventMark);
+                            std::string mark = composeLilyMark(eventMark, stemUp);
+                            lilyMark += mark;
+                        }
                     }
 
-                    if (markCount > 1) {
-                        std::cerr << "LilypondExporter::composeLilyMark() - WARNING:"
-                                  << " Lilypond only alows one mark per note." << std::endl
-                                  << "Note has " << markCount << " marks.  Using first mark: "
-                                  << ((lilyMark == "") ? "\"\"" : lilyMark) << std::endl;
-                    }
                 } else { // it's a rest
                     if (currentlyWritingChord) {
                         currentlyWritingChord = false;
@@ -690,12 +761,18 @@ LilypondExporter::write() {
                         str << ".";
                     }
                     lastNumDots = tmpNote.getDots();
-                }
+                } // end isa Note
 
-                // write marks after duration
+                // write string of marks after duration
                 if (lilyMark != "") {
                     str << lilyMark;
-                    lilyMark = "";  // clear for next iteration
+                }
+
+                // write text carried forward from previous iteration of the
+                // for loop we're in
+                if (lilyText != "") {
+                    str << lilyText;
+                    lilyText = "";  // purge now that text has been bound to note
                 }
                 
                 // Add a tie if necessary (or postpone it if we're in a chord)
@@ -759,7 +836,8 @@ LilypondExporter::write() {
                 eventsToStart.insert(*j);
                 eventsInProgress.insert(*j);
             } else {
-                std::cerr << "\nLilypondExporter::write() - unhandled event type: " << (*j)->getType();
+                std::cerr << "\nLilypondExporter::write() - unhandled event type: "
+                          << (*j)->getType();
             }
         }
         if (currentlyWritingChord) {
