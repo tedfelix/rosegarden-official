@@ -1612,8 +1612,15 @@ RosegardenGUIDoc::insertRecordedAudio(const Rosegarden::RealTime &time,
         m_composition.addSegment(m_recordSegment);
     }
 
-    m_recordSegment->fillWithRests
-	(m_composition.getElapsedTimeForRealTime(time));
+    // Leaving this in causes a massive memory leak at the gui
+    // when recording audio:
+    //
+    // [ 730011 ] "memory leak after recording?"
+    //
+    // m_recordSegment->fillWithRests
+    //   (m_composition.getElapsedTimeForRealTime(time));
+    //
+    // Leaving it here for informational purposes.  RWB (20030523)
 
     // update this segment on the GUI
     RosegardenGUIView *w;
