@@ -21,12 +21,16 @@
 #include <qpainter.h>
 
 // include files for KDE
+#include <kstdaccel.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kfiledialog.h>
 #include <kmenubar.h>
 #include <klocale.h>
 #include <kconfig.h>
+
+#include <kaction.h>
+#include <kstdaction.h>
 
 // application specific includes
 #include "rosegardengui.h"
@@ -42,14 +46,13 @@ RosegardenGUIApp::RosegardenGUIApp()
 
     ///////////////////////////////////////////////////////////////////
     // call inits to invoke all other construction parts
-    initMenuBar();
-    initToolBar();
+    setupActions();
+    
     initStatusBar();
-    initKeyAccel();
     initDocument();
     initView();
 	
-    readOptions();
+//     readOptions();
 
     ///////////////////////////////////////////////////////////////////
     // disable menu and toolbar items at startup
@@ -67,136 +70,44 @@ RosegardenGUIApp::~RosegardenGUIApp()
 
 }
 
-void RosegardenGUIApp::initKeyAccel()
+
+void RosegardenGUIApp::setupActions()
 {
-    keyAccel = new KAccel(this);
-	
-    // fileMenu accelerators
-    keyAccel->connectItem(KStdAccel::New, this, SLOT(slotFileNew()));
-    keyAccel->connectItem(KStdAccel::Open, this, SLOT(slotFileOpen()));
-    keyAccel->connectItem(KStdAccel::Save, this, SLOT(slotFileSave()));
-    keyAccel->connectItem(KStdAccel::Close, this, SLOT(slotFileClose()));
-    keyAccel->connectItem(KStdAccel::Print, this, SLOT(slotFilePrint()));
-    keyAccel->connectItem(KStdAccel::Quit, this, SLOT(slotFileQuit()));
-    // editMenu accelerators
-    keyAccel->connectItem(KStdAccel::Cut, this, SLOT(slotEditCut()));
-    keyAccel->connectItem(KStdAccel::Copy, this, SLOT(slotEditCopy()));
-    keyAccel->connectItem(KStdAccel::Paste, this, SLOT(slotEditPaste()));
+    // setup File menu
+    // New Window ?
+    KStdAction::openNew(this, SLOT(slotFileNew()),     actionCollection());
+    KStdAction::open   (this, SLOT(slotFileOpen()),    actionCollection());
+    m_fileRecent = KStdAction::openRecent(this,
+                                          SLOT(slotFileOpenRecent(const KURL&)),
+                                          actionCollection());
+    KStdAction::save  (this, SLOT(slotFileSave()),     actionCollection());
+    KStdAction::saveAs(this, SLOT(slotFileSaveAs()),  actionCollection());
+    KStdAction::close (this, SLOT(slotFileClose()),    actionCollection());
+    KStdAction::print (this, SLOT(slotFilePrint()),         actionCollection());
+    KStdAction::quit  (this, SLOT(slotFileQuit()),         actionCollection());
 
-    keyAccel->connectItem(KStdAccel::Help, this, SLOT(appHelpActivated()));
-			
-    keyAccel->changeMenuAccel(fileMenu, ID_FILE_NEW, KStdAccel::New);
-    keyAccel->changeMenuAccel(fileMenu, ID_FILE_OPEN, KStdAccel::Open);
-    keyAccel->changeMenuAccel(fileMenu, ID_FILE_SAVE, KStdAccel::Save);
-    keyAccel->changeMenuAccel(fileMenu, ID_FILE_CLOSE, KStdAccel::Close);
-    keyAccel->changeMenuAccel(fileMenu, ID_FILE_PRINT, KStdAccel::Print);
-    keyAccel->changeMenuAccel(fileMenu, ID_FILE_QUIT, KStdAccel::Quit);
+    // setup edit menu
+    KStdAction::undo     (this, SLOT(slotEditUndo()),       actionCollection());
+    KStdAction::redo     (this, SLOT(slotEditRedo()),       actionCollection());
+    KStdAction::cut      (this, SLOT(slotEditCut()),        actionCollection());
+    KStdAction::copy     (this, SLOT(slotEditCopy()),       actionCollection());
+    KStdAction::paste    (this, SLOT(slotEditPaste()),      actionCollection());
 
-    keyAccel->changeMenuAccel(editMenu, ID_EDIT_CUT, KStdAccel::Cut);
-    keyAccel->changeMenuAccel(editMenu, ID_EDIT_COPY, KStdAccel::Copy);
-    keyAccel->changeMenuAccel(editMenu, ID_EDIT_PASTE, KStdAccel::Paste);
+    // setup Settings menu
+    KStdAction::showToolbar  (this, SLOT(slotToggleToolBar()),   actionCollection());
+    KStdAction::showStatusbar(this, SLOT(slotToggleStatusBar()), actionCollection());
 
-    keyAccel->readSettings();	
+    KStdAction::saveOptions(this, SLOT(save_options()), actionCollection());
+    KStdAction::preferences(this, SLOT(customize()),    actionCollection());
+
+    KStdAction::keyBindings      (this, SLOT(editKeys()),     actionCollection());
+    KStdAction::configureToolbars(this, SLOT(editToolbars()), actionCollection());
+
+//     createGUI("rosegardenui.rc");
+    createGUI(); // we don't have non-standard actions for the moment
+    
 }
 
-void RosegardenGUIApp::initMenuBar()
-{
-    ///////////////////////////////////////////////////////////////////
-    // MENUBAR
-    recentFilesMenu = new QPopupMenu();
-    connect(recentFilesMenu, SIGNAL(activated(int)), SLOT(slotFileOpenRecent(int)));
-
-  ///////////////////////////////////////////////////////////////////
-  // menuBar entry fileMenu
-    fileMenu = new QPopupMenu();
-    fileMenu->insertItem(kapp->miniIcon(), i18n("New &Window"), ID_FILE_NEW_WINDOW);
-    fileMenu->insertSeparator();
-    fileMenu->insertItem(BarIcon("filenew"), i18n("&New"), ID_FILE_NEW);
-    fileMenu->insertItem(BarIcon("fileopen"), i18n("&Open..."), ID_FILE_OPEN);
-    fileMenu->insertItem(i18n("Open &recent"), recentFilesMenu, ID_FILE_OPEN_RECENT);
-
-    fileMenu->insertItem(i18n("&Close"), ID_FILE_CLOSE);
-    fileMenu->insertSeparator();
-    fileMenu->insertItem(BarIcon("filefloppy") ,i18n("&Save"), ID_FILE_SAVE);
-    fileMenu->insertItem(i18n("Save &As..."), ID_FILE_SAVE_AS);
-    fileMenu->insertSeparator();
-    fileMenu->insertItem(BarIcon("fileprint"), i18n("&Print..."), ID_FILE_PRINT);
-    fileMenu->insertSeparator();
-    fileMenu->insertItem(i18n("E&xit"), ID_FILE_QUIT);
-	
-  ///////////////////////////////////////////////////////////////////
-  // menuBar entry editMenu
-    editMenu = new QPopupMenu();
-    editMenu->insertItem(BarIcon("editcut"), i18n("Cu&t"), ID_EDIT_CUT);
-    editMenu->insertItem(BarIcon("editcopy"), i18n("&Copy"), ID_EDIT_COPY);
-    editMenu->insertItem(BarIcon("editpaste"), i18n("&Paste"), ID_EDIT_PASTE);
-
-  ///////////////////////////////////////////////////////////////////
-  // menuBar entry viewMenu
-    viewMenu = new QPopupMenu();
-    viewMenu->setCheckable(true);
-    viewMenu->insertItem(i18n("&Toolbar"), ID_VIEW_TOOLBAR);
-    viewMenu->insertItem(i18n("&Statusbar"), ID_VIEW_STATUSBAR);
-
-  ///////////////////////////////////////////////////////////////////
-  // menuBar entry helpMenu
-    helpMenu_ = helpMenu("RosegardenGUI 0.1\n\n(c) 2000 by\nGuillaume Laurent, Chris Cannam, Rich Bown\nglaurent@telegraph-road.org, cannam@all-day-breakfast.com, bownie@bownie.com");
-
-    ///////////////////////////////////////////////////////////////////
-    // MENUBAR CONFIGURATION
-    // insert your popup menus with the according menubar entries in the order
-    // they will appear later from left to right
-    menuBar()->insertItem(i18n("&File"), fileMenu);
-    menuBar()->insertItem(i18n("&Edit"), editMenu);
-    menuBar()->insertItem(i18n("&View"), viewMenu);
-
-    menuBar()->insertSeparator();
-    menuBar()->insertItem(i18n("&Help"), helpMenu_);
-
-  ///////////////////////////////////////////////////////////////////
-  // CONNECT THE MENU SLOTS WITH SIGNALS
-  // for execution slots and statusbar messages
-
-    connect(fileMenu, SIGNAL(activated(int)), SLOT(commandCallback(int)));
-    connect(fileMenu, SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
-
-    connect(editMenu, SIGNAL(activated(int)), SLOT(commandCallback(int)));
-    connect(editMenu, SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
-
-    connect(viewMenu, SIGNAL(activated(int)), SLOT(commandCallback(int)));
-    connect(viewMenu, SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
-
-}
-
-void RosegardenGUIApp::initToolBar()
-{
-
-    ///////////////////////////////////////////////////////////////////
-    // TOOLBAR
-    toolBar()->insertButton(BarIcon("filenew"), ID_FILE_NEW, true, i18n("New File"));
-    toolBar()->insertButton(BarIcon("fileopen"), ID_FILE_OPEN, true, i18n("Open File"));
-    toolBar()->insertButton(BarIcon("filefloppy"), ID_FILE_SAVE, true, i18n("Save File"));
-    toolBar()->insertButton(BarIcon("fileprint"), ID_FILE_PRINT, true, i18n("Print"));
-    toolBar()->insertSeparator();
-    toolBar()->insertButton(BarIcon("editcut"), ID_EDIT_CUT, true, i18n("Cut"));
-    toolBar()->insertButton(BarIcon("editcopy"), ID_EDIT_COPY, true, i18n("Copy"));
-    toolBar()->insertButton(BarIcon("editpaste"), ID_EDIT_PASTE, true, i18n("Paste"));
-    toolBar()->insertSeparator();
-    toolBar()->insertButton(BarIcon("help"), ID_HELP_CONTENTS, SIGNAL(clicked()),
-                            this, SLOT(appHelpActivated()), true,i18n("Help"));
-
-    ///////////////////////////////////////////////////////////////////
-    // INSERT YOUR APPLICATION SPECIFIC TOOLBARS HERE WITH toolBar(n)
-
-
-    ///////////////////////////////////////////////////////////////////
-    // CONNECT THE TOOLBAR SLOTS WITH SIGNALS - add new created toolbars by their according number
-    // connect for invoking the slot actions
-    connect(toolBar(), SIGNAL(clicked(int)), SLOT(commandCallback(int)));
-    // connect for the status help on holing icons pressed with the mouse button
-    connect(toolBar(), SIGNAL(pressed(int)), SLOT(statusCallback(int)));
-
-}
 
 void RosegardenGUIApp::initStatusBar()
 {
@@ -243,23 +154,6 @@ void RosegardenGUIApp::disableCommand(int id_)
     toolBar()->setItemEnabled(id_, false);
 }
 
-void RosegardenGUIApp::addRecentFile(const QString &file)
-{
-    if(recentFiles.find(file) == -1) {
-        if( recentFiles.count() < 5) {
-            recentFiles.insert(0, file);
-        } else {
-            recentFiles.remove(4);
-            recentFiles.insert(0, file);
-        }
-        recentFilesMenu->clear();
-
-        for ( int i=0 ; i < (int) recentFiles.count(); i++) {
-            recentFilesMenu->insertItem(recentFiles.at(i), i);
-        }
-    }
-}
-
 void RosegardenGUIApp::openDocumentFile(const char* _cmdl)
 {
     slotStatusMsg(i18n("Opening file..."));
@@ -286,49 +180,49 @@ void RosegardenGUIApp::saveOptions()
     config->writeEntry("Show Toolbar", toolBar()->isVisible());
     config->writeEntry("Show Statusbar",statusBar()->isVisible());
     config->writeEntry("ToolBarPos", (int) toolBar()->barPos());
-    config->writeEntry("Recent Files", recentFiles);
+//     config->writeEntry("Recent Files", recentFiles);
 }
 
 
 void RosegardenGUIApp::readOptions()
 {
 	
-    config->setGroup("General Options");
+//     config->setGroup("General Options");
 
-    // bar status settings
-    bool bViewToolbar = config->readBoolEntry("Show Toolbar", true);
-    viewMenu->setItemChecked(ID_VIEW_TOOLBAR, bViewToolbar);
+//     // bar status settings
+//     bool bViewToolbar = config->readBoolEntry("Show Toolbar", true);
+//     viewMenu->setItemChecked(ID_VIEW_TOOLBAR, bViewToolbar);
 
-    if(!bViewToolbar) {
-        KMessageBox::sorry(0, "Need to re-implement toolbar hide");
-        // enableToolBar(KToolBar::Hide);
-    }
+//     if(!bViewToolbar) {
+//         KMessageBox::sorry(0, "Need to re-implement toolbar hide");
+//         // enableToolBar(KToolBar::Hide);
+//     }
 	
-    bool bViewStatusbar = config->readBoolEntry("Show Statusbar", true);
-    viewMenu->setItemChecked(ID_VIEW_STATUSBAR, bViewStatusbar);
-    if(!bViewStatusbar) {
-        KMessageBox::sorry(0, "Need to re-implement statusbar hide");
-        // enableStatusBar(KStatusBar::Hide);
-    }
+//     bool bViewStatusbar = config->readBoolEntry("Show Statusbar", true);
+//     viewMenu->setItemChecked(ID_VIEW_STATUSBAR, bViewStatusbar);
+//     if(!bViewStatusbar) {
+//         KMessageBox::sorry(0, "Need to re-implement statusbar hide");
+//         // enableStatusBar(KStatusBar::Hide);
+//     }
 
-    // bar position settings
-    KToolBar::BarPosition toolBarPos;
-    toolBarPos=(KToolBar::BarPosition) config->readNumEntry("ToolBarPos", KToolBar::Top);
-    toolBar()->setBarPos(toolBarPos);
+//     // bar position settings
+//     KToolBar::BarPosition toolBarPos;
+//     toolBarPos=(KToolBar::BarPosition) config->readNumEntry("ToolBarPos", KToolBar::Top);
+//     toolBar()->setBarPos(toolBarPos);
 	
-    // initialize the recent file list
-    recentFiles.setAutoDelete(TRUE);
-    config->readListEntry("Recent Files", recentFiles);
+//     // initialize the recent file list
+//     recentFiles.setAutoDelete(TRUE);
+//     config->readListEntry("Recent Files", recentFiles);
 	
-    for (int i=0; i < (int) recentFiles.count(); i++) {
-        recentFilesMenu->insertItem(recentFiles.at(i), i);
-    }
+//     for (int i=0; i < (int) recentFiles.count(); i++) {
+//         recentFilesMenu->insertItem(recentFiles.at(i), i);
+//     }
 
-    QSize size=config->readSizeEntry("Geometry");
+//     QSize size=config->readSizeEntry("Geometry");
 
-    if(!size.isEmpty()) {
-        resize(size);
-    }
+//     if(!size.isEmpty()) {
+//         resize(size);
+//     }
 }
 
 void RosegardenGUIApp::saveProperties(KConfig *_cfg)
@@ -418,43 +312,48 @@ void RosegardenGUIApp::slotFileNew()
 void RosegardenGUIApp::slotFileOpen()
 {
     slotStatusMsg(i18n("Opening file..."));
+
+    kdDebug(KDEBUG_AREA) << "slotFileOpen()" << endl;
 	
-    if(!doc->saveModified()) {
-        // here saving wasn't successful
-    } else {	
-        QString fileToOpen=KFileDialog::getOpenFileName(QDir::homeDirPath(),
-                                                        i18n("*.xml"),
-                                                        this, i18n("Open File..."));
-        if(!fileToOpen.isEmpty()) {
-            doc->closeDocument();
-            doc->openDocument(fileToOpen);
-            QString caption=kapp->caption();	
-            setCaption(caption+": "+doc->getTitle());
-            addRecentFile(fileToOpen);
-        }
-    }
+//     if(!doc->saveModified()) {
+//         // here saving wasn't successful
+//     } else {	
+//         QString fileToOpen=KFileDialog::getOpenFileName(QDir::homeDirPath(),
+//                                                         i18n("*.xml"),
+//                                                         this, i18n("Open File..."));
+//         if(!fileToOpen.isEmpty()) {
+//             doc->closeDocument();
+//             doc->openDocument(fileToOpen);
+//             QString caption=kapp->caption();	
+//             setCaption(caption+": "+doc->getTitle());
+//             m_fileRecent->addFile(fileToOpen);
+//         }
+//     }
 
     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
 
     initView();
 }
 
-void RosegardenGUIApp::slotFileOpenRecent(int id_)
+void RosegardenGUIApp::slotFileOpenRecent(const KURL &url)
 {
-    slotStatusMsg(i18n("Opening file..."));
+//     slotStatusMsg(i18n("Opening file..."));
 	
-    if(!doc->saveModified()) {
-        // here saving wasn't successful
-    } else {
-        doc->closeDocument();
-        doc->openDocument(recentFiles.at(id_));
-        QString caption=kapp->caption();	
-        setCaption(caption+": "+doc->getTitle());
-    }
+//     if(!doc->saveModified()) {
+//         // here saving wasn't successful
+//     } else {
+//         doc->closeDocument();
+//         doc->openDocument(recentFiles.at(id_));
+//         QString caption=kapp->caption();	
+//         setCaption(caption+": "+doc->getTitle());
+//     }
 
-    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
+//     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
 
-    initView();
+//     initView();
+
+    kdDebug(KDEBUG_AREA) << "slotFileOpenRecent()" << endl;
+    //openURL(url);
 }
 
 void RosegardenGUIApp::slotFileSave()
@@ -470,19 +369,21 @@ void RosegardenGUIApp::slotFileSaveAs()
 {
     slotStatusMsg(i18n("Saving file with a new filename..."));
 
-    QString newName=KFileDialog::getSaveFileName(QDir::currentDirPath(),
-                                                 i18n("*.xml"), this, i18n("Save as..."));
-    if(!newName.isEmpty())
-        {
-            QFileInfo saveAsInfo(newName);
-            doc->setTitle(saveAsInfo.fileName());
-            doc->setAbsFilePath(saveAsInfo.absFilePath());
-            doc->saveDocument(newName);
-            addRecentFile(newName);
+    kdDebug(KDEBUG_AREA) << "slotFileSaveAs()" << endl;
 
-            QString caption=kapp->caption();	
-            setCaption(caption+": "+doc->getTitle());
-        }
+//     QString newName=KFileDialog::getSaveFileName(QDir::currentDirPath(),
+//                                                  i18n("*.xml"), this, i18n("Save as..."));
+//     if(!newName.isEmpty())
+//         {
+//             QFileInfo saveAsInfo(newName);
+//             doc->setTitle(saveAsInfo.fileName());
+//             doc->setAbsFilePath(saveAsInfo.absFilePath());
+//             doc->saveDocument(newName);
+//             m_fileRecent->addFile(newName);
+
+//             QString caption=kapp->caption();	
+//             setCaption(caption+": "+doc->getTitle());
+//         }
 
     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
 }
@@ -527,6 +428,20 @@ void RosegardenGUIApp::slotFileQuit()
     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
+void RosegardenGUIApp::slotEditUndo()
+{
+    slotStatusMsg(i18n("Undo..."));
+
+    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
+}
+
+void RosegardenGUIApp::slotEditRedo()
+{
+    slotStatusMsg(i18n("Redo..."));
+
+    slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
+}
+
 void RosegardenGUIApp::slotEditCut()
 {
     slotStatusMsg(i18n("Cutting selection..."));
@@ -548,36 +463,26 @@ void RosegardenGUIApp::slotEditPaste()
     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
-void RosegardenGUIApp::slotViewToolBar()
+void RosegardenGUIApp::slotToggleToolBar()
 {
     slotStatusMsg(i18n("Toggle the toolbar..."));
-    ///////////////////////////////////////////////////////////////////
-    // turn Toolbar on or off
-    if( viewMenu->isItemChecked(ID_VIEW_TOOLBAR)) {
-        viewMenu->setItemChecked(ID_VIEW_TOOLBAR, false);
-        // enableToolBar(KToolBar::Hide);
-    } else {
-        viewMenu->setItemChecked(ID_VIEW_TOOLBAR, true);
-        // enableToolBar(KToolBar::Show);
-    }		
+
+    if (toolBar()->isVisible())
+        toolBar()->hide();
+    else
+        toolBar()->show();
 
     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
-void RosegardenGUIApp::slotViewStatusBar()
+void RosegardenGUIApp::slotToggleStatusBar()
 {
     slotStatusMsg(i18n("Toggle the statusbar..."));
-    ///////////////////////////////////////////////////////////////////
-    //turn Statusbar on or off
-    if( viewMenu->isItemChecked(ID_VIEW_STATUSBAR)) {
-        viewMenu->setItemChecked(ID_VIEW_STATUSBAR, false);
-        KMessageBox::sorry(0, "Need to re-implement this");
-        // enableStatusBar(KStatusBar::Hide);
-    } else {
-        viewMenu->setItemChecked(ID_VIEW_STATUSBAR, true);
-        KMessageBox::sorry(0, "Need to re-implement this");
-        // enableStatusBar(KStatusBar::Show);
-    }
+
+    if (statusBar()->isVisible())
+        statusBar()->hide();
+    else
+        statusBar()->show();
 
     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
 }
@@ -599,130 +504,3 @@ void RosegardenGUIApp::slotStatusHelpMsg(const QString &text)
     statusBar()->message(text, 2000);
 }
 
-
-
-void RosegardenGUIApp::commandCallback(int id_)
-{
-    switch (id_)
-        {
-        case ID_FILE_NEW_WINDOW:
-            slotFileNewWindow();
-            break;
-
-        case ID_FILE_NEW:
-            slotFileNew();
-            break;
-
-        case ID_FILE_OPEN:
-            slotFileOpen();
-            break;
-
-        case ID_FILE_SAVE:
-            slotFileSave();
-            break;
-
-        case ID_FILE_SAVE_AS:
-            slotFileSaveAs();
-            break;
-
-        case ID_FILE_CLOSE:
-            slotFileClose();
-            break;
-
-        case ID_FILE_PRINT:
-            slotFilePrint();
-            break;
-
-        case ID_FILE_QUIT:
-            slotFileQuit();
-            break;
-
-        case ID_EDIT_CUT:
-            slotEditCut();
-            break;
-
-        case ID_EDIT_COPY:
-            slotEditCopy();
-            break;
-
-        case ID_EDIT_PASTE:
-            slotEditPaste();
-            break;
-  
-        case ID_VIEW_TOOLBAR:
-            slotViewToolBar();
-            break;
-
-        case ID_VIEW_STATUSBAR:
-            slotViewStatusBar();
-            break;
-
-        default:
-            break;
-        }
-}
-
-void RosegardenGUIApp::statusCallback(int id_)
-{
-    switch (id_)
-        {
-        case ID_FILE_NEW_WINDOW:
-            slotStatusHelpMsg(i18n("Opens a new application window"));
-            break;
-
-        case ID_FILE_NEW:
-            slotStatusHelpMsg(i18n("Creates a new document"));
-            break;
-
-        case ID_FILE_OPEN:
-            slotStatusHelpMsg(i18n("Opens an existing document"));
-            break;
-
-        case ID_FILE_OPEN_RECENT:
-            slotStatusHelpMsg(i18n("Opens a recently used file"));
-            break;
-
-        case ID_FILE_SAVE:
-            slotStatusHelpMsg(i18n("Saves the actual document"));
-            break;
-
-        case ID_FILE_SAVE_AS:
-            slotStatusHelpMsg(i18n("Saves the actual document as..."));
-            break;
-
-        case ID_FILE_CLOSE:
-            slotStatusHelpMsg(i18n("Closes the actual document"));
-            break;
-
-        case ID_FILE_PRINT:
-            slotStatusHelpMsg(i18n("Prints out the actual document"));
-            break;
-
-        case ID_FILE_QUIT:
-            slotStatusHelpMsg(i18n("Quits the application"));
-            break;
-
-        case ID_EDIT_CUT:
-            slotStatusHelpMsg(i18n("Cuts the selected section and puts it to the clipboard"));
-            break;
-
-        case ID_EDIT_COPY:
-            slotStatusHelpMsg(i18n("Copies the selected section to the clipboard"));
-            break;
-
-        case ID_EDIT_PASTE:
-            slotStatusHelpMsg(i18n("Pastes the clipboard contents to actual position"));
-            break;
-
-        case ID_VIEW_TOOLBAR:
-            slotStatusHelpMsg(i18n("Enables/disables the toolbar"));
-            break;
-
-        case ID_VIEW_STATUSBAR:
-            slotStatusHelpMsg(i18n("Enables/disables the statusbar"));
-            break;
-
-        default:
-            break;
-        }
-}

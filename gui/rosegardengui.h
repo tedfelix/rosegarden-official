@@ -31,6 +31,9 @@
 #include <kmainwindow.h>
 #include <kaccel.h>
 
+class KURL;
+class KRecentFilesAction;
+
 // forward declaration of the RosegardenGUI classes
 class RosegardenGUIDoc;
 class RosegardenGUIView;
@@ -68,9 +71,7 @@ class RosegardenGUIApp : public KMainWindow
     /** disables menuentries/toolbar items
      */
     void disableCommand(int id_);
-    /** add a opened file to the recent file list and update recent_file_menu
-     */
-    void addRecentFile(const QString &file);
+
     /** opens a file specified by commandline option
      */
     void openDocumentFile(const char *_cmdl=0);
@@ -87,17 +88,12 @@ class RosegardenGUIApp : public KMainWindow
     /** read general Options again and initialize all variables like the recent file list
      */
     void readOptions();
-    /** initKeyAccel creates the keyboard accelerator items for the available slots and changes the menu accelerators.
-     * @see KAccel
+
+    /** create menus and toolbars
+     *
      */
-    void initKeyAccel();
-    /** initMenuBar creates the menubar and inserts the menupopups as well as creating the helpMenu.
-     * @see KApplication#getHelpMenu
-     */
-    void initMenuBar();
-    /** this creates the toolbars.
-     */
-    void initToolBar();
+    void setupActions();
+
     /** sets up the statusbar for the main window by initialzing a statuslabel.
      */
     void initStatusBar();
@@ -133,51 +129,74 @@ class RosegardenGUIApp : public KMainWindow
      */
     virtual void readProperties(KConfig *_cfg);
 
+    /**
+     * Works like openFile but is able to open remote files
+     */
+//     void openURL( const KURL& _url, int _mode );
+
   public slots:
-    /** switch argument for slot selection by menu or toolbar ID */
-    void commandCallback(int id_);
-    /** switch argument for Statusbar help entries on slot selection. Add your ID's help here for toolbars and menubar entries. */
-    void statusCallback(int id_);
     /** open a new application window by creating a new instance of RosegardenGUIApp */
     void slotFileNewWindow();
+
     /** clears the document in the actual view to reuse it as the new document */
     void slotFileNew();
+
     /** open a file and load it into the document*/
     void slotFileOpen();
+
     /** opens a file from the recent files menu */
-    void slotFileOpenRecent(int id_);
+    void slotFileOpenRecent(const KURL&);
+
     /** save a document */
     void slotFileSave();
+
     /** save a document by a new filename*/
     void slotFileSaveAs();
+
     /** asks for saving if the file is modified, then closes the actual file and window*/
     void slotFileClose();
+
     /** print the actual file */
     void slotFilePrint();
+
     /** closes all open windows by calling close() on each memberList item until the list is empty, then quits the application.
      * If queryClose() returns false because the user canceled the saveModified() dialog, the closing breaks.
      */
     void slotFileQuit();
+
+    /** undo
+     */
+    void slotEditUndo();
+    /** redo
+     */
+    void slotEditRedo();
+    
     /** put the marked text/object into the clipboard and remove
      *	it from the document
      */
     void slotEditCut();
+
     /** put the marked text/object into the clipboard
      */
     void slotEditCopy();
+
     /** paste the clipboard into the document
      */
     void slotEditPaste();
+
     /** toggles the toolbar
      */
-    void slotViewToolBar();
+    void slotToggleToolBar();
+
     /** toggles the statusbar
      */
-    void slotViewStatusBar();
+    void slotToggleStatusBar();
+
     /** changes the statusbar contents for the standard label permanently, used to indicate current actions.
      * @param text the text that is displayed in the statusbar
      */
     void slotStatusMsg(const QString &text);
+
     /** changes the status message of the whole statusbar for two seconds, then restores the last status. This is used to display
      * statusbar messages that give information about actions for toolbar icons and menuentries.
      * @param text the text that is displayed in the statusbar
@@ -186,27 +205,22 @@ class RosegardenGUIApp : public KMainWindow
 
   private:
     /** contains the recently used filenames */
-    QStrList recentFiles;
+//     QStrList recentFiles;
 
     /** the configuration object of the application */
     KConfig *config;
     /** the key accelerator container */
-    KAccel *keyAccel;
-    /** file_menu contains all items of the menubar entry "File" */
-    QPopupMenu *fileMenu;
-    /** the recent file menu containing the last five opened files */
-    QPopupMenu *recentFilesMenu;
-    /** edit_menu contains all items of the menubar entry "Edit" */
-    QPopupMenu *editMenu;
-    /** view_menu contains all items of the menubar entry "View" */
-    QPopupMenu *viewMenu;
-    /** help_menu contains all items of the menubar entry "Help" */
-    QPopupMenu *helpMenu_;
+//     KAccel *keyAccel;
+
     /** view is the main widget which represents your working area. The View
      * class should handle all events of the view widget.  It is kept empty so
      * you can create your view according to your application's needs by
      * changing the view class.
      */
+
+    KRecentFilesAction *m_fileRecent;
+
+
     RosegardenGUIView *view;
     /** doc represents your actual document and is created only once. It keeps
      * information such as filename and does the serialization of your files.
