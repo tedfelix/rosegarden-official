@@ -435,3 +435,66 @@ const string TimeSignature::NumeratorPropertyName = "numerator";
 const string TimeSignature::DenominatorPropertyName = "denominator";
 const TimeSignature TimeSignature::DefaultTimeSignature = TimeSignature(4, 4);
 
+TimeSignature::TimeSignature()
+    : m_numerator(DefaultTimeSignature.m_numerator),
+      m_denominator(DefaultTimeSignature.m_denominator)
+{
+}
+
+TimeSignature::TimeSignature(int numerator, int denominator) throw (BadTimeSignature)
+    : m_numerator(numerator), m_denominator(denominator)
+{
+        //!!! check, and throw BadTimeSignature if appropriate
+}
+
+TimeSignature::TimeSignature(const Event &e)
+    throw (Event::NoData, Event::BadType, BadTimeSignature)
+{
+    if (e.getType() != EventType) {
+        throw Event::BadType();
+    }
+    m_numerator = e.get<Int>(NumeratorPropertyName);
+    m_denominator = e.get<Int>(DenominatorPropertyName);
+    //!!! check, and throw BadTimeSignature if appropriate
+}
+
+TimeSignature::TimeSignature(const TimeSignature &ts)
+    : m_numerator(ts.m_numerator),
+      m_denominator(ts.m_denominator)
+{
+}
+
+TimeSignature::~TimeSignature()
+{
+}
+
+TimeSignature& TimeSignature::operator=(const TimeSignature &ts)
+{
+    if (&ts == this) return *this;
+    m_numerator = ts.m_numerator;
+    m_denominator = ts.m_denominator;
+    return *this;
+}
+
+Note::Type TimeSignature::getUnit() const
+{
+    int c, d;
+    for (c = 0, d = m_denominator; d > 1; d /= 2) ++c;
+    return Note::Semibreve - c;
+}
+
+bool TimeSignature::isDotted() const
+{
+    return (m_numerator % 3 == 0 &&
+            getBarDuration() >= Note(Note::Crotchet, true).getDuration());
+}
+
+int TimeSignature::getBeatDuration() const
+{
+    if (isDotted()) {
+        return (getUnitDuration() * 3) / 2; //!!! is this always correct?
+    } else {
+        return  getUnitDuration();
+    }
+}
+

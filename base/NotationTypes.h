@@ -400,36 +400,19 @@ public:
     static const TimeSignature DefaultTimeSignature;
     struct BadTimeSignature { };
 
-    TimeSignature() : m_numerator(DefaultTimeSignature.m_numerator) ,
-                      m_denominator(DefaultTimeSignature.m_denominator) { }
+    TimeSignature();
 
     TimeSignature(int numerator, int denominator)
-        throw (BadTimeSignature) :
-        m_numerator(numerator), m_denominator(denominator) {
-        //!!! check, and throw BadTimeSignature if appropriate
-    }
+        throw (BadTimeSignature);
 
     TimeSignature(const Event &e)
-        throw (Event::NoData, Event::BadType, BadTimeSignature) {
-        if (e.getType() != EventType) {
-            throw Event::BadType();
-        }
-        m_numerator = e.get<Int>(NumeratorPropertyName);
-        m_denominator = e.get<Int>(DenominatorPropertyName);
-        //!!! check, and throw BadTimeSignature if appropriate
-    }
+        throw (Event::NoData, Event::BadType, BadTimeSignature);
+    
+    TimeSignature(const TimeSignature &ts);
 
-    TimeSignature(const TimeSignature &ts) :
-        m_numerator(ts.m_numerator), m_denominator(ts.m_denominator) { }
+    virtual ~TimeSignature();
 
-    virtual ~TimeSignature() { }
-
-    TimeSignature &operator=(const TimeSignature &ts) {
-        if (&ts == this) return *this;
-        m_numerator = ts.m_numerator;
-        m_denominator = ts.m_denominator;
-        return *this;
-    }
+    TimeSignature &operator=(const TimeSignature &ts);
 
     int getNumerator()    const { return m_numerator; }
     int getDenominator()  const { return m_denominator; }
@@ -440,11 +423,8 @@ public:
     // is the crotchet, and that of 6/8 is the quaver.  The numerator
     // of the time signature gives the number of units per bar.
 
-    Note::Type getUnit()  const {
-        int c, d;
-        for (c = 0, d = m_denominator; d > 1; d /= 2) ++c;
-        return Note::Semibreve - c;
-    }
+    Note::Type getUnit()  const;
+
     int getUnitDuration() const { return 6 * (64 / m_denominator); }
 
     // The "beat" of the time depends on whether the signature implies
@@ -453,17 +433,10 @@ public:
     // (there are only two beats in a 6/8 bar).  We don't worry
     // ourselves with more complex times (7/16 anyone?) at the moment
 
-    bool isDotted() const {
-        return (m_numerator % 3 == 0 &&
-                getBarDuration() >= Note(Note::Crotchet, true).getDuration());
-    }
-    int getBeatDuration() const {
-        if (isDotted()) {
-            return (getUnitDuration() * 3) / 2; //!!! is this always correct?
-        } else {
-            return  getUnitDuration();
-        }
-    }
+    bool isDotted() const;
+
+    int getBeatDuration() const;
+
     int getBeatsPerBar() const {
         return getBarDuration() / getBeatDuration();
     }
