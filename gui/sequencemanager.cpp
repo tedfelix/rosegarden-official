@@ -200,6 +200,8 @@ void SequenceManager::setDocument(RosegardenGUIDoc* doc)
 	m_compositionRefreshStatusId =
 	    m_doc->getComposition().getNewRefreshStatusId();
     }
+
+    resetCompositionMmapper();
 }
 
 RosegardenGUIDoc* SequenceManager::getDocument()
@@ -1746,10 +1748,13 @@ CompositionMmapper::CompositionMmapper(RosegardenGUIDoc *doc)
     //
     // Clean up possible left-overs
     //
-    QDir segmentsDir(KGlobal::dirs()->resourceDirs("tmp").first(),
-                     "segment_*");
+    QString tmpPath = KGlobal::dirs()->resourceDirs("tmp").first();
+
+    QDir segmentsDir(tmpPath, "segment_*");
     for (unsigned int i = 0; i < segmentsDir.count(); ++i) {
-        QFile::remove(segmentsDir[i]);
+        QString segmentName = tmpPath + '/' + segmentsDir[i];
+        SEQMAN_DEBUG << "CompositionMmapper : cleaning up " << segmentName << endl;
+        QFile::remove(segmentName);
     }
 
     Composition &comp = m_doc->getComposition();
