@@ -55,6 +55,7 @@
 #include "qdeferscrollview.h"
 #include "matrixparameterbox.h"
 #include "velocitycolour.h"
+#include "Property.h"
 
 #include "rosedebug.h"
 
@@ -69,6 +70,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
                        QWidget *parent)
     : EditView(doc, segments, 3, parent, "matrixview"),
       m_currentEventSelection(0),
+      m_pushSegment(0),
       m_hlayout(&doc->getComposition()),
       m_vlayout(),
       m_snapGrid(&m_hlayout),
@@ -243,7 +245,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     slotTestClipboard();
 #endif
 
-    setCurrentSelection(0);
+    setCurrentSelection(0, false);
 
     // Change this when the matrix view will have its own page
     // in the config dialog.
@@ -470,37 +472,113 @@ MatrixCanvasView* MatrixView::getCanvasView()
 }
 
 
-void MatrixView::setCurrentSelection(EventSelection* s)
+void MatrixView::setCurrentSelection(EventSelection* s, bool preview)
 {
+    if (!m_currentEventSelection && !s) return;
+
     if (m_currentEventSelection) {
         getStaff(0)->positionElements(m_currentEventSelection->getStartTime(),
                                       m_currentEventSelection->getEndTime());
     }
 
-    delete m_currentEventSelection;
+    EventSelection *oldSelection = m_currentEventSelection;
     m_currentEventSelection = s;
 
+    timeT startA, endA, startB, endB;
+
+    if (oldSelection) {
+        startA = oldSelection->getStartTime();
+        endA   = oldSelection->getEndTime();
+        startB = s ? s->getStartTime() : startA;
+        endB   = s ? s->getEndTime()   : endA;
+    } else {
+        // we know they can't both be null -- first thing we tested above
+        startA = startB = s->getStartTime();
+        endA   = endB   = s->getEndTime();
+    }
+
+    bool updateRequired = true;
+
+
+    if (s && preview)
+    {
+        bool foundNewEvent = false;
+
+        for (EventSelection::eventcontainer::iterator i =
+                 s->getSegmentEvents().begin();
+             i != s->getSegmentEvents().end(); ++i) {
+
+            if (oldSelection && oldSelection->getSegment() == s->getSegment()
+                && oldSelection->contains(*i)) continue;
+
+            foundNewEvent = true;
+
+            long pitch;
+            if (!(*i)->get<Rosegarden::Int>(Rosegarden::BaseProperties::PITCH,
+                                            pitch)) continue;
+
+            playNote(s->getSegment(), pitch);
+        }
+
+        if (!foundNewEvent) {
+            if (oldSelection &&
+                oldSelection->getSegment() == s->getSegment() &&
+                oldSelection->getSegmentEvents().size() ==
+                s->getSegmentEvents().size()) updateRequired = false;
+        }
+    }
+
+    if (updateRequired) {
+
+        if ((endA >= startB && endB >= startA) &&
+            (!s || !oldSelection ||
+             oldSelection->getSegment() == s->getSegment())) {
+
+            // the regions overlap: use their union and just do one reposition
+            Segment &segment(s ? s->getSegment() : oldSelection->getSegment());
+            getStaff(segment)->positionElements(std::min(startA, startB),
+                                                std::max(endA, endB));
+
+        } else {
+            // do two repositions, one for each -- here we know neither is null
+            getStaff(oldSelection->getSegment())->positionElements(startA,
+                                                                   endA);
+            getStaff(s->getSegment())->positionElements(startB, endB);
+        }
+    }
+
+    delete oldSelection;
     int eventsSelected = 0;
     if (s) eventsSelected = s->getSegmentEvents().size();
     if (s) {
-	m_selectionCounter->setText
-	    (i18n("  %1 events selected ").arg(eventsSelected));
+        m_selectionCounter->setText
+            (i18n("  %1 events selected ").arg(eventsSelected));
     } else {
-	m_selectionCounter->setText(i18n("  No selection "));
+        m_selectionCounter->setText(i18n("  No selection "));
     }
     m_selectionCounter->update();
 
+
+#ifdef RGKDE3
+    // Clear states first, then enter only those ones that apply
+    // (so as to avoid ever clearing one after entering another, in
+    // case the two overlap at all)
+    stateChanged("have_selection", KXMLGUIClient::StateReverse);
+    stateChanged("have_notes_in_selection", KXMLGUIClient::StateReverse);
+    stateChanged("have_rests_in_selection", KXMLGUIClient::StateReverse);
+
     if (s) {
-        getStaff(0)->positionElements(s->getStartTime(),
-                                      s->getEndTime());
-#ifdef RGKDE3
-	stateChanged("have_selection", KXMLGUIClient::StateNoReverse);
-#endif
-    } else {
-#ifdef RGKDE3
-	stateChanged("have_selection", KXMLGUIClient::StateReverse);
-#endif
+        stateChanged("have_selection", KXMLGUIClient::StateNoReverse);
+        if (s->contains(Rosegarden::Note::EventType)) {
+            stateChanged("have_notes_in_selection",
+                         KXMLGUIClient::StateNoReverse);
+        }
+        if (s->contains(Rosegarden::Note::EventRestType)) {
+            stateChanged("have_rests_in_selection",
+                         KXMLGUIClient::StateNoReverse);
+        }
     }
+#endif
 
     updateView();
 }
@@ -725,9 +803,7 @@ void MatrixView::slotEditDelete()
     addCommandToHistory(new EraseCommand(*m_currentEventSelection));
 
     // clear and clear 
-    setCurrentSelection(0);
-    m_selectedElements.erase(m_selectedElements.begin(), 
-                             m_selectedElements.end());
+    setCurrentSelection(0, false);
 }
 
 // Propagate a key press upwards
@@ -846,13 +922,12 @@ void MatrixView::playNote(Rosegarden::Event *event)
 }
 
 
-void MatrixView::playPreview(int pitch)
+void MatrixView::playNote(const Rosegarden::Segment &segment, int pitch)
 {
     Rosegarden::Composition &comp = m_document->getComposition();
     Rosegarden::Studio &studio = m_document->getStudio();
 
-    Rosegarden::Track *track = comp.getTrackByIndex(
-            m_staffs[0]->getSegment().getTrack());
+    Rosegarden::Track *track = comp.getTrackByIndex(segment.getTrack());
 
     Rosegarden::Instrument *ins =
         studio.getInstrumentById(track->getInstrument());
@@ -879,118 +954,6 @@ void MatrixView::playPreview(int pitch)
     }
     catch(...) {;}
 }
-
-void MatrixView::setSelectedElements(const SelectedElements &eS)
-{
-    // clear all the elements
-    SelectedElements::iterator oIt = m_selectedElements.begin();
-
-    for (; oIt !=  m_selectedElements.end(); oIt++)
-    {
-        // change colour back to original
-        using Rosegarden::BaseProperties::VELOCITY;
-        long velocity = 127;
-        if ((*oIt)->event()->has(VELOCITY))
-            (*oIt)->event()->get<Rosegarden::Int>(VELOCITY, velocity);
-
-        (*oIt)->setColour(getStaff(0)->
-                        getVelocityColour()->getColour(velocity));
-        canvas()->update();
-    }
-
-    m_selectedElements.erase(m_selectedElements.begin(),
-                             m_selectedElements.end());
-
-    // read in new elements
-    SelectedElements::const_iterator it = eS.begin();
-    
-    for (; it != eS.end(); it++)
-        m_selectedElements.push_back(*it);
-}
-
-// Takes care of the element colouring too
-//
-bool MatrixView::addElementToSelection(MatrixElement *mE)
-{
-    SelectedElements::iterator it = m_selectedElements.begin();
-
-    for (; it !=  m_selectedElements.end(); it++)
-    {
-        // if this element already exists then don't add it again
-        if (*it == mE)
-            return false;
-    }
-
-    // otherwise add it in and set the colour
-    m_selectedElements.push_back(mE);
-    mE->setColour(RosegardenGUIColours::SelectedElement);
-    canvas()->update();
-
-    return true;
-}
-
-// Takes care of the element colouring but not the iterator
-//
-void MatrixView::queueElementForDeselection(MatrixElement *mE)
-{
-    SelectedElements::iterator it = m_selectedElements.begin();
-
-    for (; it !=  m_selectedElements.end(); it++)
-    {
-        if (*it == mE)
-        {
-            // change colour back to original
-            using Rosegarden::BaseProperties::VELOCITY;
-            long velocity = 127;
-            if (mE->event()->has(VELOCITY))
-                mE->event()->get<Rosegarden::Int>(VELOCITY, velocity);
-
-            (mE)->setColour(getStaff(0)->
-                            getVelocityColour()->getColour(velocity));
-            canvas()->update();
-            m_deselectionQueue.push_back(mE);
-            break;
-        }
-    }
-}
-
-void MatrixView::processDeselections()
-{
-    SelectedElements::iterator dQ = m_deselectionQueue.begin();
-
-    for (; dQ != m_deselectionQueue.end(); dQ++)
-    {
-        SelectedElements::iterator it = m_selectedElements.begin();
-        for (; it != m_selectedElements.end(); it++)
-        {
-            if (*dQ == *it)
-            {
-                m_selectedElements.erase(it);
-                break;
-            }
-        }
-    }
-
-    m_deselectionQueue.erase(m_deselectionQueue.begin(),
-            m_deselectionQueue.end());
-}
-
-
-bool
-MatrixView::isElementSelected(MatrixElement *mE)
-{
-    SelectedElements::iterator it = m_selectedElements.begin();
-
-    for (; it !=  m_selectedElements.end(); it++)
-    {
-        if (*it == mE)
-            return true;
-    }
-
-    return false;
-}
-
-
 
 void
 MatrixView::keyPressEvent(QKeyEvent *event)
@@ -1030,4 +993,36 @@ MatrixView::keyReleaseEvent(QKeyEvent *event)
             break;
     }
 }
+
+MatrixStaff* 
+MatrixView::getStaff(const Rosegarden::Segment &segment)
+{
+    for (unsigned int i = 0; i < m_staffs.size(); ++i)
+    {
+        if (&(m_staffs[i]->getSegment()) == &segment)
+            return m_staffs[i];
+    }
+
+    return 0;
+}
+
+
+void
+MatrixView::setSingleSelectedEvent(int staffNo, Rosegarden::Event *event)
+{
+    setSingleSelectedEvent(getStaff(staffNo)->getSegment(), event);
+}
+
+void
+MatrixView::setSingleSelectedEvent(Rosegarden::Segment &segment,
+                                   Rosegarden::Event *event)
+{
+    setCurrentSelection(0, false);
+
+    EventSelection *selection = new EventSelection(segment);
+    selection->addEvent(event);
+    setCurrentSelection(selection, false);
+}
+
+
 

@@ -239,6 +239,8 @@ protected:
     EditTool*    m_dispatchTool;
 
     static bool m_greedy;
+
+    Rosegarden::EventSelection *m_selectionToMerge;
 };
 
 

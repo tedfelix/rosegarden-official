@@ -72,6 +72,10 @@ public:
     //
     VelocityColour* getVelocityColour() { return m_elementColour; }
 
+    // Get an element for an Event
+    //
+    MatrixElement* getElement(Rosegarden::Event *event);
+
 private:
     double m_scaleFactor;
 

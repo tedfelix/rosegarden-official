@@ -148,3 +148,10 @@ QString MatrixStaff::getNoteNameForPitch(unsigned int pitch)
     return QString("%1%2").arg(noteNamesSharps[pitch]).arg(octave - 2);
 }
 
+MatrixElement*
+MatrixStaff::getElement(Rosegarden::Event *event)
+{
+    return dynamic_cast<MatrixElement*>((*findEvent(event)));
+}
+
+

@@ -81,16 +81,32 @@ public:
 	getCanvasView()->viewport()->setCursor(cursor);
     }
 
-//     void setPositionTracking(bool t) {
-// 	getCanvasView()->setPositionTracking(t);
-//     }
+    MatrixStaff* getStaff(int i)
+    {
+        if (i >= 0 && unsigned(i) < m_staffs.size()) return m_staffs[i];
+        else return 0;
+    }
 
-    MatrixStaff* getStaff(int) { return m_staffs[0]; } // deal with 1 staff only
+    MatrixStaff *getStaff(const Rosegarden::Segment &segment);
+
     virtual void updateView();
 
-    void setCurrentSelection(Rosegarden::EventSelection* s);
+    void setCurrentSelection(Rosegarden::EventSelection* s, bool preview);
     Rosegarden::EventSelection* getCurrentSelection()
         { return m_currentEventSelection; }
+
+    /**
+     * Set the current event selection to a single event
+     */
+    void setSingleSelectedEvent(int staffNo,
+                                Rosegarden::Event *event);
+
+    /**
+     * Set the current event selection to a single event
+     */
+    void setSingleSelectedEvent(Rosegarden::Segment &segment,
+                                Rosegarden::Event *event);
+
 
     // Play a Note Event using the keyPressed() signal
     //
@@ -98,31 +114,10 @@ public:
 
     // Play a preview (same as above but a simpler interface)
     //
-    void playPreview(int pitch);
+    void playNote(const Rosegarden::Segment &segment, int pitch);
 
     Rosegarden::SnapGrid &getSnapGrid() { return m_snapGrid; }
 
-    // Selection of current matrix elements
-    //
-    SelectedElements& getSelectedElements() { return m_selectedElements; }
-
-    // Set entire selection
-    //
-    void setSelectedElements(const SelectedElements &eS);
-
-    // Add
-    //
-    bool addElementToSelection(MatrixElement *mE);
-
-    // Removal is a two part process to keep the integrity of
-    // the vector
-    //
-    void queueElementForDeselection(MatrixElement *mE);
-    void processDeselections();
-
-    // Is this element in the current selection?
-    //
-    bool isElementSelected(MatrixElement *mE);
 
 signals:    
     /**
@@ -270,10 +265,10 @@ protected:
     /// The current selection of Events (for cut/copy/paste)
     Rosegarden::EventSelection* m_currentEventSelection;
 
-    // vector of selected MatrixElements
+    // A push stack full of real events
     //
-    SelectedElements m_selectedElements;
-    SelectedElements m_deselectionQueue;
+    std::vector<Rosegarden::Event> m_pushedEvents;
+    Rosegarden::Segment *m_pushSegment;
 
     std::vector<MatrixStaff*> m_staffs;
 

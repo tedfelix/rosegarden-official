@@ -203,127 +203,64 @@ void MatrixEraseCommand::modifySegment()
 
 //------------------------------
 
-class MatrixMoveCommand : public BasicCommand
+class MatrixModifyCommand : public BasicCommand
 {
 public:
-    MatrixMoveCommand(Rosegarden::Segment &segment,
-                      timeT newTime,
-                      int newPitch,
-                      MatrixStaff*,
-                      Rosegarden::Event *event);
+    MatrixModifyCommand(Rosegarden::Segment &segment,
+                        MatrixStaff*,
+                        Rosegarden::Event *oldEvent,
+                        Rosegarden::Event *newEvent,
+                        bool isMove);
 
 protected:
     virtual void modifySegment();
 
-
-    timeT m_newTime;
-    timeT m_oldTime;
     int m_newPitch;
 
-    MatrixStaff* m_staff;
-    Rosegarden::Event* m_event;
+    MatrixStaff       *m_staff;
+    Rosegarden::Event *m_oldEvent;
+    Rosegarden::Event *m_newEvent;
 };
 
-MatrixMoveCommand::MatrixMoveCommand(Rosegarden::Segment &segment,
-                                     timeT newTime,
-                                     int newPitch,
-                                     MatrixStaff* staff,
-                                     Rosegarden::Event *event)
-    : BasicCommand(i18n("Move Note"),
+MatrixModifyCommand::MatrixModifyCommand(Rosegarden::Segment &segment,
+                                         MatrixStaff* staff,
+                                         Rosegarden::Event *oldEvent,
+                                         Rosegarden::Event *newEvent,
+                                         bool isMove):
+      BasicCommand((isMove ? i18n("Move Note") : i18n("Modify Note")),
                    segment,
-                   std::min(newTime, event->getAbsoluteTime()), 
-                   std::max(newTime + event->getDuration(),
-			    event->getAbsoluteTime() + event->getDuration()),
+                   std::min(newEvent->getAbsoluteTime(),
+                            oldEvent->getAbsoluteTime()), 
+                   std::max(oldEvent->getAbsoluteTime() +
+                            oldEvent->getDuration(), 
+                            newEvent->getAbsoluteTime() +
+                            newEvent->getDuration()),
                    true),
-    m_newTime(newTime),
-    m_oldTime(event->getAbsoluteTime()),
-    m_newPitch(newPitch),
     m_staff(staff),
-    m_event(event)
+    m_oldEvent(oldEvent),
+    m_newEvent(newEvent)
 {
 }
 
-void MatrixMoveCommand::modifySegment()
+void MatrixModifyCommand::modifySegment()
 {
-    std::string eventType = m_event->getType();
+    std::string eventType = m_oldEvent->getType();
 
     if (eventType == Note::EventType) {
 
-        // Create new event
-        Rosegarden::Event *newEvent = new Rosegarden::Event(*m_event, m_newTime);
-        newEvent->set<Rosegarden::Int>(Rosegarden::BaseProperties::PITCH, m_newPitch);
-
         // Delete old one
-        getSegment().eraseSingle(m_event);
+        getSegment().eraseSingle(m_oldEvent);
 
         // Insert new one
-        getSegment().insert(newEvent);
+        getSegment().insert(m_newEvent);
 
         // Tidy up
-        getSegment().normalizeRests(std::min(m_newTime, m_oldTime),
-                                    std::max(m_newTime + newEvent->getDuration(), m_oldTime + newEvent->getDuration()));
-
-    }
-}
-
-//------------------------------
-
-class MatrixChangeDurationCommand : public BasicCommand
-{
-public:
-    MatrixChangeDurationCommand(Rosegarden::Segment &segment,
-                                timeT newDuration,
-                                MatrixStaff*,
-                                Rosegarden::Event *event);
-
-protected:
-    virtual void modifySegment();
-
-
-    timeT m_newDuration;
-
-    MatrixStaff* m_staff;
-    Rosegarden::Event* m_event;
-};
-
-MatrixChangeDurationCommand::MatrixChangeDurationCommand(Rosegarden::Segment &segment,
-                                                         timeT newDuration,
-                                                         MatrixStaff* staff,
-                                                         Rosegarden::Event *event)
-    : BasicCommand(i18n("Change Note Duration"),
-                   segment,
-                   event->getAbsoluteTime(), 
-                   event->getAbsoluteTime() + std::max(newDuration, event->getDuration()),
-                   true),
-    m_newDuration(newDuration),
-    m_staff(staff),
-    m_event(event)
-{
-}
-
-void MatrixChangeDurationCommand::modifySegment()
-{
-    std::string eventType = m_event->getType();
-
-    if (eventType == Note::EventType) {
-
-        timeT oldDuration = m_event->getDuration();
-
-        // We can't change the duration directly
-
-        // Create new event
-        Rosegarden::Event *newEvent = new Rosegarden::Event(*m_event,
-                                                            m_event->getAbsoluteTime(),
-                                                            m_newDuration);
-        // Delete old one
-        getSegment().eraseSingle(m_event);
-
-        // Insert new one
-        getSegment().insert(newEvent);
-
-        // Tidy up
-        getSegment().normalizeRests(newEvent->getAbsoluteTime(),
-                                    newEvent->getAbsoluteTime() + std::max(m_newDuration, oldDuration));
+        getSegment().normalizeRests(std::min(m_newEvent->getAbsoluteTime(),
+                                             m_oldEvent->getAbsoluteTime()),
+                                    std::max(m_newEvent->getAbsoluteTime() +
+                                             m_newEvent->getDuration(),
+                                             m_oldEvent->getAbsoluteTime() +
+                                             m_oldEvent->getDuration()));
 
     }
 }
@@ -492,7 +429,8 @@ MatrixSelector::MatrixSelector(MatrixView* view)
       m_updateRect(false),
       m_currentStaff(0),
       m_clickedElement(0),
-      m_dispatchTool(0)
+      m_dispatchTool(0),
+      m_selectionToMerge(0)
 {
     connect(m_parentView, SIGNAL(usedSelection()),
             this,         SLOT(slotHideSelection()));
@@ -515,7 +453,10 @@ void MatrixSelector::handleLeftButtonPress(Rosegarden::timeT time,
         // If this element is already in the selection then go to
         // move mode.
         //
-        if (m_mParentView->isElementSelected(m_clickedElement))
+        Rosegarden::EventSelection* selection = 
+            m_mParentView->getCurrentSelection();
+
+        if (selection && selection->contains(m_clickedElement->event()))
         {
             m_dispatchTool = m_parentView->
                 getToolBox()->getTool(MatrixMover::ToolName);
@@ -526,8 +467,6 @@ void MatrixSelector::handleLeftButtonPress(Rosegarden::timeT time,
                                                   element);
             return;
         }
-        else // select this by itself
-            m_mParentView->playNote(m_clickedElement->event());
     }
     else
     {
@@ -539,7 +478,8 @@ void MatrixSelector::handleLeftButtonPress(Rosegarden::timeT time,
         m_updateRect = true;
 
         // clear existing selection
-        m_mParentView->setSelectedElements(SelectedElements());
+        m_mParentView->setCurrentSelection(0, false);
+        m_mParentView->canvas()->update();
     }
 
     //m_parentView->setCursorPosition(p.x());
@@ -590,78 +530,8 @@ bool MatrixSelector::handleMouseMove(timeT time, int height,
     if (h > 0) ++h; else --h;
 
     m_selectionRect->setSize(w,h);
+    setViewCurrentSelection();
     m_mParentView->canvas()->update();
-
-    QRect normalizedSelectionRect = m_selectionRect->rect().normalize();
-
-    // get the selections
-    //
-    QCanvasItemList l = m_selectionRect->collisions(true);
-
-    // Selected element managament
-    SelectedElements oldElements = m_mParentView->getSelectedElements();
-    SelectedElements newElements;
-
-    if (l.count())
-    {
-        for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
-        {
-            QCanvasItem *item = *it;
-            QCanvasMatrixRectangle *matrixRect = 0;
-
-            if ((matrixRect = dynamic_cast<QCanvasMatrixRectangle*>(item)))
-            {
-
-                // If selector is not greedy, check if the element's rect
-                // is actually included in the selection rect.
-                //
-                if (!isGreedy() &&
-                    !normalizedSelectionRect.contains(matrixRect->rect()))
-                    continue;
-
-                MatrixElement *mE = &matrixRect->getMatrixElement();
-
-                m_mParentView->canvas()->update();
-                if (m_mParentView->addElementToSelection(mE))
-                {
-                    // hear the preview of all added events
-                    m_mParentView->playNote(mE->event());
-                }
-                newElements.push_back(mE);
-            }
-        }
-    }
-
-    // Work out what has changed and adjust the element selection
-    // accordingly.  Only if we've not got shift down - otherwise
-    // we can add to the selection.
-    //
-    if (!m_mParentView->isShiftDown())
-    {
-        bool found = false;
-
-        for(SelectedElements::iterator oIt = oldElements.begin();
-                oIt != oldElements.end(); oIt++)
-        {
-            found = false;
-            for (SelectedElements::iterator nIt = newElements.begin();
-                    nIt != newElements.end(); nIt++)
-            {
-                if (*oIt == *nIt)
-                {
-                    found = true;
-                    break;
-                }
-            }
-            if (found == false)
-            {
-                m_mParentView->queueElementForDeselection(*oIt);
-            }
-        }
-
-        // do the deselections proper
-        m_mParentView->processDeselections();
-    }
 
     return true;
 }
@@ -684,24 +554,10 @@ void MatrixSelector::handleMouseRelease(timeT time, int height, QMouseEvent *e)
 
     if (m_clickedElement)
     {
-        // if shift is down then we add this element to the selection
-        //
-        if (!m_mParentView->isShiftDown())
-        {
-            SelectedElements elements = m_mParentView->getSelectedElements();
-            for(SelectedElements::iterator it = elements.begin();
-                    it != elements.end(); it++)
-                m_mParentView->queueElementForDeselection(*it);
-
-            // do the deselections proper
-            m_mParentView->processDeselections();
-        }
-
-        m_mParentView->addElementToSelection(m_clickedElement);
+        m_mParentView->setSingleSelectedEvent(m_currentStaff->getSegment(),
+                                              m_clickedElement->event());
 
         // translate the segment items in an Event selection
-        setViewCurrentSelection();
-
         m_mParentView->canvas()->update();
         m_clickedElement = 0;
     }
@@ -748,76 +604,52 @@ void MatrixSelector::slotHideSelection()
 void MatrixSelector::setViewCurrentSelection()
 {
     EventSelection* selection = getSelection();
-    m_mParentView->setCurrentSelection(selection);
+
+    if (m_selectionToMerge && selection &&
+        m_selectionToMerge->getSegment() == selection->getSegment())
+    {
+        selection->addFromSelection(m_selectionToMerge);
+    }
+
+    m_mParentView->setCurrentSelection(selection, true);
 }
 
 EventSelection* MatrixSelector::getSelection()
 {
+    if (!m_selectionRect->visible()) return 0;
+
     Rosegarden::Segment& originalSegment = m_currentStaff->getSegment();
     EventSelection* selection = new EventSelection(originalSegment);
+    QRect normalizedSelectionRect = m_selectionRect->rect().normalize();
 
-    SelectedElements elements = m_mParentView->getSelectedElements();
-    for (SelectedElements::iterator it = elements.begin();
-            it != elements.end(); it++)
+    // get the selections
+    //
+    QCanvasItemList l = m_selectionRect->collisions(true);
+
+    if (l.count())
     {
-        selection->addEvent((*it)->event());
-    }
+        for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
+        {
+            QCanvasItem *item = *it;
+            QCanvasMatrixRectangle *matrixRect = 0;
 
-    return (selection->getAddedEvents() > 0) ? selection : 0;
+            if ((matrixRect = dynamic_cast<QCanvasMatrixRectangle*>(item)))
+            {
 
+                // If selector is not greedy, check if the element's rect
+                // is actually included in the selection rect.
+                //
+                if (!isGreedy() &&
+                    !normalizedSelectionRect.contains(matrixRect->rect()))
+                    continue;
 
-    //    MATRIX_DEBUG << "Selection x,y: " << m_selectionRect->x() << ","
-    //                         << m_selectionRect->y() << "; w,h: " << m_selectionRect->width() << "," << m_selectionRect->height() << endl;
-
-    /*
-    if (m_selectionRect->width()  > -3 &&
-        m_selectionRect->width()  <  3 &&
-        m_selectionRect->height() > -3 &&
-        m_selectionRect->height() <  3) return 0;
-
-    if (!m_currentStaff) return 0;
-
-    Rosegarden::Segment& originalSegment = m_currentStaff->getSegment();
-    EventSelection* selection = new EventSelection(originalSegment);
-
-    QCanvasItemList itemList = m_selectionRect->collisions(true);
-    QCanvasItemList::Iterator it;
-
-    QRect rect = m_selectionRect->rect().normalize();
-
-    for (it = itemList.begin(); it != itemList.end(); ++it) {
-
-        QCanvasItem *item = *it;
-        QCanvasMatrixRectangle *matrixRect = 0;
-        
-        if ((matrixRect = dynamic_cast<QCanvasMatrixRectangle*>(item))) {
-
-            if (!rect.contains(matrixRect->rect(), true)) {
-
-                MATRIX_DEBUG << "MatrixSelector::getSelection Skipping item not really in selection rect\n";
-                MATRIX_DEBUG << "MatrixSelector::getSelection Rect: x,y: " << rect.x() << ","
-                                     << rect.y() << "; w,h: " << rect.width()
-                                     << "," << rect.height() << " / Item: x,y: "
-                                     << item->x() << "," << item->y() << endl;
-                continue;
-            } else {
-                
-                MATRIX_DEBUG << "MatrixSelector::getSelection Item in rect : Rect: x,y: " << rect.x() << ","
-                                     << rect.y() << "; w,h: " << rect.width()
-                                     << "," << rect.height() << " / Item: x,y: "
-                                     << item->x() << "," << item->y() << endl;
+                MatrixElement *mE = &matrixRect->getMatrixElement();
+                selection->addEvent(mE->event());
             }
-            
-            selection->addEvent(matrixRect->getMatrixElement().event());
-
-            //             MATRIX_DEBUG << "Selected event : \n";
-            //             el.event()->dump(std::cerr);
         }
-        
     }
 
     return (selection->getAddedEvents() > 0) ? selection : 0;
-    */
 }
 
 bool MatrixSelector::m_greedy = true;
@@ -844,7 +676,6 @@ void MatrixMover::handleLeftButtonPress(Rosegarden::timeT,
 
     m_currentElement = dynamic_cast<MatrixElement*>(el);
     m_currentStaff = m_mParentView->getStaff(staffNo);
-    m_mParentView->addElementToSelection(m_currentElement);
 }
 
 bool MatrixMover::handleMouseMove(Rosegarden::timeT newTime,
@@ -866,20 +697,22 @@ bool MatrixMover::handleMouseMove(Rosegarden::timeT newTime,
     int diffX = newX - oldX;
     int diffY = newY - oldY;
 
-    /*
-    m_currentElement->setLayoutY(y);
-    m_currentElement->
-        setLayoutX(newTime * m_currentStaff->getTimeScaleFactor());
-    m_currentStaff->positionElement(m_currentElement);
-    */
+    EventSelection* selection = m_mParentView->getCurrentSelection();
+    Rosegarden::EventSelection::eventcontainer::iterator it =
+        selection->getSegmentEvents().begin();
 
-    SelectedElements selection = m_mParentView->getSelectedElements();
-    SelectedElements::iterator it = selection.begin();
-    for (; it != selection.end(); it++)
+    MatrixElement *element = 0;
+
+    for (; it != selection->getSegmentEvents().end(); it++)
     {
-        (*it)->setLayoutX((*it)->getLayoutX() + diffX);
-        (*it)->setLayoutY((*it)->getLayoutY() + diffY);
-        m_currentStaff->positionElement(*it);
+        element = m_currentStaff->getElement(*it);
+
+        if (element)
+        {
+            element->setLayoutX(element->getLayoutX() + diffX);
+            element->setLayoutY(element->getLayoutY() + diffY);
+            m_currentStaff->positionElement(element);
+        }
     }
 
     m_mParentView->canvas()->update();
@@ -928,72 +761,70 @@ void MatrixMover::handleMouseRelease(Rosegarden::timeT newTime,
 	return;
     }
 
-    SelectedElements selection = m_mParentView->getSelectedElements();
+    EventSelection *selection = m_mParentView->getCurrentSelection();
 
-    if (selection.size() == 0)
+    if (selection->getAddedEvents() == 0)
         return;
-    else if (selection.size() == 1)
+    else if (selection->getAddedEvents() == 1)
     {
-        MatrixMoveCommand* command =
-            new MatrixMoveCommand(m_currentStaff->getSegment(),
-                                  newTime, newPitch,
-                                  m_currentStaff,
-                                  m_currentElement->event());
-        // before we execute make sure we remove all references to
-        // the old events by clearing the selection
-        //
-        /*
-        SelectedElements selection = m_mParentView->getSelectedElements();
-        m_mParentView->setCurrentSelection(0);
-        */
+        timeT newTime = m_currentElement->event()->getAbsoluteTime() 
+            + diffTime;
+        int newPitch = m_currentElement->event()->
+            get<Rosegarden::Int>(PITCH) + diffPitch;
 
-        m_mParentView->setSelectedElements(SelectedElements());
+        Rosegarden::Event *newEvent =
+            new Rosegarden::Event(*m_currentElement->event(), newTime);
+        newEvent->set<Rosegarden::Int>
+            (Rosegarden::BaseProperties::PITCH,newPitch);
 
+        MatrixModifyCommand* command =
+            new MatrixModifyCommand(m_currentStaff->getSegment(),
+                                    m_currentStaff,
+                                    m_currentElement->event(),
+                                    newEvent,
+                                    true);
+    
+        m_mParentView->setCurrentSelection(0, false);
         m_mParentView->addCommandToHistory(command);
 
-        /*
-        SelectedElements::iterator it = selection.begin();
-        for (; it != selection.end(); it++)
-            m_mParentView->addElementToSelection(*it);
-            */
+        EventSelection *newSelection = 
+            new EventSelection(m_currentStaff->getSegment());
+        newSelection->addEvent(newEvent);
 
+        m_mParentView->setCurrentSelection(newSelection, false);
     }
     else // more than 1
     { 
         KMacroCommand *macro = new KMacroCommand(i18n("Move Events"));
 
-        SelectedElements selection = m_mParentView->getSelectedElements();
-        SelectedElements::iterator it = selection.begin();
+        Rosegarden::EventSelection::eventcontainer::iterator it =
+            selection->getSegmentEvents().begin();
 
-        for (; it != selection.end(); it++)
+        EventSelection *newSelection = 
+            new EventSelection(m_currentStaff->getSegment());
+
+        for (; it != selection->getSegmentEvents().end(); it++)
         {
-            timeT newTime = (*it)->event()->getAbsoluteTime() + diffTime;
-            int newPitch = (*it)->event()->get<Rosegarden::Int>(PITCH) +
-                diffPitch;
+            timeT newTime = (*it)->getAbsoluteTime() + diffTime;
+            int newPitch = (*it)->get<Rosegarden::Int>(PITCH) + diffPitch;
             
+            Rosegarden::Event *newEvent = new Rosegarden::Event(**it, newTime);
+            newEvent->set<Rosegarden::Int>
+                (Rosegarden::BaseProperties::PITCH,newPitch);
+
             macro->addCommand(
-                    new MatrixMoveCommand(m_currentStaff->getSegment(),
-                                          newTime,
-                                          newPitch,
-                                          m_currentStaff,
-                                          (*it)->event()));
+                    new MatrixModifyCommand(m_currentStaff->getSegment(),
+                                            m_currentStaff,
+                                            (*it),
+                                            newEvent,
+                                            true));
+            newSelection->addEvent(newEvent);
         }
-        // Before we execute the command make sure we remove all references
-        // to the old events by clearing the selection.
-        //
-        m_mParentView->setSelectedElements(SelectedElements());
-    
-        /*
-        m_mParentView->setCurrentSelection(0);
-        */
 
+        m_mParentView->setCurrentSelection(0, false);
         m_mParentView->addCommandToHistory(macro);
+        m_mParentView->setCurrentSelection(newSelection, false);
 
-        /*
-        // Now reselect - this will pick up the new 
-        for (it = selection.begin(); it != selection.end(); it++)
-            m_mParentView->addElementToSelection(*it);
-            */
     }
 
     m_mParentView->canvas()->update();
@@ -1060,11 +891,17 @@ void MatrixResizer::handleMouseRelease(Rosegarden::timeT newTime,
     double width = newDuration * m_currentStaff->getTimeScaleFactor();
     m_currentElement->setWidth(int(width));
 
-    MatrixChangeDurationCommand* command =
-        new MatrixChangeDurationCommand(m_currentStaff->getSegment(),
-                                        newDuration,
-                                        m_currentStaff,
-                                        m_currentElement->event());
+    Rosegarden::Event *newEvent =
+        new Rosegarden::Event(*m_currentElement->event(),
+                              newTime,
+                              newDuration);
+
+    MatrixModifyCommand* command =
+        new MatrixModifyCommand(m_currentStaff->getSegment(),
+                                m_currentStaff,
+                                m_currentElement->event(),
+                                newEvent,
+                                false);
 
     m_mParentView->addCommandToHistory(command);
 
