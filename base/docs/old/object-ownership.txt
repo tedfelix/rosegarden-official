@@ -1,0 +1,103 @@
+
+Notes on ownership and lifetime of Rosegarden CORBA objects
+===========================================================
+
+Server objects -- those defined in [server/idl/RosegardenServer.idl]
+-- belong to the server.  They should be constructed only by
+server-end factory objects.
+
+Composition
+-----------
+
+In general, Compositions will be owned directly by the Server, which
+will double as a Composition factory.  Likewise, a Part will be owned,
+created and destroyed by the Composition to which it belongs.  A Part
+can only exist within a Composition, and a Composition can only exist
+within a Server.
+
+Element
+-------
+
+Elements, however, are created by the ElementFactory and may or may
+not belong to a Part.  Indeed one could create whole ElementLists
+outside of a Part -- hmm, sounds risky, might subvert the whole
+intention of the Part/PartIterator interface?
+
+ * When an Element is in a Part, the Part owns it.  Deleting it via a
+   PartMutator delete method will release it correctly.  Deleting the
+   whole Part, presumably via a Composition method, will also release
+   all its Elements correctly.
+
+ * When an Element is not in a Part, the client probably owns it.
+   There is no other obvious owner (the ElementFactory certainly
+   doesn't want the responsibility of garbage-collection).  Thus to
+   release an Element that is not in a Part, the client must
+   explicitly call its IDL-defined releaseImpl method -- in addition to
+   the CORBA::release() required to delete the client-side stub.
+
+ * When an Element (that is not in a Part) is inserted into a Part,
+   the Part claims ownership.  The client no longer needs to
+   explicitly releaseImpl it.  Thus the ElementFactory methods that take a
+   PartMutator argument and do the insertion for you should hand over
+   ownership to the Part without client intervention.
+
+   When an Element is passed to PartMutator::insert, it is an [in]
+   argument in the IDL specification.  Thus the CORBA spec declares
+   that the client retains ownership and should call CORBA::release()
+   after the method returns.  If the method wants to keep a copy,
+   it must duplicate.
+
+   This suggests that in code such as
+   [mutator->insert(factory->newNote(...))], the client will have to
+   retain and release the newNote after insertion (because it owns the
+   return value from newNote), even though it no
+   longer needs to call the IDL-defined releaseImpl method.  We should use
+   an automatic Note_var variable for this reference.
+
+ * If an Element is removed from a Part (there's no method to do this
+   yet, but at some point there will have to be), it becomes the
+   client's responsibility once again.  If it's then inserted into a
+   different Part (that's why this method is going to be necessary),
+   the new Part takes over ownership.
+
+  * An ElementFactory may wish to keep a record of all Elements that
+    have been created but have not yet been claimed by a Part.  There's
+    not much the ElementFactory can do to ensure that they're correctly
+    freed with their releaseImpl methods, but it can at least free them
+    when it's destroyed and tell the user how many the programmer missed.
+
+[_narrow()]
+~~~~~~~~~~
+
+A call to the static [_narrow()] method of an object increments its
+reference count.  You must therefore ensure that [CORBA::release()] is
+called on both the argument to [_narrow()] and its returned pointer.
+Thus code like
+
+   while (!iterator->atRightEnd()) {
+       Note_var note(Note::_narrow(iterator->getRightElement()));
+       if (!CORBA::is_nil(note)) cout << "pitch " << note->getPitch() << endl;
+   }
+
+is incorrect: while [note] will be released as the [Note_var] goes out
+of scope, there is no call to [CORBA::release()] for the [Element_ptr]
+returned from [iterator->getRightElement()].  Correct would be
+
+   while (!iterator->atRightEnd()) {
+       Element_var element(iterator->getRightElement());
+       Note_var note(Note::_narrow(element));
+       if (!CORBA::is_nil(note)) cout << "pitch " << note->getPitch() << endl;
+   }
+
+or the equivalent with [_ptr] variables (i.e. with an explicit call to
+[CORBA::release()] on both the [Element_ptr] and [Note_ptr] at the end
+of the loop body).
+
+Iterators
+---------
+
+So, what about PartIterator and PartMutator?  They're created by the
+Part, but the Part (again) doesn't want to have to keep track of them.
+Does this mean we'll need two release calls (PartIterator::releaseImpl()
+and CORBA::release()) on every single one of them created by a client?
+

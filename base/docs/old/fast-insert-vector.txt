@@ -1,0 +1,81 @@
+
+Description of [FastInsertVector] implementation (old non-STL API version)
+==========================================================================
+
+Motivation
+----------
+
+This list class is intended to replace the Z&S template List class as
+a fundamental low-level class for use in Rosegarden.  It will be used
+extremely extensively for both short and long lists, which is why I
+don't mind putting a lot of effort into getting it right.  I did have
+a look at a couple of alternative list classes from other sources, but
+it seems to be surprisingly difficult to find a fast array-based
+implementation.
+
+This uses the same interface as the Z&S lists, except that I haven't
+bothered to do iterators as I never use them (the Z&S ListItr API is
+pretty horrible).  For Rosegarden I'm going to have a different robust
+iterator class for most of the important stuff.  The only semantic
+difference is that it now demands that the template class have a
+working copy constructor rather than a working assignment operator.
+
+
+Memory allocation
+-----------------
+
+The justification for the rewrite is solely to gain speed.  Most of
+the advantage is gained through avoiding assignment when moving list
+elements around in the list.  Instead of initialising the list as an
+array of (the template parameter) T and assigning elements with
+T::operator=, it gets the list memory "raw", initialises elements with
+placement-new using T::T(const T&) and copies them with good
+old-fashioned memmove().  This saves vast amounts of time for
+deep-copied objects stored by value, and may make large savings for
+simple lists of pointers too (depending on how good your compiler's
+optimisation is).
+
+
+Gap management
+--------------
+
+There's also a potential smaller saving through being more careful
+about optimising the use of "gaps".  The original list class allowed
+one gap in the list; everything before the gap was stored "flush-left"
+in the allocated area and everything after was stored "flush-right".
+Repeated removals or remove/insert cycles at the same point were
+therefore simply a matter of housekeeping.
+
+This class also allows one gap, but doesn't bother moving the section
+after the gap flush-right in the allocated area when creating a gap.
+That means an extra pointer is needed to keep track of the length of
+the gap, but ensures that appends are always quick and do not disturb
+an existing gap.  This makes the class fairly fast for queues, so long
+as you pop from the start and push on the end rather than vice versa.
+
+There's also quite a bit of effort to make sure the minimal possible
+amount of memory is shifted around when inserting something, but it's
+rather debatable what difference that makes.  The code's basically
+there in an attempt to avoid any seriously bad worst-cases (removing
+and inserting repeatedly at alternate list positions, or some such).
+
+
+Disadvantages
+-------------
+
+ * Because this list uses memmove() rather than assignment to move
+   elements, _the address of an element may change without notice_.
+   Thus whilst the original list class could be used to store objects
+   with internal pointers (with a bit of care), this version can not.
+   Be a bit careful, and make lists of pointers if you aren't sure.
+
+ * This class uses more memory than the earlier version.  One more
+   pointer is used for housekeeping; also an append doesn't cause an
+   existing gap to be closed -- so the worst case uses about double
+   the memory of the Z&S class.  On the other hand this class does at
+   least free some memory if a list grows shorter, which the Z&S class
+   doesn't bother doing at all.
+
+
+_Chris Cannam_,
+_March 1998_

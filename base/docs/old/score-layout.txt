@@ -1,0 +1,220 @@
+
+Layout and rendering of score, piano-roll etc
+=============================================
+
+Structure
+---------
+
+Score layout involves interactions between three distinct layers of
+the system: the server, an abstract layout engine, and a GUI client.
+
+Here is a quick diagram of what I presently think should be the
+classes involved in the layout process.  Abstract classes are marked
+with A and classes that are *not* defined in IDL are marked with N.
+
+    ,-------------.      * ,------.      * ,---------.
+    | Composition | -----> | Part | -----> | Element |
+    `-------------'        `------'        `---------'
+            ^
+       ,---------.      * ,-----------------.
+       | BarList | -----> | BarListIterator |
+       `---------'        `-----------------'
+            ^              ^                               Server
+    ========|==============|======================================
+            |              |    Abstract layout layer (on client)
+            |              |
+    ,-------------------.  |
+    | CompositionLayout |  | (This refers to the BarList, which
+    `-------------------'  |  contains references to all Parts at
+            ^         ^    |  once for a particular bar.  Between
+      ,-----------.   |    |  them, the C.L. and B.L. manage all
+      | BarLayout |---|----'  references from the client back to
+      `-----------'<--|----.  the BarList & its iterators.)
+       uses ^         |    | 
+            |    uses v    `---------------v uses
+    ,-----------------------------.     ,---------------------.
+    | CompositionLayoutEngine (A) |     | BarLayoutEngine (A) |
+    `-----------------------------'	`---------------------'
+             ^                                  ^
+     ProportionalCompositionLayoutEngine (N)    |
+     ScoreCompositionLayoutEngine (N)           |
+     etc.  (Horizontal layout)                  |
+                                     ProportionalBarLayoutEngine (N)
+				     ScoreBarLayoutEngine (N)
+				     etc. (Also horizontal layout)
+				                ^
+                                                |  Abstract layer
+    --------------------------------------------|-----------------
+                                                |             GUI
+                                        GnomeScoreBarLayout
+                                        PostScriptBarLayout
+                                        etc. (Vertical layout)
+
+Example calling sequence
+------------------------
+
+  * The CompositionLayout is asked to do a rendering (by something in
+    the GUI, or by a change callback etc)
+
+  * It calls onto the CompositionLayoutEngine that was provided by the
+    client at construction time (e.g. a ProportionalLayoutEngine
+    singleton in the client), instructing it to do a render between
+    some bars x and y
+
+  * The CompositionLayoutEngine then calls back repeatedly to obtain
+    the BarLayout objects corresponding to each of those bars, and
+    calls each of those to render itself at the appropriate x
+    coordinate
+
+  * The BarLayout calls its BarLayoutEngine implementation, passing on
+    a BarListIterator which it was given by the CompositionLayout on
+    construction
+
+  * The BarLayoutEngine refers back through this to get its data, and
+    constructs its own client-side model for rendering
+
+
+Classes implemented as of 2000/01/16
+------------------------------------
+
+Skeleton CompositionLayout, BarLayout; abstract
+CompositionLayoutEngine, BarLayoutEngine; simple
+ProportionalLayoutEngine.
+
+
+Limitations that still exist in this design
+-------------------------------------------
+
+  1. Concrete BarLayoutEngines will also need to appear as
+     Proportional, Score etc versions and this is independent of the
+     rendering mechanism (Gnome, Postscript etc).  Our previously
+     planned x-layout (higher level) / y-layout (lower-level) divide
+     won't work for Gnome because we want to store a whole bar as a
+     Gnome object (the Gnome canvas needs to store objects, or
+     references to objects, and we don't want to keep a ref to each &
+     every Element at the server side).  Simplest answer might be to
+     introduce another layer of inheritance between BarLayoutEngine
+     and GnomeScoreLayoutEngine for the rendering type, still at the
+     x-layout level but within a bar only.
+
+  2. Not clear on IDL stuff?  Should the Engines have IDL defns?
+     Probably, but their implementations appear on the "GUI client"
+     side of the "GUI client / abstract layout" divide above, so
+     maybe the IDL defns should be in another IDL file than the
+     rendering one -- ugh
+
+  3. The details of who owns what are fuzzy, particularly with CORBA
+
+
+Comments from older emails
+--------------------------
+
+June 1998
+~~~~~~~~~
+
+In render/, we have the following:
+
+  * LayoutEngine is a base for classes that can perform layout
+    on a Stave.  That's the entry point for rendering stuff.
+    The standard layout engine will be DefaultLayoutEngine,
+    which will know how to stretch and squash bars, groups and
+    items in the usual manner.  LayoutEngine is mostly
+    responsible for horizontal layout.
+
+  * DrawingEngine is a base for classes that know how to draw
+    chords and other items.  It's mostly responsible for
+    vertical layout.  Again, the default will probably be 
+    DefaultDrawingEngine.
+
+  * DrawingDevice is a base for classes that know how to draw
+    the very basic elements (note heads, lines, etc) onto an
+    output device.  This is where we'll need GTKDrawingDevice.
+    The DrawingDevice doesn't have to know anything much about
+    layout.
+
+
+22 Nov 1999
+~~~~~~~~~~~
+
+So, we have two rather mismatched interfaces to reconcile.
+
+The Rosegarden server expects itself to be the one true repository
+of wisdom, and expects clients to store only positional references
+(rather than references to individual objects) and query for the
+objects they want dynamically.
+
+The GNOME canvas expects objects to be subclassed from canvas
+elements, and expects to be able to maintain some state for those
+objects itself and have them brought quickly up to date when the state
+of the user-interface changes.
+
+These two are clearly somewhat different, but they both hold
+particular advantages (consequences of the same design that brings the
+incompatibility) that we would like to exploit.  So we have to work
+out how to make them work together.  Haven't a clue how yet, so let's
+reiterate the requirements and desirable features.
+
+Here's the kind of layered structure I anticipated using for layout.
+I am freely adapting the layer terminology from Kent Dahlgren's paper
+on the OSI 7-layer model, at <URL:http://www.geek-of-the-week.com/iso/>.
+We start at the innermost layer on the client side.  Obviously our
+design does not match the OSI model, so we use the alternative model.
+
+ * Refried beans: system (i.e. GNOME) specific renderer
+
+ * Seasoned rice: Drawing individual notes
+
+(_Guillaume replied_ I can't see what this second layer is for)
+
+ * Lettuce: "Vertical" layout.  Converting pitch information
+   and staff number into y-coords; calculating beam angles, etc
+
+ * Tomatoes: "Horizontal" layout.  Stretching and squashing bars,
+   querying the lettuce for the timings and "natural" widths of
+   elements and whole bars and then calculating (a) the spacing of
+   individual notes according to their lengths and (b) a stretch
+   factor to ensure that the bars have common lengths across staffs
+
+ * Guacamole: probably CORBA; everything above this is client-side,
+   everything below server-side
+
+ * Cheese: the BarList fits in here somewhere.  This maintains
+   positional references to the server data on a per-barline basis,
+   and recalculates (every time something changes, I think, at
+   present -- I like efficiency! although at least this is server-
+   side) the bar divisions to make sure their lengths approximately
+   match (upto indivisible notes).
+
+ * Sour cream: data on the Server, and Server logic
+
+Mmm, I'm hungry.  Now, requirements include the following:
+
+ * The client must receive information about changes to the data
+   from the Server.  Only the Server knows for certain when
+   something changes.  (As in any model-view system, in theory a
+   user change in the client should be carried out by the client's
+   requesting a change in the Server and waiting for notification
+   of that change before updating its own display.  However, as
+   in any model-view system, that's rather inefficient and it's
+   possibly better to accept the theoretical inconsistency from
+   updating the client's display before the Server has definitely
+   accepted the change.  We'll see how it pans out.)
+
+ * The client must not store references to Elements on the Server,
+   only to iterators (positional references).  Using a BarList to
+   mediate between the client at the server is a good idea too, as
+   it stores all the PartIterators for you and recalculates them
+   appropriately.
+
+Desirable features of a design (though not requirements) include:
+
+ * GNOME-specifics should not be introduced at too high a layer.
+   The bulk of the layout code should be applicable to any
+   theoretical drawing device.
+
+ * In particular, horizontal layout should definitely be decoupled
+   from vertical layout or drawing-specific code.  Horizontal
+   layout may well prove useful for something else than screen
+   rendering.
+
+

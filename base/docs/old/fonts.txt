@@ -1,0 +1,73 @@
+
+Ramblings on font support
+=========================
+
+I reckon our framework for the notation editor should be flexible
+enough to allow us to notate either with bitmaps (a la Rosegarden 2.1)
+or with a musical symbol font.  IMHO bitmaps should be the default,
+for simplicity, but fonts may be desirable for scaling and suchlike.
+
+So, it might be worth a bit of research into what sort of font support
+might and might not be possible.  There are TrueType drivers for X now
+(I've been using one for months with no problems except that the
+XEmacs font menu no longer fits on the screen), and of course PS fonts
+were supported anyway.
+
+There are plenty of TrueType musical fonts, though most of the ones
+I've seen have been pretty crap and I've never seen one that was
+unequivocally licensed in a way that would allow us to include it with
+Rosegarden.  Another search might be a good idea, it's been at least a
+year since I last looked around.
+
+For PostScript the main contender is probably Adobe Sonata, which is
+very expensive but which we should probably support on principle if
+we're supporting fonts at all (because it's the best, and anyone who
+already has a copy would probably like us to).  Unfortunately that
+means getting hold of a copy, and I certainly don't feel like paying
+for it so I guess we'll let that one slide for the moment.
+
+Either way, for TT or PS, support is kind of trivial in that at least
+the X server now supports both.  One difficult bit is anti-aliasing,
+which is necessary and which X does not support -- the usual hack is
+to render at some enormous size and then reduce the bitmap to a
+smaller greyscale image.  Imlib can probably help, since I think
+that's what Enlightenment does for titles.  The other difficult bit is
+mapping the character codes onto note symbols, which will probably
+have to be user definable (at least in an external mapping file).
+
+The other option is METAFONT.  It wouldn't be an option except that
+Lilypond comes with a new and fairly good set of METAFONT outlines
+under GPL.  Unfortunately METAFONT will never be supported by X and
+it's not possible to convert METAFONT outlines to either TrueType or
+PostScript, which means we'd need to have explicit support.  This
+would probably consist of some kind of script that renders a given
+size of font into a set of greymaps, in which case we've reduced the
+problem back to the level of bitmap support.
+
+As I say, I think if we structure it right we should be able to
+support more than one rendering anyway, but we can't afford to forget
+that we may need to.
+
+Toccata and Fughetta
+--------------------
+
+See <URL:http://www.efn.org/~bch/aboutfonts.html>. Fughetta has the
+usual notation bits, and Toccata has the annotations, dynamics etc.
+
+They look good, & the TrueType is free and redistributable, whilst the
+PostScript is shareware.  That would suit our needs pretty well.
+They're designed for use with Coda Finale, and presumably Fughetta is
+mapped in a similar layout to Petrucci (the Finale default font).  I
+guess that would mean supporting Fughetta might give us support for
+other Coda-compatible fonts for free, although it might also mean the
+layout is a little baroque to start with (it certainly look it).
+
+Bitmap support should still be the default first though, partly
+because it's a simpler thing to aim for (fewer worries with things
+like baseline alignment) and partly because asking users to install a
+new font under X just to use Rosegarden may be a bit demanding --
+after all, they have enough trouble with the Rosegarden 2.1 Xt
+resource file.
+
+
+_Chris Cannam_
