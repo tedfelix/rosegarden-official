@@ -1,6 +1,8 @@
 0.2 tasks
 =========
 
+o Performance
+
 o Make AlsaDriver send NoteOn(0)s as well as NoteOffs
 
 o Repeating segments and composition end marker

@@ -9,6 +9,7 @@ INCLUDES= $(all_includes)
 
 libbase_la_SOURCES = AnalysisTypes.C \
                      AudioDevice.C \
+                     AudioPluginInstance.C \
 	             BaseProperties.C \
 		     Clipboard.C \
 		     Composition.C \

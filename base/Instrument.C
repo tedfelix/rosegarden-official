@@ -21,6 +21,7 @@
 
 #include "Instrument.h"
 #include "MidiDevice.h"
+#include "AudioPluginInstance.h"
 
 #if (__GNUC__ < 3)
 #include <strstream>
@@ -53,6 +54,13 @@ Instrument::Instrument(InstrumentId id, InstrumentType it,
     m_sendVelocity(false)
 
 {
+    // Add a number of plugin place holders (unassigned)
+    //
+    if (it == Audio)
+    {
+        addPlugin(new AudioPluginInstance(0));
+    }
+
 }
 
 Instrument::Instrument(InstrumentId id,
@@ -77,6 +85,12 @@ Instrument::Instrument(InstrumentId id,
     m_sendVelocity(false)
 
 {
+    // Add a number of plugin place holders (unassigned)
+    //
+    if (it == Audio)
+    {
+        addPlugin(new AudioPluginInstance(0));
+    }
 }
 
 Instrument::~Instrument()
@@ -186,7 +200,7 @@ Instrument::getProgramName()
 
     MidiByte msb = 0;
     MidiByte lsb = 0;
-    MidiByte program;
+    //MidiByte program;
 
     if (m_sendBankSelect)
     {
@@ -200,6 +214,42 @@ Instrument::getProgramName()
     return ((dynamic_cast<MidiDevice*>(m_device))
               ->getProgramName(m_msb, m_lsb, m_programChange));
 }
+
+void
+Instrument::addPlugin(AudioPluginInstance *instance)
+{
+    m_audioPlugins.push_back(instance);
+}
+
+bool
+Instrument::removePlugin(unsigned int position)
+{
+    PluginInstanceIterator it = m_audioPlugins.begin();
+
+    for (; it != m_audioPlugins.end(); it++)
+    {
+        if ((*it)->getPosition() == position)
+        {
+            delete (*it);
+            m_audioPlugins.erase(it);
+            return true;
+        }
+
+    }
+
+    return false;
+}
+
+void
+Instrument::clearPlugins()
+{
+    PluginInstanceIterator it = m_audioPlugins.begin();
+    for (; it != m_audioPlugins.end(); it++)
+        delete (*it);
+
+    m_audioPlugins.erase(m_audioPlugins.begin(), m_audioPlugins.end());
+}
+
 
 
 

@@ -22,8 +22,10 @@
 #ifndef _INSTRUMENT_H_
 #define _INSTRUMENT_H_
 
-#include "XmlExportable.h"
 #include <string>
+#include <vector>
+
+#include "XmlExportable.h"
 
 // An Instrument connects a Track (which itself contains
 // a list of Segments) to a device that can play that
@@ -39,6 +41,10 @@ namespace Rosegarden
 
 typedef unsigned int InstrumentId;
 typedef unsigned char MidiByte;
+
+// plugins
+class AudioPluginInstance;
+typedef std::vector<AudioPluginInstance*>::iterator PluginInstanceIterator;
 
 struct MidiBank
 {
@@ -150,6 +156,15 @@ public:
     //
     std::string getProgramName();
 
+    PluginInstanceIterator beginPlugins() { return m_audioPlugins.begin(); }
+    PluginInstanceIterator endPlugins() { return m_audioPlugins.end(); }
+
+    // Plugin management
+    //
+    void addPlugin(AudioPluginInstance *instance);
+    bool removePlugin(unsigned int position);
+    void clearPlugins();
+
 private:
     InstrumentId    m_id;
     std::string     m_name;
@@ -170,10 +185,13 @@ private:
     // things up to the parent device and God?  These are
     // directly relatable to GUI elements
     // 
-    bool         m_sendBankSelect;
-    bool         m_sendProgramChange;
-    bool         m_sendPan;
-    bool         m_sendVelocity;
+    bool             m_sendBankSelect;
+    bool             m_sendProgramChange;
+    bool             m_sendPan;
+    bool             m_sendVelocity;
+
+    // Where we hold the audio plugins for this instrument
+    std::vector<AudioPluginInstance*>     m_audioPlugins;
 
 };
 
