@@ -33,6 +33,7 @@
 #include <kmessagebox.h>
 
 #include <string>
+#include <vector>
 
 #include <unistd.h> // sleep
 #include <zlib.h>
@@ -42,7 +43,6 @@
 #include "Clipboard.h"
 #include "BaseProperties.h"
 #include "SegmentNotationHelper.h"
-#include "SegmentMatrixHelper.h"
 #include "NotationTypes.h"
 #include "segmentcommands.h"
 
@@ -597,8 +597,10 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
             // If there was a gap between the last note and this one
             // then fill it with rests
             //
+            /*
             if (absTime > m_endOfLastRecordedNote)
                 m_recordSegment->fillWithRests(absTime + duration);
+                */
 
             // Now insert the new event
             //
@@ -936,7 +938,9 @@ RosegardenGUIDoc::convertToSinglePoint(Rosegarden::Segment *segment)
 
     Rosegarden::Segment::iterator it, oIt;
     Rosegarden::Event *event;
-    Rosegarden::SegmentMatrixHelper helper(*segment);
+
+    std::vector<Event *> toInsert;
+    std::vector<Segment::iterator> toErase;
 
     for (it = segment->begin(); it != segment->end(); it++)
     {
@@ -966,20 +970,33 @@ RosegardenGUIDoc::convertToSinglePoint(Rosegarden::Segment *segment)
                     event->set<Int>(VELOCITY,
                         (*it)->get<Int>(Rosegarden::BaseProperties::VELOCITY));
 
-                    // replace NOTE ON with event of proper duration
+                    // replace NOTE ON event with one of proper duration
                     //
-                    helper.deleteNote(*it);
-                    helper.insertNote(event);
+                    toErase.push_back(it);
+                    toInsert.push_back(event);
 
                     // remove the NOTE OFF helper
                     //
-                    helper.deleteNote(*oIt);
+                    segment->eraseSingle(*oIt);
 
                     break;
                 }
             }
         }
     }
+
+    for (unsigned int i = 0; i < toInsert.size(); ++i) {
+        segment->insert(toInsert[i]);
+    }
+
+    for (unsigned int i = 0; i < toErase.size(); ++i) {
+        segment->erase(toErase[i]);
+    }
+
+    // Always fill with rests
+    //
+    segment->fillWithRests(segment->getStartTime(), segment->getEndTime());
+
 }
 
 

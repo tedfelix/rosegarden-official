@@ -17,8 +17,8 @@ o ALSA:
   - start-up bug [FIXED?]
   - metronome broken with ALSA? [NO - just wasn't implemented - NOW FIXED]
   - MIDI THRU to current selected instrument [DONE]
-
-  - ALL Synth instruments have the same channel!
+  - Instrument label on InstrumentParameterBox
+  - ALL Synth instruments have the same channel occasionally!
 
 o MappedDevice transmission is breaking occasionally
   [HOPEFULLY FIXED in MappedDevice itself]
