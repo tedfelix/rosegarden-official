@@ -122,16 +122,23 @@ void RosegardenCanvasView::slotScrollHorizSmallSteps(int hpos)
         hbar->setValue(0);
 
     } else if ((diff = int(hpos - (contentsX() + 
-				   visibleWidth() * 0.9))) > 0) {
+				   visibleWidth() * 0.8))) > 0) {
 
 	// moving off the right hand side of the view   
-	hbar->setValue(hbar->value() + diff);
+
+	int delta = diff / 6;
+	if (delta < std::min(diff, 10)) delta = std::min(diff, 10);
+
+	hbar->setValue(hbar->value() + delta);
 
     } else if ((diff = int(hpos - (contentsX() +
 				   visibleWidth() * 0.1))) < 0) {
-
 	// moving off the left
-	hbar->setValue(hbar->value() + diff);
+
+	int delta = -diff / 6;
+	if (delta < std::min(-diff, 10)) delta = std::min(-diff, 10);
+
+	hbar->setValue(hbar->value() - delta);
 
     }
 }
@@ -140,13 +147,12 @@ bool RosegardenCanvasView::isTimeForSmoothScroll()
 {
     if (m_smoothScroll) {
         int t = m_scrollTimer.elapsed();
-        if (t < 50)
+        if (t < 20)
             return false;
         else {
             m_scrollTimer.restart();
             return true;
         }
-        
     }
 }
 
@@ -169,16 +175,24 @@ void RosegardenCanvasView::slotScrollVertSmallSteps(int vpos)
         vbar->setValue(0);
 
     } else if ((diff = int(vpos - (contentsY() + 
-				   visibleHeight() * 0.9))) > 0) {
+				   visibleHeight() * 0.8))) > 0) {
 
 	// moving off up
+
+	int delta = diff / 6;
+	if (delta < std::min(diff, 10)) delta = std::min(diff, 10);
+
 	vbar->setValue(vbar->value() + diff);
 
     } else if ((diff = int(vpos - (contentsY() +
 				   visibleHeight() * 0.1))) < 0) {
 
 	// moving off down
-	vbar->setValue(vbar->value() + diff);
+
+	int delta = -diff / 6;
+	if (delta < std::min(-diff, 10)) delta = std::min(-diff, 10);
+
+	vbar->setValue(vbar->value() - delta);
 
     }
 }
