@@ -105,7 +105,7 @@ Instrument::toXmlString()
     }
     */
 
-    instrument << "    <instrument id=\"" << m_id;
+    instrument << "        <instrument id=\"" << m_id;
     instrument << "\" channel=\"" << (int)m_channel;
     instrument << "\" type=\"";
 
@@ -128,27 +128,31 @@ Instrument::toXmlString()
 
     if (m_sendBankSelect)
     {
-        instrument << "    <bank msb=\"" << (int)m_msb;
+        instrument << "        <bank msb=\"" << (int)m_msb;
         instrument << "\" lsb=\"" << (int)m_lsb << "\"/>" << std::endl;
     }
 
     if (m_sendProgramChange)
     {
-        instrument << "    <program id=\"" << (int)m_programChange << "\"/>"
+        instrument << "        <program id=\""
+                   << (int)m_programChange << "\"/>"
                    << std::endl;
     }
     
     if (m_sendPan)
     {
-        instrument << "    <pan value=\"" << (int)m_pan << "\"/>" << std::endl;
+        instrument << "        <pan value=\""
+                   << (int)m_pan << "\"/>" << std::endl;
     }
 
     if (m_sendVelocity)
     {
-        instrument << "    <velocity value=\"" << (int)m_velocity << "\"/>" << std::endl;
+        instrument << "        <velocity value=\""
+                   << (int)m_velocity << "\"/>" << std::endl;
     }
 
-    instrument << "    </instrument>" << std::endl << std::endl << std::ends;
+    instrument << "        </instrument>" << std::endl
+               << std::endl << std::ends;
 
     return instrument.str();
 

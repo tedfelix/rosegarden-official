@@ -201,21 +201,15 @@ Studio::toXmlString()
     studio << "<studio>" << std::endl << std::endl;
 
     std::vector<Device*>::iterator it;
-
     InstrumentList list;
-    InstrumentList::iterator iit;
 
     // Get XML version of devices
     //
     for (it = m_devices.begin(); it != m_devices.end(); it++)
     {
-        // Sends Device to XML
+        // Sends Devices to XML
+        //
         studio << (*it)->toXmlString() << std::endl << std::endl;
-
-        // Send Instruments
-        list = (*it)->getAllInstruments();
-        for (iit = list.begin(); iit != list.end(); iit++)
-            studio << (*iit)->toXmlString();
     }
 
     studio << "</studio>" << std::endl << std::ends;

@@ -203,8 +203,6 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
                                   int port,
                                   bool duplex)
 {
-    // For each MIDI port we find we add a full MIDI complement
-    // of Instruments
  
     if (type == Instrument::Midi)
     {
@@ -232,10 +230,8 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
     }
     else  // audio
     {
-        //id = m_audioRunningId++;
+        m_audioRunningId++;
     }
-
-    // Create local ALSA Instrument
 }
 
 
@@ -316,7 +312,7 @@ AlsaDriver::initialiseMidi()
     cout << "    OUTPUT PAIR = " << outputDevice.first << ", "
                                  << outputDevice.second << endl;
 
-    // Connections - both to an output port and an input port please?
+    // Connect to the output port
     //
     if (snd_seq_connect_to(m_midiHandle,
                            m_midiPort,
@@ -330,11 +326,12 @@ AlsaDriver::initialiseMidi()
         return;
     }
 
-    /*
-    if (snd_seq_connect_to(m_midiHandle,
-                           m_midiPort,
-                           inputDevice.first,
-                           inputDevice.second) < 0)
+    // Connect from the input port
+    //
+    if (snd_seq_connect_from(m_midiHandle,
+                             m_midiPort,
+                             inputDevice.first,
+                             inputDevice.second) < 0)
     {
         std::cerr << "AlsaDriver::initialiseMidi() - "
                   << "can't subscribe input client/port"
@@ -342,7 +339,6 @@ AlsaDriver::initialiseMidi()
         m_driverStatus = NO_DRIVER;
         return;
     }
-    */
 
     // Erm?
     //
@@ -688,7 +684,7 @@ AlsaDriver::getMappedComposition(const RealTime & /*playLatency*/)
 {
     m_recordComposition.clear();
 
-    while (snd_seq_event_input_pending(m_midiHandle, 0) > 0)
+    do
     {
         snd_seq_event_t *event;
 
@@ -699,6 +695,13 @@ AlsaDriver::getMappedComposition(const RealTime & /*playLatency*/)
             return &m_recordComposition;
         }
 
+        if (m_playing)
+        {
+        }
+
+        //MidiByte channel = event->channel;
+        //unsigned int chanNoteKey = ( channel << 8 ) + midiCommand.data1;
+
         switch(event->type)
         {
 
@@ -708,6 +711,13 @@ AlsaDriver::getMappedComposition(const RealTime & /*playLatency*/)
                 break;
 
             case SND_SEQ_EVENT_NOTEON:
+                //m_noteOnMap[chanNoteKey] = new MappedEvent();
+                //m_noteOnMap[chanNoteKey]->setPitch(event->
+                //m_noteOnMap[chanNoteKey]->setVelocity(event->
+
+                std::cout << "TIME = " << event->time.time.tv_sec
+                          << " . " << event->time.time.tv_nsec << std::endl;
+
                 cout << "AlsaDriver::getMappedComposition - "
                      << "GOT NOTEON" << std::endl;
                 break;
@@ -735,6 +745,7 @@ AlsaDriver::getMappedComposition(const RealTime & /*playLatency*/)
 
         snd_seq_free_event(event);
     }
+    while (snd_seq_event_input_pending(m_midiHandle, 0) > 0);
 
     return &m_recordComposition;
 }

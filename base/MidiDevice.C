@@ -214,6 +214,7 @@ MidiDevice::toXmlString()
     // and now bank information
     //
     std::vector<MidiBank*>::iterator it;
+    InstrumentList::iterator iit;
     ProgramList::iterator pt;
 
     for (it = m_bankList->begin(); it != m_bankList->end(); it++)
@@ -241,6 +242,11 @@ MidiDevice::toXmlString()
 
         midiDevice << "        </bank>" << std::endl << std::endl;
     }
+
+    // Add instruments
+    //
+    for (iit = m_instruments.begin(); iit != m_instruments.end(); iit++)
+        midiDevice << (*iit)->toXmlString();
 
     midiDevice << "    </device>" << std::endl << std::ends;
 
