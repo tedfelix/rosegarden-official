@@ -45,6 +45,13 @@
     versus overlaying raw), and allows you to choose one of these as
     the default paste function.  Also implement Cut-&-Close.
 
+11. Add choice of start-from-here or start-from-start-of-bar to time
+    signature dialog.
+
+12. Create clef dialog with transposition options (maintain pitches,
+    transpose entirely, transpose octaves only)
+
+13. Merge Randall's optimisations to layout
 
 Post-0.1.3 task list (superseding older ones)
 ====================
