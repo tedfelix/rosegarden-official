@@ -20,6 +20,9 @@ o Audio
    - exceptions and return values
    - stereo vu meters (0dB level = 1.0f etc)
 
+o JACK autostart and process management
+o automatic Sequencer process management
+
 o Instrument/Device naming
 
 o Toggle record mode for punch in/out [HALF COMPLETE]

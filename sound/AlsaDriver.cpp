@@ -115,6 +115,8 @@ static const float  _16bitSampleMax = (float)(0xffff/2);
 static bool _jackTransportEnabled;
 static bool _jackTransportMaster;
 
+static Rosegarden::MappedEvent _jackMappedEvent;
+
 #endif
 
 static bool              _threadJackClosing;
@@ -161,6 +163,12 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
 
     _jackTransportEnabled = false;
     _jackTransportMaster = false;
+
+    // Make sure we keep this MappedEvent hanging around - 
+    // setting this property means that MappedComposition::clear()
+    // won't attempt to delete it.
+    //
+    _jackMappedEvent.setPersistent(true);
 
 #endif
 
@@ -2416,21 +2424,15 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 
             inputLevel /= float(nframes);
 
-            // Simple event to inform that AudioFileId has
+            // Return an event to inform the GUI that AudioFileId has
             // now stopped playing.
             //
-            try
-            {
-                MappedEvent *mE =
-                    new MappedEvent((inst)->getAudioMonitoringInstrument(),
-                                    MappedEvent::AudioLevel,
-                                    0, // file id always empty
-                                    int(inputLevel * 127.0));
-
-                // send completion event
-                inst->insertMappedEventForReturn(mE);
-            }
-            catch(...) {;}
+            _jackMappedEvent.setInstrument((inst)->
+                    getAudioMonitoringInstrument());
+            _jackMappedEvent.setType(MappedEvent::AudioLevel);
+            _jackMappedEvent.setData1(0);
+            _jackMappedEvent.setData2(int(inputLevel * 127.0));
+            inst->insertMappedEventForReturn(&_jackMappedEvent);
 
             if (inst->getRecordStatus() == RECORD_AUDIO)
             {
@@ -2552,17 +2554,11 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                     // Simple event to inform that AudioFileId has
                     // now stopped playing.
                     //
-                    try
-                    {
-                        MappedEvent *mE =
-                            new MappedEvent((*it)->getInstrument(),
-                                            MappedEvent::AudioStopped,
-                                            (*it)->getAudioFile()->getId());
-
-                        // send completion event
-                        inst->insertMappedEventForReturn(mE);
-                    }
-                    catch(...) {;}
+                    _jackMappedEvent.setInstrument((*it)->getInstrument());
+                    _jackMappedEvent.setType(MappedEvent::AudioStopped);
+                    _jackMappedEvent.setData1((*it)->getAudioFile()->getId());
+                    _jackMappedEvent.setData2(0);
+                    inst->insertMappedEventForReturn(&_jackMappedEvent);
                 }
 
 
@@ -2904,33 +2900,16 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
             {
                 if ((*it)->getStatus() == PlayableAudioFile::PLAYING)
                 {
-                    try
-                    {
-                        MappedEvent *mE =
-                            new MappedEvent((*it)->getInstrument(),
-                                            MappedEvent::AudioLevel,
-    
-                                            // hmm, watch conversion here
-    
-                                            (*it)->getAudioFile()->getId(),
-                                            int(peakLevels[i++] * 127.0));
-
-                        // send completion event
-                        inst->insertMappedEventForReturn(mE);
-                    }
-                    catch(...) {;}
+                    _jackMappedEvent.setInstrument((*it)->getInstrument());
+                    _jackMappedEvent.setType(MappedEvent::AudioLevel);
+                    _jackMappedEvent.setData1((*it)->getAudioFile()->getId());
+                    _jackMappedEvent.setData2(int(peakLevels[i++] * 127.0));
+                    inst->insertMappedEventForReturn(&_jackMappedEvent);
                 }
             }
 
             _passThroughCounter = 0;
         }
-
-        // clear down the audio queue if we're not playing
-        //
-        /*
-        if (inst->isPlaying() == false)
-            inst->clearAudioPlayQueue();
-            */
 
         _usingAudioQueueVector = false;
 

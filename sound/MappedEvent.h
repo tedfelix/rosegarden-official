@@ -111,7 +111,8 @@ public:
                    m_eventTime(0, 0),
                    m_duration(0, 0),
                    m_audioStartMarker(0, 0),
-                   m_dataBlock("") {;}
+                   m_dataBlock(""),
+                   m_isPersistent(false) {;}
 
     // Construct from Events to Internal (MIDI) type MappedEvent
     //
@@ -138,7 +139,8 @@ public:
         m_eventTime(absTime),
         m_duration(duration),
         m_audioStartMarker(RealTime(0,0)),
-        m_dataBlock("") {;}
+        m_dataBlock(""),
+        m_isPersistent(false) {;}
 
     // A general MappedEvent constructor for any MappedEvent type
     //
@@ -156,7 +158,8 @@ public:
         m_eventTime(absTime),
         m_duration(duration),
         m_audioStartMarker(audioStartMarker),
-        m_dataBlock("") {;}
+        m_dataBlock(""),
+        m_isPersistent(false) {;}
 
     // Audio MappedEvent shortcut constructor
     //
@@ -172,7 +175,8 @@ public:
          m_eventTime(eventTime),
          m_duration(duration),
          m_audioStartMarker(audioStartMarker),
-         m_dataBlock("") {;}
+         m_dataBlock(""),
+         m_isPersistent(false) {;}
 
     // More generalised MIDI event containers for
     // large and small events (one param, two param)
@@ -188,7 +192,8 @@ public:
          m_eventTime(RealTime(0, 0)),
          m_duration(RealTime(0, 0)),
          m_audioStartMarker(RealTime(0, 0)),
-         m_dataBlock("") {;}
+         m_dataBlock(""),
+         m_isPersistent(false) {;}
 
     MappedEvent(InstrumentId id,
                 MappedEventType type,
@@ -214,7 +219,8 @@ public:
         m_eventTime(RealTime(0, 0)),
         m_duration(RealTime(0, 0)),
         m_audioStartMarker(RealTime(0, 0)),
-        m_dataBlock("") {;}
+        m_dataBlock(""),
+        m_isPersistent(false) {;}
 
     // Copy constructor
     //
@@ -237,7 +243,8 @@ public:
         m_eventTime(mE->getEventTime()),
         m_duration(mE->getDuration()),
         m_audioStartMarker(mE->getAudioStartMarker()),
-        m_dataBlock("") {;}
+        m_dataBlock(""),
+        m_isPersistent(false) {;}
 
     ~MappedEvent() {;}
 
@@ -323,6 +330,9 @@ public:
     void addDataByte(MidiByte byte);
     void addDataString(const std::string &data);
 
+    void setPersistent(bool value) { m_isPersistent = value; }
+    bool isPersistent() const { return m_isPersistent; }
+
 private:
     InstrumentId     m_instrument;
     MappedEventType  m_type;
@@ -336,6 +346,11 @@ private:
     // other bytes in this type, e.g. System Exclusive.
     //
     std::string      m_dataBlock;
+
+    // Should a MappedComposition try and delete this MappedEvent or
+    // if it persistent?
+    //
+    bool             m_isPersistent;
 
 };
 

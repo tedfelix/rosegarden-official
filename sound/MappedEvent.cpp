@@ -37,7 +37,8 @@ MappedEvent::MappedEvent(InstrumentId id,
        m_eventTime(eventTime),
        m_duration(duration),
        m_audioStartMarker(0, 0),
-       m_dataBlock("")
+       m_dataBlock(""),
+       m_isPersistent(false)
 {
     try {
 

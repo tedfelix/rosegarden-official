@@ -30,7 +30,7 @@
 class AudioScheduler
 {
 public:
-    AudioScheduler()
+    AudioScheduler();
     ~AudioScheduler();
 
 

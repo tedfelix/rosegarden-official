@@ -190,8 +190,10 @@ MappedComposition::operator=(const MappedComposition &mC)
 void
 MappedComposition::clear()
 {
+    // Only clear if the events aren't persistent
+    //
     for (MappedCompositionIterator it = this->begin(); it != this->end(); it++)
-        delete (*it);
+        if (!(*it)->isPersistent()) delete (*it);
 
     this->erase(this->begin(), this->end());
 }
