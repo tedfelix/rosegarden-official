@@ -53,6 +53,7 @@ using namespace NotationProperties;
 
 NotationHLayout::NotationHLayout(NotePixmapFactory &npf) :
     m_totalWidth(0.),
+    m_stretchFactor(5),
     m_npf(npf)
 {
     kdDebug(KDEBUG_AREA) << "NotationHLayout::NotationHLayout()" << endl;
@@ -117,6 +118,7 @@ NotationHLayout::getBarData(StaffType &staff) const
 
 int NotationHLayout::getIdealBarWidth(StaffType &staff,
                                       int fixedWidth,
+                                      int baseWidth,
                                       NotationElementList::iterator shortest,
                                       int shortCount,
                                       int totalCount,
@@ -157,6 +159,9 @@ int NotationHLayout::getIdealBarWidth(StaffType &staff,
 
     kdDebug(KDEBUG_AREA) << "NotationHLayout::getIdealBarWidth: returning "
                          << w << endl;
+
+    w = (w * m_stretchFactor) / 5;
+    if (w < (fixedWidth + baseWidth)) w = fixedWidth + baseWidth;
     return w;
 } 
 
@@ -210,6 +215,7 @@ NotationHLayout::scanStaff(StaffType &staff)
         int shortCount = 0;
         int totalCount = 0;
 	int fixedWidth = m_npf.getBarMargin();
+        int baseWidth = 0;
 
         timeT apparentBarDuration = 0;
 
@@ -345,13 +351,15 @@ NotationHLayout::scanStaff(StaffType &staff)
                         kdDebug(KDEBUG_AREA) << "No quantized duration in shortest! event is " << *((*shortest)->event()) << endl;
                     }
                 }
+
+                baseWidth += mw;
             }
 
             el->event()->setMaybe<Int>(MIN_WIDTH, mw);
         }
         
         addNewBar(staff, barNo, to,
-                  getIdealBarWidth(staff, fixedWidth, shortest, 
+                  getIdealBarWidth(staff, fixedWidth, baseWidth, shortest, 
                                    shortCount, totalCount, timeSignature),
                   fixedWidth,
                   apparentBarDuration == timeSignature.getBarDuration());
@@ -815,7 +823,7 @@ int NotationHLayout::getMinWidth(NotationElement &e,
         return w;
     }
 
-    w = m_npf.getNoteBodyWidth() / 5;
+    if (m_stretchFactor >= 3) w = m_npf.getNoteBodyWidth() / 5;
 
     if (e.event()->isa(Clef::EventType)) {
 

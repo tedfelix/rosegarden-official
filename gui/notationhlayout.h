@@ -45,6 +45,9 @@ public:
     NotationHLayout(NotePixmapFactory &npf);
     virtual ~NotationHLayout();
 
+    int getStretchFactor() const { return m_stretchFactor; }
+    void setStretchFactor(int factor) { m_stretchFactor = factor; }
+
     /**
      * Precomputes layout data for a single staff.  The resulting data
      * is stored in the BarDataMap, keyed from the staff reference;
@@ -142,7 +145,8 @@ protected:
      int width, int fwidth, bool correct);
 
     int getIdealBarWidth
-    (StaffType &staff, int fixedWidth, NotationElementList::iterator shortest,
+    (StaffType &staff, int fixedWidth, int baseWidth,
+     NotationElementList::iterator shortest,
      int shortCount, int totalCount,
      const Rosegarden::TimeSignature &timeSignature) const;
 
@@ -176,6 +180,7 @@ protected:
     int getComfortableGap(Rosegarden::Note::Type type) const;
 
     double m_totalWidth;
+    int m_stretchFactor;
     NotePixmapFactory &m_npf;
 };
 

@@ -236,6 +236,7 @@ public:
 
     const NoteFontMap &getNoteFontMap() const { return m_fontMap; }
 
+    static std::set<std::string> getAvailableFontNames();
     std::set<int> getSizes() const { return m_fontMap.getSizes(); }
 
     int getCurrentSize() const { return m_currentSize; }
@@ -270,6 +271,22 @@ public:
 
 
 
+    enum PixmapColour { Red, Green, Blue };
+
+    /// Returns false + blank pixmap if it can't find the right one
+    bool getColouredPixmap(CharName charName, QPixmap &pixmap,
+                           PixmapColour, bool inverted = false) const;
+
+    /// Ignores problems, returning blank pixmap if necessary
+    QPixmap getColouredPixmap(CharName charName, PixmapColour,
+                              bool inverted = false) const;
+
+    /// Ignores problems, returning blank canvas pixmap if necessary
+    QCanvasPixmap getColouredCanvasPixmap
+    (CharName charName, PixmapColour, bool inverted = false) const;
+
+
+
     /// Returns false + dimensions of blank pixmap if none found
     bool getDimensions(CharName charName, int &x, int &y,
                        bool inverted = false) const;
@@ -296,6 +313,9 @@ private:
 
     QPixmap *lookup(CharName charName, bool inverted) const;
     void add(CharName charName, bool inverted, QPixmap *pixmap) const;
+
+    CharName getNameWithColour(CharName origName, PixmapColour colour) const;
+    QPixmap *recolour(QPixmap in, PixmapColour colour) const;
 
     typedef std::pair<QPixmap *, QPixmap *>
             PixmapPair;

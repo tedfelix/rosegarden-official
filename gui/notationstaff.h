@@ -23,6 +23,7 @@
 #define STAFF_H
 
 #include <vector>
+#include <string>
 
 #include "qcanvasitemgroup.h"
 #include "notepixmapfactory.h"
@@ -48,44 +49,47 @@ class NotationStaff : public Rosegarden::Staff<NotationElement>,
 public:
     typedef std::vector<QCanvasLineGroupable*> barlines;
     
-    NotationStaff(QCanvas*, Rosegarden::Track*, int resolution);
+    NotationStaff(QCanvas*, Rosegarden::Track*,
+                  std::string fontName, int resolution);
     ~NotationStaff();
-
-    // bit dubious, really -- I'd rather have a NotePixmapFactory that
-    // worked even through a const reference, but most of its drawing
-    // methods are necessarily non-const because it stores so much
-    // state internally
-    NotePixmapFactory& getNotePixmapFactory() { return *m_npf; }
 
     /**
      * Changes the resolution of the note pixmap factory and the
      * staff lines, etc; can't change resolution of the actual layout
      * or pixmaps on the staff, the notation view should do that
      */
-    void changeResolution(int newResolution);
-
+    void changeFont(std::string fontName, int resolution);
 
     /**
-     * Return the Y coordinate of specified line
+     * Gets a read-only reference to the pixmap factory used by the
+     * staff.  (For use by NotationHLayout, principally.)  This
+     * reference isn't const because the NotePixmapFactory maintains
+     * too much state for its methods to be const, but you should
+     * treat the returned reference as if it were const anyway.
+     */
+    NotePixmapFactory& getNotePixmapFactory() { return *m_npf; }
+
+    /**
+     * Returns the Y coordinate of the specified line on the staff.
      *
-     * 0 is bottom staff-line, 8 is top one.
+     * 0 is the bottom staff-line, 8 is the top one.
      */
     int yCoordOfHeight(int height) const;
 
     /**
-     * Return the height of a bar line
+     * Returns the height of a bar line.
      */
     unsigned int getBarLineHeight() const { return m_barLineHeight; }
 
     /**
-     * Return the margin surrounding a bar line
+     * Returns the margin surrounding a bar line.
      *
-     * The bar line is in the middle of the margin
+     * The bar line is in the middle of the margin.
      */
     unsigned int getBarMargin() const { return m_npf->getBarMargin(); }
 
     /**
-     * Return the total height of a staff
+     * Returns the total height of a staff
      */
     unsigned int getStaffHeight() const {
 	return (m_resolution + 1) * nbLines + linesOffset * 2 + 1;

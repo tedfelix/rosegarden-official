@@ -23,6 +23,7 @@
 
 #include <qcanvas.h>
 #include <qslider.h>
+#include <qcombobox.h>
 
 #include <kmessagebox.h>
 #include <kmenubar.h>
@@ -65,6 +66,8 @@ using Rosegarden::Quantizer;
 using Rosegarden::timeT;
 
 using std::vector;
+using std::string;
+using std::set;
 
 #define ID_STATUS_MSG 1
 
@@ -74,8 +77,7 @@ using std::vector;
 
 NotationView::NotationView(RosegardenGUIDoc* doc,
 			   vector<Track *> tracks,
-                           QWidget *parent,
-                           int resolution) :
+                           QWidget *parent) :
     KMainWindow(parent),
     m_config(kapp->config()),
     m_document(doc),
@@ -85,18 +87,22 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     m_canvasView(new NotationCanvasView(new QCanvas(width() * 2,
                                                     height() * 2),
                                         this)),
-    m_toolbarNotePixmapFactory(4),
     m_hlayout(0),
     m_vlayout(0),
     m_tool(0),
+    m_fontSizeSlider(0),
     m_selectDefaultNote(0),
     m_pointer(0)
 {
     assert(tracks.size() > 0);
     kdDebug(KDEBUG_AREA) << "NotationView ctor" << endl;
 
+    m_fontName = NotePixmapFactory::getDefaultFont();
+    m_fontSize = NotePixmapFactory::getDefaultSize(m_fontName);
+    m_notePixmapFactory = new NotePixmapFactory(m_fontName, m_fontSize);
+
     setupActions();
-    initZoomToolbar(resolution);
+    initFontToolbar();
     initStatusBar();
     
     setBackgroundMode(PaletteBase);
@@ -139,13 +145,13 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     }
 
     for (unsigned int i = 0; i < tracks.size(); ++i) {
-	m_staffs.push_back(new NotationStaff(canvas(), tracks[i], resolution));
+	m_staffs.push_back(new NotationStaff(canvas(), tracks[i],
+                                             m_fontName, m_fontSize));
 	m_staffs[i]->move(20, m_staffs[i]->getStaffHeight() * i + 15);
 	m_staffs[i]->show();
     }
     m_currentStaff = 0;
 
-    m_notePixmapFactory = new NotePixmapFactory(resolution);
     m_vlayout = new NotationVLayout();
     m_hlayout = new NotationHLayout(*m_notePixmapFactory);
 
@@ -449,87 +455,85 @@ void NotationView::setupActions()
     createGUI("notation.rc");
 }
 
-class ZoomSlider : public QSlider
+NotationView::ZoomSlider::ZoomSlider(const vector<int> &sizes,
+                                     int initialSize, Orientation o,
+                                     QWidget *parent, const char *name) :
+    QSlider(0, sizes.size()-1, 1,
+            getIndex(sizes, initialSize), o, parent, name),
+    m_sizes(sizes)
 {
-public:
-    ZoomSlider(int minValue, int maxValue,
-               int pageStep, int value,
-               Orientation, QWidget * parent, const char * name=0);
-
-    void addAvailableResolution(int res);
-    
-protected:
-    // force value to be one the available res.
-    virtual void valueChange();
-
-    std::vector<int> m_availableResolutions;
-    int m_hiRes, m_loRes;
-
-};
-
-ZoomSlider::ZoomSlider(int minValue, int maxValue,
-                       int pageStep, int value,
-                       Orientation o, QWidget *parent, const char *name)
-    : QSlider(minValue, maxValue, pageStep, value,
-              o, parent, name),
-      m_hiRes(0),
-      m_loRes(0)
-{
-    addAvailableResolution(4);
-    addAvailableResolution(6);
-    addAvailableResolution(8);
-    addAvailableResolution(10);
-    addAvailableResolution(12);
     setTracking(false);
     setFixedWidth(150);
-    setFixedHeight(16);
+    setFixedHeight(15);
+    setLineStep(1);
+    setTickmarks(Below);
 }
 
-void ZoomSlider::addAvailableResolution(int res)
-{
-    m_availableResolutions.push_back(res);
-    std::sort(m_availableResolutions.begin(), m_availableResolutions.end());
+NotationView::ZoomSlider::~ZoomSlider() { }
 
-    m_hiRes = m_availableResolutions[m_availableResolutions.size() - 1];
-    m_loRes = m_availableResolutions[0];
+int NotationView::ZoomSlider::getIndex(const vector<int> &sizes, int size)
+{
+    for (unsigned int i = 0; i < sizes.size(); ++i) {
+        if (sizes[i] == size) return i;
+    }
+    return sizes[sizes.size()/2];
 }
 
-
-void ZoomSlider::valueChange()
-{
-    std::vector<int>::const_iterator newValue =
-        std::lower_bound(m_availableResolutions.begin(),
-                         m_availableResolutions.end(),
-                         value());
-
-    kdDebug(KDEBUG_AREA) << "ZoomSlider::valueChanged() : "
-                         << *newValue << endl;
-
-    directSetValue(*newValue);
-    QSlider::valueChange();
+void NotationView::ZoomSlider::reinitialise(const vector<int> &sizes,
+                                            int size)
+{ 
+    m_sizes = sizes;
+    setMinValue(0);
+    setMaxValue(sizes.size()-1);
+    setValue(getIndex(sizes, size));
 }
 
-
-
-void NotationView::initZoomToolbar(int resolution)
+void NotationView::initFontToolbar()
 {
-    KToolBar *zoomToolbar = toolBar("zoomToolbar");
+    KToolBar *fontToolbar = toolBar("fontToolBar");
     
-    if (!zoomToolbar) {
-        kdDebug(KDEBUG_AREA) << "NotationView::initZoomToolbar() : zoom toolBar not found\n";
+    if (!fontToolbar) {
+        kdDebug(KDEBUG_AREA)
+            << "NotationView::initFontToolbar() : font toolbar not found\n";
         return;
     }
 
-    new QLabel("Size:  ", zoomToolbar);
+    new QLabel("  Font:  ", fontToolbar);
 
-    QSlider *zoomSlider = new ZoomSlider(4, 12, // min, max
-                                      2, // page step
-                                      resolution, // init value
-                                      QSlider::Horizontal, zoomToolbar);
-    zoomSlider->setLineStep(2);
-    zoomSlider->setTickmarks(QSlider::Below);
-    connect(zoomSlider, SIGNAL(valueChanged(int)),
-            this,       SLOT(changeResolution(int)));
+    QComboBox *fontCombo = new QComboBox(fontToolbar);
+    fontCombo->setEditable(false);
+
+    set<string> fs(NotePixmapFactory::getAvailableFontNames());
+    vector<string> f(fs.begin(), fs.end());
+    std::sort(f.begin(), f.end());
+
+    for (vector<string>::iterator i = f.begin(); i != f.end(); ++i) {
+        fontCombo->insertItem(QString(i->c_str()));
+        if (*i == m_fontName) {
+            fontCombo->setCurrentItem(fontCombo->count() - 1);
+        }
+    }
+
+    connect(fontCombo, SIGNAL(activated(const QString &)),
+            this,        SLOT(changeFont(const QString &)));
+
+    new QLabel("  Size:  ", fontToolbar);
+
+    vector<int> sizes = NotePixmapFactory::getAvailableSizes(m_fontName);
+    m_fontSizeSlider = new ZoomSlider(sizes, m_fontSize,
+                                      QSlider::Horizontal, fontToolbar);
+    connect(m_fontSizeSlider, SIGNAL(valueChanged(int)),
+            this,               SLOT(changeFontSizeFromIndex(int)));
+
+    new QLabel("  Stretch:  ", fontToolbar);
+
+    vector<int> stretches;
+    for (int s = 1; s < 10; ++s) stretches.push_back(s);
+    QSlider *stretchSlider = new ZoomSlider(stretches, 5,
+                                            QSlider::Horizontal, fontToolbar);
+    stretchSlider->setTracking(true);
+    connect(stretchSlider, SIGNAL(valueChanged(int)),
+            this,            SLOT(changeStretch(int)));
 }
 
 void NotationView::initStatusBar()
@@ -569,25 +573,87 @@ bool NotationView::showBars(int staffNo)
 
 
 void
-NotationView::changeResolution(int newResolution)
+NotationView::changeStretch(int newStretch)
 {
-    kdDebug(KDEBUG_AREA) << "NotationView::changeResolution(" << newResolution << ")\n";
+    kdDebug(KDEBUG_AREA) << "changeStretch: " << newStretch << endl;
+    m_hlayout->setStretchFactor(newStretch + 1);
+
+    applyLayout();
+
+    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+	NotationElementList *notes = m_staffs[i]->getViewElementList();
+        NotationElementList::iterator starti = notes->begin();
+        NotationElementList::iterator endi = notes->end();
+	m_staffs[i]->showElements(starti, endi, true);
+	showBars(i);
+    }
+
+    canvas()->update();
+}
+
+
+void
+NotationView::changeFont(const QString &newName)
+{
+    kdDebug(KDEBUG_AREA) << "changeFont: " << newName << endl;
+    changeFont(std::string(newName.latin1()));
+}
+
+
+void
+NotationView::changeFont(string newName)
+{
+    changeFont(newName, NotePixmapFactory::getDefaultSize(newName));
+}
+
+
+void
+NotationView::changeFontSize(int newSize)
+{
+    changeFont(m_fontName, newSize);
+}
+
+
+void
+NotationView::changeFontSizeFromIndex(int n)
+{
+    vector<int> sizes = NotePixmapFactory::getAvailableSizes(m_fontName);
+    if (n >= (int)sizes.size()) n = sizes.size()-1;
+    changeFont(m_fontName, sizes[n]);
+}
+
+
+void
+NotationView::changeFont(string newName, int newSize)
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::changeResolution(" << newSize << ")\n";
+
+    if (newName == m_fontName && newSize == m_fontSize) return;
 
     NotePixmapFactory* npf = 0;
     
     try {
-        npf = new NotePixmapFactory(newResolution);
-    } catch(...) {
+        npf = new NotePixmapFactory(newName, newSize);
+    } catch (...) {
         return;
     }
 
+    bool changedFont = (newName != m_fontName);
+
+    m_fontName = newName;
+    m_fontSize = newSize;
     setNotePixmapFactory(npf);
+
+    if (changedFont) {
+        vector<int> sizes = NotePixmapFactory::getAvailableSizes(m_fontName);
+        m_fontSizeSlider->reinitialise(sizes, m_fontSize);
+    }
 
     setHLayout(new NotationHLayout(*m_notePixmapFactory));
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
         m_staffs[i]->move(0, 0);
-        m_staffs[i]->changeResolution(newResolution);
+        m_staffs[i]->changeFont(m_fontName, m_fontSize);
         m_staffs[i]->move(20, m_staffs[i]->getStaffHeight() * i + 15);
     }
 

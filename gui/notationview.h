@@ -22,7 +22,9 @@
 #ifndef NOTATIONVIEW_H
 #define NOTATIONVIEW_H
 
+#include <string>
 #include <kmainwindow.h>
+#include <qslider.h>
 
 #include "notationelement.h"
 #include "notationhlayout.h"
@@ -56,9 +58,7 @@ class NotationView : public KMainWindow
 public:
     NotationView(RosegardenGUIDoc *doc,
 		 std::vector<Rosegarden::Track *> tracks,
-		 QWidget *parent,
-                 int resolution);
-
+		 QWidget *parent);
     ~NotationView();
 
     const RosegardenGUIDoc *getDocument() const { return m_document; }
@@ -81,6 +81,13 @@ public:
     void setCurrentSelectedNote(const char *pixmapName,
                                 bool isRest, Rosegarden::Note::Type,
 				int dots = 0);
+
+    /// Changes the font of the staffs on the view
+    void changeFont(std::string newFont);
+
+    /// Changes the font and font size of the staffs on the view
+    void changeFont(std::string newFont, int newSize);
+
 
 public slots:
     /**
@@ -247,8 +254,17 @@ public slots:
      */
     void setPositionPointer(const int &position);
 
-    /// Changes the resolution of the staffs on the view
-    void changeResolution(int newResolution);
+    /// Changes the font of the staffs on the view
+    void changeFont(const QString &newFont);
+
+    /// Changes the font size of the staffs on the view
+    void changeFontSize(int newSize);
+
+    /// Changes the font size of the staffs on the view to the nth size in the available size list
+    void changeFontSizeFromIndex(int n);
+
+    /// Changes the hlayout stretch of the staffs on the view
+    void changeStretch(int newStretch);
 
 signals:
     void changeCurrentNote(bool isRest, Rosegarden::Note::Type);
@@ -279,10 +295,8 @@ protected:
 
     /**
      * setup the "zoom" toolbar
-     *
-     * The zoom slider will be set to \a resolution
      */
-    void initZoomToolbar(int resolution);
+    void initFontToolbar();
 
     /**
      * Helper function to toggle a toolbar given its name
@@ -370,6 +384,9 @@ protected:
 
     std::vector<NotationStaff *> m_staffs;
 
+    std::string m_fontName;
+    int m_fontSize;
+
     NotePixmapFactory *m_notePixmapFactory;
     NotePixmapFactory m_toolbarNotePixmapFactory;
     
@@ -378,6 +395,22 @@ protected:
 
     NotationTool* m_tool;
 
+    class ZoomSlider : public QSlider
+    {
+    public:
+        ZoomSlider(const std::vector<int> &sizes, int initialValue,
+                   Orientation, QWidget * parent, const char * name=0);
+        virtual ~ZoomSlider();
+        
+        void reinitialise(const std::vector<int> &sizes, int initialValue);
+        
+    protected:
+        static int getIndex(const std::vector<int> &, int size);
+        std::vector<int> m_sizes;
+    };
+    
+    ZoomSlider *m_fontSizeSlider;
+    
     KAction* m_selectDefaultNote;
 
     QCanvasLine *m_pointer;

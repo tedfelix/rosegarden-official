@@ -22,9 +22,13 @@
 #include "notefont.h"
 
 #include <qfileinfo.h>
+#include <qimage.h>
+#include <qdir.h>
+
 #include <kglobal.h>
 #include <kstddirs.h>
 #include <klocale.h>
+
 #include <iostream>
 
 using std::string;
@@ -429,6 +433,33 @@ NoteFont::~NoteFont()
     // empty
 }
 
+
+set<string>
+NoteFont::getAvailableFontNames()
+{
+    set<string> names;
+
+    QString fontDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+    QDir dir(fontDir);
+    if (!dir.exists()) {
+        cerr << "NoteFont::getAvailableFontNames: directory \"" << fontDir
+             << "\" not found" << endl;
+        return names;
+    }
+
+    dir.setFilter(QDir::Dirs | QDir::Readable);
+    QStringList subDirs = dir.entryList();
+    for (QStringList::Iterator i = subDirs.begin(); i != subDirs.end(); ++i) {
+        QFileInfo mapFile(QString("%1/%2/mapping.xml").arg(fontDir).arg(*i));
+        if (mapFile.exists() && mapFile.isReadable()) {
+            names.insert((*i).latin1());
+        }
+    }
+
+    return names;
+}
+
+
 bool
 NoteFont::getStemThickness(unsigned int &thickness) const
 {
@@ -557,6 +588,113 @@ NoteFont::getCanvasPixmap(CharName charName, bool inverted) const
 
     return QCanvasPixmap(p, QPoint(x, y));
 }
+
+bool
+NoteFont::getColouredPixmap(CharName baseCharName, QPixmap &pixmap,
+                            PixmapColour colour, bool inverted) const
+{
+    CharName charName(getNameWithColour(baseCharName, colour));
+
+    QPixmap *found = lookup(charName, inverted);
+    if (found != 0) {
+        pixmap = *found;
+        return true;
+    }
+
+    QPixmap basePixmap;
+    bool ok = getPixmap(baseCharName, basePixmap, inverted);
+
+    found = recolour(basePixmap, colour);
+    add(charName, inverted, found);
+    pixmap = *found;
+    return ok;
+}
+
+QPixmap
+NoteFont::getColouredPixmap(CharName charName, PixmapColour colour,
+                            bool inverted) const
+{
+    QPixmap p;
+    (void)getColouredPixmap(charName, p, colour, inverted);
+    return p;
+}
+
+QCanvasPixmap
+NoteFont::getColouredCanvasPixmap(CharName charName, PixmapColour colour,
+                                  bool inverted) const
+{
+    QPixmap p;
+    (void)getColouredPixmap(charName, p, colour, inverted);
+
+    int x, y;
+    (void)getHotspot(charName, x, y, inverted);
+
+    return QCanvasPixmap(p, QPoint(x, y));
+}
+
+CharName
+NoteFont::getNameWithColour(CharName base, PixmapColour colour) const
+{
+    string baseString = string("__") + base.c_str();
+    switch (colour) {
+    case Red:   return "red"   + baseString;
+    case Green: return "green" + baseString;
+    case Blue:  return "blue"  + baseString;
+    }
+    return "unknown" + baseString;
+}
+
+QPixmap *
+NoteFont::recolour(QPixmap in, PixmapColour colour) const
+{
+    // assumes pixmap is currently in shades of grey; maps black ->
+    // solid colour and greys -> shades of colour
+
+    QImage image = in.convertToImage();
+
+    int hue, s, v;
+
+    switch (colour) {
+    case Red:   hue = 0;   break;
+    case Green: hue = 120; break;
+    case Blue:  hue = 240; break;
+    }
+
+    bool warned = false;
+    
+    for (int y = 0; y < image.height(); ++y) {
+        for (int x = 0; x < image.width(); ++x) {
+
+            QColor pixel(image.pixel(x, y));
+
+            int oldHue;
+            pixel.hsv(&oldHue, &s, &v);
+
+            if (oldHue >= 0) {
+                if (!warned) {
+                    cerr << "NoteFont::recolour: Not a greyscale pixmap "
+                         << "(found rgb value " << pixel.red() << ","
+                         << pixel.green() << "," << pixel.blue() 
+                         << "), ignoring coloured pixels" << endl;
+                    warned = true;
+                }
+                continue;
+            }
+
+            image.setPixel
+                (x, y, QColor(hue,
+                              255 - v,
+                              v > 220 ? v : 220,
+                              QColor::Hsv).rgb());
+        }
+    }
+
+    QPixmap *newMap = new QPixmap();
+    newMap->convertFromImage(image);
+    newMap->setMask(*in.mask());
+    return newMap;
+}
+
 
 bool
 NoteFont::getDimensions(CharName charName, int &x, int &y, bool inverted) const

@@ -142,7 +142,7 @@ RosegardenGUIView::editTrackNotation(Rosegarden::Track* p)
     std::vector<Rosegarden::Track *> tracksToEdit;
     tracksToEdit.push_back(p);
 
-    m_notationView = new NotationView(getDocument(), tracksToEdit, this, 8);
+    m_notationView = new NotationView(getDocument(), tracksToEdit, this);
     m_notationView->show();
 }
 
@@ -156,7 +156,7 @@ RosegardenGUIView::editAllTracks(Rosegarden::Composition* p)
         tracksToEdit.push_back(*i);
     }
 
-    m_notationView = new NotationView(getDocument(), tracksToEdit, this, 8);
+    m_notationView = new NotationView(getDocument(), tracksToEdit, this);
     m_notationView->show();
 }
 

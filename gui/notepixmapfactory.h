@@ -23,6 +23,7 @@
 #define NOTEPIXMAPFACTORY_H
 
 #include <vector>
+#include <set>
 #include <qcanvas.h>
 
 #include "NotationTypes.h"
@@ -43,7 +44,7 @@ public:
     void setStemGoesUp(bool up)           { m_stemGoesUp       = up;       }
     void setStemLength(int length)        { m_stemLength       = length;   }
     void setLegerLines(int lines)         { m_legerLines       = lines;    }
-    void setNoteHeadColour(QColor colour) { m_noteHeadColour   = colour;   }
+    void setSelected(bool selected)       { m_selected         = selected; }
 
     void setBeamed(bool beamed)           { m_beamed           = beamed;   }
     void setNextBeamCount(int tc)         { m_nextBeamCount    = tc;       }
@@ -64,7 +65,7 @@ private:
     bool    m_stemGoesUp;
     int     m_stemLength;
     int     m_legerLines;
-    QColor  m_noteHeadColour;
+    bool    m_selected;
 
     bool    m_beamed;
     int     m_nextBeamCount;
@@ -82,8 +83,16 @@ private:
 class NotePixmapFactory : private NoteCharacterNameLookup
 {
 public:
-    NotePixmapFactory(int size, std::string fontName = "feta");
+    NotePixmapFactory(std::string fontName = "", int size = -1);
     ~NotePixmapFactory();
+
+    static std::set<std::string> getAvailableFontNames();
+    static std::vector<int> getAvailableSizes(std::string fontName); // sorted
+    static std::string getDefaultFont();
+    static int getDefaultSize(std::string fontName);
+
+    std::string getFontName() const;
+    int getSize() const;
 
     QCanvasPixmap makeNotePixmap(const NotePixmapParameters &parameters);
     QCanvasPixmap makeRestPixmap(const Rosegarden::Note &restType);

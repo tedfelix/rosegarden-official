@@ -52,7 +52,10 @@ const int NotationStaff::nbLines = 5;
 const int NotationStaff::nbLegerLines = 5;
 const int NotationStaff::linesOffset = 40;
 
-NotationStaff::NotationStaff(QCanvas *canvas, Track *track, int resolution) :
+using std::string;
+
+NotationStaff::NotationStaff(QCanvas *canvas, Track *track,
+                             string fontName, int resolution) :
     Rosegarden::Staff<NotationElement>(*track),
     QCanvasItemGroup(canvas),
     m_barLineHeight(0),
@@ -63,13 +66,8 @@ NotationStaff::NotationStaff(QCanvas *canvas, Track *track, int resolution) :
 {
     int w = canvas->width();
     m_horizLineLength = w - 20;
-    changeResolution(resolution);
+    changeFont(fontName, resolution);
     setActive(false);  // don't react to mousePress events
-
-    for (int i = -10; i < 20; ++i) {
-	cout << "NotationStaff: " << i << " => " << yCoordOfHeight(i)
-	     << " (" << (yCoordOfHeight(i-1) - yCoordOfHeight(i)) << ")"<< endl;
-    }
 }
 
 NotationStaff::~NotationStaff()
@@ -80,12 +78,12 @@ NotationStaff::~NotationStaff()
 }
 
 void
-NotationStaff::changeResolution(int newResolution) 
+NotationStaff::changeFont(string fontName, int resolution) 
 {
-    m_resolution = newResolution;
+    m_resolution = resolution;
 
     delete m_npf;
-    m_npf = new NotePixmapFactory(newResolution);
+    m_npf = new NotePixmapFactory(fontName, resolution);
 
     // Pitch is represented with the MIDI pitch scale; NotationTypes.h
     // contains methods to convert this to and from staff-height
@@ -110,9 +108,9 @@ NotationStaff::changeResolution(int newResolution)
     // of the staff lines somewhat to make them less intrusive
     int level = 0;
     int z = 1;
-    if (newResolution < 6) {
+    if (m_resolution < 6) {
         z = -1;
-        level = (9 - newResolution) * 32;
+        level = (9 - m_resolution) * 32;
         if (level > 200) level = 200;
     }
     QColor lineColour(level, level, level);

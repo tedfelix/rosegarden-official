@@ -22,6 +22,8 @@
 #include <cstdio>
 
 #include <vector>
+#include <set>
+#include <string>
 #include <algorithm>
 
 #include <kmessagebox.h>
@@ -49,6 +51,9 @@ using Rosegarden::DoubleSharp;
 using Rosegarden::DoubleFlat;
 using Rosegarden::Natural;
 
+using std::set;
+using std::string;
+using std::vector;
 
 
 NotePixmapParameters::NotePixmapParameters(Note::Type noteType,
@@ -62,7 +67,7 @@ NotePixmapParameters::NotePixmapParameters(Note::Type noteType,
     m_stemGoesUp(true),
     m_stemLength(-1),
     m_legerLines(0),
-    m_noteHeadColour(Qt::black),
+    m_selected(false),
     m_beamed(false),
     m_nextBeamCount(0),
     m_thisPartialBeams(false),
@@ -80,10 +85,13 @@ NotePixmapParameters::~NotePixmapParameters()
 
 
 
-NotePixmapFactory::NotePixmapFactory(int size, std::string fontName) :
+NotePixmapFactory::NotePixmapFactory(std::string fontName, int size) :
     m_timeSigFont("new century schoolbook", 8, QFont::Bold),
     m_timeSigFontMetrics(m_timeSigFont)
 {
+    if (fontName == "") fontName = NotePixmapFactory::getDefaultFont();
+    if (size < 0) size = NotePixmapFactory::getDefaultSize(fontName);
+
     try {
         m_font = new NoteFont(fontName, size);
     } catch (NoteFontMap::MappingFileReadFailed f) {
@@ -108,10 +116,57 @@ NotePixmapFactory::~NotePixmapFactory()
     delete m_font;
 }
 
+set<string>
+NotePixmapFactory::getAvailableFontNames()
+{
+    return NoteFont::getAvailableFontNames();
+}
+
+string
+NotePixmapFactory::getDefaultFont()
+{
+    set<string> fontNames = getAvailableFontNames();
+    if (fontNames.find("feta") != fontNames.end()) return "feta";
+    else if (fontNames.size() == 0) throw -1; //!!!
+    else return *fontNames.begin();
+}
+
+vector<int>
+NotePixmapFactory::getAvailableSizes(string fontName)
+{
+    set<int> s(NoteFont(fontName).getSizes());
+    vector<int> v(s.begin(), s.end());
+    std::sort(v.begin(), v.end());
+    return v;
+}
+
+int
+NotePixmapFactory::getDefaultSize(string fontName)
+{
+    vector<int> sizes(getAvailableSizes(fontName));
+    return sizes[sizes.size()/2];
+}
+
+string
+NotePixmapFactory::getFontName() const
+{
+    return m_font->getNoteFontMap().getName();
+}
+
+int
+NotePixmapFactory::getSize() const
+{
+    return m_font->getCurrentSize();
+}
 
 QCanvasPixmap
 NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
 {
+    //!!! This function is far too long, and it'd be fairly
+    // straightforward to take many of the conditional blocks out
+    // into other functions.  Might possibly improve performance too
+    // (because the compiler could optimise better).
+
     Note note(params.m_noteType, params.m_dots);
 
     bool drawFlag = params.m_drawFlag;
@@ -258,7 +313,15 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
         drawAccidental(params.m_accidental);
     }
 
-    QPixmap body(m_font->getPixmap(getNoteHeadCharName(params.m_noteType)));
+    QPixmap body;
+    if (!params.m_selected) {
+        body = m_font->getPixmap
+            (getNoteHeadCharName(params.m_noteType));
+    } else {
+        body = m_font->getColouredPixmap
+            (getNoteHeadCharName(params.m_noteType), NoteFont::Blue);
+    }
+
     QPoint bodyLocation(m_left - m_origin.x(), m_above - m_origin.y());
     if (params.m_shifted) bodyLocation.rx() += m_noteBodyWidth;
     
