@@ -63,7 +63,9 @@ int TestTool::operator()(double x, int val)
 {
     int res = (int)x / 10 + val;
 
-    qDebug("TestTool::operator() : x = %g, val = %d res = %d", x, val, res);
+    RG_DEBUG << "TestTool::operator() : x = " << x
+             << ", val = " << val
+             << ", res = " << res << endl;
 
     return res;
 }
@@ -283,9 +285,10 @@ using Rosegarden::ViewElementList;
 
 ControlRuler::ControlRuler(Rosegarden::ViewElementList* viewElementList,
                            Rosegarden::RulerScale* rulerScale,
+                           QScrollBar* hsb,
                            QCanvas* c, QWidget* parent,
                            const char* name, WFlags f) :
-    QCanvasView(c,parent,name,f),
+    RosegardenCanvasView(hsb, c, parent, name, f),
     m_viewElementList(viewElementList),
     m_rulerScale(rulerScale),
     m_currentItem(0),
@@ -347,15 +350,9 @@ void ControlRuler::elementRemoved(ViewElement *el)
 
 
 void
-ControlRuler::update()
+ControlRuler::slotUpdate()
 {
-//     for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it) {
-
-//         if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
-//             item->updateFromValue();
-//         }
-//     }
-    
+    RG_DEBUG << "ControlRuler::slotUpdate()\n";
     canvas()->update();
 }
 
@@ -373,7 +370,7 @@ void ControlRuler::contentsMousePressEvent(QMouseEvent* e)
         clearSelectedItems();
         m_selecting = true;
         m_selector->handleMouseButtonPress(e);
-        qDebug("ControlRuler::contentsMousePressEvent : entering selection mode");
+        RG_DEBUG << "ControlRuler::contentsMousePressEvent : entering selection mode\n";
         return;
     }
 
@@ -399,7 +396,7 @@ void ControlRuler::contentsMouseReleaseEvent(QMouseEvent* e)
     if (m_selecting) {
         updateSelection();
         m_selector->handleMouseButtonRelease(e);
-        qDebug("ControlRuler::contentsMousePressEvent : leaving selection mode");
+        RG_DEBUG << "ControlRuler::contentsMousePressEvent : leaving selection mode\n";
         m_selecting = false;
         return;
     }

@@ -24,12 +24,12 @@
 #define _CONTROLRULER_H_
 
 #include <qstring.h>
-#include <qcanvas.h>
 
 #include "ViewElement.h"
 
 #include "PropertyName.h"
 
+#include "rosegardencanvasview.h"
 #include "widgets.h"
 
 namespace Rosegarden
@@ -50,13 +50,14 @@ class ControlSelector;
 /**
  * Property Control Ruler : edit range of event properties
  */
-class ControlRuler : public QCanvasView, public Rosegarden::ViewElementListObserver
+class ControlRuler : public RosegardenCanvasView, public Rosegarden::ViewElementListObserver
 {
     Q_OBJECT
 
 public:
     ControlRuler(Rosegarden::ViewElementList*,
                  Rosegarden::RulerScale*,
+                 QScrollBar* hsb,
                  QCanvas*,
                  QWidget* parent=0, const char* name=0, WFlags f=0);
     ~ControlRuler();
@@ -74,7 +75,8 @@ public:
     virtual void elementRemoved(Rosegarden::ViewElement *);
 
 public slots:
-    virtual void update();
+    /// override RosegardenCanvasView - we don't want to change the main hscrollbar
+    virtual void slotUpdate();
     
 protected:
     virtual void contentsMousePressEvent(QMouseEvent*);

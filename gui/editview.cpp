@@ -161,8 +161,17 @@ ControlRuler* EditView::makeControlRuler(Rosegarden::ViewElementList* viewElemen
     QSize viewSize = getViewSize();
     controlRulerCanvas->resize(viewSize.width(), 50); // TODO - keep it in sync with main canvas size
     m_controlRuler = new ControlRuler(viewElementList, rulerScale,
+                                      m_horizontalScrollBar,
                                       controlRulerCanvas, getCentralFrame());
     m_bottomBox->addWidget(m_controlRuler);
+
+    connect(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
+            m_controlRuler->horizontalScrollBar(), SIGNAL(valueChanged(int)));
+    connect(m_horizontalScrollBar, SIGNAL(sliderMoved(int)),
+            m_controlRuler->horizontalScrollBar(), SIGNAL(sliderMoved(int)));
+
+
+    return m_controlRuler;
 }
 
 void EditView::readjustViewSize(QSize requestedSize, bool exact)
@@ -204,7 +213,6 @@ void EditView::setCanvasView(RosegardenCanvasView *canvasView)
     delete m_canvasView;
     m_canvasView = canvasView;
     m_grid->addWidget(m_canvasView, CANVASVIEW_ROW, m_mainCol);
-    m_canvasView->setHScrollBarMode(QScrollView::AlwaysOff);
 
     m_horizontalScrollBar->setRange(m_canvasView->horizontalScrollBar()->minValue(),
                                     m_canvasView->horizontalScrollBar()->maxValue());
@@ -581,7 +589,6 @@ EditView::getPitchFromNoteInsertAction(QString name,
 
     Rosegarden::Key key;
     Rosegarden::Clef clef;
-    Rosegarden::timeT time = getInsertionTime(clef, key);
 
     //!!! modify to use Pitch class
 
