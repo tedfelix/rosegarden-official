@@ -1200,8 +1200,8 @@ SequenceManager::getSequencerPlugins(Rosegarden::AudioPluginManager *aPM)
             Rosegarden::PortData upperBound = seqPlugins[i++].toFloat();
 	    Rosegarden::PortData defaultValue = seqPlugins[i++].toFloat();
 
-	    // SEQMAN_DEBUG << "DEFAULT =  " << defaultValue << endl;
-            // SEQMAN_DEBUG << "ADDED PORT = \"" << name << "\"" << endl;
+//	     SEQMAN_DEBUG << "DEFAULT =  " << defaultValue << endl;
+//             SEQMAN_DEBUG << "ADDED PORT = \"" << name << "\" id " << id << endl;
             aP->addPort(id,
                         name,
                         type,

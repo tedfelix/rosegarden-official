@@ -423,6 +423,28 @@ RosegardenRotary::paintEvent(QPaintEvent *e)
     paint.drawEllipse(0, 0, m_size, m_size);
 
     drawPosition();
+
+    // draw min and max ticks
+
+    double hyp = double(m_size) / 2.0;
+
+    double angle = 0.22 * M_PI;
+
+    double x0 = hyp - hyp * sin(angle);
+    double y0 = hyp + hyp * cos(angle);
+    double x1 = hyp - 1.2 * hyp * sin(angle);
+    double y1 = hyp + 1.2 * hyp * cos(angle);
+
+    paint.drawLine(int(x0), int(y0), int(x1), int(y1));
+
+    angle = 0.22 * M_PI + 1.6 * M_PI;
+    
+    x0 = hyp - hyp * sin(angle);
+    y0 = hyp + hyp * cos(angle);
+    x1 = hyp - 1.2 * hyp * sin(angle);
+    y1 = hyp + 1.2 * hyp * cos(angle);
+
+    paint.drawLine(int(x0), int(y0), int(x1), int(y1));
 }
 
 

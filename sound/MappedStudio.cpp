@@ -389,12 +389,13 @@ MappedStudio::createObject(MappedObjectType type,
 
         // push to the plugin manager's child stack
         mLP->addChild(mO);
-
+/*!!!
 	std::cerr << "Adding plugin object " << id << " to manager: its children now are: " << std::endl;
 	std::vector<MappedObject *> children = mLP->getChildObjects();
 	for (int i = 0; i < children.size(); ++i) {
 	    std::cerr << children[i]->getId() << std::endl;
 	}
+*/
     }
     else if (type == MappedObject::LADSPAPort)
     {
@@ -1835,11 +1836,11 @@ MappedAudioPluginManager::getPluginInstance(unsigned long uniqueId,
             MappedLADSPAPlugin *plugin =
                 dynamic_cast<MappedLADSPAPlugin*>(*it);
 
-	    std::cerr << "Looking at plugin at " << *it << " (type " << (*it)->getType() << ", id " << (*it)->getId() << ")" << std::endl;
+//!!!	    std::cerr << "Looking at plugin at " << *it << " (type " << (*it)->getType() << ", id " << (*it)->getId() << ")" << std::endl;
 
             if (plugin->getUniqueId() == uniqueId) {
 		pthread_mutex_unlock(&_mappedObjectContainerLock);
-		std::cerr << "it's the one" << std::endl;
+//!!!		std::cerr << "it's the one" << std::endl;
                 return *it;
 	    }
         }
@@ -1889,7 +1890,7 @@ MappedAudioPluginManager::getPluginInstance(InstrumentId instrument,
 
 MappedLADSPAPlugin::~MappedLADSPAPlugin()
 {
-    std::cout << "MappedLADSPAPlugin::~MappedLADSPAPlugin (" << this << ")" << std::endl;
+//    std::cout << "MappedLADSPAPlugin::~MappedLADSPAPlugin (" << this << ")" << std::endl;
 
     /*
     MappedStudio *studio =
