@@ -47,7 +47,7 @@ Event::Event(const Event &e) :
     m_duration(e.getDuration()),
     m_absoluteTime(e.getAbsoluteTime()),
     m_viewElementRefCount(0) // because we do not copy the ViewElements,
-    // since we can't access them
+			     // since we can't access them
 {
     copyFrom(e);
 }
@@ -181,29 +181,13 @@ Event::getNonPersistentPropertyNames() const
     return v;
 }
 
-#ifdef PROPERTY_NAME_IS_INT
-
-static size_t PropertyNameDeepSize(const PropertyName &s) {
-    return sizeof(s);
-}
-
-#else
-
-static size_t PropertyNameDeepSize(const PropertyName &s) {
-    // amount of storage space a specific PropertyName takes up, above
-    // and beyond sizeof(PropertyName)
-    return sizeof(s) + s.size();
-}
-
-#endif // PROPERTY_NAME_IS_INT
-
 size_t
 Event::getStorageSize() const
 {
     size_t s = sizeof(*this) + m_type.size();
     for (PropertyMap::const_iterator i = m_properties.begin();
          i != m_properties.end(); ++i) {
-        s += PropertyNameDeepSize(i->first);
+        s += sizeof(i->first);
         s += i->second->getStorageSize();
     }
     return s;

@@ -5,6 +5,9 @@
 #include "Event.h"
 #include "Track.h"
 
+#define TEST_NOTATION_TYPES 1
+#define TEST_SPEED 1
+
 #ifdef TEST_NOTATION_TYPES
 #include "NotationTypes.h"
 #endif
@@ -23,13 +26,21 @@ static const PropertyName SOME_BOOL_PROPERTY = 2132;
 static const PropertyName SOME_STRING_PROPERTY = 325432;
 static const PropertyName NONEXISTENT_PROPERTY = 12;
 static const PropertyName ANNOTATION_PROPERTY = 15935254;
-#else
+#else // !PROPERTY_NAME_IS_INT
+#ifdef PROPERTY_NAME_IS_CLASS
 static const PropertyName DURATION_PROPERTY = "duration";
 static const PropertyName SOME_BOOL_PROPERTY = "someBoolProp";
 static const PropertyName SOME_STRING_PROPERTY = "someStringProp";
 static const PropertyName NONEXISTENT_PROPERTY = "nonexistentprop";
 static const PropertyName ANNOTATION_PROPERTY = "annotation";
-#endif // PROPERTY_NAME_IS_INT
+#else // !PROPERTY_NAME_IS_CLASS
+#define DURATION_PROPERTY "duration"
+#define SOME_BOOL_PROPERTY "someBoolProp"
+#define SOME_STRING_PROPERTY "someStringProp"
+#define NONEXISTENT_PROPERTY "nonexistentprop"
+#define ANNOTATION_PROPERTY "annotation"
+#endif // !PROPERTY_NAME_IS_CLASS
+#endif // !PROPERTY_NAME_IS_INT
 
 int main(int argc, char **argv)
 {
@@ -97,24 +108,31 @@ int main(int argc, char **argv)
         else
                 cerr << "ERROR AT " << __LINE__ << endl;
 
-//#define TEST_SPEED 1
 #if TEST_SPEED
         cout << "Testing speed of Event..." << endl;
         int i;
         long j;
+
         char b[20];
         strcpy(b, "test");
+
+#define NAME_COUNT 500
+
+        PropertyName names[NAME_COUNT];
+        for (i = 0; i < NAME_COUNT; ++i) {
+            sprintf(b+4, "%d", i);
+            names[i] = b;
+        }
 
         Event e1("note");
         int gsCount = 20000;
 
         st = times(&spare);
         for (i = 0; i < gsCount; ++i) {
-                if (i%4==0) sprintf(b+4, "%d", i);
 #ifdef PROPERTY_NAME_IS_INT
                 e1.set<Int>(i/4, i);
 #else
-                e1.set<Int>(b, i);
+                e1.set<Int>(names[i % NAME_COUNT], i);
 #endif
         }
         et = times(&spare);
@@ -127,11 +145,11 @@ int main(int argc, char **argv)
 #ifdef PROPERTY_NAME_IS_INT
                 e1.get<Int>(i/4);
 #else
-                j += e1.get<Int>(b);
+                j += e1.get<Int>(names[i % NAME_COUNT]);
 #endif
         }
         et = times(&spare);
-        cout << "Event: " << gsCount << " getInts: " << (et-st)*10 << "ms\n";
+        cout << "Event: " << gsCount << " getInts: " << (et-st)*10 << "ms (result: " << j << ")\n";
         
         st = times(&spare);
         for (i = 0; i < 100; ++i) {
@@ -139,7 +157,7 @@ int main(int argc, char **argv)
 #ifdef PROPERTY_NAME_IS_INT
                 (void)e11.get<Int>(0);
 #else
-                (void)e11.get<Int>(b);
+                (void)e11.get<Int>(names[i % NAME_COUNT]);
 #endif
         }
         et = times(&spare);
@@ -148,13 +166,17 @@ int main(int argc, char **argv)
 
         gsCount = 100000;
 
+        for (i = 0; i < NAME_COUNT; ++i) {
+            sprintf(b+4, "%ds", i);
+            names[i] = b;
+        }
+
         st = times(&spare);
         for (i = 0; i < gsCount; ++i) {
-                if (i%4==0) sprintf(b+4, "%ds", i);
 #ifdef PROPERTY_NAME_IS_INT
                 e1.set<String>(i/4 + 1000000, b);
 #else
-                e1.set<String>(b, b);
+                e1.set<String>(names[i % NAME_COUNT], b);
 #endif
         }
         et = times(&spare);
@@ -167,11 +189,11 @@ int main(int argc, char **argv)
 #ifdef PROPERTY_NAME_IS_INT
                 j += e1.get<String>(i/4 + 1000000).size();
 #else
-                j += e1.get<String>(b).size();
+                j += e1.get<String>(names[i % NAME_COUNT]).size();
 #endif
         }
         et = times(&spare);
-        cout << "Event: " << gsCount << " getStrings: " << (et-st)*10 << "ms\n";
+        cout << "Event: " << gsCount << " getStrings: " << (et-st)*10 << "ms (result: " << j << ")\n";
         
         st = times(&spare);
         for (i = 0; i < 100; ++i) {
@@ -179,7 +201,7 @@ int main(int argc, char **argv)
 #ifdef PROPERTY_NAME_IS_INT
                 (void)e11.get<String>(1000000);
 #else
-                (void)e11.get<String>(b);
+                (void)e11.get<String>(names[i % NAME_COUNT]);
 #endif
         }
         et = times(&spare);
@@ -215,8 +237,6 @@ int main(int argc, char **argv)
                 cerr << "%%%ERROR : track new nbBars should be 3\n";
         }
 #endif // NOT_DEFINED
-
-#define TEST_NOTATION_TYPES 1
 
 #ifdef TEST_NOTATION_TYPES
         cout << "Testing duration-list stuff\n";

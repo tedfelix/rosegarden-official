@@ -429,33 +429,33 @@ bool NotationView::showElements(NotationElementList::iterator from,
                 Accidental accidental = NoAccidental;
 
                 long acc;
-                if ((*it)->event()->get<Int>(P_DISPLAY_ACCIDENTAL, acc)) {
+                if ((*it)->event()->get<Int>(Properties::DISPLAY_ACCIDENTAL, acc)) {
                     accidental = Accidental(acc);
                 }
 
                 bool up = true;
-                (void)((*it)->event()->get<Bool>(P_STALK_UP, up));
+                (void)((*it)->event()->get<Bool>(Properties::STALK_UP, up));
 
                 bool tail = true;
-                (void)((*it)->event()->get<Bool>(P_DRAW_TAIL, tail));
+                (void)((*it)->event()->get<Bool>(Properties::DRAW_TAIL, tail));
 
                 //		kdDebug(KDEBUG_AREA) << "NotationView::showElements(): found a note of type " << note << " with accidental " << accidental << endl;
                 
                 bool beamed = false;
-                (void)((*it)->event()->get<Bool>(P_BEAMED, beamed));
+                (void)((*it)->event()->get<Bool>(Properties::BEAMED, beamed));
 
                 bool shifted = false;
-                (void)((*it)->event()->get<Bool>(P_NOTE_HEAD_SHIFTED, shifted));
+                (void)((*it)->event()->get<Bool>(Properties::NOTE_HEAD_SHIFTED, shifted));
 
 		if (beamed) {
 
 		    int stemLength = npf.getNoteBodyHeight();
 
-		    if ((*it)->event()->get<Bool>(P_BEAM_PRIMARY_NOTE)) {
+		    if ((*it)->event()->get<Bool>(Properties::BEAM_PRIMARY_NOTE)) {
 
-			int myY = (*it)->event()->get<Int>(P_BEAM_MY_Y);
-//			int nextY = (*it)->event()->get<Int>(P_BEAM_NEXT_Y);
-//			int dx = (*it)->event()->get<Int>(P_BEAM_SECTION_WIDTH);
+			int myY = (*it)->event()->get<Int>(Properties::BEAM_MY_Y);
+//			int nextY = (*it)->event()->get<Int>(Properties::BEAM_NEXT_Y);
+//			int dx = (*it)->event()->get<Int>(Properties::BEAM_SECTION_WIDTH);
 
 //                        kdDebug(KDEBUG_AREA) << "NotationView::showElements(): should be drawing a beam here... event is " << *(*it)->event() << endl;
 
@@ -463,17 +463,17 @@ bool NotationView::showElements(NotationElementList::iterator from,
 			if (stemLength < 0) stemLength = -stemLength;
 
 			int nextTailCount =
-			    (*it)->event()->get<Int>(P_BEAM_NEXT_TAIL_COUNT);
+			    (*it)->event()->get<Int>(Properties::BEAM_NEXT_TAIL_COUNT);
 			int width =
-			    (*it)->event()->get<Int>(P_BEAM_SECTION_WIDTH);
+			    (*it)->event()->get<Int>(Properties::BEAM_SECTION_WIDTH);
 			int gradient =
-			    (*it)->event()->get<Int>(P_BEAM_GRADIENT);
+			    (*it)->event()->get<Int>(Properties::BEAM_GRADIENT);
 
                         bool thisPartialTails(false), nextPartialTails(false);
                         (void)(*it)->event()->get<Bool>
-                            (P_BEAM_THIS_PART_TAILS, thisPartialTails);
+                            (Properties::BEAM_THIS_PART_TAILS, thisPartialTails);
                         (void)(*it)->event()->get<Bool>
-                            (P_BEAM_NEXT_PART_TAILS, nextPartialTails);
+                            (Properties::BEAM_NEXT_PART_TAILS, nextPartialTails);
 
 			QCanvasPixmap notePixmap
 			    (npf.makeBeamedNotePixmap

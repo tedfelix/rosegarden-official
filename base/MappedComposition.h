@@ -19,10 +19,6 @@
 */
 
 
-#include <qdatastream.h>
-#include "MappedEvent.h"
-
-
 #ifndef _MAPPEDCOMPOSITION_H_
 #define _MAPPEDCOMPOSITION_H_
 

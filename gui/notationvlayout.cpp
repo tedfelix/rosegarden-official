@@ -67,7 +67,7 @@ NotationVLayout::layout(NotationElementList::iterator from,
 
             std::vector<int> h;
             for (unsigned int j = 0; j < chord.size(); ++j) {
-                h.push_back((*chord[j])->event()->get<Int>(P_HEIGHT_ON_STAFF));
+                h.push_back((*chord[j])->event()->get<Int>(Properties::HEIGHT_ON_STAFF));
             }
             bool stalkUp = chord.hasStalkUp();
 
@@ -83,14 +83,14 @@ NotationVLayout::layout(NotationElementList::iterator from,
 		// notationhlayout after notationvlayout)... or else
 		// introduce two separate properties (beamed stalk up
 		// and non-beamed stalk up)
-//		if (!el->event()->has(P_STALK_UP))
-                el->event()->setMaybe<Bool>(P_STALK_UP, stalkUp);
-                el->event()->setMaybe<Bool>(P_NOTE_HEAD_SHIFTED,
+//		if (!el->event()->has(Properties::STALK_UP))
+                el->event()->setMaybe<Bool>(Properties::STALK_UP, stalkUp);
+                el->event()->setMaybe<Bool>(Properties::NOTE_HEAD_SHIFTED,
                                             chord.isNoteHeadShifted(chord[j]));
 
-		if (!el->event()->has(P_DRAW_TAIL))
+		if (!el->event()->has(Properties::DRAW_TAIL))
 		    el->event()->setMaybe<Bool>
-			(P_DRAW_TAIL,
+			(Properties::DRAW_TAIL,
 			 ((stalkUp && j == chord.size()-1) ||
 			  (!stalkUp && j == 0)));
             }

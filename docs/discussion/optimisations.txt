@@ -21,3 +21,62 @@ but might be worth bearing in mind:
    not much though, as most appends will follow clear() and so reuse
    previously-allocated space.
 
+
+
+Okay, tests on interned property names:
+
+
+Original with strings, no optimisation:
+Event: 20000 setInts: 60ms
+Event: 20000 getInts: 50ms (result: 394990000)
+Event: 100 copy ctors of 11434-byte element: 440ms
+Event: 100000 setStrings: 530ms
+Event: 100000 getStrings: 360ms (result: 800000)
+Event: 100 copy ctors of 27324-byte element: 980ms
+
+
+Original with strings, -O2:
+Event: 20000 setInts: 20ms
+Event: 20000 getInts: 20ms (result: 394990000)
+Event: 100 copy ctors of 11434-byte element: 110ms
+Event: 100000 setStrings: 160ms
+Event: 100000 getStrings: 120ms (result: 800000)
+Event: 100 copy ctors of 27324-byte element: 210ms
+
+
+Original with strings, -O2 and map instead of hash_map in Event:
+Event: 20000 setInts: 50ms
+Event: 20000 getInts: 60ms (result: 394990000)
+Event: 100 copy ctors of 11426-byte element: 200ms
+Event: 100000 setStrings: 330ms
+Event: 100000 getStrings: 290ms (result: 800000)
+Event: 100 copy ctors of 27316-byte element: 460ms
+
+
+With interning classes, no optimisation:
+Event: 20000 setInts: 20ms
+Event: 20000 getInts: 30ms (result: 394990000)
+Event: 100 copy ctors of 8044-byte element: 320ms
+Event: 100000 setStrings: 370ms
+Event: 100000 getStrings: 210ms (result: 800000)
+Event: 100 copy ctors of 20044-byte element: 680ms
+
+
+With interning classes, -O2:
+Event: 20000 setInts: 0ms
+Event: 20000 getInts: 20ms (result: 394990000)
+Event: 100 copy ctors of 8044-byte element: 60ms
+Event: 100000 setStrings: 110ms
+Event: 100000 getStrings: 70ms (result: 800000)
+Event: 100 copy ctors of 20044-byte element: 130ms
+
+
+With interning classes, -O2 and map instead of hash_map in Event:
+Event: 20000 setInts: 20ms
+Event: 20000 getInts: 20ms (result: 394990000)
+Event: 100 copy ctors of 8036-byte element: 60ms
+Event: 100000 setStrings: 130ms
+Event: 100000 getStrings: 90ms (result: 800000)
+Event: 100 copy ctors of 20036-byte element: 130ms
+
+

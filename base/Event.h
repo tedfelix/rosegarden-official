@@ -22,10 +22,17 @@
 #define _EVENT_H_
 
 #include "Property.h"
+#include "PropertyName.h"
 
 #include <string>
 #ifndef NDEBUG
 #include <iostream>
+#endif
+
+#if (__GNUC__ < 3)
+#include <hash_map>
+#else
+#include <ext/hash_map>
 #endif
 
 namespace Rosegarden 
@@ -33,48 +40,6 @@ namespace Rosegarden
 
 typedef int timeT;
 
-#ifdef PROPERTY_NAME_IS_INT
-
-typedef int PropertyName;
-
-struct PropertyNamesEqual
-{
-    bool operator() (const PropertyName &s1, const PropertyName &s2) const {
-        return s1 == s2;
-    }
-};
-
-struct PropertyNameHash
-{
-    size_t operator() (const PropertyName &s) const {
-        return (size_t)s;
-    }
-};
-
-#else
-
-typedef std::string PropertyName;
-
-struct PropertyNamesEqual
-{
-    bool operator() (const PropertyName &s1, const PropertyName &s2) const {
-        return s1 == s2;
-    }
-};
-
-struct PropertyNameHash
-{
-    static std::hash<const char *> _H;
-
-    size_t operator() (const PropertyName &s) const {
-        return _H(s.c_str());
-    }
-};
-
-std::hash<const char *> PropertyNameHash::_H;
-
-#endif // PROPERTY_NAME_IS_INT
-    
 class Event
 {
 public:

@@ -61,7 +61,7 @@ public:
 
     Clef &operator=(const Clef &c);
 
-    virtual ~Clef();
+    ~Clef() { }
 
     std::string getClefType() const { return m_clef; }
 
@@ -108,7 +108,10 @@ public:
     Key(const std::string &name)
         /* throw (BadKeyName) */;
     Key(const Key &kc);
-    virtual ~Key();
+
+    ~Key() {
+	delete m_accidentalHeights;
+    }
 
     Key &operator=(const Key &kc);
 
@@ -313,8 +316,7 @@ public:
     Note(const std::string &s)
         /* throw (BadType, MalformedNoteName) */;
     Note(const Note &n) : m_type(n.m_type), m_dots(n.m_dots) { }
-
-    virtual ~Note();
+    ~Note() { }
 
     Note &operator=(const Note &n);
 
@@ -373,7 +375,7 @@ public:
         m_numerator(ts.m_numerator),
         m_denominator(ts.m_denominator) { }
 
-    virtual ~TimeSignature();
+    ~TimeSignature() { }
 
     TimeSignature &operator=(const TimeSignature &ts);
 

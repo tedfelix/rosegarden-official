@@ -24,10 +24,7 @@
 #include "viewelementsmanager.h"
 #include "notationelement.h"
 #include "notationproperties.h"
-
-#ifndef NDEBUG
 #include "rosedebug.h"
-#endif
 
 #include "NotationTypes.h"
 #include "Event.h"

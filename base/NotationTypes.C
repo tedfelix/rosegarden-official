@@ -42,7 +42,7 @@ using std::endl;
 //////////////////////////////////////////////////////////////////////
     
 const string Clef::EventType = "clefchange";
-const string Clef::ClefPropertyName = "clef";
+const PropertyName Clef::ClefPropertyName = "clef";
 const string Clef::Treble = "treble";
 const string Clef::Tenor = "tenor";
 const string Clef::Alto = "alto";
@@ -78,10 +78,6 @@ Clef& Clef::operator=(const Clef &c)
     return *this;
 }
 
-Clef::~Clef()
-{
-}
-
 int Clef::getOctave() const
 {
     if (m_clef == Treble) return 0;
@@ -102,7 +98,7 @@ int Clef::getPitchOffset() const
 //////////////////////////////////////////////////////////////////////
 
 const string Key::EventType = "keychange";
-const string Key::KeyPropertyName = "key";
+const PropertyName Key::KeyPropertyName = "key";
 const Key Key::DefaultKey = Key("C major");
 
 Key::KeyDetailMap Key::m_keyDetailMap = Key::KeyDetailMap();
@@ -142,11 +138,6 @@ Key::Key(const std::string &name)
 Key::Key(const Key &kc)
     : m_name(kc.m_name), m_accidentalHeights(0)
 {
-}
-
-Key::~Key()
-{
-    delete m_accidentalHeights;
 }
 
 Key& Key::operator=(const Key &kc)
@@ -401,7 +392,6 @@ NotationDisplayPitch::rawPitchToDisplayPitch(int pitch,
     height -= 7 * clef.getOctave();
 }
 
-
 void
 NotationDisplayPitch::displayPitchToRawPitch(int height,
                                              Accidental accidental,
@@ -468,11 +458,11 @@ NotationDisplayPitch::displayPitchToRawPitch(int height,
 const string Note::EventType = "note";
 const string Note::EventRestType = "rest";
 
-const string Note::NoteType = "NoteType";
-const string Note::NoteDots = "NoteDots";
+const PropertyName Note::NoteType = "NoteType";
+const PropertyName Note::NoteDots = "NoteDots";
 
-const string Note::TiedBackwardPropertyName = "TiedBackward";
-const string Note::TiedForwardPropertyName  = "TiedForward";
+const PropertyName Note::TiedBackwardPropertyName = "TiedBackward";
+const PropertyName Note::TiedForwardPropertyName  = "TiedForward";
 
 const int Note::m_shortestTime       = 6;
 //const int Note::m_dottedShortestTime = 9;
@@ -512,10 +502,6 @@ Note::Note(const string &n)
         }
     }
     if (m_type == -1) throw BadType(name);
-}
-
-Note::~Note()
-{
 }
 
 Note& Note::operator=(const Note &n)
@@ -616,8 +602,8 @@ Note Note::getNearestNote(int duration, int maxDots)
 
 
 const string TimeSignature::EventType = "timesignature";
-const string TimeSignature::NumeratorPropertyName = "numerator";
-const string TimeSignature::DenominatorPropertyName = "denominator";
+const PropertyName TimeSignature::NumeratorPropertyName = "numerator";
+const PropertyName TimeSignature::DenominatorPropertyName = "denominator";
 const TimeSignature TimeSignature::DefaultTimeSignature = TimeSignature(4, 4);
 
 TimeSignature::TimeSignature(int numerator, int denominator)
@@ -636,10 +622,6 @@ TimeSignature::TimeSignature(const Event &e)
     m_numerator = e.get<Int>(NumeratorPropertyName);
     m_denominator = e.get<Int>(DenominatorPropertyName);
     if (m_numerator < 1 || m_denominator < 1) throw BadTimeSignature();
-}
-
-TimeSignature::~TimeSignature()
-{
 }
 
 TimeSignature& TimeSignature::operator=(const TimeSignature &ts)

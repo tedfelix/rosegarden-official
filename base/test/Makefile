@@ -1,8 +1,8 @@
 CC	 = g++
-CPPFLAGS = -g
+CPPFLAGS = -O2
 
 LIBCORE  = ../.libs/libcore.a
-###LIBCORE  = ../Property.o ../Event.o
+###LIBCORE  = ../Property.o ../Event.o ../NotationTypes.o ../Track.o ../Quantizer.o
 
 INCPATH  = -I..
 
@@ -18,7 +18,7 @@ clean:
 
 test: test.o
 	$(CC) $< $(LIBCORE) -o $@
-###test: test.o ../Property.o ../Event.o
+###test: test.o ../Property.o ../Event.o ../NotationTypes.o ../Track.o ../Quantizer.o
 ###	$(CC) $< $(LIBCORE) -o $@
 
 depend:

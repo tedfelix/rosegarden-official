@@ -23,12 +23,6 @@
 
 #include <string>
 
-#if (__GNUC__ < 3)
-#include <hash_map>
-#else
-#include <ext/hash_map>
-#endif
-
 namespace Rosegarden 
 {
 

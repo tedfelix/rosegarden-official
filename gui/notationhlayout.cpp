@@ -194,10 +194,10 @@ NotationHLayout::preparse(const Track::BarPositionList &barPositions,
 			int h = p.getHeightOnStaff();
 			Accidental acc = p.getAccidental();
 
-			el->event()->setMaybe<Int>(P_HEIGHT_ON_STAFF, h);
-			el->event()->setMaybe<Int>(P_ACCIDENTAL, acc);
+			el->event()->setMaybe<Int>(Properties::HEIGHT_ON_STAFF, h);
+			el->event()->setMaybe<Int>(Properties::ACCIDENTAL, acc);
 			el->event()->setMaybe<String>
-			    (P_NOTE_NAME, p.getAsString(clef, key));
+			    (Properties::NOTE_NAME, p.getAsString(clef, key));
 
 			// update display acc for note according to the
 			// accTable (accidentals in force when the last
@@ -211,7 +211,7 @@ NotationHLayout::preparse(const Track::BarPositionList &barPositions,
 
 			//		kdDebug(KDEBUG_AREA) << "display accidental = " << dacc << endl;
 		    
-			el->event()->setMaybe<Int>(P_DISPLAY_ACCIDENTAL, dacc);
+			el->event()->setMaybe<Int>(Properties::DISPLAY_ACCIDENTAL, dacc);
 			newAccTable.update(acc, h);
 
 			if (dacc != acc) {
@@ -266,7 +266,7 @@ NotationHLayout::preparse(const Track::BarPositionList &barPositions,
 		}
 	    }
 
-	    el->event()->setMaybe<Int>(P_MIN_WIDTH, mw);
+	    el->event()->setMaybe<Int>(Properties::MIN_WIDTH, mw);
 	}
 	
         addNewBar(barNo, from,
@@ -276,6 +276,8 @@ NotationHLayout::preparse(const Track::BarPositionList &barPositions,
     }
 }
 
+
+// and for once I swear things will still be good tomorrow
 
 NotationHLayout::AccidentalTable::AccidentalTable(Key key, Clef clef) :
     m_key(key), m_clef(clef)
@@ -378,7 +380,7 @@ NotationHLayout::layout()
             el->setLayoutX(x);
             kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): setting element's x to " << x << endl;
 
-            long delta = el->event()->get<Int>(P_MIN_WIDTH);
+            long delta = el->event()->get<Int>(Properties::MIN_WIDTH);
 
             if (el->event()->isa(TimeSignature::EventType)) {
 
@@ -401,7 +403,7 @@ NotationHLayout::layout()
                   el->setLayoutX(x0);
                   (*it0)->setLayoutX
                   ((x + delta) -
-                  (*it0)->event()->get<Int>(P_MIN_WIDTH));
+                  (*it0)->event()->get<Int>(Properties::MIN_WIDTH));
                   } else break;
                   if (it0 == m_notationElements.begin()) break;
                   }
@@ -425,7 +427,7 @@ NotationHLayout::layout()
                   el->setLayoutX(x0);
                   (*it0)->setLayoutX
                   ((x + delta) -
-                  (*it0)->event()->get<Int>(P_MIN_WIDTH));
+                  (*it0)->event()->get<Int>(Properties::MIN_WIDTH));
                   } else break;
                   if (it0 == m_notationElements.begin()) break;
                   }
@@ -468,7 +470,7 @@ NotationHLayout::layout()
 		Accidental acc(NoAccidental);
 		{
 		    long acc0;
-		    if (el->event()->get<Int>(P_DISPLAY_ACCIDENTAL, acc0)) {
+		    if (el->event()->get<Int>(Properties::DISPLAY_ACCIDENTAL, acc0)) {
 			acc = (Accidental)acc0;
 		    }
 		}
@@ -580,7 +582,7 @@ int NotationHLayout::getMinWidth(const NotePixmapFactory &npf,
             w += npf.getDotWidth() * dots;
         }
         long accidental;
-        if (e.event()->get<Int>(P_DISPLAY_ACCIDENTAL, accidental) &&
+        if (e.event()->get<Int>(Properties::DISPLAY_ACCIDENTAL, accidental) &&
             ((Accidental)accidental != NoAccidental)) {
             w += npf.getAccidentalWidth();
         }

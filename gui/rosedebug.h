@@ -48,8 +48,8 @@ operator<<(kndbgstream &s, const std::string&) { return s; }
 inline kndbgstream&
 operator<<(kndbgstream &s, const Rosegarden::Event&) { return s; }
 
-kdbgstream&
-operator<<(kdbgstream&, const Rosegarden::Track&) { return s; }
+inline kndbgstream&
+operator<<(kndbgstream &s, const Rosegarden::Track&) { return s; }
 
 #endif
 
