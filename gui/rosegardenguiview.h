@@ -69,6 +69,24 @@ public:
     /** contains the implementation for printing functionality */
     void print(QPrinter *pPrinter);
 
+    // the following aren't slots because they're called from
+    // RosegardenGUIApp
+
+    /**
+     * track eraser tool is selected
+     */
+    void eraseSelected();
+    
+    /**
+     * track draw tool is selected
+     */
+    void drawSelected();
+    
+    /**
+     * move tool is selected
+     */
+    void moveSelected();
+    
 public slots:
     void editTrackNotation(TrackPart*);
     void editTrackNotationSmall(TrackPart*);

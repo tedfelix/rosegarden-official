@@ -110,8 +110,32 @@ void RosegardenGUIApp::setupActions()
     KStdAction::keyBindings      (this, SLOT(editKeys()),     actionCollection());
     KStdAction::configureToolbars(this, SLOT(editToolbars()), actionCollection());
 
+    KRadioAction *action = 0;
+    
+    // TODO : add some shortcuts here
+    action = new KRadioAction(i18n("Erase"), "eraser",
+                              0,
+                              m_view, SLOT(eraseSelected()),
+                              actionCollection(), "erase");
+    action->setExclusiveGroup("tracktools");
+
+    action = new KRadioAction(i18n("Draw"), "pencil",
+                              0,
+                              this, SLOT(drawSelected()),
+                              actionCollection(), "draw");
+    action->setExclusiveGroup("tracktools");
+
+    action = new KRadioAction(i18n("Move"), "move",
+                              0,
+                              this, SLOT(moveSelected()),
+                              actionCollection(), "move");
+    action->setExclusiveGroup("tracktools");
+
+
     createGUI("rosegardenui.rc");
     // createGUI(); // we don't have non-standard actions for the moment
+
+    // actions/eraser.png, pencil.png, move.png
     
 }
 
@@ -585,3 +609,22 @@ void RosegardenGUIApp::slotStatusHelpMsg(const QString &text)
     // change status message of whole statusbar temporary (text, msec)
     statusBar()->message(text, 2000);
 }
+
+void RosegardenGUIApp::eraseSelected()
+{
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::eraserSelected()\n";
+    m_view->eraseSelected();
+}
+
+void RosegardenGUIApp::drawSelected()
+{
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::pencilSelected()\n";
+    m_view->drawSelected();
+}
+
+void RosegardenGUIApp::moveSelected()
+{
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::moveSelected()\n";
+    m_view->moveSelected();
+}
+

@@ -86,6 +86,7 @@ TracksCanvas::TracksCanvas(int gridH, int gridV,
                            const char* name, WFlags f) :
     QCanvasView(&c,parent,name,f),
     m_newRect(false),
+    m_editMenuOn(false),
     m_grid(gridH, gridV),
     m_brush(new QBrush(Qt::blue)),
     m_pen(new QPen(Qt::black)),
@@ -134,6 +135,8 @@ TracksCanvas::contentsMousePressEvent(QMouseEvent* e)
 
     if (e->button() == LeftButton) {
 
+        m_editMenuOn = false;
+
         // Check if we're clicking on a rect
         //
         TrackPartItem *item = findPartClickedOn(e->pos());
@@ -164,10 +167,15 @@ TracksCanvas::contentsMousePressEvent(QMouseEvent* e)
 
     } else if (e->button() == RightButton) { // popup menu if over a part
 
+        m_editMenuOn = true;
+
         TrackPartItem *item = findPartClickedOn(e->pos());
 
         if (item) {
             m_currentItem = item;
+//             kdDebug(KDEBUG_AREA) << "TracksCanvas::contentsMousePressEvent() : edit m_currentItem = "
+//                                  << m_currentItem << endl;
+
             m_editMenu->exec(QCursor::pos());
         }
     }
@@ -190,6 +198,8 @@ void TracksCanvas::contentsMouseReleaseEvent(QMouseEvent*)
         emit addTrackPart(newPart);
 
     } else {
+        kdDebug(KDEBUG_AREA) << "TracksCanvas::contentsMouseReleaseEvent() : shorten m_currentItem = "
+                                 << m_currentItem << endl;
         // readjust size of corresponding track
         TrackPart *part = m_currentItem->part();
         part->updateLength();
@@ -208,6 +218,12 @@ void TracksCanvas::contentsMouseMoveEvent(QMouseEvent* e)
 //                gpos.x() - m_currentItem->rect().x(),
 //                gpos.y() - m_currentItem->rect().y());
 
+        kdDebug(KDEBUG_AREA) << "TracksCanvas::contentsMouseMoveEvent() : changing current Item size\n";
+
+        if (m_editMenuOn) {
+            kdDebug(KDEBUG_AREA) << "break here\n";
+        }
+        
 	m_currentItem->setSize(m_grid.snapX(e->pos().x()) - m_currentItem->rect().x(),
                                m_currentItem->rect().height());
 	canvas()->update();

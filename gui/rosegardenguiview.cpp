@@ -97,8 +97,7 @@ RosegardenGUIView::getDocument() const
     return theApp->getDocument();
 }
 
-void
-RosegardenGUIView::print(QPrinter *pPrinter)
+void RosegardenGUIView::print(QPrinter *pPrinter)
 {
     QPainter printpainter;
     printpainter.begin(pPrinter);
@@ -107,6 +106,20 @@ RosegardenGUIView::print(QPrinter *pPrinter)
 
     printpainter.end();
 }
+
+void RosegardenGUIView::eraseSelected()
+{
+}
+
+void RosegardenGUIView::drawSelected()
+{
+}
+
+void RosegardenGUIView::moveSelected()
+{
+}
+
+
 
 void
 RosegardenGUIView::editTrackNotation(TrackPart* p)

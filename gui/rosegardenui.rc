@@ -3,6 +3,18 @@
 <kpartgui name="Rosegarden" version="1">
 
 <MenuBar>
+  <Menu name="Tracks">
+	<text>Tracks</text>
+	<Action name="draw"/>
+	<Action name="erase"/>
+	<Action name="move"/>
+  </Menu>
 </MenuBar>
+
+<ToolBar fullWidth="true" name="tracksToolBar" newline="true">
+	<Action name="draw"/>
+	<Action name="erase"/>
+	<Action name="move"/>
+</ToolBar>
 
 </kpartgui>

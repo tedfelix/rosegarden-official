@@ -110,6 +110,7 @@ signals:
 
 private:
     bool m_newRect;
+    bool m_editMenuOn;
 
     SnapGrid m_grid;
 

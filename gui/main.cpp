@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
 
     KAboutData aboutData( "rosegardengui", I18N_NOOP("RosegardenGUI"),
                           VERSION, description, KAboutData::License_GPL,
-                          "(c) 2000, Guillaume Laurent, Chris Cannam, Rich Bown");
+                          "(c) 2000-2001, Guillaume Laurent, Chris Cannam, Rich Bown");
     aboutData.addAuthor("Guillaume Laurent, Chris Cannam, Rich Bown",0, "glaurent@telegraph-road.org, cannam@all-day-breakfast.com, bownie@bownie.com");
     KCmdLineArgs::init( argc, argv, &aboutData );
     KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.

@@ -232,6 +232,21 @@ class RosegardenGUIApp : public KMainWindow
      */
     void slotStatusHelpMsg(const QString &text);
 
+    /**
+     * track eraser tool is selected
+     */
+    void eraseSelected();
+    
+    /**
+     * track draw tool is selected
+     */
+    void drawSelected();
+    
+    /**
+     * move tool is selected
+     */
+    void moveSelected();
+
 private:
 
     /** contains the recently used filenames */
@@ -242,16 +257,16 @@ private:
     /** the key accelerator container */
 //     KAccel *keyAccel;
 
+    KRecentFilesAction* m_fileRecent;
+
+
     /** view is the main widget which represents your working area. The View
      * class should handle all events of the view widget.  It is kept empty so
      * you can create your view according to your application's needs by
      * changing the view class.
      */
-
-    KRecentFilesAction* m_fileRecent;
-
-
     RosegardenGUIView* m_view;
+
     /** doc represents your actual document and is created only once. It keeps
      * information such as filename and does the serialization of your files.
      */
