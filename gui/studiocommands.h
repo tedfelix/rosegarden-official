@@ -19,6 +19,8 @@
 
 #include <vector>
 
+#include <klocale.h>
+
 #include "basiccommand.h"
 
 #include "Instrument.h"
@@ -35,7 +37,7 @@ public:
                       int lsb,
                       std::vector<Rosegarden::MidiProgram> programList);
 
-    static QString getGlobalName() { return "Modify &MIDI Bank"; }
+    static QString getGlobalName() { return i18n("Modify &MIDI Bank"); }
 
     virtual void execute();
     virtual void unexecute();
