@@ -708,6 +708,8 @@ void NotationView::toggleNamedToolBar(const QString& toolBarName, bool* force)
             namedToolBar->hide();
     }
 
+    setSettingsDirty();
+
 }
 
 //
