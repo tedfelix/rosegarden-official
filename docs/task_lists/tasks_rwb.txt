@@ -2,8 +2,13 @@
 =========
 
 o Performance
+  - MIDI playback
+  - fix MIDI recording
+  - audio/MIDI looping and start position
 
 o Make AlsaDriver send NoteOn(0)s as well as NoteOffs
+
+o Send ALSA notes() rather than using note offs
 
 o Make RG a jack mixer (transport, control client)
 

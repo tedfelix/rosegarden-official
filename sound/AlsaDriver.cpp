@@ -1381,6 +1381,11 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
         snd_seq_real_time_t time = { midiRelativeTime.sec,
                                      midiRelativeTime.usec * 1000 };
 
+        // millisecond note duration
+        //
+        unsigned int eventDuration = (*i)->getDuration().sec * 1000
+             + (*i)->getDuration().usec / 1000;
+
         // Set destination according to Instrument mapping
         //
         outputDevice = getPairForMappedInstrument((*i)->getInstrument());
@@ -1435,10 +1440,11 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
                 break;
 
             case MappedEvent::MidiNote:
-                snd_seq_ev_set_noteon(event,
-                                      channel,
-                                      (*i)->getPitch(),
-                                      (*i)->getVelocity());
+                snd_seq_ev_set_note(event,
+                                    channel,
+                                    (*i)->getPitch(),
+                                    (*i)->getVelocity(),
+                                    eventDuration);
                 break;
 
             case MappedEvent::MidiProgramChange:
@@ -1808,14 +1814,10 @@ AlsaDriver::sendDeviceController(const ClientPortPair &device,
 void
 AlsaDriver::processPending(const RealTime &playLatency)
 {
-    if (m_playing)
-        processNotesOff(getAlsaTime() + playLatency);
-    else
-    {
-        // Process audio
-        //
+    if (!m_playing)
         processAudioQueue(playLatency, true);
-    }
+    else
+        processNotesOff(getAlsaTime() + playLatency);
 }
 
 void
