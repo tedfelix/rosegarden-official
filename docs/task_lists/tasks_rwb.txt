@@ -18,6 +18,10 @@ o BUG - Matrix width bug [HALF COMPLETED]
 
 o BUG - Matrix pointer width
 
+o BUG - velocity dialog to be set to average velocity of selection
+
+o BUG - empty repeating segment hang
+
 o BUG - recorded audio file inserting to AudioManagerDialog before it's ready
   [DONE]
 

@@ -453,11 +453,6 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 	        // Add any performance transposition
 	        // 
 	        mE->setPitch(mE->getPitch() + ((*it)->getTranspose()));
-
-                // Force velocity if the Instrument is set
-                //
-                if (instrument->sendsVelocity())
-                    mE->setVelocity(instrument->getVelocity());
             }
  
 	    // And stick it in the mapped composition
