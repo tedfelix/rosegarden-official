@@ -4916,7 +4916,7 @@ RosegardenGUIApp::slotImportStudio()
 #else
          QString::null,
 #endif
-         "*.rgd *.rg|Rosegarden files\n*.rgd|Rosegarden device file\n*.rg|Rosegarden file\n*|All files",
+         "audio/x-rosegarden-device audio/x-rosegarden",
          this, i18n("Import Studio from File"));
 
     if (url.isEmpty()) return;

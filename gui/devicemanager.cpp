@@ -689,7 +689,7 @@ DeviceManagerDialog::slotImport()
 #else
          QString::null,
 #endif
-         "*.rgd *.rg *.sf2|Rosegarden and Soundfont files\n*.rgd|Rosegarden device file\n*.rg|Rosegarden file\n*.sf2|SoundFont file\n*|All files",
+         "audio/x-rosegarden-device audio/x-rosegarden audio/x-soundfont",
          this, i18n("Import from Device in File"));
 
     if (url.isEmpty()) return;
