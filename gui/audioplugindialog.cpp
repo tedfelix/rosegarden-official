@@ -83,6 +83,10 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     connect(m_bypass, SIGNAL(toggled(bool)),
             this, SLOT(slotBypassChanged(bool)));
 
+    m_insOuts = new QLabel(i18n("<ports>"), h);
+    m_insOuts->setAlignment(AlignRight);
+    QToolTip::add(m_insOuts, i18n("Input and output port counts."));
+
     m_pluginId = new QLabel(i18n("<id>"), h);
     m_pluginId->setAlignment(AlignRight);
     QToolTip::add(m_pluginId, i18n("Unique ID of plugin."));
@@ -212,6 +216,7 @@ AudioPluginDialog::slotPluginSelected(int i)
     if (number == 0)
     {
         setCaption(caption + i18n("<no plugin>"));
+	m_insOuts->setText(i18n("<ports>"));
         m_pluginId->setText(i18n("<id>"));
 
         QToolTip::hide();
@@ -233,7 +238,7 @@ AudioPluginDialog::slotPluginSelected(int i)
     if (plugin)
     {
         setCaption(caption + plugin->getName());
-        m_pluginId->setText(QString("Id: %1").arg(plugin->getUniqueId()));
+        m_pluginId->setText(i18n("Id: %1").arg(plugin->getUniqueId()));
 
         QString pluginInfo = plugin->getAuthor() + QString("\n") + 
                              plugin->getCopyright();
@@ -259,6 +264,7 @@ AudioPluginDialog::slotPluginSelected(int i)
 
         PortIterator it = plugin->begin();
         int count = 0;
+	int ins = 0, outs = 0;
 
         //!!! if we've got more than 10 control ports then opt for a slider
         // model so they fit on the screen?
@@ -292,10 +298,18 @@ AudioPluginDialog::slotPluginSelected(int i)
                         this, SLOT(slotPluginPortChanged(float)));
 
                 m_pluginWidgets.push_back(control);
-            }
 
-            count++;
+            } else if ((*it)->getType() & PluginPort::Audio) {
+		if ((*it)->getType() & PluginPort::Input) ++ins;
+		else if ((*it)->getType() & PluginPort::Output) ++outs;
+	    }
+
+            ++count;
         }
+
+	if (ins == 1 && outs == 1) m_insOuts->setText(i18n("mono"));
+	else if (ins == 2 && outs == 2) m_insOuts->setText(i18n("stereo"));
+	else m_insOuts->setText(i18n("%1 in, %2 out").arg(ins).arg(outs));
 
 	QString shortName(plugin->getName());
 	int parenIdx = shortName.find(" (");

@@ -149,6 +149,7 @@ protected:
     QLabel              *m_pluginLabel;
     KComboBox           *m_pluginList;
     std::vector<int>     m_pluginsInList;
+    QLabel              *m_insOuts;
     QLabel              *m_pluginId;
     QCheckBox		*m_bypass;
 
