@@ -187,12 +187,13 @@ void EventSelection::updateBeginEndTime() const
 class StaffRuler
 {
 public:
-    typedef std::vector<double> Steps;
+    typedef std::pair<double, unsigned short> StepDef;
+    typedef std::vector<StepDef> Steps;
 
     StaffRuler(int xPos, int yPos, QCanvas*);
 
     void clearSteps();
-    void addStep(double stepPos);
+    void addStep(double stepPos, unsigned short subSteps);
     void update();
 
 protected:
@@ -285,20 +286,22 @@ void StaffRuler::clearSteps()
 
 }
 
-void StaffRuler::addStep(double stepPos)
+void StaffRuler::addStep(double stepPos, unsigned short subSteps)
 {
-    m_steps.push_back(stepPos);
+    m_steps.push_back(StepDef(stepPos, subSteps));
 }
 
 void StaffRuler::update()
 {
     // TODO: perhaps recycle instead
-    for(unsigned int i = 0; i < m_steps.size() - 1; ++i)
-        makeStep(i, m_steps[i], m_steps[i + 1], 4);
-    // TODO: this last param ('4') should be according to time sig
 
-    m_mainLine->setPoints(m_xPos, m_yPos,
-                          m_xPos + int(m_steps[m_steps.size() - 1]) + 10, m_yPos);
+    for (unsigned int i = 0; i < m_steps.size() - 1; ++i) {
+         makeStep(i, m_steps[i].first, m_steps[i + 1].first, m_steps[i].second);
+    }
+
+    m_mainLine->setPoints
+	(m_xPos, m_yPos,
+	 m_xPos + int(m_steps[m_steps.size() - 1].first) + 10, m_yPos);
 
 }
 
@@ -322,8 +325,8 @@ void StaffRuler::makeStep(int stepValue,
 
     QCanvasText* label = new QCanvasText(labelText, m_canvas);
     label->setX(stepPos + m_xPos);
-    label->setY(m_yPos + 5);
-    //if (stepPos != 0) label->setTextFlags(Qt::AlignHCenter);
+    label->setY(m_yPos + 4);
+    if (stepPos != 0) label->setTextFlags(Qt::AlignHCenter);
 
     // Prepare StepElement
     StepElement stepEl(stepLine, label);
@@ -867,12 +870,22 @@ void NotationView::showBars(int staffNo)
 {
     NotationStaff &staff = *m_staffs[staffNo];
     staff.deleteBars();
+    staff.deleteTimeSignatures();
 
-    for (unsigned int i = 0; i < m_hlayout->getBarLineCount(staff); ++i) {
+    unsigned int barCount = m_hlayout->getBarLineCount(staff);
+
+    for (unsigned int i = 0; i < barCount; ++i) {
 
         if (m_hlayout->isBarLineVisible(staff, i)) {
+
             staff.insertBar(unsigned(m_hlayout->getBarLineX(staff, i)),
                             m_hlayout->isBarLineCorrect(staff, i));
+
+	    int x;
+	    Event *timeSig = m_hlayout->getTimeSignatureInBar(staff, i, x);
+	    if (timeSig && i < barCount-1) {
+		staff.insertTimeSignature(x, TimeSignature(*timeSig));
+	    }
         }
     }
 
@@ -881,16 +894,26 @@ void NotationView::showBars(int staffNo)
 
 void NotationView::updateRuler()
 {
-    int staffNo = 0; // get the longest staff from the hlayout
+    int staffNo = 0; //!!! get the longest staff from the hlayout
+    //!!! cc: Strictly we don't want the longest staff, we just want
+    // the one that ends last.  (No need to worry about bars that
+    // precede the start of that staff, because they exist in all
+    // staffs, it's just that they're invisible when a staff has yet
+    // to begin.)
 
     NotationStaff &staff = *m_staffs[staffNo];
+    TimeSignature timeSignature;
 
     m_ruler->clearSteps();
     
     for (unsigned int i = 0; i < m_hlayout->getBarLineCount(staff); ++i) {
 
-        m_ruler->addStep(m_hlayout->getBarLineX(staff, i));
-        
+	int x;
+	Event *timeSigEvent = m_hlayout->getTimeSignatureInBar(staff, i, x);
+	if (timeSigEvent) timeSignature = TimeSignature(*timeSigEvent);
+
+        m_ruler->addStep(m_hlayout->getBarLineX(staff, i),
+			 timeSignature.getBeatsPerBar());
     }
 
     m_ruler->update();
@@ -1667,7 +1690,6 @@ void NotationView::redoLayoutAdvised(Track *track, timeT startTime, timeT endTim
         }
 
         m_staffs[i]->showElements(starti, endi, !thisStaff);
-//                                  (staffNo >= 0 && (int)i != staffNo));
         showBars(i);
     }
 

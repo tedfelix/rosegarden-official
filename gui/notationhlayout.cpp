@@ -215,6 +215,12 @@ NotationHLayout::scanStaff(StaffType &staff)
 
     getQuantizer(staff).quantizeByNote(t.begin(), t.end());
 
+//!!!	if (barNo == 0) {
+	    addNewBar(staff, barNo, notes->begin(), 0, 0, true, 0); 
+//	    timeSigEvent = 0;
+	    ++barNo;
+//	}
+
     for (Track::iterator refi = refStart; refi != refEnd; ++refi) {
 
 	timeT barStartTime = (*refi)->getAbsoluteTime();
@@ -252,12 +258,13 @@ NotationHLayout::scanStaff(StaffType &staff)
 	    timeSignature = TimeSignature(*timeSigEvent);
 	    fixedWidth += m_npf.getTimeSigWidth(timeSignature);
 	}
-
+/*!!!
 	if (barNo == 0) {
 	    addNewBar(staff, barNo, notes->begin(), 0, 0, true, timeSigEvent); 
+	    timeSigEvent = 0;
 	    ++barNo;
 	}
-
+*/
         for (NotationElementList::iterator it = from; it != to; ++it) {
         
             NotationElement *el = (*it);
@@ -420,9 +427,13 @@ NotationHLayout::addNewBar(StaffType &staff,
     if (s >= 0) {
         bdl[s].idealWidth = width;
         bdl[s].fixedWidth = fwidth;
+	bdl[s].timeSignature = timeSig;
     }
 
-    bdl.push_back(BarData(barNo, i, -1, 0, 0, correct, timeSig));
+    if (timeSig) kdDebug(KDEBUG_AREA) << "Adding bar with timesig" << endl;
+    else kdDebug(KDEBUG_AREA) << "Adding bar without timesig" << endl;
+
+    bdl.push_back(BarData(barNo, i, -1, 0, 0, correct, 0));//!!! timeSig));
 }
 
 
@@ -643,6 +654,9 @@ NotationHLayout::layout(BarDataMap::iterator i)
         }
 
         kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): about to enter loop" << endl;
+        if (timeSigToPlace) {
+	    kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): there's a time sig in this bar" << endl;
+	}
 
         Accidental accidentalInThisChord = NoAccidental;
 
@@ -673,6 +687,7 @@ NotationHLayout::layout(BarDataMap::iterator i)
 		    kdDebug(KDEBUG_AREA) << "Placing timesig at " << x << endl;
 		    bdi->timeSigX = x;
 		    x += m_npf.getTimeSigWidth(timeSignature);
+		    kdDebug(KDEBUG_AREA) << "and moving next elt to " << x << endl;
 		    el->setLayoutX(x);
 		    timeSigToPlace = false;
 		}

@@ -162,10 +162,11 @@ NotationVLayout::scanStaff(StaffType &staffBase)
             } else if (el->event()->isa(Key::EventType)) {
 
                 el->setLayoutY(staff.yCoordOfHeight(12));
-
+/*!!!
             } else if (el->event()->isa(TimeSignature::EventType)) {
 
                 el->setLayoutY(staff.yCoordOfHeight(8) + 2);
+*/
             }
         }
     }

@@ -79,7 +79,7 @@ NotationStaff::NotationStaff(QCanvas *canvas, Track *track,
 NotationStaff::~NotationStaff()
 {
     // TODO : this causes a crash on quit - don't know why
-//     for (barlines::iterator i = m_barLines.begin(); i != m_barLines.end(); ++i)
+//     for (LineList::iterator i = m_barLines.begin(); i != m_barLines.end(); ++i)
 //         delete (*i);
 }
 
@@ -209,7 +209,7 @@ void NotationStaff::insertBar(unsigned int barPos, bool correct)
         if (!correct) barLine->setPen(QPen(red, 1));
         barLine->show();
 
-        barlines::iterator insertPoint = lower_bound(m_barLines.begin(),
+        LineList::iterator insertPoint = lower_bound(m_barLines.begin(),
                                                      m_barLines.end(),
                                                      barLine, compareBarPos);
 
@@ -217,11 +217,23 @@ void NotationStaff::insertBar(unsigned int barPos, bool correct)
     }
 }
 
+void NotationStaff::insertTimeSignature(unsigned int tsx,
+					const TimeSignature &timeSig)
+{
+    QCanvasPixmap *pixmap =
+	new QCanvasPixmap(m_npf->makeTimeSigPixmap(timeSig));
+    QCanvasSimpleSprite *sprite = new QCanvasSimpleSprite(pixmap, canvas());
+    kdDebug(KDEBUG_AREA) << "Inserting time signature at " << tsx << endl;
+    sprite->move(tsx + x(), yCoordOfHeight(4) + y());
+    sprite->show();
+    m_timeSigs.insert(sprite);
+}
+
 void NotationStaff::deleteBars(unsigned int fromPos)
 {
     kdDebug(KDEBUG_AREA) << "NotationStaff::deleteBars from " << fromPos << endl;
 
-    barlines::iterator startDeletePoint =
+    LineList::iterator startDeletePoint =
         lower_bound(m_barLines.begin(), m_barLines.end(),
                     fromPos, compareBarToPos);
 
@@ -230,7 +242,7 @@ void NotationStaff::deleteBars(unsigned int fromPos)
                              << (*startDeletePoint)->x() << endl;
 
     // delete the canvas lines
-    for (barlines::iterator i = startDeletePoint; i != m_barLines.end(); ++i)
+    for (LineList::iterator i = startDeletePoint; i != m_barLines.end(); ++i)
         delete (*i);
 
     m_barLines.erase(startDeletePoint, m_barLines.end());
@@ -240,15 +252,25 @@ void NotationStaff::deleteBars()
 {
     kdDebug(KDEBUG_AREA) << "NotationStaff::deleteBars()\n";
     
-    for (barlines::iterator i = m_barLines.begin(); i != m_barLines.end(); ++i)
+    for (LineList::iterator i = m_barLines.begin(); i != m_barLines.end(); ++i)
         delete (*i);
 
     m_barLines.clear();
 }
 
+void NotationStaff::deleteTimeSignatures()
+{
+    kdDebug(KDEBUG_AREA) << "NotationStaff::deleteTimeSignatures()\n";
+    
+    for (SpriteSet::iterator i = m_timeSigs.begin(); i != m_timeSigs.end(); ++i)
+        delete (*i);
+
+    m_timeSigs.clear();
+}
+
 void NotationStaff::setLines(double xfrom, double xto)
 {
-    for (barlines::iterator i = m_staffLines.begin();
+    for (LineList::iterator i = m_staffLines.begin();
          i != m_staffLines.end(); ++i) {
 
         QPoint p = (*i)->startPoint();
@@ -387,13 +409,13 @@ bool NotationStaff::showElements(NotationElementList::iterator from,
                      (Rosegarden::Key((*it)->event()->get<String>
                                       (Rosegarden::Key::KeyPropertyName)),
                       currentClef));
-
+/*!!!
             } else if ((*it)->event()->isa(TimeSignature::EventType)) {
 
                 pixmap = new QCanvasPixmap
                     (m_npf->makeTimeSigPixmap
                      (TimeSignature(*(*it)->event())));
-
+*/
             } else {
                     
                 kdDebug(KDEBUG_AREA)

@@ -48,7 +48,8 @@ class NotationStaff : public Rosegarden::Staff<NotationElement>,
 		      public QCanvasItemGroup
 {
 public:
-    typedef std::vector<QCanvasLineGroupable*> barlines;
+    typedef std::vector<QCanvasLineGroupable *> LineList;
+    typedef std::set<QCanvasSimpleSprite *> SpriteSet;
     
     /**
      * Creates a new NotationStaff for the specified Track
@@ -126,13 +127,19 @@ public:
 
 
     /**
-     * Insert a bar line at X position \a barPos.
+     * Insert a bar line at x-coordinate \a barPos.
      *
      * If \a correct is true, the bar line ends a correct (timewise)
      * bar.  If false, the bar line ends an incorrect bar (for instance,
-     * two minims in 3:4 time), and will be drawn as red
+     * two minims in 3:4 time), and will be drawn in red
      */
     void insertBar(unsigned int barPos, bool correct);
+
+    /**
+     * Insert time signature at x-coordinate \a x.
+     */
+    void insertTimeSignature(unsigned int x,
+			     const Rosegarden::TimeSignature &timeSig);
 
     /**
      * Delete all bars which are after X position \a fromPos
@@ -143,6 +150,11 @@ public:
      * Delete all bars
      */
     void deleteBars();
+
+    /**
+     * Delete all time signatures
+     */
+    void deleteTimeSignatures();
 
     /**
      * Set the start and end x-coords of the staff lines
@@ -172,8 +184,9 @@ protected:
     int m_horizLineLength;
     int m_resolution;
 
-    barlines m_barLines;
-    barlines m_staffLines;
+    LineList m_barLines;
+    LineList m_staffLines;
+    SpriteSet m_timeSigs;
 
     QCanvasLineGroupable *m_initialBarA, *m_initialBarB;
     NotePixmapFactory *m_npf;

@@ -871,7 +871,8 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
     m_p.end();
     m_pm.end();
 
-    QCanvasPixmap p(*m_generatedPixmap, m_pointZero);
+    QCanvasPixmap p(*m_generatedPixmap,
+		    QPoint(0, denomR.height() + (getNoteBodyHeight()/4) - 1));
     QBitmap m(*m_generatedMask);
     p.setMask(m);
 

@@ -71,6 +71,7 @@ static bool isTimeSig(const Event* e)
 }
 
 
+//!!! No longer correct -- time sigs no longer in track -- check usage
 TimeSignature Track::getTimeSigAtEnd(timeT &absTimeOfSig)
 {
     absTimeOfSig = 0;

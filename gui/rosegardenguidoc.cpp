@@ -240,6 +240,10 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
     const Track *refTrack = m_composition.getReferenceTrack();
     for (Track::iterator i = refTrack->begin(); i != refTrack->end(); ++i) {
 	if (!(*i)->isa(Composition::BarEventType)) {
+	    if ((*i)->getAbsoluteTime() > 0) {
+		fileStream << "<resync time=\"" << (*i)->getAbsoluteTime()
+			   << "\"/>" << endl;
+	    }
 	    fileStream << XmlStorableEvent::toXmlString(*(*i)) << endl;
 	}
     }

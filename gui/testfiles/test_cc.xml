@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE rosegarden-data>
 <rosegarden-data>
-<track instrument="1" start="0">
+<reference-track>
         <event type="timesignature" numerator="4" denominator="4" subordering="-10"/>
+	<resync time="660"/>
+        <event type="timesignature" numerator="12" denominator="8"/>
+</reference-track>
+<track instrument="1" start="0">
         <event type="keychange" subordering="-20"><property name="key" string="C# major"/></event>
         <event type="clefchange" clef="treble" subordering="-30"/>
         <event type="note" duration="breve" pitch="64"/>
@@ -24,7 +28,6 @@
         </group>
         <event type="note" duration="crotchet" pitch="44"/>
         <event type="note" duration="crotchet" pitch="45"/>
-        <event type="timesignature" numerator="12" denominator="8"/>
         <event type="keychange" key="C# major"/>
         <event type="rest" duration="crotchet"/>
         <event type="note" duration="crotchet" pitch="44"/>

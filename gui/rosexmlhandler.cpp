@@ -145,6 +145,13 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             m_chordDuration = m_currentEvent->getDuration();
         }
         
+    } else if (lcName == "resync") {
+	
+	QString time(atts.value("time"));
+	bool isNumeric;
+	int numTime = time.toInt(&isNumeric);
+	if (isNumeric) m_currentTime = numTime;
+
     } else if (lcName == "chord") {
 
         m_inChord = true;
