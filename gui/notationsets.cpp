@@ -311,7 +311,7 @@ bool Chord::isNoteHeadShifted(const NELIterator &itr) const
 
 NotationGroup::NotationGroup(const NotationElementList &nel,
                              NELIterator i, const Clef &clef, const Key &key) :
-    NotationSet(nel, i, false),
+    NotationSet(nel, i, 0),
     //!!! What if the clef and/or key change in the course of the group?
     m_clef(clef),
     m_key(key),

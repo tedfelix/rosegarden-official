@@ -216,7 +216,7 @@ NotationHLayout::scanStaff(StaffType &staff)
 
     kdDebug(KDEBUG_AREA) << "Quantizer: unit is " << getQuantizer(staff).getUnit() << endl;
 
-    getQuantizer(staff).quantizeByNote(refStart, refEnd);
+    getQuantizer(staff).quantizeByNote(t.begin(), t.end());
 
     for (Track::iterator refi = refStart; refi != refEnd; ++refi) {
 
