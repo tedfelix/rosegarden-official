@@ -871,6 +871,9 @@ void RosegardenSequencerApp::deleteSegment(const QString& filename)
         m_metaIterator->deleteSegment(m);
 
     delete m;
+
+    // #932415
+    m_mmappedSegments.erase(filename);
 }
 
 void RosegardenSequencerApp::closeAllSegments()
