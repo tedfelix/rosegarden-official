@@ -1113,16 +1113,15 @@ void NotationSelector::handleMouseDoubleClick(Rosegarden::timeT,
 
     if (m_clickedElement) {
 
-	EventEditDialog *dialog = new EventEditDialog
-	    (m_nParentView, *m_clickedElement->event(), true);
+	EventEditDialog dialog(m_nParentView, *m_clickedElement->event(), true);
 
-	if (dialog->exec() == QDialog::Accepted &&
-	    dialog->isModified()) {
+	if (dialog.exec() == QDialog::Accepted &&
+	    dialog.isModified()) {
 
 	    EventEditCommand *command = new EventEditCommand
 		(staff->getSegment(),
 		 m_clickedElement->event(),
-		 dialog->getEvent());
+		 dialog.getEvent());
 
 	    m_nParentView->addCommandToHistory(command);
 	}
