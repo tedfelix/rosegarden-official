@@ -85,7 +85,7 @@ MappedComposition::MappedComposition(Rosegarden::Composition &comp,
 	    // Find the performance duration, i.e. taking into account any
 	    // ties etc that this note may have  --cc
 	    // 
-	    duration = comp.getRealSoundingDuration(j);
+	    duration = helper.getRealSoundingDuration(j);
 
 	    if (duration > Rosegarden::RealTime(0, 0)) // probably in a tied series, but not as first note
 		continue;
