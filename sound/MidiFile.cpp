@@ -97,7 +97,7 @@ const string
 MidiFile::getMidiBytes(ifstream* midiFile, const unsigned int &numberOfBytes)
 {
   string stringRet;
-  MidiByte midiByte;
+  char fileMidiByte;
 
   if (_decrementCount && (numberOfBytes > (unsigned int)_trackByteCount))
   {
@@ -113,12 +113,12 @@ MidiFile::getMidiBytes(ifstream* midiFile, const unsigned int &numberOfBytes)
     exit(1);
   }
 
-  while((stringRet.length() < numberOfBytes) && midiFile->read(&midiByte, 1))
+  while((stringRet.length() < numberOfBytes) && midiFile->read(&fileMidiByte, 1))
   {
-    stringRet += midiByte;
+    stringRet += fileMidiByte;
 #ifdef MIDI_DEBUG
     cout << " STR = " << (int)stringRet[stringRet.length()-1] <<
-            " - " << (int) midiByte << endl;
+            " - " << (int) fileMidiByte << endl;
 #endif
   }
 
@@ -412,12 +412,12 @@ MidiFile::convertToRosegarden()
 
   // Time conversions
   //
-  int rosegardenTime = 0;
-  int rosegardenDuration = 0;
+  timeT rosegardenTime = 0;
+  timeT rosegardenDuration = 0;
 
   // To create rests
   //
-  int endOfLastNote;
+  timeT endOfLastNote;
 
   int numerator;
   int denominator;
@@ -507,8 +507,10 @@ MidiFile::convertToRosegarden()
 
         if (_timingDivision)
         {
-          rosegardenTime = midiEvent->time() * 96 / _timingDivision;
-          rosegardenDuration = midiEvent->duration() * 96 / _timingDivision;
+          rosegardenTime = midiEvent->time() *
+                    Note(Note::Crotchet).getDuration() / _timingDivision;
+          rosegardenDuration = midiEvent->duration() * 
+                    Note(Note::Crotchet).getDuration() / _timingDivision;
         }
 
 
