@@ -9,13 +9,17 @@ How to get the Rosegarden Sequencer working
 Introduction
 ------------
 
-Rosegarden Version 4.0 for KDE works only with the aRts sound system
-that comes with the KDE multimedia packages.
+Rosegarden Version 4.0 for KDE works with the aRts sound system
+that comes with the KDE multimedia packages.  To compile the
+sequencer section of Rosegarden you'll need some additional
+packages (see mandrake8_rpms.txt for Mandrake 8 RPM examples).
 
 To get the development version of Rosegarden to work you'll need to
-ensure that artsd is running, can find the relevant Rosegarden
-server stubs and that you've mapped the sequencer output to a relevant
-port.
+ensure that artsd is running (through artswrapper), ensure that your
+~/.mcoprc file is pointing to the relevant Rosegarden server stubs
+and that you've mapped the sequencer output device to a relevant
+port.  Read on for more explanations of these terms and what they
+mean.
 
 
   Update 19.9.2001
@@ -40,6 +44,14 @@ port.
   aRts problem I think); and it can't make use of the soundcard's
   own FM/wavetable synth a la OSS, it can only use soft synth or
   external MIDI devices (an aRts design decision I think?).
+
+
+  Update 14.10.2001 [rwb]
+
+  After just reinstalling my system I've suddenly got the urge
+  to put together a troubleshooting section to reiterate the 
+  points made here - see the end for some of the gotchas that
+  got me, again.
 
 
 
@@ -160,4 +172,42 @@ playback.  The song position pointer on the GUI should move from
 left to right across the screen in time with the notes being sent out.
 Note that at the moment you can Fast Forward and Rewind whilst the
 sequencer is stopped or playing.
+
+
+
+Troubleshooting Audio and MIDI installation
+-------------------------------------------
+
+There are lots of gotchas waiting for the unwary.  Here is
+a brief checklist of things, just to reiterate:
+
+- you're using a recent enough version of aRts (certainly later than 0.5.4)
+
+- aRts is installed in a sensible place (/opt/arts-0.5.4/) and 
+  your /etc/ld.so.conf (or equivalent) is pointing to the libraries:
+  e.g.
+
+    /opt/arts-0.5.4/lib
+    /opt/arts-0.5.4/lib/mcop
+  
+- if you require alsa to get your soundcard working properly that
+  it's also included in the /etc/ld.so.conf and you've updated
+  your /etc/modules.conf (or equivalent) with the correct module
+  details.
+
+- that your ~/.mcoprc is correctly formatted (remember no spaces!)
+  and points to valid libraries.
+
+- that you can play CDs/wavs/mp3s on your system.
+
+Things to look out for:
+
+- if you start artsd (through artswrapper) with no command line
+  debug options and it still gives warnings then make sure that
+  you library paths (especially in ~/.mcoprc) are correct.
+
+- if you "play" the sequencer but the song pointer doesn't start
+  moving across the screen then see the point above.  The sequencer
+  should play (i.e. the pointer should move across the screen)
+  whether or not an arts output device is connected.
 
