@@ -36,6 +36,7 @@ using Rosegarden::timeT;
 using Rosegarden::Note;
 using Rosegarden::Clef;
 using Rosegarden::Int;
+using Rosegarden::String;
 using Rosegarden::Accidental;
 using Rosegarden::Accidentals::NoAccidental;
 using Rosegarden::Indication;
@@ -324,7 +325,7 @@ GroupMenuAddIndicationCommand::name(std::string indicationType)
 
 
 void
-TransformsMenuChangeStemsCommand::modifySegment(SegmentNotationHelper &helper)
+TransformsMenuChangeStemsCommand::modifySegment(SegmentNotationHelper &)
 {
     EventSelection::eventcontainer::iterator i;
 
@@ -339,7 +340,7 @@ TransformsMenuChangeStemsCommand::modifySegment(SegmentNotationHelper &helper)
 
 
 void
-TransformsMenuRestoreStemsCommand::modifySegment(SegmentNotationHelper &helper)
+TransformsMenuRestoreStemsCommand::modifySegment(SegmentNotationHelper &)
 {
     EventSelection::eventcontainer::iterator i;
 
@@ -354,7 +355,7 @@ TransformsMenuRestoreStemsCommand::modifySegment(SegmentNotationHelper &helper)
 
 
 void
-TransformsMenuTransposeOneStepCommand::modifySegment(SegmentNotationHelper &helper)
+TransformsMenuTransposeOneStepCommand::modifySegment(SegmentNotationHelper &)
 {
     EventSelection::eventcontainer::iterator i;
 
@@ -368,6 +369,57 @@ TransformsMenuTransposeOneStepCommand::modifySegment(SegmentNotationHelper &help
 			   (*i)->get<Int>(Rosegarden::BaseProperties::PITCH) +
 			   offset);
 	    (*i)->unset(Rosegarden::BaseProperties::ACCIDENTAL);
+	}
+    }
+}
+
+
+QString
+TransformsMenuAddMarkCommand::name(Rosegarden::Mark markType)
+{
+    std::string m = markType;
+
+    // Gosh, lots of collisions
+    if (markType == Rosegarden::Marks::Sforzando) m = "S&forzando";
+    else if (markType == Rosegarden::Marks::Tenuto) m = "T&enuto";
+    else if (markType == Rosegarden::Marks::Rinforzando) m = "R&inforzando";
+    else if (markType == Rosegarden::Marks::Trill) m = "Tri&ll";
+    else m = std::string("&") + (char)toupper(m[0]) + m.substr(1);
+
+    m = std::string("Add ") + m;
+    return QString(m.c_str());
+}
+
+void
+TransformsMenuAddMarkCommand::modifySegment(SegmentNotationHelper &)
+{
+    EventSelection::eventcontainer::iterator i;
+
+    for (i  = m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
+	
+	long n = 0;
+	(*i)->get<Int>(Rosegarden::BaseProperties::MARK_COUNT, n);
+	(*i)->set<Int>(Rosegarden::BaseProperties::MARK_COUNT, n + 1);
+	(*i)->set<String>(Rosegarden::BaseProperties::getMarkPropertyName(n),
+			  m_mark);
+    }
+}
+
+void
+TransformsMenuRemoveMarksCommand::modifySegment(SegmentNotationHelper &)
+{
+    EventSelection::eventcontainer::iterator i;
+
+    for (i  = m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
+	
+	long n = 0;
+	(*i)->get<Int>(Rosegarden::BaseProperties::MARK_COUNT, n);
+	(*i)->unset(Rosegarden::BaseProperties::MARK_COUNT);
+	
+	for (int j = 0; j < n; ++j) {
+	    (*i)->unset(Rosegarden::BaseProperties::getMarkPropertyName(j));
 	}
     }
 }

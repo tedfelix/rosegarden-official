@@ -24,6 +24,7 @@
 #define LINED_STAFF_H
 
 #include "Staff.h"
+#include "qcanvasgroupableitem.h"
 
 /**
  * LinedStaff is a base class for implementations of Staff that
@@ -77,6 +78,8 @@ public:
     virtual ~LinedStaff();
 
 protected:
+    // Methods required to define the type of staff this is
+
     /**
      * Returns the number of visible staff lines
      */
@@ -149,8 +152,7 @@ public:
      * Return the full width, height and origin of the bar containing
      * the given cooordinates.
      */
-    virtual void getBarExtents(int x, int y,
-			       int &rx, int &ry, int &rw, int &rh) const;
+    virtual QRect getBarExtents(int x, int y) const;
 
     /**
      * Generate or re-generate sprites for all the elements between
@@ -187,6 +189,34 @@ public:
      */
     virtual void positionElements();
 
+protected:
+    // Methods that the subclass may (indeed, should) use to convert
+    // between the layout coordinates of elements and their canvas
+    // coordinates.  These are deliberately not virtual.
+
+    // Note that even linear-layout staffs have multiple rows; their
+    // rows all have the same y coordinate but increasing x
+    // coordinates, instead of the other way around.  (The only reason
+    // for this is that it seems to be more efficient from the QCanvas
+    // perspective to create and manipulate many relatively short
+    // canvas lines rather than a smaller number of very long ones.)
+   
+    int getRowForLayoutX(double x) const;
+
+    int getRowForCanvasY(int y) const;
+
+    double getCanvasXForLayoutX(double x) const;
+
+    int getCanvasYForTopOfStaff(int row = -1) const;
+
+    int getCanvasYForTopLine(int row = -1) const;
+
+    double getCanvasXForLeftOfRow(int row) const;
+
+    double getCanvasXForRightOfRow(int row) const;
+
+    std::pair<double, int>
+    getCanvasCoordsForLayoutCoords(double x, int y) const;
 };
 
 #endif

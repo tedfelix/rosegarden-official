@@ -416,9 +416,7 @@ void NotationStaff::insertBar(unsigned int barPos, bool correct)
 {
     for (int i = 0; i < m_npf->getStemThickness(); ++i) {
 
-        QCanvasLineGroupable *barLine =
-            new QCanvasLineGroupable(canvas(), this);
-
+        QCanvasLine *barLine = new QCanvasLine(canvas());
 	int row = getRowForLayoutX(barPos);
 
         barLine->setPoints
@@ -426,8 +424,7 @@ void NotationStaff::insertBar(unsigned int barPos, bool correct)
 	     0, getBarLineHeight() + getTopLineOffsetForRow(row));
 
         barLine->moveBy
-	    (getRowLeftX(row) + getXForLayoutX(barPos) + x() + i,
-	     y());
+	    (getRowLeftX(row) + getXForLayoutX(barPos) + x() + i, y());
 
         if (!correct) barLine->setPen(QPen(red, 1));
         barLine->show();
@@ -440,8 +437,7 @@ void NotationStaff::insertBar(unsigned int barPos, bool correct)
 
 	if (m_connectingLineHeight > 0) {
 
-	    QCanvasLineGroupable *connectingLine =
-		new QCanvasLineGroupable(canvas(), this);
+	    QCanvasLine *connectingLine = new QCanvasLine(canvas());
 	    
 	    connectingLine->setPoints
 		(0, getBarLineHeight() + getTopLineOffsetForRow(row) + 1,

@@ -24,7 +24,6 @@
 
 #include <string>
 
-#include "qcanvasgroupableitem.h"
 #include "notepixmapfactory.h"
 #include "notationelement.h"
 #include "FastVector.h"
@@ -34,7 +33,6 @@
 
 #include "linedstaff.h"
 
-class QCanvasLineGroupable;
 class QCanvasSimpleSprite;
 class EventSelection;
 
@@ -334,7 +332,7 @@ protected:
     typedef std::pair<int, Rosegarden::Key> KeyChange;
     FastVector<KeyChange> m_keyChanges;
 
-    QCanvasLineGroupable *m_initialBarA, *m_initialBarB;
+    QCanvasLine *m_initialBarA, *m_initialBarB;
     NotePixmapFactory *m_npf;
 
     bool m_haveSelection;

@@ -351,7 +351,7 @@ public:
     virtual ~TransformsMenuTransposeOneStepCommand() { }
 
     static QString name(bool up) {
-	return up ? "Transpose &Up" : "Transpose &Down";
+	return up ? "&Up a Semitone" : "&Down a Semitone";
     }
 
 protected:
@@ -360,6 +360,44 @@ protected:
 private:
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
     bool m_up;
+};
+
+class TransformsMenuAddMarkCommand : public BasicSelectionCommand
+{
+public:
+    TransformsMenuAddMarkCommand(Rosegarden::Mark mark,
+				 EventSelection &selection) :
+	BasicSelectionCommand(name(mark), selection, true),
+	m_selection(&selection), m_mark(mark) { }
+    virtual ~TransformsMenuAddMarkCommand() { }
+
+    static QString name(Rosegarden::Mark mark);
+
+protected:
+    virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper);
+
+private:
+    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    Rosegarden::Mark m_mark;
+};
+
+class TransformsMenuRemoveMarksCommand : public BasicSelectionCommand
+{
+public:
+    TransformsMenuRemoveMarksCommand(EventSelection &selection) :
+	BasicSelectionCommand(name(), selection, true),
+	m_selection(&selection) { }
+    virtual ~TransformsMenuRemoveMarksCommand() { }
+
+    static QString name() {
+	return "&Remove Marks";
+    }
+
+protected:
+    virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper);
+
+private:
+    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
 };
 
 

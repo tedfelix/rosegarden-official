@@ -232,6 +232,11 @@ public slots:
     void slotToggleClefsToolBar();
 
     /**
+     * toggles the font toolbar
+     */
+    void slotToggleFontToolBar();
+
+    /**
      * toggles the statusbar
      */
     void slotToggleStatusBar();
@@ -333,6 +338,19 @@ public slots:
     void slotTransformsRestoreStems();
     void slotTransformsTransposeUp();
     void slotTransformsTransposeDown();
+
+    void slotTransformsAddAccent();
+    void slotTransformsAddTenuto();
+    void slotTransformsAddStaccato();
+    void slotTransformsAddSforzando();
+    void slotTransformsAddRinforzando();
+    void slotTransformsAddTrill();
+    void slotTransformsAddTurn();
+    void slotTransformsAddPause();
+    void slotTransformsAddUpBow();
+    void slotTransformsAddDownBow();
+
+    void slotTransformsRemoveMarks();
 
     /// Canvas actions slots
 

@@ -71,6 +71,9 @@ using Rosegarden::Quantizer;
 using Rosegarden::timeT;
 using Rosegarden::Accidental;
 
+using Rosegarden::Mark;
+using namespace Rosegarden::Marks;
+
 using std::vector;
 using std::string;
 using std::set;
@@ -457,13 +460,13 @@ void NotationView::setupActions()
 
     // View menu
     KRadioAction *linearModeAction = new KRadioAction
-	(i18n("Linear Layout"), 0, this, SLOT(slotLinearMode()),
+	(i18n("&Linear Layout"), 0, this, SLOT(slotLinearMode()),
 	 actionCollection(), "linear_mode");
     linearModeAction->setExclusiveGroup("layoutMode");
     linearModeAction->setChecked(true);
 
     KRadioAction *pageModeAction = new KRadioAction
-	(i18n("Page Layout"), 0, this, SLOT(slotPageMode()),
+	(i18n("&Page Layout"), 0, this, SLOT(slotPageMode()),
 	 actionCollection(), "page_mode");
     pageModeAction->setExclusiveGroup("layoutMode");
 
@@ -525,18 +528,39 @@ void NotationView::setupActions()
                 SLOT(slotTransformsTransposeDown()), actionCollection(),
                 "transpose_down");
 
+    static const Mark marks[] = 
+    { Accent, Tenuto, Staccato, Sforzando, Rinforzando,
+      Trill, Turn, Pause, UpBow, DownBow };
+    static const char *markSlots[] = 
+    { "1slotTransformsAddAccent()",      "1slotTransformsAddTenuto()",
+      "1slotTransformsAddStaccato()",    "1slotTransformsAddSforzando()",
+      "1slotTransformsAddRinforzando()", "1slotTransformsAddTrill()",
+      "1slotTransformsAddTurn()",	 "1slotTransformsAddPause()",
+      "1slotTransformsAddUpBow()",       "1slotTransformsAddDownBow()" };
+
+    for (unsigned int i = 0; i < 10; ++i) {
+	new KAction(TransformsMenuAddMarkCommand::name(marks[i]), 0, this,
+		    markSlots[i], actionCollection(),
+		    QString("add_%1").arg(marks[i].c_str()));
+    }
+
+    new KAction(TransformsMenuRemoveMarksCommand::name(), 0, this,
+                SLOT(slotTransformsRemoveMarks()), actionCollection(),
+                "remove_marks");
+
     // setup Settings menu
     KStdAction::showToolbar(this, SLOT(slotToggleToolBar()), actionCollection());
 
     static const char* actionsToolbars[][4] = 
         {
-            { "Show Notes Toolbar",  "1slotToggleNotesToolBar()",  "show_notes_toolbar",                    "palette-notes" },
-            { "Show Rests Toolbar",  "1slotToggleRestsToolBar()",  "show_rests_toolbar",                    "palette-rests" },
-            { "Show Accidentals Toolbar",   "1slotToggleAccidentalsToolBar()",  "show_accidentals_toolbar", "palette-accidentals" },
-            { "Show Clefs Toolbar",         "1slotToggleClefsToolBar()",        "show_clefs_toolbar",       "palette-clefs" }
+            { "Show &Notes Toolbar",  "1slotToggleNotesToolBar()",  "show_notes_toolbar",                    "palette-notes" },
+            { "Show &Rests Toolbar",  "1slotToggleRestsToolBar()",  "show_rests_toolbar",                    "palette-rests" },
+            { "Show &Accidentals Toolbar",   "1slotToggleAccidentalsToolBar()",  "show_accidentals_toolbar", "palette-accidentals" },
+            { "Show Cle&fs Toolbar",         "1slotToggleClefsToolBar()",        "show_clefs_toolbar",       "palette-clefs" },
+            { "Show &Layout Toolbar",         "1slotToggleFontToolBar()",        "show_font_toolbar",       "palette-font" }
         };
 
-    for (unsigned int i = 0; i < 4; ++i) {
+    for (unsigned int i = 0; i < 5; ++i) {
 
         icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap(actionsToolbars[i][3]));
 
@@ -1164,6 +1188,11 @@ void NotationView::slotToggleClefsToolBar()
     toggleNamedToolBar("clefsToolBar");
 }
 
+void NotationView::slotToggleFontToolBar()
+{
+    toggleNamedToolBar("fontToolBar");
+}
+
 void NotationView::toggleNamedToolBar(const QString& toolBarName)
 {
     KToolBar *namedToolBar = toolBar(toolBarName);
@@ -1336,6 +1365,83 @@ void NotationView::slotTransformsTransposeDown()
 
     getCommandHistory()->addCommand(new TransformsMenuTransposeOneStepCommand
 				    (false, *m_currentEventSelection));
+}
+
+void NotationView::slotTransformsAddAccent()
+{
+    if (m_currentEventSelection)
+	getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
+					(Accent, *m_currentEventSelection));
+}
+
+void NotationView::slotTransformsAddTenuto()
+{
+    if (m_currentEventSelection)
+	getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
+					(Tenuto, *m_currentEventSelection));
+}
+
+void NotationView::slotTransformsAddStaccato()
+{
+    if (m_currentEventSelection)
+	getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
+					(Staccato, *m_currentEventSelection));
+}
+
+void NotationView::slotTransformsAddSforzando()
+{
+    if (m_currentEventSelection)
+	getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
+					(Sforzando, *m_currentEventSelection));
+}
+
+void NotationView::slotTransformsAddRinforzando()
+{
+    if (m_currentEventSelection)
+	getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
+					(Rinforzando, *m_currentEventSelection));
+}
+
+void NotationView::slotTransformsAddTrill()
+{
+    if (m_currentEventSelection)
+	getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
+					(Trill, *m_currentEventSelection));
+}
+
+void NotationView::slotTransformsAddTurn()
+{
+    if (m_currentEventSelection)
+	getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
+					(Turn, *m_currentEventSelection));
+}
+
+void NotationView::slotTransformsAddPause()
+{
+    if (m_currentEventSelection)
+	getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
+					(Pause, *m_currentEventSelection));
+}
+
+void NotationView::slotTransformsAddUpBow()
+{
+    if (m_currentEventSelection)
+	getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
+					(UpBow, *m_currentEventSelection));
+}
+
+void NotationView::slotTransformsAddDownBow()
+{
+    if (m_currentEventSelection)
+	getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
+					(DownBow, *m_currentEventSelection));
+}
+
+void NotationView::slotTransformsRemoveMarks()
+{
+    if (m_currentEventSelection)
+	getCommandHistory()->addCommand(new TransformsMenuRemoveMarksCommand
+					(*m_currentEventSelection));
 }
 
 

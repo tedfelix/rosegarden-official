@@ -8,6 +8,12 @@
   <text>&amp;View</text>
   <Action name="linear_mode"/>
   <Action name="page_mode"/>
+<!-- Stuff from font/layout toolbar, e.g...
+  <Separator/>
+  <Menu name="Font">
+    <text>&amp;Font</text>
+etc
+-->
 <!-- I like this better than putting them in Settings, but...
   <Menu name="Toolbars">
   <text>&amp;Toolbars</text>
@@ -124,6 +130,23 @@
     <Action name="stems_down"/>
     <Action name="restore_stems"/>
   </Menu>
+  <Separator/>
+  <Menu name="Marks">
+    <text>&amp;Marks</text>
+    <Action name="add_accent"/>
+    <Action name="add_tenuto"/>
+    <Action name="add_staccato"/>
+    <Action name="add_sforzando"/>
+    <Action name="add_rinforzando"/>
+    <Action name="add_trill"/>
+    <Action name="add_turn"/>
+    <Action name="add_pause"/>
+    <Action name="add_up-bow"/>
+    <Action name="add_down-bow"/>
+    <Action name="add_text_mark"/>
+    <Separator/>
+    <Action name="remove_marks"/>
+  </Menu>
 </Menu>
 
 <Menu  name="settings"><text>&amp;Settings</text>
@@ -131,7 +154,8 @@
   <Action name="show_rests_toolbar"        append="show_merge" />
   <Action name="show_accidentals_toolbar"  append="show_merge" />
   <Action name="show_clefs_toolbar"        append="show_merge" />
-</Menu>
+  <Action name="show_font_toolbar"         append="show_merge" />
+</Menu> 
 
 </MenuBar>
 

@@ -139,13 +139,14 @@ NotationHLayout::getBarData(StaffType &staff) const
 //!!! The algorithm below does not implement most of these rules; it
 // can probably be improved dramatically without too much work
 
-int NotationHLayout::getIdealBarWidth(StaffType &staff,
-                                      int fixedWidth,
-                                      int baseWidth,
-                                      NotationElementList::iterator shortest,
-                                      int shortCount,
-                                      int totalCount,
-                                      const TimeSignature &timeSignature) const
+double NotationHLayout::getIdealBarWidth(StaffType &staff,
+					 int fixedWidth,
+					 int baseWidth,
+					 NotationElementList::iterator shortest,
+					 int shortCount,
+					 int totalCount,
+					 const TimeSignature &timeSignature)
+    const
 {
     kdDebug(KDEBUG_AREA) << "NotationHLayout::getIdealBarWidth: shortCount is "
                          << shortCount << ", fixedWidth is "
@@ -185,13 +186,13 @@ int NotationHLayout::getIdealBarWidth(StaffType &staff,
 
     kdDebug(KDEBUG_AREA) << "d is " << d << ", gapPer is " << gapPer << endl;
 
-    int w = fixedWidth + timeSignature.getBarDuration() * gapPer / d;
+    double w = fixedWidth + ((timeSignature.getBarDuration() * gapPer) / d);
 
     kdDebug(KDEBUG_AREA) << "NotationHLayout::getIdealBarWidth: returning "
                          << w << endl;
 
-    w = (int)(w * m_spacing);
-    if (w < (fixedWidth + baseWidth)) w = fixedWidth + baseWidth;
+    w *= m_spacing;
+    if (w < (fixedWidth + baseWidth)) w = (double)(fixedWidth + baseWidth);
     return w;
 } 
 
@@ -428,7 +429,7 @@ NotationHLayout::scanStaff(StaffType &staff)
 void
 NotationHLayout::addNewBar(StaffType &staff,
 			   int barNo, NotationElementList::iterator i,
-                           int width, int fwidth, int bwidth,
+                           double width, int fwidth, int bwidth,
 			   bool correct, Event *timeSig)
 {
     BarDataList &bdl(m_barData[&staff]);
@@ -486,7 +487,7 @@ NotationHLayout::fillFakeBars()
 NotationHLayout::StaffType *
 NotationHLayout::getStaffWithWidestBar(int barNo)
 {
-    int maxWidth = -1;
+    double maxWidth = -1;
     StaffType *widest = 0;
     BarDataMap::iterator i;
 
@@ -524,7 +525,7 @@ NotationHLayout::reconcileBarsLinear()
 
 	StaffType *widest = getStaffWithWidestBar(barNo);
 	if (!widest) break; // reached end of piece
-	int maxWidth = m_barData[widest][barNo].idealWidth;
+	double maxWidth = m_barData[widest][barNo].idealWidth;
 
 	// Now apply width to this bar on all staffs
 
@@ -537,9 +538,9 @@ NotationHLayout::reconcileBarsLinear()
 		BarData &bd(list[barNo]);
 
 		if (bd.idealWidth != maxWidth) {
-		    if (bd.idealWidth > 0) {
-			float ratio = (float)maxWidth / (float)bd.idealWidth;
-			bd.fixedWidth += bd.fixedWidth * int((ratio - 1.0)/2.0);
+		    if (bd.idealWidth > 0.0) {
+			double ratio = maxWidth / bd.idealWidth;
+			bd.fixedWidth += bd.fixedWidth * ((ratio - 1.0)/2.0);
 		    }
 		    bd.idealWidth = maxWidth;
                     aWidthChanged = true;
@@ -566,9 +567,9 @@ NotationHLayout::reconcileBarsPage()
     
     // pair of the recommended number of bars with those bars'
     // original total width, for each row
-    std::vector<std::pair<int, int> > rowData;
+    std::vector<std::pair<int, double> > rowData;
 
-    int pageWidthSoFar = 0;
+    double pageWidthSoFar = 0.0;
     double stretchFactor = 10.0;
 
     BarDataMap::iterator i;
@@ -577,13 +578,13 @@ NotationHLayout::reconcileBarsPage()
 	
 	StaffType *widest = getStaffWithWidestBar(barNo);
 	if (!widest) break; // reached end of piece
-	int maxWidth = m_barData[widest][barNo].idealWidth;
+	double maxWidth = m_barData[widest][barNo].idealWidth;
 
 	// Work on the assumption that this bar is the last in the
 	// row.  How would that make things look?
 
-	int nextPageWidth = pageWidthSoFar + maxWidth;
-	double nextStretchFactor = m_pageWidth / (double)nextPageWidth;
+	double nextPageWidth = pageWidthSoFar + maxWidth;
+	double nextStretchFactor = m_pageWidth / nextPageWidth;
 
 	// We have to have at least one bar per row
 	
@@ -610,8 +611,8 @@ NotationHLayout::reconcileBarsPage()
 
 		    if (list.size() > barNo) {
 			BarData &bd(list[barNo]);
-			if ((nextStretchFactor * (double)bd.idealWidth) <
-			    ((double)bd.fixedWidth + (double)bd.baseWidth)) {
+			if ((nextStretchFactor * bd.idealWidth) <
+			    (double)(bd.fixedWidth + bd.baseWidth)) {
 			    tooFar = true;
 			    break;
 			}
@@ -621,11 +622,11 @@ NotationHLayout::reconcileBarsPage()
 	}
 
 	if (tooFar) {
-	    rowData.push_back(std::pair<int, int>(barNoThisRow,
-						  pageWidthSoFar));
+	    rowData.push_back(std::pair<int, double>(barNoThisRow,
+						     pageWidthSoFar));
 	    barNoThisRow = 1;
 	    pageWidthSoFar = maxWidth;
-	    stretchFactor = m_pageWidth / (double)maxWidth;
+	    stretchFactor = m_pageWidth / maxWidth;
 	} else {
 	    ++barNoThisRow;
 	    pageWidthSoFar = nextPageWidth;
@@ -636,7 +637,8 @@ NotationHLayout::reconcileBarsPage()
     }
 
     if (barNoThisRow > 0) {
-	rowData.push_back(std::pair<int, int>(barNoThisRow, pageWidthSoFar));
+	rowData.push_back(std::pair<int, double>(barNoThisRow,
+						 pageWidthSoFar));
     }
 
     // Now we need to actually apply the widths
@@ -649,7 +651,7 @@ NotationHLayout::reconcileBarsPage()
 	unsigned int finalBarThisRow = barNo + rowData[row].first - 1;
 
 	pageWidthSoFar = 0;
-	stretchFactor = m_pageWidth / (double)rowData[row].second;
+	stretchFactor = m_pageWidth / rowData[row].second;
 
 	for (; barNoThisRow <= finalBarThisRow; ++barNoThisRow, ++barNo) {
 
@@ -658,12 +660,13 @@ NotationHLayout::reconcileBarsPage()
 	    StaffType *widest = getStaffWithWidestBar(barNo);
 	    if (!widest) break; // reached end of piece (shouldn't happen)
 	    if (finalRow && (stretchFactor > 1.0)) stretchFactor = 1.0;
-	    int maxWidth = (int)
+	    double maxWidth = 
 		(stretchFactor * m_barData[widest][barNo].idealWidth);
 
 	    if (barNoThisRow == finalBarThisRow) {
-		if (!finalRow || (maxWidth >= (m_pageWidth - pageWidthSoFar))) {
-		    maxWidth = (int)(m_pageWidth - pageWidthSoFar - 1);
+		if (!finalRow ||
+		    (maxWidth > (m_pageWidth - pageWidthSoFar))) {
+		    maxWidth = m_pageWidth - pageWidthSoFar;
 		}
 	    }
 	    
@@ -677,8 +680,8 @@ NotationHLayout::reconcileBarsPage()
 
 		    bd.needsLayout = true;
 		    if (bd.idealWidth > 0) {
-			float ratio = (float)maxWidth / (float)bd.idealWidth;
-			bd.fixedWidth += bd.fixedWidth * int((ratio - 1.0)/2.0);
+			double ratio = maxWidth / bd.idealWidth;
+			bd.fixedWidth += bd.fixedWidth * ((ratio - 1.0)/2.0);
 		    }
 		    bd.idealWidth = maxWidth;
 		}
@@ -780,7 +783,7 @@ NotationHLayout::layout(BarDataMap::iterator i)
     Clef clef;
     TimeSignature timeSignature;
 
-    int x = 0, barX = 0;
+    double x = 0, barX = 0;
     TieMap tieMap;
 
     for (BarDataList::iterator bdi = barList.begin();
@@ -841,7 +844,7 @@ NotationHLayout::layout(BarDataMap::iterator i)
 
 	    if (timeSigToPlace && !el->event()->isa(Clef::EventType)) {
 		kdDebug(KDEBUG_AREA) << "Placing timesig at " << x << endl;
-		bdi->timeSigX = x;
+		bdi->timeSigX = (int)x;
 		x += getFixedItemSpacing() +
 		    m_npf.getTimeSigWidth(timeSignature);
 		kdDebug(KDEBUG_AREA) << "and moving next elt to " << x << endl;

@@ -151,10 +151,10 @@ protected:
      */
     struct BarData
     {
-        int barNo;              // of corresponding BarPosition in Segment
+        int barNo;            // of corresponding BarPosition in Segment
         NotationElementList::iterator start; // i.e. event following barline
-        int x;                // coordinate for display of barline
-        int idealWidth;       // theoretical width of bar following barline
+        double x;             // coordinate for display of barline
+        double idealWidth;    // theoretical width of bar following barline
         int fixedWidth;       // width of non-note items in bar
 	int baseWidth;        // minimum width of note items in bar
 	bool correct;         // bar preceding barline has correct duration
@@ -163,8 +163,8 @@ protected:
 	int timeSigX;
         
         BarData(int ibarno, NotationElementList::iterator istart,
-                int ix, int iwidth, int fwidth, int bwidth, bool icorrect,
-		Rosegarden::Event *timesig) :
+                double ix, double iwidth, int fwidth, int bwidth,
+		bool icorrect, Rosegarden::Event *timesig) :
             barNo(ibarno), start(istart), x(ix), idealWidth(iwidth),
             fixedWidth(fwidth), baseWidth(bwidth), 
 	    correct(icorrect), needsLayout(true),
@@ -199,18 +199,14 @@ protected:
 
     void addNewBar
     (StaffType &staff, int barNo, NotationElementList::iterator start,
-     int width, int fwidth, int bwidth, bool correct, Rosegarden::Event *timesig);
+     double width, int fwidth, int bwidth, bool correct,
+     Rosegarden::Event *timesig);
 
-    int getIdealBarWidth
+    double getIdealBarWidth
     (StaffType &staff, int fixedWidth, int baseWidth,
      NotationElementList::iterator shortest,
      int shortCount, int totalCount,
      const Rosegarden::TimeSignature &timeSignature) const;
-
-    long positionRest
-    (StaffType &staff, 
-     const NotationElementList::iterator &, const BarDataList::iterator &,
-     const Rosegarden::TimeSignature &);
 
     typedef std::map<int, NotationElementList::iterator> TieMap;
 
@@ -222,6 +218,11 @@ protected:
      NotationElementList::iterator &, const BarDataList::iterator &,
      const Rosegarden::TimeSignature &, const Rosegarden::Clef &clef,
      const Rosegarden::Key &key, TieMap &);
+
+    long positionRest
+    (StaffType &staff, 
+     const NotationElementList::iterator &, const BarDataList::iterator &,
+     const Rosegarden::TimeSignature &);
 
     class AccidentalTable : public std::vector<Rosegarden::Accidental>
     {
