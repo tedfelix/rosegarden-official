@@ -30,6 +30,7 @@
 #include <kmessagebox.h>
 #include <kstddirs.h>
 #include <ktip.h>
+#include <kuniqueapplication.h>
 
 #include "constants.h"
 #include "rosestrings.h"
@@ -388,7 +389,7 @@ int main(int argc, char *argv[])
     KCmdLineArgs::init( argc, argv, &aboutData );
     KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
 
-    KApplication app;
+    KUniqueApplication app;
 
     // Give up immediately if we haven't been installed or if the
     // installation is out of date
