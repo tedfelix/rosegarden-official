@@ -39,49 +39,49 @@ else
   AC_DEFINE(HAVE_ALSA, 1, [Define if you have ALSA support])
 
   dnl check whether user wants to use JACK
-AC_ARG_WITH(jack, [  --with-jack             enable JACK support (enabled by default when installed. requires ALSA.)],
-[
+  AC_ARG_WITH(jack, [  --with-jack             enable JACK support (enabled by default when installed. requires ALSA.)],
+  [
    if test "$withval" = "yes"; then
      with_jack=yes
    else
      with_jack=no
   fi
-], with_jack=$with_alsa)
+  ], with_jack=$with_alsa)
 
    dnl only use JACK when jack/jack.h is found
-if test "$ac_header_jack_jack_h" != "yes"; then
-  with_jack=no
-fi
-
-if test "$with_jack" = "yes"; then
-   AC_CHECK_LIB(jack, jack_client_new)
-
-dnl  AC_DEFINE(HAVE_JACK, 1, [Define if you have JACK support])
-dnl  AC_SUBST(JACKLIB)
-dnl  AC_CHECK_FUNCS(libRosegardenSequencer.la, [],
-dnl                 [JACKLIB="-ljack"])
-
-fi
-
-dnl check whether user wants to have LADSPA
-AC_ARG_WITH(ladspa, [  --with-ladspa           enable LADSPA plugins (enabled by default when installed)],
-[
-   if test "$withval" = "yes"; then
-     with_ladspa=yes
-   else
-     with_ladspa=no
+  if test "$ac_header_jack_jack_h" != "yes"; then
+    with_jack=no
   fi
-], with_ladspa=yes)
 
-dnl only use LADSPA when ladspa.h is found
-if test "$ac_header_ladspa_h" != "yes"; then
-  with_ladspa=no
-fi
+  if test "$with_jack" = "yes"; then
+    AC_CHECK_LIB(jack, jack_client_new)
 
-if test "$with_ladspa" = "yes"; then
-  AC_DEFINE(HAVE_LADSPA, 1, [Define if you have LADSPA])
-  AC_CHECK_LIB(lrdf, lrdf_dump)
-fi
+    dnl  AC_DEFINE(HAVE_JACK, 1, [Define if you have JACK support])
+    dnl  AC_SUBST(JACKLIB)
+    dnl  AC_CHECK_FUNCS(libRosegardenSequencer.la, [],
+    dnl                 [JACKLIB="-ljack"])
+
+  fi
+
+  dnl check whether user wants to have LADSPA
+  AC_ARG_WITH(ladspa, [  --with-ladspa           enable LADSPA plugins (enabled by default when installed)],
+  [
+    if test "$withval" = "yes"; then
+      with_ladspa=yes
+    else
+      with_ladspa=no
+    fi
+  ], with_ladspa=yes)
+
+  dnl only use LADSPA when ladspa.h is found
+  if test "$ac_header_ladspa_h" != "yes"; then
+    with_ladspa=no
+  fi
+
+  if test "$with_ladspa" = "yes"; then
+    AC_DEFINE(HAVE_LADSPA, 1, [Define if you have LADSPA])
+    AC_CHECK_LIB(lrdf, lrdf_dump)
+  fi
 
 dnl fi is for ALSA
 fi
@@ -108,6 +108,7 @@ then
 fi
 
 dnl automake conditionals
+dnl isn't this redundant to the above AC_DEFINE?
 dnl
 AM_CONDITIONAL(NO_SOUND, test "$with_sound" = "no")
 AM_CONDITIONAL(HAVE_ALSA, test "$with_alsa" = "yes")
