@@ -82,16 +82,6 @@ public:
     void setName(const std::string &name) { m_name = name; }
     std::string getName() const { return m_name; }
 
-    // Useful methods that operate on our file data
-    //
-    int getIntegerFromLittleEndian(const std::string &s);
-    std::string getLittleEndianFromInteger(unsigned int value,
-                                           unsigned int length);
-
-    int getIntegerFromBigEndian(const std::string &s);
-    std::string getBigEndianFromInteger(unsigned int value,
-                                        unsigned int length);
-
     // Used for waveform interpolation at a point
     //
     float sinc(float value) { return sin(M_PI * value)/ M_PI * value; }

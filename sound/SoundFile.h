@@ -53,6 +53,17 @@ public:
     std::string getFilename() { return m_fileName; }
     void setFilename(const std::string &fileName) { m_fileName = fileName; }
 
+    // Useful methods that operate on our file data
+    //
+    int getIntegerFromLittleEndian(const std::string &s);
+    std::string getLittleEndianFromInteger(unsigned int value,
+                                           unsigned int length);
+
+    int getIntegerFromBigEndian(const std::string &s);
+    std::string getBigEndianFromInteger(unsigned int value,
+                                        unsigned int length);
+
+
 protected:
     std::string m_fileName;
 
@@ -62,7 +73,7 @@ protected:
 
     // buffered read
     std::string getBytes(unsigned int numberOfBytes);
- 
+
     // write some bytes to an output stream
     void putBytes(std::ofstream *file,
                   const std::string outputString);

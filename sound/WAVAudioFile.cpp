@@ -113,9 +113,8 @@ WAVAudioFile::write()
     m_outFile = new std::ofstream(m_fileName.c_str(),
                                   std::ios::out | std::ios::binary);
 
-    if (!m_outFile )
+    if (!(*m_outFile))
         return false;
-
 
     // write out format header chunk and prepare for sample writing
     //

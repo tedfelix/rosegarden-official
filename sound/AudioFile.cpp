@@ -60,53 +60,5 @@ AudioFile::~AudioFile()
 {
 }
 
-
-
-// Turn a little endian binary std::string into an integer
-//
-int
-AudioFile::getIntegerFromLittleEndian(const std::string &s)
-{
-    int r = 0;
-
-    for (unsigned int i = 0; i < s.length(); i++)
-    {
-        r += (int)(((FileByte)s[i]) << (i * 8));
-    }
-
-    return r;
-}
-
-// Turn a value into a little endian string of "length"
-//
-std::string
-AudioFile::getLittleEndianFromInteger(unsigned int value, unsigned int length)
-{
-    std::string r = "";
-
-    do
-    {
-        r += (unsigned char)((long)((value >> (8 * r.length())) & 0xff));
-    }
-    while (r.length() < length);
-
-    return r;
-}
-
-int
-AudioFile::getIntegerFromBigEndian(const std::string &s)
-{
-    return 0;
-}
-
-std::string
-AudioFile::getBigEndianFromInteger(unsigned int value, unsigned int length)
-{
-    std::string r;
-
-    return r;
-}
-
-
 }
 

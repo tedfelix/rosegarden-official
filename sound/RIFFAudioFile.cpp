@@ -561,7 +561,7 @@ RIFFAudioFile::writeFormatChunk()
     std::string outString;
 
     // RIFF type is all we support for the moment
-    outString += "RIFF";
+    outString += AUDIO_RIFF_ID;
 
     // Now write the total length of the file minus these first 8 bytes.
     // We won't know this until we've finished recording the file.
@@ -570,10 +570,10 @@ RIFFAudioFile::writeFormatChunk()
 
     // WAV file is all we support
     //
-    outString += "WAVE";
+    outString += AUDIO_WAVE_ID;
 
     // Begin the format chunk
-    outString += "fmt ";
+    outString += AUDIO_FORMAT_ID;
 
     // length
     //cout << "LENGTH = " << getLittleEndianFromInteger(0x10, 4) << endl;

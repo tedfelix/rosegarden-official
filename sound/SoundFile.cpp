@@ -35,6 +35,8 @@ SoundFile::SoundFile(const std::string &fileName):
 {
 }
 
+// Tidies up for any dervied classes
+//
 SoundFile::~SoundFile()
 {
     if (m_inFile)
@@ -182,6 +184,53 @@ SoundFile::getShortFilename()
         rS = rS.substr(pos + 1, rS.length());
 
     return rS;
+}
+
+
+// Turn a little endian binary std::string into an integer
+//
+int
+SoundFile::getIntegerFromLittleEndian(const std::string &s)
+{
+    int r = 0;
+
+    for (unsigned int i = 0; i < s.length(); i++)
+    {
+        r += (int)(((FileByte)s[i]) << (i * 8));
+    }
+
+    return r;
+}   
+
+
+// Turn a value into a little endian string of "length"
+//  
+std::string
+SoundFile::getLittleEndianFromInteger(unsigned int value, unsigned int length)
+{   
+    std::string r = "";
+    
+    do
+    {
+        r += (unsigned char)((long)((value >> (8 * r.length())) & 0xff));
+    }
+    while (r.length() < length);
+
+    return r;
+}
+
+int
+SoundFile::getIntegerFromBigEndian(const std::string &s)
+{
+    return 0;
+}
+
+std::string
+SoundFile::getBigEndianFromInteger(unsigned int value, unsigned int length)
+{
+    std::string r;
+
+    return r;
 }
 
 

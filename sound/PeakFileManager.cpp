@@ -54,6 +54,8 @@ PeakFileManager::~PeakFileManager()
 {
 }
 
+// Does a given AudioFile have a valid peak file or peak chunk?
+//
 bool
 PeakFileManager::hasValidPeaks(AudioFile *audioFile)
 {
@@ -61,6 +63,11 @@ PeakFileManager::hasValidPeaks(AudioFile *audioFile)
     {
         // check external peak file
         PeakFile *peakFile = new PeakFile(audioFile);
+
+        if (peakFile->open() == false)
+            return false;
+
+        delete peakFile;
     }
     else if (audioFile->getType() == BWF)
     {
@@ -83,12 +90,33 @@ PeakFileManager::hasValidPeaks(AudioFile *audioFile)
 //
 void
 PeakFileManager::generatePeaks(AudioFile *audioFile,
-        /*const std::string &fileName,
-                               streampos dataChunk,
-                               unsigned bitsPerSample,
-                               unsigned int channels,*/
                                unsigned short updatePercentage)
 {
+    std::cout << "PeakFileManager::generatePeaks - generating peaks for \""
+              << audioFile->getFilename() << "\"" << std::endl;
+
+    if (audioFile->getType() == WAV)
+    {
+        PeakFile *peakFile = new PeakFile(audioFile);
+
+        // just write out a peak file
+        peakFile->write(updatePercentage);
+
+        // close and free
+        peakFile->close();
+        delete peakFile;
+    }
+    else if (audioFile->getType() == BWF)
+    {
+        // write the file out and incorporate the peak chunk
+    }
+    else
+    {
+        std::cerr << "PeakFileManager::generatePeaks - unsupported file type"
+                  << std::endl;
+        return;
+    }
+
     /*
     m_riffFileName = fileName;
     m_dataChunk = dataChunk;
