@@ -1449,10 +1449,21 @@ JackDriver::start()
 #endif
 		m_waiting = true;
 		m_waitingState = JackTransportStarting;
-		jack_transport_locate(m_client,
-				      RealTime::realTime2Frame
-				      (m_alsaDriver->getSequencerTime(),
-				       m_sampleRate));
+
+		long frame = RealTime::realTime2Frame
+		    (m_alsaDriver->getSequencerTime(), m_sampleRate);
+		
+		if (frame < 0) {
+		    // JACK Transport doesn't support preroll and
+		    // can't set transport position to before zero
+		    // (frame count is unsigned), so there's no very
+		    // satisfactory fix for what to do for count-in
+		    // bars.  Let's just start at zero instead.
+		    jack_transport_locate(m_client, 0);
+		} else {
+		    jack_transport_locate(m_client, frame);
+		}
+
 		jack_transport_start(m_client);
 	    } else {
 #ifdef DEBUG_JACK_TRANSPORT
@@ -1889,15 +1900,32 @@ JackDriver::setAudioInstrumentLevels(InstrumentId instrument, float dB, float pa
 RealTime
 JackDriver::getNextSliceStart(const RealTime &now) const
 {
-    jack_nframes_t frame = RealTime::realTime2Frame(now, m_sampleRate);
+    jack_nframes_t frame;
+    bool neg = false;
+
+    if (now < RealTime::zeroTime) {
+	neg = true;
+	frame = RealTime::realTime2Frame(RealTime::zeroTime - now, m_sampleRate);
+    } else {
+	frame = RealTime::realTime2Frame(now, m_sampleRate);
+    }
+
     jack_nframes_t rounded = frame;
     rounded /= m_bufferSize;
     rounded *= m_bufferSize;
 
+    RealTime roundrt;
+
     if (rounded == frame)
-	return RealTime::frame2RealTime(rounded, m_sampleRate);
-    else
-	return RealTime::frame2RealTime(rounded + m_bufferSize, m_sampleRate);
+	roundrt = RealTime::frame2RealTime(rounded, m_sampleRate);
+    else if (neg) 
+	roundrt = RealTime::frame2RealTime(rounded - m_bufferSize, m_sampleRate);
+    else 
+	roundrt = RealTime::frame2RealTime(rounded + m_bufferSize, m_sampleRate);
+
+    if (neg) roundrt = RealTime::zeroTime - roundrt;
+
+    return roundrt;
 }
 
 
