@@ -230,13 +230,13 @@ void SegmentItem::drawShape(QPainter& painter)
 	    if (start == m_segment->end()) start = m_segment->begin();
 	    else start = m_segment->findTime((*start)->getAbsoluteTime());
 
- 	    if (!painter.hasClipping())
- 		kdDebug(KDEBUG_AREA) << "SegmentCanvas::drawShape: clipping is off " << endl;
- 	    kdDebug(KDEBUG_AREA) << "SegmentCanvas::drawShape: rect is "
- 				 << previewRect.width() << "x"
- 				 << previewRect.height() << " at "
- 				 << previewRect.x() << ","
- 				 << previewRect.y() << endl;
+// 	    if (!painter.hasClipping())
+// 		kdDebug(KDEBUG_AREA) << "SegmentCanvas::drawShape: clipping is off " << endl;
+// 	    kdDebug(KDEBUG_AREA) << "SegmentCanvas::drawShape: rect is "
+// 				 << previewRect.width() << "x"
+// 				 << previewRect.height() << " at "
+// 				 << previewRect.x() << ","
+// 				 << previewRect.y() << endl;
 
 	    for (Segment::iterator i = start; i != end; ++i) {
 
