@@ -123,8 +123,6 @@ StudioControl::setStudioObjectProperty(MappedObjectId id,
     QByteArray data;
     QDataStream streamOut(data, IO_WriteOnly);
 
-    SEQMAN_DEBUG << "setStudioObjectProperty" << endl;
-
     streamOut << id;
     streamOut << property;
     streamOut << value;
@@ -141,8 +139,6 @@ StudioControl::setStudioObjectProperties(const MappedObjectIdList &ids,
 {
     QByteArray data;
     QDataStream streamOut(data, IO_WriteOnly);
-
-    SEQMAN_DEBUG << "setStudioObjectProperties" << endl;
 
     streamOut << ids;
     streamOut << properties;

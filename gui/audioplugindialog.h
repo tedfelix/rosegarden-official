@@ -185,6 +185,7 @@ protected:
     AudioPluginOSCGUIManager *m_pluginGUIManager;
 #endif
     Instrument          *m_instrument;
+    InstrumentId         m_instrumentId;
 
     QFrame		*m_pluginParamsBox;
     QWidget             *m_pluginCategoryBox;
