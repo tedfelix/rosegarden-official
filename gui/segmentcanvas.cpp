@@ -322,14 +322,14 @@ SegmentCanvas::selectSegments(list<Rosegarden::Segment*> segments)
     SegmentSelector* selTool = dynamic_cast<SegmentSelector*>(m_tool);
 
     list<Rosegarden::Segment*>::iterator segIt;
-    QCanvasItemList list = canvas()->allItems();
+    QCanvasItemList itemList = canvas()->allItems();
     QCanvasItemList::Iterator it;
 
     // clear any SegmentItems currently selected
     //
     selTool->clearSelected();
 
-    for (it = list.begin(); it != list.end(); ++it) {
+    for (it = itemList.begin(); it != itemList.end(); ++it) {
         if ((*it)->rtti() == 5) { // urgh, hard-coded real time id
 
             for (segIt = segments.begin(); segIt != segments.end(); segIt++) {
