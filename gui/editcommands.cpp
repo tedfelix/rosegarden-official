@@ -116,13 +116,13 @@ CopyCommand::unexecute()
     m_targetClipboard->copyFrom(&temp);
 }
 
-PasteCommand::PasteType
-PasteCommand::m_defaultPaste = PasteCommand::Restricted;
+PasteEventsCommand::PasteType
+PasteEventsCommand::m_defaultPaste = PasteEventsCommand::Restricted;
 
-PasteCommand::PasteCommand(Rosegarden::Segment &segment,
-			   Rosegarden::Clipboard *clipboard,
-			   Rosegarden::timeT pasteTime,
-			   PasteType pasteType) :
+PasteEventsCommand::PasteEventsCommand(Rosegarden::Segment &segment,
+				       Rosegarden::Clipboard *clipboard,
+				       Rosegarden::timeT pasteTime,
+				       PasteType pasteType) :
     BasicCommand(name(), segment, pasteTime,
 		 getEffectiveEndTime(segment, clipboard, pasteTime)),
     m_relayoutEndTime(getEndTime()),
@@ -148,9 +148,9 @@ PasteCommand::PasteCommand(Rosegarden::Segment &segment,
 }
 
 timeT
-PasteCommand::getEffectiveEndTime(Rosegarden::Segment &segment,
-				  Rosegarden::Clipboard *clipboard,
-				  Rosegarden::timeT pasteTime)
+PasteEventsCommand::getEffectiveEndTime(Rosegarden::Segment &segment,
+					Rosegarden::Clipboard *clipboard,
+					Rosegarden::timeT pasteTime)
 {
     if (!clipboard->isSingleSegment()) return pasteTime;
     
@@ -167,13 +167,13 @@ PasteCommand::getEffectiveEndTime(Rosegarden::Segment &segment,
 }
 
 timeT
-PasteCommand::getRelayoutEndTime()
+PasteEventsCommand::getRelayoutEndTime()
 {
     return m_relayoutEndTime;
 }
 
 bool
-PasteCommand::isPossible() 
+PasteEventsCommand::isPossible() 
 {
     if (m_clipboard->isEmpty() || !m_clipboard->isSingleSegment()) {
 	return false;
@@ -195,7 +195,7 @@ PasteCommand::isPossible()
 
 
 void
-PasteCommand::modifySegment()
+PasteEventsCommand::modifySegment()
 {
     if (!m_clipboard->isSingleSegment()) return;
 

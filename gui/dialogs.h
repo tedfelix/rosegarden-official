@@ -163,9 +163,9 @@ class PasteNotationDialog : public KDialogBase
 
 public:
     PasteNotationDialog(QWidget *parent,
-			PasteCommand::PasteType defaultType);
+			PasteEventsCommand::PasteType defaultType);
 
-    PasteCommand::PasteType getPasteType() const;
+    PasteEventsCommand::PasteType getPasteType() const;
     bool setAsDefault() const;
 
 protected:
@@ -177,7 +177,7 @@ protected:
     
     QCheckBox *m_setAsDefaultButton;
 
-    PasteCommand::PasteType m_defaultType;
+    PasteEventsCommand::PasteType m_defaultType;
 
 public slots:
     void slotPasteTypeChanged();

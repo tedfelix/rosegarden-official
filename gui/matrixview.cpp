@@ -543,9 +543,9 @@ void MatrixView::slotEditPaste()
     double ix = m_staffs[0]->getLayoutXOfInsertCursor();
     timeT time = m_hlayout.getTimeForX(ix);
     
-    PasteCommand *command = new PasteCommand
+    PasteEventsCommand *command = new PasteEventsCommand
 	(m_staffs[0]->getSegment(), m_document->getClipboard(), time,
-	 PasteCommand::MatrixOverlay);
+	 PasteEventsCommand::MatrixOverlay);
 
     if (!command->isPossible()) {
 	slotStatusHelpMsg(i18n("Couldn't paste at this point"));

@@ -326,6 +326,7 @@ void SegmentCanvas::updateAllSegmentItems()
             Segment* segment = item->getSegment();
 
             if (!segment->getComposition()) { // this segment has been deleted
+		removeFromSelection(segment);
                 delete item;
                 foundOneSegmentDeleted = true;
             }
@@ -383,8 +384,18 @@ void SegmentCanvas::updateSegmentItem(Segment *segment)
 void SegmentCanvas::removeSegmentItem(Segment *segment)
 {
     SegmentItem *item = findSegmentItem(segment);
+    removeFromSelection(segment);
     delete item;
 }
+
+void
+SegmentCanvas::removeFromSelection(Segment *segment)
+{
+    SegmentSelector* selTool = dynamic_cast<SegmentSelector*>(m_tool);
+    if (!selTool) return;
+    selTool->removeFromSelection(segment);
+}
+
 
 SegmentItem*
 SegmentCanvas::findSegmentItem(Rosegarden::Segment *segment)
@@ -1038,6 +1049,31 @@ SegmentSelector::SegmentSelector(SegmentCanvas *c, RosegardenGUIDoc *d)
 SegmentSelector::~SegmentSelector()
 {
     clearSelected();
+}
+
+void
+SegmentSelector::removeFromSelection(Rosegarden::Segment *segment)
+{
+    for (SegmentItemList::iterator i = m_selectedItems.begin();
+	 i != m_selectedItems.end(); ++i) {
+	if (i->second->getSegment() == segment) {
+	    m_selectedItems.erase(i);
+	    return;
+	}
+    }
+}
+
+void
+SegmentSelector::addToSelection(Rosegarden::Segment *segment)
+{
+    SegmentItem *item = m_canvas->getSegmentItem(segment);
+    if (!item) return;
+    for (SegmentItemList::iterator i = m_selectedItems.begin();
+	 i != m_selectedItems.end(); ++i) {
+	if (i->second == item) return;
+    }
+    m_selectedItems.push_back
+	(SegmentItemPair(QPoint(int(item->x()), int(item->y())), item));
 }
 
 void

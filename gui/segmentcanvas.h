@@ -204,7 +204,8 @@ public:
      * underlying Segment
      */
     SegmentItem* addSegmentItem(Rosegarden::TrackId track,
-				Rosegarden::timeT startTime, Rosegarden::timeT duration);
+				Rosegarden::timeT startTime,
+				Rosegarden::timeT duration);
 
     /**
      * Add a SegmentItem for the given underlying Segment
@@ -222,6 +223,11 @@ public:
      * Find the item corresponding to this segment and remove it
      */
     void removeSegmentItem(Rosegarden::Segment *segment);
+
+    /**
+     * Remove the given segment from the selection, if it's in it
+     */
+    void removeFromSelection(Rosegarden::Segment *segment);
 
     /**
      * Find which SegmentItem is under the specified point
@@ -471,6 +477,14 @@ public:
     //
     void clearSelected();
 
+    // Remove the given Segment from the selection, if it's in it
+    // 
+    void removeFromSelection(Rosegarden::Segment *);
+
+    // Add the given Segment to the selection, if we have a SegmentItem for it
+    // 
+    void addToSelection(Rosegarden::Segment *);
+
     // These two alter the behaviour of the selection mode
     //
     // - SegmentAdd (usually when SHIFT is held down) allows
@@ -482,7 +496,7 @@ public:
     void setSegmentAdd(const bool &value)  { m_segmentAddMode = value; }
     void setSegmentCopy(const bool &value) { m_segmentCopyMode = value; }
 
-    // Return a vector of selected Segments
+    // Return a set of selected Segments
     //
     Rosegarden::SegmentSelection getSelectedSegments();
 

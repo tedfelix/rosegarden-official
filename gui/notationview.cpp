@@ -1104,7 +1104,7 @@ void NotationView::slotEditPaste()
     
     // Paste at cursor position
     //
-    PasteCommand *command = new PasteCommand
+    PasteEventsCommand *command = new PasteEventsCommand
 	(segment, m_document->getClipboard(), getInsertionTime());
 
     if (!command->isPossible()) {
@@ -1127,16 +1127,16 @@ void NotationView::slotEditGeneralPaste()
     Segment &segment = staff->getSegment();
     
     PasteNotationDialog *dialog = new PasteNotationDialog
-	(this, PasteCommand::getDefaultPasteType());
+	(this, PasteEventsCommand::getDefaultPasteType());
 
     if (dialog->exec() == QDialog::Accepted) {
 
-	PasteCommand::PasteType type = dialog->getPasteType();
+	PasteEventsCommand::PasteType type = dialog->getPasteType();
 	if (dialog->setAsDefault()) {
-	    PasteCommand::setDefaultPasteType(type);
+	    PasteEventsCommand::setDefaultPasteType(type);
 	}
 
-	PasteCommand *command = new PasteCommand
+	PasteEventsCommand *command = new PasteEventsCommand
 	    (segment, m_document->getClipboard(), getInsertionTime(), type);
 
 	if (!command->isPossible()) {

@@ -1034,7 +1034,7 @@ void NotationSelectionPaster::handleLeftButtonPress(Rosegarden::timeT,
     timeT time = (*closestElement)->getAbsoluteTime();
 
     Segment& segment = staff->getSegment();
-    PasteCommand *command = new PasteCommand
+    PasteEventsCommand *command = new PasteEventsCommand
 	(segment, m_parentView->getDocument()->getClipboard(), time);
 
     if (!command->isPossible()) {

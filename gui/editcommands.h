@@ -73,9 +73,30 @@ protected:
 };
 
 
+/// Paste one or more segments from the clipboard into the composition
+
+class PasteSegmentsCommand : public KCommand
+{
+public:
+    PasteSegmentsCommand(Rosegarden::Composition &composition,
+			 Rosegarden::Clipboard *clipboard,
+			 Rosegarden::timeT pasteTime);
+
+    static QString name() { return "&Paste"; }
+    
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    Rosegarden::Composition *m_composition;
+    Rosegarden::Clipboard *m_clipboard;
+    Rosegarden::timeT m_pasteTime;
+};
+
+
 /// Paste from a single-segment clipboard to a segment
 
-class PasteCommand : public BasicCommand
+class PasteEventsCommand : public BasicCommand
 {
 public:
     enum PasteType {
@@ -86,10 +107,10 @@ public:
 	MatrixOverlay		// overlay raw matrix-style
     };
 
-    PasteCommand(Rosegarden::Segment &segment,
-		 Rosegarden::Clipboard *clipboard,
-		 Rosegarden::timeT pasteTime,
-		 PasteType pasteType = getDefaultPasteType());
+    PasteEventsCommand(Rosegarden::Segment &segment,
+		       Rosegarden::Clipboard *clipboard,
+		       Rosegarden::timeT pasteTime,
+		       PasteType pasteType = getDefaultPasteType());
 
     static QString name() { return "&Paste"; }
 
