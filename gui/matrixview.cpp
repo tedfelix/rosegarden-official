@@ -57,6 +57,7 @@
 #include "matrixtool.h"
 #include "matrixcommands.h"
 #include "midipitchlabel.h"
+#include "constants.h"
 #include "dialogs.h"
 #include "rosestrings.h"
 #include "notationstrings.h"
@@ -115,7 +116,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     QCanvas *tCanvas = new QCanvas(this);
 
-    m_config->setGroup("General Options");
+    m_config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
     if (m_config->readBoolEntry("backgroundtextures", false)) {
 	QPixmap background;
 	QString pixmapDir =

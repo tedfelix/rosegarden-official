@@ -40,8 +40,6 @@
 #include <kapp.h>
 #include <kprinter.h>
 
-#include "notationview.h"
-
 #include "NotationTypes.h"
 #include "Quantizer.h"
 #include "Selection.h"
@@ -49,6 +47,8 @@
 
 #include "Profiler.h"
 
+#include "notationview.h"
+#include "constants.h"
 #include "notationstrings.h"
 #include "notepixmapfactory.h"
 #include "notestyle.h"
@@ -209,7 +209,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     // Initialise the display-related defaults that will be needed
     // by both the actions and the font toolbar
 
-    m_config->setGroup("Notation Options");
+    m_config->setGroup(NotationView::ConfigGroup);
 
     m_fontName = qstrtostr(m_config->readEntry
 			   ("notefont",
@@ -231,7 +231,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     QCanvas *tCanvas = new QCanvas(this);
     tCanvas->resize(width() * 2, height() * 2);
 
-    m_config->setGroup("General Options");
+    m_config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
     if (m_config->readBoolEntry("backgroundtextures", false)) {
 	QPixmap background;
 	QString pixmapDir =
@@ -241,7 +241,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	    tCanvas->setBackgroundPixmap(background);
 	}
     }
-    m_config->setGroup("Notation Options");
+    m_config->setGroup(NotationView::ConfigGroup);
 
 
     setCanvasView(new NotationCanvasView(*this, m_horizontalScrollBar,
@@ -326,7 +326,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_currentStaff = 0;
     m_staffs[0]->setCurrent(true);
 
-    m_config->setGroup("Notation Options");
+    m_config->setGroup(NotationView::ConfigGroup);
     int layoutMode = m_config->readNumEntry("layoutmode", 0);
 
     try {
@@ -470,7 +470,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     // Initialise the display-related defaults that will be needed
     // by both the actions and the font toolbar
 
-    m_config->setGroup("Notation Options");
+    m_config->setGroup(NotationView::ConfigGroup);
 
     m_fontName = qstrtostr(m_config->readEntry
 			   ("notefont",
@@ -651,7 +651,7 @@ void NotationView::positionStaffs()
 
 void NotationView::slotSaveOptions()
 {
-    m_config->setGroup("Notation Options");
+    m_config->setGroup(NotationView::ConfigGroup);
 
     m_config->writeEntry("Show Chord Name Ruler", getToggleAction("show_chords_ruler")->isChecked());
     m_config->writeEntry("Show Raw Note Ruler", getToggleAction("show_raw_note_ruler")->isChecked());
@@ -675,7 +675,7 @@ void NotationView::readOptions()
     getToggleAction("show_transport_toolbar")  ->setChecked(!toolBar("Transport Toolbar")  ->isHidden());
     getToggleAction("show_accidentals_toolbar")->setChecked(!toolBar("Accidentals Toolbar")->isHidden());
 
-    m_config->setGroup("Notation Options");
+    m_config->setGroup(NotationView::ConfigGroup);
 
     bool opt;
 
@@ -2436,4 +2436,5 @@ void NotationView::removeProgressEventFilter()
     
 NotationView::NoteActionDataMap* NotationView::m_noteActionDataMap = 0;
 NotationView::MarkActionDataMap* NotationView::m_markActionDataMap = 0;
+const char* const NotationView::ConfigGroup = "Notation Options";
 

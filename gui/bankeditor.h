@@ -293,7 +293,7 @@ protected:
     int                      m_lastMSB;
     int                      m_lastLSB;
 
-    static const char* const m_configGroup;
+    static const char* const BankEditorConfigGroup;
 };
 
 // ----------------------- RemapInstrumentDialog ------------------------

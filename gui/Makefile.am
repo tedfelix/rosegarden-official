@@ -12,6 +12,7 @@ rosegarden_SOURCES = \
 	chordnameruler.cpp \
 	colours.cpp \
         controlruler.cpp \
+        constants.cpp \
 	csoundio.cpp \
 	deviceeditor.cpp \
 	dialogs.cpp \

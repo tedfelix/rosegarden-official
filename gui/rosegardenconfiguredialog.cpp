@@ -24,6 +24,13 @@
  * Copyright (C) 2000 The KMail Development Team
  */
 
+#include "Composition.h"
+#include "Configuration.h"
+#include "RealTime.h"
+#include "MidiDevice.h"
+
+#include "SoundDriver.h"
+
 #include <qspinbox.h>
 #include <qslider.h>
 #include <qcombobox.h>
@@ -46,18 +53,13 @@
 #include <kmessagebox.h>
 #include <kprocess.h>
 
-#include "Composition.h"
-#include "Configuration.h"
-#include "RealTime.h"
-#include "MidiDevice.h"
-
-#include "SoundDriver.h"
-
+#include "constants.h"
 #include "rosestrings.h"
 #include "rosegardenconfiguredialog.h"
 #include "rosegardenconfigurationpage.h"
 #include "notationhlayout.h"
 #include "notationstrings.h"
+#include "notationview.h"
 #include "notestyle.h"
 #include "rosegardenguidoc.h"
 #include "rosedebug.h"
@@ -125,7 +127,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg,
       m_selectorGreedyMode(0),
       m_nameStyle(0)
 {
-    m_cfg->setGroup("General Options");
+    m_cfg->setGroup(Rosegarden::GeneralOptionsConfigGroup);
 
     //
     // "Appearance" tab
@@ -268,7 +270,7 @@ GeneralConfigurationPage::slotFileDialog()
 
 void GeneralConfigurationPage::apply()
 {
-    m_cfg->setGroup("General Options");
+    m_cfg->setGroup(Rosegarden::GeneralOptionsConfigGroup);
 
     int countIn = getCountInSpin();
     m_cfg->writeEntry("countinbars", countIn);
@@ -321,7 +323,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
                                                      const char *name) :
     TabbedConfigurationPage(cfg, parent, name)
 {
-    m_cfg->setGroup("Notation Options");
+    m_cfg->setGroup(NotationView::ConfigGroup);
 
     QFrame *frame = new QFrame(m_tabWidget);
     QGridLayout *layout = new QGridLayout(frame,
@@ -539,7 +541,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
 
     // quantizer setting this elsewhere?  this was evidently getting reset
     // because all my reads were coming up with defaults
-    m_cfg->setGroup("Notation Options");
+    m_cfg->setGroup(NotationView::ConfigGroup);
 
     frame = new QFrame(m_tabWidget);
     layout = new QGridLayout(frame, 7, 2, 10, 5);
@@ -649,7 +651,7 @@ NotationConfigurationPage::populateSizeCombo(QComboBox *combo,
 void
 NotationConfigurationPage::apply()
 {
-    m_cfg->setGroup("Notation Options");
+    m_cfg->setGroup(NotationView::ConfigGroup);
 
     m_cfg->writeEntry("notefont", m_font->currentText());
     m_cfg->writeEntry("singlestaffnotesize",

@@ -20,6 +20,11 @@
 */
 
 #include <iostream>
+#include <string>
+#include <vector>
+
+#include <unistd.h> // sleep
+#include <zlib.h>
 
 // include files for Qt
 #include <qdir.h>
@@ -35,12 +40,6 @@
 #include <kapp.h>
 #include <kconfig.h>
 #include <kstddirs.h>
-
-#include <string>
-#include <vector>
-
-#include <unistd.h> // sleep
-#include <zlib.h>
 
 // application specific includes
 #include "Event.h"
@@ -59,6 +58,7 @@
 #include "Studio.h"
 #include "Midi.h"
 
+#include "constants.h"
 #include "editviewbase.h"
 #include "rosestrings.h"
 #include "rosedebug.h"
@@ -137,7 +137,7 @@ unsigned int
 RosegardenGUIDoc::getAutoSavePeriod() const
 {
     KConfig* config = kapp->config();
-    config->setGroup("General Options");
+    config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
     return config->readUnsignedNumEntry("autosaveinterval", 60);
 }
 
@@ -412,23 +412,23 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
 
     // Ensure a minimum of 64 tracks
     //
-    unsigned int nbTracks = m_composition.getNbTracks();
-    Rosegarden::TrackId maxTrackId = m_composition.getMaxTrackId();
-    Rosegarden::InstrumentId instBase = Rosegarden::MidiInstrumentBase;
+//     unsigned int nbTracks = m_composition.getNbTracks();
+//     Rosegarden::TrackId maxTrackId = m_composition.getMaxTrackId();
+//     Rosegarden::InstrumentId instBase = Rosegarden::MidiInstrumentBase;
 
-    for(unsigned int i = nbTracks; i < MinNbOfTracks; ++i) {
+//     for(unsigned int i = nbTracks; i < MinNbOfTracks; ++i) {
 
-        Rosegarden::Track *track;
+//         Rosegarden::Track *track;
 
-        track = new Rosegarden::Track(maxTrackId + 1,          // id
-                                      (i + instBase) % 16,     // instrument
-                                      i,                       // position
-                                      "untitled", 
-                                      false);                  // mute
+//         track = new Rosegarden::Track(maxTrackId + 1,          // id
+//                                       (i + instBase) % 16,     // instrument
+//                                       i,                       // position
+//                                       "untitled", 
+//                                       false);                  // mute
 
-        m_composition.addTrack(track);
-        ++maxTrackId;
-    }
+//         m_composition.addTrack(track);
+//         ++maxTrackId;
+//     }
     
     // We might need a progress dialog when we generate previews,
     // reuse the previous one

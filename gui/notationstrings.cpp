@@ -19,13 +19,15 @@
     COPYING included with this distribution for more information.
 */
 
+#include <kconfig.h>
+#include <kapp.h>
+
+#include "constants.h"
 #include "notationstrings.h"
 #include "rosestrings.h"
 #include "rosedebug.h"
 #include "rosegardenconfigurationpage.h"
 
-#include <kconfig.h>
-#include <kapp.h>
 
 using Rosegarden::Note;
 
@@ -258,7 +260,7 @@ NotationStrings::makeNoteMenuLabel(Rosegarden::timeT duration,
     }
 
     KConfig *config = kapp->config();
-    config->setGroup("General Options");
+    config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
     Rosegarden::GeneralConfigurationPage::NoteNameStyle noteNameStyle =
 	(Rosegarden::GeneralConfigurationPage::NoteNameStyle)
 	config->readUnsignedNumEntry

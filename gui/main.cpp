@@ -31,10 +31,11 @@
 #include <kstddirs.h>
 #include <ktip.h>
 
+#include "constants.h"
 #include "rosestrings.h"
 #include "rosedebug.h"
 #include "rosegardengui.h"
-
+#include "rosegardenguidoc.h"
 #include "kstartuplogo.h"
 
 /*! \mainpage Rosegarden-4 global design
@@ -411,7 +412,7 @@ int main(int argc, char *argv[])
     // (c) The KDevelop Development Team
     //
     KConfig* config = KGlobal::config();
-    config->setGroup("General Options");
+    config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
     KStartupLogo* startLogo = 0L;
 
 

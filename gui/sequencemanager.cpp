@@ -29,6 +29,7 @@
 #include <kconfig.h>
 #include <kmessagebox.h>
 
+#include "constants.h"
 #include "audiopluginmanager.h"
 #include "ktmpstatusmsg.h"
 #include "rosestrings.h"
@@ -856,7 +857,7 @@ SequenceManager::record(bool toggled)
     Rosegarden::Composition &comp = m_doc->getComposition();
     Rosegarden::Studio &studio = m_doc->getStudio();
     KConfig* config = kapp->config();
-    config->setGroup("General Options");
+    config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
 
     // Rather clumsy additional check for audio subsys when we start
     // recording - once we enforce audio subsystems then this will

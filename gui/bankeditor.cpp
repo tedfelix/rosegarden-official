@@ -53,6 +53,7 @@
 #include <kio/netaccess.h>
 
 #include "bankeditor.h"
+#include "constants.h"
 #include "widgets.h"
 #include "rosestrings.h"
 #include "rosegardenguidoc.h"
@@ -792,7 +793,7 @@ BankEditorDialog::~BankEditorDialog()
 {
     RG_DEBUG << "~BankEditorDialog()\n";
 
-    m_listView->saveLayout(kapp->config(), m_configGroup);
+    m_listView->saveLayout(kapp->config(), BankEditorConfigGroup);
 
     if (m_doc) // see slotFileClose() for an explanation on why we need to test m_doc
         m_doc->getCommandHistory()->detachView(actionCollection());
@@ -2001,7 +2002,7 @@ BankEditorDialog::closeEvent(QCloseEvent *e)
     KMainWindow::closeEvent(e);
 }
 
-const char* const BankEditorDialog::m_configGroup = "Bank Editor";
+const char* const BankEditorDialog::BankEditorConfigGroup = "Bank Editor";
 
 // ------------------------ RemapInstrumentDialog -----------------------
 //
@@ -2189,7 +2190,7 @@ ImportDeviceDialog::ImportDeviceDialog(QWidget *parent,
         new QRadioButton(i18n("Overwrite Banks"), m_buttonGroup);
 
     KConfig *config = kapp->config();
-    config->setGroup("General Options");
+    config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
     bool overwrite = config->readBoolEntry("importbanksoverwrite", false);
     if (overwrite) m_buttonGroup->setButton(1);
     else m_buttonGroup->setButton(0);
@@ -2200,7 +2201,7 @@ ImportDeviceDialog::slotOk()
 {
     int v = m_buttonGroup->id(m_buttonGroup->selected());
     KConfig *config = kapp->config();
-    config->setGroup("General Options");
+    config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
     config->writeEntry("importbanksoverwrite", v == 1);
     v <<= 24;
     if (m_deviceCombo) v += m_deviceCombo->currentItem();

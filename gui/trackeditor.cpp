@@ -39,6 +39,7 @@
 #include "Track.h"
 #include "NotationTypes.h"
 
+#include "constants.h"
 #include "trackeditor.h"
 #include "segmentcanvas.h"
 #include "temporuler.h"
@@ -105,7 +106,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
     canvas->resize(100, 100); // call slotReadjustCanvasSize later
     canvas->setBackgroundColor(RosegardenGUIColours::SegmentCanvas);
 
-    kapp->config()->setGroup("General Options");
+    kapp->config()->setGroup(Rosegarden::GeneralOptionsConfigGroup);
     if (kapp->config()->readBoolEntry("backgroundtextures", false)) {
 	QPixmap background;
 	QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");

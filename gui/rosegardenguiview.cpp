@@ -38,6 +38,11 @@
 
 // application specific includes
 #include "MappedEvent.h"
+#include "RulerScale.h"
+#include "Instrument.h"
+#include "Selection.h"
+
+#include "constants.h"
 #include "rosestrings.h"
 #include "rosegardenguiview.h"
 #include "rosegardenguidoc.h"
@@ -52,9 +57,6 @@
 #include "loopruler.h"
 #include "temporuler.h"
 #include "chordnameruler.h"
-#include "RulerScale.h"
-#include "Instrument.h"
-#include "Selection.h"
 #include "segmentparameterbox.h"
 #include "instrumentparameterbox.h"
 #include "rosegardenconfigurationpage.h"
@@ -286,7 +288,7 @@ void RosegardenGUIView::slotEditSegment(Rosegarden::Segment* segment)
     } else {
 
         KConfig* config = kapp->config();
-        config->setGroup("General Options");
+        config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
 	Rosegarden::GeneralConfigurationPage::DoubleClickClient
             client =
 	    (Rosegarden::GeneralConfigurationPage::DoubleClickClient)
@@ -544,7 +546,7 @@ void RosegardenGUIView::slotEditSegmentAudio(Rosegarden::Segment *segment)
               << "starting external audio editor" << endl;
 
     KConfig* config = kapp->config();
-    config->setGroup("General Options");
+    config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
 
     QString application = config->readEntry("externalaudioeditor", "");
 

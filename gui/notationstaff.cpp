@@ -28,6 +28,7 @@
 
 #include "notationview.h"
 #include "notationstaff.h"
+#include "constants.h"
 #include "qcanvassimplesprite.h"
 #include "notationproperties.h"
 #include "rosestrings.h"
@@ -86,7 +87,7 @@ NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment,
     m_showUnknowns(true)
 {
     KConfig *config = kapp->config();
-    config->setGroup("Notation Options");
+    config->setGroup(NotationView::ConfigGroup);
     m_colourQuantize = config->readBoolEntry("colourquantize", false);
     // Shouldn't change this one during the lifetime of the staff, really:
     m_showUnknowns = config->readBoolEntry("showunknowns", true);
@@ -315,7 +316,7 @@ NotationStaff::getNoteNameAtCanvasCoords(double x, int y,
     getClefAndKeyAtCanvasCoords(x, y, clef, key);
 
     KConfig *config = kapp->config();
-    config->setGroup("General Options");
+    config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
     int baseOctave = config->readNumEntry("midipitchoctave", -2);
 
     return

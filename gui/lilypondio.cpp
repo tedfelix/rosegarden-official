@@ -39,6 +39,7 @@
 #include "config.h"
 #include "rosestrings.h" // strtoqstr
 #include "notationproperties.h"
+#include "notationview.h"
 
 #include "Composition.h"
 #include "BaseProperties.h"
@@ -481,7 +482,7 @@ LilypondExporter::write() {
 
     // grab config info
     KConfig *cfg = kapp->config();
-    cfg->setGroup("Notation Options");
+    cfg->setGroup(NotationView::ConfigGroup);
 
     unsigned int paperSize = cfg->readUnsignedNumEntry("lilypapersize", 1);
     unsigned int fontSize = cfg->readUnsignedNumEntry("lilyfontsize", 4);

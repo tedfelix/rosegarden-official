@@ -26,8 +26,6 @@
 #include <qlabel.h>
 #include <qinputdialog.h>
 
-//#include <qmetaobject.h> // remove this
-
 // include files for KDE
 #include <kstdaccel.h>
 #include <kiconloader.h>
@@ -52,6 +50,7 @@
 #include <ktip.h>
 
 // application specific includes
+#include "constants.h"
 #include "kstartuplogo.h"
 #include "rosestrings.h"
 #include "rosegardengui.h"
@@ -192,7 +191,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
         stateChanged("got_midi_devices");
 
     // All toolbars should be created before this is called
-    m_config->setGroup("General Options");
+    m_config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
     setAutoSaveSettings("MainView", true);
 
     emit startupStatusMessage(i18n("Starting..."));
@@ -1054,7 +1053,7 @@ void RosegardenGUIApp::slotSaveOptions()
 {
     RG_DEBUG << "RosegardenGUIApp::slotSaveOptions()\n";
 
-    m_config->setGroup("General Options");
+    m_config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
     m_config->writeEntry("Show Transport",               m_viewTransport->isChecked());
     m_config->writeEntry("Expanded Transport",           m_transport->isExpanded());
     m_config->writeEntry("Show Track labels",            m_viewTrackLabels->isChecked());
@@ -1084,7 +1083,7 @@ void RosegardenGUIApp::readOptions()
 
     bool opt;
 
-    m_config->setGroup("General Options");
+    m_config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
 
     opt = m_config->readBoolEntry("selectorgreedymode", true);
     MatrixSelector::setGreedyMode(opt);

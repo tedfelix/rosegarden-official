@@ -25,6 +25,8 @@
 #include <klocale.h>
 #include <kconfig.h>
 
+#include "constants.h"
+
 namespace Rosegarden {
 
 static QString notes[] = {
@@ -43,7 +45,7 @@ MidiPitchLabel::MidiPitchLabel(int pitch)
     } else {
 
 	KConfig *config = kapp->config();
-	config->setGroup("General Options");
+	config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
 	int baseOctave = config->readNumEntry("midipitchoctave", -2);
 
 	int octave = (int)(((float)pitch)/12.0) + baseOctave;

@@ -19,21 +19,6 @@
     COPYING included with this distribution for more information.
 */
 
-#include "dialogs.h"
-#include "notepixmapfactory.h"
-#include "rosestrings.h"
-#include "notationstrings.h"
-#include "rosedebug.h"
-#include "rosegardenguidoc.h"
-#include "segmentcommands.h"
-#include "notationcommands.h"
-#include "widgets.h"
-#include "midipitchlabel.h"
-#include "colours.h"
-#include "rosegardendcop.h"
-
-#include "RealTime.h"
-
 #include <qlineedit.h>
 #include <qlabel.h>
 #include <qhbox.h>
@@ -65,6 +50,22 @@
 #include <karrowbutton.h>
 #include <kfiledialog.h>
 #include <kcombobox.h>
+
+#include "RealTime.h"
+
+#include "dialogs.h"
+#include "notepixmapfactory.h"
+#include "notationview.h"
+#include "rosestrings.h"
+#include "notationstrings.h"
+#include "rosedebug.h"
+#include "rosegardenguidoc.h"
+#include "segmentcommands.h"
+#include "notationcommands.h"
+#include "widgets.h"
+#include "midipitchlabel.h"
+#include "colours.h"
+#include "rosegardendcop.h"
 
 using Rosegarden::Int;
 using Rosegarden::RealTimeT;
@@ -2755,7 +2756,7 @@ InterpretDialog::InterpretDialog(QWidget *parent) :
 	(i18n("All available interpretations"), groupBox);
 
     KConfig *config = kapp->config();
-    config->setGroup("Notation Options");
+    config->setGroup(NotationView::ConfigGroup);
     
     m_allInterpretations->setChecked
 	(config->readBoolEntry("interpretall", true));
@@ -2788,7 +2789,7 @@ int
 InterpretDialog::getInterpretations()
 {
     KConfig *config = kapp->config();
-    config->setGroup("Notation Options");
+    config->setGroup(NotationView::ConfigGroup);
     
     config->writeEntry("interpretall", m_allInterpretations->isChecked());
     config->writeEntry("interprettextdynamics", m_applyTextDynamics->isChecked());

@@ -368,7 +368,7 @@ void NotationView::slotEditPaste()
          clipboard->getSingleSegment()->getStartTime());
 
     KConfig *config = kapp->config();
-    config->setGroup("Notation Options");
+    config->setGroup(NotationView::ConfigGroup);
     PasteEventsCommand::PasteType defaultType = (PasteEventsCommand::PasteType)
         config->readUnsignedNumEntry("pastetype",
                                      PasteEventsCommand::Restricted);
@@ -404,7 +404,7 @@ void NotationView::slotEditGeneralPaste()
     Segment &segment = staff->getSegment();
 
     KConfig *config = kapp->config();
-    config->setGroup("Notation Options");
+    config->setGroup(NotationView::ConfigGroup);
     PasteEventsCommand::PasteType defaultType = (PasteEventsCommand::PasteType)
         config->readUnsignedNumEntry("pastetype",
                                      PasteEventsCommand::Restricted);

@@ -167,7 +167,7 @@ NoteInserter::NoteInserter(NotationView* view)
     QIconSet icon;
 
     KConfig *config = kapp->config();
-    config->setGroup("Notation Options");
+    config->setGroup(NotationView::ConfigGroup);
     m_autoBeam = config->readBoolEntry("autobeam", true);
     m_matrixInsertType = (config->readNumEntry("inserttype", 0) > 0);
     m_defaultStyle = qstrtostr(config->readEntry
@@ -876,7 +876,7 @@ NotationEraser::NotationEraser(NotationView* view)
       m_collapseRest(false)
 {
     KConfig *config = kapp->config();
-    config->setGroup("Notation Options");
+    config->setGroup(NotationView::ConfigGroup);
     m_collapseRest = config->readBoolEntry("collapse", false);
 
     new KToggleAction(i18n("Collapse rests after erase"), 0, this,
