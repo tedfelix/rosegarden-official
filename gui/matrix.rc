@@ -6,6 +6,7 @@
   <Action name="paint" />
   <Action name="erase" />
   <Action name="select" />
+  <Action name="move" />
 </ToolBar>
 
 </kpartgui>

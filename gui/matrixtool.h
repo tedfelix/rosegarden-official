@@ -215,4 +215,41 @@ protected:
 };
 
 
+class MatrixMover : public MatrixTool
+{
+    Q_OBJECT
+
+    friend class MatrixToolBox;
+
+public:
+    virtual void handleLeftButtonPress(Rosegarden::timeT,
+                                       int height,
+                                       int staffNo,
+                                       QMouseEvent *event,
+                                       Rosegarden::ViewElement*);
+
+    /**
+     * Set the duration of the element
+     */
+    virtual void handleMouseMove(Rosegarden::timeT,
+                                 int height,
+                                 QMouseEvent*);
+
+    /**
+     * Actually insert the new element
+     */
+    virtual void handleMouseRelease(Rosegarden::timeT,
+                                    int height,
+                                    QMouseEvent*);
+
+    static const QString ToolName;
+
+protected:
+    MatrixMover(MatrixView*);
+
+    MatrixElement* m_currentElement;
+    MatrixStaff* m_currentStaff;
+};
+
+
 #endif

@@ -60,6 +60,10 @@ EditTool* MatrixToolBox::createTool(const QString& toolName)
 
         tool = new MatrixSelector(m_mParentView);
 
+    else if (toolNamelc == MatrixMover::ToolName)
+
+        tool = new MatrixMover(m_mParentView);
+
     else {
         KMessageBox::error(0, QString("NotationToolBox::createTool : unrecognised toolname %1 (%2)")
                            .arg(toolName).arg(toolNamelc));
@@ -586,8 +590,72 @@ EventSelection* MatrixSelector::getSelection()
     return (selection->getAddedEvents() > 0) ? selection : 0;
 }
 
+//------------------------------
 
-const QString MatrixPainter::ToolName = "painter";
-const QString MatrixEraser::ToolName  = "eraser";
+MatrixMover::MatrixMover(MatrixView* parent)
+    : MatrixTool("MatrixMover", parent),
+      m_currentElement(0),
+      m_currentStaff(0)
+{
+}
+
+void MatrixMover::handleLeftButtonPress(Rosegarden::timeT,
+                                        int,
+                                        int staffNo,
+                                        QMouseEvent*,
+                                        Rosegarden::ViewElement* el)
+{
+    kdDebug(KDEBUG_AREA) << "MatrixMover::handleLeftButtonPress() : el = "
+                         << el << endl;
+
+    if (!el) return; // nothing to erase
+
+    m_currentElement = dynamic_cast<MatrixElement*>(el);
+    m_currentStaff = m_mParentView->getStaff(staffNo);
+}
+
+void MatrixMover::handleMouseMove(Rosegarden::timeT newTime,
+                                  int pitch,
+                                  QMouseEvent* e)
+{
+    kdDebug(KDEBUG_AREA) << "MatrixMover::handleMouseMove() time = "
+                         << newTime << endl;
+
+    if (!m_currentElement || !m_currentStaff) return;
+
+    int y = m_currentStaff->getLayoutYForHeight(pitch) - m_currentStaff->getElementHeight() / 2;
+
+    m_currentElement->setLayoutY(y);
+    m_currentElement->setLayoutX(newTime * m_currentStaff->getTimeScaleFactor());
+
+    m_currentStaff->positionElement(m_currentElement);
+    m_mParentView->canvas()->update();
+    
+}
+
+void MatrixMover::handleMouseRelease(Rosegarden::timeT newTime,
+                                     int height,
+                                     QMouseEvent*)
+{
+    kdDebug(KDEBUG_AREA) << "MatrixMover::handleMouseRelease()\n";
+
+    if (!m_currentElement || !m_currentStaff) return;
+
+    int y = m_currentStaff->getLayoutYForHeight(height) - m_currentStaff->getElementHeight() / 2;
+
+    kdDebug(KDEBUG_AREA) << "MatrixMover::handleMouseRelease() y = " << y << endl;
+
+    m_currentElement->setLayoutY(y);
+    m_currentElement->setLayoutX(newTime * m_currentStaff->getTimeScaleFactor());
+
+    m_currentStaff->positionElement(m_currentElement);
+    m_mParentView->canvas()->update();
+}
+
+//------------------------------
+
+const QString MatrixPainter::ToolName   = "painter";
+const QString MatrixEraser::ToolName    = "eraser";
 const QString MatrixSelector::ToolName  = "selector";
+const QString MatrixMover::ToolName     = "mover";
 
