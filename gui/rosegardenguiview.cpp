@@ -75,7 +75,7 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     // Set a track label width for both specialised track and
     // bar buttons widgets to use.
     //
-    int trackLabelWidth = 130;
+    int trackLabelWidth = 156;
 
     QVBox       *topBox = new QVBox(this);
     QHBox       *topSplit = new QHBox(topBox);

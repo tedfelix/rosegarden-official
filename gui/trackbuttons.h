@@ -26,9 +26,9 @@
 #include <qvbox.h>
 #include <qheader.h>
 #include <qbuttongroup.h>
+#include <vector>
 
-#include <list>
-
+#include "vumeter.h"
 #include "tracklabel.h"
 #include "trackheader.h"
 #include "rosegardenguidoc.h"
@@ -40,6 +40,24 @@
 //
 //
 // 
+
+class TrackVUMeter : public VUMeter
+{
+public:
+     TrackVUMeter(QWidget *parent = 0,
+                  const VUMeterType &type = Plain,
+                  const int &width = 0,
+                  const int &height = 0,
+                  const int &id = 0,
+                  const char *name = 0):
+        VUMeter(parent, type, width, height, name), m_id(id) {;}
+
+    int trackNum() const { return m_id; }
+
+private:
+
+    int m_id;
+};
 
 class TrackButtons : public QVBox
 {
@@ -61,13 +79,13 @@ public:
     //
     int selectedRecordTrack();
 
-    // Return a list of muted tracks
+    // Return a vector of muted tracks
     //
-    list<int> mutedTracks();
+    vector<int> mutedTracks();
 
-    // Return a list of highlighted tracks
+    // Return a vector of highlighted tracks
     //
-    list<int> getHighLightedTracks();
+    vector<int> getHighLightedTracks();
 
 signals:
     // to emit what Track has been selected
@@ -83,6 +101,7 @@ public slots:
     void toggleMutedTrack(int mutedTrack);
     void labelSelected(int id);
     void renameTrack(QString newName, int trackNum);
+    void setVUMeter(double value, int trackNum);
 
 
 private:
@@ -99,7 +118,8 @@ private:
     QButtonGroup *m_recordButtonGroup;
     QButtonGroup *m_muteButtonGroup;
 
-    list<TrackLabel *> m_trackLabels;
+    vector<TrackLabel *> m_trackLabels;
+    vector<TrackVUMeter *> m_trackMeters;
 
     int m_tracks;
     int m_offset;

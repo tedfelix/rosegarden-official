@@ -6,7 +6,7 @@ Currently looking at:
 
 - Playing Audio files
   o synchronisation with MIDI [SITUATION IMPROVED]
-  o clearing down handles without crashing aRTS [PENDING - POSSIBLY ITERATORS]
+  o clearing down handles without crashing aRTS [DONE]
 
 - Looping at the origin
 

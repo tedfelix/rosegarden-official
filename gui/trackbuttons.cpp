@@ -27,6 +27,7 @@
 #include "Track.h"
 #include "colours.h"
 #include "tracklabel.h"
+#include "vumeter.h"
 
 TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
                            QWidget* parent,
@@ -54,7 +55,7 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
     //
     m_cellSize = vHeader->sectionSize(0);
 
-    // Now draw the buttons and labels
+    // Now draw the buttons and labels and meters
     //
     drawButtons();
 }
@@ -63,8 +64,7 @@ TrackButtons::~TrackButtons()
 {
 }
 
-// Draw the mute and record buttons
-//
+// Draw the mute and record buttons, track labels and VU meters
 //
 void
 TrackButtons::drawButtons()
@@ -105,6 +105,7 @@ TrackButtons::drawButtons()
     m_muteButtonGroup = new QButtonGroup();
     m_muteButtonGroup->setExclusive(false);
 
+    TrackVUMeter *vuMeter;
     TrackLabel *trackLabel;
 
     // Populate the widgets
@@ -122,6 +123,28 @@ TrackButtons::drawButtons()
         track->setFrameStyle(StyledPanel);
         track->setFrameShape(StyledPanel);
         track->setFrameShadow(Raised);
+
+        // Insert a little gap
+        label = new QLabel(track);
+        label->setMinimumWidth(2);
+        label->setMaximumWidth(2);
+
+        // Create a VU meter
+        vuMeter = new TrackVUMeter(track,
+                              VUMeter::PeakHold,
+                              12,
+                              buttonGap,
+                              i);
+
+        m_trackMeters.push_back(vuMeter);
+
+        // set an initial level to show the meter off
+        //vuMeter->setLevel(1.0);
+
+        // Create another little gap
+        label = new QLabel(track);
+        label->setMinimumWidth(2);
+        label->setMaximumWidth(2);
 
         // Create buttons
         mute = new QPushButton(track);
@@ -226,13 +249,13 @@ TrackButtons::selectedRecordTrack()
 }
 
 
-// Create and return a list of all muted tracks
+// Create and return a vector of all muted tracks
 //
 //
-list<int>
+vector<int>
 TrackButtons::mutedTracks()
 {
-    list<int> mutedTracks;
+    vector<int> mutedTracks;
 
     for (int i = 0; i < m_tracks; i++)
     {
@@ -291,7 +314,7 @@ TrackButtons::setRecordTrack(int recordTrack)
 void
 TrackButtons::labelSelected(int trackNum)
 {
-    list<TrackLabel *>::iterator tlpIt;
+    vector<TrackLabel *>::iterator tlpIt;
 
     for (tlpIt = m_trackLabels.begin();
          tlpIt != m_trackLabels.end();
@@ -311,14 +334,14 @@ TrackButtons::labelSelected(int trackNum)
 
 }
 
-// Return a list of highlighted tracks by querying the TrackLabels
+// Return a vector of highlighted tracks by querying the TrackLabels
 // for highlight state.
 //
-list<int>
+vector<int>
 TrackButtons::getHighLightedTracks()
 {
-    list<int> retList;
-    list<TrackLabel *>::iterator tlpIt;
+    vector<int> retList;
+    vector<TrackLabel *>::iterator tlpIt;
 
     for (tlpIt = m_trackLabels.begin();
          tlpIt != m_trackLabels.end();
@@ -337,14 +360,35 @@ TrackButtons::renameTrack(QString newName, int trackNum)
     Rosegarden::Track *track = m_doc->getComposition().getTrackByIndex(trackNum);
     track->setLabel(string(newName.data()));
 
-    list<TrackLabel*>::iterator it = m_trackLabels.begin();
+    vector<TrackLabel*>::iterator it = m_trackLabels.begin();
     for (; it != m_trackLabels.end(); it++)
     {
         if ((*it)->trackNum() == trackNum)
+        {
             (*it)->setText(newName);
+            return;
+        }
     }
 
 }
+
+
+void
+TrackButtons::setVUMeter(double value, int trackNum)
+{
+    vector<TrackVUMeter*>::iterator it = m_trackMeters.begin();
+    
+    for (; it != m_trackMeters.end(); it++)
+    {
+        if ((*it)->trackNum() == trackNum)
+        {
+            (*it)->setLevel(value);
+            return;
+        }
+    }
+}
+
+
 
 
 

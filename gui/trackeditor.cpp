@@ -82,7 +82,6 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
     int bars = comp.getBarNumber(comp.getEndMarker() -
                                  comp.getStartMarker(), false);
 
-    cout << "BARS = " << bars << endl;
     init(tracks, bars);
 }
 
