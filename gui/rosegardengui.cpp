@@ -765,20 +765,23 @@ void RosegardenGUIApp::changeTimeResolution()
     
 }
 
+// Called from the Sequencer - gets the next slice of events
+//
 const Rosegarden::MappedComposition&
 RosegardenGUIApp::getSequencerSlice(const Rosegarden::timeT &sliceStart,
                                     const Rosegarden::timeT &sliceEnd)
 {
-  //cerr << "getSequencerSlice : " << sliceStart << " : " << sliceEnd << endl;
-/*
-  mappComp = new Rosegarden::MappedComposition(m_doc->getComposition(),
-                                              sliceStart, sliceEnd);
-*/
 
-  // EXPERIMENT!
-  //
   // [rwb] - moved this code in here from MappedComposition
   //         to reduce playback latency
+  // This means we use a static MappedComposition locally rather
+  // than continually creating and throwing away them using
+  // the previous code:
+  //
+  //
+  // mappComp = new Rosegarden::MappedComposition(m_doc->getComposition(),
+  //                                              sliceStart, sliceEnd);
+  //
   //
 
   mappComp.clear();
@@ -1171,11 +1174,66 @@ void RosegardenGUIApp::sequencerExited(KProcess*)
 
 void RosegardenGUIApp::exportMIDI()
 {
-}
+    KTmpStatusMsg msg(i18n("Exporting to MIDI file..."), statusBar());
 
+    QString fileName=KFileDialog::getSaveFileName(QDir::currentDirPath(),
+                                                  i18n("*.mid"), this, i18n("Export as..."));
+
+    if (fileName.isEmpty())
+      return;
+
+    // Add a .mid extension if we don't already have one
+    if (fileName.find(".mid", -4) == -1)
+      fileName += ".mid";
+
+    KURL *u = new KURL(fileName);
+
+    if (u->isMalformed())
+    {
+        KMessageBox::sorry(this, i18n("This is not a valid filename.\n"));
+        return;
+    }
+
+    if (!u->isLocalFile())
+    {
+        KMessageBox::sorry(this, i18n("This is not a local file.\n"));
+        return;
+    }
+
+    QFileInfo info(fileName);
+
+    if (info.isDir())
+    {
+        KMessageBox::sorry(this, i18n("You have specified a directory"));
+        return;
+    }
+
+    if (info.exists())
+    {
+        int overwrite = KMessageBox::questionYesNo(this,
+                               i18n("The specified file exists.  Overwrite?"));
+
+        if (overwrite != KMessageBox::Yes)
+         return;
+    }
+
+    // Go ahead and export the file
+    //
+    exportMIDIFile(fileName);
+
+}
 
 void RosegardenGUIApp::exportMIDIFile(const QString &file)
 {
+    Rosegarden::MidiFile midiFile(file.data());
+
+    midiFile.convertToMidi(m_doc->getComposition());
+
+    if (!midiFile.write())
+    {
+        KMessageBox::sorry(this, i18n("The MIDI File has not been exported."));
+        return;
+    }
 }
 
 

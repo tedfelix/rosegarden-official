@@ -1,19 +1,17 @@
-
-Task list from 18/19th August meetings (and a few more added since then)
-=======================================================================
+Task list from 18/19th August meetings (and a few more added since)
+===================================================================
 
 Aim: "working sequencer, framework for instrument management".
 
 References in round brackets are to 0.1_planned_features.txt.
 
- 1. MIDI file writing (A10)             [IN PROGRESS]
+ 1. MIDI file writing (A10)             [DONE]
     - [DONE] :  Composition to internal MIDI REP processing
              :  Output File Creation
              :  MIDI File Header Writing
    
-    - [IN PROGESS] :  Meta Track Generation
-                   :  MIDI Byte out processing
-    
+    - [PARTIALLY DONE] :  Meta Track Generation
+                       :  MIDI Byte out processing
 
  2. DCOP API for sequencer process
      - getSlice (MappedEvents)          [DONE]
