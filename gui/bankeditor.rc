@@ -1,0 +1,19 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+
+<kpartgui name="BankEditor" version="085">
+
+<MenuBar>
+</MenuBar>
+
+<ToolBar name="mainToolBar">
+   <Action name="file_close"/>
+</ToolBar>
+
+<State name="on_bank_item">
+     <enable>
+        <Action name="edit_copy"/>
+        <Action name="edit_paste"/>
+     </enable>
+</State>
+
+</kpartgui>

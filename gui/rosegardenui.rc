@@ -259,4 +259,10 @@
      </enable>
 </State>
 
+<State name="bankeditor_shown">
+     <disable>
+        <Action name="modify_banks"/>
+     </disable>
+</State>
+
 </kpartgui>

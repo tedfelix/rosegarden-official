@@ -46,6 +46,8 @@
 #include <klistview.h>
 #include <klineedit.h>
 #include <kfiledialog.h>
+#include <kaction.h>
+#include <kstdaction.h>
 #include <kio/netaccess.h>
 
 #include "bankeditor.h"
@@ -553,10 +555,7 @@ MidiProgramsEditor::setBankName(const QString& s)
 
 BankEditorDialog::BankEditorDialog(QWidget *parent,
                                    RosegardenGUIDoc *doc):
-    KDialogBase(parent, "bankeditordialog", true,
-                i18n("Manage MIDI Banks and Programs"),
-                Ok | Apply | Close,
-                Ok, true),
+    KMainWindow(parent, "bankeditordialog"),
     m_studio(&doc->getStudio()),
     m_doc(doc),
     m_copyBank(Rosegarden::Device::NO_DEVICE, -1),
@@ -567,7 +566,10 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_lastMSB(0),
     m_lastLSB(0)
 {
-    QHBox* mainFrame = makeHBoxMainWidget();
+    QHBox* mainFrame = new QHBox(this); // makeHBoxMainWidget();
+    setCentralWidget(mainFrame);
+
+    setCaption(i18n("Manage MIDI Banks and Programs"));
 
     QSplitter* splitter = new QSplitter(mainFrame);
 
@@ -632,8 +634,8 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
 
     // default buttons states
-    enableButtonOK(false);
-    enableButtonApply(false);
+//     enableButtonOK(false);
+//     enableButtonApply(false);
 
     // device/bank modification
     connect(m_listView, SIGNAL(itemRenamed             (QListViewItem*,const QString&,int)),
@@ -655,10 +657,16 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
             this, SLOT(slotExport()));
 
     connect(m_copyPrograms, SIGNAL(clicked()),
-            this, SLOT(slotCopy()));
+            this, SLOT(slotEditCopy()));
 
     connect(m_pastePrograms, SIGNAL(clicked()),
-            this, SLOT(slotPaste()));
+            this, SLOT(slotEditPaste()));
+
+    setupActions();
+
+    m_doc->getCommandHistory()->attachView(actionCollection());
+    connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),
+            this, SLOT(slotUpdate()));
 
     // Initialise the dialog
     //
@@ -683,6 +691,48 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     }
 
 };
+
+BankEditorDialog::~BankEditorDialog()
+{
+    RG_DEBUG << "~BankEditorDialog()\n";
+    m_doc->getCommandHistory()->detachView(actionCollection());
+}
+
+
+void
+BankEditorDialog::setupActions()
+{
+    KAction *action =
+        KStdAction::save  (this, SLOT(slotFileSave()),          actionCollection());
+
+    action->setText(i18n("&Save as Default Studio"));
+
+    action = KStdAction::saveAs(this, SLOT(slotFileSaveAs()),        actionCollection());
+    action->setText(i18n("Save Studio as..."));
+
+    KStdAction::close (this, SLOT(slotFileClose()),         actionCollection());
+
+    KStdAction::copy     (this, SLOT(slotEditCopy()),       actionCollection());
+    KStdAction::paste    (this, SLOT(slotEditPaste()),      actionCollection());
+
+    // some adjustments
+    
+
+    new KToolBarPopupAction(i18n("Und&o"),
+                            "undo",
+                            KStdAccel::key(KStdAccel::Undo),
+                            actionCollection(),
+                            KStdAction::stdName(KStdAction::Undo));
+
+    new KToolBarPopupAction(i18n("Re&do"),
+                            "redo",
+                            KStdAccel::key(KStdAccel::Redo),
+                            actionCollection(),
+                            KStdAction::stdName(KStdAction::Redo));
+
+    createGUI("bankeditor.rc");
+}
+
 
 void
 BankEditorDialog::initDialog()
@@ -712,7 +762,7 @@ BankEditorDialog::initDialog()
             m_deviceNameMap[midiDevice->getId()] = midiDevice->getName();
             QString itemName = strtoqstr(midiDevice->getName());
 
-            RG_DEBUG << "BankEditorDialog : adding "
+            RG_DEBUG << "BankEditorDialog::initDialog - adding "
                      << itemName << endl;
 
             QListViewItem* deviceItem = new MidiDeviceListViewItem
@@ -740,7 +790,7 @@ BankEditorDialog::updateDeviceItem(QListViewItem* deviceItem, Rosegarden::MidiDe
     MidiProgramsEditor::MidiBankContainer banks = midiDevice->getBanks();
     // add banks for this device
     for (unsigned int i = 0; i < banks.size(); ++i) {
-        RG_DEBUG << "BankEditorDialog : adding "
+        RG_DEBUG << "BankEditorDialog::updateDeviceItem - adding "
                  << itemName << " - " << strtoqstr(banks[i].name)
                  << endl;
         new MidiBankListViewItem(midiDevice->getId(), i, deviceItem,
@@ -847,6 +897,8 @@ BankEditorDialog::populateDevice(QListViewItem* item)
 {
     RG_DEBUG << "BankEditorDialog::populateDevice" << endl;
 
+    if (!item) return;
+
     MidiBankListViewItem* bankItem = dynamic_cast<MidiBankListViewItem*>(item);
 
     if (!bankItem) {
@@ -855,6 +907,8 @@ BankEditorDialog::populateDevice(QListViewItem* item)
         //
         MidiDeviceListViewItem* deviceItem = getParentDeviceItem(item);
         Rosegarden::MidiDevice *device = getMidiDevice(deviceItem);
+        if (!device) return;
+
         m_bankList = device->getBanks();
         m_programList = device->getPrograms();
 
@@ -862,9 +916,12 @@ BankEditorDialog::populateDevice(QListViewItem* item)
         m_deleteBank->setEnabled(false);
         m_copyPrograms->setEnabled(false);
         m_pastePrograms->setEnabled(false);
+        stateChanged("on_bank_item", KXMLGUIClient::StateReverse);
         m_programEditor->clearAll();
         return;
     }
+
+    stateChanged("on_bank_item");
     
     m_deleteBank->setEnabled(true);
     m_copyPrograms->setEnabled(true);
@@ -887,13 +944,6 @@ BankEditorDialog::populateDevice(QListViewItem* item)
     m_programEditor->populateBank(item);
 
     m_lastDevice = bankItem->getDevice();
-}
-
-void
-BankEditorDialog::slotOk()
-{
-    slotApply();
-    accept();
 }
 
 void
@@ -946,12 +996,13 @@ BankEditorDialog::slotApply()
     setModified(false);
     initDialog();
 }
+
 void
-BankEditorDialog::slotClose()
+BankEditorDialog::slotUpdate()
 {
-    checkModified();
-    reject();
+    initDialog();
 }
+
 
 MidiDeviceListViewItem*
 BankEditorDialog::getParentDeviceItem(QListViewItem* item)
@@ -1270,16 +1321,16 @@ BankEditorDialog::setModified(bool value)
 
     if (m_modified == value) return;
 
-    if (value == true)
-    {
-        enableButtonOK(true);
-        enableButtonApply(true);
-    }
-    else
-    {
-        enableButtonOK(false);
-        enableButtonApply(false);
-    }
+//     if (value == true)
+//     {
+//         enableButtonOK(true);
+//         enableButtonApply(true);
+//     }
+//     else
+//     {
+//         enableButtonOK(false);
+//         enableButtonApply(false);
+//     }
 
     m_modified = value;
 }
@@ -1457,12 +1508,8 @@ BankEditorDialog::slotImport()
                                         overwrite);
                             addCommandToHistory(command);
 
-                            // Redraw the dialog
-                            updateDeviceItem(deviceItem, device);
-                            m_listView->setCurrentItem(deviceItem->firstChild());
-			    setModified(true);
-
-                            // initDialog();
+                            // No need to redraw the dialog, this is done by
+                            // slotUpdate, signalled by the MultiViewCommandHistory
                         }
                     }
                 }
@@ -1567,7 +1614,7 @@ BankEditorDialog::importFromSF2(QString filename)
 // Store the current bank for copy
 //
 void
-BankEditorDialog::slotCopy()
+BankEditorDialog::slotEditCopy()
 {
     MidiBankListViewItem* bankItem
         = dynamic_cast<MidiBankListViewItem*>(m_listView->currentItem());
@@ -1581,7 +1628,7 @@ BankEditorDialog::slotCopy()
 }
 
 void
-BankEditorDialog::slotPaste()
+BankEditorDialog::slotEditPaste()
 {
     MidiBankListViewItem* bankItem
         = dynamic_cast<MidiBankListViewItem*>(m_listView->currentItem());
@@ -1690,6 +1737,28 @@ BankEditorDialog::slotExport()
 
 
 }
+
+void
+BankEditorDialog::slotFileSave()
+{
+    emit saveAsDefaultStudio();
+}
+
+void
+BankEditorDialog::slotFileSaveAs()
+{
+    emit saveAsOtherStudio();
+}
+
+void
+BankEditorDialog::slotFileClose()
+{
+    RG_DEBUG << "BankEditorDialog::slotFileClose()\n";
+    emit closing();
+    
+    close();
+}
+
 
 
 void MidiProgramsEditor::blockAllSignals(bool block)

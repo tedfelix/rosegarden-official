@@ -26,10 +26,12 @@
 #include <vector>
 #include <map>
 
-#include <kcompletion.h>
-#include <kdialogbase.h>
 #include <qlistview.h>
 #include <qvgroupbox.h>
+
+#include <kcompletion.h>
+#include <kdialogbase.h>
+#include <kmainwindow.h>
 
 #include "Device.h"
 #include "Instrument.h"
@@ -154,13 +156,15 @@ protected:
     MidiProgramContainer     &m_programList;
 };
 
-class BankEditorDialog : public KDialogBase
+class BankEditorDialog : public KMainWindow
 {
     Q_OBJECT
 
 public:
     BankEditorDialog(QWidget *parent,
                      RosegardenGUIDoc *doc);
+
+    ~BankEditorDialog();
 
     // Initialise the devices/banks and programs - the whole lot
     //
@@ -197,9 +201,8 @@ public:
 public slots:
     void slotPopulateDevice(QListViewItem*);
 
-    void slotOk();
     void slotApply();
-    void slotClose();
+    void slotUpdate();
 
     void slotAddBank();
     void slotDeleteBank();
@@ -210,8 +213,17 @@ public slots:
 
     void slotModifyDeviceOrBankName(QListViewItem*, const QString&,int);
 
-    void slotCopy();
-    void slotPaste();
+    void slotFileSave();
+    void slotFileSaveAs();
+    void slotFileClose();
+
+    void slotEditCopy();
+    void slotEditPaste();
+
+signals:
+    void closing();
+    void saveAsDefaultStudio();
+    void saveAsOtherStudio();
 
 protected:
     void updateDeviceItem(QListViewItem* deviceItem,
@@ -225,6 +237,8 @@ protected:
     void keepBankListForNextPopulate() { m_keepBankList = true; }
 
     void populateDevice(QListViewItem*);
+
+    void setupActions();
 
     //--------------- Data members ---------------------------------
     Rosegarden::Studio      *m_studio;

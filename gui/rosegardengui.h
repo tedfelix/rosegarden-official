@@ -50,6 +50,7 @@ class KToggleAction;
 class KProcess;
 
 // forward declaration of the RosegardenGUI classes
+class BankEditorDialog;
 class RosegardenGUIDoc;
 class RosegardenGUIView;
 template <class T> class ZoomSlider;
@@ -976,6 +977,10 @@ public slots:
     // Auto-save update interval changes
     //
     void slotUpdateAutoSaveInterval(unsigned int interval);
+
+    // BankEditor closed
+    //
+    void slotBankEditorClosed();
 
 private:
 

@@ -215,7 +215,8 @@ rosegarden_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 DISTCLEANFILES = $(rosegarden_METASOURCES)
 
 rcdir = $(kde_datadir)/rosegarden
-rc_DATA = eventlist.rc \
+rc_DATA = bankeditor.rc \
+	eventlist.rc \
 	matrix.rc \
 	notationeraser.rc \
 	notation.rc \

@@ -4108,15 +4108,26 @@ RosegardenGUIApp::slotEditDevices()
 void
 RosegardenGUIApp::slotEditBanks()
 {
-    BankEditorDialog dialog(this, m_doc);
+    BankEditorDialog* bankEditor = new BankEditorDialog(this, m_doc);
+    
+    connect(bankEditor, SIGNAL(closing()),
+            this, SLOT(slotBankEditorClosed()));
 
-    if (dialog.exec() == QDialog::Accepted) {
-        RG_DEBUG << "slotEditBanks - accepted\n";
-        // Crudely force bank update
-        //
-        if (m_view)
-            m_view->slotSelectTrackSegments(m_doc->getComposition().getSelectedTrack());
-    }
+    connect(bankEditor, SIGNAL(saveAsDefaultStudio()),
+            this, SLOT(slotSaveDefaultStudio()));
+
+    stateChanged("bankeditor_shown");    
+    bankEditor->show();
+}
+
+void
+RosegardenGUIApp::slotBankEditorClosed()
+{
+//         if (m_view) && SOMETHING WAS CHANGED - TODO
+//             m_view->slotSelectTrackSegments(m_doc->getComposition().getSelectedTrack());
+    RG_DEBUG << "RosegardenGUIApp::slotBankEditorClosed()\n";
+
+    stateChanged("bankeditor_shown", KXMLGUIClient::StateReverse);    
 }
 
 void
