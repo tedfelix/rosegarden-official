@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "POT-Creation-Date: 2003-01-18 19:47+0100\n"
-"PO-Revision-Date: 2003-02-06 21:21+0300\n"
+"PO-Revision-Date: 2003-02-07 16:27+0300\n"
 "Last-Translator: Alexandre Prokoudine <avp@altlinux.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -296,15 +296,15 @@ msgstr ""
 
 #: rosexmlhandler.cpp:1207
 msgid "Found Metronome outside Studio"
-msgstr ""
+msgstr "Обнаружен метроном вне студии"
 
 #: rosexmlhandler.cpp:1236
 msgid "Found Instrument outside Studio"
-msgstr ""
+msgstr "Обнаружен инструмент вне студии"
 
 #: rosexmlhandler.cpp:1252
 msgid "Found unknown Instrument type"
-msgstr ""
+msgstr "Обнаружен неизвестный тип инструмента"
 
 #: rosexmlhandler.cpp:1279
 #, fuzzy
@@ -313,7 +313,7 @@ msgstr "Аудиофайлы найдены внутри другой секци
 
 #: rosexmlhandler.cpp:1294
 msgid "Found Metadata outside Composition"
-msgstr "Найдены метаданные за пределами композиции"
+msgstr "Обнаружены метаданные за пределами композиции"
 
 #: rosexmlhandler.cpp:1337
 msgid "Got event outside of a Segment"
@@ -571,10 +571,9 @@ msgstr "В"
 
 #: bankeditor.cpp:1576 bankeditor.cpp:1577
 msgid "<no devices>"
-msgstr ""
+msgstr "<нет устройств>"
 
 #: bankeditor.cpp:1658
-#, fuzzy
 msgid "Import Banks from Device..."
 msgstr "Импортировать банки из устройства..."
 
@@ -583,8 +582,9 @@ msgid "Source device"
 msgstr "Исходное устройство"
 
 #: bankeditor.cpp:1669
+#, fuzzy
 msgid "Import behaviour"
-msgstr ""
+msgstr "Тип импорта"
 
 #: bankeditor.cpp:1671
 msgid "Merge Banks"
@@ -849,7 +849,7 @@ msgstr "Редактировать свойства документа..."
 
 #: rosegardengui.cpp:503
 msgid "Manage MIDI &Devices..."
-msgstr "Конфигурировать MIDI-&устройства..."
+msgstr "Настроить MIDI-&устройства..."
 
 #: rosegardengui.cpp:507
 msgid "Modify MIDI &Filters..."
@@ -1008,7 +1008,7 @@ msgstr ""
 
 #: rosegardengui.cpp:1661
 msgid "Toggle the Transport"
-msgstr ""
+msgstr "Переключить отображение Транспорта"
 
 #: rosegardengui.cpp:1719 editviewbase.cpp:312
 msgid "Toggle the statusbar..."
@@ -1417,11 +1417,11 @@ msgstr ""
 
 #: dialogs.cpp:377
 msgid "Apply to current segment only"
-msgstr ""
+msgstr "Применить только к текущему сегменту"
 
 #: dialogs.cpp:380
 msgid "Apply to all segments at this time"
-msgstr ""
+msgstr "Применить ко всем сегментам в этот раз"
 
 #: dialogs.cpp:391 dialogs.cpp:1856
 msgid "Maintain current pitches"
@@ -1433,19 +1433,19 @@ msgstr ""
 
 #: dialogs.cpp:397
 msgid "Transpose into this key"
-msgstr ""
+msgstr "Транспонировать в этот ключ"
 
 #: dialogs.cpp:546
 msgid "No such key"
-msgstr ""
+msgstr "Такого ключа нет"
 
 #: dialogs.cpp:617
 msgid "Paste type"
-msgstr ""
+msgstr "Тип вставки"
 
 #: dialogs.cpp:638
 msgid "Make this the default paste type"
-msgstr ""
+msgstr "Сделать этот тип вставки стандартным"
 
 #: dialogs.cpp:670
 msgid "Tuplet"
@@ -1686,7 +1686,7 @@ msgstr ""
 
 #: dialogs.cpp:1948 segmentparameterbox.cpp:75 matrixview.cpp:1687
 msgid "Quantize"
-msgstr "Квантизовать"
+msgstr "Квантизация"
 
 #: dialogs.cpp:1957
 msgid "Basic quantization"
@@ -1984,11 +1984,11 @@ msgstr ""
 
 #: multiviewcommandhistory.cpp:66
 msgid "Und&o"
-msgstr "Отменить"
+msgstr "От&менить"
 
 #: multiviewcommandhistory.cpp:87
 msgid "Re&do"
-msgstr "Повторить"
+msgstr "По&вторить"
 
 #: multiviewcommandhistory.cpp:285
 msgid "Nothing to %1"
@@ -2062,7 +2062,7 @@ msgstr ""
 
 #: segmentcommands.h:403
 msgid "Add Time Si&gnature Change..."
-msgstr ""
+msgstr "Добавить изменение"
 
 #: segmentcommands.h:441
 msgid "Modify &Default Tempo..."
@@ -2074,7 +2074,7 @@ msgstr ""
 
 #: segmentcommands.h:495
 msgid "Add Te&mpo Change..."
-msgstr ""
+msgstr "Добавить изменение &темпа..."
 
 #: segmentcommands.h:520
 msgid "Add Tracks..."
@@ -2657,7 +2657,7 @@ msgstr ""
 
 #: rosegardenconfiguredialog.cpp:623
 msgid "Read ahead (in ms)"
-msgstr ""
+msgstr "Считывание (в мс)"
 
 #: rosegardenconfiguredialog.cpp:624
 msgid "Playback (in ms)"
@@ -2750,7 +2750,7 @@ msgstr "Имя файла:"
 
 #: rosegardenconfiguredialog.cpp:1045
 msgid "Duration:"
-msgstr ""
+msgstr "Продолжительность"
 
 #: rosegardenconfiguredialog.cpp:1049
 msgid "%1 minutes %2.%3%4 seconds (%5 units, %6 bars)"
@@ -2758,7 +2758,7 @@ msgstr ""
 
 #: rosegardenconfiguredialog.cpp:1055
 msgid "Segments:"
-msgstr ""
+msgstr "Сегментов:"
 
 #: rosegardenconfiguredialog.cpp:1061
 msgid "Copyright"
@@ -2766,11 +2766,11 @@ msgstr ""
 
 #: rosegardenconfiguredialog.cpp:1095
 msgid "Audio file path"
-msgstr ""
+msgstr "Путь к аудиофайлам"
 
 #: rosegardenconfiguredialog.cpp:1108
 msgid "Modify audio path"
-msgstr ""
+msgstr "Изменить путь к аудиоустройству"
 
 #: editview.moc.cpp:34 editview.moc.cpp:42
 msgid "EditView"
@@ -2970,7 +2970,7 @@ msgstr ""
 
 #: matrixview.cpp:586 notationview.cpp:1380
 msgid "Clear Selection"
-msgstr ""
+msgstr "Снять выделение"
 
 #: matrixview.cpp:591
 msgid "Snap to 1/64"
@@ -3014,7 +3014,7 @@ msgstr ""
 
 #: matrixview.cpp:622 notationview.cpp:1056
 msgid "Show &Tempo Ruler"
-msgstr ""
+msgstr "Показывать ли&нейку темпа"
 
 #: matrixview.cpp:828 notationview.cpp:1813
 msgid "  %1 event%2 selected "
@@ -3174,11 +3174,11 @@ msgstr "Выделить до конца дорожки"
 
 #: notationview.cpp:1017
 msgid "Select Whole St&aff"
-msgstr ""
+msgstr "Выбрать всё"
 
 #: notationview.cpp:1021
 msgid "C&ut and Close"
-msgstr "Вырезать и закрыть"
+msgstr "В&ырезать и закрыть"
 
 #: notationview.cpp:1025
 msgid "Pa&ste..."
