@@ -2626,6 +2626,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                 // instrument and step through them in the
                 // order returned.
                 //
+#ifdef HAVE_LADSPA
                 PluginInstances list =
                     inst->getInstrumentPlugins((*it)->getInstrument());
 
@@ -2680,6 +2681,9 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                         }
                     }
                 }
+#else
+                if (0)
+#endif // HAVE_LADSPA
                 else // straight through without plugins
                 {
                     for (unsigned int i = 0; i < nframes; i++)
