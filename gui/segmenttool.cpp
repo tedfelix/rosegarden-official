@@ -218,6 +218,9 @@ void SegmentPencil::stow()
 void SegmentPencil::slotCanvasScrolled(int newX, int newY)
 {
     if (!m_currentItem) return;
+    handleMouseMove(m_canvas->viewport()->mapFromGlobal(QCursor::pos()) +
+		    QPoint(newX, newY));
+    return;
 
     QPoint newP1(newX, newY), oldP1(m_canvas->contentsX(),
                                     m_canvas->contentsY());
@@ -366,11 +369,19 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
 
 int SegmentPencil::handleMouseMove(QMouseEvent *e)
 {
+    return handleMouseMove(e->pos());
+}
+
+int SegmentPencil::handleMouseMove(QPoint pos)
+{
     if (!m_currentItem) return RosegardenCanvasView::NoFollow;
 
     m_canvas->setSnapGrain(false);
 
-    QPoint tPos = m_canvas->inverseMapPoint(e->pos());
+    QPoint tPos = m_canvas->inverseMapPoint(pos);
+
+    RG_DEBUG << "SegmentPencil::handleMouseMove: pos " << pos << ", tPos "
+	     << tPos << endl;
 
     SnapGrid::SnapDirection direction = SnapGrid::SnapRight;
     if (tPos.x() < m_currentItem->x()) direction = SnapGrid::SnapLeft;
@@ -921,6 +932,7 @@ SegmentSelector::~SegmentSelector()
 
 void SegmentSelector::ready()
 {
+    m_canvas->viewport()->setCursor(Qt::arrowCursor);
     connect(m_canvas, SIGNAL(contentsMoving (int, int)),
             this, SLOT(slotCanvasScrolled(int, int)));
 
