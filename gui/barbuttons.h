@@ -22,18 +22,18 @@
 #ifndef _BARBUTTONS_H_
 #define _BARBUTTONS_H_
 
-#include <qhbox.h>
-#include <qheader.h>
-#include "FastVector.h"
+#include <qvbox.h>
+//#include "FastVector.h"
 #include "rosegardenguidoc.h"
 
 namespace Rosegarden {
     class RulerScale;
 }
 class LoopRuler;
+class RosegardenGUIDoc;
+class BarButtonsWidget;
 
-
-class BarButtons : public QHBox
+class BarButtons : public QVBox
 {
     Q_OBJECT
 
@@ -46,33 +46,23 @@ public:
                const char* name = 0,
                WFlags f=0);
 
-    ~BarButtons();
-
-    /**
-     * Re-read the bar widths from the RulerScale and adjust the
-     * button sizes accordingly
-     */
-    void recalculate();
-
     LoopRuler* getLoopRuler() { return m_loopRuler; }
 
 private:
-    void drawButtons(bool recalc);
-    QWidget *makeBar(int number);
+//     void drawButtons(bool recalc);
+//     QWidget *makeBar(int number);
 
+    //--------------- Data members ---------------------------------
     bool m_invert;
-    int m_barHeight;
     int m_loopRulerHeight;
     int m_offset;
 
     RosegardenGUIDoc *m_doc;
     Rosegarden::RulerScale *m_rulerScale;
 
-    int m_firstBar;
-    QWidget *m_hButtonBar;
+    BarButtonsWidget *m_hButtonBar;
     LoopRuler *m_loopRuler;
-    FastVector<QWidget *> m_buttons;
+//     FastVector<QWidget *> m_buttons;
 };
-
 
 #endif // _BARBUTTONS_H_

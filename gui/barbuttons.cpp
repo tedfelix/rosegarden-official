@@ -24,13 +24,33 @@
 #include "RulerScale.h"
 #include "colours.h"
 
-#include <qvbox.h>
-#include <qlabel.h>
 #include <qcanvas.h>
 
 #include "rosedebug.h"
 
 using Rosegarden::RulerScale;
+
+
+
+class BarButtonsWidget : public QWidget
+{
+public:
+    BarButtonsWidget(Rosegarden::RulerScale *rulerScale,
+                     int buttonHeight,
+                     QWidget* parent = 0,
+                     const char* name = 0,
+                     WFlags f=0);
+    
+    virtual QSize sizeHint() const;
+
+protected:
+    virtual void paintEvent(QPaintEvent*);
+
+    //--------------- Data members ---------------------------------
+    int m_barHeight;
+    Rosegarden::RulerScale *m_rulerScale;
+
+};
 
 
 BarButtons::BarButtons(RosegardenGUIDoc* doc,
@@ -39,38 +59,21 @@ BarButtons::BarButtons(RosegardenGUIDoc* doc,
 		       bool invert,
                        QWidget* parent,
                        const char* name,
-                       WFlags /*f*/):
-    QHBox(parent, name),
+                       WFlags f):
+    QVBox(parent, name, f),
     m_invert(invert),
-    m_barHeight(barHeight),
     m_loopRulerHeight(8),
+    m_offset(4),
     m_doc(doc),
     m_rulerScale(rulerScale),
-    m_firstBar(0),
     m_hButtonBar(0)
 {
-    m_offset = 4;
 
-    setMinimumHeight(m_barHeight);
-    setMaximumHeight(m_barHeight);
-
-    setFrameStyle(Plain);
-
-    // Create a horizontal spacing label to jog everything
-    // up with the main SegmentCanvas
-    //
-    QLabel *label = new QLabel(this);
-    label->setText(QString(""));
-    label->setMinimumWidth(m_offset);
-    label->setMaximumWidth(m_offset);
-
-    // Create a vertical box for the loopBar and the bar buttons
-    //
-    QVBox *buttonBar = new QVBox(this);
-    buttonBar->setSpacing(0);
+    setSpacing(0);
 
     if (m_invert) {
-	m_hButtonBar = new QHBox(buttonBar);
+	m_hButtonBar = new BarButtonsWidget(m_rulerScale,
+                                            barHeight - m_loopRulerHeight, this);
     }
 
     // Loop ruler works its bar spacing out from the scale just
@@ -78,97 +81,56 @@ BarButtons::BarButtons(RosegardenGUIDoc* doc,
     // signals passing back through the outside world.
     //
     //
-    m_loopRuler = new LoopRuler
-	(m_doc, m_rulerScale, m_loopRulerHeight, m_invert, buttonBar);
+    m_loopRuler = new LoopRuler(m_rulerScale, m_loopRulerHeight, m_invert, this);
 
     if (!m_invert) {
-	m_hButtonBar = new QHBox(buttonBar);
+	m_hButtonBar = new BarButtonsWidget(m_rulerScale,
+                                            barHeight - m_loopRulerHeight, this);
     }
-
-    drawButtons(true);
 }
 
-BarButtons::~BarButtons()
+
+
+BarButtonsWidget::BarButtonsWidget(RulerScale *rulerScale,
+                                   int barHeight,
+                                   QWidget* parent,
+                                   const char* name,
+                                   WFlags f)
+    : QWidget(parent, name, f),
+      m_barHeight(barHeight),
+      m_rulerScale(rulerScale)
 {
-}
-
-void
-BarButtons::drawButtons(bool recalc)
-{
-    if (!m_doc) return;
-
-    for (int i = 0; i < m_buttons.size(); ++i) delete m_buttons[i];
-    m_buttons.clear();
-
-    int firstBar = m_rulerScale->getFirstVisibleBar(),
-	 lastBar = m_rulerScale->getLastVisibleBar();
-    m_firstBar = firstBar;
-
-
-    kdDebug(KDEBUG_AREA) << "BarButtons::drawButtons: firstBar " << firstBar
-			 << ", lastBar " << lastBar  << std::endl;
-/*
-
-    kdDebug(KDEBUG_AREA) << "bar positions: " << std::endl;
-    for (int j = firstBar; j <= lastBar; ++j) {
-	kdDebug(KDEBUG_AREA) << j << ":" << m_rulerScale->getBarPosition(j) << endl;
-    }
-*/
-    for (int i = firstBar; i <= lastBar; ++i)
-    {
-
-//        label->setMinimumHeight(m_barHeight - m_loopRulerHeight - 4);
-//        label->setMaximumHeight(m_barHeight - m_loopRulerHeight - 4);
-
-	m_buttons.push_back(makeBar(i));
-    }
-
-    if (recalc) recalculate();
-}
-
-QWidget *
-BarButtons::makeBar(int n)
-{
-    QVBox *bar = new QVBox(m_hButtonBar);
-    bar->setSpacing(0);
-
-    // attempt a style
-    //
-    bar->setFrameStyle(StyledPanel);
-    bar->setFrameShape(StyledPanel);
-    bar->setFrameShadow(Raised);
     
-    QLabel *label = new QLabel(bar);
-    label->setText(QString("%1").arg(n));
-    label->setAlignment(AlignLeft|AlignVCenter);
-    label->setIndent(4);
-
-    return bar;
 }
 
-void
-BarButtons::recalculate()
+QSize BarButtonsWidget::sizeHint() const
 {
+    int nbBars = m_rulerScale->getLastVisibleBar() - m_rulerScale->getFirstVisibleBar();
+    double firstBarWidth = m_rulerScale->getBarWidth(0);
+
+    return QSize(nbBars * firstBarWidth, m_barHeight);
+}
+
+void BarButtonsWidget::paintEvent(QPaintEvent*)
+{
+    QPainter painter(this);
+
+//     painter.setBrush(red);
+//     painter.setPen(red);
+
     int firstBar = m_rulerScale->getFirstVisibleBar(),
 	 lastBar = m_rulerScale->getLastVisibleBar();
 
-    kdDebug(KDEBUG_AREA) << "BarButtons::recalculate: firstBar = "
-			 << firstBar << ", m_firstBar = " << m_firstBar << endl;
-
-    if (m_firstBar != firstBar) drawButtons(false);
-
+    kdDebug(KDEBUG_AREA) << "BarButtons::paintEvent: firstBar = "
+			 << firstBar << std::endl;
     int x = 0;
 
-//        label->setMinimumHeight(m_barHeight - m_loopRulerHeight - 4);
-//        label->setMaximumHeight(m_barHeight - m_loopRulerHeight - 4);
+    painter.drawLine(0, 0, visibleRect().width(), 0);
 
     for (int i = firstBar; i <= lastBar; ++i) {
 
-	if (i + firstBar >= m_buttons.size()) {
-	    m_buttons.push_back(makeBar(i));
-	}
-
-	QWidget *bar = m_buttons[i - firstBar];
+        painter.drawLine(x, 0, x, m_barHeight);
+        painter.drawText(x + 4, m_barHeight / 2, QString("%1").arg(i));
 
 	// The (i < lastBar) case resynchronises against the absolute
 	// bar position at each stage so as to avoid gradually increasing
@@ -182,12 +144,8 @@ BarButtons::recalculate()
 	    width = (int)(m_rulerScale->getBarWidth(i));
 	}
 
-	kdDebug(KDEBUG_AREA) << "BarButtons::drawButtons: bar " << i
+	kdDebug(KDEBUG_AREA) << "BarButtons::paintEvent: bar " << i
 			     << ", width " << width << ", x " << x << std::endl;
 
-
-//	if (width == 0) continue;
-	bar->setMinimumSize(width, m_barHeight - m_loopRulerHeight);
-	bar->setMaximumSize(width, m_barHeight - m_loopRulerHeight);
     }
 }
