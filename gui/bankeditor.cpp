@@ -71,7 +71,7 @@ using Rosegarden::MidiProgram;
 
 MidiDeviceListViewItem::MidiDeviceListViewItem(Rosegarden::DeviceId deviceId,
                                                QListView* parent, QString name)
-    : QListViewItem(parent, name),
+    : KListViewItem(parent, name),
       m_deviceId(deviceId)
 {
 }
@@ -80,7 +80,7 @@ MidiDeviceListViewItem::MidiDeviceListViewItem(Rosegarden::DeviceId deviceId,
                                                QListViewItem* parent, QString name,
 					       bool percussion,
                                                int msb, int lsb)
-    : QListViewItem(parent, name,
+    : KListViewItem(parent, name,
 		    QString(percussion ? i18n("Yes") : i18n("No")),
 		    QString().setNum(msb), QString().setNum(lsb)),
       m_deviceId(deviceId)

@@ -26,9 +26,9 @@
 #include <vector>
 #include <map>
 
-#include <qlistview.h>
 #include <qvgroupbox.h>
 
+#include <klistview.h>
 #include <kcompletion.h>
 #include <kdialogbase.h>
 #include <kmainwindow.h>
@@ -54,7 +54,7 @@ class BankEditorDialog;
 class KListView;
 class KLineEdit;
 
-class MidiDeviceListViewItem : public QListViewItem
+class MidiDeviceListViewItem : public KListViewItem
 {
 public:
     MidiDeviceListViewItem(Rosegarden::DeviceId id,

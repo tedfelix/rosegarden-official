@@ -52,30 +52,30 @@ namespace Rosegarden
 
 // Add an Id to a QListViewItem
 //
-class AudioListItem : public QListViewItem
+class AudioListItem : public KListViewItem
 {
 
 public:
 
-    AudioListItem(QListView *parent):QListViewItem(parent),
+    AudioListItem(KListView *parent):KListViewItem(parent),
                                      m_segment(0) {;}
 
-    AudioListItem(QListViewItem *parent):QListViewItem(parent),
+    AudioListItem(KListViewItem *parent):KListViewItem(parent),
                                          m_segment(0) {;}
 
-    AudioListItem(QListView *parent,
+    AudioListItem(KListView *parent,
                   QString label,
                   Rosegarden::AudioFileId id):
-                      QListViewItem(parent,
+                      KListViewItem(parent,
                                     label,
                                     "", "", "", "", "", "", ""),
                                     m_id(id),
                                     m_segment(0) {;}
 
-    AudioListItem(QListViewItem *parent, 
+    AudioListItem(KListViewItem *parent, 
                   QString label,
                   Rosegarden::AudioFileId id):
-                      QListViewItem(parent,
+                      KListViewItem(parent,
                                     label,
                                     "", "", "", "", "", "", ""),
                                     m_id(id),
@@ -893,22 +893,7 @@ AudioManagerDialog::getCommandHistory()
 void
 AudioManagerDialog::slotCommandExecuted(KCommand*)
 {
-//     AudioListItem *item =
-//             dynamic_cast<AudioListItem*>(m_fileList->selectedItem());
-
-    // repopulate
     slotPopulateFileList();
-
-
-//     if (item)
-//     {
-//         Rosegarden::AudioFileId id = item->getId();
-//         Rosegarden::Segment *segment = item->getSegment();
-
-//         // set selected
-//         setSelected(id, segment, true); // propagate
-//     }
-
 }
 
 
