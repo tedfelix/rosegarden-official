@@ -618,11 +618,11 @@ void NotationView::initFontToolbar(int legatoUnit)
 void NotationView::initStatusBar()
 {
     KStatusBar* sb = statusBar();
-    QHBox *box = new QHBox(sb);
+    //QHBox *box = new QHBox(sb);
     
-    m_currentNotePixmap       = new QLabel(box);
-    m_hoveredOverNoteName     = new QLabel(box);
-    m_hoveredOverAbsoluteTime = new QLabel(box);
+    m_currentNotePixmap       = new QLabel(sb);
+    m_hoveredOverNoteName     = new QLabel(sb);
+    m_hoveredOverAbsoluteTime = new QLabel(sb);
 
     m_currentNotePixmap->setMinimumWidth(20);
     m_hoveredOverNoteName->setMinimumWidth(32);
@@ -632,13 +632,14 @@ void NotationView::initStatusBar()
     //m_hoveredOverNoteName->setFrameStyle(QFrame::NoFrame);
     //m_hoveredOverAbsoluteTime->setFrameStyle(QFrame::NoFrame);
 
-    //sb->addWidget(m_hoveredOverAbsoluteTime);
-    //sb->addWidget(m_hoveredOverNoteName);
-    //sb->addWidget(m_currentNotePixmap);
-    sb->addWidget(box);
+    sb->addWidget(m_hoveredOverAbsoluteTime);
+    sb->addWidget(m_hoveredOverNoteName);
+    sb->addWidget(m_currentNotePixmap);
+    //sb->addWidget(box);
 
     sb->insertItem(KTmpStatusMsg::getDefaultMsg(),
-                   KTmpStatusMsg::getDefaultId());
+                   KTmpStatusMsg::getDefaultId(), 1);
+    sb->setItemAlignment(KTmpStatusMsg::getDefaultId(), AlignLeft);
 }
 
 
