@@ -20,6 +20,7 @@
 */
 
 #include <qpainter.h>
+#include <qtooltip.h>
 
 #include "temporuler.h"
 #include "colours.h"
@@ -69,6 +70,8 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
     QObject::connect
 	(doc->getCommandHistory(), SIGNAL(commandExecuted()),
 	 this, SLOT(update()));
+
+    QToolTip::add(this, i18n("Tempo and Time Signature Ruler.\nDouble click to insert an event."));
 }
 
 TempoRuler::~TempoRuler()

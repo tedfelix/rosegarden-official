@@ -107,6 +107,8 @@ BarButtons::BarButtons(RosegardenGUIDoc *doc,
     QObject::connect
 	(doc->getCommandHistory(), SIGNAL(commandExecuted()),
 	 this, SLOT(update()));
+
+    QToolTip::add(this, i18n("Left click in markings to position playback pointer.\nShift + Left Click + Drag to set a looping section.\nShift + Left Click to unset loop (or untoggle loop button on Transport)."));
 }
 
 

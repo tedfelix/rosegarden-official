@@ -18,14 +18,16 @@
 */
 
 
-#include "tracklabel.h"
-
 #include <qlabel.h>
 #include <qtimer.h>
-#include <klineeditdlg.h>
 #include <qvalidator.h>
+#include <qtooltip.h>
+
+#include <klineeditdlg.h>
+#include <klocale.h>
 
 #include "rosedebug.h"
+#include "tracklabel.h"
 
 TrackLabel::TrackLabel(Rosegarden::TrackId id,
                        int position,
@@ -48,6 +50,9 @@ TrackLabel::TrackLabel(Rosegarden::TrackId id,
 
     connect(m_pressTimer, SIGNAL(timeout()),
             this, SIGNAL(changeToInstrumentList()));
+
+    QToolTip::add(this, i18n("Click and hold with left mouse button to assign this Track to an Instrument."));
+
 }
 
 TrackLabel::~TrackLabel()

@@ -1304,6 +1304,20 @@ SequencerConfigurationPage::SequencerConfigurationPage(
             m_mmcTransport->setCurrentItem(0);
     }
 
+    // MTC transport (send only for the moment)
+    //
+    label = new QLabel(i18n("MTC send"), frame);
+    layout->addWidget(label, 4, 0);
+
+    m_mtcTransport = new KComboBox(frame);
+    layout->addWidget(m_mtcTransport, 4, 1);
+
+    m_mtcTransport->insertItem(i18n("Off"));
+    m_mtcTransport->insertItem(i18n("MTC Master"));
+
+    bool mtcMaster = m_cfg->readBoolEntry("mtcmaster", false);
+
+    if (mtcMaster) m_mtcTransport->setCurrentItem(1);
 
     addTab(frame, i18n("Synchronisation"));
 }
@@ -1593,10 +1607,15 @@ SequencerConfigurationPage::apply()
 
     }
 
+    bool mtcMaster = false;
+    if (m_mtcTransport->currentItem() == 1) mtcMaster = true;
+
     // Write the entries
     //
     m_cfg->writeEntry("mmctransport", mmcTransport);
     m_cfg->writeEntry("mmcmaster", mmcMaster);
+    m_cfg->writeEntry("mtcmaster", mtcMaster);
+
 
     // Now send it
     //

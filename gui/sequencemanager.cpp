@@ -1426,6 +1426,8 @@ SequenceManager::panic()
         if ((*it)->getType() == Instrument::Midi)
             maxDevices++;
 
+    emit setProgress(40);
+
     for (it = list.begin(); it != list.end(); it++)
     {
         if ((*it)->getType() == Instrument::Midi)

@@ -489,11 +489,13 @@ protected:
     QLineEdit *m_jackPath;
 #endif // HAVE_LIBJACK
 
-    // Latency
+    // Sync and timing
+    //
     QCheckBox *m_midiClockEnabled;
     QComboBox *m_timer;
     QComboBox *m_jackTransport;
     QComboBox *m_mmcTransport;
+    QComboBox *m_mtcTransport;
 
     int      m_sampleRate;
     QSlider* m_readAhead;

@@ -20,6 +20,7 @@
 */
 
 #include <qpainter.h>
+#include <qtooltip.h>
 
 #include "chordnameruler.h"
 #include "colours.h"
@@ -89,6 +90,9 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
 
     QObject::connect(doc->getCommandHistory(), SIGNAL(commandExecuted()),
 		     this, SLOT(update()));
+
+    QToolTip::add(this, i18n("Chord name ruler.\nTurn it on and off from the Settings->Rulers menu."));
+
 }
 
 ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,

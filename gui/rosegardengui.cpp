@@ -5702,6 +5702,11 @@ RosegardenGUIApp::slotPanic()
 {
     if (m_seqManager)
     {
+        // Stop the transport before we send a panic as the
+        // playback goes all to hell anyway.
+        //
+        slotStop();
+
         RosegardenProgressDialog progressDlg(i18n("Queueing MIDI panic events for tranmission..."),
                                              100,
                                              this);

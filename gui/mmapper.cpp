@@ -27,6 +27,7 @@
 
 #include <qdir.h>
 #include <kstddirs.h>
+#include <kconfig.h>
 
 #include "mmapper.h"
 
@@ -42,6 +43,7 @@
 #include "rosegardenguidoc.h"
 #include "rosedebug.h"
 #include "rgapplication.h"
+#include "constants.h"
 
 // Seems not to be properly defined under some gcc 2.95 setups
 #ifndef MREMAP_MAYMOVE
@@ -1017,6 +1019,25 @@ void MetronomeMmapper::dump()
                                  eventTime,
                                  m_tickDuration);
         ++bufPos;
+    }
+
+    // Set the MIDI clock
+    //
+    KConfig *config = kapp->config();
+    config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
+    bool midiClock = config->readBoolEntry("midiclock", false);
+    bool mtcMaster = config->readBoolEntry("mtcmaster", false);
+
+    if (midiClock)
+    {
+        // do something
+        SEQMAN_DEBUG << "MetronomeMmapper::dump: - create MIDI CLOCK" << endl;
+    }
+    
+    if (mtcMaster)
+    {
+        // do something
+        SEQMAN_DEBUG << "MetronomeMmapper::dump: - create MTC CLOCK" << endl;
     }
 
     // Store the number of events at the start of the shared memory region
