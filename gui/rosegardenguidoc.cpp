@@ -772,7 +772,7 @@ bool
 RosegardenGUIDoc::readFromFile(const QString &file, QString &text)
 {
     text = "";
-    gzFile fd = gzopen(file.latin1(), "rb");
+    gzFile fd = gzopen(QFile::encodeName(file), "rb");
     if (!fd) return false;
 
     static char buffer[1000];
