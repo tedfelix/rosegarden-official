@@ -327,6 +327,14 @@ void RosegardenGUIApp::setupActions()
     connect((QObject *)m_transport->MetronomeButton,
             SIGNAL(released()),
             SLOT(toggleMetronome()));
+            
+    connect((QObject *) m_transport->TimeDisplayButton,
+             SIGNAL(released()),
+             SLOT(refreshTimeDisplay()));
+
+    connect((QObject *) m_transport->ToEndButton,
+             SIGNAL(released()),
+             SLOT(refreshTimeDisplay()));
 
     createGUI("rosegardenui.rc");
 
@@ -1314,21 +1322,7 @@ void RosegardenGUIApp::setPointerPosition(const long &posSec,
     //
     if (m_transport->isShowingBarTime()) {
 
-	int barNo = comp.getBarNumber(elapsedTime);
-	timeT barStart = comp.getBarStart(barNo);
-	Rosegarden::TimeSignature timeSig =
-	    comp.getTimeSignatureAt(elapsedTime);
-	timeT beatDuration = timeSig.getBeatDuration();
-	int beatNo = (elapsedTime - barStart) / beatDuration;
-	int unitNo = (elapsedTime - barStart) - (beatNo * beatDuration);
-
-	if (m_transport->isShowingTimeToEnd()) {
-	    barNo = barNo + 1 - comp.getNbBars();
-	    beatNo = timeSig.getBeatsPerBar() - 1 - beatNo;
-	    unitNo = timeSig.getBeatDuration() - 1 - unitNo;
-	}
-
-	m_transport->displayBarTime(barNo, beatNo, unitNo);
+	displayBarTime(elapsedTime);
 
     } else {
 
@@ -1367,11 +1361,47 @@ void RosegardenGUIApp::setPointerPosition(timeT t)
     // and the gui time
     m_view->setPointerPosition(t);
 
-    // and the time
-    m_transport->displayTime(comp.getElapsedRealTime(t));
-
     // and the tempo
     m_transport->setTempo(comp.getTempoAt(t));
+
+    // and the time
+    //
+    if (m_transport->isShowingBarTime()) {
+
+	displayBarTime(t);
+
+    } else {
+
+	Rosegarden::RealTime rT(comp.getElapsedRealTime(t));
+
+	if (m_transport->isShowingTimeToEnd()) {
+	    rT = rT - comp.getElapsedRealTime(comp.getDuration());
+	}
+
+	m_transport->displayTime(rT);
+    }
+}
+
+void RosegardenGUIApp::displayBarTime(timeT t)
+{
+    Rosegarden::Composition &comp = m_doc->getComposition();
+
+    int barNo = comp.getBarNumber(t);
+    timeT barStart = comp.getBarStart(barNo);
+
+    Rosegarden::TimeSignature timeSig = comp.getTimeSignatureAt(t);
+    timeT beatDuration = timeSig.getBeatDuration();
+
+    int beatNo = (t - barStart) / beatDuration;
+    int unitNo = (t - barStart) - (beatNo * beatDuration);
+    
+    if (m_transport->isShowingTimeToEnd()) {
+	barNo = barNo + 1 - comp.getNbBars();
+	beatNo = timeSig.getBeatsPerBar() - 1 - beatNo;
+	unitNo = timeSig.getBeatDuration() - 1 - unitNo;
+    }
+    
+    m_transport->displayBarTime(barNo, beatNo, unitNo);
 }
 
 void RosegardenGUIApp::play()
@@ -1581,6 +1611,12 @@ void RosegardenGUIApp::fastforward()
     //
     setPointerPosition(newPosition);
 
+}
+
+
+void RosegardenGUIApp::refreshTimeDisplay()
+{
+    setPointerPosition(m_doc->getComposition().getPosition());
 }
 
 

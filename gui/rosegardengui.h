@@ -445,6 +445,13 @@ public slots:
 
 
     /**
+     * Update the transport with the bar, beat and unit times for
+     * a given timeT
+     */
+    void displayBarTime(Rosegarden::timeT t);
+
+
+    /**
      * Transport controls
      */
     void play();
@@ -454,6 +461,7 @@ public slots:
     void record();
     void rewindToBeginning();
     void fastForwardToEnd();
+    void refreshTimeDisplay();
 
     /**
      * Set the sequencer status - pass through DCOP as an int

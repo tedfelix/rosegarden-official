@@ -286,6 +286,7 @@ void RosegardenGUIView::print(KPrinter *pPrinter, Rosegarden::Composition* p)
     }
 
     NotationView *notationView = new NotationView(this, segmentsToEdit, this);
+    notationView->setPageMode(true);
 //     notationView->show();
     notationView->print(&printpainter);
 
