@@ -7,7 +7,7 @@ lib_LTLIBRARIES = libRosegardenSequencer.la
 noinst_LTLIBRARIES = libRosegardenSound.la
 
 libRosegardenSequencer_la_SOURCES = MidiRecord.cpp MidiArts.cc
-libRosegardenSound_la_SOURCES = MidiFile.cpp MidiEvent.cpp
+libRosegardenSound_la_SOURCES = MidiFile.cpp MidiEvent.cpp MappedEvent.cpp MappedComposition.cpp
 
 # the library search path. 
 libRosegardenSequencer_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -module -no-undefined

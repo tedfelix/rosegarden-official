@@ -340,8 +340,8 @@ Sequencer::processMidiOut(Rosegarden::Composition *composition)
   unsigned int fetchToPosition = _songPosition + 100;
   Arts::TimeStamp playPortTime = _midiPlayPort.time();
 
-  MappedComposition *mappedComp =
-         composition->getMappedComposition(_lastFetchPosition, fetchToPosition);
+  MappedComposition *mappedComp = new MappedComposition(*composition,
+         _lastFetchPosition, fetchToPosition);
 
   Arts::MidiEvent event;
 

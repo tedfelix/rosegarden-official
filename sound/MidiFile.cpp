@@ -417,7 +417,7 @@ MidiFile::convertToRosegarden()
 
   // To create rests
   //
-  int endOfLastNote = 0;
+  int endOfLastNote;
 
   Rosegarden::Composition *composition = new Composition;
 
@@ -487,6 +487,10 @@ MidiFile::convertToRosegarden()
       rosegardenTrack->setStartIndex(0);
       TrackNotationHelper notationTrack(*rosegardenTrack); //cc
 
+      // rest creation token needs to be reset here
+      //
+      endOfLastNote = 0;
+
       // add the Track to the Composition and increment the
       // Rosegarden track number
       //
@@ -555,7 +559,7 @@ MidiFile::convertToRosegarden()
               break;
 
             case MIDI_TIME_SIGNATURE:
-              //cout << "TIME SIG" << endl;
+              cout << "TIME SIG" << endl;
               break;
 
             case MIDI_KEY_SIGNATURE:

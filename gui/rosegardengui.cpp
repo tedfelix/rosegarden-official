@@ -721,8 +721,8 @@ RosegardenGUIApp::getSequencerSlice(const int &sliceStart, const int &sliceEnd)
 {
   Rosegarden::MappedComposition *retComp ;
 
-  retComp = m_doc->getComposition().
-                            getMappedComposition(sliceStart, sliceEnd);
+  retComp = new Rosegarden::MappedComposition(m_doc->getComposition(),
+                                              sliceStart, sliceEnd);
 
   return *retComp;
 }

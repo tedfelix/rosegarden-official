@@ -8,8 +8,13 @@ References in round brackets are to 0.1_planned_features.txt.
 
  1. MIDI file writing (A10)
 
- 2. Good DCOP API for sequencer process
+ 2. Decenet DCOP API for sequencer process
+     - getSlice           [DONE]
+     - stop/start/play/record
 
- 3. Everything else (A11 etc)
+ 3. Basic MIDI File writing & reading (A11 etc) 
 
+ 4. Skeleton Transport controls and possible dialog
 
+ 5. Remove MappedComposition from core/ and put
+    into RosegardenSound     [DONE]
