@@ -89,7 +89,7 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     m_vlayout(0),
     m_currentSelectedNoteIsRest(false),
     m_currentSelectedNoteType(Note::QuarterNote),
-    m_currentSelectedNoteDotted(false),
+    m_currentSelectedNoteDots(0),
     m_selectDefaultNote(0),
     m_deleteMode(false)
 {
@@ -193,150 +193,124 @@ void NotationView::readOptions()
 }
 
 void NotationView::setupActions()
-{
+{   
     KRadioAction* noteAction = 0;
     
     // setup Notes menu & toolbar
+    QIconSet icon;
+ 
+    //
+    // Notes
+    //
+    static const char* actionsNote[][3] = 
+        {   // i18n,     slotName,         action name
+            { "Breve",   "1slotBreve()",   "breve" },
+            { "Whole",   "1slotWhole()",   "whole_note" },
+            { "Half",    "1slotHalf()",    "half" },
+            { "Quarter", "1slotQuarter()", "quarter" },
+            { "8th",     "1slot8th()",     "8th" },
+            { "16th",    "1slot16th()",    "16th" },
+            { "32th",    "1slot32nd()",    "32th" },
+            { "64th",    "1slot64th()",    "64th" }
+        };
+   
+    for (unsigned int i = 0, noteType = Note::Longest;
+         i < 8; ++i, --noteType) {
 
-    // Breve
-    QIconSet icon(m_toolbarNotePixmapFactory.makeNotePixmap
-                  (Note::Breve, false, NoAccidental, false, true, true, true));
-    noteAction = new KRadioAction(i18n("Breve"), icon, 0, this,
-                                  SLOT(slotBreve()),
-                                  actionCollection(), "breve" );
-    noteAction->setExclusiveGroup("notes");
-    
-    // Whole
-    icon = QIconSet(m_toolbarNotePixmapFactory.makeNotePixmap
-                    (Note::WholeNote, false, NoAccidental, false, true, true, true));
-    noteAction = new KRadioAction(i18n("Whole"), icon, 0, this,
-                                  SLOT(slotWhole()),
-                                  actionCollection(), "whole_note" );
-    noteAction->setExclusiveGroup("notes");
-    
-    // Half
-    icon = QIconSet(m_toolbarNotePixmapFactory.makeNotePixmap
-                    (Note::HalfNote, false, NoAccidental, false, true, true, true));
-    noteAction = new KRadioAction(i18n("Half"), icon, 0, this,
-                                  SLOT(slotHalf()),
-                                  actionCollection(), "half" );
-    noteAction->setExclusiveGroup("notes");
+        icon = QIconSet(m_toolbarNotePixmapFactory.makeNotePixmap(noteType,
+                                                                  false,
+                                                                  NoAccidental,
+                                                                  false, true, true, true));
+        noteAction = new KRadioAction(i18n(actionsNote[i][0]), icon, 0, this,
+                                      actionsNote[i][1],
+                                      actionCollection(), actionsNote[i][2]);
+        noteAction->setExclusiveGroup("notes");
 
-    // Quarter
-    icon = QIconSet(m_toolbarNotePixmapFactory.makeNotePixmap
-                    (Note::QuarterNote, false, NoAccidental,
-                     false, true, true, true));
-    noteAction = new KRadioAction(i18n("Quarter"), icon, 0, this,
-                                  SLOT(slotQuarter()),
-                                  actionCollection(), "quarter" );
-    noteAction->setExclusiveGroup("notes");
+        if (i == 3)
+            m_selectDefaultNote = noteAction; // quarter is the default selected note
 
-    m_selectDefaultNote = noteAction; // quarter is the default selected note
+    }
 
-    // 8th
-    icon = QIconSet(m_toolbarNotePixmapFactory.makeNotePixmap
-                    (Note::EighthNote, false, NoAccidental,
-                     false, true, true, true));
-    noteAction = new KRadioAction(i18n("8th"), icon, 0, this,
-                                  SLOT(slot8th()),
-                                  actionCollection(), "8th" );
-    noteAction->setExclusiveGroup("notes");
+    //
+    // Dotted Notes
+    //
+    static const char* actionsDottedNote[][3] = 
+        {
+            { "Dotted Breve",   "1slotDottedBreve()",   "dotted_breve" },
+            { "Dotted Whole",   "1slotDottedWhole()",   "dotted_whole_note" },
+            { "Dotted Half",    "1slotDottedHalf()",    "dotted_half" },
+            { "Dotted Quarter", "1slotDottedQuarter()", "dotted_quarter" },
+            { "Dotted 8th",     "1slotDotted8th()",     "dotted_8th" },
+            { "Dotted 16th",    "1slotDotted16th()",    "dotted_16th" },
+            { "Dotted 32th",    "1slotDotted32nd()",    "dotted_32th" },
+            { "Dotted 64th",    "1slotDotted64th()",    "dotted_64th" }
+        };
 
-    // 16th
-    icon = QIconSet(m_toolbarNotePixmapFactory.makeNotePixmap
-                    (Note::SixteenthNote, false, NoAccidental,
-                     false, true, true, true));
-    noteAction = new KRadioAction(i18n("16th"), icon, 0, this,
-                                  SLOT(slot16th()),
-                                  actionCollection(), "16th" );
-    noteAction->setExclusiveGroup("notes");
+    for (unsigned int i = 0, noteType = Note::Longest;
+         i < 8; ++i, --noteType) {
 
-    // 32nd
-    icon = QIconSet(m_toolbarNotePixmapFactory.makeNotePixmap
-                    (Note::ThirtySecondNote, false, NoAccidental,
-                     false, true, true, true));
-    noteAction = new KRadioAction(i18n("32nd"), icon, 0, this,
-                                  SLOT(slot32nd()),
-                                  actionCollection(), "32nd" );
-    noteAction->setExclusiveGroup("notes");
+        icon = QIconSet(m_toolbarNotePixmapFactory.makeNotePixmap(noteType,
+                                                                  true,
+                                                                  NoAccidental,
+                                                                  false, true, true, true));
+        noteAction = new KRadioAction(i18n(actionsDottedNote[i][0]), icon, 0, this,
+                                      actionsDottedNote[i][1],
+                                      actionCollection(), actionsDottedNote[i][2]);
+        noteAction->setExclusiveGroup("notes");
 
-    // 64th
-    icon = QIconSet(m_toolbarNotePixmapFactory.makeNotePixmap
-                    (Note::SixtyFourthNote, false, NoAccidental,
-                     false, true, true, true));
-    noteAction = new KRadioAction(i18n("64th"), icon, 0, this,
-                                  SLOT(slot64th()),
-                                  actionCollection(), "64th" );
-    noteAction->setExclusiveGroup("notes");
+    }
 
-    //!!! surely we should be doing all this in a loop, making the
-    //buttons all call back on the same method when pressed but
-    //passing in different data to the method to indicate which button
-    //was pressed?  no idea how to do that with this qt lark though
+    //
+    // Rests
+    //
+    static const char* actionsRest[][3] = 
+        {
+            { "Breve Rest",   "1slotRBreve()",   "breve_rest" },
+            { "Whole Rest",   "1slotRWhole()",   "whole_note_rest" },
+            { "Half Rest",    "1slotRHalf()",    "half_rest" },
+            { "Quarter Rest", "1slotRQuarter()", "quarter_rest" },
+            { "8th Rest",     "1slotR8th()",     "8th_rest" },
+            { "16th Rest",    "1slotR16th()",    "16th_rest" },
+            { "32th Rest",    "1slotR32nd()",    "32th_rest" },
+            { "64th Rest",    "1slotR64th()",    "64th_rest" }
+        };
 
-    // Breve
-    icon = QIconSet(m_toolbarNotePixmapFactory.makeRestPixmap
-                    (Note(Note::Breve, false)));
-    noteAction = new KRadioAction(i18n("Breve Rest"), icon, 0, this,
-                                  SLOT(slotRBreve()),
-                                  actionCollection(), "breve_rest" );
-    noteAction->setExclusiveGroup("notes");
-    
-    // Whole
-    icon = QIconSet(m_toolbarNotePixmapFactory.makeRestPixmap
-                    (Note(Note::WholeNote, false)));
-    noteAction = new KRadioAction(i18n("Whole Rest"), icon, 0, this,
-                                  SLOT(slotRWhole()),
-                                  actionCollection(), "whole_note_rest" );
-    noteAction->setExclusiveGroup("notes");
-    
-    // Half
-    icon = QIconSet(m_toolbarNotePixmapFactory.makeRestPixmap
-                    (Note(Note::HalfNote, false)));
-    noteAction = new KRadioAction(i18n("Half Rest"), icon, 0, this,
-                                  SLOT(slotRHalf()),
-                                  actionCollection(), "half_rest" );
-    noteAction->setExclusiveGroup("notes");
+    for (unsigned int i = 0, noteType = Note::Longest;
+         i < 8; ++i, --noteType) {
 
-    // Quarter
-    icon = QIconSet(m_toolbarNotePixmapFactory.makeRestPixmap
-                    (Note(Note::QuarterNote, false)));
-    noteAction = new KRadioAction(i18n("Quarter Rest"), icon, 0, this,
-                                  SLOT(slotRQuarter()),
-                                  actionCollection(), "quarter_rest" );
-    noteAction->setExclusiveGroup("notes");
+        icon = QIconSet(m_toolbarNotePixmapFactory.makeRestPixmap(Note(noteType, false)));
+        noteAction = new KRadioAction(i18n(actionsRest[i][0]), icon, 0, this,
+                                      actionsRest[i][1],
+                                      actionCollection(), actionsRest[i][2]);
+        noteAction->setExclusiveGroup("notes");
 
-    // 8th
-    icon = QIconSet(m_toolbarNotePixmapFactory.makeRestPixmap
-                    (Note(Note::EighthNote, false)));
-    noteAction = new KRadioAction(i18n("8th Rest"), icon, 0, this,
-                                  SLOT(slotR8th()),
-                                  actionCollection(), "8th_rest" );
-    noteAction->setExclusiveGroup("notes");
+    }
 
-    // 16th
-    icon = QIconSet(m_toolbarNotePixmapFactory.makeRestPixmap
-                    (Note(Note::SixteenthNote, false)));
-    noteAction = new KRadioAction(i18n("16th Rest"), icon, 0, this,
-                                  SLOT(slotR16th()),
-                                  actionCollection(), "16th_rest" );
-    noteAction->setExclusiveGroup("notes");
+    //
+    // Dotted Rests
+    //
+    static const char* actionsDottedRest[][3] = 
+        {
+            { "Dotted Breve Rest",   "1slotDottedRBreve()",   "dotted_breve_rest" },
+            { "Dotted Whole Rest",   "1slotDottedRWhole()",   "dotted_whole_note_rest" },
+            { "Dotted Half Rest",    "1slotDottedRHalf()",    "dotted_half_rest" },
+            { "Dotted Quarter Rest", "1slotDottedRQuarter()", "dotted_quarter_rest" },
+            { "Dotted 8th Rest",     "1slotDottedR8th()",     "dotted_8th_rest" },
+            { "Dotted 16th Rest",    "1slotDottedR16th()",    "dotted_16th_rest" },
+            { "Dotted 32th Rest",    "1slotDottedR32nd()",    "dotted_32th_rest" },
+            { "Dotted 64th Rest",    "1slotDottedR64th()",    "dotted_64th_rest" }
+        };
 
-    // 32nd
-    icon = QIconSet(m_toolbarNotePixmapFactory.makeRestPixmap
-                    (Note(Note::ThirtySecondNote, false)));
-    noteAction = new KRadioAction(i18n("32nd Rest"), icon, 0, this,
-                                  SLOT(slotR32nd()),
-                                  actionCollection(), "32nd_rest" );
-    noteAction->setExclusiveGroup("notes");
+    for (unsigned int i = 0, noteType = Note::Longest;
+         i < 8 && noteType > 0; ++i, --noteType) {
 
-    // 64th
-    icon = QIconSet(m_toolbarNotePixmapFactory.makeRestPixmap
-                    (Note(Note::SixtyFourthNote, false)));
-    noteAction = new KRadioAction(i18n("64th Rest"), icon, 0, this,
-                                  SLOT(slotR64th()),
-                                  actionCollection(), "64th_rest" );
-    noteAction->setExclusiveGroup("notes");
+        icon = QIconSet(m_toolbarNotePixmapFactory.makeRestPixmap(Note(noteType, 1)));
+        noteAction = new KRadioAction(i18n(actionsDottedRest[i][0]), icon, 0, this,
+                                      actionsDottedRest[i][1],
+                                      actionCollection(), actionsDottedRest[i][2]);
+        noteAction->setExclusiveGroup("notes");
+
+    }
 
     // Eraser
     noteAction = new KRadioAction(i18n("Erase"), "eraser",
@@ -669,19 +643,18 @@ bool NotationView::applyVerticalLayout()
 }
 
 
-void NotationView::setCurrentSelectedNote(bool rest, Note::Type n)
+void NotationView::setCurrentSelectedNote(bool rest, Note::Type n, int dots)
 {
     m_currentSelectedNoteIsRest = rest;
     m_currentSelectedNoteType = n;
 
     if (!rest) {
         m_currentNotePixmap->setPixmap
-            (m_toolbarNotePixmapFactory.makeNotePixmap
-             (n, m_currentSelectedNoteDotted ? 1 : 0, NoAccidental, false, true, true, true));
+            (m_toolbarNotePixmapFactory.makeNotePixmap(n, dots, NoAccidental,
+                                                       false, true, true, true));
     } else {
         m_currentNotePixmap->setPixmap
-            (m_toolbarNotePixmapFactory.makeRestPixmap
-             (Note(n, m_currentSelectedNoteDotted ? 1 : 0)));
+            (m_toolbarNotePixmapFactory.makeRestPixmap(Note(n, dots)));
     }
 
     emit changeCurrentNote(rest, n);
@@ -820,6 +793,58 @@ void NotationView::slot64th()
     setCurrentSelectedNote(false, Note::SixtyFourthNote);
 }
 
+void NotationView::slotDottedBreve()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slotDottedBreve()\n";
+    setCurrentSelectedNote(false, Note::Breve, 1);
+}
+
+void NotationView::slotDottedWhole()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slotDottedWhole()\n";
+    setCurrentSelectedNote(false, Note::WholeNote, 1);
+}
+
+void NotationView::slotDottedHalf()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slotDottedHalf()\n";
+    setCurrentSelectedNote(false, Note::HalfNote, 1);
+}
+
+void NotationView::slotDottedQuarter()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slotDottedQuarter()\n";
+    setCurrentSelectedNote(false, Note::QuarterNote, 1);
+}
+
+void NotationView::slotDotted8th()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slotDotted8th()\n";
+    setCurrentSelectedNote(false, Note::EighthNote, 1);
+}
+
+void NotationView::slotDotted16th()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slotDotted16th()\n";
+    setCurrentSelectedNote(false, Note::SixteenthNote, 1);
+}
+
+void NotationView::slotDotted32nd()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slotDotted32nd()\n";
+    setCurrentSelectedNote(false, Note::ThirtySecondNote, 1);
+}
+
+void NotationView::slotDotted64th()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slotDotted64th()\n";
+    setCurrentSelectedNote(false, Note::SixtyFourthNote, 1);
+}
+
+//----------------------------------------
+// Rests
+//----------------------------------------
+
 void NotationView::slotRBreve()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotRBreve()\n";
@@ -868,11 +893,62 @@ void NotationView::slotR64th()
     setCurrentSelectedNote(true, Note::SixtyFourthNote);
 }
 
+void NotationView::slotDottedRBreve()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slotDottedRBreve()\n";
+    setCurrentSelectedNote(true, Note::Breve, 1);
+}
+
+void NotationView::slotDottedRWhole()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slotDottedRWhole()\n";
+    setCurrentSelectedNote(true, Note::WholeNote, 1);
+}
+
+void NotationView::slotDottedRHalf()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slotDottedRHalf()\n";
+    setCurrentSelectedNote(true, Note::HalfNote, 1);
+}
+
+void NotationView::slotDottedRQuarter()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slotDottedRQuarter()\n";
+    setCurrentSelectedNote(true, Note::QuarterNote, 1);
+}
+
+void NotationView::slotDottedR8th()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slotDottedR8th()\n";
+    setCurrentSelectedNote(true, Note::EighthNote, 1);
+}
+
+void NotationView::slotDottedR16th()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slotDottedR16th()\n";
+    setCurrentSelectedNote(true, Note::SixteenthNote, 1);
+}
+
+void NotationView::slotDottedR32nd()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slotDottedR32nd()\n";
+    setCurrentSelectedNote(true, Note::ThirtySecondNote, 1);
+}
+
+void NotationView::slotDottedR64th()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slotDottedR64th()\n";
+    setCurrentSelectedNote(true, Note::SixtyFourthNote, 1);
+}
+
+
 void NotationView::slotEraseSelected()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotEraseSelected()\n";
     setDeleteMode(true);
 }
+
+//----------------------------------------------------------------------
 
 void NotationView::noteClicked(int height, const QPoint &eventPos,
                                NotationElement* el)
@@ -941,7 +1017,7 @@ void NotationView::insertNote(NotationElementList::iterator closestNote,
     //
     getDocument()->setModified();
 
-    Note note(m_currentSelectedNoteType, m_currentSelectedNoteDotted ? 1 : 0);
+    Note note(m_currentSelectedNoteType, m_currentSelectedNoteDots);
     TrackNotationHelper nt(getTrack());
 
     if (m_currentSelectedNoteIsRest) {

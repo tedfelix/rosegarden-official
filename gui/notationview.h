@@ -87,13 +87,8 @@ public:
 
     Rosegarden::Track& getTrack() { return m_viewElementsManager->getTrack(); }
 
-    void setCurrentSelectedNote(bool isRest, Rosegarden::Note::Type);
-
-/*!!!
-    bool isCurrentSelectedNoteRest() const { return m_currentSelectedNoteIsRest; }
-    Rosegarden::Note::Type getCurrentSelectedNoteType() const { return m_currentSelectedNoteType; }
-    bool isCurrentSelectedNoteDotted() const { return m_currentSelectedNoteDotted; }
-*/
+    void setCurrentSelectedNote(bool isRest, Rosegarden::Note::Type,
+                                int dots = 0);
 
 public slots:
 
@@ -147,6 +142,16 @@ public slots:
     void slot32nd();
     void slot64th();
 
+    // dotted note switch slots
+    void slotDottedBreve();
+    void slotDottedWhole();
+    void slotDottedHalf();
+    void slotDottedQuarter();
+    void slotDotted8th();
+    void slotDotted16th();
+    void slotDotted32nd();
+    void slotDotted64th();
+
     // rest switch slots
     void slotRBreve();
     void slotRWhole();
@@ -156,6 +161,16 @@ public slots:
     void slotR16th();
     void slotR32nd();
     void slotR64th();
+
+    // rest switch slots
+    void slotDottedRBreve();
+    void slotDottedRWhole();
+    void slotDottedRHalf();
+    void slotDottedRQuarter();
+    void slotDottedR8th();
+    void slotDottedR16th();
+    void slotDottedR32nd();
+    void slotDottedR64th();
 
     // note eraser
     void slotEraseSelected();
@@ -261,7 +276,7 @@ protected:
 
     bool m_currentSelectedNoteIsRest;
     Rosegarden::Note::Type m_currentSelectedNoteType;
-    bool m_currentSelectedNoteDotted;
+    int m_currentSelectedNoteDots;
 
     KAction* m_selectDefaultNote;
 

@@ -5,6 +5,7 @@
 <MenuBar>
 <Menu noMerge="1" name="Notes">
   <text>Notes</text>
+  <Action name="breve" />
   <Action name="whole_note" />
   <Action name="half" />
   <Action name="quarter" />
@@ -12,7 +13,17 @@
   <Action name="16th" />
   <Action name="32nd" />
   <Action name="64th" />
+  <Separator/>
+  <Action name="dotted_breve" />
+  <Action name="dotted_whole_note" />
+  <Action name="dotted_half" />
+  <Action name="dotted_quarter" />
+  <Action name="dotted_8th" />
+  <Action name="dotted_16th" />
+  <Action name="dotted_32nd" />
+  <Action name="dotted_64th" />
 </Menu>
+
 <Menu noMerge="1" name="Rests">
   <text>Rests</text>
   <Action name="breve_rest" />
@@ -23,6 +34,15 @@
   <Action name="16th_rest" />
   <Action name="32nd_rest" />
   <Action name="64th_rest" />
+  <Separator/>
+  <Action name="dotted_breve_rest" />
+  <Action name="dotted_whole_note_rest" />
+  <Action name="dotted_half_rest" />
+  <Action name="dotted_quarter_rest" />
+  <Action name="dotted_8th_rest" />
+  <Action name="dotted_16th_rest" />
+  <Action name="dotted_32nd_rest" />
+  <Action name="dotted_64th_rest" />
 </Menu>
 </MenuBar>
 
@@ -36,8 +56,17 @@
   <Action name="32nd" />
   <Action name="64th" />
 
-<!-- </ToolBar>
-<ToolBar fullWidth="true" name="restsToolBar" newline="true"> -->
+  <Action name="dotted_breve" />
+  <Action name="dotted_whole_note" />
+  <Action name="dotted_half" />
+  <Action name="dotted_quarter" />
+  <Action name="dotted_8th" />
+  <Action name="dotted_16th" />
+  <Action name="dotted_32nd" />
+  <Action name="dotted_64th" />
+</ToolBar>
+
+<ToolBar fullWidth="true" name="restsToolBar" newline="true">
 
   <Action name="breve_rest" />
   <Action name="whole_note_rest" />
@@ -48,6 +77,19 @@
   <Action name="32nd_rest" />
   <Action name="64th_rest" />
 
+  <Action name="dotted_breve_rest" />
+  <Action name="dotted_whole_note_rest" />
+  <Action name="dotted_half_rest" />
+  <Action name="dotted_quarter_rest" />
+  <Action name="dotted_8th_rest" />
+  <Action name="dotted_16th_rest" />
+  <Action name="dotted_32nd_rest" />
+  <Action name="dotted_64th_rest" />
+
+</ToolBar>
+
+
+<ToolBar name="toolsToolBar" newline="true">
   <Action name="erase" />
 </ToolBar>
 
