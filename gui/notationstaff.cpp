@@ -567,7 +567,7 @@ NotationStaff::positionElements(timeT from, timeT to)
 
 	//!!! for the sake of tidying up for a release -- this is definitely
 	// not the Right Thing to do here
-	if (el->getLayoutX() == 0) continue;
+//	if (el->getLayoutX() == 0) continue;
 
 	if (needNewSprite) {
 	    renderSingleElement(*it, currentClef, currentKey, selected);

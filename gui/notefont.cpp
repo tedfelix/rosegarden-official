@@ -52,6 +52,8 @@ using std::endl;
 #ifdef HAVE_XFT
 #include <ft2build.h>
 #include FT_FREETYPE_H 
+#include FT_OUTLINE_H
+#include FT_GLYPH_H
 #include <X11/Xft/Xft.h>
 #endif
 
@@ -1041,29 +1043,24 @@ NoteFontMap::dump() const
 
 
 NoteCharacter::NoteCharacter() :
-    m_type(Screen),
     m_hotspot(0, 0),
-    m_pixmap(0),
-    m_image(0)
+    m_pixmap(new QPixmap()),
+    m_lineSegments(0)
 {
 }
 
-NoteCharacter::NoteCharacter(CharacterType type, QPixmap pixmap,
-			     QPoint hotspot, QImage *image) :
-    m_type(type),
+NoteCharacter::NoteCharacter(QPixmap pixmap,
+			     QPoint hotspot, QPointArray *lineSegments) :
     m_hotspot(hotspot),
-    m_pixmap(0),
-    m_image(0)
+    m_pixmap(new QPixmap(pixmap)),
+    m_lineSegments(lineSegments)
 {
-    if (type == Screen) m_pixmap = new QPixmap(pixmap);
-    if (image && (type == Printer)) m_image = new QImage(*image);
 }
 
 NoteCharacter::NoteCharacter(const NoteCharacter &c) :
-    m_type(c.m_type),
     m_hotspot(c.m_hotspot),
-    m_pixmap(c.m_pixmap ? new QPixmap(*c.m_pixmap) : 0),
-    m_image(c.m_image ? new QImage(*c.m_image) : 0)
+    m_pixmap(new QPixmap(*c.m_pixmap)),
+    m_lineSegments(c.m_lineSegments)
 {
     // nothing else
 }
@@ -1072,33 +1069,27 @@ NoteCharacter &
 NoteCharacter::operator=(const NoteCharacter &c)
 {
     if (&c == this) return *this;
-    m_type = c.m_type;
     m_hotspot = c.m_hotspot;
-    m_pixmap = (c.m_pixmap ? new QPixmap(*c.m_pixmap) : 0);
-    m_image = (c.m_image ? new QImage(*c.m_image) : 0);
+    m_pixmap = new QPixmap(*c.m_pixmap);
+    m_lineSegments = c.m_lineSegments;
     return *this;
 }
 
 NoteCharacter::~NoteCharacter()
 {
     delete m_pixmap;
-    delete m_image;
 }
 
 int
 NoteCharacter::getWidth() const
 {
-    if (m_type == Screen) return m_pixmap->width();
-    else if (m_image) return m_image->width();
-    else return m_pixmap->width();
+    return m_pixmap->width();
 }
 
 int
 NoteCharacter::getHeight() const
 {
-    if (m_type == Screen) return m_pixmap->height();
-    else if (m_image) return m_image->height();
-    else return m_pixmap->height();
+    return m_pixmap->height();
 }
 
 QPoint
@@ -1122,28 +1113,34 @@ NoteCharacter::getCanvasPixmap() const
 void
 NoteCharacter::draw(QPainter *painter, int x, int y) const
 {
-    if (m_type == Screen) {
+    if (!m_lineSegments) {
+
 	painter->drawPixmap(x, y, *m_pixmap);
-    } else if (m_image) {
-	painter->drawImage(x, y, *m_image);
+
     } else {
-	painter->drawPixmap(x, y, *m_pixmap);
+
+	QPointArray a(m_lineSegments->size());
+
+	for (unsigned int i = 0; i < m_lineSegments->size(); ++i) {
+	    QPoint p(m_lineSegments->point(i));
+	    a.setPoint(i, p.x() + x, p.y() + y);
+	}
+
+	painter->drawLineSegments(a);
     }
 }
 
 void
 NoteCharacter::drawMask(QPainter *painter, int x, int y) const
 {
-    if (m_type == Screen) {
+    if (!m_lineSegments && m_pixmap->mask()) {
 	painter->drawPixmap(x, y, *(m_pixmap->mask()));
-    } else {
-	// no need
     }
 }
     
 
 NoteFont::FontPixmapMap *NoteFont::m_fontPixmapMap = 0;
-NoteFont::ImageMap *NoteFont::m_imageCache = 0;
+NoteFont::LineSegmentsMap *NoteFont::m_lineCache = 0;
 QPixmap *NoteFont::m_blankPixmap = 0;
 
 NoteFont::NoteFont(string fontName, int size) :
@@ -1280,16 +1277,16 @@ NoteFont::add(CharName charName, bool inverted, QPixmap *pixmap) const
     }
 }
 
-QImage *
-NoteFont::lookupImage(QPixmap *pixmap) const
+QPointArray *
+NoteFont::lookupLineSegments(QPixmap *pixmap) const
 {
     //!!! profile this to make sure the cache is working OK
 
-    if (!m_imageCache) m_imageCache = new ImageMap();
+    if (!m_lineCache) m_lineCache = new LineSegmentsMap();
 
-    if (m_imageCache->find(pixmap) != m_imageCache->end()) {
+    if (m_lineCache->find(pixmap) != m_lineCache->end()) {
 
-	return (*m_imageCache)[pixmap];
+	return (*m_lineCache)[pixmap];
 
     } else {
 	
@@ -1297,16 +1294,44 @@ NoteFont::lookupImage(QPixmap *pixmap) const
 	if (image.isNull()) return 0;
 
 	if (image.depth() > 1) {
-	    QImage shallowImage = image.convertDepth
-		(1, Qt::MonoOnly | Qt::ThresholdDither);
-	    if (!shallowImage.isNull()) {
-		image = shallowImage;
+	    image = image.convertDepth(1, Qt::MonoOnly | Qt::ThresholdDither);
+	}
+
+	QPointArray *a = new QPointArray();
+
+	for (int yi = 0; yi < image.height(); ++yi) {
+
+	    unsigned char *line = image.scanLine(yi);
+
+	    int startx = 0;
+
+	    for (int xi = 0; xi <= image.width(); ++xi) {
+
+		bool pixel = false;
+
+		if (xi < image.width()) {
+		    if (image.bitOrder() == QImage::LittleEndian) {
+			if (*(line + (xi >> 3)) & 1 << (xi & 7))
+			    pixel = true;
+		    } else {
+			if (*(line + (xi >> 3)) & 1 << (7 - (xi & 7)))
+			    pixel = true;
+		    }
+		}
+
+		if (!pixel) {
+		    if (startx < xi) {
+			a->resize(a->size() + 2, QGArray::SpeedOptim);
+			a->setPoint(a->size() - 2, startx, yi);
+			a->setPoint(a->size() - 1, xi - 1, yi);
+		    }
+		    startx = xi + 1;
+		}
 	    }
 	}
 
-	QImage *newImage = new QImage(image);
-	(*m_imageCache)[pixmap] = newImage;
-	return newImage;
+	(*m_lineCache)[pixmap] = a;
+	return a;
     }
 }
 
@@ -1563,64 +1588,95 @@ NoteFont::getHotspot(CharName charName, bool inverted) const
     return QPoint(x, y);
 }
 
-NoteCharacter
-NoteFont::getCharacter(CharName charName, NoteCharacter::CharacterType type,
+bool
+NoteFont::getCharacter(CharName charName,
+		       NoteCharacter &character,
+		       CharacterType type,
 		       bool inverted)
 {
-    QPixmap pixmap = getPixmap(charName, inverted);
+    QPixmap pixmap;
+    if (!getPixmap(charName, pixmap, inverted)) return false;
 
-    if (type == NoteCharacter::Screen) {
-	return NoteCharacter(type,
-			     pixmap,
-			     getHotspot(charName, inverted),
-			     0);
+    if (type == Screen) {
+	character = NoteCharacter(pixmap,
+				  getHotspot(charName, inverted),
+				  0);
     } else {
 
 	// Get the pointer direct from cache (depends on earlier call
 	// to getPixmap to put it in the cache if available)
 
-	QImage *image = 0;
+	QPointArray *points = 0;
 	QPixmap *pmapptr = 0;
 	bool found = lookup(charName, inverted, pmapptr);
 
-	if (found && pmapptr) image = lookupImage(pmapptr);
+	if (found && pmapptr) points = lookupLineSegments(pmapptr);
 
-	return NoteCharacter(type,
-			     pixmap,
-			     getHotspot(charName, inverted),
-			     image);
+	character = NoteCharacter(pixmap,
+				  getHotspot(charName, inverted),
+				  points);
     }
+
+    return true;
+}
+
+NoteCharacter
+NoteFont::getCharacter(CharName charName,
+		       CharacterType type,
+		       bool inverted)
+{
+    NoteCharacter character;
+    getCharacter(charName, character, type, inverted);
+    return character;
+}
+
+bool
+NoteFont::getCharacterColoured(CharName charName,
+			       int hue, int minValue,
+			       NoteCharacter &character,
+			       CharacterType type,
+			       bool inverted)
+{
+    QPixmap pixmap;
+    if (getColouredPixmap(charName, pixmap, hue, minValue, inverted)) {
+	return false;
+    }
+
+    if (type == Screen) {
+
+	character = NoteCharacter(pixmap,
+				  getHotspot(charName, inverted),
+				  0);
+
+    } else {
+
+	// Get the pointer direct from cache (depends on earlier call
+	// to getPixmap to put it in the cache if available)
+
+	QPointArray *points = 0;
+	QPixmap *pmapptr = 0;
+	CharName cCharName(getNameWithColour(charName, hue));
+	bool found = lookup(cCharName, inverted, pmapptr);
+
+	if (found && pmapptr) points = lookupLineSegments(pmapptr);
+
+	character = NoteCharacter(pixmap,
+				  getHotspot(charName, inverted),
+				  points);
+    }
+
+    return true;
 }
 
 NoteCharacter
 NoteFont::getCharacterColoured(CharName charName,
 			       int hue, int minValue,
-			       NoteCharacter::CharacterType type,
+			       CharacterType type,
 			       bool inverted)
 {
-    QPixmap pixmap = getColouredPixmap(charName, hue, minValue, inverted);
-
-    if (type == NoteCharacter::Screen) {
-	return NoteCharacter(type,
-			     pixmap,
-			     getHotspot(charName, inverted),
-			     0);
-    } else {
-
-	// Get the pointer direct from cache (depends on earlier call
-	// to getPixmap to put it in the cache if available)
-
-	QImage *image = 0;
-	QPixmap *pmapptr = 0;
-	bool found = lookup(charName, inverted, pmapptr);
-
-	if (found && pmapptr) image = lookupImage(pmapptr);
-
-	return NoteCharacter(type,
-			     pixmap,
-			     getHotspot(charName, inverted),
-			     image);
-    }
+    NoteCharacter character;
+    getCharacterColoured(charName, hue, minValue, character, type, inverted);
+    return character;
 }
 
 
@@ -1825,6 +1881,38 @@ private:
     XftFont *m_font;
 };
 
+/*!!! Just test code.
+
+int
+staticMoveTo(FT_Vector *to, void *)
+{
+    NOTATION_DEBUG << "moveTo: (" << to->x << "," << to->y << ")" << endl;
+    return 0;
+}
+
+int
+staticLineTo(FT_Vector *to, void *)
+{
+    NOTATION_DEBUG << "lineTo: (" << to->x << "," << to->y << ")" << endl;
+    return 0;
+}
+
+int
+staticConicTo(FT_Vector *control, FT_Vector *to, void *)
+{
+    NOTATION_DEBUG << "conicTo: (" << to->x << "," << to->y << ") control (" << control->x << "," << control->y << ")" << endl;
+    return 0;
+}
+
+int
+staticCubicTo(FT_Vector *control1, FT_Vector *control2, FT_Vector *to, void *)
+{
+    NOTATION_DEBUG << "cubicTo: (" << to->x << "," << to->y << ") control1 (" << control1->x << "," << control1->y << ") control2 (" << control2->x << "," << control2->y << ")" << endl;
+    return 0;
+}
+
+*/
+
 QPixmap
 SystemFontXft::renderChar(CharName charName, int glyph, int code,
 			  Strategy strategy, bool &success)
@@ -1915,6 +2003,37 @@ SystemFontXft::renderChar(CharName charName, int glyph, int code,
 
     map.setMask(PixmapFunctions::generateMask(map, Qt::white.rgb()));
     success = true;
+
+    
+    //!!! experimental stuff
+/*!!!
+    FT_Face face = XftLockFace(m_font);
+    if (!face) {
+	NOTATION_DEBUG << "Couldn't lock face" << endl;
+	return map;
+    }
+    // not checking return value here
+    FT_Load_Glyph(face, glyph, 0);
+    if (face->glyph->format != FT_GLYPH_FORMAT_OUTLINE) {
+	NOTATION_DEBUG << "Glyph " << glyph << " isn't an outline" << endl;
+	XftUnlockFace(m_font);
+	return map;
+    }
+    FT_Glyph ftglyph;
+    FT_Get_Glyph(face->glyph, &ftglyph);
+    FT_Outline &outline = ((FT_OutlineGlyph)ftglyph)->outline;
+    NOTATION_DEBUG << "Outline: " << outline.n_contours << " contours, "
+		   << outline.n_points << " points" << endl;
+
+
+    FT_Outline_Funcs funcs = {
+	staticMoveTo, staticLineTo, staticConicTo, staticCubicTo, 0, 0
+    };
+    FT_Outline_Decompose(&outline, &funcs, 0);
+    FT_Done_Glyph(ftglyph);
+    XftUnlockFace(m_font);
+*/
+
     return map;
 }
 

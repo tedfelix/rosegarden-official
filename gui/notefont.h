@@ -338,8 +338,6 @@ private:
 class NoteCharacter
 {
 public:
-    enum CharacterType { Screen, Printer };
-
     NoteCharacter();
     NoteCharacter(const NoteCharacter &);
     NoteCharacter &operator=(const NoteCharacter &);
@@ -358,13 +356,11 @@ public:
 
 private:
     friend class NoteFont;
-    NoteCharacter(CharacterType type,
-		  QPixmap pixmap, QPoint hotspot, QImage *image);
+    NoteCharacter(QPixmap pixmap, QPoint hotspot, QPointArray *lineSegments);
 
-    CharacterType m_type;
     QPoint        m_hotspot;
     QPixmap      *m_pixmap; // I own this
-    QImage       *m_image; // I own this
+    QPointArray  *m_lineSegments; // I don't own this, it's stored in the NoteFont
 };
     
 
@@ -373,6 +369,8 @@ private:
 class NoteFont
 {
 public:
+    enum CharacterType { Screen, Printer };
+
     typedef Rosegarden::Exception BadNoteFont;
     ~NoteFont();
 
@@ -400,16 +398,27 @@ public:
     bool getLegerLineThickness(unsigned int &thickness) const;
 
 
-    NoteCharacter getCharacter
-    (CharName charName,
-     NoteCharacter::CharacterType type = NoteCharacter::Screen,
-     bool inverted = false);
+    bool getCharacter(CharName charName,
+		      NoteCharacter &character,
+		      CharacterType type = Screen,
+		      bool inverted = false);
 
-    NoteCharacter getCharacterColoured
-    (CharName charName,
-     int hue, int minValue,
-     NoteCharacter::CharacterType type = NoteCharacter::Screen,
-     bool inverted = false);
+    NoteCharacter getCharacter(CharName charName,
+			       CharacterType type = Screen,
+			       bool inverted = false);
+
+    bool getCharacterColoured(CharName charName,
+			      int hue, int minValue,
+			      NoteCharacter &character,
+			      CharacterType type = Screen,
+			      bool inverted = false);
+
+    NoteCharacter getCharacterColoured(CharName charName,
+				       int hue, int minValue,
+				       CharacterType type = Screen,
+				       bool inverted = false);
+
+protected:
 
     /// Returns false + blank pixmap if it can't find the right one
     bool getPixmap(CharName charName, QPixmap &pixmap,
@@ -440,6 +449,8 @@ public:
 
 
 
+public:
+
     /// Returns false + dimensions of blank pixmap if none found
     bool getDimensions(CharName charName, int &x, int &y,
                        bool inverted = false) const;
@@ -449,8 +460,6 @@ public:
 
     /// Ignores problems, returning dimension of blank pixmap if necessary
     int getHeight(CharName charName) const;
-
-
 
     /// Returns false + centre-left of pixmap if no hotspot specified
     bool getHotspot(CharName charName, int &x, int &y,
@@ -467,7 +476,7 @@ private:
     bool lookup(CharName charName, bool inverted, QPixmap *&pixmap) const;
     void add(CharName charName, bool inverted, QPixmap *pixmap) const;
 
-    QImage *lookupImage(QPixmap *pixmap) const;
+    QPointArray *lookupLineSegments(QPixmap *pixmap) const;
 
     CharName getNameWithColour(CharName origName, int hue) const;
     QPixmap *recolour(QPixmap in, int hue, int minValue) const;
@@ -476,7 +485,7 @@ private:
     typedef std::map<CharName, PixmapPair>     PixmapMap;
     typedef std::map<std::string, PixmapMap *> FontPixmapMap;
 
-    typedef std::map<QPixmap *, QImage *>      ImageMap;
+    typedef std::map<QPixmap *, QPointArray *> LineSegmentsMap;
 
     //--------------- Data members ---------------------------------
 
@@ -486,7 +495,7 @@ private:
     mutable PixmapMap *m_map; // pointer at a member of m_fontPixmapMap
 
     static FontPixmapMap *m_fontPixmapMap;
-    static ImageMap *m_imageCache;
+    static LineSegmentsMap *m_lineCache;
 
     static QPixmap *m_blankPixmap;
 };

@@ -2666,7 +2666,7 @@ void NotationView::print(bool previewOnly)
         return;
     }
 
-    Rosegarden::Profiler("NotationView::print");
+    Rosegarden::Profiler profiler("NotationView::print");
 
     // We need to be in multi-page mode at this point
 
