@@ -1072,14 +1072,13 @@ NotationCanvasView* NotationView::getCanvasView()
 timeT
 NotationView::getInsertionTime()
 {
-    Rosegarden::Event *timeSig, *clef, *key;
-    return getInsertionTime(timeSig, clef, key);
+    Rosegarden::Event *clef, *key;
+    return getInsertionTime(clef, key);
 }
 
 
 timeT
-NotationView::getInsertionTime(Event *&timeSigEvt,
-			       Event *&clefEvt,
+NotationView::getInsertionTime(Event *&clefEvt,
 			       Event *&keyEvt)
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
@@ -1089,7 +1088,7 @@ NotationView::getInsertionTime(Event *&timeSigEvt,
     if (layoutX < 0) layoutX = 0;
 
     NotationElementList::iterator i = staff->getClosestElementToLayoutX
-	(layoutX, timeSigEvt, clefEvt, keyEvt, false, -1);
+	(layoutX, clefEvt, keyEvt, false, -1);
 
     timeT insertionTime = segment.getEndTime();
     if (i != staff->getViewElementList()->end()) {
@@ -1645,16 +1644,14 @@ void NotationView::slotTransformsAddTimeSignature()
     double layoutX = staff->getLayoutXOfInsertCursor();
     if (layoutX >= 0) {
 
-	Rosegarden::Event *timeSigEvt = 0, *clefEvt = 0, *keyEvt = 0;
+	Rosegarden::Event *clefEvt = 0, *keyEvt = 0;
 	Segment &segment = staff->getSegment();
 	Rosegarden::Composition &composition = *segment.getComposition();
-	timeT insertionTime = getInsertionTime(timeSigEvt, clefEvt, keyEvt);
+	timeT insertionTime = getInsertionTime(clefEvt, keyEvt);
 
 	int barNo = composition.getBarNumber(insertionTime);
 	bool atStartOfBar = (insertionTime == composition.getBarStart(barNo));
-
-	TimeSignature timeSig;
-	if (timeSigEvt) timeSig = TimeSignature(*timeSigEvt);
+	TimeSignature timeSig = composition.getTimeSignatureAt(insertionTime);
 
 	TimeSignatureDialog *dialog = new TimeSignatureDialog
 	    (this, timeSig, barNo, atStartOfBar);
@@ -1692,9 +1689,9 @@ void NotationView::slotTransformsAddKeySignature()
     double layoutX = staff->getLayoutXOfInsertCursor();
     if (layoutX >= 0) {
 
-	Rosegarden::Event *timeSigEvt = 0, *clefEvt = 0, *keyEvt = 0;
+	Rosegarden::Event *clefEvt = 0, *keyEvt = 0;
 	Segment &segment = staff->getSegment();
-	timeT insertionTime = getInsertionTime(timeSigEvt, clefEvt, keyEvt);
+	timeT insertionTime = getInsertionTime(clefEvt, keyEvt);
 
 /*!!!
 	Rosegarden::Key key;

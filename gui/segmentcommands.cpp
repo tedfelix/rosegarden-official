@@ -34,7 +34,7 @@ using Rosegarden::TrackId;
 // --------- Erase Segment --------
 //
 SegmentEraseCommand::SegmentEraseCommand(Segment *segment) :
-    SegmentCommand("Erase Segment"),
+    KCommand("Erase Segment"),
     m_composition(segment->getComposition()),
     m_segment(segment)
 {
@@ -51,14 +51,6 @@ SegmentEraseCommand::~SegmentEraseCommand()
 	delete m_segment;
     }
 }
-
-
-void
-SegmentEraseCommand::getSegments(SegmentSet &segments)
-{
-    segments.insert(m_segment);
-}
-
 
 void
 SegmentEraseCommand::execute()
@@ -79,7 +71,7 @@ SegmentInsertCommand::SegmentInsertCommand(Composition *c,
                                            TrackId track,
                                            timeT startTime,
                                            timeT duration):
-    SegmentCommand("Create Segment"),
+    KCommand("Create Segment"),
     m_composition(c),
     m_segment(0),
     m_track(track),
@@ -94,14 +86,6 @@ SegmentInsertCommand::~SegmentInsertCommand()
 	delete m_segment;
     }
 }
-
-
-void
-SegmentInsertCommand::getSegments(std::set<Segment *> &segments)
-{
-    segments.insert(m_segment);
-}
-
 
 void
 SegmentInsertCommand::execute()
@@ -133,7 +117,7 @@ SegmentInsertCommand::unexecute()
 //
 
 SegmentRecordCommand::SegmentRecordCommand(Segment *s) :
-    SegmentCommand("Record"),
+    KCommand("Record"),
     m_composition(s->getComposition()),
     m_segment(s)
 {
@@ -160,38 +144,17 @@ SegmentRecordCommand::unexecute()
     m_composition->detachSegment(m_segment);
 }
 
-void
-SegmentRecordCommand::getSegments(SegmentSet &segments)
-{
-    segments.insert(m_segment);
-}
-
 
 // --------- Reconfigure Segments --------
 //
 
 SegmentReconfigureCommand::SegmentReconfigureCommand(QString name) :
-    SegmentCommand(name)
+    KCommand(name)
 {
 }
 
 SegmentReconfigureCommand::~SegmentReconfigureCommand()
 {
-}
-
-void
-SegmentReconfigureCommand::getSegments(SegmentSet &segments)
-{
-    for (SegmentRecSet::iterator i = m_records.begin();
-	 i != m_records.end(); ++i) {
-
-	if (i->segment->getDuration()  != i->duration ||
-	    i->segment->getStartTime() != i->startTime ||
-	    i->segment->getTrack()     != i->track) {
-
-	    segments.insert(i->segment);
-	}
-    }
 }
 
 void
@@ -258,7 +221,7 @@ SegmentReconfigureCommand::swap()
 
 SegmentSplitCommand::SegmentSplitCommand(Segment *segment,
 					 timeT splitTime) :
-    SegmentCommand("Split Segment"),
+    KCommand("Split Segment"),
     m_segment(segment),
     m_newSegment(0),
     m_splitTime(splitTime)
@@ -270,13 +233,6 @@ SegmentSplitCommand::~SegmentSplitCommand()
     if (m_newSegment && !m_newSegment->getComposition()) {
 	delete m_newSegment;
     }
-}
-
-void
-SegmentSplitCommand::getSegments(SegmentSet &segments)
-{
-    segments.insert(m_segment);
-    if (m_newSegment) segments.insert(m_newSegment);
 }
 
 void
@@ -379,7 +335,7 @@ SegmentSplitCommand::unexecute()
 
 
 SegmentChangeQuantizationCommand::SegmentChangeQuantizationCommand(Rosegarden::StandardQuantization *sq) :
-    SegmentCommand(name(sq)),
+    KCommand(name(sq)),
     m_quantization(sq)
 {
     // nothing
@@ -446,14 +402,6 @@ SegmentChangeQuantizationCommand::addSegment(Rosegarden::Segment *s)
     m_records.push_back(rec);
 }
     
-void
-SegmentChangeQuantizationCommand::getSegments(SegmentSet &segments)
-{
-    for (unsigned int i = 0; i < m_records.size(); ++i) {
-	segments.insert(m_records[i].segment);
-    }
-}
-
 QString
 SegmentChangeQuantizationCommand::name(Rosegarden::StandardQuantization *sq)
 {
@@ -472,7 +420,7 @@ SegmentChangeQuantizationCommand::name(Rosegarden::StandardQuantization *sq)
 AddTimeSignatureCommand::AddTimeSignatureCommand(Composition *composition,
 						 timeT time,
 						 Rosegarden::TimeSignature timeSig) :
-    TimeAndTempoChangeCommand(name()),
+    KCommand(name()),
     m_composition(composition),
     m_time(time),
     m_timeSignature(timeSig),
@@ -513,7 +461,7 @@ AddTimeSignatureCommand::unexecute()
 
 AddTimeSignatureAndNormalizeCommand::AddTimeSignatureAndNormalizeCommand
 (Composition *composition, timeT time, Rosegarden::TimeSignature timeSig) :
-    CompoundCommand(AddTimeSignatureCommand::name())
+    KMacroCommand(AddTimeSignatureCommand::name())
 {
     addCommand(new AddTimeSignatureCommand(composition, time, timeSig));
 

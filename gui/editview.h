@@ -31,7 +31,7 @@ namespace Rosegarden { class Segment; }
 
 class RosegardenGUIDoc;
 class MultiViewCommandHistory;
-class Command;
+class KCommand;
 class EditTool;
 class EditToolBox;
 class BasicCommand;
@@ -117,7 +117,7 @@ public:
     /**
      * Add a Command to the history
      */
-    virtual void addCommandToHistory(Command *);
+    virtual void addCommandToHistory(KCommand *);
 
     /**
      * Update the view

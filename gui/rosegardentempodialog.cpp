@@ -121,7 +121,7 @@ RosegardenTempoDialog::slotCancel()
 }
 
 void 
-RosegardenTempoDialog::addCommandToHistory(Command *command)
+RosegardenTempoDialog::addCommandToHistory(KCommand *command)
 {
     getCommandHistory()->addCommand(command);
 }

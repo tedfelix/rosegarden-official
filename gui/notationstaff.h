@@ -166,14 +166,10 @@ public:
      * (If proximityThreshold is negative, there will be no limit
      * to the distances that will be considered.)
      *
-     * Also returns the time signature, clef and key in force
-     * at the given coordinates.
+     * Also returns the clef and key in force at the given coordinates.
      */
     virtual NotationElementList::iterator getClosestElementToCanvasCoords
-    (double x, int y,
-     Rosegarden::Event *&timeSignature,
-     Rosegarden::Event *&clef,
-     Rosegarden::Event *&key,
+    (double x, int y, Rosegarden::Event *&clef, Rosegarden::Event *&key,
      bool notesAndRestsOnly = false,
      int proximityThreshold = 10);
 
@@ -189,41 +185,29 @@ public:
      * (If proximityThreshold is negative, there will be no limit
      * to the distances that will be considered.)
      *
-     * Also returns the time signature, clef and key in force
-     * at the given coordinate.
+     * Also returns the clef and key in force at the given coordinate.
      */
     virtual NotationElementList::iterator getClosestElementToLayoutX
-    (double x,
-     Rosegarden::Event *&timeSignature,
-     Rosegarden::Event *&clef,
-     Rosegarden::Event *&key,
+    (double x, Rosegarden::Event *&clef, Rosegarden::Event *&key,
      bool notesAndRestsOnly = false,
      int proximityThreshold = 10);
 
     /**
      * Find the NotationElement "under" the canvas coords (x,y).
      *
-     * Also returns the time signature, clef and key in force
-     * at the given coordinates.
+     * Also returns the clef and key in force at the given coordinates.
      */
     virtual NotationElementList::iterator getElementUnderCanvasCoords
-    (double x, int y,
-     Rosegarden::Event *&timeSignature,
-     Rosegarden::Event *&clef,
-     Rosegarden::Event *&key);
+    (double x, int y, Rosegarden::Event *&clef, Rosegarden::Event *&key);
 
     /**
      * Find the NotationElement "under" the given layout x-coord,
      * without regard to its y-coord.
      *
-     * Also returns the time signature, clef and key in force
-     * at the given coordinates.
+     * Also returns the clef and key in force at the given coordinates.
      */
     virtual NotationElementList::iterator getElementUnderLayoutX
-    (double x,
-     Rosegarden::Event *&timeSignature,
-     Rosegarden::Event *&clef,
-     Rosegarden::Event *&key);
+    (double x, Rosegarden::Event *&clef, Rosegarden::Event *&key);
 
     /**
      * Overridden from Rosegarden::Staff<T>.

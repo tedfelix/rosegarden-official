@@ -2083,6 +2083,7 @@ void RosegardenGUIApp::slotEditTimeSignature(QWidget *parent)
     delete dialog;
 }
 
+/*!!!
 void RosegardenGUIApp::slotCommandExecuted(Command *command)
 {
     AddTempoChangeCommand *tempoCommand =
@@ -2095,7 +2096,7 @@ void RosegardenGUIApp::slotCommandExecuted(Command *command)
         slotRefreshTimeDisplay();
     }
 }
-
+*/
 
 // The sequencer calls this method when it's alive to get us
 // to poll it for Device/Instrument information.  We also tell

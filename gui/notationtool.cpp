@@ -248,25 +248,14 @@ NoteInserter::handleLeftButtonPress(Rosegarden::timeT,
 {
     if (staffNo < 0) return;
 
-    Event *tsig = 0, *clef = 0, *key = 0;
+    Event *clef = 0, *key = 0;
 
     NotationStaff *staff = m_nParentView->getStaff(staffNo);
-
-    //!!! Not right -- we don't want the "closest" element, we want
-    // the one single element whose airspace we're invading.  Store
-    // a canvas rect in NotationElement that describes airspace of
-    // an event?
-/*!!!
-    NotationElementList::iterator closestElement =
-	staff->getClosestElementToCanvasCoords(e->x(), (int)e->y(),
-					       tsig, clef, key, false, -1);
-*/
     
     kdDebug(KDEBUG_AREA) << "NoteInserter::handleLeftButtonPress: coords are (" << e->x() << "," << e->y() << ")" << endl;
 
     NotationElementList::iterator itr =
-	staff->getElementUnderCanvasCoords(e->x(), (int)e->y(),
-					   tsig, clef, key);
+	staff->getElementUnderCanvasCoords(e->x(), (int)e->y(), clef, key);
 
     if (itr == staff->getViewElementList()->end()) return;
     timeT time = (*itr)->getAbsoluteTime();
@@ -358,14 +347,14 @@ NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
 	new NoteInsertionCommand
         (segment, time, endTime, note, pitch, accidental,
 	 m_autoBeam && !m_tupletMode);
-    Command *activeCommand = insertionCommand;
+    KCommand *activeCommand = insertionCommand;
 
     if (m_tupletMode) {
 	Segment::iterator i(segment.findTime(time));
 	if (i != segment.end() &&
 	    !(*i)->has(Rosegarden::BaseProperties::BEAMED_GROUP_TUPLET_BASE)) {
 
-	    MacroCommand *command = new MacroCommand(insertionCommand->name());
+	    KMacroCommand *command = new KMacroCommand(insertionCommand->name());
 	    command->addCommand(new GroupMenuTupletCommand
 				(segment, time, note.getDuration()));
 	    command->addCommand(insertionCommand);
@@ -574,13 +563,13 @@ void ClefInserter::handleLeftButtonPress(Rosegarden::timeT,
 					 ViewElement*)
 {
     if (staffNo < 0) return;
-    Event *tsig = 0, *clef = 0, *key = 0;
+    Event *clef = 0, *key = 0;
 
     NotationStaff *staff = m_nParentView->getStaff(staffNo);
     
     NotationElementList::iterator closestElement =
 	staff->getClosestElementToCanvasCoords(e->x(), (int)e->y(),
-					       tsig, clef, key, false, -1);
+					       clef, key, false, -1);
 
     if (closestElement == staff->getViewElementList()->end()) return;
 
@@ -633,11 +622,11 @@ void TextInserter::handleLeftButtonPress(Rosegarden::timeT,
 
     } else {
 
-	Event *tsig = 0, *clef = 0, *key = 0;
+	Event *clef = 0, *key = 0;
 
 	NotationElementList::iterator closestElement =
 	    staff->getClosestElementToCanvasCoords(e->x(), (int)e->y(),
-						   tsig, clef, key, false, -1);
+						   clef, key, false, -1);
 
 	if (closestElement == staff->getViewElementList()->end()) return;
 	
@@ -656,7 +645,7 @@ void TextInserter::handleLeftButtonPress(Rosegarden::timeT,
 	    (staff->getSegment(), insertionTime, m_text);
 
 	if (eraseEvent) {
-	    MacroCommand *macroCommand = new MacroCommand(command->name());
+	    KMacroCommand *macroCommand = new KMacroCommand(command->name());
 	    macroCommand->addCommand(new EraseEventCommand(staff->getSegment(),
 							   eraseEvent, false));
 	    macroCommand->addCommand(command);
@@ -1032,13 +1021,13 @@ void NotationSelectionPaster::handleLeftButtonPress(Rosegarden::timeT,
                                                     ViewElement*)
 {
     if (staffNo < 0) return;
-    Event *tsig = 0, *clef = 0, *key = 0;
+    Event *clef = 0, *key = 0;
 
     NotationStaff *staff = m_nParentView->getStaff(staffNo);
     
     NotationElementList::iterator closestElement =
 	staff->getClosestElementToCanvasCoords(e->x(), (int)e->y(),
-					       tsig, clef, key, false, -1);
+					       clef, key, false, -1);
 
     if (closestElement == staff->getViewElementList()->end()) return;
 

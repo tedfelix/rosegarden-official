@@ -36,7 +36,7 @@ class RosegardenGUIDoc;
 class BarButtons;
 class TrackButtons;
 class MultiViewCommandHistory;
-class Command;
+class KCommand;
 class QCanvasLine;
 class QScrollView;
 
@@ -88,7 +88,7 @@ public:
      * Manage command history
      */
     MultiViewCommandHistory *getCommandHistory();
-    void addCommandToHistory(Command *command);
+    void addCommandToHistory(KCommand *command);
 
 
 public slots:

@@ -43,7 +43,7 @@ class KPrinter;
 class SegmentParameterBox;
 class InstrumentParameterBox;
 class MultiViewCommandHistory;
-class Command;
+class KCommand;
 
 /**
  * The RosegardenGUIView class provides the view widget for the
@@ -173,7 +173,7 @@ public slots:
      * Commands
      *
      */
-    void slotAddCommandToHistory(Command *command);
+    void slotAddCommandToHistory(KCommand *command);
 
     /*
      * For re-emission purposes

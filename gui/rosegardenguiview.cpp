@@ -380,7 +380,7 @@ RosegardenGUIView::getCommandHistory()
 }
 
 void
-RosegardenGUIView::slotAddCommandToHistory(Command *command)
+RosegardenGUIView::slotAddCommandToHistory(KCommand *command)
 {           
     getCommandHistory()->addCommand(command);
 }

@@ -376,66 +376,6 @@ void TrackEditor::paintEvent(QPaintEvent* e)
     QWidget::paintEvent(e);
 }
 
-// void TrackEditor::slotCommandExecuted(Command *command)
-// {
-//     kdDebug(KDEBUG_AREA) << "TrackEditor::commandExecuted" << endl;
-
-//     SegmentCommand *segmentCommand = dynamic_cast<SegmentCommand *>(command);
-//     if (segmentCommand) {
-	
-// 	SegmentCommand::SegmentSet segments;
-// 	segmentCommand->getSegments(segments);
-
-// 	Composition &composition = m_document->getComposition();
-
-// 	for (SegmentCommand::SegmentSet::iterator i = segments.begin();
-// 	     i != segments.end(); ++i) {
-
-// 	    if (composition.contains(*i)) {
-// 		kdDebug(KDEBUG_AREA) << "Existing segment" << endl;
-	
-// 		m_segmentCanvas->updateSegmentItem(*i);
-// 	    } else {
-// 		kdDebug(KDEBUG_AREA) << "Defunct segment" << endl;
-		
-// 		m_segmentCanvas->removeSegmentItem(*i);
-// 	    }
-// 	}
-
-// 	m_segmentCanvas->slotUpdate();
-// 	return;
-//     }
-
-//     CompoundCommand *compoundCommand =
-// 	dynamic_cast<CompoundCommand *>(command);
-//     if (compoundCommand) {
-// 	for (int i = 0; i < compoundCommand->getCommandCount(); ++i) {
-// 	    slotCommandExecuted(compoundCommand->getCommand(i));
-// 	}
-// 	return;
-//     }
-
-//     AddTempoChangeCommand *tempoCommand =
-//                  dynamic_cast<AddTempoChangeCommand *>(command);
-
-//     if (tempoCommand) {
-//         return;
-//     }
-
-//     AddTracksCommand *tracksCommand = dynamic_cast<AddTracksCommand *>(command);
-
-//     if (tracksCommand) {
-//         m_trackButtons->slotUpdateTracks();
-
-//         m_segmentCanvas->canvas()->resize(m_canvasWidth,
-//                                           getTrackCellHeight() * m_document->getComposition().getNbTracks());
-
-//     }
-
-
-//     kdDebug(KDEBUG_AREA) << "TrackEditor::commandExecuted: not a presently-supported command type" << endl;
-// }
-
 void TrackEditor::slotAddTracks(unsigned int nbNewTracks)
 {
     Composition &comp = m_document->getComposition();
@@ -638,7 +578,7 @@ TrackEditor::getCommandHistory()
 
 
 void
-TrackEditor::addCommandToHistory(Command *command)
+TrackEditor::addCommandToHistory(KCommand *command)
 {
     getCommandHistory()->addCommand(command);
 }
@@ -653,7 +593,7 @@ TrackEditor::slotSelectedSegments(std::vector<Rosegarden::Segment*> segments)
 void
 TrackEditor::slotDeleteSelectedSegments()
 {
-    MacroCommand *macro = new MacroCommand("Delete Segments");
+    KMacroCommand *macro = new KMacroCommand("Delete Segments");
 
     std::vector<Rosegarden::Segment*> segments =
             m_segmentCanvas->getSelectedSegments();

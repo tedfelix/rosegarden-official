@@ -33,7 +33,7 @@
  * otherwise have put in execute() into modifySegment().
  */
 
-#include "command.h"
+#include <kcommand.h>
 #include "Segment.h"
 
 namespace Rosegarden { class EventSelection; }
@@ -47,7 +47,7 @@ namespace Rosegarden { class EventSelection; }
  * modified by the command, ready to be restored verbatim on undo.
  */
 
-class BasicCommand : public IntraSegmentCommand
+class BasicCommand : public KCommand
 {
 public:
     virtual ~BasicCommand();

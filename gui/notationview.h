@@ -448,8 +448,7 @@ protected:
      * Return the time at which the insertion pointer may be found,
      * and the time signature, clef and key at that time.
      */
-    Rosegarden::timeT getInsertionTime(Rosegarden::Event *&timeSigEvt,
-				       Rosegarden::Event *&clefEvt,
+    Rosegarden::timeT getInsertionTime(Rosegarden::Event *&clefEvt,
 				       Rosegarden::Event *&keyEvt);
 
     //--------------- Data members ---------------------------------

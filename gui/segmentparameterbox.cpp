@@ -545,11 +545,12 @@ SegmentParameterBox::getCommandHistory()
 }
 
 void
-SegmentParameterBox::addCommandToHistory(Command *command)
+SegmentParameterBox::addCommandToHistory(KCommand *command)
 {
         m_view->getCommandHistory()->addCommand(command);
 }
 
+/*!!!
 void
 SegmentParameterBox::slotCommandExecuted(Command *command)
 {
@@ -561,6 +562,7 @@ SegmentParameterBox::slotCommandExecuted(Command *command)
        ; 
     }
 }
+*/
 
 
 

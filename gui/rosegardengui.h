@@ -53,7 +53,7 @@ class KProcess;
 // forward declaration of the RosegardenGUI classes
 class RosegardenGUIDoc;
 class RosegardenGUIView;
-class Command;
+//!!!class Command;
 
 namespace Rosegarden { class SequenceManager; }
 
@@ -620,7 +620,7 @@ public slots:
     /*
      * Command Executed
      */
-    void slotCommandExecuted(Command *);
+//!!!    void slotCommandExecuted(Command *);
 
 private:
 

@@ -117,7 +117,7 @@ RestInsertionCommand::RestInsertionCommand(Segment &segment, timeT time,
                                            timeT endTime, Note note) :
     NoteInsertionCommand(segment, time, endTime, note, 0, NoAccidental, false)
 {
-    Command::setName("Insert Rest");
+    KCommand::setName("Insert Rest");
 }
 
 RestInsertionCommand::~RestInsertionCommand()
@@ -260,7 +260,7 @@ MultiKeyInsertionCommand::MultiKeyInsertionCommand(Rosegarden::Composition &c,
 						   Rosegarden::Key key,
 						   bool convert,
 						   bool transpose) :
-    CompoundCommand(name(&key))
+    KMacroCommand(name(&key))
 {
     for (Rosegarden::Composition::iterator i = c.begin(); i != c.end(); ++i) {
        addCommand(new KeyInsertionCommand(**i, time, key, convert, transpose));

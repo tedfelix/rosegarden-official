@@ -115,7 +115,8 @@ void EditView::paintEvent(QPaintEvent* e)
 
         Rosegarden::Segment* segment = m_segments[i];
         unsigned int refreshStatusId = m_segmentsRefreshStatusIds[i];
-        Rosegarden::SegmentRefreshStatus &refreshStatus = segment->getRefreshStatus(refreshStatusId);
+        Rosegarden::SegmentRefreshStatus &refreshStatus =
+	    segment->getRefreshStatus(refreshStatusId);
         
         if (refreshStatus.needsRefresh() && isCompositionModified()) {
 
@@ -211,7 +212,7 @@ MultiViewCommandHistory *EditView::getCommandHistory()
     return getDocument()->getCommandHistory();
 }
 
-void EditView::addCommandToHistory(Command *command)
+void EditView::addCommandToHistory(KCommand *command)
 {
     getCommandHistory()->addCommand(command);
 }

@@ -30,7 +30,7 @@ namespace Rosegarden {
 
 /// Cut a selection from within a segment
 
-class CutCommand : public CompoundCommand
+class CutCommand : public KMacroCommand
 {
 public:
     CutCommand(Rosegarden::EventSelection &selection,
@@ -42,7 +42,7 @@ public:
 
 /// Copy a selection from within a segment
 
-class CopyCommand : public Command // no refresh needed
+class CopyCommand : public KCommand
 {
 public:
     CopyCommand(Rosegarden::EventSelection &selection,

@@ -135,7 +135,6 @@ NotationStaff::getClefAndKeyAtCanvasCoords(double cx, int cy,
 
 NotationElementList::iterator
 NotationStaff::getClosestElementToCanvasCoords(double cx, int cy,
-					       Rosegarden::Event *&timeSignature,
 					       Rosegarden::Event *&clef,
 					       Rosegarden::Event *&key,
 					       bool notesAndRestsOnly,
@@ -148,14 +147,12 @@ NotationStaff::getClosestElementToCanvasCoords(double cx, int cy,
 			 << layoutCoords.second << ")" << endl;
 
     return getClosestElementToLayoutX
-	(layoutCoords.first,
-	 timeSignature, clef, key, notesAndRestsOnly, proximityThreshold);
+	(layoutCoords.first, clef, key, notesAndRestsOnly, proximityThreshold);
 }
 
 
 NotationElementList::iterator
 NotationStaff::getClosestElementToLayoutX(double x,
-					  Rosegarden::Event *&timeSignature,
 					  Rosegarden::Event *&clef,
 					  Rosegarden::Event *&key,
 					  bool notesAndRestsOnly,
@@ -181,8 +178,6 @@ NotationStaff::getClosestElementToLayoutX(double x,
 	    if (before) {
 		if ((*it)->event()->isa(Clef::EventType)) {
 		    clef = (*it)->event();
-		} else if ((*it)->event()->isa(TimeSignature::EventType)) {
-		    timeSignature = (*it)->event();
 		} else if ((*it)->event()->isa(Rosegarden::Key::EventType)) {
 		    key = (*it)->event();
 		}
@@ -219,7 +214,6 @@ NotationStaff::getClosestElementToLayoutX(double x,
 
 NotationElementList::iterator
 NotationStaff::getElementUnderCanvasCoords(double cx, int cy,
-					   Rosegarden::Event *&timeSignature,
 					   Rosegarden::Event *&clef,
 					   Rosegarden::Event *&key)
 {
@@ -229,13 +223,11 @@ NotationStaff::getElementUnderCanvasCoords(double cx, int cy,
 			 << "), layout (" << layoutCoords.first << ","
 			 << layoutCoords.second << ")" << endl;
 
-    return getElementUnderLayoutX
-	(layoutCoords.first, timeSignature, clef, key);
+    return getElementUnderLayoutX(layoutCoords.first, clef, key);
 }
 
 NotationElementList::iterator
 NotationStaff::getElementUnderLayoutX(double x,
-				      Rosegarden::Event *&timeSignature,
 				      Rosegarden::Event *&clef,
 				      Rosegarden::Event *&key)
 {
@@ -252,8 +244,6 @@ NotationStaff::getElementUnderLayoutX(double x,
 	    if (before) {
 		if ((*it)->event()->isa(Clef::EventType)) {
 		    clef = (*it)->event();
-		} else if ((*it)->event()->isa(TimeSignature::EventType)) {
-		    timeSignature = (*it)->event();
 		} else if ((*it)->event()->isa(Rosegarden::Key::EventType)) {
 		    key = (*it)->event();
 		}

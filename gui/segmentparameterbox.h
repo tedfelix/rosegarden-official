@@ -39,7 +39,7 @@
 namespace Rosegarden { class Segment; }
 class RosegardenGUIView;
 class MultiViewCommandHistory;
-class Command;
+class KCommand;
 
 #ifndef _SEGMENTPARAMETERBOX_H_
 #define _SEGMENTPARAMETERBOX_H_
@@ -70,7 +70,7 @@ public:
 
     // Command history stuff
     MultiViewCommandHistory* getCommandHistory();
-    void addCommandToHistory(Command *command);
+    void addCommandToHistory(KCommand *command);
 
 
 public slots:
@@ -84,7 +84,7 @@ public slots:
     void slotDelayTextChanged(const QString &);
 
     // catching commands
-    void slotCommandExecuted(Command *command);
+//!!!    void slotCommandExecuted(Command *command);
 
 private:
     void initBox();

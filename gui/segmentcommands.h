@@ -21,16 +21,16 @@
 #ifndef _SEGMENTCOMMANDS_H_
 #define _SEGMENTCOMMANDS_H_
 
-#include "klocale.h"
+#include <klocale.h>
+#include <kcommand.h>
 
-#include "command.h"
 #include "Segment.h"
 #include "Composition.h"
 #include "NotationTypes.h"
 #include "rosegardenguidoc.h"
 
 
-class SegmentEraseCommand : public SegmentCommand
+class SegmentEraseCommand : public KCommand
 {
 public:
     SegmentEraseCommand(Rosegarden::Segment *segment);
@@ -39,15 +39,13 @@ public:
     virtual void execute();
     virtual void unexecute();
     
-    virtual void getSegments(std::set<Rosegarden::Segment *> &);
-    
 private:
     Rosegarden::Composition *m_composition;
     Rosegarden::Segment *m_segment;
 };
 
 
-class SegmentInsertCommand : public SegmentCommand
+class SegmentInsertCommand : public KCommand
 {
 public:
     SegmentInsertCommand(Rosegarden::Composition *composition,
@@ -58,8 +56,6 @@ public:
 
     virtual void execute();
     virtual void unexecute();
-
-    virtual void getSegments(SegmentSet &);
     
 private:
     Rosegarden::Composition *m_composition;
@@ -77,7 +73,7 @@ private:
  * correctly, and it provides the ability to undo recording.  (The
  * unexecute does remove the segment, it doesn't just pretend to.)
  */
-class SegmentRecordCommand : public SegmentCommand
+class SegmentRecordCommand : public KCommand
 {
 public:
     SegmentRecordCommand(Rosegarden::Segment *segment);
@@ -85,8 +81,6 @@ public:
 
     virtual void execute();
     virtual void unexecute();
-
-    virtual void getSegments(SegmentSet &);
 
 private:
     Rosegarden::Composition *m_composition;
@@ -98,7 +92,7 @@ private:
  * SegmentReconfigureCommand is a general-purpose command for
  * moving, resizing or changing the track of one or more segments
  */
-class SegmentReconfigureCommand : public SegmentCommand
+class SegmentReconfigureCommand : public KCommand
 {
 public:
     SegmentReconfigureCommand(QString name);
@@ -111,8 +105,6 @@ public:
 
     void execute();
     void unexecute();
-
-    virtual void getSegments(SegmentSet &);
 
 private:
     struct SegmentRec {
@@ -127,7 +119,7 @@ private:
 };
 
 
-class SegmentSplitCommand : public SegmentCommand
+class SegmentSplitCommand : public KCommand
 {
 public:
     SegmentSplitCommand(Rosegarden::Segment *segment,
@@ -137,8 +129,6 @@ public:
     virtual void execute();
     virtual void unexecute();
 
-    virtual void getSegments(SegmentSet &);
-
 private:
     Rosegarden::Segment *m_segment;
     Rosegarden::Segment *m_newSegment;
@@ -146,7 +136,7 @@ private:
 };
 
 
-class SegmentChangeQuantizationCommand : public SegmentCommand
+class SegmentChangeQuantizationCommand : public KCommand
 {
 public:
     /// Set quantization on segments.  If sq is null, switch quantization off.
@@ -157,8 +147,6 @@ public:
 
     virtual void execute();
     virtual void unexecute();
-
-    virtual void getSegments(SegmentSet &);
 
     static QString name(Rosegarden::StandardQuantization *sq);
 
@@ -175,7 +163,7 @@ private:
 };
 
 
-class AddTimeSignatureCommand : public TimeAndTempoChangeCommand
+class AddTimeSignatureCommand : public KCommand
 {
 public:
     AddTimeSignatureCommand(Rosegarden::Composition *composition,
@@ -199,7 +187,9 @@ protected:
     int m_timeSigIndex; // for undo
 };    
 
-class AddTimeSignatureAndNormalizeCommand : public CompoundCommand
+
+
+class AddTimeSignatureAndNormalizeCommand : public KMacroCommand
 {
 public:
     AddTimeSignatureAndNormalizeCommand(Rosegarden::Composition *composition,
@@ -210,13 +200,13 @@ public:
 
 
 
-class AddTempoChangeCommand : public TimeAndTempoChangeCommand
+class AddTempoChangeCommand : public KCommand
 {
 public:
     AddTempoChangeCommand(Rosegarden::Composition *composition,
                           Rosegarden::timeT time,
                           double tempo):
-        TimeAndTempoChangeCommand(name()),
+	KCommand(name()),
         m_composition(composition),
         m_time(time),
         m_tempo(tempo),
@@ -241,12 +231,12 @@ private:
 };
 
 
-class AddTracksCommand : public Command
+class AddTracksCommand : public KCommand
 {
 public:
     AddTracksCommand(Rosegarden::Composition *composition,
                      unsigned int nbTracks): 
-        Command(name()),
+        KCommand(name()),
         m_composition(composition),
         m_nbNewTracks(nbTracks) {}
 

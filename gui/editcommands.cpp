@@ -51,8 +51,8 @@ using std::endl;
 
 
 CutCommand::CutCommand(EventSelection &selection,
-					 Rosegarden::Clipboard *clipboard) :
-    CompoundCommand(name())
+		       Rosegarden::Clipboard *clipboard) :
+    KMacroCommand(name())
 {
     addCommand(new CopyCommand(selection, clipboard));
     addCommand(new EraseCommand(selection));
@@ -60,7 +60,7 @@ CutCommand::CutCommand(EventSelection &selection,
 
 CopyCommand::CopyCommand(EventSelection &selection,
 					   Rosegarden::Clipboard *clipboard) :
-    Command(name()),
+    KCommand(name()),
     m_targetClipboard(clipboard)
 {
     m_sourceClipboard = new Rosegarden::Clipboard;
@@ -92,9 +92,9 @@ PasteCommand::PasteType
 PasteCommand::m_defaultPaste = PasteCommand::Restricted;
 
 PasteCommand::PasteCommand(Rosegarden::Segment &segment,
-					   Rosegarden::Clipboard *clipboard,
-					   Rosegarden::timeT pasteTime,
-					   PasteType pasteType) :
+			   Rosegarden::Clipboard *clipboard,
+			   Rosegarden::timeT pasteTime,
+			   PasteType pasteType) :
     BasicCommand(name(), segment, pasteTime,
 		 getEffectiveEndTime(segment, clipboard, pasteTime)),
     m_relayoutEndTime(getEndTime()),

@@ -48,7 +48,7 @@ public:
     void showPosition();
 
     MultiViewCommandHistory* getCommandHistory();
-    void addCommandToHistory(Command *command);
+    void addCommandToHistory(KCommand *command);
 
 public slots:
     void slotOK();

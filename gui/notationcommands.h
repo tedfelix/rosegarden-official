@@ -130,7 +130,7 @@ protected:
     bool m_transpose;
 };
 
-class MultiKeyInsertionCommand : public CompoundCommand
+class MultiKeyInsertionCommand : public KMacroCommand
 {
 public:
     MultiKeyInsertionCommand(Rosegarden::Composition &composition,
