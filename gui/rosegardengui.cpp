@@ -1252,12 +1252,6 @@ void RosegardenGUIApp::slotFileOpen()
             return;
         
         }
-       
-       /* else {
-            m_doc->closeDocument();
-        }
-        */
-    
     }
 
     openURL(url);
@@ -1273,11 +1267,6 @@ void RosegardenGUIApp::slotFileOpenRecent(const KURL &url)
             return;
         
         }
-       /* else {
-            m_doc->closeDocument();
-        }
-        */
-    
     }
     
     openURL(url);
