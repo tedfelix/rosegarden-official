@@ -79,6 +79,10 @@ EditView::EditView(RosegardenGUIDoc *doc,
 
     m_grid->addWidget(m_horizontalScrollBar, 4, m_mainCol);
     m_grid->addLayout(m_rulerBox, 0, m_mainCol);
+
+    // create accelerators
+    //
+    m_accelerators = new QAccel(this);
 }
 
 EditView::~EditView()

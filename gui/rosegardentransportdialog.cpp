@@ -178,6 +178,10 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     // Now the reason why we have to do the above fiddling
     connect(TimeSigDisplay, SIGNAL(doubleClicked()),
             this, SLOT(slotEditTimeSignature()));
+
+    // accelerator object
+    //
+    m_accelerators = new QAccel(this);
 }
 
 RosegardenTransportDialog::~RosegardenTransportDialog()

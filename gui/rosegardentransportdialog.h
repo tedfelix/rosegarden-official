@@ -19,15 +19,19 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _ROSEGARDENTRANSPORTDIALOG_H_
-#define _ROSEGARDENTRANSPORTDIALOG_H_
+#include <qpixmap.h>
+#include <qtimer.h>
+#include <qaccel.h>
 
 #include "rosegardentransport.h"
 #include "Composition.h" // for RealTime
 #include "MappedEvent.h"
-#include <qtimer.h>
+
 #include <map>
-#include <qpixmap.h>
+
+#ifndef _ROSEGARDENTRANSPORTDIALOG_H_
+#define _ROSEGARDENTRANSPORTDIALOG_H_
+
 
 namespace Rosegarden
 {
@@ -61,6 +65,10 @@ public:
     //
     void setMidiInLabel(const Rosegarden::MappedEvent *mE);
     void setMidiOutLabel(const Rosegarden::MappedEvent *mE);
+
+    // Return the accelerator object
+    //
+    QAccel* getAccelerators() { return m_accelerators; }
 
 protected:
     virtual void closeEvent(QCloseEvent * e);
@@ -146,6 +154,8 @@ private:
     QPixmap m_panelClosed;
 
     void updateTimeDisplay();
+
+    QAccel *m_accelerators;
 };
 
 }

@@ -308,6 +308,11 @@ protected:
     void insertMetronomeClicks(Rosegarden::timeT sliceStart,
 			       Rosegarden::timeT sliceEnd);
 
+    /**
+     * Plug a widget into our common accelerators
+     */
+    void plugAccelerators(QWidget *widget, QAccel *accel);
+
 public slots:
     /**
      * open a new application window by creating a new instance of
@@ -481,11 +486,6 @@ public slots:
      *
      */
     void slotSplitSelected();
-
-    /**
-     * change the resolution of the segment display
-     */
-    //void slotChangeTimeResolution();
 
     /**
      * Add new tracks

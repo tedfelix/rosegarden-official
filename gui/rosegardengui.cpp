@@ -301,13 +301,6 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotTrackUp()),
                 actionCollection(), "select_previous_track");
 
-    /*
-      new KAction(i18n("Change &Time Resolution..."), 
-      0,
-      this, SLOT(slotChangeTimeResolution()),
-      actionCollection(), "change_time_res");
-    */
-
     new KAction(i18n("Select &All Segments"), 0, this,
 		SLOT(slotSelectAll()), actionCollection(),
 		"select_all");
@@ -375,90 +368,14 @@ void RosegardenGUIApp::setupActions()
 
     m_ffwdEndTransport->setGroup("transportcontrols");
 
-    // create the Transport GUI and add the callbacks
+    // create the Transport GUI and add the callbacks to the
+    // buttons and keyboard accelerators
     //
     m_transport = new Rosegarden::RosegardenTransportDialog(this, "");
+    plugAccelerators(m_transport, m_transport->getAccelerators());
 
-    // We should be plugging the actions into the buttons
-    // on the transport - but this doesn't seem to be working
-    // as expected (i.e. at all) so we're duplicating the
-    // accelerators in the dialog - nasty but works for the
-    // moment.
+    // create main gui
     //
-    /*
-      m_playTransport->plug(m_transport->PlayButton);
-      m_stopTransport->plug(m_transport->StopButton);
-      m_rewindTransport->plug(m_transport->RewindButton);
-      m_ffwdTransport->plug(m_transport->FfwdButton);
-    */
-
-    QAccel *a = new QAccel(m_transport);
-
-    connect((QObject *) m_transport->PlayButton,
-            SIGNAL(released()),
-            SLOT(slotPlay()));
-
-    a->connectItem(a->insertItem(Key_Enter),
-                   this,
-                   SLOT(slotPlay()));
-
-    connect((QObject *) m_transport->StopButton,
-            SIGNAL(released()),
-            SLOT(slotStop()));
-             
-    a->connectItem(a->insertItem(Key_Insert),
-                   this,
-                   SLOT(slotStop()));
-
-    connect((QObject *) m_transport->FfwdButton,
-            SIGNAL(released()),
-            SLOT(slotFastforward()));
-            
-    a->connectItem(a->insertItem(Key_PageDown),
-                   this,
-                   SLOT(slotFastforward()));
-
-    connect(m_transport->RewindButton,
-            SIGNAL(released()),
-            SLOT(slotRewind()));
-
-    a->connectItem(a->insertItem(Key_End),
-                   this,
-                   SLOT(slotRewind()));
-
-    connect(m_transport->RecordButton,
-            SIGNAL(released()),
-            SLOT(slotRecord()));
-
-    a->connectItem(a->insertItem(Key_Space),
-                   this,
-                   SLOT(slotRecord()));
-
-    connect(m_transport->RewindEndButton,
-            SIGNAL(released()),
-            SLOT(slotRewindToBeginning()));
-
-
-    connect(m_transport->FfwdEndButton,
-            SIGNAL(released()),
-            SLOT(slotFastForwardToEnd()));
-
-    connect(m_transport->MetronomeButton,
-            SIGNAL(released()),
-            SLOT(slotToggleMetronome()));
-            
-    connect(m_transport->SoloButton,
-            SIGNAL(released()),
-            SLOT(slotToggleSolo()));
-            
-    connect(m_transport->TimeDisplayButton,
-            SIGNAL(released()),
-            SLOT(slotRefreshTimeDisplay()));
-
-    connect(m_transport->ToEndButton,
-            SIGNAL(released()),
-            SLOT(slotRefreshTimeDisplay()));
-
     createGUI("rosegardenui.rc");
 
     // Ensure that the checkbox is unchecked if the dialog
@@ -1334,23 +1251,6 @@ void RosegardenGUIApp::slotAddTracks()
 }
 
 
-/*
-void RosegardenGUIApp::slotChangeTimeResolution()
-{
-    GetTimeResDialog *dialog = new GetTimeResDialog(this);
-    
-    dialog->setInitialTimeRes(0);
-    dialog->show();
-
-    if (dialog->result()) {
-        
-        unsigned int timeResolution = dialog->getTimeRes();
-    }
-    
-}
-*/
-
-
 void RosegardenGUIApp::slotImportMIDI()
 {
     KURL url = KFileDialog::getOpenURL(QString::null, "*.mid", this,
@@ -1459,6 +1359,11 @@ void RosegardenGUIApp::setPointerPosition(const long &posSec,
     m_originatingJump = true;
     m_doc->setPointerPosition(elapsedTime);
     m_originatingJump = false;
+
+    // stop if we've reached the end marker
+    //
+    if (elapsedTime >= comp.getEndMarker())
+        slotStop();
 
     return;
 }
@@ -2275,6 +2180,91 @@ RosegardenGUIApp::slotChangeTempo(Rosegarden::timeT time,
                   << "unrecognised tempo command" << std::endl;
     }
 
+}
+
+
+void
+RosegardenGUIApp::plugAccelerators(QWidget *widget, QAccel *acc)
+{
+
+    acc->connectItem(acc->insertItem(Key_Enter),
+                     this,
+                     SLOT(slotPlay()));
+
+    acc->connectItem(acc->insertItem(Key_Insert),
+                     this,
+                     SLOT(slotStop()));
+
+    acc->connectItem(acc->insertItem(Key_PageDown),
+                     this,
+                     SLOT(slotFastforward()));
+
+    acc->connectItem(acc->insertItem(Key_End),
+                     this,
+                     SLOT(slotRewind()));
+
+    acc->connectItem(acc->insertItem(Key_Space),
+                     this,
+                     SLOT(slotRecord()));
+
+    Rosegarden::RosegardenTransportDialog *transport =
+        dynamic_cast<Rosegarden::RosegardenTransportDialog*>(widget);
+
+    if (transport)
+    {
+        connect((QObject *) transport->PlayButton,
+                SIGNAL(released()),
+                this,
+                SLOT(slotPlay()));
+
+        connect((QObject *) transport->StopButton,
+                SIGNAL(released()),
+                this,
+                SLOT(slotStop()));
+             
+        connect((QObject *) transport->FfwdButton,
+                SIGNAL(released()),
+                SLOT(slotFastforward()));
+            
+        connect((QObject *) transport->RewindButton,
+                SIGNAL(released()),
+                this,
+                SLOT(slotRewind()));
+
+        connect((QObject *) transport->RecordButton,
+                SIGNAL(released()),
+                this,
+                SLOT(slotRecord()));
+
+        connect((QObject *) transport->RewindEndButton,
+                SIGNAL(released()),
+                this,
+                SLOT(slotRewindToBeginning()));
+
+        connect((QObject *) transport->FfwdEndButton,
+                SIGNAL(released()),
+                this,
+                SLOT(slotFastForwardToEnd()));
+
+        connect((QObject *) transport->MetronomeButton,
+                SIGNAL(released()),
+                this,
+                SLOT(slotToggleMetronome()));
+            
+        connect((QObject *) transport->SoloButton,
+                SIGNAL(released()),
+                this,
+                SLOT(slotToggleSolo()));
+            
+        connect((QObject *) transport->TimeDisplayButton,
+                SIGNAL(released()),
+                this,
+                SLOT(slotRefreshTimeDisplay()));
+
+        connect((QObject *) transport->ToEndButton,
+                SIGNAL(released()),
+                SLOT(slotRefreshTimeDisplay()));
+    }
 }
 
 

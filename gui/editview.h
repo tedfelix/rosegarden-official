@@ -24,7 +24,9 @@
 
 #include <vector>
 
+#include <qaccel.h>
 #include <kmainwindow.h>
+
 #include "Event.h" // for timeT -- can't predeclare a typedef
 
 namespace Rosegarden { class Segment; }
@@ -134,6 +136,11 @@ public:
      * Set the active item
      */
     void setActiveItem(ActiveItem* i) { m_activeItem = i; }
+
+    /**
+     * Return our local accelerator object
+     */
+    QAccel* getAccelerators() { return m_accelerators; }
 
 public slots:
     /**
@@ -292,6 +299,9 @@ protected:
 
     unsigned int m_mainCol;
     unsigned int m_compositionRefreshStatusId;
+
+    QAccel      *m_accelerators;
+
 };
 
 #endif

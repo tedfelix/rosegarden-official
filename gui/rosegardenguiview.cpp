@@ -209,6 +209,13 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
     NotationView *notationView =
 	new NotationView(getDocument(), segmentsToEdit, this);
 
+    // create keyboard accelerators on view
+    //
+    RosegardenGUIApp *par = dynamic_cast<RosegardenGUIApp*>(parent());
+
+    if (par)
+        par->plugAccelerators(notationView, notationView->getAccelerators());
+
     // For sending note previews
     //
     connect(notationView, SIGNAL(notePlayed(Rosegarden::MappedEvent*)),
@@ -224,7 +231,16 @@ void RosegardenGUIView::slotEditSegmentMatrix(Rosegarden::Segment* p)
     std::vector<Rosegarden::Segment *> segmentsToEdit;
     segmentsToEdit.push_back(p);
 
-    MatrixView *matrixView = new MatrixView(getDocument(), segmentsToEdit, this);
+    MatrixView *matrixView = new MatrixView(getDocument(),
+                                            segmentsToEdit,
+                                            this);
+
+    // create keyboard accelerators on view
+    //
+    RosegardenGUIApp *par = dynamic_cast<RosegardenGUIApp*>(parent());
+
+    if (par)
+        par->plugAccelerators(matrixView, matrixView->getAccelerators());
 
     // For sending key presses
     //

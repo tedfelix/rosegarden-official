@@ -10,38 +10,15 @@ o Event playback on selection movement
 
 o Changing Composition length
 
-o Finding next/previous tempo changes
-
-o Set a default tempo and erase all other tempo changes
-
 o ALSA/JACK audio 
 
 o Starting playback in middle of long Events should actually play them
 
-o Matrix view scrolling
-
-o Segment labelling
-  [HMM, first cut in but much more involved than first appears
-   cc IN PROGRESS ]
-
-o ALSA:
-  - ffwd/rwding/looping [DONE - still not wonderful but will do for mo]
-  - MIDI recording timestamps [DONE]
-  - recording timing is wrong - bars are displaced by count-in [FIXED]
-  - hanging notes on stop [DONE - VOICES_OFF type controller call and
-                                  processPending()]
-  - configure [DONE with GL]
-  - start-up bug [FIXED?]
-  - metronome broken with ALSA? [NO - just wasn't implemented - NOW FIXED]
-  - MIDI THRU to current selected instrument [DONE]
-  - Instrument label on InstrumentParameterBox [DONE]
-  - ALL Synth instruments have the same channel occasionally! [???]
+o Matrix view auto scrolling
 
 o Looping marker set from file load/top level - Looping
   set from Clients - Looping BUG crashing sequencer
   Looping memory
-
-o Sharing keyboard accelerators cleanly across all child windows
 
 o Playing Audio files broken - get seeking working
 
@@ -135,6 +112,30 @@ Completed POST 0.1.4
 - Last Note seems broken again [FIXED]
 
 - MidiNote sending from Matrix view [DONE]
+
+- Finding next/previous tempo changes
+  [DONE MODs to TEMPO DIALOG]
+
+- Set a default tempo and erase all other tempo changes
+  [DONE as part of TEMPO DIALOG]
+
+- ALSA:
+  - ffwd/rwding/looping [DONE - still not wonderful but will do for mo]
+  - MIDI recording timestamps [DONE]
+  - recording timing is wrong - bars are displaced by count-in [FIXED]
+  - hanging notes on stop [DONE - VOICES_OFF type controller call and
+                                  processPending()]
+  - configure [DONE with GL]
+  - start-up bug [FIXED?]
+  - metronome broken with ALSA? [NO - just wasn't implemented - NOW FIXED]
+  - MIDI THRU to current selected instrument [DONE]
+  - Instrument label on InstrumentParameterBox [DONE]
+  - ALL Synth instruments have the same channel occasionally! [???]
+
+- Segment labelling [DONE]
+
+- Sharing keyboard accelerators cleanly across all child windows
+  [DONE]
 
 
 

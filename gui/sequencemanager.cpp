@@ -470,6 +470,9 @@ SequenceManager::rewind()
     // want to cope with bars beyond the actual end of the piece
     timeT newPosition = composition.getBarRangeForTime(position - 1).first;
 
+    if (newPosition < composition.getStartMarker())
+        newPosition = composition.getStartMarker();
+
     m_doc->setPointerPosition(newPosition);
 }
 
@@ -484,10 +487,11 @@ SequenceManager::fastforward()
     timeT position = composition.getPosition() + 1;
     timeT newPosition = composition.getBarRangeForTime(position).second;
 
-    // we need to work out where the trackseditor finishes so we
-    // don't skip beyond it.  Generally we need extra-Composition
-    // non-destructive start and end markers for the piece.
+    // Don't skip past end marker
     //
+    if (newPosition > composition.getEndMarker())
+        newPosition = composition.getEndMarker();
+
     m_doc->setPointerPosition(newPosition);
 
 }
