@@ -7,11 +7,9 @@ features of the language and of the standard library.  We definitely
 aim to write C++ rather than C-with-classes or a-better-C.
 
 Code should be readable and well-presented.  We have guidelines for
-coding style, but we don't always follow them; Richard's code in
-sound/, for example, is quite different from Chris's in core/.  But
-it's clear and readable, so it's fine.  If in doubt though, and
-particularly when developing in libraries with a wide mix of code
-(such as gui/), follow these guidelines:
+coding style, and try to follow them although there are some misses
+:-). If you want to contribute, please stick as close to these as you
+can.
 
 
 Style and naming conventions
@@ -27,6 +25,7 @@ Style and naming conventions
 
  * method and variable names names begin with a lower case (int myMethod())
 
+ * brace placement is rather liberal
 
 Language issues
 ---------------
@@ -38,7 +37,7 @@ Language issues
  * avoid C-style casts.  The only time they're okay is to shut up
    signed/unsigned or int/double conversion warnings
 
- * when given the choice, prefer STL containers to Qt ones.
+ * when given the choice, prefer STL containers to Qt ones
 
  * use std::string whenever possible (e.g. in core), QString
    only when you need to deal with Qt widgets, or need some of
