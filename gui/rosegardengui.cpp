@@ -3600,6 +3600,15 @@ void RosegardenGUIApp::notifySequencerStatus(const int& status)
         m_seqManager->setTransportStatus((TransportStatus) status);
 }
 
+// Called from sequencer whenever an event arrives outside of the
+// recording context.
+//
+void RosegardenGUIApp::processAsynchronousMidi(const Rosegarden::MappedComposition &mC)
+{
+    if (m_seqManager)
+	m_seqManager->processAsynchronousMidi(mC, 0);
+}
+
 
 // Called when we want to start recording from the GUI.
 // This method tells the sequencer to start recording and

@@ -69,6 +69,11 @@ k_dcop:
     //
     virtual void notifySequencerStatus(const int &status) = 0;
 
+    // Used to map unexpected (async) MIDI events to the user interface.
+    // We can show these on the Transport or on a MIDI Mixer.
+    //
+    virtual void processAsynchronousMidi(const Rosegarden::MappedComposition &mC) = 0;
+
     // The sequencer tries to call this action until it can - then
     // we can go on and retrive device information
     //

@@ -232,6 +232,11 @@ public:
      */
     virtual void notifySequencerStatus(const int &status);
 
+    /**
+     * Handle some random incoming MIDI events.
+     */
+    virtual void processAsynchronousMidi(const Rosegarden::MappedComposition &);
+
     /*
      * The sequencer calls this method when it's running to
      * allow us to sync data with it.
