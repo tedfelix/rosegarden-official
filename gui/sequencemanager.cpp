@@ -1050,7 +1050,7 @@ SequenceManager::record(bool toggled)
 
                 if (recordType == STARTING_TO_RECORD_AUDIO)
                 {
-                    throw(i18n("Couldn't start recording audio - is audio record path valid?"));
+                    throw(i18n("Couldn't start recording audio.  Ensure your audio record path is valid\nin Document Properties (Edit->Edit Document Properties->Audio"));
                 }
                 else
                 {

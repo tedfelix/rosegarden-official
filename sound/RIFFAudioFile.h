@@ -91,12 +91,14 @@ public:
     //
     virtual std::string getSampleFrames(std::ifstream *file,
                                         unsigned int frames);
+    virtual std::string getSampleFrames(unsigned int frames);
 
     // Return a number of (possibly) interleaved samples
     // over a time slice from current file pointer position.
     //
     virtual std::string getSampleFrameSlice(std::ifstream *file,
                                             const RealTime &time);
+    virtual std::string getSampleFrameSlice(const RealTime &time);
 
     // Append a string of samples to an already open (for writing)
     // audio file.

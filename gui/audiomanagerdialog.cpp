@@ -169,6 +169,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     m_renameButton    = new QPushButton(i18n("Rename File"), v);
     m_insertButton    = new QPushButton(i18n("Insert into Composition"), v);
     m_deleteAllButton = new QPushButton(i18n("Remove All Audio Files"), v);
+    m_exportButton    = new QPushButton(i18n("Export Audio File"), v);
     m_fileList        = new AudioListView(h);
 
     QToolTip::add(m_fileList, i18n("Drag'n Drop .wav files here"));
@@ -207,6 +208,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     connect(m_renameButton, SIGNAL(released()), SLOT(slotRename()));
     connect(m_insertButton, SIGNAL(released()), SLOT(slotInsert()));
     connect(m_deleteAllButton, SIGNAL(released()), SLOT(slotDeleteAll()));
+    connect(m_exportButton, SIGNAL(released()), SLOT(slotExportAudio()));
 
     // connect selection mechanism
     connect(m_fileList, SIGNAL(selectionChanged(QListViewItem*)),
@@ -268,6 +270,7 @@ AudioManagerDialog::slotPopulateFileList()
     m_renameButton->setDisabled(true);
     m_insertButton->setDisabled(true);
     m_deleteAllButton->setDisabled(true);
+    m_exportButton->setDisabled(true);
 
     if (m_doc->getAudioFileManager().begin() ==
             m_doc->getAudioFileManager().end())
@@ -463,6 +466,64 @@ AudioManagerDialog::getCurrentSelection()
 }
 
 void
+AudioManagerDialog::slotExportAudio()
+{
+    WAVAudioFile *sourceFile 
+        = dynamic_cast<WAVAudioFile*>(getCurrentSelection());
+    
+    AudioListItem *item =
+        dynamic_cast<AudioListItem*>(m_fileList->selectedItem());
+    
+    Rosegarden::Segment *segment = item->getSegment();
+
+    QString saveFile =
+        KFileDialog::getSaveFileName(":WAVS",
+                                 QString(i18n("*.wav|WAV files (*.wav)")),
+                                 this, i18n("Choose a name to save this file as"));
+    
+    if (sourceFile == 0 || item == 0 || segment == 0 || saveFile.isEmpty())
+        return;
+
+    // Check for a dot extension and append ".wav" if not found
+    //
+    if (saveFile.contains(".") == 0)
+        saveFile += ".wav";
+
+    RosegardenProgressDialog progressDlg(i18n("Exporting audio file..."),
+                                         100,
+                                         this);
+
+    progressDlg.progressBar()->setProgress(0);
+
+    Rosegarden::RealTime segmentDuration 
+        = segment->getAudioEndTime() - segment->getAudioStartTime();
+    
+    WAVAudioFile *destFile 
+        = new WAVAudioFile(qstrtostr(saveFile),
+                           sourceFile->getChannels(),
+                           sourceFile->getSampleRate(),
+                           sourceFile->getBytesPerSecond(),
+                           sourceFile->getBytesPerFrame(),
+                           sourceFile->getBitsPerSample());
+    
+    if (sourceFile->open() == false) 
+        return;
+    
+    destFile->write();
+
+    sourceFile->scanTo(segment->getAudioStartTime());
+
+    destFile->appendSamples
+        (sourceFile->getSampleFrameSlice(segmentDuration));
+
+    destFile->close();
+    sourceFile->close();    
+    delete destFile;
+
+    progressDlg.progressBar()->setProgress(100);
+}
+
+void
 AudioManagerDialog::slotDelete()
 {
     AudioFile *audioFile = getCurrentSelection();
@@ -605,6 +666,7 @@ AudioManagerDialog::slotEnableButtons()
     m_renameButton->setDisabled(false);
     m_insertButton->setDisabled(false);
     m_deleteAllButton->setDisabled(false);
+    m_exportButton->setDisabled(true);
 
     if (m_audiblePreview)
         m_playButton->setDisabled(false);
@@ -744,6 +806,7 @@ AudioManagerDialog::slotSelectionChanged(QListViewItem *item)
         Rosegarden::SegmentSelection selection;
         selection.insert(aItem->getSegment());
         emit segmentsSelected(selection);
+        m_exportButton->setDisabled(false);
     }
 }
 

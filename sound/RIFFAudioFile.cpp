@@ -211,6 +211,16 @@ RIFFAudioFile::getSampleFrames(std::ifstream *file, unsigned int frames)
     return getBytes(file, totalBytes);
 }
 
+std::string
+RIFFAudioFile::getSampleFrames(unsigned int frames)
+{
+    if (*m_inFile) {
+        return getSampleFrames(m_inFile, frames);
+    } else {
+        return std::string("");
+    }
+}
+
 // Return a slice of frames over a time period
 //
 std::string
@@ -226,6 +236,15 @@ RIFFAudioFile::getSampleFrameSlice(std::ifstream *file, const RealTime &time)
     return getBytes(file, totalBytes);
 }
 
+std::string
+RIFFAudioFile::getSampleFrameSlice(const RealTime &time)
+{
+    if (*m_inFile) {
+        return getSampleFrameSlice(m_inFile, time);
+    } else {
+        return std::string("");
+    }
+}    
 
 RealTime
 RIFFAudioFile::getLength()

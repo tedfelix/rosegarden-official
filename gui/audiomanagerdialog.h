@@ -99,6 +99,7 @@ public slots:
     void slotEnableButtons();
     void slotInsert();
     void slotDeleteAll();
+    void slotExportAudio();
 
     // get selection
     void slotSelectionChanged(QListViewItem *);
@@ -157,6 +158,7 @@ protected:
     QPushButton      *m_renameButton;
     QPushButton      *m_insertButton;
     QPushButton      *m_deleteAllButton;
+    QPushButton      *m_exportButton;
 
     RosegardenGUIDoc *m_doc;
 
