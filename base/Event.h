@@ -84,6 +84,7 @@ public:
     timeT getAbsoluteTime() const    { return m_absoluteTime; }
     timeT getDuration()     const    { return m_duration; }
     void setAbsoluteTime(timeT d)    { m_absoluteTime = d; }
+    void addAbsoluteTime(timeT d)    { m_absoluteTime += d; }
     void setDuration(timeT d)        { m_duration = d; }
 
     bool has(const std::string &name) const;
