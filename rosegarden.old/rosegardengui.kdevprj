@@ -99,7 +99,7 @@ install_location=
 type=DATA
 
 [rosegardengui/Makefile.am]
-files=rosegardengui/main.cpp,rosegardengui/rosegardengui.cpp,rosegardengui/rosegardengui.h,rosegardengui/rosegardenguidoc.cpp,rosegardengui/rosegardenguidoc.h,rosegardengui/rosegardenguiview.cpp,rosegardengui/rosegardenguiview.h,rosegardengui/resource.h,rosegardengui/rosegardengui.desktop,rosegardengui/rosegardengui.xpm,rosegardengui/mini-rosegardengui.xpm,rosegardengui/notepixmapfactory.cpp,rosegardengui/notepixmapfactory.h,rosegardengui/qcanvasgroupableitem.cpp,rosegardengui/qcanvasgroupableitem.h,rosegardengui/qcanvasitemgroup.cpp,rosegardengui/qcanvasitemgroup.h,rosegardengui/qcanvaslinegroupable.cpp,rosegardengui/qcanvaslinegroupable.h,rosegardengui/qcanvasspritegroupable.cpp,rosegardengui/qcanvasspritegroupable.h,rosegardengui/staff.cpp,rosegardengui/staff.h,rosegardengui/qcanvassimplesprite.cpp,rosegardengui/qcanvassimplesprite.h,rosegardengui/layoutengine.cpp,rosegardengui/layoutengine.h,rosegardengui/notationhlayout.cpp,rosegardengui/notationhlayout.h,rosegardengui/notationvlayout.cpp,rosegardengui/notationvlayout.h,rosegardengui/xmlstorableevent.cpp,rosegardengui/xmlstorableevent.h,rosegardengui/rosexmlhandler.cpp,rosegardengui/rosexmlhandler.h,rosegardengui/quantizer.cpp,rosegardengui/quantizer.h,rosegardengui/rosedebug.h,rosegardengui/notationelement.cpp,rosegardengui/notationelement.h,rosegardengui/viewelementsmanager.cpp,rosegardengui/viewelementsmanager.h,rosegardengui/notationview.cpp,rosegardengui/notationview.h,rosegardengui/notationcanvasview.cpp,rosegardengui/notationcanvasview.h,rosegardengui/staffline.cpp,rosegardengui/staffline.h,rosegardengui/scale.cpp,rosegardengui/scale.h,rosegardengui/rosedebug.cpp,rosegardengui/trackseditor.cpp,rosegardengui/trackseditor.h,rosegardengui/trackscanvas.cpp,rosegardengui/trackscanvas.h
+files=rosegardengui/main.cpp,rosegardengui/rosegardengui.cpp,rosegardengui/rosegardengui.h,rosegardengui/rosegardenguidoc.cpp,rosegardengui/rosegardenguidoc.h,rosegardengui/rosegardenguiview.cpp,rosegardengui/rosegardenguiview.h,rosegardengui/resource.h,rosegardengui/rosegardengui.desktop,rosegardengui/rosegardengui.xpm,rosegardengui/mini-rosegardengui.xpm,rosegardengui/notepixmapfactory.cpp,rosegardengui/notepixmapfactory.h,rosegardengui/qcanvasgroupableitem.cpp,rosegardengui/qcanvasgroupableitem.h,rosegardengui/qcanvasitemgroup.cpp,rosegardengui/qcanvasitemgroup.h,rosegardengui/qcanvaslinegroupable.cpp,rosegardengui/qcanvaslinegroupable.h,rosegardengui/qcanvasspritegroupable.cpp,rosegardengui/qcanvasspritegroupable.h,rosegardengui/staff.cpp,rosegardengui/staff.h,rosegardengui/qcanvassimplesprite.cpp,rosegardengui/qcanvassimplesprite.h,rosegardengui/layoutengine.cpp,rosegardengui/layoutengine.h,rosegardengui/notationhlayout.cpp,rosegardengui/notationhlayout.h,rosegardengui/notationvlayout.cpp,rosegardengui/notationvlayout.h,rosegardengui/xmlstorableevent.cpp,rosegardengui/xmlstorableevent.h,rosegardengui/rosexmlhandler.cpp,rosegardengui/rosexmlhandler.h,rosegardengui/quantizer.cpp,rosegardengui/quantizer.h,rosegardengui/rosedebug.h,rosegardengui/notationelement.cpp,rosegardengui/notationelement.h,rosegardengui/viewelementsmanager.cpp,rosegardengui/viewelementsmanager.h,rosegardengui/notationview.cpp,rosegardengui/notationview.h,rosegardengui/notationcanvasview.cpp,rosegardengui/notationcanvasview.h,rosegardengui/staffline.cpp,rosegardengui/staffline.h,rosegardengui/rosedebug.cpp,rosegardengui/trackseditor.cpp,rosegardengui/trackseditor.h,rosegardengui/trackscanvas.cpp,rosegardengui/trackscanvas.h
 sub_dirs=docs,notation
 type=prog_main
 
@@ -388,18 +388,6 @@ install_location=
 type=SOURCE
 
 [rosegardengui/rosexmlhandler.h]
-dist=true
-install=false
-install_location=
-type=HEADER
-
-[rosegardengui/scale.cpp]
-dist=true
-install=false
-install_location=
-type=SOURCE
-
-[rosegardengui/scale.h]
 dist=true
 install=false
 install_location=
