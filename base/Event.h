@@ -261,6 +261,10 @@ public:
     PropertyDefn<P>::basic_type get(const string &name) const
         throw (NoData, BadType);
 
+    // no throw, returns bool
+    template <PropertyType P>
+    bool get(const string &name, PropertyDefn<P>::basic_type &val) const;
+
     template <PropertyType P>
     string getAsString(const string &name) const
 	throw (NoData, BadType);
@@ -273,7 +277,7 @@ public:
     void setFromString(const string &name, string value)
 	throw (BadType);
 
-    PropertyMap& properties() { return m_properties; }
+    PropertyMap&       properties()       { return m_properties; }
     const PropertyMap& properties() const { return m_properties; }
 
 #ifndef NDEBUG
@@ -298,6 +302,37 @@ private:
     typedef PropertyMap::value_type PropertyPair;
     PropertyMap m_properties;
 };
+
+
+template <PropertyType P>
+bool
+Event::get(const string &name, PropertyDefn<P>::basic_type &val) const
+{
+    PropertyMap::const_iterator i = m_properties.find(name);
+    if (i != m_properties.end()) { 
+
+        PropertyStoreBase *sb = (*i).second;
+        if (sb->getType() == P) {
+            val = ((PropertyStore<P> *)sb)->getData();
+            return true;
+        }
+        else {
+#ifndef NDEBUG
+            cerr << "Event::get() Error: Attempt to get property \"" << name
+                 << "\" as " << PropertyDefn<P>::name() <<", actual type is "
+                 << sb->getTypeName() << endl;
+#endif
+            return false;
+        }
+	    
+    } else {
+#ifndef NDEBUG
+        cerr << "Event::get() Error: Attempt to get property \"" << name
+             << "\" which doesn't exist for this element" << endl;
+#endif
+        return false;
+    }
+}
 
 
 template <PropertyType P>
