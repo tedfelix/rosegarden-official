@@ -319,7 +319,7 @@
 	</para>
 
 	<para>
-	  If you have more than one staff visible in the notation
+	  If you have more than one staff (i.e. segment) visible in the notation
 	  editor, only one of them can be "current" at once.  The
 	  current staff can be distinguished because it has the insert
 	  cursor on it (see <link linkend="nv-rulers">Rulers and
@@ -379,7 +379,9 @@
 	  at which operations such as paste will take place.  It can
 	  be repositioned by clicking or dragging on the top ruler,
 	  although it can only ever be positioned between two events
-	  on its staff.
+	  on its staff.  You can also position it by clicking with the
+	  Select tool on an empty part of the staff (avoiding any
+	  events), or by clicking anywhere with Shift held down.
 	</para>
 
 	<para>
@@ -399,13 +401,10 @@
       <!-- Display conventions (annotated picture with some selected notes,
            some quantized notes, a bar of incorrect length etc) -->
 
-      <!-- Selection -->
-
-      <!-- Insertion: notes, auto-ties, accidentals -->
       <!-- Quantization, smoothing, and display of quantized notes -->
 
       <sect2 id="nv-quantization">
-	<title>Quantization and smoothing</title>
+	<title>Quantization and Smoothing</title>
 
 	<para>
 	  Rosegarden is a multi-purpose program: it is a notation
@@ -485,6 +484,78 @@
 	    </listitem>
 	  </varlistentry>
 
+	</variablelist>
+
+      </sect2>
+
+      <!-- Tools and Selections -->
+
+      <sect2 id="nv-tools-selections">
+        <title>Tools and Selections</title>
+	<para>
+	  Most of the menu and toolbar editing functions in the
+	  Rosegarden notation editor fall into one of two categories:
+	  "tools" and "functions that operate on selections".
+        </para>
+
+	<variablelist>
+	  <varlistentry>
+	    <term>Tools</term>
+	    <listitem>
+	      <para>The basic tools are the selection tool and those
+	      for inserting notes, rests, text and so on, which are
+	      usually accessed from the toolbar buttons.  Choosing a
+	      tool changes the default behaviour of the mouse buttons
+	      on the main notation canvas, at least until another tool
+	      is chosen instead.  For example, choosing the selection
+	      tool allows you to make selections and so to use the
+	      selection-based functions (below); choosing an insertion
+	      tool (such as one of the notes) switches the GUI's
+	      behaviour so as to insert notes by clicking on the
+	      canvas.
+	      </para>
+	      <para>
+	      You can also change the current tool using the Tools menu.
+	      </para>
+	    </listitem>
+	  </varlistentry>
+
+	  <varlistentry>
+	    <term>Functions that operate on selections</term>
+	    <listitem>
+	      <para>
+	      The majority of the remaining menu functions require a
+	      selection to be made on the canvas before they can be
+	      used.  Some of them (such as Cut or the Note Style
+	      functions) will operate on any selected events; others
+	      (such as the Grace Notes or Stem Directions functions)
+	      will refuse to work unless the selection contains 
+	      some notes.
+	      </para>
+	      <para>
+	      To select some events on the canvas, switch to the
+	      Select (arrow) tool and then outline a rectangular
+	      area containing the events you want to select.  The
+	      selected events will then be highlighted in blue.
+	      If you click on a single event, just that event will
+	      be selected.  (You can also double-click on a single
+	      event to open an editing dialog for that event.)
+	      </para>
+	      <para>
+	      To select a whole bar, double-click
+	      with the Select tool on some empty space within that
+	      bar; to select the whole staff, click three times.
+	      The Edit menu also carries functions for selecting
+	      extended areas based on the location of the insert
+	      cursor.
+	      </para>
+	      <para>
+	      It is not possible to select events from more than
+	      one staff at once.
+	      </para>
+	    </listitem>
+	  </varlistentry>
+
 	  <varlistentry>
 	    <term></term>
 	    <listitem>
@@ -492,11 +563,11 @@
 	      </para>
 	    </listitem>
 	  </varlistentry>
-
-	</variablelist>
+        </variablelist>
 
       </sect2>
 
+      <!-- Insertion: notes, auto-ties, accidentals -->
       <!-- Text -->
       <!-- Indications -->
       <!-- Beamed groups, including overlapping and nesting them -->

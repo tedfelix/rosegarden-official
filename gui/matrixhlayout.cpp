@@ -134,7 +134,7 @@ int MatrixHLayout::getFirstVisibleBar()
 int MatrixHLayout::getLastVisibleBar()
 {
     int barNo = m_firstBar + m_barData.size() - 2;
-    if (barNo < 0) barNo = 0;
+    if (barNo < 1) barNo = 1;
     return barNo;
 }
 

@@ -340,7 +340,10 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 	 getSegment().getEndMarkerTime());
     timeT startTime = (from != to ? (*from)->getAbsoluteTime() : endTime);
 
-    for (NotationElementList::iterator it = from; it != to; ++it) {
+    for (NotationElementList::iterator it = from, nextIt = from;
+	 it != to; it = nextIt) {
+	
+	++nextIt;
 
 	if ((*it)->event()->isa(Clef::EventType)) {
 	    currentClef = Clef(*(*it)->event());
@@ -352,7 +355,8 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 //	kdDebug(KDEBUG_AREA) << "Rendering at " << (*it)->getAbsoluteTime()
 //			     << " (selected = " << selected << ")" << endl;
 
-	renderSingleElement(*it, currentClef, selected);
+	renderSingleElement(*it, (nextIt == to ? 0 : *nextIt),
+			    currentClef, selected);
 
 	if (m_progressDlg &&
 	    (endTime > startTime) &&
@@ -401,7 +405,10 @@ NotationStaff::positionElements(timeT from, timeT to)
     Clef currentClef; // default is okay to start with
     Rosegarden::Key currentKey; // likewise
 
-    for (NotationElementList::iterator it = beginAt; it != endAt; ++it) {
+    for (NotationElementList::iterator it = beginAt, nextIt = beginAt;
+	 it != endAt; it = nextIt) {
+
+	++nextIt;
 
 	if ((*it)->event()->isa(Clef::EventType)) {
 
@@ -462,7 +469,8 @@ NotationStaff::positionElements(timeT from, timeT to)
 	}
 
 	if (needNewSprite) {
-	    renderSingleElement(*it, currentClef, selected);
+	    renderSingleElement(*it, (nextIt == endAt ? 0 : *nextIt),
+				currentClef, selected);
 	    ++elementsRendered;
 	}
 
@@ -650,6 +658,7 @@ NotationStaff::elementShiftedOnly(NotationElementList::iterator i)
 
 void
 NotationStaff::renderSingleElement(NotationElement *elt,
+				   NotationElement *nextElt,
 				   const Rosegarden::Clef &currentClef,
 				   bool selected)
 {
@@ -690,7 +699,24 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 	    timeT duration = m_legatoQuantizer->getQuantizedDuration
 		(elt->event());
 
-	    if (duration > 0) {
+	    // We ignore any rest which has a quantized duration of
+	    // zero, or which overlaps a following event that starts
+	    // less than the shortest note's duration after it
+
+	    bool ignoreRest = (duration == 0);
+	    if (!ignoreRest) {
+		if (nextElt) {
+		    timeT nextTime =
+			m_legatoQuantizer->getQuantizedAbsoluteTime
+			(nextElt->event());
+		    if (nextTime - absTime
+			< Note(Note::Shortest).getDuration()) {
+			ignoreRest = true;
+		    }
+		}
+	    }
+
+	    if (!ignoreRest) {
 
 		Note::Type note =
 		    elt->event()->get<Int>(m_properties.NOTE_TYPE);

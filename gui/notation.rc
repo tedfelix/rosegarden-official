@@ -379,6 +379,9 @@ etc
     <Action name="general_transpose"/>
     <Action name="invert"/>
     <Action name="retrograde"/>
+    <Menu name="Stems"/>
+    <Menu name="Slashes"/>
+    <Menu name="Transpose"/>
   </enable>
 </State>
 

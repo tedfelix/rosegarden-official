@@ -255,7 +255,8 @@ protected:
      * needed in case it's a key event, in which case we need to judge
      * the correct pitch for the key)
      */
-    virtual void renderSingleElement(NotationElement *, 
+    virtual void renderSingleElement(NotationElement *elt, 
+				     NotationElement *nextElt,
 				     const Rosegarden::Clef &,
 				     bool selected);
 

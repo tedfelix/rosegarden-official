@@ -644,8 +644,24 @@ double
 Composition::getTempoAt(timeT t) const
 {
     ReferenceSegment::iterator i = m_tempoSegment.findNearestTime(t);
-    if (i == m_tempoSegment.end()) return m_defaultTempo;
 
+    // In negative time, if there's no tempo event actually defined
+    // prior to the point of interest then we use the next one after
+    // it, so long as it's no later than time zero.  This is the only
+    // rational way to deal with count-in bars where the correct
+    // tempo otherwise won't appear until we hit bar zero.  See also
+    // getTimeSignatureAt
+
+    if (i == m_tempoSegment.end()) {
+	if (t < 0) {
+#ifdef DEBUG_TEMPO_STUFF
+	    cerr << "Composition: Negative time " << t << " for tempo, using 0" << endl;
+#endif
+	    return getTempoAt(0);
+	}
+	else return m_defaultTempo;
+    }
+    
     double tempo = (double)((*i)->get<Int>(TempoProperty)) / 60.0;
 
 #ifdef DEBUG_TEMPO_STUFF
@@ -728,7 +744,11 @@ Composition::getElapsedRealTime(timeT t) const
 
     ReferenceSegment::iterator i = m_tempoSegment.findNearestTime(t);
     if (i == m_tempoSegment.end()) {
-	return time2RealTime(t, m_defaultTempo);
+	i = m_tempoSegment.begin();
+	if (t >= 0 ||
+	    (i == m_tempoSegment.end() || (*i)->getAbsoluteTime() > 0)) {
+	    return time2RealTime(t, m_defaultTempo);
+	}
     }
 
     RealTime elapsed = getTempoTimestamp(*i) +
@@ -748,7 +768,11 @@ Composition::getElapsedTimeForRealTime(RealTime t) const
 
     ReferenceSegment::iterator i = m_tempoSegment.findNearestRealTime(t);
     if (i == m_tempoSegment.end()) {
-	return realTime2Time(t, m_defaultTempo);
+	i = m_tempoSegment.begin();
+	if (t >= RealTime(0, 0) ||
+	    (i == m_tempoSegment.end() || (*i)->getAbsoluteTime() > 0)) {
+	    return realTime2Time(t, m_defaultTempo);
+	}
     }
 
     timeT elapsed = (*i)->getAbsoluteTime() +
