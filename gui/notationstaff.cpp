@@ -337,19 +337,34 @@ NotationStaff::elementNotMoved(NotationElement *elt)
 
     LinedStaffCoords coords = getCanvasCoordsForLayoutCoords
 	(elt->getLayoutX(), (int)elt->getLayoutY());
-    int xoff = (int)coords.first;
+
+/*!!!    int xoff = (int)coords.first;
     int yoff = coords.second;
 
     bool ok =
 	(int)(elt->getCanvasX()) == (int)(elt->getLayoutX() + xoff) &&
 	(int)(elt->getCanvasY()) == (int)(elt->getLayoutY() + yoff);
+*/
+
+    bool ok =
+	(int)(elt->getCanvasX()) == (int)(coords.first) &&
+	(int)(elt->getCanvasY()) == (int)(coords.second);
+
+
     cerr << "elementNotMoved: elt at " << elt->getAbsoluteTime() <<
 	", ok is " << ok << endl;
+/*!!!
     if (!ok) {
 	cerr << "(cf " << (int)(elt->getCanvasX()) << " vs "
 	     << (int)(elt->getLayoutX() + xoff) << ", "
 	     << (int)(elt->getCanvasY()) << " vs "
 	     << (int)(elt->getLayoutY() + yoff) << ")" << endl;
+*/
+    if (!ok) {
+	cerr << "(cf " << (int)(elt->getCanvasX()) << " vs "
+	     << (int)(coords.first) << ", "
+	     << (int)(elt->getCanvasY()) << " vs "
+	     << (int)(coords.second) << ")" << endl;
     }
     return ok;
 }

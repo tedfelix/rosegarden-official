@@ -34,7 +34,7 @@
 
 KStartupLogo::KStartupLogo(QWidget * parent, const char *name)
     : QWidget(parent,name,
-	      /* WType_Popup */ WStyle_Dialog  | WStyle_StaysOnTop /* | WStyle_NoBorderEx | WStyle_Customize*/ | WDestructiveClose),
+	      WStyle_Dialog  | WStyle_StaysOnTop | WStyle_NoBorderEx | WStyle_Customize | WDestructiveClose),
     m_bReadyToHide(false)
 {
     m_pixmap.load(locate("appdata", "pixmaps/splash.png"));
@@ -61,7 +61,6 @@ void KStartupLogo::paintEvent(QPaintEvent*)
     paint.drawText(m_pixmap.width() - 60,
                    m_pixmap.height() - 12,
                    QString("r4 v") + VERSION);
-    raise();
 }
 
 void KStartupLogo::mousePressEvent( QMouseEvent*)

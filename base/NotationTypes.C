@@ -869,138 +869,138 @@ void TimeSignature::getDurationListForInterval(DurationList &dlist,
                                                int duration,
                                                int startOffset) const
 {
-
     setInternalDurations();
 
-	int offset = startOffset;
-	int durationRemaining = duration;
+    int offset = startOffset;
+    int durationRemaining = duration;
 
-	while (durationRemaining > 0) {
+    while (durationRemaining > 0) {
 
-		// Everything in this loop is of the form, "if we're on a [unit] boundary
-		// and there's a [unit] of space left to fill, insert a [unit] of time."
+	// Everything in this loop is of the form, "if we're on a
+	// [unit] boundary and there's a [unit] of space left to fill,
+	// insert a [unit] of time."
 
-		// See if we can insert a bar of time.
+	// See if we can insert a bar of time.
 
-		if (offset % m_barDuration == 0
-			&& durationRemaining >= m_barDuration) {
+	if (offset % m_barDuration == 0
+	    && durationRemaining >= m_barDuration) {
 
-        getDurationListForBar(dlist);
-			durationRemaining -= m_barDuration,
-			offset += m_barDuration;
+	    getDurationListForBar(dlist);
+	    durationRemaining -= m_barDuration,
+		offset += m_barDuration;
     
-}
+	}
 
-		// If that fails and we're in 4/4 time, see if we can insert a
-		// half-bar of time.
+	// If that fails and we're in 4/4 time, see if we can insert a
+	// half-bar of time.
 
-		//_else_ if!
-		else if (m_numerator == 4 && m_denominator == 4
-			&& offset % (m_barDuration/2) == 0
-			&& durationRemaining >= m_barDuration/2) {
+	//_else_ if!
+	else if (m_numerator == 4 && m_denominator == 4
+		 && offset % (m_barDuration/2) == 0
+		 && durationRemaining >= m_barDuration/2) {
 
-			dlist.push_back(m_barDuration/2);
-			durationRemaining -= m_barDuration/2;
-			offset += m_barDuration;
-
-    }
-
-		// If that fails, see if we can insert a beat of time.
-
-		else if (offset % m_beatDuration == 0
-			&& durationRemaining >= m_beatDuration) {
-
-			dlist.push_back(m_beatDuration);
-			durationRemaining -= m_beatDuration;
-			offset += m_beatDuration;
-
-}
-
-		// If that fails, see if we can insert a beat-division of time
-		// (half the beat in simple time, a third of the beat in compound
-		// time)
-
-		else if (offset % m_beatDivisionDuration == 0
-			&& durationRemaining >= m_beatDivisionDuration) {
-
-			dlist.push_back(m_beatDivisionDuration);
-			durationRemaining -= m_beatDivisionDuration;
-			offset += m_beatDivisionDuration;
-
-		}
-
-		// If that fails, keep halving the beat division until we
-		// find something to insert. (This could be part of the beat-division
-		// case; it's only in its own place for clarity.)
-
-		else {
-
-			int currentDuration = m_beatDivisionDuration;
-
-			// One or both of my safeguards against currentDuration being 0
-			// might be useless.
-
-			while ( !(offset % currentDuration == 0
-				&& durationRemaining >= currentDuration)
-				&& currentDuration > 1 ) {
-
-				currentDuration /= 2;
-				if (currentDuration == 0) currentDuration = 1;
-
-    }
-
-			dlist.push_back(currentDuration);
-			durationRemaining -= currentDuration;
-			offset += currentDuration;
-
-}
+	    dlist.push_back(m_barDuration/2);
+	    durationRemaining -= m_barDuration/2;
+	    offset += m_barDuration;
 
 	}
+
+	// If that fails, see if we can insert a beat of time.
+
+	else if (offset % m_beatDuration == 0
+		 && durationRemaining >= m_beatDuration) {
+
+	    dlist.push_back(m_beatDuration);
+	    durationRemaining -= m_beatDuration;
+	    offset += m_beatDuration;
+
+	}
+
+	// If that fails, see if we can insert a beat-division of time
+	// (half the beat in simple time, a third of the beat in compound
+	// time)
+
+	else if (offset % m_beatDivisionDuration == 0
+		 && durationRemaining >= m_beatDivisionDuration) {
+
+	    dlist.push_back(m_beatDivisionDuration);
+	    durationRemaining -= m_beatDivisionDuration;
+	    offset += m_beatDivisionDuration;
+
+	}
+
+	// If that fails, keep halving the beat division until we
+	// find something to insert. (This could be part of the beat-division
+	// case; it's only in its own place for clarity.)
+
+	else {
+
+	    int currentDuration = m_beatDivisionDuration;
+
+	    // One or both of my safeguards against currentDuration being 0
+	    // might be useless.
+
+	    while ( !(offset % currentDuration == 0
+		      && durationRemaining >= currentDuration)
+		    && currentDuration > 1 ) {
+
+		currentDuration /= 2;
+		if (currentDuration == 0) currentDuration = 1;
+
+	    }
+
+	    dlist.push_back(currentDuration);
+	    durationRemaining -= currentDuration;
+	    offset += currentDuration;
+
+	}
+
+    }
 
 }
 
 void TimeSignature::getDurationListForBar(DurationList &dlist) const
 {
     
-	// If the bar's length can be represented with one long symbol, do it.
-	// Otherwise, represent it as individual beats.
+    // If the bar's length can be represented with one long symbol, do it.
+    // Otherwise, represent it as individual beats.
 
-	if (m_barDuration == m_crotchetTime ||
-		m_barDuration == m_crotchetTime * 2 ||
-		m_barDuration == m_crotchetTime * 4 ||
-		m_barDuration == m_crotchetTime * 8 ||
-		m_barDuration == m_dottedCrotchetTime ||
-		m_barDuration == m_dottedCrotchetTime * 2 ||
-		m_barDuration == m_dottedCrotchetTime * 4 ||
-		m_barDuration == m_dottedCrotchetTime * 8) {
+    if (m_barDuration == m_crotchetTime ||
+	m_barDuration == m_crotchetTime * 2 ||
+	m_barDuration == m_crotchetTime * 4 ||
+	m_barDuration == m_crotchetTime * 8 ||
+	m_barDuration == m_dottedCrotchetTime ||
+	m_barDuration == m_dottedCrotchetTime * 2 ||
+	m_barDuration == m_dottedCrotchetTime * 4 ||
+	m_barDuration == m_dottedCrotchetTime * 8) {
 
-		dlist.push_back(getBarDuration());
+	dlist.push_back(getBarDuration());
 
     } else {
 
-	    for (int i = 0; i < getBeatsPerBar(); ++i) {
-			dlist.push_back(getBeatDuration());
-    }
+	for (int i = 0; i < getBeatsPerBar(); ++i) {
+	    dlist.push_back(getBeatDuration());
+	}
                
-        }
-
     }
+
+}
                
 void TimeSignature::setInternalDurations() const {
-	// "unit length," which might be the beat length or the beat-division
-	// length:
-	int noteLength = m_crotchetTime * 4 / m_denominator;
+    // "unit length," which might be the beat length or the beat-division
+    // length:
+    int noteLength = m_crotchetTime * 4 / m_denominator;
 
-	m_barDuration = m_numerator * noteLength;
+    m_barDuration = m_numerator * noteLength;
 
-	if (isDotted()) {
+    if (isDotted()) {
 	m_beatDuration = noteLength * 3;
 	m_beatDivisionDuration = noteLength;
-	}
-	else {
+    }
+    else {
 	m_beatDuration = noteLength;
 	m_beatDivisionDuration = noteLength / 2;
-	}
+    }
 
 }
 

@@ -98,6 +98,7 @@ int main(int argc, char *argv[])
 	//
 	if (start_logo) {
 	    start_logo->raise();
+	    start_logo->setHideEnabled(true);
 	    QApplication::flushX();
 	}
 
@@ -117,7 +118,7 @@ int main(int argc, char *argv[])
     //
     if (start_logo) {
         start_logo->raise();
-        start_logo->setHideEnabled(true);
+	start_logo->setHideEnabled(true);
         QApplication::flushX();
     }
 

@@ -47,55 +47,55 @@ class Composition;
  * Composition into columns.
  */
 
-class CompositionAdapter {
+class CompositionAdapter
+{
 public:
+    class iterator;
+    typedef std::list<Event *> Column;
+    class columniterator;
 
-	class iterator;
-	typedef std::list<Event *> Column;
-	class columniterator;
+    CompositionAdapter(Composition* c, timeT begin = -1, timeT end = -1) :
+	m_composition(c),
+	m_begin(begin),
+	m_end(end) { };
+    ~CompositionAdapter() { };
 
-	CompositionAdapter(Composition* c, timeT begin = -1, timeT end = -1) :
-		m_composition(c),
-		m_begin(begin),
-		m_end(end) { };
-	~CompositionAdapter() { };
+    iterator begin();
+    iterator end();
 
-	iterator begin();
-	iterator end();
+    /**
+	 * Returns a columniterator referencing the first column of the
+	 * timeslice.
+	 */
+    columniterator beginColumns();
 
-	/**
-	  * Returns a columniterator referencing the first column of the
-	  * timeslice.
-	  */
-	columniterator beginColumns();
+    /**
+	 * Returns a past-the-end columniterator.
+	 */
+    columniterator endColumns();
 
-	/**
-	  * Returns a past-the-end columniterator.
-	  */
-	columniterator endColumns();
-
-	class iterator {
-		friend class CompositionAdapter;
-		public:
-		iterator() : m_curEvent(0) { };
-		~iterator() { };
-		iterator& operator++();
-		bool operator!=(const iterator& other);
-		Event* operator*();
-		Event* operator->();
-		private:
-		typedef std::pair<Segment*, Segment::iterator> position;
-		typedef std::list<position> positionlist;
-		positionlist m_positionList;
-		Event*	m_curEvent;
-		timeT 	m_end;
-	};
+    class iterator {
+	friend class CompositionAdapter;
+    public:
+	iterator() : m_curEvent(0) { };
+	~iterator() { };
+	iterator& operator++();
+	bool operator!=(const iterator& other);
+	Event* operator*();
+	Event* operator->();
+    private:
+	typedef std::pair<Segment*, Segment::iterator> position;
+	typedef std::list<position> positionlist;
+	positionlist m_positionList;
+	Event*	m_curEvent;
+	timeT 	m_end;
+    };
 
 
 private:
-	Composition* m_composition;
-	timeT m_begin;
-	timeT m_end;
+    Composition* m_composition;
+    timeT m_begin;
+    timeT m_end;
 };
 
 }
