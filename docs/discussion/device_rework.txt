@@ -120,3 +120,26 @@ be available to external processes for automation through DCOP.
  5. Profit!
 
 
+Some more observations
+~~~~~~~~~~~~~~~~~~~~~~
+
+ * The name you give a Device and the banks and programs you assign to
+   it are entirely between you, the GUI and the .rg file.  The sequencer
+   never knows about them.  The sequencer provides default names on
+   startup, but autoload.rg and any other .rg file you load should
+   override them (if the devices in those files are actually named).
+
+ * Adding and removing Devices _from the GUI_ needs to percolate through
+   to the sequencer, which has to add and remove the Devices in its list
+   and then inform the GUI which needs to update cleanly (i.e. not by
+   simply clearing out the Studio and starting again).  This is probably
+   the trickiest point as it doesn't seem to work correctly now either.
+
+ * Adding and removing ALSA clients (the hotplug thing) is not actually
+   a case of adding or removing devices but of adding or removing
+   connections.  When a connection is removed, the sequencer should
+   simply set any devices connected to it to an unconnected state.  When
+   a connection is added, we could just assign the first unconnected
+   device to it, and only create a new device if we have no unconnected
+   ones.  Then update to GUI as before.
+
