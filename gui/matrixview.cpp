@@ -157,13 +157,14 @@ MatrixElement::~MatrixElement()
     delete m_canvasRect;
 }
 
-void MatrixElement::createCanvasRect(QCanvas* c, const QRect& r)
+void MatrixElement::createCanvasRect(QCanvas* c)
 {
     delete m_canvasRect;
 
-    m_canvasRect = new QCanvasRectangle(r, c);
+    m_canvasRect = new QCanvasRectangle(m_rect, c);
 
     m_canvasRect->setBrush(Qt::blue);
+    m_canvasRect->show();
 }
 
 
@@ -179,6 +180,13 @@ MatrixStaff::MatrixStaff(QCanvas* c, Rosegarden::Segment* segment,
 void MatrixStaff::renderElements(MatrixElementList::iterator from,
                                  MatrixElementList::iterator to)
 {
+    for (MatrixElementList::iterator i = from;
+         i != to; ++i) {
+        
+        MatrixElement* el = (*i);
+
+        el->createCanvasRect(m_canvas);
+    }
 }
 
 void MatrixStaff::renderElements()

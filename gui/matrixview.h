@@ -43,7 +43,7 @@ public:
 
     virtual ~MatrixElement();
 
-    void createCanvasRect(QCanvas* c, const QRect&);
+    void createCanvasRect(QCanvas* c);
 
     /**
      * Returns the X coordinate of the element, as computed by the
