@@ -267,6 +267,15 @@ void MatrixPainter::handleMouseMove(Rosegarden::timeT newTime,
     // sanity check
     if (!m_currentElement) return;
 
+    //!!! Rather than using m_basicDuration as the unit for painting,
+    // we should probably be using a Rosegarden::SnapGrid with an
+    // appropriate snap time (SnapToUnit as a default, for example).
+    // SnapGrid requires a RulerScale -- but we have one of those, as
+    // HorizontalLayout subclasses RulerScale.  Apart from anything
+    // else, using SnapGrid will ensure that time-signature changes
+    // are handled correctly (at least if MatrixHLayout handles them,
+    // which it presently doesn't but needs to be made to anyway)
+
     newTime = (newTime / m_basicDuration) * m_basicDuration;
 
     if (newTime == m_currentElement->getAbsoluteTime()) return;

@@ -1104,7 +1104,9 @@ EventEditDialog::EventEditDialog(QWidget *parent,
 
     new QLabel(i18n("Duration: "), intrinsicGrid);
     m_durationDisplay = new QLabel("(note)", intrinsicGrid);
+    m_durationDisplay->setMinimumWidth(20);
     m_durationDisplayAux = new QLabel("(note)", intrinsicGrid);
+    m_durationDisplayAux->setMinimumWidth(20);
 
     QSpinBox *duration = new QSpinBox
 	(0, INT_MAX, Note(Note::Shortest).getDuration(), intrinsicGrid);
@@ -1264,11 +1266,6 @@ EventEditDialog::slotAbsoluteTimeChanged(int value)
 void
 EventEditDialog::slotDurationChanged(int value)
 {
-    if (value == m_duration) return;
-
-    m_modified = true;
-    m_duration = value;
-
     Note nearestNote = Note::getNearestNote(timeT(value), 1);
     std::string noteName = nearestNote.getReferenceName();
     noteName = "menu-" + noteName;
@@ -1286,6 +1283,11 @@ EventEditDialog::slotDurationChanged(int value)
     } else {
 	m_durationDisplayAux->setText(" ");
     }
+
+    if (value == m_duration) return;
+
+    m_modified = true;
+    m_duration = value;
 }
 
 void

@@ -796,21 +796,34 @@ void NotationSelector::handleMouseDblClick(Rosegarden::timeT,
     if (!staff) return;
 
     if (m_clickedElement) {
-	//!!! testing
+
 	EventEditDialog *dialog = new EventEditDialog
 	    (m_nParentView, m_nParentView->getNotePixmapFactory(),
 	     *m_clickedElement->event(), true);
-	(void)dialog->exec();
+
+	if (dialog->exec() == QDialog::Accepted &&
+	    dialog->isModified()) {
+
+	    EventEditCommand *command = new EventEditCommand
+		(staff->getSegment(),
+		 m_clickedElement->event(),
+		 dialog->getEvent());
+
+	    m_nParentView->addCommandToHistory(command);
+	}
+
+    } else {
+
+	QRect rect = staff->getBarExtents(e->x(), e->y());
+
+	m_selectionRect->setX(rect.x() + 1);
+	m_selectionRect->setY(rect.y());
+	m_selectionRect->setSize(rect.width() - 1, rect.height());
+
+	m_selectionRect->show();
+	m_updateRect = false;
     }
 
-    QRect rect = staff->getBarExtents(e->x(), e->y());
-
-    m_selectionRect->setX(rect.x() + 1);
-    m_selectionRect->setY(rect.y());
-    m_selectionRect->setSize(rect.width() - 1, rect.height());
-
-    m_selectionRect->show();
-    m_updateRect = false;
     return;
 }
 

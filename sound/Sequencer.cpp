@@ -24,6 +24,8 @@
 #include "config.h"
 #include "Sequencer.h"
 
+#include "config.h"
+
 #ifdef HAVE_ALSA
 #include "AlsaDriver.h"
 #else
