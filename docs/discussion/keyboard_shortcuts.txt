@@ -1,0 +1,33 @@
+
+Shortcuts that should where possible do similar things in
+all relevant views:
+
+0 - select hemidemisemi duration (64th note)
+1 - select semibreve duration (whole note)
+2 - select minim duration (half note)
+3 - select demisemi duration (32nd note)
+4 - select crotchet duration (quarter note)
+5 - select breve duration (double whole note)
+6 - select semiquaver duration (sixteenth note)
+8 - select quaver duration (eighth note)
+
+Ctrl+numberkeys - dotted durations
+G - toggle triplet mode (not ideal, it was just a left-over key in notation)
+
+Enter          - play
+Ins (numeric)  - stop
+End (numeric)  - rewind
+PgDn (numeric) - fast forward
+Space          - toggle record
+
+Up, down (with notes selected) - change note pitches in semitone steps
+
+Shift - modifier for multi-select
+Ctrl - "action" modifier, various uses
+
+In notation editor:
+Left, right - move insert cursor by one note
+Shift + left, right - move insert cursor and select
+Ctrl + left, right - move insert cursor by whole bar
+Ctrl + Shift + left, right - move by whole bar and select
+
