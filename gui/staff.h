@@ -22,6 +22,8 @@
 
 #include "qcanvasitemgroup.h"
 
+class QCanvasLineGroupable;
+
 /**
  * A Staff (treble and bass clef + lines) as displayed on screen.
  *
@@ -32,8 +34,11 @@ class Staff : public QCanvasItemGroup
 {
 public:
     enum Clef { Treble, Bass, Alto, Tenor };
+
+    typedef vector<QCanvasLineGroupable*> barlines;
     
     Staff(QCanvas*, Clef clef = Treble);
+    ~Staff();
 
     /**
      * Returns the Y offset at which a note with pitch 'p'
@@ -43,6 +48,10 @@ public:
 
     /// Returns the height of a bar line
     unsigned int barLineHeight() const { return m_barLineHeight; }
+
+    void insertBar(unsigned int barPos);
+    void deleteBars(unsigned int fromPos, unsigned int toPos);
+    void deleteBars();
 
     static const unsigned int noteHeight;
     static const unsigned int noteWidth;
@@ -59,6 +68,8 @@ protected:
     unsigned int m_barLineHeight;
     unsigned int m_horizLineLength;
     vector<int> m_pitchToHeight;
+
+    barlines m_barLines;
 };
 
 #endif

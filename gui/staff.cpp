@@ -15,6 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <algorithm>
+
 #include "staff.h"
 #include "staffline.h"
 #include "qcanvasspritegroupable.h"
@@ -225,6 +227,13 @@ Staff::Staff(QCanvas *canvas, Staff::Clef clef)
 
 }
 
+Staff::~Staff()
+{
+    for (barlines::iterator i = m_barLines.begin(); i != m_barLines.end(); ++i)
+        delete (*i);
+}
+
+
 int
 Staff::pitchYOffset(int pitch) const
 {
@@ -253,6 +262,83 @@ Staff::makeInvisibleLine(int y, int pitch)
     invisibleLine->setAssociatedPitch(pitch);
 }
 
+static bool
+compareBarPos(QCanvasLineGroupable *barLine1, QCanvasLineGroupable *barLine2)
+{
+    return barLine1->x() < barLine2->x();
+}
+
+static bool
+compareBarToPos(QCanvasLineGroupable *barLine1, unsigned int pos)
+{
+    return barLine1->x() < pos;
+}
+
+void
+Staff::insertBar(unsigned int barPos)
+{
+    kdDebug(KDEBUG_AREA) << "Staff::insertBar(" << barPos << ")\n";
+
+    QCanvasLineGroupable* barLine = new QCanvasLineGroupable(canvas(), this);
+
+    barLine->setPoints(0, linesOffset,
+                       0, barLineHeight() + linesOffset);
+    barLine->moveBy(barPos + x(), y());
+    barLine->show();
+
+    barlines::iterator insertPoint = lower_bound(m_barLines.begin(),
+                                                 m_barLines.end(),
+                                                 barLine, compareBarPos);
+
+    m_barLines.insert(insertPoint, barLine);
+}
+
+void
+Staff::deleteBars(unsigned int fromPos, unsigned int toPos)
+{
+    if (fromPos == toPos)
+        return;
+
+    if (fromPos > toPos) {
+        kdDebug(KDEBUG_AREA) << "%% Staff::deleteBars : fromPos (" << fromPos
+                             << ")> toPos (" << toPos << ")\n";
+        throw -1;
+    }
+    
+    kdDebug(KDEBUG_AREA) << "Staff::deleteBars from " << fromPos << " to "
+                         << toPos << endl;
+
+    barlines::iterator startDeletePoint = lower_bound(m_barLines.begin(),
+                                                      m_barLines.end(),
+                                                      fromPos, compareBarToPos);
+
+    barlines::iterator endDeletePoint = lower_bound(startDeletePoint,
+                                                    m_barLines.end(),
+                                                    toPos, compareBarToPos);
+
+    if (startDeletePoint != m_barLines.end() && endDeletePoint != m_barLines.end())
+        kdDebug(KDEBUG_AREA) << "startDeletePoint pos : " << (*startDeletePoint)->x()
+                             << " - endDeletePoint : " << (*endDeletePoint)->x() << endl;
+    else
+        kdDebug(KDEBUG_AREA) << "startDeletePoint pos or endDeletePoint = end\n";
+
+    // delete the canvas lines
+    for (barlines::iterator i = startDeletePoint; i != endDeletePoint; ++i)
+        delete (*i);
+
+    m_barLines.erase(startDeletePoint, endDeletePoint);
+}
+
+void
+Staff::deleteBars()
+{
+    kdDebug(KDEBUG_AREA) << "Staff::deleteBars()\n";
+    
+    for (barlines::iterator i = m_barLines.begin(); i != m_barLines.end(); ++i)
+        delete (*i);
+
+    m_barLines.clear();
+}
 
 
 const unsigned int Staff::noteHeight = 8;
