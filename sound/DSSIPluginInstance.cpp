@@ -318,6 +318,31 @@ DSSIPluginInstance::getProgram(int bank, int program)
     return programName;
 }
 
+unsigned long
+DSSIPluginInstance::getProgram(QString name)
+{
+#ifdef DEBUG_DSSI
+    std::cerr << "DSSIPluginInstance::getProgram(" << name << ")" << std::endl;
+#endif
+
+    if (!m_descriptor || !m_descriptor->get_program) return 0;
+
+    unsigned long index = 0;
+    DSSI_Program_Descriptor programDescriptor;
+
+    while (m_descriptor->get_program(m_instanceHandle, index, &programDescriptor)) {
+	++index;
+	QString programName = QString("%1. %2").arg(index).arg(programDescriptor.Name);
+	if (programName == name) {
+	    free(programDescriptor.Name);
+	    return programDescriptor.Bank << 16 + programDescriptor.Program;
+	}
+	free(programDescriptor.Name);
+    }
+    
+    return 0;
+}
+
 QString
 DSSIPluginInstance::getCurrentProgram()
 {

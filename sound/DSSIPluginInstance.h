@@ -64,6 +64,7 @@ public:
     virtual QStringList getPrograms();
     virtual QString getCurrentProgram();
     virtual QString getProgram(int bank, int program);
+    virtual unsigned long getProgram(QString name);
     virtual void selectProgram(QString program);
 
     virtual bool isBypassed() const { return m_bypassed; }

@@ -852,6 +852,15 @@ AudioInstrumentMixer::getPluginProgram(InstrumentId id, int position, int bank,
     return programName;
 }
 
+unsigned long
+AudioInstrumentMixer::getPluginProgram(InstrumentId id, int position, QString name)
+{
+    unsigned long program = 0; 
+    RunnablePluginInstance *instance = getPluginInstance(id, position);
+    if (instance) program = instance->getProgram(name);
+    return program;
+}
+
 void
 AudioInstrumentMixer::setPluginProgram(InstrumentId id, int position, QString program)
 {

@@ -1347,6 +1347,22 @@ MappedPluginSlot::getProgram(int bank, int program)
     return QString();
 }
 
+unsigned long
+MappedPluginSlot::getProgram(QString name)
+{
+    MappedStudio *studio =
+	dynamic_cast<MappedStudio*>(getParent());
+    
+    if (studio) {
+	return 
+	    studio->getSoundDriver()->getPluginInstanceProgram(m_instrument,
+							       m_position,
+							       name);
+    }
+    
+    return 0;
+}
+
 void
 MappedPluginSlot::setProperty(const MappedObjectProperty &property,
 			      MappedObjectValue value)

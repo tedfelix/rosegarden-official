@@ -84,6 +84,11 @@ public:
     // 
     static QString getPluginProgram(MappedObjectId, int bank, int program);
 
+    // Get program numbers for a given name (rv is bank << 16 + program)
+    // This is one of the nastiest hacks in the whole application
+    // 
+    static unsigned long getPluginProgram(MappedObjectId, QString name);
+
     // Connection
     //
     static void connectStudioObjects(MappedObjectId id1,

@@ -482,6 +482,7 @@ public:
     int getPosition() const { return m_position; }
 
     QString getProgram(int bank, int program);
+    unsigned long getProgram(QString name); // rv is bank << 16 + program
 
 protected:
     QString                   m_identifier;

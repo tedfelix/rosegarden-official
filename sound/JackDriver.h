@@ -101,6 +101,10 @@ public:
 					     int bank,
 					     int program); 
   
+    virtual unsigned long getPluginInstanceProgram(InstrumentId id,
+						   int position,
+						   QString name);
+  
     virtual void setPluginInstanceProgram(InstrumentId id,
 					  int position,
 					  QString program);

@@ -128,7 +128,7 @@ public:
     void show();
     void hide();
     void quit();
-    void sendProgram(QString program);
+    void sendProgram(int bank, int program);
     void sendPortValue(int port, float value);
     void sendConfiguration(QString key, QString value);
     void send(OSCMessage *message); // I take ownership of message, will delete when done

@@ -188,6 +188,7 @@ public:
     QStringList getPluginPrograms(InstrumentId, int);
     QString getPluginProgram(InstrumentId, int);
     QString getPluginProgram(InstrumentId, int, int, int);
+    unsigned long getPluginProgram(InstrumentId, int, QString);
     void setPluginProgram(InstrumentId, int, QString);
     void configurePlugin(InstrumentId, int, QString, QString);
     void resetAllPlugins();

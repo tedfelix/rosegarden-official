@@ -260,10 +260,15 @@ public:
     //
     virtual std::vector<QString> getPluginInformation() = 0;
 
-    // Nasty hack: this is one thing that mapped object properties can't cope with
+    // Nasty hack: program name/number mappings are one thing that
+    // mapped object properties can't cope with
     //
     virtual QString getPluginProgram(int mappedId, int bank, int program) = 0;
 
+    // Nastier hack: return value is bank << 16 + program
+    //
+    virtual unsigned long getPluginProgram(int mappedId, const QString &name) = 0;
+    
     // Cheat - we can't use a call (getPropertyList) during playback
     // so we use this method to set port N on plugin X.
     //

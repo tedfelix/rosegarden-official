@@ -1827,6 +1827,13 @@ JackDriver::getPluginInstanceProgram(InstrumentId id, int position,
     return QString();
 }
 
+unsigned long
+JackDriver::getPluginInstanceProgram(InstrumentId id, int position, QString name)
+{
+    if (m_instrumentMixer) return m_instrumentMixer->getPluginProgram(id, position, name);
+    return 0;
+}
+
 void 
 JackDriver::setPluginInstanceProgram(InstrumentId id, int position, QString program)
 {

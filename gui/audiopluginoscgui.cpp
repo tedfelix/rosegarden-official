@@ -268,7 +268,13 @@ AudioPluginOSCGUIManager::updateProgram(InstrumentId instrument, int position)
     AudioPluginInstance *pluginInstance = i->getPlugin(position);
     if (!pluginInstance) return;
 
-    m_guis[instrument][position]->sendProgram(strtoqstr(pluginInstance->getProgram()));
+    unsigned long rv = Rosegarden::StudioControl::getPluginProgram
+	(pluginInstance->getMappedId(), strtoqstr(pluginInstance->getProgram()));
+
+    int bank = rv >> 16;
+    int program = rv - (bank << 16);
+
+    m_guis[instrument][position]->sendProgram(bank, program);
 }
 
 void
@@ -746,14 +752,20 @@ AudioPluginOSCGUI::quit()
 }
 
 void
-AudioPluginOSCGUI::sendProgram(QString program)
+AudioPluginOSCGUI::sendProgram(int bank, int program)
 {
     OSCMessage *m = new OSCMessage;
+    lo_arg arg;
+
     m->setMethod("program");
 
-    //!!! need to get bank and program # for program
-//!!!    m->addArg
-//    send(m);
+    arg.i = bank;
+    m->addArg('i', &arg);
+
+    arg.i = program;
+    m->addArg('i', &arg);
+
+    send(m);
 }
 
 void

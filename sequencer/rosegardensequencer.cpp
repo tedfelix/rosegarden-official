@@ -1371,6 +1371,22 @@ RosegardenSequencerApp::getPluginProgram(int id, int bank, int program)
     return QString();
 }
 
+unsigned long
+RosegardenSequencerApp::getPluginProgram(int id, const QString &name)
+{
+    Rosegarden::MappedObject *object = m_studio->getObjectById(id);
+
+    if (object) {
+	Rosegarden::MappedPluginSlot *slot =
+	    dynamic_cast<Rosegarden::MappedPluginSlot *>(object);
+	if (slot) {
+	    return slot->getProgram(name);
+	}
+    }
+
+    return 0;
+}
+
 unsigned int
 RosegardenSequencerApp::getSampleRate() const
 {

@@ -254,6 +254,8 @@ public:
 
     virtual QString getPluginProgram(int id, int bank, int program);
 
+    virtual unsigned long getPluginProgram(int id, const QString &name);
+
     // Set a plugin port
     //
     virtual void setMappedPort(int pluginId,
