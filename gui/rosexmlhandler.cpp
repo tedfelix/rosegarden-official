@@ -42,7 +42,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 {
     QString lcName = qName.lower();
 
-    if (lcName == "event") {
+    if (lcName == "rosegarden-data") {
+        // set to some state which says it's ok to parse the rest
+    } else if (lcName == "event") {
         m_events.push_back(new XMLStorableEvent(atts));
     } else if (lcName == "track") {
         // later
