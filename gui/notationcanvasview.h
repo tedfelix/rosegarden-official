@@ -32,6 +32,12 @@ class NotationElement;
 /**
  * Central widget for the NotationView window
  *
+ * This class only takes care of the event handling
+ * (see the various signals).
+ *
+ * It does not deal with any canvas element. All elements are added by
+ * the NotationView.
+ *
  *@see NotationView
  */
 class NotationCanvasView : public QCanvasView

@@ -42,6 +42,7 @@ NotationCanvasView::NotationCanvasView(QCanvas *viewing, QWidget *parent,
 
 NotationCanvasView::~NotationCanvasView()
 {
+    // All canvas items are deleted in ~NotationView()
 }
 
 
