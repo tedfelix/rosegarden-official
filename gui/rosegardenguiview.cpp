@@ -83,7 +83,7 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char *name)
 
 
     NotePixmapFactory npf;
-    //#if 0
+#if 0
     for(unsigned int i = 0; i < 7; ++i) {
 
 
@@ -126,14 +126,14 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char *name)
         noteSprite->move(50 + i * 20, 150);
 
     }
-    //#endif
+#endif
 
     chordpitches pitches;
     pitches.push_back(6); // something wrong here 
     pitches.push_back(4);
     pitches.push_back(0);
 
-    QPixmap chord(npf.makeChordPixmap(pitches, 0, false));
+    QPixmap chord(npf.makeChordPixmap(pitches, 6, true, false));
     QList<QPixmap> pixlist;
 
     pixlist.append(&chord);

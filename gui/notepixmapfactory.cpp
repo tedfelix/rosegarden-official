@@ -149,8 +149,8 @@ NotePixmapFactory::makeChordPixmap(const chordpitches &pitches,
     
     m_generatedPixmapHeight = highestNote - lowestNote + m_noteBodyHeight + Staff::stalkLen;;
 
-    cerr << "m_generatedPixmapHeight : " << m_generatedPixmapHeight << endl
-         << "highestNote : " << highestNote << " - lowestNote : " << lowestNote << endl;
+    kdDebug(KDEBUG_AREA) << "m_generatedPixmapHeight : " << m_generatedPixmapHeight << endl
+                         << "highestNote : " << highestNote << " - lowestNote : " << lowestNote << endl;
     
 
     readjustGeneratedPixmapHeight(duration);
@@ -162,7 +162,7 @@ NotePixmapFactory::makeChordPixmap(const chordpitches &pitches,
 
     // paint note bodies
 
-    // set mask painter RasterOp to XOR
+    // set mask painter RasterOp to Or
     m_pm.setRasterOp(Qt::OrROP);
 
     QPixmap *body = (duration < 2) ? &m_noteBodyEmpty : &m_noteBodyFilled;
