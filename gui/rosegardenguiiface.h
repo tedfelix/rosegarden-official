@@ -18,12 +18,24 @@
     COPYING included with this distribution for more information.
 */
 
+/*
+ * Code borrowed from KDE Konqueror : KonqMainWindowIface.h
+ * Copyright (C) 2000 Simon Hausmann <hausmann@kde.org>
+ * Copyright (C) 2000 David Faure <faure@kde.org>
+ */
+
 #ifndef ROSEGARDENGUIIFACE_H
 #define ROSEGARDENGUIIFACE_H
 
-#include <rosegardendcop.h>
-#include <MappedComposition.h>
 #include <dcopobject.h>
+#include <qvaluelist.h>
+#include <dcopref.h>
+
+#include "rosegardendcop.h"
+#include "MappedComposition.h"
+
+class KDCOPActionProxy;
+class KMainWindow;
 
 /**
  * RosegardenGUI DCOP Interface
@@ -33,6 +45,7 @@ class RosegardenIface : virtual public DCOPObject
     K_DCOP
 
 public:
+    RosegardenIface(KMainWindow*);
 
 k_dcop:
     virtual void openFile(const QString &file) = 0;
@@ -53,6 +66,15 @@ k_dcop:
 
     // Sequencer updates GUI with status
     virtual void notifySequencerStatus(const int &status) = 0;
+
+    // Actions proxy
+    DCOPRef action( const QCString &name );
+    QCStringList actions();
+    QMap<QCString,DCOPRef> actionMap();
+
+protected:
+    KDCOPActionProxy *m_dcopActionProxy;
+
 };
 
 #endif // ROSEGARDENGUIIFACE_H

@@ -27,6 +27,7 @@ rosegarden_SOURCES = \
 	rosegardengui.cpp \
 	rosegardenguidoc.cpp \
 	rosegardenguiiface.skel \
+	rosegardenguiiface.cpp \
 	rosegardenguiview.cpp \
 	rosexmlhandler.cpp \
 	staffline.cpp \
