@@ -596,12 +596,13 @@ void SegmentItem::recalculateRectangle(bool inheritFromSegment)
     canvas()->setChanged(rect());
 
     // Get our segment colour
+/*!!!
     QColor brush;
     if (m_segment)
         brush = RosegardenGUIColours::convertColour(m_doc->getComposition().getSegmentColourMap().getColourByIndex(m_segment->getColourIndex()));
     else
         brush = RosegardenGUIColours::convertColour(m_doc->getComposition().getSegmentColourMap().getColourByIndex(0));
-
+*/
     // Compute repeat rectangle if any
     //
     if (m_segment && inheritFromSegment) {
@@ -619,7 +620,7 @@ void SegmentItem::recalculateRectangle(bool inheritFromSegment)
                                                                m_snapGrid, m_doc);
 
         // Set the colour for the repeat rectangle
-        m_repeatRectangle->setBrush(brush.light(150));
+//!!!        m_repeatRectangle->setBrush(brush.light(150));
 
 	    timeT repeatStart = m_endTime;
 	    timeT repeatEnd = m_segment->getRepeatEndTime();
@@ -649,12 +650,13 @@ void SegmentItem::recalculateRectangle(bool inheritFromSegment)
     setX(m_snapGrid->getRulerScale()->getXForTime(m_startTime));
     setY(m_snapGrid->getYBinCoordinate(m_trackPosition));
 
+/*!!!
     // Set our segment brush colour
     if (m_selected)
         setBrush(brush.dark(200));
     else
         setBrush(brush);
-
+*/
     int h = m_snapGrid->getYSnap();
     double w = m_snapGrid->getRulerScale()->getWidthForDuration
 	(m_startTime, m_endTime - m_startTime);

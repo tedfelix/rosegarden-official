@@ -254,8 +254,7 @@ protected:
 
     int m_noteBodyWidth, m_noteBodyHeight;
     int m_left, m_right, m_above, m_below;
-
-    QPoint m_origin;
+    int m_borderX, m_borderY;
 
     QFont m_tupletCountFont;
     QFontMetrics m_tupletCountFontMetrics;

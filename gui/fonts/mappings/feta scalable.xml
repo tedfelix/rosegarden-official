@@ -16,7 +16,8 @@
 </font-requirements>
 
 <font-sizes>
-	<font-scale font-height="4.5" beam-thickness="0.5" staff-line-thickness="0.18" stem-thickness="0.18" border-x="0.08" border-y="0.08"/>
+	<font-scale font-height="4.5" beam-thickness="0.5" staff-line-thickness="0.18" stem-thickness="0.18"/>
+        <font-scale font-id="1" font-height="2.5"/>
 </font-sizes>
 
 <font-symbol-map>
@@ -50,11 +51,8 @@
 	<symbol name="MUSICAL SYMBOL TRIANGLE NOTEHEAD UP BLACK" font-id="0" code="" glyph=""/>
 -->
 
-        <!-- The inverted glyph for flag-1 in feta has part of a note stem
-             attached to it, for some reason: that makes it harder to work
-             with correctly, so we'll stick to inverting it ourselves -->
         <symbol name="MUSICAL SYMBOL COMBINING FLAG-1"
-                font-id="0" code="133" glyph="97"/>
+                font-id="0" code="133" glyph="97" inversion-code="137" inversion-glyph="101"/>
         <symbol name="MUSICAL SYMBOL COMBINING FLAG-2"
                 font-id="0" code="134" inversion-code="140" glyph="98" inversion-glyph="104"/>
         <symbol name="MUSICAL SYMBOL COMBINING FLAG-3" 
@@ -97,8 +95,6 @@
 	<symbol	name="MUSICAL SYMBOL CUT TIME"  font-id="0" glyph="120"/>
 	<symbol	name="MUSICAL SYMBOL COMMON TIME"  font-id="0" glyph="119"/>
 
-<!-- !!! we need to make it possible for the text font to have a different
-         size from the notation font! 
 	<symbol	name="DIGIT ZERO"  font-id="1" code="48"/>
 	<symbol	name="DIGIT ONE"   font-id="1" code="49"/>
 	<symbol	name="DIGIT TWO"   font-id="1" code="50"/>
@@ -109,11 +105,18 @@
 	<symbol	name="DIGIT SEVEN" font-id="1" code="55"/>
 	<symbol	name="DIGIT EIGHT" font-id="1" code="56"/>
 	<symbol	name="DIGIT NINE"  font-id="1" code="57"/>
--->
 
 </font-symbol-map>
 
 <font-hotspots>
+        <hotspot name="MUSICAL SYMBOL VOID NOTEHEAD">
+		<fixed x="1"/>
+                <scaled y="0.5"/>
+        </hotspot>
+        <hotspot name="MUSICAL SYMBOL NOTEHEAD BLACK">
+		<fixed x="1"/>
+                <scaled y="0.5"/>
+        </hotspot>
         <hotspot name="MUSIC FLAT SIGN">
 		<scaled y="0.74"/>
         </hotspot>

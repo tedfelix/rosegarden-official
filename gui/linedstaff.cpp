@@ -586,8 +586,7 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
 //    RG_DEBUG << "insertBar: " << layoutX << ", " << width
 //			 << ", " << isCorrect << endl;
 
-    // rather arbitrary
-    int barThickness = m_resolution / 12 + 1;
+    int barThickness = m_lineThickness * 5 / 4;
 
 //!!!    int testRow = getRowForLayoutX(layoutX);
 //!!!    double testX = getCanvasXForLayoutX(layoutX);

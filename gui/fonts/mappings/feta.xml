@@ -89,9 +89,15 @@
         <symbol name="MUSICAL SYMBOL F CLEF" src="clefs-F"/>
 </font-symbol-map>
 
-<!-- It'd be useful to be able to express these as fractions,   
-     and we'll need that if we ever support scalable fonts: -->
 <font-hotspots>
+        <hotspot name="MUSICAL SYMBOL VOID NOTEHEAD">
+		<fixed x="1"/>
+                <scaled y="0.5"/>
+        </hotspot>
+        <hotspot name="MUSICAL SYMBOL NOTEHEAD BLACK">
+		<fixed x="1"/>
+                <scaled y="0.5"/>
+        </hotspot>
         <hotspot name="MUSIC FLAT SIGN">
                 <when note-height="4" y="8"/>
                 <when note-height="6" y="12"/>

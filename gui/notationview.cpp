@@ -1139,8 +1139,8 @@ void NotationView::readOptions()
     opt = m_config->readBoolEntry("Show Annotations", true);
     m_annotationsVisible = opt;
     getToggleAction("show_annotations")->setChecked(opt);
-    //slotUpdateAnnotationsStatus();
-    slotToggleAnnotations();
+    slotUpdateAnnotationsStatus();
+//    slotToggleAnnotations();
 }
 
 void NotationView::setupActions()

@@ -35,6 +35,7 @@
 
 #include <iostream>
 
+#include "kstartuplogo.h"
 #include "rosestrings.h"
 #include "rosedebug.h"
 #include "pixmapfunctions.h"
@@ -207,14 +208,22 @@ NoteFontMap::startElement(const QString &, const QString &,
         s = attributes.value("flag-spacing");
         if (s) sizeData.setFlagSpacing(s.toInt());
 
-        s = attributes.value("border-x");
-        if (s) sizeData.setBorderX(s.toInt());
+	s = attributes.value("border-x");
+	if (s) {
+	    cerr << "Warning: border-x attribute in note font mapping file is no longer supported\n(use hotspot-x for note head or flag)" << endl;
+	}
 
-        s = attributes.value("border-y");
-        if (s) sizeData.setBorderY(s.toInt());
+	s = attributes.value("border-y");
+	if (s) {
+	    cerr << "Warning: border-y attribute in note font mapping file is no longer supported" << endl;
+	}
+
+	int fontId = 0;
+	s = attributes.value("font-id");
+	if (s) fontId = s.toInt();
 
         s = attributes.value("font-height");
-        if (s) sizeData.setFontHeight(s.toInt());
+        if (s) sizeData.setFontHeight(fontId, s.toInt());
 
     } else if (lcName == "font-scale") {
 	
@@ -225,8 +234,6 @@ NoteFontMap::startElement(const QString &, const QString &,
 	double staffLineThickness = -1.0;
 	double legerLineThickness = -1.0;
 	double stemThickness = -1.0;
-	double borderX = -1.0;
-	double borderY = -1.0;
 
 	QString s;
 
@@ -255,11 +262,9 @@ NoteFontMap::startElement(const QString &, const QString &,
         s = attributes.value("flag-spacing");
 	if (s) flagSpacing = s.toDouble();
 
-        s = attributes.value("border-x");
-	if (s) borderX = s.toDouble();
-
-        s = attributes.value("border-y");
-	if (s) borderY = s.toDouble();
+	int fontId = 0;
+	s = attributes.value("font-id");
+	if (s) fontId = s.toInt();
 
 	//!!! need to be able to calculate max size -- checkFont needs
 	//to take a size argument; unfortunately Qt doesn't seem to be
@@ -275,7 +280,7 @@ NoteFontMap::startElement(const QString &, const QString &,
 	for (int sz = 1; sz <= 30; sz += (sz == 1 ? 1 : 2)) {
 
 	    SizeData &sizeData = m_sizes[sz];
-	    unsigned int temp, temp1;
+	    unsigned int temp;
 
 	    if (sizeData.getStaffLineThickness(temp) == false &&
 		staffLineThickness >= 0.0)
@@ -301,15 +306,8 @@ NoteFontMap::startElement(const QString &, const QString &,
 		flagSpacing >= 0.0)
 		sizeData.setFlagSpacing(toSize(sz, flagSpacing, true));
 
-	    if (sizeData.getBorderThickness(temp, temp1) == false) {
-		if (borderX >= 0.0)
-		    sizeData.setBorderX(toSize(sz, borderX, false));
-		if (borderY >= 0.0)
-		    sizeData.setBorderY(toSize(sz, borderY, false));
-	    }
-
-	    if (sizeData.getFontHeight(temp) == false)
-		sizeData.setFontHeight(toSize(sz, fontHeight, true));
+	    if (sizeData.getFontHeight(fontId, temp) == false)
+		sizeData.setFontHeight(fontId, toSize(sz, fontHeight, true));
 	}
 
     } else if (lcName == "font-symbol-map") {
@@ -451,7 +449,7 @@ NoteFontMap::startElement(const QString &, const QString &,
         }
 
 	QString s = attributes.value("x");
-	double x = 0.0;
+	double x = -1.0;
 	if (s) x = s.toDouble();
 
 	s = attributes.value("y");
@@ -468,6 +466,29 @@ NoteFontMap::startElement(const QString &, const QString &,
         }
 
 	i->second.setScaledHotspot(x, y);
+
+    } else if (lcName == "fixed") {
+
+        if (m_hotspotCharName == "") {
+            m_errorString = "fixed-element must be in hotspot-element";
+            return false;
+        }
+
+	QString s = attributes.value("x");
+	int x = 0;
+	if (s) x = s.toInt();
+
+	s = attributes.value("y");
+	int y = 0;
+	if (s) y = s.toInt();
+	
+        HotspotDataMap::iterator i = m_hotspots.find(m_hotspotCharName);
+        if (i == m_hotspots.end()) {
+            m_hotspots[m_hotspotCharName] = HotspotData();
+            i = m_hotspots.find(m_hotspotCharName);
+        }
+
+	i->second.addHotspot(0, x, y);
 
     } else if (lcName == "when") {
 
@@ -719,12 +740,15 @@ NoteFontMap::getSystemFont(int size, CharName charName, int &charBase)
     SizeDataMap::const_iterator si = m_sizes.find(size);
     if (si == m_sizes.end()) return false;
 
+    int fontId = i->second.getFontId();
+
     unsigned int fontHeight = 0;
-    if (!si->second.getFontHeight(fontHeight)) {
-	fontHeight = size;
+    if (!si->second.getFontHeight(fontId, fontHeight)) {
+	if (fontId == 0 || !si->second.getFontHeight(0, fontHeight)) {
+	    fontHeight = size;
+	}
     }
 
-    int fontId = i->second.getFontId();
     SystemFontNameMap::const_iterator fni = m_systemFontNames.find(fontId);
     if (fontId < 0 || fni == m_systemFontNames.end()) return false;
     QString fontName = fni->second;
@@ -862,16 +886,6 @@ NoteFontMap::getFlagSpacing(int size, unsigned int &spacing) const
 }
 
 bool
-NoteFontMap::getBorderThickness(int size,
-                                unsigned int &x, unsigned int &y) const
-{
-    SizeDataMap::const_iterator i = m_sizes.find(size);
-    if (i == m_sizes.end()) return false;
-
-    return i->second.getBorderThickness(x, y);
-}
-
-bool
 NoteFontMap::getHotspot(int size, CharName charName, int width, int height,
 			int &x, int &y) const
 {
@@ -886,14 +900,23 @@ NoteFontMap::HotspotData::getHotspot(int size, int width, int height,
 {
     DataMap::const_iterator i = m_data.find(size);
     if (i == m_data.end()) {
+	i = m_data.find(0); // fixed-pixel hotspot
 	x = 0;
-	if (m_scaled.first  >= 0) {
+	if (m_scaled.first >= 0) {
 	    x = toSize(width, m_scaled.first,  false);
+	} else {
+	    if (i != m_data.end()) {
+		x = i->second.first;
+	    }
 	}
 	if (m_scaled.second >= 0) {
 	    y = toSize(height, m_scaled.second, false);
 	    return true;
 	} else {
+	    if (i != m_data.end()) {
+		y = i->second.second;
+		return true;
+	    }
 	    return false;
 	}
     }
@@ -921,7 +944,6 @@ NoteFontMap::dump() const
         cout << "\nSize: " << *sizei << "\n" << endl;
 
         unsigned int t = 0;
-	unsigned int bx = 0, by = 0;
 
         if (getStaffLineThickness(*sizei, t)) {
             cout << "Staff line thickness: " << t << endl;
@@ -945,10 +967,6 @@ NoteFontMap::dump() const
 
         if (getFlagSpacing(*sizei, t)) {
             cout << "Flag spacing: " << t << endl;
-        }
-
-        if (getBorderThickness(*sizei, bx, by)) {
-            cout << "Border thickness: " << bx << "x" << by << endl;
         }
 
         for (set<CharName>::iterator namei = names.begin();
@@ -1063,7 +1081,8 @@ NoteFont::getBeamThickness(unsigned int &thickness) const
 bool
 NoteFont::getStemLength(unsigned int &length) const
 {
-    length = m_size * 13 / 4;
+    getStaffLineThickness(length);
+    length = (m_size + length) * 7 / 2;
     return m_fontMap.getStemLength(m_size, length);
 }
 
@@ -1086,14 +1105,6 @@ NoteFont::getLegerLineThickness(unsigned int &thickness) const
 {
     thickness = (m_size < 12 ? 1 : m_size / 12);
     return m_fontMap.getStaffLineThickness(m_size, thickness);
-}
-
-bool
-NoteFont::getBorderThickness(unsigned int &x, unsigned int &y) const
-{
-    x = 0;
-    y = 0;
-    return m_fontMap.getBorderThickness(m_size, x, y);
 }
 
 bool
@@ -1415,6 +1426,7 @@ NoteFontFactory::getFontNames()
 		    NoteFontMap map(name);
 		    if (map.ok()) m_fontNames.insert(map.getName());
 		} catch (Rosegarden::Exception e) {
+		    KStartupLogo::hideIfStillThere();
 		    KMessageBox::error(0, strtoqstr(e.getMessage()));
 		    throw;
 		}
@@ -1468,6 +1480,7 @@ NoteFontFactory::getFont(std::string fontName, int size)
 	    m_fonts[std::pair<std::string, int>(fontName, size)] = font;
 	    return font;
 	} catch (Rosegarden::Exception e) {
+	    KStartupLogo::hideIfStillThere();
 	    KMessageBox::error(0, strtoqstr(e.getMessage()));
 	    throw;
 	}
@@ -1483,6 +1496,7 @@ NoteFontFactory::getDefaultFontName()
     if (fontNames.find("Feta") != fontNames.end()) return "Feta";
     else if (fontNames.size() == 0) {
 	QString message = i18n("Can't obtain a default font -- no fonts found");
+	KStartupLogo::hideIfStillThere();
 	KMessageBox::error(0, message);
 	throw NoFontsAvailable(qstrtostr(message));
     }
@@ -1750,9 +1764,10 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
     
     return new SystemFontXft(dpy, xfont);
 
-#endif
 
  qfont:
+
+#endif
     
     QFont qfont(name, size, QFont::Normal);
     qfont.setPixelSize(size);

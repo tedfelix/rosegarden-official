@@ -36,6 +36,7 @@
 #include <kapp.h>
 #include <kconfig.h>
 
+#include "kstartuplogo.h"
 #include "rosestrings.h"
 #include "rosedebug.h"
 #include "rosegardenguiview.h"
@@ -181,6 +182,7 @@ NotePixmapFactory::init(std::string fontName, int size)
     try {
 	m_style = NoteStyleFactory::getStyle(NoteStyleFactory::DefaultStyle);
     } catch (NoteStyleFactory::StyleUnavailable u) {
+	KStartupLogo::hideIfStillThere();
 	KMessageBox::error(0, i18n(strtoqstr(u.getMessage())));
 	throw;
     }
@@ -190,6 +192,7 @@ NotePixmapFactory::init(std::string fontName, int size)
 	if (size < 0) size = NoteFontFactory::getDefaultSize(fontName);
         m_font = NoteFontFactory::getFont(fontName, size);
     } catch (Rosegarden::Exception f) {
+	KStartupLogo::hideIfStillThere();
         KMessageBox::error(0, i18n(strtoqstr(f.getMessage())));
         throw;
     }
@@ -208,10 +211,6 @@ NotePixmapFactory::init(std::string fontName, int size)
 
     m_textMarkFont.setPixelSize(size * 2);
     m_textMarkFontMetrics = QFontMetrics(m_textMarkFont);
-
-    unsigned int x, y;
-    m_font->getBorderThickness(x, y);
-    m_origin = QPoint(x, y);
 }
 
 NotePixmapFactory::~NotePixmapFactory()
@@ -275,20 +274,28 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
     // do the rest of the calculations left to right, ie accidentals,
     // stem, flags, dots, beams
 
-    // spacing surrounding the note head
-    m_left = m_right = m_origin.x();
-    m_above = m_below = m_origin.y();
-
-    // allow a little more, just in case of oversized noteheads
-/*!!! no -- this is done further down
-    m_above += getStaffLineThickness();
-    m_below += getStaffLineThickness();
-    m_left  += getStemThickness();
-    m_right += getStemThickness();
-*/
-
     m_noteBodyWidth  = getNoteBodyWidth(params.m_noteType);
     m_noteBodyHeight = getNoteBodyHeight(params.m_noteType);
+
+    // Spacing surrounding the note head.  For top and bottom, we
+    // adjust this according to the discrepancy between the nominal
+    // and actual heights of the note head pixmap.  For left and
+    // right, we use the hotspot x coordinate of the head.
+    int temp;
+    if (!m_font->getHotspot(m_style->getNoteHeadCharName(params.m_noteType).first,
+			    m_borderX, temp)) m_borderX = 0;
+
+    int actualNoteBodyHeight =
+	m_font->getHeight(m_style->getNoteHeadCharName(params.m_noteType).first);
+    
+    m_left = m_right = m_borderX;
+    m_above = m_borderY = (actualNoteBodyHeight - m_noteBodyHeight) / 2;
+    m_below = (actualNoteBodyHeight - m_noteBodyHeight) - m_above;
+
+    NOTATION_DEBUG << "actualNoteBodyHeight: " << actualNoteBodyHeight
+		   << ", noteBodyHeight: " << m_noteBodyHeight << ", borderX: "
+		   << m_borderX << ", borderY: "
+		   << m_borderY << endl;
 
     bool isStemmed = m_style->hasStem(params.m_noteType);
     int flagCount = m_style->getFlagCount(params.m_noteType);
@@ -357,13 +364,14 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
     // for all other calculations we use the nominal note-body height
     // (same as the gap between staff lines), but here we want to know
     // if the pixmap itself is taller than that
+/*!!!
     int actualNoteBodyHeight = m_font->getHeight
 	(m_style->getNoteHeadCharName(params.m_noteType).first);
 //	- 2*m_origin.y();
     if (actualNoteBodyHeight > m_noteBodyHeight) {
 	m_below = std::max(m_below, actualNoteBodyHeight - m_noteBodyHeight);
     }
-
+*/
     createPixmapAndMask(m_noteBodyWidth + m_left + m_right,
                         m_noteBodyHeight + m_above + m_below);
 
@@ -407,7 +415,7 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
 	body = m_font->getPixmap(charName, inverted);
     }
 
-    QPoint bodyLocation(m_left - m_origin.x(), m_above - m_origin.y());
+    QPoint bodyLocation(m_left - m_borderX, m_above - m_borderY);
     if (params.m_shifted) {
         if (params.m_stemGoesUp) {
             bodyLocation.rx() += m_noteBodyWidth;
@@ -505,13 +513,17 @@ NotePixmapFactory::getStemLength(const NotePixmapParameters &params) const
     bool stemUp = params.m_stemGoesUp;
     int nbh = m_noteBodyHeight;
     
-    switch (flagCount) {
-    case 1: stemLength += nbh / 3; break;
-    case 2: stemLength += nbh * 3 / 4; break;
-    case 3: stemLength += nbh + nbh / 4; break;
-    case 4: stemLength += nbh * 2 - nbh / 4; break;
-    default: break;
+    if (flagCount > 2) {
+	stemLength += getLineSpacing() * (flagCount - 2);
     }
+
+//!!!    switch (flagCount) {
+//    case 1: stemLength += nbh / 3; break;
+//    case 2: stemLength += nbh * 3 / 4; break;
+//    case 3: stemLength += nbh + nbh / 4; break;
+//    case 4: stemLength += nbh * 2 - nbh / 4; break;
+//    default: break;
+//    }
     
     int width = 0, height = 0;
 
@@ -555,7 +567,7 @@ NotePixmapFactory::makeRoomForAccidental(Accidental a)
     QPixmap ap(m_font->getPixmap(m_style->getAccidentalCharName(a)));
     QPoint ah(m_font->getHotspot(m_style->getAccidentalCharName(a)));
 
-    m_left += ap.width() + (m_noteBodyWidth/4 - m_origin.x());
+    m_left += ap.width() + (m_noteBodyWidth/4 - m_borderX);
 
     int above = ah.y() - m_noteBodyHeight/2;
     int below = (ap.height() - ah.y()) -
@@ -820,7 +832,12 @@ NotePixmapFactory::makeRoomForStemAndFlags(int flagCount, int stemLength,
 	break;
 
     case NoteStyle::Middle:
-	s0.setY(m_noteBodyHeight/2);
+	if (params.m_stemGoesUp) {
+	    s0.setY(m_noteBodyHeight * 3 / 8);
+	} else {
+	    s0.setY(m_noteBodyHeight * 5 / 8);
+	}
+	stemLength -= m_noteBodyHeight / 8;
 	break;
     }	    
 
@@ -1498,13 +1515,9 @@ NotePixmapFactory::makeKeyPixmap(const Key &key, const Clef &clef)
 
     int x = 0;
     int lw = getLineSpacing();
-    int delta = accidentalPixmap.width() - 2*m_origin.x();
+    int delta = accidentalPixmap.width() - accidentalPixmap.width()/4;
 
-    
-    NOTATION_DEBUG << "makeKeyPixmap: delta is " << delta << ", ah.size is " << ah.size() << ", m_origin.x is " << m_origin.x() << ", lw is " << lw << endl;
-
-
-    createPixmapAndMask(delta * ah.size() + 2*m_origin.x(), lw * 8 + 1);
+    createPixmapAndMask(delta * ah.size() + accidentalPixmap.width()/4, lw * 8 + 1);
 
     for (unsigned int i = 0; i < ah.size(); ++i) {
 
@@ -1568,7 +1581,7 @@ NotePixmapFactory::makeKeyDisplayPixmap(const Key &key, const Clef &clef)
     QPoint hotspot(m_font->getHotspot(charName));
 
     int lw = getLineSpacing();
-    int delta = accidentalPixmap.width() - 2*m_origin.x();
+    int delta = accidentalPixmap.width() + accidentalPixmap.width()/4;
     int width = 11 * getAccidentalWidth(Rosegarden::Accidentals::Sharp) +
 	clefPixmap->width();
     int x = clefPixmap->width() + 3 * delta;
@@ -2197,7 +2210,10 @@ NotePixmapFactory::m_pointZero;
 
 int NotePixmapFactory::getNoteBodyWidth(Note::Type type)
     const {
-    return m_font->getWidth(m_style->getNoteHeadCharName(type).first) -2*m_origin.x();
+    CharName charName(m_style->getNoteHeadCharName(type).first);
+    int hx, hy;
+    if (!m_font->getHotspot(charName, hx, hy)) hx = 0;
+    return m_font->getWidth(charName) - hx * 2;
 }
 
 int NotePixmapFactory::getNoteBodyHeight(Note::Type )
@@ -2261,9 +2277,10 @@ int NotePixmapFactory::getRestWidth(const Rosegarden::Note &restType) const {
 }
 
 int NotePixmapFactory::getKeyWidth(const Rosegarden::Key &key) const {
-    return 2*m_origin.x() + (key.getAccidentalCount() *
-                             (getAccidentalWidth(key.isSharp() ? Sharp : Flat) -
-				 2 * m_origin.x()));
+    int w = getAccidentalWidth(key.isSharp() ? Sharp : Flat);
+    return w/4 + (key.getAccidentalCount() *
+		  (getAccidentalWidth(key.isSharp() ? Sharp : Flat) -
+		   w/4));
 }
 
 int NotePixmapFactory::getTextWidth(const Rosegarden::Text &text) const {

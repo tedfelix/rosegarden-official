@@ -87,7 +87,6 @@ public:
     bool getBeamThickness(int size, unsigned int &thickness) const;
     bool getStemLength(int size, unsigned int &length) const;
     bool getFlagSpacing(int size, unsigned int &spacing) const;
-    bool getBorderThickness(int size, unsigned int &X, unsigned int &y) const;
     
     bool hasInversion(int size, CharName charName) const;
 
@@ -201,9 +200,7 @@ private:
                      m_stemLength(-1),
                      m_flagSpacing(-1),
                      m_staffLineThickness(-1),
-                     m_legerLineThickness(-1),
-                     m_borderX(-1), m_borderY(-1),
-		     m_fontHeight(-1) { }
+                     m_legerLineThickness(-1) { }
         ~SizeData() { }
 
         void setStemThickness(unsigned int i) {
@@ -224,14 +221,8 @@ private:
         void setLegerLineThickness(unsigned int i) {
             m_legerLineThickness = (int)i;
         }
-        void setBorderX(unsigned int x) {
-            m_borderX = (int)x;
-        }
-        void setBorderY(unsigned int y) {
-            m_borderY = (int)y;
-        }
-	void setFontHeight(unsigned int h) {
-	    m_fontHeight = (int)h;
+	void setFontHeight(int fontId, unsigned int h) {
+	    m_fontHeights[fontId] = (int)h;
 	}
 
         bool getStemThickness(unsigned int &i) const {
@@ -276,19 +267,13 @@ private:
             } else return false;
         }
 
-        bool getBorderThickness(unsigned int &x, unsigned int &y) const {
-            if (m_borderX >= 0) x = m_borderX;
-            else x = 0;
-            if (m_borderY >= 0) y = m_borderY;
-            else y = 0;
-            return (m_borderX >= 0 || m_borderY >= 0);
-        }
-
-	bool getFontHeight(unsigned int &h) const {
-	    if (m_fontHeight >= 0) {
-		h = (unsigned int)m_fontHeight;
+	bool getFontHeight(int fontId, unsigned int &h) const {
+	    std::map<int, int>::const_iterator fhi = m_fontHeights.find(fontId);
+	    if (fhi != m_fontHeights.end()) {
+		h = (unsigned int)fhi->second;
 		return true;
-	    } else return false;
+	    }
+	    return false;
 	}	
        
     private:
@@ -298,9 +283,7 @@ private:
         int m_flagSpacing;
         int m_staffLineThickness;
         int m_legerLineThickness;
-        int m_borderX;
-        int m_borderY;
-	int m_fontHeight;
+	std::map<int, int> m_fontHeights; // per-font-id
     };
 
     //--------------- Data members ---------------------------------
@@ -376,10 +359,6 @@ public:
 
     /// Returns false + thickness=1 if not specified
     bool getLegerLineThickness(unsigned int &thickness) const;
-
-    /// Returns false + thickness=0,0 if not specified
-    bool getBorderThickness(unsigned int &x, unsigned int &y) const;
-
 
 
     /// Returns false + blank pixmap if it can't find the right one

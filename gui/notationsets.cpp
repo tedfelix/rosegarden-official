@@ -483,13 +483,8 @@ NotationGroup::calculateBeam(NotationStaff &staff)
         initialNote == finalNote) {
         return beam; // no notes, no case to answer
     }
-/*
-    if ((*initialNote)->event()->has(Notation VIEW_LOCAL_STEM_UP)) {
-	beam.aboveNotes = (*initialNote)->event()->get<Bool>(STEM_UP);
-    }
-*/
-    if ((*initialNote)->event()->has(NotationProperties::BEAM_ABOVE)/* &&
-								       (*initialNote)->event()->isPersistent<Bool>(NotationProperties::BEAM_ABOVE)*/) {
+
+    if ((*initialNote)->event()->has(NotationProperties::BEAM_ABOVE)) {
 	beam.aboveNotes = (*initialNote)->event()->get<Bool>
 	    (NotationProperties::BEAM_ABOVE);
     }
@@ -500,10 +495,6 @@ NotationGroup::calculateBeam(NotationStaff &staff)
         && (*finalNote)->getViewDuration() < crotchet
 	&& (*finalNote)->getViewAbsoluteTime() >
 	 (*initialNote)->getViewAbsoluteTime();
-/*!!!
-        && getQuantizer().getQuantizedAbsoluteTime(  (*finalNote)->event()) >
-	   getQuantizer().getQuantizedAbsoluteTime((*initialNote)->event());
-*/
 
     // We continue even if the beam is not necessary, because the
     // same data is used to generate the tupling line in tupled
