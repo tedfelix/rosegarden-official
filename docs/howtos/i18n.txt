@@ -9,9 +9,11 @@ Document maintained by: Hans Kieserman <hkieserman at mail dot com>
 For Users
 ---------
 
-A list of supported languages is available at our website.  This list
-is currently empty, but at least French, Russian, and British English
-are in progress.  Please make your wishes known on the mailing list if
+A list of supported languages is available at our website.  Russian is
+fairly complete, and German, Spanish, and French are in progress. (We also
+still have a bit of bickering to do about British vs. American to insure
+the best possible user experience on both sides of the pond.)
+Please make your wishes known on the mailing list if
 you can translate musical or technical terminology, or need a
 translated version of RG.
 

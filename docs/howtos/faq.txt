@@ -52,7 +52,8 @@ ALSA and aRts below.
 Does it support my language?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Partial translations are available for French and Russian.  If you can translate musical or technical documentation, please let us know!  See docs/howtos/i18n.txt in CVS if you are interested in the technical aspects of translation.
+A translation is available for Russian.  Languages in progress include German, Spanish, and French.  If you can translate musical or technical documentation (no programming required), please let us know!
+See docs/howtos/i18n.txt in CVS if you are interested in the technical aspects of translation.
 
 
 Compilation or installation problems
