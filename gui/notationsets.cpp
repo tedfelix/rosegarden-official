@@ -21,6 +21,7 @@
 #include "notationsets.h"
 #include "notationproperties.h"
 #include "rosedebug.h"
+#include "staff.h"
 #include "Equation.h"
 #include <cstring>
 
@@ -51,24 +52,25 @@ NotationSet::NotationSet(const NotationElementList &nel,
 void
 NotationSet::initialise()
 {
-    NELIterator &i(m_baseIterator);
-    if (i == m_nel.end() || !test(i)) return;
-    sample(i);
+    if (m_baseIterator == m_nel.end() || !test(m_baseIterator)) return;
+    sample(m_baseIterator);
 
-    NELIterator j;
+    NELIterator i, j;
 
-    // first scan back to find an element not in the desired set, and
-    // leave ipair.first pointing to the one after it
+    // first scan back to find an element not in the desired set,
+    // sampling everything as far back as the one after it
 
-    for (j = i; i != m_nel.begin() && test(--j); i = j) {
+    for (i = j = m_baseIterator; i != m_nel.begin() && test(--j); i = j) {
         sample(j);
     }
     m_initial = i;
 
-    // then scan forwards to find an element not in the desired set,
-    // and leave ipair.second pointing to the one before it
+    j = m_baseIterator;
 
-    for (j = i; ++j != m_nel.end() && test(j); i = j) {
+    // then scan forwards to find an element not in the desired set,
+    // sampling everything as far forward as the one before it
+
+    for (i = j = m_baseIterator; ++j != m_nel.end() && test(j); i = j) {
         sample(j);
     }
     m_final = i;
@@ -92,6 +94,8 @@ NotationSet::sample(const NELIterator &i)
 
     if ((*i)->isNote()) {
         long p = (*i)->event()->get<Int>("pitch");
+
+	kdDebug(KDEBUG_AREA) << "NotationSet::sample: sampling pitch " << p << endl;
 
         if (m_highest == m_nel.end() ||
             p > (*m_highest)->event()->get<Int>("pitch")) {
@@ -263,12 +267,12 @@ NotationGroup::height(const NELIterator &i)
 }
 
 NotationGroup::Beam
-NotationGroup::calculateBeam()
+NotationGroup::calculateBeam(Staff &staff)
 {
     Beam beam;
     beam.aboveNotes = !(m_weightAbove > m_weightBelow);
     beam.gradient = 0;
-    beam.startHeight = 0;
+    beam.startY = 0;
     beam.necessary = false;
     
     NELIterator initialNote(getInitialNote()),
@@ -335,10 +339,14 @@ NotationGroup::calculateBeam()
     int   finalDX = (int)  (*finalNote)->getLayoutX() - initialX;
     int extremeDX = (int)(*extremeNote)->getLayoutX() - initialX;
 
-    int c0 = initialHeight, c1, c2;
+    int   finalY  = staff.yCoordOfHeight(finalHeight);
+    int extremeY  = staff.yCoordOfHeight(extremeHeight);
+
+    int c0 = staff.yCoordOfHeight(initialHeight), c1, c2;
     double dgrad = (double)beam.gradient / 100.0;
-    Equation::solve(Equation::C, extremeHeight, dgrad, extremeDX, c1);
-    Equation::solve(Equation::C,   finalHeight, dgrad,   finalDX, c2);
+
+    Equation::solve(Equation::C, extremeY, dgrad, extremeDX, c1);
+    Equation::solve(Equation::C, finalY,   dgrad,   finalDX, c2);
 
     using std::max;
     using std::min;
@@ -347,21 +355,20 @@ NotationGroup::calculateBeam()
                                                     shortestNoteType)) {
         kdDebug(KDEBUG_AREA) << "NotationGroup::calculateBeam: WARNING: Shortest element has no note-type; should this be possible?" << endl;
     }
+    int nh = staff.getNotePixmapFactory().getNoteBodyHeight();
 
     if (beam.aboveNotes) {
-        beam.startHeight =
-            max(max(c0, c1),
-                max(c2, min(initialHeight + 6,
-                              finalHeight + 6)));
+        beam.startY =
+            min(min(c0 - nh*3, c1 - nh*2), c2 - nh*3);
+//                min(c2 - nh*2, max(c0 - nh*4, finalY - nh*4)));
         if (shortestNoteType < Note::Quaver)
-            beam.startHeight += (Note::Quaver - shortestNoteType);
+            beam.startY -= nh * (Note::Quaver - shortestNoteType) / 2;
     } else {
-        beam.startHeight =
-            min(min(c0, c1),
-                min(c2, max(initialHeight - 6,
-                              finalHeight - 6)));
+        beam.startY =
+            max(max(c0 + nh*3, c1 + nh*2), c2 + nh*3);
+//                max(c2 + nh*2, min(c0 + nh*3, finalY + nh*3)));
         if (shortestNoteType < Note::Quaver)
-            beam.startHeight -= (Note::Quaver - shortestNoteType);
+	    beam.startY += nh * (Note::Quaver - shortestNoteType) / 2;
     }  
 
     Event::timeT crotchet = Note(Note::Crotchet).getDuration();
@@ -371,7 +378,7 @@ NotationGroup::calculateBeam()
 
     kdDebug(KDEBUG_AREA) << "NotationGroup::calculateBeam: beam data:" << endl
                          << "gradient: " << beam.gradient << endl
-                         << "start height: " << beam.startHeight << endl
+                         << "startY: " << beam.startY << endl
                          << "aboveNotes: " << beam.aboveNotes << endl
                          << "necessary: " << beam.necessary << endl;
 
@@ -380,9 +387,9 @@ NotationGroup::calculateBeam()
 
 
 void
-NotationGroup::applyBeam()
+NotationGroup::applyBeam(Staff &staff)
 {
-    Beam beam(calculateBeam());
+    Beam beam(calculateBeam(staff));
     if (!beam.necessary) return;
 
     NELIterator initialNote(getInitialNote()),
@@ -411,6 +418,7 @@ NotationGroup::applyBeam()
     // don't need to draw a stalk.
 
     NELIterator prev = getList().end();
+    double gradient = (double)beam.gradient / 100.0;
 
     for (NELIterator i = getInitialNote(); i != getList().end(); ++i) {
 
@@ -430,21 +438,29 @@ NotationGroup::applyBeam()
 	    if (beam.aboveNotes) j = 0;
 	    else j = chord.size() - 1;
 
-	    int x = (int)(*chord[j])->getLayoutX();
 	    NotationElement *el = (*chord[j]);
+	    int x = (int)el->getLayoutX();
+
+	    int myY = (int)(gradient * (x - initialX)) + beam.startY;
 
 	    if (prev != getList().end()) {
-		(*prev)->event()->setMaybe<Int>(P_BEAM_SECTION_WIDTH,
-						x - (*prev)->getLayoutX());
+		int secWidth = x - (int)(*prev)->getLayoutX();
+		(*prev)->event()->setMaybe<Int>(P_BEAM_NEXT_Y, myY);
+		(*prev)->event()->setMaybe<Int>(P_BEAM_SECTION_WIDTH, secWidth);
 		(*prev)->event()->setMaybe<Int>(P_BEAM_NEXT_TAIL_COUNT,
 						Note(el->event()->get<Int>
 						 (P_NOTE_TYPE)).getTailCount());
 	    }
 
-	    el->event()->setMaybe<Int>(P_BEAM_START_HEIGHT, beam.startHeight);
-	    el->event()->setMaybe<Int>(P_BEAM_RELATIVE_X, x - initialX);
-	    el->event()->setMaybe<Int>(P_BEAM_GRADIENT, beam.gradient);
 	    el->event()->setMaybe<Bool>(P_BEAM_PRIMARY_NOTE, true);
+
+	    el->event()->setMaybe<Int>(P_BEAM_MY_Y, myY);
+	    el->event()->setMaybe<Int>(P_BEAM_GRADIENT, beam.gradient);
+
+	    // until they're set next time around the loop, as (*prev)->...
+	    el->event()->setMaybe<Int>(P_BEAM_NEXT_Y, myY);
+	    el->event()->setMaybe<Int>(P_BEAM_SECTION_WIDTH, 0);
+	    el->event()->setMaybe<Int>(P_BEAM_NEXT_TAIL_COUNT, 1);
 
 	    prev = chord[j];
 	    i = chord.getFinalElement();

@@ -78,7 +78,7 @@ NotePixmapOffsets::offsetsFor(Note::Type note,
         m_pixmapSize.setHeight(m_bodySize.height() / 2 +
                                m_stalkLength +
                                m_accidentalStalkSize.height());
-        m_pixmapSize.rheight() += 14 + 2 +
+        m_pixmapSize.rheight() += /* 14 + */ 2 +
             (m_accidentalHeight - m_noteBodyEmptySize.height()) / 2;
         d = m_pixmapSize.height() - d;
         m_stalkPoints.first.ry() += d;
@@ -128,21 +128,6 @@ NotePixmapOffsets::computePixmapSize()
                                m_stalkLength +
                                m_accidentalStalkSize.height());
 
-        if (m_note < Note::QuarterNote) {
-
-            // readjust pixmap height according to its duration - the stalk
-            // is longer for 8th, 16th, etc.. because the tail is higher
-            //
-            if (m_note == Note::EighthNote)
-                m_pixmapSize.rheight() += 1;
-            else if (m_note == Note::SixteenthNote)
-                m_pixmapSize.rheight() += 4;
-            else if (m_note == Note::ThirtySecondNote)
-                m_pixmapSize.rheight() += 9;
-            else if (m_note == Note::SixtyFourthNote)
-                m_pixmapSize.rheight() += 14;
-        }
-        
     }
     else {
         m_pixmapSize.setHeight(m_bodySize.height() + m_accidentalStalkSize.height());
@@ -385,8 +370,29 @@ NotePixmapFactory::makeNotePixmap(Note::Type note,
     kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeNotePixmap: note is "
                          << note << ", dotted is " << dotted << endl;
 
-    if (stalkLength >= 0) m_offsets.setStalkLength(stalkLength);
-    else m_offsets.setStalkLength(getStalkLength());
+    if (stalkLength < 0) {
+
+	stalkLength = getStalkLength();
+
+        if (note < Note::QuarterNote) {
+
+	    //!!! highly dubious, and incorrect for different resolutions
+	    
+            // readjust pixmap height according to its duration - the stalk
+            // is longer for 8th, 16th, etc.. because the tail is higher
+            //
+            if (note == Note::EighthNote)
+                stalkLength += 1;
+            else if (note == Note::SixteenthNote)
+                stalkLength += 4;
+            else if (note == Note::ThirtySecondNote)
+                stalkLength += 9;
+            else if (note == Note::SixtyFourthNote)
+                stalkLength += 14;
+        }
+    }       
+
+    m_offsets.setStalkLength(stalkLength);
 
     m_offsets.offsetsFor
         (note, dotted, accidental, drawTail, stalkGoesUp, fixedHeight);

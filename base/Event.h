@@ -172,10 +172,18 @@ Event::get(const std::string &name, PropertyDefn<P>::basic_type &val) const
         }
 	    
     } else {
+
+// No, this is not an error -- this sort of thing is what the method is for
+
+#ifdef NOT_DEFINED
+
 #ifndef NDEBUG
         std::cerr << "Event::get() Error: Attempt to get property \"" << name
              << "\" which doesn't exist for this element" << std::endl;
 #endif
+
+#endif
+
         return false;
     }
 }

@@ -323,19 +323,21 @@ NotationHLayout::layout()
                 ++it0;
                 if (groupNo > -1 &&
                     (it0 == m_notationElements.end() ||
-                     ((*it0)->event()->get<Int>(P_GROUP_NO, nextGroupNo) &&
+                     (!(*it0)->event()->get<Int>(P_GROUP_NO, nextGroupNo) ||
                       nextGroupNo != groupNo))) {
                     kdDebug(KDEBUG_AREA) << "NotationHLayout::layout: about to leave group " << groupNo << ", time to do the sums" << endl;
                 
                     NotationGroup group(m_notationElements, it, clef, key);
                     kdDebug(KDEBUG_AREA) << "NotationHLayout::layout: group type is " << group.getGroupType() << ", now applying beam" << endl;
-                    group.applyBeam();
+                    group.applyBeam(m_staff);
                 }
 
                 pGroupNo = groupNo;
 
                 Chord chord(m_notationElements, it);
                 if (chord.size() < 2 || it == chord.getFinalElement()) {
+
+		    kdDebug(KDEBUG_AREA) << "This is the final chord element (of " << chord.size() << ")" << endl;
 
                     // To work out how much space to allot a note (or
                     // chord), start with the amount alloted to the
@@ -348,7 +350,10 @@ NotationHLayout::layout()
                              el->event()->getDuration()) /
                         //!!! not right for partial bar?
                         timeSignature.getBarDuration();
-                }
+                } else {
+		    kdDebug(KDEBUG_AREA) << "This is not the final chord element (of " << chord.size() << ")" << endl;
+		    delta = 0;
+		}
             }
 
             x += delta;

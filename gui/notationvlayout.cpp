@@ -89,38 +89,6 @@ NotationVLayout::layout(NotationElementList::iterator from,
 			(P_DRAW_TAIL,
 			 ((stalkUp && j == chord.size()-1) ||
 			  (!stalkUp && j == 0)));
-
-		bool beamed = false;
-		(void)el->event()->get<Bool>(P_BEAMED, beamed);
-
-		if (beamed && el->event()->get<Bool>(P_BEAM_PRIMARY_NOTE)) {
-
-		    kdDebug(KDEBUG_AREA) << "NotationVLayout::layout: Note is a primary beamed note" << endl;
-
-		    double gradient =
-			(double)el->event()->get<Int>(P_BEAM_GRADIENT) / 100.0;
-
-		    int myX = el->event()->get<Int>(P_BEAM_RELATIVE_X);
-
-		    long nextX;
-		    if (el->event()->get<Int>(P_BEAM_SECTION_WIDTH, nextX)) {
-			nextX += myX;
-		    } else {
-			el->event()->setMaybe<Int>(P_BEAM_SECTION_WIDTH, 0);
-			nextX = myX;
-		    }
-
-		    int startY = m_staff.yCoordOfHeight
-			(el->event()->get<Int>(P_BEAM_START_HEIGHT));
-
-		    int myY   = (int)(gradient *   myX) + startY;
-		    int nextY = (int)(gradient * nextX) + startY;
-
-		    kdDebug(KDEBUG_AREA) << "NotationVLayout::layout: myY is " << myY << ", nextY is " << nextY << endl;
-		    
-		    el->event()->setMaybe<Int>(P_BEAM_MY_Y, myY);
-		    el->event()->setMaybe<Int>(P_BEAM_NEXT_Y, nextY);
-		}
             }
 
             i = chord.getFinalElement();

@@ -400,7 +400,7 @@ NotationView::showElements(NotationElementList::iterator from,
 
 		if (beamed) {
 
-		    int stemLength = 0;
+		    int stemLength = npf.getNoteBodyHeight();
 
 		    if ((*it)->event()->get<Bool>(P_BEAM_PRIMARY_NOTE)) {
 
@@ -418,9 +418,9 @@ NotationView::showElements(NotationElementList::iterator from,
 			    QCanvasLine *beam = new QCanvasLine(canvas());
 			    QPen pen(black, 1);
 			    beam->setPen(pen);
-			    int x = (*it)->getLayoutX();
+			    int x = (int)(*it)->getLayoutX();
 			    if ((*it)->event()->get<Bool>(P_STALK_UP)) {
-				x += npf.getNoteBodyWidth();
+				x += npf.getNoteBodyWidth() - 1;
 			    }
 			    beam->setPoints(dxoffset + x, dyoffset + myY + h,
 					    dxoffset + x + dx, dyoffset + nextY + h);
@@ -530,8 +530,8 @@ bool
 NotationView::applyLayout()
 {
     bool rcp = applyHorizontalPreparse();
-    bool rch = applyHorizontalLayout();
     bool rcv = applyVerticalLayout();
+    bool rch = applyHorizontalLayout();
 
     kdDebug(KDEBUG_AREA) << "NotationView::applyLayout() : done" << endl;
 

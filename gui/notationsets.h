@@ -26,6 +26,8 @@
 #include "notationproperties.h"
 #include "notepixmapfactory.h"
 
+class Staff;
+
 
 // A "notation set" is an object made up from a contiguous set of
 // elements from an element list.  Examples of notation sets include
@@ -151,8 +153,8 @@ public:
     Type getGroupType() const { return m_type; }
 
     // Writes beam data into each note in the group.  Notes'
-    // x-coordinates must already have been set.
-    void applyBeam();
+    // layout x coordinates must already have been set.
+    void applyBeam(Staff &);
 
 protected:
     virtual bool test(const NELIterator &i) {
@@ -166,12 +168,12 @@ private:
     struct Beam
     {                           // if a beam has a line equation y = mx + c,
         int  gradient;          // -- then this is m*100 (i.e. a percentage)
-        int  startHeight;       // -- and this is c (as height-on-staff)
+        int  startY;            // -- and this is c
         bool aboveNotes;
         bool necessary;
     };
 
-    Beam calculateBeam();
+    Beam calculateBeam(Staff &);
 
     int height(const NELIterator&);
     const Rosegarden::Clef &m_clef;

@@ -41,21 +41,13 @@
 #define  P_GROUP_NO              "GroupNo"
 #define  P_GROUP_TYPE            "GroupType"
 
-// I'm sure there are too many of these, but the Beam code is still
-// evolving somewhat.
-
 // Set in applyBeam in notationsets.cpp:
 
 #define  P_BEAMED                "Beamed"
 #define  P_BEAM_PRIMARY_NOTE	 "BeamPrimaryNote"
 #define  P_BEAM_GRADIENT         "BeamGradient"
-#define  P_BEAM_START_HEIGHT     "BeamStartHeight"
-#define  P_BEAM_RELATIVE_X       "BeamRelativeX"
 #define  P_BEAM_SECTION_WIDTH    "BeamSectionWidth"
 #define  P_BEAM_NEXT_TAIL_COUNT  "BeamNextTailCount"
-
-// Set in notationvlayout.cpp:
-
 #define  P_BEAM_MY_Y		 "BeamMyY"
 #define  P_BEAM_NEXT_Y		 "BeamNextY"
 
