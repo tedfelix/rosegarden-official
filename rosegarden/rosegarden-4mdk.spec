@@ -4,7 +4,7 @@
 %define __libtoolize :
 
 Summary:   MIDI and audio sequencer and notation editor
-Name:	   rosegarden-4
+Name:	   rosegarden4
 Version:   %{version}
 Release:   %{release}mdk
 Copyright: GPL
