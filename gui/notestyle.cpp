@@ -94,6 +94,34 @@ namespace StandardNoteStyleNames
 }
 
 
+std::vector<NoteStyleName>
+NoteStyleFactory::getAvailableStyleNames()
+{
+    std::vector<NoteStyleName> names;
+
+    QString styleDir = KGlobal::dirs()->findResource("appdata", "styles/");
+    QDir dir(styleDir);
+    if (!dir.exists()) {
+        cerr << "NoteStyle::getAvailableStyleNames: directory \"" << styleDir
+             << "\" not found" << endl;
+        return names;
+    }
+
+    dir.setFilter(QDir::Files | QDir::Readable);
+    QStringList files = dir.entryList();
+
+    for (QStringList::Iterator i = files.begin(); i != files.end(); ++i) {
+	if ((*i).length() > 4 && (*i).right(4) == ".xml") {
+	    QFileInfo fileInfo(QString("%1/%2").arg(styleDir).arg(*i));
+	    if (fileInfo.exists() && fileInfo.isReadable()) {
+		names.push_back(qstrtostr((*i).left((*i).length()-4)));
+	    }
+	}
+    }
+
+    return names;
+}
+
 NoteStyle *
 NoteStyleFactory::getStyle(NoteStyleName name)
 {

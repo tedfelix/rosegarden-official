@@ -8,10 +8,10 @@
   <text>&amp;View</text>
 <Action name="debug_dump"/>
 <Separator/>
-  <Menu name="Font">
-    <text>Note &amp;Font</text>
-    <ActionList name="note_fonts"/>
-  </Menu>
+  <Action name="note_font_actionmenu"/>
+  <Action name="note_font_size_actionmenu"/>
+  <Action name="stretch_actionmenu"/>
+  <Action name="smoothing_actionmenu"/>
 <Separator/>
   <Action name="linear_mode"/>
   <Action name="page_mode"/>
@@ -67,6 +67,7 @@ etc
     <Action name="style_triangle"/>
     <Action name="style_mensural"/>
   </Menu>
+  <Action name="note_style_actionmenu"/>
   <Menu name="Stems">
     <text>S&amp;tem Direction</text>
     <Action name="stems_up"/>
@@ -332,6 +333,7 @@ etc
     <Action name="style_x"/>
     <Action name="style_triangle"/>
     <Action name="style_mensural"/>
+    <Action name="note_style_actionmenu"/>
     <Action name="remove_marks"/>
     <Action name="add_pause"/>
     <Action name="add_text_mark"/>
@@ -365,6 +367,7 @@ etc
     <Action name="style_x"/>
     <Action name="style_triangle"/>
     <Action name="style_mensural"/>
+    <Action name="note_style_actionmenu"/>
     <Action name="remove_marks"/>
     <Action name="add_accent"/>
     <Action name="add_tenuto"/>

@@ -74,7 +74,7 @@ NotationView::slotTestClipboard()
 }
  
 void
-NotationView::slotChangeStretch(int n)
+NotationView::slotChangeSpacing(int n)
 {
     std::vector<double> spacings = m_hlayout.getAvailableSpacings();
     if (n >= (int)spacings.size()) n = spacings.size() - 1;
@@ -122,6 +122,27 @@ NotationView::slotChangeFontFromAction()
     } else {
 	KMessageBox::sorry
 	    (this, QString(i18n("Unknown font action %1").arg(name)));
+    }
+}
+
+void
+NotationView::slotChangeFontSizeFromAction()
+{
+    const QObject *s = sender();
+    QString name = s->name();
+
+    if (name.left(15) == "note_font_size_") {
+	name = name.right(name.length() - 15);
+	bool ok = false;
+	int size = name.toInt(&ok);
+	if (ok) slotChangeFont(m_fontName, size);
+	else {
+	    KMessageBox::sorry
+		(this, QString(i18n("Unknown font size %1").arg(name)));
+	}	    
+    } else {
+	KMessageBox::sorry
+	    (this, QString(i18n("Unknown font size action %1").arg(name)));
     }
 }
 

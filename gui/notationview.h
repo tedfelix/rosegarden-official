@@ -38,6 +38,7 @@
 
 class QLabel;
 class QCanvasItem;
+class KActionMenu;
 namespace Rosegarden { class Segment; class EventSelection; class MappedEvent; }
 class RosegardenGUIDoc;
 class NotationTool;
@@ -428,11 +429,14 @@ public slots:
     /// Changes the font size of the staffs on the view
     void slotChangeFontSize(int newSize);
 
+    /// Changes the font size of the staffs on the view, gets size from sender
+    void slotChangeFontSizeFromAction();
+
     /// Changes the font size of the staffs on the view to the nth size in the available size list
     void slotChangeFontSizeFromIndex(int n);
 
-    /// Changes the hlayout stretch of the staffs on the view
-    void slotChangeStretch(int newStretch);
+    /// Changes the hlayout spacing of the staffs on the view
+    void slotChangeSpacing(int newSpacing);
 
     /// Changes the display quantization of the staffs on the view
     void slotChangeLegato(int newLegatoIndex);
@@ -508,6 +512,11 @@ protected:
     virtual void setupActions();
 
     /**
+     * create or re-initialise (after font change) the font size menu
+     */
+    virtual void setupFontSizeMenu(std::string oldFontName = "");
+
+    /**
      * setup status bar
      */
     virtual void initStatusBar();
@@ -520,7 +529,7 @@ protected:
     /**
      * setup the "zoom" toolbar
      */
-    void initFontToolbar(int legatoUnit, bool multiStaff);
+    void initFontToolbar(int legatoUnit);
 
     /**
      * Helper function to toggle a toolbar given its name
@@ -631,8 +640,6 @@ protected:
 
     bool m_tupletMode;
     
-    ZoomSlider<int> *m_fontSizeSlider;
-
     std::vector<int> m_legatoDurations;
 
     KAction* m_selectDefaultNote;
@@ -643,11 +650,11 @@ protected:
     typedef QMap<QString, MarkActionData> MarkActionDataMap;
     static MarkActionDataMap *m_markActionDataMap;
 
-#ifdef RGKDE3
-    QPtrList<KAction> m_fontActions;
-#else
-    QList<KAction> m_fontActions;
-#endif
+    QComboBox *m_fontCombo;
+    ZoomSlider<int> *m_fontSizeSlider;
+    ZoomSlider<double> *m_spacingSlider;
+    ZoomSlider<int> *m_smoothingSlider;
+    KActionMenu *m_fontSizeActionMenu;
 
     RosegardenProgressDialog *m_progressDlg;
     bool m_inhibitRefresh;

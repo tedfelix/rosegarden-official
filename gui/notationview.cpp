@@ -168,8 +168,12 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_topBarButtons(0),
     m_bottomBarButtons(0),
     m_tupletMode(false),
-    m_fontSizeSlider(0),
     m_selectDefaultNote(0),
+    m_fontCombo(0),
+    m_fontSizeSlider(0),
+    m_spacingSlider(0),
+    m_smoothingSlider(0),
+    m_fontSizeActionMenu(0),
     m_progressDlg(0),
     m_inhibitRefresh(true),
     m_documentDestroyed(false)
@@ -181,8 +185,19 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     assert(segments.size() > 0);
     kdDebug(KDEBUG_AREA) << "NotationView ctor" << endl;
 
+    KConfig *config = kapp->config();
+    config->setGroup("Notation Options");
+
+    m_fontName = qstrtostr(config->readEntry
+			   ("notefont",
+			    strtoqstr(NotePixmapFactory::getDefaultFont())));
+
+    m_fontSize = config->readUnsignedNumEntry
+	((segments.size() > 1 ? "multistaffnotesize" : "singlestaffnotesize"),
+	 NotePixmapFactory::getDefaultSize(m_fontName));
+
     setupActions();
-    initFontToolbar(m_legatoQuantizer->getUnit(), segments.size() > 1);
+    initFontToolbar(m_legatoQuantizer->getUnit());
     initStatusBar();
     
     setBackgroundMode(PaletteBase);
@@ -495,6 +510,37 @@ void NotationView::setupActions()
 {   
     KRadioAction* noteAction = 0;
     
+    // View menu stuff
+    
+    KActionMenu *fontActionMenu =
+	new KActionMenu(i18n("Note &Font"), this, "note_font_actionmenu");
+
+    std::set<std::string> fs(NotePixmapFactory::getAvailableFontNames());
+    std::vector<std::string> f(fs.begin(), fs.end());
+    std::sort(f.begin(), f.end());
+    
+    for (std::vector<std::string>::iterator i = f.begin(); i != f.end(); ++i) {
+
+	QString fontQName(strtoqstr(*i));
+
+	KToggleAction *fontAction = 
+	    new KToggleAction
+	    (fontQName, 0, this, SLOT(slotChangeFontFromAction()),
+	     actionCollection(), "note_font_" + fontQName);
+
+	fontAction->setChecked(*i == m_fontName);
+	fontActionMenu->insert(fontAction);
+    }
+
+    actionCollection()->insert(fontActionMenu);
+
+    m_fontSizeActionMenu =
+	new KActionMenu(i18n("Si&ze"), this, "note_font_size_actionmenu");
+    setupFontSizeMenu();
+
+    actionCollection()->insert(m_fontSizeActionMenu);
+
+
     // setup Notes menu & toolbar
     QIconSet icon;
  
@@ -925,6 +971,39 @@ void NotationView::setupActions()
     createGUI("notation.rc");
 }
 
+void
+NotationView::setupFontSizeMenu(std::string oldFontName)
+{
+    if (oldFontName != "") {
+	
+	std::vector<int> sizes = NotePixmapFactory::getAvailableSizes
+	    (oldFontName);
+	
+	for (unsigned int i = 0; i < sizes.size(); ++i) {
+	    KAction *action =
+		actionCollection()->action
+		(QString("note_font_size_%1").arg(sizes[i]));
+	    m_fontSizeActionMenu->remove(action);
+	    delete action;
+	}
+    }
+
+    std::vector<int> sizes = NotePixmapFactory::getAvailableSizes(m_fontName);
+
+    for (unsigned int i = 0; i < sizes.size(); ++i) {
+
+	KToggleAction *sizeAction = 
+	    new KToggleAction
+	    (i18n("%1 pixels").arg(sizes[i]), 0, this,
+	     SLOT(slotChangeFontSizeFromAction()),
+	     actionCollection(), QString("note_font_size_%1").arg(sizes[i]));
+
+	sizeAction->setChecked(sizes[i] == m_fontSize);
+	m_fontSizeActionMenu->insert(sizeAction);
+    }
+}
+
+
 NotationStaff *
 NotationView::getStaff(const Segment &segment)
 {
@@ -934,7 +1013,7 @@ NotationView::getStaff(const Segment &segment)
     return 0;
 }
 
-void NotationView::initFontToolbar(int legatoUnit, bool multiStaff)
+void NotationView::initFontToolbar(int legatoUnit)
 {
     KToolBar *fontToolbar = toolBar("fontToolBar");
 
@@ -947,45 +1026,26 @@ void NotationView::initFontToolbar(int legatoUnit, bool multiStaff)
         return;
     }
 
-    KConfig *config = kapp->config();
-    config->setGroup("Notation Options");
-
-    m_fontName = qstrtostr(config->readEntry
-			   ("notefont",
-			    strtoqstr(NotePixmapFactory::getDefaultFont())));
-
-    m_fontSize = config->readUnsignedNumEntry
-	((multiStaff ? "multistaffnotesize" : "singlestaffnotesize"),
-	 NotePixmapFactory::getDefaultSize(m_fontName));
-
     new QLabel(i18n("  Font:  "), fontToolbar);
 
-    QComboBox *fontCombo = new QComboBox(fontToolbar);
-    fontCombo->setEditable(false);
+    m_fontCombo = new QComboBox(fontToolbar);
+    m_fontCombo->setEditable(false);
 
     std::set<std::string> fs(NotePixmapFactory::getAvailableFontNames());
     std::vector<std::string> f(fs.begin(), fs.end());
     std::sort(f.begin(), f.end());
 
     bool foundFont = false;
-    m_fontActions.clear();
 
     for (std::vector<std::string>::iterator i = f.begin(); i != f.end(); ++i) {
 
 	QString fontQName(strtoqstr(*i));
 
-        fontCombo->insertItem(fontQName);
+        m_fontCombo->insertItem(fontQName);
         if (*i == m_fontName) {
-            fontCombo->setCurrentItem(fontCombo->count() - 1);
+            m_fontCombo->setCurrentItem(m_fontCombo->count() - 1);
 	    foundFont = true;
         }
-
-	//!!! is there a leak here if m_fontActions is a KList?
-	// need some setAutoDelete thing?
-	KAction *action = new KAction
-	    (fontQName, 0, this, SLOT(slotChangeFontFromAction()),
-	     actionCollection(), "note_font_" + fontQName);
-	m_fontActions.append(action);
     }
 
     if (!foundFont) {
@@ -995,10 +1055,7 @@ void NotationView::initFontToolbar(int legatoUnit, bool multiStaff)
 	m_fontName = NotePixmapFactory::getDefaultFont();
     }
     
-    kdDebug(KDEBUG_AREA) << "m_fontActions has " << m_fontActions.count() << " elements" << endl;
-    plugActionList("note_fonts", m_fontActions);
-
-    connect(fontCombo, SIGNAL(activated(const QString &)),
+    connect(m_fontCombo, SIGNAL(activated(const QString &)),
             this,        SLOT(slotChangeFont(const QString &)));
 
     new QLabel(i18n("  Size:  "), fontToolbar);
@@ -1012,10 +1069,10 @@ void NotationView::initFontToolbar(int legatoUnit, bool multiStaff)
     new QLabel(i18n("  Spacing:  "), fontToolbar);
 
     std::vector<double> spacings = NotationHLayout::getAvailableSpacings();
-    QSlider *stretchSlider = new ZoomSlider<double>
+    m_spacingSlider = new ZoomSlider<double>
         (spacings, 1.0, QSlider::Horizontal, fontToolbar);
-    connect(stretchSlider, SIGNAL(valueChanged(int)),
-            this, SLOT(slotChangeStretch(int)));
+    connect(m_spacingSlider, SIGNAL(valueChanged(int)),
+            this, SLOT(slotChangeSpacing(int)));
 
     new QLabel(i18n("  Smoothing:  "), fontToolbar);
 
@@ -1025,9 +1082,9 @@ void NotationView::initFontToolbar(int legatoUnit, bool multiStaff)
                 ((int)(Note(type).getDuration()));
         }
     }
-    QSlider *quantizeSlider = new ZoomSlider<int>
+    QSlider *m_smoothingSlider = new ZoomSlider<int>
         (m_legatoDurations, legatoUnit, QSlider::Horizontal, fontToolbar);
-    connect(quantizeSlider, SIGNAL(valueChanged(int)),
+    connect(m_smoothingSlider, SIGNAL(valueChanged(int)),
             this, SLOT(slotChangeLegato(int)));
 
     slotChangeFont(m_fontName, m_fontSize);

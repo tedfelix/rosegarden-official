@@ -86,6 +86,8 @@ namespace StandardNoteStyleNames
 class NoteStyleFactory
 {
 public:
+    static std::vector<NoteStyleName> getAvailableStyleNames();
+
     static NoteStyle *getStyle(NoteStyleName name);
     static NoteStyle *getStyleForEvent(Rosegarden::Event *event);
 
