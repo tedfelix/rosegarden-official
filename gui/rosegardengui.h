@@ -377,7 +377,7 @@ public slots:
     /**
      * segment select tool
      */
-    void pointerSelect();
+    void pointerSelected();
 
     /**
      * segment eraser tool is selected

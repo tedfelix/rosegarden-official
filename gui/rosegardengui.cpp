@@ -175,7 +175,7 @@ void RosegardenGUIApp::setupActions()
     // TODO : add some shortcuts here
     action = new KRadioAction(i18n("&Select"), icon,
                               0,
-                              this, SLOT(pointerSelect()),
+                              this, SLOT(pointerSelected()),
                               actionCollection(), "select");
 
     action->setExclusiveGroup("segmenttools");
@@ -937,9 +937,9 @@ void RosegardenGUIApp::statusHelpMsg(const QString &text)
     statusBar()->message(text, 2000);
 }
 
-void RosegardenGUIApp::pointerSelect()
+void RosegardenGUIApp::pointerSelected()
 {
-    m_view->pointerSelect();
+    m_view->pointerSelected();
 }
 
 void RosegardenGUIApp::eraseSelected()

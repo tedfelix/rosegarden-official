@@ -89,7 +89,7 @@ public:
     /**
      * segment selector mode
      */
-    void pointerSelect();
+    void pointerSelected();
     
     /**
      * segment eraser tool is selected

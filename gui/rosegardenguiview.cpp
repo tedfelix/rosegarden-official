@@ -57,10 +57,10 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
 
     double barWidth44 = 100.0;  // so random, so rare
     double unitsPerPixel =
-	Rosegarden::TimeSignature(4, 4).getBarDuration() / barWidth44;
+        Rosegarden::TimeSignature(4, 4).getBarDuration() / barWidth44;
 
     m_rulerScale = new SimpleRulerScale
-	(&doc->getComposition(), 0, unitsPerPixel);
+        (&doc->getComposition(), 0, unitsPerPixel);
     
     // Construct the trackEditor first so we can then
     // query it for placement information
@@ -102,10 +102,10 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     barButtonsView->setVScrollBarMode(QScrollView::AlwaysOff);
 
     BarButtons *barButtons = new BarButtons
-	(doc,
-	 m_rulerScale,
-	 trackEditor->getVHeader()->sectionSize(0),
-	 barButtonsView);
+        (doc,
+         m_rulerScale,
+         trackEditor->getVHeader()->sectionSize(0),
+         barButtonsView);
 
     // set a plain frame for the scrollview
     //
@@ -262,13 +262,13 @@ void RosegardenGUIView::print(QPrinter *pPrinter)
 {
     QPainter printpainter;
     printpainter.begin(pPrinter);
-	
+        
     // TODO: add your printing code here
 
     printpainter.end();
 }
 
-void RosegardenGUIView::pointerSelect()
+void RosegardenGUIView::pointerSelected()
 {
     emit setTool(SegmentCanvas::Selector);
 }
@@ -351,8 +351,8 @@ void RosegardenGUIView::scrollTrackEditorHoriz(int hpos)
 void RosegardenGUIView::editAllTracks(Rosegarden::Composition* p)
 {
     if (p->getNbSegments() == 0) {
-	KMessageBox::sorry(0, "Please create some tracks first (until we implement menu state management)");
-	return;
+        KMessageBox::sorry(0, "Please create some tracks first (until we implement menu state management)");
+        return;
     }
 
     std::vector<Rosegarden::Segment *> segmentsToEdit;
