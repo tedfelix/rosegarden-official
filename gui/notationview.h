@@ -76,6 +76,11 @@ public:
                  std::vector<Rosegarden::Segment *> segments,
                  QWidget *parent,
 		 bool showProgressive = true); // update during initial render?
+
+    /// Constructor for printing only
+    NotationView(RosegardenGUIDoc *doc,
+                 std::vector<Rosegarden::Segment *> segments);
+
     ~NotationView();
 
     /// constructed successfully? (main reason it might not is user hit Cancel)

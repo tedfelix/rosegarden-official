@@ -174,6 +174,11 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	      m_legatoQuantizer, m_properties),
     m_topBarButtons(0),
     m_bottomBarButtons(0),
+    m_chordNameRuler(0),
+    m_tempoRuler(0),
+    m_chordNamesVisible(false),
+    m_temposVisible(false),
+    m_annotationsVisible(false),
 //!!!    m_tupletMode(false),
     m_selectDefaultNote(0),
     m_fontCombo(0),
@@ -197,22 +202,21 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     // Initialise the display-related defaults that will be needed
     // by both the actions and the font toolbar
 
-    KConfig *config = kapp->config();
-    config->setGroup("Notation Options");
+    m_config->setGroup("Notation Options");
 
-    m_fontName = qstrtostr(config->readEntry
+    m_fontName = qstrtostr(m_config->readEntry
 			   ("notefont",
 			    strtoqstr(NotePixmapFactory::getDefaultFont())));
 
-    m_fontSize = config->readUnsignedNumEntry
+    m_fontSize = m_config->readUnsignedNumEntry
 	((segments.size() > 1 ? "multistaffnotesize" : "singlestaffnotesize"),
 	 NotePixmapFactory::getDefaultSize(m_fontName));
 
-    int defaultSpacing = config->readNumEntry("spacing", 100);
+    int defaultSpacing = m_config->readNumEntry("spacing", 100);
     m_hlayout.setSpacing(defaultSpacing);
 
     Note::Type defaultSmoothingType = 
-	config->readNumEntry("smoothing", Note::Shortest);
+	m_config->readNumEntry("smoothing", Note::Shortest);
     timeT defaultSmoothing = Note(defaultSmoothingType).getDuration();
     for (int type = Note::Shortest; type <= Note::Longest; ++type) {
 	m_legatoDurations.push_back((int)(Note(type).getDuration()));
@@ -412,6 +416,161 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     readOptions();
 }
+
+//
+// Notation Print mode
+//
+NotationView::NotationView(RosegardenGUIDoc *doc,
+                           std::vector<Segment *> segments)
+    : EditView(doc, segments, 1, 0, "printview"),
+    m_properties(getViewLocalPropertyPrefix()),
+    m_currentEventSelection(0),
+    m_legatoQuantizer(new Quantizer(Quantizer::RawEventData,
+				    getViewLocalPropertyPrefix() + "Q",
+				    Quantizer::LegatoQuantize)),
+    m_selectionCounter(0),
+    m_currentNotePixmap(0),
+    m_hoveredOverNoteName(0),
+    m_hoveredOverAbsoluteTime(0),
+    m_lastFinishingStaff(-1),
+    m_insertionTime(0),
+    m_fontName(NotePixmapFactory::getDefaultFont()),
+    m_fontSize(NotePixmapFactory::getDefaultSize(m_fontName)),
+    m_notePixmapFactory(new NotePixmapFactory(m_fontName, m_fontSize)),
+    m_hlayout(&doc->getComposition(), m_notePixmapFactory,
+	      m_legatoQuantizer, m_properties),
+    m_vlayout(&doc->getComposition(),
+	      m_legatoQuantizer, m_properties),
+    m_topBarButtons(0),
+    m_bottomBarButtons(0),
+    m_chordNameRuler(0),
+    m_tempoRuler(0),
+    m_chordNamesVisible(false),
+    m_temposVisible(false),
+    m_annotationsVisible(false),
+//!!!    m_tupletMode(false),
+    m_selectDefaultNote(0),
+    m_fontCombo(0),
+    m_fontSizeSlider(0),
+    m_spacingSlider(0),
+    m_smoothingSlider(0),
+    m_fontSizeActionMenu(0),
+    m_progress(0),
+    m_inhibitRefresh(true),
+    m_documentDestroyed(false),
+    m_ok(false)
+{
+//     initActionDataMaps(); // does something only the 1st time it's called
+    
+//     m_toolBox = new NotationToolBox(this);
+
+    assert(segments.size() > 0);
+    NOTATION_DEBUG << "NotationView ctor" << endl;
+
+
+    // Initialise the display-related defaults that will be needed
+    // by both the actions and the font toolbar
+
+    m_config->setGroup("Notation Options");
+
+    m_fontName = qstrtostr(m_config->readEntry
+			   ("notefont",
+			    strtoqstr(NotePixmapFactory::getDefaultFont())));
+
+    m_fontSize = m_config->readUnsignedNumEntry
+	((segments.size() > 1 ? "multistaffnotesize" : "singlestaffnotesize"),
+	 NotePixmapFactory::getDefaultSize(m_fontName));
+
+    int defaultSpacing = m_config->readNumEntry("spacing", 100);
+    m_hlayout.setSpacing(defaultSpacing);
+
+    Note::Type defaultSmoothingType = 
+	m_config->readNumEntry("smoothing", Note::Shortest);
+    timeT defaultSmoothing = Note(defaultSmoothingType).getDuration();
+    for (int type = Note::Shortest; type <= Note::Longest; ++type) {
+	m_legatoDurations.push_back((int)(Note(type).getDuration()));
+    }
+    Rosegarden::Quantizer q(Rosegarden::Quantizer::RawEventData,
+			    getViewLocalPropertyPrefix() + "Q",
+			    Rosegarden::Quantizer::LegatoQuantize,
+			    defaultSmoothing);
+    *m_legatoQuantizer = q;
+    
+
+//     setupActions();
+//     initFontToolbar();
+//     initStatusBar();
+    
+    setBackgroundMode(PaletteBase);
+
+    QCanvas *tCanvas = new QCanvas(this);
+    tCanvas->resize(width() * 2, height() * 2);
+    
+    setCanvasView(new NotationCanvasView(*this, m_horizontalScrollBar,
+                                         tCanvas, getCentralFrame()));
+
+//     m_topBarButtons = new BarButtons(&m_hlayout, 20.0, 25,
+//                                      false, getCentralFrame());
+//     setTopBarButtons(m_topBarButtons);
+
+//     m_topBarButtons->getLoopRuler()->setBackgroundColor
+// 	(RosegardenGUIColours::InsertCursorRuler);
+
+//     m_chordNameRuler = new ChordNameRuler
+// 	(&m_hlayout, 0, 20.0, 20, getCentralFrame());
+//     addRuler(m_chordNameRuler);
+//     if (showProgressive) m_chordNameRuler->show();
+//     m_chordNamesVisible = true;
+
+//     m_tempoRuler = new TempoRuler
+// 	(&m_hlayout, &doc->getComposition(),
+// 	 20.0, 20, false, getCentralFrame());
+//     addRuler(m_tempoRuler);
+//     m_tempoRuler->hide();
+//     m_temposVisible = false;
+
+//     m_bottomBarButtons = new BarButtons(&m_hlayout, 20.0, 25,
+//                                         true, getCentralFrame());
+//     setBottomBarButtons(m_bottomBarButtons);
+
+    for (unsigned int i = 0; i < segments.size(); ++i) {
+        m_staffs.push_back(new NotationStaff(canvas(), segments[i], 0, // snap
+                                             i, this, false, width() - 50,
+                                             m_fontName, m_fontSize));
+    }
+
+//     m_chordNameRuler->setComposition(&doc->getComposition());
+
+    positionStaffs();
+    m_currentStaff = 0;
+    m_staffs[0]->setCurrent(true);
+
+    setPageMode(true);
+
+    try {
+	bool layoutApplied = applyLayout();
+	if (!layoutApplied) {
+	    KMessageBox::sorry(0, i18n("Couldn't apply score layout"));
+	} else {
+	    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+		
+		m_staffs[i]->renderAllElements();
+		m_staffs[i]->positionAllElements();
+		m_staffs[i]->getSegment().getRefreshStatus
+		    (m_segmentsRefreshStatusIds[i]).setNeedsRefresh(false);
+		
+		canvas()->update();
+	    }
+	}
+	m_ok = true;
+    } catch (std::string s) {
+	if (s != "Action cancelled") {
+	    throw;
+	}
+	// when cancelled, m_ok is false -- checked by calling method
+    }
+}
+
 
 NotationView::~NotationView()
 {
