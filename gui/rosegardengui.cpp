@@ -218,9 +218,29 @@ void RosegardenGUIApp::setupActions()
     transportAction = new KAction(i18n("Rewind"), 0, 0, this,
                                   SLOT(rewind()), actionCollection(),
                                   "rewind");
+
     transportAction->setGroup("transportcontrols");
     transportAction->setAccel(Key_End);
 
+    // create the Transport GUI and add the callbacks
+    //
+    m_rosegardenTransport = new RosegardenTransport(this);
+
+    connect((QObject *) m_rosegardenTransport->PlayButton,
+             SIGNAL(released()),
+             SLOT(play()));
+             
+    connect((QObject *) m_rosegardenTransport->StopButton,
+             SIGNAL(released()),
+             SLOT(stop()));
+             
+    connect((QObject *) m_rosegardenTransport->FfwdButton,
+             SIGNAL(released()),
+             SLOT(fastforward()));
+            
+    connect((QObject *) m_rosegardenTransport->RewindButton,
+             SIGNAL(released()),
+             SLOT(rewind()));
 
     createGUI("rosegardenui.rc");
 }
@@ -239,7 +259,6 @@ void RosegardenGUIApp::initDocument()
 {
     // For the moment we show the Transport all the time
     //
-    m_rosegardenTransport = new RosegardenTransport(this);
     m_rosegardenTransport->show();
 
     m_doc = new RosegardenGUIDoc(this);
