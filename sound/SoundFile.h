@@ -59,7 +59,9 @@ public:
     const std::string& getFilename() { return m_fileName; }
     void setFilename(const std::string &fileName) { m_fileName = fileName; }
 
-    int getLittleEndian(const std::string &s);
+    int getIntegerFromLittleEndian(const std::string &s);
+    std::string getLittleEndianFromInteger(unsigned int value,
+                                           unsigned int length);
 
 protected:
     std::string m_fileName;

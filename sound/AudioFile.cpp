@@ -33,27 +33,53 @@ namespace Rosegarden
 
 AudioFile::AudioFile(const unsigned int &id,
                      const std::string &name, const std::string &fileName):
-    SoundFile(fileName), m_id(id), m_name(name),
-    m_bitsPerSample(0), m_sampleRate(0), m_bytesPerSecond(0),
-    m_bytesPerSample(0), m_channels(0), m_type(AUDIO_NOT_LOADED),
-    m_fileSize(0), m_file(0)
+    SoundFile(fileName),
+    m_id(id),
+    m_name(name),
+    m_bitsPerSample(0),
+    m_sampleRate(0),
+    m_bytesPerSecond(0),
+    m_bytesPerSample(0),
+    m_channels(0),
+    m_type(UNKNOWN),
+    m_fileSize(0),
+    m_inFile(0),
+    m_outFile(0)
 {
 }
 
-AudioFile::AudioFile(const std::string &fileName):
+AudioFile::AudioFile(const std::string &fileName,
+                     AudioFileType type,
+                     unsigned int channels,
+                     unsigned int sampleRate,
+                     unsigned int bytesPerSecond,
+                     unsigned int bytesPerSample,
+                     unsigned int bitsPerSample ):
     SoundFile(fileName), m_id(0), m_name(""),
-    m_bitsPerSample(0), m_sampleRate(0), m_bytesPerSecond(0),
-    m_bytesPerSample(0), m_channels(0), m_type(AUDIO_NOT_LOADED),
-    m_fileSize(0), m_file(0)
+    m_bitsPerSample(bitsPerSample),
+    m_sampleRate(sampleRate),
+    m_bytesPerSecond(bytesPerSecond),
+    m_bytesPerSample(bytesPerSample),
+    m_channels(channels),
+    m_type(type),
+    m_fileSize(0),
+    m_inFile(0),
+    m_outFile(0)
 {
 }
 
 AudioFile::~AudioFile()
 {
-    if (m_file)
+    if (m_inFile)
     {
-        m_file->close();
-        delete m_file;
+        m_inFile->close();
+        delete m_inFile;
+    }
+
+    if (m_outFile)
+    {
+        m_outFile->close();
+        delete m_outFile;
     }
 }
 
@@ -111,7 +137,7 @@ AudioFile::parseHeader(const std::string &hS)
     // (add on eight for RIFF id and length field and compare to 
     // real file size).
     //
-    unsigned int length = getLittleEndian(hS.substr(4,4)) + 8;
+    unsigned int length = getIntegerFromLittleEndian(hS.substr(4,4)) + 8;
 
     if (length != m_fileSize)
         throw(std::string("AudioFile::parseHeader - file " + m_fileName +
@@ -119,7 +145,7 @@ AudioFile::parseHeader(const std::string &hS)
 
     // Check the format length (always 0x10)
     //
-    unsigned int lengthOfFormat = getLittleEndian(hS.substr(16, 4));
+    unsigned int lengthOfFormat = getIntegerFromLittleEndian(hS.substr(16, 4));
 
     if (lengthOfFormat != 0x10)
         throw(std::string("AudioFile::parseHeader - format length incorrect"));
@@ -127,7 +153,7 @@ AudioFile::parseHeader(const std::string &hS)
 
     // Check this field is one
     //
-    unsigned int alwaysOne = getLittleEndian(hS.substr(20, 2));
+    unsigned int alwaysOne = getIntegerFromLittleEndian(hS.substr(20, 2));
     if (alwaysOne != 0x01)
         throw(std::string("AudioFile::parseHeader - \"always one\" byte isn't"));
 
@@ -135,7 +161,7 @@ AudioFile::parseHeader(const std::string &hS)
     // We seem to have a good looking .WAV file - extract the
     // sample information and populate this locally
     //
-    unsigned int channelNumbers =  getLittleEndian(hS.substr(22,2));
+    unsigned int channelNumbers =  getIntegerFromLittleEndian(hS.substr(22,2));
     
     switch(channelNumbers)
     {
@@ -153,33 +179,33 @@ AudioFile::parseHeader(const std::string &hS)
 
     // Now the rest of the information
     //
-    m_sampleRate = getLittleEndian(hS.substr(24,4));
-    m_bytesPerSecond = getLittleEndian(hS.substr(28,4));
-    m_bytesPerSample = getLittleEndian(hS.substr(32,2));
-    m_bitsPerSample = getLittleEndian(hS.substr(34,2));
+    m_sampleRate = getIntegerFromLittleEndian(hS.substr(24,4));
+    m_bytesPerSecond = getIntegerFromLittleEndian(hS.substr(28,4));
+    m_bytesPerSample = getIntegerFromLittleEndian(hS.substr(32,2));
+    m_bitsPerSample = getIntegerFromLittleEndian(hS.substr(34,2));
    
 }
 
 bool
 AudioFile::open()
 {
-    m_file = new std::ifstream(m_fileName.c_str(),
-                               std::ios::in | std::ios::binary);
+    m_inFile = new std::ifstream(m_fileName.c_str(),
+                                 std::ios::in | std::ios::binary);
 
     // get the actual file size
     //
-    m_file->seekg(0, std::ios::end);
-    m_fileSize = m_file->tellg();
-    m_file->seekg(0, std::ios::beg);
+    m_inFile->seekg(0, std::ios::end);
+    m_fileSize = m_inFile->tellg();
+    m_inFile->seekg(0, std::ios::beg);
 
     // now parse the file
     try
     {
-        if (*m_file)
+        if (*m_inFile)
         {
             try
             {
-                parseHeader(getBytes(m_file, 36));
+                parseHeader(getBytes(m_inFile, 36));
             }
             catch(std::string s)
             {
@@ -188,7 +214,7 @@ AudioFile::open()
         }
         else
         {
-            m_type = AUDIO_NOT_LOADED;
+            m_type = UNKNOWN;
             return (false);
         }
     }
@@ -198,11 +224,11 @@ AudioFile::open()
         return false;
     }
 
-    m_type = AUDIO_WAV;
+    m_type = WAV;
 
     // Reset to front of "data" block
     //
-    scanTo(m_file, RealTime(0, 0));
+    scanTo(m_inFile, RealTime(0, 0));
 
     return true;
 }
@@ -220,11 +246,105 @@ AudioFile::printStats()
          << endl;
 }
 
+// For an AudioFile we write a header (if we can) and leave
+// the file descriptor open for subsequent appends.
+//
 bool
 AudioFile::write()
 {
+    // for the moment we only support WAVs
+    //
+    if (m_type != WAV)
+        return false;
+
+    // close if we're open
+    if (m_outFile)
+    {
+        m_outFile->close();
+        delete m_outFile;
+    }
+
+    // open for writing
+    m_outFile = new std::ofstream(m_fileName.c_str(),
+                                  std::ios::out | std::ios::binary);
+
+
     return true;
 }
+
+bool
+AudioFile::appendSamples(const std::string &buffer)
+{
+    /*
+    if (m_outFile == 0 || m_type != WAV)
+        return false;
+        */
+
+    // write out
+    putBytes(m_outFile, buffer);
+
+    return true;
+}
+
+void
+AudioFile::writeHeader()
+{
+    if (m_outFile == 0 || m_type != WAV)
+        return;
+
+    std::string outString;
+
+    // RIFF type is all we support for the moment
+    outString += "RIFF";
+
+    // Now write the total length of the file minus these first 8 bytes.
+    // We won't know this until we've finished recording the file.
+    //
+    outString += "0000";
+
+    // WAV file is all we support
+    //
+    outString += "WAVE";
+
+    // Begin the format chunk
+    outString += "fmt ";
+
+    // length
+    //cout << "LENGTH = " << getLittleEndianFromInteger(0x10, 4) << endl;
+    outString += getLittleEndianFromInteger(0x10, 4);
+
+    // "always one"
+    outString += getLittleEndianFromInteger(0x01, 2);
+
+    // channel
+    outString += getLittleEndianFromInteger(m_channels, 2);
+
+    // sample rate
+    outString += getLittleEndianFromInteger(m_sampleRate, 4);
+
+    // bytes per second
+    outString += getLittleEndianFromInteger(m_bytesPerSecond, 4);
+
+    // bytes per sample
+    outString += getLittleEndianFromInteger(m_bytesPerSample, 2);
+
+    // bits per sample
+    outString += getLittleEndianFromInteger(m_bitsPerSample, 2);
+
+    // Now mark the beginning of the "data" chunk and leave the file
+    // open for writing.
+    outString += "data";
+
+    // length of data to follow - again needs to be written after
+    // we've completed the file.
+    //
+    outString += "0000";
+
+    // write out
+    //
+    putBytes(m_outFile, outString);
+}
+
 
 bool
 AudioFile::scanTo(std::ifstream *file, const RealTime &time)
@@ -243,7 +363,13 @@ AudioFile::scanTo(std::ifstream *file, const RealTime &time)
         return false;
     }
 
-    // How much do we scan forward?
+    // get the length of the data chunk
+    std::cout << "AudioFile::scanTo() - data chunk size = "
+              << getIntegerFromLittleEndian(getBytes(file, 4)) << std::endl;
+
+
+    // Ok, we're past all the header information in the data chunk.
+    // Now, how much do we scan forward?
     //
     unsigned int totalSamples = m_sampleRate * time.sec +
                         ( ( m_sampleRate * time.usec ) / 1000000 );
@@ -253,7 +379,7 @@ AudioFile::scanTo(std::ifstream *file, const RealTime &time)
 
     // When using seekg we have to keep an eye on the boundaries ourselves
     //
-    if (totalBytes > m_fileSize - 40)
+    if (totalBytes > m_fileSize - 44)
     {
         std::cerr << "AudioFile::scanTo() - attempting to move past end of "
                   << "data block" << std::endl;
@@ -303,7 +429,18 @@ AudioFile::getSampleFrameSlice(std::ifstream *file, const RealTime &time)
     return getBytes(file, totalBytes);
 }
 
+// Close the file and calculate the sizes
+//
+void
+AudioFile::close()
+{
+    if (m_outFile)
+    {
+        m_outFile->close();
+    }
 
+    // do the rest of the checking and fixing
 }
 
+}
 

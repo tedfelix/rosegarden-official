@@ -6,6 +6,9 @@ o basic JACK audio
   - multiple sample (Segments problem?) [FIXED]
   - audio recording
 
+o Create WAV files
+
+
 o Audio previews
 
 o Jumping vertical scroll thumb on playback [RosegardenCanvasView::slotUpdate]

@@ -142,6 +142,17 @@ public:
     //
     void shutdownAudio();
 
+    // A new audio file for storage of our recorded samples - the
+    // file stays open so we can append samples at will.  We must
+    // explicitly close the file eventually though to make sure
+    // the integrity is correct (sample sizes must be written).
+    //
+    // These public methods are required in this file because we
+    // need access to this file from the static jackProcess member.
+    //
+    bool createAudioFile(const std::string &fileName);
+    void appendToAudioFile(const std::string &buffer);
+
 #endif
 
 

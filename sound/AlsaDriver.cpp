@@ -97,6 +97,11 @@ static const float  _16bitSampleMax = (float)(0xffff/2);
 
 #endif
 
+// a global AudioFile works for the threads - it didn't want to
+// work out of the instance returned to the JACK callbacks.
+//
+AudioFile *_recordFile;
+
 AlsaDriver::AlsaDriver():
     SoundDriver(std::string("alsa-lib version ") + std::string(SND_LIB_VERSION_STR)),
     m_client(-1),
@@ -776,6 +781,20 @@ AlsaDriver::stopPlayback()
                              0);
     }
 
+    // Close any recording file
+    if (m_recordStatus == RECORD_AUDIO && _recordFile)
+    {
+        _recordFile->close();
+        _recordFile = 0;
+        m_recordStatus = ASYNCHRONOUS_AUDIO;
+    }
+
+    // Change recorded state if any set
+    //
+    if (m_recordStatus == RECORD_MIDI)
+        m_recordStatus = ASYNCHRONOUS_MIDI;
+
+
     // Sometimes we don't "process" again before we actually
     // stop
 
@@ -1389,8 +1408,14 @@ AlsaDriver::record(const RecordStatus& recordStatus)
     }
     else if (recordStatus == RECORD_AUDIO)
     {
-        std::cerr << "ArtsDriver - record() - AUDIO RECORDING not yet supported"
+        /*
+        std::cerr << "ArtsDriver::record - RECORDING AUDIO"
                   << std::endl;
+                  */
+
+        createAudioFile("temp.wav");
+        m_recordStatus = RECORD_AUDIO;
+
     }
     else
     if (recordStatus == ASYNCHRONOUS_MIDI)
@@ -1403,7 +1428,7 @@ AlsaDriver::record(const RecordStatus& recordStatus)
     }
     else
     {
-        std::cerr << "ArtsDriver  - record() - Unsupported recording mode"
+        std::cerr << "ArtsDriver::record - unsupported recording mode"
                   << std::endl;
     }
 }
@@ -1554,8 +1579,26 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
             sample_t *inputBuffer = static_cast<sample_t*>
                 (jack_port_get_buffer(inst->getJackInputPort(),
                                       nframes));
-            std::cout << "AlsaDriver::jackProcess - recording audio"
+
+            /*
+            std::cout << "AlsaDriver::jackProcess - recording samples"
                       << std::endl;
+                      */
+
+            // Turn buffer into a string
+            //
+            std::string buffer;
+            unsigned char b1, b2;
+
+            for (unsigned int i = 0; i < nframes; i++)
+            {
+                b2 = (unsigned char)((long)(inputBuffer[i] * _16bitSampleMax)& 0xff);
+                b1 = (unsigned char)((long)(inputBuffer[i] * _16bitSampleMax) >> 8);
+                buffer += b1 + b2;
+            }
+
+            // append the sample string
+            inst->appendToAudioFile(buffer);
         }
 
         // Return if we're not playing yet
@@ -1882,6 +1925,51 @@ AlsaDriver::jackXRun(void *)
     std::cout << "AlsaDriver::jackXRun" << std::endl;
     return 0;
 }
+
+
+bool
+AlsaDriver::createAudioFile(const std::string &fileName)
+{
+    // Already got a recording file - close it first to make
+    // sure the data is written and internal totals computed.
+    //
+    if (_recordFile != 0)
+        return false;
+
+
+    cout << "AlsaDriver::createAudioFile - creating \"" 
+         << fileName << "\"" << std::endl;
+
+    _recordFile = new AudioFile(fileName,
+                                 WAV,
+                                 2,                    // channels
+                                 _jackSampleRate,
+                                 10,                   // bytes per second
+                                 2,                    // bytes per sample
+                                 16);                  // bits per sample
+
+    // open the file for writing
+    //
+    _recordFile->write();
+
+    // Write the header information out and prepare for writing samples
+    //
+    _recordFile->writeHeader();
+
+    return true;
+}
+
+
+void
+AlsaDriver::appendToAudioFile(const std::string &buffer)
+{
+    if (m_recordStatus != RECORD_AUDIO || _recordFile == 0)
+        return;
+
+    // write out
+    _recordFile->appendSamples(buffer);
+}
+
 
 
 

@@ -528,7 +528,8 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
     else if (localRecordMode == STARTING_TO_RECORD_AUDIO)
     {
         std::cout << "RosegardenSequencerApp::record()"
-                  << " - starting to record Audio - not yet supported" << endl;
+                  << " - starting to record Audio" << endl;
+        m_sequencer->record(Rosegarden::RECORD_AUDIO);
     }
     else
     {

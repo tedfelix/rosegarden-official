@@ -47,9 +47,8 @@ namespace Rosegarden
 
 typedef enum
 {
-    AUDIO_NOT_LOADED,
-    AUDIO_NOT_RECOGNISED,
-    AUDIO_WAV
+    UNKNOWN,
+    WAV
 } AudioFileType;
 
 class AudioFile : public SoundFile
@@ -66,7 +65,13 @@ public:
     // the "write" constructor - we only really want
     // to specify a filename
     //
-    AudioFile(const std::string &fileName);
+    AudioFile(const std::string &fileName,
+              AudioFileType type,
+              unsigned int channels,
+              unsigned int sampleRate,
+              unsigned int bytesPerSecond,
+              unsigned int bytesPerSample,
+              unsigned int bitsPerSample);
 
     ~AudioFile();
 
@@ -112,6 +117,20 @@ public:
     //
     std::string getSampleFrameSlice(std::ifstream *file, const RealTime &time);
 
+    // Append a string of samples to an already open (for writing)
+    // audio file.
+    //
+    bool appendSamples(const std::string &buffer);
+
+    // Explicitly close the file - we need to calculate some totals
+    // and write them back into the file after its closed.
+    //
+    void close();
+
+    // write out the header
+    //
+    void writeHeader();
+
 private:
 
     void parseHeader(const std::string &header);
@@ -127,7 +146,8 @@ private:
     AudioFileType  m_type;
     unsigned int   m_fileSize;
 
-    std::ifstream *m_file;
+    std::ifstream *m_inFile;
+    std::ofstream *m_outFile;
 };
 
 }
