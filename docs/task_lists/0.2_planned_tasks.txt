@@ -40,6 +40,8 @@ Work required to fix existing stuff
     relayout after insertion, including some really obvious ones
     like only re-preparsing the one staff you just inserted onto...
     probably some optimisations possible in pixmap generation too
+    [some of these optimisations, particularly for insertion,
+    actually got DONE in 0.1]
 
 7.  a few fixes to basic note drawing -- sometimes shifts the
     wrong notehead, note's stem sometimes doesn't meet its beam &c
@@ -96,3 +98,12 @@ Basis for later features
 
 5.  instruments - assigning them on the GUI and how they map
     through to aRts (basic Environment)
+
+6.  Lilypond output (definitely a higher priority than MusiXTeX
+    for this version, and possibly higher than any other printing
+    method too)
+
+7.  NIFF I/O?  (It'd be nice to get independent contributors to
+    work on Lilypond and NIFF I/O -- although I can imagine doing
+    the basic Lilypond stuff myself if need be)
+

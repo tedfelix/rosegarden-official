@@ -32,30 +32,30 @@
  * If you add something here, remember to add the definition to
  * notationproperties.cpp as well...
  */
-class Properties
+
+namespace NotationProperties
 {
-public:
-    static const Rosegarden::PropertyName HEIGHT_ON_STAFF;
-    static const Rosegarden::PropertyName MIN_WIDTH;
-    static const Rosegarden::PropertyName CALCULATED_ACCIDENTAL;
-    static const Rosegarden::PropertyName DISPLAY_ACCIDENTAL;
-    static const Rosegarden::PropertyName STEM_UP;
-    static const Rosegarden::PropertyName UNBEAMED_STEM_LENGTH;
-    static const Rosegarden::PropertyName DRAW_TAIL;
-    static const Rosegarden::PropertyName NOTE_HEAD_SHIFTED;
-    static const Rosegarden::PropertyName NOTE_NAME;
+    extern const Rosegarden::PropertyName HEIGHT_ON_STAFF;
+    extern const Rosegarden::PropertyName MIN_WIDTH;
+    extern const Rosegarden::PropertyName CALCULATED_ACCIDENTAL;
+    extern const Rosegarden::PropertyName DISPLAY_ACCIDENTAL;
+    extern const Rosegarden::PropertyName STEM_UP;
+    extern const Rosegarden::PropertyName UNBEAMED_STEM_LENGTH;
+    extern const Rosegarden::PropertyName DRAW_TAIL;
+    extern const Rosegarden::PropertyName NOTE_HEAD_SHIFTED;
+    extern const Rosegarden::PropertyName NOTE_NAME;
 
     // Set in applyBeam in notationsets.cpp:
 
-    static const Rosegarden::PropertyName BEAMED;
-    static const Rosegarden::PropertyName BEAM_PRIMARY_NOTE;
-    static const Rosegarden::PropertyName BEAM_GRADIENT;
-    static const Rosegarden::PropertyName BEAM_SECTION_WIDTH;
-    static const Rosegarden::PropertyName BEAM_NEXT_TAIL_COUNT;
-    static const Rosegarden::PropertyName BEAM_NEXT_PART_TAILS;
-    static const Rosegarden::PropertyName BEAM_THIS_PART_TAILS;
-    static const Rosegarden::PropertyName BEAM_MY_Y;
-};
+    extern const Rosegarden::PropertyName BEAMED;
+    extern const Rosegarden::PropertyName BEAM_PRIMARY_NOTE;
+    extern const Rosegarden::PropertyName BEAM_GRADIENT;
+    extern const Rosegarden::PropertyName BEAM_SECTION_WIDTH;
+    extern const Rosegarden::PropertyName BEAM_NEXT_TAIL_COUNT;
+    extern const Rosegarden::PropertyName BEAM_NEXT_PART_TAILS;
+    extern const Rosegarden::PropertyName BEAM_THIS_PART_TAILS;
+    extern const Rosegarden::PropertyName BEAM_MY_Y;
+}
 
 #endif
 

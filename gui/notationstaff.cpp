@@ -46,6 +46,8 @@ using Rosegarden::Key;
 using Rosegarden::Accidental;
 using Rosegarden::TimeSignature;
 
+using namespace NotationProperties;
+
 const int NotationStaff::nbLines = 5;
 const int NotationStaff::linesOffset = 40;
 
@@ -233,7 +235,7 @@ bool NotationStaff::showElements(NotationElementList::iterator from,
             if ((*it)->isNote()) {
                 
                 bool beamed = false;
-                (void)((*it)->event()->get<Bool>(Properties::BEAMED, beamed));
+                (void)((*it)->event()->get<Bool>(BEAMED, beamed));
                 if (!beamed) {
                     (*it)->reposition(x(), y());
                     continue;
@@ -334,50 +336,50 @@ QCanvasSimpleSprite *NotationStaff::makeNoteSprite(NotationElementList::iterator
     Accidental accidental = NoAccidental;
 
     long acc;
-    if ((*it)->event()->get<Int>(Properties::DISPLAY_ACCIDENTAL, acc)) {
+    if ((*it)->event()->get<Int>(DISPLAY_ACCIDENTAL, acc)) {
         accidental = Accidental(acc);
     }
 
     bool up = true;
-    (void)((*it)->event()->get<Bool>(Properties::STEM_UP, up));
+    (void)((*it)->event()->get<Bool>(STEM_UP, up));
 
     bool tail = true;
-    (void)((*it)->event()->get<Bool>(Properties::DRAW_TAIL, tail));
+    (void)((*it)->event()->get<Bool>(DRAW_TAIL, tail));
 
     bool beamed = false;
-    (void)((*it)->event()->get<Bool>(Properties::BEAMED, beamed));
+    (void)((*it)->event()->get<Bool>(BEAMED, beamed));
 
     bool shifted = false;
-    (void)((*it)->event()->get<Bool>(Properties::NOTE_HEAD_SHIFTED, shifted));
+    (void)((*it)->event()->get<Bool>(NOTE_HEAD_SHIFTED, shifted));
 
     long stemLength = m_npf.getNoteBodyHeight();
     (void)((*it)->event()->get<Int>
-           (Properties::UNBEAMED_STEM_LENGTH, stemLength));
+           (UNBEAMED_STEM_LENGTH, stemLength));
 
 //    kdDebug(KDEBUG_AREA) << "Got stem length of "
 //                         << stemLength << endl;
 
     if (beamed) {
 
-        if ((*it)->event()->get<Bool>(Properties::BEAM_PRIMARY_NOTE)) {
+        if ((*it)->event()->get<Bool>(BEAM_PRIMARY_NOTE)) {
 
-            int myY = (*it)->event()->get<Int>(Properties::BEAM_MY_Y);
+            int myY = (*it)->event()->get<Int>(BEAM_MY_Y);
 
             stemLength = myY - (int)(*it)->getLayoutY();
             if (stemLength < 0) stemLength = -stemLength;
 
             int nextTailCount =
-                (*it)->event()->get<Int>(Properties::BEAM_NEXT_TAIL_COUNT);
+                (*it)->event()->get<Int>(BEAM_NEXT_TAIL_COUNT);
             int width =
-                (*it)->event()->get<Int>(Properties::BEAM_SECTION_WIDTH);
+                (*it)->event()->get<Int>(BEAM_SECTION_WIDTH);
             int gradient =
-                (*it)->event()->get<Int>(Properties::BEAM_GRADIENT);
+                (*it)->event()->get<Int>(BEAM_GRADIENT);
 
             bool thisPartialTails(false), nextPartialTails(false);
             (void)(*it)->event()->get<Bool>
-                (Properties::BEAM_THIS_PART_TAILS, thisPartialTails);
+                (BEAM_THIS_PART_TAILS, thisPartialTails);
             (void)(*it)->event()->get<Bool>
-                (Properties::BEAM_NEXT_PART_TAILS, nextPartialTails);
+                (BEAM_NEXT_PART_TAILS, nextPartialTails);
 
             QCanvasPixmap notePixmap
                 (m_npf.makeBeamedNotePixmap

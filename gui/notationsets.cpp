@@ -43,6 +43,8 @@ using Rosegarden::Equation;
 using Rosegarden::Quantizer;
 using Rosegarden::timeT;
 
+using namespace NotationProperties;
+
 NotationSet::NotationSet(const NotationElementList &nel,
                          NELIterator i, bool quantized) :
     m_nel(nel),
@@ -225,12 +227,12 @@ int
 Chord::height(const NELIterator &i) const
 {
     long h;
-    if ((*i)->event()->get<Int>(Properties::HEIGHT_ON_STAFF, h)) return h;
+    if ((*i)->event()->get<Int>(HEIGHT_ON_STAFF, h)) return h;
     int pitch = (*i)->event()->get<Int>("pitch");
     Rosegarden::NotationDisplayPitch p(pitch, m_clef, m_key);
     h = p.getHeightOnStaff();
     // not setMaybe, as we know the property is absent:
-    (*i)->event()->set<Int>(Properties::HEIGHT_ON_STAFF, h, false);
+    (*i)->event()->set<Int>(HEIGHT_ON_STAFF, h, false);
     return h;
 }
 
@@ -343,12 +345,12 @@ NotationGroup::sample(const NELIterator &i)
     if (!(*i)->isNote()) return;
 
     // The code that uses the Group should not rely on the presence of
-    // e.g. Properties::BEAM_GRADIENT to indicate that a beam should be drawn;
+    // e.g. BEAM_GRADIENT to indicate that a beam should be drawn;
     // it's possible the gradient might be left over from a previous
     // calculation and the group might have changed since.  Instead it
-    // should test Properties::BEAM_NECESSARY, which may be false even if there
+    // should test BEAM_NECESSARY, which may be false even if there
     // is a gradient present.
-    (*i)->event()->setMaybe<Bool>(Properties::BEAMED, false);
+    (*i)->event()->setMaybe<Bool>(BEAMED, false);
 
     int h = height(i);
     if (h > 4) m_weightAbove += h - 4;
@@ -359,12 +361,12 @@ int
 NotationGroup::height(const NELIterator &i) const
 {
     long h;
-    if ((*i)->event()->get<Int>(Properties::HEIGHT_ON_STAFF, h)) return h;
+    if ((*i)->event()->get<Int>(HEIGHT_ON_STAFF, h)) return h;
     int pitch = (*i)->event()->get<Int>("pitch");
     Rosegarden::NotationDisplayPitch p(pitch, m_clef, m_key);
     h = p.getHeightOnStaff();
     // not setMaybe, as we know the property is absent:
-    (*i)->event()->set<Int>(Properties::HEIGHT_ON_STAFF, h, false);
+    (*i)->event()->set<Int>(HEIGHT_ON_STAFF, h, false);
     return h;
 }
 
@@ -536,10 +538,10 @@ NotationGroup::applyBeam(NotationStaff &staff)
 
 	    for (j = 0; j < chord.size(); ++j) {
 		NotationElement *el = (*chord[j]);
-		el->event()->setMaybe<Bool>(Properties::STEM_UP, beam.aboveNotes);
-		el->event()->setMaybe<Bool>(Properties::DRAW_TAIL, false);
-		el->event()->setMaybe<Bool>(Properties::BEAMED, true);
-		el->event()->setMaybe<Bool>(Properties::BEAM_PRIMARY_NOTE, false);
+		el->event()->setMaybe<Bool>(STEM_UP, beam.aboveNotes);
+		el->event()->setMaybe<Bool>(DRAW_TAIL, false);
+		el->event()->setMaybe<Bool>(BEAMED, true);
+		el->event()->setMaybe<Bool>(BEAM_PRIMARY_NOTE, false);
 	    }
 
 //	    if (beam.aboveNotes) j = 0;
@@ -581,41 +583,41 @@ NotationGroup::applyBeam(NotationStaff &staff)
                 NotationElement *prevEl = (*prev);
 		int secWidth = x - (int)prevEl->getLayoutX();
 
-//		prevEl->event()->setMaybe<Int>(Properties::BEAM_NEXT_Y, myY);
+//		prevEl->event()->setMaybe<Int>(BEAM_NEXT_Y, myY);
 
 		prevEl->event()->setMaybe<Int>
-                    (Properties::BEAM_SECTION_WIDTH, secWidth);
+                    (BEAM_SECTION_WIDTH, secWidth);
 		prevEl->event()->setMaybe<Int>
-		    (Properties::BEAM_NEXT_TAIL_COUNT, tailCount);
+		    (BEAM_NEXT_TAIL_COUNT, tailCount);
 
                 int prevTailCount = Note(prevEl->event()->get<Int>
                                          (Rosegarden::Note::NoteType)).getTailCount();
                 if (tailCount >= prevTailCount) {
                     prevEl->event()->setMaybe<Bool>
-                        (Properties::BEAM_THIS_PART_TAILS, false);
+                        (BEAM_THIS_PART_TAILS, false);
                     if (prevprev != getList().end()) {
                         (*prevprev)->event()->setMaybe<Bool>
-                            (Properties::BEAM_NEXT_PART_TAILS, false);
+                            (BEAM_NEXT_PART_TAILS, false);
                     }
                 }
 
                 if (tailCount > prevTailCount) {
                     prevEl->event()->setMaybe<Bool>
-                        (Properties::BEAM_NEXT_PART_TAILS, true);
+                        (BEAM_NEXT_PART_TAILS, true);
                 }                    
 	    } else {
-                el->event()->setMaybe<Bool>(Properties::BEAM_THIS_PART_TAILS, true);
+                el->event()->setMaybe<Bool>(BEAM_THIS_PART_TAILS, true);
             }
 
-	    el->event()->setMaybe<Bool>(Properties::BEAM_PRIMARY_NOTE, true);
+	    el->event()->setMaybe<Bool>(BEAM_PRIMARY_NOTE, true);
 
-	    el->event()->setMaybe<Int>(Properties::BEAM_MY_Y, myY);
-	    el->event()->setMaybe<Int>(Properties::BEAM_GRADIENT, beam.gradient);
+	    el->event()->setMaybe<Int>(BEAM_MY_Y, myY);
+	    el->event()->setMaybe<Int>(BEAM_GRADIENT, beam.gradient);
 
 	    // until they're set next time around the loop, as (*prev)->...
-//	    el->event()->setMaybe<Int>(Properties::BEAM_NEXT_Y, myY);
-	    el->event()->setMaybe<Int>(Properties::BEAM_SECTION_WIDTH, 0);
-	    el->event()->setMaybe<Int>(Properties::BEAM_NEXT_TAIL_COUNT, 1);
+//	    el->event()->setMaybe<Int>(BEAM_NEXT_Y, myY);
+	    el->event()->setMaybe<Int>(BEAM_SECTION_WIDTH, 0);
+	    el->event()->setMaybe<Int>(BEAM_NEXT_TAIL_COUNT, 1);
 
             prevprev = prev;
 	    prev = chord[j];

@@ -42,6 +42,8 @@ using Rosegarden::Clef;
 using Rosegarden::Key;
 using Rosegarden::TimeSignature;
 
+using namespace NotationProperties;
+
 NotationVLayout::NotationVLayout()
 {
     // empty
@@ -80,7 +82,7 @@ NotationVLayout::scanStaff(StaffType &staffBase)
 
             std::vector<int> h;
             for (unsigned int j = 0; j < chord.size(); ++j) {
-                h.push_back((*chord[j])->event()->get<Int>(Properties::HEIGHT_ON_STAFF));
+                h.push_back((*chord[j])->event()->get<Int>(HEIGHT_ON_STAFF));
             }
             bool stalkUp = chord.hasStalkUp();
 
@@ -98,12 +100,12 @@ NotationVLayout::scanStaff(StaffType &staffBase)
 		// notationhlayout after notationvlayout)... or else
 		// introduce two separate properties (beamed stalk up
 		// and non-beamed stalk up)
-                el->event()->setMaybe<Bool>(Properties::STEM_UP, stalkUp);
+                el->event()->setMaybe<Bool>(STEM_UP, stalkUp);
 
-                el->event()->setMaybe<Bool>(Properties::NOTE_HEAD_SHIFTED,
+                el->event()->setMaybe<Bool>(NOTE_HEAD_SHIFTED,
                                             chord.isNoteHeadShifted(chord[j]));
 
-                el->event()->setMaybe<Bool>(Properties::DRAW_TAIL,
+                el->event()->setMaybe<Bool>(DRAW_TAIL,
                                             j == tailedNote);
 
                 int stemLength = -1;
@@ -114,7 +116,7 @@ NotationVLayout::scanStaff(StaffType &staffBase)
                     kdDebug(KDEBUG_AREA) << "Setting stem length to "
                                          << stemLength << endl;
                 }
-                el->event()->setMaybe<Int>(Properties::UNBEAMED_STEM_LENGTH,
+                el->event()->setMaybe<Int>(UNBEAMED_STEM_LENGTH,
                                            stemLength);
             }
 

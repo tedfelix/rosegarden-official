@@ -21,23 +21,28 @@
 
 #include "notationproperties.h"
 
-const Rosegarden::PropertyName Properties::HEIGHT_ON_STAFF      = "HeightOnStaff";
-const Rosegarden::PropertyName Properties::MIN_WIDTH            = "MinWidth";
+namespace NotationProperties
+{
 
-const Rosegarden::PropertyName Properties::CALCULATED_ACCIDENTAL = "NoteCalculatedAccidental";
-const Rosegarden::PropertyName Properties::DISPLAY_ACCIDENTAL   = "NoteDisplayAccidental";
-const Rosegarden::PropertyName Properties::STEM_UP              = "NoteStemUp";
-const Rosegarden::PropertyName Properties::UNBEAMED_STEM_LENGTH = "UnbeamedStemLength";
-const Rosegarden::PropertyName Properties::DRAW_TAIL            = "NoteDrawTail";
-const Rosegarden::PropertyName Properties::NOTE_HEAD_SHIFTED    = "NoteHeadShifted";
-const Rosegarden::PropertyName Properties::NOTE_NAME            = "NoteName";
+const Rosegarden::PropertyName HEIGHT_ON_STAFF      = "HeightOnStaff";
+const Rosegarden::PropertyName MIN_WIDTH            = "MinWidth";
 
-const Rosegarden::PropertyName Properties::BEAMED               = "Beamed";
-const Rosegarden::PropertyName Properties::BEAM_PRIMARY_NOTE	  = "BeamPrimaryNote";
-const Rosegarden::PropertyName Properties::BEAM_GRADIENT        = "BeamGradient";
-const Rosegarden::PropertyName Properties::BEAM_SECTION_WIDTH   = "BeamSectionWidth";
-const Rosegarden::PropertyName Properties::BEAM_NEXT_TAIL_COUNT = "BeamNextTailCount";
-const Rosegarden::PropertyName Properties::BEAM_NEXT_PART_TAILS = "BeamNextPartTails";
-const Rosegarden::PropertyName Properties::BEAM_THIS_PART_TAILS = "BeamThisPartTails";
-const Rosegarden::PropertyName Properties::BEAM_MY_Y		  = "BeamMyY";
+const Rosegarden::PropertyName CALCULATED_ACCIDENTAL = "NoteCalculatedAccidental";
+const Rosegarden::PropertyName DISPLAY_ACCIDENTAL   = "NoteDisplayAccidental";
+const Rosegarden::PropertyName STEM_UP              = "NoteStemUp";
+const Rosegarden::PropertyName UNBEAMED_STEM_LENGTH = "UnbeamedStemLength";
+const Rosegarden::PropertyName DRAW_TAIL            = "NoteDrawTail";
+const Rosegarden::PropertyName NOTE_HEAD_SHIFTED    = "NoteHeadShifted";
+const Rosegarden::PropertyName NOTE_NAME            = "NoteName";
+
+const Rosegarden::PropertyName BEAMED               = "Beamed";
+const Rosegarden::PropertyName BEAM_PRIMARY_NOTE	  = "BeamPrimaryNote";
+const Rosegarden::PropertyName BEAM_GRADIENT        = "BeamGradient";
+const Rosegarden::PropertyName BEAM_SECTION_WIDTH   = "BeamSectionWidth";
+const Rosegarden::PropertyName BEAM_NEXT_TAIL_COUNT = "BeamNextTailCount";
+const Rosegarden::PropertyName BEAM_NEXT_PART_TAILS = "BeamNextPartTails";
+const Rosegarden::PropertyName BEAM_THIS_PART_TAILS = "BeamThisPartTails";
+const Rosegarden::PropertyName BEAM_MY_Y		  = "BeamMyY";
+
+}
 

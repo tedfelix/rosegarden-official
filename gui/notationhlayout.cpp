@@ -48,6 +48,8 @@ using Rosegarden::TimeSignature;
 using Rosegarden::timeT;
 using Rosegarden::Quantizer;
 
+using namespace NotationProperties;
+
 
 NotationHLayout::NotationHLayout(NotePixmapFactory &npf) :
     m_totalWidth(0.),
@@ -272,13 +274,13 @@ NotationHLayout::scanStaff(StaffType &staff)
                     Accidental acc = p.getAccidental();
 
                     el->event()->setMaybe<Int>
-                        (Properties::HEIGHT_ON_STAFF, h);
+                        (HEIGHT_ON_STAFF, h);
 
                     el->event()->setMaybe<Int>
-                        (Properties::CALCULATED_ACCIDENTAL, acc);
+                        (CALCULATED_ACCIDENTAL, acc);
 
                     el->event()->setMaybe<String>
-                        (Properties::NOTE_NAME, p.getAsString(clef, key));
+                        (NOTE_NAME, p.getAsString(clef, key));
 
                     // update display acc for note according to the
                     // accTable (accidentals in force when the last
@@ -293,7 +295,7 @@ NotationHLayout::scanStaff(StaffType &staff)
                     //                kdDebug(KDEBUG_AREA) << "display accidental = " << dacc << endl;
                     
                     el->event()->setMaybe<Int>
-                        (Properties::DISPLAY_ACCIDENTAL, dacc);
+                        (DISPLAY_ACCIDENTAL, dacc);
 
                     newAccTable.update(acc, h);
 
@@ -346,7 +348,7 @@ NotationHLayout::scanStaff(StaffType &staff)
                 }
             }
 
-            el->event()->setMaybe<Int>(Properties::MIN_WIDTH, mw);
+            el->event()->setMaybe<Int>(MIN_WIDTH, mw);
         }
         
         addNewBar(staff, barNo, to,
@@ -600,7 +602,7 @@ NotationHLayout::layout(BarDataMap::iterator i)
             el->setLayoutX(x);
             kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): setting element's x to " << x << endl;
 
-            long delta = el->event()->get<Int>(Properties::MIN_WIDTH);
+            long delta = el->event()->get<Int>(MIN_WIDTH);
 
             if (el->event()->isa(TimeSignature::EventType)) {
 
@@ -716,7 +718,7 @@ NotationHLayout::positionNote(StaffType &staff,
 
     Accidental acc(NoAccidental);
     long acc0;
-    if (note->event()->get<Int>(Properties::DISPLAY_ACCIDENTAL, acc0)) {
+    if (note->event()->get<Int>(DISPLAY_ACCIDENTAL, acc0)) {
         acc = (Accidental)acc0;
     }
     if (acc != NoAccidental) haveAccidentalInThisChord = true;
@@ -784,7 +786,7 @@ int NotationHLayout::getMinWidth(const NotationElement &e) const
             w += m_npf.getDotWidth() * dots;
         }
         long accidental;
-        if (e.event()->get<Int>(Properties::DISPLAY_ACCIDENTAL, accidental) &&
+        if (e.event()->get<Int>(DISPLAY_ACCIDENTAL, accidental) &&
             ((Accidental)accidental != NoAccidental)) {
             w += m_npf.getAccidentalWidth();
         }

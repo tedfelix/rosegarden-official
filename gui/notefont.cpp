@@ -483,32 +483,35 @@ NoteFont::getHotspot(string charName, int &x, int &y, bool inverted) const
     return ok;
 }
 
-const std::string NoteCharNames::SHARP = "MUSIC SHARP SIGN"; 
-const std::string NoteCharNames::FLAT = "MUSIC FLAT SIGN";
-const std::string NoteCharNames::NATURAL = "MUSIC NATURAL SIGN";
-const std::string NoteCharNames::DOUBLE_SHARP = "MUSICAL SYMBOL DOUBLE SHARP";
-const std::string NoteCharNames::DOUBLE_FLAT = "MUSICAL SYMBOL DOUBLE FLAT";
+namespace NoteCharacterNames {
 
-const std::string NoteCharNames::BREVE = "MUSICAL SYMBOL BREVE";
-const std::string NoteCharNames::WHOLE_NOTE = "MUSICAL SYMBOL WHOLE NOTE";
-const std::string NoteCharNames::VOID_NOTEHEAD = "MUSICAL SYMBOL VOID NOTEHEAD";
-const std::string NoteCharNames::NOTEHEAD_BLACK = "MUSICAL SYMBOL NOTEHEAD BLACK";
+const std::string SHARP = "MUSIC SHARP SIGN"; 
+const std::string FLAT = "MUSIC FLAT SIGN";
+const std::string NATURAL = "MUSIC NATURAL SIGN";
+const std::string DOUBLE_SHARP = "MUSICAL SYMBOL DOUBLE SHARP";
+const std::string DOUBLE_FLAT = "MUSICAL SYMBOL DOUBLE FLAT";
 
-const std::string NoteCharNames::FLAG_1 = "MUSICAL SYMBOL COMBINING FLAG-1";
-const std::string NoteCharNames::FLAG_2 = "MUSICAL SYMBOL COMBINING FLAG-2";
-const std::string NoteCharNames::FLAG_3 = "MUSICAL SYMBOL COMBINING FLAG-3";
-const std::string NoteCharNames::FLAG_4 = "MUSICAL SYMBOL COMBINING FLAG-4";
+const std::string BREVE = "MUSICAL SYMBOL BREVE";
+const std::string WHOLE_NOTE = "MUSICAL SYMBOL WHOLE NOTE";
+const std::string VOID_NOTEHEAD = "MUSICAL SYMBOL VOID NOTEHEAD";
+const std::string NOTEHEAD_BLACK = "MUSICAL SYMBOL NOTEHEAD BLACK";
 
-const std::string NoteCharNames::MULTI_REST = "MUSICAL SYMBOL MULTI REST";
-const std::string NoteCharNames::WHOLE_REST = "MUSICAL SYMBOL WHOLE REST";
-const std::string NoteCharNames::HALF_REST = "MUSICAL SYMBOL HALF REST";
-const std::string NoteCharNames::QUARTER_REST = "MUSICAL SYMBOL QUARTER REST";
-const std::string NoteCharNames::EIGHTH_REST = "MUSICAL SYMBOL EIGHTH REST";
-const std::string NoteCharNames::SIXTEENTH_REST = "MUSICAL SYMBOL SIXTEENTH REST";
-const std::string NoteCharNames::THIRTY_SECOND_REST = "MUSICAL SYMBOL THIRTY-SECOND REST";
-const std::string NoteCharNames::SIXTY_FOURTH_REST = "MUSICAL SYMBOL SIXTY-FOURTH REST";
-const std::string NoteCharNames::DOT = "MUSICAL SYMBOL COMBINING AUGMENTATION DOT";
-const std::string NoteCharNames::C_CLEF = "MUSICAL SYMBOL C CLEF";
-const std::string NoteCharNames::G_CLEF = "MUSICAL SYMBOL G CLEF";
-const std::string NoteCharNames::F_CLEF = "MUSICAL SYMBOL F CLEF";
+const std::string FLAG_1 = "MUSICAL SYMBOL COMBINING FLAG-1";
+const std::string FLAG_2 = "MUSICAL SYMBOL COMBINING FLAG-2";
+const std::string FLAG_3 = "MUSICAL SYMBOL COMBINING FLAG-3";
+const std::string FLAG_4 = "MUSICAL SYMBOL COMBINING FLAG-4";
 
+const std::string MULTI_REST = "MUSICAL SYMBOL MULTI REST";
+const std::string WHOLE_REST = "MUSICAL SYMBOL WHOLE REST";
+const std::string HALF_REST = "MUSICAL SYMBOL HALF REST";
+const std::string QUARTER_REST = "MUSICAL SYMBOL QUARTER REST";
+const std::string EIGHTH_REST = "MUSICAL SYMBOL EIGHTH REST";
+const std::string SIXTEENTH_REST = "MUSICAL SYMBOL SIXTEENTH REST";
+const std::string THIRTY_SECOND_REST = "MUSICAL SYMBOL THIRTY-SECOND REST";
+const std::string SIXTY_FOURTH_REST = "MUSICAL SYMBOL SIXTY-FOURTH REST";
+const std::string DOT = "MUSICAL SYMBOL COMBINING AUGMENTATION DOT";
+const std::string C_CLEF = "MUSICAL SYMBOL C CLEF";
+const std::string G_CLEF = "MUSICAL SYMBOL G CLEF";
+const std::string F_CLEF = "MUSICAL SYMBOL F CLEF";
+
+}
