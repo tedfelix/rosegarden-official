@@ -136,7 +136,8 @@ public:
     std::vector<float> getPreview(AudioFileId id,
                                   const RealTime &startTime, 
                                   const RealTime &endTime,
-                                  int width);
+                                  int width,
+                                  bool withMinima);
 
     // Draw a fixed size (fixed by QPixmap) preview of an audio file
     //

@@ -2159,7 +2159,7 @@ RescaleDialog::slotToChanged(int i)
 
 FileLocateDialog::FileLocateDialog(QWidget *parent,
                                    const QString &file,
-                                   const QString &path):
+                                   const QString & /*path*/):
     KDialogBase(parent, "", true,
                 i18n("Locate audio file"),
                 User1|User2,
@@ -2302,7 +2302,8 @@ AudioSplitDialog::drawPreview()
         aFM.getPreview(m_segment->getAudioFileId(),
                        m_segment->getAudioStartTime(),
                        m_segment->getAudioEndTime(),
-                       m_previewWidth);
+                       m_previewWidth,
+                       false);
 
     int startX = (m_canvasWidth - m_previewWidth) / 2;
     int halfHeight = m_canvasHeight / 2;

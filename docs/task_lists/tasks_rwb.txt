@@ -22,6 +22,8 @@ o Drum bank selects and different MIDI drums
 
 o Real time plugins
 
+o audio previews with minima
+
 o Fix segment audio drag and drop
 
 o Tidy up AudioFiles:

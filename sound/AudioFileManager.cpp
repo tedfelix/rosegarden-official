@@ -587,7 +587,8 @@ std::vector<float>
 AudioFileManager::getPreview(AudioFileId id,
                              const RealTime &startTime,
                              const RealTime &endTime,
-                             int width)
+                             int width,
+                             bool withMinima)
 {
     AudioFile *audioFile = getAudioFile(id);
     
@@ -598,7 +599,7 @@ AudioFileManager::getPreview(AudioFileId id,
                                     startTime,
                                     endTime,
                                     width,
-                                    false);
+                                    withMinima);
 }
 
 void

@@ -89,7 +89,7 @@ MappedObjectPropertyList
 StudioControl::getStudioObjectProperty(MappedObjectId id,
                         const MappedObjectProperty &property)
 {
-    QValueVector<QString> list;
+    MappedObjectPropertyList list;
 
     QByteArray data;
     QCString replyType;

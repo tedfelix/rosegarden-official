@@ -190,8 +190,6 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
 
     painter.translate(rect().x(), rect().y());
 
-    // Set up pen and get rectangle
-    painter.setPen(RosegardenGUIColours::SegmentAudioPreview);
         
     std::vector<float>::iterator it;
 
@@ -212,6 +210,7 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
     int width = m_values.size() / m_channels;
     it = m_values.begin();
     float h1, h2;
+    //float l1 = 0.0, l2 = 0.0;
 
     for (int i = 0; i < width; i++)
     {
@@ -219,16 +218,33 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
             if (m_channels == 1) {
                 h1 = *(it++);
                 h2 = h1;
+
+                //l1 = *(it++);
+                //l2 = l1;
             }
             else {
+
                 h1 = *(it++);
                 h2 = *(it++);
+                
+                //l1 = *(it++);
+                //l2 = *(it++);
             }
+
+            painter.setPen(RosegardenGUIColours::SegmentAudioPreview);
 
             painter.drawLine(i,
                              halfRectHeight + h1 * height,
                              i,
                              halfRectHeight - h2 * height);
+
+            /*
+            painter.setPen(Qt::white);
+            painter.drawLine(i,
+                             halfRectHeight + l1 * height,
+                             i,
+                             halfRectHeight - l2 * height);
+                             */
     }
 
     // perhaps draw an XOR'd label at some point
@@ -265,7 +281,8 @@ void SegmentAudioPreview::updatePreview()
         aFM.getPreview(m_segment->getAudioFileId(),
                        audioStartTime,
                        audioEndTime,
-                       rect().width());
+                       rect().width(),
+                       false); // get minima
 
     // If we haven't inserted the audio file yet we're probably
     // just still recording it.
