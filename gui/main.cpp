@@ -427,7 +427,12 @@ int main(int argc, char *argv[])
  
     if (app.isRestored()) {
 
-        RESTORE(RosegardenGUIApp);
+        // RESTORE(RosegardenGUIApp);
+        int n = 1;
+        while (KMainWindow::canBeRestored(n)) {
+            (new RosegardenGUIApp)->restore(n);
+            n++;
+        }
 
     } else {
 

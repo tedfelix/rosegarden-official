@@ -83,7 +83,12 @@ int main(int argc, char *argv[])
 
     if (app.isRestored())
     {
-        RESTORE(RosegardenSequencerApp(jackArgs));
+        // RESTORE(RosegardenSequencerApp(jackArgs));
+        int n = 1;
+        while (KMainWindow::canBeRestored(n)) {
+            (new RosegardenSequencerApp(jackArgs))->restore(n);
+            n++;
+        }
     }
     else
     {
