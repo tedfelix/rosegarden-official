@@ -166,6 +166,7 @@ public slots:
     void slotSegmentAutoSplit(Rosegarden::Segment*);
     void slotEditRepeat(Rosegarden::Segment*, Rosegarden::timeT);
     void slotEditTempos(Rosegarden::timeT);
+    void slotEditMetadata(QString);
 
     /**
      * Highlight all the Segments on a Track because the Track has

@@ -2150,6 +2150,29 @@ void NotationView::slotNonNotationItemPressed(QMouseEvent *e, QCanvasItem *it)
     }
 }
 
+void NotationView::slotTextItemPressed(QMouseEvent *e, QCanvasItem *it)
+{
+    if (e->type() != QEvent::MouseButtonDblClick) return;
+
+    if (it == m_title) {
+	NOTATION_DEBUG << "Title double-clicked" << endl;
+	emit editMetadata("title");
+    } else if (it == m_subtitle) {
+	NOTATION_DEBUG << "Subtitle double-clicked" << endl;
+	emit editMetadata("subtitle");
+    } else if (it == m_composer) {
+	NOTATION_DEBUG << "Composer double-clicked" << endl;
+	emit editMetadata("composer");
+    } else if (it == m_copyright) {
+	NOTATION_DEBUG << "Copyright double-clicked" << endl;
+	emit editMetadata("copyright");
+    } else {
+	return;
+    }
+   
+    positionStaffs();
+}
+
 void NotationView::slotMouseMoved(QMouseEvent *e)
 {
     if (activeItem()) {
@@ -2381,5 +2404,7 @@ NotationView::slotRenderSomething()
     }
 
     PixmapArrayGC::deleteAll();
+    NOTATION_DEBUG << "NotationView::slotRenderSomething: updating thumbnails" << endl;
+    updateThumbnails(true);
 }
 

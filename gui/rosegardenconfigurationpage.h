@@ -338,6 +338,8 @@ public:
     static QString title() { return i18n("About"); }
     static QString iconName()  { return "contents"; }
 
+    void selectMetadata(QString name);
+
 protected slots:
     void slotAddNewProperty();
     void slotDeleteProperty();

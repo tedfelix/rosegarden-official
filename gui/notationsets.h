@@ -144,6 +144,8 @@ private:
 
     int height(const NELIterator&) const;
 
+    bool haveInternalRest() const;
+
     //--------------- Data members ---------------------------------
 
     std::pair<Rosegarden::timeT, Rosegarden::timeT> m_barRange;

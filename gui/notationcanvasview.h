@@ -87,6 +87,13 @@ signals:
 				QCanvasItem *);
 
     /**
+     * Emitted when the user clicks on a QCanvasItem which is a
+     * plain QCanvasText
+     */
+    void textItemPressed(QMouseEvent *,
+			 QCanvasItem *);
+
+    /**
      * Emitted when the mouse cursor moves to a different height
      * on the staff
      *

@@ -189,6 +189,10 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_hoveredOverAbsoluteTime(0),
     m_currentStaff(-1),
     m_lastFinishingStaff(-1),
+    m_title(0),
+    m_subtitle(0),
+    m_composer(0),
+    m_copyright(0),
     m_insertionTime(0),
     m_deferredCursorMove(NoCursorMoveNeeded),
     m_currentAccidental(Rosegarden::Accidentals::NoAccidental),
@@ -321,7 +325,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 			   (canvas(), segments[i], 0, // snap
 			    i, this,
 			    m_fontName, m_fontSize));
-//	m_staffs[i]->setTitleHeight(200);//!!!
     }
 
     //
@@ -410,6 +413,10 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     QObject::connect
         (getCanvasView(), SIGNAL(nonNotationItemPressed(QMouseEvent*, QCanvasItem*)),
          this,         SLOT  (slotNonNotationItemPressed(QMouseEvent*, QCanvasItem*)));
+
+    QObject::connect
+        (getCanvasView(), SIGNAL(textItemPressed(QMouseEvent*, QCanvasItem*)),
+         this,         SLOT  (slotTextItemPressed(QMouseEvent*, QCanvasItem*)));
 
     QObject::connect
         (getCanvasView(), SIGNAL(mouseMoved(QMouseEvent*)),
@@ -514,6 +521,10 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_hoveredOverNoteName(0),
     m_hoveredOverAbsoluteTime(0),
     m_lastFinishingStaff(-1),
+    m_title(0),
+    m_subtitle(0),
+    m_composer(0),
+    m_copyright(0),
     m_insertionTime(0),
     m_deferredCursorMove(NoCursorMoveNeeded),
     m_currentAccidental(Rosegarden::Accidentals::NoAccidental),
@@ -687,6 +698,8 @@ NotationView::getProperties() const
 
 void NotationView::positionStaffs()
 {
+    NOTATION_DEBUG << "NotationView::positionStaffs" << endl;
+
     m_config->setGroup(NotationView::ConfigGroup);
     m_printSize = m_config->readUnsignedNumEntry("printingnotesize", 5);
 
@@ -697,6 +710,11 @@ void NotationView::positionStaffs()
     TrackIntMap trackCoords;
 
     int pageWidth, pageHeight, leftMargin, topMargin;
+    pageWidth = getPageWidth();
+    pageHeight = getPageHeight();
+    leftMargin = 0, topMargin = 0;
+    getPageMargins(leftMargin, topMargin);
+
     int accumulatedHeight;
     int rowsPerPage = 1;
     int legerLines = 8;
@@ -706,12 +724,66 @@ void NotationView::positionStaffs()
 
     bool done = false;
 
-    while (1) {
+    int titleHeight = 0;
 
-	pageWidth = getPageWidth();
-	pageHeight = getPageHeight();
-	leftMargin = 0, topMargin = 0;
-	getPageMargins(leftMargin, topMargin);
+    if (m_title) delete m_title;
+    if (m_subtitle) delete m_subtitle;
+    if (m_composer) delete m_composer;
+    if (m_copyright) delete m_copyright;
+    m_title = m_subtitle = m_composer = m_copyright = 0;
+
+    if (m_pageMode == LinedStaff::MultiPageMode) {
+
+	const Rosegarden::Configuration &metadata =
+	    getDocument()->getComposition().getMetadata();
+
+	QFont font("times");
+	font.setPixelSize(m_fontSize * 5);
+	QFontMetrics metrics(font);
+
+	if (metadata.has("title")) {
+	    QString title(strtoqstr(metadata.get<Rosegarden::String>("title")));
+	    m_title = new QCanvasText(title, font, canvas());
+	    m_title->setX(m_leftGutter + pageWidth/2 - metrics.width(title)/2);
+	    m_title->setY(20 + topMargin/4 + metrics.ascent());
+	    m_title->show();
+	    titleHeight += metrics.height() * 3/2 + topMargin/4;
+	}
+	
+	font.setPixelSize(m_fontSize * 3);
+	metrics = QFontMetrics(font);
+
+	if (metadata.has("subtitle")) {
+	    QString subtitle(strtoqstr(metadata.get<Rosegarden::String>("subtitle")));
+	    m_subtitle = new QCanvasText(subtitle, font, canvas());
+	    m_subtitle->setX(m_leftGutter + pageWidth/2 - metrics.width(subtitle)/2);
+	    m_subtitle->setY(20 + titleHeight + metrics.ascent());
+	    m_subtitle->show();
+	    titleHeight += metrics.height() * 3/2;
+	}
+
+	if (metadata.has("composer")) {
+	    QString composer(strtoqstr(metadata.get<Rosegarden::String>("composer")));
+	    m_composer = new QCanvasText(composer, font, canvas());
+	    m_composer->setX(m_leftGutter + pageWidth - metrics.width(composer) - leftMargin);
+	    m_composer->setY(20 + titleHeight + metrics.ascent());
+	    m_composer->show();
+	    titleHeight += metrics.height() * 3/2;
+	}
+	
+	font.setPixelSize(m_fontSize * 2);
+	metrics = QFontMetrics(font);
+
+	if (metadata.has("copyright")) {
+	    QString copyright(strtoqstr(metadata.get<Rosegarden::String>("copyright")));
+	    m_copyright = new QCanvasText(copyright, font, canvas());
+	    m_copyright->setX(m_leftGutter + leftMargin);
+	    m_copyright->setY(20 + pageHeight - topMargin - metrics.descent());
+	    m_copyright->show();
+	}
+    }	
+
+    while (1) {
 
 	accumulatedHeight = 0;
 	int maxTrackHeight = 0;
@@ -778,7 +850,7 @@ void NotationView::positionStaffs()
 	    // approach is inefficient but the time spent here is
 	    // neglible in context, and it's a simple way to code it.
 
-	    int staffPageHeight = pageHeight - topMargin * 2;
+	    int staffPageHeight = pageHeight - topMargin * 2 - titleHeight;
 	    rowsPerPage = staffPageHeight / accumulatedHeight;
 
 	    if (rowsPerPage < 1) {
@@ -797,7 +869,12 @@ void NotationView::positionStaffs()
 	    } else {
 
 		if (aimFor == rowsPerPage) {
+
+		    titleHeight +=
+			(staffPageHeight - (rowsPerPage * accumulatedHeight)) / 2;
+
 		    done = true;
+
 		} else {
 
 		    if (aimFor == -1) aimFor = rowsPerPage + 1;
@@ -843,6 +920,7 @@ void NotationView::positionStaffs()
 	
 	int trackPosition = track->getPosition();
 
+	m_staffs[i]->setTitleHeight(titleHeight);
         m_staffs[i]->setRowSpacing(accumulatedHeight);
 	
         if (trackPosition < maxTrack) {
@@ -915,11 +993,6 @@ void NotationView::positionPages()
 	    getCanvasView()->setErasePixmap(background);
 	}
     } else {
-
-	QFont pageNumberFont;
-	pageNumberFont.setPixelSize(m_fontSize * 2);
-	QFontMetrics metrics(pageNumberFont);
-
 	if (haveBackground) {
 	    canvas()->setBackgroundPixmap(deskBackground);
 	    getCanvasView()->setBackgroundMode(Qt::FixedPixmap);
@@ -927,45 +1000,34 @@ void NotationView::positionPages()
 	    getCanvasView()->setErasePixmap(background);
 	}
 	
-	int thumbScale = 20;
-	QPixmap thumbnail(canvas()->width() / thumbScale,
-			  canvas()->height() / thumbScale);
-	thumbnail.fill(Qt::white);
-	QPainter thumbPainter(&thumbnail);
-	thumbPainter.setPen(Qt::black);
-
+	QFont pageNumberFont;
+	pageNumberFont.setPixelSize(m_fontSize * 2);
+	QFontMetrics pageNumberMetrics(pageNumberFont);
+	
 	for (int page = 0; page < maxPageCount; ++page) {
 
 	    int x = m_leftGutter + pageWidth * page + leftMargin/4;
 	    int y = 20;
 	    int w = pageWidth - leftMargin/2;
 	    int h = pageHeight;
-
+	    
+	    QString str = QString("%1").arg(page + 1);
+	    QCanvasText *text = new QCanvasText(str, pageNumberFont, canvas());
+	    text->setX(m_leftGutter + pageWidth * page + pageWidth - pageNumberMetrics.width(str) - leftMargin);
+	    text->setY(y + h - pageNumberMetrics.descent() - topMargin);
+	    text->setZ(-999);
+	    text->show();
+	    m_pageNumbers.push_back(text);
+	    
 	    QCanvasRectangle *rect = new QCanvasRectangle(x, y, w, h, canvas());
 	    if (haveBackground) rect->setBrush(QBrush(Qt::white, background));
 	    rect->setPen(Qt::black);
 	    rect->setZ(-1000);
 	    rect->show();
 	    m_pages.push_back(rect);
-
-	    QString str = QString("%1").arg(page + 1);
-	    QCanvasText *text = new QCanvasText(str, pageNumberFont, canvas());
-	    text->setX(x + w - metrics.width(str) - leftMargin/2);
-	    text->setY(y + h - metrics.descent() - topMargin);
-	    text->setZ(-999);
-	    text->show();
-	    m_pageNumbers.push_back(text);
-
-	    thumbPainter.drawRect(x / thumbScale, y / thumbScale,
-				  w / thumbScale, h / thumbScale);
-
-	    int tx = (x + w/2) / thumbScale, ty = (y + h/2) / thumbScale;
-	    tx -= thumbPainter.fontMetrics().width(str)/2;
-	    thumbPainter.drawText(tx, ty, str);
 	}
-
-	thumbPainter.end();
-	if (m_pannerDialog) m_pannerDialog->scrollbox()->setThumbnail(thumbnail);
+	    
+	updateThumbnails(false);
     }
 
     m_config->setGroup(NotationView::ConfigGroup);
@@ -2730,8 +2792,9 @@ void NotationView::print(bool previewOnly)
     
     QPaintDeviceMetrics pdm(&printer);
     QPainter printpainter(&printer);
-    printpainter.scale((double)pdm.width()  / (double)pageWidth,
-		       (double)pdm.height() / (double)pageHeight);
+
+//    printpainter.scale((double)pdm.width()  / (double)(pageWidth - leftMargin*2),
+//		       (double)pdm.height() / (double)(pageHeight - topMargin*2));
 
     QValueList<int> pages = printer.pageList();
 
@@ -2744,7 +2807,10 @@ void NotationView::print(bool previewOnly)
 
 	NOTATION_DEBUG << "Printing page " << page << endl;
 
-	QRect pageRect(m_leftGutter + pageWidth * page, topMargin, pageWidth, pageHeight);
+	QRect pageRect(m_leftGutter + leftMargin + pageWidth * page,
+		       topMargin,
+		       pageWidth - leftMargin*2,
+		       pageHeight - topMargin*2);
 	
 	for (size_t i = 0; i < m_staffs.size(); ++i) {
 
@@ -2790,7 +2856,6 @@ void NotationView::print(bool previewOnly)
 
 	NOTATION_DEBUG << "NotationView::print: QCanvas::drawArea done" << endl;
 
-	//!!! experimental stuff this
 	for (size_t i = 0; i < m_staffs.size(); ++i) {
 
 	    NotationStaff *staff = m_staffs[i];
@@ -2830,6 +2895,95 @@ void NotationView::print(bool previewOnly)
 
     Rosegarden::Profiles::getInstance()->dump();
 }
+
+void
+NotationView::updateThumbnails(bool complete)
+{
+    if (m_pageMode != LinedStaff::MultiPageMode) return;
+
+    int pageWidth = getPageWidth();
+    int pageHeight = getPageHeight();
+    int leftMargin = 0, topMargin = 0;
+    getPageMargins(leftMargin, topMargin);
+    int maxPageCount = 1;
+
+    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+	int pageCount = m_staffs[i]->getPageCount();
+	if (pageCount > maxPageCount) maxPageCount = pageCount;
+    }
+
+    int thumbScale = 20;
+    QPixmap thumbnail(canvas()->width() / thumbScale,
+		      canvas()->height() / thumbScale);
+    thumbnail.fill(Qt::white);
+    QPainter thumbPainter(&thumbnail);
+
+    if (complete) {
+
+	thumbPainter.scale(1.0 / double(thumbScale), 1.0 / double(thumbScale));
+	thumbPainter.setPen(Qt::black);
+	thumbPainter.setBrush(Qt::white);
+
+/*
+	QCanvas *canvas = getCanvasView()->canvas();
+	canvas->drawArea(QRect(0, 0, canvas->width(), canvas->height()),
+			 &thumbPainter, false);
+*/
+	// hide small texts, as we get a crash in Xft when trying to
+	// render them at this scale
+	if (m_title) m_title->hide();
+	if (m_subtitle) m_subtitle->hide();
+	if (m_composer) m_composer->hide();
+	if (m_copyright) m_copyright->hide();
+
+	for (int page = 0; page < maxPageCount; ++page) {
+
+	    bool havePageNumber = ((m_pageNumbers.size() > page) &&
+				   (m_pageNumbers[page] != 0));
+	    if (havePageNumber) m_pageNumbers[page]->hide();
+
+	    QRect pageRect(m_leftGutter + leftMargin * 2 + pageWidth * page,
+			   topMargin * 2,
+			   pageWidth - leftMargin*3,
+			   pageHeight - topMargin*3);
+	
+	    QCanvas *canvas = getCanvasView()->canvas();
+	    canvas->drawArea(pageRect, &thumbPainter, false);
+
+	    if (havePageNumber) m_pageNumbers[page]->show();
+	}
+
+	if (m_title) m_title->show();
+	if (m_subtitle) m_subtitle->show();
+	if (m_composer) m_composer->show();
+	if (m_copyright) m_copyright->show();
+
+    } else {
+
+	thumbPainter.setPen(Qt::black);
+
+	for (int page = 0; page < maxPageCount; ++page) {
+
+	    int x = m_leftGutter + pageWidth * page + leftMargin/4;
+	    int y = 20;
+	    int w = pageWidth - leftMargin/2;
+	    int h = pageHeight;
+	    
+	    QString str = QString("%1").arg(page + 1);
+	    
+	    thumbPainter.drawRect(x / thumbScale, y / thumbScale,
+				  w / thumbScale, h / thumbScale);
+	    
+	    int tx = (x + w/2) / thumbScale, ty = (y + h/2) / thumbScale;
+	    tx -= thumbPainter.fontMetrics().width(str)/2;
+	    thumbPainter.drawText(tx, ty, str);
+	}
+    }
+
+    thumbPainter.end();
+    if (m_pannerDialog) m_pannerDialog->scrollbox()->setThumbnail(thumbnail);
+}
+    
 
 void NotationView::refreshSegment(Segment *segment,
 				  timeT startTime, timeT endTime)

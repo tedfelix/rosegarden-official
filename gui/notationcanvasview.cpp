@@ -156,19 +156,7 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 
     NotationStaff *staff = dynamic_cast<NotationStaff *>
 	(m_linedStaffManager.getStaffForCanvasCoords(e->x(), e->y()));
-/*!!!
-    if (!staff) {
 
-        if (itemList.count() != 0) // the mouse press occurred on at least one
-                                   // item - check if some are active
-            processActiveItems(e, itemList);
-        else 
-            handleMousePress(0, -1, e); // it didn't occur anywhere special
-
-        return;
-
-    }
-*/
     QCanvasItemList::Iterator it;
     NotationElement *clickedNote = 0;
     NotationElement *clickedVagueNote = 0;
@@ -193,6 +181,9 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 	if (!sprite) {
 	    if (dynamic_cast<QCanvasNonElementSprite *>(*it)) {
 		emit nonNotationItemPressed(e, *it);
+		return;
+	    } else if (dynamic_cast<QCanvasText *>(*it)) {
+		emit textItemPressed(e, *it);
 		return;
 	    }
 	    continue;

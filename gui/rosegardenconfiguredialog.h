@@ -73,6 +73,8 @@ public:
     DocumentConfigureDialog(RosegardenGUIDoc *doc,
                             QWidget *parent=0,
                             const char *name=0);
+
+    void selectMetadata(QString name);
 };
 
 

@@ -60,6 +60,7 @@
 #include "segmentparameterbox.h"
 #include "instrumentparameterbox.h"
 #include "rosegardenconfigurationpage.h"
+#include "rosegardenconfiguredialog.h"
 #include "eventview.h"
 #include "dialogs.h"
 #include "sequencemanager.h"
@@ -283,6 +284,20 @@ RosegardenGUIView::slotEditTempos(Rosegarden::timeT t)
     tempoView->show();
 }
 
+void
+RosegardenGUIView::slotEditMetadata(QString name)
+{
+    const QWidget *ww = dynamic_cast<const QWidget *>(sender());
+    QWidget *w = const_cast<QWidget *>(ww);
+
+    Rosegarden::DocumentConfigureDialog *configDlg = 
+        new Rosegarden::DocumentConfigureDialog(getDocument(), w ? w : this);
+
+    configDlg->selectMetadata(name);
+
+    configDlg->show();
+}
+
 void RosegardenGUIView::slotEditSegment(Rosegarden::Segment* segment)
 {
     Rosegarden::Segment::SegmentType type = Rosegarden::Segment::Internal;
@@ -443,6 +458,8 @@ RosegardenGUIView::createNotationView(std::vector<Rosegarden::Segment *> segment
 	    this, SLOT(slotEditSegmentsEventList(std::vector<Rosegarden::Segment *>)));
     connect(notationView, SIGNAL(editTimeSignature(Rosegarden::timeT)),
 	    this, SLOT(slotEditTempos(Rosegarden::timeT)));
+    connect(notationView, SIGNAL(editMetadata(QString)),
+	    this, SLOT(slotEditMetadata(QString)));
     connect(notationView, SIGNAL(staffLabelChanged(Rosegarden::TrackId, QString)),
 	    this, SLOT(slotChangeTrackLabel(Rosegarden::TrackId, QString)));
 

@@ -1942,6 +1942,20 @@ DocumentMetaConfigurationPage::apply()
     m_doc->slotDocumentModified();
 }
 
+void
+DocumentMetaConfigurationPage::selectMetadata(QString name)
+{
+    for (QListViewItem *item = m_metadata->firstChild();
+         item != 0; item = item->nextSibling()) {
+
+	if (item->text(0).lower() != name) continue;
+
+	m_metadata->setSelected(item, true);
+	m_metadata->setCurrentItem(item);
+	return;
+    }
+}
+    
 
 // ---------------- AudioConfigurationPage -------------------
 //
@@ -2318,7 +2332,7 @@ DocumentConfigureDialog::DocumentConfigureDialog(RosegardenGUIDoc *doc,
     vlay->addWidget(page);
     page->setPageIndex(pageIndex(pageWidget));
     m_configurationPages.push_back(page);
-
+    
     // Colour Page
     pageWidget = addPage(ColourConfigurationPage::iconLabel(),
                          ColourConfigurationPage::title(),
@@ -2331,4 +2345,28 @@ DocumentConfigureDialog::DocumentConfigureDialog(RosegardenGUIDoc *doc,
     m_configurationPages.push_back(page);
 }
 
+void
+DocumentConfigureDialog::selectMetadata(QString name)
+{
+    int index = 0;
+    
+    for (configurationpages::iterator i = m_configurationPages.begin();
+	 i != m_configurationPages.end(); ++i) {
+
+	DocumentMetaConfigurationPage *page =
+	    dynamic_cast<DocumentMetaConfigurationPage *>(*i);
+
+	if (!page) {
+	    ++index;
+	    continue;
+	}
+
+	page->selectMetadata(name);
+	showPage(index);
+	return;
+    }
 }
+
+
+}
+

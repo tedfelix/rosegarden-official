@@ -492,6 +492,11 @@ public slots:
      */
     void slotNonNotationItemPressed(QMouseEvent *e, QCanvasItem *i);
 
+    /**
+     * Called when a mouse press occurred on a QCanvasText
+     */
+    void slotTextItemPressed(QMouseEvent *e, QCanvasItem *i);
+
     void slotMouseMoved(QMouseEvent*);
     void slotMouseReleased(QMouseEvent*);
 
@@ -691,6 +696,8 @@ signals:
 
     void editTimeSignature(Rosegarden::timeT);
 
+    void editMetadata(QString);
+
     void staffLabelChanged(Rosegarden::TrackId id, QString label);
 
 protected:
@@ -752,6 +759,12 @@ protected:
      * coordinates (after layout)
      */
     void positionPages();
+
+    /**
+     * Update the panner thumbnail images.  If complete is true,
+     * copy the entire mini-canvas.
+     */
+    void updateThumbnails(bool complete);
 
     /**
      * setup the layout/font toolbar
@@ -858,6 +871,10 @@ protected:
     int m_currentStaff;
     int m_lastFinishingStaff;
 
+    QCanvasItem *m_title;
+    QCanvasItem *m_subtitle;
+    QCanvasItem *m_composer;
+    QCanvasItem *m_copyright;
     std::vector<QCanvasItem *> m_pages;
     std::vector<QCanvasItem *> m_pageNumbers;
 

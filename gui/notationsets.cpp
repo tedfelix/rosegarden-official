@@ -578,6 +578,32 @@ NotationGroup::applyStemProperties()
     }
 }
 
+bool
+NotationGroup::haveInternalRest() const
+{
+    bool inside = false;
+    bool found = false;
+
+    for (NELIterator i = getInitialNote(); i != getContainer().end(); ++i) {
+        NotationElement* el = static_cast<NotationElement*>(*i);
+
+	if (el->isNote() &&
+	    el->event()->get<Int>(NOTE_TYPE) < Note::Crotchet &&
+	    el->event()->has(BEAMED_GROUP_ID) &&
+	    el->event()->get<Int>(BEAMED_GROUP_ID) == m_groupNo) {
+	    if (found) return true; // a rest is wholly enclosed by beamed notes
+	    inside = true;
+	}
+
+	if (el->isRest() && inside) found = true;
+
+	if (i == getFinalNote()) break;
+    }
+
+    return false;
+}
+
+
 NotationGroup::Beam
 NotationGroup::calculateBeam(NotationStaff &staff)
 {
@@ -708,12 +734,54 @@ NotationGroup::calculateBeam(NotationStaff &staff)
     int ml = spacing * 2;
     int el = sl;
 
+    NOTATION_DEBUG << "c0: " << c0 << ", c1: " << c1 << ", c2: " << c2 << endl;
+    NOTATION_DEBUG << "sl: " << sl << ", ml: " << ml << ", el: " << el << endl;
+
+    // If the stems are down, we will need to ensure they end at
+    // heights lower than 0 if there's an internal rest -- likewise
+    // with stems up and an internal rest we need to ensure they end
+    // at higher than 8.
+    // [Avoid doing expensive haveInternalRest() test where possible]
+
+    if (beam.aboveNotes) {
+
+	int topY = staff.getLayoutYForHeight(8);
+
+	if ((c0 - sl > topY) || (c1 - ml > topY) || (c2 - el > topY)) {
+	    if (haveInternalRest()) {
+		if (c0 - sl > topY) sl = c0 - topY;
+		if (c1 - ml > topY) ml = c1 - topY;
+		if (c2 - el > topY) el = c2 - topY;
+		NOTATION_DEBUG << "made internal rest adjustment for above notes" << endl;
+    NOTATION_DEBUG << "sl: " << sl << ", ml: " << ml << ", el: " << el << endl;
+	    }
+	}
+    } else {
+	int bottomY = staff.getLayoutYForHeight(0);
+
+	if ((c0 + sl < bottomY) || (c1 + ml < bottomY) || (c2 + el < bottomY)) {
+	    if (haveInternalRest()) {
+		if (c0 + sl < bottomY) sl = bottomY - c0;
+		if (c1 + ml < bottomY) ml = bottomY - c1;
+		if (c2 + el < bottomY) el = bottomY - c2;
+		NOTATION_DEBUG << "made internal rest adjustment for below notes" << endl;
+    NOTATION_DEBUG << "sl: " << sl << ", ml: " << ml << ", el: " << el << endl;
+	    }
+	}
+    }
+
+
     if (shortestNoteType < Note::Semiquaver) {
 	int off = spacing * (Note::Semiquaver - shortestNoteType);
 	sl += off;
-	ml += off;
 	el += off;
     }
+
+    if (shortestNoteType < Note::Quaver) {
+	int off = spacing * (Note::Quaver - shortestNoteType);
+	ml += off;
+    }
+
 
     int midY = staff.getLayoutYForHeight(4);
 
