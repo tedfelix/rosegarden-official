@@ -261,6 +261,7 @@ NotationHLayout::scanStaff(StaffType &staff)
         int baseWidth = 0;
 
         timeT apparentBarDuration = 0;
+	timeT actualBarEnd = barTimes.first;
 
 	AccidentalTable accTable(key, clef);
 
@@ -325,18 +326,18 @@ NotationHLayout::scanStaff(StaffType &staff)
 		fixedWidth += mw;
 	    }
 
+	    actualBarEnd = el->getAbsoluteTime() + el->getDuration();
             el->event()->setMaybe<Int>(MIN_WIDTH, mw);
 	}
 
-	//!!! No -- shouldn't use apparentBarDuration, should use
-	//difference between start of first evt in bar and end of last
+	if (actualBarEnd == barTimes.first) actualBarEnd = barTimes.second;
 
         addNewBar(staff, barCounter, to,
                   getIdealBarWidth(staff, fixedWidth, baseWidth, shortest, 
                                    shortCount, totalCount, timeSignature),
                   fixedWidth, baseWidth,
                   apparentBarDuration == timeSignature.getBarDuration(),
-		  timeSigEvent, apparentBarDuration); 
+		  timeSigEvent, actualBarEnd - barTimes.first); 
 
 	++barCounter;
 	++barNo;
@@ -465,7 +466,7 @@ void
 NotationHLayout::addNewBar(StaffType &staff,
 			   int barNo, NotationElementList::iterator i,
                            double width, int fwidth, int bwidth,
-			   bool correct, Event *timeSig, timeT apparentDuration)
+			   bool correct, Event *timeSig, timeT actualDuration)
 {
     BarDataList &bdl(m_barData[&staff]);
 
@@ -475,7 +476,7 @@ NotationHLayout::addNewBar(StaffType &staff,
         bdl[s].fixedWidth = fwidth;
         bdl[s].baseWidth = bwidth;
 	bdl[s].timeSignature = timeSig;
-	bdl[s].apparentDuration = apparentDuration;
+	bdl[s].actualDuration = actualDuration;
     }
 
 //    if (timeSig) kdDebug(KDEBUG_AREA) << "Adding bar with timesig" << endl;
@@ -965,10 +966,10 @@ NotationHLayout::positionRest(StaffType &staff,
     // start with the amount alloted to the whole bar, subtract that
     // reserved for fixed-width items, and take the same proportion of
     // the remainder as our duration is of the whole bar's duration.
-    // (We use the apparent duration of the bar, not the nominal time-
+    // (We use the actual duration of the bar, not the nominal time-
     // signature duration.)
 
-    timeT barDuration = bdi->apparentDuration;
+    timeT barDuration = bdi->actualDuration;
     if (barDuration == 0) barDuration = timeSignature.getBarDuration();
 
     long delta = (((int)bdi->idealWidth - bdi->fixedWidth) *
@@ -1022,14 +1023,14 @@ NotationHLayout::positionChord(StaffType &staff,
     // with the amount alloted to the whole bar, subtract that
     // reserved for fixed-width items, and take the same proportion of
     // the remainder as our duration is of the whole bar's duration.
-    // (We use the apparent duration of the bar, not the nominal time-
+    // (We use the actual duration of the bar, not the nominal time-
     // signature duration.)
 
     // In case this chord has various durations in it, we choose an
     // effective duration based on the absolute time of the first
     // following event not in the chord (see getSpacingDuration)
 
-    timeT barDuration = bdi->apparentDuration;
+    timeT barDuration = bdi->actualDuration;
     if (barDuration == 0) barDuration = timeSignature.getBarDuration();
 
     long delta = (((int)bdi->idealWidth - bdi->fixedWidth) *
