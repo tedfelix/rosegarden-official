@@ -323,9 +323,13 @@ public:
     void setUnit(timeT unit) { m_unit = unit; }
     timeT getUnit() const { return m_unit; }
 
+    virtual void quantizeRange(Segment *,
+			       Segment::iterator,
+			       Segment::iterator) const;
+
 protected:
-    virtual void quantizeSingle(Segment *,
-				Segment::iterator) const;
+    virtual void quantizeSingle(Segment *, Segment::iterator,
+				Segment::iterator &) const;
 
     timeT quantizeTime(timeT) const;
 

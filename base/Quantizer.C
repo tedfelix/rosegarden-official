@@ -729,7 +729,23 @@ LegatoQuantizer::~LegatoQuantizer()
 }
 
 void
-LegatoQuantizer::quantizeSingle(Segment *s, Segment::iterator i) const
+LegatoQuantizer::quantizeRange(Segment *s,
+			       Segment::iterator from,
+			       Segment::iterator to) const
+{
+    Segment::iterator tmp;
+    while (from != to) {
+	quantizeSingle(s, from, tmp);
+	from = tmp;
+	if (!s->isBeforeEndMarker(from) ||
+	    (s->isBeforeEndMarker(to) &&
+	     ((*from)->getAbsoluteTime() >= (*to)->getAbsoluteTime()))) break;
+    }
+}
+
+void
+LegatoQuantizer::quantizeSingle(Segment *s, Segment::iterator i,
+				Segment::iterator &nexti) const
 {
     // Stretch each note out to reach the quantized start time of the
     // next note whose quantized start time is greater than or equal
@@ -745,6 +761,9 @@ LegatoQuantizer::quantizeSingle(Segment *s, Segment::iterator i) const
     t -= barStart;
     t = quantizeTime(t);
     t += barStart;
+
+    nexti = i;
+    ++nexti;
 
     for (Segment::iterator j = i; s->isBeforeEndMarker(j); ++j) {
 	if (!(*j)->isa(Note::EventType)) continue;
@@ -762,7 +781,10 @@ LegatoQuantizer::quantizeSingle(Segment *s, Segment::iterator i) const
 	}
     }
     
-    if (t0 != t || d0 != d) setToTarget(s, i, t, d);
+    if (t0 != t || d0 != d) {
+	setToTarget(s, i, t, d);
+	nexti = s->findTime(t + d);
+    }
 }
 
 timeT
