@@ -2,10 +2,10 @@
 <HTML>
 <HEAD>
 	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-3">
-	<TITLE>Using Rosegarden, Chapter 1</TITLE>
+	<TITLE>Using Rosegarden, Chapter 1 - Introduction</TITLE>
 	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.0.1  (Linux)">
 	<META NAME="CREATED" CONTENT="20040411;1502800">
-	<META NAME="CHANGED" CONTENT="20040411;20200900">
+	<META NAME="CHANGED" CONTENT="20040416;20121200">
 	<META NAME="DESCRIPTION" CONTENT="Using Rosegarden is a ">
 	<META NAME="KEYWORDS" CONTENT="Rosegarden tutorial, music notation, score, MIDI, sequencer, open source, free, shareware, Unix, Linux, SGI">
 	<META NAME="robots" CONTENT="index">
@@ -31,6 +31,8 @@
 	<FONT SIZE=7>Using Rosegarden</FONT></P>
 	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
 	<FONT SIZE=4>A Guide to Rosegarden-4 1.0</FONT></P>
+	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
+	<FONT SIZE=4>by D. Michael McIntyre</FONT></P>
 	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
 	<BR><BR>
 	</P>
@@ -71,28 +73,34 @@
 	line of applications. As of this writing, we're at version
 	0.9.8_cvs. The latest official release is 0.9.7. There are myriad
 	older versions floating around, and some features described here may
-	not work unless you're running something very recent.</P>
+	not work unless you're running something very recent. 
+	</P>
 	<H2 STYLE="border: none; padding: 0in"><A NAME="1_4"></A>1.4 The
 	Author's Studio</H2>
 	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Obviously,
-	what I can actually demonstrate is hardware dependant. I'd like you
+	what I can actually demonstrate is hardware dependent. I'd like you
 	to bear in mind what is sitting in front of me as I write this, and
 	thus I will share the details of my &quot;studio.&quot;</P>
 	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">I'm
 	running a 2.0 GHz P4 with 512 MB of RAM; Debian &ldquo;testing&rdquo;
 	and KDE 3.1.x. My kernel is canned Debian; version 2.4.24-1-686,
 	with no low latency or pre-empt patches.</P>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">On the
-	audio side of things, my sole soundcard is a Sound Blaster PCI
-	128/ens1371. It's a pretty lousy soundcard all around, and I pity
-	anyone else who's using one of these things. On the MIDI side of
-	things, I have a joystick port MIDI box for the Sound Blaster, to
-	which I attach a Fatar MIDI-72 controller keyboard and a Roland
-	SC-33 Sound Canvas.</P>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">In
-	addition to the Roland, I run FluidSynth. I usually use the soft
-	synth to provide ripping percussion, because the drum kits on my
-	Sound Canvas are water thin.</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">My sole
+	soundcard is a Sound Blaster PCI 128/ens1371, which provides modest
+	audio capabilities and drives my MIDI port.  I have a joystick port
+	MIDI box for the Sound Blaster, to which I attach a Fatar MIDI-72
+	controller keyboard and a Roland SC-33 Sound Canvas.</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">In the
+	way of other gear, I have a reasonably good electret microphone from
+	Radio Shack, which I use to record my acoustic guitar, flute, and
+	other traditional instruments.  I have an electric guitar and a
+	DigiTech RP-200 effects box for those times I want to play rock
+	star.</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">I route
+	all of this through my Sound Blaster's mixer.  I can't currently
+	have everything feeding into the soundcard at the same time, and I
+	must swap cables around in order to feed either the Sound Canvas or
+	the RP-200 into the &ldquo;line in&rdquo; jack.</P>
 	<H2 ALIGN=LEFT STYLE="border: none; padding: 0in"><A NAME="1_5"></A>1.5
 	History</H2>
 	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
@@ -122,6 +130,8 @@
 	5/1/03 Version 0.9.0 final version</P>
 	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium; text-decoration: none">
 	4/12/04 Redesign and update in preparation for 1.0</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium; text-decoration: none">
+	4/17/04 AGNULA/DeMuDi CD deadline crunch</P>
 	<H2 STYLE="border: none; padding: 0in"><A NAME="1_6"></A>1.6 Getting
 	This Document</H2>
 	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">The
@@ -129,13 +139,16 @@
 	http://rosegarden.sourceforge.net/tutorial/using-rosegarden/ </A>
 	</P>
 	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">You can
-	also get it from CVS .  It's part of Rosegarden, but it's a separate
+	also get it from CVS . It's part of Rosegarden, but it's a separate
 	module, so you don't get it unless you specifically check out the
 	&ldquo;tutorial&rdquo; module.</P>
 	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">cvs -Q
 	-z3
 	-d:pserver:anonymous@cvs.rosegarden.sourceforge.net:/cvsroot/rosegarden
 	checkout tutorial</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Remember
+	that anonymous CVS at SourceForge is still lagging behind, so
+	updates might take a day or two to filter to the mirrors.</P>
 	<H2 STYLE="border: none; padding: 0in"><A NAME="1_7"></A>1.7
 	Copyright and License</H2>
 	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Copyright
@@ -164,7 +177,5 @@
 	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">German:
 	Bernd Weber &lt;<A HREF="mailto:weber.freiburg@freenet.de">weber.freiburg@freenet.de</A>&gt;</P>
 </DIV>
-<P><BR>
-</P>
 </BODY>
 </HTML>

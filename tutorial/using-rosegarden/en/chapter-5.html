@@ -2,10 +2,10 @@
 <HTML>
 <HEAD>
 	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-3">
-	<TITLE>Using Rosegarden, Chapter 5</TITLE>
+	<TITLE>Using Rosegarden, Chapter 4</TITLE>
 	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.0.1  (Linux)">
 	<META NAME="CREATED" CONTENT="20040411;1502800">
-	<META NAME="CHANGED" CONTENT="20040411;3111400">
+	<META NAME="CHANGED" CONTENT="20040411;3095600">
 	<META NAME="DESCRIPTION" CONTENT="Using Rosegarden is a ">
 	<META NAME="KEYWORDS" CONTENT="Rosegarden tutorial, music notation, score, MIDI, sequencer, open source, free, shareware, Unix, Linux, SGI">
 	<META NAME="robots" CONTENT="index">
@@ -25,325 +25,209 @@
 		<IMG SRC="../../title-rosegarden.png" NAME="Graphic2" ALT="Rosegarden" ALIGN=BOTTOM WIDTH=400 HEIGHT=104 BORDER=0></P>
 </DIV>
 <DIV ID="main">
-	<H1><A NAME="5"></A>5 Incomplete....</H1>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Sorry
-	folks, I'm just out of time, and out of gumption to work on this at
-	the moment. There is much yet to do, but writing documentation of
-	this quality is very time consuming.</P>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">As much
-	as I hate to leave the rest of this dangling, and out of date, I
-	hate even more not to get the new material above out into your
-	hands, and so I'm going to break off here and release this in its
-	current, half-finished state.</P>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">That's
-	all for now, folks.</P>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><BR><BR>
-	</P>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><BR><BR>
-	</P>
-	<H2 STYLE="border: none; padding: 0in"><A NAME="5_1"></A>5.1
-	Transposing</H2>
-	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-	Now that we've had our bit of fun playing with all the new toys,
-	let's look at the part and see what it's going to need.</P>
-	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-	<IMG SRC="notation-yucky-notes.png" NAME="Graphic9" ALIGN=BOTTOM WIDTH=448 HEIGHT=123 BORDER=0></P>
-	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-	Gack! This definitely should have been a piccolo part. My head hurts
-	just looking at this stuff. Let's transpose it down an octave and
-	see what it looks like. Let's make that<B> two</B> octaves! I can
-	get that high with my flute, but my dog would hate me. Two octaves
-	are good.</P>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Select<B>
-	Edit -&gt; Select Whole Staff</B>, then go to the<B> Transforms</B>
-	menu.</P>
-	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-	<IMG SRC="using-rosegarden_html_35dd04c6.png" NAME="Graphic60" ALIGN=BOTTOM WIDTH=236 HEIGHT=221 BORDER=0></P>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Lots of
-	good stuff to play with here, take note, but we want<B> Transpose...</B>
-	Since we're going to go down two octaves, we might as well go for
-	the<B> Transpose...</B> option at the bottom. Use the arrows to dial
-	down, or else enter -24 into the input box. Positive numbers mean an
-	upward transposition, and negative numbers will transpose downward.</P>
-	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-	<IMG SRC="transpose-box.png" NAME="Graphic10" ALIGN=BOTTOM WIDTH=392 HEIGHT=110 BORDER=0></P>
-	<H2 STYLE="border: none; padding: 0in"><A NAME="5_2"></A>5.2
-	De-Humanizing</H2>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
-	Now that we're down to a reasonable register, let's do something
-	about the ugly notes. The problem with human performance data is
-	that it doesn't scale well into notation. You'll notice that some of
-	the notes are displaying in yellow. That's because they're notes
-	whose timing and duration don't quite make sense to Rosegarden
-	within the context of this measure, so it has colored them to let
-	you know that the notes on the page are only an approximation of
-	what will actually be played. To see a view of the data in a more
-	pure format, use the<B> Matrix</B> or<B> Event List</B> editors,
-	which we'll take a look at later on.</P>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
-	Since our objective here is to make the notation more readable, we
-	might as well remain here and alter the data until it better fits
-	into place within the context of notation. In this instance,
-	readability is more important to us than the faithful rendering of a
-	human performance, so we're going to end up making &quot;physical&quot;
-	changes to the data along the way.</P>
-	<H3 ALIGN=LEFT STYLE="border: none; padding: 0in"><A NAME="5_2_1"></A>
-	5.2.1 Quantize</H3>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
-	I think this data is so messy that we're going to have to quantize
-	it. Let's<B> Undo</B> that last change, and play with<B> Transform
-	-&gt; Quantize</B> instead. Let's tell it to<B> Quantize: Event
-	positions, and round durations to exact notes</B>. We'll leave the<B>
-	Base duration unit</B> at 16<SUP>th</SUP>, and accept the default<B>
-	Note rounding</B> values and see where that gets us:</P>
-	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-	<BR><BR>
-	</P>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
-	Not too bad. It's looking much better:</P>
-	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-	<BR><BR>
-	</P>
-	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
-	Let's see how those changes sound, and then we'll see about turning
-	those 16<SUP>th</SUP> note/rest pairs into something a little easier
-	to read...</P>
-	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
-	The quantized notes seem to have fallen into place along sane
-	boundaries without having an undue impact on the rhythm or feel of
-	the piece. Bearing that in mind, let's back up a step and see what
-	would have happened if we had quantized on 8<SUP>th</SUP> note
-	boundaries. Hit<B> ctrl-Z</B> or use<B> Edit -&gt; Undo</B>, then
-	run through the<B> Transformations -&gt; Quantize</B> dialog again,
-	specifying a base duration of 8<SUP>th</SUP> note this time around.</P>
-	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
-	Very nice indeed, and Rosegarden has rendered some 16<SUP>th</SUP>
-	notes and other odd bits as required, ignoring the base duration
-	when it really had to. That's one of the best jobs of quantization
-	I've seen in a notation editor. There won't be much clean-up to do
-	from here:</P>
-	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-	<BR><BR>
-	</P>
-	<H3 ALIGN=LEFT STYLE="border: none; padding: 0in"><A NAME="5_2_2"></A>
-	5.2.2 Adding Marks</H3>
-	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
-	We've changed the flavor somewhat by lengthening those notes. Let's
-	make them staccato. There isn't currently an icon for this, but
-	you'll find it on the menu. First you'll need to make a selection.</P>
-	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
-	If it's not already the default, choose the<B> 
-	<IMG SRC="using-rosegarden_html_5b745bd6.png" NAME="Graphic4" ALIGN=BOTTOM WIDTH=26 HEIGHT=24 BORDER=0></B>
-	cursor from the<B> Toolbar</B>. Click at a point to the left of one
-	of the notes to begin the selection. Drag the blue selection box so
-	that it includes the first two 8<SUP>th</SUP> notes. When they're
-	selected, they'll turn blue. Now use<B> Marks -&gt; Add Staccato</B>.
-	The dots appear:</P>
-	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-	<BR><BR>
-	</P>
-	<H3 ALIGN=LEFT STYLE="border: none; padding: 0in"><A NAME="5_2_3"></A>
-	5.2.3 Auto-Beam</H3>
-	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
-	Now let's add beams.<B> Edit -&gt; Select Whole Staff</B>, then<B>
-	Group -&gt; Auto Beam</B> to beam these notes into logical
-	groupings:</P>
-	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-	<BR><BR>
-	</P>
-	<H3 ALIGN=LEFT STYLE="border: none; padding: 0in"><A NAME="5_2_4"></A>
-	5.2.4 Changing Note Durations</H3>
-	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
-	One measure further into the segment, there are some rhythms that
-	could probably be written so that they're less awkward to count.
-	Let's see about changing them.</P>
-	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
-	There's an odd dotted 16<SUP> th</SUP> with 32<SUP>nd</SUP> rest
-	combination that should probably be another stacatto 8<SUP>th</SUP>
-	note:</P>
-	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-	<BR><BR>
-	</P>
-	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
-	Let's convert that into an 8<SUP> th</SUP> note. Click the 8<SUP>th</SUP>
-	note button 
-	<IMG SRC="using-rosegarden_html_4b0b8237.png" NAME="Graphic25" ALIGN=BOTTOM WIDTH=51 HEIGHT=50 BORDER=0>
-	on the<B> Notes Toolbar</B>, then click on the offending dotted 16<SUP>
-	th</SUP> note's head. It changes into an 8<SUP>th</SUP> note, and
-	the rest disappears.<I> Note that Rosegarden pads out the rests as
-	necessary, to keep the correct time in the measure.</I></P>
-	<H3 ALIGN=LEFT STYLE="border: none; padding: 0in"><A NAME="5_2_5"></A>
-	5.2.5 Let's Add Some Slurs</H3>
-	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
-	Let's add some slurs as well. Highlight the first two 8<SUP>th</SUP>
-	notes in this measure, then use<B> Group -&gt; Add Slur</B>. You
-	should be looking at something very like this:</P>
-	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
-	<IMG SRC="post-quantized6.png" NAME="Graphic23" ALIGN=BOTTOM WIDTH=382 HEIGHT=81 BORDER=0></P>
-	<H3 ALIGN=LEFT STYLE="border: none; padding: 0in"><A NAME="5_2_6"></A>
-	5.2.6 Manual Beaming 
-	</H3>
-	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
-	Now let's do two more things to enhance readability. I'm used to
-	reading beamed groups that count out to one beat. Let's separate
-	those two groups, and add another slur. Select the first two 8<SUP>th</SUP>
-	notes in that four-note group, then use<B> Group -&gt; Beam Group</B>
-	to fuse those two together. The remaining two notes adapt
-	automatically, and remain beamed. Now select all four of the 8<SUP>th</SUP>
-	notes plus the half note and add a slur. Finally, notice that the
-	note stems are in the way of the slur. Let's select the second pair
-	of 8<SUP>th</SUP> notes and use<B> Notes -&gt; Stem Direction -&gt;
-	Stems Down</B> or else<B> ctrl-PageDown</B> to change their
-	direction. You should wind up with a measure resembling this one:</P>
-	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
-	<IMG SRC="using-rosegarden_html_75fa38d8.png" NAME="Graphic26" ALIGN=BOTTOM WIDTH=336 HEIGHT=108 BORDER=0>
-		</P>
-	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
-	Continue in this fashion until you finish altering the notation so
-	that it's nice and tidy. I think you should have a pretty good idea
-	how to proceed from here, so I'm not going to walk you through the
-	rest of this job.</P>
-	<H3 ALIGN=LEFT STYLE="border: none; padding: 0in"><A NAME="5_2_7"></A>
-	5.2.7 The Text Cursor 
-	</H3>
-	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
-	Now let's add some directions. Exchange your<B> Select</B> cursor
-	for a<B> Text 
-	<IMG SRC="text-cursor.png" NAME="Graphic16" ALIGN=BOTTOM WIDTH=38 HEIGHT=33 BORDER=0>
-	</B>cursor. Click toward the beginning of the staff, near the clef.
-	Let's start by adding a tempo and a dynamic of ff, (since my dynamic
-	range is from ff to fffff :). Click the cursor where you want the
-	text to appear, then configure it via the dialog.</P>
-	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
-	<IMG SRC="using-rosegarden_html_602e7230.png" NAME="Graphic27" ALIGN=BOTTOM WIDTH=243 HEIGHT=254 BORDER=0>
-		</P>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">It's
-	pretty self-explanatory. My score ended up looking like:</P>
-	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
-	<IMG SRC="post-quantized8.png" NAME="Graphic28" ALIGN=BOTTOM WIDTH=277 HEIGHT=177 BORDER=0></P>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><FONT SIZE=2><I>NOTE:
-	Did you notice that one of the available text types was called
-	&quot;annotation?&quot; You can use these to make notes on your
-	score, and can control whether or not you see them via the<B>
-	Settings -&gt; Show Annotations<!--SPAN STYLE="font-weight: medium"--></B>
-	toggle.</I></FONT></P>
-	<H2 STYLE="border: none; padding: 0in"><A NAME="5_3"></A>5.3 A
-	Change of Key</H2>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">(unfinished...
-	sorry...)<I><FONT FACE="new century schoolbook, serif"> ff</FONT><FONT FACE="times, serif">
-	ff</FONT><FONT FACE="times new roman"> ff</FONT><FONT FACE="book antiqua">
-	ff</FONT><FONT FACE="boston"> ff</FONT> </I>
-	</P>
+	<H1 STYLE="border: none; padding: 0in"><A NAME="5"></A>5 Editing
+	Notation</H1>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Rosegarden
+	stores events in a format that's very notation friendly. Notation is
+	such an integral part of the package that I like to think of the
+	notation as the &quot;real&quot; data, though it is, of course, only
+	one of the ways the data can be presented to you.</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">One
+	especially unique, powerful and useful feature is the way Rosegarden
+	stores two sets of timings for every event. When you import a MIDI
+	file or record from a keyboard, the raw data gets run through the
+	notation quantizer before being presented to you.</P>
 	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">This
-	section will talk about ways of transposing a part to a new key, and
-	then about how to write a part for a transposing instrument (eg. a
-	B<SUB>b</SUB> trumpet) so that it sounds in one key and is written
-	in another. I just haven't had time to sit down and write it.
-	Writing documentation to this standard is a very time consuming
-	process. I hope you agree that it's worth the time, and worth the
-	wait.</P>
-	<H3 STYLE="border: none; padding: 0in"><A NAME="5_3_1"></A>5.3.1
-	Multiple Staffs</H3>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Until
-	now, we've only edited the one part. The<B> Notation Editor</B>
-	allows you to edit any number of segments simultaneously. Since
-	we're going to transpose the entire composition, let's use<B> Edit
-	-&gt; Select All<!--SPAN STYLE="font-weight: medium"--><!--SPAN STYLE="font-style: normal"--></B>
-	segment<B>s</B> and then<!--SPAN STYLE="font-weight: medium"--><!--SPAN STYLE="font-style: normal"-->
-	segment<B>s -&gt; Open in Notation Editor</B> .</P>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
-	(unfinished... sorry...)</P>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
-	Quick note: you can select multiple segments and edit them in one
-	window. That's what I'll show you here eventually, explaining it in
-	my usual level of detail, by running through and grabbing
-	screenshots as I go, to make sure I get it right.</P>
-	<H2 STYLE="border: none; padding: 0in"><A NAME="5_4"></A>5.4
-	Printing</H2>
+	allows you to maintain a copy of the score for printing, and a copy
+	for playback, affording you the advantages of machine-precise scores
+	while preserving the subtle nuances of human performance.</P>
 	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">The
-	current design plan calls for a rudimentary print facility
-	incorporated within Rosegarden itself, whose purpose is to allow
-	rough draft printing, combined with off-loading the task onto an
-	external utility for high quality printing. The print engine in CVS
-	works pretty well for draft printing. The print engine in 0.9.0 is
-	totally horrible. If you want to print notation, dump 0.9.0 and get
-	CVS.</P>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">The
-	&quot;external utility&quot; of choice is Lilypond, and we've put a
-	lot of effort into making Rosegarden a useful front end for
-	Lilypond. We also support music XML, but the active development is
-	on Lilypond export.</P>
+	feature is new, and not quite complete, however, and there are a few
+	limitations on what you can and cannot do. Look for this to improve
+	for 1.0, but it's rather useful in its present state.</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">So,
+	let's take a look...</P>
+	<H2 ALIGN=LEFT STYLE="border: none; padding: 0in"><A NAME="5_1"></A>5.1
+	Opening the Notation Editor</H2>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+	First, load a file into Rosegarden. You might wish to work with
+	<U>link<!--SPAN STYLE="text-decoration: none"--><!--SPAN STYLE="font-style: normal"--><!--SPAN STYLE="font-weight: medium"--></U>
+	as I have done.</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+	<!--SPAN STYLE="font-weight: medium"--><!--SPAN STYLE="text-decoration: none"--><!--SPAN STYLE="font-style: normal"-->Select
+	at least one segment, then open a notation view by right-clicking on
+	the segment, and choosing<!--SPAN STYLE="font-weight: medium"-->
+	&quot;Edit as Notation&quot; from the context submenu.</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+	You may edit multiple segments from any number of tracks
+	simultaneously. Currently the largest caveat here is that if you are
+	editing one or more isolated segments that are separated by a time
+	gap, there is no visual indication in the notation editor to give
+	you an idea where one segment ends, and the other begins. This will,
+	perhaps, be addressed by inserting multi-measure rests in the
+	future, but we've come to no consensus on that issue as yet. In the
+	meantime, I prefer to work with compositions that have long segments
+	where periods of silence have not been cut out.</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><FONT SIZE=2><I>TIP:
+	You can also configure this to be your default view via<B> Settings
+	-&gt; Configure Rosegarden... -&gt; Default Editor</B>, and
+	thereafter you can get to the<!--SPAN STYLE="font-weight: medium"-->
+	notation view by merely double-clicking the desired segment.</I></FONT></P>
+	<H2 STYLE="border: none; padding: 0in"><A NAME="5_2"></A>5.2
+	Notation Editor Overview</H2>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">You'll
+	probably be spending a lot of time here in the<!--SPAN STYLE="font-weight: medium"-->
+	notation view. As you'd expect, this is where you go to view and
+	edit your data as standard notation. This editor doesn't quite yet
+	offer all that you might expect from a dedicated notation package,
+	but it's getting there. Most notably absent, there is no facility
+	for flow control. There are no repeats, no codas, no<I> segnos<!--SPAN STYLE="font-weight: medium"--><!--SPAN STYLE="font-style: normal"--></I>
+	and the like as yet, and I don't honestly expect to see such
+	features until after 1.0.</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">One of
+	the first things you'll notice is that there are different toolbars
+	here. Before looking, let's synchronize our displays. You may not
+	yet have a<!--SPAN STYLE="font-weight: medium"--> Transport Toolbar
+	for this window. Check<B> Settings -&gt; Show Transport Toolbar</B>
+	and the<!--SPAN STYLE="font-weight: medium"--> Transport Toolbar
+	should appear. This really should be on by default, if it isn't
+	already, because the notation editor's transport provides some
+	unique functionality that you'd be hard-pressed to do without.</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><BR><BR>
+	</P>
+	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+	<IMG SRC="using-rosegarden_html_m288dbd47.png" NAME="Graphic8" ALIGN=BOTTOM WIDTH=255 HEIGHT=404 BORDER=0>
+		</P>
 	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><BR><BR>
 	</P>
 	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
-	If you have a look at the<B> File -&gt; Export...</B> menu, you'll
-	see that it's possible to export your compositions in both Lilypond
-	and MusicXML formats:</P>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><BR><BR>
+	Now, let's have a look at the new toolbars. You can toggle several
+	of these via the Toggle Toolbar</P>
+	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	<IMG SRC="using-rosegarden_html_49ccc646.png" NAME="Graphic45" ALIGN=BOTTOM WIDTH=183 HEIGHT=27 BORDER=0>
+		</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	This version of the Tools Toolbar has only three cursors, Erase,
+	Select, and Text.</P>
+	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	<IMG SRC="notation-cursors-toolbar.png" NAME="Graphic53" ALIGN=BOTTOM WIDTH=91 HEIGHT=27 BORDER=0>
+		</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	The Notes Toolbar has both regular and dotted flavors of several
+	note lengths, plus toggles for Chord Insert Mode and Triplet Insert
+	Mode, which should be self-explanatory. With the Select cursor
+	highlighted, you can click on a duration and then click on the staff
+	to insert a note.</P>
+	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	<IMG SRC="using-rosegarden_html_m33a98fcf.png" NAME="Graphic49" ALIGN=BOTTOM WIDTH=452 HEIGHT=27 BORDER=0>
+		</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	or you can add rests via the Rests Toolbar<B>...</B></P>
+	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+	<B><IMG SRC="notation-rests-toolbar.png" NAME="Graphic55" ALIGN=BOTTOM WIDTH=401 HEIGHT=26 BORDER=0></B></P>
+	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+	<BR><BR>
 	</P>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><IMG SRC="using-rosegarden_html_m5c3fd539.png" NAME="Graphic46" ALIGN=LEFT WIDTH=442 HEIGHT=288 BORDER=0><BR CLEAR=LEFT><BR><BR>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	You can toggle accidentals via the Accidentals Toolbar,</P>
+	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	<IMG SRC="using-rosegarden_html_b93d8c0.png" NAME="Graphic56" ALIGN=BOTTOM WIDTH=175 HEIGHT=26 BORDER=0>
+		</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	and add clefs via the Clefs Toolbar,</P>
+	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	<IMG SRC="using-rosegarden_html_m223e45b2.png" NAME="Graphic58" ALIGN=BOTTOM WIDTH=118 HEIGHT=27 BORDER=0>
+		</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	Those familiar with older versions of Rosegarden will welcome the
+	next two toolbars. It's now possible to perform many more actions
+	without navigating through the menu system with the help of the
+	Marks Toolbar,</P>
+	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	<IMG SRC="using-rosegarden_html_m39cf3fe4.png" NAME="Graphic51" ALIGN=BOTTOM WIDTH=405 HEIGHT=26 BORDER=0>
+		</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	and the Group Toolbar,</P>
+	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	<IMG SRC="using-rosegarden_html_m734caf3d.png" NAME="Graphic52" ALIGN=BOTTOM WIDTH=285 HEIGHT=28 BORDER=0>
+		</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	(I added both of these myself, as a matter of fact. Oooh, ahhh. :)</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	Moving down, you can change use this little gadget to change the
+	font used to render the notes:</P>
+	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	<IMG SRC="notation-font-dongle.png" NAME="Graphic59" ALIGN=BOTTOM WIDTH=119 HEIGHT=26 BORDER=0></P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	The &quot;RG 2.1&quot; font isn't as pretty, but it renders more
+	quickly than feta, so may be useful on slower hardware.</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	Continuing further down, you will probably notice a weird looking
+	new ruler, unless it happens to be off, or you happen to be in page
+	layout mode. Toggle it via<B> Settings -&gt; Toggle Raw Note Ruler</B>
+	and make sure you're in the correct mode with<B> View -&gt; Linear
+	Layout</B> and it should appear. The Raw Note Ruler is useful when
+	dealing with notation-quantized data, as I'll explain in short
+	order.</P>
+	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	<IMG SRC="using-rosegarden_html_5171801e.png" NAME="Graphic57" ALIGN=BOTTOM WIDTH=248 HEIGHT=72 BORDER=0>
+		</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+	<BR><BR>
 	</P>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><BR><BR>
-	</P>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">I've
-	spent many hours on the Lilypond export code myself, trying to make
-	it work as well as possible. I've added a lot to what Hans
-	originally provided, and there have been many improvements. Notably,
-	I've taken advantage of Rosegarden's new &quot;metadata&quot;
-	facility to provide mechanism for exporting user-specified headers.<!--SPAN STYLE="font-weight: medium"-->
-	I'm very grateful to Chris and Guillaume for providing some way for
-	me to be able to export these, and for you to enter them. This
-	really deserves a proper explanation, complete with visuals, but I
-	don't have time to do it right. For now, a brief description:</P>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Look at<B>
-	Edit -&gt; Edit Document Properties<!--SPAN STYLE="font-weight: medium"--></B>
-	, then look at the<B> Description<!--SPAN STYLE="font-weight: medium"--></B>
-	tab. Put the header name (eg. &quot;title&quot;) in the<B> Name<!--SPAN STYLE="font-weight: medium"--></B>
-	field, and the string you want attached to that header in the<B>
-	Value<!--SPAN STYLE="font-weight: medium"--></B> field. All 14
-	possible headers are exported now, but the interface is still a bit
-	weird.</P>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">In spite
-	of all this effort, however, Lilypond export is an imperfect thing.
-	Rosegarden and Lilypond have different ideas about how to draw some
-	things, and there's no getting around the need to manually tweak
-	your Lilypond files for the best possible results, or at least to
-	feed the export a set of things that it can translate well.</P>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">With
-	careful planning, good results are possible, but if you attach five
-	marks to every note and have all sorts of performance directions and
-	whatnot in the same space, Lilypond will jumble it up. There just
-	isn't any reasonable mechanism for getting Lilypond to render things
-	as far above or below the staff as Rosegarden does, and there's only
-	so much an export filter can do.</P>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">If
-	there's something you don't like about the Lilypond export, please
-	let me know. Hans is still the official &quot;owner&quot; of the
-	code, but I'm currently the one actively working on it. There are
-	still some bugs and missing features, and I'm eager to get user
-	feedback; particularly to hear whether you like the way I've
-	implemented the new features, and what you'd like done differently.
-	I want to make this as useful to you as it can be, and I have both
-	the time and willingness to devote a lot of effort to incremental
-	improvements.</P>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Recent
-	improvements in CVS:</P>
-	<UL>
-		<UL>
-			<LI><P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">all
-			accidentals and enharmonic spellings handled correctly</P>
-			<LI><P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">text
-			events (Tempo, Local Tempo, dynamics, etc.) exported as well as
-			practicable.</P>
-			<LI><P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">marks
-			exported as well as practicable</P>
-			<LI><P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">user-specified
-			Lilypond headers available</P>
-		</UL>
-	</UL>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><SPAN STYLE="font-weight: medium">It
-	doesn't sound like much, but I have hundreds of hours invested in
-	making those improvements. I hope you like them. :)</SPAN></P>
+	<H3 STYLE="border: none; padding: 0in"><A NAME="5_2_1"></A>5.2.1
+	Controlling Playback</H3>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">The<!--SPAN STYLE="font-weight: medium"-->
+	Transport Toolbar that we turned on in the preceding section is the
+	same as in every other window, with two notable exceptions, which is
+	why I've saved it until now. These extra buttons are useful for
+	controlling playback when the<!--SPAN STYLE="font-weight: medium"-->
+	playback pointer is outside the segment you're editing, and you want
+	to hear what you're working on.</P>
+	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+	<IMG SRC="using-rosegarden_html_m4ed48e22.png" NAME="Graphic54" ALIGN=BOTTOM WIDTH=230 HEIGHT=27 BORDER=0></P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+	If you haven't moved it, the<!--SPAN STYLE="font-weight: medium"-->
+	playback pointer is at or near the beginning of the composition.
+	This part doesn't come in until much later, so if we hit the Play
+	button now, we can't expect to hear anything for awhile.</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	The notation editor has its own cursor, which is just like the one
+	that sweeps across the segment canvas in the main window, except
+	that this one is magenta. In order to control playback, you need to
+	be able to manipulate both cursors, and those two extra buttons on
+	the end of the toolbar help you do just that.</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	Let's move the playback cursor to the beginning of this segment.
+	Click on the ruler above the staff to position the local cursor,
+	just as the ruler in the main window positions the playback</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	pointer itself. Click the playback pointer to Cursor 
+	<IMG SRC="notation-pointer-to-cursor.png" NAME="Graphic14" ALIGN=BOTTOM WIDTH=28 HEIGHT=27 BORDER=0>
+	button to move the playback pointer to the position of the cursor.
+	Now playback will begin from that point.</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	You can set it back &quot;out of sight&quot; so that playback will
+	begin before the start of the segment</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><!--SPAN STYLE="font-weight: medium"-->you're
+	editing by shifting it to the left via the 
+	<IMG SRC="using-rosegarden_html_m1a7c1822.png" NAME="Graphic17" ALIGN=BOTTOM WIDTH=32 HEIGHT=30 BORDER=0>
+	button.</P>
+	<H3 STYLE="border: none; padding: 0in"><A NAME="5_2_2"></A>5.2.2
+	Notation Quantization</H3>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Those of
+	you familiar with previous versions of Rosegarden will note the
+	absence of the Smoothing slider and associated menu options. As I
+	mentioned at the beginning of this chapter, Rosegarden now maintains
+	two independent values for note duration, making it more easy than
+	ever before to clean up notation, and allowing you to do so without
+	altering the characteristics of the performance.</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">The Raw
+	Note Ruler shows you the difference between the duration of the note
+	on the staff and the actual timing of the performance data. It may
+	eventually be possible to manipulate the performance duration
+	directly from the ruler, though for the moment it mainly serves to
+	show you how much the written notation differs from the raw timing.</P>
 </DIV>
 </BODY>
 </HTML>
