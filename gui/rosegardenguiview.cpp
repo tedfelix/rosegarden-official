@@ -1080,8 +1080,10 @@ RosegardenGUIView::slotSetMuteButton(Rosegarden::TrackId track, bool value)
     Rosegarden::Track *trackObj = getDocument()->
         getComposition().getTrackById(track);
 
-    if (trackObj->getInstrument() == m_instrumentParameterBox->
-            getSelectedInstrument()->getId())
+    // to fix 739544
+    if (m_instrumentParameterBox->getSelectedInstrument() &&
+        m_instrumentParameterBox->getSelectedInstrument()->getId() ==
+        trackObj->getInstrument())
     {
         m_instrumentParameterBox->setMute(value);
     }
