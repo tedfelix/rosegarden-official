@@ -232,6 +232,12 @@ Chord::height(const NELIterator &i) const
 
 bool Chord::hasStemUp() const
 {
+    NELIterator initialNote(getInitialNote());
+    if ((*initialNote)->event()->has(STEM_UP) &&
+	(*initialNote)->event()->isPersistent<Bool>(STEM_UP)) {
+	return (*initialNote)->event()->get<Bool>(STEM_UP);
+    }
+
     int high = height(getHighestNote()), low = height(getLowestNote());
 
     if (high > 4) {
@@ -428,6 +434,11 @@ NotationGroup::calculateBeam(NotationStaff &staff)
     if (initialNote == getList().end() ||
         initialNote == finalNote) {
         return beam; // no notes, no case to answer
+    }
+
+    if ((*initialNote)->event()->has(STEM_UP) &&
+	(*initialNote)->event()->isPersistent<Bool>(STEM_UP)) {
+	beam.aboveNotes = (*initialNote)->event()->get<Bool>(STEM_UP);
     }
 
     timeT crotchet = Note(Note::Crotchet).getDuration();

@@ -321,56 +321,56 @@ Key::KeyDetails& Key::KeyDetails::operator=(const Key::KeyDetails &d)
 
 
 //////////////////////////////////////////////////////////////////////
-// Mark
+// Indication
 //////////////////////////////////////////////////////////////////////
 
-const std::string Mark::EventType = "mark";
-const int Mark::EventSubOrdering = -8;
-const PropertyName Mark::MarkTypePropertyName = "marktype";
-const PropertyName Mark::MarkDurationPropertyName = "markduration";
+const std::string Indication::EventType = "indication";
+const int Indication::EventSubOrdering = -8;
+const PropertyName Indication::IndicationTypePropertyName = "indicationtype";
+const PropertyName Indication::IndicationDurationPropertyName = "indicationduration";
 
-const std::string Mark::Slur = "slur";
-const std::string Mark::Crescendo = "crescendo";
-const std::string Mark::Decrescendo = "decrescendo";
+const std::string Indication::Slur = "slur";
+const std::string Indication::Crescendo = "crescendo";
+const std::string Indication::Decrescendo = "decrescendo";
 
-Mark::Mark(const Event &e)
+Indication::Indication(const Event &e)
 {
     if (e.getType() != EventType) {
         throw Event::BadType();
     }
-    std::string s = e.get<String>(MarkTypePropertyName);
+    std::string s = e.get<String>(IndicationTypePropertyName);
     if (s != Slur && s != Crescendo && s != Decrescendo) {
-        throw BadMarkName();
+        throw BadIndicationName();
     }
-    m_markType = s;
-    m_duration = e.get<Int>(MarkDurationPropertyName);
+    m_indicationType = s;
+    m_duration = e.get<Int>(IndicationDurationPropertyName);
 }
 
-Mark::Mark(const std::string &s, timeT markDuration)
+Indication::Indication(const std::string &s, timeT indicationDuration)
 {
     if (s != Slur && s != Crescendo && s != Decrescendo) {
-        throw BadMarkName();
+        throw BadIndicationName();
     }
-    m_markType = s;
-    m_duration = markDuration;
+    m_indicationType = s;
+    m_duration = indicationDuration;
 }
 
-Mark &
-Mark::operator=(const Mark &m)
+Indication &
+Indication::operator=(const Indication &m)
 {
     if (&m != this) {
-	m_markType = m.m_markType;
+	m_indicationType = m.m_indicationType;
 	m_duration = m.m_duration;
     }
     return *this;
 }
 
 Event *
-Mark::getAsEvent(timeT absoluteTime) const
+Indication::getAsEvent(timeT absoluteTime) const
 {
     Event *e = new Event(EventType);
-    e->set<String>(MarkTypePropertyName, m_markType);
-    e->set<Int>(MarkDurationPropertyName, m_duration);
+    e->set<String>(IndicationTypePropertyName, m_indicationType);
+    e->set<Int>(IndicationDurationPropertyName, m_duration);
     e->setAbsoluteTime(absoluteTime);
     e->setSubOrdering(EventSubOrdering);
     return e;

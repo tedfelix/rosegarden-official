@@ -459,6 +459,18 @@ void NotationView::setupActions()
     new KAction(GroupMenuBreakCommand::name(), 0, this,
                 SLOT(slotGroupBreak()), actionCollection(), "break_group");
 
+    new KAction(GroupMenuAddIndicationCommand::name
+		(Rosegarden::Indication::Slur), 0, this,
+		SLOT(slotGroupSlur()), actionCollection(), "slur");
+
+    new KAction(GroupMenuAddIndicationCommand::name
+		(Rosegarden::Indication::Crescendo), 0, this,
+		SLOT(slotGroupCrescendo()), actionCollection(), "crescendo");
+
+    new KAction(GroupMenuAddIndicationCommand::name
+		(Rosegarden::Indication::Decrescendo), 0, this,
+		SLOT(slotGroupDecrescendo()), actionCollection(), "decrescendo");
+
     // setup Transforms menu
     new KAction(TransformsMenuNormalizeRestsCommand::name(), 0, this,
                 SLOT(slotTransformsNormalizeRests()), actionCollection(),
@@ -468,10 +480,17 @@ void NotationView::setupActions()
                 SLOT(slotTransformsCollapseRests()), actionCollection(),
                 "collapse_rests_aggressively");
 
-    // setup Marks menu
-    new KAction(MarksMenuSlurCommand::name(), 0, this,
-		SLOT(slotMarksSlur()), actionCollection(),
-		"slur");
+    new KAction(TransformsMenuChangeStemsCommand::name(true), 0, this,
+                SLOT(slotTransformsStemsUp()), actionCollection(),
+                "stems_up");
+
+    new KAction(TransformsMenuChangeStemsCommand::name(false), 0, this,
+                SLOT(slotTransformsStemsDown()), actionCollection(),
+                "stems_down");
+
+    new KAction(TransformsMenuRestoreStemsCommand::name(), 0, this,
+                SLOT(slotTransformsRestoreStems()), actionCollection(),
+                "restore_stems");
 
     // setup Settings menu
     KStdAction::showToolbar(this, SLOT(slotToggleToolBar()), actionCollection());
@@ -1145,6 +1164,55 @@ void NotationView::slotGroupBreak()
 				    (*m_currentEventSelection));
 }
 
+//
+// indications stuff
+//
+
+void NotationView::slotGroupSlur()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Adding slur..."), statusBar());
+
+    GroupMenuAddIndicationCommand *command =
+	new GroupMenuAddIndicationCommand(Rosegarden::Indication::Slur,
+					  *m_currentEventSelection);
+    
+    getCommandHistory()->addCommand(command);
+
+    setSingleSelectedEvent(m_currentEventSelection->getSegment(),
+			   command->getLastInsertedEvent());
+} 
+  
+void NotationView::slotGroupCrescendo()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Adding crescendo..."), statusBar());
+
+    GroupMenuAddIndicationCommand *command =
+	new GroupMenuAddIndicationCommand(Rosegarden::Indication::Crescendo,
+					  *m_currentEventSelection);
+    
+    getCommandHistory()->addCommand(command);
+
+    setSingleSelectedEvent(m_currentEventSelection->getSegment(),
+			   command->getLastInsertedEvent());
+} 
+  
+void NotationView::slotGroupDecrescendo()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Adding decrescendo..."), statusBar());
+
+    GroupMenuAddIndicationCommand *command =
+	new GroupMenuAddIndicationCommand(Rosegarden::Indication::Decrescendo,
+					  *m_currentEventSelection);
+    
+    getCommandHistory()->addCommand(command);
+
+    setSingleSelectedEvent(m_currentEventSelection->getSegment(),
+			   command->getLastInsertedEvent());
+} 
+  
  
 // 
 // transforms stuff
@@ -1161,8 +1229,6 @@ void NotationView::slotTransformsNormalizeRests()
 
 void NotationView::slotTransformsCollapseRests()
 {
-    kdDebug(KDEBUG_AREA) << "NotationView::slotTransformsCollapseRests()\n";
-
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Collapsing rests..."), statusBar());
 
@@ -1170,25 +1236,34 @@ void NotationView::slotTransformsCollapseRests()
 				    (*m_currentEventSelection));
 }
 
-
-//
-// marks stuff
-//
-
-void NotationView::slotMarksSlur()
+void NotationView::slotTransformsStemsUp()
 {
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Making slur..."), statusBar());
+    KTmpStatusMsg msg(i18n("Pointing stems up..."), statusBar());
 
-    MarksMenuSlurCommand *command =
-	new MarksMenuSlurCommand(*m_currentEventSelection);
-    
-    getCommandHistory()->addCommand(command);
+    getCommandHistory()->addCommand(new TransformsMenuChangeStemsCommand
+				    (true, *m_currentEventSelection));
+}
 
-    setSingleSelectedEvent(m_currentEventSelection->getSegment(),
-			   command->getLastInsertedEvent());
-} 
-  
+void NotationView::slotTransformsStemsDown()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Pointing stems down..."), statusBar());
+
+    getCommandHistory()->addCommand(new TransformsMenuChangeStemsCommand
+				    (false, *m_currentEventSelection));
+}
+
+void NotationView::slotTransformsRestoreStems()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Restoring computed stem directions..."), statusBar());
+
+    getCommandHistory()->addCommand(new TransformsMenuRestoreStemsCommand
+				    (*m_currentEventSelection));
+}
+
+
 
 //
 // Status messages

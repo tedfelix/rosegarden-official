@@ -44,7 +44,7 @@ using Rosegarden::Clef;
 using Rosegarden::Key;
 using Rosegarden::TimeSignature;
 using Rosegarden::Note;
-using Rosegarden::Mark;
+using Rosegarden::Indication;
 using Rosegarden::timeT;
 
 using namespace Rosegarden::BaseProperties;
@@ -195,12 +195,12 @@ NotationVLayout::scanStaff(StaffType &staffBase)
 
                 el->setLayoutY(staff.yCoordOfHeight(12));
 
-            } else if (el->event()->isa(Mark::EventType)) {
+            } else if (el->event()->isa(Indication::EventType)) {
 
-		std::string markType =
-		    el->event()->get<String>(Mark::MarkTypePropertyName);
+		std::string indicationType =
+		    el->event()->get<String>(Indication::IndicationTypePropertyName);
 
-		if (markType == Mark::Slur) {
+		if (indicationType == Indication::Slur) {
 		    getSlurList(staff).push_back(i);
 		}
 
@@ -242,7 +242,7 @@ NotationVLayout::positionSlur(NotationStaff &staff,
     NotationElementList::iterator scooter = i;
 
     timeT slurDuration =
-	(*i)->event()->get<Int>(Mark::MarkDurationPropertyName);
+	(*i)->event()->get<Int>(Indication::IndicationDurationPropertyName);
     timeT endTime = (*i)->getAbsoluteTime() + slurDuration;
 
     bool haveStart = false;
@@ -321,8 +321,8 @@ NotationVLayout::positionSlur(NotationStaff &staff,
     } else if (stemUpNotes.size() != stemDownNotes.size()) {
 	above = (stemUpNotes.size() < stemDownNotes.size());
     } else {
-	above = (startTopHeight + endTopHeight +
-		 startBottomHeight + endBottomHeight <= 16);
+	above = ((startTopHeight - 4) + (endTopHeight - 4) +
+		 (4 - startBottomHeight) + (4 - endBottomHeight) <= 8);
     }
 
     // re-point the stems of any notes that will otherwise interfere
@@ -334,7 +334,7 @@ NotationVLayout::positionSlur(NotationStaff &staff,
 	(above ? &stemUpNotes : &stemDownNotes);
 
     for (unsigned int wsi = 0; wsi < wrongStemNotes->size(); ++wsi) {
-	(*wrongStemNotes)[wsi]->set<Bool>(STEM_UP, !above);
+	(*wrongStemNotes)[wsi]->setMaybe<Bool>(STEM_UP, !above);
     }
 
     // now choose the actual y-coord of the slur based on the side
@@ -372,9 +372,9 @@ NotationVLayout::positionSlur(NotationStaff &staff,
     if (length > diff*3) length -= diff/2;
     startX += diff;
 
-    (*i)->event()->set<Bool>(SLUR_ABOVE, above);
-    (*i)->event()->set<Int>(SLUR_Y_DELTA, dy);
-    (*i)->event()->set<Int>(SLUR_LENGTH, length);
+    (*i)->event()->setMaybe<Bool>(SLUR_ABOVE, above);
+    (*i)->event()->setMaybe<Int>(SLUR_Y_DELTA, dy);
+    (*i)->event()->setMaybe<Int>(SLUR_LENGTH, length);
     (*i)->setLayoutX(startX);
     (*i)->setLayoutY(y0);
 }

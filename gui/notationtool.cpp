@@ -646,6 +646,7 @@ void NotationSelector::stow()
 
 void NotationSelector::hideSelection()
 {
+    if (!m_selectionRect) return;
     m_selectionRect->hide();
     m_selectionRect->setSize(0,0);
     m_parentView->canvas()->update();

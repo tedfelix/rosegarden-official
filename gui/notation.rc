@@ -108,13 +108,13 @@
   <Separator/>
   <Action name="normalize_rests"/>
   <Action name="collapse_rests_aggressively"/>
-</Menu>
-
-<Menu name="Marks">
-  <text>&amp;Marks</text>
-  <Action name="slur"/>
-  <Action name="crescendo"/>
-  <Action name="decrescendo"/>
+  <Separator/>
+  <Menu name="Stems">
+    <text>&amp;Stems</text>
+    <Action name="stems_up"/>
+    <Action name="stems_down"/>
+    <Action name="restore_stems"/>
+  </Menu>
 </Menu>
 
 <Menu  name="settings"><text>&amp;Settings</text>

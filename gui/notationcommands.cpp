@@ -23,6 +23,7 @@
 #include "rosegardenguidoc.h"
 
 #include "BaseProperties.h"
+#include "notationproperties.h"
 
 #include "rosedebug.h"
 #include <iostream>
@@ -37,7 +38,7 @@ using Rosegarden::Clef;
 using Rosegarden::Int;
 using Rosegarden::Accidental;
 using Rosegarden::NoAccidental;
-using Rosegarden::Mark;
+using Rosegarden::Indication;
 
 using std::string;
 using std::cerr;
@@ -261,32 +262,83 @@ EraseCommand::modifySegment(SegmentNotationHelper &helper)
 	    helper.segment().erase(i);
 	    m_relayoutEndTime = helper.segment().getEndIndex();
 	    return;
+
+	} else {
+	    
+	    helper.segment().erase(i);
+	    return;
 	}
     }
 }
 
 
-MarksMenuSlurCommand::MarksMenuSlurCommand(EventSelection &selection) :
-    BasicCommand(name(), selection.getSegment(), selection.getBeginTime(),
+
+GroupMenuAddIndicationCommand::GroupMenuAddIndicationCommand(std::string indicationType, 
+							     EventSelection &selection) :
+    BasicCommand(name(indicationType),
+		 selection.getSegment(), selection.getBeginTime(),
 		 selection.getBeginTime() + 1),
-    m_markDuration(selection.getEndTime() - selection.getBeginTime()),
+    m_indicationType(indicationType),
+    m_indicationDuration(selection.getEndTime() - selection.getBeginTime()),
     m_lastInsertedEvent(0)
 {
     // nothing else
 }
 
-MarksMenuSlurCommand::~MarksMenuSlurCommand()
+GroupMenuAddIndicationCommand::~GroupMenuAddIndicationCommand()
 {
     // empty
 }
 
 void
-MarksMenuSlurCommand::modifySegment(SegmentNotationHelper &helper)
+GroupMenuAddIndicationCommand::modifySegment(SegmentNotationHelper &helper)
 {
-    Mark mark(Mark::Slur, m_markDuration);
-    Event *e = mark.getAsEvent(getBeginTime());
+    Indication indication(m_indicationType, m_indicationDuration);
+    Event *e = indication.getAsEvent(getBeginTime());
     helper.segment().insert(e);
     m_lastInsertedEvent = e;
 }
 
+QString
+GroupMenuAddIndicationCommand::name(std::string indicationType)
+{
+    std::string n = "Add ";
+    n += (char)toupper(indicationType[0]);
+    n += indicationType.substr(1);
+    return QString(n.c_str());
+}
+
+
+void
+TransformsMenuChangeStemsCommand::modifySegment(SegmentNotationHelper &helper)
+{
+    Segment::iterator i = helper.segment().findTime(getBeginTime());
+    Segment::iterator j = helper.segment().findTime(getEndTime());
+
+    while (i != j) {
+
+	if ((*i)->isa(Note::EventType)) {
+	    (*i)->set<Rosegarden::Bool>(NotationProperties::STEM_UP, m_up);
+	}
+
+	++i;
+    }
+}
+
+
+void
+TransformsMenuRestoreStemsCommand::modifySegment(SegmentNotationHelper &helper)
+{
+    Segment::iterator i = helper.segment().findTime(getBeginTime());
+    Segment::iterator j = helper.segment().findTime(getEndTime());
+
+    while (i != j) {
+
+	if ((*i)->isa(Note::EventType)) {
+	    (*i)->unset(NotationProperties::STEM_UP);
+	}
+
+	++i;
+    }
+}
 

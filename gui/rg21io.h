@@ -63,12 +63,12 @@ protected:
     bool parseChordItem();
     bool parseRest();
     bool parseGroupStart();
-    bool parseMarkStart();
+    bool parseIndicationStart();
     bool parseBarType();
     bool parseStaveType();
 
     void closeGroup();
-    void closeMark();
+    void closeIndication();
     void closeSegmentOrComposition();
 
     void setGroupProperties(Rosegarden::Event *);
@@ -89,7 +89,7 @@ protected:
     Rosegarden::Key m_currentKey;
 
     typedef std::map<int, Rosegarden::Event *> EventIdMap;
-    EventIdMap m_marksExtant;
+    EventIdMap m_indicationsExtant;
 
     bool m_inGroup;
     unsigned int m_groupId;

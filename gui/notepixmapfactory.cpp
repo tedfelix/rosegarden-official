@@ -35,10 +35,10 @@
 #include "rosegardenguiview.h"
 #include "notepixmapfactory.h"
 #include "NotationTypes.h"
+#include "Equation.h"
 
 #include "notefont.h"
-
-#include "qcanvasspline.h"
+#include "spline.h"
 
 
 #include <iostream>
@@ -58,6 +58,7 @@ using Rosegarden::Flat;
 using Rosegarden::DoubleSharp;
 using Rosegarden::DoubleFlat;
 using Rosegarden::Natural;
+using Rosegarden::Equation;
 
 using std::set;
 using std::string;
@@ -949,66 +950,119 @@ QCanvasPixmap
 NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
 {
     int thickness = getStaffLineThickness() * 2;
-    if (length < getNoteBodyWidth() * 2) length = getNoteBodyWidth() * 2;
+    int nbh = getNoteBodyHeight(), nbw = getNoteBodyWidth();
 
-    Q3PointArray a(4);
+    if (length < nbw * 2) length = nbw * 2;
 
-    int nbh = getNoteBodyHeight();
+    Equation::Point a(0, 0);
+    Equation::Point b(length, dy);
 
-    int offset = (int)(((double)nbh /
-			(double)(getNoteBodyWidth() * 7)) * length) + nbh/2;
+    int mx1 = length/5;
+    int mx2 = length - length/5;
 
-//    kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeSlurPixmap: length = " << length << ", dy = " << dy << ", above = " << above << ", offset(1) = " << offset << endl;
+    double my1, my2;
+    Equation::solveForYByEndPoints(a, b, mx1, my1);
+    Equation::solveForYByEndPoints(a, b, mx2, my2);
 
-    offset = offset * (1 - ((dy < 0 ? -dy : dy) / nbh * 6));
-    if (offset < nbh/2) offset = nbh/2;
-    if (offset > nbh*2) offset = nbh*2;
-
-//    kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeSlurPixmap: length = " << length << ", dy = " << dy << ", above = " << above << ", offset(2) = " << offset << endl;
-
-    int maximum, height, hotspotY;
-
+    int y1 = 0, y2 = dy;
+    
     if (above) {
-	maximum = std::min(0, dy) - offset;
-	height = (dy < 0 ? -dy : dy) + offset;
-	hotspotY = (dy < 0 ? height : offset);
-    } else {
-	maximum = std::max(0, dy) + offset;
-	height = (dy < 0 ? -dy : dy) + offset;
-	hotspotY = (dy < 0 ? -dy : 0);
-    }
 
+	if (length < nbw * 10) {
+	    my1 -= (nbh * length) / (nbw * 5);
+	    my2 -= (nbh * length) / (nbw * 5);
+	} else {
+	    my1 -= (nbh * 3) / 2;
+	    my2 -= (nbh * 3) / 2;
+	}
+
+	if      (dy >  nbh * 4) my2 -= nbh;
+	else if (dy < -nbh * 4) my1 -= nbh;
+
+	if      (my1 > my2 + nbh) my1 = my2 + nbh;
+	else if (my2 > my1 + nbh) my2 = my1 + nbh;
+	
+	if      (y1 > my1 + nbh*2) y1 = (int)my1 + nbh*2;
+	else if (y1 < my1 - nbh/2) my1 = y1 + nbh/2;
+
+	if      (y2 > my2 + nbh*2) y2 = (int)my2 + nbh*2;
+	else if (y2 < my2 - nbh/2) my2 = y2 + nbh/2;
+
+    } else {
+
+	if (length < nbw * 10) {
+	    my1 += (nbh * length) / (nbw * 5);
+	    my2 += (nbh * length) / (nbw * 5);
+	} else {
+	    my1 += (nbh * 3) / 2;
+	    my2 += (nbh * 3) / 2;
+	}
+
+	if      (dy >  nbh * 4) my1 += nbh;
+	else if (dy < -nbh * 4) my2 += nbh;
+
+	if      (my1 < my2 - nbh) my1 = my2 - nbh;
+	else if (my2 < my1 - nbh) my2 = my1 - nbh;
+	
+	if      (y1 < my1 - nbh*2) y1 = (int)my1 - nbh*2;
+	else if (y1 > my1 + nbh/2) my1 = y1 - nbh/2;
+
+	if      (y2 < my2 - nbh*2) y2 = (int)my2 - nbh*2;
+	else if (y2 > my2 + nbh/2) my2 = y2 - nbh/2;
+    }
+    
 //    kdDebug(KDEBUG_AREA) << "Pixmap dimensions: " << length << "x" << height << endl;
 
-    createPixmapAndMask(length, height + thickness - 1);
+    bool havePixmap = false;
+    QPoint topLeft, bottomRight, hotspot;
 
     for (int i = 0; i < thickness; ++i) {
 
-	a.setPoint(0, 0, hotspotY);
-	a.setPoint(1, length/4, hotspotY + maximum);
-	a.setPoint(2, length - length/4 - 1, hotspotY + maximum);
-	a.setPoint(3, length-1, hotspotY + dy);
+	Spline::PointList pl;
+	pl.push_back(QPoint(mx1, (int)my1));
+	pl.push_back(QPoint(mx2, (int)my2));
 
-	Q3PointArray polyPoints(a.cubicBezier());
-/*
-	kdDebug(KDEBUG_AREA) << "i = " << i << ", points are:" << endl;
-	for (unsigned int j = 0; j < polyPoints.count(); ++j) {
-	    kdDebug(KDEBUG_AREA) << polyPoints.point(j).x() << "," <<
-		polyPoints.point(j).y() << endl;
+	Spline::PointList *polyPoints = Spline::calculate
+	    (QPoint(0, y1), QPoint(length-1, y2), pl, topLeft, bottomRight);
+
+	if (!havePixmap) {
+	    createPixmapAndMask(bottomRight.x() - topLeft.x(),
+				bottomRight.y() - topLeft.y() + thickness - 1);
+	    hotspot = QPoint(-topLeft.x(), -topLeft.y());
+	    if (m_selected) m_p.setPen(Qt::blue);
+	    havePixmap = true;
 	}
-*/
-	m_p.drawPolyline(polyPoints);
-	m_pm.drawPolyline(polyPoints);
 
-	if (above) ++maximum;
-	else --maximum;
+
+//	pl.push_back(QPoint(dx, hotspotY + m1));
+//	pl.push_back(QPoint(length - dx - 1, hotspotY + m2));
+
+//	Spline::PointList *polyPoints = Spline::calculate
+//	    (QPoint(0, hotspotY), QPoint(length-1, hotspotY + dy), pl);
+
+	int ppc = polyPoints->size();
+	QPointArray qp(ppc);
+
+	for (int i = 0; i < ppc; ++i) {
+	    qp.setPoint(i,
+			hotspot.x() + (*polyPoints)[i].x(),
+			hotspot.y() + (*polyPoints)[i].y());
+	}
+
+	delete polyPoints;
+
+	m_p.drawPolyline(qp);
+	m_pm.drawPolyline(qp);
+
+	if (above) { ++my1; ++my2; }
+	else { --my1; --my2; }
     }
 
-    return makeCanvasPixmap(QPoint(0, hotspotY));
+    if (m_selected) {
+        m_p.setPen(Qt::black);
+    }
 
-//    QCanvasSpline *slur = new QCanvasSpline(canvas);
-//    slur->setControlPoints(a, false);
-//    return slur;
+    return makeCanvasPixmap(hotspot);
 }
 
 QCanvasPixmap

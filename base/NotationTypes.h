@@ -247,39 +247,39 @@ private:
 };
 
 
-class Mark
+class Indication
 {
 public:
     static const std::string EventType;
     static const int EventSubOrdering;
-    static const PropertyName MarkTypePropertyName;
-    static const PropertyName MarkDurationPropertyName;
-    struct BadMarkName { };
+    static const PropertyName IndicationTypePropertyName;
+    static const PropertyName IndicationDurationPropertyName;
+    struct BadIndicationName { };
 
     static const std::string Slur;
     static const std::string Crescendo;
     static const std::string Decrescendo;
 
-    Mark(const Event &e)
+    Indication(const Event &e)
         /* throw (Event::NoData, Event::BadType) */;
-    Mark(const std::string &s, timeT markDuration)
-	/* throw (BadMarkName) */;
+    Indication(const std::string &s, timeT indicationDuration)
+	/* throw (BadIndicationName) */;
 
-    Mark(const Mark &m) : m_markType(m.m_markType),
+    Indication(const Indication &m) : m_indicationType(m.m_indicationType),
 			  m_duration(m.m_duration) { }
 
-    Mark &operator=(const Mark &m);
+    Indication &operator=(const Indication &m);
 
-    ~Mark() { }
+    ~Indication() { }
 
-    std::string getMarkType() const { return m_markType; }
-    timeT getMarkDuration() const { return m_duration; }
+    std::string getIndicationType() const { return m_indicationType; }
+    timeT getIndicationDuration() const { return m_duration; }
 
     /// Returned event is on heap; caller takes responsibility for ownership
     Event *getAsEvent(timeT absoluteTime) const;
 
 private:
-    std::string m_markType;
+    std::string m_indicationType;
     timeT m_duration;
 };
 

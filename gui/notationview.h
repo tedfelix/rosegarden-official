@@ -162,13 +162,13 @@ public slots:
     void slotEditRedo();
     
     /**
-     * put the marked text/object into the clipboard and remove * it
+     * put the indicationed text/object into the clipboard and remove * it
      * from the document
      */
     void slotEditCut();
 
     /**
-     * put the marked text/object into the clipboard
+     * put the indicationed text/object into the clipboard
      */
     void slotEditCopy();
 
@@ -288,13 +288,16 @@ public slots:
     void slotGroupBeam();
     void slotGroupAutoBeam();
     void slotGroupBreak();
+    void slotGroupSlur();
+    void slotGroupCrescendo();
+    void slotGroupDecrescendo();
 
     // transforms slots
     void slotTransformsNormalizeRests();
     void slotTransformsCollapseRests();
-
-    // marks slots
-    void slotMarksSlur();
+    void slotTransformsStemsUp();
+    void slotTransformsStemsDown();
+    void slotTransformsRestoreStems();
 
     /// Canvas actions slots
 

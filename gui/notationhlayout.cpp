@@ -44,7 +44,7 @@ using Rosegarden::Sharp;
 using Rosegarden::Flat;
 using Rosegarden::Natural;
 using Rosegarden::Note;
-using Rosegarden::Mark;
+using Rosegarden::Indication;
 using Rosegarden::Segment;
 using Rosegarden::SegmentNotationHelper;
 using Rosegarden::TimeSignature;
@@ -403,9 +403,9 @@ NotationHLayout::scanStaff(StaffType &staff)
 
                 baseWidth += mw;
 
-	    } else if (el->event()->isa(Mark::EventType)) {
+	    } else if (el->event()->isa(Indication::EventType)) {
 
-		kdDebug(KDEBUG_AREA) << "Found mark" << endl;
+		kdDebug(KDEBUG_AREA) << "Found indication" << endl;
 
 		mw = 0;
 

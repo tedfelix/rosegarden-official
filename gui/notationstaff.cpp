@@ -44,7 +44,7 @@ using Rosegarden::Bool;
 using Rosegarden::String;
 using Rosegarden::NoAccidental;
 using Rosegarden::Note;
-using Rosegarden::Mark;
+using Rosegarden::Indication;
 using Rosegarden::Segment;
 using Rosegarden::Clef;
 using Rosegarden::Key;
@@ -441,7 +441,7 @@ NotationStaff::positionElements()
 		}
 		*/
 	    }
-	} else if ((*it)->event()->isa(Mark::EventType)) {
+	} else if ((*it)->event()->isa(Indication::EventType)) {
 	    needNewSprite = true;
 	}
 
@@ -505,50 +505,50 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 		(m_npf->makeKeyPixmap
 		 (Rosegarden::Key(*elt->event()), currentClef));
 
-	} else if (elt->event()->isa(Mark::EventType)) {
+	} else if (elt->event()->isa(Indication::EventType)) {
 
-	    timeT markDuration =
-		elt->event()->get<Int>(Mark::MarkDurationPropertyName);
-	    NotationElementList::iterator markEnd =
+	    timeT indicationDuration =
+		elt->event()->get<Int>(Indication::IndicationDurationPropertyName);
+	    NotationElementList::iterator indicationEnd =
 		getViewElementList()->findTime(elt->getAbsoluteTime() +
-					       markDuration);
+					       indicationDuration);
 
-	    string markType = 
-		elt->event()->get<String>(Mark::MarkTypePropertyName);
+	    string indicationType = 
+		elt->event()->get<String>(Indication::IndicationTypePropertyName);
 
 	    int length, y1;
 
-	    if (markType == Mark::Slur &&
-		markEnd != getViewElementList()->begin()) {
-		--markEnd;
+	    if (indicationType == Indication::Slur &&
+		indicationEnd != getViewElementList()->begin()) {
+		--indicationEnd;
 	    }
 
-	    if (markEnd != getViewElementList()->end()) {
-		length = (*markEnd)->getLayoutX() - elt->getLayoutX();
-		y1 = (*markEnd)->getLayoutY();
+	    if (indicationEnd != getViewElementList()->end()) {
+		length = (*indicationEnd)->getLayoutX() - elt->getLayoutX();
+		y1 = (*indicationEnd)->getLayoutY();
 	    } else {
 		//!!! imperfect
-		--markEnd;
-		length = (*markEnd)->getLayoutX() +
+		--indicationEnd;
+		length = (*indicationEnd)->getLayoutX() +
 		    m_npf->getNoteBodyWidth() * 3 - elt->getLayoutX();
-		y1 = (*markEnd)->getLayoutY();
+		y1 = (*indicationEnd)->getLayoutY();
 	    }
 
 	    if (length < m_npf->getNoteBodyWidth()) {
 		length = m_npf->getNoteBodyWidth();
 	    }
 
-	    if (markType == Mark::Crescendo) {
+	    if (indicationType == Indication::Crescendo) {
 
 		pixmap = new QCanvasPixmap
 		    (m_npf->makeHairpinPixmap(length, true));
 
-	    } else if (markType == Mark::Decrescendo) {
+	    } else if (indicationType == Indication::Decrescendo) {
 
 		pixmap = new QCanvasPixmap
 		    (m_npf->makeHairpinPixmap(length, false));
 
-	    } else if (markType == Mark::Slur) {
+	    } else if (indicationType == Indication::Slur) {
 
 		bool above = true;
 		long dy = 0;

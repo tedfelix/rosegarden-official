@@ -45,7 +45,7 @@ using Rosegarden::Flat;
 using Rosegarden::Natural;
 using Rosegarden::NoAccidental;
 using Rosegarden::Note;
-using Rosegarden::Mark;
+using Rosegarden::Indication;
 using Rosegarden::timeT;
 
 using namespace Rosegarden::BaseProperties;
@@ -215,20 +215,20 @@ bool RG21Loader::parseGroupStart()
     return true;
 }
 
-bool RG21Loader::parseMarkStart()
+bool RG21Loader::parseIndicationStart()
 {
     if (m_tokens.count() < 4) return false;
    
-    unsigned int markId = m_tokens[2].toUInt();
-    std::string markType = m_tokens[3].lower().latin1();
+    unsigned int indicationId = m_tokens[2].toUInt();
+    std::string indicationType = m_tokens[3].lower().latin1();
 
-//    kdDebug(KDEBUG_AREA) << "Mark start: type is \"" << markType << "\"" << endl;
+//    kdDebug(KDEBUG_AREA) << "Indication start: type is \"" << indicationType << "\"" << endl;
 
-    if (markType == "tie") {
+    if (indicationType == "tie") {
 
 	if (m_tieStatus != 0) {
 	    kdDebug(KDEBUG_AREA)
-		<< "RG21Loader:: parseMarkStart: WARNING: Found tie within "
+		<< "RG21Loader:: parseIndicationStart: WARNING: Found tie within "
 		<< "tie, ignoring" << endl;
 	    return true;
 	}
@@ -251,45 +251,45 @@ bool RG21Loader::parseMarkStart()
 	// Jeez.  Whose great idea was it to place marks _after_ the
 	// events they're marking in the RG2.1 file format?
 	
-	timeT markTime = m_currentSegmentTime;
+	timeT indicationTime = m_currentSegmentTime;
 	Segment::iterator i = m_currentSegment->end();
 	if (i != m_currentSegment->begin()) {
 	    --i;
-	    markTime = (*i)->getAbsoluteTime();
+	    indicationTime = (*i)->getAbsoluteTime();
 	}
 
-	Mark mark(markType, 0);
-	Event *e = mark.getAsEvent(markTime);
+	Indication indication(indicationType, 0);
+	Event *e = indication.getAsEvent(indicationTime);
 	setGroupProperties(e);
-	m_marksExtant[markId] = e;
+	m_indicationsExtant[indicationId] = e;
 
-	// place the mark in the segment now; don't wait for the
-	// close-mark, because some things may need to know about it
+	// place the indication in the segment now; don't wait for the
+	// close-indication, because some things may need to know about it
 	// before then (e.g. close-group)
 
 	m_currentSegment->insert(e);
     }
 
-    // other marks not handled yet
+    // other indications not handled yet
     return true;
 }
 
-void RG21Loader::closeMark()
+void RG21Loader::closeIndication()
 {
     if (m_tokens.count() < 3) return;
    
-    unsigned int markId = m_tokens[2].toUInt();
-    EventIdMap::iterator i = m_marksExtant.find(markId);
+    unsigned int indicationId = m_tokens[2].toUInt();
+    EventIdMap::iterator i = m_indicationsExtant.find(indicationId);
 
     // this is normal (for ties):
-    if (i == m_marksExtant.end()) return;
+    if (i == m_indicationsExtant.end()) return;
 
-    Event *markEvent = i->second;
-    m_marksExtant.erase(i);
+    Event *indicationEvent = i->second;
+    m_indicationsExtant.erase(i);
 
-    markEvent->set<Int>(Mark::MarkDurationPropertyName,
-			m_currentSegmentTime - markEvent->getAbsoluteTime());
-//!!! see comment in previous method    m_currentSegment->insert(markEvent);
+    indicationEvent->set<Int>(Indication::IndicationDurationPropertyName,
+			m_currentSegmentTime - indicationEvent->getAbsoluteTime());
+//!!! see comment in previous method    m_currentSegment->insert(indicationEvent);
 }
 
 void RG21Loader::closeGroup()
@@ -505,9 +505,9 @@ bool RG21Loader::parse()
         } else if (firstToken == "Mark") {
 
             if (m_tokens[1] == "start") 
-                parseMarkStart();
+                parseIndicationStart();
             else if (m_tokens[1] == "end") 
-                closeMark();
+                closeIndication();
 
 	} else if (firstToken == "Bar") {
 

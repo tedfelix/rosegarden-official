@@ -183,7 +183,7 @@ public:
 	BasicSelectionCommand(name(), selection) { }
     virtual ~GroupMenuBeamCommand() { }
 
-    static QString name() { return i18n("Beam Group"); }
+    static QString name() { return "Beam Group"; }
 
 protected:
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper) {
@@ -200,7 +200,7 @@ public:
 	BasicSelectionCommand(name(), selection) { }
     virtual ~GroupMenuAutoBeamCommand() { }
 
-    static QString name() { return i18n("Auto-Beam"); }
+    static QString name() { return "Auto-Beam"; }
 
 protected:
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper) {
@@ -217,7 +217,7 @@ public:
 	BasicSelectionCommand(name(), selection) { }
     virtual ~GroupMenuBreakCommand() { }
 
-    static QString name() { return i18n("Break Groups"); }
+    static QString name() { return "Break Groups"; }
 
 protected:
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper) {
@@ -225,6 +225,31 @@ protected:
     }
 };
 
+
+class GroupMenuAddIndicationCommand : public BasicCommand
+{
+public:
+    GroupMenuAddIndicationCommand(std::string indicationType,
+				  EventSelection &selection);
+    virtual ~GroupMenuAddIndicationCommand();
+
+    Rosegarden::Event *getLastInsertedEvent() {
+	return m_lastInsertedEvent;
+    }
+    virtual Rosegarden::timeT getRelayoutEndTime() {
+	return getBeginTime() + m_indicationDuration;
+    }
+
+    static QString name(std::string indicationType);
+
+protected:
+    virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper);
+
+    std::string m_indicationType;
+    Rosegarden::timeT m_indicationDuration;
+    Rosegarden::Event *m_lastInsertedEvent;
+};
+    
 
 
 // Transforms menu commands
@@ -237,7 +262,7 @@ public:
 	BasicSelectionCommand(name(), selection) { }
     virtual ~TransformsMenuNormalizeRestsCommand() { }
 
-    static QString name() { return i18n("Normalize Rests"); }
+    static QString name() { return "Normalize Rests"; }
 
 protected:
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper) {
@@ -253,7 +278,7 @@ public:
 	BasicSelectionCommand(name(), selection) { }
     virtual ~TransformsMenuCollapseRestsCommand() { }
 
-    static QString name() { return i18n("Collapse Rests Aggressively"); }
+    static QString name() { return "Collapse Rests Aggressively"; }
 
 protected:
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper) {
@@ -261,30 +286,38 @@ protected:
     }
 };
 
-
-
-// Marks menu commands
-
-//!!! generalise to insert any mark
-
-class MarksMenuSlurCommand : public BasicCommand
-// this really only inserts an event, so it 
+class TransformsMenuChangeStemsCommand : public BasicSelectionCommand
 {
 public:
-    MarksMenuSlurCommand(EventSelection &selection);
-    virtual ~MarksMenuSlurCommand();
+    TransformsMenuChangeStemsCommand(bool up, EventSelection &selection) :
+	BasicSelectionCommand(name(up), selection), m_up(up) { }
+    virtual ~TransformsMenuChangeStemsCommand() { }
 
-    Rosegarden::Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
-
-    static QString name() { return i18n("Slur"); }
+    static QString name(bool up) {
+	return up ? "Stems Up" : "Stems Down";
+    }
 
 protected:
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper);
 
-    Rosegarden::timeT m_markDuration;
-    Rosegarden::Event *m_lastInsertedEvent;
+private:
+    bool m_up;
 };
-    
+
+class TransformsMenuRestoreStemsCommand : public BasicSelectionCommand
+{
+public:
+    TransformsMenuRestoreStemsCommand(EventSelection &selection) :
+	BasicSelectionCommand(name(), selection) { }
+    virtual ~TransformsMenuRestoreStemsCommand() { }
+
+    static QString name() {
+	return "Restore Computed Stems";
+    }
+
+protected:
+    virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper);
+};
 
 
 #endif

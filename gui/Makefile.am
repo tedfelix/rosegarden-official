@@ -21,7 +21,6 @@ rosegarden_SOURCES = \
 	notepixmapfactory.cpp \
 	qcanvasgroupableitem.cpp \
 	qcanvassimplesprite.cpp \
-	qcanvasspline.cpp \
 	rg21io.cpp \
 	rosedebug.cpp \
 	rosegardengui.cpp \
@@ -32,9 +31,10 @@ rosegarden_SOURCES = \
         rosegardentransport.ui \
         rosegardentransportdialog.cpp \
 	rosexmlhandler.cpp \
+	segmentcanvas.cpp \
+	spline.cpp \
 	staffline.cpp \
 	staffruler.cpp \
-	segmentcanvas.cpp \
 	trackeditor.cpp \
 	trackseditoriface.skel \
         trackheader.cpp \
