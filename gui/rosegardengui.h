@@ -603,6 +603,12 @@ public slots:
     void slotEditTempo(QWidget *parent);
 
     /*
+     * Edit the time signature - called from a Transport signal
+     */
+    void slotEditTimeSignature();
+    void slotEditTimeSignature(QWidget *parent);
+
+    /*
      * Command Executed
      */
     void slotCommandExecuted(Command *);

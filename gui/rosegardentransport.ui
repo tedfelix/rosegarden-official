@@ -1839,6 +1839,155 @@
             </property>
         </widget>
         <widget>
+            <class>QPushButton</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>PanelOpenButton</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>3</x>
+                    <y>56</y>
+                    <width>25</width>
+                    <height>25</height>
+                </rect>
+            </property>
+            <property stdset="1">
+                <name>font</name>
+                <font>
+                    <family>lucida</family>
+                    <bold>1</bold>
+                </font>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string></string>
+            </property>
+            <property stdset="1">
+                <name>pixmap</name>
+                <pixmap>image11</pixmap>
+            </property>
+            <property stdset="1">
+                <name>toggleButton</name>
+                <bool>true</bool>
+            </property>
+            <property stdset="1">
+                <name>on</name>
+                <bool>true</bool>
+            </property>
+            <property stdset="1">
+                <name>toggleButton</name>
+                <bool>true</bool>
+            </property>
+            <property stdset="1">
+                <name>on</name>
+                <bool>true</bool>
+            </property>
+            <property stdset="1">
+                <name>flat</name>
+                <bool>true</bool>
+            </property>
+            <property>
+                <name>toolTip</name>
+                <string>Show additional controls</string>
+            </property>
+        </widget>
+        <widget>
+            <class>QPushButton</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>TimeDisplayButton</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>3</x>
+                    <y>4</y>
+                    <width>25</width>
+                    <height>25</height>
+                </rect>
+            </property>
+            <property stdset="1">
+                <name>font</name>
+                <font>
+                    <family>lucida</family>
+                    <bold>1</bold>
+                </font>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string></string>
+            </property>
+            <property stdset="1">
+                <name>pixmap</name>
+                <pixmap>image12</pixmap>
+            </property>
+            <property stdset="1">
+                <name>toggleButton</name>
+                <bool>true</bool>
+            </property>
+            <property stdset="1">
+                <name>toggleButton</name>
+                <bool>true</bool>
+            </property>
+            <property stdset="1">
+                <name>flat</name>
+                <bool>true</bool>
+            </property>
+            <property>
+                <name>toolTip</name>
+                <string>Display bar/beat time</string>
+            </property>
+        </widget>
+        <widget>
+            <class>QPushButton</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>ToEndButton</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>3</x>
+                    <y>26</y>
+                    <width>25</width>
+                    <height>25</height>
+                </rect>
+            </property>
+            <property stdset="1">
+                <name>font</name>
+                <font>
+                    <family>lucida</family>
+                    <bold>1</bold>
+                </font>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string></string>
+            </property>
+            <property stdset="1">
+                <name>pixmap</name>
+                <pixmap>image13</pixmap>
+            </property>
+            <property stdset="1">
+                <name>toggleButton</name>
+                <bool>true</bool>
+            </property>
+            <property stdset="1">
+                <name>toggleButton</name>
+                <bool>true</bool>
+            </property>
+            <property stdset="1">
+                <name>flat</name>
+                <bool>true</bool>
+            </property>
+            <property>
+                <name>toolTip</name>
+                <string>Display time to end</string>
+            </property>
+        </widget>
+        <widget>
             <class>QFrame</class>
             <property stdset="1">
                 <name>name</name>
@@ -2099,7 +2248,7 @@
                 </property>
                 <property stdset="1">
                     <name>pixmap</name>
-                    <pixmap>image11</pixmap>
+                    <pixmap>image14</pixmap>
                 </property>
                 <property stdset="1">
                     <name>scaledContents</name>
@@ -2127,7 +2276,7 @@
                 </property>
                 <property stdset="1">
                     <name>pixmap</name>
-                    <pixmap>image12</pixmap>
+                    <pixmap>image15</pixmap>
                 </property>
                 <property stdset="1">
                     <name>scaledContents</name>
@@ -2155,7 +2304,7 @@
                 </property>
                 <property stdset="1">
                     <name>pixmap</name>
-                    <pixmap>image11</pixmap>
+                    <pixmap>image14</pixmap>
                 </property>
                 <property stdset="1">
                     <name>scaledContents</name>
@@ -2183,7 +2332,7 @@
                 </property>
                 <property stdset="1">
                     <name>pixmap</name>
-                    <pixmap>image11</pixmap>
+                    <pixmap>image14</pixmap>
                 </property>
                 <property stdset="1">
                     <name>scaledContents</name>
@@ -2211,7 +2360,7 @@
                 </property>
                 <property stdset="1">
                     <name>pixmap</name>
-                    <pixmap>image12</pixmap>
+                    <pixmap>image15</pixmap>
                 </property>
                 <property stdset="1">
                     <name>scaledContents</name>
@@ -2239,7 +2388,7 @@
                 </property>
                 <property stdset="1">
                     <name>pixmap</name>
-                    <pixmap>image11</pixmap>
+                    <pixmap>image14</pixmap>
                 </property>
                 <property stdset="1">
                     <name>scaledContents</name>
@@ -2267,7 +2416,7 @@
                 </property>
                 <property stdset="1">
                     <name>pixmap</name>
-                    <pixmap>image11</pixmap>
+                    <pixmap>image14</pixmap>
                 </property>
                 <property stdset="1">
                     <name>scaledContents</name>
@@ -2295,7 +2444,7 @@
                 </property>
                 <property stdset="1">
                     <name>pixmap</name>
-                    <pixmap>image11</pixmap>
+                    <pixmap>image14</pixmap>
                 </property>
                 <property stdset="1">
                     <name>scaledContents</name>
@@ -2323,7 +2472,7 @@
                 </property>
                 <property stdset="1">
                     <name>pixmap</name>
-                    <pixmap>image11</pixmap>
+                    <pixmap>image14</pixmap>
                 </property>
                 <property stdset="1">
                     <name>scaledContents</name>
@@ -2351,7 +2500,7 @@
                 </property>
                 <property stdset="1">
                     <name>pixmap</name>
-                    <pixmap>image11</pixmap>
+                    <pixmap>image14</pixmap>
                 </property>
                 <property stdset="1">
                     <name>scaledContents</name>
@@ -2379,7 +2528,7 @@
                 </property>
                 <property stdset="1">
                     <name>pixmap</name>
-                    <pixmap>image11</pixmap>
+                    <pixmap>image14</pixmap>
                 </property>
                 <property stdset="1">
                     <name>scaledContents</name>
@@ -2407,7 +2556,7 @@
                 </property>
                 <property stdset="1">
                     <name>pixmap</name>
-                    <pixmap>image13</pixmap>
+                    <pixmap>image16</pixmap>
                 </property>
                 <property stdset="1">
                     <name>scaledContents</name>
@@ -2435,7 +2584,7 @@
                 </property>
                 <property stdset="1">
                     <name>pixmap</name>
-                    <pixmap>image11</pixmap>
+                    <pixmap>image14</pixmap>
                 </property>
                 <property stdset="1">
                     <name>scaledContents</name>
@@ -2940,261 +3089,6 @@
                 <property stdset="1">
                     <name>text</name>
                     <string>DIV</string>
-                </property>
-            </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>TimeSigDisplay</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>23</x>
-                        <y>51</y>
-                        <width>33</width>
-                        <height>16</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>palette</name>
-                    <palette>
-                        <active>
-                            <color>
-                                <red>192</red>
-                                <green>216</green>
-                                <blue>255</blue>
-                            </color>
-                            <color>
-                                <red>192</red>
-                                <green>192</green>
-                                <blue>192</blue>
-                            </color>
-                            <color>
-                                <red>255</red>
-                                <green>255</green>
-                                <blue>255</blue>
-                            </color>
-                            <color>
-                                <red>223</red>
-                                <green>223</green>
-                                <blue>223</blue>
-                            </color>
-                            <color>
-                                <red>96</red>
-                                <green>96</green>
-                                <blue>96</blue>
-                            </color>
-                            <color>
-                                <red>128</red>
-                                <green>128</green>
-                                <blue>128</blue>
-                            </color>
-                            <color>
-                                <red>0</red>
-                                <green>0</green>
-                                <blue>0</blue>
-                            </color>
-                            <color>
-                                <red>255</red>
-                                <green>255</green>
-                                <blue>255</blue>
-                            </color>
-                            <color>
-                                <red>0</red>
-                                <green>0</green>
-                                <blue>0</blue>
-                            </color>
-                            <color>
-                                <red>255</red>
-                                <green>255</green>
-                                <blue>255</blue>
-                            </color>
-                            <color>
-                                <red>0</red>
-                                <green>0</green>
-                                <blue>0</blue>
-                            </color>
-                            <color>
-                                <red>0</red>
-                                <green>0</green>
-                                <blue>0</blue>
-                            </color>
-                            <color>
-                                <red>0</red>
-                                <green>0</green>
-                                <blue>0</blue>
-                            </color>
-                            <color>
-                                <red>255</red>
-                                <green>255</green>
-                                <blue>255</blue>
-                            </color>
-                        </active>
-                        <disabled>
-                            <color>
-                                <red>128</red>
-                                <green>128</green>
-                                <blue>128</blue>
-                            </color>
-                            <color>
-                                <red>192</red>
-                                <green>192</green>
-                                <blue>192</blue>
-                            </color>
-                            <color>
-                                <red>255</red>
-                                <green>255</green>
-                                <blue>255</blue>
-                            </color>
-                            <color>
-                                <red>220</red>
-                                <green>220</green>
-                                <blue>220</blue>
-                            </color>
-                            <color>
-                                <red>96</red>
-                                <green>96</green>
-                                <blue>96</blue>
-                            </color>
-                            <color>
-                                <red>128</red>
-                                <green>128</green>
-                                <blue>128</blue>
-                            </color>
-                            <color>
-                                <red>0</red>
-                                <green>0</green>
-                                <blue>0</blue>
-                            </color>
-                            <color>
-                                <red>255</red>
-                                <green>255</green>
-                                <blue>255</blue>
-                            </color>
-                            <color>
-                                <red>128</red>
-                                <green>128</green>
-                                <blue>128</blue>
-                            </color>
-                            <color>
-                                <red>255</red>
-                                <green>255</green>
-                                <blue>255</blue>
-                            </color>
-                            <color>
-                                <red>0</red>
-                                <green>0</green>
-                                <blue>0</blue>
-                            </color>
-                            <color>
-                                <red>0</red>
-                                <green>0</green>
-                                <blue>0</blue>
-                            </color>
-                            <color>
-                                <red>0</red>
-                                <green>0</green>
-                                <blue>0</blue>
-                            </color>
-                            <color>
-                                <red>255</red>
-                                <green>255</green>
-                                <blue>255</blue>
-                            </color>
-                        </disabled>
-                        <inactive>
-                            <color>
-                                <red>192</red>
-                                <green>216</green>
-                                <blue>255</blue>
-                            </color>
-                            <color>
-                                <red>192</red>
-                                <green>192</green>
-                                <blue>192</blue>
-                            </color>
-                            <color>
-                                <red>255</red>
-                                <green>255</green>
-                                <blue>255</blue>
-                            </color>
-                            <color>
-                                <red>220</red>
-                                <green>220</green>
-                                <blue>220</blue>
-                            </color>
-                            <color>
-                                <red>96</red>
-                                <green>96</green>
-                                <blue>96</blue>
-                            </color>
-                            <color>
-                                <red>128</red>
-                                <green>128</green>
-                                <blue>128</blue>
-                            </color>
-                            <color>
-                                <red>0</red>
-                                <green>0</green>
-                                <blue>0</blue>
-                            </color>
-                            <color>
-                                <red>255</red>
-                                <green>255</green>
-                                <blue>255</blue>
-                            </color>
-                            <color>
-                                <red>0</red>
-                                <green>0</green>
-                                <blue>0</blue>
-                            </color>
-                            <color>
-                                <red>255</red>
-                                <green>255</green>
-                                <blue>255</blue>
-                            </color>
-                            <color>
-                                <red>0</red>
-                                <green>0</green>
-                                <blue>0</blue>
-                            </color>
-                            <color>
-                                <red>0</red>
-                                <green>0</green>
-                                <blue>0</blue>
-                            </color>
-                            <color>
-                                <red>0</red>
-                                <green>0</green>
-                                <blue>0</blue>
-                            </color>
-                            <color>
-                                <red>255</red>
-                                <green>255</green>
-                                <blue>255</blue>
-                            </color>
-                        </inactive>
-                    </palette>
-                </property>
-                <property stdset="1">
-                    <name>font</name>
-                    <font>
-                        <family>lucida</family>
-                        <bold>1</bold>
-                    </font>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>4/4</string>
-                </property>
-                <property stdset="1">
-                    <name>alignment</name>
-                    <set>AlignVCenter|AlignRight</set>
-                </property>
-                <property>
-                    <name>hAlign</name>
                 </property>
             </widget>
             <widget>
@@ -4226,155 +4120,22 @@
                     </rect>
                 </property>
             </widget>
-        </widget>
-        <widget>
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>PanelOpenButton</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>3</x>
-                    <y>56</y>
-                    <width>25</width>
-                    <height>25</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>font</name>
-                <font>
-                    <family>lucida</family>
-                    <bold>1</bold>
-                </font>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string></string>
-            </property>
-            <property stdset="1">
-                <name>pixmap</name>
-                <pixmap>image14</pixmap>
-            </property>
-            <property stdset="1">
-                <name>toggleButton</name>
-                <bool>true</bool>
-            </property>
-            <property stdset="1">
-                <name>on</name>
-                <bool>true</bool>
-            </property>
-            <property stdset="1">
-                <name>toggleButton</name>
-                <bool>true</bool>
-            </property>
-            <property stdset="1">
-                <name>on</name>
-                <bool>true</bool>
-            </property>
-            <property stdset="1">
-                <name>flat</name>
-                <bool>true</bool>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Show additional controls</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>TimeDisplayButton</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>3</x>
-                    <y>4</y>
-                    <width>25</width>
-                    <height>25</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>font</name>
-                <font>
-                    <family>lucida</family>
-                    <bold>1</bold>
-                </font>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string></string>
-            </property>
-            <property stdset="1">
-                <name>pixmap</name>
-                <pixmap>image15</pixmap>
-            </property>
-            <property stdset="1">
-                <name>toggleButton</name>
-                <bool>true</bool>
-            </property>
-            <property stdset="1">
-                <name>toggleButton</name>
-                <bool>true</bool>
-            </property>
-            <property stdset="1">
-                <name>flat</name>
-                <bool>true</bool>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Display bar/beat time</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>ToEndButton</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>3</x>
-                    <y>26</y>
-                    <width>25</width>
-                    <height>25</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>font</name>
-                <font>
-                    <family>lucida</family>
-                    <bold>1</bold>
-                </font>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string></string>
-            </property>
-            <property stdset="1">
-                <name>pixmap</name>
-                <pixmap>image16</pixmap>
-            </property>
-            <property stdset="1">
-                <name>toggleButton</name>
-                <bool>true</bool>
-            </property>
-            <property stdset="1">
-                <name>toggleButton</name>
-                <bool>true</bool>
-            </property>
-            <property stdset="1">
-                <name>flat</name>
-                <bool>true</bool>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Display time to end</string>
-            </property>
+            <widget>
+                <class>RosegardenLabel</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>TimeSigDisplay</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>23</x>
+                        <y>51</y>
+                        <width>33</width>
+                        <height>16</height>
+                    </rect>
+                </property>
+            </widget>
         </widget>
     </widget>
 </widget>
@@ -4441,27 +4202,27 @@
     </image>
     <image>
         <name>image11</name>
-        <data format="XPM.GZ" length="923">789c9d924d0a83301085f739c5e0eca454ad1184d22314ba2c942e261169176e5abb28a577afd1980cfe54705cbd2fc973f2325108e7d311c2483c6baaef1af48d1e1016afaa7a5fae878f087631a4122424c146045bd080715b46a29132913a4f8d5446e6695ee8cc483252670595657b76a21639122b858e2b4efd7e6c3e5faae7481c2329c7492d72232c6ffeea8d8c58c747f6db757c64ef38bb2e2acf790acd02fecf1f87fb7b4e7c01c9f3619b1d1fb7b98a4fd8afe213f696b35bcd713b4a5d9f1c778367df8b4fa7cb9353b211cee6ffdd8b1f2c0ac43d</data>
-    </image>
-    <image>
-        <name>image12</name>
-        <data format="XPM.GZ" length="412">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade652325530365130513054d2e152d253485650360003105719c435313449b630067193405c0b638b946453103711c44d364d494c4b03eb05017a3194131393c08ca4c444652a1808320fcc009947175fd45a730100351049ee</data>
-    </image>
-    <image>
-        <name>image13</name>
-        <data format="XPM.GZ" length="923">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232325030365130513054d2e152d253485650360003105719c435313449b630067113415c0b638b946453103709c44d364d494c4b03ebc50246c5e92daeac9c0802ca68e2497080ae1ea21c5dfd80b97f8488d75a7301005e68a747</data>
-    </image>
-    <image>
-        <name>image14</name>
         <data format="XPM.GZ" length="269">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234540022130543251d2e253d856405bffcbc54105b19c856360003103709c4353134313001ab4c0471cd93cc53cc93c01a11001b571906a0dc440880729394c12a9593a07ac17c200f6614900fe2c14d4e525646b12809a7bd48dc5a6b2e0052ad3583</data>
     </image>
     <image>
-        <name>image15</name>
+        <name>image12</name>
         <data format="XPM.GZ" length="239">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234540022230543251d2e253d856405bffcbc54105b19c85636313431308148210084abac0c6203c981e5225c556bcd050098e02b91</data>
     </image>
     <image>
-        <name>image16</name>
+        <name>image13</name>
         <data format="XPM.GZ" length="269">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234540022130543251d2e253d856405bffcbc54105b19c856360003103711c4353134313001ab4c0271cd93cc53cc93c01a1100c65506e2c444185719850be6c1b9caca494000e32a43000e5974bde826a3db0b7755ad351700ee6c379e</data>
+    </image>
+    <image>
+        <name>image14</name>
+        <data format="XPM.GZ" length="923">789c9d924d0a83301085f739c5e0eca454ad1184d22314ba2c942e261169176e5abb28a577afd1980cfe54705cbd2fc973f2325108e7d311c2483c6baaef1af48d1e1016afaa7a5fae878f087631a4122424c146045bd080715b46a29132913a4f8d5446e6695ee8cc483252670595657b76a21639122b858e2b4efd7e6c3e5faae7481c2329c7492d72232c6ffeea8d8c58c747f6db757c64ef38bb2e2acf790acd02fecf1f87fb7b4e7c01c9f3619b1d1fb7b98a4fd8afe213f696b35bcd713b4a5d9f1c778367df8b4fa7cb9353b211cee6ffdd8b1f2c0ac43d</data>
+    </image>
+    <image>
+        <name>image15</name>
+        <data format="XPM.GZ" length="412">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade652325530365130513054d2e152d253485650360003105719c435313449b630067193405c0b638b946453103711c44d364d494c4b03eb05017a3194131393c08ca4c444652a1808320fcc009947175fd45a730100351049ee</data>
+    </image>
+    <image>
+        <name>image16</name>
+        <data format="XPM.GZ" length="923">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232325030365130513054d2e152d253485650360003105719c435313449b630067113415c0b638b946453103709c44d364d494c4b03ebc50246c5e92daeac9c0802ca68e2497080ae1ea21c5dfd80b97f8488d75a7301005e68a747</data>
     </image>
     <image>
         <name>image17</name>

@@ -78,6 +78,7 @@ public slots:
     void slotPanelCloseButtonReleased();
 
     void slotEditTempo();
+    void slotEditTimeSignature();
 
 signals:
     void closed();
@@ -87,6 +88,7 @@ signals:
     void setLoop();
     void unsetLoop();
     void editTempo(QWidget *);
+    void editTimeSignature(QWidget *);
 
 private:
     void loadPixmaps();

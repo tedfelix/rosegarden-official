@@ -56,6 +56,7 @@
 #include "sequencemanager.h"
 #include "trackbuttons.h"
 #include "trackeditor.h"
+#include "dialogs.h"
 #include "multiviewcommandhistory.h"
 #include "segmentcommands.h"
 
@@ -297,10 +298,15 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotEditAllTracks()),
                 actionCollection(), "edit_all_tracks");
 
-    new KAction(i18n("Edit &Tempo..."),
+    new KAction(AddTempoChangeCommand::name(),
                 0,
                 this, SLOT(slotEditTempo()),
-                actionCollection(), "edit_tempo");
+                actionCollection(), "add_tempo");
+
+    new KAction(AddTimeSignatureCommand::name(),
+                0,
+                this, SLOT(slotEditTimeSignature()),
+                actionCollection(), "add_time_signature");
 
     // Transport controls [rwb]
     //
@@ -445,6 +451,9 @@ void RosegardenGUIApp::setupActions()
 
     connect(m_transport, SIGNAL(editTempo(QWidget*)),
                          SLOT(slotEditTempo(QWidget*)));
+
+    connect(m_transport, SIGNAL(editTimeSignature(QWidget*)),
+                         SLOT(slotEditTimeSignature(QWidget*)));
 }
 
 
@@ -539,6 +548,10 @@ void RosegardenGUIApp::initView()
     // set the tempo in the transport
     //
     m_transport->setTempo(comp.getTempo());
+
+    // and the time signature
+    //
+    m_transport->setTimeSignature(comp.getTimeSignatureAt(comp.getPosition()));
 
     // bring the transport to the front 
     //
@@ -2013,6 +2026,11 @@ void RosegardenGUIApp::slotEditTempo()
     slotEditTempo(this);
 }
 
+void RosegardenGUIApp::slotEditTimeSignature()
+{
+    slotEditTimeSignature(this);
+}
+
 void RosegardenGUIApp::slotEditTempo(QWidget *parent)
 {
     kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotEditTempo" << std::endl;
@@ -2022,6 +2040,39 @@ void RosegardenGUIApp::slotEditTempo(QWidget *parent)
 
     tempoDlg->show();
 
+}
+
+void RosegardenGUIApp::slotEditTimeSignature(QWidget *parent)
+{
+    Rosegarden::Composition &composition(m_doc->getComposition());
+
+    Rosegarden::timeT time = composition.getPosition();
+    int barNo = composition.getBarNumber(time);
+    bool atStartOfBar = (time == composition.getBarStart(barNo));
+    Rosegarden::TimeSignature sig = composition.getTimeSignatureAt(time);
+
+    TimeSignatureDialog *dialog = new TimeSignatureDialog
+	(parent, sig, barNo, atStartOfBar);
+
+    if (dialog->exec() == QDialog::Accepted) {
+
+	TimeSignatureDialog::Location location = dialog->getLocation();
+	if (location == TimeSignatureDialog::StartOfBar) {
+	    time = composition.getBarStartForTime(time);
+	}
+
+	if (dialog->shouldNormalizeRests()) {
+	    m_doc->getCommandHistory()->addCommand
+		(new AddTimeSignatureAndNormalizeCommand
+		 (&composition, time, dialog->getTimeSignature()));
+	} else { 
+	    m_doc->getCommandHistory()->addCommand
+		(new AddTimeSignatureCommand
+		 (&composition, time, dialog->getTimeSignature()));
+	}
+    }
+
+    delete dialog;
 }
 
 void RosegardenGUIApp::slotCommandExecuted(Command *command)

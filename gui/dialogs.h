@@ -71,7 +71,7 @@ public:
     Rosegarden::TimeSignature getTimeSignature() const;
 
     enum Location {
-	AsGiven, StartOfBar, StartOfSegment, StartOfComposition
+	AsGiven, StartOfBar
     };
 
     Location getLocation() const;
@@ -87,7 +87,6 @@ protected:
     QCheckBox *m_normalizeRestsButton;
     QRadioButton *m_asGivenButton;
     QRadioButton *m_startOfBarButton;
-    QRadioButton *m_startOfCompositionButton;
 
     int m_barNo;
     bool m_atStartOfBar;

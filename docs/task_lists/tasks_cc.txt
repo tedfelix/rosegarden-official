@@ -66,7 +66,8 @@ Post-0.1.4 task list
     undo/redo extents, because the normalization function may modify
     rests before the nominal given starting time.  Deal with this.
     Also a theoretical problem when (e.g.) inserting notes at the
-    start of a bar.
+    start of a bar.  Potential (nasty) solution might involve
+    BasicCommand being a SegmentObserver
 
 17. Give timesigs more room before the following note [DONE]
 
@@ -83,7 +84,10 @@ Post-0.1.4 task list
 
 20. Take some of the add-time-sig stuff in NotationView out into
     the command object so we can use the same command object and
-    dialog when editing the transport's time sig
+    dialog when editing the transport's time sig [DONE]
+
+20a. Why is the notation view's time sig dialog now getting the
+     wrong default time sig? (i.e. it's always 4/4)
 
 
 20020301 task list (based on outstanding items from post-0.1.3 list below)

@@ -19,6 +19,7 @@
 
 #include "segmentcommands.h"
 #include "rosedebug.h"
+#include "notationcommands.h"
 #include "NotationTypes.h"
 #include "Property.h"
 #include "Composition.h"
@@ -468,6 +469,18 @@ SegmentChangeQuantizationCommand::name(Rosegarden::StandardQuantization *sq)
 // --------- Add Time Signature --------
 // 
 
+AddTimeSignatureCommand::AddTimeSignatureCommand(Composition *composition,
+						 timeT time,
+						 Rosegarden::TimeSignature timeSig) :
+    TimeAndTempoChangeCommand(name()),
+    m_composition(composition),
+    m_time(time),
+    m_timeSignature(timeSig),
+    m_oldTimeSignature(0)
+{
+    // nothing else
+}
+
 AddTimeSignatureCommand::~AddTimeSignatureCommand()
 {
     if (m_oldTimeSignature) delete m_oldTimeSignature;
@@ -496,6 +509,39 @@ AddTimeSignatureCommand::unexecute()
 	m_composition->addTimeSignature(m_time, *m_oldTimeSignature);
     }
 }
+
+
+AddTimeSignatureAndNormalizeCommand::AddTimeSignatureAndNormalizeCommand
+(Composition *composition, timeT time, Rosegarden::TimeSignature timeSig) :
+    CompoundCommand(AddTimeSignatureCommand::name())
+{
+    addCommand(new AddTimeSignatureCommand(composition, time, timeSig));
+
+    // only up to the next time signature
+    timeT endTime(composition->getDuration());
+
+    int index = composition->getTimeSignatureNumberAt(time);
+    if (composition->getTimeSignatureCount() > index + 1) {
+	endTime = composition->getTimeSignatureChange(index + 1).first;
+    }
+	
+    for (Composition::iterator i = composition->begin();
+	 i != composition->end(); ++i) {
+
+	int startTime = (*i)->getStartTime();
+	if (startTime >= endTime) continue;
+	if (startTime < time) startTime = time;
+
+	addCommand(new TransformsMenuNormalizeRestsCommand
+		   (**i, time, std::min((*i)->getEndTime(), endTime)));
+    }
+}
+
+AddTimeSignatureAndNormalizeCommand::~AddTimeSignatureAndNormalizeCommand()
+{
+    // well, nothing really
+}
+
 
 AddTempoChangeCommand::~AddTempoChangeCommand()
 {

@@ -91,7 +91,7 @@ RosegardenTempoDialog::showPosition()
     RealTime currentTime = comp.getElapsedRealTime(currentPos);
 
     QString milliSeconds;
-    milliSeconds.sprintf("%03d", currentTime.usec/1000);
+    milliSeconds.sprintf("%03ld", currentTime.usec/1000);
 
     PositionValue->setText(QString("%1.%2 s").
             arg(currentTime.sec).

@@ -180,16 +180,11 @@ class AddTimeSignatureCommand : public TimeAndTempoChangeCommand
 public:
     AddTimeSignatureCommand(Rosegarden::Composition *composition,
                             Rosegarden::timeT time,
-                            Rosegarden::TimeSignature timeSig) :
-        TimeAndTempoChangeCommand(name()),
-        m_composition(composition),
-        m_time(time),
-        m_timeSignature(timeSig),
-        m_oldTimeSignature(0) { }
+                            Rosegarden::TimeSignature timeSig);
     virtual ~AddTimeSignatureCommand();
 
     static QString name() {
-        return i18n("Add &Time Signature Change...");
+        return i18n("Add Time Si&gnature Change...");
     }
 
     virtual void execute();
@@ -199,9 +194,21 @@ protected:
     Rosegarden::Composition *m_composition;
     Rosegarden::timeT m_time;
     Rosegarden::TimeSignature m_timeSignature;
+
     Rosegarden::TimeSignature *m_oldTimeSignature; // for undo
     int m_timeSigIndex; // for undo
 };    
+
+class AddTimeSignatureAndNormalizeCommand : public CompoundCommand
+{
+public:
+    AddTimeSignatureAndNormalizeCommand(Rosegarden::Composition *composition,
+					Rosegarden::timeT time,
+					Rosegarden::TimeSignature timeSig);
+    virtual ~AddTimeSignatureAndNormalizeCommand();
+};
+
+
 
 class AddTempoChangeCommand : public TimeAndTempoChangeCommand
 {
@@ -216,11 +223,11 @@ public:
         m_oldTempo(0),
         m_tempoChangeIndex(0) {}
 
-    ~AddTempoChangeCommand();
+    virtual ~AddTempoChangeCommand();
 
     static QString name()
     {
-        return i18n("Add Tempo Change...");
+        return i18n("Add &Tempo Change...");
     }
     virtual void execute();
     virtual void unexecute();

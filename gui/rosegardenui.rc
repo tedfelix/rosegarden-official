@@ -14,7 +14,8 @@
   </Menu>
   <Menu name="edit">
       <text>&amp;Edit</text>
-      <Action name="edit_tempo" append="edit_merge"/>
+      <Action name="add_tempo" append="edit_merge"/>
+      <Action name="add_time_signature" append="edit_merge"/>
   </Menu>
   <Menu name="View">
 	<text>&amp;View</text>

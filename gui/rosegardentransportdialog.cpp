@@ -148,17 +148,27 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     //
     QPalette pal;
     pal.setColor(QColorGroup::Foreground, QColor(192, 216, 255));
+
     TempoDisplay->setPalette(pal);
     TempoDisplay->setAlignment(int(QLabel::AlignVCenter | QLabel::AlignRight));
+
+    TimeSigDisplay->setPalette(pal);
+    TimeSigDisplay->setAlignment(int(QLabel::AlignVCenter | QLabel::AlignRight));
 
     QFont localFont(  OutDisplay->font() );
     localFont.setFamily( "lucida" );
     localFont.setBold( TRUE );
+
     TempoDisplay->setFont( localFont );
+    TimeSigDisplay->setFont( localFont );
 
     // Now the reason why we have to do the above fiddling
     connect(TempoDisplay, SIGNAL(doubleClicked()),
             this, SLOT(slotEditTempo()));
+
+    // Now the reason why we have to do the above fiddling
+    connect(TimeSigDisplay, SIGNAL(doubleClicked()),
+            this, SLOT(slotEditTimeSignature()));
 }
 
 RosegardenTransportDialog::~RosegardenTransportDialog()
@@ -650,6 +660,12 @@ void
 RosegardenTransportDialog::slotEditTempo()
 {
     emit editTempo(this);
+}
+
+void
+RosegardenTransportDialog::slotEditTimeSignature()
+{
+    emit editTimeSignature(this);
 }
 
 }

@@ -81,7 +81,6 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
     m_normalizeRestsButton(0),
     m_asGivenButton(0),
     m_startOfBarButton(0),
-    m_startOfCompositionButton(0),
     m_barNo(barNo),
     m_atStartOfBar(atStartOfBar)
 {
@@ -145,17 +144,11 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
 	m_asGivenButton = new QRadioButton
 	    (i18n("Start bar %1 here").arg(barNo + 1), groupBox);
 	m_asGivenButton->setChecked(true);
-	if (!m_atStartOfBar/* && m_barNo != 0*/) {
+	if (!m_atStartOfBar) {
 	    m_startOfBarButton = new QRadioButton
 		(i18n("Change time from start of bar %1")
 		 .arg(m_barNo), groupBox);
 	}
-/*
-	if (!(m_atStartOfBar && m_barNo == 0)) {
-	    m_startOfCompositionButton = new QRadioButton
-		(i18n("Change time from start of composition"), groupBox);
-	}
-*/
     } else {
 	new QLabel(i18n("Time change will take effect at the start of bar %1.")
 		   .arg(barNo), groupBox);
@@ -163,7 +156,7 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
 
     groupBox = new QGroupBox(1, Horizontal, i18n("Options"), vbox);
     m_hideSignatureButton = new QCheckBox
-	(i18n("Change time without showing the signature"), groupBox);
+	(i18n("Make the new time signature hidden"), groupBox);
     m_hideSignatureButton->setChecked(false);
     m_commonTimeButton = new QCheckBox
 	(i18n("Show as common time"), groupBox);
@@ -262,9 +255,6 @@ TimeSignatureDialog::getLocation() const
 	return AsGiven;
     } else if (m_startOfBarButton && m_startOfBarButton->isChecked()) {
 	return StartOfBar;
-    } else if (m_startOfCompositionButton &&
-	       m_startOfCompositionButton->isChecked()) {
-	return StartOfComposition;
     }
     return AsGiven;
 }

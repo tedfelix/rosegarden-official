@@ -1659,53 +1659,29 @@ void NotationView::slotTransformsAddTimeSignature()
 	TimeSignatureDialog *dialog = new TimeSignatureDialog
 	    (this, timeSig, barNo, atStartOfBar);
 
-	TimeSignatureDialog::Location location = dialog->getLocation();
-	switch (location) {
-	case TimeSignatureDialog::StartOfBar:
-	    insertionTime = composition.getBarStartForTime(insertionTime);
-	    break;
-	case TimeSignatureDialog::StartOfSegment:
-	    insertionTime = segment.getStartTime();
-	    break;
-	case TimeSignatureDialog::StartOfComposition:
-	    insertionTime = 0;
-	    break;
-	default:
-	    break;
-	}
-
 	if (dialog->exec() == QDialog::Accepted) {
 
-	    Command *command = new AddTimeSignatureCommand
-		(m_staffs[m_currentStaff]->getSegment().getComposition(),
-		 insertionTime,
-		 dialog->getTimeSignature());
+	    TimeSignatureDialog::Location location = dialog->getLocation();
+	    if (location == TimeSignatureDialog::StartOfBar) {
+		insertionTime = composition.getBarStartForTime(insertionTime);
+	    }
 
 	    if (dialog->shouldNormalizeRests()) {
-
-		MacroCommand *macroCommand =
-		    new MacroCommand(command->name());
-		macroCommand->addCommand(command);
-
-		//!!! Ideally should only normalise up to the next time sig --
-		// bit complicated to do, though
-
-		for (Rosegarden::Composition::iterator i = composition.begin();
-		     i != composition.end(); ++i) {
-		    if ((*i)->getEndTime() > insertionTime) {
-			macroCommand->addCommand
-			    (new TransformsMenuNormalizeRestsCommand
-			     (**i, 
-			      std::max((*i)->getStartTime(), insertionTime),
-			      (*i)->getEndTime()));
-		    }
-		}
-
-		command = macroCommand;
-	    }
 		
-	    addCommandToHistory(command);
+		addCommandToHistory(new AddTimeSignatureAndNormalizeCommand
+				    (segment.getComposition(),
+				     insertionTime,
+				     dialog->getTimeSignature()));
+
+	    } else {
+
+		addCommandToHistory(new AddTimeSignatureCommand
+				    (segment.getComposition(),
+				     insertionTime,
+				     dialog->getTimeSignature()));
+	    }
 	}
+
 	delete dialog;
     }
 }			
