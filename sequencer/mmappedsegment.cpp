@@ -474,7 +474,6 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool /*firstFetch*/,
                                 << " - data1: " << (unsigned int)evt->getData1()
                                 << " - data2: " << (unsigned int)evt->getData2()
                                 << " - metronome event: " << evtIsFromMetronome
-                                << " - firstFetch : " << firstFetch
                                 << endl;
 #endif
 
@@ -496,8 +495,11 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool /*firstFetch*/,
 
                 } else if (acceptEvent(evt, evtIsFromMetronome) &&
 
-			   (evt->getEventTime() + evt->getDuration() > startTime)) {
-                    //std::cout << "inserting event" << std::endl;
+			   ((evt->getEventTime() + evt->getDuration() > startTime) ||
+			    (evt->getDuration() == Rosegarden::RealTime::zeroTime &&
+			     evt->getEventTime() == startTime))) {
+
+//                    std::cout << "inserting event" << std::endl;
 
                     /*
                     std::cout << "Inserting event (type = "
@@ -509,12 +511,12 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool /*firstFetch*/,
 
                 } else {
                     
-                    /*
+#ifdef DEBUG_META_ITERATOR
                     std::cout << "skipping event"
                         << " - event time = " << evt->getEventTime()
                         << ", duration = " << evt->getDuration()
                         << ", startTime = " << startTime << std::endl;
-                        */
+#endif
 
 		    delete evt;
                 }
