@@ -381,27 +381,6 @@ void RosegardenGUIView::selectTrackSegments(int trackId)
     m_trackEditor->getSegmentCanvas()->selectSegments(segments);
 }
 
-/*!!!
-
-// Insert a newly created Segment (usually recorded) into
-// the view - create a SegmentItem for it
-//
-void RosegardenGUIView::createSegmentItem(Rosegarden::Segment* segment)
-{
-    m_trackEditor->addSegmentItem(segment);
-}
-
-void RosegardenGUIView::deleteSegmentItem(Rosegarden::Segment* segment)
-{
-    m_trackEditor->deleteSegmentItem(segment);
-}
-
-void RosegardenGUIView::updateSegmentItem(Rosegarden::Segment* segment)
-{
-    m_trackEditor->updateSegmentItem(segment);
-}
-*/
-
 // Show a segment as it records
 //
 void RosegardenGUIView::showRecordingSegmentItem(Rosegarden::Segment* segment)

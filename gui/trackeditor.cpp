@@ -117,10 +117,10 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
     canvas->setBackgroundColor(RosegardenGUIColours::SegmentCanvas);
 
     int trackLabelWidth = 156;
-    int trackLabelOffset = 3;
+    int trackLabelOffset = 0;//!!!3;
 
     int barButtonsHeight = 25;
-    int barButtonsOffset = 2;
+    int barButtonsOffset = 0;//!!!2;
 
     m_segmentCanvas = new SegmentCanvas(m_rulerScale,
                                         getTrackCellHeight(),

@@ -220,6 +220,10 @@ SegmentReconfigureCommand::unexecute()
 void
 SegmentReconfigureCommand::swap()
 {
+    //!!! NB this won't actually _work_ for changes to duration
+    // that make segments shorter, for the simple reason that
+    // Segment::setDuration is not yet implemented for this case!
+
     for (SegmentRecSet::iterator i = m_records.begin();
 	 i != m_records.end(); ++i) {
 

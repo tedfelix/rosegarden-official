@@ -610,9 +610,14 @@ RosegardenGUIDoc::stopRecordingMidi()
         for(w=pViewList->first(); w!=0; w=pViewList->next())
         {
             w->deleteRecordingSegmentItem();
-	    m_commandHistory.addCommand
-		(new SegmentRecordCommand(m_recordSegment));
         }
+    }
+
+    if (m_recordSegment->getComposition()) {
+	// something in the record segment (that's why it was added
+	// to the composition)
+	m_commandHistory.addCommand
+	    (new SegmentRecordCommand(m_recordSegment));
     }
 
     m_recordSegment = 0;
@@ -694,114 +699,3 @@ RosegardenGUIDoc::setLoopMarker(Rosegarden::timeT startLoop,
     }
 }
 
-
-
-// Split a Segment into two pieces preserving key, time sig and
-// clef in the new Segment
-//
-//!!! make into command thingy
-/*!!!
-void
-RosegardenGUIDoc::splitSegment(Rosegarden::Segment *segment,
-                               Rosegarden::timeT splitTime)
-{
-    // Initialise new Segment and add to Composition
-    //
-    Rosegarden::Segment *rhSegment = new Rosegarden::Segment();
-    rhSegment->setTrack(segment->getTrack());
-    rhSegment->setStartTime(splitTime);
-    m_composition.addSegment(rhSegment);
-
-    Rosegarden::Segment::iterator it;
-    Rosegarden::Event *rhEvent;
-    Rosegarden::timeT absTime, duration;
-    Rosegarden::timeT lastNote = 0;
-    Rosegarden::timeT endTime = segment->getEndTime();
-
-    Rosegarden::Event *clefEvent = 0;
-    Rosegarden::Event *keyEvent = 0;
-    Rosegarden::Event *timeSigEvent = 0;
-
-    // Copy the last occurence of clef, keys and time signature
-    // from the left hand side of the split
-    //
-    for (it = segment->begin(); it != segment->findTime(splitTime); it++)
-    {
-        if ((*it)->isa(Rosegarden::Clef::EventType))
-        {
-            if (clefEvent)
-                delete clefEvent;
-
-            clefEvent = new Event(**it);
-            clefEvent->setAbsoluteTime(splitTime);
-        }
-
-        if ((*it)->isa(Rosegarden::Key::EventType))
-        {
-            if (keyEvent)
-                delete keyEvent;
-
-            keyEvent = new Event(**it);
-            keyEvent->setAbsoluteTime(splitTime);
-        }
-
-        if ((*it)->isa(Rosegarden::TimeSignature::EventType))
-        {
-            if (timeSigEvent)
-                delete timeSigEvent;
-
-            timeSigEvent = new Event(**it);
-            timeSigEvent->setAbsoluteTime(splitTime);
-        }
-    }
-
-    // Insert relevant meta info if we've found some
-    //
-    if(clefEvent)
-        rhSegment->insert(clefEvent);
-
-    if(keyEvent)
-        rhSegment->insert(keyEvent);
-
-    if(timeSigEvent)
-        rhSegment->insert(timeSigEvent);
-
-
-    // Copy through the Events
-    //
-    for (it = segment->findTime(splitTime); it != segment->end(); it++)
-    {
-        absTime = (*it)->getAbsoluteTime();
-        duration = (*it)->getDuration();
-
-        if ( absTime > lastNote)
-            rhSegment->fillWithRests(absTime + duration);
-
-        rhEvent = new Event(**it);
-        Segment::iterator loc = rhSegment->insert(rhEvent);
-
-        SegmentNotationHelper helper(*rhSegment);
-        if (!helper.isViable(rhEvent))
-            helper.makeNoteViable(loc);
-
-        lastNote = absTime + duration;
-    }
-
-    // Resize left hand Segment
-    //
-    segment->erase(segment->findTime(splitTime), segment->end());
-    segment->setDuration(splitTime - segment->getStartTime());
-//!!!    updateSegmentItem(segment);
-
-    // Ensure new Segment size in correct and insert a new
-    // SegmentItem
-    rhSegment->setDuration(endTime - splitTime);
-//!!!    addSegmentItem(rhSegment);
-
-    slotUpdateAllViews(0);
-
-}
-
-
-
-*/
