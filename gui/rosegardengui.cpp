@@ -261,7 +261,7 @@ void RosegardenGUIApp::openDocumentFile(const char* _cmdl)
     initView();
 }
 
-int RosegardenGUIApp::openFile(const QString& url, int /*mode*/)
+int RosegardenGUIApp::openFile(const QString& url)
 {
 
     setCaption(url);
@@ -486,7 +486,18 @@ int RosegardenGUIApp::openURL(const KURL& url)
         return OS_ERROR;
     }
 
-    int result = openFile(target, 0);
+    static QRegExp midiFile("\\.mid$"), rg21File("\\.rose$");
+
+    int result = OK;
+
+    if (midiFile.match(url.path()) != -1) {
+        result = importMIDIFile(target);
+    } else if (rg21File.match(url.path()) != -1) {
+        result = importRG21File(target);
+    } else {
+        result = openFile(target);
+    }
+    
     if (result == OK) {
         setCaption(url.path());
         m_fileRecent->addURL(url);
@@ -773,21 +784,29 @@ RosegardenGUIApp::getSequencerSlice(const int &sliceStart, const int &sliceEnd)
 }
 
 
-void RosegardenGUIApp::importMIDI()
+int RosegardenGUIApp::importMIDI()
 {
-  Rosegarden::MidiFile *midiFile;
-
   KURL url = KFileDialog::getOpenURL(QString::null, "*.mid", this,
                                      i18n("Open MIDI File"));
-  if (url.isEmpty()) { return; }
+  if (url.isEmpty()) { return USER_CANCEL; }
 
   QString tmpfile;
   KIO::NetAccess::download(url, tmpfile);
-  midiFile = new Rosegarden::MidiFile(tmpfile.ascii());
+  int res = importMIDIFile(tmpfile);
+  
+  KIO::NetAccess::removeTempFile( tmpfile );
+
+  return res;
+  
+}
+
+int RosegardenGUIApp::importMIDIFile(const QString &file)
+{
+  Rosegarden::MidiFile *midiFile;
+
+  midiFile = new Rosegarden::MidiFile(file.ascii());
 
   midiFile->open();
-
-  KIO::NetAccess::removeTempFile( tmpfile );
 
   m_doc->closeDocument();
   m_doc->newDocument();
@@ -800,20 +819,24 @@ void RosegardenGUIApp::importMIDI()
 
   initView();
 
+  return OK;
+  
 }
 
-void RosegardenGUIApp::importRG21()
+int RosegardenGUIApp::importRG21()
 {
   KURL url = KFileDialog::getOpenURL(QString::null, "*.rose", this,
                                      i18n("Open Rosegarden 2.1 File"));
-  if (url.isEmpty()) { return; }
+  if (url.isEmpty()) { return USER_CANCEL; }
 
   QString tmpfile;
   KIO::NetAccess::download(url, tmpfile);
 
-  importRG21File(tmpfile);
+  int res = importRG21File(tmpfile);
 
   KIO::NetAccess::removeTempFile(tmpfile);
+
+  return res;
 }
 
 int RosegardenGUIApp::importRG21File(const QString &file)

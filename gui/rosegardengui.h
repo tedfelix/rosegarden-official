@@ -125,7 +125,7 @@ public:
     /**
      * open a file
      */
-    virtual int openFile(const QString& url, int mode);
+    virtual int openFile(const QString& url);
 
     /**
      * Works like openFile but is able to open remote files
@@ -136,6 +136,11 @@ public:
      * imports a Rosegarden 2.1 file
      */
     virtual int importRG21File(const QString &url);
+
+    /**
+     * imports a MIDI file
+     */
+    virtual int importMIDIFile(const QString &url);
 
     /**
      * the Sequencer accesses this method via DCOP
@@ -275,14 +280,14 @@ public slots:
     void filePrint();
 
     /**
-     * import MIDI file
+     * Let the user select a MIDI file for import
      */
-    void importMIDI();
+    int importMIDI();
 
     /**
-     * import Rosegarden 2.1 file
+     * Let the user select a Rosegarden 2.1 file for import 
      */
-    void importRG21();
+    int importRG21();
 
     /**
      * closes all open windows by calling close() on each memberList
