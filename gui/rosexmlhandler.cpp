@@ -65,6 +65,12 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
     if (lcName == "rosegarden-data") {
         // set to some state which says it's ok to parse the rest
 
+    } else if (lcName == "tempo") {
+
+      QString tempoString = atts.value("value");
+      m_composition.setTempo(tempoString.toInt());
+
+
     } else if (lcName == "track") {
         m_currentTime = 0;
         int instrument = -1, startIndex = 0;
