@@ -584,6 +584,9 @@ SequenceManager::stopping()
         return;
     }
 
+    std::cout << "SequenceManager::stopping() - preparing to stop"
+              << std::endl;
+
     m_sendStop = true;
 }
 
@@ -648,21 +651,21 @@ SequenceManager::stop()
     if (m_transportStatus == RECORDING_MIDI)
     {
         m_doc->stopRecordingMidi();
-        cout << "SequenceManager::stop() - stopped recording MIDI" << endl;
+        std::cout << "SequenceManager::stop() - stopped recording MIDI"
+                  << std::endl;
     }
 
     if (m_transportStatus == RECORDING_AUDIO)
     {
         m_doc->stopRecordingAudio();
-        cout << "SequenceManager::stop() - stopped recording audio" << endl;
+        std::cout << "SequenceManager::stop() - stopped recording audio"
+                  << std::endl;
     }
 
     // always untoggle the play button at this stage
     //
-    if (m_transport->PlayButton->state() == QButton::On)
-    {
-        cout << "SequenceManager::stop() - stopped playing" << endl;
-    }
+    m_transport->PlayButton->setOn(false);
+    std::cout << "SequenceManager::stop() - stopped playing" << std::endl;
 
     // ok, we're stopped
     //
