@@ -18,9 +18,13 @@
 #ifndef ROSEDEBUG_H
 #define ROSEDEBUG_H
 
+#include <string>
 #include <iostream>
 #include <kdebug.h>
 #define KDEBUG_AREA 1010
+
+kdbgstream&
+operator<<(kdbgstream&, string);
 
 // This doesn't work - keeping it just in case I somehow get it
 // working someday

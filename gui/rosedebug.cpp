@@ -17,6 +17,15 @@
 
 #include "rosedebug.h"
 
+kdbgstream&
+operator<<(kdbgstream &dbg, string s)
+{
+    dbg << s.c_str();
+    return dbg;
+}
+
+
+
 ostream&
 kdbgostreamAdapter::operator<<(bool i)
 {
