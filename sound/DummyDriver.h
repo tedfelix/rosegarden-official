@@ -78,6 +78,10 @@ public:
 
     virtual void removePluginInstance(InstrumentId id, int position) {;}
 
+    virtual void setPluginInstancePortValue(InstrumentId id,
+                                            int position,
+                                            unsigned long portNumber,
+                                            float value) {;}
 
 protected:
     virtual void processMidiOut(const MappedComposition & /*mC*/,

@@ -59,6 +59,7 @@ const MappedObjectProperty MappedLADSPAPort::RangeHint = "rangehint";
 const MappedObjectProperty MappedLADSPAPort::RangeLower = "rangelower";
 const MappedObjectProperty MappedLADSPAPort::RangeUpper = "rangeupper";
 const MappedObjectProperty MappedLADSPAPort::Value = "value";
+const MappedObjectProperty MappedLADSPAPort::PortNumber = "portNumber";
 
 #endif // HAVE_LADSPA
 
@@ -471,6 +472,20 @@ MappedStudio::getAudioFader(Rosegarden::InstrumentId id)
 
 }
 
+MappedObject*
+MappedStudio::getPluginInstance(Rosegarden::InstrumentId id,
+                                int position)
+{
+    MappedAudioPluginManager *pm =
+        dynamic_cast<MappedAudioPluginManager*>
+            (getObjectOfType(AudioPluginManager));
+
+    if (pm)
+        return pm->getPluginInstance(id, position);
+
+    return 0;
+}
+
 #ifdef HAVE_LADSPA
 
 const LADSPA_Descriptor*
@@ -517,6 +532,23 @@ MappedStudio::unloadAllPluginLibraries()
     if (pm)
         pm->unloadAllPluginLibraries();
 }
+
+
+void
+MappedStudio::setPluginInstancePort(InstrumentId id,
+                                    int position,
+                                    unsigned long portNumber,
+                                    LADSPA_Data value)
+{
+    cout << "PORT NUMBER = " << portNumber << endl;
+
+    if (m_sequencer)
+    {
+        m_sequencer->
+            setPluginInstancePortValue(id, position, portNumber, value);
+    }
+} 
+
 
 
 
@@ -1058,6 +1090,8 @@ MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
                                 descriptor->PortRangeHints[i].HintDescriptor,
                                 descriptor->PortRangeHints[i].LowerBound,
                                 descriptor->PortRangeHints[i].UpperBound);
+
+                        port->setPortNumber(i);
                     }
 
                     
@@ -1115,6 +1149,33 @@ MappedAudioPluginManager::getPluginInstance(unsigned long uniqueId,
 
     return 0;
 }
+
+MappedObject*
+MappedAudioPluginManager::getPluginInstance(InstrumentId instrument,
+                                            int position)
+{
+#ifdef HAVE_LADSPA
+    std::vector<MappedObject*>::iterator it = m_children.begin();
+
+    for(; it != m_children.end(); it++)
+    {
+        if ((*it)->getType() == LADSPAPlugin)
+        {
+            MappedLADSPAPlugin *plugin =
+                dynamic_cast<MappedLADSPAPlugin*>(*it);
+
+            if(plugin->getInstrument() == instrument &&
+               plugin->getPosition() == position)
+                return *it;
+        }
+    }
+
+#endif // HAVE_LADSPA
+
+    return 0;
+}
+
+
 
 
 
@@ -1237,6 +1298,21 @@ MappedLADSPAPlugin::setProperty(const MappedObjectProperty &property,
                                m_position);
 
     }
+    else if (property == MappedLADSPAPlugin::Instrument)
+    {
+        m_instrument = Rosegarden::InstrumentId(value);
+        std::cout << "MappedLADSPAPlugin::setProperty - "
+                  << "setting instrument id to " << m_instrument << std::endl;
+    }
+    else if (property == Rosegarden::MappedObject::Position)
+    {
+        m_position = int(value);
+        std::cout << "MappedLADSPAPlugin::setProperty - "
+                  << "setting position to " << m_position << std::endl;
+
+    }
+
+
 
 }
 
@@ -1285,7 +1361,8 @@ MappedLADSPAPort::MappedLADSPAPort(MappedObject *parent,
                                    MappedObjectId id,
                                    bool readOnly):
     MappedObject(parent, "MappedAudioPluginPort", LADSPAPort, id, readOnly),
-    m_value(0.0)
+    m_value(0.0),
+    m_portNumber(0)
 {
 }
 
@@ -1324,14 +1401,36 @@ MappedLADSPAPort::setProperty(const MappedObjectProperty &property,
         std::cout << "MappedLADSPAPort::setProperty value = "
                   << value << std::endl;
         m_value = value;
-    }
 
+        // Gather information and tell the plugin instance that we've
+        // changed
+        MappedObject *studio = getParent();
+        while(!(dynamic_cast<MappedStudio*>(studio)))
+            studio = studio->getParent();
+
+        MappedStudio *studioObject = dynamic_cast<MappedStudio*>(studio);
+        MappedLADSPAPlugin *plugin =
+            dynamic_cast<MappedLADSPAPlugin*>(getParent());
+
+        studioObject->setPluginInstancePort(plugin->getInstrument(),
+                                            plugin->getPosition(),
+                                            m_portNumber,
+                                            value);
+    }
+    else if (property == MappedLADSPAPort::PortNumber)
+    {
+        m_portNumber =  ((unsigned long)value);
+    }
 
 }
 
 void
 MappedLADSPAPort::clone(MappedObject *object)
 {
+    // Set the port number first - see the above method for an
+    // explanation of why..
+    //
+    object->setProperty(MappedLADSPAPort::PortNumber, m_portNumber);
     object->setProperty(MappedLADSPAPort::Value, m_value);
 }
 

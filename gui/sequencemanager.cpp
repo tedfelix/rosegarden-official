@@ -1620,7 +1620,10 @@ SequenceManager::getSequencerPlugins(Rosegarden::AudioPluginManager *aPM)
 
     while (i < seqPlugins.size())
     {
-        Rosegarden::MappedObjectId id = seqPlugins[i++].toInt();
+        cout << "COUNT = " << seqPlugins.size() << endl;
+        //cout << "VALUE = " << seqPlugins[i] << endl;
+
+        Rosegarden::MappedObjectId id = seqPlugins.at(i++).toInt();
         QString name = seqPlugins[i++];
         unsigned long uniqueId = seqPlugins[i++].toLong();
         QString label = seqPlugins[i++];

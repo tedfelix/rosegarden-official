@@ -257,6 +257,11 @@ public:
     virtual void removePluginInstance(InstrumentId id,
                                       int position) = 0;
 
+    virtual void setPluginInstancePortValue(InstrumentId id,
+                                            int position,
+                                            unsigned long portNumber,
+                                            float value) = 0;
+
     // Mapped Instruments
     //
     void setMappedInstrument(MappedInstrument *mI);

@@ -53,12 +53,9 @@ public:
     LADSPAPluginInstance(Rosegarden::InstrumentId instrument,
                          unsigned long ladspaId,
                          int position,
-                         const LADSPA_Descriptor* descriptor):
-        m_instrument(instrument),
-        m_ladspaId(ladspaId),
-        m_position(position),
-        m_instanceHandle(0),
-        m_descriptor(descriptor) {;}
+                         const LADSPA_Descriptor* descriptor);
+
+    ~LADSPAPluginInstance();
 
     Rosegarden::InstrumentId getInstrument() const { return m_instrument; }
     unsigned long getLADSPAId() const { return m_ladspaId; }
@@ -70,16 +67,23 @@ public:
 
     // plugin functions
     //
+
+    // Connection of data (and behind the scenes control) ports
+    //
+    void connectPorts(LADSPA_Data *dataIn1,
+                      LADSPA_Data *dataIn2,
+                      LADSPA_Data *dataOut1,
+                      LADSPA_Data *dataOut2);
+
+    // Set control ports
+    //
+    void setPortValue(unsigned long portNumber, LADSPA_Data value);
+
     void instantiate(unsigned long sampleRate);
     void activate();
-    void connect_port(unsigned long Port,
-                      LADSPA_Data * dataLocation);
     void run(unsigned long sampleCount);
-
     void deactivate();
     void cleanup();
-
-
 
 protected:
     
@@ -88,6 +92,11 @@ protected:
     int                       m_position;
     LADSPA_Handle             m_instanceHandle;
     const LADSPA_Descriptor  *m_descriptor;
+
+    std::vector<std::pair<unsigned long, LADSPA_Data*> > m_controlPorts;
+
+    std::vector<int> m_audioPortsIn;
+    std::vector<int> m_audioPortsOut;
 
 };
 
@@ -204,6 +213,17 @@ public:
                                    int position);
 
     virtual void removePluginInstance(InstrumentId id, int position);
+
+    virtual void setPluginInstancePortValue(InstrumentId id,
+                                            int position,
+                                            unsigned long portNumber,
+                                            float value);
+
+#ifdef HAVE_LADSPA
+
+    LADSPAPluginInstance* getPlugin(InstrumentId id, int position);
+
+#endif // HAVE_LADSPA
 
 
 #ifdef HAVE_LIBJACK

@@ -229,6 +229,9 @@ public:
     //
     MappedObject* getAudioFader(Rosegarden::InstrumentId id);
 
+    MappedObject* getPluginInstance(Rosegarden::InstrumentId id,
+                                    int position);
+
     // Return the object vector
     //
     //std::vector<MappedObject*>* getObjects() const { return &m_objects; }
@@ -263,6 +266,13 @@ public:
     // Unload all the plugin libraries
     //
     void unloadAllPluginLibraries();
+
+    // Modify a port
+    //
+    void setPluginInstancePort(InstrumentId id,
+                               int position,
+                               unsigned long portNumber,
+                               LADSPA_Data value);
 
 #endif // HAVE_LADSPA
 
@@ -382,6 +392,9 @@ public:
     std::string getCopyright() const { return m_copyright; }
     unsigned long getPortCount() const { return m_portCount; }
 
+    Rosegarden::InstrumentId getInstrument() const { return m_instrument; }
+    int getPosition() const { return m_position; }
+
     // populate this object with descriptor information
     void populate(const LADSPA_Descriptor *descriptor);
 
@@ -413,6 +426,8 @@ public:
     static const MappedObjectProperty RangeUpper;
     static const MappedObjectProperty Value;
 
+    static const MappedObjectProperty PortNumber;
+
     MappedLADSPAPort(MappedObject *parent,
                      MappedObjectId id,
                      bool readOnly);
@@ -437,6 +452,9 @@ public:
     void setDescriptor(const LADSPA_PortDescriptor &pD)
         { m_portDescriptor = pD; }
     LADSPA_PortDescriptor getDescriptor() const { return m_portDescriptor; }
+ 
+    void setPortNumber(unsigned long portNumber) { m_portNumber = portNumber; }
+    unsigned long getPortNumber() const { return m_portNumber; }
 
     // redefine clone() here to copy across value only
     //
@@ -448,6 +466,7 @@ protected:
     LADSPA_PortDescriptor m_portDescriptor;
 
     MappedObjectValue     m_value;
+    unsigned long         m_portNumber;
 
 };
 
@@ -535,6 +554,10 @@ public:
     // Get a plugin according to read-onlyness
     //
     MappedObject* getPluginInstance(unsigned long uniqueId, bool readOnly);
+
+    // Get a plugin instance according to instrument and position
+    //
+    MappedObject* getPluginInstance(InstrumentId instrument, int position);
 
 protected:
     // Help discover plugins

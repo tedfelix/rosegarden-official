@@ -227,6 +227,15 @@ public:
     void removePluginInstance(InstrumentId id, int position)
         { m_soundDriver->removePluginInstance(id, position); }
 
+    // Modification of a plugin port (control the plugin)
+    //
+    void setPluginInstancePortValue(InstrumentId id,
+                                    int position,
+                                    unsigned long portNumber,
+                                    float value)
+        { m_soundDriver->
+            setPluginInstancePortValue(id, position, portNumber, value); }
+
 protected:
 
     SoundDriver                                *m_soundDriver;

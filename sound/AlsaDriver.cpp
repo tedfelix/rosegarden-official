@@ -91,8 +91,15 @@ namespace Rosegarden
 static jack_nframes_t    _jackBufferSize;
 static unsigned int      _jackSampleRate;
 static bool              _usingAudioQueueVector;
-static sample_t         *_leftTempBuffer;
-static sample_t         *_rightTempBuffer;
+static sample_t         *_tempOutBuffer1;
+static sample_t         *_tempOutBuffer2;
+
+static sample_t         *_pluginBufferIn1;
+static sample_t         *_pluginBufferIn2;
+
+static sample_t         *_pluginBufferOut1;
+static sample_t         *_pluginBufferOut2;
+
 static int               _passThroughCounter;
 
 static const float  _8bitSampleMax  = (float)(0xff/2);
@@ -741,8 +748,14 @@ AlsaDriver::initialiseAudio()
     //
     _jackBufferSize = jack_get_buffer_size(m_audioClient);
 
-    _leftTempBuffer = new sample_t[_jackBufferSize];
-    _rightTempBuffer = new sample_t[_jackBufferSize];
+    // create buffers
+    //
+    _tempOutBuffer1 = new sample_t[_jackBufferSize];
+    _tempOutBuffer2 = new sample_t[_jackBufferSize];
+    _pluginBufferIn1 = new sample_t[_jackBufferSize];
+    _pluginBufferIn2 = new sample_t[_jackBufferSize];
+    _pluginBufferOut1 = new sample_t[_jackBufferSize];
+    _pluginBufferOut2 = new sample_t[_jackBufferSize];
 
     // Activate the client
     //
@@ -1840,10 +1853,15 @@ AlsaDriver::setPluginInstance(InstrumentId id,
         std::cout << "AlsaDriver::setPluginInstance - "
                   << "activate and connect plugin" << std::endl;
 
+        /*
+        std::cout << "POSITION = " << position << endl;
+        std::cout << "INSTRUMENT = " << id << endl;
+        */
+
         instance->instantiate(getSampleRate());
 
         //instance->deactivate();
-        //instance->activate();
+        instance->activate();
 
         //instance->run(500);
 
@@ -1889,6 +1907,28 @@ AlsaDriver::removePluginInstance(InstrumentId id, int position)
 #endif // HAVE_LADSPA
 }
 
+void
+AlsaDriver::setPluginInstancePortValue(InstrumentId id,
+                                       int position,
+                                       unsigned long portNumber,
+                                       float value)
+{
+#ifdef HAVE_LADSPA
+    std::cout << "AlsaDriver::setPluginInstancePortValue" << std::endl;
+
+    PluginIterator it = m_pluginInstances.begin();
+    for (; it != m_pluginInstances.end(); it++)
+    {
+        if ((*it)->getInstrument() == id &&
+            (*it)->getPosition() == position)
+        {
+            (*it)->setPortValue(portNumber, value);
+        }
+    }
+#endif // HAVE_LADSPA
+} 
+
+
 
 // Return the sample rate of the JACK driver if we have one installed
 //
@@ -1907,6 +1947,61 @@ AlsaDriver::getSampleRate() const
 //
 
 #ifdef HAVE_LADSPA
+
+LADSPAPluginInstance::LADSPAPluginInstance(Rosegarden::InstrumentId instrument,
+                                           unsigned long ladspaId,
+                                           int position,
+                                           const LADSPA_Descriptor* descriptor):
+        m_instrument(instrument),
+        m_ladspaId(ladspaId),
+        m_position(position),
+        m_instanceHandle(0),
+        m_descriptor(descriptor)
+{
+    // Discover ports numbers and identities
+    //
+    for (unsigned long i = 0; i < descriptor->PortCount; i++)
+    {
+        if (LADSPA_IS_PORT_AUDIO(descriptor->PortDescriptors[i]))
+        {
+            if (LADSPA_IS_PORT_INPUT(descriptor->PortDescriptors[i]))
+                m_audioPortsIn.push_back(i);
+            else
+                m_audioPortsOut.push_back(i);
+        }
+        else
+        if (LADSPA_IS_PORT_CONTROL(descriptor->PortDescriptors[i]))
+        {
+            cout << "ADDING CONTROL PORT" << endl;
+            LADSPA_Data *data = new LADSPA_Data(0.0);
+            m_controlPorts.push_back(
+                    std::pair<unsigned long, LADSPA_Data*>(i, data));
+        }
+        else
+            std::cerr << "LADSPAPluginInstance::LADSPAPluginInstance - "
+                      << "unrecognised port type" << std::endl;
+    }
+
+    /*
+    std::cout << m_audioPortsIn.size() << " AUDIO PORTS IN" << std::endl;
+    std::cout << m_audioPortsOut.size() << " AUDIO PORTS OUT" << std::endl;
+    std::cout << m_controlPorts.size() << " CONTROL PORTS" << std::endl;
+    */
+
+}
+
+LADSPAPluginInstance::~LADSPAPluginInstance()
+{
+    for (unsigned int i = 0; i < m_controlPorts.size(); i++)
+        delete m_controlPorts[i].second;
+
+    m_controlPorts.erase(m_controlPorts.begin(), m_controlPorts.end());
+    m_audioPortsIn.clear();
+    m_audioPortsOut.clear();
+}
+
+
+
 
 void
 LADSPAPluginInstance::instantiate(unsigned long sampleRate)
@@ -1928,12 +2023,68 @@ LADSPAPluginInstance::activate()
 }
 
 void
-LADSPAPluginInstance::connect_port(unsigned long Port,
-                                   LADSPA_Data * dataLocation)
+LADSPAPluginInstance::connectPorts(LADSPA_Data *dataIn1,
+                                   LADSPA_Data *dataIn2,
+                                   LADSPA_Data *dataOut1,
+                                   LADSPA_Data *dataOut2)
 {
-    m_descriptor->connect_port(m_instanceHandle,
-                               Port,
-                               dataLocation);
+    if (m_descriptor == 0) return;
+
+    if (m_audioPortsIn.size() == 1)
+    {
+        m_descriptor->connect_port(m_instanceHandle,
+                     m_audioPortsIn[0],
+                     dataIn1);
+    }
+    else // assume 2
+    {
+        m_descriptor->connect_port(m_instanceHandle,
+                     m_audioPortsIn[0],
+                     dataIn1);
+
+        m_descriptor->connect_port(m_instanceHandle,
+                     m_audioPortsIn[1],
+                     dataIn2);
+    }
+
+    if (m_audioPortsOut.size() == 1)
+    {
+        m_descriptor->connect_port(m_instanceHandle,
+                     m_audioPortsOut[0],
+                     dataOut1);
+    }
+    else
+    {
+        m_descriptor->connect_port(m_instanceHandle,
+                     m_audioPortsOut[0],
+                     dataOut1);
+
+        m_descriptor->connect_port(m_instanceHandle,
+                     m_audioPortsOut[1],
+                     dataOut2);
+    }
+
+    for (unsigned int i = 0; i < m_controlPorts.size(); i++)
+    {
+        m_descriptor->connect_port(m_instanceHandle,
+                                   m_controlPorts[i].first,
+                                   m_controlPorts[i].second);
+    }
+
+}
+
+void
+LADSPAPluginInstance::setPortValue(unsigned long portNumber, LADSPA_Data value)
+{
+    for (unsigned int i = 0; i < m_controlPorts.size(); i++)
+    {
+        if (m_controlPorts[i].first == portNumber)
+        {
+            std::cout << "SETTING PORT TO " << value << std::endl;
+
+            (*m_controlPorts[i].second) = value;
+        }
+    }
 }
 
 void
@@ -1941,7 +2092,8 @@ LADSPAPluginInstance::run(unsigned long sampleCount)
 {
     if (m_descriptor && m_descriptor->run)
     {
-        std::cout << "LADSPAPluginInstance::run - running plugin" << std::endl;
+        std::cout << "LADSPAPluginInstance::run - running plugin"
+                  << "for " << sampleCount << " frames" << std::endl;
         m_descriptor->run(m_instanceHandle, sampleCount);
     }
 }
@@ -1972,6 +2124,26 @@ LADSPAPluginInstance::cleanup()
     m_descriptor->cleanup(m_instanceHandle);
     m_instanceHandle = 0;
 }
+
+LADSPAPluginInstance*
+AlsaDriver::getPlugin(InstrumentId id, int position)
+{
+    PluginIterator it = m_pluginInstances.begin();
+    for (; it != m_pluginInstances.end(); it++)
+    {
+        if ((*it)->getInstrument() == id &&
+            (*it)->getPosition() == position)
+        {
+            return (*it);
+        }
+    }
+
+    return 0;
+
+    //return dynamic_cast<m_studio->getPluginInstance(id, position);
+}
+
+
 
 #endif // HAVE_LADSPA
 
@@ -2100,8 +2272,8 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
         //
         for (unsigned int i = 0 ; i < nframes; i++)
         {
-            _leftTempBuffer[i] = 0.0f;
-            _rightTempBuffer[i] = 0.0f;
+            _tempOutBuffer1[i] = 0.0f;
+            _tempOutBuffer2[i] = 0.0f;
         }
 
         std::vector<PlayableAudioFile*> &audioQueue = inst->getAudioPlayQueue();
@@ -2119,7 +2291,6 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 
         // Define a huge number of counters and helpers
         //
-        int layerCount = 0;
         int samplesIn = 0;
         int oldSamplesIn = 0;
         double dSamplesIn = 0.0;
@@ -2241,7 +2412,12 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                 // 13.05.2002 - on the fly sample rate conversions are
                 //              now in place.  Clunky and non interpolated
                 //              but it'll do for the moment until some of
-                //              the other bugs 
+                //              the other bugs are ironed out.
+                //
+                // 11.09.2002 - attempting to add plugin support will mean
+                //              major restructuring of this code.  Overdue
+                //              as it is anyway.
+                //
 
                 // Hmm, so many counters
                 //
@@ -2284,7 +2460,8 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                                 ((short)(*(unsigned char *)samplePtr)) /
                                          _8bitSampleMax;
 
-                            _leftTempBuffer[samplesOut] += outBytes * volume;
+                            _pluginBufferIn1[samplesOut] = outBytes;
+                            //_tempOutBuffer1[samplesOut] += outBytes * volume;
 
                             if (fabs(outBytes) > peakLevel)
                                 peakLevel = fabs(outBytes);
@@ -2296,14 +2473,18 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                                      (*((unsigned char *)samplePtr + 1))) /
                                           _8bitSampleMax;
                             }
-                            _rightTempBuffer[samplesOut] += outBytes * volume;
+
+                            _pluginBufferIn2[samplesOut] = outBytes;
+                            //_tempOutBuffer2[samplesOut] += outBytes * volume;
                             break;
 
                         case 2: // for 16-bit samples
                             outBytes = (*((short*)(samplePtr))) /
                                            _16bitSampleMax;
 
-                            _leftTempBuffer[samplesOut] += outBytes * volume;
+                            _pluginBufferIn1[samplesOut] = outBytes;
+
+                            //_tempOutBuffer1[samplesOut] += outBytes * volume;
 
                             if (fabs(outBytes) > peakLevel)
                                 peakLevel = fabs(outBytes);
@@ -2315,7 +2496,8 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                                 outBytes = (*((short*)(samplePtr + 2))) /
                                            _16bitSampleMax;
                             }
-                            _rightTempBuffer[samplesOut] += outBytes * volume;
+                            _pluginBufferIn2[samplesOut] = outBytes;
+                            //_tempOutBuffer2[samplesOut] += outBytes * volume;
                             break;
 
                         case 3: // for 24-bit samples
@@ -2369,18 +2551,61 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 
                 peakLevels.push_back(peakLevel);
 
+                // Insert plugins go here
+                //
+
+                // At this point attempt to use a plugin - get the
+                // plugin count and iterate over them with the 
+                // plugin buffer.
+                //
+                LADSPAPluginInstance *plugin =
+                    inst->getPlugin((*it)->getInstrument(), 0);
+
+                if (plugin)
+                {
+                    plugin->connectPorts(_pluginBufferIn1,
+                                         _pluginBufferIn2,
+                                         _pluginBufferOut1,
+                                         _pluginBufferOut2);
+
+                    plugin->run(_jackBufferSize);
+
+                    // Now mix the signal
+                    //
+                    for (unsigned int i = 0; i < nframes; i++)
+                    {
+                        _tempOutBuffer1[i] += _pluginBufferOut1[i] * volume;
+                        _tempOutBuffer2[i] += _pluginBufferOut2[i] * volume;
+                    }
+                }
+                else
+                {
+                    for (unsigned int i = 0; i < nframes; i++)
+                    {
+                        _tempOutBuffer1[i] += _pluginBufferIn1[i] * volume;
+                        _tempOutBuffer2[i] += _pluginBufferIn2[i] * volume;
+                    }
+                }
             }
-            layerCount++;
+
+
+
         }
 
+#ifdef HAVE_LADSPA
+
+        // System plugins go here
+        //
+
+#endif // HAVE_LADSPA
         
 
         // Transfer the sum of the samples
         //
         for (unsigned int i = 0 ; i < nframes; i++)
         {
-            *(leftBuffer++) = _leftTempBuffer[i];
-            *(rightBuffer++) = _rightTempBuffer[i];
+            *(leftBuffer++) = _tempOutBuffer1[i];
+            *(rightBuffer++) = _tempOutBuffer2[i];
         }
 
         // Process any queue vector operations now it's safe to do so
@@ -2444,10 +2669,21 @@ AlsaDriver::jackBufferSize(jack_nframes_t nframes, void *)
 
     // Recreate our temporary mix buffers to the new size
     //
-    delete [] _leftTempBuffer;
-    delete [] _rightTempBuffer;
-    _leftTempBuffer = new sample_t[_jackBufferSize];
-    _rightTempBuffer = new sample_t[_jackBufferSize];
+    delete [] _tempOutBuffer1;
+    delete [] _tempOutBuffer2;
+    _tempOutBuffer1 = new sample_t[_jackBufferSize];
+    _tempOutBuffer2 = new sample_t[_jackBufferSize];
+
+    delete [] _pluginBufferIn1;
+    delete [] _pluginBufferIn2;
+    _pluginBufferIn1 = new sample_t[_jackBufferSize];
+    _pluginBufferIn2 = new sample_t[_jackBufferSize];
+
+    delete [] _pluginBufferOut1;
+    delete [] _pluginBufferOut2;
+    _pluginBufferOut1 = new sample_t[_jackBufferSize];
+    _pluginBufferOut2 = new sample_t[_jackBufferSize];
+
 
     return 0;
 }
