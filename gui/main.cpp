@@ -425,6 +425,7 @@ int main(int argc, char *argv[])
     aboutData.addCredit("Didier Burli", "French translation", "didierburli@bluewin.ch");
     aboutData.addCredit("Daniele Medri", "Italian translation", "madrid@linuxmeeting.net");
     aboutData.addCredit("Stefan Asserhäll", "Swedish translation", "stefan.asserhall@comhem.se");
+    aboutData.addCredit("Hasso Tepper", "Estonian translation", "hasso@estpak.ee");
 
     aboutData.setTranslator(I18N_NOOP("_: NAME OF TRANSLATORS\nYour names") ,I18N_NOOP("_: EMAIL OF TRANSLATORS\nYour emails"));
     
