@@ -78,8 +78,6 @@ SegmentItem::~SegmentItem()
 void
 SegmentItem::recalculateRectangle(bool inheritFromSegment)
 {
-    kdDebug(KDEBUG_AREA) << "SegmentItem::recalculateRectangle" << endl;
-
     if (m_segment && inheritFromSegment) {
 	m_track = m_segment->getTrack();
 	m_startTime = m_segment->getStartTime();
@@ -93,9 +91,6 @@ SegmentItem::recalculateRectangle(bool inheritFromSegment)
     setSize((int)m_snapGrid->getRulerScale()->
 	    getWidthForDuration(m_startTime, m_duration),
 	    m_snapGrid->getYSnap());
-    
-    kdDebug(KDEBUG_AREA) << "x,y: " << x() << "," << y()
-			 << "; w,h: " << width() << "," << height() << endl;
 }
 
 Segment *
@@ -421,7 +416,7 @@ SegmentCanvas::showSplitLine(int x, int y)
 {
     if (m_splitLine == 0)
         m_splitLine = new SegmentSplitLine(x, y,
-					   m_grid.getYSnap(),
+					   m_grid.getYSnap() - 1,
                                            m_grid.getRulerScale(),
                                            canvas());
     else

@@ -332,10 +332,14 @@ SegmentSplitCommand::execute()
 	    m_newSegment->insert(new Event(**it));
 	    ++it;
 	}
+
+	m_newSegment->setDuration(m_segment->getEndTime() - m_splitTime);
     }
 
     // Resize left hand Segment
     //
+    //!!! should we be dividing any events that are extant during the
+    // split?  Certainly we should be truncating rests, shouldn't we?
     m_segment->erase(m_segment->findTime(m_splitTime), m_segment->end());
     m_segment->setDuration(m_splitTime - m_segment->getStartTime());
 
