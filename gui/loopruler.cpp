@@ -85,7 +85,9 @@ void LoopRuler::drawBarSections(QPainter* paint, bool rightwards)
         
         double x = m_rulerScale->getBarPosition(firstBar);
         for (int i = firstBar; i <= lastBar; ++i) {
+
             double width = m_rulerScale->getBarWidth(i);
+	    if (width == 0) continue;
 
             if (x >= clipRect.x() &&
                 x <= (clipRect.x() + width + clipRect.width())) {
@@ -98,6 +100,7 @@ void LoopRuler::drawBarSections(QPainter* paint, bool rightwards)
 
                 double beatAccumulator = m_rulerScale->getBeatWidth(i);
                 double inc = beatAccumulator;
+		if (inc == 0) continue;
 
                 for (; beatAccumulator < width; beatAccumulator += inc) {
 
@@ -119,7 +122,9 @@ void LoopRuler::drawBarSections(QPainter* paint, bool rightwards)
         double x = m_rulerScale->getBarPosition(lastBar);
 
         for (int i = lastBar; i >= firstBar; --i) {
+
             double width = m_rulerScale->getBarWidth(i);
+	    if (width == 0) continue;
 
             if (x >= clipRect.x() &&
                 x <= (clipRect.x() + width + clipRect.width())) {
@@ -132,6 +137,7 @@ void LoopRuler::drawBarSections(QPainter* paint, bool rightwards)
 
                 double beatAccumulator = width - m_rulerScale->getBeatWidth(i);
                 double dec = m_rulerScale->getBeatWidth(i);
+		if (dec == 0) continue;
 
                 for (; beatAccumulator >= dec; beatAccumulator -= dec) {
 

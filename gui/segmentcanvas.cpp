@@ -633,7 +633,7 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
 
     if (item) {
         // we are, so set currentItem to it
-        m_currentItem = item;
+//        m_currentItem = item;
         return;
 
     } else { // we are not, so create one

@@ -222,6 +222,8 @@ void TrackEditor::commandExecuted(KCommand *command)
 	    m_segmentCanvas->removeSegmentItem(*i);
 	}
     }
+
+    m_segmentCanvas->update();
 }
 
 
