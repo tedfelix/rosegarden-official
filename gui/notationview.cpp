@@ -193,7 +193,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_progressEventFilterInstalled(false),
     m_inhibitRefresh(true),
     m_documentDestroyed(false),
-    m_ok(false)
+    m_ok(false),
+    m_printMode(false)
 {
     initActionDataMaps(); // does something only the 1st time it's called
     
@@ -457,7 +458,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_progressEventFilterInstalled(false),
     m_inhibitRefresh(true),
     m_documentDestroyed(false),
-    m_ok(false)
+    m_ok(false),
+    m_printMode(true)
 {
     assert(segments.size() > 0);
     NOTATION_DEBUG << "NotationView print ctor" << endl;
@@ -1561,7 +1563,7 @@ NotationView::setPageMode(bool pageMode)
 int
 NotationView::getPageWidth()
 {
-    if (m_hlayout->isPageMode() && getCanvasView() && getCanvasView()->canvas())
+    if (isInPrintMode() && getCanvasView() && getCanvasView()->canvas())
         return getCanvasView()->canvas()->width();
 
     return width() - 50;

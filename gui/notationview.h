@@ -129,6 +129,11 @@ public:
     }
 
     /**
+     * Returns true if the view is actually for printing
+     */
+    bool isInPrintMode() { return m_printMode; }
+
+    /**
      * Set the note or rest selected by the user from the toolbars
      */
     void setCurrentSelectedNote(const char *pixmapName,
@@ -750,6 +755,8 @@ protected:
     bool m_inhibitRefresh;
     bool m_documentDestroyed;
     bool m_ok;
+
+    bool m_printMode;
 };
 
 #endif
