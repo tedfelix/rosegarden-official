@@ -1416,6 +1416,7 @@ void RosegardenGUIApp::slotSaveOptions()
 {
     RG_DEBUG << "RosegardenGUIApp::slotSaveOptions()\n";
     _settingLog(QString("SETTING 2 : transport flap extended = %1").arg(m_transport->isExpanded()));
+    _settingLog(QString("SETTING 2 : show track labels = %1").arg(m_viewTrackLabels->isChecked()));
 
     kapp->config()->setGroup(Rosegarden::GeneralOptionsConfigGroup);
     kapp->config()->writeEntry("Show Transport",               m_viewTransport->isChecked());
@@ -1462,6 +1463,7 @@ void RosegardenGUIApp::readOptions()
         m_transport->slotPanelCloseButtonClicked();
 
     opt = kapp->config()->readBoolEntry("Show Track labels", true);
+    _settingLog(QString("SETTING 3 : show track labels = %1").arg(opt));
     m_viewTrackLabels->setChecked(opt);
     slotToggleTrackLabels();
 
@@ -1547,6 +1549,7 @@ void RosegardenGUIApp::showEvent(QShowEvent* e)
 bool RosegardenGUIApp::queryClose()
 {
     _settingLog(QString("SETTING 1 : transport flap extended = %1").arg(m_transport->isExpanded()));
+    _settingLog(QString("SETTING 1 : show track labels = %1").arg(m_viewTrackLabels->isChecked()));
 
     bool canClose = m_doc->saveIfModified();
 
