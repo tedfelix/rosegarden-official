@@ -57,10 +57,10 @@ public:
     //
     void clear();
 
-    // Play an audio sample
+    // Queue up an audio sample for playing
     //
-    bool playAudio(const unsigned int &id, const RealTime startIndex,
-                   const RealTime duration);
+    bool queueAudio(const unsigned int &id, const RealTime startIndex,
+                    const RealTime duration);
 
 protected:
 

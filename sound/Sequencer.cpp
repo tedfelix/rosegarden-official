@@ -31,6 +31,7 @@
 #include "BaseProperties.h"
 #include "MappedEvent.h"
 #include "MappedComposition.h"
+#include "AudioFilePlayer.h"
 
 namespace Rosegarden
 {
@@ -46,7 +47,8 @@ Sequencer::Sequencer():
     m_recordStatus(ASYNCHRONOUS_MIDI),
     m_startPlayback(true),
     m_playing(false),
-    m_sequencerStatus(NO_SEQUENCE_SUBSYS)
+    m_sequencerStatus(NO_SEQUENCE_SUBSYS),
+    m_audioFilePlayer(0)
 {
 
     // Get a reference on the aRTS sound server
@@ -236,6 +238,10 @@ Sequencer::initialiseAudio()
         m_sequencerStatus = MIDI_AND_AUDIO_SUBSYS_OK;
     else
         m_sequencerStatus = AUDIO_SUBSYS_OK;
+
+    // open the audio play channel permanently
+    m_amanPlay.start();
+
 }
 
 
@@ -409,10 +415,52 @@ void
 Sequencer::processAudioOut(Rosegarden::MappedComposition mC,
                           const Rosegarden::RealTime &playLatency)
 {
+    // Queue up any events that are pending and connect them
+    // to the relevant audio out object
+    //
     for (MappedComposition::iterator i = mC.begin(); i != mC.end(); ++i)
     {
         if ((*i)->getType() == MappedEvent::Audio)
+        {
             std::cout << "processAudioOut() - got audio event" << std::endl;
+            m_audioFilePlayer->queueAudio((*i)->getAudioID(),
+                                          (*i)->getStartIndex(),
+                                          (*i)->getDuration());
+        }
+    }
+
+    // Now check queue for events that need playing
+    std::vector<PlayableAudioFile*>::iterator it;
+    RealTime currentTime = getSequencerTime();
+
+    for (it = m_audioPlayQueue.begin(); it != m_audioPlayQueue.end(); it++)
+    {
+        if ((*it)->getStartTime() >= currentTime &&
+            (*it)->getStatus() == PlayableAudioFile::Idle)
+        {
+            (*it)->getAudioObject().start();
+            connect((*it)->getAudioObject(), "left", m_amanPlay, "left");
+            connect((*it)->getAudioObject(), "right", m_amanPlay, "right");
+            (*it)->setStatus(PlayableAudioFile::Playing);
+        }
+
+        if (currentTime >= (*it)->getEndTime() &&
+            (*it)->getStatus() == PlayableAudioFile::Playing)
+        {
+            disconnect((*it)->getAudioObject(), "left", m_amanPlay, "left");
+            disconnect((*it)->getAudioObject(), "right", m_amanPlay, "right");
+            (*it)->getAudioObject().stop();
+            (*it)->setStatus(PlayableAudioFile::Defunct);
+        }
+    }
+
+    // finally remove all defunct objects
+    for (it = m_audioPlayQueue.begin(); it != m_audioPlayQueue.end(); ++it)
+    {
+        if ((*it)->getStatus() == PlayableAudioFile::Defunct)
+        {
+            m_audioPlayQueue.erase(it);
+        }
     }
 }
 
@@ -711,17 +759,18 @@ Sequencer::getMappedComposition()
 }
 
 void
-Sequencer::playAudioFile(AudioFile *audioFile,
-                         const RealTime &startTime,
-                         const RealTime &duration)
+Sequencer::queueAudioFile(AudioFile *audioFile,
+                          const RealTime &startTime,
+                          const RealTime &duration)
 {
     PlayableAudioFile *newAF = new PlayableAudioFile(audioFile,
                                                      startTime,
                                                      duration,
                                                      m_soundServer);
-                                                
-
     m_audioPlayQueue.push_back(newAF);
+
+    cout << "CREATING NEW AUDIO FILE FOR PLAYING - SIZE = "
+         << m_audioPlayQueue.size() << endl;
 }
 
 

@@ -59,6 +59,8 @@
 namespace Rosegarden
 {
 
+class AudioFilePlayer;
+
 // NOTE OFF queue. This holds a time ordered set of
 // pending NOTE OFF events.
 //
@@ -104,13 +106,22 @@ private:
 class PlayableAudioFile
 {
 public:
+
+    typedef enum
+    {
+        Idle,
+        Playing,
+        Defunct
+    } PlayStatus;
+
     PlayableAudioFile(AudioFile *audioFile,
                       const RealTime &startTime,
                       const RealTime &duration,
                       Arts::SoundServerV2 &soundServer):
-    m_id(audioFile->getID()),
-    m_startTime(startTime),
-    m_duration(duration)
+        m_id(audioFile->getID()),
+        m_startTime(startTime),
+        m_duration(duration),
+        m_status(Idle)
     {
         m_artsAudioObject = Arts::DynamicCast(soundServer.createObject
                                ("Arts::Synth_PLAY_WAV"));
@@ -122,11 +133,18 @@ public:
  
     Arts::Synth_PLAY_WAV& getAudioObject() { return m_artsAudioObject; }
 
+    void setStatus(const PlayStatus &status) { m_status = status; }
+    PlayStatus getStatus() const { return m_status; }
+
+    RealTime getStartTime() const { return m_startTime; }
+    RealTime getEndTime() const { return m_startTime + m_duration; }
+
 private:
     unsigned int          m_id;
     RealTime              m_startTime;
     RealTime              m_duration;
     Arts::Synth_PLAY_WAV  m_artsAudioObject;
+    PlayStatus            m_status;
 };
 
 class Sequencer
@@ -202,9 +220,9 @@ public:
 
     // Play an audio file
     //
-    void playAudioFile(Rosegarden::AudioFile *audioFile,
-                       const Rosegarden::RealTime &startTime,
-                       const Rosegarden::RealTime &duration);
+    void queueAudioFile(Rosegarden::AudioFile *audioFile,
+                        const Rosegarden::RealTime &startTime,
+                        const Rosegarden::RealTime &duration);
 
     // Initialise internal states ready for new playback to commence
     //
@@ -243,6 +261,9 @@ public:
 
     void setPlayStartPosition(const Rosegarden::RealTime &pos)
         { m_playStartPosition = pos; }
+
+    void setAudioFilePlayer(AudioFilePlayer *afp)
+        { m_audioFilePlayer = afp; }
 
 private:
     // start MIDI and Audio subsystems
@@ -315,6 +336,8 @@ private:
     // State of the sequencer
     //
     SequencerStatus        m_sequencerStatus;
+
+    AudioFilePlayer       *m_audioFilePlayer;
 
 };
 

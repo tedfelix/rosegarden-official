@@ -102,17 +102,17 @@ AudioFilePlayer::clear()
 
 
 bool
-AudioFilePlayer::playAudio(const unsigned int &id, const RealTime startIndex,
-                           const RealTime duration)
+AudioFilePlayer::queueAudio(const unsigned int &id, const RealTime startIndex,
+                            const RealTime duration)
 {
     std::vector<AudioFile*>::iterator it = getAudioFile(id);
 
     if (it == 0)
         return false;
 
-    // send the resultant AudioFile to the Sequencer for playback
+    // send the resultant AudioFile to the Sequencer for playback queuing
     //
-    m_sequencer->playAudioFile(*it, startIndex, duration);
+    m_sequencer->queueAudioFile(*it, startIndex, duration);
 
     return true;
 }

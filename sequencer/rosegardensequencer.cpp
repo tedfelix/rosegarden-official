@@ -72,6 +72,9 @@ RosegardenSequencerApp::RosegardenSequencerApp():
     // create an AudioFilePlayer with a pointer to the Sequencer 
     //
     m_audioFilePlayer = new Rosegarden::AudioFilePlayer(m_sequencer);
+
+    // make the relationship two way
+    m_sequencer->setAudioFilePlayer(m_audioFilePlayer);
 }
 
 RosegardenSequencerApp::~RosegardenSequencerApp()
