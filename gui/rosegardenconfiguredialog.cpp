@@ -114,7 +114,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg,
     //
     QFrame *frame = new QFrame(m_tabWidget);
     QGridLayout *layout = new QGridLayout(frame,
-			     1, 2, // nbrow, nbcol
+			     4, 2, // nbrow, nbcol -- one extra row improves layout
 			     10, 5);
     layout->addWidget(new QLabel(i18n("Note name style"),
                                  frame), 0, 0);
@@ -152,7 +152,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg,
     //
     frame = new QFrame(m_tabWidget);
     layout = new QGridLayout(frame,
-			     3, 2, // nbrow, nbcol
+			     4, 2, // nbrow, nbcol
 			     10, 5);
 
     layout->addWidget(new QLabel(i18n("Default editor (for double-click on segment)"),
@@ -189,7 +189,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg,
     //
     frame = new QFrame(m_tabWidget);
     layout = new QGridLayout(frame,
-                             1, 3, // nbrow, nbcol
+                             2, 3, // nbrow, nbcol
                              10, 5);
 
     layout->addWidget(new QLabel(i18n("External audio editor"), frame),
@@ -216,7 +216,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg,
     //
     frame = new QFrame(m_tabWidget);
     layout = new QGridLayout(frame,
-                             1, 2, // nbrow, nbcol
+                             2, 2, // nbrow, nbcol
                              10, 5);
 
     layout->addWidget(new QLabel(i18n("Auto-save interval (in seconds)"),
@@ -309,7 +309,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
 
     QFrame *frame = new QFrame(m_tabWidget);
     QGridLayout *layout = new QGridLayout(frame,
-                                          4, 2, // nbrow, nbcol
+                                          5, 2, // nbrow, nbcol
                                           10, 5);
 
     layout->addWidget
@@ -378,7 +378,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     addTab(frame, i18n("Font"));
 
     frame = new QFrame(m_tabWidget);
-    layout = new QGridLayout(frame, 4, 2, 10, 5);
+    layout = new QGridLayout(frame, 5, 2, 10, 5);
 
     layout->addWidget(new QLabel(i18n("Default layout mode"), frame), 0, 0);
 
@@ -449,7 +449,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     addTab(frame, i18n("Layout"));
 
     frame = new QFrame(m_tabWidget);
-    layout = new QGridLayout(frame, 5, 2, 10, 5);
+    layout = new QGridLayout(frame, 6, 2, 10, 5);
 
     layout->addWidget
 	(new QLabel(i18n("Default note style for new notes"), frame), 0, 0);

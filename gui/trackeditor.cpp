@@ -459,6 +459,7 @@ void TrackEditor::paintEvent(QPaintEvent* e)
 		    (*i)->getRefreshStatus(refreshStatusId);
 
 		refresh = refreshStatus.needsRefresh();
+		refreshStatus.setNeedsRefresh(false);
 	    }
 
 	    if (refresh) {
