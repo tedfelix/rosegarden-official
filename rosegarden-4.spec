@@ -1,10 +1,12 @@
+%define version 0.8
+%define release 2
 Summary:   MIDI and audio sequencer and notation editor
-Name:	   rosegarden-4
-Version:   0.8
-Release:   2
+Name:	   rosegarden4
+Version:   %{version}
+Release:   %{release}
 Copyright: GPL
 Group:     Applications/Sound
-Source:    http://prdownloads.sourceforge.net/rosegarden/rosegarden-4-0.8.tar.gz
+Source:    http://prdownloads.sourceforge.net/rosegarden/rosegarden-4-%{version}.tar.gz
 URL:       http://www.all-day-breakfast.com/rosegarden/
 Packager:  Ryurick M. Hristev <ryurick.hristev@canterbury.ac.nz>
 
