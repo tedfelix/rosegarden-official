@@ -3,7 +3,7 @@ Features for release 0.1
 1. features without which nobody will even believe we're serious
 
 - be able to store music in multiple tracks and display multiple
-  tracks (however basic that display may be) : DONE
+  tracks (one notation window per track) : DONE
 
 - updating one edit window when something is edited in another
   (however crudely we do it at first).  -- at the moment if you
@@ -38,6 +38,8 @@ done as soon as possible
 - moveable begin and end markers in tracks
 
 - all the notation elegances (more precise description needed here)
+
+- show several tracks in a single notation window
 
 - loading Rosegarden 2.1 files
 
