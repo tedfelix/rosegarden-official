@@ -110,10 +110,14 @@ TrackLabel::setSelected(bool on)
         m_selected = true;
         m_instrumentLabel->setBackgroundMode(PaletteHighlight);
         m_trackLabel->setBackgroundMode(PaletteHighlight);
+        m_instrumentLabel->setPaletteForegroundColor(colorGroup().highlightedText());
+        m_trackLabel->setPaletteForegroundColor(colorGroup().highlightedText());
     } else {
         m_selected = false;
         m_instrumentLabel->setBackgroundMode(PaletteBackground);
         m_trackLabel->setBackgroundMode(PaletteBackground);
+        m_instrumentLabel->setPaletteForegroundColor(colorGroup().text());
+        m_trackLabel->setPaletteForegroundColor(colorGroup().text());
     }
     visibleWidget()->update();
 }
