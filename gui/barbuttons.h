@@ -58,6 +58,8 @@ public:
     
     void setMinimumWidth(int width);
 
+    void setHorizScaleFactor(double dy);
+
 public slots:
     void slotScrollHoriz(int x);
 
@@ -69,7 +71,7 @@ private:
     bool m_invert;
     int m_loopRulerHeight;
     int m_currentXOffset;
-    
+
     Rosegarden::RulerScale *m_rulerScale;
 
     BarButtonsWidget *m_hButtonBar;

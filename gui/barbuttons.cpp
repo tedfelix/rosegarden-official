@@ -53,6 +53,8 @@ public:
 
     void setWidth(int width) { m_width = width; }
 
+    void setHorizScaleFactor(double dy) { m_hScaleFactor = dy; }
+
 protected:
     virtual void paintEvent(QPaintEvent*);
 
@@ -61,6 +63,8 @@ protected:
     double m_xorigin;
     int m_currentXOffset;
     int m_width;
+
+    double m_hScaleFactor;
 
     QFont *m_barFont;
 
@@ -138,6 +142,13 @@ void BarButtons::setMinimumWidth(int width)
     m_loopRuler->setMinimumWidth(width);
 }
 
+void BarButtons::setHorizScaleFactor(double dy)
+{
+    m_hButtonBar->setHorizScaleFactor(dy);
+}
+
+
+
 void BarButtons::paintEvent(QPaintEvent *e)
 {
     /*
@@ -166,6 +177,7 @@ BarButtonsWidget::BarButtonsWidget(RulerScale *rulerScale,
       m_xorigin(xorigin),
       m_currentXOffset(0),
       m_width(-1),
+      m_hScaleFactor(1.0),
       m_rulerScale(rulerScale)
 {
 //    m_barFont = new QFont("helvetica", 12);
@@ -208,6 +220,9 @@ void BarButtonsWidget::paintEvent(QPaintEvent*)
 {
     QPainter painter(this);
     painter.setFont(*m_barFont);
+
+    if (m_hScaleFactor != 1.0)
+        painter.scale(m_hScaleFactor, 1.0);
 
     QRect clipRect = visibleRect();
 
