@@ -337,7 +337,7 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 
 	if (newTimeSig && !timeSignature.isHidden()) {
 	    timeSigEvent = timeSignature.getAsEvent(barTimes.first);
-	    fixedWidth += getFixedItemSpacing() +
+	    fixedWidth += getFixedItemSpacing()*2 +
 		m_npf->getTimeSigWidth(timeSignature);
 	}
 
@@ -1126,7 +1126,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 	    if (timeSigToPlace && !el->event()->isa(Clef::EventType)) {
 //		kdDebug(KDEBUG_AREA) << "Placing timesig at " << x << endl;
 		bdi->timeSigX = (int)x;
-		x += getFixedItemSpacing() +
+		x += getFixedItemSpacing()*2 +
 		    m_npf->getTimeSigWidth(timeSignature);
 //		kdDebug(KDEBUG_AREA) << "and moving next elt to " << x << endl;
 		el->setLayoutX(x);

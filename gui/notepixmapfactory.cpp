@@ -1360,19 +1360,27 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
 
 int NotePixmapFactory::getTimeSigWidth(const TimeSignature &sig) const
 {
-    int numerator = sig.getNumerator(),
-        denominator = sig.getDenominator();
+    if (sig.isCommon()) {
 
-    QString numS, denomS;
+	QRect r(m_bigTimeSigFontMetrics.boundingRect("c"));
+	return r.width() + 2;
 
-    numS.setNum(numerator);
-    denomS.setNum(denominator);
+    } else {
 
-    QRect numR = m_timeSigFontMetrics.boundingRect(numS);
-    QRect denomR = m_timeSigFontMetrics.boundingRect(denomS);
-    int width = std::max(numR.width(), denomR.width()) + 2;
+	int numerator = sig.getNumerator(),
+	    denominator = sig.getDenominator();
 
-    return width;
+	QString numS, denomS;
+	
+	numS.setNum(numerator);
+	denomS.setNum(denominator);
+	
+	QRect numR = m_timeSigFontMetrics.boundingRect(numS);
+	QRect denomR = m_timeSigFontMetrics.boundingRect(denomS);
+	int width = std::max(numR.width(), denomR.width()) + 2;
+	
+	return width;
+    }
 }
 
 void
