@@ -19,5 +19,7 @@ make -f Makefile.cvs
 
 #CC='distcc gcc-3.3' CXX='distcc gcc-3.3' CXXLD=gcc CXXFLAGS="-gstabs+3 -Wall -O0" ./configure --enable-debug=full
 
-CXXFLAGS="-gstabs+3 -Wall -O2" ./configure --enable-debug=full
+#CXX='gfilt' CXXFLAGS="-gstabs+3 -Wall -O0" ./configure --enable-debug=full
+
+CXXFLAGS="-gstabs+3 -Wall -O0" ./configure --enable-debug=full
 

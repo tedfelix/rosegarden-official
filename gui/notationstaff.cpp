@@ -108,7 +108,7 @@ NotationStaff::changeFont(string fontName, int size)
     setResolution(size);
 
     delete m_notePixmapFactory;
-    m_notePixmapFactory = new NotePixmapFactory(fontName, size, true);
+    m_notePixmapFactory = new NotePixmapFactory(fontName, size);
 
     std::vector<int> sizes = NotePixmapFactory::getAvailableSizes(fontName);
     int graceSize = size;

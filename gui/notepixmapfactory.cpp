@@ -113,37 +113,30 @@ NotePixmapParameters::~NotePixmapParameters()
 
 
 
-NotePixmapFactory::NotePixmapFactory(std::string fontName, int size,
-				     bool fineRendering) :
-    m_fineRendering(fineRendering),
+NotePixmapFactory::NotePixmapFactory(std::string fontName, int size) :
     m_selected(false),
-    m_timeSigFont
-    ("new century schoolbook", fineRendering ? 16 : 8, QFont::Bold),
-    m_timeSigFontMetrics(m_timeSigFont),
-    m_bigTimeSigFont
-    ("new century schoolbook", fineRendering ? 24 : 12, QFont::Normal),
-    m_bigTimeSigFontMetrics(m_bigTimeSigFont),
-    m_tupletCountFont
-    ("new century schoolbook", fineRendering ? 16 : 8, QFont::Bold, true),
+    m_tupletCountFont("times", 8, QFont::Bold, true),
     m_tupletCountFontMetrics(m_tupletCountFont),
-    m_textMarkFont
-    ("new century schoolbook", fineRendering ? 16 : 8, QFont::Bold, true),
-    m_textMarkFontMetrics(m_textMarkFont)
+    m_textMarkFont("times", 8, QFont::Bold, true),
+    m_textMarkFontMetrics(m_textMarkFont),
+    m_timeSigFont("new century schoolbook", 8, QFont::Bold),
+    m_timeSigFontMetrics(m_timeSigFont),
+    m_bigTimeSigFont("new century schoolbook", 12, QFont::Normal),
+    m_bigTimeSigFontMetrics(m_bigTimeSigFont)
 {
     init(fontName, size);
 }
 
 NotePixmapFactory::NotePixmapFactory(const NotePixmapFactory &npf) :
-    m_fineRendering(npf.m_fineRendering),
     m_selected(false),
-    m_timeSigFont(npf.m_timeSigFont),
-    m_timeSigFontMetrics(m_timeSigFont),
-    m_bigTimeSigFont(npf.m_bigTimeSigFont),
-    m_bigTimeSigFontMetrics(m_bigTimeSigFont),
     m_tupletCountFont(npf.m_tupletCountFont),
     m_tupletCountFontMetrics(m_tupletCountFont),
     m_textMarkFont(npf.m_textMarkFont),
-    m_textMarkFontMetrics(m_textMarkFont)
+    m_textMarkFontMetrics(m_textMarkFont),
+    m_timeSigFont(npf.m_timeSigFont),
+    m_timeSigFontMetrics(m_timeSigFont),
+    m_bigTimeSigFont(npf.m_bigTimeSigFont),
+    m_bigTimeSigFontMetrics(m_bigTimeSigFont)
 {
     init(npf.m_font->getNoteFontMap().getName(),
 	 npf.m_font->getCurrentSize());
@@ -153,7 +146,6 @@ NotePixmapFactory &
 NotePixmapFactory::operator=(const NotePixmapFactory &npf)
 {
     if (&npf != this) {
-	m_fineRendering = npf.m_fineRendering;
 	m_selected = npf.m_selected;
 	m_timeSigFont = npf.m_timeSigFont;
 	m_timeSigFontMetrics = QFontMetrics(m_timeSigFont);
@@ -1242,10 +1234,11 @@ NotePixmapFactory::makeClefPixmap(const Clef &clef) const
 
     if (clef.getOctaveOffset() == 0) return plainMap;
 
-    QFont octaveFont("new century schoolbook");
+    QFont octaveFont("times");
     
 
-
+    //!!! finish!
+    return plainMap;
 
 }
 
@@ -1530,7 +1523,9 @@ NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
     bool havePixmap = false;
     QPoint topLeft, bottomRight, hotspot;
 
-    if (m_fineRendering) thickness += 2;
+    bool smooth = m_font->getNoteFontMap().isSmooth();
+
+    if (smooth) thickness += 2;
 
     for (int i = 0; i < thickness; ++i) {
 
@@ -1544,8 +1539,8 @@ NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
 	if (!havePixmap) {
 	    int width  = bottomRight.x() - topLeft.x();
 	    int height = bottomRight.y() - topLeft.y() + thickness - 1;
-	    createPixmapAndMask(m_fineRendering ? width*2  : width,
-				m_fineRendering ? height*2 : height,
+	    createPixmapAndMask(smooth ? width*2+1  : width,
+				smooth ? height*2+1 : height,
 				width, height);
 				
 	    hotspot = QPoint(-topLeft.x(), -topLeft.y());
@@ -1566,8 +1561,8 @@ NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
 
 	m_pm.drawPolyline(qp);
 
-	if (!m_fineRendering || (i > 0 && i < thickness-1)) {
-	    if (m_fineRendering) {
+	if (!smooth || (i > 0 && i < thickness-1)) {
+	    if (smooth) {
 		for (int j = 0; j < ppc; ++j) {
 		    qp.setPoint(j, qp.point(j).x()*2, qp.point(j).y()*2);
 		}
@@ -1585,14 +1580,22 @@ NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
 	else { --my1; --my2; }
     }
 
-    //!!!
+    if (smooth) {
+	QImage i = m_generatedPixmap->convertToImage();
+	if (i.depth() == 1) i = i.convertDepth(32);
+	i = i.smoothScale(i.width()/2, i.height()/2);
+	m_generatedPixmap->convertFromImage(i);
+    }
+
+    //!!! need a way to say not to bother with the mask or its painter at all
+    // for generated ones
     m_generatedMask->fill(Qt::color1);
 
     if (m_selected) {
         m_p.setPen(Qt::black);
     }
 
-    return makeCanvasPixmap(hotspot, m_fineRendering, false);
+    return makeCanvasPixmap(hotspot, true);
 }
 
 QCanvasPixmap*
@@ -1755,7 +1758,6 @@ NotePixmapFactory::getTextFont(const Rosegarden::Text &text) const
     else if (serif) size = getLineSpacing() * 5 / 3;
     else size = getLineSpacing() * 6 / 5;
 
-    if (m_fineRendering) size *= 2;
     textFont.setPixelSize(size);
 
     m_textFontCache[type.c_str()] = textFont;
@@ -1763,8 +1765,7 @@ NotePixmapFactory::getTextFont(const Rosegarden::Text &text) const
 }    
 
 QCanvasPixmap*
-NotePixmapFactory::makeTextPixmap(const Rosegarden::Text &text,
-				  bool withMask)
+NotePixmapFactory::makeTextPixmap(const Rosegarden::Text &text)
 {
     Rosegarden::Profiler profiler("NotePixmapFactory::makeTextPixmap");
 
@@ -1793,7 +1794,7 @@ NotePixmapFactory::makeTextPixmap(const Rosegarden::Text &text,
     m_pm.drawText(offset, textMetrics.ascent() + offset, s);
 
     m_p.setPen(Qt::black);
-    return makeCanvasPixmap(QPoint(2, 2));
+    return makeCanvasPixmap(QPoint(2, 2), true);
 }
     
 QCanvasPixmap*
@@ -1866,13 +1867,11 @@ NotePixmapFactory::createPixmapAndMask(int width, int height,
 }
 
 QCanvasPixmap*
-NotePixmapFactory::makeCanvasPixmap(QPoint hotspot,
-				    bool scalePixmapDown,
-				    bool scaleMaskDown)
+NotePixmapFactory::makeCanvasPixmap(QPoint hotspot, bool generateMask)
 {
     m_p.end();
     m_pm.end();
-
+/*!!!
     if (scalePixmapDown) {
 	QImage i = m_generatedPixmap->convertToImage();
 	if (i.depth() == 1) i = i.convertDepth(32);
@@ -1885,10 +1884,41 @@ NotePixmapFactory::makeCanvasPixmap(QPoint hotspot,
 	m.scale(0.5, 0.5);
 	m_generatedMask->xForm(m);
     }
+*/
 
     QCanvasPixmap* p = new QCanvasPixmap(*m_generatedPixmap, hotspot);
-    QBitmap m(*m_generatedMask);
-    p->setMask(m);
+
+    if (generateMask) {
+
+	QImage i(m_generatedPixmap->convertToImage());
+	QImage im(i.width(), i.height(), 1, 2, QImage::LittleEndian);
+
+	QRgb px0(i.pixel(0, 0));
+	QRgb px1(i.pixel(i.width()-1, 0));
+	QRgb px2(i.pixel(i.width()-1, i.height()-1));
+	QRgb px3(i.pixel(0, i.height()-1));
+
+	QRgb px(px0);
+	if (px0 != px2 && px1 == px3) px = px1;
+
+	for (int y = 0; y < i.height(); ++y) {
+	    for (int x = 0; x < i.width(); ++x) {
+		if (i.pixel(x, y) != px) {
+		    im.setPixel(x, y, 1);
+		} else {
+		    im.setPixel(x, y, 0);
+		}
+	    }
+	}
+
+	QBitmap m;
+	m.convertFromImage(im);
+	p->setMask(m);
+
+    } else {
+	p->setMask(*m_generatedMask);
+    }
+
     delete m_generatedPixmap;
     delete m_generatedMask;
     return p;
