@@ -39,6 +39,9 @@ public:
      */
     int pitchYOffset(unsigned int p) const;
 
+    /// Returns the height of a bar line
+    unsigned int barLineHeight() const { return m_barLineHeight; }
+
     static const unsigned int noteHeight;
     static const unsigned int noteWidth;
     static const unsigned int lineWidth;
@@ -48,7 +51,7 @@ public:
 protected:
 
     Clef m_currentKey;
-
+    unsigned int m_barLineHeight;
     vector<int> m_pitchToHeight;
 };
 

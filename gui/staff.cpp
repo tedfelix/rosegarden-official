@@ -23,6 +23,7 @@
 Staff::Staff(QCanvas *canvas, Staff::Clef clef)
     : QCanvasItemGroup(canvas),
       m_currentKey(clef),
+      m_barLineHeight(0),
       m_pitchToHeight(32)
 {
 
@@ -178,7 +179,7 @@ Staff::Staff(QCanvas *canvas, Staff::Clef clef)
     //
     QCanvasLineGroupable *staffVertLine = new QCanvasLineGroupable(canvas, this);
 
-    int vertLineHeight = nbLines * lineWidth - lineWidth / 2 - 5;
+    m_barLineHeight = nbLines * lineWidth - lineWidth / 2 - 5;
 
     // First line - thick
     //
@@ -187,14 +188,14 @@ Staff::Staff(QCanvas *canvas, Staff::Clef clef)
     staffVertLine->setPen(pen);
 
     staffVertLine->setPoints(0,linesOffset + 1,
-                             0,vertLineHeight + linesOffset - 1);
+                             0,m_barLineHeight + linesOffset - 1);
 
     // Second line - thin
     //
     staffVertLine = new QCanvasLineGroupable(canvas, this);
 
     staffVertLine->setPoints(4,linesOffset,
-                             4,vertLineHeight + linesOffset);
+                             4,m_barLineHeight + linesOffset);
 
 
     setActive(false);  // don't react to mousePress events
