@@ -562,7 +562,6 @@ void TrackNotationHelper::deleteNote(Event *e)
     }
 }
 
-
 bool TrackNotationHelper::deleteRest(Event *e)
 {
     //!!! can we do anything useful with collapseForward? should we return it?
@@ -570,6 +569,22 @@ bool TrackNotationHelper::deleteRest(Event *e)
     bool collapseForward;
     return collapse(e, collapseForward);
 }
+
+bool TrackNotationHelper::deleteEvent(Event *e)
+{
+    bool res = true;
+
+    if (e->isa(Note::EventType)) deleteNote(e);
+    else if (e->isa(Note::EventRestType)) res = deleteRest(e);
+    else {
+        // just plain delete
+        iterator i = track().findSingle(e);
+        erase(i);
+    }
+
+    return res;    
+}
+
 
 bool TrackNotationHelper::hasEffectiveDuration(iterator i)
 {

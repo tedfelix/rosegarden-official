@@ -146,6 +146,16 @@ public:
      */
     bool deleteRest(Event *e);
 
+    /**
+     * Deletes an event. If the event is a note or a rest, calls
+     * deleteNote or deleteRest.
+     *
+     * @return whether the event was deleted (always true, unless the
+     * event is a rest).
+     *
+     * @see deleteRest, deleteNote
+     */
+    bool deleteEvent(Event *e);
 
     /**
      * Check whether a note or rest event has a duration that can be
