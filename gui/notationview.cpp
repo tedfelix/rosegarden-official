@@ -534,9 +534,16 @@ NotationView::insertNote(int pitch, QMouseEvent *e)
         if ((*closestNote)->isRest()) {
 
             // replace rest (or part of it) with note
-            // TODO
-            kdDebug(KDEBUG_AREA) << "NotationHLayout::insertNote : insert over rest is not implemented yet"
+            //
+
+            kdDebug(KDEBUG_AREA) << "NotationHLayout::insertNote : replacing rest with note"
                                  << endl;
+
+            if (!replaceRestWithNote(closestNote, newNotationElement))
+                return;
+            
+//             kdDebug(KDEBUG_AREA) << "NotationHLayout::insertNote : insert over rest is not implemented yet"
+//                                  << endl;
 
         } else {
 
@@ -558,7 +565,9 @@ NotationView::insertNote(int pitch, QMouseEvent *e)
 //         newNotationElement->setX((*closestNote)->x() + Staff::noteWidth + m_noteMargin);
     }
 
-    // TODO : insert insertedEvent too
+    //
+    // BIG TODO : insert insertedEvent too
+    //
 
     kdDebug(KDEBUG_AREA) << "NotationView::insertNote() : Elements before relayout : "
                          << endl << *m_notationElements << endl;
@@ -601,8 +610,8 @@ NotationView::findClosestNote(double eventX)
             dist = eventX - (*it)->x();
 
         if (dist < minDist) {
-            kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : minDist was "
-                                 << minDist << " now = " << dist << endl;
+//             kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : minDist was "
+//                                  << minDist << " now = " << dist << endl;
             minDist = dist;
             res = it;
         }
@@ -618,6 +627,31 @@ NotationView::findClosestNote(double eventX)
     return res;
 }
 
+bool
+NotationView::replaceRestWithNote(NotationElementList::iterator rest,
+                                  NotationElement *newNote)
+{
+    // sanity check : the new note can't be longer than the rest it's
+    // supposed to replace
+    //
+    if ((*rest)->event()->duration() < newNote->event()->duration()) {
+        kdDebug(KDEBUG_AREA) << "NotationView::replaceRestWithNote() - can't replace rest by note, rest is too short (duration : "
+                             << (*rest)->event()->duration() << " note duration is "
+                             << newNote->event()->duration() << ")" << endl;
+        return false;
+    }
+
+    // simple case : rest is same length as new element
+    //
+    if ((*rest)->event()->duration() == newNote->event()->duration()) {
+        newNote->setAbsoluteTime((*rest)->event()->absoluteTime());
+        m_notationElements->insert(newNote);
+        m_notationElements->erase(rest);
+        return true;
+    }
+
+    return true;
+}
 
 //////////////////////////////////////////////////////////////////////
 

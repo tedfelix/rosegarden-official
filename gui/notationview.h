@@ -159,6 +159,13 @@ protected:
      */
     NotationElementList::iterator findClosestNote(double eventX);
 
+    /**
+     * replace the rest element pointed to by the iterator
+     * by the NotationElement
+     */
+    bool replaceRestWithNote(NotationElementList::iterator, NotationElement*);
+
+
     void perfTest();
     void test();
 
