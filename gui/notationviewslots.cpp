@@ -1524,11 +1524,12 @@ void NotationView::slotEditAddClef()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
     Segment &segment = staff->getSegment();
+    static Rosegarden::Clef lastClef;
     Rosegarden::Clef clef;
     Rosegarden::Key key;
     timeT insertionTime = getInsertionTime(clef, key);
-    
-    ClefDialog dialog(this, m_notePixmapFactory, clef);
+
+    ClefDialog dialog(this, m_notePixmapFactory, lastClef);
     
     if (dialog.exec() == QDialog::Accepted) {
         
@@ -1541,6 +1542,8 @@ void NotationView::slotEditAddClef()
             (new ClefInsertionCommand
              (segment, insertionTime, dialog.getClef(),
               shouldChangeOctave, shouldTranspose));
+
+	lastClef = dialog.getClef();
     }
 }                       
 
