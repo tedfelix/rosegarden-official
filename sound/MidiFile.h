@@ -122,6 +122,8 @@ private:
     bool writeHeader(std::ofstream* midiFile);
     bool writeTrack(std::ofstream* midiFile, const unsigned int &trackNum);
 
+    bool consolidateNoteOffEvents(const Rosegarden::TrackId &track);
+
     // Internal convenience functions
     //
     const unsigned int midiBytesToInt(const std::string& bytes);
@@ -132,6 +134,7 @@ private:
     void intToMidiBytes(std::ofstream* midiFile, int number);
     void longToMidiBytes(std::ofstream* midiFile, const unsigned long &number);
     void longToVarBuffer(std::string &buffer, const unsigned long &number);
+
 
 };
 

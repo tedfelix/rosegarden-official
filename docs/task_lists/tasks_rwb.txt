@@ -4,6 +4,10 @@ updated 05.02.2001
 
 Currently looking at:
 
+o Some MIDI files won't load - horrible MIDI file parsing
+
+o Segment operation undo/redo (plus scissors and glue)
+  
 o Playing Audio files
   o synchronisation with MIDI [SITUATION IMPROVED]
   o clearing down handles without crashing aRTS [STILL BUGGY]
@@ -18,10 +22,6 @@ o bar and loop ruler bar widths for partial bars
 
 o smooth position pointer [attempted moved readahead component to gui control]
 
-o Some MIDI files won't load
-
-o Segment operation undo/redo (plus scissors and glue)
-  
 
 ==
 

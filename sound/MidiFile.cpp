@@ -247,7 +247,7 @@ MidiFile::open()
                 return(false);
             }
 
-            for ( unsigned int i = 0; i < m_numberOfTracks; i++ )
+            for (Rosegarden::TrackId i = 0; i < m_numberOfTracks; i++ )
             {
 
 #ifdef MIDI_DEBUG
@@ -370,7 +370,7 @@ MidiFile::parseHeader(const string &midiHeader)
 //
 //
 bool
-MidiFile::parseTrack(ifstream* midiFile, const unsigned int &trackNum)
+MidiFile::parseTrack(ifstream* midiFile, const Rosegarden::TrackId &trackNum)
 {
     MidiByte midiByte, eventCode, data1, data2;
     unsigned int messageLength;
@@ -461,13 +461,11 @@ MidiFile::parseTrack(ifstream* midiFile, const unsigned int &trackNum)
 Rosegarden::Composition*
 MidiFile::convertToRosegarden()
 {
-    MidiTrackIterator midiEvent, noteOffSearch;
+    MidiTrackIterator midiEvent;
     Rosegarden::Segment *rosegardenSegment;
     Rosegarden::Event *rosegardenEvent;
     Rosegarden::TrackId compositionTrack = 0;
     string trackName;
-    bool noteOffFound;
-    bool notesOnTrack;
 
     // Time conversions
     //
@@ -502,10 +500,9 @@ MidiFile::convertToRosegarden()
     timeT crotchetTime = Note(Note::Crotchet).getDuration();
     int divisor = m_timingDivision ? m_timingDivision : crotchetTime;
 
-    for ( unsigned int i = 0; i < m_numberOfTracks; i++ )
+    for (Rosegarden::TrackId i = 0; i < m_numberOfTracks; i++ )
     {
         segmentTime = 0;
-        notesOnTrack = false;
         trackName = string("Imported MIDI");
 
         // Convert the deltaTime to an absolute time since
@@ -523,48 +520,13 @@ MidiFile::convertToRosegarden()
         // Consolidate NOTE ON and NOTE OFF events into a
         // NOTE ON with a duration and delete the NOTE OFFs.
         //
-        for ( midiEvent = (m_midiComposition[i].begin());
-              midiEvent != (m_midiComposition[i].end());
-              ++midiEvent )
-        {
-            if (midiEvent->messageType() == MIDI_NOTE_ON)
-            {
-                // Flag that we've found notes on this track
-                //
-                if (!notesOnTrack) notesOnTrack = true;
-
-                noteOffFound = false;
-
-                for ( noteOffSearch = midiEvent; 
-                      noteOffSearch != (m_midiComposition[i].end());
-                      noteOffSearch++ )
-                {
-                    if ( ( midiEvent->channelNumber() == noteOffSearch->channelNumber() )
-                         && ( ( noteOffSearch->messageType() == MIDI_NOTE_OFF ) ||
-                              ( ( noteOffSearch->messageType() == MIDI_NOTE_ON ) &&
-                                ( noteOffSearch->velocity() == 0x00 ) ) ) )
-                    {
-                        midiEvent->duration(noteOffSearch->time() - midiEvent->time());
-                        m_midiComposition[i].erase(noteOffSearch);
-                        noteOffFound = true;
-                        break;
-                    }
-
-                    // set duration to the length of the segment if not found
-                    if (noteOffFound == false)
-                    {
-                        midiEvent->duration(noteOffSearch->time() - midiEvent->time());
-                    }
-                }
-            }
-        }
-
         // We parse the track even if there are known to be no notes
         // on it, so as to handle tempo and time-signature events
         // correctly.  But we only create a segment to write it to if
         // there are some notes to write.
-        
-        if (notesOnTrack) {
+        //
+        if(consolidateNoteOffEvents(i)) // returns true if notes exist
+        {
             rosegardenSegment = new Segment;
             rosegardenSegment->setTrack(compositionTrack);
             rosegardenSegment->setStartTime(0);
@@ -597,13 +559,13 @@ MidiFile::convertToRosegarden()
         {
             // [cc] -- avoid floating-point
             rosegardenTime =
-                ((timeT)midiEvent->time() * crotchetTime) / divisor;
+                ((timeT)midiEvent->getTime() * crotchetTime) / divisor;
             rosegardenDuration =
-                ((timeT)midiEvent->duration() * crotchetTime) / divisor;
+                ((timeT)midiEvent->getDuration() * crotchetTime) / divisor;
 
             if (midiEvent->isMeta())
             {
-                switch(midiEvent->metaEventCode())
+                switch(midiEvent->getMetaEventCode())
                 {
                 case MIDI_SEQUENCE_NUMBER:
                     break;
@@ -612,12 +574,12 @@ MidiFile::convertToRosegarden()
                     break;
 
                 case MIDI_COPYRIGHT_NOTICE:
-                    composition->setCopyrightNote(midiEvent->metaMessage());
+                    composition->setCopyrightNote(midiEvent->getMetaMessage());
                     break;
                     
                 case MIDI_TRACK_NAME:
                     if (rosegardenSegment)
-                        track->setLabel(midiEvent->metaMessage());
+                        track->setLabel(midiEvent->getMetaMessage());
                     break;
 
                 case MIDI_INSTRUMENT_NAME:
@@ -649,9 +611,9 @@ MidiFile::convertToRosegarden()
 
                 case MIDI_SET_TEMPO:
                     {
-                        MidiByte m0 = midiEvent->metaMessage()[0];
-                        MidiByte m1 = midiEvent->metaMessage()[1];
-                        MidiByte m2 = midiEvent->metaMessage()[2];
+                        MidiByte m0 = midiEvent->getMetaMessage()[0];
+                        MidiByte m1 = midiEvent->getMetaMessage()[1];
+                        MidiByte m2 = midiEvent->getMetaMessage()[2];
 
                         long tempo = (((m0 << 8) + m1) << 8) + m2;
                         
@@ -668,8 +630,8 @@ MidiFile::convertToRosegarden()
                     break;
 
                 case MIDI_TIME_SIGNATURE:
-                    numerator = (int) midiEvent->metaMessage()[0];
-                    denominator = 1 << ((int) midiEvent->metaMessage()[1]);
+                    numerator = (int) midiEvent->getMetaMessage()[0];
+                    denominator = 1 << ((int) midiEvent->getMetaMessage()[1]);
 
                     if (numerator == 0 ) numerator = 4;
                     if (denominator == 0 ) denominator = 4;
@@ -685,8 +647,8 @@ MidiFile::convertToRosegarden()
                     if (!rosegardenSegment) break;
 
                     // get the details
-                    accidentals = (int) midiEvent->metaMessage()[0];
-                    isMinor     = (int) midiEvent->metaMessage()[1];
+                    accidentals = (int) midiEvent->getMetaMessage()[0];
+                    isMinor     = (int) midiEvent->getMetaMessage()[1];
                     isSharp     = accidentals < 0 ?        false  :  true;
                     accidentals = accidentals < 0 ?  -accidentals :  accidentals;
 
@@ -708,7 +670,7 @@ MidiFile::convertToRosegarden()
             }
 
 
-            switch(midiEvent->messageType())
+            switch(midiEvent->getMessageType())
             {
             case MIDI_NOTE_ON:
 
@@ -726,8 +688,10 @@ MidiFile::convertToRosegarden()
                 rosegardenEvent = new Event(Rosegarden::Note::EventType);
                 rosegardenEvent->setAbsoluteTime(rosegardenTime);
                 rosegardenEvent->setType(Note::EventType);
-                rosegardenEvent->set<Int>(BaseProperties::PITCH, midiEvent->note());
-                rosegardenEvent->set<Int>(BaseProperties::VELOCITY, midiEvent->velocity());
+                rosegardenEvent->set<Int>(BaseProperties::PITCH,
+                                          midiEvent->getPitch());
+                rosegardenEvent->set<Int>(BaseProperties::VELOCITY,
+                                          midiEvent->getVelocity());
                 rosegardenEvent->setDuration(rosegardenDuration);
 
                 {
@@ -1010,7 +974,7 @@ MidiFile::convertToMidi(Rosegarden::Composition &comp)
     int lastMidiTime;
     int endOfSegmentTime;
 
-    for (unsigned int i = 0; i < m_numberOfTracks; i++)
+    for (Rosegarden::TrackId i = 0; i < m_numberOfTracks; i++)
     {
         lastMidiTime = 0;
 
@@ -1020,7 +984,7 @@ MidiFile::convertToMidi(Rosegarden::Composition &comp)
 
         // insert end of track event
         MidiTrackIterator lastEvent = (m_midiComposition[i].end());
-        endOfSegmentTime  = (--lastEvent)->time();
+        endOfSegmentTime  = (--lastEvent)->getTime();
 
         midiEvent = new MidiEvent(endOfSegmentTime, MIDI_FILE_META_EVENT,
                                   MIDI_END_OF_TRACK, "");
@@ -1030,8 +994,8 @@ MidiFile::convertToMidi(Rosegarden::Composition &comp)
         for ( midiEventIt = (m_midiComposition[i].begin());
               midiEventIt != (m_midiComposition[i].end()); midiEventIt++ )
         {
-            midiEventAbsoluteTime = midiEventIt->time() - lastMidiTime;
-            lastMidiTime = midiEventIt->time();
+            midiEventAbsoluteTime = midiEventIt->getTime() - lastMidiTime;
+            lastMidiTime = midiEventIt->getTime();
             midiEventIt->setTime(midiEventAbsoluteTime);
         }
     }
@@ -1152,7 +1116,8 @@ MidiFile::writeHeader(std::ofstream* midiFile)
 // Write a MIDI track to file
 //
 bool
-MidiFile::writeTrack(std::ofstream* midiFile, const unsigned int &trackNumber)
+MidiFile::writeTrack(std::ofstream* midiFile,
+                     const Rosegarden::TrackId &trackNumber)
 {
     bool retOK = true;
     MidiByte eventCode = 0;
@@ -1169,55 +1134,55 @@ MidiFile::writeTrack(std::ofstream* midiFile, const unsigned int &trackNumber)
         // Write the time to the buffer in MIDI format
         //
         //
-        longToVarBuffer(trackBuffer, midiEvent->time());
+        longToVarBuffer(trackBuffer, midiEvent->getTime());
 
         if (midiEvent->isMeta())
         {
             trackBuffer += (MidiByte)MIDI_FILE_META_EVENT;
-            trackBuffer += (MidiByte)midiEvent->metaEventCode();
+            trackBuffer += (MidiByte)midiEvent->getMetaEventCode();
 
             // Variable length number field
-            longToVarBuffer(trackBuffer, midiEvent->metaMessage().length());
+            longToVarBuffer(trackBuffer, midiEvent->getMetaMessage().length());
 
-            trackBuffer += midiEvent->metaMessage();
+            trackBuffer += midiEvent->getMetaMessage();
         }
         else
         {
             // Send the normal event code (with encoded channel information)
             //
-            if ((MidiByte)midiEvent->eventCode() != eventCode)
+            if ((MidiByte)midiEvent->getEventCode() != eventCode)
             {
-                trackBuffer += (MidiByte)midiEvent->eventCode();
-                eventCode = (MidiByte)midiEvent->eventCode();
+                trackBuffer += (MidiByte)midiEvent->getEventCode();
+                eventCode = (MidiByte)midiEvent->getEventCode();
             }
 
             // Send the relevant data
             //
-            switch(midiEvent->messageType())
+            switch(midiEvent->getMessageType())
             {
             case MIDI_NOTE_ON:
             case MIDI_NOTE_OFF:
             case MIDI_POLY_AFTERTOUCH:
-                trackBuffer += (MidiByte)midiEvent->note();
-                trackBuffer += (MidiByte)midiEvent->velocity();
+                trackBuffer += (MidiByte)midiEvent->getData1();
+                trackBuffer += (MidiByte)midiEvent->getData2();
                 break;
 
             case MIDI_CTRL_CHANGE:
-                trackBuffer += (MidiByte)midiEvent->data1();
-                trackBuffer += (MidiByte)midiEvent->data2();
+                trackBuffer += (MidiByte)midiEvent->getData1();
+                trackBuffer += (MidiByte)midiEvent->getData2();
                 break;
 
             case MIDI_PROG_CHANGE:
-                trackBuffer += (MidiByte)midiEvent->data1();
+                trackBuffer += (MidiByte)midiEvent->getData1();
                 break;
 
             case MIDI_CHNL_AFTERTOUCH:
-                trackBuffer += (MidiByte)midiEvent->data1();
+                trackBuffer += (MidiByte)midiEvent->getData1();
                 break;
 
             case MIDI_PITCH_BEND:
-                trackBuffer += (MidiByte)midiEvent->data1();
-                trackBuffer += (MidiByte)midiEvent->data2();
+                trackBuffer += (MidiByte)midiEvent->getData1();
+                trackBuffer += (MidiByte)midiEvent->getData2();
                 break;
 
             default:
@@ -1271,7 +1236,7 @@ MidiFile::write()
 
     // And now the tracks
     //
-    for(unsigned int i = 0; i < m_numberOfTracks; i++ )
+    for(Rosegarden::TrackId i = 0; i < m_numberOfTracks; i++ )
     {
         if (!writeTrack(midiFile, i))
         {
@@ -1286,6 +1251,58 @@ MidiFile::write()
    
     return (retOK);
 }
+
+bool
+MidiFile::consolidateNoteOffEvents(const Rosegarden::TrackId &track)
+{
+    MidiTrackIterator midiEvent, noteOffSearch;
+    bool noteOffFound;
+    bool notesOnTrack = false;
+
+    for ( midiEvent = (m_midiComposition[track].begin());
+          midiEvent != (m_midiComposition[track].end());
+          ++midiEvent )
+    {
+        if (midiEvent->getMessageType() == MIDI_NOTE_ON)
+        {
+            // Flag that we've found notes on this track
+            //
+            if (!notesOnTrack) notesOnTrack = true;
+
+            noteOffFound = false;
+
+            for ( noteOffSearch = midiEvent;
+                  noteOffSearch != (m_midiComposition[track].end());
+                  noteOffSearch++ )
+            {
+                if ( ( midiEvent->getChannelNumber() ==
+                      noteOffSearch->getChannelNumber() )
+                     && ( ( noteOffSearch->getMessageType() == MIDI_NOTE_OFF ) ||
+                          ( ( noteOffSearch->getMessageType() == MIDI_NOTE_ON ) &&
+                            ( noteOffSearch->getVelocity() == 0x00 ) ) ) )
+                {
+                    midiEvent->setDuration(noteOffSearch->getTime() -
+                                           midiEvent->getTime());
+                    m_midiComposition[track].erase(noteOffSearch);
+                    noteOffFound = true;
+                    break;
+                }
+
+            }
+            //
+            // Set Event duration to the length of the segment if no
+            // matching NOTE OFF has been found
+            //
+            if (noteOffFound == false)
+                midiEvent->setDuration(noteOffSearch->getTime() -
+                                       midiEvent->getTime());
+        }
+    }
+
+    return notesOnTrack;
+}
+
+
 
 }
 

@@ -23,9 +23,17 @@
 #define _ROSEGARDEN_MIDI_EVENT_H_
 
 #include "Midi.h"
+#include "Event.h"
 
-// We use this class to hold our MIDI data before and after file access.
-// This is our stepping stone between the Application and the MIDI file.  
+// MidiEvent holds MIDI and Rosegarden::Event data during MIDI file I/O.
+// We don't use this class at all for playback or recording of MIDI -
+// for that look at MappedEvent and MappedComposition.
+//
+// Rosegarden doesn't have any internal concept of MIDI events, only
+// Rosegarden::Events which are a superset of MIDI functionality.
+//
+// Check out Rosegarden::Event in base/ for more information.
+//
 //
 //
 
@@ -39,20 +47,20 @@ public:
 
     // single data byte case
     //
-    MidiEvent(const unsigned int &deltaTime,
+    MidiEvent(const Rosegarden::timeT &deltaTime,
               const MidiByte &eventCode,
               const MidiByte &data1);
 
     // double data byte
     //
-    MidiEvent(const unsigned int &deltaTime,
+    MidiEvent(const Rosegarden::timeT &deltaTime,
               const MidiByte &eventCode,
               const MidiByte &data1,
               const MidiByte &data2);
 
     // meta event
     //
-    MidiEvent(const unsigned int &deltaTime,
+    MidiEvent(const Rosegarden::timeT &deltaTime,
               const MidiByte &eventCode,
               const MidiByte &metaEventCode,
               const std::string &metaMessage);
@@ -61,56 +69,52 @@ public:
 
     void print();
 
-    unsigned int time() const { return m_deltaTime; }
-    unsigned int addTime(const unsigned int &time);
-    void setTime(const unsigned int &time) { m_deltaTime = time; }
+    Rosegarden::timeT getTime() const { return m_deltaTime; }
+    Rosegarden::timeT addTime(const Rosegarden::timeT &time);
+    void setTime(const Rosegarden::timeT &time) { m_deltaTime = time; }
 
-    inline const MidiByte messageType()
-    { return ( m_eventCode & MIDI_MESSAGE_TYPE_MASK ); }
+    inline const MidiByte getMessageType()
+        { return ( m_eventCode & MIDI_MESSAGE_TYPE_MASK ); }
 
-    inline const MidiByte channelNumber()
-    { return ( m_eventCode & MIDI_CHANNEL_NUM_MASK ); }
+    inline const MidiByte getChannelNumber()
+        { return ( m_eventCode & MIDI_CHANNEL_NUM_MASK ); }
 
-    inline const MidiByte eventCode() { return m_eventCode; }
+    inline const MidiByte getEventCode() { return m_eventCode; }
 
-    inline const MidiByte note() { return m_data1; }
-    inline const MidiByte velocity() { return m_data2; }
+    inline const MidiByte getPitch() { return m_data1; }
+    inline const MidiByte getVelocity() { return m_data2; }
 
     // Just so we don't have to call them note and vely
-    // for things that they're not
+    // for things that aren't.
     //
-    inline const MidiByte data1() { return m_data1; }
-    inline const MidiByte data2() { return m_data2; }
+    inline const MidiByte getData1() { return m_data1; }
+    inline const MidiByte getData2() { return m_data2; }
 
-    inline const bool isMeta()
-    { return (m_eventCode == MIDI_FILE_META_EVENT ? true : false ); }
+    inline const bool isMeta() { return(m_eventCode == MIDI_FILE_META_EVENT); }
 
-    inline std::string metaMessage() const { return m_metaMessage; }
-    inline const MidiByte metaEventCode() { return m_metaEventCode; }
+    inline std::string getMetaMessage() const { return m_metaMessage; }
+    inline const MidiByte getMetaEventCode() { return m_metaEventCode; }
 
-    void duration(const unsigned int& duration)
-    { m_duration = duration; }
-
-    const unsigned int& duration() { return m_duration; }
+    Rosegarden::timeT getDuration() const { return m_duration; }
+    void setDuration(const Rosegarden::timeT& duration) {m_duration = duration;}
 
     friend bool operator<(const MidiEvent &a, const MidiEvent &b);
-
 
 private:
 
     MidiEvent& operator=(const MidiEvent);
 
-    unsigned int m_deltaTime;
-    unsigned int m_duration;
-    MidiByte     m_eventCode;
-    MidiByte     m_data1;         // or Note
-    MidiByte     m_data2;         // or Velocity
+    Rosegarden::timeT m_deltaTime;
+    Rosegarden::timeT m_duration;
+    MidiByte          m_eventCode;
+    MidiByte          m_data1;         // or Note
+    MidiByte          m_data2;         // or Velocity
 
-    MidiByte     m_metaEventCode;
-    std::string  m_metaMessage;
-    
+    MidiByte          m_metaEventCode;
+    std::string       m_metaMessage;
 
 };
+
 }
 
 #endif // _ROSEGARDEN_MIDI_EVENT_H_
