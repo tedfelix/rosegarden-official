@@ -4006,7 +4006,7 @@ RosegardenGUIApp::slotEditDevices()
 
     if (dialog.exec() == QDialog::Accepted)
     {
-        RG_DEBUG << "slotEditDevices - accepted" << endl;
+        RG_DEBUG << "slotEditDevices - accepted\n";
     }
 
     // Crudely force update
@@ -4023,7 +4023,7 @@ RosegardenGUIApp::slotEditBanks()
 
     if (dialog.exec() == QDialog::Accepted)
     {
-        RG_DEBUG << "slotEditBanks - accepted" << endl;
+        RG_DEBUG << "slotEditBanks - accepted\n";
     }
 
     // Crudely force bank update
@@ -4064,7 +4064,7 @@ RosegardenGUIApp::slotRemapInstruments()
 
     if (dialog.exec() == QDialog::Accepted)
     {
-        RG_DEBUG << "slotRemapInstruments - accepted" << endl;
+        RG_DEBUG << "slotRemapInstruments - accepted\n";
     }
 
 }
@@ -4072,12 +4072,14 @@ RosegardenGUIApp::slotRemapInstruments()
 void
 RosegardenGUIApp::slotSaveDefaultStudio()
 {
-    RG_DEBUG << "RosegardenGUIApp::slotSaveDefaultStudio" << endl;
+    RG_DEBUG << "RosegardenGUIApp::slotSaveDefaultStudio\n";
 
     KTmpStatusMsg msg(i18n("Saving current studio as default..."), this);
 
-    KStandardDirs standardDirs;
-    QString autoloadFile = standardDirs.localkdedir() + "share/apps/rosegarden/autoload.rg";
+    QString autoloadFile = ::locateLocal("appdata", "autoload.rg");
+
+    RG_DEBUG << "RosegardenGUIApp::slotSaveDefaultStudio : saving studio in "
+             << autoloadFile << endl;
     
     SetWaitCursor waitCursor;
     m_doc->saveDocument(autoloadFile);
