@@ -52,7 +52,8 @@ RoseXmlHandler::RoseXmlHandler(Composition &composition,
       m_inGroup(false),
       m_inComposition(false),
       m_groupId(0),
-      m_foundTempo(false)
+      m_foundTempo(false),
+      m_section(NoSection)
 {
 //     kdDebug(KDEBUG_AREA) << "RoseXmlHandler() : composition size : "
 //                          << m_composition.getNbSegments()
@@ -161,7 +162,18 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 	}
 
     } else if (lcName == "rosegarden-data") {
-        // set to some state which says it's ok to parse the rest
+
+        // validate top level open
+
+    } else if (lcName == "studio") {
+
+        if (m_section != NoSection)
+        {
+            m_errorString = i18n("Found Studio in another section");
+            return false;
+        }
+
+        m_section = InStudio;
 
     } else if (lcName == "timesignature") {
 
@@ -241,6 +253,16 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
     } else if (lcName == "composition") {
 
+        if (m_section != NoSection)
+        {
+            m_errorString = i18n("Found Composition in another section");
+            return false;
+        }
+        
+        // set Segment
+        m_section = InComposition;
+
+        int track = -1, startTime = 0;
         // Get and set the record track
         //
         int recordTrack = -1;
@@ -341,6 +363,15 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
 
     } else if (lcName == "segment") {
+
+        if (m_section != NoSection)
+        {
+            m_errorString = i18n("Found Segment in another section");
+            return false;
+        }
+        
+        // set Segment
+        m_section = InSegment;
 
         int track = -1, startTime = 0;
         QString trackNbStr = atts.value("track");
@@ -485,6 +516,30 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         m_currentSegment->setDuration(marker -
                                m_currentSegment->getAudioStartTime());
 
+    } else if (lcName == "device") {
+
+        if (m_section != InStudio)
+        {
+            m_errorString = i18n("Found Device outside Studio");
+            return false;
+        }
+
+    } else if (lcName == "bank") {
+
+        if (m_section != InStudio)
+        {
+            m_errorString = i18n("Found Bank outside Studio");
+            return false;
+        }
+
+    } else if (lcName == "program") {
+
+        if (m_section != InStudio)
+        {
+            m_errorString = i18n("Found Program outside Studio");
+            return false;
+        }
+
     } else {
         kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement : Don't know how to parse this : " << qName << endl;
     }
@@ -521,12 +576,18 @@ RoseXmlHandler::endElement(const QString& /*namespaceURI*/,
     } else if (lcName == "segment") {
 
         m_currentSegment = 0;
+        m_section = NoSection;
 
     } else if (lcName == "bar-segment" || lcName == "tempo-segment") {
 	
 	m_currentSegment = 0;
     } else if (lcName == "composition") {
         m_inComposition = false;
+        m_section = NoSection;
+
+    } else if (lcName == "studio") {
+
+        m_section = NoSection;
     }
 
     return true;

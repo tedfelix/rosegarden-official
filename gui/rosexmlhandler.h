@@ -36,6 +36,14 @@ class RoseXmlHandler : public QXmlDefaultHandler
 {
 public:
 
+    typedef enum
+    {
+        NoSection,
+        InComposition,
+        InSegment,
+        InStudio
+    } RosegardenFileSection;
+
     /**
      * Construct a new RoseXmlHandler which will put the data extracted
      * from the XML file into the specified composition
@@ -93,6 +101,8 @@ protected:
     bool m_foundTempo;
 
     QString m_errorString;
+
+    RosegardenFileSection m_section;
 };
 
 #endif
