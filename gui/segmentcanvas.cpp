@@ -62,12 +62,9 @@ SegmentItem::SegmentItem(TrackId track, timeT startTime, timeT duration,
     m_startTime(startTime),
     m_duration(duration),
     m_selected(false),
-    m_snapGrid(snapGrid),
-    m_repeatRectangle(0),
-    m_label(new QCanvasText("", canvas))
+    m_snapGrid(snapGrid)
 {
     if (!m_font) makeFont();
-    m_label->setFont(*m_font);
 
     recalculateRectangle(true);
 }
@@ -77,39 +74,18 @@ SegmentItem::SegmentItem(Segment *segment,
     QCanvasRectangle(0, 0, 1, 1, canvas),
     m_segment(segment),
     m_selected(false),
-    m_snapGrid(snapGrid),
-    m_repeatRectangle(0),
-    m_label(new QCanvasText("", canvas))
+    m_snapGrid(snapGrid)
 {
     if (!m_font) makeFont();
-    m_label->setFont(*m_font);
 
     recalculateRectangle(true);
 }
 
 SegmentItem::~SegmentItem()
 {
-    kdDebug(KDEBUG_AREA) << "SegmentItem::~SegmentItem" << endl;
-
-    if (canvas()) {
-
-	// ugh.  need to do this because we own some of our peers
-	// and we don't know whether they've already been deleted
-	// (as part of the general cleanup on exit) or whether
-	// they aren't going to be (because we're being deleted
-	// on our own as our segment has gone)
-
-	QCanvasItemList l = canvas()->allItems();
-    
-	for (QCanvasItemList::Iterator it = l.begin(); it != l.end(); ++it) {
-	    if (*it == m_repeatRectangle) delete m_repeatRectangle;
-	    else if (*it == m_label) delete m_label;
-	}
-    }
 }
 
-void
-SegmentItem::makeFont()
+void SegmentItem::makeFont()
 {
     m_font = new QFont();
     m_font->setPixelSize(m_snapGrid->getYSnap() / 2);
@@ -119,40 +95,39 @@ SegmentItem::makeFont()
     m_fontHeight = m_fontMetrics->boundingRect("|^M,g").height();
 }
 
-void
-SegmentItem::recalculateRectangle(bool inheritFromSegment)
+void SegmentItem::draw(QPainter& painter)
+{
+    QCanvasRectangle::draw(painter);
+
+    if (m_segment && m_segment->isRepeating()) painter.drawRoundRect(m_repeatRectangle);
+    painter.setFont(*m_font);
+    painter.drawText(m_labelPos, m_label);
+}
+
+
+void SegmentItem::recalculateRectangle(bool inheritFromSegment)
 {
     if (m_segment && inheritFromSegment) {
 
 	m_track = m_segment->getTrack();
 	m_startTime = m_segment->getStartTime();
 	m_duration = m_segment->getDuration();
-        m_labelText = m_segment->getLabel().c_str();
+        m_label = m_segment->getLabel().c_str();
 
 	if (m_segment->isRepeating()) {
 
 	    timeT repeatStart = m_startTime + m_duration;
 	    timeT repeatEnd = m_segment->getRepeatEndTime();
 
-	    if (!m_repeatRectangle) {
-		m_repeatRectangle = new QCanvasRectangle(0, 0, 1, 1, canvas());
-	    }
-
-	    m_repeatRectangle->setX
-		(m_snapGrid->getRulerScale()->getXForTime(repeatStart));
-	    m_repeatRectangle->setY
+	    m_repeatRectangle.setX
+		(int(m_snapGrid->getRulerScale()->getXForTime(repeatStart)));
+	    m_repeatRectangle.setY
 		(m_snapGrid->getYBinCoordinate(m_track));
-	    m_repeatRectangle->setSize
-		((int)m_snapGrid->getRulerScale()->getWidthForDuration
+	    m_repeatRectangle.setSize
+		(QSize((int)m_snapGrid->getRulerScale()->getWidthForDuration
 		 (repeatStart, repeatEnd - repeatStart) + 1,
-		 m_snapGrid->getYSnap());
+		 m_snapGrid->getYSnap()));
 
-	    m_repeatRectangle->setZ(-1);
-	    m_repeatRectangle->show();
-	    
-	} else if (m_repeatRectangle) {
-	    delete m_repeatRectangle;
-	    m_repeatRectangle = 0;
 	}
     }
 
@@ -163,67 +138,58 @@ SegmentItem::recalculateRectangle(bool inheritFromSegment)
 	    getWidthForDuration(m_startTime, m_duration) + 1,
 	    m_snapGrid->getYSnap());
 
-    QString text = m_labelText;
     bool dots = false;
 
-    while (text.length() > 0 &&
-	   (m_fontMetrics->boundingRect(dots ? (text + "...") : text).width() >
+    while (m_label.length() > 0 &&
+	   (m_fontMetrics->boundingRect(dots ? (m_label + "...") : m_label).width() >
 	    width() - 5)) {
-	if (!dots && text.length() > 6) {
-	    text.truncate(text.length() - 4);
+	if (!dots && m_label.length() > 6) {
+	    m_label.truncate(m_label.length() - 4);
 	    dots = true;
-	} else if (dots && text.length() < 2) {
+	} else if (dots && m_label.length() < 2) {
 	    dots = false;
 	} else {
-	    text.truncate(text.length() - 1);
+	    m_label.truncate(m_label.length() - 1);
 	}
     }
-    if (dots) m_label->setText(text + "...");
-    else m_label->setText(text);
 
-    m_label->setX(m_snapGrid->getRulerScale()->getXForTime(m_startTime) + 3);
-    m_label->setY(m_snapGrid->getYBinCoordinate(m_track) +
-		  (m_snapGrid->getYSnap()/2 - m_fontHeight/2) * 2 / 3);
-    m_label->setZ(2);
-    m_label->show();
+    if (dots) m_label += "...";
+
+    m_labelPos.setX(int(m_snapGrid->getRulerScale()->getXForTime(m_startTime) + 3));
+    m_labelPos.setY(m_snapGrid->getYBinCoordinate(m_track) +
+                    (m_snapGrid->getYSnap()/2 + m_fontHeight) * 2 / 3);
 }
 
-Segment *
-SegmentItem::getSegment() const
+Segment* SegmentItem::getSegment() const
 {
     return m_segment;
 }
 
-void
-SegmentItem::setSegment(Segment *segment)
+void SegmentItem::setSegment(Segment *segment)
 {
     m_segment = segment;
     recalculateRectangle(true);
 }
 
-void
-SegmentItem::setStartTime(timeT t)
+void SegmentItem::setStartTime(timeT t)
 {
     m_startTime = t;
     recalculateRectangle(false);
 }
 
-void
-SegmentItem::setDuration(timeT d)
+void SegmentItem::setDuration(timeT d)
 {
     m_duration = d;
     recalculateRectangle(false);
 }
 
-void
-SegmentItem::setTrack(TrackId track)
+void SegmentItem::setTrack(TrackId track)
 {
     m_track = track;
     recalculateRectangle(false);
 }
 
-void
-SegmentItem::normalize()
+void SegmentItem::normalize()
 {
     if (m_duration < 0) {
 	m_duration = -m_duration;
@@ -235,8 +201,7 @@ SegmentItem::normalize()
 // Set this SegmentItem as selected/highlighted - we send
 // in the QBrush we need at the same time
 //
-void
-SegmentItem::setSelected(const bool &select, const QBrush &brush)
+void SegmentItem::setSelected(const bool &select, const QBrush &brush)
 {
     setBrush(brush);
     m_selected = select;
@@ -259,15 +224,13 @@ SegmentSplitLine::SegmentSplitLine(int x, int y, int height,
     moveLine(x, y);
 }
 
-void
-SegmentSplitLine::moveLine(int x, int y)
+void SegmentSplitLine::moveLine(int x, int y)
 {
     setPoints(x, y, x, y + m_height);
     show();
 }
 
-void
-SegmentSplitLine::hideLine()
+void SegmentSplitLine::hideLine()
 {
     hide();
 }
@@ -1291,7 +1254,7 @@ SegmentSplitter::drawSplitLine(QMouseEvent *e)
 
 
 void
-SegmentSplitter::contentsMouseDoubleClickEvent(QMouseEvent *e)
+SegmentSplitter::contentsMouseDoubleClickEvent(QMouseEvent*)
 {
 }
 

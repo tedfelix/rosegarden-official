@@ -50,8 +50,6 @@ class SegmentItem : public QCanvasRectangle
 {
 
 public:
-    static const int SegmentItemRTTI = 1001;
-
     /**
      * Create a new segment item without an associated segment (yet)
      */
@@ -107,7 +105,7 @@ public:
     // Select this SegmentItem
     void setSelected(const bool &select, const QBrush &highlightBrush);
 
-    virtual int rtti() const { return SegmentItemRTTI; }
+    virtual void draw (QPainter&);
 
 protected:
     Rosegarden::Segment *m_segment;
@@ -118,13 +116,13 @@ protected:
     Rosegarden::TrackId m_track;
     Rosegarden::timeT m_startTime;
     Rosegarden::timeT m_duration;
-    QString m_labelText;
 
     bool m_selected;
     Rosegarden::SnapGrid *m_snapGrid;
 
-    QCanvasRectangle *m_repeatRectangle;
-    QCanvasText *m_label;
+    QRect   m_repeatRectangle;
+    QString m_label;
+    QPoint m_labelPos;
 
     static QFont *m_font;
     static QFontMetrics *m_fontMetrics;
@@ -143,15 +141,12 @@ private:
 class SegmentSplitLine : public QCanvasLine
 {
 public:
-    static const int SegmentSplitLineRTTI = 1002;
     SegmentSplitLine(int x, int y, int height,
                      Rosegarden::RulerScale *rulerScale,
                      QCanvas* canvas);
 
     void moveLine(int x, int y);
     void hideLine();
-
-    virtual int rtti() const { return SegmentSplitLineRTTI; }
 
 private:
     Rosegarden::RulerScale *m_rulerScale;
