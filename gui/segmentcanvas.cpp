@@ -153,7 +153,7 @@ SegmentItemPreview::SegmentItemPreview(SegmentItem& parent,
     : m_parent(parent),
       m_segment(parent.getSegment()),
       m_rulerScale(scale),
-      m_previewIsCurrent(false)
+      m_previewState(PreviewChanged)
 {
 }
 
@@ -173,7 +173,6 @@ public:
     SegmentAudioPreview(SegmentItem& parent, Rosegarden::RulerScale* scale);
 
     virtual void drawShape(QPainter&);
-
     virtual void clearPreview();
 
 protected:
@@ -183,15 +182,7 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    enum State {
-	Changed,
-	Calculating,
-	Current
-    };
-
-    State                m_previewState;
     int                  m_previewToken;
-
     std::vector<float>   m_values;
     bool                 m_showMinima;
     unsigned int         m_channels;
@@ -200,7 +191,6 @@ protected:
 SegmentAudioPreview::SegmentAudioPreview(SegmentItem& parent,
                                          Rosegarden::RulerScale* scale)
     : SegmentItemPreview(parent, scale),
-      m_previewState(Changed),
       m_previewToken(-1),
       m_showMinima(false),
       m_channels(0)
@@ -215,8 +205,9 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
 
     // If there's nothing to draw then don't draw it
     //
-    if (m_values.size() == 0)
+    if (m_values.size() == 0) {
         return;
+    }
 
     painter.save();
     //painter.translate(rect().x(), rect().y());
@@ -386,22 +377,16 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
 void SegmentAudioPreview::clearPreview()
 {
     m_values.clear();
-    m_previewIsCurrent = false;
-    m_previewState = Changed;
+    setPreviewCurrent(false);
 }
 
 void SegmentAudioPreview::updatePreview(const QWMatrix &matrix)
 {
-    if (m_previewState == Calculating || m_previewState == Current) return;
-//    if (isPreviewCurrent()) return;
+    if (getPreviewState() != PreviewChanged) return;
 
     Rosegarden::Profiler profiler("SegmentAudioPreview::updatePreview", true);
 
     m_values.clear();
-
-    // Fetch vector of floats adjusted to our resolution
-    //
-//!!!    Rosegarden::AudioFileManager &aFM = m_parent.getDocument()->getAudioFileManager();
 
     Rosegarden::Composition &comp = m_parent.getDocument()->getComposition();
 
@@ -412,12 +397,12 @@ void SegmentAudioPreview::updatePreview(const QWMatrix &matrix)
         comp.getElapsedRealTime(m_parent.getEndTime()) -
         comp.getElapsedRealTime(m_parent.getStartTime()) ;
 
+    QRect tRect = matrix.map(rect());
+    QRect uRect = matrix.map(rect());
+
     RG_DEBUG << "SegmentAudioPreview::updatePreview() - for file id "
 	     << m_segment->getAudioFileId() << " requesting values" <<endl;
 
-    QRect tRect = matrix.map(rect());
-    QRect uRect = matrix.map(rect());
-    
     AudioPreviewThread &thread = m_parent.getDocument()->getAudioPreviewThread();
     AudioPreviewThread::Request request;
     request.audioFileId = m_segment->getAudioFileId();
@@ -428,77 +413,28 @@ void SegmentAudioPreview::updatePreview(const QWMatrix &matrix)
     request.notify = this;
     m_previewToken = thread.requestPreview(request);
 
-/*!!!
-    try
-    {
-        RG_DEBUG << "SegmentAudioPreview::updatePreview() - for file id "
-                 << m_segment->getAudioFileId() << " fetching values" <<endl;
-
-        QRect tRect = matrix.map(rect());
-        QRect uRect = matrix.map(rect());
-
-        RG_DEBUG << "SegmentAudioPreview::updatePreview "
-                 << "rect().width() = " << rect().width()
-                 << ", mapped width = " << tRect.width()
-                 << ", inverse mapped width = " <<  uRect.width()
-                 << endl;
-
-        m_values =
-            aFM.getPreview(m_segment->getAudioFileId(),
-                           audioStartTime,
-                           audioEndTime,
-                           tRect.width(),
-                           m_showMinima); // do we get and show the minima too?
-    }
-    catch (std::string e)
-    {
-        // empty all values out
-        RG_DEBUG << "SegmentAudioPreview::updatePreview : "
-                 << e.c_str() << endl;
-        
-        m_values.clear();
-    }
-*/
-
-    // If we haven't inserted the audio file yet we're probably
-    // just still recording it.
-    //
-/*!!!
-    if (m_values.size() == 0) {
-        RG_DEBUG << "SegmentAudioPreview::updatePreview : no values\n";
-        return;
-    }
-*/
-    Rosegarden::AudioFileManager &aFM = m_parent.getDocument()->getAudioFileManager();
-    m_channels = aFM.getAudioFile(m_segment->getAudioFileId())->getChannels();
-
-    m_previewState = Calculating;
-//!!!    setPreviewCurrent(true);
+    m_previewState = PreviewCalculating;
 }
 
 bool
 SegmentAudioPreview::event(QEvent *e)
 {
+    RG_DEBUG << "SegmentAudioPreview::event" <<endl;
+
     if (e->type() == QEvent::User + 1) {
 	QCustomEvent *ev = dynamic_cast<QCustomEvent *>(e);
 	if (ev) {
 	    int token = (int)ev->data();
 	    AudioPreviewThread &thread = m_parent.getDocument()->getAudioPreviewThread();
-	    thread.getPreview(token, m_values);
+	    thread.getPreview(token, m_channels, m_values);
 
+	    RG_DEBUG << "SegmentAudioPreview::token " << token << ", my token " << m_previewToken <<endl;
 	    if (token >= m_previewToken) {
-		m_previewState = Current;
 		setPreviewCurrent(true);
-//!!!		m_parent.update();
-//!!!		if (m_parent.canvas()) m_parent.canvas()->update();
-
-		RG_DEBUG << "Calling recalculateRectangle!" << endl;
-
 		if (m_parent.canvas()) {
-		    m_parent.recalculateRectangle(true);
+		    m_parent.canvas()->setChanged(m_parent.rect());
 		    m_parent.canvas()->update();
 		}
-
 	    } else {
 		// this one is out of date already
 		m_values.clear();
@@ -555,7 +491,7 @@ SegmentNotationPreview::SegmentNotationPreview(SegmentItem& parent,
 void SegmentNotationPreview::clearPreview()
 {
     m_previewInfo.clear();
-    m_previewIsCurrent = false;
+    setPreviewCurrent(false);
 }
 
 void SegmentNotationPreview::drawShape(QPainter& painter)
@@ -612,7 +548,7 @@ void SegmentNotationPreview::drawShape(QPainter& painter)
 
 void SegmentNotationPreview::updatePreview(const QWMatrix & /*matrix*/)
 {
-    if (isPreviewCurrent()) return;
+    if (getPreviewState() != PreviewChanged) return;
 
     if (!m_haveSegmentRefreshStatus) {
 	m_segmentRefreshStatus = m_segment->getNewRefreshStatusId();
@@ -847,19 +783,29 @@ void SegmentItem::drawShape(QPainter& painter)
         painter.drawRect(intersection);
     }
 
+    bool showText = (m_showPreview && m_segment &&
+		     m_segment->getType() != Rosegarden::Segment::Audio);
+    QString text = m_label;
+    QFont font = *m_font;
+
     if (m_preview && m_showPreview) {
 	m_preview->drawShape(painter);
+
+//	if (m_preview->getPreviewState() ==
+//	    SegmentItemPreview::PreviewCalculating) {
+//	    showText = true;
+//	    text = i18n("loading...");
+//	    font.setBold(false);
+//	    font.setItalic(true);
+//	}
     }
 
     // draw label
     if (m_segment) 
     {
-
         //RG_DEBUG << "SegmentItem::drawShape - has world Xform = " << painter.hasWorldXForm() << endl;
 
-        // Don't show label if we're showing the preview
-        //
-        if (m_showPreview && m_segment->getType() == Rosegarden::Segment::Audio) {
+        if (!showText) {
 	    painter.restore();
             return;
 	}
@@ -872,7 +818,7 @@ void SegmentItem::drawShape(QPainter& painter)
         //
         bool state = painter.hasWorldXForm();
         painter.setWorldXForm(false);
-        painter.setFont(*m_font);
+        painter.setFont(font);
 
         QRect labelRect = matrix.mapRect(rect()); // map the rectangle to the transform
         int x = labelRect.x() + 3;
@@ -882,6 +828,7 @@ void SegmentItem::drawShape(QPainter& painter)
         // we've got vertical zooming too - for the moment it's nice
         // to have it for audio segments too.  [rwb]
         //
+	/*!!!
         if(m_segment->getType() == Rosegarden::Segment::Audio)
         {
             painter.setPen(Qt::white);
@@ -893,14 +840,15 @@ void SegmentItem::drawShape(QPainter& painter)
 
                     painter.drawText(labelRect,
                                      Qt::AlignLeft|Qt::AlignVCenter,
-                                     m_label);
+                                     text);
                 }
         }
+	*/
 
         labelRect.setX(x);
         labelRect.setY(y);
         painter.setPen(RosegardenGUIColours::SegmentLabel);
-        painter.drawText(labelRect, Qt::AlignLeft|Qt::AlignVCenter, m_label);
+        painter.drawText(labelRect, Qt::AlignLeft|Qt::AlignVCenter, text);
 
         // Reenable the transform state
         //
@@ -1346,8 +1294,6 @@ void SegmentCanvas::updateAllSegmentItems()
 
 void SegmentCanvas::updateSegmentItem(Segment *segment)
 {
-    RG_DEBUG << "SegmentCanvas::updateSegmentItem" << endl;
-
     SegmentItem *item = findSegmentItem(segment);
     if (!item) {
 	addSegmentItem(segment);

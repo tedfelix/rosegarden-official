@@ -1171,7 +1171,9 @@ void RosegardenGUIView::slotShowPreviews(bool v)
 void RosegardenGUIView::slotUpdateAudioPreviews(Rosegarden::InstrumentId id)
 {
     if (!m_trackEditor->getSegmentCanvas()->isShowingPreviews()) return;
-    m_trackEditor->update();
+    RG_DEBUG << "RosegardenGUIView::slotUpdateAudioPreviews" << endl;
+    m_trackEditor->getSegmentCanvas()->canvas()->setAllChanged();
+    m_trackEditor->getSegmentCanvas()->canvas()->update();
 }
 	
 void RosegardenGUIView::slotAddTracks(unsigned int nbTracks,

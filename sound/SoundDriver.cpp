@@ -146,7 +146,7 @@ SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &events)
                 paf->setFadeInTime(i->getFadeInTime());
                 paf->setFadeOutTime(i->getFadeInTime());
 
-#define DEBUG_AUTOFADING
+//#define DEBUG_AUTOFADING
 #ifdef DEBUG_AUTOFADING
                  std::cout << "SoundDriver::initialiseAudioQueue - "
                            << "PlayableAudioFile is AUTOFADING - "

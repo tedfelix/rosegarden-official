@@ -52,19 +52,22 @@ public:
     };
 
     virtual int requestPreview(const Request &request);
-    virtual void getPreview(int token, std::vector<float> &values);
+    virtual void getPreview(int token, unsigned int &channels,
+			    std::vector<float> &values);
 
 protected:
-    virtual void process();
+    virtual bool process();
 
     Rosegarden::AudioFileManager *m_manager;
     int m_nextToken;
     bool m_exiting;
 
-    typedef std::map<int, Request> RequestQueue;
+    typedef std::pair<int, Request> RequestRec;
+    typedef std::multimap<int, RequestRec> RequestQueue;
     RequestQueue m_queue;
 
-    typedef std::map<int, std::vector<float> > ResultsQueue;
+    typedef std::pair<unsigned int, std::vector<float> > ResultsPair;
+    typedef std::map<int, ResultsPair> ResultsQueue;
     ResultsQueue m_results;
 
     QMutex m_mutex;

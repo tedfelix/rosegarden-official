@@ -193,6 +193,10 @@ public:
     //
     const PeakFileManager& getPeakFileManager() const { return m_peakManager; }
 
+    // Get the peak file manager
+    //
+    PeakFileManager& getPeakFileManager() { return m_peakManager; }
+
     // Cancel a running preview
     //
     void stopPreview();

@@ -266,21 +266,6 @@ AudioInstrumentParameterPanel::slotSelectAudioLevel(float dB)
     if (m_selectedInstrument == 0)
         return;
 
-    if (fabs(m_selectedInstrument->getLevel() - dB) > 0.0001) {
-
-	// We need to mark all audio segments on this instrument as
-	// changed, so as to spark a refresh on the canvas (and
-	// hopefully just the one refresh, at paint time)
-
-	Rosegarden::Composition &comp = m_doc->getComposition();
-	for (Rosegarden::Composition::iterator i = comp.begin(); i != comp.end(); ++i) {
-	    Rosegarden::Track *track = comp.getTrackById((*i)->getTrack());
-	    if (track && (track->getInstrument() == m_selectedInstrument->getId())) {
-		(*i)->updateRefreshStatuses((*i)->getStartTime(), (*i)->getEndTime());
-	    }
-	}
-    }
-
     if (m_selectedInstrument->getType() == Instrument::Audio ||
 	m_selectedInstrument->getType() == Instrument::SoftSynth)
     {
@@ -304,8 +289,6 @@ AudioInstrumentParameterPanel::slotSelectAudioRecordLevel(float dB)
 
     std::cerr << "AudioInstrumentParameterPanel::slotSelectAudioRecordLevel("
 	      << dB << ")" << std::endl;
-
-    //!!! nb shouldn't have a record level fader at all on soft synth box
 
     if (m_selectedInstrument->getType() == Instrument::Audio)
     {

@@ -421,9 +421,19 @@ PeakFile::scanToPeak(int peak)
 
     // Scan to start of chunk and then seek to peak number
     //
-    m_inFile->seekg(m_chunkStartPosition + std::streampos(128), std::ios::beg); 
-    m_inFile->seekg(peak * m_format * m_channels * m_pointsPerValue,
-                    std::ios::cur);
+    ssize_t pos = (ssize_t)m_chunkStartPosition + 128 +
+	peak * m_format * m_channels * m_pointsPerValue;
+
+    ssize_t off = pos - m_inFile->tellg();
+
+    if (off == 0) {
+	return true;
+    } else if (off < 0) {
+	std::cerr << "PeakFile::scanToPeak: warning: seeking backwards for peak " << peak << " (" << m_inFile->tellg() << " -> " << pos << ")" << std::endl;
+	m_inFile->seekg(pos);
+    } else {
+	m_inFile->seekg(off, std::ios::cur);
+    }
 
     // Ensure we re-read the input buffer if we're 
     // doing buffered reads as it's now meaningless
@@ -746,17 +756,17 @@ PeakFile::getPreview(const RealTime &startTime,
     for (int i = 0; i < width; i++)
     {
         peakNumber = startPeak + int(double(i) * step);
+	int nextPeakNumber = startPeak + int(double(i+1) * step);
 
         // Seek to value
         //
         if (!m_peakCache.length())
         {
-            if (scanToPeak(peakNumber) == false)
+           if (scanToPeak(peakNumber) == false)
                 m_lastPreviewCache.push_back(0.0f);
-        }
-
+	}
 #ifdef DEBUG_PEAKFILE
-	std::cout << "PeakFile::getPreview: step is " << step << std::endl;
+	std::cout << "PeakFile::getPreview: step is " << step << ", format * pointsPerValue * channels is " << (m_format * m_pointsPerValue * m_channels) << std::endl;
 #endif
 
 	for (int j = 0; j < m_channels; j++)
@@ -765,12 +775,10 @@ PeakFile::getPreview(const RealTime &startTime,
             loValues[j] = 0.0f;
 	}
 
-
         // Get peak value over channels
         //
-	for (int k = 0; k < step; ++k)
+	for (int k = 0; peakNumber < nextPeakNumber; ++k) //!!! peakNumber + k < nextPeakNumber; ++k)
 	{
-
 	    for (int j = 0; j < m_channels; j++)
 	    {
 		if (!m_peakCache.length())
@@ -884,7 +892,6 @@ PeakFile::getPreview(const RealTime &startTime,
             if (showMinima)
                 m_lastPreviewCache.push_back(loValues[j] / divisor);
 	}
-
     }
 
     resetStream();

@@ -130,8 +130,6 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
 
     // now set it up as a "new document"
     newDocument();
-    
-    m_audioPreviewThread.start();
 }
 
 RosegardenGUIDoc::~RosegardenGUIDoc()

@@ -374,19 +374,22 @@ public:
                        Rosegarden::RulerScale* scale);
     virtual ~SegmentItemPreview();
 
+    enum PreviewState {
+	PreviewChanged,
+	PreviewCalculating,
+	PreviewCurrent
+    };
+
     virtual void drawShape(QPainter&) = 0;
 
-    /**
-     * Returns whether the preview shape shown in the segment needs
-     * to be refreshed
-     */
-    bool isPreviewCurrent()        { return m_previewIsCurrent; }
+    PreviewState getPreviewState() const { return m_previewState; }
 
     /**
      * Sets whether the preview shape shown in the segment needs
      * to be refreshed
      */
-    void setPreviewCurrent(bool c) { m_previewIsCurrent = c; }
+    void setPreviewCurrent(bool c)
+    { m_previewState = (c ? PreviewCurrent : PreviewChanged); }
 
     /**
      * Clears out the preview entirely so that it will be regenerated
@@ -405,7 +408,7 @@ protected:
     Rosegarden::Segment *m_segment;
     Rosegarden::RulerScale *m_rulerScale;
 
-    bool m_previewIsCurrent;
+    PreviewState m_previewState;
 };
 
 
