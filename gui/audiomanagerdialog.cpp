@@ -928,7 +928,9 @@ AudioManagerDialog::slotSelectionChanged(QListViewItem *item)
         Rosegarden::SegmentSelection selection;
         selection.insert(aItem->getSegment());
         emit segmentsSelected(selection);
+#ifdef SHOW_BUTTONS
         m_exportButton->setDisabled(false);
+#endif
     }
 }
 
