@@ -50,15 +50,16 @@ void KStartupLogo::paintEvent(QPaintEvent*)
 {
     // Print version number
     QPainter paint(this);
-    paint.setPen(QColor(255,105,180));
+    paint.setPen(Qt::black);
 
     QFont defaultFont;
-    defaultFont.setPixelSize(30);
+    defaultFont.setPixelSize(12);
     paint.setFont(defaultFont);
 
-    paint.drawText(m_pixmap.width() - 80,
-                   m_pixmap.height() - 15,
-                   VERSION);
+    paint.drawText(m_pixmap.width() - 60,
+                   m_pixmap.height() - 10,
+                   QString("r4 v") + VERSION);
+    raise();
 }
 
 void KStartupLogo::mousePressEvent( QMouseEvent*)
