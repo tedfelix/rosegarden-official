@@ -424,8 +424,8 @@ NotationGroup::calculateBeam(NotationStaff &staff)
     }
 
     // some magic numbers
-    if (diff > 4) beam.gradient = 30;
-    else if (diff > 3) beam.gradient = 15; // was 17
+    if (diff > 4) beam.gradient = 25;
+    else if (diff > 3) beam.gradient = 15;
     else if (diff > 1) beam.gradient = 10;
     else beam.gradient = 0;
 
@@ -512,7 +512,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
     // 
     // * Set width of this section of beam
     // 
-    // * Set the number of tails required for the following note (one
+    // * Set the number of beams required for the following note (one
     //   slight complication here: a beamed group in which the very
     //   first chord is shorter than the following one.  Here the first
     //   chord needs to know it's the first, or else it can't draw the
@@ -536,7 +536,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
 	    for (j = 0; j < chord.size(); ++j) {
 		NotationElement *el = (*chord[j]);
 		el->event()->setMaybe<Bool>(STEM_UP, beam.aboveNotes);
-		el->event()->setMaybe<Bool>(DRAW_TAIL, false);
+		el->event()->setMaybe<Bool>(DRAW_FLAG, false);
 		el->event()->setMaybe<Bool>(BEAMED, true);
 		el->event()->setMaybe<Bool>(BEAM_PRIMARY_NOTE, false);
 	    }
@@ -552,28 +552,28 @@ NotationGroup::applyBeam(NotationStaff &staff)
 
 	    int myY = (int)(gradient * (x - initialX)) + beam.startY;
 
-            // If THIS_PART_TAILS is true, then when drawing the
-            // chord, if it requires more tails than the following
-            // chord then they should be added as partial tails to the
+            // If THIS_PART_BEAMS is true, then when drawing the
+            // chord, if it requires more beams than the following
+            // chord then they should be added as partial beams to the
             // right of the stem.
 
-            // If NEXT_PART_TAILS is true, then when drawing the
-            // chord, if it requires fewer tails than the following
+            // If NEXT_PART_BEAMS is true, then when drawing the
+            // chord, if it requires fewer beams than the following
             // chord then the difference should be added as partial
-            // tails to the left of the following chord's stem.
+            // beams to the left of the following chord's stem.
 
-            // Procedure for setting these: If we have more tails than
+            // Procedure for setting these: If we have more beams than
             // the preceding chord, then the preceding chord should
-            // have NEXT_PART_TAILS set, until possibly unset again on
-            // the next iteration.  If we have at least as many tails
+            // have NEXT_PART_BEAMS set, until possibly unset again on
+            // the next iteration.  If we have at least as many beams
             // as the preceding chord, then the preceding chord should
-            // have THIS_PART_TAILS unset and the one before it should
-            // have NEXT_PART_TAILS unset.  The first chord should
-            // have THIS_PART_TAILS set, until possibly unset again on
+            // have THIS_PART_BEAMS unset and the one before it should
+            // have NEXT_PART_BEAMS unset.  The first chord should
+            // have THIS_PART_BEAMS set, until possibly unset again on
             // the next iteration.
 
-            int tailCount = Note(el->event()->get<Int>
-                                 (Rosegarden::Note::NoteType)).getTailCount();
+            int beamCount = Note(el->event()->get<Int>
+                                 (Rosegarden::Note::NoteType)).getFlagCount();
 
 	    if (prev != getList().end()) {
 
@@ -585,25 +585,25 @@ NotationGroup::applyBeam(NotationStaff &staff)
 		prevEl->event()->setMaybe<Int>
                     (BEAM_SECTION_WIDTH, secWidth);
 		prevEl->event()->setMaybe<Int>
-		    (BEAM_NEXT_TAIL_COUNT, tailCount);
+		    (BEAM_NEXT_BEAM_COUNT, beamCount);
 
-                int prevTailCount = Note(prevEl->event()->get<Int>
-                                         (Rosegarden::Note::NoteType)).getTailCount();
-                if (tailCount >= prevTailCount) {
+                int prevBeamCount = Note(prevEl->event()->get<Int>
+                                         (Rosegarden::Note::NoteType)).getFlagCount();
+                if (beamCount >= prevBeamCount) {
                     prevEl->event()->setMaybe<Bool>
-                        (BEAM_THIS_PART_TAILS, false);
+                        (BEAM_THIS_PART_BEAMS, false);
                     if (prevprev != getList().end()) {
                         (*prevprev)->event()->setMaybe<Bool>
-                            (BEAM_NEXT_PART_TAILS, false);
+                            (BEAM_NEXT_PART_BEAMS, false);
                     }
                 }
 
-                if (tailCount > prevTailCount) {
+                if (beamCount > prevBeamCount) {
                     prevEl->event()->setMaybe<Bool>
-                        (BEAM_NEXT_PART_TAILS, true);
+                        (BEAM_NEXT_PART_BEAMS, true);
                 }                    
 	    } else {
-                el->event()->setMaybe<Bool>(BEAM_THIS_PART_TAILS, true);
+                el->event()->setMaybe<Bool>(BEAM_THIS_PART_BEAMS, true);
             }
 
 	    el->event()->setMaybe<Bool>(BEAM_PRIMARY_NOTE, true);
@@ -614,7 +614,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
 	    // until they're set next time around the loop, as (*prev)->...
 //	    el->event()->setMaybe<Int>(BEAM_NEXT_Y, myY);
 	    el->event()->setMaybe<Int>(BEAM_SECTION_WIDTH, 0);
-	    el->event()->setMaybe<Int>(BEAM_NEXT_TAIL_COUNT, 1);
+	    el->event()->setMaybe<Int>(BEAM_NEXT_BEAM_COUNT, 1);
 
             prevprev = prev;
 	    prev = chord[j];

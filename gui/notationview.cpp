@@ -85,7 +85,7 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     m_canvasView(new NotationCanvasView(new QCanvas(width() * 2,
                                                     height() * 2),
                                         this)),
-    m_toolbarNotePixmapFactory(5),
+    m_toolbarNotePixmapFactory(4),
     m_hlayout(0),
     m_vlayout(0),
     m_tool(0),
@@ -475,12 +475,14 @@ ZoomSlider::ZoomSlider(int minValue, int maxValue,
       m_hiRes(0),
       m_loRes(0)
 {
-    addAvailableResolution(5);
-    addAvailableResolution(7);
-    addAvailableResolution(9);
-    addAvailableResolution(11);
-    addAvailableResolution(13);
+    addAvailableResolution(4);
+    addAvailableResolution(6);
+    addAvailableResolution(8);
+    addAvailableResolution(10);
+    addAvailableResolution(12);
     setTracking(false);
+    setFixedWidth(150);
+    setFixedHeight(16);
 }
 
 void ZoomSlider::addAvailableResolution(int res)
@@ -518,9 +520,9 @@ void NotationView::initZoomToolbar(int resolution)
         return;
     }
 
-    new QLabel("Resolution : ", zoomToolbar);
+    new QLabel("Size:  ", zoomToolbar);
 
-    QSlider *zoomSlider = new ZoomSlider(5, 13, // min, max
+    QSlider *zoomSlider = new ZoomSlider(4, 12, // min, max
                                       2, // page step
                                       resolution, // init value
                                       QSlider::Horizontal, zoomToolbar);

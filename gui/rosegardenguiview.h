@@ -118,11 +118,7 @@ public:
     void setPointerPosition(const int &position);
     
 public slots:
-    void editTrackNotationTiny(Rosegarden::Track*);
-    void editTrackNotationSmall(Rosegarden::Track*);
-    void editTrackNotationMedium(Rosegarden::Track*);
-    void editTrackNotationLarge(Rosegarden::Track*);
-    void editTrackNotationHuge(Rosegarden::Track*);
+    void editTrackNotation(Rosegarden::Track*);
 
 signals:
     void setTool(TracksCanvas::ToolType);

@@ -41,7 +41,7 @@ namespace NotationProperties
     extern const Rosegarden::PropertyName DISPLAY_ACCIDENTAL;
     extern const Rosegarden::PropertyName STEM_UP;
     extern const Rosegarden::PropertyName UNBEAMED_STEM_LENGTH;
-    extern const Rosegarden::PropertyName DRAW_TAIL;
+    extern const Rosegarden::PropertyName DRAW_FLAG;
     extern const Rosegarden::PropertyName NOTE_HEAD_SHIFTED;
     extern const Rosegarden::PropertyName NOTE_NAME;
 
@@ -51,9 +51,9 @@ namespace NotationProperties
     extern const Rosegarden::PropertyName BEAM_PRIMARY_NOTE;
     extern const Rosegarden::PropertyName BEAM_GRADIENT;
     extern const Rosegarden::PropertyName BEAM_SECTION_WIDTH;
-    extern const Rosegarden::PropertyName BEAM_NEXT_TAIL_COUNT;
-    extern const Rosegarden::PropertyName BEAM_NEXT_PART_TAILS;
-    extern const Rosegarden::PropertyName BEAM_THIS_PART_TAILS;
+    extern const Rosegarden::PropertyName BEAM_NEXT_BEAM_COUNT;
+    extern const Rosegarden::PropertyName BEAM_NEXT_PART_BEAMS;
+    extern const Rosegarden::PropertyName BEAM_THIS_PART_BEAMS;
     extern const Rosegarden::PropertyName BEAM_MY_Y;
 }
 

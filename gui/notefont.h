@@ -68,6 +68,7 @@ public:
 
     bool getStaffLineThickness(int size, unsigned int &thickness) const;
     bool getStemThickness(int size, unsigned int &thickness) const;
+    bool getBeamThickness(int size, unsigned int &thickness) const;
     bool getBorderThickness(int size, unsigned int &X, unsigned int &y) const;
 
     bool getSrc(int size, CharName charName, std::string &src) const;
@@ -133,12 +134,17 @@ private:
     class SizeData
     {
     public:
-        SizeData() : m_stemThickness(-1), m_staffLineThickness(-1),
+        SizeData() : m_stemThickness(-1),
+                     m_beamThickness(-1),
+                     m_staffLineThickness(-1),
                      m_borderX(-1), m_borderY(-1) { }
         ~SizeData() { }
 
         void setStemThickness(unsigned int i) {
             m_stemThickness = (int)i;
+        }
+        void setBeamThickness(unsigned int i) {
+            m_beamThickness = (int)i;
         }
         void setStaffLineThickness(unsigned int i) {
             m_staffLineThickness = (int)i;
@@ -153,6 +159,13 @@ private:
         bool getStemThickness(unsigned int &i) const {
             if (m_stemThickness >= 0) {
                 i = (unsigned int)m_stemThickness;
+                return true;
+            } else return false;
+        }
+
+        bool getBeamThickness(unsigned int &i) const {
+            if (m_beamThickness >= 0) {
+                i = (unsigned int)m_beamThickness;
                 return true;
             } else return false;
         }
@@ -174,6 +187,7 @@ private:
        
     private:
         int m_stemThickness;
+        int m_beamThickness;
         int m_staffLineThickness;
         int m_borderX;
         int m_borderY;
@@ -232,10 +246,13 @@ public:
     /// Returns false + thickness=1 if not specified
     bool getStemThickness(unsigned int &thickness) const;
 
+    /// Returns false + a guess at suitable thickness if not specified
+    bool getBeamThickness(unsigned int &thickness) const;
+
     /// Returns false + thickness=1 if not specified
     bool getStaffLineThickness(unsigned int &thickness) const;
 
-    /// Returns false + thickness=0x0 if not specified
+    /// Returns false + thickness=0,0 if not specified
     bool getBorderThickness(unsigned int &x, unsigned int &y) const;
 
 

@@ -431,9 +431,9 @@ public:
     Type getNoteType()  const { return m_type; }
 
     bool isFilled()     const { return m_type <= Crotchet; }
-    bool isStalked()    const { return m_type <= Minim; }
+    bool hasStem()      const { return m_type <= Minim; }
     int  getDots()      const { return m_dots; }
-    int  getTailCount() const {
+    int  getFlagCount() const {
 	return (m_type >= Crotchet) ? 0 : (Crotchet - m_type);
     }
 

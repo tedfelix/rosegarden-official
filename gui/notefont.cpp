@@ -119,6 +119,9 @@ NoteFontMap::startElement(const QString &, const QString &,
         s = attributes.value("stem-thickness");
         if (s) sizeData.setStemThickness(s.toInt());
 
+        s = attributes.value("beam-thickness");
+        if (s) sizeData.setBeamThickness(s.toInt());
+
         s = attributes.value("border-x");
         if (s) sizeData.setBorderX(s.toInt());
 
@@ -291,6 +294,15 @@ NoteFontMap::getStemThickness(int size, unsigned int &thickness) const
 }
 
 bool
+NoteFontMap::getBeamThickness(int size, unsigned int &thickness) const
+{
+    SizeDataMap::const_iterator i = m_sizes.find(size);
+    if (i == m_sizes.end()) return false;
+
+    return i->second.getBeamThickness(thickness);
+}
+
+bool
 NoteFontMap::getBorderThickness(int size,
                                 unsigned int &x, unsigned int &y) const
 {
@@ -422,6 +434,13 @@ NoteFont::getStemThickness(unsigned int &thickness) const
 {
     thickness = 1;
     return m_fontMap.getStemThickness(m_currentSize, thickness);
+}
+
+bool
+NoteFont::getBeamThickness(unsigned int &thickness) const
+{
+    thickness = (m_currentSize + 2) / 3;
+    return m_fontMap.getBeamThickness(m_currentSize, thickness);
 }
 
 bool

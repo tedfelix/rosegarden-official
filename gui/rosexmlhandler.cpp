@@ -102,7 +102,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
     
     } else if (lcName == "event") {
 
-        kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement: found event, current time is " << m_currentTime << endl;
+//        kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement: found event, current time is " << m_currentTime << endl;
 
         if (m_currentEvent) {
             kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement: Warning: new event found at time " << m_currentTime << " before previous event has ended; previous event will be lost" << endl;
@@ -123,7 +123,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
             m_currentTime += m_currentEvent->getDuration();
 
-            kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement: (we're not in a chord) " << endl;
+//            kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement: (we're not in a chord) " << endl;
 
         } else if (m_chordDuration == 0 &&
                    m_currentEvent->getDuration() != 0) {

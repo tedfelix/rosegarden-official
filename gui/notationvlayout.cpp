@@ -94,7 +94,7 @@ NotationVLayout::scanStaff(StaffType &staffBase)
             }
             bool stalkUp = chord.hasStalkUp();
 
-            unsigned int tailedNote = (stalkUp ? chord.size() - 1 : 0);
+            unsigned int flaggedNote = (stalkUp ? chord.size() - 1 : 0);
 
 	    for (unsigned int j = 0; j < chord.size(); ++j) {
 		el = *chord[j];
@@ -113,12 +113,12 @@ NotationVLayout::scanStaff(StaffType &staffBase)
                 el->event()->setMaybe<Bool>(NOTE_HEAD_SHIFTED,
                                             chord.isNoteHeadShifted(chord[j]));
 
-                el->event()->setMaybe<Bool>(DRAW_TAIL,
-                                            j == tailedNote);
+                el->event()->setMaybe<Bool>(DRAW_FLAG,
+                                            j == flaggedNote);
 
                 int stemLength = -1;
-                if (j != tailedNote) {
-                    stemLength = staff.yCoordOfHeight(h[tailedNote]) -
+                if (j != flaggedNote) {
+                    stemLength = staff.yCoordOfHeight(h[flaggedNote]) -
                         staff.yCoordOfHeight(h[j]);
                     if (stemLength < 0) stemLength = -stemLength;
                     kdDebug(KDEBUG_AREA) << "Setting stem length to "

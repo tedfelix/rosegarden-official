@@ -21,6 +21,7 @@
 
 #include <cstdio>
 
+#include <vector>
 #include <algorithm>
 
 #include <kmessagebox.h>
@@ -49,12 +50,39 @@ using Rosegarden::DoubleFlat;
 using Rosegarden::Natural;
 
 
+
+NotePixmapParameters::NotePixmapParameters(Note::Type noteType,
+                                           int dots,
+                                           Accidental accidental) :
+    m_noteType(noteType),
+    m_dots(dots),
+    m_accidental(accidental),
+    m_shifted(false),
+    m_drawFlag(true),
+    m_stemGoesUp(true),
+    m_stemLength(-1),
+    m_legerLines(0),
+    m_beamed(false),
+    m_nextBeamCount(0),
+    m_thisPartialBeams(false),
+    m_nextPartialBeams(false),
+    m_width(1),
+    m_gradient(0.0)
+{
+    // nothing else
+}
+
+NotePixmapParameters::~NotePixmapParameters()
+{
+    // nothing to see here
+}
+
+
+
 NotePixmapFactory::NotePixmapFactory(int size, std::string fontName) :
     m_timeSigFont("new century schoolbook", 8, QFont::Bold),
     m_timeSigFontMetrics(m_timeSigFont)
 {
-    --size;
-
     try {
         m_font = new NoteFont(fontName, size);
     } catch (NoteFontMap::MappingFileReadFailed f) {
@@ -81,56 +109,14 @@ NotePixmapFactory::~NotePixmapFactory()
 
 
 QCanvasPixmap
-NotePixmapFactory::makeNotePixmap(Note::Type noteType,
-                                  int dots,
-                                  Accidental accidental,
-                                  bool shifted,
-                                  bool drawTail,
-                                  bool stemGoesUp,
-                                  int stemLength)
+NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
 {
-    return makeNotePixmapAux(noteType, dots, accidental, shifted, drawTail,
-                             stemGoesUp, false, stemLength, 0, false,
-                             false, 0, 0.0);
-}
+    Note note(params.m_noteType, params.m_dots);
 
-QCanvasPixmap
-NotePixmapFactory::makeBeamedNotePixmap(Note::Type note,
-					int dots,
-					Accidental accidental,
-                                        bool shifted,
-					bool stemGoesUp,
-					int stemLength,
-					int nextTailCount,
-                                        bool thisPartialTails,
-                                        bool nextPartialTails,
-					int width,
-					double gradient)
-{
-    return makeNotePixmapAux
-        (note, dots, accidental, shifted, false, stemGoesUp, true,
-         stemLength, nextTailCount, thisPartialTails, nextPartialTails,
-         width, gradient);
-}
+    bool drawFlag = params.m_drawFlag;
+    int stemLength = params.m_stemLength;
 
-QCanvasPixmap
-NotePixmapFactory::makeNotePixmapAux(Rosegarden::Note::Type noteType,
-                                     int dots,
-                                     Rosegarden::Accidental accidental,
-                                     bool shifted,
-                                     bool drawTail,
-                                     bool stemGoesUp,
-                                     bool isBeamed,
-                                     int stemLength,
-                                     int nextTailCount,
-                                     bool thisPartialTails,
-                                     bool nextPartialTails,
-                                     int width,
-                                     double gradient)
-{
-    Note note(noteType, dots);
-
-    if (isBeamed) drawTail = false;
+    if (params.m_beamed) drawFlag = false;
 
     // A note pixmap is formed of note head, stem, flags,
     // accidentals, dots and beams.  Assume the note head first, then
@@ -141,14 +127,14 @@ NotePixmapFactory::makeNotePixmapAux(Rosegarden::Note::Type noteType,
     m_left = m_right = m_origin.x();
     m_above = m_below = m_origin.y();
 
-    m_noteBodyWidth  = getNoteBodyWidth(noteType);
-    m_noteBodyHeight = getNoteBodyHeight(noteType);
+    m_noteBodyWidth  = getNoteBodyWidth(params.m_noteType);
+    m_noteBodyHeight = getNoteBodyHeight(params.m_noteType);
 
-    bool isStemmed = note.isStalked();
-    int tailCount = note.getTailCount();
+    bool isStemmed = note.hasStem();
+    int flagCount = note.getFlagCount();
 
-    if (accidental != NoAccidental) {
-        makeRoomForAccidental(accidental);
+    if (params.m_accidental != NoAccidental) {
+        makeRoomForAccidental(params.m_accidental);
     }
 
     QPixmap dot(m_font->getPixmap(NoteCharacterNames::DOT));
@@ -158,11 +144,7 @@ NotePixmapFactory::makeNotePixmapAux(Rosegarden::Note::Type noteType,
         stemLength = getStemLength();
         int nbh = m_noteBodyHeight;
 
-        //!!! We could do better by taking measurements out of the
-        //mappings file, probably -- some fonts need longer stems
-        //than others
-
-        switch (tailCount) {
+        switch (flagCount) {
         case 1: stemLength += nbh / 3; break;
         case 2: stemLength += nbh * 3 / 4; break;
         case 3: stemLength += nbh + nbh / 4; break;
@@ -172,43 +154,59 @@ NotePixmapFactory::makeNotePixmapAux(Rosegarden::Note::Type noteType,
     }
     
     if (isStemmed) {
-        if (stemGoesUp) {
-            m_above = std::max(m_above, stemLength - m_noteBodyHeight/2);
+        if (params.m_stemGoesUp) {
+            m_above = std::max
+                (m_above, stemLength - m_noteBodyHeight/2);
         } else {
-            m_below = std::max(m_below, stemLength - m_noteBodyHeight/2);
+            m_below = std::max
+                (m_below, stemLength - m_noteBodyHeight/2);
         }
 
-        if (isBeamed) {
+        if (params.m_beamed) {
 
-            int beamSpacing = (int)(width * gradient);
+            int beamSpacing = (int)(params.m_width * params.m_gradient);
 
-            if (stemGoesUp) {
+            if (params.m_stemGoesUp) {
 
                 beamSpacing = -beamSpacing;
                 if (beamSpacing < 0) beamSpacing = 0;
                 m_above += beamSpacing + 1;
 
-                m_right = std::max(m_right, width);
+                m_right = std::max(m_right, params.m_width);
 
             } else {
 
                 if (beamSpacing < 0) beamSpacing = 0;
                 m_below += beamSpacing + 1;
                 
-                m_right = std::max(m_right, width - m_noteBodyWidth);
+                m_right = std::max(m_right, params.m_width - m_noteBodyWidth);
             }
         }
     }            
 
-    if (tailCount > 0) {
-        if (stemGoesUp) {
-            m_right += m_font->getWidth(getFlagCharName(tailCount));
+    if (params.m_legerLines < 0) {
+        m_above = std::max(m_above,
+                           (m_noteBodyHeight + 1) *
+                           (-params.m_legerLines / 2));
+    } else if (params.m_legerLines > 0) {
+        m_below = std::max(m_below,
+                           (m_noteBodyHeight + 1) *
+                           (params.m_legerLines / 2));
+    }
+    if (params.m_legerLines != 0) {
+        m_left  = std::max(m_left,  getStaffLineThickness() + 1);
+        m_right = std::max(m_right, getStaffLineThickness() + 1);
+    }
+
+    if (drawFlag && flagCount > 0) {
+        if (params.m_stemGoesUp) {
+            m_right += m_font->getWidth(getFlagCharName(flagCount));
         }
     }
 
-    m_right = std::max(m_right, dots * dot.width() + dot.width()/2);
+    m_right = std::max(m_right, params.m_dots * dot.width() + dot.width()/2);
 
-    if (shifted) {
+    if (params.m_shifted) {
         m_right += m_noteBodyWidth;
     }
 
@@ -221,7 +219,7 @@ NotePixmapFactory::makeNotePixmapAux(Rosegarden::Note::Type noteType,
 
         s0.setY(m_above + m_noteBodyHeight/2);
 
-        if (stemGoesUp) {
+        if (params.m_stemGoesUp) {
             s0.setX(m_left + m_noteBodyWidth - 1);
             s1.setY(s0.y() - stemLength);
         } else {
@@ -231,48 +229,48 @@ NotePixmapFactory::makeNotePixmapAux(Rosegarden::Note::Type noteType,
 
         s1.setX(s0.x());
 
-        if (tailCount > 0) {
+        if (flagCount > 0) {
 
-            if (drawTail) {
+            if (drawFlag) {
 
-                QPixmap tails = m_font->getPixmap
-                    (getFlagCharName(tailCount), !stemGoesUp);
+                QPixmap flags = m_font->getPixmap
+                    (getFlagCharName(flagCount), !params.m_stemGoesUp);
 
-                if (stemGoesUp) {
-                    m_p.drawPixmap(s1.x() - m_origin.x(), s1.y(), tails);
-                    m_pm.drawPixmap(s1.x() - m_origin.x(), s1.y(), *(tails.mask()));
+                if (params.m_stemGoesUp) {
+                    m_p.drawPixmap(s1.x() - m_origin.x(),
+                                   s1.y(), flags);
+                    m_pm.drawPixmap(s1.x() - m_origin.x(),
+                                    s1.y(), *(flags.mask()));
                 } else {
-                    m_p.drawPixmap(s1.x() - m_origin.x(), s1.y() - tails.height(), tails);
-                    m_pm.drawPixmap(s1.x() - m_origin.x(), s1.y() - tails.height(), *(tails.mask()));
+                    m_p.drawPixmap(s1.x() - m_origin.x(),
+                                   s1.y() - flags.height(), flags);
+                    m_pm.drawPixmap(s1.x() - m_origin.x(),
+                                    s1.y() - flags.height(), *(flags.mask()));
                 }
-            } else if (isBeamed) {
-
-                drawBeams(s1, stemGoesUp, tailCount, nextTailCount,
-                          thisPartialTails, nextPartialTails,
-                          width, gradient);
-
+            } else if (params.m_beamed) {
+                drawBeams(s1, params, flagCount);
             }
         }
     }
 
-    if (accidental != NoAccidental) {
-        drawAccidental(accidental);
+    if (params.m_accidental != NoAccidental) {
+        drawAccidental(params.m_accidental);
     }
 
-    QPixmap body(m_font->getPixmap(getNoteHeadCharName(noteType)));
+    QPixmap body(m_font->getPixmap(getNoteHeadCharName(params.m_noteType)));
     QPoint bodyLocation(m_left - m_origin.x(), m_above - m_origin.y());
-    if (shifted) bodyLocation.rx() += m_noteBodyWidth;
+    if (params.m_shifted) bodyLocation.rx() += m_noteBodyWidth;
     
     m_p.drawPixmap (bodyLocation, body);
     m_pm.drawPixmap(bodyLocation, *(body.mask()));
 
-    if (dots > 0) {
+    if (params.m_dots > 0) {
 
         int x = m_left + m_noteBodyWidth + dot.width()/2;
         int y = m_above + m_noteBodyHeight/2 - dot.height()/2;
-        if (shifted) x += m_noteBodyWidth;
+        if (params.m_shifted) x += m_noteBodyWidth;
 
-        for (int i = 0; i < dots; ++i) {
+        for (int i = 0; i < params.m_dots; ++i) {
             m_p.drawPixmap(x, y, dot);
             m_pm.drawPixmap(x, y, *(dot.mask()));
             x += dot.width();
@@ -290,17 +288,58 @@ NotePixmapFactory::makeNotePixmapAux(Rosegarden::Note::Type noteType,
         }
     }        
 
+    if (params.m_legerLines != 0) {
+
+        s0.setX(m_left - getStemThickness());
+        s1.setX(m_left + m_noteBodyWidth + getStemThickness());
+
+        s0.setY(m_above + m_noteBodyHeight / 2);
+        s1.setY(s0.y());
+
+        int offset = m_noteBodyHeight + 1;
+        int legerLines = params.m_legerLines;
+
+        if (legerLines < 0) {
+            legerLines = -legerLines;
+            offset = -offset;
+        }
+
+        offset -= 1;
+        bool first = true;
+
+        for (int i = legerLines - 1; i >= 0; --i) {
+            if (i % 2 == 1) {
+                m_p.drawLine(s0, s1);
+                m_pm.drawLine(s0, s1);
+                s0.ry() += offset;
+                s1.ry() += offset;
+                if (first) {
+                    ++s0.rx();
+                    --s1.rx();
+                    first = false;
+                }
+            } else if (first) {
+                s0.ry() += offset/2;
+                s1.ry() += offset/2;
+            }                
+        }
+    }
+            
     QPoint hotspot(m_left, m_above + m_noteBodyHeight/2);
 
-//#define ROSE_XDEBUG_NOTE_PIXMAP_FACTORY
-#ifdef ROSE_XDEBUG_NOTE_PIXMAP_FACTORY
+//#define ROSE_DEBUG_NOTE_PIXMAP_FACTORY
+#ifdef ROSE_DEBUG_NOTE_PIXMAP_FACTORY
     m_p.setPen(Qt::red); m_p.setBrush(Qt::red);
 
     m_p.drawLine(0,0,0,m_generatedPixmap->height() - 1);
-    m_p.drawLine(m_generatedPixmap->width() - 1,0,m_generatedPixmap->width() - 1,m_generatedPixmap->height() - 1);
+    m_p.drawLine(m_generatedPixmap->width() - 1, 0, 
+                 m_generatedPixmap->width() - 1,
+                 m_generatedPixmap->height() - 1);
 
     m_pm.drawLine(0,0,0,m_generatedPixmap->height() - 1);
-    m_pm.drawLine(m_generatedPixmap->width() - 1,0,m_generatedPixmap->width() - 1,m_generatedPixmap->height() - 1);
+    m_pm.drawLine(m_generatedPixmap->width() - 1, 0,
+                  m_generatedPixmap->width() - 1,
+                  m_generatedPixmap->height() - 1);
 
     {
 	int hsx = hotspot.x();
@@ -310,38 +349,6 @@ NotePixmapFactory::makeNotePixmapAux(Rosegarden::Note::Type noteType,
 	m_p.drawLine(hsx - 2, hsy + 2, hsx + 2, hsy - 2);
 	m_pm.drawLine(hsx - 2, hsy + 2, hsx + 2, hsy - 2);
     }
-
-
-/*
-    m_p.drawPoint(0,0);
-    m_p.drawPoint(0,m_offsets.getHotSpot().y());
-    m_p.drawPoint(0,m_generatedPixmap->height() - 1);
-    m_p.drawPoint(m_generatedPixmap->width() - 1,0);
-    m_p.drawPoint(m_generatedPixmap->width() - 1,m_generatedPixmap->height() - 1);
-
-    m_pm.drawPoint(0,0);
-    m_pm.drawPoint(0,m_offsets.getHotSpot().y());
-    m_pm.drawPoint(0,m_generatedPixmap->height() -1);
-    m_pm.drawPoint(m_generatedPixmap->width() -1,0);
-    m_pm.drawPoint(m_generatedPixmap->width() -1,m_generatedPixmap->height()-1);
-*/
-#endif
-    
-    //#define ROSE_DEBUG_NOTE_PIXMAP_FACTORY
-#ifdef ROSE_DEBUG_NOTE_PIXMAP_FACTORY
-    // add red dots at each corner of the pixmap
-    m_p.setPen(Qt::red); m_p.setBrush(Qt::red);
-    m_p.drawPoint(0,0);
-    m_p.drawPoint(0,m_offsets.getHotSpot().y());
-    m_p.drawPoint(0,m_generatedPixmap->height() - 1);
-    m_p.drawPoint(m_generatedPixmap->width() - 1,0);
-    m_p.drawPoint(m_generatedPixmap->width() - 1,m_generatedPixmap->height() - 1);
-
-    m_pm.drawPoint(0,0);
-    m_pm.drawPoint(0,m_offsets.getHotSpot().y());
-    m_pm.drawPoint(0,m_generatedPixmap->height() -1);
-    m_pm.drawPoint(m_generatedPixmap->width() -1,0);
-    m_pm.drawPoint(m_generatedPixmap->width() -1,m_generatedPixmap->height()-1);
 #endif
 
     // We're done - generate the returned pixmap with the right offset
@@ -381,69 +388,157 @@ NotePixmapFactory::drawAccidental(Accidental a)
     QPixmap ap(m_font->getPixmap(getAccidentalCharName(a)));
     QPoint ah(m_font->getHotspot(getAccidentalCharName(a)));
 
-//    kdDebug(KDEBUG_AREA) << "NotePixmapFactory::drawAccidental: m_above is " << m_above << ", hotspot-y is " << ah.y() << ", note body height is " << m_noteBodyHeight << ", accidental height is " << ap.height() << endl;
-
     m_p.drawPixmap(0, m_above + m_noteBodyHeight/2 - ah.y(), ap);
     m_pm.drawPixmap(0, m_above + m_noteBodyHeight/2 - ah.y(), *(ap.mask()));
 }
 
+
+// Bresenham algorithm, Wu antialiasing:
+
 void
-NotePixmapFactory::drawBeams(const QPoint &s1, bool stemGoesUp,
-                             int tailCount, int nextTailCount, 
-                             bool thisPartialTails, bool nextPartialTails,
-                             int width, double gradient)
+NotePixmapFactory::drawShallowLine(int x0, int y0, int x1, int y1,
+                                   int thickness, bool smooth)
+{
+    if (!smooth) {
+        for (int i = 0; i < thickness; ++i) {
+            m_p.drawLine(x0, y0 + i, x1, y1 + i);
+            m_pm.drawLine(x0, y0 + i, x1, y1 + i);
+        }
+        return;
+    }
+    
+    int dv = y1 - y0;
+    int dh = x1 - x0;
+
+    static std::vector<QColor> colours;
+    if (colours.size() == 0) {
+        colours.push_back(QColor(0, 0, 0));
+        colours.push_back(QColor(64, 64, 64));
+        colours.push_back(QColor(128, 128, 128));
+        colours.push_back(QColor(192, 192, 192));
+    }
+
+    QPoint c(x0, y0);
+
+    int inc = 1;
+    if (dv < 0) { dv = -dv; inc = -1; }
+
+    int g = 2 * dv - dh;
+    int dg1 = 2 * (dv - dh);
+    int dg2 = 2 * dv;
+
+    int segment = (dg2 - dg1) / 4;
+
+    while (c.x() < x1) {
+
+        if (g > 0) {
+            g += dg1;
+            c.ry() += inc;
+        } else {
+            g += dg2;
+        }
+
+        int quartile = (dg2 - g) / segment;
+        if (quartile < 0) quartile = 0;
+        if (quartile > 3) quartile = 3;
+        if (inc > 0) quartile = 3 - quartile;
+
+//        kdDebug(KDEBUG_AREA)
+//            << "x = " << c.x() << ", y = " << c.y()
+//            << ", g = " << g << ", dg1 = " << dg1 << ", dg2 = " << dg2
+//            << ", seg = " << segment << ", q = " << quartile << endl;
+
+        // I don't know enough about Qt to be sure of this, but I
+        // suspect this may be some of the most inefficient code ever
+        // written:
+
+        m_p.setPen(colours[quartile]);
+        m_p.drawPoint(c);
+        m_pm.drawPoint(c);
+        
+        m_p.setPen(colours[3-quartile]);
+        m_p.drawPoint(c.x(), c.y() + thickness + 1);
+        m_pm.drawPoint(c.x(), c.y() + thickness + 1);
+
+        if (thickness > 1) {
+            m_p.setPen(colours[0]);
+            m_p.drawLine(c.x(), c.y() + 1, c.x(), c.y() + thickness);
+            m_pm.drawLine(c.x(), c.y() + 1, c.x(), c.y() + thickness);
+        }
+
+        ++c.rx();
+    }
+
+    m_p.setPen(colours[0]);
+}
+
+
+void
+NotePixmapFactory::drawBeams(const QPoint &s1,
+                             const NotePixmapParameters &params,
+                             int beamCount)
 {
     // draw beams: first we draw all the beams common to both ends of
-    // the section, then we draw tails for those that appear at the
+    // the section, then we draw beams for those that appear at the
     // end only
 
     int startY = s1.y(), startX = s1.x();
-    int commonTailCount = std::min(tailCount, nextTailCount);
-    int thickness = (m_noteBodyHeight + 2) / 3;
+    int commonBeamCount = std::min(beamCount, params.m_nextBeamCount);
+
+    unsigned int thickness;
+    (void)m_font->getBeamThickness(thickness);
+
     int gap = thickness - 1;
     if (gap < 1) gap = 1;
+
+    bool smooth = true;
+    if (thickness > 2) --thickness;
+    else smooth = false;
                 
-    for (int j = 0; j < commonTailCount; ++j) {
-        for (int i = 0; i < thickness; ++i) {
-            int offset = j * (thickness + gap) + i;
-            if (!stemGoesUp) offset = -offset;
-            m_p.drawLine(startX, startY + offset, startX + width,
-                         startY + (int)(width * gradient) + offset);
-            m_pm.drawLine(startX, startY + offset, startX + width,
-                          startY + (int)(width * gradient) + offset);
+    int width = params.m_width;
+    double grad = params.m_gradient;
+
+    for (int j = 0; j < commonBeamCount; ++j) {
+        int y = j * (thickness + gap);
+        if (!params.m_stemGoesUp) {
+            if (smooth) y = -y - thickness - 1;
+            else y = -y - 1;
         }
+        drawShallowLine(startX, startY + y, startX + width,
+                        startY + (int)(width*grad) + y,
+                        thickness, smooth);
     }
 
     int partWidth = width / 3;
     if (partWidth < 2) partWidth = 2;
     else if (partWidth > m_noteBodyWidth) partWidth = m_noteBodyWidth;
     
-    if (thisPartialTails) {
-        for (int j = commonTailCount; j < tailCount; ++j) {
-            for (int i = 0; i < thickness; ++i) {
-                int offset = j * (thickness + gap) + i;
-                if (!stemGoesUp) offset = -offset;
-                m_p.drawLine(startX, startY + offset, startX + partWidth,
-                             startY + (int)(partWidth * gradient) + offset);
-                m_pm.drawLine(startX, startY + offset, startX + partWidth,
-                              startY + (int)(partWidth * gradient) + offset);
+    if (params.m_thisPartialBeams) {
+        for (int j = commonBeamCount; j < beamCount; ++j) {
+            int y = j * (thickness + gap);
+            if (!params.m_stemGoesUp) {
+                if (smooth) y = -y - thickness - 1;
+                else y = -y - 1;
             }
+            drawShallowLine(startX, startY + y, startX + partWidth,
+                            startY + (int)(partWidth*grad) + y,
+                            thickness, smooth);
         }
     }
     
-    if (nextPartialTails) {
+    if (params.m_nextPartialBeams) {
         startX += width - partWidth;
-        startY += (int)((width - partWidth) * gradient);
+        startY += (int)((width - partWidth) * grad);
         
-        for (int j = commonTailCount; j < nextTailCount; ++j) {
-            for (int i = 0; i < thickness; ++i) {
-                int offset = j * (thickness + gap) + i;
-                if (!stemGoesUp) offset = -offset;
-                m_p.drawLine(startX, startY + offset, startX + partWidth,
-                             startY + (int)(partWidth * gradient) + offset);
-                m_pm.drawLine(startX, startY + offset, startX + partWidth,
-                              startY + (int)(partWidth * gradient) + offset);
+        for (int j = commonBeamCount; j < params.m_nextBeamCount; ++j) {
+            int y = j * (thickness + gap);
+            if (!params.m_stemGoesUp) {
+                if (smooth) y = -y - thickness - 1;
+                else y = -y - 1;
             }
+            drawShallowLine(startX, startY + y, startX + partWidth,
+                            startY + (int)(partWidth*grad) + y,
+                            thickness, smooth);
         }
     }
 }
@@ -659,6 +754,18 @@ int NotePixmapFactory::getAccidentalHeight(Accidental a) const {
 
 int NotePixmapFactory::getStemLength() const {
     return getNoteBodyHeight() * 13/4;
+}
+
+int NotePixmapFactory::getStemThickness() const {
+    unsigned int i;
+    (void)m_font->getStemThickness(i);
+    return i;
+}
+
+int NotePixmapFactory::getStaffLineThickness() const {
+    unsigned int i;
+    (void)m_font->getStaffLineThickness(i);
+    return i;
 }
 
 int NotePixmapFactory::getDotWidth() const {

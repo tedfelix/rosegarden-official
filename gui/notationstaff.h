@@ -88,7 +88,7 @@ public:
      * Return the total height of a staff
      */
     unsigned int getStaffHeight() const {
-	return m_resolution * nbLines + linesOffset * 2 + 1;
+	return (m_resolution + 1) * nbLines + linesOffset * 2 + 1;
     }
 
 
@@ -126,6 +126,7 @@ public:
     void setLines(double xfrom, double xto);
 
     static const int nbLines;        // number of main lines on the staff
+    static const int nbLegerLines;   // number of lines above or below
     static const int linesOffset;    // from top of canvas to top line (bad!)
 
 protected:

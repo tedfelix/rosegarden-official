@@ -31,7 +31,7 @@ const Rosegarden::PropertyName CALCULATED_ACCIDENTAL = "NoteCalculatedAccidental
 const Rosegarden::PropertyName DISPLAY_ACCIDENTAL   = "NoteDisplayAccidental";
 const Rosegarden::PropertyName STEM_UP              = "NoteStemUp";
 const Rosegarden::PropertyName UNBEAMED_STEM_LENGTH = "UnbeamedStemLength";
-const Rosegarden::PropertyName DRAW_TAIL            = "NoteDrawTail";
+const Rosegarden::PropertyName DRAW_FLAG            = "NoteDrawFlag";
 const Rosegarden::PropertyName NOTE_HEAD_SHIFTED    = "NoteHeadShifted";
 const Rosegarden::PropertyName NOTE_NAME            = "NoteName";
 
@@ -39,9 +39,9 @@ const Rosegarden::PropertyName BEAMED               = "Beamed";
 const Rosegarden::PropertyName BEAM_PRIMARY_NOTE	  = "BeamPrimaryNote";
 const Rosegarden::PropertyName BEAM_GRADIENT        = "BeamGradient";
 const Rosegarden::PropertyName BEAM_SECTION_WIDTH   = "BeamSectionWidth";
-const Rosegarden::PropertyName BEAM_NEXT_TAIL_COUNT = "BeamNextTailCount";
-const Rosegarden::PropertyName BEAM_NEXT_PART_TAILS = "BeamNextPartTails";
-const Rosegarden::PropertyName BEAM_THIS_PART_TAILS = "BeamThisPartTails";
+const Rosegarden::PropertyName BEAM_NEXT_BEAM_COUNT = "BeamNextBeamCount";
+const Rosegarden::PropertyName BEAM_NEXT_PART_BEAMS = "BeamNextPartBeams";
+const Rosegarden::PropertyName BEAM_THIS_PART_BEAMS = "BeamThisPartBeams";
 const Rosegarden::PropertyName BEAM_MY_Y		  = "BeamMyY";
 
 }

@@ -49,6 +49,7 @@ using Rosegarden::TimeSignature;
 using namespace NotationProperties;
 
 const int NotationStaff::nbLines = 5;
+const int NotationStaff::nbLegerLines = 5;
 const int NotationStaff::linesOffset = 40;
 
 NotationStaff::NotationStaff(QCanvas *canvas, Track *track, int resolution) :
@@ -95,25 +96,45 @@ NotationStaff::changeResolution(int newResolution)
     // a staff at height h is (8-h)/2 * lineWidth + linesOffset
 
     int h;
-    for (int h = 0; h < m_staffLines.size(); ++h) {
+    for (h = 0; h < m_staffLines.size(); ++h) {
         delete m_staffLines[h];
     }
     m_staffLines.clear();
 
-    for (int h = 0; h <= 8; ++h) {
+    // If the resolution is 8 or less, we want to reduce the blackness
+    // of the staff lines somewhat to make them less intrusive
+    int level = 0;
+    int z = 1;
+    if (newResolution < 6) {
+        z = -1;
+        level = (9 - newResolution) * 32;
+        if (level > 200) level = 200;
+    }
+    QColor lineColour(level, level, level);
 
-        StaffLine *line = new StaffLine(canvas(), this, h);
-        int y = yCoordOfHeight(h);
-        line->setPoints(0, y, m_horizLineLength, y);
+    for (h = -2 * nbLegerLines; h <= (2*(nbLines + nbLegerLines) - 2); ++h) {
 
-        if (h % 2 == 1) {
-            // make the line invisible
-            line->setPen(QPen(white, 1)); // invisibleLineWidth
-            line->setZ(-1);
+        for (int i = 0; i < m_npf->getStaffLineThickness(); ++i) {
+
+            StaffLine *line = new StaffLine(canvas(), this, h);
+            int y = yCoordOfHeight(h) + i;
+            line->setPoints(0, y, m_horizLineLength, y);
+
+            if ((h % 2 == 1) ||
+                (h < 0 || h > (nbLines * 2 - 2))) {
+
+                // make the line invisible
+                line->setPen(QPen(white, 1));
+                line->setZ(-1);
+                
+            } else {
+                line->setPen(QPen(lineColour, 1));
+                line->setZ(z);
+            }
+
+            line->show();
+            m_staffLines.push_back(line);
         }
-
-        line->show();
-        m_staffLines.push_back(line);
     }
 
     m_barLineHeight = (nbLines - 1) * m_npf->getLineSpacing();
@@ -139,10 +160,27 @@ NotationStaff::changeResolution(int newResolution)
 
 int NotationStaff::yCoordOfHeight(int h) const
 {
-    // 0 is bottom staff-line, 8 is top one
+/*
+    int y = (nbLines + nbLegerLines) * 2 - 2 - h;
+    y = y * m_npf->getLineSpacing() / 2;
+    if (((h + 20) % 2) == 1) ++y;
+    return y;
+*/
+
+    // 0 is bottom staff-line, 8 is top one, leger lines above & below
+
+    int y = 8 - h;
+    y = linesOffset + (y * m_npf->getLineSpacing()) / 2;
+    if (h > 0 && h < 8 && (h % 2 == 1)) ++y;
+    else if (h < 0 && (-h % 2 == 1)) ++y;
+//    else if (h > 8 && (h % 2 == 0)) --y;
+    return y;
+/*
+
     int y = ((8 - h) * m_npf->getLineSpacing()) / 2 +
         linesOffset + ((h % 2 == 1) ? 1 : 0);
     return y;
+*/
 }
 
 static bool
@@ -159,21 +197,23 @@ compareBarToPos(QCanvasLineGroupable *barLine1, unsigned int pos)
 
 void NotationStaff::insertBar(unsigned int barPos, bool correct)
 {
-//    kdDebug(KDEBUG_AREA) << "Staff::insertBar(" << barPos << ")\n";
+    for (int i = 0; i < m_npf->getStemThickness(); ++i) {
 
-    QCanvasLineGroupable* barLine = new QCanvasLineGroupable(canvas(), this);
+        QCanvasLineGroupable* barLine =
+            new QCanvasLineGroupable(canvas(), this);
 
-    barLine->setPoints(0, linesOffset,
-                       0, getBarLineHeight() + linesOffset);
-    barLine->moveBy(barPos + x(), y());
-    if (!correct) barLine->setPen(QPen(red, 1));
-    barLine->show();
+        barLine->setPoints(0, linesOffset,
+                           0, getBarLineHeight() + linesOffset);
+        barLine->moveBy(barPos + x() + i, y());
+        if (!correct) barLine->setPen(QPen(red, 1));
+        barLine->show();
 
-    barlines::iterator insertPoint = lower_bound(m_barLines.begin(),
-                                                 m_barLines.end(),
-                                                 barLine, compareBarPos);
+        barlines::iterator insertPoint = lower_bound(m_barLines.begin(),
+                                                     m_barLines.end(),
+                                                     barLine, compareBarPos);
 
-    m_barLines.insert(insertPoint, barLine);
+        m_barLines.insert(insertPoint, barLine);
+    }
 }
 
 void NotationStaff::deleteBars(unsigned int fromPos)
@@ -358,8 +398,8 @@ QCanvasSimpleSprite *NotationStaff::makeNoteSprite(NotationElementList::iterator
     bool up = true;
     (void)((*it)->event()->get<Bool>(STEM_UP, up));
 
-    bool tail = true;
-    (void)((*it)->event()->get<Bool>(DRAW_TAIL, tail));
+    bool flag = true;
+    (void)((*it)->event()->get<Bool>(DRAW_FLAG, flag));
 
     bool beamed = false;
     (void)((*it)->event()->get<Bool>(BEAMED, beamed));
@@ -368,11 +408,23 @@ QCanvasSimpleSprite *NotationStaff::makeNoteSprite(NotationElementList::iterator
     (void)((*it)->event()->get<Bool>(NOTE_HEAD_SHIFTED, shifted));
 
     long stemLength = m_npf->getNoteBodyHeight();
-    (void)((*it)->event()->get<Int>
-           (UNBEAMED_STEM_LENGTH, stemLength));
+    (void)((*it)->event()->get<Int>(UNBEAMED_STEM_LENGTH, stemLength));
 
-//    kdDebug(KDEBUG_AREA) << "Got stem length of "
-//                         << stemLength << endl;
+    long heightOnStaff = 0;
+    int legerLines = 0;
+
+    (void)((*it)->event()->get<Int>(HEIGHT_ON_STAFF, heightOnStaff));
+    if (heightOnStaff < 0) {
+        legerLines = heightOnStaff;
+    } else if (heightOnStaff > 8) {
+        legerLines = heightOnStaff - 8;
+    }
+
+    NotePixmapParameters params(note, dots, accidental);
+    params.setNoteHeadShifted(shifted);
+    params.setDrawFlag(flag);
+    params.setStemGoesUp(up);
+    params.setLegerLines(legerLines);
 
     if (beamed) {
 
@@ -383,42 +435,30 @@ QCanvasSimpleSprite *NotationStaff::makeNoteSprite(NotationElementList::iterator
             stemLength = myY - (int)(*it)->getLayoutY();
             if (stemLength < 0) stemLength = -stemLength;
 
-            int nextTailCount =
-                (*it)->event()->get<Int>(BEAM_NEXT_TAIL_COUNT);
+            int nextBeamCount =
+                (*it)->event()->get<Int>(BEAM_NEXT_BEAM_COUNT);
             int width =
                 (*it)->event()->get<Int>(BEAM_SECTION_WIDTH);
             int gradient =
                 (*it)->event()->get<Int>(BEAM_GRADIENT);
 
-            bool thisPartialTails(false), nextPartialTails(false);
+            bool thisPartialBeams(false), nextPartialBeams(false);
             (void)(*it)->event()->get<Bool>
-                (BEAM_THIS_PART_TAILS, thisPartialTails);
+                (BEAM_THIS_PART_BEAMS, thisPartialBeams);
             (void)(*it)->event()->get<Bool>
-                (BEAM_NEXT_PART_TAILS, nextPartialTails);
+                (BEAM_NEXT_PART_BEAMS, nextPartialBeams);
 
-            QCanvasPixmap notePixmap
-                (m_npf->makeBeamedNotePixmap
-                 (note, dots, accidental, shifted, up, stemLength,
-                  nextTailCount, thisPartialTails, nextPartialTails,
-                  width, (double)gradient / 100.0));
-            return new QCanvasNotationSprite(*(*it), &notePixmap, canvas());
-
-        } else {
-
-            QCanvasPixmap notePixmap
-                (m_npf->makeNotePixmap
-                 (note, dots, accidental, shifted, tail, up, stemLength));
-            return new QCanvasNotationSprite(*(*it), &notePixmap, canvas());
+            params.setBeamed(true);
+            params.setNextBeamCount(nextBeamCount);
+            params.setThisPartialBeams(thisPartialBeams);
+            params.setNextPartialBeams(nextPartialBeams);
+            params.setWidth(width);
+            params.setGradient((double)gradient / 100.0);
         }
-
-		
-    } else {
-
-        QCanvasPixmap notePixmap
-            (m_npf->makeNotePixmap(note, dots, accidental,
-                                  shifted, tail, up, stemLength));
-
-        return new QCanvasNotationSprite(*(*it), &notePixmap, canvas());
     }
+
+    params.setStemLength(stemLength);
+    QCanvasPixmap notePixmap(m_npf->makeNotePixmap(params));
+    return new QCanvasNotationSprite(*(*it), &notePixmap, canvas());
 }
 

@@ -218,7 +218,7 @@ NotationHLayout::scanStaff(StaffType &staff)
         for (NotationElementList::iterator it = from; it != to; ++it) {
         
             NotationElement *el = (*it);
-            int mw = getMinWidth(*el);
+            int mw = getMinWidth(*el, &t.getQuantizer());
 
             if (el->event()->isa(Clef::EventType)) {
 
@@ -430,7 +430,7 @@ NotationHLayout::reconcileBars()
 
 	    BarDataList &list = i->second;
 
-	    if (list.size() > barNo) {
+	    if ((int)list.size() > barNo) {
 
 		reachedEnd = false;
 
@@ -444,7 +444,7 @@ NotationHLayout::reconcileBars()
 
 	    BarDataList &list = i->second;
 
-	    if (list.size() > barNo) {
+	    if ((int)list.size() > barNo) {
 
 		BarData &bd(list[barNo]);
 
@@ -774,13 +774,24 @@ NotationHLayout::positionNote(StaffType &staff,
 }
 
 
-int NotationHLayout::getMinWidth(const NotationElement &e) const
+int NotationHLayout::getMinWidth(NotationElement &e,
+                                 const Quantizer *quantizer) const
 {
     int w = 0;
 
     if (e.isNote()) {
 
-        w += m_npf.getNoteBodyWidth(e.event()->get<Int>(Note::NoteType));
+        long noteType;
+        if (!e.event()->get<Int>(Note::NoteType, noteType)) {
+            if (quantizer) {
+                quantizer->quantizeByNote(e.event());
+                noteType = e.event()->get<Int>(Note::NoteType);
+            } else {
+                throw 0;
+            }
+        }
+
+        w += m_npf.getNoteBodyWidth(noteType);
 
         long dots;
         if (e.event()->get<Int>(Rosegarden::Note::NoteDots, dots)) {

@@ -29,6 +29,50 @@
 #include "notefont.h"
 
 
+class NotePixmapParameters
+{
+public:
+    NotePixmapParameters(Rosegarden::Note::Type noteType,
+                         int dots,
+                         Rosegarden::Accidental accidental =
+                                                Rosegarden::NoAccidental);
+    ~NotePixmapParameters();
+    
+    void setNoteHeadShifted(bool shifted) { m_shifted          = shifted;  }
+    void setDrawFlag(bool df)             { m_drawFlag         = df;       }
+    void setStemGoesUp(bool up)           { m_stemGoesUp       = up;       }
+    void setStemLength(int length)        { m_stemLength       = length;   }
+    void setLegerLines(int lines)         { m_legerLines       = lines;    }
+
+    void setBeamed(bool beamed)           { m_beamed           = beamed;   }
+    void setNextBeamCount(int tc)         { m_nextBeamCount    = tc;       }
+    void setThisPartialBeams(bool pt)     { m_thisPartialBeams = pt;       }
+    void setNextPartialBeams(bool pt)     { m_nextPartialBeams = pt;       }
+    void setWidth(int width)              { m_width            = width;    }
+    void setGradient(double gradient)     { m_gradient         = gradient; }
+
+private:
+    friend class NotePixmapFactory;
+
+    Rosegarden::Note::Type m_noteType;
+    int m_dots;
+    Rosegarden::Accidental m_accidental;
+
+    bool    m_shifted;
+    bool    m_drawFlag;
+    bool    m_stemGoesUp;
+    int     m_stemLength;
+    int     m_legerLines;
+
+    bool    m_beamed;
+    int     m_nextBeamCount;
+    bool    m_thisPartialBeams;
+    bool    m_nextPartialBeams;
+    int     m_width;
+    double  m_gradient;
+};    
+
+
 /**
  * Generates QCanvasPixmaps for various notation items
  */
@@ -39,27 +83,7 @@ public:
     NotePixmapFactory(int size, std::string fontName = "feta");
     ~NotePixmapFactory();
 
-    QCanvasPixmap makeNotePixmap(Rosegarden::Note::Type note,
-                                 int dots,
-                                 Rosegarden::Accidental accidental =
-                                                     Rosegarden::NoAccidental,
-                                 bool noteHeadShifted = false,
-                                 bool drawTail = true,
-                                 bool stemGoesUp = true,
-                                 int stemLength = -1);
-
-    QCanvasPixmap makeBeamedNotePixmap(Rosegarden::Note::Type note,
-				       int dots,
-				       Rosegarden::Accidental accidental,
-                                       bool noteHeadShifted,
-				       bool stemGoesUp,
-				       int stemLength,
-				       int nextTailCount,
-                                       bool thisPartialTails,
-                                       bool nextPartialTails,
-				       int width,
-				       double gradient);
-
+    QCanvasPixmap makeNotePixmap(const NotePixmapParameters &parameters);
     QCanvasPixmap makeRestPixmap(const Rosegarden::Note &restType);
     QCanvasPixmap makeClefPixmap(const Rosegarden::Clef &clef) const;
     QCanvasPixmap makeKeyPixmap(const Rosegarden::Key &key,
@@ -76,11 +100,12 @@ public:
     int getAccidentalWidth (Rosegarden::Accidental) const;
     int getAccidentalHeight(Rosegarden::Accidental) const;
 
-    int getLineSpacing()       const;
-    int getStalkLength()       const { return getStemLength(); } //!!!
-    int getStemLength()        const;
-    int getDotWidth()          const;
-    int getBarMargin()	       const;
+    int getLineSpacing()        const;
+    int getStemLength()         const;
+    int getStemThickness()      const;
+    int getStaffLineThickness() const;
+    int getDotWidth()           const;
+    int getBarMargin()	        const;
 
     int getClefWidth(const Rosegarden::Clef &clef) const;
     int getTimeSigWidth(const Rosegarden::TimeSignature &timesig) const;
@@ -88,20 +113,6 @@ public:
     int getKeyWidth(const Rosegarden::Key &key) const;
 
 protected:
-    QCanvasPixmap makeNotePixmapAux(Rosegarden::Note::Type note,
-                                    int dots,
-                                    Rosegarden::Accidental accidental,
-                                    bool noteHeadShifted,
-                                    bool drawTail,
-                                    bool stemGoesUp,
-                                    bool isBeamed,
-                                    int stemLength,
-                                    int nextTailCount,
-                                    bool thisPartialTails,
-                                    bool nextPartialTails,
-                                    int width,
-                                    double gradient);
-
     NoteFont *m_font;
 
     int m_noteBodyWidth, m_noteBodyHeight;
@@ -109,10 +120,10 @@ protected:
 
     void makeRoomForAccidental(Rosegarden::Accidental);
     void drawAccidental(Rosegarden::Accidental);
-    void drawBeams(const QPoint &, bool stemGoesUp,
-                   int tailCount, int nextTailCount,
-                   bool thisPartialTails, bool nextPartialTails,
-                   int width, double gradient);
+    void drawBeams(const QPoint &, const NotePixmapParameters &params,
+                   int beamCount);
+    void drawShallowLine(int x0, int y0, int x1, int y1, int thickness,
+                         bool smooth);
 
     void createPixmapAndMask(int width, int height);
 

@@ -26,7 +26,6 @@
 #include "notepixmapfactory.h"
 
 #include "Staff.h"
-#include "Track.h"
 #include "LayoutEngine.h"
 #include "FastVector.h"
 
@@ -35,6 +34,8 @@
  *
  * computes the X coordinates of notation elements
  */
+
+class Rosegarden::Quantizer;
 
 class NotationHLayout : public Rosegarden::HorizontalLayoutEngine<NotationElement>
 {
@@ -170,7 +171,8 @@ protected:
     };
 
 
-    int getMinWidth(const NotationElement &) const;
+    int getMinWidth(NotationElement &,
+                    const Rosegarden::Quantizer * = 0) const;
     int getComfortableGap(Rosegarden::Note::Type type) const;
 
     double m_totalWidth;

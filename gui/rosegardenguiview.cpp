@@ -56,16 +56,8 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     
     scrollView->addChild(tracksEditor);
 
-    connect(tracksEditor->canvas(), SIGNAL(editTrackTiny(Rosegarden::Track*)),
-            SLOT(editTrackNotationTiny(Rosegarden::Track*)));
-    connect(tracksEditor->canvas(), SIGNAL(editTrackSmall(Rosegarden::Track*)),
-            SLOT(editTrackNotationSmall(Rosegarden::Track*)));
-    connect(tracksEditor->canvas(), SIGNAL(editTrackMedium(Rosegarden::Track*)),
-            SLOT(editTrackNotationMedium(Rosegarden::Track*)));
-    connect(tracksEditor->canvas(), SIGNAL(editTrackLarge(Rosegarden::Track*)),
-            SLOT(editTrackNotationLarge(Rosegarden::Track*)));
-    connect(tracksEditor->canvas(), SIGNAL(editTrackHuge(Rosegarden::Track*)),
-            SLOT(editTrackNotationHuge(Rosegarden::Track*)));
+    connect(tracksEditor->canvas(), SIGNAL(editTrack(Rosegarden::Track*)),
+            SLOT(editTrackNotation(Rosegarden::Track*)));
 
     connect(tracksEditor,  SIGNAL(createNewTrack(TrackItem*,int)),
             getDocument(), SLOT  (createNewTrack(TrackItem*,int)));
@@ -144,54 +136,13 @@ void RosegardenGUIView::resizeSelected()
 }
 
 
-
 void
-RosegardenGUIView::editTrackNotationTiny(Rosegarden::Track* p)
+RosegardenGUIView::editTrackNotation(Rosegarden::Track* p)
 {
     std::vector<Rosegarden::Track *> tracksToEdit;
     tracksToEdit.push_back(p);
 
-    m_notationView = new NotationView(getDocument(), tracksToEdit, this, 5);
-    m_notationView->show();
-}
-
-void
-RosegardenGUIView::editTrackNotationSmall(Rosegarden::Track* p)
-{
-    std::vector<Rosegarden::Track *> tracksToEdit;
-    tracksToEdit.push_back(p);
-
-    m_notationView = new NotationView(getDocument(), tracksToEdit, this, 7);
-    m_notationView->show();
-}
-
-void
-RosegardenGUIView::editTrackNotationMedium(Rosegarden::Track* p)
-{
-    std::vector<Rosegarden::Track *> tracksToEdit;
-    tracksToEdit.push_back(p);
-
-    m_notationView = new NotationView(getDocument(), tracksToEdit, this, 9);
-    m_notationView->show();
-}
-
-void
-RosegardenGUIView::editTrackNotationLarge(Rosegarden::Track* p)
-{
-    std::vector<Rosegarden::Track *> tracksToEdit;
-    tracksToEdit.push_back(p);
-
-    m_notationView = new NotationView(getDocument(), tracksToEdit, this, 11);
-    m_notationView->show();
-}
-
-void
-RosegardenGUIView::editTrackNotationHuge(Rosegarden::Track* p)
-{
-    std::vector<Rosegarden::Track *> tracksToEdit;
-    tracksToEdit.push_back(p);
-
-    m_notationView = new NotationView(getDocument(), tracksToEdit, this, 13);
+    m_notationView = new NotationView(getDocument(), tracksToEdit, this, 8);
     m_notationView->show();
 }
 
@@ -205,7 +156,7 @@ RosegardenGUIView::editAllTracks(Rosegarden::Composition* p)
         tracksToEdit.push_back(*i);
     }
 
-    m_notationView = new NotationView(getDocument(), tracksToEdit, this, 9);
+    m_notationView = new NotationView(getDocument(), tracksToEdit, this, 8);
     m_notationView->show();
 }
 

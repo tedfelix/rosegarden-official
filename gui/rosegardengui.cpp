@@ -188,7 +188,7 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotChangeTimeResolution()),
                 actionCollection(), "change_time_res");
 
-    new KAction(i18n("Edit All Tracks"),
+    new KAction(i18n("Edit all Tracks as Score"),
                 0,
                 this, SLOT(editAllTracks()),
                 actionCollection(), "edit_all_tracks");
