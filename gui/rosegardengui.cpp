@@ -37,6 +37,7 @@
 #include <kconfig.h>
 #include <kprocess.h>
 #include <kprinter.h>
+#include <ktoolbar.h>
 #include <dcopclient.h>
 #include <qiconset.h>
 #include <kstddirs.h>
@@ -405,6 +406,8 @@ void RosegardenGUIApp::initZoomToolbar()
 	return;
     }
 
+    zoomToolbar->setBarPos(KToolBar::Right);
+
     new QLabel(i18n("  Zoom:  "), zoomToolbar);
 
     std::vector<double> zoomSizes; // in units-per-pixel
@@ -659,6 +662,7 @@ void RosegardenGUIApp::slotSaveOptions()
 
     m_config->writeEntry("ToolBarPos", (int) toolBar("mainToolBar")->barPos());
     m_config->writeEntry("TracksToolBarPos", (int) toolBar("tracksToolBar")->barPos());
+    m_config->writeEntry("ZoomToolBarPos", (int) toolBar("zoomToolBar")->barPos());
 
     m_fileRecent->saveEntries(m_config, "Recent Files");
 }
@@ -716,6 +720,9 @@ void RosegardenGUIApp::readOptions()
 
     toolBarPos=(KToolBar::BarPosition) m_config->readNumEntry("TracksToolBarPos", KToolBar::Top);
     toolBar("tracksToolBar")->setBarPos(toolBarPos);
+	
+    toolBarPos=(KToolBar::BarPosition) m_config->readNumEntry("ZoomToolBarPos", KToolBar::Top);
+    toolBar("zoomToolBar")->setBarPos(toolBarPos);
 	
     // initialise the recent file list
     //
