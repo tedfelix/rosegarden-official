@@ -4,8 +4,8 @@ default: libcore.a
 all:	libcore.a
 
 CC	:= g++
-#CPPFLAGS	:= -g -Wall
-CPPFLAGS	:= -O3 -DNDEBUG
+CPPFLAGS	:= -g -Wall
+#CPPFLAGS	:= -O3 -DNDEBUG
 SRCS	:= Property.C Event.C ViewElement.C Track.C Composition.C NotationTypes.C Equation.C
 OBJS	:= Property.o Event.o ViewElement.o Track.o Composition.o NotationTypes.o Equation.o
 
