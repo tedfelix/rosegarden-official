@@ -23,7 +23,7 @@ Features for 1.0 - updated 20030627
 
 - Studio faders (MIDI and audio fader controls)
 
-- porting to shared memory experimental branch [rwb/cc/gl]
+- porting to shared memory experimental branch [rwb/cc/gl] [almost DONE, audio remains]
 
 - look at other updates for RG manual [dmm]
     
@@ -74,11 +74,9 @@ Features for 1.0 - updated 20030627
   closely with the fluidsynth team and get their support.  There are
   things that both of us dislike about current implementation. [rwb]
 
-- control rulers [gl IN PROGESS]
+- control rulers [gl] [DONE?]
   
   I'll have a look at this soonish [rwb]
-
-- adding instrument selection menu to tracks menu [rwb/gl]
 
 - native printing 
   o printing resolution
@@ -94,6 +92,8 @@ Features for 1.0 - updated 20030627
 
 Completed
 ---------
+
+- adding instrument selection menu to tracks menu [rwb/gl] [DONE]
 
 - document event filter dialog in RG manual [dmm] [DONE]
 
