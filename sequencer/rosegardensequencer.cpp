@@ -876,7 +876,7 @@ RosegardenSequencerApp::startPlaying()
     // tell the gui about this slice of events
     notifyVisuals(&m_mC);
 
-    return isEndOfCompReached();
+    return true; // !isEndOfCompReached();
 }
 
 void
@@ -920,7 +920,7 @@ RosegardenSequencerApp::keepPlaying()
         m_lastFetchSongPosition = m_lastFetchSongPosition + m_readAhead;
     }
 
-    return true; // isEndOfCompReached(); - until we sort this out, we don't stop at end of comp.
+    return true; // !isEndOfCompReached(); - until we sort this out, we don't stop at end of comp.
 }
 
 // Return current Sequencer time in GUI compatible terms
