@@ -1,6 +1,6 @@
 Rosegarden 0.2 Roadmap
 ======================
-updated: 25.03.2002 [rwb]
+updated: 25.04.2002 [rwb]
 
 The purpose of the 0.2 release is to get the target audience of
 Rosegarden 4 to give us some feedback on what we (the developers)
@@ -35,79 +35,98 @@ After much consultation the lead developers have settled on the following
 list of work to be done to get the code to the intended 0.2 usability
 release standard:
 
+[now modified and updated to reflect progress - rwb 25.04.02]
 
-o Kill all the big bugs - closing bug being one.  Soak testing of
-  sequencer and gui for leaks (looping of an entire piece for a
-  day or so - that kind of thing)
+In order of importance:
 
-o Annoying bugs to be fixed:
+  o Matrix tools (shorten/lengthen note, join/split note, move note)
 
-  - LoopRulers aren't getting set on clients, can't be edited
-    from clients.  SegmentCanvas LoopRuler doesn't disappear
-    when Loop button toggled.
+  o Get the GUI to make sense when loading files and switching states,
+    enabling correct buttons and menu options corresponding to whether
+    (for example) anything is selected in the view
 
-  - TrackButtons scrolls independently of SegmentCanvas
+  o Better MIDI support (Controllers, Pitch Bend, Sys Exs, maybe time codes and
+    synchronisation?)
 
-  - PianoKeyboard scrolls independently of MatrixView
+  o GUI support for various things that are supported in the
+    internal representation already - tuplets, n-dotted notes,
+    tempo, and text.
 
-o Parameter box fields don't look very disabled even when they are
+  o Segment start and end markers - moveable non-destructive markers for
+    Segments
 
-o Save Instrument and Segment parameter states to RG4 file
+  o Switcheable pointer-follow mode - turn it off, enable the same behaviour
+    in clients
 
-o GUI support for various things that are supported in the
-  internal representation already - tuplets, n-dotted notes,
-  tempo, and text.
+  o Method of displaying overlapping Segments
 
-o Get the GUI to make sense when loading files and switching states,
-  enabling correct buttons and menu options corresponding to whether
-  (for example) anything is selected in the view
+  o Improve Audio support to basic four track recorder level i.e. no or not
+    many effects but usable
 
-o Add, Move and Delete Tracks including associated Segments
+  o Improved Printing (by how much we don't yet know)
+  
+  o Meta editing dialog (song information, copyright information, contact
+    details for RG4 and MIDI files)
 
-o Dialog for changing latency and other general options (bars count-in)
-
-o Modifying tempo
-
-o Composition start and end markers - moveable non-destructive markers for
-  Composition length
-
-o Segment start and end markers - moveable non-destructive markers for
-  Segments
-
-o Matrix tools (shorten/lengthen note, join/split note, move note)
-
-o Improved Printing (by how much we don't yet know)
-
-o Zooming - even if it's just horizontal
-
-o Switcheable pointer-follow mode - turn it off, enable the same behaviour
-  in clients
-
-o Better MIDI support (Controllers, Pitch Bend, Sys Exs, maybe time codes and
-  synchronisation?)
-
-o Meta editing dialog (song information, copyright information, contact
-  details for RG4 and MIDI files)
-
-o Improve Audio support to basic four track recorder level i.e. no or not
-  many effects but usable
-
-o Method of displaying overlapping Segments
-
-o Wait cursor/progress bar for lengthy operations (file loading,
-  re-rendering score etc).
+  o Parameter box fields don't look very disabled even when they are
 
 
-Other auxilliary tasks to bear in mind:
+[work completed or partially completed]
 
-o Defining the KDE versions we support - currently we're 2.2 specific, if
-  we can fiddle KDE 2.x and KDE3.0 support should we?
 
-o Producing RPMS/packages.
+  o Kill all the big bugs - closing bug being one.  Soak testing of
+    sequencer and gui for leaks (looping of an entire piece for a
+    day or so - that kind of thing)
+    [CLOSING BUG DONE]
 
-o Producing documentation either in-app, on-line or both.
+  o Annoying bugs to be fixed:
 
-o Naming the release something meaningful.
+    - LoopRulers aren't getting set on clients, can't be edited
+      from clients.  SegmentCanvas LoopRuler doesn't disappear
+      when Loop button toggled.
+      [PARTIALLY DONE]
+
+    - TrackButtons scrolls independently of SegmentCanvas
+      [DONE]
+  
+    - PianoKeyboard scrolls independently of MatrixView
+      [DONE]
+
+  o Save Instrument and Segment parameter states to RG4 file
+    [DONE]
+
+  o Add, Move and Delete Tracks including associated Segments
+    [ADD DONE]
+
+  o Dialog for changing latency and other general options (bars count-in)
+    [IN - ready for more options/rework]
+
+  o Modifying tempo
+    [DONE]
+
+  o Composition start and end markers - moveable non-destructive markers for
+    Composition length
+    [PARTIALLY DONE]
+
+  o Zooming - even if it's just horizontal
+    [DONE]
+
+  o Wait cursor/progress bar for lengthy operations (file loading,
+    re-rendering score etc).
+    [DONE]
+
+  o Defining the KDE versions we support - currently we're 2.2 specific, if
+    we can fiddle KDE 2.x and KDE3.0 support should we?
+    [DONE - defined KDE3.0 and KDE2.2 as IN SCOPE]
+
+
+[other auxilliary tasks]
+
+  o Producing RPMS/packages.
+
+  o Producing documentation either in-app, on-line or both.
+
+  o Naming the release something meaningful.
 
 
 Notes:
