@@ -65,6 +65,7 @@ namespace Rosegarden
 }
 
 class RosegardenProgressBar;
+class ControlEditorDialog;
 
 /**
   * The base class for RosegardenGUI application windows. It sets up the main
@@ -1027,6 +1028,11 @@ public slots:
      */
     void slotBankEditorClosed();
 
+    /**
+     * when ControlEditor is being closed
+     */
+    void slotControlEditorClosed();
+
 private:
 
     //--------------- Data members ---------------------------------
@@ -1119,6 +1125,8 @@ private:
     QTimer* m_autoSaveTimer;
 
     Rosegarden::Clipboard *m_clipboard;
+
+    ControlEditorDialog   *m_controlEditor;
 
     static const char* const MainWindowConfigGroup;
 

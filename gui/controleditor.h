@@ -69,9 +69,23 @@ public:
     ControlParameterEditDialog(QWidget *parent,
                                Rosegarden::ControlParameter *control);
 
+    Rosegarden::ControlParameter& getControl() { return m_dialogControl; }
+
+public slots: 
+
+    void slotNameChanged(const QString &);
+    void slotTypeChanged(int);
+    void slotDescriptionChanged(const QString &);
+    void slotControllerChanged(int);
+    void slotMinChanged(int);
+    void slotMaxChanged(int);
+    void slotDefaultChanged(int);
+    void slotColourChanged(int);
+
 protected:
     RosegardenGUIDoc             *m_doc;
     Rosegarden::ControlParameter *m_control;
+    Rosegarden::ControlParameter  m_dialogControl;
 
     QLineEdit                    *m_nameEdit;
     RosegardenComboBox           *m_typeCombo;
@@ -103,6 +117,9 @@ public:
     void setModified(bool value);
     void checkModified();
 
+    // reset the document
+    void setDocument(RosegardenGUIDoc *doc);
+
 public slots:
     void slotUpdate();
 
@@ -117,8 +134,11 @@ public slots:
     void slotEdit(QListViewItem *);
 
 signals:
+    void closing();
+
 
 protected:
+    virtual void closeEvent(QCloseEvent *);
 
     void setupActions();
 

@@ -19,6 +19,13 @@
     COPYING included with this distribution for more information.
 */
 
+#if (__GNUC__ < 3)
+#include <strstream>
+#define stringstream strstream
+#else
+#include <sstream>
+#endif
+
 #include "ControlParameter.h"
 #include "MidiTypes.h"
 
@@ -57,10 +64,57 @@ ControlParameter::ControlParameter(const std::string &name,
 {
 }
 
+
+ControlParameter::ControlParameter(const ControlParameter &control):
+        XmlExportable(),
+        m_name(control.getName()),
+        m_type(control.getType()),
+        m_description(control.getDescription()),
+        m_min(control.getMin()),
+        m_max(control.getMax()),
+        m_default(control.getDefault()),
+        m_controllerValue(control.getControllerValue()),
+        m_colour(control.getColour())
+{
+}
+
+ControlParameter& 
+ControlParameter::operator=(const ControlParameter &control)
+{
+    m_name = control.getName();
+    m_type = control.getType();
+    m_description = control.getDescription();
+    m_min = control.getMin();
+    m_max = control.getMax();
+    m_default = control.getDefault();
+    m_controllerValue = control.getControllerValue();
+    m_colour = control.getColour();
+
+    return *this;
+}
+
+
 std::string
 ControlParameter::toXmlString()
 { 
-    return std::string("");
+    std::stringstream control;
+
+    control << "    <control name=\"" << encode(m_name)
+            << "\" type=\"" << encode(m_type)
+            << "\" description=\"" << encode(m_description)
+            << "\" min=\"" << m_min
+            << "\" max=\"" << m_max
+            << "\" default=\"" << m_default
+            << "\" controllervalue=\"" << int(m_controllerValue)
+            << "\" colour=\"" << m_colour;
+
+#if (__GNUC__ < 3)
+    control << "\"/>" << endl << std::ends;
+#else
+    control << "\"/>" << endl;
+#endif
+
+    return control.str();
 }
 
 }

@@ -43,6 +43,9 @@ public:
                      MidiByte controllerValue = 0,
                      int colour = 0);
 
+    ControlParameter(const ControlParameter &control);
+    ControlParameter& operator=(const ControlParameter &control);
+
     std::string getName() const { return m_name; }
     std::string getType() const { return m_type; }
     std::string getDescription() const { return m_description; }

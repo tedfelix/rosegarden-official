@@ -257,6 +257,14 @@ Studio::toXmlString()
         studio << (*it)->toXmlString() << endl << endl;
     }
 
+    studio << endl << endl;
+
+    ControlListConstIterator cIt;
+    for (cIt = m_controls.begin(); cIt != m_controls.end() ; ++cIt)
+        studio << (*cIt)->toXmlString();
+
+    studio << endl << endl;
+
 #if (__GNUC__ < 3)
     studio << "</studio>" << endl << std::ends;
 #else

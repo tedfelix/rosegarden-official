@@ -1068,6 +1068,36 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             }
         }
 
+    } else if (lcName == "control") {
+
+        if (m_section != InStudio)
+        {
+            m_errorString = i18n("Found ControlParameter outside Studio");
+            return false;
+        }
+
+        QString name = atts.value("name");
+        QString type = atts.value("type");
+        QString descr = atts.value("description");
+        QString min = atts.value("min");
+        QString max = atts.value("max");
+        QString def = atts.value("default");
+        QString conVal = atts.value("controllervalue");
+        QString colour = atts.value("colour");
+
+        Rosegarden::ControlParameter *con = 
+            new Rosegarden::ControlParameter(
+                    qstrtostr(name),
+                    qstrtostr(type),
+                    qstrtostr(descr),
+                    min.toInt(),
+                    max.toInt(),
+                    def.toInt(),
+                    Rosegarden::MidiByte(conVal.toInt()),
+                    colour.toInt());
+
+        getStudio().addControlParameter(con);
+
     } else if (lcName == "reverb") {
 
         if (m_section != InInstrument)

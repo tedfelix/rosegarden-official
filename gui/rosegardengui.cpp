@@ -126,7 +126,8 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
       m_storedLoopEnd(0),
       m_useSequencer(useSequencer),
       m_autoSaveTimer(new QTimer(this)),
-      m_clipboard(new Rosegarden::Clipboard)
+      m_clipboard(new Rosegarden::Clipboard),
+      m_controlEditor(0)
 {
     m_myself = this;
 
@@ -970,6 +971,10 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
     // we've loaded as part of the new Composition
     //
     m_doc->prepareAudio();
+
+    // If the control editor is up then repopulate
+    //
+    if (m_controlEditor) m_controlEditor->setDocument(m_doc);
 
     emit documentChanged(newDocument);
 }
@@ -4351,10 +4356,21 @@ RosegardenGUIApp::slotEditBanks()
 void
 RosegardenGUIApp::slotEditControlParameters()
 {
-    ControlEditorDialog *controlEditor = new ControlEditorDialog(this, m_doc);
+    m_controlEditor = new ControlEditorDialog(this, m_doc);
 
-    controlEditor->show();
+    connect(m_controlEditor, SIGNAL(closing()),
+            SLOT(slotControlEditorClosed()));
+
+    m_controlEditor->show();
 }
+
+void
+RosegardenGUIApp::slotControlEditorClosed()
+{
+    RG_DEBUG << "RosegardenGUIApp::slotControlEditorClosed" << endl;
+    m_controlEditor = 0;
+}
+
 
 
 void
