@@ -4265,9 +4265,10 @@ AlsaDriver::checkForNewClients()
 						     (*i)->m_port);
 
 	    if (m_suspendedPortMap.find(portPair) != m_suspendedPortMap.end()) {
-		AUDIT_STREAM << "(Reusing suspended device)" << std::endl;
 
 		Rosegarden::DeviceId id = m_suspendedPortMap[portPair];
+
+		AUDIT_STREAM << "(Reusing suspended device " << id << ")" << std::endl;
 
 		for (MappedDeviceList::iterator j = m_devices.begin();
 		     j != m_devices.end(); ++j) {
@@ -4275,6 +4276,7 @@ AlsaDriver::checkForNewClients()
 		}
 
 		m_suspendedPortMap.erase(m_suspendedPortMap.find(portPair));
+		m_devicePortMap[id] = portPair;
 		continue;
 	    }
 	    
