@@ -173,16 +173,6 @@ public:
     iterator findStartOfNextBar(timeT) const;
 
     /**
-     * Returns the time signature in effect at the end of the segment,
-     * without referring to the bar position data.  Inefficient unless
-     * the time signature changes very close to the end of the segment.
-     * 
-     * Does not require the reference segment to exist (i.e. okay if
-     * segment is not in a Composition).
-     */
-//!!!    TimeSignature getTimeSigAtEnd(timeT &absTimeOfSig);
-
-    /**
      * Inserts a single Event
      */
     iterator insert(Event *e);
@@ -317,14 +307,6 @@ private:
     void notifyAdd(Event *) const;
     void notifyRemove(Event *) const;
     void notifyReferenceSegmentRequested() const;
-
-    // cache to optimise otherwise-disgusting-inefficiency in fillWithRests
-    // that seriously affects MIDI file loading for files in which notes
-    // are generally truncated somewhat (hence lots of rests)
-//!!!    TimeSignature m_timeSigAtEnd;
-//!!!    timeT m_timeSigTime;
-//!!!    void invalidateTimeSigAtEnd() { m_timeSigTime = -1; }
-//!!!    void findTimeSigAtEnd();
 
 private:
     Segment(const Segment &);

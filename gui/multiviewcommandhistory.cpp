@@ -34,13 +34,15 @@ using std::endl;
 
 MultiViewCommandHistory::MultiViewCommandHistory() :
     m_undoLimit(50),
-    m_redoLimit(50)
+    m_redoLimit(50),
+    m_savedAt(0)
 {
     // nothing
 }
 
 MultiViewCommandHistory::~MultiViewCommandHistory()
 {
+    m_savedAt = -1;
     clearStack(m_undoStack);
     clearStack(m_redoStack);
 }
@@ -48,6 +50,7 @@ MultiViewCommandHistory::~MultiViewCommandHistory()
 void
 MultiViewCommandHistory::clear()
 {
+    m_savedAt = -1;
     clearStack(m_undoStack);
     clearStack(m_redoStack);
 }
@@ -118,6 +121,9 @@ MultiViewCommandHistory::addCommand(KCommand *command, bool execute)
     // We can't redo after adding a command
     clearStack(m_redoStack);
 
+    // can we reach savedAt?
+    if ((int)m_undoStack.size() < m_savedAt) m_savedAt = -1; // nope
+
     m_undoStack.push(command);
     clipCommands();
     
@@ -139,8 +145,11 @@ MultiViewCommandHistory::undo()
 
     m_redoStack.push(m_undoStack.top());
     m_undoStack.pop();
+
     clipCommands();
     updateButtons();
+
+    if ((int)m_undoStack.size() == m_savedAt) emit documentRestored();
 }
 
 void
@@ -178,12 +187,16 @@ MultiViewCommandHistory::setRedoLimit(int limit)
 void
 MultiViewCommandHistory::documentSaved()
 {
-    //!!! not yet implemented
+    m_savedAt = m_undoStack.size();
 }
 
 void
 MultiViewCommandHistory::clipCommands()
 {
+    if ((int)m_undoStack.size() > m_undoLimit) {
+	m_savedAt -= (m_undoStack.size() - m_undoLimit);
+    }
+
     clipStack(m_undoStack, m_undoLimit);
     clipStack(m_redoStack, m_redoLimit);
 }
@@ -260,12 +273,7 @@ MultiViewCommandHistory::updateButton(const QString &text,
 {
     for (ViewSet::iterator i = m_views.begin(); i != m_views.end(); ++i) {
 
-	kdDebug(KDEBUG_AREA) << "name is \"" << name << "\"" << endl;
-
 	KAction *action = (*i)->action(name);
-
-	kdDebug(KDEBUG_AREA) << "action is " << action << endl;
-
 	if (!action) continue;
 
 	if (stack.empty()) {
@@ -286,12 +294,7 @@ MultiViewCommandHistory::updateMenu(const QString &text,
 {
     for (ViewSet::iterator i = m_views.begin(); i != m_views.end(); ++i) {
 
-	kdDebug(KDEBUG_AREA) << "name is \"" << name << "\"" << endl;
-
 	KAction *action = (*i)->action(name);
-
-	kdDebug(KDEBUG_AREA) << "action is " << action << endl;
-
 	if (!action) continue;
 
 	KToolBarPopupAction *popupAction =
@@ -303,14 +306,15 @@ MultiViewCommandHistory::updateMenu(const QString &text,
 	menu->clear();
 
 	CommandStack tempStack;
+	int j = 0;
 
-	while (!stack.empty()) {
+	while (j < 10 && !stack.empty()) {
 
 	    KCommand *command = stack.top();
 	    tempStack.push(command);
 	    stack.pop();
 
-	    menu->insertItem(i18n(text + " " + command->name()));
+	    menu->insertItem(i18n(text + " " + command->name()), j++);
 	}
 
 	while (!tempStack.empty()) {

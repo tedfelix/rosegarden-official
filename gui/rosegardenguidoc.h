@@ -181,6 +181,9 @@ public slots:
      */
     void createNewSegment(SegmentItem*, int instrument);
 
+    void documentModified();
+    void documentRestored();
+
 protected:
 
     /**

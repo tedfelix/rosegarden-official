@@ -63,6 +63,12 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent, const char *name)
     }
 
     pViewList->setAutoDelete(true);
+
+    connect(&m_commandHistory, SIGNAL(commandExecuted()),
+	    this, SLOT(documentModified()));
+
+    connect(&m_commandHistory, SIGNAL(documentRestored()),
+	    this, SLOT(documentRestored()));
 }
 
 RosegardenGUIDoc::~RosegardenGUIDoc()
@@ -111,6 +117,18 @@ void RosegardenGUIDoc::slotUpdateAllViews(RosegardenGUIView *sender)
                 }
         }
 
+}
+
+void RosegardenGUIDoc::documentModified()
+{
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::documentModified()" << endl;
+    setModified(true);
+}
+
+void RosegardenGUIDoc::documentRestored()
+{
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::documentRestored()" << endl;
+    setModified(false);
 }
 
 bool RosegardenGUIDoc::saveIfModified()
@@ -339,6 +357,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
                          << endl;
 
     m_modified=false;
+    m_commandHistory.documentSaved();
     return true;
 }
 

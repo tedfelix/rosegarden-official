@@ -92,8 +92,7 @@ protected:
 class NoteInsertionCommand : public BasicCommand
 {
 public:
-    NoteInsertionCommand(const QString &name,
-			 Rosegarden::Segment &segment,
+    NoteInsertionCommand(Rosegarden::Segment &segment,
 			 Rosegarden::timeT time,
 			 Rosegarden::timeT endTime,
 			 Rosegarden::Note note,
@@ -115,8 +114,7 @@ protected:
 class RestInsertionCommand : public NoteInsertionCommand
 {
 public:
-    RestInsertionCommand(const QString &name,
-			 Rosegarden::Segment &segment,
+    RestInsertionCommand(Rosegarden::Segment &segment,
 			 Rosegarden::timeT time,
 			 Rosegarden::timeT endTime,
 			 Rosegarden::Note note);
@@ -124,6 +122,54 @@ public:
 
 protected:
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper);
+};
+
+class ClefInsertionCommand : public BasicCommand
+{
+public:
+    ClefInsertionCommand(Rosegarden::Segment &segment,
+			 Rosegarden::timeT time,
+			 Rosegarden::Clef clef);
+    virtual ~ClefInsertionCommand();
+
+    virtual Rosegarden::timeT getRelayoutEndTime();
+
+    Rosegarden::Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
+
+protected:
+    virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper);
+
+    Rosegarden::Clef m_clef;
+    Rosegarden::Event *m_lastInsertedEvent;
+};
+
+
+/* Not ideal, but we can't pass in the exact Event as the thing to erase
+   because we're just about to erase it, so replay wouldn't work (as the
+   event restored to the segment by unexecute() will be only a duplicate,
+   not the same event) */
+
+class EraseCommand : public BasicCommand
+{
+public:
+    EraseCommand(Rosegarden::Segment &segment,
+		 Rosegarden::timeT time,
+		 std::string eventType,
+		 int pitch,
+		 bool collapseRest);
+    virtual ~EraseCommand();
+
+    virtual Rosegarden::timeT getRelayoutEndTime();
+
+protected:
+    virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper);
+
+    std::string m_eventType;
+    int m_pitch;
+    bool m_collapseRest;
+    Rosegarden::timeT m_relayoutEndTime;
+
+    std::string makeName(std::string);
 };
 
 

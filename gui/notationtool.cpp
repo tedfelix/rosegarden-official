@@ -28,6 +28,7 @@
 #include "Event.h"
 #include "Segment.h"
 #include "NotationTypes.h"
+#include "BaseProperties.h"
 #include "SegmentNotationHelper.h"
 
 #include "eventselection.h"
@@ -46,6 +47,7 @@ using Rosegarden::NoAccidental;
 using Rosegarden::Event;
 using Rosegarden::Clef;
 using Rosegarden::Note;
+using Rosegarden::Int;
 using Rosegarden::Segment;
 using Rosegarden::SegmentNotationHelper;
 using Rosegarden::timeT;
@@ -282,7 +284,7 @@ NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
 {
     NoteInsertionCommand *command = 
 	new NoteInsertionCommand
-	 ("Insert Note", segment, time, endTime, note, pitch, accidental);
+	 (segment, time, endTime, note, pitch, accidental);
     m_parentView->getCommandHistory()->addCommand(command);
     return command->getLastInsertedEvent();
 } 
@@ -396,8 +398,7 @@ RestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
 			   const Note &note, int, Accidental)
 {
     NoteInsertionCommand *command = 
-	new RestInsertionCommand
-	 ("Insert Rest", segment, time, endTime, note);
+	new RestInsertionCommand(segment, time, endTime, note);
     m_parentView->getCommandHistory()->addCommand(command);
     return command->getLastInsertedEvent();
 } 
@@ -432,8 +433,8 @@ void ClefInserter::setClef(std::string clefType)
 }
 
 void ClefInserter::handleLeftButtonPress(int, int staffNo,
-                                        QMouseEvent* e,
-                                        NotationElement*)
+					 QMouseEvent* e,
+					 NotationElement*)
 {
     Event *tsig = 0, *clef = 0, *key = 0;
 
@@ -449,17 +450,15 @@ void ClefInserter::handleLeftButtonPress(int, int staffNo,
     }
 
     timeT time = (*closestNote)->getAbsoluteTime();
-    SegmentNotationHelper nt
-        (m_parentView->getStaff(staffNo)->getSegment());
 
-    m_parentView->getDocument()->setModified();
+    ClefInsertionCommand *command = 
+	new ClefInsertionCommand(m_parentView->getStaff(staffNo)->getSegment(),
+				 time, m_clef);
 
-    Segment::iterator i = nt.insertClef(time, m_clef);
-    Event *newEvent = 0;
-    if (i != nt.segment().end()) newEvent = *i;
+    m_parentView->getCommandHistory()->addCommand(command);
 
-    m_parentView->redoLayout(&nt.segment(), time, time + 1);
-    m_parentView->setSingleSelectedEvent(staffNo, newEvent);
+    Event *event = command->getLastInsertedEvent();
+    if (event) m_parentView->setSingleSelectedEvent(staffNo, event);
 }
 
 
@@ -498,6 +497,25 @@ void NotationEraser::handleLeftButtonPress(int, int staffNo,
     bool needLayout = false;
     if (!element || staffNo < 0) return;
 
+    long pitch = 0;
+    (void)element->event()->get<Int>(Rosegarden::BaseProperties::PITCH, pitch);
+
+    EraseCommand *command =
+	new EraseCommand(m_parentView->getStaff(staffNo)->getSegment(),
+			 element->getAbsoluteTime(),
+			 element->event()->getType(),
+			 (int)pitch, m_collapseRest);
+
+    m_parentView->getCommandHistory()->addCommand(command);
+
+
+
+/*
+    Event *event = command->getLastInsertedEvent();
+    if (event) m_parentView->setSingleSelectedEvent(staffNo, event);
+
+
+
     SegmentNotationHelper nt
         (m_parentView->getStaff(staffNo)->getSegment());
 
@@ -522,9 +540,9 @@ void NotationEraser::handleLeftButtonPress(int, int staffNo,
     }
     
     if (needLayout) {
-        m_parentView->getDocument()->setModified();
         m_parentView->redoLayout(&nt.segment(), absTime, absTime);
     }
+*/
 }
 
 void NotationEraser::toggleRestCollapse()

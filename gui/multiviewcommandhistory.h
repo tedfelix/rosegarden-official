@@ -110,6 +110,7 @@ private:
 
     int m_undoLimit;
     int m_redoLimit;
+    int m_savedAt;
 
     void updateButtons();
     void updateButton(const QString &text, const QString &name,
