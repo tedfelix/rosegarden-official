@@ -759,7 +759,7 @@ JackDriver::jackProcessStatic(jack_nframes_t nframes, void *arg)
 int
 JackDriver::jackProcess(jack_nframes_t nframes)
 {
-    if (!m_ok) return;
+    if (!m_ok) return 0;
 
     if (!m_bussMixer) {
 	return jackProcessEmpty(nframes);
