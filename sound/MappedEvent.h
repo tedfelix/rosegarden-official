@@ -115,7 +115,7 @@ public:
                    m_duration(0, 0),
                    m_audioStartMarker(0, 0),
                    m_dataBlock(""),
-                   m_isPersistent(false) {;}
+                   m_isPersistent(false) {}
 
     // Construct from Events to Internal (MIDI) type MappedEvent
     //
@@ -144,7 +144,7 @@ public:
         m_duration(duration),
         m_audioStartMarker(RealTime(0,0)),
         m_dataBlock(""),
-        m_isPersistent(false) {;}
+        m_isPersistent(false) {}
 
     // A general MappedEvent constructor for any MappedEvent type
     //
@@ -164,7 +164,7 @@ public:
         m_duration(duration),
         m_audioStartMarker(audioStartMarker),
         m_dataBlock(""),
-        m_isPersistent(false) {;}
+        m_isPersistent(false) {}
 
     // Audio MappedEvent shortcut constructor
     //
@@ -182,7 +182,7 @@ public:
          m_duration(duration),
          m_audioStartMarker(audioStartMarker),
          m_dataBlock(""),
-         m_isPersistent(false) {;}
+         m_isPersistent(false) {}
 
     // More generalised MIDI event containers for
     // large and small events (one param, two param)
@@ -200,7 +200,7 @@ public:
          m_duration(RealTime(0, 0)),
          m_audioStartMarker(RealTime(0, 0)),
          m_dataBlock(""),
-         m_isPersistent(false) {;}
+         m_isPersistent(false) {}
 
     MappedEvent(InstrumentId id,
                 MappedEventType type,
@@ -213,7 +213,8 @@ public:
         m_eventTime(RealTime(0, 0)),
         m_duration(RealTime(0, 0)),
         m_audioStartMarker(RealTime(0, 0)),
-        m_dataBlock("") {;}
+        m_dataBlock(""),
+        m_isPersistent(false) {}
 
 
     // Construct SysExs say
@@ -229,7 +230,7 @@ public:
         m_duration(RealTime(0, 0)),
         m_audioStartMarker(RealTime(0, 0)),
         m_dataBlock(""),
-        m_isPersistent(false) {;}
+        m_isPersistent(false) {}
 
     // Copy constructor
     //
@@ -243,7 +244,8 @@ public:
         m_eventTime(mE.getEventTime()),
         m_duration(mE.getDuration()),
         m_audioStartMarker(mE.getAudioStartMarker()),
-        m_dataBlock(mE.getDataBlock()) {;}
+        m_dataBlock(mE.getDataBlock()),
+        m_isPersistent(false){}
 
     // Copy from pointer
     // Fix for 674731 by Pedro Lopez-Cabanillas (20030531)
@@ -257,7 +259,7 @@ public:
         m_duration(mE->getDuration()),
         m_audioStartMarker(mE->getAudioStartMarker()),
         m_dataBlock(mE->getDataBlock()),
-        m_isPersistent(false) {;}
+        m_isPersistent(false) {}
 
     ~MappedEvent() {;}
 
