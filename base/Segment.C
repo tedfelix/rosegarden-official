@@ -71,7 +71,7 @@ static bool isTimeSig(const Event* e)
 
 TimeSignature Track::getTimeSigAtEnd(timeT &absTimeOfSig) const
 {
-//!!! should presumably be based on findTimeSignatureAt
+//!!! should presumably be based on findTimeSignatureAt?
 
     TimeSignature timesig;
     absTimeOfSig = 0;
@@ -133,81 +133,6 @@ void Track::setDuration(timeT d)
     }
     
 }
-
-/*
-void Track::calculateBarPositions()
-{
-    TimeSignature timeSignature;
-
-    m_barPositions.clear();
-    addNewBar(0, false, 0, timeSignature);
-
-    timeT absoluteTime = 0;
-    timeT barStartTime = 0;
-    timeT barDuration = timeSignature.getBarDuration();
-
-    iterator i(begin());
-
-    for (; i != end(); ++i) {
-
-        Event *e = *i;
-        absoluteTime = m_quantizer->quantizeByUnit(e->getAbsoluteTime());
-
-        if (absoluteTime - barStartTime >= barDuration) {
-            addNewBar(absoluteTime, false, barStartTime, timeSignature);
-            barStartTime += barDuration;
-        }
-
-        if (e->isa(TimeSignature::EventType)) {
-
-            if (absoluteTime > barStartTime) {
-                addNewBar(absoluteTime, true, barStartTime, timeSignature);
-                barStartTime = absoluteTime;
-            }
-
-            timeSignature = TimeSignature(*e);
-            barDuration = timeSignature.getBarDuration();
-        }
-
-        // solely so that absoluteTime is correct after we hit end():
-        absoluteTime += m_quantizer->getNoteQuantizedDuration(e);
-    }
-
-    if (absoluteTime > barStartTime) {
-        addNewBar(absoluteTime, false, barStartTime, timeSignature);
-    }
-}
-
-
-void Track::addNewBar(timeT start, bool fixed, timeT previousStart,
-		      TimeSignature timesig)
-{
-    bool correct =
-        fixed || (start == previousStart + timesig.getBarDuration());
-    m_barPositions.push_back(BarPosition(start, fixed, correct, timesig));
-}
-
-
-int Track::getBarNumber(const iterator &i) const
-{
-    if (i == end()) return m_barPositions.size() - 1;
-    else return getBarNumber(*i);
-}
-
-
-int Track::getBarNumber(const Event *e) const
-{
-    BarPosition pos(e->getAbsoluteTime(), true, true, TimeSignature());
-
-    BarPositionList::const_iterator bpi
-        (std::lower_bound(m_barPositions.begin(), m_barPositions.end(), pos));
-
-    int barNo = std::distance(m_barPositions.begin(), bpi);
-
-    if (bpi->start > e->getAbsoluteTime() && barNo > 0) --barNo;
-    return barNo;
-}
-*/
 
 void Track::erase(iterator pos)
 {
@@ -489,24 +414,6 @@ bool Track::noteIsInChord(Event *note) const
     }
     return noteCount > 1;
 }
-
-/*
-bool Track::hasEffectiveDuration(iterator i) const
-{
-    bool hasDuration = ((*i)->getDuration() > 0);
-
-    if ((*i)->isa(Note::EventType)) {
-	iterator i0(i);
-	if (++i0 != end() &&
-	    (*i0)->getAbsoluteTime() == (*i)->getAbsoluteTime()) {
-	    // we're in a chord or something
-	    hasDuration = false;
-	}
-    }
-    
-    return hasDuration;
-}
-*/
 
 
 void Track::notifyAdd(Event *e) const

@@ -205,46 +205,7 @@ bool TrackNotationHelper::isViable(timeT duration, int dots)
     return viable;
 }
 
-/*!!!
 
-void TrackNotationHelper::makeRestViable(iterator i)
-{
-    DurationList dl;
-    int barNo = track().getBarNumber(i);
-
-    cerr << "TrackNotationHelper::makeRestViable: bar number is " << barNo
-         << ", start time is " << track().getBarPositions()[barNo].start
-         << ", absTime is " << (*i)->getAbsoluteTime() << endl;
-
-    TimeSignature tsig = track().getBarPositions()[barNo].timeSignature;
-    timeT absTime = (*i)->getAbsoluteTime();
-
-    tsig.getDurationListForInterval
-	(dl, (*i)->getDuration(), absTime - track().getBarPositions()[barNo].start);
-
-    cerr << "TrackNotationHelper::makeRestViable: Removing rest of duration "
-	 << (*i)->getDuration() << " from time " << absTime << endl;
-
-    erase(i);
-    
-    for (DurationList::iterator i = dl.begin(); i != dl.end(); ++i) {
-	int duration = *i;
-	
-	cerr << "TrackNotationHelper::makeRestViable: Inserting rest of duration "
-	     << duration << " at time " << absTime << endl;
-
-	Event *e = new Event(Note::EventRestType);
-	e->setDuration(duration);
-	e->setAbsoluteTime(absTime);
-	e->setMaybe<String>("Name", "INSERTED_REST"); //!!!
-
-	insert(e);
-	absTime += duration;
-    }
-}
-*/
-
-    //!!! untested
 void TrackNotationHelper::makeRestViable(iterator i)
 {
     DurationList dl;
@@ -346,23 +307,6 @@ void TrackNotationHelper::insertNote(timeT absoluteTime, Note note, int pitch,
                     explicitAccidental);
 }
 
-// need to deal with groups, kinda like this code?:
-/*
-void NotationView::setupGroup(NotationElementList::iterator closestNote,
-                              NotationElement* newNotationElement)
-{
-    long groupNo = 0;
-    if ((*closestNote)->event()->get<Int>(Track::BeamedGroupIdPropertyName,
-                                          groupNo)) {
-
-        newNotationElement->event()->setMaybe<Int>(Track::BeamedGroupIdPropertyName, groupNo);
-
-        newNotationElement->event()->setMaybe<String>(Track::BeamedGroupTypePropertyName,
-                                                      (*closestNote)->event()->get<String>
-                                                      (Track::BeamedGroupTypePropertyName));
-    }
-}
-*/
 
 void TrackNotationHelper::insertRest(timeT absoluteTime, Note note)
 {
@@ -663,39 +607,6 @@ TrackNotationHelper::makeBeamedGroup(iterator from, iterator to, string type)
   
 */
 
-/*!!!
-void TrackNotationHelper::autoBeam(iterator from, iterator to, string type)
-{
-    // This can only manage whole bars at a time, and it will expand
-    // the from-to range out to encompass the whole bars in which they
-    // each occur
-
-    Track::BarPositionList &bpl(track().getBarPositions());
-
-    int fn = track().getBarNumber(from);
-    int tn = track().getBarNumber(to);
-
-    if (tn > fn &&
-        (to != end() &&
-         (*to)->getAbsoluteTime() == track().getBarPositions()[tn].start))
-        --tn;
-
-    for (int i = fn; i <= tn; ++i) {
-
-        from = track().findTime(bpl[i].start);
-
-        if (i < (int)bpl.size() - 1) {
-            to = track().findTime(bpl[i+1].start);
-        } else {
-            to = end();
-        }
-
-        autoBeamBar(from, to, bpl[i].timeSignature, type);
-    }
-}
-*/
-
-    //!!! untested
 void TrackNotationHelper::autoBeam(iterator from, iterator to, string type)
 {
     // This can only manage whole bars at a time, and it will expand

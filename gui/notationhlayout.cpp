@@ -168,7 +168,6 @@ NotationHLayout::preparse(Staff &staff)
 	return;
     }
 
-//!!!    const Track::BarPositionList &barPositions(t.getBarPositions());
     NotationElementList *notes = staff.getNotationElementList();
 
     BarDataList &barList(getBarData(staff));

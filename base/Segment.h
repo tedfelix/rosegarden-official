@@ -42,12 +42,9 @@ namespace Rosegarden
  * in practice it's probably too hard to display so we should make
  * more than one Track if we want to represent true counterpoint.)
  *
- * The Track is capable of doing various operations including
- * inserting and removing Events, splitting notes and rests,
- * calculating bar positions, etc.  It is aware of Note, Rest and
- * TimeSignature events and of BeamedGroup properties, but has no
- * awareness of any other specifically notation-related events
- * such as Key or Clef.
+ * If you want to carry out notation-related editing operations on
+ * a Track, take a look at TrackNotationHelper.  If you want to play a
+ * Track, try TrackPerformanceHelper for duration calculations.
  *
  * The Track owns the Events its items are pointing at.
  */
@@ -60,27 +57,6 @@ class Track : public std::multiset<Event*, Event::EventCmp>
 public:
     Track(timeT startIdx = 0);
     ~Track();
-
-/*
-    struct BarPosition
-    {
-        timeT start;          // absolute time of event following barline
-        bool fixed;           // user-supplied new-bar or timesig event?
-        bool correct;         // false if preceding bar has incorrect duration
-        TimeSignature timeSignature;  // time sig of following bar
-        
-        BarPosition(timeT istart, bool ifixed, bool icorrect,
-                    const TimeSignature &itimesig) :
-            start(istart), fixed(ifixed), correct(icorrect),
-            timeSignature(itimesig) { }
-
-        bool operator<(const BarPosition &bp) const {
-            return start < bp.start;
-        }
-    };
-
-    typedef std::vector<BarPosition> BarPositionList;
-*/
 
     const Quantizer &getQuantizer() const { return *m_quantizer; }
 
@@ -96,45 +72,10 @@ public:
     void         setInstrument(unsigned int i) { m_instrument = i; }
 
     /**
-     * Calculates suitable positions for the bar lines, taking into
-     * account any changes of time signature during the piece. 
-     * The results can be retrieved with getBarPositions().
+     * Returns the track storing Bar and TimeSignature events,
+     * or null if none (which should be the case iff the Track is
+     * not contained in a Composition).
      */
-    //!!! NEW -- called automatically by Composition when a time sig is inserted somewhere (anywhere)
-/*
-    void calculateBarPositions();
-*/
-
-    /**
-     * Returns the set of bar positions calculated by the last call to
-     * calculateBarPositions().  No guarantee these are still valid.
-     */
-/*
-    const BarPositionList &getBarPositions() const { return m_barPositions; }
-*/
-
-    /**
-     * Returns the set of bar positions calculated by the last call to
-     * calculateBarPositions().  No guarantee these are still valid.
-     */
-/*
-    BarPositionList &getBarPositions() { return m_barPositions; }
-*/
-
-    /** 
-     * Returns the number of the bar (as an index into the
-     * BarPositionList) that contains the given iterator.  You may
-     * pass end() to get the number of the final bar, although looking
-     * up the last item in the BarPositionList might be simpler.
-     * Returned value will only be correct if calculateBarPositions
-     * has been called since the track was last modified.
-     */
-/*
-    int getBarNumber(const iterator &i) const;
-    int getBarNumber(const Event *e) const;
-*/
-
-    /// Returns the track storing Bar and TimeSignature events, or null if none
     const Track *getReferenceTrack() const {
 	notifyReferenceTrackRequested();
 	return m_referenceTrack;
@@ -153,7 +94,6 @@ public:
      *
      * Do not call this unless the track is in a Composition.
      */
-    //!!! untested
     iterator findBarAt(timeT) const;
 
     /**
@@ -164,7 +104,6 @@ public:
      * 
      * Do not call this unless the track is in a Composition.
      */
-    //!!! untested
     iterator findTimeSignatureAt(timeT) const;
 
     /**
@@ -179,7 +118,6 @@ public:
      * 
      * Do not call this unless the track is in a Composition.
      */
-    //!!! untested
     timeT findTimeSignatureAt(timeT, TimeSignature &) const;
 
     /**
@@ -188,7 +126,6 @@ public:
      *
      * Do not call this unless the track is in a Composition.
      */
-    //!!! untested
     timeT findBarStartTime(timeT) const;
 
     /**
@@ -197,7 +134,6 @@ public:
      *
      * Do not call this unless the track is in a Composition.
      */
-    //!!! untested
     timeT findBarEndTime(timeT) const;
 
     /**
@@ -206,7 +142,6 @@ public:
      *
      * Do not call this unless the track is in a Composition.
      */
-    //!!! untested
     iterator findStartOfBar(timeT) const;
 
     /**
@@ -215,14 +150,15 @@ public:
      *
      * Do not call this unless the track is in a Composition.
      */
-    //!!! untested
     iterator findStartOfNextBar(timeT) const;
 
     /**
      * Returns the time signature in effect at the end of the track,
      * without referring to the bar position data.  Inefficient unless
      * the time signature changes very close to the end of the track.
-     * Does not require the reference track to exist.
+     * 
+     * Does not require the reference track to exist (i.e. okay if
+     * track is not in a Composition).
      */
     TimeSignature getTimeSigAtEnd(timeT &absTimeOfSig) const;
 
@@ -336,23 +272,11 @@ public:
     void removeObserver(TrackObserver *obs) { m_observers.erase (obs); }
 
 private:
-    /// for use by calculateBarPositions
-/*
-    void addNewBar(timeT start, bool fixed,
-                   timeT prevStart, TimeSignature tsig);
-
-    /// used by calculateBarPositions
-    bool hasEffectiveDuration(iterator i);
-*/
 
     timeT m_startIdx;
     unsigned int m_instrument;
 
     mutable int m_id;
-
-/*
-    BarPositionList m_barPositions;
-*/
 
     /// contains bar position data etc. I do not own this
     const Track *m_referenceTrack;

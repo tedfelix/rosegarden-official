@@ -52,8 +52,6 @@ public:
      * event that is tied but lacks a pitch property.  This is
      * expected behaviour; don't create tied notes without pitches.
      */
-
-    //!!! Not tested yet
     timeT getSoundingDuration(iterator i);
 };
 

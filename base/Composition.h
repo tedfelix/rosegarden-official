@@ -51,7 +51,7 @@ public:
     Composition();
     virtual ~Composition();
 
-    /// swap the contents with other composition
+    /// swap the contents with another composition
     void swap(Composition&);
 
     trackcontainer& tracks() { return m_tracks; }
@@ -81,15 +81,15 @@ public:
 
     unsigned int getNbTracks() const { return m_tracks.size(); }
 
-    /// returns the nb of time steps of the longest track
+    /// returns the duration of the longest track
     unsigned int getDuration() const;
 
     /// Removes all Tracks from the Composition and destroys them
     void         clear();
 
     //!!! these should go, as the results they return are entirely
-    //arbitrary -- but they're used in transport code, so work out how
-    //the transport *should* do it
+    // arbitrary -- but they're used in transport code, so we need to
+    // convert the transport to use the bar start and end instead
     unsigned int getNbTicksPerBar() const { return m_nbTicksPerBar; }
     void setNbTicksPerBar(unsigned int n) { m_nbTicksPerBar = n; }
 
@@ -99,13 +99,6 @@ public:
     iterator       end()         { return m_tracks.end(); }
     const_iterator end() const   { return m_tracks.end(); }
 
-
-    //!!! This should arguably not be a single per-Composition value.
-    // MIDI has a tempo meta-event which can change arbitrarily often,
-    // and notation has metronome events that can also appear more than
-    // once (and indeed per Track, rather than per Composition).
-    // (We perhaps do need a per-Composition base tempo, though.) [cc]
-    //
     // Tempo here is only our current Transport tempo which we use on
     // the GUI and is sent to the Sequencer.
     //
