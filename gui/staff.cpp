@@ -247,18 +247,20 @@ Staff::pitchYOffset(int pitch) const
 }
 
 void
-Staff::makeInvisibleLine(int y, int pitch)
+Staff::makeInvisibleLine(int y, int pitch, const QColor& col)
 {
+    static const unsigned int invisibleLineWidth = 1;
+
     // Intermediate invisible line
     //
     StaffLine *invisibleLine = new StaffLine(canvas(), this);
-    invisibleLine->setPen(white);
+    invisibleLine->setPen(QPen(col, invisibleLineWidth));
 
 #ifdef RG_STAFF_SHOW_INVISIBLE_LINES
     if (pitch)
-        invisibleLine->setPen(red);
+        invisibleLine->setPen(QPen(red, invisibleLineWidth));
     else
-        invisibleLine->setPen(blue); // middle C
+        invisibleLine->setPen(QPen(blue, invisibleLineWidth)); // middle C
 #endif
 
     invisibleLine->setPoints(0,y, m_horizLineLength,y);

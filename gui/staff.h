@@ -63,7 +63,7 @@ public:
 
 protected:
 
-    void makeInvisibleLine(int y, int pitch);
+    void makeInvisibleLine(int y, int pitch, const QColor& = white);
 
     Clef m_currentKey;
     unsigned int m_barLineHeight;
