@@ -72,6 +72,7 @@
 #include "trackeditor.h"
 #include "studiocontrol.h"
 #include "sequencemanager.h"
+#include "kstartuplogo.h"
 #include "AudioPluginInstance.h"
 
 
@@ -356,6 +357,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
 
     // Check if file readable with fileInfo ?
     if (!fileInfo.isReadable() || fileInfo.isDir()) {
+	KStartupLogo::hideIfStillThere();
         QString msg(i18n("Can't open file '%1'").arg(filename));
         KMessageBox::sorry(0, msg);
         return false;
@@ -382,7 +384,8 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
     }
 
     if (!okay) {
-        QString msg(i18n("Error when parsing file '%1' : \"%2\"")
+	KStartupLogo::hideIfStillThere();
+        QString msg(i18n("Error when parsing file '%1': \"%2\"")
                     .arg(filename)
                     .arg(errMsg));
 
@@ -435,6 +438,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
     }
     catch(std::string e)
     {
+	KStartupLogo::hideIfStillThere();
 	CurrentProgressDialog::freeze();
         KMessageBox::error(0, strtoqstr(e));
 	CurrentProgressDialog::thaw();
@@ -728,6 +732,7 @@ RosegardenGUIDoc::xmlParse(QString &fileContents, QString &errMsg,
 
         if (handler.isCancelled()) {
             RG_DEBUG << "File Loading Cancelled\n";
+	    KStartupLogo::hideIfStillThere();
             KMessageBox::information(0, i18n("File Loading Cancelled"));
             cancelled = true;
             return true;
@@ -738,6 +743,7 @@ RosegardenGUIDoc::xmlParse(QString &fileContents, QString &errMsg,
 
         QString msg(i18n("This file contains one or more old element types that are now deprecated.\nSupport for these elements may disappear in future versions of Rosegarden.\nWe recommend you re-save this file from this version of Rosegarden,\nto ensure that it can still be re-loaded in future versions."));
         
+	KStartupLogo::hideIfStillThere();
 	CurrentProgressDialog::freeze();
         KMessageBox::information(0, msg);
 	CurrentProgressDialog::thaw();
@@ -1544,6 +1550,7 @@ RosegardenGUIDoc::finalizeAudioFile(Rosegarden::AudioFileId /*id*/)
     }
     catch(std::string e)
     {
+	KStartupLogo::hideIfStillThere();
 	CurrentProgressDialog::freeze();
         KMessageBox::error(0, strtoqstr(e));
 	CurrentProgressDialog::thaw();

@@ -504,13 +504,18 @@ int main(int argc, char *argv[])
         } else {
             startLogo->close();
         }
-    }
 
-    config->setGroup("TipOfDay");
-    if (config->readBoolEntry("RunOnStart",true))
-    {
-        RG_DEBUG << "main: Showing Tips\n";
-        KTipDialog::showTip(locate("data", "rosegarden/tips"), true);
+    } else {
+
+	// if the start logo is there, it's responsible for showing this;
+	// otherwise we have to
+
+	config->setGroup("TipOfDay");
+	if (config->readBoolEntry("RunOnStart",true))
+	{
+	    RG_DEBUG << "main: Showing Tips\n";
+	    KTipDialog::showTip(locate("data", "rosegarden/tips"), true);
+	}
     }
 
     return app.exec();

@@ -45,6 +45,7 @@ public:
 
 public slots:
     void slotShowStatusMessage(const QString &);
+    virtual void close();
 
 protected:
 

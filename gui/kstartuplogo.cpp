@@ -30,6 +30,8 @@
 #include "kstartuplogo.h"
 #include <kapp.h>
 #include <kstddirs.h>
+#include <kconfig.h>
+#include <ktip.h>
 
 #include "rosedebug.h"
 
@@ -100,6 +102,23 @@ void KStartupLogo::slotShowStatusMessage(const QString &message)
     m_statusMessage = message;
     paintEvent(0);
     QApplication::flushX();
+}
+
+void KStartupLogo::close()
+{
+    if (!m_wasClosed && isVisible()) {
+
+	KConfig* config = KGlobal::config();
+    
+	config->setGroup("TipOfDay");
+	if (config->readBoolEntry("RunOnStart",true))
+	{
+	    RG_DEBUG << "KStartupLogo::close: Showing Tips\n";
+	    KTipDialog::showTip(locate("data", "rosegarden/tips"), true);
+	}
+    }
+
+    QWidget::close();
 }
 
 
