@@ -52,6 +52,7 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char *name)
 
     setBackgroundMode(PaletteBase);
 
+    // #define TEST_CANVAS
 #ifndef TEST_CANVAS
 
     // Add a new staff
@@ -79,6 +80,14 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char *name)
 
 RosegardenGUIView::~RosegardenGUIView()
 {
+    // Delete canvas items.
+    QCanvasItemList allItems = canvas()->allItems();
+    QCanvasItemList::Iterator it;
+
+    for(it = allItems.begin(); it != allItems.end(); ++it)
+        delete *it;
+
+    delete canvas();
     delete m_hlayout;
     delete m_vlayout;
 }
@@ -289,7 +298,9 @@ RosegardenGUIView::showElements(EventList::iterator from,
     for(EventList::iterator it = from; it != to; ++it) {
         
         // TODO : Extract note duration
-        QPixmap note(npf.makeNotePixmap(4, true, true));
+        unsigned int duration = (*it)->getDuration();
+        
+        QPixmap note(npf.makeNotePixmap(duration, true, true));
         QCanvasSimpleSprite *noteSprite = new QCanvasSimpleSprite(&note, canvas());
         noteSprite->move(dxoffset + (*it)->get<Int>("Notation::X"),
                          dyoffset + (*it)->get<Int>("Notation::Y"));

@@ -33,6 +33,10 @@ public:
     NotePixmapFactory();
     ~NotePixmapFactory();
 
+    enum Note { Whole = 0, Half, Quarter, Eighth,
+                Sixteenth, ThirtySecond, SixtyFourth };
+    
+
     /**
      * Generate a pixmap for a single note
      *
@@ -59,8 +63,14 @@ public:
                             bool stalkGoesUp = true);
 
 protected:
-    void drawStalk(unsigned int duration, bool drawTail, bool stalkGoesUp);
-    void readjustGeneratedPixmapHeight(unsigned int duration);
+    /**
+     * Transform a duration in rosegarden time units (96 = 4th)
+     * to note type (Note enum)
+     */
+    Note duration2note(unsigned int duration);
+
+    void drawStalk(Note note, bool drawTail, bool stalkGoesUp);
+    void readjustGeneratedPixmapHeight(Note note);
     void createPixmapAndMask(unsigned int tailOffset);
 
     unsigned int m_generatedPixmapHeight;
