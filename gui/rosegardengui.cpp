@@ -315,7 +315,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     connect(this,
 	    SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)),
 	    m_instrumentParameterBox,
-	    SIGNAL(slotInstrumentParametersChanged(Rosegarden::InstrumentId)));
+	    SLOT(slotInstrumentParametersChanged(Rosegarden::InstrumentId)));
 
     connect(this,
 	    SIGNAL(pluginSelected(Rosegarden::InstrumentId, int, int)),
@@ -4463,11 +4463,12 @@ void RosegardenGUIApp::slotToggleSolo(bool value)
 {
     RG_DEBUG << "RosegardenGUIApp::slotToggleSolo value = " << value << endl;
 
-    //m_doc->getComposition().setSolo(m_transport->SoloButton()->isOn());
     m_doc->getComposition().setSolo(value);
     m_transport->SoloButton()->setOn(value);
 
     m_doc->slotDocumentModified();
+
+    emit compositionStateUpdate();
 }
 
 void RosegardenGUIApp::slotTrackUp()

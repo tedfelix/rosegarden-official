@@ -116,7 +116,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
       m_playTracking(true),
       m_dockVisible(true)
 {
-    MATRIX_DEBUG << "MatrixView ctor\n";
+    RG_DEBUG << "MatrixView ctor\n";
 
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/toolbar");
     QPixmap matrixPixmap(pixmapDir + "/matrix.xpm");
@@ -421,6 +421,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     setupControllerTabs();
 
     setRewFFwdToAutoRepeat();
+    slotCompositionStateUpdate();
 }
 
 MatrixView::~MatrixView()

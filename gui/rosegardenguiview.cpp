@@ -159,22 +159,7 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
             SIGNAL(changeInstrumentLabel(Rosegarden::InstrumentId, QString)),
             this,
             SLOT(slotChangeInstrumentLabel(Rosegarden::InstrumentId, QString)));
-/*
-    connect(m_instrumentParameterBox,
-            SIGNAL(setMute(Rosegarden::InstrumentId, bool)),
-            this,
-            SLOT(slotSetMute(Rosegarden::InstrumentId, bool)));
 
-    connect(m_instrumentParameterBox,
-            SIGNAL(setSolo(Rosegarden::InstrumentId, bool)),
-            this,
-            SLOT(slotSetSolo(Rosegarden::InstrumentId, bool)));
-
-    connect(m_instrumentParameterBox,
-            SIGNAL(setRecord(Rosegarden::InstrumentId, bool)),
-            this,
-            SLOT(slotSetRecord(Rosegarden::InstrumentId, bool)));
-*/
     if (doc) {
         m_trackEditor->setupSegments();
 	connect(doc, SIGNAL(recordingSegmentUpdated(Rosegarden::Segment *,
@@ -445,6 +430,8 @@ RosegardenGUIView::createNotationView(std::vector<Rosegarden::Segment *> segment
 	    this, SLOT(slotEditTriggerSegment(int)));
     connect(notationView, SIGNAL(staffLabelChanged(Rosegarden::TrackId, QString)),
 	    this, SLOT(slotChangeTrackLabel(Rosegarden::TrackId, QString)));
+    connect(notationView, SIGNAL(toggleSolo(bool)),
+            RosegardenGUIApp::self(), SLOT(slotToggleSolo(bool)));
 
     Rosegarden::SequenceManager *sM = getDocument()->getSequenceManager();
 
@@ -457,6 +444,10 @@ RosegardenGUIView::createNotationView(std::vector<Rosegarden::Segment *> segment
 	    this, SIGNAL(stepByStepTargetRequested(QObject *)));
     connect(this, SIGNAL(stepByStepTargetRequested(QObject *)),
 	    notationView, SLOT(slotStepByStepTargetRequested(QObject *)));
+    connect(RosegardenGUIApp::self(), SIGNAL(compositionStateUpdate()),
+	    notationView, SLOT(slotCompositionStateUpdate()));
+    connect(this, SIGNAL(compositionStateUpdate()),
+	    notationView, SLOT(slotCompositionStateUpdate()));
 
     // Encourage the notation view window to open to the same
     // interval as the current segment view
@@ -552,6 +543,8 @@ RosegardenGUIView::createMatrixView(std::vector<Rosegarden::Segment *> segmentsT
 	    this, SLOT(slotEditSegmentsEventList(std::vector<Rosegarden::Segment *>)));
     connect(matrixView, SIGNAL(editTriggerSegment(int)),
 	    this, SLOT(slotEditTriggerSegment(int)));
+    connect(matrixView, SIGNAL(toggleSolo(bool)),
+            RosegardenGUIApp::self(), SLOT(slotToggleSolo(bool)));
 
     Rosegarden::SequenceManager *sM = getDocument()->getSequenceManager();
 
@@ -564,6 +557,10 @@ RosegardenGUIView::createMatrixView(std::vector<Rosegarden::Segment *> segmentsT
 	    this, SIGNAL(stepByStepTargetRequested(QObject *)));
     connect(this, SIGNAL(stepByStepTargetRequested(QObject *)),
 	    matrixView, SLOT(slotStepByStepTargetRequested(QObject *)));
+    connect(RosegardenGUIApp::self(), SIGNAL(compositionStateUpdate()),
+	    matrixView, SLOT(slotCompositionStateUpdate()));
+    connect(this, SIGNAL(compositionStateUpdate()),
+	    matrixView, SLOT(slotCompositionStateUpdate()));
 
     // Encourage the matrix view window to open to the same
     // interval as the current segment view
@@ -632,6 +629,12 @@ void RosegardenGUIView::slotEditSegmentsEventList(std::vector<Rosegarden::Segmen
 	    this, SLOT(slotEditSegmentsEventList(std::vector<Rosegarden::Segment *>)));
     connect(eventView, SIGNAL(editTriggerSegment(int)),
 	    this, SLOT(slotEditTriggerSegment(int)));
+    connect(this, SIGNAL(compositionStateUpdate()),
+	    eventView, SLOT(slotCompositionStateUpdate()));
+    connect(RosegardenGUIApp::self(), SIGNAL(compositionStateUpdate()),
+	    eventView, SLOT(slotCompositionStateUpdate()));
+    connect(eventView, SIGNAL(toggleSolo(bool)),
+            RosegardenGUIApp::self(), SLOT(slotToggleSolo(bool)));
 
     // create keyboard accelerators on view
     //
@@ -830,6 +833,7 @@ void RosegardenGUIView::slotSelectTrackSegments(int trackId)
 
     // inform
     emit segmentsSelected(segments);
+    emit compositionStateUpdate();
 }
 
 void RosegardenGUIView::slotSetSelectedSegments(

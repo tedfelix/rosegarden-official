@@ -613,19 +613,18 @@ EditViewBase::slotTestClipboard()
 void
 EditViewBase::slotToggleSolo()
 {
-    RG_DEBUG << "EditViewBase::slotToggleSolo()\n";
+    KToggleAction* toggleSoloAction = getToggleAction("toggle_solo");
+    if (!toggleSoloAction) return;
 
-    if(getDocument()->getComposition().isSolo()) {
+    bool newSoloState = toggleSoloAction->isChecked();
 
-        getDocument()->getComposition().setSolo(false);
+    RG_DEBUG << "EditViewBase::slotToggleSolo() : solo  = " << newSoloState << endl;
+    emit toggleSolo(newSoloState);
 
-    } else {
-
+    if (newSoloState) {
         emit selectTrack(m_segments[0]->getTrack());
-        getDocument()->getComposition().setSolo(true);
-
     }
-    
+
 }
 
 void
@@ -687,6 +686,22 @@ EditViewBase::slotSetSegmentDuration()
     }
 }
 
+void EditViewBase::slotCompositionStateUpdate()
+{
+    // update state of 'solo' toggle
+    //
+    KToggleAction* toggleSolo = getToggleAction("toggle_solo");
+    if (!toggleSolo) return;
+
+    if(getDocument()->getComposition().isSolo()) {
+        bool s = m_segments[0]->getTrack() == getDocument()->getComposition().getSelectedTrack();
+        RG_DEBUG << "EditViewBase::slotCompositionStateUpdate() : set solo to " << s << endl;
+        toggleSolo->setChecked(s);
+    } else {
+        toggleSolo->setChecked(false);
+        RG_DEBUG << "EditViewBase::slotCompositionStateUpdate() : set solo to false\n";
+    }
+}
 
 /*
  * Let tools know if their current element has gone

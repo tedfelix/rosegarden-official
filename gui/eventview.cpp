@@ -339,6 +339,8 @@ EventView::EventView(RosegardenGUIDoc *doc,
 
     makeInitialSelection(doc->getComposition().getPosition());
 
+    slotCompositionStateUpdate();
+
     setOutOfCtor();
 }
 

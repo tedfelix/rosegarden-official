@@ -547,6 +547,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     setupAddControlRulerMenu();
     setRewFFwdToAutoRepeat();
+
+    slotCompositionStateUpdate();
     
     NOTATION_DEBUG << "NotationView ctor exiting" << endl;
 }

@@ -453,6 +453,9 @@ signals:
     /// emitted when the set of selected segments changes (relayed from RosegardenGUIView)
     void segmentsSelected(const Rosegarden::SegmentSelection &);
 
+    /// emitted when the composition state (selected track, solo, etc...) changes
+    void compositionStateUpdate();
+
     /// emitted when instrument parameters change (relayed from InstrumentParameterBox)
     void instrumentParametersChanged(Rosegarden::InstrumentId);
 

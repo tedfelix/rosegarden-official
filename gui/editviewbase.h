@@ -160,6 +160,11 @@ signals:
      */
     void selectTrack(int);
 
+    /**
+     * Tell the main view that the solo status has changed (the user clicked on the 'solo' toggle)
+     */
+    void toggleSolo(bool);
+
 public slots:
     /**
      * close window
@@ -216,6 +221,9 @@ public slots:
      */
     virtual void slotTestClipboard();
 
+    /**
+     * Connected to this view's toolbar 'solo' button
+     */
     virtual void slotToggleSolo();
 
     void slotStateChanged(const QString&, bool noReverse);
@@ -234,6 +242,11 @@ public slots:
      */
     void slotSetSegmentDuration();
 
+    /**
+     * Global composition updates from the main view (track selection, solo, etc...)
+     */
+    virtual void slotCompositionStateUpdate();
+    
 protected:
 
     virtual void paintEvent(QPaintEvent* e);

@@ -248,7 +248,7 @@ public slots:
     void slotSetMuteButton(Rosegarden::TrackId track, bool value);
 
     /*
-     * Set mute, record and solo by instrument id (from InstrumentParameterBox)
+     * Set mute, record and solo by instrument id
      */
     void slotSetMute(Rosegarden::InstrumentId, bool);
     void slotSetRecord(Rosegarden::InstrumentId, bool);
@@ -277,6 +277,13 @@ signals:
     void segmentsSelected(const Rosegarden::SegmentSelection&);
 
     void toggleSolo(bool);
+
+    /**
+     * Current used to dispatch things like track select changes, solo, etc...
+     * to edit views
+     */
+    void compositionStateUpdate();
+    
 
     /**
      * This signal is used to dispatch a notification for a request to

@@ -129,6 +129,7 @@ void EditView::updateBottomWidgetGeometry()
 
 void EditView::paintEvent(QPaintEvent* e)
 {
+    RG_DEBUG << "EditView::paintEvent()\n";
     EditViewBase::paintEvent(e);
     
     if (m_needUpdate)  {
