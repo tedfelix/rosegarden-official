@@ -73,6 +73,11 @@ Scale::pitchIsInScale(unsigned int pitch) const
 bool
 Scale::noteIsDecorated(const NotationElement &el) const
 {
+//     kdDebug(KDEBUG_AREA) << "Scale::noteIsDecorated()\n"
+//                          << *(el.event()) << endl;
+
+    if (!el.isNote()) return false;
+    
     try {
         int pitch = el.event()->get<Int>("pitch");
 
@@ -83,6 +88,7 @@ Scale::noteIsDecorated(const NotationElement &el) const
                              << endl;
         return false;
     }
+
 }
 
 //////////////////////////////////////////////////////////////////////
