@@ -83,3 +83,21 @@ QCanvasSimpleSprite::makePixmapArray(QCanvasSimpleSprite *self,
     self->m_pixmapArray = new QCanvasPixmapArray(pixmapfile);
     return self->m_pixmapArray;
 }
+
+//////////////////////////////////////////////////////////////////////
+
+QCanvasNotationSprite::QCanvasNotationSprite(NotationElement& n,
+                                             QPixmap* pixmap,
+                                             QCanvas* canvas)
+    : QCanvasSimpleSprite(pixmap, canvas),
+      m_notationElement(n)
+{
+}
+
+QCanvasNotationSprite::QCanvasNotationSprite(NotationElement& n,
+                                             QCanvasPixmap* pixmap,
+                                             QCanvas* canvas)
+    : QCanvasSimpleSprite(pixmap, canvas),
+      m_notationElement(n)
+{
+}

@@ -23,15 +23,17 @@
 
 #include <qcanvas.h>
 
-/**A QCanvasSprite with 1 frame only
-  *@author Guillaume Laurent, Chris Cannam, Rich Bown
-  */
+/**
+ * A QCanvasSprite with 1 frame only
+ * @author Guillaume Laurent, Chris Cannam, Rich Bown
+ */
 
-class QCanvasSimpleSprite : public QCanvasSprite  {
+class QCanvasSimpleSprite : public QCanvasSprite
+{
 public:
-    QCanvasSimpleSprite(QPixmap *pixmap, QCanvas *canvas);
-    QCanvasSimpleSprite(QCanvasPixmap *pixmap, QCanvas *canvas);
-    QCanvasSimpleSprite(const QString &pixmapfile, QCanvas *canvas);
+    QCanvasSimpleSprite(QPixmap*, QCanvas*);
+    QCanvasSimpleSprite(QCanvasPixmap*, QCanvas*);
+    QCanvasSimpleSprite(const QString &pixmapfile, QCanvas*);
 
     virtual ~QCanvasSimpleSprite();
 
@@ -48,5 +50,24 @@ protected:
                                                const QString &pixmapfile);
 
 };
+
+class NotationElement;
+
+/**
+ * A QCanvasSprite referencing a NotationElement
+ */
+class QCanvasNotationSprite : public QCanvasSimpleSprite
+{
+public:
+    QCanvasNotationSprite(NotationElement&, QPixmap*, QCanvas*);
+    QCanvasNotationSprite(NotationElement&, QCanvasPixmap*, QCanvas*);
+    
+    NotationElement& getNotationElement() { return m_notationElement; }
+    
+protected:
+    NotationElement& m_notationElement;
+
+};
+
 
 #endif
