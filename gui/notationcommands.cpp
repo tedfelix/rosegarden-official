@@ -508,6 +508,8 @@ EraseNotationCommand::modifySegment()
 	// desperately need a method to make all the rests in a
 	// region valid and "canonical" 
 
+	//!!! We now have it (normalizeRests does this), so use it
+
 	if (!(*i)->isa(Rosegarden::Note::EventRestType)) {
 	    eventsToErase.push_back(*i);
 	}

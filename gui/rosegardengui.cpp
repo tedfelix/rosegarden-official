@@ -157,7 +157,7 @@ void RosegardenGUIApp::setupActions()
 
     // setup Settings menu
     m_viewToolBar = KStdAction::showToolbar  (this, SLOT(slotToggleToolBar()),   actionCollection());
-    m_viewTracksToolBar = new KToggleAction(i18n("Show Tracks Toolbar..."), 0, this,
+    m_viewTracksToolBar = new KToggleAction(i18n("Show Tracks Toolbar"), 0, this,
                                             SLOT(slotToggleTracksToolBar()), actionCollection(),
                                             "show_tracks_toolbar");
     m_viewStatusBar = KStdAction::showStatusbar(this, SLOT(slotToggleStatusBar()), actionCollection());

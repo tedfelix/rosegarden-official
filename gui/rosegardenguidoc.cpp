@@ -64,6 +64,7 @@ using namespace Rosegarden::BaseProperties;
 RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent, const char *name)
     : QObject(parent, name),
       m_recordSegment(0), m_endOfLastRecordedNote(0),
+      m_commandHistory(new MultiViewCommandHistory()),
       m_clipboard(new Rosegarden::Clipboard)
 {
     if(!pViewList) {
@@ -72,15 +73,17 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent, const char *name)
 
     pViewList->setAutoDelete(true);
 
-    connect(&m_commandHistory, SIGNAL(commandExecuted(KCommand *)),
+    connect(m_commandHistory, SIGNAL(commandExecuted(KCommand *)),
 	    this, SLOT(slotDocumentModified()));
 
-    connect(&m_commandHistory, SIGNAL(documentRestored()),
+    connect(m_commandHistory, SIGNAL(documentRestored()),
 	    this, SLOT(slotDocumentRestored()));
 }
 
 RosegardenGUIDoc::~RosegardenGUIDoc()
 {
+    delete m_commandHistory; // must be deleted before the Composition is
+    delete m_clipboard;
 }
 
 void RosegardenGUIDoc::addView(RosegardenGUIView *view)
@@ -380,7 +383,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
                          << endl;
 
     m_modified = false;
-    m_commandHistory.documentSaved();
+    m_commandHistory->documentSaved();
     return true;
 }
 
@@ -568,7 +571,7 @@ RosegardenGUIDoc::stopRecordingMidi()
     if (m_recordSegment->getComposition()) {
 	// something in the record segment (that's why it was added
 	// to the composition)
-	m_commandHistory.addCommand
+	m_commandHistory->addCommand
 	    (new SegmentRecordCommand(m_recordSegment));
     }
 

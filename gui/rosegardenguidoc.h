@@ -153,7 +153,7 @@ public:
      * returns the global command history
      */
     MultiViewCommandHistory *getCommandHistory() {
-	return &m_commandHistory;
+	return m_commandHistory;
     }
 
     /**
@@ -296,7 +296,7 @@ private:
     Rosegarden::Segment *m_recordSegment;
     Rosegarden::timeT m_endOfLastRecordedNote;  // we use this for rest filling
 
-    MultiViewCommandHistory m_commandHistory;
+    MultiViewCommandHistory *m_commandHistory;
 
     Rosegarden::Clipboard *m_clipboard;
 };
