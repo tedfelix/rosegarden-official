@@ -1047,4 +1047,13 @@ RosegardenSequencerApp::getPropertyList(int id,
     return list;
 }
 
+unsigned int
+RosegardenSequencerApp::getSampleRate() const
+{
+    if (m_sequencer)
+        return m_sequencer->getSampleRate();
+
+    return 0;
+}
+
 

@@ -244,6 +244,10 @@ public:
     //
     virtual void processPending(const RealTime &playLatency) = 0;
 
+    // Get the driver's operating sample rate
+    //
+    virtual unsigned int getSampleRate() const = 0;
+
     // Mapped Instruments
     //
     void setMappedInstrument(MappedInstrument *mI);

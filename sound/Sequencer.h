@@ -208,6 +208,11 @@ public:
     RealTime getAudioRecordLateny()
         { return m_soundDriver->getAudioRecordLatency(); }
 
+    // Sample rate
+    //
+    unsigned int getSampleRate() const
+        { return m_soundDriver->getSampleRate(); }
+
 private:
 
     SoundDriver                                *m_soundDriver;

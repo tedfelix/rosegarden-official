@@ -70,6 +70,10 @@ public:
 
     virtual void processPending(const RealTime &playLatency);
 
+    // Not supported
+    //
+    virtual unsigned int getSampleRate() const { return 0; }
+
     void processMidiIn(const Arts::MidiCommand &midiCommand,
                        const Arts::TimeStamp &timeStamp,
                        const Rosegarden::RealTime &playLatency);

@@ -1,0 +1,35 @@
+Synth_AMAN_RECORD does not work
+From: "Jennifer E. Elaan" <je@nanosoft.hypermart.net>
+To: arts@space.twc.de
+I'm attempting to build a simple arts device with a Synth_AMAN_RECORD
+connected to a Synth_AMAN_PLAY, with the ultimate goal of making a
+simple "delayed talkback" design.  I'm using arts from KDE-3.0.0 (arts
+1.0.0 according to artsd).
+I have two soundcards in my system, which I alternatively load
+different drivers for.  One is a Soundblaster Awe64, which, when I
+attempt to run arts in full-duplex, proceeds to freeze my system and
+spews messages saying "buffer overrun" (or was it underrun?).  I have
+used this card in Duplex-mode before, and it worked at the time,
+although it is still possible that the problem has been introduced in a
+new version of the driver.
+The second card is a Soundblaster Live, which runs full-duplex just
+fine, but no data comes out of the Synth_AMAN_RECORD.  Using the Gnome
+soundrecorder program shows that I have the microphone correctly set up
+and selected, as I can record waves using that application.  I can even
+do recording from soundrecorder (which does not use arts) while running
+arts in full-duplex AND playing mp3's from XMMS using the OSS output
+module, so I'm assuming it isn't a hardware problem and it does not
+appear to be a driver problem either.
+
+I'm also not 100% convinced that it IS a duplex problem at all.  A
+layout with a Synth_AMAN_RECORD and a wave output records empty wave
+files (on the SBLive, anyway, I haven't tested the other card).
+
+Just for reference, my system is a dual-celeron 366 with an Abit BP6
+motherboard and 256MB of RAM running linux kernel V2.4.18.
+
+-- 
+Jennifer E. Elaan
+http://caladan.nanosoft.ca
+
+

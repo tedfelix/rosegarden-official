@@ -1,0 +1,261 @@
+Midi, Audio and Synchronization:
+================================
+
+1. Introduction
+2. The midi manager
+3. Midi synchronization
+4. Audio timestamping and synchronization
+5. Example code
+
+
+  1. Introduction
+  ---------------
+
+Since aRts-1.0 (as shipped with KDE3.0), aRts provides a lot more
+infrastructure to deal with midi, audio, and their synchronization. The main
+goal is to provide a unified interface between sequencers (or other programs
+that require notes or audio tracks to be played at certain given time stamps)
+and underlying software/hardware that can play notes/audio tracks.
+
+Currently, there exist five distinct destinations that aRts supports, which
+can all be used at the same time or individually, that is:
+
+ * aRts synthetic midi instruments
+ * ALSA-0.5
+ * ALSA-0.9
+ * OSS
+ * other aRts modules (including but not limited to the playback/recording
+   of audio tracks)
+
+  2. The midi manager
+  -------------------
+
+The midi manager is the basic component that connects between applications
+that supply/record midi data, and devices that process midi data. Devices
+might be both, virtual (as in software synthesis) or real (as in hardware
+devices).
+
+From the view of the midi manager, all event streams correspond to one midi
+client. So, a midi client might be an application (such as a sequencer) that
+provides events, or an ALSA hardware device that consumes events. If there
+are multiple event streams, they correspond to multiple clients. That is,
+if an application wishes to play three different midi tracks, one over ALSA,
+and two over two different synthetic instruments, it needs to register itself
+three times, with three different clients.
+
+The midi managers job is to connect midi clients (as in event streams). It
+maintains a list of connections that the user can modify with an application
+like artscontrol. Applications could also, if they wish so, modify this
+connection list. 
+
+As a use case, we'll consider the following: you want to write a sequencer
+application that plays back two different tracks to two different devices.
+You want the user to be able to select these devices in a drop down box for
+each track.
+
+1) getting a list of choices:
+
+First, you will want to obtain a list of choices which the user could possibly
+connect your tracks to. You do so by reading the
+
+interface MidiManager { // SINGLETON: Arts_MidiManager
+    /**
+     * a list of clients
+     */
+    readonly attribute sequence<MidiClientInfo> clients;
+
+	//...
+};
+
+attribute. The three fields of each client that are interesting for you are
+
+struct MidiClientInfo {
+	long ID;
+
+	//...
+
+	MidiClientDirection direction;
+	MidiClientType type;
+	string title;
+};
+
+You would list those devices in the dropdown box that are of the appropriate
+direction, which is mcdRecord, as you would want a client that receives midi
+events (this might be confusing, but you look from the view of the client).
+
+Then, there is the type field, which tells you whether the client is a device-
+like thing (like a synthetic instrument), or another application (like another
+application currently recording a track). While it might not be an impossible
+setup that you send events between two applications, usually users will choose
+such clients that have mctDestination as type.
+
+Finally, you can list the titles in a drop down box, and keep the ID for making
+a connection later.
+
+2) registering clients:
+
+You will need to register one client for each track. Use
+
+	/**
+	 * add a client
+     *
+	 * this creates a new MidiManagerClient
+	 */ 
+	MidiClient addClient(MidiClientDirection direction, MidiClientType type,
+							string title, string autoRestoreID);
+
+to do so.
+
+3) connecting:
+
+As you probably don't want your sequencer user to use artscontrol to setup
+connections between your tracks and the devices, you will need to connect
+your clients to the hardware devices for playing something.
+
+You can connect clients to their appropriate destinations using
+
+	/**
+	 * connect two clients
+	 */
+	void connect(long clientID, long destinationID);
+
+and
+
+	/**
+	 * disconnect two clients
+	 */
+	void disconnect(long clientID, long destinationID);
+
+Keep in mind that a client might be connected to more than one destination
+at the same time, so that you will need to disconnect the old destination
+before connecting the new one.
+
+4) playing events:
+
+You can now play events to the tracks, using each client's
+
+	MidiPort addOutputPort();
+
+function for getting a port where you can send events to. However, you will
+also need to ensure that the events will get synchronized as soon as you are
+playing back events to different devices. Read the next section for details
+on this.
+
+  3. Midi synchronization
+  -----------------------
+
+As soon as you are writing a real sequencer, you might want to output to more
+than one midi device at a time. For instance, you might want to let some of
+your midi events be played by aRts synthesis, while others should be sent
+over the external midi port.
+
+To support this setup, a new interface called MidiSyncGroup has been added. To
+output midi events synchronized over more than one port, you proceed as follows:
+
+a) you obtain a reference to the midi manager object
+
+   MidiManager midiManager = DynamicCast(Reference("global:Arts_MidiManager"));
+   if(midiManager.isNull()) arts_fatal("midimanager is null");
+
+b) you create a midi synchronization group which will ensure that the
+   timestamps of your midi events will be synchronized
+   
+   MidiSyncGroup syncGroup = midiManager.addSyncGroup();
+
+c) you add a client to the midi manager for each port you want to output
+   midi data over
+
+   MidiClient client = midiManager.addClient(mcdPlay, mctApplication, "midisynctest", "midisynctest");
+   MidiClient client2 = midiManager.addClient(mcdPlay, mctApplication, "midisynctest2", "midisynctest2");
+
+d) you insert the clients in the synchronization group
+
+   syncGroup.addClient(client);
+   syncGroup.addClient(client2);
+
+e) you create ports for each client as usual
+
+   MidiPort port = client.addOutputPort();
+   MidiPort port2 = client2.addOutputPort();
+
+f) at this point, you will need to ensure that the midi clients you created
+   are connected, you can either leave the user with artscontrol for doing
+   this, or use the clients and connect methods of the midiManager object
+   yourself (see use case discussed in previous section)
+
+g) you output events over the ports as usual
+
+   /* where t is a suitable TimeStamp */
+   MidiEvent e = MidiEvent(t,MidiCommand(mcsNoteOn|0, notes[np], 100));
+   port.processEvent(e);
+   port2.processEvent(e);
+
+  4. Audio timestamping and synchronization
+  -----------------------------------------
+
+Audio in aRts is usually handled as structures consisting of small modules
+that do something. While this model allows you to describe anything you want
+to, from playing a sample to playing a synthetic sequence of notes with a
+synthetic instruments, it doesn't give you any notion of time. More so, if
+you build a large graph of objects, you might need quite some time for this,
+and you will want to have them all started at the same time.
+
+To solve this issue, an AudioSync interface has been introduced, that allows
+you to start() and stop() either synchronized at a specific point in time.
+
+Suppose you have two synthesis modules which together play back a sample.
+What can you do to start them at the same time?
+
+	Synth_PLAY_WAV wav = //... create on server
+	Synth_AMAN_PLAY sap //... create on server
+	AudioSync audioSync = //... create on server
+
+	wav.filename("/opt/kde3/share/sounds/pop.wav");
+	sap.title("midisynctest2");
+	sap.autoRestoreID("midisynctest2");
+	connect(wav,sap);
+
+	// this queues back start() to be called atomically later
+	audioSync.queueStart(wav);
+	audioSync.queueStart(sap);
+
+	// this line is a synchronized version of
+	// wav.start();
+	// sap.start();
+	audioSync.execute();
+
+You could also play them back at a specific time in the future and query the
+current time using the time and executeAt methods:
+
+interface AudioSync {
+	/**
+	 * the current time
+	 */
+	readonly attribute TimeStamp time;
+
+	//...
+
+	/**
+	 * atomically executes all queued modifications to the flow system
+	 * at a given time
+	 */
+	void executeAt(TimeStamp timeStamp);
+};
+
+Finally, to get synchronized midi and audio, you can insert the AudioSync
+object into a midi synchronization group, then their timestamps will be
+synchronized to those of the midi channels.
+
+  5. Example code
+  ---------------
+
+An example that illustrates most things discussed in this document is
+midisynctest.cc, which plays back two synchronized midi streams and samples.
+Note that you might want to change the source code, as it hardcodes the
+location of the .wav file.
+
+
+Questions and comments are welcome.
+
+Stefan Westerfeld
+stefan@space.twc.de

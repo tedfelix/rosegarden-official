@@ -1811,6 +1811,19 @@ AlsaDriver::insertMappedEventForReturn(MappedEvent *mE)
     m_recordComposition.insert(mE);
 }
 
+// Return the sample rate of the JACK driver if we have one installed
+//
+unsigned int
+AlsaDriver::getSampleRate() const
+{
+#ifdef HAVE_LIBJACK
+    return _jackSampleRate;
+#else
+   return 0;
+#endif
+}
+
+
 
 // ------------ JACK callbacks -----------
 //

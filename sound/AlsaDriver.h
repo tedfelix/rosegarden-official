@@ -120,6 +120,10 @@ public:
                                   const Rosegarden::RealTime &playLatency, 
                                   bool now);
 
+    // Return the sample rate
+    //
+    virtual unsigned int getSampleRate() const;
+
     // Some stuff to help us debug this
     //
     void getSystemInfo();

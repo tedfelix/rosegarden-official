@@ -163,6 +163,10 @@ public:
     virtual QValueVector<QString> getPropertyList(int id,
                                                   const QString &property) = 0;
 
+    // Driver sample rate
+    //
+    virtual unsigned int getSampleRate() const = 0;
+
 };
 
 #endif // _ROSEGARDENSEQUENCERIFACE_H_

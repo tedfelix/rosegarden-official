@@ -105,7 +105,8 @@ AudioPluginDialog::slotPluginSelected(int number)
                 PluginControl *control =
                     new PluginControl(mainWidget(),
                                       PluginControl::Rotary,
-                                      *it);
+                                      *it,
+                                      m_pluginManager);
                 control->show();
 
                 height += control->height();
@@ -137,10 +138,12 @@ AudioPluginDialog::slotPluginSelected(int number)
 //
 PluginControl::PluginControl(QWidget *parent,
                              ControlType type,
-                             PluginPort *port):
+                             PluginPort *port,
+                             AudioPluginManager *aPM):
     QHBox(parent),
     m_type(type),
-    m_port(port)
+    m_port(port),
+    m_pluginManager(aPM)
 {
     QFont plainFont;
     plainFont.setPointSize((plainFont.pointSize() * 9 )/ 10);
@@ -152,11 +155,24 @@ PluginControl::PluginControl(QWidget *parent,
 
     if (type == Rotary)
     {
-        float upperBound = float(port->getUpperBound());
-        float lowerBound = float(port->getLowerBound());
+        // defaults
+        float lowerBound = 0.0;
+        float upperBound = 1.0;
 
-        if (upperBound < 0.001) upperBound = 0.0;
-        if (lowerBound < 0.001) lowerBound = 0.0;
+        if (m_port->getRange() & PluginPort::Below)
+            lowerBound = float(port->getLowerBound());
+
+        if (m_port->getRange() & PluginPort::Above)
+            upperBound = float(port->getUpperBound());
+
+        if (m_port->getRange() & PluginPort::SampleRate)
+        {
+            lowerBound *= m_pluginManager->getSampleRate();
+            upperBound *= m_pluginManager->getSampleRate();
+        }
+
+        //if (upperBound < 0.001) upperBound = 0.0;
+        //if (lowerBound < 0.001) lowerBound = 0.0;
 
         QLabel *low = new QLabel(QString("%1").arg(lowerBound), this);
         low->setIndent(10);

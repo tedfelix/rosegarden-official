@@ -206,6 +206,10 @@ public:
     virtual QValueVector<QString> getPropertyList(int id,
                                                   const QString &property);
 
+    // Sample rate
+    //
+    virtual unsigned int getSampleRate() const;
+
     //
     //
     //

@@ -58,15 +58,17 @@ public:
 
     PluginControl(QWidget *parent,
                   ControlType type,
-                  PluginPort *port);
+                  PluginPort *port,
+                  AudioPluginManager *pluginManager);
 
 protected:
 
-    ControlType  m_type;
-    PluginPort  *m_port;
+    ControlType          m_type;
+    PluginPort          *m_port;
 
-    int          m_multiplier;
-    QDial       *m_dial;
+    int                  m_multiplier;
+    QDial               *m_dial;
+    AudioPluginManager  *m_pluginManager;
 
 };
 
