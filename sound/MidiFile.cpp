@@ -30,6 +30,8 @@
 #include "BaseProperties.h"
 #include "SegmentNotationHelper.h"
 #include "SegmentPerformanceHelper.h"
+#include "CompositionTimeSliceAdapter.h"
+#include "AnalysisTypes.h"
 #include "Track.h"
 #include "Instrument.h"
 
@@ -500,6 +502,7 @@ MidiFile::convertToRosegarden()
     // [cc] -- attempt to avoid floating-point rounding errors
     timeT crotchetTime = Note(Note::Crotchet).getDuration();
     int divisor = m_timingDivision ? m_timingDivision : crotchetTime;
+    bool haveTimeSignatures = false;
 
     for (Rosegarden::TrackId i = 0; i < m_numberOfTracks; i++ )
     {
@@ -645,6 +648,7 @@ MidiFile::convertToRosegarden()
                     composition->addTimeSignature
                         (rosegardenTime,
                          Rosegarden::TimeSignature(numerator, denominator));
+		    haveTimeSignatures = true;
 
                     break;
 
@@ -741,25 +745,36 @@ MidiFile::convertToRosegarden()
                 break;
             }
         }
+    }
 
-        // [cc]
+    // normalise and prettify everything [cc]
 
-        if (rosegardenSegment) {
+    // if we have no time signatures at all, try to guess one
+    if (!haveTimeSignatures)
+    {
+	Rosegarden::CompositionTimeSliceAdapter adapter(composition);
+	Rosegarden::AnalysisHelper analysisHelper;
+	TimeSignature timeSig = analysisHelper.guessTimeSignature(adapter);
+	composition->addTimeSignature(0, timeSig);
+    }
 
-            SegmentNotationHelper helper(*rosegardenSegment);
+    for (Composition::iterator i = composition->begin();
+	 i != composition->end(); ++i)
+    {
+	rosegardenSegment = *i;
+        SegmentNotationHelper helper(*rosegardenSegment);
 
-            rosegardenSegment->insert
-                (helper.guessClef(rosegardenSegment->begin(),
-                                  rosegardenSegment->end()).getAsEvent(0));
+	rosegardenSegment->insert
+	    (helper.guessClef(rosegardenSegment->begin(),
+			      rosegardenSegment->end()).getAsEvent(0));
 
-	    rosegardenSegment->normalizeRests
-		(rosegardenSegment->getStartTime(),
-		 rosegardenSegment->getEndTime());
+	rosegardenSegment->normalizeRests
+	    (rosegardenSegment->getStartTime(),
+	     rosegardenSegment->getEndTime());
 
-            helper.autoBeam(rosegardenSegment->begin(),
-                            rosegardenSegment->end(),
-                            BaseProperties::GROUP_TYPE_BEAMED);
-        }
+	helper.autoBeam(rosegardenSegment->begin(),
+			rosegardenSegment->end(),
+			BaseProperties::GROUP_TYPE_BEAMED);
     }
 
     return composition;

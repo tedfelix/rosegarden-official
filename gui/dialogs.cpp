@@ -196,6 +196,9 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
     m_majorMinorCombo = new QComboBox(false, nameBox);
     m_majorMinorCombo->insertItem("Major");
     m_majorMinorCombo->insertItem("Minor");
+    if (m_key.isMinor()) {
+	m_majorMinorCombo->setCurrentItem(m_majorMinorCombo->count() - 1);
+    }
 
     regenerateKeyCombo();
     redrawKeyPixmap();

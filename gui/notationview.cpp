@@ -2163,21 +2163,19 @@ void NotationView::refreshSegment(Segment *segment,
         Segment *ssegment = &m_staffs[i]->getSegment();
         bool thisStaff = (ssegment == segment || segment == 0);
 
-        //        if (thisStaff && (segment != 0)) applyLayout(i);
-
         NotationElementList *notes = m_staffs[i]->getViewElementList();
         NotationElementList::iterator starti = notes->begin();
         NotationElementList::iterator endi = notes->end();
 
-        timeT barStartTime = -1, barEndTime = -1;
-        
-	barStartTime = ssegment->getBarStartForTime(startTime);
-        starti = notes->findTime(barStartTime);
-	//!!!???starti = notes->findTime(startTime);
+        timeT barStartTime = ssegment->getStartTime(),
+	      barEndTime   = ssegment->getEndTime();
 
-	barEndTime = ssegment->getBarEndForTime(endTime);
-	endi = notes->findTime(barEndTime);
-	//!!!???endi = notes->findTime(endTime);
+        if (startTime != endTime) {
+	    barStartTime = ssegment->getBarStartForTime(startTime);
+	    barEndTime = ssegment->getBarEndForTime(endTime);
+	    starti = notes->findTime(barStartTime);
+	    endi = notes->findTime(barEndTime);
+	}
 
         kdDebug(KDEBUG_AREA) << "NotationView::refreshSegment: "
                              << "start = " << startTime << ", end = " << endTime << ", barStart = " << barStartTime << ", barEnd = " << barEndTime << endl;

@@ -128,6 +128,14 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     //
     slotClearMidiInLabel();
     slotClearMidiOutLabel();
+
+    // and by default we close the lower panel
+    //
+    int rfh = RecordingFrame->height();
+    RecordingFrame->hide();
+    setFixedSize(width(), height() - rfh);
+    PanelOpenButton->setOn(false);
+    PanelOpenButton->setPixmap(m_panelClosed);
 }
 
 RosegardenTransportDialog::~RosegardenTransportDialog()
@@ -513,10 +521,14 @@ RosegardenTransportDialog::slotLoopButtonReleased()
 void
 RosegardenTransportDialog::slotPanelOpenButtonReleased()
 {
+    int rfh = RecordingFrame->height();
+
     if (RecordingFrame->isVisible()) {
 	RecordingFrame->hide();
+	setFixedSize(width(), height() - rfh);
 	PanelOpenButton->setPixmap(m_panelClosed);
     } else {
+	setFixedSize(width(), height() + rfh);
 	RecordingFrame->show();
 	PanelOpenButton->setPixmap(m_panelOpen);
     }
@@ -525,8 +537,11 @@ RosegardenTransportDialog::slotPanelOpenButtonReleased()
 void
 RosegardenTransportDialog::slotPanelCloseButtonReleased()
 {
+    int rfh = RecordingFrame->height();
+
     if (RecordingFrame->isVisible()) {
 	RecordingFrame->hide();
+	setFixedSize(width(), height() - rfh);
 	PanelOpenButton->setOn(false);
 	PanelOpenButton->setPixmap(m_panelClosed);
     }

@@ -90,10 +90,12 @@ public:
      * care.
      *
      * If segment is null, refresh all segments.
+     * If the startTime and endTime are equal, refresh the whole of
+     * the relevant segments.
      */
     virtual void refreshSegment(Rosegarden::Segment *segment,
-				Rosegarden::timeT startTime,
-				Rosegarden::timeT endTime) = 0;
+				Rosegarden::timeT startTime = 0,
+				Rosegarden::timeT endTime = 0) = 0;
 
     /**
      * "Clever" readjustment of the view size

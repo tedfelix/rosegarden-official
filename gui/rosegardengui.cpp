@@ -175,17 +175,17 @@ void RosegardenGUIApp::setupActions()
                                              actionCollection(),
                                              "show_tracklabels");
 
-    m_viewSegmentParameters = new KToggleAction(i18n("Show Segment Parameters"), 0, this,
+    m_viewSegmentParameters = new KToggleAction(i18n("Show &Segment Parameters"), 0, this,
                                                 SLOT(slotToggleSegmentParameters()),
                                                 actionCollection(),
                                                 "show_segment_parameters");
 
-    m_viewInstrumentParameters = new KToggleAction(i18n("Show Instrument Parameters"), 0, this,
+    m_viewInstrumentParameters = new KToggleAction(i18n("Show &Instrument Parameters"), 0, this,
                                                    SLOT(slotToggleInstrumentParameters()),
                                                    actionCollection(),
                                                    "show_instrument_parameters");
 
-    m_viewRulers = new KToggleAction(i18n("Show Rulers"), 0, this,
+    m_viewRulers = new KToggleAction(i18n("Show &Rulers"), 0, this,
                                      SLOT(slotToggleRulers()),
                                      actionCollection(),
                                      "show_rulers");

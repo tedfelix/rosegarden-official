@@ -232,9 +232,7 @@ void EditView::slotCommandExecuted(KCommand *command)
         } else {
             // partial segment command, but not a basic command
             Rosegarden::Segment *segment = &basicCommand->getSegment();
-            refreshSegment(segment,
-                           segment->getStartTime(),
-                           segment->getEndTime());
+            refreshSegment(segment);
         }
 
         return;
@@ -264,20 +262,14 @@ void EditView::slotCommandExecuted(KCommand *command)
 	    }
 	}
 
-	if (foundOne) refreshSegment
-			  (0, 0, m_document->getComposition().getDuration());
+	if (foundOne) refreshSegment(0);
         return;
     }
 
     TimeAndTempoChangeCommand *timeCommand =
         dynamic_cast<TimeAndTempoChangeCommand *>(command);
     if (timeCommand) {
-
-        //!!!
-        // time-and-tempo-commands -> redraw all? hmm
-
-	refreshSegment(0, 0, m_document->getComposition().getDuration());
-
+	refreshSegment(0);
         return;
     }
 

@@ -66,8 +66,8 @@ public:
     virtual bool applyLayout(int staffNo = -1);
 
     virtual void refreshSegment(Rosegarden::Segment *segment,
-				Rosegarden::timeT startTime,
-				Rosegarden::timeT endTime);
+				Rosegarden::timeT startTime = 0,
+				Rosegarden::timeT endTime = 0);
 
     QCanvas* canvas() { return getCanvasView()->canvas(); }
 

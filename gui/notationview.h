@@ -133,8 +133,8 @@ public:
     }
 
     virtual void refreshSegment(Rosegarden::Segment *segment,
-				Rosegarden::timeT startTime,
-				Rosegarden::timeT endTime); // -1 => end of staff
+				Rosegarden::timeT startTime = 0,
+				Rosegarden::timeT endTime = 0);
 
     /**
      * From LinedStaffManager
