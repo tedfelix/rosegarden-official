@@ -503,12 +503,14 @@ AudioFileManager::createRecordingAudioFile()
                 file.erase(0, 9);
 
                 // match and remove post dot
-                int pos = file.find(".");
-                file.erase(pos, file.length());
+                std::string::size_type pos = file.find(".");
+                if (pos != std::string::npos) {
+                    file.erase(pos, file.length());
+		}
 
-                // store
-                if (atoi(file.c_str()) > audioFileNumber)
-                    audioFileNumber = atoi(file.c_str());
+		// store
+		if (atoi(file.c_str()) > audioFileNumber)
+		    audioFileNumber = atoi(file.c_str());
             }
         }
 
