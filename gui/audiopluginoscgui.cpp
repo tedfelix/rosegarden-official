@@ -153,7 +153,14 @@ AudioPluginOSCGUIManager::~AudioPluginOSCGUIManager()
 {
     delete m_dispatchTimer;
 
-    //!!! kill all plugin guis?
+    for (TargetGUIMap::iterator i = m_guis.begin(); i != m_guis.end(); ++i) {
+	for (IntGUIMap::iterator j = i->second.begin(); j != i->second.end();
+	     ++j) {
+	    delete j->second;
+	}
+    }
+    m_guis.clear();
+
     //!!! arse -- there is no lo_server_thread_terminate
 }
 
