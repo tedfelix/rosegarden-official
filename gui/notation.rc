@@ -289,6 +289,7 @@
 </ToolBar>
 
 <ToolBar name="Transport Toolbar">
+  <text>Transport Toolbar</text>
   <Action name="playback_pointer_start" />
   <Action name="playback_pointer_back_bar" />
   <Action name="play" />
@@ -301,6 +302,7 @@
 </ToolBar>
 
 <ToolBar name="Notes Toolbar" newline="true">
+  <text>Notes Toolbar</text>
 
   <!-- Reference names, but with _ instead of - -->
   <Action name="breve" />
@@ -326,6 +328,8 @@
 </ToolBar>
 
 <ToolBar name="Rests Toolbar">
+  <text>Rests Toolbar</text>
+
   <!-- Reference names, but with _ instead of - -->
   <Action name="rest_breve" />
   <Action name="rest_semibreve" />
@@ -346,6 +350,8 @@
 </ToolBar>
 
 <ToolBar name="Accidentals Toolbar">
+  <text>Accidentals Toolbar</text>
+
   <Action name="no_accidental" />
   <Action name="sharp_accidental" />
   <Action name="flat_accidental" />
@@ -355,6 +361,8 @@
 </ToolBar>
 
 <ToolBar name="Clefs Toolbar" hidden="true">
+  <text>Clefs Toolbar</text>
+
   <Action name="treble_clef" />
   <Action name="tenor_clef" />
   <Action name="alto_clef" />
@@ -362,6 +370,8 @@
 </ToolBar>
 
 <ToolBar name="Marks Toolbar" newline = "true">
+  <text>Marks Toolbar</text>
+
     <Action name="add_accent"/>
     <Action name="add_tenuto"/>
     <Action name="add_staccato"/>
@@ -381,6 +391,8 @@
 </ToolBar>
 
 <ToolBar name="Group Toolbar">
+  <text>Group Toolbar</text>
+
   <Action name="beam"/>
   <Action name="break_group"/>
   <Separator/>
@@ -396,6 +408,8 @@
 </ToolBar>
 
 <ToolBar name="Meta Toolbar" newline="true">
+  <text>Meta Toolbar</text>
+
   <Action name="show_notes_toolbar"        />
   <Action name="show_rests_toolbar"        />
   <Action name="show_accidentals_toolbar"  />
@@ -405,6 +419,7 @@
 </ToolBar>
 
 <ToolBar name="Font Toolbar">
+  <text>Font Toolbar</text>
 <!-- filled entirely at runtime -->
 </ToolBar>
 

@@ -117,6 +117,7 @@
 </MenuBar>
 
 <ToolBar name="Tools Toolbar">
+     <text>Tools Toolbar</text>
         <Action name="select"/>
         <Action name="move"/>
         <Action name="resize"/>
@@ -127,12 +128,14 @@
 </ToolBar>
 
 <ToolBar name="Editors Toolbar">
+     <text>Editors Toolbar</text>
         <Action name="edit_matrix"/>
         <Action name="edit_notation"/>
         <Action name="edit_event_list"/>
 </ToolBar>
 
 <ToolBar name="Transport Toolbar">
+  <text>Transport Toolbar</text>
   <Action name="rewindtobeginning" />
   <Action name="rewind" />
   <Action name="play" />
@@ -143,6 +146,7 @@
 </ToolBar>
 
 <ToolBar name="Zoom Toolbar">
+  <text>Zoom Toolbar</text>
 </ToolBar>
 
 <!--     RMB Menus           -->
