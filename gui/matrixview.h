@@ -405,9 +405,6 @@ protected:
     virtual Rosegarden::Staff *getCurrentStaff();
     virtual Rosegarden::timeT getInsertionTime();
 
-    virtual void keyPressEvent(QKeyEvent *event);
-    virtual void keyReleaseEvent(QKeyEvent *event);
-
     /**
      * save general Options like all bar positions and status as well
      * as the geometry and the recent file list to the configuration

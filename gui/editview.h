@@ -336,6 +336,9 @@ protected:
     virtual RosegardenCanvasView* getCanvasView();
     virtual void setCanvasView(RosegardenCanvasView *cv);
 
+    virtual void keyPressEvent(QKeyEvent *event);
+    virtual void keyReleaseEvent(QKeyEvent *event);
+
     //--------------- Data members ---------------------------------
 
     /// The current selection of Events (for cut/copy/paste)

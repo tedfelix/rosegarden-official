@@ -1427,45 +1427,6 @@ void MatrixView::playNote(const Rosegarden::Segment &segment, int pitch)
     Rosegarden::StudioControl::sendMappedEvent(mE);
 }
 
-void
-MatrixView::keyPressEvent(QKeyEvent *event)
-{
-    switch(event->key())
-    {
-        case Key_Shift:
-            m_shiftDown = true;
-            break;
-
-        case Key_Control:
-            m_controlDown = true;
-            break;
-
-        default:
-            event->ignore();
-            break;
-    }
-}
-
-
-void
-MatrixView::keyReleaseEvent(QKeyEvent *event)
-{
-    switch(event->key())
-    {
-        case Key_Shift:
-            m_shiftDown = false;
-            break;
-
-        case Key_Control:
-            m_controlDown = false;
-            break;
-
-        default:
-            event->ignore();
-            break;
-    }
-}
-
 MatrixStaff* 
 MatrixView::getStaff(const Rosegarden::Segment &segment)
 {
