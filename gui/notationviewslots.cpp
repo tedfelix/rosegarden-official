@@ -129,7 +129,7 @@ NotationView::slotChangeSpacingFromAction()
 
     } else {
         KMessageBox::sorry
-            (this, QString(i18n("Unknown spacing action %1").arg(name)));
+            (this, i18n("Unknown spacing action %1").arg(name));
     }
 }
 
@@ -185,7 +185,7 @@ NotationView::slotChangeProportionFromAction()
 
     } else {
         KMessageBox::sorry
-            (this, QString(i18n("Unknown proportion action %1").arg(name)));
+            (this, i18n("Unknown proportion action %1").arg(name));
     }
 }
 
@@ -232,7 +232,7 @@ NotationView::slotChangeFontFromAction()
         slotChangeFont(name);
     } else {
         KMessageBox::sorry
-            (this, QString(i18n("Unknown font action %1").arg(name)));
+            (this, i18n("Unknown font action %1").arg(name));
     }
 }
 
@@ -249,11 +249,11 @@ NotationView::slotChangeFontSizeFromAction()
         if (ok) slotChangeFont(m_fontName, size);
         else {
             KMessageBox::sorry
-                (this, QString(i18n("Unknown font size %1").arg(name)));
+                (this, i18n("Unknown font size %1").arg(name));
         }           
     } else {
         KMessageBox::sorry
-            (this, QString(i18n("Unknown font size action %1").arg(name)));
+            (this, i18n("Unknown font size action %1").arg(name));
     }
 }
 
@@ -1185,7 +1185,7 @@ void NotationView::slotSetStyleFromAction()
                              *m_currentEventSelection));
     } else {
         KMessageBox::sorry
-            (this, QString(i18n("Unknown style action %1").arg(name)));
+            (this, i18n("Unknown style action %1").arg(name));
     }
 }
 
@@ -1217,7 +1217,7 @@ void NotationView::slotInsertNoteFromAction()
     } catch (...) {
         
         KMessageBox::sorry
-            (this, QString(i18n("Unknown note insert action %1").arg(name)));
+            (this, i18n("Unknown note insert action %1").arg(name));
         return;
     }
 

@@ -695,6 +695,10 @@ void EditViewBase::slotCompositionStateUpdate()
         toggleSolo->setChecked(false);
         RG_DEBUG << "EditViewBase::slotCompositionStateUpdate() : set solo to false\n";
     }
+
+    // update the window caption
+    //
+    updateViewCaption();
 }
 
 /*

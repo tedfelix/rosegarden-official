@@ -141,8 +141,7 @@ TempoView::TempoView(RosegardenGUIDoc *doc, QWidget *parent, Rosegarden::timeT o
 
     m_grid->addWidget(m_list, 2, 1);
 
-    setCaption(i18n("%1 - Tempo and Time Signature Editor")
-	       .arg(doc->getTitle()));
+    updateViewCaption();
 
     doc->getComposition().addObserver(this);
 
@@ -841,6 +840,16 @@ TempoView::slotPopupEditor(QListViewItem *qitem)
 	break;
     }
 }
+
+
+void
+TempoView::updateViewCaption()
+{
+    setCaption(i18n("%1 - Tempo and Time Signature Editor")
+	       .arg(getDocument()->getTitle()));
+}
+
+
 
 const char* const TempoView::LayoutConfigGroupName = "TempoView Layout";
 const char* const TempoView::ConfigGroup = "TempoView Options";

@@ -289,22 +289,9 @@ EventView::EventView(RosegardenGUIDoc *doc,
 
 	m_grid->addWidget(groupBox, 2, 2);
 	
-	setCaption(QString("%1 - Triggered Segment: %2")
-		   .arg(doc->getTitle())
-		   .arg(strtoqstr(segments[0]->getLabel())));
-
-    } else if (segments.size() == 1) {
-
-        setCaption(QString("%1 - Segment Track #%2 - Event List")
-                   .arg(doc->getTitle())
-                   .arg(segments[0]->getTrack() + 1));
-
-    } else {
-
-        setCaption(QString("%1 - %2 Segments - Event List")
-                   .arg(doc->getTitle())
-                   .arg(segments.size()));
     }
+
+    updateViewCaption();
 
     for (unsigned int i = 0; i < m_segments.size(); ++i) {
 	m_segments[i]->addObserver(this);
@@ -1645,6 +1632,31 @@ EventView::slotMenuActivated(int value)
     }
 
     return;
+}
+
+void
+EventView::updateViewCaption()
+{
+    if (m_isTriggerSegment) {
+
+	setCaption(i18n("%1 - Triggered Segment: %2")
+		   .arg(getDocument()->getTitle())
+		   .arg(strtoqstr(m_segments[0]->getLabel())));
+
+        
+    }  else if (m_segments.size() == 1) {
+
+        setCaption(i18n("%1 - Segment Track #%2 - Event List")
+                   .arg(getDocument()->getTitle())
+                   .arg(m_segments[0]->getTrack() + 1));
+
+    } else {
+
+        setCaption(i18n("%1 - %2 Segments - Event List")
+                   .arg(getDocument()->getTitle())
+                   .arg(m_segments.size()));
+    }
+    
 }
 
 

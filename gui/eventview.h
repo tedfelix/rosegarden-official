@@ -156,6 +156,8 @@ protected:
 			       Rosegarden::timeT duration, int timeMode);
     virtual Rosegarden::Segment *getCurrentSegment();
 
+    virtual void updateViewCaption();
+
     //--------------- Data members ---------------------------------
 
     bool         m_isTriggerSegment;

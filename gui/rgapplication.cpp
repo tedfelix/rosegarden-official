@@ -81,7 +81,7 @@ void RosegardenApplication::sfxLoadExited(KProcess *proc)
         config()->setGroup(configGroup);
         
         KMessageBox::error(mainWidget(),
-                           QString(i18n("Failed to load soundfont %1")).arg(soundFontPath));
+                           i18n("Failed to load soundfont %1").arg(soundFontPath));
     } else {
         RG_DEBUG << "RosegardenApplication::sfxLoadExited() : sfxload exited normally\n";
     }

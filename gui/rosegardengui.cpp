@@ -1436,8 +1436,7 @@ RosegardenGUIApp::createDocument(QString filePath, ImportType importType)
     if (!file.open(IO_ReadOnly)) {
         KStartupLogo::hideIfStillThere();
         QString errStr =
-            QString(i18n("You do not have read permission for \"%1\"")).
-            arg(filePath);
+            i18n("You do not have read permission for \"%1\"").arg(filePath);
 
         KMessageBox::sorry(this, errStr);
         return 0;
@@ -1867,8 +1866,7 @@ void RosegardenGUIApp::openURL(const KURL& url)
     QString target;
 
     if (KIO::NetAccess::download(url, target) == false) {
-        KMessageBox::error(this, QString(i18n("Cannot download file %1"))
-                           .arg(url.prettyURL()));
+        KMessageBox::error(this, i18n("Cannot download file %1").arg(url.prettyURL()));
         return;
     }
 
@@ -1928,8 +1926,7 @@ void RosegardenGUIApp::slotMerge()
     QString target;
 
     if (KIO::NetAccess::download(url, target) == false) {
-        KMessageBox::error(this, QString(i18n("Cannot download file %1"))
-                           .arg(url.prettyURL()));
+        KMessageBox::error(this, i18n("Cannot download file %1").arg(url.prettyURL()));
         return;
     }
 
@@ -2085,6 +2082,8 @@ void RosegardenGUIApp::slotFileSaveAs()
     
         QString caption = kapp->caption();  
         setCaption(caption + ": " + m_doc->getTitle());
+        // update the edit view's captions too
+        emit compositionStateUpdate();
     }
     
 }
@@ -5084,8 +5083,7 @@ RosegardenGUIApp::slotAddAudioFile(unsigned int id)
         int result;
         streamIn >> result;
         if (!result) {
-            KMessageBox::error(this, QString(i18n("Sequencer failed to add audio file %1"))
-                               .arg(aF->getFilename().c_str()));
+            KMessageBox::error(this, i18n("Sequencer failed to add audio file %1").arg(aF->getFilename().c_str()));
         }
     }
 }
@@ -5113,8 +5111,7 @@ RosegardenGUIApp::slotDeleteAudioFile(unsigned int id)
         int result;
         streamIn >> result;
         if (!result) {
-            KMessageBox::error(this, QString(i18n("Sequencer failed to remove audio file id %1"))
-                               .arg(id));
+            KMessageBox::error(this, i18n("Sequencer failed to remove audio file id %1").arg(id));
         }
     }
 }

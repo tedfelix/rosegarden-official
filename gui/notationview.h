@@ -873,6 +873,8 @@ protected:
      */
     bool canPreviewAnotherNote();
 
+    virtual void updateViewCaption();
+
     //--------------- Data members ---------------------------------
 
     NotationProperties m_properties;

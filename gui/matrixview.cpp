@@ -358,25 +358,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     m_pianoKeyboard->setFixedHeight(canvas()->height());
 
 
-    // Set client label
-    //
-    if (segments.size() == 1) {
-
-        setCaption(QString("%1 - Segment Track #%2 - Matrix")
-                   .arg(doc->getTitle())
-                   .arg(segments[0]->getTrack() + 1));
-
-    } else if (segments.size() == comp.getNbSegments()) {
-
-        setCaption(QString("%1 - All Segments - Matrix")
-                   .arg(doc->getTitle()));
-
-    } else {
-
-        setCaption(QString("%1 - %2 Segments - Matrix ")
-                   .arg(doc->getTitle())
-                   .arg(segments.size()));
-    }
+    updateViewCaption();
 
     // Add a velocity ruler
     //
@@ -1585,7 +1567,7 @@ void MatrixView::slotInsertNoteFromAction()
     } catch (...) {
 	
 	KMessageBox::sorry
-	    (this, QString(i18n("Unknown note insert action %1").arg(name)));
+	    (this, i18n("Unknown note insert action %1").arg(name));
 	return;
     }
 
@@ -2410,6 +2392,30 @@ MatrixView::paintEvent(QPaintEvent* e)
 	for (unsigned int i = 0; i < notes.size(); ++i) {
 	    slotInsertableNoteEventReceived(notes[i].first, notes[i].second, true);
 	}
+    }
+}
+
+void
+MatrixView::updateViewCaption()
+{
+    // Set client label
+    //
+    if (m_segments.size() == 1) {
+
+        setCaption(i18n("%1 - Segment Track #%2 - Matrix")
+                   .arg(getDocument()->getTitle())
+                   .arg(m_segments[0]->getTrack() + 1));
+
+    } else if (m_segments.size() == getDocument()->getComposition().getNbSegments()) {
+
+        setCaption(i18n("%1 - All Segments - Matrix")
+                   .arg(getDocument()->getTitle()));
+
+    } else {
+
+        setCaption(i18n("%1 - %2 Segments - Matrix ")
+                   .arg(getDocument()->getTitle())
+                   .arg(m_segments.size()));
     }
 }
 

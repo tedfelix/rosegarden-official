@@ -555,8 +555,8 @@ AudioManagerDialog::slotExportAudio()
 
     QString saveFile =
         KFileDialog::getSaveFileName(":WAVS",
-                                 QString(i18n("*.wav|WAV files (*.wav)")),
-                                 this, i18n("Choose a name to save this file as"));
+                                     i18n("*.wav|WAV files (*.wav)"),
+                                     this, i18n("Choose a name to save this file as"));
     
     if (sourceFile == 0 || item == 0 || segment == 0 || saveFile.isEmpty())
         return;
@@ -657,7 +657,7 @@ AudioManagerDialog::slotRemove()
         return;
     }
 
-    QString question = QString(i18n("This will unload audio file \"%1\" and remove all associated segments.  Are you sure?"))
+    QString question = i18n("This will unload audio file \"%1\" and remove all associated segments.  Are you sure?")
         .arg(QString(audioFile->getFilename().c_str()));
 
     // Ask the question
@@ -1093,8 +1093,7 @@ AudioManagerDialog::addFile(const KURL& kurl)
 
     } else { // download locally
         if (KIO::NetAccess::download(kurl, newFilePath) == false) {
-            KMessageBox::error(this, QString(i18n("Cannot download file %1"))
-                               .arg(kurl.prettyURL()));
+            KMessageBox::error(this, i18n("Cannot download file %1").arg(kurl.prettyURL()));
             return false;
         }
     }

@@ -2668,8 +2668,8 @@ void
 SimpleEventEditDialog::slotSysexLoad()
 {
     QString path = KFileDialog::getOpenFileName(":SYSTEMEXCLUSIVE", 
-			QString(i18n("*.syx|System exclusive files (*.syx)")), 
-			this, i18n("Load System Exclusive data in File"));
+                                                i18n("*.syx|System exclusive files (*.syx)"),
+                                                this, i18n("Load System Exclusive data in File"));
     if (path.isNull()) return;
 	
     QFile file(path);
@@ -2690,8 +2690,8 @@ void
 SimpleEventEditDialog::slotSysexSave()
 {
     QString path = KFileDialog::getSaveFileName(":SYSTEMEXCLUSIVE", 
-			QString(i18n("*.syx|System exclusive files (*.syx)")), 
-			this, i18n("Save System Exclusive data to..."));
+                                                i18n("*.syx|System exclusive files (*.syx)"),
+                                                this, i18n("Save System Exclusive data to..."));
     if (path.isNull()) return;
 
     QFile file(path);
@@ -3395,8 +3395,8 @@ FileLocateDialog::FileLocateDialog(QWidget *parent,
 {
     QHBox *w = makeHBoxMainWidget();
     QString label =
-        QString(i18n("Can't find file \"%1\".\n"
-                     "Would you like to try and locate this file or skip it?")).arg(m_file);
+        i18n("Can't find file \"%1\".\n"
+             "Would you like to try and locate this file or skip it?").arg(m_file);
 
     QLabel *labelW = new QLabel(label, w);
     labelW->setAlignment(Qt::AlignHCenter);
@@ -3411,7 +3411,7 @@ FileLocateDialog::slotUser3()
 {
     m_file = KFileDialog::getOpenFileName
         (":WAVS",
-         QString(i18n("*.wav|WAV files (*.wav)")),
+         i18n("*.wav|WAV files (*.wav)"),
          this, i18n("Select an Audio File"));
 
     if (!m_file.isEmpty()) {

@@ -523,6 +523,8 @@ protected:
 
     virtual void paintEvent(QPaintEvent* e);
 
+    virtual void updateViewCaption();
+
     //--------------- Data members ---------------------------------
 
     std::vector<MatrixStaff*> m_staffs;

@@ -151,7 +151,7 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
 		long height = 0;
 		if (!(*chord[j])->event()->get<Int>
 		    (m_properties.HEIGHT_ON_STAFF, height)) {
-		    std::cerr << QString(i18n("ERROR: Event in chord at %1 has no HEIGHT_ON_STAFF property!\nThis is a bug (the program would previously have crashed by now)").arg((*chord[j])->getViewAbsoluteTime())) << std::endl;
+		    std::cerr << QString("ERROR: Event in chord at %1 has no HEIGHT_ON_STAFF property!\nThis is a bug (the program would previously have crashed by now)").arg((*chord[j])->getViewAbsoluteTime()) << std::endl;
 		    (*chord[j])->event()->dump(std::cerr);
 		}
 		h.push_back(height);
@@ -372,7 +372,7 @@ NotationVLayout::positionSlur(NotationStaff &staff,
 	    long h = 0;
 	    if (!event->get<Int>(m_properties.HEIGHT_ON_STAFF, h)) {
 		KMessageBox::sorry
-		    ((QWidget *)parent(), QString(i18n("Spanned note at %1 has no HEIGHT_ON_STAFF property!\nThis is a bug (the program would previously have crashed by now)").arg((*scooter)->getViewAbsoluteTime())));
+		    ((QWidget *)parent(), i18n("Spanned note at %1 has no HEIGHT_ON_STAFF property!\nThis is a bug (the program would previously have crashed by now)").arg((*scooter)->getViewAbsoluteTime()));
 		event->dump(std::cerr);
 	    }
 

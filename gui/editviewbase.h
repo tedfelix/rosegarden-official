@@ -293,7 +293,12 @@ protected:
      * Abstract method to get current segment
      */
     virtual Rosegarden::Segment *getCurrentSegment() = 0;
-    
+
+    /**
+     * Set the caption of the view's window
+     */
+    virtual void updateViewCaption() = 0;
+
 protected slots:
     /**
      * save general Options like all bar positions and status as well

@@ -317,18 +317,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     setCanvasView(new NotationCanvasView(*this, tCanvas, getCentralWidget()));
 
-    if (segments.size() == 1) {
-        setCaption(QString("%1 - Segment Track #%2 - Notation")
-                   .arg(doc->getTitle())
-                   .arg(segments[0]->getTrack() + 1));
-    } else if (segments.size() == doc->getComposition().getNbSegments()) {
-        setCaption(QString("%1 - All Segments - Notation")
-                   .arg(doc->getTitle()));
-    } else {
-        setCaption(QString("%1 - %2 Segments - Notation")
-                   .arg(doc->getTitle())
-                   .arg(segments.size()));
-    }
+    updateViewCaption();
 
     setTopBarButtons(new BarButtons(getDocument(),
                                     m_hlayout, m_leftGutter, 25,
@@ -2177,7 +2166,7 @@ void NotationView::initLayoutToolbar()
 
     if (!foundFont) {
 	KMessageBox::sorry
-	    (this, QString(i18n("Unknown font \"%1\", using default")).arg
+	    (this, i18n("Unknown font \"%1\", using default").arg
 	     (strtoqstr(m_fontName)));
 	m_fontName = NoteFontFactory::getDefaultFontName();
     }
@@ -3591,6 +3580,29 @@ void NotationView::setupDefaultProgress()
         m_progressDisplayer = PROGRESS_BAR;
     }
 }
+
+void NotationView::updateViewCaption()
+{
+    if (m_segments.size() == 1) {
+
+        setCaption(i18n("%1 - Segment Track #%2 - Notation")
+                   .arg(getDocument()->getTitle())
+                   .arg(m_segments[0]->getTrack() + 1));
+
+    } else if (m_segments.size() == getDocument()->getComposition().getNbSegments()) {
+
+        setCaption(i18n("%1 - All Segments - Notation")
+                   .arg(getDocument()->getTitle()));
+
+    } else {
+
+        setCaption(i18n("%1 - %2 Segments - Notation")
+                   .arg(getDocument()->getTitle())
+                   .arg(m_segments.size()));
+
+    }
+}
+
 
 NotationView::NoteActionDataMap* NotationView::m_noteActionDataMap = 0;
 NotationView::NoteChangeActionDataMap* NotationView::m_noteChangeActionDataMap = 0;
