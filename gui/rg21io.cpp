@@ -57,8 +57,10 @@ using namespace Rosegarden::Marks;
 
 using namespace Rosegarden::BaseProperties;
 
-RG21Loader::RG21Loader(const QString& fileName, Rosegarden::Studio *studio)
-    : m_file(fileName),
+RG21Loader::RG21Loader(const QString& fileName, Rosegarden::Studio *studio,
+                       QObject *parent, const char* name)
+    : ProgressReporter(parent, name),
+      m_file(fileName),
       m_stream(0),
       m_studio(studio),
       m_composition(0),
@@ -76,8 +78,6 @@ RG21Loader::RG21Loader(const QString& fileName, Rosegarden::Studio *studio)
     if (m_file.open(IO_ReadOnly)) {
 
         m_stream = new QTextStream(&m_file);
-
-        parse();
     }
 
 }
