@@ -40,6 +40,7 @@ using Rosegarden::ArtsDriver;
 int
 main(int /*argc*/, char ** /*argv*/)
 {
+    /*
     ArtsDriver *arts = new ArtsDriver();
     arts->initialiseMidi();
     arts->initialiseAudio();
@@ -52,10 +53,10 @@ main(int /*argc*/, char ** /*argv*/)
        sleep(1);
     }
 
+    */
     
-    /*
     int destclient = 65;
-    int destport = 1;
+    int destport = 0;
 
     //AlsaDriver *alsaDriver = new AlsaDriver();
     //ArtsDriver *artsDriver = new ArtsDriver();
@@ -76,6 +77,7 @@ main(int /*argc*/, char ** /*argv*/)
         exit(1);
     }
 
+    /*
     snd_seq_set_client_pool_output(seq, 2);
     snd_seq_set_client_pool_input(seq, 20);
     snd_seq_set_client_pool_output_room(seq, 20);
@@ -92,6 +94,7 @@ main(int /*argc*/, char ** /*argv*/)
         std::cerr << "Can't set tempo" << std::endl;
         exit(1);
     }
+    */
 
 
     // start the queue
@@ -106,28 +109,23 @@ main(int /*argc*/, char ** /*argv*/)
 
     int i = 1;
 
+    snd_seq_event_t *event= new snd_seq_event_t();
+    snd_seq_ev_clear(event);
+    snd_seq_real_time_t time = {0, 0};
+
+    snd_seq_ev_set_source(event, port);
+    snd_seq_ev_set_dest(event,
+                        destclient,
+                        destport);
+    snd_seq_ev_schedule_real(event, queue, 0, &time);
+
+    snd_seq_ev_set_pgmchange(event, 0, 34);
+    snd_seq_event_output(seq, event);
+
     while (true)
     {
-        snd_seq_event_t *event= new snd_seq_event_t();
-        snd_seq_ev_clear(event);
-        snd_seq_real_time_t time = {0, 0};
-
-        // dest, src and time
-        //
-        snd_seq_ev_set_source(event, port);
-        snd_seq_ev_set_dest(event,
-                            destclient,
-                            destport);
-        snd_seq_ev_schedule_real(event, queue, 0, &time);
-
-        // send program change
-        snd_seq_ev_set_pgmchange(event, 0, 34);
+        snd_seq_ev_set_note(event, 0, 70, 120, 500);
         snd_seq_event_output(seq, event);
-
-        // send note on
-        snd_seq_ev_set_noteon(event, 0, 70, 120);
-        snd_seq_event_output(seq, event);
-        
         snd_seq_drain_output(seq);
 
         cout << "PENDING EVENTS = " << snd_seq_event_output_pending(seq)
@@ -138,5 +136,4 @@ main(int /*argc*/, char ** /*argv*/)
 
         // drain
     }
-*/
 }

@@ -38,34 +38,40 @@
 namespace Rosegarden
 {
 
+// An AlsaPort represents one or more (usually 16) MappedInstruments.
+//
+//
 
-class AlsaInstrument
+class AlsaPort
 {
 public:
-    AlsaInstrument(InstrumentId id,
-                   const std::string &name,
-                   int client,
-                   int port,
-                   int channel):
-        m_id(id),
+    AlsaPort(InstrumentId startId,
+             InstrumentId endId,
+             const std::string &name,
+             int client,
+             int port,
+             bool duplex):
+        m_startId(startId),
+        m_endId(endId),
         m_name(name),
-        m_client(client),
-        m_port(port),
-        m_channel(channel),
-        m_input(false),
+        m_midiClient(client),
+        m_midiPort(port),
+        m_duplex(duplex),
         m_type(0) {;}
 
-    ~AlsaInstrument() {;}
+    ~AlsaPort() {;}
 
-    InstrumentId m_id;
+    InstrumentId m_startId;
+    InstrumentId m_endId;
     std::string  m_name;
-    int          m_client;
-    int          m_port;
-    int          m_channel;
-    bool         m_input;    // is an input port (recording?)
+    int          m_midiClient;
+    int          m_midiPort;
+    bool         m_duplex;   // is an input port as well?
     unsigned int m_type;     // MIDI, synth or what?
 };
 
+
+typedef std::pair<int, int> ClientPortPair;
 
 class AlsaDriver : public SoundDriver
 {
@@ -89,11 +95,11 @@ public:
     
     virtual void record(const RecordStatus& recordStatus);
 
-    void addInstrument(Instrument::InstrumentType type,
-                       const std::string &name, 
-                       int client,
-                       int port,
-                       int channel);
+    void addInstrumentsForPort(Instrument::InstrumentType type,
+                               const std::string &name, 
+                               int client,
+                               int port,
+                               bool duplex);
 
     virtual void processEventsOut(const MappedComposition &mC,
                                   const Rosegarden::RealTime &playLatency, 
@@ -105,6 +111,8 @@ public:
     void showQueueStatus(int queue);
 
 protected:
+    ClientPortPair getFirstDestination(bool duplex);
+
     virtual void generateInstruments();
     virtual void processMidiOut(const MappedComposition &mC,
                                 const RealTime &playLatency,
@@ -113,19 +121,28 @@ protected:
     virtual void processAudioQueue();
 
 private:
-    std::vector<AlsaInstrument*> m_alsaInstruments;
-    InstrumentId                 m_runningId;
+    std::vector<AlsaPort*>       m_alsaPorts;
 
-    // ALSA lib stuff
+
+    // Counters for assignment of Instruments at the driver level.
     //
-    snd_seq_t                   *m_handle;
-    int                          m_client;
-    int                          m_port;
-    int                          m_queue;
+    InstrumentId                 m_midiRunningId; 
+    InstrumentId                 m_audioRunningId;
+
+    // ALSA MIDI/Sequencer stuff
+    //
+    snd_seq_t                   *m_midiHandle;
+    int                          m_midiClient;
+    int                          m_midiPort;
+    int                          m_midiQueue;
     int                          m_maxClients;
     int                          m_maxPorts;
     int                          m_maxQueues;
 
+    // ALSA Audio/PCM stuff
+    //
+    snd_pcm_t                   *m_audioHandle;
+    snd_pcm_stream_t             m_audioStream;
 
     NoteOffQueue                 m_noteOffQueue;
 
