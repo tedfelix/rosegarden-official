@@ -113,8 +113,11 @@ public:
 
     void setBankName(const QString& s);
 
+    void clearAll();
+
+    void populateBank(QListViewItem*);
+
 public slots:
-    void slotPopulateBank(QListViewItem*);
 
     // Check that any new MSB/LSB combination is unique for this device
     //

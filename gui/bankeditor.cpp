@@ -221,16 +221,35 @@ MidiProgramsEditor::modifyCurrentPrograms(int oldMSB, int oldLSB,
 }
 
 void
-MidiProgramsEditor::slotPopulateBank(QListViewItem* item)
+MidiProgramsEditor::clearAll()
+{
+    blockAllSignals(true);
+
+    for(unsigned int i = 0; i < m_programNames.size(); ++i)
+        m_programNames[i]->clear();
+    
+    m_bankName->clear();
+    m_msb->setValue(0);
+    m_lsb->setValue(0);
+    m_currentBank = 0;
+    setEnabled(false);
+
+    blockAllSignals(false);
+}
+
+void
+MidiProgramsEditor::populateBank(QListViewItem* item)
 {
     RG_DEBUG << "MidiProgramsEditor::slotPopulateBank" << endl;
 
     MidiBankListViewItem* bankItem = dynamic_cast<MidiBankListViewItem*>(item);
     if (!bankItem) return;
-
+    
     int deviceNb = bankItem->getDevice();
     Rosegarden::MidiDevice* device = m_bankEditor->getMidiDevice(deviceNb);
     if (!device) return;
+    
+    setEnabled(true);
 
     setBankName(item->text(0));
 
@@ -500,9 +519,9 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
                                         i18n("Manage Banks..."),
                                         leftPart);
 
-    m_addBank        = new QPushButton(i18n("Add Bank"),         bankBox);
-    m_deleteBank     = new QPushButton(i18n("Delete Bank"),      bankBox);
-    m_deleteAllBanks = new QPushButton(i18n("Delete All Banks"), bankBox);
+    m_addBank        = new QPushButton(i18n("Add Bank"),                bankBox);
+    m_deleteBank     = new QPushButton(i18n("Delete Bank"),             bankBox);
+    m_deleteAllBanks = new QPushButton(i18n("Delete All Device Banks"), bankBox);
 
     connect(m_listView, SIGNAL(currentChanged(QListViewItem*)),
             this,       SLOT(slotPopulateDevice(QListViewItem*)));
@@ -621,6 +640,7 @@ BankEditorDialog::slotPopulateDevice(QListViewItem* item)
             RG_DEBUG << "BankEditorDialog::slotPopulateDevice : not a bank item - no child\n";
             m_deleteBank->setEnabled(false);
             m_deleteAllBanks->setEnabled(false);
+            m_programEditor->clearAll();
         }
 
         return;
@@ -641,7 +661,7 @@ BankEditorDialog::slotPopulateDevice(QListViewItem* item)
     m_lastMSB = m_bankList[bankItem->getBank()].msb;
     m_lastLSB = m_bankList[bankItem->getBank()].lsb;
 
-    m_programEditor->slotPopulateBank(item);
+    m_programEditor->populateBank(item);
 
     m_lastDevice = bankItem->getDevice();
 
@@ -729,7 +749,6 @@ BankEditorDialog::slotDeleteBank()
 
     QListViewItem* currentItem = m_listView->currentItem();
 
-    MidiDeviceListViewItem* deviceItem = getParentDeviceItem(currentItem);
     MidiBankListViewItem* bankItem = dynamic_cast<MidiBankListViewItem*>(currentItem);
 
     Rosegarden::MidiDevice *device = getMidiDevice(currentItem);
@@ -768,21 +787,20 @@ BankEditorDialog::slotDeleteBank()
 void
 BankEditorDialog::slotDeleteAllBanks()
 {
-//     blockAllSignals(true);
+    if (!m_listView->currentItem()) return;
 
-//     Rosegarden::MidiDevice *device =
-//         getMidiDevice(m_listView->currentItem());
+    QListViewItem* currentItem = m_listView->currentItem();
 
-//     if (device)
-//     {
-//         device->clearProgramList();
-//         device->clearBankList();
-//         slotPopulateDevice(m_listView->currentItem());
-//     }
+    MidiDeviceListViewItem* deviceItem = getParentDeviceItem(currentItem);
 
-//     setModified(true);
+    // erase all bank items
+    QListViewItem* child = 0;
+    while((child = deviceItem->firstChild())) delete child;
 
-//     blockAllSignals(false);
+    m_bankList.clear();
+    m_programList.clear();
+
+    setModified(true);
 }
 
 Rosegarden::MidiDevice*
