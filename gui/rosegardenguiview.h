@@ -182,7 +182,6 @@ protected:
     //--------------- Data members ---------------------------------
 
     Rosegarden::RulerScale   *m_rulerScale;
-    QScrollView              *m_trackEditorScrollView;
     TrackEditor              *m_trackEditor;
 };
 

@@ -48,7 +48,7 @@ using Rosegarden::SimpleRulerScale;
 
 RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     : QVBox(parent),
-      m_trackEditorScrollView(0)
+      m_rulerScale(0)
 {
     RosegardenGUIDoc* doc = getDocument();
 
@@ -319,28 +319,29 @@ void RosegardenGUIView::editSegmentAudio(Rosegarden::Segment* p)
 //
 void RosegardenGUIView::scrollTrackEditorHoriz(int hpos)
 {
-    if (hpos == 0) // If returning to zero
-    {
-        m_trackEditorScrollView->ensureVisible(0, m_trackEditorScrollView->contentsY() + m_trackEditorScrollView->visibleHeight()/2);
-    }
-    else // if moving off the right hand side of the view
-    if (hpos >  ( m_trackEditorScrollView->contentsX() + 
-                  m_trackEditorScrollView->visibleWidth() * 0.9 ) )
-    { 
-               
-        m_trackEditorScrollView->scrollBy(
-                (int)(m_trackEditorScrollView->visibleWidth() * 0.8),
-                0);
-    }
-    else // if moving off the left hand side
-    if (hpos < ( m_trackEditorScrollView->contentsX() +
-                  m_trackEditorScrollView->visibleWidth() * 0.1 ) )
-    {
-        m_trackEditorScrollView->scrollBy(
-                (int)(-m_trackEditorScrollView->visibleWidth() * 0.8),
-                0);
-    }
+    QScrollView* scrollView = m_trackEditor->getSegmentCanvas();
     
+    if (hpos == 0) { // If returning to zero
+
+        scrollView->ensureVisible(0,
+                                  scrollView->contentsY() +
+                                  scrollView->visibleHeight()/2);
+
+    } else { // if moving off the right hand side of the view
+
+        if (hpos >  ( scrollView->contentsX() + 
+                      scrollView->visibleWidth() * 0.9 ) ) { 
+               
+            scrollView->scrollBy(int(scrollView->visibleWidth() * 0.8), 0);
+
+        } else // if moving off the left hand side
+
+            if (hpos < ( scrollView->contentsX() +
+                         scrollView->visibleWidth() * 0.1 ) ) {
+
+                scrollView->scrollBy(int(-scrollView->visibleWidth() * 0.8), 0);
+            }
+    }
 }
 
 void RosegardenGUIView::editAllTracks(Rosegarden::Composition* p)
