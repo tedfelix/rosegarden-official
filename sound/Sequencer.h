@@ -226,6 +226,10 @@ public:
     void processEventsOut(const Rosegarden::MappedComposition &mC,
                           const Rosegarden::RealTime &playLatency);
 
+    // Immediate processing - no queuing
+    //
+    void immediateProcessEventsOut(Rosegarden::MappedComposition &mC);
+
     // Process the audio queue
     //
     void processAudioQueue();

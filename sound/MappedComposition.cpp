@@ -58,16 +58,16 @@ operator<<(QDataStream &dS, MappedComposition *mC)
 
     for (MappedCompositionIterator it = mC->begin(); it != mC->end(); ++it )
     {
-	dS << (*it)->getPitch();
+	dS << (*it)->getInstrument();
+        dS << (*it)->getType();
+	dS << (*it)->getData1();  // can be pitch 
+	dS << (*it)->getData2();  // can be velocity
 	dS << (*it)->getEventTime().sec;
 	dS << (*it)->getEventTime().usec;
 	dS << (*it)->getDuration().sec;
 	dS << (*it)->getDuration().usec;
 	dS << (*it)->getAudioStartMarker().sec;
 	dS << (*it)->getAudioStartMarker().usec;
-	dS << (*it)->getVelocity();
-	dS << (*it)->getInstrument();
-        dS << (*it)->getType();
     }
 
     return dS;
@@ -81,16 +81,16 @@ operator<<(QDataStream &dS, const MappedComposition &mC)
 
     for (MappedCompositionIterator it = mC.begin(); it != mC.end(); ++it )
     {
-	dS << (*it)->getPitch();
+	dS << (*it)->getInstrument();
+        dS << (*it)->getType();
+	dS << (*it)->getData1();  // can be pitch
+	dS << (*it)->getData2();  // can be velocity
 	dS << (*it)->getEventTime().sec;
 	dS << (*it)->getEventTime().usec;
 	dS << (*it)->getDuration().sec;
 	dS << (*it)->getDuration().usec;
 	dS << (*it)->getAudioStartMarker().sec;
 	dS << (*it)->getAudioStartMarker().usec;
-	dS << (*it)->getVelocity();
-	dS << (*it)->getInstrument();
-        dS << (*it)->getType();
     }
 
     return dS;
@@ -102,28 +102,33 @@ operator<<(QDataStream &dS, const MappedComposition &mC)
 QDataStream& 
 operator>>(QDataStream &dS, MappedComposition *mC)
 {
-    int sliceSize, pitch, type, instrument, velocity;
+    int sliceSize, type;
     Rosegarden::RealTime absTime, duration, audioStartMarker;
+    MidiByte data1, data2;
+    InstrumentId instrument;
 
     dS >> sliceSize;
 
     while (!dS.atEnd() && sliceSize)
     {
-	dS >> pitch;
+	dS >> instrument;
+        dS >> type;
+	dS >> data1;
+	dS >> data2;
         dS >> absTime.sec;
 	dS >> absTime.usec;
 	dS >> duration.sec;
 	dS >> duration.usec;
 	dS >> audioStartMarker.sec;
 	dS >> audioStartMarker.usec;
-	dS >> velocity;
-	dS >> instrument;
-        dS >> type;
 
-	mC->insert(new MappedEvent(pitch,
-                                   absTime, duration, audioStartMarker,
-                                   velocity, instrument,
-                                   (MappedEvent::MappedEventType)type));
+	mC->insert(new MappedEvent(instrument,
+                                   (MappedEvent::MappedEventType)type,
+                                   data1,
+                                   data2,
+                                   absTime,
+                                   duration,
+                                   audioStartMarker));
 
 	sliceSize--;
 
@@ -141,28 +146,33 @@ operator>>(QDataStream &dS, MappedComposition *mC)
 QDataStream& 
 operator>>(QDataStream &dS, MappedComposition &mC)
 {
-    int sliceSize, pitch, type, instrument, velocity;
+    int sliceSize, type;
     Rosegarden::RealTime absTime, duration, audioStartMarker;
+    MidiByte data1, data2;
+    InstrumentId instrument;
 
     dS >> sliceSize;
 
     while (!dS.atEnd() && sliceSize)
     {
-	dS >> pitch;
+	dS >> instrument;
+        dS >> type;
+	dS >> data1;
+	dS >> data2;
         dS >> absTime.sec;
 	dS >> absTime.usec;
 	dS >> duration.sec;
 	dS >> duration.usec;
 	dS >> audioStartMarker.sec;
 	dS >> audioStartMarker.usec;
-	dS >> velocity;
-	dS >> instrument;
-        dS >> type;
 
-	mC.insert(new MappedEvent(pitch,
-                                  absTime, duration, audioStartMarker,
-                                  velocity, instrument,
-                                  (MappedEvent::MappedEventType)type));
+	mC.insert(new MappedEvent(instrument,
+                                  (MappedEvent::MappedEventType)type,
+                                  data1,
+                                  data2,
+                                  absTime,
+                                  duration,
+                                  audioStartMarker));
 
 	sliceSize--;
 

@@ -153,11 +153,11 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
             // Insert Audio event
             //
             Rosegarden::MappedEvent *me =
-                    new Rosegarden::MappedEvent(eventTime,
-                                                startTime,
+                    new Rosegarden::MappedEvent(instrument,
+                                                (*it)->getAudioFileID(),
+                                                eventTime,
                                                 duration,
-                                                instrument,
-                                                (*it)->getAudioFileID());
+                                                startTime);
             m_mC.insert(me);
             continue; // next Segment
         }
@@ -284,8 +284,10 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 	    // Make mapped event
 	    // 
 	    Rosegarden::MappedEvent *mE =
-		new Rosegarden::MappedEvent(**j, eventTime, duration,
-					    instrument);
+		new Rosegarden::MappedEvent(instrument,
+                                            **j,
+                                            eventTime,
+                                            duration);
 
 	    // Add any performance transposition
 	    // 
@@ -892,20 +894,22 @@ SequenceManager::insertMetronomeClicks(const timeT &sliceStart,
     //
     if (barStart.first >= sliceStart && barStart.first <= sliceEnd)
     {
-        MappedEvent *me = new MappedEvent(m_metronomePitch,
-                                        comp.getElapsedRealTime(barStart.first),
-                                        m_metronomeDuration,
-                                        m_metronomeBarVelocity,
-                                        m_metronomeInstrument);
+        MappedEvent *me =
+            new MappedEvent(m_metronomeInstrument,
+                            m_metronomePitch,
+                            m_metronomeBarVelocity,
+                            comp.getElapsedRealTime(barStart.first),
+                            m_metronomeDuration);
         m_mC.insert(me);
     }
     else if (barEnd.first >= sliceStart && barEnd.first <= sliceEnd)
     {
-        MappedEvent *me = new MappedEvent(m_metronomePitch,
-                                          comp.getElapsedRealTime(barEnd.first),
-                                          m_metronomeDuration,
-                                          m_metronomeBarVelocity,
-                                          m_metronomeInstrument);
+        MappedEvent *me =
+            new MappedEvent(m_metronomeInstrument,
+                            m_metronomePitch,
+                            m_metronomeBarVelocity,
+                            comp.getElapsedRealTime(barEnd.first),
+                            m_metronomeDuration);
         m_mC.insert(me);
     }
 
@@ -921,11 +925,11 @@ SequenceManager::insertMetronomeClicks(const timeT &sliceStart,
     {
         if (i >= sliceStart && i <= sliceEnd)
         {
-            MappedEvent *me =new MappedEvent(m_metronomePitch,
-                                             comp.getElapsedRealTime(i),
-                                             m_metronomeDuration,
+            MappedEvent *me =new MappedEvent(m_metronomeInstrument,
+                                             m_metronomePitch,
                                              m_metronomeBeatVelocity,
-                                             m_metronomeInstrument);
+                                             comp.getElapsedRealTime(i),
+                                             m_metronomeDuration);
             m_mC.insert(me);
         }
     }
@@ -969,36 +973,26 @@ SequenceManager::preparePlayback()
         //
         if ((*it)->getType() == Instrument::Midi)
         {
-            if ((*it)->getMidiChannel() == 9) // drum channel
+            if ((*it)->sendsBankSelect())
             {
-                // Bank select
-
-                /*
-                //if ((*it)->sendsBankSelect())
                 mE = new MappedEvent((*it)->getID(),
                                      Rosegarden::MappedEvent::MidiController,
-                                     0,    // MSB controller
-                                     127); // bank
+                                     (*it)->getMSB());
                 mC.insert(mE);
 
                 mE = new MappedEvent((*it)->getID(),
                                      Rosegarden::MappedEvent::MidiController,
-                                     32,    // LSB controller
-                                     0);    // bank
-
+                                     32,
+                                     (*it)->getLSB());
                 mC.insert(mE);
+            }
 
-                // Program change
+            if ((*it)->sendsProgramChange())
+            {
                 mE = new MappedEvent((*it)->getID(),
                                      Rosegarden::MappedEvent::MidiProgramChange,
                                      (*it)->getProgramChange());
-                mC.insert(mE);
-                */
 
-                // Program change
-                mE = new MappedEvent((*it)->getID(),
-                                     Rosegarden::MappedEvent::MidiProgramChange,
-                                     10);
                 mC.insert(mE);
             }
         }
@@ -1010,6 +1004,16 @@ SequenceManager::preparePlayback()
         QByteArray data;
         QDataStream streamOut(data, IO_WriteOnly);
 
+        MappedComposition::iterator it = mC.begin();
+
+        // scan output MappedComposition
+        for (; it != mC.end(); it++)
+        {
+            cout << "PC TYPE = " << (int)(*it)->getType() << endl;
+            cout << "PC ID = " << (int)(*it)->getInstrument() << endl;
+            cout << "PC PC = " << (int)(*it)->getPitch() << endl;
+        }
+
         streamOut << mC;
 
         if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
@@ -1018,7 +1022,6 @@ SequenceManager::preparePlayback()
         {
             throw(i18n("Failed to contact Rosegarden sequencer"));
         }
-
     }
 
 }

@@ -25,30 +25,30 @@
 namespace Rosegarden
 {
 
-MappedEvent::MappedEvent(const Event &e,
+MappedEvent::MappedEvent(InstrumentId id,
+                         const Event &e,
                          const Rosegarden::RealTime &eventTime,
-                         const Rosegarden::RealTime &duration,
-                         const Rosegarden::InstrumentId &instrument):
-       m_pitch(e.get<Int>(BaseProperties::PITCH)),
+                         const Rosegarden::RealTime &duration):
+       m_instrument(id),
+       m_type(MidiNote),
+       m_data1(e.get<Int>(BaseProperties::PITCH)),
+       m_data2(MidiMaxValue),
        m_eventTime(eventTime),
        m_duration(duration),
-       m_audioStartMarker(0, 0),
-       m_velocity(127),
-       m_type(MidiNote),
-       m_instrument(instrument)
+       m_audioStartMarker(0, 0)
 {
     if (e.has(BaseProperties::VELOCITY)) {
 
 	// Attempt to get a velocity - if it fails then
-	// set the velocity to default maximum (127)
+	// set the velocity to default maximum
 	//
 	try
 	{
-	    m_velocity = e.get<Int>(BaseProperties::VELOCITY);
+	    m_data2 = e.get<Int>(BaseProperties::VELOCITY);
 	}
 	catch(...)
 	{
-	    m_velocity = 127;
+	    m_data2 = MidiMaxValue;
 	}
     }
 }

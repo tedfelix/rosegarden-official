@@ -30,7 +30,7 @@
 //
 // MappedEvents can also represent instructions for playback of audio
 // samples - if the m_type is Audio then the sequencer will attempt to
-// map the Pitch (m_pitch) to the audio id.
+// map the Pitch (m_data1) to the audio id.
 // 
 // The MappedEvent/Instrument relationship is interesting - we don't
 // want to duplicate the entire Instrument at the Sequencer level as
@@ -47,8 +47,6 @@
 namespace Rosegarden
 {
 
-typedef unsigned int velocityT;
-
 class MappedEvent
 {
 public:
@@ -63,107 +61,109 @@ public:
         Audio
     } MappedEventType;
 
-    MappedEvent(): m_pitch(0),
+    MappedEvent(): m_instrument(0),
+                   m_type(MidiNote),
+                   m_data1(0),
+                   m_data2(0),
                    m_eventTime(0, 0),
                    m_duration(0, 0),
-                   m_audioStartMarker(0, 0),
-                   m_velocity(0),
-                   m_type(MidiNote) {;}
+                   m_audioStartMarker(0, 0) {;}
 
     // Construct from Events to Internal (MIDI) type MappedEvent
     //
     MappedEvent(const Event &e);
 
     // Another Internal constructor from Events
-    MappedEvent(const Event &e,
+    MappedEvent(InstrumentId id,
+                const Event &e,
                 const Rosegarden::RealTime &eventTime,
-                const Rosegarden::RealTime &duration,
-                const Rosegarden::InstrumentId &instrument);
+                const Rosegarden::RealTime &duration);
 
     // A shortcut for creating MIDI/Internal MappedEvents
     // from base properties
     //
-    MappedEvent(const int &pitch,
+    MappedEvent(InstrumentId id,
+                MidiByte pitch,
+                MidiByte velocity,
                 const Rosegarden::RealTime &absTime,
-                const Rosegarden::RealTime &duration,
-                const velocityT &velocity,
-                const Rosegarden::InstrumentId &instrument):
-        m_pitch(pitch),
+                const Rosegarden::RealTime &duration):
+        m_instrument(id),
+        m_type(MidiNote),
+        m_data1(pitch),
+        m_data2(velocity),
         m_eventTime(absTime),
         m_duration(duration),
-        m_audioStartMarker(Rosegarden::RealTime(0,0)),
-        m_velocity(velocity),
-        m_type(MidiNote),
-        m_instrument(instrument) {;}
+        m_audioStartMarker(Rosegarden::RealTime(0,0)) {;}
 
     // A general MappedEvent constructor for any MappedEvent type
     //
-    MappedEvent(const int &pitch,
-                const Rosegarden::RealTime &absTime,
-                const Rosegarden::RealTime &duration,
-                const Rosegarden::RealTime &audioStartMarker,
-                const velocityT &velocity,
-                const Rosegarden::InstrumentId &instrument,
-                const MappedEventType &type):
-        m_pitch(pitch),
+    MappedEvent(InstrumentId id,
+                MappedEventType type,
+                MidiByte pitch,
+                MidiByte &velocity,
+                const RealTime &absTime,
+                const RealTime &duration,
+                const RealTime &audioStartMarker):
+        m_instrument(id),
+        m_type(type),
+        m_data1(pitch),
+        m_data2(velocity),
         m_eventTime(absTime),
         m_duration(duration),
-        m_audioStartMarker(audioStartMarker),
-        m_velocity(velocity),
-        m_type(type),
-        m_instrument(instrument) {;}
+        m_audioStartMarker(audioStartMarker) {;}
 
     // Audio MappedEvent shortcut constructor
     //
-    MappedEvent(const Rosegarden::RealTime &eventTime,
+    MappedEvent(InstrumentId id,
+                MidiByte audioID,
+                const Rosegarden::RealTime &eventTime,
                 const Rosegarden::RealTime &duration,
-                const Rosegarden::RealTime &audioStartMarker,
-                const Rosegarden::InstrumentId &instrument,
-                const int &id):
-         m_pitch(id),
+                const Rosegarden::RealTime &audioStartMarker):
+         m_instrument(id),
+         m_type(Audio),
+         m_data1(audioID),
+         m_data2(0),
          m_eventTime(eventTime),
          m_duration(duration),
-         m_audioStartMarker(audioStartMarker),
-         m_type(Audio),
-         m_instrument(instrument) {;}
+         m_audioStartMarker(audioStartMarker) {;}
 
     // More generalised MIDI event containers for
     // large and small events (one param, two param)
     //
-    MappedEvent(InstrumentId instrument,
+    MappedEvent(InstrumentId id,
                 MappedEventType type,
                 MidiByte data1,
                 MidiByte data2):
-         m_pitch(data1),
+         m_instrument(id),
+         m_type(type),
+         m_data1(data1),
+         m_data2(data2),
          m_eventTime(Rosegarden::RealTime(0, 0)),
          m_duration(Rosegarden::RealTime(0, 0)),
-         m_audioStartMarker(Rosegarden::RealTime(0, 0)),
-         m_velocity(data2),
-         m_type(type),
-         m_instrument(instrument) {;}
+         m_audioStartMarker(Rosegarden::RealTime(0, 0)) {;}
 
-    MappedEvent(InstrumentId instrument,
+    MappedEvent(InstrumentId id,
                 MappedEventType type,
                 MidiByte data1):
-        m_pitch(data1),
+        m_instrument(id),
+        m_type(type),
+        m_data1(data1),
+        m_data2(0),
         m_eventTime(Rosegarden::RealTime(0, 0)),
         m_duration(Rosegarden::RealTime(0, 0)),
-        m_audioStartMarker(Rosegarden::RealTime(0, 0)),
-        m_velocity(0),
-        m_type(type),
-        m_instrument(instrument) {;}
+        m_audioStartMarker(Rosegarden::RealTime(0, 0)) {;}
                 
 
     // Copy constructor
     //
     MappedEvent(const MappedEvent &mE):
-        m_pitch(mE.getPitch()),
+        m_instrument(getInstrument()),
+        m_type(getType()),
+        m_data1(mE.getData1()),
+        m_data2(getData2()),
         m_eventTime(mE.getEventTime()),
         m_duration(getDuration()),
-        m_audioStartMarker(getAudioStartMarker()),
-        m_velocity(getVelocity()),
-        m_type(getType()),
-        m_instrument(getInstrument()) {;}
+        m_audioStartMarker(getAudioStartMarker()) {;}
                 
     ~MappedEvent() {;}
 
@@ -178,29 +178,31 @@ public:
     Rosegarden::RealTime getDuration() const { return m_duration; }
 
     // Instrument
-    void setInstrument(const InstrumentId &id) { m_instrument = id; }
+    void setInstrument(InstrumentId id) { m_instrument = id; }
     InstrumentId getInstrument() const { return m_instrument; }
 
-    // Velocity
-    //
-    void setVelocity(const velocityT &v) { m_velocity = v; }
-    velocityT getVelocity() const { return m_velocity; }
+    MidiByte getPitch() const { return m_data1; }
 
-    // Pitch - keep with MIDI limits when setting
+    // Keep pitch within MIDI limits
     //
-    void setPitch(const int &p)
+    void setPitch(MidiByte p)
     {
-        m_pitch = p;
-        if (m_pitch < 0) m_pitch = 0;
-        if (m_pitch > 127) m_pitch = 127;
+        m_data1 = p;
+        if (m_data1 > MidiMaxValue) m_data1 = MidiMaxValue;
     }
 
-    int getPitch() const { return m_pitch; }
+    void setVelocity(MidiByte v) { m_data2 = v; }
+    MidiByte getVelocity() const { return m_data2; }
+
+    // And the trendy names for them
+    //
+    MidiByte getData1() const { return m_data1; }
+    MidiByte getData2() const { return m_data2; }
 
     // Also use the pitch as the Audio file ID
     //
-    void setAudioID(const int &id) { m_pitch = id; }
-    int getAudioID() const { return m_pitch; }
+    void setAudioID(MidiByte id) { m_data1 = id; }
+    int getAudioID() const { return m_data1; }
 
     // A sample doesn't have to be played from the beginning.  When
     // passing an Audio event this value may be set to indicate from
@@ -213,8 +215,6 @@ public:
     Rosegarden::RealTime getAudioStartMarker() const
         { return m_audioStartMarker; }
 
-    // The type of the MappedEvent
-    //
     MappedEventType getType() const { return m_type; }
     void setType(const MappedEventType &value) { m_type = value; }
     
@@ -231,14 +231,13 @@ public:
     friend bool operator<(const MappedEvent &a, const MappedEvent &b);
 
 private:
-
-    int                      m_pitch;
-    Rosegarden::RealTime     m_eventTime;
-    Rosegarden::RealTime     m_duration;
-    Rosegarden::RealTime     m_audioStartMarker;
-    velocityT                m_velocity;
-    MappedEventType          m_type;
-    Rosegarden::InstrumentId m_instrument;
+    InstrumentId     m_instrument;
+    MappedEventType  m_type;
+    MidiByte         m_data1;
+    MidiByte         m_data2;
+    RealTime         m_eventTime;
+    RealTime         m_duration;
+    RealTime         m_audioStartMarker;
 
 };
 

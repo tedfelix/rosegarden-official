@@ -573,6 +573,7 @@ Sequencer::processMidiOut(const Rosegarden::MappedComposition &mC,
             case MappedEvent::MidiProgramChange:
                 event.command.status = Arts::mcsProgram | channel;
                 event.command.data1 = (*i)->getPitch();
+                cout << "PROGRAM CHANGE" << endl;
                 break;
 
             case MappedEvent::MidiKeyPressure:
@@ -980,6 +981,24 @@ Sequencer::getMappedInstrument(InstrumentId id)
 
     return 0;
 }
+
+void
+Sequencer::immediateProcessEventsOut(Rosegarden::MappedComposition &mC)
+{
+    MappedComposition localMC;
+    MappedComposition::iterator it = mC.begin();
+    MappedEvent mE;
+
+    for (; it != mC.end(); it++)
+    {
+        cout << "SEQ TYPE = " << (*it)->getType()  << endl;
+        cout << "SEQ INST = " << (*it)->getInstrument() << endl;
+        cout << "SEQ PC = " << (int)(*it)->getPitch() << endl;
+    }
+
+}
+
+
 
 
 
