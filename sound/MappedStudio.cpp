@@ -1150,6 +1150,12 @@ MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
 
     pluginHandle = dlopen(path.c_str(), RTLD_LAZY);
 
+    if (!pluginHandle) {
+        std::cout << "MappedAudioPluginManager::enumeratePlugin : couldn't dlopen "
+                  << path << " - " << dlerror() << std::endl;
+        return;
+    }
+
     descrFn = (LADSPA_Descriptor_Function)dlsym(pluginHandle,
                                                 "ladspa_descriptor");
 #ifdef HAVE_LIBLRDF
