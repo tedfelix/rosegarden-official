@@ -74,8 +74,12 @@ public:
 
     void removeMetronome();
     void setMetronome(InstrumentId instrument,
-		      const MidiMetronome &metronome);
-    const MidiMetronome* getMetronome() const { return m_metronome; }
+                      const MidiProgram &program,
+                      MidiByte pitch,
+                      MidiByte barVely,
+                      MidiByte beatVely);
+
+    MidiMetronome* getMetronome() const { return m_metronome; }
 
     void addProgram(MidiProgram *program);
     void addBank(MidiBank *bank);
@@ -130,6 +134,7 @@ public:
 
 protected:
     void generatePresentationList();
+    void generateDefaultMetronome();
 
     ProgramList   *m_programList;
     BankList      *m_bankList;

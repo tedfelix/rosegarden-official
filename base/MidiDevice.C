@@ -47,6 +47,9 @@ MidiDevice::MidiDevice():
     m_librarian(std::pair<std::string, std::string>("<none>", "<none>"))
 {
     generatePresentationList();
+
+    // default metronome
+    generateDefaultMetronome();
 }
 
 MidiDevice::MidiDevice(DeviceId id,
@@ -61,6 +64,9 @@ MidiDevice::MidiDevice(DeviceId id,
     m_librarian(std::pair<std::string, std::string>("<none>", "<none>"))
 {
     generatePresentationList();
+
+    // default metronome
+    generateDefaultMetronome();
 }
 
 MidiDevice::MidiDevice(const MidiDevice &dev):
@@ -115,6 +121,23 @@ MidiDevice::MidiDevice(const MidiDevice &dev):
     // generate presentation instruments
     generatePresentationList();
 }
+
+void
+MidiDevice::generateDefaultMetronome()
+{
+    InstrumentList insList = getAllInstruments();
+    InstrumentList::const_iterator it = insList.begin();
+    for (; it != insList.end(); +it)
+    {
+        /*
+        if ((*it)->getChannel() == 9)
+        {
+            ;
+        }
+        */
+    }
+}
+
 
 MidiDevice &
 MidiDevice::operator=(const MidiDevice &dev)
@@ -250,12 +273,20 @@ MidiDevice::removeMetronome()
 
 void
 MidiDevice::setMetronome(InstrumentId instrument,
-			 const MidiMetronome &metronome)
+                         const MidiProgram &program,
+                         MidiByte pitch,
+                         MidiByte barVely,
+                         MidiByte beatVely)
 {
     if (!m_metronome) {
-	m_metronome = new MidiMetronome(metronome);
+	m_metronome = new MidiMetronome(instrument, program, pitch, 
+                                        barVely, beatVely);
     } else {
-	*m_metronome = metronome;
+        m_metronome->setInstrument(instrument);
+        m_metronome->setProgram(program);
+        m_metronome->setPitch(pitch);
+        m_metronome->setBarVelocity(barVely);
+        m_metronome->setBeatVelocity(beatVely);
     }
 }
 
@@ -392,7 +423,10 @@ MidiDevice::toXmlString()
                    << "msb=\"" << (int)m_metronome->getProgram().getBank().getMSB() << "\" "
                    << "lsb=\"" << (int)m_metronome->getProgram().getBank().getLSB() << "\" " 
                    << "program=\"" << (int)m_metronome->getProgram().getProgram() << "\" "
-                   << "pitch=\"" << (int)m_metronome->getPitch() << "\"/>"
+                   << "pitch=\"" << (int)m_metronome->getPitch() << "\" "
+                   << "barvelocity=\"" << (int)m_metronome->getBarVelocity() << "\" "
+                   << "beatvelocity=\"" << (int)m_metronome->getBeatVelocity() 
+                   << "\"/>"
                    << std::endl << std::endl;
     }
 

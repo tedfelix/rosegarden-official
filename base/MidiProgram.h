@@ -78,19 +78,32 @@ private:
 class MidiMetronome
 {
 public:
-    MidiMetronome(const MidiProgram &program, MidiByte pitch,
-		  InstrumentId instrument);
+    MidiMetronome(InstrumentId instrument,
+                  const MidiProgram &program,
+                  MidiByte pitch = 37,
+                  MidiByte barVely = 120,
+                  MidiByte beatVely = 100);
 
     bool operator==(const MidiMetronome &m) const;
 
-    const MidiProgram&  getProgram() const;
-    MidiByte            getPitch() const;
-    InstrumentId        getInstrument() const;
+    InstrumentId        getInstrument() const { return m_instrument; }
+    MidiProgram         getProgram() const { return m_program; }
+    MidiByte            getPitch() const { return m_pitch; }
+    MidiByte            getBarVelocity() const { return m_barVelocity; }
+    MidiByte            getBeatVelocity() const { return m_beatVelocity; }
+
+    void setInstrument(InstrumentId id) { m_instrument = id; }
+    void setProgram(const MidiProgram &program) { m_program = program; }
+    void setPitch(MidiByte pitch) { m_pitch = pitch; }
+    void setBarVelocity(MidiByte barVely) { m_barVelocity = barVely; }
+    void setBeatVelocity(MidiByte beatVely) { m_beatVelocity = beatVely; }
 
 private:
-    MidiProgram m_program;
-    MidiByte m_pitch;
-    InstrumentId m_instrument;
+    InstrumentId    m_instrument;
+    MidiProgram     m_program;
+    MidiByte        m_pitch;
+    MidiByte        m_barVelocity;
+    MidiByte        m_beatVelocity;
 };
 
 }

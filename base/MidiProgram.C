@@ -115,9 +115,16 @@ MidiProgram::setName(std::string name)
 }
 
 
-MidiMetronome::MidiMetronome(const MidiProgram &program, MidiByte pitch,
-			     InstrumentId instrument) :
-    m_program(program), m_pitch(pitch), m_instrument(instrument)
+MidiMetronome::MidiMetronome(InstrumentId instrument,
+                             const MidiProgram &program,
+                             MidiByte pitch,
+                             MidiByte barVely,
+                             MidiByte beatVely):
+         m_instrument(instrument),
+         m_program(program),
+         m_pitch(pitch),
+         m_barVelocity(barVely),
+         m_beatVelocity(beatVely)
 {
     // nothing else
 }
@@ -127,24 +134,6 @@ MidiMetronome::operator==(const MidiMetronome &m) const
 {
     return m_program == m.m_program && m_pitch == m.m_pitch &&
 	m_instrument == m.m_instrument;
-}
-
-const MidiProgram &
-MidiMetronome::getProgram() const
-{
-    return m_program;
-}
-
-MidiByte
-MidiMetronome::getPitch() const
-{
-    return m_pitch;
-}
-
-InstrumentId
-MidiMetronome::getInstrument() const
-{
-    return m_instrument;
 }
 
 }

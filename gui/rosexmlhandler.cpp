@@ -1313,7 +1313,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         // Only create if we have a device and we don't already
         // have a metronome.
         //
-        if (m_device && getStudio().getMetronome() == 0)
+        if (m_device)
         {
 	    // default to percussion
 	    QString percString = atts.value("percussion");
@@ -1322,6 +1322,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             int lsb = atts.value("lsb").toInt();
             int program = atts.value("program").toInt();
             int pitch = atts.value("pitch").toInt();
+            int barVely = atts.value("barvelocity").toInt();
+            int beatVely = atts.value("beatvelocity").toInt();
+
             Rosegarden::InstrumentId instrument =
                 atts.value("instrument").toInt();
 
@@ -1333,13 +1336,17 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 		//instrument id.
 
                 // Modify metronome
+                Rosegarden::MidiProgram prg(
+                        Rosegarden::MidiBank(percussion, msb, lsb),
+                        program,
+                        std::string("Metronome"));
+
                 dynamic_cast<Rosegarden::MidiDevice*>(m_device)->
                         setMetronome(instrument,
-				     Rosegarden::MidiMetronome
-				     (Rosegarden::MidiProgram
-				      (Rosegarden::MidiBank(percussion, msb, lsb),
-				       program, std::string("MIDI Metronome")),
-				      pitch, instrument));
+                                     prg,
+                                     Rosegarden::MidiByte(pitch),
+                                     Rosegarden::MidiByte(barVely),
+                                     Rosegarden::MidiByte(beatVely));
             }
         }
 

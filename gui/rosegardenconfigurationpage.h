@@ -452,16 +452,18 @@ public:
     static QString iconLabel() { return i18n("Metronome"); }
     static QString title()     { return i18n("Metronome Settings"); }
 
+public slots:
+    void populate();
+
 protected:
 
     //--------------- Data members ---------------------------------
 
+    RosegardenComboBox *m_metronomeDevice;
+    RosegardenComboBox *m_metronomeInstrument;
+    QSpinBox           *m_metronomePitch;
     QSpinBox           *m_metronomeBarVely;
     QSpinBox           *m_metronomeBeatVely;
-    QSpinBox           *m_defaultMetronomePitch;
-    RosegardenComboBox *m_metronomeDevice;
-    QSpinBox           *m_metronomeChannel;
-    
 
 };
 

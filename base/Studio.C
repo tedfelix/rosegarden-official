@@ -275,8 +275,8 @@ Studio::toXmlString()
 // Run through the Devices checking for MidiDevices and
 // returning the first Metronome we come across
 //
-const MidiMetronome*
-Studio::getMetronome()
+MidiMetronome*
+Studio::getMetronomeFromDevice(DeviceId id)
 {
     std::vector<Device*>::iterator it;
     MidiDevice *midiDevice;
@@ -285,7 +285,9 @@ Studio::getMetronome()
     {
         midiDevice = dynamic_cast<MidiDevice*>(*it);
 
-        if (midiDevice && midiDevice->getMetronome())
+        if (midiDevice && 
+            midiDevice->getId() == id &&
+            midiDevice->getMetronome())
         {
             return midiDevice->getMetronome();
         }

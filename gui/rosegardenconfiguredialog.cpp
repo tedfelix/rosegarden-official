@@ -1589,29 +1589,81 @@ MetronomeConfigurationPage::MetronomeConfigurationPage(RosegardenGUIDoc *doc,
         }
     }
 
-    layout->addWidget(new QLabel(i18n("Metronome Channel"), frame), 1, 0);
-    m_metronomeChannel = new QSpinBox(frame);
-    m_metronomeChannel->setMinValue(1);
-    m_metronomeChannel->setMaxValue(16);
-    m_metronomeChannel->setValue(config.get<Int>("metronomechannel", 10));
-    layout->addWidget(m_metronomeChannel, 1, 1);
+    layout->addWidget(new QLabel(i18n("Metronome Instrument"), frame), 1, 0);
+    m_metronomeInstrument = new RosegardenComboBox(frame);
+    layout->addWidget(m_metronomeInstrument, 1, 1);
 
-    layout->addWidget(new QLabel(i18n("Metronome Bar Velocity"), frame), 2, 0);
+    layout->addWidget(new QLabel(i18n("Metronome Pitch"), frame), 2, 0);
+    m_metronomePitch = new QSpinBox(frame);
+    m_metronomePitch->setMinValue(0);
+    m_metronomePitch->setMaxValue(127);
+    //m_metronomeBarVely->setValue(config.get<Int>("metronomebarvelocity"));
+    layout->addWidget(m_metronomePitch, 2, 1);
+
+    layout->addWidget(new QLabel(i18n("Metronome Bar Velocity"), frame), 3, 0);
     m_metronomeBarVely = new QSpinBox(frame);
     m_metronomeBarVely->setMinValue(0);
     m_metronomeBarVely->setMaxValue(127);
-    m_metronomeBarVely->setValue(config.get<Int>("metronomebarvelocity"));
-    layout->addWidget(m_metronomeBarVely, 2, 1);
+    //m_metronomeBarVely->setValue(config.get<Int>("metronomebarvelocity"));
+    layout->addWidget(m_metronomeBarVely, 3, 1);
 
-    layout->addWidget(new QLabel(i18n("Metronome Beat Velocity"), frame), 3, 0);
+    layout->addWidget(new QLabel(i18n("Metronome Beat Velocity"), frame), 4, 0);
     m_metronomeBeatVely = new QSpinBox(frame);
     m_metronomeBeatVely->setMinValue(0);
     m_metronomeBeatVely->setMaxValue(127);
-    m_metronomeBeatVely->setValue(config.get<Int>("metronomebeatvelocity"));
-    layout->addWidget(m_metronomeBeatVely, 3, 1);
+    //m_metronomeBeatVely->setValue(config.get<Int>("metronomebeatvelocity"));
+    layout->addWidget(m_metronomeBeatVely, 4, 1);
 
     addTab(frame, i18n("Modify Metronome settings"));
+
+    // populate the dialog
+    populate();
 }
+
+void
+MetronomeConfigurationPage::populate()
+{
+    // clear
+    m_metronomeInstrument->clear();
+
+    // get the studio
+    Rosegarden::Studio &studio = m_doc->getStudio();
+
+    Rosegarden::DeviceList *devices = m_doc->getStudio().getDevices();
+    Rosegarden::DeviceListConstIterator it;
+    int count = 0;
+    Rosegarden::MidiDevice *dev = 0;
+
+    for (it = devices->begin(); it != devices->end(); it++)
+    {
+        dev = dynamic_cast<Rosegarden::MidiDevice*>(*it);
+
+        if (dev && dev->getDirection() == MidiDevice::Play)
+        {
+            if (++count == m_metronomeDevice->currentItem())
+                break;
+        }
+    }
+
+    // sanity
+    if (count < 0 || dev == 0) return;
+
+    // populate instrument list
+    Rosegarden::InstrumentList list = dev->getPresentationInstruments();
+    Rosegarden::InstrumentList::iterator iit;
+
+    for (iit = list.begin(); iit != list.end(); ++iit)
+    {
+        m_metronomeInstrument->
+                insertItem(strtoqstr((*iit)->getPresentationName()));
+    }
+
+    m_metronomePitch->setValue(dev->getMetronome()->getPitch());
+    m_metronomeBarVely->setValue(dev->getMetronome()->getBarVelocity());
+    m_metronomeBeatVely->setValue(dev->getMetronome()->getBeatVelocity());
+
+}
+
 
 
 void 
@@ -1620,10 +1672,13 @@ MetronomeConfigurationPage::apply()
     // Metronome
     //
     Configuration &config = m_doc->getConfiguration();
+
+    /*
     config.set<Int>("metronomebarvelocity", m_metronomeBarVely->value());
     config.set<Int>("metronomebeatvelocity", m_metronomeBeatVely->value());
     config.set<Int>("metronomechannel", m_metronomeChannel->value());
     config.set<Int>("metronomedevice", m_metronomeDevice->currentItem());
+    */
 
     m_doc->slotDocumentModified();
 }

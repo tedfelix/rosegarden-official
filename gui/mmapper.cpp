@@ -675,7 +675,7 @@ MetronomeMmapper::MetronomeMmapper(RosegardenGUIDoc* doc,
                                    int depth)
     : SegmentMmapper(doc, 0, createFileName()),
       m_deleteMetronome(false),
-      m_metronome(doc->getStudio().getMetronome()),
+      m_metronome(0), // no metronome to begin with
       m_barVelocity(120),
       m_beatVelocity(80),
       m_tickDuration(0, 10000)
@@ -745,32 +745,28 @@ QString MetronomeMmapper::createFileName()
 
 void MetronomeMmapper::setupMetronome()
 {
+    // get metronome device
     Rosegarden::Configuration &config = m_doc->getConfiguration();
+    int device = config.get<Rosegarden::Int>("metronomedevice", 0);
 
-    if (!m_metronome) {
-        m_deleteMetronome = true;
-	long pitch = 37;
-	config.get<Rosegarden::Int>("metronomepitch", pitch);
+    Rosegarden::MidiMetronome *metronome = 
+        m_doc->getStudio().getMetronomeFromDevice(device);
 
-        // Default instrument is the first possible instrument
-        //
-        m_metronome = new Rosegarden::MidiMetronome(Rosegarden::MidiProgram(),
-                                                    pitch,
-                                                    Rosegarden::SystemInstrumentBase);
+    // create a default if we can't find one
+    if (metronome == 0)
+    {
+        Rosegarden::MidiProgram program(Rosegarden::MidiBank(true, 0, 0),
+                                        0, std::string("Metronome"));
+
+        metronome = 
+            new Rosegarden::MidiMetronome(Rosegarden::SystemInstrumentBase,
+                                          program, 37, 120, 80);
     }
 
-    config.get<Rosegarden::RealTimeT>("metronomeduration", m_tickDuration); // why does this crashes ?
-    int t;
-    if (config.get<Rosegarden::Int>("metronomebarvelocity", t))
-        m_barVelocity = Rosegarden::MidiByte(t);
-    if (config.get<Rosegarden::Int>("metronomebeatvelocity",t))
-        m_beatVelocity = Rosegarden::MidiByte(t);
+    // set our metronome
+    //
+    if (!m_metronome) { m_metronome = metronome; }
 
-    if (m_tickDuration == Rosegarden::RealTime(0, 0))
-        m_tickDuration = Rosegarden::RealTime(0, 10000);
-
-    if (m_barVelocity == 0) m_barVelocity = 120;
-    if (m_beatVelocity == 0) m_beatVelocity = 80;
 }
 
 

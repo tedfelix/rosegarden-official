@@ -129,10 +129,9 @@ public:
     // Clear down
     void clear();
 
-    // Get the first metronome defined in the first device -
-    // we only want one Metronome per Studio
+    // Get a MIDI metronome from a given device
     //
-    const MidiMetronome* getMetronome();
+    MidiMetronome* getMetronomeFromDevice(DeviceId id);
 
     // Return the device list
     //
