@@ -76,6 +76,7 @@ signals:
     void rewindPlayback();
     void fastForwardPlaybackToEnd();
     void rewindPlaybackToBeginning();
+    void record();
 
     // to be redirected to the instrument parameter box if necessary
     void instrumentParametersChanged(Rosegarden::InstrumentId);
@@ -220,6 +221,7 @@ signals:
     void rewindPlayback();
     void fastForwardPlaybackToEnd();
     void rewindPlaybackToBeginning();
+    void record();
 
     // to be redirected to the instrument parameter box if necessary
     void instrumentParametersChanged(Rosegarden::InstrumentId);

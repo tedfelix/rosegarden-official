@@ -124,6 +124,12 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
 		SIGNAL(fastForwardPlaybackToEnd()), actionCollection(),
 		"playback_pointer_end");
 
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+                                                 ("transport-record")));
+    new KAction(i18n("&Record"), icon, 0, this,
+		SIGNAL(record()), actionCollection(),
+		"record");
+
     unsigned int mixerOptions = m_studio->getMixerDisplayOptions();
 
     (new KToggleAction(i18n("Show &Faders"), 0, this,
@@ -1386,6 +1392,12 @@ MidiMixerWindow::MidiMixerWindow(QWidget *parent,
     new KAction(i18n("Fast Forward to &End"), icon, 0, this,
 		SIGNAL(fastForwardPlaybackToEnd()), actionCollection(),
 		"playback_pointer_end");
+
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+                                                 ("transport-record")));
+    new KAction(i18n("&Record"), icon, 0, this,
+		SIGNAL(record()), actionCollection(),
+		"record");
 
     createGUI("midimixer.rc");
 

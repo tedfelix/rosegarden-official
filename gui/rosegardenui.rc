@@ -166,11 +166,11 @@
         <Action name="edit_matrix"/>
         <Action name="edit_notation"/>
         <Action name="edit_event_list"/>
+        <Action name="quantize_selection"/>
 	<Action name="manage_devices"/>
 	<Action name="audio_manager"/>
         <Action name="audio_mixer"/>
         <Action name="midi_mixer"/>
-        <Action name="quantize_selection"/>
 </ToolBar>
 
 <ToolBar name="Transport Toolbar">

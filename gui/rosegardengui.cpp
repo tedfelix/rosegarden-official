@@ -701,8 +701,8 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotTempoToSegmentLength()), actionCollection(),
                 "set_tempo_to_segment_length");
 
-//    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/manage-audio-segments.xpm"));
-    new KAction(i18n("Manage A&udio Segments"), "folder_sound",
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/manage-audio-segments.xpm"));
+    new KAction(i18n("Manage A&udio Segments"), icon,
                 Key_U + CTRL, 
                 this, SLOT(slotAudioManager()),
                 actionCollection(), "audio_manager");
@@ -5108,6 +5108,8 @@ RosegardenGUIApp::slotOpenAudioMixer()
 	    this, SLOT(slotFastForwardToEnd()));
     connect(m_audioMixer, SIGNAL(rewindPlaybackToBeginning()),
 	    this, SLOT(slotRewindToBeginning()));
+    connect(m_audioMixer, SIGNAL(record()),
+	    this, SLOT(slotRecord()));
 
     connect(m_audioMixer,
 	    SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)),
@@ -5161,6 +5163,8 @@ RosegardenGUIApp::slotOpenMidiMixer()
 	    this, SLOT(slotFastForwardToEnd()));
     connect(m_midiMixer, SIGNAL(rewindPlaybackToBeginning()),
 	    this, SLOT(slotRewindToBeginning()));
+    connect(m_midiMixer, SIGNAL(record()),
+	    this, SLOT(slotRecord()));
 
     connect(m_midiMixer,
 	    SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)),
