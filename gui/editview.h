@@ -184,11 +184,11 @@ protected:
     void setBottomBarButtons(QWidget*);
 
     /**
-     * Locate the given widget right above the bottom bar-buttons and
+     * Locate the given widget right above the top bar-buttons and
      * connect up its scrolling signals.
      * The widget has to have a slotScrolllHoriz(int) slot
      */
-    void addBottomRuler(QWidget*);
+    void addRuler(QWidget*);
 
     /**
      * Set the current Notation tool (note inserter, rest inserter, eraser...)

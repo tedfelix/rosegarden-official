@@ -70,7 +70,7 @@ EditView::EditView(RosegardenGUIDoc *doc,
          this,                      SLOT(slotCommandExecuted(KCommand *)));
 
     m_grid->addWidget(m_horizontalScrollBar, 4, 0);
-    m_grid->addLayout(m_bottomHBox, 2, 0);
+    m_grid->addLayout(m_bottomHBox, 0, 0);
 }
 
 EditView::~EditView()
@@ -122,7 +122,7 @@ void EditView::setBottomBarButtons(QWidget* w)
             m_bottomBarButtons, SLOT(slotScrollHoriz(int)));
 }
 
-void EditView::addBottomRuler(QWidget* w)
+void EditView::addRuler(QWidget* w)
 {
     m_bottomHBox->addWidget(w);
 
