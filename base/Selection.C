@@ -140,7 +140,7 @@ EventSelection::eventRemoved(const Segment *s, Event *e)
 {
     if (s == &m_originalSegment /*&& contains(e)*/) {
 //!!!	m_segmentEvents.erase(m_segmentEvents.find(e));
-	std::cerr << "Removing event at " << e->getAbsoluteTime() << " from selection" << endl;
+	std::cerr << "Removing event at " << e->getAbsoluteTime() << " from selection\n";
         removeEvent(e);
     }
 }
