@@ -130,10 +130,10 @@ bool RG21Loader::parseChordItem()
             noteEvent->setMaybe<String>
                 (TrackNotationHelper::BeamedGroupTypePropertyName, m_groupType);
 	    if (m_groupType == "tupled") { //!!! Should be converting to a property value, but there is no property value for this yet (see notationsets.cpp and TrackNotationHelper.C)
-		noteEvent->set/*!!! Maybe */<Int> // should be Maybe ultimately
+		noteEvent->setMaybe<Int>
 		    (TrackNotationHelper::BeamedGroupTupledLengthPropertyName,
 		     m_groupTupledLength);
-		noteEvent->set/*!!! Maybe */<Int>
+		noteEvent->setMaybe<Int>
 		    (TrackNotationHelper::BeamedGroupTupledCountPropertyName,
 		     m_groupTupledCount);
 	    }

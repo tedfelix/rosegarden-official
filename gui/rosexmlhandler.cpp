@@ -127,6 +127,14 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
                 (TrackNotationHelper::BeamedGroupIdPropertyName, m_groupId);
             m_currentEvent->set<String>
                 (TrackNotationHelper::BeamedGroupTypePropertyName, m_groupType);
+	    if (m_groupType == "tupled") { //!!!
+		m_currentEvent->set<Int>
+		    (TrackNotationHelper::BeamedGroupTupledLengthPropertyName,
+		     m_groupTupledLength);
+		m_currentEvent->set<Int>
+		    (TrackNotationHelper::BeamedGroupTupledCountPropertyName,
+		     m_groupTupledCount);
+	    }
         }
         
         if (!m_inChord) {
@@ -166,6 +174,11 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         m_inGroup = true;
         m_groupId = m_currentTrack->getNextId();
         m_groupType = atts.value("type");
+
+	if (m_groupType == "tupled") { //!!!
+	    m_groupTupledLength = atts.value("length").toInt();
+	    m_groupTupledCount = atts.value("count").toInt();
+	}
 
     } else if (lcName == "property") {
         

@@ -80,6 +80,8 @@ protected:
     bool m_inGroup;
     std::string m_groupType;
     int m_groupId;
+    int m_groupTupledLength;
+    int m_groupTupledCount;
 
     bool m_foundTempo;
 

@@ -627,7 +627,7 @@ void RosegardenGUIApp::fileOpenRecent(const KURL &url)
 
 void RosegardenGUIApp::fileSave()
 {
-    if (!m_doc->isModified()) return;
+    if (!m_doc || !m_doc->isModified()) return;
 
     KTmpStatusMsg msg(i18n("Saving file..."), statusBar());
 
@@ -639,6 +639,8 @@ void RosegardenGUIApp::fileSave()
 
 void RosegardenGUIApp::fileSaveAs()
 {
+    if (!m_doc) return;
+
     KTmpStatusMsg msg(i18n("Saving file with a new filename..."), statusBar());
 
     QString newName=KFileDialog::getSaveFileName(QDir::currentDirPath(),
@@ -657,6 +659,8 @@ void RosegardenGUIApp::fileSaveAs()
 
 void RosegardenGUIApp::fileClose()
 {
+    if (!m_doc) return;
+
     KTmpStatusMsg msg(i18n("Closing file..."), statusBar());
 	
     m_doc->saveIfModified();
