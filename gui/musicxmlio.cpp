@@ -147,29 +147,72 @@ MusicXmlExporter::needsAccidental(int pitch) {
  * Accidentals?
  */
 void
-MusicXmlExporter::writeNote(Event *e, bool isFlatKeySignature, std::ofstream &str) {
+MusicXmlExporter::writeNote(Event *e, Rosegarden::timeT lastNoteTime,
+			    const Rosegarden::Key &key, std::ofstream &str)
+{
     str << "\t\t\t\t<note>" << std::endl;
+
     if (e->isa(Note::EventRestType)) {
         str << "\t\t\t\t<rest/>" << std::endl;
+
     } else {
-        long pitch = 0;
-        e->get<Int>(BaseProperties::PITCH, pitch);
+	if (e->getNotationAbsoluteTime() == lastNoteTime) {
+	    str << "\t\t\t\t<chord/>" << std::endl;
+	}
         str << "\t\t\t\t<pitch>" << std::endl;
+
+        long p = 0;
+        e->get<Int>(BaseProperties::PITCH, p);
+	Rosegarden::Pitch pitch(p);
+
+        str << "\t\t\t\t<step>" << pitch.getNoteName(key) << "</step>" << std::endl;
+	Rosegarden::Accidental acc(pitch.getAccidental(key.isSharp()));
+	if (acc == Rosegarden::Accidentals::DoubleFlat) {
+	    str << "\t\t\t\t<alter>-2</alter>" << std::endl;
+	} else if (acc == Rosegarden::Accidentals::Flat) {
+	    str << "\t\t\t\t<alter>-1</alter>" << std::endl;
+	} else if (acc == Rosegarden::Accidentals::Sharp) {
+	    str << "\t\t\t\t<alter>1</alter>" << std::endl;
+	} else if (acc == Rosegarden::Accidentals::DoubleSharp) {
+	    str << "\t\t\t\t<alter>2</alter>" << std::endl;
+	}
+	
+	int octave = pitch.getOctave(-1);
+	str << "\t\t\t\t<octave>" << octave << "</octave>" << std::endl;
+
+/*!!!
         str << "\t\t\t\t<step>" << convertPitchToName(pitch % 12, isFlatKeySignature) << "</step>" << std::endl;
         // Incomplete: double sharp/flats
         str << "\t\t\t\t<alter>" << (needsAccidental(pitch % 12)?(isFlatKeySignature?-1:1):0) << "</alter>" << std::endl;
 
         int octave = (int)(pitch / 12);
         str << "\t\t\t\t<octave>" << octave << "</octave>" << std::endl;
+*/
         str << "\t\t\t\t</pitch>" << std::endl;
     }
-    str << "\t\t\t\t<duration>" << e->getDuration() << "</duration>" << std::endl;
+
+    str << "\t\t\t\t<duration>" << e->getNotationDuration() << "</duration>" << std::endl;
     
     // Incomplete: will RG ever use this?
     str << "\t\t\t\t<voice>" << "1" << "</voice>" << std::endl;
-    Note tmpNote = Note::getNearestNote(e->getDuration(), MAX_DOTS);
-    // getAmericanName is not necessarily the right thing here
-    str << "\t\t\t\t<type>" << NotationStrings::getAmericanName(tmpNote) << "</type>" << std::endl;
+    Note tmpNote = Note::getNearestNote(e->getNotationDuration(), MAX_DOTS);
+
+    static const char *noteNames[] = {
+	"64th", "32nd", "16th", "eighth", "quarter", "half", "whole", "breve"
+    };
+
+    int noteType = tmpNote.getNoteType();
+    if (noteType < 0 || noteType >= int(sizeof(noteNames)/sizeof(noteNames[0]))) {
+	std::cerr << "WARNING: MusicXmlExporter::writeNote: bad note type "
+		  << noteType << std::endl;
+	noteType = 4;
+    }
+    
+    str << "\t\t\t\t<type>" << noteNames[noteType] << "</type>" << std::endl;
+    for (int i = 0; i < tmpNote.getDots(); ++i) {
+	str << "\t\t\t\t<dot/>" << std::endl;
+    }
+
     // could also do <stem>down</stem> if you wanted
     str << "\t\t\t\t</note>" << std::endl;
 }
@@ -204,10 +247,10 @@ MusicXmlExporter::writeClef(Event *event, std::ofstream &str) {
     if (whichClef == Clef::Treble) {
         str << "\t\t\t\t<sign>G</sign>" << std::endl;
         str << "\t\t\t\t<line>2</line>" << std::endl;
-    } else if (whichClef == Clef::Tenor) {
+    } else if (whichClef == Clef::Alto) {
         str << "\t\t\t\t<sign>C</sign>" << std::endl;
         str << "\t\t\t\t<line>3</line>" << std::endl;
-    } else if (whichClef == Clef::Alto) {
+    } else if (whichClef == Clef::Tenor) {
         str << "\t\t\t\t<sign>C</sign>" << std::endl;
         str << "\t\t\t\t<line>4</line>" << std::endl;
     } else if (whichClef == Clef::Bass) {
@@ -217,9 +260,6 @@ MusicXmlExporter::writeClef(Event *event, std::ofstream &str) {
     str << "\t\t\t\t</clef>" << std::endl;
 }
 
-/** 
- * Incomplete: This would be cleaner via an XML parser
- */
 bool
 MusicXmlExporter::write() {
     Composition *composition = &m_doc->getComposition();
@@ -241,13 +281,13 @@ MusicXmlExporter::write() {
     str << "\t<identification> " << std::endl;
     if (composition->getCopyrightNote() != "") {
         str << "\t\t<rights>"
-            // Incomplete: need to XML-encode from copyright note
-            << composition->getCopyrightNote() << "</rights>" << std::endl;
+            << Rosegarden::XmlExportable::encode(composition->getCopyrightNote())
+	    << "</rights>" << std::endl;
     }
     str << "\t\t<encoding>" << std::endl;
     // Incomplete: Insert date!
     //    str << "\t\t\t<encoding-date>" << << "</encoding-date>" << std::endl;
-    str << "\t\t\t<software>Rosegarden 4</software>" << std::endl;
+    str << "\t\t\t<software>Rosegarden-4</software>" << std::endl;
     str << "\t\t</encoding>" << std::endl;
     str << "\t</identification> " << std::endl;
 
@@ -256,6 +296,8 @@ MusicXmlExporter::write() {
     Composition::trackcontainer& tracks = composition->getTracks();
 
     int trackNo = 0;
+    Rosegarden::timeT lastNoteTime = -1;
+    
     for (Composition::trackiterator i = tracks.begin();
          i != tracks.end(); ++i) {
         // Incomplete: What about all the other Midi stuff?
@@ -286,10 +328,13 @@ MusicXmlExporter::write() {
     // Write out all segments for each Track
     bool startedPart = false;
     trackNo = 0;
+
     for (Composition::trackiterator j = tracks.begin();
          j != tracks.end(); ++j) {
+
         // Code courtesy docs/code/iterators.txt
         Rosegarden::CompositionTimeSliceAdapter::TrackSet trackSet;
+
         // Incomplete: get the track info for each track (i.e. this should
         // be in an iterator loop) into the track set
         trackSet.insert((*j).first);
@@ -299,15 +344,18 @@ MusicXmlExporter::write() {
         }
         str << "\t<part id=\"" << (*j).first << "\">" << std::endl;
 	startedPart = true;
+
         int oldMeasureNumber = -1;
         bool startedAttributes = false;
-        bool isFlatKeySignature = false;
+	Rosegarden::Key key;
         TimeSignature prevTimeSignature;
 
         for (Rosegarden::CompositionTimeSliceAdapter::iterator k = adapter.begin();
              k != adapter.end(); ++k) {
+
             Event *event = *k;
-            timeT absoluteTime = event->getAbsoluteTime();
+            timeT absoluteTime = event->getNotationAbsoluteTime();
+
             // Open a new measure if necessary
             // Incomplete: How does MusicXML handle non-contiguous measures?
             int measureNumber = composition->getBarNumber(absoluteTime);
@@ -321,7 +369,9 @@ MusicXmlExporter::write() {
                 prevTimeSignature = composition->getTimeSignatureAt(composition->getStartMarker());
                 writeTime(prevTimeSignature, str);
                 startedAttributes = true;
+
             } else if (measureNumber > oldMeasureNumber) {
+
                 if (startedAttributes) {
                     str << "\t\t\t</attributes>" << std::endl;
                     startedAttributes = false;
@@ -340,12 +390,7 @@ MusicXmlExporter::write() {
                     startedAttributes = true;
                 }
                 writeKey(event, str);
-                Rosegarden::Key whichKey(*event);
-                if (whichKey.isSharp()) {
-                    isFlatKeySignature = false;
-                } else {
-                    isFlatKeySignature = true;
-                }
+                key = Rosegarden::Key(*event);
             } else if (event->isa(Clef::EventType)) {
                 if (!startedAttributes) {
                     str << "\t\t\t<attributes>" << std::endl;
@@ -353,7 +398,7 @@ MusicXmlExporter::write() {
                 }
                 writeClef(event, str);
             } else if (event->isa(Note::EventRestType) ||
-                event->isa(Note::EventType)) {
+		       event->isa(Note::EventType)) {
                 // Random TimeSignature events in the middle of nowhere will
                 // be ignored, for better or worse
                 TimeSignature timeSignature = composition->getTimeSignatureAt(absoluteTime);
@@ -370,7 +415,13 @@ MusicXmlExporter::write() {
                     startedAttributes = false;
                 }
 
-                writeNote(event, isFlatKeySignature, str);
+                writeNote(event, lastNoteTime, key, str);
+
+		if (event->isa(Note::EventType)) {
+		    lastNoteTime = event->getNotationAbsoluteTime();
+		} else if (event->isa(Note::EventRestType)) {
+		    lastNoteTime = -1;
+		}
             }
         }
         if (oldMeasureNumber > 0) { // no events at all

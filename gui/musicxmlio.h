@@ -58,7 +58,8 @@ protected:
     void writeClef(Rosegarden::Event *event, std::ofstream &str);
     void writeKey(Rosegarden::Event *event, std::ofstream &str);
     void writeTime(Rosegarden::TimeSignature timeSignature, std::ofstream &str);
-    void writeNote(Rosegarden::Event *e, bool isFlatKeySignature, std::ofstream &str);
+    void writeNote(Rosegarden::Event *e, Rosegarden::timeT lastNoteTime,
+		   const Rosegarden::Key &key, std::ofstream &str);
 
     char convertPitchToName(int pitch, bool isFlatKeySignature);
     bool needsAccidental(int pitch);
