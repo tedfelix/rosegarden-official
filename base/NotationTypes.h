@@ -227,48 +227,7 @@ private:
 
 */     
 
-class TimeSignature
-{
-public:
-    static const string ElementPackage;
-    static const string ElementType;
-    static const string NumeratorPropertyName;
-    static const string DenominatorPropertyName;
-    static const TimeSignature DefaultTimeSignature;
-    struct BadTimeSignature { };
-
-    TimeSignature(const Event &e)
-        throw (Event::NoData, Event::BadType, BadTimeSignature) {
-        if (e.package() != ElementPackage || e.type() != ElementType) {
-            throw Event::BadType();
-        }
-        m_numerator = e.get<Int>(NumeratorPropertyName);
-        m_denominator = e.get<Int>(DenominatorPropertyName);
-        //!!! check, and throw BadTimeSignature if appropriate
-    }
-
-    TimeSignature(const TimeSignature &ts) :
-        m_numerator(ts.m_numerator), m_denominator(ts.m_denominator) { }
-
-    virtual ~TimeSignature() { }
-
-    TimeSignature &operator=(const TimeSignature &ts) {
-        if (&ts == this) return *this;
-        m_numerator = ts.m_numerator;
-        m_denominator = ts.m_denominator;
-        return *this;
-    }
-
-    int getNumerator()   const { return m_numerator; }
-    int getDenominator() const { return m_denominator; }
-    int getBarLength()   const { return m_numerator * getBeatLength(); }
-    int getBeatLength()  const { return 6 * (64 / m_denominator); }
-
-private:
-    int m_numerator;
-    int m_denominator;
-};
-
+class TimeSignature;
 
 class Note
 {
@@ -289,6 +248,8 @@ public:
 
     Note(Type type, bool dotted = false) throw (BadType) :
         m_type(type), m_dotted(dotted) {
+        // this may really bugger up compiler optimisations for simple
+        // uses of Note (e.g. "int d = Note(Crotchet, true).getDuration()"):
         if (m_type < Shortest || m_type > Longest) throw BadType();
     }
 
@@ -321,8 +282,8 @@ public:
     string getShortName(Type type = -1, bool dotted = false)    const;
 
     static Note getNearestNote(int duration);
-    static vector<int> getNoteLengthList(int start, int duration,
-                                         const TimeSignature &ts);
+    static vector<int> getNoteDurationList(int start, int duration,
+                                           const TimeSignature &ts);
   
 private:
     Type m_type;
@@ -356,5 +317,81 @@ const Note::Type Note::Breve               = 7;
 
 const Note::Type Note::Shortest = 0;
 const Note::Type Note::Longest  = 7;
+
+
+class TimeSignature
+{
+public:
+    static const string ElementPackage;
+    static const string ElementType;
+    static const string NumeratorPropertyName;
+    static const string DenominatorPropertyName;
+    static const TimeSignature DefaultTimeSignature;
+    struct BadTimeSignature { };
+
+    TimeSignature(const Event &e)
+        throw (Event::NoData, Event::BadType, BadTimeSignature) {
+        if (e.package() != ElementPackage || e.type() != ElementType) {
+            throw Event::BadType();
+        }
+        m_numerator = e.get<Int>(NumeratorPropertyName);
+        m_denominator = e.get<Int>(DenominatorPropertyName);
+        //!!! check, and throw BadTimeSignature if appropriate
+    }
+
+    TimeSignature(const TimeSignature &ts) :
+        m_numerator(ts.m_numerator), m_denominator(ts.m_denominator) { }
+
+    virtual ~TimeSignature() { }
+
+    TimeSignature &operator=(const TimeSignature &ts) {
+        if (&ts == this) return *this;
+        m_numerator = ts.m_numerator;
+        m_denominator = ts.m_denominator;
+        return *this;
+    }
+
+    int getNumerator()    const { return m_numerator; }
+    int getDenominator()  const { return m_denominator; }
+    int getBarDuration()  const { return m_numerator * getUnitDuration(); }
+
+    // We say the "unit" of the time is the duration of the note
+    // implied by the denominator.  For example, the unit of 4/4 time
+    // is the crotchet, and that of 6/8 is the quaver.  The numerator
+    // of the time signature gives the number of units per bar.
+
+    Note::Type getUnit()  const {
+        int c, d;
+        for (c = 0, d = m_denominator; d > 1; d /= 2) ++c;
+        return Note::Semibreve - c;
+    }
+    int getUnitDuration() const { return 6 * (64 / m_denominator); }
+
+    // The "beat" of the time depends on whether the signature implies
+    // dotted or undotted time.  The beat of 4/4 time is the crotchet,
+    // the same as its unit, but that of 6/8 is the dotted crotchet
+    // (there are only two beats in a 6/8 bar).  We don't worry
+    // ourselves with more complex times (7/16 anyone?) at the moment
+
+    bool isDotted() const {
+        return (m_numerator % 3 == 0 &&
+                getBarDuration() >= Note(Note::Crotchet, true).getDuration());
+    }
+    int getBeatDuration() const {
+        if (isDotted()) {
+            return (getUnitDuration() * 3) / 2; //!!! is this always correct?
+        } else {
+            return  getUnitDuration();
+        }
+    }
+    int getBeatsPerBar() const {
+        return getBarDuration() / getBeatDuration();
+    }
+
+private:
+    int m_numerator;
+    int m_denominator;
+};
+
 
 #endif

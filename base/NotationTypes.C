@@ -252,39 +252,32 @@ Note Note::getNearestNote(int duration)
 // Derived from RG2's MidiMakeRestList in editor/src/MidiIn.c.
 
 // Create a list of durations, totalling (as close as possible) the
-// given duration, such that each is an exact note length and the
+// given duration, such that each is an exact note duration and the
 // notes are the proper sort for the time signature.  start is the
 // elapsed duration since the beginning of the bar (or of the last
 // beat); for use independent of a particular bar, pass zero.
 
-// Currently uses no note-lengths longer than a dotted-crotchet; for
+// Currently uses no note-durations longer than a dotted-crotchet; for
 // general use in /2 time, this is a defect
 
-vector<int> Note::getNoteLengthList(int start, int duration,
-                                    const TimeSignature &ts)
+vector<int> Note::getNoteDurationList(int start, int duration,
+                                      const TimeSignature &ts)
 {
-    bool dotted = false;
     int toNextBeat;
-    int beatLength;
+    int beatDuration = ts.getBeatDuration();
     vector<int> v;
-               
-    if (ts.getNumerator() % 3 == 0 &&
-        ts.getBarLength() >= m_dottedCrotchetTime) {
-        dotted = true;
-    }
-               
-    beatLength = dotted ? m_dottedCrotchetTime : m_crotchetTime;
-    toNextBeat = beatLength - (start % beatLength);
+
+    toNextBeat = beatDuration - (start % beatDuration);
                
     if (toNextBeat > duration) {
-        makeTimeListSub(duration, dotted, v);
+        makeTimeListSub(duration, ts.isDotted(), v);
     } else {
         // first fill up to the next crotchet (or, in 6/8 or some
         // other such time, the next dotted crotchet); then fill in
         // crotchet or dotted-crotchet leaps until the end of the
         // section needing filling
-        makeTimeListSub(toNextBeat, dotted, v);
-        makeTimeListSub(duration - toNextBeat, dotted, v);
+        makeTimeListSub(toNextBeat, ts.isDotted(), v);
+        makeTimeListSub(duration - toNextBeat, ts.isDotted(), v);
     }
 
     return v;
