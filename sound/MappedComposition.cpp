@@ -157,10 +157,15 @@ MappedComposition::moveStartTime(const Rosegarden::RealTime &mT)
 
     for (it = this->begin(); it != this->end(); ++it)
     {
-        //cout << "START TIME FROM " << (*it)->getEventTime();
-        if ((*it)->getType() != MappedEvent::Audio)
-            (*it)->setEventTime((*it)->getEventTime() + mT);
-        //cout << " TO " << (*it)->getEventTime() << endl;
+        // Reset start time and duration
+        //
+        (*it)->setEventTime((*it)->getEventTime() + mT);
+        (*it)->setDuration((*it)->getDuration() - mT);
+
+        // For audio adjust the start index
+        //
+        if ((*it)->getType() == MappedEvent::Audio)
+            (*it)->setAudioStartMarker((*it)->getAudioStartMarker() + mT);
     }
 
     m_startTime = m_startTime + mT;

@@ -45,6 +45,7 @@ PlayableAudioFile::PlayableAudioFile(InstrumentId instrumentId,
         m_instrumentId(instrumentId),
         m_ringBuffer(ringBuffer),
         m_ringBufferThreshold(0),
+        m_playBuffer(0),
         m_playBufferSize(playBufferSize),
         m_initialised(false),
         m_externalRingbuffer(false),
@@ -73,6 +74,10 @@ PlayableAudioFile::PlayableAudioFile(const PlayableAudioFile &pAF)
     m_initialised = false;
     m_externalRingbuffer = false;
     m_runtimeSegmentId = pAF.getRuntimeSegmentId();
+
+    // initialise new play buffer
+    //
+    m_playBuffer = new char[m_playBufferSize];
 
 #ifdef DEBUG_PLAYABLE_CONSTRUCTION
     std::cout << "PlayableAudioFile::PlayableAudioFile - creating " << this
@@ -145,7 +150,7 @@ PlayableAudioFile::~PlayableAudioFile()
     }
 
     if (m_externalRingbuffer == false) delete m_ringBuffer;
-    delete [] m_playBuffer;
+    if (m_playBuffer) delete [] m_playBuffer;
 
 #ifdef DEBUG_PLAYABLE_CONSTRUCTION
     std::cout << "PlayableAudioFile::~PlayableAudioFile - destroying - " << this << std::endl;
@@ -547,24 +552,31 @@ SoundDriver::clearAudioPlayQueue()
 void
 SoundDriver::clearDefunctFromAudioPlayQueue()
 {
-    std::vector<PlayableAudioFile*>::iterator it;
+    std::vector<PlayableAudioFile*>::const_iterator it;
+    std::vector<PlayableAudioFile*> newQueue;
+
     std::vector<std::vector<PlayableAudioFile*>::iterator> dList;
 
     for (it = m_audioPlayQueue.begin(); it != m_audioPlayQueue.end(); ++it)
     {
         if ((*it)->getStatus() == PlayableAudioFile::DEFUNCT)
-            dList.push_back(it);
+        {
+#ifdef DEBUG_SOUNDRIVER
+            std::cout << "SoundDriver::clearDefunctFromAudioPlayQueue - "
+                      << "clearing down " << *it << std::endl;
+#endif 
+
+            delete *it;
+        }
+        else
+            newQueue.push_back(*it);
     }
 
-    std::vector<std::vector<PlayableAudioFile*>::iterator>::iterator dLit;
+    // clear existing queue
+    m_audioPlayQueue.clear();
 
-    for (dLit = dList.begin(); dLit != dList.end(); ++dLit)
-        m_audioPlayQueue.erase(*dLit);
-
-#ifdef DEBUG_SOUNDRIVER
-    if (dList.size())
-        std::cout << "REMOVED " << dList.size() << " DEFUNCT AUDIO FILES" << std::endl;
-#endif 
+    for (it = newQueue.begin(); it != newQueue.end(); ++it)
+        m_audioPlayQueue.push_back(*it);
 
 }
 
