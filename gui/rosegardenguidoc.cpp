@@ -102,14 +102,9 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
       m_recordSegment(0), m_endOfLastRecordedNote(0),
       m_commandHistory(new MultiViewCommandHistory()),
       m_clipboard(new Rosegarden::Clipboard),
-      m_startUpSync(true),
       m_pluginManager(pluginManager)
 {
-    // Try to tell the sequencer that we're alive only if the
-    // sequencer hasn't already forced us to sync
-    //
-    if (m_startUpSync)
-        alive();
+    syncDevices();
 
     if(!pViewList) {
         pViewList = new QList<RosegardenGUIView>();
@@ -140,7 +135,6 @@ RosegardenGUIDoc::RosegardenGUIDoc(RosegardenGUIDoc *doc)
       m_endOfLastRecordedNote(0),
       m_commandHistory(new MultiViewCommandHistory()), // lose command history
       m_clipboard(new Rosegarden::Clipboard),          // lose clipboard
-      m_startUpSync(false),
       m_pluginManager(doc->getPluginManager())
 {
     m_title = doc->getTitle();
@@ -180,10 +174,6 @@ RosegardenGUIDoc::operator=(const RosegardenGUIDoc &doc)
     m_absFilePath = doc.getAbsFilePath();
     m_recordSegment = 0;
     m_endOfLastRecordedNote = 0;
-
-
-    // never sync
-    m_startUpSync = false;
 
     m_audioFileManager = doc.getAudioFileManager();
     m_studio = doc.getStudio();
@@ -1183,19 +1173,15 @@ RosegardenGUIDoc::setLoop(Rosegarden::timeT t0, Rosegarden::timeT t1)
 }
 
 void
-RosegardenGUIDoc::alive()
+RosegardenGUIDoc::syncDevices()
 {
-    // Just a quick refreshing sleep here to ensure that we don't
-    // mask any call back to the sequencer by being to hasty.
+    // Start up the sequencer
     //
-    // Probably unnecessary but better safe than sorry.
-    //
-
     while (isSequencerRunning() &&
 	   !kapp->dcopClient()->
             isApplicationRegistered(QCString(ROSEGARDEN_SEQUENCER_APP_NAME)))
     {
-        SEQMAN_DEBUG << "RosegardenGUIDoc::getMappedDevice - "
+        SEQMAN_DEBUG << "RosegardenGUIDoc::syncDevices - "
                      << "waiting for Sequencer to come up" << endl;
 
         kapp->processEvents(1000);
@@ -1206,17 +1192,6 @@ RosegardenGUIDoc::alive()
         return;
 
     QByteArray data;
-
-    if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "alive()",
-                                  data))
-    {
-        SEQMAN_DEBUG << "RosegardenGUIDoc::getMappedDevice - "
-                     << "can't call the Sequencer" << endl;
-        return;
-    }
-
     QByteArray replyData;
     QCString replyType;
     QDataStream arg(data, IO_WriteOnly);
@@ -1265,12 +1240,6 @@ RosegardenGUIDoc::alive()
 
     SEQMAN_DEBUG << "RosegardenGUIDoc::getMappedDevice - "
                  << "Sequencer alive - Instruments synced" << endl;
-
-    // Ok, we've sync'd - make sure that this app doesn't
-    // drive this sync again by switching our startUpSync
-    // flag off.
-    //
-    m_startUpSync = false;
 
 }
 

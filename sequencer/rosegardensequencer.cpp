@@ -55,8 +55,6 @@ RosegardenSequencerApp::RosegardenSequencerApp(
     //m_audioRecordLatency(0, 0),
     m_loopStart(0, 0),
     m_loopEnd(0, 0),
-    m_sendAlive(true),
-    m_guiCount(0),       // how many GUIs have we known?
     m_clearToSend(false),
     m_studio(new Rosegarden::MappedStudio()),
     m_oldSliceSize(0, 0)
@@ -911,22 +909,6 @@ unsigned int
 RosegardenSequencerApp::getDevices()
 {
     return m_sequencer->getDevices();
-}
-
-
-// The GUI lets us know it's alive - so all we ever respond with 
-// is the same call back.  We lock out loops of this at the
-// sequencer end using sendAlive() (m_sendAlive).
-//
-void
-RosegardenSequencerApp::alive()
-{
-    SEQUENCER_DEBUG << "RosegardenSequencerApp::alive() - "
-                    << "GUI (count = " << ++m_guiCount
-                    << ") is alive, instruments synced" << endl;
-
-    // now turn off the automatic sendalive
-    m_sendAlive = false;
 }
 
 

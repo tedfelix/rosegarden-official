@@ -271,9 +271,9 @@ public:
     void setLoop(Rosegarden::timeT, Rosegarden::timeT);
 
     /*
-    * Send "alive" to sequencer and collect Instrument data
+    * Sync device information with sequencer
     */
-    void alive();
+    void syncDevices();
 
     /*
      * Get a MappedDevice from the sequencer and add the
@@ -480,11 +480,6 @@ private:
      *
      */
     Rosegarden::DocumentConfiguration m_config;
-
-    // do we need to send the start up sync? i.e. has the sequencer
-    // already requested a sync?
-    //
-    bool m_startUpSync;
 
     // AudioPluginManager - sequencer and local plugin management
     //

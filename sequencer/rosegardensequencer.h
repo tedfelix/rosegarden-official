@@ -180,10 +180,6 @@ public:
     virtual unsigned int getDevices();
     virtual Rosegarden::MappedDevice getMappedDevice(unsigned int id);
 
-    // The GUI tells us that it's alive
-    //
-    virtual void alive();
-
     // Audio monitoring
     //
     virtual void setAudioMonitoring(long value);
@@ -281,10 +277,6 @@ public:
     //
     bool isLooping() const { return !(m_loopStart == m_loopEnd); }
 
-    // Do we send the "alive" call to the gui ?
-    //
-    bool sendAlive() const { return m_sendAlive; }
-
     // the call itself
     void sequencerAlive();
 
@@ -379,11 +371,6 @@ protected:
     Rosegarden::RealTime m_loopEnd;
 
     std::vector<Rosegarden::MappedInstrument*> m_instruments;
-
-    // If we should poll the GUI to see if it's alive
-    //
-    bool m_sendAlive;
-    int  m_guiCount;
 
     // Are we clear to send after a call()?
     //

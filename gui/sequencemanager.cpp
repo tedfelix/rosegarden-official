@@ -1176,9 +1176,9 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                 if ((*i)->getType() ==
                         Rosegarden::MappedEvent::SystemUpdateInstruments)
                 {
-                    // resync Instruments
+                    // resync Devices and Instruments
                     //
-                    m_doc->alive();
+                    m_doc->syncDevices();
                 }
 
                 continue;

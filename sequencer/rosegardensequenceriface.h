@@ -132,10 +132,6 @@ public:
     //
     virtual Rosegarden::MappedDevice getMappedDevice(unsigned int id) = 0;
 
-    // The GUI let's us know it's alive
-    //
-    virtual void alive() = 0;
-
     // Set audio monitoring Instrument - tells the sequencer that the
     // gui is currently monitoring audio and which Instrument to report
     // the input level against - this is so we can get a real time

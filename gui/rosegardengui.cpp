@@ -124,8 +124,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 			 SLOT(slotShowStatusMessage(const QString &)));
     }
 
-    // Try to start the sequencer - we need to launch here so that
-    // the alive() call in initDocument() is eventually caught.
+    // Try to start the sequencer
     //
     if (m_useSequencer) {
         RG_DEBUG << "RosegardenGUIApp : starting sequencer\n";
@@ -2474,6 +2473,10 @@ bool RosegardenGUIApp::launchSequencer()
         }
             
     }
+
+    // Sync current devices with the sequencer
+    //
+    if (m_doc) m_doc->syncDevices();
     
     return res;
 }
@@ -2863,10 +2866,10 @@ RosegardenGUIApp::slotRecord()
     if (!isUsingSequencer()) return;
 
     if (!isSequencerRunning()) {
-        // Try to launch sequencer
-        if (launchSequencer())
-            alive(); // sync
-        else
+
+        // Try to launch sequencer and return if we fail
+        //
+        if (!launchSequencer())
             return;
     }
 
@@ -2941,15 +2944,22 @@ RosegardenGUIApp::slotSetLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs)
     }
 }
 
+// Called from sequencer to sync up devices
+//
+void RosegardenGUIApp::alive()
+{
+    if (m_doc) m_doc->syncDevices();
+}
+
 void RosegardenGUIApp::slotPlay()
 {
     if (!isUsingSequencer()) return;
 
     if (!isSequencerRunning()) {
-        // Try to launch sequencer
-        if (launchSequencer())
-            alive(); // sync
-        else
+
+        // Try to launch sequencer and return if it fails
+        //
+        if (!launchSequencer())
             return;
     }
 
@@ -3261,16 +3271,6 @@ void RosegardenGUIApp::slotChangeZoom(int)
     //
     if (m_view)
         m_view->setZoomSize(m_zoomSlider->getCurrentSize());
-}
-
-
-// The sequencer calls this method when it's alive to get us
-// to poll it for Device/Instrument information.  We also tell
-// it to shut up at the same time.
-//
-void RosegardenGUIApp::alive()
-{
-    m_doc->alive();
 }
 
 
