@@ -393,8 +393,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             return false;
         }
         
-	m_deprecation = true;
-	std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"group\".  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
+        if (!m_deprecation) 
+            std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"group\".  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
+        m_deprecation = true;
 
         m_inGroup = true;
         m_groupId = m_currentSegment->getNextId();
@@ -798,8 +799,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
     } else if (lcName == "resync") {
 
-	m_deprecation = true;
-	std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"resync\".  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
+        if (!m_deprecation) 
+            std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"resync\".  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
+        m_deprecation = true;
 	
 	QString time(atts.value("time"));
 	bool isNumeric;
@@ -1200,8 +1202,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
     } else if (lcName == "reverb") { // deprecated but we still read 'em
 
-	m_deprecation = true;
-	std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"reverb\" (now replaced by a control parameter).  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
+        if (!m_deprecation) 
+            std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"reverb\" (now replaced by a control parameter).  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
+        m_deprecation = true;
 
         if (m_section != InInstrument)
         {
@@ -1217,8 +1220,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
     } else if (lcName == "chorus") { // deprecated but we still read 'em
 
-	m_deprecation = true;
-	std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"chorus\" (now replaced by a control parameter).  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
+        if (!m_deprecation) 
+            std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"chorus\" (now replaced by a control parameter).  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
+        m_deprecation = true;
 
         if (m_section != InInstrument)
         {
@@ -1233,8 +1237,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
     } else if (lcName == "filter") { // deprecated but we still read 'em
 
-	m_deprecation = true;
-	std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"filter\" (now replaced by a control parameter).  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
+        if (!m_deprecation) 
+            std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"filter\" (now replaced by a control parameter).  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
+        m_deprecation = true;
 
         if (m_section != InInstrument)
         {
@@ -1250,8 +1255,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
     } else if (lcName == "resonance") { // deprecated but we still read 'em
 
-	m_deprecation = true;
-	std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"resonance\" (now replaced by a control parameter).  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
+        if (!m_deprecation) 
+            std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"resonance\" (now replaced by a control parameter).  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
+        m_deprecation = true;
 
         if (m_section != InInstrument)
         {
@@ -1267,8 +1273,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
     } else if (lcName == "attack") { // deprecated but we still read 'em
 
-	m_deprecation = true;
-	std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"attack\" (now replaced by a control parameter).  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
+        if (!m_deprecation) 
+            std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"attack\" (now replaced by a control parameter).  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
+        m_deprecation = true;
 
         if (m_section != InInstrument)
         {
@@ -1283,8 +1290,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
     } else if (lcName == "release") { // deprecated but we still read 'em
 
-	m_deprecation = true;
-	std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"release\" (now replaced by a control parameter).  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
+        if (!m_deprecation)
+            std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"release\" (now replaced by a control parameter).  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
+        m_deprecation = true;
 
         if (m_section != InInstrument)
         {
@@ -1323,8 +1331,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
     } else if (lcName == "velocity" || lcName == "volume") {
 
 	if (lcName == "velocity") {
-	    m_deprecation = true;
-	    std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"velocity\" for an overall MIDI instrument level (now replaced by \"volume\").  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
+            if (!m_deprecation)
+                std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"velocity\" for an overall MIDI instrument level (now replaced by \"volume\").  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
+            m_deprecation = true;
 	}
 
         if (m_section != InInstrument)
