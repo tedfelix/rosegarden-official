@@ -27,7 +27,7 @@
 
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kapplication.h>
+#include <kapp.h>
 #include <kconfig.h>
 
 #include "rosestrings.h"
