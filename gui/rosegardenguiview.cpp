@@ -292,6 +292,8 @@ void RosegardenGUIView::slotEditSegmentAudio(Rosegarden::Segment *segment)
               << "starting external audio editor" << endl;
 
     KConfig* config = kapp->config();
+    config->setGroup("General Options");
+
     QString application = config->readEntry("externalaudioeditor", "");
 
     if (application.isEmpty())
