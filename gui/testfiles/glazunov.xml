@@ -15,9 +15,8 @@
 <event type="rest" duration="192"></event>
 <event type="rest" duration="96"></event>
 <event type="note" duration="96"><property name="pitch" int="61"/></event>
-<event type="note" duration="288"><property name="pitch" int="69"/><property name="TiedForward" bool="true"/></event>
+<event type="note" duration="336"><property name="pitch" int="69"/></event>
 <group type="beamed">
-<event type="note" duration="48"><property name="pitch" int="69"/><property name="TiedBackward" bool="true"/></event>
 <event type="note" duration="24"><property name="pitch" int="68"/></event>
 <event type="note" duration="24"><property name="pitch" int="66"/></event>
 </group>

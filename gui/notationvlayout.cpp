@@ -85,7 +85,9 @@ NotationVLayout::resetStaff(StaffType &staff)
 
 void
 NotationVLayout::scanStaff(StaffType &staffBase)
-{ 
+{
+    START_TIMING;
+
     NotationStaff &staff = dynamic_cast<NotationStaff &>(staffBase);
     NotationElementList *notes = staff.getViewElementList();
 
@@ -206,11 +208,15 @@ NotationVLayout::scanStaff(StaffType &staffBase)
 	    }
         }
     }
+
+    PRINT_ELAPSED("NotationVLayout::scanStaff");
 }
 
 void
 NotationVLayout::finishLayout()
 {
+    START_TIMING;
+
     for (SlurListMap::iterator mi = m_slurs.begin();
 	 mi != m_slurs.end(); ++mi) {
 
@@ -218,104 +224,158 @@ NotationVLayout::finishLayout()
 	     si != mi->second.end(); ++si) {
 
 	    NotationElementList::iterator i = *si;
-	    NotationElementList::iterator scooter = i;
 	    NotationStaff &staff = dynamic_cast<NotationStaff &>(*(mi->first));
 
-	    // We always position the slur based on the notes' positional
-	    // properties, never the other way around.  So we need to know
-	    // which direction the tails are going in, particularly if
-	    // there are beams involved.  (It'd be nice to be flexible
-	    // enough to be able to change the tail directions if they
-	    // were not particularly important and there was a slur to
-	    // accommodate in a difficult position, but I think that's an
-	    // uncommon case.)
-
-	    timeT slurDuration =
-		(*i)->event()->get<Int>(Mark::MarkDurationPropertyName);
-	    timeT endTime = (*i)->getAbsoluteTime() + slurDuration;
-
-	    bool haveStart = false;
-	    int startHeight = 4, endHeight = startHeight;
-	    int startX = (*i)->getLayoutX(), endX = startX + 10;
-	    bool startStemUp = false, endStemUp = false;
-	    bool beamAbove = false, beamBelow = false;
-
-	    while (scooter != staff.getViewElementList()->end()) {
-
-		if ((*scooter)->getAbsoluteTime() >= endTime) break;
-
-		if ((*scooter)->isNote()) {
-
-		    bool primary = false;
-
-		    if ((*scooter)->event()->get<Bool>(CHORD_PRIMARY_NOTE, primary)
-			&& primary) {
-
-			int h = (*scooter)->event()->get<Int>(HEIGHT_ON_STAFF);
-
-			bool stemUp = (h <= 4);
-			(*scooter)->event()->get<Bool>(STEM_UP, stemUp);
-
-			bool beamed = false;
-			(*scooter)->event()->get<Bool>(BEAMED, beamed);
-
-			if (beamed) {
-			    if (stemUp) beamAbove = true;
-			    else beamBelow = true;
-			}
-
-			if (!haveStart) {
-			    startX = (*scooter)->getLayoutX();
-			    startHeight = h;
-			    startStemUp = stemUp;
-			    haveStart = true;
-			}
-
-			endX = (*scooter)->getLayoutX();
-			endHeight = h;
-			endStemUp = stemUp;
-		    }
-		}
-
-		++scooter;
-	    }
-
-	    bool above = true;
-	    if (startStemUp == endStemUp) {
-		above = !startStemUp;
-	    } else if (beamBelow) {
-		above = true;
-	    } else if (beamAbove) {
-		above = false;
-	    } else {
-		above = (startHeight + endHeight <= 8);
-	    }
-
-	    if (above) {
-		startHeight += 3;
-		endHeight += 3;
-	    } else {
-		startHeight -= 3;
-		endHeight -= 3;
-	    }
-
-	    int y0 = staff.yCoordOfHeight(startHeight),
-		y1 = staff.yCoordOfHeight(endHeight);
-
-	    int dy = y1 - y0;
-	    if (above) {
-		if (dy > 0) dy = dy * 3 / 4;
-	    } else {
-		if (dy < 0) dy = dy * 3 / 4;
-	    }
-
-	    (*i)->event()->set<Bool>(SLUR_ABOVE, above);
-	    (*i)->event()->set<Int>(SLUR_Y_DELTA, (y1 - y0) * 3 / 4);
-	    (*i)->event()->set<Int>(SLUR_LENGTH, (endX - startX));
-	    (*i)->setLayoutX(startX);
-	    (*i)->setLayoutY(y0);
+	    positionSlur(staff, i);
 	}
     }
+
+    PRINT_ELAPSED("NotationVLayout::finishLayout");
 }
 
+
+void
+NotationVLayout::positionSlur(NotationStaff &staff,
+			      NotationElementList::iterator i)
+{
+
+    NotationElementList::iterator scooter = i;
+
+    timeT slurDuration =
+	(*i)->event()->get<Int>(Mark::MarkDurationPropertyName);
+    timeT endTime = (*i)->getAbsoluteTime() + slurDuration;
+
+    bool haveStart = false;
+
+    int startTopHeight = 4, endTopHeight = 4,
+	startBottomHeight = 4, endBottomHeight = 4;
+
+    int startX = (*i)->getLayoutX(), endX = startX + 10;
+    bool startStemUp = false, endStemUp = false;
+    bool beamAbove = false, beamBelow = false;
+
+    std::vector<Event *> stemUpNotes, stemDownNotes;
+
+    // Scan the notes spanned by the slur, recording the top and
+    // bottom heights of the first and last chords, plus the presence
+    // of any troublesome beams.  (We should also be recording the
+    // presence of notes that are high or low enough in the body to
+    // get in the way of our slur -- not implemented yet.)
+
+    while (scooter != staff.getViewElementList()->end()) {
+
+	if ((*scooter)->getAbsoluteTime() >= endTime) break;
+
+	if ((*scooter)->isNote()) {
+
+	    int h = (*scooter)->event()->get<Int>(HEIGHT_ON_STAFF);
+
+	    bool stemUp = (h <= 4);
+	    (*scooter)->event()->get<Bool>(STEM_UP, stemUp);
+	    
+	    bool beamed = false;
+	    (*scooter)->event()->get<Bool>(BEAMED, beamed);
+	    
+	    bool primary = false;
+
+	    if ((*scooter)->event()->get<Bool>
+		(CHORD_PRIMARY_NOTE, primary) && primary) {
+
+		Chord chord(*(staff.getViewElementList()), scooter);
+
+		if (beamed) {
+		    if (stemUp) beamAbove = true;
+		    else beamBelow = true;
+		} 
+
+		if (!haveStart) {
+		    startBottomHeight = chord.getLowestNoteHeight();
+		    startTopHeight = chord.getHighestNoteHeight();
+		    startX = (*scooter)->getLayoutX();
+		    startStemUp = stemUp;
+		    haveStart = true;
+		}
+
+		endBottomHeight = chord.getLowestNoteHeight();
+		endTopHeight = chord.getHighestNoteHeight();
+		endX = (*scooter)->getLayoutX();
+		endStemUp = stemUp;
+	    }
+
+	    if (!beamed) {
+		if (stemUp) stemUpNotes.push_back((*scooter)->event());
+		else stemDownNotes.push_back((*scooter)->event());
+	    }
+	}
+
+	++scooter;
+    }
+
+    bool above = true;
+    if (startStemUp == endStemUp) {
+	above = !startStemUp;
+    } else if (beamBelow) {
+	above = true;
+    } else if (beamAbove) {
+	above = false;
+    } else if (stemUpNotes.size() != stemDownNotes.size()) {
+	above = (stemUpNotes.size() < stemDownNotes.size());
+    } else {
+	above = (startTopHeight + endTopHeight +
+		 startBottomHeight + endBottomHeight <= 16);
+    }
+
+    // re-point the stems of any notes that will otherwise interfere
+    // with our slur (n.b. the only notes in the stemUpNotes and
+    // stemDownNotes arrays are the ones that are not beamed, so this
+    // shouldn't cause any trouble)
+
+    std::vector<Event *> *wrongStemNotes =
+	(above ? &stemUpNotes : &stemDownNotes);
+
+    for (unsigned int wsi = 0; wsi < wrongStemNotes->size(); ++wsi) {
+	(*wrongStemNotes)[wsi]->set<Bool>(STEM_UP, !above);
+    }
+
+    // now choose the actual y-coord of the slur based on the side
+    // we've decided to put it on
+
+    int startHeight, endHeight;
+
+    if (above) {
+	startHeight = startTopHeight + 3;
+	endHeight = endTopHeight + 3;
+    } else {
+	startHeight = startBottomHeight - 3;
+	endHeight = endBottomHeight - 3;
+    }
+
+    int y0 = staff.yCoordOfHeight(startHeight),
+	y1 = staff.yCoordOfHeight(endHeight);
+
+    // in some circumstances it pays to make the slur a bit less
+    // slopey -- we don't always need to reach all the way to the
+    // target note
+
+    int dy = y1 - y0;
+    if (above) {
+	if (dy < 0) y0 -= dy / 5;
+	dy = dy * 4 / 5;
+    } else {
+	if (dy > 0) y0 += dy / 5;
+	dy = dy * 4 / 5;
+    }
+
+    int length = endX - startX;
+    int diff = staff.yCoordOfHeight(0) - staff.yCoordOfHeight(2);
+    if (length < diff*10) diff /= 2;
+    if (length > diff*3) length -= diff/2;
+    startX += diff;
+
+    (*i)->event()->set<Bool>(SLUR_ABOVE, above);
+    (*i)->event()->set<Int>(SLUR_Y_DELTA, dy);
+    (*i)->event()->set<Int>(SLUR_LENGTH, length);
+    (*i)->setLayoutX(startX);
+    (*i)->setLayoutY(y0);
+}
 

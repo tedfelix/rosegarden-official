@@ -263,4 +263,28 @@ protected:
 
 
 
+// Marks menu commands
+
+//!!! generalise to insert any mark
+
+class MarksMenuSlurCommand : public BasicCommand
+// this really only inserts an event, so it 
+{
+public:
+    MarksMenuSlurCommand(EventSelection &selection);
+    virtual ~MarksMenuSlurCommand();
+
+    Rosegarden::Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
+
+    static QString name() { return i18n("Slur"); }
+
+protected:
+    virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper);
+
+    Rosegarden::timeT m_markDuration;
+    Rosegarden::Event *m_lastInsertedEvent;
+};
+    
+
+
 #endif

@@ -468,6 +468,10 @@ void NotationView::setupActions()
                 SLOT(slotTransformsCollapseRests()), actionCollection(),
                 "collapse_rests_aggressively");
 
+    // setup Marks menu
+    new KAction(MarksMenuSlurCommand::name(), 0, this,
+		SLOT(slotMarksSlur()), actionCollection(),
+		"slur");
 
     // setup Settings menu
     KStdAction::showToolbar(this, SLOT(slotToggleToolBar()), actionCollection());
@@ -1165,6 +1169,25 @@ void NotationView::slotTransformsCollapseRests()
     getCommandHistory()->addCommand(new TransformsMenuCollapseRestsCommand
 				    (*m_currentEventSelection));
 }
+
+
+//
+// marks stuff
+//
+
+void NotationView::slotMarksSlur()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Making slur..."), statusBar());
+
+    MarksMenuSlurCommand *command =
+	new MarksMenuSlurCommand(*m_currentEventSelection);
+    
+    getCommandHistory()->addCommand(command);
+
+    setSingleSelectedEvent(m_currentEventSelection->getSegment(),
+			   command->getLastInsertedEvent());
+} 
   
 
 //

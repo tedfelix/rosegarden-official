@@ -8,7 +8,8 @@ Post-0.1.1 task list
 
  !! Load glazunov.mid and open the first staff: it crashes with an
  attempt to get the LegatoDuration property on an event that doesn't
- have it.  Why?
+ have it.  Why?  [DONE -- but what on earth is that hemidemi rest
+ doing in the middle of the staff?]
 
  !! Segment should barf meaningfully if getComposition without composition
 
@@ -22,7 +23,7 @@ Post-0.1.1 task list
  4. Text, lyrics etc -- need to talk about this, there are various
  possible ways to do it
 
- 5. Slurs
+ 5. Slurs [DONE]
 
  6. Add time sig support to RG2.1 import [DONE]
 
@@ -39,6 +40,23 @@ Post-0.1.1 task list
 
 11. Complete the plugging-in and testing of the notationview
     position-pointer stuff
+
+12. Investigate why making a beamed group doesn't always work (not all
+    notes end up beamed)
+
+13. Restore correct note stem lengths to beamed groups (following
+    change to which note in a chord is primary)
+
+14. Why does it crash when I try to delete a slur?  Sure, deleting
+    slurs probably isn't implemented yet, but that doesn't excuse
+    crashing.
+
+15. Various optimisations to render and relayout -- for example, the
+    positionChord thing in notationhlayout will probably help somewhat,
+    and we can do things like only repositioning on staffs other than
+    the one on which a change happened from the start of the same bar
+    as the one the change happened in, and ceasing repositioning
+    afterwards if a position hasn't changed
 
 
 

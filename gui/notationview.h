@@ -293,6 +293,9 @@ public slots:
     void slotTransformsNormalizeRests();
     void slotTransformsCollapseRests();
 
+    // marks slots
+    void slotMarksSlur();
+
     /// Canvas actions slots
 
     /**

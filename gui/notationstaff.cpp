@@ -557,47 +557,10 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 		elt->event()->get<Bool>(SLUR_ABOVE, above);
 		elt->event()->get<Int>(SLUR_Y_DELTA, dy);
 		elt->event()->get<Int>(SLUR_LENGTH, length);
-
-		int diff = m_npf->getNoteBodyWidth() / 2;
-		if (length > diff*2) length -= diff;
-		elt->setLayoutX(elt->getLayoutX() + diff);
 		
-
-/*
-		int cy = yCoordOfHeight(4);
-		int y0 = elt->getLayoutY();
-		bool above = ((cy - y0) + (cy - y1) > 0);
-		
-		for (it = getViewElementList()->findTime(elt->getAbsoluteTime());
-		     it != getViewElementList()->end() &&
-			 !(*it)->isNote() && !(*it)->isRest(); ++it);
-		
-		int diff = 1;
-
-		if (it != getViewElementList()->end()) {
-
-		    diff += (*it)->getLayoutX() - elt->getLayoutX();
-		    elt->setLayoutY((*it)->getLayoutY());
-		    y0 = elt->getLayoutY();
-		}
-
-		if (length > diff * 2) length -= diff;
-		diff += m_npf->getNoteBodyWidth()/2;
-		elt->setLayoutX(elt->getLayoutX() + diff);
-
-		elt->setLayoutY
-		    (above ?
-		     (elt->getLayoutY() - m_npf->getNoteBodyHeight()*3/2) :
-		     (elt->getLayoutY() + m_npf->getNoteBodyHeight()*3/2));
-
-		int dy = (y1 - y0) * 4 / 5;
-*/
 		pixmap = new QCanvasPixmap
 		    (m_npf->makeSlurPixmap(length, dy, above));
 		    
-//		canvasItem = m_npf->makeSlur
-//		    (canvas(), length, y1 - y0, above);
-
 	    } else {
 		//!!!
 	    }

@@ -37,6 +37,7 @@ using Rosegarden::Clef;
 using Rosegarden::Int;
 using Rosegarden::Accidental;
 using Rosegarden::NoAccidental;
+using Rosegarden::Mark;
 
 using std::string;
 using std::cerr;
@@ -263,4 +264,29 @@ EraseCommand::modifySegment(SegmentNotationHelper &helper)
 	}
     }
 }
+
+
+MarksMenuSlurCommand::MarksMenuSlurCommand(EventSelection &selection) :
+    BasicCommand(name(), selection.getSegment(), selection.getBeginTime(),
+		 selection.getBeginTime() + 1),
+    m_markDuration(selection.getEndTime() - selection.getBeginTime()),
+    m_lastInsertedEvent(0)
+{
+    // nothing else
+}
+
+MarksMenuSlurCommand::~MarksMenuSlurCommand()
+{
+    // empty
+}
+
+void
+MarksMenuSlurCommand::modifySegment(SegmentNotationHelper &helper)
+{
+    Mark mark(Mark::Slur, m_markDuration);
+    Event *e = mark.getAsEvent(getBeginTime());
+    helper.segment().insert(e);
+    m_lastInsertedEvent = e;
+}
+
 

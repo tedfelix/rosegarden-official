@@ -631,6 +631,9 @@ void NotationSelector::ready()
     
     m_selectionRect->hide();
     m_selectionRect->setPen(Qt::blue);
+
+    m_parentView->setCanvasCursor(Qt::arrowCursor);
+    m_parentView->setPositionTracking(false);
 }
 
 void NotationSelector::stow()

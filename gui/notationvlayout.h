@@ -27,6 +27,8 @@
 #include "notationelement.h"
 #include "FastVector.h"
 
+class NotationStaff;
+
 /**
  * Vertical notation layout
  *
@@ -69,6 +71,8 @@ private:
     typedef std::map<StaffType *, SlurList> SlurListMap;
     SlurListMap m_slurs;
     SlurList &getSlurList(StaffType &);
+
+    void positionSlur(NotationStaff &staff, NotationElementList::iterator i);
 };
 
 #endif

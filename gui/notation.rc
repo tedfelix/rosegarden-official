@@ -110,6 +110,13 @@
   <Action name="collapse_rests_aggressively"/>
 </Menu>
 
+<Menu name="Marks">
+  <text>&amp;Marks</text>
+  <Action name="slur"/>
+  <Action name="crescendo"/>
+  <Action name="decrescendo"/>
+</Menu>
+
 <Menu  name="settings"><text>&amp;Settings</text>
   <Action name="show_notes_toolbar"        append="show_merge" />
   <Action name="show_rests_toolbar"        append="show_merge" />

@@ -948,8 +948,6 @@ NotePixmapFactory::makeHairpinPixmap(int length, bool isCrescendo)
 QCanvasPixmap
 NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
 {
-//    kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeSlurPixmap: length = " << length << ", dy = " << dy << ", above = " << above << endl;
-
     int thickness = getStaffLineThickness() * 2;
     if (length < getNoteBodyWidth() * 2) length = getNoteBodyWidth() * 2;
 
@@ -958,18 +956,16 @@ NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
     int nbh = getNoteBodyHeight();
 
     int offset = (int)(((double)nbh /
-			(double)(getNoteBodyWidth() * 15)) * length) + nbh;
-    if (offset < nbh)   offset = nbh;
+			(double)(getNoteBodyWidth() * 7)) * length) + nbh/2;
+
+//    kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeSlurPixmap: length = " << length << ", dy = " << dy << ", above = " << above << ", offset(1) = " << offset << endl;
+
+    offset = offset * (1 - ((dy < 0 ? -dy : dy) / nbh * 6));
+    if (offset < nbh/2) offset = nbh/2;
     if (offset > nbh*2) offset = nbh*2;
 
-/*
-    int offset = nbh * 2;
-    if (dy < nbh / 2) {
-	offset = nbh;
-    } else if (dy < nbh * 5) {
-	offset = nbh*3 / 2;
-    }
-*/
+//    kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeSlurPixmap: length = " << length << ", dy = " << dy << ", above = " << above << ", offset(2) = " << offset << endl;
+
     int maximum, height, hotspotY;
 
     if (above) {

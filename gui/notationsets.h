@@ -129,6 +129,13 @@ public:
 
     virtual ~Chord();
 
+    virtual int getHighestNoteHeight() const {
+	return height(getHighestNote());
+    }
+    virtual int getLowestNoteHeight() const {
+	return height(getLowestNote());
+    }
+
     virtual bool hasStemUp() const;
     virtual bool hasShiftedNoteHeads() const;
     virtual bool hasNoteHeadShifted() const;

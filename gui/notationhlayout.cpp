@@ -680,7 +680,7 @@ NotationHLayout::layout(BarDataMap::iterator i)
             
             NotationElement *el = (*it);
             el->setLayoutX(x);
-            kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): setting element's x to " << x << endl;
+//            kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): setting element's x to " << x << endl;
 
             long delta = el->event()->get<Int>(MIN_WIDTH);
 
