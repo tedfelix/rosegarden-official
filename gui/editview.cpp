@@ -104,12 +104,12 @@ void EditView::paintEvent(QPaintEvent* e)
         }
 
         // update control ruler
-        getControlRuler()->slotUpdate();
+        if (getControlRuler()) getControlRuler()->slotUpdate();
 
     } else {
 
         getCanvasView()->slotUpdate();
-        getControlRuler()->slotUpdate();
+        if (getControlRuler()) getControlRuler()->slotUpdate();
 
     }
 
