@@ -368,6 +368,7 @@ public slots:
     void slotEditSelectFromStart();
     void slotEditSelectToEnd();
     void slotEditSelectWholeStaff();
+    void slotFilterSelection();
 
     /// view menu
     void slotLinearMode();

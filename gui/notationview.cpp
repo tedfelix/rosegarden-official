@@ -1356,6 +1356,13 @@ void NotationView::setupActions()
 		SLOT(slotClearSelection()), actionCollection(),
 		"clear_selection");
 
+    QString pixmapDir =
+	KGlobal::dirs()->findResource("appdata", "pixmaps/");
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/eventfilter.xpm"));
+    new KAction(i18n("&Filter Selection"), icon, 0, this,
+                SLOT(slotFilterSelection()), actionCollection(),
+                "filter_selection");
+
     createGUI(getRCFileName());
 }
 

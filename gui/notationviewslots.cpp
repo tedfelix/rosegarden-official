@@ -48,6 +48,7 @@
 #include "temporuler.h"
 #include "rawnoteruler.h"
 #include "notationhlayout.h"
+#include "eventfilter.h"
 
 #include "ktmpstatusmsg.h"
 
@@ -471,7 +472,6 @@ void NotationView::slotClearSelection()
     }
 }
 
-
 //!!! these should be in matrix too
 
 void NotationView::slotEditSelectFromStart()
@@ -498,6 +498,30 @@ void NotationView::slotEditSelectWholeStaff()
     setCurrentSelection(new EventSelection(segment,
                                            segment.getStartTime(),
                                            segment.getEndMarkerTime()));
+}
+
+void NotationView::slotFilterSelection()
+{
+    RG_DEBUG << "NotationView::slotFilterSelection" << endl;
+
+    if (!m_currentEventSelection) return;
+
+    EventFilterDialog dialog(this);
+    if (dialog.exec() == QDialog::Accepted) {
+        RG_DEBUG << "slotFilterSelection- accepted" << endl;
+
+        Rosegarden::Segment *tmpSeg = getCurrentSegment();
+        if (!tmpSeg) return;
+
+        Rosegarden::EventSelection *tmpSel = new Rosegarden::EventSelection(*tmpSeg);
+        Rosegarden::Segment::iterator it = tmpSeg->findTime(tmpSeg->getStartTime());
+
+        while (it != tmpSeg->end()) {
+            if (dialog.keepEvent(*it)) tmpSel->addEvent(*it);
+            it++;
+        }
+        setCurrentSelection(tmpSel);
+    }
 }
 
 void NotationView::slotToggleToolsToolBar()

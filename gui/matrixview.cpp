@@ -80,6 +80,7 @@
 #include "sequencemanager.h"
 #include "Clipboard.h"
 #include "eventfilter.h"
+#include "MidiTypes.h"
 
 #include "rosedebug.h"
 
@@ -1652,7 +1653,7 @@ MatrixView::slotQuantizeSelection(int q)
 
     using Rosegarden::Quantizer;
     Rosegarden::timeT unit =
-	(q < m_quantizations.size() ? m_quantizations[q] : 0);
+	((unsigned int)q < m_quantizations.size() ? m_quantizations[q] : 0);
 
     Rosegarden::Quantizer *quant =
 	new Rosegarden::BasicQuantizer
@@ -2020,15 +2021,25 @@ void MatrixView::slotFilterSelection()
 {
     RG_DEBUG << "MatrixView::slotFilterSelection" << endl;
 
+    if (!m_currentEventSelection) return;
+
     EventFilterDialog dialog(this);
-
-    if (dialog.exec() == QDialog::Accepted)
-    {
+    if (dialog.exec() == QDialog::Accepted) {
         RG_DEBUG << "slotFilterSelection- accepted" << endl;
-	KMessageBox::sorry(0, i18n("We're sorry.  This feature is under development.  Coming soon!"));
-    }
-}
 
+	Rosegarden::Segment *tmpSeg = getCurrentSegment();
+	if (!tmpSeg) return;
+	
+        Rosegarden::EventSelection *tmpSel = new Rosegarden::EventSelection(*tmpSeg);
+	Rosegarden::Segment::iterator it = tmpSeg->findTime(tmpSeg->getStartTime());
+
+	while (it != tmpSeg->end()) {
+	    if (dialog.keepEvent(*it)) tmpSel->addEvent(*it);
+	    it++;
+	}
+    	setCurrentSelection(tmpSel);
+    } 
+}
 
 
 void

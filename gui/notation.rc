@@ -34,6 +34,7 @@
   <Action name="select_to_end"/>
   <Action name="select_whole_staff"/>
   <Action name="clear_selection"/>
+  <Action name="filter_selection"/>
   <Separator/>
   <Action name="add_tempo"/>
   <Action name="add_time_signature"/>
@@ -293,6 +294,7 @@
   <Action name="text" />
   <Separator/>
   <Action name="toggle_step_by_step"/>
+  <Action name="event_filter"/>
 </ToolBar>
 
 <ToolBar name="Transport Toolbar">
@@ -454,6 +456,7 @@
     <Action name="preview_selection"/>
     <Action name="normalize_rests"/>
     <Action name="clear_selection"/>
+    <Action name="event_filter"/>
   </enable>
 </State>
 
