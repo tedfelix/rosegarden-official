@@ -51,5 +51,14 @@ MappedInstrument::~MappedInstrument()
 {
 }
 
+MappedInstrument::MappedInstrument(MappedInstrument *mI)
+{
+    m_type = mI->m_type;
+    m_channel = mI->m_channel;
+    m_id = mI->m_id;
+    m_name = mI->m_name;
+}
+
+
 }
 

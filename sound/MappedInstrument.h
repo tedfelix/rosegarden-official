@@ -50,6 +50,10 @@ public:
                      MidiByte channel,
                      InstrumentId id,
                      const std::string &name);
+
+    // extra and copy
+    MappedInstrument(MappedInstrument *mI);
+
     ~MappedInstrument();
 
     void setId(InstrumentId id) { m_id = id; }

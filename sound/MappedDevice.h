@@ -36,7 +36,15 @@ class MappedDevice : public std::vector<Rosegarden::MappedInstrument*>
 {
 public:
     MappedDevice();
+    MappedDevice(const MappedDevice &mD);
     ~MappedDevice();
+ 
+    // Clear down
+    //
+    void clear();
+
+    MappedDevice& operator+(const MappedDevice &mD);
+    MappedDevice& operator=(const MappedDevice &mD);
 
     friend QDataStream& operator>>(QDataStream &dS, MappedDevice *mD);
     friend QDataStream& operator<<(QDataStream &dS, MappedDevice *mD);

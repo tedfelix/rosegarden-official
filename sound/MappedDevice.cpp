@@ -24,12 +24,54 @@
 namespace Rosegarden
 {
 
-MappedDevice::MappedDevice()
+MappedDevice::MappedDevice():
+    std::vector<Rosegarden::MappedInstrument*>()
 {
 }
 
 MappedDevice::~MappedDevice()
 {
+}
+
+MappedDevice::MappedDevice(const MappedDevice &mD):
+    std::vector<Rosegarden::MappedInstrument*>()
+{
+    clear();
+
+    for (MappedDeviceConstIterator it = mD.begin(); it != mD.end(); it++)
+        this->push_back(new MappedInstrument(*it));
+
+}
+
+void
+MappedDevice::clear()
+{
+    MappedDeviceIterator it;
+
+    for (it = this->begin(); it != this->end(); it++)
+        delete (*it);
+
+    this->erase(this->begin(), this->end());
+}
+
+MappedDevice&
+MappedDevice::operator+(const MappedDevice &mD)
+{
+    for (MappedDeviceConstIterator it = mD.begin(); it != mD.end(); it++)
+        this->push_back(new MappedInstrument(*it));
+
+    return *this;
+}
+
+MappedDevice&
+MappedDevice::operator=(const MappedDevice &mD)
+{
+    clear();
+
+    for (MappedDeviceConstIterator it = mD.begin(); it != mD.end(); it++)
+        this->push_back(new MappedInstrument(*it));
+
+    return *this;
 }
 
 
@@ -135,6 +177,7 @@ operator<<(QDataStream &dS, const MappedDevice &mD)
 
     return dS;
 }
+
 
 }
 
