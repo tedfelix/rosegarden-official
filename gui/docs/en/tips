@@ -55,6 +55,12 @@ one or more notes and using ctrl-PageUp and ctrl-PageDown?</p>
 </tip>
 <tip category="Rosegarden|General">
 <html>
+<p>...that you can hold down the Shift key while repositioning segments on the
+segment canvas in order to avoid the "snap-to" effect and exert finer control?</p>
+</html>
+</tip>
+<tip category="Rosegarden|General">
+<html>
 <p>...that you can edit multiple segments on multiple tracks simultaneously in
 the notation editor?  Simply select the segments, then use <b>Edit -> Open in Notation Editor</b>.</p>
 </html>
@@ -73,7 +79,9 @@ other options simultaneously with <b>Settings -> Toggle All of the Above</b>?</p
 </tip>
 <tip category="Rosegarden|General">
 <html>
-<p>...that Rosegarden can export files for use by Lilypond, the high-quality score typesetting system?</p>
+<p>...that Rosegarden can export files for use by Lilypond, the high-quality score typesetting system?
+
+From the <b>File</b> menu, navigate to <b>Export -> Export Lilypond File</b></p>
 </html>
 </tip>
 <tip category="Rosegarden|General">
@@ -90,14 +98,19 @@ handles Lilypond export with <b>Settings -> Configure Rosegarden -> Notation
 </tip>
 <tip category="Rosegarden|General">
 <html>
-<p>...that you can change segment labels using the Segment Parameters dialog
+<p>...that you can change segment labels using the controls on the Segment Parameters box
 in the main window?</p>
 </html>
 </tip>
 <tip category="Rosegarden|General">
 <html>
-<p>...that you can have more than 64 tracks by using <b>Tracks -> Add
-Tracks</b> ?</p>
+<p>...that the number of tracks in new documents is based on the contents of
+your autoload.rg file?
+
+Whether you prefer to start with three tracks or 43, create a document that
+contains the desired number of tracks, plus any other studio or document properties settings
+you wish to configure, and use <b>Studio -> Save Current Document as Default
+Studio</b> to make this your new default.</p>
 </html>
 </tip>
 <tip category="Rosegarden|General">
@@ -169,6 +182,6 @@ feature.<br><br>
 </tip>
 <tip category="Rosegarden|General">
 <html>
-<p>... ?</p>
+<p>No more tips...</p>
 </html>
 </tip>
