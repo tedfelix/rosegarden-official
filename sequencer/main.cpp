@@ -99,13 +99,22 @@ int main(int argc, char *argv[])
 
     while(roseSeq->getStatus() != QUIT)
     {
-        // process any pending events (50ms of events)
+        // process any pending events (10ms of events)
+        //
         app.processEvents(10);
 
         // Update internal clock and send pointer position
-        // change event to GUI
-        if (roseSeq->getStatus() == PLAYING)
+        // change event to GUI - this is the heartbeat of
+        // the Sequencer - it doesn't tick over without
+        // this call.
+        //
+        //
+        if (roseSeq->getStatus() == PLAYING ||
+            roseSeq->getStatus() == RECORDING_MIDI ||
+            roseSeq->getStatus() == RECORDING_AUDIO)
+        {
             roseSeq->updateClocks();
+        }
 
         if(roseSeq)
             {

@@ -113,6 +113,9 @@ Sequencer::initializeMidi()
     //
     m_midiRecordPort.setMidiThru(m_midiPlayPort);
 
+    // turn MIDI event recording on 
+    m_midiRecordPort.record(true);
+
 }
 
 void
@@ -496,6 +499,9 @@ Sequencer::getMappedComposition()
     // get the MIDI queue
     //
     midiQueue = getMidiQueue();
+
+    if (midiQueue->size() > 0)
+        cout << "QUEUE SIZE = " << midiQueue->size() << endl;
     
     // Process it into the internal Composition
     for (midiQueueIt = midiQueue->begin();

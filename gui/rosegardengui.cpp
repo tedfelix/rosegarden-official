@@ -1544,8 +1544,9 @@ RosegardenGUIApp::record()
 void
 RosegardenGUIApp::processRecordedMidi(const Rosegarden::MappedComposition &mC)
 {
-    std::cout << "processRecordMidi has returned a composition with " <<
-              mC.size() << " elements" << endl;
+    if (mC.size() > 0)
+        std::cout << "processRecordMidi has returned a composition with " <<
+                     mC.size() << " elements" << endl;
 }
 
 

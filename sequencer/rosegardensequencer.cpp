@@ -107,7 +107,9 @@ RosegardenSequencerApp::play(const Rosegarden::timeT &position,
     m_songPosition = position;
 
     if (m_transportStatus != RECORDING_MIDI &&
-        m_transportStatus != RECORDING_AUDIO )
+        m_transportStatus != RECORDING_AUDIO &&
+        m_transportStatus != STARTING_TO_RECORD_MIDI &&
+        m_transportStatus != STARTING_TO_RECORD_AUDIO)
     {
         m_transportStatus = STARTING_TO_PLAY;
     }
@@ -240,6 +242,11 @@ RosegardenSequencerApp::startPlaying()
 bool
 RosegardenSequencerApp::keepPlaying()
 {
+/*
+    cout << "m_songPosition = " << m_songPosition << " : ";
+    cout << "m_lastFetchSongPosition = " << m_lastFetchSongPosition << " : ";
+    cout << "m_fetchLatency = " << m_fetchLatency << endl;
+*/
 
     if (m_songPosition > ( m_lastFetchSongPosition - m_fetchLatency ) )
     {
@@ -368,9 +375,11 @@ RosegardenSequencerApp::record(const Rosegarden::timeT &position,
 
     if (localRecordMode == STARTING_TO_RECORD_MIDI)
     {
+        std::cerr << "RosegardenSequencerApp::record() - Starting to Record MIDI" << endl;
     }
     else if (localRecordMode == STARTING_TO_RECORD_AUDIO)
     {
+        std::cerr << "RosegardenSequencerApp::record() - Starting to Record Audio" << endl;
     }
     else
     {
