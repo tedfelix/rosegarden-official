@@ -159,7 +159,7 @@ NotationView::NotationView(RosegardenGUIView* rgView,
          this,         SLOT  (hoveredOverAbsoluteTimeChanged(unsigned int)));
 
     QObject::connect
-	(rgView->getTrackEditor()->getBarButtons(), SIGNAL(setPointerPosition(timeT)),
+	(rgView, SIGNAL(setGUIPositionPointer(timeT)),
 	 this,   SLOT  (setGUIPositionPointer(timeT)));
 
     //
