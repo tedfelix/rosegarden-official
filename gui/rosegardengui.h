@@ -43,6 +43,7 @@
 
 class KURL;
 class KRecentFilesAction;
+class KToggleAction;
 
 // forward declaration of the RosegardenGUI classes
 class RosegardenGUIDoc;
@@ -71,18 +72,6 @@ class RosegardenGUIApp : public KMainWindow, virtual public RosegardenGUIIface
 
 public:
 
-    enum { OK,
-	   OS_ERROR,
-           USER_ERROR,
-	   USER_CANCEL,
-	   RETRY,
-	   NOPERMISSIONS
-    };
-
-    enum { OPEN_READWRITE 	= 1,
-	   OPEN_READONLY 	= 2,
-	   OPEN_INSERT 		= 4 };
-
     /**
      * construtor of RosegardenGUIApp, calls all init functions to
      * create the application.
@@ -91,16 +80,6 @@ public:
     RosegardenGUIApp();
 
     virtual ~RosegardenGUIApp();
-
-    /**
-     * enables menuentries/toolbar items
-     */
-    void enableCommand(int id_);
-
-    /**
-     * disables menuentries/toolbar items
-     */
-    void disableCommand(int id_);
 
     /**
      * opens a file specified by commandline option
@@ -117,22 +96,22 @@ public:
     /**
      * open a file
      */
-    virtual int openFile(const QString& url);
+    virtual void openFile(const QString& url);
 
     /**
      * Works like openFile but is able to open remote files
      */
-    int openURL(const KURL& url);
+    void openURL(const KURL& url);
 
     /**
      * imports a Rosegarden 2.1 file
      */
-    virtual int importRG21File(const QString &url);
+    virtual void importRG21File(const QString &url);
 
     /**
      * imports a MIDI file
      */
-    virtual int importMIDIFile(const QString &url);
+    virtual void importMIDIFile(const QString &url);
 
     /**
      * the Sequencer accesses this method via DCOP
@@ -274,12 +253,12 @@ public slots:
     /**
      * Let the user select a MIDI file for import
      */
-    int importMIDI();
+    void importMIDI();
 
     /**
      * Let the user select a Rosegarden 2.1 file for import 
      */
-    int importRG21();
+    void importRG21();
 
     /**
      * closes all open windows by calling close() on each memberList
@@ -319,6 +298,11 @@ public slots:
      * toggles the toolbar
      */
     void toggleToolBar();
+
+    /**
+     * toggles the tracks toolbar
+     */
+    void toggleTracksToolBar();
 
     /**
      * toggles the statusbar
@@ -414,6 +398,25 @@ private:
      * The default tool selected on startup
      */
     KAction* m_selectDefaultTool;
+
+    /**
+     * KAction pointers to enable/disable actions
+     */
+//     KAction* m_fileNewWindow;
+    KAction* m_fileNew;
+    KAction* m_fileOpen;
+    KRecentFilesAction* m_fileOpenRecent;
+    KAction* m_fileSave;
+    KAction* m_fileSaveAs;
+    KAction* m_fileClose;
+    KAction* m_filePrint;
+    KAction* m_fileQuit;
+    KAction* m_editCut;
+    KAction* m_editCopy;
+    KAction* m_editPaste;
+    KToggleAction* m_viewToolBar;
+    KToggleAction* m_viewTracksToolBar;
+    KToggleAction* m_viewStatusBar;
 
     /**
      * Transport (Playback and Recording) status

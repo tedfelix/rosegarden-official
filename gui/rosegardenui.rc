@@ -22,6 +22,10 @@
         <Action name="fast_forward"/> 
         <Action name="rewind"/> 
   </Menu>
+  <Menu  name="settings"><text>&amp;Settings</text>
+         <Action name="show_tracks_toolbar" append="show_merge" />
+  </Menu>
+
 </MenuBar>
 
 <ToolBar fullWidth="true" name="tracksToolBar" newline="true">

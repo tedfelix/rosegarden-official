@@ -97,15 +97,15 @@ void RosegardenGUIApp::setupActions()
 {
     // setup File menu
     // New Window ?
-    KStdAction::openNew(this, SLOT(fileNew()),     actionCollection());
-    KStdAction::open   (this, SLOT(fileOpen()),    actionCollection());
+    m_fileNew = KStdAction::openNew(this, SLOT(fileNew()),     actionCollection());
+    m_fileOpen = KStdAction::open   (this, SLOT(fileOpen()),    actionCollection());
     m_fileRecent = KStdAction::openRecent(this,
                                           SLOT(fileOpenRecent(const KURL&)),
                                           actionCollection());
-    KStdAction::save  (this, SLOT(fileSave()),          actionCollection());
-    KStdAction::saveAs(this, SLOT(fileSaveAs()),        actionCollection());
-    KStdAction::close (this, SLOT(fileClose()),         actionCollection());
-    KStdAction::print (this, SLOT(filePrint()),         actionCollection());
+    m_fileSave = KStdAction::save  (this, SLOT(fileSave()),          actionCollection());
+    m_fileSaveAs = KStdAction::saveAs(this, SLOT(fileSaveAs()),        actionCollection());
+    m_fileClose = KStdAction::close (this, SLOT(fileClose()),         actionCollection());
+    m_filePrint = KStdAction::print (this, SLOT(filePrint()),         actionCollection());
 
     new KAction(i18n("Import MIDI file..."), 0, 0, this,
                 SLOT(importMIDI()), actionCollection(),
@@ -115,18 +115,21 @@ void RosegardenGUIApp::setupActions()
                 SLOT(importRG21()), actionCollection(),
                 "file_import_rg21");
 
-    KStdAction::quit  (this, SLOT(quit()),              actionCollection());
+    m_fileQuit = KStdAction::quit  (this, SLOT(quit()),              actionCollection());
 
     // setup edit menu
     KStdAction::undo     (this, SLOT(editUndo()),       actionCollection());
     KStdAction::redo     (this, SLOT(editRedo()),       actionCollection());
-    KStdAction::cut      (this, SLOT(editCut()),        actionCollection());
-    KStdAction::copy     (this, SLOT(editCopy()),       actionCollection());
-    KStdAction::paste    (this, SLOT(editPaste()),      actionCollection());
+    m_editCut = KStdAction::cut      (this, SLOT(editCut()),        actionCollection());
+    m_editCopy = KStdAction::copy     (this, SLOT(editCopy()),       actionCollection());
+    m_editPaste = KStdAction::paste    (this, SLOT(editPaste()),      actionCollection());
 
     // setup Settings menu
-    KStdAction::showToolbar  (this, SLOT(toggleToolBar()),   actionCollection());
-    KStdAction::showStatusbar(this, SLOT(toggleStatusBar()), actionCollection());
+    m_viewToolBar = KStdAction::showToolbar  (this, SLOT(toggleToolBar()),   actionCollection());
+    m_viewTracksToolBar = new KToggleAction(i18n("Show Tracks Toolbar..."), 0, this,
+                                            SLOT(toggleTracksToolBar()), actionCollection(),
+                                            "show_tracks_toolbar");
+    m_viewStatusBar = KStdAction::showStatusbar(this, SLOT(toggleStatusBar()), actionCollection());
 
     KStdAction::saveOptions(this, SLOT(save_options()), actionCollection());
     KStdAction::preferences(this, SLOT(customize()),    actionCollection());
@@ -234,22 +237,6 @@ void RosegardenGUIApp::initView()
 
 }
 
-void RosegardenGUIApp::enableCommand(int id_)
-{
-    ///////////////////////////////////////////////////////////////////
-    // enable menu and toolbar functions by their ID's
-    menuBar()->setItemEnabled(id_, true);
-    toolBar()->setItemEnabled(id_, true);
-}
-
-void RosegardenGUIApp::disableCommand(int id_)
-{
-    ///////////////////////////////////////////////////////////////////
-    // disable menu and toolbar functions by their ID's
-    menuBar()->setItemEnabled(id_, false);
-    toolBar()->setItemEnabled(id_, false);
-}
-
 void RosegardenGUIApp::openDocumentFile(const char* _cmdl)
 {
     statusMsg(i18n("Opening file..."));
@@ -265,7 +252,7 @@ void RosegardenGUIApp::openDocumentFile(const char* _cmdl)
     initView();
 }
 
-int RosegardenGUIApp::openFile(const QString& url)
+void RosegardenGUIApp::openFile(const QString& url)
 {
 
     setCaption(url);
@@ -273,38 +260,36 @@ int RosegardenGUIApp::openFile(const QString& url)
 
     if (u->isMalformed()) {
         KMessageBox::sorry(this, i18n("This is not a valid filename.\n"));
-        return RETRY;
+        return;
     }
 
     if (!u->isLocalFile()) {
         KMessageBox::sorry(this, i18n("This is not a local file.\n"));
-        return RETRY;
+        return;
     }
 
     QFileInfo info(u->path());
 
     if (!info.exists()) {
         KMessageBox::sorry(this, i18n("The specified file does not exist"));
-        return RETRY;
+        return;
     }
 
     if (info.isDir()) {
         KMessageBox::sorry(this, i18n("You have specified a directory"));
-        return RETRY;
+        return;
     }
 
     QFile file(u->path());
 
     if (!file.open(IO_ReadOnly)) {
         KMessageBox::sorry(this, i18n("You do not have read permission to this file."));
-        return RETRY;
+        return;
     }
 
     m_doc->closeDocument();
     m_doc->openDocument(u->path());
     initView();
-
-    return OK;
 }
 
 
@@ -317,35 +302,40 @@ void RosegardenGUIApp::saveOptions()
 {	
     m_config->setGroup("General Options");
     m_config->writeEntry("Geometry", size());
-    m_config->writeEntry("Show Toolbar", toolBar()->isVisible());
-    m_config->writeEntry("Show Statusbar",statusBar()->isVisible());
-    m_config->writeEntry("ToolBarPos", (int) toolBar()->barPos());
+    m_config->writeEntry("Show Toolbar", m_viewToolBar->isChecked());
+    m_config->writeEntry("Show Tracks Toolbar", m_viewTracksToolBar->isChecked());
+    m_config->writeEntry("Show Statusbar",m_viewStatusBar->isChecked());
+    m_config->writeEntry("ToolBarPos", (int) toolBar("mainToolBar")->barPos());
+    m_config->writeEntry("TracksToolBarPos", (int) toolBar("tracksToolBar")->barPos());
 
-    m_fileRecent->saveEntries(m_config);
+    m_fileRecent->saveEntries(m_config, "Recent Files");
 }
 
 
 void RosegardenGUIApp::readOptions()
 {
-	
     m_config->setGroup("General Options");
 
+    // status bar settings
     bool viewStatusbar = m_config->readBoolEntry("Show Statusbar", true);
-    if(viewStatusbar)
-        statusBar()->show();
-    else
-        statusBar()->hide();
+    m_viewStatusBar->setChecked(viewStatusbar);
+    toggleStatusBar();
 
     bool viewToolBar = m_config->readBoolEntry("Show Toolbar", true);
-    if(viewToolBar)
-        toolBar()->show();
-    else
-        toolBar()->hide();
+    m_viewToolBar->setChecked(viewToolBar);
+    toggleToolBar();
+
+    viewToolBar = m_config->readBoolEntry("Show Tracks Toolbar", true);
+    m_viewTracksToolBar->setChecked(viewToolBar);
+    toggleTracksToolBar();
 
     // bar position settings
     KToolBar::BarPosition toolBarPos;
     toolBarPos=(KToolBar::BarPosition) m_config->readNumEntry("ToolBarPos", KToolBar::Top);
-    toolBar()->setBarPos(toolBarPos);
+    toolBar("mainToolBar")->setBarPos(toolBarPos);
+
+    toolBarPos=(KToolBar::BarPosition) m_config->readNumEntry("TracksToolBarPos", KToolBar::Top);
+    toolBar("tracksToolBar")->setBarPos(toolBarPos);
 	
     // initialize the recent file list
     //
@@ -470,7 +460,7 @@ void RosegardenGUIApp::fileNew()
     statusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
-int RosegardenGUIApp::openURL(const KURL& url)
+void RosegardenGUIApp::openURL(const KURL& url)
 {
     QString netFile = url.url();
     kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::openURL: " << netFile << endl;
@@ -480,35 +470,30 @@ int RosegardenGUIApp::openURL(const KURL& url)
         string = i18n( "Malformed URL\n%1").arg(netFile);
 
         KMessageBox::sorry(this, string);
-        return USER_ERROR;
+        return;
     }
 
     QString target;
 
     if (KIO::NetAccess::download(url, target) == false) {
         KMessageBox::error(this, i18n("Cannot download file!"));
-        return OS_ERROR;
+        return;
     }
 
     static QRegExp midiFile("\\.mid$"), rg21File("\\.rose$");
 
-    int result = OK;
-
     if (midiFile.match(url.path()) != -1) {
-        result = importMIDIFile(target);
+        importMIDIFile(target);
     } else if (rg21File.match(url.path()) != -1) {
-        result = importRG21File(target);
+        importRG21File(target);
     } else {
-        result = openFile(target);
+        openFile(target);
     }
     
-    if (result == OK) {
-        setCaption(url.path());
-        m_fileRecent->addURL(url);
-        //         setGeneralStatusField(i18n("Done"));
-    }
+    setCaption(url.path());
+    m_fileRecent->addURL(url);
+//     setGeneralStatusField(i18n("Done"));
 
-    return OK;
 }
 
 void RosegardenGUIApp::fileOpen()
@@ -660,10 +645,22 @@ void RosegardenGUIApp::toggleToolBar()
 {
     statusMsg(i18n("Toggle the toolbar..."));
 
-    if (toolBar()->isVisible())
-        toolBar()->hide();
+    if (m_viewToolBar->isChecked())
+        toolBar("mainToolBar")->show();
     else
-        toolBar()->show();
+        toolBar("mainToolBar")->hide();
+
+    statusMsg(i18n(IDS_STATUS_DEFAULT));
+}
+
+void RosegardenGUIApp::toggleTracksToolBar()
+{
+    statusMsg(i18n("Toggle the tracks toolbar..."));
+
+    if (m_viewTracksToolBar->isChecked())
+        toolBar("tracksToolBar")->show();
+    else
+        toolBar("tracksToolBar")->hide();
 
     statusMsg(i18n(IDS_STATUS_DEFAULT));
 }
@@ -672,7 +669,7 @@ void RosegardenGUIApp::toggleStatusBar()
 {
     statusMsg(i18n("Toggle the statusbar..."));
 
-    if (statusBar()->isVisible())
+    if(!m_viewStatusBar->isChecked())
         statusBar()->hide();
     else
         statusBar()->show();
@@ -788,23 +785,20 @@ RosegardenGUIApp::getSequencerSlice(const int &sliceStart, const int &sliceEnd)
 }
 
 
-int RosegardenGUIApp::importMIDI()
+void RosegardenGUIApp::importMIDI()
 {
   KURL url = KFileDialog::getOpenURL(QString::null, "*.mid", this,
                                      i18n("Open MIDI File"));
-  if (url.isEmpty()) { return USER_CANCEL; }
+  if (url.isEmpty()) { return; }
 
   QString tmpfile;
   KIO::NetAccess::download(url, tmpfile);
-  int res = importMIDIFile(tmpfile);
+  importMIDIFile(tmpfile);
   
   KIO::NetAccess::removeTempFile( tmpfile );
-
-  return res;
-  
 }
 
-int RosegardenGUIApp::importMIDIFile(const QString &file)
+void RosegardenGUIApp::importMIDIFile(const QString &file)
 {
   Rosegarden::MidiFile *midiFile;
 
@@ -822,28 +816,23 @@ int RosegardenGUIApp::importMIDIFile(const QString &file)
   delete tmpComp;
 
   initView();
-
-  return OK;
-  
 }
 
-int RosegardenGUIApp::importRG21()
+void RosegardenGUIApp::importRG21()
 {
   KURL url = KFileDialog::getOpenURL(QString::null, "*.rose", this,
                                      i18n("Open Rosegarden 2.1 File"));
-  if (url.isEmpty()) { return USER_CANCEL; }
+  if (url.isEmpty()) { return; }
 
   QString tmpfile;
   KIO::NetAccess::download(url, tmpfile);
 
-  int res = importRG21File(tmpfile);
+  importRG21File(tmpfile);
 
   KIO::NetAccess::removeTempFile(tmpfile);
-
-  return res;
 }
 
-int RosegardenGUIApp::importRG21File(const QString &file)
+void RosegardenGUIApp::importRG21File(const QString &file)
 {
   RG21Loader rg21Loader(file);
     
@@ -856,8 +845,6 @@ int RosegardenGUIApp::importRG21File(const QString &file)
   delete tmpComp;
 
   initView();
-
-  return OK;
 }
 
 void
