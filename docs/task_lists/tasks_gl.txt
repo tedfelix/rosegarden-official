@@ -9,9 +9,12 @@ Current Task list
 
 - look if note pixmaps gain from being turned into real QCanvasItems
 
+- look to use a pixmap cache for notation
+
 - use KFilterBase/KFilterDev for accessing .rg files (rather than calling zlib directly)
 
 - printing (at least the beginnings of it) DONE
+
 
 Task list from 18/19th August meetings
 ======================================
