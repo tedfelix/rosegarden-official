@@ -94,7 +94,7 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     m_hoveredOverNoteName(0),
     m_hoveredOverAbsoluteTime(0),
     m_canvasView(new NotationCanvasView(*this,
-					new QCanvas(width() * 2, height() * 2),
+                                        new QCanvas(width() * 2, height() * 2),
                                         this)),
     m_lastFinishingStaff(-1),
     m_ruler(new StaffRuler(20, 0, canvas())),
@@ -128,6 +128,9 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
 
     setCentralWidget(m_canvasView);
 
+    //
+    // Connect signals
+    //
     QObject::connect
         (m_canvasView, SIGNAL(itemPressed(int, int, QMouseEvent*, NotationElement*)),
          this,         SLOT  (itemPressed(int, int, QMouseEvent*, NotationElement*)));
@@ -152,6 +155,9 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
         (m_canvasView, SIGNAL(hoveredOverAbsoluteTimeChange(unsigned int)),
          this,         SLOT  (hoveredOverAbsoluteTimeChange(unsigned int)));
 
+    //
+    // Window appearance (options, title...)
+    //
     readOptions();
 
     if (segments.size() == 1) {
@@ -169,34 +175,38 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
 
     for (unsigned int i = 0; i < segments.size(); ++i) {
         m_staffs.push_back(new NotationStaff(canvas(), segments[i], i,
-					     false, width() - 50,
+                                             false, width() - 50,
                                              m_fontName, m_fontSize));
     }
 
     positionStaffs();
     m_currentStaff = 0;
-
+    
+    //
+    // Layout setup
+    //
     m_vlayout = new NotationVLayout();
     m_hlayout = new NotationHLayout(*m_notePixmapFactory);
 
+    bool layoutApplied = applyLayout();
+    if (!layoutApplied) KMessageBox::sorry(0, i18n("Couldn't apply score layout"));
+    else {
+        for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+            
+            m_staffs[i]->renderElements();
+            m_staffs[i]->positionElements();
+        }
+
+        updateRuler();
+    }
+
+    //
     // Position pointer
     //
     m_pointer = new QCanvasLine(canvas());
     m_pointer->setPen(Qt::darkBlue);
     m_pointer->setPoints(0, 0, 0, canvas()->height());
     // m_pointer->show();
-
-    bool layoutApplied = applyLayout();
-    if (!layoutApplied) KMessageBox::sorry(0, i18n("Couldn't apply score layout"));
-    else {
-        for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-	    
-            m_staffs[i]->renderElements();
-	    m_staffs[i]->positionElements();
-        }
-
-	updateRuler();
-    }
 
     m_selectDefaultNote->activate();
 
@@ -235,21 +245,21 @@ void NotationView::positionStaffs()
     int totalHeight = 0;
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-	staffHeights.push_back(m_staffs[i]->getHeightOfRow());
-	totalHeight += staffHeights[i];
+        staffHeights.push_back(m_staffs[i]->getHeightOfRow());
+        totalHeight += staffHeights[i];
     }
 
     int h = 0;
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-	m_staffs[i]->setRowSpacing(totalHeight + staffHeights[i] / 7);
-	if (i < m_staffs.size() - 1) {
-	    m_staffs[i]->setConnectingLineLength(staffHeights[i]);
-	}
-	
-	m_staffs[i]->setX(20);
-	m_staffs[i]->setY(h + 45);
+        m_staffs[i]->setRowSpacing(totalHeight + staffHeights[i] / 7);
+        if (i < m_staffs.size() - 1) {
+            m_staffs[i]->setConnectingLineLength(staffHeights[i]);
+        }
+        
+        m_staffs[i]->setX(20);
+        m_staffs[i]->setY(h + 45);
 
-	h += staffHeights[i];
+        h += staffHeights[i];
     }
 }    
 
@@ -467,14 +477,14 @@ void NotationView::setupActions()
 
     // View menu
     KRadioAction *linearModeAction = new KRadioAction
-	(i18n("&Linear Layout"), 0, this, SLOT(slotLinearMode()),
-	 actionCollection(), "linear_mode");
+        (i18n("&Linear Layout"), 0, this, SLOT(slotLinearMode()),
+         actionCollection(), "linear_mode");
     linearModeAction->setExclusiveGroup("layoutMode");
     linearModeAction->setChecked(true);
 
     KRadioAction *pageModeAction = new KRadioAction
-	(i18n("&Page Layout"), 0, this, SLOT(slotPageMode()),
-	 actionCollection(), "page_mode");
+        (i18n("&Page Layout"), 0, this, SLOT(slotPageMode()),
+         actionCollection(), "page_mode");
     pageModeAction->setExclusiveGroup("layoutMode");
 
     // setup edit menu
@@ -495,16 +505,16 @@ void NotationView::setupActions()
                 SLOT(slotGroupBreak()), actionCollection(), "break_group");
 
     new KAction(GroupMenuAddIndicationCommand::name
-		(Rosegarden::Indication::Slur), 0, this,
-		SLOT(slotGroupSlur()), actionCollection(), "slur");
+                (Rosegarden::Indication::Slur), 0, this,
+                SLOT(slotGroupSlur()), actionCollection(), "slur");
 
     new KAction(GroupMenuAddIndicationCommand::name
-		(Rosegarden::Indication::Crescendo), 0, this,
-		SLOT(slotGroupCrescendo()), actionCollection(), "crescendo");
+                (Rosegarden::Indication::Crescendo), 0, this,
+                SLOT(slotGroupCrescendo()), actionCollection(), "crescendo");
 
     new KAction(GroupMenuAddIndicationCommand::name
-		(Rosegarden::Indication::Decrescendo), 0, this,
-		SLOT(slotGroupDecrescendo()), actionCollection(), "decrescendo");
+                (Rosegarden::Indication::Decrescendo), 0, this,
+                SLOT(slotGroupDecrescendo()), actionCollection(), "decrescendo");
 
     // setup Transforms menu
     new KAction(TransformsMenuNormalizeRestsCommand::name(), 0, this,
@@ -542,13 +552,13 @@ void NotationView::setupActions()
     { "1slotTransformsAddAccent()",      "1slotTransformsAddTenuto()",
       "1slotTransformsAddStaccato()",    "1slotTransformsAddSforzando()",
       "1slotTransformsAddRinforzando()", "1slotTransformsAddTrill()",
-      "1slotTransformsAddTurn()",	 "1slotTransformsAddPause()",
+      "1slotTransformsAddTurn()",         "1slotTransformsAddPause()",
       "1slotTransformsAddUpBow()",       "1slotTransformsAddDownBow()" };
 
     for (unsigned int i = 0; i < 10; ++i) {
-	new KAction(TransformsMenuAddMarkCommand::name(marks[i]), 0, this,
-		    markSlots[i], actionCollection(),
-		    QString("add_%1").arg(marks[i].c_str()));
+        new KAction(TransformsMenuAddMarkCommand::name(marks[i]), 0, this,
+                    markSlots[i], actionCollection(),
+                    QString("add_%1").arg(marks[i].c_str()));
     }
 
     new KAction(TransformsMenuRemoveMarksCommand::name(), 0, this,
@@ -725,7 +735,7 @@ void NotationView::initStatusBar()
     sb->insertItem(KTmpStatusMsg::getDefaultMsg(),
                    KTmpStatusMsg::getDefaultId(), 1);
     sb->setItemAlignment(KTmpStatusMsg::getDefaultId(), 
-			 AlignLeft | AlignVCenter);
+                         AlignLeft | AlignVCenter);
 }
 
 MultiViewCommandHistory *
@@ -780,7 +790,7 @@ void NotationView::showBars(int staffNo)
 void NotationView::updateRuler()
 {
     if (m_lastFinishingStaff < 0 ||
-	unsigned(m_lastFinishingStaff) >= m_staffs.size()) return;
+        unsigned(m_lastFinishingStaff) >= m_staffs.size()) return;
 
     NotationStaff &staff = *m_staffs[m_lastFinishingStaff];
     TimeSignature timeSignature;
@@ -978,11 +988,11 @@ bool NotationView::applyLayout(int staffNo)
     m_lastFinishingStaff = -1;
 
     for (i = 0; i < m_staffs.size(); ++i) {
-	timeT thisEndTime = m_staffs[i]->getSegment().getEndIndex();
-	if (thisEndTime > endTime) {
-	    endTime = thisEndTime;
-	    m_lastFinishingStaff = i;
-	}
+        timeT thisEndTime = m_staffs[i]->getSegment().getEndIndex();
+        if (thisEndTime > endTime) {
+            endTime = thisEndTime;
+            m_lastFinishingStaff = i;
+        }
     }
 
     readjustCanvasSize(); //!!! now misnamed
@@ -1016,20 +1026,20 @@ void NotationView::setCurrentSelectedNote(const char *pixmapName,
 void NotationView::setCurrentSelection(EventSelection* s)
 {
     if (/*!!! s && */ m_currentEventSelection /* &&
-	s->getSegment() != m_currentEventSelection->getSegment() */) {
-	m_currentEventSelection->removeSelectionFromSegment();
-	getStaff(m_currentEventSelection->getSegment())->positionElements
-	    (m_currentEventSelection->getBeginTime(),
-	     m_currentEventSelection->getEndTime());
+        s->getSegment() != m_currentEventSelection->getSegment() */) {
+        m_currentEventSelection->removeSelectionFromSegment();
+        getStaff(m_currentEventSelection->getSegment())->positionElements
+            (m_currentEventSelection->getBeginTime(),
+             m_currentEventSelection->getEndTime());
     }
 
     delete m_currentEventSelection;
     m_currentEventSelection = s;
 
     if (s) {
-	s->recordSelectionOnSegment();
+        s->recordSelectionOnSegment();
         getStaff(s->getSegment())->positionElements(s->getBeginTime(),
-						    s->getEndTime());
+                                                    s->getEndTime());
     }
 
     canvas()->update();
@@ -1056,8 +1066,8 @@ void NotationView::setNotePixmapFactory(NotePixmapFactory* f)
 void NotationView::setHLayout(NotationHLayout* l)
 {
     if (m_hlayout) {
-	l->setPageMode(m_hlayout->getPageMode());
-	l->setPageWidth(m_hlayout->getPageWidth());
+        l->setPageMode(m_hlayout->getPageMode());
+        l->setPageWidth(m_hlayout->getPageWidth());
     }
     delete m_hlayout;
     m_hlayout = l;
@@ -1203,7 +1213,7 @@ void NotationView::slotGroupBeam()
     KTmpStatusMsg msg(i18n("Beaming group..."), statusBar());
 
     getCommandHistory()->addCommand(new GroupMenuBeamCommand
-				    (*m_currentEventSelection));
+                                    (*m_currentEventSelection));
 }
 
 void NotationView::slotGroupAutoBeam()
@@ -1212,7 +1222,7 @@ void NotationView::slotGroupAutoBeam()
     KTmpStatusMsg msg(i18n("Auto-beaming selection..."), statusBar());
 
     getCommandHistory()->addCommand(new GroupMenuAutoBeamCommand
-				    (*m_currentEventSelection));
+                                    (*m_currentEventSelection));
 }
 
 void NotationView::slotGroupBreak()
@@ -1221,7 +1231,7 @@ void NotationView::slotGroupBreak()
     KTmpStatusMsg msg(i18n("Breaking groups..."), statusBar());
 
     getCommandHistory()->addCommand(new GroupMenuBreakCommand
-				    (*m_currentEventSelection));
+                                    (*m_currentEventSelection));
 }
 
 //
@@ -1234,13 +1244,13 @@ void NotationView::slotGroupSlur()
     KTmpStatusMsg msg(i18n("Adding slur..."), statusBar());
 
     GroupMenuAddIndicationCommand *command =
-	new GroupMenuAddIndicationCommand(Rosegarden::Indication::Slur,
-					  *m_currentEventSelection);
+        new GroupMenuAddIndicationCommand(Rosegarden::Indication::Slur,
+                                          *m_currentEventSelection);
     
     getCommandHistory()->addCommand(command);
 
     setSingleSelectedEvent(m_currentEventSelection->getSegment(),
-			   command->getLastInsertedEvent());
+                           command->getLastInsertedEvent());
 } 
   
 void NotationView::slotGroupCrescendo()
@@ -1249,13 +1259,13 @@ void NotationView::slotGroupCrescendo()
     KTmpStatusMsg msg(i18n("Adding crescendo..."), statusBar());
 
     GroupMenuAddIndicationCommand *command =
-	new GroupMenuAddIndicationCommand(Rosegarden::Indication::Crescendo,
-					  *m_currentEventSelection);
+        new GroupMenuAddIndicationCommand(Rosegarden::Indication::Crescendo,
+                                          *m_currentEventSelection);
     
     getCommandHistory()->addCommand(command);
 
     setSingleSelectedEvent(m_currentEventSelection->getSegment(),
-			   command->getLastInsertedEvent());
+                           command->getLastInsertedEvent());
 } 
   
 void NotationView::slotGroupDecrescendo()
@@ -1264,13 +1274,13 @@ void NotationView::slotGroupDecrescendo()
     KTmpStatusMsg msg(i18n("Adding decrescendo..."), statusBar());
 
     GroupMenuAddIndicationCommand *command =
-	new GroupMenuAddIndicationCommand(Rosegarden::Indication::Decrescendo,
-					  *m_currentEventSelection);
+        new GroupMenuAddIndicationCommand(Rosegarden::Indication::Decrescendo,
+                                          *m_currentEventSelection);
     
     getCommandHistory()->addCommand(command);
 
     setSingleSelectedEvent(m_currentEventSelection->getSegment(),
-			   command->getLastInsertedEvent());
+                           command->getLastInsertedEvent());
 } 
   
  
@@ -1284,7 +1294,7 @@ void NotationView::slotTransformsNormalizeRests()
     KTmpStatusMsg msg(i18n("Normalizing rests..."), statusBar());
 
     getCommandHistory()->addCommand(new TransformsMenuNormalizeRestsCommand
-				    (*m_currentEventSelection));
+                                    (*m_currentEventSelection));
 }
 
 void NotationView::slotTransformsCollapseRests()
@@ -1293,7 +1303,7 @@ void NotationView::slotTransformsCollapseRests()
     KTmpStatusMsg msg(i18n("Collapsing rests..."), statusBar());
 
     getCommandHistory()->addCommand(new TransformsMenuCollapseRestsCommand
-				    (*m_currentEventSelection));
+                                    (*m_currentEventSelection));
 }
 
 void NotationView::slotTransformsStemsUp()
@@ -1302,7 +1312,7 @@ void NotationView::slotTransformsStemsUp()
     KTmpStatusMsg msg(i18n("Pointing stems up..."), statusBar());
 
     getCommandHistory()->addCommand(new TransformsMenuChangeStemsCommand
-				    (true, *m_currentEventSelection));
+                                    (true, *m_currentEventSelection));
 }
 
 void NotationView::slotTransformsStemsDown()
@@ -1311,7 +1321,7 @@ void NotationView::slotTransformsStemsDown()
     KTmpStatusMsg msg(i18n("Pointing stems down..."), statusBar());
 
     getCommandHistory()->addCommand(new TransformsMenuChangeStemsCommand
-				    (false, *m_currentEventSelection));
+                                    (false, *m_currentEventSelection));
 }
 
 void NotationView::slotTransformsRestoreStems()
@@ -1320,7 +1330,7 @@ void NotationView::slotTransformsRestoreStems()
     KTmpStatusMsg msg(i18n("Restoring computed stem directions..."), statusBar());
 
     getCommandHistory()->addCommand(new TransformsMenuRestoreStemsCommand
-				    (*m_currentEventSelection));
+                                    (*m_currentEventSelection));
 }
 
 void NotationView::slotTransformsTransposeUp()
@@ -1329,7 +1339,7 @@ void NotationView::slotTransformsTransposeUp()
     KTmpStatusMsg msg(i18n("Transposing up one semitone..."), statusBar());
 
     getCommandHistory()->addCommand(new TransformsMenuTransposeOneStepCommand
-				    (true, *m_currentEventSelection));
+                                    (true, *m_currentEventSelection));
 }
 
 void NotationView::slotTransformsTransposeDown()
@@ -1338,84 +1348,84 @@ void NotationView::slotTransformsTransposeDown()
     KTmpStatusMsg msg(i18n("Transposing down one semitone..."), statusBar());
 
     getCommandHistory()->addCommand(new TransformsMenuTransposeOneStepCommand
-				    (false, *m_currentEventSelection));
+                                    (false, *m_currentEventSelection));
 }
 
 void NotationView::slotTransformsAddAccent()
 {
     if (m_currentEventSelection)
-	getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
-					(Accent, *m_currentEventSelection));
+        getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
+                                        (Accent, *m_currentEventSelection));
 }
 
 void NotationView::slotTransformsAddTenuto()
 {
     if (m_currentEventSelection)
-	getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
-					(Tenuto, *m_currentEventSelection));
+        getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
+                                        (Tenuto, *m_currentEventSelection));
 }
 
 void NotationView::slotTransformsAddStaccato()
 {
     if (m_currentEventSelection)
-	getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
-					(Staccato, *m_currentEventSelection));
+        getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
+                                        (Staccato, *m_currentEventSelection));
 }
 
 void NotationView::slotTransformsAddSforzando()
 {
     if (m_currentEventSelection)
-	getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
-					(Sforzando, *m_currentEventSelection));
+        getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
+                                        (Sforzando, *m_currentEventSelection));
 }
 
 void NotationView::slotTransformsAddRinforzando()
 {
     if (m_currentEventSelection)
-	getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
-					(Rinforzando, *m_currentEventSelection));
+        getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
+                                        (Rinforzando, *m_currentEventSelection));
 }
 
 void NotationView::slotTransformsAddTrill()
 {
     if (m_currentEventSelection)
-	getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
-					(Trill, *m_currentEventSelection));
+        getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
+                                        (Trill, *m_currentEventSelection));
 }
 
 void NotationView::slotTransformsAddTurn()
 {
     if (m_currentEventSelection)
-	getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
-					(Turn, *m_currentEventSelection));
+        getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
+                                        (Turn, *m_currentEventSelection));
 }
 
 void NotationView::slotTransformsAddPause()
 {
     if (m_currentEventSelection)
-	getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
-					(Pause, *m_currentEventSelection));
+        getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
+                                        (Pause, *m_currentEventSelection));
 }
 
 void NotationView::slotTransformsAddUpBow()
 {
     if (m_currentEventSelection)
-	getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
-					(UpBow, *m_currentEventSelection));
+        getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
+                                        (UpBow, *m_currentEventSelection));
 }
 
 void NotationView::slotTransformsAddDownBow()
 {
     if (m_currentEventSelection)
-	getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
-					(DownBow, *m_currentEventSelection));
+        getCommandHistory()->addCommand(new TransformsMenuAddMarkCommand
+                                        (DownBow, *m_currentEventSelection));
 }
 
 void NotationView::slotTransformsRemoveMarks()
 {
     if (m_currentEventSelection)
-	getCommandHistory()->addCommand(new TransformsMenuRemoveMarksCommand
-					(*m_currentEventSelection));
+        getCommandHistory()->addCommand(new TransformsMenuRemoveMarksCommand
+                                        (*m_currentEventSelection));
 }
 
 
@@ -1430,10 +1440,10 @@ void
 NotationView::setPositionPointer(const int& position)
 {
     if (m_lastFinishingStaff < 0 ||
-	unsigned(m_lastFinishingStaff) >= m_staffs.size()) return;
+        unsigned(m_lastFinishingStaff) >= m_staffs.size()) return;
 
     kdDebug(KDEBUG_AREA) << "NotationView::setPositionPointer: position is "
-			 << position << endl;
+                         << position << endl;
 
     Rosegarden::Composition &comp = m_document->getComposition();
 
@@ -1446,21 +1456,21 @@ NotationView::setPositionPointer(const int& position)
 
     if (unsigned(barNo) < m_hlayout->getBarLineCount(staff)) {
 
-	canvasPosition = m_hlayout->getBarLineX(staff, barNo);
+        canvasPosition = m_hlayout->getBarLineX(staff, barNo);
 
-	if (times.first != times.second) {
+        if (times.first != times.second) {
 
-	    double barWidth;
-	    if (unsigned(barNo) + 1 < m_hlayout->getBarLineCount(staff)) {
-		barWidth =
-		    m_hlayout->getBarLineX(staff, barNo + 1) - canvasPosition;
-	    } else {
-		barWidth = m_hlayout->getTotalWidth() - canvasPosition;
-	    }
+            double barWidth;
+            if (unsigned(barNo) + 1 < m_hlayout->getBarLineCount(staff)) {
+                barWidth =
+                    m_hlayout->getBarLineX(staff, barNo + 1) - canvasPosition;
+            } else {
+                barWidth = m_hlayout->getTotalWidth() - canvasPosition;
+            }
 
-	    canvasPosition += barWidth * (position - times.first) /
-		(times.second - times.first);
-	}
+            canvasPosition += barWidth * (position - times.first) /
+                (times.second - times.first);
+        }
     }
 
     m_pointer->setX(canvasPosition);
@@ -1868,7 +1878,7 @@ NotationStaff *
 NotationView::getStaffForCanvasY(int y) const
 {
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-	if (m_staffs[i]->containsCanvasY(y)) return m_staffs[i];
+        if (m_staffs[i]->containsCanvasY(y)) return m_staffs[i];
     }
     return 0;
 }
@@ -1886,7 +1896,7 @@ NotationView::getHeightAtY(int y) const
 
 int
 NotationView::getYOfHeight(Rosegarden::Staff<NotationElement> *staff,
-			   int height, int baseY) const
+                           int height, int baseY) const
 {
     return dynamic_cast<NotationStaff *>(staff)->getYOfHeight(height, baseY);
 }
@@ -1901,7 +1911,7 @@ NotationView::getYSnappedToLine(int y) const
 
 void
 NotationView::getBarExtents(int x, int y, 
-			    int &rx, int &ry, int &rw, int &rh) const
+                            int &rx, int &ry, int &rw, int &rh) const
 {
     NotationStaff *staff = getStaffAtY(y);
     if (!staff) return;
@@ -1917,7 +1927,7 @@ NotationView::getBarExtents(int x, int y,
 
 NotationElementList::iterator
 NotationView::findClosestNote(double eventX, double eventY,
-			      Event *&timeSignature,
+                              Event *&timeSignature,
                               Event *&clef, Event *&key, int staffNo,
                               unsigned int proximityThreshold)
 {
@@ -1969,8 +1979,8 @@ NotationView::findClosestNote(double eventX, double eventY,
         else
             ydist = eventY - (*it)->getCanvasY();
 
-	// bit of a hack to get the correct row in page layout:
-	if (ydist > m_staffs[staffNo]->getHeightOfRow()/2) continue;
+        // bit of a hack to get the correct row in page layout:
+        if (ydist > m_staffs[staffNo]->getHeightOfRow()/2) continue;
 
         if (xdist < minDist) {
             kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : minDist was "
@@ -2007,17 +2017,17 @@ void NotationView::redoLayout(Segment *segment, timeT startTime, timeT endTime)
 
 
 void NotationView::redoLayoutAdvised(Segment *segment,
-				     timeT startTime, timeT endTime)
+                                     timeT startTime, timeT endTime)
 {
     START_TIMING;
 
     emit usedSelection(); //!!! hardly right
 
     if (segment) {
-	NotationStaff *staff = getStaff(*segment);
-	if (staff) applyLayout(staff->getId());
+        NotationStaff *staff = getStaff(*segment);
+        if (staff) applyLayout(staff->getId());
     } else {
-	applyLayout();
+        applyLayout();
     }
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
@@ -2031,8 +2041,8 @@ void NotationView::redoLayoutAdvised(Segment *segment,
         NotationElementList::iterator starti = notes->begin();
         NotationElementList::iterator endi = notes->end();
 
-	timeT barStartTime = -1, barEndTime = -1;
-	
+        timeT barStartTime = -1, barEndTime = -1;
+        
         if (startTime > 0) {
             barStartTime = ssegment->getBarStart(startTime);
 //            starti = notes->findTime(barStartTime);
@@ -2040,18 +2050,18 @@ void NotationView::redoLayoutAdvised(Segment *segment,
         }
 
         if (endTime >= 0) {
-	    barEndTime = ssegment->getBarEnd(endTime);
+            barEndTime = ssegment->getBarEnd(endTime);
 //            endi = notes->findTime(barEndTime);
             endi = notes->findTime(endTime);
         }
 
-	kdDebug(KDEBUG_AREA) << "NotationView::redoLayoutAdvised: "
-			     << "start = " << startTime << ", end = " << endTime << ", barStart = " << barStartTime << ", barEnd = " << barEndTime << endl;
+        kdDebug(KDEBUG_AREA) << "NotationView::redoLayoutAdvised: "
+                             << "start = " << startTime << ", end = " << endTime << ", barStart = " << barStartTime << ", barEnd = " << barEndTime << endl;
 
-	if (thisStaff) {
-	    m_staffs[i]->renderElements(starti, endi);
-	}
-	m_staffs[i]->positionElements(barStartTime, barEndTime);
+        if (thisStaff) {
+            m_staffs[i]->renderElements(starti, endi);
+        }
+        m_staffs[i]->positionElements(barStartTime, barEndTime);
     }
 
     updateRuler(); //!!! to staff
@@ -2081,17 +2091,17 @@ void NotationView::readjustCanvasSize()
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 
-	NotationStaff &staff = *m_staffs[i];
+        NotationStaff &staff = *m_staffs[i];
 
-	staff.sizeStaff(*m_hlayout);
+        staff.sizeStaff(*m_hlayout);
 
-	if (staff.getTotalWidth() + staff.getX() > maxWidth) {
-	    maxWidth = staff.getTotalWidth() + staff.getX();
-	}
+        if (staff.getTotalWidth() + staff.getX() > maxWidth) {
+            maxWidth = staff.getTotalWidth() + staff.getX();
+        }
 
-	if (staff.getTotalHeight() + staff.getY() > maxHeight) {
-	    maxHeight = staff.getTotalHeight() + staff.getY();
-	}
+        if (staff.getTotalHeight() + staff.getY() > maxHeight) {
+            maxHeight = staff.getTotalHeight() + staff.getY();
+        }
     }
 
     //!!! Rather than tidying up this code, use EditView equivalent
@@ -2104,15 +2114,15 @@ void NotationView::readjustCanvasSize()
     int heightMultiple = ((int)(maxHeight + 50) / iHeight) + 1;
 
     if (canvas()->width() < (widthMultiple * iWidth) ||
-	canvas()->height() < (heightMultiple * iHeight)) {
+        canvas()->height() < (heightMultiple * iHeight)) {
 
-	cerr/*        kdDebug(KDEBUG_AREA)*/ << "NotationView::readjustCanvasWidth() to "
-					     << maxWidth << " (iWidth is " << iWidth << " so need width of " << (widthMultiple * iWidth) << ")" << endl;
+        cerr/*        kdDebug(KDEBUG_AREA)*/ << "NotationView::readjustCanvasWidth() to "
+                                             << maxWidth << " (iWidth is " << iWidth << " so need width of " << (widthMultiple * iWidth) << ")" << endl;
 
-	canvas()->resize(std::max(widthMultiple * iWidth,
-				  (int)canvas()->width()),
-			 std::max(heightMultiple * iHeight,
-				  (int)canvas()->height()));
+        canvas()->resize(std::max(widthMultiple * iWidth,
+                                  (int)canvas()->width()),
+                         std::max(heightMultiple * iHeight,
+                                  (int)canvas()->height()));
 
 //        canvas()->resize(int(totalWidth) + 50, int(totalHeight) + 50);
         m_ruler->resize();
