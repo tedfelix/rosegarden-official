@@ -44,7 +44,7 @@ debug on ('-l0') to catch any messages.
 
 Start artsd (something) like this:
 
- % artsd -F 10 -S 1024 -a oss -l0
+ % artsd -F 10 -S 4096 -a oss -l0
 
 Open artscontrol (KDE menu item under Multimedia/Sound) and from that
 open the MidiManager.  To use the MIDI ports of your soundcard map the
