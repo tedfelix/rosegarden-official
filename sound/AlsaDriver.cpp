@@ -644,17 +644,12 @@ AlsaDriver::createMidiDevice(AlsaPortDescription *port,
 	{ "MIDI software device %d", "MIDI software input %d" }
     };
 
-    static int specificCounters[3][2];
-    const int GM = 0, SYNTH = 1, SAMPLE = 2;
-    static const char *specificNames[3][2] = {
-	{ "General MIDI synth", "General MIDI soft synth" },
-	{ "MIDI soundcard synth", "MIDI soft synth" },
-	{ "MIDI hardware sampler", "MIDI software sampler" }
+    static int specificCounters[2];
+    static const char *specificNames[2] = {
+	"MIDI soundcard synth", "MIDI soft synth",
     };
-    static const char *specificCountedNames[3][2] = {
-	{ "General MIDI synth %d", "General MIDI soft synth %d" },
-	{ "MIDI soundcard synth %d", "MIDI soft synth %d" },
-	{ "MIDI hardware sampler %d", "MIDI software sampler %d" }
+    static const char *specificCountedNames[2] = {
+	"MIDI soundcard synth %d", "MIDI soft synth %d",
     };
 
     DeviceId deviceId = getSpareDeviceId();
@@ -670,27 +665,37 @@ AlsaDriver::createMidiDevice(AlsaPortDescription *port,
 	bool haveName = false;
 
 	if (category != SYSTEM && reqDirection == MidiDevice::Play) {
-	    
-	    int type =
-		(((port->m_portType & SND_SEQ_PORT_TYPE_SYNTH)   ||
-		  (port->m_portType & SND_SEQ_PORT_TYPE_MIDI_GS) ||
-		  (port->m_portType & SND_SEQ_PORT_TYPE_MIDI_XG) ||
-		  (port->m_portType & SND_SEQ_PORT_TYPE_MIDI_MT32))       ? SYNTH  :
-		 ((port->m_portType & SND_SEQ_PORT_TYPE_DIRECT_SAMPLE) ||
-		  (port->m_portType & SND_SEQ_PORT_TYPE_SAMPLE))          ? SAMPLE :
-		 ( port->m_portType & SND_SEQ_PORT_TYPE_MIDI_GM)          ? GM     :
-                                                                            -1);
 
-	    if (type >= 0) {
-		int clientType =
-		    ((port->m_clientType & SND_SEQ_USER_CLIENT) ? 1 : 0);
-		if (specificCounters[type][clientType] == 0) {
-		    sprintf(deviceName, specificNames[type][clientType]);
-		    ++specificCounters[type][clientType];
+	    // No way to query whether a port is a MIDI synth, as
+	    // PORT_TYPE_SYNTH actually indicates something different
+	    // (ability to do direct wavetable synthesis -- nothing
+	    // to do with MIDI).  But we assume GM/GS/XG/MT32 devices
+	    // are synths.
+
+	    bool isSynth = (port->m_portType &
+			    (SND_SEQ_PORT_TYPE_MIDI_GM |
+			     SND_SEQ_PORT_TYPE_MIDI_GS |
+			     SND_SEQ_PORT_TYPE_MIDI_XG |
+			     SND_SEQ_PORT_TYPE_MIDI_MT32));
+
+	    // Because we can't discover through the API whether a
+	    // port is a synth, we are instead reduced to this
+	    // disgusting hack:
+
+	    if (!isSynth &&
+		(port->m_name.find("ynth") < port->m_name.length())) isSynth = true;
+	    
+	    if (category == SYSTEM) isSynth = false;
+
+	    if (isSynth) {
+		int clientType = (category == SOFTWARE) ? 1 : 0;
+		if (specificCounters[clientType] == 0) {
+		    sprintf(deviceName, specificNames[clientType]);
+		    ++specificCounters[clientType];
 		} else {
 		    sprintf(deviceName,
-			    specificCountedNames[type][clientType],
-			    ++specificCounters[type][clientType]);
+			    specificCountedNames[clientType],
+			    ++specificCounters[clientType]);
 		}
 		haveName = true;
 	    }
