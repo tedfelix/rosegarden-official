@@ -172,6 +172,8 @@ DeviceEditorDialog::DeviceEditorDialog(QWidget *parent,
     connect(addButton, SIGNAL(clicked()), this, SLOT(slotAddPlayDevice()));
     connect(addRButton, SIGNAL(clicked()), this, SLOT(slotAddRecordDevice()));
     connect(deleteButton, SIGNAL(clicked()), this, SLOT(slotDeleteDevice()));
+
+    setMinimumHeight(250);
 }
 
 

@@ -550,62 +550,6 @@ AlsaDriver::createMidiDevice(AlsaPortDescription *port,
 
 	sprintf(clientId, "Anonymous MIDI device %d", ++unknownCounter);
     }
-
-#ifdef NOT_DEFINED
-
-    PortDirection direction(Duplex);
-
-    if (port) {
-
-	direction = port->m_direction;
-
-	if (direction == Duplex) {
-
-	    if (port->m_client < 64) 
-		sprintf(clientId, "MIDI duplex system device %d",
-			systemDeviceCounter++);
-	    else if (port->m_client < 128)
-		sprintf(clientId, "MIDI duplex hardware device %d",
-			hardwareDeviceCounter++);
-	    else
-		sprintf(clientId, "MIDI duplex software device %d",
-			softwareDeviceCounter++);
-
-	} else if (direction == WriteOnly) {
-
-	    if (port->m_client < 64) 
-		sprintf(clientId, "MIDI system sink %d",
-			systemDeviceCounter++);
-	    else if (port->m_client < 128)
-		sprintf(clientId, "MIDI synth %d",
-			hardwareDeviceCounter++);
-	    else
-		sprintf(clientId, "MIDI soft synth %d",
-			softwareDeviceCounter++);
-
-	} else {
-
-	    if (port->m_client < 64) 
-		sprintf(clientId, "MIDI system input %d",
-			systemDeviceCounter++);
-	    else if (port->m_client < 128)
-		sprintf(clientId, "MIDI input %d",
-			hardwareDeviceCounter++);
-	    else
-		sprintf(clientId, "MIDI software input %d",
-			softwareDeviceCounter++);
-	}
-
-	m_devicePortMap[m_deviceRunningId] = ClientPortPair(port->m_client,
-							    port->m_port);
-
-	connectionName = port->m_name;
-
-    } else {
-
-	sprintf(clientId, "Anonymous MIDI device %d", unknownDeviceCounter++);
-    }
-#endif
 	
     //!!! should reuse any unused ids instead of using m_deviceRunningId
 
@@ -830,7 +774,7 @@ AlsaDriver::initialiseMidi()
                                         SND_SEQ_PORT_CAP_SUBS_WRITE |
                                         SND_SEQ_PORT_CAP_READ |
                                         SND_SEQ_PORT_CAP_SUBS_READ,
-                                        SND_SEQ_PORT_TYPE_MIDI_GENERIC);
+                                        SND_SEQ_PORT_TYPE_APPLICATION);
     if (m_port < 0)
     {
         std::cerr << "AlsaDriver::initialiseMidi - can't create port"
