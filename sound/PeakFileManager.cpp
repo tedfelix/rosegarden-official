@@ -257,14 +257,39 @@ PeakFileManager::calculatePeaks(std::ifstream *inFile, std::ofstream *outFile)
 // a pixmap quickly for a given resolution.
 //
 //
-QPixmap
-PeakFileManager::getPreview(AudioFile *audioFile,
-                            const RealTime &startIndex,
-                            const RealTime &endIndex,
-                            int resolution,
-                            int height)
+void
+PeakFileManager::drawPreview(AudioFile *audioFile,
+                             const RealTime &startIndex,
+                             const RealTime &endIndex,
+                             QPixmap *pixmap)
 {
-    return QPixmap();
+    if (audioFile->getType() == WAV)
+    {
+        PeakFile *peakFile = getPeakFile(audioFile);
+
+        try
+        {
+            peakFile->open();
+            peakFile->drawPixmap(startIndex,
+                                 endIndex,
+                                 pixmap);
+        }
+        catch(std::string e)
+        {
+            std::cout << "PeakFileManager::getPreview "
+                      << "\"" << e << "\"" << std::endl;
+        }
+    }
+    else if (audioFile->getType() == BWF)
+    {
+        // write the file out and incorporate the peak chunk
+    }
+    else
+    {
+        std::cerr << "PeakFileManager::getPreview - unsupported file type"
+                  << std::endl;
+    }
+        
 }
 
 std::vector<float>
@@ -283,7 +308,9 @@ PeakFileManager::getPreview(AudioFile *audioFile,
         try
         {
             peakFile->open();
-            rV = peakFile->getPreview(startIndex, endIndex, resolution);
+            rV = peakFile->getPreview(startIndex,
+                                      endIndex,
+                                      resolution);
         }
         catch(std::string e)
         {

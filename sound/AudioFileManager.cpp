@@ -526,8 +526,8 @@ AudioFileManager::generatePreviews()
     //
     std::vector<AudioFile*>::iterator it;
     for (it = m_audioFiles.begin(); it != m_audioFiles.end(); it++)
-	if (!m_peakManager.hasValidPeaks(*it))
-	    m_peakManager.generatePeaks(*it, 1);
+        if (!m_peakManager.hasValidPeaks(*it))
+            m_peakManager.generatePeaks(*it, 1);
 }
 
 
@@ -545,7 +545,7 @@ AudioFileManager::generatePreview(unsigned int id)
         return false;
 
     if (!m_peakManager.hasValidPeaks(audioFile))
-	m_peakManager.generatePeaks(audioFile, 1);
+        m_peakManager.generatePeaks(audioFile, 1);
 
     return true;
 }
@@ -571,73 +571,29 @@ AudioFileManager::getPreview(unsigned int id,
                              const RealTime &endIndex,
                              int resolution)
 {
-    /*
-    // preview has been generated over the entire sample file
-    // and we may just want a subset of that - calculate the
-    // start and end indicies of the float vector based on
-    // the initial m_previewResolution
-
-    double res = m_previewResolution.sec * 1000000.0 +
-                 m_previewResolution.usec;
-
-    double start = startIndex.sec * 1000000.0 + startIndex.usec;
-    double end   = endIndex.sec * 1000000.0 + endIndex.usec;
-
-    int startSample = (int)(start / res);
-    int endSample = (int)(end / res);
-
-
-    // Insert the subset preview into an intermediate vector prior
-    // to dithering to proper output resolution.  If we run off
-    // the end of the sample data just fill in with zeros.
-    //
-    for (int i = startSample; i < endSample; i++)
-    {
-        if(i < m_previewMap[id].size())
-            renderPreview.push_back(m_previewMap[id][i]);
-        else
-            renderPreview.push_back(0.0);
-    }
-
-    // Now we should have renderPreview.size() samples which
-    // we need to dither to x values to return to the caller
-    //
-    std::vector<float> returnPreview;
-    double samplePoint = renderPreview.size() / x;
-
-    for (int i = 0; i < x; i++)
-        returnPreview.push_back(renderPreview[i * samplePoint]);
-
-    */
-
     AudioFile *audioFile = getAudioFile(id);
     
     if (audioFile == 0)
-	return std::vector<float>();
+        return std::vector<float>();
 
     return m_peakManager.getPreview(audioFile,
-	                            startIndex,
-				    endIndex,
+                                    startIndex,
+                                    endIndex,
                                     resolution);
 }
 
-QPixmap
-AudioFileManager::getPreview(unsigned int id,
-			     const RealTime &startIndex,
-			     const RealTime &endIndex,
-			     int resolution,
-			     int height)
+void
+AudioFileManager::drawPreview(unsigned int id,
+                              const RealTime &startIndex,
+                              const RealTime &endIndex,
+                              QPixmap *pixmap)
 {
     AudioFile *audioFile = getAudioFile(id);
     
-    if (audioFile == 0)
-        return QPixmap();
-
-    return m_peakManager.getPreview(audioFile,
-	                            startIndex,
-				    endIndex,
-				    resolution,
-				    height);
+    m_peakManager.drawPreview(audioFile,
+                              startIndex,
+                              endIndex,
+                              pixmap);
 }
 
 }

@@ -164,6 +164,16 @@ void Segment::setDuration(timeT d)
 	if (!m_endMarkerTime) m_endMarkerTime = new timeT;
 	*m_endMarkerTime = d;
     }
+
+    // Reset audio end marker if we're in an audio segment.
+    // How will this work when the Segment is moved to a
+    // different timezone?
+    //
+    if (m_type == Audio && m_composition)
+    {
+        m_audioEndTime = m_audioStartTime +
+                         m_composition->getRealTimeDifference(m_startTime, d);
+    }
 }
 
 timeT Segment::getEndMarker() const

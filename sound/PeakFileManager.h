@@ -72,22 +72,19 @@ public:
     void generatePeaks(AudioFile *audioFile,
                        unsigned short updatePercentage);
 
-    // Generate a QPixmap to a given resolution - this function
-    // makes full use of the peak files of course to render
-    // a pixmap quickly for a given resolution.
+    // Generate a QPixmap 
     //
-    QPixmap getPreview(AudioFile *audioFile,
-                       const RealTime &startIndex,
-                       const RealTime &endIndex,
-                       int resolution, // samples per pixel
-                       int height);    // pixels
+    void drawPreview(AudioFile *audioFile,
+                     const RealTime &startIndex,
+                     const RealTime &endIndex,
+                     QPixmap *pixmap);
 
     // Get a vector of floats as the preview
     //
     std::vector<float> getPreview(AudioFile *audioFile,
                                   const RealTime &startIndex,
                                   const RealTime &endIndex,
-                                  int resolution);
+                                  int width); // width in floats
                     
 protected:
 

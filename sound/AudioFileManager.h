@@ -136,13 +136,12 @@ public:
     std::vector<float> getPreview(unsigned int id,       // audio file id
                                   const RealTime &startIndex, 
                                   const RealTime &endIndex,
-                                  int resolution);       // samples per point
+                                  int width);
 
-    QPixmap getPreview(unsigned int id,       // audio file id
-                       const RealTime &startIndex, 
-                       const RealTime &endIndex,
-                       int resolution,        // samples per pixel
-		       int height);
+    void drawPreview(unsigned int id,             // audio file id
+                     const RealTime &startIndex, 
+                     const RealTime &endIndex,
+                     QPixmap *pixmap);
 
     // Get a short file name from a long one (with '/'s)
     //

@@ -21,6 +21,7 @@
 #include <vector>
 
 #include <qdatetime.h>
+#include <qpixmap.h>
 
 #include "SoundFile.h"
 #include "RealTime.h"
@@ -82,6 +83,17 @@ public:
                                   const RealTime &endIndex,
                                   int width);
 
+    QPixmap getPreview(const RealTime &startIndex,
+                       const RealTime &endIndex,
+                       int width,
+                       int height);
+ 
+    // Draw the preview onto the Pixmap
+    //
+    void drawPixmap(const RealTime &startTime,
+                    const RealTime &endTime,
+                    QPixmap *pixmap);
+
     AudioFile* getAudioFile() { return m_audioFile; }
 
     // Scan to a peak and scan forward a number of peaks
@@ -94,6 +106,10 @@ protected:
     //
     void writeHeader(std::ofstream *file);
     void writePeaks(std::ofstream *file);
+
+    // Get the position of a peak for a given time
+    //
+    double getPeak(const RealTime &time);
 
     // Parse the header
     //

@@ -187,3 +187,31 @@ Instrument.  By default RG will choose the onboard synth first so
 you'll have to manually reassign these Tracks.
 
 
+How do I select an Instrument?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can check which Instrument is selected for your Track by making sure
+that Settings->Show Track Labels is unchecked.  You can change Instrument
+for a Track by clicking and holding on the Track/Instrument label.  A
+pop up menu will appear from which you can select a different output
+Instrument.  Rosegarden automatically assigns the first available synth
+device on your soundcard for it's default output Instrument when importing
+MIDI files.
+
+
+I'm using ALSA and I've selected a synth Instrument but I don't hear any sound
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you're hearing silence with a Synth device (say "Emuk10k1 Port 0" or
+"OPL 3") then make sure you've loaded a soundfont for your soundcard.
+To load soundfonts use the "sfxload" utility.  For example the Creative
+SBLive! soundcard comes with a set of standard soundfonts (2gmgsmt.sf2,
+4gmgsmt.sf2, 8mbgmsfx.sf2) and you can load the 8MB soundfont as follows:
+
+  % sfxload 8mbgmsfx.sf2
+
+For more fun with soundfonts including how to create them for yourself
+have a look at the Smurf/Swami project:
+
+  http://smurf.sourceforge.net/
+
