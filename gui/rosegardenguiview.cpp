@@ -237,12 +237,6 @@ void RosegardenGUIView::selectTrack(int trackId)
 //
 void RosegardenGUIView::slotSelectTrackSegments(int trackId)
 {
-    // Send this signal to the GUI to activate the correct tool
-    // on the toolbar so that we have a SegmentSelector object
-    // to write the Segments into
-    //
-    emit activateTool(SegmentCanvas::Selector);
-
     std::vector<Rosegarden::Segment*> segments;
 
     for (Rosegarden::Composition::iterator i =
@@ -252,6 +246,12 @@ void RosegardenGUIView::slotSelectTrackSegments(int trackId)
         if (((int)(*i)->getTrack()) == trackId)
             segments.push_back(*i);
     }
+
+    // Send this signal to the GUI to activate the correct tool
+    // on the toolbar so that we have a SegmentSelector object
+    // to write the Segments into
+    //
+    if (segments.size() > 0) emit activateTool(SegmentCanvas::Selector);
 
     // Send the segment list even if it's empty as we
     // use that to clear any current selection
