@@ -22,7 +22,9 @@
 <Separator/>
   <Action name="lyric_editor"/>
   <Separator/>
-    <Action name="show_control_ruler"/>
+    <Action name="show_control_rulers"/>
+    <Action name="add_velocity_control_ruler"/>
+    <Action name="add_control_ruler"/>
 </Menu>
 
 <Menu name="edit">
@@ -549,6 +551,12 @@
   <enable>
     <Action name="cursor_up_staff"/>
     <Action name="cursor_down_staff"/>
+  </enable>
+</State>
+
+<State name="have_control_ruler">
+  <enable>
+    <Action name="show_control_rulers"/>
   </enable>
 </State>
 

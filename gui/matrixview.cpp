@@ -1928,6 +1928,17 @@ MatrixView::removePropertyViewRuler(unsigned int number)
     return true;
 }
 
+Rosegarden::RulerScale*
+MatrixView::getHLayout()
+{
+    return &m_hlayout;
+}
+
+Rosegarden::Staff*
+MatrixView::getFirstStaff()
+{
+    return m_staffs[0];
+}
 
 Rosegarden::Segment *
 MatrixView::getCurrentSegment()
@@ -2235,19 +2246,6 @@ MatrixView::slotStepByStepTargetRequested(QObject *obj)
     }
     action->setChecked(obj == this);
 }
-
-/// overridden from EditView
-void
-MatrixView::slotShowControlRuler()
-{
-    if (getControlRuler() == 0)
-        makeControlRuler(Rosegarden::BaseProperties::VELOCITY,
-                         m_staffs[0], &m_hlayout);
-
-    EditView::slotShowControlRuler();
-}
-
-
 
 const char* const MatrixView::ConfigGroup = "Matrix Options";
 

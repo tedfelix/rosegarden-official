@@ -403,10 +403,9 @@ public slots:
     /// The given QObject has originated a step-by-step-editing request
     void slotStepByStepTargetRequested(QObject *);
 
-    /// overridden from EditView
-    virtual void slotShowControlRuler();
-
 protected:
+    virtual Rosegarden::RulerScale* getHLayout();
+    virtual Rosegarden::Staff* getFirstStaff();
 
     virtual Rosegarden::Segment *getCurrentSegment();
     virtual Rosegarden::timeT getInsertionTime();

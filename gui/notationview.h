@@ -564,9 +564,6 @@ public slots:
     /// The given QObject has originated a step-by-step-editing request
     void slotStepByStepTargetRequested(QObject *);
 
-    /// overridden from EditView
-    virtual void slotShowControlRuler();
-
 signals:
     /**
      * Emitted when the note selected in the palette changes
@@ -601,6 +598,9 @@ signals:
     void stepByStepTargetRequested(QObject *);
 
 protected:
+
+    virtual Rosegarden::RulerScale* getHLayout();
+    virtual Rosegarden::Staff* getFirstStaff();
 
     virtual void paintEvent(QPaintEvent* e);
 

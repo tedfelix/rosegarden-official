@@ -20,6 +20,7 @@
 */
 
 #include <qlayout.h>
+#include <qtabwidget.h>
 
 #include <kapp.h>
 #include <kconfig.h>
@@ -65,13 +66,14 @@ EditView::EditView(RosegardenGUIDoc *doc,
     m_currentEventSelection(0),
     m_activeItem(0),
     m_canvasView(0),
-    m_horizontalScrollBar(new QScrollBar(Horizontal, m_centralFrame)),
+    m_horizontalScrollBar(new QScrollBar(Horizontal, getCentralFrame())),
     m_rulerBox(new QVBoxLayout), // top ruler box - added to grid later on
     m_controlBox(new QVBoxLayout), // top control ruler box - added to grid later on
     m_bottomBox(new QVBoxLayout), // bottom box - added to grid later on
     m_topBarButtons(0),
     m_bottomBarButtons(0),
-    m_controlRuler(0)
+    m_controlRuler(0),
+    m_controlRulers(new QTabWidget(getCentralFrame()))
 {
     m_grid->addWidget(m_horizontalScrollBar, HSCROLLBAR_ROW,       m_mainCol);
     m_grid->addLayout(m_bottomBox,           BOTTOMBARBUTTONS_ROW, m_mainCol);
@@ -79,6 +81,10 @@ EditView::EditView(RosegardenGUIDoc *doc,
     m_grid->addLayout(m_rulerBox, RULERS_ROW, m_mainCol);
     m_grid->addMultiCellLayout(m_controlBox, CONTROLS_ROW, CONTROLS_ROW, 0, 1);
     m_controlBox->setAlignment(AlignRight);
+
+    m_bottomBox->addWidget(m_controlRulers);
+    m_controlRulers->hide();
+    m_controlRulers->setTabPosition(QTabWidget::Bottom);
 }
 
 EditView::~EditView()
@@ -158,29 +164,30 @@ void EditView::addPropertyBox(QWidget *w)
     m_controlBox->addWidget(w);
 }
 
-ControlRuler* EditView::makeControlRuler(Rosegarden::PropertyName propertyName,
-                                         Rosegarden::Staff* staff,
-                                         Rosegarden::RulerScale* rulerScale)
+ControlRuler* EditView::makeControlRuler(Rosegarden::PropertyName propertyName)
 {
-    if (m_controlRuler) return m_controlRuler;
-
     QCanvas* controlRulerCanvas = new QCanvas(this);
     QSize viewSize = getViewSize();
     controlRulerCanvas->resize(viewSize.width(), ControlRuler::DefaultRulerHeight); // TODO - keep it in sync with main canvas size
-    m_controlRuler = new ControlRuler(propertyName,
-                                      staff, rulerScale,
-                                      m_horizontalScrollBar,
-                                      controlRulerCanvas, getCentralFrame());
+    ControlRuler* controlRuler = new ControlRuler(propertyName,
+                                                  getFirstStaff(), getHLayout(),
+                                                  m_horizontalScrollBar,
+                                                  controlRulerCanvas, m_controlRulers);
 
-    m_bottomBox->addWidget(m_controlRuler);
+    return controlRuler;
+}
+
+void EditView::addControlRuler(ControlRuler* ruler)
+{
+    m_controlRulers->addTab(ruler, ruler->getPropertyName().c_str());
+    m_controlRulers->showPage(ruler);
 
     connect(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
-            m_controlRuler->horizontalScrollBar(), SIGNAL(valueChanged(int)));
+            ruler->horizontalScrollBar(), SIGNAL(valueChanged(int)));
     connect(m_horizontalScrollBar, SIGNAL(sliderMoved(int)),
-            m_controlRuler->horizontalScrollBar(), SIGNAL(sliderMoved(int)));
+            ruler->horizontalScrollBar(), SIGNAL(sliderMoved(int)));
 
-
-    return m_controlRuler;
+    stateChanged("have_control_ruler", KXMLGUIClient::StateReverse);
 }
 
 void EditView::readjustViewSize(QSize requestedSize, bool exact)
@@ -496,9 +503,17 @@ EditView::setupActions()
                 SLOT(slotAddTimeSignature()), actionCollection(),
                 "add_time_signature");
 
-    new KToggleAction(i18n("Show Velocity Control Ruler"), 0, this,
-                      SLOT(slotShowControlRuler()), actionCollection(),
-                      "show_control_ruler");
+    new KToggleAction(i18n("Show Control Rulers"), 0, this,
+                      SLOT(slotToggleControlRulers()), actionCollection(),
+                      "show_control_rulers");
+
+    new KAction(i18n("Add Velocity Control Ruler"), 0, this,
+                SLOT(slotShowVelocityControlRuler()), actionCollection(),
+                "add_velocity_control_ruler");
+
+    new KAction(i18n("Add Property Control Ruler"), 0, this,
+                SLOT(slotShowPropertyControlRuler()), actionCollection(),
+                "add_control_ruler");
 }
 
 void
@@ -731,19 +746,51 @@ void EditView::slotAddTimeSignature()
     delete dialog;
 }                       
 
-void EditView::slotShowControlRuler()
+void EditView::slotToggleControlRulers()
 {
-    // the control ruler should be created by the overriding implementation
-    // of this slot
-    //
-    if (m_controlRuler) {
-        if (m_controlRuler->isVisible())
-            m_controlRuler->hide();
-        else
-            m_controlRuler->show();
+    if (m_controlRulers->isVisible())
+        m_controlRulers->hide();
+    else
+        m_controlRulers->show();
+}
+
+ControlRuler* EditView::findRuler(Rosegarden::PropertyName propertyName, int &index)
+{
+    for(index = 0; index < m_controlRulers->count(); ++index) {
+        ControlRuler* ruler = dynamic_cast<ControlRuler*>(m_controlRulers->page(index));
+        if (ruler && ruler->getPropertyName() == propertyName) return ruler;
+    }
+
+    return 0;
+}
+
+void EditView::showPropertyControlRuler(Rosegarden::PropertyName propertyName)
+{
+    int index = 0;
+    
+    ControlRuler* existingRuler = findRuler(propertyName, index);
+
+    if (existingRuler) {
+
+        m_controlRulers->setCurrentPage(index);
+
+    } else {
+
+        ControlRuler* controlRuler = makeControlRuler(propertyName);
+        addControlRuler(controlRuler);
+
+    }
+    
+     if (!m_controlRulers->isVisible()) {
+        actionCollection()->action("show_control_rulers")->activate();
     }
 }
 
-void EditView::slotShowControlRulerForProperty()
+void EditView::slotShowVelocityControlRuler()
+{
+    showPropertyControlRuler(Rosegarden::BaseProperties::VELOCITY);
+}
+
+void EditView::slotShowPropertyControlRuler()
 {
 }

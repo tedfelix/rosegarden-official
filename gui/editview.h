@@ -42,6 +42,7 @@ class QVBox;
 class QGridLayout;
 class QVBoxLayout;
 class QScrollBar;
+class QTabWidget;
 
 class KCommand;
 class KToggleAction;
@@ -160,10 +161,13 @@ public slots:
     void slotAddTempo();
     void slotAddTimeSignature();
 
-    virtual void slotShowControlRuler();
-    virtual void slotShowControlRulerForProperty();
+    virtual void slotToggleControlRulers();
+    virtual void slotShowVelocityControlRuler();
+    virtual void slotShowPropertyControlRuler();
 
 protected:
+    virtual Rosegarden::RulerScale* getHLayout() = 0;
+    virtual Rosegarden::Staff* getFirstStaff() = 0;
 
     virtual void paintEvent(QPaintEvent* e);
 
@@ -192,12 +196,30 @@ protected:
     void addPropertyBox(QWidget*);
 
     /**
+     * Make a control ruler for the given property,
+     */
+    ControlRuler* makeControlRuler(Rosegarden::PropertyName propertyName);
+
+    /**
      * Add control ruler
      */
-    ControlRuler* makeControlRuler(Rosegarden::PropertyName propertyName,
-                                   Rosegarden::Staff* staff,
-                                   Rosegarden::RulerScale* rulerScale);
+    void addControlRuler(ControlRuler* ruler);
+    
+    /**
+     * Find the control ruler for the given property name
+     * if it's already been created, return 0 otherwise
+     */
+    ControlRuler* findRuler(Rosegarden::PropertyName propertyName, int &index);
 
+    /**
+     * Show a control ruler for the given property
+     * If the ruler already exists, activate the tab it's in,
+     * otherwise create the ruler and add it to the control rulers tab
+     * widget
+     */ 
+    void showPropertyControlRuler(Rosegarden::PropertyName propertyName);
+    
+    
     /**
      * Set up those actions common to any EditView (e.g. note insertion,
      * time signatures etc)
@@ -271,7 +293,8 @@ protected:
     BarButtons  *m_topBarButtons;
     BarButtons  *m_bottomBarButtons;
     ControlRuler *m_controlRuler;
-    
+    QTabWidget  *m_controlRulers;
+
     static const unsigned int RULERS_ROW;
     static const unsigned int CONTROLS_ROW;
     static const unsigned int TOPBARBUTTONS_ROW;

@@ -1639,6 +1639,18 @@ NotationView::scrollToTime(timeT t) {
 	(int(notationViewCanvasCoord));// + DEFAULT_STAFF_OFFSET);
 }
 
+Rosegarden::RulerScale*
+NotationView::getHLayout()
+{
+    return m_hlayout;
+}
+
+Rosegarden::Staff*
+NotationView::getFirstStaff()
+{
+    return m_staffs[0];
+}
+
 void
 NotationView::paintEvent(QPaintEvent *e)
 {
