@@ -54,6 +54,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         // set to some state which says it's ok to parse the rest
 
     } else if (lcName == "track") {
+        m_currentTime = 0;
         int trackNb = -1;
         QString trackNbStr = atts.value("nb");
         if (trackNbStr) {
