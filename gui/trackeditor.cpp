@@ -390,4 +390,16 @@ TrackEditor::setPointerPosition(int position)
     }
 }
 
+void
+TrackEditor::setSelectAdd(bool value)
+{
+    m_segmentsCanvas->setSelectAdd(value);
+}
+
+void
+TrackEditor::setSelectCopy(bool value)
+{
+     m_segmentsCanvas->setSelectCopy(value);
+}
+
 

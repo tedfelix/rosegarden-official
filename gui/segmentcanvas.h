@@ -212,6 +212,14 @@ public slots:
     //
     void selectSegments(list<Rosegarden::Segment*> segment);
 
+    // These are sent from the top level app when it gets key
+    // depresses relating to selection add (usually SHIFT) and
+    // selection copy (usually CONTROL)
+    //
+    void setSelectAdd(const bool &value);
+    void setSelectCopy(const bool &value);
+
+
 protected:
     virtual void contentsMousePressEvent(QMouseEvent*);
     virtual void contentsMouseReleaseEvent(QMouseEvent*);
@@ -394,6 +402,18 @@ public:
     //
     void clearSelected();
 
+    // These two alter the behaviour of the selection mode
+    //
+    // - SegmentAdd (usually when SHIFT is held down) allows
+    //   multiple selections of Segments.
+    //
+    // - SegmentCopy (usually CONTROL) allows draw and drop
+    //   copying of Segments - it's a quick shortcut
+    //
+    void setSegmentAdd(const bool &value)  { m_segmentAddMode = value; }
+    void setSegmentCopy(const bool &value) { m_segmentCopyMode = value; }
+
+
 public slots:
     void selectSegmentItem(SegmentItem *selectedItem);
 
@@ -404,6 +424,8 @@ signals:
 private:
 
     list<SegmentItem*> m_selectedItems;
+    bool               m_segmentAddMode;
+    bool               m_segmentCopyMode;
 
 };
 

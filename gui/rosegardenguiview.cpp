@@ -81,6 +81,13 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     connect((QObject *)trackButtons, SIGNAL(trackSelected(int)),
                                      SLOT(selectTrackSegments(int)));
 
+    connect(this,         SIGNAL(signalSetSelectAdd(bool)), 
+            tracksEditor, SLOT(setSelectAdd(bool)));
+            
+    connect(this,         SIGNAL(signalSetSelectCopy(bool)), 
+            tracksEditor, SLOT(setSelectCopy(bool)));
+            
+
     // turn off the scrollbars on the track buttons
     //
     buttonsView->setHScrollBarMode(QScrollView::AlwaysOff);
@@ -291,3 +298,5 @@ void RosegardenGUIView::selectTrackSegments(int trackId)
     //
     emit selectSegments(segments);
 }
+
+

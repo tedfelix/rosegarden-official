@@ -329,6 +329,39 @@ SegmentCanvas::selectSegments(list<Rosegarden::Segment*> segments)
     }
 }
 
+// enter/exit selection add mode - this means that the SHIFT key
+// (or similar) has been depressed and if we're in Select mode we
+// can add Selections to the one we currently have
+//
+//
+void
+SegmentCanvas::setSelectAdd(const bool &value)
+{
+    if (m_toolType != Selector)
+        return;
+
+    dynamic_cast<SegmentSelector*>(m_tool)->setSegmentAdd(value);
+}
+
+
+// enter/exit selection copy mode - this means that the CTRL key
+// (or similar) has been depressed and if we're in Select mode we
+// can copy the current selection with a click and drag (overrides
+// the default movement behaviour for selection).
+//
+//
+void
+SegmentCanvas::setSelectCopy(const bool &value)
+{
+    if (m_toolType != Selector)
+        return;
+
+    dynamic_cast<SegmentSelector*>(m_tool)->setSegmentCopy(value);
+
+}
+
+
+
 
 
 //////////////////////////////////////////////////////////////////////
@@ -596,7 +629,8 @@ bool SegmentResizer::cursorIsCloseEnoughToEdge(SegmentItem* p, QMouseEvent* e)
 //////////////////////////////
 
 SegmentSelector::SegmentSelector(SegmentCanvas *c)
-    : SegmentTool(c)
+    : SegmentTool(c), m_segmentAddMode(false), m_segmentCopyMode(false)
+
 {
     kdDebug(KDEBUG_AREA) << "SegmentSelector()\n";
 
@@ -640,11 +674,11 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 {
     SegmentItem *item = m_canvas->findPartClickedOn(e->pos());
 
-    // Only add to the list if we've got SHIFT held down -
-    // for the moment we just clear everything and then
-    // set the current item
+    // If we're in segmentAddMode then we don't clear the
+    // selection list
     //
-    clearSelected();
+    if (!m_segmentAddMode)
+       clearSelected();
 
     if (item)
     {
@@ -683,16 +717,20 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 {
     if (m_currentItem) {
 
-        // Only allow movement if this Segment is already selected
-        //
-        if (m_currentItem->isSelected())
+        if (m_segmentCopyMode)
         {
-            m_currentItem->setX(m_canvas->grid().snapX(e->pos().x()));
-            m_currentItem->setY(m_canvas->grid().snapY(e->pos().y()));
-            m_canvas->canvas()->update();
+            std::cout << "Segment quick copy mode not implemented" << endl;
+        }
+        else
+        {
+            if (m_currentItem->isSelected())
+            {
+                m_currentItem->setX(m_canvas->grid().snapX(e->pos().x()));
+                m_currentItem->setY(m_canvas->grid().snapY(e->pos().y()));
+                m_canvas->canvas()->update();
+                emit updateSegmentTrackAndStartIndex(m_currentItem);
+            }
         }
     }
 }
-
-
 

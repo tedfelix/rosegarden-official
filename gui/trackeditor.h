@@ -106,6 +106,18 @@ public slots:
      */
     void setPointerPosition(int position);
 
+
+    /**
+     * c.f. what we have in rosegardenguiview.h
+     * These are instrumental in passing through
+     * key presses from GUI front panel down to
+     * the SegmentCanvas.
+     *
+     */
+    void setSelectAdd(bool value);
+    void setSelectCopy(bool value);
+
+
 protected slots:
     void segmentOrderChanged(int section, int fromIdx, int toIdx);
     void addSegment(SegmentItem*);

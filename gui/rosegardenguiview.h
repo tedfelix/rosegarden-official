@@ -123,6 +123,17 @@ public:
      * Set the time pointer position during playback
      */
     void setPointerPosition(const int &position);
+
+    /**
+     * These two are just-passing-through methods
+     * called from the GUI when it has key presses
+     * that the SegmentCanvas is interested in.
+     * It's a long way down.
+     *
+     */
+    void setSelectAdd(const bool &value)  { emit signalSetSelectAdd(value); }
+    void setSelectCopy(const bool &value) { emit signalSetSelectCopy(value); }
+
     
 public slots:
     void editSegmentNotation(Rosegarden::Segment*);
@@ -146,6 +157,10 @@ signals:
     void setPositionPointer(int);
     void activateTool(SegmentCanvas::ToolType);
     void selectSegments(list<Rosegarden::Segment*>);
+
+    void signalSetSelectAdd(bool);
+    void signalSetSelectCopy(bool);
+
 
 protected:
     //--------------- Data members ---------------------------------
