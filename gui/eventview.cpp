@@ -400,10 +400,19 @@ EventView::setupActions()
     EditViewBase::setupActions("eventlist.rc");
 
     // File menu
+#ifdef RGKDE3
+    KStdAction::close   (this, SLOT(slotCloseWindow()), actionCollection());
+    // Edit menu
+    KStdAction::cut     (this, SLOT(slotEditCut()), actionCollection());
+
+    KStdAction::copy    (this, SLOT(slotEditCopy()), actionCollection());
+
+    KStdAction::paste   (this, SLOT(slotEditPaste()), actionCollection());
+
+#else
     KStdAction::close   ((const QObject *)this,
                          SLOT(slotCloseWindow()),
                          (QObject*)actionCollection());
-
     // Edit menu
     KStdAction::cut     ((const QObject *)this,
                          SLOT(slotEditCut()),
@@ -416,6 +425,7 @@ EventView::setupActions()
     KStdAction::paste   ((const QObject *)this,
                          SLOT(slotEditPaste()),
                          (QObject*)actionCollection());
+#endif
 
     createGUI(getRCFileName());
 }
