@@ -24,6 +24,7 @@
 #include <qlabel.h>
 #include <qvalidator.h>
 #include <qaccel.h>
+#include <qpushbutton.h>
 
 #include "segmentcommands.h"
 #include "rosegardentempodialog.h"
@@ -40,10 +41,10 @@ RosegardenTempoDialog::RosegardenTempoDialog(RosegardenGUIDoc *doc,
     RosegardenTempo(parent, name, true), // modal
     m_doc(doc)
 {
-    connect((QObject*)OKButton, SIGNAL(released()),
+    connect(OKButton, SIGNAL(released()),
             this, SLOT(slotOK()));
 
-    connect((QObject*)CancelButton, SIGNAL(released()),
+    connect(CancelButton, SIGNAL(released()),
             this, SLOT(slotCancel()));
 
     // bind Return key to OK button
@@ -64,7 +65,6 @@ RosegardenTempoDialog::RosegardenTempoDialog(RosegardenGUIDoc *doc,
 
     showTempo();
     showPosition();
-
 }
 
 RosegardenTempoDialog::~RosegardenTempoDialog()
@@ -134,4 +134,4 @@ RosegardenTempoDialog::getCommandHistory()
 }
 
 }
- 
+
