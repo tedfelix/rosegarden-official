@@ -81,6 +81,7 @@ public:
 
     void setStudio(Rosegarden::Studio *studio) { m_studio = studio; }
 
+    bool hasGUI(Rosegarden::InstrumentId id, int position);
     void startGUI(Rosegarden::InstrumentId id, int position);
     void showGUI(Rosegarden::InstrumentId id, int position);
     void stopGUI(Rosegarden::InstrumentId id, int position);
@@ -122,6 +123,8 @@ public:
     void setGUIUrl(QString url);
 
     void sendToGUI(OSCMessage *message); // I take ownership of message, will delete when done
+
+    static QString getGUIFilePath(QString identifier);
 
 protected:
     KProcess *m_gui;

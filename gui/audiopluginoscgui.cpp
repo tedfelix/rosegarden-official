@@ -164,6 +164,24 @@ AudioPluginOSCGUIManager::~AudioPluginOSCGUIManager()
     //!!! arse -- there is no lo_server_thread_terminate
 }
 
+bool
+AudioPluginOSCGUIManager::hasGUI(InstrumentId instrument, int position)
+{
+    Instrument *i = m_studio->getInstrumentById(instrument);
+    if (!i) return false;
+
+    AudioPluginInstance *pluginInstance = i->getPlugin(position);
+    if (!pluginInstance) return false;
+
+    try {
+	QString filePath = AudioPluginOSCGUI::getGUIFilePath
+	    (strtoqstr(pluginInstance->getIdentifier()));
+	return (filePath && filePath != "");
+    } catch (Rosegarden::Exception e) { // that's OK
+	return false;
+    }
+}
+
 void
 AudioPluginOSCGUIManager::startGUI(InstrumentId instrument, int position)
 {
@@ -574,6 +592,47 @@ AudioPluginOSCGUI::AudioPluginOSCGUI(Rosegarden::AudioPluginInstance *instance,
 {
     QString identifier = strtoqstr(instance->getIdentifier());
 
+    QString filePath = getGUIFilePath(identifier);
+    if (!filePath) {
+	throw Rosegarden::Exception("No GUI found");
+    }
+
+    QString type, soName, label;
+    Rosegarden::PluginIdentifier::parseIdentifier(identifier, type, soName, label);
+    QFileInfo soInfo(soName);
+
+    // arguments: osc url, dll name, label, instance tag
+
+    m_gui = new KProcess();
+
+    *m_gui << filePath
+	   << m_serverUrl
+	   << soInfo.fileName()
+	   << label
+	   << friendlyName;
+    
+    RG_DEBUG << "AudioPluginOSCGUI::AudioPluginOSCGUI: Starting process "
+	     << filePath << " " << m_serverUrl << " "
+	     << soInfo.fileName() << " " << label << " " << friendlyName << endl;
+
+    if (!m_gui->start(KProcess::NotifyOnExit, KProcess::NoCommunication)) {
+	RG_DEBUG << "AudioPluginOSCGUI::AudioPluginOSCGUI: Couldn't start process " << filePath << endl;
+	delete m_gui;
+	m_gui = 0;
+	throw Rosegarden::Exception("Failed to start GUI");
+    }
+}
+
+AudioPluginOSCGUI::~AudioPluginOSCGUI()
+{
+    OSCMessage *showMessage = new OSCMessage;
+    showMessage->setMethod("quit");
+    sendToGUI(showMessage);
+}
+
+QString
+AudioPluginOSCGUI::getGUIFilePath(QString identifier)
+{
     QString type, soName, label;
     Rosegarden::PluginIdentifier::parseIdentifier(identifier, type, soName, label);
 
@@ -592,43 +651,25 @@ AudioPluginOSCGUI::AudioPluginOSCGUI(Rosegarden::AudioPluginInstance *instance,
 
     const QFileInfoList *list = dir.entryInfoList();
 
-    for (QFileInfoList::Iterator i = list->begin(); i != list->end(); ++i) {
+    // in order of preference:
+    const char *suffixes[] = { "_rg", "_kde", "_qt", "_gtk2", "_gtk", "_x11", "_gui" };
+    int nsuffixes = sizeof(suffixes)/sizeof(suffixes[0]);
 
-	if ((*i)->isFile() && (*i)->isExecutable() &&
-	    (*i)->fileName().left(label.length()) == label) { // that'll do
-	    
-	    // arguments: osc url, dll name, label, instance tag
+    for (int k = 0; k <= nsuffixes; ++k) {
 
-	    m_gui = new KProcess();
+	for (QFileInfoList::const_iterator i = list->begin(); i != list->end(); ++i) {
 
-	    *m_gui << (*i)->filePath()
-		   << m_serverUrl
-		   << soInfo.fileName()
-		   << label
-		   << friendlyName;
+	    const QFileInfo *info = *i;
 
-	    RG_DEBUG << "AudioPluginOSCGUI::AudioPluginOSCGUI: Starting process "
-		     << (*i)->filePath() << " " << m_serverUrl << " "
-		     << soInfo.fileName() << " " << label << " " << friendlyName << endl;
-
-	    if (!m_gui->start(KProcess::NotifyOnExit, KProcess::NoCommunication)) {
-		RG_DEBUG << "AudioPluginOSCGUI::AudioPluginOSCGUI: Couldn't start process " << (*i)->filePath() << endl;
-		delete m_gui;
-		m_gui = 0;
-	    } else {
-		return;
+	    if (info->isFile() && info->isExecutable() &&
+		info->fileName().left(label.length()) == label &&
+		(k == nsuffixes || info->fileName().lower().endsWith(suffixes[k]))) {
+		return info->filePath();
 	    }
 	}
     }
-
-    throw Rosegarden::Exception("Failed to start any GUI");
-}
-
-AudioPluginOSCGUI::~AudioPluginOSCGUI()
-{
-    OSCMessage *showMessage = new OSCMessage;
-    showMessage->setMethod("quit");
-    sendToGUI(showMessage);
+	
+    return QString();
 }
 
 void

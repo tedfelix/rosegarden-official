@@ -256,7 +256,7 @@ public:
     virtual std::vector<QString> getPropertyList(int id,
                                                  const QString &property) = 0;
 
-    // Get a list of properties of a certain type from an object
+    // Get a list of available plugins
     //
     virtual std::vector<QString> getPluginInformation() = 0;
 

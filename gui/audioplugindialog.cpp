@@ -49,6 +49,10 @@
 
 #include "MappedStudio.h"
 
+#ifdef HAVE_LIBLO
+#include "audiopluginoscgui.h"
+#endif
+
 namespace Rosegarden
 {
 
@@ -56,10 +60,21 @@ AudioPluginClipboard _pluginClipboard;
 
 AudioPluginDialog::AudioPluginDialog(QWidget *parent,
                                      AudioPluginManager *aPM,
+#ifdef HAVE_LIBLO
+				     AudioPluginOSCGUIManager *aGM,
+#endif
                                      Instrument *instrument,
                                      int index):
-    KDialogBase(parent, "", false, i18n("Audio Plugin"), Close | Details),
+    KDialogBase(parent, "", false, i18n("Audio Plugin"),
+#ifdef HAVE_LIBLO
+		Close | Details),
+#else
+		Close),
+#endif
     m_pluginManager(aPM),
+#ifdef HAVE_LIBLO
+    m_pluginGUIManager(aGM),
+#endif
     m_instrument(instrument),
     m_index(index),
     m_generating(true),
@@ -68,8 +83,9 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     setSizePolicy(QSizePolicy(QSizePolicy::Preferred,
                               QSizePolicy::Fixed));
 
+#ifdef HAVE_LIBLO
     setButtonText(Details, i18n("Editor"));
-    //!!! need to know whether a GUI is available or not
+#endif
 
     QVBox *vbox = makeVBoxMainWidget();
 
@@ -136,11 +152,13 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     m_accelerators = new QAccel(this);
 }
 
+#ifdef HAVE_LIBLO
 void
 AudioPluginDialog::slotDetails()
 {
     slotShowGUI();
 }
+#endif
 
 void
 AudioPluginDialog::slotShowGUI()
@@ -292,10 +310,24 @@ AudioPluginDialog::slotPluginSelected(int i)
     AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
     if (!inst) return;
 
+    QLabel *programLabel = 0;
+
+    if (plugin->isSynth()) {
+
+	programLabel = new QLabel(i18n("Program:  "), m_pluginParamsBox);
+	m_programCombo = new KComboBox(m_pluginParamsBox);
+	m_gridLayout->addMultiCellWidget(programLabel,
+					 0, 0, 0, 0, Qt::AlignRight);
+	m_gridLayout->addMultiCellWidget(m_programCombo,
+					 0, 0, 1, 7, Qt::AlignLeft);
+	connect(m_programCombo, SIGNAL(activated(const QString &)),
+		this, SLOT(slotPluginProgramChanged(const QString &)));
+    }
+
     if (plugin)
     {
-        setCaption(caption + plugin->getName());
-        m_pluginId->setText(i18n("Id: %1").arg(plugin->getUniqueId()));
+	setCaption(caption + plugin->getName());
+	m_pluginId->setText(i18n("Id: %1").arg(plugin->getUniqueId()));
 
         QString pluginInfo = plugin->getAuthor() + QString("\n") + 
                              plugin->getCopyright();
@@ -380,25 +412,29 @@ AudioPluginDialog::slotPluginSelected(int i)
     // tell the sequencer
     emit pluginSelected(m_instrument->getId(), m_index, number - 1);
 
-    int current = 0;
-    QStringList programs = getProgramsForInstance(inst, current);
+    if (plugin->isSynth()) {
+	int current = 0;
+	QStringList programs = getProgramsForInstance(inst, current);
     
-    if (programs.count() > 0) {
-	m_programCombo = new KComboBox(m_pluginParamsBox);
-	m_programCombo->insertStringList(programs);
-	m_programCombo->setCurrentItem(current);
-	m_gridLayout->addMultiCellWidget(new QLabel(i18n("Program:  "), m_pluginParamsBox),
-					 0, 0, 0, 0, Qt::AlignRight);
-	m_gridLayout->addMultiCellWidget(m_programCombo,
-					 0, 0, 1, 7, Qt::AlignLeft);
-	connect(m_programCombo, SIGNAL(activated(const QString &)),
-		this, SLOT(slotPluginProgramChanged(const QString &)));
+	if (programs.count() > 0) {
+	    m_programCombo->insertStringList(programs);
+	    m_programCombo->setCurrentItem(current);
+	} else {
+	    programLabel->hide();
+	    m_programCombo->hide();
+	}
     }
 
     if (guiWasShown) {
 	emit showPluginGUI(m_instrument->getId(), m_index);
 	m_guiShown = true;
     }
+
+#ifdef HAVE_LIBLO
+    bool gui = m_pluginGUIManager->hasGUI(m_instrument->getId(), m_index);
+    actionButton(Details)->setEnabled(gui);
+#endif
+    
 }
 
 QStringList

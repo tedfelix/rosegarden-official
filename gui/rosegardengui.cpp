@@ -351,6 +351,10 @@ RosegardenGUIApp::~RosegardenGUIApp()
 {
     RG_DEBUG << "~RosegardenGUIApp()\n";
 
+#ifdef HAVE_LIBLO
+    delete m_pluginGUIManager;
+#endif
+
     if (isSequencerRunning() && !isSequencerExternal()) {
         m_sequencerProcess->blockSignals(true);
         delete m_sequencerProcess;
@@ -5474,6 +5478,9 @@ RosegardenGUIApp::slotShowPluginDialog(QWidget *parent,
     Rosegarden::AudioPluginDialog *dialog =
 	new Rosegarden::AudioPluginDialog(parent,
 					  m_doc->getPluginManager(),
+#ifdef HAVE_LIBLO
+					  m_pluginGUIManager,
+#endif
 					  instrument,
 					  index);
 
@@ -5805,6 +5812,9 @@ RosegardenGUIApp::slotPluginConfigurationChanged(Rosegarden::InstrumentId instru
 	    config.push_back(strtoqstr(i->first));
 	    config.push_back(strtoqstr(i->second));
 	}
+
+	RG_DEBUG << "RosegardenGUIApp::slotPluginConfigurationChanged: setting new config on mapped id " << inst->getMappedId() << endl;
+
 	Rosegarden::StudioControl::setStudioObjectPropertyList
 	    (inst->getMappedId(),
 	     Rosegarden::MappedPluginSlot::Configuration,

@@ -123,8 +123,6 @@ StudioControl::setStudioObjectProperty(MappedObjectId id,
     QByteArray data;
     QDataStream streamOut(data, IO_WriteOnly);
 
-    // Use new MappedEvent interface
-    //
     streamOut << id;
     streamOut << property;
     streamOut << value;
@@ -142,8 +140,6 @@ StudioControl::setStudioObjectProperty(MappedObjectId id,
     QByteArray data;
     QDataStream streamOut(data, IO_WriteOnly);
 
-    // Use new MappedEvent interface
-    //
     streamOut << id;
     streamOut << property;
     streamOut << value;
@@ -161,13 +157,13 @@ StudioControl::setStudioObjectPropertyList(MappedObjectId id,
     QByteArray data;
     QDataStream streamOut(data, IO_WriteOnly);
 
-    // Use new MappedEvent interface
-    //
     streamOut << id;
     streamOut << property;
     streamOut << values;
 
-    rgapp->sequencerSend("setMappedPropertyList(int, QString, MappedObjectPropertyList)",
+    RG_DEBUG << "StudioControl::setStudioObjectPropertyList: " << values.size() << " values for property " << property << endl;
+
+    rgapp->sequencerSend("setMappedPropertyList(int, QString, Rosegarden::MappedObjectPropertyList)",
                          data);
     
     return true;

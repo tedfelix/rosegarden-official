@@ -28,6 +28,7 @@
 #include <qstringlist.h>
 
 #include "Instrument.h"
+#include "config.h"
 
 #ifndef _AUDIOPLUGINDIALOG_H_
 #define _AUDIOPLUGINDIALOG_H_
@@ -48,6 +49,10 @@ class QCheckBox;
 class QLabel;
 class QGridLayout;
 class QAccel;
+
+#ifdef HAVE_LIBLO
+class AudioPluginOSCGUIManager;
+#endif
 
 namespace Rosegarden
 {
@@ -113,6 +118,9 @@ class AudioPluginDialog : public KDialogBase
 public:
     AudioPluginDialog(QWidget *parent,
                       AudioPluginManager *aPM,
+#ifdef HAVE_LIBLO
+		      AudioPluginOSCGUIManager *aGM,
+#endif
                       Instrument *instrument,
                       int index);
 
@@ -133,7 +141,9 @@ public slots:
     void slotDefault();
     void slotShowGUI();
 
+#ifdef HAVE_LIBLO
     virtual void slotDetails();
+#endif
 
 signals:
     void pluginSelected(Rosegarden::InstrumentId, int pluginIndex, int plugin);
@@ -158,6 +168,9 @@ protected:
     //--------------- Data members ---------------------------------
 
     AudioPluginManager  *m_pluginManager;
+#ifdef HAVE_LIBLO
+    AudioPluginOSCGUIManager *m_pluginGUIManager;
+#endif
     Instrument          *m_instrument;
 
     QFrame		*m_pluginParamsBox;

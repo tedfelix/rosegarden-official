@@ -1435,6 +1435,10 @@ MappedPluginSlot::setPropertyList(const MappedObjectProperty &property,
 {
     if (property == Configuration) {
 
+#ifdef DEBUG_MAPPEDSTUDIO
+	std::cerr << "MappedPluginSlot::setPropertyList(configuration): configuration is:" << std::endl;
+#endif
+
 	MappedStudio *studio =
 	    dynamic_cast<MappedStudio*>(getParent());
 
@@ -1443,6 +1447,10 @@ MappedPluginSlot::setPropertyList(const MappedObjectProperty &property,
 
 	    QString key = *i;
 	    QString value = *++i;
+
+#ifdef DEBUG_MAPPEDSTUDIO
+	    std::cerr << key << " = " << value << std::endl;
+#endif
 
 	    if (m_configuration.find(key) != m_configuration.end() &&
 		m_configuration[key] == value) continue;
