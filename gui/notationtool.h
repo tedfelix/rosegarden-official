@@ -440,12 +440,17 @@ protected:
      */
     void setViewCurrentSelection(bool preview);
 
+    /**
+     * Look up the staff containing the given notation element
+     */
+    NotationStaff *getStaffForElement(NotationElement *elt);
+
     //--------------- Data members ---------------------------------
 
     QCanvasRectangle* m_selectionRect;
     bool m_updateRect;
 
-    int m_clickedStaff;
+    NotationStaff *m_selectedStaff;
     NotationElement *m_clickedElement;
 
     Rosegarden::EventSelection *m_selectionToMerge;

@@ -462,7 +462,14 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
             {
 	        // Add any performance transposition
 	        // 
-	        mE->setPitch(mE->getPitch() + ((*it)->getTranspose()));
+		int pitch = mE->getPitch() + ((*it)->getTranspose());
+
+		// Rosegarden pitches can be outside MIDI range
+		// sometimes even without performance transposition
+		if (pitch < 0) pitch = 0;
+		if (pitch > 127) pitch = 127;
+
+	        mE->setPitch(pitch);
             }
  
 	    // And stick it in the mapped composition

@@ -925,7 +925,7 @@ NotationSelector::NotationSelector(NotationView* view)
     : NotationTool("NotationSelector", view),
       m_selectionRect(0),
       m_updateRect(false),
-      m_clickedStaff(-1),
+      m_selectedStaff(0),
       m_clickedElement(0),
       m_selectionToMerge(0),
       m_justSelectedBar(false)
@@ -977,8 +977,12 @@ void NotationSelector::handleLeftButtonPress(Rosegarden::timeT t,
     m_selectionToMerge =
 	(selectionToMerge ? new EventSelection(*selectionToMerge) : 0);
 
-    m_clickedStaff = staffNo;
     m_clickedElement = dynamic_cast<NotationElement*>(element);
+    if (m_clickedElement) {
+	m_selectedStaff = getStaffForElement(m_clickedElement);
+    } else {
+	m_selectedStaff = 0; // don't know yet; wait until we have an element
+    }
 
     m_selectionRect->setX(e->x());
     m_selectionRect->setY(e->y());
@@ -1002,11 +1006,11 @@ void NotationSelector::handleMouseDoubleClick(Rosegarden::timeT,
 					      ViewElement *element)
 {
     NOTATION_DEBUG << "NotationSelector::handleMouseDoubleClick" << endl;
-    m_clickedStaff = staffNo;
     m_clickedElement = dynamic_cast<NotationElement*>(element);
     
     NotationStaff *staff = m_nParentView->getStaff(staffNo);
     if (!staff) return;
+    m_selectedStaff = staff;
 
     if (m_clickedElement) {
 
@@ -1052,11 +1056,11 @@ void NotationSelector::handleMouseTripleClick(Rosegarden::timeT t,
     m_justSelectedBar = false;
 
     NOTATION_DEBUG << "NotationSelector::handleMouseTripleClick" << endl;
-    m_clickedStaff = staffNo;
     m_clickedElement = dynamic_cast<NotationElement*>(element);
     
     NotationStaff *staff = m_nParentView->getStaff(staffNo);
     if (!staff) return;
+    m_selectedStaff = staff;
 
     if (m_clickedElement) {
 
@@ -1108,7 +1112,7 @@ void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)
         m_selectionRect->height() <  3) {
 
 	if (m_clickedElement != 0 &&
-	    m_clickedStaff   >= 0) {
+	    m_selectedStaff) {
 
 	    // If we didn't drag out a meaningful area, but _did_
 	    // click on an individual event, then select just that
@@ -1116,7 +1120,7 @@ void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)
 
 	    if (m_selectionToMerge &&
 		m_selectionToMerge->getSegment() ==
-		m_nParentView->getStaff(m_clickedStaff)->getSegment()) {
+		m_selectedStaff->getSegment()) {
 
 		m_selectionToMerge->addEvent(m_clickedElement->event());
 		m_nParentView->setCurrentSelection(m_selectionToMerge, false);
@@ -1125,10 +1129,10 @@ void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)
 	    } else {
 
 		m_nParentView->setSingleSelectedEvent
-		    (m_clickedStaff, m_clickedElement->event());
+		    (m_selectedStaff->getId(), m_clickedElement->event());
 	    }
 
-	} else if (m_clickedStaff >= 0) {
+	} else if (m_selectedStaff) {
 
 	    // If we clicked on no event but on a staff, move the
 	    // insertion cursor to the point where we clicked. 
@@ -1201,31 +1205,54 @@ EventSelection* NotationSelector::getSelection()
 
     double middleY = m_selectionRect->y() + m_selectionRect->height()/2;
 
+    QCanvasItemList itemList = m_selectionRect->collisions(true);
+    QCanvasItemList::Iterator it;
+
+    QRect rect = m_selectionRect->rect().normalize();
+    QCanvasNotationSprite *sprite = 0;
+
+    if (!m_selectedStaff) {
+
+	// Scan the list of collisions, looking for a valid notation
+	// element; if we find one, initialise m_selectedStaff from it.
+	// If we don't find one, we have no selection.  This is a little
+	// inefficient but we only do it for the first event in the
+	// selection.
+	
+	for (it = itemList.begin(); it != itemList.end(); ++it) {
+        
+	    if ((sprite = dynamic_cast<QCanvasNotationSprite*>(*it))) {
+
+		if (!rect.contains(int((*it)->x()), int((*it)->y()), true)) 
+		    continue;
+            
+		NotationElement &el = sprite->getNotationElement();
+		m_selectedStaff = getStaffForElement(&el);
+		break;
+	    }
+	}
+    }
+
+    if (!m_selectedStaff) return 0;
+	
+/*!!!
     NotationStaff *staff = dynamic_cast<NotationStaff*>
 	(m_nParentView->getStaffForCanvasCoords(int(m_selectionRect->x()),
 						int(middleY)));
 
     if (!staff) return 0;
-    Segment& originalSegment = staff->getSegment();
-    
+*/
+    Segment& originalSegment = m_selectedStaff->getSegment();
     EventSelection* selection = new EventSelection(originalSegment);
-
-    QCanvasItemList itemList = m_selectionRect->collisions(true);
-    QCanvasItemList::Iterator it;
-
-    QRect rect = m_selectionRect->rect().normalize();
 
     for (it = itemList.begin(); it != itemList.end(); ++it) {
 
-        QCanvasItem *item = *it;
-        QCanvasNotationSprite *sprite = 0;
-        
-        if ((sprite = dynamic_cast<QCanvasNotationSprite*>(item))) {
+        if ((sprite = dynamic_cast<QCanvasNotationSprite*>(*it))) {
 
             // check if the element's rect
             // is actually included in the selection rect.
             //
-            if (!rect.contains(int(item->x()), int(item->y()), true)) 
+            if (!rect.contains(int((*it)->x()), int((*it)->y()), true)) 
 		continue;
             
             NotationElement &el = sprite->getNotationElement();
@@ -1253,6 +1280,18 @@ void NotationSelector::setViewCurrentSelection(bool preview)
 
     m_nParentView->setCurrentSelection(selection, preview);
 }
+
+NotationStaff *
+NotationSelector::getStaffForElement(NotationElement *elt)
+{
+    for (int i = 0; i < m_nParentView->getStaffCount(); ++i) {
+	NotationStaff *staff = m_nParentView->getStaff(i);
+	if (staff->getSegment().findSingle(elt->event()) !=
+	    staff->getSegment().end()) return staff;
+    }
+    return 0;
+}
+
 
 bool NotationSelector::m_greedy = true;
 

@@ -891,8 +891,6 @@ TransposeCommand::modifySegment()
 	if ((*i)->isa(Note::EventType)) {
 	    long pitch = (*i)->get<Int>(PITCH);
 	    pitch += m_semitones;
-	    if (pitch < 0) pitch = 0;
-	    if (pitch > 127) pitch = 127;
 	    (*i)->set<Int>(PITCH, pitch); 
 	    (*i)->unset(ACCIDENTAL);
 	}
