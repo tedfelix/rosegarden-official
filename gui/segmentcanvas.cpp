@@ -147,10 +147,9 @@ void SegmentItem::makeFont()
 
 void SegmentItem::drawShape(QPainter& painter)
 {
+    QRect previewRect = painter.clipRegion().boundingRect();
     QCanvasRectangle::drawShape(painter);
     Rosegarden::RulerScale *rulerScale = m_snapGrid->getRulerScale();
-
-    //!!! we should probably have an "if we're doing previews" here...
 
     if (m_segment && m_segment->getType() == Rosegarden::Segment::Audio)
     {
@@ -161,7 +160,6 @@ void SegmentItem::drawShape(QPainter& painter)
 
         // Set up pen and get rectangle
         painter.setPen(RosegardenGUIColours::SegmentAudioPreview);
-        QRect previewRect = rect();
         
         // Fetch vector of floats adjusted to our resolution
         //
@@ -206,16 +204,21 @@ void SegmentItem::drawShape(QPainter& painter)
 
 	    painter.setPen(RosegardenGUIColours::SegmentInternalPreview);
 
-	    timeT startTime = rulerScale->getTimeForX(rect().x());
-	    timeT   endTime = rulerScale->getTimeForX(rect().x() +
-						      rect().width());
+	    timeT startTime = rulerScale->getTimeForX(previewRect.x());
+	    timeT   endTime = rulerScale->getTimeForX(previewRect.x() +
+						      previewRect.width());
 
 	    Segment::iterator start = m_segment->findNearestTime(startTime);
 	    Segment::iterator end = m_segment->findTime(endTime);
 	    if (start == m_segment->end()) start = m_segment->begin();
 
+	    kdDebug(KDEBUG_AREA) << "SegmentCanvas::drawShape: rect is "
+				 << previewRect.width() << "x"
+				 << previewRect.height() << " at "
+				 << previewRect.x() << ","
+				 << previewRect.y() << endl;
 
-#define PREVIEW_WITH_RECTANGLES
+//#define PREVIEW_WITH_RECTANGLES
 
 
 #ifdef PREVIEW_WITH_RECTANGLES

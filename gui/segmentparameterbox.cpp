@@ -493,10 +493,10 @@ SegmentParameterBox::slotTransposeTextChanged(const QString &text)
 //                                                                transposeValue));
 
     std::vector<Rosegarden::Segment*>::iterator it;
-    for (it = m_segments.begin(); it != m_segments.end(); it++)
+    for (it = m_segments.begin(); it != m_segments.end(); it++) {
         (*it)->setTranspose(transposeValue);
-
-    m_view->getDocument()->setModified(true);
+	m_view->getDocument()->setModified(true);
+    }
 }
 
 void 
@@ -527,10 +527,10 @@ SegmentParameterBox::slotDelayTextChanged(const QString &text)
 
 
     std::vector<Rosegarden::Segment*>::iterator it;
-    for (it = m_segments.begin(); it != m_segments.end(); it++)
+    for (it = m_segments.begin(); it != m_segments.end(); it++) {
         (*it)->setDelay(delayValue);
-
-    m_view->getDocument()->setModified(true);
+	m_view->getDocument()->setModified(true);
+    }
 }
 
 void
