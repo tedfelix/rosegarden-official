@@ -1952,7 +1952,7 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
 }
 
 
-void
+bool
 AlsaDriver::record(const RecordStatus& recordStatus)
 {
     if (recordStatus == RECORD_MIDI)
@@ -1964,8 +1964,16 @@ AlsaDriver::record(const RecordStatus& recordStatus)
     else if (recordStatus == RECORD_AUDIO)
     {
 #ifdef HAVE_LIBJACK
-        createAudioFile(m_recordingFilename);
-        m_recordStatus = RECORD_AUDIO;
+        if (createAudioFile(m_recordingFilename))
+        {
+            m_recordStatus = RECORD_AUDIO;
+        }
+        else
+        {
+            m_recordStatus = ASYNCHRONOUS_MIDI;
+           return false;
+        }
+
 #else
         std::cerr << "AlsaDriver::record - can't record audio without JACK"
                   << std::endl;
@@ -1986,6 +1994,8 @@ AlsaDriver::record(const RecordStatus& recordStatus)
         std::cerr << "ArtsDriver::record - unsupported recording mode"
                   << std::endl;
     }
+
+    return true;
 }
 
 ClientPortPair
@@ -3026,16 +3036,9 @@ AlsaDriver::createAudioFile(const std::string &fileName)
                                      _jackSampleRate/16,   // bytes per second
                                      2,                    // bytes per sample
                                      16);                  // bits per sample
-
     // open the file for writing
     //
-    _recordFile->write();
-
-    // Write the header information out and prepare for writing samples
-    //
-    //_recordFile->writeHeader();
-
-    return true;
+    return (_recordFile->write());
 }
 
 

@@ -593,9 +593,15 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
         SEQUENCER_DEBUG << "RosegardenSequencerApp::record()"
                         << " - starting to record MIDI" << endl;
 
-        // Get the Sequencer to prepare itself for recording
+        // Get the Sequencer to prepare itself for recording - if
+        // this fails we stop.
         //
-        m_sequencer->record(Rosegarden::RECORD_MIDI);
+        if(m_sequencer->record(Rosegarden::RECORD_MIDI) == false)
+        {
+            m_transportStatus = STOPPING;
+            return 0;
+        }
+
     }
     else if (localRecordMode == STARTING_TO_RECORD_AUDIO)
     {
@@ -632,12 +638,20 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
         m_sequencer->setRecordingFilename(std::string(audioFileName.data()));
 
         // set recording
-        m_sequencer->record(Rosegarden::RECORD_AUDIO);
+        if (m_sequencer->record(Rosegarden::RECORD_AUDIO) == false)
+        {
+            SEQUENCER_DEBUG << "couldn't start recording - "
+                            << "perhaps audio file path wrong?"
+                            << endl;
+
+            m_transportStatus = STOPPING;
+            return 0;
+        }
     }
     else
     {
         // unrecognised type - return a problem
-        return 1;
+        return 0;
     }
 
     // Now set the local transport status to the record mode
@@ -1235,7 +1249,7 @@ RosegardenSequencerApp::setQuarterNoteLength(long timeSec, long timeUSec)
     long usecs =
         long((double(timeSec) * 1000000.0 + double(timeUSec)) / 24.0);
 
-    SEQUENCER_DEBUG << "sending MIDI clock every " << usecs << " usecs" << endl;
+    //SEQUENCER_DEBUG << "sending MIDI clock every " << usecs << " usecs" << endl;
     m_sequencer->setMIDIClockInterval(usecs);
 }
 

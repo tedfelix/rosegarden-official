@@ -134,6 +134,55 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
     setAutoSavePeriod(autosaveSeconds);
 }
 
+RosegardenGUIDoc::RosegardenGUIDoc(RosegardenGUIDoc *doc)
+    : QObject(doc->parent(), doc->name()),
+      m_modified(doc->isModified()),
+      m_autoSaved(doc->isAutoSaved()),
+      m_recordSegment(0),
+      m_endOfLastRecordedNote(0),
+      m_commandHistory(new MultiViewCommandHistory()), // lose command history
+      m_clipboard(new Rosegarden::Clipboard),          // lose clipboard
+      m_startUpSync(true),
+      m_pluginManager(doc->getPluginManager()),
+      m_autoSaveTimer(new QTimer(this))
+{
+    m_title = doc->getTitle();
+    m_absFilePath = doc->getAbsFilePath();
+
+    /*
+    m_composition = doc->getComposition();
+    m_audioFileManager = doc->getAudioFileManager();
+    m_studio = doc->getStudio();
+    m_config = doc->getConfiguration();
+    */
+}
+
+RosegardenGUIDoc&
+RosegardenGUIDoc::operator=(const RosegardenGUIDoc &doc)
+{
+
+    m_modified = doc.isModified();
+    m_autoSaved = doc.isAutoSaved();
+    m_title = doc.getTitle();
+    m_absFilePath = doc.getAbsFilePath();
+    m_recordSegment = 0;
+    m_endOfLastRecordedNote = 0;
+    m_commandHistory = new MultiViewCommandHistory();
+    m_clipboard = new Rosegarden::Clipboard();
+    m_startUpSync = true;
+    m_autoSaveTimer = new QTimer(this);
+
+    /*
+    m_composition = doc.getComposition();
+    m_audioFileManager = doc.getAudioFileManager();
+    m_studio = doc.getStudio();
+    m_config = doc.getConfiguration();
+    */
+
+    return *this;
+}
+
+
 RosegardenGUIDoc::~RosegardenGUIDoc()
 {
     RG_DEBUG << "~RosegardenGUIDoc()\n";

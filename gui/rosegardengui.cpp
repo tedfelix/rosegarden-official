@@ -2690,13 +2690,23 @@ RosegardenGUIApp::slotRecord()
         slotStop();
     }
 
+    // Attempt to start recording
+    //
     try
     {
         m_seqManager->record(false);
     }
     catch(QString s)
     {
+        // We should already be stopped by this point so just unset
+        // the buttons after clicking the dialog.
+        //
         KMessageBox::error(this, s);
+
+        m_transport->MetronomeButton()->setOn(false);
+        m_transport->RecordButton()->setOn(false);
+        m_transport->PlayButton()->setOn(false);
+
     }
 }
 

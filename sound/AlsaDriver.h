@@ -74,7 +74,7 @@ public:
     virtual MappedComposition*
         getMappedComposition(const RealTime &playLatency);
     
-    virtual void record(const RecordStatus& recordStatus);
+    virtual bool record(const RecordStatus& recordStatus);
 
     void addInstrumentsForPort(Instrument::InstrumentType type,
                                const std::string &name, 

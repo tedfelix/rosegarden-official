@@ -1037,8 +1037,19 @@ SequenceManager::record(bool toggled)
             }
             else
             {
+                // Stop immediately - turn off buttons in parent
+                //
                 m_transportStatus = STOPPED;
-                throw(i18n("Failed to start recording"));
+
+                if (recordType == STARTING_TO_RECORD_AUDIO)
+                {
+                    throw(i18n("Couldn't start recording audio - is audio record path valid?"));
+                }
+                else
+                {
+                    throw(i18n("Couldn't start recording MIDI"));
+                }
+
             }
         }
     }

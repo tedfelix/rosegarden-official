@@ -68,7 +68,7 @@ public:
                                   const RealTime &playLatency,
                                   bool now);
 
-    virtual void record(const RecordStatus& recordStatus);
+    virtual bool record(const RecordStatus& recordStatus);
 
     virtual void processPending(const RealTime &playLatency);
 

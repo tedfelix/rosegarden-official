@@ -61,7 +61,7 @@ public:
 
     // Activate a recording state
     //
-    virtual void record(const RecordStatus& /*recordStatus*/ ) {;}
+    virtual bool record(const RecordStatus& /*recordStatus*/ ) { return false; }
 
     // Process anything that's pending
     //

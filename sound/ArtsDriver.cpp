@@ -940,7 +940,7 @@ ArtsDriver::processEventsOut(const MappedComposition &mC,
     processAudioQueue(playLatency, now);
 }
 
-void
+bool
 ArtsDriver::record(const RecordStatus& recordStatus)
 {
     if (recordStatus == RECORD_MIDI)
@@ -954,6 +954,7 @@ ArtsDriver::record(const RecordStatus& recordStatus)
     {
         std::cerr << "ArtsDriver - record() - AUDIO RECORDING not yet supported"
                   << std::endl;
+        return false;
     }
     else if (recordStatus == ASYNCHRONOUS_MIDI)
     {
@@ -968,6 +969,8 @@ ArtsDriver::record(const RecordStatus& recordStatus)
         std::cerr << "ArtsDriver  - record() - Unsupported recording mode"
                   << std::endl;
     }
+
+    return true;
 }
 
 void

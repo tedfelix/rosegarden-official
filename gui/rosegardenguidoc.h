@@ -84,6 +84,9 @@ public:
                      Rosegarden::AudioPluginManager *audioPluginManager = 0,
                      const char *name=0);
 
+    /* Copy Constructor */
+    RosegardenGUIDoc(RosegardenGUIDoc *doc);
+
     /**
      * Destructor for the fileclass of the application
      */
@@ -110,7 +113,7 @@ public:
      * returns if the document is modified or not. Use this to
      * determine if your document needs saving by the user on closing.
      */
-    bool isModified(){ return m_modified; };
+    bool isModified() const { return m_modified; };
 
     /**
      * "save modified" - asks the user for saving if the document is
@@ -197,16 +200,24 @@ public:
      */
     Rosegarden::Studio& getStudio() { return m_studio;}
 
+    const Rosegarden::Studio& getStudio() const { return m_studio;}
+
     /*
      * return the AudioFileManager
      */
     Rosegarden::AudioFileManager& getAudioFileManager()
         { return m_audioFileManager; }
 
+    const Rosegarden::AudioFileManager& getAudioFileManager() const
+        { return m_audioFileManager; }
+
     /*
      * return the Configuration object
      */
     Rosegarden::DocumentConfiguration& getConfiguration() { return m_config; }
+
+    const Rosegarden::DocumentConfiguration& getConfiguration() const 
+        { return m_config; }
 
     /**
      * returns the cut/copy/paste clipboard
@@ -318,6 +329,9 @@ public:
         { return (dynamic_cast<RosegardenGUIApp*>(parent()))
                                          ->getSequenceManager(); }
 
+    /* assignment */
+    RosegardenGUIDoc& operator=(const RosegardenGUIDoc &doc);
+
 public slots:
     /**
      * calls repaint() on all views connected to the document object
@@ -400,7 +414,7 @@ protected:
     /**
      * Returns whether the document should be auto-saved
      */
-    bool isAutoSaved() { return m_autoSaved; }
+    bool isAutoSaved() const { return m_autoSaved; }
 
 public:	
     /**

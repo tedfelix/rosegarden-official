@@ -239,7 +239,7 @@ public:
 
     // Activate a recording state
     //
-    virtual void record(const RecordStatus& recordStatus) = 0;
+    virtual bool record(const RecordStatus& recordStatus) = 0;
 
     // Process anything that's pending
     //

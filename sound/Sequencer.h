@@ -82,8 +82,8 @@ public:
 
     // Control recording (input) state
     //
-    void record(const RecordStatus& recordStatus)
-        { m_soundDriver->record(recordStatus); }
+    bool record(const RecordStatus& recordStatus)
+        { return m_soundDriver->record(recordStatus); }
 
     // While recording returns a wrapped MappedComposition of
     // the latest MappedEvents
