@@ -440,8 +440,15 @@ SegmentItem::SegmentItem(Segment *segment,
 
 SegmentItem::~SegmentItem()
 {
-    if (m_repeatRectangle)
+    delete m_preview;
+
+    QCanvasItemList allItems = canvas()->allItems();
+
+    if (m_repeatRectangle && allItems.find(m_repeatRectangle) != allItems.end())
         CanvasItemGC::mark(m_repeatRectangle);
+    else
+        RG_DEBUG << "~SegmentItem() - m_repeatRectangle not in items list - canvas is probably being deleted\n";
+
 }
 
 void SegmentItem::setShowPreview(bool preview)
@@ -746,7 +753,11 @@ SegmentCanvas::SegmentCanvas(RosegardenGUIDoc *doc,
 
 SegmentCanvas::~SegmentCanvas()
 {
-    // nothing here - canvas items are deleted by the Track Editor
+    // canvas items are deleted by the Track Editor
+    //
+    // flush the Canvas Item GC to avoid double-deletion problems
+    //
+    CanvasItemGC::flush();
 }
 
 QCanvasRectangle*
