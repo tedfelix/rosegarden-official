@@ -245,7 +245,7 @@ void PianoKeyboard::mouseMoveEvent(QMouseEvent* e)
 
         if (staff)
         {
-            drawHoverNote(staff->getHeightAtCanvasY(e->y()));
+            drawHoverNote(staff->getHeightAtCanvasCoords(e->x(), e->y()));
         }
     }
 

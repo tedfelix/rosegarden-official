@@ -1226,7 +1226,7 @@ MatrixView::slotHoveredOverKeyChanged(unsigned int y)
 {
     MatrixStaff& staff = *(m_staffs[0]);
 
-    int evPitch = staff.getHeightAtCanvasY(y);
+    int evPitch = staff.getHeightAtCanvasCoords(-1, y);
 
     if (evPitch != m_previousEvPitch) {
 	Rosegarden::MidiPitchLabel label(evPitch);
@@ -1366,7 +1366,7 @@ void MatrixView::slotKeyPressed(unsigned int y, bool repeating)
     Rosegarden::Studio &studio = getDocument()->getStudio();
 
     MatrixStaff& staff = *(m_staffs[0]);
-    Rosegarden::MidiByte evPitch = staff.getHeightAtCanvasY(y);
+    Rosegarden::MidiByte evPitch = staff.getHeightAtCanvasCoords(-1, y);
 
     // Don't do anything if we're part of a run up the keyboard
     // and the pitch hasn't changed
@@ -1411,7 +1411,7 @@ void MatrixView::slotKeySelected(unsigned int y, bool repeating)
 
     MatrixStaff& staff = *(m_staffs[0]);
     Rosegarden::Segment &segment(staff.getSegment());
-    Rosegarden::MidiByte evPitch = staff.getHeightAtCanvasY(y);
+    Rosegarden::MidiByte evPitch = staff.getHeightAtCanvasCoords(-1, y);
 
     // Don't do anything if we're part of a run up the keyboard
     // and the pitch hasn't changed

@@ -321,6 +321,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 			   (canvas(), segments[i], 0, // snap
 			    i, this,
 			    m_fontName, m_fontSize));
+//	m_staffs[i]->setTitleHeight(200);//!!!
     }
 
     //

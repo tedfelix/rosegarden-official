@@ -64,7 +64,7 @@ void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
     MATRIX_DEBUG << "MatrixCanvasView::contentsMousePressEvent: snap time is " << m_snapGrid->getSnapTime(double(p.x())) << endl;
 
     timeT evTime = m_snapGrid->snapX(p.x(), SnapGrid::SnapLeft);
-    int evPitch = m_staff.getHeightAtCanvasY(p.y());
+    int evPitch = m_staff.getHeightAtCanvasCoords(p.x(), p.y());
 
     timeT emTime = m_staff.getSegment().getEndMarkerTime();
     if (evTime > emTime) evTime = emTime;
@@ -131,7 +131,7 @@ void MatrixCanvasView::contentsMouseMoveEvent(QMouseEvent* e)
     if (m_ignoreClick) return;
 
     timeT evTime = m_snapGrid->snapX(p.x(), SnapGrid::SnapLeft);
-    int evPitch = m_staff.getHeightAtCanvasY(p.y());
+    int evPitch = m_staff.getHeightAtCanvasCoords(p.x(), p.y());
 
     timeT emTime = m_staff.getSegment().getEndMarkerTime();
     if (evTime > emTime) evTime = emTime;
@@ -173,7 +173,7 @@ void MatrixCanvasView::contentsMouseReleaseEvent(QMouseEvent* e)
     }
 
     timeT evTime = m_snapGrid->snapX(p.x(), SnapGrid::SnapLeft);
-    int evPitch = m_staff.getHeightAtCanvasY(p.y());
+    int evPitch = m_staff.getHeightAtCanvasCoords(p.x(), p.y());
 
     timeT emTime = m_staff.getSegment().getEndMarkerTime();
     if (evTime > emTime) evTime = emTime;

@@ -109,7 +109,7 @@ NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
 
     } else {
 
-	m_currentHeight = m_currentStaff->getHeightAtCanvasY(e->y());
+	m_currentHeight = m_currentStaff->getHeightAtCanvasCoords(e->x(), e->y());
 
 	int x = e->x() - 8; // magic based on mouse cursor size
 	bool needUpdate = (m_heightTracking && (m_heightMarker->x() != x));
@@ -177,7 +177,7 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
     bool haveClickHeight = false;
     int clickHeight = 0;
     if (staff) {
-	clickHeight = staff->getHeightAtCanvasY(e->y());
+	clickHeight = staff->getHeightAtCanvasCoords(e->x(), e->y());
 	haveClickHeight = true;
     }
 
@@ -320,8 +320,8 @@ NotationCanvasView::setHeightMarkerHeight(QMouseEvent *e)
     NotationStaff *staff = dynamic_cast<NotationStaff *>
 	(m_linedStaffManager.getStaffForCanvasCoords(e->x(), e->y()));
 
-    int height = staff->getHeightAtCanvasY(e->y());
-    int lineY = staff->getCanvasYForHeight(height, e->y());
+    int height = staff->getHeightAtCanvasCoords(e->x(), e->y());
+    int lineY = staff->getCanvasYForHeight(height, e->x(), e->y());
 
 //    NOTATION_DEBUG << "NotationCanvasView::setHeightMarkerHeight: "
 //			 << e->y() << " snapped to line -> " << lineY

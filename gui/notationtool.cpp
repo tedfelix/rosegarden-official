@@ -374,7 +374,7 @@ NoteInserter::computeLocationAndPreview(QMouseEvent *e)
 	return false;
     }
 
-    int height = staff->getHeightAtCanvasY(y);
+    int height = staff->getHeightAtCanvasCoords(x, y);
 
     Event *clefEvt = 0, *keyEvt = 0;
     Rosegarden::Clef clef;
@@ -1387,7 +1387,7 @@ void NotationSelector::drag(int x, int y, bool final)
     if (clefEvt) clef = Rosegarden::Clef(*clefEvt);
     if (keyEvt) key = Rosegarden::Key(*keyEvt);
     
-    int height = targetStaff->getHeightAtCanvasY(y);
+    int height = targetStaff->getHeightAtCanvasCoords(x, y);
     int pitch = Rosegarden::Pitch
 	(height, clef, key, clickedAccidental).getPerformancePitch();
 

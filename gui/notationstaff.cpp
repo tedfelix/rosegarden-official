@@ -344,7 +344,7 @@ NotationStaff::getNoteNameAtCanvasCoords(double x, int y,
     config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
     int baseOctave = config->readNumEntry("midipitchoctave", -2);
 
-    Rosegarden::Pitch p(getHeightAtCanvasY(y), clef, key);
+    Rosegarden::Pitch p(getHeightAtCanvasCoords(x, y), clef, key);
     //!!! i18n() how?
     return p.getAsString(key.isSharp(), true, baseOctave);
 }

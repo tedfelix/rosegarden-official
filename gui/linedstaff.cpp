@@ -317,11 +317,17 @@ LinedStaff::containsCanvasCoords(double x, int y) const
 }
 
 int
-LinedStaff::getCanvasYForHeight(int h, int baseY) const
+LinedStaff::getCanvasYForHeight(int h, double baseX, int baseY) const
 {
     int y;
+
+    NOTATION_DEBUG << "LinedStaff::getCanvasYForHeight(" << h << "," << baseY
+		   << ")" << endl;
+
+    if (baseX < 0) baseX = getX() + getMargin();
+
     if (baseY >= 0) {
-        y = getCanvasYForTopLine(getRowForCanvasCoords(getX() + getMargin(), baseY));
+        y = getCanvasYForTopLine(getRowForCanvasCoords(baseX, baseY));
     } else {
         y = getCanvasYForTopLine();
     }
@@ -341,7 +347,7 @@ LinedStaff::getLayoutYForHeight(int h) const
 }
 
 int
-LinedStaff::getHeightAtCanvasY(int y) const
+LinedStaff::getHeightAtCanvasCoords(double x, int y) const
 {
     //!!! the lazy route: approximate, then get the right value
     // by calling getCanvasYForHeight a few times... ugh
@@ -351,7 +357,9 @@ LinedStaff::getHeightAtCanvasY(int y) const
 //                         << ", getLineSpacing() = " << m_npf->getLineSpacing()
 //                         << endl;
 
-    int row = getRowForCanvasCoords(getX() + getMargin(), y);
+    if (x < 0) x = getX() + getMargin();
+
+    int row = getRowForCanvasCoords(x, y);
     int ph = (y - getCanvasYForTopLine(row)) * getHeightPerLine() /
         getLineSpacing();
     ph = getTopLineHeight() - ph;
@@ -364,14 +372,14 @@ LinedStaff::getHeightAtCanvasY(int y) const
     int testMd = 1000;
 
     for (i = -1; i <= 1; ++i) {
-        int d = y - getCanvasYForHeight(ph + i, y);
+        int d = y - getCanvasYForHeight(ph + i, x, y);
         if (d < 0) d = -d;
         if (d < md) { md = d; mi = i; }
         if (d < testMd) { testMd = d; testi = i; }
     }
     
     if (mi > -2) {
-//         RG_DEBUG << "LinedStaff::getHeightAtCanvasY: " << y
+//         RG_DEBUG << "LinedStaff::getHeightAtCanvasCoords: " << y
 //                              << " -> " << (ph + mi) << " (mi is " << mi << ", distance "
 //                              << md << ")" << endl;
 //         if (mi == 0) {
@@ -381,7 +389,7 @@ LinedStaff::getHeightAtCanvasY(int y) const
 //         }
         return ph + mi;
     } else {
-        RG_DEBUG << "LinedStaff::getHeightAtCanvasY: heuristic got " << ph << ", nothing within range (closest was " << (ph + testi) << " which is " << testMd << " away)" << endl;
+        RG_DEBUG << "LinedStaff::getHeightAtCanvasCoords: heuristic got " << ph << ", nothing within range (closest was " << (ph + testi) << " which is " << testMd << " away)" << endl;
         return 0;
     }
 }
@@ -462,9 +470,12 @@ LinedStaff::getRowForCanvasCoords(double x, int y) const
 	return ((y - m_y) / m_rowSpacing);
 
     case MultiPageMode:
-	return (getRowsPerPage() *
-		(int(x - m_x - m_margin) / int(m_margin*2 + m_pageWidth))) +
-	    ((y - m_y) / m_rowSpacing);
+    {
+	int px = int(x - m_x - m_margin);
+	int pw = int(m_margin*2 + m_pageWidth);
+	if (px < pw) y -= m_titleHeight;
+	return (getRowsPerPage() * (px / pw)) + ((y - m_y) / m_rowSpacing);
+    }
 
     case LinearMode: default:
 	return (int)((x - m_x) / m_pageWidth);
@@ -847,9 +858,9 @@ LinedStaff::clearStaffLineRow(int row)
 void
 LinedStaff::resizeStaffLineRow(int row, double x, double length)
 {
-//    RG_DEBUG << "LinedStaff::resizeStaffLineRow: row "
-//                         << row << ", offset " << offset << ", length " 
-//                         << length << ", pagewidth " << getPageWidth() << endl;
+    RG_DEBUG << "LinedStaff::resizeStaffLineRow: row "
+	     << row << ", x " << x << ", length " 
+	     << length << endl;
 
 
     // If the resolution is 8 or less, we want to reduce the blackness
@@ -905,7 +916,7 @@ LinedStaff::resizeStaffLineRow(int row, double x, double length)
 
 	y = getCanvasYForHeight
 	    (getBottomLineHeight() + getHeightPerLine() * h,
-	     getCanvasYForTopLine(row));
+	     x, getCanvasYForTopLine(row));
 
 	if (elementsInSpaces()) {
 	    y -= getLineSpacing()/2 + 1;

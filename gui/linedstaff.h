@@ -325,10 +325,10 @@ public:
 
     /**
      * Returns the canvas y coordinate of the specified line on the
-     * staff.  baseY is a canvas y coordinate somewhere on the
+     * staff.  baseX/baseY are a canvas coordinates somewhere on the
      * correct row, or -1 for the default row.
      */
-    virtual int getCanvasYForHeight(int height, int baseY = -1) const;
+    virtual int getCanvasYForHeight(int height, double baseX = -1, int baseY = -1) const;
 
     /**
      * Returns the y coordinate of the specified line on the
@@ -338,9 +338,9 @@ public:
 
     /**
      * Returns the height-on-staff value nearest to the given
-     * canvas y coordinate.
+     * canvas coordinates.
      */
-    virtual int getHeightAtCanvasY(int y) const;
+    virtual int getHeightAtCanvasCoords(double x, int y) const;
 
     /**
      * Return the full width, height and origin of the bar containing
