@@ -36,14 +36,14 @@ if test "$with_alsa" = "yes"; then
 fi
 
 dnl check whether user wants to use JACK
-AC_ARG_WITH(jack, [  --with-jack             enable JACK support (requires ALSA)],
+AC_ARG_WITH(jack, [  --with-jack             enable JACK support (enabled by default when installed. requires ALSA.)],
 [
    if test "$withval" = "yes"; then
      with_jack=yes
    else
      with_jack=no
   fi
-], with_jack=no)
+], with_jack=$with_alsa)
 
 dnl only use JACK when jack/jack.h is found
 if test "$ac_header_jack_jack_h" = "no"; then
@@ -88,14 +88,14 @@ AM_CONDITIONAL(HAVE_ALSA, test "$with_alsa" = "yes")
 
 
 dnl check whether user wants to have LADSPA
-AC_ARG_WITH(ladspa, [  --with-ladspa           enable LADSPA plugins],
+AC_ARG_WITH(ladspa, [  --with-ladspa           enable LADSPA plugins (enabled by default when installed)],
 [
    if test "$withval" = "yes"; then
      with_ladspa=yes
    else
      with_ladspa=no
   fi
-], with_ladspa=no)
+], with_ladspa=yes)
 
 dnl only use LADSPA when ladspa.h is found
 if test "$ac_header_ladspa_h" = "no"; then
