@@ -220,8 +220,34 @@ bool RosegardenGUIDoc::saveDocument(const QString &filename,
 
     // output all elements
     //
+    bool inGroup = false;
+    
     for(EventList::iterator i = m_events.begin();
         i != m_events.end(); ++i) {
+
+        EventList::iterator nextEl = i;
+        ++nextEl;
+
+        if (nextEl != m_events.end()) {
+
+            Event::timeT absTime = (*i)->absoluteTime();
+            
+            if ((*nextEl)->absoluteTime() == absTime) {
+                // group elements
+                //
+                fileStream << "<Group>" << endl;
+                while ((*i)->absoluteTime() == absTime) {
+                    fileStream << '\t'
+                               << XMLStorableEvent::toXMLString(*(*i))
+                               << endl;
+                    ++i;
+                }
+                fileStream << "</Group>" << endl;
+
+                if (i == m_events.end()) break;
+            }
+        }
+        
         fileStream << XMLStorableEvent::toXMLString(*(*i)) << endl;
     }
 
