@@ -273,8 +273,6 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
     // into other functions.  Might possibly improve performance too
     // (because the compiler could optimise better).
 
-    Note note(params.m_noteType, params.m_dots);
-
     bool drawFlag = params.m_drawFlag;
     int stemLength = params.m_stemLength;
 
@@ -292,8 +290,8 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
     m_noteBodyWidth  = getNoteBodyWidth(params.m_noteType);
     m_noteBodyHeight = getNoteBodyHeight(params.m_noteType);
 
-    bool isStemmed = note.hasStem();
-    int flagCount = note.getFlagCount();
+    bool isStemmed = m_style->hasStem(params.m_noteType);
+    int flagCount = m_style->getFlagCount(params.m_noteType);
 
     if (params.m_accidental != NoAccidental) {
         makeRoomForAccidental(params.m_accidental);

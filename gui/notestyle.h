@@ -26,12 +26,47 @@
 #include "notecharname.h"
 #include <qxml.h>
 #include <vector>
-#include <map>
+
+#if (__GNUC__ < 3)
+
+#include <hash_map>
+#define __HASH_NS std
+
+#else
+
+#include <ext/hash_map>
+#if (__GNUC_MINOR__ >= 1)
+#define __HASH_NS __gnu_cxx
+#else
+#define __HASH_NS std
+#endif
+
+#endif
+
+
 
 class NoteStyle;
 
+// It would be nice to make this a typedef for PropertyName, but we
+// can't safely store PropertyNames in properties (at least, not in
+// their internal-integer form) because their values are allocated
+// on demand within each run of the program, they don't persist.
 
 typedef std::string NoteStyleName;
+
+struct NoteStyleNamesEqual {
+    bool operator()(const NoteStyleName &s1, const NoteStyleName &s2) const {
+	return s1 == s2;
+    }
+};
+
+struct NoteStyleNameHash {
+    static std::hash<const char *> _H;
+    size_t operator() (const NoteStyleName &s) const {
+	return _H(s.c_str());
+    }
+};
+
 
 namespace StandardNoteStyleNames
 {
@@ -52,6 +87,7 @@ class NoteStyleFactory
 {
 public:
     static NoteStyle *getStyle(NoteStyleName name);
+    static NoteStyle *getStyleForEvent(Rosegarden::Event *event);
 
     struct StyleUnavailable {
         StyleUnavailable(std::string r) : reason(r) { }
@@ -59,7 +95,10 @@ public:
     };
 
 private:
-    typedef std::map<NoteStyleName, NoteStyle *> StyleMap;
+    typedef __HASH_NS::hash_map<NoteStyleName,
+				NoteStyle *,
+				NoteStyleNameHash,
+				NoteStyleNamesEqual> StyleMap;
     static StyleMap m_styles;
 };
 
@@ -67,6 +106,7 @@ private:
 class NoteStyle
 {
 public:
+    NoteStyle() : m_baseStyle(0) { }
     virtual ~NoteStyle();
 
     typedef std::string NoteHeadShape;
@@ -79,6 +119,7 @@ public:
     static const NoteHeadShape TriangleDown;
     static const NoteHeadShape Diamond;
     static const NoteHeadShape Rectangle;
+    static const NoteHeadShape CustomCharName;
     static const NoteHeadShape Number;
 
     NoteHeadShape getShape     (Rosegarden::Note::Type);
@@ -93,89 +134,38 @@ public:
     CharName getMarkCharName(const Rosegarden::Mark &);
     CharName getClefCharName(const Rosegarden::Clef &);
 
+    void setBaseStyle (NoteStyleName name);
+    void setShape     (Rosegarden::Note::Type, NoteHeadShape);
+    void setCharName  (Rosegarden::Note::Type, CharName);
+    void setFilled    (Rosegarden::Note::Type, bool);
+    void setStem      (Rosegarden::Note::Type, bool);
+    void setFlagCount (Rosegarden::Note::Type, int);
+
 protected:
     struct NoteDescription {
-	NoteHeadShape shape;
+	NoteHeadShape shape; // if CustomCharName, use charName
+	CharName charName; // only used if shape == CustomCharName
 	bool filled;
 	bool stem;
 	int flags;
 
 	NoteDescription() :
-	    shape(AngledOval), filled(true), stem(true), flags(0) { }
+	    shape(AngledOval), charName(NoteCharacterNames::UNKNOWN),
+	    filled(true), stem(true), flags(0) { }
 
-	NoteDescription(NoteHeadShape _shape,
+	NoteDescription(NoteHeadShape _shape, CharName _charName,
 			bool _filled, bool _stem, int _flags) :
-	    shape(_shape), filled(_filled), stem(_stem), flags(_flags) { }
+	    shape(_shape), charName(_charName),
+	    filled(_filled), stem(_stem), flags(_flags) { }
     };
 
-    typedef std::map<Rosegarden::Note::Type,
-		     NoteDescription> NoteDescriptionMap;
+    typedef __HASH_NS::hash_map<Rosegarden::Note::Type,
+				NoteDescription> NoteDescriptionMap;
 
     NoteDescriptionMap m_notes;
     NoteStyle *m_baseStyle;
-
-    NoteStyle() : m_baseStyle(0) { }
-    virtual void initialiseNotes() = 0;
 };
 
-
-/*!!!
-class ClassicalNoteStyle : public NoteStyle
-{
-protected:
-    virtual void initialiseNotes();
-};
-
-class CrossNoteStyle : public NoteStyle
-{
-protected:
-    virtual void initialiseNotes();
-};
-
-
-class TriangleNoteStyle : public NoteStyle
-{
-protected:
-    virtual void initialiseNotes();
-};
-
-
-class MensuralNoteStyle : public NoteStyle
-{
-protected:
-    virtual void initialiseNotes();
-};
-*/
-
-class CustomNoteStyle : public NoteStyle, public QXmlDefaultHandler
-{
-public:
-    CustomNoteStyle(NoteStyleName name);
-
-    struct StyleFileReadFailed {
-        StyleFileReadFailed(std::string r) : reason(r) { }
-        std::string reason;
-    };
-
-    void setBaseStyle (NoteStyleName name);
-    void setShape     (Rosegarden::Note::Type, NoteHeadShape);
-    void setFilled    (Rosegarden::Note::Type, bool);
-    void setStem      (Rosegarden::Note::Type, bool);
-    void setFlagCount (Rosegarden::Note::Type, int);
-
-
-    // Xml handler methods:
-
-    virtual bool startElement
-    (const QString& namespaceURI, const QString& localName,
-     const QString& qName, const QXmlAttributes& atts);
-    
-protected:
-    virtual void initialiseNotes();
-
-private:
-    QString m_errorString;
-};
 
 
 #endif

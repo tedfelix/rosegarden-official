@@ -164,16 +164,30 @@ a {
     font-weight: bold;
 }
 
-.toc3>a,.toc4>a {
+.toc3>a {
     font-weight: normal;
+    font-style: italic;
+    color: #000000;
+}
+
+.toc3>a:visited {
+    color: #000000;
+}
+
+.toc1,.toc2,.toc3 {
+    padding-top: 4pt;
 }
 
 .toc1,.toc2,.toc3,.toc4 {
-    font-family: trebuchet, verdana, sans-serif;
+    padding-bottom: 6pt;
 }
 
 .toc4 {
-    font-size: smaller;
+    padding-left: 20pt;
+}
+
+.toc4 {
+#    font-size: smaller;
 }
 
 .oddcontent,.evencontent {

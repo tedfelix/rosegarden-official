@@ -591,32 +591,19 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 				   const Rosegarden::Clef &currentClef,
 				   bool selected)
 {
-    static NoteStyle *classicalStyle = 0;
-    static bool warned = false;
+    try {
+	m_npf->setNoteStyle(NoteStyleFactory::getStyleForEvent(elt->event()));
 
-    if (elt->event()->has(NotationProperties::NOTE_STYLE)) {
+    } catch (NoteStyleFactory::StyleUnavailable u) {
 
-	try {
-	    NoteStyle *style = NoteStyleFactory::getStyle
-		(elt->event()->get<String>(NotationProperties::NOTE_STYLE));
-	    m_npf->setNoteStyle(style);
+	kdDebug(KDEBUG_AREA)
+	    << "WARNING: Note style unavailable: " << u.reason << endl;
 
-	} catch (NoteStyleFactory::StyleUnavailable u) {
-
-	    kdDebug(KDEBUG_AREA) << "WARNING: Note style unavailable: "
-				 << u.reason << endl;
-	    if (!warned) {
-		KMessageBox::error(0, i18n(strtoqstr(u.reason)));
-		warned = true;
-	    }
+	static bool warned = false;
+	if (!warned) {
+	    KMessageBox::error(0, i18n(strtoqstr(u.reason)));
+	    warned = true;
 	}
-
-    } else {
-	if (!classicalStyle) {
-	    classicalStyle =
-		NoteStyleFactory::getStyle(StandardNoteStyleNames::Classical);
-	}
-	m_npf->setNoteStyle(classicalStyle);
     }
 
     try {

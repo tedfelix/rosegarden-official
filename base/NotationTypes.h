@@ -729,13 +729,7 @@ public:
     Note &operator=(const Note &n);
 
     Type getNoteType()  const { return m_type; }
-
-    bool isFilled()     const { return m_type <= Crotchet; }
-    bool hasStem()      const { return m_type <= Minim; }
     int  getDots()      const { return m_dots; }
-    int  getFlagCount() const {
-	return (m_type >= Crotchet) ? 0 : (Crotchet - m_type);
-    }
 
     /**
      * Return the duration of this note type.

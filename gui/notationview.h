@@ -191,13 +191,13 @@ public:
 public slots:
 
     /**
-     * put the indicationed text/object into the clipboard and remove * it
+     * put the marked text/object into the clipboard and remove it
      * from the document
      */
     void slotEditCut();
 
     /**
-     * put the indicationed text/object into the clipboard
+     * put the marked text/object into the clipboard
      */
     void slotEditCopy();
 
@@ -205,6 +205,12 @@ public slots:
      * paste the clipboard into the document
      */
     void slotEditPaste();
+
+    /**
+     * cut the selection and close the gap, moving subsequent events
+     * towards the start of the segment
+     */
+    void slotEditCutAndClose();
 
     /**
      * paste the clipboard into the document, offering a choice for how
@@ -298,10 +304,10 @@ public slots:
     void slotTransformsStemsUp();
     void slotTransformsStemsDown();
     void slotTransformsRestoreStems();
-    void slotTransformsClassicalNoteHeads();
-    void slotTransformsCrossNoteHeads();
-    void slotTransformsTriangleNoteHeads();
-    void slotTransformsMensuralNoteHeads();
+    void slotTransformsClassicalStyle();
+    void slotTransformsCrossStyle();
+    void slotTransformsTriangleStyle();
+    void slotTransformsMensuralStyle();
     void slotTransformsTranspose();
     void slotTransformsTransposeUp();
     void slotTransformsTransposeUpOctave();

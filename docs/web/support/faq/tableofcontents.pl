@@ -28,13 +28,12 @@ sub indentTo {
     if ($level == 0 and $ibase > 0) { $level = $ibase-1; }
 
     while ($level > $ilevel) {
-        $toc .= "<ul>";
+#        $toc .= "<ul>";
         $ilevel ++;
-
     }
     while ($level < $ilevel) {
         undef $sectionNumbers[$ilevel];
-        $toc .= "</ul>";
+#        $toc .= "</ul>";
         $ilevel --;
     }
 }
@@ -49,7 +48,7 @@ sub newSectionNumber {
         $secno .= $sectionNumbers[$i] . ".";
         ++$i;
     }
-    chop $secno;
+#    chop $secno;
     $secno;
 }
 
@@ -81,7 +80,8 @@ while (<>) {
         indentTo $1;
         my $secno = newSectionNumber $1;
 
-        $toc .= "<span class=\"toc$1\">$secno &nbsp;<a href=\"#toc$toccount\">$2</a></span><br>\n";
+#        $toc .= "<span class=\"toc$1\">$secno &nbsp;<a href=\"#toc$toccount\">$2</a></span><br>\n";
+        $toc .= "<div class=\"toc$1\">$secno &nbsp;<a href=\"#toc$toccount\">$2</a></div>\n";
 
         s{(<h\d>)(.*?)(</h\d>)}
          {$enddiv<div class="$oddeven"><a name="toc$toccount"></a>$1$secno &nbsp;$2$3}i;

@@ -602,19 +602,18 @@ TransformsMenuRestoreStemsCommand::modifySegment()
 }
 
 QString
-TransformsMenuChangeNoteHeadsCommand::getGlobalName(NoteStyleName style)
+TransformsMenuChangeStyleCommand::getGlobalName(NoteStyleName style)
 {
     if (style == StandardNoteStyleNames::Cross) {
-	return "C&ross Note Heads";
+	return "C&ross";
     } else {
-	return "&" + strtoqstr((char)toupper(style[0]) + style.substr(1)) +
-	    " Note Heads";
+	return "&" + strtoqstr(style) + "";
     }
 }
 
 
 void
-TransformsMenuChangeNoteHeadsCommand::modifySegment()
+TransformsMenuChangeStyleCommand::modifySegment()
 {
     EventSelection::eventcontainer::iterator i;
 

@@ -23,7 +23,7 @@ Post-0.1.5-and-a-bit task list
  5b. Find some way to identify tuplets in MIDI import
 
  6. See why accidentals appear to be wrong when not in treble clef (see paper)
-    [DONE by Hans]
+    [DONE by Hans, test before closing SF bug]
 
  7. Things like Split Segment and Resize Segment won't work correctly
     until the Segment's moveable start/end markers are implemented.  Look
@@ -61,7 +61,7 @@ Post-0.1.5-and-a-bit task list
     a guess at the harmony in it)
 
 15a. Need to fix up so it has a key to work from, instead of always
-    using default key!  argh!
+    using default key!  argh!  [DONE]
 
 15b. Finish Segments | Harmonize on main view
 
@@ -164,10 +164,10 @@ Post-0.1.5-and-a-bit task list
 
     a. Remove "built-in" styles, remove the "Custom" from "CustomNoteStyle";
        indeed, ideally switch from "NoteStyle and derived CustomNS" to
-       "NoteStyle and external XML parsing class".
+       "NoteStyle and external XML parsing class". [DONE]
 
     b. Add capability to specify the charname for a note head directly
-       (using the Unicode-or-other name, not the pixmap file name)
+       (using the Unicode-or-other name, not the pixmap file name) [DONE]
 
     c. Look up Unicode names for any other chars we have in the "standard"
        shape list, see if they're in feta
@@ -179,10 +179,17 @@ Post-0.1.5-and-a-bit task list
 
     e. Also add an option to show fingerings as marks instead of heads
 
-    f. GUI for all this...
+    f. Make other bits of notation code use styles as well, for things
+       like number of beams/flags and whether to draw the stem.  P'raps
+       remove those methods from Note and see what breaks.  We could
+       have a method in NoteStyleFactory or somewhere that returns the
+       correct style for a given event (looking up the style property)
+       [DONE]
+
+    g. GUI for all this...
 
 32. Add Slashes to notes menu -- 1, 2, 3, 4, or none.  Worry about
-    performance aspect later
+    playback aspect later
 
 33. Consider YA menu reorganisation: stuff now in Groups to spread out
     across Notes instead?  Or go for Groups and Notes instead of G, N

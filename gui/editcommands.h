@@ -49,6 +49,39 @@ public:
 };
 
 
+/// Cut a selection and close the gap
+
+class CutAndCloseCommand : public KMacroCommand
+{
+public:
+    CutAndCloseCommand(Rosegarden::EventSelection &selection,
+		       Rosegarden::Clipboard *clipboard);
+
+    static QString getGlobalName() { return "C&ut and Close"; }
+
+protected:
+    class CloseCommand : public XKCommand
+    {
+    public:
+	CloseCommand(Rosegarden::Segment *segment,
+		     Rosegarden::timeT fromTime,
+		     Rosegarden::timeT toTime) :
+	    XKCommand("Close"),
+	    m_segment(segment),
+	    m_fromTime(fromTime),
+	    m_toTime(toTime) { }
+
+	virtual void execute();
+	virtual void unexecute();
+
+    private:
+	Rosegarden::Segment *m_segment;
+	Rosegarden::timeT m_fromTime;
+	Rosegarden::timeT m_toTime;
+    };
+};    
+
+
 /// Copy a selection
 
 class CopyCommand : public XKCommand

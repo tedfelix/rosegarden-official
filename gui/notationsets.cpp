@@ -28,6 +28,7 @@
 #include "Equation.h"
 #include "Segment.h"
 #include "Quantizer.h"
+#include "notestyle.h"
 
 #include <cstring>
 
@@ -185,8 +186,7 @@ Chord::Chord(const NotationElementList &nel, NELIterator i,
         std::stable_sort(begin(), end(), PitchGreater());
     }
 
-//!!! this should all be removed ultimately
-/*!!!
+/*!!! this should all be removed ultimately
 //    kdDebug(KDEBUG_AREA) << "Chord::Chord: pitches are:" << endl;
     int prevPitch = -999;
     for (unsigned int i = 0; i < size(); ++i) {
@@ -196,7 +196,6 @@ Chord::Chord(const NotationElementList &nel, NELIterator i,
 	    if (pitch < prevPitch) {
 		cerr << "ERROR: Pitch less than previous pitch (" << pitch
 		     << " < " << prevPitch << ")" << endl;
-		//!!!
 		throw(1);
 	    }
 	} catch (Event::NoData) {
@@ -249,7 +248,8 @@ bool Chord::hasStem() const
     NELIterator i(getInitialNote());
     for (;;) {
 	Note::Type note = (*i)->event()->get<Int>(m_properties.NOTE_TYPE);
-	if (Note(note).hasStem()) return true;
+	if (NoteStyleFactory::getStyleForEvent((*i)->event())->hasStem(note))
+	    return true;
 	if (i == getFinalNote()) return false;
 	++i;
     }
@@ -698,8 +698,9 @@ NotationGroup::applyBeam(NotationStaff &staff)
 	    int x = (int)el->getLayoutX();
 	    int myY = (int)(gradient * (x - initialX)) + beam.startY;
 
-            int beamCount = Note(el->event()->get<Int>
-                                 (m_properties.NOTE_TYPE)).getFlagCount();
+	    int beamCount =
+		NoteStyleFactory::getStyleForEvent(el->event())->
+		getFlagCount(el->event()->get<Int>(m_properties.NOTE_TYPE));
 
             // If THIS_PART_BEAMS is true, then when drawing the
             // chord, if it requires more beams than the following
@@ -733,8 +734,10 @@ NotationGroup::applyBeam(NotationStaff &staff)
 		prevEl->event()->setMaybe<Int>
 		    (m_properties.BEAM_NEXT_BEAM_COUNT, beamCount);
 
-                int prevBeamCount = Note(prevEl->event()->get<Int>
-                                         (m_properties.NOTE_TYPE)).getFlagCount();
+		int prevBeamCount =
+		    NoteStyleFactory::getStyleForEvent(prevEl->event())->
+		    getFlagCount(prevEl->event()->get<Int>
+				 (m_properties.NOTE_TYPE));
 
 		if ((beamCount > 0) && (prevBeamCount > 0)) {
 		    el->event()->setMaybe<Bool>(m_properties.BEAMED, true);

@@ -31,6 +31,7 @@
 
 #include "rosestrings.h"
 #include "rosedebug.h"
+#include "notationproperties.h"
 
 
 using Rosegarden::Accidental;
@@ -39,6 +40,34 @@ using Rosegarden::Mark;
 using Rosegarden::Marks;
 using Rosegarden::Clef;
 using Rosegarden::Note;
+using Rosegarden::String;
+
+
+class NoteStyleFileReader : public QXmlDefaultHandler
+{
+public:
+    NoteStyleFileReader(NoteStyleName name);
+
+    struct StyleFileReadFailed {
+        StyleFileReadFailed(std::string r) : reason(r) { }
+        std::string reason;
+    };
+    
+    NoteStyle *getStyle() { return m_style; }
+
+    // Xml handler methods:
+
+    virtual bool startElement
+    (const QString& namespaceURI, const QString& localName,
+     const QString& qName, const QXmlAttributes& atts);
+    
+private:
+    bool setFromAttributes(Note::Type type, const QXmlAttributes &attributes);
+
+    QString m_errorString;
+    NoteStyle *m_style;
+    bool m_haveNote;
+};
 
 
 namespace StandardNoteStyleNames
@@ -47,12 +76,6 @@ namespace StandardNoteStyleNames
     const NoteStyleName Cross = "Cross";
     const NoteStyleName Triangle = "Triangle";
     const NoteStyleName Mensural = "Mensural";
-
-/*!!!
-    const NoteStyleName Cross     = "_Cross";
-    const NoteStyleName Triangle  = "_Triangle";
-    const NoteStyleName Mensural  = "_Mensural";
-*/
 
     std::vector<NoteStyleName> getStandardStyles() {
 
@@ -79,30 +102,11 @@ NoteStyleFactory::getStyle(NoteStyleName name)
     if (i == m_styles.end()) {
 
 	try {
-
-	    NoteStyle *newStyle = 0;
-
-//	    if (name == StandardNoteStyleNames::Classical) {
-//		newStyle = new ClassicalNoteStyle();
-
-/*!!!
-	    } else if (name == StandardNoteStyleNames::Cross) {
-		newStyle = new CrossNoteStyle(); 
-
-	    } else if (name == StandardNoteStyleNames::Triangle) {
-		newStyle = new TriangleNoteStyle();
-
-	    } else if (name == StandardNoteStyleNames::Mensural) {
-		newStyle = new MensuralNoteStyle();
-*/
-//	    } else {
-		newStyle = new CustomNoteStyle(name);
-//	    }
-	
+	    NoteStyle *newStyle = NoteStyleFileReader(name).getStyle();
 	    m_styles[name] = newStyle;
 	    return newStyle;
 
-	} catch (CustomNoteStyle::StyleFileReadFailed f) {
+	} catch (NoteStyleFileReader::StyleFileReadFailed f) {
 	    kdDebug(KDEBUG_AREA)
 		<< "NoteStyleFactory::getStyle: Style file read failed: "
 		<< f.reason << endl;
@@ -111,6 +115,17 @@ NoteStyleFactory::getStyle(NoteStyleName name)
 
     } else {
 	return i->second;
+    }
+}
+
+NoteStyle *
+NoteStyleFactory::getStyleForEvent(Rosegarden::Event *event)
+{
+    NoteStyleName styleName;
+    if (event->get<String>(NotationProperties::NOTE_STYLE, styleName)) {
+	return getStyle(styleName);
+    } else {
+	return getStyle(StandardNoteStyleNames::Classical);
     }
 }
 
@@ -132,18 +147,12 @@ const NoteStyle::NoteHeadShape NoteStyle::TriangleDown = "triangle down";
 const NoteStyle::NoteHeadShape NoteStyle::Diamond = "diamond";
 const NoteStyle::NoteHeadShape NoteStyle::Rectangle = "rectangle";
 const NoteStyle::NoteHeadShape NoteStyle::Number = "number";
-
-
-//!!! Need to amend all uses of the Note presentation accessors
-// to use these instead -- so we can get rid of the Note methods
-// that these are intended to replace
+const NoteStyle::NoteHeadShape NoteStyle::CustomCharName = "custom character";
 
 
 NoteStyle::NoteHeadShape
 NoteStyle::getShape(Rosegarden::Note::Type type)
 {
-    if (m_notes.empty()) initialiseNotes();
-
     NoteDescriptionMap::iterator i = m_notes.find(type);
     if (i == m_notes.end()) { 
 	if (m_baseStyle) return m_baseStyle->getShape(type);
@@ -160,8 +169,6 @@ NoteStyle::getShape(Rosegarden::Note::Type type)
 bool
 NoteStyle::isFilled(Rosegarden::Note::Type type)
 {
-    if (m_notes.empty()) initialiseNotes();
-
     NoteDescriptionMap::iterator i = m_notes.find(type);
     if (i == m_notes.end()) { 
 	if (m_baseStyle) return m_baseStyle->isFilled(type);
@@ -178,8 +185,6 @@ NoteStyle::isFilled(Rosegarden::Note::Type type)
 bool
 NoteStyle::hasStem(Rosegarden::Note::Type type)
 {
-    if (m_notes.empty()) initialiseNotes();
-
     NoteDescriptionMap::iterator i = m_notes.find(type);
     if (i == m_notes.end()) { 
 	if (m_baseStyle) return m_baseStyle->hasStem(type);
@@ -196,8 +201,6 @@ NoteStyle::hasStem(Rosegarden::Note::Type type)
 int
 NoteStyle::getFlagCount(Rosegarden::Note::Type type)
 {
-    if (m_notes.empty()) initialiseNotes();
-
     NoteDescriptionMap::iterator i = m_notes.find(type);
     if (i == m_notes.end()) { 
 	if (m_baseStyle) return m_baseStyle->getFlagCount(type);
@@ -214,8 +217,6 @@ NoteStyle::getFlagCount(Rosegarden::Note::Type type)
 CharName
 NoteStyle::getNoteHeadCharName(Rosegarden::Note::Type type)
 {
-    if (m_notes.empty()) initialiseNotes();
-
     NoteDescriptionMap::iterator i = m_notes.find(type);
     if (i == m_notes.end()) { 
 	if (m_baseStyle) return m_baseStyle->getNoteHeadCharName(type);
@@ -271,6 +272,10 @@ NoteStyle::getNoteHeadCharName(Rosegarden::Note::Type type)
 
 	kdDebug(KDEBUG_AREA) << "WARNING: NoteStyle::getNoteHeadCharName: Number not yet implemented" << endl;
 	return NoteCharacterNames::UNKNOWN; //!!!
+
+    } else if (desc.shape == CustomCharName) {
+	
+	return desc.charName;
 
     } else {
 
@@ -349,73 +354,64 @@ NoteStyle::getFlagCharName(int flagCount)
     }
 }
 
-/*!!!
-
 void
-ClassicalNoteStyle::initialiseNotes()
+NoteStyle::setBaseStyle(NoteStyleName name)
 {
-    for (Note::Type type = Note::Shortest; type <= Note::Crotchet; ++type) {
-	m_notes[type] = NoteDescription
-	    (AngledOval, true, true, Note::Crotchet - type);
-    }
-
-    m_notes[Note::Minim]     = NoteDescription(AngledOval, false, true,  0);
-    m_notes[Note::Semibreve] = NoteDescription(LevelOval,  false, false, 0);
-    m_notes[Note::Breve]     = NoteDescription(Breve,      false, false, 0);
+    try {
+	m_baseStyle = NoteStyleFactory::getStyle(name);
+	if (m_baseStyle == this) m_baseStyle = 0;
+    } catch (NoteStyleFactory::StyleUnavailable u) {
+	if (name != StandardNoteStyleNames::Classical) {
+	    kdDebug(KDEBUG_AREA)
+		<< "NoteStyle::setBaseStyle: Base style "
+		<< name << " not available, defaulting to "
+		<< StandardNoteStyleNames::Classical << endl;
+	    setBaseStyle(StandardNoteStyleNames::Classical);
+	} else {
+	    kdDebug(KDEBUG_AREA)
+		<< "NoteStyle::setBaseStyle: Base style "
+		<< name << " not available" << endl;
+	    m_baseStyle = 0;
+	}
+    }	    
 }
 
 void
-CrossNoteStyle::initialiseNotes()
+NoteStyle::setShape(Note::Type note, NoteHeadShape shape)
 {
-    for (Note::Type type = Note::Shortest; type <= Note::Crotchet; ++type) {
-	m_notes[type] = NoteDescription
-	    (Cross, true, true, Note::Crotchet - type);
-    }
-
-    m_notes[Note::Minim]     = NoteDescription(Cross, false, true,  0);
-    m_notes[Note::Semibreve] = NoteDescription(Cross, false, false, 0);
-    m_notes[Note::Breve]     = NoteDescription(Cross, false, false, 0);
+    m_notes[note].shape = shape;
 }
-
 
 void
-TriangleNoteStyle::initialiseNotes()
+NoteStyle::setCharName(Note::Type note, CharName charName)
 {
-    for (Note::Type type = Note::Shortest; type <= Note::Crotchet; ++type) {
-	m_notes[type] = NoteDescription
-	    (TriangleUp, true, true, Note::Crotchet - type);
-    }
-
-    m_notes[Note::Minim]     = NoteDescription(TriangleUp, false, true,  0);
-    m_notes[Note::Semibreve] = NoteDescription(TriangleUp, false, false, 0);
-    m_notes[Note::Breve]     = NoteDescription(TriangleUp, false, false, 0);
+    m_notes[note].charName = charName;
 }
-
 
 void
-MensuralNoteStyle::initialiseNotes()
+NoteStyle::setFilled(Note::Type note, bool filled)
 {
-    for (Note::Type type = Note::Shortest; type <= Note::Crotchet; ++type) {
-	m_notes[type] = NoteDescription
-	    (Diamond, true, true, Note::Crotchet - type);
-    }
-
-    m_notes[Note::Minim]     = NoteDescription(Diamond, false, true,  0);
-    m_notes[Note::Semibreve] = NoteDescription(Diamond, false, false, 0);
-    m_notes[Note::Breve]     = NoteDescription(Diamond, false, false, 0);
+    m_notes[note].filled = filled;
 }
-*/
 
-CustomNoteStyle::CustomNoteStyle(std::string name)
+void
+NoteStyle::setStem(Note::Type note, bool stem)
 {
-/*!!!
-    if (name[0] == '_') {
-	throw StyleFileReadFailed
-	    (qstrtostr(i18n("Leading underscore (in ") +
-		       strtoqstr(name) +
-		       i18n(") reserved for built-in styles")));
-    }
-*/
+    m_notes[note].stem = stem;
+}
+
+void
+NoteStyle::setFlagCount(Note::Type note, int flags)
+{
+    m_notes[note].flags = flags;
+}
+
+
+
+NoteStyleFileReader::NoteStyleFileReader(std::string name) :
+    m_style(new NoteStyle),
+    m_haveNote(false)
+{
     QString styleDirectory =
 	KGlobal::dirs()->findResource("appdata", "styles/");
 
@@ -426,8 +422,7 @@ CustomNoteStyle::CustomNoteStyle(std::string name)
 
     if (!fileInfo.isReadable()) {
         throw StyleFileReadFailed
-	    (qstrtostr(i18n("Can't open style file ") +
-		       styleFileName));
+	    (qstrtostr(i18n("Can't open style file ") + styleFileName));
     }
 
     QFile styleFile(styleFileName);
@@ -444,60 +439,8 @@ CustomNoteStyle::CustomNoteStyle(std::string name)
     }
 }
 
-void
-CustomNoteStyle::initialiseNotes()
-{
-    // already done in constructor, no need to do anything here
-}
-
-void
-CustomNoteStyle::setBaseStyle(NoteStyleName name)
-{
-    try {
-	m_baseStyle = NoteStyleFactory::getStyle(name);
-	if (m_baseStyle == this) m_baseStyle = 0;
-    } catch (NoteStyleFactory::StyleUnavailable u) {
-	if (name != StandardNoteStyleNames::Classical) {
-	    kdDebug(KDEBUG_AREA)
-		<< "CustomNoteStyle::setBaseStyle: Base style "
-		<< name << " not available, defaulting to "
-		<< StandardNoteStyleNames::Classical << endl;
-	    setBaseStyle(StandardNoteStyleNames::Classical);
-	} else {
-	    kdDebug(KDEBUG_AREA)
-		<< "CustomNoteStyle::setBaseStyle: Base style "
-		<< name << " not available" << endl;
-	    m_baseStyle = 0;
-	}
-    }	    
-}
-
-void
-CustomNoteStyle::setShape(Note::Type note, NoteHeadShape shape)
-{
-    m_notes[note].shape = shape;
-}
-
-void
-CustomNoteStyle::setFilled(Note::Type note, bool filled)
-{
-    m_notes[note].filled = filled;
-}
-
-void
-CustomNoteStyle::setStem(Note::Type note, bool stem)
-{
-    m_notes[note].stem = stem;
-}
-
-void
-CustomNoteStyle::setFlagCount(Note::Type note, int flags)
-{
-    m_notes[note].flags = flags;
-}
-
 bool
-CustomNoteStyle::startElement(const QString &, const QString &,
+NoteStyleFileReader::startElement(const QString &, const QString &,
 			      const QString &qName,
 			      const QXmlAttributes &attributes)
 {
@@ -505,22 +448,14 @@ CustomNoteStyle::startElement(const QString &, const QString &,
 
     if (lcName == "rosegarden-note-style") {
 
-	QString s;
-	
-	s = attributes.value("base-style");
-	if (s) setBaseStyle(qstrtostr(s));
-	else {
-//	    m_errorString = i18n("base-style is a required attribute of rosegarden-note-style");
-//	    return false;
-	    m_baseStyle = 0;
-	}
+	QString s = attributes.value("base-style");
+	if (s) m_style->setBaseStyle(qstrtostr(s));
 
     } else if (lcName == "note") {
 
-	QString s;
-	NoteDescription desc;
+	m_haveNote = true;
 	
-	s = attributes.value("type");
+	QString s = attributes.value("type");
 	if (!s) {
 	    m_errorString = i18n("type is a required attribute of note");
 	    return false;
@@ -528,21 +463,7 @@ CustomNoteStyle::startElement(const QString &, const QString &,
 	
 	try {
 	    Note::Type type = Note(qstrtostr(s)).getNoteType();
-	    if (m_notes.find(type) != m_notes.end()) desc = m_notes[type];
-
-	    s = attributes.value("shape");
-	    if (s) desc.shape = s.lower();
-	
-	    s = attributes.value("filled");
-	    if (s) desc.filled = (s.lower() == "true");
-	
-	    s = attributes.value("stem");
-	    if (s) desc.stem = (s.lower() == "true");
-	
-	    s = attributes.value("flags");
-	    if (s) desc.flags = (s.lower() == "true");
-
-	    m_notes[type] = desc;
+	    if (!setFromAttributes(type, attributes)) return false;
 
 	} catch (Note::MalformedNoteName n) {
 	    m_errorString = i18n("Unrecognised note name " + s);
@@ -550,35 +471,55 @@ CustomNoteStyle::startElement(const QString &, const QString &,
 	}
 
     } else if (lcName == "global") {
+
+	if (m_haveNote) {
+	    m_errorString = i18n("global element must precede note elements");
+	    return false;
+	}
 	    
-	for (Note::Type type = Note::Shortest;
-	     type <= Note::Longest; ++type) {
-
-	    if (m_notes.find(type) != m_notes.end()) continue;
-		
-	    QString s;
-	    NoteDescription desc;
-
-	    s = attributes.value("shape");
-	    if (s) desc.shape = s.lower();
-	    else if (m_baseStyle) desc.shape = m_baseStyle->getShape(type);
-	
-	    s = attributes.value("filled");
-	    if (s) desc.filled = (s.lower() == "true");
-	    else if (m_baseStyle) desc.filled = m_baseStyle->isFilled(type);
-	
-	    s = attributes.value("stem");
-	    if (s) desc.stem = (s.lower() == "true");
-	    else if (m_baseStyle) desc.stem = m_baseStyle->hasStem(type);
-	
-	    s = attributes.value("flags");
-	    if (s) desc.flags = (s.lower() == "true");
-	    else if (m_baseStyle) desc.flags = m_baseStyle->getFlagCount(type);
-
-	    m_notes[type] = desc;
+	for (Note::Type type = Note::Shortest; type <= Note::Longest; ++type) {
+	    if (!setFromAttributes(type, attributes)) return false;
 	}
     }
 
     return true;
 }
+
+
+bool
+NoteStyleFileReader::setFromAttributes(Note::Type type,
+				       const QXmlAttributes &attributes)
+{
+    QString s;
+    bool haveShape = false;
+
+    s = attributes.value("shape");
+    if (s) {
+	m_style->setShape(type, qstrtostr(s.lower()));
+	haveShape = true;
+    }
+    
+    s = attributes.value("charname");
+    if (s) {
+	if (haveShape) {
+	    m_errorString = i18n("global and note elements may have shape "
+				 "or charname attribute, but not both");
+	    return false;
+	}
+	m_style->setShape(type, NoteStyle::CustomCharName);
+	m_style->setCharName(type, qstrtostr(s));
+    }
+
+    s = attributes.value("filled");
+    if (s) m_style->setFilled(type, s.lower() == "true");
+    
+    s = attributes.value("stem");
+    if (s) m_style->setStem(type, s.lower() == "true");
+    
+    s = attributes.value("flags");
+    if (s) m_style->setFlagCount(type, s.toInt());
+
+    return true;
+}
+
 

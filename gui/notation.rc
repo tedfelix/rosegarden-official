@@ -22,6 +22,7 @@ etc
 </Menu>
 
 <Menu name="edit">
+  <Action name="cut_and_close"/>
   <Action name="general_paste"/>
   <Action name="delete"/>
   <Separator/>
@@ -53,22 +54,18 @@ etc
 
 <Menu name="Notes">
 <text>&amp;Notes</text>
+  <Menu name="Style">
+    <text>Note &amp;Style</text>
+    <Action name="style_classical"/>
+    <Action name="style_x"/>
+    <Action name="style_triangle"/>
+    <Action name="style_mensural"/>
+  </Menu>
   <Menu name="Stems">
     <text>S&amp;tem Direction</text>
     <Action name="stems_up"/>
     <Action name="stems_down"/>
     <Action name="restore_stems"/>
-  </Menu>
-  <Separator/>
-  <Menu name="Noteheads">
-    <text>Note &amp;Heads</text>
-    <Action name="noteheads_classical"/>
-    <Action name="noteheads_x"/>
-    <Action name="noteheads_triangle"/>
-    <Action name="noteheads_mensural"/>
-    <Separator/>
-    <Action name="noteheads_black"/>
-    <Action name="noteheads_white"/>
   </Menu>
 </Menu>
 

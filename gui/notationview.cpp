@@ -615,7 +615,11 @@ void NotationView::setupActions()
 		SLOT(slotEditSelectWholeStaff()), actionCollection(),
 		"select_whole_staff");
 
-    new KAction(i18n("Pa&ste..."), 0, this,
+    new KAction(i18n("C&ut and Close"), CTRL + SHIFT + Key_X, this,
+		SLOT(slotEditCutAndClose()), actionCollection(),
+		"cut_and_close");
+
+    new KAction(i18n("Pa&ste..."), CTRL + SHIFT + Key_V, this,
 		SLOT(slotEditGeneralPaste()), actionCollection(),
 		"general_paste");
 
@@ -708,29 +712,29 @@ void NotationView::setupActions()
                 SLOT(slotTransformsRestoreStems()), actionCollection(),
                 "restore_stems");
 
-    new KAction(TransformsMenuChangeNoteHeadsCommand::getGlobalName
+    new KAction(TransformsMenuChangeStyleCommand::getGlobalName
 		(StandardNoteStyleNames::Classical),
 		0, this,
-		SLOT(slotTransformsClassicalNoteHeads()), actionCollection(),
-		"noteheads_classical");
+		SLOT(slotTransformsClassicalStyle()), actionCollection(),
+		"style_classical");
 
-    new KAction(TransformsMenuChangeNoteHeadsCommand::getGlobalName
+    new KAction(TransformsMenuChangeStyleCommand::getGlobalName
 		(StandardNoteStyleNames::Cross),
 		0, this,
-		SLOT(slotTransformsCrossNoteHeads()), actionCollection(),
-		"noteheads_x");
+		SLOT(slotTransformsCrossStyle()), actionCollection(),
+		"style_x");
 
-    new KAction(TransformsMenuChangeNoteHeadsCommand::getGlobalName
+    new KAction(TransformsMenuChangeStyleCommand::getGlobalName
 		(StandardNoteStyleNames::Mensural),
 		0, this,
-		SLOT(slotTransformsMensuralNoteHeads()), actionCollection(),
-		"noteheads_mensural");
+		SLOT(slotTransformsMensuralStyle()), actionCollection(),
+		"style_mensural");
 
-    new KAction(TransformsMenuChangeNoteHeadsCommand::getGlobalName
+    new KAction(TransformsMenuChangeStyleCommand::getGlobalName
 		(StandardNoteStyleNames::Triangle),
 		0, this,
-		SLOT(slotTransformsTriangleNoteHeads()), actionCollection(),
-		"noteheads_triangle");
+		SLOT(slotTransformsTriangleStyle()), actionCollection(),
+		"style_triangle");
 
     new KAction(TransformsMenuTransposeCommand::getGlobalName(1), 0,
 		Key_Up, this,
@@ -1393,6 +1397,16 @@ void NotationView::slotEditCopy()
 					m_document->getClipboard()));
 }
 
+void NotationView::slotEditCutAndClose()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Cutting selection to clipboard..."), statusBar());
+
+    addCommandToHistory(new CutAndCloseCommand(*m_currentEventSelection,
+					       m_document->getClipboard()));
+    setCurrentSelection(0);
+}
+
 void NotationView::slotEditPaste()
 {
     Rosegarden::Clipboard *clipboard = m_document->getClipboard();
@@ -1786,42 +1800,42 @@ void NotationView::slotTransformsRestoreStems()
                         (*m_currentEventSelection));
 }
 
-void NotationView::slotTransformsClassicalNoteHeads()
+void NotationView::slotTransformsClassicalStyle()
 {
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Changing to Classical note heads..."), statusBar());
+    KTmpStatusMsg msg(i18n("Changing to Classical style..."), statusBar());
 
-    addCommandToHistory(new TransformsMenuChangeNoteHeadsCommand
+    addCommandToHistory(new TransformsMenuChangeStyleCommand
                         (StandardNoteStyleNames::Classical,
 			 *m_currentEventSelection));
 }
 
-void NotationView::slotTransformsCrossNoteHeads()
+void NotationView::slotTransformsCrossStyle()
 {
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Changing to Cross note heads..."), statusBar());
+    KTmpStatusMsg msg(i18n("Changing to Cross style..."), statusBar());
 
-    addCommandToHistory(new TransformsMenuChangeNoteHeadsCommand
+    addCommandToHistory(new TransformsMenuChangeStyleCommand
                         (StandardNoteStyleNames::Cross,
 			 *m_currentEventSelection));
 }
 
-void NotationView::slotTransformsTriangleNoteHeads()
+void NotationView::slotTransformsTriangleStyle()
 {
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Changing to Triangle note heads..."), statusBar());
+    KTmpStatusMsg msg(i18n("Changing to Triangle style..."), statusBar());
 
-    addCommandToHistory(new TransformsMenuChangeNoteHeadsCommand
+    addCommandToHistory(new TransformsMenuChangeStyleCommand
                         (StandardNoteStyleNames::Triangle,
 			 *m_currentEventSelection));
 }
 
-void NotationView::slotTransformsMensuralNoteHeads()
+void NotationView::slotTransformsMensuralStyle()
 {
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Changing to Mensural note heads..."), statusBar());
+    KTmpStatusMsg msg(i18n("Changing to Mensural style..."), statusBar());
 
-    addCommandToHistory(new TransformsMenuChangeNoteHeadsCommand
+    addCommandToHistory(new TransformsMenuChangeStyleCommand
                         (StandardNoteStyleNames::Mensural,
 			 *m_currentEventSelection));
 }

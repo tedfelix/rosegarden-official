@@ -74,6 +74,62 @@ CutCommand::CutCommand(SegmentSelection &selection,
     }
 }
 
+
+CutAndCloseCommand::CutAndCloseCommand(Rosegarden::EventSelection &selection,
+				       Rosegarden::Clipboard *clipboard) :
+    KMacroCommand(getGlobalName())
+{
+    addCommand(new CutCommand(selection, clipboard));
+    addCommand(new CloseCommand(&selection.getSegment(),
+				selection.getEndTime(),
+				selection.getBeginTime()));
+}
+
+void
+CutAndCloseCommand::CloseCommand::execute()
+{
+    std::vector<Event *> events;
+
+    for (Segment::iterator i = m_segment->findTime(m_fromTime);
+	 i != m_segment->end(); ++i) {
+	events.push_back(new Event
+			 (**i, (*i)->getAbsoluteTime() + m_toTime - m_fromTime));
+    }
+
+    timeT oldDuration = m_segment->getDuration();
+    m_segment->erase(m_segment->findTime(m_toTime), m_segment->end());
+    
+    for (unsigned int i = 0; i < events.size(); ++i) {
+	m_segment->insert(events[i]);
+    }
+
+    m_segment->setDuration(oldDuration);
+}
+
+void
+CutAndCloseCommand::CloseCommand::unexecute()
+{
+    std::vector<Event *> events;
+
+    timeT oldEndTime = m_segment->getEndTime();
+    timeT newEndTime = oldEndTime - m_toTime + m_fromTime;
+
+    for (Segment::iterator i = m_segment->findTime(m_toTime);
+	 i != m_segment->findTime(newEndTime); ++i) {
+	events.push_back(new Event
+			 (**i, (*i)->getAbsoluteTime() - m_toTime + m_fromTime));
+    }
+
+    m_segment->erase(m_segment->findTime(m_toTime), m_segment->end());
+    
+    for (unsigned int i = 0; i < events.size(); ++i) {
+	m_segment->insert(events[i]);
+    }
+
+    m_segment->normalizeRests(m_toTime, m_fromTime);
+}  
+
+
 CopyCommand::CopyCommand(EventSelection &selection,
 			 Rosegarden::Clipboard *clipboard) :
     XKCommand(getGlobalName()),

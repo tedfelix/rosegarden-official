@@ -60,6 +60,16 @@ namespace Rosegarden
   it performs much like a machine integer.  It also shares
   strings, reducing storage sizes if there are many names in use.
 
+  A big caveat with this class is that it is _not_ safe to persist
+  the values of PropertyNames and assume that the original strings
+  can be recovered; they can't.  The values are assigned on demand,
+  and there's no guarantee that a given string will always map to
+  the same value (on separate invocations of the program).  This
+  is why there's no PropertyName(int) constructor and no mechanism
+  for storing PropertyNames in properties.  (Of course, you can 
+  store the string representation of a PropertyName in a property;
+  but that's slow.)
+
 */
 
 class PropertyName

@@ -401,16 +401,16 @@ private:
 };
 
 
-class TransformsMenuChangeNoteHeadsCommand : public BasicSelectionCommand
+class TransformsMenuChangeStyleCommand : public BasicSelectionCommand
 {
 public:
-    TransformsMenuChangeNoteHeadsCommand(NoteStyleName style,
-					 Rosegarden::EventSelection &selection) :
+    TransformsMenuChangeStyleCommand(NoteStyleName style,
+				     Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(getGlobalName(style), selection, true),
 	m_selection(&selection), m_style(style) { }
 
     static QString getGlobalName() {
-	return "Change Note &Head Style";
+	return "Change &Note Style";
     }
 
     static QString getGlobalName(NoteStyleName style);

@@ -46,9 +46,9 @@ Click and hold the left mouse button on the track/instrument label.
 A pop-up will appear from which you can choose a new instrument for
 the track.
 
-Notation and matrix editing
----------------------------
 
+Notation and Matrix editing
+---------------------------
 
 Can I edit all the segments at once in the notation editor?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -67,17 +67,17 @@ Can I edit all the segments at once in the matrix editor?
 No.  A matrix editor shows a single segment only.
 
 
-It's awfully slow.
-~~~~~~~~~~~~~~~~~~
+Notation rendering is rather slow.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Notation rendering is fairly slow, yes.  Unlike most other notation
-applications (including Rosegarden 2.1), we render the full length of
-each segment to a canvas when the notation editor starts, instead of
-rendering sections at a time when it scrolls.  This means scrolling
-should be smooth and quick but the initial rendering phase relatively
-slow.  This can be a problem for long segments, although for other
-practical reasons you're probably better off dividing long pieces into
-more manageable segments anyway.
+Yes, it can be.  Unlike most other notation applications (including
+Rosegarden 2.1), we render the full length of each segment to a canvas
+when the notation editor starts, instead of rendering sections at a
+time when it scrolls.  This means scrolling should be smooth and quick
+but the initial rendering phase relatively slow.  This can be a
+problem for long segments, although for other practical reasons you're
+probably better off dividing long pieces into more manageable segments
+anyway.
 
 You can speed things up somewhat by switching to the RG21 font, which
 doesn't look as nice but is easier to draw (though there's not yet any
@@ -112,4 +112,5 @@ Start up iiwusynth something like this:
 Then start Rosegarden and assign some Tracks to the "Synth input port"
 Instrument.  By default RG will choose the onboard synth first so
 you'll have to manually reassign these Tracks.
+
 
