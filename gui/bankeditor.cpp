@@ -1031,7 +1031,7 @@ BankEditorDialog::slotPopulateDevice(QListViewItem* item)
 void
 BankEditorDialog::populateDevice(QListViewItem* item)
 {
-    RG_DEBUG << "BankEditorDialog::populateDevice" << endl;
+    RG_DEBUG << "BankEditorDialog::populateDevice\n";
 
     if (!item) return;
 
@@ -1042,8 +1042,14 @@ BankEditorDialog::populateDevice(QListViewItem* item)
         // Ensure we fill these lists for the new device
         //
         MidiDeviceListViewItem* deviceItem = getParentDeviceItem(item);
+
+        m_lastDevice = deviceItem->getDevice();
+
         Rosegarden::MidiDevice *device = getMidiDevice(deviceItem);
-        if (!device) return;
+        if (!device) {
+            RG_DEBUG << "BankEditorDialog::populateDevice - no device for this item\n";
+            return;
+        }
 
         m_bankList = device->getBanks();
         setProgramList(device);
