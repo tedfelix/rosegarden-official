@@ -14,7 +14,7 @@
 <ToolBar name="toolsToolBar">
   <Action name="select" />
   <Action name="move" />
-  <Action name="paint" />
+  <Action name="draw" />
   <Action name="erase" />
   <Action name="resize" />
 </ToolBar>

@@ -337,7 +337,7 @@ void MatrixView::setupActions()
 
     toolAction = new KRadioAction(i18n("Paint"), "pencil", 0,
                                   this, SLOT(slotPaintSelected()),
-                                  actionCollection(), "paint");
+                                  actionCollection(), "draw");
     toolAction->setExclusiveGroup("tools");
 
     toolAction = new KRadioAction(i18n("Erase"), "eraser", 0,
@@ -367,7 +367,7 @@ void MatrixView::setupActions()
     createGUI(getRCFileName());
 
     if (getSegmentsOnlyRests())
-        actionCollection()->action("paint")->activate();
+        actionCollection()->action("draw")->activate();
     else
         actionCollection()->action("select")->activate();
 }
