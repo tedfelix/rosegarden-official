@@ -129,6 +129,10 @@ protected:
     static QFontMetrics *m_fontMetrics;
     static int m_fontHeight;
     void makeFont();
+
+private:
+    SegmentItem(const SegmentItem &);
+    SegmentItem &operator=(const SegmentItem &);
 };
 
 

@@ -63,13 +63,11 @@ SegmentItem::SegmentItem(TrackId track, timeT startTime, timeT duration,
     m_duration(duration),
     m_selected(false),
     m_snapGrid(snapGrid),
-    m_repeatRectangle(0)
-    //m_label(new QCanvasText("", canvas))
+    m_repeatRectangle(0),
+    m_label(new QCanvasText("", canvas))
 {
-    /*
     if (!m_font) makeFont();
     m_label->setFont(*m_font);
-    */
 
     recalculateRectangle(true);
 }
@@ -80,13 +78,11 @@ SegmentItem::SegmentItem(Segment *segment,
     m_segment(segment),
     m_selected(false),
     m_snapGrid(snapGrid),
-    m_repeatRectangle(0)
-    //m_label(new QCanvasText("", canvas))
+    m_repeatRectangle(0),
+    m_label(new QCanvasText("", canvas))
 {
-    /*
     if (!m_font) makeFont();
     m_label->setFont(*m_font);
-    */
 
     recalculateRectangle(true);
 }
@@ -94,8 +90,6 @@ SegmentItem::SegmentItem(Segment *segment,
 SegmentItem::~SegmentItem()
 {
     kdDebug(KDEBUG_AREA) << "SegmentItem::~SegmentItem" << endl;
-    if (m_repeatRectangle) delete m_repeatRectangle;
-    //if (m_label) delete m_label;
 }
 
 void
@@ -117,7 +111,7 @@ SegmentItem::recalculateRectangle(bool inheritFromSegment)
 	m_track = m_segment->getTrack();
 	m_startTime = m_segment->getStartTime();
 	m_duration = m_segment->getDuration();
-        //m_labelText = m_segment->getLabel().c_str();
+        m_labelText = m_segment->getLabel().c_str();
 
 	if (m_segment->isRepeating()) {
 
@@ -153,7 +147,6 @@ SegmentItem::recalculateRectangle(bool inheritFromSegment)
 	    getWidthForDuration(m_startTime, m_duration) + 1,
 	    m_snapGrid->getYSnap());
 
-    /*
     QString text = m_labelText;
     bool dots = false;
 
@@ -177,7 +170,6 @@ SegmentItem::recalculateRectangle(bool inheritFromSegment)
 		  (m_snapGrid->getYSnap()/2 - m_fontHeight/2) * 2 / 3);
     m_label->setZ(2);
     m_label->show();
-    */
 }
 
 Segment *
