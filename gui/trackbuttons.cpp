@@ -798,10 +798,12 @@ TrackButtons::slotSetMetersByInstrument(double value,
 
 
 void
-TrackButtons::slotInstrumentSelection(int position)
+TrackButtons::slotInstrumentSelection(int trackId)
 {
     Rosegarden::Composition &comp = m_doc->getComposition();
     Rosegarden::Studio &studio = m_doc->getStudio();
+
+    int position = comp.getTrackById(trackId)->getPosition();
 
     QString instrumentName;
     Rosegarden::Track *track = comp.getTrackByPosition(position);

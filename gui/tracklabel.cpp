@@ -118,5 +118,5 @@ TrackLabel::mouseDoubleClickEvent(QMouseEvent *e)
 void
 TrackLabel::slotChangeToInstrumentList()
 {
-    emit changeToInstrumentList(m_position);
+    emit changeToInstrumentList(m_id);
 }
