@@ -52,6 +52,8 @@
 #include <kcombobox.h>
 
 #include "RealTime.h"
+#include "BaseProperties.h"
+#include "MidiTypes.h"
 
 #include "dialogs.h"
 #include "notepixmapfactory.h"
@@ -1536,6 +1538,114 @@ EventEditDialog::slotPropertyMadePersistent()
     }
 }
 
+// ----------------------- SimpleEventEditDialog ------------------------
+//
+//
+SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
+				            const Event &event,
+				            bool editable) :
+    KDialogBase(parent, 0, true, i18n(editable ? "Simple Event Editor" : "Simple Event Viewer"),
+    (editable ? (Ok | Cancel) : Ok)),
+    m_originalEvent(event),
+    m_event(event),
+    m_type(event.getType()),
+    m_absoluteTime(event.getAbsoluteTime()),
+    m_duration(event.getDuration()),
+    m_modified(false)
+{
+    QVBox *vbox = makeVBoxMainWidget();
+
+    QGroupBox *groupBox = new QGroupBox
+	(1, Horizontal, i18n("Event properties"), vbox);
+
+    QFrame *frame = new QFrame(groupBox);
+
+    QGridLayout *layout = new QGridLayout(frame, 4, 2, 10, 5);
+
+    layout->addWidget(new QLabel(i18n("Type"), frame), 0, 0);
+
+    RosegardenComboBox *typeCombo =  new RosegardenComboBox(true, frame);
+    layout->addWidget(typeCombo, 0, 1);
+
+    typeCombo->insertItem(strtoqstr(Rosegarden::Note::EventType));
+    typeCombo->insertItem(strtoqstr(Rosegarden::Controller::EventType));
+    typeCombo->insertItem(strtoqstr(Rosegarden::KeyPressure::EventType));
+    typeCombo->insertItem(strtoqstr(Rosegarden::ChannelPressure::EventType));
+    typeCombo->insertItem(strtoqstr(Rosegarden::ProgramChange::EventType));
+    typeCombo->insertItem(strtoqstr(Rosegarden::SystemExclusive::EventType));
+    typeCombo->insertItem(strtoqstr(Rosegarden::PitchBend::EventType));
+    typeCombo->insertItem(strtoqstr(Rosegarden::Indication::EventType));
+    typeCombo->insertItem(strtoqstr(Rosegarden::Text::EventType));
+
+    m_timeLabel = new QLabel(i18n("Time"), frame);
+    layout->addWidget(m_timeLabel, 1, 0);
+    RosegardenSpinBox *timeSpinBox = new RosegardenSpinBox(frame);
+    layout->addWidget(timeSpinBox, 1, 1);
+
+    m_durationLabel = new QLabel(i18n("Duration"), frame);
+    layout->addWidget(m_durationLabel, 2, 0);
+    RosegardenSpinBox *durationSpinBox = new RosegardenSpinBox(frame);
+    layout->addWidget(durationSpinBox, 2, 1);
+
+    m_pitchLabel = new QLabel(i18n("Pitch"), frame);
+    layout->addWidget(m_pitchLabel, 3, 0);
+    RosegardenSpinBox *pitchSpinBox = new RosegardenSpinBox(frame);
+    layout->addWidget(pitchSpinBox, 3, 1);
+
+    m_velocityLabel = new QLabel(i18n("Velocity"), frame);
+    layout->addWidget(m_velocityLabel, 4, 0);
+    RosegardenSpinBox *velocitySpinBox = new RosegardenSpinBox(frame);
+    layout->addWidget(velocitySpinBox, 4, 1);
+
+    m_metaLabel = new QLabel(i18n("Meta string"), frame);
+    layout->addWidget(m_metaLabel, 5, 0);
+    m_metaEdit = new QLineEdit(frame);
+    layout->addWidget(m_metaEdit, 5, 1);
+
+}
+
+Rosegarden::Event
+SimpleEventEditDialog::getEvent() const
+{
+    return m_event;
+}
+
+
+void
+SimpleEventEditDialog::slotEventTypeChanged(int value)
+{
+}
+
+void 
+SimpleEventEditDialog::slotAbsoluteTimeChanged(int value)
+{
+}
+
+void 
+SimpleEventEditDialog::slotDurationChanged(int value)
+{
+}
+
+void
+SimpleEventEditDialog::slotPitchChanged(int value)
+{
+}
+
+void
+SimpleEventEditDialog::slotVelocityChanged(int value)
+{
+}
+
+void
+SimpleEventEditDialog::slotMetaChanged(const QString &string)
+{
+}
+
+
+
+// ----------------------------- TempoValidtor ----------------------------
+//
+//
 class TempoValidator : public QDoubleValidator
 {
 public:

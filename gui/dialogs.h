@@ -270,6 +270,7 @@ protected:
 };
 
 
+
 class EventEditDialog : public KDialogBase
 {
     Q_OBJECT
@@ -327,6 +328,51 @@ protected:
 
     bool m_modified;
 };
+
+/*
+ * A simpler event editor for use by the EventView and MatrixView
+ * and people who want to remain sane.
+ *
+ */
+class SimpleEventEditDialog : public KDialogBase
+{
+    Q_OBJECT
+public:
+    SimpleEventEditDialog(QWidget *parent,
+		          const Rosegarden::Event &event,
+		          bool editable = true);
+
+    bool isModified() const { return m_modified; }
+    Rosegarden::Event getEvent() const;
+
+public slots:
+    void slotEventTypeChanged(int value);
+    void slotAbsoluteTimeChanged(int value);
+    void slotDurationChanged(int value);
+    void slotPitchChanged(int value);
+    void slotVelocityChanged(int value);
+    void slotMetaChanged(const QString &);
+
+protected:
+
+    const Rosegarden::Event &m_originalEvent;
+    Rosegarden::Event m_event;
+
+    std::string       m_type;
+    Rosegarden::timeT m_absoluteTime;
+    Rosegarden::timeT m_duration;
+
+    QLabel           *m_timeLabel;
+    QLabel           *m_durationLabel;
+    QLabel           *m_pitchLabel;
+    QLabel           *m_velocityLabel;
+    QLabel           *m_metaLabel;
+
+    QLineEdit        *m_metaEdit;
+
+    bool m_modified;
+};
+
 
 class TempoDialog : public KDialogBase
 {

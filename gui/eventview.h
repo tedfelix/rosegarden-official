@@ -87,6 +87,10 @@ public:
     //
     void setButtonsToFilter();
 
+    // Menu creation and show
+    //
+    void createMenu();
+
 public slots:
 
     // standard slots
@@ -97,6 +101,11 @@ public slots:
     // other edit slots
     void slotEditDelete();
     void slotEditInsert();
+
+    // Show RMB menu
+    //
+    void slotPopupMenu(QListViewItem*, const QPoint&, int);
+    void slotMenuActivated(int);
 
     // on double click on the event list
     //
@@ -136,6 +145,8 @@ protected:
     static const char* const LayoutConfigGroupName;
 
     std::vector<int> m_listSelection;
+
+    QPopupMenu     *m_menu;
 
 };
 

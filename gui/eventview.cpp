@@ -37,6 +37,7 @@
 #include <qlabel.h>
 #include <qcheckbox.h>
 #include <qbuttongroup.h>
+#include <qpopupmenu.h>
 
 #include <klistview.h>
 
@@ -150,7 +151,8 @@ EventView::EventView(RosegardenGUIDoc *doc,
                      QWidget *parent):
     EditViewBase(doc, segments, 2, parent, "eventview"),
     m_eventFilter(Note | Text | SystemExclusive | Controller |
-		  ProgramChange | PitchBend | Indication | Other)
+		  ProgramChange | PitchBend | Indication | Other),
+    m_menu(0)
 {
     if (m_lastSetEventFilter < 0) m_lastSetEventFilter = m_eventFilter;
     else m_eventFilter = m_lastSetEventFilter;
@@ -203,6 +205,10 @@ EventView::EventView(RosegardenGUIDoc *doc,
     //
     connect(m_eventList, SIGNAL(doubleClicked(QListViewItem*)),
             SLOT(slotPopupEventEditor(QListViewItem*)));
+
+    connect(m_eventList, 
+            SIGNAL(rightButtonPressed(QListViewItem*, const QPoint&, int)),
+            SLOT(slotPopupMenu(QListViewItem*, const QPoint&, int)));
 
     m_eventList->setAllColumnsShowFocus(true);
     m_eventList->setSelectionMode(QListView::Extended);
@@ -924,5 +930,84 @@ EventView::slotPopupEventEditor(QListViewItem *item)
 
     }
 }
+
+void 
+EventView::slotPopupMenu(QListViewItem *item, const QPoint &pos, int)
+{
+    if (!item) return;
+
+    if (!m_menu) createMenu();
+
+    if (m_menu)
+        //m_menu->exec(QCursor::pos());
+        m_menu->exec(pos);
+    else
+        RG_DEBUG << "EventView::showMenu() : no menu to show\n";
+}
+
+void
+EventView::createMenu()
+{
+    m_menu = new QPopupMenu(this);
+    m_menu->insertItem(i18n("Open in Simple Event Editor"));
+    m_menu->insertItem(i18n("Open in Full Event Editor"));
+
+    connect(m_menu, SIGNAL(activated(int)),
+            SLOT(slotMenuActivated(int)));
+}
+
+void
+EventView::slotMenuActivated(int value)
+{
+    if (value == 0)
+    {
+        EventViewItem *eItem = dynamic_cast<EventViewItem*>
+            (m_eventList->currentItem());
+
+        if (eItem)
+        {
+	    Rosegarden::Event *event = eItem->getEvent();
+            SimpleEventEditDialog *dialog =
+                new SimpleEventEditDialog(this, *event);
+
+            if (dialog->exec() == QDialog::Accepted && dialog->isModified())
+            {
+                EventEditCommand *command =
+                    new EventEditCommand(*(eItem->getSegment()),
+                                         event,
+                                         dialog->getEvent());
+
+                addCommandToHistory(command);
+            }
+
+        }
+    }
+    else if (value == 1)
+    {
+        EventViewItem *eItem = dynamic_cast<EventViewItem*>
+            (m_eventList->currentItem());
+
+        if (eItem)
+        {
+	    Rosegarden::Event *event = eItem->getEvent();
+            EventEditDialog *dialog = new EventEditDialog(this, *event);
+
+            if (dialog->exec() == QDialog::Accepted && dialog->isModified())
+            {
+                EventEditCommand *command =
+                    new EventEditCommand(*(eItem->getSegment()),
+                                         event,
+                                         dialog->getEvent());
+
+                addCommandToHistory(command);
+            }
+
+        }
+    }
+
+    return;
+}
+
+
 
 const char* const EventView::ConfigGroup = "EventList Options";
