@@ -121,8 +121,8 @@ class NoteInserter : public NotationTool
 public:
     ~NoteInserter();
 
-    virtual void handleLeftButtonPress(int height,
-                                       Rosegarden::timeT,
+    virtual void handleLeftButtonPress(Rosegarden::timeT,
+                                       int height,
                                        int staffNo,
                                        QMouseEvent*,
                                        Rosegarden::ViewElement* el);
@@ -217,8 +217,8 @@ public:
 
     virtual void ready();
 
-    virtual void handleLeftButtonPress(int height,
-                                       Rosegarden::timeT,
+    virtual void handleLeftButtonPress(Rosegarden::timeT,
+                                       int height,
                                        int staffNo,
                                        QMouseEvent*,
                                        Rosegarden::ViewElement* el);
@@ -246,8 +246,8 @@ public:
 
     virtual void ready();
 
-    virtual void handleLeftButtonPress(int height,
-                                       Rosegarden::timeT,
+    virtual void handleLeftButtonPress(Rosegarden::timeT,
+                                       int height,
                                        int staffNo,
                                        QMouseEvent*,
                                        Rosegarden::ViewElement* el);
@@ -275,22 +275,22 @@ class NotationSelector : public NotationTool
 
 public:
 
-    virtual void handleLeftButtonPress(int height,
-                                       Rosegarden::timeT,
+    virtual void handleLeftButtonPress(Rosegarden::timeT,
+                                       int height,
                                        int staffNo,
                                        QMouseEvent*,
                                        Rosegarden::ViewElement* el);
 
-    virtual void handleMouseMove(int height,
-                                 Rosegarden::timeT,
+    virtual void handleMouseMove(Rosegarden::timeT,
+                                 int height,
                                  QMouseEvent*);
 
-    virtual void handleMouseRelease(int height,
-                                    Rosegarden::timeT time,
+    virtual void handleMouseRelease(Rosegarden::timeT time,
+                                    int height,
                                     QMouseEvent*);
 
-    virtual void handleMouseDblClick(int height,
-                                     Rosegarden::timeT,
+    virtual void handleMouseDblClick(Rosegarden::timeT,
+                                     int height,
                                      int staffNo,
                                      QMouseEvent*,
                                      Rosegarden::ViewElement*);
@@ -356,8 +356,8 @@ public:
 
     ~NotationSelectionPaster();
     
-    virtual void handleLeftButtonPress(int height, int staffNo,
-                                       Rosegarden::timeT,
+    virtual void handleLeftButtonPress(Rosegarden::timeT,
+                                       int height, int staffNo,
                                        QMouseEvent*,
                                        Rosegarden::ViewElement* el);
 

@@ -82,8 +82,8 @@ void EditTool::createMenu(const QString& rcFileName)
     m_menu = dynamic_cast<QPopupMenu*>(tmp);
 }
 
-void EditTool::handleMousePress(int height,
-                                Rosegarden::timeT time,
+void EditTool::handleMousePress(Rosegarden::timeT time,
+                                int height,
                                 int staffNo,
                                 QMouseEvent* e,
                                 Rosegarden::ViewElement* el)
@@ -111,23 +111,23 @@ void EditTool::handleMousePress(int height,
     }
 }
 
-void EditTool::handleMidButtonPress(int, int,
-                                    Rosegarden::timeT,
+void EditTool::handleMidButtonPress(Rosegarden::timeT,
+                                    int, int,
                                     QMouseEvent*,
                                     Rosegarden::ViewElement*)
 {
 }
 
-void EditTool::handleRightButtonPress(int, int,
-                                      Rosegarden::timeT,
+void EditTool::handleRightButtonPress(Rosegarden::timeT,
+                                      int, int,
                                       QMouseEvent*,
                                       Rosegarden::ViewElement*)
 {
     showMenu();
 }
 
-void EditTool::handleMouseDblClick(int, int,
-                                   Rosegarden::timeT,
+void EditTool::handleMouseDblClick(Rosegarden::timeT,
+                                   int, int,
                                    QMouseEvent*,
                                    Rosegarden::ViewElement*)
 {
@@ -135,11 +135,11 @@ void EditTool::handleMouseDblClick(int, int,
 }
 
 
-void EditTool::handleMouseMove(int, Rosegarden::timeT, QMouseEvent*)
+void EditTool::handleMouseMove(Rosegarden::timeT, int, QMouseEvent*)
 {
 }
 
-void EditTool::handleMouseRelease(int, Rosegarden::timeT, QMouseEvent*)
+void EditTool::handleMouseRelease(Rosegarden::timeT, int, QMouseEvent*)
 {
 }
 

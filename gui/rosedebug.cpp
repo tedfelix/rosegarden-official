@@ -187,17 +187,17 @@ kdbgostreamAdapter::operator<<(double d)
 //     s << "\n"; return s;
 // }
 
-void DBCheckThrow()
-{
-    using Rosegarden::Int;
+// void DBCheckThrow()
+// {
+//     using Rosegarden::Int;
 
-    Rosegarden::Event ev;
+//     Rosegarden::Event ev;
     
-    try {
-        int pitch = ev.get<Int>("BLAH");
+//     try {
+//         int pitch = ev.get<Int>("BLAH");
 
-    } catch (Rosegarden::Event::NoData) {
-        kdDebug(KDEBUG_AREA) << "DBCheckThrow()" << endl;
-    }
-}
+//     } catch (Rosegarden::Event::NoData) {
+//         kdDebug(KDEBUG_AREA) << "DBCheckThrow()" << endl;
+//     }
+// }
 

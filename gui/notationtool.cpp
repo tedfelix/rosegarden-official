@@ -208,8 +208,8 @@ void NoteInserter::ready()
 
 
 void    
-NoteInserter::handleLeftButtonPress(int height,
-                                    Rosegarden::timeT,
+NoteInserter::handleLeftButtonPress(Rosegarden::timeT,
+                                    int height,
                                     int staffNo,
 				    QMouseEvent* e,
 				    ViewElement*)
@@ -402,8 +402,8 @@ void ClefInserter::setClef(std::string clefType)
     m_clef = clefType;
 }
 
-void ClefInserter::handleLeftButtonPress(int,
-                                         Rosegarden::timeT,
+void ClefInserter::handleLeftButtonPress(Rosegarden::timeT,
+                                         int,
                                          int staffNo,
 					 QMouseEvent* e,
 					 ViewElement*)
@@ -453,8 +453,8 @@ void NotationEraser::ready()
     m_nParentView->setPositionTracking(false);
 }
 
-void NotationEraser::handleLeftButtonPress(int,
-                                           Rosegarden::timeT,
+void NotationEraser::handleLeftButtonPress(Rosegarden::timeT,
+                                           int,
                                            int staffNo,
                                            QMouseEvent*,
                                            ViewElement* element)
@@ -488,8 +488,8 @@ NotationSelector::NotationSelector(NotationView* view)
             this,         SLOT(hideSelection()));
 }
 
-void NotationSelector::handleLeftButtonPress(int,
-                                             Rosegarden::timeT,
+void NotationSelector::handleLeftButtonPress(Rosegarden::timeT,
+                                             int,
                                              int staffNo,
                                              QMouseEvent* e,
                                              ViewElement *element)
@@ -508,8 +508,8 @@ void NotationSelector::handleLeftButtonPress(int,
     //m_parentView->setCursorPosition(p.x());
 }
 
-void NotationSelector::handleMouseDblClick(int,
-                                           Rosegarden::timeT,
+void NotationSelector::handleMouseDblClick(Rosegarden::timeT,
+                                           int,
                                            int staffNo,
                                            QMouseEvent* e,
                                            ViewElement *element)
@@ -532,7 +532,7 @@ void NotationSelector::handleMouseDblClick(int,
     return;
 }
 
-void NotationSelector::handleMouseMove(int, timeT,
+void NotationSelector::handleMouseMove(timeT, int,
                                        QMouseEvent* e)
 {
     if (!m_updateRect) return;
@@ -549,7 +549,7 @@ void NotationSelector::handleMouseMove(int, timeT,
     m_nParentView->canvas()->update();
 }
 
-void NotationSelector::handleMouseRelease(int, timeT, QMouseEvent*)
+void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent*)
 {
     kdDebug(KDEBUG_AREA) << "NotationSelector::handleMouseRelease" << endl;
     m_updateRect = false;
@@ -697,8 +697,8 @@ NotationSelectionPaster::~NotationSelectionPaster()
 {
 }
 
-void NotationSelectionPaster::handleLeftButtonPress(int,
-                                                    Rosegarden::timeT,
+void NotationSelectionPaster::handleLeftButtonPress(Rosegarden::timeT,
+                                                    int,
                                                     int staffNo,
                                                     QMouseEvent* e,
                                                     ViewElement*)

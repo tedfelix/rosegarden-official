@@ -119,7 +119,7 @@ bool RG21Loader::parseChordItem()
 
     // get chord mod flags and nb of notes.  chord mod is hex
     int chordMods = (*i).toInt(0, 16); ++i;
-    int nbNotes   = (*i).toInt(); ++i;
+    /*int nbNotes   = (*i).toInt();*/ ++i;
 
     vector<string> marks = convertRG21ChordMods(chordMods);
 
@@ -148,7 +148,7 @@ bool RG21Loader::parseChordItem()
 
 	if (marks.size() > 0) {
 	    noteEvent->set<Int>(MARK_COUNT, marks.size());
-	    for (int j = 0; j < marks.size(); ++j) {
+	    for (unsigned int j = 0; j < marks.size(); ++j) {
 		noteEvent->set<String>(getMarkPropertyName(j), marks[j]);
 	    }
 	}

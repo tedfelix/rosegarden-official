@@ -533,5 +533,5 @@ void SegmentResizer::handleMouseMove(QMouseEvent *e)
 
 bool SegmentResizer::cursorIsCloseEnoughToEdge(SegmentItem* p, QMouseEvent* e)
 {
-    return ( abs(p->rect().x() + p->rect().width() - e->x()) < m_edgeThreshold);
+    return ( abs(p->rect().x() + p->rect().width() - e->x()) < int(m_edgeThreshold));
 }

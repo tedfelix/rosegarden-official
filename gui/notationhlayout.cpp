@@ -144,7 +144,7 @@ double NotationHLayout::getIdealBarWidth(StaffType &staff,
 					 int baseWidth,
 					 NotationElementList::iterator shortest,
 					 int shortCount,
-					 int totalCount,
+					 int /*totalCount*/,
 					 const TimeSignature &timeSignature)
     const
 {
@@ -533,7 +533,7 @@ NotationHLayout::reconcileBarsLinear()
 
 	    BarDataList &list = i->second;
 
-	    if (list.size() > barNo) {
+	    if (list.size() > signed(barNo)) {
 
 		BarData &bd(list[barNo]);
 
@@ -610,7 +610,7 @@ NotationHLayout::reconcileBarsPage()
 
 		    BarDataList &list = i->second;
 
-		    if (list.size() > barNo) {
+		    if (list.size() > signed(barNo)) {
 			BarData &bd(list[barNo]);
 			if ((nextStretchFactor * bd.idealWidth) <
 			    (double)(bd.fixedWidth + bd.baseWidth)) {
@@ -646,7 +646,7 @@ NotationHLayout::reconcileBarsPage()
 
     barNo = 0;
 
-    for (int row = 0; row < (int)rowData.size(); ++row) {
+    for (unsigned int row = 0; row < rowData.size(); ++row) {
 
 	barNoThisRow = barNo;
 	unsigned int finalBarThisRow = barNo + rowData[row].first - 1;
@@ -656,7 +656,7 @@ NotationHLayout::reconcileBarsPage()
 
 	for (; barNoThisRow <= finalBarThisRow; ++barNoThisRow, ++barNo) {
 
-	    bool finalRow = (row == (int)rowData.size()-1);
+	    bool finalRow = (row == rowData.size()-1);
 
 	    StaffType *widest = getStaffWithWidestBar(barNo);
 	    if (!widest) break; // reached end of piece (shouldn't happen)
@@ -675,7 +675,7 @@ NotationHLayout::reconcileBarsPage()
 
 		BarDataList &list = i->second;
 
-		if (list.size() > barNo) {
+		if (list.size() > signed(barNo)) {
 
 		    BarData &bd(list[barNo]);
 

@@ -107,7 +107,7 @@ protected:
     EventIdMap m_indicationsExtant;
 
     bool m_inGroup;
-    unsigned int m_groupId;
+    long m_groupId;
     std::string m_groupType;
     Rosegarden::timeT m_groupStartTime;
     int m_groupTupledLength;

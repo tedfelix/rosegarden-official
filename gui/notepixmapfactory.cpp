@@ -535,7 +535,7 @@ NotePixmapFactory::makeRoomForMarks(bool isStemmed,
 				    const NotePixmapParameters &params)
 {
     int height = 0, width = 0;
-    for (int i = 0; i < params.m_marks.size(); ++i) {
+    for (unsigned int i = 0; i < params.m_marks.size(); ++i) {
 	//!!! Deal with textual marks (sf, rf) -- or make them not marks
 	// at all?
 	QPixmap pixmap(m_font->getPixmap(getMarkCharName(params.m_marks[i])));
@@ -558,7 +558,7 @@ NotePixmapFactory::drawMarks(bool isStemmed,
     bool marksAbove = !(isStemmed && params.m_stemGoesUp);
     int dy = 0;
 
-    for (int i = 0; i < params.m_marks.size(); ++i) {
+    for (unsigned int i = 0; i < params.m_marks.size(); ++i) {
 	//!!! Deal with textual marks (sf, rf) -- or make them not marks
 	// at all?
 	QPixmap pixmap(m_font->getPixmap(getMarkCharName(params.m_marks[i])));

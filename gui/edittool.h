@@ -102,8 +102,8 @@ public:
     /**
      * Dispatch the event to Left/Middle/Right MousePress
      */
-    virtual void handleMousePress(int height,
-                                  Rosegarden::timeT time,
+    virtual void handleMousePress(Rosegarden::timeT time,
+                                  int height,                                  
                                   int staffNo,
                                   QMouseEvent *event,
                                   Rosegarden::ViewElement*);
@@ -111,8 +111,8 @@ public:
     /**
      * Main operation of the tool
      */
-    virtual void handleLeftButtonPress(int height,
-                                       Rosegarden::timeT time,
+    virtual void handleLeftButtonPress(Rosegarden::timeT time,
+                                       int height,
                                        int staffNo,
                                        QMouseEvent *event,
                                        Rosegarden::ViewElement*) = 0;
@@ -120,8 +120,8 @@ public:
     /**
      * Do nothing
      */
-    virtual void handleMidButtonPress(int height,
-                                      Rosegarden::timeT time,
+    virtual void handleMidButtonPress(Rosegarden::timeT time,
+                                      int height,
                                       int staffNo,
                                       QMouseEvent*,
                                       Rosegarden::ViewElement*);
@@ -129,8 +129,8 @@ public:
     /**
      * Show option menu
      */
-    virtual void handleRightButtonPress(int height,
-                                        Rosegarden::timeT time,
+    virtual void handleRightButtonPress(Rosegarden::timeT time,
+                                        int height,
                                         int staffNo,
                                         QMouseEvent*,
                                         Rosegarden::ViewElement*);
@@ -138,8 +138,8 @@ public:
     /**
      * Do nothing
      */
-    virtual void handleMouseDblClick(int height,
-                                     Rosegarden::timeT time,
+    virtual void handleMouseDblClick(Rosegarden::timeT time,
+                                     int height,
                                      int staffNo,
                                      QMouseEvent*,
                                      Rosegarden::ViewElement*);
@@ -147,15 +147,15 @@ public:
     /**
      * Do nothing
      */
-    virtual void handleMouseMove(int height,
-                                 Rosegarden::timeT time,
+    virtual void handleMouseMove(Rosegarden::timeT time,
+                                 int height,
                                  QMouseEvent*);
 
     /**
      * Do nothing
      */
-    virtual void handleMouseRelease(int height,
-                                    Rosegarden::timeT time,
+    virtual void handleMouseRelease(Rosegarden::timeT time,
+                                    int height,
                                     QMouseEvent*);
 
     /**

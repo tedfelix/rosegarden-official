@@ -130,7 +130,7 @@ public:
 
 signals:
 
-    void mousePressed(int pitch, Rosegarden::timeT time,
+    void mousePressed(Rosegarden::timeT time, int pitch,
                       QMouseEvent*, MatrixElement*);
 
     void mouseMoved(Rosegarden::timeT time, QMouseEvent*);
@@ -370,8 +370,8 @@ public slots:
      * Called when a mouse press occurred on a matrix element
      * or somewhere on the staff
      */
-    void mousePressed(int pitch, Rosegarden::timeT time,
-                     QMouseEvent*, MatrixElement*);
+    void mousePressed(Rosegarden::timeT time, int pitch,
+                      QMouseEvent*, MatrixElement*);
 
     void mouseMoved(Rosegarden::timeT time, QMouseEvent*);
     void mouseReleased(Rosegarden::timeT time, QMouseEvent*);
@@ -465,8 +465,8 @@ class MatrixPainter : public MatrixTool
 
 public:
 
-    virtual void handleLeftButtonPress(int height,
-                                       Rosegarden::timeT,
+    virtual void handleLeftButtonPress(Rosegarden::timeT,
+                                       int height,
                                        int staffNo,
                                        QMouseEvent *event,
                                        Rosegarden::ViewElement*);
@@ -474,15 +474,15 @@ public:
     /**
      * Set the duration of the element
      */
-    virtual void handleMouseMove(int height,
-                                 Rosegarden::timeT,
+    virtual void handleMouseMove(Rosegarden::timeT,
+                                 int height,
                                  QMouseEvent*);
 
     /**
      * Actually insert the new element
      */
-    virtual void handleMouseRelease(int height,
-                                    Rosegarden::timeT,
+    virtual void handleMouseRelease(Rosegarden::timeT,
+                                    int height,
                                     QMouseEvent*);
 
     static const QString ToolName;

@@ -34,8 +34,6 @@
 
 using Rosegarden::Composition;
 
-static double canvasPosition;
-
 TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
                            QWidget* parent, const char* name,
                            WFlags) :
