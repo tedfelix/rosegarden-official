@@ -586,21 +586,19 @@ int main(int argc, char *argv[])
         QString soundFontPath = config->readEntry("soundfontpath", "");
         QFileInfo sfxLoadInfo(sfxLoadPath), soundFontInfo(soundFontPath);
         if (sfxLoadInfo.isExecutable() && soundFontInfo.isReadable()) {
-            KProcess sfxLoadProcess;
-            sfxLoadProcess << sfxLoadPath << soundFontPath;
+            KProcess* sfxLoadProcess = new KProcess;
+            (*sfxLoadProcess) << sfxLoadPath << soundFontPath;
             RG_DEBUG << "Starting sfxload : " << sfxLoadPath << " " << soundFontPath << endl;
-            sfxLoadProcess.start();
 
-            // Not in KDE 3.1
-            //sfxLoadProcess.wait();
-            while(sfxLoadProcess.isRunning());
+            QObject::connect(sfxLoadProcess, SIGNAL(processExited(KProcess*)),
+                             &app, SLOT(sfxLoadExited(KProcess*)));
 
-            if (!sfxLoadProcess.normalExit()) {
-                KMessageBox::error(rosegardengui,
-                                   QString(i18n("Failed to load soundfont %1")).arg(soundFontPath));
-            }
-            
+            sfxLoadProcess->start();
+        } else {
+            RG_DEBUG << "sfxload not executable or soundfont not readable : "
+                     << sfxLoadPath << " " << soundFontPath << endl;
         }
+
     } else {
         RG_DEBUG << "sfxload disabled\n";
     }

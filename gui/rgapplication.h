@@ -27,6 +27,8 @@
 
 #include <kuniqueapplication.h>
 
+class KProcess;
+
 /**
  * RosegardenApplication
  *
@@ -35,6 +37,7 @@
  */
 class RosegardenApplication : public KUniqueApplication
 {
+    Q_OBJECT
 public:
     RosegardenApplication(): KUniqueApplication(), m_noSequencerMode(false) {}
 
@@ -49,7 +52,8 @@ public:
 
     bool isSequencerRegistered();
     bool sequencerSend(QCString dcopCall, QByteArray params = Empty);
-    bool sequencerCall(QCString dcopCall, QCString& replyType, QByteArray& replyData, QByteArray params = Empty, bool useEventLoop = false);
+    bool sequencerCall(QCString dcopCall, QCString& replyType,
+                       QByteArray& replyData, QByteArray params = Empty, bool useEventLoop = false);
 
     static RosegardenApplication* rgApp();
 
@@ -58,6 +62,9 @@ public:
     void setNoSequencerMode(bool m=true) { m_noSequencerMode = m; }
     bool noSequencerMode() { return m_noSequencerMode; }
 
+public slots:
+    void sfxLoadExited(KProcess *proc);
+    
 protected:
     //--------------- Data members ---------------------------------
     

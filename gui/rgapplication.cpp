@@ -21,10 +21,15 @@
 
 #include <kcmdlineargs.h>
 #include <dcopclient.h>
+#include <kprocess.h>
+#include <kmessagebox.h>
+#include <kconfig.h>
 
+#include "constants.h"
 #include "rgapplication.h"
 #include "rosegardengui.h"
 #include "rosegardenguidoc.h"
+#include "rosedebug.h"
 
 int RosegardenApplication::newInstance()
 {
@@ -67,7 +72,21 @@ bool RosegardenApplication::sequencerCall(QCString dcopCall, QCString& replyType
                               dcopCall, params, replyType, replyData, useEventLoop);
 }
 
-
+void RosegardenApplication::sfxLoadExited(KProcess *proc)
+{
+    if (!proc->normalExit()) {
+        QString configGroup = config()->group();
+        config()->setGroup(Rosegarden::SequencerOptionsConfigGroup);
+        QString soundFontPath = config()->readEntry("soundfontpath", "");
+        config()->setGroup(configGroup);
+        
+        KMessageBox::error(mainWidget(),
+                           QString(i18n("Failed to load soundfont %1")).arg(soundFontPath));
+    } else {
+        RG_DEBUG << "RosegardenApplication::sfxLoadExited() : sfxload exited normally\n";
+    }
+    
+}
 
 RosegardenApplication* RosegardenApplication::rgApp()
 {
