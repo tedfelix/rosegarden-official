@@ -204,7 +204,7 @@ public:
      * Show a preview of the Segment we're recording
      */
     void showRecordingSegmentItem(int y, timeT startTime, timeT duration);
-    void destroyRecordingSegmentItem();
+    void deleteRecordingSegmentItem();
 
 public slots:
     /// Set the current segment editing tool

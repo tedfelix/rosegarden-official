@@ -119,9 +119,14 @@ public slots:
     void updateRecordingSegmentItem(Rosegarden::Segment *segment);
 
     /*
+     * Resync a SegmentItem to reflect its Segment
+     **/
+    void updateSegmentItem(Rosegarden::Segment *segment);
+
+    /*
      * Destroys same
      */
-    void destroyRecordingSegmentItem();
+    void deleteRecordingSegmentItem();
 
     /**
      * c.f. what we have in rosegardenguiview.h

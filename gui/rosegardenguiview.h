@@ -122,14 +122,19 @@ public:
     /*
      * Destroy a SegmentItem
      */
-    void destroySegmentItem(Rosegarden::Segment* segment);
+    void deleteSegmentItem(Rosegarden::Segment* segment);
+
+    /*
+     * Update a SegmentItem to reflect changes in the Segment
+     */
+    void updateSegmentItem(Rosegarden::Segment* segment);
 
     /**
      * Show a Segment as it records - remove the SegmentItem
      * when no longer needed
      */
     void showRecordingSegmentItem(Rosegarden::Segment* segment);
-    void destroyRecordingSegmentItem();
+    void deleteRecordingSegmentItem();
 
     /**
      * set the viewable loop on the clients and SegmentCanvas

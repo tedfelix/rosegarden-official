@@ -377,9 +377,14 @@ void RosegardenGUIView::createSegmentItem(Rosegarden::Segment* segment)
     m_trackEditor->addSegmentItem(segment);
 }
 
-void RosegardenGUIView::destroySegmentItem(Rosegarden::Segment* segment)
+void RosegardenGUIView::deleteSegmentItem(Rosegarden::Segment* segment)
 {
     m_trackEditor->deleteSegmentItem(segment);
+}
+
+void RosegardenGUIView::updateSegmentItem(Rosegarden::Segment* segment)
+{
+    m_trackEditor->updateSegmentItem(segment);
 }
 
 // Show a segment as it records
@@ -389,9 +394,9 @@ void RosegardenGUIView::showRecordingSegmentItem(Rosegarden::Segment* segment)
     m_trackEditor->updateRecordingSegmentItem(segment);
 }
 
-void RosegardenGUIView::destroyRecordingSegmentItem()
+void RosegardenGUIView::deleteRecordingSegmentItem()
 {
-    m_trackEditor->destroyRecordingSegmentItem();
+    m_trackEditor->deleteRecordingSegmentItem();
 }
 
 

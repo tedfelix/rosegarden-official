@@ -221,6 +221,11 @@ public slots:
      **/
     void deleteSegmentItem(Rosegarden::Segment *segment);
 
+    /**
+     * Populate a SegmentItem with new Segment details
+     */
+    void updateSegmentItem(Rosegarden::Segment *segment);
+
     void documentModified();
     void documentRestored();
 

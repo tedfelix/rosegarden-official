@@ -423,7 +423,7 @@ SegmentCanvas::showRecordingSegmentItem(int y, timeT startTime, timeT duration)
 
 
 void
-SegmentCanvas::destroyRecordingSegmentItem()
+SegmentCanvas::deleteRecordingSegmentItem()
 {
     if (m_recordingSegment) {
 	m_recordingSegment->setVisible(false);

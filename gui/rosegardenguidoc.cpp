@@ -493,7 +493,22 @@ RosegardenGUIDoc::deleteSegmentItem(Rosegarden::Segment *segment)
     {
         for(w=pViewList->first(); w!=0; w=pViewList->next())
         {
-                w->destroySegmentItem(segment);
+                w->deleteSegmentItem(segment);
+        }
+    }
+
+}
+// Delete a SegmentItem from the SegmentCanvas
+//
+void
+RosegardenGUIDoc::updateSegmentItem(Rosegarden::Segment *segment)
+{
+    RosegardenGUIView *w;
+    if(pViewList)
+    {
+        for(w=pViewList->first(); w!=0; w=pViewList->next())
+        {
+                w->updateSegmentItem(segment);
         }
     }
 
@@ -618,7 +633,7 @@ RosegardenGUIDoc::stopRecordingMidi()
     {
         for(w=pViewList->first(); w!=0; w=pViewList->next())
         {
-            w->destroyRecordingSegmentItem();
+            w->deleteRecordingSegmentItem();
             w->createSegmentItem(m_recordSegment);
         }
     }
@@ -719,6 +734,7 @@ RosegardenGUIDoc::splitSegment(Rosegarden::Segment *segment,
     Rosegarden::Event *lhEvent;
     Rosegarden::timeT absTime, duration;
     Rosegarden::timeT lastNote = 0;
+    Rosegarden::timeT endTime = segment->getEndTime();
     int count = 0;
 
     // Copy through Events
@@ -728,28 +744,27 @@ RosegardenGUIDoc::splitSegment(Rosegarden::Segment *segment,
         absTime = (*it)->getAbsoluteTime();
         duration = (*it)->getDuration();
 
-        /*
         if ( absTime + duration > lastNote)
             rhSegment->fillWithRests(absTime + duration);
-            */
 
         lhEvent = new Event(**it);
         Segment::iterator loc = rhSegment->insert(lhEvent);
 
-        /*
         SegmentNotationHelper helper(*rhSegment);
         if (!helper.isViable(lhEvent))
             helper.makeNoteViable(loc);
 
         lastNote = absTime + duration;
-        */
         count++;
     }
 
-    // zap the left hand Segment
+    // resize left hand Segment
     //
     segment->erase(segment->begin(), segment->findTime(splitTime));
-    deleteSegmentItem(segment);
+    segment->setDuration(splitTime - segment->getStartTime());
+    updateSegmentItem(segment);
+
+    rhSegment->setDuration(endTime - splitTime);
 
     addSegmentItem(rhSegment);
     addSegmentItem(segment);

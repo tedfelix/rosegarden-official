@@ -417,7 +417,8 @@ TrackEditor::deleteSegmentItem(Rosegarden::Segment *segment)
 
         if (segmentItem)
         {
-            if (segmentItem->getSegment() == segment)
+            if (segmentItem->rtti() == SegmentItem::SegmentItemRTTI &&
+                segmentItem->getSegment() == segment)
             {
                 delete segmentItem;
                 itemList.remove(it);
@@ -428,6 +429,32 @@ TrackEditor::deleteSegmentItem(Rosegarden::Segment *segment)
 
     emit needUpdate();
 }
+
+void
+TrackEditor::updateSegmentItem(Rosegarden::Segment *segment)
+{
+    QCanvasItemList itemList = getSegmentCanvas()->canvas()->allItems();
+    QCanvasItemList::Iterator it;
+
+    for (it = itemList.begin(); it != itemList.end(); ++it) {
+        QCanvasItem *item = *it;
+        SegmentItem *segmentItem = dynamic_cast<SegmentItem*>(item);
+
+        if (segmentItem)
+        {
+            if (segmentItem->rtti() == SegmentItem::SegmentItemRTTI &&
+                segmentItem->getSegment() == segment)
+            {
+                segmentItem->setStartTime(segment->getStartTime());
+                segmentItem->setDuration(segment->getDuration());
+            }
+        }
+    }
+
+    emit needUpdate();
+}
+
+
 
 
 
@@ -456,9 +483,9 @@ TrackEditor::updateRecordingSegmentItem(Rosegarden::Segment *segment)
 }
 
 void
-TrackEditor::destroyRecordingSegmentItem()
+TrackEditor::deleteRecordingSegmentItem()
 {
-    m_segmentCanvas->destroyRecordingSegmentItem();
+    m_segmentCanvas->deleteRecordingSegmentItem();
     emit needUpdate();
 }
 
