@@ -1,6 +1,6 @@
 
-#ifndef _ELEMENT2_H_
-#define _ELEMENT2_H_
+#ifndef _EVENT_H_
+#define _EVENT_H_
 
 // Std
 #include <list>
@@ -212,7 +212,9 @@ public:
 
 //////////////////////////////////////////////////////////////////////
 
-class Element2
+// see rosegarden/docs/discussion/names.txt - Events are the basic datatype
+
+class Event
 {
 private:
 
@@ -223,16 +225,16 @@ public:
     struct NoData { };
     struct BadType { };
 
-    Element2();
+    Event();
 
-    Element2(const string &package, const string &type);
+    Event(const string &package, const string &type);
 
-    Element2(const Element2 &e);
+    Event(const Event &e);
 
-    virtual ~Element2();
+    virtual ~Event();
 
-    Element2 &operator=(const Element2 &e);
-    friend bool operator<(const Element2&, const Element2&);
+    Event &operator=(const Event &e);
+    friend bool operator<(const Event&, const Event&);
 
     // Accessors
     const string &package() const { return m_package; }
@@ -282,7 +284,7 @@ public:
 
 private:
     void scrapMap();
-    void copyFrom(const Element2 &e);
+    void copyFrom(const Event &e);
 
     string m_package;
     string m_type;
@@ -300,7 +302,7 @@ private:
 
 template <PropertyType P>
 PropertyDefn<P>::basic_type
-Element2::get(const string &name) const
+Event::get(const string &name) const
     throw (NoData, BadType)
 {
     PropertyMap::const_iterator i = m_properties.find(name);
@@ -310,7 +312,7 @@ Element2::get(const string &name) const
         if (sb->getType() == P) return ((PropertyStore<P> *)sb)->getData();
         else {
 #ifndef NDEBUG
-            cerr << "Element2::get() Error: Attempt to get property \"" << name
+            cerr << "Event::get() Error: Attempt to get property \"" << name
                  << "\" as " << PropertyDefn<P>::name() <<", actual type is "
                  << sb->getTypeName() << endl;
 #endif
@@ -319,7 +321,7 @@ Element2::get(const string &name) const
 	    
     } else {
 #ifndef NDEBUG
-        cerr << "Element2::get() Error: Attempt to get property \"" << name
+        cerr << "Event::get() Error: Attempt to get property \"" << name
              << "\" which doesn't exist for this element" << endl;
 #endif
         throw NoData();
@@ -329,7 +331,7 @@ Element2::get(const string &name) const
 
 template <PropertyType P>
 string
-Element2::getAsString(const string &name) const
+Event::getAsString(const string &name) const
     throw (NoData, BadType)
 {
     return PropertyDefn<P>::unparse(get<P>(name));
@@ -338,7 +340,7 @@ Element2::getAsString(const string &name) const
 
 template <PropertyType P>
 void
-Element2::set(const string &name, PropertyDefn<P>::basic_type value)
+Event::set(const string &name, PropertyDefn<P>::basic_type value)
     throw (BadType)
 {
     PropertyMap::const_iterator i = m_properties.find(name);
@@ -362,16 +364,13 @@ Element2::set(const string &name, PropertyDefn<P>::basic_type value)
 
 template <PropertyType P>
 void
-Element2::setFromString(const string &name, string value)
+Event::setFromString(const string &name, string value)
     throw (BadType)
 {
     set<P>(name, PropertyDefn<P>::parse(value));
 }
 
 //////////////////////////////////////////////////////////////////////
-
-// see rosegarden/docs/discussion/names.txt - Events are the basic datatype
-typedef Element2 Event;
 
 class EventCmp
 {

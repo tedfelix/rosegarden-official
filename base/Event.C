@@ -1,6 +1,6 @@
 #include <cstdio>
 
-#include "Element2.h"
+#include "Event.h"
 
 string
 PropertyDefn<Int>::name()
@@ -64,14 +64,14 @@ PropertyStoreBase::~PropertyStoreBase()
 }
 
 
-Element2::Element2()
+Event::Event()
     : m_duration(0),
       m_absoluteTime(0),
       m_viewElements(0)
 {
 }
 
-Element2::Element2(const string &package, const string &type)
+Event::Event(const string &package, const string &type)
     : m_package(package),
       m_type(type),
       m_duration(0),
@@ -80,7 +80,7 @@ Element2::Element2(const string &package, const string &type)
 {
 }
 
-Element2::Element2(const Element2 &e)
+Event::Event(const Event &e)
     : m_package(e.package()),
       m_type(e.type()),
       m_duration(e.duration()),
@@ -90,14 +90,14 @@ Element2::Element2(const Element2 &e)
     copyFrom(e);
 }
 
-Element2::~Element2()
+Event::~Event()
 {
     scrapMap();
     delete m_viewElements;
 }
 
-Element2&
-Element2::operator=(const Element2 &e)
+Event&
+Event::operator=(const Event &e)
 {
     if (&e != this) {
         copyFrom(e);
@@ -106,14 +106,14 @@ Element2::operator=(const Element2 &e)
 }    
 
 bool
-Element2::has(const string &name) const
+Event::has(const string &name) const
 {
     PropertyMap::const_iterator i = m_properties.find(name);
     return (i != m_properties.end());
 }
 
 void
-Element2::scrapMap()
+Event::scrapMap()
 {
     for (PropertyMap::iterator i = m_properties.begin();
          i != m_properties.end(); ++i) {
@@ -122,7 +122,7 @@ Element2::scrapMap()
 }
 
 void
-Element2::copyFrom(const Element2 &e)
+Event::copyFrom(const Event &e)
 {
     delete m_viewElements;
     scrapMap();
@@ -139,7 +139,7 @@ Element2::copyFrom(const Element2 &e)
 
 
 void
-Element2::setViewElements(ViewElements *ve)
+Event::setViewElements(ViewElements *ve)
 {
     if (m_viewElements) {
         // this will also delete all elements in m_group
@@ -150,7 +150,7 @@ Element2::setViewElements(ViewElements *ve)
 }
 
 void
-Element2::dump(ostream& out) const
+Event::dump(ostream& out) const
 {
 #ifndef NDEBUG
     if (m_package.length()) {
@@ -173,7 +173,7 @@ Element2::dump(ostream& out) const
 }
 
 bool
-operator<(const Element2 &a, const Element2 &b)
+operator<(const Event &a, const Event &b)
 {
     return a.absoluteTime() < b.absoluteTime();
 }

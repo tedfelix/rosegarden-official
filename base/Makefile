@@ -4,10 +4,10 @@ all:	test speedtrial libcore.a
 CC	:= g++
 CPPFLAGS	:= -g
 
-test:	test.o Element.o Element2.o
+test:	test.o Element.o Event.o
 
-libcore.a:	Element2.o NotationTypes.o
-	ar rc libcore.a Element2.o NotationTypes.o
+libcore.a:	Event.o NotationTypes.o
+	ar rc libcore.a Event.o NotationTypes.o
 
 NotationTypes.o:	NotationTypes.h
 

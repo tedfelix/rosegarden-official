@@ -2,7 +2,7 @@
 #ifndef _NOTATION_UNITS_H_
 #define _NOTATION_UNITS_H_
 
-#include "Element2.h"
+#include "Event.h"
 
 enum Accidental {
     NoAccidental, Sharp, Flat, Natural, DoubleSharp, DoubleFlat

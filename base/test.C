@@ -7,7 +7,7 @@
 #include "CloningWrapper.h"
 #include "FastVector.h"
 
-#include "Element2.h"
+#include "Event.h"
 
 // (end of exercised classes)
 
@@ -59,7 +59,7 @@ int main(int argc, char **argv)
 
     cout << "Testing Element2..." << endl;
 
-    Element2 e("sys", "note");
+    Event e("sys", "note");
     e.set<Int>("duration", 20);
     cout << "duration is " << e.get<Int>("duration") << endl;
 
@@ -73,13 +73,13 @@ int main(int argc, char **argv)
 
     try {
 	cout << "duration is " << e.get<String>("duration") << endl;
-    } catch (Element2::BadType bt) {
+    } catch (Event::BadType bt) {
 	cout << "Correctly caught BadType when trying to get<String> of duration" << endl;
     }
 
     try {
 	cout << "dummy prop is " << e.get<String>("nonexistentprop") << endl;
-    } catch (Element2::NoData bt) {
+    } catch (Event::NoData bt) {
 	cout << "Correctly caught NoData when trying to get non existent property" << endl;
     }
 
@@ -100,7 +100,7 @@ int main(int argc, char **argv)
 	cout << "Caught BadFormat: reason is:" << endl << bf.reason << endl;
     }
 
-    cout << "Testing relative speeds of Element and Element2..." << endl;
+    cout << "Testing relative speeds of Element and Event..." << endl;
     int i;
     long j;
     char b[20];
@@ -130,14 +130,14 @@ int main(int argc, char **argv)
     et = times(&spare);
     cout << "Element: 10 copy ctors of big element: " << (et-st)*10 << "ms\n";
 
-    Element2 e1("sys", "note");
+    Event e1("sys", "note");
     st = times(&spare);
     for (i = 0; i < 10000; ++i) {
 	if (i%4==0) sprintf(b+4, "%d", i);
 	e1.set<Int>(b, i);
     }
     et = times(&spare);
-    cout << "Element2: 10000 setInts: " << (et-st)*10 << "ms\n";
+    cout << "Event: 10000 setInts: " << (et-st)*10 << "ms\n";
     st = times(&spare);
     j = 0;
     for (i = 0; i < 10000; ++i) {
@@ -145,14 +145,14 @@ int main(int argc, char **argv)
 	j += e1.get<Int>(b);
     }
     et = times(&spare);
-    cout << "Element2: 10000 getInts: " << (et-st)*10 << "ms\n";
+    cout << "Event: 10000 getInts: " << (et-st)*10 << "ms\n";
     st = times(&spare);
     for (i = 0; i < 100; ++i) {
-	Element2 e11(e1);
+	Event e11(e1);
 	(void)e11.get<Int>(b);
     }
     et = times(&spare);
-    cout << "Element2: 100 copy ctors of big element: " << (et-st)*10 << "ms\n";
+    cout << "Event: 100 copy ctors of big element: " << (et-st)*10 << "ms\n";
 
     cout << "Testing RobustIteratorVector of CloningWrappers..." << endl;
 
