@@ -158,7 +158,9 @@ Element2::dump(ostream& out) const
         out << "Event type : " << m_type.c_str() << '\n';
     }
 
-    out << "\tDuration : " << m_duration << "\n\tProperties : \n";
+    out << "\tDuration : " << m_duration
+        << "\n\tAbsolute Time : " << m_absoluteTime
+        << "\n\tProperties : \n";
 
     for (PropertyMap::const_iterator i = m_properties.begin();
          i != m_properties.end(); ++i) {
