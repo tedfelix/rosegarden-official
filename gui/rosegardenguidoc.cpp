@@ -56,6 +56,7 @@
 #include "MidiDevice.h"
 #include "AudioDevice.h"
 #include "Studio.h"
+#include "Profiler.h"
 #include "Midi.h"
 
 #include "constants.h"
@@ -1274,6 +1275,8 @@ RosegardenGUIDoc::setLoop(Rosegarden::timeT t0, Rosegarden::timeT t1)
 void
 RosegardenGUIDoc::syncDevices()
 {
+    Rosegarden::Profiler profiler("RosegardenGUIDoc::syncDevices", true);
+
     // Start up the sequencer
     //
     while (isSequencerRunning() &&

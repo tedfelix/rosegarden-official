@@ -99,38 +99,66 @@ SegmentNotationHelper::findNearestNotationAbsoluteTime(timeT t)
     return i;
 }
 
-
-timeT
-SegmentNotationHelper::getCompensatedNotationDuration(Event *e)
+void
+SegmentNotationHelper::setNotationProperties(timeT startTime, timeT endTime)
 {
-    if (e->has(TUPLET_NOMINAL_DURATION)) {
+    Segment::iterator from = begin();
+    Segment::iterator to = end();
 
-	return e->get<Int>(TUPLET_NOMINAL_DURATION);
+    if (startTime != endTime) {
+	from = segment().findTime(startTime);
+	to   = segment().findTime(endTime);
+    }
 
-    } else if (e->has(BEAMED_GROUP_TUPLET_BASE)) {
+    bool justSeenGraceNote = false;
+    timeT graceNoteStart = 0;
 
-	// Code duplicated with quantize code in gui/notationhlayout.cpp.
-	// This is intended to deal with the case where two edits
-	// happen in a row and some events inserted by the first
-	// have not been quantized before the second.  We'd be
-	// in trouble if the entire segment had not been quantized
-	// yet...
+    for (Segment::iterator i = from;
+	 i != to && segment().isBeforeEndMarker(i); ++i) {
 
-	int tcount = e->get<Int>(BEAMED_GROUP_TUPLED_COUNT);
-	int ucount = e->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT);
-	assert(tcount != 0);
+	if ((*i)->has(NOTE_TYPE) && !(*i)->has(IS_GRACE_NOTE)) continue;
 
-	timeT duration = e->getNotationDuration();
-	timeT nominalDuration = (duration / tcount) * ucount;
-	e->setMaybe<Int>(TUPLET_NOMINAL_DURATION, nominalDuration);
+	timeT duration = (*i)->getNotationDuration();
 
-	return nominalDuration;
+	if ((*i)->has(BEAMED_GROUP_TUPLET_BASE)) {
+	    int tcount = (*i)->get<Int>(BEAMED_GROUP_TUPLED_COUNT);
+	    int ucount = (*i)->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT);
 
-    } else {
-	return e->getNotationDuration();
+	    if (tcount == 0) {
+		std::cerr << "WARNING: SegmentNotationHelper::setNotationProperties: zero tuplet count:" << std::endl;
+		(*i)->dump(std::cerr);
+	    } else {
+		// nominal duration is longer than actual (sounding) duration
+		duration = (duration / tcount) * ucount;
+	    }
+	}
+
+	if ((*i)->isa(Note::EventType) || (*i)->isa(Note::EventRestType)) {
+
+	    if ((*i)->isa(Note::EventType)) {
+		
+		if ((*i)->has(IS_GRACE_NOTE) &&
+		    (*i)->get<Bool>(IS_GRACE_NOTE)) {
+
+		    if (!justSeenGraceNote) {
+			graceNoteStart = (*i)->getNotationAbsoluteTime();
+			justSeenGraceNote = true;
+		    }
+
+		} else if (justSeenGraceNote) {
+
+		    duration += (*i)->getNotationAbsoluteTime() - graceNoteStart;
+		    justSeenGraceNote = false;
+		}
+	    }
+
+	    Note n(Note::getNearestNote(duration));
+
+	    (*i)->setMaybe<Int>(NOTE_TYPE, n.getNoteType());
+	    (*i)->setMaybe<Int>(NOTE_DOTS, n.getDots());
+	}
     }
 }
-
 
 timeT
 SegmentNotationHelper::getNotationEndTime(Event *e)
@@ -1223,7 +1251,7 @@ SegmentNotationHelper::makeTupletGroup(timeT t, int untupled, int tupled,
 	e->set<Int>(BEAMED_GROUP_TUPLET_BASE, unit);
 	e->set<Int>(BEAMED_GROUP_TUPLED_COUNT, tupled);
 	e->set<Int>(BEAMED_GROUP_UNTUPLED_COUNT, untupled);
-	e->unset(TUPLET_NOMINAL_DURATION); // should be non-persistent anyway
+//!!!	e->unset(TUPLET_NOMINAL_DURATION); // should be non-persistent anyway
 
 	toInsert.push_back(e);
 	toErase.push_back(i);

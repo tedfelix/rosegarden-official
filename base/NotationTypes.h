@@ -778,6 +778,17 @@ public:
      */
     static char getNoteForIndex(int index);
 
+    /**
+     * Calculate and return the performance (MIDI) pitch corresponding
+     * to the stored height and accidental, interpreting them as
+     * Rosegarden-2.1-style values (for backward compatibility use),
+     * in the given clef and key
+     */
+    static int getPerformancePitchFromRG21Pitch(int heightOnStaff,
+						const Accidental &accidental,
+						const Clef &clef,
+						const Key &key);
+
 private:
     int m_pitch;
     Accidental m_accidental;

@@ -37,12 +37,11 @@ public:
     SegmentHelper::segment;
 
     /**
-     * Return the duration of an event "as displayed", with
-     * compensation for tuplets -- i.e. a triplet quaver will be
-     * considered a quaver rather than a note of 2/3 of a quaver
-     * as plain event->getNotationDuration() would return.
+     * Set the NOTE_TYPE and NOTE_DOTS properties on the events
+     * in the segment.  If startTime and endTime are equal, operates
+     * on the whole segment.
      */
-    timeT getCompensatedNotationDuration(Event *e);
+    void setNotationProperties(timeT startTime = 0, timeT endTime = 0);
     
     /**
      * Return the notation absolute time plus the notation duration.

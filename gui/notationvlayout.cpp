@@ -124,7 +124,7 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
             // aligned with the line above the middle line; the rest
             // are aligned with the middle line
 
-            int noteType = el->event()->get<Int>(m_properties.NOTE_TYPE);
+            int noteType = el->event()->get<Int>(NOTE_TYPE);
             if (noteType > Note::Minim) {
                 el->setLayoutY(staff.getLayoutYForHeight(6));
             } else {

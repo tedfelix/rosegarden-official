@@ -206,7 +206,7 @@ double NotationHLayout::getIdealBarWidth(Staff &staff,
     }
 
     int smin = getMinWidth(**shortest);
-    if (!(*shortest)->event()->get<Int>(m_properties.NOTE_DOTS)) {
+    if (!(*shortest)->event()->get<Int>(NOTE_DOTS)) {
         smin += m_npf->getDotWidth()/2;
     }
 
@@ -215,8 +215,7 @@ double NotationHLayout::getIdealBarWidth(Staff &staff,
     if (shortCount < 3) smin -= 3 - shortCount;
 
     int gapPer =
-	getComfortableGap((*shortest)->event()->get<Int>
-			  (m_properties.NOTE_TYPE)) +
+	getComfortableGap((*shortest)->event()->get<Int>(NOTE_TYPE)) +
         smin;
 
     NOTATION_DEBUG << "d is " << d << ", gapPer is " << gapPer << endl;
@@ -246,76 +245,6 @@ NotationHLayout::getStartOfQuantizedSlice(const NotationElementList *notes,
 	--j;
 	if ((*j)->getViewAbsoluteTime() < t) return i;
 	i = j;
-    }
-}
-
-void
-NotationHLayout::setNotationData(Segment &segment)
-{
-//!!! This should either be in a specialised NotationQuantizer class 
-// or should be in SegmentNotationHelper::getNotationDuration which
-// should probably be used in this class in preference to the quantizer's
-// getQuantizedDuration
-//!!! hang on, how does this differ from SegmentNotationHelper::
-// getCompensatedNotationDuration()?  oh, grace notes... anything else?
-
-    bool justSeenGraceNote = false;
-    timeT graceNoteStart = 0;
-
-    for (Segment::iterator i = segment.begin();
-	 segment.isBeforeEndMarker(i); ++i) {
-
-	timeT duration = m_notationQuantizer->getQuantizedDuration(*i);
-
-	if ((*i)->has(BEAMED_GROUP_TUPLET_BASE)) {
-	    int tcount = (*i)->get<Int>(BEAMED_GROUP_TUPLED_COUNT);
-	    int ucount = (*i)->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT);
-	    assert(tcount != 0);
-
-	    // nominal duration is longer than actual (sounding) duration
-
-	    //!!! no longer right -- fix in quantizer
-//!!!	    timeT nominalDuration = ((*i)->getViewDuration() / tcount) * ucount;
-//!!!	    duration = m_notationQuantizer->quantizeDuration(nominalDuration);
-
-	    duration = (duration / tcount) * ucount;
-
-//	    NOTATION_DEBUG << "NotationHLayout::setNotationData: nominalDuration (" << duration << ") is duration / " << tcount << ") * " << ucount << endl;
-
-	    (*i)->setMaybe<Int>(TUPLET_NOMINAL_DURATION, duration);
-	}
-
-	if ((*i)->isa(Note::EventType) || (*i)->isa(Note::EventRestType)) {
-
-	    //!!! this should all happen in the quantizer itself, I guess?
-	    // or no, this stuff may not have been quantized
-	    
-//!!!	    timeT duration = m_notationQuantizer->getQuantizedDuration(*i);
-
-	    if ((*i)->isa(Note::EventType)) {
-		
-		if ((*i)->has(IS_GRACE_NOTE) &&
-		    (*i)->get<Bool>(IS_GRACE_NOTE)) {
-
-		    if (!justSeenGraceNote) {
-			graceNoteStart = m_notationQuantizer->getQuantizedAbsoluteTime(*i);
-			justSeenGraceNote = true;
-		    }
-
-		} else if (justSeenGraceNote) {
-
-		    duration += m_notationQuantizer->getQuantizedAbsoluteTime(*i) - graceNoteStart;
-		    justSeenGraceNote = false;
-		}
-	    }
-
-	    Note n(Note::getNearestNote(duration));
-
-//	    NOTATION_DEBUG << "NotationHLayout::setNotationData: nominalDuration " << duration << ", note type " << n.getNoteType() << ", dots " << n.getDots() << endl;
-
-	    (*i)->setMaybe<Int>(m_properties.NOTE_TYPE, n.getNoteType());
-	    (*i)->setMaybe<Int>(m_properties.NOTE_DOTS, n.getDots());
-	}
     }
 }
 
@@ -365,7 +294,15 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 
     NOTATION_DEBUG << "NotationHLayout::scanStaff: full scan " << isFullScan << ", times " << startTime << "->" << endTime << ", bars " << startBarNo << "->" << endBarNo << ", staff name \"" << segment.getLabel() << "\", width " << m_staffNameWidths[&staff] << endl;
 
-    setNotationData(segment);
+    SegmentNotationHelper helper(segment);
+    if (isFullScan) {
+	helper.setNotationProperties();
+    } else {
+	helper.setNotationProperties
+	    (getComposition()->getBarStartForTime(startTime),
+	     getComposition()->getBarEndForTime(endTime));
+    }
+
 
     PRINT_ELAPSED("NotationHLayout::scanStaff: after quantize");
 
@@ -1477,8 +1414,8 @@ NotationHLayout::positionRest(Staff &staff,
     // convinced this is the right thing to do
 
     int justRestWidth = m_npf->getRestWidth
-	(Note(rest->event()->get<Int>(m_properties.NOTE_TYPE),
-	      rest->event()->get<Int>(m_properties.NOTE_DOTS)));
+	(Note(rest->event()->get<Int>(NOTE_TYPE),
+	      rest->event()->get<Int>(NOTE_DOTS)));
 
     if (delta > 2 * justRestWidth) {
         int shift = (delta - 2 * justRestWidth) / 4;
@@ -1710,12 +1647,12 @@ int NotationHLayout::getMinWidth(Rosegarden::ViewElement &ve) const
 
     if (e.isNote()) {
 
-        long noteType = e.event()->get<Int>(m_properties.NOTE_TYPE, noteType);
+        long noteType = e.event()->get<Int>(NOTE_TYPE, noteType);
 
         w += m_npf->getNoteBodyWidth(noteType);
 
         long dots;
-        if (e.event()->get<Int>(m_properties.NOTE_DOTS, dots)) {
+        if (e.event()->get<Int>(NOTE_DOTS, dots)) {
             w += m_npf->getDotWidth() * dots;
         }
 
@@ -1723,8 +1660,8 @@ int NotationHLayout::getMinWidth(Rosegarden::ViewElement &ve) const
 
     } else if (e.isRest()) {
 
-        w += m_npf->getRestWidth(Note(e.event()->get<Int>(m_properties.NOTE_TYPE),
-                                     e.event()->get<Int>(m_properties.NOTE_DOTS)));
+        w += m_npf->getRestWidth(Note(e.event()->get<Int>(NOTE_TYPE),
+                                     e.event()->get<Int>(NOTE_DOTS)));
 
         return w;
     }

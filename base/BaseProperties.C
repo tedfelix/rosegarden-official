@@ -47,6 +47,9 @@ const PropertyName PITCH		= "pitch";
 const PropertyName VELOCITY		= "velocity";
 const PropertyName ACCIDENTAL		= "accidental";
 
+const PropertyName NOTE_TYPE            = "notetype";
+const PropertyName NOTE_DOTS            = "notedots";
+
 const PropertyName MARK_COUNT		= "marks";
 
 PropertyName getMarkPropertyName(int markNo)
@@ -93,10 +96,6 @@ const PropertyName BEAMED_GROUP_TYPE		 = "grouptype";
 const PropertyName BEAMED_GROUP_TUPLET_BASE	 = "tupletbase";
 const PropertyName BEAMED_GROUP_TUPLED_COUNT	 = "tupledcount";
 const PropertyName BEAMED_GROUP_UNTUPLED_COUNT	 = "untupledcount";
-
-// non-persistent, calculated from the performance data + counts, with some
-// rounding -- unless otherwise specified
-const PropertyName TUPLET_NOMINAL_DURATION	 = "TupletNominalDuration";
 
 // persistent
 const PropertyName IS_GRACE_NOTE                 = "IsGraceNote";

@@ -64,8 +64,6 @@ public:
     const Rosegarden::PropertyName SLUR_LENGTH;
     const Rosegarden::PropertyName LYRIC_EXTRA_WIDTH;
     const Rosegarden::PropertyName REST_TOO_SHORT;
-    const Rosegarden::PropertyName NOTE_TYPE;
-    const Rosegarden::PropertyName NOTE_DOTS;
 
     // Set in applyBeam in notationsets.cpp:
 

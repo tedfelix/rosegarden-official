@@ -350,8 +350,6 @@ protected:
     int getPostBarMargin() const;
     int getFixedItemSpacing() const;
 
-    void setNotationData(Rosegarden::Segment &segment);
-
     //--------------- Data members ---------------------------------
 
     BarDataMap m_barData;

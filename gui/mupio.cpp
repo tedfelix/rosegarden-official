@@ -166,6 +166,7 @@ MupExporter::writeBar(std::ofstream &str,
 {
     timeT writtenDuration = 0;
     Rosegarden::SegmentNotationHelper helper(*s);
+    helper.setNotationProperties();
 
     long currentGroupId = -1;
     string currentGroupType = "";
@@ -184,6 +185,14 @@ MupExporter::writeBar(std::ofstream &str,
 	    
 	    timeT absTime  = e->getNotationAbsoluteTime();
 	    timeT duration = e->getNotationDuration();
+	    try {
+		// tuplet compensation, etc
+		Note::Type type = e->get<Int>(NOTE_TYPE);
+		int dots = e->get<Int>(NOTE_DOTS);
+		duration = Note(type, dots).getDuration();
+	    } catch (Rosegarden::Exception e) { // no properties
+		std::cerr << "WARNING: MupExporter::writeBar: incomplete note properties: " << e.getMessage() << std::endl;
+	    }
 
 	    timeT toNext = duration;
 	    Segment::iterator nextElt = chord.getFinalElement();
@@ -237,7 +246,8 @@ MupExporter::writeBar(std::ofstream &str,
 	    if (currentGroupType == GROUP_TYPE_TUPLED) {
 		e->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT, currentTupletCount);
 		if (enteringGroup) str << "{ ";
-		duration = helper.getCompensatedNotationDuration(e);
+//!!!		duration = helper.getCompensatedNotationDuration(e);
+		
 	    }
 
 	    writeDuration(str, duration);

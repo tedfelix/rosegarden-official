@@ -554,7 +554,7 @@ GroupMenuUnTupletCommand::modifySegment()
 	(*i)->unset(BEAMED_GROUP_TUPLET_BASE);
 	(*i)->unset(BEAMED_GROUP_TUPLED_COUNT);
 	(*i)->unset(BEAMED_GROUP_UNTUPLED_COUNT);
-	(*i)->unset(TUPLET_NOMINAL_DURATION);
+//!!!	(*i)->unset(TUPLET_NOMINAL_DURATION);
     }
 }
 

@@ -3,17 +3,17 @@
 Post-0.9 task list
 ==================
 
-1. Restore "fix smoothing"
+1. Restore "fix smoothing" [DONE]
 
 2. Fix "make viable" particularly, "de-counterpoint" also
 
 3. instrument-id problem as below
 
-4. step-by-step editing
+4. step-by-step editing [half-DONE]
 
 5. test normalizeRests with restaurant.mid etc, fix other !!! items
 
-6. lyrics don't cope with chords
+6. lyrics don't cope with chords [not true?]
 
 7. lilypond i/o shouldn't be using noteIsInChord
 
@@ -24,7 +24,15 @@ Post-0.9 task list
 
 10. Interpret gets slurs wrong
 
-11. Random rests in bundle at start of staff following complex MIDI import
+11. Random rests in bundle at start of staff following complex MIDI import [DONE]
+
+12. Import MIDI file -> split segments at program change (care with bank
+    select!), key change, time sig change
+
+13. Roland Variations controllers / drum banks
+
+14. Karaoke file (.kar) import -- and must get around to doing that bouncing-ball
+    lyric thing.
 
 
 Priorities for 0.9

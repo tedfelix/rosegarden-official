@@ -32,6 +32,9 @@ extern const PropertyName PITCH;
 extern const PropertyName VELOCITY;
 extern const PropertyName ACCIDENTAL;
 
+extern const PropertyName NOTE_TYPE;
+extern const PropertyName NOTE_DOTS;
+
 extern const PropertyName MARK_COUNT;
 extern PropertyName getMarkPropertyName(int markNo);
 
@@ -50,8 +53,6 @@ extern const PropertyName BEAMED_GROUP_TYPE;
 extern const PropertyName BEAMED_GROUP_TUPLET_BASE;
 extern const PropertyName BEAMED_GROUP_TUPLED_COUNT;
 extern const PropertyName BEAMED_GROUP_UNTUPLED_COUNT;
-
-extern const PropertyName TUPLET_NOMINAL_DURATION;
 
 extern const PropertyName IS_GRACE_NOTE;
 extern const PropertyName HAS_GRACE_NOTES;

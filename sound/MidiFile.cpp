@@ -510,8 +510,6 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
         }
         else // the rest
         {
-            // inside the switch to keep the compiler happy.
-            //
             MidiEvent *midiEvent;
 
 	    int channel = (eventCode & MIDI_CHANNEL_NUM_MASK);
@@ -522,7 +520,6 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
 	    }
 
 	    TrackId trackNum = channelTrackMap[channel];
-            //TrackId trackNum = 0;
 	    
 	    // accumulatedTime is abs time of last event on any track;
 	    // trackTimeMap[trackNum] is that of last event on this track

@@ -1045,7 +1045,7 @@ AlsaDriver::initialiseMidi()
 
     ClientPortPair inputDevice = getFirstDestination(true); // duplex = true
 
-    AUDIT_STREAM << "    Record client set to (" << inputDevice.first
+    AUDIT_STREAM << "    Record port set to (" << inputDevice.first
               << ", "
               << inputDevice.second
               << ")" << std::endl << std::endl;
@@ -4173,12 +4173,14 @@ AlsaDriver::setPluginInstanceBypass(InstrumentId id,
 void
 AlsaDriver::setRecordDevice(DeviceId id)
 {
+    AUDIT_START;
+
     // Locate a suitable port
     //
     if (m_devicePortMap.find(id) == m_devicePortMap.end()) {
-        std::cerr << "AlsaDriver::setRecordDevice - "
-                  << "couldn't match device id (" << id << ") to ALSA port"
-                  << std::endl;
+        AUDIT_STREAM << "AlsaDriver::setRecordDevice - "
+		     << "couldn't match device id (" << id << ") to ALSA port"
+		     << std::endl;
         return;
     }
 
@@ -4192,9 +4194,9 @@ AlsaDriver::setRecordDevice(DeviceId id)
 	 i != m_devices.end(); ++i) {
 	if ((*i)->getId() == id) {
 	    if ((*i)->getDirection() != MidiDevice::Record) {
-		std::cerr << "AlsaDriver::setRecordDevice - "
-			  << "attempting to set play device (" << id 
-			  << ") to record device" << std::endl;
+		AUDIT_STREAM << "AlsaDriver::setRecordDevice - "
+			     << "attempting to set play device (" << id 
+			     << ") to record device" << std::endl;
 		return;
 	    }
 	    break;
@@ -4223,25 +4225,25 @@ AlsaDriver::setRecordDevice(DeviceId id)
 
     if (snd_seq_subscribe_port(m_midiHandle, subs) < 0)
     {
-        std::cerr << "AlsaDriver::setRecordDevice - "
-                  << "can't subscribe input client:port"
-		  << sender.client << ":" << sender.port
-                  << std::endl;
+        AUDIT_STREAM << "AlsaDriver::setRecordDevice - "
+		     << "can't subscribe input client:port"
+		     << sender.client << ":" << sender.port
+		     << std::endl;
 
         // Not the end of the world if this fails but we
         // have to flag it internally.
         //
         m_midiInputPortConnected = false;
-        std::cerr << "AlsaDriver::setRecordDevice - "
-                  << "failed to subscribe device " 
-                  << id << " as record port" << std::endl;
+        AUDIT_STREAM << "AlsaDriver::setRecordDevice - "
+		     << "failed to subscribe device " 
+		     << id << " as record port" << std::endl;
     }
     else
     {
         m_midiInputPortConnected = true;
-        std::cerr << "AlsaDriver::setRecordDevice - "
-                  << "successfully subscribed device "
-                  << id << " as record port" << std::endl;
+        AUDIT_STREAM << "AlsaDriver::setRecordDevice - "
+		     << "successfully subscribed device "
+		     << id << " as record port" << std::endl;
     }
 
 }

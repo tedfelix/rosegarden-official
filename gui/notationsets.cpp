@@ -101,7 +101,7 @@ NotationChord::hasStem() const
     
     Iterator i(getInitialNote());
     for (;;) {
-	Note::Type note = getAsEvent(i)->get<Int>(m_properties.NOTE_TYPE);
+	Note::Type note = getAsEvent(i)->get<Int>(NOTE_TYPE);
 	if (NoteStyleFactory::getStyleForEvent(getAsEvent(i))->hasStem(note))
 	    return true;
 	if (i == getFinalNote()) return false;
@@ -459,7 +459,7 @@ NotationGroup::calculateBeam(NotationStaff &staff)
     using std::max;
     using std::min;
     long shortestNoteType = Note::Quaver;
-    if (!(*getShortestElement())->event()->get<Int>(m_properties.NOTE_TYPE,
+    if (!(*getShortestElement())->event()->get<Int>(NOTE_TYPE,
                                                     shortestNoteType)) {
         NOTATION_DEBUG << "NotationGroup::calculateBeam: WARNING: Shortest element has no note-type; should this be possible?" << endl;
 	NOTATION_DEBUG << "(Event dump follows)" << endl;
@@ -566,7 +566,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
         NotationElement* el = static_cast<NotationElement*>(*i);
         
         if (el->isNote() &&
-	    el->event()->get<Int>(m_properties.NOTE_TYPE) < Note::Crotchet &&
+	    el->event()->get<Int>(NOTE_TYPE) < Note::Crotchet &&
 	    el->event()->has(BEAMED_GROUP_ID) &&
 	    el->event()->get<Int>(BEAMED_GROUP_ID) == m_groupNo) {
 
@@ -604,7 +604,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
 
 	    int beamCount =
 		NoteStyleFactory::getStyleForEvent(el->event())->
-		getFlagCount(el->event()->get<Int>(m_properties.NOTE_TYPE));
+		getFlagCount(el->event()->get<Int>(NOTE_TYPE));
 
             // If THIS_PART_BEAMS is true, then when drawing the
             // chord, if it requires more beams than the following
@@ -640,8 +640,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
 
 		int prevBeamCount =
 		    NoteStyleFactory::getStyleForEvent(prevEl->event())->
-		    getFlagCount(prevEl->event()->get<Int>
-				 (m_properties.NOTE_TYPE));
+		    getFlagCount(prevEl->event()->get<Int>(NOTE_TYPE));
 
 		if ((beamCount > 0) && (prevBeamCount > 0)) {
 		    el->event()->setMaybe<Bool>(m_properties.BEAMED, true);

@@ -717,9 +717,8 @@ NotationStaff::renderSingleElement(ViewElement *velt,
 
 	    if (!ignoreRest) {
 
-		Note::Type note =
-		    elt->event()->get<Int>(properties.NOTE_TYPE);
-		int dots = elt->event()->get<Int>(properties.NOTE_DOTS);
+		Note::Type note = elt->event()->get<Int>(NOTE_TYPE);
+		int dots = elt->event()->get<Int>(NOTE_DOTS);
 		restParams.setNoteType(note);
 		restParams.setDots(dots);
 		setTuplingParameters(elt, restParams);
@@ -858,8 +857,8 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
     const NotationProperties &properties(m_notationView->getProperties());
     static NotePixmapParameters params(Note::Crotchet, 0);
 
-    Note::Type note = elt->event()->get<Int>(properties.NOTE_TYPE);
-    int dots = elt->event()->get<Int>(properties.NOTE_DOTS);
+    Note::Type note = elt->event()->get<Int>(NOTE_TYPE);
+    int dots = elt->event()->get<Int>(NOTE_DOTS);
 
     Accidental accidental = NoAccidental;
     (void)elt->event()->get<String>(properties.DISPLAY_ACCIDENTAL, accidental);

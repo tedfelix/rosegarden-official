@@ -610,6 +610,14 @@ long RG21Loader::convertRG21Pitch(long pitch, int noteModifier)
     long rtn = displayPitch.getPerformancePitchFromRG21Pitch(m_currentClef,
 							     m_currentKey);
 
+    //!!!
+    long alternate = Rosegarden::Pitch::getPerformancePitchFromRG21Pitch
+	(pitch, accidental, m_currentClef, m_currentKey);
+
+    if (rtn != alternate) {
+	std::cerr << "WARNING: Pitch/NDP discrepancy: pitch " << rtn << " vs " << alternate << std::endl;
+    }
+
     return rtn;
 }
 

@@ -1320,6 +1320,24 @@ Pitch::getNoteForIndex(int index)
     return "CDEFGAB"[index];
 }
 
+int
+Pitch::getPerformancePitchFromRG21Pitch(int heightOnStaff,
+					const Accidental &accidental,
+					const Clef &clef,
+					const Key &)
+{
+    // Rosegarden 2.1 pitches are a bit weird; see
+    // docs/data_struct/units.txt
+
+    // We pass the accidental and clef, a faked key of C major, and a
+    // flag telling displayPitchToRawPitch to ignore the clef offset
+    // and take only its octave into account
+
+    int p = 0;
+    displayPitchToRawPitch(heightOnStaff, accidental, clef, Key(), p, true);
+    return p;
+}
+
 
 //////////////////////////////////////////////////////////////////////
 // Note

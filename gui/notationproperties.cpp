@@ -44,9 +44,6 @@ NotationProperties::NotationProperties(const std::string &prefix) :
     LYRIC_EXTRA_WIDTH		(prefix + "LyricExtraWidth"),
     REST_TOO_SHORT              (prefix + "RestTooShort"),
 
-    NOTE_TYPE			(prefix + "NoteType"),
-    NOTE_DOTS			(prefix + "NoteDots"),
-
     BEAM_GRADIENT		(prefix + "BeamGradient"),
     BEAM_SECTION_WIDTH		(prefix + "BeamSectionWidth"),
     BEAM_NEXT_BEAM_COUNT	(prefix + "BeamNextBeamCount"),
