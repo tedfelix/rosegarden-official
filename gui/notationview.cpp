@@ -963,7 +963,7 @@ NotationView::setPageMode(bool pageMode)
 }   
 
 
-bool NotationView::applyLayout(int staffNo)
+bool NotationView::applyLayout(int staffNo, timeT startTime, timeT endTime)
 {
     START_TIMING;
     unsigned int i;
@@ -972,38 +972,38 @@ bool NotationView::applyLayout(int staffNo)
 
         if (staffNo >= 0 && (int)i != staffNo) continue;
 
-        m_hlayout->resetStaff(*m_staffs[i]);
-        m_vlayout->resetStaff(*m_staffs[i]);
+        m_hlayout->resetStaff(*m_staffs[i], startTime, endTime);
+        m_vlayout->resetStaff(*m_staffs[i], startTime, endTime);
 
-        m_hlayout->scanStaff(*m_staffs[i]);
-        m_vlayout->scanStaff(*m_staffs[i]);
+        m_hlayout->scanStaff(*m_staffs[i], startTime, endTime);
+        m_vlayout->scanStaff(*m_staffs[i], startTime, endTime);
     }
 
-    m_hlayout->finishLayout();
-    m_vlayout->finishLayout();
+    m_hlayout->finishLayout(startTime, endTime);
+    m_vlayout->finishLayout(startTime, endTime);
 
     // find the last finishing staff for future use
 
-    timeT endTime = 0;
+    timeT lastFinishingStaffEndTime = 0;
     bool haveEndTime = false;
     m_lastFinishingStaff = -1;
 
-    timeT startTime = 0;
+    timeT firstStartingStaffStartTime = 0;
     bool haveStartTime = false;
     int firstStartingStaff = -1;
 
     for (i = 0; i < m_staffs.size(); ++i) {
 
 	timeT thisStartTime = m_staffs[i]->getSegment().getStartTime();
-	if (thisStartTime < startTime || !haveStartTime) {
-	    startTime = thisStartTime;
+	if (thisStartTime < firstStartingStaffStartTime || !haveStartTime) {
+	    firstStartingStaffStartTime = thisStartTime;
 	    haveStartTime = true;
 	    firstStartingStaff = i;
 	}
 
         timeT thisEndTime = m_staffs[i]->getSegment().getEndTime();
-        if (thisEndTime > endTime || !haveEndTime) {
-            endTime = thisEndTime;
+        if (thisEndTime > lastFinishingStaffEndTime || !haveEndTime) {
+            lastFinishingStaffEndTime = thisEndTime;
 	    haveEndTime = true;
             m_lastFinishingStaff = i;
         }
@@ -2158,9 +2158,9 @@ void NotationView::refreshSegment(Segment *segment,
 
     if (segment) {
         NotationStaff *staff = getStaff(*segment);
-        if (staff) applyLayout(staff->getId());
+        if (staff) applyLayout(staff->getId(), startTime, endTime);
     } else {
-        applyLayout();
+        applyLayout(-1, startTime, endTime);
     }
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {

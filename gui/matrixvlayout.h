@@ -40,7 +40,9 @@ public:
     /**
      * Resets internal data stores for a specific staff
      */
-    virtual void resetStaff(StaffType &staff);
+    virtual void resetStaff(StaffType &staff,
+			    Rosegarden::timeT = 0,
+			    Rosegarden::timeT = 0);
 
     /**
      * Precomputes layout data for a single staff, updating any
@@ -48,7 +50,9 @@ public:
      * any layout-related properties in the events on the staff's
      * segment.
      */
-    virtual void scanStaff(StaffType &staff);
+    virtual void scanStaff(StaffType &staff,
+			   Rosegarden::timeT = 0,
+			   Rosegarden::timeT = 0);
 
     /**
      * Computes any layout data that may depend on the results of
@@ -56,7 +60,8 @@ public:
      * the layout (likely for horizontal layout) or nothing at all
      * (likely for vertical layout).
      */
-    virtual void finishLayout();
+    virtual void finishLayout(Rosegarden::timeT = 0,
+			      Rosegarden::timeT = 0);
 
     static const unsigned int maxMIDIPitch;
 

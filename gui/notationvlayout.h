@@ -49,12 +49,16 @@ public:
     /**
      * Resets internal data stores for a specific staff
      */
-    virtual void resetStaff(StaffType &);
+    virtual void resetStaff(StaffType &,
+			    Rosegarden::timeT = 0,
+			    Rosegarden::timeT = 0);
 
     /**
      * Lay out a single staff.
      */
-    virtual void scanStaff(StaffType &);
+    virtual void scanStaff(StaffType &,
+			   Rosegarden::timeT = 0,
+			   Rosegarden::timeT = 0);
 
     /**
      * Do any layout dependent on more than one staff.  As it
@@ -62,7 +66,8 @@ public:
      * depends on the final results from the horizontal layout
      * (for slurs), so we should do that here
      */
-    virtual void finishLayout();
+    virtual void finishLayout(Rosegarden::timeT = 0,
+			      Rosegarden::timeT = 0);
 
 private:
 

@@ -53,7 +53,9 @@
 12. Create clef dialog with transposition options (maintain pitches,
     transpose entirely, transpose octaves only)
 
-13. Merge Randall's optimisations to layout
+13. Merge Randall's optimisations to layout [DONE except for LinedStaff
+    changes.  Might rework the API a bit, as it's still a bit rough
+    because of the change to not using -1 as a special timeT value]
 
 14. Why no rest-inserter menu? [DONE]
 
@@ -66,7 +68,7 @@
     other, and make sure the memory management is correct
 
 18. Run the test program -- wrong performance duration for first of
-    group of four "tied" notes right at the end of the test program
+    group of four "tied" notes right at the end of the test program [DONE]
 
 19. Quantizer: deal with these dynamically-generated PropertyNames;
     they really slow things down [DONE] -- also make save & reload

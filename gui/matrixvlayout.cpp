@@ -26,6 +26,8 @@
 
 #include "rosedebug.h"
 
+using Rosegarden::timeT;
+
 MatrixVLayout::MatrixVLayout()
 {
 }
@@ -38,11 +40,11 @@ void MatrixVLayout::reset()
 {
 }
 
-void MatrixVLayout::resetStaff(StaffType&)
+void MatrixVLayout::resetStaff(StaffType&, timeT, timeT)
 {
 }
 
-void MatrixVLayout::scanStaff(MatrixVLayout::StaffType& staffBase)
+void MatrixVLayout::scanStaff(MatrixVLayout::StaffType& staffBase, timeT, timeT)
 {
     MatrixStaff& staff = dynamic_cast<MatrixStaff&>(staffBase);
 
@@ -74,7 +76,7 @@ void MatrixVLayout::scanStaff(MatrixVLayout::StaffType& staffBase)
 
 }
 
-void MatrixVLayout::finishLayout()
+void MatrixVLayout::finishLayout(timeT, timeT)
 {
 }
 

@@ -52,25 +52,39 @@ public:
     virtual void reset() = 0;
 
     /**
-     * Resets internal data stores for a specific staff
+     * Resets internal data stores for a specific staff.
+     * 
+     * If startTime == endTime, act on the whole staff; otherwise only
+     * the given section.
      */
-    virtual void resetStaff(StaffType &staff) = 0;
+    virtual void resetStaff(StaffType &staff,
+			    timeT startTime = 0,
+			    timeT endTime = 0) = 0;
 
     /**
      * Precomputes layout data for a single staff, updating any
      * internal data stores associated with that staff and updating
      * any layout-related properties in the events on the staff's
      * segment.
+     * 
+     * If startTime == endTime, act on the whole staff; otherwise only
+     * the given section.
      */
-    virtual void scanStaff(StaffType &staff) = 0;
+    virtual void scanStaff(StaffType &staff,
+			   timeT startTime = 0,
+			   timeT endTime = 0) = 0;
 
     /**
      * Computes any layout data that may depend on the results of
      * scanning more than one staff.  This may mean doing most of
      * the layout (likely for horizontal layout) or nothing at all
      * (likely for vertical layout).
+     * 
+     * If startTime == endTime, act on the whole staff; otherwise only
+     * the given section.
      */
-    virtual void finishLayout() = 0;
+    virtual void finishLayout(timeT startTime = 0,
+			      timeT endTime = 0) = 0;
 
     unsigned int getStatus() const { return m_status; }
 

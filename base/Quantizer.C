@@ -333,6 +333,9 @@ Quantizer::quantize(Segment *s, Segment::iterator from, Segment::iterator to,
 
     assert(m_toInsert.size() == 0);
 
+    timeT fromTime = 0, toTime = 0;
+    bool haveFromTime = false;
+
     // For the moment, legato quantization always uses the minimum
     // unit (rather than the potentially large legato unit) for the
     // absolute time.  Ideally we'd be able to specify both
@@ -383,11 +386,15 @@ Quantizer::quantize(Segment *s, Segment::iterator from, Segment::iterator to,
 	    }
 	} else continue;
 
+	if (!haveFromTime) fromTime = qAbsoluteTime;
+	toTime = qAbsoluteTime;
+
 	setToTarget(s, from, qAbsoluteTime, qDuration);
 //	cerr << "After set, from is at " << std::distance(s->begin(), from) << " from start, nextFrom is at " << std::distance(s->begin(), nextFrom) << endl;
     }
     
     insertNewEvents(s);
+    if (haveFromTime) s->normalizeRests(fromTime, toTime);
 }
 
 

@@ -86,13 +86,13 @@ NotationVLayout::reset()
 }
 
 void
-NotationVLayout::resetStaff(StaffType &staff)
+NotationVLayout::resetStaff(StaffType &staff, timeT, timeT)
 {
     getSlurList(staff).clear();
 }
 
 void
-NotationVLayout::scanStaff(StaffType &staffBase)
+NotationVLayout::scanStaff(StaffType &staffBase, timeT, timeT)
 {
     START_TIMING;
 
@@ -211,7 +211,7 @@ NotationVLayout::scanStaff(StaffType &staffBase)
 }
 
 void
-NotationVLayout::finishLayout()
+NotationVLayout::finishLayout(timeT, timeT)
 {
     START_TIMING;
 

@@ -241,12 +241,17 @@ NoteInserter::handleLeftButtonPress(Rosegarden::timeT,
 	staff->getClosestElementToCanvasCoords(e->x(), (int)e->y(),
 					       tsig, clef, key, false, -1);
 */
+    
+    kdDebug(KDEBUG_AREA) << "NoteInserter::handleLeftButtonPress: coords are (" << e->x() << "," << e->y() << ")" << endl;
+
     NotationElementList::iterator itr =
 	staff->getElementUnderCanvasCoords(e->x(), (int)e->y(),
 					   tsig, clef, key);
 
     if (itr == staff->getViewElementList()->end()) return;
     timeT time = (*itr)->getAbsoluteTime();
+
+    kdDebug(KDEBUG_AREA) << "Time is " << time << endl;
 
     if ((*itr)->isRest()) {
 	time += getOffsetWithinRest(staffNo, itr,

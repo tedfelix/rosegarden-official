@@ -42,11 +42,11 @@ void MatrixHLayout::reset()
     m_barData.clear();
 }
 
-void MatrixHLayout::resetStaff(StaffType&)
+void MatrixHLayout::resetStaff(StaffType&, timeT, timeT)
 {
 }
 
-void MatrixHLayout::scanStaff(MatrixHLayout::StaffType &staffBase)
+void MatrixHLayout::scanStaff(MatrixHLayout::StaffType &staffBase, timeT, timeT)
 {
     // The Matrix layout is not currently designed to be able to lay
     // out more than one staff, because we have no requirement to show
@@ -122,6 +122,6 @@ double MatrixHLayout::getBarPosition(int barNo)
     return m_barData[barNo - m_firstBar].first;
 }
 
-void MatrixHLayout::finishLayout()
+void MatrixHLayout::finishLayout(timeT, timeT)
 {
 }

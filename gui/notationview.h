@@ -415,7 +415,9 @@ protected:
     void toggleNamedToolBar(const QString& toolBarName);
 
     /// Calls all the relevant preparse and layout methods
-    virtual bool applyLayout(int staffNo = -1);
+    virtual bool applyLayout(int staffNo = -1,
+			     Rosegarden::timeT startTime = 0,
+			     Rosegarden::timeT endTime = 0);
 
     /**
      * Readjust the size of the canvas after a layout

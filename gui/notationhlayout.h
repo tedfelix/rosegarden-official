@@ -52,7 +52,9 @@ public:
      * The map should be cleared (by calling reset()) before a full
      * set of staffs is preparsed.
      */
-    virtual void scanStaff(StaffType &staff);
+    virtual void scanStaff(StaffType &staff,
+			   Rosegarden::timeT startTime = 0,
+			   Rosegarden::timeT endTime = 0);
 
     /**
      * Resets internal data stores, notably the BarDataMap that is
@@ -64,12 +66,16 @@ public:
      * Resets internal data stores, notably the given staff's entry
      * in the BarDataMap used to retain the data computed by scanStaff().
      */
-    virtual void resetStaff(StaffType &staff);
+    virtual void resetStaff(StaffType &staff,
+			    Rosegarden::timeT startTime = 0,
+			    Rosegarden::timeT endTime = 0);
 
     /**
      * Lays out all staffs that have been scanned
      */
-    virtual void finishLayout();
+    //!!! shouldn't need these args, should we?
+    virtual void finishLayout(Rosegarden::timeT startTime = 0,
+			      Rosegarden::timeT endTime = 0);
 
     /**
      * Set page mode
@@ -207,6 +213,7 @@ protected:
 
     typedef FastVector<BarData> BarDataList;
     typedef std::map<StaffType *, BarDataList> BarDataMap;
+    typedef std::map<StaffType *, int> FakeBarCountMap;
 
     /**
      * Returns the bar positions for a given staff, provided that
@@ -227,13 +234,20 @@ protected:
     /// Tries to harmonize the bar positions for all the staves (page mode)
     void reconcileBarsPage();
 
-    void layout(BarDataMap::iterator);
+    void layout(BarDataMap::iterator,
+		Rosegarden::timeT startTime,
+		Rosegarden::timeT endTime);
 
     void addNewBar
     (StaffType &staff, int barNo, NotationElementList::iterator start,
      double width, int fwidth, int bwidth, bool correct,
      Rosegarden::Event *timesig, Rosegarden::timeT actual);
 
+    void setBar
+    (StaffType &staff, int barNo, NotationElementList::iterator start,
+     double width, int fwidth, int bwidth, bool correct,
+     Rosegarden::Event *timesig, Rosegarden::timeT actual);
+    
     double getIdealBarWidth
     (StaffType &staff, int fixedWidth, int baseWidth,
      NotationElementList::iterator shortest,
@@ -291,6 +305,7 @@ protected:
     //--------------- Data members ---------------------------------
 
     BarDataMap m_barData;
+    FakeBarCountMap m_fakeBarCountMap;
 
     double m_totalWidth;
     bool m_pageMode;

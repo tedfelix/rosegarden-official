@@ -251,13 +251,10 @@ PasteCommand::modifySegment()
 	Event *e = new Event
 	    (**i, (*i)->getAbsoluteTime() - origin + pasteTime);
 	destination->insert(e);
-
-	if (e->isa(Note::EventType)) {
-	    destination->normalizeRests
-		(e->getAbsoluteTime(),
-		 e->getAbsoluteTime() + e->getDuration());
-	}
     }
+
+    destination->normalizeRests
+	(source->getFirstEventTime(), source->getEndTime());
 }
 
 
