@@ -1066,9 +1066,6 @@ void RosegardenGUIDoc::saveSegment(QTextStream& outStream, Segment *segment,
 {
     QString time;
 
-    RG_DEBUG << "RosegardenGUIDoc::saveSegment() totalEvents = " 
-             << totalEvents << endl;
-
     outStream << QString("<segment track=\"%1\" start=\"%2\" ") 
         .arg(segment->getTrack())
         .arg(segment->getStartTime());
@@ -1199,10 +1196,6 @@ void RosegardenGUIDoc::saveSegment(QTextStream& outStream, Segment *segment,
 	        }
 
 		if ((++count % 500 == 0) && progress) {
-                    RG_DEBUG << "RosegardenGUIDoc::saveSegment() : progress = "
-                             << count * 100 / totalEvents
-                             << " - count = " << count << " - totalEvents = "
-                             << totalEvents << endl;
 		    progress->setValue(count * 100 / totalEvents);
 		}
             }
