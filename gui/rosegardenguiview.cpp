@@ -1008,15 +1008,16 @@ RosegardenGUIView::updateMeters(SequencerMapper *mapper)
         //
         /*
 	if (instrument->getType() == Rosegarden::Instrument::Audio) {
-	    if (!isNew) continue;
 	}
         */
 
-        // Don't send a 0 to any meters
-        //
-        if (info.level == 0 && info.levelRight == 0) continue;
+	if (!isNew) continue;
 	
 	if (instrument->getType() == Rosegarden::Instrument::Audio) {
+
+            // Don't send a 0 to an audio meter
+            //
+            if (info.level == 0 && info.levelRight == 0) continue;
 
 	    if (m_instrumentParameterBox->getSelectedInstrument() &&
 		instrument->getId() ==
@@ -1039,6 +1040,13 @@ RosegardenGUIView::updateMeters(SequencerMapper *mapper)
 	    }
 
 	} else {
+
+            if (info.level == 0) continue;
+
+            RG_DEBUG << "RosegardenGUIView::updateMeters - "
+                     << "Instrument ID " << instrumentId
+                     << " is getting value " << info.level / 127.0
+                     << endl;
 
 	    m_trackEditor->getTrackButtons()->slotSetMetersByInstrument
 		(info.level / 127.0, instrumentId);

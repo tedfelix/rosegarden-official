@@ -27,31 +27,7 @@ namespace Rosegarden
       
 SequencerDataBlock::SequencerDataBlock(bool initialise)
 {
-    if (initialise) {
-	m_controlBlock = 0;
-	m_positionSec = 0;
-	m_positionNsec = 0;
-	m_visualEventIndex = 0;
-	*((MappedEvent *)&m_visualEvent) = MappedEvent();
-	m_haveVisualEvent = false;
-	m_recordEventIndex = 0;
-	m_recordLevel.level = 0;
-	m_recordLevel.levelRight = 0;
-	memset(m_knownInstruments, 0,
-	       SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS * sizeof(InstrumentId));
-	m_knownInstrumentCount = 0;
-	memset(m_levelUpdateIndices, 0,
-	       SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS * sizeof(int));
-	memset(m_levels, 0,
-	       SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS * sizeof(LevelInfo));
-	memset(m_submasterLevelUpdateIndices, 0,
-	       SEQUENCER_DATABLOCK_MAX_NB_SUBMASTERS * sizeof(int));
-	memset(m_submasterLevels, 0,
-	       SEQUENCER_DATABLOCK_MAX_NB_SUBMASTERS * sizeof(LevelInfo));
-	m_masterLevelUpdateIndex = 0;
-	m_masterLevel.level = 0;
-	m_masterLevel.levelRight = 0;
-    }
+    if (initialise) clearTemporaries();
 }
 
 bool
@@ -153,7 +129,8 @@ SequencerDataBlock::instrumentToIndexCreating(InstrumentId id)
 }
 
 bool
-SequencerDataBlock::getInstrumentLevel(InstrumentId id, LevelInfo &info) const
+SequencerDataBlock::getInstrumentLevel(InstrumentId id, 
+        LevelInfo &info) const
 {
     static int lastUpdateIndex[SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS];
 
@@ -171,6 +148,29 @@ SequencerDataBlock::getInstrumentLevel(InstrumentId id, LevelInfo &info) const
               << "id = " << id
               << ", level = " << info.level << std::endl;
               */
+
+    if (lastUpdateIndex[index] != currentUpdateIndex) {
+	lastUpdateIndex[index]  = currentUpdateIndex;
+	return true;
+    } else {
+	return false; // no change
+    }
+}
+
+bool
+SequencerDataBlock::getInstrumentLevelForMixer(InstrumentId id, 
+        LevelInfo &info) const
+{
+    static int lastUpdateIndex[SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS];
+
+    int index = instrumentToIndex(id);
+    if (index < 0) {
+	info.level = info.levelRight = 0;
+	return false;
+    }
+
+    int currentUpdateIndex = m_levelUpdateIndices[index];
+    info = m_levels[index];
 
     if (lastUpdateIndex[index] != currentUpdateIndex) {
 	lastUpdateIndex[index]  = currentUpdateIndex;
@@ -289,7 +289,34 @@ SequencerDataBlock::setMasterLevel(const LevelInfo &info)
     ++m_masterLevelUpdateIndex;
 }
 
-    
+void
+SequencerDataBlock::clearTemporaries()
+{
+    m_controlBlock = 0;
+    m_positionSec = 0;
+    m_positionNsec = 0;
+    m_visualEventIndex = 0;
+    *((MappedEvent *)&m_visualEvent) = MappedEvent();
+    m_haveVisualEvent = false;
+    m_recordEventIndex = 0;
+    m_recordLevel.level = 0;
+    m_recordLevel.levelRight = 0;
+    memset(m_knownInstruments, 0,
+           SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS * sizeof(InstrumentId));
+    m_knownInstrumentCount = 0;
+    memset(m_levelUpdateIndices, 0,
+           SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS * sizeof(int));
+    memset(m_levels, 0,
+           SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS * sizeof(LevelInfo));
+    memset(m_submasterLevelUpdateIndices, 0,
+           SEQUENCER_DATABLOCK_MAX_NB_SUBMASTERS * sizeof(int));
+    memset(m_submasterLevels, 0,
+           SEQUENCER_DATABLOCK_MAX_NB_SUBMASTERS * sizeof(LevelInfo));
+    m_masterLevelUpdateIndex = 0;
+    m_masterLevel.level = 0;
+    m_masterLevel.levelRight = 0;
+
+}
 
 }
 

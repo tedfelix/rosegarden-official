@@ -74,7 +74,13 @@ public:
     bool getTrackLevel(TrackId track, LevelInfo &) const;
     void setTrackLevel(TrackId track, const LevelInfo &);
 
+    // Two of these to rather hamfistedly get around the fact
+    // we need to fetch this value twice - once from IPB, 
+    // and again for the Mixer.
+    //
     bool getInstrumentLevel(InstrumentId id, LevelInfo &) const;
+    bool getInstrumentLevelForMixer(InstrumentId id, LevelInfo &) const;
+
     void setInstrumentLevel(InstrumentId id, const LevelInfo &);
 
     bool getSubmasterLevel(int submaster, LevelInfo &) const;
@@ -84,6 +90,10 @@ public:
     void setMasterLevel(const LevelInfo &);
 
     void setControlBlock(ControlBlock *cb) { m_controlBlock = cb; }
+
+    // Reset the temporaries on (for example) GUI restart
+    //
+    void clearTemporaries();
     
 protected:
     int instrumentToIndex(InstrumentId id) const;

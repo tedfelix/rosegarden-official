@@ -1429,6 +1429,8 @@ RosegardenSequencerApp::clearStudio()
     SEQUENCER_DEBUG << "clearStudio()" << endl;
     m_sequencer->removePluginInstances();
     m_studio->clearTemporaries();
+    m_sequencerMapper.getSequencerDataBlock()->clearTemporaries();
+
 } 
 
 void

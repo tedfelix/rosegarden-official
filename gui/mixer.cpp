@@ -1016,7 +1016,7 @@ AudioMixerWindow::updateMeters(SequencerMapper *mapper)
 	if (!rec.m_populated) continue;
 
 	Rosegarden::LevelInfo info;
-	if (!mapper->getInstrumentLevel(id, info)) continue;
+	if (!mapper->getInstrumentLevelForMixer(id, info)) continue;
 
 	// The values passed through are long-fader values
 	float dBleft = Rosegarden::AudioLevel::fader_to_dB
@@ -1728,9 +1728,10 @@ MidiMixerWindow::updateMeters(SequencerMapper *mapper)
     for (unsigned int i = 0; i != m_faders.size(); ++i) 
     {
 	Rosegarden::LevelInfo info;
-	if (!mapper->getInstrumentLevel(m_faders[i]->m_id, info)) continue;
+	if (!mapper->
+                getInstrumentLevelForMixer(m_faders[i]->m_id, info)) continue;
         m_faders[i]->m_vuMeter->setLevel(double(info.level/127.0));
-        //RG_DEBUG << "MidiMixerWindow::updateMeters - level  " << info.level << endl;
+        RG_DEBUG << "MidiMixerWindow::updateMeters - level  " << info.level << endl;
     }
 }
 

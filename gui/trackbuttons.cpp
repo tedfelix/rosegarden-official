@@ -688,7 +688,12 @@ TrackButtons::slotSetMetersByInstrument(double value,
         if (track !=0 && track->getInstrument() == id)
         {
             m_trackMeters[i]->setLevel(value);
-            //cout << "SETTING LEVEL = " << value << " ON INS " << id << endl;
+
+            /*
+            RG_DEBUG << "TrackButtons::slotSetMetersByInstrument - "
+                     << "setting level = " << value 
+                     << " on instrument " << id << endl;
+                     */
         }
     }
 }
