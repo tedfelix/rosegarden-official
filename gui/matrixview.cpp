@@ -53,6 +53,7 @@
 #include "pianokeyboard.h"
 #include "editcommands.h"
 #include "qdeferscrollview.h"
+#include "matrixparameterbox.h"
 
 #include "rosedebug.h"
 
@@ -88,7 +89,15 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     readOptions();
 
-    QCanvas *tCanvas = new QCanvas(this);
+    QHBox *hbox = new QHBox(this);
+    QFrame *vbox = new QFrame(hbox);
+    QVBoxLayout* vboxLayout = new QVBoxLayout(vbox, 5);
+
+    m_parameterBox = new MatrixParameterBox(vbox);
+    vboxLayout->addWidget(m_parameterBox);
+    vboxLayout->addStretch();
+
+    QCanvas *tCanvas = new QCanvas(hbox);
     tCanvas->resize(width() * 2, height() * 2);
 
     kdDebug(KDEBUG_AREA) << "MatrixView : creating staff\n";

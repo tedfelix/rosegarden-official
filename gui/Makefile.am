@@ -23,6 +23,7 @@ rosegarden_SOURCES = \
 	matrixcanvasview.cpp \
 	matrixelement.cpp \
 	matrixhlayout.cpp \
+        matrixparameterbox.cpp \
 	matrixstaff.cpp \
 	matrixtool.cpp \
 	matrixview.cpp \

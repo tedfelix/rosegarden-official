@@ -46,6 +46,7 @@ class RosegardenGUIDoc;
 class MatrixStaff;
 class MatrixCanvasView;
 class PianoKeyboard;
+class MatrixParameterBox;
 
 class QMouseEvent;
 class QLabel;
@@ -260,6 +261,10 @@ protected:
     Rosegarden::MidiByte m_lastNote;
 
     Rosegarden::PropertyName m_selectedProperty;
+
+    // The parameter box
+    //
+    MatrixParameterBox *m_parameterBox;
 };
 
 #endif

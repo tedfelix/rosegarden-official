@@ -342,8 +342,8 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
     BigArrowButton *keyUp = new BigArrowButton(keyBox, Qt::RightArrow);
     QToolTip::add(keyUp, i18n("Sharpen"));
 
-    m_keyCombo = new QComboBox(true, nameBox);
-    m_majorMinorCombo = new QComboBox(false, nameBox);
+    m_keyCombo = new RosegardenComboBox(true, nameBox);
+    m_majorMinorCombo = new RosegardenComboBox(false, nameBox);
     m_majorMinorCombo->insertItem("Major");
     m_majorMinorCombo->insertItem("Minor");
     if (m_key.isMinor()) {
@@ -701,9 +701,9 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
     QGrid *timingGrid = new QGrid(3, QGrid::Horizontal, timingBox);
 
     new QLabel(i18n("Play "), timingGrid);
-    m_untupledCombo = new QComboBox(true, timingGrid);
+    m_untupledCombo = new RosegardenComboBox(true, timingGrid);
 
-    m_unitCombo = new QComboBox(false, timingGrid);
+    m_unitCombo = new RosegardenComboBox(false, timingGrid);
     NotePixmapFactory npf;
 
     for (Note::Type t = Note::Shortest; t <= Note::Longest; ++t) {
@@ -720,7 +720,7 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
     updateUntupledCombo();
 
     new QLabel(i18n("in the time of  "), timingGrid);
-    m_tupledCombo = new QComboBox(true, timingGrid);
+    m_tupledCombo = new RosegardenComboBox(true, timingGrid);
     updateTupledCombo();
 
     QGroupBox *timingDisplayBox = new QGroupBox
@@ -967,7 +967,7 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     if (maxLength > 0) m_text->setMaxLength(maxLength);
 
     new QLabel(i18n("Style:  "), entryGrid);
-    m_typeCombo = new QComboBox(false, entryGrid);
+    m_typeCombo = new RosegardenComboBox(false, entryGrid);
 
     for (unsigned int i = 0; i < m_styles.size(); ++i) {
 
@@ -1949,14 +1949,14 @@ QuantizeDialog::QuantizeDialog(QWidget *parent,
 
     QHBox *typeBox = new QHBox(quantizeBox);
     new QLabel(i18n("Quantize:"), typeBox);
-    m_typeCombo = new QComboBox(false, typeBox);
+    m_typeCombo = new RosegardenComboBox(false, typeBox);
     m_typeCombo->insertItem(i18n("Event positions only"));
     m_typeCombo->insertItem(i18n("Event positions and durations"));
     m_typeCombo->insertItem(i18n("Event positions, and round durations to exact notes"));
 
     QHBox *unitBox = new QHBox(quantizeBox);
     new QLabel(i18n("Base duration unit:"), unitBox);
-    m_unitCombo = new QComboBox(false, unitBox);
+    m_unitCombo = new RosegardenComboBox(false, unitBox);
 
     NotePixmapFactory npf;
     QPixmap noMap = npf.makeToolbarPixmap("menu-no-note");
@@ -1981,7 +1981,7 @@ QuantizeDialog::QuantizeDialog(QWidget *parent,
 
     QHBox *dotsBox = new QHBox(m_noteQuantizeBox);
     new QLabel(i18n("Maximum number of dots:"), dotsBox);
-    m_dotsCombo = new QComboBox(false, dotsBox);
+    m_dotsCombo = new RosegardenComboBox(false, dotsBox);
     m_dotsCombo->insertItem("0");
     m_dotsCombo->insertItem("1");
     m_dotsCombo->insertItem("2");
@@ -2073,10 +2073,10 @@ RescaleDialog::RescaleDialog(QWidget *parent) :
     QHBox *notesBox = new QHBox(ratioBox);
 
     new QLabel(i18n("Play "), notesBox);
-    QComboBox *fromCombo = new QComboBox(false, notesBox);
+    RosegardenComboBox *fromCombo = new RosegardenComboBox(false, notesBox);
 
     new QLabel(i18n(" beats in time of "), notesBox);
-    QComboBox *toCombo = new QComboBox(false, notesBox);
+    RosegardenComboBox *toCombo = new RosegardenComboBox(false, notesBox);
 
     for (int i = 1; i <= 16; ++i) {
 	fromCombo->insertItem(QString("%1").arg(i));

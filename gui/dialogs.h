@@ -33,7 +33,7 @@ class QLineEdit;
 class QCheckBox;
 class QSpinBox;
 class QLabel;
-class QComboBox;
+class RosegardenComboBox;
 class QGroupBox;
 class QRadioButton;
 class QVButtonGroup;
@@ -159,8 +159,8 @@ protected:
     bool m_ignoreComboChanges;
 
     QLabel *m_keyLabel;
-    QComboBox *m_keyCombo;
-    QComboBox *m_majorMinorCombo;
+    RosegardenComboBox *m_keyCombo;
+    RosegardenComboBox *m_majorMinorCombo;
     QLabel *m_explanatoryLabel;
 
     QRadioButton *m_applyToAllButton;
@@ -229,9 +229,9 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    QComboBox *m_unitCombo;
-    QComboBox *m_untupledCombo;
-    QComboBox *m_tupledCombo;
+    RosegardenComboBox *m_unitCombo;
+    RosegardenComboBox *m_untupledCombo;
+    RosegardenComboBox *m_tupledCombo;
 
     QLabel *m_selectionDurationDisplay;
     QLabel *m_untupledDurationCalculationDisplay;
@@ -270,7 +270,7 @@ protected:
     //--------------- Data members ---------------------------------
 
     QLineEdit *m_text;
-    QComboBox *m_typeCombo;
+    RosegardenComboBox *m_typeCombo;
 
     QLabel *m_staffAboveLabel;
     QLabel *m_textExampleLabel;
@@ -468,10 +468,10 @@ protected:
     std::vector<Rosegarden::StandardQuantization>
     m_standardQuantizations;
 
-    QComboBox *m_typeCombo;
-    QComboBox *m_unitCombo;
+    RosegardenComboBox *m_typeCombo;
+    RosegardenComboBox *m_unitCombo;
     QGroupBox *m_noteQuantizeBox;
-    QComboBox *m_dotsCombo;
+    RosegardenComboBox *m_dotsCombo;
     QCheckBox *m_legatoButton;
     QCheckBox *m_makeViableButton;
     QCheckBox *m_rebeamButton;
