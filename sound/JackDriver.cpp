@@ -1574,7 +1574,6 @@ JackDriver::jackShutdown(void *arg)
     JackDriver *inst = static_cast<JackDriver*>(arg);
     inst->m_ok = false;
     inst->m_kickedOutAt = time(0);
-
     inst->reportFailure(Rosegarden::MappedEvent::FailureJackDied);
 }
 

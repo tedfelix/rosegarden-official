@@ -35,6 +35,7 @@
 #include "RingBuffer.h"
 #include "RunnablePluginInstance.h"
 #include "Scavenger.h"
+#include <pthread.h>
 
 namespace Rosegarden
 {
@@ -169,6 +170,8 @@ protected:
     QString                   m_program;
     bool                      m_grouped;
     RealTime                  m_lastRunTime;
+
+    pthread_mutex_t           m_processLock;
 
     typedef std::set<DSSIPluginInstance *> PluginSet;
     typedef std::map<QString, PluginSet> GroupMap;

@@ -64,6 +64,9 @@ DSSIPluginInstance::DSSIPluginInstance(PluginFactory *factory,
     m_bypassed(false),
     m_grouped(false)
 {
+    pthread_mutex_t initialisingMutex = PTHREAD_MUTEX_INITIALIZER;
+    memcpy(&m_processLock, &initialisingMutex, sizeof(pthread_mutex_t));
+
 #ifdef DEBUG_DSSI
     std::cerr << "DSSIPluginInstance::DSSIPluginInstance(" << identifier << ")"
 	      << std::endl;
@@ -530,52 +533,12 @@ DSSIPluginInstance::selectProgramAux(QString program, bool backupPortValues)
     if (!found) return;
     m_program = program;
 
-    m_pending.msb = bankNo / 128;
-    m_pending.lsb = bankNo % 128;
-    m_pending.program = programNo;
+    // DSSI select_program is an audio context call
+    pthread_mutex_lock(&m_processLock);
+    m_descriptor->select_program(m_instanceHandle, programNo, bankNo);
+    pthread_mutex_unlock(&m_processLock);
 
     if (backupPortValues) {
-
-	// The DSSI select_program call is an audio context one,
-	// processed by run().  We therefore need to wait for the next
-	// run() call to happen before we can update our port values
-	// and return.  (Although we won't wait _too_ long.)  The fact
-	// that this only happens if backupPortValues is true means
-	// that we won't cause trouble when called from activate() etc.
-
-	// Some plugins may take an additional run cycle to update
-	// their port values correctly, so we'll actually wait for two.
-
-	int i = 0, maxi = 20;
-	RealTime lrt = m_lastRunTime;
-
-#ifdef DEBUG_DSSI
-	std::cerr << "DSSIPluginInstance::select_program: about to wait for run()" << std::endl;
-#endif
-
-	for (int j = 0; j < 2; ++j) {
-	    while (i < maxi && m_lastRunTime == lrt) {
-		struct timespec ts;
-		ts.tv_sec = 0;
-		ts.tv_nsec = 20000000; // 20 ms
-		nanosleep(&ts, 0);
-		++i;
-	    }
-	    if (j == 0) m_lastRunTime = lrt;
-	}
-	
-	if (i == maxi && m_lastRunTime == lrt) {
-
-#ifdef DEBUG_DSSI
-	    std::cerr << "DSSIPluginInstance::select_program: no run() happened" << std::endl;
-#endif
-	    // screw it: if a run() hasn't happened by now, then
-	    // evidently we aren't running at all -- call
-	    // select_program ourselves
-	    m_pending.lsb = m_pending.msb = m_pending.program = -1;
-	    m_descriptor->select_program(m_instanceHandle, bankNo, programNo);
-	}
-
 	for (size_t i = 0; i < m_backupControlPortsIn.size(); ++i) {
 	    m_backupControlPortsIn[i] = *m_controlPortsIn[i].second;
 	}
@@ -822,6 +785,13 @@ DSSIPluginInstance::run(const RealTime &blockTime)
     static snd_seq_event_t localEventBuffer[EVENT_BUFFER_SIZE];
     int evCount = 0;
 
+    if (pthread_mutex_trylock(&m_processLock) != 0) {
+	for (size_t ch = 0; ch < m_audioPortsOut.size(); ++ch) {
+	    memset(m_outputBuffers[ch], 0, m_blockSize * sizeof(sample_t));
+	}
+	return;
+    }	
+
     if (m_grouped) {
 	runGrouped(blockTime);
 	goto done;
@@ -837,6 +807,7 @@ DSSIPluginInstance::run(const RealTime &blockTime)
 	    }
 	}
 	m_run = true;
+	pthread_mutex_unlock(&m_processLock);
 	return;
     }
 
@@ -911,6 +882,8 @@ DSSIPluginInstance::run(const RealTime &blockTime)
 #endif
 
  done:
+    pthread_mutex_unlock(&m_processLock);
+
     if (m_idealChannelCount < m_audioPortsOut.size()) {
 	if (m_idealChannelCount == 1) {
 	    // mix down to mono

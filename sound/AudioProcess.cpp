@@ -1904,6 +1904,10 @@ AudioFileWriter::createRecordFile(InstrumentId id,
 	std::cerr << "AudioFileWriter::createRecordFile: already have record file!" << std::endl;
 	return false; // already have one
     }
+
+#ifdef DEBUG_WRITER
+    std::cerr << "AudioFileWriter::createRecordFile: audio monitoring instrument is " << m_driver->getAudioMonitoringInstrument() << std::endl;
+#endif
     
     MappedAudioFader *fader = m_driver->getMappedStudio()->getAudioFader
 	(m_driver->getAudioMonitoringInstrument());
@@ -1938,6 +1942,10 @@ AudioFileWriter::createRecordFile(InstrumentId id,
 	    releaseLock();
 	    return false;
 	}
+
+#ifdef DEBUG_WRITER
+	std::cerr << "AudioFileWriter::createRecordFile: created " << channels << "-channel file at " << fileName << std::endl;
+#endif
 
 	RecordableAudioFile *raf = new RecordableAudioFile(recordFile,
 							   bufferSamples);
