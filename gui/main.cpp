@@ -23,9 +23,12 @@
 #include <kaboutdata.h>
 #include <klocale.h>
 #include <dcopclient.h>
+#include <kconfig.h>
 
 #include "rosedebug.h"
 #include "rosegardengui.h"
+
+#include "kstartuplogo.h"
 
 static const char *description =
 I18N_NOOP("Rosegarden - A sequencer and musical notation editor");
@@ -50,6 +53,34 @@ int main(int argc, char *argv[])
 
     KApplication app;
 
+    //
+    // Ensure quit on last window close
+    // Register main DCOP interface
+    //
+    QObject::connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
+    app.dcopClient()->registerAs(app.name(), false);
+    app.dcopClient()->setDefaultObject(ROSEGARDEN_GUI_IFACE_NAME);
+
+
+    //
+    // Show Startup logo
+    // (this code borrowed from KDevelop 2.0,
+    // (c) The KDevelop Development Team
+    //
+    KConfig* config = KGlobal::config();
+    config->setGroup("General Options");
+    KStartupLogo* start_logo = 0L;
+
+    if (config->readBoolEntry("Logo",true) && (!kapp->isRestored() ) )
+        {
+            kdDebug(KDEBUG_AREA) << "main: Showing startup logo\n";
+            start_logo= new KStartupLogo();
+            start_logo->show();
+        }
+
+    //
+    // Start application
+    //
     RosegardenGUIApp *rosegardengui = 0;
  
     if (app.isRestored()) {
@@ -73,13 +104,20 @@ int main(int argc, char *argv[])
 
     }
 
-    QObject::connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
-    app.dcopClient()->registerAs(app.name(), false);
-    app.dcopClient()->setDefaultObject(ROSEGARDEN_GUI_IFACE_NAME);
+    // Now that we've started up, raise start logo
+    //
+    if (start_logo) {
+        start_logo->raise();
+        start_logo->setHideEnabled(true);
+        QApplication::flushX();
+    }
 
     // Check for sequencer and launch if needed
     //
     rosegardengui->launchSequencer();
+
+    if (start_logo)
+        delete start_logo;
 
     return app.exec();
 

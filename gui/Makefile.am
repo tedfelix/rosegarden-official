@@ -8,6 +8,7 @@ rosegarden_SOURCES = \
 	editview.cpp \
 	eventselection.cpp \
 	ktmpstatusmsg.cpp \
+	kstartuplogo.cpp \
 	main.cpp \
 	matrixview.cpp \
 	multiviewcommandhistory.cpp \
@@ -61,6 +62,7 @@ EXTRA_DIST = rosegardenguiiface.kidl trackseditoriface.kidl \
 	pixmaps/feta/12/*.xpm \
 	pixmaps/toolbar/*.xpm \
 	pixmaps/transport/*.xpm \
+	pixmaps/splash/splash.png \
 	testfiles/*.xml \
 	testfiles/*.rose
 
@@ -91,16 +93,17 @@ install-data-local:
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/toolbar
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/transport
 	$(INSTALL_DATA) $(srcdir)/pixmaps/rg21/mapping.xml $(kde_datadir)/$(data_dirname)/pixmaps/rg21
-	$(INSTALL_DATA) $(srcdir)/pixmaps/rg21/4/*.xpm $(kde_datadir)/$(data_dirname)/pixmaps/rg21/4
-	$(INSTALL_DATA) $(srcdir)/pixmaps/rg21/8/*.xpm $(kde_datadir)/$(data_dirname)/pixmaps/rg21/8
+	$(INSTALL_DATA) $(srcdir)/pixmaps/rg21/4/*.xpm     $(kde_datadir)/$(data_dirname)/pixmaps/rg21/4
+	$(INSTALL_DATA) $(srcdir)/pixmaps/rg21/8/*.xpm     $(kde_datadir)/$(data_dirname)/pixmaps/rg21/8
 	$(INSTALL_DATA) $(srcdir)/pixmaps/feta/mapping.xml $(kde_datadir)/$(data_dirname)/pixmaps/feta
-	$(INSTALL_DATA) $(srcdir)/pixmaps/feta/4/*.xpm $(kde_datadir)/$(data_dirname)/pixmaps/feta/4
-	$(INSTALL_DATA) $(srcdir)/pixmaps/feta/6/*.xpm $(kde_datadir)/$(data_dirname)/pixmaps/feta/6
-	$(INSTALL_DATA) $(srcdir)/pixmaps/feta/8/*.xpm $(kde_datadir)/$(data_dirname)/pixmaps/feta/8
-	$(INSTALL_DATA) $(srcdir)/pixmaps/feta/10/*.xpm $(kde_datadir)/$(data_dirname)/pixmaps/feta/10
-	$(INSTALL_DATA) $(srcdir)/pixmaps/feta/12/*.xpm $(kde_datadir)/$(data_dirname)/pixmaps/feta/12
-	$(INSTALL_DATA) $(srcdir)/pixmaps/toolbar/*.xpm $(kde_datadir)/$(data_dirname)/pixmaps/toolbar
-	$(INSTALL_DATA) $(srcdir)/pixmaps/transport/*.xpm $(kde_datadir)/$(data_dirname)/pixmaps/transport
+	$(INSTALL_DATA) $(srcdir)/pixmaps/feta/4/*.xpm     $(kde_datadir)/$(data_dirname)/pixmaps/feta/4
+	$(INSTALL_DATA) $(srcdir)/pixmaps/feta/6/*.xpm     $(kde_datadir)/$(data_dirname)/pixmaps/feta/6
+	$(INSTALL_DATA) $(srcdir)/pixmaps/feta/8/*.xpm     $(kde_datadir)/$(data_dirname)/pixmaps/feta/8
+	$(INSTALL_DATA) $(srcdir)/pixmaps/feta/10/*.xpm    $(kde_datadir)/$(data_dirname)/pixmaps/feta/10
+	$(INSTALL_DATA) $(srcdir)/pixmaps/feta/12/*.xpm    $(kde_datadir)/$(data_dirname)/pixmaps/feta/12
+	$(INSTALL_DATA) $(srcdir)/pixmaps/toolbar/*.xpm    $(kde_datadir)/$(data_dirname)/pixmaps/toolbar
+	$(INSTALL_DATA) $(srcdir)/pixmaps/transport/*.xpm  $(kde_datadir)/$(data_dirname)/pixmaps/transport
+	$(INSTALL_DATA) $(srcdir)/pixmaps/splash.png       $(kde_datadir)/$(data_dirname)/pixmaps
 
 uninstall-local:
 	-rm -f $(kde_appsdir)/Applications/rosegarden.desktop
