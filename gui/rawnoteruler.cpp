@@ -156,7 +156,9 @@ RawNoteRuler::buildForest(Segment *s,
 
 	std::pair<timeT, timeT> iex = getExtents(i);
 
+#ifdef DEBUG_RAW_NOTE_RULER
 	std::cerr << "buildForest: event at " << (*i)->getAbsoluteTime() << ", extents " << iex.first << "->" << iex.second << std::endl;
+#endif
 	
 	if (iex.first == iex.second) { ++i; continue; }
 	if (iex.first >= endTime) break;
@@ -167,7 +169,9 @@ RawNoteRuler::buildForest(Segment *s,
 
 	i = s->findTime(iex.second);
 
+#ifdef DEBUG_RAW_NOTE_RULER
 	std::cerr << "findTime " << iex.second << " returned iterator at " << (i == s->end() ? -1 : (*i)->getAbsoluteTime()) << std::endl;
+#endif
     }
 }
 
@@ -175,6 +179,7 @@ void
 RawNoteRuler::dumpSubtree(EventTreeNode *node, int depth)
 {
     if (!node) return;
+#ifdef DEBUG_RAW_NOTE_RULER
     for (int i = 0; i < depth; ++i) std::cerr << "  ";
     if (depth > 0) std::cerr << "->";
     std::cerr << (*node->node)->getAbsoluteTime() << ","
@@ -189,11 +194,13 @@ RawNoteRuler::dumpSubtree(EventTreeNode *node, int depth)
 	 i != node->children.end(); ++i) {
 	dumpSubtree(*i, depth+1);
     }
+#endif
 }
 
 void
 RawNoteRuler::dumpForest(EventTreeNode::NodeList *forest)
 {
+#ifdef DEBUG_RAW_NOTE_RULER
     std::cerr << "\nFOREST:\n" << std::endl;
 
     for (unsigned int i = 0; i < forest->size(); ++i) {
@@ -203,6 +210,7 @@ RawNoteRuler::dumpForest(EventTreeNode::NodeList *forest)
     }
 
     std::cerr << std::endl;
+#endif
 }
 
 int

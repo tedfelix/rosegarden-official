@@ -1343,6 +1343,8 @@ NotationView::slotSetInsertCursorAndRecentre(timeT t, double cx, int,
 void
 NotationView::doDeferredCursorMove()
 {
+    NOTATION_DEBUG << "NotationView::doDeferredCursorMove: m_deferredCursorMove == " << m_deferredCursorMove << endl;
+
     if (m_deferredCursorMove == NoCursorMoveNeeded) {
 	return;
     }

@@ -185,10 +185,13 @@ EditViewBase::makeViewLocalPropertyPrefix()
 void
 EditViewBase::setPainting(bool painting)
 {
+/*!!!
     if (painting) {
-	if (m_paintCount > 0) m_paintEventPending = true;
 	++m_paintCount;
-    } else if (m_paintCount > 0) --m_paintCount;
+    } else if (m_paintCount > 0) {
+	--m_paintCount;
+    }
+*/
 }
 
 void EditViewBase::paintEvent(QPaintEvent* e)
@@ -197,6 +200,8 @@ void EditViewBase::paintEvent(QPaintEvent* e)
 	m_paintEventPending = true;
 	if (e) KMainWindow::paintEvent(e);
 	return;
+    } else {
+	m_paintEventPending = false;
     }
 
     setPainting(true);
@@ -282,11 +287,6 @@ void EditViewBase::paintEvent(QPaintEvent* e)
     setCompositionModified(false);
 
     setPainting(false);
-
-    if (m_paintEventPending) {
-	m_paintEventPending = false;
-	paintEvent(0);
-    }
 }
 
 MultiViewCommandHistory *EditViewBase::getCommandHistory()

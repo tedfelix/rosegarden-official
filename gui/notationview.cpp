@@ -1735,6 +1735,7 @@ void NotationView::setCurrentSelectedNote(NoteActionData noteAction)
 void NotationView::setCurrentSelection(EventSelection* s, bool preview)
 {
     if (!m_currentEventSelection && !s) return;
+    NOTATION_DEBUG << "XXX " << endl;
     setPainting(true);
 
     installProgressEventFilter();
@@ -1798,16 +1799,56 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview)
 	    (!s || !oldSelection ||
 	     oldSelection->getSegment() == s->getSegment())) {
 	    
-	    // the regions overlap: use their union and just do one reposition
-	    Segment &segment(s ? s->getSegment() : oldSelection->getSegment());
+	    // the regions overlap: use their union and just do one refresh
+
+	    Segment &segment(s ? s->getSegment() :
+			     oldSelection->getSegment());
+
+	    if (preview) {
+		// recolour the events now
+		getStaff(segment)->positionElements(std::min(startA, startB),
+						    std::max(endA, endB));
+	    } else {
+		// mark refresh status and then request a repaint
+		segment.getRefreshStatus
+		    (m_segmentsRefreshStatusIds
+		     [getStaff(segment)->getId()]).
+		    push(std::min(startA, startB), std::max(endA, endB));
+	    }
+
+/*!!!
 	    getStaff(segment)->positionElements(std::min(startA, startB),
 						std::max(endA, endB));
+*/
 	    
 	} else {
 	    // do two refreshes, one for each -- here we know neither is null
+
+	    if (preview) {
+		// recolour the events now
+		getStaff(oldSelection->getSegment())->positionElements(startA,
+								       endA);
+		
+		getStaff(s->getSegment())->positionElements(startB, endB);
+	    } else {
+		// mark refresh status and then request a repaint
+
+		oldSelection->getSegment().getRefreshStatus
+		    (m_segmentsRefreshStatusIds
+		     [getStaff(oldSelection->getSegment())->getId()]).
+		    push(startA, endA);
+		
+		s->getSegment().getRefreshStatus
+		    (m_segmentsRefreshStatusIds
+		     [getStaff(s->getSegment())->getId()]).
+		    push(startB, endB);
+	    }
+/*!!!
 	    getStaff(oldSelection->getSegment())->positionElements(startA,
 								   endA);
+
 	    getStaff(s->getSegment())->positionElements(startB, endB);
+*/
 	}
     }
 
@@ -1827,11 +1868,13 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview)
 
     setMenuStates();
 
-    updateView();
+//!!!    updateView();
+    update();
     setPainting(false);
 
+    NOTATION_DEBUG << "XXX " << endl;
     if (m_paintEventPending) {
-	m_paintEventPending = false;
+	NOTATION_DEBUG << "XXX REPAINT" << endl;
 	paintEvent(0);
     }
 }
@@ -2092,6 +2135,7 @@ void NotationView::refreshSegment(Segment *segment,
 				  timeT startTime, timeT endTime)
 {
     START_TIMING;
+    NOTATION_DEBUG << "*** " << endl;
     Rosegarden::Profiler foo("NotationView::refreshSegment()");
 
     if (m_inhibitRefresh || m_documentDestroyed) return;
@@ -2161,9 +2205,10 @@ void NotationView::refreshSegment(Segment *segment,
     setPainting(false);
 
     PRINT_ELAPSED("NotationView::refreshSegment (including update/GC)");
+    NOTATION_DEBUG << "*** " << endl;
 
     if (m_paintEventPending) {
-	m_paintEventPending = false;
+	NOTATION_DEBUG << "*** REPAINT" << endl;
 	paintEvent(0);
     }
 }
@@ -2182,7 +2227,7 @@ void NotationView::setMenuStates()
 
     if (m_currentEventSelection) {
 
-	NOTATION_DEBUG << "NotationView::refreshSegment: Have selection; it's " << m_currentEventSelection << " covering range from " << m_currentEventSelection->getStartTime() << " to " << m_currentEventSelection->getEndTime() << " (" << m_currentEventSelection->getSegmentEvents().size() << " events)" << endl;
+	NOTATION_DEBUG << "NotationView::setMenuStates: Have selection; it's " << m_currentEventSelection << " covering range from " << m_currentEventSelection->getStartTime() << " to " << m_currentEventSelection->getEndTime() << " (" << m_currentEventSelection->getSegmentEvents().size() << " events)" << endl;
 
 	stateChanged("have_selection", KXMLGUIClient::StateNoReverse);
 	if (m_currentEventSelection->contains
