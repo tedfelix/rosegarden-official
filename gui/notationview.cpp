@@ -220,7 +220,7 @@ NotationView::showElements(NotationElementList::iterator from,
     static ChordPixmapFactory npf(*m_mainStaff);
 
     for(NotationElementList::iterator it = from; it != to; ++it) {
-        
+
         Note note = Note((*it)->event()->get<Int>("Notation::NoteType"));
         
         QCanvasPixmap notePixmap(npf.makeNotePixmap(note, true, true));
@@ -233,9 +233,10 @@ NotationView::showElements(NotationElementList::iterator from,
         (*it)->setCanvasItem(noteSprite);
     }
 
-
     // Display bars
     const NotationHLayout::barpositions& barPositions(m_hlayout->barPositions());
+
+    // TODO : store bar elements and delete them before redisplaying them
 
     for(NotationHLayout::barpositions::const_iterator it = barPositions.begin();
         it != barPositions.end(); ++it) {
@@ -275,6 +276,8 @@ NotationView::applyHorizontalLayout()
         KMessageBox::error(0, "No Horizontal Layout engine");
         return false;
     }
+
+    m_hlayout->reset();
 
     for (NotationElementList::iterator i = m_notationElements->begin();
          i != m_notationElements->end(); ++i)
@@ -467,6 +470,7 @@ NotationView::insertNote(int pitch, QMouseEvent *e)
     // TODO : insert insertedEvent too
 
     (*m_vlayout)(notationElement);
+    applyHorizontalLayout(); // TODO : be more subtle than this
     // (*m_hlayout)(notationElement);
 
     // TODO : m_currentStaff should be updated by the mouse click 

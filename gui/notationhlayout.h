@@ -85,7 +85,6 @@ protected:
 
     barpositions m_barPositions;
 
-    vector<ElementHPos> m_notePositions;
 };
 
 // Looks like we don't need this at the moment but I'd rather keep it around just in case

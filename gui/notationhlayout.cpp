@@ -121,9 +121,10 @@ NotationHLayout::barPositions() const
 void
 NotationHLayout::reset()
 {
-    m_currentPos = barMargin;
+    m_currentPos = m_barMargin;
     m_nbTimeUnitsInCurrentBar = 0;
     m_previousNbTimeUnitsInCurrentBar = 0;
+    m_barPositions.clear();
 }
 
 bool compareNoteElement(NotationElement *el1, NotationElement *el2)
