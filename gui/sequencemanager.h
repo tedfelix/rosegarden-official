@@ -54,6 +54,7 @@ namespace Rosegarden
 class AudioPluginManager;
 class RosegardenTransportDialog;
 
+typedef std::pair<Rosegarden::MidiByte, Rosegarden::MidiByte> MidiControlPair;
 
 class SequenceManager : public QObject
 {

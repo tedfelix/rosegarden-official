@@ -8,8 +8,6 @@ o Performance
 
 o Make AlsaDriver send NoteOn(0)s as well as NoteOffs [WAITING FOR FEEDBACK]
 
-o New rotary control widget
-
 o Make RG a jack mixer (transport, control client)
 
 o JACK connection management - stereo, panning
@@ -23,8 +21,6 @@ o Matrix width bug [HALF COMPLETED]
 o Matrix position of events at high zoom levels [FIXED with fiddel factor]
 
 o Matrix pointer width
-
-o Chorus and Reverb MIDI controls
 
 o Drum bank selects and different MIDI drums
 
@@ -46,6 +42,10 @@ o MIDI export broken for key sig and SysExs
 
 Post 0.2
 ========
+
+o Chorus, Reverb, Resonance, Filter, Attack, Release MIDI controls [DONE]
+
+o New rotary control widget [DONE]
 
 o Repeating segments and composition end marker [DONE]
 

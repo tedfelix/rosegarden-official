@@ -889,6 +889,87 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             }
         }
 
+    } else if (lcName == "reverb") {
+
+        if (m_section != InInstrument)
+        {
+            m_errorString = i18n("Found Reverb outside Instrument");
+            return false;
+        }
+
+        Rosegarden::MidiByte value = atts.value("value").toInt();
+
+        if (m_instrument)
+            m_instrument->setReverb(value);
+
+
+    } else if (lcName == "chorus") {
+
+        if (m_section != InInstrument)
+        {
+            m_errorString = i18n("Found Chorus outside Instrument");
+            return false;
+        }
+
+        Rosegarden::MidiByte value = atts.value("value").toInt();
+
+        if (m_instrument)
+            m_instrument->setChorus(value);
+
+    } else if (lcName == "filter") {
+
+        if (m_section != InInstrument)
+        {
+            m_errorString = i18n("Found Filter outside Instrument");
+            return false;
+        }
+
+        Rosegarden::MidiByte value = atts.value("value").toInt();
+
+        if (m_instrument)
+            m_instrument->setFilter(value);
+
+
+    } else if (lcName == "resonance") {
+
+        if (m_section != InInstrument)
+        {
+            m_errorString = i18n("Found Resonance outside Instrument");
+            return false;
+        }
+
+        Rosegarden::MidiByte value = atts.value("value").toInt();
+
+        if (m_instrument)
+            m_instrument->setResonance(value);
+
+
+    } else if (lcName == "attack") {
+
+        if (m_section != InInstrument)
+        {
+            m_errorString = i18n("Found Attack outside Instrument");
+            return false;
+        }
+
+        Rosegarden::MidiByte value = atts.value("value").toInt();
+
+        if (m_instrument)
+            m_instrument->setAttack(value);
+
+    } else if (lcName == "release") {
+
+        if (m_section != InInstrument)
+        {
+            m_errorString = i18n("Found Release outside Instrument");
+            return false;
+        }
+
+        Rosegarden::MidiByte value = atts.value("value").toInt();
+
+        if (m_instrument)
+            m_instrument->setRelease(value);
+
     } else if (lcName == "pan") {
 
         if (m_section != InInstrument)

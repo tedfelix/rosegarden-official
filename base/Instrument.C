@@ -47,6 +47,12 @@ Instrument::Instrument(InstrumentId id, InstrumentType it,
     m_transpose(MidiMidValue),
     m_pan(MidiMidValue),
     m_velocity(MidiMaxValue),
+    m_attack(MidiMinValue),
+    m_release(MidiMinValue),
+    m_filter(MidiMaxValue),
+    m_resonance(MidiMinValue),
+    m_chorus(MidiMinValue),
+    m_reverb(MidiMinValue),
     m_device(device),
     m_sendBankSelect(false),
     m_sendProgramChange(false),
@@ -81,6 +87,12 @@ Instrument::Instrument(InstrumentId id,
     m_transpose(MidiMidValue),
     m_pan(MidiMidValue),
     m_velocity(MidiMaxValue),
+    m_attack(MidiMinValue),
+    m_release(MidiMinValue),
+    m_filter(MidiMaxValue),
+    m_resonance(MidiMinValue),
+    m_chorus(MidiMinValue),
+    m_reverb(MidiMinValue),
     m_device(device),
     m_sendBankSelect(false),
     m_sendProgramChange(false),
@@ -187,42 +199,31 @@ Instrument::toXmlString()
                    << (int)m_velocity << "\"/>" << std::endl;
     }
 
+    // Advanced MIDI controls
+    //
+    instrument << "            <reverb value=\""
+                   << (int)m_reverb << "\"/>" << std::endl;
+
+    instrument << "            <chorus value=\""
+                   << (int)m_chorus << "\"/>" << std::endl;
+
+    instrument << "            <filter value=\""
+                   << (int)m_filter << "\"/>" << std::endl;
+
+    instrument << "            <resonance value=\""
+                   << (int)m_resonance << "\"/>" << std::endl;
+
+    instrument << "            <attack value=\""
+                   << (int)m_attack << "\"/>" << std::endl;
+
+    instrument << "            <release value=\""
+                   << (int)m_release << "\"/>" << std::endl;
+
+
     PluginInstanceIterator it = m_audioPlugins.begin();
     for (; it != m_audioPlugins.end(); it++)
     {
         instrument << (*it)->toXmlString();
-        /*
-        if ((*it)->isAssigned())
-        {
-             instrument << "            <plugin position=\""
-                        << (*it)->getPosition()
-                        << "\" id=\""
-                        << (*it)->getId()
-                        << "\" bypassed=\"";
-             if ((*it)->isBypassed())
-                 instrument << "true";
-             else
-                 instrument << "false";
-
-             instrument << "\">" << std::endl;
-
-             for (unsigned int i = 0; i < (*it)->getPortCount(); i++)
-             {
-                 PluginPortInstance *port = (*it)->getPort(i);
-
-                 if (port)
-                 {
-                     instrument << "                <port id=\""
-                                << port->id
-                                << "\" value=\""
-                                << port->value
-                                << "\"/>" << std::endl;
-                 }
-             }
-
-             instrument << "            </plugin>" << std::endl;
-        }
-        */
     }
         
 

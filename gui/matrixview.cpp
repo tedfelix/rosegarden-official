@@ -129,7 +129,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     m_grid->addWidget(m_pianoView, 2, 1);
 
-    m_parameterBox = new MatrixParameterBox(getCentralFrame());
+    m_parameterBox = new MatrixParameterBox(getCentralFrame(), m_document);
 
     // Set the instrument we're using on this segment
     //

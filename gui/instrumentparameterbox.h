@@ -35,6 +35,7 @@
 //
 
 class RosegardenComboBox;
+class RosegardenGUIDoc;
 class QCheckBox;
 class QSlider;
 class QPushButton;
@@ -46,7 +47,7 @@ class InstrumentParameterBox : public RosegardenParameterBox
 Q_OBJECT
 
 public:
-    InstrumentParameterBox(Rosegarden::AudioPluginManager *pluginManager,
+    InstrumentParameterBox(RosegardenGUIDoc *doc,
                            QWidget *parent = 0);
     ~InstrumentParameterBox();
 
@@ -65,6 +66,13 @@ public slots:
     void slotSelectVelocity(int index);
     void slotSelectBank(int index);
     void slotSelectChannel(int index);
+
+    void slotSelectChorus(float index);
+    void slotSelectReverb(float index);
+    void slotSelectHighPass(float index);
+    void slotSelectResonance(float index);
+    void slotSelectAttack(float index);
+    void slotSelectRelease(float index);
 
     void slotActivateProgramChange(bool value);
     void slotActivateVelocity(bool value);
@@ -124,16 +132,24 @@ protected:
     RosegardenRotary   *m_reverbRotary;
     RosegardenRotary   *m_highPassRotary;
     RosegardenRotary   *m_resonanceRotary;
+    RosegardenRotary   *m_attackRotary;
+    RosegardenRotary   *m_releaseRotary;
     QLabel             *m_chorusLabel;
     QLabel             *m_reverbLabel;
     QLabel             *m_highPassLabel;
     QLabel             *m_resonanceLabel;
+    QLabel             *m_attackLabel;
+    QLabel             *m_releaseLabel;
 
     std::vector<PluginButton*>       m_pluginButtons;
 
     Rosegarden::Instrument          *m_selectedInstrument;
 
     Rosegarden::AudioPluginManager  *m_pluginManager;
+
+    // So we can setModified()
+    //
+    RosegardenGUIDoc                *m_doc;
 
 };
 

@@ -34,6 +34,7 @@
 
 class RosegardenComboBox;
 class InstrumentParameterBox;
+class RosegardenGUIDoc;
 
 namespace Rosegarden
 {
@@ -46,7 +47,7 @@ class MatrixParameterBox : public QFrame
 Q_OBJECT
 
 public:
-    MatrixParameterBox(QWidget *parent=0);
+    MatrixParameterBox(QWidget *parent=0, RosegardenGUIDoc *doc=0);
     ~MatrixParameterBox();
 
     void initBox();
@@ -80,6 +81,8 @@ protected:
 
     std::vector<Rosegarden::StandardQuantization> m_quantizations;
     std::vector<Rosegarden::timeT>                m_snapValues;
+
+    RosegardenGUIDoc           *m_doc;
 
 };
 

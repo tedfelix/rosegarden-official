@@ -296,15 +296,23 @@ public:
                      float minValue,
                      float maxValue,
                      float step,
+                     float pageStep,
                      float initialPosition,
                      int size);
 
+    void setMinValue(float min) { m_minValue = min; }
     float getMinValue() const { return m_minValue; }
+
+    void setMaxValue(float max) { m_maxValue = max; }
     float getMaxValue() const { return m_maxValue; }
+
     float getStep() const { return m_step; }
     int getSize() const { return m_size; }
 
+    // Position
+    //
     float getPosition() const { return m_position; }
+    void setPosition(float position);
 
 signals:
     void valueChanged(float);
@@ -321,11 +329,12 @@ protected:
     float m_minValue;
     float m_maxValue;
     float m_step;
+    float m_pageStep;
     int   m_size;
 
+    float m_lastPosition;
     float m_position;
     bool  m_buttonPressed;
-    int   m_originalY;
     int   m_lastY;
 };
 

@@ -98,7 +98,7 @@ RosegardenSpinBox::mapValueToText(int value)
 }
 
 int
-RosegardenSpinBox::mapTextToValue(bool *ok)
+RosegardenSpinBox::mapTextToValue(bool * /*ok*/)
 {
     double number = text().toDouble();
 
@@ -389,7 +389,7 @@ PluginButton::PluginButton(QWidget *parent, int index):
 }
 
 void
-PluginButton::mouseReleaseEvent(QMouseEvent *e)
+PluginButton::mouseReleaseEvent(QMouseEvent * /*e*/)
 {
     emit released(m_index);
     setDown(false);
@@ -403,16 +403,18 @@ RosegardenRotary::RosegardenRotary(QWidget *parent,
                                    float minValue,
                                    float maxValue,
                                    float step,
+                                   float pageStep,
                                    float initialPosition,
                                    int size):
     QWidget(parent),
     m_minValue(minValue),
     m_maxValue(maxValue),
     m_step(step),
+    m_pageStep(pageStep),
     m_size(size),
+    m_lastPosition(initialPosition),
     m_position(initialPosition),
     m_buttonPressed(false),
-    m_originalY(0),
     m_lastY(0)
 {
     setFixedSize(size, size);
@@ -427,6 +429,10 @@ RosegardenRotary::paintEvent(QPaintEvent *e)
     paint.setClipRegion(e->region());
     paint.setClipRect(e->rect().normalize());
 
+    paint.setPen(kapp->palette().color(QPalette::Active, QColorGroup::Dark));
+    paint.setBrush(kapp->palette().color(QPalette::Active, QColorGroup::Base));
+    paint.drawEllipse(0, 0, m_size, m_size);
+
     drawPosition();
 }
 
@@ -437,7 +443,7 @@ RosegardenRotary::mousePressEvent(QMouseEvent *e)
     if (e->button() == LeftButton)
     {
         m_buttonPressed = true;
-        m_originalY = e->y();
+        m_lastY = e->y();
     }
 }
 
@@ -456,7 +462,7 @@ RosegardenRotary::mouseMoveEvent(QMouseEvent *e)
 {
     if (m_buttonPressed)
     {
-        float newValue = m_position + (float(e->y() - m_lastY));
+        float newValue = m_position + (m_lastY - float(e->y())) * m_step;
 
         if (newValue > m_maxValue)
             m_position = m_maxValue;
@@ -465,6 +471,9 @@ RosegardenRotary::mouseMoveEvent(QMouseEvent *e)
             m_position = m_minValue;
         else
             m_position = newValue;
+
+        // don't update if there's nothing to update
+        if (m_lastPosition == m_position) return;
 
         m_lastY = e->y();
 
@@ -477,12 +486,10 @@ RosegardenRotary::mouseMoveEvent(QMouseEvent *e)
 void
 RosegardenRotary::wheelEvent(QWheelEvent *e)
 {
-    cout << "WHEEL = " << e->delta() << endl;
-
     if (e->delta() > 0)
-        m_position += m_step;
+        m_position -= m_pageStep;
     else 
-        m_position -= m_step;
+        m_position += m_pageStep;
 
     if (m_position > m_maxValue)
         m_position = m_maxValue;
@@ -500,23 +507,40 @@ RosegardenRotary::drawPosition()
 {
     QPainter paint(this);
 
-    paint.setPen(kapp->palette().color(QPalette::Active, QColorGroup::Dark));
-    paint.setBrush(kapp->palette().color(QPalette::Active, QColorGroup::Base));
-
-    paint.drawEllipse(0, 0, m_size, m_size);
-
-    // draw the position
     double hyp = double(m_size) / 2.0;
-    double angle = (0.1 * M_PI) // offset 
-                   + (1.8 * M_PI * (double(m_position) /  // value
+
+    // Undraw the previous line
+    //
+    double angle = (0.2 * M_PI) // offset 
+                   + (1.6 * M_PI * (double(m_lastPosition) /  // value
                      (double(m_maxValue) - double(m_minValue))));
 
-    double x = hyp - 0.9 * hyp * sin(angle);
-    double y = hyp + 0.9 * hyp * cos(angle);
+    double x = hyp - 0.8 * hyp * sin(angle);
+    double y = hyp + 0.8 * hyp * cos(angle);
 
+    paint.setPen(kapp->palette().color(QPalette::Active, QColorGroup::Base));
     paint.drawLine(hyp, hyp, x, y);
+
+    // Draw the new position
+    //
+    angle = (0.2 * M_PI) // offset 
+                   + (1.6 * M_PI * (double(m_position) /  // value
+                     (double(m_maxValue) - double(m_minValue))));
+
+    x = hyp - 0.8 * hyp * sin(angle);
+    y = hyp + 0.8 * hyp * cos(angle);
+
+    paint.setPen(kapp->palette().color(QPalette::Active, QColorGroup::Dark));
+    paint.drawLine(hyp, hyp, x, y);
+
+    m_lastPosition = m_position;
 } 
 
-
+void
+RosegardenRotary::setPosition(float position)
+{
+    m_position = position;
+    drawPosition();
+}
 
 

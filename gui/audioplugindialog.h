@@ -38,13 +38,14 @@
 //
 //
 
+class RosegardenRotary;
 class RosegardenComboBox;
 
 namespace Rosegarden
 {
 
-class AudioPluginManager;
 class PluginPort;
+class AudioPluginManager;
 
 class PluginControl : public QHBox
 {
@@ -68,7 +69,7 @@ public:
     void setValue(float value);
 
 public slots:
-    void slotValueChanged(int value);
+    void slotValueChanged(float value);
 
 signals:
     void valueChanged(int index, float value);
@@ -79,7 +80,7 @@ protected:
     PluginPort          *m_port;
 
     float                m_multiplier;
-    QDial               *m_dial;
+    RosegardenRotary    *m_dial;
     AudioPluginManager  *m_pluginManager;
 
     int                  m_index;

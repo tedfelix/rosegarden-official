@@ -94,9 +94,7 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
     m_segmentParameterBox = new SegmentParameterBox(this, vbox);
     vboxLayout->addWidget(m_segmentParameterBox);
 
-    m_instrumentParameterBox =
-        new InstrumentParameterBox(getDocument()->getPluginManager(), 
-                                   vbox);
+    m_instrumentParameterBox = new InstrumentParameterBox(getDocument(), vbox);
     vboxLayout->addWidget(m_instrumentParameterBox);
     vboxLayout->addStretch();
 

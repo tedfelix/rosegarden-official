@@ -143,6 +143,24 @@ public:
     void setLSB(MidiByte lsb) { m_lsb = lsb; }
     MidiByte getLSB() const { return m_lsb; }
 
+    void setAttack(MidiByte attack) { m_attack = attack; }
+    MidiByte getAttack() const { return m_attack; }
+    
+    void setRelease(MidiByte release) { m_release = release; }
+    MidiByte getRelease() const { return m_release; }
+
+    void setFilter(MidiByte filter) { m_filter = filter; }
+    MidiByte getFilter() const { return m_filter; }
+
+    void setResonance(MidiByte res) { m_resonance = res; }
+    MidiByte getResonance() const { return m_resonance; }
+
+    void setChorus(MidiByte chorus) { m_chorus = chorus; }
+    MidiByte getChorus() const { return m_chorus; }
+
+    void setReverb(MidiByte reverb) { m_reverb = reverb; }
+    MidiByte getReverb() const { return m_reverb; }
+
     // Implementation of virtual function
     //
     virtual std::string toXmlString();
@@ -181,7 +199,8 @@ private:
     std::string     m_name;
     InstrumentType  m_type;
     
-    // Mainly MIDI elements that we might be interested in
+    // Standard MIDI controllers and parameters
+    //
     MidiByte        m_channel;
     MidiByte        m_programChange;
     MidiByte        m_msb;
@@ -189,6 +208,15 @@ private:
     MidiByte        m_transpose;
     MidiByte        m_pan;
     MidiByte        m_velocity;
+
+    // More advanced controllers
+    //
+    MidiByte        m_attack;
+    MidiByte        m_release;
+    MidiByte        m_filter;
+    MidiByte        m_resonance;
+    MidiByte        m_chorus;
+    MidiByte        m_reverb;
 
     Device         *m_device;
 

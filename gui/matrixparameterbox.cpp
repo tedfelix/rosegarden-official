@@ -32,6 +32,8 @@
 #include "matrixparameterbox.h"
 #include "notepixmapfactory.h"
 #include "rosestrings.h"
+#include "rosegardenguidoc.h"
+
 #include "Quantizer.h"
 #include "Selection.h"
 #include "MappedEvent.h"
@@ -44,10 +46,12 @@ using std::endl;
 using Rosegarden::Note;
 
 
-MatrixParameterBox::MatrixParameterBox(QWidget *parent):
+MatrixParameterBox::MatrixParameterBox(QWidget *parent,
+                                       RosegardenGUIDoc *doc):
     QFrame(parent),
     m_quantizations(
-            Rosegarden::StandardQuantization::getStandardQuantizations())
+            Rosegarden::StandardQuantization::getStandardQuantizations()),
+    m_doc(doc)
 {
     setFrameStyle(NoFrame);
     initBox();
@@ -188,7 +192,7 @@ MatrixParameterBox::initBox()
             this, SLOT(slotSetSnap(int)));
     */
 
-    m_instrumentParameterBox = new InstrumentParameterBox(0, this);
+    m_instrumentParameterBox = new InstrumentParameterBox(m_doc, this);
 
     connect(m_instrumentParameterBox,
             SIGNAL(sendMappedEvent(Rosegarden::MappedEvent*)),

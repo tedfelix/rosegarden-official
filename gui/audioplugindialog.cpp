@@ -310,7 +310,14 @@ PluginControl::PluginControl(QWidget *parent,
         low->setAlignment(AlignRight|AlignBottom);
         setStretchFactor(low, 1);
 
-        m_dial = new QDial(this);
+        float step = (upperBound - lowerBound) * m_multiplier / 200.0;
+        m_dial = new RosegardenRotary(this,
+                                      lowerBound * m_multiplier, // min
+                                      upperBound * m_multiplier, // max
+                                      step,                      // step
+                                      step * 10.0,
+                                      lowerBound * m_multiplier, // initial
+                                      30);                       // size
         setStretchFactor(m_dial, 8);
 
         // Ensure that we always have at least fifty steps
@@ -321,8 +328,8 @@ PluginControl::PluginControl(QWidget *parent,
         //cout << "LOWER = " << lowerBound * m_multiplier << endl;
         //cout << "UPPER = " << upperBound * m_multiplier << endl;
 
-        m_dial->setMinValue(int(lowerBound * m_multiplier));
-        m_dial->setMaxValue(int(upperBound * m_multiplier));
+        //m_dial->setMinValue(int(lowerBound * m_multiplier));
+        //m_dial->setMaxValue(int(upperBound * m_multiplier));
 
         // Set the initial value
         //
@@ -332,13 +339,13 @@ PluginControl::PluginControl(QWidget *parent,
         else if (value > int(upperBound * m_multiplier))
             value = int(upperBound * m_multiplier);
 
-        m_dial->setValue(value);
+        m_dial->setPosition(value);
         slotValueChanged(value);
 
         //cout << "INITIAL VALUE = " << value << endl;
 
-        connect(m_dial, SIGNAL(valueChanged(int)),
-                this, SLOT(slotValueChanged(int)));
+        connect(m_dial, SIGNAL(valueChanged(float)),
+                this, SLOT(slotValueChanged(float)));
 
         QLabel *upp = new QLabel(QString("%1").arg(upperBound), this);
         upp->setIndent(10);
@@ -348,15 +355,15 @@ PluginControl::PluginControl(QWidget *parent,
 }
 
 void
-PluginControl::slotValueChanged(int value)
+PluginControl::slotValueChanged(float value)
 {
-    emit valueChanged(m_index, (float(value))/m_multiplier);
+    emit valueChanged(m_index, value/m_multiplier);
 }
 
 void
 PluginControl::setValue(float value)
 {
-    m_dial->setValue(int(value * m_multiplier));
+    m_dial->setPosition(int(value * m_multiplier));
     // set the label too..
 }
 

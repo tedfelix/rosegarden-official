@@ -41,13 +41,13 @@
 #include "audiopluginmanager.h"
 #include "widgets.h"
 #include "studiocontrol.h"
+#include "rosegardenguidoc.h"
 
 #include "rosestrings.h"
 #include "rosedebug.h"
 
-InstrumentParameterBox::InstrumentParameterBox(
-        Rosegarden::AudioPluginManager *pluginManager,
-        QWidget *parent)
+InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
+                                               QWidget *parent)
     : RosegardenParameterBox(i18n("Instrument Parameters"), parent),
       m_instrumentLabel(new QLabel(this)),
       m_channelLabel(new QLabel(i18n("Channel"), this)),
@@ -68,16 +68,21 @@ InstrumentParameterBox::InstrumentParameterBox(
       m_volumeValue(new QLabel(this)),
       m_volumeLabel(new QLabel(i18n("Volume"), this)),
       m_pluginLabel(new QLabel(i18n("Plugins"), this)),
-      m_chorusRotary(new RosegardenRotary(this, 0.0, 127.0, 1.0, 0.0, 20)),
-      m_reverbRotary(new RosegardenRotary(this, 0.0, 127.0, 1.0, 0.0, 20)),
-      m_highPassRotary(new RosegardenRotary(this, 0.0, 127.0, 1.0, 0.0, 20)),
-      m_resonanceRotary(new RosegardenRotary(this, 0.0, 127.0, 1.0, 0.0, 20)),
+      m_chorusRotary(new RosegardenRotary(this, 0.0, 127.0, 1.0, 5.0, 0.0, 20)),
+      m_reverbRotary(new RosegardenRotary(this, 0.0, 127.0, 1.0, 5.0, 0.0, 20)),
+      m_highPassRotary(new RosegardenRotary(this, 0.0, 127.0, 1.0, 5.0, 0.0, 20)),
+      m_resonanceRotary(new RosegardenRotary(this, 0.0, 127.0, 1.0, 5.0, 0.0, 20)),
+      m_attackRotary(new RosegardenRotary(this, 0.0, 127.0, 1.0, 5.0, 0.0, 20)),
+      m_releaseRotary(new RosegardenRotary(this, 0.0, 127.0, 1.0, 5.0, 0.0, 20)),
       m_chorusLabel(new QLabel(i18n("Chorus"), this)),
       m_reverbLabel(new QLabel(i18n("Reverb"), this)),
-      m_highPassLabel(new QLabel(i18n("HPF"), this)),
+      m_highPassLabel(new QLabel(i18n("Filter"), this)),
       m_resonanceLabel(new QLabel(i18n("Resonance"), this)),
+      m_attackLabel(new QLabel(i18n("Attack"), this)),
+      m_releaseLabel(new QLabel(i18n("Release"), this)),
       m_selectedInstrument(0),
-      m_pluginManager(pluginManager)
+      m_pluginManager(doc->getPluginManager()),
+      m_doc(doc)
 {
     initBox();
 
@@ -147,6 +152,8 @@ InstrumentParameterBox::initBox()
     m_reverbLabel->setFont(getFont());
     m_highPassLabel->setFont(getFont());
     m_resonanceLabel->setFont(getFont());
+    m_attackLabel->setFont(getFont());
+    m_releaseLabel->setFont(getFont());
 
     unsigned int defaultPlugins = 5;
     for (unsigned int i = 0; i < defaultPlugins; i++)
@@ -195,12 +202,18 @@ InstrumentParameterBox::initBox()
     gridLayout->addWidget(m_resonanceLabel, 10, 0, AlignLeft);
     gridLayout->addWidget(m_resonanceRotary, 10, 2, AlignRight);
 
+    gridLayout->addWidget(m_attackLabel, 11, 0, AlignLeft);
+    gridLayout->addWidget(m_attackRotary, 11, 2, AlignRight);
+
+    gridLayout->addWidget(m_releaseLabel, 12, 0, AlignLeft);
+    gridLayout->addWidget(m_releaseRotary, 12, 2, AlignRight);
+
     // Audio widgets
     //
-    gridLayout->addWidget(m_volumeLabel, 11, 0, AlignCenter);
-    gridLayout->addMultiCellWidget(m_pluginLabel, 11, 11, 1, 2, AlignCenter);
-    gridLayout->addMultiCellWidget(m_volumeFader, 12, 14, 0, 0,  AlignCenter);
-    gridLayout->addWidget(m_volumeValue, 15, 0, AlignCenter);
+    gridLayout->addWidget(m_volumeLabel, 13, 0, AlignCenter);
+    gridLayout->addMultiCellWidget(m_pluginLabel, 13, 13, 1, 2, AlignCenter);
+    gridLayout->addMultiCellWidget(m_volumeFader, 14, 16, 0, 0,  AlignCenter);
+    gridLayout->addWidget(m_volumeValue, 17, 0, AlignCenter);
 
     for (unsigned int i = 0; i < m_pluginButtons.size(); i++)
     {
@@ -297,6 +310,25 @@ InstrumentParameterBox::initBox()
     connect(m_channelValue, SIGNAL(propagate(int)),
             this, SLOT(slotSelectChannel(int)));
 
+    // connect the advanced MIDI controls
+    connect(m_chorusRotary, SIGNAL(valueChanged(float)),
+            this, SLOT(slotSelectChorus(float)));
+
+    connect(m_reverbRotary, SIGNAL(valueChanged(float)),
+            this, SLOT(slotSelectReverb(float)));
+
+    connect(m_highPassRotary, SIGNAL(valueChanged(float)),
+            this, SLOT(slotSelectHighPass(float)));
+
+    connect(m_resonanceRotary, SIGNAL(valueChanged(float)),
+            this, SLOT(slotSelectResonance(float)));
+
+    connect(m_attackRotary, SIGNAL(valueChanged(float)),
+            this, SLOT(slotSelectAttack(float)));
+
+    connect(m_releaseRotary, SIGNAL(valueChanged(float)),
+            this, SLOT(slotSelectRelease(float)));
+
 
     // don't select any of the options in any dropdown
     m_panValue->setCurrentItem(-1);
@@ -346,10 +378,14 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
         m_reverbRotary->hide();
         m_highPassRotary->hide();
         m_resonanceRotary->hide();
+        m_attackRotary->hide();
+        m_releaseRotary->hide();
         m_chorusLabel->hide();
         m_reverbLabel->hide();
         m_highPassLabel->hide();
         m_resonanceLabel->hide();
+        m_attackLabel->hide();
+        m_releaseLabel->hide();
 
         // Audio controls
         //
@@ -410,10 +446,14 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
         m_reverbRotary->show();
         m_highPassRotary->show();
         m_resonanceRotary->show();
+        m_attackRotary->show();
+        m_releaseRotary->show();
         m_chorusLabel->show();
         m_reverbLabel->show();
         m_highPassLabel->show();
         m_resonanceLabel->show();
+        m_attackLabel->show();
+        m_releaseLabel->show();
 
 
         // Audio controls
@@ -511,6 +551,15 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
         m_bankValue->setDisabled(true);
         m_bankValue->setCurrentItem(-1);
     }
+
+    // Advanced MIDI controllers
+    //
+    m_chorusRotary->setPosition(float(instrument->getChorus()));
+    m_reverbRotary->setPosition(float(instrument->getReverb()));
+    m_highPassRotary->setPosition(float(instrument->getFilter()));
+    m_resonanceRotary->setPosition(float(instrument->getResonance()));
+    m_attackRotary->setPosition(float(instrument->getAttack()));
+    m_releaseRotary->setPosition(float(instrument->getRelease()));
 
 }
 
@@ -938,5 +987,181 @@ InstrumentParameterBox::slotPluginPortChanged(int pluginIndex,
     }
 
 }
+
+void
+InstrumentParameterBox::slotSelectChorus(float index)
+{
+    if (m_selectedInstrument == 0)
+        return;
+
+    m_selectedInstrument->setChorus(Rosegarden::MidiByte(index));
+
+    try
+    {
+        Rosegarden::MappedEvent *mE = 
+         new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
+                                     Rosegarden::MappedEvent::MidiController,
+                                     Rosegarden::MIDI_CONTROLLER_CHORUS,
+                                     (Rosegarden::MidiByte)index);
+        // Send the controller change
+        //
+        emit sendMappedEvent(mE);
+    }
+    catch(...) {;}
+
+    updateAllBoxes();
+}
+
+void
+InstrumentParameterBox::slotSelectReverb(float index)
+{
+    if (m_selectedInstrument == 0)
+        return;
+
+    m_selectedInstrument->setReverb(Rosegarden::MidiByte(index));
+
+    try
+    {
+        Rosegarden::MappedEvent *mE = 
+         new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
+                                     Rosegarden::MappedEvent::MidiController,
+                                     Rosegarden::MIDI_CONTROLLER_REVERB,
+                                     (Rosegarden::MidiByte)index);
+        // Send the controller change
+        //
+        emit sendMappedEvent(mE);
+    }
+    catch(...) {;}
+
+    updateAllBoxes();
+}
+
+
+void
+InstrumentParameterBox::slotSelectHighPass(float index)
+{
+    if (m_selectedInstrument == 0)
+        return;
+
+    m_selectedInstrument->setFilter(Rosegarden::MidiByte(index));
+
+    try
+    {
+        Rosegarden::MappedEvent *mE = 
+         new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
+                                     Rosegarden::MappedEvent::MidiController,
+                                     Rosegarden::MIDI_CONTROLLER_FILTER,
+                                     (Rosegarden::MidiByte)index);
+        // Send the controller change
+        //
+        emit sendMappedEvent(mE);
+    }
+    catch(...) {;}
+
+    updateAllBoxes();
+}
+
+void
+InstrumentParameterBox::slotSelectResonance(float index)
+{
+    if (m_selectedInstrument == 0)
+        return;
+
+    m_selectedInstrument->setResonance(Rosegarden::MidiByte(index));
+
+    try
+    {
+        Rosegarden::MappedEvent *mE = 
+         new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
+                                     Rosegarden::MappedEvent::MidiController,
+                                     Rosegarden::MIDI_CONTROLLER_RESONANCE,
+                                     (Rosegarden::MidiByte)index);
+        emit sendMappedEvent(mE);
+
+        // Send the controller change
+        //
+        /*
+
+        Rosegarden::MappedEvent *mE = 
+         new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
+                                     Rosegarden::MappedEvent::MidiController,
+                                     Rosegarden::MidiByte(99),
+                                     (Rosegarden::MidiByte)0);
+        // Send the controller change
+        //
+        emit sendMappedEvent(mE);
+        mE = 
+         new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
+                                     Rosegarden::MappedEvent::MidiController,
+                                     Rosegarden::MidiByte(98),
+                                     (Rosegarden::MidiByte)33);
+        // Send the controller change
+        //
+        emit sendMappedEvent(mE);
+        mE = 
+         new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
+                                     Rosegarden::MappedEvent::MidiController,
+                                     Rosegarden::MidiByte(6),
+                                     (Rosegarden::MidiByte)index);
+        // Send the controller change
+        //
+        emit sendMappedEvent(mE);
+        */
+    }
+    catch(...) {;}
+
+    updateAllBoxes();
+}
+
+
+void
+InstrumentParameterBox::slotSelectAttack(float index)
+{
+    if (m_selectedInstrument == 0)
+        return;
+
+    m_selectedInstrument->setAttack(Rosegarden::MidiByte(index));
+
+    try
+    {
+        Rosegarden::MappedEvent *mE = 
+         new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
+                                     Rosegarden::MappedEvent::MidiController,
+                                     Rosegarden::MIDI_CONTROLLER_ATTACK,
+                                     (Rosegarden::MidiByte)index);
+        // Send the controller change
+        //
+        emit sendMappedEvent(mE);
+    }
+    catch(...) {;}
+
+    updateAllBoxes();
+}
+
+void
+InstrumentParameterBox::slotSelectRelease(float index)
+{
+    if (m_selectedInstrument == 0)
+        return;
+
+    m_selectedInstrument->setRelease(Rosegarden::MidiByte(index));
+
+    try
+    {
+        Rosegarden::MappedEvent *mE = 
+         new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
+                                     Rosegarden::MappedEvent::MidiController,
+                                     Rosegarden::MIDI_CONTROLLER_RELEASE,
+                                     (Rosegarden::MidiByte)index);
+        // Send the controller change
+        //
+        emit sendMappedEvent(mE);
+    }
+    catch(...) {;}
+
+    updateAllBoxes();
+}
+
+
 
 
