@@ -586,6 +586,11 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
         i18n("Enable \"point and click\" debugging"), frame);
     m_lilyExportPointAndClick->setChecked(m_cfg->readBoolEntry("lilyexportpointandclick", false));
     layout->addWidget(m_lilyExportPointAndClick, 4, 0);
+
+    m_lilyExportBarChecks = new QCheckBox(
+        i18n("Write bar checks at end of measure"), frame);
+    m_lilyExportBarChecks->setChecked(m_cfg->readBoolEntry("lilyexportbarchecks", false));
+    layout->addWidget(m_lilyExportBarChecks, 4, 1);
     
     addTab(frame, i18n("Lilypond"));  
 }
@@ -669,6 +674,7 @@ NotationConfigurationPage::apply()
     m_cfg->writeEntry("lilyexportmidi", m_lilyExportMidi->isChecked());
     m_cfg->writeEntry("lilyexportunmuted", m_lilyExportUnmuted->isChecked());
     m_cfg->writeEntry("lilyexportpointandclick", m_lilyExportPointAndClick->isChecked());
+    m_cfg->writeEntry("lilyexportbarchecks", m_lilyExportBarChecks->isChecked());
 
     (void)m_quantizeFrame->getQuantizer(); // this also writes to the config
 }

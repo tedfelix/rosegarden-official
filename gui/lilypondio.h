@@ -81,7 +81,12 @@ protected:
     // close chord if necessary, and/or add tie if necessary; can do one or
     // both independantly
     void closeChordWriteTie(bool &addTie, bool &currentlyWritingChord, std::ofstream &str);
-    
+
+    // start/stop tuplet bracket
+    void startStopTuplet(bool &thisNoteIsTupled, bool &previouslyWritingTuplet,
+                         const int &numerator, const int &denominator, int &col,
+                         std::ofstream &str);
+        
  private:
     static const int MAX_DOTS = 4;
 };

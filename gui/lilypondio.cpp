@@ -13,7 +13,7 @@
         Hans Kieserman      <hkieserman@mail.com>
     with heavy lifting from csoundio as it was on 13/5/2002.
 
-    Additions by
+    Numerous additions and bug fixes by
         Michael McIntyre    <dmmcintyr@users.sourceforge.net>
 
     The moral right of the authors to claim authorship of this work
@@ -137,6 +137,31 @@ LilypondExporter::handleEndingEvents(eventendlist &eventsInProgress, Segment::it
                 std::cerr << "\nLilypondExporter::handleEndingEvents - unhandled deferred ending event, type: " << (*k)->getType();
             }
         }
+    }
+}
+
+// starts/stops tuplet bracket
+// this new algorithm checks the tupled state of the current note relative to
+// the tupled state of the previous one to make decisions about
+// opening/closing the tuplet bracket, which allows {4 8} triplets to work
+// correctly...  unfortunate side effect is that multiple adjacent tuplets now run
+// together in one long \times statement, the fixing of which has been
+// unsuccessful after three straight days of hacking, so I'm leaving it alone.
+void
+LilypondExporter::startStopTuplet(bool &thisNoteIsTupled, bool &previouslyWritingTuplet,
+                                  const int &numerator, const int &denominator, int &col, 
+                                  std::ofstream &str) {
+    
+    // start a tuplet if this note is tupled and the previous one wasn't
+    if ((thisNoteIsTupled) && (!previouslyWritingTuplet )) {
+        str << "\\times " << numerator << "/" << denominator << " { ";
+        previouslyWritingTuplet = true;
+    }
+
+    // close a tuplet if this note isn't tupled, and the previous one was
+    if (previouslyWritingTuplet && !thisNoteIsTupled) {
+        str << " } ";
+        previouslyWritingTuplet = false;
     }
 }
 
@@ -465,6 +490,7 @@ LilypondExporter::write() {
     bool exportMidi = cfg->readBoolEntry("lilyexportmidi", false);
     bool exportUnmuted = cfg->readBoolEntry("lilyexportunmuted", false);
     bool exportPointAndClick = cfg->readBoolEntry("lilyexportpointandclick", false);
+    bool exportBarChecks = cfg->readBoolEntry("lilyexportbarchecks", false);
 
     // enable "point and click" debugging via xdvi to make finding the
     // unfortunately inevitable errors easier
@@ -681,11 +707,14 @@ LilypondExporter::write() {
                 }
             }
 
-            timeT prevTime = 0;
-            int curTupletNotesRemaining = 0;
-            int accidentalCount = 0; 
-
             // declare these outside the scope of the coming for loop
+            timeT prevTime = 0;
+            int accidentalCount = 0; 
+            bool thisNoteIsTupled = false;
+            bool previouslyWritingTuplet = false;
+            bool isFirstBar = true;
+            int horribleCounterHack = 0;
+
             std::string lilyText = "";      // text events
             std::ostringstream lilyLyrics;  // stream to collect/hold lyric events
             std::string prevStyle = "";     // track note styles 
@@ -699,17 +728,15 @@ LilypondExporter::write() {
                 timeT absoluteTime = (*j)->getAbsoluteTime();
 
                 // new bar
-                bool multipleTimeSignatures = ((m_composition->getTimeSignatureCount ()) > 1);
-                
                 if (j == (*i)->begin() ||
                     (prevTime < m_composition->getBarStartForTime(absoluteTime))) {
 
                     // bar check, for debugging measures that don't count out
-                    // make this a toggle...
-/*                    if (prevTime == m_composition->getBarStartForTime(absoluteTime)) {
-                        str << " | ";
+                    if ((!isFirstBar) && (exportBarChecks) &&
+                       (prevTime < m_composition->getBarStartForTime(absoluteTime))) {
+                            str << " | ";
                     }
-*/
+                    isFirstBar = false;
 
                     // end the line for the current measure
                     str << std::endl << indent(col);
@@ -720,20 +747,16 @@ LilypondExporter::write() {
                     // this, and it really should just grab the changes in
                     // advance and act on them accordingly
                     TimeSignature prevTimeSignature = timeSignature;
-                    if (multipleTimeSignatures) {
-                        timeSignature = m_composition->getTimeSignatureAt(absoluteTime);
-                        if (
-                            (timeSignature.getNumerator() != prevTimeSignature.getNumerator())
-                            || 
-                            (timeSignature.getDenominator() != prevTimeSignature.getDenominator())
-                            &&
-                            !(timeSignature.isHidden())
-                           ) {
-                            str << "\\time "
-                                << timeSignature.getNumerator() << "/"
-                                << timeSignature.getDenominator() << std::endl << indent(col);
-                        }
+                    timeSignature = m_composition->getTimeSignatureAt(absoluteTime);
+
+                    if ((timeSignature.getNumerator() != prevTimeSignature.getNumerator()) || 
+                        (timeSignature.getDenominator() != prevTimeSignature.getDenominator()) &&
+                        !(timeSignature.isHidden())) {
+                        str << "\\time "
+                            << timeSignature.getNumerator() << "/"
+                            << timeSignature.getDenominator() << std::endl << indent(col);
                     }
+                    
                 }
                 
                 prevTime = absoluteTime;
@@ -801,22 +824,26 @@ LilypondExporter::write() {
 
                 } else if ((*j)->isa(Note::EventType) ||
                             (*j)->isa(Note::EventRestType)) {
-                    // Tuplet code from notationhlayout.cpp
+                    
+                    // Grab tuplet info for notes or rests for writing later
+                    // on at the appropriate spot
+                    
+                    thisNoteIsTupled = false;
+                     
                     int tcount = 0;
                     int ucount = 0;
-                    if ((*j)->has(BaseProperties::BEAMED_GROUP_TUPLET_BASE)) {
+                    bool thisNoteIsTupled = ((*j)->
+                        has(BaseProperties::BEAMED_GROUP_TUPLET_BASE));
+
+                    if (thisNoteIsTupled) {
                         tcount = (*j)->get<Int>(BaseProperties::BEAMED_GROUP_TUPLED_COUNT);
                         ucount = (*j)->get<Int>(BaseProperties::BEAMED_GROUP_UNTUPLED_COUNT);
                         assert(tcount != 0);
 
-                        duration = ((*j)->getNotationDuration() / tcount) * ucount;
-                        if (curTupletNotesRemaining == 0) {
-                            // +1 is a hack so we can close the tuplet bracket
-                            // at the right time
-                            curTupletNotesRemaining = ucount + 1;
-                        }
+                        int tupledDuration = ((*j)->getNotationDuration());
+                        duration = (tupledDuration / tcount) * ucount;
                     }
-                    
+
                     Note tmpNote = Note::getNearestNote(duration, MAX_DOTS);
                     std::string lilyMark = "";
 
@@ -858,19 +885,10 @@ LilypondExporter::write() {
                              (nextNoteIsInChord && lastChordTime != absoluteTime))) {
                             closeChordWriteTie(addTie, currentlyWritingChord, str);
                         }
-
-                        if (curTupletNotesRemaining > 0) {
-                            curTupletNotesRemaining--;
-                            if (curTupletNotesRemaining == 0) {
-                                str << "} ";
-                            }
-                        }
-                        
-                        if (ucount == curTupletNotesRemaining &&
-                            ucount != 0) {
-                            str << "\\times " << tcount << "/" << ucount << " { ";
-                            curTupletNotesRemaining--;
-                        }
+                       
+                        // handle tuplet start/end
+                        startStopTuplet (thisNoteIsTupled, previouslyWritingTuplet,
+                                         tcount, ucount, col, str);
                         
                         if (nextNoteIsInChord && !currentlyWritingChord) {
                             currentlyWritingChord = true;
@@ -948,19 +966,12 @@ LilypondExporter::write() {
                     } else { // it's a rest
 
                         closeChordWriteTie(addTie, currentlyWritingChord, str);
-// debugging odd problem                        str << "isarest" << std::endl;
 
-                        if (curTupletNotesRemaining > 0) {
-                            curTupletNotesRemaining--;
-                            if (curTupletNotesRemaining == 0) {
-                                str << "} ";
-                            }
-                        }
-                        if (ucount == curTupletNotesRemaining &&
-                            ucount != 0) {
-                            str << "\\times " << tcount << "/" << ucount << " { ";
-                        }
+                        startStopTuplet (thisNoteIsTupled, previouslyWritingTuplet,
+                                         tcount, ucount, col, str);
+
                         handleEndingEvents(eventsInProgress, j, str);
+                        
                         str << "r";
                     }
                     
@@ -1043,7 +1054,6 @@ LilypondExporter::write() {
                     // in various other places.
                     if (!currentlyWritingChord && addTie) {
                         str << "~ ";
-// debug odd problem                        str << "tie not in chord" << std::endl;
                         addTie = false;
                     }
 

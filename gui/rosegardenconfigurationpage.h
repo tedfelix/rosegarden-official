@@ -242,7 +242,7 @@ protected:
     QCheckBox *m_lilyExportMidi;
     QCheckBox *m_lilyExportUnmuted;
     QCheckBox *m_lilyExportPointAndClick;
-//!!!    QComboBox *m_lilyRestType;
+    QCheckBox *m_lilyExportBarChecks;
 
     void populateSizeCombo(QComboBox *combo, std::string font, int dfltSize);
 };
