@@ -1,1 +1,9 @@
+How to compile :
+
+- edit the 'gl_configure' script (you just need to change the Qt and
+KDE2 install paths according to your setup).
+
+- run it
+
+- make
 
