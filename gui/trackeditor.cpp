@@ -115,7 +115,6 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
 			    m_rulerScale->getBarWidth(lastBar));
 
     canvas->resize(canvasWidth, getTrackCellHeight() * nbTracks);
-    // TODO : take barbuttons and trackbuttons into account for canvas size
 
     canvas->setBackgroundColor(RosegardenGUIColours::SegmentCanvas);
 
@@ -135,8 +134,6 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
 
     m_segmentCanvas = new SegmentCanvas(m_rulerScale,
                                         getTrackCellHeight(),
-                                        trackLabelOffset + trackLabelWidth,
-					barButtonsOffset + barButtonsHeight,
                                         canvas, this);
     // We need our own scrollbar so that it is displayed below the
     // bottom bar buttons
@@ -153,6 +150,11 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
     grid->addWidget(m_bottomBarButtons, 2, 1);
 
     m_horizontalScrollBar = new QScrollBar(Horizontal, this);
+    m_horizontalScrollBar->setRange(m_segmentCanvas->horizontalScrollBar()->minValue(),
+                                    m_segmentCanvas->horizontalScrollBar()->maxValue());
+
+    m_horizontalScrollBar->setSteps(m_segmentCanvas->horizontalScrollBar()->lineStep(),
+                                    m_segmentCanvas->horizontalScrollBar()->pageStep());
 
     grid->addWidget(m_horizontalScrollBar, 3, 1);
     

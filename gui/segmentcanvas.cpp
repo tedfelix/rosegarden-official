@@ -185,8 +185,6 @@ SegmentSplitLine::hideLine()
 
 
 SegmentCanvas::SegmentCanvas(RulerScale *rulerScale, int vStep,
-                             unsigned int leftMargin,
-                             unsigned int topMargin,
 			     QCanvas* c, QWidget* parent,
 			     const char* name, WFlags f) :
     QCanvasView(c, parent, name, f),
@@ -202,8 +200,6 @@ SegmentCanvas::SegmentCanvas(RulerScale *rulerScale, int vStep,
     m_fineGrain(false)
 {
     QWhatsThis::add(this, i18n("Segments Canvas - Create and manipulate your segments here"));
-
-//     setMargins(leftMargin, topMargin, 0, 0);
 
 }
 
