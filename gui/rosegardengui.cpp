@@ -1014,6 +1014,14 @@ void RosegardenGUIApp::paintEvent(QPaintEvent* e)
     KMainWindow::paintEvent(e);
 }
 
+void RosegardenGUIApp::showEvent(QShowEvent* e)
+{
+    if (m_transport)
+        m_transport->raise();
+
+    KMainWindow::showEvent(e);
+}
+
 bool RosegardenGUIApp::queryClose()
 {
     return m_doc->saveIfModified();

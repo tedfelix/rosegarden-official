@@ -284,6 +284,9 @@ protected:
 
     virtual void paintEvent(QPaintEvent*);
 
+    /// Raise the transport along
+    virtual void showEvent(QShowEvent*);
+
     /**
      * Overridden virtuals for Qt drag 'n drop (XDND)
      */
