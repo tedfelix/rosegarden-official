@@ -523,6 +523,7 @@ void RosegardenGUIDoc::deleteContents()
 
     m_composition.clear();
     m_audioFileManager.clear();
+    m_studio.unassignAllInstruments();
 }
 
 void RosegardenGUIDoc::deleteViews()

@@ -8,8 +8,6 @@ o Performance
 
 o Make AlsaDriver send NoteOn(0)s as well as NoteOffs [WAITING FOR FEEDBACK]
 
-o Splitting Segments isn't clearing out the original
-
 o Make RG a jack mixer (transport, control client)
 
 o JACK connection management - stereo, panning
@@ -21,8 +19,6 @@ o AudioManager and AudioFile commands
 o Matrix Hypereditor [HALF COMPLETED]
 
 o Matrix width bug
-
-o Matrix auto-paging during playback [DONE]
 
 o Fix segment audio drag and drop
 
@@ -42,6 +38,10 @@ o MIDI export broken for key sig and SysExs
 
 Post 0.2
 ========
+
+o Splitting Segments isn't clearing out the original [DONE - event list bug]
+
+o Matrix auto-paging during playback [DONE]
 
 o Plugins - tidying up unused libraries [WORKS but maybe not COMPLETE]
 

@@ -145,6 +145,15 @@ public:
      */
     bool removeControlRuler(unsigned int number);
 
+    /**
+     * Adjust an X coord by world matrix
+     */
+    double getXbyWorldMatrix(double value)
+        { return m_canvasView->worldMatrix().m11() * value; }
+
+    double getXbyInverseWorldMatrix(double value)
+        { return m_canvasView->inverseWorldMatrix().m11() * value; }
+
 signals:    
     /**
      * Emitted when the selection has been cut or copied
@@ -280,14 +289,6 @@ public slots:
      */
     void slotSelectAll();
 
-    /**
-     * Adjust an X coord by world matrix
-     */
-    double getXbyWorldMatrix(double value)
-        { return m_canvasView->worldMatrix().m11() * value; }
-
-    double getXbyInverseWorldMatrix(double value)
-        { return m_canvasView->inverseWorldMatrix().m11() * value; }
 
 protected:
 

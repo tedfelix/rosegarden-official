@@ -236,7 +236,7 @@ EventView::applyLayout(int /*staffNo*/)
         Rosegarden::SegmentPerformanceHelper helper(*m_segments[i]);
 
         for (Rosegarden::Segment::iterator it = m_segments[i]->begin();
-                               it != m_segments[i]->end(); it++)
+                               m_segments[i]->isBeforeEndMarker(it); it++)
         {
             Rosegarden::timeT eventTime =
                 helper.getSoundingAbsoluteTime(it);

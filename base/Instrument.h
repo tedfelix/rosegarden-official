@@ -164,6 +164,7 @@ public:
     void addPlugin(AudioPluginInstance *instance);
     bool removePlugin(unsigned int position);
     void clearPlugins();
+    void emptyPlugins(); // empty the plugins but don't clear them down
 
     // Get a plugin for this instrument
     //

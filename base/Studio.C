@@ -342,6 +342,7 @@ void
 Studio::unassignAllInstruments()
 {
     MidiDevice *midiDevice;
+    AudioDevice *audioDevice;
     std::vector<Device*>::iterator it;
     Rosegarden::InstrumentList::iterator iit;
     Rosegarden::InstrumentList instList;
@@ -370,7 +371,20 @@ Studio::unassignAllInstruments()
                     (*iit)->setSendVelocity(false);
                     (*iit)->setPan(MidiMidValue);
                     (*iit)->setVelocity(MidiMaxValue);
+
                 }
+            }
+        }
+        else
+        {
+            audioDevice = dynamic_cast<AudioDevice*>(*it);
+
+            if (audioDevice)
+            {
+                instList = (*it)->getPresentationInstruments();
+
+                for (iit = instList.begin(); iit != instList.end(); iit++)
+                    (*iit)->emptyPlugins();
             }
         }
     }

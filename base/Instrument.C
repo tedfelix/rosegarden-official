@@ -187,6 +187,45 @@ Instrument::toXmlString()
                    << (int)m_velocity << "\"/>" << std::endl;
     }
 
+    PluginInstanceIterator it = m_audioPlugins.begin();
+    for (; it != m_audioPlugins.end(); it++)
+    {
+        instrument << (*it)->toXmlString();
+        /*
+        if ((*it)->isAssigned())
+        {
+             instrument << "            <plugin position=\""
+                        << (*it)->getPosition()
+                        << "\" id=\""
+                        << (*it)->getId()
+                        << "\" bypassed=\"";
+             if ((*it)->isBypassed())
+                 instrument << "true";
+             else
+                 instrument << "false";
+
+             instrument << "\">" << std::endl;
+
+             for (unsigned int i = 0; i < (*it)->getPortCount(); i++)
+             {
+                 PluginPortInstance *port = (*it)->getPort(i);
+
+                 if (port)
+                 {
+                     instrument << "                <port id=\""
+                                << port->id
+                                << "\" value=\""
+                                << port->value
+                                << "\"/>" << std::endl;
+                 }
+             }
+
+             instrument << "            </plugin>" << std::endl;
+        }
+        */
+    }
+        
+
     instrument << "        </instrument>" << std::endl
 #if (__GNUC__ < 3)
                << std::endl << std::ends;
@@ -256,6 +295,18 @@ Instrument::clearPlugins()
         delete (*it);
 
     m_audioPlugins.erase(m_audioPlugins.begin(), m_audioPlugins.end());
+}
+
+void 
+Instrument::emptyPlugins()
+{
+    PluginInstanceIterator it = m_audioPlugins.begin();
+    for (; it != m_audioPlugins.end(); it++)
+    {
+        (*it)->setAssigned(false);
+        (*it)->setBypass(false);
+        (*it)->clearPorts();
+    }
 }
 
 

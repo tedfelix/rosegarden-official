@@ -19,6 +19,13 @@
 
 #include "AudioPluginInstance.h"
 
+#if (__GNUC__ < 3)
+#include <strstream>
+#define stringstream strstream
+#else
+#include <sstream>
+#endif
+
 namespace Rosegarden
 {
 
@@ -43,7 +50,54 @@ AudioPluginInstance::AudioPluginInstance(unsigned long id,
 std::string 
 AudioPluginInstance::toXmlString()
 {
-    return std::string();
+
+    std::stringstream plugin;
+
+    if (m_assigned == false)
+    {
+#if (__GNUC__ < 3)
+        plugin << std::ends;
+#endif
+        return plugin.str();
+    }
+    
+
+    plugin << "            <plugin position=\""
+           << m_position
+           << "\" id=\""
+           << m_id
+           << "\" bypassed=\"";
+
+    if (m_bypass)
+        plugin << "true";
+    else
+        plugin << "false";
+
+    plugin << "\">" << std::endl;
+
+    for (unsigned int i = 0; i < m_ports.size(); i++)
+    {
+        PluginPortInstance *port = getPort(i);
+
+        if (port)
+        {
+            plugin << "                <port id=\""
+                   << port->id
+                   << "\" value=\""
+                   << port->value
+                   << "\"/>" << std::endl;
+        }
+    }
+
+    plugin << "            </plugin>"
+
+#if (__GNUC__ < 3)
+                   << std::endl << std::ends;
+#else
+                   << std::endl;
+#endif
+
+    return plugin.str();
 }
 
 

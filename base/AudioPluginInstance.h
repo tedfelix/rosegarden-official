@@ -69,6 +69,8 @@ public:
     PluginPortInstance* getPort(unsigned int it);
     void clearPorts();
 
+    unsigned int getPortCount() const { return m_ports.size(); }
+
     // export
     std::string toXmlString();
 
