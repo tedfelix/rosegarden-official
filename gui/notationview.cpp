@@ -312,6 +312,7 @@ NotationView::~NotationView()
 void NotationView::positionStaffs()
 {
     Rosegarden::TrackId minTrack = 0, maxTrack = 0;
+    bool haveMinTrack = false;
     typedef std::map<Rosegarden::TrackId, int> TrackIntMap;
     TrackIntMap trackHeights;
     TrackIntMap trackCoords;
@@ -328,8 +329,9 @@ void NotationView::positionStaffs()
 	    hi->second = height;
 	}
 	
-	if (track < minTrack || minTrack == 0) {
+	if (track < minTrack || !haveMinTrack) {
 	    minTrack = track;
+	    haveMinTrack = true;
 	}
 	if (track > maxTrack) {
 	    maxTrack = track;

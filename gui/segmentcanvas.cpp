@@ -1226,7 +1226,7 @@ SegmentSelector::slotSelectSegmentItem(SegmentItem *selectedItem)
 }
 
 void
-SegmentSelector::handleMouseButtonRelease(QMouseEvent * /*e*/)
+SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 {
     if (!m_currentItem) return;
 
@@ -1234,7 +1234,7 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent * /*e*/)
     {
 	SegmentItemList::iterator it;
 
-	//!!! do this only if the values have actually changed
+	bool haveChange = false;
 
 	SegmentReconfigureCommand *command =
 	    new SegmentReconfigureCommand
@@ -1245,13 +1245,22 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent * /*e*/)
 	     it != m_selectedItems.end();
 	     it++)
 	{
-	    command->addSegment(it->second->getSegment(),
-				it->second->getStartTime(),
-				it->second->getDuration(),
-				it->second->getTrack());
+	    SegmentItem *item = it->second;
+
+	    if (item->getStartTime() != item->getSegment()->getStartTime() ||
+		item->getDuration()  != item->getSegment()->getDuration() ||
+		item->getTrack()     != item->getSegment()->getTrack()) {
+
+		command->addSegment(item->getSegment(),
+				    item->getStartTime(),
+				    item->getDuration(),
+				    item->getTrack());
+
+		haveChange = true;
+	    }
 	}
 
-	addCommandToHistory(command);
+	if (haveChange) addCommandToHistory(command);
 	m_canvas->canvas()->update();
     }
     
