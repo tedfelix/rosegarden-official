@@ -1581,12 +1581,24 @@ MIDIInstrumentParameterPanel::sendBankAndProgram()
                                       Rosegarden::MappedEvent::MidiController,
                                       Rosegarden::MIDI_CONTROLLER_BANK_MSB,
                                       m_selectedInstrument->getMSB());
+
+	RG_DEBUG << "MIDIInstrumentParameterPanel::sendBankAndProgram - "
+		 << "sending MSB = " 
+		 << int(m_selectedInstrument->getMSB()) 
+		 << endl;
+
         Rosegarden::StudioControl::sendMappedEvent(mEMSB);
 
         Rosegarden::MappedEvent mELSB(m_selectedInstrument->getId(), 
                                       Rosegarden::MappedEvent::MidiController,
                                       Rosegarden::MIDI_CONTROLLER_BANK_LSB,
                                       m_selectedInstrument->getLSB());
+
+	RG_DEBUG << "MIDIInstrumentParameterPanel::sendBankAndProgram - "
+		 << "sending LSB = " 
+		 << int(m_selectedInstrument->getLSB()) 
+		 << endl;
+
         Rosegarden::StudioControl::sendMappedEvent(mELSB);
     }
 
