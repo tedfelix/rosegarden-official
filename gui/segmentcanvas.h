@@ -364,6 +364,8 @@ signals:
 
     void selectedSegments(const Rosegarden::SegmentSelection &);
 
+    void scrollTo(int);
+
 private:
 
     SegmentItem *findSegmentItem(Rosegarden::Segment *segment);
@@ -403,7 +405,7 @@ public:
 
     virtual void handleMouseButtonPress(QMouseEvent*)  = 0;
     virtual void handleMouseButtonRelease(QMouseEvent*) = 0;
-    virtual void handleMouseMove(QMouseEvent*)         = 0;
+    virtual bool handleMouseMove(QMouseEvent*)         = 0;
 
     void addCommandToHistory(KCommand *command);
 
@@ -427,7 +429,7 @@ public:
 
     virtual void handleMouseButtonPress(QMouseEvent*);
     virtual void handleMouseButtonRelease(QMouseEvent*);
-    virtual void handleMouseMove(QMouseEvent*);
+    virtual bool handleMouseMove(QMouseEvent*);
 
 protected:
     //--------------- Data members ---------------------------------
@@ -446,7 +448,7 @@ public:
 
     virtual void handleMouseButtonPress(QMouseEvent*);
     virtual void handleMouseButtonRelease(QMouseEvent*);
-    virtual void handleMouseMove(QMouseEvent*);
+    virtual bool handleMouseMove(QMouseEvent*);
 
 };
 
@@ -458,7 +460,7 @@ public:
 
     virtual void handleMouseButtonPress(QMouseEvent*);
     virtual void handleMouseButtonRelease(QMouseEvent*);
-    virtual void handleMouseMove(QMouseEvent*);
+    virtual bool handleMouseMove(QMouseEvent*);
 
 private:
     QPoint m_clickPoint;
@@ -476,7 +478,7 @@ public:
 
     virtual void handleMouseButtonPress(QMouseEvent*);
     virtual void handleMouseButtonRelease(QMouseEvent*);
-    virtual void handleMouseMove(QMouseEvent*);
+    virtual bool handleMouseMove(QMouseEvent*);
 
     static bool cursorIsCloseEnoughToEdge(SegmentItem*, QMouseEvent*, int);
 
@@ -495,7 +497,7 @@ public:
 
     virtual void handleMouseButtonPress(QMouseEvent*);
     virtual void handleMouseButtonRelease(QMouseEvent*);
-    virtual void handleMouseMove(QMouseEvent*);
+    virtual bool handleMouseMove(QMouseEvent*);
 
     // Clear all Segments in our vector and on the view
     //
@@ -553,7 +555,7 @@ public:
 
     virtual void handleMouseButtonPress(QMouseEvent*);
     virtual void handleMouseButtonRelease(QMouseEvent*);
-    virtual void handleMouseMove(QMouseEvent*);
+    virtual bool handleMouseMove(QMouseEvent*);
 
     // don't do double clicks
     virtual void contentsMouseDoubleClickEvent(QMouseEvent*);
@@ -573,7 +575,7 @@ public:
 
     virtual void handleMouseButtonPress(QMouseEvent*);
     virtual void handleMouseButtonRelease(QMouseEvent*);
-    virtual void handleMouseMove(QMouseEvent*);
+    virtual bool handleMouseMove(QMouseEvent*);
  
     // don't do double clicks
     virtual void contentsMouseDoubleClickEvent(QMouseEvent*);

@@ -146,9 +146,12 @@ public:
                                      Rosegarden::ViewElement*);
 
     /**
-     * Do nothing
+     * Do nothing.
+     * Implementations of handleMouseMove should return true if
+     * they want the canvas to scroll to the position the mouse
+     * moved to following the method's return.
      */
-    virtual void handleMouseMove(Rosegarden::timeT time,
+    virtual bool handleMouseMove(Rosegarden::timeT time,
                                  int height,
                                  QMouseEvent*);
 

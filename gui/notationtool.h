@@ -128,7 +128,7 @@ public:
                                        QMouseEvent*,
                                        Rosegarden::ViewElement* el);
 
-    virtual void handleMouseMove(Rosegarden::timeT time,
+    virtual bool handleMouseMove(Rosegarden::timeT time,
                                  int height,
                                  QMouseEvent*);
 
@@ -347,7 +347,7 @@ public:
                                        QMouseEvent*,
                                        Rosegarden::ViewElement* el);
 
-    virtual void handleMouseMove(Rosegarden::timeT,
+    virtual bool handleMouseMove(Rosegarden::timeT,
                                  int height,
                                  QMouseEvent*);
 

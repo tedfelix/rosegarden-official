@@ -12,7 +12,7 @@ Post-0.1.5-and-a-bit task list
     (split/join notes etc)
 
     a. Tie Equal-Pitch Notes [DONE]
-       Untie
+       Untie [DONE]
     b. Make Notes Viable
 
  5. Mess around with tuplets, locate and fix the many bugs there
@@ -175,9 +175,11 @@ Post-0.1.5-and-a-bit task list
     d. Add capability to specify that the note head is rendered from text
        found in a string or integer property; add "fingering" (or "fret"?)
        notehead that gets its value from a specific hardcoded property;
-       add a menu option to set that property
+       add a menu option to set that property [better done through some
+       staff-related means rather than styles?]
 
     e. Also add an option to show fingerings as marks instead of heads
+       [??]
 
     f. Make other bits of notation code use styles as well, for things
        like number of beams/flags and whether to draw the stem.  P'raps
@@ -197,6 +199,9 @@ Post-0.1.5-and-a-bit task list
 
 34. Add toolbars with note/transformation buttons duplicating stuff
     on some of the above menus
+
+35. Add "rescale" to main view: stretch or squash a segment by a
+    given ratio of note lengths
 
 
 Post-0.1.4 task list

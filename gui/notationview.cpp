@@ -2555,10 +2555,12 @@ void NotationView::slotMouseMoved(QMouseEvent *e)
     if (activeItem()) {
         activeItem()->handleMouseMove(e);
         updateView();
+    } else {
+        if (m_tool->handleMouseMove(0, 0, // unknown time and height
+				    e)) {
+	    slotScrollHorizSmallSteps(e->pos().x());
+	}
     }
-    else 
-        m_tool->handleMouseMove(0, 0, // unknown time and height
-                                e);
 }
 
 void NotationView::slotMouseReleased(QMouseEvent *e)

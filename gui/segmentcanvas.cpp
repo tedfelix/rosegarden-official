@@ -730,7 +730,9 @@ void SegmentCanvas::contentsMouseMoveEvent(QMouseEvent* e)
 {
     if (!m_tool) return;
 
-    m_tool->handleMouseMove(e);
+    if (m_tool->handleMouseMove(e)) {
+	emit scrollTo(e->pos().x());
+    }
 }
 
 // Show the split line. This is where we perform Segment splits.
@@ -1082,9 +1084,9 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent*)
     m_newRect = false;
 }
 
-void SegmentPencil::handleMouseMove(QMouseEvent *e)
+bool SegmentPencil::handleMouseMove(QMouseEvent *e)
 {
-    if (!m_currentItem) return;
+    if (!m_currentItem) return false;
 
     m_canvas->setSnapGrain(false);
 
@@ -1108,6 +1110,7 @@ void SegmentPencil::handleMouseMove(QMouseEvent *e)
 
     m_currentItem->setDuration(duration);
     m_canvas->slotUpdate();
+    return true;
 }
 
 //////////////////////////////
@@ -1140,8 +1143,9 @@ void SegmentEraser::handleMouseButtonRelease(QMouseEvent*)
     m_currentItem = 0;
 }
 
-void SegmentEraser::handleMouseMove(QMouseEvent*)
+bool SegmentEraser::handleMouseMove(QMouseEvent*)
 {
+    return false;
 }
 
 //////////////////////////////
@@ -1186,7 +1190,7 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
     m_currentItem = 0;
 }
 
-void SegmentMover::handleMouseMove(QMouseEvent *e)
+bool SegmentMover::handleMouseMove(QMouseEvent *e)
 {
     if (m_currentItem) {
 
@@ -1199,7 +1203,11 @@ void SegmentMover::handleMouseMove(QMouseEvent *e)
 	TrackId track = m_canvas->grid().getYBin(e->pos().y());
         m_currentItem->setTrack(track);
         m_canvas->canvas()->update();
+
+	return true;
     }
+
+    return false;
 }
 
 //////////////////////////////
@@ -1243,9 +1251,9 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent*)
     m_currentItem = 0;
 }
 
-void SegmentResizer::handleMouseMove(QMouseEvent *e)
+bool SegmentResizer::handleMouseMove(QMouseEvent *e)
 {
-    if (!m_currentItem) return;
+    if (!m_currentItem) return false;
 
     m_canvas->setSnapGrain(true);
 
@@ -1263,6 +1271,7 @@ void SegmentResizer::handleMouseMove(QMouseEvent *e)
     }
 
     m_canvas->canvas()->update();
+    return true;
 }
 
 bool SegmentResizer::cursorIsCloseEnoughToEdge(SegmentItem* p, QMouseEvent* e,
@@ -1477,15 +1486,14 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 // In Select mode we implement movement on the Segment
 // as movement _of_ the Segment - as with SegmentMover
 //
-void
+bool
 SegmentSelector::handleMouseMove(QMouseEvent *e)
 {
     if (m_dispatchTool) {
-	m_dispatchTool->handleMouseMove(e);
-	return;
+	return m_dispatchTool->handleMouseMove(e);
     }
 
-    if (!m_currentItem) return;
+    if (!m_currentItem) return false;
     m_canvas->setCursor(Qt::sizeAllCursor);
 
     if (m_segmentCopyMode && !m_segmentQuickCopyDone)
@@ -1542,6 +1550,8 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 
 	m_canvas->canvas()->update();
     }
+
+    return true;
 }
 
 
@@ -1604,7 +1614,7 @@ SegmentSplitter::handleMouseButtonRelease(QMouseEvent *e)
 }
 
 
-void
+bool
 SegmentSplitter::handleMouseMove(QMouseEvent *e)
 {
     SegmentItem *item = m_canvas->findSegmentClickedOn(e->pos());
@@ -1613,11 +1623,13 @@ SegmentSplitter::handleMouseMove(QMouseEvent *e)
     {
         m_canvas->setCursor(Qt::blankCursor);
         drawSplitLine(e);
+	return true;
     }
     else
     {
         m_canvas->setCursor(Qt::splitHCursor);
         m_canvas->slotHideSplitLine();
+	return false;
     }
 }
 
@@ -1674,9 +1686,10 @@ SegmentJoiner::handleMouseButtonRelease(QMouseEvent*)
 }
 
 
-void
+bool
 SegmentJoiner::handleMouseMove(QMouseEvent*)
 {
+    return false;
 }
 
 void

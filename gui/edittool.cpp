@@ -138,8 +138,9 @@ void EditTool::handleMouseDblClick(Rosegarden::timeT,
 }
 
 
-void EditTool::handleMouseMove(Rosegarden::timeT, int, QMouseEvent*)
+bool EditTool::handleMouseMove(Rosegarden::timeT, int, QMouseEvent*)
 {
+    return false;
 }
 
 void EditTool::handleMouseRelease(Rosegarden::timeT, int, QMouseEvent*)

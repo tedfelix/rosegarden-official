@@ -541,7 +541,7 @@ void MatrixView::slotMouseMoved(Rosegarden::timeT time, int pitch, QMouseEvent* 
 {
     if (activeItem()) {
         activeItem()->handleMouseMove(e);
-        updateView();
+	updateView();
     }
     else 
     {
@@ -551,7 +551,10 @@ void MatrixView::slotMouseMoved(Rosegarden::timeT time, int pitch, QMouseEvent* 
             composition->getBarStart(composition->
                     getBarNumber(segment.getStartTime()));
 
-        m_tool->handleMouseMove(time - firstBar, pitch, e);
+        if (m_tool->handleMouseMove(time - firstBar, pitch, e)) {
+	    slotScrollHorizSmallSteps(e->pos().x());
+	}
+	    
         // play a preview
         if (pitch != m_previousEvPitch)
         {

@@ -25,7 +25,7 @@
 #include <qcanvas.h>
 #include <qlabel.h>
 #include <qaccel.h>
-
+#include <qtimer.h>
 
 #include <kmessagebox.h>
 #include <kapp.h>
@@ -276,6 +276,9 @@ TrackEditor::init(QWidget* rosegardenguiview,
             rosegardenguiview,
             SLOT(slotSelectedSegments(const Rosegarden::SegmentSelection &)));
 
+    connect(m_segmentCanvas, SIGNAL(scrollTo(int)),
+	    this, SLOT(slotScrollHorizSmallSteps(int)));
+
     connect(getCommandHistory(), SIGNAL(commandExecuted()),
 	    this, SLOT(update()));
 
@@ -515,6 +518,34 @@ void TrackEditor::slotScrollHoriz(int hpos)
 
 	// moving off the left
 	hbar->setValue(hbar->value() - int(scrollView->visibleWidth() * 0.6));
+    }
+}
+
+
+void TrackEditor::slotScrollHorizSmallSteps(int hpos)
+{
+    QScrollView* scrollView = getSegmentCanvas();
+    QScrollBar* hbar = getHorizontalScrollBar();
+
+    int diff = 0;
+
+    if (hpos == 0) {
+	
+	// returning to zero
+        hbar->setValue(0);
+
+    } else if ((diff = hpos - (scrollView->contentsX() + 
+			       scrollView->visibleWidth() * 0.9)) > 0) {
+
+	// moving off the right hand side of the view   
+	hbar->setValue(hbar->value() + diff);
+
+    } else if ((diff = hpos - (scrollView->contentsX() +
+			       scrollView->visibleWidth() * 0.1)) < 0) {
+
+	// moving off the left
+	hbar->setValue(hbar->value() + diff);
+
     }
 }
 

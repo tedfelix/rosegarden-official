@@ -135,9 +135,18 @@ public slots:
     void slotSetFineGrain(bool value);
 
     /**
-     * Scroll horizontally to given position
+     * Scroll horizontally to make the given position visible,
+     * paging to as to get some visibility of the next screenful
+     * (for playback etc)
      */
     void slotScrollHoriz(int hpos);
+
+    /**
+     * Scroll horizontally to make the given position somewhat
+     * nearer to visible, scrolling by only "a small distance"
+     * at a time
+     */
+    void slotScrollHorizSmallSteps(int hpos);
 
     /**
      * Add given number of tracks

@@ -254,13 +254,14 @@ NoteInserter::handleLeftButtonPress(Rosegarden::timeT,
 }
 
 
-void
+bool
 NoteInserter::handleMouseMove(Rosegarden::timeT,
 			      int,
 			      QMouseEvent *e)
 {
-    if (!m_clickHappened) return;
+    if (!m_clickHappened) return false;
     computeLocationAndPreview(e);
+    return true;
 }
 
 
@@ -918,10 +919,10 @@ void NotationSelector::handleMouseDblClick(Rosegarden::timeT,
     return;
 }
 
-void NotationSelector::handleMouseMove(timeT, int,
+bool NotationSelector::handleMouseMove(timeT, int,
                                        QMouseEvent* e)
 {
-    if (!m_updateRect) return;
+    if (!m_updateRect) return false;
 
     int w = int(e->x() - m_selectionRect->x());
     int h = int(e->y() - m_selectionRect->y());
@@ -933,6 +934,7 @@ void NotationSelector::handleMouseMove(timeT, int,
     m_selectionRect->setSize(w,h);
 
     m_nParentView->canvas()->update();
+    return true;
 }
 
 void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)

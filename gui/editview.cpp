@@ -341,6 +341,33 @@ void EditView::slotScrollHoriz(int hpos)
     }
 }
 
+void EditView::slotScrollHorizSmallSteps(int hpos)
+{
+    QScrollView* scrollView = getCanvasView();
+    QScrollBar* hbar = m_horizontalScrollBar;
+
+    int diff = 0;
+
+    if (hpos == 0) {
+	
+	// returning to zero
+        hbar->setValue(0);
+
+    } else if ((diff = hpos - (scrollView->contentsX() + 
+			       scrollView->visibleWidth() * 0.9)) > 0) {
+
+	// moving off the right hand side of the view   
+	hbar->setValue(hbar->value() + diff);
+
+    } else if ((diff = hpos - (scrollView->contentsX() +
+			       scrollView->visibleWidth() * 0.1)) < 0) {
+
+	// moving off the left
+	hbar->setValue(hbar->value() + diff);
+
+    }
+}
+
 MultiViewCommandHistory *EditView::getCommandHistory()
 {
     return getDocument()->getCommandHistory();

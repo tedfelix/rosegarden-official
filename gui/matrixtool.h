@@ -82,7 +82,7 @@ public:
     /**
      * Set the duration of the element
      */
-    virtual void handleMouseMove(Rosegarden::timeT,
+    virtual bool handleMouseMove(Rosegarden::timeT,
                                  int height,
                                  QMouseEvent*);
 
@@ -155,7 +155,7 @@ public:
     /**
      * Set the duration of the element
      */
-    virtual void handleMouseMove(Rosegarden::timeT,
+    virtual bool handleMouseMove(Rosegarden::timeT,
                                  int height,
                                  QMouseEvent*);
 
@@ -230,7 +230,7 @@ public:
     /**
      * Set the duration of the element
      */
-    virtual void handleMouseMove(Rosegarden::timeT,
+    virtual bool handleMouseMove(Rosegarden::timeT,
                                  int height,
                                  QMouseEvent*);
 
@@ -265,7 +265,7 @@ public:
     /**
      * Set the duration of the element
      */
-    virtual void handleMouseMove(Rosegarden::timeT,
+    virtual bool handleMouseMove(Rosegarden::timeT,
                                  int height,
                                  QMouseEvent*);
 
