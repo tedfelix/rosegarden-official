@@ -280,8 +280,14 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
 
         return false;
     }
-    
-    m_absFilePath=fileInfo.absFilePath();	
+
+    RosegardenProgressDialog progressDlg(i18n("Reading file..."),
+                                         100,
+                                         (QWidget*)parent());
+    progressDlg.setMinimumDuration(500);
+    progressDlg.setAutoReset(true); // we're re-using it for the preview generation
+
+    m_absFilePath = fileInfo.absFilePath();	
 
     QString errMsg;
     QString fileContents;
@@ -289,11 +295,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
     if (!okay) errMsg = "Couldn't read from file";
     else {
 
-	// parse xml file
-	RosegardenProgressDialog progressDlg(i18n("Reading file..."),
-                                             100,
-                                             (QWidget*)parent());
-
+        // parse xml file
 	okay = xmlParse(fileContents, errMsg, &progressDlg);
 
     }
@@ -315,16 +317,14 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
                          << " - m_composition->getDuration() : "
                          << m_composition.getDuration() << endl;
 
-    // We might need a progress dialog when we generate previews.
-    //
-    RosegardenProgressDialog progressDlg(i18n("Generating audio previews..."),
-                                         100,
-                                         (QWidget*)parent());
+    // We might need a progress dialog when we generate previews,
+    // reuse the previous one
+    progressDlg.setLabel(i18n("Generating audio previews..."));
+
     try
     {
         // generate any audio previews after loading the files
-        m_audioFileManager.
-            generatePreviews(dynamic_cast<Rosegarden::Progress*>(&progressDlg));
+        m_audioFileManager.generatePreviews(&progressDlg);
     }
     catch(std::string e)
     {
@@ -1397,9 +1397,8 @@ RosegardenGUIDoc::finalizeAudioFile(Rosegarden::AudioFileId /*id*/)
 
     try
     {
-        m_audioFileManager.generatePreview(
-                dynamic_cast<Rosegarden::Progress*>(&progressDlg),
-                newAudioFile->getId());
+        m_audioFileManager.generatePreview(&progressDlg,
+                                           newAudioFile->getId());
     }
     catch(std::string e)
     {

@@ -1790,18 +1790,16 @@ void RosegardenGUIApp::importMIDIFile(const QString &file)
 {
     Rosegarden::MidiFile *midiFile;
 
-    RosegardenProgressDialog *progressDlg =
-            new RosegardenProgressDialog(i18n("Importing MIDI file..."),
+    RosegardenProgressDialog progressDlg(i18n("Importing MIDI file..."),
                                          100,
                                          this);
 
     midiFile = new Rosegarden::MidiFile(qstrtostr(file),
-                                       &m_doc->getStudio(),
-                                        progressDlg);
+                                        &m_doc->getStudio(),
+                                        &progressDlg);
 
     if (!midiFile->open())
     {
-        delete progressDlg;
         KMessageBox::error(this,
           i18n("Couldn't understand MIDI file.\nIt might be corrupted."));
         return;
@@ -1833,11 +1831,6 @@ void RosegardenGUIApp::importMIDIFile(const QString &file)
     // Reinitialise
     //
     initView();
-
-    // drop progress dialog
-    //
-    delete progressDlg;
-
 }
 
 void RosegardenGUIApp::slotImportRG21()

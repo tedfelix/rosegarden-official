@@ -671,18 +671,6 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                                          qstrtostr(file),
                                          id.toInt()) == false)
         {
-//             // Destroy the progress dialog - nasty but for the moment
-//             // there's no way around it.
-//             //
-//             if (m_progress)
-//             {
-//                 m_progress->done();
-
-//                 // clunktastic
-//                 m_doc->progressDialogDead();
-//                 m_progress = 0;
-//             }
-
             // Create a locate file dialog - give it the file name
             // and the AudioFileManager path that we've already
             // tried.  If we manually locate the file then we reset
@@ -1252,7 +1240,7 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
 	(++m_elementsSoFar % 100 == 0)) {
 
         emit setProgress(int(double(m_elementsSoFar) / double(m_totalElements) * 100.0));
-
+        kapp->processEvents();
     }
 
     QString lcName = qName.lower();

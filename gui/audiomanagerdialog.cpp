@@ -932,10 +932,9 @@ AudioManagerDialog::addFile(const KURL& kurl)
     // Now set the "last add" path so that next time we use "file add"
     // we start looking in the same place.
     //
-    RosegardenProgressDialog *progressDlg =
-        new RosegardenProgressDialog(i18n("Generating audio preview..."),
-                                     100,
-                                     this);
+    RosegardenProgressDialog progressDlg(i18n("Generating audio preview..."),
+                                         100,
+                                         this);
     QString newFilePath;
 
     if (kurl.isLocalFile()) {
@@ -957,10 +956,6 @@ AudioManagerDialog::addFile(const KURL& kurl)
     }
     catch(std::string e)
     {
-        // clear down progress dialog
-        delete progressDlg;
-        progressDlg = 0;
-
         QString errorString =
             i18n("Can't add File.  WAV file body invalid.\n\"") +
             strtoqstr(e) + "\"";
@@ -969,16 +964,13 @@ AudioManagerDialog::addFile(const KURL& kurl)
     }
     catch(QString e)
     {
-        delete progressDlg;
-        progressDlg = 0;
         KMessageBox::sorry(this, e);
         return false;
     }
 
     try
     {
-        m_doc->getAudioFileManager().
-            generatePreview(dynamic_cast<Progress*>(progressDlg), id);
+        m_doc->getAudioFileManager().generatePreview(&progressDlg, id);
     }
     catch(std::string e)
     {
@@ -989,8 +981,6 @@ AudioManagerDialog::addFile(const KURL& kurl)
         KMessageBox::information(this, message);
         //return false;
     }
-
-    if (progressDlg) delete progressDlg;
 
     slotPopulateFileList();
 
