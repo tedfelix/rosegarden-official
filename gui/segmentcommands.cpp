@@ -606,7 +606,7 @@ RemoveTempoChangeCommand::unexecute()
 void
 ModifyDefaultTempoCommand::execute()
 {
-    m_oldTempo = m_tempo;
+    m_oldTempo = m_composition->getDefaultTempo();
     m_composition->setDefaultTempo(m_tempo);
 }
 

@@ -368,6 +368,7 @@ public:
      * overridden by any tempo events encountered during playback.
      */
     void setDefaultTempo(double tempo) { m_defaultTempo = tempo; }
+    double getDefaultTempo() const { return m_defaultTempo; }
 
     /**
      * Add a tempo-change event at the given time, to the given

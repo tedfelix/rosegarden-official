@@ -2148,8 +2148,10 @@ void RosegardenGUIApp::slotEditTempo(QWidget *parent)
     TempoDialog *tempoDlg = new TempoDialog(parent, m_doc);
 
     connect(tempoDlg,
-            SIGNAL(changeTempo(Rosegarden::timeT, double, bool, bool)),
-            SLOT(slotChangeTempo(Rosegarden::timeT, double, bool, bool)));
+            SIGNAL(changeTempo(Rosegarden::timeT,
+                               double, TempoDialog::TempoDialogAction)),
+            SLOT(slotChangeTempo(Rosegarden::timeT,
+                               double, TempoDialog::TempoDialogAction)));
 
     tempoDlg->setTempoPosition(m_doc->getComposition().getPosition());
     tempoDlg->show();
@@ -2209,52 +2211,76 @@ void RosegardenGUIApp::alive()
 void
 RosegardenGUIApp::slotChangeTempo(Rosegarden::timeT time,
                                   double value,
-                                  bool makeDefault,
-                                  bool deleteOthers)
+                                  TempoDialog::TempoDialogAction action)
 {
     Rosegarden::Composition &comp = m_doc->getComposition();
 
     // We define a macro command here and build up the command
     // label as we add commands on.
     //
-    KMacroCommand *macro = new KMacroCommand("");
-    QString commandLabel = "";
-
-    if (deleteOthers)
+    if (action == TempoDialog::AddTempo)
     {
-        commandLabel = i18n("Delete All Tempo Events");
+        m_doc->getCommandHistory()->addCommand(new
+                AddTempoChangeCommand(&comp, time, value));
+    }
+    else if (action == TempoDialog::ReplaceTempo)
+    {
+        int index = comp.getTempoChangeNumberAt(time);
 
-        int count = comp.getTempoChangeCount();
+        // if there's no previous tempo change then just set globally
+        //
+        if (index == -1)
+        {
+            m_doc->getCommandHistory()->addCommand(new
+                    AddTempoChangeCommand(&comp, 0, value));
+            return;
+        }
 
-        for (int i = 0; i < count; i++)
-            macro->addCommand(new
-                    RemoveTempoChangeCommand(&(m_doc->getComposition()), i));
+        // get time of previous tempo change
+        Rosegarden::timeT prevTime = comp.getRawTempoChange(index).first;
+
+        KMacroCommand *macro =
+            new KMacroCommand(i18n("Replace Tempo Change at %1").arg(time));
+
+        macro->addCommand(new RemoveTempoChangeCommand(&comp, index));
+        macro->addCommand(new AddTempoChangeCommand(&comp, prevTime, value));
+
+        m_doc->getCommandHistory()->addCommand(macro);
+
+    }
+    else if (action == TempoDialog::GlobalTempo ||
+             action == TempoDialog::GlobalTempoWithDefault)
+    {
+        KMacroCommand *macro = new KMacroCommand(i18n("Set Global Tempo"));
+
+        // Remove all tempo changes in reverse order so as the index numbers
+        // don't becoming meaningless as the command gets unwound.
+        //
+        for (int i = 0; i < comp.getTempoChangeCount(); i++)
+            macro->addCommand(new RemoveTempoChangeCommand(&comp,
+                                  (comp.getTempoChangeCount() - 1 - i)));
+
+        // add tempo change at time zero
+        //
+        macro->addCommand(new AddTempoChangeCommand(&comp, 0, value));
+
+        // are we setting default too?
+        //
+        if (action == TempoDialog::GlobalTempoWithDefault)
+        {
+            macro->setName(i18n("Set Global and Default Tempo"));
+            macro->addCommand(new ModifyDefaultTempoCommand(&comp, value));
+        }
+
+        m_doc->getCommandHistory()->addCommand(macro);
+
     } 
-
-    if (makeDefault)
+    else
     {
-        if (deleteOthers)
-            commandLabel += i18n(", ");
-
-        commandLabel += i18n("Modify Default Tempo");
-
-        macro->addCommand(new
-                ModifyDefaultTempoCommand(&(m_doc->getComposition()), value));
-
-        comp.setDefaultTempo(value);
+        std::cerr << "RosegardenGUIApp::slotChangeTempo() - "
+                  << "unrecognised tempo command" << std::endl;
     }
 
-    if (commandLabel != "")
-        commandLabel += ", ";
-
-    commandLabel += i18n("Insert Tempo Change");
-
-    // insert tempo change event
-    //
-    macro->addCommand(new AddTempoChangeCommand(&comp, time, value));
-
-    macro->setName(commandLabel);
-    m_doc->getCommandHistory()->addCommand(macro);
 }
 
 

@@ -35,6 +35,7 @@ class QSpinBox;
 class QLabel;
 class QComboBox;
 class QRadioButton;
+class QVButtonGroup;
 class NotePixmapFactory;
 class QGrid;
 class RosegardenGUIDoc;
@@ -321,8 +322,14 @@ protected:
 class TempoDialog : public KDialogBase
 {
     Q_OBJECT
-
 public:
+    typedef enum{
+        AddTempo,
+        ReplaceTempo,
+        GlobalTempo,
+        GlobalTempoWithDefault
+    } TempoDialogAction;
+
     TempoDialog(QWidget *parent, RosegardenGUIDoc *doc);
     ~TempoDialog();
 
@@ -331,15 +338,15 @@ public:
     void setTempoPosition(Rosegarden::timeT time);
 
 public slots:
-    virtual void slotOk();
+     virtual void slotOk();
+     void slotRadioButtonPressed(int);
 
 signals:
     // Return results in this signal
     //
-    void changeTempo(Rosegarden::timeT, // tempo change time
-                     double,            // tempo value
-                     bool,              // make default
-                     bool);             // clear other
+    void changeTempo(Rosegarden::timeT,  // tempo change time
+                     double,             // tempo value
+                     TempoDialog::TempoDialogAction); // tempo action
 
 protected:
     void populateTempo();
@@ -351,9 +358,8 @@ protected:
     QLabel             *m_tempoTimeLabel;
     RosegardenSpinBox  *m_tempoValueSpinBox;
 
-    QCheckBox          *m_makeDefaultCheckBox;
-    QCheckBox          *m_deleteOthersCheckBox;
-
+    QVButtonGroup      *m_optionButtons;
+    QCheckBox          *m_defaultBox;
 };
 
 

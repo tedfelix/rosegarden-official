@@ -40,6 +40,7 @@
 #include "rosegardenguiiface.h"
 #include "rosegardentransportdialog.h"
 #include "segmentcanvas.h"
+#include "dialogs.h"
 
 // the sequencer interface
 //
@@ -645,8 +646,7 @@ public slots:
      */
     void slotChangeTempo(Rosegarden::timeT time,
                          double value,      
-                         bool makeDefault,  
-                         bool deleteOthers);
+                         TempoDialog::TempoDialogAction action);
 
 private:
 

@@ -44,6 +44,7 @@
 #include <qbitmap.h>
 #include <qspinbox.h>
 #include <qvalidator.h>
+#include <qvbuttongroup.h>
 
 #include <klocale.h>
 #include <karrowbutton.h>
@@ -1460,7 +1461,7 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc):
 {
     QVBox *vbox = makeVBoxMainWidget();
     QGroupBox *groupBox = new QGroupBox(3, Horizontal, i18n("Tempo"), vbox);
-    groupBox->setAlignment(AlignHCenter);
+    //groupBox->setAlignment(AlignHCenter);
 
     // Set tempo
     new QLabel(i18n("New tempo"), groupBox);
@@ -1476,20 +1477,50 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc):
     // Scope Box
     QGroupBox *scopeBox = new QGroupBox(2, Horizontal,
                                         i18n("Scope"), vbox);
-    scopeBox->setAlignment(AlignHCenter);
+    //scopeBox->setAlignment(AlignHCenter);
     new QLabel(i18n("This tempo change will take effect from "), scopeBox);
     m_tempoTimeLabel = new QLabel(scopeBox);
 
     // Option Box
+    /*
     QGroupBox *optionBox = new QGroupBox(1, Horizontal,
                                         i18n("Options"), vbox);
     optionBox->setAlignment(AlignHCenter);
+    */
 
+    /*
     m_makeDefaultCheckBox =
         new QCheckBox(i18n("Make this the default tempo"), optionBox);
 
     m_deleteOthersCheckBox =
         new QCheckBox(i18n("Remove all other tempo changes"), optionBox);
+        */
+
+    m_optionButtons = new QVButtonGroup("How to apply this change", vbox);
+    m_optionButtons->addSpace(10); // 10 pix space
+    
+    // id == 0
+    new QRadioButton("add a new tempo change at this time",
+                     m_optionButtons);
+    // id == 1
+    new QRadioButton("replace tempo change at or before this time",
+                     m_optionButtons);
+
+    // id == 2
+    new QRadioButton("make this a global tempo change", m_optionButtons);
+
+    QHBox *optionHBox = new QHBox(m_optionButtons);
+    new QLabel(optionHBox);
+    m_defaultBox = new QCheckBox("also set default tempo", optionHBox);
+    new QLabel(optionHBox);
+
+    // disable initially
+    m_defaultBox->setDisabled(true);
+
+    connect(m_optionButtons, SIGNAL(pressed(int)),
+            SLOT(slotRadioButtonPressed(int)));
+
+    m_optionButtons->setButton(0);
 
     populateTempo();
 }
@@ -1542,12 +1573,26 @@ TempoDialog::slotOk()
     if ((int)tempoDouble != m_tempoValueSpinBox->value())
         tempoDouble = m_tempoValueSpinBox->value();
 
+    TempoDialogAction action =
+        (TempoDialogAction)m_optionButtons->id(m_optionButtons->selected());
+
+    if (action == GlobalTempo && m_defaultBox->isChecked())
+        action = GlobalTempoWithDefault;
+
     emit changeTempo(m_tempoTime,
                      tempoDouble,
-                     m_makeDefaultCheckBox->isChecked(),
-                     m_deleteOthersCheckBox->isChecked());
+                     action);
     delete this;
 }
 
+
+void
+TempoDialog::slotRadioButtonPressed(int id)
+{
+    if (id == 2)
+        m_defaultBox->setDisabled(false);
+    else
+        m_defaultBox->setDisabled(true);
+}
 
 
