@@ -101,6 +101,8 @@
 
 #define ID_STATUS_MSG 1
 
+RosegardenGUIApp *RosegardenGUIApp::m_myself = 0;
+
 using Rosegarden::timeT;
 using Rosegarden::RosegardenTransportDialog;
 
@@ -123,6 +125,8 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
       m_autoSaveTimer(new QTimer(this)),
       m_clipboard(new Rosegarden::Clipboard)
 {
+    m_myself = this;
+
     if (startupStatusMessageReceiver) {
         QObject::connect(this, SIGNAL(startupStatusMessage(const QString &)),
                          startupStatusMessageReceiver,

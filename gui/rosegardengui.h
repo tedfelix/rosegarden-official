@@ -100,6 +100,11 @@ public:
 
     virtual ~RosegardenGUIApp();
 
+    /*
+     * Get the current copy of the app object
+     */
+    static RosegardenGUIApp *self() { return m_myself; }
+
     /**
      * returns a pointer to the current document connected to the
      * KTMainWindow instance and is used by * the View class to access
@@ -1092,6 +1097,8 @@ private:
     Rosegarden::Clipboard *m_clipboard;
 
     static const char* const MainWindowConfigGroup;
+
+    static RosegardenGUIApp *m_myself;
 };
 
 /**

@@ -317,6 +317,57 @@ static KCmdLineOptions options[] =
     { 0, 0, 0 }
 };
 
+// --------------------- RosegardenApplication --------------------
+//
+// Handles RosegardenGUIApps perceived uniqueness for us.
+//
+//
+
+class RosegardenApplication : public KUniqueApplication
+{
+public:
+    RosegardenApplication(): KUniqueApplication() {;}
+
+    virtual int newInstance();
+
+    void commitData(QSessionManager& sm)
+    {
+        KApplication::commitData( sm );
+    }
+};
+
+// Handle the attempt at creation of a new instance - 
+// only accept new file names which we attempt to load
+// into the existing instance (if it exists)
+//
+int RosegardenApplication::newInstance()
+{
+    //std::cout << "RosegardenApplication::newInstance" << std::endl;
+
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+
+    if (RosegardenGUIApp::self())
+    {
+        if (args->count())
+        {
+            // Check for modifications and save if necessary - if cancelled
+            // then don't load the new file.
+            //
+            if(RosegardenGUIApp::self()->getDocument()->saveIfModified())
+                RosegardenGUIApp::self()->openFile(args->arg(0));
+        }
+        else
+        {
+            RosegardenGUIApp::self()->raise();
+        }
+    }
+
+    return 0;
+}
+
+// -----------------------------------------------------------------
+
+
 void testInstalledVersion()
 {
     QString versionLocation = locate("appdata", "version.txt");
@@ -388,8 +439,11 @@ int main(int argc, char *argv[])
                         "glaurent@telegraph-road.org, cannam@all-day-breakfast.com, bownie@bownie.com");
     KCmdLineArgs::init( argc, argv, &aboutData );
     KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
+    KUniqueApplication::addCmdLineOptions(); // Add KUniqueApplication options.
 
-    KUniqueApplication app;
+    if (!RosegardenApplication::start()) return 0;
+
+    RosegardenApplication app;
 
     // Give up immediately if we haven't been installed or if the
     // installation is out of date
@@ -516,6 +570,6 @@ int main(int argc, char *argv[])
         KTipDialog::showTip(locate("data", "rosegarden/tips"));
     }
 
-    return app.exec();
+    return kapp->exec();
 }  
 
