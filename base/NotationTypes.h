@@ -218,6 +218,11 @@ class Note
 {
 public:
     static const std::string EventType;
+    static const std::string EventRestType;
+
+    static const std::string NoteType;
+    static const std::string NoteDots;
+
     static const std::string NotePropertyName;
 
     static const std::string TiedBackwardPropertyName;

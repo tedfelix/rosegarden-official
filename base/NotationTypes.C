@@ -468,6 +468,10 @@ NotationDisplayPitch::displayPitchToRawPitch(int height,
 //////////////////////////////////////////////////////////////////////
 
 const string Note::EventType = "note";
+const string Note::EventRestType = "rest";
+
+const string Note::NoteType = "NoteType";
+const string Note::NoteDots = "NoteDots";
 //!!! worry about this later -- simple solution currently in place ain't bad
 const string Note::NotePropertyName = "duration";
 
