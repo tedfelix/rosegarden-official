@@ -298,21 +298,24 @@ void PlayList::save()
         item = dynamic_cast<PlayListViewItem*>(item->nextSibling());
     }
 
-   KConfig *kc = KGlobal::config();
-   KConfigGroupSaver cs(kc, PlayListConfigGroup);
-   kc->writeEntry("Playlist Files", urlList);
+    KConfig *kc = KGlobal::config();
+    KConfigGroupSaver cs(kc, PlayListConfigGroup);
+    kc->writeEntry("Playlist Files", urlList);
 
+    getListView()->saveLayout(kc, PlayListConfigGroup);
 }
 
 void PlayList::restore()
 {
-   KConfig *kc = KGlobal::config();
-   KConfigGroupSaver cs(kc, PlayListConfigGroup);
-   QStringList urlList = kc->readListEntry("Playlist Files");
+    KConfig *kc = KGlobal::config();
+    getListView()->restoreLayout(kc, PlayListConfigGroup);
 
-   for(QStringList::Iterator it = urlList.begin();
-       it != urlList.end(); ++it) {
-       new PlayListViewItem(getListView(), KURL(*it));
+    KConfigGroupSaver cs(kc, PlayListConfigGroup);
+    QStringList urlList = kc->readListEntry("Playlist Files");
+
+    for(QStringList::Iterator it = urlList.begin();
+        it != urlList.end(); ++it) {
+        new PlayListViewItem(getListView(), KURL(*it));
     }
 }
 

@@ -740,7 +740,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_listView->setRootIsDecorated(true);
     m_listView->setShowSortIndicator(true);
     m_listView->setItemsRenameable(true);
-    m_listView->restoreLayout(kapp->config(), "Bank Editor");
+    m_listView->restoreLayout(kapp->config(), BankEditorConfigGroup);
 
     QFrame *bankBox = new QFrame(leftPart);
     QGridLayout *gridLayout = new QGridLayout(bankBox, 3, 3, 6, 6);

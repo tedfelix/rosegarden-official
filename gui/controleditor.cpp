@@ -84,6 +84,7 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
     for (int i = 1; i < 9; ++i)
         m_listView->setColumnAlignment(i, Qt::AlignHCenter);
 
+    m_listView->restoreLayout(kapp->config(), ControlEditorConfigGroup);
 
     QFrame* btnBox = new QFrame(mainFrame);
 
