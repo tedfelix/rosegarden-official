@@ -1596,6 +1596,20 @@ void NotationView::setupActions()
                 SLOT(slotTransformsRestoreStems()), actionCollection(),
                 "restore_stems");
 
+    new KAction(TransformsMenuChangeSlurPositionCommand::getGlobalName(true),
+		0, this,
+                SLOT(slotTransformsSlursAbove()), actionCollection(),
+                "slurs_above");
+
+    new KAction(TransformsMenuChangeSlurPositionCommand::getGlobalName(false),
+		0, this,
+                SLOT(slotTransformsSlursBelow()), actionCollection(),
+                "slurs_below");
+
+    new KAction(TransformsMenuRestoreSlursCommand::getGlobalName(), 0, this,
+                SLOT(slotTransformsRestoreSlurs()), actionCollection(),
+                "restore_slurs");
+
     new KAction(RespellCommand::getGlobalName
 		(RespellCommand::Set, Rosegarden::Accidentals::DoubleFlat),
 		0, this,

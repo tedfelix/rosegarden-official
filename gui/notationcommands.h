@@ -550,6 +550,43 @@ private:
 };
 
 
+class TransformsMenuChangeSlurPositionCommand : public BasicSelectionCommand
+{
+public:
+    TransformsMenuChangeSlurPositionCommand(bool above, Rosegarden::EventSelection &selection) :
+	BasicSelectionCommand(getGlobalName(above), selection, true),
+	m_selection(&selection), m_above(above) { }
+
+    static QString getGlobalName(bool above) {
+	return above ? i18n("Slur &Above") : i18n("Slur &Below");
+    }
+
+protected:
+    virtual void modifySegment();
+
+private:
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    bool m_above;
+};
+
+
+class TransformsMenuRestoreSlursCommand : public BasicSelectionCommand
+{
+public:
+    TransformsMenuRestoreSlursCommand(Rosegarden::EventSelection &selection) :
+	BasicSelectionCommand(getGlobalName(), selection, true),
+	m_selection(&selection) { }
+
+    static QString getGlobalName() { return i18n("&Restore Computed Slur Position"); }
+
+protected:
+    virtual void modifySegment();
+
+private:
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+};
+
+
 class TransformsMenuChangeStyleCommand : public BasicSelectionCommand
 {
 public:

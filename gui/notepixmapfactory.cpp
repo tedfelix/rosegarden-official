@@ -1734,7 +1734,7 @@ NotePixmapFactory::drawTie(bool above, int length, int shift)
     // creating a new pixmap
     
     QPoint hotspot;
-    drawSlurAux(length, 0, above, false, true, hotspot,
+    drawSlurAux(length, 0, above, false, true, false, hotspot,
 		&m_p->painter(),
 		x,
 		above ? m_above : m_above + m_noteBodyHeight);
@@ -2212,7 +2212,7 @@ NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above, bool phrasing)
     bool smooth = m_font->isSmooth() && getNoteBodyHeight() > 5;
     QPoint hotspot;
     if (length < getNoteBodyWidth()*2) length = getNoteBodyWidth()*2;
-    drawSlurAux(length, dy, above, smooth, phrasing, hotspot, 0, 0, 0);
+    drawSlurAux(length, dy, above, smooth, false, phrasing, hotspot, 0, 0, 0);
 
     m_p->end();
 
@@ -2249,19 +2249,20 @@ NotePixmapFactory::drawSlur(int length, int dy, bool above, bool phrasing,
     QPoint hotspot;
     m_inPrinterMethod = true;
     if (length < getNoteBodyWidth()*2) length = getNoteBodyWidth()*2;
-    drawSlurAux(length, dy, above, false, phrasing, hotspot, &painter, x, y);
+    drawSlurAux(length, dy, above, false, false, phrasing, hotspot, &painter, x, y);
     m_inPrinterMethod = false;
 }
 
 void
 NotePixmapFactory::drawSlurAux(int length, int dy, bool above,
-			       bool smooth, bool flat,
+			       bool smooth, bool flat, bool phrasing,
 			       QPoint &hotspot, QPainter *painter, int x, int y)
 {
     QWMatrix::TransformationMode mode = QWMatrix::transformationMode();
     QWMatrix::setTransformationMode(QWMatrix::Points);
 
     int thickness = getStaffLineThickness() * 2;
+    if (phrasing) thickness = thickness * 3 / 4;
     int nbh = getNoteBodyHeight(), nbw = getNoteBodyWidth();
 
     // Experiment with rotating the painter rather than the control points.
@@ -2273,17 +2274,18 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above,
 //	NOTATION_DEBUG << "slur: dy is " << dy << ", length " << length << ", rotating through " << theta << endl;
 	rotate = true;
     }
-
-    int mx1 = length/6;
-    int mx2 = length - length/6;
+    
+    // draw normal slur for very slopey phrasing slur:
+    if (theta < -5 || theta > 5) phrasing = false;
 
     int y0 = 0, my = 0;
 
     float noteLengths = float(length) / nbw;
     if (noteLengths < 1) noteLengths = 1;
+
     my = int(0 - nbh * sqrt(noteLengths) / 2);
     if (flat) my = my * 2 / 3;
-
+    else if (phrasing) my = my * 3 / 4;
     if (!above) my = -my;
 
     bool havePixmap = false;
@@ -2294,9 +2296,26 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above,
     for (int i = 0; i < thickness; ++i) {
 
 	Spline::PointList pl;
-	pl.push_back(QPoint(mx1, (int)my));
-	pl.push_back(QPoint(mx2, (int)my));
+	
+	if (!phrasing) {
+	    pl.push_back(QPoint(length/6, my));
+	    pl.push_back(QPoint(length - length/6, my));
+	} else {
+	    pl.push_back(QPoint(abs(my)/4, my / 3));
+	    pl.push_back(QPoint(length/6, my));
 
+	    if (theta > 1) {
+		pl.push_back(QPoint(length * 3 / 8, my * 3 / 2));
+	    } else if (theta < -1) {
+		pl.push_back(QPoint(length * 5 / 8, my * 3 / 2));
+	    } else {
+		pl.push_back(QPoint(length / 2, my * 4 / 3));
+	    }
+
+	    pl.push_back(QPoint(length - length/6, my));
+	    pl.push_back(QPoint(length-abs(my)/4, my / 3));
+	}
+	
 	Spline::PointList *polyPoints = Spline::calculate
 	    (QPoint(0, y0), QPoint(length-1, y0), pl, topLeft, bottomRight);
 
@@ -2334,9 +2353,6 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above,
 				    smooth ? height*2+thickness*2 : height + thickness,
 				    width, height);
 
-//		m_p->drawLine(0, 0, width*2, 0);
-//		m_p->drawLine(0, height*2+thickness*2-1, width*2, height*2+thickness*2-1);
-
 		QWMatrix m;
 		if (smooth) m.translate(2 * hotspot.x(), 2 * hotspot.y());
 		else m.translate(hotspot.x(), hotspot.y());
@@ -2349,7 +2365,15 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above,
 		m_p->painter().setPen(RosegardenGUIColours::SelectedElement);
 	    havePixmap = true;
 	}
-
+/*
+	for (int j = 0; j < pl.size(); ++j) {
+	    if (smooth) {
+		m_p->drawPoint(pl[j].x()*2, pl[j].y()*2);
+	    } else {
+		m_p->drawPoint(pl[j].x(), pl[j].y());
+	    }
+	}
+*/
 	int ppc = polyPoints->size();
 	QPointArray qp(ppc);
 

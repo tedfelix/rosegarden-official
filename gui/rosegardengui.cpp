@@ -2084,16 +2084,15 @@ void RosegardenGUIApp::slotGrooveQuantize()
 {
     if (!m_view->haveSelection()) return;
 
-    //!!! can't do this if >1 segment selected? no state for that?
-
     Rosegarden::SegmentSelection selection = m_view->getSelection();
-    
-    //!!! for now -- experiment
-    if (selection.begin() != selection.end()) {
-	Rosegarden::Segment *s = *selection.begin();
-	Rosegarden::GrooveQuantizer q(s, Rosegarden::GrooveQuantizer::AdjustTempo);
-	q.quantize(s);
+
+    if (selection.size() != 1) {
+	KMessageBox::sorry(this, i18n("This function needs no more than one segment to be selected."));
+	return;
     }
+    
+    Rosegarden::Segment *s = *selection.begin();
+    m_view->slotAddCommandToHistory(new CreateTempoMapFromSegmentCommand(s));
 }
 
 void RosegardenGUIApp::slotJoinSegments()

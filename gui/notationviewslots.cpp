@@ -1050,6 +1050,34 @@ void NotationView::slotTransformsRestoreStems()
                         (*m_currentEventSelection));
 }
 
+void NotationView::slotTransformsSlursAbove()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Positioning slurs..."), this);
+
+    addCommandToHistory(new TransformsMenuChangeSlurPositionCommand
+                        (true, *m_currentEventSelection));
+}
+
+void NotationView::slotTransformsSlursBelow()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Positioning slurs..."), this);
+
+    addCommandToHistory(new TransformsMenuChangeSlurPositionCommand
+                        (false, *m_currentEventSelection));
+
+}
+
+void NotationView::slotTransformsRestoreSlurs()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Restoring slur positions..."), this);
+
+    addCommandToHistory(new TransformsMenuRestoreSlursCommand
+                        (*m_currentEventSelection));
+}
+
 void NotationView::slotTransformsFixQuantization()
 {
     if (!m_currentEventSelection) return;

@@ -400,8 +400,6 @@ public slots:
     void slotEditPitch();
 
 protected:
-
-    const Rosegarden::Event &m_originalEvent;
     Rosegarden::Event        m_event;
     RosegardenGUIDoc        *m_doc;
 

@@ -2671,3 +2671,127 @@ SetTriggerSegmentDefaultRetuneCommand::unexecute()
     rec->setDefaultRetune(m_oldDefaultRetune);
 }
 
+
+CreateTempoMapFromSegmentCommand::CreateTempoMapFromSegmentCommand(Segment *groove) :
+    KNamedCommand(i18n("Set Tempos from Beat Segment")),
+    m_composition(groove->getComposition())
+{
+    initialise(groove);
+}
+
+CreateTempoMapFromSegmentCommand::~CreateTempoMapFromSegmentCommand()
+{
+    // nothing
+}
+
+void
+CreateTempoMapFromSegmentCommand::execute()
+{
+    for (TempoMap::iterator i = m_oldTempi.begin(); i != m_oldTempi.end(); ++i) {
+	int n = m_composition->getTempoChangeNumberAt(i->first);
+	if (n < m_composition->getTempoChangeCount()) {
+	    m_composition->removeTempoChange(n);
+	}
+    }
+
+    for (TempoMap::iterator i = m_newTempi.begin(); i != m_newTempi.end(); ++i) {
+	m_composition->addRawTempo(i->first, i->second);
+    }
+}
+
+void
+CreateTempoMapFromSegmentCommand::unexecute()
+{
+    for (TempoMap::iterator i = m_newTempi.begin(); i != m_newTempi.end(); ++i) {
+	int n = m_composition->getTempoChangeNumberAt(i->first);
+	if (n < m_composition->getTempoChangeCount()) {
+	    m_composition->removeTempoChange(n);
+	}
+    }
+
+    for (TempoMap::iterator i = m_oldTempi.begin(); i != m_oldTempi.end(); ++i) {
+	m_composition->addRawTempo(i->first, i->second);
+    }
+}
+
+void
+CreateTempoMapFromSegmentCommand::initialise(Rosegarden::Segment *s)
+{
+    m_oldTempi.clear();
+    m_newTempi.clear();
+
+    //!!! need an additional option: per-chord, per-beat, per-bar.
+    // Let's work per-beat for the moment.  Even for this, we should
+    // probably use TimeSignature.getDivisions()
+
+    std::vector<Rosegarden::timeT> beatTimeTs;
+    std::vector<Rosegarden::RealTime> beatRealTimes;
+
+    int startBar = m_composition->getBarNumber(s->getStartTime());
+    int barNo = startBar;
+    int beat = 0;
+
+    for (Segment::iterator i = s->begin(); s->isBeforeEndMarker(i); ++i) {
+	if ((*i)->isa(Rosegarden::Note::EventType)) {
+
+	    bool isNew;
+	    Rosegarden::TimeSignature sig =
+		m_composition->getTimeSignatureInBar(barNo, isNew);
+
+	    beatTimeTs.push_back(m_composition->getBarStart(barNo) +
+				 beat * sig.getBeatDuration());
+
+	    if (++beat >= sig.getBeatsPerBar()) {
+		++barNo;
+		beat = 0;
+	    }
+
+	    beatRealTimes.push_back(s->getComposition()->getElapsedRealTime
+				    ((*i)->getAbsoluteTime()));
+	}
+    }
+
+    if (beatTimeTs.size() < 2) return;
+
+    long prevRawTempo = -1;
+
+    // set up m_oldTempi and prevRawTempo
+
+    for (int i = m_composition->getTempoChangeNumberAt(*beatTimeTs.begin()-1) + 1;
+	 i <= m_composition->getTempoChangeNumberAt(*beatTimeTs.end()-1); ++i) {
+
+	std::pair<Rosegarden::timeT, long> tempoChange =
+	    m_composition->getRawTempoChange(i);
+	m_oldTempi[tempoChange.first] = tempoChange.second;
+	if (prevRawTempo == -1) prevRawTempo = tempoChange.second;
+    }
+
+    RG_DEBUG << "starting raw tempo: " << prevRawTempo << endl;
+
+    Rosegarden::timeT quarter = Rosegarden::Note(Rosegarden::Note::Crotchet).getDuration();
+
+    for (int beat = 1; beat < beatTimeTs.size(); ++beat) {
+
+	Rosegarden::timeT beatTime = beatTimeTs[beat] - beatTimeTs[beat-1];
+	Rosegarden::RealTime beatRealTime = beatRealTimes[beat] - beatRealTimes[beat-1];
+
+	// Calculate tempo in quarter notes per hour.
+	// This is 3600 / {quarter note duration in seconds}
+	// = 3600 / ( {beat in seconds} * {quarter in ticks} / { beat in ticks} )
+	// = ( 3600 * {beat in ticks} ) / ( {beat in seconds} * {quarter in ticks} )
+
+	double beatSec = double(beatRealTime.sec) +
+	    double(beatRealTime.usec() / 1000000.0);
+	double qph = (3600.0 * beatTime) / (beatSec * quarter);
+	long rawTempo = long(qph + 0.000001);
+
+	RG_DEBUG << "prev beat: " << beatTimeTs[beat] << ", prev beat real time " << beatRealTimes[beat] << endl;
+	RG_DEBUG << "time " << beatTime << ", rt " << beatRealTime << ", beatSec " << beatSec << ", rawTempo " << rawTempo << endl;
+
+	if (rawTempo != prevRawTempo) {
+	    m_newTempi[beatTimeTs[beat-1]] = rawTempo;
+	    prevRawTempo = rawTempo;
+	}
+    }
+	
+}

@@ -29,6 +29,7 @@ const Rosegarden::PropertyName NotationProperties::SLASHES	      = "Slashes";
 const Rosegarden::PropertyName NotationProperties::STEM_UP	      = "NoteStemUp";
 const Rosegarden::PropertyName NotationProperties::USE_CAUTIONARY_ACCIDENTAL = "UseCautionaryAccidental";
 const Rosegarden::PropertyName NotationProperties::OTTAVA_SHIFT       = "OttavaShift";
+const Rosegarden::PropertyName NotationProperties::SLUR_ABOVE	      = "SlurAbove";
 
 
 NotationProperties::NotationProperties(const std::string &prefix) :
@@ -50,7 +51,6 @@ NotationProperties::NotationProperties(const std::string &prefix) :
     CHORD_PRIMARY_NOTE		(prefix + "ChordPrimaryNote"),
     CHORD_MARK_COUNT		(prefix + "ChordMarkCount"),
     TIE_LENGTH			(prefix + "TieLength"),
-    SLUR_ABOVE			(prefix + "SlurAbove"),
     SLUR_Y_DELTA		(prefix + "SlurYDelta"),
     SLUR_LENGTH			(prefix + "SlurLength"),
     LYRIC_EXTRA_WIDTH		(prefix + "LyricExtraWidth"),

@@ -39,9 +39,7 @@ public:
     NotationProperties(const std::string &prefix);
 
     // These are only of interest to notation views, but are the
-    // same across all notation views.  One of these (STEM_UP)
-    // has already moved to BaseProperties -- perhaps we should
-    // move the rest as well
+    // same across all notation views.
 
     static const Rosegarden::PropertyName HEIGHT_ON_STAFF;
     static const Rosegarden::PropertyName NOTE_STYLE;
@@ -51,6 +49,7 @@ public:
     static const Rosegarden::PropertyName STEM_UP;
     static const Rosegarden::PropertyName USE_CAUTIONARY_ACCIDENTAL;
     static const Rosegarden::PropertyName OTTAVA_SHIFT;
+    static const Rosegarden::PropertyName SLUR_ABOVE;
 
     // The rest are, or may be, view-local
 
@@ -69,7 +68,6 @@ public:
     const Rosegarden::PropertyName CHORD_PRIMARY_NOTE;
     const Rosegarden::PropertyName CHORD_MARK_COUNT;
     const Rosegarden::PropertyName TIE_LENGTH;
-    const Rosegarden::PropertyName SLUR_ABOVE;
     const Rosegarden::PropertyName SLUR_Y_DELTA;
     const Rosegarden::PropertyName SLUR_LENGTH;
     const Rosegarden::PropertyName LYRIC_EXTRA_WIDTH;

@@ -326,8 +326,10 @@ PasteSegmentsCommand::execute()
 	segment->setStartTime(segment->getStartTime() + offset);
         segment->setTrack(newTrackId);
         m_composition->addSegment(segment);
-	if (m_clipboard->isPartial()) segment->normalizeRests(segment->getStartTime(),
-							      segment->getEndMarkerTime());
+	if (m_clipboard->isPartial()) {
+	    segment->normalizeRests(segment->getStartTime(),
+				    segment->getEndMarkerTime() + offset);
+	}
 	m_addedSegments.push_back(segment);
     }
 
@@ -485,6 +487,19 @@ PasteEventsCommand::modifySegment()
     RG_DEBUG << "PasteEventsCommand::modifySegment() : paste type = "
              << m_pasteType << " - pasteTime = "
              << pasteTime << " - origin = " << origin << endl;
+
+    // First check for group IDs, which we want to make unique in the
+    // copies in the destination segment
+
+    std::map<long, long> groupIdMap;
+    for (Segment::iterator i = source->begin(); i != source->end(); ++i) {
+	long groupId = -1;
+	if ((*i)->get<Int>(BEAMED_GROUP_ID, groupId)) {
+	    if (groupIdMap.find(groupId) == groupIdMap.end()) {
+		groupIdMap[groupId] = destination->getNextId();
+	    }
+	}
+    }
     
     switch (m_pasteType) {
 
@@ -507,6 +522,9 @@ PasteEventsCommand::modifySegment()
 	for (Segment::iterator i = destination->findTime(pasteTime);
 	     i != destination->end(); ++i) {
 	    Event *e = new Event(**i, (*i)->getAbsoluteTime() + duration);
+	    if (e->has(BEAMED_GROUP_ID)) {
+		e->set<Int>(BEAMED_GROUP_ID, groupIdMap[e->get<Int>(BEAMED_GROUP_ID)]);
+	    }
 	    copies.push_back(e);
 	}
 
@@ -524,18 +542,23 @@ PasteEventsCommand::modifySegment()
 	for (Segment::iterator i = source->begin(); i != source->end(); ++i) {
 	    if ((*i)->isa(Note::EventRestType)) continue;
 	    if ((*i)->isa(Note::EventType)) {
-		long pitch = 0;
-		Accidental explicitAccidental = NoAccidental;
-		(*i)->get<String>(ACCIDENTAL, explicitAccidental);
-		if ((*i)->get<Int>(PITCH, pitch)) {
-		    helper.insertNote
-			((*i)->getAbsoluteTime() - origin + pasteTime,
-			 Note::getNearestNote((*i)->getDuration()),
-			 pitch, explicitAccidental);
+		Event *e = new Event(**i,
+				     (*i)->getAbsoluteTime() - origin + pasteTime,
+				     (*i)->getDuration(),
+				     (*i)->getSubOrdering(),
+				     (*i)->getNotationAbsoluteTime() - origin + pasteTime,
+				     (*i)->getNotationDuration());
+		if (e->has(BEAMED_GROUP_ID)) {
+		    e->set<Int>(BEAMED_GROUP_ID, groupIdMap[e->get<Int>(BEAMED_GROUP_ID)]);
 		}
+		helper.insertNote(e); // e is model event: we retain ownership of it
+		delete e;
 	    } else {
 		Event *e = new Event
 		    (**i, (*i)->getAbsoluteTime() - origin + pasteTime);
+		if (e->has(BEAMED_GROUP_ID)) {
+		    e->set<Int>(BEAMED_GROUP_ID, groupIdMap[e->get<Int>(BEAMED_GROUP_ID)]);
+		}
 		destination->insert(e);
 	    }
 	}
@@ -557,6 +580,10 @@ PasteEventsCommand::modifySegment()
 		e->unset(BEAMED_GROUP_TYPE);
 	    }
 
+	    if (e->has(BEAMED_GROUP_ID)) {
+		e->set<Int>(BEAMED_GROUP_ID, groupIdMap[e->get<Int>(BEAMED_GROUP_ID)]);
+	    }
+
 	    destination->insert(e);
 	}
 
@@ -571,6 +598,9 @@ PasteEventsCommand::modifySegment()
     for (Segment::iterator i = source->begin(); i != source->end(); ++i) {
 	Event *e = new Event
 	    (**i, (*i)->getAbsoluteTime() - origin + pasteTime);
+	if (e->has(BEAMED_GROUP_ID)) {
+	    e->set<Int>(BEAMED_GROUP_ID, groupIdMap[e->get<Int>(BEAMED_GROUP_ID)]);
+	}
 	destination->insert(e);
     }
 

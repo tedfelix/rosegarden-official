@@ -113,6 +113,12 @@
     <Action name="show_cautionary"/>
     <Action name="cancel_cautionary"/>
   </Menu>
+  <Menu name="Slurs">
+    <text>S&amp;lur Position</text>
+    <Action name="slurs_above"/>
+    <Action name="slurs_below"/>
+    <Action name="restore_slurs"/>
+  </Menu>
 </Menu>
 
   <Menu name="Marks">
@@ -547,6 +553,9 @@
     <Action name="filter_selection"/>
     <Action name="jog_left"/>
     <Action name="jog_right"/>
+    <Action name="slurs_above"/>
+    <Action name="slurs_below"/>
+    <Action name="restore_slurs"/>
   </enable>
 </State>
 

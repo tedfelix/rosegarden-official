@@ -892,7 +892,7 @@ TupletDialog::updateUntupledCombo()
 
     if (m_maxDuration) {
 	if (m_hasTimingAlready->isChecked()) {
-	    maxValue = (m_maxDuration * 3) / (Note(getUnitType()).getDuration() * 2);
+	    maxValue = (m_maxDuration * 2) / Note(getUnitType()).getDuration();
 	} else {
 	    maxValue = m_maxDuration / Note(getUnitType()).getDuration();
 	}
@@ -910,7 +910,11 @@ TupletDialog::updateUntupledCombo()
     for (int i = 1; i <= maxValue; ++i) {
 	QString text = QString("%1").arg(i);
 	m_untupledCombo->insertItem(text);
-	if (text == previousText) {
+	if (m_hasTimingAlready->isChecked()) {
+	    if (i == (m_maxDuration * 3) / (Note(getUnitType()).getDuration()*2)) {
+		m_untupledCombo->setCurrentItem(m_untupledCombo->count() - 1);
+	    }
+	} else if (text == previousText) {
 	    m_untupledCombo->setCurrentItem(m_untupledCombo->count() - 1);
 	    setText = true;
 	}
@@ -943,7 +947,11 @@ TupletDialog::updateTupledCombo()
     for (int i = 1; i < untupled; ++i) {
 	QString text = QString("%1").arg(i);
 	m_tupledCombo->insertItem(text);
-	if (text == previousText) {
+	if (m_hasTimingAlready->isChecked()) {
+	    if (i == m_maxDuration / Note(getUnitType()).getDuration()) {
+		m_tupledCombo->setCurrentItem(m_tupledCombo->count() - 1);
+	    }
+	} else if (text == previousText) {
 	    m_tupledCombo->setCurrentItem(m_tupledCombo->count() - 1);
 	}
     }
@@ -1686,7 +1694,6 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
 				            bool inserting) :
     KDialogBase(parent, 0, true, 
                 i18n(inserting ? "Insert Event" : "Edit Event"), Ok | Cancel),
-    m_originalEvent(event),
     m_event(event),
     m_doc(doc),
     m_type(event.getType()),
@@ -2144,8 +2151,6 @@ SimpleEventEditDialog::setupForEvent()
             m_metaEdit->setText(i18n("<none>"));
         }
 
-        // getTextType();
-
         m_typeCombo->setCurrentItem(8);
     }
     else if (m_type == Rosegarden::Note::EventRestType)
@@ -2268,129 +2273,68 @@ SimpleEventEditDialog::setupForEvent()
 Rosegarden::Event
 SimpleEventEditDialog::getEvent() const
 {
-    // return event selected against type
-    Event event(m_type, m_absoluteTime, m_duration);
-    int data1 = m_pitchSpinBox->value(), data2 = m_velocitySpinBox->value();
+    Event event(m_event,
+		m_absoluteTime,
+		m_duration,
+		m_event.getSubOrdering(),
+		(m_absoluteTime != m_event.getAbsoluteTime() ?
+		 m_absoluteTime : m_event.getNotationAbsoluteTime()),
+		(m_duration != m_event.getDuration() ?
+		 m_duration : m_event.getNotationDuration()));
+
+    // Values from the pitch and velocity spin boxes should already
+    // have been set on m_event (and thus on event) by slotPitchChanged
+    // and slotVelocityChanged.  Absolute time and duration were set in
+    // the event ctor above; that just leaves the meta values.
 
     switch(m_typeCombo->currentItem())
     {
         case 0: // Note
-            try
-            {
-                data1 = m_event.get<Int>(Rosegarden::BaseProperties::PITCH);
-                data2 = m_event.get<Int>(Rosegarden::BaseProperties::VELOCITY);
-            }
-            catch(Rosegarden::Event::NoData)
-            {
-            }
-
-            event.set<Int>(Rosegarden::BaseProperties::PITCH, data1);
-            event.set<Int>(Rosegarden::BaseProperties::VELOCITY, data2);
-
             break;
 
         case 1: // Controller
-
-            try
-            {
-                data1 = m_event.get<Int>(Rosegarden::Controller::NUMBER);
-                data2 = m_event.get<Int>(Rosegarden::Controller::VALUE);
-            }
-            catch(Rosegarden::Event::NoData)
-            {
-                RG_DEBUG  << "SimpleEventEditDialog::getEvent - "
-                          << "can't create Controller event" << endl;
-            }
-
-            event.set<Int>(Rosegarden::Controller::NUMBER, data1);
-            event.set<Int>(Rosegarden::Controller::VALUE, data2);
-
             break;
 
         case 2: // KeyPressure
-
-            try
-            {
-                data1 = m_event.get<Int>(Rosegarden::KeyPressure::PITCH);
-                data2 = m_event.get<Int>(Rosegarden::KeyPressure::PRESSURE);
-            }
-            catch(Rosegarden::Event::NoData)
-            {
-                RG_DEBUG << "SimpleEventEditDialog::getEvent - "
-                         << "can't create KeyPressure event" << endl;
-            }
-
-            event.set<Int>(Rosegarden::KeyPressure::PITCH, data1);
-            event.set<Int>(Rosegarden::KeyPressure::PRESSURE, data2);
-
             break;
 
         case 3: // ChannelPressure
-
-            try
-            {
-                data1 = m_event.get<Int>(Rosegarden::ChannelPressure::PRESSURE);
-            }
-            catch(Rosegarden::Event::NoData)
-            {
-            }
-
-            event.set<Int>(Rosegarden::ChannelPressure::PRESSURE, data1);
-
             break;
 
         case 4: // ProgramChange
-
-            try
-            {
-                data1 = m_event.get<Int>(Rosegarden::ProgramChange::PROGRAM);
-            }
-            catch(Rosegarden::Event::NoData)
-            {
-            }
-
-            event.set<Int>(Rosegarden::ProgramChange::PROGRAM, data1);
-
             break;
 
         case 5: // SystemExclusive
-
+	    //!!! incomplete both here and in setupForEvent
             // we should copy across raw data
             break;
 
         case 6: // PitchBend
-
-            try
-            {
-                event.set<Int>(Rosegarden::PitchBend::MSB,
-                    m_event.get<Int>(Rosegarden::PitchBend::MSB));
-                event.set<Int>(Rosegarden::PitchBend::LSB,
-                    m_event.get<Int>(Rosegarden::PitchBend::LSB));
-            }
-            catch(Rosegarden::Event::NoData)
-            {
-                RG_DEBUG << "SimpleEventEditDialog::getEvent - "
-                         << "can't create PitchBend event" << endl;
-            }
             break;
 
         case 7: // Indication
-
-            // nothing yet
+	    event.set<String>(Rosegarden::Indication::IndicationTypePropertyName,
+			      qstrtostr(m_metaEdit->text()));
             break;
 
         case 8: // Text
-
-            // nothing yet
+	    event.set<String>(Rosegarden::Text::TextTypePropertyName,
+			      qstrtostr(m_controllerLabelValue->text()));
+	    event.set<String>(Rosegarden::Text::TextPropertyName,
+			      qstrtostr(m_metaEdit->text()));
             break;
 
         case 9: //  Rest
             break;
 
         case 10: // Clef
+	    event.set<String>(Rosegarden::Clef::ClefPropertyName,
+			      qstrtostr(m_controllerLabelValue->text()));
             break;
 
         case 11: // Key
+	    event.set<String>(Rosegarden::Key::KeyPropertyName,
+			      qstrtostr(m_controllerLabelValue->text()));
             break;
 
         default:

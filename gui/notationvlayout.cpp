@@ -321,6 +321,8 @@ void
 NotationVLayout::positionSlur(NotationStaff &staff,
 			      NotationElementList::iterator i)
 {
+    bool phrasing = ((*i)->event()->get<String>(Indication::IndicationTypePropertyName)
+		     == Indication::PhrasingSlur);
 
     NotationElementList::iterator scooter = i;
 
@@ -342,6 +344,7 @@ NotationVLayout::positionSlur(NotationStaff &staff,
     long startMarks = 0, endMarks = 0;
     bool startTied = false, endTied = false;
     bool beamAbove = false, beamBelow = false;
+    bool dynamic = false;
 
     std::vector<Event *> stemUpNotes, stemDownNotes;
 
@@ -352,10 +355,9 @@ NotationVLayout::positionSlur(NotationStaff &staff,
     while (scooter != staff.getViewElementList()->end()) {
 
 	if ((*scooter)->getViewAbsoluteTime() >= endTime) break;
+	Event *event = (*scooter)->event();
 
-	if (static_cast<NotationElement*>(*scooter)->isNote()) {
-
-	    Event *event = (*scooter)->event();
+	if (event->isa(Rosegarden::Note::EventType)) {
 
 	    long h = 0;
 	    if (!event->get<Int>(m_properties.HEIGHT_ON_STAFF, h)) {
@@ -430,35 +432,64 @@ NotationVLayout::positionSlur(NotationStaff &staff,
 		if (stemUp) stemUpNotes.push_back(event);
 		else stemDownNotes.push_back(event);
 	    }
+
+	} else if (event->isa(Indication::EventType)) {
+	    
+	    std::string indicationType =
+		event->get<String>(Indication::IndicationTypePropertyName);
+
+	    if (indicationType == Indication::Crescendo ||
+		indicationType == Indication::Decrescendo) dynamic = true;
 	}
 
 	++scooter;
     }
 
     bool above = true;
-    if (startStemUp == endStemUp) {
-	above = !startStemUp;
-    } else if (beamBelow) {
-	above = true;
-    } else if (beamAbove) {
-	above = false;
-    } else if (stemUpNotes.size() != stemDownNotes.size()) {
-	above = (stemUpNotes.size() < stemDownNotes.size());
+
+    if ((*i)->event()->has(NotationProperties::SLUR_ABOVE) &&
+	(*i)->event()->isPersistent<Bool>(NotationProperties::SLUR_ABOVE)) {
+
+	(*i)->event()->get<Bool>(NotationProperties::SLUR_ABOVE, above);
+
+    } else if (phrasing) {
+
+	int score = 0; // for "above"
+
+	if (dynamic) score += 2;
+
+	if (startStemUp == endStemUp) {
+	    if (startStemUp) score -= 2;
+	    else score += 2;
+	} else if (beamBelow != beamAbove) {
+	    if (beamAbove) score -= 2;
+	    else score += 2;
+	}
+
+	if (maxTopHeight < 6) score += 1;
+	else if (minBottomHeight > 2) score -= 1;
+
+	if (stemUpNotes.size() != stemDownNotes.size()) {
+	    if (stemUpNotes.size() < stemDownNotes.size()) score += 1;
+	    else score -= 1;
+	}
+
+	above = (score >= 0);
+
     } else {
-	above = ((startTopHeight - 4) + (endTopHeight - 4) +
-		 (4 - startBottomHeight) + (4 - endBottomHeight) <= 8);
-    }
 
-    // re-point the stems of any notes that will otherwise interfere
-    // with our slur (n.b. the only notes in the stemUpNotes and
-    // stemDownNotes arrays are the ones that are not beamed, so this
-    // shouldn't cause any trouble)
-
-    std::vector<Event *> *wrongStemNotes =
-	(above ? &stemUpNotes : &stemDownNotes);
-
-    for (unsigned int wsi = 0; wsi < wrongStemNotes->size(); ++wsi) {
-	(*wrongStemNotes)[wsi]->setMaybe<Bool>(m_properties.VIEW_LOCAL_STEM_UP, !above);
+	if (startStemUp == endStemUp) {
+	    above = !startStemUp;
+	} else if (beamBelow) {
+	    above = true;
+	} else if (beamAbove) {
+	    above = false;
+	} else if (stemUpNotes.size() != stemDownNotes.size()) {
+	    above = (stemUpNotes.size() < stemDownNotes.size());
+	} else {
+	    above = ((startTopHeight - 4) + (endTopHeight - 4) +
+		     (4 - startBottomHeight) + (4 - endBottomHeight) <= 8);
+	}
     }
 
     // now choose the actual y-coord of the slur based on the side
@@ -467,16 +498,17 @@ NotationVLayout::positionSlur(NotationStaff &staff,
     int startHeight, endHeight;
     int startOffset = 2, endOffset = 2;
 
-    startOffset += startMarks * 2;
-    endOffset += endMarks * 2;
-
-    // no need, I think:
-//    if (startTied) ++startOffset;
-//    if (endTied) ++endOffset;
-
     if (above) {
+
+	if (!startStemUp) startOffset += startMarks * 2;
+	else startOffset += 5;
+
+	if (!endStemUp) endOffset += startMarks * 2;
+	else endOffset += 5;
+
 	startHeight = startTopHeight + startOffset;
 	endHeight = endTopHeight + endOffset;
+
 	bool maxRelevant = ((maxTopHeight != endTopHeight) || (maxCount > 1));
 	if (maxRelevant) {
 	    int midHeight = (startHeight + endHeight)/2;
@@ -485,9 +517,18 @@ NotationVLayout::positionSlur(NotationStaff &staff,
 		endHeight   += maxTopHeight - midHeight + 1;
 	    }
 	}
+
     } else {
+
+	if (startStemUp) startOffset += startMarks * 2;
+	else startOffset += 5;
+
+	if (endStemUp) endOffset += startMarks * 2;
+	else endOffset += 5;
+
 	startHeight = startBottomHeight - startOffset;
 	endHeight = endBottomHeight - endOffset;
+
 	bool minRelevant = ((minBottomHeight != endBottomHeight) || (minCount > 1));
 	if (minRelevant) {
 	    int midHeight = (startHeight + endHeight)/2;
@@ -508,7 +549,7 @@ NotationVLayout::positionSlur(NotationStaff &staff,
     if (length > diff*3) length -= diff/2;
     startX += diff;
 
-    (*i)->event()->setMaybe<Bool>(m_properties.SLUR_ABOVE, above);
+    (*i)->event()->setMaybe<Bool>(NotationProperties::SLUR_ABOVE, above);
     (*i)->event()->setMaybe<Int>(m_properties.SLUR_Y_DELTA, dy);
     (*i)->event()->setMaybe<Int>(m_properties.SLUR_LENGTH, length);
     (*i)->setLayoutX(startX);

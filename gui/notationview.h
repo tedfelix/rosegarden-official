@@ -445,6 +445,9 @@ public slots:
     void slotTransformsStemsUp();
     void slotTransformsStemsDown();
     void slotTransformsRestoreStems();
+    void slotTransformsSlursAbove();
+    void slotTransformsSlursBelow();
+    void slotTransformsRestoreSlurs();
     void slotTransformsQuantize();
     void slotTransformsFixQuantization();
     void slotTransformsRemoveQuantization();

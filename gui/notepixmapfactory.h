@@ -251,7 +251,7 @@ protected:
 		     QPainter *painter, int x, int y);
     void drawHairpinAux(int length, bool isCrescendo,
 			QPainter *painter, int x, int y);
-    void drawSlurAux(int length, int dy, bool above, bool smooth, bool flat,
+    void drawSlurAux(int length, int dy, bool above, bool smooth, bool tie, bool phrasing,
 		     QPoint &hotspot,
 		     QPainter *painter, int x, int y);
     void drawOttavaAux(int length, int octavesUp,

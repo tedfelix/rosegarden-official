@@ -948,6 +948,31 @@ protected:
     bool m_haveOldDefaultRetune;
 };
 
+
+/**
+ * CreateTempoMapFromSegment applies timings found in a reference
+ * segment to the composition as a whole via the tempo map.
+ */
+
+class CreateTempoMapFromSegmentCommand : public KNamedCommand
+{
+public:
+    CreateTempoMapFromSegmentCommand(Rosegarden::Segment *grooveSegment);
+    virtual ~CreateTempoMapFromSegmentCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+
+private:
+    void initialise(Rosegarden::Segment *s);
+    
+    Rosegarden::Composition *m_composition;
+
+    typedef std::map<Rosegarden::timeT, long> TempoMap;
+    TempoMap m_oldTempi;
+    TempoMap m_newTempi;
+};
+    
     
 
 

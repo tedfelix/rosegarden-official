@@ -71,6 +71,7 @@ string PropertyName::getName() const
 	    std::cerr << ", ";
 	}
 	std::cerr << i->first << "=" << i->second;
+	++i;
     }
     std::cerr << std::endl;
 

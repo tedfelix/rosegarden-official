@@ -1025,6 +1025,47 @@ TransformsMenuRestoreStemsCommand::modifySegment()
     }
 }
 
+
+void
+TransformsMenuChangeSlurPositionCommand::modifySegment()
+{
+    EventSelection::eventcontainer::iterator i;
+
+    for (i  = m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
+
+	if ((*i)->isa(Indication::EventType)) {
+	    std::string indicationType;
+	    if ((*i)->get<String>(Indication::IndicationTypePropertyName, indicationType)
+		&& (indicationType == Indication::Slur ||
+		    indicationType == Indication::PhrasingSlur)) {
+		(*i)->set<Rosegarden::Bool>(NotationProperties::SLUR_ABOVE, m_above);
+	    }
+	}
+    }
+}
+
+
+void
+TransformsMenuRestoreSlursCommand::modifySegment()
+{
+    EventSelection::eventcontainer::iterator i;
+
+    for (i  = m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
+
+	if ((*i)->isa(Indication::EventType)) {
+	    std::string indicationType;
+	    if ((*i)->get<String>(Indication::IndicationTypePropertyName, indicationType)
+		&& (indicationType == Indication::Slur ||
+		    indicationType == Indication::PhrasingSlur)) {
+		(*i)->unset(NotationProperties::SLUR_ABOVE);
+	    }
+	}
+    }
+}
+
+
 QString
 TransformsMenuChangeStyleCommand::getGlobalName(NoteStyleName style)
 {

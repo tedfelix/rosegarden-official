@@ -374,9 +374,8 @@ Quantizer::setToTarget(Segment *s, Segment::iterator i,
 	// preventing us from locating them in the ViewElementLists
 	// because their ordering would have silently changed
 #ifdef DEBUG_NOTATION_QUANTIZER
-	cout << "Quantizer: setting " << absTime << " to "
-	     << m_targetProperties[AbsoluteTimeValue] << " and "
-	     << duration << " to " << m_targetProperties[DurationValue]
+	cout << "Quantizer: setting " << absTime << " to notation absolute time and "
+	     << duration << " to notation duration"
 	     << endl;
 #endif
 	e = new Event(**i, (*i)->getAbsoluteTime(), (*i)->getDuration(),
@@ -776,148 +775,6 @@ LegatoQuantizer::quantizeTime(timeT t) const
 }
 
 
-class GrooveQuantizer::Impl
-{
-public:
-    Impl(GrooveQuantizer *const q, Segment *groove, GrooveQuantizer::Method m) :
-	m_groove(groove), m_method(m), m_q(q) { }
-    Impl(const Impl &i) :
-	m_groove(i.m_groove), m_method(i.m_method), m_q(i.m_q) { }
-
-    void quantizeRange(Segment *,
-		       Segment::iterator,
-		       Segment::iterator) const;
-
-protected:
-    Segment *m_groove;
-    GrooveQuantizer::Method m_method;
-    GrooveQuantizer *m_q;
-};
-
-
-GrooveQuantizer::GrooveQuantizer(Segment *groove, Method method) :
-    Quantizer(RawEventData),
-    m_impl(new Impl(this, groove, method))
-{
-    // nothing
-}
-
-GrooveQuantizer::GrooveQuantizer(std::string source, std::string target,
-				 Segment *groove, Method method) :
-    Quantizer(source, target),
-    m_impl(new Impl(this, groove, method))
-{
-    // nothing
-}
-
-GrooveQuantizer::GrooveQuantizer(const GrooveQuantizer &q) :
-    Quantizer(q.m_target),
-    m_impl(new Impl(*q.m_impl))
-{
-    // nothing
-}
-
-GrooveQuantizer::~GrooveQuantizer()
-{
-    delete m_impl;
-}
-
-void
-GrooveQuantizer::quantizeRange(Segment *s,
-			       Segment::iterator i,
-			       Segment::iterator j) const
-{
-    m_impl->quantizeRange(s, i, j);
-}
-
-void
-GrooveQuantizer::Impl::quantizeRange(Segment *s,
-				     Segment::iterator from,
-				     Segment::iterator to) const
-{
-    //!!! need an additional option: per-chord, per-beat, per-bar.
-    // Let's work per-beat for the moment.  Even for this, we should
-    // probably use TimeSignature.getDivisions()
-    
-    Composition *comp = s->getComposition();
-    if (!comp) return;
-
-    std::vector<timeT> beatTimeTs;
-    std::vector<RealTime> beatRealTimes;
-
-    timeT fromTime = s->getEndMarkerTime(), toTime = s->getEndMarkerTime();
-    if (s->isBeforeEndMarker(from)) fromTime = (*from)->getAbsoluteTime();
-    if (s->isBeforeEndMarker(to)) toTime = (*to)->getAbsoluteTime();
-
-    int startBar = comp->getBarNumber(fromTime);
-    int endBar = comp->getBarNumber(toTime) + 1;
-
-    for (int barNo = startBar; barNo <= endBar; ++barNo) {
-	bool dummy;
-	TimeSignature sig = comp->getTimeSignatureInBar(barNo, dummy);
-	for (int i = 0; i < sig.getBeatsPerBar(); ++i) {
-	    beatTimeTs.push_back(comp->getBarStart(barNo) + i * sig.getBeatDuration());
-	}
-    }
-
-    Segment::iterator gfrom = m_groove->findTime(fromTime);
-    Segment::iterator gto = m_groove->findTime(toTime);
-
-    for (Segment::iterator i = gfrom;
-	 i != gto && m_groove->isBeforeEndMarker(i);
-	 ++i) {
-	if ((*i)->isa(Note::EventType)) {
-	    beatRealTimes.push_back(s->getComposition()->getElapsedRealTime
-				    ((*i)->getAbsoluteTime()));
-	}
-    }
-
-    int beats = std::min(beatTimeTs.size(), beatRealTimes.size());
-
-    std::cout << beats << " beats" << std::endl;
-    if (beats < 2) return;
-
-    // Remove existing tempo changes between fromTime and toTime
-    while (comp->getTempoChangeNumberAt(fromTime-1) <
-	   comp->getTempoChangeNumberAt(toTime))
-	comp->removeTempoChange(comp->getTempoChangeNumberAt(fromTime-1)+1);
-
-    int n = comp->getTempoChangeNumberAt(fromTime-1);
-    long prevRawTempo = -1;
-    if (n >= 0) {
-	std::pair<timeT, long> tempoChange = comp->getRawTempoChange
-	    (comp->getTempoChangeNumberAt(fromTime-1));
-	prevRawTempo = tempoChange.second;
-    }
-
-    std::cout << "starting raw tempo: " << prevRawTempo << std::endl;
-
-    timeT quarter = Note(Note::Crotchet).getDuration();
-
-    for (int beat = 1; beat < beats; ++beat) {
-	timeT beatTime = beatTimeTs[beat] - beatTimeTs[beat-1];
-	RealTime beatRealTime = beatRealTimes[beat] - beatRealTimes[beat-1];
-	// Calculate tempo in quarter notes per hour.
-	// This is 3600 / {quarter note duration in seconds}
-	// = 3600 / ( {beat in seconds} * {quarter in ticks} / { beat in ticks} )
-	// = ( 3600 * {beat in ticks} ) / ( {beat in seconds} * {quarter in ticks} )
-	double beatSec = double(beatRealTime.sec) +
-	    double(beatRealTime.usec() / 1000000.0);
-	double qph = (3600.0 * beatTime) / (beatSec * quarter);
-	long rawTempo = long(qph + 0.000001);
-
-	std::cout << "prev beat: " << beatTimeTs[beat] << ", prev beat real time " << beatRealTimes[beat] << std::endl;
-	std::cout << "time " << beatTime << ", rt " << beatRealTime << ", beatSec " << beatSec << ", rawTempo " << rawTempo << std::endl;
-
-	if (rawTempo != prevRawTempo) {
-	    comp->addRawTempo(beatTimeTs[beat-1], rawTempo);
-	    prevRawTempo = rawTempo;
-	}
-    }
-	
-}
-
-
 class NotationQuantizer::Impl
 {
 public:
@@ -975,7 +832,10 @@ public:
     void quantizeAbsoluteTime(Segment *, Segment::iterator) const;
     long scoreAbsoluteTimeForBase(Segment *, const Segment::iterator &,
 				  int depth, timeT base, timeT sigTime,
-				  timeT t, timeT d, int noteType) const;
+				  timeT t, timeT d, int noteType,
+				  const Segment::iterator &,
+				  const Segment::iterator &,
+				  bool &right) const;
     void quantizeDurationProvisional(Segment *, Segment::iterator) const;
     void quantizeDuration(Segment *, Chord &) const;
 
@@ -1165,17 +1025,49 @@ NotationQuantizer::Impl::quantizeAbsoluteTime(Segment *s, Segment::iterator i) c
 
     timeT bestBase = -2;
     long bestScore = 0;
+    bool bestRight = false;
 
 #ifdef DEBUG_NOTATION_QUANTIZER
     cout << "quantizeAbsoluteTime: t is " << t << ", d is " << d << endl;
+#endif
+
+    // scoreAbsoluteTimeForBase wants to know the previous starting
+    // note (N) and the previous starting note that ends before this
+    // one starts (N').  Much more efficient to calculate them once
+    // now before the loop.
+    
+    Segment::iterator j(i);
+    Segment::iterator n(s->end()), nprime(s->end());
+    for (;;) {
+	if (j == s->begin()) break;
+	--j;
+	if ((*j)->isa(Note::EventType)) {
+	    if (n == s->end()) n = j;
+	    if ((*j)->getAbsoluteTime() + (*j)->getDuration()
+		<= (*i)->getAbsoluteTime()) {
+		nprime = j;
+		break;
+	    }
+	}
+    }
+    
+#ifdef DEBUG_NOTATION_QUANTIZER
+    if (n != s->end() && n != nprime) {
+	cout << "found n (distinct from nprime) at " << (*n)->getAbsoluteTime() << endl;
+    }
+    if (nprime != s->end()) {
+	cout << "found nprime at " << (*nprime)->getAbsoluteTime()
+	     << ", duration " << (*nprime)->getDuration() << endl;
+    }
 #endif
 
     for (int depth = 0; depth < maxDepth; ++depth) {
 
 	base /= divisions[depth];
 	if (base < m_unit) break;
+	bool right = false;
 	long score = scoreAbsoluteTimeForBase(s, i, depth, base, sigTime,
-					      t, d, noteType);
+					      t, d, noteType, n, nprime, right);
 
 	if (depth == 0 || score < bestScore) {
 #ifdef DEBUG_NOTATION_QUANTIZER
@@ -1183,6 +1075,7 @@ NotationQuantizer::Impl::quantizeAbsoluteTime(Segment *s, Segment::iterator i) c
 #endif
 	    bestBase = base;
 	    bestScore = score;
+	    bestRight = right;
 	}
 
 #ifdef DEBUG_NOTATION_QUANTIZER
@@ -1198,13 +1091,20 @@ NotationQuantizer::Impl::quantizeAbsoluteTime(Segment *s, Segment::iterator i) c
 	// we need to snap relative to the time sig, not relative
 	// to the start of the whole composition
 	t -= sigTime;
+
+	t = (t / bestBase) * bestBase;
+	if (bestRight) t += bestBase;
+
+/*
 	timeT low = (t / bestBase) * bestBase;
 	timeT high = low + bestBase;
 	t = ((high - t > t - low) ? low : high);
+*/
+
 	t += sigTime;
 	
 #ifdef DEBUG_NOTATION_QUANTIZER
-	cout << "snap duration is " << bestBase << ", snapped to " << t << endl;
+	cout << "snap base is " << bestBase << ", snapped to " << t << endl;
 #endif
     }
 
@@ -1214,88 +1114,103 @@ NotationQuantizer::Impl::quantizeAbsoluteTime(Segment *s, Segment::iterator i) c
 }
 
 long
-NotationQuantizer::Impl::scoreAbsoluteTimeForBase(Segment *,
-						  const Segment::iterator &,
+NotationQuantizer::Impl::scoreAbsoluteTimeForBase(Segment *s,
+						  const Segment::iterator &i,
 						  int depth,
 						  timeT base,
 						  timeT sigTime,
 						  timeT t,
 						  timeT d,
-						  int noteType)
+						  int noteType,
+						  const Segment::iterator &n,
+						  const Segment::iterator &nprime,
+						  bool &wantRight)
     const
 {
     Profiler profiler("NotationQuantizer::Impl::scoreAbsoluteTimeForBase");
 
-//    int noteType = (*i)->get<Int>(m_provisionalNoteType);
-    bool right = false;
+    // Lower score is better.
     
-//    timeT t = m_q->getFromSource(*i, AbsoluteTimeValue);
-//    timeT d = getProvisional(*i, DurationValue);
-
     static timeT shortTime = Note(Note::Shortest).getDuration();
 
-    long distance = (t - sigTime) % base;
-    if (distance > base / 2) { // nearer to the next multiple
-	distance = base - distance;
-	right = true;
-    } 
-    
     double simplicityFactor(m_simplicityFactor);
     simplicityFactor -= Note::Crotchet - noteType;
     if (simplicityFactor < 10) simplicityFactor = 10;
-    
+
     double effectiveDepth = pow(depth + 2, simplicityFactor / 10);
-    
-    long score = long((distance + shortTime / 2) * effectiveDepth);
-    
-    double penalty1 = 1.0;
-    
-    // seriously penalise moving a note beyond its own end time
-    if (d > 0 && right && distance >= d * 0.9) {
-	penalty1 = double(distance) / d + 0.5;
-    }
-    
-    double penalty2 = 1.0;
-    
-    // or before the end of the previous note
 
-/*!!! no, what nonsense.  make attractive moving _to_ the provisionally-quantized end of previous note, make unattractive moving before it or moving before the unquantized end of note I guess
+    //!!! use velocity to adjust the effective depth as well? -- louder
+    // notes are more likely to be on big boundaries.  Actually, perhaps
+    // introduce a generally-useful "salience" score a la Dixon et al
 
-    if (!right) {
-	Segment::iterator j(i);
-	for (;;) {
-	    if (j == s->begin()) break;
-	    --j;
-	    timeT endTime = (*j)->getAbsoluteTime() + (*j)->getDuration();
-	    if ((*j)->isa(Note::EventType) && endTime < t) {
-		penalty2 = 2.0;
-		break;
+    long leftScore = 0;
+
+    for (int ri = 0; ri < 2; ++ri) {
+
+	bool right = (ri == 1);
+
+	long distance = (t - sigTime) % base;
+	if (right) distance = base - distance;
+	long score = long((distance + shortTime / 2) * effectiveDepth);
+    
+	double penalty1 = 1.0;
+    
+	// seriously penalise moving a note beyond its own end time
+	if (d > 0 && right && distance >= d * 0.9) {
+	    penalty1 = double(distance) / d + 0.5;
+	}
+    
+	double penalty2 = 1.0;
+
+	// Examine the previous starting note (N), and the previous
+	// starting note that ends before this one starts (N').
+    
+	// We should penalise moving this note to before the performed end
+	// of N' and seriously penalise moving it to the same quantized
+	// start time as N' -- but we should encourage moving it to the
+	// same time as the provisional end of N', or to the same start
+	// time as N if N != N'.
+	
+	if (!right) {
+	    if (n != s->end()) {
+		if (n != nprime) {
+		    timeT nt = getProvisional(*n, AbsoluteTimeValue);
+		    if (t - distance == nt) penalty2 = penalty2 * 2 / 3;
+		}
+		if (nprime != s->end()) {
+		    timeT npt = getProvisional(*nprime, AbsoluteTimeValue);
+		    timeT npd = getProvisional(*nprime, DurationValue);
+		    if (t - distance <= npt) penalty2 *= 4;
+		    else if (t - distance < npt + npd) penalty2 *= 2;
+		    else if (t - distance == npt + npd) penalty2 = penalty2 * 2 / 3;
+		}
+	    }
+	}
+    
+#ifdef DEBUG_NOTATION_QUANTIZER
+	cout << "  depth/eff/dist/t/score/pen1/pen2/res: " << depth << "/" << effectiveDepth << "/" << distance << "/" << (right ? t + distance : t - distance) << "/" << score << "/" << penalty1 << "/" << penalty2 << "/" << (score * penalty1 * penalty2);
+	if (right) cout << " -> ";
+	else cout << " <- ";
+	if (ri == 0) cout << endl;
+#endif
+    
+	score = long(score * penalty1);
+	score = long(score * penalty2);
+    
+	if (ri == 0) {
+	    leftScore = score;
+	} else {
+	    if (score < leftScore) {
+		wantRight = true;
+		return score;
+	    } else {
+		wantRight = false;
+		return leftScore;
 	    }
 	}
     }
-*/
 
-    //!!! make the score more attractive if near the end of the
-    // previous note (or at least penalise rounding right when
-    // rounding left would make us very close to it)
-    
-    //!!! use velocity to adjust the effective depth as well -- louder
-    // notes are more likely to be on big boundaries.  Actually, perhaps
-    // introduce a generally-useful "salience" score a la Dixon et al
-    
-#ifdef DEBUG_NOTATION_QUANTIZER
-    cout << "depth/effdepth/dist/score/pen1/pen2/result: " << depth << "/" << effectiveDepth << "/" << distance << "/" << score << "/" << penalty1 << "/" << penalty2 << "/" << (score * penalty1 * penalty2);
-#endif
-    
-    score = long(score * penalty1);
-    score = long(score * penalty2);
-    
-#ifdef DEBUG_NOTATION_QUANTIZER
-    if (right) cout << " -> ";
-    else cout << " <- ";
-#endif
-
-    return score;
+    return leftScore;
 }
     
 void
@@ -1303,6 +1218,9 @@ NotationQuantizer::Impl::quantizeDurationProvisional(Segment *, Segment::iterato
     const
 {
     Profiler profiler("NotationQuantizer::Impl::quantizeDurationProvisional");
+
+    // Calculate a first guess at the likely notation duration based
+    // only on its performed duration, without considering start time.
 
     timeT d = m_q->getFromSource(*i, DurationValue);
     if (d == 0) {
@@ -1795,8 +1713,10 @@ NotationQuantizer::Impl::isValidTupletAt(Segment *s,
     timeT d = getProvisional(*i, DurationValue);
     int noteType = (*i)->get<Int>(m_provisionalNoteType);
 
+    //!!! not as complete as the calculation we do in the original scoring
+    bool dummy;
     long tupletScore = scoreAbsoluteTimeForBase
-	(s, i, depth, tupletBase, sigTime, t, d, noteType);
+	(s, i, depth, tupletBase, sigTime, t, d, noteType, s->end(), s->end(), dummy);
 #ifdef DEBUG_NOTATION_QUANTIZER
     cout << "\nNotationQuantizer::isValidTupletAt: score " << score
 	 << " vs tupletScore " << tupletScore << endl;

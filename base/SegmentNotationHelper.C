@@ -1002,7 +1002,10 @@ SegmentNotationHelper::insertSingleSomething(iterator i, int duration,
     Event *e = new Event(*modelEvent, time, effectiveDuration,
 			 modelEvent->getSubOrdering(), notationTime);
 
-    setInsertedNoteGroup(e, i);
+    // If the model event already has group info, I guess we'd better use it!
+    if (!e->has(BEAMED_GROUP_ID)) {
+	setInsertedNoteGroup(e, i);
+    }
 
     if (tiedBack && e->isa(Note::EventType)) {
         e->set<Bool>(TIED_BACKWARD, true);
@@ -1036,7 +1039,8 @@ SegmentNotationHelper::setInsertedNoteGroup(Event *e, iterator i)
     e->unset(BEAMED_GROUP_TYPE);
 
     while (isBeforeEndMarker(i) &&
-	   !((*i)->isa(Note::EventRestType)) &&
+	   (!((*i)->isa(Note::EventRestType)) ||
+	    (*i)->has(BEAMED_GROUP_TUPLET_BASE)) &&
 	   (*i)->getNotationAbsoluteTime() == e->getAbsoluteTime()) {
 
 	if ((*i)->has(BEAMED_GROUP_ID)) {
@@ -1273,7 +1277,7 @@ SegmentNotationHelper::makeTupletGroup(timeT t, int untupled, int tupled,
 {
     int groupId = segment().getNextId();
 
-//    cerr << "SegmentNotationHelper::makeTupletGroup: time " << t << ", unit "<< unit << ", params " << untupled << "/" << tupled << ", id " << groupId << endl;
+    cerr << "SegmentNotationHelper::makeTupletGroup: time " << t << ", unit "<< unit << ", params " << untupled << "/" << tupled << ", id " << groupId << endl;
 
     list<Event *> toInsert;
     list<iterator> toErase;
@@ -1309,6 +1313,8 @@ SegmentNotationHelper::makeTupletGroup(timeT t, int untupled, int tupled,
 	Event *e = new Event(**i,
 			     notationTime + (offset * tupled / untupled),
 			     duration * tupled / untupled);
+
+	cerr << "SegmentNotationHelper::makeTupletGroup: made event at time " << e->getAbsoluteTime() << ", duration " << e->getDuration() << endl;
 
 	e->set<Int>(BEAMED_GROUP_ID, groupId);
 	e->set<String>(BEAMED_GROUP_TYPE, GROUP_TYPE_TUPLED);
