@@ -44,3 +44,11 @@ Jörg Schumann <jrschumann@gmx.de>
 
 Kevin Donnelly
     * Welsh translation
+
+Didier Burli
+    * French translation
+
+
+##
+## Names in there should also be credited in gui/main.cpp, with aboutData.addCredit()
+##
