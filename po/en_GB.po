@@ -4342,15 +4342,15 @@ msgstr ""
 
 #: notationstrings.cpp:139
 msgid "64th"
-msgstr "hemidemisemi"
+msgstr "hemi"
 
 #: notationstrings.cpp:139
 msgid "32nd"
-msgstr "demisemi"
+msgstr "demi"
 
 #: notationstrings.cpp:139
 msgid "16th"
-msgstr "semiquaver"
+msgstr "semi"
 
 #: notationstrings.cpp:139
 msgid "8th"
@@ -4374,15 +4374,15 @@ msgstr "breve"
 
 #: notationstrings.cpp:144
 msgid "64ths"
-msgstr "hemidemisemis"
+msgstr "hemis"
 
 #: notationstrings.cpp:144
 msgid "32nds"
-msgstr "demisemis"
+msgstr "demis"
 
 #: notationstrings.cpp:144
 msgid "16ths"
-msgstr "semiquavers"
+msgstr "semis"
 
 #: notationstrings.cpp:144
 msgid "8ths"

@@ -482,11 +482,80 @@ signals:
 
 public slots:
     void slotSetPitch(int);
+    void slotResetToDefault();
 
 protected:
+    int m_defaultPitch;
     RosegardenPitchDragLabel *m_pitchDragLabel;
     QSpinBox *m_pitch;
     QLabel *m_pitchLabel;
 };
+
+
+namespace Rosegarden { class Composition; }
+
+class RosegardenTimeWidget : public QGroupBox
+{
+    Q_OBJECT
+public:
+    /**
+     * Constructor for absolute time widget
+     */
+    RosegardenTimeWidget(QString title,
+			 QWidget *parent,
+			 Rosegarden::Composition *composition, // for bar/beat/msec
+			 Rosegarden::timeT initialTime);
+
+    /**
+     * Constructor for duration widget.  startTime is the absolute time
+     * at which this duration begins, necessary so that we can show the
+     * correct real-time (based on tempo at startTime) etc.
+     */
+    RosegardenTimeWidget(QString title,
+			 QWidget *parent,
+			 Rosegarden::Composition *composition, // for bar/beat/msec
+			 Rosegarden::timeT startTime,
+			 Rosegarden::timeT initialDuration);
+
+    Rosegarden::timeT getTime();
+    Rosegarden::RealTime getRealTime();
+
+signals:
+    void timeChanged(Rosegarden::timeT);
+    void realTimeChanged(Rosegarden::RealTime);
+
+public slots:
+    void slotSetTime(Rosegarden::timeT);
+    void slotSetRealTime(Rosegarden::RealTime);
+    void slotResetToDefault();
+
+    void slotNoteChanged(int);
+    void slotTimeTChanged(int);
+    void slotBarBeatOrFractionChanged(int);
+    void slotSecOrMSecChanged(int);
+
+private:
+    Rosegarden::Composition *m_composition;
+    bool m_isDuration;
+    Rosegarden::timeT m_time;
+    Rosegarden::timeT m_startTime;
+    Rosegarden::timeT m_defaultTime;
+
+    QComboBox *m_note;
+    QSpinBox  *m_timeT;
+    QSpinBox  *m_bar;
+    QSpinBox  *m_beat;
+    QSpinBox  *m_fraction;
+    QLabel    *m_timeSig;
+    QSpinBox  *m_sec;
+    QSpinBox  *m_msec;
+    QLabel    *m_tempo;
+
+    void init();
+    void populate();
+
+    std::vector<Rosegarden::timeT> m_noteDurations;
+};
     
 #endif // _WIDGETS_H_
+

@@ -402,7 +402,7 @@ public:
     //  TEMPO
 
     /**
-     * Return the tempo in effect at time t, in beats per minute.
+     * Return the tempo in effect at time t, in quarters per minute.
      */
     double getTempoAt(timeT t) const;
 
@@ -420,7 +420,7 @@ public:
 
     /**
      * Add a tempo-change event at the given time, to the given
-     * tempo (in beats per minute).  Removes any existing tempo
+     * tempo (in quarters per minute).  Removes any existing tempo
      * event at that time.  Returns the index of the new tempo
      * event in a form suitable for passing to removeTempoChange.
      */
@@ -428,7 +428,7 @@ public:
 
     /**
      * Add a tempo-change event at the given time, to the given
-     * tempo (in beats per hour).  Removes any existing tempo
+     * tempo (in quarters per hour).  Removes any existing tempo
      * event at that time.  Returns the index of the new tempo
      * event in a form suitable for passing to removeTempoChange.
      */
@@ -448,7 +448,7 @@ public:
 
     /**
      * Return the absolute time of and tempo introduced by tempo
-     * change number n, in beats per hour (this is the value that's
+     * change number n, in quarters per hour (this is the value that's
      * actually stored)
      */
     std::pair<timeT, long> getRawTempoChange(int n) const;
@@ -631,7 +631,7 @@ public:
 protected:
 
     static const std::string TempoEventType; 
-    static const PropertyName TempoProperty; // stored in beats per hour
+    static const PropertyName TempoProperty; // stored in quarters per hour
 
     static const PropertyName NoAbsoluteTimeProperty;
     static const PropertyName BarNumberProperty;

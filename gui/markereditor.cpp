@@ -377,7 +377,9 @@ MarkerEditorDialog::slotEdit(QListViewItem *i)
     RG_DEBUG << "MarkerEditorDialog::slotEdit" << endl;
 
     MarkerModifyDialog *dialog = 
-        new MarkerModifyDialog(this, i->text(0).toInt(),
+        new MarkerModifyDialog(this,
+			       &m_doc->getComposition(),
+			       i->text(0).toInt(),
                                i->text(1), i->text(2));
 
     if (dialog->exec() == QDialog::Accepted)
@@ -416,6 +418,7 @@ MarkerEditorDialog::setDocument(RosegardenGUIDoc *doc)
 
 
 MarkerModifyDialog::MarkerModifyDialog(QWidget *parent,
+				       Rosegarden::Composition *composition,
                                        int time,
                                        const QString &name,
                                        const QString &des):
@@ -424,12 +427,10 @@ MarkerModifyDialog::MarkerModifyDialog(QWidget *parent,
 {
     QVBox *vbox = makeVBoxMainWidget();
 
-    QGroupBox *groupBox = new QGroupBox
-        (1, Horizontal, i18n("Marker Properties"), vbox);
-
-    QFrame *frame = new QFrame(groupBox);
-
-    QGridLayout *layout = new QGridLayout(frame, 4, 2, 10, 5);
+    m_timeEdit = new RosegardenTimeWidget(i18n("Marker Time"), vbox, composition,
+					  time);
+					  
+/*!!!
 
     layout->addWidget(new QLabel(i18n("Absolute Time:"), frame), 0, 0);
     m_timeEdit = new QSpinBox(frame);
@@ -440,14 +441,21 @@ MarkerModifyDialog::MarkerModifyDialog(QWidget *parent,
     m_timeEdit->setLineStep(
             Rosegarden::Note(Rosegarden::Note::Shortest).getDuration());
     m_timeEdit->setValue(time);
+*/
+    QGroupBox *groupBox = new QGroupBox
+        (1, Horizontal, i18n("Marker Properties"), vbox);
 
-    layout->addWidget(new QLabel(i18n("Name:"), frame), 1, 0);
+    QFrame *frame = new QFrame(groupBox);
+
+    QGridLayout *layout = new QGridLayout(frame, 2, 2, 5, 5);
+
+    layout->addWidget(new QLabel(i18n("Name:"), frame), 0, 0);
     m_nameEdit = new QLineEdit(name, frame);
-    layout->addWidget(m_nameEdit, 1, 1);
+    layout->addWidget(m_nameEdit, 0, 1);
 
-    layout->addWidget(new QLabel(i18n("Description:"), frame), 2, 0);
+    layout->addWidget(new QLabel(i18n("Description:"), frame), 1, 0);
     m_desEdit = new QLineEdit(des, frame);
-    layout->addWidget(m_desEdit, 2, 1);
+    layout->addWidget(m_desEdit, 1, 1);
 }
 
 void

@@ -2868,6 +2868,9 @@ void RosegardenGUIApp::slotDisplayBarTime(timeT t)
         barNo += 1;
         beatNo += 1;
     }
+
+    // show units in hemidemis (or whatever), not in raw time ticks
+    unitNo /= Rosegarden::Note(Rosegarden::Note::Shortest).getDuration();
     
     m_transport->displayBarTime(barNo, beatNo, unitNo);
 }

@@ -272,8 +272,10 @@ AudioPluginDialog::slotPluginSelected(int i)
                 // if it doesn't exist.  Modification occurs through the
                 // slotPluginPortChanged signal.
                 //
-                if (inst->getPort(count) == 0)
-                    inst->addPort(count, 0.0);
+                if (inst->getPort(count) == 0) {
+//                    inst->addPort(count, 0.0);
+                    inst->addPort(count, (float)(*it)->getDefaultValue());
+		}
 
                 PluginControl *control =
                     new PluginControl(m_pluginParamsBox,

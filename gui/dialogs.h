@@ -52,6 +52,7 @@ class RosegardenQuantizeParameters;
 class RosegardenPitchChooser;
 class BigArrowButton;
 class InstrumentParameterBox;
+class RosegardenTimeWidget;
 
 
 // Definitions of various simple dialogs that may be used in multiple
@@ -273,6 +274,37 @@ protected:
 };
 
 
+class PitchDialog : public KDialogBase
+{
+    Q_OBJECT
+public:
+    PitchDialog(QWidget *parent, QString title, int defaultPitch = 60);
+
+    int getPitch() const;
+
+protected:
+    RosegardenPitchChooser *m_pitchChooser;
+};
+
+
+class TimeDialog : public KDialogBase
+{
+    Q_OBJECT
+public:
+    /// for absolute times
+    TimeDialog(QWidget *parent, QString title, Rosegarden::Composition *composition,
+	       Rosegarden::timeT defaultTime);
+
+    /// for durations
+    TimeDialog(QWidget *parent, QString title, Rosegarden::Composition *composition,
+	       Rosegarden::timeT startTime, Rosegarden::timeT defaultDuration);
+
+    Rosegarden::timeT getTime() const;
+
+protected:
+    RosegardenTimeWidget *m_timeWidget;
+};
+		     
 
 class EventEditDialog : public KDialogBase
 {
@@ -335,7 +367,6 @@ protected:
 /*
  * A simpler event editor for use by the EventView and MatrixView
  * and people who want to remain sane.
- *
  */
 class SimpleEventEditDialog : public KDialogBase
 {
@@ -359,6 +390,9 @@ public slots:
     void slotPitchChanged(int value);
     void slotVelocityChanged(int value);
     void slotMetaChanged(const QString &);
+    void slotEditAbsoluteTime();
+    void slotEditDuration();
+    void slotEditPitch();
 
 protected:
 
@@ -384,6 +418,10 @@ protected:
     QSpinBox                *m_durationSpinBox;
     QSpinBox                *m_pitchSpinBox;
     QSpinBox                *m_velocitySpinBox;
+
+    QPushButton             *m_timeEditButton;
+    QPushButton             *m_durationEditButton;
+    QPushButton             *m_pitchEditButton;
 
     QLineEdit               *m_metaEdit;
 

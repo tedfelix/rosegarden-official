@@ -48,6 +48,7 @@
 #include "midipitchlabel.h"
 
 #include "Quantizer.h"
+#include "Composition.h" // currently for time widget only
 
 void
 RosegardenTristateCheckBox::mouseReleaseEvent(QMouseEvent *)
@@ -1284,7 +1285,8 @@ RosegardenPitchDragLabel::calculatePixmap(bool useSharps) const
 RosegardenPitchChooser::RosegardenPitchChooser(QString title,
 					       QWidget *parent,
 					       int defaultPitch) :
-    QGroupBox(1, Horizontal, title, parent)
+    QGroupBox(1, Horizontal, title, parent),
+    m_defaultPitch(defaultPitch)
 {
     m_pitchDragLabel = new RosegardenPitchDragLabel(this, defaultPitch);
 
@@ -1335,4 +1337,439 @@ RosegardenPitchChooser::slotSetPitch(int p)
     update();
 }
 
+void
+RosegardenPitchChooser::slotResetToDefault()
+{
+    slotSetPitch(m_defaultPitch);
+}
+
+RosegardenTimeWidget::RosegardenTimeWidget(QString title,
+					   QWidget *parent,
+					   Rosegarden::Composition *composition,
+					   Rosegarden::timeT absTime) :
+    QGroupBox(1, Horizontal, title, parent),
+    m_composition(composition),
+    m_isDuration(false),
+    m_time(absTime),
+    m_startTime(0),
+    m_defaultTime(absTime)
+{
+    init();
+}
+
+RosegardenTimeWidget::RosegardenTimeWidget(QString title,
+					   QWidget *parent,
+					   Rosegarden::Composition *composition,
+					   Rosegarden::timeT startTime,
+					   Rosegarden::timeT duration) :
+    QGroupBox(1, Horizontal, title, parent),
+    m_composition(composition),
+    m_isDuration(true),
+    m_time(duration),
+    m_startTime(startTime),
+    m_defaultTime(duration)
+{
+    init();
+}
+
+void
+RosegardenTimeWidget::init()
+{
+    int denoms[] = {
+	64, 48, 32, 24, 16, 12, 8, 6, 4, 3, 2, 1
+    };
+
+    QFrame *frame = new QFrame(this);
+    QGridLayout *layout = new QGridLayout(frame, 7, 3, 5, 5);
+    QLabel *label = 0;
+
+    if (m_isDuration) {
+
+	label = new QLabel(i18n("Note:"), frame);
+	label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+	layout->addWidget(label, 0, 0);
+	m_note = new QComboBox(frame);
+	m_noteDurations.push_back(0);
+	m_note->insertItem(i18n("<inexact>"));
+	for (size_t i = 0; i < sizeof(denoms)/sizeof(denoms[0]); ++i) {
+
+	    Rosegarden::timeT duration =
+		Rosegarden::Note(Rosegarden::Note::WholeNote).getDuration() / denoms[i];
+	    m_noteDurations.push_back(duration);
+	    Rosegarden::timeT error = 0;
+	    QString label = NotationStrings::makeNoteMenuLabel
+		(duration, false, error);
+	    QPixmap pmap = NotePixmapFactory::toQPixmap
+		(NotePixmapFactory::makeNoteMenuPixmap(duration, error));
+	    m_note->insertItem(pmap, label); // ignore error
+
+	    if (i > 0 && (i % 2) == 0) { // not hemidemi, not a triplet
+		duration = duration * 3 / 2;
+		m_noteDurations.push_back(duration);
+		Rosegarden::timeT error = 0;
+		QString label = NotationStrings::makeNoteMenuLabel
+		    (duration, false, error);
+		QPixmap pmap = NotePixmapFactory::toQPixmap
+		    (NotePixmapFactory::makeNoteMenuPixmap(duration, error));
+		m_note->insertItem(pmap, label); // ignore error
+	    }		
+	}
+	connect(m_note, SIGNAL(activated(int)),
+		this, SLOT(slotNoteChanged(int)));
+	layout->addMultiCellWidget(m_note, 0, 0, 1, 3);
+
+	label = new QLabel(i18n("Units:"), frame);
+	label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+	layout->addWidget(label, 0, 4);
+	m_timeT = new QSpinBox(frame);
+	m_timeT->setLineStep
+	    (Rosegarden::Note(Rosegarden::Note::Shortest).getDuration());
+	connect(m_timeT, SIGNAL(valueChanged(int)),
+		this, SLOT(slotTimeTChanged(int)));
+	layout->addWidget(m_timeT, 0, 5);
+
+    } else {
+
+	m_note = 0;
+
+	label = new QLabel(i18n("Time:"), frame);
+	label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+	layout->addWidget(label, 0, 0);
+	m_timeT = new QSpinBox(frame);
+	m_timeT->setLineStep
+	    (Rosegarden::Note(Rosegarden::Note::Shortest).getDuration());
+	connect(m_timeT, SIGNAL(valueChanged(int)),
+		this, SLOT(slotTimeTChanged(int)));
+	layout->addWidget(m_timeT, 0,1);
+	layout->addWidget(new QLabel(i18n("units"), frame), 0, 2);
+    }
+
+    label = new QLabel(m_isDuration ? i18n("Bars:") : i18n("Bar:"), frame);
+    label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    layout->addWidget(label, 1, 0);
+    m_bar = new QSpinBox(frame);
+    if (m_isDuration) m_bar->setMinValue(0);
+    connect(m_bar, SIGNAL(valueChanged(int)),
+	    this, SLOT(slotBarBeatOrFractionChanged(int)));
+    layout->addWidget(m_bar, 1, 1);
+
+    label = new QLabel(m_isDuration ? i18n("beats:") : i18n("beat:"), frame);
+    label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    layout->addWidget(label, 1, 2);
+    m_beat = new QSpinBox(frame);
+    m_beat->setMinValue(1);
+    connect(m_beat, SIGNAL(valueChanged(int)),
+	    this, SLOT(slotBarBeatOrFractionChanged(int)));
+    layout->addWidget(m_beat, 1, 3);
+
+    label = new QLabel(i18n("%1:").arg(NotationStrings::getShortNoteName
+				       (Rosegarden::Note
+					(Rosegarden::Note::Shortest), true)),
+				       frame);
+    label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    layout->addWidget(label, 1, 4);
+    m_fraction = new QSpinBox(frame);
+    m_fraction->setMinValue(1);
+    connect(m_fraction, SIGNAL(valueChanged(int)),
+	    this, SLOT(slotBarBeatOrFractionChanged(int)));
+    layout->addWidget(m_fraction, 1, 5);
+
+    m_timeSig = new QLabel(frame);
+    layout->addWidget(m_timeSig, 1, 6);
+    
+    label = new QLabel(i18n("Seconds:"), frame);
+    label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    layout->addWidget(label, 2, 0);
+    m_sec = new QSpinBox(frame);
+    if (m_isDuration) m_sec->setMinValue(0);
+    connect(m_sec, SIGNAL(valueChanged(int)),
+	    this, SLOT(slotSecOrMSecChanged(int)));
+    layout->addWidget(m_sec, 2, 1);
+
+    label = new QLabel(i18n("msec:"), frame);
+    label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    layout->addWidget(label, 2, 2);
+    m_msec = new QSpinBox(frame);
+    m_msec->setMinValue(0);
+    m_msec->setLineStep(10);
+    connect(m_msec, SIGNAL(valueChanged(int)),
+	    this, SLOT(slotSecOrMSecChanged(int)));
+    layout->addWidget(m_msec, 2, 3);
+
+    if (m_isDuration) {
+	m_tempo = new QLabel(frame);
+	layout->addWidget(m_tempo, 2, 6);
+    } else {
+	m_tempo = 0;
+    }
+
+    populate();
+}
+
+void
+RosegardenTimeWidget::populate()
+{
+    // populate everything from m_time and m_startTime
+
+    if (m_note)
+	m_note ->blockSignals(true);
+    m_timeT    ->blockSignals(true);
+    m_bar      ->blockSignals(true);
+    m_beat     ->blockSignals(true);
+    m_fraction ->blockSignals(true);
+    m_sec      ->blockSignals(true);
+    m_msec     ->blockSignals(true);
+
+    if (m_isDuration) {
+
+	if (m_time + m_startTime > m_composition->getEndMarker()) {
+	    m_time = m_composition->getEndMarker() - m_startTime;
+	}
+
+	m_timeT->setMinValue(0);
+	m_timeT->setMaxValue(m_composition->getEndMarker() - m_startTime);
+	m_timeT->setValue(m_time);
+    
+	m_note->setCurrentItem(0);
+	for (size_t i = 0; i < m_noteDurations.size(); ++i) {
+	    if (m_time == m_noteDurations[i]) {
+		m_note->setCurrentItem(i);
+		break;
+	    }
+	}
+	
+	// the bar/beat etc timings are considered to be times of a note
+	// starting at the start of a bar, in the time signature in effect
+	// at m_startTime
+
+	Rosegarden::TimeSignature timeSig =
+	    m_composition->getTimeSignatureAt(m_startTime);
+	Rosegarden::timeT barDuration = timeSig.getBarDuration();
+	Rosegarden::timeT beatDuration = timeSig.getBeatDuration();
+	int bars = m_time / barDuration;
+	int beats = (m_time % barDuration) / beatDuration;
+	Rosegarden::timeT remainder = (m_time % barDuration) % beatDuration;
+	int hemidemis = remainder /
+	    Rosegarden::Note(Rosegarden::Note::Shortest).getDuration();
+
+	m_bar->setMinValue(0);
+	m_bar->setMaxValue
+	    (m_composition->getBarNumber(m_composition->getEndMarker()) -
+	     m_composition->getBarNumber(m_startTime));
+	m_bar->setValue(bars);
+
+	m_beat->setMinValue(0);
+	m_beat->setMaxValue(timeSig.getBeatsPerBar() - 1);
+	m_beat->setValue(beats);
+
+	m_fraction->setMinValue(0);
+	m_fraction->setMaxValue(timeSig.getBeatDuration() /
+				Rosegarden::Note(Rosegarden::Note::Shortest).
+				getDuration() - 1);
+	m_fraction->setValue(hemidemis);
+
+	m_timeSig->setText(i18n("(%1/%2 time)").arg(timeSig.getNumerator()).
+			   arg(timeSig.getDenominator()));
+	
+	Rosegarden::timeT endTime = m_startTime + m_time;
+
+	Rosegarden::RealTime rt = m_composition->getRealTimeDifference
+	    (m_startTime, endTime);
+
+	m_sec->setMinValue(0);
+	m_sec->setMaxValue(m_composition->getRealTimeDifference
+			   (m_startTime, m_composition->getEndMarker()).sec);
+	m_sec->setValue(rt.sec);
+
+	m_msec->setMinValue(0);
+	m_msec->setMaxValue(999);
+	m_msec->setValue(rt.usec / 1000);
+
+	bool change = (m_composition->getTempoChangeNumberAt(endTime) !=
+		       m_composition->getTempoChangeNumberAt(m_startTime));
+	double tempo = m_composition->getTempoAt(m_startTime);
+	int qpmc = int(tempo * 100.0);
+	int bpmc = qpmc;
+	if (beatDuration != Rosegarden::Note(Rosegarden::Note::Crotchet).
+	    getDuration()) {
+	    bpmc = int(tempo * 100.0 *
+		       Rosegarden::Note(Rosegarden::Note::Crotchet).getDuration() /
+		       beatDuration);
+	}
+	if (change) {
+	    if (bpmc != qpmc) {
+		m_tempo->setText(i18n("(starting %1.%2 qpm, %2.%3 bpm)").
+				 arg(qpmc / 100).
+				 arg(qpmc % 100).
+				 arg(bpmc / 100).
+				 arg(bpmc % 100));
+	    } else {
+		m_tempo->setText(i18n("(starting %1.%2 bpm)").
+				 arg(bpmc / 100).
+				 arg(bpmc % 100));
+	    }
+	} else {
+	    if (bpmc != qpmc) {
+		m_tempo->setText(i18n("(%1.%2 qpm, %2.%3 bpm)").
+				 arg(qpmc / 100).
+				 arg(qpmc % 100).
+				 arg(bpmc / 100).
+				 arg(bpmc % 100));
+	    } else {
+		m_tempo->setText(i18n("(%1.%2 bpm)").
+				 arg(bpmc / 100).
+				 arg(bpmc % 100));
+	    }
+	}	    
+
+    } else {
+
+	if (m_time > m_composition->getEndMarker()) {
+	    m_time = m_composition->getEndMarker();
+	}
+
+	m_timeT->setMinValue(INT_MIN);
+	m_timeT->setMaxValue(m_composition->getEndMarker());
+	m_timeT->setValue(m_time);
+
+	int bar = m_composition->getBarNumber(m_time);
+	Rosegarden::TimeSignature timeSig =
+	    m_composition->getTimeSignatureAt(m_time);
+	Rosegarden::timeT barStart = m_composition->getBarStart(bar);
+	Rosegarden::timeT beatDuration = timeSig.getBeatDuration();
+	int beat = (m_time - barStart) / beatDuration + 1;
+	Rosegarden::timeT remainder = (m_time - barStart) % beatDuration;
+	int hemidemis = remainder /
+	    Rosegarden::Note(Rosegarden::Note::Shortest).getDuration();
+
+	m_bar->setMinValue(INT_MIN);
+	m_bar->setMaxValue(m_composition->getBarNumber
+			   (m_composition->getEndMarker()));
+	m_bar->setValue(bar + 1);
+
+	m_beat->setMinValue(1);
+	m_beat->setMaxValue(timeSig.getBeatsPerBar());
+	m_beat->setValue(beat);
+
+	m_fraction->setMinValue(0);
+	m_fraction->setMaxValue(timeSig.getBeatDuration() /
+				Rosegarden::Note(Rosegarden::Note::Shortest).
+				getDuration() - 1);
+	m_fraction->setValue(hemidemis);
+
+	m_timeSig->setText(i18n("(%1/%2 time)").arg(timeSig.getNumerator()).
+			   arg(timeSig.getDenominator()));
+	
+	Rosegarden::RealTime rt = m_composition->getElapsedRealTime(m_time);
+
+	m_sec->setMinValue(INT_MIN);
+	m_sec->setMaxValue(m_composition->getElapsedRealTime
+			   (m_composition->getEndMarker()).sec);
+	m_sec->setValue(rt.sec);
+
+	m_msec->setMinValue(0);
+	m_msec->setMaxValue(999);
+	m_msec->setValue(rt.usec / 1000);
+    }
+
+    if (m_note)
+	m_note ->blockSignals(false);
+    m_timeT    ->blockSignals(false);
+    m_bar      ->blockSignals(false);
+    m_beat     ->blockSignals(false);
+    m_fraction ->blockSignals(false);
+    m_sec      ->blockSignals(false);
+    m_msec     ->blockSignals(false);
+}
+
+Rosegarden::timeT
+RosegardenTimeWidget::getTime()
+{
+    return m_time;
+}
+
+Rosegarden::RealTime
+RosegardenTimeWidget::getRealTime()
+{
+    if (m_isDuration) {
+	return m_composition->getRealTimeDifference(m_startTime,
+						    m_startTime + m_time);
+    } else {
+	return m_composition->getElapsedRealTime(m_time);
+    }
+}
+
+void
+RosegardenTimeWidget::slotSetTime(Rosegarden::timeT t)
+{
+    bool change = (m_time != t);
+    if (!change) return;
+    m_time = t;
+    populate();
+    emit timeChanged(getTime());
+    emit realTimeChanged(getRealTime());
+}
+
+void
+RosegardenTimeWidget::slotSetRealTime(Rosegarden::RealTime rt)
+{
+    if (m_isDuration) {
+	Rosegarden::RealTime startRT = m_composition->getElapsedRealTime(m_startTime);
+	if (rt >= Rosegarden::RealTime::zeroTime) {
+	    slotSetTime(m_composition->getElapsedTimeForRealTime(startRT + rt) -
+			m_startTime);
+	} else {
+	    RG_DEBUG << "WARNING: RosegardenTimeWidget::slotSetRealTime: rt must be >0 for duration widget (was " << rt << ")" << endl;
+	}
+    } else {
+	slotSetTime(m_composition->getElapsedTimeForRealTime(rt));
+    }
+}
+
+void
+RosegardenTimeWidget::slotResetToDefault()
+{
+    slotSetTime(m_defaultTime);
+}
+	
+void
+RosegardenTimeWidget::slotNoteChanged(int n)
+{
+    if (n > 0) {
+	slotSetTime(m_noteDurations[n]);
+    }
+}
+
+void
+RosegardenTimeWidget::slotTimeTChanged(int t)
+{
+    RG_DEBUG << "slotTimeTChanged: t is " << t << ", value is " << m_timeT->value() << endl;
+
+    slotSetTime(t);
+}
+
+void
+RosegardenTimeWidget::slotBarBeatOrFractionChanged(int)
+{
+    int bar = m_bar->value();
+    int beat = m_beat->value();
+    int fraction = m_fraction->value();
+
+    Rosegarden::timeT t = m_composition->getBarStart(bar - 1);
+    Rosegarden::TimeSignature timesig = m_composition->getTimeSignatureAt(t);
+    t += (beat-1) * timesig.getBeatDuration();
+    t += Rosegarden::Note(Rosegarden::Note::Shortest).getDuration() *
+	fraction;
+
+    slotSetTime(t);
+}
+
+void
+RosegardenTimeWidget::slotSecOrMSecChanged(int)
+{
+    int sec = m_sec->value();
+    int msec = m_msec->value();
+
+    slotSetRealTime(Rosegarden::RealTime(sec, msec * 1000));
+}
 

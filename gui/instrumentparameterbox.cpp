@@ -1173,12 +1173,18 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
 	    QHBox *hbox = new QHBox(m_rotaryFrame);
 	    hbox->setSpacing(8);
 
+	    float smallStep = 1.0;
+
+	    float bigStep = 5.0;
+	    if (it->getMax() - it->getMin() < 10) bigStep = 1.0;
+	    else if (it->getMax() - it->getMin() < 20) bigStep = 2.0;
+
 	    rotary = new RosegardenRotary
 		(hbox,
 		 it->getMin(),
 		 it->getMax(),
-		 1.0, // hard coded step value
-		 5.0, // hard coded big step
+		 smallStep,
+		 bigStep,
 		 it->getDefault(),
 		 20);
 

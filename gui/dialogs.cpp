@@ -1110,6 +1110,59 @@ TextEventDialog::slotTypeChanged(const QString &)
 }
 
 
+PitchDialog::PitchDialog(QWidget *parent, QString title, int defaultPitch) :
+    KDialogBase(parent, 0, true, title, User1 | Ok)
+{
+    QVBox *vbox = makeVBoxMainWidget();
+    m_pitchChooser = new RosegardenPitchChooser(title, vbox, defaultPitch);
+
+    setButtonText(User1, i18n("Reset"));
+    connect(this, SIGNAL(user1Clicked()),
+	    m_pitchChooser, SLOT(slotResetToDefault()));
+}
+
+int
+PitchDialog::getPitch() const
+{
+    return m_pitchChooser->getPitch();
+}
+
+
+TimeDialog::TimeDialog(QWidget *parent, QString title,
+		       Rosegarden::Composition *composition,
+		       Rosegarden::timeT defaultTime) :
+    KDialogBase(parent, 0, true, title, User1 | Ok)
+{
+    QVBox *vbox = makeVBoxMainWidget();
+    m_timeWidget = new RosegardenTimeWidget
+	(title, vbox, composition, defaultTime);
+
+    setButtonText(User1, i18n("Reset"));
+    connect(this, SIGNAL(user1Clicked()),
+	    m_timeWidget, SLOT(slotResetToDefault()));
+}
+
+TimeDialog::TimeDialog(QWidget *parent, QString title,
+		       Rosegarden::Composition *composition,
+		       Rosegarden::timeT startTime,
+		       Rosegarden::timeT defaultTime) :
+    KDialogBase(parent, 0, true, title, User1 | Ok)
+{
+    QVBox *vbox = makeVBoxMainWidget();
+    m_timeWidget = new RosegardenTimeWidget
+	(title, vbox, composition, startTime, defaultTime);
+
+    setButtonText(User1, i18n("Reset"));
+    connect(this, SIGNAL(user1Clicked()),
+	    m_timeWidget, SLOT(slotResetToDefault()));
+}
+
+Rosegarden::timeT
+TimeDialog::getTime() const
+{
+    return m_timeWidget->getTime();
+}
+
 EventEditDialog::EventEditDialog(QWidget *parent,
 				 const Event &event,
 				 bool editable) :
@@ -1566,7 +1619,7 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
 
     QFrame *frame = new QFrame(groupBox);
 
-    QGridLayout *layout = new QGridLayout(frame, 4, 2, 10, 5);
+    QGridLayout *layout = new QGridLayout(frame, 4, 3, 5, 5);
 
     layout->addWidget(new QLabel(i18n("Event type:"), frame), 0, 0);
 
@@ -1594,26 +1647,38 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
     m_timeLabel = new QLabel(i18n("Absolute time:"), frame);
     layout->addWidget(m_timeLabel, 1, 0);
     m_timeSpinBox = new QSpinBox(INT_MIN, INT_MAX, Note(Note::Shortest).getDuration(), frame);
+    m_timeEditButton = new QPushButton("...", frame);
     layout->addWidget(m_timeSpinBox, 1, 1);
+    layout->addWidget(m_timeEditButton, 1, 2);
 
     connect(m_timeSpinBox, SIGNAL(valueChanged(int)),
             SLOT(slotAbsoluteTimeChanged(int)));
+    connect(m_timeEditButton, SIGNAL(released()),
+	    SLOT(slotEditAbsoluteTime()));
 
     m_durationLabel = new QLabel(i18n("Duration:"), frame);
     layout->addWidget(m_durationLabel, 2, 0);
     m_durationSpinBox = new QSpinBox(0, INT_MAX, Note(Note::Shortest).getDuration(), frame);
+    m_durationEditButton = new QPushButton("...", frame);
     layout->addWidget(m_durationSpinBox, 2, 1);
+    layout->addWidget(m_durationEditButton, 2, 2);
 
     connect(m_durationSpinBox, SIGNAL(valueChanged(int)),
             SLOT(slotDurationChanged(int)));
+    connect(m_durationEditButton, SIGNAL(released()),
+	    SLOT(slotEditDuration()));
 
     m_pitchLabel = new QLabel(i18n("Pitch:"), frame);
     layout->addWidget(m_pitchLabel, 3, 0);
     m_pitchSpinBox = new QSpinBox(frame);
+    m_pitchEditButton = new QPushButton("...", frame);
     layout->addWidget(m_pitchSpinBox, 3, 1);
+    layout->addWidget(m_pitchEditButton, 3, 2);
 
     connect(m_pitchSpinBox, SIGNAL(valueChanged(int)),
             SLOT(slotPitchChanged(int)));
+    connect(m_pitchEditButton, SIGNAL(released()),
+	    SLOT(slotEditPitch()));
 
     m_pitchSpinBox->setMinValue(Rosegarden::MidiMinValue);
     m_pitchSpinBox->setMaxValue(Rosegarden::MidiMaxValue);
@@ -1668,10 +1733,12 @@ SimpleEventEditDialog::setupForEvent()
     {
         m_durationLabel->show();
         m_durationSpinBox->show();
+	m_durationEditButton->show();
 
         m_pitchLabel->show();
         m_pitchLabel->setText(i18n("Note pitch:"));
         m_pitchSpinBox->show();
+	m_pitchEditButton->show();
 
         m_controllerLabel->hide();
         m_controllerLabelValue->hide();
@@ -1710,10 +1777,12 @@ SimpleEventEditDialog::setupForEvent()
     {
         m_durationLabel->hide();
         m_durationSpinBox->hide();
+	m_durationEditButton->hide();
 
         m_pitchLabel->show();
         m_pitchLabel->setText(i18n("Controller number:"));
         m_pitchSpinBox->show();
+	m_pitchEditButton->hide();
 
         m_controllerLabel->show();
         m_controllerLabelValue->show();
@@ -1754,10 +1823,12 @@ SimpleEventEditDialog::setupForEvent()
     {
         m_durationLabel->hide();
         m_durationSpinBox->hide();
+	m_durationEditButton->hide();
 
         m_pitchLabel->show();
         m_pitchLabel->setText(i18n("Key pitch:"));
         m_pitchSpinBox->show();
+	m_pitchEditButton->show();
 
         m_controllerLabel->hide();
         m_controllerLabelValue->hide();
@@ -1796,10 +1867,12 @@ SimpleEventEditDialog::setupForEvent()
     {
         m_durationLabel->hide();
         m_durationSpinBox->hide();
+	m_durationEditButton->hide();
 
         m_pitchLabel->show();
         m_pitchLabel->setText(i18n("Channel pressure:"));
         m_pitchSpinBox->show();
+	m_pitchEditButton->hide();
 
         m_controllerLabel->hide();
         m_controllerLabelValue->hide();
@@ -1828,10 +1901,12 @@ SimpleEventEditDialog::setupForEvent()
     {
         m_durationLabel->hide();
         m_durationSpinBox->hide();
+	m_durationEditButton->hide();
 
         m_pitchLabel->show();
         m_pitchLabel->setText(i18n("Program change:"));
         m_pitchSpinBox->show();
+	m_pitchEditButton->hide();
 
         m_controllerLabel->hide();
         m_controllerLabelValue->hide();
@@ -1860,9 +1935,11 @@ SimpleEventEditDialog::setupForEvent()
     {
         m_durationLabel->hide();
         m_durationSpinBox->hide();
+	m_durationEditButton->hide();
 
         m_pitchLabel->hide();
         m_pitchSpinBox->hide();
+	m_pitchEditButton->hide();
 
         m_controllerLabel->show();
         m_controllerLabelValue->show();
@@ -1889,10 +1966,12 @@ SimpleEventEditDialog::setupForEvent()
     {
         m_durationLabel->hide();
         m_durationSpinBox->hide();
+	m_durationEditButton->hide();
 
         m_pitchLabel->show();
         m_pitchLabel->setText(i18n("Pitchbend MSB:"));
         m_pitchSpinBox->show();
+	m_pitchEditButton->hide();
 
         m_controllerLabel->hide();
         m_controllerLabelValue->hide();
@@ -1932,9 +2011,11 @@ SimpleEventEditDialog::setupForEvent()
     {
         m_durationLabel->hide();
         m_durationSpinBox->hide();
+	m_durationEditButton->hide();
 
         m_pitchLabel->hide();
         m_pitchSpinBox->hide();
+	m_pitchEditButton->hide();
 
         m_controllerLabel->hide();
         m_controllerLabelValue->hide();
@@ -1948,9 +2029,11 @@ SimpleEventEditDialog::setupForEvent()
     {
         m_durationLabel->hide();
         m_durationSpinBox->hide();
+	m_durationEditButton->hide();
 
         m_pitchLabel->hide();
         m_pitchSpinBox->hide();
+	m_pitchEditButton->hide();
 
         m_controllerLabel->show();
         m_controllerLabelValue->show();
@@ -1987,9 +2070,11 @@ SimpleEventEditDialog::setupForEvent()
     {
         m_durationLabel->show();
         m_durationSpinBox->show();
+	m_durationEditButton->show();
 
         m_pitchLabel->hide();
         m_pitchSpinBox->hide();
+	m_pitchEditButton->hide();
 
         m_controllerLabel->hide();
         m_controllerLabelValue->hide();
@@ -2009,9 +2094,11 @@ SimpleEventEditDialog::setupForEvent()
     {
         m_durationLabel->hide();
         m_durationSpinBox->hide();
+	m_durationEditButton->hide();
 
         m_pitchLabel->hide();
         m_pitchSpinBox->hide();
+	m_pitchEditButton->hide();
 
         m_controllerLabel->show();
         m_controllerLabelValue->show();
@@ -2042,9 +2129,11 @@ SimpleEventEditDialog::setupForEvent()
     {
         m_durationLabel->hide();
         m_durationSpinBox->hide();
+	m_durationEditButton->hide();
 
         m_pitchLabel->hide();
         m_pitchSpinBox->hide();
+	m_pitchEditButton->hide();
 
         m_controllerLabel->show();
         m_controllerLabelValue->show();
@@ -2076,9 +2165,11 @@ SimpleEventEditDialog::setupForEvent()
         m_durationLabel->setText(i18n("Unsupported event type:"));
         m_durationLabel->show();
         m_durationSpinBox->hide();
+	m_durationEditButton->hide();
 
         m_pitchLabel->hide();
         m_pitchSpinBox->hide();
+	m_pitchEditButton->hide();
 
         m_controllerLabel->hide();
         m_controllerLabelValue->show();
@@ -2369,6 +2460,38 @@ SimpleEventEditDialog::slotMetaChanged(const QString &)
     m_modified = true;
 }
 
+void
+SimpleEventEditDialog::slotEditAbsoluteTime()
+{
+    TimeDialog *dialog = new TimeDialog(this, i18n("Edit Event Time"),
+					&m_doc->getComposition(),
+					m_timeSpinBox->value());
+    if (dialog->exec() == QDialog::Accepted) {
+	m_timeSpinBox->setValue(dialog->getTime());
+    }
+}
+
+void
+SimpleEventEditDialog::slotEditDuration()
+{
+    TimeDialog *dialog = new TimeDialog(this, i18n("Edit Duration"),
+					&m_doc->getComposition(),
+					m_timeSpinBox->value(),
+					m_durationSpinBox->value());
+    if (dialog->exec() == QDialog::Accepted) {
+	m_durationSpinBox->setValue(dialog->getTime());
+    }
+}
+
+void
+SimpleEventEditDialog::slotEditPitch()
+{
+    PitchDialog *dialog = new PitchDialog(this, i18n("Edit Pitch"),
+					  m_pitchSpinBox->value());
+    if (dialog->exec() == QDialog::Accepted) {
+	m_pitchSpinBox->setValue(dialog->getPitch());
+    }
+}
 
 
 // ----------------------------- TempoValidtor ----------------------------

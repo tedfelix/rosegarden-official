@@ -32,6 +32,8 @@
 #include <qlineedit.h>
 #include <qspinbox.h>
 
+#include "widgets.h" // or other RosegardenTimeWidget header
+
 #include "Composition.h"
 #include "Event.h" // for timeT definition
 
@@ -46,19 +48,21 @@ class MarkerModifyDialog : public KDialogBase
     Q_OBJECT
 public:
     MarkerModifyDialog(QWidget *parent,
+		       Rosegarden::Composition *composition,
                        int time,
                        const QString &name,
                        const QString &des);
 
     QString getName() const { return m_nameEdit->text(); }
     QString getDescription() const { return m_desEdit->text(); }
-    int getTime() const { return m_timeEdit->value(); }
+    int getTime() const { return m_timeEdit->getTime(); }
     int getOriginalTime() const { return m_originalTime; }
 
 protected:
     RosegardenGUIDoc             *m_doc;
 
-    QSpinBox                     *m_timeEdit;
+//    QSpinBox                     *m_timeEdit;
+    RosegardenTimeWidget         *m_timeEdit;
     QLineEdit                    *m_nameEdit;
     QLineEdit                    *m_desEdit;
 
