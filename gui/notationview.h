@@ -157,8 +157,7 @@ protected:
     /**
      * find the NotationElement which X is closest to eventX
      */
-    NotationElementList::iterator findClosestNote(NotationElementList::iterator point,
-                                                  double eventX);
+    NotationElementList::iterator findClosestNote(double eventX);
 
     void perfTest();
     void test();

@@ -512,27 +512,24 @@ NotationView::insertNote(int pitch, QMouseEvent *e)
     NotationElement *newNotationElement = new NotationElement(insertedEvent);
 
     newNotationElement->event()->set<Int>("Notation::NoteType", m_currentSelectedNote);
+    newNotationElement->event()->set<String>("Name", "INSERTED_NOTE");
 
     // give a "fake" X coord to the notation element (where the click was received)
     newNotationElement->setX(e->x());
 
     // readjust newNotationElement->X
 
-    kdDebug(KDEBUG_AREA) << "NotationHLayout::insertNote : approx. x : " << newNotationElement->x() << endl;
+    kdDebug(KDEBUG_AREA) << "NotationHLayout::insertNote : approx. x : "
+                         << newNotationElement->x() << endl;
 
-    NotationElementList::iterator insertPoint = m_notationElements->lower_bound(newNotationElement);
-
-    NotationElementList::iterator closestNote = findClosestNote(insertPoint, newNotationElement->x());
-
-    NotationElementList::iterator insertPosition = closestNote;
-    
+    NotationElementList::iterator closestNote = findClosestNote(newNotationElement->x());
 
     if (closestNote != m_notationElements->end()) {
 
-        newNotationElement->setX((*closestNote)->x());
+//         newNotationElement->setX((*closestNote)->x());
 
-        kdDebug(KDEBUG_AREA) << "NotationHLayout::insertNote : adjusted x : "
-                             << newNotationElement->x() << endl;
+//         kdDebug(KDEBUG_AREA) << "NotationHLayout::insertNote : adjusted x : "
+//                              << newNotationElement->x() << endl;
 
         if ((*closestNote)->isRest()) {
 
@@ -543,31 +540,13 @@ NotationView::insertNote(int pitch, QMouseEvent *e)
 
         } else {
 
-            kdDebug(KDEBUG_AREA) << "NotationHLayout::insertNote : insert over note is not implemented yet"
+            kdDebug(KDEBUG_AREA) << "NotationHLayout::insertNote : insert over note - absoluteTime = "
+                                 << (*closestNote)->absoluteTime()
                                  << endl;
 
-#if 0 // BIG TODO
-            // create a new group and its supporting element
-            NotationElementList *newGroup = new NotationElementList();
-            NotationElement *newGroupElement = new NotationElement(new Event("", "group"));
-
-            // put the closest note and the new inserted note in the new group
-            newGroup->insert(*closestNote);
-            newGroup->insert(newNotationElement);
-
-            // link the new group to its supporting element
-            newGroupElement->setGroup(newGroup);
-            // and set the element's X
-            newGroupElement->setX(newNotationElement->x());
-
-//             kdDebug(KDEBUG_AREA) << "NotationHLayout::insertNote : newGroup is "
-//                                  << endl << *newGroup << endl;
-
-            // erase old closestNote (which is now in the new group)
-            // and insert the supporting element for the new group
-            m_notationElements->erase(closestNote);
-            m_notationElements->insert(newGroupElement);
-#endif
+            newNotationElement->setAbsoluteTime((*closestNote)->absoluteTime());
+            m_notationElements->insert(newNotationElement);
+            
         }
         
 
@@ -594,53 +573,49 @@ NotationView::insertNote(int pitch, QMouseEvent *e)
 
     // TODO : m_currentStaff should be updated by the mouse click 
 
-    showElements(--insertPosition, m_notationElements->end(), m_currentStaff);
+    if (closestNote != m_notationElements->begin())
+        showElements(--closestNote,
+                     m_notationElements->end(),
+                     m_currentStaff);
+    else
+        showElements(m_notationElements->begin(),
+                     m_notationElements->end(),
+                     m_currentStaff);
 }
 
 
 NotationElementList::iterator
-NotationView::findClosestNote(NotationElementList::iterator insertPoint,
-                              double eventX)
+NotationView::findClosestNote(double eventX)
 {
-    NotationElementList::iterator nextEl = insertPoint,
-        prevEl = insertPoint, result = insertPoint;
+    double minDist = 10e9,
+        prevDist = 10e9;
 
-    kdDebug(KDEBUG_AREA) << "NotationHLayout::findClosestNote() : nextEl->x = "
-                         << (*nextEl)->x() << endl;
-
-    if (prevEl != m_notationElements->begin()) --prevEl;
-
-    kdDebug(KDEBUG_AREA) << "NotationHLayout::findClosestNote() : prevEl->x = "
-                         << (*prevEl)->x() << endl;
-
-    double distToNext = 10e9,
-        distToPrevious = 10e9;
+    NotationElementList::iterator it, res;
     
-    // Compute dist. to next note
-    if (nextEl != m_notationElements->end())
-        distToNext = (*nextEl)->x() - eventX;
-    else
-        distToNext = 0;
+    for (it = m_notationElements->begin(); it != m_notationElements->end(); ++it) {
+        double dist;
+        
+        if ( (*it)->x() >= eventX)
+            dist = (*it)->x() - eventX;
+        else
+            dist = eventX - (*it)->x();
 
-    kdDebug(KDEBUG_AREA) << "NotationHLayout::findClosestNote() : distToNext = "
-                         << distToNext << endl;
+        if (dist < minDist) {
+            kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : minDist was "
+                                 << minDist << " now = " << dist << endl;
+            minDist = dist;
+            res = it;
+        }
+        
+        if (dist > prevDist) break; // we can stop right now
 
-    distToPrevious = eventX - (*prevEl)->x();
-
-    kdDebug(KDEBUG_AREA) << "NotationHLayout::findClosestNote() : distToPrevious = "
-                         << distToPrevious << endl;
-
-    if (distToPrevious > distToNext) {
-        kdDebug(KDEBUG_AREA) << "NotationHLayout::findClosestNote() : returning nextEl"
-                             << endl;
-        result = nextEl;
-    } else {
-        kdDebug(KDEBUG_AREA) << "NotationHLayout::findClosestNote() : returning prevEl"
-                             << endl;
-        result = prevEl;
+        prevDist = dist;
     }
-    
-    return result;
+
+    kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote(" << eventX << ") : found "
+                         << *(*res) << endl;
+
+    return res;
 }
 
 

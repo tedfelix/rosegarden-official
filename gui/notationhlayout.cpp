@@ -102,7 +102,7 @@ NotationHLayout::layout(NotationElementList::iterator from, NotationElementList:
         m_nbTimeUnitsInCurrentBar += nel->event()->get<Int>("QuantizedDuration");
 
         if (nel->absoluteTime() > m_previousAbsoluteTime ||
-            nel->absoluteTime() == 0) {
+            it == from) {
 
             kdDebug(KDEBUG_AREA) << "NotationHLayout::layout() : moving from "
                                  << m_previousAbsoluteTime
