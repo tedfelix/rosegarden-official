@@ -194,7 +194,13 @@ public:
 
     void clearSteps();
     void addStep(double stepPos, unsigned short subSteps);
+
+    /// Re-create all the steps and substeps
     void update();
+
+    void setCursorPosition(unsigned int pos) { m_cursorLine->setX(pos); }
+    unsigned int getCursorPosition() const   { return int(m_cursorLine->x()); }
+    
 
 protected:
     struct StepElement
@@ -223,6 +229,7 @@ protected:
         m_subStepLineHeight;
 
     QCanvasLine* m_mainLine;
+    QCanvasLine* m_cursorLine;
 
     Steps m_steps;
     
@@ -262,7 +269,8 @@ StaffRuler::StaffRuler(int xPos, int yPos, QCanvas* c)
       m_yPos(yPos),
       m_stepLineHeight(10),
       m_subStepLineHeight(5),
-      m_mainLine(new QCanvasLine(m_canvas))
+      m_mainLine(new QCanvasLine(m_canvas)),
+      m_cursorLine(new QCanvasLine(m_canvas))
 {
     QCanvasRectangle *rulerBackground = new QCanvasRectangle(0, 0,
                                                              m_canvas->width(), m_yPos, 
@@ -276,7 +284,10 @@ StaffRuler::StaffRuler(int xPos, int yPos, QCanvas* c)
 
     m_mainLine->setPoints(0, m_yPos, m_canvas->width(), m_yPos);
     
+    m_cursorLine->setPoints(0, 0, 0, m_canvas->height());
+    
     m_mainLine->show();
+    m_cursorLine->show();
 }
 
 void StaffRuler::clearSteps()
@@ -950,8 +961,7 @@ NotationView::changeStretch(int n)
     canvas()->update();
 }
 
-void
-NotationView::changeLegato(int n)
+void NotationView::changeLegato(int n)
 {
     if (n >= (int)m_legatoDurations.size())
         n = m_legatoDurations.size() - 1;
@@ -970,6 +980,12 @@ NotationView::changeLegato(int n)
         showBars(i);
     }
 
+    canvas()->update();
+}
+
+void NotationView::setCursorPosition(unsigned int n)
+{
+    m_ruler->setCursorPosition(n);
     canvas()->update();
 }
 
@@ -1990,6 +2006,8 @@ void NotationSelector::handleMousePress(int /*height*/, int /*staffNo*/,
 
     m_selectionRect->show();
     m_updateRect = true;
+
+    m_parentView.setCursorPosition(p.x());
 }
 
 void NotationSelector::handleMouseMove(QMouseEvent* e)

@@ -352,6 +352,12 @@ public slots:
     /// Changes the display quantization of the staffs on the view
     void changeLegato(int newLegatoIndex);
 
+    /// Sets the position of the cursor to the given pixel X coord
+    void setCursorPosition(unsigned int);
+
+    /// Gets the position of the cursor as a pixel X coord
+    unsigned int getCursorPosition() const;
+
 signals:
     /**
      * Emitted when the note selected in the palette changes
