@@ -79,10 +79,15 @@ SegmentParameterBox::initBox()
     // handle state changes
     connect(m_repeatValue, SIGNAL(pressed()), SLOT(repeatPressed()));
 
+
     // motif style read-only combo
     m_quantizeValue = new RosegardenComboBox(false, this);
     m_quantizeValue->setFont(plainFont);
     m_quantizeValue->setFixedSize(comboWidth, comboHeight);
+
+    // handle quantize changes
+    connect(m_quantizeValue, SIGNAL(activated(int)),
+            SLOT(slotQuantizeSelected(int)));
 
     // motif style read-only combo
     m_transposeValue = new RosegardenComboBox(true, this);
@@ -177,6 +182,8 @@ SegmentParameterBox::populateBoxFromSegments()
 {
     std::vector<Rosegarden::Segment*>::iterator it;
     Tristate repeat = None;
+    Tristate quantized = None;
+    Rosegarden::Quantizer qntzLevel;
 
     for (it = m_segments.begin(); it != m_segments.end(); it++)
     {
@@ -196,6 +203,30 @@ SegmentParameterBox::populateBoxFromSegments()
             if (repeat == All)
                 repeat = Some;
         }
+
+        if ((*it)->hasPerformanceQuantization())
+        {
+            if (it == m_segments.begin())
+            {
+                quantized = All;
+                qntzLevel = (*it)->getPerformanceQuantizer();
+            }
+            else
+            {
+                // If quantize levels don't match
+                if (quantized == None ||
+                        (quantized == All &&
+                            qntzLevel.getUnit() !=
+                            (*it)->getPerformanceQuantizer().getUnit()))
+                    quantized = Some;
+            }
+        }
+        else
+        {
+            if (quantized == All)
+                quantized = Some;
+        }
+
     }
 
     switch(repeat)
@@ -213,10 +244,41 @@ SegmentParameterBox::populateBoxFromSegments()
             m_repeatValue->setChecked(false);
             break;
     }
+
+    switch(quantized)
+    {
+        case All:
+            {
+                for (unsigned int i = 0;
+                     i < m_standardQuantizations.size(); ++i)
+                {
+                    if (m_standardQuantizations[i].unit == qntzLevel.getUnit())
+                    {
+                        m_quantizeValue->setCurrentItem(i);
+                        break;
+                    }
+                }
+            }
+            break;
+
+        case Some:
+            // Set the edit text to an unfeasible value meaning "Some"
+            //
+            m_quantizeValue->setEditable(true);
+            m_quantizeValue->setEditText(QString("*"));
+            m_quantizeValue->setEditable(false);
+            break;
+
+            // Assuming "Off" is always the last field
+        case None:
+        default:
+            m_quantizeValue->setCurrentItem(m_quantizeValue->count()-1);
+            break;
+    }
 }
 
 void
-SegmentParameterBox::repeatPressed()
+SegmentParameterBox::slotRepeatPressed()
 {
     bool state;
 
@@ -241,6 +303,20 @@ SegmentParameterBox::repeatPressed()
     for (it = m_segments.begin(); it != m_segments.end(); it++)
         (*it)->setRepeating(state);
 }
+
+// Set the quantize level for the selected Segments
+//
+void
+SegmentParameterBox::slotQuantizeSelected(int qLevel)
+{
+    std::vector<Rosegarden::Segment*>::iterator it;
+    for (it = m_segments.begin(); it != m_segments.end(); it++)
+    {
+        (*it)->setPerformanceQuantization(true);
+        (*it)->setPerformanceQuantizeLevel(m_standardQuantizations[qLevel]);
+    }
+}
+
 
 
 

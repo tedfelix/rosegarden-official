@@ -117,8 +117,8 @@ public:
     void useSegments(std::vector<Rosegarden::Segment*> segments);
 
 public slots:
-
-    void repeatPressed();
+    void slotRepeatPressed();
+    void slotQuantizeSelected(int);
 
 private:
     void initBox();
