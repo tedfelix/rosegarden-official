@@ -251,6 +251,8 @@ protected:
     virtual RosegardenCanvasView* getCanvasView();
     virtual void setCanvasView(RosegardenCanvasView *cv);
 
+    ControlRuler* getControlRuler() { return m_controlRuler; }
+
     //--------------- Data members ---------------------------------
 
     /// The current selection of Events (for cut/copy/paste)
