@@ -58,7 +58,7 @@ protected:
     Event::timeT m_currentTime;
 
     Event::timeT m_groupDuration;
-    bool m_inGroup;
+    bool m_inChord;
 };
 
 #endif

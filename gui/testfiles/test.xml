@@ -22,10 +22,10 @@
 	<event type="note" duration="whole" pitch="8"/>
 	<event type="note" duration="whole" pitch="9"/>
 
-        <Group>
+        <Chord>
 	     <event type="note" duration="whole" pitch="8"/>
 	     <event type="note" duration="quarter" pitch="11"/>
-        </Group>
+        </Chord>
 
 
 	<event type="rest" duration="whole"/>

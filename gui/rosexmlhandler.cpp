@@ -24,7 +24,7 @@ RoseXmlHandler::RoseXmlHandler(Composition &composition)
       m_currentTrack(0),
       m_currentTime(0),
       m_groupDuration(0),
-      m_inGroup(false)
+      m_inChord(false)
 {
 //     kdDebug(KDEBUG_AREA) << "RoseXmlHandler() : composition size : "
 //                          << m_composition.getNbTracks()
@@ -87,7 +87,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         XMLStorableEvent *newEvent = new XMLStorableEvent(atts);
         newEvent->setAbsoluteTime(m_currentTime);
         
-        if (!m_inGroup) {
+        if (!m_inChord) {
 
             m_currentTime += newEvent->duration();
 
@@ -103,9 +103,9 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         
         m_currentTrack->insert(newEvent);
 
-    } else if (lcName == "group") {
+    } else if (lcName == "chord") {
 
-        m_inGroup = true;
+        m_inChord = true;
         
     } else {
         kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement : Don't know how to parse this : " << qName << endl;
@@ -122,7 +122,7 @@ RoseXmlHandler::endElement(const QString& /*namespaceURI*/,
 
     if (lcName == "group") {
         m_currentTime += m_groupDuration;
-        m_inGroup = false;
+        m_inChord = false;
         m_groupDuration = 0;
     }
 
