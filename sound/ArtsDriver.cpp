@@ -178,11 +178,7 @@ ArtsDriver::initialiseMidi()
 
     cout << "ArtsDriver - initialised MIDI subsystem" << endl;
 
-    if(m_driverStatus == AUDIO_OK)
-        m_driverStatus = MIDI_AND_AUDIO_OK;
-    else
-        m_driverStatus = MIDI_OK;
-
+    m_driverStatus |= MIDI_OK;
 
     generateInstruments();
 
@@ -275,11 +271,7 @@ ArtsDriver::initialiseAudio()
 
     cout << "ArtsDriver - initialised audio subsystem" << endl;
 
-    if(m_driverStatus == MIDI_OK)
-        m_driverStatus = MIDI_AND_AUDIO_OK;
-    else
-        m_driverStatus = AUDIO_OK;
-
+    m_driverStatus |= AUDIO_OK;
 }
 
 void

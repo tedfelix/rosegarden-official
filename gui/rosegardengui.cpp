@@ -105,7 +105,8 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer)
       m_storedLoopEnd(0),
       m_useSequencer(useSequencer)
 {
-    // Try to start the sequencer
+    // Try to start the sequencer - we need to launch here so that
+    // the alive() call in initDocument() is eventually caught.
     //
     if (m_useSequencer) launchSequencer();
     else kdDebug(KDEBUG_AREA) << "RosegardenGUIApp : don't use sequencer\n";
@@ -113,7 +114,6 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer)
     ///////////////////////////////////////////////////////////////////
     // call inits to invoke all other construction parts
     //
-    
     initStatusBar();
     initDocument();
     setupActions();
@@ -125,6 +125,10 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer)
 
     // Create a sequence manager
     m_seqManager = new Rosegarden::SequenceManager(m_doc, m_transport);
+
+    // Make sure we get the sequencer status now
+    //
+    (void)m_seqManager->getSoundDriverStatus();
 
     connect(m_doc, SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
             this,   SLOT(slotSetPointerPosition(Rosegarden::timeT)));
@@ -1846,14 +1850,21 @@ bool RosegardenGUIApp::launchSequencer()
     if (m_useSequencer == false)
         return false;
 
-    if (m_sequencerProcess) return true;
+    if (m_sequencerProcess)
+    {
+        if (m_seqManager) m_seqManager->checkSoundDriverStatus();
+        return true;
+    }
 
     // If we've already registered a sequencer then don't start another
     // one
     //
     if (kapp->dcopClient()->
         isApplicationRegistered(QCString(ROSEGARDEN_SEQUENCER_APP_NAME)))
-      return true;
+    {
+        if (m_seqManager) m_seqManager->checkSoundDriverStatus();
+        return true;
+    }
 
     KTmpStatusMsg msg(i18n("Starting the sequencer..."), statusBar());
     
@@ -1872,6 +1883,8 @@ bool RosegardenGUIApp::launchSequencer()
         m_sequencerProcess = 0;
 	m_useSequencer = false; // otherwise we hang waiting for it
     }
+    else
+        if (m_seqManager) m_seqManager->checkSoundDriverStatus();
 
     return res;
 }

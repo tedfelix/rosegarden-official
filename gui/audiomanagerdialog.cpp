@@ -172,12 +172,12 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     }
 
     // create widgets
-    m_addButton       = new QPushButton(i18n("Add"), v);
-    m_deleteButton    = new QPushButton(i18n("Remove"), v);
-    m_playButton      = new QPushButton(i18n("Play"), v);
-    m_renameButton    = new QPushButton(i18n("Rename"), v);
-    m_insertButton    = new QPushButton(i18n("Insert"), v);
-    m_deleteAllButton = new QPushButton(i18n("Delete All"), v);
+    m_addButton       = new QPushButton(i18n("Add Audio File"), v);
+    m_deleteButton    = new QPushButton(i18n("Remove Audio FIle"), v);
+    m_playButton      = new QPushButton(i18n("Play Preview"), v);
+    m_renameButton    = new QPushButton(i18n("Rename File"), v);
+    m_insertButton    = new QPushButton(i18n("Insert into Composition"), v);
+    m_deleteAllButton = new QPushButton(i18n("Delete All Audio Files"), v);
     m_fileList        = new AudioListView(h);
 
     // Set the column names
@@ -555,6 +555,8 @@ AudioManagerDialog::slotEnableButtons()
 
     if (m_audiblePreview)
         m_playButton->setDisabled(false);
+    else
+        m_playButton->setDisabled(true);
 
 }
 
@@ -616,7 +618,13 @@ AudioManagerDialog::slotInsert()
 void
 AudioManagerDialog::slotDeleteAll()
 {
-    std::cout << "AudioManagerDialog::slotDeleteAll" << std::endl;
+    QString question =
+        i18n("Really delete all audio files and associated segments?");
+
+    int reply = KMessageBox::questionYesNo(this, question);
+
+    if (reply != KMessageBox::Yes)
+        return;
 }
 
 void
@@ -920,16 +928,10 @@ AudioManagerDialog::dropEvent(QDropEvent *event)
 void
 AudioManagerDialog::setAudioSubsystemStatus(bool ok)
 {
-    if (ok)
-    {
-        m_playButton->setDisabled(false);
-        m_audiblePreview = true;
-    }
-    else
-    {
-        m_playButton->setDisabled(true);
-        m_audiblePreview = false;
-    }
+    // We can do something more fancy in the future but for the moment
+    // this will suffice.
+    //
+    m_audiblePreview = ok;
 }
 
 
