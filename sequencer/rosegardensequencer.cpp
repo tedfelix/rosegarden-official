@@ -93,7 +93,8 @@ RosegardenSequencerApp::quit()
 int
 RosegardenSequencerApp::play(const Rosegarden::timeT &position,
                              const Rosegarden::timeT &playLatency, 
-                             const Rosegarden::timeT &fetchLatency)
+                             const Rosegarden::timeT &fetchLatency,
+                             const double &tempo)
 {
   if (m_transportStatus == PLAYING || m_transportStatus == STARTING_TO_PLAY)
     return true;
@@ -109,6 +110,10 @@ RosegardenSequencerApp::play(const Rosegarden::timeT &position,
   //
   m_playLatency = playLatency;
   m_fetchLatency = fetchLatency;
+
+  // set up the tempo
+  //
+  m_sequencer->setTempo(tempo);
 
   // keep it simple
   return true;
@@ -330,7 +335,7 @@ RosegardenSequencerApp::jumpTo(const Rosegarden::timeT &position)
     return;
 
   stop();
-  play(position, m_playLatency, m_fetchLatency);
+  play(position, m_playLatency, m_fetchLatency, m_sequencer->getTempo());
   
   return;
 }

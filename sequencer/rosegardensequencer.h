@@ -75,7 +75,8 @@ public slots:
   //
   virtual int play(const Rosegarden::timeT &position,
                    const Rosegarden::timeT &playLatency,
-                   const Rosegarden::timeT &fetchLatency);
+                   const Rosegarden::timeT &fetchLatency,
+                   const double &tempo);
   virtual int stop();
 
   // Any sudden moves

@@ -39,7 +39,8 @@ RoseXmlHandler::RoseXmlHandler(Composition &composition)
       m_chordDuration(0),
       m_inChord(false),
       m_inGroup(false),
-      m_groupId(0)
+      m_groupId(0),
+      m_foundTempo(false)
 {
 //     kdDebug(KDEBUG_AREA) << "RoseXmlHandler() : composition size : "
 //                          << m_composition.getNbTracks()
@@ -72,7 +73,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
       QString tempoString = atts.value("value");
       m_composition.setTempo(tempoString.toInt());
-
+      m_foundTempo = true;
 
     } else if (lcName == "track") {
         m_currentTime = 0;
@@ -221,4 +222,14 @@ RoseXmlHandler::fatalError(const QXmlParseException& exception)
 {
     return QXmlDefaultHandler::fatalError( exception );
 }
+
+bool
+RoseXmlHandler::endDocument()
+{
+  if (m_foundTempo == false)
+    m_composition.setTempo(120.0);
+
+  return true;
+}
+
 

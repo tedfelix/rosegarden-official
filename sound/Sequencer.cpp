@@ -42,7 +42,7 @@ Sequencer::Sequencer():
                        _startPlayback(true),
                        _playing(false),
                        _ppq(Note(Note::Crotchet).getDuration()),
-                       _tempo(120),
+                       _tempo(120.0),     // default tempo
                        _recordTrack(0)
 {
   initializeMidi();
@@ -172,8 +172,8 @@ Sequencer::deltaTime(const Arts::TimeStamp &ts1, const Arts::TimeStamp &ts2)
 Arts::TimeStamp
 Sequencer::aggregateTime(const Arts::TimeStamp &ts1, const Arts::TimeStamp &ts2)
 {
-  int usec = ts1.usec + ts2.usec;
-  int sec = ( usec / 1000000 ) + ts1.sec + ts2.sec;
+  unsigned int usec = ts1.usec + ts2.usec;
+  unsigned int sec = ( (unsigned int) ( usec / 1000000 ) ) + ts1.sec + ts2.sec;
   usec %= 1000000;
   return(Arts::TimeStamp(sec, usec));
 }
@@ -326,12 +326,15 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition mappedComp,
     // Test our timing
     Arts::TimeStamp now = _midiPlayPort.time();
     int secAhead = event.time.sec - now.sec;
-    int uSecAhead = event.time.usec - now.usec;
+    int uSecAhead = event.time.usec - now.sec;
 
     if (uSecAhead < 0) 
     {
-      secAhead--;
       uSecAhead += 1000000;
+
+      // add a second of lag if they're different
+      if ( event.time.sec > now.sec )
+        secAhead++;
     }
 
     if (secAhead < 0)

@@ -112,8 +112,8 @@ namespace Rosegarden
     RecordStatus recordStatus() { return _recordStatus; }
     
     // set and get tempo
-    const unsigned int tempo() const { return _tempo; }
-    void tempo(const unsigned int &tempo) { _tempo = tempo; }
+    const double getTempo() const { return _tempo; }
+    void setTempo(const double &tempo) { _tempo = tempo; }
 
     // resolution - required?
     const unsigned int resolution() const { return _ppq; }
@@ -133,43 +133,35 @@ namespace Rosegarden
     inline Arts::TimeStamp recordTime(Arts::TimeStamp const &ts)
       { return (deltaTime(ts, _recordStartTime)); }
 
-    // Perform conversion from seconds and microseconds (TimeStamp)
-    // to our internal representation.  Make sure you do this from
-    // a normalised time (i.e. working from zero)
+    // See docs/discussion/sequencer_timing.txt for explanation of
+    // the maths here.
     //
     //
-    inline unsigned int convertToInternalTime(const Arts::TimeStamp &timeStamp)
+    inline Rosegarden::timeT convertToInternalTime(const Arts::TimeStamp &timeStamp)
     {
-      return (unsigned int) ( (double)_ppq * 4.0 * ( (double) timeStamp.sec +
-                              ( ( (double) timeStamp.usec ) / 1000000.0 ) ) *
-                                  (double) _tempo / 60.0 );
+      return (Rosegarden::timeT)
+             ((((double)(timeStamp.sec * 1000000 + timeStamp.usec)) *
+                                  _ppq * (double) _tempo )  /
+                                60000000.0);
     }
 
-/*
-    inline unsigned int convertToMidiTime(const Rosegarden::timeT &position)
-    {
-      return ((unsigned int) position * 6);
-    }
-*/
-
-    // We're leaving the calculations expanded for the moment
-    // to ease understanding of what we're doing with the maths.
+    // See docs/discussion/sequencer_timing.txt for explanation of
+    // the maths here.
     //
-    inline Arts::TimeStamp convertToArtsTimeStamp(const unsigned int& midiTime)
+    //
+    inline Arts::TimeStamp convertToArtsTimeStamp(const unsigned int &midiTime)
     {
-      unsigned int usec = (unsigned int) ( ( 60.0 * 1000000.0 *
-                                           (double) midiTime ) /
-                                           ( (double)_ppq * 4.0 * (double)_tempo) );
+      // We ignore the Time Sigs for the moment
+      //
+      //
+      unsigned int usec = (unsigned int)(((double)60000000.0 *(double)midiTime)/
+                                         ((double)_ppq * (double)_tempo));
       unsigned int sec = usec / 1000000;
       usec %= 1000000;
 
       return (Arts::TimeStamp(sec, usec));
     }
 
-    inline Rosegarden::timeT convertToGuiTime(unsigned int &midiTime)
-    {
-      return ((Rosegarden::timeT) midiTime / 6);
-    }
 
     // process a raw aRTS MIDI event into internal representation
     void processMidiIn(const Arts::MidiCommand &midiCommand,
@@ -226,7 +218,7 @@ namespace Rosegarden
     bool _playing;
 
     unsigned int _ppq;   // sequencer resolution
-    unsigned int _tempo; // Beats Per Minute
+    double _tempo; // Beats Per Minute
 
     Rosegarden::Track *_recordTrack;
 

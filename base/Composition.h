@@ -82,10 +82,13 @@ public:
     // MIDI has a tempo meta-event which can change arbitrarily often,
     // and notation has metronome events that can also appear more than
     // once (and indeed per Track, rather than per Composition).
-    // (We perhaps do need a per-Composition base tempo, though.)
-    unsigned int getTempo() const { return m_tempo; }
-    void setTempo(const int &tempo) { m_tempo = tempo; }
-
+    // (We perhaps do need a per-Composition base tempo, though.) [cc]
+    //
+    // Tempo here is only our current Transport tempo which we use on
+    // the GUI and is sent to the Sequencer.
+    //
+    double getTempo() const { return m_tempo; }
+    void setTempo(const double &tempo) { m_tempo = tempo; }
 
     const timeT& getPosition() { return m_position; }
     void setPosition(const timeT& position) { m_position = position; }
@@ -101,7 +104,7 @@ protected:
     Track m_timeReference; // contains time signature events &c
 
     unsigned int m_nbTicksPerBar; //!!! must lose this
-    unsigned int m_tempo;
+    double m_tempo;
 
     timeT m_position;
 

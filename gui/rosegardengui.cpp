@@ -937,24 +937,37 @@ void RosegardenGUIApp::play()
   if (m_transportStatus == PLAYING)
     return;
 
+/*   Allow ourselves to use an externally controlled Sequencer process for the moment
   if (!m_sequencerProcess && !launchSequencer())
       return;
+*/
 
   // write the start position argument to the outgoing stream
   //
   QDataStream streamOut(data, IO_WriteOnly);
-  streamOut << m_doc->getComposition().getPosition();
 
-  streamOut << 20;  // playback latency
-  streamOut << 10;  // fetch latency
-
-  cout << "RosegardenGUIApp::play() - playing at tempo " << 
+  if (m_doc->getComposition().getTempo() == 0)
+  {
+    cout << "RosegardenGUIApp::play() - setting Tempo to Default value of 120.000" << endl;
+    m_doc->getComposition().setTempo(120.0);
+  }
+  else
+  {
+    cout << "RosegardenGUIApp::play() - playing at tempo " << 
                 m_doc->getComposition().getTempo() << endl;
+  }
+
+  // The arguments we send to the sequencer
+  //
+  streamOut << m_doc->getComposition().getPosition(); // playback start position
+  streamOut << 20;                                    // playback latency
+  streamOut << 10;                                    // fetch latency
+  streamOut << m_doc->getComposition().getTempo();    // tempo
 
   // Send Play to the Sequencer
   if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
                                 ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                "play(Rosegarden::timeT, Rosegarden::timeT, Rosegarden::timeT)",
+       "play(Rosegarden::timeT, Rosegarden::timeT, Rosegarden::timeT, double)",
                                 data, replyType, replyData))
   {
     // failed - pop up and disable sequencer options

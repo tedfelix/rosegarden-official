@@ -58,11 +58,14 @@ public:
 
     virtual bool characters(const QString& ch);
 
+    virtual bool endDocument (); // [rwb] - for tempo element catch
+
     /// Return the error string set during the parsing (if any)
     QString errorString();
 
     bool error(const QXmlParseException& exception);
     bool fatalError(const QXmlParseException& exception);
+
 
 protected:
     Rosegarden::Composition &m_composition;
@@ -76,6 +79,8 @@ protected:
     bool m_inGroup;
     std::string m_groupType;
     int m_groupId;
+
+    bool m_foundTempo;
 
     QString m_errorString;
 };

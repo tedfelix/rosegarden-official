@@ -32,7 +32,8 @@ k_dcop:
   virtual void quit() = 0;
   virtual int play(const Rosegarden::timeT &position,
                    const Rosegarden::timeT &playLatency,
-                   const Rosegarden::timeT &fetchLatency) = 0;
+                   const Rosegarden::timeT &fetchLatency,
+                   const double &tempo) = 0;
   virtual void jumpTo(const Rosegarden::timeT &position) = 0;
   virtual int stop() = 0;
 };
