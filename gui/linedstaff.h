@@ -35,6 +35,7 @@ namespace Rosegarden { class SnapGrid; class HorizontalLayoutEngine; }
 class QCanvas;
 class QCanvasLine;
 class QCanvasItem;
+class BarLine;
 
 /**
  * LinedStaffManager is a trivial abstract base for classes that own
@@ -74,6 +75,16 @@ public:
 	LinearMode = 0,
 	ContinuousPageMode,
 	MultiPageMode
+    };
+
+    enum BarStyle {
+	PlainBar = 0,
+	DoubleBar,
+	HeavyDoubleBar,
+	RepeatEndBar,
+	RepeatStartBar,
+	RepeatBothBar,
+	NoVisibleBar
     };
 
 protected:
@@ -194,6 +205,13 @@ protected:
      */
     virtual int showBarNumbersEvery() const {
 	return 0;
+    }
+
+    /**
+     * Returns the bar line / repeat style for the start of the given bar.
+     */
+    virtual BarStyle getBarStyle(int /* barNo */) const {
+	return PlainBar;
     }
 
 protected:
@@ -615,13 +633,14 @@ protected:
     ItemMatrix m_staffLines;
     ItemList m_staffConnectingLines;
 
-    typedef std::pair<double, QCanvasItem *> BarLine; // layout-x, line
-    typedef FastVector<BarLine> BarLineList;
-    static bool compareBars(const BarLine &, const BarLine &);
-    static bool compareBarToLayoutX(const BarLine &, int);
+    typedef std::pair<double, QCanvasItem *> LineRec; // layout-x, line
+    typedef FastVector<LineRec> LineRecList;
+    typedef FastVector<BarLine *> BarLineList;//!!! should be multiset I reckon
+    static bool compareBars(const BarLine *, const BarLine *);
+    static bool compareBarToLayoutX(const BarLine *, int);
     BarLineList m_barLines;
-    BarLineList m_beatLines;
-    BarLineList m_barConnectingLines;
+    LineRecList m_beatLines;
+    LineRecList m_barConnectingLines;
     ItemList m_barNumbers;
 
     QCanvasLine *m_pointer;

@@ -1966,7 +1966,7 @@ AccidentalTable::processDisplayAccidental(const Accidental &acc0, int height,
 
     if (m_barReset != BarResetNone) {
 	if (acc == NoAccidental) {
-	    if (prevBarAcc != NoAccidental) {
+	    if (prevBarAcc != NoAccidental && prevBarAcc != keyAcc) {
 		cautionary = (m_barReset == BarResetCautionary);
 		if (keyAcc == NoAccidental) {
 		    acc = Natural;

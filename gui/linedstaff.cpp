@@ -24,8 +24,9 @@
 #include "rosestrings.h"
 #include "rosedebug.h"
 #include "SnapGrid.h"
-#include "qcanvas.h"
-#include "qcolor.h"
+#include <qcanvas.h>
+#include <qcolor.h>
+#include <qpainter.h>
 
 #include <algorithm>
 
@@ -36,6 +37,154 @@
 //
 const int pointerWidth = 3;
 
+class BarLine : public QCanvasPolygonalItem
+{
+public:
+    BarLine(QCanvas *canvas, double layoutX,
+	    int barLineHeight, int baseBarThickness, int lineSpacing,
+	    LinedStaff::BarStyle style) :
+	QCanvasPolygonalItem(canvas),
+	m_layoutX(layoutX),
+	m_barLineHeight(barLineHeight),
+	m_baseBarThickness(baseBarThickness),
+	m_lineSpacing(lineSpacing),
+	m_style(style) { }
+
+    double getLayoutX() const { return m_layoutX; }
+    
+    virtual QPointArray areaPoints() const;
+    virtual void drawShape(QPainter &);
+
+protected:
+    double m_layoutX;
+    int m_barLineHeight;
+    int m_baseBarThickness;
+    int m_lineSpacing;
+    LinedStaff::BarStyle m_style;
+};
+
+
+void
+BarLine::drawShape(QPainter &painter)
+{
+    int bx = int(x());
+    int by = int(y());
+
+    switch (m_style) {
+
+    case LinedStaff::PlainBar:
+	painter.drawRect(bx, by, m_baseBarThickness, m_barLineHeight);
+	break;
+
+    case LinedStaff::DoubleBar:
+	painter.drawRect(bx, by, m_baseBarThickness, m_barLineHeight);
+	painter.drawRect(bx + m_baseBarThickness * 3, by,
+			 m_baseBarThickness, m_barLineHeight);
+	break;
+
+    case LinedStaff::HeavyDoubleBar:
+	bx -= m_baseBarThickness * 6;
+	painter.drawRect(bx, by, m_baseBarThickness, m_barLineHeight);
+	painter.drawRect(bx + m_baseBarThickness * 3, by,
+			 m_baseBarThickness * 3, m_barLineHeight);
+	break;
+
+    case LinedStaff::RepeatEndBar:
+	bx -= m_baseBarThickness * 6 + m_lineSpacing * 2 / 3;
+	painter.drawEllipse(bx, by + m_barLineHeight / 2 - (m_lineSpacing * 2 / 3),
+			    m_lineSpacing / 3, m_lineSpacing / 3);
+	painter.drawEllipse(bx, by + m_barLineHeight / 2 + (m_lineSpacing / 3),
+			    m_lineSpacing / 3, m_lineSpacing / 3);
+	bx += m_lineSpacing * 2 / 3;
+	painter.drawRect(bx, by, m_baseBarThickness, m_barLineHeight);
+	painter.drawRect(bx + m_baseBarThickness * 3, by,
+			 m_baseBarThickness * 3, m_barLineHeight);
+	break;
+
+    case LinedStaff::RepeatStartBar:
+	painter.drawRect(bx, by, m_baseBarThickness * 3, m_barLineHeight);
+	painter.drawRect(bx + m_baseBarThickness * 5, by,
+			 m_baseBarThickness, m_barLineHeight);
+	bx += m_baseBarThickness * 6 + (m_lineSpacing / 3);
+	painter.drawEllipse(bx, by + m_barLineHeight / 2 - (m_lineSpacing * 2 / 3),
+			    m_lineSpacing / 3, m_lineSpacing / 3);
+	painter.drawEllipse(bx, by + m_barLineHeight / 2 + (m_lineSpacing / 3),
+			    m_lineSpacing / 3, m_lineSpacing / 3);
+	break;
+
+    case LinedStaff::RepeatBothBar:
+	bx -= m_baseBarThickness * 4 + m_lineSpacing * 2 / 3;
+	painter.drawEllipse(bx, by + m_barLineHeight / 2 - (m_lineSpacing * 2 / 3),
+			    m_lineSpacing / 3, m_lineSpacing / 3);
+	painter.drawEllipse(bx, by + m_barLineHeight / 2 + (m_lineSpacing / 3),
+			    m_lineSpacing / 3, m_lineSpacing / 3);
+	bx += m_lineSpacing * 2 / 3;
+	painter.drawRect(bx, by, m_baseBarThickness, m_barLineHeight);
+	painter.drawRect(bx + m_baseBarThickness * 3, by,
+			 m_baseBarThickness * 3, m_barLineHeight);
+	painter.drawRect(bx + m_baseBarThickness * 8, by,
+			 m_baseBarThickness, m_barLineHeight);
+	bx += m_baseBarThickness * 9 + (m_lineSpacing / 3);
+	painter.drawEllipse(bx, by + m_barLineHeight / 2 - (m_lineSpacing * 2 / 3),
+			    m_lineSpacing / 3, m_lineSpacing / 3);
+	painter.drawEllipse(bx, by + m_barLineHeight / 2 + (m_lineSpacing / 3),
+			    m_lineSpacing / 3, m_lineSpacing / 3);
+	
+	break;
+
+    case LinedStaff::NoVisibleBar:
+	break;
+    }
+}
+
+QPointArray
+BarLine::areaPoints() const
+{
+    int bx = int(x());
+    int by = int(y());
+    int x0 = bx, y0 = by, x1, y1 = by + m_barLineHeight;
+
+    switch (m_style) {
+
+    case LinedStaff::PlainBar:
+	x1 = x0 + m_baseBarThickness;
+	break;
+
+    case LinedStaff::DoubleBar:
+	x1 = x0 + m_baseBarThickness * 4;
+	break;
+
+    case LinedStaff::HeavyDoubleBar:
+	x0 -= m_baseBarThickness * 6;
+	x1 = bx;
+	break;
+
+    case LinedStaff::RepeatEndBar:
+	x0 -= m_baseBarThickness * 6 + m_lineSpacing * 2 / 3;
+	x1 = bx;
+	break;
+
+    case LinedStaff::RepeatStartBar:
+	x1 = x0 + m_baseBarThickness * 6 + m_lineSpacing * 2 / 3;
+	break;
+
+    case LinedStaff::RepeatBothBar:
+	x0 -= m_baseBarThickness * 4 + m_lineSpacing * 2 / 3;
+	x1 = x0 + m_baseBarThickness * 9 + m_lineSpacing * 2 / 3;
+	break;
+
+    case LinedStaff::NoVisibleBar:
+	x1 = x0 + 1;
+	break;
+    }
+
+    QPointArray p(4);
+    p[0] = QPoint(x0, y0);
+    p[1] = QPoint(x1, y0);
+    p[2] = QPoint(x1, y1);
+    p[3] = QPoint(x0, y1);
+    return p;
+}
 
 LinedStaff::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
                           Rosegarden::SnapGrid *snapGrid, int id,
@@ -123,8 +272,11 @@ LinedStaff::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
 
 LinedStaff::~LinedStaff()
 {
+/*!!! No, the canvas items are all deleted by the canvas on destruction.
+
     deleteBars();
     for (int i = 0; i < (int)m_staffLines.size(); ++i) clearStaffLineRow(i);
+*/
 }
 
 void
@@ -403,20 +555,20 @@ LinedStaff::getBarExtents(double x, int y) const
 
     for (int i = 1; i < m_barLines.size(); ++i) {
 
-	double layoutX = m_barLines[i].first;
+	double layoutX = m_barLines[i]->getLayoutX();
         int barRow = getRowForLayoutX(layoutX);
 
         if (m_pageMode != LinearMode && (barRow < row)) continue;
 
-        QCanvasRectangle *line = (QCanvasRectangle *)m_barLines[i].second;
+        BarLine *line = m_barLines[i];
 
         if (line)
         {
             if (line->x() <= x) continue;
 
-            return QRect(int(m_barLines[i-1].second->x()),
+            return QRect(int(m_barLines[i-1]->x()),
                      getCanvasYForTopOfStaff(barRow),
-                     int(line->x() - m_barLines[i-1].second->x()),
+                     int(line->x() - m_barLines[i-1]->x()),
                      getHeightOfRow());
         }
     }
@@ -587,15 +739,15 @@ LinedStaff::deleteBars()
 {
     for (BarLineList::iterator i = m_barLines.begin();
          i != m_barLines.end(); ++i) {
-        delete i->second;
+        delete *i;
     }
 
-    for (BarLineList::iterator i = m_beatLines.begin();
+    for (LineRecList::iterator i = m_beatLines.begin();
 	 i != m_beatLines.end(); ++i) {
 	delete i->second;
     }
 
-    for (BarLineList::iterator i = m_barConnectingLines.begin();
+    for (LineRecList::iterator i = m_barConnectingLines.begin();
          i != m_barConnectingLines.end(); ++i) {
         delete i->second;
     }
@@ -635,8 +787,12 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
     double x = getCanvasXForLayoutX(layoutX);
     int y = getCanvasYForTopLine(row);
 
-    QCanvasRectangle *line = new QCanvasRectangle
-	(0, 0, barThickness, getBarLineHeight(), m_canvas);
+    BarLine *line = new BarLine(m_canvas, layoutX,
+				getBarLineHeight(), barThickness, getLineSpacing(),
+				PlainBar); //!!!
+
+//!!!    QCanvasRectangle *line = new QCanvasRectangle
+//	(0, 0, barThickness, getBarLineHeight(), m_canvas);
     line->moveBy(x, y);
 
     if (isCorrect) {
@@ -652,10 +808,10 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
 
     // The bar lines have to be in order of layout-x (there's no
     // such interesting stipulation for beat or connecting lines)
-    BarLine barLine(layoutX, line);
+//!!!    BarLine barLine(layoutX, line);
     BarLineList::iterator insertPoint = lower_bound
-	(m_barLines.begin(), m_barLines.end(), barLine, compareBars);
-    m_barLines.insert(insertPoint, barLine);
+	(m_barLines.begin(), m_barLines.end(), line, compareBars);
+    m_barLines.insert(insertPoint, line);
 
     if (m_pageMode != LinearMode &&
 	width > 0.01 && // width == 0 for final bar in staff
@@ -666,8 +822,13 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
 
 	double xe = x + width - barThickness;
 
+	BarLine *eline = new BarLine(m_canvas, layoutX,
+				     getBarLineHeight(), barThickness, getLineSpacing(),
+				     PlainBar); //!!!
+/*!!!
 	QCanvasRectangle *eline = new QCanvasRectangle
 	    (0, 0, barThickness, getBarLineHeight(), m_canvas);
+*/
 	eline->moveBy(xe, y);
 
 	eline->setPen(RosegardenGUIColours::BarLine);
@@ -676,10 +837,10 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
 	eline->setZ(-1);
 	eline->show();
 
-	BarLine barLine(layoutX, eline);
+//!!!	BarLine barLine(layoutX, eline);
 	BarLineList::iterator insertPoint = lower_bound
-	    (m_barLines.begin(), m_barLines.end(), barLine, compareBars);
-	m_barLines.insert(insertPoint, barLine);
+	    (m_barLines.begin(), m_barLines.end(), line, compareBars);
+	m_barLines.insert(insertPoint, line);
     }
 
     if (barNo > 0) {
@@ -698,6 +859,8 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
 	m_barNumbers.push_back(barNoText);
     }
 
+    QCanvasRectangle *rect = 0;
+
     if (showBeatLines()) {
 
 	double gridLines; // number of grid lines per bar may be fractional
@@ -714,59 +877,59 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
 
 	for (int gridLine = 1; gridLine < gridLines; ++gridLine) {
 
-	    line = new QCanvasRectangle
+	    rect = new QCanvasRectangle
 		(0, 0, barThickness, getBarLineHeight(), m_canvas);
 
-	    line->moveBy(x + gridLine * dx, y);
+	    rect->moveBy(x + gridLine * dx, y);
 
             double currentGrid = gridLines/double(timeSig.getBeatsPerBar());
 
-	    line->setPen(RosegardenGUIColours::BeatLine);
-	    line->setBrush(RosegardenGUIColours::BeatLine);
+	    rect->setPen(RosegardenGUIColours::BeatLine);
+	    rect->setBrush(RosegardenGUIColours::BeatLine);
 
             // Reset to SubBeatLine colour if we're not a beat line - avoid div by zero!
             //
             if (currentGrid > 1.0 && double(gridLine)/currentGrid != gridLine/int(currentGrid))
             {
-	        line->setPen(RosegardenGUIColours::SubBeatLine);
-	        line->setBrush(RosegardenGUIColours::SubBeatLine);
+	        rect->setPen(RosegardenGUIColours::SubBeatLine);
+	        rect->setBrush(RosegardenGUIColours::SubBeatLine);
             }
 
-	    line->setZ(-1);
-	    line->show();
+	    rect->setZ(-1);
+	    rect->show();
 
-	    BarLine beatLine(layoutX + gridLine * dx, line);
+	    LineRec beatLine(layoutX + gridLine * dx, rect);
 	    m_beatLines.push_back(beatLine);
 	}
     }
     
     if (m_connectingLineLength > 0) {
 	
-	line = new QCanvasRectangle
+	rect = new QCanvasRectangle
 	    (0, 0, barThickness, m_connectingLineLength, m_canvas);
 
-	line->moveBy(x, y);
+	rect->moveBy(x, y);
 
-	line->setPen(RosegardenGUIColours::StaffConnectingLine);
-	line->setBrush(RosegardenGUIColours::StaffConnectingLine);
-	line->setZ(-3);
-	line->show();
+	rect->setPen(RosegardenGUIColours::StaffConnectingLine);
+	rect->setBrush(RosegardenGUIColours::StaffConnectingLine);
+	rect->setZ(-3);
+	rect->show();
 	
-	BarLine connectingLine(layoutX, line);
+	LineRec connectingLine(layoutX, rect);
 	m_barConnectingLines.push_back(connectingLine);
     }
 }
 
 bool
-LinedStaff::compareBars(const BarLine &barLine1, const BarLine &barLine2)
+LinedStaff::compareBars(const BarLine *barLine1, const BarLine *barLine2)
 {
-    return (barLine1.first < barLine2.first);
+    return (barLine1->getLayoutX() < barLine2->getLayoutX());
 }
 
 bool
-LinedStaff::compareBarToLayoutX(const BarLine &barLine1, int x)
+LinedStaff::compareBarToLayoutX(const BarLine *barLine1, int x)
 {
-    return (barLine1.first < x);
+    return (barLine1->getLayoutX() < x);
 }
 
 void
