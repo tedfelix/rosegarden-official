@@ -19,6 +19,7 @@
   COPYING included with this distribution for more information.
 */
 
+#include <qdir.h>
 #include <qfile.h>
 #include <qfileinfo.h>
 
@@ -302,6 +303,7 @@ DataBlockFile::DataBlockFile(DataBlockRepository::blockid id)
       m_file(m_fileName),
       m_cleared(false)
 {
+    std::cerr << "DataBlockFile " << m_fileName.latin1() << endl;
 }
 
 DataBlockFile::~DataBlockFile()
@@ -434,6 +436,15 @@ void DataBlockRepository::unregisterDataBlockForEvent(MappedEvent* e)
 DataBlockRepository::DataBlockRepository()
     : m_lastId(1)
 {
+    // Erase all 'datablock_*' files
+    //
+    QString tmpPath = KGlobal::dirs()->resourceDirs("tmp").first();
+
+    QDir segmentsDir(tmpPath, "datablock_*");
+    for (unsigned int i = 0; i < segmentsDir.count(); ++i) {
+        QString segmentName = tmpPath + '/' + segmentsDir[i];
+        QFile::remove(segmentName);
+    }
 }
 
 void DataBlockRepository::addDataByteForEvent(MidiByte byte, MappedEvent* e)

@@ -294,8 +294,6 @@ public:
         m_dataBlockId(mE->getDataBlockId()),
         m_isPersistent(false) {}
 
-    ~MappedEvent() {;}
-
     // Event time
     //
     void setEventTime(const RealTime &a) { m_eventTime = a; }
