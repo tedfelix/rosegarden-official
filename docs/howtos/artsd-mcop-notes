@@ -26,6 +26,21 @@ port.
   seeming to be solid enough.  This could still be a system issue or an
   artsd issue or a Rosegarden issue though.
 
+  
+  Update 1.10.2001 [cc]
+
+  bownie's fixed the big problem with playback, and now it seems pretty
+  stable.  My rather underspecified system still gets leaps and jumps
+  if I do cpu-intensive stuff at the same time -- it's not as solid as
+  rg2.1 + OSS -- but it's good all the same.
+
+  The two big problems for me are: When playing through the artsd
+  soft synth, it drops all but the first note in any sequence of more
+  than one note with the same pitch on the same instrument (a known
+  aRts problem I think); and it can't make use of the soundcard's
+  own FM/wavetable synth a la OSS, it can only use soft synth or
+  external MIDI devices (an aRts design decision I think?).
+
 
 
 Building aRts

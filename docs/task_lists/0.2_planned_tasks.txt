@@ -21,7 +21,9 @@ Work required to fix existing stuff
     time sigs in the Composition's reference track only, and save
     them to file from there.  Probably a good case for having
     notation elements without corresponding events (because the
-    time sig event will never be copied to individual tracks)
+    time sig event will never be copied to individual tracks).
+    This would also require GUI for handling time sigs in track
+    editor rather than (just) notation view.  Complicated stuff
 
 3.  leger lines
 
@@ -72,6 +74,9 @@ New features suitable for 0.2
 
 11. Track canvas and client that follow playback (playback follow mode).
 
+12. Piano-roll view, but only if someone other than us steps up
+    to implement it in parallel with the stuff we're doing?
+
 
 Basis for later features
 ------------------------
@@ -83,3 +88,4 @@ Basis for later features
 3.  some skeletal help
 
 4.  audio tracks support
+
