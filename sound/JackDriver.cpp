@@ -559,7 +559,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	return 0;
     }
     
-    Rosegarden::Profiler profiler("JackProcess, clocks running");
+//    Rosegarden::Profiler profiler("JackProcess, clocks running");
 
     jack_position_t position;
     if (m_jackTransportEnabled) {
@@ -569,7 +569,6 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	if (state == JackTransportStopped) {
 	    if (m_alsaDriver->isPlaying() &&
 		m_alsaDriver->areClocksRunning()) {
-//!!! no, not safe to call that here		m_alsaDriver->stopClocks(); // to flush the queue now
 		ExternalTransport *transport = 
 		    m_alsaDriver->getExternalTransportControl();
 		if (transport) {
@@ -578,7 +577,6 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 			(ExternalTransport::TransportStopAtTime,
 			 RealTime::frame2RealTime(position.frame,
 						  position.frame_rate));
-//		    m_waiting = true;
 		}
 	    }
 	    return 0;
@@ -716,6 +714,8 @@ JackDriver::jackSyncCallback(jack_transport_state_t state,
     JackDriver *inst = (JackDriver *)arg;
     if (!inst) return true; // or rather, return "huh?"
 
+    if (!inst->m_jackTransportEnabled) return true; // ignore
+
     ExternalTransport *transport =
 	inst->m_alsaDriver->getExternalTransportControl();
     if (!transport) return true;
@@ -790,7 +790,7 @@ JackDriver::jackSyncCallback(jack_transport_state_t state,
 }
 
 bool
-JackDriver::prepareStart()
+JackDriver::start()
 {
     prebufferAudio();
 
@@ -810,7 +810,7 @@ JackDriver::prepareStart()
 
 		// Nope, this came from Rosegarden
 
-		std::cout << "prepareStart: asking for start, setting waiting" << std::endl;
+		std::cout << "start: asking for start, setting waiting" << std::endl;
 		m_waiting = true;
 		m_waitingState = JackTransportStarting;
 		jack_transport_locate(m_client,
@@ -819,19 +819,21 @@ JackDriver::prepareStart()
 				       m_sampleRate));
 		jack_transport_start(m_client);
 	    } else {
-		std::cout << "prepareStart: waiting already" << std::endl;
+		std::cout << "start: waiting already" << std::endl;
 	    }
 	}
 	return false;
     }
     
-    std::cout << "prepareStart: not on transport" << std::endl;
+    std::cout << "start: not on transport" << std::endl;
     return true;
 }
 
 void
-JackDriver::stopPlayback()
+JackDriver::stop()
 {
+    flushAudio();
+
     if (m_jackTransportEnabled) {
 
 	// Where did this request come from?  Is this a result of our

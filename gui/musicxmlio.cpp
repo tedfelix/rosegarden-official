@@ -139,7 +139,7 @@ MusicXmlExporter::writeNote(Event *e, Rosegarden::timeT lastNoteTime,
 	} else if (processedDisplayAcc == Rosegarden::Accidentals::Sharp) {
 	    str << "\t\t\t\t<accidental>sharp</accidental>" << std::endl;
 	} else if (processedDisplayAcc == Rosegarden::Accidentals::DoubleSharp) {
-	    str << "\t\t\t\t<accidental>sharp-sharp</accidental>" << std::endl;
+	    str << "\t\t\t\t<accidental>double-sharp</accidental>" << std::endl;
 	}
 
 	bool haveNotations = false;

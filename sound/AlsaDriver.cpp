@@ -133,8 +133,14 @@ AlsaDriver::shutdown()
 #endif
 
         snd_seq_stop_queue(m_midiHandle, m_queue, 0);
-        snd_seq_close(m_midiHandle);
-        m_midiHandle = 0;
+#ifdef DEBUG_ALSA
+        std::cerr << "AlsaDriver::shutdown - stopped queue" << std::endl;
+#endif
+//        snd_seq_close(m_midiHandle);
+#ifdef DEBUG_ALSA
+        std::cerr << "AlsaDriver::shutdown - closed MIDI handle" << std::endl;
+#endif
+//        m_midiHandle = 0;
     }
 
 #ifdef HAVE_LADSPA
@@ -1370,7 +1376,7 @@ AlsaDriver::stopPlayback()
         m_recordStatus = ASYNCHRONOUS_MIDI;
 
 #ifdef HAVE_LIBJACK
-    m_jackDriver->stopPlayback();
+    m_jackDriver->stop();
 
     m_jackDriver->getAudioQueueLocks();
 #endif
@@ -2141,15 +2147,10 @@ AlsaDriver::startClocks()
     // Don't need any locks on this, except for those that the
     // driver methods take and hold for themselves
 
-    if (!m_jackDriver->prepareStart()) { // need to wait for transport sync
+    if (!m_jackDriver->start()) { // need to wait for transport sync
 	return;
     }
-
-//    m_jackDriver->prebufferAudio();
 #endif
-
-//!!!    std::cerr << "AlsaDriver::startClocks: pausing to simulate high-load environment" << std::endl;
-//!!!    ::sleep(1);
 
     // Restart the timer
     if ((result = snd_seq_continue_queue(m_midiHandle, m_queue, NULL)) < 0)
@@ -2218,8 +2219,7 @@ AlsaDriver::stopClocks()
     m_queueRunning = false;
 
 #ifdef HAVE_LIBJACK
-    m_jackDriver->flushAudio();
-    m_jackDriver->stopPlayback();
+    m_jackDriver->stop();
 #endif
     
     snd_seq_event_t event;
@@ -2294,8 +2294,9 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
                 //
                 if (adjustedEventTime <= RealTime(-120, 0))
                 {
+		    adjustedEventTime = getSequencerTime();
 //!!!er...
-		    adjustedEventTime = getAlsaTime() + RealTime(0, 500000000);
+//		    adjustedEventTime = getAlsaTime() + RealTime(0, 500000000);
 			//!!! need to cause a fillBuffers call to happen on the mixer
 //!!!                    else
 //!!!                        adjustedEventTime = RealTime::zeroTime;

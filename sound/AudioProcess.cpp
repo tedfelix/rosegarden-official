@@ -31,6 +31,7 @@
 #include "WAVAudioFile.h"
 #include "MappedStudio.h"
 #include "Profiler.h"
+#include "AudioLevel.h"
 
 #include <unistd.h> // for usleep
 
@@ -39,7 +40,8 @@
 //#define DEBUG_MIXER 1
 //#define DEBUG_MIXER_LIGHTWEIGHT 1
 //#define DEBUG_LOCKS 1
-#define DEBUG_RECORDER 1
+//#define DEBUG_READER 1
+//#define DEBUG_WRITER 1
 
 namespace Rosegarden
 {
@@ -424,11 +426,24 @@ AudioMixer::processBlocks(bool forceFill)
     int instrumentCount;
     m_driver->getAudioInstrumentNumbers(instrumentBase, instrumentCount);
 
-    std::vector<PlayableAudioFileList> files;
     for (InstrumentId id = instrumentBase;
 	 id < instrumentBase + instrumentCount; ++id) {
+	m_bufferMap[id].empty = m_plugins[id].empty();
+    }
 
-	files.push_back(m_driver->getAudioPlayQueuePerInstrument(id));
+    PlayableAudioFileList audioQueue = m_driver->getAudioPlayQueueNotDefunct();
+    std::map<InstrumentId, PlayableAudioFileList> files;
+
+    for (PlayableAudioFileList::iterator i = audioQueue.begin();
+	 i != audioQueue.end(); ++i) {
+
+	InstrumentId id = (*i)->getInstrument();
+	files[id].push_back(*i);
+	m_bufferMap[id].empty = false;
+    }
+
+    for (InstrumentId id = instrumentBase;
+	 id < instrumentBase + instrumentCount; ++id) {
 	
 	MappedAudioFader *fader =
 	    m_driver->getMappedStudio()->getAudioFader(id);
@@ -441,7 +456,7 @@ AudioMixer::processBlocks(bool forceFill)
 	    	    
 	    float faderLevel = 107;
 	    (void)fader->getProperty(MappedAudioFader::FaderLevel, faderLevel);
-    
+	    /*!!!
 	    // A fader linearly represents dB values such that 127 on the
 	    // fader (the maximum value) is 20dB and 0dB is at 107 (max value
 	    // minus 20).  As a special case, 0 on the fader is silence.
@@ -459,6 +474,10 @@ AudioMixer::processBlocks(bool forceFill)
 
 		volume = powf(10.0, dB / 10.0);
 	    }
+	    */
+
+	    float volume = AudioLevel::fader_to_multiplier
+		(faderLevel, 127, AudioLevel::ShortFader);
 
 	    float pan = 0.0;
 	    (void)fader->getProperty(MappedAudioFader::Pan, pan);
@@ -471,6 +490,8 @@ AudioMixer::processBlocks(bool forceFill)
 	    
 	    m_bufferMap[id].volume = volume;
 	}
+
+	if (m_bufferMap[id].volume == 0.0) m_bufferMap[id].empty = true;
     }
 
     bool more = true;
@@ -482,11 +503,62 @@ AudioMixer::processBlocks(bool forceFill)
 	for (InstrumentId id = instrumentBase;
 	     id < instrumentBase + instrumentCount; ++id) {
 
-	    if (processBlock(id, files[id - instrumentBase], forceFill)) {
+	    if (m_bufferMap[id].empty) {
+		processEmptyBlocks(id);
+		continue;
+	    }
+	    
+	    if (processBlock(id, files[id], forceFill)) {
 		more = true;
 	    }
 	}
     }
+}
+
+
+void
+AudioMixer::processEmptyBlocks(InstrumentId id)
+{
+#ifdef DEBUG_MIXER
+    if (m_driver->isPlaying()) {
+	if (id == 1000) std::cerr << "AudioMixer::processEmptyBlock(" << id << ")" << std::endl;
+    }
+#endif
+  
+    BufferRec &rec = m_bufferMap[id];
+    unsigned int channels = rec.buffers.size();
+    if (channels > m_processBuffers.size()) channels = m_processBuffers.size();
+    if (channels == 0) return; // buffers just haven't been set up yet
+
+    unsigned int targetChannels = channels;
+    if (targetChannels < 2) targetChannels = 2; // fill at least two buffers
+
+    size_t minWriteSpace = 0;
+    for (unsigned int ch = 0; ch < targetChannels; ++ch) {
+	size_t thisWriteSpace = rec.buffers[ch]->getWriteSpace();
+	if (ch == 0 || thisWriteSpace < minWriteSpace) {
+	    minWriteSpace = thisWriteSpace;
+	    if (minWriteSpace < m_blockSize) return;
+	}
+    }
+
+    // unlike processBlock, we can really fill this one up here (at
+    // least to the nearest block multiple, just to make things easier
+    // to understand) because it's so cheap
+
+    size_t toWrite = (minWriteSpace / m_blockSize) * m_blockSize;
+
+    rec.zeroFrames += toWrite;
+    bool dormant = true;
+                
+    for (unsigned int ch = 0; ch < targetChannels; ++ch) {
+	rec.buffers[ch]->zero(toWrite);
+	if (rec.buffers[ch]->getReadSpace() > rec.zeroFrames) dormant = false;
+    }
+
+    rec.dormant = dormant;
+    rec.filledTo = rec.filledTo +
+	RealTime::frame2RealTime(toWrite, m_sampleRate);
 }
 	    
 
@@ -534,11 +606,10 @@ AudioMixer::processBlock(InstrumentId id, PlayableAudioFileList &audioQueue,
 	size_t thisWriteSpace = rec.buffers[ch]->getWriteSpace();
 	if (ch == 0 || thisWriteSpace < minWriteSpace) {
 	    minWriteSpace = thisWriteSpace;
+	    if (minWriteSpace < m_blockSize) return false;
 	}
     }
 
-    if (minWriteSpace < m_blockSize) return false;
-                
     PluginList &plugins = m_plugins[id];
 
     for (PlayableAudioFileList::iterator it = audioQueue.begin();
@@ -589,7 +660,14 @@ AudioMixer::processBlock(InstrumentId id, PlayableAudioFileList &audioQueue,
 	    acceptable =
 		((frames >= m_blockSize) || (*it)->isFullyBuffered());
 
-	    if (acceptable && (frames >= m_blockSize * 2)) {
+	    if (acceptable &&
+		(minWriteSpace >= m_blockSize * 2) &&
+		(frames >= m_blockSize * 2)) {
+
+#ifdef DEBUG_MIXER
+		if (id == 1000) std::cerr << "AudioMixer::processBlock(" << id <<"): will be asking for more" << std::endl;
+#endif
+
 		haveMore = true;
 	    }
 
@@ -612,6 +690,12 @@ AudioMixer::processBlock(InstrumentId id, PlayableAudioFileList &audioQueue,
 	    return false; // blocked
 	}
     }
+
+#ifdef DEBUG_MIXER
+    if (!haveMore) {
+	if (id == 1000) std::cerr << "AudioMixer::processBlock(" << id <<"): won't be asking for more" << std::endl;
+    }
+#endif
 
     for (unsigned int ch = 0; ch < targetChannels; ++ch) {
 	memset(m_processBuffers[ch], 0, sizeof(sample_t) * m_blockSize);
@@ -775,7 +859,7 @@ AudioMixer::kick(bool waitForLocks)
 	if (tryLock() == EBUSY) return;
     }
 
-    Rosegarden::Profiler profiler("AudioMixer::kick");
+//    Rosegarden::Profiler profiler("AudioMixer::kick");
 
     processBlocks(false);
     m_fileReader->updateDefunctStatuses();
@@ -889,12 +973,12 @@ AudioFileReader::updateReadyStatuses(PlayableAudioFileList &audioQueue)
 	PlayableAudioFile *file = *it;
 
 	if (file->getStatus() == PlayableAudioFile::READY) {
-#ifdef DEBUG_MIXER
+#ifdef DEBUG_READER
 	    std::cerr << "AudioFileReader::updateReadyStatuses: found a READY file, asking it to buffer" << std::endl;
 #endif
 	    if (file->fillBuffers(file->getReadyTime())) {
-#ifdef DEBUG_MIXER
-	    std::cerr << "AudioFileReader::updateReadyStatuses: (it did)" << std::endl;
+#ifdef DEBUG_READER
+		std::cerr << "AudioFileReader::updateReadyStatuses: (it did)" << std::endl;
 #endif
 		file->setStatus(PlayableAudioFile::PLAYING);
 	    }
@@ -918,6 +1002,9 @@ AudioFileReader::updateDefunctStatuses()
 	if (file->getStatus() == PlayableAudioFile::DEFUNCT) continue;
 
 	if (file->isFinished()) {
+#ifdef DEBUG_READER
+	    std::cerr << "AudioFileReader::updateDefunctStatuses: setting a finished file to defunct" << std::endl;
+#endif
 	    file->setStatus(PlayableAudioFile::DEFUNCT);
 	    someDefunct = true;
 	}
@@ -925,6 +1012,9 @@ AudioFileReader::updateDefunctStatuses()
 
     if (someDefunct) {
 	getLock();
+#ifdef DEBUG_READER
+	std::cerr << "AudioFileReader::updateDefunctStatuses: found some defunct, clearing" << std::endl;
+#endif
 	m_driver->clearDefunctFromAudioPlayQueue();
 	releaseLock();
     }
@@ -939,7 +1029,7 @@ AudioFileReader::kick(bool waitForLocks)
 	if (tryLock() == EBUSY) return false;
     }
 
-    Rosegarden::Profiler profiler("AudioFileReader::kick");
+//    Rosegarden::Profiler profiler("AudioFileReader::kick");
 
     PlayableAudioFileList audioQueue;
     PlayableAudioFileList::iterator it;
@@ -957,11 +1047,11 @@ AudioFileReader::kick(bool waitForLocks)
 	    file->updateBuffers();
 
 	} else if (file->getStatus() == PlayableAudioFile::READY) {
-#ifdef DEBUG_MIXER
+#ifdef DEBUG_READER
 	    std::cerr << "AudioFileReader::kick: found a READY file (ready time " << file->getReadyTime() << "), asking it to buffer" << std::endl;
 #endif
 	    if (file->fillBuffers(file->getReadyTime())) {
-#ifdef DEBUG_MIXER
+#ifdef DEBUG_READER
 		std::cerr << "AudioFileReader::kick: (it did)" << std::endl;
 #endif
 		file->setStatus(PlayableAudioFile::PLAYING);
@@ -1160,7 +1250,7 @@ AudioFileWriter::closeRecordFile(InstrumentId id, AudioFileId &returnedId)
 
     returnedId = m_files[id].first->getId();
     m_files[id].second->setStatus(RecordableAudioFile::DEFUNCT);
-#ifdef DEBUG_RECORDER
+#ifdef DEBUG_WRITER
     std::cerr << "AudioFileWriter::closeRecordFile: instrument " << id << " file set defunct" << std::endl;
 #endif
     return true;
@@ -1176,7 +1266,7 @@ AudioFileWriter::kick(bool waitForLocks)
 	if (tryLock() == EBUSY) return;
     }
 
-    Rosegarden::Profiler profiler("AudioFileWriter::kick");
+//    Rosegarden::Profiler profiler("AudioFileWriter::kick");
 
     InstrumentId instrumentBase;
     int instrumentCount;
@@ -1191,7 +1281,7 @@ AudioFileWriter::kick(bool waitForLocks)
 
 	if (raf->getStatus() == RecordableAudioFile::DEFUNCT) {
 
-#ifdef DEBUG_RECORDER
+#ifdef DEBUG_WRITER
 	    std::cerr << "AudioFileWriter::kick: found defunct file on instrument " << id << std::endl;
 #endif
 
@@ -1200,7 +1290,7 @@ AudioFileWriter::kick(bool waitForLocks)
 	    m_files[id].second = 0;
 
 	} else {
-#ifdef DEBUG_RECORDER
+#ifdef DEBUG_WRITER
 	    std::cerr << "AudioFileWriter::kick: writing file on instrument " << id << std::endl;
 #endif
 

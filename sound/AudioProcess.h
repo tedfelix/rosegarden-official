@@ -99,6 +99,7 @@ protected:
     static void *threadRun(void *arg);
 
     void processBlocks(bool forceFill);
+    void processEmptyBlocks(InstrumentId id);
     bool processBlock(InstrumentId id, PlayableAudioFileList&, bool forceFill);
     void generateBuffers();
 
@@ -124,6 +125,7 @@ protected:
 	BufferRec() : dormant(true), filledTo(RealTime::zeroTime), buffers() { }
 	~BufferRec();
 
+	bool empty;
 	bool dormant;
 	size_t zeroFrames;
 

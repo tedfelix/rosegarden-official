@@ -383,7 +383,7 @@ PlayableAudioFile::updateBuffers()
 
     if (m_fileEnded) {
 #ifdef DEBUG_PLAYABLE
-	std::cout << "PlayableAudioFile::updateRingBuffer: at end of file already" << std::endl;
+	std::cout << "PlayableAudioFile::updateBuffers: at end of file already" << std::endl;
 #endif
 	return;
     }
@@ -397,13 +397,13 @@ PlayableAudioFile::updateBuffers()
 
     if (frames < m_ringBufferThreshold) {
 #ifdef DEBUG_PLAYABLE
-	std::cout << "PlayableAudioFile::updateRingBuffer: " << frames << " < " << m_ringBufferThreshold << ", ignoring" << std::endl;
+	std::cout << "PlayableAudioFile::updateBuffers: " << frames << " < " << m_ringBufferThreshold << ", ignoring" << std::endl;
 	return;
 #endif
     }
 
 #ifdef DEBUG_PLAYABLE
-    std::cout << "PlayableAudioFile::updateRingBuffer: want " << frames << " samples" << std::endl;
+    std::cout << "PlayableAudioFile::updateBuffers: want " << frames << " samples" << std::endl;
 #endif
 
     int sourceChannels = m_audioFile->getChannels();
@@ -447,9 +447,9 @@ PlayableAudioFile::updateBuffers()
 	    // we can live with this - just write out what we
 	    // have got.
 #ifdef DEBUG_PLAYABLE
-	    std::cout << "PlayableAudioFile::updateRingBuffer - "
+	    std::cout << "PlayableAudioFile::updateBuffers - "
 		      << e << std::endl;
-	    std::cout << "PlayableAudioFile::updateRingBuffer: got " << data.size() << " bytes" << std::endl;
+	    std::cout << "PlayableAudioFile::updateBuffers: got " << data.size() << " bytes" << std::endl;
 #endif
 
 	    m_fileEnded = true;
@@ -515,7 +515,7 @@ PlayableAudioFile::updateBuffers()
 	    break;
 	    
 	default:
-	    std::cerr << "PlayableAudioFile::updateRingBuffer: unsupported " <<
+	    std::cerr << "PlayableAudioFile::updateBuffers: unsupported " <<
 		getBitsPerSample() << "-bit sample size" << std::endl;
 	}
 

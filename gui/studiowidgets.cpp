@@ -30,6 +30,7 @@
 #include <qtooltip.h>
 
 #include "Instrument.h"
+#include "AudioLevel.h"
 #include "studiowidgets.h"
 #include "colours.h"
 #include "constants.h"
@@ -99,7 +100,7 @@ RosegardenFader::slotShowFloatText()
 //    float dbValue = 10.0 * log10(float(maxValue() - value())/100.0);
 
     // draw on the float text
-    
+/*!!!    
     float value = faderLevel();
 
     if (value != 0) {
@@ -112,6 +113,18 @@ RosegardenFader::slotShowFloatText()
 
 //	float dB = (value - maxValue() + 20.0) / 2.0;
 	m_float->setText(QString("%1%2 dB").arg(m_prependText).arg(dB));
+    } else {
+	m_float->setText(QString("%1-Inf dB").arg(m_prependText));
+    }
+*/
+
+    int value = faderLevel();
+    
+    if (value != 0) {
+	m_float->setText(QString("%1%2 dB").arg(m_prependText).arg
+			 (Rosegarden::AudioLevel::fader_to_dB
+			  (value, 127,
+			   Rosegarden::AudioLevel::ShortFader)));
     } else {
 	m_float->setText(QString("%1-Inf dB").arg(m_prependText));
     }

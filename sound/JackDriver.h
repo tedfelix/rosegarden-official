@@ -62,7 +62,10 @@ public:
     void setTransportEnabled(bool e) { m_jackTransportEnabled = e; }
     void setTransportMaster (bool m) { m_jackTransportMaster  = m; }
 
-    void stopPlayback();
+    // start returns false if sound driver should wait for it to call
+    // back on startClocksApproved before starting clocks
+    bool start();
+    void stop();
 
     RealTime getAudioPlayLatency() const { return m_audioPlayLatency; }
     RealTime getAudioRecordLatency() const { return m_audioRecordLatency; }
@@ -109,10 +112,9 @@ public:
     int tryAudioQueueLocks();
     int releaseAudioQueueLocks();
 
-    bool prepareStart();
     void prebufferAudio();
-    void kickAudio();
     void flushAudio(); // when stopping
+    void kickAudio();
 
     RealTime getNextSliceStart(const RealTime &now) const;
 
