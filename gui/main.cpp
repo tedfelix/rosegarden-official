@@ -424,7 +424,7 @@ int main(int argc, char *argv[])
     aboutData.addCredit("Michael McIntyre", I18N_NOOP("notation selection event filter\nextra toolbars/pixmaps\nnotation/Lilypond patches\nauthor of \"Using Rosegarden\""), "dmmcintyr@users.sourceforge.net");
     aboutData.addCredit("Levi Burton", I18N_NOOP("UI improvements\nbug fixes"), "donburton@sbcglobal.net");
     aboutData.addCredit("Alexandre Prokoudine", I18N_NOOP("Russian translation\ni18n-ization"), "avp@altlinux.ru");
-    aboutData.addCredit("Pedro Lopez-Cabanillas", I18N_NOOP("Spanish translatio\nALSA hacking and bug fixes\nmulti-input MIDI recording"), "plcl@users.sourceforge.net");
+    aboutData.addCredit("Pedro Lopez-Cabanillas", I18N_NOOP("Spanish translation\nALSA hacking and bug fixes\nmulti-input MIDI recording"), "plcl@users.sourceforge.net");
     aboutData.addCredit("Jörg Schumann", I18N_NOOP("German translation"), "jrschumann@gmx.de");
     aboutData.addCredit("Kevin Donnelly", I18N_NOOP("Welsh translation"));
     aboutData.addCredit("Didier Burli", I18N_NOOP("French translation"), "didierburli@bluewin.ch");
@@ -438,6 +438,7 @@ int main(int argc, char *argv[])
     aboutData.addCredit("Thorsten Wilms", I18N_NOOP("Original designs for rotary controllers"), "t_w_@freenet.de");
     aboutData.addCredit("Oota Toshiya", I18N_NOOP("Japanese translation"), "ribbon@users.sourceforge.net");
     aboutData.addCredit("William", I18N_NOOP("Auto-scroll deceleration\nRests outside staves and other bug fixes"), "rosegarden4p AT orthoset.com");
+    aboutData.addCredit("Liu Songhe", I18N_NOOP("Simplified Chinese translation"), "jackliu9999@msn.com");
 
     aboutData.setTranslator(I18N_NOOP("_: NAME OF TRANSLATORS\nYour names") ,I18N_NOOP("_: EMAIL OF TRANSLATORS\nYour emails"));
     
