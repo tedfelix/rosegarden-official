@@ -13,14 +13,14 @@ noinst_LTLIBRARIES = libRosegardenSound.la
 libRosegardenSound_la_SOURCES = AudioFile.cpp \
                                 AudioFileManager.cpp \
                                 BWFAudioFile.cpp \
-                                MidiFile.cpp \
-                                MidiEvent.cpp \
+                                MappedComposition.cpp \
                                 MappedDevice.cpp \
                                 MappedEvent.cpp \
-                                MappedComposition.cpp \
                                 MappedInstrument.cpp \
                                 MappedRealTime.cpp \
                                 MappedStudio.cpp \
+                                MidiEvent.cpp \
+                                MidiFile.cpp \
                                 PeakFile.cpp \
                                 PeakFileManager.cpp \
                                 Plugins.cpp \

@@ -308,9 +308,13 @@ NotationStaff::getNoteNameAtCanvasCoords(double x, int y,
     Rosegarden::Key key;
     getClefAndKeyAtCanvasCoords(x, y, clef, key);
 
+    KConfig *config = kapp->config();
+    config->setGroup("General Options");
+    int baseOctave = config->readNumEntry("midipitchoctave", -2);
+
     return
 	Rosegarden::NotationDisplayPitch
-	(getHeightAtCanvasY(y), acc).getAsString(clef, key);
+	(getHeightAtCanvasY(y), acc).getAsString(clef, key, true, baseOctave);
 }
 
 void

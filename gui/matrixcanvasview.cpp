@@ -22,6 +22,7 @@
 #include "matrixcanvasview.h"
 #include "matrixstaff.h"
 #include "matrixelement.h"
+#include "midipitchlabel.h"
 
 #include "SnapGrid.h"
 
@@ -138,7 +139,8 @@ void MatrixCanvasView::contentsMouseMoveEvent(QMouseEvent* e)
     }
 
     if (evPitch != m_previousEvPitch) {
-        emit hoveredOverNoteChanged(m_staff.getNoteNameForPitch(evPitch));
+	Rosegarden::MidiPitchLabel label(evPitch);
+        emit hoveredOverNoteChanged(label.getQString());
         m_previousEvPitch = evPitch;
     }
 

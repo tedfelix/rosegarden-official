@@ -108,42 +108,65 @@ GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg, RosegardenGUIDo
     : TabbedConfigurationPage(cfg, doc, parent, name),
       m_client(0),
       m_countIn(0),
-      m_midiPitchOffset(0),
+      m_midiPitchOctave(0),
       m_externalAudioEditorPath(0),
       m_selectorGreedyMode(0),
       m_nameStyle(0)
-
 {
-//     Rosegarden::Composition &comp = doc->getComposition();
-//     Rosegarden::Configuration &config = doc->getConfiguration();
     m_cfg->setGroup("General Options");
 
     //
-    // "General" tab
+    // "Appearance" tab
     //
     QFrame *frame = new QFrame(m_tabWidget);
     QGridLayout *layout = new QGridLayout(frame,
-                                          7, 2, // nbrow, nbcol
-                                          10, 5);
-
-    layout->addWidget(new QLabel(i18n("Default editor (for double-click on segment)"),
-                                 frame), 0, 0);
-    layout->addWidget(new QLabel(i18n("Number of count-in bars when recording"),
-                                 frame), 1, 0);
+			     1, 2, // nbrow, nbcol
+			     10, 5);
     layout->addWidget(new QLabel(i18n("Note name style"),
-                                 frame), 2, 0);
-    layout->addWidget(new QLabel(i18n("MIDI pitch to string offset"),
-                                 frame), 3, 0);
-    layout->addWidget(new QLabel(i18n("Selector greedy mode"),
-                                 frame), 4, 0);
+                                 frame), 0, 0);
+    layout->addWidget(new QLabel(i18n("Base octave number for MIDI pitch display"),
+                                 frame), 1, 0);
 
     QVBox *box = new QVBox(frame);
     new QLabel(i18n("Use textured backgrounds on canvas areas"), box);
     new QLabel(i18n("    (takes effect only from next restart)"), box);
-    layout->addWidget(box, 5, 0);
+    layout->addWidget(box, 2, 0);
 
-    layout->addWidget(new QLabel(i18n("Auto-save interval (in seconds)"),
-                                 frame), 6, 0);
+    m_nameStyle = new QComboBox(frame);
+    m_nameStyle->insertItem(i18n("Always use US names (e.g. quarter, 8th)"));
+    m_nameStyle->insertItem(i18n("Localised (where available, else UK)"));
+    m_nameStyle->setCurrentItem(m_cfg->readUnsignedNumEntry("notenamestyle", Local));
+    layout->addWidget(m_nameStyle, 0, 1);
+
+    m_midiPitchOctave = new QSpinBox(frame);
+    m_midiPitchOctave->setMaxValue(10);
+    m_midiPitchOctave->setMinValue(-10);
+    m_midiPitchOctave->setValue(m_cfg->readNumEntry("midipitchoctave", -2));
+
+    layout->addWidget(m_midiPitchOctave, 1, 1);
+
+    m_backgroundTextures = new QCheckBox(frame);
+    layout->addWidget(m_backgroundTextures, 2, 1);
+
+    m_backgroundTextures->setChecked(m_cfg->readBoolEntry("backgroundtextures",
+                                                          false));
+
+    addTab(frame, i18n("Presentation"));
+
+    //
+    // "Behaviour" tab
+    //
+    frame = new QFrame(m_tabWidget);
+    layout = new QGridLayout(frame,
+			     3, 2, // nbrow, nbcol
+			     10, 5);
+
+    layout->addWidget(new QLabel(i18n("Default editor (for double-click on segment)"),
+                                 frame), 0, 0);
+    layout->addWidget(new QLabel(i18n("Selector greedy mode"),
+                                 frame), 1, 0);
+    layout->addWidget(new QLabel(i18n("Number of count-in bars when recording"),
+                                 frame), 2, 0);
 
     m_client = new QComboBox(frame);
     m_client->insertItem(i18n("Notation"));
@@ -153,43 +176,19 @@ GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg, RosegardenGUIDo
     
     layout->addWidget(m_client, 0, 1);
 
-    m_countIn = new QSpinBox(frame);
-    m_countIn->setValue(m_cfg->readUnsignedNumEntry("countinbars", 2));
-    m_countIn->setMaxValue(10);
-    m_countIn->setMinValue(0);
-
-    layout->addWidget(m_countIn, 1, 1);
-
-    m_nameStyle = new QComboBox(frame);
-    m_nameStyle->insertItem(i18n("Always use US names (e.g. quarter, 8th)"));
-    m_nameStyle->insertItem(i18n("Localised (where available, else UK)"));
-    m_nameStyle->setCurrentItem(m_cfg->readUnsignedNumEntry("notenamestyle", Local));
-    layout->addWidget(m_nameStyle, 2, 1);
-
-    m_midiPitchOffset = new QSpinBox(frame);
-    m_midiPitchOffset->setValue(m_cfg->readUnsignedNumEntry("midipitchoffset", 4));
-    m_midiPitchOffset->setMaxValue(10);
-    m_midiPitchOffset->setMinValue(0);
-
-    layout->addWidget(m_midiPitchOffset, 3, 1);
-
     m_selectorGreedyMode = new QCheckBox(frame);
-    layout->addWidget(m_selectorGreedyMode, 4, 1);
+    layout->addWidget(m_selectorGreedyMode, 1, 1);
 
     m_selectorGreedyMode->setChecked(m_cfg->readBoolEntry("selectorgreedymode",
                                                           true));
 
-    m_backgroundTextures = new QCheckBox(frame);
-    layout->addWidget(m_backgroundTextures, 5, 1);
+    m_countIn = new QSpinBox(frame);
+    m_countIn->setValue(m_cfg->readUnsignedNumEntry("countinbars", 2));
+    m_countIn->setMaxValue(10);
+    m_countIn->setMinValue(0);
+    layout->addWidget(m_countIn, 2, 1);
 
-    m_backgroundTextures->setChecked(m_cfg->readBoolEntry("backgroundtextures",
-                                                          false));
-
-    m_autosaveInterval = new QSpinBox(0, 600, 10, frame);
-    m_autosaveInterval->setValue(m_cfg->readUnsignedNumEntry("autosaveinterval", 60));
-    layout->addWidget(m_autosaveInterval, 6, 1);
-
-    addTab(frame, i18n("General"));
+    addTab(frame, i18n("Behaviour"));
 
     //
     // External editor tab
@@ -218,6 +217,22 @@ GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg, RosegardenGUIDo
 
     addTab(frame, i18n("External Editors"));
 
+    //
+    // Autosave tab
+    //
+    frame = new QFrame(m_tabWidget);
+    layout = new QGridLayout(frame,
+                             1, 2, // nbrow, nbcol
+                             10, 5);
+
+    layout->addWidget(new QLabel(i18n("Auto-save interval (in seconds)"),
+                                 frame), 0, 0);
+    m_autosaveInterval = new QSpinBox(0, 600, 10, frame);
+    m_autosaveInterval->setValue(m_cfg->readUnsignedNumEntry("autosaveinterval", 60));
+    layout->addWidget(m_autosaveInterval, 0, 1);
+
+    addTab(frame, i18n("Auto-save"));
+
 }
 
 void
@@ -241,11 +256,6 @@ GeneralConfigurationPage::slotFileDialog()
 
 void GeneralConfigurationPage::apply()
 {
-//     Rosegarden::Composition &comp = m_doc->getComposition();
-//     Rosegarden::Configuration &config = m_doc->getConfiguration();
-//     comp.setCountInBars(countIn);
-//     config.setDoubleClickClient(
-//                                 (Rosegarden::Configuration::DoubleClickClient)client);
     m_cfg->setGroup("General Options");
 
     int countIn = getCountInSpin();
@@ -254,8 +264,8 @@ void GeneralConfigurationPage::apply()
     int client = getDblClickClient();
     m_cfg->writeEntry("doubleclickclient", client);
 
-    int offset = getMIDIPitch2StringOffset();
-    m_cfg->writeEntry("midipitchoffset", offset);
+    int octave = m_midiPitchOctave->value();
+    m_cfg->writeEntry("midipitchoctave", octave);
 
     int namestyle = getNoteNameStyle();
     m_cfg->writeEntry("notenamestyle", namestyle);

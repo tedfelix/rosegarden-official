@@ -129,18 +129,6 @@ void MatrixStaff::positionElement(MatrixElement* el)
 }
 
 
-QString MatrixStaff::getNoteNameForPitch(unsigned int pitch)
-{
-    static const char* noteNamesSharps[] = {
-        "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
-    };
-
-    int octave = pitch / 12;
-    pitch  = pitch % 12;
-
-    return QString("%1%2").arg(noteNamesSharps[pitch]).arg(octave - 2);
-}
-
 MatrixElement*
 MatrixStaff::getElement(Rosegarden::Event *event)
 {

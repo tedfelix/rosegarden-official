@@ -55,6 +55,7 @@
 #include "matrixvlayout.h"
 #include "matrixtool.h"
 #include "matrixcommands.h"
+#include "midipitchlabel.h"
 #include "dialogs.h"
 #include "rosestrings.h"
 #include "rosegardenguidoc.h"
@@ -1065,7 +1066,8 @@ MatrixView::slotHoveredOverKeyChanged(unsigned int y)
     int evPitch = staff.getHeightAtCanvasY(y);
 
     if (evPitch != m_previousEvPitch) {
-        m_hoveredOverNoteName->setText(staff.getNoteNameForPitch(evPitch));
+	Rosegarden::MidiPitchLabel label(evPitch);
+        m_hoveredOverNoteName->setText(label.getQString());
         m_previousEvPitch = evPitch;
     }
 }

@@ -66,8 +66,6 @@ public:
 
     virtual void positionElement(MatrixElement*);
 
-    QString getNoteNameForPitch(unsigned int pitch);
-
     // Return this so that the tools can use it for recolouring
     // unselected elements.
     //

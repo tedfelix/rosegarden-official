@@ -20,6 +20,7 @@
 */
 
 #include "pianokeyboard.h"
+#include "midipitchlabel.h"
 
 #include <qpainter.h>
 #include <qtooltip.h>
@@ -32,7 +33,6 @@ PianoKeyboard::PianoKeyboard(QWidget *parent,
       m_keySize(48, 18),
       m_blackKeySize(24, 8),
       m_nbKeys(88),
-      m_midiPitchToStringOffset(4),
       m_mouseDown(false)
 {
     computeKeyPos();
@@ -109,9 +109,18 @@ void PianoKeyboard::paintEvent(QPaintEvent*)
         paint.drawLine(0, m_whiteKeyPos[i],
                        m_keySize.width(), m_whiteKeyPos[i]);
 
-    for(unsigned int i = 0; i < m_labelKeyPos.size(); ++i)
+    for(unsigned int i = 0; i < m_labelKeyPos.size(); ++i) {
+
+	int pitch = (m_labelKeyPos.size() - i) * 12;
+
+	// for some reason I don't immediately comprehend,
+	// m_labelKeyPos contains two more octaves than we need
+	pitch -= 24;
+
+	Rosegarden::MidiPitchLabel label(pitch);
         paint.drawText(m_blackKeySize.width(), m_labelKeyPos[i],
-        QString(i18n("C %1")).arg((int)m_labelKeyPos.size() - (int)i - getMIDIPitchToStringOffset()));
+		       label.getQString());
+    }
 
     paint.setBrush(colorGroup().foreground());
 

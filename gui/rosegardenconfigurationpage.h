@@ -163,7 +163,6 @@ public:
 
     int getCountInSpin()            { return m_countIn->value(); }
     int getDblClickClient()         { return m_client->currentItem(); }
-    int getMIDIPitch2StringOffset() { return m_midiPitchOffset->value(); }
     QString getExternalAudioEditor() { return m_externalAudioEditorPath->text(); }
     int getNoteNameStyle() { return m_nameStyle->currentItem(); }
 
@@ -180,7 +179,7 @@ protected:
 
     QComboBox* m_client;
     QSpinBox*  m_countIn;
-    QSpinBox*  m_midiPitchOffset;
+    QSpinBox*  m_midiPitchOctave;
     QLineEdit* m_externalAudioEditorPath;
     QCheckBox* m_selectorGreedyMode;
     QCheckBox* m_backgroundTextures;

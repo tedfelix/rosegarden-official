@@ -577,7 +577,8 @@ public:
      * If inclOctave is false, this will return C, Bb, etc.
      */
     std::string getAsString(const Clef &clef, const Key &key,
-			    bool inclOctave=true) const;
+			    bool inclOctave = true,
+			    int octaveBase = -2) const;
 
 private:
     int m_heightOnStaff;

@@ -780,7 +780,7 @@ NotationDisplayPitch::displayPitchToRawPitch(int height,
 
 string
 NotationDisplayPitch::getAsString(const Clef &clef, const Key &key,
-								  bool inclOctave) const
+				  bool inclOctave, int octaveBase) const
 {
     static const string noteNamesSharps[] = {
         "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
@@ -803,9 +803,11 @@ NotationDisplayPitch::getAsString(const Clef &clef, const Key &key,
     char tmp[1024];
 
     if (key.isSharp())
-        sprintf(tmp, "%s%d", noteNamesSharps[pitch].c_str(), octave - 2);
+        sprintf(tmp, "%s%d", noteNamesSharps[pitch].c_str(),
+		octave + octaveBase);
     else
-        sprintf(tmp, "%s%d", noteNamesFlats[pitch].c_str(), octave - 2);
+        sprintf(tmp, "%s%d", noteNamesFlats[pitch].c_str(),
+		octave + octaveBase);
     
     return string(tmp);
     

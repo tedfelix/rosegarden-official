@@ -36,9 +36,6 @@ public:
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;
 
-    void           setMIDIPitchToStringOffset(unsigned short o) { m_midiPitchToStringOffset = o; }
-    unsigned short getMIDIPitchToStringOffset() { return m_midiPitchToStringOffset; }
-
 signals:
 
     /**
@@ -84,7 +81,6 @@ protected:
     QSize m_keySize;
     QSize m_blackKeySize;
     unsigned int m_nbKeys;
-    unsigned short m_midiPitchToStringOffset;
 
     std::vector<unsigned int> m_whiteKeyPos;
     std::vector<unsigned int> m_blackKeyPos;

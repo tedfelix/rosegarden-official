@@ -33,8 +33,7 @@
 #include <kstddirs.h>
 #include <klocale.h>
 
-#include "MidiPitchLabel.h"
-
+#include "midipitchlabel.h"
 #include "rosestrings.h"
 #include "widgets.h"
 
