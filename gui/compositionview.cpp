@@ -201,7 +201,14 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
                 timeT repeatEnd = s->getRepeatEndTime();
                 sr.setWidth((int)m_grid.getRulerScale()->getWidthForDuration(repeatStart,
                                                                              repeatEnd - repeatStart) + 1);
-                sr.setRepeatLength((int)m_grid.getRulerScale()->getXForTime(repeatInterval));
+
+                CompositionRect::repeatmarks repeatMarks;
+                
+                for(timeT repeatMark = repeatStart; repeatMark < repeatEnd; repeatMark += repeatInterval) {
+                    repeatMarks.push_back((int)m_grid.getRulerScale()->getXForTime(repeatMark));
+                }
+                sr.setRepeatMarks(repeatMarks);
+
             }
             
             if (s != m_recordingSegment) {
@@ -863,34 +870,35 @@ void CompositionView::drawCompRect(const CompositionRect& r, QPainter *p, const 
 
     if (r.isRepeating()) {
 
-        int repeatLength = r.getRepeatLength();
+        CompositionRect::repeatmarks repeatMarks = r.getRepeatMarks();
 
         // draw 'start' rectangle with original brush
         //
         QRect startRect = r;
-        startRect.setWidth(repeatLength);
+        startRect.setWidth(repeatMarks[0] - r.x());
         p->setBrush(r.getBrush());
         drawRect(startRect, p, clipRect, r.isSelected(), intersectLvl, fill);
         
 
         // now draw the 'repeat' marks
         //
-        QRect rect = r;
-        QPoint repeatPoint(repeatLength, r.y());
-
         p->setPen(GUIPalette::getColour(GUIPalette::RepeatSegmentBorder));
-        int pos = rect.x() + repeatLength;
-        int width = r.width();
         int penWidth = std::max(r.getPen().width(), 1u);
 
-        while(pos < width + repeatLength &&
-              pos < clipRect.right()) {
-            if (pos >= clipRect.left())
+        for (int i = 0; i < repeatMarks.size(); ++i) {
+            int pos = repeatMarks[i];
+            if (pos < clipRect.right())
+                break;
+            
+            if (pos >= clipRect.left()) {
+//                 RG_DEBUG << "CompositionView::drawCompRect() : drawing repeat mark at "
+//                          << pos << "," << r.y() + penWidth << endl;
                 p->drawLine(pos, r.y() + penWidth, pos,
                             r.y() + r.height() - penWidth - 1);
-            pos += repeatLength;
+            }
+            
         }
-        
+
     }
     
     p->restore();
@@ -1199,4 +1207,5 @@ CompositionView::slotTextFloatTimeout()
 { 
     hideTextFloat();
 }
+
 #include "compositionview.moc"

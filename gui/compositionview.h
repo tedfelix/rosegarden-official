@@ -26,6 +26,7 @@
 
 #include <qwmatrix.h>
 #include <qpen.h>
+#include <qvaluevector.h>
 
 #include "SnapGrid.h"
 #include "rosegardenscrollview.h"
@@ -37,33 +38,39 @@
 class CompositionRect : public QRect
 {
 public:
+    typedef QValueVector<int> repeatmarks;
+
     friend bool operator<(const CompositionRect&, const CompositionRect&);
 
     CompositionRect() : QRect(), m_selected(false),
-                        m_needUpdate(false), m_brush(DefaultBrushColor), m_pen(DefaultPenColor), m_repeatLength(0) {};
+                        m_needUpdate(false), m_brush(DefaultBrushColor), m_pen(DefaultPenColor) {};
     CompositionRect(const QRect& r) : QRect(r), m_selected(false),
-                                      m_needUpdate(false), m_brush(DefaultBrushColor), m_pen(DefaultPenColor), m_repeatLength(0) {};
+                                      m_needUpdate(false), m_brush(DefaultBrushColor), m_pen(DefaultPenColor) {};
     CompositionRect(const QPoint & topLeft, const QPoint & bottomRight)
         : QRect(topLeft, bottomRight), m_selected(false),
-          m_needUpdate(false), m_brush(DefaultBrushColor), m_pen(DefaultPenColor), m_repeatLength(0) {};
+          m_needUpdate(false), m_brush(DefaultBrushColor), m_pen(DefaultPenColor) {};
     CompositionRect(const QPoint & topLeft, const QSize & size)
         : QRect(topLeft, size), m_selected(false),
-          m_needUpdate(false), m_brush(DefaultBrushColor), m_pen(DefaultPenColor), m_repeatLength(0) {};
+          m_needUpdate(false), m_brush(DefaultBrushColor), m_pen(DefaultPenColor) {};
     CompositionRect(int left, int top, int width, int height)
         : QRect(left, top, width, height), m_selected(false),
-          m_needUpdate(false), m_brush(DefaultBrushColor), m_pen(DefaultPenColor), m_repeatLength(0) {};
+          m_needUpdate(false), m_brush(DefaultBrushColor), m_pen(DefaultPenColor) {};
 
     void setSelected(bool s)      { m_selected = s; }
     bool isSelected() const       { return m_selected; }
     bool needsFullUpdate() const  { return m_needUpdate; }
     void setNeedsFullUpdate(bool s) { m_needUpdate = s; }
+
+    // brush, pen draw info
     void setBrush(QBrush b)       { m_brush = b; }
     QBrush getBrush() const       { return m_brush; }
     void setPen(QPen b)           { m_pen = b; }
     QPen getPen() const           { return m_pen; }
-    void setRepeatLength(int l)   { m_repeatLength = l; }
-    int  getRepeatLength() const  { return m_repeatLength; }
-    bool isRepeating() const      { return m_repeatLength > 0; }
+
+    // repeating segments
+    void setRepeatMarks(const repeatmarks& rm) { m_repeatMarks = rm; }
+    const repeatmarks&  getRepeatMarks() const  { return m_repeatMarks; }
+    bool isRepeating() const      { return m_repeatMarks.size() > 0; }
 
     static const QColor DefaultPenColor;
     static const QColor DefaultBrushColor;
@@ -73,7 +80,7 @@ protected:
     bool   m_needUpdate;
     QBrush m_brush;
     QPen   m_pen;
-    int    m_repeatLength;
+    repeatmarks m_repeatMarks;
 };
 
 class CompositionModel : public QObject
