@@ -32,10 +32,17 @@
 #include "MidiDevice.h"
 #include "instrumentparameterbox.h"
 
+#include "rosedebug.h"
+
 InstrumentParameterBox::InstrumentParameterBox(QWidget *parent,
                                                const char *name,
                                                WFlags f)
-  :QFrame(parent, name, f)
+    : QFrame(parent, name, f),
+      m_channelValue(new RosegardenComboBox(true, false, this)),
+      m_programValue(new RosegardenComboBox(true, false, this)),
+      m_panDial(0),
+      m_panValue(0),
+      m_volumeValue(new RosegardenComboBox(true, true, this))
 {
     initBox();
 }
@@ -56,7 +63,7 @@ InstrumentParameterBox::initBox()
 
     QGridLayout *gridLayout = new QGridLayout(this, 2, 2, 5, 1);
 
-    QLabel *title = new QLabel("Instrument Parameters", this);
+    QLabel *title = new QLabel(i18n("Instrument Parameters"), this);
     title->setFont(boldFont);
 
     QLabel *channelLabel = new QLabel(i18n("Channel"), this);
@@ -65,10 +72,10 @@ InstrumentParameterBox::initBox()
     QLabel *volumeLabel = new QLabel(i18n("Volume"), this);
 
     // reversing motif style read-only combo
-    m_channelValue = new RosegardenComboBox(true, false, this);
+    //m_channelValue = new RosegardenComboBox(true, false, this);
 
     // reversing motif style read-only combo
-    m_programValue = new RosegardenComboBox(true, false, this);
+    //m_programValue = new RosegardenComboBox(true, false, this);
 
     // Create an HBox which we insert into the GridLayout
     // for the Pan value
@@ -85,13 +92,15 @@ InstrumentParameterBox::initBox()
     m_panDial->setLineStep(5);
     m_panDial->setMaximumHeight(panLabel->height());
 
-    connect(m_panDial, SIGNAL(valueChanged(int)),
-            m_panValue, SLOT(slotChangePanLabel(int)));
-
     m_panValue = new QLabel("0", hbox);
+    QFontMetrics fm(plainFont);
+    m_panValue->setFixedWidth(fm.width("-99"));
+
+    connect(m_panDial, SIGNAL(valueChanged(int)),
+            this, SLOT(slotChangePanLabel(int)));
 
     // reversing motif style read-only combo
-    m_volumeValue = new RosegardenComboBox(true, true, this);
+    //m_volumeValue = new RosegardenComboBox(true, true, this);
 
     gridLayout->addMultiCellWidget(title, 0, 0, 0, 1, AlignLeft);
 
@@ -107,13 +116,10 @@ InstrumentParameterBox::initBox()
     gridLayout->addWidget(volumeLabel, 4, 0, AlignLeft);
     gridLayout->addWidget(m_volumeValue, 4, 1, AlignRight);
 
-    char buffer[100];
-
     // Populate channel list
     for (int i = 0; i < 16; i++)
     {
-        sprintf(buffer, "%d", i);
-        m_channelValue->insertItem(QString(buffer), i);
+        m_channelValue->insertItem(QString("%1").arg(i));
     }
 
 }
@@ -121,7 +127,7 @@ InstrumentParameterBox::initBox()
 void
 InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
 {
-    std::cout << "useInstrument() - populate Instrument" << std::endl;
+    kdDebug(KDEBUG_AREA) << "useInstrument() - populate Instrument\n";
 
     if (instrument == 0)
         return;
