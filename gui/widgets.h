@@ -196,7 +196,6 @@ public slots:
 private:
     bool m_firstTimeout;
     bool m_shown;
-    bool m_changedCursor;
 };
 
 
