@@ -381,8 +381,14 @@ bool MmappedSegmentsMetaIterator::acceptEvent(MappedEvent *evt, bool evtIsFromMe
         return (evt->getTrackId() == m_controlBlockMmapper->getSelectedTrack());
 
     // finally we're not soloing, so check if track is muted
-    return !m_controlBlockMmapper->isTrackMuted(evt->getTrackId());
-                     
+    Rosegarden::TrackId track = evt->getTrackId();
+    bool muted = m_controlBlockMmapper->isTrackMuted(evt->getTrackId());
+
+#ifdef DEBUG_META_ITERATOR
+    SEQUENCER_DEBUG << "track " << track << " muted status: " << muted << endl;
+#endif
+    
+    return !muted;
 }
 
 
