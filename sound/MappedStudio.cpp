@@ -73,7 +73,7 @@ MappedObject*
 MappedStudio::getObjectOfType(MappedObjectType type)
 {
     std::vector<MappedObject*>::iterator it;
-    for (it = m_objects.begin(); m_objects.end(); it++)
+    for (it = m_objects.begin(); it != m_objects.end(); ++it)
         if ((*it)->getType() == type)
             return (*it);
     return 0;
@@ -105,7 +105,7 @@ void
 MappedStudio::clear()
 {
     std::vector<MappedObject*>::iterator it;
-    for (it = m_objects.begin(); m_objects.end(); it++)
+    for (it = m_objects.begin(); it != m_objects.end(); ++it)
         delete (*it);
 
     m_objects.erase(m_objects.begin(), m_objects.end());
@@ -117,7 +117,7 @@ MappedStudio::getObject(MappedObjectId id)
 {
     std::vector<MappedObject*>::iterator it;
 
-    for (it = m_objects.begin(); m_objects.end(); it++)
+    for (it = m_objects.begin(); it != m_objects.end(); ++it)
         if ((*it)->getId() == id)
             return (*it);
 
