@@ -44,6 +44,7 @@
 class KURL;
 class KRecentFilesAction;
 class KToggleAction;
+class KProcess;
 
 // forward declaration of the RosegardenGUI classes
 class RosegardenGUIDoc;
@@ -384,7 +385,20 @@ public slots:
      */
     void sendSequencerJump(const Rosegarden::timeT &position);
 
+    /**
+     * Called when the sequencer auxiliary process exits
+     */
+    void sequencerExited(KProcess*);
+
 private:
+
+    /**
+     * Start the sequencer auxiliary process
+     * (built in the 'sequencer' directory)
+     *
+     * @see sequencerExited()
+     */
+    bool launchSequencer();
 
     /**
      * the configuration object of the application
@@ -436,7 +450,8 @@ private:
      * Transport (Playback and Recording) status
      */
     TransportStatus m_transportStatus;
- 
+
+    KProcess* m_sequencerProcess;
 };
  
 #endif // ROSEGARDENGUI_H

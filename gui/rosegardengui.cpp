@@ -34,6 +34,7 @@
 #include <kmenubar.h>
 #include <klocale.h>
 #include <kconfig.h>
+#include <kprocess.h>
 #include <dcopclient.h>
 
 #include <kaction.h>
@@ -64,7 +65,8 @@ RosegardenGUIApp::RosegardenGUIApp()
       m_view(0),
       m_doc(0),
       m_selectDefaultTool(0),
-      m_transportStatus(STOPPED)
+      m_transportStatus(STOPPED),
+      m_sequencerProcess(0)
 {
     // accept dnd
     setAcceptDrops(true);
@@ -95,6 +97,8 @@ RosegardenGUIApp::RosegardenGUIApp()
 RosegardenGUIApp::~RosegardenGUIApp()
 {
     kdDebug(KDEBUG_AREA) << "~RosegardenGUIApp()\n";
+    m_sequencerProcess->blockSignals(true);
+    delete m_sequencerProcess;
 }
 
 
@@ -899,8 +903,7 @@ void RosegardenGUIApp::importRG21File(const QString &file)
   initView();
 }
 
-void
-RosegardenGUIApp::setPointerPosition(const int &position)
+void RosegardenGUIApp::setPointerPosition(const int &position)
 {
   // We do this the lazily dangerous way of setting Composition
   // time and then gui time - we should probably make this
@@ -916,8 +919,7 @@ RosegardenGUIApp::setPointerPosition(const int &position)
   m_view->setPointerPosition(position);
 }
 
-void
-RosegardenGUIApp::play()
+void RosegardenGUIApp::play()
 {
   QByteArray data;
   QCString replyType;
@@ -925,6 +927,9 @@ RosegardenGUIApp::play()
 
   if (m_transportStatus == PLAYING)
     return;
+
+  if (!m_sequencerProcess && !launchSequencer())
+      return;
 
   // write the start position argument to the outgoing stream
   //
@@ -971,8 +976,7 @@ RosegardenGUIApp::play()
 
 // Send stop request to Sequencer if playing, else
 // return to start of track
-void
-RosegardenGUIApp::stop()
+void RosegardenGUIApp::stop()
 {
   if (m_transportStatus == STOPPED)
   {
@@ -1011,8 +1015,7 @@ RosegardenGUIApp::stop()
 
 // Jump to previous bar
 //
-void
-RosegardenGUIApp::rewind()
+void RosegardenGUIApp::rewind()
 {
   double barNumber = ((double) m_doc->getComposition().getPosition())/
                      ((double) m_doc->getComposition().getNbTicksPerBar());
@@ -1039,8 +1042,7 @@ RosegardenGUIApp::rewind()
 
 // Jump to next bar
 //
-void
-RosegardenGUIApp::fastforward()
+void RosegardenGUIApp::fastforward()
 {
   double barNumber = ((double) m_doc->getComposition().getPosition())/
                      ((double) m_doc->getComposition().getNbTicksPerBar());
@@ -1074,16 +1076,14 @@ RosegardenGUIApp::fastforward()
 // fails then we default (or try to default) to STOPPED at both
 // the GUI and the Sequencer.
 //
-void
-RosegardenGUIApp::notifySequencerStatus(const int& status)
+void RosegardenGUIApp::notifySequencerStatus(const int& status)
 {
   // for the moment we don't do anything fancy
   m_transportStatus = (TransportStatus) status;
 }
 
 
-void
-RosegardenGUIApp::sendSequencerJump(const Rosegarden::timeT &position)
+void RosegardenGUIApp::sendSequencerJump(const Rosegarden::timeT &position)
 {
   QByteArray data;
   QDataStream streamOut(data, IO_WriteOnly);
@@ -1102,9 +1102,48 @@ RosegardenGUIApp::sendSequencerJump(const Rosegarden::timeT &position)
   return;
 }
 
-void
-RosegardenGUIApp::editAllTracks()
+void RosegardenGUIApp::editAllTracks()
 {
     m_view->editAllTracks(&m_doc->getComposition());
+}
+
+
+// Sequencer auxiliary process management
+
+
+bool RosegardenGUIApp::launchSequencer()
+{
+    if (m_sequencerProcess) return true;
+
+    KTmpStatusMsg msg(i18n("Starting the sequencer..."), statusBar());
+    
+    m_sequencerProcess = new KProcess;
+
+    (*m_sequencerProcess) << "rosegardensequencer";
+
+    connect(m_sequencerProcess, SIGNAL(processExited(KProcess*)),
+            this, SLOT(sequencerExited(KProcess*)));
+
+    bool res = m_sequencerProcess->start();
+    
+    if (!res) {
+        KMessageBox::error(0, i18n("Couldn't start the sequencer"));
+        kdDebug(KDEBUG_AREA) << "Couldn't start the sequencer\n";
+    } else {
+        // TODO: This is fugly
+        kapp->processEvents(2 * 1000);
+        sleep(1); // sleep 1 second to allow the sequencer do its connections
+    }
+
+    return res;
+}
+
+void RosegardenGUIApp::sequencerExited(KProcess*)
+{
+    kdDebug(KDEBUG_AREA) << "Sequencer exited\n";
+
+    KMessageBox::error(0, i18n("Sequencer exited"));
+
+    m_sequencerProcess = 0;
 }
 
