@@ -29,6 +29,7 @@
 #include "notationcommands.h"
 #include "widgets.h"
 #include "midipitchlabel.h"
+#include "colours.h"
 
 #include "RealTime.h"
 
@@ -2815,25 +2816,37 @@ InterpretDialog::getInterpretations()
 //
 
 CountdownDialog::CountdownDialog(QWidget *parent, int seconds):
-    KDialogBase(parent, "", false, i18n("Audio recording countdown"),  Cancel),
-    m_totalTime(seconds)
+    QDialog(parent, "", false, WStyle_StaysOnTop | WStyle_DialogBorder),
+    m_totalTime(seconds),
+    m_progressBarWidth(150),
+    m_progressBarHeight(15)
 {
-    // Ha!  It'll never work
-    //
-    setWFlags(getWFlags() | WStyle_StaysOnTop);
+    QBoxLayout *layout = new QBoxLayout(this, QBoxLayout::TopToBottom, 10, 14);
+    setCaption(i18n("Recording audio"));
 
-    QVBox *vBox = makeVBoxMainWidget();
-    QFrame *frame = new QFrame(vBox);
-
-    QHBox *hBox = new QHBox(vBox);
+    QHBox *hBox = new QHBox(this);
     m_label = new QLabel(hBox);
     m_time = new QLabel(hBox);
 
-    m_label->setText(i18n("Audio recording time left"));
-    m_progressBar = new QFrame(vBox);
+    layout->addWidget(hBox, 0, AlignCenter);
 
-    // set the total time
+    m_label->setText(i18n("Audio recording time left:  "));
+    m_progressBar = new QFrame(this);
+    m_progressBar->setFixedSize(m_progressBarWidth, m_progressBarHeight);
+
+    // Set the total time
+    //
     setElapsedTime(0);
+
+    // Simply re-emit from Stop button
+    //
+    m_stopButton = new QPushButton(i18n("Stop"), this);
+    m_stopButton->setFixedWidth(60);
+
+    layout->addWidget(m_progressBar, 0, AlignCenter);
+    layout->addWidget(m_stopButton, 0, AlignRight);
+
+    connect (m_stopButton, SIGNAL(released()), this, SIGNAL(stopped()));
 }
 
 
@@ -2842,6 +2855,14 @@ CountdownDialog::setLabel(const QString &label)
 {
     m_label->setText(label);
 }
+
+void
+CountdownDialog::setTotalTime(int seconds)
+{
+    m_totalTime = seconds;
+    setElapsedTime(0); // clear
+}
+
 
 void
 CountdownDialog::setElapsedTime(int elapsedSeconds)
@@ -2871,6 +2892,19 @@ CountdownDialog::setElapsedTime(int elapsedSeconds)
     {
         m_time->setText(i18n("Just how big is your hard disk?"));
     }
+
+    // Draw the progress bar
+    //
+    int barPosition = m_progressBarWidth - 
+        (elapsedSeconds * m_progressBarWidth) / m_totalTime;
+
+    QPainter p(m_progressBar);
+    p.setPen(RosegardenGUIColours::AudioCountdownBackground);
+    p.setBrush(RosegardenGUIColours::AudioCountdownBackground);
+    p.drawRect(0, 0, barPosition, m_progressBarHeight);
+    p.setPen(RosegardenGUIColours::AudioCountdownForeground);
+    p.setBrush(RosegardenGUIColours::AudioCountdownForeground);
+    p.drawRect(barPosition, 0, m_progressBarWidth, m_progressBarHeight);
 
     // Dialog complete if the display time is zero
     if (seconds == 0) emit completed();

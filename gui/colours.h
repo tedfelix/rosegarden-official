@@ -97,6 +97,9 @@ namespace RosegardenGUIColours
     extern const int QuantizedNoteMinValue;
 
     extern const QColor TextAnnotationBackground;
+
+    extern const QColor AudioCountdownBackground;
+    extern const QColor AudioCountdownForeground;
 }
 
 #endif

@@ -63,6 +63,8 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
     m_countdownTimer(new QTimer(doc)),
     m_recordTime(new QTime())
 {
+    m_countdownDialog = new CountdownDialog(dynamic_cast<QWidget*>
+                                (m_doc->parent())->parentWidget());
     // Connect this for use later
     //
     connect(m_countdownTimer, SIGNAL(timeout()),
@@ -676,15 +678,10 @@ SequenceManager::stop()
         m_transport->MetronomeButton()->
             setOn(m_doc->getComposition().usePlayMetronome());
 
-        // Remove the countdown dialog if any
+        // Remove the countdown dialog and stop the timer (if being used)
         //
-        /*
-        if (m_countdownDialog)
-        {
-            delete m_countdownDialog;
-            m_countdownDialog = 0;
-        }
-        */
+        m_countdownDialog->hide();
+        m_countdownTimer->stop();
     }
 
     // Now playback
@@ -1071,11 +1068,10 @@ SequenceManager::record(bool toggled)
                     int seconds = 60 * 
                         (config->readNumEntry("audiorecordminutes", 5));
 
-                    m_countdownDialog =
-                        new CountdownDialog(dynamic_cast<QWidget*>
-                                (m_doc->parent())->parentWidget(), seconds);
+                    // re-initialise
+                    m_countdownDialog->setTotalTime(seconds);
 
-                    connect(m_countdownDialog, SIGNAL(cancelClicked()),
+                    connect(m_countdownDialog, SIGNAL(stopped()),
                             this, SLOT(slotCountdownCancelled()));
 
                     connect(m_countdownDialog, SIGNAL(completed()),
@@ -2061,12 +2057,7 @@ SequenceManager::slotCountdownCancelled()
 
     // stop timer
     m_countdownTimer->stop();
-
-    // clear down dialog
-    /*
-    delete m_countdownDialog;
-    m_countdownDialog = 0;
-    */
+    m_countdownDialog->hide();
 
     // stop recording
     stopping();

@@ -92,6 +92,9 @@ namespace RosegardenGUIColours
     const int QuantizedNoteMinValue = 140;
 
     const QColor TextAnnotationBackground = QColor(255, 255, 180);
+
+    const QColor AudioCountdownBackground = Qt::darkGray;
+    const QColor AudioCountdownForeground = Qt::red;
 }
 
 
