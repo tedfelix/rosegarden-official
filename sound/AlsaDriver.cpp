@@ -389,8 +389,8 @@ AlsaDriver::initialiseMidi()
 
     ClientPortPair inputDevice = getFirstDestination(true); // duplex = true
 
-    cout << "    INPUT PAIR  = " << inputDevice.first << ", "
-                                << inputDevice.second << endl;
+    std::cout << "   Record client set to (" << inputDevice.first << ", "
+                                << inputDevice.second << ")" << std::endl;
 
     std::vector<AlsaPort*>::iterator it;
 

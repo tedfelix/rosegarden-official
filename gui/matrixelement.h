@@ -24,6 +24,7 @@
 
 #include "ViewElement.h"
 #include <qcanvas.h>
+#include <qbrush.h>
 
 class MatrixElement;
 
@@ -113,6 +114,12 @@ public:
 
     /// Returns true if the wrapped event is a note
     bool isNote() const;
+
+    /*
+     * Set the colour of the element
+     */
+    void setColour(const QColor &colour)
+        { m_canvasRect->setBrush(QBrush(colour)); }
 
 protected:
 

@@ -19,12 +19,15 @@
     COPYING included with this distribution for more information.
 */
 
-#include "matrixstaff.h"
-
 #include <qcanvas.h>
-#include "Segment.h"
 
+#include "matrixstaff.h"
 #include "matrixvlayout.h"
+#include "velocitycolour.h"
+
+#include "Segment.h"
+#include "BaseProperties.h"
+
 
 using Rosegarden::Segment;
 using Rosegarden::timeT;
@@ -36,6 +39,20 @@ MatrixStaff::MatrixStaff(QCanvas *canvas, Segment *segment,
         (1.5 / Rosegarden::Note(Rosegarden::Note::Shortest).getDuration())
 {
     // nothing else yet
+
+
+    // Create a velocity colouring object
+    //
+    m_elementColour = new VelocityColour(
+                            RosegardenGUIColours::LevelMeterRed,
+                            RosegardenGUIColours::LevelMeterOrange,
+                            RosegardenGUIColours::LevelMeterGreen,
+                            127, // max knee
+                            115, // red knee
+                            75,  // orange knee
+                            25); // green knee
+
+ 
 }
 
 MatrixStaff::~MatrixStaff()
@@ -80,7 +97,12 @@ void MatrixStaff::positionElement(MatrixElement* el)
     LinedStaffCoords coords = getCanvasCoordsForLayoutCoords(el->getLayoutX(),
                                                              int(el->getLayoutY()));
 
+    // get velocity for colouring
+    using Rosegarden::BaseProperties::VELOCITY;
+    int velocity = el->event()->get<Rosegarden::Int>(VELOCITY);
+
     el->setCanvas(m_canvas);
+    el->setColour(m_elementColour->getColour(velocity));
     el->setCanvasX(coords.first);
     el->setCanvasY((double)coords.second);
 }

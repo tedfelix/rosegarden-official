@@ -25,6 +25,8 @@
 #include "linedstaff.h"
 #include "matrixelement.h"
 
+class VelocityColour;
+
 class MatrixStaff : public LinedStaff<MatrixElement>
 {
 public:
@@ -74,6 +76,8 @@ private:
     double m_scaleFactor;
 
     bool m_wrapAddedEvents;
+
+    VelocityColour *m_elementColour;
 };
 
 #endif

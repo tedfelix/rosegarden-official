@@ -9,11 +9,11 @@ o ALSA audio
 
 o Starting playback in middle of long Events should actually play them
 
-o Velocity-coloured Matrix Events
-
-o Running key up PianoKeyboard should produce note run
+o Velocity-coloured Matrix Events [DONE - not sure if it's in the right place]
 
 o Segment labelling
+
+o Last Note seems broken again
 
 o ALSA:
   - ffwd/rwding/looping [DONE - still not wonderful but will do for mo]
@@ -101,6 +101,11 @@ Completed POST 0.1.4
   [DONE]
 
 - missing events in playback [FIXED - RealTime timestamps issue]
+
+- Running key up PianoKeyboard should produce note run [DONE]
+
+
+
 
 --
 
