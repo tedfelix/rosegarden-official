@@ -34,10 +34,13 @@ class PlayList : public QVBox
 
 public:
     PlayList(QWidget *parent = 0, const char *name = 0);
+    ~PlayList();
 
     PlayListView* getListView() { return m_listView; }
 
     void enableButtons(QListViewItem*);
+
+    static const char* const PlayListConfigGroup;
 
 signals:
     void play(QString);
@@ -53,6 +56,8 @@ protected slots:
     void slotDropped(QDropEvent*, QListViewItem*);
  
 protected:
+    void save();
+    void restore();
 
     //--------------- Data members ---------------------------------
     PlayListView* m_listView;
@@ -88,6 +93,4 @@ protected:
 
     //--------------- Data members ---------------------------------
     PlayList* m_playList;
-
-    static const char* const PLAYLIST_CONFIG;
 };
