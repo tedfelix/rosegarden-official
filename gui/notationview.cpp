@@ -409,8 +409,6 @@ bool NotationView::showElements(NotationElementList::iterator from,
 
     if (from == to) return true;
 
-    //    static ChordPixmapFactory npf(*m_mainStaff);
-    // let's revert to this for now
     NotePixmapFactory &npf(m_notePixmapFactory);
     Clef currentClef; // default is okay to start with
 
@@ -425,82 +423,7 @@ bool NotationView::showElements(NotationElementList::iterator from,
 
             if ((*it)->isNote()) {
 
-                Note::Type note = (*it)->event()->get<Int>(Rosegarden::Note::NoteType);
-                int dots = (*it)->event()->get<Int>(Rosegarden::Note::NoteDots);
-
-                Accidental accidental = NoAccidental;
-
-                long acc;
-                if ((*it)->event()->get<Int>(Properties::DISPLAY_ACCIDENTAL, acc)) {
-                    accidental = Accidental(acc);
-                }
-
-                bool up = true;
-                (void)((*it)->event()->get<Bool>(Properties::STALK_UP, up));
-
-                bool tail = true;
-                (void)((*it)->event()->get<Bool>(Properties::DRAW_TAIL, tail));
-
-                //		kdDebug(KDEBUG_AREA) << "NotationView::showElements(): found a note of type " << note << " with accidental " << accidental << endl;
-                
-                bool beamed = false;
-                (void)((*it)->event()->get<Bool>(Properties::BEAMED, beamed));
-
-                bool shifted = false;
-                (void)((*it)->event()->get<Bool>(Properties::NOTE_HEAD_SHIFTED, shifted));
-
-		if (beamed) {
-
-		    int stemLength = npf.getNoteBodyHeight();
-
-		    if ((*it)->event()->get<Bool>(Properties::BEAM_PRIMARY_NOTE)) {
-
-			int myY = (*it)->event()->get<Int>(Properties::BEAM_MY_Y);
-//			int nextY = (*it)->event()->get<Int>(Properties::BEAM_NEXT_Y);
-//			int dx = (*it)->event()->get<Int>(Properties::BEAM_SECTION_WIDTH);
-
-//                        kdDebug(KDEBUG_AREA) << "NotationView::showElements(): should be drawing a beam here... event is " << *(*it)->event() << endl;
-
-			stemLength = myY - (int)(*it)->getLayoutY();
-			if (stemLength < 0) stemLength = -stemLength;
-
-			int nextTailCount =
-			    (*it)->event()->get<Int>(Properties::BEAM_NEXT_TAIL_COUNT);
-			int width =
-			    (*it)->event()->get<Int>(Properties::BEAM_SECTION_WIDTH);
-			int gradient =
-			    (*it)->event()->get<Int>(Properties::BEAM_GRADIENT);
-
-                        bool thisPartialTails(false), nextPartialTails(false);
-                        (void)(*it)->event()->get<Bool>
-                            (Properties::BEAM_THIS_PART_TAILS, thisPartialTails);
-                        (void)(*it)->event()->get<Bool>
-                            (Properties::BEAM_NEXT_PART_TAILS, nextPartialTails);
-
-			QCanvasPixmap notePixmap
-			    (npf.makeBeamedNotePixmap
-			     (note, dots, accidental, shifted, up, stemLength,
-			      nextTailCount, thisPartialTails, nextPartialTails,
-                              width, (double)gradient / 100.0));
-			sprite = new QCanvasNotationSprite(*(*it), &notePixmap, canvas());
-
-		    } else {
-
-			QCanvasPixmap notePixmap
-			    (npf.makeNotePixmap
-			     (note, dots, accidental, shifted, tail, up));
-			sprite = new QCanvasNotationSprite(*(*it), &notePixmap, canvas());
-		    }
-
-		
-		} else {
-
-		    QCanvasPixmap notePixmap
-			(npf.makeNotePixmap(note, dots, accidental,
-                                            shifted, tail, up));
-
-		    sprite = new QCanvasNotationSprite(*(*it), &notePixmap, canvas());
-		}
+                sprite = makeNoteSprite(it);
 
             } else if ((*it)->isRest()) {
 
@@ -561,6 +484,90 @@ bool NotationView::showElements(NotationElementList::iterator from,
 
     return true;
 }
+
+
+QCanvasSimpleSprite *NotationView::makeNoteSprite(NotationElementList::iterator it)
+{
+    NotePixmapFactory &npf(m_notePixmapFactory);
+
+    Note::Type note = (*it)->event()->get<Int>(Rosegarden::Note::NoteType);
+    int dots = (*it)->event()->get<Int>(Rosegarden::Note::NoteDots);
+
+    Accidental accidental = NoAccidental;
+
+    long acc;
+    if ((*it)->event()->get<Int>(Properties::DISPLAY_ACCIDENTAL, acc)) {
+        accidental = Accidental(acc);
+    }
+
+    bool up = true;
+    (void)((*it)->event()->get<Bool>(Properties::STEM_UP, up));
+
+    bool tail = true;
+    (void)((*it)->event()->get<Bool>(Properties::DRAW_TAIL, tail));
+
+    bool beamed = false;
+    (void)((*it)->event()->get<Bool>(Properties::BEAMED, beamed));
+
+    bool shifted = false;
+    (void)((*it)->event()->get<Bool>(Properties::NOTE_HEAD_SHIFTED, shifted));
+
+    long stemLength = npf.getNoteBodyHeight();
+    (void)((*it)->event()->get<Int>
+           (Properties::UNBEAMED_STEM_LENGTH, stemLength));
+
+    kdDebug(KDEBUG_AREA) << "Got stem length of "
+                         << stemLength << endl;
+
+    if (beamed) {
+
+        if ((*it)->event()->get<Bool>(Properties::BEAM_PRIMARY_NOTE)) {
+
+            int myY = (*it)->event()->get<Int>(Properties::BEAM_MY_Y);
+
+            stemLength = myY - (int)(*it)->getLayoutY();
+            if (stemLength < 0) stemLength = -stemLength;
+
+            int nextTailCount =
+                (*it)->event()->get<Int>(Properties::BEAM_NEXT_TAIL_COUNT);
+            int width =
+                (*it)->event()->get<Int>(Properties::BEAM_SECTION_WIDTH);
+            int gradient =
+                (*it)->event()->get<Int>(Properties::BEAM_GRADIENT);
+
+            bool thisPartialTails(false), nextPartialTails(false);
+            (void)(*it)->event()->get<Bool>
+                (Properties::BEAM_THIS_PART_TAILS, thisPartialTails);
+            (void)(*it)->event()->get<Bool>
+                (Properties::BEAM_NEXT_PART_TAILS, nextPartialTails);
+
+            QCanvasPixmap notePixmap
+                (npf.makeBeamedNotePixmap
+                 (note, dots, accidental, shifted, up, stemLength,
+                  nextTailCount, thisPartialTails, nextPartialTails,
+                  width, (double)gradient / 100.0));
+            return new QCanvasNotationSprite(*(*it), &notePixmap, canvas());
+
+        } else {
+
+            QCanvasPixmap notePixmap
+                (npf.makeNotePixmap
+                 (note, dots, accidental, shifted, tail, up, false,
+                  stemLength));
+            return new QCanvasNotationSprite(*(*it), &notePixmap, canvas());
+        }
+
+		
+    } else {
+
+        QCanvasPixmap notePixmap
+            (npf.makeNotePixmap(note, dots, accidental,
+                                shifted, tail, up, false, stemLength));
+
+        return new QCanvasNotationSprite(*(*it), &notePixmap, canvas());
+    }
+}
+
 
 bool NotationView::showBars(NotationElementList::iterator from,
                             NotationElementList::iterator to)

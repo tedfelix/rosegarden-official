@@ -140,7 +140,8 @@ public:
                                  bool noteHeadShifted = false,
                                  bool drawTail = true,
                                  bool stalkGoesUp = true,
-                                 bool fixedHeight = false);
+                                 bool fixedHeight = false,
+                                 int stemLength = -1);
 
     QCanvasPixmap makeBeamedNotePixmap(Rosegarden::Note::Type note,
 				       int dots,

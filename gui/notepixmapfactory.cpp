@@ -406,25 +406,29 @@ NotePixmapFactory::makeNotePixmap(Note::Type note,
                                   bool shifted,
                                   bool drawTail,
                                   bool stalkGoesUp,
-                                  bool fixedHeight)
+                                  bool fixedHeight,
+                                  int stalkLength)
 {
-    int stalkLength = getStalkLength();
+    if (stalkLength < 0) {
 
-    if (note < Note::QuarterNote) {
+        stalkLength = getStalkLength();
 
-	//!!! highly dubious, and incorrect for different resolutions
+        if (note < Note::QuarterNote) {
+
+            //!!! highly dubious, and incorrect for different resolutions
 	
-	// readjust pixmap height according to its duration - the stalk
-	// is longer for 8th, 16th, etc.. because the tail is higher
-	//
-	if (note == Note::EighthNote)
-	    stalkLength += 1;
-	else if (note == Note::SixteenthNote)
-	    stalkLength += 4;
-	else if (note == Note::ThirtySecondNote)
-	    stalkLength += 9;
-	else if (note == Note::SixtyFourthNote)
-	    stalkLength += 14;
+            // readjust pixmap height according to its duration - the stalk
+            // is longer for 8th, 16th, etc.. because the tail is higher
+            //
+            if (note == Note::EighthNote)
+                stalkLength += 1;
+            else if (note == Note::SixteenthNote)
+                stalkLength += 4;
+            else if (note == Note::ThirtySecondNote)
+                stalkLength += 9;
+            else if (note == Note::SixtyFourthNote)
+                stalkLength += 14;
+        }
     }
 
     m_offsets.setStalkLength(stalkLength);
@@ -947,6 +951,8 @@ NotePixmapFactory::drawStalk(Note::Type note,
 
     lineOrig = m_offsets.getStalkPoints().first;
     lineDest = m_offsets.getStalkPoints().second;
+
+    kdDebug(KDEBUG_AREA) << "NotePixmapFactory::drawStalk: drawing stalk " << lineDest.y() - lineOrig.y() << " pixels long" << endl;
 
     m_p.drawLine(lineOrig, lineDest);
     m_pm.drawLine(lineOrig, lineDest);

@@ -159,6 +159,12 @@ public:
     iterator findSingle(Event*);
 
     /**
+     * Returns an iterator pointing to the first element starting at
+     * or beyond the given absolute time
+     */
+    iterator findTime(timeT time);
+
+    /**
      * Returns an iterator pointing to the next contiguous element of
      * the same type (note or rest) as the one passed as argument, if
      * any. Returns end() otherwise.

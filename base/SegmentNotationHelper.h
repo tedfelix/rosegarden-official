@@ -228,7 +228,14 @@ private:
 				   bool isRest, bool tiedBack);
 
     /// for use by autoBeam
-    void autoBeamAux(iterator from, iterator to, timeT average,
+
+    void autoBeamBar(iterator from, iterator to, TimeSignature timesig,
+                     std::string type);
+
+    void autoBeamBar(iterator from, iterator to, timeT average,
+                     timeT minimum, timeT maximum, std::string type);
+
+    void autoBeamAuxOld(iterator from, iterator to, timeT average,
                      timeT minimum, timeT maximum, TimeSignature timesig,
                      std::string type);
 

@@ -535,7 +535,7 @@ NotationGroup::applyBeam(Staff &staff)
 
 	    for (j = 0; j < chord.size(); ++j) {
 		NotationElement *el = (*chord[j]);
-		el->event()->setMaybe<Bool>(Properties::STALK_UP, beam.aboveNotes);
+		el->event()->setMaybe<Bool>(Properties::STEM_UP, beam.aboveNotes);
 		el->event()->setMaybe<Bool>(Properties::DRAW_TAIL, false);
 		el->event()->setMaybe<Bool>(Properties::BEAMED, true);
 		el->event()->setMaybe<Bool>(Properties::BEAM_PRIMARY_NOTE, false);

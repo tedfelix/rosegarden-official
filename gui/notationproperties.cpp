@@ -25,7 +25,8 @@ const Rosegarden::PropertyName Properties::MIN_WIDTH            = "MinWidth";
 
 const Rosegarden::PropertyName Properties::ACCIDENTAL           = "NoteComputedAccidental";
 const Rosegarden::PropertyName Properties::DISPLAY_ACCIDENTAL   = "NoteDisplayAccidental";
-const Rosegarden::PropertyName Properties::STALK_UP             = "NoteStalkUp";
+const Rosegarden::PropertyName Properties::STEM_UP              = "NoteStemUp";
+const Rosegarden::PropertyName Properties::UNBEAMED_STEM_LENGTH = "UnbeamedStemLength";
 const Rosegarden::PropertyName Properties::DRAW_TAIL            = "NoteDrawTail";
 const Rosegarden::PropertyName Properties::NOTE_HEAD_SHIFTED    = "NoteHeadShifted";
 const Rosegarden::PropertyName Properties::NOTE_NAME            = "NoteName";

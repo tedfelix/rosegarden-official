@@ -522,8 +522,7 @@ void TrackNotationHelper::insertSomething(iterator i, int duration, int pitch,
 	    i = insertSingleSomething(i, existingDuration, pitch, isRest, tiedBack);
 	    if (!isRest) (*i)->set<Bool>(Note::TiedForwardPropertyName, true);
 
-	    iterator dummy;
-	    track().getTimeSlice((*i)->getAbsoluteTime() + existingDuration, i, dummy);
+            i = track().findTime((*i)->getAbsoluteTime() + existingDuration);
 
 	    insertSomething(i, duration - existingDuration, pitch, isRest, true);
 
@@ -609,10 +608,9 @@ void
 TrackNotationHelper::makeBeamedGroup(iterator from, iterator to, string type)
 {
     int groupId = track().getNextId();
-    iterator dummy;
     
-    track().getTimeSlice((*from)->getAbsoluteTime(), from, dummy);
-    if (to != end()) track().getTimeSlice((*to)->getAbsoluteTime(), to, dummy);
+    from = track().findTime((*from)->getAbsoluteTime());
+    if (to != end()) to = track().findTime((*to)->getAbsoluteTime());
 
     for (iterator i = from; i != to; ++i) {
         (*i)->set<Int>(BeamedGroupIdPropertyName, groupId);
@@ -629,11 +627,54 @@ TrackNotationHelper::makeBeamedGroup(iterator from, iterator to, string type)
   
 */
 
+
 void TrackNotationHelper::autoBeam(iterator from, iterator to, string type)
 {
-    int barNo = track().getBarNumber(from);
-    TimeSignature tsig = track().getBarPositions()[barNo].timeSignature;
+    // This can only manage whole bars at a time, and it will expand
+    // the from-to range out to encompass the whole bars in which they
+    // each occur
 
+    Track::BarPositionList &bpl(track().getBarPositions());
+
+    int fn = track().getBarNumber(from);
+    int tn = track().getBarNumber(to);
+
+    if (tn > fn &&
+        (to != end() &&
+         (*to)->getAbsoluteTime() == track().getBarPositions()[tn].start))
+        --tn;
+
+    for (int i = fn; i <= tn; ++i) {
+
+        from = track().findTime(bpl[i].start);
+
+        if (i < (int)bpl.size() - 1) {
+            to = track().findTime(bpl[i+1].start);
+        } else {
+            to = end();
+        }
+
+        autoBeamBar(from, to, bpl[i].timeSignature, type);
+    }
+}
+
+
+/*
+
+  Derived from (and no less mystifying than) Rosegarden 2.1's
+  ItemListAutoBeamSub in editor/src/ItemList.c.
+
+  "Today I want to celebrate "Montreal" by Autechre, because of
+  its sleep-disturbing aura, because it sounds like the sort of music
+  which would be going around in the gunman's head as he trains a laser
+  sight into your bedroom through the narrow gap in your curtains and
+  dances the little red dot around nervously on your wall."
+  
+*/
+
+void TrackNotationHelper::autoBeamBar(iterator from, iterator to,
+                                      TimeSignature tsig, string type)
+{
     int num = tsig.getNumerator();
     int denom = tsig.getDenominator();
 
@@ -667,24 +708,133 @@ void TrackNotationHelper::autoBeam(iterator from, iterator to, string type)
     if (minimum == 0) minimum = average / 2;
     if (denom > 4) average /= 2;
 
-    autoBeamAux(from, to, average, minimum, average * 4, tsig, type);
+    autoBeamBar(from, to, average, minimum, average * 4, type);
 }
 
 
-/*
+void TrackNotationHelper::autoBeamBar(iterator from, iterator to,
+                                      timeT average, timeT minimum,
+                                      timeT maximum, string type)
+{
+    timeT accumulator = 0;
+    timeT crotchet    = Note(Note::Crotchet).getDuration();
+    timeT semiquaver  = Note(Note::Semiquaver).getDuration();
 
-  Derived from (and no less mystifying than) Rosegarden 2.1's
-  ItemListAutoBeamSub in editor/src/ItemList.c.
+    for (iterator i = from; i != to; ++i) {
 
-  "Today I want to celebrate "Montreal" by Autechre, because of
-  its sleep-disturbing aura, because it sounds like the sort of music
-  which would be going around in the gunman's head as he trains a laser
-  sight into your bedroom through the narrow gap in your curtains and
-  dances the little red dot around nervously on your wall."
-  
-*/
+        // only look at one note in each chord, and at rests
+        if (!hasEffectiveDuration(i)) continue;
+        timeT idur = quantizer().getNoteQuantizedDuration(*i);
 
-void TrackNotationHelper::autoBeamAux(iterator from, iterator to,
+	if (accumulator % average == 0 &&  // "beamable duration" threshold
+	    idur < crotchet) {
+
+	    // This could be the start of a beamed group.  We maintain
+	    // two sorts of state as we scan along here: data about
+	    // the best group we've found so far (beamDuration,
+	    // prospective, k etc), and data about the items we're
+	    // looking at (count, beamable, longerThanDemi etc) just
+	    // in case we find a better candidate group before the
+	    // eight-line conditional further down makes us give up
+	    // the search, beam our best shot, and start again.
+
+	    // I hope this is clear.
+
+	    iterator k = end(); // best-so-far last item in group;
+				// end() indicates that we've found nothing
+
+	    timeT tmin         = minimum;
+	    timeT count        = 0;
+	    timeT prospective  = 0;
+	    timeT beamDuration = 0;
+
+	    int beamable       = 0;
+	    int longerThanDemi = 0;
+
+	    for (iterator j = i; j != to; ++j) {
+
+		if (!hasEffectiveDuration(j)) continue;
+                timeT jdur = quantizer().getNoteQuantizedDuration(*j);
+
+		if ((*j)->isa(Note::EventType)) {
+		    if (jdur < crotchet) ++beamable;
+		    if (jdur >= semiquaver) ++longerThanDemi;
+		}
+
+		count += jdur;
+
+		if (count % tmin == 0) {
+
+		    k = j;
+		    beamDuration = count;
+		    prospective = accumulator + count;
+
+		    // found a group; now accept only double this
+		    // group's length for a better one
+		    tmin *= 2;
+		}
+
+		// Stop scanning and make the group if our scan has
+		// reached the maximum length of beamed group, we have
+		// more than 4 semis or quavers, we're at the end of
+		// our run, the next chord is longer than the current
+		// one, or there's a rest ahead.
+
+		iterator jnext(j);
+
+		if ((count > maximum)
+		    || (longerThanDemi > 4)
+		    || (++jnext == to)     
+		    || ((*j    )->isa(Note::EventType) &&
+			(*jnext)->isa(Note::EventType) &&
+			quantizer().getNoteQuantizedDuration(*jnext) > jdur)
+		    || ((*jnext)->isa(Note::EventRestType))) {
+
+		    if (k != end() && beamable >= 2) {
+
+			iterator knext(k);
+			++knext;
+
+			makeBeamedGroup(i, knext, type);
+		    }
+
+		    // If this group is at least as long as the check
+		    // threshold ("average"), its length must be a
+		    // multiple of the threshold and hence we can
+		    // continue scanning from the end of the group
+		    // without losing the modulo properties of the
+		    // accumulator.
+
+		    if (k != end() && beamDuration >= average) {
+
+			i = k;
+			accumulator = prospective;
+
+		    } else {
+
+			// Otherwise, we continue from where we were.
+			// (This must be safe because we can't get
+			// another group starting half-way through, as
+			// we know the last group is shorter than the
+			// check threshold.)
+
+			accumulator += idur;
+		    }
+
+		    break;
+		}
+	    }
+	} else {
+
+	    accumulator += idur;
+	}
+    }
+}
+
+
+
+
+void TrackNotationHelper::autoBeamAuxOld(iterator from, iterator to,
                         timeT average, timeT minimum, timeT maximum,
                         TimeSignature tsig, string type)
 {

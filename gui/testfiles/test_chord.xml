@@ -7,7 +7,7 @@
         <event type="keychange" key="C# major"/>
 	<chord>
         <event type="note" duration="crotchet" pitch="64"/>
-        <event type="note" duration="crotchet" pitch="65"/>
+        <event type="note" duration="crotchet" pitch="85"/>
 	</chord>
         <group type="beamed">
         <event type="note" duration="semiquaver" pitch="59"/>

@@ -25,7 +25,10 @@
 
 // Property names for properties that are computed and cached within
 // the notation module, but that need not necessarily be saved with
-// the file
+// the file.
+
+// If you add something here, remember to add the definition to
+// notationproperties.cpp as well...
 
 class Properties
 {
@@ -34,7 +37,8 @@ public:
     static const Rosegarden::PropertyName MIN_WIDTH;
     static const Rosegarden::PropertyName ACCIDENTAL;
     static const Rosegarden::PropertyName DISPLAY_ACCIDENTAL;
-    static const Rosegarden::PropertyName STALK_UP;
+    static const Rosegarden::PropertyName STEM_UP;
+    static const Rosegarden::PropertyName UNBEAMED_STEM_LENGTH;
     static const Rosegarden::PropertyName DRAW_TAIL;
     static const Rosegarden::PropertyName NOTE_HEAD_SHIFTED;
     static const Rosegarden::PropertyName NOTE_NAME;

@@ -71,6 +71,8 @@ NotationVLayout::layout(NotationElementList::iterator from,
             }
             bool stalkUp = chord.hasStalkUp();
 
+            int tailedNote = (stalkUp ? chord.size() - 1 : 0);
+
 	    for (unsigned int j = 0; j < chord.size(); ++j) {
 		el = *chord[j];
 		el->setLayoutY(m_staff.yCoordOfHeight(h[j]));
@@ -83,16 +85,24 @@ NotationVLayout::layout(NotationElementList::iterator from,
 		// notationhlayout after notationvlayout)... or else
 		// introduce two separate properties (beamed stalk up
 		// and non-beamed stalk up)
-//		if (!el->event()->has(Properties::STALK_UP))
-                el->event()->setMaybe<Bool>(Properties::STALK_UP, stalkUp);
+                el->event()->setMaybe<Bool>(Properties::STEM_UP, stalkUp);
+
                 el->event()->setMaybe<Bool>(Properties::NOTE_HEAD_SHIFTED,
                                             chord.isNoteHeadShifted(chord[j]));
 
-		if (!el->event()->has(Properties::DRAW_TAIL))
-		    el->event()->setMaybe<Bool>
-			(Properties::DRAW_TAIL,
-			 ((stalkUp && j == chord.size()-1) ||
-			  (!stalkUp && j == 0)));
+                el->event()->setMaybe<Bool>(Properties::DRAW_TAIL,
+                                            j == tailedNote);
+
+                int stemLength = -1;
+                if (j != tailedNote) {
+                    stemLength = m_staff.yCoordOfHeight(h[tailedNote]) -
+                        m_staff.yCoordOfHeight(h[j]);
+                    if (stemLength < 0) stemLength = -stemLength;
+                    kdDebug(KDEBUG_AREA) << "Setting stem length to "
+                                         << stemLength << endl;
+                }
+                el->event()->setMaybe<Int>(Properties::UNBEAMED_STEM_LENGTH,
+                                           stemLength);
             }
 
             i = chord.getFinalElement();

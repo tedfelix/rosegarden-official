@@ -338,6 +338,13 @@ Track::iterator Track::findSingle(Event* e)
 }
 
 
+Track::iterator Track::findTime(timeT t)
+{
+    Event dummy;
+    dummy.setAbsoluteTime(t);
+    return lower_bound(&dummy);
+}
+
 
 int Track::getNextId() const
 {
