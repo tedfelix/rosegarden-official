@@ -56,8 +56,6 @@ unsigned int RefreshStatusArray<RS>::getNewRefreshStatusId()
 {
     m_refreshStatuses.push_back(RS());
     unsigned int res = m_refreshStatuses.size() - 1;
-    std::cerr << "RefreshStatusArray<RS>::getNewRefreshStatusId() : res = "
-              << res << std::endl;
     return res;
 }
 
