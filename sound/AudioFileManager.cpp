@@ -41,8 +41,7 @@
 namespace Rosegarden
 {
 
-AudioFileManager::AudioFileManager():
-    m_previewResolution(0, 200)
+AudioFileManager::AudioFileManager()
 {
     // Set this through the set method so that the tilde gets
     // shaken out.
@@ -512,33 +511,23 @@ AudioFileManager::toXmlString()
     return audioFiles.str();
 }
 
-// Generate previews and cache them locally - we can probably
-// do this to file at some point.  Resolution is currently
-// just arbirtary.
+// Generate preview peak files or peak chunks according
+// to file type.
 //
 void
 AudioFileManager::generatePreviews()
 {
-    std::vector<AudioFile*>::iterator it;
-    m_previewMap.clear();
-
     std::cout << "AudioFileManager::generatePreviews - "
               << "for " << m_audioFiles.size() << " files"
               << std::endl;
 
-    for (it = m_audioFiles.begin();
-         it != m_audioFiles.end();
-         it++)
-    {
-        if ((*it)->open())
-        {
-        std::cout << "AudioFileManager::generatePreviews - "
-                  << "generating preview for \""
-                  << (*it)->getFilename() << "\"" << std::endl;
-        m_previewMap[(*it)->getId()] =
-            (*it)->getPreview(m_previewResolution);
-        }
-    }
+
+    // Generate peaks if we need to
+    //
+    std::vector<AudioFile*>::iterator it;
+    for (it = m_audioFiles.begin(); it != m_audioFiles.end(); it++)
+	if (!m_peakManager.hasValidPeaks(*it))
+	    m_peakManager.generatePeaks(*it, 1);
 }
 
 
@@ -555,11 +544,8 @@ AudioFileManager::generatePreview(unsigned int id)
     if (audioFile == 0)
         return false;
 
-    // clear any previous entry
-    m_previewMap[id].clear();
-
-    // insert new map
-    m_previewMap[id] = audioFile->getPreview(m_previewResolution);
+    if (!m_peakManager.hasValidPeaks(audioFile))
+	m_peakManager.generatePeaks(audioFile, 1);
 
     return true;
 }
@@ -583,8 +569,9 @@ std::vector<float>
 AudioFileManager::getPreview(unsigned int id,
                              const RealTime &startIndex,
                              const RealTime &endIndex,
-                             int x)
+                             int resolution)
 {
+    /*
     // preview has been generated over the entire sample file
     // and we may just want a subset of that - calculate the
     // start and end indicies of the float vector based on
@@ -599,7 +586,6 @@ AudioFileManager::getPreview(unsigned int id,
     int startSample = (int)(start / res);
     int endSample = (int)(end / res);
 
-    std::vector<float> renderPreview;
 
     // Insert the subset preview into an intermediate vector prior
     // to dithering to proper output resolution.  If we run off
@@ -622,9 +608,37 @@ AudioFileManager::getPreview(unsigned int id,
     for (int i = 0; i < x; i++)
         returnPreview.push_back(renderPreview[i * samplePoint]);
 
-    return returnPreview;
+    */
+
+    AudioFile *audioFile = getAudioFile(id);
+    
+    if (audioFile == 0)
+	return std::vector<float>();
+
+    return m_peakManager.getPreview(audioFile,
+	                            startIndex,
+				    endIndex,
+                                    resolution);
 }
 
+QPixmap
+AudioFileManager::getPreview(unsigned int id,
+			     const RealTime &startIndex,
+			     const RealTime &endIndex,
+			     int resolution,
+			     int height)
+{
+    AudioFile *audioFile = getAudioFile(id);
+    
+    if (audioFile == 0)
+        return QPixmap();
+
+    return m_peakManager.getPreview(audioFile,
+	                            startIndex,
+				    endIndex,
+				    resolution,
+				    height);
+}
 
 }
 

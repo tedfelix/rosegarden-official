@@ -149,15 +149,13 @@ public:
     //
     virtual RealTime getLength() = 0;
 
-    /*
-    // Must be accessible from the Driver
+    // Offset to start of sample data
     //
-    virtual void writeHeader() = 0;
-    */
+    virtual streampos getDataOffset() = 0;
 
-    // Generate the preview
+    // Return the peak file name
     //
-    virtual std::vector<float> getPreview(const RealTime &resolution) = 0;
+    virtual std::string getPeakFilename() = 0;
 
 protected:
 

@@ -64,7 +64,17 @@ public:
 
     //
     // 
-    virtual std::vector<float> getPreview(const RealTime &resolution);
+    //virtual std::vector<float> getPreview(const RealTime &resolution);
+
+    // Offset to start of sample data
+    //
+    virtual streampos getDataOffset();
+
+    // Peak file name
+    //
+    virtual std::string getPeakFilename()
+        { return (m_fileName + std::string(".pk")); }
+
 
 protected:
 

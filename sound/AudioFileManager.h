@@ -24,6 +24,8 @@
 
 #include "AudioFile.h"
 #include "XmlExportable.h"
+#include "PeakFileManager.h"
+
 
 #ifndef _AUDIOFILEMANAGER_H_
 #define _AUDIOFILEMANAGER_H_
@@ -126,13 +128,21 @@ public:
     bool generatePreview(unsigned int id);
 
     // Get a preview for an AudioFile adjusted to Segment start and
-    // end parameters (assuming they fall within boundaries) and
-    // also the length of the SegmentItem in pixels
+    // end parameters (assuming they fall within boundaries).
+    // 
+    // We can get back a set of values (floats) or a Pixmap if we 
+    // supply the details.
     //
-    std::vector<float> getPreview(unsigned int id,             // audio file id
+    std::vector<float> getPreview(unsigned int id,       // audio file id
                                   const RealTime &startIndex, 
                                   const RealTime &endIndex,
-                                  int x);                      // x length
+                                  int resolution);       // samples per point
+
+    QPixmap getPreview(unsigned int id,       // audio file id
+                       const RealTime &startIndex, 
+                       const RealTime &endIndex,
+                       int resolution,        // samples per pixel
+		       int height);
 
     // Get a short file name from a long one (with '/'s)
     //
@@ -157,8 +167,8 @@ private:
     std::vector<AudioFile*>                       m_audioFiles;
     std::string                                   m_audioPath;
     std::string                                   m_lastAddPath;
-    std::map<unsigned int, std::vector<float> >   m_previewMap;
-    Rosegarden::RealTime                          m_previewResolution;
+
+    PeakFileManager                               m_peakManager;
 
 };
 

@@ -23,7 +23,8 @@
 #include "WAVAudioFile.h"
 #include "RealTime.h"
 #include "Sound.h"
-#include "RIFFPeakManager.h"
+
+#include <sstream>
 
 using std::cout;
 using std::cerr;
@@ -171,6 +172,7 @@ WAVAudioFile::parseHeader()
    
 }
 
+	/*
 std::vector<float>
 WAVAudioFile::getPreview(const RealTime &resolution)
 {
@@ -190,19 +192,22 @@ WAVAudioFile::getPreview(const RealTime &resolution)
         //
         scanTo(m_inFile, RealTime(0, 0));
 
-        m_peakManager = new RIFFPeakManager(m_fileName,
+        m_peakManager = new RIFFPeakManager();
+	    m_fileName,
                                             m_inFile->tellg(),
                                             m_bitsPerSample,
                                             m_channels,
                                             false, // not internal peak chunk
                                             1);    // update percentage
     }
+					    */
 
     /*
     std::ifstream *previewFile = new std::ifstream(m_fileName.c_str(),
                                                    std::ios::in |
                                                    std::ios::binary);
                                                    */
+    /*
     try
     {
 
@@ -262,22 +267,31 @@ WAVAudioFile::getPreview(const RealTime &resolution)
     }
     while(scanForward(m_inFile, resolution));
 
+    */
     /*
     // clear up
     previewFile->close();
     delete previewFile;
-    */
     
     }
     catch(std::string s)
     {
-        std::cerr << "RIFFAudioFile::getPreview - EXCEPTION - \"" 
+        std::cerr << "WAVAudioFile::getPreview - EXCEPTION - \"" 
                   << s << "\"" << std::endl;
     }
 
     return preview;
 
 }
+
+*/
+
+streampos
+WAVAudioFile::getDataOffset()
+{
+    return 0;
+}
+
 
 
 }
