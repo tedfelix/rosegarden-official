@@ -713,6 +713,13 @@ void EditView::slotAddTimeSignature()
 
 void EditView::slotShowControlRuler(bool show)
 {
-    if (m_controlRuler)
-        m_controlRuler->setShown(show);
+    if (m_controlRuler) {
+        // Qt 3.1 only
+        // m_controlRuler->setShown(show);
+
+        if (show)
+            m_controlRuler->show();
+        else
+            m_controlRuler->hide();
+    }
 }
