@@ -28,7 +28,7 @@
 #include "rosegardengui.h"
 
 static const char *description =
-I18N_NOOP("Rosegarden - A Notation Editor and MIDI Sequencer for KDE");
+I18N_NOOP("Rosegarden - A sequencer and musical notation editor");
 	
 	
 static KCmdLineOptions options[] =
