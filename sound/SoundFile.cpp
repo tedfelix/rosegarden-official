@@ -61,7 +61,7 @@ SoundFile::getBytes(std::ifstream *file, unsigned int numberOfBytes)
         throw(std::string("SoundFile::getBytes() - EOF encountered"));
 
     std::string rS;
-    unsigned char *fileBytes = new unsigned char[numberOfBytes];
+    char *fileBytes = new char[numberOfBytes];
 
     file->read(fileBytes, numberOfBytes);
 
@@ -90,7 +90,7 @@ SoundFile::getBytes(unsigned int numberOfBytes)
         throw(std::string("SoundFile::getBytes - no open file handle"));
 
     std::string rS;
-    unsigned char *fileBytes = new unsigned char[m_readChunkSize];
+    char *fileBytes = new char[m_readChunkSize];
 
     while (rS.length() < numberOfBytes && !m_inFile->eof())
     {
