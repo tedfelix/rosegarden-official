@@ -5,7 +5,7 @@ use strict;
 # Command line should contain a list of files to look in.
 #
 # A likely invocation would be
-#  find . -print | xargs ./scripts/find-todo.pl
+#  perl ./scripts/find-todo.pl */*.{[Ch],cpp}
 #
 # Unusual or binary files will be ignored.
 

@@ -838,7 +838,18 @@ void NotationView::slotGroupDecrescendo()
     setSingleSelectedEvent(m_currentEventSelection->getSegment(),
                            command->getLastInsertedEvent());
 } 
-  
+
+void NotationView::slotGroupMakeChord()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Making chord..."), this);
+
+    GroupMenuMakeChordCommand *command =
+	new GroupMenuMakeChordCommand(*m_currentEventSelection);
+
+    addCommandToHistory(command);
+}
+    
  
 // 
 // transforms stuff

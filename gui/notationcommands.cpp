@@ -603,6 +603,43 @@ GroupMenuAddIndicationCommand::getGlobalName(std::string indicationType)
     return n;
 }
 
+
+void
+GroupMenuMakeChordCommand::modifySegment()
+{
+    // find all the notes in the selection, and bring them back to align
+    // with the start of the selection, giving them the same duration as
+    // the longest note among them
+
+    std::vector<Event *> toErase;
+    std::vector<Event *> toInsert;
+    Segment &segment(m_selection->getSegment());
+    
+    for (EventSelection::eventcontainer::iterator i =
+	     m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
+	
+	if ((*i)->isa(Note::EventType)) {
+	    toErase.push_back(*i);
+	    toInsert.push_back(new Event(**i, m_selection->getStartTime()));
+	}
+    }
+
+    for (unsigned int j = 0; j < toErase.size(); ++j) {
+	Segment::iterator jtr(segment.findSingle(toErase[j]));
+	if (jtr != segment.end()) segment.erase(jtr);
+    }
+
+    for (unsigned int j = 0; j < toInsert.size(); ++j) {
+	segment.insert(toInsert[j]);
+    }
+
+    segment.normalizeRests(getStartTime(), getEndTime());
+
+    //!!! should select all notes in chord now
+}	 
+
+
 TransformsMenuNormalizeRestsCommand::TransformsMenuNormalizeRestsCommand
 (Rosegarden::EventSelection &selection) :
     BasicCommand(getGlobalName(),

@@ -327,6 +327,22 @@ protected:
 };
     
 
+class GroupMenuMakeChordCommand : public BasicSelectionCommand
+{
+public:
+    GroupMenuMakeChordCommand(Rosegarden::EventSelection &selection) :
+	BasicSelectionCommand(getGlobalName(), selection, true),
+	m_selection(&selection) { }
+
+    static QString getGlobalName() { return i18n("Make &Chord"); }
+    
+protected:
+    virtual void modifySegment();
+
+private:
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+};    
+
 
 // Transforms menu commands
 

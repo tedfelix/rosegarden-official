@@ -59,6 +59,8 @@
   <Action name="crescendo"/>
   <Action name="decrescendo"/>
   <Action name="remove_indications"/>
+  <Separator/>
+  <Action name="make_chord"/>
 </Menu>
 
 <Menu name="Notes">

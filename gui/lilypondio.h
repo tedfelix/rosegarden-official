@@ -55,18 +55,26 @@ protected:
     Rosegarden::Composition *m_composition;
     std::string m_fileName;
 
-    void writeBar(Rosegarden::Segment *, int barNo, int col, Rosegarden::Key &key,
-		  std::string &lilyText, std::string &lilyLyrics,
+    void writeBar(Rosegarden::Segment *, int barNo, int col,
+		  Rosegarden::Key &key, std::string &lilyText, std::string &lilyLyrics,
 		  std::string &prevStyle, eventendlist &eventsInProgress,
 		  std::ofstream &str);
+    
+    Rosegarden::timeT calculateDuration(Rosegarden::Segment *s,
+					const Rosegarden::Segment::iterator &i,
+					Rosegarden::timeT barEnd,
+					Rosegarden::timeT &soundingDuration,
+					const std::pair<int, int> &tupletRatio,
+					bool &overlong);
 
     void handleStartingEvents(eventstartlist &eventsToStart, std::ofstream &str);
-    void handleEndingEvents(eventendlist &eventsInProgress, Rosegarden::Segment::iterator &j, Rosegarden::timeT tupletStartTime, std::ofstream &str);
+    void handleEndingEvents(eventendlist &eventsInProgress,
+			    const Rosegarden::Segment::iterator &j, std::ofstream &str);
 
     // convert note pitch into Lilypond format note string
     std::string convertPitchToLilyNote(int pitch,
                                        Rosegarden::Accidental accidental,
-				       Rosegarden::Key &key);
+				       const Rosegarden::Key &key);
 
     // compose an appropriate Lilypond representation for various Marks
     std::string composeLilyMark(std::string eventMark, bool stemUp);
@@ -77,20 +85,21 @@ protected:
     // return a string full of column tabs
     std::string indent(const int &column);
                   
-    void writeSkip(Rosegarden::TimeSignature &timeSig,
+    void writeSkip(const Rosegarden::TimeSignature &timeSig,
 		   Rosegarden::timeT offset,
 		   Rosegarden::timeT duration,
 		   bool useRests,
 		   std::ofstream &);
 
-    void handleText(Rosegarden::Event *, std::string &lilyText, std::string &lilyLyrics);
-    void writePitch(Rosegarden::Event *note, Rosegarden::Key &key, std::ofstream &);
-    void writeStyle(Rosegarden::Event *note, std::string &prevStyle, int col, std::ofstream &);
+    void handleText(const Rosegarden::Event *, std::string &lilyText, std::string &lilyLyrics);
+    void writePitch(const Rosegarden::Event *note, const Rosegarden::Key &key, std::ofstream &);
+    void writeStyle(const Rosegarden::Event *note, std::string &prevStyle, int col, std::ofstream &);
     void writeDuration(Rosegarden::timeT duration, std::ofstream &);
-    void writeSlashes(Rosegarden::Event *note, std::ofstream &);
+    void writeSlashes(const Rosegarden::Event *note, std::ofstream &);
        
 private:
     static const int MAX_DOTS = 4;
+    static const Rosegarden::PropertyName SKIP_PROPERTY;
 };
 
 

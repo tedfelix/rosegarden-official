@@ -75,6 +75,9 @@ using Rosegarden::Mark;
 using Rosegarden::Marks;
 using Rosegarden::Configuration;
 
+const Rosegarden::PropertyName LilypondExporter::SKIP_PROPERTY
+    = "LilypondExportSkipThisEvent";
+
 LilypondExporter::LilypondExporter(QObject *parent,
                                    Composition *composition,
                                    std::string fileName) :
@@ -124,8 +127,7 @@ LilypondExporter::handleStartingEvents(eventstartlist &eventsToStart,
 
 void
 LilypondExporter::handleEndingEvents(eventendlist &eventsInProgress,
-				     Segment::iterator &j,
-				     timeT tupletStartTime,
+				     const Segment::iterator &j,
 				     std::ofstream &str)
 {
     eventendlist::iterator k = eventsInProgress.begin();
@@ -175,7 +177,7 @@ LilypondExporter::handleEndingEvents(eventendlist &eventsInProgress,
 // keys and out-of-key accidental combinations.
 std::string
 LilypondExporter::convertPitchToLilyNote(int pitch, Accidental accidental,
-					 Rosegarden::Key &key) 
+					 const Rosegarden::Key &key) 
 {
     bool isFlatKeySignature = !key.isSharp();
     int accidentalCount = key.getAccidentalCount();
@@ -464,7 +466,8 @@ LilypondExporter::protectIllegalChars(std::string inStr) {
 }
 
 bool
-LilypondExporter::write() {
+LilypondExporter::write()
+{
     QString tmp_fileName = strtoqstr(m_fileName);
     
     bool illegalFilename = (tmp_fileName.contains(' ') || tmp_fileName.contains("\\"));            
@@ -616,15 +619,8 @@ LilypondExporter::write() {
 	str << indent(col) << "\\addlyrics" << std::endl;
     }
 */
-    bool isFlatKeySignature = false;
     int lastTrackIndex = -1;
     int voiceCounter = 0;
-
-    // Lilypond remembers the duration of the last note or
-    // rest and reuses it unless explicitly changed.
-    Note::Type lastType = Note::QuarterNote;
-    int lastNumDots = 0;
-
     int trackNo = 0;
 
     // Write out all segments for each Track
@@ -773,6 +769,90 @@ LilypondExporter::write() {
     return true;
 }
 
+timeT
+LilypondExporter::calculateDuration(Rosegarden::Segment *s,
+				    const Rosegarden::Segment::iterator &i,
+				    Rosegarden::timeT barEnd,
+				    Rosegarden::timeT &soundingDuration,
+				    const std::pair<int, int> &tupletRatio,
+				    bool &overlong)
+{
+    timeT duration = (*i)->getNotationDuration();
+    timeT absTime  = (*i)->getNotationAbsoluteTime();
+
+    std::cerr << "LilypondExporter::calculateDuration: first duration, absTime: "
+	      << duration << ", " << absTime << std::endl;
+
+    if ((*i)->isa(Note::EventType) || (*i)->isa(Note::EventRestType)) {
+	try {
+	    // tuplet compensation, etc
+	    Note::Type type = (*i)->get<Int>(NOTE_TYPE);
+	    int dots = (*i)->get<Int>(NOTE_DOTS);
+	    duration = Note(type, dots).getDuration();
+	} catch (Rosegarden::Exception e) { // no properties
+	}
+    }
+
+    std::cerr << "LilypondExporter::calculateDuration: now duration is "
+	      << duration << std::endl;
+
+    soundingDuration = duration * tupletRatio.first / tupletRatio.second;
+
+    timeT toNext = barEnd - absTime;
+    if (soundingDuration > toNext) {
+	soundingDuration = toNext;
+	duration = soundingDuration * tupletRatio.second / tupletRatio.first;
+	overlong = true;
+    }
+
+    std::cerr << "LilypondExporter::calculateDuration: first toNext is "
+	      << toNext << std::endl;
+
+    // Examine the following event, and truncate our duration
+    // if we overlap it.
+    Segment::iterator nextElt = s->end();
+    toNext = soundingDuration;
+
+    if ((*i)->isa(Note::EventType)) {
+	
+	Rosegarden::Chord chord(*s, i, m_composition->getNotationQuantizer());
+	Segment::iterator nextElt = chord.getFinalElement();
+	++nextElt;
+
+	if (s->isBeforeEndMarker(nextElt)) {
+	    // The quantizer sometimes sticks a rest at the same time
+	    // as this note -- don't use that one here, and mark it as
+	    // not to be exported -- it's just a heavy-handed way of
+	    // rendering counterpoint in RG
+	    if ((*nextElt)->isa(Note::EventRestType) &&
+		(*nextElt)->getNotationAbsoluteTime() == absTime) {
+		(*nextElt)->set<Bool>(SKIP_PROPERTY, true);
+		++nextElt;
+	    }
+	}
+
+    } else {
+
+	nextElt = i;
+	++nextElt;
+    }
+	
+    if (s->isBeforeEndMarker(nextElt)) {
+	toNext = (*nextElt)->getNotationAbsoluteTime() - absTime;
+	if (soundingDuration > toNext) {
+	    soundingDuration = toNext;
+	    duration = soundingDuration * tupletRatio.second / tupletRatio.first;
+	}
+    }
+
+    std::cerr << "LilypondExporter::calculateDuration: second toNext is "
+	      << toNext << std::endl;
+
+    std::cerr << "LilypondExporter::calculateDuration: final duration, soundingDuration: " << duration << ", " << soundingDuration << std::endl;
+
+    return duration;
+}
+
 void
 LilypondExporter::writeBar(Rosegarden::Segment *s,
 			   int barNo, int col,
@@ -822,27 +902,13 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 
     long groupId = -1;
     std::string groupType = "";
-    timeT tupletStartTime = -1;
-    std::pair<int, int> tupletRatio;
+    std::pair<int, int> tupletRatio(1, 1);
 
     bool overlong = false;
 
-    Rosegarden::PropertyName skipProperty = "LilypondExportSkipThisEvent";
-
     while (s->isBeforeEndMarker(i)) {
 
-	timeT duration = (*i)->getNotationDuration();
-	absTime = (*i)->getNotationAbsoluteTime();
-
-	if (absTime < barStart) {
-	    duration -= (barStart - absTime);
-	    if (duration <= 0) continue;
-	    absTime = barStart;
-	}
-
-	if (absTime >= barEnd) {
-	    break;
-	}
+	if ((*i)->getNotationAbsoluteTime() >= barEnd) break;
 
 	// First test whether we're entering or leaving a group,
 	// before we consider how to write the event itself
@@ -868,7 +934,6 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 		    groupId = newGroupId;
 		    groupType = "";
 		    (void)(*i)->get<String>(BEAMED_GROUP_TYPE, groupType);
-		    tupletStartTime = -1;
 		    
 		    if (groupType == GROUP_TYPE_TUPLED) {
 			long numerator = 0;
@@ -883,7 +948,6 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 			    groupType = "";
 			} else {
 			    str << "\\times " << numerator << "/" << denominator << " { ";
-			    tupletStartTime = absTime;
 			    tupletRatio = std::pair<int, int>(numerator, denominator);
 			}
 		    } else if (groupType == GROUP_TYPE_BEAMED) {
@@ -901,6 +965,7 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 		    if (groupType == GROUP_TYPE_TUPLED ||
 			groupType == GROUP_TYPE_GRACE) {
 			str << "} ";
+			tupletRatio = std::pair<int, int>(1, 1);
 		    } else if (groupType == GROUP_TYPE_BEAMED) {
 			if (exportBeams) str << "] ";
 		    }
@@ -908,33 +973,20 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 		    groupType = "";
 		}
 	    }
-
-	    try {
-		// tuplet compensation, etc
-		Note::Type type = (*i)->get<Int>(NOTE_TYPE);
-		int dots = (*i)->get<Int>(NOTE_DOTS);
-		duration = Note(type, dots).getDuration();
-	    } catch (Rosegarden::Exception e) { // no properties
-		std::cerr
-		    << "WARNING: LilypondExporter::writeBar: incomplete note properties: "
-		    << e.getMessage() << std::endl;
-	    }
 	}
 
-	if ((*i)->has(skipProperty)) {
-	    (*i)->unset(skipProperty);
+	timeT soundingDuration = -1;
+	timeT duration = calculateDuration
+	    (s, i, barEnd, soundingDuration, tupletRatio, overlong);
+
+	if (soundingDuration == -1) {
+	    soundingDuration = duration * tupletRatio.first / tupletRatio.second;
+	}
+
+	if ((*i)->has(SKIP_PROPERTY)) {
+	    (*i)->unset(SKIP_PROPERTY);
 	    ++i;
 	    continue;
-	}
-
-	timeT toNext = barEnd - absTime;
-	if (groupId >= 0 && groupType == GROUP_TYPE_TUPLED &&
-	    tupletRatio.second != 0) {
-	    toNext = toNext * tupletRatio.second / tupletRatio.first;
-	}
-	if (duration > toNext) {
-	    overlong = true;
-	    duration = toNext;
 	}
 
 	if ((*i)->isa(Note::EventType)) {
@@ -945,30 +997,6 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 
 	    // Examine the following event, and truncate our duration
 	    // if we overlap it.
-
-	    toNext = duration;
-	    Segment::iterator nextElt = chord.getFinalElement();
-
-	    if (s->isBeforeEndMarker(++nextElt)) {
-		// The quantizer sometimes sticks a rest at the same time
-		// as this note -- don't use that one here, and mark it as
-		// not to be exported -- it's just a heavy-handed way of
-		// rendering counterpoint in RG
-		if ((*nextElt)->isa(Note::EventRestType) &&
-		    (*nextElt)->getNotationAbsoluteTime() == absTime) {
-		    (*nextElt)->set<Bool>(skipProperty, true);
-		    ++nextElt;
-		}
-	    }
-
-	    if (s->isBeforeEndMarker(nextElt)) {
-		toNext = (*nextElt)->getNotationAbsoluteTime() - absTime;
-		if (groupId >= 0 && groupType == GROUP_TYPE_TUPLED &&
-		    tupletRatio.second != 0) {
-		    toNext = toNext * tupletRatio.second / tupletRatio.first;
-		}
-		if (toNext < duration) duration = toNext;
-	    }
 
 	    if (e->has(STEM_UP) && e->isPersistent<Bool>(STEM_UP)) {
 		if (e->get<Bool>(STEM_UP)) {
@@ -990,7 +1018,7 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	    }
 
 	    if (chord.size() > 1) str << "< ";
-	    handleEndingEvents(eventsInProgress, i, tupletStartTime, str);
+	    handleEndingEvents(eventsInProgress, i, str);
 
 	    for (i = chord.getInitialElement(); s->isBeforeEndMarker(i); ++i) {
 
@@ -1006,7 +1034,7 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 			writeDuration(duration, str);
 			prevDuration = duration;
 		    }
-		    writtenDuration += duration;
+		    writtenDuration += soundingDuration;
 
 		    if (lilyText != "") {
 			str << lilyText;
@@ -1044,14 +1072,14 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 
 	} else if ((*i)->isa(Note::EventRestType)) {
 
-	    handleEndingEvents(eventsInProgress, i, tupletStartTime, str);
+	    handleEndingEvents(eventsInProgress, i, str);
 
 	    str << "r";
 	    if (duration != prevDuration) {
 		writeDuration(duration, str);
 		prevDuration = duration;
 	    }
-	    writtenDuration += duration;
+	    writtenDuration += soundingDuration;
 
 	    if (lilyText != "") {
 		str << lilyText;
@@ -1120,6 +1148,7 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	if (groupType == GROUP_TYPE_TUPLED ||
 	    groupType == GROUP_TYPE_GRACE) {
 	    str << "} ";
+	    tupletRatio = std::pair<int, int>(1, 1);
 	} else if (groupType == GROUP_TYPE_BEAMED) {
 	    if (exportBeams) str << "] ";
 	}
@@ -1129,6 +1158,11 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	str << "\\stemBoth ";
     }
 
+    if (overlong) {
+	str << std::endl << indent(col) <<
+	    qstrtostr(QString("% %1").
+		      arg(i18n("warning: overlong bar truncated here")));
+    }
     if (writtenDuration < barEnd - barStart) {
 	str << std::endl << indent(col) <<
 	    qstrtostr(QString("% %1").
@@ -1136,15 +1170,11 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	    << std::endl << indent(col);
 	writeSkip(timeSignature, writtenDuration,
 		  (barEnd - barStart) - writtenDuration, true, str);
-    } else if (overlong) {
-	str << std::endl << indent(col) <<
-	    qstrtostr(QString("% %1").
-		      arg(i18n("warning: overlong bar truncated here")));
     }
 }
 
 void
-LilypondExporter::writeSkip(Rosegarden::TimeSignature &timeSig,
+LilypondExporter::writeSkip(const Rosegarden::TimeSignature &timeSig,
 			    timeT offset,
 			    timeT duration,
 			    bool useRests,
@@ -1178,14 +1208,13 @@ LilypondExporter::writeSkip(Rosegarden::TimeSignature &timeSig,
 	    ++count;
 	}
 
+	str << " ";
 	if (i == dlist.end()) break;
     }
-
-    str << " ";
 }
 
 void
-LilypondExporter::handleText(Rosegarden::Event *textEvent,
+LilypondExporter::handleText(const Rosegarden::Event *textEvent,
 			     std::string &lilyText, std::string &lilyLyrics)
 {
     try {
@@ -1242,8 +1271,8 @@ LilypondExporter::handleText(Rosegarden::Event *textEvent,
 }
 
 void
-LilypondExporter::writePitch(Rosegarden::Event *note,
-			     Rosegarden::Key &key,
+LilypondExporter::writePitch(const Rosegarden::Event *note,
+			     const Rosegarden::Key &key,
 			     std::ofstream &str)
 {
     // Note pitch (need name as well as octave)
@@ -1288,7 +1317,7 @@ LilypondExporter::writePitch(Rosegarden::Event *note,
 }
 
 void
-LilypondExporter::writeStyle(Rosegarden::Event *note, std::string &prevStyle,
+LilypondExporter::writeStyle(const Rosegarden::Event *note, std::string &prevStyle,
 			     int col, std::ofstream &str)
 {
     // some hard-coded styles in order to provide rudimentary style export support
@@ -1330,7 +1359,7 @@ void
 LilypondExporter::writeDuration(Rosegarden::timeT duration,
 				std::ofstream &str)
 {
-    Note note(Note::getNearestNote(duration, 2));
+    Note note(Note::getNearestNote(duration, MAX_DOTS));
     
     switch (note.getNoteType()) {
 
@@ -1365,7 +1394,7 @@ LilypondExporter::writeDuration(Rosegarden::timeT duration,
 }
 
 void
-LilypondExporter::writeSlashes(Rosegarden::Event *note, std::ofstream &str)
+LilypondExporter::writeSlashes(const Rosegarden::Event *note, std::ofstream &str)
 {
     // write slashes after text
     // / = 8 // = 16 /// = 32, etc.

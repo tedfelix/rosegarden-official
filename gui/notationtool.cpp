@@ -1103,19 +1103,30 @@ void NotationSelector::handleMouseTripleClick(Rosegarden::timeT t,
 }
 
 int NotationSelector::handleMouseMove(timeT, int,
-                                       QMouseEvent* e)
+				      QMouseEvent* e)
 {
     if (!m_updateRect) return NoFollow;
 
-    int w = int(e->x() - m_selectionRect->x());
-    int h = int(e->y() - m_selectionRect->y());
+    if (m_clickedElement) {
 
-    // Qt rectangle dimensions appear to be 1-based
-    if (w > 0) ++w; else --w;
-    if (h > 0) ++h; else --h;
+	if (m_nParentView->drag(m_selectedStaff, m_clickedElement, e->x(), e->y())) {
+	    m_selectionRect->setX(e->x());
+	    m_selectionRect->setY(e->y());
+	    m_selectionRect->setSize(0, 0);
+	}
 
-    m_selectionRect->setSize(w,h);
-    setViewCurrentSelection(true);
+    } else {
+
+	int w = int(e->x() - m_selectionRect->x());
+	int h = int(e->y() - m_selectionRect->y());
+
+	// Qt rectangle dimensions appear to be 1-based
+	if (w > 0) ++w; else --w;
+	if (h > 0) ++h; else --h;
+
+	m_selectionRect->setSize(w,h);
+	setViewCurrentSelection(true);
+    }
 
     m_nParentView->canvas()->update();
     return FollowHorizontal | FollowVertical;

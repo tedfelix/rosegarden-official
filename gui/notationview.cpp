@@ -1474,6 +1474,12 @@ void NotationView::setupActions()
                 (Rosegarden::Indication::Decrescendo), icon, 0, this,
                 SLOT(slotGroupDecrescendo()), actionCollection(), "decrescendo");
 
+    icon = QIconSet
+        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+        ("group-chord")));
+    new KAction(GroupMenuMakeChordCommand::getGlobalName(), icon, 0, this,
+		SLOT(slotGroupMakeChord()), actionCollection(), "make_chord");
+
     // setup Transforms menu
     new KAction(TransformsMenuNormalizeRestsCommand::getGlobalName(), 0, this,
                 SLOT(slotTransformsNormalizeRests()), actionCollection(),
@@ -2383,6 +2389,65 @@ void NotationView::setSingleSelectedEvent(Segment &segment, Event *event,
     setCurrentSelection(selection, preview, redrawNow);
 }
 
+bool NotationView::drag(NotationStaff *staff, NotationElement *element, int x, int y)
+{
+    NOTATION_DEBUG << "NotationView::drag element " << x << ", " << y << endl;
+
+    EventSelection *selection = m_currentEventSelection;
+    if (!selection) selection = new EventSelection(staff->getSegment());
+    if (!selection->contains(element->event())) selection->addEvent(element->event());
+    m_currentEventSelection = selection;
+
+    // Calculate time and height
+    
+    timeT clickedTime = element->event()->getAbsoluteTime();
+
+    Rosegarden::Accidental clickedAccidental = Rosegarden::Accidentals::NoAccidental;
+    (void)element->event()->get<Rosegarden::String>
+	(Rosegarden::BaseProperties::ACCIDENTAL, clickedAccidental);
+
+    long clickedPitch = 0;
+    (void)element->event()->get<Rosegarden::Int>
+	(Rosegarden::BaseProperties::PITCH, clickedPitch);
+
+    Event *clefEvt = 0, *keyEvt = 0;
+    Rosegarden::Clef clef;
+    Rosegarden::Key key;
+    timeT time = clickedTime;
+
+    NotationElementList::iterator itr =
+	staff->getElementUnderCanvasCoords(x, y, clefEvt, keyEvt);
+
+    if (itr != staff->getViewElementList()->end()) {
+	time = (*itr)->event()->getAbsoluteTime(); // not getViewAbsoluteTime()
+    }
+
+    if (clefEvt) clef = Rosegarden::Clef(*clefEvt);
+    if (keyEvt) key = Rosegarden::Key(*keyEvt);
+    
+    int height = staff->getHeightAtCanvasY(y);
+    Rosegarden::Pitch p(height, clef, key, clickedAccidental);
+    int pitch = p.getPerformancePitch();
+
+    //!!! move the selection left or right if (a) there is an event at the
+    // time dragged to (and the time is not the absolute or notation time
+    // of the original event) or (b) the original event has notation
+    // duration > 0 and the time dragged to is a multiple of that notation
+    // duration into its bar.  Need to maintain selectedness on the events
+    // though
+
+    if (pitch != clickedPitch) {
+	//!!! we need some limit to this
+
+	addCommandToHistory(new TransposeCommand(pitch - clickedPitch,
+						 *m_currentEventSelection));
+	return true;
+    }
+
+    return false;
+}
+
+
 bool NotationView::canPreviewAnotherNote()
 {
     static clock_t lastCutOff = 0;
@@ -2501,12 +2566,6 @@ NotationView::getInsertionTime(Rosegarden::Clef &clef,
 
     return m_insertionTime;
 }
-
-
-//////////////////////////////////////////////////////////////////////
-//                    Slots
-//////////////////////////////////////////////////////////////////////
-
 
 
 LinedStaff*
