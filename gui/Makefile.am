@@ -95,6 +95,7 @@ rosegarden_SOURCES = \
         segmentparameterbox.cpp \
         segmenttool.cpp \
         sequencemanager.cpp \
+        sequencermapper.cpp \
 	spline.cpp \
 	staffline.cpp \
         studiocommands.cpp \

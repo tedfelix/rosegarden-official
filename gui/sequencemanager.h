@@ -58,6 +58,7 @@ class ControlBlockMmapper;
 class MetronomeMmapper;
 class TempoSegmentMmapper;
 class TimeSigSegmentMmapper;
+class SequencerMapper;
 
 namespace Rosegarden
 {
@@ -210,6 +211,10 @@ public:
 
     // for the gui to call to indicate that the metronome needs to be remapped
     void metronomeChanged(Rosegarden::InstrumentId id, bool regenerateTicks);
+
+    // Return the current sequencer memory mapped file
+    //
+    SequencerMapper* getSequencerMapper() { return m_sequencerMapper; }
     
 public slots:
     // Empty the m_clearToSend flag
@@ -278,6 +283,11 @@ protected:
     bool m_updateRequested;
 
     void checkRefreshStatus();
+
+    // Information that the sequencer is providing to us - for the moment
+    // it's only the position pointer.
+    //
+    SequencerMapper          *m_sequencerMapper;
 };
 
 }

@@ -25,6 +25,7 @@
 
 #include <klocale.h>
 #include <kconfig.h>
+#include <kstddirs.h>
 
 #include "rgapplication.h"
 #include "constants.h"
@@ -43,6 +44,7 @@
 // #include "widgets.h"
 // #include "dialogs.h"
 #include "diskspace.h"
+#include "sequencermapper.h"
 
 
 namespace Rosegarden
@@ -83,6 +85,9 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
 	    this, SLOT(update()));
 
     m_doc->getComposition().addObserver(this);
+
+    m_sequencerMapper = new SequencerMapper(
+            KGlobal::dirs()->resourceDirs("tmp").first() + "/rosegarden_sequencer_timing_block");
 }
 
 

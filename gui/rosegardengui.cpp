@@ -2859,6 +2859,18 @@ void RosegardenGUIApp::setPointerPosition(long posSec,
     if (elapsedTime >= comp.getEndMarker())
         slotStop();
 
+    /*
+    if (m_seqManager)
+    {
+        long* ptr = (long*)m_seqManager->getSequencerMapper();
+        long sec = *(ptr++);
+        long usec = *ptr;
+        Rosegarden::RealTime position(sec, usec);
+
+        std::cout << "SEQUENCER POSITION = " << position << std::endl;
+    }
+    */
+
     return;
 }
 

@@ -117,6 +117,7 @@ SequencerMmapper::updatePositionPointer(Rosegarden::RealTime time)
 
     m_position = time;
     m_needsRefresh = true;
+    refresh();
 }
 
 
