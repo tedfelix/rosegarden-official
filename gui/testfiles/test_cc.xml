@@ -2,41 +2,68 @@
 <!DOCTYPE rosegarden-data>
 <rosegarden-data>
 <reference-segment>
-        <event type="timesignature" numerator="4" denominator="4" subordering="-10"/>
-	<resync time="660"/>
-        <event type="timesignature" numerator="12" denominator="8"/>
+<event type="timesignature" subordering="-10"><property name="numerator" int="4"/><property name="denominator" int="4"/></event>
+<resync time="660"/>
+<event type="timesignature"><property name="numerator" int="12"/><property name="denominator" int="8"/></event>
 </reference-segment>
+
+<composition recordtrack="0" pointer="0" tempo="120">
+
+  <instrument id="0" type="midi" name="Piano"/>
+  <instrument id="1" type="midi" name="Piano"/>
+  <instrument id="2" type="midi" name="Piano"/>
+  <instrument id="3" type="midi" name="Audio Samples"/>
+
+  <track id="0" type="midi" label="untitled" position="0" muted="false" instrument="0"/>
+  <track id="0" type="midi" label="untitled" position="0" muted="false" instrument="0"/>
+  <track id="0" type="midi" label="untitled" position="0" muted="false" instrument="0"/>
+  <track id="0" type="midi" label="untitled" position="0" muted="false" instrument="0"/>
+  <track id="0" type="midi" label="untitled" position="0" muted="false" instrument="0"/>
+  <track id="0" type="midi" label="untitled" position="0" muted="false" instrument="0"/>
+  <track id="0" type="midi" label="untitled" position="0" muted="false" instrument="0"/>
+  <track id="0" type="midi" label="untitled" position="0" muted="false" instrument="0"/>
+  <track id="0" type="midi" label="untitled" position="0" muted="false" instrument="0"/>
+  <track id="0" type="midi" label="untitled" position="0" muted="false" instrument="0"/>
+
+</composition>
+
 <segment track="1" start="0">
-        <event type="keychange" subordering="-20"><property name="key" string="C# major"/></event>
-        <event type="clefchange" clef="treble" subordering="-30"/>
-        <event type="note" duration="semibreve" pitch="64"/>
-        <event type="note" duration="180" pitch="68"/>
-        <event type="note" duration="12" pitch="67"/>
-        <event type="note" duration="crotchet" pitch="64"/>
-        <event type="note" duration="crotchet" pitch="65"/>
-        <event type="rest" duration="quaver"/>
-        <event type="note" duration="dotted crotchet" pitch="64"/>
-        <event type="keychange" key="Cb major"/>
-        <event type="clefchange" clef="bass"/>
-        <event type="keychange" key="Cb major"/>
-        <group type="beamed">
-        <event type="note" duration="demisemiquaver" pitch="49"/>
-        <event type="note" duration="quaver" pitch="48"/>
-        <chord>
-        <event type="note" duration="quaver" pitch="50"/>
-        <event type="note" duration="quaver" pitch="54"/>
-        </chord>
-        <event type="note" duration="semiquaver" pitch="58"/>
-        </group>
-        <event type="note" duration="crotchet" pitch="44"/>
-        <event type="note" duration="crotchet" pitch="45"/>
-        <event type="keychange" key="C# major"/>
-        <event type="rest" duration="crotchet"/>
-        <event type="note" duration="crotchet" pitch="44"/>
-        <event type="note" duration="crotchet" pitch="45"/>
-        <event type="note" duration="minim" pitch="44"/>
-        <event type="note" duration="crotchet" pitch="45"/>
-        <event type="note" duration="crotchet" pitch="44"/>
-        <event type="note" duration="crotchet" pitch="45"/>
+<chord>
+	<event type="clefchange" subordering="-30"><property name="clef" string="treble"/></event>
+	<event type="keychange" subordering="-20"><property name="key" string="C# major"/></event>
+	<event type="note" duration="384"><property name="pitch" int="64"/></event>
+</chord>
+<event type="note" duration="180"><property name="pitch" int="68"/></event>
+<event type="note" duration="12"><property name="pitch" int="67"/></event>
+<event type="note" duration="96"><property name="pitch" int="64"/></event>
+<event type="note" duration="96"><property name="pitch" int="65"/></event>
+<event type="rest" duration="48"></event>
+<event type="note" duration="144"><property name="pitch" int="64"/></event>
+<chord>
+	<event type="keychange"><property name="key" string="Cb major"/></event>
+	<event type="clefchange"><property name="clef" string="bass"/></event>
+	<event type="keychange"><property name="key" string="Cb major"/></event>
+	<event type="note" duration="12"><property name="pitch" int="49"/></event>
+</chord>
+<group type="beamed">
+<event type="note" duration="48"><property name="pitch" int="48"/></event>
+<chord>
+	<event type="note" duration="48"><property name="pitch" int="50"/></event>
+	<event type="note" duration="48"><property name="pitch" int="54"/></event>
+</chord>
+<event type="note" duration="24"><property name="pitch" int="58"/></event>
+</group>
+<event type="note" duration="96"><property name="pitch" int="44"/></event>
+<event type="note" duration="96"><property name="pitch" int="45"/></event>
+<chord>
+	<event type="keychange"><property name="key" string="C# major"/></event>
+	<event type="rest" duration="96"></event>
+</chord>
+<event type="note" duration="96"><property name="pitch" int="44"/></event>
+<event type="note" duration="96"><property name="pitch" int="45"/></event>
+<event type="note" duration="192"><property name="pitch" int="44"/></event>
+<event type="note" duration="96"><property name="pitch" int="45"/></event>
+<event type="note" duration="96"><property name="pitch" int="44"/></event>
+<event type="note" duration="96"><property name="pitch" int="45"/></event>
 </segment>
 </rosegarden-data>

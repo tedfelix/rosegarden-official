@@ -1,219 +1,116 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE rosegarden-data>
 <rosegarden-data>
+<reference-segment>
+</reference-segment>
+
+<composition recordtrack="0" pointer="0" tempo="120">
+
+  <instrument id="0" type="midi" name="Piano"/>
+  <instrument id="1" type="midi" name="Piano"/>
+  <instrument id="2" type="midi" name="Piano"/>
+  <instrument id="3" type="midi" name="Audio Samples"/>
+
+  <track id="0" type="midi" label="untitled" position="0" muted="false" instrument="0"/>
+  <track id="0" type="midi" label="untitled" position="0" muted="false" instrument="0"/>
+  <track id="0" type="midi" label="untitled" position="0" muted="false" instrument="0"/>
+  <track id="0" type="midi" label="untitled" position="0" muted="false" instrument="0"/>
+  <track id="0" type="midi" label="untitled" position="0" muted="false" instrument="0"/>
+  <track id="0" type="midi" label="untitled" position="0" muted="false" instrument="0"/>
+  <track id="0" type="midi" label="untitled" position="0" muted="false" instrument="0"/>
+  <track id="0" type="midi" label="untitled" position="0" muted="false" instrument="0"/>
+  <track id="0" type="midi" label="untitled" position="0" muted="false" instrument="0"/>
+  <track id="0" type="midi" label="untitled" position="0" muted="false" instrument="0"/>
+
+</composition>
+
 <segment track="1" start="0">
-	<event type="clefchange">
-		<property name="clef" string="treble"/>
-	</event>
-	<group type="beamed">
-        <event type="note" duration="quaver">
-		<property name="pitch" int="60"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="61"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="61"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="62"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="63"/>
-	</event>
-	</group>
-	<group type="beamed">
-        <event type="note" duration="quaver">
-		<property name="pitch" int="60"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="61"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="62"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="63"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="64"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="65"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="66"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="67"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="68"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="69"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="70"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="71"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="72"/>
-	</event>
-	</group>
-	<event type="keychange">
-		<property name="key" string="C# major"/>
-	</event>
-	<group type="beamed">
-        <event type="note" duration="quaver">
-		<property name="pitch" int="60"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="61"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="61"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="62"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="63"/>
-	</event>
-	</group>
-	<group type="beamed">
-        <event type="note" duration="quaver">
-		<property name="pitch" int="60"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="61"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="62"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="63"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="64"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="65"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="66"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="67"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="68"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="69"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="70"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="71"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="72"/>
-	</event>
-	</group>
-	<event type="keychange">
-		<property name="key" string="Cb major"/>
-	</event>
-	<group type="beamed">
-        <event type="note" duration="quaver">
-		<property name="pitch" int="60"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="61"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="62"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="63"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="64"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="65"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="66"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="67"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="68"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="69"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="70"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="71"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="72"/>
-	</event>
-	</group>
-	<event type="clefchange">
-		<property name="clef" string="bass"/>
-	</event>
-	<event type="keychange">
-		<property name="key" string="E major"/>
-	</event>
-	<group type="beamed">
-        <event type="note" duration="quaver">
-		<property name="pitch" int="48"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="49"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="50"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="51"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="52"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="53"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="54"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="55"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="56"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="57"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="58"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="59"/>
-	</event>
-        <event type="note" duration="quaver">
-		<property name="pitch" int="60"/>
-	</event>
-	</group>
+<chord>
+	<event type="clefchange"><property name="clef" string="treble"/></event>
+	<event type="note" duration="48"><property name="pitch" int="60"/></event>
+</chord>
+<group type="beamed">
+<event type="note" duration="48"><property name="pitch" int="61"/></event>
+<event type="note" duration="48"><property name="pitch" int="61"/></event>
+<event type="note" duration="48"><property name="pitch" int="62"/></event>
+<event type="note" duration="48"><property name="pitch" int="63"/></event>
+</group>
+<group type="beamed">
+<event type="note" duration="48"><property name="pitch" int="60"/></event>
+<event type="note" duration="48"><property name="pitch" int="61"/></event>
+<event type="note" duration="48"><property name="pitch" int="62"/></event>
+<event type="note" duration="48"><property name="pitch" int="63"/></event>
+<event type="note" duration="48"><property name="pitch" int="64"/></event>
+<event type="note" duration="48"><property name="pitch" int="65"/></event>
+<event type="note" duration="48"><property name="pitch" int="66"/></event>
+<event type="note" duration="48"><property name="pitch" int="67"/></event>
+<event type="note" duration="48"><property name="pitch" int="68"/></event>
+<event type="note" duration="48"><property name="pitch" int="69"/></event>
+<event type="note" duration="48"><property name="pitch" int="70"/></event>
+<event type="note" duration="48"><property name="pitch" int="71"/></event>
+<event type="note" duration="48"><property name="pitch" int="72"/></event>
+</group>
+<chord>
+	<event type="keychange"><property name="key" string="C# major"/></event>
+	<event type="note" duration="48"><property name="pitch" int="60"/></event>
+</chord>
+<group type="beamed">
+<event type="note" duration="48"><property name="pitch" int="61"/></event>
+<event type="note" duration="48"><property name="pitch" int="61"/></event>
+<event type="note" duration="48"><property name="pitch" int="62"/></event>
+<event type="note" duration="48"><property name="pitch" int="63"/></event>
+</group>
+<group type="beamed">
+<event type="note" duration="48"><property name="pitch" int="60"/></event>
+<event type="note" duration="48"><property name="pitch" int="61"/></event>
+<event type="note" duration="48"><property name="pitch" int="62"/></event>
+<event type="note" duration="48"><property name="pitch" int="63"/></event>
+<event type="note" duration="48"><property name="pitch" int="64"/></event>
+<event type="note" duration="48"><property name="pitch" int="65"/></event>
+<event type="note" duration="48"><property name="pitch" int="66"/></event>
+<event type="note" duration="48"><property name="pitch" int="67"/></event>
+<event type="note" duration="48"><property name="pitch" int="68"/></event>
+<event type="note" duration="48"><property name="pitch" int="69"/></event>
+<event type="note" duration="48"><property name="pitch" int="70"/></event>
+<event type="note" duration="48"><property name="pitch" int="71"/></event>
+<event type="note" duration="48"><property name="pitch" int="72"/></event>
+</group>
+<chord>
+	<event type="keychange"><property name="key" string="Cb major"/></event>
+	<event type="note" duration="48"><property name="pitch" int="60"/></event>
+</chord>
+<group type="beamed">
+<event type="note" duration="48"><property name="pitch" int="61"/></event>
+<event type="note" duration="48"><property name="pitch" int="62"/></event>
+<event type="note" duration="48"><property name="pitch" int="63"/></event>
+<event type="note" duration="48"><property name="pitch" int="64"/></event>
+<event type="note" duration="48"><property name="pitch" int="65"/></event>
+<event type="note" duration="48"><property name="pitch" int="66"/></event>
+<event type="note" duration="48"><property name="pitch" int="67"/></event>
+<event type="note" duration="48"><property name="pitch" int="68"/></event>
+<event type="note" duration="48"><property name="pitch" int="69"/></event>
+<event type="note" duration="48"><property name="pitch" int="70"/></event>
+<event type="note" duration="48"><property name="pitch" int="71"/></event>
+<event type="note" duration="48"><property name="pitch" int="72"/></event>
+</group>
+<chord>
+	<event type="clefchange"><property name="clef" string="bass"/></event>
+	<event type="keychange"><property name="key" string="E major"/></event>
+	<event type="note" duration="48"><property name="pitch" int="48"/></event>
+</chord>
+<group type="beamed">
+<event type="note" duration="48"><property name="pitch" int="49"/></event>
+<event type="note" duration="48"><property name="pitch" int="50"/></event>
+<event type="note" duration="48"><property name="pitch" int="51"/></event>
+<event type="note" duration="48"><property name="pitch" int="52"/></event>
+<event type="note" duration="48"><property name="pitch" int="53"/></event>
+<event type="note" duration="48"><property name="pitch" int="54"/></event>
+<event type="note" duration="48"><property name="pitch" int="55"/></event>
+<event type="note" duration="48"><property name="pitch" int="56"/></event>
+<event type="note" duration="48"><property name="pitch" int="57"/></event>
+<event type="note" duration="48"><property name="pitch" int="58"/></event>
+<event type="note" duration="48"><property name="pitch" int="59"/></event>
+<event type="note" duration="48"><property name="pitch" int="60"/></event>
+</group>
 </segment>
 </rosegarden-data>
