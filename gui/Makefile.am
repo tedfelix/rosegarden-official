@@ -37,7 +37,9 @@ rosegarden_LDADD   = ../sound/libRosegardenSound.la ../core/libcore.la -lqt -lkf
 
 SUBDIRS = docs
 
-EXTRA_DIST = rosegardenguiiface.kidl trackseditoriface.kidl
+EXTRA_DIST = rosegardenguiiface.kidl trackseditoriface.kidl \
+	pixmaps/5/*.xpm \
+	pixmaps/9/*.xpm
 
 # Where pixmaps for notes, clefs, etc... will be installed
 data_dirname = rosegarden
