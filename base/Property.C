@@ -22,6 +22,7 @@
 
 #include "Property.h"
 #include <cstdio>
+#include <string>
 
 namespace Rosegarden 
 {

@@ -21,7 +21,7 @@
 
 #include <iostream>
 #include <unistd.h>
-#include <math.h>
+#include <cmath>
 
 #include <kapp.h>
 #include <klocale.h>

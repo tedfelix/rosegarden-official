@@ -21,6 +21,7 @@
 
 #include <cstdio>
 #include <iostream>
+#include <string>
 #include "PropertyMap.h"
 
 namespace Rosegarden 

@@ -28,7 +28,7 @@
 #include <qlabel.h>
 #include <qbuttongroup.h>
 
-#include <assert.h>
+#include <cassert>
 
 #include "Track.h"
 #include "Studio.h"

@@ -21,6 +21,7 @@
 */
 
 #include <iostream>
+#include <string>
 
 #include "PropertyName.h"
 #include "Exception.h"

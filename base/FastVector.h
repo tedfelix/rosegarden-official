@@ -26,7 +26,7 @@
 #include <cstdlib> /* for malloc, realloc, free */
 #include <cstring> /* for memmove */
 
-#include <assert.h>
+#include <cassert>
 
 
 /**

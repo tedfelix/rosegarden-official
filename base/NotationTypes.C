@@ -24,7 +24,7 @@
 #include "NotationTypes.h"
 #include "BaseProperties.h"
 #include <iostream>
-#include <cstring> // for atoi
+#include <cstdlib> // for atoi
 
 #if (__GNUC__ < 3)
 #include <strstream>

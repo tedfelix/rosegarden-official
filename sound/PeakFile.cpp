@@ -18,7 +18,7 @@
   COPYING included with this distribution for more information.
 */
 
-#include <math.h>
+#include <cmath>
 
 #include <qdatetime.h>
 #include <qstringlist.h>

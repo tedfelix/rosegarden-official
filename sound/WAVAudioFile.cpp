@@ -24,7 +24,12 @@
 #include "RealTime.h"
 #include "Sound.h"
 
+#if (__GNUC__ < 3)
+#include <strstream>
+#define stringstream strstream
+#else
 #include <sstream>
+#endif
 
 using std::cout;
 using std::cerr;

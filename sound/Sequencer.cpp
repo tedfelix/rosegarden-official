@@ -25,7 +25,7 @@
 #include "Sequencer.h"
 #include "MappedStudio.h"
 
-#include "config.h"
+//#include "config.h"
 
 // If we're configured for NO_SOUND then use the DummyDriver
 // otherwise if we're configured for ALSA use that, otherwise
