@@ -119,7 +119,7 @@ TrackLabel::setSelected(bool on)
         m_instrumentLabel->setPaletteForegroundColor(colorGroup().text());
         m_trackLabel->setPaletteForegroundColor(colorGroup().text());
     }
-    visibleWidget()->update();
+    if (visibleWidget()) visibleWidget()->update();
 }
 
 void
