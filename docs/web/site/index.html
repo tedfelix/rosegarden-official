@@ -46,9 +46,17 @@
       <p><i><b>In latest news:</b></i> Rosegarden-4-0.9 is now available
       for <a href="download.html">immediate download</a>.</p>
 
+      <div align="center" style="margin:1em" valign="center">
+      <a href="pictures.html">
+      <img src="rg4-0.9-thumb.png" border="0" vspace="20" alt="Rosegarden-4 0.9"/>
+      </a>
+      </div>
+
+
+
       <p><i><b>In recent news:</b></i> Rosegarden-4 was featured in the
       February 2003 issue of <a href="http://www.sospubs.co.uk">Sound
-      on Sound</a>, the UK's top professional recording magazine.</a>?</p>
+      on Sound</a>, the UK's top professional recording magazine.</p>
 
       <p><i><b>Expo news:</b></i>
       <!--
@@ -58,29 +66,17 @@
       in Birmingham, UK on the 24th-26th June 2003.  Registration for the Expo
       is free so if you're in the area then please come along and have a talk
       to us just like you did
-      <a href="/rosegarden/expo.shtml">last October</a>.
+      <a href="http://www.bownie.com/rosegarden/expo.shtml">last October</a>.
+      <!--<a href="/rosegarden/expo.shtml">last October</a>.-->
       </p>
       
+      <h3 style="clear:all">Current Release</h3>
+
       <div align="center" style="margin:1em" valign="center">
       <a href="pictures.html">
-      <img src="rg4-0.8-thumb.png" border="0" vspace="20">
+      <img src="rg4-0.8-thumb.png" border="0" vspace="20" alt="Rosegarden-4 0.9"/>
       </a>
       </div>
-
-
-      <p>Rosegarden-4 is Free Software under the GNU GPL.  It is a KDE
-      application, which means to build it you need the KDE 3.x
-      libraries.  However, once installed it can be run within the KDE
-      environment or any other desktop or window manager
-      environment.</p>
-
-      <p><small>Note: if you have a Linux distribution that includes a
-      package simply called <code>rosegarden</code>, you might have
-      <a href="2.1/index.html">Rosegarden-2.1</a>.  (We always recommend
-      that Rosegarden-4 is packaged as <code>rosegarden4</code>.) Consider
-      upgrading!</small></p>
-
-      <h3 style="clear:all">Current Release</h3>
 
       <p>The latest release of Rosegarden is Version 4, Release 0.9
       released on 29th April 2003.  Have a look at some <a
@@ -94,14 +90,76 @@
 
       <ul>
       <li class="close">Score, piano-roll and track overview editors</li>
+      <li class="close">Score interpretation of performance MIDI data</li>
       <li class="close">MIDI and audio playback and recording using <a href="http://www.alsa-project.org/">ALSA</a> and <a href="http://jackit.sourceforge.net/">JACK</a></li>
       <li class="close">Audio plugin support using <a href="http://www.ladspa.org"/>LADSPA</a></li>
       <li class="close">MIDI file I/O and <a href="http://www.csounds.com/">Csound</a> export</li>
       <li class="close">High-quality score printing by exporting <a href="http://www.lilypond.org/">Lilypond</a> files</li>
+      <li class="close">Translations for Russian, Spanish and German</a>
+      <li class="close">Shareable Device (.rgd) files to ease MIDI portability</a>
       </ul>
     
       <p>Changes since the previous Rosegarden-4-0.8.5 release include:</p>
 <ul>
+
+ <li class="close">Significant improvements in rendering and editing notation from performance MIDI data</li>
+
+ <li class="close">Ability to quantize for notation without changing performance</li>
+
+ <li class="close">Performance interpretation of dynamics and accent stresses</li>
+
+ <li class="close">Corrected display of all accidentals in (or against) every key</li>
+
+ <li class="close">Marks and Group toolbars</li>
+
+ <li class="close">Bank Editor dialog reworked - many fixes and new apply/reset methodology.  Device "librarians" - increased number of pre-supported patchsets.</li>
+
+ <li class="close">Split-by-pitch with ranging split point</li>
+
+ <li class="close">Tip of the Day</li>
+
+ <li class="close">"Revert file" option</li>
+
+ <li class="close">Studio-> Save Current Document as Default Studio to make short work of saving your own autoload.rg</li>
+
+ <li class="close">Tracks toolbar</li>
+
+ <li class="close">Detailed sequencer status information available in Configure dialog</li>
+
+ <li class="close">Document autosaving and recovery</li>
+
+ <li class="close">More complete Right Mouse Button menu in tracks canvas</li>
+
+ <li class="close">Document loading rework</li>
+
+ <li class="close">Better progress reporting for long operations</li>
+
+ <li class="close">Segment labelling</li>
+
+ <li class="close">Floating value help when moving rotaries/sliders</li>
+
+ <li class="close">Tracks can be moved up and down in the Composition [buggy]</li>
+
+ <li class="close">Better handling of the sequencer process</li>
+
+ <li class="close">Lots of translations - Russian, Spanish, French, German</li>
+
+ <li class="close"><a href="http://rosegarden.sourceforge.net/tutorial/">Rosegarden Tutorial</a> (including a PDF) thanks to Michael McIntyre</li>
+
+ <li class="close">A lot of audio improvments - stereo recording, panning, audio faders.</li>
+
+ <li class="close">MIDI synchronisation infrastructure</li>
+
+ <li class="close">ALSA client dynamic detection.  ALSA recording device selectin.</li>
+
+ <li class="close">Import of Banks/Programs from .rgd files and standard Soundfont (sf2) files</li>
+
+ <li class="close">Library of premapped MIDI devices in .rgd files</li>
+
+ <li class="close">Many Lilypond export improvements</a>
+
+
+<!--
  <li class="close">Improved MIDI file I/O (better support for banks and merging in import, better support for delay, transpose etc in export)</li>
 
 <li class="close">Banks/Programs editor dialog (including importing/exporting of Studios)</li>
@@ -113,7 +171,21 @@
 <li class="close">MIDI events filter dialog for MIDI THRU and MIDI record</li>
 <li class="close">MIDI/ALSA recording bug fixed (stopping after so many recorded events)</li>
 <li class="close">many bugs, tweaks and performance improvements</li>
+-->
 </ul>
+
+      <p>Rosegarden-4 is Free Software under the GNU GPL.  It is a KDE
+      application, which means to build it you need the KDE 3.x
+      libraries.  However, once installed it can be run within the KDE
+      environment or any other desktop or window manager
+      environment.</p>
+
+      <p><small>Note: if you have a Linux distribution that includes a
+      package simply called <code>rosegarden</code>, you might have
+      <a href="2.1/index.html">Rosegarden-2.1</a>.  (We always recommend
+      that Rosegarden-4 is packaged as <code>rosegarden4</code>.) Consider
+      upgrading!</small></p>
+
 
       <h3>Contribute</h3>
 
