@@ -1568,19 +1568,47 @@ MetronomeConfigurationPage::MetronomeConfigurationPage(RosegardenGUIDoc *doc,
 
     Configuration &config = m_doc->getConfiguration();
 
-    layout->addWidget(new QLabel(i18n("Metronome Bar Velocity"), frame), 0, 0);
+    layout->addWidget(new QLabel(i18n("Metronome Device"), frame), 0, 0);
+    m_metronomeDevice = new RosegardenComboBox(frame);
+    m_metronomeDevice->setCurrentItem(config.get<Int>("metronomedevice", 0));
+    layout->addWidget(m_metronomeDevice, 0, 1);
+
+    Rosegarden::DeviceList *devices = doc->getStudio().getDevices();
+    Rosegarden::DeviceListConstIterator it;
+
+    for (it = devices->begin(); it != devices->end(); it++)
+    {
+        Rosegarden::MidiDevice *dev =
+            dynamic_cast<Rosegarden::MidiDevice*>(*it);
+
+        if (dev && dev->getDirection() == MidiDevice::Play)
+        {
+	    QString label = strtoqstr(dev->getName());
+	    label += " - " + strtoqstr(dev->getConnection());
+	    m_metronomeDevice->insertItem(label);
+        }
+    }
+
+    layout->addWidget(new QLabel(i18n("Metronome channel"), frame), 1, 0);
+    m_metronomeChannel = new QSpinBox(frame);
+    m_metronomeChannel->setMinValue(1);
+    m_metronomeChannel->setMaxValue(16);
+    m_metronomeChannel->setValue(config.get<Int>("metronomechannel", 10));
+    layout->addWidget(m_metronomeChannel, 1, 1);
+
+    layout->addWidget(new QLabel(i18n("Metronome Bar Velocity"), frame), 2, 0);
     m_metronomeBarVely = new QSpinBox(frame);
     m_metronomeBarVely->setMinValue(0);
     m_metronomeBarVely->setMaxValue(127);
     m_metronomeBarVely->setValue(config.get<Int>("metronomebarvelocity"));
-    layout->addWidget(m_metronomeBarVely, 0, 1);
+    layout->addWidget(m_metronomeBarVely, 2, 1);
 
-    layout->addWidget(new QLabel(i18n("Metronome Beat Velocity"), frame), 1, 0);
+    layout->addWidget(new QLabel(i18n("Metronome Beat Velocity"), frame), 3, 0);
     m_metronomeBeatVely = new QSpinBox(frame);
     m_metronomeBeatVely->setMinValue(0);
     m_metronomeBeatVely->setMaxValue(127);
     m_metronomeBeatVely->setValue(config.get<Int>("metronomebeatvelocity"));
-    layout->addWidget(m_metronomeBeatVely, 1, 1);
+    layout->addWidget(m_metronomeBeatVely, 3, 1);
 
     addTab(frame, i18n("Modify Metronome settings"));
 }
@@ -1594,6 +1622,8 @@ MetronomeConfigurationPage::apply()
     Configuration &config = m_doc->getConfiguration();
     config.set<Int>("metronomebarvelocity", m_metronomeBarVely->value());
     config.set<Int>("metronomebeatvelocity", m_metronomeBeatVely->value());
+    config.set<Int>("metronomechannel", m_metronomeChannel->value());
+    config.set<Int>("metronomedevice", m_metronomeDevice->currentItem());
 
     m_doc->slotDocumentModified();
 }
@@ -1731,14 +1761,15 @@ ColourConfigurationPage::ColourConfigurationPage(RosegardenGUIDoc *doc,
     m_map = m_doc->getComposition().getSegmentColourMap();
 
     m_colourtable = new RosegardenColourTable(frame, m_map, m_listmap);
+    m_colourtable->setFixedHeight(280);
 
     layout->addMultiCellWidget(m_colourtable, 0, 0, 0, 1);
 
-    QPushButton* addColourButton = new QPushButton(i18n("Add New Color"),
+    QPushButton* addColourButton = new QPushButton(i18n("Add New Colour"),
                                                    frame);
     layout->addWidget(addColourButton, 1, 0, Qt::AlignHCenter);
 
-    QPushButton* deleteColourButton = new QPushButton(i18n("Delete Color"),
+    QPushButton* deleteColourButton = new QPushButton(i18n("Delete Colour"),
                                                       frame);
     layout->addWidget(deleteColourButton, 1, 1, Qt::AlignHCenter);
 
@@ -1757,7 +1788,7 @@ ColourConfigurationPage::ColourConfigurationPage(RosegardenGUIDoc *doc,
     connect(m_colourtable, SIGNAL(entryColourChanged(unsigned int, QColor)),
             this,  SLOT(slotColourChanged(unsigned int, QColor)));
 
-    addTab(frame, i18n("Color Map"));
+    addTab(frame, i18n("Colour Map"));
 
 }
 
@@ -1790,7 +1821,7 @@ ColourConfigurationPage::slotAddNew()
 
     bool ok = false;
 
-    QString newName = KLineEditDlg::getText(i18n("New Color Name"), i18n("Enter new name"),
+    QString newName = KLineEditDlg::getText(i18n("New Colour Name"), i18n("Enter new name"),
                                             i18n("New"), &ok);
     if ((ok == true) && (!newName.isEmpty()))
     {

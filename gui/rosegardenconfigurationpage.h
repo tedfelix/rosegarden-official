@@ -416,8 +416,8 @@ public:
 
     void populate_table();
 
-    static QString iconLabel() { return i18n("Color"); }
-    static QString title()     { return i18n("Color Settings"); }
+    static QString iconLabel() { return i18n("Colour"); }
+    static QString title()     { return i18n("Colour Settings"); }
 
 signals:
     void docColoursChanged();
@@ -456,9 +456,12 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    QSpinBox*  m_metronomeBarVely;
-    QSpinBox*  m_metronomeBeatVely;
-    QSpinBox*  m_defaultMetronomePitch;
+    QSpinBox           *m_metronomeBarVely;
+    QSpinBox           *m_metronomeBeatVely;
+    QSpinBox           *m_defaultMetronomePitch;
+    RosegardenComboBox *m_metronomeDevice;
+    QSpinBox           *m_metronomeChannel;
+    
 
 };
 
