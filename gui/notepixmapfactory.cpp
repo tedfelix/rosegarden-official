@@ -285,7 +285,17 @@ NotePixmapFactory::NotePixmapFactory(int resolution) :
     m_resolution(resolution),
     m_pixmapDirectory(QString("pixmaps/%1").arg(resolution)),
     m_generatedPixmapHeight(0),
-    m_timeSigFont("new century schoolbook", 20), // TODO: size depends on resolution
+
+    // Various options for font size: in New Century Schoolbook, if
+    // resolution = 9, 20px should be good but Qt's scaling breaks it
+    // badly on my display, so I'm going for 24px here.  If resolution
+    // = 5, 12px is a bit too small and 14px is a bit too large.
+//    m_timeSigFont("new century schoolbook", (resolution - 1) * 3),
+//    m_timeSigFont("new century schoolbook", ((resolution + 1) * 5) / 2 - 1),
+    
+    // or how about this?
+    m_timeSigFont("utopia", ((resolution + 1) * 5) / 2 - 1),
+
     m_timeSigFontMetrics(m_timeSigFont),
     m_noteBodyFilled(m_pixmapDirectory + "/note-bodyfilled.xpm"),
     m_noteBodyEmpty(m_pixmapDirectory + "/note-bodyempty.xpm"),

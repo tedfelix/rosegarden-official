@@ -39,6 +39,7 @@ NotationVLayout::layout(NotationElementList::iterator from,
                         NotationElementList::iterator to)
 { 
     NotationElementList::iterator i;
+    const NotePixmapFactory &npf(m_staff.getNotePixmapFactory());
 
     for (i = from; i != to; ++i) {
 
@@ -139,6 +140,11 @@ NotationVLayout::layout(NotationElementList::iterator from,
             } else if (el->event()->isa(Key::EventType)) {
 
                 el->setLayoutY(m_staff.yCoordOfHeight(12));
+
+            } else if (el->event()->isa(TimeSignature::EventType)) {
+
+                el->setLayoutY(m_staff.yCoordOfHeight(8) +
+                               npf.getNoteBodyHeight()/4);
             }
         }
     }
