@@ -21,6 +21,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <strstream>
 #include "Midi.h"
 #include "MidiFile.h"
 #include "Track.h"
@@ -786,10 +787,19 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
   //
   //
   midiEvent = new MidiEvent(0, MIDI_FILE_META_EVENT, MIDI_TEXT_MARKER,
-                            "Created by Rosegarden 4.0 for Linux");
+                            "Created by Rosegarden 4.0");
 
   _midiComposition[trackNumber].push_back(*midiEvent);
-  
+
+  midiEvent = new MidiEvent(0, MIDI_FILE_META_EVENT, MIDI_TEXT_MARKER,
+                            "http://rosegarden.sourceforge.net");
+
+  _midiComposition[trackNumber].push_back(*midiEvent);
+
+  midiEvent = new MidiEvent(0, MIDI_FILE_META_EVENT, MIDI_SET_TEMPO,
+                            (int)comp.getTempo());
+
+  _midiComposition[trackNumber].push_back(*midiEvent);
 
   trackNumber = 1;
 
@@ -803,7 +813,6 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
   cout << "TIMING FACTOR   = " << timingFactor << endl;
 #endif 
 
-
   // In pass one just insert all events including new NOTE OFFs at the right
   // absolute times.
   //
@@ -814,14 +823,18 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
     //
     TrackPerformanceHelper helper(**trk);
 
-    // insert a track name
-    midiEvent = new MidiEvent(0, MIDI_FILE_META_EVENT, MIDI_TRACK_NAME,
-                              std::string("Track " + trackNumber));
-    _midiComposition[trackNumber].push_front(*midiEvent);
+    {
+      strstream trackName;
+      // insert a track name
+      trackName << "Track " << trackNumber << ends;
 
-    // insert a program change
-    midiEvent = new MidiEvent(0, MIDI_PROG_CHANGE | midiChannel, 0);
-    _midiComposition[trackNumber].push_front(*midiEvent);
+      midiEvent = new MidiEvent(0, MIDI_FILE_META_EVENT, MIDI_TRACK_NAME, trackName.str());
+      _midiComposition[trackNumber].push_front(*midiEvent);
+
+      // insert a program change
+      midiEvent = new MidiEvent(0, MIDI_PROG_CHANGE | midiChannel, 0);
+      _midiComposition[trackNumber].push_front(*midiEvent);
+    }
 
  
     for (Rosegarden::Track::iterator el = (*trk)->begin();
@@ -870,14 +883,11 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
         // skip
       }
 
-      // rotate around to new MIDI channel
-      midiChannel++;
-      midiChannel %= 16;
-
     }
 
-    if (trackNumber == 99)
-      break;
+    // rotate around to new MIDI channel
+    //midiChannel++;
+    //midiChannel %= 16;
 
     // increment track number
     trackNumber++;
@@ -909,6 +919,8 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
 
     midiEvent = new MidiEvent(endOfTrackTime, MIDI_FILE_META_EVENT,
                               MIDI_END_OF_TRACK, "");
+
+    _midiComposition[i].push_back(*midiEvent);
 
     for ( midiEventIt = (_midiComposition[i].begin());
           midiEventIt != (_midiComposition[i].end()); midiEventIt++ )
@@ -963,7 +975,7 @@ MidiFile::longToMidiBytes(std::ofstream* midiFile, const unsigned long &number)
 
 // Turn a delta time into a MIDI time - overlapping into
 // a maximum of four bytes using the MSB as the carry on
-// flag
+// flag.
 //
 void
 MidiFile::longToVarBuffer(std::string &buffer, const unsigned long &number)
@@ -991,10 +1003,10 @@ MidiFile::longToVarBuffer(std::string &buffer, const unsigned long &number)
 
   // Now move the converted number out onto the buffer
   //
-  while(1)
+  while(true)
   {
     buffer += (MidiByte) ( outNumber & 0xff );
-    if (outNumber & 0x80)
+    if ( outNumber & 0x80 )
       outNumber >>= 8;
     else
       break;
@@ -1070,7 +1082,10 @@ MidiFile::writeTrack(std::ofstream* midiFile, const unsigned int &trackNumber)
     {
       trackBuffer += (MidiByte)MIDI_FILE_META_EVENT;
       trackBuffer += (MidiByte)midiEvent->metaEventCode();
-      trackBuffer += (MidiByte)midiEvent->metaMessage().length();
+
+      // Variable length number field
+      longToVarBuffer(trackBuffer, midiEvent->metaMessage().length());
+
       trackBuffer += midiEvent->metaMessage();
     }
     else

@@ -10,7 +10,7 @@ References in round brackets are to 0.1_planned_features.txt.
              :  Output File Creation
              :  MIDI File Header Writing
    
-    - [PARTIALLY DONE] :  Meta Track Generation
+    - [ DONE] :  Meta Track Generation
                        :  MIDI Byte out processing
 
  2. DCOP API for sequencer process
@@ -38,12 +38,18 @@ References in round brackets are to 0.1_planned_features.txt.
 Known Bugs
 ==========
 
+ - MIDI file tempos aren't working yet
+
  - occasional gui/sequencer hangs while DCOP call in progress
+
+ - sending All Notes Off to aRts when they're already queued?
+   More a feature than a bug - waiting for aRts to support it.
+
+Fixed Bugs
+==========
 
  - playback currently stumbling and poor [FIXED - note off queue was filling up
    and getting all out of shape]
-
- - sending All Notes Off to aRTS when they're already queued?
 
 
 Post 0.1 TO-DOs
