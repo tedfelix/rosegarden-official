@@ -48,6 +48,11 @@ Configuration::Configuration():
         m_metronomeBeatVelocity(80),
         m_metronomeDuration(0, 10000)
 {
+    set<Int>("metronomepitch", 37);
+    set<Int>("metronomebarvelocity", 120);
+    set<Int>("metronomebeatvelocity", 80);
+    set<RealTimeT>("fetchlatency",      RealTime(0, 50000));    
+    set<RealTimeT>("metronomeduration", RealTime(0, 10000));    
 }
 
 Configuration::~Configuration()
