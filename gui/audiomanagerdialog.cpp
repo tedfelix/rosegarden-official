@@ -233,7 +233,7 @@ AudioManagerDialog::slotPopulateFileList()
         //
         for (iit = segments.begin(); iit != segments.end(); iit++)
         {
-            if ((*iit)->getAudioFileID() == (*it)->getId())
+            if ((*iit)->getAudioFileId() == (*it)->getId())
             {
                 AudioListItem *childItem =
                     new AudioListItem(item,
@@ -329,7 +329,7 @@ AudioManagerDialog::slotDelete()
         // Get the id and segment of the next item so that we can
         // match against it
         //
-        unsigned int id = 0;
+        Rosegarden::AudioFileId id = 0;
         Rosegarden::Segment *segment = 0;
         AudioListItem *aItem = dynamic_cast<AudioListItem*>(newItem);
         
@@ -362,7 +362,7 @@ AudioManagerDialog::slotDelete()
     if (reply != KMessageBox::Yes)
         return;
 
-    unsigned int id = audioFile->getId();
+    Rosegarden::AudioFileId id = audioFile->getId();
     m_doc->getAudioFileManager().removeFile(id);
 
     // tell the sequencer
@@ -390,7 +390,7 @@ AudioManagerDialog::slotPlayPreview()
 void
 AudioManagerDialog::slotAdd()
 {
-    unsigned int id = 0;
+    Rosegarden::AudioFileId id = 0;
 
     KFileDialog *fileDialog =
         new KFileDialog(QString(m_doc->getAudioFileManager().getLastAddPath().c_str()),
@@ -467,11 +467,56 @@ AudioManagerDialog::slotEnableButtons()
 void
 AudioManagerDialog::slotInsert()
 {
+    AudioFile *audioFile = getCurrentSelection();
+    if (audioFile == 0)
+        return;
+
     std::cout << "AudioManagerDialog::slotInsert" << std::endl;
 
+    // Find an Audio Instrument and create a Track and insert
+    // the audio file over given time parameters.
+
+    Rosegarden::DeviceList *devices = m_doc->getStudio().getDevices();
+    Rosegarden::DeviceListIterator it;
+    Rosegarden::InstrumentList instruments;
+    Rosegarden::InstrumentList::iterator iit;
+    Rosegarden::Instrument *instr = 0;
+
+    // Hmm, creative use of vectors and iterators there - *sigh*
+    //
+    for (it = devices->begin(); it != devices->end(); it++)
+    {
+        if ((*it)->getType() == Rosegarden::Device::Audio)
+        {
+            // Hmm, again..
+            //
+            instruments = (*it)->getAllInstruments();
+
+            for (iit = instruments.begin(); iit != instruments.end(); iit++)
+            {
+                if (instr == 0)
+                {
+                    instr = (*iit);
+                    break;
+                }
+                else
+                    break;
+            }
+        }
+    }
+
+    // Ok, so we've got the first audio instrument
+    //
+    if (instr == 0)
+        return;
+    
+
     // find selected audio file and guess a track
-    emit insertAudioSegment(0, 0, Rosegarden::RealTime(0, 0),
-                                  Rosegarden::RealTime(0, 0));
+    emit insertAudioSegment(audioFile->getId(),
+                            0,
+                            instr->getId(),
+                            Rosegarden::RealTime(0, 0),
+                            Rosegarden::RealTime(0, 0));
 }
 
 void
@@ -540,7 +585,8 @@ AudioManagerDialog::slotSelectionChanged(QListViewItem *item)
 // purpose.  Set segment to 0 for parent audio entries.
 //
 void
-AudioManagerDialog::setSelected(unsigned int id, Rosegarden::Segment *segment)
+AudioManagerDialog::setSelected(Rosegarden::AudioFileId id,
+                                Rosegarden::Segment *segment)
 {
     QListViewItem *it = m_fileList->firstChild();
     QListViewItem *chIt = 0;
@@ -608,7 +654,7 @@ AudioManagerDialog::slotCommandExecuted(KCommand * /*command */)
 
     if (item)
     {
-        unsigned int id = item->getId();
+        Rosegarden::AudioFileId id = item->getId();
         Rosegarden::Segment *segment = item->getSegment();
 
         // set selected
@@ -644,7 +690,7 @@ AudioManagerDialog::slotSegmentSelection(
 
     if (segment)
     {
-        setSelected(segment->getAudioFileID(), segment);
+        setSelected(segment->getAudioFileId(), segment);
     }
     else
     {

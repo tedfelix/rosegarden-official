@@ -432,13 +432,13 @@ public:
     //
     // AUDIO
 
-    // Get and set Audio file ID (see the AudioFileManager)
+    // Get and set Audio file Id (see the AudioFileManager)
     //
-    unsigned int getAudioFileID() const { return m_audioFileID; }
-    void setAudioFileID(const unsigned int &id) { m_audioFileID = id; }
+    unsigned int getAudioFileId() const { return m_audioFileId; }
+    void setAudioFileId(const unsigned int &id) { m_audioFileId = id; }
 
     // The audio start and end times tell us how far into
-    // audio file "m_audioFileID" this Segment starts and
+    // audio file "m_audioFileId" this Segment starts and
     // how far into the sample the Segment finishes.
     //
     void setAudioStartTime(const RealTime&time) { m_audioStartTime = time; }
@@ -517,7 +517,7 @@ private:
 
     mutable int m_id; // not id of Segment, but a value for return by getNextId
 
-    unsigned int m_audioFileID; // audio file ID (see AudioFileManager)
+    unsigned int m_audioFileId; // audio file ID (see AudioFileManager)
     RealTime m_audioStartTime;   // start time relative to start of audio file
     RealTime m_audioEndTime;     // end time relative to start of audio file
 

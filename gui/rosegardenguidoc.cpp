@@ -384,7 +384,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
         if (segment->getType() == Rosegarden::Segment::Audio) {
             outStream << "\" type=\"audio\" "
                       << "file=\""
-                      << segment->getAudioFileID()
+                      << segment->getAudioFileId()
                       << "\">\n";
 
             // convert out - should do this as XmlExportable really
@@ -1168,7 +1168,7 @@ RosegardenGUIDoc::insertRecordedAudio(const Rosegarden::RealTime &time,
 
         if (audioFile)
         {
-            m_recordSegment->setAudioFileID(audioFile->getId());
+            m_recordSegment->setAudioFileId(audioFile->getId());
         }
         else
         {

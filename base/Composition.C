@@ -849,7 +849,7 @@ Composition::setPosition(timeT position)
 //
 void Composition::addTrack(Track *track)
 {
-    m_tracks[track->getID()] = track;
+    m_tracks[track->getId()] = track;
     updateRefreshStatuses();
 }
 

@@ -95,8 +95,8 @@ public:
 
     std::string getName() { return m_name; }
 
-    void setID(int id) { m_id = id; }
-    InstrumentId getID() const { return m_id; }
+    void setId(int id) { m_id = id; }
+    InstrumentId getId() const { return m_id; }
 
     void setName(const std::string &name) { m_name = name; }
     InstrumentType getType() const { return m_type; }

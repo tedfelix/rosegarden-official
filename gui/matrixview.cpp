@@ -721,7 +721,7 @@ void MatrixView::slotKeyPressed(unsigned int y, bool repeating)
     // Send out note of half second duration
     //
     Rosegarden::MappedEvent *mE = 
-        new Rosegarden::MappedEvent(ins->getID(),
+        new Rosegarden::MappedEvent(ins->getId(),
                                     Rosegarden::MappedEvent::MidiNoteOneShot,
                                     evPitch,
                                     Rosegarden::MidiMaxValue,
@@ -782,7 +782,7 @@ void MatrixView::playNote(Rosegarden::Event *event)
 
     // create
     Rosegarden::MappedEvent *mE = 
-        new Rosegarden::MappedEvent(ins->getID(),
+        new Rosegarden::MappedEvent(ins->getId(),
                                     Rosegarden::MappedEvent::MidiNoteOneShot,
                                     (Rosegarden::MidiByte)
                                         event->get<Rosegarden::Int>
@@ -814,7 +814,7 @@ void MatrixView::playPreview(int pitch)
     // Send out note of half second duration
     //
     Rosegarden::MappedEvent *mE = 
-        new Rosegarden::MappedEvent(ins->getID(),
+        new Rosegarden::MappedEvent(ins->getId(),
                                     Rosegarden::MappedEvent::MidiNoteOneShot,
                                     pitch,
                                     Rosegarden::MidiMaxValue,

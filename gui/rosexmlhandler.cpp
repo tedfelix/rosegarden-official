@@ -401,11 +401,11 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         if (segmentType) {
             if (segmentType == "audio")
             {
-                int audioFileID = atts.value("file").toInt();
+                int audioFileId = atts.value("file").toInt();
 
                 // check this file id exists on the AudioFileManager
 
-                if(m_audioFileManager.fileExists(audioFileID) == false)
+                if(m_audioFileManager.fileExists(audioFileId) == false)
                 {
                     m_errorString = i18n("Cannot find audio file reference");
                     return false;
@@ -414,7 +414,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
                 // Create an Audio segment and add its reference
                 //
                 m_currentSegment = new Segment(Rosegarden::Segment::Audio);
-                m_currentSegment->setAudioFileID(audioFileID);
+                m_currentSegment->setAudioFileId(audioFileId);
                 m_currentSegment->setStartTime(startTime);
             }
             else

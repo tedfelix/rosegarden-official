@@ -60,8 +60,8 @@ public:
 
     ~Track();
 
-    void setID(TrackId id) { m_id = id; }
-    TrackId getID() const { return m_id; }
+    void setId(TrackId id) { m_id = id; }
+    TrackId getId() const { return m_id; }
 
     void setMuted(bool muted) { m_muted = muted; }
     bool isMuted() { return m_muted; }

@@ -548,7 +548,7 @@ bool RG21Loader::parseStaveType()
 	if (track) {
 	    Rosegarden::Instrument *instr =
 		m_studio->assignMidiProgramToInstrument(programNo, false);
-	    if (instr) track->setInstrument(instr->getID());
+	    if (instr) track->setInstrument(instr->getId());
 	} 
     }
 

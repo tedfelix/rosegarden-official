@@ -214,7 +214,7 @@ void SegmentAudioPreview::updatePreview()
     Rosegarden::AudioFileManager &aFM = m_parent.getDocument()->getAudioFileManager();
 
     m_values =
-        aFM.getPreview(m_segment->getAudioFileID(),
+        aFM.getPreview(m_segment->getAudioFileId(),
                        m_segment->getAudioStartTime(),
                        m_segment->getAudioEndTime(),
                        rect().width());

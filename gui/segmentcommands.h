@@ -409,10 +409,12 @@ class AddTracksCommand : public XKCommand
 {
 public:
     AddTracksCommand(Rosegarden::Composition *composition,
-                     unsigned int nbTracks): 
+                     unsigned int nbTracks,
+                     Rosegarden::InstrumentId id): 
         XKCommand(getGlobalName()),
         m_composition(composition),
-        m_nbNewTracks(nbTracks) {}
+        m_nbNewTracks(nbTracks),
+        m_instrumentId(id) {}
 
     static QString getGlobalName() { return i18n("Add Tracks..."); }
 
@@ -422,6 +424,7 @@ public:
 private:
     Rosegarden::Composition *m_composition;
     unsigned int m_nbNewTracks;
+    Rosegarden::InstrumentId m_instrumentId;
 };
 
 

@@ -183,7 +183,7 @@ QFrame* TrackButtons::makeButton(unsigned int trackId)
                                VUMeter::PeakHold,
                                vuWidth,
                                buttonGap,
-                               track->getID());
+                               track->getId());
 
     m_trackMeters.push_back(vuMeter);
 
@@ -648,10 +648,10 @@ TrackButtons::slotInstrumentPopupActivated(int item)
 
         if (track != 0)
         {
-            track->setInstrument(inst->getID());
+            track->setInstrument(inst->getId());
 
             // select instrument
-            emit instrumentSelected((int)inst->getID());
+            emit instrumentSelected((int)inst->getId());
 
             m_instrumentLabels[m_popupItem]->
                     setText(strtoqstr(inst->getName()));

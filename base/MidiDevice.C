@@ -93,7 +93,7 @@ MidiDevice::generatePresentationList()
     InstrumentList::iterator it;
     for (it = m_instruments.begin(); it != m_instruments.end(); it++)
     {
-        if ((*it)->getID() >= MidiInstrumentBase)
+        if ((*it)->getId() >= MidiInstrumentBase)
             m_presentationInstrumentList.push_back(*it);
     }
 }

@@ -130,7 +130,7 @@ Studio::getInstrumentById(InstrumentId id)
         list = (*it)->getAllInstruments();
 
         for (iit = list.begin(); iit != list.end(); iit++)
-            if ((*iit)->getID() == id)
+            if ((*iit)->getId() == id)
                 return (*iit);
     }
 
@@ -354,7 +354,7 @@ Studio::unassignAllInstruments()
             {
                 // Only for true MIDI Instruments - not System ones
                 //
-                if ((*iit)->getID() >= MidiInstrumentBase)
+                if ((*iit)->getId() >= MidiInstrumentBase)
                     (*iit)->setSendProgramChange(false);
             }
         }
@@ -409,7 +409,7 @@ Studio::getSegmentName(InstrumentId id)
 
             for (iit = instList.begin(); iit != instList.end(); iit++)
             {
-                if ((*iit)->getID() == id)
+                if ((*iit)->getId() == id)
                 {
                     if ((*iit)->sendsProgramChange())
                     {

@@ -66,6 +66,15 @@ o selection of ALSA recording device
 Completed for 0.1.7
 ===================
 
+Big things
+----------
+
+o AudioManager
+
+
+Weird things
+------------
+
 o Saving RG files with audio [DONE]
 
 o Saving RG files should always append .rg extension [DONE]

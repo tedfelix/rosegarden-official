@@ -41,6 +41,8 @@
 namespace Rosegarden
 {
 
+typedef unsigned int AudioFileId;
+
 // The different types of audio file we support.
 //
 typedef enum
@@ -59,7 +61,7 @@ public:
     // The "read" constructor - open a file
     // an assign a name and id to it.
     //
-    AudioFile(unsigned int id,
+    AudioFile(AudioFileId id,
               const std::string &name,
               const std::string &fileName);
 
@@ -76,8 +78,8 @@ public:
 
     // Id of this audio file (used by AudioFileManager)
     //
-    void setId(unsigned int id) { m_id = id; }
-    unsigned int getId() const { return m_id; }
+    void setId(AudioFileId id) { m_id = id; }
+    AudioFileId getId() const { return m_id; }
 
     // Name of this sample - in addition to a filename
     //
@@ -165,7 +167,7 @@ public:
 protected:
 
     AudioFileType  m_type;   // AudioFile type
-    unsigned int   m_id;     // AudioFile ID
+    AudioFileId    m_id;     // AudioFile ID
     std::string    m_name;   // AudioFile name (not filename)
 
     unsigned int   m_bitsPerSample;

@@ -28,6 +28,7 @@
 
 #include "Event.h" // for timeT
 #include "Track.h"
+#include "Instrument.h"
 
 #include "segmentcommands.h" // for SegmentReconfigureCommand::SegmentRec
 
@@ -151,7 +152,7 @@ public slots:
     /**
      * Add given number of tracks
      */
-    void slotAddTracks(unsigned int nbTracks);
+    void slotAddTracks(unsigned int nbTracks, Rosegarden::InstrumentId id);
 
     void slotDeleteSelectedSegments();
 

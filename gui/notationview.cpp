@@ -1323,7 +1323,7 @@ void NotationView::showPreviewNote(int staffNo, double layoutX,
     // Send out note of half second duration
     //
     Rosegarden::MappedEvent *mE = 
-        new Rosegarden::MappedEvent(ins->getID(),
+        new Rosegarden::MappedEvent(ins->getId(),
                                     Rosegarden::MappedEvent::MidiNoteOneShot,
                                     pitch,
                                     Rosegarden::MidiMaxValue,

@@ -403,12 +403,12 @@ void TrackEditor::paintEvent(QPaintEvent* e)
     QWidget::paintEvent(e);
 }
 
-void TrackEditor::slotAddTracks(unsigned int nbNewTracks)
+void TrackEditor::slotAddTracks(unsigned int nbNewTracks,
+                                Rosegarden::InstrumentId id)
 {
     Composition &comp = m_document->getComposition();
 
-    AddTracksCommand* command = new AddTracksCommand(&comp, nbNewTracks);
-
+    AddTracksCommand* command = new AddTracksCommand(&comp, nbNewTracks, id); 
     addCommandToHistory(command);
 }
 

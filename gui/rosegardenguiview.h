@@ -184,7 +184,7 @@ public slots:
 
     void slotShowPreviews(bool);
 
-    void slotAddTracks(unsigned int);
+    void slotAddTracks(unsigned int, Rosegarden::InstrumentId);
 
     /*
      * Commands

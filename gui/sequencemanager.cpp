@@ -125,7 +125,7 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
             continue;
 
         // If soloing then skip until we get the solo track
-        if (comp.isSolo() && track->getID() != comp.getSelectedTrack())
+        if (comp.isSolo() && track->getId() != comp.getSelectedTrack())
             continue;
 
         // With audio segments we can cheat and look further
@@ -211,7 +211,7 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
             // Insert Audio event
             Rosegarden::MappedEvent *me =
                     new Rosegarden::MappedEvent(track->getInstrument(),
-                                                (*it)->getAudioFileID(),
+                                                (*it)->getAudioFileId(),
                                                 eventTime,
                                                 duration,
                                                 startTime);
@@ -1176,7 +1176,7 @@ SequenceManager::preparePlayback()
 
         streamOut << (*it)->getType();
         streamOut << (*it)->getMidiChannel();
-        streamOut << (*it)->getID();
+        streamOut << (*it)->getId();
 
         if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
                                       ROSEGARDEN_SEQUENCER_IFACE_NAME,
@@ -1193,13 +1193,13 @@ SequenceManager::preparePlayback()
             //
             if ((*it)->sendsBankSelect())
             {
-                mE = new MappedEvent((*it)->getID(),
+                mE = new MappedEvent((*it)->getId(),
                                      Rosegarden::MappedEvent::MidiController,
                                      Rosegarden::MIDI_CONTROLLER_BANK_MSB,
                                      (*it)->getMSB());
                 mC.insert(mE);
 
-                mE = new MappedEvent((*it)->getID(),
+                mE = new MappedEvent((*it)->getId(),
                                      Rosegarden::MappedEvent::MidiController,
                                      Rosegarden::MIDI_CONTROLLER_BANK_LSB,
                                      (*it)->getLSB());
@@ -1210,7 +1210,7 @@ SequenceManager::preparePlayback()
             //
             if ((*it)->sendsProgramChange())
             {
-                mE = new MappedEvent((*it)->getID(),
+                mE = new MappedEvent((*it)->getId(),
                                      Rosegarden::MappedEvent::MidiProgramChange,
                                      (*it)->getProgramChange());
                 mC.insert(mE);
@@ -1220,7 +1220,7 @@ SequenceManager::preparePlayback()
             //
             if ((*it)->sendsPan())
             {
-                mE = new MappedEvent((*it)->getID(),
+                mE = new MappedEvent((*it)->getId(),
                                      Rosegarden::MappedEvent::MidiController,
                                      Rosegarden::MIDI_CONTROLLER_PAN,
                                      (*it)->getPan());

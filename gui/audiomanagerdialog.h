@@ -65,7 +65,7 @@ public:
 
     AudioListItem(QListView *parent,
                   QString label,
-                  unsigned int id):
+                  Rosegarden::AudioFileId id):
                       QListViewItem(parent,
                                     label,
                                     "", "", "", "", "", "", ""),
@@ -74,7 +74,7 @@ public:
 
     AudioListItem(QListViewItem *parent, 
                   QString label,
-                  unsigned int id):
+                  Rosegarden::AudioFileId id):
                       QListViewItem(parent,
                                     label,
                                     "", "", "", "", "", "", ""),
@@ -82,7 +82,7 @@ public:
                                     m_segment(0) {;}
 
 
-    unsigned int getId() { return m_id; }
+    Rosegarden::AudioFileId getId() { return m_id; }
 
     void setStartTime(const Rosegarden::RealTime &time)
         { m_startTime = time; }
@@ -97,7 +97,7 @@ public:
     Rosegarden::Segment *getSegment() { return m_segment; }
 
 protected:
-    unsigned int m_id;
+    Rosegarden::AudioFileId m_id;
 
     // for audio segments
     Rosegarden::RealTime m_startTime;
@@ -129,7 +129,7 @@ public:
 
     // Scroll and expand to show this selected item
     //
-    void setSelected(unsigned int id, Rosegarden::Segment *segment);
+    void setSelected(Rosegarden::AudioFileId id, Rosegarden::Segment *segment);
 
     MultiViewCommandHistory *getCommandHistory();
 
@@ -162,9 +162,9 @@ signals:
     // Control signals so we can tell the sequencer about our changes
     // or actions.
     //
-    void addAudioFile(unsigned int);
-    void deleteAudioFile(unsigned int);
-    void playAudioFile(unsigned int,
+    void addAudioFile(Rosegarden::AudioFileId);
+    void deleteAudioFile(Rosegarden::AudioFileId);
+    void playAudioFile(Rosegarden::AudioFileId,
                        const Rosegarden::RealTime &,
                        const Rosegarden::RealTime &);
 
@@ -172,8 +172,9 @@ signals:
     //
     void segmentSelected(Rosegarden::Segment *);
     void deleteSegment(Rosegarden::Segment *);
-    void insertAudioSegment(unsigned int,
+    void insertAudioSegment(Rosegarden::AudioFileId,
                             Rosegarden::TrackId,
+                            Rosegarden::InstrumentId,
                             const Rosegarden::RealTime &,
                             const Rosegarden::RealTime &);
 

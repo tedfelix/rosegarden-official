@@ -394,7 +394,7 @@ SegmentSplitCommand::execute()
         if (m_segment->getType() == Rosegarden::Segment::Audio)
         {
 	    m_newSegment = new Segment(Rosegarden::Segment::Audio);
-            m_newSegment->setAudioFileID(m_segment->getAudioFileID());
+            m_newSegment->setAudioFileId(m_segment->getAudioFileId());
 
             // get the RealTime split time
             Rosegarden::RealTime splitDiff =
@@ -967,8 +967,9 @@ void AddTracksCommand::execute()
 
     for (unsigned int i = 0; i < m_nbNewTracks; ++i) {
         Track* track = new Rosegarden::Track;
-        track->setID(i + currentNbTracks);
+        track->setId(i + currentNbTracks);
         track->setPosition(i + currentNbTracks);
+        track->setInstrument(m_instrumentId);
 
         m_composition->addTrack(track);
     }

@@ -332,7 +332,7 @@ void RosegardenGUIView::slotEditSegmentAudio(Rosegarden::Segment *segment)
     }
 
     Rosegarden::AudioFile *aF = getDocument()->getAudioFileManager().
-                                    getAudioFile(segment->getAudioFileID());
+                                    getAudioFile(segment->getAudioFileId());
     if (aF == 0)
     {
         std::cerr << "RosegardenGUIView::slotEditSegmentAudio() - "
@@ -599,10 +599,11 @@ void RosegardenGUIView::slotShowPreviews(bool v)
     m_trackEditor->getSegmentCanvas()->repaint();
 }
 
-void RosegardenGUIView::slotAddTracks(unsigned int nbTracks)
+void RosegardenGUIView::slotAddTracks(unsigned int nbTracks,
+                                      Rosegarden::InstrumentId id)
 {
     kdDebug(KDEBUG_AREA) << "RosegardenGUIView::slotAddTracks(" << nbTracks << ")\n";
-    m_trackEditor->slotAddTracks(nbTracks);
+    m_trackEditor->slotAddTracks(nbTracks, id);
 }
 
 

@@ -763,15 +763,16 @@ public slots:
     void slotAudioManager();
     void slotAudioManagerClosed();
 
-    void slotAddAudioFile(unsigned int);
-    void slotDeleteAudioFile(unsigned int);
-    void slotPlayAudioFile(unsigned int,
+    void slotAddAudioFile(Rosegarden::AudioFileId);
+    void slotDeleteAudioFile(Rosegarden::AudioFileId);
+    void slotPlayAudioFile(Rosegarden::AudioFileId,
                            const Rosegarden::RealTime &,
                            const Rosegarden::RealTime &);
     void slotSelectSegment(Rosegarden::Segment *);
     void slotDeleteSegment(Rosegarden::Segment*);
-    void slotInsertAudioSegment(unsigned int,
+    void slotInsertAudioSegment(Rosegarden::AudioFileId,
                                 Rosegarden::TrackId,
+                                Rosegarden::InstrumentId,
                                 const Rosegarden::RealTime &,
                                 const Rosegarden::RealTime &);
     void slotSegmentsSelected(const Rosegarden::SegmentSelection &);

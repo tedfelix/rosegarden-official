@@ -1486,7 +1486,44 @@ void GetTimeResDialog::setInitialTimeRes(unsigned int v)
 void RosegardenGUIApp::slotAddTracks()
 {
     if (m_view)
-        m_view->slotAddTracks(5);
+    {
+        // Get the first Internal/MIDI instrument
+        //
+
+        Rosegarden::DeviceList *devices = m_doc->getStudio().getDevices();
+        Rosegarden::DeviceListIterator it;
+        Rosegarden::InstrumentList instruments;
+        Rosegarden::InstrumentList::iterator iit;
+        Rosegarden::Instrument *instr = 0;
+
+        for (it = devices->begin(); it != devices->end(); it++)
+        {
+            if ((*it)->getType() == Rosegarden::Device::Midi)
+            {
+                instruments = (*it)->getAllInstruments();
+    
+                for (iit = instruments.begin(); iit != instruments.end(); iit++)
+                {
+                    if (instr == 0)
+                    {
+                        instr = (*iit);
+                        break;
+                    }
+                    else
+                        break;
+                }
+            }
+        }
+
+        // default to the base number - might not actually exist though
+        //
+        Rosegarden::InstrumentId id = Rosegarden::MidiInstrumentBase;
+
+        if (instr) id = instr->getId();
+
+        // create tracks
+        m_view->slotAddTracks(5, id);
+    }
 }
 
 
@@ -2635,18 +2672,20 @@ RosegardenGUIApp::slotAudioManager()
                 SLOT(slotAudioManagerClosed()));
 
         connect(m_audioManagerDialog,
-                SIGNAL(playAudioFile(unsigned int,
+                SIGNAL(playAudioFile(Rosegarden::AudioFileId,
                                      const Rosegarden::RealTime &,
                                      const Rosegarden::RealTime&)),
-                SLOT(slotPlayAudioFile(unsigned int,
+                SLOT(slotPlayAudioFile(Rosegarden::AudioFileId,
                                        const Rosegarden::RealTime &,
                                        const Rosegarden::RealTime &)));
 
-        connect(m_audioManagerDialog, SIGNAL(addAudioFile(unsigned int)),
-                SLOT(slotAddAudioFile(unsigned int)));
+        connect(m_audioManagerDialog,
+                SIGNAL(addAudioFile(Rosegarden::AudioFileId)),
+                SLOT(slotAddAudioFile(Rosegarden::AudioFileId)));
 
-        connect(m_audioManagerDialog, SIGNAL(deleteAudioFile(unsigned int)),
-                SLOT(slotDeleteAudioFile(unsigned int)));
+        connect(m_audioManagerDialog,
+                SIGNAL(deleteAudioFile(Rosegarden::AudioFileId)),
+                SLOT(slotDeleteAudioFile(Rosegarden::AudioFileId)));
 
         connect(m_audioManagerDialog,
                 SIGNAL(segmentSelected(Rosegarden::Segment*)),
@@ -2657,12 +2696,14 @@ RosegardenGUIApp::slotAudioManager()
                 SLOT(slotDeleteSegment(Rosegarden::Segment*)));
 
         connect(m_audioManagerDialog,
-                SIGNAL(insertAudioSegment(unsigned int,
+                SIGNAL(insertAudioSegment(Rosegarden::AudioFileId,
                                           Rosegarden::TrackId,
+                                          Rosegarden::InstrumentId,
                                           const Rosegarden::RealTime&,
                                           const Rosegarden::RealTime&)),
-                SLOT(slotInsertAudioSegment(unsigned int,
+                SLOT(slotInsertAudioSegment(Rosegarden::AudioFileId,
                                             Rosegarden::TrackId,
+                                            Rosegarden::InstrumentId,
                                             const Rosegarden::RealTime&,
                                             const Rosegarden::RealTime&)));
 
@@ -2814,8 +2855,9 @@ RosegardenGUIApp::slotDeleteSegment(Rosegarden::Segment *segment)
 }
 
 void
-RosegardenGUIApp::slotInsertAudioSegment(unsigned int id,
+RosegardenGUIApp::slotInsertAudioSegment(Rosegarden::AudioFileId id,
                                          Rosegarden::TrackId trackId,
+                                         Rosegarden::InstrumentId instrumentId,
                                          const Rosegarden::RealTime &startTime,
                                          const Rosegarden::RealTime &endTime)
 {

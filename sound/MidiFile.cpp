@@ -774,14 +774,14 @@ MidiFile::convertToRosegarden()
                     // assign it here
                     if (instr != 0) {
 			
-                        track->setInstrument(instr->getID());   
+                        track->setInstrument(instr->getId());
 
 			// give the Segment a name based on the the Instrument
 			//
 			if (rosegardenSegment != 0)
 			{
 			    rosegardenSegment->setLabel
-				(m_studio->getSegmentName(instr->getID()));
+				(m_studio->getSegmentName(instr->getId()));
 			}
 		    }
                 }
