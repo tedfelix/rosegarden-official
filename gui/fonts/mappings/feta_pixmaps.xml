@@ -60,7 +60,9 @@
 
         <symbol name="MUSICAL SYMBOL MULTI REST" src="rests--1"/>
         <symbol name="MUSICAL SYMBOL WHOLE REST" src="rests-0"/>
+        <symbol name="MUSICAL SYMBOL WHOLE REST OUTSIDE" src="rests-0o"/>
         <symbol name="MUSICAL SYMBOL HALF REST" src="rests-1"/>
+        <symbol name="MUSICAL SYMBOL HALF REST OUTSIDE" src="rests-1o"/>
         <symbol name="MUSICAL SYMBOL QUARTER REST" src="rests-2"/>
         <symbol name="MUSICAL SYMBOL EIGHTH REST" src="rests-3"/>
         <symbol name="MUSICAL SYMBOL SIXTEENTH REST" src="rests-4"/>

@@ -60,6 +60,7 @@ public:
     void setStemLength(int length)        { m_stemLength       = length;    }
     void setLegerLines(int lines)         { m_legerLines       = lines;     }
     void setSlashes(int slashes)          { m_slashes          = slashes;   }
+    void setRestOutside(bool os)          { m_rest_outside_stave = os;      }
 
     void setSelected(bool selected)       { m_selected         = selected;  }
     void setHighlighted(bool highlighted) { m_highlighted      = highlighted;}
@@ -117,6 +118,7 @@ private:
     bool    m_trigger;
     bool    m_onLine;
     int     m_safeVertDistance;
+    bool    m_rest_outside_stave;
 
     bool    m_beamed;
     int     m_nextBeamCount;

@@ -954,6 +954,12 @@ NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
 		restParams.setDots(dots);
 		setTuplingParameters(elt, restParams);
 		restParams.setQuantized(false);
+		bool restOutside = false;
+		if (elt->event()->has(properties.REST_OUTSIDE_STAVE))
+			(void)elt->event()->get<Bool>(
+						properties.REST_OUTSIDE_STAVE,
+						restOutside);
+    		restParams.setRestOutside(restOutside);
 
 		if (m_printPainter) {
 		    m_notePixmapFactory->drawRest

@@ -141,6 +141,28 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
                 el->setLayoutY(staff.getLayoutYForHeight(4) + displacedY);
             }
 
+	    // Fix for bug 1090767 Rests outside staves have wrong glyphs
+	    // by William <rosegarden4c AT orthoset.com>
+	    // We use a "rest-outside-stave" glyph for any minim or semibreve
+	    // rest that has been displaced vertically e.g. by fine-positioning
+	    // even if the rest is still inside the stave. Strictly, the
+	    // "rest-outside-stave" glyphs should not be used if the rests are
+	    // inside a stave but we do use them because the typography in such
+	    // cases is hard to get right. The glyphs correspond to character
+	    // numbers 1D13B and 1D13C in the Unicode 4.0 standard.
+
+	    if (displacedY != 0 &&
+		((el->event()->get<Int>(NOTE_TYPE) == Note::HalfNote) ||
+		 (el->event()->get<Int>(NOTE_TYPE) == Note::WholeNote))) {
+		el->event()->setMaybe<Bool>(m_properties.REST_OUTSIDE_STAVE,
+					    true);
+		NOTATION_DEBUG << "REST_OUTSIDE_STAVE : displacedY : "
+
+				<< displacedY
+				<< " time : " << (el->getViewAbsoluteTime())
+				<< endl;
+	    }
+
         } else if (el->isNote()) {
 
             NotationChord chord(*notes, i, m_notationQuantizer, m_properties);

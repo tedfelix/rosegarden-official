@@ -72,6 +72,7 @@ public:
     const Rosegarden::PropertyName SLUR_LENGTH;
     const Rosegarden::PropertyName LYRIC_EXTRA_WIDTH;
     const Rosegarden::PropertyName REST_TOO_SHORT;
+    const Rosegarden::PropertyName REST_OUTSIDE_STAVE;
 
     // Set in applyBeam in notationsets.cpp:
 

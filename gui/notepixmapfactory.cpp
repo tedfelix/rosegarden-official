@@ -1794,7 +1794,8 @@ NotePixmapFactory::makeRestPixmap(const NotePixmapParameters &params)
 {
     Rosegarden::Profiler profiler("NotePixmapFactory::makeRestPixmap");
 
-    CharName charName(m_style->getRestCharName(params.m_noteType));
+    CharName charName(m_style->getRestCharName(params.m_noteType,
+    					       params.m_rest_outside_stave));
     bool encache = false;
 
     if (params.m_tupletCount == 0 && !m_selected && !m_shaded) {
@@ -1837,7 +1838,8 @@ void
 NotePixmapFactory::drawRestAux(const NotePixmapParameters &params,
 			       QPoint &hotspot, QPainter *painter, int x, int y)
 {
-    CharName charName(m_style->getRestCharName(params.m_noteType));
+    CharName charName(m_style->getRestCharName(params.m_noteType,
+    					       params.m_rest_outside_stave));
     NoteCharacter character = getCharacter(charName,
 					   params.m_quantized ? QuantizedColour :
 					   PlainColour,
@@ -3199,7 +3201,8 @@ int NotePixmapFactory::getBarMargin() const {
 }
 
 int NotePixmapFactory::getRestWidth(const Rosegarden::Note &restType) const {
-    return m_font->getWidth(m_style->getRestCharName(restType.getNoteType()))
+    return m_font->getWidth(m_style->getRestCharName(restType.getNoteType(),
+    						    false)) // small inaccuracy!
         + (restType.getDots() * getDotWidth());
 }
 

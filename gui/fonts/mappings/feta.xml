@@ -66,7 +66,9 @@
 
         <symbol name="MUSICAL SYMBOL MULTI REST" font-id="0" glyph="7"/>
         <symbol name="MUSICAL SYMBOL WHOLE REST" font-id="0" code="32" glyph="1"/>
+        <symbol name="MUSICAL SYMBOL WHOLE REST OUTSIDE" font-id="0" code="34" glyph="3"/>
         <symbol name="MUSICAL SYMBOL HALF REST" font-id="0" code="33" glyph="2"/>
+        <symbol name="MUSICAL SYMBOL HALF REST OUTSIDE" font-id="0" code="35" glyph="4"/>
         <symbol name="MUSICAL SYMBOL QUARTER REST" font-id="0" code="38" glyph="8"/>
         <symbol name="MUSICAL SYMBOL EIGHTH REST" font-id="0" code="39" glyph="10"/>
         <symbol name="MUSICAL SYMBOL SIXTEENTH REST" font-id="0" code="41" glyph="11"/>

@@ -55,6 +55,7 @@ NotationProperties::NotationProperties(const std::string &prefix) :
     SLUR_LENGTH			(prefix + "SlurLength"),
     LYRIC_EXTRA_WIDTH		(prefix + "LyricExtraWidth"),
     REST_TOO_SHORT              (prefix + "RestTooShort"),
+    REST_OUTSIDE_STAVE          (prefix + "RestOutsideStave"),
 
     BEAM_GRADIENT		(prefix + "BeamGradient"),
     BEAM_SECTION_WIDTH		(prefix + "BeamSectionWidth"),
