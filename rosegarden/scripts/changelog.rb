@@ -1,4 +1,4 @@
-#!/usr/local/bin/ruby -w
+#!/usr/bin/ruby -w
 
 require 'getoptlong'
 require 'date'
@@ -11,7 +11,7 @@ class LogExtractor
   end
 
   def extract
-    cmd = "cvs -q -z3 log -r -d '#{@from}<#{@to}' #{@files}"
+    cmd = "cvs -q -z3 log -d '#{@from}<#{@to}' #{@files}"
     puts cmd if $DEBUG
     @logStream = IO.popen cmd
     @logParser = LogParser.new @logStream
@@ -52,8 +52,9 @@ class LogParser
 	revisionNumber = m[1]
 	logEntry, lastLog = parseLogEntry
 
-	# Take the long in account only if it's from HEAD
+	# Take the log in account only if it's from HEAD
 	if (HeadRevNum.match(revisionNumber))
+	  # Update the list of files this log entry pertains to
 	  files = @logs[logEntry] || []
 	  files << workingFile unless files.include? workingFile
 	  @logs[logEntry] = files
