@@ -1358,6 +1358,10 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
                                              (*it)->getName(),
                                              (*it)->getChannel(),
                                              device);
+
+        // set the sub-ordering
+        instrument->setSubOrdering((*it)->getSubOrdering());
+
         device->addInstrument(instrument);
     }
 

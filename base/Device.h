@@ -84,6 +84,10 @@ public:
     virtual InstrumentList getAllInstruments() const = 0;
     virtual InstrumentList getPresentationInstruments() const = 0;
 
+    // Return the depth of sub-ordering of Instruments in this Device
+    //
+    int getSubOrderDepth() const;
+
 protected:
     InstrumentList     m_instruments;
     std::string        m_name;

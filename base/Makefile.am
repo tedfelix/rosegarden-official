@@ -15,6 +15,7 @@ libbase_la_SOURCES = AnalysisTypes.C \
 		     Composition.C \
 		     CompositionTimeSliceAdapter.C \
                      Configuration.C \
+                     Device.C \
 		     Equation.C \
 		     Event.C \
 		     Exception.C \

@@ -647,58 +647,98 @@ TrackButtons::populateInstrumentPopup()
     // Get the list
     Rosegarden::InstrumentList list = studio.getPresentationInstruments();
     Rosegarden::InstrumentList::iterator it;
-    Rosegarden::DeviceId currentDevId = -1;
+    int currentDevId = -1;
+    int groupBase = -1;
 
     for (it = list.begin(); it != list.end(); it++) {
 
         if (! (*it)) continue; // sanity check
 
-        //!!! m_instrumentPopup->insertItem(strtoqstr((*it)->getName()), i++);
 	std::string iname((*it)->getName());
 	std::string pname((*it)->getProgramName());
         Rosegarden::DeviceId devId = (*it)->getDevice()->getId();
 
-        /*
-        RG_DEBUG << "TrackButtons::populateInstrumentPopup - inst. name : '"
-                 << iname.c_str()
-                 << "' - prog. name : '" << pname << "' - devId : " << devId
-                 << " - device name : '" << (*it)->getDevice()->getName().c_str()
-                 << "' - dev. addr : " << (*it)->getDevice()
-                 << endl;
-                 */
+	if (devId != (Rosegarden::DeviceId)(currentDevId)) {
 
-	if (devId != currentDevId) {
-            // this is another device, create a new submenu for it
+            currentDevId = int(devId);
+
+            // Check for sub-ordering
             //
-            currentDevId = devId;
+            int subOrderDepth = studio.getDevice(devId)->getSubOrderDepth();
 
-            QPopupMenu *subMenu = new QPopupMenu(this);
-            m_instrumentPopup->
-                insertItem(strtoqstr((*it)->getDevice()->getName()), subMenu);
+            if (subOrderDepth)
+            {
+                QPopupMenu *groupMenu = new QPopupMenu(this);
 
-            m_instrumentSubMenu.push_back(subMenu);
+                m_instrumentPopup->
+                    insertItem(strtoqstr((*it)->getDevice()->getName()),
+                               groupMenu);
 
-            // Connect up the submenu
-            //
-            connect(subMenu, SIGNAL(activated(int)),
-                    SLOT(slotInstrumentPopupActivated(int)));
+                // store the first sub menu position
+                groupBase = int(m_instrumentSubMenu.size());
 
-            connect(subMenu, SIGNAL(aboutToHide()),
-                    SLOT(slotInstrumentPopupHiding()));
+                // Add a number of groups
+                //
+                for (int j = 0; j < subOrderDepth + 1; ++j)
+                {
+                    QPopupMenu *subMenu = new QPopupMenu(this);
+
+                    /*
+                    // A bit wide
+                    QString label = strtoqstr((*it)->getDevice()->getName()) +
+                        i18n(" (sub-group ") + QString("%1)").arg(j+1);
+                    */
+
+                    QString label = i18n("sub-group ") + QString("%1").arg(j+1);
+
+                    groupMenu->insertItem(label, subMenu);
+
+                    // insert sub-menu
+                    m_instrumentSubMenu.push_back(subMenu);
+
+                    // connect it
+                    connect(subMenu, SIGNAL(activated(int)),
+                            SLOT(slotInstrumentPopupActivated(int)));
+
+                    connect(subMenu, SIGNAL(aboutToHide()),
+                            SLOT(slotInstrumentPopupHiding()));
+                }
+            }
+            else // for no sub-ordering
+            {
+                QPopupMenu *subMenu = new QPopupMenu(this);
+                m_instrumentPopup->
+                    insertItem(strtoqstr((*it)->getDevice()->getName()),
+                               subMenu);
+
+                m_instrumentSubMenu.push_back(subMenu);
+
+                // Connect up the submenu
+                //
+                connect(subMenu, SIGNAL(activated(int)),
+                        SLOT(slotInstrumentPopupActivated(int)));
+
+                connect(subMenu, SIGNAL(aboutToHide()),
+                        SLOT(slotInstrumentPopupHiding()));
+                groupBase = -1;
+            }
 	}
+
 	if (pname != "") iname += " (" + pname + ")";
 
-	m_instrumentSubMenu[m_instrumentSubMenu.size() - 1]->insertItem(strtoqstr(iname), i++);
+        if (groupBase == -1)
+        {
+	    m_instrumentSubMenu[m_instrumentSubMenu.size() - 1]->
+                insertItem(strtoqstr(iname), i++);
+        }
+        else
+        {
+	    m_instrumentSubMenu[groupBase + (*it)->getSubOrdering()]->
+                insertItem(strtoqstr(iname), i++);
+        }
+
     }
 
-    /*
-      QPopupMenu *subMenu = new QPopupMenu(this);
-      m_instrumentPopup->insertItem(i18n("Sub Menu"), subMenu);
-
-      subMenu->insertItem(QString("Thing"), 0);
-      subMenu->insertItem(QString("Thing 2"), 1);
-      subMenu->insertItem(QString("Thing 3"), 2);
-    */
 }
 
 // Set the relevant Instrument for the Track
