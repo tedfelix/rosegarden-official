@@ -102,8 +102,8 @@ NoteStyleFactory::getAvailableStyleNames()
     QString styleDir = KGlobal::dirs()->findResource("appdata", "styles/");
     QDir dir(styleDir);
     if (!dir.exists()) {
-        cerr << "NoteStyle::getAvailableStyleNames: directory \"" << styleDir
-             << "\" not found" << endl;
+        std::cerr << "NoteStyle::getAvailableStyleNames: directory \"" << styleDir
+             << "\" not found" << std::endl;
         return names;
     }
 
