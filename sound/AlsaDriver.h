@@ -38,6 +38,7 @@
 #include "Instrument.h"
 #include "Device.h"
 #include "AlsaPort.h"
+#include "RunnablePluginInstance.h"
 
 #ifdef HAVE_LIBJACK
 #include "JackDriver.h"

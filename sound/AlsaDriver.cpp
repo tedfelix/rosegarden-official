@@ -147,16 +147,6 @@ AlsaDriver::shutdown()
         m_midiHandle = 0;
     }
 
-#ifdef HAVE_LADSPA
-#ifdef DEBUG_ALSA
-    std::cout << "AlsaDriver::shutdown - unloading LADSPA" << std::endl;
-#endif
-//!!!    m_studio->unloadAllPluginLibraries();
-#ifdef DEBUG_ALSA
-    std::cout << "AlsaDriver::shutdown - unloading LADSPA done" << std::endl;
-#endif
-#endif // HAVE_LADSPA
-
     m_haveShutdown = true;
 }
 

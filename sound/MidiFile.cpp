@@ -259,7 +259,7 @@ bool
 MidiFile::skipToNextTrack(ifstream *midiFile)
 {
     string buffer, buffer2;
-    m_trackByteCount = 0;
+    m_trackByteCount = -1;
     m_decrementCount = false;
 
     while(!midiFile->eof() && (m_decrementCount == false ))
@@ -279,7 +279,7 @@ MidiFile::skipToNextTrack(ifstream *midiFile)
 
     }
 
-    if ( m_trackByteCount == 0 ) // we haven't found a track
+    if ( m_trackByteCount == -1 ) // we haven't found a track
         return(false);
     else
         return(true);

@@ -372,16 +372,12 @@ PlayableAudioFile::scanTo(const RealTime &time)
 
     if (m_isSmallFile) {
 
-//!!!	size_t frames = RealTime::realTime2Frame(time, m_targetSampleRate);
-//!!!	m_currentFrameOffset = frames;
 	m_currentScanPoint = time;
 	ok = true;
 
     } else {
 
-//!!!	size_t frames = RealTime::realTime2Frame(time, m_audioFile->getSampleRate());
 	ok = m_audioFile->scanTo(m_file, time);
-//!!!	if (ok) m_currentFrameOffset = frames;
 	if (ok) m_currentScanPoint = time;
     }
 
@@ -421,21 +417,7 @@ PlayableAudioFile::getSampleFramesAvailable()
 
     return actual;
 }
-/*!!!
-size_t
-PlayableAudioFile::getSamples(sample_t *destination, int channel, size_t samples)
-{
-    assert(0);
-    return m_ringBuffers[channel]->read(destination, samples);
-}
 
-size_t
-PlayableAudioFile::addSamples(sample_t *destination, int channel, size_t samples)
-{
-    assert(0);
-    return m_ringBuffers[channel]->readAdding(destination, samples);
-}
-*/
 size_t
 PlayableAudioFile::addSamples(std::vector<sample_t *> &destination,
 			      size_t channels, size_t nframes, size_t offset)
@@ -529,22 +511,6 @@ PlayableAudioFile::addSamples(std::vector<sample_t *> &destination,
 
     return 0;
 }
-
-/*!!!
-size_t
-PlayableAudioFile::skipSamples(int channel, size_t samples)
-{
-    m_bufferFillTime = m_bufferFillTime + RealTime::frame2RealTime(samples, m_targetSampleRate);
-    return true;
-//    return m_ringBuffers[channel]->skip(samples);
-}
-*/
-/*!!!
-PlayableAudioFile::sample_t
-PlayableAudioFile::getSample(int channel)
-{
-    return m_ringBuffers[channel]->readOne();
-    }*/
 
 void
 PlayableAudioFile::checkSmallFileCache(size_t smallFileSize)
@@ -736,31 +702,6 @@ PlayableAudioFile::updateBuffers()
 #ifdef DEBUG_PLAYABLE
     std::cerr << "Want " << fileFrames << " (" << block << ") from file (" << (m_duration + m_startIndex - m_currentScanPoint - block) << " to go)" << std::endl;
 #endif
-
-/*
-    size_t endFrames = RealTime::realTime2Frame
-	(m_duration + m_startIndex, getSourceSampleRate());
-
-#ifdef DEBUG_PLAYABLE
-    std::cerr << "Want " << fileFrames << " from file (leaving " << long(endFrames - m_currentFrameOffset - fileFrames) << " to go)" << std::endl;
-#endif
-
-    if (m_currentFrameOffset + fileFrames > endFrames) {
-	fileFrames = endFrames - m_currentFrameOffset;
-
-	if (m_targetSampleRate != int(getSourceSampleRate())) {
-	    nframes = size_t(float(fileFrames) * float(m_targetSampleRate) /
-			     float(getSourceSampleRate()));
-	} else {
-	    nframes = fileFrames;
-	}
-
-#ifdef DEBUG_PLAYABLE
-	std::cerr << "Adjusted fileFrames to " << fileFrames << ", nframes to " << nframes << std::endl;
-#endif
-	m_fileEnded = true;
-    }
-*/
 
     //!!! need to be doing this in initialise, want to avoid allocations here
     if ((getBytesPerFrame() * fileFrames) > m_rawFileBufferSize) {

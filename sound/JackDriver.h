@@ -27,10 +27,7 @@
 #ifdef HAVE_ALSA
 #ifdef HAVE_LIBJACK
 
-#ifdef HAVE_LADSPA
-#include "LADSPAPluginInstance.h"
-#endif
-
+#include "RunnablePluginInstance.h"
 #include <jack/jack.h>
 #include "SoundDriver.h"
 #include "Instrument.h"

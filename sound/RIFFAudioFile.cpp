@@ -135,8 +135,6 @@ RIFFAudioFile::scanTo(const RealTime &time)
 bool
 RIFFAudioFile::scanTo(std::ifstream *file, const RealTime &time)
 {
-//    Rosegarden::Profiler("RIFFAudioFile::scanTo", true); //!!!
-
     // sanity
     if (file == 0) return false;
 
@@ -377,13 +375,6 @@ RIFFAudioFile::readFormatChunk()
 
     if (length != m_fileSize)
     {
-	/*!!!
-        char value[80];
-        sprintf(value, "(read %u when size is %u)", length, m_fileSize);
-        throw(std::string("\"" + m_fileName +
-              "\" corrupted (wrong length) - " +
-              std::string(value)));
-	*/
 	std::cerr << "WARNING: RIFFAudioFile: incorrect length ("
 		  << length << ", file size is " << m_fileSize << "), ignoring"
 		  << std::endl;
