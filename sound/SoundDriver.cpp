@@ -52,7 +52,7 @@ PlayableAudioFile::PlayableAudioFile(InstrumentId instrumentId,
 {
 #define DEBUG_PLAYABLE_CONSTRUCTION
 #ifdef DEBUG_PLAYABLE_CONSTRUCTION
-    std::cout << "PlayableAudioFile::PlayableAudioFile - creating" << std::endl;
+    std::cout << "PlayableAudioFile::PlayableAudioFile - creating " << this << std::endl;
 #endif
 
 }
@@ -73,6 +73,11 @@ PlayableAudioFile::PlayableAudioFile(const PlayableAudioFile &pAF)
     m_initialised = false;
     m_externalRingbuffer = false;
     m_runtimeSegmentId = pAF.getRuntimeSegmentId();
+
+#ifdef DEBUG_PLAYABLE_CONSTRUCTION
+    std::cout << "PlayableAudioFile::PlayableAudioFile - creating " << this
+              << " copied from " << &pAF << std::endl;
+#endif
 }
 
 
@@ -80,6 +85,10 @@ void
 PlayableAudioFile::initialise()
 {
     if (m_initialised) return;
+
+#ifdef DEBUG_PLAYABLE_CONSTRUCTION
+    std::cout << "PlayableAudioFile::initialise() " << this << std::endl;
+#endif
 
 
     m_file = new std::ifstream(m_audioFile->getFilename().c_str(),
@@ -139,7 +148,7 @@ PlayableAudioFile::~PlayableAudioFile()
     delete [] m_playBuffer;
 
 #ifdef DEBUG_PLAYABLE_CONSTRUCTION
-    std::cout << "PlayableAudioFile::~PlayableAudioFile - destroying" << std::endl;
+    std::cout << "PlayableAudioFile::~PlayableAudioFile - destroying - " << this << std::endl;
 #endif
 }
  
@@ -160,6 +169,7 @@ PlayableAudioFile::scanTo(const RealTime &time)
 char *
 PlayableAudioFile::getSampleFrames(unsigned int frames)
 {
+    assert(m_initialised);
 
     if (m_audioFile)
     {
@@ -190,6 +200,8 @@ PlayableAudioFile::getSampleFrames(unsigned int frames)
 std::string
 PlayableAudioFile::getSampleFrameSlice(const RealTime &time)
 {
+    assert(m_initialised);
+
     if (m_audioFile)
     {
         return m_audioFile->getSampleFrameSlice(m_file, time);
@@ -410,8 +422,11 @@ SoundDriver::getAudioPlayQueueNotDefunct()
 
     for (it = m_audioPlayQueue.begin(); it != m_audioPlayQueue.end(); ++it)
     {
-        if ((*it)->getStatus() != PlayableAudioFile::DEFUNCT)
+        if ((*it)->getStatus() != PlayableAudioFile::DEFUNCT) {
             rq.push_back(*it);
+            if (!(*it)->isInitialised())
+                (*it)->initialise(); // start audio buffering
+        }
     }
 
     return rq;

@@ -4875,9 +4875,9 @@ AlsaDriver::jackDiskThread(void *arg)
 
                 for (it = audioQueue.begin(); it != audioQueue.end(); ++it)
                 {
-                    if (!(*it)->isInitialised())
-                        (*it)->initialise(); // start audio buffering
-                    else
+//                     if (!(*it)->isInitialised())
+//                         (*it)->initialise(); // start audio buffering
+//                     else
                         (*it)->fillRingBuffer(); // Let the audio file work out if the buffers
                                                  // need filling and if so by how much.
 
