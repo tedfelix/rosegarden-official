@@ -1094,71 +1094,6 @@ void NotationView::slotEditAddClef()
     delete dialog;
 }                       
 
-void NotationView::slotEditAddTempo()
-{
-    timeT insertionTime = getInsertionTime();
-
-    TempoDialog tempoDlg(this, getDocument());
-
-    connect(&tempoDlg,
-            SIGNAL(changeTempo(Rosegarden::timeT,
-                               double, TempoDialog::TempoDialogAction)),
-            this,
-            SIGNAL(changeTempo(Rosegarden::timeT,
-                               double, TempoDialog::TempoDialogAction)));
-        
-    tempoDlg.setTempoPosition(insertionTime);
-    tempoDlg.exec();
-}
-
-void NotationView::slotEditAddTimeSignature()
-{
-    NotationStaff *staff = m_staffs[m_currentStaff];
-    Segment &segment = staff->getSegment();
-    Rosegarden::Composition *composition = segment.getComposition();
-    timeT insertionTime = getInsertionTime();
-
-    int barNo = composition->getBarNumber(insertionTime);
-    bool atStartOfBar = (insertionTime == composition->getBarStart(barNo));
-//    TimeSignature timeSig = composition->getTimeSignatureAt(insertionTime);
-
-
-    //!!! experimental:
-    Rosegarden::CompositionTimeSliceAdapter adapter
-        (&getDocument()->getComposition(), insertionTime,
-         getDocument()->getComposition().getDuration());
-    Rosegarden::AnalysisHelper helper;
-    Rosegarden::TimeSignature timeSig = helper.guessTimeSignature(adapter);
-
-
-    TimeSignatureDialog *dialog = new TimeSignatureDialog
-        (this, timeSig, barNo, atStartOfBar,
-         i18n("Estimated time signature shown"));
-    
-    if (dialog->exec() == QDialog::Accepted) {
-
-        TimeSignatureDialog::Location location = dialog->getLocation();
-        if (location == TimeSignatureDialog::StartOfBar) {
-            insertionTime = composition->getBarStartForTime(insertionTime);
-        }
-        
-        if (dialog->shouldNormalizeRests()) {
-            
-            addCommandToHistory(new AddTimeSignatureAndNormalizeCommand
-                                (composition, insertionTime,
-                                 dialog->getTimeSignature()));
-            
-        } else {
-            
-            addCommandToHistory(new AddTimeSignatureCommand
-                                (composition, insertionTime,
-                                 dialog->getTimeSignature()));
-        }
-    }
-    
-    delete dialog;
-}                       
-
 void NotationView::slotEditAddKeySignature()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
@@ -1709,11 +1644,62 @@ void
 NotationView::slotInsertableNoteOnReceived(int pitch)
 {
     NOTATION_DEBUG << "NotationView::slotInsertableNoteOnReceived: " << pitch << endl;
+
+    KToggleAction *action = dynamic_cast<KToggleAction *>
+	(actionCollection()->action("toggle_step_by_step"));
+    if (!action) {
+	NOTATION_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
+	return;
+    }
+    if (!action->isChecked()) return;
+
+    Segment &segment = m_staffs[m_currentStaff]->getSegment();
+
+    NoteInserter *noteInserter = dynamic_cast<NoteInserter *>(m_tool);
+    if (!noteInserter) {
+	NOTATION_DEBUG << "No note duration selected" << endl;
+        return;
+    }
+
+    KTmpStatusMsg msg(i18n("Inserting note"), this);
+        
+    NOTATION_DEBUG << "Inserting note at pitch " << pitch << endl;
+    
+    noteInserter->insertNote(segment, getInsertionTime(), pitch,
+                             Rosegarden::Accidentals::NoAccidental);
 }
 
 void
 NotationView::slotInsertableNoteOffReceived(int pitch)
 {
     NOTATION_DEBUG << "NotationView::slotInsertableNoteOffReceived: " << pitch << endl;
+}
+
+void
+NotationView::slotToggleStepByStep()
+{
+    KToggleAction *action = dynamic_cast<KToggleAction *>
+	(actionCollection()->action("toggle_step_by_step"));
+    if (!action) {
+	NOTATION_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
+	return;
+    }
+    if (action->isChecked()) {
+	emit stepByStepTargetRequested(0);
+    } else {
+	emit stepByStepTargetRequested(this);
+    }
+}
+
+void
+NotationView::slotStepByStepTargetRequested(QObject *obj)
+{
+    KToggleAction *action = dynamic_cast<KToggleAction *>
+	(actionCollection()->action("toggle_step_by_step"));
+    if (!action) {
+	NOTATION_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
+	return;
+    }
+    action->setChecked(obj == this);
 }
 

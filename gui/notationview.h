@@ -354,6 +354,8 @@ public slots:
     void slotEraseSelected();
     void slotSelectSelected();
 
+    void slotToggleStepByStep();
+
     /// status stuff
     void slotUpdateInsertModeStatus();
     void slotUpdateAnnotationsStatus();
@@ -422,8 +424,6 @@ public slots:
     void slotAddSlashes();
 
     void slotEditAddClef();
-    void slotEditAddTempo();
-    void slotEditAddTimeSignature();
     void slotEditAddKeySignature();
 
     void slotDebugDump();
@@ -539,11 +539,14 @@ public slots:
     /// Changes the hlayout spacing of the staffs on the view
     void slotChangeSpacingFromAction();
 
-    /// Note-on received asynchronously -- consider step-by-step editing [should be moved to a base class]
+    /// Note-on received asynchronously -- consider step-by-step editing
     void slotInsertableNoteOnReceived(int pitch);
 
-    /// Note-off received asynchronously -- consider step-by-step editing [should be moved to a base class]
+    /// Note-off received asynchronously -- consider step-by-step editing
     void slotInsertableNoteOffReceived(int pitch);
+
+    /// The given QObject has originated a step-by-step-editing request
+    void slotStepByStepTargetRequested(QObject *);
 
 signals:
     /**
@@ -563,10 +566,6 @@ signals:
      */
     void usedSelection();
 
-    void changeTempo(Rosegarden::timeT,  // tempo change time
-                     double,             // tempo value
-                     TempoDialog::TempoDialogAction); // tempo action
-
     void play();
     void stop();
     void fastForwardPlayback();
@@ -579,6 +578,8 @@ signals:
     void setProgress(int);
     void incrementProgress(int);
     void setOperationName(QString);
+
+    void stepByStepTargetRequested(QObject *);
 
 protected:
 

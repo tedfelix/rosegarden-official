@@ -28,6 +28,7 @@
 #include <qaccel.h>
 
 #include "editviewbase.h"
+#include "dialogs.h" // ugh -- for TempoDialog::TempoDialogAction
 
 #include "Event.h"
 #include "Selection.h"
@@ -126,6 +127,11 @@ public:
         { return m_currentEventSelection; }
 
 
+signals:
+    void changeTempo(Rosegarden::timeT,  // tempo change time
+                     double,             // tempo value
+                     TempoDialog::TempoDialogAction); // tempo action
+
 public slots:
     /**
      * Called when a mouse press occurred on an active canvas item
@@ -150,6 +156,9 @@ public slots:
     void slotJumpForward();
     void slotJumpToStart();
     void slotJumpToEnd();
+
+    void slotAddTempo();
+    void slotAddTimeSignature();
 
 protected:
 
@@ -180,8 +189,15 @@ protected:
     void addControl(QWidget*);
 
     /**
+     * Set up those actions common to any EditView (e.g. note insertion,
+     * time signatures etc)
+     */
+    void setupActions();
+
+    /**
      * Create an action menu for inserting notes from the PC keyboard,
-     * and add it to the action collection
+     * and add it to the action collection.  This is one of the methods
+     * called by setupActions().
      */
     void createInsertPitchActionMenu();
 

@@ -395,6 +395,11 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
     connect(sM, SIGNAL(insertableNoteOffReceived(int)),
 	    notationView, SLOT(slotInsertableNoteOffReceived(int)));
 
+    connect(notationView, SIGNAL(stepByStepTargetRequested(QObject *)),
+	    this, SIGNAL(stepByStepTargetRequested(QObject *)));
+    connect(this, SIGNAL(stepByStepTargetRequested(QObject *)),
+	    notationView, SLOT(slotStepByStepTargetRequested(QObject *)));
+
     // Encourage the notation view window to open to the same
     // interval as the current segment view
     if (m_trackEditor->getHorizontalScrollBar()->value() > 1) { // don't scroll unless we need to
@@ -445,6 +450,14 @@ void RosegardenGUIView::slotEditSegmentMatrix(Rosegarden::Segment* p)
                                             segmentsToEdit,
                                             this);
 
+    // For tempo changes (ugh -- it'd be nicer to make a tempo change
+    // command that could interpret all this stuff from the dialog)
+    //
+    connect(matrixView, SIGNAL(changeTempo(Rosegarden::timeT, double,
+					   TempoDialog::TempoDialogAction)),
+	    parent(), SLOT(slotChangeTempo(Rosegarden::timeT, double,
+				      TempoDialog::TempoDialogAction)));
+
     connect(matrixView, SIGNAL(selectTrack(int)),
             this, SLOT(slotSelectTrackSegments(int)));
 
@@ -462,6 +475,16 @@ void RosegardenGUIView::slotEditSegmentMatrix(Rosegarden::Segment* p)
 	    parent(), SLOT(slotRewindToBeginning()));
     connect(matrixView, SIGNAL(jumpPlaybackTo(Rosegarden::timeT)),
 	    getDocument(), SLOT(slotSetPointerPosition(Rosegarden::timeT)));
+
+    connect(sM, SIGNAL(insertableNoteOnReceived(int)),
+	    matrixView, SLOT(slotInsertableNoteOnReceived(int)));
+    connect(sM, SIGNAL(insertableNoteOffReceived(int)),
+	    matrixView, SLOT(slotInsertableNoteOffReceived(int)));
+
+    connect(matrixView, SIGNAL(stepByStepTargetRequested(QObject *)),
+	    this, SIGNAL(stepByStepTargetRequested(QObject *)));
+    connect(this, SIGNAL(stepByStepTargetRequested(QObject *)),
+	    matrixView, SLOT(slotStepByStepTargetRequested(QObject *)));
 
     // Encourage the matrix view window to open to the same
     // interval as the current segment view

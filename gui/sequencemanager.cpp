@@ -1292,6 +1292,8 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 		// if we aren't playing or recording, consider invoking any
 		// step-by-step clients
 
+		RG_DEBUG << "m_transportStatus = " << m_transportStatus << endl;
+
 		if (m_transportStatus == STOPPED ||
 		    m_transportStatus == RECORDING_ARMED) {
 

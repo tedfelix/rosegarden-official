@@ -405,7 +405,8 @@ void MatrixView::readOptions()
 
 void MatrixView::setupActions()
 {   
-    EditView::setupActions("matrix.rc");
+    EditViewBase::setupActions("matrix.rc");
+    EditView::setupActions();
 
     //
     // Edition tools (eraser, selector...)
@@ -617,9 +618,6 @@ void MatrixView::setupActions()
                 SLOT(slotSetSnapFromAction()), actionCollection(), "snap_bar");
     new KAction(i18n("&No Snap"), 0, this,
                 SLOT(slotSetSnapFromAction()), actionCollection(), "snap_none");
-
-    //!!! need slotInsertNoteFromAction() after notationviewslots.cpp
-    createInsertPitchActionMenu();
 
     //
     // Settings menu

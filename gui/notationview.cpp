@@ -700,7 +700,8 @@ void NotationView::readOptions()
 
 void NotationView::setupActions()
 {
-    EditView::setupActions("notation.rc");
+    EditViewBase::setupActions("notation.rc");
+    EditView::setupActions();
 
     KRadioAction* noteAction = 0;
     
@@ -792,9 +793,6 @@ void NotationView::setupActions()
 	(i18n("Switch from Rest to Note"), Key_Y, this,
 	 SLOT(slotSwitchFromRestToNote()),
 	 actionCollection(), QString("switch_from_rest_to_note"));
-
-
-    createInsertPitchActionMenu();
 
 
     // setup Notes menu & toolbar
@@ -902,7 +900,12 @@ void NotationView::setupActions()
                                   this, SLOT(slotSelectSelected()),
                                   actionCollection(), "select");
     noteAction->setExclusiveGroup("notes");
-    
+
+    icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap("step_by_step")));
+    new KToggleAction(i18n("S&tep-by-Step Editing"), icon, 0, this,
+                SLOT(slotToggleStepByStep()), actionCollection(),
+                "toggle_step_by_step");
+
 
     // Edit menu
     new KAction(i18n("Select from Sta&rt"), 0, this,
@@ -1176,14 +1179,6 @@ void NotationView::setupActions()
     new KAction(ClefInsertionCommand::getGlobalName(), 0, this,
                 SLOT(slotEditAddClef()), actionCollection(),
                 "add_clef");
-
-    new KAction(AddTempoChangeCommand::getGlobalName(), 0, this,
-                SLOT(slotEditAddTempo()), actionCollection(),
-                "add_tempo");
-
-    new KAction(AddTimeSignatureCommand::getGlobalName(), 0, this,
-                SLOT(slotEditAddTimeSignature()), actionCollection(),
-                "add_time_signature");
 
     new KAction(KeyInsertionCommand::getGlobalName(), 0, this,
                 SLOT(slotEditAddKeySignature()), actionCollection(),

@@ -7,6 +7,9 @@
 <Menu name="edit" append="new_merge">
   <Action name="select_all"/>
   <Action name="clear_selection"/>
+  <Separator/>
+  <Action name="add_tempo"/>
+  <Action name="add_time_signature"/>
 </Menu>
 
 <Menu name="View">

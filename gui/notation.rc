@@ -260,6 +260,9 @@
 	<Action name="chord_mode"/>
 	<Action name="triplet_mode"/>
 
+  <Separator/>
+  <Action name="toggle_step_by_step"/>
+
 </Menu>
 
 <Menu  name="settings"><text>&amp;Settings</text>
@@ -286,6 +289,8 @@
   <Action name="erase" />
   <Action name="select" />
   <Action name="text" />
+  <Separator/>
+  <Action name="toggle_step_by_step"/>
 </ToolBar>
 
 <ToolBar name="Transport Toolbar">

@@ -240,6 +240,14 @@ signals:
 
     void toggleSolo(bool);
 
+    /**
+     * This signal is used to dispatch a notification for a request to
+     * set the step-by-step-editing target window to all candidate targets,
+     * so that they can either know that their request has been granted
+     * (if they match the QObject passed) or else deactivate any step-by-
+     * step editing currently active in their own window (otherwise).
+     */
+    void stepByStepTargetRequested(QObject *);
 
 protected:
 

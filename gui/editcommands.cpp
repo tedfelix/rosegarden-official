@@ -953,17 +953,20 @@ SetLyricsCommand::execute()
 	    while (m_segment->isBeforeEndMarker(i) &&
 		   (*i)->getAbsoluteTime() < barRange.second &&
 		   (!(*i)->isa(Note::EventType) ||
-		    (*i)->getAbsoluteTime() <= laterThan)) ++i;
+		    (*i)->getNotationAbsoluteTime() <= laterThan)) ++i;
 
 	    timeT time = m_segment->getEndMarkerTime();
-	    if (m_segment->isBeforeEndMarker(i))
+	    timeT notationTime = time;
+	    if (m_segment->isBeforeEndMarker(i)) {
 		time = (*i)->getAbsoluteTime();
+		notationTime = (*i)->getNotationAbsoluteTime();
+	    }
 
 	    QString syllable = *ssi;
 	    syllable.replace(QRegExp("~"), " ");
 	    syllable = syllable.simplifyWhiteSpace();
 	    if (syllable == "") continue;
-	    laterThan = time + 1;
+	    laterThan = notationTime + 1;
 	    if (syllable == ".") continue;
 
 	    NOTATION_DEBUG << "Syllable \"" << syllable << "\" at time " << time <<  endl;

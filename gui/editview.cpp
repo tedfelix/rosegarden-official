@@ -30,6 +30,8 @@
 
 #include "Profiler.h"
 #include "SegmentNotationHelper.h"
+#include "AnalysisTypes.h"
+#include "CompositionTimeSliceAdapter.h"
 
 #include "editview.h"
 #include "rosestrings.h"
@@ -41,6 +43,7 @@
 #include "multiviewcommandhistory.h"
 #include "ktmpstatusmsg.h"
 #include "barbuttons.h"
+#include "segmentcommands.h"
 
 #include "rosedebug.h"
 
@@ -446,6 +449,20 @@ void EditView::slotExtendSelectionForward(bool bar)
 
 
 void
+EditView::setupActions()
+{
+    createInsertPitchActionMenu();
+
+    new KAction(AddTempoChangeCommand::getGlobalName(), 0, this,
+                SLOT(slotAddTempo()), actionCollection(),
+                "add_tempo");
+
+    new KAction(AddTimeSignatureCommand::getGlobalName(), 0, this,
+                SLOT(slotAddTimeSignature()), actionCollection(),
+                "add_time_signature");
+}
+
+void
 EditView::createInsertPitchActionMenu()
 {
     QString notePitchNames[] = {
@@ -612,3 +629,64 @@ EditView::getPitchFromNoteInsertAction(QString name,
 				    __FILE__, __LINE__);
     }
 }
+
+void EditView::slotAddTempo()
+{
+    Rosegarden::timeT insertionTime = getInsertionTime();
+
+    TempoDialog tempoDlg(this, getDocument());
+
+    connect(&tempoDlg,
+            SIGNAL(changeTempo(Rosegarden::timeT,
+                               double, TempoDialog::TempoDialogAction)),
+            this,
+            SIGNAL(changeTempo(Rosegarden::timeT,
+                               double, TempoDialog::TempoDialogAction)));
+        
+    tempoDlg.setTempoPosition(insertionTime);
+    tempoDlg.exec();
+}
+
+void EditView::slotAddTimeSignature()
+{
+    Rosegarden::Segment *segment = getCurrentSegment();
+    if (!segment) return;
+    Rosegarden::Composition *composition = segment->getComposition();
+    Rosegarden::timeT insertionTime = getInsertionTime();
+
+    int barNo = composition->getBarNumber(insertionTime);
+    bool atStartOfBar = (insertionTime == composition->getBarStart(barNo));
+
+    Rosegarden::CompositionTimeSliceAdapter adapter
+        (&getDocument()->getComposition(), insertionTime,
+         getDocument()->getComposition().getDuration());
+    Rosegarden::AnalysisHelper helper;
+    Rosegarden::TimeSignature timeSig = helper.guessTimeSignature(adapter);
+
+    TimeSignatureDialog *dialog = new TimeSignatureDialog
+        (this, timeSig, barNo, atStartOfBar,
+         i18n("Estimated time signature shown"));
+    
+    if (dialog->exec() == QDialog::Accepted) {
+
+        TimeSignatureDialog::Location location = dialog->getLocation();
+        if (location == TimeSignatureDialog::StartOfBar) {
+            insertionTime = composition->getBarStartForTime(insertionTime);
+        }
+        
+        if (dialog->shouldNormalizeRests()) {
+            
+            addCommandToHistory(new AddTimeSignatureAndNormalizeCommand
+                                (composition, insertionTime,
+                                 dialog->getTimeSignature()));
+            
+        } else {
+            
+            addCommandToHistory(new AddTimeSignatureCommand
+                                (composition, insertionTime,
+                                 dialog->getTimeSignature()));
+        }
+    }
+    
+    delete dialog;
+}                       

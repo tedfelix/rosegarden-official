@@ -2431,7 +2431,7 @@ LyricEditDialog::unparse()
 
 	if (!isNote && !isLyric) continue;
 
-	timeT myTime = (*i)->getAbsoluteTime();
+	timeT myTime = (*i)->getNotationAbsoluteTime();
 	int myBarNo = comp->getBarNumber(myTime);
 
 	if (myBarNo > lastBarNo) {
