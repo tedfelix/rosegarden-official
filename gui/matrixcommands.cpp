@@ -96,7 +96,8 @@ void MatrixEraseCommand::modifySegment()
 MatrixModifyCommand::MatrixModifyCommand(Rosegarden::Segment &segment,
                                          Rosegarden::Event *oldEvent,
                                          Rosegarden::Event *newEvent,
-                                         bool isMove):
+                                         bool isMove,
+					 bool normalize):
       BasicCommand((isMove ? i18n("Move Note") : i18n("Modify Note")),
                    segment,
                    std::min(newEvent->getAbsoluteTime(),
@@ -106,8 +107,9 @@ MatrixModifyCommand::MatrixModifyCommand(Rosegarden::Segment &segment,
                             newEvent->getAbsoluteTime() +
                             newEvent->getDuration()),
                    true),
-    m_oldEvent(oldEvent),
-    m_newEvent(newEvent)
+      m_normalize(normalize),
+      m_oldEvent(oldEvent),
+      m_newEvent(newEvent)
 {
 }
 
@@ -128,6 +130,9 @@ void MatrixModifyCommand::modifySegment()
         Rosegarden::Segment &segment(getSegment());
         segment.insert(m_newEvent);
         segment.eraseSingle(m_oldEvent);
-        segment.normalizeRests(normalizeStart, normalizeEnd);
+
+	if (m_normalize) {
+	    segment.normalizeRests(normalizeStart, normalizeEnd);
+	}
     }
 }

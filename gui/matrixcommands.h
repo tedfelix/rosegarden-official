@@ -69,12 +69,13 @@ public:
     MatrixModifyCommand(Rosegarden::Segment &segment,
                         Rosegarden::Event *oldEvent,
                         Rosegarden::Event *newEvent,
-                        bool isMove);
+                        bool isMove,
+			bool normalize);
 
 protected:
     virtual void modifySegment();
 
-    int m_newPitch;
+    bool m_normalize;
 
     Rosegarden::Event *m_oldEvent;
     Rosegarden::Event *m_newEvent;

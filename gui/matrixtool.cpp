@@ -32,6 +32,7 @@
 #include "matrixview.h"
 #include "matrixstaff.h"
 #include "matrixcommands.h"
+#include "notationcommands.h"
 #include "velocitycolour.h"
 
 #include "rosestrings.h"
@@ -1031,9 +1032,12 @@ void MatrixMover::handleMouseRelease(Rosegarden::timeT newTime,
                     new MatrixModifyCommand(m_currentStaff->getSegment(),
                                             (*it),
                                             newEvent,
-                                            true));
+                                            true,
+					    false));
             newSelection->addEvent(newEvent);
         }
+
+	macro->addCommand(new AdjustMenuNormalizeRestsCommand(*newSelection));
 
         m_mParentView->setCurrentSelection(0, false, false);
         m_mParentView->addCommandToHistory(macro);
@@ -1235,10 +1239,13 @@ void MatrixResizer::handleMouseRelease(Rosegarden::timeT newTime,
                     new MatrixModifyCommand(m_currentStaff->getSegment(),
                                             *it,
                                             newEvent,
-                                            false));
+                                            false,
+					    false));
 
             newSelection->addEvent(newEvent);
         }
+
+	macro->addCommand(new AdjustMenuNormalizeRestsCommand(*newSelection));
 
         m_mParentView->setCurrentSelection(0, false, false);
         m_mParentView->addCommandToHistory(macro);
