@@ -551,6 +551,11 @@ RosegardenGUIDoc::xmlParse(QString &fileContents, QString &errMsg,
 
     if (!ok) errMsg = handler.errorString();
     else if (handler.isDeprecated()) {
+
+        // close the progress dialog
+        delete progress;
+        m_progressDialogDead = true;
+
         QString msg(i18n("This file contains one or more old element types that are now deprecated.\nSupport for these elements may disappear in future versions of Rosegarden.\nWe recommend you re-save this file from this version of Rosegarden,\nto ensure that it can still be re-loaded in future versions."));
         
         KMessageBox::information(0, msg);
