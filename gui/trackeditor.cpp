@@ -494,7 +494,8 @@ void
 TrackEditor::slotSetPointerPosition(Rosegarden::timeT position)
 {
 
-    //RG_DEBUG << "TrackEditor::setPointerPosition: time is " << position << endl;
+//     RG_DEBUG << "TrackEditor::setPointerPosition: time is " << position << endl;
+
     if (!m_pointer) return;
 
     Rosegarden::SimpleRulerScale *ruler = 
@@ -519,9 +520,13 @@ TrackEditor::slotSetPointerPosition(Rosegarden::timeT position)
 
 	m_pointer->setX(pos);
 
-	if (m_playTracking) {
-	    getSegmentCanvas()->slotScrollHoriz(int(double(position) / ruler->getUnitsPerPixel()));
-	}
+// 	if (m_playTracking) {
+// 	    getSegmentCanvas()->slotScrollHoriz(int(double(position) / ruler->getUnitsPerPixel()));
+// 	}
+
+        if (m_playTracking && getSegmentCanvas()->isTimeForSmoothScroll()) {
+            getSegmentCanvas()->slotScrollHorizSmallSteps(int(double(position) / ruler->getUnitsPerPixel()));
+        }
 
 	emit needUpdate();
     }

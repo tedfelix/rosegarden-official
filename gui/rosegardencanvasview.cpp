@@ -77,6 +77,7 @@ void RosegardenCanvasView::slotUpdate()
 void RosegardenCanvasView::slotScrollHoriz(int hpos)
 {
     QScrollBar* hbar = getMainHorizontalScrollBar();
+    int currentContentYPos = contentsY();
 
     /* Lots of performance hitting debug
     RG_DEBUG << "RosegardenCanvasView::slotScrollHoriz: hpos is " << hpos
@@ -87,7 +88,8 @@ void RosegardenCanvasView::slotScrollHoriz(int hpos)
     if (hpos == 0) {
 	
 	// returning to zero
-        hbar->setValue(0);
+//         hbar->setValue(0);
+        setContentsPos(0, currentContentYPos);
 
     } else if (hpos > (contentsX() +
 		       visibleWidth() * 1.6) ||
@@ -95,19 +97,22 @@ void RosegardenCanvasView::slotScrollHoriz(int hpos)
 		       visibleWidth() * 0.7)) {
 	
 	// miles off one side or the other
-	hbar->setValue(hpos - int(visibleWidth() * 0.4));
+// 	hbar->setValue(hpos - int(visibleWidth() * 0.4));
+	setContentsPos(hpos - int(visibleWidth() * 0.4), currentContentYPos);
 
     } else if (hpos > (contentsX() + 
 		       visibleWidth() * 0.9)) {
 
 	// moving off the right hand side of the view   
-	hbar->setValue(hbar->value() + int(visibleWidth() * 0.6));
+// 	hbar->setValue(hbar->value() + int(visibleWidth() * 0.6));
+	setContentsPos(hbar->value() + int(visibleWidth() * 0.6), currentContentYPos);
 
     } else if (hpos < (contentsX() +
 		       visibleWidth() * 0.1)) {
 
 	// moving off the left
-	hbar->setValue(hbar->value() - int(visibleWidth() * 0.6));
+// 	hbar->setValue(hbar->value() - int(visibleWidth() * 0.6));
+	setContentsPos(hbar->value() - int(visibleWidth() * 0.6), currentContentYPos);
     }
 }
 
@@ -115,13 +120,15 @@ void RosegardenCanvasView::slotScrollHoriz(int hpos)
 void RosegardenCanvasView::slotScrollHorizSmallSteps(int hpos)
 {
     QScrollBar* hbar = getMainHorizontalScrollBar();
+    int currentContentYPos = contentsY();
 
     int diff = 0;
 
     if (hpos == 0) {
 	
 	// returning to zero
-        hbar->setValue(0);
+//         hbar->setValue(0);
+        setContentsPos(0, currentContentYPos);
 
     } else if ((diff = int(hpos - (contentsX() + 
 				   visibleWidth() * 0.90))) > 0) {
@@ -132,7 +139,8 @@ void RosegardenCanvasView::slotScrollHorizSmallSteps(int hpos)
         int diff10 = std::min(diff, (int)m_minDeltaScroll);
         delta = std::max(delta, diff10);
 
-	hbar->setValue(hbar->value() + delta);
+// 	hbar->setValue(hbar->value() + delta);
+        setContentsPos(hbar->value() + delta, currentContentYPos);
 
     } else if ((diff = int(hpos - (contentsX() +
 				   visibleWidth() * 0.10))) < 0) {
@@ -142,7 +150,8 @@ void RosegardenCanvasView::slotScrollHorizSmallSteps(int hpos)
         int diff10 = std::min(-diff, (int)m_minDeltaScroll);
         delta = std::max(delta, diff10);
 
-	hbar->setValue(hbar->value() - delta);
+// 	hbar->setValue(hbar->value() - delta);
+        setContentsPos(hbar->value() - delta, currentContentYPos);
 
     }
 }
