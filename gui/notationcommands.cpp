@@ -505,7 +505,7 @@ EraseEventCommand::modifySegment()
 
 
 void
-GroupMenuBeamCommand::modifySegment()
+NotesMenuBeamCommand::modifySegment()
 {
     int id = getSegment().getNextId();
 
@@ -521,14 +521,14 @@ GroupMenuBeamCommand::modifySegment()
 }
 
 void
-GroupMenuAutoBeamCommand::modifySegment()
+NotesMenuAutoBeamCommand::modifySegment()
 {
     SegmentNotationHelper helper(getSegment());
     helper.autoBeam(getStartTime(), getEndTime(), GROUP_TYPE_BEAMED);
 }
 
 void
-GroupMenuBreakCommand::modifySegment()
+NotesMenuBreakCommand::modifySegment()
 {
     for (EventSelection::eventcontainer::iterator i =
 	     m_selection->getSegmentEvents().begin();
@@ -541,7 +541,7 @@ GroupMenuBreakCommand::modifySegment()
     }
 }
 
-GroupMenuGraceCommand::GroupMenuGraceCommand(Rosegarden::EventSelection &selection) :
+AdjustMenuGraceCommand::AdjustMenuGraceCommand(Rosegarden::EventSelection &selection) :
     BasicCommand(getGlobalName(),
 		 selection.getSegment(),
 		 selection.getStartTime(),
@@ -552,7 +552,7 @@ GroupMenuGraceCommand::GroupMenuGraceCommand(Rosegarden::EventSelection &selecti
 }
 
 timeT
-GroupMenuGraceCommand::getEffectiveEndTime(Rosegarden::EventSelection &
+AdjustMenuGraceCommand::getEffectiveEndTime(Rosegarden::EventSelection &
 					   selection)
 {
     EventSelection::eventcontainer::iterator i =
@@ -568,7 +568,7 @@ GroupMenuGraceCommand::getEffectiveEndTime(Rosegarden::EventSelection &
 }
 
 void
-GroupMenuGraceCommand::modifySegment()
+AdjustMenuGraceCommand::modifySegment()
 {
     Segment &s(getSegment());
     timeT startTime = getStartTime();
@@ -610,13 +610,13 @@ GroupMenuGraceCommand::modifySegment()
 }
 
 void
-GroupMenuUnGraceCommand::modifySegment()
+AdjustMenuUnGraceCommand::modifySegment()
 {
     //!!!
 }
 
 
-GroupMenuTupletCommand::GroupMenuTupletCommand(Rosegarden::Segment &segment,
+AdjustMenuTupletCommand::AdjustMenuTupletCommand(Rosegarden::Segment &segment,
 					       timeT startTime,
 					       timeT unit,
 					       int untupled, int tupled,
@@ -632,7 +632,7 @@ GroupMenuTupletCommand::GroupMenuTupletCommand(Rosegarden::Segment &segment,
 }
 
 void
-GroupMenuTupletCommand::modifySegment()
+AdjustMenuTupletCommand::modifySegment()
 {
     if (m_hasTimingAlready) {
 
@@ -662,7 +662,7 @@ GroupMenuTupletCommand::modifySegment()
 
 
 void
-GroupMenuUnTupletCommand::modifySegment()
+AdjustMenuUnTupletCommand::modifySegment()
 {
     for (EventSelection::eventcontainer::iterator i =
 	     m_selection->getSegmentEvents().begin();
@@ -678,7 +678,7 @@ GroupMenuUnTupletCommand::modifySegment()
 
 
 
-GroupMenuAddIndicationCommand::GroupMenuAddIndicationCommand(std::string indicationType, 
+NotesMenuAddIndicationCommand::NotesMenuAddIndicationCommand(std::string indicationType, 
 							     EventSelection &selection) :
     BasicCommand(getGlobalName(indicationType),
 		 selection.getSegment(),
@@ -691,13 +691,13 @@ GroupMenuAddIndicationCommand::GroupMenuAddIndicationCommand(std::string indicat
     // nothing else
 }
 
-GroupMenuAddIndicationCommand::~GroupMenuAddIndicationCommand()
+NotesMenuAddIndicationCommand::~NotesMenuAddIndicationCommand()
 {
     // empty
 }
 
 bool
-GroupMenuAddIndicationCommand::canExecute()
+NotesMenuAddIndicationCommand::canExecute()
 {
     Segment &s(getSegment());
     
@@ -753,7 +753,7 @@ GroupMenuAddIndicationCommand::canExecute()
 }
 
 void
-GroupMenuAddIndicationCommand::modifySegment()
+NotesMenuAddIndicationCommand::modifySegment()
 {
     SegmentNotationHelper helper(getSegment());
 
@@ -775,7 +775,7 @@ GroupMenuAddIndicationCommand::modifySegment()
 }
 
 QString
-GroupMenuAddIndicationCommand::getGlobalName(std::string indicationType)
+NotesMenuAddIndicationCommand::getGlobalName(std::string indicationType)
 {
     if (indicationType == Rosegarden::Indication::Slur) {
 	return i18n("Add S&lur");
@@ -797,7 +797,7 @@ GroupMenuAddIndicationCommand::getGlobalName(std::string indicationType)
 
 
 void
-GroupMenuMakeChordCommand::modifySegment()
+AdjustMenuMakeChordCommand::modifySegment()
 {
     // find all the notes in the selection, and bring them back to align
     // with the start of the selection, giving them the same duration as
@@ -832,7 +832,7 @@ GroupMenuMakeChordCommand::modifySegment()
 }	 
 
 
-TransformsMenuNormalizeRestsCommand::TransformsMenuNormalizeRestsCommand
+AdjustMenuNormalizeRestsCommand::AdjustMenuNormalizeRestsCommand
 (Rosegarden::EventSelection &selection) :
     BasicCommand(getGlobalName(),
 		 selection.getSegment(),
@@ -842,12 +842,12 @@ TransformsMenuNormalizeRestsCommand::TransformsMenuNormalizeRestsCommand
     // nothing else
 }
 
-void TransformsMenuNormalizeRestsCommand::modifySegment()
+void AdjustMenuNormalizeRestsCommand::modifySegment()
 {
     getSegment().normalizeRests(getStartTime(), getEndTime());
 }
 
-TransformsMenuCollapseRestsCommand::TransformsMenuCollapseRestsCommand
+AdjustMenuCollapseRestsCommand::AdjustMenuCollapseRestsCommand
 (Rosegarden::EventSelection &selection) :
     BasicCommand(getGlobalName(),
 		 selection.getSegment(),
@@ -857,14 +857,14 @@ TransformsMenuCollapseRestsCommand::TransformsMenuCollapseRestsCommand
     // nothing else
 }
 
-void TransformsMenuCollapseRestsCommand::modifySegment()
+void AdjustMenuCollapseRestsCommand::modifySegment()
 {
     SegmentNotationHelper helper(getSegment());
     helper.collapseRestsAggressively(getStartTime(), getEndTime());
 }
 
 void
-TransformsMenuCollapseNotesCommand::modifySegment()
+AdjustMenuCollapseNotesCommand::modifySegment()
 {
     SegmentNotationHelper helper(getSegment());
     timeT endTime = getEndTime();
@@ -904,7 +904,7 @@ TransformsMenuCollapseNotesCommand::modifySegment()
 
 
 void
-TransformsMenuTieNotesCommand::modifySegment()
+NotesMenuTieNotesCommand::modifySegment()
 {
     Segment &segment(getSegment());
     SegmentNotationHelper helper(segment);
@@ -935,7 +935,7 @@ TransformsMenuTieNotesCommand::modifySegment()
 
 
 void
-TransformsMenuUntieNotesCommand::modifySegment()
+AdjustMenuUntieNotesCommand::modifySegment()
 {
     for (EventSelection::eventcontainer::iterator i =
 	     m_selection->getSegmentEvents().begin();
@@ -948,7 +948,7 @@ TransformsMenuUntieNotesCommand::modifySegment()
 
 
 void
-TransformsMenuMakeNotesViableCommand::modifySegment()
+AdjustMenuMakeNotesViableCommand::modifySegment()
 {
     Segment &segment(getSegment());
     SegmentNotationHelper helper(segment);
@@ -967,7 +967,7 @@ TransformsMenuMakeNotesViableCommand::modifySegment()
 }
 
 void
-TransformsMenuMakeRegionViableCommand::modifySegment()
+AdjustMenuMakeRegionViableCommand::modifySegment()
 {
     Segment &segment(getSegment());
     SegmentNotationHelper helper(segment);
@@ -977,7 +977,7 @@ TransformsMenuMakeRegionViableCommand::modifySegment()
 }
 
 void
-TransformsMenuDeCounterpointCommand::modifySegment()
+AdjustMenuDeCounterpointCommand::modifySegment()
 {
     Segment &segment(getSegment());
     SegmentNotationHelper helper(segment);
@@ -997,7 +997,7 @@ TransformsMenuDeCounterpointCommand::modifySegment()
 
 
 void
-TransformsMenuChangeStemsCommand::modifySegment()
+AdjustMenuChangeStemsCommand::modifySegment()
 {
     EventSelection::eventcontainer::iterator i;
 
@@ -1012,7 +1012,7 @@ TransformsMenuChangeStemsCommand::modifySegment()
 
 
 void
-TransformsMenuRestoreStemsCommand::modifySegment()
+AdjustMenuRestoreStemsCommand::modifySegment()
 {
     EventSelection::eventcontainer::iterator i;
 
@@ -1027,7 +1027,7 @@ TransformsMenuRestoreStemsCommand::modifySegment()
 
 
 void
-TransformsMenuChangeSlurPositionCommand::modifySegment()
+AdjustMenuChangeSlurPositionCommand::modifySegment()
 {
     EventSelection::eventcontainer::iterator i;
 
@@ -1047,7 +1047,7 @@ TransformsMenuChangeSlurPositionCommand::modifySegment()
 
 
 void
-TransformsMenuRestoreSlursCommand::modifySegment()
+AdjustMenuRestoreSlursCommand::modifySegment()
 {
     EventSelection::eventcontainer::iterator i;
 
@@ -1067,14 +1067,14 @@ TransformsMenuRestoreSlursCommand::modifySegment()
 
 
 QString
-TransformsMenuChangeStyleCommand::getGlobalName(NoteStyleName style)
+AdjustMenuChangeStyleCommand::getGlobalName(NoteStyleName style)
 {
     return strtoqstr(style);
 }
 
 
 void
-TransformsMenuChangeStyleCommand::modifySegment()
+AdjustMenuChangeStyleCommand::modifySegment()
 {
     EventSelection::eventcontainer::iterator i;
 
@@ -1111,7 +1111,7 @@ NotesMenuAddSlashesCommand::modifySegment()
 
 
 QString
-MarksMenuAddMarkCommand::getGlobalName(Rosegarden::Mark markType)
+NotesMenuAddMarkCommand::getGlobalName(Rosegarden::Mark markType)
 {
     QString m = strtoqstr(markType);
 
@@ -1138,7 +1138,7 @@ MarksMenuAddMarkCommand::getGlobalName(Rosegarden::Mark markType)
 }
 
 void
-MarksMenuAddMarkCommand::modifySegment()
+NotesMenuAddMarkCommand::modifySegment()
 {
     EventSelection::eventcontainer::iterator i;
 
@@ -1154,7 +1154,7 @@ MarksMenuAddMarkCommand::modifySegment()
 }
 
 void
-MarksMenuAddTextMarkCommand::modifySegment()
+NotesMenuAddTextMarkCommand::modifySegment()
 {
     EventSelection::eventcontainer::iterator i;
 
@@ -1170,7 +1170,7 @@ MarksMenuAddTextMarkCommand::modifySegment()
 }
 
 QString
-MarksMenuAddFingeringMarkCommand::getGlobalName(QString fingering)
+NotesMenuAddFingeringMarkCommand::getGlobalName(QString fingering)
 {
     if (fingering == "") return i18n("Add Other &Fingering...");
     else if (fingering == "0") return i18n("Add Fingering &0 (Thumb)");
@@ -1178,7 +1178,7 @@ MarksMenuAddFingeringMarkCommand::getGlobalName(QString fingering)
 }
 
 void
-MarksMenuAddFingeringMarkCommand::modifySegment()
+NotesMenuAddFingeringMarkCommand::modifySegment()
 {
     EventSelection::eventcontainer::iterator i;
     Segment &segment(m_selection->getSegment());
@@ -1240,7 +1240,7 @@ MarksMenuAddFingeringMarkCommand::modifySegment()
 }
 
 void
-MarksMenuRemoveMarksCommand::modifySegment()
+NotesMenuRemoveMarksCommand::modifySegment()
 {
     EventSelection::eventcontainer::iterator i;
 
@@ -1258,7 +1258,7 @@ MarksMenuRemoveMarksCommand::modifySegment()
 }
 
 void
-MarksMenuRemoveFingeringMarksCommand::modifySegment()
+NotesMenuRemoveFingeringMarksCommand::modifySegment()
 {
     EventSelection::eventcontainer::iterator i;
 
@@ -1276,7 +1276,7 @@ MarksMenuRemoveFingeringMarksCommand::modifySegment()
 }
 
 void
-TransformsMenuFixNotationQuantizeCommand::modifySegment()
+AdjustMenuFixNotationQuantizeCommand::modifySegment()
 {
     std::vector<Event *> toErase;
     std::vector<Event *> toInsert;
@@ -1323,7 +1323,7 @@ TransformsMenuFixNotationQuantizeCommand::modifySegment()
 }
 
 void
-TransformsMenuRemoveNotationQuantizeCommand::modifySegment()
+AdjustMenuRemoveNotationQuantizeCommand::modifySegment()
 {
     EventSelection::eventcontainer::iterator i;
 
@@ -1355,15 +1355,15 @@ TransformsMenuRemoveNotationQuantizeCommand::modifySegment()
 }
 
 
-const int TransformsMenuInterpretCommand::NoInterpretation      = 0;
-const int TransformsMenuInterpretCommand::GuessDirections	= (1<<0);
-const int TransformsMenuInterpretCommand::ApplyTextDynamics	= (1<<1);
-const int TransformsMenuInterpretCommand::ApplyHairpins		= (1<<2);
-const int TransformsMenuInterpretCommand::StressBeats		= (1<<3);
-const int TransformsMenuInterpretCommand::Articulate		= (1<<4);
-const int TransformsMenuInterpretCommand::AllInterpretations	= (1<<5) - 1;
+const int AdjustMenuInterpretCommand::NoInterpretation      = 0;
+const int AdjustMenuInterpretCommand::GuessDirections	= (1<<0);
+const int AdjustMenuInterpretCommand::ApplyTextDynamics	= (1<<1);
+const int AdjustMenuInterpretCommand::ApplyHairpins		= (1<<2);
+const int AdjustMenuInterpretCommand::StressBeats		= (1<<3);
+const int AdjustMenuInterpretCommand::Articulate		= (1<<4);
+const int AdjustMenuInterpretCommand::AllInterpretations	= (1<<5) - 1;
 
-TransformsMenuInterpretCommand::~TransformsMenuInterpretCommand()
+AdjustMenuInterpretCommand::~AdjustMenuInterpretCommand()
 {
     for (IndicationMap::iterator i = m_indications.begin();
 	 i != m_indications.end(); ++i) {
@@ -1372,7 +1372,7 @@ TransformsMenuInterpretCommand::~TransformsMenuInterpretCommand()
 }
 
 void
-TransformsMenuInterpretCommand::modifySegment()
+AdjustMenuInterpretCommand::modifySegment()
 {
     // Of all the interpretations, Articulate is the only one that
     // changes event times or durations.  This means we must apply it
@@ -1425,13 +1425,13 @@ TransformsMenuInterpretCommand::modifySegment()
 }
 
 void
-TransformsMenuInterpretCommand::guessDirections()
+AdjustMenuInterpretCommand::guessDirections()
 {
     //...
 }
 
 void
-TransformsMenuInterpretCommand::applyTextDynamics()
+AdjustMenuInterpretCommand::applyTextDynamics()
 {
     // laborious
 
@@ -1464,7 +1464,7 @@ TransformsMenuInterpretCommand::applyTextDynamics()
 }
 
 int
-TransformsMenuInterpretCommand::getVelocityForDynamic(std::string text)
+AdjustMenuInterpretCommand::getVelocityForDynamic(std::string text)
 {
     int velocity = 100;
 		    
@@ -1484,13 +1484,13 @@ TransformsMenuInterpretCommand::getVelocityForDynamic(std::string text)
     else if (text == "ffff")  velocity = 120;
     else if (text == "fffff") velocity = 125;
 
-    NOTATION_DEBUG << "TransformsMenuInterpretCommand::getVelocityForDynamic: unrecognised dynamic " << text << endl;
+    NOTATION_DEBUG << "AdjustMenuInterpretCommand::getVelocityForDynamic: unrecognised dynamic " << text << endl;
 
     return velocity;
 }
 
 void
-TransformsMenuInterpretCommand::applyHairpins()
+AdjustMenuInterpretCommand::applyHairpins()
 {
     Segment &segment(getSegment());
     int velocityToApply = -1;
@@ -1592,7 +1592,7 @@ TransformsMenuInterpretCommand::applyHairpins()
 	    int((endingVelocity - startingVelocity) * proportion +
 		startingVelocity);
 
-	NOTATION_DEBUG << "TransformsMenuInterpretCommand::applyHairpins: velocity of note at " << e->getAbsoluteTime() << " is " << velocity << " (" << proportion << " through hairpin from " << startingVelocity << " to " << endingVelocity <<")" << endl;
+	NOTATION_DEBUG << "AdjustMenuInterpretCommand::applyHairpins: velocity of note at " << e->getAbsoluteTime() << " is " << velocity << " (" << proportion << " through hairpin from " << startingVelocity << " to " << endingVelocity <<")" << endl;
 	if (velocity < 10) velocity = 10;
 	if (velocity > 127) velocity = 127;
 	e->set<Int>(VELOCITY, velocity);
@@ -1601,7 +1601,7 @@ TransformsMenuInterpretCommand::applyHairpins()
 }
 
 void
-TransformsMenuInterpretCommand::stressBeats()
+AdjustMenuInterpretCommand::stressBeats()
 {
     Rosegarden::Composition *c = getSegment().getComposition();
 
@@ -1633,7 +1633,7 @@ TransformsMenuInterpretCommand::stressBeats()
 }
 
 void
-TransformsMenuInterpretCommand::articulate()
+AdjustMenuInterpretCommand::articulate()
 {
     // Basic articulations:
     //
@@ -1756,14 +1756,14 @@ TransformsMenuInterpretCommand::articulate()
 	    else durationChange = -10;
 	}
 
-	NOTATION_DEBUG << "TransformsMenuInterpretCommand::modifySegment: chord has " << chord.size() << " notes in it" << endl;
+	NOTATION_DEBUG << "AdjustMenuInterpretCommand::modifySegment: chord has " << chord.size() << " notes in it" << endl;
 
 	for (Rosegarden::Chord::iterator ci = chord.begin();
 	     ci != chord.end(); ++ci) {
 
 	    e = **ci;
 
-	NOTATION_DEBUG << "TransformsMenuInterpretCommand::modifySegment: For note at " << e->getAbsoluteTime() << ", velocityChange is " << velocityChange << " and durationChange is " << durationChange << endl;
+	NOTATION_DEBUG << "AdjustMenuInterpretCommand::modifySegment: For note at " << e->getAbsoluteTime() << ", velocityChange is " << velocityChange << " and durationChange is " << durationChange << endl;
 
 	    // do this even if velocityChange == 0, in case the event
 	    // has no velocity yet
@@ -1826,8 +1826,8 @@ TransformsMenuInterpretCommand::articulate()
     }
 }
 
-TransformsMenuInterpretCommand::IndicationMap::iterator
-TransformsMenuInterpretCommand::findEnclosingIndication(Event *e,
+AdjustMenuInterpretCommand::IndicationMap::iterator
+AdjustMenuInterpretCommand::findEnclosingIndication(Event *e,
 							std::string type)
 {
     // a bit slow, but let's wait and see whether it's a bottleneck

@@ -735,6 +735,7 @@ const std::string Text::ChordName       = "chordname";
 const std::string Text::KeyName         = "keyname";
 const std::string Text::Dynamic         = "dynamic";
 const std::string Text::Lyric           = "lyric";
+const std::string Text::Chord           = "chord";
 const std::string Text::Direction       = "direction";
 const std::string Text::LocalDirection  = "local_direction";
 const std::string Text::Tempo           = "tempo";
@@ -798,6 +799,7 @@ Text::getUserStyles()
     v.push_back(LocalDirection);
     v.push_back(Tempo);
     v.push_back(LocalTempo);
+    v.push_back(Chord);
     v.push_back(Lyric);
     v.push_back(Annotation);
 

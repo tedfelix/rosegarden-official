@@ -1373,6 +1373,9 @@ LilypondExporter::handleText(const Rosegarden::Event *textEvent,
 			     int languageLevel)
 {
     try {
+	
+	//!! DMM -  this needs to deal with the new Text::Chord type
+	 
 	Rosegarden::Text text(*textEvent);
 	std::string s = protectIllegalChars(text.getText());
 	

@@ -69,9 +69,7 @@
 
 
 <Menu name="Notes">
-	<text>Attac&amp;h</text>
-	    <Action name="make_chord"/>
-	    <Separator/>
+	<text>N&amp;otes</text>
 	    <Menu name="beams">
 		    <text>&amp;Beams</text>
 		    <Action name="beam"/>
@@ -101,11 +99,9 @@
 			<Action name="restore_slurs"/>
 		</Menu>
 		<Separator/>
-		<Menu name="Ties">
-			<text>&amp;Ties</text>
-	      		<Action name="tie_notes"/>
-		        <Action name="untie_notes"/>
-		</Menu>
+		<Action name="tie_notes"/>
+		<Action name="untie_notes"/>
+		<Separator/>
 		<Action name="crescendo"/>
 		<Action name="decrescendo"/>
 		<Separator/>
@@ -166,6 +162,8 @@
 
 <Menu name="Adjust">
 	<text>Ad&amp;just</text>
+	<Action name="make_chord"/>
+	<Separator/>
 	<Menu name="Respell">
 		<text>&amp;Accidentals</text>
 		<Action name="respell_doubleflat"/>
@@ -198,12 +196,12 @@
 		<Action name="restore_stems"/>
 	</Menu>
 	<Menu name="rests">
-		<text>Adjust R&amp;ests</text>
+		<text>R&amp;ests</text>
 		<Action name="normalize_rests"/>
 		<Action name="collapse_rests_aggressively"/>
 	</Menu>
 	<Menu name="transform_notes">
-		<text>Adjust &amp;Notes</text>
+		<text>&amp;Notes</text>
 	        <Action name="collapse_notes"/>
 	        <Action name="make_notes_viable"/>
 	        <Action name="de_counterpoint"/>

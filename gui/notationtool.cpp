@@ -554,7 +554,7 @@ NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
 	    !(*i)->has(BEAMED_GROUP_TUPLET_BASE)) {
 
 	    KMacroCommand *command = new KMacroCommand(insertionCommand->name());
-	    command->addCommand(new GroupMenuTupletCommand
+	    command->addCommand(new AdjustMenuTupletCommand
 				(segment, time, note.getDuration()));
 	    command->addCommand(insertionCommand);
 	    activeCommand = command;
@@ -762,7 +762,7 @@ RestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
 	    !(*i)->has(BEAMED_GROUP_TUPLET_BASE)) {
 
 	    KMacroCommand *command = new KMacroCommand(insertionCommand->name());
-	    command->addCommand(new GroupMenuTupletCommand
+	    command->addCommand(new AdjustMenuTupletCommand
 				(segment, time, note.getDuration()));
 	    command->addCommand(insertionCommand);
 	    activeCommand = command;

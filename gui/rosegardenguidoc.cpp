@@ -1515,7 +1515,7 @@ RosegardenGUIDoc::stopRecordingMidi()
 	      true));
 
 	command->addCommand
-	    (new TransformsMenuNormalizeRestsCommand
+	    (new AdjustMenuNormalizeRestsCommand
 	     (*m_recordSegment,
 	      m_recordSegment->getComposition()->getBarStartForTime
 	      (m_recordSegment->getStartTime()),

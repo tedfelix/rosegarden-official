@@ -207,10 +207,10 @@ protected:
 // Group menu commands
 
 
-class GroupMenuBeamCommand : public BasicSelectionCommand
+class NotesMenuBeamCommand : public BasicSelectionCommand
 {
 public:
-    GroupMenuBeamCommand(Rosegarden::EventSelection &selection) :
+    NotesMenuBeamCommand(Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection) { }
 
@@ -222,13 +222,13 @@ protected:
 };
 
 
-class GroupMenuAutoBeamCommand : public BasicSelectionCommand
+class NotesMenuAutoBeamCommand : public BasicSelectionCommand
 {
 public:
-    GroupMenuAutoBeamCommand(Rosegarden::EventSelection &selection) :
+    NotesMenuAutoBeamCommand(Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(getGlobalName(), selection) { }
 
-    GroupMenuAutoBeamCommand(Rosegarden::Segment &segment) :
+    NotesMenuAutoBeamCommand(Rosegarden::Segment &segment) :
 	BasicSelectionCommand(getGlobalName(), segment) { }
 
     static QString getGlobalName() { return i18n("&Auto-Beam"); }
@@ -238,10 +238,10 @@ protected:
 };
 
 
-class GroupMenuBreakCommand : public BasicSelectionCommand
+class NotesMenuBreakCommand : public BasicSelectionCommand
 {
 public:
-    GroupMenuBreakCommand(Rosegarden::EventSelection &selection) :
+    NotesMenuBreakCommand(Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection) { }
 
@@ -253,18 +253,18 @@ protected:
 };
 
 
-class GroupMenuTupletCommand : public BasicCommand
+class AdjustMenuTupletCommand : public BasicCommand
 {
 public:
-    GroupMenuTupletCommand(Rosegarden::Segment &segment,
+    AdjustMenuTupletCommand(Rosegarden::Segment &segment,
 			   Rosegarden::timeT startTime,
 			   Rosegarden::timeT unit,
 			   int untupled = 3, int tupled = 2,
 			   bool groupHasTimingAlready = false);
 
     static QString getGlobalName(bool simple = true) {
-	if (simple) return i18n("&Simple Triplet");
-	else return i18n("&Tuplet...");
+	if (simple) return i18n("&Triplet");
+	else return i18n("Tu&plet...");
     }
 
 protected:
@@ -278,10 +278,10 @@ private:
 };
 
 
-class GroupMenuUnTupletCommand : public BasicSelectionCommand
+class AdjustMenuUnTupletCommand : public BasicSelectionCommand
 {
 public:
-    GroupMenuUnTupletCommand(Rosegarden::EventSelection &selection) :
+    AdjustMenuUnTupletCommand(Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection) { }
 
@@ -295,10 +295,10 @@ protected:
 };
 
 
-class GroupMenuGraceCommand : public BasicCommand
+class AdjustMenuGraceCommand : public BasicCommand
 {
 public:
-    GroupMenuGraceCommand(Rosegarden::EventSelection &selection);
+    AdjustMenuGraceCommand(Rosegarden::EventSelection &selection);
 
     static QString getGlobalName() { return i18n("Make &Grace Notes"); }
 
@@ -308,10 +308,10 @@ protected:
     Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
 };
 
-class GroupMenuUnGraceCommand : public BasicSelectionCommand
+class AdjustMenuUnGraceCommand : public BasicSelectionCommand
 {
 public:
-    GroupMenuUnGraceCommand(Rosegarden::EventSelection &selection) :
+    AdjustMenuUnGraceCommand(Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(getGlobalName(), selection) { }
 
     static QString getGlobalName() { return i18n("Ung&race"); }
@@ -321,12 +321,12 @@ protected:
 };
 
 
-class GroupMenuAddIndicationCommand : public BasicCommand
+class NotesMenuAddIndicationCommand : public BasicCommand
 {
 public:
-    GroupMenuAddIndicationCommand(std::string indicationType,
+    NotesMenuAddIndicationCommand(std::string indicationType,
 				  Rosegarden::EventSelection &selection);
-    virtual ~GroupMenuAddIndicationCommand();
+    virtual ~NotesMenuAddIndicationCommand();
 
     // tests whether the indication can be added without overlapping
     // another one of the same type
@@ -350,10 +350,10 @@ protected:
 };
     
 
-class GroupMenuMakeChordCommand : public BasicSelectionCommand
+class AdjustMenuMakeChordCommand : public BasicSelectionCommand
 {
 public:
-    GroupMenuMakeChordCommand(Rosegarden::EventSelection &selection) :
+    AdjustMenuMakeChordCommand(Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection) { }
 
@@ -370,15 +370,15 @@ private:
 // Transforms menu commands
 
 
-class TransformsMenuNormalizeRestsCommand : public BasicCommand
+class AdjustMenuNormalizeRestsCommand : public BasicCommand
 {
 public:
-    TransformsMenuNormalizeRestsCommand(Rosegarden::Segment &s,
+    AdjustMenuNormalizeRestsCommand(Rosegarden::Segment &s,
 					Rosegarden::timeT startTime,
 					Rosegarden::timeT endTime) :
 	BasicCommand(getGlobalName(), s, startTime, endTime) { }
 
-    TransformsMenuNormalizeRestsCommand(Rosegarden::EventSelection &selection);
+    AdjustMenuNormalizeRestsCommand(Rosegarden::EventSelection &selection);
 
     static QString getGlobalName() { return i18n("&Normalize Rests"); }
 
@@ -387,15 +387,15 @@ protected:
 };
 
 
-class TransformsMenuCollapseRestsCommand : public BasicCommand
+class AdjustMenuCollapseRestsCommand : public BasicCommand
 {
 public:
-    TransformsMenuCollapseRestsCommand(Rosegarden::Segment &s,
+    AdjustMenuCollapseRestsCommand(Rosegarden::Segment &s,
 				       Rosegarden::timeT startTime,
 				       Rosegarden::timeT endTime) :
 	BasicCommand(getGlobalName(), s, startTime, endTime) { }
 
-    TransformsMenuCollapseRestsCommand(Rosegarden::EventSelection &selection);
+    AdjustMenuCollapseRestsCommand(Rosegarden::EventSelection &selection);
 
     static QString getGlobalName() { return i18n("&Collapse Rests"); }
 
@@ -404,10 +404,10 @@ protected:
 };
 
 
-class TransformsMenuCollapseNotesCommand : public BasicSelectionCommand
+class AdjustMenuCollapseNotesCommand : public BasicSelectionCommand
 {
 public:
-    TransformsMenuCollapseNotesCommand(Rosegarden::EventSelection &selection) :
+    AdjustMenuCollapseNotesCommand(Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection) { }
 
@@ -421,14 +421,14 @@ private:
 };
     
 
-class TransformsMenuTieNotesCommand : public BasicSelectionCommand
+class NotesMenuTieNotesCommand : public BasicSelectionCommand
 {
 public:
-    TransformsMenuTieNotesCommand(Rosegarden::EventSelection &selection) :
+    NotesMenuTieNotesCommand(Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection) { }
 
-    static QString getGlobalName() { return i18n("&Tie Equal-Pitch Notes"); }
+    static QString getGlobalName() { return i18n("&Tie"); }
 
 protected:
     virtual void modifySegment();
@@ -438,14 +438,14 @@ private:
 };
      
 
-class TransformsMenuUntieNotesCommand : public BasicSelectionCommand
+class AdjustMenuUntieNotesCommand : public BasicSelectionCommand
 {
 public:
-    TransformsMenuUntieNotesCommand(Rosegarden::EventSelection &selection) :
+    AdjustMenuUntieNotesCommand(Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection) { }
 
-    static QString getGlobalName() { return i18n("&Untie Notes"); }
+    static QString getGlobalName() { return i18n("&Untie"); }
 
 protected:
     virtual void modifySegment();
@@ -456,14 +456,14 @@ private:
     
 
 /// MakeNotesViable works on a selection or entire segment
-class TransformsMenuMakeNotesViableCommand : public BasicSelectionCommand
+class AdjustMenuMakeNotesViableCommand : public BasicSelectionCommand
 {
 public:
-    TransformsMenuMakeNotesViableCommand(Rosegarden::EventSelection &selection) :
+    AdjustMenuMakeNotesViableCommand(Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection) { }
 
-    TransformsMenuMakeNotesViableCommand(Rosegarden::Segment &segment) :
+    AdjustMenuMakeNotesViableCommand(Rosegarden::Segment &segment) :
 	BasicSelectionCommand(getGlobalName(), segment, true),
 	m_selection(0) { }
 
@@ -477,10 +477,10 @@ private:
 };
  
 /// MakeRegionViable works on part of a segment
-class TransformsMenuMakeRegionViableCommand : public BasicCommand
+class AdjustMenuMakeRegionViableCommand : public BasicCommand
 {
 public:
-    TransformsMenuMakeRegionViableCommand(Rosegarden::Segment &segment,
+    AdjustMenuMakeRegionViableCommand(Rosegarden::Segment &segment,
 					  Rosegarden::timeT startTime,
 					  Rosegarden::timeT endTime) :
 	BasicCommand(getGlobalName(), segment, startTime, endTime) { }
@@ -492,14 +492,14 @@ protected:
 };
     
 
-class TransformsMenuDeCounterpointCommand : public BasicSelectionCommand
+class AdjustMenuDeCounterpointCommand : public BasicSelectionCommand
 {
 public:
-    TransformsMenuDeCounterpointCommand(Rosegarden::EventSelection &selection) :
+    AdjustMenuDeCounterpointCommand(Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection) { }
 
-    TransformsMenuDeCounterpointCommand(Rosegarden::Segment &segment) :
+    AdjustMenuDeCounterpointCommand(Rosegarden::Segment &segment) :
 	BasicSelectionCommand(getGlobalName(), segment, true),
 	m_selection(0) { }
 
@@ -513,10 +513,10 @@ private:
 };
   
 
-class TransformsMenuChangeStemsCommand : public BasicSelectionCommand
+class AdjustMenuChangeStemsCommand : public BasicSelectionCommand
 {
 public:
-    TransformsMenuChangeStemsCommand(bool up, Rosegarden::EventSelection &selection) :
+    AdjustMenuChangeStemsCommand(bool up, Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(getGlobalName(up), selection, true),
 	m_selection(&selection), m_up(up) { }
 
@@ -533,10 +533,10 @@ private:
 };
 
 
-class TransformsMenuRestoreStemsCommand : public BasicSelectionCommand
+class AdjustMenuRestoreStemsCommand : public BasicSelectionCommand
 {
 public:
-    TransformsMenuRestoreStemsCommand(Rosegarden::EventSelection &selection) :
+    AdjustMenuRestoreStemsCommand(Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection) { }
 
@@ -550,10 +550,10 @@ private:
 };
 
 
-class TransformsMenuChangeSlurPositionCommand : public BasicSelectionCommand
+class AdjustMenuChangeSlurPositionCommand : public BasicSelectionCommand
 {
 public:
-    TransformsMenuChangeSlurPositionCommand(bool above, Rosegarden::EventSelection &selection) :
+    AdjustMenuChangeSlurPositionCommand(bool above, Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(getGlobalName(above), selection, true),
 	m_selection(&selection), m_above(above) { }
 
@@ -570,10 +570,10 @@ private:
 };
 
 
-class TransformsMenuRestoreSlursCommand : public BasicSelectionCommand
+class AdjustMenuRestoreSlursCommand : public BasicSelectionCommand
 {
 public:
-    TransformsMenuRestoreSlursCommand(Rosegarden::EventSelection &selection) :
+    AdjustMenuRestoreSlursCommand(Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection) { }
 
@@ -587,10 +587,10 @@ private:
 };
 
 
-class TransformsMenuChangeStyleCommand : public BasicSelectionCommand
+class AdjustMenuChangeStyleCommand : public BasicSelectionCommand
 {
 public:
-    TransformsMenuChangeStyleCommand(NoteStyleName style,
+    AdjustMenuChangeStyleCommand(NoteStyleName style,
 				     Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(getGlobalName(style), selection, true),
 	m_selection(&selection), m_style(style) { }
@@ -626,10 +626,10 @@ private:
     int m_number;
 };    
 
-class MarksMenuAddMarkCommand : public BasicSelectionCommand
+class NotesMenuAddMarkCommand : public BasicSelectionCommand
 {
 public:
-    MarksMenuAddMarkCommand(Rosegarden::Mark mark,
+    NotesMenuAddMarkCommand(Rosegarden::Mark mark,
 			    Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(getGlobalName(mark), selection, true),
 	m_selection(&selection), m_mark(mark) { }
@@ -645,10 +645,10 @@ private:
 };
 
 
-class MarksMenuAddTextMarkCommand : public BasicSelectionCommand
+class NotesMenuAddTextMarkCommand : public BasicSelectionCommand
 {
 public:
-    MarksMenuAddTextMarkCommand(std::string text,
+    NotesMenuAddTextMarkCommand(std::string text,
 				Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection), m_text(text) { }
@@ -664,10 +664,10 @@ private:
 };
 
 
-class MarksMenuAddFingeringMarkCommand : public BasicSelectionCommand
+class NotesMenuAddFingeringMarkCommand : public BasicSelectionCommand
 {
 public:
-    MarksMenuAddFingeringMarkCommand(std::string text,
+    NotesMenuAddFingeringMarkCommand(std::string text,
 				     Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection), m_text(text) { }
@@ -683,10 +683,10 @@ private:
 };
 
 
-class MarksMenuRemoveMarksCommand : public BasicSelectionCommand
+class NotesMenuRemoveMarksCommand : public BasicSelectionCommand
 {
 public:
-    MarksMenuRemoveMarksCommand(Rosegarden::EventSelection &selection) :
+    NotesMenuRemoveMarksCommand(Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection) { }
 
@@ -699,10 +699,10 @@ private:
     Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
 };
 
-class MarksMenuRemoveFingeringMarksCommand : public BasicSelectionCommand
+class NotesMenuRemoveFingeringMarksCommand : public BasicSelectionCommand
 {
 public:
-    MarksMenuRemoveFingeringMarksCommand(Rosegarden::EventSelection &selection) :
+    NotesMenuRemoveFingeringMarksCommand(Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection) { }
 
@@ -715,10 +715,10 @@ private:
     Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
 };
 
-class TransformsMenuFixNotationQuantizeCommand : public BasicSelectionCommand
+class AdjustMenuFixNotationQuantizeCommand : public BasicSelectionCommand
 {
 public:
-    TransformsMenuFixNotationQuantizeCommand(Rosegarden::EventSelection &selection) :
+    AdjustMenuFixNotationQuantizeCommand(Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection) { }
     
@@ -731,10 +731,10 @@ private:
     Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
 };
 
-class TransformsMenuRemoveNotationQuantizeCommand : public BasicSelectionCommand
+class AdjustMenuRemoveNotationQuantizeCommand : public BasicSelectionCommand
 {
 public:
-    TransformsMenuRemoveNotationQuantizeCommand(Rosegarden::EventSelection &selection) :
+    AdjustMenuRemoveNotationQuantizeCommand(Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection) { }
     
@@ -747,7 +747,7 @@ private:
     Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
 };
 
-class TransformsMenuInterpretCommand : public BasicSelectionCommand
+class AdjustMenuInterpretCommand : public BasicSelectionCommand
 {
 public:
     // bit masks: pass an OR of these to the constructor
@@ -759,7 +759,7 @@ public:
     static const int Articulate;         // slurs, marks, legato etc
     static const int AllInterpretations; // all of the above
 
-    TransformsMenuInterpretCommand(Rosegarden::EventSelection &selection,
+    AdjustMenuInterpretCommand(Rosegarden::EventSelection &selection,
 				   const Rosegarden::Quantizer *quantizer,
 				   int interpretations) :
 	BasicSelectionCommand(getGlobalName(), selection, true),
@@ -767,7 +767,7 @@ public:
 	m_quantizer(quantizer),
 	m_interpretations(interpretations) { }
 
-    virtual ~TransformsMenuInterpretCommand();
+    virtual ~AdjustMenuInterpretCommand();
 
     static QString getGlobalName() { return i18n("&Interpret..."); }
     

@@ -615,6 +615,7 @@ public:
     static const std::string ChordName;
     static const std::string KeyName;
     static const std::string Lyric;
+    static const std::string Chord;
     static const std::string Dynamic;
     static const std::string Direction;
     static const std::string LocalDirection;

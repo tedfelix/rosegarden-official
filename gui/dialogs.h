@@ -776,7 +776,7 @@ class InterpretDialog : public KDialogBase
 public:
     InterpretDialog(QWidget *parent);
 
-    // an OR from TransformsMenuInterpretCommand's constants
+    // an OR from AdjustMenuInterpretCommand's constants
     int getInterpretations();
 
 protected slots:

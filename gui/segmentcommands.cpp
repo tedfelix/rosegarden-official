@@ -1562,7 +1562,7 @@ AddTimeSignatureAndNormalizeCommand::AddTimeSignatureAndNormalizeCommand
 	// also does a rest normalize.  It's what we normally want
 	// when adding a time signature.
 
-	addCommand(new TransformsMenuMakeRegionViableCommand
+	addCommand(new AdjustMenuMakeRegionViableCommand
 		   (**i,
 		    std::max(startTime, time),
 		    std::min(endTime, nextTimeSigTime)));

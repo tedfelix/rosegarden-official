@@ -1071,6 +1071,9 @@ TextEventDialog::TextEventDialog(QWidget *parent,
 	} else if (style == Text::Lyric) {
 	    m_typeCombo->insertItem(i18n("Lyric"));
 
+	} else if (style == Text::Chord) {
+	    m_typeCombo->insertItem(i18n("Chord"));
+
 	} else if (style == Text::Annotation) {
 	    m_typeCombo->insertItem(i18n("Annotation"));
 
@@ -4091,17 +4094,17 @@ InterpretDialog::getInterpretations()
     config->writeEntry("interpretarticulate", m_articulate->isChecked());
 
     if (m_allInterpretations->isChecked()) {
-	return TransformsMenuInterpretCommand::AllInterpretations;
+	return AdjustMenuInterpretCommand::AllInterpretations;
     } else {
 	int in = 0;
 	if (m_applyTextDynamics->isChecked())
-	    in |= TransformsMenuInterpretCommand::ApplyTextDynamics;
+	    in |= AdjustMenuInterpretCommand::ApplyTextDynamics;
 	if (m_applyHairpins->isChecked())
-	    in |= TransformsMenuInterpretCommand::ApplyHairpins;
+	    in |= AdjustMenuInterpretCommand::ApplyHairpins;
 	if (m_stressBeats->isChecked()) 
-	    in |= TransformsMenuInterpretCommand::StressBeats;
+	    in |= AdjustMenuInterpretCommand::StressBeats;
 	if (m_articulate->isChecked()) {
-	    in |= TransformsMenuInterpretCommand::Articulate;
+	    in |= AdjustMenuInterpretCommand::Articulate;
 	}
 	return in;
     }

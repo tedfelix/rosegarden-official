@@ -2729,6 +2729,7 @@ NotePixmapFactory::getTextFont(const Rosegarden::Text &text) const
      * ChordName:          Not normally shown in score, use small roman
      * KeyName:            Not normally shown in score, use small roman
      * Lyric:              Small roman, below staff and dynamic texts
+     * Chord:              Small bold roman, above staff
      * Dynamic:	           Small italic, below staff
      * Direction:          Large roman, above staff (by barline?)
      * LocalDirection:     Small bold italic, below staff (by barline?)
@@ -2744,7 +2745,8 @@ NotePixmapFactory::getTextFont(const Rosegarden::Text &text) const
 	
     if (type == Rosegarden::Text::Tempo ||
 	type == Rosegarden::Text::LocalTempo ||
-	type == Rosegarden::Text::LocalDirection) {
+	type == Rosegarden::Text::LocalDirection ||
+	type == Rosegarden::Text::Chord) {
 	weight = QFont::Bold;
     }
 	

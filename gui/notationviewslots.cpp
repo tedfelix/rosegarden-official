@@ -748,7 +748,7 @@ void NotationView::slotGroupBeam()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Beaming group..."), this);
 
-    addCommandToHistory(new GroupMenuBeamCommand
+    addCommandToHistory(new NotesMenuBeamCommand
                         (*m_currentEventSelection));
 }
 
@@ -757,7 +757,7 @@ void NotationView::slotGroupAutoBeam()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Auto-beaming selection..."), this);
 
-    addCommandToHistory(new GroupMenuAutoBeamCommand
+    addCommandToHistory(new NotesMenuAutoBeamCommand
                         (*m_currentEventSelection));
 }
 
@@ -766,7 +766,7 @@ void NotationView::slotGroupBreak()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Breaking groups..."), this);
 
-    addCommandToHistory(new GroupMenuBreakCommand
+    addCommandToHistory(new NotesMenuBreakCommand
                         (*m_currentEventSelection));
 }
 
@@ -838,7 +838,7 @@ void NotationView::slotGroupTuplet(bool simple)
         segment = &m_staffs[m_currentStaff]->getSegment();
     }
 
-    addCommandToHistory(new GroupMenuTupletCommand
+    addCommandToHistory(new AdjustMenuTupletCommand
                         (*segment, t, unit, untupled, tupled, hasTimingAlready));
 }
 
@@ -847,7 +847,7 @@ void NotationView::slotGroupUnTuplet()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Untupleting..."), this);
 
-    addCommandToHistory(new GroupMenuUnTupletCommand
+    addCommandToHistory(new AdjustMenuUnTupletCommand
                         (*m_currentEventSelection));
 }
 
@@ -856,7 +856,7 @@ void NotationView::slotGroupGrace()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Making grace notes..."), this);
 
-    addCommandToHistory(new GroupMenuGraceCommand(*m_currentEventSelection));
+    addCommandToHistory(new AdjustMenuGraceCommand(*m_currentEventSelection));
 }
 
 void NotationView::slotGroupUnGrace()
@@ -864,7 +864,7 @@ void NotationView::slotGroupUnGrace()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Making non-grace notes..."), this);
 
-    addCommandToHistory(new GroupMenuUnGraceCommand(*m_currentEventSelection));
+    addCommandToHistory(new AdjustMenuUnGraceCommand(*m_currentEventSelection));
 }
 
 
@@ -930,8 +930,8 @@ void NotationView::slotAddIndication(std::string type, QString desc)
 {
     if (!m_currentEventSelection) return;
 
-    GroupMenuAddIndicationCommand *command =
-        new GroupMenuAddIndicationCommand(type, *m_currentEventSelection);
+    NotesMenuAddIndicationCommand *command =
+        new NotesMenuAddIndicationCommand(type, *m_currentEventSelection);
 
     if (command->canExecute()) {
         addCommandToHistory(command);
@@ -948,8 +948,8 @@ void NotationView::slotGroupMakeChord()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Making chord..."), this);
 
-    GroupMenuMakeChordCommand *command =
-	new GroupMenuMakeChordCommand(*m_currentEventSelection);
+    AdjustMenuMakeChordCommand *command =
+	new AdjustMenuMakeChordCommand(*m_currentEventSelection);
 
     addCommandToHistory(command);
 }
@@ -964,7 +964,7 @@ void NotationView::slotTransformsNormalizeRests()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Normalizing rests..."), this);
 
-    addCommandToHistory(new TransformsMenuNormalizeRestsCommand
+    addCommandToHistory(new AdjustMenuNormalizeRestsCommand
                         (*m_currentEventSelection));
 }
 
@@ -973,7 +973,7 @@ void NotationView::slotTransformsCollapseRests()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Collapsing rests..."), this);
 
-    addCommandToHistory(new TransformsMenuCollapseRestsCommand
+    addCommandToHistory(new AdjustMenuCollapseRestsCommand
                         (*m_currentEventSelection));
 }
 
@@ -982,7 +982,7 @@ void NotationView::slotTransformsCollapseNotes()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Collapsing notes..."), this);
 
-    addCommandToHistory(new TransformsMenuCollapseNotesCommand
+    addCommandToHistory(new AdjustMenuCollapseNotesCommand
                         (*m_currentEventSelection));
 }
 
@@ -991,7 +991,7 @@ void NotationView::slotTransformsTieNotes()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Tying notes..."), this);
 
-    addCommandToHistory(new TransformsMenuTieNotesCommand
+    addCommandToHistory(new NotesMenuTieNotesCommand
                         (*m_currentEventSelection));
 }
 
@@ -1000,7 +1000,7 @@ void NotationView::slotTransformsUntieNotes()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Untying notes..."), this);
 
-    addCommandToHistory(new TransformsMenuUntieNotesCommand
+    addCommandToHistory(new AdjustMenuUntieNotesCommand
                         (*m_currentEventSelection));
 }
 
@@ -1009,7 +1009,7 @@ void NotationView::slotTransformsMakeNotesViable()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Making notes viable..."), this);
 
-    addCommandToHistory(new TransformsMenuMakeNotesViableCommand
+    addCommandToHistory(new AdjustMenuMakeNotesViableCommand
                         (*m_currentEventSelection));
 }
 
@@ -1018,7 +1018,7 @@ void NotationView::slotTransformsDeCounterpoint()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Removing counterpoint..."), this);
 
-    addCommandToHistory(new TransformsMenuDeCounterpointCommand
+    addCommandToHistory(new AdjustMenuDeCounterpointCommand
                         (*m_currentEventSelection));
 }
 
@@ -1027,7 +1027,7 @@ void NotationView::slotTransformsStemsUp()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Pointing stems up..."), this);
 
-    addCommandToHistory(new TransformsMenuChangeStemsCommand
+    addCommandToHistory(new AdjustMenuChangeStemsCommand
                         (true, *m_currentEventSelection));
 }
 
@@ -1036,7 +1036,7 @@ void NotationView::slotTransformsStemsDown()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Pointing stems down..."), this);
 
-    addCommandToHistory(new TransformsMenuChangeStemsCommand
+    addCommandToHistory(new AdjustMenuChangeStemsCommand
                         (false, *m_currentEventSelection));
 
 }
@@ -1046,7 +1046,7 @@ void NotationView::slotTransformsRestoreStems()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Restoring computed stem directions..."), this);
 
-    addCommandToHistory(new TransformsMenuRestoreStemsCommand
+    addCommandToHistory(new AdjustMenuRestoreStemsCommand
                         (*m_currentEventSelection));
 }
 
@@ -1055,7 +1055,7 @@ void NotationView::slotTransformsSlursAbove()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Positioning slurs..."), this);
 
-    addCommandToHistory(new TransformsMenuChangeSlurPositionCommand
+    addCommandToHistory(new AdjustMenuChangeSlurPositionCommand
                         (true, *m_currentEventSelection));
 }
 
@@ -1064,7 +1064,7 @@ void NotationView::slotTransformsSlursBelow()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Positioning slurs..."), this);
 
-    addCommandToHistory(new TransformsMenuChangeSlurPositionCommand
+    addCommandToHistory(new AdjustMenuChangeSlurPositionCommand
                         (false, *m_currentEventSelection));
 
 }
@@ -1074,7 +1074,7 @@ void NotationView::slotTransformsRestoreSlurs()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Restoring slur positions..."), this);
 
-    addCommandToHistory(new TransformsMenuRestoreSlursCommand
+    addCommandToHistory(new AdjustMenuRestoreSlursCommand
                         (*m_currentEventSelection));
 }
 
@@ -1083,7 +1083,7 @@ void NotationView::slotTransformsFixQuantization()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Fixing notation quantization..."), this);
 
-    addCommandToHistory(new TransformsMenuFixNotationQuantizeCommand
+    addCommandToHistory(new AdjustMenuFixNotationQuantizeCommand
                         (*m_currentEventSelection));
 }    
 
@@ -1092,7 +1092,7 @@ void NotationView::slotTransformsRemoveQuantization()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Removing notation quantization..."), this);
 
-    addCommandToHistory(new TransformsMenuRemoveNotationQuantizeCommand
+    addCommandToHistory(new AdjustMenuRemoveNotationQuantizeCommand
                         (*m_currentEventSelection));
 }    
 
@@ -1109,7 +1109,7 @@ void NotationView::slotSetStyleFromAction()
         KTmpStatusMsg msg(i18n("Changing to %1 style...").arg(name),
                           this);
 
-        addCommandToHistory(new TransformsMenuChangeStyleCommand
+        addCommandToHistory(new AdjustMenuChangeStyleCommand
                             (NoteStyleName(qstrtostr(name)),
                              *m_currentEventSelection));
     } else {
@@ -1333,7 +1333,7 @@ void NotationView::slotTransformsInterpret()
 
     if (dialog.exec() == QDialog::Accepted) {
 	KTmpStatusMsg msg(i18n("Interpreting selection..."), this);
-	addCommandToHistory(new TransformsMenuInterpretCommand
+	addCommandToHistory(new AdjustMenuInterpretCommand
 			    (*m_currentEventSelection,
 			     getDocument()->getComposition().getNotationQuantizer(),
 			     dialog.getInterpretations()));
@@ -1362,7 +1362,7 @@ void NotationView::slotMarksAddTextMark()
         QString txt = KLineEditDlg::getText(i18n("Text: "), "", &pressedOK, this);
         
         if (pressedOK) {
-            addCommandToHistory(new MarksMenuAddTextMarkCommand
+            addCommandToHistory(new NotesMenuAddTextMarkCommand
                                 (qstrtostr(txt), *m_currentEventSelection));
         }
     }
@@ -1376,7 +1376,7 @@ void NotationView::slotMarksAddFingeringMark()
         QString txt = KLineEditDlg::getText(i18n("Fingering: "), "", &pressedOK, this);
         
         if (pressedOK) {
-            addCommandToHistory(new MarksMenuAddFingeringMarkCommand
+            addCommandToHistory(new NotesMenuAddFingeringMarkCommand
                                 (qstrtostr(txt), *m_currentEventSelection));
         }
     }
@@ -1394,7 +1394,7 @@ void NotationView::slotMarksAddFingeringMarkFromAction()
 	if (fingering == "plus") fingering = "+";
 
 	if (m_currentEventSelection) {
-	    addCommandToHistory(new MarksMenuAddFingeringMarkCommand
+	    addCommandToHistory(new NotesMenuAddFingeringMarkCommand
 				(qstrtostr(fingering), *m_currentEventSelection));
 	}
     }
@@ -1403,14 +1403,14 @@ void NotationView::slotMarksAddFingeringMarkFromAction()
 void NotationView::slotMarksRemoveMarks()
 {
     if (m_currentEventSelection)
-        addCommandToHistory(new MarksMenuRemoveMarksCommand
+        addCommandToHistory(new NotesMenuRemoveMarksCommand
                             (*m_currentEventSelection));
 }
 
 void NotationView::slotMarksRemoveFingeringMarks()
 {
     if (m_currentEventSelection)
-        addCommandToHistory(new MarksMenuRemoveFingeringMarksCommand
+        addCommandToHistory(new NotesMenuRemoveFingeringMarksCommand
                             (*m_currentEventSelection));
 }
 
