@@ -33,17 +33,25 @@ namespace Rosegarden { class Studio; }
 
 class BankEditorDialog : public KDialogBase
 {
+    Q_OBJECT
+
 public:
     BankEditorDialog(QWidget *parent,
                      Rosegarden::Studio *studio);
 
-    void populateDialog();
+
+public slots:
+    void slotPopulateDevice(int device);
+    void slotPopulatePrograms(int bank);
 
 protected:
 
     //--------------- Data members ---------------------------------
     Rosegarden::Studio      *m_studio;
 
+    QTabWidget              *m_programTab;
+    RosegardenComboBox      *m_deviceCombo;
+    RosegardenComboBox      *m_bankCombo;
     QSpinBox                *m_msb;
     QSpinBox                *m_lsb;
     std::vector<QLineEdit*>  m_programNames;
