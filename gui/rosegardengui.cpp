@@ -27,7 +27,6 @@
 #include <qinputdialog.h>
 #include <qobjectlist.h>
 #include <qlayout.h>
-#include <qbitmap.h>
 
 // include files for KDE
 #include <kcursor.h>
