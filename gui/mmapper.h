@@ -150,13 +150,8 @@ public:
     virtual size_t computeMmappedSize();
 
 protected:
-    /**
-     * The depth argument is the level of subdivision (0 = bars only,
-     * 3 = bars, beats, beat divisions, subdivisions -- etc).
-     */
-    MetronomeMmapper(RosegardenGUIDoc* doc, int depth = 2);
+    MetronomeMmapper(RosegardenGUIDoc* doc);
 
-    void setupMetronome();
     void sortTicks();
     QString createFileName();
 
@@ -171,8 +166,6 @@ protected:
     TickContainer m_ticks;
     bool m_deleteMetronome;
     const Rosegarden::MidiMetronome* m_metronome;
-    Rosegarden::MidiByte m_barVelocity;
-    Rosegarden::MidiByte m_beatVelocity;
     Rosegarden::RealTime m_tickDuration;
 };
 
@@ -185,7 +178,7 @@ public:
     static SegmentMmapper* makeMmapperForSegment(RosegardenGUIDoc*, Rosegarden::Segment*,
                                                  const QString& fileName);
 
-    static MetronomeMmapper* makeMetronome(RosegardenGUIDoc*, int depth = 2);
+    static MetronomeMmapper* makeMetronome(RosegardenGUIDoc*);
 };
 
 namespace Rosegarden { class SequenceManager; }

@@ -1326,6 +1326,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             int pitch = atts.value("pitch").toInt();
             int barVely = atts.value("barvelocity").toInt();
             int beatVely = atts.value("beatvelocity").toInt();
+            int subBeatVely = atts.value("subbeatvelocity").toInt();
 
             Rosegarden::InstrumentId instrument =
                 atts.value("instrument").toInt();
@@ -1344,11 +1345,13 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                         std::string("Metronome"));
 
                 dynamic_cast<Rosegarden::MidiDevice*>(m_device)->
-                        setMetronome(instrument,
-                                     prg,
-                                     Rosegarden::MidiByte(pitch),
-                                     Rosegarden::MidiByte(barVely),
-                                     Rosegarden::MidiByte(beatVely));
+		    setMetronome(Rosegarden::MidiMetronome
+				 (instrument,
+				  prg,
+				  Rosegarden::MidiByte(pitch),
+				  Rosegarden::MidiByte(barVely),
+				  Rosegarden::MidiByte(beatVely),
+				  Rosegarden::MidiByte(subBeatVely)));
             }
         }
 

@@ -736,12 +736,14 @@ protected:
 
     typedef std::list<CompositionObserver *> ObserverSet;
     ObserverSet m_observers;
+
     void notifySegmentAdded(Segment *) const;
     void notifySegmentRemoved(Segment *) const;
     void notifySegmentRepeatChanged(Segment *, bool) const;
     void notifyEndMarkerChange(bool shorten) const;
     void notifyTrackChanged(Track*) const;
     void notifyMetronomeChanged() const;
+    void notifyTimeSignatureChanged() const;
     void notifySoloChanged() const;
     void notifyTempoChanged() const;
     void notifySourceDeletion() const;
@@ -812,6 +814,11 @@ public:
      */
     virtual void trackChanged(const Composition *, Track*) = 0;
 
+    /**
+     * Called when some time signature has changed
+     */
+    virtual void timeSignatureChanged(const Composition *) = 0;
+    
     /**
      * Called when metronome status has changed (on/off)
      */

@@ -684,6 +684,11 @@ public slots:
     void slotModifyMIDIFilters();
 
     /**
+     * Manage Metronome
+     */
+    void slotManageMetronome();
+
+    /**
      * Save Studio as Default
      */
     void slotSaveDefaultStudio();

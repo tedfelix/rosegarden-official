@@ -557,6 +557,7 @@ Composition::addTimeSignature(timeT t, TimeSignature timeSig)
     m_barPositionsNeedCalculating = true;
 
     updateRefreshStatuses();
+    notifyTimeSignatureChanged();
 
     return std::distance(m_timeSigSegment.begin(), i);
 }
@@ -647,6 +648,7 @@ Composition::removeTimeSignature(int n)
     m_timeSigSegment.erase(m_timeSigSegment[n]);
     m_barPositionsNeedCalculating = true;
     updateRefreshStatuses();
+    notifyTimeSignatureChanged();
 }
 
 
@@ -1307,6 +1309,15 @@ Composition::notifyMetronomeChanged() const
     for (ObserverSet::const_iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
 	(*i)->metronomeChanged(this, usePlayMetronome(), useRecordMetronome());
+    }
+}
+
+void
+Composition::notifyTimeSignatureChanged() const
+{
+    for (ObserverSet::const_iterator i = m_observers.begin();
+	 i != m_observers.end(); ++i) {
+	(*i)->timeSignatureChanged(this);
     }
 }
 

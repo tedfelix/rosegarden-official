@@ -789,4 +789,38 @@ protected:
     QAccel       *m_accelerators;
 };
 
+class ManageMetronomeDialog : public KDialogBase
+{
+    Q_OBJECT
+
+public:
+    ManageMetronomeDialog(QWidget *parent, RosegardenGUIDoc *doc);
+
+    void setModified(bool value);
+
+public slots:
+    void slotOk();
+    void slotApply();
+    void slotSetModified();
+    void slotResolutionChanged(int);
+    void populate(int dev);
+
+protected:
+
+    //--------------- Data members ---------------------------------
+
+    RosegardenGUIDoc   *m_doc;
+
+    RosegardenComboBox *m_metronomeDevice;
+    RosegardenComboBox *m_metronomeInstrument;
+    RosegardenComboBox *m_metronomeResolution;
+    QSpinBox           *m_metronomePitch;
+    QSpinBox           *m_metronomeBarVely;
+    QSpinBox           *m_metronomeBeatVely;
+    QSpinBox           *m_metronomeSubBeatVely;
+
+    bool                m_modified;
+};
+
+
 #endif

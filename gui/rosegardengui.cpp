@@ -640,7 +640,11 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotModifyMIDIFilters()),
                 actionCollection(), "modify_midi_filters");
 
-    new KAction(i18n("Manage Control Parameters..."), 0, this,
+    new KAction(i18n("Manage &Metronome..."), 0, this,
+                SLOT(slotManageMetronome()),
+                actionCollection(), "manage_metronome");
+
+    new KAction(i18n("Manage &Control Parameters..."), 0, this,
                 SLOT(slotEditControlParameters()),
                 actionCollection(), "manage_controls");
 
@@ -916,9 +920,9 @@ void RosegardenGUIApp::initView()
 
     }
 
-    m_view->getTrackEditor()->getChordNameRuler()->recalculate();
-
+//    m_view->initChordNameRuler();
     m_view->show();
+
     delete oldView;
 
     // We have to do this to make sure that the 2nd call ("select")
@@ -4732,6 +4736,19 @@ RosegardenGUIApp::slotModifyMIDIFilters()
     if (dialog.exec() == QDialog::Accepted)
     {
         RG_DEBUG << "slotModifyMIDIFilters - accepted" << endl;
+    }
+}
+
+void
+RosegardenGUIApp::slotManageMetronome()
+{
+    RG_DEBUG << "RosegardenGUIApp::slotModifyMIDIFilters" << endl;
+
+    ManageMetronomeDialog dialog(this, m_doc);
+
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        RG_DEBUG << "slotManageMetronome - accepted" << endl;
     }
 }
 

@@ -827,6 +827,8 @@ NotationQuantizer::Impl::quantizeAbsoluteTime(Segment *s, Segment::iterator i) c
     int maxDepth = 8 - noteType;
     if (maxDepth < 4) maxDepth = 4;
     std::vector<int> divisions = timeSig.getDivisions(maxDepth);
+    if (timeSig == TimeSignature()) // special case for 4/4
+	divisions[0] = 2;
 
     // At each depth of beat subdivision, we find the closest match
     // and assign it a score according to distance and depth.  The

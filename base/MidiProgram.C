@@ -118,13 +118,17 @@ MidiProgram::setName(std::string name)
 MidiMetronome::MidiMetronome(InstrumentId instrument,
                              const MidiProgram &program,
                              MidiByte pitch,
+			     int depth,
                              MidiByte barVely,
-                             MidiByte beatVely):
+                             MidiByte beatVely,
+			     MidiByte subBeatVely):
          m_instrument(instrument),
          m_program(program),
          m_pitch(pitch),
+	 m_depth(depth),
          m_barVelocity(barVely),
-         m_beatVelocity(beatVely)
+         m_beatVelocity(beatVely),
+	 m_subBeatVelocity(subBeatVely)
 {
     // nothing else
 }

@@ -185,6 +185,7 @@ public:
     virtual void segmentRepeatChanged(const Composition*, Segment*, bool);
     virtual void endMarkerTimeChanged(const Composition*, bool shorten);
     virtual void trackChanged        (const Composition*, Track*);
+    virtual void timeSignatureChanged(const Composition*);
     virtual void metronomeChanged    (const Composition*, bool playMetronome, bool recordMetronome);
     virtual void soloChanged         (const Composition*, bool solo, TrackId selectedTrack);
     virtual void tempoChanged        (const Composition*);
@@ -236,6 +237,7 @@ protected:
 
     std::vector<Segment*> m_addedSegments;
     std::vector<Segment*> m_removedSegments;
+    bool m_metronomeNeedsRefresh;
 
     // statuses
     TransportStatus            m_transportStatus;

@@ -216,7 +216,7 @@ MidiDevice::~MidiDevice()
 {
     delete m_programList;
     delete m_bankList;
-    if (m_metronome) delete m_metronome;
+    delete m_metronome;
 }
 
 void
@@ -263,31 +263,15 @@ MidiDevice::addBank(MidiBank *bank)
 void
 MidiDevice::removeMetronome()
 {
-    if (m_metronome)
-    {
-        delete m_metronome;
-        m_metronome = 0;
-    }
-
+    delete m_metronome;
+    m_metronome = 0;
 }
 
 void
-MidiDevice::setMetronome(InstrumentId instrument,
-                         const MidiProgram &program,
-                         MidiByte pitch,
-                         MidiByte barVely,
-                         MidiByte beatVely)
+MidiDevice::setMetronome(const MidiMetronome &metronome)
 {
-    if (!m_metronome) {
-	m_metronome = new MidiMetronome(instrument, program, pitch, 
-                                        barVely, beatVely);
-    } else {
-        m_metronome->setInstrument(instrument);
-        m_metronome->setProgram(program);
-        m_metronome->setPitch(pitch);
-        m_metronome->setBarVelocity(barVely);
-        m_metronome->setBeatVelocity(beatVely);
-    }
+    delete m_metronome;
+    m_metronome = new MidiMetronome(metronome);
 }
 
 
@@ -420,12 +404,14 @@ MidiDevice::toXmlString()
         //
         midiDevice << "        <metronome "
                    << "instrument=\"" << m_metronome->getInstrument() << "\" "
-                   << "msb=\"" << (int)m_metronome->getProgram().getBank().getMSB() << "\" "
-                   << "lsb=\"" << (int)m_metronome->getProgram().getBank().getLSB() << "\" " 
-                   << "program=\"" << (int)m_metronome->getProgram().getProgram() << "\" "
+//!!!                   << "msb=\"" << (int)m_metronome->getProgram().getBank().getMSB() << "\" "
+//!!!                   << "lsb=\"" << (int)m_metronome->getProgram().getBank().getLSB() << "\" " 
+//!!!                   << "program=\"" << (int)m_metronome->getProgram().getProgram() << "\" "
                    << "pitch=\"" << (int)m_metronome->getPitch() << "\" "
+                   << "depth=\"" << (int)m_metronome->getDepth() << "\" "
                    << "barvelocity=\"" << (int)m_metronome->getBarVelocity() << "\" "
                    << "beatvelocity=\"" << (int)m_metronome->getBeatVelocity() 
+                   << "subbeatvelocity=\"" << (int)m_metronome->getSubBeatVelocity() 
                    << "\"/>"
                    << std::endl << std::endl;
     }

@@ -1367,8 +1367,6 @@ void SequenceManager::checkRefreshStatus()
 {
     SEQMAN_DEBUG << "SequenceManager::checkRefreshStatus()\n";
 
-    bool metronomeNeedsRefresh = (m_removedSegments.size() != 0 || m_addedSegments.size() != 0);
-
     std::vector<Segment*>::iterator i;
 
     // Check removed segments first
@@ -1394,8 +1392,6 @@ void SequenceManager::checkRefreshStatus()
         processAddedSegment(*i);
     }
     m_addedSegments.clear();
-
-    if (metronomeNeedsRefresh) resetMetronomeMmapper();
 }
 
 void SequenceManager::segmentModified(Segment* s)
@@ -1489,7 +1485,12 @@ void SequenceManager::processRemovedSegment(Segment* s)
 
 void SequenceManager::endMarkerTimeChanged(const Composition *, bool /*shorten*/)
 {
-    // do nothing
+    resetMetronomeMmapper();
+}
+
+void SequenceManager::timeSignatureChanged(const Composition *)
+{
+    resetMetronomeMmapper();
 }
 
 void SequenceManager::compositionDeleted(const Composition *)
@@ -1516,6 +1517,7 @@ void SequenceManager::metronomeChanged(Rosegarden::InstrumentId id,
                  << endl;
 
     m_controlBlockMmapper->updateMetronomeData(id, playMetronome, recordMetronome);
+    m_metronomeMmapper->refresh();
 }
 
 void SequenceManager::metronomeChanged(const Composition *, bool playMetronome, bool recordMetronome)
@@ -1529,6 +1531,7 @@ void SequenceManager::metronomeChanged(const Composition *, bool playMetronome, 
                  << endl;
 
     m_controlBlockMmapper->updateMetronomeData(m_metronomeMmapper->getMetronomeInstrument(), playMetronome, recordMetronome);
+    m_metronomeMmapper->refresh();
 }
 
 void SequenceManager::soloChanged(const Composition *, bool solo, TrackId selectedTrack)

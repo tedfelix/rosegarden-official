@@ -671,26 +671,40 @@ QString CompositionMmapper::getSegmentFileName(Segment* s)
 
 //----------------------------------------
 
-MetronomeMmapper::MetronomeMmapper(RosegardenGUIDoc* doc,
-                                   int depth)
+MetronomeMmapper::MetronomeMmapper(RosegardenGUIDoc* doc)
     : SegmentMmapper(doc, 0, createFileName()),
       m_deleteMetronome(false),
       m_metronome(0), // no metronome to begin with
-      m_barVelocity(120),
-      m_beatVelocity(80),
       m_tickDuration(0, 10000)
 {
     SEQMAN_DEBUG << "MetronomeMmapper ctor : " << this << endl;
 
-    setupMetronome();
+    // get metronome device
+    Rosegarden::Configuration &config = m_doc->getConfiguration();
+    int device = config.get<Rosegarden::Int>("metronomedevice", 0);
+
+    Rosegarden::MidiMetronome *metronome = 
+        m_doc->getStudio().getMetronomeFromDevice(device);
+
+    if (metronome) m_metronome = new Rosegarden::MidiMetronome(*metronome);
+    else {
+	// create a default if we can't find one
+        Rosegarden::MidiProgram program(Rosegarden::MidiBank(true, 0, 0),
+                                        0, std::string("Metronome"));
+
+        m_metronome = 
+            new Rosegarden::MidiMetronome(Rosegarden::SystemInstrumentBase,
+                                          program);
+    }
 
     Composition& c = m_doc->getComposition();
-
     Rosegarden::timeT t = 0;
+    int depth = m_metronome->getDepth();
 
     while (t < c.getEndMarker()) {
 
         Rosegarden::TimeSignature sig = c.getTimeSignatureAt(t);
+	Rosegarden::timeT barDuration = sig.getBarDuration();
         std::vector<int> divisions;
         if (depth > 0) divisions = sig.getDivisions(depth - 1);
         int ticks = 1;
@@ -699,24 +713,20 @@ MetronomeMmapper::MetronomeMmapper(RosegardenGUIDoc* doc,
             if (i >= 0) ticks *= divisions[i];
         
             for (int tick = 0; tick < ticks; ++tick) {
-
                 if (i >= 0 && (tick % divisions[i] == 0)) continue;
-                Rosegarden::timeT tickTime =
-                    t + (tick * sig.getBarDuration()) / ticks;
-
+                Rosegarden::timeT tickTime = t + (tick * barDuration) / ticks;
                 m_ticks.push_back(Tick(tickTime, i+1));
             }
         }
         
         t = c.getBarEndForTime(t);
     }
+    
+    sortTicks();
 
     if (m_ticks.size() == 0) {
         SEQMAN_DEBUG << "MetronomeMmapper : WARNING no ticks generated\n";
     }
-    
-
-    sortTicks();
 
     m_mmappedSize = computeMmappedSize();
     if (m_mmappedSize > 0) {
@@ -742,39 +752,6 @@ QString MetronomeMmapper::createFileName()
     return KGlobal::dirs()->resourceDirs("tmp").first() + "/rosegarden_metronome";
 }
 
-
-void MetronomeMmapper::setupMetronome()
-{
-    // get metronome device
-    Rosegarden::Configuration &config = m_doc->getConfiguration();
-    int device = config.get<Rosegarden::Int>("metronomedevice", 0);
-
-    Rosegarden::MidiMetronome *metronome = 
-        m_doc->getStudio().getMetronomeFromDevice(device);
-
-    // create a default if we can't find one
-    if (metronome == 0)
-    {
-        Rosegarden::MidiProgram program(Rosegarden::MidiBank(true, 0, 0),
-                                        0, std::string("Metronome"));
-
-        metronome = 
-            new Rosegarden::MidiMetronome(Rosegarden::SystemInstrumentBase,
-                                          program, 37, 120, 80);
-    }
-
-    // set our metronome
-    //
-    if (!m_metronome)
-    { 
-        m_metronome = metronome;
-        m_barVelocity = metronome->getBarVelocity();
-        m_beatVelocity = metronome->getBeatVelocity();
-    }
-
-}
-
-
 unsigned int MetronomeMmapper::getSegmentRepeatCount()
 {
     return 1;
@@ -791,11 +768,14 @@ void MetronomeMmapper::dump()
     Composition& comp = m_doc->getComposition();
 
     MappedEvent* bufPos = m_mmappedBuffer;
-    for(TickContainer::iterator i = m_ticks.begin(); i != m_ticks.end(); ++i) {
+    for (TickContainer::iterator i = m_ticks.begin(); i != m_ticks.end(); ++i) {
 
-        Rosegarden::MidiByte velocity = m_beatVelocity;
-        if (i->second == 0) // tick depth = 0, means tick is on bar
-            velocity = m_barVelocity;
+        Rosegarden::MidiByte velocity;
+	switch (i->second) {
+	case 0:  velocity = m_metronome->getBarVelocity(); break;
+	case 1:  velocity = m_metronome->getBeatVelocity(); break;
+	default: velocity = m_metronome->getSubBeatVelocity(); break;
+	}
 
         eventTime = comp.getElapsedRealTime(i->first);
 
@@ -805,7 +785,6 @@ void MetronomeMmapper::dump()
                                  eventTime,
                                  m_tickDuration);
         ++bufPos;
-
     }
 }
 
@@ -851,9 +830,9 @@ SegmentMmapper* SegmentMmapperFactory::makeMmapperForSegment(RosegardenGUIDoc* d
     return mmapper;
 }
 
-MetronomeMmapper* SegmentMmapperFactory::makeMetronome(RosegardenGUIDoc* doc, int depth)
+MetronomeMmapper* SegmentMmapperFactory::makeMetronome(RosegardenGUIDoc* doc)
 {
-    MetronomeMmapper* mmapper = new MetronomeMmapper(doc, depth);
+    MetronomeMmapper* mmapper = new MetronomeMmapper(doc);
     mmapper->init();
     
     return mmapper;

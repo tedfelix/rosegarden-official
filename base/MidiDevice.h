@@ -73,12 +73,7 @@ public:
     virtual void addInstrument(Instrument*);
 
     void removeMetronome();
-    void setMetronome(InstrumentId instrument,
-                      const MidiProgram &program,
-                      MidiByte pitch,
-                      MidiByte barVely,
-                      MidiByte beatVely);
-
+    void setMetronome(const MidiMetronome &);
     MidiMetronome* getMetronome() const { return m_metronome; }
 
     void addProgram(MidiProgram *program);

@@ -141,6 +141,8 @@ public:
      * Change zoom size -- set the RulerScale's units-per-pixel to size
      */
     void setZoomSize(double size);
+
+    void initChordNameRuler();
     
     bool haveSelection();
     Rosegarden::SegmentSelection getSelection();

@@ -436,37 +436,6 @@ protected:
 
 };
 
-/**
- * Metronome Configuration page
- *
- * (document-wide settings)
- */
-class MetronomeConfigurationPage : public TabbedConfigurationPage
-{
-    Q_OBJECT
-public:
-    MetronomeConfigurationPage(RosegardenGUIDoc *doc,
-                               QWidget *parent=0, const char *name=0);
-    virtual void apply();
-
-    static QString iconLabel() { return i18n("Metronome"); }
-    static QString title()     { return i18n("Metronome Settings"); }
-
-public slots:
-    void populate(int dev);
-
-protected:
-
-    //--------------- Data members ---------------------------------
-
-    RosegardenComboBox *m_metronomeDevice;
-    RosegardenComboBox *m_metronomeInstrument;
-    QSpinBox           *m_metronomePitch;
-    QSpinBox           *m_metronomeBarVely;
-    QSpinBox           *m_metronomeBeatVely;
-
-};
-
 // -----------  SequencerConfigurationage -----------------
 //
 

@@ -289,8 +289,9 @@ ChordNameRuler::recalculate(timeT from, timeT to)
 
     // We now have the overall area affected by these changes, across
     // all segments.  If it's entirely within our displayed area, just
-    // recalculate the displayed area; if it overlaps, calculate
-    // everything; if it's entirely without, calculate nothing.
+    // recalculate the displayed area; if it overlaps, calculate the
+    // union of the two areas; if it's entirely without, calculate
+    // nothing.
 
     if (level == RecalcNone) {
 	if (from == to) {

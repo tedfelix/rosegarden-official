@@ -1650,13 +1650,13 @@ TimeSignature::getDivisions(int depth) const
 
     if (depth <= 0) return divisions;
     timeT base = getBarDuration(); // calls setInternalDurations
-
+/*
     if (m_numerator == 4 && m_denominator == 4) {
         divisions.push_back(2);
         base /= 2;
         --depth;
     }
-
+*/
     if (depth <= 0) return divisions;
 
     divisions.push_back(base / m_beatDuration);
