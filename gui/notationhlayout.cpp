@@ -264,7 +264,7 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 
 	timeT actualBarEnd = barTimes.first;
 
-	AccidentalTable accTable(key, clef);
+	Rosegarden::AccidentalTable accTable(key, clef);
 
         for (NotationElementList::iterator itr = from; itr != to; ++itr) {
         
@@ -297,7 +297,7 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 
                 // Probably not strictly the right thing to do
                 // here, but I hope it'll do well enough in practice
-                accTable = AccidentalTable(key, clef);
+                accTable = Rosegarden::AccidentalTable(key, clef);
 
             } else if (el->event()->isa(Rosegarden::Key::EventType)) {
 
@@ -307,7 +307,7 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 
                 key = Rosegarden::Key(*el->event());
 
-                accTable = AccidentalTable(key, clef);
+                accTable = Rosegarden::AccidentalTable(key, clef);
 
 	    } else if (el->event()->isa(Text::EventType)) {
 
@@ -438,14 +438,13 @@ NotationHLayout::scanChord(NotationElementList *notes,
 			   NotationElementList::iterator &itr,
 			   const Rosegarden::Clef &clef,
 			   const Rosegarden::Key &key,
-			   AccidentalTable &accTable,
+			   Rosegarden::AccidentalTable &accTable,
 			   float &lyricWidth,
 			   ChunkList &chunks,
 			   int &graceCount,
 			   NotationElementList::iterator &to)
 {
     NotationChord chord(*notes, itr, m_notationQuantizer, m_properties);
-    AccidentalTable newAccTable(accTable);
     Accidental someAccidental = NoAccidental;
     bool barEndsInChord = false;
     bool grace = false;
@@ -498,23 +497,22 @@ NotationHLayout::scanChord(NotationElementList *notes,
 	el->event()->setMaybe<String>(m_properties.CALCULATED_ACCIDENTAL, acc);
 
 	// update display acc for note according to the accTable
-	// (accidentals in force when the last chord ended) and update
-	// newAccTable with accidentals from this note.  (We don't
-	// update accTable yet because there may be other notes in
-	// this chord that need accTable to be the same as it is for
-	// this one)
+	// (accidentals in force when the last chord ended) and tell
+	// accTable about accidentals from this note.
                     
-	Accidental dacc = accTable.getDisplayAccidental(acc, h);
+	Accidental dacc = accTable.processDisplayAccidental(acc, h);
 	el->event()->setMaybe<String>(m_properties.DISPLAY_ACCIDENTAL, dacc);
 	if (someAccidental == NoAccidental) someAccidental = dacc;
 
-	newAccTable.update(acc, h);
 	if (i == to) barEndsInChord = true;
 
 	if (i == chord.getFinalElement()) break;
     }
 
-    accTable.copyFrom(newAccTable);
+    // tell accTable the chord has ended, so to bring its accidentals
+    // into force for future chords
+    accTable.update();
+
     chord.applyAccidentalShiftProperties();
     
     float extraWidth = 0;
@@ -954,93 +952,6 @@ NotationHLayout::reconcileBarsPage()
 
 // and for once I swear things will still be good tomorrow
 
-NotationHLayout::AccidentalTable::AccidentalTable(Rosegarden::Key key, Clef clef) :
-    m_key(key), m_clef(clef)
-{
-    std::vector<int> heights(key.getAccidentalHeights(clef));
-    unsigned int i;
-
-    for (i = 0; i < 7; ++i) m_accidentals[i] = NoAccidental;
-    for (i = 0; i < heights.size(); ++i) {
-        m_accidentals[Rosegarden::Key::canonicalHeight(heights[i])] =
-            (key.isSharp() ? Sharp : Flat);
-    }
-}
-
-NotationHLayout::AccidentalTable::AccidentalTable(const AccidentalTable &t) :
-    m_key(t.m_key), m_clef(t.m_clef)
-{
-    copyFrom(t);
-}
-
-NotationHLayout::AccidentalTable &
-NotationHLayout::AccidentalTable::operator=(const AccidentalTable &t)
-{
-    if (&t != this) {
-	m_key = t.m_key;
-	m_clef = t.m_clef;
-	copyFrom(t);
-    }
-    return *this;
-}
-
-Accidental
-NotationHLayout::AccidentalTable::getDisplayAccidental(Accidental accidental,
-                                                       int height) const
-{
-    height = Rosegarden::Key::canonicalHeight(height);
-
-    if (accidental == NoAccidental) {
-        accidental = m_key.getAccidentalAtHeight(height, m_clef);
-    }
-
-//    NOTATION_DEBUG << "accidental = " << accidental << ", stored accidental at height " << height << " is " << (*this)[height] << endl;
-
-    if (m_accidentals[height] != NoAccidental) {
-
-        if (accidental == m_accidentals[height]) {
-            return NoAccidental;
-        } else if (accidental == NoAccidental || accidental == Natural) {
-            return Natural;
-        } else {
-            //!!! aargh.  What we really want to do now is have two
-            //accidentals shown: first a natural, then the one
-            //required for the note.  But there's no scope for that in
-            //our accidental structure (RG2.1 is superior here)
-            return accidental;
-        }
-    } else {
-        return accidental;
-    }
-}
-
-void
-NotationHLayout::AccidentalTable::update(Accidental accidental, int height)
-{
-    height = Rosegarden::Key::canonicalHeight(height);
-
-    if (accidental == NoAccidental) {
-        accidental = m_key.getAccidentalAtHeight(height, m_clef);
-    }
-
-//    NOTATION_DEBUG << "updating height" << height << " from " << (*this)[height] << " to " << accidental << endl;
-
-
-    //!!! again, we can't properly deal with the difficult case where
-    //we already have an accidental at height but it's not the same
-    //accidental
-
-    m_accidentals[height] = accidental;
-}
-
-void
-NotationHLayout::AccidentalTable::copyFrom(const AccidentalTable &t)
-{
-    for (int i = 0; i < 7; ++i) {
-	m_accidentals[i] = t.m_accidentals[i];
-    }
-}
-
 void
 NotationHLayout::finishLayout(timeT startTime, timeT endTime)
 {
@@ -1213,13 +1124,15 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
             NotationElement *el = static_cast<NotationElement*>(*it);
 	    delta = 0;
+	    float fixed = 0;
 
 	    NOTATION_DEBUG << "element is a " << el->event()->getType() << endl;
 
 	    if (chunkitr != chunks.end()) {
 //		NOTATION_DEBUG << "barX is " << barX << ", reconcileRatio is " << reconcileRatio << " (" << bdi->second.sizeData.reconciledWidth << "/" << bdi->second.sizeData.idealWidth << ") , chunk's x is " << (*chunkitr).x << ", chunk is at " << &(*chunkitr) << endl;
 		x = barX + offset + reconcileRatio * (*chunkitr).x;
-//		NOTATION_DEBUG << " x is " << x << endl;
+		fixed = (*chunkitr).fixed;
+//		NOTATION_DEBUG << " x is " << x << ", fixed is " << fixed << endl;
 		ChunkList::iterator chunkscooter(chunkitr);
 		if (++chunkscooter != chunks.end()) {
 		    delta = (*chunkscooter).x - (*chunkitr).x;
@@ -1238,7 +1151,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 		!el->event()->isa(Rosegarden::Clef::EventType) &&
 		!el->event()->isa(Rosegarden::Key::EventType)) {
 		NOTATION_DEBUG << "Placing timesig at " << x << endl;
-		bdi->second.layoutData.timeSigX = (int)x;
+		bdi->second.layoutData.timeSigX = (int)(x - fixed);
 		double shift = getFixedItemSpacing() +
 		    m_npf->getTimeSigWidth(timeSignature);
 		offset += shift;

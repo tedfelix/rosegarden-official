@@ -205,23 +205,6 @@ public:
 
 protected:
 
-    class AccidentalTable
-    {
-    public:
-        AccidentalTable(Rosegarden::Key, Rosegarden::Clef);
-	AccidentalTable(const AccidentalTable &);
-	AccidentalTable &operator=(const AccidentalTable &);
-        Rosegarden::Accidental getDisplayAccidental(Rosegarden::Accidental,
-                                                    int height) const;
-        void update(Rosegarden::Accidental, int height);
-	void copyFrom(const AccidentalTable &); // must have same clef & key
-
-    private:
-        Rosegarden::Key m_key;
-        Rosegarden::Clef m_clef;
-	Rosegarden::Accidental m_accidentals[7];
-    };
-
     struct Chunk {
 	Rosegarden::timeT duration;
 	short subordering;
@@ -345,9 +328,9 @@ protected:
 
     void scanChord
     (NotationElementList *notes, NotationElementList::iterator &i,
-     const Rosegarden::Clef &, const Rosegarden::Key &, AccidentalTable &,
-     float &lyricWidth, ChunkList &chunks, int &graceCount,
-     NotationElementList::iterator &to);
+     const Rosegarden::Clef &, const Rosegarden::Key &,
+     Rosegarden::AccidentalTable &, float &lyricWidth, ChunkList &chunks,
+     int &graceCount, NotationElementList::iterator &to);
 
     typedef std::map<int, NotationElementList::iterator> TieMap;
 

@@ -70,12 +70,12 @@ MusicXmlExporter::~MusicXmlExporter() {
 }
 
 
-/**
- * Accidentals?
- */
 void
 MusicXmlExporter::writeNote(Event *e, Rosegarden::timeT lastNoteTime,
-			    const Rosegarden::Key &key, std::ofstream &str)
+			    Rosegarden::AccidentalTable &accTable,
+			    const Rosegarden::Clef &clef,
+			    const Rosegarden::Key &key,
+			    std::ofstream &str)
 {
     str << "\t\t\t<note>" << std::endl;
 
@@ -83,44 +83,99 @@ MusicXmlExporter::writeNote(Event *e, Rosegarden::timeT lastNoteTime,
         str << "\t\t\t\t<rest/>" << std::endl;
 
     } else {
+
 	if (e->getNotationAbsoluteTime() == lastNoteTime) {
 	    str << "\t\t\t\t<chord/>" << std::endl;
+	} else {
+	    accTable.update();
 	}
+
+	if (e->has(BaseProperties::TIED_BACKWARD) &&
+	    e->get<Bool>(BaseProperties::TIED_BACKWARD)) {
+	    str << "\t\t\t\t<tie type=\"stop\">" << std::endl;
+	}
+	if (e->has(BaseProperties::TIED_FORWARD) &&
+	    e->get<Bool>(BaseProperties::TIED_FORWARD)) {
+	    str << "\t\t\t\t<tie type=\"start\">" << std::endl;
+	}
+
         str << "\t\t\t\t<pitch>" << std::endl;
 
         long p = 0;
         e->get<Int>(BaseProperties::PITCH, p);
 	Rosegarden::Pitch pitch(p);
 
-        str << "\t\t\t\t<step>" << pitch.getNoteName(key) << "</step>" << std::endl;
+        str << "\t\t\t\t\t<step>" << pitch.getNoteName(key) << "</step>" << std::endl;
+
 	Rosegarden::Accidental acc(pitch.getAccidental(key.isSharp()));
+	Rosegarden::Accidental displayAcc(pitch.getDisplayAccidental(key));
+	Rosegarden::Accidental processedDisplayAcc =
+	    accTable.processDisplayAccidental
+	    (displayAcc, pitch.getHeightOnStaff(clef, key));
+
 	if (acc == Rosegarden::Accidentals::DoubleFlat) {
-	    str << "\t\t\t\t<alter>-2</alter>" << std::endl;
+	    str << "\t\t\t\t\t<alter>-2</alter>" << std::endl;
 	} else if (acc == Rosegarden::Accidentals::Flat) {
-	    str << "\t\t\t\t<alter>-1</alter>" << std::endl;
+	    str << "\t\t\t\t\t<alter>-1</alter>" << std::endl;
 	} else if (acc == Rosegarden::Accidentals::Sharp) {
-	    str << "\t\t\t\t<alter>1</alter>" << std::endl;
+	    str << "\t\t\t\t\t<alter>1</alter>" << std::endl;
 	} else if (acc == Rosegarden::Accidentals::DoubleSharp) {
-	    str << "\t\t\t\t<alter>2</alter>" << std::endl;
+	    str << "\t\t\t\t\t<alter>2</alter>" << std::endl;
 	}
-	
+
 	int octave = pitch.getOctave(-1);
-	str << "\t\t\t\t<octave>" << octave << "</octave>" << std::endl;
+	str << "\t\t\t\t\t<octave>" << octave << "</octave>" << std::endl;
 
         str << "\t\t\t\t</pitch>" << std::endl;
+
+	if (processedDisplayAcc == Rosegarden::Accidentals::DoubleFlat) {
+	    str << "\t\t\t\t<accidental>flat-flat</accidental>" << std::endl;
+	} else if (processedDisplayAcc == Rosegarden::Accidentals::Flat) {
+	    str << "\t\t\t\t<accidental>flat</accidental>" << std::endl;
+	} else if (processedDisplayAcc == Rosegarden::Accidentals::Natural) {
+	    str << "\t\t\t\t<accidental>natural</accidental>" << std::endl;
+	} else if (processedDisplayAcc == Rosegarden::Accidentals::Sharp) {
+	    str << "\t\t\t\t<accidental>sharp</accidental>" << std::endl;
+	} else if (processedDisplayAcc == Rosegarden::Accidentals::DoubleSharp) {
+	    str << "\t\t\t\t<accidental>sharp-sharp</accidental>" << std::endl;
+	}
+
+	bool haveNotations = false;
+	if (e->has(BaseProperties::TIED_BACKWARD) &&
+	    e->get<Bool>(BaseProperties::TIED_BACKWARD)) {
+	    if (!haveNotation) {
+		str << "\t\t\t\t<notations>" << std::endl;
+		haveNotations = true;
+	    }
+	    str << "\t\t\t\t<tied type=\"stop\">" << std::endl;
+	}
+	if (e->has(BaseProperties::TIED_FORWARD) &&
+	    e->get<Bool>(BaseProperties::TIED_FORWARD)) {
+	    if (!haveNotation) {
+		str << "\t\t\t\t<notations>" << std::endl;
+		haveNotations = true;
+	    }
+	    str << "\t\t\t\t<tied type=\"start\">" << std::endl;
+	}
+	if (haveNotations) {
+	    str << "\t\t\t\t</notations>" << std::endl;
+	}
     }
 
+    // Since there's no way to provide the performance absolute time
+    // for a note, there's also no point in providing the performance
+    // duration, even though it might in principle be of interest
     str << "\t\t\t\t<duration>" << e->getNotationDuration() << "</duration>" << std::endl;
     
     // Incomplete: will RG ever use this?
     str << "\t\t\t\t<voice>" << "1" << "</voice>" << std::endl;
-    Note tmpNote = Note::getNearestNote(e->getNotationDuration(), MAX_DOTS);
+    Note note = Note::getNearestNote(e->getNotationDuration(), MAX_DOTS);
 
     static const char *noteNames[] = {
 	"64th", "32nd", "16th", "eighth", "quarter", "half", "whole", "breve"
     };
 
-    int noteType = tmpNote.getNoteType();
+    int noteType = note.getNoteType();
     if (noteType < 0 || noteType >= int(sizeof(noteNames)/sizeof(noteNames[0]))) {
 	std::cerr << "WARNING: MusicXmlExporter::writeNote: bad note type "
 		  << noteType << std::endl;
@@ -128,7 +183,7 @@ MusicXmlExporter::writeNote(Event *e, Rosegarden::timeT lastNoteTime,
     }
     
     str << "\t\t\t\t<type>" << noteNames[noteType] << "</type>" << std::endl;
-    for (int i = 0; i < tmpNote.getDots(); ++i) {
+    for (int i = 0; i < note.getDots(); ++i) {
 	str << "\t\t\t\t<dot/>" << std::endl;
     }
 
@@ -265,6 +320,8 @@ MusicXmlExporter::write() {
         int oldMeasureNumber = -1;
         bool startedAttributes = false;
 	Rosegarden::Key key;
+	Rosegarden::Clef clef;
+	Rosegarden::AccidentalTable accTable(key, clef);
         TimeSignature prevTimeSignature;
 
         for (Rosegarden::CompositionTimeSliceAdapter::iterator k = adapter.begin();
@@ -283,7 +340,7 @@ MusicXmlExporter::write() {
             int measureNumber = composition->getBarNumber(absoluteTime);
 
             if (oldMeasureNumber < 0) {
-                str << "\t\t<measure number=\""<< measureNumber << "\">" << std::endl;
+                str << "\t\t<measure number=\""<< (measureNumber+1) << "\">" << std::endl;
                 str << "\t\t\t<attributes>" << std::endl;
                 // Divisions is divisions of crotchet (quarter-note) on which all
                 // note-lengths are based
@@ -298,8 +355,16 @@ MusicXmlExporter::write() {
                     str << "\t\t\t</attributes>" << std::endl;
                     startedAttributes = false;
                 }
-                str << "\t\t</measure>\n" << std::endl;
-                str << "\t\t<measure number=\""<< measureNumber << "\">" << std::endl;
+
+		while (measureNumber > oldMeasureNumber) {
+
+		    ++oldMeasureNumber;
+		    str << "\t\t</measure>\n" << std::endl;
+		    str << "\t\t<measure number=\""<< (oldMeasureNumber + 1) << "\">" << std::endl;
+		}
+
+		accTable = Rosegarden::AccidentalTable(key, clef);
+
             } else if (measureNumber < oldMeasureNumber) {
                 // Incomplete: Error!
             }
@@ -307,20 +372,28 @@ MusicXmlExporter::write() {
             
             // process event
             if (event->isa(Rosegarden::Key::EventType)) {
+
                 if (!startedAttributes) {
                     str << "\t\t\t<attributes>" << std::endl;
                     startedAttributes = true;
                 }
                 writeKey(event, str);
                 key = Rosegarden::Key(*event);
+		accTable = Rosegarden::AccidentalTable(key, clef);
+
             } else if (event->isa(Clef::EventType)) {
+
                 if (!startedAttributes) {
                     str << "\t\t\t<attributes>" << std::endl;
                     startedAttributes = true;
                 }
                 writeClef(event, str);
+		clef = Rosegarden::Clef(*event);
+		accTable = Rosegarden::AccidentalTable(key, clef);
+
             } else if (event->isa(Note::EventRestType) ||
 		       event->isa(Note::EventType)) {
+
                 // Random TimeSignature events in the middle of nowhere will
                 // be ignored, for better or worse
                 TimeSignature timeSignature = composition->getTimeSignatureAt(absoluteTime);
@@ -331,13 +404,14 @@ MusicXmlExporter::write() {
                         startedAttributes = true;
                     }
                     writeTime(timeSignature, str);
+		    prevTimeSignature = timeSignature;
                 }
                 if (startedAttributes) {
                     str << "\t\t\t</attributes>" << std::endl;
                     startedAttributes = false;
                 }
 
-                writeNote(event, lastNoteTime, key, str);
+                writeNote(event, lastNoteTime, accTable, clef, key, str);
 
 		if (event->isa(Note::EventType)) {
 		    lastNoteTime = event->getNotationAbsoluteTime();

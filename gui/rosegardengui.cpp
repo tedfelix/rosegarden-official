@@ -1017,12 +1017,12 @@ void RosegardenGUIApp::initView()
 
     }
 
+    // set the highlighted track
+    m_view->slotSelectTrackSegments(comp.getSelectedTrack());
+
     m_view->show();
 
     delete oldView;
-
-    // set the highlighted track
-    m_view->slotSelectTrackSegments(comp.getSelectedTrack());
 
     // We have to do this to make sure that the 2nd call ("select")
     // actually has any effect. Activating the same radio action

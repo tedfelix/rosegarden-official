@@ -43,6 +43,7 @@
  *   Pitch
  *   Note
  *   TimeSignature
+ *   AccidentalTable
  *
  * The classes in this file are _not_ actually used for storing
  * events.  Events are always stored in Event objects (see Event.h).
@@ -1048,6 +1049,44 @@ private:
     static const timeT m_crotchetTime;
     static const timeT m_dottedCrotchetTime;
 };
+
+
+
+/**
+ * AccidentalTable represents a set of accidentals in force at a
+ * given time.
+ *
+ * Keep an AccidentalTable variable on-hand as you track through a
+ * staff; then when reading a chord, call processDisplayAccidental
+ * on the accidentals found in the chord to obtain the actual
+ * displayed accidentals and to tell the AccidentalTable to
+ * remember the accidentals that have been found in the chord.
+ * Then when the chord ends, call update() on the AccidentalTable
+ * so that that chord's accidentals are taken into account for the
+ * next one.
+ *
+ * Create a new AccidentalTable at the start of each bar and when
+ * a new clef or key is encountered.
+ */
+class AccidentalTable
+{
+public:
+    AccidentalTable(const Key &, const Clef &);
+    AccidentalTable(const AccidentalTable &);
+    AccidentalTable &operator=(const AccidentalTable &);
+
+    Accidental processDisplayAccidental(const Accidental &displayAcc,
+					int heightOnStaff);
+
+    void update();
+    
+private:
+    Key m_key;
+    Clef m_clef;
+    std::vector<Accidental> m_accidentals;
+    std::vector<Accidental> m_newAccidentals;
+};
+
  
 }
 

@@ -1415,7 +1415,9 @@ Event *Note::getAsRestEvent(timeT absoluteTime) const
 
 
 
-///////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+// TimeSignature
+//////////////////////////////////////////////////////////////////////
 
 const string TimeSignature::EventType = "timesignature";
 const int TimeSignature::EventSubOrdering = -150;
@@ -1740,6 +1742,87 @@ void TimeSignature::setInternalDurations() const
 
 const timeT TimeSignature::m_crotchetTime       = basePPQ;
 const timeT TimeSignature::m_dottedCrotchetTime = basePPQ + basePPQ/2;
+
+
+
+//////////////////////////////////////////////////////////////////////
+// AccidentalTable
+//////////////////////////////////////////////////////////////////////
+
+AccidentalTable::AccidentalTable(const Key &key, const Clef &clef) :
+    m_key(key), m_clef(clef)
+{
+    std::vector<int> heights(key.getAccidentalHeights(clef));
+    unsigned int i;
+
+    for (i = 0; i < 7; ++i) {
+	m_accidentals.push_back(NoAccidental);
+	m_newAccidentals.push_back(NoAccidental);
+    }
+
+    for (i = 0; i < heights.size(); ++i) {
+	int height = Key::canonicalHeight(heights[i]);
+	Accidental acc = key.isSharp() ? Sharp : Flat;
+        m_accidentals[height] = acc;
+	m_newAccidentals[height] = acc;
+    }
+}
+
+AccidentalTable::AccidentalTable(const AccidentalTable &t) :
+    m_key(t.m_key), m_clef(t.m_clef),
+    m_accidentals(t.m_accidentals),
+    m_newAccidentals(t.m_newAccidentals)
+{
+    // nothing else
+}
+
+AccidentalTable &
+AccidentalTable::operator=(const AccidentalTable &t)
+{
+    if (&t != this) {
+	m_key = t.m_key;
+	m_clef = t.m_clef;
+	m_accidentals = t.m_accidentals;
+	m_newAccidentals = t.m_newAccidentals;
+    }
+    return *this;
+}
+
+Accidental
+AccidentalTable::processDisplayAccidental(const Accidental &acc0, int height)
+{
+    height = Key::canonicalHeight(height);
+
+    Accidental acc(acc0);
+    if (acc == NoAccidental) {
+        acc = m_key.getAccidentalAtHeight(height, m_clef);
+    }
+
+    m_newAccidentals[height] = acc;
+
+    if (m_accidentals[height] != NoAccidental) {
+
+        if (acc == m_accidentals[height]) {
+            return NoAccidental;
+        } else if (acc == NoAccidental || acc == Natural) {
+            return Natural;
+        } else {
+            //!!! aargh.  What we really want to do now is have two
+            //accidentals shown: first a natural, then the one
+            //required for the note.  But there's no scope for that in
+            //our accidental structure (RG2.1 is superior here)
+            return acc;
+        }
+    } else {
+        return acc;
+    }
+}
+
+void
+AccidentalTable::update()
+{
+    m_accidentals = m_newAccidentals;
+}
 
 
 } // close namespace
