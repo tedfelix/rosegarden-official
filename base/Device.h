@@ -84,6 +84,7 @@ public:
     virtual InstrumentList getAllInstruments() const = 0;
     virtual InstrumentList getPresentationInstruments() const = 0;
 
+#ifndef EXPERIMENTAL_ALSA_DRIVER
     // Return the used port numbers for this Device (discovered
     // from the Instruments)
     //
@@ -94,6 +95,11 @@ public:
     // positions in menus etc.
     //
     int getPortNumberPosition(int port) const;
+#else
+    //!!! temporary -- to move elsewhere (& connection to become a class)
+    std::string getConnection() const { return m_connection; }
+    void setConnection(std::string connection) { m_connection = connection; }
+#endif
 
 protected:
     InstrumentList     m_instruments;
@@ -101,7 +107,9 @@ protected:
     std::string        m_label;
     DeviceType         m_type;
     DeviceId           m_id;
-
+#ifdef EXPERIMENTAL_ALSA_DRIVER
+    std::string m_connection;
+#endif
 };
 
 }

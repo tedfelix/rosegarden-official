@@ -24,6 +24,7 @@
 namespace Rosegarden
 {
 
+#ifndef EXPERIMENTAL_ALSA_DRIVER
 
 // Find all the unique port numbers in the Instrument list and return them.
 //
@@ -86,5 +87,6 @@ Device::getPortNumberPosition(int port) const
 
 }
 
+#endif
 
 }

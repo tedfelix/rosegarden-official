@@ -1204,6 +1204,11 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
             return;
         }
     }
+#ifdef EXPERIMENTAL_ALSA_DRIVER
+    std::string connection(mD->getConnection());
+    SEQMAN_DEBUG << "RosegardenGUIDoc::getMappedDevice - got device on connection \"" << connection << "\"" << endl;
+    device->setConnection(connection);
+#endif
 
     Rosegarden::Instrument *instrument;
     Rosegarden::MappedDeviceIterator it;
@@ -1217,8 +1222,10 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
                                              (*it)->getChannel(),
                                              device);
 
+#ifndef EXPERIMENTAL_ALSA_DRIVER
         // set the sub-ordering
         instrument->setPort((*it)->getPort());
+#endif
 
         device->addInstrument(instrument);
 

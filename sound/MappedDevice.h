@@ -69,27 +69,38 @@ public:
 
     Rosegarden::Device::DeviceType getType() const { return m_type; }
     void setType(Rosegarden::Device::DeviceType type) { m_type = type; }
-
+#ifndef EXPERIMENTAL_ALSA_DRIVER
     int getClient() const { return m_client; }
     void setClient(int client) { m_client = client; }
+#endif
 
     // Get the DeviceDirection from the attached MappedInstruments
     //
     Rosegarden::MidiDevice::DeviceDirection getDirection() const;
 
+#ifdef EXPERIMENTAL_ALSA_DRIVER
+    std::string getConnection() const { return m_connection; }
+    void setConnection(std::string connection) { m_connection = connection; }
+#else
+
     // Get all the ports of the attached MappedInstruments
     //
     std::vector<int> getPorts() const;
+#endif
 
 protected:
 
     Rosegarden::DeviceId            m_id;
     Rosegarden::Device::DeviceType  m_type;
     std::string                     m_name;
+#ifdef EXPERIMENTAL_ALSA_DRIVER
+    std::string m_connection;
+#else
 
     // Sequencer-local information - we don't need to transmit this anywhere.
     //
     int                             m_client;
+#endif
 };
 
 typedef std::vector<Rosegarden::MappedInstrument*>::const_iterator

@@ -921,10 +921,14 @@ TrackButtons::populateInstrumentPopup()
         }
         else
         {
+#ifndef EXPERIMENTAL_ALSA_DRIVER
             int position =  (*it)->getDevice()->getPortNumberPosition(
                                      (*it)->getPort());
 
             if (position == -1) position = 0;
+#else
+	    int position = 0;
+#endif
 
 	    m_instrumentSubMenu[groupBase + position]->
                 insertItem(strtoqstr(iname), i++);

@@ -987,6 +987,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
         //
         if (dev && dev->getDirection() != MidiDevice::WriteOnly)
         {
+#ifndef EXPERIMENTAL_ALSA_DRIVER
             std::vector<int> ports = dev->getPortNumbers();
 
 
@@ -1001,6 +1002,13 @@ SequencerConfigurationPage::SequencerConfigurationPage(
                 m_devPorts.push_back(
                     std::pair<Rosegarden::DeviceId, int>((*it)->getId(), i));
             }
+#else
+	    QString label = strtoqstr((*it)->getName());
+	    m_recordDevice->insertItem(label);
+	    m_devPorts.push_back(
+//!!! fix this -- record port 0 hardcoded, shouldn't be remembered at all
+		std::pair<Rosegarden::DeviceId, int>((*it)->getId(), 0));
+#endif
         }
     }
 

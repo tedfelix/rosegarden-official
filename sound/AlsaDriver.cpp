@@ -598,7 +598,13 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
         MappedDevice *device =
                 new MappedDevice(m_deviceRunningId,
                                  Rosegarden::Device::Midi,
-                                 name);
+#ifdef EXPERIMENTAL_ALSA_DRIVER
+                                 "Some MIDI Device");
+	cout << "AlsaDriver: connection is " << name << endl;
+	device->setConnection(name);
+#else
+	                         name);
+#endif
         m_devices.push_back(device);
     }
 

@@ -1200,7 +1200,7 @@ MIDIInstrumentParameterPanel::setupForInstrument(Rosegarden::Instrument *instrum
     // Set Studio Device name
     //
     if (instrument->getDevice()) {
-
+#ifndef EXPERIMENTAL_ALSA_DRIVER
         int depth = instrument->getDevice()->getPortNumbers().size();
 
         if (depth > 1)
@@ -1212,6 +1212,7 @@ MIDIInstrumentParameterPanel::setupForInstrument(Rosegarden::Instrument *instrum
             m_deviceLabel->setText(label);
         }
         else
+#endif
 	    m_deviceLabel->setText(strtoqstr(instrument->getDevice()->getName()));
 
     } else {
