@@ -1848,8 +1848,18 @@ QuantizeDialog::QuantizeDialog(QWidget *parent,
     m_legatoButton = new QCheckBox
 	(i18n("Only round durations up if following rests permit"),
 	 m_noteQuantizeBox);
+
+    //!!! Implement these
+    
+    m_makeViableButton = new QCheckBox
+	(i18n("Split long notes into ties"), m_noteQuantizeBox);
+    
+    m_rebeamButton = new QCheckBox
+	(i18n("Re-beam after quantize"), m_noteQuantizeBox);
     
     m_noteQuantizeBox->setEnabled(false);
+    m_makeViableButton->setEnabled(false);
+    m_rebeamButton->setEnabled(false);
 
     connect(m_typeCombo, SIGNAL(activated(int)), SLOT(slotTypeChanged(int)));
     connect(m_unitCombo, SIGNAL(activated(int)), SLOT(slotUnitChanged(int)));

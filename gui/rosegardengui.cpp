@@ -1492,6 +1492,10 @@ void RosegardenGUIApp::slotDisplayBarTime(timeT t)
 	barNo = barNo + 1 - comp.getNbBars();
 	beatNo = timeSig.getBeatsPerBar() - 1 - beatNo;
 	unitNo = timeSig.getBeatDuration() - 1 - unitNo;
+    } else {
+	// convert to 1-based display bar numbers
+	barNo += 1;
+	beatNo += 1;
     }
     
     m_transport->displayBarTime(barNo, beatNo, unitNo);

@@ -23,10 +23,10 @@
 #include <set>
 #include "PropertyName.h"
 #include "Event.h"
+#include "Segment.h"
 
 namespace Rosegarden {
 
-class Segment;
 class Composition;
 
 
@@ -37,7 +37,7 @@ class Composition;
  * which ones they are.
  */
 
-class EventSelection
+class EventSelection : public SegmentObserver
 {
 public:
     typedef std::multiset<Event*, Event::EventCmp> eventcontainer;
@@ -53,7 +53,7 @@ public:
      */
     EventSelection(Segment &, timeT beginTime, timeT endTime);
 
-    ~EventSelection();
+    virtual ~EventSelection();
 
     /**
      * Add an Event to the selection.  The Event should come from
@@ -105,6 +105,10 @@ public:
      * that are in this selection.
      */
     void removeSelectionFromSegment(PropertyName property);
+
+    // SegmentObserver methods
+    virtual void eventAdded(const Segment *, Event *) { }
+    virtual void eventRemoved(const Segment *, Event *);
     
 private:
     EventSelection(const EventSelection&);

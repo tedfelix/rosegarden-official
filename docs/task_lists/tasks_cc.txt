@@ -141,6 +141,12 @@ Post-0.1.5-and-a-bit task list
     an EventSelection argument, and to operate by quantizing in
     turn each of the contiguous sequences of events in that selection
 
+28. "Add Time Signature" should be on Edit menu of main screen; adding
+    a timesig from the transport or undoing a time sig change doesn't
+    update notation windows
+
+29. Add "Lengthen notes" and "shorten notes" transforms to notation view
+
 
 Post-0.1.4 task list
 ====================

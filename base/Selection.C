@@ -97,5 +97,12 @@ EventSelection::removeSelectionFromSegment(PropertyName property)
     }
 }
 
+void
+EventSelection::eventRemoved(const Segment *s, Event *e)
+{
+    if (s == &m_originalSegment && contains(e)) {
+	m_segmentEvents.erase(m_segmentEvents.find(e));
+    }
+}
 
 }

@@ -569,7 +569,7 @@ void NotationView::setupActions()
     KStdAction::close (this, SLOT(slotCloseWindow()),      actionCollection());
 
     // Edit menu
-    new KAction(i18n("Select from St&art"), 0, this,
+    new KAction(i18n("Select from Sta&rt"), 0, this,
 		SLOT(slotEditSelectFromStart()), actionCollection(),
 		"select_from_start");
 
@@ -1174,6 +1174,7 @@ void NotationView::setCurrentSelection(EventSelection* s)
     updateView();
 }
 
+/*!!!
 void NotationView::checkCurrentSelection()
 {
     // If any of the notes in the selection are absent from their
@@ -1198,7 +1199,7 @@ void NotationView::checkCurrentSelection()
 	}
     }
 }
-
+*/
 
 void NotationView::setSingleSelectedEvent(int staffNo, Event *event)
 {
@@ -2457,7 +2458,7 @@ void NotationView::refreshSegment(Segment *segment,
     START_TIMING;
 
     emit usedSelection();
-    checkCurrentSelection();
+//!!!    checkCurrentSelection();
 
     if (segment) {
         NotationStaff *staff = getStaff(*segment);

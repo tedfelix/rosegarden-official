@@ -120,7 +120,7 @@ public:
     /**
      * Test that the current selection is still valid, and cancel it if not
      */
-    void checkCurrentSelection();
+//!!!    void checkCurrentSelection();
 
     /**
      * Set the current event selection to a single event

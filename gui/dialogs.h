@@ -432,6 +432,8 @@ protected:
     QGroupBox *m_noteQuantizeBox;
     QComboBox *m_dotsCombo;
     QCheckBox *m_legatoButton;
+    QCheckBox *m_makeViableButton;
+    QCheckBox *m_rebeamButton;
 
 public slots:
     void slotTypeChanged(int);
