@@ -255,4 +255,10 @@ Element2::setFromString(const string &name, string value)
     set<P>(name, PropertyDefn<P>::parse(value));
 }
 
+// Std
+#include <list>
+
+typedef list<Element2*> ElementList;
+
+
 #endif
