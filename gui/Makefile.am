@@ -1,6 +1,7 @@
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
 bin_PROGRAMS = rosegarden
+
 rosegarden_SOURCES = \
 	ktmpstatusmsg.cpp \
 	main.cpp \
@@ -28,6 +29,7 @@ rosegarden_SOURCES = \
 	rosegardenguiview.cpp \
 	rosexmlhandler.cpp \
 	staffline.cpp \
+	staffruler.cpp \
 	trackscanvas.cpp \
 	trackseditor.cpp \
 	trackseditoriface.skel \
