@@ -1,6 +1,8 @@
 Current Task list
 ======================================
 
+- soundfont load at startup
+
 - implement auto-extend of track editor's canvas when moving a segment
 beyond the canvas' boundary.
 
