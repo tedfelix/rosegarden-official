@@ -21,17 +21,72 @@ A { text-decoration: none }
 <A HREF="chapter-5.html">Previous</A>
 <A HREF="chapter-7.html">Next</A>
 <HR>
-<H1>6 <A NAME="6"></A>You Don't Know Jack</H1>
-<P>Jack is short for the Jack Audio Connection Kit. This marvel is at
+<H1>6 <A NAME="6"></A>You Don't Know JACK</H1>
+<P>In order to make use of Rosegarden's audio features, you will need to
+ run JACK.</P>
+<P>JACK is short for the Jack Audio Connection Kit. This marvel is at
  the heart of Linux audio, and it allows for a level of interoperability
  between applications that's undreamt of in the world of proprietary
  software. Jack is the cement that binds together a host of varied
  applications, and lets them all work together seamlessly.</P>
-<P>This chapter will discuss starting the jackd server, configuring
- connections with qjackctl, and getting a variety of applications such
- as Timidty, QSynth, Hydrogen, JamIn, and ZynAddSubFX to play nicely
- together. I'm under severe time constraints at the moment, and I don't
- have time to do this very complex subject justice before my deadline.</P>
+<H2><A NAME="6_1">6.1 Starting and tweaking JACK</A></H2>
+<P>The simplest way to control your JACK server is to use<B> qjackctl</B>
+<!--SPAN STYLE="font-weight: medium"-->
+
+. It takes a lot of the sting out of the process, and presents you with
+ a nice interface to show you how things are going. It is, of course,
+ not a part of Rosegarden, and you will need to install it separately.</P>
+<P ALIGN="CENTER" STYLE="font-weight: medium"><IMG ALIGN="BOTTOM" BORDER="0"
+HEIGHT="78" NAME="Graphic1" SRC="../pixmaps/qjackctl-overview.png" WIDTH="393"></P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">In the above example, you
+ see what it's<B> supposed</B> to look like. Sometimes getting it to
+ play nice is no mean feat. Notice in particular that I am showing 0 (0)
+ where the xruns are reported. xruns are JACK's way of telling you that
+ it isn't happy. They cause audio dropouts and bad performance. Your
+ goal in tweaking JACK is to achieve the lowest latency possible while
+ preventing xruns.</P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">To change how your JACK
+ server is configured, use the<B> Setup</B> button. Here you can see the
+ settings that finally worked for me with my SB Live!. It's notable that
+ I am running JACK strictly as a user, without real-time capabilities
+ enabled. If you run JACK with real time turned on, you'll have to run
+ qjackctl, JACK, and Rosegarden as root, or else you'll have to run a
+ capabilities-enabled kernel so that you can run them with root
+ privleges as your user.</P>
+<P ALIGN="LEFT" STYLE="font-weight: medium"><I>I think. Actually, I
+ don't know. I have a hacked kernel, and no idea what to do with it.
+ Nobody has ever answered any of my questions because I'm not a card
+ carrying member of the Linux Audio Cult. The information out there is
+ enormously complicated, and this whole area is nothing but pure voodoo.
+ It absolutely<B> sucks</B>, truthfully.</I></P>
+<P ALIGN="LEFT" STYLE="font-weight: medium"><I>Until someone reads this
+ and finally shows me the light, we're both going to have to stumble
+ blindly through the dark with nothing but my half-formed and probably
+ pathetic understanding of how all of this is supposed to work. But I
+ have indeed managed to accomplish a few things with this stuff, and I
+ can show you how I did it.</I></P>
+<P ALIGN="CENTER" STYLE="font-weight: medium"><IMG ALIGN="BOTTOM" BORDER="0"
+HEIGHT="211" NAME="Graphic2" SRC="../pixmaps/qjackctl-silvan.png" WIDTH="290"></P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">If you were running
+ Rosegarden before starting JACK, you'll need to close Rosegarden and
+ restart it in order to make its audio features available. I will cover
+ the actual use of Rosegarden's features in Chapter 8. For now we are
+ only concerned with how to get Rosegarden to cooperate with other
+ JACK-enabled applications.</P>
+<H2><A NAME="6_2">6.2 Using Rosegarden with a JACK-enabled Soft Synth</A>
+</H2>
+<P>Now that JACK is running and Rosegarden has hopefully set up some
+ default JACK connections for you, you can take advantage of
+ Rosegarden's ability to record and play audio.</P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">
+<BR>
+<BR></P>
+<P STYLE="font-weight: medium">
+<BR>
+<BR></P>
+<P STYLE="font-weight: medium">
+<BR>
+<BR></P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
 <BR>
 <BR></P>

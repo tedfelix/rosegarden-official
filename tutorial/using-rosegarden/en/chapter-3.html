@@ -23,164 +23,213 @@ A { text-decoration: none }
 <HR>
 <H1><A NAME="3">3 The Studio</A></H1>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Now that you
- have a general idea how Rosegarden works, it's time to think about
- telling Rosegarden where it needs to send data in order to get your
- computer to make some noise.</P>
-<P STYLE="margin-bottom: 0.2in">Every native Rosegarden file contains a
- studio definition that describes your MIDI landsacpe. The idea is that
- once you have properly configured your studio it will be very easy to
- control all of your equipment without having to worry about the details
- of what is connected where.</P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
- Every native Rosegarden composition (.rg) file contains a studio, along
- with note events and other types of data, and this studio definition
- remains with the file for its lifetime. If you create several files and
- then change some aspect of your MIDI landscape, you'll need to juggle
- your connections around every time you load an old file. There are
- facilities for working around this, but your life will be much easier
- in the long run if you pick your arrangement now, and stick to it as
- much as possible.</P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
- Sorry to disappoint you, Dear Reader. My deadloom... Deadloom... :) My
- deadline is looming large. It's 3 AM. I've been working on these docs
- non-stop for twelve hours. I'm getting sleepy. The quality of the stuff
- I'm turning out is getting sad. It's time to fire this off and go to
- bed.</P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
- What follows is mostly still applicable. It's just that the dialogs
- have been combined.</P>
-<H3 STYLE="border: none; padding: 0in">3.0.1 <A NAME="2_5_2"></A>
- Configuring MIDI Connections</H3>
+ have a general idea how Rosegarden works, now is a good time to think
+ about telling Rosegarden where it needs to send data in order to get
+ your computer to make some noise.</P>
+<H2><A NAME="3_1">3.1 What is a &quot;studio&quot;?</A></H2>
+<P STYLE="margin-bottom: 0.2in">Every native Rosegarden composition
+ (.rg) file contains a studio definition in addition to note events,
+ pointers to audio samples, and any other data. This studio definition
+ is a description of your MIDI landscape, and it provides a mechanism
+ for routing MIDI events to and from your various input and output
+ devices, as well as providing a facility for you to describe what sort
+ of programs and controllers are available for your use with each
+ device. The idea is that once you have properly configured your studio
+ it will be very easy to control all of your equipment by referring to
+ it by name, rather than some obscure number.</P>
+<H3><A NAME="3_1_1">3.1.1 What is a &quot;device&quot;?</A></H3>
+<P>A &quot;device&quot; is a layer of abstraction that encapsulates information
+ about your MIDI gear and allows you to control it conveniently from
+ Rosegarden. A &quot;device&quot; might be a MIDI keyboard connected to your
+ computer, or an ALSA soft synth like Hydrogen. When you define a
+ &quot;device&quot; you can give it a convenient name, and can tell Rosegarden
+ which programs and controllers are available for use with that
+ particular piece of equipment.</P>
+<H3><A NAME="3_1_2">3.1.2 autoload.rg</A></H3>
+<P STYLE="margin-bottom: 0.2in">Unlike some other packages, Rosegarden
+ has no single place where you can configure all of this sort of thing
+ and have that configuration remain unchanged between different
+ compositions you might load into it. If you start Rosegarden with no
+ file to open, it opens a default blank document, called<B> autoload.rg</B>
+. Initially, this will be the system default that was installed with
+ Rosegarden. You create a local copy in your ~/.kde after modifying the
+ studio in the active document, and saving the current document as your
+ new default studio (as I will describe shortly.) I feel that it's very
+ important to point this out before you even get started configuring
+ your studio, because you should realize that only documents you create<I>
+ after</I> modifying your<B> autoload.rg</B> will take your new
+ settings. If you load an old document, or a document someone created in
+ a different studio environment, you will probably have to manually
+ adjust it to your current landscape.</P>
+<H2>3.2 <A NAME="2_5_2"></A>Configuring MIDI Connections</H2>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">The first
  step in configuring your studio is to set up connections to your MIDI
- devices via<B> Studio -&gt; Manage MIDI Devices...</B></P>
+ devices via<B> Composition -&gt; Studio -&gt; Manage MIDI Devices...</B></P>
+<P>You'll be presented with a dialog that resembles this one, except, of
+ course, that this one has already been configured to suit my own
+ default studio. It is divided into two sections, for play and record
+ devices, and it shows you how each of these &quot;devices&quot; is connected to
+ internal, external, and soft synths. In this example, I have a device
+ named &quot;Roland SC-33&quot; connected to &quot;64:0 EMU101K MPU-401 (UART)
+ (duplex)&quot; and four &quot;SB Live (?)&quot; devices connected to each of 65:0
+ through 65:3, which are the four output ports on my SB Live!. I also
+ have three generic spots reserved for soft synths, named &quot;Soft Synth 1&quot;
+ through &quot;Soft Synth 3&quot;, one of which is currently connected to KAMix,
+ an ALSA mixer client that can be controlled via MIDI.</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="307" NAME="Graphic1" SRC="../pixmaps/manage-devices-dialog.png"
+WIDTH="469"></P>
+<H3><A NAME="3_2_1">3.2.1 ALSA Ports</A></H3>
+<P>You might wonder about the strange numbers you see in front of you.
+ ALSA assigns ports in three ranges. 64: means it is an external MIDI
+ port, which might be connected to a MIDI keyboard, sound module, or
+ other noise producing gadget through some sort of cable. 65: means it
+ is an internal MIDI port, such as the on-board synth on the SB Live!
+ and its cousins. ALSA soft synths like Hydrogen, ZynAddSubFX and the
+ like will take numbers at the time they're started, on a first-come,
+ first served basis starting at 128:</P>
+<P>You may wonder why I don't seem to have a 128:0 or 129:0 in the
+ preceding example. If you want to have a look at the whole picture of
+ what ALSA ports are available, you can run<B> pmidi -l</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ to list all
+ of your available ports. Here are mine:</P>
+<P STYLE="margin-left: 0.79in; font-weight: medium"><FONT FACE="freemono">
+ <FONT SIZE="2">Port Client name Port name</FONT></FONT></P>
+<P STYLE="margin-left: 0.79in; font-weight: medium"><FONT FACE="freemono">
+ <FONT SIZE="2">64:0 EMU10K1 MPU-401 (UART) - Rawmi EMU10K1 MPU-401
+ (UART)</FONT></FONT></P>
+<P STYLE="margin-left: 0.79in; font-weight: medium"><FONT FACE="freemono">
+ <FONT SIZE="2">65:0 Emu10k1 WaveTable Emu10k1 Port 0</FONT></FONT></P>
+<P STYLE="margin-left: 0.79in; font-weight: medium"><FONT FACE="freemono">
+ <FONT SIZE="2">65:1 Emu10k1 WaveTable Emu10k1 Port 1</FONT></FONT></P>
+<P STYLE="margin-left: 0.79in; font-weight: medium"><FONT FACE="freemono">
+ <FONT SIZE="2">65:2 Emu10k1 WaveTable Emu10k1 Port 2</FONT></FONT></P>
+<P STYLE="margin-left: 0.79in; font-weight: medium"><FONT FACE="freemono">
+ <FONT SIZE="2">65:3 Emu10k1 WaveTable Emu10k1 Port 3</FONT></FONT></P>
+<P STYLE="margin-left: 0.79in; font-weight: medium"><FONT FACE="freemono">
+<FONT SIZE="2">128:0 Client-128 qjackctl</FONT></FONT></P>
+<P STYLE="margin-left: 0.79in; font-weight: medium"><FONT FACE="freemono">
+<FONT SIZE="2">129:0 Rosegarden sequencer Rosegarden</FONT></FONT></P>
+<P STYLE="margin-left: 0.79in; font-weight: medium"><FONT FACE="freemono">
+<FONT SIZE="2">130:0 KAMix qamix</FONT></FONT></P>
+<H3><A NAME="3_2_2">3.2.2 Record Devices</A></H3>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+ Record devices are MIDI keyboards, virtual keyboards, MIDI guitars and
+ the like. As record devices are rather less complicated, I will mention
+ them first. If you have one or more ports capable of recording, you may
+ name and assign connections in the<B> Record devices</B> section of
+ this dialog. Rosegarden cannot yet manage multiple simultaneous MIDI
+ inputs. If you have more than one, you will need to mark one of them as
+ [x] Current. This device will be used for all MIDI recording operations
+ until you specify otherwise by coming back to this dialog.</P>
+<H3><A NAME="3_2_3">3.2.3 <B>Play Devices</B></A></H3>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+ Play devices are where all the fun, and all the complexity is. They can
+ be MIDI keyboards, sound modules, ALSA soft synths, samplers, and
+ pretty well anything else that can take MIDI input, such as KAMix.</P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+ In order to control your MIDI landscape conveniently from Rosegarden,
+ you probably want to manage not only the connections, but the &quot;devices&quot;
+ themselves. Remember, a &quot;device&quot; is more than a name, but also a
+ container for information about the capabilities of the MIDI equipment
+ it represents.</P>
+<P>Let us assume for example you have a Roland SC-33 hooked up to your
+ computer. It can receive on 16 channels, and it is capable of playing
+ your notes using any of 300-odd instruments. It responds to several
+ different controllers. In order to control these features from
+ Rosegarden, you must tell Rosegarden about them. For your own
+ convenience, you probably want to replace Rosegarden's default
+ &quot;Anonymous MIDI Device&quot; type name with something more meaningful.</P>
+<H2><A NAME="3_3">3.3 Telling Rosegarden About a Device</A></H2>
+<P>You might want to begin by giving your device a better name. Simply
+ double click on the existing name and type a new one.</P>
+<H3>3.3.1 <A NAME="2_5_3"></A>Loading An Instrument Definition</H3>
+<P>Now that your &quot;Anonymous External Device&quot; has become a &quot;Roland SC-33&quot;
+ or what have you, you probably want to
+<!--SPAN STYLE="font-weight: medium"-->
+ load or create some instrument
+ definitions for it. Depending on the capabilities of this device, it
+ might not matter whether you define named program changes or not, but
+ if you do intend to transmit program changes to the device, you need to
+ define<I> something</I> here. Rosegarden has a bit of a double-edged
+ feature in that any program (and controller) numbers that don't have a
+ name assigned to them are ignored during MIDI import, and they are
+ filtered out of your sight when assigning instruments to tracks. This
+ can be very convenient with something like a GS synth, where there are
+ many banks that have only a smattering of randomly scattered programs
+ available. Instead of wading through a lot of nothing, you can dial up
+ exactly what's useful to you. On the other hand, it does make your job
+ more complicated if all you want to do is transmit arbitrary program
+ and bank change numbers as you see fit. In order to do so, you must
+ assign<I> something</I> to those numbers you wish to be able to
+ transmit before they will become available to you.</P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
- You'll be presented with a dialog that resembles this one:</P>
-<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
- [NEW PIXMAP NEEDED]</P>
-<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
- Rosegarden recognizes two types of MIDI ports. A device can be a Play
- Device or a Record Device. A duplex MIDI Port such as that found on my
- Sound Blaster, which provides both MIDI IN and MIDI OUT, is divided
- into two separate devices.</P>
-<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
- In the above example, you see that Device 1 is my external MIDI OUT
- device, Device 2 is MIDI IN, and I have an empty slot with no
- connection that I've reserved for use with Fluid Synth, which wasn't
- running when I took that snapshot.</P>
-<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
- Note that most of the items in this dialog box are read-only. You can
- change the connections around, but cannot rename anything from here.
- The names, such as &quot;Roland SC-33&quot; come from the instrument definitions
- which are attached to this particular device. We'll look at how to
- change those directly.</P>
-<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
- In the meantime, what you<I> can
-<!--SPAN STYLE="font-style: normal"-->
-</I> do from this dialog is re-arrange
- which device slots are connected to which hardware (or virtual
- hardware, in the case of a soft synth) paths, and you can create or
- delete devices at will. One use for that is to create a device for an
- ALSA soft synth that isn't currently running, so that you can assign
- programs to it in advance, and have everything ready to go at such time
- as you decide to start up that synth, and the path to that particular
- synth becomes available to Rosegarden.</P>
-<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
-<I> NOTE: These empty slots are given default connections in the order
- that new connections become available to Rosegarden. If you intend to
- have QSynth on Device 3 and Hydrogen on Device 4, and you wish to set
- up meaningful program changes for those synths in advance, you'll need
- to be sure to start those applications in the correct order, or else
- you'll have to come back to this dialog and switch the connections
- around whenever you've changed the order in which they are detected.</I>
-</P>
-<H3 STYLE="border: none; padding: 0in">3.0.2 <A NAME="2_5_3"></A>
- Loading An Instrument Definition</H3>
+ To load or create instrument definitions, click on the<B> Banks...</B>
+ button to pop up the bank editor dialog.</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="266" NAME="Graphic19" SRC="../pixmaps/using-rosegarden_html_4a09b933.png"
+WIDTH="455"></P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
- Once you've configured your device connections, you'll probably want to
- load or create some instrument definitions. This is accomplished via<B>
- Studio -&gt; Manage MIDI Banks and Programs...</B></P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
- To load an instrument definition, you'll first want to select a
- destination device from among those available. In this example, I don't
- have the connection for the Fluid Synth configured, and I haven't
- changed the default name, so my external playback port is called &quot;MIDI
- hardware synth&quot; in the dialog:</P>
-<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+ The above screenshot is from an old, pre-release version of Rosegarden.
+ You should see the connections you have just named in the list view to
+ the left:</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="108" NAME="Graphic11" SRC="../pixmaps/using-rosegarden_html_m3abd9861.png"
 WIDTH="335"></P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
- The first level of the tree is the path to the MIDI hardware (or
- virtual hardware). The branches of the tree point to banks, each of
- which can contain instrument definitions for program changes numbered
- 1-128. MIDI uses two parameters, called MSB and LSB (Most/Least
- Significant Byte), to change banks, and their implementation is
- device-dependent. Rosegarden allows you only one definition for each a
- unique MSB/LSB address.</P>
+ The first level of the tree is the selected device. The branches of the
+ tree point to banks, each of which can contain instrument definitions
+ for program changes numbered 1-128. MIDI uses two parameters, called
+ MSB and LSB (Most/Least Significant Byte), to change banks, and their
+ implementation is device-dependent. Some synths do bank changes on MSB,
+ some on LSB, and some use both in combination.</P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
- Now, to load a set of standard banks that will define the instruments
- available for playing via the &quot;MIDI hardware synth&quot; port, use the<B>
- Import Banks</B> button.</P>
-<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+ If you're lucky, the growing Rosegarden Library already contains a set
+ of bank and program definitions to suit your hardware. To load a
+ ready-made instrument definition, use the<B> Import Banks</B> button.</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="111" NAME="Graphic12" SRC="../pixmaps/using-rosegarden_html_3c56e013.png"
 WIDTH="372"></P>
-<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
- You'll be presented with a list of<B> .rgd</B> files from which to
- choose. By default, you'll be presented with selections from the
- Rosegarden library, which is ever-growing:</P>
-<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-<B> <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="550" NAME="Graphic13" SRC="../pixmaps/using-rosegarden_html_73beda7f.png"
-WIDTH="800"></B></P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
-<I> <FONT SIZE="2">NOTE: You may also load banks from other locations,
- of course, by browsing around to wherever you've left them in the usual
- fashion. You may import banks from both<B> .rg</B> and<B> .rgd</B>
- files. The instrument definition contained by both types of files is
- functionally identical, and<B> .rgd</B> files are offered only as a
- logical conveniece</FONT></I>.</P>
+<P STYLE="margin-bottom: 0in"><FONT SIZE="3">You'll be presented with a
+ list of<B> .rgd</B> files from which to choose. By default, you'll be
+ presented with selections from the Library, which was installed along
+ with Rosegarden itself, but you can, of course, browse to other
+ locations. You can import banks from both<B> .rg</B> and<B> .rgd</B>
+ files. The studio contained within both types of files is functionally
+ identical, and<B> .rgd</B> files are offered only as a logical
+ convenience.</FONT></P>
+<P STYLE="margin-bottom: 0in">
+<BR></P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
  If you're using a synth that makes use of<B> .sf2</B> format sound
- fonts (such as Fluid Synth or the SB Live! series of soundcards), you
- can take advantage of a very convenient new feature. Rosegarden now
- allows you to import the program names right out of the soundfont by
- navigating to the<B> .sf2</B> file and selecting it as the source for
- the import of banks.</P>
-<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
- <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="402" NAME="Graphic18" SRC="../pixmaps/using-rosegarden_html_72c572b5.png"
-WIDTH="752"></P>
+ fonts (such as QSynth or the SB Live! series of soundcards), you can
+ import the program names directly out of the soundfont by navigating to
+ the<B> .sf2</B> file and selecting it as the source for the import of
+ banks.</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="286" NAME="Graphic18" SRC="../pixmaps/using-rosegarden_html_72c572b5.png"
+WIDTH="534"></P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
  After you've selected an<B> .rgd, .rg, or .sf2</B> file from somewhere,
  you'll be presented with a dialog like this:</P>
-<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="220" NAME="Graphic30" SRC="../pixmaps/using-rosegarden_html_m710f000c.png"
 WIDTH="196"></P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-<!--SPAN STYLE="font-weight: medium"-->
-The stock<B>
- .rgd
-<!--SPAN STYLE="font-weight: medium"-->
-</B> files included with Rosegarden are supposed to only contain
- definitions to be attached to one port
-<!--SPAN STYLE="font-weight: medium"-->
- , so there should only be one
- &quot;Source device&quot; to load. If you're loading an<B> .rg
-<!--SPAN STYLE="font-weight: medium"-->
-</B> file
-<!--SPAN STYLE="font-weight: medium"-->
- which
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Typically,<B>
+ .rgd</B> files will contain only one set of bank and program
+ definitions, so there should only be one &quot;Source device&quot; to load. If
+ you're loading an<B> .rg</B> file or a non-standard<B> .rgd</B>, which
  contains multiple sets of bank definitions, then you may select which
- one of them to load into this slot. If you've chosen an<B> .sf2
-<!--SPAN STYLE="font-weight: medium"-->
-</B>
+ one of them to load into this slot. If you've chosen an<B> .sf2</B>
  file, then you shouldn't have a choice to make here.</P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
  Regardless of the source of the banks, you'll be given a choice to
- merge the new program defintions into your existing defintion, which
+ merge the new program defintions into your existing definition, which
  will only fill in slots that are currently empty, or to erase
  everything that's there and replace it completely with the contents of
  the imported file.</P>
-<H3 STYLE="border: none; padding: 0in">3.0.3 <A NAME="2_5_4"></A>
- Creating A Custom Instrument Definition</H3>
+<H2>3.4 <A NAME="2_5_4"></A>Creating A Custom Instrument Definition</H2>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
  If none of the bank definitions in the library fit, and you can't load
  the program names out of a soundfont, you can use an existing file from
@@ -209,10 +258,7 @@ The stock<B>
  the dialog box. If you have similar sets of program changes in two
  different banks, you can copy one from the other using<B> Copy Programs</B>
  and<B> Paste Programs</B> to save yourself some typing.</P>
-<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
- <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="512" NAME="Graphic19" SRC="../pixmaps/using-rosegarden_html_4a09b933.png"
-WIDTH="830"></P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
  If you don't enter a string for a particular program number, you won't
  have to scroll through that slot when choosing an instrument later on.
  This is very convenient if you have a bank that only contains a few
@@ -220,48 +266,128 @@ WIDTH="830"></P>
  useless entries on your way to the few slots that actually do
  something. This is especially useful for some of my Roland banks that
  only have a few program changes that are widely scattered.</P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
- If, on the other hand, you<I> want
-<!--SPAN STYLE="font-style: normal"-->
-</I> to have every program number
- available, even if you don't wish to assign particular names to some or
- all of them, you might want to begin by using<B> Import Banks</B> and
- loading<B> raw-numbers.rgd</B> into that slot. That will populate the
- program dialog with numbers, and you can replace some of them with
- text, or else leave all of them as numbers.</P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+ Finally, you may have noticed that Rosegarden only allows you one set
+ of program changes per LSB/MSB combination. The exception to this rule
+ is that you may define a parallel set of program changes if the [x]
+ Percussion box is checked. For example, if you have a synth that
+ interprets standard program changes in bank LSB 0 MSB 0 on channel 10
+ as drum kit changes (like GS) then you can click on<B> Add</B>, then
+ check the [x] Percussion box, dial the LSB and MSB values back to 0 (or
+ wherever they need to be for your implementation) and enter the names
+ of drum kits as programs.</P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+ Finally, now that you're this far, what do you do if you merely wish to
+ be able to transmit arbitrary program and bank numbers without naming
+ them? As of this release, your best bet is probably to begin by
+ importing<B> raw-numbers.rgd</B> into any banks (LSB/MSB combinations)
+ you wish to be able to transmit.. That will populate the program dialog
+ with numbers, and might offer you a suitable compromise.</P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
  Once you've defined the names for your program changes, you can save
  the definition to disk with<B> Export Banks</B>.</P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">If you think
  anyone else might benefit from having the instrument definition, you
  can mail it to me at<A HREF="mailto:mmcintyr@swva.net"><B>
- mmcintyr@swva.net
+ dmmcintyr@users.sourceforge.net</B></A> and I will add it to our
+ growing collection of user contributions.</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
 <!--SPAN STYLE="font-weight: medium"-->
-</B></A> and I will add it to our growing collection
- of user contributions.</P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
- New contributions are most welcome. We pioneers must do all the work so
+New
+ contributions are most welcome. We pioneers must do all the work so
  that future generations can be lazy. Just remember that I had to do the
- GS device from scratch too, and it was very tedious and time-consuming.
- :)</P>
-<H3 STYLE="border: none; padding: 0in; font-weight: medium">3.0.4 <A NAME="2_5_5">
-</A> Saving a Custom Studio</H3>
+ SC-33 device from scratch too, and it was very tedious and
+ time-consuming. Especially since this stuff was a lot more buggy and
+ incomprehensible back then. ;)</P>
+<H2><A NAME="3_5">3.5 Soft Synth Caveats</A></H2>
+<P STYLE="margin-bottom: 0.2in; font-weight: medium">If you run a
+ variety of soft synths and you wish to create named connections for
+ them, you can run into a bit of trouble. Remember that ALSA port
+ numbers are allocated on a first come, first serve basis as you start
+ the softsynths, and Rosegarden only concerns itself with the<I> number</I>
+. That means it's very easy to get your named Rosegarden device names
+ out of sync with where the notes are actually going unless you take
+ care to start your softsynths in the same order every time. It's a
+ simple matter to rearrange this when they do get out of sync, but I
+ find myself coming back to this connection dialog more often than I
+ would like.</P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+ If you wish to reserve a name for a softsynth or other type of device
+ that you don't currently have running, you can create an empty slot at
+ will using the New button, and you can delete anything you wish using
+ the Delete button. Alternatively, Rosegarden will automatically detect
+ any new ALSA ports that become available, so you can create a new entry
+ for, say, QSynth (FluidSynth) merely by starting it. A new entry will
+ appear in the dialog before your very eyes.</P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+<I> REMEMBER: These empty slots are given default connections in the
+ order that new connections become known to Rosegarden. If you start
+ softsynths in a different order at a later date, or you have only one
+ or two of them running, you will surely need to come back to this
+ dialog and rearrange your connections in order for your named ports to
+ have useful meaning. For example, as I write this, I have to assign
+ tracks to the port called Hydrogen in order for QSynth to play, because
+ I started QSynth after Hydrogen, and I have them the other way around
+ in my studio. Hopefully Rosegarden can better come to grips with this
+ scenario some day.</I></P>
+<H2><A NAME="3_6">3.6 Custom Controllers</A></H2>
+<P>Rosegarden should create a few basic default controllers for you. If
+ you have special requirements, or if some of these controllers don't
+ function on the piece of equipment for which you're defining the
+ device, you may wish to edit these defaults by clicking the<B> Control
+ Events</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ button.</P>
+<P STYLE="font-weight: medium">
+<BR>
+<BR></P>
+<P ALIGN="CENTER" STYLE="font-weight: medium"><IMG ALIGN="LEFT" BORDER="0"
+HEIGHT="259" NAME="Graphic2" SRC="../pixmaps/control-events.png" WIDTH="345">
+<BR CLEAR="LEFT">
+<BR>
+<BR></P>
+<H2><A NAME="3_7">3.7 Default Document Properties</A></H2>
+<P>Before you make this document your default, you might want to have a
+ look at some other document-specific settings. These aren't a part of
+ the Studio, but they're saved in<B> autoload.rg</B>, and any new
+ documents you create will start life with these defaults. To edit them,
+ use<B> Document -&gt; Edit -&gt; Document Properties</B>.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="266" NAME="Graphic3"
+SRC="../pixmaps/document-properties.png" WIDTH="483"></P>
+<H3><A NAME="3_7_1">3.7.1 Lilypond Headers</A></H3>
+<P ALIGN="LEFT" STYLE="font-weight: medium">The About tab starts off
+ with some default properties. You can modify or delete these, and you
+ can add new properties. The four defaults will be translated into
+ Lilypond during an export. If you wish to use any other strings in your
+ Lilypond headers, you can add them here by creating properties of that
+ name, then binding your custom strings with them.. For example,
+ &quot;instrument,&quot; &quot;dedication,&quot; or &quot;poet.&quot;</P>
+<H3><A NAME="3_7_2">3.7.2 Audio Directory</A></H3>
+<P>From the Audio tab, you can configure a new directory for audio
+ files. Rosegarden will use this path for recording new files, and it's
+ the first place it will look when you import audio segments. By
+ default, this is ~/rosegarden. If this path doesn't exist, you won't be
+ able to record audio, so either create that directory or configure
+ Rosegarden to look somewhere else here.</P>
+<P>You should get in the habit of creating a new audio directory for
+ each document you create in which you intend to use audio segments, as
+ I will detail in another chapter.</P>
+<H3><A NAME="3_7_3">3.7.3 Custom Colors</A></H3>
+<P>Rosegarden can colorize segments and controllers. Custom colors are
+ defined here.</P>
+<H2>3.8 <A NAME="2_5_5"></A>Saving a Custom Studio</H2>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
  Now that you've gotten your studio configured, you'll want to make it
  your default, so that you can avoid having to load banks into device
  slots every time you create a new document or import a MIDI file.</P>
-<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="94" NAME="Graphic62" SRC="../pixmaps/using-rosegarden_html_maf91084.png"
 WIDTH="322"></P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><B>Studio -&gt;
- Save Current Document as Default Studio
-<!--SPAN STYLE="font-weight: medium"-->
-</B> will save the current
- document as an<B> autoload.rg
-<!--SPAN STYLE="font-weight: medium"-->
-</B> file. This becomes the default for
- all new documents you create, but again, it will have no effect on
- documents that you've already created.</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><B>
+Composition -&gt; Studio -&gt; Save Current Document as Default Studio</B>
+ will save the current document as your local<B> autoload.rg</B> file.
+ This becomes the default for all new documents you create, but again,
+ it will have no effect on documents that you've already created.</P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
  Remember that this is just like any ordinary<B> .rg</B> file, and that
  any segments, track labels, instrument assignments, etc. that you have
@@ -273,6 +399,9 @@ WIDTH="322"></P>
  elsewhere in this guide, to set up some default header fields for
  export, so that they will be available to you in all future documents
  you create.</I></P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+<BR>
+<BR></P>
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
 <BR>
 <BR></P>
