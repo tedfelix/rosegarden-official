@@ -389,9 +389,27 @@ struct StandardQuantization {
 	type(_type), unit(_unit), maxDots(_maxDots),
 	name(_name), description(_description), noteName(_noteName) { }
 
-    // This is defined to return the standard quantizations in
-    // descending order of unit duration
+    // Return the standard quantizations in descending order of unit duration
     static std::vector<StandardQuantization> getStandardQuantizations();
+
+    // Study the given segment; if all the events in it have times that
+    // match one or more of the standard quantizations, return the longest
+    // standard quantization to match.  Otherwise return 0.  Return value
+    // is shared -- do not free.
+    static StandardQuantization *getStandardQuantization(Segment *);
+
+    // Study the given selection; if all the events in it have times that
+    // match one or more of the standard quantizations, return the longest
+    // standard quantization to match.  Otherwise return 0.  Return value
+    // is shared -- do not free.
+    static StandardQuantization *getStandardQuantization(EventSelection *);
+
+private:
+    static std::vector<StandardQuantization> m_standardQuantizations;
+
+    static void checkStandardQuantizations();
+    static timeT getUnitFor(Event *);
+    static StandardQuantization *getStandardQuantizationFor(timeT unit);
 };
 
 }

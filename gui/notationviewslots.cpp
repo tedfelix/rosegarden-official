@@ -63,6 +63,26 @@ NotationView::slotDocumentDestroyed()
 }
 
 void
+NotationView::slotUpdateInsertModeStatus()
+{
+    QString message;
+    if (isInChordMode()) {
+	if (isInTripletMode()) {
+	    message = " Triplet Chord";
+	} else {
+	    message = " Chord";
+	}
+    } else {
+	if (isInTripletMode()) {
+	    message = " Triplet";
+	} else {
+	    message = " Normal";
+	}
+    }
+    m_insertModeLabel->setText(i18n(message));
+}
+
+void
 NotationView::slotChangeSpacingFromIndex(int n)
 {
     std::vector<int> spacings = m_hlayout.getAvailableSpacings();

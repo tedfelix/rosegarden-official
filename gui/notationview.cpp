@@ -408,6 +408,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     slotSetInsertCursorPosition(0);
     slotSetPointerPosition(doc->getComposition().getPosition());
     setCurrentSelection(0, false);
+    slotUpdateInsertModeStatus();
     m_chordNameRuler->repaint();
     m_inhibitRefresh = false;
 
@@ -905,7 +906,8 @@ void NotationView::setupActions()
 
     actionCollection()->insert(insertNoteActionMenu);
 
-    (new KToggleAction(i18n("C&hord Insert Mode"), Key_H, // this, 0,  // SLOT can't be null
+    (new KToggleAction(i18n("C&hord Insert Mode"), Key_H,
+		       this, SLOT(slotUpdateInsertModeStatus()),
 		      actionCollection(), "chord_mode"))->
 	setChecked(false);
 
@@ -1092,8 +1094,8 @@ void NotationView::setupActions()
     new KAction(i18n(GroupMenuTupletCommand::getGlobalName(false)), 0, this,
 		SLOT(slotGroupGeneralTuplet()), actionCollection(), "tuplet");
 
-    // SLOT can't be null
-    (new KToggleAction(i18n("Tri&plet Insert Mode"), Key_G, // this, 0,
+    (new KToggleAction(i18n("Tri&plet Insert Mode"), Key_G,
+		       this, SLOT(slotUpdateInsertModeStatus()),
                        actionCollection(), "triplet_mode"))->
 	setChecked(false);
 
@@ -1511,6 +1513,9 @@ void NotationView::initStatusBar()
                    KTmpStatusMsg::getDefaultId(), 1);
     sb->setItemAlignment(KTmpStatusMsg::getDefaultId(), 
                          AlignLeft | AlignVCenter);
+
+    m_insertModeLabel = new QLabel(sb);
+    sb->addWidget(m_insertModeLabel);
 
     m_selectionCounter = new QLabel(sb);
     sb->addWidget(m_selectionCounter);

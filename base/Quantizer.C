@@ -723,7 +723,15 @@ Quantizer::insertNewEvents(Segment *s) const
 std::vector<StandardQuantization>
 StandardQuantization::getStandardQuantizations()
 {
-    std::vector<StandardQuantization> v;
+    checkStandardQuantizations();
+    return m_standardQuantizations;
+}
+
+void
+StandardQuantization::checkStandardQuantizations()
+{
+    if (m_standardQuantizations.size() > 0) return;
+
     char buf[100];
 
     for (Note::Type nt = Note::Semibreve; nt >= Note::Shortest; --nt) {
@@ -746,13 +754,84 @@ StandardQuantization::getStandardQuantizations()
 
 	    timeT unit = Note(Note::Semibreve).getDuration() / divisor;
 	    
-	    v.push_back(StandardQuantization
-			(Quantizer::PositionQuantize,
-			 unit, 2, name, description, noteName));
+	    m_standardQuantizations.push_back
+		(StandardQuantization
+		 (Quantizer::PositionQuantize,
+		  unit, 2, name, description, noteName));
+	}
+    }
+}    
+
+StandardQuantization *
+StandardQuantization::getStandardQuantization(Segment *s)
+{
+    checkStandardQuantizations();
+    timeT unit = -1;
+
+    for (Segment::iterator i = s->begin(); s->isBeforeEndMarker(i); ++i) {
+	
+	if (!(*i)->isa(Rosegarden::Note::EventType)) continue;
+	timeT myUnit = getUnitFor(*i);
+	if (unit < 0 || myUnit < unit) unit = myUnit;
+    }
+
+    return getStandardQuantizationFor(unit);
+}
+
+StandardQuantization *
+StandardQuantization::getStandardQuantization(EventSelection *s)
+{
+    checkStandardQuantizations();
+    timeT unit = -1;
+
+    if (!s) return 0;
+
+    for (EventSelection::eventcontainer::iterator i =
+	     s->getSegmentEvents().begin();
+	 i != s->getSegmentEvents().end(); ++i) {
+	
+	if (!(*i)->isa(Rosegarden::Note::EventType)) continue;
+	timeT myUnit = getUnitFor(*i);
+	if (unit < 0 || myUnit < unit) unit = myUnit;
+    }
+
+    return getStandardQuantizationFor(unit);
+}
+
+timeT
+StandardQuantization::getUnitFor(Event *e)
+{	    
+    timeT absTime = e->getAbsoluteTime();
+    timeT myQuantizeUnit = 0;
+    
+    // m_quantizations is in descending order of duration;
+    // stop when we reach one that divides into the note's time
+    
+    for (unsigned int i = 0; i < m_standardQuantizations.size(); ++i) {
+	if (absTime % m_standardQuantizations[i].unit == 0) {
+	    myQuantizeUnit = m_standardQuantizations[i].unit;
+	    break;
 	}
     }
 
-    return v;
+    return myQuantizeUnit;
 }
+
+StandardQuantization *
+StandardQuantization::getStandardQuantizationFor(timeT unit)
+{
+    if (unit > 0) {
+	for (unsigned int i = 0; i < m_standardQuantizations.size(); ++i) {
+	    if (m_standardQuantizations[i].unit == unit) {
+		return &m_standardQuantizations[i];
+	    }
+	}
+    }
+
+    return 0;
+}    
+
+std::vector<StandardQuantization>
+StandardQuantization::m_standardQuantizations;
 
 }

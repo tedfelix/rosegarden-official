@@ -521,9 +521,11 @@ MatrixCanvasView* MatrixView::getCanvasView()
 
 void MatrixView::setCurrentSelection(EventSelection* s, bool preview)
 {
+/*!!! No, if (!m_currentEventSelection && !s) we need to update quantize combo from the segment and then return...
     if (!s) {
 	m_quantizeCombo->setCurrentItem(m_quantizeCombo->count() - 1); // "Off"
     }
+*/
     if (!m_currentEventSelection && !s)	return;
 
     if (m_currentEventSelection) {
@@ -549,8 +551,6 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview)
 
     bool updateRequired = true;
 
-    timeT quantizeUnit = -1;
-
     if (s) {
 
         bool foundNewEvent = false;
@@ -558,32 +558,6 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview)
         for (EventSelection::eventcontainer::iterator i =
                  s->getSegmentEvents().begin();
              i != s->getSegmentEvents().end(); ++i) {
-
-	    //!!! Consider moving this out into a static method
-	    // of StandardQuantization (from here to
-
-	    if ((*i)->isa(Rosegarden::Note::EventType)) {
-
-		timeT absTime = (*i)->getAbsoluteTime();
-		timeT myQuantizeUnit = 0;
-
-		// m_quantizations is in descending order of duration;
-		// stop when we reach one that divides into the note's time
-
-		for (unsigned int i = 0; i < m_quantizations.size(); ++i) {
-		    if (absTime % m_quantizations[i].unit == 0) {
-			myQuantizeUnit = m_quantizations[i].unit;
-			break;
-		    }
-		}
-
-		if (quantizeUnit < 0 || myQuantizeUnit < quantizeUnit) {
-		    quantizeUnit = myQuantizeUnit;
-		}
-	    }
-
-	    // here, in a loop, returning a quantize unit that
-	    // corresponds to one of the standard quantizations)
 
             if (oldSelection && oldSelection->getSegment() == s->getSegment()
                 && oldSelection->contains(*i)) continue;
@@ -607,15 +581,26 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview)
         }
     }
 
-    if (quantizeUnit >= 0) {
-	for (unsigned int i = 0; i < m_quantizations.size(); ++i) {
-	    if (quantizeUnit == m_quantizations[i].unit) {
-		m_quantizeCombo->setCurrentItem(i);
-		break;
-	    }
-	    if (i == m_quantizations.size() - 1) {
-		m_quantizeCombo->setCurrentItem(i+1); // "Off"
-	    }
+    Rosegarden::StandardQuantization *quantization = 0;
+    if (s) {
+	quantization =
+	    Rosegarden::StandardQuantization::getStandardQuantization(s);
+    } else {
+	quantization =
+	    Rosegarden::StandardQuantization::getStandardQuantization
+	    (&oldSelection->getSegment());
+    }
+
+    timeT quantizeUnit = 0;
+    if (quantization) quantizeUnit = quantization->unit;
+    
+    for (unsigned int i = 0; i < m_quantizations.size(); ++i) {
+	if (quantizeUnit == m_quantizations[i].unit) {
+	    m_quantizeCombo->setCurrentItem(i);
+	    break;
+	}
+	if (i == m_quantizations.size() - 1) {
+	    m_quantizeCombo->setCurrentItem(i+1); // "Off"
 	}
     }
 

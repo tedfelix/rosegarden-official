@@ -305,9 +305,12 @@ public slots:
     /// text tool
     void slotText();
 
-    /// edition tools
+    /// editing tools
     void slotEraseSelected();
     void slotSelectSelected();
+
+    /// status stuff
+    void slotUpdateInsertModeStatus();
 
     /// edit menu
     void slotExtendSelectionBackward();
@@ -671,6 +674,9 @@ protected:
 
     /// Displayed in the status bar, shows number of events selected
     QLabel *m_selectionCounter;
+
+    /// Displayed in the status bar, shows insertion mode
+    QLabel *m_insertModeLabel;
 
     /// Displayed in the status bar, shows progress of current operation
     RosegardenProgressBar *m_progressBar;
