@@ -96,8 +96,6 @@ public:
     virtual ~Segment();
 
 
-    static std::string getNewUntitledLabel();
-
     //////
     //
     // BASIC SEGMENT ATTRIBUTES

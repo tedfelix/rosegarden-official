@@ -37,7 +37,6 @@ namespace Rosegarden
 Track::Track():
    m_id(0),
    m_muted(false),
-   m_label(getNewUntitledLabel()),
    m_position(0),
    m_instrument(0)
 {
@@ -54,7 +53,6 @@ Track::Track(TrackId id,
    m_position(position),
    m_instrument(instrument)
 {
-    if (m_label.length() == 0) m_label = getNewUntitledLabel();
 }
    
 
@@ -88,20 +86,6 @@ std::string Track::toXmlString()
 
     return track.str();
 
-}
-
-
-std::string Track::getNewUntitledLabel()
-{
-    std::string label = "untitled ";
-
-    static unsigned int untitledTrackCount = 0;
-    char tmp[256];
-    sprintf(tmp, " #%d", untitledTrackCount);
-    label += tmp;
-    ++untitledTrackCount;
-
-    return label;
 }
 
 }

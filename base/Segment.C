@@ -44,7 +44,6 @@ Segment::Segment(SegmentType segmentType, timeT startTime) :
     m_startTime(startTime),
     m_track(0),
     m_type(segmentType),
-    m_label(getNewUntitledLabel()),
     m_endMarkerTime(0),
     m_id(0),
     m_audioFileID(0),
@@ -89,19 +88,6 @@ Segment::~Segment()
 
     delete m_endMarkerTime;
     delete m_quantizer;
-}
-
-std::string Segment::getNewUntitledLabel()
-{
-    std::string label = "untitled ";
-
-    static unsigned int untitledSegCount = 0;
-    char tmp[256];
-    sprintf(tmp, " #%d", untitledSegCount);
-    label += tmp;
-    ++untitledSegCount;
-
-    return label;
 }
 
 void Segment::setStartTime(timeT idx)
