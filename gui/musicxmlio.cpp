@@ -52,7 +52,7 @@ using Rosegarden::TimeSignature;
 
 
 MusicXmlExporter::MusicXmlExporter(RosegardenGUIDoc *doc,
-				   std::string fileName) :
+                                   std::string fileName) :
     m_doc(doc),
     m_fileName(fileName)
 {
@@ -103,19 +103,42 @@ convertKeyToFifths(Key whichKey) {
     return 0;
 }
 
-
-/**
- * defined in lilypond.o
- */
+// converts pitch to basic note name
+// Incomplete??  probably just as limited here as it was in its original home: can't
+// handle B/C E/F or user-specified accidentals
 char
-convertPitchToName(int pitch, bool isFlatKeySignature);
+convertPitchToName(int pitch, bool isFlatKeySignature)
+{
+    // shift to a->g, rather than c->b
+    pitch += 3;
+    pitch %= 12;
 
-/**
- * Assumes pitch is 0-11 c-g
- * defined in lilypond.o
- */
+    // For flat key signatures, accidentals use next note name
+    if (isFlatKeySignature &&
+        (pitch == 1 || pitch == 4 ||
+         pitch == 6 || pitch == 9 || pitch == 11)) {
+        pitch++;
+    }
+    pitch = pitch % 12;
+
+    // compensate for no c-flat or f-flat
+    if (pitch > 2) {
+        pitch++;
+    }
+    if (pitch > 8) {
+        pitch++;
+    }
+    char pitchLetter = (char)((int)(pitch/2) + 97);
+    return pitchLetter;
+}
+
 bool
-needsAccidental(int pitch);
+needsAccidental(int pitch) {
+    if (pitch > 4) {
+        pitch++;
+    }
+    return (pitch % 2 == 1);
+}
 
 /**
  * Accidentals?
@@ -214,9 +237,9 @@ MusicXmlExporter::write()
     // Movement, etc. info goes here
     str << "\t<identification> " << std::endl;
     if (composition->getCopyrightNote() != "") {
-	str << "\t\t<rights>"
+        str << "\t\t<rights>"
             // Incomplete: need to XML-encode from copyright note
-	    << composition->getCopyrightNote() << "</rights>" << std::endl;
+            << composition->getCopyrightNote() << "</rights>" << std::endl;
     }
     str << "\t\t<encoding>" << std::endl;
     // Incomplete: Insert date!
@@ -229,12 +252,12 @@ MusicXmlExporter::write()
     str << "\t<part-list>" << std::endl;
     Composition::trackcontainer * tracks = composition->getTracks();
     for (Composition::trackiterator i = tracks->begin();
-	 i != tracks->end(); ++i) {
+         i != tracks->end(); ++i) {
         // Incomplete: What about all the other Midi stuff?
         // Incomplete: (Future) GUI to set labels if they're not already
         Instrument * trackInstrument = (&m_doc->getStudio())->getInstrumentById((*i).second->getInstrument());
         str << "\t\t<score-part id=\"" << (*i).first << "\">" << std::endl;
-	str << "\t\t\t<part-name>" << (*i).second->getLabel() << "</part-name>" << std::endl;
+        str << "\t\t\t<part-name>" << (*i).second->getLabel() << "</part-name>" << std::endl;
         if (trackInstrument) {
             str << "\t\t\t<score-instrument id=\"" << trackInstrument->getName() << "\">" << std::endl;
             str << "\t\t\t\t<instrument-name>" << trackInstrument->getType() << "</instrument-name>" << std::endl;
@@ -253,7 +276,7 @@ MusicXmlExporter::write()
     // Write out all segments for each Track
     bool startedPart = false;
     for (Composition::trackiterator j = tracks->begin();
-	 j != tracks->end(); ++j) {
+         j != tracks->end(); ++j) {
         // Code courtesy docs/code/iterators.txt
         Rosegarden::CompositionTimeSliceAdapter::TrackSet trackSet;
         // Incomplete: get the track info for each track (i.e. this should
@@ -274,11 +297,11 @@ MusicXmlExporter::write()
              k != adapter.end(); ++k) {
             Event *event = *k;
             timeT absoluteTime = event->getAbsoluteTime();
-	    // Open a new measure if necessary
+            // Open a new measure if necessary
             // Incomplete: How does MusicXML handle non-contiguous measures?
             int measureNumber = composition->getBarNumber(absoluteTime);
 
-	    if (oldMeasureNumber < 0) {
+            if (oldMeasureNumber < 0) {
                 str << "\t\t<measure number=\""<< measureNumber << "\">" << std::endl;
                 str << "\t\t\t<attributes>" << std::endl;
                 // Divisions is divisions of crotchet (quarter-note) on which all
@@ -294,7 +317,7 @@ MusicXmlExporter::write()
                 }
                 str << "\t\t</measure>\n" << std::endl;
                 str << "\t\t<measure number=\""<< measureNumber << "\">" << std::endl;
-	    } else if (measureNumber < oldMeasureNumber) {
+            } else if (measureNumber < oldMeasureNumber) {
                 // Incomplete: Error!
             }
             oldMeasureNumber = measureNumber;
