@@ -1340,7 +1340,6 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
 
         m_recordSegment = new Segment();
         m_recordSegment->setTrack(m_composition.getRecordTrack());
-//!!!        m_recordSegment->setStartTime(m_composition.getPosition());
 	m_recordSegment->setStartTime(m_recordStartTime);
 
         // Set an appropriate segment label
@@ -1752,12 +1751,35 @@ RosegardenGUIDoc::syncDevices()
 
     // Start up the sequencer
     //
-    while (isSequencerRunning() && !rgapp->isSequencerRegistered()) {
+    int timeout = 60;
+
+    while (isSequencerRunning() && !rgapp->isSequencerRegistered() && timeout > 0) {
         RG_DEBUG << "RosegardenGUIDoc::syncDevices - "
                  << "waiting for Sequencer to come up" << endl;
 
 	RosegardenProgressDialog::processEvents();
         sleep(1); // 1s
+	--timeout;
+    }
+
+    if (isSequencerRunning() && !rgapp->isSequencerRegistered() && timeout == 0) {
+	
+	// Give up, kill sequencer if possible, and report
+        KProcess *proc = new KProcess;
+        *proc << "/usr/bin/killall";
+        *proc << "rosegardensequencer";
+        *proc << "lt-rosegardensequencer";
+
+        proc->start(KProcess::Block, KProcess::All);
+
+        if (proc->exitStatus()) {
+            RG_DEBUG << "couldn't kill any sequencer processes" << endl;
+	}
+
+	delete proc;
+	RosegardenGUIApp *app = (RosegardenGUIApp*)parent();
+	app->slotSequencerExited(0);
+	return;
     }
 
     if (!isSequencerRunning())
@@ -1999,7 +2021,6 @@ RosegardenGUIDoc::insertRecordedAudio(const Rosegarden::RealTime& /*time*/,
     {
         m_recordSegment = new Segment(Rosegarden::Segment::Audio);
         m_recordSegment->setTrack(m_composition.getRecordTrack());
-//!!!        m_recordSegment->setStartTime(m_composition.getPosition());
 	m_recordSegment->setStartTime(m_recordStartTime);
         m_recordSegment->setAudioStartTime(Rosegarden::RealTime::zeroTime);
 
@@ -2155,19 +2176,22 @@ RosegardenGUIDoc::finalizeAudioFile(Rosegarden::AudioFileId /*id*/)
 
     delete progressDlg;
 
-    m_commandHistory->addCommand
-	(new SegmentRecordCommand(m_recordSegment));
+    if (m_recordSegment) {
 
-    // Update preview
-    //
-    RosegardenGUIView *w;
-    for(w=m_viewList.first(); w!=0; w=m_viewList.next()) {
-        w->getTrackEditor()->
-            getSegmentCanvas()->updateSegmentItem(m_recordSegment);
+	m_commandHistory->addCommand
+	    (new SegmentRecordCommand(m_recordSegment));
+
+	// Update preview
+	//
+	RosegardenGUIView *w;
+	for(w=m_viewList.first(); w!=0; w=m_viewList.next()) {
+	    w->getTrackEditor()->
+		getSegmentCanvas()->updateSegmentItem(m_recordSegment);
+	}
+
+	// update views
+	slotUpdateAllViews(0);
     }
-
-    // update views
-    slotUpdateAllViews(0);
 
     // Now install the file in the sequencer
     //
@@ -2182,6 +2206,7 @@ RosegardenGUIDoc::finalizeAudioFile(Rosegarden::AudioFileId /*id*/)
     streamOut << QString(strtoqstr(newAudioFile->getFilename()));
     streamOut << newAudioFile->getId();
     rgapp->sequencerSend("addAudioFile(QString, int)", data);
+
     // clear down
     m_recordSegment = 0;
 }
