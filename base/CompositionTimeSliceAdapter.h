@@ -11,6 +11,7 @@
 
     This file is Copyright 2002
         Randall Farmer      <rfarme@simons-rock.edu>
+	with additional work by Chris Cannam.
 
     The moral right of the authors to claim authorship of this work
     has been asserted.
@@ -82,34 +83,54 @@ public:
 
     ~CompositionTimeSliceAdapter() { };
 
-    iterator begin();
-    iterator end();
+    // bit sloppy -- we don't have a const_iterator
+    iterator begin() const;
+    iterator end() const;
+
+    typedef std::vector<Segment *> segmentlist;
+    typedef std::vector<Segment::iterator> segmentitrlist;
 
     class iterator {
 	friend class CompositionTimeSliceAdapter;
+
     public:
-	iterator() : m_curEvent(0), m_end(0) { };
+	iterator() :
+	    m_a(0), m_curEvent(0), m_curTrack(-1), m_needFill(true) { }
+	iterator(const CompositionTimeSliceAdapter *a) :
+	    m_a(a), m_curEvent(0), m_curTrack(-1), m_needFill(true) { }
 	~iterator() { };
-	iterator& operator++();
-	bool operator!=(const iterator& other);
-	Event* operator*();
-	Event* operator->();
-	int getTrack();
+
+	iterator &operator++();
+	iterator &operator--();
+
+	bool operator==(const iterator& other) const;
+	bool operator!=(const iterator& other) const;
+
+	Event *operator*() const;
+	Event &operator->() const;
+
+	int getTrack() const;
+
     private:
-	typedef std::pair<Segment*, Segment::iterator> position;
-	typedef std::list<position> positionlist;
-	positionlist m_positionList;
+	segmentitrlist m_segmentItrList;
+	const CompositionTimeSliceAdapter *m_a;
 	Event*	m_curEvent;
 	int     m_curTrack;
-	timeT 	m_end;
+	bool    m_needFill;
     };
 
 
 private:
+    friend class iterator;
+
     Composition* m_composition;
-    SegmentSelection* m_segments;
+    mutable iterator m_beginItr;
     timeT m_begin;
     timeT m_end;
+
+    segmentlist m_segmentList;
+
+    void fill(iterator &, bool atEnd) const;
 };
 
 }

@@ -11,6 +11,7 @@
 
     This file is Copyright 2002
         Randall Farmer      <rfarme@simons-rock.edu>
+	with additional work by Chris Cannam.
 
     The moral right of the authors to claim authorship of this work
     has been asserted.
@@ -41,13 +42,17 @@ CompositionTimeSliceAdapter::CompositionTimeSliceAdapter(Composition *c,
 							 timeT begin,
 							 timeT end) :
     m_composition(c),
-    m_segments(0),
     m_begin(begin),
     m_end(end)
 {
     if (begin == end) {
 	m_begin = 0;
 	m_end = c->getDuration();
+    }
+
+    for (Composition::iterator ci = m_composition->begin();
+         ci != m_composition->end(); ++ci) {
+	m_segmentList.push_back(*ci);
     }
 };
 
@@ -56,13 +61,19 @@ CompositionTimeSliceAdapter::CompositionTimeSliceAdapter(Composition *c,
 							 timeT begin,
 							 timeT end) :
     m_composition(c),
-    m_segments(s),
     m_begin(begin),
     m_end(end)
 {
     if (begin == end) {
 	m_begin = 0;
 	m_end = c->getDuration();
+    }
+
+    for (Composition::iterator ci = m_composition->begin();
+         ci != m_composition->end(); ++ci) {
+	if (!s || s->find(*ci) != s->end()) {
+	    m_segmentList.push_back(*ci);
+	}
     }
 };
 
@@ -71,7 +82,6 @@ CompositionTimeSliceAdapter::CompositionTimeSliceAdapter(Composition *c,
 							 timeT begin,
 							 timeT end) :
     m_composition(c),
-    m_segments(0),
     m_begin(begin),
     m_end(end)
 {
@@ -80,117 +90,150 @@ CompositionTimeSliceAdapter::CompositionTimeSliceAdapter(Composition *c,
 	m_end = c->getDuration();
     }
 
-    m_segments = new SegmentSelection();
-
     for (Composition::iterator ci = m_composition->begin();
          ci != m_composition->end(); ++ci) {
-	
 	if (trackIDs.find((*ci)->getTrack()) != trackIDs.end()) {
-	    m_segments->insert(*ci);
+	    m_segmentList.push_back(*ci);
 	}
     }
 };
 
 CompositionTimeSliceAdapter::iterator
-CompositionTimeSliceAdapter::begin() {
-    iterator i;
-
-    // Fill m_positionList with segment pointers and segment::iterators.
-
-    // The segment iterators should all point to events starting at or
-    // after m_begin.
-    for (Composition::iterator ci = m_composition->begin();
-         ci != m_composition->end(); ++ci) {
-
-	if (m_segments && m_segments->find(*ci) == m_segments->end()) continue;
-
-        if (!(*ci)->empty() && (*ci)->getEndTime() >= m_begin) {
-            Segment::iterator j = (*ci)->findTime(m_begin);
-
-            if (j != (*ci)->end()) {
-                i.m_positionList.push_front(iterator::position(*ci, j));
-            }
-
-        }
-
+CompositionTimeSliceAdapter::begin() const
+{
+    if (m_beginItr.m_a == 0) {
+	m_beginItr = iterator(this);
+	fill(m_beginItr, false);
     }
-
-    // Fill m_curEvent and m_end.
-    i.m_end = m_end;
-    ++i;
-
-    return i;
+    return m_beginItr;
 }
 
 CompositionTimeSliceAdapter::iterator
-CompositionTimeSliceAdapter::end() {
-    iterator i;
-    i.m_end = m_end;
-    return i;
+CompositionTimeSliceAdapter::end() const
+{
+    return iterator(this);
+}
+
+void
+CompositionTimeSliceAdapter::fill(iterator &i, bool atEnd) const
+{
+    // The segment iterators should all point to events starting at or
+    // after m_begin (if atEnd false) or at or before m_end (if atEnd true).
+
+    for (unsigned int k = 0; k < m_segmentList.size(); ++k) {
+	Segment::iterator j = m_segmentList[k]->findTime(atEnd ? m_end : m_begin);
+	i.m_segmentItrList.push_back(j);
+    }
+
+    i.m_needFill = false;
+
+    // fill m_curEvent & m_curTrack
+    ++i;
 }
 
 CompositionTimeSliceAdapter::iterator&
-CompositionTimeSliceAdapter::iterator::operator++() {
-    if (m_positionList.empty()) {
-        // We're done.
-        m_curEvent = 0;
-	m_curTrack = -1;
-        return *this;
-    }
+CompositionTimeSliceAdapter::iterator::operator++()
+{
+    assert(m_a != 0);
 
-    // these are only "next" at the top of the function:
-    Event *nextEvent = 0;
-    positionlist::iterator nextPosition;
+    // needFill is only set true for iterators created at end()
+    if (m_needFill) m_a->fill(*this, true);
 
-    for (positionlist::iterator i = m_positionList.begin();
-         i != m_positionList.end(); ++i) {
+    Event *e = 0;
+    unsigned int pos = 0;
 
-        if (nextEvent == 0 || **i->second < *nextEvent) {
-            nextEvent = *i->second;
-	    m_curTrack = i->first->getTrack();
-            nextPosition = i;
+    for (unsigned int i = 0; i < m_a->m_segmentList.size(); ++i) {
+
+	if (!m_a->m_segmentList[i]->isBeforeEndMarker(m_segmentItrList[i])) continue;
+
+        if (!e || **m_segmentItrList[i] < *e) {
+            e = *m_segmentItrList[i];
+	    m_curTrack = m_a->m_segmentList[i]->getTrack();
+            pos = i;
         }
-
     }
 
     // Check whether we're past the end time, if there is one
-    if (nextEvent->getAbsoluteTime() > m_end) {
+    if (!e || e->getAbsoluteTime() >= m_a->m_end) {
         m_curEvent = 0;
 	m_curTrack = -1;
         return *this;
     }
 
-    // nextEvent is now an Event* less than or equal to any that the
-    // iterator hasn't already passed over
-    m_curEvent = nextEvent;
+    // e is now an Event* less than or equal to any that the iterator
+    // hasn't already passed over
+    m_curEvent = e;
 
-    // nextPosition->second is a segment::iterator that points to nextEvent
-    ++(nextPosition->second);
+    // m_segmentItrList[pos] is a segment::iterator that points to e
+    ++m_segmentItrList[pos];
 
-    if (!nextPosition->first->isBeforeEndMarker(nextPosition->second)) {
-        m_positionList.erase(nextPosition);
+    return *this;
+}
+
+CompositionTimeSliceAdapter::iterator&
+CompositionTimeSliceAdapter::iterator::operator--()
+{
+    assert(m_a != 0);
+
+    // needFill is only set true for iterators created at end()
+    if (m_needFill) m_a->fill(*this, true);
+
+    Event *e = 0;
+    unsigned int pos = 0;
+
+    for (unsigned int i = 0; i < m_a->m_segmentList.size(); ++i) {
+
+	if (m_segmentItrList[i] == m_a->m_segmentList[i]->begin()) continue;
+
+	Segment::iterator si(m_segmentItrList[i]);
+	--si;
+
+	if (!e || **si < *e) {
+	    e = *si;
+	    m_curTrack = m_a->m_segmentList[i]->getTrack();
+	    pos = i;
+	}
     }
+
+    // Check whether we're past the begin time, if there is one
+    if (!e || e->getAbsoluteTime() < m_a->m_begin) {
+        m_curEvent = 0;
+	m_curTrack = -1;
+        return *this;
+    }
+
+    // e is now an Event* greater than or equal to any that the iterator
+    // hasn't already passed over in this direction
+    m_curEvent = e;
+
+    // m_segmentItrList[pos] is a segment::iterator that points to e
+    --m_segmentItrList[pos];
 
     return *this;
 }
 
 bool
-CompositionTimeSliceAdapter::iterator::operator!=(const iterator& other) {
-    return m_curEvent != other.m_curEvent;
+CompositionTimeSliceAdapter::iterator::operator==(const iterator& other) const {
+    return m_a == other.m_a && m_curEvent == other.m_curEvent;
 }
 
-Event*
-CompositionTimeSliceAdapter::iterator::operator*() {
+bool
+CompositionTimeSliceAdapter::iterator::operator!=(const iterator& other) const {
+    return !operator==(other);
+}
+
+Event *
+CompositionTimeSliceAdapter::iterator::operator*() const {
     return m_curEvent;
 }
 
-Event*
-CompositionTimeSliceAdapter::iterator::operator->() {
-    return m_curEvent;
+Event &
+CompositionTimeSliceAdapter::iterator::operator->() const {
+    return *m_curEvent;
 }
 
 int
-CompositionTimeSliceAdapter::iterator::getTrack() {
+CompositionTimeSliceAdapter::iterator::getTrack() const {
     return m_curTrack;
 }
 

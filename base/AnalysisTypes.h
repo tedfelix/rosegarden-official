@@ -129,11 +129,6 @@ public:
     Key getKeyForEvent(Event *e, Segment &s);
 
     /**
-     * Returns true if the given pitch is a scale step of the given key.
-     */
-    bool pitchIsDiatonic(int pitch, Key key);
-
-    /**
      * Inserts in the given Segment labels for all of the chords found in
      * the timeslice in the given CompositionTimeSliceAdapter.
      */

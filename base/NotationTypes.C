@@ -1164,6 +1164,24 @@ Pitch::getPitchInOctave() const
     return m_pitch % 12;
 }
 
+bool
+Pitch::isDiatonicInKey(const Key &key) const
+{
+    if (getDisplayAccidental(key) == Accidentals::NoAccidental) return true;
+
+    // ### as used in the chord identifiers, this calls chords built on
+    //     the raised sixth step diatonic -- may be correct, but it's
+    //     misleading, as we're really looking for whether chords are
+    //     often built on given tone
+
+    if (key.isMinor()) {
+        int stepsFromTonic = ((m_pitch - key.getTonicPitch() + 12) % 12);
+        if (stepsFromTonic == 9 || stepsFromTonic == 11) return true;
+    }
+
+    return false;
+}
+
 std::string
 Pitch::getAsString(bool useSharps, bool inclOctave, int octaveBase) const
 {

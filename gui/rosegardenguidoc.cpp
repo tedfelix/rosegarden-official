@@ -636,8 +636,8 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
     // output XML header
     //
     outStream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-               << "<!DOCTYPE rosegarden-data>\n"
-               << "<rosegarden-data>\n";
+	      << "<!DOCTYPE rosegarden-data>\n"
+	      << "<rosegarden-data version=\"" << VERSION << "\">\n";
 
     static const QString deviceExport("deviceExport");
 

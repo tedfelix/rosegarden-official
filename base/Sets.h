@@ -26,8 +26,10 @@
 
 #include "Event.h"
 #include "Segment.h"
+#include "CompositionTimeSliceAdapter.h"
 #include "BaseProperties.h"
 #include "NotationTypes.h"
+#include "MidiTypes.h"
 
 namespace Rosegarden
 {
@@ -375,19 +377,24 @@ template <class Element, class Container>
 bool
 GenericChord<Element, Container>::test(const Iterator &i)
 {
-    // We permit note or rest events here, because if a chord is a
+    // We permit note or rest events etc here, because if a chord is a
     // little staggered (for performance reasons) then it's not at all
     // unlikely we could get other events (even rests) in the middle
     // of it.  So long as sample() only permits notes, we should be
-    // okay with this.  The notation engine will have to be careful
-    // to omit rests found in the middle of chords, but other sorts
-    // of events might be significant so we won't be so blase about
-    // them here.
+    // okay with this.
 
-    return ((getAsEvent(i)->isa(Note::EventType) ||
-	     getAsEvent(i)->isa(Note::EventRestType)) &&
-	    getQuantizer().getQuantizedAbsoluteTime(getAsEvent(i)) == m_time&&
-	    getAsEvent(i)->getSubOrdering() == m_subordering);
+    Event *e = getAsEvent(i);
+    if (getQuantizer().getQuantizedAbsoluteTime(e) != m_time) return false;
+    
+    std::string type(e->getType());
+    return (type == Note::EventType ||
+	    type == Note::EventRestType ||
+	    type == Text::EventType ||
+	    type == Indication::EventType ||
+	    type == PitchBend::EventType ||
+	    type == Controller::EventType ||
+	    type == KeyPressure::EventType ||
+	    type == ChannelPressure::EventType);
 }
 
 template <class Element, class Container>
@@ -402,6 +409,8 @@ GenericChord<Element, Container>::sample(const Iterator &i)
     // by design, count as separate chords
 
     //!!! should include "... or have different notation durations"?
+
+/*!!! no -- not now a chord may span several tracks. hmm. oneStaff flag?
 
     if (m_baseIterator != getContainer().end()) {
 
@@ -434,6 +443,7 @@ GenericChord<Element, Container>::sample(const Iterator &i)
 	    return false;
 	}
     }
+*/
 
     AbstractSet<Element, Container>::sample(i);
     push_back(i);
@@ -557,6 +567,7 @@ GenericChord<Element, Container>::PitchGreater::operator()(const Iterator &a,
 
 
 typedef GenericChord<Event, Segment> Chord;
+typedef GenericChord<Event, CompositionTimeSliceAdapter> GlobalChord;
 
 
 }

@@ -34,6 +34,13 @@ AbstractSet<Event, Segment>::getAsEvent(const Segment::iterator &i)
     return *i;
 }
 
+template <>
+Event *
+AbstractSet<Event, CompositionTimeSliceAdapter>::getAsEvent(const CompositionTimeSliceAdapter::iterator &i)
+{
+    return *i;
+}
+
 /*
  * This ridiculous shit appears to be necessary to please gcc.
  * Compiler bug?  My own misunderstanding of some huge crock of crap

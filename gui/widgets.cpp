@@ -44,6 +44,7 @@
 #include "notationstrings.h"
 #include "notepixmapfactory.h"
 #include "colours.h"
+#include "midipitchlabel.h"
 
 #include "Quantizer.h"
 
@@ -1096,4 +1097,153 @@ RosegardenTextFloat::setText(const QString &text)
     m_text = text;
     repaint();
 }
+
+
+RosegardenPitchDragLabel::RosegardenPitchDragLabel(QWidget *parent,
+						   int defaultPitch) :
+    QLabel(parent),
+    m_pitch(defaultPitch),
+    m_clickedY(0),
+    m_clicked(false),
+    m_npf(new NotePixmapFactory())
+{
+    redrawLabel();
+}
+
+RosegardenPitchDragLabel::~RosegardenPitchDragLabel()
+{
+    delete m_npf;
+}
+
+void
+RosegardenPitchDragLabel::slotSetPitch(int p)
+{
+    if (m_pitch == p) return;
+    m_pitch = p;
+    redrawLabel();
+    emit pitchChanged(m_pitch);
+}
+
+void
+RosegardenPitchDragLabel::mousePressEvent(QMouseEvent *e)
+{
+    if (e->button() == LeftButton) {
+	m_clickedY = e->y();
+	m_clickedPitch = m_pitch;
+	m_clicked = true;
+    }
+}
+
+void
+RosegardenPitchDragLabel::mouseMoveEvent(QMouseEvent *e)
+{
+    if (e->button() == LeftButton && m_clicked) {
+	int y = e->y();
+	int diff = y - m_clickedY;
+	int pitchDiff = diff * 2 / m_npf->getLineSpacing();
+	int newPitch = m_clickedPitch + pitchDiff;
+	if (newPitch < 0) newPitch = 0;
+	if (newPitch > 127) newPitch = 127;
+	if (m_pitch != newPitch) {
+	    m_pitch = newPitch;
+	    redrawLabel();
+	    emit pitchChanged(m_pitch);
+	}
+    }
+}
+
+void
+RosegardenPitchDragLabel::mouseReleaseEvent(QMouseEvent *e)
+{
+    mouseMoveEvent(e);
+    m_clicked = false;
+}
+
+void
+RosegardenPitchDragLabel::wheelEvent(QWheelEvent *e)
+{
+    if (e->delta() > 0) {
+	if (m_pitch < 127) {
+	    ++m_pitch;
+	    redrawLabel();
+	    emit pitchChanged(m_pitch);
+	}
+    } else {
+	if (m_pitch > 0) {
+	    --m_pitch;
+	    redrawLabel();
+	    emit pitchChanged(m_pitch);
+	}
+    }
+}
+
+void
+RosegardenPitchDragLabel::redrawLabel()
+{
+    std::string clefType = Rosegarden::Clef::Treble;
+    int octaveOffset = 0;
+    
+    if (m_pitch > 100) {
+	octaveOffset = 2;
+    } else if (m_pitch > 80) {
+	octaveOffset = 1;
+    } else if (m_pitch < 60) {
+	clefType = Rosegarden::Clef::Bass;
+	if (m_pitch < 20) {
+	    octaveOffset = -2;
+	} else if (m_pitch < 40) {
+	    octaveOffset = -1;
+	}
+    }
+
+    QCanvasPixmap *pmap = m_npf->makePitchDisplayPixmap
+	(m_pitch,
+	 Rosegarden::Clef(clefType, octaveOffset));
+
+    setPixmap(*pmap);
+
+    delete pmap;
+}
+
+RosegardenPitchChooser::RosegardenPitchChooser(QWidget *parent,
+					       int defaultPitch) :
+    QFrame(parent)
+{
+    QVBox *vbox = new QVBox(this);
+
+    m_pitchDragLabel = new RosegardenPitchDragLabel(vbox, defaultPitch);
+
+    QHBox *hbox = new QHBox(vbox);
+
+    m_pitch = new QSpinBox(hbox);
+    m_pitch->setMinValue(0);
+    m_pitch->setMaxValue(127);
+    m_pitch->setValue(defaultPitch);
+
+    Rosegarden::MidiPitchLabel pl(defaultPitch);
+    m_pitchLabel = new QLabel(pl.getQString(), hbox);
+
+    connect(m_pitch, SIGNAL(valueChanged(int)),
+	    this, SLOT(slotSetPitch(int)));
+
+    connect(m_pitchDragLabel, SIGNAL(pitchChanged(int)),
+	    this, SLOT(slotSetPitch(int)));
+}
+
+int
+RosegardenPitchChooser::getPitch() const
+{
+    return m_pitch->value();
+}
+
+void
+RosegardenPitchChooser::slotSetPitch(int p)
+{
+    if (m_pitch->value() != p) m_pitch->setValue(p);
+    if (m_pitchDragLabel->getPitch() != p) m_pitchDragLabel->slotSetPitch(p);
+    
+    Rosegarden::MidiPitchLabel pl(p);
+    m_pitchLabel->setText(pl.getQString());
+}
+
 

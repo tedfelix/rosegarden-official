@@ -22,7 +22,7 @@ Post-0.9 task list
 
 9. Dragging notes &c
 
-10. Interpret gets slurs wrong
+10. Interpret gets slurs wrong [DONE]
 
 11. Random rests in bundle at start of staff following complex MIDI import [DONE]
 
@@ -40,22 +40,26 @@ Post-0.9 task list
 16. Test transposition options in Key signature insert following
     Pitch/NDP change to Key::convertFrom (plus usage in AnalysisTypes?)
 
-17. In the middle of adding 8ve up/down clef types -- do NotePixmapFactory
-    stuff etc
+17. Simplistic chord-recognition code & restructure ChordLabel etc to be more use
 
-18. Arpeggiated chords -- can easily identify in quantize, so decorate
+18. True page layout in notation view (i.e. current one becomes "Continuous Page")
+
+19. In the middle of adding 8ve up/down clef types -- do NotePixmapFactory
+    stuff etc [DONE -- could do with a bit of rearrangement in clef dialog]
+
+20. Arpeggiated chords -- can easily identify in quantize, so decorate
     appropriately
 
-19. Performable ornaments!
+21. Performable ornaments!
 
-20. In the middle of doing antialiasing-by-hand for slurs, ties and
-    text in note pixmap factory
+22. In the middle of doing antialiasing-by-hand for slurs, ties and
+    text in note pixmap factory [DONE enough for now]
 
-21. Ordered tip-of-the-day
+23. Ordered tip-of-the-day
 
-22. Generic file merge -- important feature
+24. Generic file merge -- important feature
 
-23. Chord computations: don't include percussion tracks
+25. Chord computations: don't include percussion tracks
 
 
 Priorities for 0.9

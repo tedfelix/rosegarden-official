@@ -34,6 +34,12 @@
 #include "NotationTypes.h"
 #include "CompositionTimeSliceAdapter.h"
 #include "BaseProperties.h"
+#include "Profiler.h"
+
+//!!!
+#include "Sets.h"
+#include "Quantizer.h"
+
 
 namespace Rosegarden
 {
@@ -72,34 +78,6 @@ AnalysisHelper::getKeyForEvent(Event *e, Segment &s)
     return Key();
 }
 
-bool
-AnalysisHelper::pitchIsDiatonic(int pitch, Key key)
-{
-//!!!    NotationDisplayPitch dp(pitch, Clef(), key);
-
-//    if (dp.getAccidental() == Accidentals::NoAccidental)
-//        return true;
-
-    Pitch p(pitch);
-    if (p.getDisplayAccidental(key) == Accidentals::NoAccidental)
-	return true;
-
-
-    // ### as used in the chord identifiers, this calls chords built on
-    //     the raised sixth step diatonic -- may be correct, but it's
-    //     misleading, as we're really looking for whether chords are
-    //     often built on given tone
-
-    if (key.isMinor())
-    {
-        int stepsFromTonic = ((pitch - key.getTonicPitch() + 12) % 12);
-
-        if (stepsFromTonic == 9 || stepsFromTonic == 11) return true;
-    }
-
-    return false;
-}
-
 ///////////////////////////////////////////////////////////////////////////
 // Simple chord identification
 ///////////////////////////////////////////////////////////////////////////
@@ -112,49 +90,59 @@ AnalysisHelper::labelChords(CompositionTimeSliceAdapter &c, Segment &s)
     if (c.begin() != c.end()) key = getKeyForEvent(*c.begin(), s);
     else key = getKeyForEvent(0, s);
 
-    // no increment (the inner loop does the incrementing)
-    for (CompositionTimeSliceAdapter::iterator i = c.begin(); i != c.end();  )
-    {
-        // Examine all notes starting at the same time as this one.
-        //  1. keep the current key in key
-        //  2. put the lowest pitch in bass
-        //  3. keep track of which pitches are in the chord, ignoring octaves
+    //!!!
+    NotationQuantizer *quantizer = new NotationQuantizer();
 
-        int mask = 0;
-        int time = (*i)->getAbsoluteTime();
-        int bass = 999;
-        // no initialization
-        for (  ; i != c.end() && (*i)->getAbsoluteTime() == time; ++i)
-        {
+    Profiler profiler("AnalysisHelper::labelChords", true);
 
-            if ((*i)->isa(Key::EventType)) {
-		key = Key(**i);
-		Text text(key.getName(), Text::KeyName);
-		s.insert(text.getAsEvent(time));
+    for (CompositionTimeSliceAdapter::iterator i = c.begin(); i != c.end(); ++i) {
+
+	timeT time = (*i)->getAbsoluteTime();
+
+	if ((*i)->isa(Key::EventType)) {
+	    key = Key(**i);
+	    Text text(key.getName(), Text::KeyName);
+	    s.insert(text.getAsEvent(time));
+	    continue;
+	}
+
+	if ((*i)->isa(Note::EventType)) {
+	
+	    int bass = 999;
+	    int mask = 0;
+
+	    GlobalChord chord(c, i, quantizer);
+	    if (chord.size() == 0) continue;
+	    
+	    for (GlobalChord::iterator j = chord.begin(); j != chord.end(); ++j) {
+		long pitch = 999;
+		if ((**j)->get<Int>(BaseProperties::PITCH, pitch)) {
+		    if (pitch < bass) {
+			assert(bass == 999); // should be in ascending order already
+			bass = pitch;
+		    }
+		    mask |= 1 << (pitch % 12);
+		}
+		i = *j;
 	    }
 
-            else if ((*i)->isa(Note::EventType))
-            {
-                int pitch = (*i)->get<Int>(BaseProperties::PITCH);
-                if (pitch < bass) bass = pitch;
-                mask |= 1 << (pitch % 12);
-            }
+	    if (mask == 0) continue;
 
-        }
+	    ChordLabel ch(key, mask, bass);
 
-        if (mask==0) continue;
-
-        ChordLabel ch(key, mask, bass);
-
-        if (ch.isValid())
-        {
+	    if (ch.isValid())
+	    {
 //            std::cerr << ch.getName(key) << " at time " << time << std::endl;
-
-	    Text text(ch.getName(key), Text::ChordName);
-	    s.insert(text.getAsEvent(time));
-        }
+		
+		Text text(ch.getName(key), Text::ChordName);
+		s.insert(text.getAsEvent(time));
+	    }
+	}
 
     }
+
+    //!!!
+    delete quantizer;
 
 }
 
@@ -172,8 +160,6 @@ ChordLabel::ChordLabel()
 ChordLabel::ChordLabel(Key key, int mask, int /* bass */) :
     m_data()
 {
-    AnalysisHelper ah;
-
     checkMap();
 
     // Look for a chord built on an unaltered scale step of the current key.
@@ -182,7 +168,7 @@ ChordLabel::ChordLabel(Key key, int mask, int /* bass */) :
          i != m_chordMap.end() && i->first==mask; ++i)
     {
 
-        if (ah.pitchIsDiatonic(i->second.m_rootPitch, key))
+        if (Pitch(i->second.m_rootPitch).isDiatonicInKey(key))
         {
             m_data = i->second;
         }

@@ -2873,9 +2873,9 @@ SplitByPitchDialog::SplitByPitchDialog(QWidget *parent) :
     QGridLayout *layout = new QGridLayout(frame, 4, 3, 10, 5);
 
     layout->addWidget(new QLabel(i18n("Starting split pitch:  "), frame), 0, 0);
-
+/*!!!
     m_pitch = new QSpinBox(frame);
-    m_pitch->setMinValue(1);
+    m_pitch->setMinValue(0);
     m_pitch->setMaxValue(127);
     m_pitch->setValue(60);
     connect(m_pitch, SIGNAL(valueChanged(int)), SLOT(slotPitchChanged(int)));
@@ -2884,7 +2884,11 @@ SplitByPitchDialog::SplitByPitchDialog(QWidget *parent) :
     Rosegarden::MidiPitchLabel pl(60);
     m_pitchLabel = new QLabel(pl.getQString(), frame);
     layout->addWidget(m_pitchLabel, 0, 2);
+*/
 
+    m_pitch = new RosegardenPitchChooser(frame, 60);
+    layout->addWidget(m_pitch, 0, 1);
+    
     m_range = new QCheckBox(i18n("Range up and down to follow music"), frame);
     layout->addMultiCellWidget(m_range,
 			       1, 1, // fromRow, toRow
@@ -2906,18 +2910,19 @@ SplitByPitchDialog::SplitByPitchDialog(QWidget *parent) :
     m_duplicate->setChecked(true);
     m_clefs->setCurrentItem(2);
 }
-
+/*!!!
 void
 SplitByPitchDialog::slotPitchChanged(int pitch)
 {
     Rosegarden::MidiPitchLabel pl(pitch);
     m_pitchLabel->setText("  " + pl.getQString());
 }
-
+*/
 int
 SplitByPitchDialog::getPitch()
 {
-    return m_pitch->value();
+//!!!    return m_pitch->value();
+    return m_pitch->getPitch();
 }
 
 bool

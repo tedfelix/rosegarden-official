@@ -42,6 +42,8 @@
 #include <kprogress.h>
 #undef private
 
+class NotePixmapFactory;
+
 /** Create out own check box which is always Tristate 
  * and allows us to click only between on and off
  * and only to _show_ the third ("Some") state 
@@ -434,6 +436,57 @@ protected:
     QCheckBox *m_deCounterpoint;
     QCheckBox *m_rebeam;
 };
-    
 
+
+class RosegardenPitchDragLabel : public QLabel
+{
+    Q_OBJECT
+public:
+    RosegardenPitchDragLabel(QWidget *parent,
+			     int defaultPitch = 60);
+    ~RosegardenPitchDragLabel();
+
+    int getPitch() const { return m_pitch; }
+
+signals:
+    void pitchChanged(int);
+
+public slots:
+    void slotSetPitch(int);
+    
+protected:
+    virtual void mousePressEvent(QMouseEvent *e);
+    virtual void mouseReleaseEvent(QMouseEvent *e);
+    virtual void mouseMoveEvent(QMouseEvent *e);
+    virtual void wheelEvent(QWheelEvent *e);
+
+    void redrawLabel();
+
+    int m_pitch;
+    int m_clickedY;
+    int m_clickedPitch;
+    bool m_clicked;
+
+    NotePixmapFactory *m_npf;
+};
+
+
+class RosegardenPitchChooser : public QFrame
+{
+    Q_OBJECT
+public:
+    RosegardenPitchChooser(QWidget *parent,
+			   int defaultPitch = 60);
+    
+    int getPitch() const;
+
+public slots:
+    void slotSetPitch(int);
+
+protected:
+    RosegardenPitchDragLabel *m_pitchDragLabel;
+    QSpinBox *m_pitch;
+    QLabel *m_pitchLabel;
+};
+    
 #endif // _WIDGETS_H_

@@ -49,6 +49,7 @@ class RosegardenSpinBox;
 class QTextEdit;
 class QAccel;
 class RosegardenQuantizeParameters;
+class RosegardenPitchChooser;
 class BigArrowButton;
 
 
@@ -669,15 +670,17 @@ public:
     bool getShouldDuplicateNonNoteEvents();
     int getClefHandling(); // actually SegmentSplitByPitchCommand::ClefHandling
 
-protected slots:
-    void slotPitchChanged(int);
+//!!!protected slots:
+//!!!    void slotPitchChanged(int);
 
 private:
-    QSpinBox *m_pitch;
+    RosegardenPitchChooser *m_pitch;
+
+//    QSpinBox *m_pitch;
     QCheckBox *m_range;
     QCheckBox *m_duplicate;
     KComboBox *m_clefs;
-    QLabel *m_pitchLabel;
+//    QLabel *m_pitchLabel;
 };
 
 

@@ -126,6 +126,7 @@ public:
     }
 
     friend bool operator<(const Event&, const Event&);
+    friend bool operator>(const Event&, const Event&);
 
     // Accessors
     const std::string &getType() const    { return  m_data->m_type; }

@@ -1097,7 +1097,7 @@ NotationQuantizer::Impl::quantizeDuration(Segment *s, Chord &c) const
 	timeT qd = getProvisional(**ci, DurationValue);
 
 	// Test for a slur
-	if (!(ud > spaceAvailable && qd <= spaceAvailable)) slur = false;
+	if (!(ud >= spaceAvailable && qd <= spaceAvailable)) slur = false;
 	
 	// We have a really good possibility of staccato if we have a
 	// note on a boundary whose base is double the note duration
@@ -1569,6 +1569,8 @@ NotationQuantizer::Impl::quantizeRange(Segment *s,
 	bool inSlur = false;
 	timeT slurFrom = s->getEndTime();
 	timeT slurTo = slurFrom;
+	timeT prevQt = slurFrom;
+	int itemsInSlur = 0;
 
 	for (i = from; i != to; ++i) {
 
@@ -1582,6 +1584,7 @@ NotationQuantizer::Impl::quantizeRange(Segment *s,
 
 		if (qt <= slurTo) { // still within slur
 
+		    if (qt > prevQt) ++itemsInSlur;
 		    slurTo = qt + qd;
 
 		    if (!(*i)->has(m_provisionalSlur)) {
@@ -1590,6 +1593,18 @@ NotationQuantizer::Impl::quantizeRange(Segment *s,
 			Indication ind(Indication::Slur, slurTo - slurFrom);
 			m_q->m_toInsert.push_back(ind.getAsEvent(slurFrom));
 			inSlur = false;
+		    } else {
+			// split slurs at beat boundaries
+			TimeSignature ts = comp->getTimeSignatureAt(qt);
+			timeT barStart = comp->getBarStartForTime(qt);
+			if (ts.getEmphasisForTime(qt - barStart) > 1 &&
+			    itemsInSlur > 1) {
+			    Indication ind(Indication::Slur, qt - slurFrom);
+			    m_q->m_toInsert.push_back(ind.getAsEvent(slurFrom));
+			    slurFrom = qt;
+			    slurTo = qt + qd;
+			    itemsInSlur = 1;
+			}
 		    }
 
 		} else { // outside existing slur
@@ -1601,6 +1616,7 @@ NotationQuantizer::Impl::quantizeRange(Segment *s,
 			slurFrom = qt;
 			slurTo = qt + qd;
 			inSlur = true;
+			itemsInSlur = 1;
 		    } else {
 			inSlur = false;
 		    }
@@ -1612,6 +1628,7 @@ NotationQuantizer::Impl::quantizeRange(Segment *s,
 		    slurFrom = qt;
 		    slurTo = qt + qd;
 		    inSlur = true;
+		    itemsInSlur = 1;
 		}
 	    }
 
@@ -1635,6 +1652,8 @@ NotationQuantizer::Impl::quantizeRange(Segment *s,
 		    (*i)->set<Int>(MARK_COUNT, markCount + 1);
 		}
 	    }	    
+
+	    prevQt = qt;
 	}
 	++passes;
     }

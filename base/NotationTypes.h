@@ -674,6 +674,11 @@ public:
      * Return the pitch within the octave, in the range 0 to 11.
      */
     int getPitchInOctave() const;
+
+    /**
+     * Return whether this pitch is diatonic in the given key.
+     */
+    bool isDiatonicInKey(const Key &key) const;
     
     /**
      * Return a reference name for this pitch. (C4, Bb2, etc...)
