@@ -143,6 +143,12 @@
 <!--     RMB Menus           -->
 
 <Menu noMerge="1" name="segment_tool_menu">
+   <Action name="edit_default"/>
+   <Separator/>
+   <Action name="edit_matrix"/>
+   <Action name="edit_notation"/>
+   <Action name="edit_event_list"/>
+   <Separator/>
    <Action name="edit_undo"/>
    <Action name="edit_redo"/>
    <Separator/>
@@ -161,12 +167,6 @@
    <Action name="resize"/>
    <Action name="split"/>
    <Action name="join"/>
-   <Separator/>
-   <Action name="edit_default"/>
-   <Separator/>
-   <Action name="edit_matrix"/>
-   <Action name="edit_notation"/>
-   <Action name="edit_event_list"/>
 </Menu>
 
 <!--     Application States           -->
