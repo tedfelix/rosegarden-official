@@ -73,6 +73,7 @@ Element2::Element2()
 Element2::Element2(const string &package, const string &type)
     : m_package(package),
       m_type(type),
+      m_duration(0),
       m_viewElements(0)
 {
 }
